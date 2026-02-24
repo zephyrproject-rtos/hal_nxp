@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief EVTG driver version. */
-#define FSL_EVTG_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2. */
+#define FSL_EVTG_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3. */
 /*! @} */
 
 /*! @brief EVTG instance index. */

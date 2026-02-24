@@ -212,14 +212,32 @@ void SPDIF_TxEnable(SPDIF_Type *base, bool enable)
  */
 void SPDIF_TxSetSampleRate(SPDIF_Type *base, uint32_t sampleRate_Hz, uint32_t sourceClockFreq_Hz)
 {
-    uint32_t clkDiv     = sourceClockFreq_Hz / (sampleRate_Hz * 64U);
-    uint32_t mod        = sourceClockFreq_Hz % (sampleRate_Hz * 64U);
+    uint32_t clkDiv     = 0;
+    uint32_t mod        = 0;
+    uint32_t divisor    = 0;
     uint32_t val        = 0;
     uint8_t clockSource = (uint8_t)(((base->STC) & SPDIF_STC_TXCLK_SOURCE_MASK) >> SPDIF_STC_TXCLK_SOURCE_SHIFT);
 
+    /* INT31-C: Check for overflow before multiplication */
+    assert(sampleRate_Hz > 0U);
+    assert(sampleRate_Hz <= (UINT32_MAX / 64U));
+
+    divisor = sampleRate_Hz * 64U;
+
+    /* INT31-C: Prevent division by zero */
+    assert(divisor > 0U);
+
+    clkDiv = sourceClockFreq_Hz / divisor;
+    mod    = sourceClockFreq_Hz % divisor;
+
+    /* INT30-C: Check divisor is at least 2 to prevent division issues */
+    assert(divisor >= 2U);
+
     /* Compute the nearest divider */
-    if (mod > ((sampleRate_Hz * 64U) / 2U))
+    if (mod > (divisor / 2U))
     {
+        /* INT30-C: Check for overflow before addition */
+        assert(clkDiv < UINT32_MAX);
         clkDiv += 1U;
     }
 
@@ -241,6 +259,7 @@ void SPDIF_TxSetSampleRate(SPDIF_Type *base, uint32_t sampleRate_Hz, uint32_t so
     }
     else
     {
+        assert(clkDiv > 0U);
         /* Other clock only uses txclk div */
         val = base->STC & (~(SPDIF_STC_TXCLK_DF_MASK | SPDIF_STC_SYSCLK_DF_MASK));
         val |= SPDIF_STC_TXCLK_DF(clkDiv - 1U);
@@ -273,6 +292,8 @@ uint32_t SPDIF_GetRxSampleRate(SPDIF_Type *base, uint32_t clockSourceFreq_Hz)
     measure = base->SRFM;
     temp    = (uint64_t)measure * (uint64_t)clockSourceFreq_Hz;
     temp /= 1024U * 1024U * 128U * gain;
+    /* INT31-C: Check for data loss before casting from uint64_t to uint32_t */
+    assert(temp <= UINT32_MAX);
     sampleRate = (uint32_t)temp;
 
     return sampleRate;
@@ -349,7 +370,7 @@ void SPDIF_ReadBlocking(SPDIF_Type *base, uint8_t *buffer, uint32_t size)
         data = SPDIF_ReadLeftData(base);
         for (j = 0; j < 3U; j++)
         {
-            *buffer = ((uint8_t)(data >> (j * 8U)) & 0xFFU);
+            *buffer = (uint8_t)((data >> (j * 8U)) & 0xFFU);
             buffer++;
         }
 
@@ -357,7 +378,7 @@ void SPDIF_ReadBlocking(SPDIF_Type *base, uint8_t *buffer, uint32_t size)
         data = SPDIF_ReadRightData(base);
         for (j = 0; j < 3U; j++)
         {
-            *buffer = ((uint8_t)(data >> (j * 8U)) & 0xFFU);
+            *buffer = (uint8_t)((data >> (j * 8U)) & 0xFFU);
             buffer++;
         }
 
@@ -767,9 +788,9 @@ void SPDIF_TransferRxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
         if (buffer != NULL)
         {
             data      = SPDIF_ReadQChannel(base);
-            buffer[0] = (uint8_t)data & 0xFFU;
-            buffer[1] = (uint8_t)(data >> 8U) & 0xFFU;
-            buffer[2] = (uint8_t)(data >> 16U) & 0xFFU;
+            buffer[0] = (uint8_t)(data & 0xFFU);
+            buffer[1] = (uint8_t)((data >> 8U) & 0xFFU);
+            buffer[2] = (uint8_t)((data >> 16U) & 0xFFU);
         }
     }
 
@@ -781,9 +802,9 @@ void SPDIF_TransferRxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
         if (buffer != NULL)
         {
             data      = SPDIF_ReadUChannel(base);
-            buffer[0] = (uint8_t)data & 0xFFU;
-            buffer[1] = (uint8_t)(data >> 8U) & 0xFFU;
-            buffer[2] = (uint8_t)(data >> 16U) & 0xFFU;
+            buffer[0] = (uint8_t)(data & 0xFFU);
+            buffer[1] = (uint8_t)((data >> 8U) & 0xFFU);
+            buffer[2] = (uint8_t)((data >> 16U) & 0xFFU);
         }
     }
 

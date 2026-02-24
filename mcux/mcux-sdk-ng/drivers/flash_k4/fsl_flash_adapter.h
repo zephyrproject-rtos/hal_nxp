@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 NXP
+ * Copyright 2018-2021, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -117,5 +117,7 @@
 #define FLASH_FEATURE_PAGE_SIZE           FSL_FEATURE_FLASH_PFLASH_PAGE_SIZE
 #define FLASH_FEATURE_PHRASE_SIZE_IN_WORD (4u)
 #define FLASH_FEATURE_PAGE_SIZE_IN_WORD   (32u)
+
+/*! @} */
 
 #endif /* FSL_FLASH_ADAPTER_H_ */

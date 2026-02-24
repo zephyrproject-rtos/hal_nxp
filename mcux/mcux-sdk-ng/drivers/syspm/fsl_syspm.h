@@ -114,6 +114,7 @@ void SYSPM_Deinit(SYSPM_Type *base);
  * @brief Select event counters
  *
  * @param base               SYSPM peripheral base address.
+ * @param monitor            syspm control monitor, see to #syspm_monitor_t.
  * @param event              syspm select event, see to #syspm_event_t.
  * @param eventCode          select which event to be counted in PMECTRx., see to table Events.
  */
@@ -124,6 +125,7 @@ void SYSPM_SelectEvent(SYSPM_Type *base, syspm_monitor_t monitor, syspm_event_t 
  *
  * @param base        SYSPM peripheral base address.
  * @param monitor     syspm control monitor, see to #syspm_monitor_t.
+ * @param event       syspm select event, see to #syspm_event_t.
  */
 void SYSPM_ResetEvent(SYSPM_Type *base, syspm_monitor_t monitor, syspm_event_t event);
 

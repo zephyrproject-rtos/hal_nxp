@@ -159,8 +159,11 @@ void TEMPMON_SetTempAlarm(TEMPMON_Type *base, int16_t tempVal, tempmon_alarm_mod
     int32_t tempCodeVal;
     uint32_t tempRegVal;
 
-    /* Calculate alarm temperature code value */
-    tempCodeVal = s_hotCount + (s_hotTemp - (int32_t)tempVal) * s_roomC_hotC / (int32_t)s_hotT_ROOM;
+    /* INT32-C: Use 64-bit intermediate to prevent signed integer overflow */
+    int64_t tempDiff = (int64_t)(s_hotTemp - (int32_t)tempVal);
+    int64_t tempProduct = tempDiff * (int64_t)s_roomC_hotC;
+    int64_t tempResult = (int64_t)s_hotCount + (tempProduct / (int64_t)s_hotT_ROOM);
+    tempCodeVal = (int32_t)tempResult;
 
     switch (alarmMode)
     {

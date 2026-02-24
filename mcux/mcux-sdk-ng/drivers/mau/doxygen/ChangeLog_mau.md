@@ -1,5 +1,10 @@
 # MAU
 
+## [2.2.2]
+
+- Bug fix
+  - Fixed assert judgment.
+
 ## [2.2.1]
 
 - Improvements

@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.flexcomm_spi_dma)
-    mcux_component_version(2.2.2)
+    mcux_component_version(2.2.3)
 
     mcux_add_source(SOURCES fsl_spi_dma.c fsl_spi_dma.h)
 

@@ -1,5 +1,10 @@
 # CCM32K
 
+## [2.2.1]
+
+- Bug Fixes
+  - Fixed doxygen warning: unbalanced grouping commands.
+
 ## [2.2.0]
 
 - Improvements

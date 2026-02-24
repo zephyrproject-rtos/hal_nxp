@@ -1,5 +1,15 @@
 # FREQME
 
+## [2.1.4]
+
+- Improvements
+  - Clarified pulse width measurement mode usage.
+
+## [2.1.3]
+
+- Bug Fixes
+  - Fixed violations of the CERT INT30-C INT31-C.
+
 ## [2.1.2]
 
 - Improvements

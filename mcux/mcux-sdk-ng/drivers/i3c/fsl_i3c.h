@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I3C driver version */
-#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 14, 3))
+#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 14, 4))
 /*! @} */
 
 /*!

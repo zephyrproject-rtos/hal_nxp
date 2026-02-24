@@ -1,5 +1,10 @@
 # CE
 
+## [2.3.4]
+
+- Improvements:
+  - Fixed violations of the MISRA C-2012 Rule 7.2, 11.3.
+
 ## [2.3.3]
 
 - Improvements

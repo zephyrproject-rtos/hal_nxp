@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, 2024-2025 NXP
+ * Copyright 2022, 2024-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -143,7 +143,7 @@ uint32_t LPI2C_GetInstance(LPI2C_Type *base)
 /*!
  * @brief Computes a cycle count for a given time in nanoseconds.
  * @param sourceClock_Hz LPI2C functional clock frequency in Hertz.
- * @param width_ns Desired with in nanoseconds.
+ * @param width_ns Desired width in nanoseconds.
  * @param minCycles Minimum cycle count.
  * @param maxCycles Maximum cycle count.
  * @param prescaler LPI2C prescaler setting. If the cycle period is not affected by the prescaler value, set it to 0.
@@ -434,7 +434,7 @@ void LPI2C_MasterInit(LPI2C_Type *base, const lpi2c_master_config_t *masterConfi
     }
     if (0U != masterConfig->sclGlitchFilterWidth_ns)
     {
-        /* Calculate SDL filter width. The width is equal to FILTSCL cycles of functional clock.
+        /* Calculate SCL filter width. The width is equal to FILTSCL cycles of functional clock.
            And set FILTSCL to 0 disables the fileter, so the min value is 1. */
         cycles = LPI2C_GetCyclesForWidth(sourceClock_Hz, masterConfig->sclGlitchFilterWidth_ns, 1U,
                                          (LPI2C_MCFGR2_FILTSCL_MASK >> LPI2C_MCFGR2_FILTSCL_SHIFT), 0U);
@@ -453,20 +453,22 @@ void LPI2C_MasterInit(LPI2C_Type *base, const lpi2c_master_config_t *masterConfi
 
     if (0U != (masterConfig->busIdleTimeout_ns))
     {
+        cfgr2 = base->MCFGR2;
         /* Calculate bus idle timeout value. The value is equal to BUSIDLE cycles of functional clock divided by
            prescaler. And set BUSIDLE to 0 disables the fileter, so the min value is 1. */
         cycles = LPI2C_GetCyclesForWidth(sourceClock_Hz, masterConfig->busIdleTimeout_ns, 1U,
                                          (LPI2C_MCFGR2_BUSIDLE_MASK >> LPI2C_MCFGR2_BUSIDLE_SHIFT), prescaler);
         cfgr2 &= ~LPI2C_MCFGR2_BUSIDLE_MASK;
         cfgr2 |= LPI2C_MCFGR2_BUSIDLE(cycles);
+        base->MCFGR2 = cfgr2;
     }
-    base->MCFGR2 = cfgr2;
+
     if (0U != masterConfig->pinLowTimeout_ns)
     {
         /* Calculate bus pin low timeout value. The value is equal to PINLOW cycles of functional clock divided by
            prescaler. And set PINLOW to 0 disables the fileter, so the min value is 1. */
         cycles       = LPI2C_GetCyclesForWidth(sourceClock_Hz, masterConfig->pinLowTimeout_ns / 256U, 1U,
-                                         (LPI2C_MCFGR2_BUSIDLE_MASK >> LPI2C_MCFGR2_BUSIDLE_SHIFT), prescaler);
+                                         (LPI2C_MCFGR3_PINLOW_MASK >> LPI2C_MCFGR3_PINLOW_SHIFT), prescaler);
         base->MCFGR3 = (base->MCFGR3 & ~LPI2C_MCFGR3_PINLOW_MASK) | LPI2C_MCFGR3_PINLOW(cycles);
     }
 
@@ -648,8 +650,13 @@ void LPI2C_MasterSetBaudRate(LPI2C_Type *base, uint32_t sourceClock_Hz, uint32_t
         if (filtSda < (sourceClock_Hz / baudRate_Hz / 20U - bestDivider - 2U))
         {
             filtSda = (uint8_t)(sourceClock_Hz / baudRate_Hz / 20U) - bestDivider - 2U;
+            if (filtSda > (LPI2C_MCFGR2_FILTSDA_MASK >> LPI2C_MCFGR2_FILTSDA_SHIFT))
+            {
+                filtSda = LPI2C_MCFGR2_FILTSDA_MASK >> LPI2C_MCFGR2_FILTSDA_SHIFT;
+            }
+
+            base->MCFGR2 = (base->MCFGR2 & ~LPI2C_MCFGR2_FILTSDA_MASK) | LPI2C_MCFGR2_FILTSDA(filtSda);
         }
-        base->MCFGR2 = (base->MCFGR2 & ~LPI2C_MCFGR2_FILTSDA_MASK) | LPI2C_MCFGR2_FILTSDA(filtSda);
     }
 
     /* Set CLKHI, CLKLO, SETHOLD, DATAVD value. */
@@ -724,46 +731,44 @@ status_t LPI2C_MasterStop(LPI2C_Type *base)
 {
     /* Wait until there is room in the fifo. */
     status_t result = LPI2C_MasterWaitForTxReady(base);
-    if (kStatus_Success == result)
+
+    /* Send the STOP signal */
+    base->MTDR = (uint32_t)kStopCmd;
+
+    /* Wait for the stop detected flag to set, indicating the transfer has completed on the bus. */
+    /* Also check for errors while waiting. */
+#if I2C_RETRY_TIMES != 0U
+    uint32_t waitTimes = I2C_RETRY_TIMES;
+#endif
+
+#if I2C_RETRY_TIMES != 0U
+    while ((result == kStatus_Success) && (0U != waitTimes))
     {
-        /* Send the STOP signal */
-        base->MTDR = (uint32_t)kStopCmd;
-
-        /* Wait for the stop detected flag to set, indicating the transfer has completed on the bus. */
-        /* Also check for errors while waiting. */
-#if I2C_RETRY_TIMES != 0U
-        uint32_t waitTimes = I2C_RETRY_TIMES;
-#endif
-
-#if I2C_RETRY_TIMES != 0U
-        while ((result == kStatus_Success) && (0U != waitTimes))
-        {
-            waitTimes--;
+        waitTimes--;
 #else
-        while (result == kStatus_Success)
-        {
+    while (result == kStatus_Success)
+    {
 #endif
-            uint32_t status = LPI2C_MasterGetStatusFlags(base);
+        uint32_t status = LPI2C_MasterGetStatusFlags(base);
 
-            /* Check for error flags. */
-            result = LPI2C_MasterCheckAndClearError(base, status);
+        /* Check for error flags. */
+        result = LPI2C_MasterCheckAndClearError(base, status);
 
-            /* Check if the stop was sent successfully. */
-            if ((0U != (status & (uint32_t)kLPI2C_MasterStopDetectFlag)) &&
-                (0U != (status & (uint32_t)kLPI2C_MasterTxReadyFlag)))
-            {
-                LPI2C_MasterClearStatusFlags(base, (uint32_t)kLPI2C_MasterStopDetectFlag);
-                break;
-            }
+        /* Check if the stop was sent successfully. */
+        if ((0U != (status & (uint32_t)kLPI2C_MasterStopDetectFlag)) &&
+            (0U != (status & (uint32_t)kLPI2C_MasterTxReadyFlag)))
+        {
+            LPI2C_MasterClearStatusFlags(base, (uint32_t)kLPI2C_MasterStopDetectFlag);
+            break;
         }
+    }
 
 #if I2C_RETRY_TIMES != 0U
-        if (0U == waitTimes)
-        {
-            result = kStatus_LPI2C_Timeout;
-        }
-#endif
+    if (0U == waitTimes)
+    {
+        result = kStatus_LPI2C_Timeout;
     }
+#endif
 
     return result;
 }
@@ -1009,22 +1014,16 @@ status_t LPI2C_MasterTransferBlocking(LPI2C_Type *base, lpi2c_master_transfer_t 
             {
                 result = LPI2C_MasterReceive(base, transfer->data, transfer->dataSize);
             }
+        }
+
+        if ((transfer->flags & (uint32_t)kLPI2C_TransferNoStopFlag) == 0U)
+        {
+            /* Send STOP */
+            status_t stopResult = LPI2C_MasterStop(base);
 
             if (kStatus_Success == result)
             {
-                if ((transfer->flags & (uint32_t)kLPI2C_TransferNoStopFlag) == 0U)
-                {
-                    result = LPI2C_MasterStop(base);
-                }
-            }
-        }
-
-        /* Transmit fail */
-        if (kStatus_Success != result)
-        {
-            if ((transfer->flags & (uint32_t)kLPI2C_TransferNoStopFlag) == 0U)
-            {
-                (void)LPI2C_MasterStop(base);
+                result = stopResult;
             }
         }
     }

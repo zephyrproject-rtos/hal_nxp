@@ -1,5 +1,9 @@
 # PDM
 
+## [2.9.4]
+- Improvements
+  - support multiple IRQ handlers
+
 ## [2.9.3]
 
 - Bug Fixes

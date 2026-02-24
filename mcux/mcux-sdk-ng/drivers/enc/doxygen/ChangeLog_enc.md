@@ -1,5 +1,9 @@
 # ENC
 
+## [2.2.2]
+- Bug Fixes
+  - Fixed CERT INT31-C violations.
+
 ## [2.2.1]
 
 - Improvements

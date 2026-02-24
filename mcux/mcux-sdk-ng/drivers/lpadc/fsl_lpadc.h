@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief LPADC driver version 2.9.4. */
-#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 9, 4))
+/*! @brief LPADC driver version 2.9.5. */
+#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 9, 5))
 /*! @} */
 
 /*! @name Configuration */
@@ -960,6 +960,8 @@ static inline void LPADC_DisableInterrupts(ADC_Type *base, uint32_t mask)
     base->IE &= ~mask;
 }
 
+/*! @} */
+
 /*!
  * @name DMA Control
  * @{
@@ -1229,8 +1231,11 @@ static inline void LPADC_SetOffsetValue(ADC_Type *base, uint32_t value)
  *
  * Calibration function should be executed before using converter in application. It used the software trigger and a
  * dummy conversion, get the offset and write them into the OFSTRIM register. It called some of functional API
- * including: -LPADC_EnableCalibration(...) -LPADC_LPADC_SetOffsetValue(...) -LPADC_SetConvCommandConfig(...)
- *   -LPADC_SetConvTriggerConfig(...)
+ * including: 
+ * - LPADC_EnableCalibration(...)
+ * - LPADC_SetOffsetValue(...)
+ * - LPADC_SetConvCommandConfig(...)
+ * - LPADC_SetConvTriggerConfig(...)
  *
  * @param base  LPADC peripheral base address.
  *

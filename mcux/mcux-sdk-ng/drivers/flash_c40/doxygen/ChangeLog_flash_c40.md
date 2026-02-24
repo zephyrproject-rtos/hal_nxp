@@ -1,5 +1,10 @@
 # FLASH-C40
 
+## [1.2.1]
+
+- Fixed unaligned write
+- Fixed verify routine in flash protection setup
+
 ## [1.2.0]
 
 - UTEST write support

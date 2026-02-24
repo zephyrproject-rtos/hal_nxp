@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -17,7 +17,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define FSL_QDC_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_QDC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 
 /*!
  * @brief Interrupt enable/disable mask.

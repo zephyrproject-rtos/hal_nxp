@@ -1,5 +1,9 @@
 # ASRC
 
+## [2.1.4]
+- Improvements
+  - Aligned clock source configuration for ASRC peripheral
+
 ## [2.1.3]
 
 - Bug Fixes

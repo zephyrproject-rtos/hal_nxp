@@ -1,5 +1,12 @@
 # XBAR
 
+## [2.2.1]
+
+- Bug Fixes
+  - Fixed CERT-C issues.
+  - Fixed bug that `XBAR_SetOutputSignalConfig` doesn't clear old configuration when
+    setting new configurations.
+
 ## [2.2.0]
 
 - New Features

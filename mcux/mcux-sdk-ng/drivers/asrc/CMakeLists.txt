@@ -12,7 +12,7 @@ if(CONFIG_MCUX_COMPONENT_driver.asrc_edma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.asrc)
-    mcux_component_version(2.1.3)
+    mcux_component_version(2.1.4)
 
     mcux_add_source(SOURCES fsl_asrc.h fsl_asrc.c)
 

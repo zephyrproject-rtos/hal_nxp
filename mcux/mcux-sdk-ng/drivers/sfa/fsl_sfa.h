@@ -21,11 +21,13 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief SFA driver version 2.1.3 */
-#define FSL_SFA_DRVIER_VERSION (MAKE_VERSION(2, 1, 3))
+/*! @brief SFA driver version 2.1.4 */
+#define FSL_SFA_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
 /*! @} */
 
-/*! @name Configuration */
+/*! @name Configuration
+ * @{
+ */
 
 /*!
  * @brief Max loops to wait for SFA measurement started
@@ -79,7 +81,6 @@
  * This callback can be used in non blocking IRQHandler.
  * Specify the callback you want in the call to SFA_InstallCallback().
  *
- * @param base SFA peripheral base address.
  * @param status The runtime measurement status.
  *        kStatus_SFA_MeasurementCompleted: The measurement completes.
  *        kStatus_SFA_ReferenceCounterTimeout: Reference counter timeout happenes.
@@ -554,6 +555,7 @@ static inline uint32_t SFA_GetCUTHighLimitClockCount(SFA_Type *base)
 
 /*!
  * @name Control REF counter
+ * @{
  */
 
 /*!

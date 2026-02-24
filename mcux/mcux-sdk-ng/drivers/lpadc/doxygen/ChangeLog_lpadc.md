@@ -1,5 +1,10 @@
 # LPADC
 
+## [2.9.5]
+
+- Improvements
+  - Fix doxygen issue, grouping command should be balanced.
+
 ## [2.9.4]
 
 - Improvements

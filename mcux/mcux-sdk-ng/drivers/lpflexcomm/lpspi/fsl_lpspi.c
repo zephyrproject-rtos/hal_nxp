@@ -967,7 +967,7 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
 
     /* Configure transfer control register. */
     base->TCR = (LPSPI_GetTcr(base) & ~(LPSPI_TCR_CONT_MASK | LPSPI_TCR_CONTC_MASK | LPSPI_TCR_RXMSK_MASK |
-                               LPSPI_TCR_TXMSK_MASK | LPSPI_TCR_PCS_MASK)) |
+                               LPSPI_TCR_TXMSK_MASK | LPSPI_TCR_PCS_MASK | LPSPI_TCR_WIDTH_MASK)) |
                 LPSPI_TCR_PCS(whichPcs) | LPSPI_TCR_WIDTH(width);
 
     /*TCR is also shared the FIFO, so wait for TCR written.*/

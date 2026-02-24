@@ -46,7 +46,17 @@ typedef struct mu_message
     uint32_t payload[ELEMU_TR_COUNT - MU_MSG_HEADER_SIZE];
 } mu_message_t;
 
-void ELEMU_mu_hal_send_data(ELEMU_Type *mu, uint8_t regid, uint32_t *data)
+ 
+/*!
+ * brief Send one word of data to specified transmit register.
+ *
+ * This function waits until the transmit register is ready and writes one word of data.
+ *
+ * param mu ELEMU peripheral base address
+ * param regid Transmit register index
+ * param data Pointer to data to be sent
+ */
+ void ELEMU_mu_hal_send_data(ELEMU_Type *mu, uint8_t regid, uint32_t *data)
 {
     uint32_t mask = (BIT(regid));
     while ((mu->TSR & mask) == 0u)
@@ -55,6 +65,15 @@ void ELEMU_mu_hal_send_data(ELEMU_Type *mu, uint8_t regid, uint32_t *data)
     mu->TR[regid] = *data;
 }
 
+/*!
+ * brief Receive one word of data from specified receive register.
+ *
+ * This function waits until data is available in the receive register and reads it.
+ *
+ * param mu ELEMU peripheral base address
+ * param regid Receive register index
+ * param data Pointer to store received data
+ */
 void ELEMU_mu_hal_receive_data(ELEMU_Type *mu, uint8_t regid, uint32_t *data)
 {
     uint32_t mask        = BIT(regid);
@@ -70,6 +89,16 @@ void ELEMU_mu_hal_receive_data(ELEMU_Type *mu, uint8_t regid, uint32_t *data)
     }
 }
 
+/*!
+ * brief Wait for data availability and receive one word from specified register.
+ *
+ * param mu ELEMU peripheral base address
+ * param regid Receive register index
+ * param data Pointer to store received data
+ * param wait Maximum wait iterations
+ *
+ * return kStatus_Success if successful, kStatus_ELEMU_RequestTimeout if timeout
+ */
 status_t ELEMU_mu_hal_receive_data_wait(ELEMU_Type *mu, uint8_t regid, uint32_t *data, uint32_t wait)
 {
     uint32_t mask        = BIT(regid);
@@ -77,11 +106,12 @@ status_t ELEMU_mu_hal_receive_data_wait(ELEMU_Type *mu, uint8_t regid, uint32_t 
     status_t ret         = 0;
     while ((mu->RSR & mask) == 0u)
     {
-        if (--wait == 0u)
+        if (wait == 0u)
         {
             ret = kStatus_ELEMU_RequestTimeout;
             break;
         }
+        wait--;
     }
     if (ret != kStatus_ELEMU_RequestTimeout)
     {
@@ -96,6 +126,18 @@ status_t ELEMU_mu_hal_receive_data_wait(ELEMU_Type *mu, uint8_t regid, uint32_t 
     return ret;
 }
 
+/*!
+ * brief Send a message to ELEMU using transmit registers.
+ *
+ * This function sends a message buffer to ELEMU by writing words to transmit registers.
+ *
+ * param mu ELEMU peripheral base address
+ * param buf Pointer to message buffer
+ * param wordCount Number of words to send
+ *
+ * return kStatus_Success if successful, kStatus_ELEMU_InvalidArgument if buf is NULL,
+ *         kStatus_ELEMU_AgumentOutOfRange if wordCount exceeds register count
+ */
 status_t ELEMU_mu_send_message(ELEMU_Type *mu, uint32_t buf[], size_t wordCount)
 {
     uint8_t tx_reg_idx = 0u;
@@ -124,6 +166,16 @@ status_t ELEMU_mu_send_message(ELEMU_Type *mu, uint32_t buf[], size_t wordCount)
     return ret;
 }
 
+/*!
+ * brief Wait until ELEMU is ready for communication.
+ *
+ * This function checks the status register and waits until ELEMU is ready.
+ *
+ * param mu ELEMU peripheral base address
+ * param wait Maximum wait iterations
+ *
+ * return kStatus_Success if ready, kStatus_ELEMU_RequestTimeout if timeout
+ */
 status_t ELEMU_mu_wait_for_ready(ELEMU_Type *mu, uint32_t wait)
 {
     if (kStatus_Success != ELEMU_LP_WakeupPathInit(mu))
@@ -158,6 +210,14 @@ status_t ELEMU_mu_wait_for_ready(ELEMU_Type *mu, uint32_t wait)
 #endif
 }
 #if (defined(FSL_FEATURE_ELEMU_HAS_SEMA4_STATUS_REGISTER) && FSL_FEATURE_ELEMU_HAS_SEMA4_STATUS_REGISTER)
+
+/*!
+ * brief Get current ownership status of ELEMU.
+ *
+ * param mu ELEMU peripheral base address
+ *
+ * return Ownership status enum value
+ */
 elemu_ownership_status_t ELEMU_mu_get_ownership_status(ELEMU_Type *mu)
 {
     elemu_ownership_status_t ret = kStatus_ELEMU_Unknown;
@@ -181,6 +241,16 @@ elemu_ownership_status_t ELEMU_mu_get_ownership_status(ELEMU_Type *mu)
     return ret;
 }
 
+/*!
+ * brief Attempt to acquire ownership of ELEMU.
+ *
+ * This function tries to acquire ownership of ELEMU using the semaphore register.
+ *
+ * param mu ELEMU peripheral base address
+ *
+ * return kStatus_Success if acquired, kStatus_ELEMU_Busy if locked by other,
+ *         kStatus_Fail if acquisition failed
+ */
 status_t ELEMU_mu_get_ownership(ELEMU_Type *mu)
 {
     status_t ret    = kStatus_Fail;
@@ -200,6 +270,16 @@ status_t ELEMU_mu_get_ownership(ELEMU_Type *mu)
     return ret;
 }
 
+/*!
+ * brief Release ownership of ELEMU.
+ *
+ * This function releases ownership of ELEMU using the semaphore release register.
+ *
+ * param mu ELEMU peripheral base address
+ *
+ * return kStatus_Success if released, kStatus_ELEMU_Busy if locked by other,
+ *         kStatus_Fail if release failed
+ */
 status_t ELEMU_mu_release_ownership(ELEMU_Type *mu)
 {
     status_t ret    = kStatus_Fail;
@@ -219,6 +299,16 @@ status_t ELEMU_mu_release_ownership(ELEMU_Type *mu)
     return ret;
 }
 
+/*!
+ * brief Release ownership of ELEMU.
+ *
+ * This function releases ownership of ELEMU using the semaphore release register.
+ *
+ * param mu ELEMU peripheral base address
+ *
+ * return kStatus_Success if released, kStatus_ELEMU_Busy if locked by other,
+ *         kStatus_Fail if release failed
+ */
 status_t ELEMU_mu_release_ownership_force(ELEMU_Type *mu)
 {
     status_t ret    = kStatus_Fail;
@@ -239,6 +329,18 @@ status_t ELEMU_mu_release_ownership_force(ELEMU_Type *mu)
 }
 #endif /* FSL_FEATURE_ELEMU_HAS_SEMA4_STATUS_REGISTER */
 
+/*!
+ * brief Read a message from ELEMU receive registers.
+ *
+ * This function reads a message from ELEMU including header and payload.
+ *
+ * param mu ELEMU peripheral base address
+ * param buf Pointer to buffer to store message
+ * param size Pointer to size variable
+ * param read_header Flag to indicate if header should be read
+ *
+ * return kStatus_Success if successful, kStatus_ELEMU_InvalidArgument if buf or size is NULL
+ */
 status_t ELEMU_mu_read_message(ELEMU_Type *mu, uint32_t *buf, uint8_t *size, uint8_t read_header)
 {
     uint8_t msg_size   = 0u;
@@ -258,6 +360,12 @@ status_t ELEMU_mu_read_message(ELEMU_Type *mu, uint32_t *buf, uint8_t *size, uin
             ELEMU_mu_hal_receive_data(mu, rx_reg_idx, (uint32_t *)(uintptr_t)&msg->header);
             msg_size = msg->header.size;
             rx_reg_idx++;
+
+            /* prevent wrap on `msg_size + 1u` */
+            if (((uint8_t)UINT8_MAX) - msg_size < 1u)
+            {
+                return kStatus_OutOfRange;
+            }
             *size = msg_size + 1u;
         }
         else
@@ -278,6 +386,19 @@ status_t ELEMU_mu_read_message(ELEMU_Type *mu, uint32_t *buf, uint8_t *size, uin
     return ret;
 }
 
+/*!
+ * brief Wait and read data from ELEMU receive registers.
+ *
+ * This function waits for data availability and reads the specified number of words.
+ *
+ * param mu ELEMU peripheral base address
+ * param buf Pointer to buffer to store data
+ * param size Pointer to size variable
+ * param wait Maximum wait iterations
+ *
+ * return kStatus_Success if successful, kStatus_ELEMU_InvalidArgument if buf or size is NULL,
+ *         kStatus_ELEMU_RequestTimeout if timeout
+ */
 status_t ELEMU_mu_read_data_wait(ELEMU_Type *mu, uint32_t buf[], uint8_t *size, uint32_t wait)
 {
     uint8_t msg_size   = 0u;
@@ -314,6 +435,18 @@ status_t ELEMU_mu_read_data_wait(ELEMU_Type *mu, uint32_t buf[], uint8_t *size, 
     return ret;
 }
 
+/*!
+ * brief Get response message from ELEMU.
+ *
+ * This function reads a response message from ELEMU using the read_message function.
+ *
+ * param mu ELEMU peripheral base address
+ * param buf Pointer to buffer to store response
+ * param wordCount Expected number of words
+ *
+ * return kStatus_Success if successful, kStatus_ELEMU_InvalidArgument if buf is NULL,
+ *         kStatus_ELEMU_AgumentOutOfRange if wordCount exceeds register count
+ */
 status_t ELEMU_mu_get_response(ELEMU_Type *mu, uint32_t *buf, size_t wordCount)
 {
     uint8_t size = (uint8_t)wordCount;
@@ -333,6 +466,19 @@ status_t ELEMU_mu_get_response(ELEMU_Type *mu, uint32_t *buf, size_t wordCount)
     return ret;
 }
 
+/*!
+ * brief Wait for data availability and read from ELEMU.
+ *
+ * This function waits for data and reads the specified number of words.
+ *
+ * param mu ELEMU peripheral base address
+ * param buf Pointer to buffer to store data
+ * param wordCount Expected number of words
+ * param wait Maximum wait iterations
+ *
+ * return kStatus_Success if successful, kStatus_ELEMU_InvalidArgument if buf is NULL,
+ *         kStatus_ELEMU_AgumentOutOfRange if wordCount exceeds register count
+ */
 status_t ELEMU_mu_wait_for_data(ELEMU_Type *mu, uint32_t *buf, size_t wordCount, uint32_t wait)
 {
     uint8_t size = (uint8_t)wordCount;
@@ -352,10 +498,18 @@ status_t ELEMU_mu_wait_for_data(ELEMU_Type *mu, uint32_t *buf, size_t wordCount,
     return ret;
 }
 
+/*!
+ * brief Initialize ELEMU module.
+ *
+ * This function does nothing. ELEMU is initialized after leaving ROM.
+ *
+ * param mu ELEMU peripheral base address
+ */
 void ELEMU_mu_init(ELEMU_Type *mu)
 {
     /* nothing to do for initialization */
 }
+
 
 static status_t ELEMU_StartupWait(ELEMU_Type *mu)
 {
@@ -381,6 +535,15 @@ static status_t ELEMU_StartupWait(ELEMU_Type *mu)
     return status;
 }
 
+/*!
+ * brief Initialize low-power wakeup path for ELEMU.
+ *
+ * This function enables clocks and waits for ELEMU startup sequence.
+ *
+ * param mu ELEMU peripheral base address
+ *
+ * return kStatus_Success if successful, kStatus_Fail otherwise
+ */
 status_t ELEMU_LP_WakeupPathInit(ELEMU_Type *mu)
 {
     status_t status = kStatus_Fail;
@@ -421,6 +584,16 @@ status_t ELEMU_LP_WakeupPathInit(ELEMU_Type *mu)
 #define TUNNEL_TYPE_SB3_ELE_FW   0x22u
 #define SB3_BLOCK0_SIZE_IN_BYTES 0x60u
 
+/*!
+ * brief Load firmware into ELE.
+ *
+ * This function uploads firmware to ELEMU using secure tunnel.
+ *
+ * param mu ELEMU peripheral base address
+ * param image Pointer to firmware image data
+ *
+ * return kStatus_Success if successful, kStatus_Fail otherwise
+ */
 status_t ELEMU_loadFw(ELEMU_Type *mu, uint32_t image[])
 {
     uint32_t resultState          = 0u;

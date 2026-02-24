@@ -1,5 +1,10 @@
 # XBAR
 
+## [2.1.1]
+
+- Bug Fixes
+  - Fixed CERT-C issues.
+
 ## [2.1.0]
 
 - Improvements

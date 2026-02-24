@@ -1,5 +1,15 @@
 # MU
 
+## [2.3.3]
+
+- Improvements
+  - Fix build failure when driver clock control disabled.
+  
+## [2.3.2]
+
+- Improvements
+  - Fix MISRA C-2012 Rule 20.8 violations.
+
 ## [2.3.1]
 
 - Bug Fixes

@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FlexCAN driver version. */
-#define FSL_FLEXCAN_DRIVER_VERSION (MAKE_VERSION(2, 14, 5))
+#define FSL_FLEXCAN_DRIVER_VERSION (MAKE_VERSION(2, 15, 0))
 /*! @} */
 
 #if !(defined(FLEXCAN_WAIT_TIMEOUT) && FLEXCAN_WAIT_TIMEOUT)
@@ -2501,6 +2501,47 @@ status_t FLEXCAN_TransferSendNonBlocking(CAN_Type *base, flexcan_handle_t *handl
  * @retval kStatus_FLEXCAN_RxBusy - Rx Message Buffer is in use.
  */
 status_t FLEXCAN_TransferReceiveNonBlocking(CAN_Type *base, flexcan_handle_t *handle, flexcan_mb_transfer_t *pMbXfer);
+
+/*!
+ * @brief Sends a remote request frame using IRQ.
+ *
+ * This function sends a remote request frame using IRQ. This is a non-blocking function, which returns
+ * right away. When the remote request frame has been sent out, the send callback function is called.
+ * User should invoke API FLEXCAN_TransferReceiveNonBlocking to receive the response frame. Receive
+ * message buffer index should less than send message buffer index.
+ *
+ * @param base FlexCAN peripheral base address.
+ * @param handle FlexCAN handle pointer.
+ * @param pMbXfer FlexCAN Message Buffer transfer structure. See the #flexcan_mb_transfer_t.
+ * @retval kStatus_Success        Start Tx remote request frame sending process successfully.
+ * @retval kStatus_Fail           Write Tx Message Buffer failed.
+ * @retval kStatus_FLEXCAN_TxBusy Message Buffer is transmitting remote request frame.
+ */
+status_t FLEXCAN_TransferRemoteRequestNonBlocking(CAN_Type *base,
+                                                  flexcan_handle_t *handle,
+                                                  flexcan_mb_transfer_t *pMbXfer);
+
+/*!
+ * @brief Configures a FlexCAN Message Buffer for automatic remote response using IRQ.
+ *
+ * This function configures a Message Buffer to automatically respond to remote request frames using IRQ.
+ * This is a non-blocking function, which returns right away. When a matching remote request frame is
+ * received, the configured response frame will be transmitted automatically, and the callback function
+ * will be called.
+ * User should invoke this API when CTRL2[RRS]=0.
+ * When CTRL2[RRS]=0, if a remote request frame is received and matches a mailbox configured with
+ * CODE=kFLEXCAN_RxMbRanswer, the mailbox content will be transmitted as a response frame automatically.
+ * The received remote request frame is not stored.
+ *
+ * @param base FlexCAN peripheral base address.
+ * @param handle FlexCAN handle pointer.
+ * @param pMbXfer FlexCAN Message Buffer transfer structure. See the #flexcan_mb_transfer_t.
+ * @retval kStatus_Success   Configure remote response Message Buffer successfully.
+ * @retval kStatus_Busy      Message Buffer is waiting for remote request frame or transmitting response frame.
+ */
+status_t FLEXCAN_TransferRemoteResponseNonBlocking(CAN_Type *base,
+                                                   flexcan_handle_t *handle,
+                                                   flexcan_mb_transfer_t *pMbXfer);
 
 /*!
  * @brief Receives a message from Rx FIFO using IRQ.

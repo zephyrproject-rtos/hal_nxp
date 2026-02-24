@@ -1,5 +1,10 @@
 # I2C
 
+## [2.3.4]
+
+- Bug Fixes
+  - Added internal reset of master function after arbitration lost in I2C_MasterTransferHandleIRQ(), otherwise the STAT[MSTARBLOSS] is not set in next transfer.
+
 ## [2.3.3]
 
 - Bug Fixes

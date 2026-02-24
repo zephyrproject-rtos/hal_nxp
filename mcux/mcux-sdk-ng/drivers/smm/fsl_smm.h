@@ -221,12 +221,12 @@ static inline void SMM_ShutDownBandgapInLowPowerModes(SMM_Type *base, bool shutd
 {
     if (shutdown)
     {
-        base->PWDN_CONFIG |= SMM_PWDN_CONFIG_BGR_DSBL_DPD_PD_MASK;
+        base->PWDN_CONFIG |= SMM_PWDN_CONFIG_BGR_PULSE_MASK;
         base->PWDN_CONFIG |= SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK;
     }
     else
     {
-        base->PWDN_CONFIG &= ~SMM_PWDN_CONFIG_BGR_DSBL_DPD_PD_MASK;
+        base->PWDN_CONFIG &= ~SMM_PWDN_CONFIG_BGR_PULSE_MASK;
         base->PWDN_CONFIG &= ~SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK;
     }
 }
@@ -281,11 +281,11 @@ static inline void SMM_SwitchToXTAL32(SMM_Type *base, bool enable)
 {
     if (enable)
     {
-        base->PWDN_CONFIG &= ~SMM_PWDN_CONFIG_AON_DPD_SL_CLK_MASK;
+        base->PWDN_CONFIG &= ~SMM_PWDN_CONFIG_AON_DPD_CLK_SEL_MASK;
     }
     else
     {
-        base->PWDN_CONFIG |= SMM_PWDN_CONFIG_AON_DPD_SL_CLK_MASK;
+        base->PWDN_CONFIG |= SMM_PWDN_CONFIG_AON_DPD_CLK_SEL_MASK;
     }
 }
 

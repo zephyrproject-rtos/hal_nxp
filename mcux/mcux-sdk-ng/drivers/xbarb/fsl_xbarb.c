@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -114,13 +114,13 @@ void XBARB_SetSignalsConnection(XBARB_Type *base, xbar_input_signal_t input, xba
 {
     xbarb_u8_u16_t regVal;
     uint8_t byteInReg;
-    uint8_t outputIndex = (uint8_t)output;
+    uint8_t outputIndex = (uint8_t)((unsigned)output & 0xFFU);
 
     byteInReg = outputIndex % 2U;
 
     regVal._u16 = XBARB_SELx(base, outputIndex);
 
-    regVal._u8[byteInReg] = (uint8_t)input;
+    regVal._u8[byteInReg] = (uint8_t)((unsigned)input & 0xFFU);
 
     XBARB_SELx(base, outputIndex) = regVal._u16;
 }

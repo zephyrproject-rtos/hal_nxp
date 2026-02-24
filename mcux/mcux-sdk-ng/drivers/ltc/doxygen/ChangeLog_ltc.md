@@ -1,5 +1,10 @@
 # LTC
 
+## [2.0.18]
+
+- Bug fix:
+ - Fix CERT INT30-C and INT31-C compliance.
+
 ## [2.0.17]
 
 - Bug fix:

@@ -26,6 +26,8 @@
 /*! @brief Flash driver version for SDK*/
 #define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(2, 3, 3)) /*!< Version 2.3.3. */
 
+/*! @} */
+
 /*! @brief Flash driver version for ROM*/
 enum _flash_driver_version_constants
 {

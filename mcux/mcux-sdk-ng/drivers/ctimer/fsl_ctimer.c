@@ -569,7 +569,18 @@ static void CTIMER_GenericIRQHandler(uint32_t index)
     /* Get Interrupt status flags */
     int_stat = CTIMER_GetStatusFlags(s_ctimerBases[index]);
     /* Clear the status flags that were set */
+#if defined(FSL_FEATURE_CTIMER_HAS_ERRATA_53024) && FSL_FEATURE_CTIMER_HAS_ERRATA_53024
+    do {
+        /* ERR053024: CTIMER may enter interrupt twice when function clock 
+         * is much slower than bus clock. Keep clearing the interrupt flag 
+         * until it's confirmed to be cleared to avoid spurious interrupts.
+         */
+        CTIMER_ClearStatusFlags(s_ctimerBases[index], int_stat);
+    } while ((int_stat = CTIMER_GetStatusFlags(s_ctimerBases[index])) != 0U);
+#else
     CTIMER_ClearStatusFlags(s_ctimerBases[index], int_stat);
+#endif
+    
     if (ctimerCallbackType[index] == kCTIMER_SingleCallback)
     {
         if (s_ctimerCallback[index][0] != NULL)

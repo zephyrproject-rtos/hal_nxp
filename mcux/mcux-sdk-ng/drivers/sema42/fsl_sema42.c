@@ -182,13 +182,13 @@ status_t SEMA42_TryLock(SEMA42_Type *base, uint8_t gateNum, uint8_t procNum)
  */
 status_t SEMA42_Lock(SEMA42_Type *base, uint8_t gateNum, uint8_t procNum)
 {
-#if SEMA42_BUSY_POLL_COUNT
+#if defined(SEMA42_BUSY_POLL_COUNT) && (SEMA42_BUSY_POLL_COUNT > 0)
     uint32_t poll_count = SEMA42_BUSY_POLL_COUNT;
 #endif
 
     while (kStatus_Success != SEMA42_TryLock(base, gateNum, procNum))
     {
-#if SEMA42_BUSY_POLL_COUNT
+#if defined(SEMA42_BUSY_POLL_COUNT) && (SEMA42_BUSY_POLL_COUNT > 0)
         if ((--poll_count) == 0u)
         {
             return kStatus_Timeout;

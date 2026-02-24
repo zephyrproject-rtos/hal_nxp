@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief QSPI EDMA driver version. */
-#define FSL_QSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
+#define FSL_QSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 5))
 /*! @} */
 
 typedef struct _qspi_edma_handle qspi_edma_handle_t;

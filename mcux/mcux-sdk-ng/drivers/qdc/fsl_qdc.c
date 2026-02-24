@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -101,8 +101,8 @@ void QDC_Init(QDC_Type *base, const qdc_config_t *config)
 #endif
 
     /* QDC_CTRL. */
-    tmp16 = base->CTRL & (uint16_t)(~(QDC_CTRL_W1C_FLAGS | QDC_CTRL_HIP_MASK | QDC_CTRL_HNE_MASK | QDC_CTRL_REV_MASK |
-                                      QDC_CTRL_PH1_MASK | QDC_CTRL_XIP_MASK | QDC_CTRL_XNE_MASK | QDC_CTRL_WDE_MASK));
+    tmp16 = base->CTRL & MCUX_MASK_INVERT_16(QDC_CTRL_W1C_FLAGS | QDC_CTRL_HIP_MASK | QDC_CTRL_HNE_MASK | QDC_CTRL_REV_MASK |
+                                    QDC_CTRL_PH1_MASK | QDC_CTRL_XIP_MASK | QDC_CTRL_XNE_MASK | QDC_CTRL_WDE_MASK);
     /* For HOME trigger. */
     if (kQDC_HOMETriggerDisabled != config->HOMETriggerMode)
     {
@@ -146,8 +146,8 @@ void QDC_Init(QDC_Type *base, const qdc_config_t *config)
         ;
 
     /* QDC_CTRL2. */
-    tmp16 = base->CTRL2 & (uint16_t)(~(QDC_CTRL2_W1C_FLAGS | QDC_CTRL2_OUTCTL_MASK | QDC_CTRL2_REVMOD_MASK |
-                                       QDC_CTRL2_MOD_MASK | QDC_CTRL2_UPDPOS_MASK | QDC_CTRL2_UPDHLD_MASK));
+    tmp16 = base->CTRL2 & MCUX_MASK_INVERT_16(QDC_CTRL2_W1C_FLAGS | QDC_CTRL2_OUTCTL_MASK | QDC_CTRL2_REVMOD_MASK |
+                                    QDC_CTRL2_MOD_MASK | QDC_CTRL2_UPDPOS_MASK | QDC_CTRL2_UPDHLD_MASK);
     if (kQDC_POSMATCHOnReadingAnyPositionCounter == config->positionMatchMode)
     {
         tmp16 |= QDC_CTRL2_OUTCTL_MASK;
@@ -160,8 +160,8 @@ void QDC_Init(QDC_Type *base, const qdc_config_t *config)
     {
         tmp16 |= QDC_CTRL2_MOD_MASK;
         /* Set modulus value. */
-        base->UMOD = (uint16_t)(config->positionModulusValue >> 16U); /* Upper 16 bits. */
-        base->LMOD = (uint16_t)(config->positionModulusValue);        /* Lower 16 bits. */
+        base->UMOD = (uint16_t)(config->positionModulusValue >> 16U);    /* Upper 16 bits. */
+        base->LMOD = (uint16_t)(config->positionModulusValue & 0xFFFFU); /* Lower 16 bits. */
     }
     if (config->enableTRIGGERClearPositionCounter)
     {
@@ -175,7 +175,7 @@ void QDC_Init(QDC_Type *base, const qdc_config_t *config)
 
 #if (defined(FSL_FEATURE_QDC_HAS_CTRL3) && FSL_FEATURE_QDC_HAS_CTRL3)
     /* QDC_CTRL3. */
-    tmp16 = base->CTRL3 & (uint16_t)(~(QDC_CTRL3_PMEN_MASK | QDC_CTRL3_PRSC_MASK));
+    tmp16 = base->CTRL3 & MCUX_MASK_INVERT_16((uint16_t)QDC_CTRL3_PMEN_MASK | (uint16_t)QDC_CTRL3_PRSC_MASK);
     if (config->enablePeriodMeasurementFunction)
     {
         tmp16 |= QDC_CTRL3_PMEN_MASK;
@@ -186,12 +186,12 @@ void QDC_Init(QDC_Type *base, const qdc_config_t *config)
 #endif
 
     /* QDC_UCOMP & QDC_LCOMP. */
-    base->UCOMP = (uint16_t)(config->positionCompareValue >> 16U); /* Upper 16 bits. */
-    base->LCOMP = (uint16_t)(config->positionCompareValue);        /* Lower 16 bits. */
+    base->UCOMP = (uint16_t)(config->positionCompareValue >> 16U);    /* Upper 16 bits. */
+    base->LCOMP = (uint16_t)(config->positionCompareValue & 0xFFFFU); /* Lower 16 bits. */
 
     /* QDC_UINIT & QDC_LINIT. */
-    base->UINIT = (uint16_t)(config->positionInitialValue >> 16U); /* Upper 16 bits. */
-    base->LINIT = (uint16_t)(config->positionInitialValue);        /* Lower 16 bits. */
+    base->UINIT = (uint16_t)(config->positionInitialValue >> 16U);    /* Upper 16 bits. */
+    base->LINIT = (uint16_t)(config->positionInitialValue & 0xFFFFU); /* Lower 16 bits. */
 }
 
 /*!
@@ -280,7 +280,7 @@ void QDC_GetDefaultConfig(qdc_config_t *config)
  */
 void QDC_DoSoftwareLoadInitialPositionValue(QDC_Type *base)
 {
-    uint16_t tmp16 = base->CTRL & (uint16_t)(~QDC_CTRL_W1C_FLAGS);
+    uint16_t tmp16 = base->CTRL & MCUX_MASK_INVERT_16(QDC_CTRL_W1C_FLAGS);
 
     tmp16 |= QDC_CTRL_SWIP_MASK; /* Write 1 to trigger the command for loading initial position value. */
     base->CTRL = tmp16;
@@ -325,7 +325,7 @@ void QDC_SetSelfTestConfig(QDC_Type *base, const qdc_self_test_config_t *config)
  */
 void QDC_EnableWatchdog(QDC_Type *base, bool enable)
 {
-    uint16_t tmp16 = base->CTRL & (uint16_t)(~(QDC_CTRL_W1C_FLAGS | QDC_CTRL_WDE_MASK));
+    uint16_t tmp16 = base->CTRL & MCUX_MASK_INVERT_16(QDC_CTRL_W1C_FLAGS | QDC_CTRL_WDE_MASK);
 
     if (enable)
     {
@@ -394,7 +394,7 @@ uint32_t QDC_GetStatusFlags(QDC_Type *base)
  */
 void QDC_ClearStatusFlags(QDC_Type *base, uint32_t mask)
 {
-    uint32_t tmp16 = 0U;
+    uint16_t tmp16 = 0U;
 
     /* QDC_CTRL. */
     if (0U != ((uint32_t)kQDC_HOMETransitionFlag & mask))
@@ -415,7 +415,7 @@ void QDC_ClearStatusFlags(QDC_Type *base, uint32_t mask)
     }
     if (0U != tmp16)
     {
-        base->CTRL = (uint16_t)(((uint32_t)base->CTRL & (~QDC_CTRL_W1C_FLAGS)) | tmp16);
+        base->CTRL = (base->CTRL & MCUX_MASK_INVERT_16(QDC_CTRL_W1C_FLAGS)) | tmp16;
     }
 
     /* QDC_CTRL2. */
@@ -436,7 +436,7 @@ void QDC_ClearStatusFlags(QDC_Type *base, uint32_t mask)
     }
     if (0U != tmp16)
     {
-        base->CTRL2 = (uint16_t)(((uint32_t)base->CTRL2 & (~QDC_CTRL2_W1C_FLAGS)) | tmp16);
+        base->CTRL2 = (base->CTRL2 & MCUX_MASK_INVERT_16(QDC_CTRL2_W1C_FLAGS)) | tmp16;
     }
 }
 
@@ -448,7 +448,7 @@ void QDC_ClearStatusFlags(QDC_Type *base, uint32_t mask)
  */
 void QDC_EnableInterrupts(QDC_Type *base, uint32_t mask)
 {
-    uint32_t tmp16 = 0U;
+    uint16_t tmp16 = 0U;
 
     /* QDC_CTRL. */
     if (0U != ((uint32_t)kQDC_HOMETransitionInterruptEnable & mask))
@@ -469,7 +469,7 @@ void QDC_EnableInterrupts(QDC_Type *base, uint32_t mask)
     }
     if (tmp16 != 0U)
     {
-        base->CTRL = (uint16_t)(((uint32_t)base->CTRL & (~QDC_CTRL_W1C_FLAGS)) | tmp16);
+        base->CTRL = (base->CTRL & MCUX_MASK_INVERT_16(QDC_CTRL_W1C_FLAGS)) | tmp16;
     }
     /* QDC_CTRL2. */
     tmp16 = 0U;
@@ -489,7 +489,7 @@ void QDC_EnableInterrupts(QDC_Type *base, uint32_t mask)
     }
     if (tmp16 != 0U)
     {
-        base->CTRL2 = (uint16_t)(((uint32_t)base->CTRL2 & (~QDC_CTRL2_W1C_FLAGS)) | tmp16);
+        base->CTRL2 = (base->CTRL2 & MCUX_MASK_INVERT_16(QDC_CTRL2_W1C_FLAGS)) | tmp16;
     }
 }
 
@@ -522,7 +522,7 @@ void QDC_DisableInterrupts(QDC_Type *base, uint32_t mask)
     }
     if (0U != tmp16)
     {
-        base->CTRL = (uint16_t)(base->CTRL & (uint16_t)(~QDC_CTRL_W1C_FLAGS)) & (uint16_t)(~tmp16);
+        base->CTRL = (base->CTRL & MCUX_MASK_INVERT_16(QDC_CTRL_W1C_FLAGS)) & MCUX_MASK_INVERT_16(tmp16);
     }
     /* QDC_CTRL2. */
     tmp16 = 0U;
@@ -542,7 +542,7 @@ void QDC_DisableInterrupts(QDC_Type *base, uint32_t mask)
     }
     if (tmp16 != 0U)
     {
-        base->CTRL2 = (uint16_t)(base->CTRL2 & (uint16_t)(~QDC_CTRL2_W1C_FLAGS)) & (uint16_t)(~tmp16);
+        base->CTRL2 = (base->CTRL2 & MCUX_MASK_INVERT_16(QDC_CTRL2_W1C_FLAGS)) & MCUX_MASK_INVERT_16(tmp16);
     }
 }
 
@@ -600,8 +600,8 @@ uint32_t QDC_GetEnabledInterrupts(QDC_Type *base)
  */
 void QDC_SetInitialPositionValue(QDC_Type *base, uint32_t value)
 {
-    base->UINIT = (uint16_t)(value >> 16U); /* Set upper 16 bits. */
-    base->LINIT = (uint16_t)(value);        /* Set lower 16 bits. */
+    base->UINIT = (uint16_t)(value >> 16U);     /* Set upper 16 bits. */
+    base->LINIT = (uint16_t)(value & 0xFFFFU);  /* Set lower 16 bits. */
 }
 
 /*!

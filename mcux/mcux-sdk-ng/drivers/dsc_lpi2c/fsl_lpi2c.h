@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 NXP
+ * Copyright 2020-2022, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief LPI2C driver version. */
-#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*! @} */
 
 /*******************************************************************************
@@ -1902,6 +1902,17 @@ void LPI2C_SlaveTransferHandleIRQ(lpi2c_slave_transfer_handle_t *psHandle);
 /*! @} */
 
 /* ========================================= End of Transactional API Group ========================================= */
+
+#if !(defined(FSL_FEATURE_I2C_HAS_NO_IRQ) && FSL_FEATURE_I2C_HAS_NO_IRQ)
+/*!
+ * @brief LPI2C driver IRQ handler common entry.
+ *
+ * This function provides the common IRQ request entry for LPI2C.
+ *
+ * @param instance LPI2C instance.
+ */
+void LPI2C_DriverIRQHandler(uint32_t instance);
+#endif
 
 #if defined(__cplusplus)
 }

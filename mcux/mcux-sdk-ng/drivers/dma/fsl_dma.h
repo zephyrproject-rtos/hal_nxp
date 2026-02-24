@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief DMA driver version 2.1.2. */
-#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+/*! @brief DMA driver version 2.1.3. */
+#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
 /*! @} */
 
 /*! @brief _dma_channel_status_flags status flag for the DMA driver. */
@@ -299,7 +299,7 @@ static inline void DMA_EnableCycleSteal(DMA_Type *base, uint32_t channel, bool e
 {
     assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
-    base->DMA[channel].DCR = (base->DMA[channel].DCR & (~DMA_DCR_CS_MASK)) | DMA_DCR_CS(enable);
+    base->DMA[channel].DCR = (base->DMA[channel].DCR & (~DMA_DCR_CS_MASK)) | DMA_DCR_CS((enable ? 1U : 0U));
 }
 
 /*!
@@ -316,7 +316,7 @@ static inline void DMA_EnableAutoAlign(DMA_Type *base, uint32_t channel, bool en
 {
     assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
-    base->DMA[channel].DCR = (base->DMA[channel].DCR & (~DMA_DCR_AA_MASK)) | DMA_DCR_AA(enable);
+    base->DMA[channel].DCR = (base->DMA[channel].DCR & (~DMA_DCR_AA_MASK)) | DMA_DCR_AA((enable ? 1U : 0U));
 }
 
 /*!
@@ -333,7 +333,8 @@ static inline void DMA_EnableAsyncRequest(DMA_Type *base, uint32_t channel, bool
 {
     assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
-    base->DMA[channel].DCR = (base->DMA[channel].DCR & (~DMA_DCR_EADREQ_MASK)) | DMA_DCR_EADREQ(enable);
+    base->DMA[channel].DCR = (base->DMA[channel].DCR & (~DMA_DCR_EADREQ_MASK)) |
+                                                       DMA_DCR_EADREQ((enable ? 1U : 0U));
 }
 
 /*!

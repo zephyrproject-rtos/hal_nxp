@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -95,8 +95,22 @@ static void LPUART_SendEDMACallback(edma_handle_t *handle, void *param, bool tra
         /* Stop transfer. */
         EDMA_AbortTransfer(handle);
 
-        /* Enable tx complete interrupt */
-        LPUART_EnableInterrupts(lpuartPrivateHandle->base, (uint32_t)kLPUART_TransmissionCompleteInterruptEnable);
+        if (lpuartPrivateHandle->handle->txCbMode == kLPUART_TxFifoEmpty)
+        {
+            /* Enable tx complete interrupt */
+            LPUART_EnableInterrupts(lpuartPrivateHandle->base, (uint32_t)kLPUART_TransmissionCompleteInterruptEnable);
+        }
+        else
+        {
+            /* kLPUART_TxEdmaComplete */
+            lpuartPrivateHandle->handle->txState = (uint8_t)kLPUART_TxIdle;
+
+            if (NULL != lpuartPrivateHandle->handle->callback)
+            {
+                lpuartPrivateHandle->handle->callback(lpuartPrivateHandle->base, lpuartPrivateHandle->handle,
+                                                      kStatus_LPUART_TxIdle, lpuartPrivateHandle->handle->userData);
+            }
+        }
     }
 }
 
@@ -142,6 +156,17 @@ void LPUART_TransferCreateHandleEDMA(LPUART_Type *base,
                                      edma_handle_t *txEdmaHandle,
                                      edma_handle_t *rxEdmaHandle)
 {
+    LPUART_TransferCreateHandleEDMAExt(base, handle, callback, userData, txEdmaHandle, rxEdmaHandle, kLPUART_TxFifoEmpty);
+}
+
+void LPUART_TransferCreateHandleEDMAExt(LPUART_Type *base,
+                                     lpuart_edma_handle_t *handle,
+                                     lpuart_edma_transfer_callback_t callback,
+                                     void *userData,
+                                     edma_handle_t *txEdmaHandle,
+                                     edma_handle_t *rxEdmaHandle,
+                                     lpuart_tx_callback_mode_t txCbMode)
+{
     assert(NULL != handle);
 
     uint32_t instance = LPUART_GetInstance(base);
@@ -161,6 +186,8 @@ void LPUART_TransferCreateHandleEDMA(LPUART_Type *base,
     handle->callback = callback;
     handle->userData = userData;
 
+    handle->txCbMode = txCbMode;
+
 #if defined(FSL_FEATURE_LPUART_HAS_FIFO) && FSL_FEATURE_LPUART_HAS_FIFO
     /* Note:
        Take care of the RX FIFO, EDMA request only assert when received bytes
@@ -175,17 +202,21 @@ void LPUART_TransferCreateHandleEDMA(LPUART_Type *base,
         base->WATER &= (~LPUART_WATER_RXWATER_MASK);
     }
 #endif
-    handler.lpuart_handler = LPUART_TransferEdmaHandleIRQ;
-    /* Save the handle in global variables to support the double weak mechanism. */
-    LP_FLEXCOMM_SetIRQHandler(instance, handler.lpflexcomm_handler, handle, LP_FLEXCOMM_PERIPH_LPUART);
-    /* Disable all LPUART internal interrupts */
-    LPUART_DisableInterrupts(base, (uint32_t)kLPUART_AllInterruptEnable);
-    /* Enable interrupt in NVIC. */
+
+    if (handle->txCbMode == kLPUART_TxFifoEmpty)
+    {
+        handler.lpuart_handler = LPUART_TransferEdmaHandleIRQ;
+        /* Save the handle in global variables to support the double weak mechanism. */
+        LP_FLEXCOMM_SetIRQHandler(instance, handler.lpflexcomm_handler, handle, LP_FLEXCOMM_PERIPH_LPUART);
+        /* Disable all LPUART internal interrupts */
+        LPUART_DisableInterrupts(base, (uint32_t)kLPUART_AllInterruptEnable);
+        /* Enable interrupt in NVIC. */
 #if defined(FSL_FEATURE_LPUART_HAS_SEPARATE_RX_TX_IRQ) && FSL_FEATURE_LPUART_HAS_SEPARATE_RX_TX_IRQ
-    (void)EnableIRQ(s_lpuartTxIRQ[instance]);
+        (void)EnableIRQ(s_lpuartTxIRQ[instance]);
 #else
-    (void)EnableIRQ(s_lpuartIRQ[instance]);
+        (void)EnableIRQ(s_lpuartIRQ[instance]);
 #endif
+    }
 
     /* Configure TX. */
     if (NULL != txEdmaHandle)

@@ -16,11 +16,13 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*! @{ */
-/*! @brief CMC driver version 2.4.3. */
-#define FSL_CMC_DRIVER_VERSION (MAKE_VERSION(2, 4, 3))
+/*! @brief CMC driver version 2.4.4. */
+#define FSL_CMC_DRIVER_VERSION (MAKE_VERSION(2, 4, 4))
 /*! @} */
 
-/*! @name Configuration */
+/*! @name Configuration
+ * @{
+*/
 
 /*!
  * @brief Max loops to wait for CMC SRAM operation complete
@@ -874,6 +876,7 @@ void CMC_ConfigFlashMode(CMC_Type *base, bool wake, bool doze, bool disable);
 
 /*!
  * @name Debug Configuration.
+ * @{
  */
 
 /*!

@@ -1,5 +1,10 @@
 # SDMA
 
+## [2.4.3]
+
+- Bug Fixes
+  - Fixed coverity issues with CERT INT30-C, CERT INT31-C compliance.
+
 ## [2.4.2]
 
 - Bug Fixes

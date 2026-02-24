@@ -690,11 +690,20 @@ void ACMP_GetDefaultDiscreteModeConfig(acmp_discrete_mode_config_t *config)
     /* Initializes the configure structure to zero. */
     (void)memset(config, 0, sizeof(*config));
 
+#if !(defined(FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE) && (FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE==0U))
     config->enablePositiveChannelDiscreteMode = false;
     config->enableNegativeChannelDiscreteMode = false;
+#else
+    config->bypassPositiveChannelResistorDivider = false;
+    config->bypassNegativeChannelResistorDivider = false;
+#endif /* FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE */
 
 #if !(defined(FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN) && (FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN == 1U))
+#if !(defined(FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE) && (FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE==0U))
     config->enableResistorDivider = false;
+#else
+    config->enableHysteresisDivider = false;
+#endif /* FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE */
     config->clockSource           = kACMP_DiscreteClockSlow;
     config->sampleTime            = kACMP_DiscreteSampleTimeAs1T;
     config->phase1Time            = kACMP_DiscretePhaseTimeAlt0;

@@ -1,6 +1,5 @@
 /*
- * Copyright 2023-2025 NXP
- * All rights reserved.
+ * Copyright 2023-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -10,6 +9,17 @@
 
 #include "fsl_common.h"
 
+#if defined(CONFIG_FLASH_DRIVER_EXECUTES_FROM_RAM) && (CONFIG_FLASH_DRIVER_EXECUTES_FROM_RAM == 1)
+#define RAMFUNC MCUX_RAMFUNC
+#else
+#define RAMFUNC
+#endif
+
+#if defined(CONFIG_ENABLE_QUICKACCESS_SECTION_IN_XSPI_DRIVER) && (CONFIG_ENABLE_QUICKACCESS_SECTION_IN_XSPI_DRIVER == 1)
+  #define RAMVARIABLE AT_QUICKACCESS_SECTION_DATA
+#else
+  #define RAMVARIABLE(var) var
+#endif
 /*!
  * @addtogroup xspi
  * @{
@@ -20,13 +30,57 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-#define FSL_XSPI_DRIVER_VERSION (MAKE_VERSION(2, 5, 2))
+#define FSL_XSPI_DRIVER_VERSION (MAKE_VERSION(2, 7, 0))
 /*@{*/
 
 /*! @brief Formula to form XSPI instructions in LUT table. */
 #define XSPI_LUT_SEQ(cmd0, pad0, op0, cmd1, pad1, op1)                                            \
     (XSPI_LUT_INSTR0(cmd0) | XSPI_LUT_PAD0(pad0) | XSPI_LUT_OPRND0(op0) | XSPI_LUT_INSTR1(cmd1) | \
      XSPI_LUT_PAD1(pad1) | XSPI_LUT_OPRND1(op1))
+
+#ifndef FSL_FEATURE_XSPI_TARGET_GROUP_COUNT
+#define XSPI_TARGET_GROUP_COUNT (2U)
+#else
+#define XSPI_TARGET_GROUP_COUNT FSL_FEATURE_XSPI_TARGET_GROUP_COUNT
+#endif
+
+#ifndef FSL_FEATURE_XSPI_SFP_FRAD_COUNT
+#define XSPI_SFP_FRAD_COUNT (8U)
+#else
+#define XSPI_SFP_FRAD_COUNT FSL_FEATURE_XSPI_SFP_FRAD_COUNT
+#endif
+
+#if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
+#define XSPI_TG_REG_ADDR(base, tg, reg)                             \
+    ((uint32_t)(((uint32_t)tg == 0U) ? (uint32_t)(&((base)->reg)) : \
+                                       (uint32_t)(&((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].reg##_SUB))))
+#define XSPI_TG_REG_VAL(base, tg, reg) \
+    ((uint32_t)(((uint32_t)tg == 0U) ? ((base)->reg) : ((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].reg##_SUB)))
+
+#define XSPI_TG_REG_ADDR_RBDR(base, tg)                       \
+    ((uint32_t)(((uint32_t)tg == 0U) ? (&((base)->RBDR[0])) : \
+                                       (&((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].RBDR_SUB_[0]))))
+#define XSPI_TG_REG_VAL_RBDR_INDEX(base, tg, i) \
+    ((uint32_t)(((uint32_t)tg == 0U) ? ((base)->RBDR[i]) : ((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].RBDR_SUB_[i])))
+
+#define XSPI_TG_REG_ADDR_INT_EN(base, tg)                              \
+    ((uint32_t)(((uint32_t)tg == 0U) ? (uint32_t)(&((base)->INT_EN)) : \
+                                       (uint32_t)(&((base)->SFP_INT_EN_SUB[(uint32_t)tg - 1U]))))
+
+#define XSPI_TG_REG_ADDR_RSER(base, tg)                              \
+    ((uint32_t)(((uint32_t)tg == 0U) ? (uint32_t)(&((base)->RSER)) : \
+                                       (uint32_t)(&((base)->RSER_SUB[(uint32_t)tg - 1U]))))
+
+#else
+
+#define XSPI_TG_REG_ADDR(base, tg, reg)         ((uint32_t)(&((base)->reg)))
+#define XSPI_TG_REG_VAL(base, tg, reg)          ((uint32_t)((base)->reg))
+#define XSPI_TG_REG_ADDR_RBDR(base, tg)         ((uint32_t)(&((base)->RBDR[0])))
+#define XSPI_TG_REG_VAL_RBDR_INDEX(base, tg, i) ((uint32_t)((base)->RBDR[i]))
+#define XSPI_TG_REG_ADDR_INT_EN(base, tg)       (uint32_t)(&((base)->INT_EN))
+#define XSPI_TG_REG_ADDR_RSER(base, tg)         (uint32_t)(&((base)->RSER))
+
+#endif /* (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV) */
 
 /*! @brief Status structure of XSPI.*/
 enum
@@ -55,13 +109,13 @@ enum
                                                                                of RX buffer is incorrect. */
     kStatus_XSPI_IpAccessIPCRInvalid = MAKE_STATUS(kStatusGroup_XSPI, 17),         /*!< Access attributes to write
                                                                                         IPCR are not correct. */
-    kStatus_XSPI_IpAccessNotGranted  = MAKE_STATUS(kStatusGroup_XSPI, 18),   /*!< IP request not granted by arbiter. */
-    kStatus_XSPI_IpReadFinished      = MAKE_STATUS(kStatusGroup_XSPI, 19),   /*!< Finish IP read all
-                                                                                data stored in buffer. */
-    kStatus_XSPI_IpWriteFinished     = MAKE_STATUS(kStatusGroup_XSPI, 20),   /*!< Finish IP write operation. */
-    kStatus_XSPI_TxBufferUnderrun    = MAKE_STATUS(kStatusGroup_XSPI, 21),   /*!< XSPI attempted to pull data when the
-                                                                            TX buffer is empty. */
-    kStatus_XSPI_ArbiterGranted      = MAKE_STATUS(kStatusGroup_XSPI, 22),   /*!< XSPI arbiter granted. */
+    kStatus_XSPI_IpAccessNotGranted = MAKE_STATUS(kStatusGroup_XSPI, 18), /*!< IP request not granted by arbiter. */
+    kStatus_XSPI_IpReadFinished     = MAKE_STATUS(kStatusGroup_XSPI, 19), /*!< Finish IP read all
+                                                                             data stored in buffer. */
+    kStatus_XSPI_IpWriteFinished  = MAKE_STATUS(kStatusGroup_XSPI, 20),   /*!< Finish IP write operation. */
+    kStatus_XSPI_TxBufferUnderrun = MAKE_STATUS(kStatusGroup_XSPI, 21),   /*!< XSPI attempted to pull data when the
+                                                                         TX buffer is empty. */
+    kStatus_XSPI_ArbiterGranted = MAKE_STATUS(kStatusGroup_XSPI, 22),     /*!< XSPI arbiter granted. */
 };
 
 /*! @brief CMD definition of XSPI, use to form LUT instruction, xspi_lut_instr_t. */
@@ -127,35 +181,57 @@ typedef enum _xspi_flags
     kXSPI_AhbReadAddressErrorFlag = XSPI_FR_RDADDR_MASK,            /*!< The master send an AHB read address to that
                                                                 buffer is not within the address range of any
                                                                 sub-buffers or the address within multiple sub-buffers. */
-    kXSPI_IllegalInstructionErrorFlag = XSPI_FR_ILLINE_MASK,   /*!< This field is set when an illegal instruction is
-                                                                 encountered by the controller in any of the sequences.*/
-    kXSPI_IpCmdtriggerErrorFlag = XSPI_FR_IPIEF_MASK,          /*!< Write access to Rx buffer control reg when
-                                                               IP-triggered command is executing. */
-    kXSPI_PageProgramWaitFlag = XSPI_FR_PPWF_MASK,             /*!< Indicates assertion of the page-program wait flag
-                                                             after writing to flash memory. */
+    kXSPI_IllegalInstructionErrorFlag = XSPI_FR_ILLINE_MASK, /*!< This field is set when an illegal instruction is
+                                                               encountered by the controller in any of the sequences.*/
+    kXSPI_IpCmdtriggerErrorFlag = XSPI_FR_IPIEF_MASK,        /*!< Write access to Rx buffer control reg when
+                                                             IP-triggered command is executing. */
+    kXSPI_PageProgramWaitFlag = XSPI_FR_PPWF_MASK,           /*!< Indicates assertion of the page-program wait flag
+                                                           after writing to flash memory. */
 #if defined(XSPI_FR_IPEDERR_MASK)
-    kXSPI_IPEDRxDecryptionErrorFlag    = XSPI_FR_IPEDERR_MASK, /*!< only support XSPI0 XSPI1*/
-#endif /* defined(XSPI_FR_IPEDERR_MASK) */
-    kXSPI_IpCommandExecutionDoneFlag   = XSPI_FR_TFF_MASK, /*!< Indicates XSPI has completed a running IP command. */
+    kXSPI_IPEDRxDecryptionErrorFlag = XSPI_FR_IPEDERR_MASK,  /*!< only support XSPI0 XSPI1*/
+#endif                                                       /* defined(XSPI_FR_IPEDERR_MASK) */
+    kXSPI_IpCommandExecutionDoneFlag   = XSPI_FR_TFF_MASK,   /*!< Indicates XSPI has completed a running IP command. */
     kXSPI_SequenceExecutionTimeoutFlag = XSPI_INT_EN_TO_ERR_MASK, /*!< Sequence execution timeout. */
-    kXSPI_FradMatchErrorFlag = XSPI_INT_EN_FRADMTCH_MASK,   /*Transaction address does not lie within address range of
-                                                              any FRAD descriptor.*/
-    kXSPI_Frad0AccessErrorFlag = XSPI_INT_EN_FRAD0ACC_MASK, /*<! FRAD 0 access error. */
-    kXSPI_Frad1AccessErrorFlag = XSPI_INT_EN_FRAD1ACC_MASK, /*<! FRAD 1 access error. */
-    kXSPI_Frad2AccessErrorFlag = XSPI_INT_EN_FRAD0ACC_MASK, /*<! FRAD 2 access error. */
-    kXSPI_Frad3AccessErrorFlag = XSPI_INT_EN_FRAD1ACC_MASK, /*<! FRAD 3 access error. */
-    kXSPI_Frad4AccessErrorFlag = XSPI_INT_EN_FRAD0ACC_MASK, /*<! FRAD 4 access error. */
-    kXSPI_Frad5AccessErrorFlag = XSPI_INT_EN_FRAD1ACC_MASK, /*<! FRAD 5 access error. */
-    kXSPI_Frad6AccessErrorFlag = XSPI_INT_EN_FRAD0ACC_MASK, /*<! FRAD 6 access error. */
-    kXSPI_Frad7AccessErrorFlag = XSPI_INT_EN_FRAD1ACC_MASK, /*<! FRAD 7 access error. */
-    kXSPI_FradnAccErrorFlag    = XSPI_INT_EN_FRAD0ACC_MASK | XSPI_INT_EN_FRAD1ACC_MASK | XSPI_INT_EN_FRAD2ACC_MASK |
+    kXSPI_FradMatchErrorFlag = XSPI_INT_EN_FRADMTCH_MASK,     /*Transaction address does not lie within address range of
+                                                                any FRAD descriptor.*/
+    kXSPI_Frad0AccessErrorFlag = XSPI_INT_EN_FRAD0ACC_MASK,   /*<! FRAD 0 access error. */
+    kXSPI_Frad1AccessErrorFlag = XSPI_INT_EN_FRAD1ACC_MASK,   /*<! FRAD 1 access error. */
+    kXSPI_Frad2AccessErrorFlag = XSPI_INT_EN_FRAD2ACC_MASK,   /*<! FRAD 2 access error. */
+    kXSPI_Frad3AccessErrorFlag = XSPI_INT_EN_FRAD3ACC_MASK,   /*<! FRAD 3 access error. */
+    kXSPI_Frad4AccessErrorFlag = XSPI_INT_EN_FRAD4ACC_MASK,   /*<! FRAD 4 access error. */
+    kXSPI_Frad5AccessErrorFlag = XSPI_INT_EN_FRAD5ACC_MASK,   /*<! FRAD 5 access error. */
+    kXSPI_Frad6AccessErrorFlag = XSPI_INT_EN_FRAD6ACC_MASK,   /*<! FRAD 6 access error. */
+    kXSPI_Frad7AccessErrorFlag = XSPI_INT_EN_FRAD7ACC_MASK,   /*<! FRAD 7 access error. */
+#if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
+    kXSPI_Frad8AccessErrorFlag  = XSPI_INT_EN_FRAD8ACC_MASK,  /*<! FRAD 9 access error. */
+    kXSPI_Frad9AccessErrorFlag  = XSPI_INT_EN_FRAD9ACC_MASK,  /*<! FRAD 9 access error. */
+    kXSPI_Frad10AccessErrorFlag = XSPI_INT_EN_FRAD10ACC_MASK, /*<! FRAD 10 access error. */
+    kXSPI_Frad11AccessErrorFlag = XSPI_INT_EN_FRAD11ACC_MASK, /*<! FRAD 11 access error. */
+    kXSPI_Frad12AccessErrorFlag = XSPI_INT_EN_FRAD12ACC_MASK, /*<! FRAD 12 access error. */
+    kXSPI_Frad13AccessErrorFlag = XSPI_INT_EN_FRAD13ACC_MASK, /*<! FRAD 13 access error. */
+    kXSPI_Frad14AccessErrorFlag = XSPI_INT_EN_FRAD14ACC_MASK, /*<! FRAD 14 access error. */
+    kXSPI_Frad15AccessErrorFlag = XSPI_INT_EN_FRAD15ACC_MASK, /*<! FRAD 15 access error. */
+#endif /* (defined(FSL_FEATURE_XSPI_HAS_ESPI_EENV) && FSL_FEATURE_XSPI_HAS_ESPI_EENV) */
+    kXSPI_FradnAccErrorFlag = XSPI_INT_EN_FRAD0ACC_MASK | XSPI_INT_EN_FRAD1ACC_MASK | XSPI_INT_EN_FRAD2ACC_MASK |
                               XSPI_INT_EN_FRAD3ACC_MASK | XSPI_INT_EN_FRAD4ACC_MASK | XSPI_INT_EN_FRAD5ACC_MASK |
-                              XSPI_INT_EN_FRAD6ACC_MASK | XSPI_INT_EN_FRAD7ACC_MASK, /*!< ORed value of all frad
-                                                                                     error flag,. */
-    kXSPI_IpsErrorFlag       = XSPI_INT_EN_IPS_ERR_MASK,
-    kXSPI_Tg0SfarErrorFlag   = XSPI_INT_EN_TG0SFAR_MASK,
-    kXSPI_Tg1SfarErrorFlag   = XSPI_INT_EN_TG1SFAR_MASK,
-    kXSPI_TgnIpcrErrorFlag   = XSPI_INT_EN_TG0IPCR_MASK | XSPI_INT_EN_TG1IPCR_MASK,
+                              XSPI_INT_EN_FRAD6ACC_MASK | XSPI_INT_EN_FRAD7ACC_MASK
+#if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
+                              | XSPI_INT_EN_FRAD8ACC_MASK | XSPI_INT_EN_FRAD9ACC_MASK | XSPI_INT_EN_FRAD10ACC_MASK |
+                              XSPI_INT_EN_FRAD11ACC_MASK | XSPI_INT_EN_FRAD12ACC_MASK | XSPI_INT_EN_FRAD13ACC_MASK |
+                              XSPI_INT_EN_FRAD14ACC_MASK | XSPI_INT_EN_FRAD15ACC_MASK
+#endif /* (defined(FSL_FEATURE_XSPI_HAS_ESPI_EENV) && FSL_FEATURE_XSPI_HAS_ESPI_EENV) */
+    ,  /*!< ORed value of all frad error flag,. */
+    kXSPI_IpsErrorFlag     = XSPI_INT_EN_IPS_ERR_MASK,
+    kXSPI_TgnSfarErrorFlag = XSPI_INT_EN_TG0SFAR_MASK
+#if (!(defined(FSL_FEATURE_XSPI_HAS_EENV) && (FSL_FEATURE_XSPI_HAS_EENV)))
+                             | XSPI_INT_EN_TG1SFAR_MASK
+#endif /* !defined(FSL_FEATURE_XSPI_HAS_EENV) && (!FSL_FEATURE_XSPI_HAS_EENV) */
+    ,
+    kXSPI_TgnIpcrErrorFlag = XSPI_INT_EN_TG0IPCR_MASK
+#if (!(defined(FSL_FEATURE_XSPI_HAS_EENV) && (FSL_FEATURE_XSPI_HAS_EENV)))
+                             | XSPI_INT_EN_TG1IPCR_MASK
+#endif /* !defined(FSL_FEATURE_XSPI_HAS_EENV) && (!FSL_FEATURE_XSPI_HAS_EENV) */
+    ,
     kXSPI_LockRegErrorFlag   = XSPI_INT_EN_LCK_ERR_IE_MASK,
     kXSPI_ArbLockTimeoutFlag = XSPI_INT_EN_ARB_TO_IE_MASK,
     kXSPI_ArbWinEventFlag    = XSPI_INT_EN_ARB_WIN_IE_MASK,
@@ -167,51 +243,71 @@ typedef enum _xspi_flags
  */
 enum _xspi_error_flag
 {
-    kXSPI_ErrorNoFradMatch = XSPI_ERRSTAT_FRADMTCH_MASK, /*!< The transaction address does not lie within
-                                                        the address range of any FRAD. */
-    kXSPI_ErrorFrad0Access = XSPI_ERRSTAT_FRAD0ACC_MASK, /*!< The transaction address lies within the address range of
-                                                        the FRAD0 but it does not pass the access permission checks
-                                                        for the FRAD or the FRAD is under exclusive lock by another
-                                                        manager. */
-    kXSPI_ErrorFrad1Access = XSPI_ERRSTAT_FRAD1ACC_MASK, /*!< The transaction address lies within the address range of
-                                                        the FRAD1 but it does not pass the access permission checks
-                                                        for the FRAD or the FRAD is under exclusive lock by another
-                                                        manager. */
-    kXSPI_ErrorFrad2Access = XSPI_ERRSTAT_FRAD2ACC_MASK, /*!< The transaction address lies within the address range of
-                                                        the FRAD2 but it does not pass the access permission checks
-                                                        for the FRAD or the FRAD is under exclusive lock by another
-                                                        manager. */
-    kXSPI_ErrorFrad3Access = XSPI_ERRSTAT_FRAD3ACC_MASK, /*!< The transaction address lies within the address range of
-                                                        the FRAD3 but it does not pass the access permission checks
-                                                        for the FRAD or the FRAD is under exclusive lock by another
-                                                        manager. */
-    kXSPI_ErrorFrad4Access = XSPI_ERRSTAT_FRAD4ACC_MASK, /*!< The transaction address lies within the address range of
-                                                        the FRAD4 but it does not pass the access permission checks
-                                                        for the FRAD or the FRAD is under exclusive lock by another
-                                                        manager. */
-    kXSPI_ErrorFrad5Access = XSPI_ERRSTAT_FRAD5ACC_MASK, /*!< The transaction address lies within the address range of
-                                                        the FRAD5 but it does not pass the access permission checks
-                                                        for the FRAD or the FRAD is under exclusive lock by another
-                                                        manager. */
-    kXSPI_ErrorFrad6Access = XSPI_ERRSTAT_FRAD6ACC_MASK, /*!< The transaction address lies within the address range of
-                                                        the FRAD6 but it does not pass the access permission checks
-                                                        for the FRAD or the FRAD is under exclusive lock by another
-                                                        manager. */
-    kXSPI_ErrorFrad7Access = XSPI_ERRSTAT_FRAD7ACC_MASK, /*!< The transaction address lies within the address range of
-                                                        the FRAD7 but it does not pass the access permission checks
-                                                        for the FRAD or the FRAD is under exclusive lock by another
-                                                        manager. */
+    kXSPI_ErrorNoFradMatch = XSPI_ERRSTAT_FRADMTCH_MASK,   /*!< The transaction address does not lie within
+                                                          the address range of any FRAD. */
+    kXSPI_ErrorFrad0Access = XSPI_ERRSTAT_FRAD0ACC_MASK,   /*!< The transaction address lies within the address range of
+                                                          the FRAD0 but it does not pass the access permission checks
+                                                          for the FRAD or the FRAD is under exclusive lock by another
+                                                          manager. */
+    kXSPI_ErrorFrad1Access = XSPI_ERRSTAT_FRAD1ACC_MASK,   /*!< The transaction address lies within the address range of
+                                                          the FRAD1 but it does not pass the access permission checks
+                                                          for the FRAD or the FRAD is under exclusive lock by another
+                                                          manager. */
+    kXSPI_ErrorFrad2Access = XSPI_ERRSTAT_FRAD2ACC_MASK,   /*!< The transaction address lies within the address range of
+                                                          the FRAD2 but it does not pass the access permission checks
+                                                          for the FRAD or the FRAD is under exclusive lock by another
+                                                          manager. */
+    kXSPI_ErrorFrad3Access = XSPI_ERRSTAT_FRAD3ACC_MASK,   /*!< The transaction address lies within the address range of
+                                                          the FRAD3 but it does not pass the access permission checks
+                                                          for the FRAD or the FRAD is under exclusive lock by another
+                                                          manager. */
+    kXSPI_ErrorFrad4Access = XSPI_ERRSTAT_FRAD4ACC_MASK,   /*!< The transaction address lies within the address range of
+                                                          the FRAD4 but it does not pass the access permission checks
+                                                          for the FRAD or the FRAD is under exclusive lock by another
+                                                          manager. */
+    kXSPI_ErrorFrad5Access = XSPI_ERRSTAT_FRAD5ACC_MASK,   /*!< The transaction address lies within the address range of
+                                                          the FRAD5 but it does not pass the access permission checks
+                                                          for the FRAD or the FRAD is under exclusive lock by another
+                                                          manager. */
+    kXSPI_ErrorFrad6Access = XSPI_ERRSTAT_FRAD6ACC_MASK,   /*!< The transaction address lies within the address range of
+                                                          the FRAD6 but it does not pass the access permission checks
+                                                          for the FRAD or the FRAD is under exclusive lock by another
+                                                          manager. */
+    kXSPI_ErrorFrad7Access = XSPI_ERRSTAT_FRAD7ACC_MASK,   /*!< The transaction address lies within the address range of
+                                                          the FRAD7 but it does not pass the access permission checks
+                                                          for the FRAD or the FRAD is under exclusive lock by another
+                                                          manager. */
+#if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
+    kXSPI_ErrorFrad8Access  = XSPI_ERRSTAT_FRAD8ACC_MASK,  /*<! FRAD 8 access error. */
+    kXSPI_ErrorFrad9Access  = XSPI_ERRSTAT_FRAD9ACC_MASK,  /*<! FRAD 9 access error. */
+    kXSPI_ErrorFrad10Access = XSPI_ERRSTAT_FRAD10ACC_MASK, /*<! FRAD 10 access error. */
+    kXSPI_ErrorFrad11Access = XSPI_ERRSTAT_FRAD11ACC_MASK, /*<! FRAD 11 access error. */
+    kXSPI_ErrorFrad12Access = XSPI_ERRSTAT_FRAD12ACC_MASK, /*<! FRAD 12 access error. */
+    kXSPI_ErrorFrad13Access = XSPI_ERRSTAT_FRAD13ACC_MASK, /*<! FRAD 13 access error. */
+    kXSPI_ErrorFrad14Access = XSPI_ERRSTAT_FRAD14ACC_MASK, /*<! FRAD 14 access error. */
+    kXSPI_ErrorFrad15Access = XSPI_ERRSTAT_FRAD15ACC_MASK, /*<! FRAD 15 access error. */
+#endif /* (defined(FSL_FEATURE_XSPI_HAS_ESPI_EENV) && FSL_FEATURE_XSPI_HAS_ESPI_EENV) */
     kXSPI_ErrorIpBusTransfer = XSPI_ERRSTAT_IPS_ERR_MASK, /*!< A common error has occurred and XSPI has generated an
                                                         IPS bus transfer error. */
-    kXSPI_ErrorTg0Sfar   = XSPI_ERRSTAT_TG0SFAR_MASK, /*!< An SFAR write trigger an error while written to the TG0. */
-    kXSPI_ErrorTg1Sfar   = XSPI_ERRSTAT_TG1SFAR_MASK, /*!< An SFAR write trigger an error while written to the TG1. */
-    kXSPI_ErrorTg0Ipcr   = XSPI_ERRSTAT_TG0IPCR_MASK, /*!< An IPCR write trigger an error while written to the TG0. */
-    kXSPI_ErrorTg1Ipcr   = XSPI_ERRSTAT_TG1IPCR_MASK, /*!< An IPCR write trigger an error while written to the TG1. */
-    kXSPI_ErrorTimeout   = XSPI_ERRSTAT_TO_ERR_MASK,  /*!< A flash memory transaction has triggered a timeout error and
-                                                    has been terminated by SFP. */
-    kXSPI_ArbitrationWin = XSPI_ERRSTAT_ARB_WIN_MASK, /*!< The target group request was granted access. */
+    kXSPI_ErrorTg0Sfar = XSPI_ERRSTAT_TG0SFAR_MASK, /*!< An SFAR write trigger an error while written to the TG0. */
+    kXSPI_ErrorTg0Ipcr = XSPI_ERRSTAT_TG0IPCR_MASK, /*!< An IPCR write trigger an error while written to the TG0. */
+#if (!(defined(FSL_FEATURE_XSPI_HAS_EENV) && (FSL_FEATURE_XSPI_HAS_EENV)))
+    kXSPI_ErrorTg1Sfar = XSPI_ERRSTAT_TG1SFAR_MASK, /*!< An SFAR write trigger an error while written to the TG1. */
+    kXSPI_ErrorTg1Ipcr = XSPI_ERRSTAT_TG1IPCR_MASK, /*!< An IPCR write trigger an error while written to the TG1. */
+#endif                                              /* defined(XSPI_ERRSTAT_TG1IPCR_MASK) */
+    kXSPI_ErrorTimeout = XSPI_ERRSTAT_TO_ERR_MASK,  /*!< A flash memory transaction has triggered a timeout error and
+                                                  has been terminated by SFP. */
+    kXSPI_ArbitrationWin       = XSPI_ERRSTAT_ARB_WIN_MASK,     /*!< The target group request was granted access. */
     kXSPI_ErrorArbitrationLock = XSPI_ERRSTAT_ARB_LOCK_TO_MASK, /*!< Arbitration lock has timed out. */
-    kXSPI_ErrorWriteLockedReg = XSPI_ERRSTAT_LOCK_ERR_MASK,     /*!< An attempt to write a locked register. */
+    kXSPI_ErrorWriteLockedReg  = XSPI_ERRSTAT_LOCK_ERR_MASK,    /*!< An attempt to write a locked register. */
+    kXSPI_ErrorAllFlags        = kXSPI_ErrorNoFradMatch | kXSPI_ErrorFrad0Access | kXSPI_ErrorFrad1Access |
+                          kXSPI_ErrorFrad2Access | kXSPI_ErrorFrad3Access | kXSPI_ErrorFrad4Access |
+                          kXSPI_ErrorFrad5Access | kXSPI_ErrorFrad6Access | kXSPI_ErrorFrad7Access |
+                          kXSPI_ErrorIpBusTransfer | kXSPI_ErrorTg0Ipcr | kXSPI_ErrorTg0Sfar |
+#if (!(defined(FSL_FEATURE_XSPI_HAS_EENV) && (FSL_FEATURE_XSPI_HAS_EENV)))
+                          kXSPI_ErrorTg1Ipcr | kXSPI_ErrorTg1Sfar |
+#endif
+                          kXSPI_ErrorTimeout,
 };
 
 /*!
@@ -220,28 +316,28 @@ enum _xspi_error_flag
  */
 enum _xspi_cmd_execution_arbitration_flag
 {
-    kXSPI_FlagIpCmdFinished = XSPI_FR_TFF_MASK, /*!< IP command transaction finished flag. */
+    kXSPI_FlagIpCmdFinished    = XSPI_FR_TFF_MASK,    /*!< IP command transaction finished flag. */
     kXSPI_FlagAhbReadAddrError = XSPI_FR_RDADDR_MASK, /*!< Wrong AHB read address, XSPI return AHB error payload. */
     kXSPI_FlagAhbPerformanceMonitorOverflow = XSPI_FR_PERFOVF_MASK, /*!< Buffer hit or miss counter overflow. */
-    kXSPI_FlagIpCmdTriggerFail = XSPI_FR_IPIEF_MASK, /*!< Fail when set IP RX buffer watermark. */
-    kXSPI_FlagPageProgramWait = XSPI_FR_PPWF_MASK,  /*!< Indicate assertion of the page-program wait flag after writing
-                                                    to flash memory. */
+    kXSPI_FlagIpCmdTriggerFail              = XSPI_FR_IPIEF_MASK,   /*!< Fail when set IP RX buffer watermark. */
+    kXSPI_FlagPageProgramWait = XSPI_FR_PPWF_MASK,   /*!< Indicate assertion of the page-program wait flag after writing
+                                                     to flash memory. */
     kXSPI_FlagAhbBufferOverflow = XSPI_FR_ABOF_MASK, /*!< The size of the AHB access exceeds the size of AHB buffer. */
     kXSPI_FlagAhbIllegalBurstSizeError = XSPI_FR_AIBSEF_MASK, /*!< The total burst size of the AHB transacton is greater
                                                             than the prefetch data size. */
     kXSPI_FlagAhbIllegalTransactionError = XSPI_FR_AITEF_MASK, /*!< XSPI has not generated a response to the AHB bus
                                                         due to an illegal transaction and expiration of the watchdog
                                                         timer. */
-    kXSPI_FlagAhbTransactionError = XSPI_FR_AAEF_MASK, /*!< AHB transaction error. */
-    kXSPI_FlagRxBufferWatermarkExceeded = XSPI_FR_RBDF_MASK, /*!< The RX buffer watermark has been exceeded. */
-    kXSPI_FlagRxBufferOverflow = XSPI_FR_RBOF_MASK, /*!< The RX buffer cannot receive any
-                                                        more data from the SFM device. */
-    kXSPI_FlagIllegalInstrError = XSPI_FR_ILLINE_MASK, /*!< The xspi encountered an illegal
-                                                        instruction in any sequence. */
-    kXSPI_FlagDllUnlock = XSPI_FR_DLLUNLCK_MASK,    /*!< DLL unlock. */
-    kXSPI_FlagTxBufferUnderRun = XSPI_FR_TBUF_MASK, /*!< XSPI attempt to pull data when the TX buffer is empty. */
-    kXSPI_FlagTxBufferFill = XSPI_FR_TBFF_MASK, /*!< The TX buffer is filling. */
-    kXSPI_FlagDllAbort = XSPI_FR_DLLABRT_MASK,  /*!< DLL terminate. */
+    kXSPI_FlagAhbTransactionError       = XSPI_FR_AAEF_MASK,   /*!< AHB transaction error. */
+    kXSPI_FlagRxBufferWatermarkExceeded = XSPI_FR_RBDF_MASK,   /*!< The RX buffer watermark has been exceeded. */
+    kXSPI_FlagRxBufferOverflow          = XSPI_FR_RBOF_MASK,   /*!< The RX buffer cannot receive any
+                                                                   more data from the SFM device. */
+    kXSPI_FlagIllegalInstrError = XSPI_FR_ILLINE_MASK,         /*!< The xspi encountered an illegal
+                                                                instruction in any sequence. */
+    kXSPI_FlagDllUnlock        = XSPI_FR_DLLUNLCK_MASK,        /*!< DLL unlock. */
+    kXSPI_FlagTxBufferUnderRun = XSPI_FR_TBUF_MASK,    /*!< XSPI attempt to pull data when the TX buffer is empty. */
+    kXSPI_FlagTxBufferFill     = XSPI_FR_TBFF_MASK,    /*!< The TX buffer is filling. */
+    kXSPI_FlagDllAbort         = XSPI_FR_DLLABRT_MASK, /*!< DLL terminate. */
     kXSPI_FlagDataLearningPatternFailure = XSPI_FR_DLPFF_MASK, /*!< The XSPI encountered a DATA_LEARN instruction in a
                                                         sequence, but no sampling point is found for the data learning
                                                         pattern. */
@@ -254,105 +350,153 @@ enum _xspi_cmd_execution_arbitration_flag
  */
 enum _xspi_interrupt_enable
 {
-    kXSPI_TransactionFinishIntEnable = XSPI_RSER_TFIE_MASK,     /*!< Enable generation of an interrupt when an IP
-                                                                    command transaction completes. */
-    kXSPI_AhbReadAddrErrorIntEnable  = XSPI_RSER_RDADDRIE_MASK, /*!< Enable generation of an interrupt on occurrence of
-                                                                    an AHB read address error. */
+    kXSPI_TransactionFinishIntEnable = XSPI_RSER_TFIE_MASK,    /*!< Enable generation of an interrupt when an IP
+                                                                   command transaction completes. */
+    kXSPI_AhbReadAddrErrorIntEnable = XSPI_RSER_RDADDRIE_MASK, /*!< Enable generation of an interrupt on occurrence of
+                                                                   an AHB read address error. */
     kXSPI_AhbPerformanceMonitorOverflowIntEnable = XSPI_RSER_PERFOVIE_MASK, /*!< Enable generation of an interrupt on
                                                                     a buffer hit or miss counter overflow. */
-    kXSPI_IpCmdTrigFailErrorIntEnable = XSPI_RSER_IPIEIE_MASK,  /*!< IP command trigger fail error interrupt enable. */
-    kXSPI_PageProgramWaitIntEnable    = XSPI_RSER_PPWIE_MASK,   /*!< Enable generation of an interrupt
-                                                                on page-program wait. */
-    kXSPI_AhbBufferOverflowIntEnable  = XSPI_RSER_ABOIE_MASK,   /*!< Enable generation of an interrupt on occurrence of
-                                                                an AHB buffer overflow. */
-    kXSPI_AhbIllegalBurstSizeErrorIntEnable = XSPI_RSER_AIBSIE_MASK, /*!< Enable generation of an interrupt on
-                                                            occurrence of an AHB illegal burst size error. */
-    kXSPI_AhbIllegalTransactionErrorIntEnable = XSPI_RSER_AITIE_MASK,   /*!< Enable generation of an interrupt of an
-                                                            AHB illegal transaction error. */
-    kXSPI_AhbAbortErrorIntEnable    = XSPI_RSER_AAIE_MASK,  /*!< Enable generation of an interrupt on occurrence of
-                                                            an AHB abort error. */
-    kXSPI_RxBufferDrainIntEnable = XSPI_RSER_RBDIE_MASK,    /*!< Enable generation of an interrupt on
-                                                            occurrence of RX buffer drain. */
-    kXSPI_RxBufferOverflowIntEnable = XSPI_RSER_RBOIE_MASK, /*!< Enable generation of an interrupt on occurrence
-                                                            of RX buffer overflow. */
+    kXSPI_IpCmdTrigFailErrorIntEnable = XSPI_RSER_IPIEIE_MASK, /*!< IP command trigger fail error interrupt enable. */
+    kXSPI_PageProgramWaitIntEnable    = XSPI_RSER_PPWIE_MASK,  /*!< Enable generation of an interrupt
+                                                               on page-program wait. */
+    kXSPI_AhbBufferOverflowIntEnable = XSPI_RSER_ABOIE_MASK,   /*!< Enable generation of an interrupt on occurrence of
+                                                               an AHB buffer overflow. */
+    kXSPI_AhbIllegalBurstSizeErrorIntEnable = XSPI_RSER_AIBSIE_MASK,  /*!< Enable generation of an interrupt on
+                                                             occurrence of an AHB illegal burst size error. */
+    kXSPI_AhbIllegalTransactionErrorIntEnable = XSPI_RSER_AITIE_MASK, /*!< Enable generation of an interrupt of an
+                                                          AHB illegal transaction error. */
+    kXSPI_AhbAbortErrorIntEnable = XSPI_RSER_AAIE_MASK,        /*!< Enable generation of an interrupt on occurrence of
+                                                               an AHB abort error. */
+    kXSPI_RxBufferDrainIntEnable = XSPI_RSER_RBDIE_MASK,       /*!< Enable generation of an interrupt on
+                                                               occurrence of RX buffer drain. */
+    kXSPI_RxBufferOverflowIntEnable = XSPI_RSER_RBOIE_MASK,    /*!< Enable generation of an interrupt on occurrence
+                                                               of RX buffer overflow. */
     kXSPI_IllegalInstrErrorIntEnable = XSPI_RSER_ILLINIE_MASK, /*!< Enable generation of an interrupt on occurrence
                                                             of an illegal instruction error. */
-    kXSPI_DllUnlockIntEnable    = XSPI_RSER_DLLULIE_MASK,   /*!< Enable generation of an interrupt on a
-                                                            DLL unlock event. */
-    kXSPI_TxBufferUnderrunIntEnable = XSPI_RSER_TBUIE_MASK, /*!< Enable generation of an interrupt
-                                                                on TX buffer underrun. */
+    kXSPI_DllUnlockIntEnable = XSPI_RSER_DLLULIE_MASK,         /*!< Enable generation of an interrupt on a
+                                                               DLL unlock event. */
+    kXSPI_TxBufferUnderrunIntEnable = XSPI_RSER_TBUIE_MASK,    /*!< Enable generation of an interrupt
+                                                                   on TX buffer underrun. */
     kXSPI_TxBufferFillIntEnable = XSPI_RSER_TBFIE_MASK, /*!< Enable generation of an interrupt on TX buffer fill. */
     kXSPI_DataLearningPatternFailIntEnable = XSPI_RSER_DLPFIE_MASK, /*!< Enable generation of an interrupt on data
                                                                 learning pattern failure. */
 
-    kXSPI_NoFradMatchErrorIntEnable = (uint64_t)XSPI_INT_EN_FRADMTCH_MASK << 32UL,    /*!< Enable the interrupt generated when
-                                                                the transaction address does not lie within the address
-                                                                range of any FRAD. */
-    kXSPI_Frad0AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD0ACC_MASK << 32UL,  /*!< Enable the interrupt generated when the
-                                                                transaction address lies within the address range of
-                                                                the FRAD0 but it does not pass the access
-                                                                permission checks for the FRAD or the FRAD is under
-                                                                exclusive lock. */
-    kXSPI_Frad1AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD1ACC_MASK << 32UL,  /*!< Enable the interrupt generated when the
-                                                                transaction address lies within the address range of
-                                                                the FRAD1 but it does not pass the access
-                                                                permission checks for the FRAD or the FRAD is under
-                                                                exclusive lock. */
-    kXSPI_Frad2AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD2ACC_MASK << 32UL,  /*!< Enable the interrupt generated when the
-                                                                transaction address lies within the address range of
-                                                                the FRAD2 but it does not pass the access
-                                                                permission checks for the FRAD or the FRAD is under
-                                                                exclusive lock. */
-    kXSPI_Frad3AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD3ACC_MASK << 32UL,  /*!< Enable the interrupt generated when the
-                                                                transaction address lies within the address range of
-                                                                the FRAD3 but it does not pass the access
-                                                                permission checks for the FRAD or the FRAD is under
-                                                                exclusive lock. */
-    kXSPI_Frad4AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD4ACC_MASK << 32UL,  /*!< Enable the interrupt generated when the
-                                                                transaction address lies within the address range of
-                                                                the FRAD4 but it does not pass the access
-                                                                permission checks for the FRAD or the FRAD is under
-                                                                exclusive lock. */
-    kXSPI_Frad5AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD5ACC_MASK << 32UL,  /*!< Enable the interrupt generated when the
-                                                                transaction address lies within the address range of
-                                                                the FRAD5 but it does not pass the access
-                                                                permission checks for the FRAD or the FRAD is under
-                                                                exclusive lock. */
-    kXSPI_Frad6AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD6ACC_MASK << 32UL,  /*!< Enable the interrupt generated when the
-                                                                transaction address lies within the address range of
-                                                                the FRAD6 but it does not pass the access
-                                                                permission checks for the FRAD or the FRAD is under
-                                                                exclusive lock. */
-    kXSPI_Frad7AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD7ACC_MASK << 32UL,  /*!< Enable the interrupt generated when the
-                                                                transaction address lies within the address range of
-                                                                the FRAD7 but it does not pass the access
-                                                                permission checks for the FRAD or the FRAD is under
-                                                                exclusive lock. */
-    kXSPI_IpsErrIntEnable = (uint64_t)XSPI_INT_EN_IPS_ERR_MASK << 32UL,   /*!< Enable the interrupt generated when a common error
-                                                                    has occurred an XSPI has generated an
-                                                                    IPS bus transfer error. */
-    kXSPI_Tg0SfarErrIntEnable = (uint64_t)XSPI_INT_EN_TG0SFAR_MASK << 32U,  /*!< Enable the interrupt generated when an SFAR
-                                                                    write triggers an error while being written to the
-                                                                    target group 0. */
-    kXSPI_Tg1SfarErrIntEnable = (uint64_t)XSPI_INT_EN_TG1SFAR_MASK << 32U,  /*!< Enable the interrupt generated when an SFAR
-                                                                    write triggers an error while being written to the
-                                                                    target group 1. */
-    kXSPI_Tg0IpcrErrIntEnable = (uint64_t)XSPI_INT_EN_TG0IPCR_MASK << 32U,  /*!< Enable the interrupt generated when an IPCR write
-                                                                    triggers an error while being written to the
-                                                                    target group 0. */
-    kXSPI_Tg1IpcrErrIntEnable = (uint64_t)XSPI_INT_EN_TG1IPCR_MASK << 32U,  /*!< Enable the interrupt generated when an IPCR write
-                                                                    triggers an error while being written to the
-                                                                    target group 1. */
-    kXSPI_TimeoutErrIntEnable = (uint64_t)XSPI_INT_EN_TO_ERR_MASK << 32U, /*!< Enable the interrupt generated when a flash memory
-                                                                    transaction triggers a timeout error and has been
-                                                                    terminated by SFP. */
-    kXSPI_ArbitrationWinIntEnable = (uint64_t)XSPI_INT_EN_ARB_WIN_IE_MASK << 32U, /*!< Enable the interrupt generated when the
-                                                                    target group queue request is granted access. */
-    kXSPI_ArbitrationLockTimeoutErrIntEnable = (uint64_t)XSPI_INT_EN_ARB_TO_IE_MASK << 32U, /*!< Enable the interrupt generated
-                                                                when a flash memory transaction triggers a timeout
-                                                                error and has been terminated by SFP. */
-    kXSPI_LockRegWriteErrIntEnable = (uint64_t)XSPI_INT_EN_ARB_TO_IE_MASK << 32U, /*!< Enable the interrupt generated by an
-                                                                attempt to write a locked register. */
+    kXSPI_NoFradMatchErrorIntEnable = (uint64_t)XSPI_INT_EN_FRADMTCH_MASK << 32UL,   /*!< Enable the interrupt generated
+                                                               when the transaction address does not lie within the
+                                                               address range of any FRAD. */
+    kXSPI_Frad0AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD0ACC_MASK << 32UL,   /*!< Enable the interrupt generated
+                                                                 when the transaction address lies within the address
+                                                                 range of the FRAD0 but it does not pass the access
+                                                                 permission checks for the FRAD or the FRAD is under
+                                                                 exclusive lock. */
+    kXSPI_Frad1AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD1ACC_MASK << 32UL,   /*!< Enable the interrupt generated
+                                                                 when the transaction address lies within the address
+                                                                 range of the FRAD1 but it does not pass the access
+                                                                 permission checks for the FRAD or the FRAD is under
+                                                                 exclusive lock. */
+    kXSPI_Frad2AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD2ACC_MASK << 32UL,   /*!< Enable the interrupt generated
+                                                                 when the transaction address lies within the address
+                                                                 range of the FRAD2 but it does not pass the access
+                                                                 permission checks for the FRAD or the FRAD is under
+                                                                 exclusive lock. */
+    kXSPI_Frad3AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD3ACC_MASK << 32UL,   /*!< Enable the interrupt generated
+                                                                 when the transaction address lies within the address
+                                                                 range of the FRAD3 but it does not pass the access
+                                                                 permission checks for the FRAD or the FRAD is under
+                                                                 exclusive lock. */
+    kXSPI_Frad4AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD4ACC_MASK << 32UL,   /*!< Enable the interrupt generated
+                                                                 when the transaction address lies within the address
+                                                                 range of the FRAD4 but it does not pass the access
+                                                                 permission checks for the FRAD or the FRAD is under
+                                                                 exclusive lock. */
+    kXSPI_Frad5AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD5ACC_MASK << 32UL,   /*!< Enable the interrupt generated
+                                                                 when the transaction address lies within the address
+                                                                 range of the FRAD5 but it does not pass the access
+                                                                 permission checks for the FRAD or the FRAD is under
+                                                                 exclusive lock. */
+    kXSPI_Frad6AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD6ACC_MASK << 32UL,   /*!< Enable the interrupt generated
+                                                                 when the transaction address lies within the address
+                                                                 range of the FRAD6 but it does not pass the access
+                                                                 permission checks for the FRAD or the FRAD is under
+                                                                 exclusive lock. */
+    kXSPI_Frad7AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD7ACC_MASK << 32UL,   /*!< Enable the interrupt generated
+                                                                 when the transaction address lies within the address
+                                                                 range of the FRAD7 but it does not pass the access
+                                                                 permission checks for the FRAD or the FRAD is under
+                                                                 exclusive lock. */
+#if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
+    kXSPI_Frad8AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD8ACC_MASK << 32UL,   /*!< Enable the interrupt generated
+                                                                 when the transaction address lies within the address
+                                                                 range of the FRAD0 but it does not pass the access
+                                                                 permission checks for the FRAD or the FRAD is under
+                                                                 exclusive lock. */
+    kXSPI_Frad9AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD9ACC_MASK << 32UL,   /*!< Enable the interrupt generated
+                                                                 when the transaction address lies within the address
+                                                                 range of the FRAD9 but it does not pass the access
+                                                                 permission checks for the FRAD or the FRAD is under
+                                                                 exclusive lock. */
+    kXSPI_Frad10AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD10ACC_MASK << 32UL, /*!< Enable the interrupt generated
+                                                               when the transaction address lies within the address
+                                                               range of the FRAD10 but it does not pass the access
+                                                               permission checks for the FRAD or the FRAD is under
+                                                               exclusive lock. */
+    kXSPI_Frad11AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD11ACC_MASK << 32UL, /*!< Enable the interrupt generated
+                                                               when the transaction address lies within the address
+                                                               range of the FRAD11 but it does not pass the access
+                                                               permission checks for the FRAD or the FRAD is under
+                                                               exclusive lock. */
+    kXSPI_Frad12AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD12ACC_MASK << 32UL, /*!< Enable the interrupt generated
+                                                               when the transaction address lies within the address
+                                                               range of the FRAD12 but it does not pass the access
+                                                               permission checks for the FRAD or the FRAD is under
+                                                               exclusive lock. */
+    kXSPI_Frad13AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD13ACC_MASK << 32UL, /*!< Enable the interrupt generated
+                                                               when the transaction address lies within the address
+                                                               range of the FRAD13 but it does not pass the access
+                                                               permission checks for the FRAD or the FRAD is under
+                                                               exclusive lock. */
+    kXSPI_Frad14AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD14ACC_MASK << 32UL, /*!< Enable the interrupt generated
+                                                               when the transaction address lies within the address
+                                                               range of the FRAD14 but it does not pass the access
+                                                               permission checks for the FRAD or the FRAD is under
+                                                               exclusive lock. */
+    kXSPI_Frad15AccessErrorIntEnable = (uint64_t)XSPI_INT_EN_FRAD15ACC_MASK << 32UL, /*!< Enable the interrupt generated
+                                                               when the transaction address lies within the address
+                                                               range of the FRAD15 but it does not pass the access
+                                                               permission checks for the FRAD or the FRAD is under
+                                                               exclusive lock. */
+#endif                               /* (defined(FSL_FEATURE_XSPI_HAS_ESPI_EENV) && FSL_FEATURE_XSPI_HAS_ESPI_EENV) */
+    kXSPI_IpsErrIntEnable = (uint64_t)XSPI_INT_EN_IPS_ERR_MASK
+                            << 32UL, /*!< Enable the interrupt generated when a common error
+                               has occurred an XSPI has generated an
+                               IPS bus transfer error. */
+    kXSPI_Tg0SfarErrIntEnable = (uint64_t)XSPI_INT_EN_TG0SFAR_MASK << 32U, /*!< Enable the interrupt generated when an
+                                                                   SFAR write triggers an error while being written to
+                                                                   the target group 0. */
+#if defined(XSPI_INT_EN_TG1SFAR_MASK)
+    kXSPI_Tg1SfarErrIntEnable = (uint64_t)XSPI_INT_EN_TG1SFAR_MASK << 32U, /*!< Enable the interrupt generated when an
+                                                                   SFAR write triggers an error while being written to
+                                                                   the target group 1. */
+#endif                                                                     /* defined(XSPI_INT_EN_TG1SFAR_MASK) */
+    kXSPI_Tg0IpcrErrIntEnable = (uint64_t)XSPI_INT_EN_TG0IPCR_MASK << 32U, /*!< Enable the interrupt generated when an
+                                                                   IPCR write triggers an error while being written to
+                                                                   the target group 0. */
+#if defined(XSPI_INT_EN_TG1IPCR_MASK)
+    kXSPI_Tg1IpcrErrIntEnable = (uint64_t)XSPI_INT_EN_TG1IPCR_MASK << 32U, /*!< Enable the interrupt generated when an
+                                                                   IPCR write triggers an error while being written to
+                                                                   the target group 1. */
+#endif                                                                     /* defined(XSPI_INT_EN_TG1IPCR_MASK) */
+    kXSPI_TimeoutErrIntEnable = (uint64_t)XSPI_INT_EN_TO_ERR_MASK << 32U,  /*!< Enable the interrupt generated when a
+                                                                     flash memory  transaction triggers a timeout error
+                                                                     and has been  terminated by SFP. */
+    kXSPI_ArbitrationWinIntEnable = (uint64_t)XSPI_INT_EN_ARB_WIN_IE_MASK
+                                    << 32U,                                /*!< Enable the interrupt generated when the
+                                                             target group queue request is granted access. */
+    kXSPI_ArbitrationLockTimeoutErrIntEnable = (uint64_t)XSPI_INT_EN_ARB_TO_IE_MASK << 32U, /*!< Enable the interrupt
+                                                                generated when a flash memory transaction triggers a
+                                                                timeout error and has been terminated by SFP. */
+    kXSPI_LockRegWriteErrIntEnable = (uint64_t)XSPI_INT_EN_ARB_TO_IE_MASK << 32U, /*!< Enable the interrupt generated by
+                                                                an attempt to write a locked register. */
 };
 
 /************************** External Device Control Structures and Enumerations Start *******************************/
@@ -470,7 +614,7 @@ typedef enum _xspi_data_learning_pad_select
  */
 typedef struct _xspi_data_learning_config
 {
-    uint32_t pattern;                            /*!< Pre-defiend pattern to match. */
+    uint32_t pattern;                            /*!< Pre-defined pattern to match. */
     bool deviceSupported;                        /*!< Specify if external device support data learning feature. */
     xspi_data_learning_pad_select_t padSelected; /*!< Used to select pad which use for pattern matching IO. */
 } xspi_data_learning_config_t;
@@ -481,7 +625,9 @@ typedef struct _xspi_data_learning_config
 typedef struct _xspi_sample_clk_config
 {
     xspi_sample_clk_source_t sampleClkSource; /*!< Specify the sample clock source. */
+#if (defined(FSL_FEATURE_XSPI_HAS_DQS_LAT_EN) && FSL_FEATURE_XSPI_HAS_DQS_LAT_EN)
     bool enableDQSLatency;                    /*!< Enable DQS latency or not. */
+#endif                                        /* FSL_FEATURE_XSPI_HAS_DQS_LAT_EN */
     xspi_dll_config_t dllConfig; /*!< Specify the DLL configuration, to improve data accuracy, please adjust
                                      DLL settings based on specific use.  */
 } xspi_sample_clk_config_t;
@@ -533,7 +679,7 @@ typedef union _xspi_device_interface_settings
         xspi_hyper_bus_x16_mode_t x16Mode; /*!< Specify hyper bus X16 mode. */
         bool enableVariableLatency;        /*!< If enabled, the count of latency is depends on hyper bus device. */
         bool forceBit10To1;                /*!< Force bit 10 to logic one or not. */
-        uint32_t pageSize; /*!< The size of page to program, the unit is byte. */
+        uint32_t pageSize;                 /*!< The size of page to program, the unit is byte. */
     } hyperBusSettings;
 } xspi_device_interface_settings_t;
 
@@ -570,10 +716,10 @@ typedef struct _xspi_device_config
     uint8_t CSSetupTime;                                /*!< CS line setup time. */
 
     xspi_sample_clk_config_t sampleClkConfig;           /*!< Configuration of sample clock. */
-
+#if (defined(FSL_FEATURE_XSPI_HAS_DDR) && FSL_FEATURE_XSPI_HAS_DDR)
     xspi_device_ddr_config_t *ptrDeviceDdrConfig;    /*!< Set as NULL to set device as SDR mode, to change to DDR mode,
                                                    this member should be populated. */
-
+#endif
     xspi_device_addr_mode_t addrMode;                /*!< Address mode of external device. */
     uint8_t columnAddrWidth;                         /*!< Width of column address. */
     bool enableCASInterleaving;                      /*!< Usually enabled in dual-die device. */
@@ -650,8 +796,6 @@ typedef struct _xspi_mdad_config
                                              descriptor queue*/
 } xspi_mdad_config_t;
 
-#define XSPI_TARGET_GROUP_COUNT (2U)
-
 /*!
  * @brief The structure of SFP MDAD configurations for all target groups.
  */
@@ -670,11 +814,30 @@ typedef enum _xspi_descriptor_lock
     kXSPI_DescriptorLockEnabled = 0x3U,               /*!< Descriptor registers are read-only.*/
 } xspi_descriptor_lock_t;
 
+#if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
+/*! @brief FRAD configuration. */
+typedef struct _xspi_frad_tg_config
+{
+    uint8_t tgMasterAccess[XSPI_TARGET_GROUP_COUNT]; /*!< This field define the access restrictions for respective
+                               Master Domain corresponding to this FRAD region. Access permissions are decided  based on
+                               secure an privilege attributes of current transaction. Read access is not restricted.*/
+    bool assignIsValid; /*!< This field indicates whether the FRAD Descriptor for a specific flash region
+                          is valid.*/
+    xspi_descriptor_lock_t descriptorLock; /*!< This field enables masking of accidental write on FRAD registers.
+                                           Lock is enabled/disabled by Secure/ Privileged master.*/
+    xspi_exclusive_access_lock_mode_t exclusiveAccessLock; /*!< This field provides exclusive write lock over a
+                                                      FRAD region based on MDnACP.*/
+} xspi_frad_tg_config_t;
+#endif
+
 /*! @brief FRAD configuration. */
 typedef struct _xspi_frad_config_t
 {
-    uint32_t startAddress;   /*!< Specifies the specific flash memory region starting address*/
-    uint32_t endAddress;     /*!< Specifies the specific flash memory region end address*/
+    uint32_t startAddress; /*!< Specifies the specific flash memory region starting address*/
+    uint32_t endAddress;   /*!< Specifies the specific flash memory region end address*/
+#if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
+    xspi_frad_tg_config_t tgConfig[XSPI_TARGET_GROUP_COUNT];
+#else
     uint8_t tg0MasterAccess; /*!< This field define the access restrictions for respective Master Domain
                                corresponding to this FRAD region. Access permissions are decided  based on secure
                                an privilege attributes of current transaction. Read access is not restricted.*/
@@ -685,9 +848,9 @@ typedef struct _xspi_frad_config_t
                                            Lock is enabled/disabled by Secure/ Privileged master.*/
     xspi_exclusive_access_lock_mode_t exclusiveAccessLock; /*!< This field provides exclusive write lock over a
                                                       FRAD region based on MDnACP.*/
+#endif
 } xspi_frad_config_t;
 
-#define XSPI_SFP_FRAD_COUNT (8U)
 /*!
  * @brief The structure of SFP FRAD configurations.
  */
@@ -726,14 +889,23 @@ typedef struct _xspi_ip_access_config
                                           ongoing write or read command to complete before terminating the command. */
 } xspi_ip_access_config_t;
 
-#define XSPI_IP_RX_BUFFER_SIZE (512UL)       /* RX Buffer size is 512 Byte. */
-#define XSPI_IP_TX_BUFFER_SIZE (1024UL)      /* TX Buffer size is 1024 Byte. */
+#define XSPI_IP_RX_BUFFER_SIZE (512UL)  /* RX Buffer size is 512 Byte. */
+#define XSPI_IP_TX_BUFFER_SIZE (1024UL) /* TX Buffer size is 1024 Byte. */
 
 /*! @brief The enumeration of target group. */
 typedef enum _xspi_target_group
 {
     kXSPI_TargetGroup0 = 0x0U, /*!< Target groupe queue 0*/
     kXSPI_TargetGroup1 = 0x1U, /*!< Target groupe queue 1*/
+#if defined(FSL_FEATURE_XSPI_TARGET_GROUP_COUNT) && (FSL_FEATURE_XSPI_TARGET_GROUP_COUNT > 2U)
+    kXSPI_TargetGroup2 = 0x2U, /*!< Target groupe queue 2*/
+#endif
+#if defined(FSL_FEATURE_XSPI_TARGET_GROUP_COUNT) && (FSL_FEATURE_XSPI_TARGET_GROUP_COUNT > 3U)
+    kXSPI_TargetGroup3 = 0x3U, /*!< Target groupe queue 3*/
+#endif
+#if defined(FSL_FEATURE_XSPI_TARGET_GROUP_COUNT) && (FSL_FEATURE_XSPI_TARGET_GROUP_COUNT > 4U)
+    kXSPI_TargetGroup4 = 0x4U, /*!< Target groupe queue 4*/
+#endif
 } xspi_target_group_t;
 
 /*!
@@ -754,7 +926,7 @@ typedef struct _xspi_transfer
     uint8_t seqIndex;                /*!< Sequence ID for command. */
     uint32_t *data;                  /*!< Data buffer. */
     size_t dataSize;                 /*!< Data size in bytes. */
-    xspi_target_group_t targetGroup; /*!< Target group. include targetGroup[0] targetGroup[1]*/
+    xspi_target_group_t targetGroup; /*!< Target group.*/
     bool lockArbitration;
 } xspi_transfer_t;
 
@@ -767,7 +939,10 @@ typedef void (*xspi_transfer_callback_t)(XSPI_Type *base, xspi_handle_t *handle,
 /*! @brief Transfer handle structure for XSPI. */
 struct _xspi_handle
 {
-    uint32_t state;                 /*!< Internal state for XSPI transfer */
+    uint32_t state;                              /*!< Internal state for XSPI transfer */
+#if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
+    xspi_target_group_t tgId;                    /*!< Target Group. */
+#endif
     uint8_t *data;                               /*!< Data buffer. */
     size_t dataSize;                             /*!< Remaining Data size in bytes. */
     size_t transferTotalSize;                    /*!< Total Data size in bytes. */
@@ -828,9 +1003,9 @@ typedef struct _xspi_ahbBuffer_config
         bool enableAllMaster; /*!< When set, buffer3 acts as an all-master buffer.buff[i] routed to buffer3*/
     } enaPri;
 
-    uint16_t bufferSize;                                     /* Specify the AHB buffer size and transfer size(8 byte as unit),
-                                                              * in range of 512, 256, 128, 64, 32, 16, 8, 4, 2, 0.
-                                                              */
+    uint16_t bufferSize; /* Specify the AHB buffer size and transfer size(8 byte as unit),
+                          * in range of 512, 256, 128, 64, 32, 16, 8, 4, 2, 0.
+                          */
     xspi_ahbBuffer_sub_buffer_config_t *ptrSubBuffer0Config; /*!< Pointer to sub buffer0's configuration. */
     xspi_ahbBuffer_sub_buffer_config_t *ptrSubBuffer1Config; /*!< Pointer to sub buffer1's configuration. */
     xspi_ahbBuffer_sub_buffer_config_t *ptrSubBuffer2Config; /*!< Pointer to sub buffer2's configuration. */
@@ -928,6 +1103,10 @@ typedef struct _xspi_ahb_access_config
         uint32_t highPayload; /*!< High 32bit error payload. */
         uint32_t lowPayload;  /*!< Low 32bit error payload. */
     } ahbErrorPayload;
+#if (defined(FSL_FEATURE_XSPI_HAS_WRTER_EN_BIT) && FSL_FEATURE_XSPI_HAS_WRTER_EN_BIT)
+    bool enableWriteTerminate; /*!< True to enable an AHB transaction can terminate the ongoing AHB read-prefetch,
+                                    in default it is enabled. */
+#endif                         /* FSL_FEATURE_XSPI_HAS_WRTER_EN_BIT */
 } xspi_ahb_access_config_t;
 
 /*!
@@ -974,6 +1153,7 @@ typedef enum _xspi_otfad_prefetch_boundary
 
 /**************************** XSPI Controller Structures and Enumerations Start *********************************/
 
+#if (defined(FSL_FEATURE_XSPI_HAS_END_CFG) && FSL_FEATURE_XSPI_HAS_END_CFG)
 /*! @brief Byte ordering endianness. */
 typedef enum _xspi_byte_order
 {
@@ -982,12 +1162,17 @@ typedef enum _xspi_byte_order
     kXSPI_32BitBE = 0x2U, /*!< 32 bit big endian*/
     kXSPI_64BitLE = 0x3U, /*!< 64 bit little endian*/
 } xspi_byte_order_t;
+#endif                    /* FSL_FEATURE_XSPI_HAS_END_CFG */
 
 /*! @brief XSPI configuration structure. */
 typedef struct _xspi_config
 {
+#if (defined(FSL_FEATURE_XSPI_HAS_END_CFG) && FSL_FEATURE_XSPI_HAS_END_CFG)
     xspi_byte_order_t byteOrder;                  /*!< Byte ordering endianness*/
+#endif                                            /* FSL_FEATURE_XSPI_HAS_END_CFG */
+#if (defined(FSL_FEATURE_XSPI_HAS_DOZE_MODE) && FSL_FEATURE_XSPI_HAS_DOZE_MODE)
     bool enableDoze;                              /*!< Enable/disable doze mode support. */
+#endif
     xspi_ahb_access_config_t *ptrAhbAccessConfig; /*!< Pointer to AHB access configuration,
                                                   can be NULL is AHB access is not used. */
     xspi_ip_access_config_t *ptrIpAccessConfig;   /*!< Pointer to IP access configuration,
@@ -997,11 +1182,11 @@ typedef struct _xspi_config
 
 #if (defined(FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT) && (FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT > 0))
 /*! @brief The enumeration of cache64 policy.   */
-typedef enum  _xspi_cache64_policy
+typedef enum _xspi_cache64_policy
 {
-    kXSPI_Cache64PolicyNonCacheable = 0U,   /*!< Non-cacheable. */
-    kXSPI_Cache64PolicyWriteThrough = 1U,   /*!< Write through. */
-    kXSPI_Cache64PolicyWriteBack    = 2U,   /*!< Write back. */
+    kXSPI_Cache64PolicyNonCacheable = 0U, /*!< Non-cacheable. */
+    kXSPI_Cache64PolicyWriteThrough = 1U, /*!< Write through. */
+    kXSPI_Cache64PolicyWriteBack    = 2U, /*!< Write back. */
 } xspi_cache64_policy_t;
 
 /*!
@@ -1012,11 +1197,11 @@ typedef enum  _xspi_cache64_policy
  */
 typedef struct _xspi_cache64_config
 {
-    uint32_t region0TopAddr;                /*!< Top address of region0, bit0-bit9 ignored. */
-    xspi_cache64_policy_t region0Policy;    /*!< Policy of region0. */
-    uint32_t region1TopAddr;                /*!< Top address of region1, bit0-bit9 ignored. */
-    xspi_cache64_policy_t region1Policy;    /*!< Policy of region1. */
-    xspi_cache64_policy_t region2Policy;    /*!< Policy of region2. */
+    uint32_t region0TopAddr;             /*!< Top address of region0, bit0-bit9 ignored. */
+    xspi_cache64_policy_t region0Policy; /*!< Policy of region0. */
+    uint32_t region1TopAddr;             /*!< Top address of region1, bit0-bit9 ignored. */
+    xspi_cache64_policy_t region1Policy; /*!< Policy of region1. */
+    xspi_cache64_policy_t region2Policy; /*!< Policy of region2. */
 } xspi_cache64_region_config_t;
 #endif /* (defined(FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT) && (FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT > 0)) */
 
@@ -1044,9 +1229,10 @@ uint32_t XSPI_GetInstance(XSPI_Type *base);
  * @brief Check and clear IP command execution errors.
  *
  * @param base XSPI base pointer.
+ * @param tgId Specify the target group.
  * @param status interrupt status.
  */
-status_t XSPI_CheckAndClearError(XSPI_Type *base, uint32_t status);
+status_t XSPI_CheckAndClearErrorTG(XSPI_Type *base, xspi_target_group_t tgId, uint32_t status);
 
 /*!
  * @brief Initializes the XSPI module and internal state.
@@ -1089,26 +1275,30 @@ void XSPI_Deinit(XSPI_Type *base);
  */
 void XSPI_UpdateLUT(XSPI_Type *base, uint8_t index, const uint32_t *cmd, uint8_t count);
 
+#if defined(XSPI_SPTRCLR_OTFAD_BNDRY_MASK)
 /*!
  * @brief Set OTFAD prefetch boundary.
  *
  * @param base XSPI peripheral base address.
  * @param boundary Prefetch boundary to set, in type of @ref xspi_otfad_prefetch_boundary_t.
  */
-static inline void XSPI_SetOTFADPrefetchBoundary(XSPI_Type *base, xspi_otfad_prefetch_boundary_t boundary)
+RAMFUNC static inline void XSPI_SetOTFADPrefetchBoundary(XSPI_Type *base, xspi_otfad_prefetch_boundary_t boundary)
 {
     base->SPTRCLR = (base->SPTRCLR & (~XSPI_SPTRCLR_OTFAD_BNDRY_MASK)) | XSPI_SPTRCLR_OTFAD_BNDRY(boundary);
 }
+#endif /* defined(XSPI_SPTRCLR_OTFAD_BNDRY_MASK) */
 /* @} */
 
 /*!
  * @name XSPI Controller Low-Level Inferfaces
  */
 
-static inline void XSPI_UpdateByteOrder(XSPI_Type *base, xspi_byte_order_t byteOrder)
+#if (defined(FSL_FEATURE_XSPI_HAS_END_CFG) && FSL_FEATURE_XSPI_HAS_END_CFG)
+RAMFUNC static inline void XSPI_UpdateByteOrder(XSPI_Type *base, xspi_byte_order_t byteOrder)
 {
     base->MCR = ((base->MCR) & (~XSPI_MCR_END_CFG_MASK)) | XSPI_MCR_END_CFG(byteOrder);
 }
+#endif /* FSL_FEATURE_XSPI_HAS_END_CFG */
 
 /*!
  * @brief Enable or disable the XSPI module.
@@ -1116,7 +1306,7 @@ static inline void XSPI_UpdateByteOrder(XSPI_Type *base, xspi_byte_order_t byteO
  * @param base XSPI peripheral base address.
  * @param enable true means enable XSPI, false means disable.
  */
-static inline void XSPI_EnableModule(XSPI_Type *base, bool enable)
+RAMFUNC static inline void XSPI_EnableModule(XSPI_Type *base, bool enable)
 {
     if (enable)
     {
@@ -1136,7 +1326,7 @@ static inline void XSPI_EnableModule(XSPI_Type *base, bool enable)
  * @retval true XSPI module is enabled.
  * @retval false XSPI module is disabled.
  */
-static inline bool XSPI_CheckModuleEnabled(XSPI_Type *base)
+RAMFUNC static inline bool XSPI_CheckModuleEnabled(XSPI_Type *base)
 {
     return ((base->MCR & XSPI_MCR_MDIS_MASK) == 0UL);
 }
@@ -1150,24 +1340,51 @@ static inline bool XSPI_CheckModuleEnabled(XSPI_Type *base)
  */
 void XSPI_ResetSfmAndAhbDomain(XSPI_Type *base);
 
+#if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
+/*!
+ * @brief Reset IPS target group queue.
+ *
+ * @param base XSPI peripheral base address.
+ * @param tgId Target group ID.
+ */
+RAMFUNC static inline void XSPI_ResetTgQueueTG(XSPI_Type *base, xspi_target_group_t tgId)
+{
+    if (tgId == 0U)
+    {
+        base->MCR |= XSPI_MCR_IPS_TG_RST_MASK;
+    }
+    else
+    {
+        base->MCR_EXT |= (XSPI_MCR_EXT_IPS_TG_RST1_MASK << ((uint32_t)tgId - 1U));
+    }
+}
+#else
 /*!
  * @brief Reset IPS target group queue.
  *
  * @param base XSPI peripheral base address.
  */
-static inline void XSPI_ResetTgQueue(XSPI_Type *base)
+RAMFUNC static inline void XSPI_ResetTgQueue(XSPI_Type *base)
 {
     base->MCR |= XSPI_MCR_IPS_TG_RST_MASK;
 }
+#endif
 
 /*!
  * @brief Software reset  flash memory domain, AHB domain, and Target group at the same time.
  *
  * @param base XSPI peripheral base address.
  */
-static inline void XSPI_SoftwareReset(XSPI_Type *base)
+RAMFUNC static inline void XSPI_SoftwareReset(XSPI_Type *base)
 {
+#if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
+    for (uint8_t i = 0; i < XSPI_TARGET_GROUP_COUNT; i++)
+    {
+        XSPI_ResetTgQueueTG(base, (xspi_target_group_t)i);
+    }
+#else
     XSPI_ResetTgQueue(base);
+#endif
     XSPI_ResetSfmAndAhbDomain(base);
 }
 
@@ -1179,7 +1396,7 @@ static inline void XSPI_SoftwareReset(XSPI_Type *base)
  * @retval false Write access to listed registers is not locked.
  * @retval true Write access to listed registers is locked.
  */
-static inline bool XSPI_CheckGlobalConfigLocked(XSPI_Type *base)
+RAMFUNC static inline bool XSPI_CheckGlobalConfigLocked(XSPI_Type *base)
 {
     return (bool)((base->MGC & XSPI_MGC_GCLCK_MASK) != 0UL);
 }
@@ -1223,7 +1440,7 @@ status_t XSPI_UpdateDeviceAddrMode(XSPI_Type *base, xspi_device_addr_mode_t addr
             - \b true Enable variable latency;
             - \b false Disable variable latency.
  */
-static inline void XSPI_EnableVariableLatency(XSPI_Type *base, bool enable)
+RAMFUNC static inline void XSPI_EnableVariableLatency(XSPI_Type *base, bool enable)
 {
     if (enable)
     {
@@ -1235,6 +1452,7 @@ static inline void XSPI_EnableVariableLatency(XSPI_Type *base, bool enable)
     }
 }
 
+#if (defined(FSL_FEATURE_XSPI_HAS_DOZE_MODE) && FSL_FEATURE_XSPI_HAS_DOZE_MODE)
 /*!
  * @brief Enable/disable Doze mode for XSPI controller.
  *
@@ -1245,7 +1463,7 @@ static inline void XSPI_EnableVariableLatency(XSPI_Type *base, bool enable)
  *          - \b true Enable Doze mode;
  *          - \b false Disable Doze mode.
  */
-static inline void XSPI_EnableDozeMode(XSPI_Type *base, bool enable)
+RAMFUNC static inline void XSPI_EnableDozeMode(XSPI_Type *base, bool enable)
 {
     if (enable)
     {
@@ -1256,6 +1474,7 @@ static inline void XSPI_EnableDozeMode(XSPI_Type *base, bool enable)
         base->MCR &= ~XSPI_MCR_DOZE_MASK;
     }
 }
+#endif /* FSL_FEATURE_XSPI_HAS_DOZE_MODE */
 
 /*!
  * @brief Specify the logic level of the XSPI IOFA[3] and IOFA[2] output in the inactive state.
@@ -1266,7 +1485,7 @@ static inline void XSPI_EnableDozeMode(XSPI_Type *base, bool enable)
  *          - \b false Output logic 0;
  *          - \b true Output logic 1.
  */
-static inline void XSPI_SetSignalOutputValue(XSPI_Type *base, uint32_t signalMask, bool outputLogic)
+RAMFUNC static inline void XSPI_SetSignalOutputValue(XSPI_Type *base, uint32_t signalMask, bool outputLogic)
 {
     bool moduleEnabled = false;
 
@@ -1303,7 +1522,7 @@ static inline void XSPI_SetSignalOutputValue(XSPI_Type *base, uint32_t signalMas
  *           - \b true Enable inverted serial clock output;
  *           - \b false Disable inverted serial clock output.
  */
-static inline void XSPI_EnableInvertedSerialClockOutput(XSPI_Type *base, bool enable)
+RAMFUNC static inline void XSPI_EnableInvertedSerialClockOutput(XSPI_Type *base, bool enable)
 {
     bool moduleEnabled = false;
 
@@ -1313,6 +1532,7 @@ static inline void XSPI_EnableInvertedSerialClockOutput(XSPI_Type *base, bool en
         XSPI_EnableModule(base, false);
     }
 
+#if (defined(XSPI_MCR_CKN_FA_EN_MASK) && XSPI_MCR_CKN_FA_EN_MASK)
     if (enable)
     {
         base->MCR |= XSPI_MCR_CKN_FA_EN_MASK;
@@ -1321,6 +1541,7 @@ static inline void XSPI_EnableInvertedSerialClockOutput(XSPI_Type *base, bool en
     {
         base->MCR &= ~XSPI_MCR_CKN_FA_EN_MASK;
     }
+#endif
 
     if (moduleEnabled)
     {
@@ -1337,8 +1558,8 @@ static inline void XSPI_EnableInvertedSerialClockOutput(XSPI_Type *base, bool en
  * @param[in] enableX16Mode X16 mode is enabled or not.
  * @param[in] xspiRootClk The frequency of xspi root clock, the unit is Hz.
  */
-void XSPI_UpdateDllValue( XSPI_Type *base, xspi_dll_config_t *ptrDllConfig,
-                        bool enableDDR, bool enableX16Mode, uint32_t xspiRootClk);
+void XSPI_UpdateDllValue(
+    XSPI_Type *base, xspi_dll_config_t *ptrDllConfig, bool enableDDR, bool enableX16Mode, uint32_t xspiRootClk);
 
 /*!
  * @brief Set Data learning configurations.
@@ -1361,7 +1582,7 @@ status_t XSPI_SetDataLearningConfig(XSPI_Type *base, xspi_data_learning_config_t
  * @retval true Data learning has failed.
  * @retval false Data learning not fail.
  */
-static inline bool XSPI_CheckDataLearningFailure(XSPI_Type *base)
+RAMFUNC static inline bool XSPI_CheckDataLearningFailure(XSPI_Type *base)
 {
     return (bool)((base->DLSR_F[0] & XSPI_DLSR_F_DLPFF_MASK) == XSPI_DLSR_F_DLPFF_MASK);
 }
@@ -1373,7 +1594,9 @@ static inline bool XSPI_CheckDataLearningFailure(XSPI_Type *base)
  * @param[out] posEdgeMatch Pointer to the memory to store positive edge match signature.
  * @param[out] negEdgeMatch Pointer to the memory to store negative edge match signature.
  */
-static inline void XSPI_GetDataLearningEdgeMatchSignature(XSPI_Type *base, uint8_t *posEdgeMatch, uint8_t *negEdgeMatch)
+RAMFUNC static inline void XSPI_GetDataLearningEdgeMatchSignature(XSPI_Type *base,
+                                                                  uint8_t *posEdgeMatch,
+                                                                  uint8_t *negEdgeMatch)
 {
     uint32_t tmp32 = base->DLSR_F[0];
 
@@ -1407,27 +1630,31 @@ status_t XSPI_SetDeviceConfig(XSPI_Type *base, xspi_device_config_t *devConfig);
  */
 
 /*!
- * @brief Enables the XSPI interrupts.
+ * @brief Enables the XSPI interrupts for specific target group.
  *
  * @param base XSPI peripheral base address.
- * @param mask XSPI interrupt source, should be the OR'ed value of @ref xspi_interrupt_enable_t.
+ * @param tgId Target group ID.
+ * @param mask XSPI interrupt source mask.
  */
-static inline void XSPI_EnableInterrupts(XSPI_Type *base, uint64_t mask)
+RAMFUNC static inline void XSPI_EnableInterruptsTG(XSPI_Type *base, xspi_target_group_t tgId, uint64_t mask)
 {
-    base->INT_EN |= ((mask >> 32UL) & 0xFFFFFFFFUL);
-    base->RSER |= ((uint32_t)mask & 0xFFFFFFFFUL);
+    volatile uint32_t *intEn = (volatile uint32_t *)XSPI_TG_REG_ADDR_INT_EN(base, tgId);
+    *intEn |= (uint32_t)((mask >> 32UL) & 0xFFFFFFFFUL);
+    base->RSER |= (uint32_t)(mask & 0xFFFFFFFFUL);
 }
 
 /*!
- * @brief Disables the XSPI interrupts.
+ * @brief Disables the XSPI interrupts for specific target group.
  *
  * @param base XSPI peripheral base address.
- * @param mask XSPI interrupt source, should be the OR'ed value of @ref xspi_interrupt_enable_t.
+ * @param tgId Target group ID.
+ * @param mask XSPI interrupt source mask.
  */
-static inline void XSPI_DisableInterrupts(XSPI_Type *base, uint64_t mask)
+RAMFUNC static inline void XSPI_DisableInterruptsTG(XSPI_Type *base, xspi_target_group_t tgId, uint64_t mask)
 {
-    base->INT_EN &= ~((mask >> 32UL) & 0xFFFFFFFFUL);
-    base->RSER &= ~((uint32_t)mask & 0xFFFFFFFFUL);
+    volatile uint32_t *intEn = (volatile uint32_t *)XSPI_TG_REG_ADDR_INT_EN(base, tgId);
+    *intEn &= ~((uint32_t)((mask >> 32UL) & 0xFFFFFFFFUL));
+    base->RSER &= ~((uint32_t)(mask & 0xFFFFFFFFUL));
 }
 
 /* @} */
@@ -1436,63 +1663,71 @@ static inline void XSPI_DisableInterrupts(XSPI_Type *base, uint64_t mask)
 /*@{*/
 
 /*!
- * @brief Enables or disables XSPI IP Tx FIFO DMA requests.
+ * @brief Enables or disables XSPI IP Tx FIFO DMA requests for specific target group.
  *
  * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
  * @param[in] enable Enable flag for transmit DMA request. Pass true for enable, false for disable.
  */
-static inline void XSPI_EnableTxDMA(XSPI_Type *base, bool enable)
+RAMFUNC static inline void XSPI_EnableTxDMATG(XSPI_Type *base, xspi_target_group_t tgId, bool enable)
 {
+    uint32_t reg = XSPI_TG_REG_ADDR_RSER(base, tgId);
+
     if (enable)
     {
-        base->RSER |= XSPI_RSER_TBFDE_MASK;
+        *(volatile uint32_t *)reg |= XSPI_RSER_TBFDE_MASK;
     }
     else
     {
-        base->RSER &= ~XSPI_RSER_TBFDE_MASK;
+        *(volatile uint32_t *)reg &= ~XSPI_RSER_TBFDE_MASK;
     }
 }
 
 /*!
- * @brief Enables or disables XSPI IP Rx FIFO DMA requests.
+ * @brief Enables or disables XSPI IP Rx FIFO DMA requests for specific target group.
  *
  * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
  * @param[in] enable Enable flag for receive DMA request. Pass true for enable, false for disable.
  */
-static inline void XSPI_EnableRxDMA(XSPI_Type *base, bool enable)
+RAMFUNC static inline void XSPI_EnableRxDMATG(XSPI_Type *base, xspi_target_group_t tgId, bool enable)
 {
+    uint32_t reg = XSPI_TG_REG_ADDR_RSER(base, tgId);
+
     if (enable)
     {
-        base->RSER |= XSPI_RSER_RBDDE_MASK;
+        *(volatile uint32_t *)reg |= XSPI_RSER_RBDDE_MASK;
     }
     else
     {
-        base->RSER &= ~XSPI_RSER_RBDDE_MASK;
+        *(volatile uint32_t *)reg &= ~XSPI_RSER_RBDDE_MASK;
     }
 }
 
 /*!
- * @brief Gets XSPI IP tx fifo address for DMA transfer.
+ * @brief Gets XSPI IP tx fifo address for DMA transfer for specific target group.
  *
  * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
  *
- * @return The tx fifo address.
+ * @return The tx fifo address for the target group.
  */
-static inline uint32_t XSPI_GetTxFifoAddress(XSPI_Type *base)
+RAMFUNC static inline uint32_t XSPI_GetTxFifoAddressTG(XSPI_Type *base, xspi_target_group_t tgId)
 {
-    return (uint32_t)&base->TBDR;
+    return XSPI_TG_REG_ADDR(base, tgId, TBDR);
 }
 
 /*!
- * @brief Gets XSPI IP rx fifo address for DMA transfer.
+ * @brief Gets XSPI IP rx fifo address for DMA transfer for specific target group.
  *
  * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
  *
- * @return The rx fifo address.
+ * @return The rx fifo address for the target group.
  */
-static inline uint32_t XSPI_GetRxFifoAddress(XSPI_Type *base)
+RAMFUNC static inline uint32_t XSPI_GetRxFifoAddressTG(XSPI_Type *base, xspi_target_group_t tgId)
 {
-    return (uint32_t)&base->RBDR[0];
+    return XSPI_TG_REG_ADDR_RBDR(base, tgId);
 }
 
 /*@}*/
@@ -1503,54 +1738,88 @@ static inline uint32_t XSPI_GetRxFifoAddress(XSPI_Type *base)
  */
 
 /*!
- * @brief Get error status flags.
+ * @brief Get error status flags for specific target group.
  *
- * @param base SPC peripheral base address.
+ * @param base XSPI peripheral base address.
+ * @param tgId Target group ID.
  *
- * @return All asserted error status flags, should be the OR'ed value of @ref XSPI_GetErrorStatusFlags.
+ * @return All asserted error status flags for the target group.
+ *   Should be the OR'ed value of @ref xspi_error_flag_t.
  */
-static inline uint32_t XSPI_GetErrorStatusFlags(XSPI_Type *base)
+RAMFUNC static inline uint32_t XSPI_GetErrorStatusFlagsTG(XSPI_Type *base, xspi_target_group_t tgId)
 {
-    return base->ERRSTAT;
+    return XSPI_TG_REG_VAL(base, tgId, ERRSTAT);
 }
 
 /*!
- * @brief Clear input error status flags.
+ * @brief Clear input error status flags for specific target group.
  *
- * @param base SPC peripheral base address.
- * @param flags Error flags to clear, the OR'ed value of @ref XSPI_GetErrorStatusFlags.
+ * @param base XSPI peripheral base address.
+ * @param tgId Target group ID.
+ * @param flags Error flags to clear. Should be the OR'ed value of @ref xspi_error_flag_t.
  */
-static inline void XSPI_ClearErrorStatusFlags(XSPI_Type *base, uint32_t flags)
+RAMFUNC static inline void XSPI_ClearErrorStatusFlagsTG(XSPI_Type *base, xspi_target_group_t tgId, uint32_t flags)
 {
-    base->ERRSTAT = flags;
+    uint32_t reg              = XSPI_TG_REG_ADDR(base, tgId, ERRSTAT);
+    *(volatile uint32_t *)reg = flags;
 }
 
 /*!
- * @brief Get the XSPI interrupt status flags.
- *
- * @deprecated Please use XSPI_GetErrorStatusFlags() as instead.
+ * @brief Check if the IP access request was granted access for specific target group.
  *
  * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
  *
- * @return interrupt status flag, use status flag to AND #xspi_flags_t could get the related status.
+ * @retval true The IP access is granted arbitration for the target group.
+ * @retval false No IP access is queued for the target group.
  */
-static inline uint32_t XSPI_GetInterruptStatusFlags(XSPI_Type *base)
+RAMFUNC static inline bool XSPI_CheckIpRequestGrantedTG(XSPI_Type *base, xspi_target_group_t tgId)
 {
-    return base->ERRSTAT;
+    uint32_t reg = XSPI_TG_REG_VAL(base, tgId, ERRSTAT);
+    return (bool)((reg & XSPI_ERRSTAT_ARB_WIN_MASK) != 0UL);
+}
+
+/*! @brief Return whether the bus is idle for specific target group.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
+ *
+ * @retval true Bus is idle for the target group.
+ * @retval false Bus is busy for the target group.
+ */
+RAMFUNC static inline bool XSPI_GetBusIdleStatusTG(XSPI_Type *base, xspi_target_group_t tgId)
+{
+    uint32_t reg = XSPI_TG_REG_VAL(base, tgId, SR);
+    return (bool)(XSPI_SR_BUSY_MASK != (reg & XSPI_SR_BUSY_MASK));
 }
 
 /*!
- * @brief Check if the IP access request was granted access if enable corresponding interrupt source, the XSPI
- * IRQ will be asserted.
+ * @brief Get asserted flags about SFM command execution and arbitration for specific target group.
  *
  * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
  *
- * @retval true Ip request granted.
- * @retval false Ip reqest not granted.
+ * @return The assert flags about SFM command execution and arbitration for the target group.
+ *  should be the OR'ed value of @ref xspi_cmd_execution_arbitration_flag_t.
  */
-static inline bool XSPI_CheckIpRequestGranted(XSPI_Type *base)
+RAMFUNC static inline uint32_t XSPI_GetCmdExecutionArbitrationStatusFlagsTG(XSPI_Type *base, xspi_target_group_t tgId)
 {
-    return (bool)((base->ERRSTAT & XSPI_ERRSTAT_ARB_WIN_MASK) != 0UL);
+    return XSPI_TG_REG_VAL(base, tgId, FR);
+}
+
+/*!
+ * @brief Clear asserted flags about SFM command execution and arbitration for specific target group.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
+ * @param[in] flags The mask of flags to clear.
+ */
+RAMFUNC static inline void XSPI_ClearCmdExecutionArbitrationStatusFlagsTG(XSPI_Type *base,
+                                                                          xspi_target_group_t tgId,
+                                                                          uint32_t flags)
+{
+    uint32_t reg              = XSPI_TG_REG_ADDR(base, tgId, FR);
+    *(volatile uint32_t *)reg = flags;
 }
 
 /*! @brief Return whether the bus is idle.
@@ -1560,9 +1829,29 @@ static inline bool XSPI_CheckIpRequestGranted(XSPI_Type *base)
  * @retval true Bus is idle.
  * @retval false Bus is busy.
  */
-static inline bool XSPI_GetBusIdleStatus(XSPI_Type *base)
+RAMFUNC static inline bool XSPI_GetBusIdleStatus(XSPI_Type *base)
 {
-    return (bool)(XSPI_SR_BUSY_MASK != (base->SR & XSPI_SR_BUSY_MASK));
+    /* Check TG0 */
+    if (XSPI_SR_BUSY_MASK == (base->SR & XSPI_SR_BUSY_MASK))
+    {
+        return false;
+    }
+
+#if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
+    /* Check all sub target groups */
+    for (uint8_t tgId = 1; tgId < XSPI_TARGET_GROUP_COUNT; tgId++)
+    {
+        if (tgId <= XSPI_SUB_REG_ARRAY_COUNT)
+        {
+            if (XSPI_SR_BUSY_MASK == (base->SUB_REG_ARRAY[tgId - 1].SR_SUB & XSPI_SR_BUSY_MASK))
+            {
+                return false;
+            }
+        }
+    }
+#endif /* FSL_FEATURE_XSPI_HAS_EENV */
+
+    return true;
 }
 
 /*!
@@ -1573,9 +1862,29 @@ static inline bool XSPI_GetBusIdleStatus(XSPI_Type *base)
  * @retval true AHB read access is requested or is ongoing.
  * @retval false AHB read access is not requested and is not ongoing.
  */
-static inline bool XSPI_CheckAhbReadAccessAsserted(XSPI_Type *base)
+RAMFUNC static inline bool XSPI_CheckAhbReadAccessAsserted(XSPI_Type *base)
 {
-    return (bool)((base->SR & XSPI_SR_AHB_ACC_MASK) != 0UL);
+    /* Check TG0 */
+    if ((base->SR & XSPI_SR_AHB_ACC_MASK) != 0UL)
+    {
+        return true;
+    }
+
+#if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
+    /* Check all sub target groups */
+    for (uint8_t tgId = 1; tgId < XSPI_TARGET_GROUP_COUNT; tgId++)
+    {
+        if (tgId <= XSPI_SUB_REG_ARRAY_COUNT)
+        {
+            if ((base->SUB_REG_ARRAY[tgId - 1].SR_SUB & XSPI_SR_AHB_ACC_MASK) != 0UL)
+            {
+                return true;
+            }
+        }
+    }
+#endif /* FSL_FEATURE_XSPI_HAS_EENV */
+
+    return false;
 }
 
 /*!
@@ -1586,33 +1895,29 @@ static inline bool XSPI_CheckAhbReadAccessAsserted(XSPI_Type *base)
  * @retval true AHB read access is requested or is ongoing.
  * @retval false AHB read access is not requested and is not ongoing.
  */
-static inline bool XSPI_CheckAhbWriteAccessAsserted(XSPI_Type *base)
+RAMFUNC static inline bool XSPI_CheckAhbWriteAccessAsserted(XSPI_Type *base)
 {
-    return (bool)((base->SR & XSPI_SR_AWRACC_MASK) != 0UL);
-}
+    /* Check TG0 */
+    if ((base->SR & XSPI_SR_AWRACC_MASK) != 0UL)
+    {
+        return true;
+    }
 
-/*!
- * @brief Get asserted flags about SFM command execution and arbitration.
- *
- * @param[in] base XSPI peripheral base address.
- *
- * @return The assert flags about SFM command execution and arbitration,
- *  should be the OR'ed value of @ref xspi_cmd_execution_arbitration_flag_t.
- */
-static inline uint32_t XSPI_GetCmdExecutionArbitrationStatusFlags(XSPI_Type *base)
-{
-    return (base->FR);
-}
+#if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
+    /* Check all sub target groups */
+    for (uint8_t tgId = 1; tgId < XSPI_TARGET_GROUP_COUNT; tgId++)
+    {
+        if (tgId <= XSPI_SUB_REG_ARRAY_COUNT)
+        {
+            if ((base->SUB_REG_ARRAY[tgId - 1].SR_SUB & XSPI_SR_AWRACC_MASK) != 0UL)
+            {
+                return true;
+            }
+        }
+    }
+#endif /* FSL_FEATURE_XSPI_HAS_EENV */
 
-/*!
- * @brief Clear asserted flags about SFM command execution and arbitration.
- *
- * @param[in] base XSPI peripheral base address.
- * @param[in] flags The mask of flags to clear, should be the OR'ed value of @ref xspi_cmd_execution_arbitration_flag_t.
- */
-static inline void XSPI_ClearCmdExecutionArbitrationStatusFlags(XSPI_Type *base, uint32_t flags)
-{
-    base->FR = flags;
+    return false;
 }
 
 /*@}*/
@@ -1625,29 +1930,34 @@ static inline void XSPI_ClearCmdExecutionArbitrationStatusFlags(XSPI_Type *base,
 /*! @brief Clear the XSPI IP TX/RX buffer logic.
  *
  * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
  * @param[in] txFifo Pass true to reset TX FIFO.
  * @param[in] rxFifo Pass true to reset RX FIFO.
  */
-static inline void XSPI_ResetTxRxBuffer(XSPI_Type *base, bool txFifo, bool rxFifo)
+RAMFUNC static inline void XSPI_ResetTxRxBufferTG(XSPI_Type *base, xspi_target_group_t tgId, bool txFifo, bool rxFifo)
 {
+    uint32_t reg = XSPI_TG_REG_ADDR(base, tgId, MCR);
+
     if (txFifo)
     {
-        base->MCR |= XSPI_MCR_CLR_TXF_MASK;
+        *(volatile uint32_t *)reg |= XSPI_MCR_CLR_TXF_MASK;
     }
     if (rxFifo)
     {
-        base->MCR |= XSPI_MCR_CLR_RXF_MASK;
+        *(volatile uint32_t *)reg |= XSPI_MCR_CLR_RXF_MASK;
     }
 }
 
 /*!
- * @brief Clear TX buffer.
+ * @brief Clear TX buffer for specific target group.
  *
  * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
  */
-static inline void XSPI_ClearTxBuffer(XSPI_Type *base)
+RAMFUNC static inline void XSPI_ClearTxBufferTG(XSPI_Type *base, xspi_target_group_t tgId)
 {
-    base->MCR |= XSPI_MCR_CLR_TXF_MASK;
+    uint32_t reg = XSPI_TG_REG_ADDR(base, tgId, MCR);
+    *(volatile uint32_t *)reg |= XSPI_MCR_CLR_TXF_MASK;
 
     for (uint8_t i = 0U; i < 10U; i++)
     {
@@ -1656,9 +1966,37 @@ static inline void XSPI_ClearTxBuffer(XSPI_Type *base)
 }
 
 /*!
+ * @brief Check if IP manager can write to TX buffer for specific target group.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
+ *
+ * @retval true Tx buffer lock is open.
+ * @retval false Tx buffer lock is not open.
+ */
+RAMFUNC static inline bool XSPI_CheckTxBuffLockOpenTG(XSPI_Type *base, xspi_target_group_t tgId)
+{
+    return (bool)((XSPI_TG_REG_VAL(base, tgId, FSMSTAT) & XSPI_FSMSTAT_STATE_MASK) == XSPI_FSMSTAT_STATE(1UL));
+}
+
+/*!
+ * @brief Writes data into IPS TX Buffer for specific target group.
+ *
+ * @param[in] base XSPI peripheral base address
+ * @param[in] tgId Target group ID.
+ * @param[in] data The data bytes to send.
+ */
+RAMFUNC static inline void XSPI_WriteTxBufferTG(XSPI_Type *base, xspi_target_group_t tgId, uint32_t data)
+{
+    uint32_t reg              = XSPI_TG_REG_ADDR(base, tgId, TBDR);
+    *(volatile uint32_t *)reg = data;
+}
+
+/*!
  * @brief Update watermark for TX buffer.
  *
  * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
  * @param[in] waterMark The watermark to set, the unit is byte, should be the multiple of 4 byte.
  *
  * @retval  kStatus_XSPI_IPAccessAsserted Fail to update watermark for Tx buffer, due to IP access is asserted.
@@ -1666,40 +2004,18 @@ static inline void XSPI_ClearTxBuffer(XSPI_Type *base)
  * multiple of 4 bytes.
  * @retval kStatus_Success Successful to update watermark.
  */
-status_t XSPI_UpdateTxBufferWaterMark(XSPI_Type *base, uint32_t waterMark);
+RAMFUNC status_t XSPI_UpdateTxBufferWaterMarkTG(XSPI_Type *base, xspi_target_group_t tgId, uint32_t waterMark);
 
 /*!
- * @brief Check if IP manager can write to TX buffer.
+ * @brief Clear RX buffer for specific target group.
  *
  * @param[in] base XSPI peripheral base address.
- *
- * @retval true Tx buffer lock is open.
- * @retval false Tx buffer lock is not open.
+ * @param[in] tgId Target group ID.
  */
-static inline bool XSPI_CheckTxBuffLockOpen(XSPI_Type *base)
+RAMFUNC static inline void XSPI_ClearRxBufferTG(XSPI_Type *base, xspi_target_group_t tgId)
 {
-    return (bool)((base->FSMSTAT & XSPI_FSMSTAT_STATE_MASK) == XSPI_FSMSTAT_STATE(1UL));
-}
-
-/*!
- * @brief Writes data into IPS TX Buffer.
- *
- * @param[in] base XSPI peripheral base address
- * @param[in] data The data bytes to send.
- */
-static inline void XSPI_WriteTxBuffer(XSPI_Type *base, uint32_t data)
-{
-    base->TBDR = data;
-}
-
-/*!
- * @brief Clear RX buffer.
- *
- * @param[in] base XSPI peripheral base address.
- */
-static inline void XSPI_ClearRxBuffer(XSPI_Type *base)
-{
-    base->MCR |= XSPI_MCR_CLR_RXF_MASK;
+    uint32_t reg = XSPI_TG_REG_ADDR(base, tgId, MCR);
+    *(volatile uint32_t *)reg |= XSPI_MCR_CLR_RXF_MASK;
 
     for (uint8_t i = 0U; i < 10U; i++)
     {
@@ -1708,28 +2024,159 @@ static inline void XSPI_ClearRxBuffer(XSPI_Type *base)
 }
 
 /*!
- * @brief Receive data from IPX RX FIFO.
+ * @brief Receive data from IPX RX FIFO for specific target group.
  *
  * @param[in] base XSPI peripheral base address
+ * @param[in] tgId Target group ID.
  * @param[in] fifoIndex Source fifo index.
  *
  * @return The data in the FIFO.
  */
-static inline uint32_t XSPI_ReadRxBuffer(XSPI_Type *base, uint8_t fifoIndex)
+RAMFUNC static inline uint32_t XSPI_ReadRxBufferTG(XSPI_Type *base, xspi_target_group_t tgId, uint8_t fifoIndex)
 {
-    return base->RBDR[fifoIndex];
+    return XSPI_TG_REG_VAL_RBDR_INDEX(base, tgId, fifoIndex);
 }
 
 /*!
- * @brief Trigger a pop event for RX buffer pop event.
+ * @brief Trigger a pop event for RX buffer pop event for specific target group.
  *
  * @note Each pop event discard watermark + 1 enties from RX buffer.
  *
  * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
  */
-static inline void XSPI_TriggerRxBufferPopEvent(XSPI_Type *base)
+RAMFUNC static inline void XSPI_TriggerRxBufferPopEventTG(XSPI_Type *base, xspi_target_group_t tgId)
 {
-    base->FR = XSPI_FR_RBDF_MASK;
+    uint32_t reg              = XSPI_TG_REG_ADDR(base, tgId, FR);
+    *(volatile uint32_t *)reg = XSPI_FR_RBDF_MASK;
+}
+
+/*!
+ * @brief Check if RX buffer watermark is exceed for specific target group.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
+ *
+ * @retval true The RX buffer watermark has been excceded.
+ * @retval false The RX buffer watermark has not been exceeded.
+ */
+RAMFUNC static inline bool XSPI_CheckRxBufferWaterMarkExceedTG(XSPI_Type *base, xspi_target_group_t tgId)
+{
+    return (bool)((XSPI_TG_REG_VAL(base, tgId, FR) & XSPI_FR_RBDF_MASK) == XSPI_FR_RBDF_MASK);
+}
+
+/*!
+ * @brief Get RX buffer aviailable bytes count for specific target group.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
+ *
+ * @return The available counts if bytes in RX buffer.
+ */
+RAMFUNC static inline uint32_t XSPI_GetRxBufferAvailableBytesCountTG(XSPI_Type *base, xspi_target_group_t tgId)
+{
+    return ((XSPI_TG_REG_VAL(base, tgId, RBSR) & XSPI_RBSR_RDBFL_MASK) >> XSPI_RBSR_RDBFL_SHIFT) * 4UL;
+}
+
+/*!
+ * @brief Get counts of bytes already removed from RX buffer for specific target group.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
+ *
+ * @return Counts of removed bytes.
+ */
+RAMFUNC static inline uint32_t XSPI_GetRxBufferRemovedBytesCountTG(XSPI_Type *base, xspi_target_group_t tgId)
+{
+    return ((XSPI_TG_REG_VAL(base, tgId, RBSR) & XSPI_RBSR_RDCTR_MASK) >> XSPI_RBSR_RDCTR_SHIFT) * 4UL;
+}
+
+/*!
+ * @brief Check if IP write access is triggered for specific target group.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
+ *
+ * @retval true The IP write access is granted arbitration.
+ * @retval false No IP write access is queued.
+ */
+RAMFUNC static inline bool XSPI_CheckIpWriteTriggeredTG(XSPI_Type *base, xspi_target_group_t tgId)
+{
+    return (bool)((XSPI_TG_REG_VAL(base, tgId, FSMSTAT) & XSPI_FSMSTAT_STATE_MASK) == XSPI_FSMSTAT_STATE(2U));
+}
+
+/*!
+ * @brief Check if IP read access is triggered for specific target group.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
+ *
+ * @retval true The IP read access is granted arbitration.
+ * @retval false No IP read access is queued.
+ */
+RAMFUNC static inline bool XSPI_CheckIpReadTriggeredTG(XSPI_Type *base, xspi_target_group_t tgId)
+{
+    return (bool)((XSPI_TG_REG_VAL(base, tgId, FSMSTAT) & XSPI_FSMSTAT_STATE_MASK) == XSPI_FSMSTAT_STATE(3U));
+}
+
+/*!
+ * @brief Check if IPS transfer is granted arbitration or execution for specific target group.
+ *
+ * @note The FSMSTAT[VLD] goes to 0 once the IPS transfer is completed and XSPI is IDLE.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
+ *
+ * @retval true Valid, the IPS transfer is granted arbitration or execution.
+ * @retval false Not valid, no IPS transfer is queued.
+ */
+RAMFUNC static inline bool XSPI_CheckFSMValidTG(XSPI_Type *base, xspi_target_group_t tgId)
+{
+    return (bool)((XSPI_TG_REG_VAL(base, tgId, FSMSTAT) & XSPI_FSMSTAT_VLD_MASK) != 0UL);
+}
+
+/*!
+ * @brief Check if IP access is asserted for specific target group.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Target group ID.
+ *
+ * @retval false The Access triggered by IP bus is not asserted.
+ * @retval true The Access triggered by IP bus is asserted.
+ */
+RAMFUNC static inline bool XSPI_CheckIPAccessAssertedTG(XSPI_Type *base, xspi_target_group_t tgId)
+{
+    return (bool)((XSPI_TG_REG_VAL(base, tgId, SR) & XSPI_SR_IP_ACC_MASK) != 0UL);
+}
+
+/*!
+ * @brief Check if IP access is asserted.
+ *
+ * @param[in] base XSPI peripheral base address.
+ *
+ * @retval false The Access triggered by IP bus is not asserted.
+ * @retval true The Access triggered by IP bus is asserted.
+ */
+RAMFUNC static inline bool XSPI_CheckIPAccessAsserted(XSPI_Type *base)
+{
+    /* Check main target group. */
+    if ((base->SR & XSPI_SR_IP_ACC_MASK) != 0UL)
+    {
+        return true;
+    }
+
+#if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
+    /* Check all sub target groups. */
+    for (uint8_t tgId = 1; tgId < XSPI_TARGET_GROUP_COUNT; tgId++)
+    {
+        if ((base->SUB_REG_ARRAY[tgId - 1].SR_SUB & XSPI_SR_IP_ACC_MASK) != 0UL)
+        {
+            return true;
+        }
+    }
+#endif /* FSL_FEATURE_XSPI_HAS_EENV */
+
+    return false;
 }
 
 /*!
@@ -1737,13 +2184,14 @@ static inline void XSPI_TriggerRxBufferPopEvent(XSPI_Type *base)
  *
  * @code
  * Set watermark as 4 bytes:
- * XSPI_UpdateRxBufferWaterMark(XSPI0, 4UL);
+ * XSPI_UpdateRxBufferWaterMarkTG(XSPI0, tgId, 4UL);
  * Set watermark as 8 bytes:
- * XSPI_UpdateRxBufferWaterMark(XSPI0, 8UL);
+ * XSPI_UpdateRxBufferWaterMarkTG(XSPI0, tgId, 8UL);
  * @endcode
  *
  *
  * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Specify the target group.
  * @param[in] waterMark Specify the number of bytes in the RX buffer which causes XSPI to assert the watermark exceeded
  * flag, should be in multiple of 4 bytes.
  *
@@ -1752,53 +2200,33 @@ static inline void XSPI_TriggerRxBufferPopEvent(XSPI_Type *base)
  * multiple of 4 bytes.
  * @retval kStatus_Success Successful to update watermark.
  */
-status_t XSPI_UpdateRxBufferWaterMark(XSPI_Type *base, uint32_t waterMark);
+status_t XSPI_UpdateRxBufferWaterMarkTG(XSPI_Type *base, xspi_target_group_t tgId, uint32_t waterMark);
 
 /*!
- * @brief Check if RX buffer watermark is exceed.
+ * @brief Set exclusive access lock mode for the specific frad.
  *
  * @param[in] base XSPI peripheral base address.
- *
- * @retval true The RX buffer watermark has been excceded.
- * @retval false The RX buffer watermark has not been exceeded.
- */
-static inline bool XSPI_CheckRxBufferWaterMarkExceed(XSPI_Type *base)
-{
-    return (bool)((base->FR & XSPI_FR_RBDF_MASK) == XSPI_FR_RBDF_MASK);
-}
-
-/*!
- * @brief Get RX buffer aviailable bytes count.
- *
- * @param[in] base XSPI peripheral base address.
- *
- * @return The available counts if bytes in RX buffer.
- */
-static inline uint32_t XSPI_GetRxBufferAvailableBytesCount(XSPI_Type *base)
-{
-    return ((base->RBSR & XSPI_RBSR_RDBFL_MASK) >> XSPI_RBSR_RDBFL_SHIFT) * 4UL;
-}
-
-/*!
- * @brief Get counts of bytes already removed from RX buffer.
- *
- * @param[in] base XSPI peripheral base address.
- *
- * @return Counts of removed bytes.
- */
-static inline uint32_t XSPI_GetRxBufferRemovedBytesCount(XSPI_Type *base)
-{
-    return ((base->RBSR & XSPI_RBSR_RDCTR_MASK) >> XSPI_RBSR_RDCTR_SHIFT) * 4UL;
-}
-
-/*!
- * @brief Set exclusive access lock mode for the specific frad..
- *
- * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Specify the target group.
  * @param[in] ealMode Specify the exclusive access lock mode.
  * @param[in] fradId Specify the frad.
  */
-void XSPI_SetSFPFradEALMode(XSPI_Type *base, xspi_exclusive_access_lock_mode_t ealMode, uint8_t fradId);
+void XSPI_SetSFPFradEALModeTG(XSPI_Type *base,
+                              xspi_target_group_t tgId,
+                              xspi_exclusive_access_lock_mode_t ealMode,
+                              uint8_t fradId);
+
+/*!
+ * @brief Get FARD latest transaction information.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] tgId Specify the target group.
+ * @param[out] ptrInfo Pointer to the variable in type of @ref xspi_frad_transaction_info_t to store information.
+ * @param[in] fradId Specify the frad Id.
+ */
+void XSPI_GetFradLastTransactionsInfo(XSPI_Type *base,
+                                      xspi_target_group_t tgId,
+                                      xspi_frad_transaction_info_t *ptrInfo,
+                                      uint8_t fradId);
 
 /*!
  * @brief Update SFP configurations, including MDAD configurations and FRAD configurations.
@@ -1819,7 +2247,7 @@ void XSPI_UpdateSFPConfig(XSPI_Type *base,
  * @retval false SFP FRAD check is disabled.
  * @retval true SFP FRAD check is enabled for IP write access.
  */
-static inline bool XSPI_CheckSFPFradEnabled(XSPI_Type *base)
+RAMFUNC static inline bool XSPI_CheckSFPFradEnabled(XSPI_Type *base)
 {
     return (bool)((base->MGC & XSPI_MGC_GVLDFRAD_MASK) != 0UL);
 }
@@ -1833,15 +2261,6 @@ static inline bool XSPI_CheckSFPFradEnabled(XSPI_Type *base)
  * @return The details of MDAD error reason, in type of @ref xspi_mdad_error_reason_t.
  */
 xspi_mdad_error_reason_t XSPI_GetMdadErrorReason(XSPI_Type *base, xspi_target_group_t tgId);
-
-/*!
- * @brief Get FARD latest transaction information.
- *
- * @param[in] base XSPI peripheral base address.
- * @param[out] ptrInfo Pointer to the variable in type of @ref xspi_frad_transaction_info_t to store information.
- * @param[in] fradId Specify the frad Id.
- */
-void XSPI_GetFradLastTransactionsInfo(XSPI_Type *base, xspi_frad_transaction_info_t *ptrInfo, uint8_t fradId);
 
 /*!
  * @brief Update SFP arbitration lock timeout counter.
@@ -1880,27 +2299,14 @@ void XSPI_GetTgAddrWriteStatus(XSPI_Type *base, xspi_target_group_t tgId, xspi_t
  * @param[in] base XSPI peripheral base address.
  * @param[in] tgId Specify the target group.
  */
-void XSPI_UnlockIpAccessArbitration(XSPI_Type *base, xspi_target_group_t tgId);
-
-/*!
- * @brief Check if IP access is asserted.
- *
- * @param[in] base XSPI peripheral base address.
- *
- * @retval false The Access triggered by IP bus is not asserted.
- * @retval true The Access triggered by IP bus is asserted.
- */
-static inline bool XSPI_CheckIPAccessAsserted(XSPI_Type *base)
-{
-    return (bool)((base->SR & XSPI_SR_IP_ACC_MASK) != 0UL);
-}
+RAMFUNC void XSPI_UnlockIpAccessArbitrationTG(XSPI_Type *base, xspi_target_group_t tgId);
 
 /*!
  * @brief Clear Ip access sequence pointer.
  *
  * @param[in] base XSPI peripheral base address.
  */
-static inline void XSPI_ClearIPAccessSeqPointer(XSPI_Type *base)
+RAMFUNC static inline void XSPI_ClearIPAccessSeqPointer(XSPI_Type *base)
 {
     base->SPTRCLR |= XSPI_SPTRCLR_IPPTRC_MASK;
 }
@@ -1922,61 +2328,6 @@ static inline void XSPI_ClearIPAccessSeqPointer(XSPI_Type *base)
 status_t XSPI_UpdateIPAccessTimeoutCounter(XSPI_Type *base, uint32_t countValue);
 
 /*!
- * @brief Check if IP access is granted by XSPI arbitration.
- *
- * @deprecated Use #XSPI_CheckIpRequestGranted() as instead
- * @param base XSPI peripheral base address.
- *
- * @retval true The IP access is granted arbitration.
- * @retval false No IP access is queued.
- */
-static inline bool XSPI_CheckIPAccessGranted(XSPI_Type *base)
-{
-    return (bool)((base->FSMSTAT & XSPI_FSMSTAT_VLD_MASK) != 0UL);
-}
-
-/*!
- * @brief Check if IP write access is triggered.
- *
- * @param[in] base XSPI peripheral base address.
- *
- * @retval true The IP write access is granted arbitration.
- * @retval false No IP write access is queued.
- */
-static inline bool XSPI_CheckIpWriteTriggered(XSPI_Type *base)
-{
-    return (bool)((base->FSMSTAT & XSPI_FSMSTAT_STATE_MASK) == XSPI_FSMSTAT_STATE(2U));
-}
-
-/*!
- * @brief Check if IP read access is triggered.
- *
- * @param[in] base XSPI peripheral base address.
- *
- * @retval true The IP read access is granted arbitration.
- * @retval false No IP read access is queued.
- */
-static inline bool XSPI_CheckIpReadTriggered(XSPI_Type *base)
-{
-    return (bool)((base->FSMSTAT & XSPI_FSMSTAT_STATE_MASK) == XSPI_FSMSTAT_STATE(3U));
-}
-
-/*!
- * @brief Check if IPS transfer is granted arbitration or execution.
- *
- * @note The FSMSTAT[VLD] goes to 0 once the IPS transfer is completed and XSPI is IDLE.
- *
- * @param[in] base XSPI peripheral base address.
- *
- * @retval true Valid, the IPS transfer is granted arbitration or execution.
- * @retval false Not valid, no IPS transfer is queued.
- */
-static inline bool XSPI_CheckFSMValid(XSPI_Type *base)
-{
-    return (bool)((base->FSMSTAT & XSPI_FSMSTAT_VLD_MASK) != 0UL);
-}
-
-/*!
  * @brief Start IP access(including read and write) in blocking way.
  *
  * @param[in] base XSPI peripheral base address.
@@ -1990,8 +2341,8 @@ static inline bool XSPI_CheckFSMValid(XSPI_Type *base)
  * @retval kStatus_XSPI_IpAccessIPCRInvalid Wrong seqindex or bytesize input.
  * @retval kStatus_Success Success to start Ip access.
  */
-status_t XSPI_StartIpAccess(XSPI_Type *base, uint32_t addr, uint8_t seqIndex,
-                            size_t byteSize, xspi_target_group_t tgId, bool lockArbitration);
+status_t XSPI_StartIpAccess(
+    XSPI_Type *base, uint32_t addr, uint8_t seqIndex, size_t byteSize, xspi_target_group_t tgId, bool lockArbitration);
 
 /*!
  * @brief Start IP access in non-blocking way.
@@ -2007,8 +2358,8 @@ status_t XSPI_StartIpAccess(XSPI_Type *base, uint32_t addr, uint8_t seqIndex,
  * @retval kStatus_XSPI_IpAccessIPCRInvalid Invalid to set IPCR register.
  * @retval kStatus_XSPI_IpAccessAddrSettingInvalid Invalid to set SFAR register.
  */
-status_t XSPI_StartIpAccessNonBlocking(XSPI_Type *base, uint32_t addr, uint8_t seqIndex,
-                                        size_t byteSize, xspi_target_group_t tgId, bool lockArbitration);
+status_t XSPI_StartIpAccessNonBlocking(
+    XSPI_Type *base, uint32_t addr, uint8_t seqIndex, size_t byteSize, xspi_target_group_t tgId, bool lockArbitration);
 
 /* @} */
 
@@ -2030,36 +2381,64 @@ status_t XSPI_StartIpAccessNonBlocking(XSPI_Type *base, uint32_t addr, uint8_t s
 status_t XSPI_SetIpAccessConfig(XSPI_Type *base, xspi_ip_access_config_t *ptrIpAccessConfig);
 
 /*!
- * @brief Sends a buffer of data bytes using blocking method.
- *
+ * @brief Sends a buffer of data bytes using blocking method for specific target group.
  * @note This function blocks via polling until all bytes have been sent.
- *
- * @param[in] base XSPI peripheral base address
- * @param[in] buffer Pointer to the buffer to send.
- * @param[in] size The number of data bytes to send
- *
+ * @param base XSPI peripheral base address
+ * @param tgId Target group ID
+ * @param buffer The data bytes to send
+ * @param size The number of data bytes to send
  * @retval kStatus_Success write success without error
  * @retval kStatus_XSPI_SequenceExecutionTimeout sequence execution timeout
  * @retval kStatus_XSPI_IpCommandSequenceError IP command sequence error detected
  * @retval kStatus_XSPI_IpCommandGrantTimeout IP command grant timeout detected
  */
-status_t XSPI_WriteBlocking(XSPI_Type *base, uint8_t *buffer, size_t size);
+status_t XSPI_WriteBlockingTG(XSPI_Type *base, xspi_target_group_t tgId, uint8_t *buffer, size_t size);
 
 /*!
- * @brief Receives a buffer of data bytes using a blocking method.
- *
+ * @brief Receives a buffer of data bytes using a blocking method for specific target group.
  * @note This function blocks via polling until all bytes have been sent.
- *
- * @param[in] base XSPI peripheral base address
- * @param[out] buffer Pointer to the buffer to store read data.
- * @param[in] size The number of data bytes to receive
- *
+ * @param base XSPI peripheral base address
+ * @param tgId Target group ID
+ * @param buffer The data bytes to send
+ * @param size The number of data bytes to receive
  * @retval kStatus_Success read success without error
  * @retval kStatus_XSPI_SequenceExecutionTimeout sequence execution timeout
  * @retval kStatus_XSPI_IpCommandSequenceError IP command sequence error detected
  * @retval kStatus_XSPI_IpCommandGrantTimeout IP command grant timeout detected
  */
-status_t XSPI_ReadBlocking(XSPI_Type *base, uint8_t *buffer, size_t size);
+status_t XSPI_ReadBlockingTG(XSPI_Type *base, xspi_target_group_t tgId, uint8_t *buffer, size_t size);
+
+#if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
+/*!
+ * @brief Initializes the XSPI handle for specific target group which is used in transactional functions.
+ *
+ * @param base XSPI peripheral base address.
+ * @param handle pointer to xspi_handle_t structure to store the transfer state.
+ * @param callback pointer to user callback function.
+ * @param userData user parameter passed to the callback function.
+ * @param targetGroup target group ID for this handle.
+ */
+void XSPI_TransferCreateHandle(XSPI_Type *base,
+                               xspi_handle_t *handle,
+                               xspi_transfer_callback_t callback,
+                               void *userData,
+                               xspi_target_group_t targetGroup);
+
+#else
+/*!
+ * @brief Initialize the XSPI handle which is used in transactional functions.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] handle pointer to xspi_handle_t structure to store the transfer state.
+ * @param[in] callback pointer to user callback function.
+ * @param[in] userData user parameter passed to the callback function.
+ */
+void XSPI_TransferCreateHandle(XSPI_Type *base,
+                               xspi_handle_t *handle,
+                               xspi_transfer_callback_t callback,
+                               void *userData);
+
+#endif /* (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV) */
 
 /*!
  * @brief Execute command to transfer a buffer data bytes using a blocking method.
@@ -2076,19 +2455,6 @@ status_t XSPI_ReadBlocking(XSPI_Type *base, uint8_t *buffer, size_t size);
  * @retval kStatus_XSPI_IpCommandGrantTimeout IP command grant timeout detected
  */
 status_t XSPI_TransferBlocking(XSPI_Type *base, xspi_transfer_t *xfer);
-
-/*!
- * @brief Initialize the XSPI handle which is used in transactional functions.
- *
- * @param[in] base XSPI peripheral base address.
- * @param[in] handle pointer to xspi_handle_t structure to store the transfer state.
- * @param[in] callback pointer to user callback function.
- * @param[in] userData user parameter passed to the callback function.
- */
-void XSPI_TransferCreateHandle(XSPI_Type *base,
-                               xspi_handle_t *handle,
-                               xspi_transfer_callback_t callback,
-                               void *userData);
 
 /*!
  * @brief Perform a interrupt non-blocking transfer on the XSPI bus.
@@ -2145,7 +2511,7 @@ void XSPI_TransferAbort(XSPI_Type *base, xspi_handle_t *handle);
  *
  * @param[in] base XSPI peripheral base address.
  */
-static inline void XSPI_ClearAhbBuffer(XSPI_Type *base)
+RAMFUNC static inline void XSPI_ClearAhbBuffer(XSPI_Type *base)
 {
     base->SPTRCLR |= XSPI_SPTRCLR_ABRT_CLR_MASK;
     while ((base->SPTRCLR & XSPI_SPTRCLR_ABRT_CLR_MASK) != 0UL)
@@ -2198,8 +2564,8 @@ status_t XSPI_SetAhbBufferConfig(XSPI_Type *base,
  * @retval kStatus_XSPI_AhbWriteAccessAsserted Fail due to an AHB write access already asserted.
  * @retval kStatus_Success Success to set AHB buffer size.
  */
-status_t XSPI_UpdateAhbBufferSize(XSPI_Type *base, uint16_t buf0Size,
-                                 uint16_t buf1Size, uint16_t buf2Size, uint16_t buf3Size);
+status_t XSPI_UpdateAhbBufferSize(
+    XSPI_Type *base, uint16_t buf0Size, uint16_t buf1Size, uint16_t buf2Size, uint16_t buf3Size);
 
 /*!
  * @brief Get status of AHB sub buffer.
@@ -2219,7 +2585,7 @@ xspi_ahb_sub_buffer_status_t XSPI_GetAhbSubBufferStatus(XSPI_Type *base, uint8_t
  *
  * @param[in] base XSPI peripheral base address.
  */
-static inline void XSPI_StartAhbBufferPerfMonitor(XSPI_Type *base)
+RAMFUNC static inline void XSPI_StartAhbBufferPerfMonitor(XSPI_Type *base)
 {
     base->AHB_PERF_CTRL |= XSPI_AHB_PERF_CTRL_CNTSTART_MASK;
 }
@@ -2239,7 +2605,7 @@ void XSPI_EnableAhbBufferPerfMonitor(XSPI_Type *base, uint8_t ahbBufferId, uint8
  * @param[in] base XSPI peripheral base address.
  * @param[in] ahbBufferId Specify the selected AHB buffer.
  */
-static inline void XSPI_DisableAhbBufferPerfMonitor(XSPI_Type *base, uint8_t ahbBufferId)
+RAMFUNC static inline void XSPI_DisableAhbBufferPerfMonitor(XSPI_Type *base, uint8_t ahbBufferId)
 {
     base->AHB_PERF_CTRL &= (uint32_t)(~(uint32_t)(XSPI_AHB_PERF_CTRL_BUF0_EN_MASK << (uint32_t)(ahbBufferId)));
 }
@@ -2249,7 +2615,7 @@ static inline void XSPI_DisableAhbBufferPerfMonitor(XSPI_Type *base, uint8_t ahb
  *
  * @param[in] base XSPI peripheral base address.
  */
-static inline void XSPI_StopAhbBufferPerfMonitor(XSPI_Type *base)
+RAMFUNC static inline void XSPI_StopAhbBufferPerfMonitor(XSPI_Type *base)
 {
     base->AHB_PERF_CTRL |= XSPI_AHB_PERF_CTRL_CNTSTP_MASK;
 }
@@ -2261,9 +2627,8 @@ static inline void XSPI_StopAhbBufferPerfMonitor(XSPI_Type *base)
  * @param[in] ahbBufferId Specify AHB buffer Id.
  * @param[out] ptrPerfMonitorResult Pointer to the variable to store selected AHB buffer's performance monitor result.
  */
-static inline void XSPI_GetAhbBufferPerfMonitorResult(XSPI_Type *base,
-                                                      uint8_t ahbBufferId,
-                                                      xspi_ahbBuffer_perf_monitor_result_t *ptrPerfMonitorResult)
+RAMFUNC static inline void XSPI_GetAhbBufferPerfMonitorResult(
+    XSPI_Type *base, uint8_t ahbBufferId, xspi_ahbBuffer_perf_monitor_result_t *ptrPerfMonitorResult)
 {
     uint32_t tmp32 = 0UL;
 
@@ -2280,7 +2645,7 @@ static inline void XSPI_GetAhbBufferPerfMonitorResult(XSPI_Type *base,
  * @retval false AHB buffer performance monitor timeout counter is not overflow.
  * @retval true AHB buffer performance monitor timeout counter is overflow.
  */
-static inline bool XSPI_CheckAhbBufferPerfMonitorTimeCounterOverflow(XSPI_Type *base)
+RAMFUNC static inline bool XSPI_CheckAhbBufferPerfMonitorTimeCounterOverflow(XSPI_Type *base)
 {
     return (bool)((base->AHB_PERF_CTRL & XSPI_AHB_PERF_CTRL_TCNTO_MASK) != 0UL);
 }
@@ -2294,7 +2659,7 @@ static inline bool XSPI_CheckAhbBufferPerfMonitorTimeCounterOverflow(XSPI_Type *
  * @retval false Overflow not detected.
  * @retval true Overflow is detected.
  */
-static inline bool XSPI_CheckAhbBufferPerfMonitorHitOverflow(XSPI_Type *base, uint8_t ahbBufferId)
+RAMFUNC static inline bool XSPI_CheckAhbBufferPerfMonitorHitOverflow(XSPI_Type *base, uint8_t ahbBufferId)
 {
     return (bool)((base->AHB_PERF_CTRL & (XSPI_AHB_PERF_CTRL_BUF0_HIT_OVF_MASK << (uint32_t)ahbBufferId)) != 0UL);
 }
@@ -2308,9 +2673,10 @@ static inline bool XSPI_CheckAhbBufferPerfMonitorHitOverflow(XSPI_Type *base, ui
  * @retval false Overflow not detected.
  * @retval true Overflow is detected.
  */
-static inline bool XSPI_CheckAhbBufferPerfMonitorMissOverflow(XSPI_Type *base, uint8_t ahbBufferId)
+RAMFUNC static inline bool XSPI_CheckAhbBufferPerfMonitorMissOverflow(XSPI_Type *base, uint8_t ahbBufferId)
 {
-    return (bool)((base->AHB_PERF_CTRL & ((uint32_t)XSPI_AHB_PERF_CTRL_BUF0_MISS_OVF_MASK << (uint32_t)ahbBufferId)) != 0UL);
+    return (bool)((base->AHB_PERF_CTRL & ((uint32_t)XSPI_AHB_PERF_CTRL_BUF0_MISS_OVF_MASK << (uint32_t)ahbBufferId)) !=
+                  0UL);
 }
 
 /*!
@@ -2320,7 +2686,7 @@ static inline bool XSPI_CheckAhbBufferPerfMonitorMissOverflow(XSPI_Type *base, u
  *
  * @return The value of time counter, in AHB clock cycles, since the performance monitor was running.
  */
-static inline uint32_t XSPI_GetAhbBufferPerfMonitorTimeCounter(XSPI_Type *base)
+RAMFUNC static inline uint32_t XSPI_GetAhbBufferPerfMonitorTimeCounter(XSPI_Type *base)
 {
     return base->AHB_PERF_TIME_CNT;
 }
@@ -2441,7 +2807,7 @@ xspi_ahb_read_error_info_t XSPI_ReturnAhbReadErrorInfo(XSPI_Type *base);
  *
  * @param[in] base XSPI peripheral base address.
  */
-static inline void XSPI_ClearAhbAccessSeqPointer(XSPI_Type *base)
+RAMFUNC static inline void XSPI_ClearAhbAccessSeqPointer(XSPI_Type *base)
 {
     base->SPTRCLR |= XSPI_SPTRCLR_BFPTRC_MASK;
 }
@@ -2463,7 +2829,7 @@ void XSPI_GetAhbRequestSuspendInfo(XSPI_Type *base, xspi_ahb_request_suspend_inf
  *               - \b false Disable AHB read prefetch;
  *               - \b true Enable AHB read prefetch.
  */
-static inline void XSPI_EnableAhbReadPrefetch(XSPI_Type *base, bool enable)
+RAMFUNC static inline void XSPI_EnableAhbReadPrefetch(XSPI_Type *base, bool enable)
 {
     if (enable)
     {
@@ -2488,7 +2854,7 @@ static inline void XSPI_EnableAhbReadPrefetch(XSPI_Type *base, bool enable)
  * access to the external memory are blocked. And the internal "page wait time" counter
  * starts(Invoke XSPI_UpdatePageWaitTimeCounter to update counter value). After this counter
  * reaches the value, a read is triggered by the XSPI module to read external device's
- * status register(The seq id should be pre-defiend by XSPI_SetAhbReadStatusRegSeqId),
+ * status register(The seq id should be pre-defined by XSPI_SetAhbReadStatusRegSeqId),
  * and the value is stored in the XSPI internal regsiter. And there are two
  * options(Invoke XSPI_SelectPPWFlagClearPolicy to select) to clear the asserted page program wait flag.
  *      1. Automatic cleared by XSPI hardware;
@@ -2561,7 +2927,7 @@ status_t XSPI_SetAhbReadStatusRegSeqId(XSPI_Type *base, uint8_t seqId);
  *
  * @return The status regsiter value of external device.
  */
-static inline uint16_t XSPI_GetSFMStatusRegValue(XSPI_Type *base)
+RAMFUNC static inline uint16_t XSPI_GetSFMStatusRegValue(XSPI_Type *base)
 {
     while ((base->PPW_RDSR & XSPI_PPW_RDSR_VALID_MASK) == 0UL)
     {
@@ -2583,6 +2949,19 @@ static inline uint16_t XSPI_GetSFMStatusRegValue(XSPI_Type *base)
  */
 status_t XSPI_SetSFMStatusRegInfo(XSPI_Type *base, xspi_device_status_reg_info_t *ptrStatusRegInfo);
 
+#if (defined(FSL_FEATURE_XSPI_HAS_WRTER_EN_BIT) && FSL_FEATURE_XSPI_HAS_WRTER_EN_BIT)
+/*!
+ * @brief Enable or disable AHB write terminate functionality.
+ *
+ * @param base XSPI peripheral base address.
+ * @param enable True to enable AHB write terminate, false to disable.
+ *
+ * @retval kStatus_XSPI_AhbReadAccessAsserted Fail due to an AHB read access already asserted
+ * @retval kStatus_XSPI_AhbWriteAccessAsserted Fail due to an AHB write access already asserted
+ * @retval kStatus_Success Success to enable/disable AHB write terminate functionality.
+ */
+status_t XSPI_EnableAhbWriteTerminate(XSPI_Type *base, bool enable);
+#endif /* FSL_FEATURE_XSPI_HAS_WRTER_EN_BIT */
 /*! @} */
 
 /*!
@@ -2602,6 +2981,411 @@ status_t XSPI_SetSFMStatusRegInfo(XSPI_Type *base, xspi_device_status_reg_info_t
  * @retval kStatus_Success Success to set AHB read status register sequence Id.
  */
 status_t XSPI_SetAhbAccessConfig(XSPI_Type *base, xspi_ahb_access_config_t *ptrAhbAccessConfig);
+
+/*! @} */
+
+/*!
+ * @name Map legacy APIs to TG-suffixed implementations.
+ * @{
+ */
+
+/*!
+ * @brief Enables or disables XSPI IP Tx FIFO DMA requests.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] enable Enable flag for transmit DMA request. Pass true for enable, false for disable.
+ */
+RAMFUNC static inline void XSPI_EnableTxDMA(XSPI_Type *base, bool enable)
+{
+    XSPI_EnableTxDMATG(base, (xspi_target_group_t)0, enable);
+}
+
+/*!
+ * @brief Enables or disables XSPI IP Rx FIFO DMA requests.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] enable Enable flag for receive DMA request. Pass true for enable, false for disable.
+ */
+RAMFUNC static inline void XSPI_EnableRxDMA(XSPI_Type *base, bool enable)
+{
+    XSPI_EnableRxDMATG(base, (xspi_target_group_t)0, enable);
+}
+
+/*!
+ * @brief Gets XSPI IP tx fifo address for DMA transfer.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @return The tx fifo address.
+ */
+RAMFUNC static inline uint32_t XSPI_GetTxFifoAddress(XSPI_Type *base)
+{
+    return XSPI_GetTxFifoAddressTG(base, (xspi_target_group_t)0);
+}
+
+/*!
+ * @brief Gets XSPI IP rx fifo address for DMA transfer.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @return The rx fifo address.
+ */
+RAMFUNC static inline uint32_t XSPI_GetRxFifoAddress(XSPI_Type *base)
+{
+    return XSPI_GetRxFifoAddressTG(base, (xspi_target_group_t)0);
+}
+
+/*!
+ * @brief Get error status flags.
+ *
+ * @param base XSPI peripheral base address.
+ *
+ * @return All asserted error status flags for the target group.
+ *   Should be the OR'ed value of @ref xspi_error_flag_t.
+ */
+RAMFUNC static inline uint32_t XSPI_GetErrorStatusFlags(XSPI_Type *base)
+{
+    return XSPI_GetErrorStatusFlagsTG(base, (xspi_target_group_t)0);
+}
+
+/*!
+ * @brief Clear input error status flags.
+ *
+ * @param base XSPI peripheral base address.
+ * @param flags Error flags to clear. Should be the OR'ed value of @ref xspi_error_flag_t.
+ */
+RAMFUNC static inline void XSPI_ClearErrorStatusFlags(XSPI_Type *base, uint32_t flags)
+{
+    XSPI_ClearErrorStatusFlagsTG(base, (xspi_target_group_t)0, flags);
+}
+
+/*!
+ * @brief Get the XSPI interrupt status flags.
+ *
+ * @deprecated Please use XSPI_GetErrorStatusFlags() as instead.
+ * @param[in] base XSPI peripheral base address.
+ * @return interrupt status flag, use status flag to AND #xspi_flags_t could get the related status.
+ */
+RAMFUNC static inline uint32_t XSPI_GetInterruptStatusFlags(XSPI_Type *base)
+{
+    return base->ERRSTAT;
+}
+
+/*!
+ * @brief Check if the IP access request was granted access.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @retval true IP request granted.
+ * @retval false IP request not granted.
+ */
+RAMFUNC static inline bool XSPI_CheckIpRequestGranted(XSPI_Type *base)
+{
+    return XSPI_CheckIpRequestGrantedTG(base, (xspi_target_group_t)0);
+}
+
+/*!
+ * @brief Get asserted flags about SFM command execution and arbitration.
+ *
+ * @param[in] base XSPI peripheral base address.
+ *
+ * @return The assert flags about SFM command execution and arbitration,
+ *  should be the OR'ed value of @ref xspi_cmd_execution_arbitration_flag_t.
+ */
+RAMFUNC static inline uint32_t XSPI_GetCmdExecutionArbitrationStatusFlags(XSPI_Type *base)
+{
+    return XSPI_GetCmdExecutionArbitrationStatusFlagsTG(base, (xspi_target_group_t)0);
+}
+
+/*!
+ * @brief Clear asserted flags about SFM command execution and arbitration.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] flags The mask of flags to clear.
+ */
+RAMFUNC static inline void XSPI_ClearCmdExecutionArbitrationStatusFlags(XSPI_Type *base, uint32_t flags)
+{
+    XSPI_ClearCmdExecutionArbitrationStatusFlagsTG(base, (xspi_target_group_t)0, flags);
+}
+
+/*!
+ * @brief Clear TX buffer.
+ *
+ * @param[in] base XSPI peripheral base address.
+ */
+RAMFUNC static inline void XSPI_ClearTxBuffer(XSPI_Type *base)
+{
+    XSPI_ClearTxBufferTG(base, (xspi_target_group_t)0);
+}
+
+/*!
+ * @brief Clear RX buffer.
+ *
+ * @param[in] base XSPI peripheral base address.
+ */
+RAMFUNC static inline void XSPI_ClearRxBuffer(XSPI_Type *base)
+{
+    XSPI_ClearRxBufferTG(base, (xspi_target_group_t)0);
+}
+
+/*!
+ * @brief Clear the XSPI IP TX/RX buffer logic.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] txFifo Pass true to reset TX FIFO.
+ * @param[in] rxFifo Pass true to reset RX FIFO.
+ */
+RAMFUNC static inline void XSPI_ResetTxRxBuffer(XSPI_Type *base, bool txFifo, bool rxFifo)
+{
+    XSPI_ResetTxRxBufferTG(base, (xspi_target_group_t)0, txFifo, rxFifo);
+}
+
+/*!
+ * @brief Update watermark for RX buffer.
+ *
+ * @code
+ * Set watermark as 4 bytes:
+ * XSPI_UpdateRxBufferWaterMark(XSPI0, 4UL);
+ * Set watermark as 8 bytes:
+ * XSPI_UpdateRxBufferWaterMark(XSPI0, 8UL);
+ * @endcode
+ *
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] waterMark Specify the number of bytes in the RX buffer which causes XSPI to assert the watermark exceeded
+ * flag, should be in multiple of 4 bytes.
+ *
+ * @retval kStatus_XSPI_IPAccessAsserted Fail to update watermark for Rx buffer, due to IP access is asserted.
+ * @retval kStatus_XSPI_WaterMarkIllegal Fail to update watermark for Tx buffer, due to input watermark is not the
+ * multiple of 4 bytes.
+ * @retval kStatus_Success Successful to update watermark.
+ */
+RAMFUNC static inline status_t XSPI_UpdateRxBufferWaterMark(XSPI_Type *base, uint32_t waterMark)
+{
+    return XSPI_UpdateRxBufferWaterMarkTG(base, (xspi_target_group_t)0, waterMark);
+}
+
+/*!
+ * @brief Update watermark for TX buffer.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] waterMark The watermark to set.
+ * @return Status of the operation.
+ */
+RAMFUNC static inline status_t XSPI_UpdateTxBufferWaterMark(XSPI_Type *base, uint32_t waterMark)
+{
+    return XSPI_UpdateTxBufferWaterMarkTG(base, (xspi_target_group_t)0, waterMark);
+}
+
+/*!
+ * @brief Unlock IP access arbitration.
+ *
+ * @param[in] base XSPI peripheral base address.
+ */
+RAMFUNC static inline void XSPI_UnlockIpAccessArbitration(XSPI_Type *base)
+{
+    XSPI_UnlockIpAccessArbitrationTG(base, (xspi_target_group_t)0);
+}
+
+/*!
+ * @brief Check and clear IP command execution errors.
+ *
+ * @param base XSPI peripheral base address.
+ * @param status Interrupt status.
+ * @return Status of the operation.
+ */
+RAMFUNC static inline status_t XSPI_CheckAndClearError(XSPI_Type *base, uint32_t status)
+{
+    return XSPI_CheckAndClearErrorTG(base, (xspi_target_group_t)0, status);
+}
+
+/*!
+ * @brief Writes data into IPS TX Buffer.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] data The data bytes to send.
+ */
+RAMFUNC static inline void XSPI_WriteTxBuffer(XSPI_Type *base, uint32_t data)
+{
+    XSPI_WriteTxBufferTG(base, (xspi_target_group_t)0, data);
+}
+
+/*!
+ * @brief Receive data from IPX RX FIFO.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] fifoIndex Source fifo index.
+ * @return The data in the FIFO.
+ */
+RAMFUNC static inline uint32_t XSPI_ReadRxBuffer(XSPI_Type *base, uint8_t fifoIndex)
+{
+    return XSPI_ReadRxBufferTG(base, (xspi_target_group_t)0, fifoIndex);
+}
+
+/*!
+ * @brief Trigger a pop event for RX buffer.
+ *
+ * @param[in] base XSPI peripheral base address.
+ */
+RAMFUNC static inline void XSPI_TriggerRxBufferPopEvent(XSPI_Type *base)
+{
+    XSPI_TriggerRxBufferPopEventTG(base, (xspi_target_group_t)0);
+}
+
+/*!
+ * @brief Check if RX buffer watermark is exceeded.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @retval true The RX buffer watermark has been exceeded.
+ * @retval false The RX buffer watermark has not been exceeded.
+ */
+RAMFUNC static inline bool XSPI_CheckRxBufferWaterMarkExceed(XSPI_Type *base)
+{
+    return XSPI_CheckRxBufferWaterMarkExceedTG(base, (xspi_target_group_t)0);
+}
+
+/*!
+ * @brief Get RX buffer available bytes count.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @return The available counts of bytes in RX buffer.
+ */
+RAMFUNC static inline uint32_t XSPI_GetRxBufferAvailableBytesCount(XSPI_Type *base)
+{
+    return XSPI_GetRxBufferAvailableBytesCountTG(base, (xspi_target_group_t)0);
+}
+
+/*!
+ * @brief Get counts of bytes already removed from RX buffer.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @return Counts of removed bytes.
+ */
+RAMFUNC static inline uint32_t XSPI_GetRxBufferRemovedBytesCount(XSPI_Type *base)
+{
+    return XSPI_GetRxBufferRemovedBytesCountTG(base, (xspi_target_group_t)0);
+}
+
+/*!
+ * @brief Check if IP access is granted by XSPI arbitration.
+ *
+ * @deprecated Use #XSPI_CheckIpRequestGranted() as instead
+ * @param base XSPI peripheral base address.
+ *
+ * @retval true The IP access is granted arbitration.
+ * @retval false No IP access is queued.
+ */
+RAMFUNC static inline bool XSPI_CheckIPAccessGranted(XSPI_Type *base)
+{
+    return (bool)((base->FSMSTAT & XSPI_FSMSTAT_VLD_MASK) != 0UL);
+}
+
+/*!
+ * @brief Check if IP write access is triggered.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @retval true The IP write access is granted arbitration.
+ * @retval false No IP write access is queued.
+ */
+RAMFUNC static inline bool XSPI_CheckIpWriteTriggered(XSPI_Type *base)
+{
+    return XSPI_CheckIpWriteTriggeredTG(base, (xspi_target_group_t)0);
+}
+
+/*!
+ * @brief Check if IP read access is triggered.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @retval true The IP read access is granted arbitration.
+ * @retval false No IP read access is queued.
+ */
+RAMFUNC static inline bool XSPI_CheckIpReadTriggered(XSPI_Type *base)
+{
+    return XSPI_CheckIpReadTriggeredTG(base, (xspi_target_group_t)0);
+}
+
+/*!
+ * @brief Check if IPS transfer is granted arbitration or execution.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @retval true Valid, the IPS transfer is granted.
+ * @retval false Not valid, no IPS transfer is queued.
+ */
+RAMFUNC static inline bool XSPI_CheckFSMValid(XSPI_Type *base)
+{
+    return XSPI_CheckFSMValidTG(base, (xspi_target_group_t)0);
+}
+
+/*!
+ * @brief Check if IP manager can write to TX buffer.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @retval true TX buffer lock is open.
+ * @retval false TX buffer lock is not open.
+ */
+RAMFUNC static inline bool XSPI_CheckTxBuffLockOpen(XSPI_Type *base)
+{
+    return XSPI_CheckTxBuffLockOpenTG(base, (xspi_target_group_t)0);
+}
+
+/*!
+ * @brief Enables the XSPI interrupts.
+ *
+ * @param base XSPI peripheral base address.
+ * @param mask XSPI interrupt source mask.
+ */
+RAMFUNC static inline void XSPI_EnableInterrupts(XSPI_Type *base, uint64_t mask)
+{
+    XSPI_EnableInterruptsTG(base, (xspi_target_group_t)0, mask);
+}
+
+/*!
+ * @brief Disables the XSPI interrupts.
+ *
+ * @param base XSPI peripheral base address.
+ * @param mask XSPI interrupt source mask.
+ */
+RAMFUNC static inline void XSPI_DisableInterrupts(XSPI_Type *base, uint64_t mask)
+{
+    XSPI_DisableInterruptsTG(base, (xspi_target_group_t)0, mask);
+}
+
+/*!
+ * @brief Set exclusive access lock mode for the specific FRAD.
+ *
+ * @param[in] base XSPI peripheral base address.
+ * @param[in] ealMode Specify the exclusive access lock mode.
+ * @param[in] fradId Specify the FRAD.
+ */
+RAMFUNC static inline void XSPI_SetSFPFradEALMode(XSPI_Type *base,
+                                                  xspi_exclusive_access_lock_mode_t ealMode,
+                                                  uint8_t fradId)
+{
+    XSPI_SetSFPFradEALModeTG(base, (xspi_target_group_t)0, ealMode, fradId);
+}
+
+/*!
+ * @brief Sends a buffer of data bytes using blocking method.
+ *
+ * @param base XSPI peripheral base address.
+ * @param buffer The data bytes to send.
+ * @param size The number of data bytes to send.
+ * @return Status of the operation.
+ */
+RAMFUNC static inline status_t XSPI_WriteBlocking(XSPI_Type *base, uint8_t *buffer, size_t size)
+{
+    return XSPI_WriteBlockingTG(base, (xspi_target_group_t)0, buffer, size);
+}
+
+/*!
+ * @brief Receives a buffer of data bytes using a blocking method.
+ *
+ * @param base XSPI peripheral base address.
+ * @param buffer The data bytes to receive.
+ * @param size The number of data bytes to receive.
+ * @return Status of the operation.
+ */
+RAMFUNC static inline status_t XSPI_ReadBlocking(XSPI_Type *base, uint8_t *buffer, size_t size)
+{
+    return XSPI_ReadBlockingTG(base, (xspi_target_group_t)0, buffer, size);
+}
 
 /*! @} */
 
@@ -2677,7 +3461,7 @@ void XSPI_Cache64_CleanInvalidateByRange(uint32_t address, size_t size);
  * @param base CACHE64_CTRL peripheral base address.
  * @param enable Specify whether all cacheable spaces to write through are forced,
  */
-static inline void XSPI_Cache64_ForceWriteThrough(CACHE64_CTRL_Type *base, bool enable)
+RAMFUNC static inline void XSPI_Cache64_ForceWriteThrough(CACHE64_CTRL_Type *base, bool enable)
 {
     if (enable)
     {
@@ -2695,7 +3479,7 @@ static inline void XSPI_Cache64_ForceWriteThrough(CACHE64_CTRL_Type *base, bool 
  * @param base CACHE64_CTRL peripheral base address.
  * @param enable Specify whether force no allocation on cache misses.
  */
-static inline void XSPI_Cache64_ForceNoAllocation(CACHE64_CTRL_Type *base, bool enable)
+RAMFUNC static inline void XSPI_Cache64_ForceNoAllocation(CACHE64_CTRL_Type *base, bool enable)
 {
     if (enable)
     {

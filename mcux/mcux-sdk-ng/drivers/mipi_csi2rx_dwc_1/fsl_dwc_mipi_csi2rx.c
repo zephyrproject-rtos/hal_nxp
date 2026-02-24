@@ -19,148 +19,303 @@
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.dwc_mipi_csi2rx_1"
 #endif
-
-#define DWC_MIPI_CSI2_DATA_IDS1(vc, dt)            (uint32_t)(0x3FU)&(dt) << (uint32_t)(0x8U)*(vc)
-#define DWC_MIPI_CSI2_DATA_IDS_VC1(vc)             (uint32_t)(0xFU)&(vc) << (uint32_t)(0x8U)*(vc)
-
+#define DWC_MIPI_CSI2_DATA_IDS1(vc, dt)            (((uint32_t)(0x3FU) & (dt)) << ((uint32_t)(0x8U) * (vc)))
+#define DWC_MIPI_CSI2_DATA_IDS_VC1(vc)             (((uint32_t)(0xFU) & (vc)) << ((uint32_t)(0x8U) * (vc)))
 #define DWC_MIPI_CSI2_INT_MSK_PHY_FATAL_MASK            (uint32_t)(0xFU)
 #define DWC_MIPI_CSI2_INT_MSK_PKT_FATAL_MASK            (uint32_t)(0x3U)
 #define DWC_MIPI_CSI2_INT_MSK_PHY_MASK                  (uint32_t)(0xF000FU)
 #define DWC_MIPI_CSI2_INT_MSK_LINE_MASK                 (uint32_t)(0xFF00FFU)
 
 /*******************************************************************************
- * Variables
- ******************************************************************************/
-
-/*! @brief Array to map MIPI CSI2RX instance number to base address. */
-static const uint32_t s_csi2rxBaseAddrs[] = PRIMARY_CSI2_CONTROLLER_BASE_ADDRS;
-
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-/*! @brief Pointers to MPI CSI2RX clocks for each instance. */
-static const clock_ip_name_t s_csi2rxClocks[] = CSI_CLOCKS;
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
-/*******************************************************************************
  * Code
  ******************************************************************************/
 
-uint32_t MIPI_CSI2RX_GetInstance(PRIMARY_CSI2_CONTROLLER_Type *base)
+void MIPI_CSI2RX_Startup(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config)
 {
-    uint32_t i;
-
-    for (i = 0U; i < ARRAY_SIZE(s_csi2rxBaseAddrs); i++)
+    if (config->phyNumber == KCSI2RX_DPHY_Primary)
     {
-        if (MSDK_REG_SECURE_ADDR((uint32_t)base) == MSDK_REG_SECURE_ADDR(s_csi2rxBaseAddrs[i]))
-        {
-            return i;
-        }
+        /* Release DWC mipi csi2 host from reset */
+        csi1->CSI2_RESETN &= ~PRIMARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
+        csi1->CSI2_RESETN |= PRIMARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
     }
-
-    assert(false);
-
-    return 0;
-}
-
-void MIPI_CSI2RX_Startup(PRIMARY_CSI2_CONTROLLER_Type *base)
-{
-    /* Release DWC mipi csi2 host from reset */
-    base->CSI2_RESETN &= ~PRIMARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
-    base->CSI2_RESETN |= PRIMARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
+    else
+    {
+        /* Release DWC mipi csi2 host from reset */
+        csi2->CSI2_RESETN &= ~SECONDARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
+        csi2->CSI2_RESETN |= SECONDARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
+    }
 
     /* Apply PHY reset*/
-    DWC_DPHY_Reset(base);
+    DWC_DPHY_Reset(csi1, csi2, config);
 
     /* Set and release PHY test codes from reset */
-    DWC_DPHY_TestCodeReset(base);
+    DWC_DPHY_TestCodeReset(csi1, csi2, config);
 }
 
-status_t MIPI_CSI2RX_InitInterface(PRIMARY_CSI2_CONTROLLER_Type *base, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config)
+void MIPI_CSI2RX_PhyConfigure(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2,
+                              uint8_t hsfreq,  uint16_t ddl_osc_freq, const csi2rx_config_t *config)
 {
-    assert(NULL != config);
-    status_t result = kStatus_Success;
+    uint8_t lowbyte_ddl_osc_freq = ddl_osc_freq & 0xFF;
+    uint8_t highbyte_ddl_osc_freq = (ddl_osc_freq >> 8) & 0xFF;
 
-    /* Put Synopsys DPHY to reset status */
-    base->DPHY_RSTZ &= ~PRIMARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
-    base->PHY_SHUTDOWNZ &= ~PRIMARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
-    base->CSI2_RESETN &= ~PRIMARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
-
-    /* Init CSI PHY interface */
-    result = DWC_DPHY_Init(base, phybase, config);
-
-    base->CSI2_RESETN = ((base->CSI2_RESETN & ~PRIMARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK) | PRIMARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK);
-
-    /* The dwc csi host interface supports up to 8 virtual channels, configure vitrual channel datatype */
-    if (config->vcNum <= (uint32_t)3)
-    {
-        base->DATA_IDS_1 =  ((base->DATA_IDS_1 & ~DWC_MIPI_CSI2_DATA_IDS1(config->vcNum, config->dataType)) | DWC_MIPI_CSI2_DATA_IDS1(config->vcNum, config->dataType));
-        base->DATA_IDS_VC_1 &= DWC_MIPI_CSI2_DATA_IDS_VC1(config->vcNum);
-    }
-    else if (config->vcNum > 3 && config->vcNum <= 7)
-    {
-        base->DATA_IDS_2 = ((base->DATA_IDS_2 & ~DWC_MIPI_CSI2_DATA_IDS1(config->vcNum, config->dataType)) | DWC_MIPI_CSI2_DATA_IDS1(config->vcNum, config->dataType));
-        base->DATA_IDS_VC_2 &= DWC_MIPI_CSI2_DATA_IDS_VC1(config->vcNum);
-    }
-
-    return result;
-}
-
-status_t MIPI_CSI2RX_Init(PRIMARY_CSI2_CONTROLLER_Type *pribase, SECONDARY_CSI2_CONTROLLER_Type *secbase, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config)
-{
-    status_t result = kStatus_Success;
-    PRIMARY_CSI2_CONTROLLER_Type *base;
-
-    assert(NULL != config);
-
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    /* un-gate clock */
-    (void)CLOCK_EnableClock(s_csi2rxClocks[CSI2RX_GetInstance(base)]);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
-    /*
-     * Check the required number of data lanes for the CSI interface.
-     * When the D-PHY operates in normal mode, each CSI interface supports up to 2 data lanes.
-     * In aggregation mode, 4 data lanes can be implemented on the first interface.
-     */
     if (config->phyMode == KCSI2RX_DPHY_NormalMode)
     {
-        assert (config->laneNum <= 2);
         if (config->phyNumber == KCSI2RX_DPHY_Primary)
         {
-            base = pribase;
+            /* Select testcode extension 0 and configure HS frequency range */
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_RX_SYS_0, DWC_DPHY_RX_SYS_0_HSFREQRANGE_SEL_ENABLE);
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_RX_SYS_1, hsfreq);
+
+            /* Enable DDL oscillation frequency override */
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_RX_STARTUP_OVR_5, DWC_DPHY_RX_STARTUP_OVR_5_COUNTER_BYPASS_MASK);
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_RX_STARTUP_OVR_4, (0x1U << 4));  /* counter_for_des_en_config_if = 1 */
+
+            /* Configure calibration settings (undocumented registers) */
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_1);
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_RX_SYS_9, 0x43U);  /* deskew_numedges value */
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_3);
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_RX_SYS_6, 0x80U);  /* tolerance value */
+
+            /* Configure DDL oscillation frequency */
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_RX_STARTUP_OVR_2, lowbyte_ddl_osc_freq);
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_RX_STARTUP_OVR_3, highbyte_ddl_osc_freq);
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+            DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_RX_STARTUP_OVR_4, ((0x1U << 4) | DWC_DPHY_RX_STARTUP_OVR_4_DDL_OSC_FREQ_OVR_EN_MASK));
         }
         else
         {
-            base = (PRIMARY_CSI2_CONTROLLER_Type *)secbase;
+            /* Select testcode extension 0 and configure HS frequency range */
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_RX_SYS_0, DWC_DPHY_RX_SYS_0_HSFREQRANGE_SEL_ENABLE);
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_RX_SYS_1, hsfreq);
+
+            /* Enable DDL oscillation frequency override */
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_RX_STARTUP_OVR_5, DWC_DPHY_RX_STARTUP_OVR_5_COUNTER_BYPASS_MASK);
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_RX_STARTUP_OVR_4, (0x1U << 4));  /* counter_for_des_en_config_if = 1 */
+
+            /* Configure calibration settings (undocumented registers) */
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_1);
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_RX_SYS_9, 0x43U);  /* deskew_numedges value */
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_3);
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_RX_SYS_6, 0x80U);  /* tolerance value */
+
+            /* Configure DDL oscillation frequency */
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_RX_STARTUP_OVR_2, lowbyte_ddl_osc_freq);
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_RX_STARTUP_OVR_3, highbyte_ddl_osc_freq);
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+            DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_RX_STARTUP_OVR_4, ((0x1U << 4) | DWC_DPHY_RX_STARTUP_OVR_4_DDL_OSC_FREQ_OVR_EN_MASK));
         }
     }
-    else if ((config->phyMode == KCSI2RX_DPHY_AggregatedMode) && (config->phyNumber == KCSI2RX_DPHY_Primary))
+    else
     {
-        assert (config->laneNum <= 4);
-        base = (PRIMARY_CSI2_CONTROLLER_Type *)pribase;
+        /* Aggregated mode - Configure CSI1 */
+        DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+        DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_RX_SYS_0, DWC_DPHY_RX_SYS_0_HSFREQRANGE_SEL_ENABLE);
+        DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_RX_SYS_1, hsfreq);
+        DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+        DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_RX_STARTUP_OVR_5, DWC_DPHY_RX_STARTUP_OVR_5_COUNTER_BYPASS_MASK);
+        DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+        DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_RX_STARTUP_OVR_4, (0x1U << 4));
+
+        DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+        DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_RX_STARTUP_OVR_2, lowbyte_ddl_osc_freq);
+        DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+        DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_RX_STARTUP_OVR_3, highbyte_ddl_osc_freq);
+        DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+        DWC_DPHY_SetTestConfigureCSI1(csi1, DWC_DPHY_RX_STARTUP_OVR_4, ((0x1U << 4) | DWC_DPHY_RX_STARTUP_OVR_4_DDL_OSC_FREQ_OVR_EN_MASK));
+
+        /* Aggregated mode - Configure CSI2 */
+        DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+        DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_RX_SYS_0, DWC_DPHY_RX_SYS_0_HSFREQRANGE_SEL_ENABLE);
+        DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_RX_SYS_1, hsfreq);
+        DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+        DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_RX_STARTUP_OVR_5, DWC_DPHY_RX_STARTUP_OVR_5_COUNTER_BYPASS_MASK);
+        DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+        DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_RX_STARTUP_OVR_4, (0x1U << 4));
+
+        DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+        DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_RX_STARTUP_OVR_2, lowbyte_ddl_osc_freq);
+        DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+        DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_RX_STARTUP_OVR_3, highbyte_ddl_osc_freq);
+        DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_TESTCODE_X_REG, DWC_DPHY_TESTCODE_X_VAL_0);
+        DWC_DPHY_SetTestConfigureCSI2(csi2, DWC_DPHY_RX_STARTUP_OVR_4, ((0x1U << 4) | DWC_DPHY_RX_STARTUP_OVR_4_DDL_OSC_FREQ_OVR_EN_MASK));
     }
+}
 
-    /* Start up MIPI CSI-2 host control */
-    MIPI_CSI2RX_Startup(base);
+status_t MIPI_CSI2RX_InitInterface(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2,
+                                   CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config)
+{
+    assert(NULL != config);
+    status_t result = kStatus_Success;
 
-    /* Initialize the MIPI CSI-2 host controller */
-    result = MIPI_CSI2RX_InitInterface(base, phybase, config);
+    uint8_t phy_testclr;
+    uint8_t phy_testdin;
+    uint8_t phy_testen;
+    uint8_t phy_testclk;
 
-    /* Define errors mask, enable CSI interrupt. */
-    base->INT_MSK_PHY_FATAL &= ~DWC_MIPI_CSI2_INT_MSK_PHY_FATAL_MASK;
-    base->INT_MSK_PKT_FATAL &= ~DWC_MIPI_CSI2_INT_MSK_PKT_FATAL_MASK;
-    base->INT_MSK_PHY &= ~DWC_MIPI_CSI2_INT_MSK_PHY_MASK;
-    base->INT_MSK_LINE &= ~DWC_MIPI_CSI2_INT_MSK_LINE_MASK;
+    /* Select CSI and phy according into config */
+    if (config->phyMode == KCSI2RX_DPHY_NormalMode)
+    {
+        if (config->phyNumber == KCSI2RX_DPHY_Primary)
+        {
+            /* Put Synopsys DPHY to reset status */
+            csi1->DPHY_RSTZ &= ~PRIMARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+            csi1->PHY_SHUTDOWNZ &= ~PRIMARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+
+            phy_testclr = 1;
+            phy_testdin = 0;
+            phy_testen = 0;
+            phy_testclk = 0;
+
+            csi1->PHY_TEST_CTRL1 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
+            csi1->PHY_TEST_CTRL0 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+            SDK_DelayAtLeastUs(1, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+            phy_testclr = 0;
+            csi1->PHY_TEST_CTRL0 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+
+            MIPI_CSI2RX_PhyConfigure(csi1, csi2, config->hsFreqrange, config->ddl_osc_freq, config);
+            DWC_DPHY_InitNormal(csi1, csi2, phybase, config);
+            phybase->PRIMARY_PHY_TEST_MODE_CONTROL &= 0xfffffcff; /* Clear bits [9:8] */
+
+            /* The dwc csi host interface supports up to 8 virtual channels, configure vitrual channel datatype */
+            if (config->vcNum <= (uint32_t)3)
+            {
+                csi1->DATA_IDS_1 =  ((csi1->DATA_IDS_1 & ~DWC_MIPI_CSI2_DATA_IDS1(config->vcNum, config->dataType))
+                                     | DWC_MIPI_CSI2_DATA_IDS1(config->vcNum, config->dataType));
+                csi1->DATA_IDS_VC_1 &= DWC_MIPI_CSI2_DATA_IDS_VC1(config->vcNum);
+            }
+            else if (config->vcNum > 3 && config->vcNum <= 7)
+            {
+                csi1->DATA_IDS_2 = ((csi1->DATA_IDS_2 & ~DWC_MIPI_CSI2_DATA_IDS1(config->vcNum, config->dataType)) | DWC_MIPI_CSI2_DATA_IDS1(config->vcNum, config->dataType));
+                csi1->DATA_IDS_VC_2 &= DWC_MIPI_CSI2_DATA_IDS_VC1(config->vcNum);
+            }
+        }
+        else
+        {
+            /* Put Synopsys DPHY to reset status */
+            csi2->DPHY_RSTZ &= ~SECONDARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+            csi2->PHY_SHUTDOWNZ &= ~SECONDARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+
+            phy_testclr = 1;
+            phy_testdin = 0;
+            phy_testen = 0;
+            phy_testclk = 0;
+
+            csi2->PHY_TEST_CTRL1 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
+            csi2->PHY_TEST_CTRL0 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+            SDK_DelayAtLeastUs(1, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+            phy_testclr = 0;
+            csi2->PHY_TEST_CTRL0 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+
+            MIPI_CSI2RX_PhyConfigure(csi1, csi2, config->hsFreqrange, config->ddl_osc_freq, config);
+            DWC_DPHY_InitNormal(csi1, csi2, phybase, config);
+            phybase->SECONDARY_PHY_TEST_MODE_CONTROL &= 0xfffffcff; /* Clear bits [9:8] */
+
+            /* The dwc csi host interface supports up to 8 virtual channels, configure vitrual channel datatype */
+            if (config->vcNum <= (uint32_t)3)
+            {
+                csi2->DATA_IDS_1 =  ((csi2->DATA_IDS_1 & ~DWC_MIPI_CSI2_DATA_IDS1(config->vcNum, config->dataType))
+                                     | DWC_MIPI_CSI2_DATA_IDS1(config->vcNum, config->dataType));
+                csi2->DATA_IDS_VC_1 &= DWC_MIPI_CSI2_DATA_IDS_VC1(config->vcNum);
+            }
+            else if (config->vcNum > 3 && config->vcNum <= 7)
+            {
+                csi2->DATA_IDS_2 = ((csi2->DATA_IDS_2 & ~DWC_MIPI_CSI2_DATA_IDS1(config->vcNum, config->dataType)) | DWC_MIPI_CSI2_DATA_IDS1(config->vcNum, config->dataType));
+                csi2->DATA_IDS_VC_2 &= DWC_MIPI_CSI2_DATA_IDS_VC1(config->vcNum);
+            }
+        }
+    }
+    else
+    {
+        /* Put Synopsys DPHY to reset status */
+        csi1->DPHY_RSTZ &= ~PRIMARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+        csi1->PHY_SHUTDOWNZ &= ~PRIMARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+        phy_testclr = 1;
+        phy_testdin = 0;
+        phy_testen = 0;
+        phy_testclk = 0;
+        csi1->PHY_TEST_CTRL1 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
+        csi1->PHY_TEST_CTRL0 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+        SDK_DelayAtLeastUs(1, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+        phy_testclr = 0;
+        csi1->PHY_TEST_CTRL0 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+
+        /* Put Synopsys DPHY to reset status */
+        csi2->DPHY_RSTZ &= ~SECONDARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+        csi2->PHY_SHUTDOWNZ &= ~SECONDARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+
+        phy_testclr = 1;
+        phy_testdin = 0;
+        phy_testen = 0;
+        phy_testclk = 0;
+
+        csi2->PHY_TEST_CTRL1 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
+        csi2->PHY_TEST_CTRL0 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+        SDK_DelayAtLeastUs(1, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+        phy_testclr = 0;
+        csi2->PHY_TEST_CTRL0 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+
+        MIPI_CSI2RX_PhyConfigure(csi1, csi2, config->hsFreqrange, config->ddl_osc_freq, config);
+
+        DWC_DPHY_InitAggr(csi1, csi2, phybase, config);
+        phybase->PRIMARY_PHY_TEST_MODE_CONTROL &= 0xfffffcff; /* Clear bits [9:8] */
+        phybase->SECONDARY_PHY_TEST_MODE_CONTROL &= 0xfffffcff; /* Clear bits [9:8] */
+    }
 
     return result;
 }
 
-void MIPI_CSI2RX_Deinit(PRIMARY_CSI2_CONTROLLER_Type *base)
+status_t MIPI_CSI2RX_Init(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config)
 {
-    base->CSI2_RESETN &= ~PRIMARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
-    DWC_DPHY_PowerOff(base);
+    status_t result = kStatus_Success;
 
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    /* gate clock */
-    (void)CLOCK_DisableClock(s_csi2rxClocks[CSI2RX_GetInstance(base)]);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+    assert(NULL != config);
+
+    /* Start up MIPI CSI-2 host control */
+    MIPI_CSI2RX_Startup(csi1, csi2, config);
+
+    /* Initialize the MIPI CSI-2 host controller */
+    result = MIPI_CSI2RX_InitInterface(csi1, csi2, phybase, config);
+
+    /* Define errors mask, enable CSI interrupt. */
+    csi1->INT_MSK_PHY_FATAL &= ~DWC_MIPI_CSI2_INT_MSK_PHY_FATAL_MASK;
+    csi1->INT_MSK_PKT_FATAL &= ~DWC_MIPI_CSI2_INT_MSK_PKT_FATAL_MASK;
+    csi1->INT_MSK_PHY &= ~DWC_MIPI_CSI2_INT_MSK_PHY_MASK;
+    csi1->INT_MSK_LINE &= ~DWC_MIPI_CSI2_INT_MSK_LINE_MASK;
+    csi2->INT_MSK_PHY_FATAL &= ~DWC_MIPI_CSI2_INT_MSK_PHY_FATAL_MASK;
+    csi2->INT_MSK_PKT_FATAL &= ~DWC_MIPI_CSI2_INT_MSK_PKT_FATAL_MASK;
+    csi2->INT_MSK_PHY &= ~DWC_MIPI_CSI2_INT_MSK_PHY_MASK;
+    csi2->INT_MSK_LINE &= ~DWC_MIPI_CSI2_INT_MSK_LINE_MASK;
+
+    return result;
 }
+
+void MIPI_CSI2RX_Deinit(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, uint8_t instance)
+{
+    if (instance == KCSI2RX_DPHY_Primary)
+    {
+        csi1->CSI2_RESETN &= ~PRIMARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
+        /* Poweroff DWC RX DPHY module */
+        csi1->DPHY_RSTZ &= ~PRIMARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+        csi1->PHY_SHUTDOWNZ &= ~PRIMARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+    }
+    else
+    {
+        csi2->CSI2_RESETN &= ~SECONDARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
+        /* Poweroff DWC RX DPHY module */
+        csi2->DPHY_RSTZ &= ~SECONDARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+        csi2->PHY_SHUTDOWNZ &= ~SECONDARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+    }
+}
+

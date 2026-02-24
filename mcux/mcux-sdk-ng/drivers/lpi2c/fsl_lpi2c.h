@@ -26,7 +26,7 @@
  * @{
  */
 /*! @brief LPI2C driver version. */
-#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 6, 2))
+#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 6, 4))
 /*! @} */
 
 /*! @brief Retry times for waiting flag. */
@@ -227,7 +227,6 @@ enum _lpi2c_master_transfer_flags
 {
     kLPI2C_TransferDefaultFlag       = 0x00U, /*!< Transfer starts with a start signal, stops with a stop signal. */
     kLPI2C_TransferNoStartFlag       = 0x01U, /*!< Don't send a start condition, address, and sub address */
-    kLPI2C_TransferRepeatedStartFlag = 0x02U, /*!< Send a repeated start condition */
     kLPI2C_TransferNoStopFlag        = 0x04U, /*!< Don't send a stop condition. */
 };
 
@@ -590,7 +589,7 @@ static inline void LPI2C_MasterReset(LPI2C_Type *base)
  */
 static inline void LPI2C_MasterEnable(LPI2C_Type *base, bool enable)
 {
-    base->MCR = (base->MCR & ~LPI2C_MCR_MEN_MASK) | LPI2C_MCR_MEN(enable);
+    base->MCR = (base->MCR & ~LPI2C_MCR_MEN_MASK) | LPI2C_MCR_MEN(enable ? 1U : 0U);
 }
 
 /*! @}*/
@@ -707,7 +706,7 @@ static inline uint32_t LPI2C_MasterGetEnabledInterrupts(LPI2C_Type *base)
  */
 static inline void LPI2C_MasterEnableDMA(LPI2C_Type *base, bool enableTx, bool enableRx)
 {
-    base->MDER = LPI2C_MDER_TDDE(enableTx) | LPI2C_MDER_RDDE(enableRx);
+    base->MDER = LPI2C_MDER_TDDE(enableTx ? 1U : 0U) | LPI2C_MDER_RDDE(enableRx ? 1U : 0U);
 }
 
 /*!
@@ -1087,7 +1086,7 @@ static inline void LPI2C_SlaveReset(LPI2C_Type *base)
  */
 static inline void LPI2C_SlaveEnable(LPI2C_Type *base, bool enable)
 {
-    base->SCR = (base->SCR & ~LPI2C_SCR_SEN_MASK) | LPI2C_SCR_SEN(enable);
+    base->SCR = (base->SCR & ~LPI2C_SCR_SEN_MASK) | LPI2C_SCR_SEN(enable ? 1U : 0U);
 }
 
 /*! @}*/
@@ -1202,7 +1201,7 @@ static inline uint32_t LPI2C_SlaveGetEnabledInterrupts(LPI2C_Type *base)
 static inline void LPI2C_SlaveEnableDMA(LPI2C_Type *base, bool enableAddressValid, bool enableRx, bool enableTx)
 {
     base->SDER = (base->SDER & ~(LPI2C_SDER_AVDE_MASK | LPI2C_SDER_RDDE_MASK | LPI2C_SDER_TDDE_MASK)) |
-                 LPI2C_SDER_AVDE(enableAddressValid) | LPI2C_SDER_RDDE(enableRx) | LPI2C_SDER_TDDE(enableTx);
+                 LPI2C_SDER_AVDE(enableAddressValid ? 1U : 0U) | LPI2C_SDER_RDDE(enableRx ? 1U : 0U) | LPI2C_SDER_TDDE(enableTx ? 1U : 0U);
 }
 
 /*! @}*/

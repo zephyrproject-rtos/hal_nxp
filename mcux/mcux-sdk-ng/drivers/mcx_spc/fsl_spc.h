@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2025 NXP
+ * Copyright 2022-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -19,8 +19,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief SPC driver version 2.10.0. */
-#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 10, 0))
+/*! @brief SPC driver version 2.11.0. */
+#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 11, 0))
 /*! @} */
 
 #define SPC_EVD_CFG_REG_EVDISO_SHIFT   0UL
@@ -664,12 +664,11 @@ static inline void SPC_ClearPowerDomainLowPowerRequestFlag(SPC_Type *base, spc_p
 
 /*! @} */
 
-#if (defined(FSL_FEATURE_MCX_SPC_HAS_SRAMRETLDO_REG) && FSL_FEATURE_MCX_SPC_HAS_SRAMRETLDO_REG)
 /*!
  * @name SRAM Retention LDO Control APIs
  * @{
  */
-
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_SRAMRETLDO_REFTRIM_REG) && (FSL_FEATURE_MCX_SPC_HAS_SRAMRETLDO_REFTRIM_REG == 0U))
 /*!
  * @brief Trims SRAM retention regulator reference voltage, trim step is 12 mV, range is around 0.48V to 0.85V.
  *
@@ -681,7 +680,9 @@ static inline void SPC_TrimSRAMLdoRefVoltage(SPC_Type *base, uint8_t trimValue)
     base->SRAMRETLDO_REFTRIM =
         ((base->SRAMRETLDO_REFTRIM & ~SPC_SRAMRETLDO_REFTRIM_REFTRIM_MASK) | SPC_SRAMRETLDO_REFTRIM_REFTRIM(trimValue));
 }
+#endif
 
+#if (defined(FSL_FEATURE_MCX_SPC_HAS_SRAMRETLDO_REG) && FSL_FEATURE_MCX_SPC_HAS_SRAMRETLDO_REG)
 /*!
  * @brief Enables/disables SRAM retention LDO.
  *
@@ -725,9 +726,8 @@ static inline void SPC_UnRetainSRAMArray(SPC_Type *base, uint8_t mask)
 {
     base->SRAMRETLDO_CNTRL &= ~SPC_SRAMRETLDO_CNTRL_SRAM_RET_EN(mask);
 }
-
-/*! @} */
 #endif /* FSL_FEATURE_MCX_SPC_HAS_SRAMRETLDO_REG */
+/*! @} */
 
 /*!
  * @name Low Power Request configuration

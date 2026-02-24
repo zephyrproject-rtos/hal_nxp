@@ -30,7 +30,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief IOCON driver version. */
-#define FSL_IOCON_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_IOCON_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*! @} */
 
 /**
@@ -93,6 +93,7 @@ typedef struct _iocon_group
 
 #if defined(IOCON_PIO_INVERT_SHIFT)
 #define IOCON_INV_EN (0x1 << IOCON_PIO_INVERT_SHIFT) /*!< Enables invert function on input */
+#define IOCON_INV_DI (0x0 << IOCON_PIO_INVERT_SHIFT) /*!< Disables invert function on input */
 #endif
 
 #if defined(IOCON_PIO_DIGIMODE_SHIFT)
@@ -113,6 +114,7 @@ typedef struct _iocon_group
 
 #if defined(IOCON_PIO_OD_SHIFT)
 #define IOCON_OPENDRAIN_EN (0x1 << IOCON_PIO_OD_SHIFT) /*!< Enables open-drain function */
+#define IOCON_OPENDRAIN_DI (0x0 << IOCON_PIO_OD_SHIFT) /*!< Disables open-drain function */
 #endif
 
 #if defined(IOCON_PIO_I2CFILTER_SHIFT)

@@ -209,6 +209,7 @@ static status_t EP_DescriptorInit(ep_handle_t *handle, const ep_config_t *config
         handle->txBdRing[ring].bdBase    = bdrConfig->txBdrConfig[ring].bdArray;
         handle->txBdRing[ring].dirtyBase = bdrConfig->txBdrConfig[ring].dirtyArray;
         handle->txBdRing[ring].len       = bdrConfig->txBdrConfig[ring].len;
+        handle->txBdRing[ring].enableInterrupt = bdrConfig->txBdrConfig[ring].enIntr;
     }
     for (ring = 0; ring < config->siConfig.rxRingUse; ring++)
     {
@@ -864,8 +865,7 @@ status_t EP_SendFrameCommon(ep_handle_t *handle,
                 txDesTemp->standard.frameLen = frameLen;
 #endif
                 txDesTemp->standard.isExtended = (uint32_t)isExtEnable;
-                txDesTemp->standard.enableInterrupt =
-                    (uint32_t)((handle->hw.si->BDR[hwRing].TBIER & ENETC_SI_TBIER_TXFIE_MASK) != 0U);
+                txDesTemp->standard.enableInterrupt = txBdRing->enableInterrupt;
 
                 if (isExtEnable)
                 {

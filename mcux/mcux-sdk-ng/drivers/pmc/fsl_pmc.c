@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -41,14 +41,17 @@ void PMC_GetParam(PMC_Type *base, pmc_param_t *param)
  */
 void PMC_ConfigureLowVoltDetect(PMC_Type *base, const pmc_low_volt_detect_config_t *config)
 {
-    base->LVDSC1 = (uint8_t)((0U |
+    /* INT31-C: Validate value fits in uint8_t before narrowing conversion */
+    uint32_t lvdsc1_value = ((0U |
 #if (defined(FSL_FEATURE_PMC_HAS_LVDV) && FSL_FEATURE_PMC_HAS_LVDV)
                               ((uint32_t)config->voltSelect << PMC_LVDSC1_LVDV_SHIFT) |
 #endif
-                              ((uint32_t)config->enableInt << PMC_LVDSC1_LVDIE_SHIFT) |
-                              ((uint32_t)config->enableReset << PMC_LVDSC1_LVDRE_SHIFT)
+                              ((uint32_t)(config->enableInt ? 1U : 0U) << PMC_LVDSC1_LVDIE_SHIFT) |
+                              ((uint32_t)(config->enableReset ? 1U : 0U) << PMC_LVDSC1_LVDRE_SHIFT)
                               /* Clear the Low Voltage Detect Flag with previous power detect setting */
                               | PMC_LVDSC1_LVDACK_MASK));
+    assert(lvdsc1_value <= UINT8_MAX);
+    base->LVDSC1 = (uint8_t)lvdsc1_value;
 }
 
 /*!
@@ -62,13 +65,16 @@ void PMC_ConfigureLowVoltDetect(PMC_Type *base, const pmc_low_volt_detect_config
  */
 void PMC_ConfigureLowVoltWarning(PMC_Type *base, const pmc_low_volt_warning_config_t *config)
 {
-    base->LVDSC2 = (uint8_t)((0U |
+    /* INT31-C: Validate value fits in uint8_t before narrowing conversion */
+    uint32_t lvdsc2_value = ((0U |
 #if (defined(FSL_FEATURE_PMC_HAS_LVWV) && FSL_FEATURE_PMC_HAS_LVWV)
                               ((uint32_t)config->voltSelect << PMC_LVDSC2_LVWV_SHIFT) |
 #endif
-                              ((uint32_t)config->enableInt << PMC_LVDSC2_LVWIE_SHIFT)
+                              ((uint32_t)(config->enableInt ? 1U : 0U) << PMC_LVDSC2_LVWIE_SHIFT)
                               /* Clear the Low Voltage Warning Flag with previous power detect setting */
                               | PMC_LVDSC2_LVWACK_MASK));
+    assert(lvdsc2_value <= UINT8_MAX);
+    base->LVDSC2 = (uint8_t)lvdsc2_value;
 }
 
 #if (defined(FSL_FEATURE_PMC_HAS_HVDSC1) && FSL_FEATURE_PMC_HAS_HVDSC1)
@@ -105,16 +111,18 @@ void PMC_ConfigureHighVoltDetect(PMC_Type *base, const pmc_high_volt_detect_conf
  */
 void PMC_ConfigureBandgapBuffer(PMC_Type *base, const pmc_bandgap_buffer_config_t *config)
 {
-    base->REGSC = (uint8_t)(0U
+    /* INT31-C: Validate value fits in uint8_t before narrowing conversion */
+    uint8_t regsc_value = (0U
 #if (defined(FSL_FEATURE_PMC_HAS_BGBE) && FSL_FEATURE_PMC_HAS_BGBE)
-                            | ((uint32_t)config->enable << PMC_REGSC_BGBE_SHIFT)
+                            | ((uint32_t)(config->enable ? 1U : 0U) << PMC_REGSC_BGBE_SHIFT)
 #endif /* FSL_FEATURE_PMC_HAS_BGBE */
 #if (defined(FSL_FEATURE_PMC_HAS_BGEN) && FSL_FEATURE_PMC_HAS_BGEN)
-                            | (((uint32_t)config->enableInLowPowerMode << PMC_REGSC_BGEN_SHIFT))
+                            | ((uint32_t)(config->enableInLowPowerMode ? 1U : 0U) << PMC_REGSC_BGEN_SHIFT)
 #endif /* FSL_FEATURE_PMC_HAS_BGEN */
 #if (defined(FSL_FEATURE_PMC_HAS_BGBDS) && FSL_FEATURE_PMC_HAS_BGBDS)
                             | ((uint32_t)config->drive << PMC_REGSC_BGBDS_SHIFT)
 #endif /* FSL_FEATURE_PMC_HAS_BGBDS */
     );
+    base->REGSC = (uint8_t)regsc_value;
 }
 #endif

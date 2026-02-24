@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.mscan)
-    mcux_component_version(2.1.0)
+    mcux_component_version(2.1.1)
 
     mcux_add_source(SOURCES fsl_mscan.h fsl_mscan.c)
 

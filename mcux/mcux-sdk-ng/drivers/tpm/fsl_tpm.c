@@ -139,17 +139,18 @@ void TPM_Init(TPM_Type *base, const tpm_config_t *config)
     base->SC = TPM_SC_PS(config->prescale);
 #if !(defined(FSL_FEATURE_TPM_HAS_NO_CONF) && FSL_FEATURE_TPM_HAS_NO_CONF)
     /* Setup the counter operation */
-    base->CONF = TPM_CONF_DOZEEN(config->enableDoze) |
+    base->CONF = TPM_CONF_DOZEEN(config->enableDoze ? 1U : 0U) |
 #if defined(FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN) && FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN
-                 TPM_CONF_GTBEEN(config->useGlobalTimeBase) |
+                 TPM_CONF_GTBEEN(config->useGlobalTimeBase ? 1U : 0U) |
 #endif
 #if defined(FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC) && FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC
-                 TPM_CONF_GTBSYNC(config->syncGlobalTimeBase) |
+                 TPM_CONF_GTBSYNC(config->syncGlobalTimeBase ? 1U : 0U) |
 #endif
-                 TPM_CONF_CROT(config->enableReloadOnTrigger) |
-                 TPM_CONF_CSOT(config->enableStartOnTrigger) | TPM_CONF_CSOO(config->enableStopOnOverflow) |
+                 TPM_CONF_CROT(config->enableReloadOnTrigger ? 1U : 0U) |
+                 TPM_CONF_CSOT(config->enableStartOnTrigger ? 1U : 0U) |
+                 TPM_CONF_CSOO(config->enableStopOnOverflow ? 1U : 0U) |
 #if defined(FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER) && FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER
-                 TPM_CONF_CPOT(config->enablePauseOnTrigger) |
+                 TPM_CONF_CPOT(config->enablePauseOnTrigger ? 1U : 0U) |
 #endif
 #if defined(FSL_FEATURE_TPM_HAS_EXTERNAL_TRIGGER_SELECTION) && FSL_FEATURE_TPM_HAS_EXTERNAL_TRIGGER_SELECTION
                  TPM_CONF_TRGSRC(config->triggerSource) | TPM_CONF_TRGPOL(config->extTriggerPolarity) |
@@ -310,6 +311,9 @@ static status_t TPM_SetupSinglePwmChannel(TPM_Type *base,
 #if TPM_TIMEOUT
     uint32_t timeout = TPM_TIMEOUT;
 #endif
+    assert(((chnlParams.dutyCyclePercent != 0U) &&
+            (mod <= 0xFFFFFFFFU / chnlParams.dutyCyclePercent)) ||
+            (chnlParams.dutyCyclePercent == 0U));
 
     /* MSnB:MSnA field value always be 10, ELSnB:ELSnA field value should config according to the channel params */
 #if defined(FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT) && FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT
@@ -326,12 +330,12 @@ static status_t TPM_SetupSinglePwmChannel(TPM_Type *base,
      * This function is called inside the TPM_SetupPwm() function.
      * If you enter an invalid base, the function will not work properly.
      */
-    if ((chnlId >= (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) || /* GCOVR_EXCL_BR_LINE */
+    if ((-1 == (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) || /* GCOVR_EXCL_BR_LINE */
         /*
          * $Branch Coverage Justification$
          * (chnlId >= (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) not covered.  $ref tpm_c_ref_2$.
          */
-        (-1 == (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base))) /* GCOVR_EXCL_LINE */
+        (chnlId >= (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base))) /* GCOVR_EXCL_LINE */
     {
         return kStatus_InvalidArgument;
     }
@@ -386,6 +390,9 @@ static status_t TPM_SetupSinglePwmChannel(TPM_Type *base,
         }
         else
         {
+            assert(((chnlParams.firstEdgeDelayPercent != 0U) &&
+                    (mod <= 0xFFFFFFFFU / chnlParams.firstEdgeDelayPercent)) ||
+                    chnlParams.firstEdgeDelayPercent == 0U);
             cnvFirstEdge = (mod * chnlParams.firstEdgeDelayPercent) / 100U;
             cnv          = (mod * chnlParams.dutyCyclePercent) / 100U;
         }
@@ -482,9 +489,9 @@ static status_t TPM_SetupSinglePwmChannel(TPM_Type *base,
         assert(!(mode == kTPM_EdgeAlignedPwm && cnv == 1U && (base->SC & TPM_SC_PS_MASK) == kTPM_Prescale_Divide_1));
 #endif
         /* When switching mode, disable channel first */
-        TPM_DisableChannel(base, (tpm_chnl_t)chnlId);
+        (void)TPM_DisableChannel(base, (tpm_chnl_t)chnlId);
         /* Set the requested PWM mode, output mode MSnB:MSnA field value set to 10 */
-        TPM_EnableChannel(base, (tpm_chnl_t)chnlId, controlBits);
+        (void)TPM_EnableChannel(base, (tpm_chnl_t)chnlId, controlBits);
 
         /* 
          * According to ERR008068, if writing Channel(n) Value register (TPMx_CnV) more than once when the timer
@@ -674,8 +681,8 @@ status_t TPM_UpdatePwmDutycycle(TPM_Type *base,
 
     /* Return error if requested chnlNumber is greater than the max allowed */
     /* Return error if requested dutycycle/chnlNumber is greater than the max allowed */
-    if ((chnlId >= (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) ||
-        (-1 == (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)))
+    if ((-1 == (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) ||
+        (chnlId >= (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)))
     {
         return kStatus_InvalidArgument;
     }
@@ -703,6 +710,8 @@ status_t TPM_UpdatePwmDutycycle(TPM_Type *base,
             return kStatus_InvalidArgument;
         }
         uint32_t cnvFirstEdge;
+        assert(((dutyCyclePercent != 0U) && (mod <= 0xFFFFFFFFU / dutyCyclePercent)) ||
+                (dutyCyclePercent == 0U));
         cnv = (mod * dutyCyclePercent) / 100U;
         if ((base->CONTROLS[chnlId * 2U].CnV & counterMax) > mod)
         {
@@ -712,7 +721,7 @@ status_t TPM_UpdatePwmDutycycle(TPM_Type *base,
         {
             cnvFirstEdge = base->CONTROLS[chnlId * 2U].CnV & counterMax;
         }
-
+        assert(cnvFirstEdge <= 0xFFFFFFFFU - cnv);
         if (((cnvFirstEdge + cnv) > mod) || ((cnv == 0U) && (cnvFirstEdge > 0U)))
         {
             /* Return error if the following situation occurs :
@@ -761,6 +770,7 @@ status_t TPM_UpdatePwmDutycycle(TPM_Type *base,
                 return kStatus_Timeout;
             }
 #endif
+            assert(cnvFirstEdge <= 0xFFFFFFFFU - cnv);
             base->CONTROLS[(chnlId * 2U) + 1U].CnV = cnvFirstEdge + cnv;
         } while ((cnvFirstEdge + cnv) != base->CONTROLS[(chnlId * 2U) + 1U].CnV);
     }
@@ -773,6 +783,8 @@ status_t TPM_UpdatePwmDutycycle(TPM_Type *base,
         }
         else
         {
+            assert(((dutyCyclePercent != 0U) && (mod <= 0xFFFFFFFFU / dutyCyclePercent)) ||
+                    dutyCyclePercent == 0U);
             cnv = (mod * dutyCyclePercent) / 100U;
         }
         /* Fix ERROR050050 */
@@ -816,8 +828,8 @@ status_t TPM_UpdatePwmDutycycle(TPM_Type *base,
  */
 void TPM_UpdateChnlEdgeLevelSelect(TPM_Type *base, tpm_chnl_t chnlNumber, uint8_t level)
 {
-    assert(((uint8_t)chnlNumber < (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) &&
-           (-1 != (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)));
+    assert(((-1 != (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) &&
+           (uint8_t)chnlNumber < (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)));
 
     uint8_t control = TPM_GetChannelContorlBits(base, chnlNumber);
 
@@ -825,7 +837,7 @@ void TPM_UpdateChnlEdgeLevelSelect(TPM_Type *base, tpm_chnl_t chnlNumber, uint8_
     (void)TPM_DisableChannel(base, chnlNumber);
 
     /* Clear the field and write the new level value */
-    control &= ~(uint8_t)(TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK);
+    control &= MCUX_MASK_INVERT_8(TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK);
     control |= ((uint8_t)level << TPM_CnSC_ELSA_SHIFT) & (TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK);
 
     /* Enable channle with new level value */
@@ -844,8 +856,8 @@ void TPM_UpdateChnlEdgeLevelSelect(TPM_Type *base, tpm_chnl_t chnlNumber, uint8_
  */
 void TPM_SetupInputCapture(TPM_Type *base, tpm_chnl_t chnlNumber, tpm_input_capture_edge_t captureMode)
 {
-    assert(((uint8_t)chnlNumber < (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) &&
-           (-1 != (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)));
+    assert(((-1 != (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) &&
+           (uint8_t)chnlNumber < (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)));
 
 #if defined(FSL_FEATURE_TPM_HAS_QDCTRL) && FSL_FEATURE_TPM_HAS_QDCTRL
     /* The TPM's QDCTRL register required to be effective */
@@ -893,8 +905,8 @@ status_t TPM_SetupOutputCompare(TPM_Type *base,
                             tpm_output_compare_mode_t compareMode,
                             uint32_t compareValue)
 {
-    assert(((uint8_t)chnlNumber < (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) &&
-           (-1 != (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)));
+    assert((-1 != (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) &&
+           ((uint8_t)chnlNumber < (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)));
 #if TPM_TIMEOUT
     uint32_t timeout = TPM_TIMEOUT;
 #endif

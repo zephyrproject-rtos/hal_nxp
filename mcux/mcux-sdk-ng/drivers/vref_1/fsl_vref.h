@@ -1,6 +1,5 @@
 /*
- * Copyright 2019-2024 NXP
- * All rights reserved.
+ * Copyright 2019-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,7 +20,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_VREF_DRIVER_VERSION (MAKE_VERSION(2, 4, 0)) /*!< Version 2.4.0. */
+#define FSL_VREF_DRIVER_VERSION (MAKE_VERSION(2, 5, 0)) /*!< Version 2.5.0. */
 /*! @} */
 
 /*! @brief VREF buffer modes. */
@@ -67,7 +66,7 @@ extern "C" {
  * and how to call the VREF_Init function by passing in these parameters.
  * @code
  *    vref_config_t vrefConfig;
- *    VREF_GetDefaultConfig(VREF, &vrefConfig);
+ *    VREF_GetDefaultConfig(&vrefConfig);
  *    vrefConfig.bufferMode = kVREF_ModeHighPowerBuffer;
  *    VREF_Init(VREF, &vrefConfig);
  * @endcode
@@ -84,7 +83,7 @@ void VREF_Init(VREF_Type *base, const vref_config_t *config);
  * This is an example.
  * @code
  *    vref_config_t vrefUserConfig;
- *    VREF_GetDefaultConfig(VREF, &vrefUserConfig);
+ *    VREF_GetDefaultConfig(&vrefUserConfig);
  *    VREF_Init(VREF, &vrefUserConfig);
  *    ...
  *    VREF_Deinit(VREF);
@@ -187,7 +186,8 @@ static inline void VREF_SetTestUlockValue(VREF_Type *base, uint16_t value)
  */
 static inline uint16_t VREF_GetTestUlockValue(VREF_Type *base)
 {
-    return (uint16_t)(base->TEST_UNLOCK & VREF_TEST_UNLOCK_TEST_UNLOCK_VALUE_MASK >> VREF_TEST_UNLOCK_TEST_UNLOCK_VALUE_SHIFT);
+    return (uint16_t)(((base->TEST_UNLOCK & VREF_TEST_UNLOCK_TEST_UNLOCK_VALUE_MASK) >>
+                       VREF_TEST_UNLOCK_TEST_UNLOCK_VALUE_SHIFT));
 }
 
 /*!
@@ -364,6 +364,50 @@ static inline uint8_t VREF_GetTempCompLsb(VREF_Type *base)
     return (uint8_t)((base->TRIM0 & VREF_TRIM0_COMPLSB_MASK) >> VREF_TRIM0_COMPLSB_SHIFT);
 }
 #endif /* FSL_FEATURE_VREF_HAS_TRIM0_REG */
+
+#if (defined(FSL_FEATURE_VREF_HAS_REFCHSELN_EN) && (FSL_FEATURE_VREF_HAS_REFCHSELN_EN != 0U))
+/*!
+ * @brief Decides whether to enable the ADC negative channel to receive the reference voltage.
+ *
+ * @param base VREF peripheral address.
+ * @param enable Enable/disable ADC negative channel reference voltage.
+ * - \b true  Enable ADC negative channel reference voltage.
+ * - \b false Disable ADC negative channel reference voltage.
+ */
+static inline void VREF_SetAdcNegChannelRef(VREF_Type *base, bool enable)
+{
+    if (enable)
+    {
+        base->CSR |= VREF_CSR_REFCHSELN_EN_MASK;
+    }
+    else
+    {
+        base->CSR &= ~VREF_CSR_REFCHSELN_EN_MASK;
+    }
+}
+#endif
+
+#if (defined(FSL_FEATURE_VREF_HAS_REFCHSELP_EN) && (FSL_FEATURE_VREF_HAS_REFCHSELP_EN != 0U))
+/*!
+ * @brief Decides whether to enable the ADC positive channel to receive the reference voltage.
+ *
+ * @param base VREF peripheral address.
+ * @param enable Enable/disable ADC positive channel reference voltage.
+ * - \b true  Enable ADC positive channel reference voltage.
+ * - \b false Disable ADC positive channel reference voltage.
+ */
+static inline void VREF_SetAdcPosChannelRef(VREF_Type *base, bool enable)
+{
+    if (enable)
+    {
+        base->CSR |= VREF_CSR_REFCHSELP_EN_MASK;
+    }
+    else
+    {
+        base->CSR &= ~VREF_CSR_REFCHSELP_EN_MASK;
+    }
+}
+#endif
 
 /*! @} */
 

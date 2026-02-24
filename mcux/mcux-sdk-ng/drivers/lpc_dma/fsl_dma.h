@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief DMA driver version */
-#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 3)) /*!< Version 2.5.3. */
+#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 4)) /*!< Version 2.5.4. */
 /*! @} */
 
 /*! @brief DMA max transfer size */
@@ -487,9 +487,9 @@ static inline uint32_t DMA_SetChannelXferConfig(
     bool reload, bool clrTrig, bool intA, bool intB, uint8_t width, uint8_t srcInc, uint8_t dstInc, uint32_t bytes)
 {
     assert(((uint32_t)bytes / (uint32_t)width) <= DMA_MAX_TRANSFER_COUNT);
-    return (DMA_CHANNEL_XFERCFG_CFGVALID_MASK | DMA_CHANNEL_XFERCFG_RELOAD(reload) |
-            DMA_CHANNEL_XFERCFG_CLRTRIG(clrTrig) | DMA_CHANNEL_XFERCFG_SETINTA(intA) |
-            DMA_CHANNEL_XFERCFG_SETINTB(intB) |
+    return (DMA_CHANNEL_XFERCFG_CFGVALID_MASK | (reload ? DMA_CHANNEL_XFERCFG_RELOAD_MASK : 0UL) |
+            (clrTrig ? DMA_CHANNEL_XFERCFG_CLRTRIG_MASK : 0UL) |  (intA ? DMA_CHANNEL_XFERCFG_SETINTA_MASK : 0UL) |
+            (intB ? DMA_CHANNEL_XFERCFG_SETINTB_MASK : 0UL) |
             DMA_CHANNEL_XFERCFG_WIDTH((uint32_t)width == 4UL ? 2UL : ((uint32_t)width - 1UL)) |
             DMA_CHANNEL_XFERCFG_SRCINC((uint32_t)srcInc == 4UL ? ((uint32_t)srcInc - 1UL) : (uint32_t)srcInc) |
             DMA_CHANNEL_XFERCFG_DSTINC((uint32_t)dstInc == 4UL ? ((uint32_t)dstInc - 1UL) : (uint32_t)dstInc) |

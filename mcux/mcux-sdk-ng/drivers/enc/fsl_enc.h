@@ -18,7 +18,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define FSL_ENC_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+#define FSL_ENC_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 
 /*!
  * @brief Interrupt enable/disable mask.

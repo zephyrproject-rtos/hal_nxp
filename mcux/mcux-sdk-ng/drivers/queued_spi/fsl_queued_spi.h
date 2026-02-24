@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief QSPI driver version. */
-#define FSL_QSPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_QSPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*! @} */
 
 /*!
@@ -1389,6 +1389,15 @@ void QSPI_SlaveTransferAbort(qspi_slave_transfer_handle_t *psHandle);
 void QSPI_SlaveTransferHandleIRQ(qspi_slave_transfer_handle_t *psHandle);
 
 /*! @} */
+
+/*!
+ * @brief QSPI driver IRQ handler common entry.
+ *
+ * This function provides the common IRQ request entry for QSPI.
+ *
+ * @param instance QSPI instance.
+ */
+void QSPI_DriverIRQHandler(uint32_t instance);
 
 #if defined(__cplusplus)
 }

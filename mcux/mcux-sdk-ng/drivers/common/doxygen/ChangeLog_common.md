@@ -1,5 +1,20 @@
 # COMMON
 
+## [2.6.3]
+
+- New Features
+  - Added bit mask inversion macros to avoid type promotion.
+  - Added register operation macros.
+- Improvements
+  - Make function `MSDK_EnableCpuCycleCounter` compatible with CMSIS-5 and CMSIS-6.
+
+- Bug Fixes
+  - Fixed build issue of CMSIS PACK BSP example caused by CMSIS 6.1 issue.
+## [2.6.2]
+
+- Bug Fixes
+  - Fixed violations of MISRA C-2012 rule for implicit conversions in boolean contexts
+
 ## [2.6.1]
 
 - Improvements

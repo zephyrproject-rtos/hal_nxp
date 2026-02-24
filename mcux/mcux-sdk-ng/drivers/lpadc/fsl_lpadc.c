@@ -124,14 +124,25 @@ static uint32_t LPADC_GetGainConvResult(float gainAdjustment)
     uint32_t tmp32    = 0U;
     uint32_t GCRa[17] = {0};
     uint32_t GCALR    = 0U;
+    float tmpFloat;
+    float scale;
+    float invScale;
+    uint32_t scaleUint32;
 
     for (i = 0x11U; i > 0U; i--)
     {
-        tmp32          = (uint32_t)((gainAdjustment) / ((float)(1.0 / (double)(1U << (0x10U - (i - 1U))))));
+        /* MISRA 10.8: Avoid casting composite expression - use intermediate variable */
+        /* Simplify division by reciprocal to multiplication*/
+        uint32_t shiftValue = 0x10U - ((uint32_t)i - 1U);
+        scaleUint32         = (uint32_t)(1UL << shiftValue);
+        scale              = (float)scaleUint32;
+        invScale       = 1.0f / scale;
+        tmpFloat       = gainAdjustment * scale;
+        tmp32          = (uint32_t)tmpFloat;
         GCRa[i - 1U]   = tmp32;
-        gainAdjustment = gainAdjustment - ((float)tmp32) * ((float)(1.0 / (double)(1U << (0x10U - (i - 1U)))));
+        gainAdjustment = gainAdjustment - ((float)tmp32 * invScale);
     }
-    /* Get GCALR value calculated */
+    /* Get GCALR value calculated. */
     for (i = 0x11U; i > 0U; i--)
     {
         GCALR += GCRa[i - 1U] * ((uint32_t)(1UL << (uint32_t)(i - 1UL)));
@@ -288,11 +299,12 @@ void LPADC_GetDefaultConfig(lpadc_config_t *config)
 #endif /* FSL_FEATURE_LPADC_HAS_CFG_VREF1RNG */
     config->enableInDozeMode = true;
 #if defined(FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS) && FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS
-    /* Set calibration average mode to max by default,
-     * kLPADC_ConversionAverage128 for 3 bit width.
-     * kLPADC_ConversionAverage1024 fot 4 bit width.
+    /* MISRA 3.1, 10.1, 10.4, 10.8: Set calibration average mode to max by default.
+     * kLPADC_ConversionAverage128 for 3 bit width,
+     * kLPADC_ConversionAverage1024 for 4 bit width.
      */
-    config->conversionAverageMode = (lpadc_conversion_average_mode_t)(kLPADC_ConversionAverageMax - 1);
+    uint32_t tempAvgMode = (uint32_t)kLPADC_ConversionAverageMax - 1U;
+    config->conversionAverageMode = (lpadc_conversion_average_mode_t)tempAvgMode;
 #endif /* FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS */
     config->enableAnalogPreliminary = false;
     config->powerUpDelay            = 0x80;
@@ -805,9 +817,10 @@ void LPADC_DoAutoCalibration(ADC_Type *base)
 {
     LPADC_PrepareAutoCalibration(base);
 #if defined(FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE) && FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE
-    LPADC_FinishAutoCalibration(base);
+    /* MISRA 17.7: Explicitly discard return value */
+    (void)LPADC_FinishAutoCalibration(base);
 #else
-    LPADC_FinishAutoCalibration(base);
+    (void)LPADC_FinishAutoCalibration(base);
 #endif /* FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE */
 }
 

@@ -1,5 +1,16 @@
 # MCX_SPC
 
+## [2.11.0]
+
+- New Features
+  - Add feature macro FSL_FEATURE_MCX_SPC_HAS_SRAMRETLDO_REFTRIM_REG to be
+    compatible with some platforms where SPC has no SRAMRETLDO_REFTRIM register.
+
+## [2.10.1]
+
+- Improvements
+  - Add support for some platform does not has Trim for SRAMRETLDO.
+
 ## [2.10.0]
 
 - New Features

@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief MsCAN driver version. */
-#define FSL_MSCAN_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_MSCAN_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*! @} */
 
 /*! @brief MsCAN Rx Message Buffer Mask helper macro. */
@@ -579,7 +579,7 @@ static inline void MSCAN_EnableTxInterrupts(MSCAN_Type *base, uint8_t mask)
  */
 static inline void MSCAN_DisableTxInterrupts(MSCAN_Type *base, uint8_t mask)
 {
-    base->CANTIER &= ~mask;
+    MCUX_REG_BIT_CLEAR8(base->CANTIER, mask);
 }
 
 /*!
@@ -607,7 +607,7 @@ static inline void MSCAN_EnableRxInterrupts(MSCAN_Type *base, uint8_t mask)
  */
 static inline void MSCAN_DisableRxInterrupts(MSCAN_Type *base, uint8_t mask)
 {
-    base->CANRIER &= ~mask;
+    MCUX_REG_BIT_CLEAR8(base->CANRIER, mask);
 }
 
 /*!
@@ -646,7 +646,7 @@ static inline void MSCAN_Enable(MSCAN_Type *base, bool enable)
     }
     else
     {
-        base->CANCTL1 &= ~((uint8_t)MSCAN_CANCTL1_CANE_MASK);
+        MCUX_REG_BIT_CLEAR8(base->CANCTL1, MSCAN_CANCTL1_CANE_MASK);
     }
 }
 

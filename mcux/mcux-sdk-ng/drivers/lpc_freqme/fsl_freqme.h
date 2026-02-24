@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2022, 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,8 +20,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief FREQME driver version 2.1.2. */
-#define FSL_FREQME_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+/*! @brief FREQME driver version 2.1.4. */
+#define FSL_FREQME_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
 /*! @} */
 
 /*!
@@ -67,6 +67,15 @@ enum _freqme_interrupt_enable
 typedef enum _freqme_operate_mode
 {
     kFREQME_FreqMeasurementMode = 0U,  /*!< The module works in the frequency measurement mode. */
+    /*
+     * In pulse width measurement mode, FREQME uses the known high or low period of the reference clock as
+     * a measurement window.
+     * During this window, it counts the number of pulses from the target clock. By combining the known
+     * duration of the reference clock's high or low period with the counted target pulses, the target
+     * clock frequency can be calculated.
+     * If the reference clock has a high period of 1 ms and 1000 target pulses occur during that time,
+     * the target frequency is 1 MHz.
+     */
     kFREOME_PulseWidthMeasurementMode, /*!< The module works in the pulse width measurement mode. */
 } freqme_operate_mode_t;
 
@@ -342,11 +351,8 @@ static inline bool FREQME_CheckPulsePolarity(FREQME_Type *base)
 }
 
 /*!
- * @brief Get measurement result, if operate mode is selected as pulse width measurement mode this function can
- * be used to calculate pulse width.
- *
- * @note Pulse width = counter result / Frequency of target clock.
- *
+ * @brief Get measurement result.
+ * 
  * @param base FREQME peripheral base address.
  * @return Measurement result.
  */

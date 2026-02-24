@@ -50,3 +50,15 @@
 ## [2.0.0]
 
 - Initial version.
+
+
+# POWERQUAD_CMSIS
+
+## [2.1.0]
+
+- Improvements
+  - Support use different API name, to work together with CMSIS DSP software implementation.
+
+## [2.0.4]
+
+- Inherit the SDK 2.0 driver.

@@ -1,5 +1,11 @@
 # NETC
 
+## [2.10.4]
+
+- New Features
+  - Added phywrapper registers and access APIs definition.
+  - Added i.MX952 SOC driver.
+
 ## [2.10.3]
 
 - New Features

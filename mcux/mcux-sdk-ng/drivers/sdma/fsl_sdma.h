@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SDMA driver version */
-#define FSL_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 2)) /*!< Version 2.4.2. */
+#define FSL_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 3)) /*!< Version 2.4.3. */
 /*! @} */
 
 #ifndef SDMA_DRIVER_LOAD_RAM_SCRIPT

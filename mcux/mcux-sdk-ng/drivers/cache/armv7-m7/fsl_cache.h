@@ -20,8 +20,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief cache driver version 2.0.4. */
-#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+/*! @brief cache driver version 2.0.6. */
+#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
 /*! @} */
 
 #if defined(FSL_FEATURE_SOC_L2CACHEC_COUNT) && FSL_FEATURE_SOC_L2CACHEC_COUNT
@@ -226,7 +226,12 @@ static inline void L1CACHE_CleanInvalidateDCache(void)
  */
 static inline void L1CACHE_InvalidateDCacheByRange(uint32_t address, uint32_t size_byte)
 {
-    SCB_InvalidateDCache_by_Addr((uint32_t *)address, (int32_t)size_byte);
+    if (size_byte == 0U)
+    {
+        return;
+    }
+    int32_t len = (size_byte > (uint32_t)INT32_MAX) ? (int32_t)INT32_MAX : (int32_t)size_byte;
+    SCB_InvalidateDCache_by_Addr((uint32_t *)address, len);
 }
 
 /*!
@@ -241,7 +246,12 @@ static inline void L1CACHE_InvalidateDCacheByRange(uint32_t address, uint32_t si
  */
 static inline void L1CACHE_CleanDCacheByRange(uint32_t address, uint32_t size_byte)
 {
-    SCB_CleanDCache_by_Addr((uint32_t *)address, (int32_t)size_byte);
+    if (size_byte == 0U)
+    {
+        return;
+    }
+    int32_t len = (size_byte > (uint32_t)INT32_MAX) ? (int32_t)INT32_MAX : (int32_t)size_byte;
+    SCB_CleanDCache_by_Addr((uint32_t *)address, len);
 }
 
 /*!
@@ -256,7 +266,12 @@ static inline void L1CACHE_CleanDCacheByRange(uint32_t address, uint32_t size_by
  */
 static inline void L1CACHE_CleanInvalidateDCacheByRange(uint32_t address, uint32_t size_byte)
 {
-    SCB_CleanInvalidateDCache_by_Addr((uint32_t *)address, (int32_t)size_byte);
+    if (size_byte == 0U)
+    {
+        return;
+    }
+    int32_t len = (size_byte > (uint32_t)INT32_MAX) ? (int32_t)INT32_MAX : (int32_t)size_byte;
+    SCB_CleanInvalidateDCache_by_Addr((uint32_t *)address, len);
 }
 /*! @} */
 

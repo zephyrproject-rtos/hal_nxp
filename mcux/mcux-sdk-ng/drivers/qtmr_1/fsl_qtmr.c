@@ -81,12 +81,12 @@ void QTMR_Init(TMR_Type *base, qtmr_channel_selection_t channel, const qtmr_conf
 
     /* Setup the master mode operation */
     base->CHANNEL[channel].SCTRL =
-        (TMR_SCTRL_EEOF(config->enableExternalForce) | TMR_SCTRL_MSTR(config->enableMasterMode));
+        (TMR_SCTRL_EEOF(config->enableExternalForce ? 1U : 0U) | TMR_SCTRL_MSTR(config->enableMasterMode ? 1U : 0U));
 
     /* Setup debug mode */
     base->CHANNEL[channel].CSCTRL = TMR_CSCTRL_DBG_EN(config->debugMode);
 
-    base->CHANNEL[channel].FILT &= (uint16_t)(~(TMR_FILT_FILT_CNT_MASK | TMR_FILT_FILT_PER_MASK));
+    base->CHANNEL[channel].FILT &= MCUX_MASK_INVERT_16(TMR_FILT_FILT_CNT_MASK | TMR_FILT_FILT_PER_MASK);
     /* Setup input filter */
     base->CHANNEL[channel].FILT =
         (TMR_FILT_FILT_CNT(config->faultFilterCount) | TMR_FILT_FILT_PER(config->faultFilterPeriod));
@@ -101,7 +101,7 @@ void QTMR_Init(TMR_Type *base, qtmr_channel_selection_t channel, const qtmr_conf
 void QTMR_Deinit(TMR_Type *base, qtmr_channel_selection_t channel)
 {
     /* Stop the counter */
-    base->CHANNEL[channel].CTRL &= (uint16_t)(~TMR_CTRL_CM_MASK);
+    base->CHANNEL[channel].CTRL &= MCUX_MASK_INVERT_16(TMR_CTRL_CM_MASK);
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Disable the module clock */
@@ -182,6 +182,8 @@ status_t QTMR_SetupPwm(TMR_Type *base,
 
         /* Counter values to generate a PWM signal */
         periodCount = srcClock_Hz / pwmFreqHz;
+
+        assert(dutyCyclePercent == 0U || periodCount <= 0xFFFFFFFFU / dutyCyclePercent);
         highCount   = periodCount * dutyCyclePercent / 100U;
         lowCount    = periodCount - highCount;
 
@@ -220,7 +222,7 @@ status_t QTMR_SetupPwm(TMR_Type *base,
         /* Setup the compare load control for COMP1 and COMP2.
          * Load COMP1 when CSCTRL[TCF2] is asserted, load COMP2 when CSCTRL[TCF1] is asserted
          */
-        reg &= (uint16_t)(~(TMR_CSCTRL_CL1_MASK | TMR_CSCTRL_CL2_MASK));
+        reg &= MCUX_MASK_INVERT_16((uint16_t)TMR_CSCTRL_CL1_MASK | (uint16_t)TMR_CSCTRL_CL2_MASK);
         reg |= (TMR_CSCTRL_CL1(kQTMR_LoadOnComp2) | TMR_CSCTRL_CL2(kQTMR_LoadOnComp1));
         base->CHANNEL[channel].CSCTRL = reg;
 
@@ -232,11 +234,11 @@ status_t QTMR_SetupPwm(TMR_Type *base,
         else
         {
             /* True polarity, no inversion */
-            base->CHANNEL[channel].SCTRL &= ~(uint16_t)TMR_SCTRL_OPS_MASK;
+            base->CHANNEL[channel].SCTRL &= MCUX_MASK_INVERT_16(TMR_SCTRL_OPS_MASK);
         }
 
         reg = base->CHANNEL[channel].CTRL;
-        reg &= ~(uint16_t)TMR_CTRL_OUTMODE_MASK;
+        reg &= MCUX_MASK_INVERT_16(TMR_CTRL_OUTMODE_MASK);
         if (dutyCyclePercent == 100U)
         {
             /* Set OFLAG output on compare */
@@ -291,17 +293,17 @@ void QTMR_SetupInputCapture(TMR_Type *base,
     qtmrRegType reg;
 
     /* Clear the prior value for the input source for capture */
-    reg = base->CHANNEL[channel].CTRL & (uint16_t)(~TMR_CTRL_SCS_MASK);
+    reg = base->CHANNEL[channel].CTRL & MCUX_MASK_INVERT_16(TMR_CTRL_SCS_MASK);
 
     /* Set the new input source */
     reg |= TMR_CTRL_SCS(capturePin);
     base->CHANNEL[channel].CTRL = reg;
 
     /* Clear the prior values for input polarity, capture mode. Set the external pin as input */
-    reg = base->CHANNEL[channel].SCTRL &
-          (uint16_t)(~(TMR_SCTRL_IPS_MASK | TMR_SCTRL_CAPTURE_MODE_MASK | TMR_SCTRL_OEN_MASK));
+    reg = base->CHANNEL[channel].SCTRL & MCUX_MASK_INVERT_16(TMR_SCTRL_IPS_MASK |
+        TMR_SCTRL_CAPTURE_MODE_MASK | TMR_SCTRL_OEN_MASK);
     /* Set the new values */
-    reg |= (TMR_SCTRL_IPS(inputPolarity) | TMR_SCTRL_CAPTURE_MODE(captureMode));
+    reg |= (TMR_SCTRL_IPS(inputPolarity ? 1U : 0U) | TMR_SCTRL_CAPTURE_MODE(captureMode));
     base->CHANNEL[channel].SCTRL = reg;
 
     /* Setup if counter should reload when a capture occurs */
@@ -311,7 +313,7 @@ void QTMR_SetupInputCapture(TMR_Type *base,
     }
     else
     {
-        base->CHANNEL[channel].CSCTRL &= (uint16_t)(~TMR_CSCTRL_ROC_MASK);
+        base->CHANNEL[channel].CSCTRL &= MCUX_MASK_INVERT_16(TMR_CSCTRL_ROC_MASK);
     }
 }
 
@@ -342,7 +344,7 @@ void QTMR_EnableInterrupts(TMR_Type *base, qtmr_channel_selection_t channel, uin
     if ((mask & (uint16_t)kQTMR_EdgeInterruptEnable) != 0UL)
     {
         /* Restriction: Do not set both SCTRL[IEFIE] and DMA[IEFDE] */
-        base->CHANNEL[channel].DMA &= ~(uint16_t)TMR_DMA_IEFDE_MASK;
+        base->CHANNEL[channel].DMA &= MCUX_MASK_INVERT_16(TMR_DMA_IEFDE_MASK);
         reg |= TMR_SCTRL_IEFIE_MASK;
     }
     base->CHANNEL[channel].SCTRL = reg;
@@ -377,17 +379,17 @@ void QTMR_DisableInterrupts(TMR_Type *base, qtmr_channel_selection_t channel, ui
     /* Compare interrupt */
     if ((mask & (uint16_t)kQTMR_CompareInterruptEnable) != 0UL)
     {
-        reg &= (uint16_t)(~TMR_SCTRL_TCFIE_MASK);
+        reg &= MCUX_MASK_INVERT_16(TMR_SCTRL_TCFIE_MASK);
     }
     /* Overflow interrupt */
     if ((mask & (uint16_t)kQTMR_OverflowInterruptEnable) != 0UL)
     {
-        reg &= (uint16_t)(~TMR_SCTRL_TOFIE_MASK);
+        reg &= MCUX_MASK_INVERT_16(TMR_SCTRL_TOFIE_MASK);
     }
     /* Input edge interrupt */
     if ((mask & (uint16_t)kQTMR_EdgeInterruptEnable) != 0UL)
     {
-        reg &= (uint16_t)(~TMR_SCTRL_IEFIE_MASK);
+        reg &= MCUX_MASK_INVERT_16(TMR_SCTRL_IEFIE_MASK);
     }
     base->CHANNEL[channel].SCTRL = reg;
 
@@ -395,12 +397,12 @@ void QTMR_DisableInterrupts(TMR_Type *base, qtmr_channel_selection_t channel, ui
     /* Compare 1 interrupt */
     if ((mask & (uint16_t)kQTMR_Compare1InterruptEnable) != 0UL)
     {
-        reg &= ~(uint16_t)TMR_CSCTRL_TCF1EN_MASK;
+        reg &= MCUX_MASK_INVERT_16(TMR_CSCTRL_TCF1EN_MASK);
     }
     /* Compare 2 interrupt */
     if ((mask & (uint16_t)kQTMR_Compare2InterruptEnable) != 0UL)
     {
-        reg &= ~(uint16_t)TMR_CSCTRL_TCF2EN_MASK;
+        reg &= MCUX_MASK_INVERT_16(TMR_CSCTRL_TCF2EN_MASK);
     }
     base->CHANNEL[channel].CSCTRL = reg;
 }
@@ -513,17 +515,17 @@ void QTMR_ClearStatusFlags(TMR_Type *base, qtmr_channel_selection_t channel, uin
     /* Timer compare flag */
     if ((mask & (uint32_t)kQTMR_CompareFlag) != 0U)
     {
-        reg &= (uint16_t)(~TMR_SCTRL_TCF_MASK);
+        reg &= MCUX_MASK_INVERT_16(TMR_SCTRL_TCF_MASK);
     }
     /* Timer overflow flag */
     if ((mask & (uint32_t)kQTMR_OverflowFlag) != 0U)
     {
-        reg &= (uint16_t)(~TMR_SCTRL_TOF_MASK);
+        reg &= MCUX_MASK_INVERT_16(TMR_SCTRL_TOF_MASK);
     }
     /* Input edge flag */
     if ((mask & (uint32_t)kQTMR_EdgeFlag) != 0U)
     {
-        reg &= (uint16_t)(~TMR_SCTRL_IEF_MASK);
+        reg &= MCUX_MASK_INVERT_16(TMR_SCTRL_IEF_MASK);
     }
     base->CHANNEL[channel].SCTRL = reg;
 
@@ -531,12 +533,12 @@ void QTMR_ClearStatusFlags(TMR_Type *base, qtmr_channel_selection_t channel, uin
     /* Compare 1 flag */
     if ((mask & (uint32_t)kQTMR_Compare1Flag) != 0U)
     {
-        reg &= ~(uint16_t)TMR_CSCTRL_TCF1_MASK;
+        reg &= MCUX_MASK_INVERT_16(TMR_CSCTRL_TCF1_MASK);
     }
     /* Compare 2 flag */
     if ((mask & (uint32_t)kQTMR_Compare2Flag) != 0U)
     {
-        reg &= ~(uint16_t)TMR_CSCTRL_TCF2_MASK;
+        reg &= MCUX_MASK_INVERT_16(TMR_CSCTRL_TCF2_MASK);
     }
     base->CHANNEL[channel].CSCTRL = reg;
 }
@@ -570,10 +572,12 @@ void QTMR_SetTimerPeriod(TMR_Type *base, qtmr_channel_selection_t channel, uint1
 
     /* Reset LOAD register to reinitialize the counters */
 #if (defined(FSL_FEATURE_TMR_HAS_32BIT_REGISTER) && FSL_FEATURE_TMR_HAS_32BIT_REGISTER)
-    base->CHANNEL[channel].LOAD &= ~TMR_LOAD_LOAD_MASK;
+    base->CHANNEL[channel].LOAD &= MCUX_MASK_INVERT_32(TMR_LOAD_LOAD_MASK);
 #else
-    base->CHANNEL[channel].LOAD &= (uint16_t)(~TMR_LOAD_LOAD_MASK);
+    base->CHANNEL[channel].LOAD &= MCUX_MASK_INVERT_16(TMR_LOAD_LOAD_MASK);
 #endif
+
+    assert(ticks >= 1U );
 
     if ((base->CHANNEL[channel].CTRL & TMR_CTRL_DIR_MASK) != 0U)
     {
@@ -633,7 +637,7 @@ void QTMR_EnableDma(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t m
     if ((mask & (uint32_t)kQTMR_InputEdgeFlagDmaEnable) != 0U)
     {
         /* Restriction: Do not set both DMA[IEFDE] and SCTRL[IEFIE] */
-        base->CHANNEL[channel].SCTRL &= (uint16_t)(~TMR_SCTRL_IEFIE_MASK);
+        base->CHANNEL[channel].SCTRL &= MCUX_MASK_INVERT_16(TMR_SCTRL_IEFIE_MASK);
         reg |= TMR_DMA_IEFDE_MASK;
     }
     /* Comparator Preload Register 1 DMA Enable */
@@ -665,17 +669,17 @@ void QTMR_DisableDma(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t 
     /* Input Edge Flag DMA Enable */
     if ((mask & (uint32_t)kQTMR_InputEdgeFlagDmaEnable) != 0U)
     {
-        reg &= ~(uint16_t)TMR_DMA_IEFDE_MASK;
+        reg &= MCUX_MASK_INVERT_16(TMR_DMA_IEFDE_MASK);
     }
     /* Comparator Preload Register 1 DMA Enable */
     if ((mask & (uint32_t)kQTMR_ComparatorPreload1DmaEnable) != 0U)
     {
-        reg &= ~(uint16_t)TMR_DMA_CMPLD1DE_MASK;
+        reg &= MCUX_MASK_INVERT_16(TMR_DMA_CMPLD1DE_MASK);
     }
     /* Comparator Preload Register 2 DMA Enable */
     if ((mask & (uint32_t)kQTMR_ComparatorPreload2DmaEnable) != 0U)
     {
-        reg &= ~(uint16_t)TMR_DMA_CMPLD2DE_MASK;
+        reg &= MCUX_MASK_INVERT_16(TMR_DMA_CMPLD2DE_MASK);
     }
     base->CHANNEL[channel].DMA = reg;
 }
@@ -694,19 +698,19 @@ void QTMR_SetPwmOutputToIdle(TMR_Type *base, qtmr_channel_selection_t channel, b
     qtmrRegType reg = base->CHANNEL[channel].SCTRL;
 
     /* Stop qtimer channel counter first */
-    base->CHANNEL[channel].CTRL &= (uint16_t)(~TMR_CTRL_CM_MASK);
+    base->CHANNEL[channel].CTRL &= MCUX_MASK_INVERT_16(TMR_CTRL_CM_MASK);
     /* Clear count value */
     base->CHANNEL[channel].CNTR = 0U;
 
     if (0U != (reg & ((uint16_t)TMR_SCTRL_OPS_MASK)))
     {
         /* Inverted polarity. */
-        reg |= (uint16_t)(TMR_SCTRL_FORCE_MASK | TMR_SCTRL_VAL(!idleStatus));
+        reg |= (uint16_t)(TMR_SCTRL_FORCE_MASK | TMR_SCTRL_VAL(idleStatus ? 0U : 1U));
     }
     else
     {
         /* True polarity. */
-        reg |= (uint16_t)(TMR_SCTRL_FORCE_MASK | TMR_SCTRL_VAL(idleStatus));
+        reg |= (uint16_t)(TMR_SCTRL_FORCE_MASK | TMR_SCTRL_VAL(idleStatus ? 1U : 0U));
     }
     base->CHANNEL[channel].SCTRL = reg;
 
@@ -740,10 +744,10 @@ void QTMR_SetPwmClockMode(TMR_Type *base, qtmr_channel_selection_t channel, qtmr
     qtmrRegType reg = base->CHANNEL[channel].CTRL;
 
     /* Clear qtimer channel counter mode */
-    base->CHANNEL[channel].CTRL = reg & (uint16_t)(~TMR_CTRL_CM_MASK);
+    base->CHANNEL[channel].CTRL = reg & MCUX_MASK_INVERT_16(TMR_CTRL_CM_MASK);
 
     /* Set the new clock prescaler value and restore qtimer channel counter mode*/
-    reg &= (uint16_t)(~(TMR_CTRL_PCS_MASK));
+    reg &= MCUX_MASK_INVERT_16(TMR_CTRL_PCS_MASK);
     reg |= TMR_CTRL_PCS(prescaler);
     base->CHANNEL[channel].CTRL = reg;
 }

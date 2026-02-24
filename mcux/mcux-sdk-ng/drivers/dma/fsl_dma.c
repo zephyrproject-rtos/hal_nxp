@@ -158,8 +158,8 @@ void DMA_SetTransferConfig(DMA_Type *base, uint32_t channel, const dma_transfer_
     /* Set DMA Control Register */
     tmpreg = base->DMA[channel].DCR;
     tmpreg &= ~(DMA_DCR_DSIZE_MASK | DMA_DCR_DINC_MASK | DMA_DCR_SSIZE_MASK | DMA_DCR_SINC_MASK);
-    tmpreg |= (DMA_DCR_DSIZE(config->destSize) | DMA_DCR_DINC(config->enableDestIncrement) |
-               DMA_DCR_SSIZE(config->srcSize) | DMA_DCR_SINC(config->enableSrcIncrement));
+    tmpreg |= (DMA_DCR_DSIZE(config->destSize) | DMA_DCR_DINC((config->enableDestIncrement ? 1U : 0U)) |
+               DMA_DCR_SSIZE(config->srcSize) | DMA_DCR_SINC((config->enableSrcIncrement ? 1U : 0U)));
     base->DMA[channel].DCR = tmpreg;
 }
 

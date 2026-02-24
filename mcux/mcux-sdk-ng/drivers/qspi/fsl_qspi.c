@@ -226,6 +226,8 @@ void QSPI_Deinit(QuadSPI_Type *base)
  */
 void QSPI_SetFlashConfig(QuadSPI_Type *base, qspi_flash_config_t *config)
 {
+    /* INT30-C: Prevent address overflow */
+    assert(config->flashA1Size <= (UINT32_MAX - FSL_FEATURE_QSPI_AMBA_BASE));
     assert(FSL_FEATURE_QSPI_AMBA_BASE + config->flashA1Size > FSL_FEATURE_QSPI_AMBA_BASE);
 
     uint32_t address = FSL_FEATURE_QSPI_AMBA_BASE + config->flashA1Size;
@@ -237,6 +239,8 @@ void QSPI_SetFlashConfig(QuadSPI_Type *base, qspi_flash_config_t *config)
 
     /* Config the serial flash size */
     base->SFA1AD = address;
+    /* INT30-C: Prevent address overflow */
+    assert(config->flashA2Size <= (UINT32_MAX - address));
     address += config->flashA2Size;
     base->SFA2AD = address;
 #if defined(FSL_FEATURE_QSPI_SUPPORT_SINGLE_MODE) && (FSL_FEATURE_QSPI_SUPPORT_SINGLE_MODE)
@@ -247,15 +251,19 @@ void QSPI_SetFlashConfig(QuadSPI_Type *base, qspi_flash_config_t *config)
 #endif /* FSL_FEATURE_QSPI_SUPPORT_SINGLE_MODE */
 #if (defined(FSL_FEATURE_QSPI_SUPPORT_PARALLEL_MODE) && (FSL_FEATURE_QSPI_SUPPORT_PARALLEL_MODE)) || \
     (defined(FSL_FEATURE_QSPI_SUPPORT_INDIVIDUAL_MODE) && (FSL_FEATURE_QSPI_SUPPORT_INDIVIDUAL_MODE))
+    assert(config->flashB1Size <= (UINT32_MAX - address));
     address += config->flashB1Size;
     base->SFB1AD = address;
+    assert(config->flashB2Size <= (UINT32_MAX - address));
     address += config->flashB2Size;
     base->SFB2AD = address;
 #endif /* FSL_FEATURE_QSPI_SUPPORT_PARALLEL_MODE || FSL_FEATURE_QSPI_SUPPORT_INDIVIDUAL_MODE */
 
 #if !defined(FSL_FEATURE_QSPI_HAS_NO_SFACR) || (!FSL_FEATURE_QSPI_HAS_NO_SFACR)
     /* Set Word Addressable feature */
-    val         = QuadSPI_SFACR_WA(config->enableWordAddress) | QuadSPI_SFACR_CAS(config->cloumnspace);
+    /* INT31-C: Explicit boolean to integer conversion */
+    uint32_t wordAddrEnable = config->enableWordAddress ? 1U : 0U;
+    val = QuadSPI_SFACR_WA(wordAddrEnable) | QuadSPI_SFACR_CAS(config->cloumnspace);
     base->SFACR = val;
 #endif /* FSL_FEATURE_QSPI_HAS_NO_SFACR */
 

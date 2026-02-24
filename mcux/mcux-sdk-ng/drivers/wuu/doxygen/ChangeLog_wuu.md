@@ -1,5 +1,11 @@
 # WUU
 
+## [2.4.2]
+- Bug Fixes
+  - Fixed violations of CERT-C:
+    - Check filterIndex >= 1U to prevent underflow.
+    - Check multiplication results fit in uint8_t before assignment to shift variable.
+
 ## [2.4.1]
 
 - Improvements

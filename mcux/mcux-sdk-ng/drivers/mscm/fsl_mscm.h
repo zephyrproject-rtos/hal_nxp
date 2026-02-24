@@ -81,8 +81,6 @@ static inline uint32_t MSCM_GetSecureIrq(MSCM_Type *base)
     return base->SECURE_IRQ;
 }
 
-/*! @} */
-
 #if defined(__cplusplus)
 }
 #endif

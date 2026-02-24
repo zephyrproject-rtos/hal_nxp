@@ -1,5 +1,10 @@
 # PINT
 
+## [2.3.0]
+
+- Improvements
+    - Add API PINT_EnableInterruptByIndex and PINT_DisableInterruptByIndex to provide more granular interrupt control.
+
 ## [2.2.0]
 
   - Fixed

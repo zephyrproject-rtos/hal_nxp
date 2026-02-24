@@ -126,9 +126,9 @@ void IGF_SetIgfConfig(IGF_Type *base, uint32_t channel, const igf_config_t *conf
     base->MCR[channel].MCR &= ~IGF_MCR_FGEN_MASK;
 
     /* Configure MCR register */
-    base->MCR[channel].MCR = IGF_MCR_POL(config->invertOutput) |
-                         IGF_MCR_IMM(config->immediatePropagation) |
-                         IGF_MCR_PSSEL(config->useExternalPrescaler) |
+    base->MCR[channel].MCR = IGF_MCR_POL((config->invertOutput ?  1U : 0U)) |
+                         IGF_MCR_IMM((config->immediatePropagation ?  1U : 0U)) |
+                         IGF_MCR_PSSEL((config->useExternalPrescaler ?  1U : 0U)) |
                          IGF_MCR_RFM(config->risingEdgeFilter) |
                          IGF_MCR_FFM(config->fallingEdgeFilter);
 

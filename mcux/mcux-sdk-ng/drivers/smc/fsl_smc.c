@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -155,7 +155,8 @@ status_t SMC_SetPowerModeRun(SMC_Type *base)
 
     reg = base->PMCTRL;
     /* configure Normal RUN mode */
-    reg &= ~(smc_reg_t)SMC_PMCTRL_RUNM_MASK;
+    /* INT31-C: Safe bitwise inversion */
+    reg &= (smc_reg_t)((smc_reg_t)SMC_PMCTRL_RUNM_MASK ^ 0xFFU);
     reg |= ((smc_reg_t)kSMC_RunNormal << SMC_PMCTRL_RUNM_SHIFT);
     base->PMCTRL = reg;
 
@@ -214,14 +215,16 @@ status_t SMC_SetPowerModeStop(SMC_Type *base, smc_partial_stop_option_t option)
 #if (defined(FSL_FEATURE_SMC_HAS_PSTOPO) && FSL_FEATURE_SMC_HAS_PSTOPO)
     /* configure the Partial Stop mode in Normal Stop mode */
     reg = base->STOPCTRL;
-    reg &= ~(smc_reg_t)SMC_STOPCTRL_PSTOPO_MASK;
+    /* INT31-C: Safe bitwise inversion */
+    reg &= (smc_reg_t)((smc_reg_t)SMC_STOPCTRL_PSTOPO_MASK ^ 0xFFU);
     reg |= ((smc_reg_t)option << SMC_STOPCTRL_PSTOPO_SHIFT);
     base->STOPCTRL = reg;
 #endif
 
     /* configure Normal Stop mode */
     reg = base->PMCTRL;
-    reg &= ~(smc_reg_t)SMC_PMCTRL_STOPM_MASK;
+    /* INT31-C: Safe bitwise inversion */
+    reg &= (smc_reg_t)((smc_reg_t)SMC_PMCTRL_STOPM_MASK ^ 0xFFU);
     reg |= ((smc_reg_t)kSMC_StopNormal << SMC_PMCTRL_STOPM_SHIFT);
     base->PMCTRL = reg;
 
@@ -269,7 +272,8 @@ status_t SMC_SetPowerModeVlpr(SMC_Type *base
     else
     {
         /* remains in VLP mode on an interrupt */
-        reg &= ~(smc_reg_t)SMC_PMCTRL_LPWUI_MASK;
+        /* INT31-C: Safe bitwise inversion */
+        reg &= (smc_reg_t)((smc_reg_t)SMC_PMCTRL_LPWUI_MASK ^ 0xFFU);
     }
 #endif /* FSL_FEATURE_SMC_HAS_LPWUI */
 
@@ -311,7 +315,8 @@ status_t SMC_SetPowerModeVlps(SMC_Type *base)
 
     /* configure VLPS mode */
     reg = base->PMCTRL;
-    reg &= ~(smc_reg_t)SMC_PMCTRL_STOPM_MASK;
+    /* INT31-C: Safe bitwise inversion */
+    reg &= (smc_reg_t)((smc_reg_t)SMC_PMCTRL_STOPM_MASK ^ 0xFFU);
     reg |= ((smc_reg_t)kSMC_StopVlps << SMC_PMCTRL_STOPM_SHIFT);
     base->PMCTRL = reg;
 
@@ -367,7 +372,8 @@ status_t SMC_SetPowerModeLls(SMC_Type *base
 #if (defined(FSL_FEATURE_SMC_HAS_LPOPO) && FSL_FEATURE_SMC_HAS_LPOPO)
     if (config->enableLpoClock)
     {
-        base->STOPCTRL &= ~(smc_reg_t)SMC_STOPCTRL_LPOPO_MASK;
+        /* INT31-C: Safe bitwise inversion */
+        base->STOPCTRL &= (smc_reg_t)((smc_reg_t)SMC_STOPCTRL_LPOPO_MASK ^ 0xFFU);
     }
     else
     {
@@ -462,7 +468,8 @@ status_t SMC_SetPowerModeVlls(SMC_Type *base, const smc_power_mode_vlls_config_t
 
     /* configure to VLLS mode */
     reg = base->PMCTRL;
-    reg &= ~(smc_reg_t)SMC_PMCTRL_STOPM_MASK;
+    /* INT31-C: Safe bitwise inversion */
+    reg &= (smc_reg_t)((smc_reg_t)SMC_PMCTRL_STOPM_MASK ^ 0xFFU);
     reg |= ((smc_reg_t)kSMC_StopVlls << SMC_PMCTRL_STOPM_SHIFT);
     base->PMCTRL = reg;
 
@@ -480,7 +487,8 @@ status_t SMC_SetPowerModeVlls(SMC_Type *base, const smc_power_mode_vlls_config_t
     base->STOPCTRL = reg;
 #else
     reg = base->STOPCTRL;
-    reg &= ~(smc_reg_t)SMC_STOPCTRL_VLLSM_MASK;
+    /* INT31-C: Safe bitwise inversion */
+    reg &= (smc_reg_t)((smc_reg_t)SMC_STOPCTRL_VLLSM_MASK ^ 0xFFU);
     reg |= ((smc_reg_t)config->subMode << SMC_STOPCTRL_VLLSM_SHIFT);
     base->STOPCTRL = reg;
 #endif /* FSL_FEATURE_SMC_HAS_LLS_SUBMODE */

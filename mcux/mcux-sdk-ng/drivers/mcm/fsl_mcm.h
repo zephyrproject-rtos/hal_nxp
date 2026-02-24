@@ -199,6 +199,7 @@ static inline uint32_t MCM_GetBufferFaultAddress(MCM_Type *base)
  * @brief Gets buffer fault attributes.
  *
  * @param base MCM peripheral base address.
+ * @param bufferfault Structure to store the result.
  */
 static inline void MCM_GetBufferFaultAttribute(MCM_Type *base, mcm_buffer_fault_attribute_t *bufferfault)
 {
@@ -420,6 +421,7 @@ static inline uint32_t MCM_GetLmemFaultAddress(MCM_Type *base)
  * @brief Get LMEM fault attributes.
  *
  * @param base MCM peripheral base address.
+ * @param lmemFault Structure to store the result.
  */
 static inline void MCM_GetLmemFaultAttribute(MCM_Type *base, mcm_lmem_fault_attribute_t *lmemFault)
 {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,9 +22,11 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Defines ITRC driver version 2.4.0.
+/*! @brief Defines ITRC driver version 2.4.1.
  *
  * Change log:
+ * - Version 2.4.1
+ *   - Update to MCXA577 ITRC offering
  * - Version 2.4.0
  *   - Rework the input signal definition for better flexibility
  * - Version 2.3.0
@@ -36,7 +38,7 @@
  * - Version 2.0.0
  *   - initial version
  */
-#define FSL_ITRC_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+#define FSL_ITRC_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
 /*! @} */
 
 typedef enum _itrc_input_signals
@@ -219,6 +221,10 @@ typedef enum _itrc_out_signals
 #define ITRC_STATUS_IN3_STATUS_MASK (0u)
 #endif
 
+#ifndef ITRC_STATUS_IN8_STATUS_MASK
+#define ITRC_STATUS_IN8_STATUS_MASK (0u)
+#endif
+
 #ifndef ITRC_STATUS_IN9_STATUS_MASK
 #define ITRC_STATUS_IN9_STATUS_MASK (0u)
 #endif
@@ -237,6 +243,10 @@ typedef enum _itrc_out_signals
 
 #ifndef ITRC_STATUS1_IN32_25_STATUS_MASK
 #define ITRC_STATUS1_IN32_25_STATUS_MASK (0u)
+#endif
+
+#ifndef ITRC_STATUS1_IN36_STATUS_MASK
+#define ITRC_STATUS1_IN36_STATUS_MASK (0u)
 #endif
 
 #ifndef ITRC_STATUS1_IN46_STATUS_MASK

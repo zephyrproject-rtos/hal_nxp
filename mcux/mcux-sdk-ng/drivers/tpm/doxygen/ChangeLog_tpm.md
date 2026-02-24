@@ -1,5 +1,12 @@
 # TPM
 
+## [2.4.2]
+
+- Bug Fixes
+  - Fixed CERT INT30-C INT31-C issue for:
+    - Unsigned integer operation may wrap.
+    - Casting from "int" to "unsigned char" may result in lost or misinterpreted data.
+
 ## [2.4.1]
 
 - Improvements

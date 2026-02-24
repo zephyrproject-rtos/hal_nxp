@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_CTIMER_DRIVER_VERSION (MAKE_VERSION(2, 3, 3)) /*!< Version 2.3.3 */
+#define FSL_CTIMER_DRIVER_VERSION (MAKE_VERSION(2, 3, 4)) /*!< Version 2.3.4 */
 /*! @} */
 
 /*! @brief List of Timer capture channels */

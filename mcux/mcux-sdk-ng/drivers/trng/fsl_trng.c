@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020-2023, 2025 NXP
+ * Copyright 2016-2017, 2020-2023, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -167,7 +167,12 @@
 #elif (defined(MCXL253_cm0plus_SERIES) || defined(MCXL253_cm33_SERIES) || \
        defined(MCXL254_cm0plus_SERIES) || defined(MCXL254_cm33_SERIES) || \
        defined(MCXL255_cm0plus_SERIES) || defined(MCXL255_cm33_SERIES) || \
-       defined(MCXA266_SERIES) || defined(MCXA366_SERIES))
+       defined(MCXA266_SERIES) || defined(MCXA366_SERIES) || \
+       defined(MCXA286_SERIES) || defined(MCXA287_SERIES) || \
+       defined(MCXA456_SERIES) || defined(MCXA457_SERIES) || \
+       defined(MCXA536_SERIES) || defined(MCXA537_SERIES) || \
+       defined(MCXA556_SERIES) || defined(MCXA566_SERIES) || \
+       defined(MCXA567_SERIES) || defined(MCXA577_SERIES))
       
 #ifndef TRNG_ENT_COUNT
 #define TRNG_ENT_COUNT TRNG_ENTA_ENT_COUNT

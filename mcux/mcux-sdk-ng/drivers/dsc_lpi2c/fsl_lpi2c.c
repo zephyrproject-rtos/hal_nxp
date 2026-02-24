@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 NXP
+ * Copyright 2020-2021, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -2776,6 +2776,14 @@ static void LPI2C_CommonIRQHandler(uint32_t u32Instance)
             /* Slave mode. */
             s_pfLpi2cSlaveIsr(s_psLpi2cSlaveHandle[u32Instance]);
         }
+    }
+}
+
+void LPI2C_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_eLpi2cBases))
+    {
+        LPI2C_CommonIRQHandler(instance);
     }
 }
 #endif

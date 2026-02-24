@@ -1,5 +1,11 @@
 # USART
 
+## [2.9.0]
+
+- New Features
+  - Added support for RS-485 (configuration of OESEL, OEPOL, OETA in CFG register).
+  - Added handling when a start is detected on the receiver input in USART_TransferHandleIRQ().
+
 ## [2.8.5]
 
 - Bug Fixes

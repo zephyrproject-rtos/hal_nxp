@@ -1,5 +1,10 @@
 # SPDIF DMA Driver
 
+## [2.0.9]
+
+- Bug fixes
+  - Fixed MSG cert int31-c findings
+
 ## [2.0.8]
 
 - Improvements

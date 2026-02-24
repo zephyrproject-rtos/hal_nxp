@@ -496,16 +496,40 @@ void L2CACHE_LockdownByWayEnable(uint32_t masterId, uint32_t mask, bool enable)
 void L1CACHE_InvalidateICacheByRange(uint32_t address, uint32_t size_byte)
 {
 #if (__DCACHE_PRESENT == 1U)
-    uint32_t addr      = address & ~((uint32_t)FSL_FEATURE_L1ICACHE_LINESIZE_BYTE - 1U);
-    uint32_t align_len = address - addr;
-    int32_t size       = (int32_t)size_byte + (int32_t)align_len;
+    uint32_t addr       = address & ~((uint32_t)FSL_FEATURE_L1ICACHE_LINESIZE_BYTE - 1U);
+    uint32_t align_len  = address - addr;
+    uint32_t line_size  = (uint32_t)FSL_FEATURE_L1ICACHE_LINESIZE_BYTE;
+    uint32_t size;
+
+    if ((UINT32_MAX - size_byte) < align_len)
+    {
+        size = UINT32_MAX;
+    }
+    else
+    {
+        size = size_byte + align_len;
+    }
 
     __DSB();
-    while (size > 0)
+    while (size != 0U)
     {
         SCB->ICIMVAU = addr;
-        addr += (uint32_t)FSL_FEATURE_L1ICACHE_LINESIZE_BYTE;
-        size -= (int32_t)FSL_FEATURE_L1ICACHE_LINESIZE_BYTE;
+
+        if ((UINT32_MAX - addr) < line_size)
+        {
+            break;
+        }
+
+        addr += line_size;
+
+        if (size > line_size)
+        {
+            size -= line_size;
+        }
+        else
+        {
+            size = 0U;
+        }
     }
     __DSB();
     __ISB();

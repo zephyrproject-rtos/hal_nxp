@@ -760,6 +760,79 @@ void PINT_DisableCallbackByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
 }
 
 /*!
+ * brief enable interrupt in NVIC by pin index.
+
+ * This function enables the interrupt in the NVIC. The difference with
+ * PINT_EnableCallbackByIndex() is that PINT_EnableCallbackByIndex() not
+ * only enables the interrupt in the NVIC but also clears pending interrupts.
+ * Use this function together with PINT_DisableInterruptByIndex() to
+ * temporarily disable/enable the pin interrupt.
+ * Use PINT_EnableCallbackByIndex() to enable the interrupt after installing
+ * the callback.
+ *
+ * param base Base address of the peripheral.
+ * param pinIdx pin index.
+ *
+ * retval None.
+ */
+void PINT_EnableInterruptByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
+{
+    assert(base != NULL);
+
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+    /* Get the right security pint irq index in array */
+    if ((base == SECPINT) && ((uint32_t)pintIdx < (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS))
+    {
+        pintIdx =
+            (pint_pin_int_t)(uint32_t)((uint32_t)pintIdx + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS);
+    }
+#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
+
+#if defined(FSL_FEATURE_PINT_INTERRUPT_COMBINE) && (FSL_FEATURE_PINT_INTERRUPT_COMBINE == 1)
+    (void)EnableIRQ(s_pintIRQ[0]);
+#else
+    (void)EnableIRQ(s_pintIRQ[pintIdx]);
+#endif
+}
+
+/*!
+ * brief disable interrupt in NVIC by pin index.
+
+ * This function disables the interrupt in the NVIC. The difference with
+ * PINT_DisableCallbackByIndex() is that PINT_DisableCallbackByIndex() not
+ * only disables the interrupt in the NVIC but also clears pending interrupts.
+ * Use this function together with PINT_EnableInterruptByIndex() to
+ * temporarily disable/enable the pin interrupt.
+ * Use PINT_DisableCallbackByIndex() to disable the interrupt in a de-init function.
+ *
+ * param base Base address of the peripheral.
+ * param pinIdx pin index.
+ *
+ * retval None.
+ */
+void PINT_DisableInterruptByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
+{
+    uint32_t instance = PINT_GetInstance(base);
+
+    assert(base != NULL);
+
+    if (instance < FSL_FEATURE_PINT_NUMBER_OF_INSTANCE)
+    {
+#if defined(FSL_FEATURE_PINT_INTERRUPT_COMBINE) && (FSL_FEATURE_PINT_INTERRUPT_COMBINE == 1)
+        (void)DisableIRQ(s_pintIRQ[0]);
+#else
+        (void)DisableIRQ(s_pintIRQ[pintIdx]);
+#endif
+    }
+    else
+    {
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+        (void)DisableIRQ(s_pintIRQ[(uint32_t)pintIdx + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS]);
+#endif
+    }
+}
+
+/*!
  * brief	Deinitialize PINT peripheral.
 
  * This function disables the PINT clock.

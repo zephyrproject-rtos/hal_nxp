@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief ACMP driver version 2.4.0. */
-#define FSL_ACMP_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+/*! @brief ACMP driver version 2.5.0. */
+#define FSL_ACMP_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 /*! @} */
 
 /*! @brief The mask of status flags cleared by writing 1. */

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -185,6 +185,40 @@ static status_t ltc_pkha_clear_regabne(LTC_Type *base, bool A, bool B, bool N, b
 /*******************************************************************************
  * LTC Common code static
  ******************************************************************************/
+/*!
+ * @brief Check if addition of two 32-bit unsigned integers would wrap.
+ *
+ * @param a 32-bit unsinged integer operand 'a'
+ * @param b 32-bit unsinged integer operand 'b'
+ *
+ * @retval true if addition wrap would occur, false if no wrap occurs
+ */
+static inline bool ltc_add_uint32_wrapcheck(uint32_t a, uint32_t b)
+{
+    if ((UINT32_MAX - a) < b)
+    {
+        return true;
+    }
+    return false;
+}
+
+/*!
+ * @brief Check if subtraction of two 32-bit unsigned integers would wrap.
+ *
+ * @param a 32-bit unsinged integer operand 'a'
+ * @param b 32-bit unsinged integer operand 'b'
+ *
+ * @retval true if subtraction wrap would occur, false if no wrap occurs
+ */
+static inline bool ltc_sub_uint32_wrapcheck(uint32_t a, uint32_t b)
+{
+    if (a < b)
+    {
+        return true;
+    }
+    return false;
+}
+
 /*!
  * @brief Tests the correct key size.
  *
@@ -928,6 +962,12 @@ static status_t ltc_symmetric_process_data_multiple(LTC_Type *base,
         {
             while (0U != inSize)
             {
+                /* prevent wrap of `max_ltc_fifo_size - fifoConsumed` */
+                if (true == ltc_sub_uint32_wrapcheck(max_ltc_fifo_size, fifoConsumed))
+                {
+                    return kStatus_OutOfRange;
+                }
+
                 if (inSize > (max_ltc_fifo_size - fifoConsumed))
                 {
                     sz = (max_ltc_fifo_size - fifoConsumed);
@@ -1942,6 +1982,22 @@ static void ltc_aes_ccm_context_init(
 
     /* compute B0 */
     ltc_memcpy(&blk, &blkZero, sizeof(blk));
+
+    /* If we want CCM* (so support of tagSize 0), we force M' to be 0 in the
+     * `flags` calculation (M' should be zero, per IEEE Std 802.15.4-2011).
+     */
+    if (0u == tagSize)
+    {
+        tagSize = 2u;
+    }
+
+    /* CERT INT30-C compliant - before this function is called,
+     * the validation function ltc_aes_ccm_check_input_args() forces the following values:
+     *   - `ivSize` is validated to be between 7 and 13 (inclusive) and
+     *   - `tagSize` is validated to be between 0 and 16 (inclusive).
+     * The last noncompliant value of `tagSize` is then 0, which is in turn
+     * checked and updated to a compliant value in the conditional block above.
+     */
     /* tagSize - size of output MAC */
     q     = 15u - ivSize;
     flags = (uint8_t)(8u * ((tagSize - 2u) / 2u) + q - 1u); /* 8*M' + L' */
@@ -2072,6 +2128,7 @@ static status_t ltc_aes_ccm_process(LTC_Type *base,
     status_t retval;          /* return value */
     uint32_t max_ltc_fifo_sz; /* maximum data size that we can put to LTC FIFO in one session. 12-bit limit. */
     ltc_mode_t modeReg;       /* read and write LTC mode register */
+    uint32_t aadSizeTmp = 0u;
 
     bool single_ses_proc_all; /* aad and src data can be processed in one session */
 
@@ -2091,7 +2148,13 @@ static status_t ltc_aes_ccm_process(LTC_Type *base,
      * then all can be processed in one session INITIALIZE/FINALIZE.
      * Otherwise, we have to split into multiple session, going through INITIALIZE, UPDATE (if required) and FINALIZE.
      */
-    single_ses_proc_all = ((((aadSize + 2u) + 15u) & 0xfffffff0u) + inputSize) <= max_ltc_fifo_sz;
+    aadSizeTmp = (((aadSize + 2u) + 15u) & 0xfffffff0u);
+    /* prevent wrap of `aadSizeTmp + inputSize` */
+    if (true == ltc_add_uint32_wrapcheck(aadSizeTmp, inputSize))
+    {
+        return kStatus_OutOfRange;
+    }
+    single_ses_proc_all = (aadSizeTmp + inputSize) <= max_ltc_fifo_sz;
 
     /* setup key, algorithm and set the alg.state to INITIALIZE */
     if (single_ses_proc_all)
@@ -3419,6 +3482,7 @@ static status_t ltc_hash_move_rest_to_context(
     ltc_hash_ctx_internal_t *ctx, const uint8_t *data, uint32_t dataSize, ltc_mode_t modeReg, uint32_t blockSize)
 {
     status_t status = kStatus_Success;
+    uint32_t totalRemainingSize = 0u;
     ltc_hash_block_t blkZero;
     uint32_t i;
 
@@ -3437,13 +3501,24 @@ static status_t ltc_hash_move_rest_to_context(
         }
         else
         {
-            if (dataSize + ctx->blksz > blockSize)
+            /* prevent wrap of `dataSize + ctx->blksz` */
+            if (true == ltc_add_uint32_wrapcheck(dataSize, ctx->blksz))
+            {
+                return kStatus_OutOfRange;
+            }
+            totalRemainingSize = dataSize + ctx->blksz;
+            if (totalRemainingSize > blockSize)
             {
                 uint32_t sz = 0;
                 status      = ltc_hash_merge_and_flush_buf(ctx, data, dataSize, modeReg, blockSize, &sz);
                 if (kStatus_Success != status)
                 {
                     return status;
+                }
+                /* prevent wrap of `dataSize -= sz` */
+                if (true == ltc_sub_uint32_wrapcheck(dataSize, sz))
+                {
+                    return kStatus_OutOfRange;
                 }
                 data = &data[sz];
                 dataSize -= sz;
@@ -3480,6 +3555,12 @@ static status_t ltc_hash_process_input_data(ltc_hash_ctx_internal_t *ctx,
     if (kStatus_Success != status)
     {
         return status;
+    }
+
+    /* prevent wrap of inputSize -= sz */
+    if (true == ltc_sub_uint32_wrapcheck(inputSize, sz))
+    {
+        return kStatus_OutOfRange;
     }
     input = &input[sz];
     inputSize -= sz;
@@ -3620,6 +3701,7 @@ status_t LTC_HASH_Update(ltc_hash_ctx_t *ctx, const uint8_t *input, uint32_t inp
 {
     bool isUpdateState;
     ltc_mode_t modeReg = 0; /* read and write LTC mode register */
+    uint32_t totalRemainingSize = 0u;
     LTC_Type *base;
     status_t status;
     ltc_hash_ctx_internal_t *ctxInternal;
@@ -3632,10 +3714,27 @@ status_t LTC_HASH_Update(ltc_hash_ctx_t *ctx, const uint8_t *input, uint32_t inp
         return status;
     }
 
+    /* check if keySize did not get corrupted to an invalid value since Init */
+    if (ltc_hash_alg_is_cmac(ctxInternal->algo))
+    {
+        if (!ltc_check_key_size(ctxInternal->word[kLTC_HashCtxKeySize]))
+        {
+            return kStatus_InvalidArgument;
+        }
+    }
+
     base      = ctxInternal->base;
     blockSize = ltc_hash_get_block_size(ctxInternal->algo);
+
+    /* prevent wrap of `ctxInternal->blksz + inputSize` */
+    if (true == ltc_add_uint32_wrapcheck(ctxInternal->blksz, inputSize))
+    {
+        return kStatus_OutOfRange;
+    }
+    totalRemainingSize = ctxInternal->blksz + inputSize;
+
     /* if we are still less than 64 bytes, keep only in context */
-    if ((ctxInternal->blksz + inputSize) <= blockSize)
+    if (totalRemainingSize <= blockSize)
     {
         ltc_memcpy((&ctxInternal->blk.b[0]) + ctxInternal->blksz, input, inputSize);
         ctxInternal->blksz += inputSize;
@@ -3728,6 +3827,15 @@ status_t LTC_HASH_Finish(ltc_hash_ctx_t *ctx, uint8_t *output, uint32_t *outputS
     if (kStatus_Success != status)
     {
         return status;
+    }
+
+    /* check if keySize did not get corrupted to an invalid value since Init */
+    if (ltc_hash_alg_is_cmac(ctxInternal->algo))
+    {
+        if (!ltc_check_key_size(ctxInternal->word[kLTC_HashCtxKeySize]))
+        {
+            return kStatus_InvalidArgument;
+        }
     }
 
     base = ctxInternal->base;

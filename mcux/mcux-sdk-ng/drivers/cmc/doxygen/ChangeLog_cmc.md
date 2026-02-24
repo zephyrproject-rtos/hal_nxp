@@ -1,5 +1,10 @@
 # CMC
 
+## [2.4.4]
+
+- Bug Fixes
+  - Fixed doxygen warning: unbalanced grouping commands.
+
 ## [2.4.3]
 
 - Improvements

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 NXP
+ * Copyright 2018-2021, 2025 NXP
  * All rights reserved.
  *
  *
@@ -2644,7 +2644,7 @@ void double_scalar_multiplication(uint32_t *X3,
 {
     uint32_t index = 0, c = 0;
     uint32_t *p1 = NULL, *p2 = NULL, x1, x2, *lut, *Tx = NULL, *Ty = NULL, *Tz = NULL;
-    size_t bitlen, shiftr, shiftl = 0u;
+    size_t bitlen = 0u , shiftr = 0u , shiftl = 0u;
 
     if (N_wordlen == 8U)
     {

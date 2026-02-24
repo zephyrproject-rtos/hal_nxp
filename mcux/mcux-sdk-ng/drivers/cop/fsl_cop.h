@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2018, 2025 NXP
+ * Copyright 2016-2018, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -54,8 +54,8 @@ typedef enum _cop_timeout_cycles
 /*! @brief Define the COP timeout mode. */
 typedef enum _cop_timeout_mode
 {
-    kCOP_ShortTimeoutMode = 0U, /*!< COP selects long timeout */
-    kCOP_LongTimeoutMode  = 1U, /*!< COP selects short timeout */
+    kCOP_ShortTimeoutMode = 0U, /*!< COP selects short timeout */
+    kCOP_LongTimeoutMode  = 1U, /*!< COP selects long timeout */
 } cop_timeout_mode_t;
 #endif /* FSL_FEATURE_COP_HAS_LONGTIME_MODE */
 

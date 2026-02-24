@@ -603,10 +603,10 @@ uint32_t DSI_InitDphy(const MIPI_DSI_Type *base, const dsi_dphy_config_t *config
     dphy->CFG_MIXEL_AUTO_PD_EN = 1U;
 
     /* Set the timing parameters. */
-    host->CFG_TIMING = DSI2_HOST_BASE_CFG_TIMING_CFG_T_CLK_GAP(config->tClkGap_ByteClk) |
-                       DSI2_HOST_BASE_CFG_TIMING_CFG_TX_GAP(config->tHsExit_ByteClk) |
-                       DSI2_HOST_BASE_CFG_TIMING_CFG_T_POST(config->tClkPost_ByteClk) |
-                       DSI2_HOST_BASE_CFG_TIMING_CFG_T_PRE(config->tClkPre_ByteClk);
+    host->CFG_TIMING = DSI2_HOST_CFG_TIMING_CFG_T_CLK_GAP(config->tClkGap_ByteClk) |
+                       DSI2_HOST_CFG_TIMING_CFG_TX_GAP(config->tHsExit_ByteClk) |
+                       DSI2_HOST_CFG_TIMING_CFG_T_POST(config->tClkPost_ByteClk) |
+                       DSI2_HOST_CFG_TIMING_CFG_T_PRE(config->tClkPre_ByteClk);
     host->CFG_TWAKEUP                  = config->tWakeup_EscClk;
     dphy->CFG_MIXEL_U_PRG_HS_PREPARE   = (uint32_t)config->tHsPrepare_HalfTxEscClk - DSI_THS_PREPARE_HALF_ESC_CLK_BASE;
     dphy->CFG_MIXEL_UC_PRG_HS_PREPARE  = (uint32_t)config->tClkPrepare_HalfTxEscClk - DSI_TCLK_PREPARE_HALF_ESC_CLK_BASE;

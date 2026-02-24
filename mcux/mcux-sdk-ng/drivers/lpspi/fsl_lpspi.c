@@ -1262,11 +1262,14 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
 
     /* Configure transfer control register. */
     base->TCR = (LPSPI_GetTcr(base) & ~(LPSPI_TCR_CONT_MASK | LPSPI_TCR_CONTC_MASK | LPSPI_TCR_RXMSK_MASK |
-                                        LPSPI_TCR_TXMSK_MASK | LPSPI_TCR_PCS_MASK)) |
+                                        LPSPI_TCR_TXMSK_MASK | LPSPI_TCR_PCS_MASK
 #if !(defined(FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH) && FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH)
-                LPSPI_TCR_WIDTH(width) |
+                                        | LPSPI_TCR_WIDTH_MASK)) | LPSPI_TCR_WIDTH(width) |
+#else
+                                        )) |
 #endif
                 LPSPI_TCR_PCS(whichPcs);
+
     /*TCR is also shared the FIFO, so wait for TCR written.*/
     /*
      * $Branch Coverage Justification$
@@ -2350,7 +2353,7 @@ static uint32_t LPSPI_CombineWriteData(const uint8_t *txData, uint8_t bytesEachW
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_c_ref_1$
      */
-    switch (bytesEachWrite)
+    switch (bytesEachWrite) /* GCOVR_EXCL_BR_LINE */
     {
         case 1:
             wordToSend = *txData;
@@ -2421,9 +2424,11 @@ static uint32_t LPSPI_CombineWriteData(const uint8_t *txData, uint8_t bytesEachW
             }
             break;
 
+        /* GCOVR_EXCL_START */
         default:
             assert(false);
             break;
+            /* GCOVR_EXCL_STOP */
     }
     return wordToSend;
 }
@@ -2506,10 +2511,12 @@ static void LPSPI_SeparateReadData(uint8_t *rxData, uint32_t readData, uint8_t b
             }
             break;
 
-        default: /* GCOVR_EXCL_START */
+        /* GCOVR_EXCL_START */
+        default:
             assert(false);
             break;
-    } /* GCOVR_EXCL_STOP */
+            /* GCOVR_EXCL_STOP */
+    }
 }
 
 /*!

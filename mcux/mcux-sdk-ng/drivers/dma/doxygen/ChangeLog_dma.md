@@ -1,5 +1,10 @@
 # DMA
 
+## [2.1.3]
+
+- Bug Fixes
+  - Fixed coverity issues with CERT INT30-C, CERT INT31-C compliance.
+
 ## [2.1.2]
 
 - Bug Fixes

@@ -909,8 +909,7 @@ static inline void FLEXIO_SetPinLevel(FLEXIO_Type *base, uint8_t pin, bool level
 {
 	base->PINOUTD =
 		(base->PINOUTD & ~((uint32_t)((uint32_t)1U << pin))) |
-		(FLEXIO_PINOUTD_OUTD((uint32_t)((true == level)
-		? (uint32_t)0x1U : (uint32_t)0x0U) << pin));
+		FLEXIO_PINOUTD_OUTD((level ? (uint32_t)1U : (uint32_t)0U) << pin);
 }
 
 /*!
@@ -938,8 +937,7 @@ static inline void FLEXIO_ConfigPinOverride(FLEXIO_Type *base, uint8_t pin, bool
 {
 	base->PINOUTE =
 		(base->PINOUTE & ~((uint32_t)((uint32_t)1U << pin))) |
-		FLEXIO_PINOUTE_OUTE((uint32_t)((true == enabled)
-		? (uint32_t)0x1U : (uint32_t)0x0U) << pin);
+		FLEXIO_PINOUTE_OUTE((enabled ? (uint32_t)1U : (uint32_t)0U) << pin);
 }
 
 /*!

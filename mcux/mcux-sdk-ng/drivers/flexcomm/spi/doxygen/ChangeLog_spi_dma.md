@@ -1,5 +1,11 @@
 # SPI_DMA
 
+## [2.2.3]
+
+- Bug Fixes
+  - Fixed the bug `SPI_MasterTransferGetCountDMA` and `SPI_SlaveTransferGetCountDMA`
+    returns wrong count.
+
 ## [2.2.2]
 
 - Bug Fixes

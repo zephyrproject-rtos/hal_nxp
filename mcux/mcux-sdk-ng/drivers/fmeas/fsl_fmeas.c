@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,35 +18,80 @@
 #endif
 
 #if defined(FSL_FEATURE_FMEAS_ASYNC_SYSCON_FREQMECTRL) && (FSL_FEATURE_FMEAS_ASYNC_SYSCON_FREQMECTRL)
+/*!
+ * brief    Get the target clock counter value.
+ *
+ * param    base : Peripheral base address.
+ * return   Target clock counter value.
+ */
+static inline uint32_t FMEAS_GetTargetClockCount(FMEAS_SYSCON_Type *base)
+{
+    return (uint32_t)(((((FMEAS_SYSCON_Type *)base)->FREQMECTRL & FMEAS_SYSCON_FREQMECTRL_CAPVAL_MASK) >>
+                       FMEAS_SYSCON_FREQMECTRL_CAPVAL_SHIFT) + 1U);
+}
 
-/*! @brief Target clock counter value  */
-#define TARGET_CLOCK_COUNT(base)                                                                    \
-    ((uint32_t)(((((FMEAS_SYSCON_Type *)base)->FREQMECTRL & FMEAS_SYSCON_FREQMECTRL_CAPVAL_MASK) >> \
-                 FMEAS_SYSCON_FREQMECTRL_CAPVAL_SHIFT) +                                            \
-                1))
-
-/*! @brief Reference clock counter value */
-#define REFERENCE_CLOCK_COUNT ((1 << FMEAS_INDEX) - 1)
+/*!
+ * brief    Get the reference clock counter value.
+ *
+ * return   Reference clock counter value.
+ */
+static inline uint32_t FMEAS_GetReferenceClockCount(void)
+{
+    return (uint32_t)((1U << FMEAS_INDEX) - 1U);
+}
 
 #elif defined(FSL_FEATURE_SOC_FREQME_COUNT) && (FSL_FEATURE_SOC_FREQME_COUNT)
-/*! @brief Target clock counter value.
- * According to user manual, 2 has to be subtracted from RESULT field. */
-#define TARGET_CLOCK_COUNT(base) \
-    ((uint32_t)((((FREQME_Type *)base)->FREQMECTRL_R & FREQME_FREQMECTRL_R_RESULT_MASK) - 2U))
+/*!
+ * brief    Get the target clock counter value.
+ *
+ * param    base : Peripheral base address.
+ * return   Target clock counter value.
+ */
+static inline uint32_t FMEAS_GetTargetClockCount(FMEAS_SYSCON_Type *base)
+{
+    uint32_t capval = (uint32_t)(((FREQME_Type *)base)->FREQMECTRL_R & FREQME_FREQMECTRL_R_RESULT_MASK);
 
-/*! @brief Reference clock counter value. */
-#define REFERENCE_CLOCK_COUNT ((uint32_t)(((uint32_t)1U) << 20U))
+    /* INT30-C: Prevent unsigned integer underflow */
+    assert(capval >= 2U);
+    return capval - 2U;
+}
+
+/*!
+ * brief    Get the reference clock counter value.
+ *
+ * return   Reference clock counter value.
+ */
+static inline uint32_t FMEAS_GetReferenceClockCount(void)
+{
+    return (uint32_t)(((uint32_t)1U) << 20U);
+}
 
 #else
-/*! @brief Target clock counter value.
- * According to user manual, 2 has to be subtracted from captured value (CAPVAL). */
-#define TARGET_CLOCK_COUNT(base) \
-    ((uint32_t)(                 \
-        ((((SYSCON_Type *)base)->FREQMECTRL & SYSCON_FREQMECTRL_CAPVAL_MASK) >> SYSCON_FREQMECTRL_CAPVAL_SHIFT) - 2U))
+/*!
+ * brief    Get the target clock counter value.
+ *
+ * param    base : Peripheral base address.
+ * return   Target clock counter value.
+ */
+static inline uint32_t FMEAS_GetTargetClockCount(FMEAS_SYSCON_Type *base)
+{
+    uint32_t capval = (uint32_t)((((SYSCON_Type *)base)->FREQMECTRL & SYSCON_FREQMECTRL_CAPVAL_MASK) >>
+                                  SYSCON_FREQMECTRL_CAPVAL_SHIFT);
+    /* INT30-C: Prevent unsigned integer underflow */
+    assert(capval >= 2U);
+    return capval - 2U;
+}
 
-/*! @brief Reference clock counter value. */
-#define REFERENCE_CLOCK_COUNT \
-    ((uint32_t)((((uint32_t)SYSCON_FREQMECTRL_CAPVAL_MASK) >> (uint32_t)SYSCON_FREQMECTRL_CAPVAL_SHIFT) + (uint32_t)1U))
+/*!
+ * brief    Get the reference clock counter value.
+ *
+ * return   Reference clock counter value.
+ */
+static inline uint32_t FMEAS_GetReferenceClockCount(void)
+{
+    return (uint32_t)((((uint32_t)SYSCON_FREQMECTRL_CAPVAL_MASK) >> (uint32_t)SYSCON_FREQMECTRL_CAPVAL_SHIFT) +
+                        (uint32_t)1U);
+}
 
 #endif
 
@@ -64,12 +109,12 @@
  */
 uint32_t FMEAS_GetFrequency(FMEAS_SYSCON_Type *base, uint32_t refClockRate)
 {
-    uint32_t targetClockCount = TARGET_CLOCK_COUNT(base);
+    uint32_t targetClockCount = FMEAS_GetTargetClockCount(base);
     uint64_t clkrate          = 0;
 
     if (((int32_t)targetClockCount) > 0)
     {
-        clkrate = (((uint64_t)targetClockCount) * (uint64_t)refClockRate) / REFERENCE_CLOCK_COUNT;
+        clkrate = (((uint64_t)targetClockCount) * (uint64_t)refClockRate) / FMEAS_GetReferenceClockCount();
     }
 
 #if defined(SYSCON_CLOCK_CTRL_FRO1MHZ_FREQM_ENA_MASK) && defined(SYSCON_CLOCK_CTRL_XTAL32MHZ_FREQM_ENA_MASK)
@@ -77,7 +122,7 @@ uint32_t FMEAS_GetFrequency(FMEAS_SYSCON_Type *base, uint32_t refClockRate)
     SYSCON->CLOCK_CTRL &= ~(SYSCON_CLOCK_CTRL_FRO1MHZ_FREQM_ENA_MASK | SYSCON_CLOCK_CTRL_XTAL32MHZ_FREQM_ENA_MASK);
 #endif
 
-    return (uint32_t)clkrate;
+    return (uint32_t)(clkrate & 0xFFFFFFFFU);
 }
 
 #if defined(FSL_FEATURE_FMEAS_GET_COUNT_SCALE) && (FSL_FEATURE_FMEAS_GET_COUNT_SCALE)
@@ -86,8 +131,8 @@ void FMEAS_GetCountWithScale(FMEAS_SYSCON_Type *base,
                              uint32_t *refClockCount,
                              uint32_t *targetClockCount)
 {
-    *targetClockCount = TARGET_CLOCK_COUNT(base);
-    *refClockCount    = ((1 << scale) - 1);
+    *targetClockCount = FMEAS_GetTargetClockCount(base);
+    *refClockCount    = ((1UL << scale) - 1UL);
 
     /* Assume measurement complete - gate high freq clock FRO1M and XTAL32M to FMEAS */
     SYSCON->CLOCK_CTRL &= ~(SYSCON_CLOCK_CTRL_FRO1MHZ_FREQM_ENA_MASK | SYSCON_CLOCK_CTRL_XTAL32MHZ_FREQM_ENA_MASK);

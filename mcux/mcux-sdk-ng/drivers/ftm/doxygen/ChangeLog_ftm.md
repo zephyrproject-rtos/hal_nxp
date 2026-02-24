@@ -1,5 +1,16 @@
 # FTM
 
+## [2.7.5]
+
+- Bug Fixes
+  - Corrected the bit shift calculation for fault input filter enable in FTM_SetupFaultInput().
+
+## [2.7.4]
+
+- Bug Fixes
+  - Fixed violations of the CERT INT31-C.
+  - Fixed MISRA C-2012 issue: rule 10.1.
+
 ## [2.7.3]
 
 - Bug Fixes

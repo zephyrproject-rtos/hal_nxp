@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version. */
+#define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version. */
 /*! @} */
 
 /*! @brief Quad Timer primary clock source selection*/
@@ -351,7 +351,7 @@ static inline void QTMR_StartTimer(TMR_Type *base, qtmr_counting_mode_t clockSou
 {
     uint16_t reg = base->CTRL;
 
-    reg &= ~(uint16_t)TMR_CTRL_CM_MASK;
+    reg &= (uint16_t)TMR_CTRL_CM_MASK ^ 0xFFFFU;
     reg |= TMR_CTRL_CM(clockSource);
     base->CTRL = reg;
 }
@@ -363,7 +363,7 @@ static inline void QTMR_StartTimer(TMR_Type *base, qtmr_counting_mode_t clockSou
  */
 static inline void QTMR_StopTimer(TMR_Type *base)
 {
-    base->CTRL &= ~(uint16_t)TMR_CTRL_CM_MASK;
+    base->CTRL &= (uint16_t)TMR_CTRL_CM_MASK ^ 0xFFFFU;
 }
 
 /*! @}*/

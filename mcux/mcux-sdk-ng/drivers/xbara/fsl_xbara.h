@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2022, 2024 NXP
+ * Copyright 2016-2019, 2022, 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,7 +20,7 @@
  * Definitions
  ******************************************************************************/
 
-#define FSL_XBARA_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
+#define FSL_XBARA_DRIVER_VERSION (MAKE_VERSION(2, 0, 7))
 
 /* Macros for entire XBARA_SELx register.  */
 #define XBARA_SELx(base, output) (((volatile uint16_t *)(&((base)->SEL0)))[(uint32_t)(output) / 2UL])
@@ -39,7 +39,8 @@ typedef enum _xbara_active_edge
     kXBARA_EdgeNone             = 0U, /*!< Edge detection status bit never asserts. */
     kXBARA_EdgeRising           = 1U, /*!< Edge detection status bit asserts on rising edges. */
     kXBARA_EdgeFalling          = 2U, /*!< Edge detection status bit asserts on falling edges. */
-    kXBARA_EdgeRisingAndFalling = 3U  /*!< Edge detection status bit asserts on rising and falling edges. */
+    kXBARA_EdgeRisingAndFalling = 3U, /*!< Edge detection status bit asserts on rising and falling edges. */
+    kXBARA_EdgeMax                    /*!< Max value. */
 } xbara_active_edge_t;
 
 /*!
@@ -49,7 +50,8 @@ typedef enum _xbar_request
 {
     kXBARA_RequestDisable         = 0U, /*!< Interrupt and DMA are disabled. */
     kXBARA_RequestDMAEnable       = 1U, /*!< DMA enabled, interrupt disabled. */
-    kXBARA_RequestInterruptEnable = 2U  /*!< Interrupt enabled, DMA disabled. */
+    kXBARA_RequestInterruptEnable = 2U, /*!< Interrupt enabled, DMA disabled. */
+    kXBARA_RequestMax                   /*!< Max value. */
 } xbara_request_t;
 
 /*!

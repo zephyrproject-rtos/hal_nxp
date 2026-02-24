@@ -1,5 +1,10 @@
 # PWM
 
+## [2.0.2]
+
+- Bug Fixes
+  - Fixed violations of the CERT INT31-C rule.
+
 ## [2.0.1]
 
 - Bug Fixes

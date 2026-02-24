@@ -20,8 +20,6 @@ Implementation file for ARM API compatible FFT functions on CE
  * It delegates the FFT computation to the ZV2117 CE module.
  * Please refer to CM33 documentation for details.
  *
- * return Command execution status.
- * 
  * note This API only support float32 FFTs.
  */
 void ce_arm_cfft_f32(

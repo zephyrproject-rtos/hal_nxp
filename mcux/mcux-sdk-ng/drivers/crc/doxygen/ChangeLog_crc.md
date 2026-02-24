@@ -1,5 +1,15 @@
 # CRC
 
+## [2.1.0]
+
+- Bug fix:
+  - Choosing CRC clocks from CRC clock array according to instance instead of hardcoded value.
+
+## [2.0.5]
+
+- Bug fix:
+  - Fix CERT-C issue with boolean-to-unsigned integer conversion.
+
 ## [2.0.4]
 
 - Improvements

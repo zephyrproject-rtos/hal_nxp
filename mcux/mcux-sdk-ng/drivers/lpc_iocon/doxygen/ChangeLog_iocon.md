@@ -1,5 +1,10 @@
 # IOCON
 
+## [2.2.1]
+
+- Improvements
+  - Added macros IOCON_INV_DI and IOCON_OPENDRAIN_DI
+
 ## [2.2.0]
 
 - Improvements

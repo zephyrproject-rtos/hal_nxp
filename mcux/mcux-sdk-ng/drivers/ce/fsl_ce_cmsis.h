@@ -47,8 +47,6 @@ extern "C" {
  * @details This API is designed to be compatible with the ARM CM33 FFT interface.
  * It delegates the FFT computation to the ZV2117 CE module.
  * Please refer to CM33 documentation for details.
- *
- * @return Command execution status.
  * 
  * @note This API only support float32 FFTs.
  */

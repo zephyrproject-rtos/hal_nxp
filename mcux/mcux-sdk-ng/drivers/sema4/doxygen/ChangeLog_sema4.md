@@ -1,5 +1,10 @@
 # SEMA4
 
+## [2.2.3]
+
+- Improvements
+  - Fix MISRA C-2012 Rule 20.8 violations.
+
 ## [2.2.2]
 
 - Improvements

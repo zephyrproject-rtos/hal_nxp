@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 NXP
+ * Copyright 2018-2021, 2025 NXP
  * All rights reserved.
  *
  *
@@ -23,9 +23,9 @@
  */
 /*! @name Driver version */
 /*! @{ */
-/*! @brief CASPER driver version. Version 2.2.4.
+/*! @brief CASPER driver version. Version 2.2.5.
  *
- * Current version: 2.2.4
+ * Current version: 2.2.5
  *
  * Change log:
  * - Version 2.0.0
@@ -65,8 +65,10 @@
  *   - Added macro into CASPER_Init and CASPER_Deinit to support devices without clock and reset control.
  * - Version 2.2.4
  *   - Fix MISRA-C 2012 issue.
+ * - Version 2.2.5
+ *   - Fix Coverity Uninitialized scalar variable.
  */
-#define FSL_CASPER_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
+#define FSL_CASPER_DRIVER_VERSION (MAKE_VERSION(2, 2, 5))
 /*! @} */
 
 /*! @brief CASPER operation

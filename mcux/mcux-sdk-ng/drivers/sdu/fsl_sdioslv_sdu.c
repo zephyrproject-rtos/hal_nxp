@@ -78,11 +78,6 @@ void SDIOSLV_Init0(void)
     CLKCTL0->PSCCTL1_SET  = CLKCTL0_PSCCTL1_SET_SDIO_SLV(1);
     RSTCTL0->PRSTCTL1_CLR = RSTCTL0_PRSTCTL1_CLR_SDIO_SLV(1);
 
-    set_iomux(20, 15);
-
-    // via Abhijit
-    rmw2(&MCI_IO_MUX->FSEL, MCI_IO_MUX_FSEL_SEL_SDIO_MASK, MCI_IO_MUX_FSEL_SEL_SDIO_SHIFT, 1U);
-
     // 0 means we don't use standard defns (i.e. wireless). If you use standard defs
     // then you need to comply totally with the standard (Microsoft et al). Left at
     // 0, our driver performs the function.
@@ -179,6 +174,11 @@ status_t SDIOSLV_Init1(SDU_FN_CARD_Type *base, sdio_slave_config_t *config)
 
     // If this is set to 1, IO_READY and CARD_READY status will be 0.
     SDU_FN0_CARD->DEV_SLEEP = SDU_FN0_CARD_DEV_SLEEP_DEV_SLEEP(0U);
+
+    set_iomux(20, 15);
+
+    // via Abhijit
+    rmw2(&MCI_IO_MUX->FSEL, MCI_IO_MUX_FSEL_SEL_SDIO_MASK, MCI_IO_MUX_FSEL_SEL_SDIO_SHIFT, 1U);
 
     return (status_t)kStatus_Success;
 }

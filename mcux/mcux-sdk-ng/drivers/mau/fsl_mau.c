@@ -172,7 +172,7 @@ float arm_sin_f32(float input)
  */
 mau_q31_t arm_sin_q31(mau_q31_t input)
 {
-    assert((input <= INT32_MAX / 2) && (input >= INT32_MIN / 2));
+    assert((input <= (mau_q31_t)INT32_MAX / 2) && (input >= (mau_q31_t)INT32_MIN / 2));
 
     return MAU_SinPIXQ31(MAU0, (input * 2), kMAU_RES0);
 }
@@ -209,7 +209,7 @@ float arm_cos_f32(float input)
  */
 mau_q31_t arm_cos_q31(mau_q31_t input)
 {
-    assert((input <= INT32_MAX / 2) && (input >= INT32_MIN / 2));
+    assert((input <= (mau_q31_t)INT32_MAX / 2) && (input >= (mau_q31_t)INT32_MIN / 2));
 
     return MAU_CosPIXQ31(MAU0, (input * 2), kMAU_RES0);
 }
@@ -248,7 +248,7 @@ void arm_sin_cos_f32(float input, float *sin_val, float *cos_val)
  */
 void arm_sin_cos_q31(mau_q31_t input, mau_q31_t *sin_val, mau_q31_t *cos_val)
 {
-    assert((input <= INT32_MAX / 2) && (input >= INT32_MIN / 2));
+    assert((input <= (mau_q31_t)INT32_MAX / 2) && (input >= (mau_q31_t)INT32_MIN / 2));
 
     MAU_SinCosPIXQ31(MAU0, (input * 2), sin_val, cos_val, kMAU_RES0, kMAU_RES1);
 }

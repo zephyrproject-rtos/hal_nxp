@@ -50,7 +50,7 @@
  */
 
 /*! @brief Driver Version */
-#define FSL_NETC_DRIVER_VERSION (MAKE_VERSION(2, 10, 1))
+#define FSL_NETC_DRIVER_VERSION (MAKE_VERSION(2, 10, 4))
 
 /*! @brief Macro to divides an address into a low 32 bits and a possible high 32 bits */
 #define NETC_ADDR_LOW_32BIT(x)  ((uint32_t)(x) & 0xFFFFFFFFU)
@@ -3753,6 +3753,7 @@ typedef struct _netc_tx_bdr
     uint16_t producerIndex;          /*!< Current index for transmit. */
     uint16_t cleanIndex;             /*!< Current index for tx cleaning. */
     uint32_t len;                    /*!< Length of this BD ring. */
+    uint8_t enableInterrupt;         /*!< Interrupt flag for this BD ring. */
 } netc_tx_bdr_t;
 
 /*! @brief Status/Interrupts flags for the TX BDR. Each flag get its own bit thus it support bit AND/OR operation. */

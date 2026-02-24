@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief eDMA driver version */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 2)) /*!< Version 2.5.2. */
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 3)) /*!< Version 2.5.3. */
 /*! @} */
 
 /*! @brief eDMA transfer configuration */
@@ -438,8 +438,9 @@ static inline void EDMA_SetChannelPreemptionConfig(DMA_Type *base,
     assert(channel < (uint16_t)FSL_FEATURE_EDMA_MODULE_CHANNEL);
     assert(config != NULL);
 
-    base->CH[channel].CH_PRI = DMA_CH_PRI_ECP(config->enableChannelPreemption) |
-                               DMA_CH_PRI_DPA(!config->enablePreemptAbility) | DMA_CH_PRI_APL(config->channelPriority);
+    base->CH[channel].CH_PRI = DMA_CH_PRI_ECP((config->enableChannelPreemption ? 1U : 0U)) |
+                               DMA_CH_PRI_DPA((config->enablePreemptAbility ? 0U : 1U)) |
+                               DMA_CH_PRI_APL(config->channelPriority);
 }
 
 /*!
@@ -515,7 +516,8 @@ static inline void EDMA_EnableAsyncRequest(DMA_Type *base, uint32_t channel, boo
     assert(channel < (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL);
 
     base->CH[channel].CH_CSR =
-        (base->CH[channel].CH_CSR & (~(DMA_CH_CSR_EARQ_MASK | DMA_CH_CSR_DONE_MASK))) | DMA_CH_CSR_EARQ(enable);
+        (base->CH[channel].CH_CSR & (~(DMA_CH_CSR_EARQ_MASK | DMA_CH_CSR_DONE_MASK))) |
+                                    DMA_CH_CSR_EARQ((enable ? 1U : 0U));
 }
 
 /*!
@@ -532,7 +534,7 @@ static inline void EDMA_EnableAutoStopRequest(DMA_Type *base, uint32_t channel, 
     assert(channel < (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL);
 
     base->CH[channel].TCD_CSR =
-        (base->CH[channel].TCD_CSR & (~(uint16_t)DMA_TCD_CSR_DREQ_MASK)) | DMA_TCD_CSR_DREQ(enable);
+        (base->CH[channel].TCD_CSR & (~(uint16_t)DMA_TCD_CSR_DREQ_MASK)) | DMA_TCD_CSR_DREQ((enable ? 1U : 0U));
 }
 
 /*!
@@ -696,7 +698,7 @@ static inline void EDMA_TcdEnableAutoStopRequest(edma_tcd_t *tcd, bool enable)
     assert(tcd != NULL);
     assert(((uint32_t)tcd & 0x1FU) == 0U);
 
-    tcd->CSR = (tcd->CSR & (~(uint16_t)DMA_TCD_CSR_DREQ_MASK)) | DMA_TCD_CSR_DREQ(enable);
+    tcd->CSR = (tcd->CSR & (~(uint16_t)DMA_TCD_CSR_DREQ_MASK)) | DMA_TCD_CSR_DREQ((enable ? 1U : 0U));
 }
 
 /*!
@@ -832,6 +834,7 @@ void EDMA_ClearChannelStatusFlags(DMA_Type *base, uint32_t channel, uint32_t mas
 /*! @} */
 /*!
  * @name eDMA Transactional Operation
+ * @{
  */
 
 /*!
@@ -1038,6 +1041,10 @@ static inline edma_transfer_size_t EDMA_GetTransferSize(uint32_t width)
             break;
         case 64U:
             transferSize = kEDMA_TransferSize64Bytes;
+            break;
+        default:
+            /* All the cases have been listed above, the default clause should not be reached. */
+            assert(false);
             break;
     }
     

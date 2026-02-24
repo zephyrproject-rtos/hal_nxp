@@ -5,6 +5,15 @@
 - Improvements
   - Added feature macros to support some platforms which do not have system LDO, VDD_SYS, DCDC_BURST_CFG.
 
+
+- Bug Fixes
+  - Fixed doxygen warnings: 
+    1. unbalanced grouping commands.
+    2. Argument 'base' of command @param is not found in the argument
+      list of sfa_callback_t(status_t status)
+    3. Explicit link request to 'kStatus_SPC_CORELDOVoltageSetFail.' could not be resolved
+
+
 ## [2.7.1]
 
 - Improvements

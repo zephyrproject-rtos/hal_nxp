@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2023 NXP
+ * Copyright 2016-2019, 2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -108,10 +108,15 @@ void WDOG_Init(WDOG_Type *base, const wdog_config_t *config)
     uint16_t value        = 0u;
     uint32_t primaskValue = 0U;
 
-    value = WDOG_WCR_WDE(config->enableWdog) | WDOG_WCR_WDW(!config->workMode.enableWait) |
-            WDOG_WCR_WDZST(!config->workMode.enableStop) | WDOG_WCR_WDBG(!config->workMode.enableDebug) |
-            WDOG_WCR_SRE(config->softwareResetExtension) | WDOG_WCR_WT(config->timeoutValue) |
-            WDOG_WCR_WDT(config->enableTimeOutAssert) | WDOG_WCR_SRS_MASK | WDOG_WCR_WDA_MASK;
+    value = WDOG_WCR_WDE(config->enableWdog ? 1U : 0U) |
+            WDOG_WCR_WDW(config->workMode.enableWait ? 0U : 1U) |
+            WDOG_WCR_WDZST(config->workMode.enableStop ? 0U : 1U) |
+            WDOG_WCR_WDBG(config->workMode.enableDebug ? 0U : 1U) |
+            WDOG_WCR_SRE(config->softwareResetExtension ? 1U : 0U) |
+            WDOG_WCR_WT(config->timeoutValue) |
+            WDOG_WCR_WDT(config->enableTimeOutAssert ? 1U : 0U) |
+            WDOG_WCR_SRS_MASK |
+            WDOG_WCR_WDA_MASK;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Set configuration */
@@ -119,8 +124,9 @@ void WDOG_Init(WDOG_Type *base, const wdog_config_t *config)
 #endif
 
     primaskValue = DisableGlobalIRQ();
-    base->WICR   = WDOG_WICR_WICT(config->interruptTimeValue) | WDOG_WICR_WIE(config->enableInterrupt);
-    base->WMCR   = WDOG_WMCR_PDE(config->enablePowerDown);
+    base->WICR   = WDOG_WICR_WICT(config->interruptTimeValue) |
+                   WDOG_WICR_WIE(config->enableInterrupt ? 1U : 0U);
+    base->WMCR   = WDOG_WMCR_PDE(config->enablePowerDown ? 1U : 0U);
     base->WCR    = value;
     EnableGlobalIRQ(primaskValue);
     if (config->enableInterrupt)

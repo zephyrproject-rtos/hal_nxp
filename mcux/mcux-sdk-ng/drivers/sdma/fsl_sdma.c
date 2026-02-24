@@ -398,13 +398,13 @@ void SDMA_Init(SDMAARM_Type *base, const sdma_config_t *config)
     tmpreg = base->CONFIG;
     tmpreg &= ~(SDMAARM_CONFIG_ACR_MASK | SDMAARM_CONFIG_RTDOBS_MASK | SDMAARM_CONFIG_CSM_MASK);
     /* Channel 0 shall use static context switch method */
-    tmpreg |= (SDMAARM_CONFIG_ACR(config->ratio) | SDMAARM_CONFIG_RTDOBS(config->enableRealTimeDebugPin) |
+    tmpreg |= (SDMAARM_CONFIG_ACR(config->ratio) | SDMAARM_CONFIG_RTDOBS((config->enableRealTimeDebugPin ? 1U : 0U)) |
                SDMAARM_CONFIG_CSM(0U));
     base->CONFIG = tmpreg;
 
     tmpreg = base->SDMA_LOCK;
     tmpreg &= ~SDMAARM_SDMA_LOCK_SRESET_LOCK_CLR_MASK;
-    tmpreg |= SDMAARM_SDMA_LOCK_SRESET_LOCK_CLR(config->isSoftwareResetClearLock);
+    tmpreg |= SDMAARM_SDMA_LOCK_SRESET_LOCK_CLR((config->isSoftwareResetClearLock ? 1U : 0U));
     base->SDMA_LOCK = tmpreg;
 
     /* Set the context size to 32 bytes */
@@ -1055,7 +1055,7 @@ void SDMA_DriverIRQHandler(void)
     SDMA_ClearChannelInterruptStatus(SDMAARM, 1U);
     /* Ignore channel0, as channel0 is only used for download */
     val = (SDMAARM->INTR) >> 1U;
-    while (val)
+    while ((val != 0UL) && (i < FSL_FEATURE_SDMA_MODULE_CHANNEL))
     {
         if ((val & 0x1UL) != 0UL)
         {
@@ -1077,7 +1077,7 @@ void SDMA1_DriverIRQHandler(void)
     SDMA_ClearChannelInterruptStatus(SDMAARM1, 1U);
     /* Ignore channel0, as channel0 is only used for download */
     val = (SDMAARM1->INTR) >> 1U;
-    while (val != 0UL)
+    while ((val != 0UL) && (i < FSL_FEATURE_SDMA_MODULE_CHANNEL))
     {
         if ((val & 0x1UL) != 0UL)
         {
@@ -1099,7 +1099,7 @@ void SDMA2_DriverIRQHandler(void)
     SDMA_ClearChannelInterruptStatus(SDMAARM2, 1U);
     /* Ignore channel0, as channel0 is only used for download */
     val = (SDMAARM2->INTR) >> 1U;
-    while (val != 0UL)
+    while ((val != 0UL) && (i < FSL_FEATURE_SDMA_MODULE_CHANNEL))
     {
         if ((val & 0x1UL) != 0UL)
         {
@@ -1122,7 +1122,7 @@ void SDMA3_DriverIRQHandler(void)
     SDMA_ClearChannelInterruptStatus(SDMAARM3, 1U);
     /* Ignore channel0, as channel0 is only used for download */
     val = (SDMAARM3->INTR) >> 1U;
-    while (val != 0UL)
+    while ((val != 0UL) && (i < FSL_FEATURE_SDMA_MODULE_CHANNEL))
     {
         if ((val & 0x1UL) != 0UL)
         {

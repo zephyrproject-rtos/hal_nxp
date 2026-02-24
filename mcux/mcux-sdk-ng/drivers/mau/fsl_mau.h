@@ -21,7 +21,7 @@
 /*! @{ */
 
 /*! @brief MAU driver version. */
-#define FSL_MAU_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+#define FSL_MAU_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*! @} */
 
 /*! @brief MAU Q15 type. */

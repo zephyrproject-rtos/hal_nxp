@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_PINT_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_PINT_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*! @} */
 
 /* Legacy code sets callback for each PINT event resource. */
@@ -605,6 +605,41 @@ void PINT_Deinit(PINT_Type *base);
  * @retval None.
  */
 void PINT_EnableCallbackByIndex(PINT_Type *base, pint_pin_int_t pintIdx);
+
+/*!
+ * @brief enable interrupt in NVIC by pin index.
+
+ * This function enables the interrupt in the NVIC. The difference with
+ * PINT_EnableCallbackByIndex() is that PINT_EnableCallbackByIndex() not
+ * only enables the interrupt in the NVIC but also clears pending interrupts.
+ * Use this function together with PINT_DisableInterruptByIndex() to
+ * temporarily disable/enable the pin interrupt.
+ * Use PINT_EnableCallbackByIndex() to enable the interrupt after installing
+ * the callback.
+ *
+ * @param base Base address of the peripheral.
+ * @param pinIdx pin index.
+ *
+ * @retval None.
+ */
+void PINT_EnableInterruptByIndex(PINT_Type *base, pint_pin_int_t pintIdx);
+
+/*!
+ * @brief disable interrupt in NVIC by pin index.
+
+ * This function disables the interrupt in the NVIC. The difference with
+ * PINT_DisableCallbackByIndex() is that PINT_DisableCallbackByIndex() not
+ * only disables the interrupt in the NVIC but also clears pending interrupts.
+ * Use this function together with PINT_EnableInterruptByIndex() to
+ * temporarily disable/enable the pin interrupt.
+ * Use PINT_DisableCallbackByIndex() to disable the interrupt in a de-init function.
+ *
+ * @param base Base address of the peripheral.
+ * @param pinIdx pin index.
+ *
+ * @retval None.
+ */
+void PINT_DisableInterruptByIndex(PINT_Type *base, pint_pin_int_t pintIdx);
 
 /*!
  * @brief disable callback by pin index.

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020 NXP
+ * Copyright 2016-2017, 2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SMC driver version */
-#define FSL_SMC_DRIVER_VERSION (MAKE_VERSION(2, 0, 7))
+#define FSL_SMC_DRIVER_VERSION (MAKE_VERSION(2, 0, 8))
 /*! @} */
 
 /*!
@@ -274,7 +274,9 @@ static inline void SMC_SetPowerModeProtection(SMC_Type *base, uint8_t allowedMod
  */
 static inline smc_power_state_t SMC_GetPowerModeState(SMC_Type *base)
 {
-    return (smc_power_state_t)base->PMSTAT;
+    /* INT31-C: Validate register value before casting to enum */
+    uint8_t pmstat = (uint8_t)((base->PMSTAT & SMC_PMSTAT_PMSTAT_MASK) >> SMC_PMSTAT_PMSTAT_SHIFT);
+    return (smc_power_state_t)pmstat;
 }
 
 /*!

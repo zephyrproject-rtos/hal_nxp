@@ -75,8 +75,14 @@ enum _i3c_dma_flag_constants
 /*! @brief Array to map I3C instance number to base pointer. */
 static I3C_Type *const kI3cBases[] = I3C_BASE_PTRS;
 
+#if defined(I3C_ERRATA_052123_USE_DMA_CHAIN) && (I3C_ERRATA_052123_USE_DMA_CHAIN)
+/* Pre-allocated chain descriptor table for RX to avoid runtime allocation. */
+SDK_ALIGN(static dma_descriptor_t s_dma_table[ARRAY_SIZE(kI3cBases)][I3C_DMA_CHAIN_COUNT_MAX],
+          FSL_FEATURE_DMA_LINK_DESCRIPTOR_ALIGN_SIZE);
+#else
 /*! @brief DMA linked transfer descriptor. */
 SDK_ALIGN(static dma_descriptor_t s_dma_table[ARRAY_SIZE(kI3cBases)][2], FSL_FEATURE_DMA_LINK_DESCRIPTOR_ALIGN_SIZE);
+#endif
 
 /*******************************************************************************
  * Prototypes
@@ -88,9 +94,45 @@ SDK_ALIGN(static dma_descriptor_t s_dma_table[ARRAY_SIZE(kI3cBases)][2], FSL_FEA
 #if defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123)
 static void I3C_MasterSetDMARxLoop(i3c_master_dma_handle_t *handle)
 {
-    uint32_t leftDataSize = handle->transfer.dataSize - handle->transDataSize;
-    uint32_t instance     = I3C_GetInstance(handle->base);
+    uint32_t instance = I3C_GetInstance(handle->base);
     uint32_t unitDataLen;
+#if defined(I3C_ERRATA_052123_USE_DMA_CHAIN) && (I3C_ERRATA_052123_USE_DMA_CHAIN)
+    i3c_rx_trigger_level_t rxTriggerLevel;
+    uint32_t transDataSize = 0;
+    uint32_t leftDataSize;
+    uint32_t descCount;
+    bool intr;
+
+    rxTriggerLevel = (handle->transfer.dataSize >= 6U) ? kI3C_RxTriggerUntilThreeQuarterOrMore :
+                                                         (i3c_rx_trigger_level_t)(handle->transfer.dataSize / 2U);
+    I3C_MasterSetWatermarks(handle->base, kI3C_TxTriggerOnEmpty, rxTriggerLevel, false, false);
+
+    descCount = I3C_DMA_RX_CHAIN_COUNT(handle->transfer.dataSize);
+    for (uint32_t i = 0U; i < descCount; i++)
+    {
+        leftDataSize = handle->transfer.dataSize - transDataSize;
+        unitDataLen  = (leftDataSize >= 6U) ? 6U : (1U << (leftDataSize / 2U));
+
+        /* Need to adjust the watermark before last DMA descriptor, so enable interrupts for the second-to-last DMA
+         * descriptor. */
+        intr = (leftDataSize >= 12U) ? false : true;
+
+        DMA_SetupDescriptor(&s_dma_table[instance][i],
+                            DMA_CHANNEL_XFER((i < (descCount - 1U)), false, intr, false, sizeof(uint8_t),
+                                             kDMA_AddressInterleave0xWidth, kDMA_AddressInterleave1xWidth, unitDataLen),
+                            (void *)(uint32_t *)(uint32_t)&handle->base->MRDATAB,
+                            (uint8_t *)handle->transfer.data + transDataSize,
+                            (i == (descCount - 1U)) ? NULL : &s_dma_table[instance][i + 1U]);
+
+        /* Let DMA interrupt know that there's left data to copy with watermark update. */
+        if (unitDataLen == 6U)
+        {
+            handle->transDataSize += unitDataLen;
+        }
+        transDataSize += unitDataLen;
+    }
+#else
+    uint32_t leftDataSize = handle->transfer.dataSize - handle->transDataSize;
 
     if (leftDataSize >= 6U)
     {
@@ -120,6 +162,7 @@ static void I3C_MasterSetDMARxLoop(i3c_master_dma_handle_t *handle)
                         (void *)(uint32_t *)(uint32_t)&handle->base->MRDATAB,
                         (uint8_t *)handle->transfer.data + handle->transDataSize, NULL);
     handle->transDataSize += unitDataLen;
+#endif
     DMA_SetChannelConfig(handle->rxDmaHandle->base, handle->rxDmaHandle->channel, NULL, true);
     DMA_SubmitChannelDescriptor(handle->rxDmaHandle, &s_dma_table[instance][0]);
     DMA_StartTransfer(handle->rxDmaHandle);
@@ -136,12 +179,19 @@ static void I3C_MasterTransferDMACallbackRx(dma_handle_t *dmaHandle, void *param
         uint32_t leftDataSize = i3cHandle->transfer.dataSize - i3cHandle->transDataSize;
         if (leftDataSize > 0U)
         {
+#if (defined(I3C_ERRATA_052123_USE_DMA_CHAIN) && (I3C_ERRATA_052123_USE_DMA_CHAIN))
+            i3c_rx_trigger_level_t rxTriggerLevel;
+            rxTriggerLevel = (leftDataSize >= 6U) ? kI3C_RxTriggerUntilThreeQuarterOrMore :
+                                                    (i3c_rx_trigger_level_t)(leftDataSize / 2U);
+            I3C_MasterSetWatermarks(i3cHandle->base, kI3C_TxTriggerOnEmpty, rxTriggerLevel, false, false);
+            i3cHandle->transDataSize += leftDataSize;
+#else
             I3C_MasterSetDMARxLoop(i3cHandle);
+#endif
         }
         else
         {
 #endif
-
             /* If target send back the data logner as expect and controller can't get COMPLETE, stop the transfer here.
                If bus transfer is done normally, this function will do nothing. */
             if ((i3cHandle->state != (uint8_t)kCtrlDoneState) &&
@@ -162,10 +212,87 @@ static void I3C_MasterTransferDMACallbackRx(dma_handle_t *dmaHandle, void *param
 static void I3C_MasterSetDMATxLoop(
     I3C_Type *base, i3c_master_dma_handle_t *handle, void *data, size_t dataSize, bool isSubAddr)
 {
+    uint32_t instance     = I3C_GetInstance(base);
     uint32_t byteAddr     = isSubAddr ? (uint32_t)&base->MWDATAB : (uint32_t)&base->MWDATABE;
     uint32_t halfWordAddr = isSubAddr ? (uint32_t)&base->MWDATAH : (uint32_t)&base->MWDATAHE;
-    uint32_t instance     = I3C_GetInstance(base);
+#if defined(I3C_ERRATA_052123_USE_DMA_CHAIN) && (I3C_ERRATA_052123_USE_DMA_CHAIN)
+    uint8_t *pData = data;
 
+    uint32_t txDmaChainCount = I3C_DMA_TX_CHAIN_COUNT(dataSize);
+    size_t leftSize          = dataSize;
+
+    for (uint32_t j = 0; j < txDmaChainCount; j++)
+    {
+        if (leftSize == 1U)
+        {
+            DMA_SetupDescriptor(&s_dma_table[instance][j],
+                                DMA_CHANNEL_XFER(false, false, true, false, WIDTH_1_BYTE, kDMA_AddressInterleave1xWidth,
+                                                 kDMA_AddressInterleave0xWidth, 1U),
+                                pData + handle->transDataSize, (void *)(uint32_t *)byteAddr, NULL);
+        }
+        else if (leftSize == 2U)
+        {
+            DMA_SetupDescriptor(&s_dma_table[instance][j],
+                                DMA_CHANNEL_XFER(false, false, true, false, WIDTH_2_BYTE, kDMA_AddressInterleave1xWidth,
+                                                 kDMA_AddressInterleave0xWidth, 2U),
+                                pData + handle->transDataSize, (void *)(uint32_t *)halfWordAddr, NULL);
+        }
+        else if (leftSize <= 8U)
+        {
+            (void)memset(&handle->workaroundBuff[j][0], 0, sizeof(handle->workaroundBuff[j]));
+            for (uint32_t i = 0; i < leftSize - 1U; i += 2U)
+            {
+                (void)memcpy((void *)&handle->workaroundBuff[j][i * 2U], (void *)(pData + handle->transDataSize + i),
+                             2);
+            }
+
+            DMA_SetupDescriptor(&s_dma_table[instance][j],
+                                DMA_CHANNEL_XFER(true, false, false, false, WIDTH_4_BYTE, kDMA_AddressInterleave1xWidth,
+                                                 kDMA_AddressInterleave0xWidth, ((leftSize - 1U) / 2U) * 4U),
+                                &handle->workaroundBuff[j][0], (void *)(uint8_t *)(uint32_t)&base->MWDATAH,
+                                &s_dma_table[instance][j + 1U]);
+
+            if ((leftSize % 2U) != 0U)
+            {
+                (void)memcpy((void *)&handle->workaroundBuff[j][((leftSize - 1U) / 2U) * 4U],
+                             (void *)(pData + handle->transDataSize + leftSize - 1U), 1);
+                DMA_SetupDescriptor(&s_dma_table[instance][j + 1U],
+                                    DMA_CHANNEL_XFER(false, false, true, false, WIDTH_1_BYTE,
+                                                     kDMA_AddressInterleave1xWidth, kDMA_AddressInterleave0xWidth, 1U),
+                                    &handle->workaroundBuff[j][((leftSize - 1U) / 2U) * 4U],
+                                    (void *)(uint32_t *)byteAddr, NULL);
+            }
+            else
+            {
+                DMA_SetupDescriptor(&s_dma_table[instance][j + 1U],
+                                    DMA_CHANNEL_XFER(false, false, true, false, WIDTH_2_BYTE,
+                                                     kDMA_AddressInterleave1xWidth, kDMA_AddressInterleave0xWidth, 2U),
+                                    &handle->workaroundBuff[j][((leftSize - 1U) / 2U) * 4U],
+                                    (void *)(uint32_t *)halfWordAddr, NULL);
+            }
+        }
+        else
+        {
+            (void)memset(&handle->workaroundBuff[j][0], 0, sizeof(handle->workaroundBuff[j]));
+            for (uint32_t i = 0; i <= 6U; i += 2U)
+            {
+                (void)memcpy((void *)&handle->workaroundBuff[j][i * 2U], (void *)(pData + handle->transDataSize + i),
+                             2);
+            }
+            DMA_SetupDescriptor(&s_dma_table[instance][j],
+                                DMA_CHANNEL_XFER(true, false, false, false, WIDTH_4_BYTE, kDMA_AddressInterleave1xWidth,
+                                                 kDMA_AddressInterleave0xWidth, 16U),
+                                (void *)&handle->workaroundBuff[j][0], (void *)(uint32_t *)(uint32_t)&base->MWDATAH,
+                                &s_dma_table[instance][j + 1U]);
+        }
+
+        if (!isSubAddr)
+        {
+            handle->transDataSize += ((leftSize <= 8U) ? leftSize : 8U);
+            leftSize -= ((leftSize <= 8U) ? leftSize : 8U);
+        }
+    }
+#else
     if (dataSize == 1U)
     {
         DMA_SetupDescriptor(&s_dma_table[instance][0],
@@ -231,6 +358,7 @@ static void I3C_MasterSetDMATxLoop(
     {
         handle->transDataSize += ((dataSize <= 8U) ? dataSize : 8U);
     }
+#endif
     DMA_SetChannelConfig(handle->txDmaHandle->base, handle->txDmaHandle->channel, NULL, true);
     DMA_SubmitChannelDescriptor(handle->txDmaHandle, &s_dma_table[instance][0]);
     DMA_StartTransfer(handle->txDmaHandle);

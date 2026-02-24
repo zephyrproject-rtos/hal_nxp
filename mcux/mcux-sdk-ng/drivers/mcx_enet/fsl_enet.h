@@ -58,19 +58,19 @@
 /*! @brief Defines for read format. */
 #define ENET_TXDESCRIP_RD_BL1_MASK  (0x3fffU)
 #define ENET_TXDESCRIP_RD_BL2_MASK  (ENET_TXDESCRIP_RD_BL1_MASK << 16)
-#define ENET_TXDESCRIP_RD_BL1(n)    ((uint32_t)(n) & ENET_TXDESCRIP_RD_BL1_MASK)
-#define ENET_TXDESCRIP_RD_BL2(n)    (((uint32_t)(n) & ENET_TXDESCRIP_RD_BL1_MASK) << 16)
+#define ENET_TXDESCRIP_RD_BL1(n)    ((uint32_t)(n)&ENET_TXDESCRIP_RD_BL1_MASK)
+#define ENET_TXDESCRIP_RD_BL2(n)    (((uint32_t)(n)&ENET_TXDESCRIP_RD_BL1_MASK) << 16)
 #define ENET_TXDESCRIP_RD_TTSE_MASK (1UL << 30)
 #define ENET_TXDESCRIP_RD_IOC_MASK  (1UL << 31)
 
 #define ENET_TXDESCRIP_RD_FL_MASK   (0x7FFFU)
-#define ENET_TXDESCRIP_RD_FL(n)     ((uint32_t)(n) & ENET_TXDESCRIP_RD_FL_MASK)
-#define ENET_TXDESCRIP_RD_CIC(n)    (((uint32_t)(n) & 0x3U) << 16)
+#define ENET_TXDESCRIP_RD_FL(n)     ((uint32_t)(n)&ENET_TXDESCRIP_RD_FL_MASK)
+#define ENET_TXDESCRIP_RD_CIC(n)    (((uint32_t)(n)&0x3U) << 16)
 #define ENET_TXDESCRIP_RD_TSE_MASK  (1UL << 18)
-#define ENET_TXDESCRIP_RD_SLOT(n)   (((uint32_t)(n) & 0x0fU) << 19)
-#define ENET_TXDESCRIP_RD_SAIC(n)   (((uint32_t)(n) & 0x07U) << 23)
-#define ENET_TXDESCRIP_RD_CPC(n)    (((uint32_t)(n) & 0x03U) << 26)
-#define ENET_TXDESCRIP_RD_LDFD(n)   (((uint32_t)(n) & 0x03U) << 28)
+#define ENET_TXDESCRIP_RD_SLOT(n)   (((uint32_t)(n)&0x0fU) << 19)
+#define ENET_TXDESCRIP_RD_SAIC(n)   (((uint32_t)(n)&0x07U) << 23)
+#define ENET_TXDESCRIP_RD_CPC(n)    (((uint32_t)(n)&0x03U) << 26)
+#define ENET_TXDESCRIP_RD_LDFD(n)   (((uint32_t)(n)&0x03U) << 28)
 #define ENET_TXDESCRIP_RD_LD_MASK   (1UL << 28)
 #define ENET_TXDESCRIP_RD_FD_MASK   (1UL << 29)
 #define ENET_TXDESCRIP_RD_CTXT_MASK (1UL << 30)
@@ -93,14 +93,18 @@
 
 /*! @name Defines some Ethernet parameters. */
 /*@{*/
-#define ENET_FRAME_MAX_FRAMELEN      (1518U) /*!< Default maximum ethernet frame size. */
-#define ENET_FCS_LEN                 (4U)    /*!< Ethernet Rx frame FCS length. */
-#define ENET_ADDR_ALIGNMENT          (0x3U)  /*!< Recommended ethernet buffer alignment. */
-#define ENET_BUFF_ALIGNMENT          (4U)    /*!< Receive buffer alignment shall be 4bytes-aligned. */
-#define ENET_RING_NUM_MAX            (2U)    /*!< The maximum number of Tx/Rx descriptor rings. */
-#define ENET_MTL_RXFIFOSIZE          (2048U) /*!< The Rx fifo size. */
-#define ENET_MTL_TXFIFOSIZE          (2048U) /*!< The Tx fifo size. */
-#define ENET_MACINT_ENUM_OFFSET      (16U)   /*!< The offset for mac interrupt in enum type. */
+#define ENET_FRAME_MAX_FRAMELEN (1518U)        /*!< Default maximum ethernet frame size. */
+#define ENET_FCS_LEN            (4U)           /*!< Ethernet Rx frame FCS length. */
+#define ENET_ADDR_ALIGNMENT     (0x3U)         /*!< Recommended ethernet buffer alignment. */
+#define ENET_BUFF_ALIGNMENT     (4U)           /*!< Receive buffer alignment shall be 4bytes-aligned. */
+#if ENET_DMA_CH_COUNT < ENET_MTL_QUEUE_COUNT
+#define ENET_RING_NUM_MAX ENET_DMA_CH_COUNT    /*!< The maximum number of Tx/Rx descriptor rings. */
+#else
+#define ENET_RING_NUM_MAX ENET_MTL_QUEUE_COUNT /*!< The maximum number of Tx/Rx descriptor rings. */
+#endif                                         /* ENET_DMA_CH_COUNT < ENET_MTL_QUEUE_COUNT */
+#define ENET_MTL_RXFIFOSIZE          (2048U)   /*!< The Rx fifo size. */
+#define ENET_MTL_TXFIFOSIZE          (2048U)   /*!< The Tx fifo size. */
+#define ENET_MACINT_ENUM_OFFSET      (16U)     /*!< The offset for mac interrupt in enum type. */
 #define ENET_FRAME_TX_LEN_LIMITATION (ENET_TXDESCRIP_RD_BL1_MASK) /*!< The Tx frame length software limitation. */
 #define ENET_FRAME_RX_ERROR_BITS(x)  (((x) >> 19U) & 0x3FU)       /*!< The Rx frame error bits field. */
 /*@}*/
@@ -937,12 +941,16 @@ void ENET_EnterPowerDown(ENET_Type *base, uint32_t *wakeFilter);
  */
 static inline void ENET_ExitPowerDown(ENET_Type *base)
 {
+    uint8_t index;
+
     /* Clear and status ans reset the power down. */
     base->MAC_PMT_CONTROL_STATUS &= ~ENET_MAC_PMT_CONTROL_STATUS_PWRDWN_MASK;
 
     /* Restore the Tx which is disabled when enter power down mode. */
-    base->DMA_CH[0].DMA_CHX_TX_CTRL |= ENET_DMA_CH_DMA_CHX_TX_CTRL_ST_MASK;
-    base->DMA_CH[1].DMA_CHX_TX_CTRL |= ENET_DMA_CH_DMA_CHX_TX_CTRL_ST_MASK;
+    for (index = 0U; index < ENET_RING_NUM_MAX; index++)
+    {
+        base->DMA_CH[index].DMA_CHX_TX_CTRL |= ENET_DMA_CH_DMA_CHX_TX_CTRL_ST_MASK;
+    }
     base->MAC_CONFIGURATION |= ENET_MAC_CONFIGURATION_TE_MASK;
 }
 

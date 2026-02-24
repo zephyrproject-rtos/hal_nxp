@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SEMA4 driver version */
-#define FSL_SEMA4_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+#define FSL_SEMA4_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
 /*! @} */
 
 /*! @brief The number to reset all SEMA4 gates. */

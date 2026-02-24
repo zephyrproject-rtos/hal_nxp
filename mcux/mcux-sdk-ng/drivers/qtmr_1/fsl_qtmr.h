@@ -27,7 +27,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 3, 0)) /*!< Version */
+#define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 3, 1)) /*!< Version */
 /*! @} */
 
 #if (defined(FSL_FEATURE_TMR_HAS_32BIT_REGISTER) && FSL_FEATURE_TMR_HAS_32BIT_REGISTER)
@@ -399,13 +399,13 @@ void QTMR_SetCompareValue(TMR_Type *base, qtmr_channel_selection_t channel, uint
 #if (defined(FSL_FEATURE_TMR_HAS_32BIT_REGISTER) && FSL_FEATURE_TMR_HAS_32BIT_REGISTER)
 static inline void QTMR_SetLoadValue(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t value)
 {
-    base->CHANNEL[channel].LOAD &= ~TMR_LOAD_LOAD_MASK;
+    base->CHANNEL[channel].LOAD &= MCUX_MASK_INVERT_32(TMR_LOAD_LOAD_MASK);
     base->CHANNEL[channel].LOAD = value;
 }
 #else
 static inline void QTMR_SetLoadValue(TMR_Type *base, qtmr_channel_selection_t channel, uint16_t value)
 {
-    base->CHANNEL[channel].LOAD &= (uint16_t)(~TMR_LOAD_LOAD_MASK);
+    base->CHANNEL[channel].LOAD &= MCUX_MASK_INVERT_16(TMR_LOAD_LOAD_MASK);
     base->CHANNEL[channel].LOAD = value;
 }
 #endif
@@ -452,7 +452,7 @@ static inline void QTMR_StartTimer(TMR_Type *base, qtmr_channel_selection_t chan
 {
     uint32_t reg = base->CHANNEL[channel].CTRL;
 
-    reg &= ~TMR_CTRL_CM_MASK;
+    reg &= MCUX_MASK_INVERT_32(TMR_CTRL_CM_MASK);
     reg |= TMR_CTRL_CM(clockSource);
     base->CHANNEL[channel].CTRL = reg;
 }
@@ -461,7 +461,7 @@ static inline void QTMR_StartTimer(TMR_Type *base, qtmr_channel_selection_t chan
 {
     uint16_t reg = base->CHANNEL[channel].CTRL;
 
-    reg &= (uint16_t)(~(TMR_CTRL_CM_MASK));
+    reg &= MCUX_MASK_INVERT_16(TMR_CTRL_CM_MASK);
     reg |= TMR_CTRL_CM(clockSource);
     base->CHANNEL[channel].CTRL = reg;
 }
@@ -476,12 +476,12 @@ static inline void QTMR_StartTimer(TMR_Type *base, qtmr_channel_selection_t chan
 #if (defined(FSL_FEATURE_TMR_HAS_32BIT_REGISTER) && FSL_FEATURE_TMR_HAS_32BIT_REGISTER)
 static inline void QTMR_StopTimer(TMR_Type *base, qtmr_channel_selection_t channel)
 {
-    base->CHANNEL[channel].CTRL &= ~TMR_CTRL_CM_MASK;
+    base->CHANNEL[channel].CTRL &= MCUX_MASK_INVERT_32(TMR_CTRL_CM_MASK);
 }
 #else
 static inline void QTMR_StopTimer(TMR_Type *base, qtmr_channel_selection_t channel)
 {
-    base->CHANNEL[channel].CTRL &= (uint16_t)(~TMR_CTRL_CM_MASK);
+    base->CHANNEL[channel].CTRL &= MCUX_MASK_INVERT_16(TMR_CTRL_CM_MASK);
 }
 #endif
 

@@ -96,7 +96,14 @@ void VREF_Init(VREF_Type *base, const vref_config_t *config)
     CLOCK_EnableClock(s_vrefClocks[VREF_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+#if !(defined(FSL_FEATURE_VREF_HAS_LPBGEN) && (FSL_FEATURE_VREF_HAS_LPBGEN == 0U))
     base->CSR |= VREF_CSR_LPBGEN_MASK;
+#endif
+
+#if (defined(FSL_FEATURE_VREF_HAS_IBIAS_EN) && (FSL_FEATURE_VREF_HAS_IBIAS_EN != 0U))
+    base->CSR |= VREF_CSR_IBIAS_EN_MASK;
+#endif
+
     /* After enabling low power bandgap, delay 20 us. */
     SDK_DelayAtLeastUs(20U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 

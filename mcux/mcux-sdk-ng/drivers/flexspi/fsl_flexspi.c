@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2023-2025 NXP
+ * Copyright 2016-2022, 2023-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -289,6 +289,8 @@ status_t FLEXSPI_CheckAndClearError(FLEXSPI_Type *base, uint32_t status)
  */
 void FLEXSPI_Init(FLEXSPI_Type *base, const flexspi_config_t *config)
 {
+    assert(config->clockDiv <= ((FLEXSPI_MCR0_SERCLKDIV_MASK >> FLEXSPI_MCR0_SERCLKDIV_SHIFT) + 1U));
+
     uint32_t configValue = 0;
     uint8_t i            = 0;
     uint32_t totalAhbBufferSize = 0UL;
@@ -317,6 +319,7 @@ void FLEXSPI_Init(FLEXSPI_Type *base, const flexspi_config_t *config)
 
     /* Configure MCR0 configuration items. */
     configValue = FLEXSPI_MCR0_RXCLKSRC(config->rxSampleClock) | FLEXSPI_MCR0_DOZEEN(config->enableDoze) |
+                  FLEXSPI_MCR0_SERCLKDIV((config->clockDiv > 0U) ? (config->clockDiv - 1U) : 0U) |
                   FLEXSPI_MCR0_IPGRANTWAIT(config->ipGrantTimeoutCycle) |
                   FLEXSPI_MCR0_AHBGRANTWAIT(config->ahbConfig.ahbGrantTimeoutCycle) |
                   FLEXSPI_MCR0_SCKFREERUNEN(config->enableSckFreeRunning) |
@@ -371,8 +374,8 @@ void FLEXSPI_Init(FLEXSPI_Type *base, const flexspi_config_t *config)
                    FLEXSPI_AHBCR_PREFETCHEN(config->ahbConfig.enableAHBPrefetch) |
                    FLEXSPI_AHBCR_BUFFERABLEEN(config->ahbConfig.enableAHBBufferable) |
 #if (defined(FSL_FEATURE_FLEXSPI_HAS_RESUMEDISABLE_BIT_CONFIG_SUPPORT) && FSL_FEATURE_FLEXSPI_HAS_RESUMEDISABLE_BIT_CONFIG_SUPPORT)
-                   FLEXSPI_AHBCR_RESUMEDISABLE(config->ahbConfig.disableAhbReadResume) | 
-#endif 
+                   FLEXSPI_AHBCR_RESUMEDISABLE(config->ahbConfig.disableAhbReadResume) |
+#endif
                    FLEXSPI_AHBCR_CACHABLEEN(config->ahbConfig.enableAHBCachable);
     base->AHBCR = configValue;
 
@@ -419,6 +422,7 @@ void FLEXSPI_GetDefaultConfig(flexspi_config_t *config)
     FLEXSPI_Memset(config, 0, sizeof(*config));
 
     config->rxSampleClock        = kFLEXSPI_ReadSampleClkLoopbackInternally;
+    config->clockDiv             = 1;
     config->enableSckFreeRunning = false;
 #if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN)
     config->enableCombination = false;
@@ -468,7 +472,7 @@ void FLEXSPI_GetDefaultConfig(flexspi_config_t *config)
     /* ERR052733: When IPED is enabled, the RESUME should be disabled. Flexspi does not support RESUME when IPED is enabled.
        Workaround: Software should configure this AHBCR_RESUMEDISABLE bit to 1'b1 which uses the IPED enable.*/
     config->ahbConfig.disableAhbReadResume   = true;
-#else    
+#else
     config->ahbConfig.disableAhbReadResume   = false;
 #endif /* FSL_FEATURE_FLEXSPI_HAS_ERRATA_052733 */
 #endif /* FSL_FEATURE_FLEXSPI_HAS_RESUMEDISABLE_BIT_CONFIG_SUPPORT */
@@ -684,7 +688,7 @@ void FLEXSPI_SetAddressMapping(FLEXSPI_Type *base, const flexspi_addr_map_config
 
 /*!
  * brief Update all AHB buffers' settings, including buffer size, master ID.
- * 
+ *
  * param base FLEXSPI peripheral base address.
  * param ptrAhbBufferCtrl Pointer to structure flexspi_ahbBuffers_ctrl_t which store all AHB buffers' settings.
  */

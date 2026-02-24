@@ -148,7 +148,7 @@ void IGF_SetIgfConfig(IGF_Type *base, uint32_t channel, const igf_config_t *conf
  */
 static inline void IGF_SetOutputPolarity(IGF_Type *base, uint32_t channel, bool invertPolarity)
 {
-    base->MCR[channel].MCR = (base->MCR[channel].MCR & ~IGF_MCR_POL_MASK) | IGF_MCR_POL(invertPolarity ? 1 : 0);
+    base->MCR[channel].MCR = (base->MCR[channel].MCR & ~IGF_MCR_POL_MASK) | IGF_MCR_POL((invertPolarity ? 1U : 0U));
 }
 
 /*!
@@ -162,7 +162,7 @@ static inline void IGF_SetOutputPolarity(IGF_Type *base, uint32_t channel, bool 
  */
 static inline void IGF_SetImmediatePropagation(IGF_Type *base, uint32_t channel, bool enable)
 {
-    base->MCR[channel].MCR = (base->MCR[channel].MCR & ~IGF_MCR_IMM_MASK) | IGF_MCR_IMM(enable ? 1 : 0);
+    base->MCR[channel].MCR = (base->MCR[channel].MCR & ~IGF_MCR_IMM_MASK) | IGF_MCR_IMM((enable ? 1U : 0U));
 }
 
 /*!
@@ -176,7 +176,7 @@ static inline void IGF_SetImmediatePropagation(IGF_Type *base, uint32_t channel,
  */
 static inline void IGF_SelectPrescalerSource(IGF_Type *base, uint32_t channel, bool external)
 {
-    base->MCR[channel].MCR = (base->MCR[channel].MCR & ~IGF_MCR_PSSEL_MASK) | IGF_MCR_PSSEL(external ? 1 : 0);
+    base->MCR[channel].MCR = (base->MCR[channel].MCR & ~IGF_MCR_PSSEL_MASK) | IGF_MCR_PSSEL((external ? 1U : 0U));
 }
 
 /*!

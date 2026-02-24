@@ -1,5 +1,10 @@
 # ACMP
 
+## [2.5.0]
+
+- New Feature
+  - Supported the plateforms which don't have continuous mode.
+
 ## [2.4.0]
 
 - New Feature

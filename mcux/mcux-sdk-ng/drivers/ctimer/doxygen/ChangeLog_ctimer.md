@@ -1,5 +1,9 @@
 # CTIMER
 
+## [2.3.4]
+- Bug Fixes
+  - Fixed ERRATA ERR053024 CTIMER will enter interrupt twice when function clock much slower than bus clock.
+
 ## [2.3.3]
 
 - Bug Fixes

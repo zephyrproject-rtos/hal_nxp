@@ -22,9 +22,14 @@ if(CONFIG_MCUX_COMPONENT_driver.powerquad)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.powerquad_cmsis)
-    mcux_component_version(2.0.4)
+    mcux_component_version(2.1.0)
 
-    mcux_add_source(SOURCES fsl_powerquad.h fsl_powerquad_cmsis.c)
+    mcux_add_source(
+        SOURCES
+        fsl_powerquad.h
+        fsl_powerquad_cmsis.h
+        fsl_powerquad_cmsis.c
+    )
 
     mcux_add_include(INCLUDES .)
 

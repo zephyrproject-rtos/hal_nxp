@@ -29,7 +29,7 @@ static void FLEXSPI_SLV_Memset(void *src, uint8_t value, size_t length);
 static FLEXSPI_SLV_Type *const s_flexspiSlvBases[] = FLEXSPI_SLV_BASE_PTRS;
 
 /*! @brief Pointers to Flexspi Follower IRQ number for each instance. */
-static const IRQn_Type s_flexspiSlvIrqs[] = {FLEXSPI_SLV_IRQn};
+static const IRQn_Type s_flexspiSlvIrqs[] = FLEXSPI_SLV_IRQS;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /* Clock name array */
@@ -239,12 +239,6 @@ void FLEXSPI_SLV_HandleIRQ(FLEXSPI_SLV_Type *base, flexspi_slv_handle_t *handle)
 void FLEXSPI_SLV_DriverIRQHandler(void);
 void FLEXSPI_SLV_DriverIRQHandler(void)
 {
-#if defined(FLEXSPI_SLV)
-    s_flexspiSlvIsr(FLEXSPI_SLV, s_flexspiSlvHandle[0]);
-#elif defined(COMM_FLEXSPI_FLR)
-    s_flexspiSlvIsr(COMM_FLEXSPI_FLR, s_flexspiSlvHandle[0]);
-#else
-#error "No valid FLEXSPI_SLV instance found!"
-#endif
+    s_flexspiSlvIsr(s_flexspiSlvBases[0], s_flexspiSlvHandle[0]);
     SDK_ISR_EXIT_BARRIER;
 }

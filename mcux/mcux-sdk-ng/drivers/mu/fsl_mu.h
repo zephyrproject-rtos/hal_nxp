@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2025 NXP
+ * Copyright 2016-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -63,7 +63,7 @@
  * @{
  */
 /*! @brief MU driver version. */
-#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
 /*! @} */
 
 #define MU_GET_CORE_FLAG(flags) (((uint32_t)(flags) >> 0U) & 0xFFUL)

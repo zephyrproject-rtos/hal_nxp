@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020 NXP
+ * Copyright 2016-2017, 2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -72,28 +72,31 @@ typedef struct _crc_module_config
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-#if defined(CRC_RESETS_ARRAY)
 /*!
  * @brief Get instance number for CRC module.
  *
  * @param base CRC peripheral base address
  */
 static uint32_t CRC_GetInstance(CRC_Type *base);
-#endif
+
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-#if defined(CRC_RESETS_ARRAY)
 static CRC_Type *const s_crcBases[] = CRC_BASE_PTRS;
 
+#if defined(CRC_RESETS_ARRAY)
 /* Reset array */
 static const reset_ip_name_t s_crcResets[] = CRC_RESETS_ARRAY;
 #endif
 
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+/*! @brief Array to map CRC instance number to clock name. */
+static const clock_ip_name_t s_crcClockName[] = CRC_CLOCKS;
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
-#if defined(CRC_RESETS_ARRAY)
 static uint32_t CRC_GetInstance(CRC_Type *base)
 {
     uint32_t instance;
@@ -111,7 +114,6 @@ static uint32_t CRC_GetInstance(CRC_Type *base)
 
     return instance;
 }
-#endif
 
 /*!
  * @brief Returns transpose type for CRC protocol reflect in parameter.
@@ -150,9 +152,12 @@ static void CRC_ConfigureAndStart(CRC_Type *base, const crc_module_config_t *con
 {
     uint32_t crcControl;
 
+    /* explicit conversion from bool to unsigned integer */
+    uint32_t complementChecksum = (true == config->complementChecksum) ? 1U : 0U;
+
     /* pre-compute value for CRC control registger based on user configuraton without WAS field */
     crcControl = 0U | CRC_CTRL_TOT(config->writeTranspose) | CRC_CTRL_TOTR(config->readTranspose) |
-                 CRC_CTRL_FXOR(config->complementChecksum) | CRC_CTRL_TCRC(config->crcBits);
+                 CRC_CTRL_FXOR(complementChecksum) | CRC_CTRL_TCRC(config->crcBits);
 
     /* make sure the control register is clear - WAS is deasserted, and protocol is set */
     base->CTRL = crcControl;
@@ -233,7 +238,7 @@ void CRC_Init(CRC_Type *base, const crc_config_t *config)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* ungate clock */
-    CLOCK_EnableClock(kCLOCK_Crc0);
+    CLOCK_EnableClock(s_crcClockName[CRC_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if defined(CRC_RESETS_ARRAY)
@@ -249,6 +254,21 @@ void CRC_Init(CRC_Type *base, const crc_config_t *config)
     {
         CRC_SetRawProtocolConfig(base, config);
     }
+}
+
+/*!
+ * brief Disables the CRC peripheral module.
+ *
+ * This function disables the clock gate in the SIM module for the CRC peripheral.
+ *
+ * param base CRC peripheral address.
+ */
+void CRC_Deinit(CRC_Type *base)
+{
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+    /* gate clock */
+    CLOCK_DisableClock(s_crcClockName[CRC_GetInstance(base)]);
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
 /*!

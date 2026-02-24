@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1354,6 +1354,15 @@ static void QSPI_CommonIRQHandler(QSPI_Type *base, void *param)
     }
 /* Added for ARM errata 838869, affects Cortex-M4, Cortex-M4F. */
     SDK_ISR_EXIT_BARRIER;
+}
+
+void QSPI_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_psQspiBases))
+    {
+        assert(s_psQspiHandles[instance]);
+        QSPI_CommonIRQHandler(s_psQspiBases[instance], s_psQspiHandles[instance]);
+    }
 }
 
 #if defined(QSPI0)

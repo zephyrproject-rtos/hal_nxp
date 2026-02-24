@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.eqdc)
-    mcux_component_version(2.3.1)
+    mcux_component_version(2.3.2)
 
     mcux_add_source(SOURCES fsl_eqdc.h fsl_eqdc.c)
 

@@ -531,20 +531,20 @@ static status_t ENET_QOS_SetMacControl(ENET_QOS_Type *base,
             configIndex = index & 0x3U;
 
             /* Configure rx queue priority. */
-            if (index < 4U)
+#if ENET_QOS_MAC_RXQ_CTRL_COUNT > 3
+            if (index >= 4U)
+            {
+                rxQueuePrioMap1 &= ~((uint32_t)ENET_QOS_MAC_RXQ_CTRL_PSRQ0_MASK << (8U * configIndex));
+                rxQueuePrioMap1 |= (uint32_t)ENET_QOS_MAC_RXQ_CTRL_PSRQ0(multiqCfg->rxQueueConfig[index].priority)
+                                   << (8U * configIndex);
+            }
+            else
+#endif /* ENET_QOS_MAC_RXQ_CTRL_COUNT > 3 */
             {
                 rxQueuePrioMap0 &= ~((uint32_t)ENET_QOS_MAC_RXQ_CTRL_PSRQ0_MASK << (8U * configIndex));
                 rxQueuePrioMap0 |= (uint32_t)ENET_QOS_MAC_RXQ_CTRL_PSRQ0(multiqCfg->rxQueueConfig[index].priority)
                                    << (8U * configIndex);
             }
-#if ENET_QOS_MAC_RXQ_CTRL_COUNT > 3
-            else
-            {              
-                rxQueuePrioMap1 &= ~((uint32_t)ENET_QOS_MAC_RXQ_CTRL_PSRQ0_MASK << (8U * configIndex));
-                rxQueuePrioMap1 |= (uint32_t)ENET_QOS_MAC_RXQ_CTRL_PSRQ0(multiqCfg->rxQueueConfig[index].priority)
-                                   << (8U * configIndex);
-            }
-#endif /* ENET_QOS_MAC_RXQ_CTRL_COUNT > 3 */
 
             /* Configure queue enable mode. */
             reg |= ENET_QOS_MAC_RXQ_CTRL_RXQ0EN((uint32_t)multiqCfg->rxQueueConfig[index].mode) << (2U * index);
@@ -1633,7 +1633,7 @@ void ENET_QOS_CreateHandler(ENET_QOS_Type *base,
     handle->userData = userData;
 
     /* Use default ENET_QOS_CommonIRQHandler as default weak IRQ handler. */
-    ENET_QOS_SetISRHandler(base, ENET_QOS_CommonIRQHandler);
+    ENET_QOS_SetISRHandler(base, &ENET_QOS_CommonIRQHandler);
 }
 
 /*!

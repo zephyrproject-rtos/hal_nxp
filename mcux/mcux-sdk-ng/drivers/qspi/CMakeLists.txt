@@ -21,7 +21,7 @@ if(CONFIG_MCUX_COMPONENT_driver.qspi_mcxe31b)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.qspi_edma)
-    mcux_component_version(2.2.4)
+    mcux_component_version(2.2.5)
 
     mcux_add_source(SOURCES fsl_qspi_edma.h fsl_qspi_edma.c)
 
@@ -30,7 +30,7 @@ if(CONFIG_MCUX_COMPONENT_driver.qspi_edma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.qspi)
-    mcux_component_version(2.3.1)
+    mcux_component_version(2.3.2)
 
     mcux_add_source(SOURCES fsl_qspi.h fsl_qspi.c)
 

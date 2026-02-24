@@ -874,6 +874,6 @@ void TRDC_MbcSetMemoryBlockConfig(TRDC_Type *base, const trdc_mbc_memory_block_c
     *(uint32_t *)regAddr = configWord;
 
     /* Check whether the register is set according to configuration. */
-    assert(*(uint32_t *)regAddr == configWord);
+    assert((*(uint32_t *)regAddr & (0xFUL << shift)) == ((pid._u32 & 0xFU) << shift));
 }
 #endif

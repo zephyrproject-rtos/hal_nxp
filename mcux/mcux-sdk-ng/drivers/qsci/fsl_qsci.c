@@ -1,5 +1,5 @@
 /*
- * Copyright 2020,2021 NXP
+ * Copyright 2020,2021,2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1418,6 +1418,14 @@ void QSCI_TransferHandleIRQ(void *handle)
         {
             psHandle->pfCallback(psHandle);
         }
+    }
+}
+
+void QSCI_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_pfQsciBases))
+    {
+        s_pfQsciIsr(s_psQsciHandles[instance]);
     }
 }
 

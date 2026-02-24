@@ -1,5 +1,27 @@
 # FLEXCAN
 
+## [2.15.0]
+
+- Improvements
+  - Add remote request and response non-blocking transfer APIs.
+    - `FLEXCAN_TransferRemoteRequestNonBlocking`
+    - `FLEXCAN_TransferRemoteResponseNonBlocking`
+- Bug Fixes
+  - Fixed improper CS code when configuring FlexCAN Remote Response Message Buffer in
+    `FLEXCAN_SetRemoteResponseMbConfig`.
+
+## [2.14.7]
+
+- Improvements
+  - Add Coverage Justification for uncovered code.
+- Bug Fixes
+  - Fixed violations of the CERT INT30-C INT31-C.
+
+## [2.14.6]
+
+- Bug Fixes
+  - Fixed MCR register reconfiguration failure after FlexCAN soft reset on some platforms.
+
 ## [2.14.5]
 
 - Improvements

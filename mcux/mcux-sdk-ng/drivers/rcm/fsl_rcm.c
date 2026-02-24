@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020 NXP
+ * Copyright 2016-2017, 2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -29,14 +29,16 @@ void RCM_ConfigureResetPinFilter(RCM_Type *base, const rcm_reset_pin_filter_conf
 #if (defined(FSL_FEATURE_RCM_REG_WIDTH) && (FSL_FEATURE_RCM_REG_WIDTH == 32))
     uint32_t reg;
 
-    reg = (((uint32_t)config->enableFilterInStop << RCM_RPC_RSTFLTSS_SHIFT) | (uint32_t)config->filterInRunWait);
+    /* INT31-C: Safe boolean to integer conversion */
+    reg = (((uint32_t)(config->enableFilterInStop ? 1U : 0U) << RCM_RPC_RSTFLTSS_SHIFT) | (uint32_t)config->filterInRunWait);
     if (config->filterInRunWait == kRCM_FilterBusClock)
     {
         reg |= ((uint32_t)config->busClockFilterCount << RCM_RPC_RSTFLTSEL_SHIFT);
     }
     base->RPC = reg;
 #else
-    base->RPFC = (((uint8_t)config->enableFilterInStop << RCM_RPFC_RSTFLTSS_SHIFT) | (uint8_t)config->filterInRunWait);
+    /* INT31-C: Safe boolean to integer conversion and proper type handling */
+    base->RPFC = (uint8_t)((config->enableFilterInStop ? 1U : 0U) << RCM_RPFC_RSTFLTSS_SHIFT) | (uint8_t)config->filterInRunWait;
     if (config->filterInRunWait == kRCM_FilterBusClock)
     {
         base->RPFW = config->busClockFilterCount;
@@ -63,6 +65,8 @@ void RCM_SetForceBootRomSource(RCM_Type *base, rcm_boot_rom_config_t config)
 #if (defined(FSL_FEATURE_RCM_REG_WIDTH) && (FSL_FEATURE_RCM_REG_WIDTH == 32))
     base->FM = reg;
 #else
+    /* INT31-C: Validate before narrowing conversion */
+    assert(reg <= UINT8_MAX);
     base->FM = (uint8_t)reg;
 #endif /* FSL_FEATURE_RCM_REG_WIDTH == 32 */
 }

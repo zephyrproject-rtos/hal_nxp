@@ -1,6 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
- * All rights reserved.
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief eDMA driver version */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 10, 7)) /*!< Version 2.10.7. */
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 10, 9)) /*!< Version 2.10.9. */
 /*! @} */
 
 /*! @brief eDMA driver name */
@@ -1884,6 +1883,16 @@ static inline uint32_t EDMA_GetNextTCDAddress(edma_handle_t *handle)
  * @param handle eDMA handle pointer.
  */
 void EDMA_HandleIRQ(edma_handle_t *handle);
+
+/*!
+ * @brief Initialize all fields to 0 for the TCD structure.
+ *
+ * This function initialize all fields for this TCD structure to 0.
+ *
+ * @param base eDMA peripheral base address.
+ * @param tcd Pointer to the TCD structure.
+ */
+void EDMA_TcdInit(EDMA_Type *base, edma_tcd_t *tcdRegs);
 
 /*! @} */
 

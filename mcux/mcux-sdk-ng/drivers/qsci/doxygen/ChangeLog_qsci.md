@@ -1,5 +1,10 @@
 # QSCI
 
+## [2.0.5]
+
+- New Feature
+  - Added common IRQ handler entry QSCI_DriverIRQHandler.
+
 ## [2.0.4]
 
 - Bug Fixes

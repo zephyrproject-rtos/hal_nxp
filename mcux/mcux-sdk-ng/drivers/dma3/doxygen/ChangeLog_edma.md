@@ -1,5 +1,11 @@
 # EDMA (DMA3)
 
+## [2.5.3]
+
+- Bug Fixes
+  - Fixed coverity issues with CERT INT30-C, CERT INT31-C compliance.
+  - Fixed violations of MISRA C-2012 rule 10.4, 8.5.
+
 ## [2.5.2]
 
 - Bug Fixes

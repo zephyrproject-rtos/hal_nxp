@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,9 +20,9 @@
  */
 /*! @name Driver version */
 /*! @{ */
-/*! @brief LTC driver version. Version 2.0.17.
+/*! @brief LTC driver version. Version 2.0.18.
  *
- * Current version: 2.0.17
+ * Current version: 2.0.18
  *
  * Change log:
  * - Version 2.0.1
@@ -75,8 +75,11 @@
  *
  * - Version 2.0.17
  *   - Fix CMAC for payloads over one block, and if BRIC is present on the device, remove XCBC and "decrypt key" functionality
+ *
+ * - Version 2.0.18
+ *   - Fix CERT INT30-C and INT31-C compliance
  */
-#define FSL_LTC_DRIVER_VERSION (MAKE_VERSION(2, 0, 17))
+#define FSL_LTC_DRIVER_VERSION (MAKE_VERSION(2, 0, 18))
 /*! @} */
 /*! @} */
 

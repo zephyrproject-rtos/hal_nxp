@@ -25,7 +25,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SPI DMA driver version. */
-#define FSL_SPI_DMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+#define FSL_SPI_DMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
 /*! @} */
 
 typedef struct _spi_dma_handle spi_dma_handle_t;

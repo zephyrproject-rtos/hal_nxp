@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -85,8 +85,10 @@ status_t PWM_Init(PWM_Type *base, const pwm_config_t *config)
     base->PWMCR = (PWM_PWMCR_REPEAT(config->sampleRepeat) | PWM_PWMCR_PRESCALER(config->prescale) |
                    PWM_PWMCR_CLKSRC(config->clockSource) | PWM_PWMCR_POUTC(config->outputConfig) |
                    PWM_PWMCR_HCTR(config->halfWordSwap) | PWM_PWMCR_BCTR(config->byteSwap) |
-                   PWM_PWMCR_STOPEN(config->enableStopMode) | PWM_PWMCR_DBGEN(config->enableDebugMode) |
-                   PWM_PWMCR_WAITEN(config->enableWaitMode) | PWM_PWMCR_DOZEN(config->enableDozeMode) |
+                   PWM_PWMCR_STOPEN(config->enableStopMode ? 1U : 0U) |
+                   PWM_PWMCR_DBGEN(config->enableDebugMode ? 1U : 0U) |
+                   PWM_PWMCR_WAITEN(config->enableWaitMode ? 1U : 0U) |
+                   PWM_PWMCR_DOZEN(config->enableDozeMode ? 1U : 0U) |
                    PWM_PWMCR_FWM(config->fifoWater));
 
     return kStatus_Success;

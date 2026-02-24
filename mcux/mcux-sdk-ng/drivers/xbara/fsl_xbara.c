@@ -1,12 +1,13 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_xbara.h"
+#include <stddef.h>
 
 /*******************************************************************************
  * Definitions
@@ -19,6 +20,8 @@
 
 /* Macros for entire XBARA_CTRL register.  */
 #define XBARA_CTRLx(base, index) (((volatile uint16_t *)(&((base)->CTRL0)))[(index)])
+
+#define XBARA_SELx_REG_COUNT ((offsetof(XBARA_Type, CTRL0) - offsetof(XBARA_Type, SEL0)) / sizeof(((XBARA_Type *)0)->SEL0))
 
 typedef union
 {
@@ -122,13 +125,15 @@ void XBARA_SetSignalsConnection(XBARA_Type *base, xbar_input_signal_t input, xba
 {
     xbara_u8_u16_t regVal;
     uint8_t byteInReg;
-    uint8_t outputIndex = (uint8_t)output;
+    uint8_t outputIndex = (uint8_t)((unsigned)output & 0xFFU);
+
+    assert((outputIndex / 2U) < XBARA_SELx_REG_COUNT);
 
     byteInReg = outputIndex % 2U;
 
     regVal._u16 = XBARA_SELx(base, outputIndex);
 
-    regVal._u8[byteInReg] = (uint8_t)input;
+    regVal._u8[byteInReg] = (uint8_t)((unsigned)input & 0xFFU);
 
     XBARA_SELx(base, outputIndex) = regVal._u16;
 }
@@ -169,7 +174,7 @@ void XBARA_ClearStatusFlags(XBARA_Type *base, uint32_t mask)
     /* Assign regVal to CTRL0 register's value */
     regVal = (base->CTRL0);
     /* Perform this command to avoid writing 1 into interrupt flag bits */
-    regVal &= (uint16_t)(~(XBARA_CTRL0_STS0_MASK | XBARA_CTRL0_STS1_MASK));
+    MCUX_REG_BIT_CLEAR16(regVal, (XBARA_CTRL0_STS0_MASK | XBARA_CTRL0_STS1_MASK));
     /* Write 1 to interrupt flag bits corresponding to mask */
     regVal |= (uint16_t)(mask & (XBARA_CTRL0_STS0_MASK | XBARA_CTRL0_STS1_MASK));
     /* Write regVal value into CTRL0 register */
@@ -178,7 +183,7 @@ void XBARA_ClearStatusFlags(XBARA_Type *base, uint32_t mask)
     /* Assign regVal to CTRL1 register's value */
     regVal = (base->CTRL1);
     /* Perform this command to avoid writing 1 into interrupt flag bits */
-    regVal &= (uint16_t)(~(XBARA_CTRL1_STS2_MASK | XBARA_CTRL1_STS3_MASK));
+    MCUX_REG_BIT_CLEAR16(regVal, (XBARA_CTRL1_STS2_MASK | XBARA_CTRL1_STS3_MASK));
     /* Write 1 to interrupt flag bits corresponding to mask */
     regVal |= (uint16_t)((mask >> 16U) & (XBARA_CTRL1_STS2_MASK | XBARA_CTRL1_STS3_MASK));
     /* Write regVal value into CTRL1 register */
@@ -207,12 +212,13 @@ void XBARA_SetOutputSignalConfig(XBARA_Type *base,
                                  xbar_output_signal_t output,
                                  const xbara_control_config_t *controlConfig)
 {
-    uint8_t outputIndex = (uint8_t)output;
+    uint8_t outputIndex = (uint8_t)((unsigned)output & 0xFFU);
     uint8_t regIndex;
     uint8_t byteInReg;
     xbara_u8_u16_t regVal;
 
     assert(outputIndex < (uint32_t)FSL_FEATURE_XBARA_INTERRUPT_COUNT);
+    assert((controlConfig->activeEdge < kXBARA_EdgeMax) && (controlConfig->requestType < kXBARA_RequestMax));
 
     regIndex  = outputIndex / 2U;
     byteInReg = outputIndex % 2U;
@@ -220,7 +226,7 @@ void XBARA_SetOutputSignalConfig(XBARA_Type *base,
     regVal._u16 = XBARA_CTRLx(base, regIndex);
 
     /* Don't clear the status flags. */
-    regVal._u16 &= (uint16_t)(~(XBARA_CTRL0_STS0_MASK | XBARA_CTRL0_STS1_MASK));
+    MCUX_REG_BIT_CLEAR16(regVal._u16, (XBARA_CTRL0_STS0_MASK | XBARA_CTRL0_STS1_MASK));
 
     regVal._u8[byteInReg] = (uint8_t)(XBARA_CTRL0_EDGE0(controlConfig->activeEdge) |
                                       (uint16_t)(((uint32_t)controlConfig->requestType) << XBARA_CTRL0_DEN0_SHIFT));

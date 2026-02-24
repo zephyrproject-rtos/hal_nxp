@@ -1,5 +1,10 @@
 # FLEXSPI
 
+## [2.9.0]
+
+- New Features
+  - Added FlexSPI root clock divider configuration.
+
 ## [2.8.1]
 
 - Improvements

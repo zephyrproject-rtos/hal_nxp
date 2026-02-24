@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -85,8 +85,10 @@ void FREQME_Init(FREQME_Type *base, const freq_measure_config_t *config)
     {
         tmp32 |= FREQME_CTRL_W_MEASURE_IN_PROGRESS_MASK;
     }
-    tmp32 |= FREQME_CTRL_W_CONTINUOUS_MODE_EN(config->enableContinuousMode) |
-             FREQME_CTRL_W_PULSE_MODE(config->operateMode);
+
+    tmp32 |= (config->enableContinuousMode ? FREQME_CTRL_W_CONTINUOUS_MODE_EN_MASK : 0U);
+    tmp32 |= FREQME_CTRL_W_PULSE_MODE(config->operateMode);
+
     if (config->operateMode == kFREQME_FreqMeasurementMode)
     {
         tmp32 |= FREQME_CTRL_W_REF_SCALE(config->operateModeAttribute.refClkScaleFactor);
@@ -139,6 +141,7 @@ uint32_t FREQME_CalculateTargetClkFreq(FREQME_Type *base, uint32_t refClkFrequen
     uint32_t measureResult = 0UL;
     uint32_t targetFreq    = 0UL;
     uint64_t tmp64         = 0ULL;
+    uint64_t refCountCycle = 0ULL;
 
     while ((base->CTRL_R & FREQME_CTRL_R_MEASURE_IN_PROGRESS_MASK) != 0UL)
     {
@@ -147,8 +150,13 @@ uint32_t FREQME_CalculateTargetClkFreq(FREQME_Type *base, uint32_t refClkFrequen
     if (!FREQME_CheckOperateMode(base))
     {
         measureResult = base->CTRL_R & FREQME_CTRL_R_RESULT_MASK;
+
+        assert(measureResult >= 2UL);
         tmp64         = ((uint64_t)measureResult - 2ULL) * (uint64_t)refClkFrequency;
-        targetFreq    = (uint32_t)(tmp64 / (1ULL << (uint64_t)FREQME_GetReferenceClkScaleValue(base)));
+        refCountCycle = 1ULL << (uint64_t)FREQME_GetReferenceClkScaleValue(base);
+
+        assert(tmp64 / refCountCycle <= 0xFFFFFFFFU);
+        targetFreq    = (uint32_t)(tmp64 / refCountCycle);
     }
 
     return targetFreq;

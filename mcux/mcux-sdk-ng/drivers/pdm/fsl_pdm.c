@@ -41,6 +41,17 @@ static status_t PDM_ValidateSrcClockRate(uint32_t channelMask,
 static PDM_Type *const s_pdmBases[] = PDM_BASE_PTRS;
 /*!@brief PDM handle pointer */
 static pdm_handle_t *s_pdmHandle[ARRAY_SIZE(s_pdmBases)];
+/* IRQ number array */
+static const IRQn_Type s_pdmEventIRQ[] = PDM_Event_IRQS;
+#if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
+static const IRQn_Type s_pdmErrorIRQ[] = PDM_Error_IRQS;
+#endif
+#if !(defined FSL_FEATURE_PDM_HAS_NO_HWVAD && FSL_FEATURE_PDM_HAS_NO_HWVAD)
+static const IRQn_Type s_pdmHwvadEventIRQ[] = PDM_HWVAD_Event_IRQS;
+#if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
+static const IRQn_Type s_pdmHwvadErrorIRQ[] = PDM_HWVAD_Error_IRQS;
+#endif
+#endif
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /* Clock name array */
 static const clock_ip_name_t s_pdmClock[] = PDM_CLOCKS;
@@ -581,10 +592,12 @@ void PDM_TransferCreateHandle(PDM_Type *base, pdm_handle_t *handle, pdm_transfer
 {
     assert(handle != NULL);
 
+    uint32_t instance = PDM_GetInstance(base);
+
     /* Zero the handle */
     (void)memset(handle, 0, sizeof(*handle));
 
-    s_pdmHandle[PDM_GetInstance(base)] = handle;
+    s_pdmHandle[instance] = handle;
 
     handle->callback  = callback;
     handle->userData  = userData;
@@ -594,10 +607,10 @@ void PDM_TransferCreateHandle(PDM_Type *base, pdm_handle_t *handle, pdm_transfer
     s_pdmIsr = PDM_TransferHandleIRQ;
 
     /* Enable RX event IRQ */
-    (void)EnableIRQ(PDM_EVENT_IRQn);
+    (void)EnableIRQ(s_pdmEventIRQ[instance]);
 #if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
     /* Enable FIFO error IRQ */
-    (void)EnableIRQ(PDM_ERROR_IRQn);
+    (void)EnableIRQ(s_pdmErrorIRQ[instance]);
 #endif
 }
 
@@ -963,6 +976,7 @@ void PDM_SetHwvadZeroCrossDetectorConfig(PDM_Type *base, const pdm_hwvad_zero_cr
  * param enable true is enable, false is disable.
  * retval None.
  */
+#if !(defined FSL_FEATURE_PDM_HAS_NO_HWVAD && FSL_FEATURE_PDM_HAS_NO_HWVAD)
 void PDM_EnableHwvadInterruptCallback(PDM_Type *base, pdm_hwvad_callback_t vadCallback, void *userData, bool enable)
 {
     uint32_t instance = PDM_GetInstance(base);
@@ -970,11 +984,11 @@ void PDM_EnableHwvadInterruptCallback(PDM_Type *base, pdm_hwvad_callback_t vadCa
     if (enable)
     {
         PDM_EnableHwvadInterrupts(base, (uint32_t)kPDM_HwvadErrorInterruptEnable | (uint32_t)kPDM_HwvadInterruptEnable);
-        NVIC_ClearPendingIRQ(PDM_HWVAD_EVENT_IRQn);
-        (void)EnableIRQ(PDM_HWVAD_EVENT_IRQn);
+        NVIC_ClearPendingIRQ(s_pdmHwvadEventIRQ[instance]);
+        (void)EnableIRQ(s_pdmHwvadEventIRQ[instance]);
 #if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
-        NVIC_ClearPendingIRQ(PDM_HWVAD_ERROR_IRQn);
-        (void)EnableIRQ(PDM_HWVAD_ERROR_IRQn);
+        NVIC_ClearPendingIRQ(s_pdmHwvadErrorIRQ[instance]);
+        (void)EnableIRQ(s_pdmHwvadErrorIRQ[instance]);
 #endif
         s_pdm_hwvad_notification[instance].callback = vadCallback;
         s_pdm_hwvad_notification[instance].userData = userData;
@@ -983,16 +997,17 @@ void PDM_EnableHwvadInterruptCallback(PDM_Type *base, pdm_hwvad_callback_t vadCa
     {
         PDM_DisableHwvadInterrupts(base,
                                    (uint32_t)kPDM_HwvadErrorInterruptEnable | (uint32_t)kPDM_HwvadInterruptEnable);
-        (void)DisableIRQ(PDM_HWVAD_EVENT_IRQn);
+        (void)DisableIRQ(s_pdmHwvadEventIRQ[instance]);
 #if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
-        (void)DisableIRQ(PDM_HWVAD_ERROR_IRQn);
-        NVIC_ClearPendingIRQ(PDM_HWVAD_ERROR_IRQn);
+        (void)DisableIRQ(s_pdmHwvadErrorIRQ[instance]);
+        NVIC_ClearPendingIRQ(s_pdmHwvadErrorIRQ[instance]);
 #endif
         s_pdm_hwvad_notification[instance].callback = NULL;
         s_pdm_hwvad_notification[instance].userData = NULL;
-        NVIC_ClearPendingIRQ(PDM_HWVAD_EVENT_IRQn);
+        NVIC_ClearPendingIRQ(s_pdmHwvadEventIRQ[instance]);
     }
 }
+#endif
 
 #if (defined PDM)
 void PDM_HWVAD_EVENT_DriverIRQHandler(void);

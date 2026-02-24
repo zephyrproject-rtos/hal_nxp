@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,10 +22,16 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Defines GDET driver version 2.1.0.
+/*! @brief Defines GDET driver version 2.1.2.
  *
  * Change log:
  *
+ * - Version 2.1.2
+ *   - Update to MCXA577 GDET offering
+ *
+ * - Version 2.1.1
+ *   - Update to RT700 GDET offering
+ * 
  * - Version 2.1.0
  *   - Update for multiple instances
  *   - Fix bug in isolation off API
@@ -37,7 +43,7 @@
  * - Version 2.0.0
  *   - initial version
  */
-#define FSL_GDET_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_GDET_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*! @} */
 
 /*!

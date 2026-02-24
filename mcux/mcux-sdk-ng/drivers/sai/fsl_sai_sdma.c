@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 - 2021 NXP
+ * Copyright 2017 - 2025 NXP
  * All rights reserved.
  *
  *
@@ -256,7 +256,11 @@ void SAI_TransferTxSetConfigSDMA(I2S_Type *base, sai_sdma_handle_t *handle, sai_
     if (saiConfig->channelNums > 1U)
     {
         /* fifo address offset, 4U is the address offset between each fifo */
-        handle->fifoOffset = ((saiConfig->endChannel - saiConfig->startChannel) * 4U) / (saiConfig->channelNums - 1U);
+        /* INT31-C: Validate signed-to-unsigned conversion and narrowing cast */
+        assert(saiConfig->endChannel >= saiConfig->startChannel);
+        uint32_t temp = ((uint32_t)(saiConfig->endChannel - saiConfig->startChannel) * 4U) / (saiConfig->channelNums - 1U);
+        assert(temp <= 0xFFU);
+        handle->fifoOffset = (uint8_t)temp;
     }
     else
     {
@@ -302,7 +306,11 @@ void SAI_TransferRxSetConfigSDMA(I2S_Type *base, sai_sdma_handle_t *handle, sai_
     if (saiConfig->channelNums > 1U)
     {
         /* fifo address offset, 4U is the address offset between each fifo */
-        handle->fifoOffset = ((saiConfig->endChannel - saiConfig->startChannel) * 4U) / (saiConfig->channelNums - 1U);
+        /* INT31-C: Validate signed-to-unsigned conversion and narrowing cast */
+        assert(saiConfig->endChannel >= saiConfig->startChannel);
+        uint32_t temp = ((uint32_t)(saiConfig->endChannel - saiConfig->startChannel) * 4U) / (saiConfig->channelNums - 1U);
+        assert(temp <= 0xFFU);
+        handle->fifoOffset = (uint8_t)temp;
     }
     else
     {
@@ -344,10 +352,17 @@ status_t SAI_TransferSendSDMA(I2S_Type *base, sai_sdma_handle_t *handle, sai_tra
     sdma_handle_t *dmaHandle      = handle->dmaHandle;
     sdma_peripheral_t perType     = kSDMA_PeripheralNormal;
 
+    /* INT31-C: Validate multiplication result before narrowing conversion */
+    uint32_t watermarkCheck = (uint32_t)handle->count * handle->bytesPerFrame;
+    if(watermarkCheck > 0xFFFFU)
+    {
+        return kStatus_InvalidArgument;
+    }
+
     /* Check if input parameter invalid */
     if ((xfer->data == NULL) || (xfer->dataSize == 0U) || ((handle->channelNums > 1U) && (handle->fifoOffset == 0U)) ||
         ((handle->channelNums > 1U) &&
-         ((uint16_t)handle->count * handle->bytesPerFrame > (uint16_t)kSDMA_MultiFifoWatermarkLevelMask)) ||
+         ((uint16_t)watermarkCheck > (uint16_t)kSDMA_MultiFifoWatermarkLevelMask)) ||
         ((xfer->dataSize % (handle->bytesPerFrame)) != 0U))
     {
         return kStatus_InvalidArgument;
@@ -444,10 +459,17 @@ status_t SAI_TransferReceiveSDMA(I2S_Type *base, sai_sdma_handle_t *handle, sai_
     uint32_t srcAddr              = SAI_RxGetDataRegisterAddress(base, handle->channel);
     sdma_peripheral_t perType     = kSDMA_PeripheralNormal;
 
+    /* INT31-C: Validate multiplication result before narrowing conversion */
+    uint32_t watermarkCheck = (uint32_t)handle->count * handle->bytesPerFrame;
+    if(watermarkCheck > 0xFFFFU)
+    {
+        return kStatus_InvalidArgument;
+    }
+
     /* Check if input parameter invalid */
     if ((xfer->data == NULL) || (xfer->dataSize == 0U) || ((handle->channelNums > 1U) && (handle->fifoOffset == 0U)) ||
         ((handle->channelNums > 1U) &&
-         ((uint16_t)handle->count * handle->bytesPerFrame > (uint16_t)kSDMA_MultiFifoWatermarkLevelMask)) ||
+         ((uint16_t)watermarkCheck > (uint16_t)kSDMA_MultiFifoWatermarkLevelMask)) ||
         ((xfer->dataSize % (handle->bytesPerFrame)) != 0U))
     {
         return kStatus_InvalidArgument;

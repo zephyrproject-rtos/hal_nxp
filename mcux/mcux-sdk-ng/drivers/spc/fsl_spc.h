@@ -109,6 +109,7 @@
 #define SPC_VDD_CORE_GLITCH_DETECT_SC_IE_MASK                 SPC_VDD_GLITCH_DETECT_SC_IE_MASK
 #define SPC_VDD_CORE_GLITCH_DETECT_SC_IE                      SPC_VDD_GLITCH_DETECT_SC_IE
 #endif
+
 /*!
  * @brief SPC status enumeration.
  */
@@ -544,6 +545,7 @@ extern "C" {
  * @name SPC Status
  * @{
  */
+
 /*!
  * @brief Gets Isolation status for each power domains.
  *
@@ -1458,7 +1460,7 @@ static inline void SPC_SetLowPowerWakeUpDelay(SPC_Type *base, uint16_t delay)
  * @retval #kStatus_SPC_Busy The SPC instance is busy to execute any type of power mode transition.
  * @retval #kStatus_SPC_CORELDOVoltageWrong The selected voltage level is wrong.
  * @retval #kStatus_SPC_CORELDOLowDriveStrengthIgnore Set driver strength to low will be ignored.
- * @retval #kStatus_SPC_CORELDOVoltageSetFail. Fail to change Core LDO voltage level.
+ * @retval #kStatus_SPC_CORELDOVoltageSetFail Fail to change Core LDO voltage level.
  * @retval #kStatus_SPC_SYSLDOLowDriveStrengthIgnore Set driver strength to low will be ignored.
  * @retval #kStatus_SPC_DCDCPulseRefreshModeIgnore Set driver strength to Pulse Refresh mode will be ignored.
  * @retval #kStatus_SPC_DCDCLowDriveStrengthIgnore Set driver strength to Low Drive Strength will be ignored.
@@ -1990,10 +1992,12 @@ status_t SPC_SetActiveModeCoreLDORegulatorConfig(SPC_Type *base, const spc_activ
  * @retval #kStatus_Success Config Core LDO regulator in power mode successfully.
  * @retval #kStatus_SPC_Busy The SPC instance is busy to execute any type of power mode transition.
  * @retval #kStatus_SPC_CORELDOLowDriveStrengthIgnore Set driver strength to low will be ignored.
- * @retval #kStatus_SPC_CORELDOVoltageSetFail. Fail to change Core LDO voltage level.
+ * @retval #kStatus_SPC_CORELDOVoltageSetFail Fail to change Core LDO voltage level.
  * @retval #kStatus_Timeout Timeout occurs while waiting completion.
  */
 status_t SPC_SetLowPowerModeCoreLDORegulatorConfig(SPC_Type *base, const spc_lowpower_mode_core_ldo_option_t *option);
+
+/*! @} */
 
 #if (defined(FSL_FEATURE_SPC_HAS_SYS_LDO) && FSL_FEATURE_SPC_HAS_SYS_LDO)
 /*!

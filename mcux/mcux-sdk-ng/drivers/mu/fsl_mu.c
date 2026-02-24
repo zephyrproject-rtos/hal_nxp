@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2023-2025 NXP
+ * Copyright 2016-2020, 2023-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -25,9 +25,12 @@
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*! @brief Pointers to mu clocks for each instance. */
 static const clock_ip_name_t s_muClocks[] = MU_CLOCKS;
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) || defined(MU_RESETS_ARRAY)
 /*! @brief Pointers to mu bases for each instance. */
 static MU_Type *const s_muBases[] = MU_BASE_PTRS;
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL || MU_RESETS_ARRAY */
 
 #if defined(MU_RESETS_ARRAY)
 /* Reset array */
@@ -37,7 +40,7 @@ static const reset_ip_name_t s_muResets[] = MU_RESETS_ARRAY;
 /******************************************************************************
  * Code
  *****************************************************************************/
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) || defined(MU_RESETS_ARRAY)
 static uint32_t MU_GetInstance(MU_Type *base)
 {
     uint32_t instance;
@@ -62,7 +65,7 @@ static uint32_t MU_GetInstance(MU_Type *base)
 
     return instance;
 }
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL || MU_RESETS_ARRAY */
 
 /*!
  * brief Initializes the MU module.
@@ -73,12 +76,16 @@ static uint32_t MU_GetInstance(MU_Type *base)
  */
 void MU_Init(MU_Type *base)
 {
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) || defined(MU_RESETS_ARRAY)
+    uint32_t instance = MU_GetInstance(base);
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL || MU_RESETS_ARRAY */
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    (void)CLOCK_EnableClock(s_muClocks[MU_GetInstance(base)]);
+    (void)CLOCK_EnableClock(s_muClocks[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if defined(MU_RESETS_ARRAY)
-    RESET_ReleasePeripheralReset(s_muResets[MU_GetInstance(base)]);
+    RESET_ReleasePeripheralReset(s_muResets[instance]);
 #endif
 }
 
@@ -115,19 +122,19 @@ status_t MU_SendMsg(MU_Type *base, uint32_t regIndex, uint32_t msg)
 {
     assert(regIndex < MU_TR_COUNT);
 
-#if MU_BUSY_POLL_COUNT
+#if defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0)
     uint32_t poll_count = MU_BUSY_POLL_COUNT;
-#endif /* MU_BUSY_POLL_COUNT */
+#endif /* defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0) */
 
     /* Wait TX register to be empty. */
     while (0U == (base->SR & (((uint32_t)kMU_Tx0EmptyFlag) >> regIndex)))
     {
-#if MU_BUSY_POLL_COUNT
+#if defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0)
         if ((--poll_count) == 0u)
         {
             return kStatus_Timeout;
         }
-#endif /* MU_BUSY_POLL_COUNT */
+#endif /* defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0) */
     }
 
     base->TR[regIndex] = msg;
@@ -168,19 +175,19 @@ status_t MU_ReceiveMsgTimeout(MU_Type *base, uint32_t regIndex, uint32_t *readVa
         return kStatus_InvalidArgument;
     }
 
-#if MU_BUSY_POLL_COUNT
+#if defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0)
     uint32_t poll_count = MU_BUSY_POLL_COUNT;
-#endif /* MU_BUSY_POLL_COUNT */
+#endif /* defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0) */
 
     /* Wait RX register to be full. */
     while (0U == (base->SR & (((uint32_t)kMU_Rx0FullFlag) >> regIndex)))
     {
-#if MU_BUSY_POLL_COUNT
+#if defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0)
         if ((--poll_count) == 0u)
         {
             return kStatus_Timeout;
         }
-#endif /* MU_BUSY_POLL_COUNT */
+#endif /* defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0) */
     }
 
     *readValue = base->RR[regIndex];
@@ -241,9 +248,9 @@ uint32_t MU_ReceiveMsg(MU_Type *base, uint32_t regIndex)
  */
 status_t MU_SetFlags(MU_Type *base, uint32_t flags)
 {
-#if MU_BUSY_POLL_COUNT
+#if defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0)
     uint32_t poll_count = MU_BUSY_POLL_COUNT;
-#endif /* MU_BUSY_POLL_COUNT */
+#endif /* defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0) */
 
     /* Wait for update finished. */
     /*
@@ -256,7 +263,7 @@ status_t MU_SetFlags(MU_Type *base, uint32_t flags)
      */
     while (0U != (base->SR & ((uint32_t)MU_SR_FUP_MASK))) /* GCOVR_EXCL_BR_LINE */
     {
-#if MU_BUSY_POLL_COUNT
+#if defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0)
         /*
          * $Branch Coverage Justification$
          * The timeout branch cannot be reliably tested because:
@@ -274,7 +281,7 @@ status_t MU_SetFlags(MU_Type *base, uint32_t flags)
              */
             return kStatus_Timeout; /* GCOVR_EXCL_LINE */
         }
-#endif /* MU_BUSY_POLL_COUNT */
+#endif /* defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0) */
     }
 
     MU_SetFlagsNonBlocking(base, flags);
@@ -447,9 +454,9 @@ status_t MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset
     /* Set CCR[HR] to trigger hardware reset. */
     base->CCR = ccr | MU_CCR_HR_MASK;
 
-#if MU_BUSY_POLL_COUNT
+#if defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0)
     uint32_t poll_count = MU_BUSY_POLL_COUNT;
-#endif /* MU_BUSY_POLL_COUNT */
+#endif /* defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0) */
 
     /* If wait the other core enters reset. */
     if (waitReset)
@@ -457,12 +464,12 @@ status_t MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset
         /* Wait for the other core go to reset. */
         while (0U == (base->SR & MU_SR_RAIP_MASK))
         {
-#if MU_BUSY_POLL_COUNT
+#if defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0)
         if ((--poll_count) == 0u)
         {
             return kStatus_Timeout;
         }
-#endif /* MU_BUSY_POLL_COUNT */
+#endif /* defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0) */
         }
 
         if (!holdReset)
@@ -470,19 +477,19 @@ status_t MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset
             /* Clear CCR[HR]. */
             base->CCR = ccr;
 
-#if MU_BUSY_POLL_COUNT
+#if defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0)
             poll_count = MU_BUSY_POLL_COUNT;
-#endif /* MU_BUSY_POLL_COUNT */
+#endif /* defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0) */
 
             /* Wait for the other core out of reset. */
             while (0U == (base->SR & MU_SR_RDIP_MASK))
             {
-#if MU_BUSY_POLL_COUNT
+#if defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0)
                 if ((--poll_count) == 0u)
                 {
                     return kStatus_Timeout;
                 }
-#endif /* MU_BUSY_POLL_COUNT */
+#endif /* defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0) */
             }
         }
     }
@@ -566,9 +573,9 @@ status_t MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset
     /* Set CR[HR] to trigger hardware reset. */
     base->CR = cr | MU_CR_HR_MASK;
 
-#if MU_BUSY_POLL_COUNT
+#if defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0)
     uint32_t poll_count = MU_BUSY_POLL_COUNT;
-#endif /* MU_BUSY_POLL_COUNT */
+#endif /* defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0) */
 
     /* If wait the other core enters reset. */
     if (waitReset)
@@ -577,12 +584,12 @@ status_t MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset
         /* Wait for the other core go to reset. */
         while (0U == (base->SR & MU_SR_RAIP_MASK))
         {
-#if MU_BUSY_POLL_COUNT
+#if defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0)
             if ((--poll_count) == 0u)
             {
                 return kStatus_Timeout;
             }
-#endif /* MU_BUSY_POLL_COUNT */
+#endif /* defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0) */
         }
 #endif
 
@@ -592,19 +599,19 @@ status_t MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset
             base->CR = cr;
 
 #if (defined(FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT) && FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT)
-#if MU_BUSY_POLL_COUNT
+#if defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0)
             poll_count = MU_BUSY_POLL_COUNT;
-#endif /* MU_BUSY_POLL_COUNT */
+#endif /* defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0) */
 
             /* Wait for the other core out of reset. */
             while (0U == (base->SR & MU_SR_RDIP_MASK))
             {
-#if MU_BUSY_POLL_COUNT
+#if defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0)
                 if ((--poll_count) == 0u)
                 {
                     return kStatus_Timeout;
                 }
-#endif /* MU_BUSY_POLL_COUNT */
+#endif /* defined(MU_BUSY_POLL_COUNT) && (MU_BUSY_POLL_COUNT > 0) */
             }
 #endif
         }

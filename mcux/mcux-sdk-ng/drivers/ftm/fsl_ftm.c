@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2025 NXP
+ * Copyright 2016-2022, 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -95,7 +95,7 @@ static void FTM_SetPwmSync(FTM_Type *base, uint32_t syncMethod, bool swRstCnt, b
     uint32_t reg = 0, syncReg = 0;
 
     /* The CHANNEL_COUNT macro returns -1 if it cannot match the FTM instance */
-    assert(-1 != FSL_FEATURE_FTM_CHANNEL_COUNTn(base));
+    assert(-1 != (int)FSL_FEATURE_FTM_CHANNEL_COUNTn(base));
 
     syncReg = base->SYNC;
     /* Enable PWM synchronization of output mask register */
@@ -235,7 +235,7 @@ static void FTM_SetReloadPoints(FTM_Type *base, uint32_t reloadPoints)
  */
 status_t FTM_Init(FTM_Type *base, const ftm_config_t *config)
 {
-    assert(config);
+    assert(config != NULL);
 #if defined(FSL_FEATURE_FTM_IS_TPM_ONLY_INSTANCE)
     /* This function does not support the current instance, please use the TPM driver. */
     assert((FSL_FEATURE_FTM_IS_TPM_ONLY_INSTANCE(base) == 0U));
@@ -492,7 +492,7 @@ status_t FTM_SetupPwm(FTM_Type *base,
     {
         /* Return error if requested chnlNumber is greater than the max allowed */
         if (((int)chnlParams->chnlNumber >= FSL_FEATURE_FTM_CHANNEL_COUNTn(base)) ||
-            (-1 == FSL_FEATURE_FTM_CHANNEL_COUNTn(base)))
+            (-1 == (int)FSL_FEATURE_FTM_CHANNEL_COUNTn(base)))
         {
             return kStatus_InvalidArgument;
         }
@@ -627,7 +627,7 @@ status_t FTM_UpdatePwmDutycycle(FTM_Type *base,
 
     /* Return error if requested chnlNumber is greater than the max allowed */
     if (((int)chnlNumber >= FSL_FEATURE_FTM_CHANNEL_COUNTn(base)) ||
-        (-1 == FSL_FEATURE_FTM_CHANNEL_COUNTn(base)))
+        (-1 == (int)FSL_FEATURE_FTM_CHANNEL_COUNTn(base)))
     {
         return kStatus_InvalidArgument;
     }
@@ -730,7 +730,7 @@ status_t FTM_SetupPwmMode(FTM_Type *base,
     assert(chnlParams != NULL);
     assert(numOfChnls != 0U);
     /* The CHANNEL_COUNT macro returns -1 if it cannot match the FTM instance */
-    assert(-1 != FSL_FEATURE_FTM_CHANNEL_COUNTn(base));
+    assert(-1 != (int)FSL_FEATURE_FTM_CHANNEL_COUNTn(base));
 
     uint32_t reg;
     uint32_t mod, cnvFirstEdge;
@@ -875,7 +875,7 @@ void FTM_ConfigSinglePWM(FTM_Type *base,
     uint32_t reg;
 
     assert((chnlParams->mode == kFTM_EdgeAlignedPwm) || (chnlParams->mode == kFTM_CenterAlignedPwm));
-    assert(FSL_FEATURE_FTM_CHANNEL_COUNTn(base) != -1);
+    assert((int)FSL_FEATURE_FTM_CHANNEL_COUNTn(base) != -1);
     assert((int)chnlNumber < FSL_FEATURE_FTM_CHANNEL_COUNTn(base));
 
     if (chnlParams->mode == kFTM_CenterAlignedPwm)
@@ -940,7 +940,7 @@ void FTM_ConfigCombinePWM(FTM_Type *base,
     uint32_t reg;
 
     assert((chnlParams->mode != kFTM_EdgeAlignedPwm) && (chnlParams->mode != kFTM_CenterAlignedPwm));
-    assert(FSL_FEATURE_FTM_CHANNEL_COUNTn(base) != -1);
+    assert((int)FSL_FEATURE_FTM_CHANNEL_COUNTn(base) != -1);
     assert((int)chnlPairNumber < (int)FSL_FEATURE_FTM_CHANNEL_COUNTn(base) / 2);
 
     /* Clear Center-Aligned PWM Select for FTM */
@@ -1134,7 +1134,7 @@ void FTM_SetupDualEdgeCapture(FTM_Type *base,
                               const ftm_dual_edge_capture_param_t *edgeParam,
                               uint32_t filterValue)
 {
-    assert(edgeParam);
+    assert(edgeParam != NULL);
 
     uint32_t reg;
 
@@ -1249,12 +1249,12 @@ void FTM_SetupFaultInput(FTM_Type *base, ftm_fault_input_t faultNumber, const ft
     if (faultParams->useFaultFilter)
     {
         /* Enable the fault filter */
-        base->FLTCTRL |= ((uint32_t)FTM_FLTCTRL_FFLTR0EN_MASK << (FTM_FLTCTRL_FFLTR0EN_SHIFT + (uint32_t)faultNumber));
+        base->FLTCTRL |= ((uint32_t)FTM_FLTCTRL_FFLTR0EN_MASK << (uint32_t)faultNumber);
     }
     else
     {
         /* Disable the fault filter */
-        base->FLTCTRL &= ~((uint32_t)FTM_FLTCTRL_FFLTR0EN_MASK << (FTM_FLTCTRL_FFLTR0EN_SHIFT + (uint32_t)faultNumber));
+        base->FLTCTRL &= ~((uint32_t)FTM_FLTCTRL_FFLTR0EN_MASK << (uint32_t)faultNumber);
     }
 
     if (faultParams->faultLevel)
@@ -1345,7 +1345,7 @@ void FTM_EnableInterrupts(FTM_Type *base, uint32_t mask)
  */
 void FTM_DisableInterrupts(FTM_Type *base, uint32_t mask)
 {
-    assert(FSL_FEATURE_FTM_CHANNEL_COUNTn(base) != -1);
+    assert((int)FSL_FEATURE_FTM_CHANNEL_COUNTn(base) != -1);
     uint32_t chnlInts  = (mask & 0xFFU);
     uint32_t chnlCount = (uint32_t)FSL_FEATURE_FTM_CHANNEL_COUNTn(base);
     uint32_t i = 0;
@@ -1402,7 +1402,7 @@ void FTM_DisableInterrupts(FTM_Type *base, uint32_t mask)
 uint32_t FTM_GetEnabledInterrupts(FTM_Type *base)
 {
     /* The CHANNEL_COUNT macro returns -1 if it cannot match the FTM instance */
-    assert(FSL_FEATURE_FTM_CHANNEL_COUNTn(base) != -1);
+    assert((int)FSL_FEATURE_FTM_CHANNEL_COUNTn(base) != -1);
     uint32_t enabledInterrupts = 0;
     uint32_t chnlCount = (uint32_t)FSL_FEATURE_FTM_CHANNEL_COUNTn(base);
     uint32_t i = 0;

@@ -185,14 +185,15 @@ void EDMA_Init(DMA_Type *base, const edma_config_t *config)
     tmpreg = base->MP_CSR;
     tmpreg &= ~(DMA_MP_CSR_HAE_MASK | DMA_MP_CSR_ERCA_MASK | DMA_MP_CSR_EDBG_MASK);
 
-    tmpreg = (tmpreg & (~DMA_MP_CSR_GMRC_MASK)) | DMA_MP_CSR_GMRC(config->enableMasterIdReplication);
+    tmpreg = (tmpreg & (~DMA_MP_CSR_GMRC_MASK)) | DMA_MP_CSR_GMRC((config->enableMasterIdReplication ? 1U : 0U));
 
 #if !(defined FSL_FEATURE_EDMA_HAS_NO_MP_CSR_EBW && FSL_FEATURE_EDMA_HAS_NO_MP_CSR_EBW)
-    tmpreg = (tmpreg & (~DMA_MP_CSR_EBW_MASK)) | DMA_MP_CSR_EBW(config->enableBufferedWrites);
+    tmpreg = (tmpreg & (~DMA_MP_CSR_EBW_MASK)) | DMA_MP_CSR_EBW((config->enableBufferedWrites ? 1U : 0U));
 #endif
 
-    tmpreg |= (DMA_MP_CSR_HAE(config->enableHaltOnError) | DMA_MP_CSR_ERCA(config->enableRoundRobinArbitration) |
-               DMA_MP_CSR_EDBG(config->enableDebugMode));
+    tmpreg |= (DMA_MP_CSR_HAE((config->enableHaltOnError ? 1U : 0U)) |
+               DMA_MP_CSR_ERCA((config->enableRoundRobinArbitration ? 1U : 0U)) |
+               DMA_MP_CSR_EDBG((config->enableDebugMode ? 1U : 0U)));
 
     base->MP_CSR = tmpreg;
     base->MP_CSR &= (~DMA_MP_CSR_HALT_MASK);
@@ -270,7 +271,7 @@ void EDMA_ResetChannel(DMA_Type *base, uint32_t channel)
     base->CH[channel].CH_ES |= DMA_CH_ES_ERR_MASK;
     base->CH[channel].CH_CSR |= DMA_CH_CSR_DONE_MASK;
 
-    EDMA_TcdReset((edma_tcd_t *)((uint32_t)&base->CH[channel] + 0x00000020));
+    EDMA_TcdReset((edma_tcd_t *)((uint32_t)&base->CH[channel] + 0x00000020U));
 }
 
 /*!
@@ -582,8 +583,8 @@ void EDMA_TcdSetMinorOffsetConfig(edma_tcd_t *tcd, const edma_minor_offset_confi
     tmpreg = tcd->NBYTES;
     tmpreg &=
         ~(DMA_TCD_NBYTES_MLOFFYES_SMLOE_MASK | DMA_TCD_NBYTES_MLOFFYES_DMLOE_MASK | DMA_TCD_NBYTES_MLOFFYES_MLOFF_MASK);
-    tmpreg |= (DMA_TCD_NBYTES_MLOFFYES_SMLOE(config->enableSrcMinorOffset) |
-               DMA_TCD_NBYTES_MLOFFYES_DMLOE(config->enableDestMinorOffset) |
+    tmpreg |= (DMA_TCD_NBYTES_MLOFFYES_SMLOE((config->enableSrcMinorOffset ? 1U : 0U)) |
+               DMA_TCD_NBYTES_MLOFFYES_DMLOE((config->enableDestMinorOffset ? 1U : 0U)) |
                DMA_TCD_NBYTES_MLOFFYES_MLOFF(config->minorOffset));
     tcd->NBYTES = tmpreg;
 }
@@ -869,7 +870,7 @@ void EDMA_CreateHandle(edma_handle_t *handle, DMA_Type *base, uint32_t channel)
        CSR will be 0. Because in order to suit EDMA busy check mechanism in
        EDMA_SubmitTransfer, CSR must be set 0.
     */
-    tcdRegs = (edma_tcd_t *)((uint32_t)&handle->base->CH[handle->channel] + 0x00000020);
+    tcdRegs = (edma_tcd_t *)((uint32_t)&handle->base->CH[handle->channel] + 0x00000020U);
     tcdRegs->SADDR = 0;
     tcdRegs->SOFF = 0;
     tcdRegs->ATTR = 0;
@@ -1283,8 +1284,8 @@ void EDMA_StartTransfer(edma_handle_t *handle)
                  * (tcdRegs->CSR & DMA_TCD_CSR_ESG_MASK) != 0u) not covered.
                  * $ref edma_c_ref_3$.
                  */
-                if ((!((handle->base->CH[handle->channel].CH_CSR & DMA_CH_CSR_DONE_MASK) != 0U)) ||
-                    ((tcdRegs->CSR & DMA_TCD_CSR_ESG_MASK) != 0u)) /* GCOVR_EXCL_BR_LINE */
+                if ((!((handle->base->CH[handle->channel].CH_CSR & DMA_CH_CSR_DONE_MASK) != 0U)) || /* GCOVR_EXCL_BR_LINE */
+                    ((tcdRegs->CSR & DMA_TCD_CSR_ESG_MASK) != 0u)) /* GCOVR_EXCL_LINE */
                 {
                     /*
                         Re-enable channel request must be as soon as possible, so must put

@@ -7,6 +7,10 @@
  */
 
 /*
+    Version 1.2.1:
+        - Fixed unaligned write
+        - Fixed verify routine in protection setup
+
     Version 1.2.0:
         - UTEST write support
 
@@ -356,12 +360,24 @@ static status_t C40_LockSectorIndex(uint32_t sectorNum, uint32_t *lockSectorInde
     return kStatus_FLASH_Success;
 }
 
+/*
+ * @brief Sets flash protection for given sector
+ *
+ * @param sectorNum       Sector number
+ * @param locked          locked if true, otherwise unlocked
+ * @param verify          if true it will readback and verify desired lock value
+ *
+ * @retval kStatus_FLASH_Success
+ * @retval kStatus_FLASH_CommandFailure   Verification failed
+ * @retval kStatus_FLASH_AddressError     Sector translates to wrong address
+ *
+ */
 
 static status_t C40_SectorLockSet(uint32_t sectorNum, bool locked, bool verify)
 {
     status_t ret;
     uint32_t lockSectorIndex;
-    uint32_t origValue;
+    uint32_t mask;
     volatile uint32_t *lockSectorRegister;
 
     ret = C40_LockSectorIndex(sectorNum, &lockSectorIndex, &lockSectorRegister);
@@ -370,22 +386,26 @@ static status_t C40_SectorLockSet(uint32_t sectorNum, bool locked, bool verify)
         return ret;
     }
 
-    origValue = *lockSectorRegister;
+    mask = (1 << lockSectorIndex);
 
     if (locked)
     {
 
-        *lockSectorRegister |= (1 << lockSectorIndex);
+        *lockSectorRegister |= mask;
     }
     else
     {
-        *lockSectorRegister &= ~(1 << lockSectorIndex);
+        *lockSectorRegister &= ~mask;
     }
 
-    if (verify && (origValue ^ *lockSectorRegister) == 0)
+    if (verify)
     {
-        /* No change, something failed */
-        return kStatus_FLASH_CommandFailure;
+        uint32_t expected = locked ? mask : 0;
+
+        if ((*lockSectorRegister & mask) != expected)
+        {
+             return kStatus_FLASH_CommandFailure;
+        }
     }
 
     return kStatus_FLASH_Success;
@@ -839,7 +859,7 @@ status_t FLASH_Program(flash_config_t *config, uint32_t start, uint32_t *src, ui
 
         chunkSize = (sizeLeft > bytesToAlignedPage) ? bytesToAlignedPage : sizeLeft;
 
-        ret = C40_Write(start, lengthInBytes, src8, C40_DEFAULT_CORE_DOMAIN_ID);
+        ret = C40_Write(addr, chunkSize, src8, C40_DEFAULT_CORE_DOMAIN_ID);
         if (ret != kStatus_FLASH_Success)
         {
             return ret;
@@ -847,16 +867,16 @@ status_t FLASH_Program(flash_config_t *config, uint32_t start, uint32_t *src, ui
 
         sizeLeft -= chunkSize;
         src8     += chunkSize;
+        addr     += chunkSize;
     }
 
     /* continue with aligned writes */
 
     while (sizeLeft > 0)
     {
-
         chunkSize = (sizeLeft > C40_WRITE_SIZE_MAX) ? C40_WRITE_SIZE_MAX : sizeLeft;
 
-        ret = C40_Write(start, lengthInBytes, src8, C40_DEFAULT_CORE_DOMAIN_ID);
+        ret = C40_Write(addr, chunkSize, src8, C40_DEFAULT_CORE_DOMAIN_ID);
         if (ret != kStatus_FLASH_Success)
         {
             return ret;
@@ -864,6 +884,7 @@ status_t FLASH_Program(flash_config_t *config, uint32_t start, uint32_t *src, ui
 
         sizeLeft -= chunkSize;
         src8     += chunkSize;
+        addr     += chunkSize;
     }
 
     return ret;

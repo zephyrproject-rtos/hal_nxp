@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018, 2020-2023, 2025 NXP
+ * Copyright 2016-2018, 2020-2023, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,12 +23,14 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief TRNG driver version 2.0.19.
+/*! @brief TRNG driver version 2.0.20.
  *
- * Current version: 2.0.19
+ * Current version: 2.0.20
  *
  *
  * Change log:
+ * - version 2.0.20
+ *   - Added support for MCXA devices.
  * - version 2.0.19
  *   - Added support for MCXA and MCXL.
  * - version 2.0.18
@@ -71,7 +73,7 @@
  *   - add support for KL8x and KL28Z
  *   - update default OSCDIV for K81 to divide by 2
  */
-#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 18))
+#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 20))
 /*! @} */
 
 /*! @brief TRNG sample mode. Used by trng_config_t. */

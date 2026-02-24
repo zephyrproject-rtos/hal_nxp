@@ -483,7 +483,7 @@ status_t ASRC_SetChannelPairConfig(ASRC_Type *base,
     uint32_t asrcsr =
         base->ASRCSR &
         (~(ASRC_ASRCSR_INPUT_CLOCK_SOURCE_MASK(channelPair) | ASRC_ASRCSR_OUTPUT_CLOCK_SOURCE_MASK(channelPair)));
-    if (config->outClockSource < 0 || config->outClockSource > kASRC_ClockSourceBitClocke_MQS_CLOCK_ROOT) {
+    if (config->outClockSource < 0 || config->outClockSource > kASRC_ClockSourceMax) {
         return kStatus_InvalidArgument;
     }
     asrcsr |= ASRC_ASRCSR_OUTPUT_CLOCK_SOURCE(config->outClockSource, channelPair);

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief UART driver version. */
-#define FSL_UART_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+#define FSL_UART_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
 /*! @} */
 
 /*! @brief Retry times for waiting flag. */
@@ -51,6 +51,7 @@ enum
         MAKE_STATUS(kStatusGroup_IUART, 13), /*!< Baudrate is not support in current clock source */
     kStatus_UART_BreakDetect = MAKE_STATUS(kStatusGroup_IUART, 14), /*!< Receiver detect BREAK signal */
     kStatus_UART_Timeout     = MAKE_STATUS(kStatusGroup_IUART, 15), /*!< UART times out. */
+    kStatus_UART_9bitSlaveAddressDetected   = MAKE_STATUS(kStatusGroup_IUART, 16), /*!< Receiver detect 9bit slave address. */
 };
 
 /*! @brief UART data bits count. */
@@ -74,6 +75,13 @@ typedef enum _uart_stop_bit_count
     kUART_OneStopBit = 0x0U, /*!< One stop bit */
     kUART_TwoStopBit = 0x1U, /*!< Two stop bits */
 } uart_stop_bit_count_t;
+
+/*! @brief UART 9bit address detect mode. */
+typedef enum _uart_9bit_detect_mode
+{
+    kUART_9BitNormalMode = 0x0U, /*!< 9Bit normal mode */
+    kUART_9BitAutoMode = 0x1U, /*!< 9Bit automatic mode */
+} uart_9bit_detect_mode_t;
 
 /*! @brief UART idle condition detect. */
 typedef enum _uart_idle_condition
@@ -357,6 +365,106 @@ void UART_GetDefaultConfig(uart_config_t *config);
  * @retval kStatus_Success Set baudrate succeeded.
  */
 status_t UART_SetBaudRate(UART_Type *base, uint32_t baudRate_Bps, uint32_t srcClock_Hz);
+
+/*!
+ * @brief Enable 9-bit mode for UART.
+ *
+ * This function set the 9-bit mode for UART module.
+ *
+ * @param base UART peripheral base address.
+ * @param enable true to enable, flase to disable.
+ */
+void UART_Enable9bitMode(UART_Type *base, bool enable);
+
+/*!
+ * @brief Transmit an address frame in 9-bit data mode.
+ *
+ * @param base UART peripheral base address.
+ * @param address UART slave address.
+ */
+void UART_SendAddress(UART_Type *base, uint8_t address);
+
+/*!
+ * @brief Set the 9bit slave address character.
+ *
+ * This function configures the address for UART module that works as slave in 9-bit RS-485 mode.
+ *
+ * @param base UART peripheral base address.
+ * @param address 9bit slave address character.
+ */
+static inline void UART_SetMatchAddress(UART_Type *base, uint8_t address)
+{
+    /* Configure 9bit slave address character. */
+    base->UMCR &= ~UART_UMCR_SLADDR_MASK;
+	base->UMCR |= UART_UMCR_SLADDR(address);
+}
+
+/*!
+ * @brief Set 9bit Slave Address Detect Mode.
+ * Mode:
+ *    Normal   - In this mode, once the UART has detected a 9th bit is equal to '1',
+ *               it will always save the subsequent frames to RxFIFO. So the software
+ *               must decide whether the address and data in RxFIFO are needed or not.
+ *    Automtic - In this mode, If the address byte is received and it does not match
+ *               SLADDR character, the receiver will discard the address byte and
+*                subsequent data byte.If the address byte again matches SLADDR character,
+ *               the receiver will put this address byte and subsequent data byte in the
+ *               RxFIFO along with their 9th bit.
+ * @param base UART peripheral base address.
+ * @param mode 9bit Slave Address Detect Mode Selection.
+ *
+ *    kUART_9BitNormalMode for Normal mode
+ *    kUART_9BitAutoMode for Automtic mode.
+ */
+static inline void UART_Set9bitAddressDetectMode(UART_Type *base, uint8_t mode)
+{
+    if (mode == kUART_9BitNormalMode)
+    {
+        base->UMCR &= ~UART_UMCR_SLAM_MASK;
+    }
+    else
+    {
+        base->UMCR |= UART_UMCR_SLAM_MASK;
+    }
+}
+
+/*!
+ * @brief Set 9bit Slave Address Detected Interrupt Enable.
+ *
+ * @param base UART peripheral base address.
+ * @param enable true to enable, flase to disable.
+ */
+static inline void UART_Set9bitAddressDetectInterrput(UART_Type *base, bool enable)
+{
+    if (enable)
+    {
+        base->UMCR |= UART_UMCR_SADEN_MASK;
+    }
+    else
+    {
+        base->UMCR &= ~UART_UMCR_SADEN_MASK;
+    }
+}
+
+/*!
+ * @brief Set UART 9th transmit bit.
+ *
+ * @param base UART peripheral base address.
+ */
+static inline void UART_Set9thTransmitBit(UART_Type *base)
+{
+    base->UMCR |= UART_UMCR_TXB8_MASK;
+}
+
+/*!
+ * @brief Clear UART 9th transmit bit.
+ *
+ * @param base UART peripheral base address.
+ */
+static inline void UART_Clear9thTransmitBit(UART_Type *base)
+{
+    base->UMCR &= ~UART_UMCR_TXB8_MASK;
+}
 
 /*!
  * @brief This function is used to Enable the UART Module.

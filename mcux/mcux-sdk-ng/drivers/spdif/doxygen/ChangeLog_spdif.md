@@ -1,5 +1,10 @@
 # SPDIF
 
+## [2.0.8]
+
+- Bug fixes
+  - Fixed MSG cert int30-c and int31-c findings
+
 ## [2.0.7]
 
 - Improvements

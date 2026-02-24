@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022, 2025 NXP
+ * Copyright 2020-2022, 2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief IMU driver version. */
-#define FSL_IMU_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_IMU_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*! @} */
 
 #define IMU_MSG_FIFO_STATUS_MSG_FIFO_LOCKED_MASK      (1UL)

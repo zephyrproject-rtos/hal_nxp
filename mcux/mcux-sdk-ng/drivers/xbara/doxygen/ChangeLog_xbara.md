@@ -1,5 +1,10 @@
 # XBARA
 
+## [2.0.7]
+
+- Bug Fixes
+  - Fixed CERT-C issues.
+
 ## [2.0.6]
 
 - Bug Fixes

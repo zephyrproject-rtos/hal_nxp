@@ -220,6 +220,7 @@ static inline void SMSCM_LockMemControlReg(SMSCM_Type *base, smscm_mem_t mem)
  * @brief Enable or disable the on-chip memory flash cache.
  *
  * @param base SMSCM peripheral address.
+ * @param enable Use true to enable, false to disable.
  */
 static inline void SMSCM_EnableFlashCache(SMSCM_Type *base, bool enable)
 {
@@ -237,6 +238,7 @@ static inline void SMSCM_EnableFlashCache(SMSCM_Type *base, bool enable)
  * @brief Enable flash instruction cache.
  *
  * @param base SMSCM peripheral address.
+ * @param enable Use true to enable, false to disable.
  */
 static inline void SMSCM_EnableFlashInstructionCache(SMSCM_Type *base, bool enable)
 {
@@ -254,6 +256,7 @@ static inline void SMSCM_EnableFlashInstructionCache(SMSCM_Type *base, bool enab
  * @brief Enable flash data cache.
  *
  * @param base SMSCM peripheral address.
+ * @param enable Use true to enable, false to disable.
  */
 static inline void SMSCM_EnableFlashDataCache(SMSCM_Type *base, bool enable)
 {
@@ -291,6 +294,7 @@ static inline void SMSCM_LockFlashIFR1(SMSCM_Type *base)
  * @brief SMSCM Flash Speculate enable.
  *
  * @param base SMSCM peripheral address.
+ * @param enable Use true to enable, false to disable.
  */
 static inline void SMSCM_EnableFlashSpeculate(SMSCM_Type *base, bool enable)
 {
@@ -308,6 +312,7 @@ static inline void SMSCM_EnableFlashSpeculate(SMSCM_Type *base, bool enable)
  * @brief SMSCM Data Prefetch enable.
  *
  * @param base SMSCM peripheral address.
+ * @param enable Use true to enable, false to disable.
  */
 static inline void SMSCM_EnableDataPrefetch(SMSCM_Type *base, bool enable)
 {
@@ -325,6 +330,7 @@ static inline void SMSCM_EnableDataPrefetch(SMSCM_Type *base, bool enable)
  * @brief Disable non-correctable bus errors on flash data fetches.
  *
  * @param base SMSCM peripheral address.
+ * @param enable Use true to enable, false to disable.
  */
 static inline void SMSCM_EnableFlashDataNonCorrectableBusError(SMSCM_Type *base, bool enable)
 {
@@ -342,6 +348,7 @@ static inline void SMSCM_EnableFlashDataNonCorrectableBusError(SMSCM_Type *base,
  * @brief Disable non-correctable bus errors on flash instruction fetches.
  *
  * @param base SMSCM peripheral address.
+ * @param enable Use true to enable, false to disable.
  */
 static inline void SMSCM_EnableFlashInstructionNonCorrectableBusError(SMSCM_Type *base, bool enable)
 {

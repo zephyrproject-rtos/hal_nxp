@@ -19,7 +19,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief CSI2RX driver version. */
-#define FSL_CSI2RX_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_CSI2RX_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*! @brief CSI2RX data lanes.  */
@@ -107,13 +107,14 @@ typedef struct _pg_pattern_config
 typedef struct _csi2rx_config
 {
     uint32_t laneNum;                /*!< Number of active lanes used for receiving data. */
-    uint32_t vcNum;                  /*!< Number of used CSI host interface vittual channel. */
-    csi2rx_payload_t dataType;       /*!< Number of csi host channel received data type from sonsor. */
+    uint32_t vcNum;                  /*!< Number of used CSI host interface virtual channel. */
+    csi2rx_payload_t dataType;       /*!< Number of csi host channel received data type from sensor. */
     bool pgEnable;                  /*!< Whether enable CSI host pattern generator, CSI will halt camera received data 
                                           if enable it. Default disabled */
     pg_pattern_config_t pgPattern;  /*!< Number of active lanes used for receiving data. */
     uint32_t cfgclkFreqrange;        /*!< Number of DPHY clock frequency. */
     uint32_t hsFreqrange;            /*!< Number of DPHY frequency range, a lane operation range from 8Mbps to ?. */
+    uint32_t ddl_osc_freq;           /*!< Number of phy ddl osc frequency. */
     uint32_t phyMode;                /*!< CSI2 DPHY operation mode. */
     uint32_t phyNumber;              /*!< CSI2 DPHY number index. */
 } csi2rx_config_t;
@@ -138,33 +139,35 @@ uint32_t MIPI_CSI2RX_GetInstance(PRIMARY_CSI2_CONTROLLER_Type *base);
  *
  * @param base CSI2RX peripheral address.
  */
-void MIPI_CSI2RX_Startup(PRIMARY_CSI2_CONTROLLER_Type *base);
+void MIPI_CSI2RX_Startup(PRIMARY_CSI2_CONTROLLER_Type *base, SECONDARY_CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config);
 
 /*!
  * @brief This function deal with CSI and PHY initialization.
  *
- * @param base CSI2RX peripheral address.
+ * @param csi1 CSI2RX primary peripheral address.
+ * @param csi2 CSI2RX secondary peripheral address.
  * @param phybase PHY module periperal address.
  * @param config CSI2RX module configuration structure.
  */
-status_t MIPI_CSI2RX_InitInterface(PRIMARY_CSI2_CONTROLLER_Type *base, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config);
-
+status_t MIPI_CSI2RX_InitInterface(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config);
 /*!
  * @brief The CSI host interface is basically configured and ready to receive sensor data after this function.
  *
- * @param pribase CSI2 primary peripheral address.
- * @param secbase CSI2 secondry peripheral address.
+ * @param csi1 CSI2 primary peripheral address.
+ * @param csi2 CSI2 secondary peripheral address.
  * @param phybase PHY module periperal address.
  * @param config CSI2RX module configuration structure.
  */
-status_t MIPI_CSI2RX_Init(PRIMARY_CSI2_CONTROLLER_Type *pribase, SECONDARY_CSI2_CONTROLLER_Type *secbase, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config);
+status_t MIPI_CSI2RX_Init(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config);
 
 /*!
  * @brief This function disables the CSI2 host and PHY module.
  *
- * @param base CSI2RX peripheral address.
+ * @param csi1 CSI2 primary peripheral address.
+ * @param csi2 CSI2 secondary peripheral address.
+ * @param instance CSI interface number.
  */
-void MIPI_CSI2RX_Deinit(PRIMARY_CSI2_CONTROLLER_Type *base);
+void MIPI_CSI2RX_Deinit(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, uint8_t instance);
 
 #if defined(__cplusplus)
 }

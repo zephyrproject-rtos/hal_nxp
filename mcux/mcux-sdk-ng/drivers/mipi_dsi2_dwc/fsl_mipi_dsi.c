@@ -339,7 +339,7 @@ void DSI_SetIpiConfig(DSI_V2_HOST_IPI_Type *ipi, const dsi_ipi_config_t *config)
 {
     assert(config);
 
-    uint8_t ipi_format, ipi_depth;
+    uint8_t ipi_format = 0U, ipi_depth = 0U;
 
     switch (config->dsi_fmt)
     {
@@ -975,7 +975,7 @@ void DSI_ConfigDphy(DISPLAY_DSI_CSR_Type *base,
 {
     assert(config != NULL);
     uint16_t dphyClkFreq_Mhz;
-    uint8_t dsi_csr_format;
+    uint8_t dsi_csr_format = 0U;
     dsi_dphypll_config_t DphyPllCfg = {0};
     dphyClkFreq_Mhz                = dataRateFreq_Hz / 1000000U;
     DSI_DphyGetPllDivider(&DphyPllCfg, phyRefClkFreq_Hz, dataRateFreq_Hz);

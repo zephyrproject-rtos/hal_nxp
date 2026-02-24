@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2025 NXP
+ * Copyright 2021-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,7 +22,7 @@
  * @{
  */
 /*! @brief MU driver version. */
-#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 8, 1))
+#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 8, 3))
 /*! @} */
 
 #define MU_CORE_INTR(intr) ((uint32_t)(intr) << 0U)
@@ -366,20 +366,6 @@ typedef enum _mu_general_purpose_interrupt
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
-/*!
- * @name MU instance.
- * @{
- */
-
-/*!
- * @brief Get the MU instance index.
- *
- * @param base MU peripheral base address.
- * @return MU instance index.
- */
-uint32_t MU_GetInstance(MU_Type *base);
-/*! @} */
 
 /*!
  * @name MU initialization.

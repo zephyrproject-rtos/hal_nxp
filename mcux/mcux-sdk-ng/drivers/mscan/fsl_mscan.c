@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020, 2023 NXP
+ * Copyright 2017-2020, 2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -215,7 +215,7 @@ static void MSCAN_EnterInitMode(MSCAN_Type *base)
 static void MSCAN_ExitInitMode(MSCAN_Type *base)
 {
     /* Clear initial request bit. */
-    base->CANCTL0 &= ~((uint8_t)MSCAN_CANCTL0_INITRQ_MASK);
+    MCUX_REG_BIT_CLEAR8(base->CANCTL0, MSCAN_CANCTL0_INITRQ_MASK);
 
     /* Wait until the MsCAN Module exits initial mode. */
     while (0U != (base->CANCTL1 & MSCAN_CANCTL1_INITAK_MASK))
@@ -430,16 +430,16 @@ void MSCAN_Init(MSCAN_Type *base, const mscan_config_t *config, uint32_t sourceC
 
     /* Enable Self Wake Up Mode. */
     ctl0Temp = (config->enableWakeup) ? ctl0Temp | (uint8_t)MSCAN_CANCTL0_WUPE_MASK :
-                                        ctl0Temp & ~((uint8_t)MSCAN_CANCTL0_WUPE_MASK);
+                                        ctl0Temp & MCUX_MASK_INVERT_8(MSCAN_CANCTL0_WUPE_MASK);
     /* Enable Loop Back Mode. */
     ctl1Temp = (config->enableLoopBack) ? ctl1Temp | (uint8_t)MSCAN_CANCTL1_LOOPB_MASK :
-                                          ctl1Temp & ~((uint8_t)MSCAN_CANCTL1_LOOPB_MASK);
+                                          ctl1Temp & MCUX_MASK_INVERT_8(MSCAN_CANCTL1_LOOPB_MASK);
     /* Enable Listen Mode. */
     ctl1Temp = (config->enableListen) ? ctl1Temp | (uint8_t)MSCAN_CANCTL1_LISTEN_MASK :
-                                        ctl1Temp & ~((uint8_t)MSCAN_CANCTL1_LISTEN_MASK);
+                                        ctl1Temp & MCUX_MASK_INVERT_8(MSCAN_CANCTL1_LISTEN_MASK);
     /* Clock source selection. */
     ctl1Temp = (kMSCAN_ClkSrcBus == config->clkSrc) ? ctl1Temp | (uint8_t)MSCAN_CANCTL1_CLKSRC_MASK :
-                                                      ctl1Temp & ~((uint8_t)MSCAN_CANCTL1_CLKSRC_MASK);
+                                                      ctl1Temp & MCUX_MASK_INVERT_8(MSCAN_CANCTL1_CLKSRC_MASK);
 
     /* Save CTLx Configuation. */
     base->CANCTL0 = ctl0Temp;
@@ -464,7 +464,7 @@ void MSCAN_Init(MSCAN_Type *base, const mscan_config_t *config, uint32_t sourceC
 
     /* Enable Timer. */
     base->CANCTL0 = (config->enableTimer) ? base->CANCTL0 | (uint8_t)MSCAN_CANCTL0_TIME_MASK :
-                                            base->CANCTL0 & ~((uint8_t)MSCAN_CANCTL0_TIME_MASK);
+                                            base->CANCTL0 & MCUX_MASK_INVERT_8(MSCAN_CANCTL0_TIME_MASK);
 }
 
 /*!
@@ -540,8 +540,9 @@ void MSCAN_SetTimingConfig(MSCAN_Type *base, const mscan_timing_config_t *config
     MSCAN_EnterInitMode(base);
 
     /* Cleaning previous Timing Setting. */
-    base->CANBTR0 &= (uint8_t)(~(MSCAN_CANBTR0_BRP_MASK | MSCAN_CANBTR0_SJW_MASK));
-    base->CANBTR1 &= (uint8_t)(~(MSCAN_CANBTR1_TSEG1_MASK | MSCAN_CANBTR1_TSEG2_MASK | MSCAN_CANBTR1_SAMP_MASK));
+    MCUX_REG_BIT_CLEAR8(base->CANBTR0, (MSCAN_CANBTR0_BRP_MASK | MSCAN_CANBTR0_SJW_MASK));
+    MCUX_REG_BIT_CLEAR8(base->CANBTR1, (MSCAN_CANBTR1_TSEG1_MASK | MSCAN_CANBTR1_TSEG2_MASK | 
+                                        MSCAN_CANBTR1_SAMP_MASK));
 
     /* Updating Timing Setting according to configuration structure. */
     base->CANBTR0 |= (MSCAN_CANBTR0_BRP(config->priDiv) | MSCAN_CANBTR0_SJW(config->sJumpwidth));

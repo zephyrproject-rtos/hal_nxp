@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,7 +20,7 @@
  * Definitions
  ******************************************************************************/
 
-#define FSL_XBAR_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_XBAR_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 
 /* Macros for entire XBAR_SELx register. */
 #define XBAR_SELx(base, output) (((volatile uint16_t *)(&((base)->SEL0)))[(uint32_t)(output) / 2UL])
@@ -36,8 +36,8 @@ typedef enum _xbar_active_edge
     kXBAR_EdgeNone             = 0U, /*!< Edge detection status bit never asserts. */
     kXBAR_EdgeRising           = 1U, /*!< Edge detection status bit asserts on rising edges. */
     kXBAR_EdgeFalling          = 2U, /*!< Edge detection status bit asserts on falling edges. */
-    kXBAR_EdgeRisingAndFalling = 3U  /*!< Edge detection status bit asserts on rising and falling edges. */
-
+    kXBAR_EdgeRisingAndFalling = 3U, /*!< Edge detection status bit asserts on rising and falling edges. */
+    kXBAR_EdgeMax                    /*!< Max value. */
 } xbar_active_edge_t;
 
 /*!
@@ -47,7 +47,8 @@ typedef enum _xbar_request
 {
     kXBAR_RequestDisable         = 0U, /*!< Interrupt and DMA are disabled. */
     kXBAR_RequestDMAEnable       = 1U, /*!< DMA enabled, interrupt disabled. */
-    kXBAR_RequestInterruptEnalbe = 2U  /*!< Interrupt enabled, DMA disabled. */
+    kXBAR_RequestInterruptEnalbe = 2U, /*!< Interrupt enabled, DMA disabled. */
+    kXBAR_RequestMax                   /*!< Max value. */
 } xbar_request_t;
 
 /*!

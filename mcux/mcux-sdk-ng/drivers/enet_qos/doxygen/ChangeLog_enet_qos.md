@@ -1,5 +1,10 @@
 # ENET_QOS
 
+## [2.7.3]
+
+- Bug Fixes
+  - Fixed the MISRA C-2012 issue rule 7.2, 17.12, 18.1.
+
 ## [2.7.2]
 
 - Bug Fixes

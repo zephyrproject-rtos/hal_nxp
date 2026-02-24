@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Defines LPC Frequency Measure driver version 2.1.1. */
-#define FSL_FMEAS_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_FMEAS_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*! @} */
 
 #if defined(FSL_FEATURE_FMEAS_INDEX_20) && (FSL_FEATURE_FMEAS_INDEX_20)

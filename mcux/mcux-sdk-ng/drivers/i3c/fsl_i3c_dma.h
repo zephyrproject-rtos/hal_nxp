@@ -16,8 +16,45 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I3C DMA driver version. */
-#define FSL_I3C_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 9))
+#define FSL_I3C_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 10))
 /*@}*/
+
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123)
+/* Note: This workaround uses large watermark to remind DMA to move Rx data. It needs to prepare
+ * DMA chain based on the exact data size from slave, otherwise some bytes in tail may lose
+ * because last data bytes doesn't reach the watermark.
+ */
+
+/* Optional: use preallocated DMA descriptor chain to implement ERRATA 052123 workaround.
+ * When enabled the driver will preallocate a table of DMA descriptors per-instance and
+ * build a chained list of descriptors (each descriptor transferring at most 6 bytes) so
+ * the RX path can submit the entire chain at initialization and avoid preparing short
+ * descriptors per-interrupt.
+ */
+#ifndef I3C_ERRATA_052123_USE_DMA_CHAIN
+#define I3C_ERRATA_052123_USE_DMA_CHAIN 0U
+#endif
+
+#if defined(I3C_ERRATA_052123_USE_DMA_CHAIN) && (I3C_ERRATA_052123_USE_DMA_CHAIN)
+#ifndef I3C_ERRATA_052123_DMA_RX_CHAIN_MAX_TRANSFER_BYTES
+#define I3C_ERRATA_052123_DMA_RX_CHAIN_MAX_TRANSFER_BYTES 100U
+#endif
+#ifndef I3C_ERRATA_052123_DMA_TX_CHAIN_MAX_TRANSFER_BYTES
+#define I3C_ERRATA_052123_DMA_TX_CHAIN_MAX_TRANSFER_BYTES 100U
+#endif
+
+#define I3C_DMA_RX_CHAIN_COUNT(size) \
+    ((size) / 6U + (((size) % 6U) ? ((((size) % 6U == 3U) || ((size) % 6U == 5U)) ? 2U : 1U) : 0U))
+
+#define I3C_DMA_TX_CHAIN_COUNT(size) (((size) + 7U) / 8U)
+
+/* Number of chain descriptors per instance. */
+#define I3C_DMA_CHAIN_COUNT_MAX                                                    \
+    MAX(I3C_DMA_RX_CHAIN_COUNT(I3C_ERRATA_052123_DMA_RX_CHAIN_MAX_TRANSFER_BYTES), \
+        I3C_DMA_TX_CHAIN_COUNT(I3C_ERRATA_052123_DMA_TX_CHAIN_MAX_TRANSFER_BYTES))
+
+#endif /* defined(I3C_ERRATA_052123_USE_DMA_CHAIN) && (I3C_ERRATA_052123_USE_DMA_CHAIN) */
+#endif /* defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123) */
 
 /*!
  * @addtogroup i3c_master_dma_driver
@@ -46,23 +83,27 @@ typedef struct _i3c_master_dma_callback
  */
 struct _i3c_master_dma_handle
 {
-    I3C_Type *base;                     /*!< I3C base pointer. */
-    uint8_t state;                      /*!< Transfer state machine current state. */
-    uint32_t transferCount;             /*!< Indicates progress of the transfer */
-    uint8_t subaddressBuffer[4];        /*!< Saving subaddress command. */
-    uint8_t subaddressCount;            /*!< Saving command count. */
-    i3c_master_transfer_t transfer;     /*!< Copy of the current transfer info. */
-    i3c_master_dma_callback_t callback; /*!< Callback function pointer. */
-    void *userData;                     /*!< Application data passed to callback. */
-    dma_handle_t *rxDmaHandle;          /*!< Handle for receive DMA channel. */
-    dma_handle_t *txDmaHandle;          /*!< Handle for transmit DMA channel. */
-    uint8_t ibiAddress;                 /*!< Slave address which request IBI. */
-    uint8_t *ibiBuff;                   /*!< Pointer to IBI buffer to keep ibi bytes. */
-    size_t ibiPayloadSize;              /*!< IBI payload size. */
-    i3c_ibi_type_t ibiType;             /*!< IBI type. */
+    I3C_Type *base;                                      /*!< I3C base pointer. */
+    uint8_t state;                                       /*!< Transfer state machine current state. */
+    uint32_t transferCount;                              /*!< Indicates progress of the transfer */
+    uint8_t subaddressBuffer[4];                         /*!< Saving subaddress command. */
+    uint8_t subaddressCount;                             /*!< Saving command count. */
+    i3c_master_transfer_t transfer;                      /*!< Copy of the current transfer info. */
+    i3c_master_dma_callback_t callback;                  /*!< Callback function pointer. */
+    void *userData;                                      /*!< Application data passed to callback. */
+    dma_handle_t *rxDmaHandle;                           /*!< Handle for receive DMA channel. */
+    dma_handle_t *txDmaHandle;                           /*!< Handle for transmit DMA channel. */
+    uint8_t ibiAddress;                                  /*!< Slave address which request IBI. */
+    uint8_t *ibiBuff;                                    /*!< Pointer to IBI buffer to keep ibi bytes. */
+    size_t ibiPayloadSize;                               /*!< IBI payload size. */
+    i3c_ibi_type_t ibiType;                              /*!< IBI type. */
 #if defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123)
-    uint32_t transDataSize;             /*!< Transferred data size. */
-    uint8_t workaroundBuff[16];         /*!< Workaround buffer to store temporary data. */
+    uint32_t transDataSize;                              /*!< Transferred data size. */
+#if defined(I3C_ERRATA_052123_USE_DMA_CHAIN) && (I3C_ERRATA_052123_USE_DMA_CHAIN)
+    uint8_t workaroundBuff[I3C_DMA_CHAIN_COUNT_MAX][16]; /*!< Workaround buffer to store temporary data. */
+#else
+    uint8_t workaroundBuff[16]; /*!< Workaround buffer to store temporary data. */
+#endif
 #endif
 };
 

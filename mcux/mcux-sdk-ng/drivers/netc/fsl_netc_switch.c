@@ -697,6 +697,7 @@ status_t SWT_ManagementTxRxConfig(swt_handle_t *handle, ep_handle_t *epHandle, c
         handle->mgmtTxBdRing.bdBase    = txRxConfig->mgmtTxBdrConfig.bdArray;
         handle->mgmtTxBdRing.dirtyBase = txRxConfig->mgmtTxBdrConfig.dirtyArray;
         handle->mgmtTxBdRing.len       = txRxConfig->mgmtTxBdrConfig.len;
+        handle->mgmtTxBdRing.enableInterrupt = txRxConfig->mgmtTxBdrConfig.enIntr;
     }
 
     return kStatus_Success;

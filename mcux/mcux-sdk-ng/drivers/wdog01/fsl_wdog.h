@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2023 NXP
+ * Copyright 2016-2019, 2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Defines WDOG driver version */
-#define FSL_WDOG_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_WDOG_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*! @} */
 /*! @name Refresh sequence */
 /*! @{ */
@@ -160,7 +160,7 @@ static inline void WDOG_Enable(WDOG_Type *base)
  */
 static inline void WDOG_Disable(WDOG_Type *base)
 {
-    base->WCR &= ~(uint16_t)WDOG_WCR_WDE_MASK;
+    base->WCR &= (uint16_t)(WDOG_WCR_WDE_MASK ^ 0xFFFFU);
 }
 
 /*!
@@ -174,7 +174,7 @@ static inline void WDOG_Disable(WDOG_Type *base)
  */
 static inline void WDOG_TriggerSystemSoftwareReset(WDOG_Type *base)
 {
-    base->WCR &= ~(uint16_t)WDOG_WCR_SRS_MASK;
+    base->WCR &= (uint16_t)(WDOG_WCR_SRS_MASK ^ 0xFFFFU);
 }
 
 /*!
@@ -190,7 +190,7 @@ static inline void WDOG_TriggerSystemSoftwareReset(WDOG_Type *base)
  */
 static inline void WDOG_TriggerSoftwareSignal(WDOG_Type *base)
 {
-    base->WCR &= ~(uint16_t)WDOG_WCR_WDA_MASK;
+    base->WCR &= (uint16_t)(WDOG_WCR_WDA_MASK ^ 0xFFFFU);
 }
 
 /*!
@@ -254,7 +254,7 @@ void WDOG_ClearInterruptStatus(WDOG_Type *base, uint16_t mask);
  */
 static inline void WDOG_SetTimeoutValue(WDOG_Type *base, uint16_t timeoutCount)
 {
-    base->WCR = (base->WCR & (uint16_t)~WDOG_WCR_WT_MASK) | WDOG_WCR_WT(timeoutCount);
+    base->WCR = (base->WCR & (uint16_t)(WDOG_WCR_WT_MASK ^ 0xFFFFU)) | WDOG_WCR_WT(timeoutCount);
 }
 
 /*!
@@ -269,7 +269,7 @@ static inline void WDOG_SetTimeoutValue(WDOG_Type *base, uint16_t timeoutCount)
  */
 static inline void WDOG_SetInterrputTimeoutValue(WDOG_Type *base, uint16_t timeoutCount)
 {
-    base->WICR = (base->WICR & ~(uint16_t)WDOG_WICR_WICT_MASK) | WDOG_WICR_WICT(timeoutCount);
+    base->WICR = (base->WICR & (uint16_t)(WDOG_WICR_WICT_MASK ^ 0xFFFFU)) | WDOG_WICR_WICT(timeoutCount);
 }
 
 /*!
@@ -282,7 +282,7 @@ static inline void WDOG_SetInterrputTimeoutValue(WDOG_Type *base, uint16_t timeo
  */
 static inline void WDOG_DisablePowerDownEnable(WDOG_Type *base)
 {
-    base->WMCR &= ~(uint16_t)WDOG_WMCR_PDE_MASK;
+    base->WMCR &= (uint16_t)(WDOG_WMCR_PDE_MASK ^ 0xFFFFU);
 }
 
 /*!

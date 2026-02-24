@@ -19,7 +19,7 @@
  * Definitions
  ******************************************************************************/
 
-#define FSL_XBAR_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_XBAR_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 
 #if defined(FSL_FEATURE_XBAR_DSC_REG_WIDTH) && (FSL_FEATURE_XBAR_DSC_REG_WIDTH == 32)
 typedef uint32_t xbar_reg_t;
@@ -47,7 +47,8 @@ typedef enum _xbar_active_edge
     kXBAR_EdgeNone             = 0U, /*!< Edge detection status bit never asserts. */
     kXBAR_EdgeRising           = 1U, /*!< Edge detection status bit asserts on rising edges. */
     kXBAR_EdgeFalling          = 2U, /*!< Edge detection status bit asserts on falling edges. */
-    kXBAR_EdgeRisingAndFalling = 3U  /*!< Edge detection status bit asserts on rising and falling edges. */
+    kXBAR_EdgeRisingAndFalling = 3U, /*!< Edge detection status bit asserts on rising and falling edges. */
+    kXBAR_EdgeMax                    /*!< Max value. */
 } xbar_active_edge_t;
 
 /*!
@@ -57,7 +58,8 @@ typedef enum _xbar_request
 {
     kXBAR_RequestDisable         = 0U, /*!< Interrupt and DMA are disabled. */
     kXBAR_RequestDMAEnable       = 1U, /*!< DMA enabled, interrupt disabled. */
-    kXBAR_RequestInterruptEnable = 2U  /*!< Interrupt enabled, DMA disabled. */
+    kXBAR_RequestInterruptEnable = 2U, /*!< Interrupt enabled, DMA disabled. */
+    kXBAR_RequestMax                   /*!< Max value. */
 } xbar_request_t;
 
 /*!

@@ -179,13 +179,13 @@ status_t SEMA4_TryLock(SEMA4_Type *base, uint8_t gateNum, uint8_t procNum)
  */
 status_t SEMA4_Lock(SEMA4_Type *base, uint8_t gateNum, uint8_t procNum)
 {
-#if SEMA4_BUSY_POLL_COUNT
+#if defined(SEMA4_BUSY_POLL_COUNT) && (SEMA4_BUSY_POLL_COUNT > 0)
     uint32_t poll_count = SEMA4_BUSY_POLL_COUNT;
 #endif
 
     while (kStatus_Success != SEMA4_TryLock(base, gateNum, procNum))
     {
-#if SEMA4_BUSY_POLL_COUNT
+#if defined(SEMA4_BUSY_POLL_COUNT) && (SEMA4_BUSY_POLL_COUNT > 0)
         if ((--poll_count) == 0u)
         {
             return kStatus_Timeout;

@@ -539,7 +539,7 @@ void EQDC_SetOperateMode(EQDC_Type *base, eqdc_operate_mode_t operateMode);
  */
 static inline void EQDC_SetCountMode(EQDC_Type *base, eqdc_count_mode_t countMode)
 {
-    base->CTRL2 = (base->CTRL2 & (uint16_t)(~EQDC_CTRL2_CMODE_MASK)) | EQDC_CTRL2_CMODE(countMode);
+    MCUX_REG_MODIFY16(base->CTRL2, EQDC_CTRL2_CMODE_MASK, EQDC_CTRL2_CMODE(countMode));
 }
 
 /*! @} */
@@ -559,11 +559,11 @@ static inline void EQDC_EnableWatchdog(EQDC_Type *base, bool bEnable)
 {
     if (bEnable)
     {
-        base->CTRL = (base->CTRL & (~EQDC_CTRL_W1C_FLAGS)) | EQDC_CTRL_WDE_MASK;
+        MCUX_REG_MODIFY16(base->CTRL, EQDC_CTRL_W1C_FLAGS, EQDC_CTRL_WDE_MASK);
     }
     else
     {
-        base->CTRL = (base->CTRL & (~(EQDC_CTRL_W1C_FLAGS | EQDC_CTRL_WDE_MASK)));
+        MCUX_REG_BIT_CLEAR16(base->CTRL, (EQDC_CTRL_W1C_FLAGS | EQDC_CTRL_WDE_MASK));
     }
 }
 
@@ -604,7 +604,7 @@ static inline void EQDC_EnableDMA(EQDC_Type *base, bool bEnable)
         /* Quadrature decoder CTRL[DMAEN] bit can not be cleared except do EQDC reset*/
         assert(false);
 #else
-        base->CTRL &= ~EQDC_CTRL_DMAEN_MASK;
+        MCUX_REG_BIT_CLEAR16(base->CTRL, EQDC_CTRL_DMAEN_MASK);
 #endif
     }
 }
@@ -641,7 +641,7 @@ static inline void EQDC_SetBufferedRegisterLoadUpdateMode(EQDC_Type *base)
  */
 static inline void EQDC_ClearBufferedRegisterLoadUpdateMode(EQDC_Type *base)
 {
-    base->CTRL2 &= ~EQDC_CTRL2_LDMOD_MASK;
+    MCUX_REG_BIT_CLEAR16(base->CTRL2, EQDC_CTRL2_LDMOD_MASK);
 }
 
 /*!
@@ -666,7 +666,7 @@ static inline void EQDC_SetEqdcLdok(EQDC_Type *base)
  *
  * @param base EQDC peripheral base address.
  */
-static inline uint8_t EQDC_GetEqdcLdok(EQDC_Type *base)
+static inline uint16_t EQDC_GetEqdcLdok(EQDC_Type *base)
 {
     return base->CTRL & EQDC_CTRL_LDOK_MASK;
 }
@@ -678,7 +678,7 @@ static inline uint8_t EQDC_GetEqdcLdok(EQDC_Type *base)
  */
 static inline void EQDC_ClearEqdcLdok(EQDC_Type *base)
 {
-    base->CTRL &= ~EQDC_CTRL_LDOK_MASK;
+    MCUX_REG_BIT_CLEAR16(base->CTRL, EQDC_CTRL_LDOK_MASK);
 }
 
 /*! @} */
@@ -714,12 +714,12 @@ static inline void EQDC_ClearStatusFlags(EQDC_Type *base, uint32_t u32Flags)
 {
     if (0U != (u32Flags & EQDC_CTRL_INT_FLAGS))
     {
-        base->CTRL = (base->CTRL & (~EQDC_CTRL_W1C_FLAGS)) | (u32Flags & EQDC_CTRL_INT_FLAGS);
+        MCUX_REG_MODIFY16(base->CTRL, EQDC_CTRL_W1C_FLAGS, u32Flags & EQDC_CTRL_INT_FLAGS);
     }
 
     if (0U != ((u32Flags >> 16) & EQDC_INTCTRL_INT_FLAGS))
     {
-        base->INTCTRL = (base->INTCTRL & (~EQDC_INTCTRL_W1C_FLAGS)) | ((u32Flags >> 16) & EQDC_INTCTRL_INT_FLAGS);
+        MCUX_REG_MODIFY16(base->INTCTRL, EQDC_INTCTRL_W1C_FLAGS, (u32Flags >> 16) & EQDC_INTCTRL_INT_FLAGS);
     }
 }
 
@@ -761,12 +761,12 @@ static inline void EQDC_EnableInterrupts(EQDC_Type *base, uint32_t u32Interrupts
 {
     if (0U != (u32Interrupts & EQDC_CTRL_INT_EN))
     {
-        base->CTRL = (base->CTRL & (~EQDC_CTRL_W1C_FLAGS)) | (u32Interrupts & EQDC_CTRL_INT_EN);
+        MCUX_REG_MODIFY16(base->CTRL, EQDC_CTRL_W1C_FLAGS, u32Interrupts & EQDC_CTRL_INT_EN);
     }
 
     if (0U != ((u32Interrupts >> 16) & EQDC_INTCTRL_INT_EN))
     {
-        base->INTCTRL = (base->INTCTRL & (~EQDC_INTCTRL_W1C_FLAGS)) | ((u32Interrupts >> 16) & EQDC_INTCTRL_INT_EN);
+        MCUX_REG_MODIFY16(base->INTCTRL, EQDC_INTCTRL_W1C_FLAGS, (u32Interrupts >> 16) & EQDC_INTCTRL_INT_EN);
     }
 }
 
@@ -780,12 +780,14 @@ static inline void EQDC_DisableInterrupts(EQDC_Type *base, uint32_t u32Interrupt
 {
     if (0U != (u32Interrupts & EQDC_CTRL_INT_EN))
     {
-        base->CTRL = (base->CTRL & (~EQDC_CTRL_W1C_FLAGS)) & (~(u32Interrupts & EQDC_CTRL_INT_EN));
+        base->CTRL = (base->CTRL & MCUX_MASK_INVERT_16(EQDC_CTRL_W1C_FLAGS)) &
+                        (MCUX_MASK_INVERT_16(u32Interrupts & EQDC_CTRL_INT_EN));
     }
 
     if (0U != ((u32Interrupts >> 16) & EQDC_INTCTRL_INT_EN))
     {
-        base->INTCTRL = (base->INTCTRL & (~EQDC_INTCTRL_W1C_FLAGS)) & (~((u32Interrupts >> 16) & EQDC_INTCTRL_INT_EN));
+        base->INTCTRL = (base->INTCTRL & MCUX_MASK_INVERT_16(EQDC_INTCTRL_W1C_FLAGS)) &
+                            (MCUX_MASK_INVERT_16((u32Interrupts >> 16) & EQDC_INTCTRL_INT_EN));
     }
 }
 
@@ -807,7 +809,7 @@ static inline void EQDC_DisableInterrupts(EQDC_Type *base, uint32_t u32Interrupt
  */
 static inline void EQDC_DoSoftwareLoadInitialPositionValue(EQDC_Type *base)
 {
-    base->CTRL = (base->CTRL & (~EQDC_CTRL_W1C_FLAGS)) | EQDC_CTRL_SWIP_MASK;
+    MCUX_REG_MODIFY16(base->CTRL, EQDC_CTRL_W1C_FLAGS, EQDC_CTRL_SWIP_MASK);
 }
 
 /*!
@@ -827,8 +829,10 @@ static inline void EQDC_DoSoftwareLoadInitialPositionValue(EQDC_Type *base)
  */
 static inline void EQDC_SetInitialPositionValue(EQDC_Type *base, uint32_t u32PositionInitValue)
 {
+    uint32_t lowfield = 0;
+    lowfield   = u32PositionInitValue & 0xFFFFU;
     base->UINIT = (uint16_t)(u32PositionInitValue >> 16U);
-    base->LINIT = (uint16_t)(u32PositionInitValue);
+    base->LINIT = (uint16_t)(lowfield);
 }
 
 /*!
@@ -841,8 +845,10 @@ static inline void EQDC_SetInitialPositionValue(EQDC_Type *base, uint32_t u32Pos
  */
 static inline void EQDC_SetPositionCounterValue(EQDC_Type *base, uint32_t positionCounterValue)
 {
+    uint32_t lowfield = 0;
+    lowfield   = positionCounterValue & 0xFFFFU;
     base->UPOS = (uint16_t)(positionCounterValue >> 16U);
-    base->LPOS = (uint16_t)(positionCounterValue);
+    base->LPOS = (uint16_t)(lowfield);
 }
 
 /*!
@@ -862,8 +868,10 @@ static inline void EQDC_SetPositionCounterValue(EQDC_Type *base, uint32_t positi
  */
 static inline void EQDC_SetPositionModulusValue(EQDC_Type *base, uint32_t positionModulusValue)
 {
+    uint32_t lowfield = 0;
+    lowfield   = positionModulusValue & 0xFFFFU;
     base->UMOD = (uint16_t)(positionModulusValue >> 16U);
-    base->LMOD = (uint16_t)(positionModulusValue);
+    base->LMOD = (uint16_t)(lowfield);
 }
 
 /*!
@@ -883,8 +891,10 @@ static inline void EQDC_SetPositionModulusValue(EQDC_Type *base, uint32_t positi
  */
 static inline void EQDC_SetPositionCompare0Value(EQDC_Type *base, uint32_t u32PositionComp0Value)
 {
+    uint32_t lowfield = 0;
+    lowfield     = u32PositionComp0Value & 0xFFFFU;
     base->UCOMP0 = (uint16_t)(u32PositionComp0Value >> 16U);
-    base->LCOMP0 = (uint16_t)(u32PositionComp0Value);
+    base->LCOMP0 = (uint16_t)(lowfield);
 }
 
 /*!
@@ -904,8 +914,10 @@ static inline void EQDC_SetPositionCompare0Value(EQDC_Type *base, uint32_t u32Po
  */
 static inline void EQDC_SetPositionCompare1Value(EQDC_Type *base, uint32_t u32PositionComp1Value)
 {
+    uint32_t lowfield = 0;
+    lowfield     = u32PositionComp1Value & 0xFFFFU;
     base->UCOMP1 = (uint16_t)(u32PositionComp1Value >> 16U);
-    base->LCOMP1 = (uint16_t)(u32PositionComp1Value);
+    base->LCOMP1 = (uint16_t)(lowfield);
 }
 
 /*!
@@ -925,8 +937,10 @@ static inline void EQDC_SetPositionCompare1Value(EQDC_Type *base, uint32_t u32Po
  */
 static inline void EQDC_SetPositionCompare2Value(EQDC_Type *base, uint32_t u32PositionComp2Value)
 {
+    uint32_t lowfield = 0;
+    lowfield = u32PositionComp2Value & 0xFFFFU;
     base->UCOMP2 = (uint16_t)(u32PositionComp2Value >> 16U);
-    base->LCOMP2 = (uint16_t)(u32PositionComp2Value);
+    base->LCOMP2 = (uint16_t)(lowfield);
 }
 
 /*!
@@ -946,8 +960,10 @@ static inline void EQDC_SetPositionCompare2Value(EQDC_Type *base, uint32_t u32Po
  */
 static inline void EQDC_SetPositionCompare3Value(EQDC_Type *base, uint32_t u32PositionComp3Value)
 {
+    uint32_t lowfield = 0;
+    lowfield = u32PositionComp3Value & 0xFFFFU;
     base->UCOMP3 = (uint16_t)(u32PositionComp3Value >> 16U);
-    base->LCOMP3 = (uint16_t)(u32PositionComp3Value);
+    base->LCOMP3 = (uint16_t)(lowfield);
 }
 
 /*!

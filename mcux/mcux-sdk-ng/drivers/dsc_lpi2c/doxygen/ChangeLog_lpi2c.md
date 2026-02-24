@@ -1,5 +1,10 @@
 # LPI2C
 
+## [2.0.3]
+
+- New Feature
+  - Added common IRQ handler entry LPI2C_DriverIRQHandler.
+
 ## [2.0.2]
 
 - Bug Fixes

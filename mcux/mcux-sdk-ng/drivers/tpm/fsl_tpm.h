@@ -30,8 +30,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief TPM driver version 2.4.0. */
-#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
+/*! @brief TPM driver version 2.4.2. */
+#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 4, 2))
 /*! @} */
 
 /*!
@@ -449,6 +449,23 @@ void TPM_GetDefaultConfig(tpm_config_t *config);
  */
 tpm_clock_prescale_t TPM_CalculateCounterClkDiv(TPM_Type *base, uint32_t counterPeriod_Hz, uint32_t srcClock_Hz);
 
+#if defined(FSL_FEATURE_TPM_HAS_GLOBAL) && FSL_FEATURE_TPM_HAS_GLOBAL
+/*!
+ * @brief Performs a software reset on the TPM module.
+ *
+ * Reset all internal logic and registers, except the Global Register. Remains set until cleared by software.
+ *
+ * @note TPM software reset is available on certain SoC's only
+ *
+ * @param base TPM peripheral base address
+ */
+static inline void TPM_Reset(TPM_Type *base)
+{
+    base->GLOBAL |= TPM_GLOBAL_RST_MASK;
+    base->GLOBAL &= ~TPM_GLOBAL_RST_MASK;
+}
+#endif
+
 /*! @}*/
 
 /*!
@@ -776,6 +793,15 @@ uint32_t TPM_GetEnabledInterrupts(TPM_Type *base);
  */
 void TPM_RegisterCallBack(TPM_Type *base, tpm_callback_t callback);
 
+/*!
+ * @brief TPM driver IRQ handler common entry.
+ *
+ * This function provides the common IRQ request entry for TPM.
+ *
+ * @param instance TPM instance.
+ */
+void TPM_DriverIRQHandler(uint32_t instance);
+
 /*! @}*/
 
 /*!
@@ -943,6 +969,8 @@ static inline uint32_t TPM_GetCurrentTimerCount(TPM_Type *base)
     return (uint32_t)((base->CNT & TPM_CNT_COUNT_MASK) >> TPM_CNT_COUNT_SHIFT);
 }
 
+/*! @}*/
+
 /*!
  * @name Timer Start and Stop
  * @{
@@ -1014,32 +1042,6 @@ static inline status_t TPM_StopTimer(TPM_Type *base)
 }
 
 /*! @}*/
-
-#if defined(FSL_FEATURE_TPM_HAS_GLOBAL) && FSL_FEATURE_TPM_HAS_GLOBAL
-/*!
- * @brief Performs a software reset on the TPM module.
- *
- * Reset all internal logic and registers, except the Global Register. Remains set until cleared by software.
- *
- * @note TPM software reset is available on certain SoC's only
- *
- * @param base TPM peripheral base address
- */
-static inline void TPM_Reset(TPM_Type *base)
-{
-    base->GLOBAL |= TPM_GLOBAL_RST_MASK;
-    base->GLOBAL &= ~TPM_GLOBAL_RST_MASK;
-}
-#endif
-
-/*!
- * @brief TPM driver IRQ handler common entry.
- *
- * This function provides the common IRQ request entry for TPM.
- *
- * @param instance TPM instance.
- */
-void TPM_DriverIRQHandler(uint32_t instance);
 
 #if defined(__cplusplus)
 }

@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SAI_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 0)) /*!< Version 2.6.0 */
+#define FSL_SAI_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 1)) /*!< Version 2.6.1 */
 /*! @} */
 
 typedef struct _sai_sdma_handle sai_sdma_handle_t;

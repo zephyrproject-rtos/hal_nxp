@@ -360,7 +360,7 @@ int32_t CE_MatrixEvdHerm_CF32(float *pLambdaOut,
                               uint8_t flag_packedInput)
 {
     int32_t status;
-    int32_t *ptemp = (int32_t *)&tol;
+    int32_t *ptemp = (int32_t *)(void *)&tol;
 
     ce_cmdstruct_t cmdstruct;
     cmdstruct.n_ptr_args         = 4;

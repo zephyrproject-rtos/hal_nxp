@@ -12,7 +12,7 @@ if(CONFIG_MCUX_COMPONENT_driver.iuart_sdma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.iuart)
-    mcux_component_version(2.3.2)
+    mcux_component_version(2.3.3)
 
     mcux_add_source(SOURCES fsl_uart.h fsl_uart.c)
 

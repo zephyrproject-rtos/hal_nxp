@@ -18,8 +18,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Defines WUU driver version 2.4.1. */
-#define FSL_WUU_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
+/*! @brief Defines WUU driver version 2.4.2. */
+#define FSL_WUU_DRIVER_VERSION (MAKE_VERSION(2, 4, 2))
 /*! @} */
 
 /*!

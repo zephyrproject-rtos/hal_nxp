@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 NXP
+ * Copyright 2020-2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief CCM32K driver version 2.2.0. */
-#define FSL_CCM32K_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief CCM32K driver version 2.2.1. */
+#define FSL_CCM32K_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*! @} */
 
 #define CCM32K_OSC32K_CTRL_OSC_MODE_MASK  (0x3U)
@@ -521,6 +521,7 @@ static inline uint32_t CCM32K_GetStatusFlag(CCM32K_Type *base)
 
 /*!
  * @name State/Clock Source Interfaces
+ * @{
  */
 /*!
  * @brief Get current state.

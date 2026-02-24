@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 5, 1)) /*!< Version */
+#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 5, 2)) /*!< Version */
 /*! @} */
 
 #ifndef SCT_EV_STATE_STATEMSKn
@@ -507,7 +507,7 @@ static inline void SCTIMER_StartTimer(SCT_Type *base, uint32_t countertoStart)
         case (uint32_t)kSCTIMER_Counter_L:
             assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Clear HALT_L bit when user wants to start the Low counter */
-            base->CTRL_ACCESS16BIT.CTRLL &= ~((uint16_t)SCT_CTRLL_HALT_L_MASK);
+            base->CTRL_ACCESS16BIT.CTRLL &= MCUX_MASK_INVERT_16(SCT_CTRLL_HALT_L_MASK);
             break;
 
         case (uint32_t)kSCTIMER_Counter_H:
@@ -936,24 +936,25 @@ void SCTIMER_SetupOutputToggleAction(SCT_Type *base, uint32_t whichIO, uint32_t 
  */
 static inline void SCTIMER_SetupCounterLimitAction(SCT_Type *base, sctimer_counter_t whichCounter, uint32_t event)
 {
+    assert(event < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS);
     switch (whichCounter)
     {
         case kSCTIMER_Counter_L:
             assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Use Counter_L bits when user wants to setup the Low counter */
-            base->LIMIT_ACCESS16BIT.LIMITL |= SCT_LIMITL_LIMITL(1UL << event);
+            base->LIMIT_ACCESS16BIT.LIMITL |= SCT_LIMITL_LIMITL((1UL << event) & 0xFFFFU);
             break;
 
         case kSCTIMER_Counter_H:
             assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Use Counter_H bits when user wants to setup the High counter */
-            base->LIMIT |= SCT_LIMIT_LIMMSK_H(1UL << event);
+            base->LIMIT |= SCT_LIMIT_LIMMSK_H((1UL << event) & 0xFFFFU);
             break;
 
         case kSCTIMER_Counter_U:
             assert(1U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Use Counter_L bits when counter is operating in 32-bit mode (unify counter). */
-            base->LIMIT |= SCT_LIMIT_LIMMSK_L(1UL << event);
+            base->LIMIT |= SCT_LIMIT_LIMMSK_L((1UL << event) & 0xFFFFU);
             break;
 
         default:
@@ -974,24 +975,25 @@ static inline void SCTIMER_SetupCounterLimitAction(SCT_Type *base, sctimer_count
  */
 static inline void SCTIMER_SetupCounterStopAction(SCT_Type *base, sctimer_counter_t whichCounter, uint32_t event)
 {
+    assert(event < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS);
     switch (whichCounter)
     {
         case kSCTIMER_Counter_L:
             assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Use Counter_L bits when user wants to setup the Low counter */
-            base->STOP_ACCESS16BIT.STOPL |= SCT_STOPL_STOPL(1UL << event);
+            base->STOP_ACCESS16BIT.STOPL |= SCT_STOPL_STOPL((1UL << event) & 0xFFFFU);
             break;
 
         case kSCTIMER_Counter_H:
             assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Use Counter_H bits when user wants to start the High counter */
-            base->STOP |= SCT_STOP_STOPMSK_H(1UL << event);
+            base->STOP |= SCT_STOP_STOPMSK_H((1UL << event) & 0xFFFFU);
             break;
 
         case kSCTIMER_Counter_U:
             assert(1U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Use Counter_L bits when counter is operating in 32-bit mode (unify counter). */
-            base->STOP |= SCT_STOP_STOPMSK_L(1UL << event);
+            base->STOP |= SCT_STOP_STOPMSK_L((1UL << event) & 0xFFFFU);
             break;
 
         default:
@@ -1012,24 +1014,25 @@ static inline void SCTIMER_SetupCounterStopAction(SCT_Type *base, sctimer_counte
  */
 static inline void SCTIMER_SetupCounterStartAction(SCT_Type *base, sctimer_counter_t whichCounter, uint32_t event)
 {
+    assert(event < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS);
     switch (whichCounter)
     {
         case kSCTIMER_Counter_L:
             assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Use Counter_L bits when user wants to setup the Low counter */
-            base->START_ACCESS16BIT.STARTL |= SCT_STARTL_STARTL(1UL << event);
+            base->START_ACCESS16BIT.STARTL |= SCT_STARTL_STARTL((1UL << event) & 0xFFFFU);
             break;
 
         case kSCTIMER_Counter_H:
             assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Use Counter_H bits when user wants to start the High counter */
-            base->START |= SCT_START_STARTMSK_H(1UL << event);
+            base->START |= SCT_START_STARTMSK_H((1UL << event) & 0xFFFFU);
             break;
 
         case kSCTIMER_Counter_U:
             assert(1U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Use Counter_L bits when counter is operating in 32-bit mode (unify counter). */
-            base->START |= SCT_START_STARTMSK_L(1UL << event);
+            base->START |= SCT_START_STARTMSK_L((1UL << event) & 0xFFFFU);
             break;
 
         default:
@@ -1052,24 +1055,25 @@ static inline void SCTIMER_SetupCounterStartAction(SCT_Type *base, sctimer_count
  */
 static inline void SCTIMER_SetupCounterHaltAction(SCT_Type *base, sctimer_counter_t whichCounter, uint32_t event)
 {
+    assert(event < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS);
     switch (whichCounter)
     {
         case kSCTIMER_Counter_L:
             assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Use Counter_L bits when user wants to setup the Low counter */
-            base->HALT_ACCESS16BIT.HALTL |= SCT_HALTL_HALTL(1UL << event);
+            base->HALT_ACCESS16BIT.HALTL |= SCT_HALTL_HALTL((1UL << event) & 0xFFFFU);
             break;
 
         case kSCTIMER_Counter_H:
             assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Use Counter_H bits when user wants to start the High counter */
-            base->HALT |= SCT_HALT_HALTMSK_H(1UL << event);
+            base->HALT |= SCT_HALT_HALTMSK_H((1UL << event) & 0xFFFFU);
             break;
 
         case kSCTIMER_Counter_U:
             assert(1U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Use Counter_L bits when counter is operating in 32-bit mode (unify counter). */
-            base->HALT |= SCT_HALT_HALTMSK_L(1UL << event);
+            base->HALT |= SCT_HALT_HALTMSK_L((1UL << event) & 0xFFFFU);
             break;
 
         default:

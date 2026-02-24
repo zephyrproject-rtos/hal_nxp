@@ -118,10 +118,11 @@ void SPC_ConfigVddCoreGlitchDetector(SPC_Type *base, const spc_vdd_core_glitch_d
           ~(SPC_VDD_CORE_GLITCH_DETECT_SC_CNT_SELECT_MASK | SPC_VDD_CORE_GLITCH_DETECT_SC_TIMEOUT_MASK |
             SPC_VDD_CORE_GLITCH_DETECT_SC_RE_MASK | SPC_VDD_CORE_GLITCH_DETECT_SC_IE_MASK);
 
+    /* INT31-C: Explicit bool to unsigned conversion */
     reg |= SPC_VDD_CORE_GLITCH_DETECT_SC_CNT_SELECT(config->rippleCounterSelect) |
            SPC_VDD_CORE_GLITCH_DETECT_SC_TIMEOUT(config->resetTimeoutValue) |
-           SPC_VDD_CORE_GLITCH_DETECT_SC_RE(config->enableReset) |
-           SPC_VDD_CORE_GLITCH_DETECT_SC_IE(config->enableInterrupt);
+           SPC_VDD_CORE_GLITCH_DETECT_SC_RE(config->enableReset ? 1U : 0U) |
+           SPC_VDD_CORE_GLITCH_DETECT_SC_IE(config->enableInterrupt ? 1U : 0U);
 
     base->VDD_CORE_GLITCH_DETECT_SC = reg;
 }

@@ -1,5 +1,10 @@
 # QTMR
 
+## [2.0.2]
+
+- Bug Fixes
+  - Fix CERT INT30-C and CERT INT31-C violations.
+
 ## [2.0.1]
 
 - Bug Fixes

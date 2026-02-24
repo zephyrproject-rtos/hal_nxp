@@ -1,5 +1,12 @@
 # RCM
 
+## [2.0.5]
+- Bug Fixes
+  - Replace direct boolean to integer casts with explicit ternary operators for INT31-C compliance.
+  - Add validation before narrowing uint32_t to uint8_t conversion using assert.
+  - Add INT31-C compliance comments for safe type handling.
+  - Apply fixes to RCM_ConfigureResetPinFilter and RCM_SetForceBootRomSource functions.
+
 ## [2.0.4]
 
 - Bug Fixes

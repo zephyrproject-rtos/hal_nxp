@@ -152,6 +152,7 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
     currentTcd = handle->tail;
     handle->tcdUsed++;
     /* Calculate index of next TCD */
+    assert(currentTcd < INT8_MAX);
     nextTcd = currentTcd + 0x01;
     if (nextTcd == handle->tcdSize)
     {
@@ -161,6 +162,8 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
     handle->tail = nextTcd;
     EnableGlobalIRQ(primask);
     /* Calculate index of previous TCD */
+    assert(currentTcd >= 0);
+    assert(tcdSize > 0);
     previousTcd = (currentTcd != 0x00) ? (currentTcd - 0x01) : (handle->tcdSize - 0x01);
     /* Configure current TCD block. */
 #if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
@@ -269,7 +272,7 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
     if (currentTcd != previousTcd)
     {
         /* Enable scatter/gather feature in the previous TCD block. */
-        csr = (handle->tcdPool[previousTcd].CSR | (uint16_t)DMA_CSR_ESG_MASK) & ~(uint16_t)DMA_CSR_DREQ_MASK;
+        csr = (handle->tcdPool[previousTcd].CSR | (uint16_t)DMA_CSR_ESG_MASK) & (UINT16_MAX ^ (uint16_t)DMA_CSR_DREQ_MASK);
         handle->tcdPool[previousTcd].CSR = csr;
         /*
             Check if the TCD block in the registers is the previous one (points to current TCD block). It
@@ -285,7 +288,7 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
 #endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
         {
             /* Enable scatter/gather also in the TCD registers. */
-            csr = (tcdRegs->CSR | (uint16_t)DMA_CSR_ESG_MASK) & ~(uint16_t)DMA_CSR_DREQ_MASK;
+            csr = (tcdRegs->CSR | (uint16_t)DMA_CSR_ESG_MASK) & (UINT16_MAX ^ (uint16_t)DMA_CSR_DREQ_MASK);
             /* Must write the CSR register one-time, because the transfer maybe finished anytime. */
             tcdRegs->CSR = csr;
             /*
@@ -501,6 +504,7 @@ status_t SPDIF_TransferSendEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle, s
     handle->queueUser                               = (handle->queueUser + 0x01U) % SPDIF_XFER_QUEUE_SIZE;
 
     /* Store the initially configured eDMA minor byte transfer count into the SPDIF handle */
+    assert(handle->count <= 16U);
     handle->nbytes = handle->count * 8U;
 
     /* Prepare edma configure */
@@ -571,6 +575,7 @@ status_t SPDIF_TransferReceiveEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle
     handle->queueUser                               = (handle->queueUser + 0x01U) % SPDIF_XFER_QUEUE_SIZE;
 
     /* Store the initially configured eDMA minor byte transfer count into the SPDIF handle */
+    assert(handle->count <= 16U);
     handle->nbytes = handle->count * 8U;
 
     /* Prepare edma configure */

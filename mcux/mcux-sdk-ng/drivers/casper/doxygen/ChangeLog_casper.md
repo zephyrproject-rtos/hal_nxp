@@ -1,4 +1,8 @@
-# CASSPER
+# CASPER
+
+## [2.2.5]
+
+- Fix Coverity Uninitialized scalar variable.
 
 ## [2.2.4]
 

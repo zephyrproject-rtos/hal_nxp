@@ -1,5 +1,13 @@
 # GDET
 
+## [2.1.2]
+
+- Update to MCXA577 GDET offering
+
+## [2.1.1]
+
+- Update to RT700 GDET offering
+
 ## [2.1.0]
 
 - Update for multiple instances

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2025 NXP
+ * Copyright 2021-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,25 +21,29 @@
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-#if (defined(MU_CLOCKS))
+#if (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)) && (defined(MU_CLOCKS))
 /*! brief Pointers to mu clocks for each instance. */
 static const clock_ip_name_t s_muClocks[] = MU_CLOCKS;
-#endif
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+#endif /* (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)) && \
+          (defined(MU_CLOCKS)) */
+
+#if (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)) && \
+    (defined(MU_CLOCKS)) || defined(MU_RESETS_ARRAY)
+/*! brief Pointers to mu bases for each instance. */
+static MU_Type *const s_muBases[] = MU_BASE_PTRS;
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL || MU_RESETS_ARRAY */
 
 #if defined(MU_RESETS_ARRAY)
 /* Reset array */
 static const reset_ip_name_t s_muResets[] = MU_RESETS_ARRAY;
 #endif
 
-/*! brief Pointers to mu bases for each instance. */
-static MU_Type *const s_muBases[] = MU_BASE_PTRS;
-
 /******************************************************************************
  * Code
  *****************************************************************************/
-uint32_t MU_GetInstance(MU_Type *base)
+#if (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)) && \
+    (defined(MU_CLOCKS)) || defined(MU_RESETS_ARRAY)
+static uint32_t MU_GetInstance(MU_Type *base)
 {
     uint32_t instance;
 
@@ -56,6 +60,7 @@ uint32_t MU_GetInstance(MU_Type *base)
 
     return instance;
 }
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL || MU_RESETS_ARRAY */
 
 /*!
  * brief Initializes the MU module.
@@ -66,14 +71,19 @@ uint32_t MU_GetInstance(MU_Type *base)
  */
 void MU_Init(MU_Type *base)
 {
+#if (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)) && \
+    (defined(MU_CLOCKS)) || defined(MU_RESETS_ARRAY)
+    uint32_t instance = MU_GetInstance(base);
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL || MU_RESETS_ARRAY */
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 #if (defined(MU_CLOCKS))
-    (void)CLOCK_EnableClock(s_muClocks[MU_GetInstance(base)]);
+    (void)CLOCK_EnableClock(s_muClocks[instance]);
 #endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if defined(MU_RESETS_ARRAY)
-    RESET_ReleasePeripheralReset(s_muResets[MU_GetInstance(base)]);
+    RESET_ReleasePeripheralReset(s_muResets[instance]);
 #endif
 }
 
@@ -112,19 +122,19 @@ status_t MU_SendMsg(MU_Type *base, uint32_t regIndex, uint32_t msg)
 {
     assert(regIndex < MU_TR_COUNT);
 
-#if MU1_BUSY_POLL_COUNT
+#if defined(MU1_BUSY_POLL_COUNT) && (MU1_BUSY_POLL_COUNT > 0)
     uint32_t poll_count = MU1_BUSY_POLL_COUNT;
-#endif /* MU1_BUSY_POLL_COUNT */
+#endif /* defined(MU1_BUSY_POLL_COUNT) && (MU1_BUSY_POLL_COUNT > 0) */
 
     /* Wait TX register to be empty. */
     while (0U == (base->TSR & (1UL << regIndex)))
     {
-#if MU1_BUSY_POLL_COUNT
+#if defined(MU1_BUSY_POLL_COUNT) && (MU1_BUSY_POLL_COUNT > 0)
         if ((--poll_count) == 0u)
         {
             return kStatus_Timeout;
         }
-#endif /* MU1_BUSY_POLL_COUNT */
+#endif /* defined(MU1_BUSY_POLL_COUNT) && (MU1_BUSY_POLL_COUNT > 0) */
     }
 
     base->TR[regIndex] = msg;
@@ -165,19 +175,19 @@ status_t MU_ReceiveMsgTimeout(MU_Type *base, uint32_t regIndex, uint32_t *readVa
         return kStatus_InvalidArgument;
     }
 
-#if MU1_BUSY_POLL_COUNT
+#if defined(MU1_BUSY_POLL_COUNT) && (MU1_BUSY_POLL_COUNT > 0)
     uint32_t poll_count = MU1_BUSY_POLL_COUNT;
-#endif /* MU1_BUSY_POLL_COUNT */
+#endif /* defined(MU1_BUSY_POLL_COUNT) && (MU1_BUSY_POLL_COUNT > 0) */
 
     /* Wait RX register to be full. */
     while (0U == (base->RSR & (1UL << regIndex)))
     {
-#if MU1_BUSY_POLL_COUNT
+#if defined(MU1_BUSY_POLL_COUNT) && (MU1_BUSY_POLL_COUNT > 0)
         if ((--poll_count) == 0u)
         {
             return kStatus_Timeout;
         }
-#endif /* MU1_BUSY_POLL_COUNT */
+#endif /* defined(MU1_BUSY_POLL_COUNT) && (MU1_BUSY_POLL_COUNT > 0) */
     }
 
     *readValue = base->RR[regIndex];
@@ -238,19 +248,19 @@ uint32_t MU_ReceiveMsg(MU_Type *base, uint32_t regIndex)
  */
 status_t MU_SetFlags(MU_Type *base, uint32_t flags)
 {
-#if MU1_BUSY_POLL_COUNT
+#if defined(MU1_BUSY_POLL_COUNT) && (MU1_BUSY_POLL_COUNT > 0)
     uint32_t poll_count = MU1_BUSY_POLL_COUNT;
-#endif /* MU1_BUSY_POLL_COUNT */
+#endif /* defined(MU1_BUSY_POLL_COUNT) && (MU1_BUSY_POLL_COUNT > 0) */
 
     /* Wait for update finished. */
     while (0U != (base->SR & ((uint32_t)MU_SR_FUP_MASK)))
     {
-#if MU1_BUSY_POLL_COUNT
+#if defined(MU1_BUSY_POLL_COUNT) && (MU1_BUSY_POLL_COUNT > 0)
         if ((--poll_count) == 0u)
         {
             return kStatus_Timeout;
         }
-#endif /* MU1_BUSY_POLL_COUNT */
+#endif /* defined(MU1_BUSY_POLL_COUNT) && (MU1_BUSY_POLL_COUNT > 0) */
     }
 
     MU_SetFlagsNonBlocking(base, flags);
@@ -605,19 +615,19 @@ status_t MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset
     {
 #if !(defined(FSL_FEATURE_MU_NO_CORE_STATUS) && (0 != FSL_FEATURE_MU_NO_CORE_STATUS))
 #if !(defined(FSL_FEATURE_MU_HAS_RESET_ASSERT_INT) && (FSL_FEATURE_MU_HAS_RESET_ASSERT_INT == 0))
-#if MU1_BUSY_POLL_COUNT
+#if defined(MU1_BUSY_POLL_COUNT) && (MU1_BUSY_POLL_COUNT > 0)
         uint32_t poll_count = MU1_BUSY_POLL_COUNT;
-#endif /* MU1_BUSY_POLL_COUNT */
+#endif /* defined(MU1_BUSY_POLL_COUNT) && (MU1_BUSY_POLL_COUNT > 0) */
 
         /* Wait for the other core go to reset. */
         while (0U == (base->CSSR0 & MU_CSSR0_RAIP_MASK))
         {
-#if MU1_BUSY_POLL_COUNT
+#if defined(MU1_BUSY_POLL_COUNT) && (MU1_BUSY_POLL_COUNT > 0)
             if ((--poll_count) == 0u)
             {
                 return kStatus_Timeout;
             }
-#endif /* MU1_BUSY_POLL_COUNT */
+#endif /* defined(MU1_BUSY_POLL_COUNT) && (MU1_BUSY_POLL_COUNT > 0) */
         }
 #endif /* FSL_FEATURE_MU_HAS_RESET_ASSERT_INT */
 #endif /* FSL_FEATURE_MU_NO_CORE_STATUS */

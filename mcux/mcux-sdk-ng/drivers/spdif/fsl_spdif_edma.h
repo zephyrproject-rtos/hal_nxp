@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SPDIF_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 8)) /*!< Version 2.0.8 */
+#define FSL_SPDIF_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 9)) /*!< Version 2.0.9 */
 /*! @} */
 
 typedef struct _spdif_edma_handle spdif_edma_handle_t;

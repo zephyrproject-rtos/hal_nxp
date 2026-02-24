@@ -1,5 +1,10 @@
 # LPC_DMA
 
+## [2.5.4]
+
+- Bug Fixes
+  - Fixed coverity issues with CERT INT30-C, CERT INT31-C compliance.
+
 ## [2.5.3]
 
 - Improvements

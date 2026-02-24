@@ -27,7 +27,7 @@ Functional API definitions for ARM drivers for CE
 /*! @name Driver version */
 /*! @{ */
 /*! @brief CE driver version. */
-#define FSL_CE_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
+#define FSL_CE_DRIVER_VERSION (MAKE_VERSION(2, 3, 4))
 /*! @} */
 
 /*!

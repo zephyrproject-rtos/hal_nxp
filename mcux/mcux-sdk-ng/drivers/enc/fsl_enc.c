@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021, 2023 NXP
+ * Copyright 2016-2021, 2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -102,8 +102,8 @@ void ENC_Init(ENC_Type *base, const enc_config_t *config)
 #endif
 
     /* ENC_CTRL. */
-    tmp16 = base->CTRL & (uint16_t)(~(ENC_CTRL_W1C_FLAGS | ENC_CTRL_HIP_MASK | ENC_CTRL_HNE_MASK | ENC_CTRL_REV_MASK |
-                                      ENC_CTRL_PH1_MASK | ENC_CTRL_XIP_MASK | ENC_CTRL_XNE_MASK | ENC_CTRL_WDE_MASK));
+    tmp16 = base->CTRL & MCUX_MASK_INVERT_16(ENC_CTRL_W1C_FLAGS | ENC_CTRL_HIP_MASK | ENC_CTRL_HNE_MASK | ENC_CTRL_REV_MASK |
+                                      ENC_CTRL_PH1_MASK | ENC_CTRL_XIP_MASK | ENC_CTRL_XNE_MASK | ENC_CTRL_WDE_MASK);
     /* For HOME trigger. */
     if (kENC_HOMETriggerDisabled != config->HOMETriggerMode)
     {
@@ -147,8 +147,8 @@ void ENC_Init(ENC_Type *base, const enc_config_t *config)
         ;
 
     /* ENC_CTRL2. */
-    tmp16 = base->CTRL2 & (uint16_t)(~(ENC_CTRL2_W1C_FLAGS | ENC_CTRL2_OUTCTL_MASK | ENC_CTRL2_REVMOD_MASK |
-                                       ENC_CTRL2_MOD_MASK | ENC_CTRL2_UPDPOS_MASK | ENC_CTRL2_UPDHLD_MASK));
+    tmp16 = base->CTRL2 & MCUX_MASK_INVERT_16(ENC_CTRL2_W1C_FLAGS | ENC_CTRL2_OUTCTL_MASK | ENC_CTRL2_REVMOD_MASK |
+                                    ENC_CTRL2_MOD_MASK | ENC_CTRL2_UPDPOS_MASK | ENC_CTRL2_UPDHLD_MASK);
     if (kENC_POSMATCHOnReadingAnyPositionCounter == config->positionMatchMode)
     {
         tmp16 |= ENC_CTRL2_OUTCTL_MASK;
@@ -160,9 +160,9 @@ void ENC_Init(ENC_Type *base, const enc_config_t *config)
     if (config->enableModuloCountMode)
     {
         tmp16 |= ENC_CTRL2_MOD_MASK;
-        /* Set modulus value. */
-        base->UMOD = (uint16_t)(config->positionModulusValue >> 16U); /* Upper 16 bits. */
-        base->LMOD = (uint16_t)(config->positionModulusValue);        /* Lower 16 bits. */
+        /* Set modulus value */
+        base->UMOD = (uint16_t)(config->positionModulusValue >> 16U);    /* Upper 16 bits. */
+        base->LMOD = (uint16_t)(config->positionModulusValue & 0xFFFFU); /* Lower 16 bits. */
     }
     if (config->enableTRIGGERClearPositionCounter)
     {
@@ -176,7 +176,7 @@ void ENC_Init(ENC_Type *base, const enc_config_t *config)
 
 #if (defined(FSL_FEATURE_ENC_HAS_CTRL3) && FSL_FEATURE_ENC_HAS_CTRL3)
     /* ENC_CTRL3. */
-    tmp16 = base->CTRL3 & (uint16_t)(~(ENC_CTRL3_PMEN_MASK | ENC_CTRL3_PRSC_MASK));
+    tmp16 = base->CTRL3 & MCUX_MASK_INVERT_16((uint16_t)ENC_CTRL3_PMEN_MASK | (uint16_t)ENC_CTRL3_PRSC_MASK);
     if (config->enablePeriodMeasurementFunction)
     {
         tmp16 |= ENC_CTRL3_PMEN_MASK;
@@ -187,12 +187,14 @@ void ENC_Init(ENC_Type *base, const enc_config_t *config)
 #endif
 
     /* ENC_UCOMP & ENC_LCOMP. */
-    base->UCOMP = (uint16_t)(config->positionCompareValue >> 16U); /* Upper 16 bits. */
-    base->LCOMP = (uint16_t)(config->positionCompareValue);        /* Lower 16 bits. */
+    /* Set compare value */
+    base->UCOMP = (uint16_t)(config->positionCompareValue >> 16U);      /* Upper 16 bits. */
+    base->LCOMP = (uint16_t)(config->positionCompareValue & 0xFFFFU);   /* Lower 16 bits. */
 
     /* ENC_UINIT & ENC_LINIT. */
-    base->UINIT = (uint16_t)(config->positionInitialValue >> 16U); /* Upper 16 bits. */
-    base->LINIT = (uint16_t)(config->positionInitialValue);        /* Lower 16 bits. */
+    /* Set initial value */
+    base->UINIT = (uint16_t)(config->positionInitialValue >> 16U);      /* Upper 16 bits. */
+    base->LINIT = (uint16_t)(config->positionInitialValue & 0xFFFFU);   /* Lower 16 bits. */
 }
 
 /*!
@@ -281,7 +283,7 @@ void ENC_GetDefaultConfig(enc_config_t *config)
  */
 void ENC_DoSoftwareLoadInitialPositionValue(ENC_Type *base)
 {
-    uint16_t tmp16 = base->CTRL & (uint16_t)(~ENC_CTRL_W1C_FLAGS);
+    uint16_t tmp16 = base->CTRL & MCUX_MASK_INVERT_16(ENC_CTRL_W1C_FLAGS);
 
     tmp16 |= ENC_CTRL_SWIP_MASK; /* Write 1 to trigger the command for loading initial position value. */
     base->CTRL = tmp16;
@@ -326,7 +328,7 @@ void ENC_SetSelfTestConfig(ENC_Type *base, const enc_self_test_config_t *config)
  */
 void ENC_EnableWatchdog(ENC_Type *base, bool enable)
 {
-    uint16_t tmp16 = base->CTRL & (uint16_t)(~(ENC_CTRL_W1C_FLAGS | ENC_CTRL_WDE_MASK));
+    uint16_t tmp16 = base->CTRL & MCUX_MASK_INVERT_16(ENC_CTRL_W1C_FLAGS | ENC_CTRL_WDE_MASK);
 
     if (enable)
     {
@@ -395,7 +397,7 @@ uint32_t ENC_GetStatusFlags(ENC_Type *base)
  */
 void ENC_ClearStatusFlags(ENC_Type *base, uint32_t mask)
 {
-    uint32_t tmp16 = 0U;
+    uint16_t tmp16 = 0U;
 
     /* ENC_CTRL. */
     if (0U != ((uint32_t)kENC_HOMETransitionFlag & mask))
@@ -416,7 +418,7 @@ void ENC_ClearStatusFlags(ENC_Type *base, uint32_t mask)
     }
     if (0U != tmp16)
     {
-        base->CTRL = (uint16_t)(((uint32_t)base->CTRL & (~ENC_CTRL_W1C_FLAGS)) | tmp16);
+        base->CTRL = (base->CTRL & MCUX_MASK_INVERT_16(ENC_CTRL_W1C_FLAGS)) | tmp16;
     }
 
     /* ENC_CTRL2. */
@@ -437,7 +439,7 @@ void ENC_ClearStatusFlags(ENC_Type *base, uint32_t mask)
     }
     if (0U != tmp16)
     {
-        base->CTRL2 = (uint16_t)(((uint32_t)base->CTRL2 & (~ENC_CTRL2_W1C_FLAGS)) | tmp16);
+        base->CTRL2 = (base->CTRL2 & MCUX_MASK_INVERT_16(ENC_CTRL2_W1C_FLAGS)) | tmp16;
     }
 }
 
@@ -449,7 +451,7 @@ void ENC_ClearStatusFlags(ENC_Type *base, uint32_t mask)
  */
 void ENC_EnableInterrupts(ENC_Type *base, uint32_t mask)
 {
-    uint32_t tmp16 = 0U;
+    uint16_t tmp16 = 0U;
 
     /* ENC_CTRL. */
     if (0U != ((uint32_t)kENC_HOMETransitionInterruptEnable & mask))
@@ -470,7 +472,7 @@ void ENC_EnableInterrupts(ENC_Type *base, uint32_t mask)
     }
     if (tmp16 != 0U)
     {
-        base->CTRL = (uint16_t)(((uint32_t)base->CTRL & (~ENC_CTRL_W1C_FLAGS)) | tmp16);
+        base->CTRL = (base->CTRL & MCUX_MASK_INVERT_16(ENC_CTRL_W1C_FLAGS)) | tmp16;
     }
     /* ENC_CTRL2. */
     tmp16 = 0U;
@@ -490,7 +492,7 @@ void ENC_EnableInterrupts(ENC_Type *base, uint32_t mask)
     }
     if (tmp16 != 0U)
     {
-        base->CTRL2 = (uint16_t)(((uint32_t)base->CTRL2 & (~ENC_CTRL2_W1C_FLAGS)) | tmp16);
+        base->CTRL2 = (base->CTRL2 & MCUX_MASK_INVERT_16(ENC_CTRL2_W1C_FLAGS)) | tmp16;
     }
 }
 
@@ -523,7 +525,7 @@ void ENC_DisableInterrupts(ENC_Type *base, uint32_t mask)
     }
     if (0U != tmp16)
     {
-        base->CTRL = (uint16_t)(base->CTRL & (uint16_t)(~ENC_CTRL_W1C_FLAGS)) & (uint16_t)(~tmp16);
+        base->CTRL = (base->CTRL & MCUX_MASK_INVERT_16(ENC_CTRL_W1C_FLAGS)) & MCUX_MASK_INVERT_16(tmp16);
     }
     /* ENC_CTRL2. */
     tmp16 = 0U;
@@ -543,7 +545,7 @@ void ENC_DisableInterrupts(ENC_Type *base, uint32_t mask)
     }
     if (tmp16 != 0U)
     {
-        base->CTRL2 = (uint16_t)(base->CTRL2 & (uint16_t)(~ENC_CTRL2_W1C_FLAGS)) & (uint16_t)(~tmp16);
+        base->CTRL2 = (base->CTRL2 & MCUX_MASK_INVERT_16(ENC_CTRL2_W1C_FLAGS)) & MCUX_MASK_INVERT_16(tmp16);
     }
 }
 
@@ -601,8 +603,9 @@ uint32_t ENC_GetEnabledInterrupts(ENC_Type *base)
  */
 void ENC_SetInitialPositionValue(ENC_Type *base, uint32_t value)
 {
-    base->UINIT = (uint16_t)(value >> 16U); /* Set upper 16 bits. */
-    base->LINIT = (uint16_t)(value);        /* Set lower 16 bits. */
+    /* Validate value before narrowing conversion */
+    base->UINIT = (uint16_t)(value >> 16U);     /* Set upper 16 bits. */
+    base->LINIT = (uint16_t)(value & 0xFFFFU);  /* Set lower 16 bits. */
 }
 
 /*!

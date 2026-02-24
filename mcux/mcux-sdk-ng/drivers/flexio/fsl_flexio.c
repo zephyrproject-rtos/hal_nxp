@@ -68,9 +68,18 @@ uint32_t FLEXIO_GetInstance(FLEXIO_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_flexioBases); instance++)
+    /*
+     * $Branch Coverage Justification$
+     * (instance >= ARRAY_SIZE(s_flexioBases)) not covered. The peripheral base
+     * address is always valid and checked by assert.
+     */
+    for (instance = 0; instance < ARRAY_SIZE(s_flexioBases); instance++) /* GCOVR_EXCL_BR_LINE */
     {
-        if (MSDK_REG_SECURE_ADDR(s_flexioBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        /*
+         * $Branch Coverage Justification$
+         * false branch not covered - depends on count of peripheral instances
+         */
+        if (MSDK_REG_SECURE_ADDR(s_flexioBases[instance]) == MSDK_REG_SECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
         {
             break;
         }
@@ -122,7 +131,7 @@ void FLEXIO_Init(FLEXIO_Type *base, const flexio_config_t *userConfig)
     ctrlReg |= (FLEXIO_CTRL_DBGE(userConfig->enableInDebug ? 1U : 0U) | FLEXIO_CTRL_FASTACC(userConfig->enableFastAccess ? 1U : 0U) |
                 FLEXIO_CTRL_FLEXEN(userConfig->enableFlexio ? 1U : 0U));
 #if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
-    if (!userConfig->enableInDoze ? 1U : 0U)
+    if (!userConfig->enableInDoze)
     {
         ctrlReg |= FLEXIO_CTRL_DOZEN_MASK;
     }

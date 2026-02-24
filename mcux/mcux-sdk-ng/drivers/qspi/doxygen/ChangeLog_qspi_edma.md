@@ -1,5 +1,10 @@
 # QSPI_EDMA
 
+## [2.2.5]
+
+- Improvements
+  - Fixed Coverity MSG issues.
+
 ## [2.2.4]
 
 - Changed

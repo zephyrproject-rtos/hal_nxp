@@ -1,5 +1,5 @@
 /*
- * Copyright 2020,2021,2024 NXP
+ * Copyright 2020,2021,2024,2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief QSCI driver version. */
-#define FSL_QSCI_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+#define FSL_QSCI_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
 /*! @} */
 
 /*******************************************************************************
@@ -1259,6 +1259,15 @@ status_t QSCI_TransferGetReceivedCount(qsci_transfer_handle_t *psHandle, uint32_
  * @return QSCI instance.
  */
 uint16_t QSCI_GetInstance(QSCI_Type *base);
+
+/*!
+ * @brief QSCI driver IRQ handler common entry.
+ *
+ * This function provides the common IRQ request entry for QSCI.
+ *
+ * @param instance QSCI instance.
+ */
+void QSCI_DriverIRQHandler(uint32_t instance);
 
 #if defined(__cplusplus)
 }

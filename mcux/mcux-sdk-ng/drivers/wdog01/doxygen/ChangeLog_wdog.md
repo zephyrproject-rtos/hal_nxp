@@ -1,5 +1,9 @@
 # WDOG
 
+## [2.2.1]
+- Bug Fixes
+  - Fixed CERT INT31-C violations.
+
 ## [2.2.0]
 
 - Bug Fixes

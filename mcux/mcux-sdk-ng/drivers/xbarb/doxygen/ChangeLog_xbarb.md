@@ -1,5 +1,10 @@
 # XBARB
 
+## [2.0.3]
+
+- Bug Fixes
+  - Fixed CERT-C issues.
+
 ## [2.0.2]
 
 - Bug Fixes

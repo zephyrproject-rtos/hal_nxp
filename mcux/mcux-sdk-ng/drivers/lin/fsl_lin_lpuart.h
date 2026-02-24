@@ -256,13 +256,13 @@ void LIN_LPUART_SetBaudRate(LPUART_Type *base, uint32_t *osr, uint16_t *sbr);
  * @param base LPUART peripheral base address
  * @param linUserConfig user configuration structure of type #lin_user_config_t
  * @param linCurrentState pointer to the LIN_LPUART driver state structure
+ * @param linSourceClockFreq LIN source clock frequency in Hz
  * @return An error code or lin_status_t
  */
 lin_status_t LIN_LPUART_Init(LPUART_Type *base,
                              lin_user_config_t *linUserConfig,
                              lin_state_t *linCurrentState,
                              uint32_t linSourceClockFreq);
-
 /*!
  * @brief Shuts down the LIN_LPUART by disabling interrupts and transmitter/receiver.
  *
@@ -434,12 +434,13 @@ lin_status_t LIN_LPUART_AutoBaudCapture(uint32_t instance);
  * @brief LIN_LPUART RX TX interrupt handler
  *
  * @param base LPUART peripheral base address
- * @return void
  */
 void LIN_LPUART_IRQHandler(LPUART_Type *base);
 
 #if defined(__cplusplus)
 }
 #endif
+
+/*! @}*/
 
 #endif /* FSL_LIN_LPUART_H_ */

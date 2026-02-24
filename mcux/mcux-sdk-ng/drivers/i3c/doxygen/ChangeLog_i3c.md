@@ -1,5 +1,10 @@
 # I3C
 
+## [2.14.4]
+
+- Improvements
+  - Fixed MSG violations.
+
 ## [2.14.3]
 
 - Improvements

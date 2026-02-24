@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_ASRC_DRIVER_VERSION (MAKE_VERSION(2, 1, 3)) /*!< Version 2.1.3 */
+#define FSL_ASRC_DRIVER_VERSION (MAKE_VERSION(2, 1, 4)) /*!< Version 2.1.4 */
 /*! @} */
 
 #ifndef ASRC_XFER_QUEUE_SIZE

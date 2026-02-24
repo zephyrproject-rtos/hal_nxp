@@ -1,5 +1,10 @@
 # SCTIMER
 
+## [2.5.2]
+
+- Bug Fixes
+  - Fixed CERT INT31-C violation issues.
+
 ## [2.5.1]
 
 - Bug Fixes

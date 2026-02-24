@@ -361,6 +361,7 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
     base->FIFOSTAT |= (SPI_FIFOSTAT_TXERR_MASK  | SPI_FIFOSTAT_RXERR_MASK);
 
     handle->state         = (uint8_t)kSPI_Busy;
+    handle->transferSize  = xfer->dataSize;
     spi_config_p          = (spi_config_t *)SPI_GetConfig(base);
     handle->bytesPerFrame =
         (uint8_t)((spi_config_p->dataWidth > kSPI_Data8Bits) ? (sizeof(uint16_t)) : (sizeof(uint8_t)));

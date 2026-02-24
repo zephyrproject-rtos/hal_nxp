@@ -4,6 +4,7 @@
 
 - Bug Fixes
   - Fix CERT INT31-C issues.
+  - Fixed the violations of MISRA C-2012 rules: 10.1.
 
 ## [2.5.0]
 

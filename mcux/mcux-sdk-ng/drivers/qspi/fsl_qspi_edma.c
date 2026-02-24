@@ -150,7 +150,10 @@ void QSPI_TransferTxCreateHandleEDMA(QuadSPI_Type *base,
     handle->userData = userData;
 
     /* Get the watermark value */
-    handle->count = (uint8_t)base->TBCT + 1U;
+    /* INT31-C: Validate before narrowing conversion */
+    uint32_t value = ((uint32_t)(base->TBCT & QuadSPI_TBCT_WMRK_MASK)) + 1U;
+    assert(value <= 0xFFU);
+    handle->count = (uint8_t)value;
 
     /* Configure TX edma callback */
     EDMA_SetCallback(handle->dmaHandle, QSPI_SendEDMACallback, &s_edmaPrivateHandle[instance][0]);
@@ -187,7 +190,10 @@ void QSPI_TransferRxCreateHandleEDMA(QuadSPI_Type *base,
     handle->userData = userData;
 
     /* Get the watermark value */
-    handle->count = ((uint8_t)base->RBCT & QuadSPI_RBCT_WMRK_MASK) + 1U;
+    /* INT31-C: Validate before narrowing conversion */
+    uint32_t value = ((uint32_t)(base->RBCT & QuadSPI_RBCT_WMRK_MASK)) + 1U;
+    assert(value <= 0xFFU);
+    handle->count = (uint8_t)value;
 
     /* Configure RX edma callback */
     EDMA_SetCallback(handle->dmaHandle, QSPI_ReceiveEDMACallback, &s_edmaPrivateHandle[instance][1]);
@@ -224,7 +230,10 @@ status_t QSPI_TransferSendEDMA(QuadSPI_Type *base, qspi_edma_handle_t *handle, q
                              (sizeof(uint32_t) * (uint32_t)handle->count), xfer->dataSize, kEDMA_MemoryToPeripheral);
 
         /* Store the initially configured eDMA minor byte transfer count into the QSPI handle */
-        handle->nbytes = (uint8_t)(sizeof(uint32_t) * handle->count);
+        /* INT31-C: Validate before narrowing conversion */
+        uint32_t nbytes = sizeof(uint32_t) * (uint32_t)handle->count;
+        assert(nbytes <= 0xFFU);
+        handle->nbytes = (uint8_t)nbytes;
 
         /* Submit transfer. */
         do
@@ -277,7 +286,11 @@ status_t QSPI_TransferReceiveEDMA(QuadSPI_Type *base, qspi_edma_handle_t *handle
                              (sizeof(uint32_t) * (uint32_t)handle->count), xfer->dataSize, kEDMA_MemoryToMemory);
 
         /* Store the initially configured eDMA minor byte transfer count into the QSPI handle */
-        handle->nbytes = (uint8_t)(sizeof(uint32_t) * handle->count);
+        /* INT31-C: Validate before narrowing conversion */
+        uint32_t nbytes = sizeof(uint32_t) * (uint32_t)handle->count;
+        assert(nbytes <= 0xFFU);
+        handle->nbytes = (uint8_t)nbytes;
+
         /* Submit transfer. */
         do
         {
@@ -285,7 +298,7 @@ status_t QSPI_TransferReceiveEDMA(QuadSPI_Type *base, qspi_edma_handle_t *handle
         } while (status != kStatus_Success);
 
         EDMA_SetModulo(handle->dmaHandle->base, handle->dmaHandle->channel, kEDMA_Modulo32bytes, kEDMA_ModuloDisable);
-        
+
         EDMA_StartTransfer(handle->dmaHandle);
 
         /* Enable QSPI TX EDMA. */

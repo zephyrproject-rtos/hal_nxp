@@ -1,5 +1,10 @@
 # UART
 
+## [2.3.3]
+
+- New Features
+  - Add 9-bit mode support for UART communication
+
 ## [2.3.2]
 
 - Improvements

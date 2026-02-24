@@ -441,10 +441,10 @@ void LIN_GetMasterDefaultConfig(lin_user_config_t *linUserConfig);
  * @brief Calculates baudrate registers values for given baudrate
  *
  * @param instance LPUART instance
- * @param instance baudRate_Bps LPUART baudrate
- * @param instance srcClock_Hz LPUART clock frequency
- * @param instance osr LPUART baudrate OSR value, return value
- * @param instance sbr LPUART baudrate SBR value, return value
+ * @param baudRate_Bps LPUART baudrate
+ * @param srcClock_Hz LPUART clock frequency
+ * @param osr LPUART baudrate OSR value, return value
+ * @param sbr LPUART baudrate SBR value, return value
  *
  */
 void LIN_CalculateBaudrate(
@@ -453,8 +453,8 @@ void LIN_CalculateBaudrate(
  * @brief Set baudrate registers values
  *
  * @param instance LPUART instance
- * @param instance osr LPUART baudrate OSR value
- * @param instance sbr LPUART baudrate SBR value
+ * @param osr LPUART baudrate OSR value
+ * @param sbr LPUART baudrate SBR value
  *
  */
 void LIN_SetBaudrate(uint32_t instance, uint32_t osr, uint16_t sbr);
@@ -468,6 +468,7 @@ void LIN_SetBaudrate(uint32_t instance, uint32_t osr, uint16_t sbr);
  * @param instance LPUART instance
  * @param linUserConfig user configuration structure of type #lin_user_config_t
  * @param linCurrentState pointer to the LIN Hardware Interface driver state structure
+ * @param clockSource clock source frequency in Hz for the LIN Hardware Interface
  * @return An error code or lin_status_t
  */
 lin_status_t LIN_Init(uint32_t instance,
@@ -644,7 +645,6 @@ lin_node_state_t LIN_GetCurrentNodeState(uint32_t instance);
  * with period of 500 micro seconds (recommended). In timer IRQ handler, call this function.
  *
  * @param instance LPUART instance
- * @return void
  */
 void LIN_TimeoutService(uint32_t instance);
 
@@ -653,7 +653,6 @@ void LIN_TimeoutService(uint32_t instance);
  *
  * @param instance LPUART instance
  * @param timeoutValue  Timeout Value to be set
- * @return void
  */
 void LIN_SetTimeoutCounter(uint32_t instance, uint32_t timeoutValue);
 
@@ -688,7 +687,6 @@ lin_status_t LIN_DisableIRQ(uint32_t instance);
  * @brief Interrupt handler for LIN Hardware Interface.
  *
  * @param instance LPUART instance
- * @return void
  */
 void LIN_IRQHandler(uint8_t instance);
 
@@ -732,5 +730,7 @@ uint8_t LIN_MakeChecksumByte(const uint8_t *buffer, uint8_t sizeBuffer, uint8_t 
 #if defined(__cplusplus)
 }
 #endif
+
+/*! @}*/
 
 #endif /* FSL_LIN_H_ */

@@ -1,5 +1,11 @@
 # EQDC
 
+## [2.3.2]
+
+- Bug Fix
+- Fixed violations of the CERT INT31-C.
+- Fixed violations of the MISRA C-2012 rules 10.1, 10.3, 10.8.
+
 ## [2.3.1]
 
 - Bug Fix

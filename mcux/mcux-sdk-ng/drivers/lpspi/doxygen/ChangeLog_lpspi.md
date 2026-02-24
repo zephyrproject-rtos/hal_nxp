@@ -1,5 +1,10 @@
 # LPSPI
 
+## [2.7.4]
+
+- Bug Fixes
+  - Clear WIDTH bits from the TCR register before writing a new value in LPSPI_MasterTransferBlocking().
+
 ## [2.7.3]
 
 - Improvements

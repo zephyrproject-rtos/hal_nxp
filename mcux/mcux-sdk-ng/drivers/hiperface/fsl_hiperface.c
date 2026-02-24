@@ -570,11 +570,13 @@ status_t DSL_RDB_TraverseNodeDefiningValue(HIPERFACE_Type *base, dsl_rdb_node_t 
 				break;
 			}
 		}
+
 		if (status != kStatus_Success) {
 			free(newNodes);
+			root->nodes = NULL;
+		} else {
+			root->nodes = newNodes;
 		}
-
-		root->nodes = newNodes;
 	}
 	return kStatus_Success;
 }

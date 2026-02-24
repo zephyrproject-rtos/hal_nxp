@@ -71,20 +71,32 @@ void TSTMR_Deinit(TSTMR_Type *base);
  */
 static inline uint64_t TSTMR_ReadTimeStamp(TSTMR_Type *base)
 {
-    uint32_t reg_l;
-    uint32_t reg_h;
-    uint32_t regPrimask = DisableGlobalIRQ();
-    /* A complete read operation should include both TSTMR LOW and HIGH reads. If a HIGH read does not follow a LOW
-     * read, then any other Time Stamp value read will be locked at a fixed value. The TSTMR LOW read should occur
-     * first, followed by the TSTMR HIGH read.
-     * */
-    reg_l = base->L;
+    uint32_t primask = DisableGlobalIRQ();
+    uint64_t timeStamp;
+
+    uint32_t l1 = base->L;
     __DMB();
-    reg_h = base->H;
+    uint32_t h1 = base->H & TSTMR_H_VALUE_MASK;
 
-    EnableGlobalIRQ(regPrimask);
+    __DMB();
+    uint32_t l2 = base->L;
+    __DMB();
+    uint32_t h2 = base->H & TSTMR_H_VALUE_MASK;
 
-    return (uint64_t)reg_l | (((uint64_t)reg_h) << 32U);
+    EnableGlobalIRQ(primask);
+
+    if (l2 < l1)
+    {
+        /* Wrap (or early-carry window): use the pair that follows L2 */
+        timeStamp = (((uint64_t)h2) << 32) | l2;
+    }
+    else
+    {
+        /* No wrap between L1 and L2: use the earlier consistent pair */
+        timeStamp = (((uint64_t)h1) << 32) | l1;
+    }
+
+    return timeStamp;
 }
 
 /*!

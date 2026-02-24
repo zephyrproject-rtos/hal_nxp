@@ -1,5 +1,10 @@
 # DCP
 
+## [2.1.8]
+
+- Bug Fix
+  - Fix missing OTP flag in DCP Control0 field when using OTP UNIQUE keys.
+
 ## [2.1.7]
 
 - Bug Fix

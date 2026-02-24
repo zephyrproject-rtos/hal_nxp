@@ -1,5 +1,10 @@
 # Queued SPI
 
+## [2.1.2]
+
+- New Feature
+  - Added common IRQ handler entry QSPI_DriverIRQHandler.
+
 ## [2.1.1]
 
 - Bug Fixes

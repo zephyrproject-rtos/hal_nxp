@@ -1,5 +1,10 @@
 # SFA
 
+## [2.1.4]
+
+- Bug Fixes
+  - Fixed doxygen warnings: unbalanced grouping commands.
+
 ## [2.1.3]
 
 - Improvements

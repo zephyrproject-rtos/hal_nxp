@@ -231,17 +231,17 @@ static void DMA_SetupXferCFG(dma_xfercfg_t *xfercfg, uint32_t *xfercfg_addr)
     uint32_t xfer = 0;
 
     /* set valid flag - descriptor is ready now */
-    xfer |= DMA_CHANNEL_XFERCFG_CFGVALID(xfercfg->valid);
+    xfer |= (xfercfg->valid ? DMA_CHANNEL_XFERCFG_CFGVALID_MASK : 0UL);
     /* set reload - allow link to next descriptor */
-    xfer |= DMA_CHANNEL_XFERCFG_RELOAD(xfercfg->reload);
+    xfer |= (xfercfg->reload ? DMA_CHANNEL_XFERCFG_RELOAD_MASK : 0UL);
     /* set swtrig flag - start transfer */
-    xfer |= DMA_CHANNEL_XFERCFG_SWTRIG(xfercfg->swtrig);
+    xfer |= (xfercfg->swtrig ? DMA_CHANNEL_XFERCFG_SWTRIG_MASK : 0UL);
     /* set transfer count */
-    xfer |= DMA_CHANNEL_XFERCFG_CLRTRIG(xfercfg->clrtrig);
+    xfer |= (xfercfg->clrtrig ? DMA_CHANNEL_XFERCFG_CLRTRIG_MASK : 0UL);
     /* set INTA */
-    xfer |= DMA_CHANNEL_XFERCFG_SETINTA(xfercfg->intA);
+    xfer |= (xfercfg->intA ? DMA_CHANNEL_XFERCFG_SETINTA_MASK : 0UL);
     /* set INTB */
-    xfer |= DMA_CHANNEL_XFERCFG_SETINTB(xfercfg->intB);
+    xfer |= (xfercfg->intB ? DMA_CHANNEL_XFERCFG_SETINTB_MASK : 0UL);
     /* set data width */
     xfer |= DMA_CHANNEL_XFERCFG_WIDTH(xfercfg->byteWidth == 4U ? 2U : xfercfg->byteWidth - 1UL);
     /* set source increment value */
@@ -629,7 +629,7 @@ void DMA_SetChannelConfig(DMA_Type *base, uint32_t channel, dma_channel_trigger_
         tmpReg |= (uint32_t)(trigger->type) | (uint32_t)(trigger->burst) | (uint32_t)(trigger->wrap);
     }
 
-    tmpReg |= DMA_CHANNEL_CFG_PERIPHREQEN(isPeriph);
+    tmpReg |= (isPeriph ? DMA_CHANNEL_CFG_PERIPHREQEN_MASK : 0UL);
 
     base->CHANNEL[channel].CFG = tmpReg;
 }

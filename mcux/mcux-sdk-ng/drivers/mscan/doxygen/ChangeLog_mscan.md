@@ -1,5 +1,10 @@
 # MSCAN
 
+## [2.1.1]
+
+- Bug Fixes
+  - Fixed violations of the CERT INT31-C.
+
 ## [2.1.0]
 
 - Improvements

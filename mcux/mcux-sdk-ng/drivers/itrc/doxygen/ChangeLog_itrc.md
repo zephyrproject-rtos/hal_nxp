@@ -1,5 +1,9 @@
 # ITRC
 
+## [2.4.1]
+
+- Update to MCXA577 ITRC offering
+
 ## [2.4.0]
 
 - Rework the input signal definition for better flexibility

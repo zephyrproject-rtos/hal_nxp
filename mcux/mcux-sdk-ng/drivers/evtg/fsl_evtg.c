@@ -43,13 +43,16 @@ void EVTG_Init(EVTG_Type *base, evtg_index_t evtgIndex, evtg_config_t *psConfig)
 
 #if defined(FSL_FEATURE_EVTG_HAS_FORCE_BYPASS_FLIPFLOP) && FSL_FEATURE_EVTG_HAS_FORCE_BYPASS_FLIPFLOP
     base->EVTG_INST[(uint8_t)evtgIndex].EVTG_CTRL |= EVTG_EVTG_INST_EVTG_CTRL_FORCE_BYPASS(
-        ((uint16_t)psConfig->enableForceBypassFlipFlopAOI1 << 1U) | (uint16_t)psConfig->enableForceBypassFlipFlopAOI0);
+        ((uint16_t)(psConfig->enableForceBypassFlipFlopAOI1 ? 1U : 0U) << 1U) |
+         (uint16_t)(psConfig->enableForceBypassFlipFlopAOI0 ? 1U : 0U));
 #endif
 
     /* Configure EVTG input sync. */
     base->EVTG_INST[(uint8_t)evtgIndex].EVTG_CTRL |= EVTG_EVTG_INST_EVTG_CTRL_SYNC_CTRL(
-        (((uint16_t)psConfig->enableInputDSync << 3U) | ((uint16_t)psConfig->enableInputCSync << 2U) |
-         ((uint16_t)psConfig->enableInputBSync << 1U) | ((uint16_t)psConfig->enableInputASync)));
+        (((uint16_t)(psConfig->enableInputDSync ? 1U : 0U) << 3U) |
+         ((uint16_t)(psConfig->enableInputCSync ? 1U : 0U) << 2U) |
+         ((uint16_t)(psConfig->enableInputBSync ? 1U : 0U) << 1U) |
+         ((uint16_t)(psConfig->enableInputASync ? 1U : 0U))));
 
     /* Configure AOI0. */
     base->EVTG_INST[(uint8_t)evtgIndex].EVTG_AOI0_BFT01 =

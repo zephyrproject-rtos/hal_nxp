@@ -57,7 +57,7 @@ static const reset_ip_name_t s_flexcommResets[] = FLEXCOMM_RSTS;
  * Code
  ******************************************************************************/
 
-/* check whether flexcomm supports peripheral type */
+ /* check whether flexcomm supports peripheral type */
 static bool FLEXCOMM_PeripheralIsPresent(FLEXCOMM_Type *base, FLEXCOMM_PERIPH_T periph)
 {
     if (periph == FLEXCOMM_PERIPH_NONE)
@@ -72,12 +72,17 @@ static bool FLEXCOMM_PeripheralIsPresent(FLEXCOMM_Type *base, FLEXCOMM_PERIPH_T 
     {
         return (base->PSELID & (1U << 7U)) > (uint32_t)0U ? true : false;
     }
+#if defined(FSL_FEATURE_FLEXCOMM_HAS_QSPI_FLR)
+    else if (periph == FLEXCOMM_QSPI_FLR)
+    {
+        return (base->PSELID & (1U << 8U)) > (uint32_t)0U ? true : false;
+    }
+#endif
     else
     {
         return false;
     }
 }
-
 /* Get the index corresponding to the FLEXCOMM */
 /*! brief Returns instance number for FLEXCOMM module with given base address. */
 uint32_t FLEXCOMM_GetInstance(void *base)

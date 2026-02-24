@@ -30,6 +30,9 @@ typedef enum
     FLEXCOMM_PERIPH_I2C,    /*!< I2C Peripheral */
     FLEXCOMM_PERIPH_I2S_TX, /*!< I2S TX Peripheral */
     FLEXCOMM_PERIPH_I2S_RX, /*!< I2S RX Peripheral */
+#if defined(FSL_FEATURE_FLEXCOMM_HAS_QSPI_FLR)
+    FLEXCOMM_QSPI_FLR = 0x7u /*!< QSPI Follower Peripheral */
+#endif
 } FLEXCOMM_PERIPH_T;
 
 /*! @brief Typedef for interrupt handler. */

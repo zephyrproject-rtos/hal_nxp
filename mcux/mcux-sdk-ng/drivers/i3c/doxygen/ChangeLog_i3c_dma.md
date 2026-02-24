@@ -1,5 +1,10 @@
 # I3C_DMA
 
+## [2.1.10]
+
+- Improvements
+  - Added DMA chain optimization for Errata 052123.
+
 ## [2.1.9]
 
 - Improvements

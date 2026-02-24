@@ -1,5 +1,15 @@
 # USDHC
 
+## [2.8.8]
+
+- Bug Fixes
+  - Fixed build issue with armgcc O3.
+
+## [2.8.7]
+
+- Bug Fixes
+  - Disabled CMD error check for standard tuning per RM.
+
 ## [2.8.6]
 
 - Bug Fixes

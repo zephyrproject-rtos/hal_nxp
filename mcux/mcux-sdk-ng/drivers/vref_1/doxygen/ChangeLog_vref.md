@@ -1,5 +1,18 @@
 # VREF
 
+## [2.5.0]
+
+- New features
+  - Add VREF_SetAdcNegChannelRef() API for ADC negative channel control
+  - Add VREF_SetAdcPosChannelRef() API for ADC positive channel control
+  - Add conditional LPBGEN_MASK setting based on feature availability
+  - Add IBIAS_EN_MASK setting for devices with IBIAS_EN feature
+
+## [2.4.1]
+
+- Improvements
+  - Improve doxygen documentation.
+
 ## [2.4.0]
 
 - Improvements

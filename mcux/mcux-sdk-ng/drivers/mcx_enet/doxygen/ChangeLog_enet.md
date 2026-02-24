@@ -1,5 +1,10 @@
 # MCX_ENET
 
+## [2.2.0]
+
+- New features
+  - Support for the version of peripheral with reduced features like a single DMA channel.
+
 ## [2.1.4]
 
 - Bug Fixes

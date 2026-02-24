@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -77,7 +77,8 @@ void QTMR_Init(TMR_Type *base, const qtmr_config_t *config)
     base->CTRL = (TMR_CTRL_PCS(config->primarySource) | TMR_CTRL_SCS(config->secondarySource));
 
     /* Setup the master mode operation */
-    base->SCTRL = (TMR_SCTRL_EEOF(config->enableExternalForce) | TMR_SCTRL_MSTR(config->enableMasterMode));
+    base->SCTRL = (TMR_SCTRL_EEOF(config->enableExternalForce ? 1U : 0U) |
+                TMR_SCTRL_MSTR(config->enableMasterMode ? 1U : 0U));
 
     /* Setup debug mode */
     base->CSCTRL = TMR_CSCTRL_DBG_EN(config->debugMode);
@@ -94,7 +95,7 @@ void QTMR_Init(TMR_Type *base, const qtmr_config_t *config)
 void QTMR_Deinit(TMR_Type *base)
 {
     /* Stop the counter */
-    base->CTRL &= ~(uint16_t)TMR_CTRL_CM_MASK;
+    base->CTRL &= (uint16_t)TMR_CTRL_CM_MASK ^ 0xFFFFU;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Disable the module clock */
@@ -170,7 +171,11 @@ status_t QTMR_SetupPwm(
 
         /* Counter values to generate a PWM signal */
         periodCount = (srcClock_Hz / pwmFreqHz);
+
+        assert(periodCount <= UINT32_MAX / dutyCyclePercent);
         highCount   = (periodCount * dutyCyclePercent) / 100U;
+
+        assert(periodCount >= highCount);
         lowCount    = periodCount - highCount;
 
         /* Setup the compare registers for PWM output */
@@ -185,7 +190,7 @@ status_t QTMR_SetupPwm(
         /* Setup the compare load control for COMP1 and COMP2.
          * Load COMP1 when CSCTRL[TCF2] is asserted, load COMP2 when CSCTRL[TCF1] is asserted
          */
-        reg &= ~((uint16_t)TMR_CSCTRL_CL1_MASK | (uint16_t)TMR_CSCTRL_CL2_MASK);
+        reg &= ((uint16_t)TMR_CSCTRL_CL1_MASK | (uint16_t)TMR_CSCTRL_CL2_MASK) ^ 0xFFFFU;
         reg |= (TMR_CSCTRL_CL1(kQTMR_LoadOnComp2) | TMR_CSCTRL_CL2(kQTMR_LoadOnComp1));
         base->CSCTRL = reg;
 
@@ -197,11 +202,11 @@ status_t QTMR_SetupPwm(
         else
         {
             /* True polarity, no inversion */
-            base->SCTRL &= ~(uint16_t)TMR_SCTRL_OPS_MASK;
+            base->SCTRL &= (uint16_t)TMR_SCTRL_OPS_MASK ^ 0xFFFFU;
         }
 
         reg = base->CTRL;
-        reg &= ~(uint16_t)TMR_CTRL_OUTMODE_MASK;
+        reg &= (uint16_t)TMR_CTRL_OUTMODE_MASK ^ 0xFFFFU;
         /* Count until compare value is  reached and re-initialize the counter, toggle OFLAG output
          * using alternating compare register
          */
@@ -247,7 +252,7 @@ void QTMR_SetupInputCapture(TMR_Type *base,
     reg = base->SCTRL &
           (~((uint16_t)TMR_SCTRL_IPS_MASK | (uint16_t)TMR_SCTRL_CAPTURE_MODE_MASK | (uint16_t)TMR_SCTRL_OEN_MASK));
     /* Set the new values */
-    reg |= (TMR_SCTRL_IPS(inputPolarity) | TMR_SCTRL_CAPTURE_MODE(captureMode));
+    reg |= (TMR_SCTRL_IPS(inputPolarity ? 1U : 0U) | TMR_SCTRL_CAPTURE_MODE(captureMode));
     base->SCTRL = reg;
 
     /* Setup if counter should reload when a capture occurs */
@@ -257,7 +262,7 @@ void QTMR_SetupInputCapture(TMR_Type *base,
     }
     else
     {
-        base->CSCTRL &= ~(uint16_t)TMR_CSCTRL_ROC_MASK;
+        base->CSCTRL &= (uint16_t)TMR_CSCTRL_ROC_MASK ^ 0xFFFFU;
     }
 }
 
@@ -319,17 +324,17 @@ void QTMR_DisableInterrupts(TMR_Type *base, uint32_t mask)
     /* Compare interrupt */
     if (0U != (mask & (uint32_t)kQTMR_CompareInterruptEnable))
     {
-        reg &= ~(uint16_t)TMR_SCTRL_TCFIE_MASK;
+        reg &= (uint16_t)TMR_SCTRL_TCFIE_MASK ^ 0xFFFFU;
     }
     /* Overflow interrupt */
     if (0U != (mask & (uint32_t)kQTMR_OverflowInterruptEnable))
     {
-        reg &= ~(uint16_t)TMR_SCTRL_TOFIE_MASK;
+        reg &= (uint16_t)TMR_SCTRL_TOFIE_MASK ^ 0xFFFFU;
     }
     /* Input edge interrupt */
     if (0U != (mask & (uint32_t)kQTMR_EdgeInterruptEnable))
     {
-        reg &= ~(uint16_t)TMR_SCTRL_IEFIE_MASK;
+        reg &= (uint16_t)TMR_SCTRL_IEFIE_MASK ^ 0xFFFFU;
     }
     base->SCTRL = reg;
 
@@ -337,12 +342,12 @@ void QTMR_DisableInterrupts(TMR_Type *base, uint32_t mask)
     /* Compare 1 interrupt */
     if (0U != (mask & (uint32_t)kQTMR_Compare1InterruptEnable))
     {
-        reg &= ~(uint16_t)TMR_CSCTRL_TCF1EN_MASK;
+        reg &= (uint16_t)TMR_CSCTRL_TCF1EN_MASK ^ 0xFFFFU;
     }
     /* Compare 2 interrupt */
     if (0U != (mask & (uint32_t)kQTMR_Compare2InterruptEnable))
     {
-        reg &= ~(uint16_t)TMR_CSCTRL_TCF2EN_MASK;
+        reg &= (uint16_t)TMR_CSCTRL_TCF2EN_MASK ^ 0xFFFFU;
     }
     base->CSCTRL = reg;
 }
@@ -452,17 +457,17 @@ void QTMR_ClearStatusFlags(TMR_Type *base, uint32_t mask)
     /* Timer compare flag */
     if (0U != (mask & (uint32_t)kQTMR_CompareFlag))
     {
-        reg &= ~(uint16_t)TMR_SCTRL_TCF_MASK;
+        reg &= (uint16_t)TMR_SCTRL_TCF_MASK ^ 0xFFFFU;
     }
     /* Timer overflow flag */
     if (0U != (mask & (uint32_t)kQTMR_OverflowFlag))
     {
-        reg &= ~(uint16_t)TMR_SCTRL_TOF_MASK;
+        reg &= (uint16_t)TMR_SCTRL_TOF_MASK ^ 0xFFFFU;
     }
     /* Input edge flag */
     if (0U != (mask & (uint32_t)kQTMR_EdgeFlag))
     {
-        reg &= ~(uint16_t)TMR_SCTRL_IEF_MASK;
+        reg &= (uint16_t)TMR_SCTRL_IEF_MASK ^ 0xFFFFU;
     }
     base->SCTRL = reg;
 
@@ -470,12 +475,12 @@ void QTMR_ClearStatusFlags(TMR_Type *base, uint32_t mask)
     /* Compare 1 flag */
     if (0U != (mask & (uint32_t)kQTMR_Compare1Flag))
     {
-        reg &= ~(uint16_t)TMR_CSCTRL_TCF1_MASK;
+        reg &= (uint16_t)TMR_CSCTRL_TCF1_MASK ^ 0xFFFFU;
     }
     /* Compare 2 flag */
     if (0U != (mask & (uint32_t)kQTMR_Compare2Flag))
     {
-        reg &= ~(uint16_t)TMR_CSCTRL_TCF2_MASK;
+        reg &= (uint16_t)TMR_CSCTRL_TCF2_MASK ^ 0xFFFFU;
     }
     base->CSCTRL = reg;
 }

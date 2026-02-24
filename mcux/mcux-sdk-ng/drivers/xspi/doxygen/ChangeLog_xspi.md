@@ -1,5 +1,35 @@
 # XSPI
 
+## [2.7.0]
+
+- New Features
+  - Added EENV support to setup XSPI based on diffferent target groups.
+
+- Bug Fixes
+  - Fixed issue of XSPI_UpdateSFPConfig() function. Disabled all global MDAD and FRAD setting before updating.
+
+## [2.6.1]
+
+- Improvements
+  - Support for macro to place functions in RAM. Functions of file needs to be place in RAM while using XSPI1 for RT700.
+  - Support added to place variables in RAM. Its required when code from ram is using these variables.
+
+## [2.6.0]
+
+- Improvements
+  - Added feature macro support for devices with reserved register bit fields to
+    improve compatibility across different device variants.
+    - FSL_FEATURE_XSPI_HAS_DQS_LAT_EN
+    - FSL_FEATURE_XSPI_HAS_END_CFG
+    - FSL_FEATURE_XSPI_HAS_DOZE_MODE
+  - Enhanced register access handling using conditional compilation to accommodate hardware differences.
+  - Added supports of MAIN_XSPI0_DriverIRQHandler() and MAIN_XSPI1_DriverIRQHandler.
+
+- New Features
+  - Added AHB write terminate functionality support for devices with FSL_FEATURE_XSPI_HAS_WRTER_EN_BIT.
+    - New API: XSPI_EnableAhbWriteTerminate() to control AHB write termination of read-prefetch operations.
+    - New configuration field: enableWriteTerminate in xspi_ahb_access_config_t structure.
+
 ## [2.5.2]
 
 - Improvements

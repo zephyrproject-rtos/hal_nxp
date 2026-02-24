@@ -129,16 +129,16 @@ void EQDC_Init(EQDC_Type *base, const eqdc_config_t *psConfig)
     imrTemp = base->IMR;
 
     imrTemp = (psConfig->filterPhaseA) ? (imrTemp | (uint16_t)EQDC_IMR_FPHA_MASK) :
-                                         (imrTemp & (uint16_t)(~EQDC_IMR_FPHA_MASK));
+                                (imrTemp & MCUX_MASK_INVERT_16(EQDC_IMR_FPHA_MASK));
 
     imrTemp = (psConfig->filterPhaseB) ? (imrTemp | (uint16_t)EQDC_IMR_FPHB_MASK) :
-                                         (imrTemp & (uint16_t)(~EQDC_IMR_FPHB_MASK));
+                                (imrTemp & MCUX_MASK_INVERT_16(EQDC_IMR_FPHB_MASK));
 
     imrTemp = (psConfig->filterIndPre) ? (imrTemp | (uint16_t)EQDC_IMR_FIND_PRE_MASK) :
-                                         (imrTemp & (uint16_t)(~EQDC_IMR_FIND_PRE_MASK));
+                                (imrTemp & MCUX_MASK_INVERT_16(EQDC_IMR_FIND_PRE_MASK));
 
     imrTemp = (psConfig->filterHomEna) ? (imrTemp | (uint16_t)EQDC_IMR_FHOM_ENA_MASK) :
-                                         (imrTemp & (uint16_t)(~EQDC_IMR_FHOM_ENA_MASK));
+                                (imrTemp & MCUX_MASK_INVERT_16(EQDC_IMR_FHOM_ENA_MASK));
 
     base->IMR = imrTemp;
 
@@ -146,14 +146,16 @@ void EQDC_Init(EQDC_Type *base, const eqdc_config_t *psConfig)
     filtTemp = base->FILT;
 
     /* Prescaler used by LASTEDGE and POSDPER. */
-    filtTemp = (filtTemp & (uint16_t)(~EQDC_FILT_PRSC_MASK)) | EQDC_FILT_PRSC(psConfig->prescaler);
+    filtTemp = (filtTemp & MCUX_MASK_INVERT_16(EQDC_FILT_PRSC_MASK)) | EQDC_FILT_PRSC(psConfig->prescaler);
 
     filtTemp = (psConfig->filterClockSourceselection) ? (filtTemp | (uint16_t)EQDC_FILT_FILT_CS_MASK) :
-                                                        (filtTemp & (uint16_t)(~EQDC_FILT_FILT_CS_MASK));
+                                                (filtTemp & MCUX_MASK_INVERT_16(EQDC_FILT_FILT_CS_MASK));
 
-    filtTemp = (filtTemp & (uint16_t)(~EQDC_FILT_FILT_CNT_MASK)) | EQDC_FILT_FILT_CNT(psConfig->filterSampleCount);
+    filtTemp = (filtTemp & MCUX_MASK_INVERT_16(EQDC_FILT_FILT_CNT_MASK)) |
+                EQDC_FILT_FILT_CNT(psConfig->filterSampleCount);
 
-    filtTemp = (filtTemp & (uint16_t)(~EQDC_FILT_FILT_PER_MASK)) | EQDC_FILT_FILT_PER(psConfig->filterSamplePeriod);
+    filtTemp = (filtTemp & MCUX_MASK_INVERT_16(EQDC_FILT_FILT_PER_MASK)) |
+                EQDC_FILT_FILT_PER(psConfig->filterSamplePeriod);
 
     base->FILT = filtTemp;
 
@@ -161,24 +163,24 @@ void EQDC_Init(EQDC_Type *base, const eqdc_config_t *psConfig)
     ctrlTemp = base->CTRL;
 
     /* HOME Enable trigger. */
-    ctrlTemp = (ctrlTemp & (uint16_t)(~(EQDC_CTRL_HIP_MASK | EQDC_CTRL_HNE_MASK))) |
+    ctrlTemp = (ctrlTemp & MCUX_MASK_INVERT_16(EQDC_CTRL_HIP_MASK | EQDC_CTRL_HNE_MASK)) |
                (uint16_t)psConfig->homeEnableInitPosCounterMode;
 
     /* INDEX Preset trigger. */
-    ctrlTemp = (ctrlTemp & (uint16_t)(~(EQDC_CTRL_XIP_MASK | EQDC_CTRL_XNE_MASK))) |
+    ctrlTemp = (ctrlTemp & MCUX_MASK_INVERT_16((uint16_t)EQDC_CTRL_XIP_MASK | (uint16_t)EQDC_CTRL_XNE_MASK)) |
                (uint16_t)psConfig->indexPresetInitPosCounterMode;
 
     /* Reverse direction. */
     ctrlTemp = (psConfig->enableReverseDirection) ? (ctrlTemp | (uint16_t)EQDC_CTRL_REV_MASK) :
-                                                    (ctrlTemp & (uint16_t)(~EQDC_CTRL_REV_MASK));
+                                            (ctrlTemp & MCUX_MASK_INVERT_16(EQDC_CTRL_REV_MASK));
 
     /* Enable watchdog. */
     ctrlTemp = (psConfig->enableWatchdog) ? (ctrlTemp | (uint16_t)EQDC_CTRL_WDE_MASK) :
-                                            (ctrlTemp & (uint16_t)(~EQDC_CTRL_WDE_MASK));
+                                    (ctrlTemp & MCUX_MASK_INVERT_16(EQDC_CTRL_WDE_MASK));
 
     /* Enable Dma. */
     ctrlTemp = (psConfig->enableDma) ? (ctrlTemp | (uint16_t)EQDC_CTRL_DMAEN_MASK) :
-                                       (ctrlTemp & (uint16_t)(~EQDC_CTRL_DMAEN_MASK));
+                                (ctrlTemp & MCUX_MASK_INVERT_16(EQDC_CTRL_DMAEN_MASK));
 
     /* W1C flags. */
     ctrlTemp |= (uint16_t)EQDC_CTRL_W1C_FLAGS;
@@ -189,45 +191,47 @@ void EQDC_Init(EQDC_Type *base, const eqdc_config_t *psConfig)
     ctrl2Temp = base->CTRL2;
 
     /* Set eqdc count mode. */
-    ctrl2Temp = (ctrl2Temp & (uint16_t)(~EQDC_CTRL2_CMODE_MASK)) | EQDC_CTRL2_CMODE(psConfig->countMode);
+    ctrl2Temp = (ctrl2Temp & MCUX_MASK_INVERT_16(EQDC_CTRL2_CMODE_MASK)) | EQDC_CTRL2_CMODE(psConfig->countMode);
 
     /* Set eqdc modulo loop or one shot counting mode. */
     ctrl2Temp = (psConfig->countOnce) ? (ctrl2Temp | (uint16_t)EQDC_CTRL2_ONCE_MASK) :
-                                        (ctrl2Temp & (uint16_t)(~EQDC_CTRL2_ONCE_MASK));
+                                        (ctrl2Temp & MCUX_MASK_INVERT_16(EQDC_CTRL2_ONCE_MASK));
 
     /* TRIGGER initializes position counter. */
     ctrl2Temp = (psConfig->enableTriggerInitPositionCounter) ? (ctrl2Temp | (uint16_t)EQDC_CTRL2_INITPOS_MASK) :
-                                                               (ctrl2Temp & (uint16_t)(~EQDC_CTRL2_INITPOS_MASK));
+                                                    (ctrl2Temp & MCUX_MASK_INVERT_16(EQDC_CTRL2_INITPOS_MASK));
 
 #if (defined(FSL_FEATURE_EQDC_CTRL2_HAS_EMIP_BIT_FIELD) && FSL_FEATURE_EQDC_CTRL2_HAS_EMIP_BIT_FIELD)
     /* Index Event Edge Mark initializes position counter. */
     ctrl2Temp = (psConfig->enableIndexInitPositionCounter) ? (ctrl2Temp | (uint16_t)EQDC_CTRL2_EMIP_MASK) :
-                                                             (ctrl2Temp & (uint16_t)(~EQDC_CTRL2_EMIP_MASK));
+                                                    (ctrl2Temp & MCUX_MASK_INVERT_16(EQDC_CTRL2_EMIP_MASK));
 #endif /* FSL_FEATURE_EQDC_CTRL2_HAS_EMIP_BIT_FIELD */
 
     /* Enable period measurement. */
     ctrl2Temp = (psConfig->enablePeriodMeasurement) ? (ctrl2Temp | (uint16_t)EQDC_CTRL2_PMEN_MASK) :
-                                                      (ctrl2Temp & (uint16_t)(~EQDC_CTRL2_PMEN_MASK));
+                                            (ctrl2Temp & MCUX_MASK_INVERT_16(EQDC_CTRL2_PMEN_MASK));
 
     /* Output pulse. */
-    ctrl2Temp = (psConfig->outputPulseMode) ? (ctrl2Temp | (uint16_t)EQDC_CTRL2_OUTCTL_MASK) :
-                                              (ctrl2Temp & (uint16_t)(~EQDC_CTRL2_OUTCTL_MASK));
+    ctrl2Temp = (psConfig->outputPulseMode == kEQDC_OutputPulseOnReadingPositionCounter) ?
+                                            (ctrl2Temp | (uint16_t)EQDC_CTRL2_OUTCTL_MASK) :
+                                            (ctrl2Temp & MCUX_MASK_INVERT_16(EQDC_CTRL2_OUTCTL_MASK));
 
     /* Revolution count condition. */
-    ctrl2Temp = (psConfig->revolutionCountCondition) ? (ctrl2Temp | (uint16_t)EQDC_CTRL2_REVMOD_MASK) :
-                                                       (ctrl2Temp & (uint16_t)(~EQDC_CTRL2_REVMOD_MASK));
+    ctrl2Temp = (psConfig->revolutionCountCondition == kEQDC_RevolutionCountOnRollOverModulus) ?
+                                            (ctrl2Temp | (uint16_t)EQDC_CTRL2_REVMOD_MASK) :
+                                            (ctrl2Temp & MCUX_MASK_INVERT_16(EQDC_CTRL2_REVMOD_MASK));
 
     /* Buffered register load (Update) mode select. */
     ctrl2Temp = (psConfig->bufferedRegisterLoadMode) ? (ctrl2Temp | (uint16_t)EQDC_CTRL2_LDMOD_MASK) :
-                                                       (ctrl2Temp & (uint16_t)(~EQDC_CTRL2_LDMOD_MASK));
+                                            (ctrl2Temp & MCUX_MASK_INVERT_16(EQDC_CTRL2_LDMOD_MASK));
 
     /* TRIGGER clears position register. */
     ctrl2Temp = (psConfig->enableTriggerClearPositionRegisters) ? (ctrl2Temp | (uint16_t)EQDC_CTRL2_UPDPOS_MASK) :
-                                                                  (ctrl2Temp & (uint16_t)(~EQDC_CTRL2_UPDPOS_MASK));
+                                                        (ctrl2Temp & MCUX_MASK_INVERT_16(EQDC_CTRL2_UPDPOS_MASK));
 
     /* TRIGGER loads position registers. */
     ctrl2Temp = (psConfig->enableTriggerHoldPositionRegisters) ? (ctrl2Temp | (uint16_t)EQDC_CTRL2_UPDHLD_MASK) :
-                                                                  (ctrl2Temp & (uint16_t)(~EQDC_CTRL2_UPDHLD_MASK));
+                                                        (ctrl2Temp & MCUX_MASK_INVERT_16(EQDC_CTRL2_UPDHLD_MASK));
 
     base->CTRL2 = ctrl2Temp;
 
@@ -272,10 +276,10 @@ void EQDC_Deinit(EQDC_Type *base)
  *    psConfig->enableTriggerHoldPositionRegisters  = false;
  *    psConfig->enableWatchdog                      = false;
  *    psConfig->watchdogTimeoutValue                = 0xFFFFU;
- *    psConfig->filterPhaseA                        = 0U;
- *    psConfig->filterPhaseB                        = 0U;
- *    psConfig->filterIndPre                        = 0U;
- *    psConfig->filterHomEna                        = 0U;
+ *    psConfig->filterPhaseA                        = false;
+ *    psConfig->filterPhaseB                        = false;
+ *    psConfig->filterIndPre                        = false;
+ *    psConfig->filterHomEna                        = false;
  *    psConfig->filterClockSourceselection          = false;
  *    psConfig->filterSampleCount                   = kEQDC_Filter3Samples;
  *    psConfig->filterSamplePeriod                  = 0U;
@@ -314,10 +318,10 @@ void EQDC_GetDefaultConfig(eqdc_config_t *psConfig)
     psConfig->enableTriggerHoldPositionRegisters  = false;
     psConfig->enableWatchdog                      = false;
     psConfig->watchdogTimeoutValue                = 0xFFFFU;
-    psConfig->filterPhaseA                        = 0U;
-    psConfig->filterPhaseB                        = 0U;
-    psConfig->filterIndPre                        = 0U;
-    psConfig->filterHomEna                        = 0U;
+    psConfig->filterPhaseA                        = false;
+    psConfig->filterPhaseB                        = false;
+    psConfig->filterIndPre                        = false;
+    psConfig->filterHomEna                        = false;
     psConfig->filterClockSourceselection          = false;
     psConfig->filterSampleCount                   = kEQDC_Filter3Samples;
     psConfig->filterSamplePeriod                  = 0U;
@@ -352,23 +356,23 @@ void EQDC_SetOperateMode(EQDC_Type *base, eqdc_operate_mode_t operateMode)
     switch (operateMode)
     {
         case kEQDC_QuadratureDecodeOperationMode:
-            base->CTRL &= ~EQDC_CTRL_PH1_MASK;
-            base->CTRL2 &= ~EQDC_CTRL2_OPMODE_MASK;
+            MCUX_REG_BIT_CLEAR16(base->CTRL, EQDC_CTRL_PH1_MASK);
+            MCUX_REG_BIT_CLEAR16(base->CTRL2, EQDC_CTRL2_OPMODE_MASK);
             break;
 
         case kEQDC_QuadratureCountOperationMode:
-            base->CTRL &= ~EQDC_CTRL_PH1_MASK;
-            base->CTRL2 |= EQDC_CTRL2_OPMODE_MASK;
+            MCUX_REG_BIT_CLEAR16(base->CTRL, EQDC_CTRL_PH1_MASK);
+            MCUX_REG_BIT_SET16(base->CTRL2, EQDC_CTRL2_OPMODE_MASK);
             break;
 
         case kEQDC_SinglePhaseDecodeOperationMode:
-            base->CTRL |= EQDC_CTRL_PH1_MASK;
-            base->CTRL2 &= ~EQDC_CTRL2_OPMODE_MASK;
+            MCUX_REG_BIT_SET16(base->CTRL, EQDC_CTRL_PH1_MASK);
+            MCUX_REG_BIT_CLEAR16(base->CTRL2, EQDC_CTRL2_OPMODE_MASK);
             break;
 
         case kEQDC_SinglePhaseCountOperationMode:
-            base->CTRL |= EQDC_CTRL_PH1_MASK;
-            base->CTRL2 |= EQDC_CTRL2_OPMODE_MASK;
+            MCUX_REG_BIT_SET16(base->CTRL, EQDC_CTRL_PH1_MASK);
+            MCUX_REG_BIT_SET16(base->CTRL2, EQDC_CTRL2_OPMODE_MASK);
             break;
 
         default:
