@@ -19,9 +19,18 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 2.5.0. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+/*! @brief power driver version 2.5.1. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
 /*@}*/
+
+/*! @brief Retry times for waiting flag. */
+#ifndef POWER_RETRY_TIMES
+#ifdef CONFIG_POWER_RETRY_TIMES
+#define POWER_RETRY_TIMES CONFIG_POWER_RETRY_TIMES
+#else
+#define POWER_RETRY_TIMES 0U /* Defining to zero means to keep waiting for the flag until it is assert/deassert. */
+#endif
+#endif
 
 /*! @brief Define the default PMIC modes for power modes. */
 #ifndef POWER_DEFAULT_PMICMODE_DS

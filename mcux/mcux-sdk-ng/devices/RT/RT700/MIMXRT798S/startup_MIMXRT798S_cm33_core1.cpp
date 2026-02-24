@@ -1,7 +1,7 @@
 //*****************************************************************************
 // MIMXRT798S_cm33_core1 startup code
 //
-// Version : 220725
+// Version : 081225
 //*****************************************************************************
 //
 // Copyright 2016-2025 NXP
@@ -71,6 +71,7 @@ void ResetISR(void);
 #else
 void Reset_Handler(void);
 #endif //(__MCUXPRESSO)
+void Reset_Handler_C(void);
 WEAK void NMI_Handler(void);
 WEAK void HardFault_Handler(void);
 WEAK void MemManage_Handler(void);
@@ -285,7 +286,9 @@ void PVTS1_HIFI1_DriverIRQHandler(void) ALIAS(DefaultISR);
 // __main() is the entry point for Redlib based applications
 // main() is the entry point for Newlib based applications
 //*****************************************************************************
-#if defined(__MCUXPRESSO)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+extern void __main(void);
+#elif defined(__MCUXPRESSO)
 #if defined(__REDLIB__)
 extern void __main(void);
 #else
@@ -326,12 +329,15 @@ extern uint32_t __StackLimit[];
 #define _vStackTop  __StackTop
 #define _vStackBase __StackLimit
 
+/*
+ * Data section ROM and RAM addresses
+ */
 extern uint32_t __etext[];
 extern uint32_t __data_start__[];
 extern uint32_t __data_end__[];
-
 extern uint32_t __bss_start__[];
 extern uint32_t __bss_end__[];
+
 #else
 #error Unsupported toolchain!
 #endif //(__CC_ARM) || (__ARMCC_VERSION)
@@ -529,41 +535,16 @@ extern unsigned int __bss_section_table_end;
 // Sets up a simple runtime environment and initializes the C/C++
 // library.
 //*****************************************************************************
-#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
-__attribute__ ((used, section("InRoot$$Sections")))
-__attribute__ ((naked))
-#elif defined(__MCUXPRESSO)
-__attribute__ ((naked, section(".after_vectors.reset")))
-#elif defined(__ICCARM__)
-__stackless
-#elif defined(__GNUC__)
-__attribute__ ((naked))
-#endif //(__CC_ARM) || (__ARMCC_VERSION)
-void Reset_Handler(void)
+void Reset_Handler_C(void)
 {
-    // Disable interrupts
-    __asm volatile("cpsid i");
-    // Config VTOR & MSP register
-    __asm volatile(
-        "LDR R0, =0xE000ED08  \n"
-        "STR %0, [R0]         \n"
-        "LDR R1, [%0]         \n"
-        "MSR MSP, R1          \n"
-        "MSR MSPLIM, %1       \n"
-        :
-        : "r"(__vector_table), "r"(_vStackBase)
-        : "r0", "r1");
+#if !defined(__NO_SYSTEM_INIT)
+    SystemInit();
+#endif //(__NO_SYSTEM_INIT)
 
 #if defined(__CC_ARM) || defined(__ARMCC_VERSION)
-    __asm volatile(
-        "LDR R0, =SystemInit \n"
-        "BLX R0              \n"
-        "cpsie i             \n"
-        "LDR R0, =__main     \n"
-        "BX  R0              \n");
+    __asm volatile ("cpsie i");
+    __main();
 #elif defined(__MCUXPRESSO)
-    SystemInit();
-
     //
     // Copy the data sections from flash to SRAM.
     //
@@ -608,19 +589,15 @@ void Reset_Handler(void)
     main();
 #endif //(__REDLIB__)
 #elif defined(__ICCARM__)
-    SystemInit();
     // Reenable interrupts
     __asm volatile("cpsie i");
 
     __iar_program_start();
 #elif defined(__GNUC__)
-#if !defined(__NO_SYSTEM_INIT)
-    SystemInit();
-#endif //(__NO_SYSTEM_INIT)
     /*     Loop to copy data from read only memory to RAM. The ranges
      *      of copy from/to are specified by following symbols evaluated in
      *      linker script.
-     *      1. __etext/_data_start__/__data_end__
+     *      *. __etext/_data_start__/__data_end__
      *      Note: All must be aligned to 4 bytes boundary.
      */
     uint32_t *pDataSrc, *pDataDest;
@@ -670,6 +647,37 @@ void Reset_Handler(void)
         ;
     }
 #endif //!(__ARMCC_VERSION) && !(__CC_ARM)
+}
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+__attribute__ ((used, section("InRoot$$Sections")))
+__attribute__ ((naked))
+#elif defined(__MCUXPRESSO)
+__attribute__ ((naked, section(".after_vectors.reset")))
+#elif defined(__ICCARM__)
+__stackless
+#elif defined(__GNUC__)
+__attribute__ ((naked))
+#endif //(__CC_ARM) || (__ARMCC_VERSION)
+void Reset_Handler(void)
+{
+    // Disable interrupts
+    __asm volatile("cpsid i");
+    // Config VTOR & MSP register
+    __asm volatile(
+        "LDR R0, =0xE000ED08  \n"
+        "STR %0, [R0]         \n"
+        "LDR R1, [%0]         \n"
+        "MSR MSP, R1          \n"
+        "MSR MSPLIM, %1       \n"
+        :
+        : "r"(__vector_table), "r"(_vStackBase)
+        : "r0", "r1");
+
+    // Call Reset_Handler_C
+    __asm volatile ("LDR R0, =Reset_Handler_C \n"
+                    "BLX R0                   \n"
+                    );
 }
 
 //*****************************************************************************

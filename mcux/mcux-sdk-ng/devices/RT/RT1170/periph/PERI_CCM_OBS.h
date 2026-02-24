@@ -53,14 +53,14 @@
 **                          MIMXRT117HDVMAB_cm4
 **                          MIMXRT117HDVMAB_cm7
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250703
+**     Version:             rev. 4.0, 2026-01-06
+**     Build:               b260106
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CCM_OBS
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -74,14 +74,18 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-13)
+**         Consolidate asrc/xbar and enet macros into common header.
+**     - rev. 4.0 (2026-01-06)
+**         Update header files to align with IMXRT1170RM Rev.5.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_CCM_OBS.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-01-06
  * @brief CMSIS Peripheral Access Layer for CCM_OBS
  *
  * CMSIS Peripheral Access Layer for CCM_OBS
@@ -418,9 +422,9 @@ typedef struct {
 
 #define CCM_OBS_OBSERVE_AUTHEN_LOCK_TZ_MASK      (0x10U)
 #define CCM_OBS_OBSERVE_AUTHEN_LOCK_TZ_SHIFT     (4U)
-/*! LOCK_TZ - Lock truszone setting
- *  0b0..Trustzone setting is not locked.
- *  0b1..Trustzone setting is locked.
+/*! LOCK_TZ - Lock TZ_USER and TZ_NS
+ *  0b0..Not locked.
+ *  0b1..Locked.
  */
 #define CCM_OBS_OBSERVE_AUTHEN_LOCK_TZ(x)        (((uint32_t)(((uint32_t)(x)) << CCM_OBS_OBSERVE_AUTHEN_LOCK_TZ_SHIFT)) & CCM_OBS_OBSERVE_AUTHEN_LOCK_TZ_MASK)
 
@@ -479,7 +483,7 @@ typedef struct {
 
 #define CCM_OBS_OBSERVE_AUTHEN_SET_LOCK_TZ_MASK  (0x10U)
 #define CCM_OBS_OBSERVE_AUTHEN_SET_LOCK_TZ_SHIFT (4U)
-/*! LOCK_TZ - Lock truszone setting */
+/*! LOCK_TZ - Lock TZ_USER and TZ_NS */
 #define CCM_OBS_OBSERVE_AUTHEN_SET_LOCK_TZ(x)    (((uint32_t)(((uint32_t)(x)) << CCM_OBS_OBSERVE_AUTHEN_SET_LOCK_TZ_SHIFT)) & CCM_OBS_OBSERVE_AUTHEN_SET_LOCK_TZ_MASK)
 
 #define CCM_OBS_OBSERVE_AUTHEN_SET_WHITE_LIST_MASK (0xF00U)
@@ -521,7 +525,7 @@ typedef struct {
 
 #define CCM_OBS_OBSERVE_AUTHEN_CLR_LOCK_TZ_MASK  (0x10U)
 #define CCM_OBS_OBSERVE_AUTHEN_CLR_LOCK_TZ_SHIFT (4U)
-/*! LOCK_TZ - Lock truszone setting */
+/*! LOCK_TZ - Lock TZ_USER and TZ_NS */
 #define CCM_OBS_OBSERVE_AUTHEN_CLR_LOCK_TZ(x)    (((uint32_t)(((uint32_t)(x)) << CCM_OBS_OBSERVE_AUTHEN_CLR_LOCK_TZ_SHIFT)) & CCM_OBS_OBSERVE_AUTHEN_CLR_LOCK_TZ_MASK)
 
 #define CCM_OBS_OBSERVE_AUTHEN_CLR_WHITE_LIST_MASK (0xF00U)
@@ -563,7 +567,7 @@ typedef struct {
 
 #define CCM_OBS_OBSERVE_AUTHEN_TOG_LOCK_TZ_MASK  (0x10U)
 #define CCM_OBS_OBSERVE_AUTHEN_TOG_LOCK_TZ_SHIFT (4U)
-/*! LOCK_TZ - Lock truszone setting */
+/*! LOCK_TZ - Lock TZ_USER and TZ_NS */
 #define CCM_OBS_OBSERVE_AUTHEN_TOG_LOCK_TZ(x)    (((uint32_t)(((uint32_t)(x)) << CCM_OBS_OBSERVE_AUTHEN_TOG_LOCK_TZ_SHIFT)) & CCM_OBS_OBSERVE_AUTHEN_TOG_LOCK_TZ_MASK)
 
 #define CCM_OBS_OBSERVE_AUTHEN_TOG_WHITE_LIST_MASK (0xF00U)

@@ -1,5 +1,5 @@
 if (CONFIG_MCUX_COMPONENT_driver.romapi)
-    mcux_component_version(1.1.2)
+    mcux_component_version(1.1.3)
 
     mcux_add_source(
         SOURCES ./romapi/fsl_romapi.c

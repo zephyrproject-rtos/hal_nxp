@@ -12,8 +12,8 @@
 **                          MIMXRT685SVFVKB_cm33
 **                          MIMXRT685SVFVKB_dsp
 **
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 4.0, 2025-11-13
+**     Build:               b251113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMIC
@@ -33,14 +33,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2025-11-13)
+**         Add puf irq and move some trng compatibility macros to common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_DMIC.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2025-11-13
  * @brief CMSIS Peripheral Access Layer for DMIC
  *
  * CMSIS Peripheral Access Layer for DMIC

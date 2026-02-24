@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 0.1, 2021-03-09
-**     Build:               b250814
+**     Version:             rev. 1.0, 2025-11-13
+**     Build:               b251210
 **
 **     Abstract:
 **         Chip specific module features.
@@ -16,6 +16,10 @@
 **     Revisions:
 **     - rev. 0.1 (2021-03-09)
 **         Initial version.
+**     - rev. 1.0 (2025-11-13)
+**         Add "belong to flexcomm" feature to lpspi/lpi2c.
+**         Add otfad feature.
+**         Update pdm feature align to shared definition changes.
 **
 ** ###################################################################
 */
@@ -196,6 +200,8 @@
 #define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
 /* @brief Has High Speed Mode Trim Request (bitfield CTRL[CALHS]). */
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (0)
+/* @brief Has Justified Left Enable (bitfield CFG2[JLEFT]). */
+#define FSL_FEATURE_LPADC_HAS_CFG2_JLEFT (1)
 /* @brief Buffer size of temperature sensor (CMDHa[LOOP] value to be set in process of calculate the temperature). */
 #define FSL_FEATURE_LPADC_TEMP_SENS_BUFFER_SIZE (2U)
 /* @brief Temperature sensor parameter A (slope). */
@@ -625,6 +631,8 @@
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (8)
 /* @brief Has dedicated interrupt for master and slave. */
 #define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPI2C_IS_LPFLEXCOMM (0)
 
 /* LPIT module features */
 
@@ -647,6 +655,8 @@
 #define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
 /* @brief Has no WIDTH bits in TCR register. */
 #define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPSPI_IS_LPFLEXCOMM (0)
 
 /* LPTMR module features */
 
@@ -856,7 +866,7 @@
 /* @brief Actual MAC Tx IPG is longer than configured when transmitting back-to-back packets in MII half duplex mode. */
 #define FSL_FEATURE_NETC_HAS_ERRATA_052167 (1)
 /* @brief The actual offset of the SG_DROP_COUNT in the Ingress Stream Count Table STSE_DATA element is not as document. */
-#define FSL_FEATURE_NETC_HAS_ERRATA_052206 (1)
+#define FSL_FEATURE_NETC_HAS_ERRATA_052206 (0)
 /* @brief The receiving NETC MAC cannot reliably detect the frame when IPG length and flexiable preamble are set to the minimum value. */
 #define FSL_FEATURE_NETC_HAS_ERRATA_052129 (1)
 /* @brief PTCaTSDR registers are implemented in the wrong order within the memory map. */
@@ -869,6 +879,8 @@
 #define FSL_FEATURE_NETC_HAS_PORT_PSRCR (0)
 /* @brief NXP Switch port group support. */
 #define FSL_FEATURE_NETC_HAS_PORT_PGCR (0)
+/* @brief SG_DROP_COUNT value in the Ingress Stream Count STSE_DATA response begins at an incorrect bit offset, causing it to be read incorrectly. */
+#define FSL_FEATURE_NETC_HAS_ERRATA_052134 (1)
 
 /* NVIC module features */
 
@@ -876,6 +888,17 @@
 #define FSL_FEATURE_INTERRUPT_IRQ_MIN (-14)
 /* @brief Highest interrupt request number. */
 #define FSL_FEATURE_INTERRUPT_IRQ_MAX (105)
+
+/* OTFAD module features */
+
+/* @brief OTFAD has Security Violation Mode (SVM) */
+#define FSL_FEATURE_OTFAD_HAS_SVM_MODE (0)
+/* @brief OTFAD has Key Blob Processing */
+#define FSL_FEATURE_OTFAD_HAS_KEYBLOB_PROCESSING (1)
+/* @brief OTFAD has interrupt request enable */
+#define FSL_FEATURE_OTFAD_HAS_HAS_IRQ_ENABLE (0)
+/* @brief OTFAD has Force Error */
+#define FSL_FEATURE_OTFAD_HAS_FORCE_ERR (1)
 
 /* PDM module features */
 
@@ -895,22 +918,24 @@
 #define FSL_FEATURE_PDM_HIGH_QUALITY_CLKDIV_FACTOR (93)
 /* @brief CLKDIV factor in Very Low Quality modes */
 #define FSL_FEATURE_PDM_VERY_LOW_QUALITY_CLKDIV_FACTOR (43)
-/* @brief PDM Has DC_OUT_CTRL. */
-#define FSL_FEATURE_PDM_HAS_DC_OUT_CTRL (0)
-/* @brief PDM Has Fixed DC CTRL VALUE. */
-#define FSL_FEATURE_PDM_DC_CTRL_VALUE_FIXED (0)
-/* @brief PDM Has no independent error IRQ. */
-#define FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ (0)
-/* @brief PDM has no minimum clkdiv. */
-#define FSL_FEATURE_PDM_HAS_NO_MINIMUM_CLKDIV (0)
 /* @brief PDM Has No VADEF Bitfield In PDM VAD0_STAT Register */
 #define FSL_FEATURE_PDM_HAS_NO_VADEF (1)
+/* @brief PDM has no minimum clkdiv. */
+#define FSL_FEATURE_PDM_HAS_NO_MINIMUM_CLKDIV (0)
 /* @brief PDM Has no FIR_RDY Bitfield In PDM STAT Register */
 #define FSL_FEATURE_PDM_HAS_NO_FIR_RDY (0)
 /* @brief PDM Has no DOZEN Bitfield In PDM CTRL_1 Register */
 #define FSL_FEATURE_PDM_HAS_NO_DOZEN (0)
 /* @brief PDM Has DEC_BYPASS Bitfield In PDM CTRL_2 Register */
 #define FSL_FEATURE_PDM_HAS_DECIMATION_FILTER_BYPASS (0)
+/* @brief PDM Has DC_OUT_CTRL. */
+#define FSL_FEATURE_PDM_HAS_DC_OUT_CTRL (0)
+/* @brief PDM Has Fixed DC CTRL VALUE. */
+#define FSL_FEATURE_PDM_DC_CTRL_VALUE_FIXED (0)
+/* @brief PDM Has no independent error IRQ. */
+#define FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ (0)
+/* @brief PDM has no hardware Voice Activity Detector */
+#define FSL_FEATURE_PDM_HAS_NO_HWVAD (0)
 
 /* PWM module features */
 
@@ -1032,6 +1057,10 @@
 
 /* @brief The basic settings for access to the temperature sensor through Analog IP (AI) Interface. */
 #define FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE (0)
+
+/* TMR module features */
+
+/* No feature definitions */
 
 /* TPM module features */
 

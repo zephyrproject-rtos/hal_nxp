@@ -53,14 +53,14 @@
 **                          MIMXRT117HDVMAB_cm4
 **                          MIMXRT117HDVMAB_cm7
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250703
+**     Version:             rev. 4.0, 2026-01-06
+**     Build:               b260106
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENET
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -74,14 +74,18 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-13)
+**         Consolidate asrc/xbar and enet macros into common header.
+**     - rev. 4.0 (2026-01-06)
+**         Update header files to align with IMXRT1170RM Rev.5.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_ENET.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-01-06
  * @brief CMSIS Peripheral Access Layer for ENET
  *
  * CMSIS Peripheral Access Layer for ENET
@@ -165,46 +169,46 @@
 /** ENET - Register Layout Typedef */
 typedef struct {
        uint8_t RESERVED_0[4];
-  __IO uint32_t EIR;                               /**< Interrupt Event Register, offset: 0x4 */
-  __IO uint32_t EIMR;                              /**< Interrupt Mask Register, offset: 0x8 */
+  __IO uint32_t EIR;                               /**< Interrupt Event, offset: 0x4 */
+  __IO uint32_t EIMR;                              /**< Interrupt Mask, offset: 0x8 */
        uint8_t RESERVED_1[4];
   __IO uint32_t RDAR;                              /**< Receive Descriptor Active Register - Ring 0, offset: 0x10 */
   __IO uint32_t TDAR;                              /**< Transmit Descriptor Active Register - Ring 0, offset: 0x14 */
        uint8_t RESERVED_2[12];
-  __IO uint32_t ECR;                               /**< Ethernet Control Register, offset: 0x24 */
+  __IO uint32_t ECR;                               /**< Ethernet Control, offset: 0x24 */
        uint8_t RESERVED_3[24];
-  __IO uint32_t MMFR;                              /**< MII Management Frame Register, offset: 0x40 */
-  __IO uint32_t MSCR;                              /**< MII Speed Control Register, offset: 0x44 */
+  __IO uint32_t MMFR;                              /**< MII Management Frame, offset: 0x40 */
+  __IO uint32_t MSCR;                              /**< MII Speed Control, offset: 0x44 */
        uint8_t RESERVED_4[28];
-  __IO uint32_t MIBC;                              /**< MIB Control Register, offset: 0x64 */
+  __IO uint32_t MIBC;                              /**< MIB Control, offset: 0x64 */
        uint8_t RESERVED_5[28];
-  __IO uint32_t RCR;                               /**< Receive Control Register, offset: 0x84 */
+  __IO uint32_t RCR;                               /**< Receive Control, offset: 0x84 */
        uint8_t RESERVED_6[60];
-  __IO uint32_t TCR;                               /**< Transmit Control Register, offset: 0xC4 */
+  __IO uint32_t TCR;                               /**< Transmit Control, offset: 0xC4 */
        uint8_t RESERVED_7[28];
-  __IO uint32_t PALR;                              /**< Physical Address Lower Register, offset: 0xE4 */
-  __IO uint32_t PAUR;                              /**< Physical Address Upper Register, offset: 0xE8 */
-  __IO uint32_t OPD;                               /**< Opcode/Pause Duration Register, offset: 0xEC */
-  __IO uint32_t TXIC[ENET_TXIC_COUNT];             /**< Transmit Interrupt Coalescing Register, array offset: 0xF0, array step: 0x4 */
+  __IO uint32_t PALR;                              /**< Physical Address Lower, offset: 0xE4 */
+  __IO uint32_t PAUR;                              /**< Physical Address Upper, offset: 0xE8 */
+  __IO uint32_t OPD;                               /**< Opcode/Pause Duration, offset: 0xEC */
+  __IO uint32_t TXIC[ENET_TXIC_COUNT];             /**< Transmit Interrupt Coalescing, array offset: 0xF0, array step: 0x4 */
        uint8_t RESERVED_8[4];
-  __IO uint32_t RXIC[ENET_RXIC_COUNT];             /**< Receive Interrupt Coalescing Register, array offset: 0x100, array step: 0x4 */
+  __IO uint32_t RXIC[ENET_RXIC_COUNT];             /**< Receive Interrupt Coalescing, array offset: 0x100, array step: 0x4 */
        uint8_t RESERVED_9[12];
-  __IO uint32_t IAUR;                              /**< Descriptor Individual Upper Address Register, offset: 0x118 */
-  __IO uint32_t IALR;                              /**< Descriptor Individual Lower Address Register, offset: 0x11C */
-  __IO uint32_t GAUR;                              /**< Descriptor Group Upper Address Register, offset: 0x120 */
-  __IO uint32_t GALR;                              /**< Descriptor Group Lower Address Register, offset: 0x124 */
+  __IO uint32_t IAUR;                              /**< Descriptor Individual Upper Address, offset: 0x118 */
+  __IO uint32_t IALR;                              /**< Descriptor Individual Lower Address, offset: 0x11C */
+  __IO uint32_t GAUR;                              /**< Descriptor Group Upper Address, offset: 0x120 */
+  __IO uint32_t GALR;                              /**< Descriptor Group Lower Address, offset: 0x124 */
        uint8_t RESERVED_10[28];
-  __IO uint32_t TFWR;                              /**< Transmit FIFO Watermark Register, offset: 0x144 */
+  __IO uint32_t TFWR;                              /**< Transmit FIFO Watermark, offset: 0x144 */
        uint8_t RESERVED_11[24];
-  __IO uint32_t RDSR1;                             /**< Receive Descriptor Ring 1 Start Register, offset: 0x160, available only on: ENET_1G (missing on ENET) */
-  __IO uint32_t TDSR1;                             /**< Transmit Buffer Descriptor Ring 1 Start Register, offset: 0x164, available only on: ENET_1G (missing on ENET) */
+  __IO uint32_t RDSR1;                             /**< Receive Descriptor Ring 1 Start, offset: 0x160, available only on: ENET_1G (missing on ENET) */
+  __IO uint32_t TDSR1;                             /**< Transmit Buffer Descriptor Ring 1 Start, offset: 0x164, available only on: ENET_1G (missing on ENET) */
   __IO uint32_t MRBR1;                             /**< Maximum Receive Buffer Size Register - Ring 1, offset: 0x168, available only on: ENET_1G (missing on ENET) */
-  __IO uint32_t RDSR2;                             /**< Receive Descriptor Ring 2 Start Register, offset: 0x16C, available only on: ENET_1G (missing on ENET) */
-  __IO uint32_t TDSR2;                             /**< Transmit Buffer Descriptor Ring 2 Start Register, offset: 0x170, available only on: ENET_1G (missing on ENET) */
+  __IO uint32_t RDSR2;                             /**< Receive Descriptor Ring 2 Start, offset: 0x16C, available only on: ENET_1G (missing on ENET) */
+  __IO uint32_t TDSR2;                             /**< Transmit Buffer Descriptor Ring 2 Start, offset: 0x170, available only on: ENET_1G (missing on ENET) */
   __IO uint32_t MRBR2;                             /**< Maximum Receive Buffer Size Register - Ring 2, offset: 0x174, available only on: ENET_1G (missing on ENET) */
        uint8_t RESERVED_12[8];
-  __IO uint32_t RDSR;                              /**< Receive Descriptor Ring 0 Start Register, offset: 0x180 */
-  __IO uint32_t TDSR;                              /**< Transmit Buffer Descriptor Ring 0 Start Register, offset: 0x184 */
+  __IO uint32_t RDSR;                              /**< Receive Descriptor Ring 0 Start, offset: 0x180 */
+  __IO uint32_t TDSR;                              /**< Transmit Buffer Descriptor Ring 0 Start, offset: 0x184 */
   __IO uint32_t MRBR;                              /**< Maximum Receive Buffer Size Register - Ring 0, offset: 0x188 */
        uint8_t RESERVED_13[4];
   __IO uint32_t RSFL;                              /**< Receive FIFO Section Full Threshold, offset: 0x190 */
@@ -228,73 +232,73 @@ typedef struct {
   __IO uint32_t TDAR2;                             /**< Transmit Descriptor Active Register - Ring 2, offset: 0x1EC, available only on: ENET_1G (missing on ENET) */
   __IO uint32_t QOS;                               /**< QOS Scheme, offset: 0x1F0, available only on: ENET_1G (missing on ENET) */
        uint8_t RESERVED_16[16];
-  __I  uint32_t RMON_T_PACKETS;                    /**< Tx Packet Count Statistic Register, offset: 0x204 */
-  __I  uint32_t RMON_T_BC_PKT;                     /**< Tx Broadcast Packets Statistic Register, offset: 0x208 */
-  __I  uint32_t RMON_T_MC_PKT;                     /**< Tx Multicast Packets Statistic Register, offset: 0x20C */
-  __I  uint32_t RMON_T_CRC_ALIGN;                  /**< Tx Packets with CRC/Align Error Statistic Register, offset: 0x210 */
-  __I  uint32_t RMON_T_UNDERSIZE;                  /**< Tx Packets Less Than Bytes and Good CRC Statistic Register, offset: 0x214 */
-  __I  uint32_t RMON_T_OVERSIZE;                   /**< Tx Packets GT MAX_FL bytes and Good CRC Statistic Register, offset: 0x218 */
-  __I  uint32_t RMON_T_FRAG;                       /**< Tx Packets Less Than 64 Bytes and Bad CRC Statistic Register, offset: 0x21C */
-  __I  uint32_t RMON_T_JAB;                        /**< Tx Packets Greater Than MAX_FL bytes and Bad CRC Statistic Register, offset: 0x220 */
-  __I  uint32_t RMON_T_COL;                        /**< Tx Collision Count Statistic Register, offset: 0x224 */
-  __I  uint32_t RMON_T_P64;                        /**< Tx 64-Byte Packets Statistic Register, offset: 0x228 */
-  __I  uint32_t RMON_T_P65TO127;                   /**< Tx 65- to 127-byte Packets Statistic Register, offset: 0x22C */
-  __I  uint32_t RMON_T_P128TO255;                  /**< Tx 128- to 255-byte Packets Statistic Register, offset: 0x230 */
-  __I  uint32_t RMON_T_P256TO511;                  /**< Tx 256- to 511-byte Packets Statistic Register, offset: 0x234 */
-  __I  uint32_t RMON_T_P512TO1023;                 /**< Tx 512- to 1023-byte Packets Statistic Register, offset: 0x238 */
-  __I  uint32_t RMON_T_P1024TO2047;                /**< Tx 1024- to 2047-byte Packets Statistic Register, offset: 0x23C */
-  __I  uint32_t RMON_T_P_GTE2048;                  /**< Tx Packets Greater Than 2048 Bytes Statistic Register, offset: 0x240 */
-  __I  uint32_t RMON_T_OCTETS;                     /**< Tx Octets Statistic Register, offset: 0x244 */
+  __I  uint32_t RMON_T_PACKETS;                    /**< Tx Packet Count Statistic, offset: 0x204 */
+  __I  uint32_t RMON_T_BC_PKT;                     /**< Tx Broadcast Packets Statistic, offset: 0x208 */
+  __I  uint32_t RMON_T_MC_PKT;                     /**< Tx Multicast Packets Statistic, offset: 0x20C */
+  __I  uint32_t RMON_T_CRC_ALIGN;                  /**< Tx Packets with CRC/Align Error Statistic, offset: 0x210 */
+  __I  uint32_t RMON_T_UNDERSIZE;                  /**< Tx Packets Less Than Bytes and Good CRC Statistic, offset: 0x214 */
+  __I  uint32_t RMON_T_OVERSIZE;                   /**< Tx Packets GT MAX_FL bytes and Good CRC Statistic, offset: 0x218 */
+  __I  uint32_t RMON_T_FRAG;                       /**< Tx Packets Less Than 64 Bytes and Bad CRC Statistic, offset: 0x21C */
+  __I  uint32_t RMON_T_JAB;                        /**< Tx Packets Greater Than MAX_FL bytes and Bad CRC Statistic, offset: 0x220 */
+  __I  uint32_t RMON_T_COL;                        /**< Tx Collision Count Statistic, offset: 0x224 */
+  __I  uint32_t RMON_T_P64;                        /**< Tx 64-Byte Packets Statistic, offset: 0x228 */
+  __I  uint32_t RMON_T_P65TO127;                   /**< Tx 65- to 127-byte Packets Statistic, offset: 0x22C */
+  __I  uint32_t RMON_T_P128TO255;                  /**< Tx 128- to 255-byte Packets Statistic, offset: 0x230 */
+  __I  uint32_t RMON_T_P256TO511;                  /**< Tx 256- to 511-byte Packets Statistic, offset: 0x234 */
+  __I  uint32_t RMON_T_P512TO1023;                 /**< Tx 512- to 1023-byte Packets Statistic, offset: 0x238 */
+  __I  uint32_t RMON_T_P1024TO2047;                /**< Tx 1024- to 2047-byte Packets Statistic, offset: 0x23C */
+  __I  uint32_t RMON_T_P_GTE2048;                  /**< Tx Packets Greater Than 2048 Bytes Statistic, offset: 0x240 */
+  __I  uint32_t RMON_T_OCTETS;                     /**< Tx Octets Statistic, offset: 0x244 */
        uint8_t RESERVED_17[4];
-  __I  uint32_t IEEE_T_FRAME_OK;                   /**< Frames Transmitted OK Statistic Register, offset: 0x24C */
-  __I  uint32_t IEEE_T_1COL;                       /**< Frames Transmitted with Single Collision Statistic Register, offset: 0x250 */
-  __I  uint32_t IEEE_T_MCOL;                       /**< Frames Transmitted with Multiple Collisions Statistic Register, offset: 0x254 */
-  __I  uint32_t IEEE_T_DEF;                        /**< Frames Transmitted after Deferral Delay Statistic Register, offset: 0x258 */
-  __I  uint32_t IEEE_T_LCOL;                       /**< Frames Transmitted with Late Collision Statistic Register, offset: 0x25C */
-  __I  uint32_t IEEE_T_EXCOL;                      /**< Frames Transmitted with Excessive Collisions Statistic Register, offset: 0x260 */
-  __I  uint32_t IEEE_T_MACERR;                     /**< Frames Transmitted with Tx FIFO Underrun Statistic Register, offset: 0x264 */
-  __I  uint32_t IEEE_T_CSERR;                      /**< Frames Transmitted with Carrier Sense Error Statistic Register, offset: 0x268 */
-  __I  uint32_t IEEE_T_SQE;                        /**< Reserved Statistic Register, offset: 0x26C */
-  __I  uint32_t IEEE_T_FDXFC;                      /**< Flow Control Pause Frames Transmitted Statistic Register, offset: 0x270 */
-  __I  uint32_t IEEE_T_OCTETS_OK;                  /**< Octet Count for Frames Transmitted w/o Error Statistic Register, offset: 0x274 */
+  __I  uint32_t IEEE_T_FRAME_OK;                   /**< Frames Transmitted OK Statistic, offset: 0x24C */
+  __I  uint32_t IEEE_T_1COL;                       /**< Frames Transmitted with Single Collision Statistic, offset: 0x250 */
+  __I  uint32_t IEEE_T_MCOL;                       /**< Frames Transmitted with Multiple Collisions Statistic, offset: 0x254 */
+  __I  uint32_t IEEE_T_DEF;                        /**< Frames Transmitted after Deferral Delay Statistic, offset: 0x258 */
+  __I  uint32_t IEEE_T_LCOL;                       /**< Frames Transmitted with Late Collision Statistic, offset: 0x25C */
+  __I  uint32_t IEEE_T_EXCOL;                      /**< Frames Transmitted with Excessive Collisions Statistic, offset: 0x260 */
+  __I  uint32_t IEEE_T_MACERR;                     /**< Frames Transmitted with Tx FIFO Underrun Statistic, offset: 0x264 */
+  __I  uint32_t IEEE_T_CSERR;                      /**< Frames Transmitted with Carrier Sense Error Statistic, offset: 0x268 */
+  __I  uint32_t IEEE_T_SQE;                        /**< Reserved Statistic, offset: 0x26C */
+  __I  uint32_t IEEE_T_FDXFC;                      /**< Flow Control Pause Frames Transmitted Statistic, offset: 0x270 */
+  __I  uint32_t IEEE_T_OCTETS_OK;                  /**< Octet Count for Frames Transmitted w/o Error Statistic, offset: 0x274 */
        uint8_t RESERVED_18[12];
-  __I  uint32_t RMON_R_PACKETS;                    /**< Rx Packet Count Statistic Register, offset: 0x284 */
-  __I  uint32_t RMON_R_BC_PKT;                     /**< Rx Broadcast Packets Statistic Register, offset: 0x288 */
-  __I  uint32_t RMON_R_MC_PKT;                     /**< Rx Multicast Packets Statistic Register, offset: 0x28C */
-  __I  uint32_t RMON_R_CRC_ALIGN;                  /**< Rx Packets with CRC/Align Error Statistic Register, offset: 0x290 */
-  __I  uint32_t RMON_R_UNDERSIZE;                  /**< Rx Packets with Less Than 64 Bytes and Good CRC Statistic Register, offset: 0x294 */
-  __I  uint32_t RMON_R_OVERSIZE;                   /**< Rx Packets Greater Than MAX_FL and Good CRC Statistic Register, offset: 0x298 */
-  __I  uint32_t RMON_R_FRAG;                       /**< Rx Packets Less Than 64 Bytes and Bad CRC Statistic Register, offset: 0x29C */
-  __I  uint32_t RMON_R_JAB;                        /**< Rx Packets Greater Than MAX_FL Bytes and Bad CRC Statistic Register, offset: 0x2A0 */
+  __I  uint32_t RMON_R_PACKETS;                    /**< Rx Packet Count Statistic, offset: 0x284 */
+  __I  uint32_t RMON_R_BC_PKT;                     /**< Rx Broadcast Packets Statistic, offset: 0x288 */
+  __I  uint32_t RMON_R_MC_PKT;                     /**< Rx Multicast Packets Statistic, offset: 0x28C */
+  __I  uint32_t RMON_R_CRC_ALIGN;                  /**< Rx Packets with CRC/Align Error Statistic, offset: 0x290 */
+  __I  uint32_t RMON_R_UNDERSIZE;                  /**< Rx Packets with Less Than 64 Bytes and Good CRC Statistic, offset: 0x294 */
+  __I  uint32_t RMON_R_OVERSIZE;                   /**< Rx Packets Greater Than MAX_FL and Good CRC Statistic, offset: 0x298 */
+  __I  uint32_t RMON_R_FRAG;                       /**< Rx Packets Less Than 64 Bytes and Bad CRC Statistic, offset: 0x29C */
+  __I  uint32_t RMON_R_JAB;                        /**< Rx Packets Greater Than MAX_FL Bytes and Bad CRC Statistic, offset: 0x2A0 */
        uint8_t RESERVED_19[4];
-  __I  uint32_t RMON_R_P64;                        /**< Rx 64-Byte Packets Statistic Register, offset: 0x2A8 */
-  __I  uint32_t RMON_R_P65TO127;                   /**< Rx 65- to 127-Byte Packets Statistic Register, offset: 0x2AC */
-  __I  uint32_t RMON_R_P128TO255;                  /**< Rx 128- to 255-Byte Packets Statistic Register, offset: 0x2B0 */
-  __I  uint32_t RMON_R_P256TO511;                  /**< Rx 256- to 511-Byte Packets Statistic Register, offset: 0x2B4 */
-  __I  uint32_t RMON_R_P512TO1023;                 /**< Rx 512- to 1023-Byte Packets Statistic Register, offset: 0x2B8 */
-  __I  uint32_t RMON_R_P1024TO2047;                /**< Rx 1024- to 2047-Byte Packets Statistic Register, offset: 0x2BC */
-  __I  uint32_t RMON_R_P_GTE2048;                  /**< Rx Packets Greater than 2048 Bytes Statistic Register, offset: 0x2C0 */
-  __I  uint32_t RMON_R_OCTETS;                     /**< Rx Octets Statistic Register, offset: 0x2C4 */
-  __I  uint32_t IEEE_R_DROP;                       /**< Frames not Counted Correctly Statistic Register, offset: 0x2C8 */
-  __I  uint32_t IEEE_R_FRAME_OK;                   /**< Frames Received OK Statistic Register, offset: 0x2CC */
-  __I  uint32_t IEEE_R_CRC;                        /**< Frames Received with CRC Error Statistic Register, offset: 0x2D0 */
-  __I  uint32_t IEEE_R_ALIGN;                      /**< Frames Received with Alignment Error Statistic Register, offset: 0x2D4 */
-  __I  uint32_t IEEE_R_MACERR;                     /**< Receive FIFO Overflow Count Statistic Register, offset: 0x2D8 */
-  __I  uint32_t IEEE_R_FDXFC;                      /**< Flow Control Pause Frames Received Statistic Register, offset: 0x2DC */
-  __I  uint32_t IEEE_R_OCTETS_OK;                  /**< Octet Count for Frames Received without Error Statistic Register, offset: 0x2E0 */
+  __I  uint32_t RMON_R_P64;                        /**< Rx 64-Byte Packets Statistic, offset: 0x2A8 */
+  __I  uint32_t RMON_R_P65TO127;                   /**< Rx 65- to 127-Byte Packets Statistic, offset: 0x2AC */
+  __I  uint32_t RMON_R_P128TO255;                  /**< Rx 128- to 255-Byte Packets Statistic, offset: 0x2B0 */
+  __I  uint32_t RMON_R_P256TO511;                  /**< Rx 256- to 511-Byte Packets Statistic, offset: 0x2B4 */
+  __I  uint32_t RMON_R_P512TO1023;                 /**< Rx 512- to 1023-Byte Packets Statistic, offset: 0x2B8 */
+  __I  uint32_t RMON_R_P1024TO2047;                /**< Rx 1024- to 2047-Byte Packets Statistic, offset: 0x2BC */
+  __I  uint32_t RMON_R_P_GTE2048;                  /**< Rx Packets Greater than 2048 Bytes Statistic, offset: 0x2C0 */
+  __I  uint32_t RMON_R_OCTETS;                     /**< Rx Octets Statistic, offset: 0x2C4 */
+  __I  uint32_t IEEE_R_DROP;                       /**< Frames not Counted Correctly Statistic, offset: 0x2C8 */
+  __I  uint32_t IEEE_R_FRAME_OK;                   /**< Frames Received OK Statistic, offset: 0x2CC */
+  __I  uint32_t IEEE_R_CRC;                        /**< Frames Received with CRC Error Statistic, offset: 0x2D0 */
+  __I  uint32_t IEEE_R_ALIGN;                      /**< Frames Received with Alignment Error Statistic, offset: 0x2D4 */
+  __I  uint32_t IEEE_R_MACERR;                     /**< Receive FIFO Overflow Count Statistic, offset: 0x2D8 */
+  __I  uint32_t IEEE_R_FDXFC;                      /**< Flow Control Pause Frames Received Statistic, offset: 0x2DC */
+  __I  uint32_t IEEE_R_OCTETS_OK;                  /**< Octet Count for Frames Received without Error Statistic, offset: 0x2E0 */
        uint8_t RESERVED_20[284];
-  __IO uint32_t ATCR;                              /**< Adjustable Timer Control Register, offset: 0x400 */
-  __IO uint32_t ATVR;                              /**< Timer Value Register, offset: 0x404 */
-  __IO uint32_t ATOFF;                             /**< Timer Offset Register, offset: 0x408 */
-  __IO uint32_t ATPER;                             /**< Timer Period Register, offset: 0x40C */
-  __IO uint32_t ATCOR;                             /**< Timer Correction Register, offset: 0x410 */
-  __IO uint32_t ATINC;                             /**< Time-Stamping Clock Period Register, offset: 0x414 */
+  __IO uint32_t ATCR;                              /**< Adjustable Timer Control, offset: 0x400 */
+  __IO uint32_t ATVR;                              /**< Timer Value, offset: 0x404 */
+  __IO uint32_t ATOFF;                             /**< Timer Offset, offset: 0x408 */
+  __IO uint32_t ATPER;                             /**< Timer Period, offset: 0x40C */
+  __IO uint32_t ATCOR;                             /**< Timer Correction, offset: 0x410 */
+  __IO uint32_t ATINC;                             /**< Time-Stamping Clock Period, offset: 0x414 */
   __I  uint32_t ATSTMP;                            /**< Timestamp of Last Transmitted Frame, offset: 0x418 */
        uint8_t RESERVED_21[488];
-  __IO uint32_t TGSR;                              /**< Timer Global Status Register, offset: 0x604 */
+  __IO uint32_t TGSR;                              /**< Timer Global Status, offset: 0x604 */
   struct {                                         /* offset: 0x608, array step: 0x8 */
-    __IO uint32_t TCSR;                              /**< Timer Control Status Register, array offset: 0x608, array step: 0x8 */
-    __IO uint32_t TCCR;                              /**< Timer Compare Capture Register, array offset: 0x60C, array step: 0x8 */
+    __IO uint32_t TCSR;                              /**< Timer Control Status, array offset: 0x608, array step: 0x8 */
+    __IO uint32_t TCCR;                              /**< Timer Compare Capture, array offset: 0x60C, array step: 0x8 */
   } CHANNEL[ENET_CHANNEL_COUNT];
 } ENET_Type;
 
@@ -307,7 +311,7 @@ typedef struct {
  * @{
  */
 
-/*! @name EIR - Interrupt Event Register */
+/*! @name EIR - Interrupt Event */
 /*! @{ */
 
 #define ENET_EIR_RXB1_MASK                       (0x1U)
@@ -443,7 +447,7 @@ typedef struct {
 #define ENET_EIR_BABR(x)                         (((uint32_t)(((uint32_t)(x)) << ENET_EIR_BABR_SHIFT)) & ENET_EIR_BABR_MASK)
 /*! @} */
 
-/*! @name EIMR - Interrupt Mask Register */
+/*! @name EIMR - Interrupt Mask */
 /*! @{ */
 
 #define ENET_EIMR_RXB1_MASK                      (0x1U)
@@ -681,7 +685,7 @@ typedef struct {
 #define ENET_TDAR_TDAR(x)                        (((uint32_t)(((uint32_t)(x)) << ENET_TDAR_TDAR_SHIFT)) & ENET_TDAR_TDAR_MASK)
 /*! @} */
 
-/*! @name ECR - Ethernet Control Register */
+/*! @name ECR - Ethernet Control */
 /*! @{ */
 
 #define ENET_ECR_RESET_MASK                      (0x1U)
@@ -747,7 +751,7 @@ typedef struct {
 
 #define ENET_ECR_SVLANEN_MASK                    (0x200U)
 #define ENET_ECR_SVLANEN_SHIFT                   (9U)
-/*! SVLANEN - S-VLAN enable
+/*! SVLANEN - S-VLAN Enable
  *  0b0..Only the EtherType 0x8100 will be considered for VLAN detection.
  *  0b1..The EtherType 0x88a8 will be considered in addition to 0x8100 (C-VLAN) to identify a VLAN frame in
  *       receive. When a VLAN frame is identified, the two bytes following the VLAN type are extracted and used by the
@@ -757,7 +761,7 @@ typedef struct {
 
 #define ENET_ECR_VLANUSE2ND_MASK                 (0x400U)
 #define ENET_ECR_VLANUSE2ND_SHIFT                (10U)
-/*! VLANUSE2ND - VLAN use second tag
+/*! VLANUSE2ND - VLAN Use Second Tag
  *  0b0..Always extract data from the first VLAN tag if it exists.
  *  0b1..When a double-tagged frame is detected, the data of the second tag is extracted for further processing. A
  *       double-tagged frame is defined as: The first tag can be a C-VLAN or a S-VLAN (if SVLAN_ENA = 1) The
@@ -767,7 +771,7 @@ typedef struct {
 
 #define ENET_ECR_SVLANDBL_MASK                   (0x800U)
 #define ENET_ECR_SVLANDBL_SHIFT                  (11U)
-/*! SVLANDBL - S-VLAN double tag
+/*! SVLANDBL - S-VLAN Double Tag
  *  0b0..Disable S-VLAN double tag
  *  0b1..Enable S-VLAN double tag
  */
@@ -775,14 +779,14 @@ typedef struct {
 
 #define ENET_ECR_TXC_DLY_MASK                    (0x10000U)
 #define ENET_ECR_TXC_DLY_SHIFT                   (16U)
-/*! TXC_DLY - Transmit clock delay
+/*! TXC_DLY - Transmit Clock Delay
  *  0b0..RGMII_TXC is not delayed.
  *  0b1..Generate delayed version of RGMII_TXC.
  */
 #define ENET_ECR_TXC_DLY(x)                      (((uint32_t)(((uint32_t)(x)) << ENET_ECR_TXC_DLY_SHIFT)) & ENET_ECR_TXC_DLY_MASK)
 /*! @} */
 
-/*! @name MMFR - MII Management Frame Register */
+/*! @name MMFR - MII Management Frame */
 /*! @{ */
 
 #define ENET_MMFR_DATA_MASK                      (0xFFFFU)
@@ -816,7 +820,7 @@ typedef struct {
 #define ENET_MMFR_ST(x)                          (((uint32_t)(((uint32_t)(x)) << ENET_MMFR_ST_SHIFT)) & ENET_MMFR_ST_MASK)
 /*! @} */
 
-/*! @name MSCR - MII Speed Control Register */
+/*! @name MSCR - MII Speed Control */
 /*! @{ */
 
 #define ENET_MSCR_MII_SPEED_MASK                 (0x7EU)
@@ -843,7 +847,7 @@ typedef struct {
 #define ENET_MSCR_HOLDTIME(x)                    (((uint32_t)(((uint32_t)(x)) << ENET_MSCR_HOLDTIME_SHIFT)) & ENET_MSCR_HOLDTIME_MASK)
 /*! @} */
 
-/*! @name MIBC - MIB Control Register */
+/*! @name MIBC - MIB Control */
 /*! @{ */
 
 #define ENET_MIBC_MIB_CLEAR_MASK                 (0x20000000U)
@@ -871,7 +875,7 @@ typedef struct {
 #define ENET_MIBC_MIB_DIS(x)                     (((uint32_t)(((uint32_t)(x)) << ENET_MIBC_MIB_DIS_SHIFT)) & ENET_MIBC_MIB_DIS_MASK)
 /*! @} */
 
-/*! @name RCR - Receive Control Register */
+/*! @name RCR - Receive Control */
 /*! @{ */
 
 #define ENET_RCR_LOOP_MASK                       (0x1U)
@@ -926,8 +930,7 @@ typedef struct {
 #define ENET_RCR_RGMII_EN_SHIFT                  (6U)
 /*! RGMII_EN - RGMII Mode Enable
  *  0b0..MAC configured for non-RGMII operation
- *  0b1..MAC configured for RGMII operation. If ECR[SPEED] is set, the MAC is in RGMII 1000-Mbit/s mode. If
- *       ECR[SPEED] is cleared, the MAC is in RGMII 10/100-Mbit/s mode.
+ *  0b1..MAC configured for RGMII operation.
  */
 #define ENET_RCR_RGMII_EN(x)                     (((uint32_t)(((uint32_t)(x)) << ENET_RCR_RGMII_EN_SHIFT)) & ENET_RCR_RGMII_EN_MASK)
 
@@ -1001,7 +1004,7 @@ typedef struct {
 #define ENET_RCR_GRS(x)                          (((uint32_t)(((uint32_t)(x)) << ENET_RCR_GRS_SHIFT)) & ENET_RCR_GRS_MASK)
 /*! @} */
 
-/*! @name TCR - Transmit Control Register */
+/*! @name TCR - Transmit Control */
 /*! @{ */
 
 #define ENET_TCR_GTS_MASK                        (0x1U)
@@ -1060,7 +1063,7 @@ typedef struct {
 #define ENET_TCR_CRCFWD(x)                       (((uint32_t)(((uint32_t)(x)) << ENET_TCR_CRCFWD_SHIFT)) & ENET_TCR_CRCFWD_MASK)
 /*! @} */
 
-/*! @name PALR - Physical Address Lower Register */
+/*! @name PALR - Physical Address Lower */
 /*! @{ */
 
 #define ENET_PALR_PADDR1_MASK                    (0xFFFFFFFFU)
@@ -1069,7 +1072,7 @@ typedef struct {
 #define ENET_PALR_PADDR1(x)                      (((uint32_t)(((uint32_t)(x)) << ENET_PALR_PADDR1_SHIFT)) & ENET_PALR_PADDR1_MASK)
 /*! @} */
 
-/*! @name PAUR - Physical Address Upper Register */
+/*! @name PAUR - Physical Address Upper */
 /*! @{ */
 
 #define ENET_PAUR_TYPE_MASK                      (0xFFFFU)
@@ -1082,7 +1085,7 @@ typedef struct {
 #define ENET_PAUR_PADDR2(x)                      (((uint32_t)(((uint32_t)(x)) << ENET_PAUR_PADDR2_SHIFT)) & ENET_PAUR_PADDR2_MASK)
 /*! @} */
 
-/*! @name OPD - Opcode/Pause Duration Register */
+/*! @name OPD - Opcode/Pause Duration */
 /*! @{ */
 
 #define ENET_OPD_PAUSE_DUR_MASK                  (0xFFFFU)
@@ -1096,7 +1099,7 @@ typedef struct {
 #define ENET_OPD_OPCODE(x)                       (((uint32_t)(((uint32_t)(x)) << ENET_OPD_OPCODE_SHIFT)) & ENET_OPD_OPCODE_MASK)
 /*! @} */
 
-/*! @name TXIC - Transmit Interrupt Coalescing Register */
+/*! @name TXIC - Transmit Interrupt Coalescing */
 /*! @{ */
 
 #define ENET_TXIC_ICTT_MASK                      (0xFFFFU)
@@ -1126,7 +1129,7 @@ typedef struct {
 #define ENET_TXIC_ICEN(x)                        (((uint32_t)(((uint32_t)(x)) << ENET_TXIC_ICEN_SHIFT)) & ENET_TXIC_ICEN_MASK)
 /*! @} */
 
-/*! @name RXIC - Receive Interrupt Coalescing Register */
+/*! @name RXIC - Receive Interrupt Coalescing */
 /*! @{ */
 
 #define ENET_RXIC_ICTT_MASK                      (0xFFFFU)
@@ -1156,7 +1159,7 @@ typedef struct {
 #define ENET_RXIC_ICEN(x)                        (((uint32_t)(((uint32_t)(x)) << ENET_RXIC_ICEN_SHIFT)) & ENET_RXIC_ICEN_MASK)
 /*! @} */
 
-/*! @name IAUR - Descriptor Individual Upper Address Register */
+/*! @name IAUR - Descriptor Individual Upper Address */
 /*! @{ */
 
 #define ENET_IAUR_IADDR1_MASK                    (0xFFFFFFFFU)
@@ -1164,7 +1167,7 @@ typedef struct {
 #define ENET_IAUR_IADDR1(x)                      (((uint32_t)(((uint32_t)(x)) << ENET_IAUR_IADDR1_SHIFT)) & ENET_IAUR_IADDR1_MASK)
 /*! @} */
 
-/*! @name IALR - Descriptor Individual Lower Address Register */
+/*! @name IALR - Descriptor Individual Lower Address */
 /*! @{ */
 
 #define ENET_IALR_IADDR2_MASK                    (0xFFFFFFFFU)
@@ -1172,7 +1175,7 @@ typedef struct {
 #define ENET_IALR_IADDR2(x)                      (((uint32_t)(((uint32_t)(x)) << ENET_IALR_IADDR2_SHIFT)) & ENET_IALR_IADDR2_MASK)
 /*! @} */
 
-/*! @name GAUR - Descriptor Group Upper Address Register */
+/*! @name GAUR - Descriptor Group Upper Address */
 /*! @{ */
 
 #define ENET_GAUR_GADDR1_MASK                    (0xFFFFFFFFU)
@@ -1180,7 +1183,7 @@ typedef struct {
 #define ENET_GAUR_GADDR1(x)                      (((uint32_t)(((uint32_t)(x)) << ENET_GAUR_GADDR1_SHIFT)) & ENET_GAUR_GADDR1_MASK)
 /*! @} */
 
-/*! @name GALR - Descriptor Group Lower Address Register */
+/*! @name GALR - Descriptor Group Lower Address */
 /*! @{ */
 
 #define ENET_GALR_GADDR2_MASK                    (0xFFFFFFFFU)
@@ -1188,7 +1191,7 @@ typedef struct {
 #define ENET_GALR_GADDR2(x)                      (((uint32_t)(((uint32_t)(x)) << ENET_GALR_GADDR2_SHIFT)) & ENET_GALR_GADDR2_MASK)
 /*! @} */
 
-/*! @name TFWR - Transmit FIFO Watermark Register */
+/*! @name TFWR - Transmit FIFO Watermark */
 /*! @{ */
 
 #define ENET_TFWR_TFWR_MASK                      (0x3FU)
@@ -1211,7 +1214,7 @@ typedef struct {
 #define ENET_TFWR_STRFWD(x)                      (((uint32_t)(((uint32_t)(x)) << ENET_TFWR_STRFWD_SHIFT)) & ENET_TFWR_STRFWD_MASK)
 /*! @} */
 
-/*! @name RDSR1 - Receive Descriptor Ring 1 Start Register */
+/*! @name RDSR1 - Receive Descriptor Ring 1 Start */
 /*! @{ */
 
 #define ENET_RDSR1_R_DES_START_MASK              (0xFFFFFFF8U)
@@ -1219,7 +1222,7 @@ typedef struct {
 #define ENET_RDSR1_R_DES_START(x)                (((uint32_t)(((uint32_t)(x)) << ENET_RDSR1_R_DES_START_SHIFT)) & ENET_RDSR1_R_DES_START_MASK)
 /*! @} */
 
-/*! @name TDSR1 - Transmit Buffer Descriptor Ring 1 Start Register */
+/*! @name TDSR1 - Transmit Buffer Descriptor Ring 1 Start */
 /*! @{ */
 
 #define ENET_TDSR1_X_DES_START_MASK              (0xFFFFFFF8U)
@@ -1235,7 +1238,7 @@ typedef struct {
 #define ENET_MRBR1_R_BUF_SIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ENET_MRBR1_R_BUF_SIZE_SHIFT)) & ENET_MRBR1_R_BUF_SIZE_MASK)
 /*! @} */
 
-/*! @name RDSR2 - Receive Descriptor Ring 2 Start Register */
+/*! @name RDSR2 - Receive Descriptor Ring 2 Start */
 /*! @{ */
 
 #define ENET_RDSR2_R_DES_START_MASK              (0xFFFFFFF8U)
@@ -1243,7 +1246,7 @@ typedef struct {
 #define ENET_RDSR2_R_DES_START(x)                (((uint32_t)(((uint32_t)(x)) << ENET_RDSR2_R_DES_START_SHIFT)) & ENET_RDSR2_R_DES_START_MASK)
 /*! @} */
 
-/*! @name TDSR2 - Transmit Buffer Descriptor Ring 2 Start Register */
+/*! @name TDSR2 - Transmit Buffer Descriptor Ring 2 Start */
 /*! @{ */
 
 #define ENET_TDSR2_X_DES_START_MASK              (0xFFFFFFF8U)
@@ -1259,7 +1262,7 @@ typedef struct {
 #define ENET_MRBR2_R_BUF_SIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ENET_MRBR2_R_BUF_SIZE_SHIFT)) & ENET_MRBR2_R_BUF_SIZE_MASK)
 /*! @} */
 
-/*! @name RDSR - Receive Descriptor Ring 0 Start Register */
+/*! @name RDSR - Receive Descriptor Ring 0 Start */
 /*! @{ */
 
 #define ENET_RDSR_R_DES_START_MASK               (0xFFFFFFF8U)
@@ -1267,7 +1270,7 @@ typedef struct {
 #define ENET_RDSR_R_DES_START(x)                 (((uint32_t)(((uint32_t)(x)) << ENET_RDSR_R_DES_START_SHIFT)) & ENET_RDSR_R_DES_START_MASK)
 /*! @} */
 
-/*! @name TDSR - Transmit Buffer Descriptor Ring 0 Start Register */
+/*! @name TDSR - Transmit Buffer Descriptor Ring 0 Start */
 /*! @{ */
 
 #define ENET_TDSR_X_DES_START_MASK               (0xFFFFFFF8U)
@@ -1586,7 +1589,7 @@ typedef struct {
 #define ENET_QOS_RX_FLUSH2(x)                    (((uint32_t)(((uint32_t)(x)) << ENET_QOS_RX_FLUSH2_SHIFT)) & ENET_QOS_RX_FLUSH2_MASK)
 /*! @} */
 
-/*! @name RMON_T_PACKETS - Tx Packet Count Statistic Register */
+/*! @name RMON_T_PACKETS - Tx Packet Count Statistic */
 /*! @{ */
 
 #define ENET_RMON_T_PACKETS_TXPKTS_MASK          (0xFFFFU)
@@ -1595,7 +1598,7 @@ typedef struct {
 #define ENET_RMON_T_PACKETS_TXPKTS(x)            (((uint32_t)(((uint32_t)(x)) << ENET_RMON_T_PACKETS_TXPKTS_SHIFT)) & ENET_RMON_T_PACKETS_TXPKTS_MASK)
 /*! @} */
 
-/*! @name RMON_T_BC_PKT - Tx Broadcast Packets Statistic Register */
+/*! @name RMON_T_BC_PKT - Tx Broadcast Packets Statistic */
 /*! @{ */
 
 #define ENET_RMON_T_BC_PKT_TXPKTS_MASK           (0xFFFFU)
@@ -1604,7 +1607,7 @@ typedef struct {
 #define ENET_RMON_T_BC_PKT_TXPKTS(x)             (((uint32_t)(((uint32_t)(x)) << ENET_RMON_T_BC_PKT_TXPKTS_SHIFT)) & ENET_RMON_T_BC_PKT_TXPKTS_MASK)
 /*! @} */
 
-/*! @name RMON_T_MC_PKT - Tx Multicast Packets Statistic Register */
+/*! @name RMON_T_MC_PKT - Tx Multicast Packets Statistic */
 /*! @{ */
 
 #define ENET_RMON_T_MC_PKT_TXPKTS_MASK           (0xFFFFU)
@@ -1613,7 +1616,7 @@ typedef struct {
 #define ENET_RMON_T_MC_PKT_TXPKTS(x)             (((uint32_t)(((uint32_t)(x)) << ENET_RMON_T_MC_PKT_TXPKTS_SHIFT)) & ENET_RMON_T_MC_PKT_TXPKTS_MASK)
 /*! @} */
 
-/*! @name RMON_T_CRC_ALIGN - Tx Packets with CRC/Align Error Statistic Register */
+/*! @name RMON_T_CRC_ALIGN - Tx Packets with CRC/Align Error Statistic */
 /*! @{ */
 
 #define ENET_RMON_T_CRC_ALIGN_TXPKTS_MASK        (0xFFFFU)
@@ -1622,7 +1625,7 @@ typedef struct {
 #define ENET_RMON_T_CRC_ALIGN_TXPKTS(x)          (((uint32_t)(((uint32_t)(x)) << ENET_RMON_T_CRC_ALIGN_TXPKTS_SHIFT)) & ENET_RMON_T_CRC_ALIGN_TXPKTS_MASK)
 /*! @} */
 
-/*! @name RMON_T_UNDERSIZE - Tx Packets Less Than Bytes and Good CRC Statistic Register */
+/*! @name RMON_T_UNDERSIZE - Tx Packets Less Than Bytes and Good CRC Statistic */
 /*! @{ */
 
 #define ENET_RMON_T_UNDERSIZE_TXPKTS_MASK        (0xFFFFU)
@@ -1631,7 +1634,7 @@ typedef struct {
 #define ENET_RMON_T_UNDERSIZE_TXPKTS(x)          (((uint32_t)(((uint32_t)(x)) << ENET_RMON_T_UNDERSIZE_TXPKTS_SHIFT)) & ENET_RMON_T_UNDERSIZE_TXPKTS_MASK)
 /*! @} */
 
-/*! @name RMON_T_OVERSIZE - Tx Packets GT MAX_FL bytes and Good CRC Statistic Register */
+/*! @name RMON_T_OVERSIZE - Tx Packets GT MAX_FL bytes and Good CRC Statistic */
 /*! @{ */
 
 #define ENET_RMON_T_OVERSIZE_TXPKTS_MASK         (0xFFFFU)
@@ -1640,7 +1643,7 @@ typedef struct {
 #define ENET_RMON_T_OVERSIZE_TXPKTS(x)           (((uint32_t)(((uint32_t)(x)) << ENET_RMON_T_OVERSIZE_TXPKTS_SHIFT)) & ENET_RMON_T_OVERSIZE_TXPKTS_MASK)
 /*! @} */
 
-/*! @name RMON_T_FRAG - Tx Packets Less Than 64 Bytes and Bad CRC Statistic Register */
+/*! @name RMON_T_FRAG - Tx Packets Less Than 64 Bytes and Bad CRC Statistic */
 /*! @{ */
 
 #define ENET_RMON_T_FRAG_TXPKTS_MASK             (0xFFFFU)
@@ -1649,7 +1652,7 @@ typedef struct {
 #define ENET_RMON_T_FRAG_TXPKTS(x)               (((uint32_t)(((uint32_t)(x)) << ENET_RMON_T_FRAG_TXPKTS_SHIFT)) & ENET_RMON_T_FRAG_TXPKTS_MASK)
 /*! @} */
 
-/*! @name RMON_T_JAB - Tx Packets Greater Than MAX_FL bytes and Bad CRC Statistic Register */
+/*! @name RMON_T_JAB - Tx Packets Greater Than MAX_FL bytes and Bad CRC Statistic */
 /*! @{ */
 
 #define ENET_RMON_T_JAB_TXPKTS_MASK              (0xFFFFU)
@@ -1658,7 +1661,7 @@ typedef struct {
 #define ENET_RMON_T_JAB_TXPKTS(x)                (((uint32_t)(((uint32_t)(x)) << ENET_RMON_T_JAB_TXPKTS_SHIFT)) & ENET_RMON_T_JAB_TXPKTS_MASK)
 /*! @} */
 
-/*! @name RMON_T_COL - Tx Collision Count Statistic Register */
+/*! @name RMON_T_COL - Tx Collision Count Statistic */
 /*! @{ */
 
 #define ENET_RMON_T_COL_TXPKTS_MASK              (0xFFFFU)
@@ -1667,7 +1670,7 @@ typedef struct {
 #define ENET_RMON_T_COL_TXPKTS(x)                (((uint32_t)(((uint32_t)(x)) << ENET_RMON_T_COL_TXPKTS_SHIFT)) & ENET_RMON_T_COL_TXPKTS_MASK)
 /*! @} */
 
-/*! @name RMON_T_P64 - Tx 64-Byte Packets Statistic Register */
+/*! @name RMON_T_P64 - Tx 64-Byte Packets Statistic */
 /*! @{ */
 
 #define ENET_RMON_T_P64_TXPKTS_MASK              (0xFFFFU)
@@ -1676,7 +1679,7 @@ typedef struct {
 #define ENET_RMON_T_P64_TXPKTS(x)                (((uint32_t)(((uint32_t)(x)) << ENET_RMON_T_P64_TXPKTS_SHIFT)) & ENET_RMON_T_P64_TXPKTS_MASK)
 /*! @} */
 
-/*! @name RMON_T_P65TO127 - Tx 65- to 127-byte Packets Statistic Register */
+/*! @name RMON_T_P65TO127 - Tx 65- to 127-byte Packets Statistic */
 /*! @{ */
 
 #define ENET_RMON_T_P65TO127_TXPKTS_MASK         (0xFFFFU)
@@ -1685,7 +1688,7 @@ typedef struct {
 #define ENET_RMON_T_P65TO127_TXPKTS(x)           (((uint32_t)(((uint32_t)(x)) << ENET_RMON_T_P65TO127_TXPKTS_SHIFT)) & ENET_RMON_T_P65TO127_TXPKTS_MASK)
 /*! @} */
 
-/*! @name RMON_T_P128TO255 - Tx 128- to 255-byte Packets Statistic Register */
+/*! @name RMON_T_P128TO255 - Tx 128- to 255-byte Packets Statistic */
 /*! @{ */
 
 #define ENET_RMON_T_P128TO255_TXPKTS_MASK        (0xFFFFU)
@@ -1694,7 +1697,7 @@ typedef struct {
 #define ENET_RMON_T_P128TO255_TXPKTS(x)          (((uint32_t)(((uint32_t)(x)) << ENET_RMON_T_P128TO255_TXPKTS_SHIFT)) & ENET_RMON_T_P128TO255_TXPKTS_MASK)
 /*! @} */
 
-/*! @name RMON_T_P256TO511 - Tx 256- to 511-byte Packets Statistic Register */
+/*! @name RMON_T_P256TO511 - Tx 256- to 511-byte Packets Statistic */
 /*! @{ */
 
 #define ENET_RMON_T_P256TO511_TXPKTS_MASK        (0xFFFFU)
@@ -1703,7 +1706,7 @@ typedef struct {
 #define ENET_RMON_T_P256TO511_TXPKTS(x)          (((uint32_t)(((uint32_t)(x)) << ENET_RMON_T_P256TO511_TXPKTS_SHIFT)) & ENET_RMON_T_P256TO511_TXPKTS_MASK)
 /*! @} */
 
-/*! @name RMON_T_P512TO1023 - Tx 512- to 1023-byte Packets Statistic Register */
+/*! @name RMON_T_P512TO1023 - Tx 512- to 1023-byte Packets Statistic */
 /*! @{ */
 
 #define ENET_RMON_T_P512TO1023_TXPKTS_MASK       (0xFFFFU)
@@ -1712,7 +1715,7 @@ typedef struct {
 #define ENET_RMON_T_P512TO1023_TXPKTS(x)         (((uint32_t)(((uint32_t)(x)) << ENET_RMON_T_P512TO1023_TXPKTS_SHIFT)) & ENET_RMON_T_P512TO1023_TXPKTS_MASK)
 /*! @} */
 
-/*! @name RMON_T_P1024TO2047 - Tx 1024- to 2047-byte Packets Statistic Register */
+/*! @name RMON_T_P1024TO2047 - Tx 1024- to 2047-byte Packets Statistic */
 /*! @{ */
 
 #define ENET_RMON_T_P1024TO2047_TXPKTS_MASK      (0xFFFFU)
@@ -1721,7 +1724,7 @@ typedef struct {
 #define ENET_RMON_T_P1024TO2047_TXPKTS(x)        (((uint32_t)(((uint32_t)(x)) << ENET_RMON_T_P1024TO2047_TXPKTS_SHIFT)) & ENET_RMON_T_P1024TO2047_TXPKTS_MASK)
 /*! @} */
 
-/*! @name RMON_T_P_GTE2048 - Tx Packets Greater Than 2048 Bytes Statistic Register */
+/*! @name RMON_T_P_GTE2048 - Tx Packets Greater Than 2048 Bytes Statistic */
 /*! @{ */
 
 #define ENET_RMON_T_P_GTE2048_TXPKTS_MASK        (0xFFFFU)
@@ -1730,7 +1733,7 @@ typedef struct {
 #define ENET_RMON_T_P_GTE2048_TXPKTS(x)          (((uint32_t)(((uint32_t)(x)) << ENET_RMON_T_P_GTE2048_TXPKTS_SHIFT)) & ENET_RMON_T_P_GTE2048_TXPKTS_MASK)
 /*! @} */
 
-/*! @name RMON_T_OCTETS - Tx Octets Statistic Register */
+/*! @name RMON_T_OCTETS - Tx Octets Statistic */
 /*! @{ */
 
 #define ENET_RMON_T_OCTETS_TXOCTS_MASK           (0xFFFFFFFFU)
@@ -1739,7 +1742,7 @@ typedef struct {
 #define ENET_RMON_T_OCTETS_TXOCTS(x)             (((uint32_t)(((uint32_t)(x)) << ENET_RMON_T_OCTETS_TXOCTS_SHIFT)) & ENET_RMON_T_OCTETS_TXOCTS_MASK)
 /*! @} */
 
-/*! @name IEEE_T_FRAME_OK - Frames Transmitted OK Statistic Register */
+/*! @name IEEE_T_FRAME_OK - Frames Transmitted OK Statistic */
 /*! @{ */
 
 #define ENET_IEEE_T_FRAME_OK_COUNT_MASK          (0xFFFFU)
@@ -1748,7 +1751,7 @@ typedef struct {
 #define ENET_IEEE_T_FRAME_OK_COUNT(x)            (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_T_FRAME_OK_COUNT_SHIFT)) & ENET_IEEE_T_FRAME_OK_COUNT_MASK)
 /*! @} */
 
-/*! @name IEEE_T_1COL - Frames Transmitted with Single Collision Statistic Register */
+/*! @name IEEE_T_1COL - Frames Transmitted with Single Collision Statistic */
 /*! @{ */
 
 #define ENET_IEEE_T_1COL_COUNT_MASK              (0xFFFFU)
@@ -1757,7 +1760,7 @@ typedef struct {
 #define ENET_IEEE_T_1COL_COUNT(x)                (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_T_1COL_COUNT_SHIFT)) & ENET_IEEE_T_1COL_COUNT_MASK)
 /*! @} */
 
-/*! @name IEEE_T_MCOL - Frames Transmitted with Multiple Collisions Statistic Register */
+/*! @name IEEE_T_MCOL - Frames Transmitted with Multiple Collisions Statistic */
 /*! @{ */
 
 #define ENET_IEEE_T_MCOL_COUNT_MASK              (0xFFFFU)
@@ -1766,7 +1769,7 @@ typedef struct {
 #define ENET_IEEE_T_MCOL_COUNT(x)                (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_T_MCOL_COUNT_SHIFT)) & ENET_IEEE_T_MCOL_COUNT_MASK)
 /*! @} */
 
-/*! @name IEEE_T_DEF - Frames Transmitted after Deferral Delay Statistic Register */
+/*! @name IEEE_T_DEF - Frames Transmitted after Deferral Delay Statistic */
 /*! @{ */
 
 #define ENET_IEEE_T_DEF_COUNT_MASK               (0xFFFFU)
@@ -1775,7 +1778,7 @@ typedef struct {
 #define ENET_IEEE_T_DEF_COUNT(x)                 (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_T_DEF_COUNT_SHIFT)) & ENET_IEEE_T_DEF_COUNT_MASK)
 /*! @} */
 
-/*! @name IEEE_T_LCOL - Frames Transmitted with Late Collision Statistic Register */
+/*! @name IEEE_T_LCOL - Frames Transmitted with Late Collision Statistic */
 /*! @{ */
 
 #define ENET_IEEE_T_LCOL_COUNT_MASK              (0xFFFFU)
@@ -1784,7 +1787,7 @@ typedef struct {
 #define ENET_IEEE_T_LCOL_COUNT(x)                (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_T_LCOL_COUNT_SHIFT)) & ENET_IEEE_T_LCOL_COUNT_MASK)
 /*! @} */
 
-/*! @name IEEE_T_EXCOL - Frames Transmitted with Excessive Collisions Statistic Register */
+/*! @name IEEE_T_EXCOL - Frames Transmitted with Excessive Collisions Statistic */
 /*! @{ */
 
 #define ENET_IEEE_T_EXCOL_COUNT_MASK             (0xFFFFU)
@@ -1793,7 +1796,7 @@ typedef struct {
 #define ENET_IEEE_T_EXCOL_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_T_EXCOL_COUNT_SHIFT)) & ENET_IEEE_T_EXCOL_COUNT_MASK)
 /*! @} */
 
-/*! @name IEEE_T_MACERR - Frames Transmitted with Tx FIFO Underrun Statistic Register */
+/*! @name IEEE_T_MACERR - Frames Transmitted with Tx FIFO Underrun Statistic */
 /*! @{ */
 
 #define ENET_IEEE_T_MACERR_COUNT_MASK            (0xFFFFU)
@@ -1802,7 +1805,7 @@ typedef struct {
 #define ENET_IEEE_T_MACERR_COUNT(x)              (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_T_MACERR_COUNT_SHIFT)) & ENET_IEEE_T_MACERR_COUNT_MASK)
 /*! @} */
 
-/*! @name IEEE_T_CSERR - Frames Transmitted with Carrier Sense Error Statistic Register */
+/*! @name IEEE_T_CSERR - Frames Transmitted with Carrier Sense Error Statistic */
 /*! @{ */
 
 #define ENET_IEEE_T_CSERR_COUNT_MASK             (0xFFFFU)
@@ -1811,7 +1814,7 @@ typedef struct {
 #define ENET_IEEE_T_CSERR_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_T_CSERR_COUNT_SHIFT)) & ENET_IEEE_T_CSERR_COUNT_MASK)
 /*! @} */
 
-/*! @name IEEE_T_SQE - Reserved Statistic Register */
+/*! @name IEEE_T_SQE - Reserved Statistic */
 /*! @{ */
 
 #define ENET_IEEE_T_SQE_COUNT_MASK               (0xFFFFU)
@@ -1820,7 +1823,7 @@ typedef struct {
 #define ENET_IEEE_T_SQE_COUNT(x)                 (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_T_SQE_COUNT_SHIFT)) & ENET_IEEE_T_SQE_COUNT_MASK)
 /*! @} */
 
-/*! @name IEEE_T_FDXFC - Flow Control Pause Frames Transmitted Statistic Register */
+/*! @name IEEE_T_FDXFC - Flow Control Pause Frames Transmitted Statistic */
 /*! @{ */
 
 #define ENET_IEEE_T_FDXFC_COUNT_MASK             (0xFFFFU)
@@ -1829,7 +1832,7 @@ typedef struct {
 #define ENET_IEEE_T_FDXFC_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_T_FDXFC_COUNT_SHIFT)) & ENET_IEEE_T_FDXFC_COUNT_MASK)
 /*! @} */
 
-/*! @name IEEE_T_OCTETS_OK - Octet Count for Frames Transmitted w/o Error Statistic Register */
+/*! @name IEEE_T_OCTETS_OK - Octet Count for Frames Transmitted w/o Error Statistic */
 /*! @{ */
 
 #define ENET_IEEE_T_OCTETS_OK_COUNT_MASK         (0xFFFFFFFFU)
@@ -1838,7 +1841,7 @@ typedef struct {
 #define ENET_IEEE_T_OCTETS_OK_COUNT(x)           (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_T_OCTETS_OK_COUNT_SHIFT)) & ENET_IEEE_T_OCTETS_OK_COUNT_MASK)
 /*! @} */
 
-/*! @name RMON_R_PACKETS - Rx Packet Count Statistic Register */
+/*! @name RMON_R_PACKETS - Rx Packet Count Statistic */
 /*! @{ */
 
 #define ENET_RMON_R_PACKETS_COUNT_MASK           (0xFFFFU)
@@ -1847,7 +1850,7 @@ typedef struct {
 #define ENET_RMON_R_PACKETS_COUNT(x)             (((uint32_t)(((uint32_t)(x)) << ENET_RMON_R_PACKETS_COUNT_SHIFT)) & ENET_RMON_R_PACKETS_COUNT_MASK)
 /*! @} */
 
-/*! @name RMON_R_BC_PKT - Rx Broadcast Packets Statistic Register */
+/*! @name RMON_R_BC_PKT - Rx Broadcast Packets Statistic */
 /*! @{ */
 
 #define ENET_RMON_R_BC_PKT_COUNT_MASK            (0xFFFFU)
@@ -1856,7 +1859,7 @@ typedef struct {
 #define ENET_RMON_R_BC_PKT_COUNT(x)              (((uint32_t)(((uint32_t)(x)) << ENET_RMON_R_BC_PKT_COUNT_SHIFT)) & ENET_RMON_R_BC_PKT_COUNT_MASK)
 /*! @} */
 
-/*! @name RMON_R_MC_PKT - Rx Multicast Packets Statistic Register */
+/*! @name RMON_R_MC_PKT - Rx Multicast Packets Statistic */
 /*! @{ */
 
 #define ENET_RMON_R_MC_PKT_COUNT_MASK            (0xFFFFU)
@@ -1865,7 +1868,7 @@ typedef struct {
 #define ENET_RMON_R_MC_PKT_COUNT(x)              (((uint32_t)(((uint32_t)(x)) << ENET_RMON_R_MC_PKT_COUNT_SHIFT)) & ENET_RMON_R_MC_PKT_COUNT_MASK)
 /*! @} */
 
-/*! @name RMON_R_CRC_ALIGN - Rx Packets with CRC/Align Error Statistic Register */
+/*! @name RMON_R_CRC_ALIGN - Rx Packets with CRC/Align Error Statistic */
 /*! @{ */
 
 #define ENET_RMON_R_CRC_ALIGN_COUNT_MASK         (0xFFFFU)
@@ -1874,7 +1877,7 @@ typedef struct {
 #define ENET_RMON_R_CRC_ALIGN_COUNT(x)           (((uint32_t)(((uint32_t)(x)) << ENET_RMON_R_CRC_ALIGN_COUNT_SHIFT)) & ENET_RMON_R_CRC_ALIGN_COUNT_MASK)
 /*! @} */
 
-/*! @name RMON_R_UNDERSIZE - Rx Packets with Less Than 64 Bytes and Good CRC Statistic Register */
+/*! @name RMON_R_UNDERSIZE - Rx Packets with Less Than 64 Bytes and Good CRC Statistic */
 /*! @{ */
 
 #define ENET_RMON_R_UNDERSIZE_COUNT_MASK         (0xFFFFU)
@@ -1883,7 +1886,7 @@ typedef struct {
 #define ENET_RMON_R_UNDERSIZE_COUNT(x)           (((uint32_t)(((uint32_t)(x)) << ENET_RMON_R_UNDERSIZE_COUNT_SHIFT)) & ENET_RMON_R_UNDERSIZE_COUNT_MASK)
 /*! @} */
 
-/*! @name RMON_R_OVERSIZE - Rx Packets Greater Than MAX_FL and Good CRC Statistic Register */
+/*! @name RMON_R_OVERSIZE - Rx Packets Greater Than MAX_FL and Good CRC Statistic */
 /*! @{ */
 
 #define ENET_RMON_R_OVERSIZE_COUNT_MASK          (0xFFFFU)
@@ -1892,7 +1895,7 @@ typedef struct {
 #define ENET_RMON_R_OVERSIZE_COUNT(x)            (((uint32_t)(((uint32_t)(x)) << ENET_RMON_R_OVERSIZE_COUNT_SHIFT)) & ENET_RMON_R_OVERSIZE_COUNT_MASK)
 /*! @} */
 
-/*! @name RMON_R_FRAG - Rx Packets Less Than 64 Bytes and Bad CRC Statistic Register */
+/*! @name RMON_R_FRAG - Rx Packets Less Than 64 Bytes and Bad CRC Statistic */
 /*! @{ */
 
 #define ENET_RMON_R_FRAG_COUNT_MASK              (0xFFFFU)
@@ -1901,7 +1904,7 @@ typedef struct {
 #define ENET_RMON_R_FRAG_COUNT(x)                (((uint32_t)(((uint32_t)(x)) << ENET_RMON_R_FRAG_COUNT_SHIFT)) & ENET_RMON_R_FRAG_COUNT_MASK)
 /*! @} */
 
-/*! @name RMON_R_JAB - Rx Packets Greater Than MAX_FL Bytes and Bad CRC Statistic Register */
+/*! @name RMON_R_JAB - Rx Packets Greater Than MAX_FL Bytes and Bad CRC Statistic */
 /*! @{ */
 
 #define ENET_RMON_R_JAB_COUNT_MASK               (0xFFFFU)
@@ -1910,7 +1913,7 @@ typedef struct {
 #define ENET_RMON_R_JAB_COUNT(x)                 (((uint32_t)(((uint32_t)(x)) << ENET_RMON_R_JAB_COUNT_SHIFT)) & ENET_RMON_R_JAB_COUNT_MASK)
 /*! @} */
 
-/*! @name RMON_R_P64 - Rx 64-Byte Packets Statistic Register */
+/*! @name RMON_R_P64 - Rx 64-Byte Packets Statistic */
 /*! @{ */
 
 #define ENET_RMON_R_P64_COUNT_MASK               (0xFFFFU)
@@ -1919,7 +1922,7 @@ typedef struct {
 #define ENET_RMON_R_P64_COUNT(x)                 (((uint32_t)(((uint32_t)(x)) << ENET_RMON_R_P64_COUNT_SHIFT)) & ENET_RMON_R_P64_COUNT_MASK)
 /*! @} */
 
-/*! @name RMON_R_P65TO127 - Rx 65- to 127-Byte Packets Statistic Register */
+/*! @name RMON_R_P65TO127 - Rx 65- to 127-Byte Packets Statistic */
 /*! @{ */
 
 #define ENET_RMON_R_P65TO127_COUNT_MASK          (0xFFFFU)
@@ -1928,7 +1931,7 @@ typedef struct {
 #define ENET_RMON_R_P65TO127_COUNT(x)            (((uint32_t)(((uint32_t)(x)) << ENET_RMON_R_P65TO127_COUNT_SHIFT)) & ENET_RMON_R_P65TO127_COUNT_MASK)
 /*! @} */
 
-/*! @name RMON_R_P128TO255 - Rx 128- to 255-Byte Packets Statistic Register */
+/*! @name RMON_R_P128TO255 - Rx 128- to 255-Byte Packets Statistic */
 /*! @{ */
 
 #define ENET_RMON_R_P128TO255_COUNT_MASK         (0xFFFFU)
@@ -1937,7 +1940,7 @@ typedef struct {
 #define ENET_RMON_R_P128TO255_COUNT(x)           (((uint32_t)(((uint32_t)(x)) << ENET_RMON_R_P128TO255_COUNT_SHIFT)) & ENET_RMON_R_P128TO255_COUNT_MASK)
 /*! @} */
 
-/*! @name RMON_R_P256TO511 - Rx 256- to 511-Byte Packets Statistic Register */
+/*! @name RMON_R_P256TO511 - Rx 256- to 511-Byte Packets Statistic */
 /*! @{ */
 
 #define ENET_RMON_R_P256TO511_COUNT_MASK         (0xFFFFU)
@@ -1946,7 +1949,7 @@ typedef struct {
 #define ENET_RMON_R_P256TO511_COUNT(x)           (((uint32_t)(((uint32_t)(x)) << ENET_RMON_R_P256TO511_COUNT_SHIFT)) & ENET_RMON_R_P256TO511_COUNT_MASK)
 /*! @} */
 
-/*! @name RMON_R_P512TO1023 - Rx 512- to 1023-Byte Packets Statistic Register */
+/*! @name RMON_R_P512TO1023 - Rx 512- to 1023-Byte Packets Statistic */
 /*! @{ */
 
 #define ENET_RMON_R_P512TO1023_COUNT_MASK        (0xFFFFU)
@@ -1955,7 +1958,7 @@ typedef struct {
 #define ENET_RMON_R_P512TO1023_COUNT(x)          (((uint32_t)(((uint32_t)(x)) << ENET_RMON_R_P512TO1023_COUNT_SHIFT)) & ENET_RMON_R_P512TO1023_COUNT_MASK)
 /*! @} */
 
-/*! @name RMON_R_P1024TO2047 - Rx 1024- to 2047-Byte Packets Statistic Register */
+/*! @name RMON_R_P1024TO2047 - Rx 1024- to 2047-Byte Packets Statistic */
 /*! @{ */
 
 #define ENET_RMON_R_P1024TO2047_COUNT_MASK       (0xFFFFU)
@@ -1964,7 +1967,7 @@ typedef struct {
 #define ENET_RMON_R_P1024TO2047_COUNT(x)         (((uint32_t)(((uint32_t)(x)) << ENET_RMON_R_P1024TO2047_COUNT_SHIFT)) & ENET_RMON_R_P1024TO2047_COUNT_MASK)
 /*! @} */
 
-/*! @name RMON_R_P_GTE2048 - Rx Packets Greater than 2048 Bytes Statistic Register */
+/*! @name RMON_R_P_GTE2048 - Rx Packets Greater than 2048 Bytes Statistic */
 /*! @{ */
 
 #define ENET_RMON_R_P_GTE2048_COUNT_MASK         (0xFFFFU)
@@ -1973,7 +1976,7 @@ typedef struct {
 #define ENET_RMON_R_P_GTE2048_COUNT(x)           (((uint32_t)(((uint32_t)(x)) << ENET_RMON_R_P_GTE2048_COUNT_SHIFT)) & ENET_RMON_R_P_GTE2048_COUNT_MASK)
 /*! @} */
 
-/*! @name RMON_R_OCTETS - Rx Octets Statistic Register */
+/*! @name RMON_R_OCTETS - Rx Octets Statistic */
 /*! @{ */
 
 #define ENET_RMON_R_OCTETS_COUNT_MASK            (0xFFFFFFFFU)
@@ -1982,7 +1985,7 @@ typedef struct {
 #define ENET_RMON_R_OCTETS_COUNT(x)              (((uint32_t)(((uint32_t)(x)) << ENET_RMON_R_OCTETS_COUNT_SHIFT)) & ENET_RMON_R_OCTETS_COUNT_MASK)
 /*! @} */
 
-/*! @name IEEE_R_DROP - Frames not Counted Correctly Statistic Register */
+/*! @name IEEE_R_DROP - Frames not Counted Correctly Statistic */
 /*! @{ */
 
 #define ENET_IEEE_R_DROP_COUNT_MASK              (0xFFFFU)
@@ -1991,7 +1994,7 @@ typedef struct {
 #define ENET_IEEE_R_DROP_COUNT(x)                (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_R_DROP_COUNT_SHIFT)) & ENET_IEEE_R_DROP_COUNT_MASK)
 /*! @} */
 
-/*! @name IEEE_R_FRAME_OK - Frames Received OK Statistic Register */
+/*! @name IEEE_R_FRAME_OK - Frames Received OK Statistic */
 /*! @{ */
 
 #define ENET_IEEE_R_FRAME_OK_COUNT_MASK          (0xFFFFU)
@@ -2000,7 +2003,7 @@ typedef struct {
 #define ENET_IEEE_R_FRAME_OK_COUNT(x)            (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_R_FRAME_OK_COUNT_SHIFT)) & ENET_IEEE_R_FRAME_OK_COUNT_MASK)
 /*! @} */
 
-/*! @name IEEE_R_CRC - Frames Received with CRC Error Statistic Register */
+/*! @name IEEE_R_CRC - Frames Received with CRC Error Statistic */
 /*! @{ */
 
 #define ENET_IEEE_R_CRC_COUNT_MASK               (0xFFFFU)
@@ -2009,7 +2012,7 @@ typedef struct {
 #define ENET_IEEE_R_CRC_COUNT(x)                 (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_R_CRC_COUNT_SHIFT)) & ENET_IEEE_R_CRC_COUNT_MASK)
 /*! @} */
 
-/*! @name IEEE_R_ALIGN - Frames Received with Alignment Error Statistic Register */
+/*! @name IEEE_R_ALIGN - Frames Received with Alignment Error Statistic */
 /*! @{ */
 
 #define ENET_IEEE_R_ALIGN_COUNT_MASK             (0xFFFFU)
@@ -2018,7 +2021,7 @@ typedef struct {
 #define ENET_IEEE_R_ALIGN_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_R_ALIGN_COUNT_SHIFT)) & ENET_IEEE_R_ALIGN_COUNT_MASK)
 /*! @} */
 
-/*! @name IEEE_R_MACERR - Receive FIFO Overflow Count Statistic Register */
+/*! @name IEEE_R_MACERR - Receive FIFO Overflow Count Statistic */
 /*! @{ */
 
 #define ENET_IEEE_R_MACERR_COUNT_MASK            (0xFFFFU)
@@ -2027,7 +2030,7 @@ typedef struct {
 #define ENET_IEEE_R_MACERR_COUNT(x)              (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_R_MACERR_COUNT_SHIFT)) & ENET_IEEE_R_MACERR_COUNT_MASK)
 /*! @} */
 
-/*! @name IEEE_R_FDXFC - Flow Control Pause Frames Received Statistic Register */
+/*! @name IEEE_R_FDXFC - Flow Control Pause Frames Received Statistic */
 /*! @{ */
 
 #define ENET_IEEE_R_FDXFC_COUNT_MASK             (0xFFFFU)
@@ -2036,7 +2039,7 @@ typedef struct {
 #define ENET_IEEE_R_FDXFC_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_R_FDXFC_COUNT_SHIFT)) & ENET_IEEE_R_FDXFC_COUNT_MASK)
 /*! @} */
 
-/*! @name IEEE_R_OCTETS_OK - Octet Count for Frames Received without Error Statistic Register */
+/*! @name IEEE_R_OCTETS_OK - Octet Count for Frames Received without Error Statistic */
 /*! @{ */
 
 #define ENET_IEEE_R_OCTETS_OK_COUNT_MASK         (0xFFFFFFFFU)
@@ -2045,7 +2048,7 @@ typedef struct {
 #define ENET_IEEE_R_OCTETS_OK_COUNT(x)           (((uint32_t)(((uint32_t)(x)) << ENET_IEEE_R_OCTETS_OK_COUNT_SHIFT)) & ENET_IEEE_R_OCTETS_OK_COUNT_MASK)
 /*! @} */
 
-/*! @name ATCR - Adjustable Timer Control Register */
+/*! @name ATCR - Adjustable Timer Control */
 /*! @{ */
 
 #define ENET_ATCR_EN_MASK                        (0x1U)
@@ -2107,7 +2110,7 @@ typedef struct {
 
 #define ENET_ATCR_SLAVE_MASK                     (0x2000U)
 #define ENET_ATCR_SLAVE_SHIFT                    (13U)
-/*! SLAVE - Enable Timer Slave Mode
+/*! SLAVE - Enable Timer Follower Mode
  *  0b0..The timer is active and all configuration fields in this register are relevant.
  *  0b1..The internal timer is disabled and the externally provided timer value is used. All other fields, except
  *       CAPTURE, in this register have no effect. CAPTURE can still be used to capture the current timer value.
@@ -2115,7 +2118,7 @@ typedef struct {
 #define ENET_ATCR_SLAVE(x)                       (((uint32_t)(((uint32_t)(x)) << ENET_ATCR_SLAVE_SHIFT)) & ENET_ATCR_SLAVE_MASK)
 /*! @} */
 
-/*! @name ATVR - Timer Value Register */
+/*! @name ATVR - Timer Value */
 /*! @{ */
 
 #define ENET_ATVR_ATIME_MASK                     (0xFFFFFFFFU)
@@ -2123,7 +2126,7 @@ typedef struct {
 #define ENET_ATVR_ATIME(x)                       (((uint32_t)(((uint32_t)(x)) << ENET_ATVR_ATIME_SHIFT)) & ENET_ATVR_ATIME_MASK)
 /*! @} */
 
-/*! @name ATOFF - Timer Offset Register */
+/*! @name ATOFF - Timer Offset */
 /*! @{ */
 
 #define ENET_ATOFF_OFFSET_MASK                   (0xFFFFFFFFU)
@@ -2131,7 +2134,7 @@ typedef struct {
 #define ENET_ATOFF_OFFSET(x)                     (((uint32_t)(((uint32_t)(x)) << ENET_ATOFF_OFFSET_SHIFT)) & ENET_ATOFF_OFFSET_MASK)
 /*! @} */
 
-/*! @name ATPER - Timer Period Register */
+/*! @name ATPER - Timer Period */
 /*! @{ */
 
 #define ENET_ATPER_PERIOD_MASK                   (0xFFFFFFFFU)
@@ -2140,7 +2143,7 @@ typedef struct {
 #define ENET_ATPER_PERIOD(x)                     (((uint32_t)(((uint32_t)(x)) << ENET_ATPER_PERIOD_SHIFT)) & ENET_ATPER_PERIOD_MASK)
 /*! @} */
 
-/*! @name ATCOR - Timer Correction Register */
+/*! @name ATCOR - Timer Correction */
 /*! @{ */
 
 #define ENET_ATCOR_COR_MASK                      (0x7FFFFFFFU)
@@ -2149,7 +2152,7 @@ typedef struct {
 #define ENET_ATCOR_COR(x)                        (((uint32_t)(((uint32_t)(x)) << ENET_ATCOR_COR_SHIFT)) & ENET_ATCOR_COR_MASK)
 /*! @} */
 
-/*! @name ATINC - Time-Stamping Clock Period Register */
+/*! @name ATINC - Time-Stamping Clock Period */
 /*! @{ */
 
 #define ENET_ATINC_INC_MASK                      (0x7FU)
@@ -2174,7 +2177,7 @@ typedef struct {
 #define ENET_ATSTMP_TIMESTAMP(x)                 (((uint32_t)(((uint32_t)(x)) << ENET_ATSTMP_TIMESTAMP_SHIFT)) & ENET_ATSTMP_TIMESTAMP_MASK)
 /*! @} */
 
-/*! @name TGSR - Timer Global Status Register */
+/*! @name TGSR - Timer Global Status */
 /*! @{ */
 
 #define ENET_TGSR_TF0_MASK                       (0x1U)
@@ -2210,7 +2213,7 @@ typedef struct {
 #define ENET_TGSR_TF3(x)                         (((uint32_t)(((uint32_t)(x)) << ENET_TGSR_TF3_SHIFT)) & ENET_TGSR_TF3_MASK)
 /*! @} */
 
-/*! @name TCSR - Timer Control Status Register */
+/*! @name TCSR - Timer Control Status */
 /*! @{ */
 
 #define ENET_TCSR_TDRE_MASK                      (0x1U)
@@ -2272,7 +2275,7 @@ typedef struct {
 /* The count of ENET_TCSR */
 #define ENET_TCSR_COUNT                          (4U)
 
-/*! @name TCCR - Timer Compare Capture Register */
+/*! @name TCCR - Timer Compare Capture */
 /*! @{ */
 
 #define ENET_TCCR_TCC_MASK                       (0xFFFFFFFFU)
@@ -2288,9 +2291,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group ENET_Register_Masks */
-
-/* ENET Buffer Descriptor and Buffer Address Alignment. */
-#define ENET_BUFF_ALIGNMENT                      (64U)
 
 
 /*!

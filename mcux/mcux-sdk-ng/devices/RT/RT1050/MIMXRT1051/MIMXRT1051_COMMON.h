@@ -12,8 +12,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    IMXRT1050RM Rev.5, 07/2021 | IMXRT1050SRM Rev.2
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250701
+**     Version:             rev. 3.0, 2025-11-13
+**     Build:               b251113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1051
@@ -43,14 +43,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-13)
+**         Move enet compatibility macros to common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1051_COMMON.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2025-11-13
  * @brief CMSIS Peripheral Access Layer for MIMXRT1051
  *
  * CMSIS Peripheral Access Layer for MIMXRT1051
@@ -61,7 +63,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0200U
+#define MCU_MEM_MAP_VERSION 0x0300U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -545,6 +547,9 @@ typedef enum IRQn {
 #define ENET_Error_IRQS                          { ENET_IRQn }
 #define ENET_1588_Timer_IRQS                     { ENET_1588_Timer_IRQn }
 #define ENET_Ts_IRQS                             { ENET_IRQn }
+/* ENET Buffer Descriptor and Buffer Address Alignment. */
+#define ENET_BUFF_ALIGNMENT                      (64U)
+
 
 /* EWM - Peripheral instance base addresses */
 /** Peripheral EWM base address */
@@ -651,9 +656,9 @@ typedef enum IRQn {
 /** Array initializer of GPIO peripheral base pointers */
 #define GPIO_BASE_PTRS                           { (GPIO_Type *)0u, GPIO1, GPIO2, GPIO3, GPIO4, GPIO5 }
 /** Interrupt vectors for the GPIO peripheral type */
-#define GPIO_IRQS                                { NotAvail_IRQn, GPIO1_INT0_IRQn, GPIO1_INT1_IRQn, GPIO1_INT2_IRQn, GPIO1_INT3_IRQn, GPIO1_INT4_IRQn, GPIO1_INT5_IRQn, GPIO1_INT6_IRQn, GPIO1_INT7_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }
 #define GPIO_COMBINED_LOW_IRQS                   { NotAvail_IRQn, GPIO1_Combined_0_15_IRQn, GPIO2_Combined_0_15_IRQn, GPIO3_Combined_0_15_IRQn, GPIO4_Combined_0_15_IRQn, GPIO5_Combined_0_15_IRQn }
 #define GPIO_COMBINED_HIGH_IRQS                  { NotAvail_IRQn, GPIO1_Combined_16_31_IRQn, GPIO2_Combined_16_31_IRQn, GPIO3_Combined_16_31_IRQn, GPIO4_Combined_16_31_IRQn, GPIO5_Combined_16_31_IRQn }
+#define GPIO_IRQS                                { NotAvail_IRQn, GPIO1_INT0_IRQn, GPIO1_INT1_IRQn, GPIO1_INT2_IRQn, GPIO1_INT3_IRQn, GPIO1_INT4_IRQn, GPIO1_INT5_IRQn, GPIO1_INT6_IRQn, GPIO1_INT7_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }
 
 /* GPT - Peripheral instance base addresses */
 /** Peripheral GPT1 base address */

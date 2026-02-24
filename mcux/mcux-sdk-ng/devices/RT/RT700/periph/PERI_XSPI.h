@@ -27,8 +27,8 @@
 **                          MIMXRT798SGFOB_hifi1
 **                          MIMXRT798SGFOB_hifi4
 **
-**     Version:             rev. 4.0, 2025-06-06
-**     Build:               b250722
+**     Version:             rev. 5.1, 2025-12-08
+**     Build:               b251208
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for XSPI
@@ -50,14 +50,18 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 4.0 (2025-06-06)
 **         B0 initial version
+**     - rev. 5.0 (2025-11-13)
+**         Add puf/sdadc irq and cache64 compatibility macros to common header.
+**     - rev. 5.1 (2025-12-08)
+**         Update RM version and add pdm irq for hifi1/hifi4.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_XSPI.h
- * @version 4.0
- * @date 2025-06-06
+ * @version 5.1
+ * @date 2025-12-08
  * @brief CMSIS Peripheral Access Layer for XSPI
  *
  * CMSIS Peripheral Access Layer for XSPI
@@ -605,6 +609,14 @@ typedef struct {
 #define XSPI_BFGENCR_SEQID_RDSR_SHIFT            (0U)
 /*! SEQID_RDSR - Read Status Register Sequence ID in LUT */
 #define XSPI_BFGENCR_SEQID_RDSR(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_BFGENCR_SEQID_RDSR_SHIFT)) & XSPI_BFGENCR_SEQID_RDSR_MASK)
+
+#define XSPI_BFGENCR_WRTER_EN_MASK               (0x10U)
+#define XSPI_BFGENCR_WRTER_EN_SHIFT              (4U)
+/*! WRTER_EN - Write Terminate Enable
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define XSPI_BFGENCR_WRTER_EN(x)                 (((uint32_t)(((uint32_t)(x)) << XSPI_BFGENCR_WRTER_EN_SHIFT)) & XSPI_BFGENCR_WRTER_EN_MASK)
 
 #define XSPI_BFGENCR_SPLITEN_MASK                (0x100U)
 #define XSPI_BFGENCR_SPLITEN_SHIFT               (8U)

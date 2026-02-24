@@ -53,14 +53,14 @@
 **                          MIMXRT117HDVMAB_cm4
 **                          MIMXRT117HDVMAB_cm7
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250703
+**     Version:             rev. 4.0, 2026-01-06
+**     Build:               b260106
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ANADIG_LDO_SNVS
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -74,14 +74,18 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-13)
+**         Consolidate asrc/xbar and enet macros into common header.
+**     - rev. 4.0 (2026-01-06)
+**         Update header files to align with IMXRT1170RM Rev.5.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_ANADIG_LDO_SNVS.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-01-06
  * @brief CMSIS Peripheral Access Layer for ANADIG_LDO_SNVS
  *
  * CMSIS Peripheral Access Layer for ANADIG_LDO_SNVS
@@ -214,6 +218,16 @@ typedef struct {
 #define ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_ALWAYS_4MA_PULLDOWN_EN_SHIFT (8U)
 /*! ALWAYS_4MA_PULLDOWN_EN - always_4ma_pulldown_en */
 #define ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_ALWAYS_4MA_PULLDOWN_EN(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_ALWAYS_4MA_PULLDOWN_EN_SHIFT)) & ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_ALWAYS_4MA_PULLDOWN_EN_MASK)
+
+#define ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_BO_EN_MASK (0x10000U)
+#define ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_BO_EN_SHIFT (16U)
+/*! BO_EN - BO_EN */
+#define ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_BO_EN(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_BO_EN_SHIFT)) & ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_BO_EN_MASK)
+
+#define ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_BO_OFFSET_MASK (0x60000U)
+#define ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_BO_OFFSET_SHIFT (17U)
+/*! BO_OFFSET - bo_offset */
+#define ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_BO_OFFSET(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_BO_OFFSET_SHIFT)) & ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_BO_OFFSET_MASK)
 
 #define ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_TRACK_MODE_EN_MASK (0x80000U)
 #define ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_TRACK_MODE_EN_SHIFT (19U)

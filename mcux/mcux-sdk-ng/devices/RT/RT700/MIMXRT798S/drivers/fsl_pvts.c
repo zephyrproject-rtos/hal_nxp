@@ -17,10 +17,8 @@
 #define FSL_COMPONENT_ID "platform.drivers.pvts"
 #endif
 
-#define PVTS_NUM_OF_SP           3U  /* Sum of setpoints. */
+#define PVTS_NUM_OF_SP           3U /* Sum of setpoints. */
 #define PVTS_DELAY_MAX_CTRL_WORD 0x3FFU
-#define PVTS_DELAY_MAX           62U /* Delay 0 -> 31, Delay 1 -> 31*/
-#define PVTS_DELAY_MIN           2U  /* Delay 0 -> 1, Delay 1 -> 1*/
 #define PVTS_DELAY_OFF           0U
 #define IS_DELAY_VALID(del)      ((del >= PVTS_DELAY_MIN) && (del <= PVTS_DELAY_MAX))
 #define OTP_FUSE_ADDR_NOT_FOUND  0U
@@ -41,6 +39,8 @@ static uint32_t delay_to_control_word(pvts_delay_t delay_value);
 const uint32_t cpu_freq[PVTS_PVT_COUNT][PVTS_NUM_OF_SP]   = {{110000000U, 192000000U, 325000000U},
                                                              {100000000U, 160000000U, 250000000U}};
 const uint32_t fuse_index[PVTS_PVT_COUNT][PVTS_NUM_OF_SP] = {{487U, 485U, 483U}, {486U, 484U, 482U}};
+
+const uint32_t param_fuse_index[PVTS_PVT_COUNT] = {452U, 451U};
 #endif
 
 /*******************************************************************************
@@ -110,6 +110,35 @@ status_t PVTS_ReadDelayFromOTP(bool otp_initialized,
 
     *delayValues = new_delay;
 
+    return kStatus_Success;
+}
+
+status_t PVTS_ReadParametersFromOTP(bool otp_initialized,
+                                    pvts_instance_t instance,
+                                    uint32_t core_freq_hz,
+                                    uint32_t *parameters)
+{
+    uint32_t value;
+    uint32_t pvts_fuse_addr_index;
+
+    if (!otp_initialized)
+    {
+        otp_init(core_freq_hz);
+    }
+
+    pvts_fuse_addr_index = param_fuse_index[(uint32_t)instance];
+
+    if (kStatus_Success != otp_fuse_read(pvts_fuse_addr_index, &value))
+    {
+        return kStatus_Fail;
+    }
+
+    if (!otp_initialized)
+    {
+        (void)otp_deinit();
+    }
+
+    *parameters = value;
     return kStatus_Success;
 }
 #endif

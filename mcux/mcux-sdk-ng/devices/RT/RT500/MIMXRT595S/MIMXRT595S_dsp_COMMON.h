@@ -5,8 +5,8 @@
 **
 **     Compiler:            Xtensa Compiler
 **     Reference manual:    iMXRT500RM Rev.1, 07/2022
-**     Version:             rev. 6.0, 2024-10-29
-**     Build:               b250619
+**     Version:             rev. 7.0, 2025-11-13
+**     Build:               b251113
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMXRT595S_dsp
@@ -32,14 +32,16 @@
 **     - rev. 6.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 7.0 (2025-11-13)
+**         Add puf irq and move some trng compatibility macros to common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT595S_dsp_COMMON.h
- * @version 6.0
- * @date 2024-10-29
+ * @version 7.0
+ * @date 2025-11-13
  * @brief Peripheral Access Layer for MIMXRT595S_dsp
  *
  * Peripheral Access Layer for MIMXRT595S_dsp
@@ -50,7 +52,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0600U
+#define MCU_MEM_MAP_VERSION 0x0700U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -944,6 +946,9 @@ typedef enum IRQn {
 #define TRNG_BASE_ADDRS                          { TRNG_BASE }
 /** Array initializer of TRNG peripheral base pointers */
 #define TRNG_BASE_PTRS                           { TRNG }
+/* Backward compatibility */
+#define TRNG0                                    TRNG
+
 
 /* USART - Peripheral instance base addresses */
 /** Peripheral USART0 base address */

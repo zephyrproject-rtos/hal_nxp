@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2023 NXP
+ * Copyright 2016-2020, 2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief reset driver version 2.1.0. */
-#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief reset driver version 2.1.1. */
+#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 /*!
@@ -123,8 +123,31 @@ typedef enum _RSTCTL_RSTn
     kPINT_RST_SHIFT_RSTn     = (RST_CTL1_PSCCTL2 << 8) | 30U, /**< GPIO Pin interrupt reset control */
     kINPUTMUX_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL2 << 8) | 31U, /**< Peripheral input muxes reset control */
 } RSTCTL_RSTn_t;
-
 /** Array initializers with peripheral reset bits **/
+#define ACMP_RSTS             \
+    {                         \
+        kACMP0_RST_SHIFT_RSTn \
+    } /* Reset bits for ACMP peripheral */
+#define AXI_SWITCH_RSTS            \
+    {                              \
+        kAXI_SWITCH_RST_SHIFT_RSTn \
+    } /* Reset bits for AXI Switch peripheral */
+#define DSP_RSTS            \
+    {                       \
+        kDSP_RST_SHIFT_RSTn \
+    } /* Reset bits for DSP peripheral */
+#define GPU_RSTS            \
+    {                       \
+        kGPU_RST_SHIFT_RSTn \
+    } /* Reset bits for GPU peripheral */
+#define MIPI_DSI_PHY_RSTS            \
+    {                                \
+        kMIPI_DSI_PHY_RST_SHIFT_RSTn \
+    } /* Reset bits for MIPI DSI PHY peripheral */
+#define SMARTDMA_RSTS            \
+    {                            \
+        kSMART_DMA_RST_SHIFT_RSTn \
+    } /* Reset bits for Smart DMA peripheral */
 #define ADC_RSTS             \
     {                        \
         kADC0_RST_SHIFT_RSTn \
@@ -214,6 +237,10 @@ typedef enum _RSTCTL_RSTn
     {                       \
         kPUF_RST_SHIFT_RSTn \
     } /* Reset bits for PUF peripheral */
+#define FREQME_RSTS            \
+    {                          \
+        kFREQME_RST_SHIFT_RSTn \
+    } /* Reset bits for FREQM peripheral */
 #define SCT_RSTS            \
     {                       \
         kSCT_RST_SHIFT_RSTn \

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2024 NXP
+ * Copyright 2016 - 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief reset driver version 2.2.1. */
-#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+/*! @brief reset driver version 2.2.2. */
+#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*@}*/
 
 /*!
@@ -109,6 +109,22 @@ typedef enum _RSTCTL_RSTn
 } RSTCTL_RSTn_t;
 
 /** Array initializers with peripheral reset bits **/
+#define ACMP_RSTS             \
+    {                         \
+        kACMP0_RST_SHIFT_RSTn \
+    } /* Reset bits for ACMP peripheral */
+#define DSP_RSTS            \
+    {                       \
+        kDSP_RST_SHIFT_RSTn \
+    } /* Reset bits for DSP peripheral */
+#define FLEXSPI_RSTS            \
+    {                           \
+        kFLEXSPI_RST_SHIFT_RSTn \
+    } /* Reset bits for FLEXSPI peripheral */
+#define SEMA42_RSTS          \
+    {                        \
+        kSEMA_RST_SHIFT_RSTn \
+    } /* Reset bits for SEMA42 peripheral */
 #define ADC_RSTS             \
     {                        \
         kADC0_RST_SHIFT_RSTn \
@@ -163,6 +179,10 @@ typedef enum _RSTCTL_RSTn
     {                        \
         kPINT_RST_SHIFT_RSTn \
     } /* Reset bits for PINT peripheral */
+#define FREQME_RSTS            \
+    {                          \
+        kFREQME_RST_SHIFT_RSTn \
+    } /* Reset bits for FREQM peripheral */
 #define SCT_RSTS            \
     {                       \
         kSCT_RST_SHIFT_RSTn \

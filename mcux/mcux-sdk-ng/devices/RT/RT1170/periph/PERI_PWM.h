@@ -53,14 +53,14 @@
 **                          MIMXRT117HDVMAB_cm4
 **                          MIMXRT117HDVMAB_cm7
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250703
+**     Version:             rev. 4.0, 2026-01-06
+**     Build:               b260106
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PWM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -74,14 +74,18 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-13)
+**         Consolidate asrc/xbar and enet macros into common header.
+**     - rev. 4.0 (2026-01-06)
+**         Update header files to align with IMXRT1170RM Rev.5.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_PWM.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-01-06
  * @brief CMSIS Peripheral Access Layer for PWM
  *
  * CMSIS Peripheral Access Layer for PWM
@@ -289,8 +293,8 @@ typedef struct {
  *  0b100..The local sync signal from this submodule is used to force updates.
  *  0b101..The master sync signal from submodule0 is used to force updates. This setting should not be used in
  *         submodule0 as it holds the FORCE OUTPUT signal to logic 0.
- *  0b110..The external force signal, EXT_FORCE, from outside the PWM module causes updates.
- *  0b111..The external sync signal, EXT_SYNC, from outside the PWM module causes updates.
+ *  0b110..The external force signal, EXT_FORCE, from outside the eFlexPWM module causes updates.
+ *  0b111..The external sync signal, EXT_SYNC, from outside the eFlexPWM module causes updates.
  */
 #define PWM_CTRL2_FORCE_SEL(x)                   (((uint16_t)(((uint16_t)(x)) << PWM_CTRL2_FORCE_SEL_SHIFT)) & PWM_CTRL2_FORCE_SEL_MASK)
 

@@ -10,7 +10,7 @@
 **
 **     Reference manual:    IMXRT1180RM, Rev 5, 01/2024
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250930
+**     Build:               b251217
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1186_cm33
@@ -158,8 +158,8 @@ typedef enum IRQn {
   CM33_TCM_ERROR_IRQn          = 48,               /**< M33 TCM Error interrupt */
   CM7_TCM_ECC_IRQn             = 49,               /**< M7 TCM ECC interrupt */
   CM7_TCM_ERROR_IRQn           = 50,               /**< M7 TCM Error interrupt */
-  CAN2_IRQn                    = 51,               /**< CAN2 interrupt */
-  CAN2_ERROR_IRQn              = 52,               /**< CAN2 error interrupt */
+  Reserved67_IRQn              = 51,               /**< Reserved interrupt */
+  Reserved68_IRQn              = 52,               /**< Reserved interrupt */
   FLEXIO1_IRQn                 = 53,               /**< FLEXIO1 interrupt */
   FLEXIO2_IRQn                 = 54,               /**< FLEXIO2 interrupt */
   FLEXSPI1_IRQn                = 55,               /**< FLEXSPI1 interrupt */
@@ -298,8 +298,8 @@ typedef enum IRQn {
   EQDC4_IRQn                   = 188,              /**< EQDC4 interrupt */
   ADC2_IRQn                    = 189,              /**< ADC2 interrupt */
   DCDC_IRQn                    = 190,              /**< DCDC brown out interrupt */
-  Reserved207_IRQn             = 191,              /**< Reserved interrupt */
-  Reserved208_IRQn             = 192,              /**< Reserved interrupt */
+  CAN3_IRQn                    = 191,              /**< CAN3 interrupt */
+  CAN3_ERROR_IRQn              = 192,              /**< CAN3 error interrupt */
   DAC_IRQn                     = 193,              /**< DAC interrupt */
   LPSPI5_IRQn                  = 194,              /**< LPSPI5 interrupt */
   LPSPI6_IRQn                  = 195,              /**< LPSPI6 interrupt */
@@ -423,6 +423,7 @@ typedef enum _asrc_clock_source
     kASRC_ClockSourceBitClockc_SAI4_CLOCK_ROOT = 12U, /**< SAI4 CLOCK ROOT */
     kASRC_ClockSourceBitClockd_MIC_CLOCK_ROOT = 13U, /**< MIC CLOCK ROOT */
     kASRC_ClockSourceBitClocke_MQS_CLOCK_ROOT = 14U, /**< MQS CLOCK ROOT */
+    kASRC_ClockSourceMax            = 14U,         /**< max value */
 } asrc_clock_source_t;
 
 /* @} */
@@ -1826,43 +1827,43 @@ typedef enum _xbar_output_signal
   #define CAN1                                     ((CAN_Type *)CAN1_BASE)
   /** Peripheral CAN1 base pointer */
   #define CAN1_NS                                  ((CAN_Type *)CAN1_BASE_NS)
-  /** Peripheral CAN2 base address */
-  #define CAN2_BASE                                (0x525B0000u)
-  /** Peripheral CAN2 base address */
-  #define CAN2_BASE_NS                             (0x425B0000u)
-  /** Peripheral CAN2 base pointer */
-  #define CAN2                                     ((CAN_Type *)CAN2_BASE)
-  /** Peripheral CAN2 base pointer */
-  #define CAN2_NS                                  ((CAN_Type *)CAN2_BASE_NS)
+  /** Peripheral CAN3 base address */
+  #define CAN3_BASE                                (0x545B0000u)
+  /** Peripheral CAN3 base address */
+  #define CAN3_BASE_NS                             (0x445B0000u)
+  /** Peripheral CAN3 base pointer */
+  #define CAN3                                     ((CAN_Type *)CAN3_BASE)
+  /** Peripheral CAN3 base pointer */
+  #define CAN3_NS                                  ((CAN_Type *)CAN3_BASE_NS)
   /** Array initializer of CAN peripheral base addresses */
-  #define CAN_BASE_ADDRS                           { 0u, CAN1_BASE, CAN2_BASE }
+  #define CAN_BASE_ADDRS                           { 0u, CAN1_BASE, 0u, CAN3_BASE }
   /** Array initializer of CAN peripheral base pointers */
-  #define CAN_BASE_PTRS                            { (CAN_Type *)0u, CAN1, CAN2 }
+  #define CAN_BASE_PTRS                            { (CAN_Type *)0u, CAN1, (CAN_Type *)0u, CAN3 }
   /** Array initializer of CAN peripheral base addresses */
-  #define CAN_BASE_ADDRS_NS                        { 0u, CAN1_BASE_NS, CAN2_BASE_NS }
+  #define CAN_BASE_ADDRS_NS                        { 0u, CAN1_BASE_NS, 0u, CAN3_BASE_NS }
   /** Array initializer of CAN peripheral base pointers */
-  #define CAN_BASE_PTRS_NS                         { (CAN_Type *)0u, CAN1_NS, CAN2_NS }
+  #define CAN_BASE_PTRS_NS                         { (CAN_Type *)0u, CAN1_NS, (CAN_Type *)0u, CAN3_NS }
 #else
   /** Peripheral CAN1 base address */
   #define CAN1_BASE                                (0x443A0000u)
   /** Peripheral CAN1 base pointer */
   #define CAN1                                     ((CAN_Type *)CAN1_BASE)
-  /** Peripheral CAN2 base address */
-  #define CAN2_BASE                                (0x425B0000u)
-  /** Peripheral CAN2 base pointer */
-  #define CAN2                                     ((CAN_Type *)CAN2_BASE)
+  /** Peripheral CAN3 base address */
+  #define CAN3_BASE                                (0x445B0000u)
+  /** Peripheral CAN3 base pointer */
+  #define CAN3                                     ((CAN_Type *)CAN3_BASE)
   /** Array initializer of CAN peripheral base addresses */
-  #define CAN_BASE_ADDRS                           { 0u, CAN1_BASE, CAN2_BASE }
+  #define CAN_BASE_ADDRS                           { 0u, CAN1_BASE, 0u, CAN3_BASE }
   /** Array initializer of CAN peripheral base pointers */
-  #define CAN_BASE_PTRS                            { (CAN_Type *)0u, CAN1, CAN2 }
+  #define CAN_BASE_PTRS                            { (CAN_Type *)0u, CAN1, (CAN_Type *)0u, CAN3 }
 #endif
 /** Interrupt vectors for the CAN peripheral type */
-#define CAN_Rx_Warning_IRQS                      { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
-#define CAN_Tx_Warning_IRQS                      { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
-#define CAN_Wake_Up_IRQS                         { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
-#define CAN_Error_IRQS                           { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
-#define CAN_Bus_Off_IRQS                         { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
-#define CAN_ORed_Message_buffer_IRQS             { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
+#define CAN_Rx_Warning_IRQS                      { NotAvail_IRQn, CAN1_IRQn, NotAvail_IRQn, CAN3_IRQn }
+#define CAN_Tx_Warning_IRQS                      { NotAvail_IRQn, CAN1_IRQn, NotAvail_IRQn, CAN3_IRQn }
+#define CAN_Wake_Up_IRQS                         { NotAvail_IRQn, CAN1_IRQn, NotAvail_IRQn, CAN3_IRQn }
+#define CAN_Error_IRQS                           { NotAvail_IRQn, CAN1_IRQn, NotAvail_IRQn, CAN3_IRQn }
+#define CAN_Bus_Off_IRQS                         { NotAvail_IRQn, CAN1_IRQn, NotAvail_IRQn, CAN3_IRQn }
+#define CAN_ORed_Message_buffer_IRQS             { NotAvail_IRQn, CAN1_IRQn, NotAvail_IRQn, CAN3_IRQn }
 
 /* CCM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -2703,6 +2704,8 @@ typedef enum _xbar_output_signal
   /** Array initializer of FLEXSPI_SLV peripheral base pointers */
   #define FLEXSPI_SLV_BASE_PTRS                    { FLEXSPI_SLV }
 #endif
+/** Interrupt vectors for the FLEXSPI_SLV peripheral type */
+#define FLEXSPI_SLV_IRQS                         { FLEXSPI_SLV_IRQn }
 
 /* GPC_CPU_CTRL - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -5931,10 +5934,21 @@ typedef enum _xbar_output_signal
   /** Array initializer of XCACHE peripheral base pointers */
   #define XCACHE_BASE_PTRS                         { XCACHE_PC, XCACHE_PS }
 #endif
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
 /** XCACHE physical memory base address */
-#define XCACHE_PHYMEM_BASES                        { 0x00000000u, 0x20000000u }
+ #define XCACHE_PHYMEM_BASES                       { 0x10000000u, 0x30000000u }
 /** XCACHE physical memory size */
-#define XCACHE_PHYMEM_SIZES                        { 0x20000000u, 0xE0000000u }
+ #define XCACHE_PHYMEM_SIZES                       { 0x20000000u, 0xE0000000u }
+/** XCACHE physical memory base address */
+ #define XCACHE_PHYMEM_BASES_NS                    { 0x00000000u, 0x20000000u }
+/** XCACHE physical memory size */
+ #define XCACHE_PHYMEM_SIZES_NS                    { 0x20000000u, 0xE0000000u }
+#else
+/** XCACHE physical memory base address */
+ #define XCACHE_PHYMEM_BASES                       { 0x00000000u, 0x20000000u }
+/** XCACHE physical memory size */
+ #define XCACHE_PHYMEM_SIZES                       { 0x20000000u, 0xE0000000u }
+#endif
 
 
 /* ----------------------------------------------------------------------------

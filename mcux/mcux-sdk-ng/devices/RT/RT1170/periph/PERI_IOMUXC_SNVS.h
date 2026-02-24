@@ -53,14 +53,14 @@
 **                          MIMXRT117HDVMAB_cm4
 **                          MIMXRT117HDVMAB_cm7
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250703
+**     Version:             rev. 4.0, 2026-01-06
+**     Build:               b260106
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC_SNVS
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -74,14 +74,18 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-13)
+**         Consolidate asrc/xbar and enet macros into common header.
+**     - rev. 4.0 (2026-01-06)
+**         Update header files to align with IMXRT1170RM Rev.5.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_IOMUXC_SNVS.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-01-06
  * @brief CMSIS Peripheral Access Layer for IOMUXC_SNVS
  *
  * CMSIS Peripheral Access Layer for IOMUXC_SNVS
@@ -462,7 +466,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_TEST_MODE_DIG_PUE_MASK (0x4U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_TEST_MODE_DIG_PUE_SHIFT (2U)
-/*! PUE - Pull / Keep Select Field
+/*! PUE - Pull Enable
  *  0b0..Pull Disable
  *  0b1..Pull Enable
  */
@@ -470,7 +474,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_TEST_MODE_DIG_PUS_MASK (0x8U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_TEST_MODE_DIG_PUS_SHIFT (3U)
-/*! PUS - Pull Up / Down Config. Field
+/*! PUS - Pull Select
  *  0b0..Weak pull down
  *  0b1..Weak pull up
  */
@@ -502,7 +506,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_POR_B_DIG_PUE_MASK (0x4U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_POR_B_DIG_PUE_SHIFT (2U)
-/*! PUE - Pull / Keep Select Field
+/*! PUE - Pull Enable
  *  0b0..Pull Disable
  *  0b1..Pull Enable
  */
@@ -510,7 +514,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_POR_B_DIG_PUS_MASK (0x8U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_POR_B_DIG_PUS_SHIFT (3U)
-/*! PUS - Pull Up / Down Config. Field
+/*! PUS - Pull Select
  *  0b0..Weak pull down
  *  0b1..Weak pull up
  */
@@ -542,7 +546,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_ONOFF_DIG_PUE_MASK (0x4U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_ONOFF_DIG_PUE_SHIFT (2U)
-/*! PUE - Pull / Keep Select Field
+/*! PUE - Pull Enable
  *  0b0..Pull Disable
  *  0b1..Pull Enable
  */
@@ -550,7 +554,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_ONOFF_DIG_PUS_MASK (0x8U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_ONOFF_DIG_PUS_SHIFT (3U)
-/*! PUS - Pull Up / Down Config. Field
+/*! PUS - Pull Select
  *  0b0..Weak pull down
  *  0b1..Weak pull up
  */
@@ -582,7 +586,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_WAKEUP_DIG_PUE_MASK (0x4U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_WAKEUP_DIG_PUE_SHIFT (2U)
-/*! PUE - Pull / Keep Select Field
+/*! PUE - Pull Enable
  *  0b0..Pull Disable
  *  0b1..Pull Enable
  */
@@ -590,7 +594,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_WAKEUP_DIG_PUS_MASK (0x8U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_WAKEUP_DIG_PUS_SHIFT (3U)
-/*! PUS - Pull Up / Down Config. Field
+/*! PUS - Pull Select
  *  0b0..Weak pull down
  *  0b1..Weak pull up
  */
@@ -630,7 +634,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_PMIC_ON_REQ_DIG_PUE_MASK (0x4U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_PMIC_ON_REQ_DIG_PUE_SHIFT (2U)
-/*! PUE - Pull / Keep Select Field
+/*! PUE - Pull Enable
  *  0b0..Pull Disable
  *  0b1..Pull Enable
  */
@@ -638,7 +642,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_PMIC_ON_REQ_DIG_PUS_MASK (0x8U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_PMIC_ON_REQ_DIG_PUS_SHIFT (3U)
-/*! PUS - Pull Up / Down Config. Field
+/*! PUS - Pull Select
  *  0b0..Weak pull down
  *  0b1..Weak pull up
  */
@@ -678,7 +682,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_PMIC_STBY_REQ_DIG_PUE_MASK (0x4U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_PMIC_STBY_REQ_DIG_PUE_SHIFT (2U)
-/*! PUE - Pull / Keep Select Field
+/*! PUE - Pull Enable
  *  0b0..Pull Disable
  *  0b1..Pull Enable
  */
@@ -686,7 +690,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_PMIC_STBY_REQ_DIG_PUS_MASK (0x8U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_PMIC_STBY_REQ_DIG_PUS_SHIFT (3U)
-/*! PUS - Pull Up / Down Config. Field
+/*! PUS - Pull Select
  *  0b0..Weak pull down
  *  0b1..Weak pull up
  */
@@ -726,7 +730,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_00_DIG_PUE_MASK (0x4U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_00_DIG_PUE_SHIFT (2U)
-/*! PUE - Pull / Keep Select Field
+/*! PUE - Pull Enable
  *  0b0..Pull Disable
  *  0b1..Pull Enable
  */
@@ -734,7 +738,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_00_DIG_PUS_MASK (0x8U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_00_DIG_PUS_SHIFT (3U)
-/*! PUS - Pull Up / Down Config. Field
+/*! PUS - Pull Select
  *  0b0..Weak pull down
  *  0b1..Weak pull up
  */
@@ -774,7 +778,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_01_DIG_PUE_MASK (0x4U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_01_DIG_PUE_SHIFT (2U)
-/*! PUE - Pull / Keep Select Field
+/*! PUE - Pull Enable
  *  0b0..Pull Disable
  *  0b1..Pull Enable
  */
@@ -782,7 +786,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_01_DIG_PUS_MASK (0x8U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_01_DIG_PUS_SHIFT (3U)
-/*! PUS - Pull Up / Down Config. Field
+/*! PUS - Pull Select
  *  0b0..Weak pull down
  *  0b1..Weak pull up
  */
@@ -822,7 +826,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_02_DIG_PUE_MASK (0x4U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_02_DIG_PUE_SHIFT (2U)
-/*! PUE - Pull / Keep Select Field
+/*! PUE - Pull Enable
  *  0b0..Pull Disable
  *  0b1..Pull Enable
  */
@@ -830,7 +834,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_02_DIG_PUS_MASK (0x8U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_02_DIG_PUS_SHIFT (3U)
-/*! PUS - Pull Up / Down Config. Field
+/*! PUS - Pull Select
  *  0b0..Weak pull down
  *  0b1..Weak pull up
  */
@@ -870,7 +874,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_03_DIG_PUE_MASK (0x4U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_03_DIG_PUE_SHIFT (2U)
-/*! PUE - Pull / Keep Select Field
+/*! PUE - Pull Enable
  *  0b0..Pull Disable
  *  0b1..Pull Enable
  */
@@ -878,7 +882,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_03_DIG_PUS_MASK (0x8U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_03_DIG_PUS_SHIFT (3U)
-/*! PUS - Pull Up / Down Config. Field
+/*! PUS - Pull Select
  *  0b0..Weak pull down
  *  0b1..Weak pull up
  */
@@ -918,7 +922,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_04_DIG_PUE_MASK (0x4U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_04_DIG_PUE_SHIFT (2U)
-/*! PUE - Pull / Keep Select Field
+/*! PUE - Pull Enable
  *  0b0..Pull Disable
  *  0b1..Pull Enable
  */
@@ -926,7 +930,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_04_DIG_PUS_MASK (0x8U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_04_DIG_PUS_SHIFT (3U)
-/*! PUS - Pull Up / Down Config. Field
+/*! PUS - Pull Select
  *  0b0..Weak pull down
  *  0b1..Weak pull up
  */
@@ -966,7 +970,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_05_DIG_PUE_MASK (0x4U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_05_DIG_PUE_SHIFT (2U)
-/*! PUE - Pull / Keep Select Field
+/*! PUE - Pull Enable
  *  0b0..Pull Disable
  *  0b1..Pull Enable
  */
@@ -974,7 +978,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_05_DIG_PUS_MASK (0x8U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_05_DIG_PUS_SHIFT (3U)
-/*! PUS - Pull Up / Down Config. Field
+/*! PUS - Pull Select
  *  0b0..Weak pull down
  *  0b1..Weak pull up
  */
@@ -1014,7 +1018,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_06_DIG_PUE_MASK (0x4U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_06_DIG_PUE_SHIFT (2U)
-/*! PUE - Pull / Keep Select Field
+/*! PUE - Pull Enable
  *  0b0..Pull Disable
  *  0b1..Pull Enable
  */
@@ -1022,7 +1026,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_06_DIG_PUS_MASK (0x8U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_06_DIG_PUS_SHIFT (3U)
-/*! PUS - Pull Up / Down Config. Field
+/*! PUS - Pull Select
  *  0b0..Weak pull down
  *  0b1..Weak pull up
  */
@@ -1062,7 +1066,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_07_DIG_PUE_MASK (0x4U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_07_DIG_PUE_SHIFT (2U)
-/*! PUE - Pull / Keep Select Field
+/*! PUE - Pull Enable
  *  0b0..Pull Disable
  *  0b1..Pull Enable
  */
@@ -1070,7 +1074,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_07_DIG_PUS_MASK (0x8U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_07_DIG_PUS_SHIFT (3U)
-/*! PUS - Pull Up / Down Config. Field
+/*! PUS - Pull Select
  *  0b0..Weak pull down
  *  0b1..Weak pull up
  */
@@ -1110,7 +1114,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_08_DIG_PUE_MASK (0x4U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_08_DIG_PUE_SHIFT (2U)
-/*! PUE - Pull / Keep Select Field
+/*! PUE - Pull Enable
  *  0b0..Pull Disable
  *  0b1..Pull Enable
  */
@@ -1118,7 +1122,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_08_DIG_PUS_MASK (0x8U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_08_DIG_PUS_SHIFT (3U)
-/*! PUS - Pull Up / Down Config. Field
+/*! PUS - Pull Select
  *  0b0..Weak pull down
  *  0b1..Weak pull up
  */
@@ -1158,7 +1162,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_09_DIG_PUE_MASK (0x4U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_09_DIG_PUE_SHIFT (2U)
-/*! PUE - Pull / Keep Select Field
+/*! PUE - Pull Enable
  *  0b0..Pull Disable
  *  0b1..Pull Enable
  */
@@ -1166,7 +1170,7 @@ typedef struct {
 
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_09_DIG_PUS_MASK (0x8U)
 #define IOMUXC_SNVS_SW_PAD_CTL_PAD_GPIO_SNVS_09_DIG_PUS_SHIFT (3U)
-/*! PUS - Pull Up / Down Config. Field
+/*! PUS - Pull Select
  *  0b0..Weak pull down
  *  0b1..Weak pull up
  */

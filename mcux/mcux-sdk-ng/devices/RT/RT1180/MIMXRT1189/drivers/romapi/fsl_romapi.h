@@ -15,8 +15,8 @@
  * @{
  */
 
-/*! @brief ROM API version 1.1.2. */
-#define FSL_ROM_ROMAPI_VERSION (MAKE_VERSION(1U, 1U, 2U))
+/*! @brief ROM API version 1.1.3. */
+#define FSL_ROM_ROMAPI_VERSION (MAKE_VERSION(1U, 1U, 3U))
 /*! @brief ROM FLEXSPI NOR driver version 1.7.0. */
 #define FSL_ROM_FLEXSPINOR_DRIVER_VERSION (MAKE_VERSION(1U, 7U, 0U))
 
@@ -215,9 +215,9 @@ enum _flexspi_serial_clk_freq
     kFLEXSPISerialClk_30MHz    = 1U, /*!< FlexSPI serial clock 30MHz */
     kFLEXSPISerialClk_50MHz    = 2U, /*!< FlexSPI serial clock 50MHz */
     kFLEXSPISerialClk_60MHz    = 3U, /*!< FlexSPI serial clock 60MHz */
-    kFLEXSPISerialClk_75MHz    = 4U, /*!< FlexSPI serial clock 75MHz */
-    kFLEXSPISerialClk_80MHz    = 5U, /*!< FlexSPI serial clock 80MHz */
-    kFLEXSPISerialClk_100MHz   = 6U, /*!< FlexSPI serial clock 100MHz */
+    kFLEXSPISerialClk_80MHz    = 4U, /*!< FlexSPI serial clock 80MHz */
+    kFLEXSPISerialClk_100MHz   = 5U, /*!< FlexSPI serial clock 100MHz */
+    kFLEXSPISerialClk_120MHz   = 6U, /*!< FlexSPI serial clock 120MHz */
     kFLEXSPISerialClk_133MHz   = 7U, /*!< FlexSPI serial clock 133MHz */
     kFLEXSPISerialClk_166MHz   = 8U, /*!< FlexSPI serial clock 166MHz */
 };

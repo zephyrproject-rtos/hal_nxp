@@ -33,7 +33,7 @@ if (CONFIG_MCUX_COMPONENT_driver.power)
 endif()
 
 if (CONFIG_MCUX_COMPONENT_driver.reset)
-    mcux_component_version(2.2.1)
+    mcux_component_version(2.2.2)
     mcux_add_source( SOURCES fsl_reset.c fsl_reset.h )
     mcux_add_include( INCLUDES . )
 endif()

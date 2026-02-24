@@ -912,55 +912,91 @@ void POWER_SetPORVoltage(const power_por_voltage_t *porVolt)
 #endif
 
 #if defined(PMC0) /* Compute domain request enter deep sleep mode. */
-AT_QUICKACCESS_SECTION_CODE(static void POWER_EnableXspiCache(CACHE64_CTRL_Type *cache))
+AT_QUICKACCESS_SECTION_CODE(static status_t POWER_EnableXspiCache(CACHE64_CTRL_Type *cache))
 {
+#if POWER_RETRY_TIMES > 0
+    uint32_t retry = POWER_RETRY_TIMES;
+#endif
     /* First, invalidate the entire cache. */
     cache->CCR |= CACHE64_CTRL_CCR_INVW0_MASK | CACHE64_CTRL_CCR_INVW1_MASK | CACHE64_CTRL_CCR_GO_MASK;
     while ((cache->CCR & CACHE64_CTRL_CCR_GO_MASK) != 0x00U)
     {
+#if POWER_RETRY_TIMES > 0
+        if (--retry == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
     /* As a precaution clear the bits to avoid inadvertently re-running this command. */
     cache->CCR &= ~(CACHE64_CTRL_CCR_INVW0_MASK | CACHE64_CTRL_CCR_INVW1_MASK);
     /* Now enable the cache. */
     cache->CCR |= CACHE64_CTRL_CCR_ENCACHE_MASK;
+    return kStatus_Success;
 }
 
-AT_QUICKACCESS_SECTION_CODE(static void POWER_DisableXspiCache(CACHE64_CTRL_Type *cache))
+AT_QUICKACCESS_SECTION_CODE(static status_t POWER_DisableXspiCache(CACHE64_CTRL_Type *cache))
 {
+#if POWER_RETRY_TIMES > 0
+    uint32_t retry = POWER_RETRY_TIMES;
+#endif
     /* First, clean XSPI cache. */
     cache->CCR |= CACHE64_CTRL_CCR_PUSHW0_MASK | CACHE64_CTRL_CCR_PUSHW1_MASK | CACHE64_CTRL_CCR_GO_MASK;
     while ((cache->CCR & CACHE64_CTRL_CCR_GO_MASK) != 0x00U)
     {
+#if POWER_RETRY_TIMES > 0
+        if (--retry == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
     /* As a precaution clear the bits to avoid inadvertently re-running this command. */
     cache->CCR &= ~(CACHE64_CTRL_CCR_PUSHW0_MASK | CACHE64_CTRL_CCR_PUSHW1_MASK);
 
     /* Now disable XSPI cache. */
     cache->CCR &= ~CACHE64_CTRL_CCR_ENCACHE_MASK;
+    return kStatus_Success;
 }
 
-AT_QUICKACCESS_SECTION_CODE(static void deinitXSPI(XSPI_Type *base, CACHE64_CTRL_Type *cache))
+AT_QUICKACCESS_SECTION_CODE(static status_t deinitXSPI(XSPI_Type *base, CACHE64_CTRL_Type *cache))
 {
+    status_t ret = kStatus_Success;
+#if POWER_RETRY_TIMES > 0
+    uint32_t retry = POWER_RETRY_TIMES;
+#endif
     xspiCacheEnabled = false;
     base->MCR &= ~XSPI_MCR_MDIS_MASK;
 
     /* Wait until XSPI is not busy */
     while ((base->SR & XSPI_SR_BUSY_MASK) != 0U)
     {
+#if POWER_RETRY_TIMES > 0
+        if (--retry == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
 
     if ((cache->CCR & CACHE64_CTRL_CCR_ENCACHE_MASK) != 0x00U)
     {
         xspiCacheEnabled = true;
-        POWER_DisableXspiCache(cache);
+        ret              = POWER_DisableXspiCache(cache);
     }
 
     /* Disable module. */
     base->MCR |= XSPI_MCR_MDIS_MASK;
+
+    return ret;
 }
 
-AT_QUICKACCESS_SECTION_CODE(static void initXSPI(XSPI_Type *base, CACHE64_CTRL_Type *cache))
+AT_QUICKACCESS_SECTION_CODE(static status_t initXSPI(XSPI_Type *base, CACHE64_CTRL_Type *cache))
 {
+    status_t ret = kStatus_Success;
+#if POWER_RETRY_TIMES > 0
+    uint32_t retry = POWER_RETRY_TIMES;
+#endif
     /* Disable XSPI module */
     base->MCR |= XSPI_MCR_MDIS_MASK;
     base->MCR |= XSPI_MCR_IPS_TG_RST_MASK;
@@ -986,6 +1022,12 @@ AT_QUICKACCESS_SECTION_CODE(static void initXSPI(XSPI_Type *base, CACHE64_CTRL_T
     base->SPTRCLR |= XSPI_SPTRCLR_ABRT_CLR_MASK;
     while ((base->SPTRCLR & XSPI_SPTRCLR_ABRT_CLR_MASK) != 0UL)
     {
+#if POWER_RETRY_TIMES > 0
+        if (--retry == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
 
     /* Clear AHB access sequence pointer. */
@@ -996,21 +1038,24 @@ AT_QUICKACCESS_SECTION_CODE(static void initXSPI(XSPI_Type *base, CACHE64_CTRL_T
 
     if (xspiCacheEnabled)
     {
-        POWER_EnableXspiCache(cache);
+        ret = POWER_EnableXspiCache(cache);
     }
 
     __DSB();
     __ISB();
+
+    return ret;
 }
 
-AT_QUICKACCESS_SECTION_CODE(static void deinitXip(void))
+AT_QUICKACCESS_SECTION_CODE(static status_t deinitXip(void))
 {
+    status_t ret = kStatus_Success;
     if (POWER_IS_XIP_XSPI0())
     {
         /* Enable XSPI clock again */
         CLKCTL0->PSCCTL1_SET = CLKCTL0_PSCCTL1_SET_XSPI0_MASK;
         /* Disable XSPI module */
-        deinitXSPI(XSPI0, CACHE64_CTRL0);
+        ret                  = deinitXSPI(XSPI0, CACHE64_CTRL0);
         CLKCTL0->PSCCTL1_CLR = CLKCTL0_PSCCTL1_SET_XSPI0_MASK;
     }
     else if (POWER_IS_XIP_XSPI1())
@@ -1018,41 +1063,47 @@ AT_QUICKACCESS_SECTION_CODE(static void deinitXip(void))
         /* Enable XSPI clock again */
         CLKCTL0->PSCCTL1_SET = CLKCTL0_PSCCTL1_SET_XSPI1_MASK;
         /* Disable XSPI module */
-        deinitXSPI(XSPI1, CACHE64_CTRL1);
+        ret                  = deinitXSPI(XSPI1, CACHE64_CTRL1);
         CLKCTL0->PSCCTL1_CLR = CLKCTL0_PSCCTL1_SET_XSPI1_MASK;
     }
     else
     {
         /* Do nothing */
     }
+    return ret;
 }
 
-AT_QUICKACCESS_SECTION_CODE(static void initXip(void))
+AT_QUICKACCESS_SECTION_CODE(static status_t initXip(void))
 {
+    status_t ret = kStatus_Success;
     if (POWER_IS_XIP_XSPI0())
     {
         /* Enable XSPI clock again */
         CLKCTL0->PSCCTL1_SET = CLKCTL0_PSCCTL1_SET_XSPI0_MASK;
         /* Re-enable XSPI module */
-        initXSPI(XSPI0, CACHE64_CTRL0);
+        ret = initXSPI(XSPI0, CACHE64_CTRL0);
     }
     else if (POWER_IS_XIP_XSPI1())
     {
         /* Enable XSPI clock again */
         CLKCTL0->PSCCTL1_SET = CLKCTL0_PSCCTL1_SET_XSPI1_MASK;
         /* Re-enable XSPI module */
-        initXSPI(XSPI1, CACHE64_CTRL1);
+        ret = initXSPI(XSPI1, CACHE64_CTRL1);
     }
     else
     {
         /* Do nothing */
     }
+    return ret;
 }
 
 /* Need do low power request-ack for all the modules capable of DMA HW Wake function if the DMA_HWWake is used. */
-AT_QUICKACCESS_SECTION_CODE(static void POWER_DMA_HWWake_LPRequest(void))
+AT_QUICKACCESS_SECTION_CODE(static status_t POWER_DMA_HWWake_LPRequest(void))
 {
     uint32_t lpReqClockCfg, lpReqResetCfg;
+#if POWER_RETRY_TIMES > 0
+    uint32_t retry = POWER_RETRY_TIMES;
+#endif
 
     if (SLEEPCON0->HW_WAKE != 0U) /* Only assert the LP Requet when DMA HW_WAKE enabled. */
     {
@@ -1082,21 +1133,55 @@ AT_QUICKACCESS_SECTION_CODE(static void POWER_DMA_HWWake_LPRequest(void))
         while ((SLEEPCON0->PRIVATE_CSTAT0 & PRIVATE_CONTROLLER_HWWAKE_MODULE_MASK) !=
                PRIVATE_CONTROLLER_HWWAKE_MODULE_MASK)
         {
+#if POWER_RETRY_TIMES > 0
+            if (--retry == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
+#if POWER_RETRY_TIMES > 0
+        retry = POWER_RETRY_TIMES;
+#endif
         while ((SLEEPCON0->SHA_MEDSEN_TSTAT0 & SHA_MEDSEN_TSTAT_HWWAKE_MODULE_MASK) !=
                SHA_MEDSEN_TSTAT_HWWAKE_MODULE_MASK)
         {
+#if POWER_RETRY_TIMES > 0
+            if (--retry == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
+#if POWER_RETRY_TIMES > 0
+        retry = POWER_RETRY_TIMES;
+#endif
         while ((SLEEPCON0->PRIVATE_TSTAT0 & PRIVATE_TSTAT_HWWAKE_MODULE_MASK0) != PRIVATE_TSTAT_HWWAKE_MODULE_MASK0)
         {
+#if POWER_RETRY_TIMES > 0
+            if (--retry == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
+#if POWER_RETRY_TIMES > 0
+        retry = POWER_RETRY_TIMES;
+#endif
         while ((SLEEPCON0->PRIVATE_TSTAT1 & PRIVATE_TSTAT_HWWAKE_MODULE_MASK1) != PRIVATE_TSTAT_HWWAKE_MODULE_MASK1)
         {
+#if POWER_RETRY_TIMES > 0
+            if (--retry == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
 
         CLKCTL0->PSCCTL1  = lpReqClockCfg;
         RSTCTL0->PRSTCTL2 = lpReqResetCfg;
     }
+    return kStatus_Success;
 }
 
 AT_QUICKACCESS_SECTION_CODE(static void POWER_DMA_HWWake_LPRestore(void))
@@ -1112,14 +1197,23 @@ AT_QUICKACCESS_SECTION_CODE(static void POWER_DMA_HWWake_LPRestore(void))
     }
 }
 
-AT_QUICKACCESS_SECTION_CODE(static void POWER_DisableCache(XCACHE_Type *base))
+AT_QUICKACCESS_SECTION_CODE(static status_t POWER_DisableCache(XCACHE_Type *base))
 {
+#if POWER_RETRY_TIMES > 0
+    uint32_t retry = POWER_RETRY_TIMES;
+#endif
     /* First, push any modified contents. */
     base->CCR |= XCACHE_CCR_PUSHW0_MASK | XCACHE_CCR_PUSHW1_MASK | XCACHE_CCR_GO_MASK;
 
     /* Wait until the cache command completes. */
     while ((base->CCR & XCACHE_CCR_GO_MASK) != 0x00U)
     {
+#if POWER_RETRY_TIMES > 0
+        if (--retry == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
 
     /* As a precaution clear the bits to avoid inadvertently re-running this command. */
@@ -1127,22 +1221,35 @@ AT_QUICKACCESS_SECTION_CODE(static void POWER_DisableCache(XCACHE_Type *base))
 
     /* Now disable the cache. */
     base->CCR &= ~XCACHE_CCR_ENCACHE_MASK;
+
+    return kStatus_Success;
 }
 
-AT_QUICKACCESS_SECTION_CODE(static void POWER_EnableCache(XCACHE_Type *base))
+AT_QUICKACCESS_SECTION_CODE(static status_t POWER_EnableCache(XCACHE_Type *base))
 {
+#if POWER_RETRY_TIMES > 0
+    uint32_t retry = POWER_RETRY_TIMES;
+#endif
     /* Invalidate all lines in both ways and initiate the cache command. */
     base->CCR |= XCACHE_CCR_INVW0_MASK | XCACHE_CCR_INVW1_MASK | XCACHE_CCR_GO_MASK;
 
     /* Wait until the cache command completes. */
     while ((base->CCR & XCACHE_CCR_GO_MASK) != 0x00U)
     {
+#if POWER_RETRY_TIMES > 0
+        if (--retry == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
 
     /* Now enable the cache. */
     base->CCR |= XCACHE_CCR_ENCACHE_MASK;
     __ISB();
     __DSB();
+
+    return kStatus_Success;
 }
 
 /** @brief This API configure the SLEEPCON SLEEPCFG and PMC_PDSLEEPCFG registers.
@@ -1337,7 +1444,7 @@ AT_QUICKACCESS_SECTION_CODE(static void POWER_EnterLowPower_FullConfig(const uin
                              PMC_CTRL_AGDET2RE_MASK | PMC_CTRL_AGDET1RE_MASK);
 
     /* Deinit XSPI interface in case XIP */
-    deinitXip();
+    (void)deinitXip();
 
     if (backupCache[1]) /* Xcache is not retented in DSR mode. */
     {
@@ -1345,7 +1452,7 @@ AT_QUICKACCESS_SECTION_CODE(static void POWER_EnterLowPower_FullConfig(const uin
 
         if (cacheEnabled[1])
         {
-            POWER_DisableCache(XCACHE1);
+            (void)POWER_DisableCache(XCACHE1);
         }
     }
     if (backupCache[0]) /* Xcache is not retented in DSR mode. */
@@ -1354,14 +1461,14 @@ AT_QUICKACCESS_SECTION_CODE(static void POWER_EnterLowPower_FullConfig(const uin
 
         if (cacheEnabled[0])
         {
-            POWER_DisableCache(XCACHE0);
+            (void)POWER_DisableCache(XCACHE0);
         }
     }
 
     if (mode == kPower_DeepSleep)
     {
         /* The DMA HWWake function requires all the ACK of modules supporting HWWake, do handshake for those modules. */
-        POWER_DMA_HWWake_LPRequest();
+        (void)POWER_DMA_HWWake_LPRequest();
     }
 
     /* If the first one to Deep Sleep, ignore the Ignores power-down ready signal from LPOSC, FRO2. */
@@ -1382,19 +1489,19 @@ AT_QUICKACCESS_SECTION_CODE(static void POWER_EnterLowPower_FullConfig(const uin
     {
         if (cacheEnabled[1])
         {
-            POWER_EnableCache(XCACHE1);
+            (void)POWER_EnableCache(XCACHE1);
         }
     }
     if (backupCache[0])
     {
         if (cacheEnabled[0])
         {
-            POWER_EnableCache(XCACHE0);
+            (void)POWER_EnableCache(XCACHE0);
         }
     }
 
     /* Init XSPI in case XIP */
-    initXip();
+    (void)initXip();
 
     /* Clear LVD flags */
     PMC->FLAGS = PMC_FLAGS_LVDVDD1F_MASK | PMC_FLAGS_LVDVDD2F_MASK | PMC_FLAGS_LVDVDDNF_MASK | PMC_FLAGS_AGDET1F_MASK |
@@ -1412,9 +1519,12 @@ AT_QUICKACCESS_SECTION_CODE(void POWER_EnterDSR(const uint32_t exclude_from_pd[7
 }
 #else
 /* Need do low power request-ack for all the modules capable of DMA HW Wake function if the DMA_HWWake is used. */
-AT_QUICKACCESS_SECTION_CODE(static void POWER_DMA_HWWake_LPRequest(void))
+AT_QUICKACCESS_SECTION_CODE(static status_t POWER_DMA_HWWake_LPRequest(void))
 {
     uint32_t lpReqClockCfg, lpReqResetCfg;
+#if POWER_RETRY_TIMES > 0
+    uint32_t retry = POWER_RETRY_TIMES;
+#endif
 
     if (SLEEPCON1->HW_WAKE != 0U) /* Only assert the LP Requet when DMA HW_WAKE enabled. */
     {
@@ -1436,21 +1546,46 @@ AT_QUICKACCESS_SECTION_CODE(static void POWER_DMA_HWWake_LPRequest(void))
         SLEEPCON1->SHA_MED_TCTRL0 |= SLEEPCON1_SHA_MED_TCTRL0_FLEXIO_B_LPREQ_MASK; /* FLEXIO Bus*/
         SLEEPCON1->SHA_SEN_TCTRL0 |= SLEEPCON1_SHA_SEN_TCTRL0_MICFIL_STOP_MASK;    /* MICFIL */
         SLEEPCON1->PRIVATE_TCTRL0 |= PRIVATE_TCTRL_HWWAKE_MODULE_MASK0;            /* SAI and LP_FLEXCOMM */
-
         while ((SLEEPCON1->PRIVATE_CSTAT0 & PRIVATE_CONTROLLER_HWWAKE_MODULE_MASK) !=
                PRIVATE_CONTROLLER_HWWAKE_MODULE_MASK)
         {
+#if POWER_RETRY_TIMES > 0
+            if (--retry == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
+#if POWER_RETRY_TIMES > 0
+        retry = POWER_RETRY_TIMES;
+#endif
         while ((SLEEPCON1->SHA_MEDSEN_TSTAT0 & SHA_MEDSEN_TSTAT_HWWAKE_MODULE_MASK) !=
                SHA_MEDSEN_TSTAT_HWWAKE_MODULE_MASK)
         {
+#if POWER_RETRY_TIMES > 0
+            if (--retry == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
+#if POWER_RETRY_TIMES > 0
+        retry = POWER_RETRY_TIMES;
+#endif
         while ((SLEEPCON1->PRIVATE_TSTAT0 & PRIVATE_TSTAT_HWWAKE_MODULE_MASK0) != PRIVATE_TSTAT_HWWAKE_MODULE_MASK0)
         {
+#if POWER_RETRY_TIMES > 0
+            if (--retry == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
         CLKCTL1->PSCCTL1  = lpReqClockCfg;
         RSTCTL1->PRSTCTL0 = lpReqResetCfg;
     }
+
+    return kStatus_Success;
 }
 
 AT_QUICKACCESS_SECTION_CODE(static void POWER_DMA_HWWake_LPRestore(void))

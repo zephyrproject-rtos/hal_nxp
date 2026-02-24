@@ -25,8 +25,8 @@
 **                          MIMXRT106LDVL6A
 **                          MIMXRT106SDVL6A
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250619
+**     Version:             rev. 3.0, 2025-11-13
+**     Build:               b251113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FLEXSPI
@@ -54,14 +54,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-13)
+**         Move enet compatibility macros to common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_FLEXSPI.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2025-11-13
  * @brief CMSIS Peripheral Access Layer for FLEXSPI
  *
  * CMSIS Peripheral Access Layer for FLEXSPI

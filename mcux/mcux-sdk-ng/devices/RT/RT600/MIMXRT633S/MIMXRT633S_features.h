@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 1.0, 2018-06-19
-**     Build:               b250812
+**     Version:             rev. 2.0, 2025-11-13
+**     Build:               b251113
 **
 **     Abstract:
 **         Chip specific module features.
@@ -16,6 +16,8 @@
 **     Revisions:
 **     - rev. 1.0 (2018-06-19)
 **         Initial version.
+**     - rev. 2.0 (2025-11-13)
+**         Update mu/cache64 feature to align with shared definition changes.
 **
 ** ###################################################################
 */
@@ -205,10 +207,8 @@
 
 /* @brief Cache Line size in byte. */
 #define FSL_FEATURE_CACHE64_CTRL_LINESIZE_BYTE (32)
-
-/* CACHE64_POLSEL module features */
-
-/* No feature definitions */
+/* @brief Cache does not support write buffer. */
+#define FSL_FEATURE_CACHE64_CTRL_HAS_NO_WRITE_BUF (0)
 
 /* CASPER module features */
 
@@ -497,28 +497,36 @@
 
 /* MU module features */
 
+/* @brief MU side for current core */
+#define FSL_FEATURE_MU_SIDE_A (1)
 /* @brief MU Has register CCR */
 #define FSL_FEATURE_MU_HAS_CCR (0)
 /* @brief MU Has register SR[RS], BSR[ARS] */
 #define FSL_FEATURE_MU_HAS_SR_RS (1)
 /* @brief MU Has register CR[RDIE], CR[RAIE], SR[RDIP], SR[RAIP] */
-#define FSL_FEATURE_MU_HAS_RESET_INT (0)
+#define FSL_FEATURE_MU_HAS_RESET_INT (1)
 /* @brief MU Has register SR[MURIP] */
 #define FSL_FEATURE_MU_HAS_SR_MURIP (0)
-/* @brief brief MU Has register SR[HRIP] */
+/* @brief MU Has register SR[HRIP] */
 #define FSL_FEATURE_MU_HAS_SR_HRIP (0)
-/* @brief brief MU does not support enable clock of the other core, CR[CLKE] or CCR[CLKE]. */
+/* @brief MU does not support enable clock of the other core, CR[CLKE] or CCR[CLKE]. */
 #define FSL_FEATURE_MU_NO_CLKE (1)
-/* @brief brief MU does not support NMI, CR[NMI]. */
+/* @brief MU does not support NMI, CR[NMI]. */
 #define FSL_FEATURE_MU_NO_NMI (1)
-/* @brief brief MU does not support hold the other core reset. CR[RSTH] or CCR[RSTH]. */
+/* @brief MU does not support hold the other core reset. CR[RSTH] or CCR[RSTH]. */
 #define FSL_FEATURE_MU_NO_RSTH (1)
-/* @brief brief MU does not supports MU reset, CR[MUR]. */
+/* @brief MU does not supports MU reset, CR[MUR]. */
 #define FSL_FEATURE_MU_NO_MUR (0)
-/* @brief brief MU does not supports hardware reset, CR[HR] or CCR[HR]. */
+/* @brief MU does not supports hardware reset, CR[HR] or CCR[HR]. */
 #define FSL_FEATURE_MU_NO_HR (1)
-/* @brief brief MU supports mask the hardware reset. CR[HRM] or CCR[HRM]. */
+/* @brief MU supports mask the hardware reset. CR[HRM] or CCR[HRM]. */
 #define FSL_FEATURE_MU_HAS_HRM (0)
+/* @brief MU does not support check the other core power mode. SR[PM] or BSR[APM]. */
+#define FSL_FEATURE_MU_NO_PM (0)
+/* @brief MU supports reset assert interrupt. CR[RAIE] or BCR[RAIE]. */
+#define FSL_FEATURE_MU_HAS_RESET_ASSERT_INT (1)
+/* @brief MU supports reset de-assert interrupt. CR[RDIE] or BCR[RDIE]. */
+#define FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT (1)
 
 /* OTFAD module features */
 
@@ -579,10 +587,6 @@
 
 /* @brief SSEL pin count. */
 #define FSL_FEATURE_SPI_SSEL_COUNT (4)
-
-/* TRNG module features */
-
-/* No feature definitions */
 
 /* USBHSD module features */
 

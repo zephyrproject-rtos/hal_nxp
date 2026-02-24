@@ -27,8 +27,8 @@
 **                          MIMXRT798SGFOB_hifi1
 **                          MIMXRT798SGFOB_hifi4
 **
-**     Version:             rev. 4.0, 2025-06-06
-**     Build:               b250722
+**     Version:             rev. 5.1, 2025-12-08
+**     Build:               b251208
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PMC
@@ -50,14 +50,18 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 4.0 (2025-06-06)
 **         B0 initial version
+**     - rev. 5.0 (2025-11-13)
+**         Add puf/sdadc irq and cache64 compatibility macros to common header.
+**     - rev. 5.1 (2025-12-08)
+**         Update RM version and add pdm irq for hifi1/hifi4.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_PMC.h
- * @version 4.0
- * @date 2025-06-06
+ * @version 5.1
+ * @date 2025-12-08
  * @brief CMSIS Peripheral Access Layer for PMC
  *
  * CMSIS Peripheral Access Layer for PMC
@@ -1093,7 +1097,7 @@ typedef struct {
  *  0b01000..0.48 V
  *  0b10000..0.56 V
  *  0b11000..0.64 V
- *  0b11111..0.72 V
+ *  0b11111..0.71 V
  */
 #define PMC_PORCTRL_VDD1LVL(x)                   (((uint32_t)(((uint32_t)(x)) << PMC_PORCTRL_VDD1LVL_SHIFT)) & PMC_PORCTRL_VDD1LVL_MASK)
 
@@ -1104,7 +1108,7 @@ typedef struct {
  *  0b01000..0.48 V
  *  0b10000..0.56 V
  *  0b11000..0.64 V
- *  0b11111..0.72 V
+ *  0b11111..0.71 V
  */
 #define PMC_PORCTRL_VDD2LVL(x)                   (((uint32_t)(((uint32_t)(x)) << PMC_PORCTRL_VDD2LVL_SHIFT)) & PMC_PORCTRL_VDD2LVL_MASK)
 
@@ -1115,7 +1119,7 @@ typedef struct {
  *  0b01000..0.48 V
  *  0b10000..0.56 V
  *  0b11000..0.64 V
- *  0b11111..0.72 V
+ *  0b11111..0.71 V
  */
 #define PMC_PORCTRL_VDDNLVL(x)                   (((uint32_t)(((uint32_t)(x)) << PMC_PORCTRL_VDDNLVL_SHIFT)) & PMC_PORCTRL_VDDNLVL_MASK)
 /*! @} */

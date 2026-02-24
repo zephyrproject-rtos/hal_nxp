@@ -27,8 +27,8 @@
 **                          MIMXRT798SGFOB_hifi1
 **                          MIMXRT798SGFOB_hifi4
 **
-**     Version:             rev. 4.0, 2025-06-06
-**     Build:               b250722
+**     Version:             rev. 5.1, 2025-12-08
+**     Build:               b251208
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PKC
@@ -50,14 +50,18 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 4.0 (2025-06-06)
 **         B0 initial version
+**     - rev. 5.0 (2025-11-13)
+**         Add puf/sdadc irq and cache64 compatibility macros to common header.
+**     - rev. 5.1 (2025-12-08)
+**         Update RM version and add pdm irq for hifi1/hifi4.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_PKC.h
- * @version 4.0
- * @date 2025-06-06
+ * @version 5.1
+ * @date 2025-12-08
  * @brief CMSIS Peripheral Access Layer for PKC
  *
  * CMSIS Peripheral Access Layer for PKC
@@ -154,24 +158,18 @@ typedef struct {
   __IO uint32_t PKC_UPTR;                          /**< Universal pointer FUP program, offset: 0x40 */
   __IO uint32_t PKC_UPTRT;                         /**< Universal pointer FUP table, offset: 0x44 */
   __IO uint32_t PKC_ULEN;                          /**< Universal pointer length, offset: 0x48 */
-       uint8_t RESERVED_2[4];
-  __IO uint32_t PKC_MCDATA;                        /**< MC pattern data interface, offset: 0x50 */
-       uint8_t RESERVED_3[12];
-  __I  uint32_t PKC_VERSION;                       /**< PKC version register, offset: 0x60 */
-       uint8_t RESERVED_4[3916];
+       uint8_t RESERVED_2[3940];
   __O  uint32_t PKC_SOFT_RST;                      /**< Software reset, offset: 0xFB0 */
-       uint8_t RESERVED_5[12];
+       uint8_t RESERVED_3[12];
   __I  uint32_t PKC_ACCESS_ERR;                    /**< Access Error, offset: 0xFC0 */
   __O  uint32_t PKC_ACCESS_ERR_CLR;                /**< Clear Access Error, offset: 0xFC4 */
-       uint8_t RESERVED_6[16];
+       uint8_t RESERVED_4[16];
   __O  uint32_t PKC_INT_CLR_ENABLE;                /**< Interrupt enable clear, offset: 0xFD8 */
   __O  uint32_t PKC_INT_SET_ENABLE;                /**< Interrupt enable set, offset: 0xFDC */
   __I  uint32_t PKC_INT_STATUS;                    /**< Interrupt status, offset: 0xFE0 */
   __I  uint32_t PKC_INT_ENABLE;                    /**< Interrupt enable, offset: 0xFE4 */
   __O  uint32_t PKC_INT_CLR_STATUS;                /**< Interrupt status clear, offset: 0xFE8 */
   __O  uint32_t PKC_INT_SET_STATUS;                /**< Interrupt status set, offset: 0xFEC */
-       uint8_t RESERVED_7[12];
-  __I  uint32_t PKC_MODULE_ID;                     /**< Module ID, offset: 0xFFC */
 } PKC_Type;
 
 /* ----------------------------------------------------------------------------
@@ -445,68 +443,6 @@ typedef struct {
 #define PKC_PKC_ULEN_LEN(x)                      (((uint32_t)(((uint32_t)(x)) << PKC_PKC_ULEN_LEN_SHIFT)) & PKC_PKC_ULEN_LEN_MASK)
 /*! @} */
 
-/*! @name PKC_MCDATA - MC pattern data interface */
-/*! @{ */
-
-#define PKC_PKC_MCDATA_MCDATA_MASK               (0xFFFFFFFFU)
-#define PKC_PKC_MCDATA_MCDATA_SHIFT              (0U)
-/*! MCDATA - Microcode read/write data */
-#define PKC_PKC_MCDATA_MCDATA(x)                 (((uint32_t)(((uint32_t)(x)) << PKC_PKC_MCDATA_MCDATA_SHIFT)) & PKC_PKC_MCDATA_MCDATA_MASK)
-/*! @} */
-
-/*! @name PKC_VERSION - PKC version register */
-/*! @{ */
-
-#define PKC_PKC_VERSION_MULSIZE_MASK             (0x3U)
-#define PKC_PKC_VERSION_MULSIZE_SHIFT            (0U)
-/*! MULSIZE
- *  0b01..Reserved
- *  0b10..64-bit multiplier
- *  0b11..Reserved
- */
-#define PKC_PKC_VERSION_MULSIZE(x)               (((uint32_t)(((uint32_t)(x)) << PKC_PKC_VERSION_MULSIZE_SHIFT)) & PKC_PKC_VERSION_MULSIZE_MASK)
-
-#define PKC_PKC_VERSION_MCAVAIL_MASK             (0x4U)
-#define PKC_PKC_VERSION_MCAVAIL_SHIFT            (2U)
-#define PKC_PKC_VERSION_MCAVAIL(x)               (((uint32_t)(((uint32_t)(x)) << PKC_PKC_VERSION_MCAVAIL_SHIFT)) & PKC_PKC_VERSION_MCAVAIL_MASK)
-
-#define PKC_PKC_VERSION_UPAVAIL_MASK             (0x8U)
-#define PKC_PKC_VERSION_UPAVAIL_SHIFT            (3U)
-#define PKC_PKC_VERSION_UPAVAIL(x)               (((uint32_t)(((uint32_t)(x)) << PKC_PKC_VERSION_UPAVAIL_SHIFT)) & PKC_PKC_VERSION_UPAVAIL_MASK)
-
-#define PKC_PKC_VERSION_UPCACHEAVAIL_MASK        (0x10U)
-#define PKC_PKC_VERSION_UPCACHEAVAIL_SHIFT       (4U)
-#define PKC_PKC_VERSION_UPCACHEAVAIL(x)          (((uint32_t)(((uint32_t)(x)) << PKC_PKC_VERSION_UPCACHEAVAIL_SHIFT)) & PKC_PKC_VERSION_UPCACHEAVAIL_MASK)
-
-#define PKC_PKC_VERSION_GF2AVAIL_MASK            (0x20U)
-#define PKC_PKC_VERSION_GF2AVAIL_SHIFT           (5U)
-#define PKC_PKC_VERSION_GF2AVAIL(x)              (((uint32_t)(((uint32_t)(x)) << PKC_PKC_VERSION_GF2AVAIL_SHIFT)) & PKC_PKC_VERSION_GF2AVAIL_MASK)
-
-#define PKC_PKC_VERSION_PARAMNUM_MASK            (0xC0U)
-#define PKC_PKC_VERSION_PARAMNUM_SHIFT           (6U)
-#define PKC_PKC_VERSION_PARAMNUM(x)              (((uint32_t)(((uint32_t)(x)) << PKC_PKC_VERSION_PARAMNUM_SHIFT)) & PKC_PKC_VERSION_PARAMNUM_MASK)
-
-#define PKC_PKC_VERSION_SBX0AVAIL_MASK           (0x100U)
-#define PKC_PKC_VERSION_SBX0AVAIL_SHIFT          (8U)
-#define PKC_PKC_VERSION_SBX0AVAIL(x)             (((uint32_t)(((uint32_t)(x)) << PKC_PKC_VERSION_SBX0AVAIL_SHIFT)) & PKC_PKC_VERSION_SBX0AVAIL_MASK)
-
-#define PKC_PKC_VERSION_SBX1AVAIL_MASK           (0x200U)
-#define PKC_PKC_VERSION_SBX1AVAIL_SHIFT          (9U)
-#define PKC_PKC_VERSION_SBX1AVAIL(x)             (((uint32_t)(((uint32_t)(x)) << PKC_PKC_VERSION_SBX1AVAIL_SHIFT)) & PKC_PKC_VERSION_SBX1AVAIL_MASK)
-
-#define PKC_PKC_VERSION_SBX2AVAIL_MASK           (0x400U)
-#define PKC_PKC_VERSION_SBX2AVAIL_SHIFT          (10U)
-#define PKC_PKC_VERSION_SBX2AVAIL(x)             (((uint32_t)(((uint32_t)(x)) << PKC_PKC_VERSION_SBX2AVAIL_SHIFT)) & PKC_PKC_VERSION_SBX2AVAIL_MASK)
-
-#define PKC_PKC_VERSION_SBX3AVAIL_MASK           (0x800U)
-#define PKC_PKC_VERSION_SBX3AVAIL_SHIFT          (11U)
-#define PKC_PKC_VERSION_SBX3AVAIL(x)             (((uint32_t)(((uint32_t)(x)) << PKC_PKC_VERSION_SBX3AVAIL_SHIFT)) & PKC_PKC_VERSION_SBX3AVAIL_MASK)
-
-#define PKC_PKC_VERSION_MCRECONF_SIZE_MASK       (0xFF000U)
-#define PKC_PKC_VERSION_MCRECONF_SIZE_SHIFT      (12U)
-#define PKC_PKC_VERSION_MCRECONF_SIZE(x)         (((uint32_t)(((uint32_t)(x)) << PKC_PKC_VERSION_MCRECONF_SIZE_SHIFT)) & PKC_PKC_VERSION_MCRECONF_SIZE_MASK)
-/*! @} */
-
 /*! @name PKC_SOFT_RST - Software reset */
 /*! @{ */
 
@@ -610,26 +546,6 @@ typedef struct {
 #define PKC_PKC_INT_SET_STATUS_INT_PDONE_MASK    (0x1U)
 #define PKC_PKC_INT_SET_STATUS_INT_PDONE_SHIFT   (0U)
 #define PKC_PKC_INT_SET_STATUS_INT_PDONE(x)      (((uint32_t)(((uint32_t)(x)) << PKC_PKC_INT_SET_STATUS_INT_PDONE_SHIFT)) & PKC_PKC_INT_SET_STATUS_INT_PDONE_MASK)
-/*! @} */
-
-/*! @name PKC_MODULE_ID - Module ID */
-/*! @{ */
-
-#define PKC_PKC_MODULE_ID_SIZE_MASK              (0xFFU)
-#define PKC_PKC_MODULE_ID_SIZE_SHIFT             (0U)
-#define PKC_PKC_MODULE_ID_SIZE(x)                (((uint32_t)(((uint32_t)(x)) << PKC_PKC_MODULE_ID_SIZE_SHIFT)) & PKC_PKC_MODULE_ID_SIZE_MASK)
-
-#define PKC_PKC_MODULE_ID_MINOR_REV_MASK         (0xF00U)
-#define PKC_PKC_MODULE_ID_MINOR_REV_SHIFT        (8U)
-#define PKC_PKC_MODULE_ID_MINOR_REV(x)           (((uint32_t)(((uint32_t)(x)) << PKC_PKC_MODULE_ID_MINOR_REV_SHIFT)) & PKC_PKC_MODULE_ID_MINOR_REV_MASK)
-
-#define PKC_PKC_MODULE_ID_MAJOR_REV_MASK         (0xF000U)
-#define PKC_PKC_MODULE_ID_MAJOR_REV_SHIFT        (12U)
-#define PKC_PKC_MODULE_ID_MAJOR_REV(x)           (((uint32_t)(((uint32_t)(x)) << PKC_PKC_MODULE_ID_MAJOR_REV_SHIFT)) & PKC_PKC_MODULE_ID_MAJOR_REV_MASK)
-
-#define PKC_PKC_MODULE_ID_ID_MASK                (0xFFFF0000U)
-#define PKC_PKC_MODULE_ID_ID_SHIFT               (16U)
-#define PKC_PKC_MODULE_ID_ID(x)                  (((uint32_t)(((uint32_t)(x)) << PKC_PKC_MODULE_ID_ID_SHIFT)) & PKC_PKC_MODULE_ID_ID_MASK)
 /*! @} */
 
 

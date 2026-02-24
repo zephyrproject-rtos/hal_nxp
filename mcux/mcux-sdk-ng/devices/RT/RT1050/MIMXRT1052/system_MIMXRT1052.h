@@ -12,8 +12,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    IMXRT1050RM Rev.5, 07/2021 | IMXRT1050SRM Rev.2
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 3.0, 2025-11-13
+**     Build:               b251113
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -45,14 +45,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-13)
+**         Move enet compatibility macros to common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1052
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2025-11-13
  * @brief Device specific configuration file for MIMXRT1052 (header file)
  *
  * Provides a system configuration function and a global variable that contains

@@ -53,14 +53,14 @@
 **                          MIMXRT117HDVMAB_cm4
 **                          MIMXRT117HDVMAB_cm7
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250703
+**     Version:             rev. 4.0, 2026-01-06
+**     Build:               b260106
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPSPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -74,14 +74,18 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-13)
+**         Consolidate asrc/xbar and enet macros into common header.
+**     - rev. 4.0 (2026-01-06)
+**         Update header files to align with IMXRT1170RM Rev.5.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_LPSPI.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-01-06
  * @brief CMSIS Peripheral Access Layer for LPSPI
  *
  * CMSIS Peripheral Access Layer for LPSPI
@@ -448,6 +452,30 @@ typedef struct {
 
 /*! @name CFGR0 - Configuration 0 */
 /*! @{ */
+
+#define LPSPI_CFGR0_HREN_MASK                    (0x1U)
+#define LPSPI_CFGR0_HREN_SHIFT                   (0U)
+/*! HREN - Host Request Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define LPSPI_CFGR0_HREN(x)                      (((uint32_t)(((uint32_t)(x)) << LPSPI_CFGR0_HREN_SHIFT)) & LPSPI_CFGR0_HREN_MASK)
+
+#define LPSPI_CFGR0_HRPOL_MASK                   (0x2U)
+#define LPSPI_CFGR0_HRPOL_SHIFT                  (1U)
+/*! HRPOL - Host Request Polarity
+ *  0b0..Active high if CFGR1[PCSPOL] bit 1 is 0
+ *  0b1..Active low if CFGR1[PCSPOL] bit 1 is 0
+ */
+#define LPSPI_CFGR0_HRPOL(x)                     (((uint32_t)(((uint32_t)(x)) << LPSPI_CFGR0_HRPOL_SHIFT)) & LPSPI_CFGR0_HRPOL_MASK)
+
+#define LPSPI_CFGR0_HRSEL_MASK                   (0x4U)
+#define LPSPI_CFGR0_HRSEL_SHIFT                  (2U)
+/*! HRSEL - Host Request Select
+ *  0b0..HREQ pin
+ *  0b1..Input trigger
+ */
+#define LPSPI_CFGR0_HRSEL(x)                     (((uint32_t)(((uint32_t)(x)) << LPSPI_CFGR0_HRSEL_SHIFT)) & LPSPI_CFGR0_HRSEL_MASK)
 
 #define LPSPI_CFGR0_CIRFIFO_MASK                 (0x100U)
 #define LPSPI_CFGR0_CIRFIFO_SHIFT                (8U)

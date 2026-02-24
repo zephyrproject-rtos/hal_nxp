@@ -7,8 +7,8 @@
 **
 **     Compiler:            Xtensa Compiler
 **     Reference manual:    MIMXRT685 User manual Rev. 1.8 21 November 2024
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 4.0, 2025-11-13
+**     Build:               b251113
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMXRT685S_dsp
@@ -28,14 +28,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2025-11-13)
+**         Add puf irq and move some trng compatibility macros to common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT685S_dsp_COMMON.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2025-11-13
  * @brief Peripheral Access Layer for MIMXRT685S_dsp
  *
  * Peripheral Access Layer for MIMXRT685S_dsp
@@ -46,7 +48,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0300U
+#define MCU_MEM_MAP_VERSION 0x0400U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -720,6 +722,9 @@ typedef enum IRQn {
 #define TRNG_BASE_ADDRS                          { TRNG_BASE }
 /** Array initializer of TRNG peripheral base pointers */
 #define TRNG_BASE_PTRS                           { TRNG }
+/* Backward compatibility */
+#define TRNG0                                    TRNG
+
 
 /* USART - Peripheral instance base addresses */
 /** Peripheral USART0 base address */

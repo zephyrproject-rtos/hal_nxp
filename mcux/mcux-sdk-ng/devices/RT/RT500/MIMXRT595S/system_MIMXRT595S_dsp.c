@@ -5,8 +5,8 @@
 **
 **     Compiler:            Xtensa Compiler
 **     Reference manual:    iMXRT500RM Rev.1, 07/2022
-**     Version:             rev. 6.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 7.0, 2025-11-13
+**     Build:               b251113
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -34,6 +34,8 @@
 **     - rev. 6.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 7.0 (2025-11-13)
+**         Add puf irq and move some trng compatibility macros to common header.
 **
 ** ###################################################################
 */
@@ -41,7 +43,7 @@
 /*!
  * @file MIMXRT595S
  * @version 1.0
- * @date 200525
+ * @date 131125
  * @brief Device specific configuration file for MIMXRT595S (implementation file)
  *
  * Provides a system configuration function and a global variable that contains

@@ -27,8 +27,8 @@
 **                          MIMXRT798SGFOB_hifi1
 **                          MIMXRT798SGFOB_hifi4
 **
-**     Version:             rev. 4.0, 2025-06-06
-**     Build:               b250722
+**     Version:             rev. 5.1, 2025-12-08
+**     Build:               b251208
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PDM
@@ -50,14 +50,18 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 4.0 (2025-06-06)
 **         B0 initial version
+**     - rev. 5.0 (2025-11-13)
+**         Add puf/sdadc irq and cache64 compatibility macros to common header.
+**     - rev. 5.1 (2025-12-08)
+**         Update RM version and add pdm irq for hifi1/hifi4.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_PDM.h
- * @version 4.0
- * @date 2025-06-06
+ * @version 5.1
+ * @date 2025-12-08
  * @brief CMSIS Peripheral Access Layer for PDM
  *
  * CMSIS Peripheral Access Layer for PDM
@@ -251,7 +255,7 @@ typedef struct {
  *  0b00..Disables DMA and interrupt requests
  *  0b01..Enables DMA requests
  *  0b10..Enables interrupt requests
- *  0b11..Reserved
+ *  0b11..
  */
 #define PDM_CTRL_1_DISEL(x)                      (((uint32_t)(((uint32_t)(x)) << PDM_CTRL_1_DISEL_SHIFT)) & PDM_CTRL_1_DISEL_MASK)
 

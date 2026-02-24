@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -7,6 +7,12 @@
 
 #include "fsl_common.h"
 #include "fsl_reset.h"
+
+#if defined(CONFIG_FLASH_DRIVER_EXECUTES_FROM_RAM) && (CONFIG_FLASH_DRIVER_EXECUTES_FROM_RAM == 1)
+  #define RAMFUNC MCUX_RAMFUNC
+#else
+  #define RAMFUNC
+#endif
 
 /*******************************************************************************
  * Definitions
@@ -35,7 +41,7 @@
  * param peripheral Assert reset to this peripheral. The enum argument contains encoding of reset register
  *                   and reset bit position in the reset register.
  */
-void RESET_SetPeripheralReset(reset_ip_name_t peripheral)
+RAMFUNC void RESET_SetPeripheralReset(reset_ip_name_t peripheral)
 {
     const uint32_t regIndex = ((uint32_t)peripheral & 0x0000FF00u) >> 8;
     const uint32_t bitPos   = ((uint32_t)peripheral & 0x000000FFu);
@@ -135,7 +141,7 @@ void RESET_SetPeripheralReset(reset_ip_name_t peripheral)
  * param peripheral Clear reset to this peripheral. The enum argument contains encoding of reset register
  *                   and reset bit position in the reset register.
  */
-void RESET_ClearPeripheralReset(reset_ip_name_t peripheral)
+RAMFUNC void RESET_ClearPeripheralReset(reset_ip_name_t peripheral)
 {
     const uint32_t regIndex = ((uint32_t)peripheral & 0x0000FF00u) >> 8;
     const uint32_t bitPos   = ((uint32_t)peripheral & 0x000000FFu);
@@ -236,7 +242,7 @@ void RESET_ClearPeripheralReset(reset_ip_name_t peripheral)
  * param peripheral Peripheral to reset. The enum argument contains encoding of reset register
  *                   and reset bit position in the reset register.
  */
-void RESET_PeripheralReset(reset_ip_name_t peripheral)
+RAMFUNC void RESET_PeripheralReset(reset_ip_name_t peripheral)
 {
     RESET_SetPeripheralReset(peripheral);
     RESET_ClearPeripheralReset(peripheral);

@@ -12,8 +12,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    IMXRT1040RM Rev.1, 09/2022
-**     Version:             rev. 1.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 2.0, 2025-11-13
+**     Build:               b251113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1041
@@ -31,14 +31,16 @@
 **     - rev. 1.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 2.0 (2025-11-13)
+**         Move enet compatibility macros to common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1041.h
- * @version 1.0
- * @date 2024-10-29
+ * @version 2.0
+ * @date 2025-11-13
  * @brief CMSIS Peripheral Access Layer for MIMXRT1041
  *
  * CMSIS Peripheral Access Layer for MIMXRT1041

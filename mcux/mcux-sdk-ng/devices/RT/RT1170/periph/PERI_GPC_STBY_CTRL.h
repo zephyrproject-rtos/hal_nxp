@@ -53,14 +53,14 @@
 **                          MIMXRT117HDVMAB_cm4
 **                          MIMXRT117HDVMAB_cm7
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250703
+**     Version:             rev. 4.0, 2026-01-06
+**     Build:               b260106
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GPC_STBY_CTRL
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -74,14 +74,18 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-13)
+**         Consolidate asrc/xbar and enet macros into common header.
+**     - rev. 4.0 (2026-01-06)
+**         Update header files to align with IMXRT1170RM Rev.5.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_GPC_STBY_CTRL.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-01-06
  * @brief CMSIS Peripheral Access Layer for GPC_STBY_CTRL
  *
  * CMSIS Peripheral Access Layer for GPC_STBY_CTRL
@@ -321,9 +325,7 @@ typedef struct {
 #define GPC_STBY_CTRL_STBY_PMIC_OUT_CTRL_CNT_MODE_SHIFT (28U)
 /*! CNT_MODE - Count mode
  *  0b00..Counter disable mode: not use step counter, step completes once receiving step_done
- *  0b01..Counter delay mode: delay after receiving step_done, delay cycle number is STEP_CNT
  *  0b10..Ignore step_done response, the counter starts to count once step begins, when counter reaches STEP_CNT value, the step completes
- *  0b11..Time out mode, the counter starts to count once step begins, the step completes when either step_done received or counting to STEP_CNT value
  */
 #define GPC_STBY_CTRL_STBY_PMIC_OUT_CTRL_CNT_MODE(x) (((uint32_t)(((uint32_t)(x)) << GPC_STBY_CTRL_STBY_PMIC_OUT_CTRL_CNT_MODE_SHIFT)) & GPC_STBY_CTRL_STBY_PMIC_OUT_CTRL_CNT_MODE_MASK)
 

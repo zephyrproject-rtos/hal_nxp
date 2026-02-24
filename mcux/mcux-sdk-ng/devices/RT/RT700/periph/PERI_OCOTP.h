@@ -27,8 +27,8 @@
 **                          MIMXRT798SGFOB_hifi1
 **                          MIMXRT798SGFOB_hifi4
 **
-**     Version:             rev. 4.0, 2025-06-06
-**     Build:               b250722
+**     Version:             rev. 5.1, 2025-12-08
+**     Build:               b251208
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for OCOTP
@@ -50,14 +50,18 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 4.0 (2025-06-06)
 **         B0 initial version
+**     - rev. 5.0 (2025-11-13)
+**         Add puf/sdadc irq and cache64 compatibility macros to common header.
+**     - rev. 5.1 (2025-12-08)
+**         Update RM version and add pdm irq for hifi1/hifi4.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_OCOTP.h
- * @version 4.0
- * @date 2025-06-06
+ * @version 5.1
+ * @date 2025-12-08
  * @brief CMSIS Peripheral Access Layer for OCOTP
  *
  * CMSIS Peripheral Access Layer for OCOTP
@@ -137,20 +141,19 @@
  */
 
 /** OCOTP - Size of Registers Arrays */
-#define OCOTP_OTP_SHADOW_PARTA_COUNT              48u
-#define OCOTP_OTP_SHADOW_PARTB_COUNT              368u
+#define OCOTP_OTP_SHADOW_PARTA_COUNT              488u
 
 /** OCOTP - Register Layout Typedef */
 typedef struct {
-  __IO uint32_t OTP_SHADOW_PARTA[OCOTP_OTP_SHADOW_PARTA_COUNT]; /**< OTP shadow register, array offset: 0x0, array step: 0x4 */
-       uint8_t RESERVED_0[384];
-  __IO uint32_t OTP_SHADOW_PARTB[OCOTP_OTP_SHADOW_PARTB_COUNT]; /**< OTP shadow register, array offset: 0x240, array step: 0x4 */
+  __IO uint32_t OTP_SHADOW[OCOTP_OTP_SHADOW_PARTA_COUNT]; /**< OTP Shadow Register, array offset: 0x0, array step: 0x4 */
+       uint8_t RESERVED_0[96];
   __IO uint32_t CTRL;                              /**< OTP Controller Control Register, offset: 0x800 */
        uint8_t RESERVED_1[4];
   __IO uint32_t HW_OCOTP_WRITE_DATA;               /**< OTP Controller Write Data Register, offset: 0x808 */
   __IO uint32_t READ_CTRL;                         /**< OTP Controller Read Ctrl Register, offset: 0x80C */
   __IO uint32_t HW_OCOTP_READ_DATA;                /**< OTP Controller Read Data Register, offset: 0x810 */
-       uint8_t RESERVED_2[12];
+  __IO uint32_t HW_OCOTP_CLK_DIV;                  /**< OTP Controller Clock Divider register, offset: 0x814 */
+       uint8_t RESERVED_2[8];
   __IO uint32_t HW_OCOTP_STATUS;                   /**< OTP Controller Status Register, offset: 0x820 */
        uint8_t RESERVED_3[4];
   __I  uint32_t VERSION;                           /**< OTP Controller Version Register, offset: 0x828 */
@@ -175,23 +178,17 @@ typedef struct {
  * @{
  */
 
-/*! @name OTP_SHADOW_PARTA - OTP shadow register */
+/*! @name OTP_SHADOW - OTP Shadow Register */
 /*! @{ */
 
-#define OCOTP_OTP_SHADOW_PARTA_SHADOW_MASK       (0xFFFFFFFFU)
-#define OCOTP_OTP_SHADOW_PARTA_SHADOW_SHIFT      (0U)
-/*! SHADOW - OTP shadow register, fsb have read access of shadow 0-47 (offset should be 0*4-47*4) */
-#define OCOTP_OTP_SHADOW_PARTA_SHADOW(x)         (((uint32_t)(((uint32_t)(x)) << OCOTP_OTP_SHADOW_PARTA_SHADOW_SHIFT)) & OCOTP_OTP_SHADOW_PARTA_SHADOW_MASK)
+#define OCOTP_OTP_SHADOW_SHADOW_MASK             (0xFFFFFFFFU)
+#define OCOTP_OTP_SHADOW_SHADOW_SHIFT            (0U)
+/*! SHADOW - OTP shadow register, fsb have read access of shadow 0-487. */
+#define OCOTP_OTP_SHADOW_SHADOW(x)               (((uint32_t)(((uint32_t)(x)) << OCOTP_OTP_SHADOW_SHADOW_SHIFT)) & OCOTP_OTP_SHADOW_SHADOW_MASK)
 /*! @} */
 
-/*! @name OTP_SHADOW_PARTB - OTP shadow register */
-/*! @{ */
-
-#define OCOTP_OTP_SHADOW_PARTB_SHADOW_MASK       (0xFFFFFFFFU)
-#define OCOTP_OTP_SHADOW_PARTB_SHADOW_SHIFT      (0U)
-/*! SHADOW - OTP shadow register, fsb have read access of shadow 144-511 (offset should be 144*4-511*4) */
-#define OCOTP_OTP_SHADOW_PARTB_SHADOW(x)         (((uint32_t)(((uint32_t)(x)) << OCOTP_OTP_SHADOW_PARTB_SHADOW_SHIFT)) & OCOTP_OTP_SHADOW_PARTB_SHADOW_MASK)
-/*! @} */
+/* The count of OCOTP_OTP_SHADOW */
+#define OCOTP_OTP_SHADOW_COUNT                   (488U)
 
 /*! @name CTRL - OTP Controller Control Register */
 /*! @{ */
@@ -251,6 +248,26 @@ typedef struct {
 #define OCOTP_HW_OCOTP_READ_DATA_READ_DATA_MASK  (0xFFFFFFFFU)
 #define OCOTP_HW_OCOTP_READ_DATA_READ_DATA_SHIFT (0U)
 #define OCOTP_HW_OCOTP_READ_DATA_READ_DATA(x)    (((uint32_t)(((uint32_t)(x)) << OCOTP_HW_OCOTP_READ_DATA_READ_DATA_SHIFT)) & OCOTP_HW_OCOTP_READ_DATA_READ_DATA_MASK)
+/*! @} */
+
+/*! @name HW_OCOTP_CLK_DIV - OTP Controller Clock Divider register */
+/*! @{ */
+
+#define OCOTP_HW_OCOTP_CLK_DIV_DIV_MASK          (0xFU)
+#define OCOTP_HW_OCOTP_CLK_DIV_DIV_SHIFT         (0U)
+#define OCOTP_HW_OCOTP_CLK_DIV_DIV(x)            (((uint32_t)(((uint32_t)(x)) << OCOTP_HW_OCOTP_CLK_DIV_DIV_SHIFT)) & OCOTP_HW_OCOTP_CLK_DIV_DIV_MASK)
+
+#define OCOTP_HW_OCOTP_CLK_DIV_RESET_MASK        (0x20000000U)
+#define OCOTP_HW_OCOTP_CLK_DIV_RESET_SHIFT       (29U)
+#define OCOTP_HW_OCOTP_CLK_DIV_RESET(x)          (((uint32_t)(((uint32_t)(x)) << OCOTP_HW_OCOTP_CLK_DIV_RESET_SHIFT)) & OCOTP_HW_OCOTP_CLK_DIV_RESET_MASK)
+
+#define OCOTP_HW_OCOTP_CLK_DIV_HALT_MASK         (0x40000000U)
+#define OCOTP_HW_OCOTP_CLK_DIV_HALT_SHIFT        (30U)
+#define OCOTP_HW_OCOTP_CLK_DIV_HALT(x)           (((uint32_t)(((uint32_t)(x)) << OCOTP_HW_OCOTP_CLK_DIV_HALT_SHIFT)) & OCOTP_HW_OCOTP_CLK_DIV_HALT_MASK)
+
+#define OCOTP_HW_OCOTP_CLK_DIV_REQFLAG_MASK      (0x80000000U)
+#define OCOTP_HW_OCOTP_CLK_DIV_REQFLAG_SHIFT     (31U)
+#define OCOTP_HW_OCOTP_CLK_DIV_REQFLAG(x)        (((uint32_t)(((uint32_t)(x)) << OCOTP_HW_OCOTP_CLK_DIV_REQFLAG_SHIFT)) & OCOTP_HW_OCOTP_CLK_DIV_REQFLAG_MASK)
 /*! @} */
 
 /*! @name HW_OCOTP_STATUS - OTP Controller Status Register */

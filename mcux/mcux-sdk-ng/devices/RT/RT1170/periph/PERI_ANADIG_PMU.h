@@ -53,14 +53,14 @@
 **                          MIMXRT117HDVMAB_cm4
 **                          MIMXRT117HDVMAB_cm7
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250703
+**     Version:             rev. 4.0, 2026-01-06
+**     Build:               b260106
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ANADIG_PMU
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -74,14 +74,18 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-13)
+**         Consolidate asrc/xbar and enet macros into common header.
+**     - rev. 4.0 (2026-01-06)
+**         Update header files to align with IMXRT1170RM Rev.5.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_ANADIG_PMU.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-01-06
  * @brief CMSIS Peripheral Access Layer for ANADIG_PMU
  *
  * CMSIS Peripheral Access Layer for ANADIG_PMU
@@ -278,6 +282,16 @@ typedef struct {
  *  0b1..VDD_LV2
  */
 #define ANADIG_PMU_PMU_BIAS_CTRL_WB_VDD_SEL_1P8(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_PMU_PMU_BIAS_CTRL_WB_VDD_SEL_1P8_SHIFT)) & ANADIG_PMU_PMU_BIAS_CTRL_WB_VDD_SEL_1P8_MASK)
+
+#define ANADIG_PMU_PMU_BIAS_CTRL_WB_PW_LVL_1P8_MASK (0xF000000U)
+#define ANADIG_PMU_PMU_BIAS_CTRL_WB_PW_LVL_1P8_SHIFT (24U)
+/*! WB_PW_LVL_1P8 - wb_pw_lvl_1p8 */
+#define ANADIG_PMU_PMU_BIAS_CTRL_WB_PW_LVL_1P8(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_PMU_PMU_BIAS_CTRL_WB_PW_LVL_1P8_SHIFT)) & ANADIG_PMU_PMU_BIAS_CTRL_WB_PW_LVL_1P8_MASK)
+
+#define ANADIG_PMU_PMU_BIAS_CTRL_WB_NW_LVL_1P8_MASK (0xF0000000U)
+#define ANADIG_PMU_PMU_BIAS_CTRL_WB_NW_LVL_1P8_SHIFT (28U)
+/*! WB_NW_LVL_1P8 - wb_nw_lvl_1p8 */
+#define ANADIG_PMU_PMU_BIAS_CTRL_WB_NW_LVL_1P8(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_PMU_PMU_BIAS_CTRL_WB_NW_LVL_1P8_SHIFT)) & ANADIG_PMU_PMU_BIAS_CTRL_WB_NW_LVL_1P8_MASK)
 /*! @} */
 
 /*! @name PMU_BIAS_CTRL2 - PMU_BIAS_CTRL2_REGISTER */

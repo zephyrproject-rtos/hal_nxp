@@ -13,7 +13,7 @@
 **
 **     Reference manual:    IMXRT1015RM Rev.1, 02/2021 | IMXRT102XSRM Rev.0
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250701
+**     Build:               b251112
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1015
@@ -532,9 +532,9 @@ typedef enum IRQn {
 /** Array initializer of GPIO peripheral base pointers */
 #define GPIO_BASE_PTRS                           { (GPIO_Type *)0u, GPIO1, GPIO2, GPIO3, (GPIO_Type *)0u, GPIO5 }
 /** Interrupt vectors for the GPIO peripheral type */
-#define GPIO_IRQS                                { NotAvail_IRQn, GPIO1_INT0_IRQn, GPIO1_INT1_IRQn, GPIO1_INT2_IRQn, GPIO1_INT3_IRQn, GPIO1_INT4_IRQn, GPIO1_INT5_IRQn, GPIO1_INT6_IRQn, GPIO1_INT7_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }
 #define GPIO_COMBINED_LOW_IRQS                   { NotAvail_IRQn, GPIO1_Combined_0_15_IRQn, GPIO2_Combined_0_15_IRQn, GPIO3_Combined_0_15_IRQn, NotAvail_IRQn, GPIO5_Combined_0_15_IRQn }
 #define GPIO_COMBINED_HIGH_IRQS                  { NotAvail_IRQn, GPIO1_Combined_16_31_IRQn, GPIO2_Combined_16_31_IRQn, GPIO3_Combined_16_31_IRQn, NotAvail_IRQn, GPIO5_Combined_16_31_IRQn }
+#define GPIO_IRQS                                { NotAvail_IRQn, GPIO1_INT0_IRQn, GPIO1_INT1_IRQn, GPIO1_INT2_IRQn, GPIO1_INT3_IRQn, GPIO1_INT4_IRQn, GPIO1_INT5_IRQn, GPIO1_INT6_IRQn, GPIO1_INT7_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }
 
 /* GPT - Peripheral instance base addresses */
 /** Peripheral GPT1 base address */

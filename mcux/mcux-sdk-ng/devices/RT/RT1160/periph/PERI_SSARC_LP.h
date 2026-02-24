@@ -13,8 +13,8 @@
 **                          MIMXRT1166XVM5A_cm4
 **                          MIMXRT1166XVM5A_cm7
 **
-**     Version:             rev. 1.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 2.0, 2025-11-13
+**     Build:               b251114
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SSARC_LP
@@ -32,14 +32,16 @@
 **     - rev. 1.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 2.0 (2025-11-13)
+**         Consolidate asrc/xbar and enet macros into common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_SSARC_LP.h
- * @version 1.0
- * @date 2024-10-29
+ * @version 2.0
+ * @date 2025-11-13
  * @brief CMSIS Peripheral Access Layer for SSARC_LP
  *
  * CMSIS Peripheral Access Layer for SSARC_LP
@@ -59,66 +61,6 @@
 #else
   #error "No valid CPU defined!"
 #endif
-
-/* ----------------------------------------------------------------------------
-   -- Mapping Information
-   ---------------------------------------------------------------------------- */
-
-/*!
- * @addtogroup Mapping_Information Mapping Information
- * @{
- */
-
-/** Mapping Information */
-#if !defined(SSARC_POWER_DOMAIN_NAME_T_)
-#define SSARC_POWER_DOMAIN_NAME_T_
-/*!
- * @addtogroup ssarc_mapping
- * @{
- */
-
-/*******************************************************************************
- * Definitions
- ******************************************************************************/
-
-/*!
- * @brief Structure for the SSARC mapping
- *
- * The name of power domain.
- */
-
-typedef enum _ssarc_power_domain_name
-{
-    kSSARC_MEGAMIXPowerDomain       = 0U,          /**< MEGAMIX Power Domain, request from BPC0. */
-    kSSARC_DISPLAYMIXPowerDomain    = 1U,          /**< DISPLAYMIX Power Domain, request from BPC1. */
-    kSSARC_WAKEUPMIXPowerDomain     = 2U,          /**< WAKEUPMIX Power Domain, request from BPC2. */
-    kSSARC_LPSRMIXPowerDomain       = 3U,          /**< LPSRMIX Power Domain, request from BPC3. */
-    kSSARC_PowerDomain4             = 4U,          /**< MIPI PHY Power Domain, request from BPC4. */
-    kSSARC_PowerDomain5             = 5U,          /**< Virtual power domain, request from BPC5. */
-    kSSARC_PowerDomain6             = 6U,          /**< Virtual power domain, request from BPC6. */
-    kSSARC_PowerDomain7             = 7U,          /**< Virtual power domain, request from BPC7. */
-} ssarc_power_domain_name_t;
-#endif /* SSARC_POWER_DOMAIN_NAME_T_ */
-
-#if !defined(SSARC_CPU_DOMAIN_NAME_T_)
-#define SSARC_CPU_DOMAIN_NAME_T_
- /*
- * @brief The name of cpu domain.
- */
-typedef enum _ssarc_cpu_domain_name
-{
-    kSSARC_CM7Core                  = 0U,          /**< CM7 Core domain. */
-    kSSARC_CM4Core                  = 1U,          /**< CM4 Core domain. */
-} ssarc_cpu_domain_name_t;
-
-/* @} */
-#endif /* SSARC_CPU_DOMAIN_NAME_T_ */
-
-
-/*!
- * @}
- */ /* end of group Mapping_Information */
-
 
 /* ----------------------------------------------------------------------------
    -- Device Peripheral Access Layer

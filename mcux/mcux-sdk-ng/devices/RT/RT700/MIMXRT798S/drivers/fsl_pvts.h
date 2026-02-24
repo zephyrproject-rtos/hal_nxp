@@ -21,12 +21,22 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief pvts driver version 2.0.2. */
-#define FSL_PVTS_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief pvts driver version 2.1.0. */
+#define FSL_PVTS_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
-#define PVTS_GET_DELAY0_FROM_FUSE_VALUE(fuse) ((pvts_delay_t)(fuse & 0x00FFU))         /*!< Calculate delay0 value from fuse word. */
-#define PVTS_GET_DELAY1_FROM_FUSE_VALUE(fuse) ((pvts_delay_t)((fuse & 0xFF00U) >> 8U)) /*!< Calculate delay1 value from fuse word. */  
+#define PVTS_GET_DELAY0_FROM_FUSE_VALUE(fuse) \
+    ((pvts_delay_t)(fuse & 0x00FFU))         /*!< Calculate delay0 value from fuse word. */
+#define PVTS_GET_DELAY1_FROM_FUSE_VALUE(fuse) \
+    ((pvts_delay_t)((fuse & 0xFF00U) >> 8U)) /*!< Calculate delay1 value from fuse word. */
+
+#define PVTS_GET_A_PARAMETER_FROM_FUSE_VALUE(fuse) \
+    ((pvts_delay_t)(fuse & 0xFFFFU))              /*!< Calculate A parameter value from fuse word. */
+#define PVTS_GET_B_PARAMETER_FROM_FUSE_VALUE(fuse) \
+    ((pvts_delay_t)((fuse & 0xFFFF0000U) >> 16U)) /*!< Calculate B parameter value from fuse word. */
+
+#define PVTS_DELAY_MAX 62U                        /*!< Valide max PVTS delay */
+#define PVTS_DELAY_MIN 2U                         /*!< Valide min PVTS delay */
 
 /*!
  * @brief PVTS sensors, each PVTS provides 2 sets of sensors to monitor 2 CPUs in same power domain.
@@ -99,8 +109,8 @@ void PVTS_Stop(pvts_sensor_t sensor);
  * true: OTP initialized by the calling app. driver will read the delay value from OTP and return.
  * @param instance PVTS instance or power domain.
  * @param core_freq_hz Core clock frequency in hertz.
- * @param delayValues Pointer to a uint32_t where the PVT delay values will be returned. 
- *        Use PVTS_GET_DELAY0_FROM_FUSE_VALUE to get delay value for ARM core, 
+ * @param delayValues Pointer to a uint32_t where the PVT delay values will be returned.
+ *        Use PVTS_GET_DELAY0_FROM_FUSE_VALUE to get delay value for ARM core,
  *        PVTS_GET_DELAY1_FROM_FUSE_VALUE for HiFi DSP core.
  * @retval kStatus_Success Successfully read the delay from OTP.
  * @retval kStatus_Fail Failed to read delay from OTP.
@@ -109,6 +119,25 @@ status_t PVTS_ReadDelayFromOTP(bool otp_initialized,
                                pvts_instance_t instance,
                                uint32_t core_freq_hz,
                                uint32_t *delayValues);
+
+/*!
+ * @brief Reads the PVTS dparameters value from OTP. Can only be called by CPU0(CM33 core0).
+ *
+ * @param otp_initialized Specifies whether the OTP is already initialized or not.
+ * false: The driver will initialize the OTP, read the delay value, and then de-initialize the OTP.
+ * true: OTP initialized by the calling app. driver will read the delay value from OTP and return.
+ * @param instance PVTS instance or power domain.
+ * @param core_freq_hz Core clock frequency in hertz.
+ * @param prameters Pointer to a uint32_t where the PVTS A/B parameters' values will be returned.
+ *        Use PVTS_GET_A_PARAMETER_FROM_FUSE_VALUE to get parameter A,
+ *        PVTS_GET_B_PARAMETER_FROM_FUSE_VALUE for B.
+ * @retval kStatus_Success Successfully read the delay from OTP.
+ * @retval kStatus_Fail Failed to read delay from OTP.
+ */
+status_t PVTS_ReadParametersFromOTP(bool otp_initialized,
+                                    pvts_instance_t instance,
+                                    uint32_t core_freq_hz,
+                                    uint32_t *prameters);
 #endif
 
 /*!

@@ -3,9 +3,9 @@
 **     Processors:          MIMXRT735SGAWBR_ezhv
 **                          MIMXRT735SGFOB_ezhv
 **
-**     Reference manual:    iMXRT700RM Rev.3, 05/2025
-**     Version:             rev. 4.0, 2025-06-06
-**     Build:               b250722
+**     Reference manual:    iMXRT700RM Rev.5, 10/2025
+**     Version:             rev. 5.1, 2025-12-08
+**     Build:               b251208
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMXRT735S_ezhv
@@ -27,14 +27,18 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 4.0 (2025-06-06)
 **         B0 initial version
+**     - rev. 5.0 (2025-11-13)
+**         Add puf/sdadc irq and cache64 compatibility macros to common header.
+**     - rev. 5.1 (2025-12-08)
+**         Update RM version and add pdm irq for hifi1/hifi4.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT735S_ezhv.h
- * @version 4.0
- * @date 2025-06-06
+ * @version 5.1
+ * @date 2025-12-08
  * @brief Peripheral Access Layer for MIMXRT735S_ezhv
  *
  * Peripheral Access Layer for MIMXRT735S_ezhv

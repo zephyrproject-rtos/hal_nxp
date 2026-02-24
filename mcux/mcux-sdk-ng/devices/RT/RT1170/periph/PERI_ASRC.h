@@ -53,14 +53,14 @@
 **                          MIMXRT117HDVMAB_cm4
 **                          MIMXRT117HDVMAB_cm7
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250703
+**     Version:             rev. 4.0, 2026-01-06
+**     Build:               b260106
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ASRC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -74,14 +74,18 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-13)
+**         Consolidate asrc/xbar and enet macros into common header.
+**     - rev. 4.0 (2026-01-06)
+**         Update header files to align with IMXRT1170RM Rev.5.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_ASRC.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-01-06
  * @brief CMSIS Peripheral Access Layer for ASRC
  *
  * CMSIS Peripheral Access Layer for ASRC
@@ -113,58 +117,6 @@
 #else
   #error "No valid CPU defined!"
 #endif
-
-/* ----------------------------------------------------------------------------
-   -- Mapping Information
-   ---------------------------------------------------------------------------- */
-
-/*!
- * @addtogroup Mapping_Information Mapping Information
- * @{
- */
-
-/** Mapping Information */
-#if !defined(ASRC_CLOCK_SOURCE_T_)
-#define ASRC_CLOCK_SOURCE_T_
-/*!
- * @addtogroup asrc_clock_source
- * @{
- */
-
-/*******************************************************************************
- * Definitions
- ******************************************************************************/
-
-/*!
- * @brief The ASRC clock source
- */
-
-typedef enum _asrc_clock_source
-{
-    kASRC_ClockSourceNotAvalible    = -1,          /**< not avalible */
-    kASRC_ClockSourceBitClock0_SAI1_TX = 0U,       /**< SAI1 TX */
-    kASRC_ClockSourceBitClock1_SAI1_RX = 1U,       /**< SAI1 RX */
-    kASRC_ClockSourceBitClock2_SAI2_TX = 2U,       /**< SAI2 TX */
-    kASRC_ClockSourceBitClock3_SAI2_RX = 3U,       /**< SAI2 RX */
-    kASRC_ClockSourceBitClock4_SAI3_TX = 4U,       /**< SAI3 TX */
-    kASRC_ClockSourceBitClock5_SAI3_RX = 5U,       /**< SAI3 RX */
-    kASRC_ClockSourceBitClock6_SAI4_TX = 6U,       /**< SAI4 TX */
-    kASRC_ClockSourceBitClock7_SAI4_RX = 7U,       /**< SAI4 RX */
-    kASRC_ClockSourceBitClock8_SPDIF_TX = 8U,      /**< SPDIF TX */
-    kASRC_ClockSourceBitClock9_SPDIF_RX = 9U,      /**< SPDIF RX */
-    kASRC_ClockSourceBitClocka_SAI2_CLOCK_ROOT = 10U, /**< SAI2 CLOCK ROOT */
-    kASRC_ClockSourceBitClockb_SAI3_CLOCK_ROOT = 11U, /**< SAI3 CLOCK ROOT */
-    kASRC_ClockSourceBitClockc_SAI4_CLOCK_ROOT = 12U, /**< SAI4 CLOCK ROOT */
-    kASRC_ClockSourceBitClockd_MIC_CLOCK_ROOT = 13U, /**< MIC CLOCK ROOT */
-    kASRC_ClockSourceBitClocke_MQS_CLOCK_ROOT = 14U, /**< MQS CLOCK ROOT */
-} asrc_clock_source_t;
-#endif /* ASRC_CLOCK_SOURCE_T_ */
-
-
-/*!
- * @}
- */ /* end of group Mapping_Information */
-
 
 /* ----------------------------------------------------------------------------
    -- Device Peripheral Access Layer

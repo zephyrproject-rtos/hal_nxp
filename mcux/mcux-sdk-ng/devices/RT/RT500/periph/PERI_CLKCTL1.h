@@ -9,8 +9,8 @@
 **                          MIMXRT595SFFOC_cm33
 **                          MIMXRT595SFFOC_dsp
 **
-**     Version:             rev. 6.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 7.0, 2025-11-13
+**     Build:               b251113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CLKCTL1
@@ -36,14 +36,16 @@
 **     - rev. 6.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 7.0 (2025-11-13)
+**         Add puf irq and move some trng compatibility macros to common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_CLKCTL1.h
- * @version 6.0
- * @date 2024-10-29
+ * @version 7.0
+ * @date 2025-11-13
  * @brief CMSIS Peripheral Access Layer for CLKCTL1
  *
  * CMSIS Peripheral Access Layer for CLKCTL1

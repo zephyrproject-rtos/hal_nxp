@@ -9,8 +9,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    iMXRT500RM Rev.1, 07/2022
-**     Version:             rev. 6.0, 2024-10-29
-**     Build:               b250619
+**     Version:             rev. 7.0, 2025-11-13
+**     Build:               b251113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT595S_cm33
@@ -36,14 +36,16 @@
 **     - rev. 6.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 7.0 (2025-11-13)
+**         Add puf irq and move some trng compatibility macros to common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT595S_cm33_COMMON.h
- * @version 6.0
- * @date 2024-10-29
+ * @version 7.0
+ * @date 2025-11-13
  * @brief CMSIS Peripheral Access Layer for MIMXRT595S_cm33
  *
  * CMSIS Peripheral Access Layer for MIMXRT595S_cm33
@@ -54,7 +56,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0600U
+#define MCU_MEM_MAP_VERSION 0x0700U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -1992,6 +1994,8 @@ typedef enum IRQn {
   /** Array initializer of PUF peripheral base pointers */
   #define PUF_BASE_PTRS                            { PUF }
 #endif
+/** Interrupt vectors for the PUF peripheral type */
+#define PUF_IRQS                                 { PUF_IRQn }
 
 /* RSTCTL0 - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -2441,6 +2445,9 @@ typedef enum IRQn {
 #endif
 /** Interrupt vectors for the TRNG peripheral type */
 #define TRNG_IRQS                                { RNG_IRQn }
+/* Backward compatibility */
+#define TRNG0                                    TRNG
+
 
 /* USART - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

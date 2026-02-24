@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 1.1, 2019-02-20
-**     Build:               b250812
+**     Version:             rev. 2.0, 2025-11-13
+**     Build:               b251113
 **
 **     Abstract:
 **         Chip specific module features.
@@ -20,6 +20,9 @@
 **         Rev.0 Header GA
 **     - rev. 1.1 (2019-02-20)
 **         Update register SRC_SRSR's bitfield LOCKUP_SYSRESETREQ to LOCKUP.
+**     - rev. 2.0 (2025-11-13)
+**         Add "belong to flexcomm" feature to lpspi/lpi2c.
+**         Add eUSB PHY support feature to usb.
 **
 ** ###################################################################
 */
@@ -369,6 +372,8 @@
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (4)
 /* @brief Has dedicated interrupt for master and slave. */
 #define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPI2C_IS_LPFLEXCOMM (0)
 
 /* LPSPI module features */
 
@@ -382,6 +387,8 @@
 #define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
 /* @brief Has no WIDTH bits in TCR register. */
 #define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPSPI_IS_LPFLEXCOMM (0)
 
 /* LPUART module features */
 
@@ -655,6 +662,10 @@
 /* @brief L1 DCACHE line size in byte. */
 #define FSL_FEATURE_L1DCACHE_LINESIZE_BYTE (32)
 
+/* TMR module features */
+
+/* No feature definitions */
+
 /* TRNG module features */
 
 /* @brief TRNG has no TRNG_ACC bitfield. */
@@ -666,6 +677,8 @@
 #define FSL_FEATURE_USBHS_EHCI_COUNT (1)
 /* @brief Number of endpoints supported */
 #define FSL_FEATURE_USBHS_ENDPT_COUNT (8)
+/* @brief If the USB controller support eUSB PHY */
+#define FSL_FEATURE_USBHS_SUPPORT_EUSBn(x) (0)
 
 /* USBPHY module features */
 

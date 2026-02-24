@@ -13,8 +13,8 @@
 **                          MIMXRT1024DAG5A
 **                          MIMXRT1024DAG5B
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250529
+**     Version:             rev. 3.0, 2025-11-13
+**     Build:               b251113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USB_ANALOG
@@ -38,14 +38,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-13)
+**         Move enet compatibility macros to common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_USB_ANALOG.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2025-11-13
  * @brief CMSIS Peripheral Access Layer for USB_ANALOG
  *
  * CMSIS Peripheral Access Layer for USB_ANALOG
