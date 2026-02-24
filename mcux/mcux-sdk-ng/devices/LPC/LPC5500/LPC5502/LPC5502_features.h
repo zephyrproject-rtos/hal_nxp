@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 1.0, 2020-04-09
-**     Build:               b250813
+**     Version:             rev. 2.0, 2025-11-18
+**     Build:               b251118
 **
 **     Abstract:
 **         Chip specific module features.
@@ -16,6 +16,8 @@
 **     Revisions:
 **     - rev. 1.0 (2020-04-09)
 **         Initial version based on Niobe4mini
+**     - rev. 2.0 (2025-11-18)
+**         Update puf feature align to shared definition changes.
 **
 ** ###################################################################
 */
@@ -451,7 +453,7 @@
 /* MRT module features */
 
 /* @brief number of channels. */
-#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS  (4)
+#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS (4)
 
 /* PINT module features */
 

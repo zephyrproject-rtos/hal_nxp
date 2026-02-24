@@ -27,7 +27,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief reset driver version 2.4.0 */
-#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
 /*@}*/
 
 /*!
@@ -249,6 +249,14 @@ typedef enum _SYSCON_RSTn
     {                       \
         kPUF_RST_SHIFT_RSTn \
     } /* Reset bits for PUF peripheral */
+#define RTC_RSTS            \
+    {                       \
+        kRTC_RST_SHIFT_RSTn \
+    } /* Reset bits for PUF peripheral */
+#define FREQME_RSTS_N          \
+    {                          \
+        kFREQME_RST_SHIFT_RSTn \
+    } /* Reset bits for FREQME peripheral */
 typedef SYSCON_RSTn_t reset_ip_name_t;
 #define USB1RAM_RSTS USB1RAM_RST
 #define USB1H_RSTS   USB1H_RST

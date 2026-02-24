@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2018-01-09
-**     Build:               b250801
+**     Build:               b251118
 **
 **     Abstract:
 **         Chip specific module features.
@@ -115,7 +115,7 @@
 /* MRT module features */
 
 /* @brief number of channels. */
-#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS  (2)
+#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS (2)
 /* @brief Has no MULTITASK bitfile in MODCFG reigster. */
 #define FSL_FEATURE_MRT_HAS_NO_MODCFG_MULTITASK (1)
 /* @brief Has no INUSE bitfile in STAT reigster. */

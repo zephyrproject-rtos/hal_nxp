@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2017-12-15
-**     Build:               b250801
+**     Build:               b251118
 **
 **     Abstract:
 **         Chip specific module features.
@@ -195,7 +195,7 @@
 /* MRT module features */
 
 /* @brief number of channels. */
-#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS  (4)
+#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS (4)
 
 /* interrupt module features */
 

@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 1.0, 2020-04-09
-**     Build:               b250813
+**     Version:             rev. 2.0, 2025-11-18
+**     Build:               b251118
 **
 **     Abstract:
 **         Chip specific module features.
@@ -16,6 +16,8 @@
 **     Revisions:
 **     - rev. 1.0 (2020-04-09)
 **         Initial version based on Niobe4mini
+**     - rev. 2.0 (2025-11-18)
+**         Update puf feature align to shared definition changes.
 **
 ** ###################################################################
 */
@@ -481,7 +483,7 @@
 /* MRT module features */
 
 /* @brief number of channels. */
-#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS  (4)
+#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS (4)
 
 /* PINT module features */
 
@@ -507,10 +509,12 @@
 
 /* PUF module features */
 
+/* @brief PUF has SHIFT_STATUS register. */
+#define FSL_FEATURE_PUF_HAS_SHIFT_STATUS (1)
+/* @brief PUF has IDXBLK_SHIFT register. */
+#define FSL_FEATURE_PUF_HAS_IDXBLK_SHIFT (0)
 /* @brief Number of PUF key slots available on device. */
 #define FSL_FEATURE_PUF_HAS_KEYSLOTS (4)
-/* @brief the shift status value */
-#define FSL_FEATURE_PUF_HAS_SHIFT_STATUS (1)
 /* @brief PUF has dedicated SRAM control */
 #define FSL_FEATURE_PUF_HAS_SRAM_CTRL (1)
 /* @brief Puf Activation Code Address. */

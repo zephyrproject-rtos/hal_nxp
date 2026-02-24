@@ -1025,6 +1025,7 @@ typedef enum IRQn {
   #define I2C7                                     ((I2C_Type *)I2C7_BASE)
   /** Peripheral I2C7 base pointer */
   #define I2C7_NS                                  ((I2C_Type *)I2C7_BASE_NS)
+#if defined(CPU_LPC5502JBD64)
   /** Array initializer of I2C peripheral base addresses */
   #define I2C_BASE_ADDRS                           { I2C0_BASE, I2C1_BASE, I2C2_BASE, I2C3_BASE, I2C4_BASE, I2C5_BASE, I2C6_BASE, I2C7_BASE }
   /** Array initializer of I2C peripheral base pointers */
@@ -1033,6 +1034,16 @@ typedef enum IRQn {
   #define I2C_BASE_ADDRS_NS                        { I2C0_BASE_NS, I2C1_BASE_NS, I2C2_BASE_NS, I2C3_BASE_NS, I2C4_BASE_NS, I2C5_BASE_NS, I2C6_BASE_NS, I2C7_BASE_NS }
   /** Array initializer of I2C peripheral base pointers */
   #define I2C_BASE_PTRS_NS                         { I2C0_NS, I2C1_NS, I2C2_NS, I2C3_NS, I2C4_NS, I2C5_NS, I2C6_NS, I2C7_NS }
+#elif defined(CPU_LPC5502JHI48)
+  /** Array initializer of I2C peripheral base addresses */
+  #define I2C_BASE_ADDRS                           { I2C0_BASE, I2C1_BASE, I2C2_BASE, I2C3_BASE, I2C4_BASE, I2C5_BASE, I2C6_BASE }
+  /** Array initializer of I2C peripheral base pointers */
+  #define I2C_BASE_PTRS                            { I2C0, I2C1, I2C2, I2C3, I2C4, I2C5, I2C6 }
+  /** Array initializer of I2C peripheral base addresses */
+  #define I2C_BASE_ADDRS_NS                        { I2C0_BASE_NS, I2C1_BASE_NS, I2C2_BASE_NS, I2C3_BASE_NS, I2C4_BASE_NS, I2C5_BASE_NS, I2C6_BASE_NS }
+  /** Array initializer of I2C peripheral base pointers */
+  #define I2C_BASE_PTRS_NS                         { I2C0_NS, I2C1_NS, I2C2_NS, I2C3_NS, I2C4_NS, I2C5_NS, I2C6_NS }
+#endif
 #else
   /** Peripheral I2C0 base address */
   #define I2C0_BASE                                (0x40086000u)
@@ -1066,13 +1077,25 @@ typedef enum IRQn {
   #define I2C7_BASE                                (0x40098000u)
   /** Peripheral I2C7 base pointer */
   #define I2C7                                     ((I2C_Type *)I2C7_BASE)
+#if defined(CPU_LPC5502JBD64)
   /** Array initializer of I2C peripheral base addresses */
   #define I2C_BASE_ADDRS                           { I2C0_BASE, I2C1_BASE, I2C2_BASE, I2C3_BASE, I2C4_BASE, I2C5_BASE, I2C6_BASE, I2C7_BASE }
   /** Array initializer of I2C peripheral base pointers */
   #define I2C_BASE_PTRS                            { I2C0, I2C1, I2C2, I2C3, I2C4, I2C5, I2C6, I2C7 }
+#elif defined(CPU_LPC5502JHI48)
+  /** Array initializer of I2C peripheral base addresses */
+  #define I2C_BASE_ADDRS                           { I2C0_BASE, I2C1_BASE, I2C2_BASE, I2C3_BASE, I2C4_BASE, I2C5_BASE, I2C6_BASE }
+  /** Array initializer of I2C peripheral base pointers */
+  #define I2C_BASE_PTRS                            { I2C0, I2C1, I2C2, I2C3, I2C4, I2C5, I2C6 }
 #endif
+#endif
+#if defined(CPU_LPC5502JBD64)
 /** Interrupt vectors for the I2C peripheral type */
 #define I2C_IRQS                                 { FLEXCOMM0_IRQn, FLEXCOMM1_IRQn, FLEXCOMM2_IRQn, FLEXCOMM3_IRQn, FLEXCOMM4_IRQn, FLEXCOMM5_IRQn, FLEXCOMM6_IRQn, FLEXCOMM7_IRQn }
+#elif defined(CPU_LPC5502JHI48)
+/** Interrupt vectors for the I2C peripheral type */
+#define I2C_IRQS                                 { FLEXCOMM0_IRQn, FLEXCOMM1_IRQn, FLEXCOMM2_IRQn, FLEXCOMM3_IRQn, FLEXCOMM4_IRQn, FLEXCOMM5_IRQn, FLEXCOMM6_IRQn }
+#endif
 
 /* I2S - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1140,6 +1163,7 @@ typedef enum IRQn {
   #define I2S7                                     ((I2S_Type *)I2S7_BASE)
   /** Peripheral I2S7 base pointer */
   #define I2S7_NS                                  ((I2S_Type *)I2S7_BASE_NS)
+#if defined(CPU_LPC5502JBD64)
   /** Array initializer of I2S peripheral base addresses */
   #define I2S_BASE_ADDRS                           { I2S0_BASE, I2S1_BASE, I2S2_BASE, I2S3_BASE, I2S4_BASE, I2S5_BASE, I2S6_BASE, I2S7_BASE }
   /** Array initializer of I2S peripheral base pointers */
@@ -1148,6 +1172,16 @@ typedef enum IRQn {
   #define I2S_BASE_ADDRS_NS                        { I2S0_BASE_NS, I2S1_BASE_NS, I2S2_BASE_NS, I2S3_BASE_NS, I2S4_BASE_NS, I2S5_BASE_NS, I2S6_BASE_NS, I2S7_BASE_NS }
   /** Array initializer of I2S peripheral base pointers */
   #define I2S_BASE_PTRS_NS                         { I2S0_NS, I2S1_NS, I2S2_NS, I2S3_NS, I2S4_NS, I2S5_NS, I2S6_NS, I2S7_NS }
+#elif defined(CPU_LPC5502JHI48)
+  /** Array initializer of I2S peripheral base addresses */
+  #define I2S_BASE_ADDRS                           { I2S0_BASE, I2S3_BASE, I2S4_BASE, I2S6_BASE }
+  /** Array initializer of I2S peripheral base pointers */
+  #define I2S_BASE_PTRS                            { I2S0, I2S3, I2S4, I2S6 }
+  /** Array initializer of I2S peripheral base addresses */
+  #define I2S_BASE_ADDRS_NS                        { I2S0_BASE_NS, I2S3_BASE_NS, I2S4_BASE_NS, I2S6_BASE_NS }
+  /** Array initializer of I2S peripheral base pointers */
+  #define I2S_BASE_PTRS_NS                         { I2S0_NS, I2S3_NS, I2S4_NS, I2S6_NS }
+#endif
 #else
   /** Peripheral I2S0 base address */
   #define I2S0_BASE                                (0x40086000u)
@@ -1181,13 +1215,25 @@ typedef enum IRQn {
   #define I2S7_BASE                                (0x40098000u)
   /** Peripheral I2S7 base pointer */
   #define I2S7                                     ((I2S_Type *)I2S7_BASE)
+#if defined(CPU_LPC5502JBD64)
   /** Array initializer of I2S peripheral base addresses */
   #define I2S_BASE_ADDRS                           { I2S0_BASE, I2S1_BASE, I2S2_BASE, I2S3_BASE, I2S4_BASE, I2S5_BASE, I2S6_BASE, I2S7_BASE }
   /** Array initializer of I2S peripheral base pointers */
   #define I2S_BASE_PTRS                            { I2S0, I2S1, I2S2, I2S3, I2S4, I2S5, I2S6, I2S7 }
+#elif defined(CPU_LPC5502JHI48)
+  /** Array initializer of I2S peripheral base addresses */
+  #define I2S_BASE_ADDRS                           { I2S0_BASE, I2S3_BASE, I2S4_BASE, I2S6_BASE }
+  /** Array initializer of I2S peripheral base pointers */
+  #define I2S_BASE_PTRS                            { I2S0, I2S3, I2S4, I2S6 }
 #endif
+#endif
+#if defined(CPU_LPC5502JBD64)
 /** Interrupt vectors for the I2S peripheral type */
 #define I2S_IRQS                                 { FLEXCOMM0_IRQn, FLEXCOMM1_IRQn, FLEXCOMM2_IRQn, FLEXCOMM3_IRQn, FLEXCOMM4_IRQn, FLEXCOMM5_IRQn, FLEXCOMM6_IRQn, FLEXCOMM7_IRQn }
+#elif defined(CPU_LPC5502JHI48)
+/** Interrupt vectors for the I2S peripheral type */
+#define I2S_IRQS                                 { FLEXCOMM0_IRQn, FLEXCOMM3_IRQn, FLEXCOMM4_IRQn, FLEXCOMM6_IRQn }
+#endif
 
 /* INPUTMUX - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1559,6 +1605,7 @@ typedef enum IRQn {
   #define SPI8                                     ((SPI_Type *)SPI8_BASE)
   /** Peripheral SPI8 base pointer */
   #define SPI8_NS                                  ((SPI_Type *)SPI8_BASE_NS)
+#if defined(CPU_LPC5502JBD64)
   /** Array initializer of SPI peripheral base addresses */
   #define SPI_BASE_ADDRS                           { SPI0_BASE, SPI1_BASE, SPI3_BASE, SPI4_BASE, SPI6_BASE, SPI7_BASE, SPI8_BASE }
   /** Array initializer of SPI peripheral base pointers */
@@ -1567,6 +1614,16 @@ typedef enum IRQn {
   #define SPI_BASE_ADDRS_NS                        { SPI0_BASE_NS, SPI1_BASE_NS, SPI3_BASE_NS, SPI4_BASE_NS, SPI6_BASE_NS, SPI7_BASE_NS, SPI8_BASE_NS }
   /** Array initializer of SPI peripheral base pointers */
   #define SPI_BASE_PTRS_NS                         { SPI0_NS, SPI1_NS, SPI3_NS, SPI4_NS, SPI6_NS, SPI7_NS, SPI8_NS }
+#elif defined(CPU_LPC5502JHI48)
+  /** Array initializer of SPI peripheral base addresses */
+  #define SPI_BASE_ADDRS                           { SPI0_BASE, SPI3_BASE, SPI6_BASE, SPI8_BASE }
+  /** Array initializer of SPI peripheral base pointers */
+  #define SPI_BASE_PTRS                            { SPI0, SPI3, SPI6, SPI8 }
+  /** Array initializer of SPI peripheral base addresses */
+  #define SPI_BASE_ADDRS_NS                        { SPI0_BASE_NS, SPI3_BASE_NS, SPI6_BASE_NS, SPI8_BASE_NS }
+  /** Array initializer of SPI peripheral base pointers */
+  #define SPI_BASE_PTRS_NS                         { SPI0_NS, SPI3_NS, SPI6_NS, SPI8_NS }
+#endif
 #else
   /** Peripheral SPI0 base address */
   #define SPI0_BASE                                (0x40086000u)
@@ -1596,13 +1653,25 @@ typedef enum IRQn {
   #define SPI8_BASE                                (0x4009F000u)
   /** Peripheral SPI8 base pointer */
   #define SPI8                                     ((SPI_Type *)SPI8_BASE)
+#if defined(CPU_LPC5502JBD64)
   /** Array initializer of SPI peripheral base addresses */
   #define SPI_BASE_ADDRS                           { SPI0_BASE, SPI1_BASE, SPI3_BASE, SPI4_BASE, SPI6_BASE, SPI7_BASE, SPI8_BASE }
   /** Array initializer of SPI peripheral base pointers */
   #define SPI_BASE_PTRS                            { SPI0, SPI1, SPI3, SPI4, SPI6, SPI7, SPI8 }
+#elif defined(CPU_LPC5502JHI48)
+  /** Array initializer of SPI peripheral base addresses */
+  #define SPI_BASE_ADDRS                           { SPI0_BASE, SPI3_BASE, SPI6_BASE, SPI8_BASE }
+  /** Array initializer of SPI peripheral base pointers */
+  #define SPI_BASE_PTRS                            { SPI0, SPI3, SPI6, SPI8 }
 #endif
+#endif
+#if defined(CPU_LPC5502JBD64)
 /** Interrupt vectors for the SPI peripheral type */
 #define SPI_IRQS                                 { FLEXCOMM0_IRQn, FLEXCOMM1_IRQn, FLEXCOMM3_IRQn, FLEXCOMM4_IRQn, FLEXCOMM6_IRQn, FLEXCOMM7_IRQn, FLEXCOMM8_IRQn }
+#elif defined(CPU_LPC5502JHI48)
+/** Interrupt vectors for the SPI peripheral type */
+#define SPI_IRQS                                 { FLEXCOMM0_IRQn, FLEXCOMM3_IRQn, FLEXCOMM6_IRQn, FLEXCOMM8_IRQn }
+#endif
 
 /* SYSCON - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1728,6 +1797,7 @@ typedef enum IRQn {
   #define USART7                                   ((USART_Type *)USART7_BASE)
   /** Peripheral USART7 base pointer */
   #define USART7_NS                                ((USART_Type *)USART7_BASE_NS)
+#if defined(CPU_LPC5502JBD64)
   /** Array initializer of USART peripheral base addresses */
   #define USART_BASE_ADDRS                         { USART0_BASE, USART1_BASE, USART2_BASE, USART3_BASE, USART4_BASE, USART5_BASE, USART6_BASE, USART7_BASE }
   /** Array initializer of USART peripheral base pointers */
@@ -1736,6 +1806,16 @@ typedef enum IRQn {
   #define USART_BASE_ADDRS_NS                      { USART0_BASE_NS, USART1_BASE_NS, USART2_BASE_NS, USART3_BASE_NS, USART4_BASE_NS, USART5_BASE_NS, USART6_BASE_NS, USART7_BASE_NS }
   /** Array initializer of USART peripheral base pointers */
   #define USART_BASE_PTRS_NS                       { USART0_NS, USART1_NS, USART2_NS, USART3_NS, USART4_NS, USART5_NS, USART6_NS, USART7_NS }
+#elif defined(CPU_LPC5502JHI48)
+  /** Array initializer of USART peripheral base addresses */
+  #define USART_BASE_ADDRS                         { USART0_BASE, USART1_BASE, USART2_BASE, USART3_BASE, USART4_BASE, USART5_BASE, USART6_BASE }
+  /** Array initializer of USART peripheral base pointers */
+  #define USART_BASE_PTRS                          { USART0, USART1, USART2, USART3, USART4, USART5, USART6 }
+  /** Array initializer of USART peripheral base addresses */
+  #define USART_BASE_ADDRS_NS                      { USART0_BASE_NS, USART1_BASE_NS, USART2_BASE_NS, USART3_BASE_NS, USART4_BASE_NS, USART5_BASE_NS, USART6_BASE_NS }
+  /** Array initializer of USART peripheral base pointers */
+  #define USART_BASE_PTRS_NS                       { USART0_NS, USART1_NS, USART2_NS, USART3_NS, USART4_NS, USART5_NS, USART6_NS }
+#endif
 #else
   /** Peripheral USART0 base address */
   #define USART0_BASE                              (0x40086000u)
@@ -1769,13 +1849,25 @@ typedef enum IRQn {
   #define USART7_BASE                              (0x40098000u)
   /** Peripheral USART7 base pointer */
   #define USART7                                   ((USART_Type *)USART7_BASE)
+#if defined(CPU_LPC5502JBD64)
   /** Array initializer of USART peripheral base addresses */
   #define USART_BASE_ADDRS                         { USART0_BASE, USART1_BASE, USART2_BASE, USART3_BASE, USART4_BASE, USART5_BASE, USART6_BASE, USART7_BASE }
   /** Array initializer of USART peripheral base pointers */
   #define USART_BASE_PTRS                          { USART0, USART1, USART2, USART3, USART4, USART5, USART6, USART7 }
+#elif defined(CPU_LPC5502JHI48)
+  /** Array initializer of USART peripheral base addresses */
+  #define USART_BASE_ADDRS                         { USART0_BASE, USART1_BASE, USART2_BASE, USART3_BASE, USART4_BASE, USART5_BASE, USART6_BASE }
+  /** Array initializer of USART peripheral base pointers */
+  #define USART_BASE_PTRS                          { USART0, USART1, USART2, USART3, USART4, USART5, USART6 }
 #endif
+#endif
+#if defined(CPU_LPC5502JBD64)
 /** Interrupt vectors for the USART peripheral type */
 #define USART_IRQS                               { FLEXCOMM0_IRQn, FLEXCOMM1_IRQn, FLEXCOMM2_IRQn, FLEXCOMM3_IRQn, FLEXCOMM4_IRQn, FLEXCOMM5_IRQn, FLEXCOMM6_IRQn, FLEXCOMM7_IRQn }
+#elif defined(CPU_LPC5502JHI48)
+/** Interrupt vectors for the USART peripheral type */
+#define USART_IRQS                               { FLEXCOMM0_IRQn, FLEXCOMM1_IRQn, FLEXCOMM2_IRQn, FLEXCOMM3_IRQn, FLEXCOMM4_IRQn, FLEXCOMM5_IRQn, FLEXCOMM6_IRQn }
+#endif
 
 /* UTICK - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

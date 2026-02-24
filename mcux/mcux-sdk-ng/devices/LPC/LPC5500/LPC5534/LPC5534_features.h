@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250814
+**     Version:             rev. 3.0, 2025-11-18
+**     Build:               b251118
 **
 **     Abstract:
 **         Chip specific module features.
@@ -21,6 +21,8 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-18)
+**         Update puf feature align to shared definition changes.
 **
 ** ###################################################################
 */
@@ -309,10 +311,8 @@
 
 /* @brief Cache Line size in byte. */
 #define FSL_FEATURE_CACHE64_CTRL_LINESIZE_BYTE (32)
-
-/* CACHE64_POLSEL module features */
-
-/* No feature definitions */
+/* @brief Cache does not support write buffer. */
+#define FSL_FEATURE_CACHE64_CTRL_HAS_NO_WRITE_BUF (0)
 
 /* CAN module features */
 
@@ -618,7 +618,7 @@
 /* MRT module features */
 
 /* @brief number of channels. */
-#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS  (4)
+#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS (4)
 
 /* PINT module features */
 
@@ -672,14 +672,14 @@
 
 /* RTC module features */
 
+/* @brief Has Reset in system level. */
+#define FSL_FEATURE_RTC_HAS_RESET (1)
 /* @brief Has Tamper Direction Register support. */
 #define FSL_FEATURE_RTC_HAS_TAMPER_DIRECTION (0)
 /* @brief Has Tamper Queue Status and Control Register support. */
 #define FSL_FEATURE_RTC_HAS_TAMPER_QUEUE (1)
 /* @brief Has RTC subsystem. */
 #define FSL_FEATURE_RTC_HAS_SUBSYSTEM (1)
-/* @brief Has Reset in system level. */
-#define FSL_FEATURE_RTC_HAS_RESET (1)
 /* @brief Has RTC Tamper 23 Filter Configuration Register support. */
 #define FSL_FEATURE_RTC_HAS_FILTER23_CFG (1)
 /* @brief Has WAKEUP_MODE bitfile in CTRL2 register. */

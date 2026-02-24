@@ -11,8 +11,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    LPC84x User manual Rev.1.6  8 Dec 2017
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 3.0, 2025-11-18
+**     Build:               b251118
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC845
@@ -37,14 +37,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-18)
+**         Update m0p core interrupts dedication.
 **
 ** ###################################################################
 */
 
 /*!
  * @file LPC845.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2025-11-18
  * @brief CMSIS Peripheral Access Layer for LPC845
  *
  * CMSIS Peripheral Access Layer for LPC845

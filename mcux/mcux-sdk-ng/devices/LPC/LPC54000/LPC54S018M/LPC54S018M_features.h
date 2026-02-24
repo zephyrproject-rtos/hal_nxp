@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 1.2, 2017-06-08
-**     Build:               b250801
+**     Version:             rev. 2.0, 2025-11-18
+**     Build:               b251118
 **
 **     Abstract:
 **         Chip specific module features.
@@ -23,6 +23,8 @@
 **         Remove RTC_CTRL_RTC_OSC_BYPASS.
 **         SYSCON_ARMTRCLKDIV rename to SYSCON_ARMTRACECLKDIV.
 **         Remove RESET and HALT from SYSCON_AHBCLKDIV.
+**     - rev. 2.0 (2025-11-18)
+**         Update puf feature align to shared definition changes.
 **
 ** ###################################################################
 */
@@ -74,6 +76,8 @@
 #define FSL_FEATURE_SOC_MRT_COUNT (1)
 /* @brief PINT availability on the SoC. */
 #define FSL_FEATURE_SOC_PINT_COUNT (1)
+/* @brief PUF availability on the SoC. */
+#define FSL_FEATURE_SOC_PUF_COUNT (1)
 /* @brief RIT availability on the SoC. */
 #define FSL_FEATURE_SOC_RIT_COUNT (1)
 /* @brief LPC_RNG availability on the SoC. */
@@ -260,7 +264,7 @@
 /* MRT module features */
 
 /* @brief number of channels. */
-#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS  (4)
+#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS (4)
 
 /* interrupt module features */
 
@@ -274,9 +278,12 @@
 /* @brief Number of connected outputs */
 #define FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS (8)
 
-/* PUFCTRL module features */
+/* PUF module features */
 
-/* No feature definitions */
+/* @brief PUF has SHIFT_STATUS register. */
+#define FSL_FEATURE_PUF_HAS_SHIFT_STATUS (0)
+/* @brief PUF has IDXBLK_SHIFT register. */
+#define FSL_FEATURE_PUF_HAS_IDXBLK_SHIFT (0)
 
 /* RTC module features */
 

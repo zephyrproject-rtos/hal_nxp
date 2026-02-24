@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 1.1, 2019-05-16
-**     Build:               b250801
+**     Version:             rev. 2.0, 2025-11-18
+**     Build:               b251118
 **
 **     Abstract:
 **         Chip specific module features.
@@ -18,6 +18,8 @@
 **         Initial version based on v0.2UM
 **     - rev. 1.1 (2019-05-16)
 **         Initial A1 version based on v1.3UM
+**     - rev. 2.0 (2025-11-18)
+**         Update puf feature align to shared definition changes.
 **
 ** ###################################################################
 */
@@ -349,7 +351,7 @@
 /* MRT module features */
 
 /* @brief number of channels. */
-#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS  (4)
+#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS (4)
 
 /* PINT module features */
 
@@ -380,10 +382,12 @@
 
 /* PUF module features */
 
+/* @brief PUF has SHIFT_STATUS register. */
+#define FSL_FEATURE_PUF_HAS_SHIFT_STATUS (1)
+/* @brief PUF has IDXBLK_SHIFT register. */
+#define FSL_FEATURE_PUF_HAS_IDXBLK_SHIFT (0)
 /* @brief Number of PUF key slots available on device. */
 #define FSL_FEATURE_PUF_HAS_KEYSLOTS (4)
-/* @brief the shift status value */
-#define FSL_FEATURE_PUF_HAS_SHIFT_STATUS (1)
 /* @brief Puf Activation Code Address. */
 #define FSL_FEATURE_PUF_ACTIVATION_CODE_ADDRESS (648704)
 /* @brief Puf Activation Code Size. */
