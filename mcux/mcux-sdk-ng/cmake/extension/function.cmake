@@ -2956,13 +2956,19 @@ function(_mcux_preprocess_and_add_linker)
     return()
   endif()
 
-  # Generate script before link; VERBATIM preserves arg boundaries
-  add_custom_command(
-    TARGET ${MCUX_SDK_PROJECT_NAME}
-    PRE_LINK
+  # Create preprocess_linker_file to generate preprocessed linker script and
+  # make it regenerate if source linker script changes. 
+  # The preprocess_linker_file target will be used for parsing command when
+  # creating GUI project
+  add_custom_target(preprocess_linker_file BYPRODUCTS ${__BYPRODUCTS}
     COMMAND ${cmd}
+    DEPENDS "${raw_linker_abs_path}"
     WORKING_DIRECTORY "${__WORKING_DIRECTORY}"
-    VERBATIM)
+    COMMAND_EXPAND_LISTS
+    VERBATIM
+  )
+  # make sure the command execute before ${MCUX_SDK_PROJECT_NAME} is built
+  add_dependencies(${MCUX_SDK_PROJECT_NAME} preprocess_linker_file)
 
   _mcux_add_linker_script(TARGETS ${__TARGETS} LINKER
                           ${processed_linker_abs_path})
