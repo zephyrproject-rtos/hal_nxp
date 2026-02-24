@@ -20,7 +20,7 @@
 **                          KW47Z420B3AFTA
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Build:               b251124
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MSCM
@@ -1226,6 +1226,52 @@ typedef struct {
 /*!
  * @}
  */ /* end of group MSCM_Register_Masks */
+
+/**
+ * @brief Get the unique silicon identifier (UID) from the device
+ *
+ * This function reads the 128-bit unique device identifier from the MSCM
+ * peripheral's UID registers and copies it to the provided buffer.
+ * The UID is extracted directly from hardware registers without using any
+ * standard library functions.
+ *
+ * @details The function reads four 32-bit registers (UID[0] through
+ *          UID[3]) and converts them to a 16-byte array in little-endian
+ *          format. Each 32-bit register is broken down into 4 bytes with the
+ *          least significant byte first.
+ *
+ * @param[out] aOutUid16B   Pointer to a buffer that will receive the 16-byte UID.
+ *                          Must be at least 16 bytes in size. Cannot be NULL.
+ * @param[out] pOutLen      Pointer to a variable that will receive the length
+ *                          of the UID in bytes (always 16). Cannot be NULL.
+ *
+ * @return None
+ */
+static inline void Chip_GetUID(uint8_t *aOutUid16B, uint8_t *pOutLen)
+{
+    union {
+        uint32_t words[4];
+        uint8_t bytes[16];
+    } uid;
+    uint8_t i;
+
+    /* Get the MCU uid */
+    uid.words[0] = MSCM->UID[0];;
+    uid.words[1] = MSCM->UID[1];;
+    uid.words[2] = MSCM->UID[2];;
+    uid.words[3] = MSCM->UID[3];;
+
+    /* Copy bytes */
+    for (i = 0U; i < 16U; i++)
+    {
+        aOutUid16B[i] = uid.bytes[i];
+    }
+
+    /* Get the uid length */
+    *pOutLen = 16U;
+
+    return;
+}
 
 
 /*!

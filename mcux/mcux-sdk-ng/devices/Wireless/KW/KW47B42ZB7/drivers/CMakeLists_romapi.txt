@@ -2,8 +2,8 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-if (CONFIG_MCUX_COMPONENT_driver.romapi_soc)
-    mcux_component_version(1.2.5)
+if (CONFIG_MCUX_COMPONENT_driver.romapi)
+    mcux_component_version(1.2.6)
 
     mcux_add_source(
         SOURCES

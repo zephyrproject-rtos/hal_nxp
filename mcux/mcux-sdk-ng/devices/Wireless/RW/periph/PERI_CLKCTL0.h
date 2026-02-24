@@ -7,14 +7,14 @@
 **                          RW612HNA2I
 **                          RW612UKA2I
 **
-**     Version:             rev. 3.0, 2025-04-07
-**     Build:               b250519
+**     Version:             rev. 4.0, 2026-01-12
+**     Build:               b260114
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CLKCTL0
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,14 +28,18 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-04-07)
 **         Based on CRR Rev9.1.
+**     - rev. 4.0 (2026-01-12)
+**         Based on CRR Rev10.0.
+**         Update the registers AHB_PERIPH1_SLAVE_RULE and AIPS_BRIDGE_MEM_RULE1
+**         in advanced high-performance bus secure control.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_CLKCTL0.h
- * @version 3.0
- * @date 2025-04-07
+ * @version 4.0
+ * @date 2026-01-12
  * @brief CMSIS Peripheral Access Layer for CLKCTL0
  *
  * CMSIS Peripheral Access Layer for CLKCTL0

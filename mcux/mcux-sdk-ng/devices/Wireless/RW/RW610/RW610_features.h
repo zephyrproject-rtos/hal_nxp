@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 1.0, 2021-03-16
-**     Build:               b250815
+**     Version:             rev. 2.0, 2025-11-17
+**     Build:               b251204
 **
 **     Abstract:
 **         Chip specific module features.
@@ -16,6 +16,8 @@
 **     Revisions:
 **     - rev. 1.0 (2021-03-16)
 **         Initial version.
+**     - rev. 2.0 (2025-11-17)
+**         Update trng/cache64 feature align to shared definition changes
 **
 ** ###################################################################
 */
@@ -160,10 +162,8 @@
 
 /* @brief Cache Line size in byte. */
 #define FSL_FEATURE_CACHE64_CTRL_LINESIZE_BYTE (32)
-
-/* CACHE64_POLSEL module features */
-
-/* No feature definitions */
+/* @brief Cache does not support write buffer. */
+#define FSL_FEATURE_CACHE64_CTRL_HAS_NO_WRITE_BUF (0)
 
 /* CDOG module features */
 
@@ -384,6 +384,10 @@
 /* @brief GPIO has interrupts */
 #define FSL_FEATURE_GPIO_HAS_INTERRUPT (1)
 
+/* I2C module features */
+
+/* No feature definitions */
+
 /* I2S module features */
 
 /* @brief I2S support dual channel transfer. */
@@ -422,6 +426,10 @@
 
 /* @brief Powerlib API is different with other LPC series devices. */
 #define FSL_FEATURE_POWERLIB_EXTEND (1)
+
+/* POWERQUAD module features */
+
+/* No feature definitions */
 
 /* RTC module features */
 
@@ -466,6 +474,8 @@
 #define FSL_FEATURE_TRNG_HAS_NO_TRNG_SBLIM (1)
 /* @brief TRNG supports reset control. */
 #define FSL_FEATURE_TRNG_HAS_RSTCTL (1)
+/* @brief TRNG does not support FOR_CLK mode. */
+#define FSL_FEATURE_TRNG_HAS_NO_TRNG_MCTL_FOR_CLK_MODE (0)
 /* @brief TRNG supports dual oscillator mode. */
 #define FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS (1)
 /* @brief TRNG supports control pin. */

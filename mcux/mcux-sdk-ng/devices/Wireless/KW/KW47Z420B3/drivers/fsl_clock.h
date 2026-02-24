@@ -38,10 +38,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-/*! @brief CLOCK driver version 2.1.3. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
-/*@}*/
+/*! @{ */
+/*! @brief CLOCK driver version 2.1.5. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 5))
+/*! @} */
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -130,9 +130,9 @@ extern volatile uint32_t g_xtal32Freq;
     }
 
 /*! @brief Clock ip name array for PORT. */
-#define PORT_CLOCKS                              \
-    {                                            \
-        kCLOCK_PortA, kCLOCK_PortB, kCLOCK_PortC \
+#define PORT_CLOCKS                                             \
+    {                                                           \
+        kCLOCK_PortA, kCLOCK_PortB, kCLOCK_PortC, kCLOCK_NOGATE \
     }
 
 /*! @brief Clock ip name array for LPADC. */
@@ -154,9 +154,9 @@ extern volatile uint32_t g_xtal32Freq;
     }
 
 /*! @brief Clock ip name array for GPIO. */
-#define GPIO_CLOCKS                              \
-    {                                            \
-        kCLOCK_GpioA, kCLOCK_GpioB, kCLOCK_GpioC \
+#define GPIO_CLOCKS                                             \
+    {                                                           \
+        kCLOCK_GpioA, kCLOCK_GpioB, kCLOCK_GpioC, kCLOCK_NOGATE \
     }
 
 /*! @brief Clock ip name array for LPIT. */
@@ -669,7 +669,7 @@ static inline void CLOCK_SetIpSrc(clock_ip_name_t name, clock_ip_src_t src)
 
     uint32_t reg = CLOCK_REG(name);
 
-    assert(reg & MRCC_PR_MASK);
+    assert(0U != (reg & MRCC_PR_MASK));
 
     reg = (reg & (~MRCC_MUX_MASK)) | MRCC_MUX(src);
 
@@ -702,7 +702,7 @@ static inline void CLOCK_SetIpSrcDiv(clock_ip_name_t name, uint8_t divValue)
 
     uint32_t reg = CLOCK_REG(name);
 
-    assert(reg & MRCC_PR_MASK);
+    assert(0U != (reg & MRCC_PR_MASK));
 
     reg = (reg & (~MRCC_DIV_MASK)) | MRCC_DIV(divValue);
 
@@ -790,7 +790,7 @@ uint32_t CLOCK_GetSysClkFreq(scg_sys_clk_t type);
  */
 static inline void CLOCK_SetRunModeSysClkConfig(const scg_sys_clk_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     union
     {
@@ -811,7 +811,7 @@ static inline void CLOCK_SetRunModeSysClkConfig(const scg_sys_clk_config_t *conf
  */
 static inline void CLOCK_GetCurSysClkConfig(scg_sys_clk_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     union
     {
@@ -834,7 +834,7 @@ static inline void CLOCK_SetClkOutSel(clock_clkout_src_t setting)
 {
     CLOCK_REG(&SCG0->CLKOUTCNFG) = SCG_CLKOUTCNFG_CLKOUTSEL(setting);
 }
-/* @} */
+/*! @} */
 
 /*!
  * @name SCG System OSC Clock.
@@ -940,7 +940,7 @@ static inline void CLOCK_LockSysOscControlStatusReg(void)
     CLOCK_REG(&SCG0->SOSCCSR) |= SCG_SOSCCSR_LK_MASK;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name SCG Slow IRC Clock.
@@ -1009,7 +1009,7 @@ static inline void CLOCK_LockSircControlStatusReg(void)
     CLOCK_REG(&SCG0->SIRCCSR) |= SCG_SIRCCSR_LK_MASK;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name SCG Fast IRC Clock.
@@ -1208,6 +1208,9 @@ static inline void CLOCK_LockRoscControlStatusReg(void)
     CLOCK_REG(&SCG0->ROSCCSR) |= SCG_ROSCCSR_LK_MASK;
 }
 
+/*! @} */
+
+
 /*!
  * @name External clock frequency
  * @{
@@ -1233,7 +1236,7 @@ static inline void CLOCK_SetXtal32Freq(uint32_t freq)
     g_xtal32Freq = freq;
 }
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }

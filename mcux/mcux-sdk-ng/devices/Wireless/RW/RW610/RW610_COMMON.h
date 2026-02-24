@@ -9,15 +9,15 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    RW61X User manual Rev. 0.95, June 2022
-**     Version:             rev. 3.0, 2025-04-07
-**     Build:               b250619
+**     Reference manual:    RW61X reference manual Rev. 10.0 - 12 January 2026
+**     Version:             rev. 4.0, 2026-01-12
+**     Build:               b260114
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RW610
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -31,14 +31,18 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-04-07)
 **         Based on CRR Rev9.1.
+**     - rev. 4.0 (2026-01-12)
+**         Based on CRR Rev10.0.
+**         Update the registers AHB_PERIPH1_SLAVE_RULE and AIPS_BRIDGE_MEM_RULE1
+**         in advanced high-performance bus secure control.
 **
 ** ###################################################################
 */
 
 /*!
  * @file RW610_COMMON.h
- * @version 3.0
- * @date 2025-04-07
+ * @version 4.0
+ * @date 2026-01-12
  * @brief CMSIS Peripheral Access Layer for RW610
  *
  * CMSIS Peripheral Access Layer for RW610
@@ -49,7 +53,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0300U
+#define MCU_MEM_MAP_VERSION 0x0400U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -1109,6 +1113,9 @@ typedef enum IRQn {
 #define ENET_Error_IRQS                          { ENET_IRQn }
 #define ENET_1588_Timer_IRQS                     { ENET_TIMER_IRQn }
 #define ENET_Ts_IRQS                             { ENET_IRQn }
+/* ENET Buffer Descriptor and Buffer Address Alignment. */
+#define ENET_BUFF_ALIGNMENT                      (64U)
+
 
 /* FLEXCOMM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -2516,6 +2523,8 @@ typedef enum IRQn {
   /** Array initializer of TRNG peripheral base pointers */
   #define TRNG_BASE_PTRS                           { TRNG }
 #endif
+/** Interrupt vectors for the TRNG peripheral type */
+#define TRNG_IRQS                                { TRNG_IRQn }
 
 /* USART - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

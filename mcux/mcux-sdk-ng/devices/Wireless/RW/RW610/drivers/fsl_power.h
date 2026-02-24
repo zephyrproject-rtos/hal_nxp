@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023, 2026 NXP
+ * Copyright 2020-2023 NXP
  *  
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief POWER driver version 2.6.1. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 6, 1))
+/*! @brief POWER driver version 2.6.0. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
 /*@}*/
 
 /*!

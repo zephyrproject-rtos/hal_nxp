@@ -1,5 +1,5 @@
 /*
- * Copyright 2021, 2023-2024 NXP
+ * Copyright 2021, 2023-2025 NXP
  *  
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -25,8 +25,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief reset driver version 2.1.1. */
-#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief reset driver version 2.1.2. */
+#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*@}*/
 
 /*!
@@ -172,6 +172,34 @@ typedef enum _RSTCTL_RSTn
     {                                                        \
         kENET_IPG_RST_SHIFT_RSTn, kENET_IPG_S_RST_SHIFT_RSTn \
     } /* Reset bits for ENET peripheral */
+#define INPUTMUX_RSTS            \
+    {                            \
+        kINPUTMUX_RST_SHIFT_RSTn \
+    } /* Reset bits for INPUTMUX peripheral */
+#define FREQME_RSTS_N          \
+    {                          \
+        kFREQME_RST_SHIFT_RSTn \
+    } /* Reset bits for FREQNE peripheral */
+#define LCDIC_RSTS            \
+    {                         \
+        kLCDIC_RST_SHIFT_RSTn \
+    } /* Reset bits for LCDIC peripheral */
+#define SDIO_RST             \
+    {                        \
+        kSDIO_RST_SHIFT_RSTn \
+    } /* Reset bits for SDIO peripheral */
+#define FLEXSPI_RSTS            \
+    {                           \
+        kFLEXSPI_RST_SHIFT_RSTn \
+    } /* Reset bits for FLEXSPI peripheral */
+#define OTP_RSTS            \
+    {                       \
+        kOTP_RST_SHIFT_RSTn \
+    } /* Reset bits for OTP peripheral */
+#define PKC_RSTS            \
+    {                       \
+        kPKC_RST_SHIFT_RSTn \
+    } /* Reset bits for PKC peripheral */
 
 /*!
  * @brief IP reset handle

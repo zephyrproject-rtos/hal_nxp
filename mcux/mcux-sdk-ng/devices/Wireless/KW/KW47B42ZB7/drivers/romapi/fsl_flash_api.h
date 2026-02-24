@@ -23,7 +23,7 @@
  * @{
  */
 /*! @brief Flash driver version for SDK*/
-#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(1, 2, 5)) /*!< Version 1.2.5. */
+#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(1, 2, 6)) /*!< Version 1.2.6. */
 /*@}*/
 
 /*! @brief Constructs the four character code for the Flash driver API key. */
@@ -337,6 +337,25 @@ status_t FLASH_ProgramPage(
  * @retval #kStatus_FLASH_CommandAborOption
  */
 status_t FLASH_VerifyEraseAll(FMU_Type *base);
+
+/*!
+ * @brief Verify that the flash block are erased
+ *
+ * @param config A pointer to the storage for the driver runtime state.
+ * @param base FMU base address.
+ * @param blockaddr The start address of the desired flash memory to be verified.
+ *        The start address need to be block-aligned.
+ *
+ * @retval #kStatus_FLASH_Success API was executed successfully.
+ * @retval #kStatus_FLASH_InvalidArgument An invalid argument is provided.
+ * @retval #kStatus_FLASH_AlignmentError Parameter is not aligned with specified baseline.
+ * @retval #kStatus_FLASH_AddressError Address is out of range.
+ * @retval #kStatus_FLASH_ExecuteInRamFunctionNotReady Execute-in-RAM function is not available.
+ * @retval #kStatus_FLASH_AccessError Invalid instruction codes and out-of bounds addresses.
+ * @retval #kStatus_FLASH_ProtectionViolation The program/erase operation is requested to execute on protected areas.
+ * @retval #kStatus_FLASH_CommandFailure Run-time error during the command execution.
+ */
+status_t FLASH_VerifyEraseBlock(flash_config_t *config, FMU_Type *base, uint32_t blockaddr);
 
 /*!
  * @brief Verify that the flash phrases are erased

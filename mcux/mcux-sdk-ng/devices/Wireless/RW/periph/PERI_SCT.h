@@ -7,14 +7,14 @@
 **                          RW612HNA2I
 **                          RW612UKA2I
 **
-**     Version:             rev. 3.0, 2025-04-07
-**     Build:               b250519
+**     Version:             rev. 4.0, 2026-01-12
+**     Build:               b260114
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SCT
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,14 +28,18 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-04-07)
 **         Based on CRR Rev9.1.
+**     - rev. 4.0 (2026-01-12)
+**         Based on CRR Rev10.0.
+**         Update the registers AHB_PERIPH1_SLAVE_RULE and AIPS_BRIDGE_MEM_RULE1
+**         in advanced high-performance bus secure control.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_SCT.h
- * @version 3.0
- * @date 2025-04-07
+ * @version 4.0
+ * @date 2026-01-12
  * @brief CMSIS Peripheral Access Layer for SCT
  *
  * CMSIS Peripheral Access Layer for SCT
@@ -851,6 +855,14 @@ typedef struct {
  *  0b1..Capture. Register n operates as a capture register
  */
 #define SCT_REGMODEL_REGMODEL(x)                 (((uint16_t)(((uint16_t)(x)) << SCT_REGMODEL_REGMODEL_SHIFT)) & SCT_REGMODEL_REGMODEL_MASK)
+
+#define SCT_REGMODEL_REGMOD_L_MASK               (0xFFFFU)
+#define SCT_REGMODEL_REGMOD_L_SHIFT              (0U)
+#define SCT_REGMODEL_REGMOD_L(x)                 (((uint16_t)(((uint16_t)(x)) << SCT_REGMODEL_REGMOD_L_SHIFT)) & SCT_REGMODEL_REGMOD_L_MASK)
+
+#define SCT_REGMODEL_REGMOD_H_MASK               (0xFFFF0000U)
+#define SCT_REGMODEL_REGMOD_H_SHIFT              (16U)
+#define SCT_REGMODEL_REGMOD_H(x)                 (((uint16_t)(((uint16_t)(x)) << SCT_REGMODEL_REGMOD_H_SHIFT)) & SCT_REGMODEL_REGMOD_H_MASK)
 /*! @} */
 
 /*! @name REGMODEH - SCT_REGMODEH register */
@@ -863,10 +875,22 @@ typedef struct {
  *  0b1..Capture. Register n operates as a capture register
  */
 #define SCT_REGMODEH_REGMODEH(x)                 (((uint16_t)(((uint16_t)(x)) << SCT_REGMODEH_REGMODEH_SHIFT)) & SCT_REGMODEH_REGMODEH_MASK)
+
+#define SCT_REGMODEH_REGMOD_L_MASK               (0xFFFFU)
+#define SCT_REGMODEH_REGMOD_L_SHIFT              (0U)
+#define SCT_REGMODEH_REGMOD_L(x)                 (((uint16_t)(((uint16_t)(x)) << SCT_REGMODEH_REGMOD_L_SHIFT)) & SCT_REGMODEH_REGMOD_L_MASK)
+
+#define SCT_REGMODEH_REGMOD_H_MASK               (0xFFFF0000U)
+#define SCT_REGMODEH_REGMOD_H_SHIFT              (16U)
+#define SCT_REGMODEH_REGMOD_H(x)                 (((uint16_t)(((uint16_t)(x)) << SCT_REGMODEH_REGMOD_H_SHIFT)) & SCT_REGMODEH_REGMOD_H_MASK)
 /*! @} */
 
 /*! @name REGMODE - Match/Capture Mode */
 /*! @{ */
+
+#define SCT_REGMODE_REGMOD_L_MASK                (0xFFFFU)
+#define SCT_REGMODE_REGMOD_L_SHIFT               (0U)
+#define SCT_REGMODE_REGMOD_L(x)                  (((uint32_t)(((uint32_t)(x)) << SCT_REGMODE_REGMOD_L_SHIFT)) & SCT_REGMODE_REGMOD_L_MASK)
 
 #define SCT_REGMODE_REGMOD_L0_MASK               (0x1U)
 #define SCT_REGMODE_REGMOD_L0_SHIFT              (0U)
@@ -995,6 +1019,10 @@ typedef struct {
  *  0b1..Capture. Register n operates as a capture register
  */
 #define SCT_REGMODE_REGMOD_L15(x)                (((uint32_t)(((uint32_t)(x)) << SCT_REGMODE_REGMOD_L15_SHIFT)) & SCT_REGMODE_REGMOD_L15_MASK)
+
+#define SCT_REGMODE_REGMOD_H_MASK                (0xFFFF0000U)
+#define SCT_REGMODE_REGMOD_H_SHIFT               (16U)
+#define SCT_REGMODE_REGMOD_H(x)                  (((uint32_t)(((uint32_t)(x)) << SCT_REGMODE_REGMOD_H_SHIFT)) & SCT_REGMODE_REGMOD_H_MASK)
 
 #define SCT_REGMODE_REGMOD_H0_MASK               (0x10000U)
 #define SCT_REGMODE_REGMOD_H0_SHIFT              (16U)

@@ -39,8 +39,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.1.3. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
+/*! @brief CLOCK driver version 2.1.4. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -654,7 +654,7 @@ static inline void CLOCK_SetIpSrc(clock_ip_name_t name, clock_ip_src_t src)
 
     uint32_t reg = CLOCK_REG(name);
 
-    assert(reg & MRCC_PR_MASK);
+    assert(0U != (reg & MRCC_PR_MASK));
 
     reg = (reg & (~MRCC_MUX_MASK)) | MRCC_MUX(src);
 
@@ -687,7 +687,7 @@ static inline void CLOCK_SetIpSrcDiv(clock_ip_name_t name, uint8_t divValue)
 
     uint32_t reg = CLOCK_REG(name);
 
-    assert(reg & MRCC_PR_MASK);
+    assert(0U != (reg & MRCC_PR_MASK));
 
     reg = (reg & (~MRCC_DIV_MASK)) | MRCC_DIV(divValue);
 
@@ -775,7 +775,7 @@ uint32_t CLOCK_GetSysClkFreq(scg_sys_clk_t type);
  */
 static inline void CLOCK_SetRunModeSysClkConfig(const scg_sys_clk_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     union
     {
@@ -796,7 +796,7 @@ static inline void CLOCK_SetRunModeSysClkConfig(const scg_sys_clk_config_t *conf
  */
 static inline void CLOCK_GetCurSysClkConfig(scg_sys_clk_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     union
     {
