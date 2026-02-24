@@ -7,8 +7,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    K32L3ARM, Rev. 0 , 05/2019
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 2.1, 2025-11-10
+**     Build:               b251111
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for K32L3A60_cm4
@@ -26,14 +26,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 2.1 (2025-11-10)
+**         Update m0p core interrupts description.
 **
 ** ###################################################################
 */
 
 /*!
  * @file K32L3A60_cm4_COMMON.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 2.1
+ * @date 2025-11-10
  * @brief CMSIS Peripheral Access Layer for K32L3A60_cm4
  *
  * CMSIS Peripheral Access Layer for K32L3A60_cm4
@@ -46,7 +48,7 @@
  * compatible) */
 #define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0001U
 
 
 /* ----------------------------------------------------------------------------
@@ -722,6 +724,9 @@ typedef enum _mu_power_mode
 #define TRNG_BASE_PTRS                           { TRNG }
 /** Interrupt vectors for the TRNG peripheral type */
 #define TRNG_IRQS                                { TRNG_IRQn }
+/* Backward compatibility */
+#define TRNG0                                    TRNG
+
 
 /* TSTMR - Peripheral instance base addresses */
 /** Peripheral TSTMRA base address */

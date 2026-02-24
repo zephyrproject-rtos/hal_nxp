@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 2.15, 2016-03-21
-**     Build:               b250811
+**     Version:             rev. 3.0, 2025-11-07
+**     Build:               b251107
 **
 **     Abstract:
 **         Chip specific module features.
@@ -58,6 +58,8 @@
 **         FTM features BUS_CLOCK and FAST_CLOCK removed.
 **     - rev. 2.15 (2016-03-21)
 **         Added MK22FN512VFX12 part.
+**     - rev. 3.0 (2025-11-07)
+**         Common updates for RTC feature.
 **
 ** ###################################################################
 */
@@ -1709,9 +1711,11 @@
 #define FSL_FEATURE_RTC_HAS_PCR (0)
 /* @brief Has Oscillator Enable(bitfield CR[OSCE]). */
 #define FSL_FEATURE_RTC_HAS_NO_CR_OSCE (0)
+/* @brief Has no supervisor access bit (CR[SUP]). */
+#define FSL_FEATURE_RTC_HAS_NO_CR_SUP (0)
 /* @brief Is affected by errata with ID 010716 (RTC: Timer Alarm Flag can assert erroneously). */
 #define FSL_FEATURE_RTC_HAS_ERRATA_010716 (0)
-/* @brief Has clock output (bitfield CR[CLKO]). */
+/* @brief Has clock output bit (CR[CLKO]). */
 #define FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT (1)
 
 /* SIM module features */

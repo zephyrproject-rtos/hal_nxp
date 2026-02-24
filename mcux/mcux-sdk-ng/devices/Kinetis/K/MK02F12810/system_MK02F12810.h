@@ -15,7 +15,7 @@
 **
 **     Reference manual:    K02P64M100SFARM, Rev. 0, February 14, 2014
 **     Version:             rev. 1.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b251106
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -88,7 +88,6 @@ extern "C" {
 #define SYSTEM_SMC_PMPROT_VALUE        0xAAU               /* SMC_PMPROT */
 
 #define DEFAULT_SYSTEM_CLOCK           20971520U           /* Default System clock value */
-
 
 
 /**

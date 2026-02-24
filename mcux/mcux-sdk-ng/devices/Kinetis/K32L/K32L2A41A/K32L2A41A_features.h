@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 1.0, 2019-10-30
-**     Build:               b250811
+**     Version:             rev. 2.0, 2025-11-10
+**     Build:               b251110
 **
 **     Abstract:
 **         Chip specific module features.
@@ -16,6 +16,8 @@
 **     Revisions:
 **     - rev. 1.0 (2019-10-30)
 **         Initial version.
+**     - rev. 2.0 (2025-11-10)
+**         Update RTC feature for common updates, add "Belong to LPFLEXCOMM" feature for LPI2C/LPSPI.
 **
 ** ###################################################################
 */
@@ -926,6 +928,8 @@
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (4)
 /* @brief Has dedicated interrupt for master and slave. */
 #define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPI2C_IS_LPFLEXCOMM (0)
 
 /* LPIT module features */
 
@@ -948,6 +952,8 @@
 #define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
 /* @brief Has no WIDTH bits in TCR register. */
 #define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPSPI_IS_LPFLEXCOMM (0)
 
 /* LPTMR module features */
 
@@ -1198,9 +1204,11 @@
 #define FSL_FEATURE_RTC_HAS_PCR (0)
 /* @brief Has Oscillator Enable(bitfield CR[OSCE]). */
 #define FSL_FEATURE_RTC_HAS_NO_CR_OSCE (0)
+/* @brief Has no supervisor access bit (CR[SUP]). */
+#define FSL_FEATURE_RTC_HAS_NO_CR_SUP (0)
 /* @brief Is affected by errata with ID 010716 (RTC: Timer Alarm Flag can assert erroneously). */
 #define FSL_FEATURE_RTC_HAS_ERRATA_010716 (0)
-/* @brief Has clock output (bitfield CR[CLKO]). */
+/* @brief Has clock output bit (CR[CLKO]). */
 #define FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT (1)
 
 /* SCG module features */

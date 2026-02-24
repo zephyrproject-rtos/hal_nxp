@@ -15,7 +15,7 @@
 **
 **     Reference manual:    K22P121M120SF8RM, Rev. 1, March 24, 2014
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b251106
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -99,7 +99,6 @@ extern "C" {
 #define SYSTEM_SMC_PMPROT_VALUE        0xAAU               /* SMC_PMPROT */
 
 #define DEFAULT_SYSTEM_CLOCK           20971520U           /* Default System clock value */
-
 
 
 /**

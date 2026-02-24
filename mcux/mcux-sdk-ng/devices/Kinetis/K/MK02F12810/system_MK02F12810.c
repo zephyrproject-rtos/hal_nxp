@@ -15,7 +15,7 @@
 **
 **     Reference manual:    K02P64M100SFARM, Rev. 0, February 14, 2014
 **     Version:             rev. 1.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b251106
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -203,3 +203,4 @@ void SystemCoreClockUpdate (void) {
 __attribute__ ((weak)) void SystemInitHook (void) {
   /* Void implementation of the weak function. */
 }
+

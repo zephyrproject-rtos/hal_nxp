@@ -7,8 +7,8 @@
 **                          MKE17Z512VLH9
 **                          MKE17Z512VLL9
 **
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 3.1, 2025-11-11
+**     Build:               b251111
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMAMUX
@@ -28,14 +28,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.1 (2025-11-11)
+**         Update m0p core interrupts description.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_DMAMUX.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 3.1
+ * @date 2025-11-11
  * @brief CMSIS Peripheral Access Layer for DMAMUX
  *
  * CMSIS Peripheral Access Layer for DMAMUX

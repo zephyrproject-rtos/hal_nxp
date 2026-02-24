@@ -9,8 +9,8 @@
 **                          MKE15Z256VLH7
 **                          MKE15Z256VLL7
 **
-**     Version:             rev. 7.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 7.1, 2025-11-11
+**     Build:               b251111
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FGPIO
@@ -38,14 +38,16 @@
 **     - rev. 7.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 7.1 (2025-11-11)
+**         Update m0p core interrupts description.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_FGPIO.h
- * @version 7.0
- * @date 2024-10-29
+ * @version 7.1
+ * @date 2025-11-11
  * @brief CMSIS Peripheral Access Layer for FGPIO
  *
  * CMSIS Peripheral Access Layer for FGPIO

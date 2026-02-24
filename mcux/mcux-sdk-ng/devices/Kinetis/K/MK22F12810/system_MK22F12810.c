@@ -13,7 +13,7 @@
 **
 **     Reference manual:    K22P121M100SF9RM, Rev. 1, April 25, 2014
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b251106
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -212,3 +212,4 @@ void SystemCoreClockUpdate (void) {
 __attribute__ ((weak)) void SystemInitHook (void) {
   /* Void implementation of the weak function. */
 }
+

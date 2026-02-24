@@ -14,8 +14,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    KE1xZP100M72SF1RM, Rev. 1, Jun. 2021
-**     Version:             rev. 4.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 4.1, 2025-11-11
+**     Build:               b251111
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -39,14 +39,16 @@
 **     - rev. 4.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.1 (2025-11-11)
+**         Update m0p core interrupts description.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MKE17Z7
- * @version 4.0
- * @date 2024-10-29
+ * @version 4.1
+ * @date 2025-11-11
  * @brief Device specific configuration file for MKE17Z7 (header file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -80,7 +82,6 @@ extern "C" {
 
 #define DEFAULT_SYSTEM_CLOCK           48000000U           /* Default System clock value */
 #define CPU_INT_SLOW_CLK_HZ            8000000U            /* Value of the slow internal oscillator clock frequency in Hz */
-
 
 
 /**

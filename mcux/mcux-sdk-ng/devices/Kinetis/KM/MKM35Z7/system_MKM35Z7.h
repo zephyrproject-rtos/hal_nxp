@@ -16,8 +16,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    KM35P144M75SF0RM, Rev.1, Dec 2019
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 3.1, 2025-11-11
+**     Build:               b251111
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -39,15 +39,17 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.1 (2025-11-11)
+**         Update m0p core interrupts description.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MKM35Z7
- * @version 3.0
- * @date 2024-10-29
- * @brief Device specific configuration file for MKM35Z7 (header file)
+ * @version 3.1
+ * @date 2025-11-11
+ * @brief Device specific configuration file for MKM35Z7 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
  * the system frequency. It configures the device and initializes the oscillator
@@ -55,7 +57,7 @@
  */
 
 #ifndef _SYSTEM_MKM35Z7_H_
-#define _SYSTEM_MKM35Z7_H_                       /**< Symbol preventing repeated inclusion */
+#define _SYSTEM_MKM35Z7_H_                    /**< Symbol preventing repeated inclusion */
 
 #ifdef __cplusplus
 extern "C" {

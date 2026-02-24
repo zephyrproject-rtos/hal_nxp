@@ -15,7 +15,7 @@
 **
 **     Reference manual:    K22P121M120SF7RM, Rev. 1, March 24, 2014
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b251107
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -72,7 +72,7 @@
  * @file MK22F51212
  * @version 3.0
  * @date 2024-10-29
- * @brief Device specific configuration file for MK22F51212 (header file)
+ * @brief Device specific configuration file for MK22F51212 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
  * the system frequency. It configures the device and initializes the oscillator

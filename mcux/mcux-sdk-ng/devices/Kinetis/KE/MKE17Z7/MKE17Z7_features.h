@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 2.0, 2021-06-25
-**     Build:               b250723
+**     Version:             rev. 3.0, 2025-11-11
+**     Build:               b251111
 **
 **     Abstract:
 **         Chip specific module features.
@@ -18,6 +18,8 @@
 **         Initial version.
 **     - rev. 2.0 (2021-06-25)
 **         Based on Rev.1 RM.
+**     - rev. 3.0 (2025-11-11)
+**         Add "belong to flexcomm" feature for LPI2C/LPSPI.
 **
 ** ###################################################################
 */
@@ -670,6 +672,8 @@
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (4)
 /* @brief Has dedicated interrupt for master and slave. */
 #define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPI2C_IS_LPFLEXCOMM (0)
 
 /* LPIT module features */
 
@@ -692,6 +696,8 @@
 #define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
 /* @brief Has no WIDTH bits in TCR register. */
 #define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPSPI_IS_LPFLEXCOMM (0)
 
 /* LPTMR module features */
 

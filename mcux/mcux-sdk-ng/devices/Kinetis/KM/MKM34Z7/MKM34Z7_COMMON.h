@@ -10,8 +10,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    KM34P144M75SF0RM, Rev.1, Jan 2015
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 2.1, 2025-11-11
+**     Build:               b251111
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MKM34Z7
@@ -33,14 +33,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 2.1 (2025-11-11)
+**         Update m0p core interrupts description.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MKM34Z7_COMMON.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 2.1
+ * @date 2025-11-11
  * @brief CMSIS Peripheral Access Layer for MKM34Z7
  *
  * CMSIS Peripheral Access Layer for MKM34Z7
@@ -53,7 +55,7 @@
  * compatible) */
 #define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0001U
 
 
 /* ----------------------------------------------------------------------------
@@ -74,10 +76,10 @@ typedef enum IRQn {
 
   /* Core interrupts */
   NonMaskableInt_IRQn          = -14,              /**< Non Maskable Interrupt */
-  HardFault_IRQn               = -13,              /**< Cortex-M0 SV Hard Fault Interrupt */
-  SVCall_IRQn                  = -5,               /**< Cortex-M0 SV Call Interrupt */
-  PendSV_IRQn                  = -2,               /**< Cortex-M0 Pend SV Interrupt */
-  SysTick_IRQn                 = -1,               /**< Cortex-M0 System Tick Interrupt */
+  HardFault_IRQn               = -13,              /**< Cortex-M0P SV Hard Fault Interrupt */
+  SVCall_IRQn                  = -5,               /**< Cortex-M0P SV Call Interrupt */
+  PendSV_IRQn                  = -2,               /**< Cortex-M0P Pend SV Interrupt */
+  SysTick_IRQn                 = -1,               /**< Cortex-M0P System Tick Interrupt */
 
   /* Device specific interrupts */
   DMA0_IRQn                    = 0,                /**< DMA channel 0 transfer complete */

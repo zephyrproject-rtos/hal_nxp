@@ -7,8 +7,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    K32L3ARM, Rev. 0 , 05/2019
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 2.1, 2025-11-10
+**     Build:               b251111
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for K32L3A60_cm0plus
@@ -26,14 +26,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 2.1 (2025-11-10)
+**         Update m0p core interrupts description.
 **
 ** ###################################################################
 */
 
 /*!
  * @file K32L3A60_cm0plus_COMMON.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 2.1
+ * @date 2025-11-10
  * @brief CMSIS Peripheral Access Layer for K32L3A60_cm0plus
  *
  * CMSIS Peripheral Access Layer for K32L3A60_cm0plus
@@ -46,7 +48,7 @@
  * compatible) */
 #define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0001U
 
 
 /* ----------------------------------------------------------------------------
@@ -67,10 +69,10 @@ typedef enum IRQn {
 
   /* Core interrupts */
   NonMaskableInt_IRQn          = -14,              /**< Non Maskable Interrupt */
-  HardFault_IRQn               = -13,              /**< Cortex-M0 SV Hard Fault Interrupt */
-  SVCall_IRQn                  = -5,               /**< Cortex-M0 SV Call Interrupt */
-  PendSV_IRQn                  = -2,               /**< Cortex-M0 Pend SV Interrupt */
-  SysTick_IRQn                 = -1,               /**< Cortex-M0 System Tick Interrupt */
+  HardFault_IRQn               = -13,              /**< Cortex-M0P SV Hard Fault Interrupt */
+  SVCall_IRQn                  = -5,               /**< Cortex-M0P SV Call Interrupt */
+  PendSV_IRQn                  = -2,               /**< Cortex-M0P Pend SV Interrupt */
+  SysTick_IRQn                 = -1,               /**< Cortex-M0P System Tick Interrupt */
 
   /* Device specific interrupts */
   CTI1_IRQn                    = 0,                /**< Cross Trigger Interface 1 */
@@ -767,6 +769,9 @@ typedef enum _mu_power_mode
 #define TRNG_BASE_PTRS                           { TRNG }
 /** Interrupt vectors for the TRNG peripheral type */
 #define TRNG_IRQS                                { TRNG_IRQn }
+/* Backward compatibility */
+#define TRNG0                                    TRNG
+
 
 /* TSTMR - Peripheral instance base addresses */
 /** Peripheral TSTMRB base address */

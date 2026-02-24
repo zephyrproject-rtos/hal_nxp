@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 1.0, 2019-04-22
-**     Build:               b250811
+**     Version:             rev. 2.0, 2025-11-10
+**     Build:               b251110
 **
 **     Abstract:
 **         Chip specific module features.
@@ -16,6 +16,8 @@
 **     Revisions:
 **     - rev. 1.0 (2019-04-22)
 **         Initial version.
+**     - rev. 2.0 (2025-11-10)
+**         Update LPCMP/RTC feature for common updates, add "Belong to LPFLEXCOMM" feature for LPI2C/LPSPI.
 **
 ** ###################################################################
 */
@@ -830,6 +832,28 @@
 #define FSL_FEATURE_LPCMP_HAS_ROUNDROBIN_MODE (0)
 /* @brief Has window mode (related to existence of CCR1.WINDOW_CLS). */
 #define FSL_FEATURE_LPCMP_HAS_WINDOW_CONTROL (0)
+/* @brief Has no CCR0 CMP_STOP_EN bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_NO_CCR0_CMP_STOP_EN (0)
+/* @brief Has RRCR0 RR_CLK_SEL bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_CLK_SEL (0)
+/* @brief Has RRCR0 RR_TRG_SEL bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_TRG_SEL (0)
+/* @brief Has RRCR0 RR_SAMPLE_CNT bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_SAMPLE_CNT (0)
+/* @brief Has RRCR0 RR_SAMPLE_THRESHOLD bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_SAMPLE_THRESHOLD (0)
+/* @brief Has CCR2 INPSEL bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_CCR2_INPSEL (0)
+/* @brief Has CCR2 INMSEL bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_CCR2_INMSEL (0)
+/* @brief Has CCR2 CMP_NPMD bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_CCR2_CMP_NPMD (1)
+/* @brief Has DCR DAC_HPMD bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_DCR_DAC_HPMD (1)
+/* @brief Has CCR0 LINKEN bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_CCR0_LINKEN (0)
+/* @brief Has RRCR2 register. */
+#define FSL_FEATURE_LPCMP_HAS_RRCR2 (0)
 /* @brief Has CCR0 CMP_STOP_EN bitfield. */
 #define FSL_FEATURE_LPCMP_HAS_CCR0_CMP_STOP_EN (1)
 /* @brief CMP instance support CCR0 CMP_STOP_EN bitfield. */
@@ -848,6 +872,8 @@
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (4)
 /* @brief Has dedicated interrupt for master and slave. */
 #define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPI2C_IS_LPFLEXCOMM (0)
 
 /* LPIT module features */
 
@@ -870,6 +896,8 @@
 #define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
 /* @brief Has no WIDTH bits in TCR register. */
 #define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPSPI_IS_LPFLEXCOMM (0)
 
 /* LPTMR module features */
 
@@ -1096,9 +1124,11 @@
 #define FSL_FEATURE_RTC_HAS_PCR (1)
 /* @brief Has Oscillator Enable(bitfield CR[OSCE]). */
 #define FSL_FEATURE_RTC_HAS_NO_CR_OSCE (0)
+/* @brief Has no supervisor access bit (CR[SUP]). */
+#define FSL_FEATURE_RTC_HAS_NO_CR_SUP (0)
 /* @brief Is affected by errata with ID 010716 (RTC: Timer Alarm Flag can assert erroneously). */
 #define FSL_FEATURE_RTC_HAS_ERRATA_010716 (0)
-/* @brief Has clock output (bitfield CR[CLKO]). */
+/* @brief Has clock output bit (CR[CLKO]). */
 #define FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT (1)
 
 /* SCG module features */
@@ -1606,10 +1636,6 @@
 #define FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x) (0)
 
 /* TRGMUX module features */
-
-/* No feature definitions */
-
-/* TRNG module features */
 
 /* No feature definitions */
 

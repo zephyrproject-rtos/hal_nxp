@@ -14,8 +14,8 @@
 **                          MKE02Z64VLH4
 **                          MKE02Z64VQH4
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 2.1, 2025-11-11
+**     Build:               b251111
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ADC
@@ -33,14 +33,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 2.1 (2025-11-11)
+**         Update m0p core interrupts description.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_ADC.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 2.1
+ * @date 2025-11-11
  * @brief CMSIS Peripheral Access Layer for ADC
  *
  * CMSIS Peripheral Access Layer for ADC

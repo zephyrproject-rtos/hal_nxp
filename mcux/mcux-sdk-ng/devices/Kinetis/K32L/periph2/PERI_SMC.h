@@ -13,8 +13,8 @@
 **                          K32L2B31VLH0A
 **                          K32L2B31VMP0A
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 2.1, 2025-11-10
+**     Build:               b251110
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SMC
@@ -32,14 +32,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 2.1 (2025-11-10)
+**         Update core interrupts description.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_SMC.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 2.1
+ * @date 2025-11-10
  * @brief CMSIS Peripheral Access Layer for SMC
  *
  * CMSIS Peripheral Access Layer for SMC

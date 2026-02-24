@@ -10,8 +10,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    KE1xZP100M96SF0RM, Rev. 1, Sep. 2023
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 3.1, 2025-11-11
+**     Build:               b251111
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -33,14 +33,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.1 (2025-11-11)
+**         Update m0p core interrupts description.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MKE17Z9
- * @version 3.0
- * @date 2024-10-29
+ * @version 3.1
+ * @date 2025-11-11
  * @brief Device specific configuration file for MKE17Z9 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -123,3 +125,4 @@ void SystemCoreClockUpdate (void) {
 __attribute__ ((weak)) void SystemInitHook (void) {
   /* Void implementation of the weak function. */
 }
+
