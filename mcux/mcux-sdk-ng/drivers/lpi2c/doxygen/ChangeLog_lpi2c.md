@@ -1,17 +1,5 @@
 # LPI2C
 
-## [2.6.4]
-
-- Bug Fixes
-  - Limited value of filtSda in LPI2C_MasterSetBaudRate().
-  - Updated LPI2C_MasterStop() and LPI2C_MasterTransferBlocking() to send I2C STOP also in case of error.
-  - Removed unused flag kLPI2C_TransferRepeatedStartFlag.
-
-## [2.6.3]
-
-- Bug Fixes
-  - Fixed static analysis identified issues.
-
 ## [2.6.2]
 
 - Improvements

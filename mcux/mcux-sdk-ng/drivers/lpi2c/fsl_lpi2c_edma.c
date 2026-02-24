@@ -199,7 +199,7 @@ static uint32_t LPI2C_GenerateCommands(lpi2c_master_edma_handle_t *handle)
             uint32_t subaddressRemaining = xfer->subaddressSize;
             while (0U != subaddressRemaining--)
             {
-                uint8_t subaddressByte = (uint8_t)((xfer->subaddress >> (8U * subaddressRemaining)) & 0xffU);
+                uint8_t subaddressByte = (uint8_t)(xfer->subaddress >> (8U * subaddressRemaining)) & 0xffU;
                 cmd[cmdCount++]        = subaddressByte;
             }
         }
@@ -450,7 +450,7 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
         }
         else
         {
-            uint32_t maxTxFifo = 1U << ((handle->base->PARAM & LPI2C_PARAM_MTXFIFO_MASK) >> LPI2C_PARAM_MTXFIFO_SHIFT);
+            uint32_t maxTxFifo = (handle->base->PARAM & LPI2C_PARAM_MTXFIFO_MASK) >> LPI2C_PARAM_MTXFIFO_SHIFT;
             uint32_t minCommandCount = MIN(commandCount, maxTxFifo);
             transferConfig.majorLoopCounts = minCommandCount;
             handle->remainingCommand = commandCount - minCommandCount;
@@ -461,12 +461,10 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
          * $Branch Coverage Justification$
          * $ref fsl_lpi2c_edma_c_ref_3$
          */
-        if(handle->remainingCommand > 0U) /* GCOVR_EXCL_BR_LINE */
+        if(handle->remainingCommand > 0)
         {
-            /* GCOVR_EXCL_START */
             handle->enableTxReadyFlag = true;
             EDMA_EnableChannelInterrupts(handle->rx->base, handle->rx->channel, (uint32_t)kEDMA_MajorInterruptEnable);
-            /* GCOVR_EXCL_STOP */
         }
         else
         {
@@ -610,7 +608,7 @@ static void LPI2C_MasterEDMACallback(edma_handle_t *dmaHandle, void *userData, b
 
     if((FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base) == 0) && handle->enableTxReadyFlag == true)
     {
-        LPI2C_MasterEnableInterrupts(handle->base, (uint32_t)kLPI2C_MasterTxReadyFlag);
+        LPI2C_MasterEnableInterrupts(handle->base, kLPI2C_MasterTxReadyFlag);
         handle->enableTxReadyFlag = false;
         return;
     }
@@ -646,13 +644,12 @@ static void LPI2C_MasterTransferEdmaHandleIRQ(LPI2C_Type *base, void *lpi2cMaste
      * $Branch Coverage Justification$
      * $ref fsl_lpi2c_edma_c_ref_3$
      */
-    if((0U != (LPI2C_MasterGetEnabledInterrupts(base) & (uint32_t)kLPI2C_MasterTxReadyFlag)) && (0U != (status & (uint32_t)kLPI2C_MasterTxReadyFlag))) /* GCOVR_EXCL_BR_LINE */
+    if((0U != (LPI2C_MasterGetEnabledInterrupts(base) & kLPI2C_MasterTxReadyFlag)) && (0U != (status & (uint32_t)kLPI2C_MasterTxReadyFlag)))
     {
-        /* GCOVR_EXCL_START */
-        if(handle->remainingCommand > 0U)
+        if(handle->remainingCommand > 0)
         {
             uint32_t i;
-            uint32_t maxTxFifo = 1U << ((handle->base->PARAM & LPI2C_PARAM_MTXFIFO_MASK) >> LPI2C_PARAM_MTXFIFO_SHIFT);
+            uint32_t maxTxFifo = (handle->base->PARAM & LPI2C_PARAM_MTXFIFO_MASK) >> LPI2C_PARAM_MTXFIFO_SHIFT;
             uint32_t txCount = maxTxFifo - ((base->MFSR & LPI2C_MFSR_TXCOUNT_MASK) >> LPI2C_MFSR_TXCOUNT_SHIFT);
             for(i = 0; i < MIN(txCount, handle->remainingCommand); i++)
             {
@@ -661,11 +658,10 @@ static void LPI2C_MasterTransferEdmaHandleIRQ(LPI2C_Type *base, void *lpi2cMaste
             handle->remainingCommand -= i;
             handle->commandIndex += i;
         }
-        if(handle->remainingCommand == 0U)
+        if(handle->remainingCommand == 0)
         {
-            LPI2C_MasterDisableInterrupts(handle->base, (uint32_t)kLPI2C_MasterTxReadyFlag);
+            LPI2C_MasterDisableInterrupts(handle->base, kLPI2C_MasterTxReadyFlag);
         }
-        /* GCOVR_EXCL_STOP */
     }
     else
     {
