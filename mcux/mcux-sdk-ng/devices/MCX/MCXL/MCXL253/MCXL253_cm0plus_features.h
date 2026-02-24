@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250814
+**     Build:               b251210
 **
 **     Abstract:
 **         Chip specific module features.
@@ -88,6 +88,8 @@
 #define FSL_FEATURE_LPCMP_HAS_RRCR2 (1)
 /* @brief Has CCR0 CMP_STOP_EN bitfield. */
 #define FSL_FEATURE_LPCMP_HAS_CCR0_CMP_STOP_EN (1)
+/* @brief CMP instance support CCR0 CMP_STOP_EN bitfield. */
+#define FSL_FEATURE_LPCMP_INSTANCE_SUPPORT_CCR0_CMP_STOP_ENn(x) (1)
 
 /* GPIO module features */
 
@@ -110,6 +112,8 @@
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (16)
 /* @brief Has dedicated interrupt for master and slave. */
 #define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPI2C_IS_LPFLEXCOMM (0)
 
 /* LPTMR module features */
 
@@ -242,7 +246,7 @@
 #define FSL_FEATURE_PORT_SUPPORT_DIFFERENT_VOLTAGE_RANGE (1)
 /* @brief Has EFT detect (registers EDFR, EDIER and EDCR). */
 #define FSL_FEATURE_PORT_SUPPORT_EFT (0)
-/* @brief Alt function 0 means GPIO (not analog). */
+/* @brief Function 0 is GPIO. */
 #define FSL_FEATURE_PORT_PCR_MUX_GPIO (0)
 /* @brief Has drive strength control (register bit PCR[DSE]). */
 #define FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH (1)
@@ -298,12 +302,16 @@
 
 /* @brief MU side for current core */
 #define FSL_FEATURE_MU_SIDE_B (1)
-/* @brief MU supports reset assert interrupt. CIER0[RAIE] or CR[RAIE] or BCR[RAIE] . */
+/* @brief MU supports reset assert interrupt. CIER0[RAIE] or CR[RAIE] or BCR[RAIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_ASSERT_INT (0)
 /* @brief MU supports reset de-assert interrupt. CR[RDIE] or BCR[RDIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT (0)
 /* @brief MU does not support core status. Register CSSR0 or CSR0. */
 #define FSL_FEATURE_MU_NO_CORE_STATUS (1)
+/* @brief MU does not support NMI. Register bit CCR0[NMI]. */
+#define FSL_FEATURE_MU_NO_NMI (1)
+/* @brief MU does not support core event pending. Register bit SR[CEP]. */
+#define FSL_FEATURE_MU_NO_CEP (1)
 /* @brief MU supports Power-Down mode entry interrupt. CIER0[PDIE] */
 #define FSL_FEATURE_MU_HAS_PD_INT (0)
 /* @brief MU supports STOP mode entry interrupt. CIER0[STOPIE] */
@@ -316,14 +324,10 @@
 #define FSL_FEATURE_MU_HAS_RUN_INT (0)
 /* @brief MU supports hardware reset interrupt. CSSR0[HRIP] or CSR0[HRIP]. */
 #define FSL_FEATURE_MU_HAS_SR_HRIP (0)
-/* @brief MU does not support enable clock of the other core, CR[CLKE] or CCR[CLKE]. */
-#define FSL_FEATURE_MU_NO_CLKE (1)
-/* @brief MU does not support NMI. Register bit CCR0[NMI]. */
-#define FSL_FEATURE_MU_NO_NMI (1)
-/* @brief MU does not support core event pending. Register bit SR[CEP]. */
-#define FSL_FEATURE_MU_NO_CEP (1)
 /* @brief MU supports reset interrupt. Register bit SR[MURIP]. */
 #define FSL_FEATURE_MU_HAS_SR_MURIP (0)
+/* @brief MU does not support enable clock of the other core, CR[CLKE] or CCR[CLKE]. */
+#define FSL_FEATURE_MU_NO_CLKE (1)
 /* @brief MU has bit CCR0[RSTH]. */
 #define FSL_FEATURE_MU_HAS_RSTH (0)
 /* @brief MU has bit CCR0[RSTH] by instance. */

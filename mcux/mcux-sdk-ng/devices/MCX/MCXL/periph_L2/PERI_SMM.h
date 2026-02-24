@@ -13,14 +13,14 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250901
+**     Version:             rev. 1.1, 2026-01-02
+**     Build:               b260105
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SMM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,14 +29,16 @@
 **     Revisions:
 **     - rev. 1.0 (2025-06-13)
 **         Generated based on Rev1 DraftH.
+**     - rev. 1.1 (2026-01-02)
+**         Generated based on Rev.1 RC.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_SMM.h
- * @version 1.0
- * @date 2025-06-13
+ * @version 1.1
+ * @date 2026-01-02
  * @brief CMSIS Peripheral Access Layer for SMM
  *
  * CMSIS Peripheral Access Layer for SMM
@@ -234,6 +236,7 @@ typedef struct {
  *  0b100..DPD2
  *  0b101..DPD3
  *  0b110..Shutdown
+ *  0b111..Reserved
  */
 #define SMM_STAT_DPD_STATE(x)                    (((uint32_t)(((uint32_t)(x)) << SMM_STAT_DPD_STATE_SHIFT)) & SMM_STAT_DPD_STATE_MASK)
 
@@ -272,15 +275,15 @@ typedef struct {
 /*! RST_B_WKP - RESET_B Wakeup */
 #define SMM_STAT_RST_B_WKP(x)                    (((uint32_t)(((uint32_t)(x)) << SMM_STAT_RST_B_WKP_SHIFT)) & SMM_STAT_RST_B_WKP_MASK)
 
-#define SMM_STAT_QCH_EN_MASK                     (0x1000U)
-#define SMM_STAT_QCH_EN_SHIFT                    (12U)
-/*! QCH_EN - Q channel timeout enable */
-#define SMM_STAT_QCH_EN(x)                       (((uint32_t)(((uint32_t)(x)) << SMM_STAT_QCH_EN_SHIFT)) & SMM_STAT_QCH_EN_MASK)
+#define SMM_STAT_QCH_TIMEOUT_EN_MASK             (0x1000U)
+#define SMM_STAT_QCH_TIMEOUT_EN_SHIFT            (12U)
+/*! QCH_TIMEOUT_EN - Q channel timeout enable */
+#define SMM_STAT_QCH_TIMEOUT_EN(x)               (((uint32_t)(((uint32_t)(x)) << SMM_STAT_QCH_TIMEOUT_EN_SHIFT)) & SMM_STAT_QCH_TIMEOUT_EN_MASK)
 
-#define SMM_STAT_QCH_INT_MASK                    (0x2000U)
-#define SMM_STAT_QCH_INT_SHIFT                   (13U)
-/*! QCH_INT - Q channel timeout interrupt */
-#define SMM_STAT_QCH_INT(x)                      (((uint32_t)(((uint32_t)(x)) << SMM_STAT_QCH_INT_SHIFT)) & SMM_STAT_QCH_INT_MASK)
+#define SMM_STAT_QCH_TIMEOUT_INT_MASK            (0x2000U)
+#define SMM_STAT_QCH_TIMEOUT_INT_SHIFT           (13U)
+/*! QCH_TIMEOUT_INT - Q channel timeout interrupt */
+#define SMM_STAT_QCH_TIMEOUT_INT(x)              (((uint32_t)(((uint32_t)(x)) << SMM_STAT_QCH_TIMEOUT_INT_SHIFT)) & SMM_STAT_QCH_TIMEOUT_INT_MASK)
 
 #define SMM_STAT_QCH_DNY_IE_MASK                 (0x4000U)
 #define SMM_STAT_QCH_DNY_IE_SHIFT                (14U)
@@ -314,13 +317,13 @@ typedef struct {
 /*! ADVC2P0_DPD2_ACT - ADVC2P0 DPD2 active */
 #define SMM_PWDN_CONFIG_ADVC2P0_DPD2_ACT(x)      (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_ADVC2P0_DPD2_ACT_SHIFT)) & SMM_PWDN_CONFIG_ADVC2P0_DPD2_ACT_MASK)
 
-#define SMM_PWDN_CONFIG_BGR_DSBL_DPD_PD_MASK     (0x8U)
-#define SMM_PWDN_CONFIG_BGR_DSBL_DPD_PD_SHIFT    (3U)
-/*! BGR_DSBL_DPD_PD - BGR disable
- *  0b0..Disable shutdown of BGR at DPD / PD modes
- *  0b1..Enable shutdown of BGR at DPD / PD modes
+#define SMM_PWDN_CONFIG_BGR_PULSE_MASK           (0x8U)
+#define SMM_PWDN_CONFIG_BGR_PULSE_SHIFT          (3U)
+/*! BGR_PULSE - BGR Move To Pulse Mode
+ *  0b0..Disable shutdown of BGR in DPD1/2 modes
+ *  0b1..Enable shutdown of BGR in DPD1/2 modes
  */
-#define SMM_PWDN_CONFIG_BGR_DSBL_DPD_PD(x)       (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_BGR_DSBL_DPD_PD_SHIFT)) & SMM_PWDN_CONFIG_BGR_DSBL_DPD_PD_MASK)
+#define SMM_PWDN_CONFIG_BGR_PULSE(x)             (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_BGR_PULSE_SHIFT)) & SMM_PWDN_CONFIG_BGR_PULSE_MASK)
 
 #define SMM_PWDN_CONFIG_DPD3_SHTDWN_MASK         (0x20U)
 #define SMM_PWDN_CONFIG_DPD3_SHTDWN_SHIFT        (5U)
@@ -334,7 +337,7 @@ typedef struct {
 
 #define SMM_PWDN_CONFIG_DPD_ABRT_MASK            (0x80U)
 #define SMM_PWDN_CONFIG_DPD_ABRT_SHIFT           (7U)
-/*! DPD_ABRT - Abort Deep Sleep Power Down */
+/*! DPD_ABRT - Abort DPD Mode Entry */
 #define SMM_PWDN_CONFIG_DPD_ABRT(x)              (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_DPD_ABRT_SHIFT)) & SMM_PWDN_CONFIG_DPD_ABRT_MASK)
 
 #define SMM_PWDN_CONFIG_Q_TMT_EN_MASK            (0x100U)
@@ -342,13 +345,13 @@ typedef struct {
 /*! Q_TMT_EN - Q timeout enable */
 #define SMM_PWDN_CONFIG_Q_TMT_EN(x)              (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_Q_TMT_EN_SHIFT)) & SMM_PWDN_CONFIG_Q_TMT_EN_MASK)
 
-#define SMM_PWDN_CONFIG_AON_DPD_SL_CLK_MASK      (0x200U)
-#define SMM_PWDN_CONFIG_AON_DPD_SL_CLK_SHIFT     (9U)
-/*! AON_DPD_SL_CLK - AON Deep Sleep and Deep Power Down slow clock
+#define SMM_PWDN_CONFIG_AON_DPD_CLK_SEL_MASK     (0x200U)
+#define SMM_PWDN_CONFIG_AON_DPD_CLK_SEL_SHIFT    (9U)
+/*! AON_DPD_CLK_SEL - AON DPD2 Clock Selector
  *  0b0..Move to 32KHz at DPD2
  *  0b1..Remain at AON_CLK at DPD2
  */
-#define SMM_PWDN_CONFIG_AON_DPD_SL_CLK(x)        (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_AON_DPD_SL_CLK_SHIFT)) & SMM_PWDN_CONFIG_AON_DPD_SL_CLK_MASK)
+#define SMM_PWDN_CONFIG_AON_DPD_CLK_SEL(x)       (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_AON_DPD_CLK_SEL_SHIFT)) & SMM_PWDN_CONFIG_AON_DPD_CLK_SEL_MASK)
 
 #define SMM_PWDN_CONFIG_WKUP_CPU_M_MASK          (0x400U)
 #define SMM_PWDN_CONFIG_WKUP_CPU_M_SHIFT         (10U)
@@ -538,7 +541,7 @@ typedef struct {
 
 #define SMM_RTC_ANLG_XTAL_RTC_ALV_INDCTN_MASK    (0x100U)
 #define SMM_RTC_ANLG_XTAL_RTC_ALV_INDCTN_SHIFT   (8U)
-/*! RTC_ALV_INDCTN - RTC alive indictation
+/*! RTC_ALV_INDCTN - RTC alive indication
  *  0b0..Not working
  *  0b1..Working
  */

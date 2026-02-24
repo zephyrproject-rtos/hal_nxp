@@ -45,6 +45,17 @@
 /*******************************************************************************
  * API
  ******************************************************************************/
+/**
+ * @brief Enable or disable EDMA request for SoC.
+ *
+ * This function enables or disables a specific EDMA request by setting or clearing
+ * the corresponding bit in the AHBSC security general purpose register.
+ *
+ * @param base DMA peripheral base address (DMA0 or other DMA instance).
+ * @param request The EDMA request number to enable or disable.
+ * @param value true to enable the request, false to disable it.
+ */
+void EDMA_SocRequestEnable(DMA_Type *base, uint32_t request, bool value);
 
 #ifdef __cplusplus
 extern "C" {

@@ -783,14 +783,14 @@ void Power_ClearLpPowerSettings(void)
     CMC_SetClockMode(CMC, kCMC_GateNoneClock);
     CMC_SetGlobalPowerMode(CMC, kCMC_ActiveOrSleepMode);
     AON__SMM->STAT = SMM_STAT_DPD_SEQ_END_MASK | SMM_STAT_DPD_END_MASK;
-    AON__SMM->PWDN_CONFIG &= ~(SMM_PWDN_CONFIG_BGR_DSBL_DPD_PD_MASK | SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK |
+    AON__SMM->PWDN_CONFIG &= ~(SMM_PWDN_CONFIG_BGR_PULSE_MASK | SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK |
                                SMM_PWDN_CONFIG_CTRL_SRAM_DPD2_MASK);
 #elif __CORTEX_M == 0U
     SMM_DisableAonCpuIso(AON__SMM);
     SMM_ClearAllLowPowerSequence(AON__SMM);
     SMM_ClearAonCpuWakeupSources(AON__SMM);
     AON__SMM->STAT = SMM_STAT_DPD_SEQ_END_MASK | SMM_STAT_DPD_END_MASK;
-    AON__SMM->PWDN_CONFIG &= ~(SMM_PWDN_CONFIG_BGR_DSBL_DPD_PD_MASK | SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK |
+    AON__SMM->PWDN_CONFIG &= ~(SMM_PWDN_CONFIG_BGR_PULSE_MASK | SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK |
                                SMM_PWDN_CONFIG_CTRL_SRAM_DPD2_MASK);
 #endif /* __CORTEX_M */
 }
@@ -1070,7 +1070,7 @@ status_t Power_EnterPowerDown2(power_pd2_config_t *config)
             AON__CGU->CLK_CONFIG |= CGU_CLK_CONFIG_ROOT_AUX_CLK_EN_MASK;
             AON__CGU->CLK_CONFIG =
                 (AON__CGU->CLK_CONFIG & ~CGU_CLK_CONFIG_ROOT_CLK_SEL_MASK) | CGU_CLK_CONFIG_ROOT_CLK_SEL(3U);
-            AON__CGU->CLK_CONFIG &= ~(CGU_CLK_CONFIG_FRO10M_EN_MASK | CGU_CLK_CONFIG_FRO2M_EN_MASK);
+            AON__CGU->CLK_CONFIG &= ~(CGU_CLK_CONFIG_LPIRC_EN_MASK | CGU_CLK_CONFIG_ULPIRC_EN_MASK);
         }
 
         sharedHandle->requestCM33Start  = false;
@@ -1121,7 +1121,7 @@ status_t Power_EnterPowerDown2(power_pd2_config_t *config)
                 AON__CGU->CLK_CONFIG |= CGU_CLK_CONFIG_ROOT_AUX_CLK_EN_MASK;
                 AON__CGU->CLK_CONFIG =
                     (AON__CGU->CLK_CONFIG & ~CGU_CLK_CONFIG_ROOT_CLK_SEL_MASK) | CGU_CLK_CONFIG_ROOT_CLK_SEL(3U);
-                AON__CGU->CLK_CONFIG &= ~(CGU_CLK_CONFIG_FRO10M_EN_MASK | CGU_CLK_CONFIG_FRO2M_EN_MASK);
+                AON__CGU->CLK_CONFIG &= ~(CGU_CLK_CONFIG_LPIRC_EN_MASK | CGU_CLK_CONFIG_ULPIRC_EN_MASK);
             }
 
             sharedHandle->previousPowerMode = kPower_PowerDown2;
@@ -1174,7 +1174,7 @@ status_t Power_EnterDeepPowerDown1(power_dpd1_config_t *config)
 
     if (config->disableFRO10M)
     {
-        AON__CGU->CLK_CONFIG &= ~CGU_CLK_CONFIG_FRO10M_EN_MASK;
+        AON__CGU->CLK_CONFIG &= ~CGU_CLK_CONFIG_LPIRC_EN_MASK;
     }
 
     /* 2. Configuration for CMC. */
@@ -1334,11 +1334,11 @@ status_t Power_EnterDeepPowerDown2(power_dpd2_config_t *config)
     {
         if (config->disableFRO10M)
         {
-            AON__CGU->CLK_CONFIG &= ~CGU_CLK_CONFIG_FRO10M_EN_MASK;
+            AON__CGU->CLK_CONFIG &= ~CGU_CLK_CONFIG_LPIRC_EN_MASK;
         }
         if ((config->disableFRO2M) == true)
         {
-            AON__CGU->CLK_CONFIG &= ~CGU_CLK_CONFIG_FRO2M_EN_MASK;
+            AON__CGU->CLK_CONFIG &= ~CGU_CLK_CONFIG_ULPIRC_EN_MASK;
         }
 
         sharedHandle->requestCM33Start  = false;
@@ -1440,7 +1440,7 @@ status_t Power_EnterDeepPowerDown2(power_dpd2_config_t *config)
 
             if (config->disableFRO10M)
             {
-                AON__CGU->CLK_CONFIG &= ~CGU_CLK_CONFIG_FRO10M_EN_MASK;
+                AON__CGU->CLK_CONFIG &= ~CGU_CLK_CONFIG_LPIRC_EN_MASK;
             }
 
             sharedHandle->previousPowerMode = kPower_DeepPowerDown2;

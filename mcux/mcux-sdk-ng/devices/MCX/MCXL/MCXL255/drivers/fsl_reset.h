@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 NXP
+ * Copyright 2024-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief reset driver version 2.5.0 */
-#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+/*! @brief reset driver version 2.6.0 */
+#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
 /*@}*/
 
 /*!
@@ -48,7 +48,9 @@ typedef enum _SYSCON_RSTn
     kCRC_RST_SHIFT_RSTn       = (0U | (9U)),          /*!< CRC          reset control */
     kERM0_RST_SHIFT_RSTn      = (0U | (10U)),         /*!< ERM0         reset control */
     kLPI2C0_RST_SHIFT_RSTn    = (0U | (14U)),         /*!< LPI2C0       reset control */
+#if defined(LPI2C1)
     kLPI2C1_RST_SHIFT_RSTn    = (0U | (15U)),         /*!< LPI2C1       reset control */
+#endif
     kLPSPI0_RST_SHIFT_RSTn    = (0U | (16U)),         /*!< LPSPI0       reset control */
     kLPSPI1_RST_SHIFT_RSTn    = (0U | (17U)),         /*!< LPSPI1       reset control */
     kLPUART0_RST_SHIFT_RSTn   = (0U | (18U)),         /*!< LPUART0      reset control */
@@ -67,7 +69,9 @@ typedef enum _SYSCON_RSTn
     kPORT1_RST_SHIFT_RSTn     = ((1U << 8) | (1U)),   /*!< PORT1        reset control */
     kPORT2_RST_SHIFT_RSTn     = ((1U << 8) | (2U)),   /*!< PORT2        reset control */
     kPORT3_RST_SHIFT_RSTn     = ((1U << 8) | (3U)),   /*!< PORT3        reset control */
+#if defined(FSL_FEATURE_SOC_LCD_COUNT) && (FSL_FEATURE_SOC_LCD_COUNT > 0U)
     kSGLCD0_RST_SHIFT_RSTn    = ((1U << 8) | (6U)),   /*!< SGLCD0       reset control */
+#endif
     kTRNG0_RST_SHIFT_RSTn     = ((1U << 8) | (8U)),   /*!< TRNG0        reset control */
 #endif /* Building on the main core */
 
@@ -77,11 +81,17 @@ typedef enum _SYSCON_RSTn
     kAonCAL_RST_SHIFT_RSTn      = ((2U << 8) | (2U)),  /*!< AON CAL     reset control */
     kAonQTMR0_RST_SHIFT_RSTn    = ((2U << 8) | (5U)),  /*!< AON QTMR0   reset control */
     kAonLPTMR_RST_SHIFT_RSTn    = ((2U << 8) | (7U)),  /*!< AON LPTMR   reset control */
+#if defined(FSL_FEATURE_SOC_KPP_COUNT) && (FSL_FEATURE_SOC_KPP_COUNT > 0U)
     kAonKPP_RST_SHIFT_RSTn      = ((2U << 8) | (8U)),  /*!< AON KPP     reset control */
+#endif
     kAonLPADC_RST_SHIFT_RSTn    = ((2U << 8) | (9U)),  /*!< AON LPADC   reset control */
+#if defined(FSL_FEATURE_SOC_LCD_COUNT) && (FSL_FEATURE_SOC_LCD_COUNT > 0U)
     kAonLCD_RST_SHIFT_RSTn      = ((2U << 8) | (10U)), /*!< AON LCD     reset control */
+#endif
     kAonSecurity_RST_SHIFT_RSTn = ((2U << 8) | (11U)), /*!< AON Security reset control */
+#if defined(AON__ACMP0)
     kAonACMP0_RST_SHIFT_RSTn    = ((2U << 8) | (12U)), /*!< AON ACMP    reset control */
+#endif
     kAonADVC2P0_RST_SHIFT_RSTn  = ((2U << 8) | (13U)), /*!< AON ADVC2P0 reset control */
 
     NotAvail_RSTn = (0xFFFFU),                         /*!< No          reset control */
@@ -134,14 +144,28 @@ typedef enum _SYSCON_RSTn
     {                                                  \
         kLPSPI0_RST_SHIFT_RSTn, kLPSPI1_RST_SHIFT_RSTn \
     } /* Reset bits for LPSPI peripheral */
+#if defined(LPI2C1)
 #define LPI2C_RSTS             \
     {                          \
         kLPI2C0_RST_SHIFT_RSTn, kLPI2C1_RST_SHIFT_RSTn, kAonI2C_RST_SHIFT_RSTn \
     } /* Reset bits for LPI2C peripheral */
+#else
+#define LPI2C_RSTS             \
+    {                          \
+        kLPI2C0_RST_SHIFT_RSTn, NotAvail_RSTn, kAonI2C_RST_SHIFT_RSTn \
+    } /* Reset bits for LPI2C peripheral */
+#endif /* LPI2C1 */
+#if defined(AON__ACMP0)
 #define LPCMP_RSTS                                      \
     {                                                   \
         kACMP0_RST_SHIFT_RSTn, kAonACMP0_RST_SHIFT_RSTn \
     } /* Reset bits for ACMP peripheral */
+#else
+#define LPCMP_RSTS             \
+    {                          \
+        kACMP0_RST_SHIFT_RSTn, \
+    } /* Reset bits for ACMP peripheral */
+#endif /* AON__ACMP0 */
 #define OSTIMER_RSTS             \
     {                            \
         kOSTIMER0_RST_SHIFT_RSTn \
@@ -169,10 +193,17 @@ typedef enum _SYSCON_RSTn
     {                          \
         NotAvail_RSTn, NotAvail_RSTn, kAonI2C_RST_SHIFT_RSTn \
     } /* Reset bits for LPI2C peripheral */
-#define CTIMER_RSTS                                         \
+#if defined(AON__TMR1)
+#define TMR_RSTS                                         \
     {                                                       \
-        kAonQTMR0_RST_SHIFT_RSTn, kAonLPTMR_RST_SHIFT_RSTn  \
+        kAonQTMR0_RST_SHIFT_RSTn, kAonQTMR0_RST_SHIFT_RSTn  \
     } /* Reset bits for CTIMER peripheral */
+#else
+#define TMR_RSTS                 \
+    {                            \
+        kAonQTMR0_RST_SHIFT_RSTn \
+    } /* Reset bits for CTIMER peripheral */
+#endif /* AON__TMR1 */
 #define PORT_RSTS_N                                  \
     {                                                \
         NotAvail_RSTn                                \
@@ -181,10 +212,12 @@ typedef enum _SYSCON_RSTn
     {                                                \
         NotAvail_RSTn                                \
     } /* Reset bits for GPIO peripheral */
-#define LPCMP_RSTS                             \
-    {                                          \
-        NotAvail_RSTn, kAonACMP0_RST_SHIFT_RSTn \
+#if defined(AON__ACMP0)
+#define LPCMP_RSTS               \
+    {                            \
+        kAonACMP0_RST_SHIFT_RSTn \
     } /* Reset bits for ACMP peripherals */
+#endif
 #define PORT_RSTS_N                                  \
     {                                                \
         NotAvail_RSTn                                \

@@ -1,6 +1,22 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA343VFM
+**     Processors:          MCXA173VFM
+**                          MCXA173VLF
+**                          MCXA173VLH
+**                          MCXA173VLL
+**                          MCXA174VFM
+**                          MCXA174VLF
+**                          MCXA174VLH
+**                          MCXA174VLL
+**                          MCXA183VFM
+**                          MCXA183VLF
+**                          MCXA183VLH
+**                          MCXA183VLL
+**                          MCXA184VFM
+**                          MCXA184VLF
+**                          MCXA184VLH
+**                          MCXA184VLL
+**                          MCXA343VFM
 **                          MCXA343VLF
 **                          MCXA343VLH
 **                          MCXA343VLL
@@ -8,9 +24,17 @@
 **                          MCXA344VLF
 **                          MCXA344VLH
 **                          MCXA344VLL
+**                          MCXA353VFM
+**                          MCXA353VLF
+**                          MCXA353VLH
+**                          MCXA353VLL
+**                          MCXA354VFM
+**                          MCXA354VLF
+**                          MCXA354VLH
+**                          MCXA354VLL
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251028
+**     Build:               b251111
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FMU
@@ -44,10 +68,22 @@
 #if !defined(PERI_FMU_H_)
 #define PERI_FMU_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXA343VFM) || defined(CPU_MCXA343VLF) || defined(CPU_MCXA343VLH) || defined(CPU_MCXA343VLL))
+#if (defined(CPU_MCXA173VFM) || defined(CPU_MCXA173VLF) || defined(CPU_MCXA173VLH) || defined(CPU_MCXA173VLL))
+#include "MCXA173_COMMON.h"
+#elif (defined(CPU_MCXA174VFM) || defined(CPU_MCXA174VLF) || defined(CPU_MCXA174VLH) || defined(CPU_MCXA174VLL))
+#include "MCXA174_COMMON.h"
+#elif (defined(CPU_MCXA183VFM) || defined(CPU_MCXA183VLF) || defined(CPU_MCXA183VLH) || defined(CPU_MCXA183VLL))
+#include "MCXA183_COMMON.h"
+#elif (defined(CPU_MCXA184VFM) || defined(CPU_MCXA184VLF) || defined(CPU_MCXA184VLH) || defined(CPU_MCXA184VLL))
+#include "MCXA184_COMMON.h"
+#elif (defined(CPU_MCXA343VFM) || defined(CPU_MCXA343VLF) || defined(CPU_MCXA343VLH) || defined(CPU_MCXA343VLL))
 #include "MCXA343_COMMON.h"
 #elif (defined(CPU_MCXA344VFM) || defined(CPU_MCXA344VLF) || defined(CPU_MCXA344VLH) || defined(CPU_MCXA344VLL))
 #include "MCXA344_COMMON.h"
+#elif (defined(CPU_MCXA353VFM) || defined(CPU_MCXA353VLF) || defined(CPU_MCXA353VLH) || defined(CPU_MCXA353VLL))
+#include "MCXA353_COMMON.h"
+#elif (defined(CPU_MCXA354VFM) || defined(CPU_MCXA354VLF) || defined(CPU_MCXA354VLH) || defined(CPU_MCXA354VLL))
+#include "MCXA354_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif

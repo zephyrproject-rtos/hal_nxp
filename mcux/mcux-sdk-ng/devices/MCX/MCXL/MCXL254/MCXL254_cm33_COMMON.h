@@ -8,15 +8,15 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MCXL25xRM DraftH
-**     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250919
+**     Reference manual:    MCXL25x RM Rev.1 RC
+**     Version:             rev. 1.1, 2026-01-02
+**     Build:               b260105
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXL254_cm33
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -25,14 +25,16 @@
 **     Revisions:
 **     - rev. 1.0 (2025-06-13)
 **         Generated based on Rev1 DraftH.
+**     - rev. 1.1 (2026-01-02)
+**         Generated based on Rev.1 RC.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MCXL254_cm33_COMMON.h
- * @version 1.0
- * @date 2025-06-13
+ * @version 1.1
+ * @date 2026-01-02
  * @brief CMSIS Peripheral Access Layer for MCXL254_cm33
  *
  * CMSIS Peripheral Access Layer for MCXL254_cm33
@@ -45,7 +47,7 @@
  * compatible) */
 #define MCU_MEM_MAP_VERSION 0x0100U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0001U
 
 
 /* ----------------------------------------------------------------------------
@@ -1734,35 +1736,6 @@ typedef enum IRQn {
   #define TRNG_BASE_ADDRS                          { TRNG0_BASE }
   /** Array initializer of TRNG peripheral base pointers */
   #define TRNG_BASE_PTRS                           { TRNG0 }
-#endif
-
-/* UDF - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral UDF0 base address */
-  #define UDF0_BASE                                (0x500D3000u)
-  /** Peripheral UDF0 base address */
-  #define UDF0_BASE_NS                             (0x400D3000u)
-  /** Peripheral UDF0 base pointer */
-  #define UDF0                                     ((UDF_Type *)UDF0_BASE)
-  /** Peripheral UDF0 base pointer */
-  #define UDF0_NS                                  ((UDF_Type *)UDF0_BASE_NS)
-  /** Array initializer of UDF peripheral base addresses */
-  #define UDF_BASE_ADDRS                           { UDF0_BASE }
-  /** Array initializer of UDF peripheral base pointers */
-  #define UDF_BASE_PTRS                            { UDF0 }
-  /** Array initializer of UDF peripheral base addresses */
-  #define UDF_BASE_ADDRS_NS                        { UDF0_BASE_NS }
-  /** Array initializer of UDF peripheral base pointers */
-  #define UDF_BASE_PTRS_NS                         { UDF0_NS }
-#else
-  /** Peripheral UDF0 base address */
-  #define UDF0_BASE                                (0x400D3000u)
-  /** Peripheral UDF0 base pointer */
-  #define UDF0                                     ((UDF_Type *)UDF0_BASE)
-  /** Array initializer of UDF peripheral base addresses */
-  #define UDF_BASE_ADDRS                           { UDF0_BASE }
-  /** Array initializer of UDF peripheral base pointers */
-  #define UDF_BASE_PTRS                            { UDF0 }
 #endif
 
 /* UTICK - Peripheral instance base addresses */

@@ -2,7 +2,7 @@
 //*****************************************************************************
 // MCXE315 startup code
 //
-// Version : 110825
+// Version : 271025
 //*****************************************************************************
 //
 // Copyright 2016-2025 NXP
@@ -67,6 +67,7 @@ void ResetISR(void);
 #else
 void Reset_Handler(void);
 #endif // __MCUXPRESSO
+void Reset_Handler_C(void);
 WEAK void NMI_Handler(void);
 WEAK void HardFault_Handler(void);
 WEAK void MemManage_Handler(void);
@@ -518,7 +519,9 @@ void HSE_B_CLK_FAIL_DriverIRQHandler(void) ALIAS(DefaultISR);
 // __main() is the entry point for Redlib based applications
 // main() is the entry point for Newlib based applications
 //*****************************************************************************
-#if defined(__MCUXPRESSO)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+extern void __main(void);
+#elif defined(__MCUXPRESSO)
 #if defined(__REDLIB__)
 extern void __main(void);
 #else
@@ -896,175 +899,15 @@ extern unsigned int __bss_section_table_end;
 // Sets up a simple runtime environment and initializes the C/C++
 // library.
 //*****************************************************************************
-//  ITCM base and end addresses
-#define ITCM_BASE_ADDR 0x00000000UL
-#define ITCM_END_ADDR 0x00007fffUL
-
-// DTCM base and end addresses
-#define DTCM_BASE_ADDR 0x20000000UL
-#define DTCM_END_ADDR 0x2000ffffUL
-
-
-// Standby RAM base and end addresses
-#define SRAM_BASE_ADDR 0x20400000UL
-#define SRAM_END_ADDR  0x20407fffUL
-
-// patterns for initial ecc, heap and stack sections initialization
-#ifndef STARTUP_ECC_INITVALUE
-#define STARTUP_ECC_INITVALUE   0xFEEDFACECAFEBEEFULL
-#endif
-
-#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
-__attribute__ ((naked))
-void Reset_Handler(void) {
-    // Disable interrupts
-    __asm volatile ("cpsid i");
-    // Config VTOR & MSP register
-    __asm volatile ("LDR R0, =0xE000ED08  \n"
-                    "STR %0, [R0]         \n"
-                    "LDR R1, [%0]         \n"
-                    "MSR MSP, R1          \n"
-                    :
-                    : "r"(__Vectors)
-                    : "r0");
-
-#if !defined(BYPASS_ECC_ITCM_INIT)
-    __asm volatile ("LDR     R0, =0x00000000     \n"
-                    "LDR     R1, =0x00007FFF     \n"
-                    "LDR     R2, =.ram_init_itcm \n"
-                    "CMP.W   R1, R2              \n"
-                    "BCS.N   .ram_init_itcm_done \n"
-                    ".ram_init_itcm:             \n"
-                    "LDR     R2, =0              \n"
-                    "LDR     R3, =0              \n"
-                    "LDR     R4, =0              \n"
-                    "LDR     R5, =0              \n"
-                    ".loop01:                    \n"
-                    "STMIA   R0!, {R2 - R5}      \n"
-                    "CMP     R0, R1              \n"
-                    "BCC.N   .loop01             \n"
-                    ".ram_init_itcm_done:        \n"
-                    );
-#endif
-
-#if !defined(BYPASS_ECC_DTCM_INIT)
-    __asm volatile ("LDR     R0, =0x20000000     \n"
-                    "LDR     R1, =0x2000FFFF     \n"
-                    "LDR     R2, =0              \n"
-                    "LDR     R3, =0              \n"
-                    "LDR     R4, =0              \n"
-                    "LDR     R5, =0              \n"
-                    ".loop02:                    \n"
-                    "STMIA   R0!, {R2 - R5}      \n"
-                    "CMP     R0, R1              \n"
-                    "BCC.N   .loop02             \n"
-                    );
-#endif
-
-#if !defined(BYPASS_ECC_SRAM_INIT)
-    __asm volatile ("LDR     R0, =0x20400000     \n"
-                    "LDR     R2, =0x4028C000     \n"
-                    "LDR     R2, [R2]            \n"
-                    "LSLS    R2, R2, #31         \n"
-                    "BPL.N   .ram_init_done      \n"
-                    "LDR     R1, =0x20407FFF     \n"
-                    "LDR     R2, =0              \n"
-                    "LDR     R3, =0              \n"
-                    "LDR     R4, =0              \n"
-                    "LDR     R5, =0              \n"
-                    ".loop03:                    \n"
-                    "STMIA   R0!, {R2 - R5}      \n"
-                    "CMP     R0, R1              \n"
-                    "BCC.N   .loop03             \n"
-                    ".ram_init_done:             \n"
-                    );
-#endif
-
-#elif defined(__MCUXPRESSO)
-__attribute__ ((naked, section(".after_vectors.reset")))
-void ResetISR(void) {
-    // Disable interrupts
-    __asm volatile ("cpsid i");
-    // Config VTOR & MSP register
-    __asm volatile ("LDR R0, =0xE000ED08  \n"
-                    "STR %0, [R0]         \n"
-                    "LDR R1, [%0]         \n"
-                    "MSR MSP, R1          \n"
-                    :
-                    : "r"(g_pfnVectors)
-                    : "r0");
-#elif defined (__ICCARM__)
-__stackless void Reset_Handler(void) {
-    // Disable interrupts
-    __asm volatile ("cpsid i");
-    // Config VTOR & MSP register
-    __asm volatile ("LDR R0, =0xE000ED08  \n"
-                    "STR %0, [R0]         \n"
-                    "LDR R1, [%0]         \n"
-                    "MSR MSP, R1          \n"
-                    :
-                    : "r"(__vector_table)
-                    : "r0");
-#elif defined (__GNUC__)
-__attribute__ ((naked))
-void Reset_Handler(void) {
-    // Disable interrupts
-    __asm volatile ("cpsid i");
-    // Config VTOR & MSP register
-    __asm volatile ("LDR R0, =0xE000ED08  \n"
-                    "STR %0, [R0]         \n"
-                    "LDR R1, [%0]         \n"
-                    "MSR MSP, R1          \n"
-                    :
-                    : "r"(__isr_vector)
-                    : "r0");
-#else
-#error Unsupported toolchain!
-#endif
-
-#if !defined(__ARMCC_VERSION) && !defined(__CC_ARM) // ARM compiler does not allow C code in naked function.
-    // TCM/SRAM controller must perform a read-modify-write for any access < 32-bit(ITCM) or 64-bit to keep the ECC updated.
-    // The Software must ensure the TCM is ECC clean by initializing all memories that have the potential to be accessed as < 32-bit(ITCM) or 64-bit.
-    uint64_t *pDest;
-
-#if !defined(BYPASS_ECC_ITCM_INIT)
-#if defined(__MCUXPRESSO)
-    if ((uint32_t)ResetISR > ITCM_END_ADDR)
-#elif defined (__ICCARM__) || defined (__GNUC__)
-    if ((uint32_t)Reset_Handler > ITCM_END_ADDR) // Bypass ECC RAM initialization on ITCM target, debugger will do the initialization
-#else
-#error Unsupported toolchain!
-#endif
-    {
-       pDest = (uint64_t *)ITCM_BASE_ADDR;
-       while (pDest < (uint64_t*)ITCM_END_ADDR) { *pDest++ = STARTUP_ECC_INITVALUE; }
-    }
-#endif
-
-#if !defined(BYPASS_ECC_DTCM_INIT)
-    pDest = (uint64_t*)DTCM_BASE_ADDR;
-    while (pDest < (uint64_t*)DTCM_END_ADDR) { *pDest++ = STARTUP_ECC_INITVALUE; }
-#endif
-
-#if !defined(BYPASS_ECC_SRAM_INIT)
-
-    if (((*(volatile uint32_t *)(0x4028c000)) & 0x1U) != 0U)  // Skip standby SRAM if not POR, MC_RGM->DES & MC_RGM_DES_F_POR_MASK
-    {
-      pDest = (uint64_t*)SRAM_BASE_ADDR;
-      while (pDest < (uint64_t*)SRAM_END_ADDR) { *pDest++ = STARTUP_ECC_INITVALUE; }
-    }
-#endif
-
+void Reset_Handler_C(void)
+{
+#if !defined(__NO_SYSTEM_INIT)
     SystemInit();
-#endif
+#endif //(__NO_SYSTEM_INIT)
 
 #if defined(__CC_ARM) || defined(__ARMCC_VERSION)
-    __asm volatile ("LDR R0, =SystemInit \n"
-                    "BLX R0              \n"
-                    "cpsie i             \n"
-                    "LDR R0, =__main     \n"
-                    "BX  R0              \n"
-                    );
+    __asm volatile ("cpsie i");
+    __main();
 #elif defined(__MCUXPRESSO)
     // Copy the data sections from flash to SRAM.
     unsigned int LoadAddr, ExeAddr, SectionLen;
@@ -1188,15 +1031,98 @@ void Reset_Handler(void) {
 
 #endif
 
-    //
     // main() shouldn't return, but if it does, we'll just enter an infinite loop
-    //
-#if !defined(__ARMCC_VERSION) && !defined(__CC_ARM)
     while (1)
     {
         ;
     }
+}
+
+#if defined(__MCUXPRESSO)
+__attribute__ ((naked, section(".after_vectors.reset")))
+void ResetISR(void) {
+#else
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+__attribute__ ((used, section("InRoot$$Sections")))
 #endif
+__attribute__ ((naked))
+void Reset_Handler(void) {
+#endif // __MCUXPRESSO
+    // Disable interrupts
+    __asm volatile ("cpsid i");
+    // Config VTOR & MSP register
+    __asm volatile ("LDR R0, =0xE000ED08  \n"
+                    "STR %0, [R0]         \n"
+                    "LDR R1, [%0]         \n"
+                    "MSR MSP, R1          \n"
+                    :
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+                    : "r"(__Vectors)
+#elif defined(__MCUXPRESSO)
+                    : "r"(g_pfnVectors)
+#elif defined (__ICCARM__)
+                    : "r"(__vector_table)
+#elif defined (__GNUC__)
+                    : "r"(__isr_vector)
+#else
+#error "Unsupported toolchain!"
+#endif
+                    : "r0");
+
+// TCM/SRAM controller must perform a read-modify-write for any access < 32-bit(ITCM) or 64-bit to keep the ECC updated.
+// The Software must ensure the TCM is ECC clean by initializing all memories that have the potential to be accessed as < 32-bit(ITCM) or 64-bit.
+#if !defined(BYPASS_ECC_ITCM_INIT)
+    __asm volatile ("LDR     R0, =0x00000000     \n"
+                    "LDR     R1, =0x00007FFF     \n"
+                    "LDR     R2, =Reset_Handler_C\n"
+                    "CMP.W   R1, R2              \n"
+                    "BCS.N   ram_init_itcm_done  \n"
+                    "ram_init_itcm:              \n"
+                    "LDR     R2, =0              \n"
+                    "LDR     R3, =0              \n"
+                    "LDR     R4, =0              \n"
+                    "LDR     R5, =0              \n"
+                    "loop01:                     \n"
+                    "STMIA   R0!, {R2 - R5}      \n"
+                    "CMP     R0, R1              \n"
+                    "BCC.N   loop01              \n"
+                    "ram_init_itcm_done:         \n"
+                    );
+#endif
+
+#if !defined(BYPASS_ECC_DTCM_INIT)
+    __asm volatile ("LDR     R0, =0x20000000     \n"
+                    "LDR     R1, =0x2000FFFF     \n"
+                    "LDR     R2, =0              \n"
+                    "LDR     R3, =0              \n"
+                    "LDR     R4, =0              \n"
+                    "LDR     R5, =0              \n"
+                    "loop02:                     \n"
+                    "STMIA   R0!, {R2 - R5}      \n"
+                    "CMP     R0, R1              \n"
+                    "BCC.N   loop02              \n"
+                    );
+#endif
+
+#if !defined(BYPASS_ECC_SRAM_INIT)
+    __asm volatile ("LDR     R0, =0x20400000     \n"
+                    "LDR     R2, =0x4028C000     \n"
+                    "LDR     R2, [R2]            \n"
+                    "LSLS    R2, R2, #31         \n"
+                    "BPL.N   ram_init_done       \n"
+                    "LDR     R1, =0x20407FFF     \n"
+                    "LDR     R2, =0              \n"
+                    "LDR     R3, =0              \n"
+                    "LDR     R4, =0              \n"
+                    "LDR     R5, =0              \n"
+                    "loop03:                     \n"
+                    "STMIA   R0!, {R2 - R5}      \n"
+                    "CMP     R0, R1              \n"
+                    "BCC.N   loop03              \n"
+                    "ram_init_done:              \n"
+                    );
+#endif
+
 }
 
 //*****************************************************************************

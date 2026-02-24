@@ -15,7 +15,7 @@
 
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
-#define FSL_COMPONENT_ID "driver.romapi_soc"
+#define FSL_COMPONENT_ID "driver.romapi"
 #endif
 
 /*
@@ -80,8 +80,8 @@ static status_t flash_check_param(
  */
 status_t FLASH_Init(flash_config_t *config)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(config);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != config);
 
     status_t status;
     status = BOOTLOADER_API_TREE_POINTER->flashDriver->flash_init(config);
@@ -94,9 +94,9 @@ status_t FLASH_Init(flash_config_t *config)
  */
 status_t FLASH_Erase(flash_config_t *config, FMU_Type *base, uint32_t start, uint32_t lengthInBytes, uint32_t key)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(config);
-    assert(base);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != config);
+    assert(NULL != base);
 
     /* Clear flash cache before every erase to prevent the possibility of returning stale data */
     MCM->CPCR2 |= MCM_CPCR2_CCBC_MASK;
@@ -112,10 +112,10 @@ status_t FLASH_Erase(flash_config_t *config, FMU_Type *base, uint32_t start, uin
  */
 status_t FLASH_Program(flash_config_t *config, FMU_Type *base, uint32_t start, uint32_t *src, uint32_t lengthInBytes)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(config);
-    assert(base);
-    assert(src);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != config);
+    assert(NULL != base);
+    assert(NULL != src);
 
     status_t status = kStatus_Fail;
 
@@ -192,10 +192,10 @@ status_t FLASH_Program(flash_config_t *config, FMU_Type *base, uint32_t start, u
 status_t FLASH_ProgramPage(
     flash_config_t *config, FMU_Type *base, uint32_t start, uint32_t *src, uint32_t lengthInBytes)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(config);
-    assert(base);
-    assert(src);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != config);
+    assert(NULL != base);
+    assert(NULL != src);
 
     status_t status = kStatus_Fail;
 
@@ -275,9 +275,9 @@ status_t FLASH_ProgramPage(
  */
 status_t FLASH_VerifyErasePhrase(flash_config_t *config, FMU_Type *base, uint32_t start, uint32_t lengthInBytes)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(config);
-    assert(base);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != config);
+    assert(NULL != base);
 
     status_t status;
     status = BOOTLOADER_API_TREE_POINTER->flashDriver->flash_verify_erase_phrase(config, base, start, lengthInBytes);
@@ -290,8 +290,8 @@ status_t FLASH_VerifyErasePhrase(flash_config_t *config, FMU_Type *base, uint32_
  */
 status_t FLASH_VerifyEraseAll(FMU_Type *base)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(base);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != base);
 
     status_t status;
     status = BOOTLOADER_API_TREE_POINTER->flashDriver->flash_verify_erase_all(base);
@@ -304,9 +304,9 @@ status_t FLASH_VerifyEraseAll(FMU_Type *base)
  */
 status_t FLASH_VerifyErasePage(flash_config_t *config, FMU_Type *base, uint32_t start, uint32_t lengthInBytes)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(config);
-    assert(base);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != config);
+    assert(NULL != base);
 
     status_t status;
     status = BOOTLOADER_API_TREE_POINTER->flashDriver->flash_verify_erase_page(config, base, start, lengthInBytes);
@@ -319,12 +319,27 @@ status_t FLASH_VerifyErasePage(flash_config_t *config, FMU_Type *base, uint32_t 
  */
 status_t FLASH_VerifyEraseSector(flash_config_t *config, FMU_Type *base, uint32_t start, uint32_t lengthInBytes)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(config);
-    assert(base);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != config);
+    assert(NULL != base);
 
     status_t status;
     status = BOOTLOADER_API_TREE_POINTER->flashDriver->flash_verify_erase_sector(config, base, start, lengthInBytes);
+
+    return status;
+}
+
+/*!
+ * @brief Checking if a flash block is in the erased state.
+ */
+status_t FLASH_VerifyEraseBlock(flash_config_t *config, FMU_Type *base, uint32_t blockaddr)
+{
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != config);
+    assert(NULL != base);
+
+    status_t status;
+    status = BOOTLOADER_API_TREE_POINTER->flashDriver->flash_verify_erase_block(config, base, blockaddr);
 
     return status;
 }
@@ -338,11 +353,11 @@ status_t FLASH_VerifyEraseSector(flash_config_t *config, FMU_Type *base, uint32_
 status_t FLASH_ReadIntoMisr(
     flash_config_t *config, FMU_Type *base, uint32_t start, uint32_t endAddr, uint32_t *seed, uint32_t *signature)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(config);
-    assert(base);
-    assert(seed);
-    assert(signature);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != config);
+    assert(NULL != base);
+    assert(NULL != seed);
+    assert(NULL != signature);
 
     status_t status;
     status = BOOTLOADER_API_TREE_POINTER->flashDriver->flash_read_into_misr(config, base, start, endAddr, seed, signature);
@@ -355,9 +370,9 @@ status_t FLASH_ReadIntoMisr(
  */
 status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichProperty, uint32_t *value)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(config);
-    assert(value);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != config);
+    assert(NULL != value);
 
     status_t status;
     status = BOOTLOADER_API_TREE_POINTER->flashDriver->flash_get_property(config, whichProperty, value);
@@ -406,8 +421,8 @@ __attribute__ ((section (".ramfunc")))
 static status_t flash_check_param(
     flash_config_t *config, FMU_Type *base, uint32_t start, uint32_t lengthInBytes, uint32_t alignmentBaseline)
 {
-    assert(config);
-    assert(base);
+    assert(NULL != config);
+    assert(NULL != base);
 
     status_t status = kStatus_FLASH_InvalidArgument;
 
@@ -488,9 +503,9 @@ static status_t flash_check_param(
  */
 status_t FLASH_VerifyEraseIFRPhrase(flash_config_t *config, FMU_Type *base, uint32_t start, uint32_t lengthInBytes)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(config);
-    assert(base);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != config);
+    assert(NULL != base);
 
     status_t status;
     status = BOOTLOADER_API_TREE_POINTER->flashDriver->ifr_verify_erase_phrase(config, base, start, lengthInBytes);
@@ -503,9 +518,9 @@ status_t FLASH_VerifyEraseIFRPhrase(flash_config_t *config, FMU_Type *base, uint
  */
 status_t FLASH_VerifyEraseIFRPage(flash_config_t *config, FMU_Type *base, uint32_t start, uint32_t lengthInBytes)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(config);
-    assert(base);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != config);
+    assert(NULL != base);
 
     status_t status;
     status = BOOTLOADER_API_TREE_POINTER->flashDriver->ifr_verify_erase_page(config, base, start, lengthInBytes);
@@ -518,9 +533,9 @@ status_t FLASH_VerifyEraseIFRPage(flash_config_t *config, FMU_Type *base, uint32
  */
 status_t FLASH_VerifyEraseIFRSector(flash_config_t *config, FMU_Type *base, uint32_t start, uint32_t lengthInBytes)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(config);
-    assert(base);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != config);
+    assert(NULL != base);
 
     status_t status;
     status = BOOTLOADER_API_TREE_POINTER->flashDriver->ifr_verify_erase_sector(config, base, start, lengthInBytes);
@@ -537,11 +552,11 @@ status_t FLASH_VerifyEraseIFRSector(flash_config_t *config, FMU_Type *base, uint
 status_t FLASH_ReadIFRIntoMisr(
     flash_config_t *config, FMU_Type *base, uint32_t start, uint32_t endAddr, uint32_t *seed, uint32_t *signature)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(config);
-    assert(base);
-    assert(seed);
-    assert(signature);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != config);
+    assert(NULL != base);
+    assert(NULL != seed);
+    assert(NULL != signature);
 
     status_t status;
     status = BOOTLOADER_API_TREE_POINTER->flashDriver->ifr_read_into_misr(config, base, start, endAddr, seed, signature);
@@ -559,7 +574,7 @@ status_t FLASH_ReadIFRIntoMisr(
  */
 status_t SPI_EepromInit(uint32_t baudRate)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
     return BOOTLOADER_API_TREE_POINTER->lpspiFlashDriver->spi_eeprom_init(baudRate);
 }
 
@@ -568,8 +583,8 @@ status_t SPI_EepromInit(uint32_t baudRate)
  */
 status_t SPI_EepromRead(uint8_t *dest, uint32_t length, uint32_t address, bool requestFastRead)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(dest);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != dest);
 
     return BOOTLOADER_API_TREE_POINTER->lpspiFlashDriver->spi_eeprom_read(dest, length, address, requestFastRead);
 }
@@ -579,8 +594,8 @@ status_t SPI_EepromRead(uint8_t *dest, uint32_t length, uint32_t address, bool r
  */
 status_t SPI_EepromWrite(uint8_t *data, uint32_t length, uint32_t address)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(data);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != data);
 
     return BOOTLOADER_API_TREE_POINTER->lpspiFlashDriver->spi_eeprom_write(data, length, address);
 }
@@ -590,7 +605,7 @@ status_t SPI_EepromWrite(uint8_t *data, uint32_t length, uint32_t address)
  */
 status_t SPI_EepromErase(uint32_t address, eraseOptions_t option)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
     return BOOTLOADER_API_TREE_POINTER->lpspiFlashDriver->spi_eeprom_erase(address, option);
 }
 
@@ -598,7 +613,7 @@ status_t SPI_EepromErase(uint32_t address, eraseOptions_t option)
  */
 void SPI_EepromFinalize(void)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
     BOOTLOADER_API_TREE_POINTER->lpspiFlashDriver->spi_eeprom_finalize();
 }
 
@@ -610,7 +625,7 @@ void SPI_EepromFinalize(void)
  */
 status_t KB_Init(void)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
     return BOOTLOADER_API_TREE_POINTER->kbApi->kb_init();
 }
 
@@ -631,8 +646,8 @@ status_t KB_Init(void)
  */
 status_t KB_Execute(const uint8_t *data, uint32_t dataLength, uint32_t isUpdateExt)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(data);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != data);
 
     return BOOTLOADER_API_TREE_POINTER->kbApi->kb_execute(data, dataLength, isUpdateExt);
 }
@@ -642,7 +657,7 @@ status_t KB_Execute(const uint8_t *data, uint32_t dataLength, uint32_t isUpdateE
  */
 status_t KB_Deinit(void)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
     return BOOTLOADER_API_TREE_POINTER->kbApi->kb_deinit();
 }
 
@@ -655,8 +670,8 @@ status_t KB_Deinit(void)
  */
 nboot_status_t NBOOT_ContextInit(nboot_context_t *context)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(context);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != context);
 
     return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_context_init(context);
 }
@@ -667,8 +682,8 @@ nboot_status_t NBOOT_ContextInit(nboot_context_t *context)
  */
 nboot_status_t NBOOT_ContextFree(nboot_context_t *context)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(context);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != context);
 
     return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_context_free(context);
 }
@@ -682,9 +697,9 @@ nboot_status_t NBOOT_ContextFree(nboot_context_t *context)
  */
 nboot_status_t NBOOT_SB3LoaderManifest(nboot_context_t *context, uint32_t *manifest)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(context);
-    assert(manifest);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != context);
+    assert(NULL != manifest);
 
     return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_sb3_load_manifest(context, manifest);
 }
@@ -697,9 +712,9 @@ nboot_status_t NBOOT_SB3LoaderManifest(nboot_context_t *context, uint32_t *manif
  */
 nboot_status_t NBOOT_SB3LoaderBlock(nboot_context_t *context, uint32_t *block)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(context);
-    assert(block);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != context);
+    assert(NULL != block);
 
     return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_sb3_load_block(context, block);
 }
@@ -713,9 +728,9 @@ nboot_status_t NBOOT_SB3LoaderBlock(nboot_context_t *context, uint32_t *block)
  */
 nboot_status_t NBOOT_SB3LoaderS200Fw(nboot_context_t *context, uint32_t *sb3Data)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(context);
-    assert(sb3Data);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != context);
+    assert(NULL != sb3Data);
 
     return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_sb3_load_s200_fw(context, sb3Data);
 }
@@ -729,9 +744,9 @@ nboot_status_t NBOOT_ImgAuthenticateEcdsa(nboot_context_t *context,
                                           uint8_t imageStart[],
                                           nboot_bool_t *isSignatureVerified)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(context);
-    assert(isSignatureVerified);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != context);
+    assert(NULL != isSignatureVerified);
 
     return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_img_authenticate_ecdsa(context, imageStart,
                                                                                         isSignatureVerified);
@@ -742,9 +757,9 @@ nboot_status_t NBOOT_ImgAuthenticateEcdsa(nboot_context_t *context,
  */
 nboot_status_t NBOOT_RngRandom(nboot_context_t *context, void *buf, size_t bufLen)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(context);
-    assert(buf);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != context);
+    assert(NULL != buf);
 
     return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_rng_random(context, buf, bufLen);
 }
@@ -754,9 +769,9 @@ nboot_status_t NBOOT_RngRandom(nboot_context_t *context, void *buf, size_t bufLe
  */
 nboot_status_t NBOOT_RngRandomHq(nboot_context_t *context, void *buf, size_t bufLen)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(context);
-    assert(buf);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != context);
+    assert(NULL != buf);
 
     return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_rng_random_hq(context, buf, bufLen);
 }
@@ -770,9 +785,9 @@ nboot_status_t NBOOT_FuseProgram(nboot_context_t *context,
                                  uint32_t *data,
                                  uint32_t systemClockFrequencyMHz)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(context);
-    assert(data);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != context);
+    assert(NULL != data);
 
     return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_fuse_program(context, addr, data,
                                                                               systemClockFrequencyMHz);
@@ -784,9 +799,9 @@ nboot_status_t NBOOT_FuseProgram(nboot_context_t *context,
  */
 nboot_status_t NBOOT_FuseRead(nboot_context_t *context, uint32_t addr, uint32_t *data, uint32_t systemClockFrequencyMHz)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(context);
-    assert(data);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != context);
+    assert(NULL != data);
 
     return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_fuse_read(context, addr, data,
                                                                            systemClockFrequencyMHz);
@@ -799,10 +814,10 @@ nboot_status_t NBOOT_FuseRead(nboot_context_t *context, uint32_t addr, uint32_t 
  */
 nboot_status_t NBOOT_PropertyGet(nboot_context_t *context, uint32_t propertyId, uint8_t *destData, size_t *dataLen)
 {
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(context);
-    assert(destData);
-    assert(dataLen);
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != context);
+    assert(NULL != destData);
+    assert(NULL != dataLen);
 
     return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_property_get(context, propertyId, destData, dataLen);
 }

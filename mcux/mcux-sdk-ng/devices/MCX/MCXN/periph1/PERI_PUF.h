@@ -10,7 +10,7 @@
 **                          MCXN236VPB
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b251114
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PUF
@@ -575,10 +575,10 @@ typedef struct {
 /*! COOLFLUX_DEBUG - Disable key access when debugger is attached to COOLFLUX after power-up */
 #define PUF_HW_RUC0_COOLFLUX_DEBUG(x)            (((uint32_t)(((uint32_t)(x)) << PUF_HW_RUC0_COOLFLUX_DEBUG_SHIFT)) & PUF_HW_RUC0_COOLFLUX_DEBUG_MASK)
 
-#define PUF_HW_RUC0_dsp_debug_MASK               (0x4000000U)
-#define PUF_HW_RUC0_dsp_debug_SHIFT              (26U)
+#define PUF_HW_RUC0_DSP_DEBUG_MASK               (0x4000000U)
+#define PUF_HW_RUC0_DSP_DEBUG_SHIFT              (26U)
 /*! dsp_debug - DSP debug status. */
-#define PUF_HW_RUC0_dsp_debug(x)                 (((uint32_t)(((uint32_t)(x)) << PUF_HW_RUC0_dsp_debug_SHIFT)) & PUF_HW_RUC0_dsp_debug_MASK)
+#define PUF_HW_RUC0_DSP_DEBUG(x)                 (((uint32_t)(((uint32_t)(x)) << PUF_HW_RUC0_DSP_DEBUG_SHIFT)) & PUF_HW_RUC0_DSP_DEBUG_MASK)
 
 #define PUF_HW_RUC0_ACCESS_LEVEL_MASK            (0xF0000000U)
 #define PUF_HW_RUC0_ACCESS_LEVEL_SHIFT           (28U)

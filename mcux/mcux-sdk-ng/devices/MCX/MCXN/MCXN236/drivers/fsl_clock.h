@@ -1,6 +1,5 @@
 /*
- * Copyright 2022-2023, NXP
- * All rights reserved.
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,8 +20,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.0.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief CLOCK driver version 2.0.1. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -76,9 +75,9 @@
         kCLOCK_InputMux0 \
     }
 /*! @brief Clock ip name array for GPIO. */
-#define GPIO_CLOCKS                                                          \
-    {                                                                        \
-        kCLOCK_Gpio0, kCLOCK_Gpio1, kCLOCK_Gpio2, kCLOCK_Gpio3, kCLOCK_Gpio4 \
+#define GPIO_CLOCKS                                                                       \
+    {                                                                                     \
+        kCLOCK_Gpio0, kCLOCK_Gpio1, kCLOCK_Gpio2, kCLOCK_Gpio3, kCLOCK_Gpio4, kCLOCK_None \
     }
 /*! @brief Clock ip name array for GDET. */
 #define GDET_CLOCKS                                                          \

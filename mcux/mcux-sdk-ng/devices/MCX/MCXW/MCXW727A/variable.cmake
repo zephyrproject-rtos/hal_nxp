@@ -5,6 +5,7 @@
 #### chip related
 include(${SdkRootDirPath}/devices/MCX/variable.cmake)
 mcux_set_variable(device MCXW727A)
+mcux_set_variable(conn_device mcxw72)
 mcux_set_variable(device_root devices)
 mcux_set_variable(soc_series MCXW)
 mcux_set_variable(soc_periph periph3)

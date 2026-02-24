@@ -4,14 +4,15 @@
 **                          MCXA456VLQ
 **                          MCXA456VPN
 **
-**     Compilers:           GNU C Compiler
+**     Compilers:
+**                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1_DraftC
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260119
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -19,7 +20,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -73,22 +74,12 @@ __attribute__ ((weak)) void SystemInit (void) {
   #endif /* (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
 #endif /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
 
-  SCB->CPACR |= ((3UL << 0*2) | (3UL << 1*2));    /* set CP0, CP1 Full Access in Secure mode (enable PowerQuad) */
+    SCB->CPACR |= ((3UL << 0*2) | (3UL << 1*2));    /* set CP0, CP1 Full Access in Secure mode (enable PowerQuad) */
 #if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
-  SCB_NS->CPACR |= ((3UL << 0*2) | (3UL << 1*2));    /* set CP0, CP1 Full Access in Normal mode (enable PowerQuad) */
+    SCB_NS->CPACR |= ((3UL << 0*2) | (3UL << 1*2));    /* set CP0, CP1 Full Access in Normal mode (enable PowerQuad) */
 #endif /* (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
 
-  SCB->NSACR |= ((3UL << 0) | (3UL << 10));   /* enable CP0, CP1, CP10, CP11 Non-secure Access */
-
-#if !defined(__ZEPHYR__)
-#if defined(__MCUXPRESSO)
-    extern void(*const g_pfnVectors[]) (void);
-    SCB->VTOR = (uint32_t) &g_pfnVectors;
-#else
-    extern void *__Vectors;
-    SCB->VTOR = (uint32_t) &__Vectors;
-#endif
-#endif
+    SCB->NSACR |= ((3UL << 0) | (3UL << 10));   /* enable CP0, CP1, CP10, CP11 Non-secure Access */
 
     /* Enable the LPCAC */
     SYSCON->LPCAC_CTRL |= SYSCON_LPCAC_CTRL_LPCAC_MEM_REQ_MASK;
@@ -97,6 +88,7 @@ __attribute__ ((weak)) void SystemInit (void) {
     /* Enables flash speculation */
     SYSCON->NVM_CTRL &= ~(SYSCON_NVM_CTRL_DIS_MBECC_ERR_DATA_MASK | SYSCON_NVM_CTRL_DIS_MBECC_ERR_INST_MASK);
     SYSCON->NVM_CTRL &= ~SYSCON_NVM_CTRL_DIS_FLASH_SPEC_MASK;
+
   SystemInitHook();
 }
 

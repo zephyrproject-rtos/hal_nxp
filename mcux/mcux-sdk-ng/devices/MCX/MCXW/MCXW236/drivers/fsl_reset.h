@@ -1,6 +1,6 @@
 /*
  * Copyright 2016 Freescale
- * Copyright 2016,2020-2022, 2024 NXP
+ * Copyright 2016,2020-2022, 2024-2025 NXP
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief reset driver version 2.0.2. */
-#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief reset driver version 2.0.3. */
+#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*!
@@ -164,6 +164,30 @@ typedef enum _SYSCON_RSTn
     {                         \
         kUTICK_RST_SHIFT_RSTn \
     } /* Reset bits for SPIFI peripheral */
+#define FREQME_RSTS_N          \
+    {                          \
+        kFREQME_RST_SHIFT_RSTn \
+    } /* Reset bits for FREQNE peripheral */
+#define TRNG_RSTS            \
+    {                        \
+        kTRNG_RST_SHIFT_RSTn \
+    } /* Reset bits for TRNG peripheral */
+#define PUF_RSTS            \
+    {                       \
+        kPUF_RST_SHIFT_RSTn \
+    } /* Reset bits for PUF peripheral */
+#define SYSCTL_RSTS            \
+    {                          \
+        kSYSCTL_RST_SHIFT_RSTn \
+    } /* Reset bits for SYSCTL peripheral */
+#define HASHCRYPT_RSTS            \
+    {                             \
+        kHASHCRYPT_RST_SHIFT_RSTn \
+    } /* Reset bits for HASHCRYPT peripheral */
+#define CASPER_RSTS            \
+    {                          \
+        kCASPER_RST_SHIFT_RSTn \
+    } /* Reset bits for CASPER peripheral */
 
 typedef SYSCON_RSTn_t reset_ip_name_t;
 

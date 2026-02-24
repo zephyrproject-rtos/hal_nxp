@@ -8,15 +8,15 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MCXL25xRM DraftH
-**     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250901
+**     Reference manual:    MCXL25x RM Rev.1 RC
+**     Version:             rev. 1.1, 2026-01-02
+**     Build:               b260105
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXL253_cm33
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -25,14 +25,16 @@
 **     Revisions:
 **     - rev. 1.0 (2025-06-13)
 **         Generated based on Rev1 DraftH.
+**     - rev. 1.1 (2026-01-02)
+**         Generated based on Rev.1 RC.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MCXL253_cm33.h
- * @version 1.0
- * @date 2025-06-13
+ * @version 1.1
+ * @date 2026-01-02
  * @brief CMSIS Peripheral Access Layer for MCXL253_cm33
  *
  * CMSIS Peripheral Access Layer for MCXL253_cm33
@@ -87,7 +89,6 @@
 #include "PERI_TMR.h"
 #include "PERI_TRDC.h"
 #include "PERI_TRNG.h"
-#include "PERI_UDF.h"
 #include "PERI_UTICK.h"
 #include "PERI_WUU.h"
 #include "PERI_WWDT.h"

@@ -1,10 +1,11 @@
+
 //*****************************************************************************
 // MCXA457 startup code
 //
-// Version : 241125
+// Version : 190126
 //*****************************************************************************
 //
-// Copyright 2016-2025 NXP
+// Copyright 2016-2026 NXP
 //
 // SPDX-License-Identifier: BSD-3-Clause
 //*****************************************************************************
@@ -83,6 +84,7 @@ WEAK void DebugMon_Handler(void);
 WEAK void PendSV_Handler(void);
 WEAK void SysTick_Handler(void);
 WEAK void DefaultISR(void);
+WEAK void DefaultISR1(uint32_t instance);
 
 //*****************************************************************************
 // Forward declaration of the application IRQ handlers. When the application
@@ -354,7 +356,7 @@ void SMARTDMA_DriverIRQHandler(void) ALIAS(DefaultISR);
 void CDOG1_DriverIRQHandler(void) ALIAS(DefaultISR);
 void PKC_DriverIRQHandler(void) ALIAS(DefaultISR);
 void SGI_DriverIRQHandler(void) ALIAS(DefaultISR);
-void SPI_FILTER_DriverIRQHandler(void) ALIAS(DefaultISR);
+void SPI_FILTER_DriverIRQHandler(uint32_t instance) ALIAS(DefaultISR1);
 void TRNG0_DriverIRQHandler(void) ALIAS(DefaultISR);
 void SECURE_ERR_DriverIRQHandler(void) ALIAS(DefaultISR);
 void SEC_HYPERVISOR_CALL_DriverIRQHandler(void) ALIAS(DefaultISR);
@@ -437,12 +439,15 @@ extern uint32_t __StackLimit[];
 #define _vStackTop  __StackTop
 #define _vStackBase __StackLimit
 
+/*
+ * Data section ROM and RAM addresses
+ */
 extern uint32_t __etext[];
 extern uint32_t __data_start__[];
 extern uint32_t __data_end__[];
-
 extern uint32_t __bss_start__[];
 extern uint32_t __bss_end__[];
+
 #else
 #error Unsupported toolchain!
 #endif //(__CC_ARM) || (__ARMCC_VERSION)
@@ -756,7 +761,7 @@ void Reset_Handler_C(void)
     /*     Loop to copy data from read only memory to RAM. The ranges
      *      of copy from/to are specified by following symbols evaluated in
      *      linker script.
-     *      1. __etext/_data_start__/__data_end__
+     *      *. __etext/_data_start__/__data_end__
      *      Note: All must be aligned to 4 bytes boundary.
      */
     uint32_t *pDataSrc, *pDataDest;
@@ -920,6 +925,13 @@ WEAK_AV void SysTick_Handler(void)
 WEAK_AV void DefaultISR(void)
 {
     while (1)
+    {
+    }
+}
+
+WEAK_AV void DefaultISR1(uint32_t instance)
+{
+    while(1)
     {
     }
 }
@@ -1492,7 +1504,7 @@ WEAK void SGI_IRQHandler(void)
 
 WEAK void SPI_FILTER_IRQHandler(void)
 {
-    SPI_FILTER_DriverIRQHandler();
+	SPI_FILTER_DriverIRQHandler(0U);
 }
 
 WEAK void TRNG0_IRQHandler(void)

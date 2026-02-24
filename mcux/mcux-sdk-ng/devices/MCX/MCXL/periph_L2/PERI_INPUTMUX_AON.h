@@ -13,14 +13,14 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250901
+**     Version:             rev. 1.1, 2026-01-02
+**     Build:               b260105
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for INPUTMUX_AON
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,14 +29,16 @@
 **     Revisions:
 **     - rev. 1.0 (2025-06-13)
 **         Generated based on Rev1 DraftH.
+**     - rev. 1.1 (2026-01-02)
+**         Generated based on Rev.1 RC.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_INPUTMUX_AON.h
- * @version 1.0
- * @date 2025-06-13
+ * @version 1.1
+ * @date 2026-01-02
  * @brief CMSIS Peripheral Access Layer for INPUTMUX_AON
  *
  * CMSIS Peripheral Access Layer for INPUTMUX_AON
@@ -103,7 +105,7 @@
 #define INPUTMUX_AON_QTMRA_COUNT                  4u
 #define INPUTMUX_AON_SOC_GLUE_XOR0_INA_COUNT      2u
 #define INPUTMUX_AON_QTMRB_COUNT                  4u
-#define INPUTMUX_AON_ACMP0_TRIGM_COUNT            4u
+#define INPUTMUX_AON_LPACMP0_TRIGM_COUNT          4u
 #define INPUTMUX_AON_LPADC0_TRIGM_COUNT           4u
 #define INPUTMUX_AON_AON_TRIG_OUTN_COUNT          2u
 
@@ -119,14 +121,14 @@ typedef struct {
   __IO uint32_t LCSENSE_SEQ_PTRIG_GLUE_IN;         /**< LCSENSE_SEQ_PTRIG_GLUE_IN trigger input connections, offset: 0x1D4 */
   __IO uint32_t LCSENSE_SEQ_TICKS_GLUE_IN;         /**< LCSENSE_SEQ_TICKS_GLUE_IN trigger input connections, offset: 0x1D8 */
        uint8_t RESERVED_1[132];
-  __IO uint32_t ACMP0_TRIG[INPUTMUX_AON_ACMP0_TRIGM_COUNT]; /**< ACMP0 Input Connections, array offset: 0x260, array step: 0x4 */
+  __IO uint32_t LPACMP0_TRIG[INPUTMUX_AON_LPACMP0_TRIGM_COUNT]; /**< LPACMP0 Input Connections, array offset: 0x260, array step: 0x4 */
        uint8_t RESERVED_2[16];
   __IO uint32_t LPADC0_TRIG[INPUTMUX_AON_LPADC0_TRIGM_COUNT]; /**< LPADC trigger input connections, array offset: 0x280, array step: 0x4 */
        uint8_t RESERVED_3[560];
   __IO uint32_t AON_TRIG_OUT[INPUTMUX_AON_AON_TRIG_OUTN_COUNT]; /**< AON Trigger Output Connections, array offset: 0x4C0, array step: 0x4 */
        uint8_t RESERVED_4[24];
-  __IO uint32_t CMP0_SAMPLE;                       /**< ACMP0 SAMPLE trigger input connections, offset: 0x4E0 */
-  __IO uint32_t CMP0_RR_TRIG;                      /**< ACMP0 RR trigger input connections, offset: 0x4E4 */
+  __IO uint32_t ACMP0_SAMPLE;                      /**< ACMP0 SAMPLE trigger input connections, offset: 0x4E0 */
+  __IO uint32_t ACMP0_RR_TRIG;                     /**< ACMP0 RR trigger input connections, offset: 0x4E4 */
        uint8_t RESERVED_5[184];
   __IO uint32_t LPI2C0_TRIG;                       /**< LPI2C0 trigger input connections, offset: 0x5A0 */
        uint8_t RESERVED_6[124];
@@ -158,10 +160,10 @@ typedef struct {
  *  0b000111..AON_TRIG_IN6 input is selected
  *  0b001000..AON_TRIG_IN7 input is selected
  *  0b001001..CM33 transmit event is selected
- *  0b001010..QTMR1 counter[0] direction is selected
- *  0b001011..QTMR1 counter[1] direction is selected
- *  0b001100..QTMR1 counter[2] direction is selected
- *  0b001101..QTMR1 counter[3] direction is selected
+ *  0b001010..QTMR1 channel[0] output is selected
+ *  0b001011..QTMR1 channel[1] output is selected
+ *  0b001100..QTMR1 channel[2] output is selected
+ *  0b001101..QTMR1 channel[3] output is selected
  *  0b001110..CMP0_OUT is selected
  *  0b001111..Reserved
  *  0b010000..LPI2C0 Controller End of Packet is selected
@@ -201,10 +203,10 @@ typedef struct {
  *  0b110010..Reserved
  *  0b110011..soc_glue_XOR0_out is selected
  *  0b110100..Reserved
- *  0b110101..QTMR0 counter[0] direction is selected
- *  0b110110..QTMR0 counter[1] direction is selected
- *  0b110111..QTMR0 counter[2] direction is selected
- *  0b111000..QTMR0 counter[3] direction is selected
+ *  0b110101..QTMR0 channel[0] output is selected
+ *  0b110110..QTMR0 channel[1] output is selected
+ *  0b110111..QTMR0 channel[2] output is selected
+ *  0b111000..QTMR0 channel[3] output is selected
  *  0b111001..LCSense_Sequencer_Primary_Trigger_glue_out is selected
  */
 #define INPUTMUX_AON_QTMR0_TMR_INP(x)            (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_QTMR0_TMR_INP_SHIFT)) & INPUTMUX_AON_QTMR0_TMR_INP_MASK)
@@ -436,10 +438,10 @@ typedef struct {
  *  0b000111..AON_TRIG_IN6 input is selected
  *  0b001000..AON_TRIG_IN7 input is selected
  *  0b001001..CM33 transmit event is selected
- *  0b001010..QTMR1 channel[0] output is selected
- *  0b001011..QTMR1 channel[1] output is selected
- *  0b001100..QTMR1 channel[2] output is selected
- *  0b001101..QTMR1 channel[3] output is selected
+ *  0b001010..QTMR0 channel[0] output is selected
+ *  0b001011..QTMR0 channel[1] output is selected
+ *  0b001100..QTMR0 channel[2] output is selected
+ *  0b001101..QTMR0 channel[3] output is selected
  *  0b001110..CMP0_OUT is selected
  *  0b001111..Reserved
  *  0b010000..LPI2C0 Controller End of Packet is selected
@@ -479,10 +481,10 @@ typedef struct {
  *  0b110010..Reserved
  *  0b110011..soc_glue_XOR0_out is selected
  *  0b110100..Reserved
- *  0b110101..QTMR0 channel[0] output is selected
- *  0b110110..QTMR0 channel[1] output is selected
- *  0b110111..QTMR0 channel[2] output is selected
- *  0b111000..QTMR0 channel[3] output is selected
+ *  0b110101..QTMR1 channel[0] output is selected
+ *  0b110110..QTMR1 channel[1] output is selected
+ *  0b110111..QTMR1 channel[2] output is selected
+ *  0b111000..QTMR1 channel[3] output is selected
  *  0b111001..LCSense_Sequencer_Primary_Trigger_glue_out is selected
  */
 #define INPUTMUX_AON_QTMR1_TMR_INP(x)            (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_QTMR1_TMR_INP_SHIFT)) & INPUTMUX_AON_QTMR1_TMR_INP_MASK)
@@ -695,12 +697,12 @@ typedef struct {
 #define INPUTMUX_AON_LCSENSE_SEQ_TICKS_GLUE_IN_INP(x) (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_LCSENSE_SEQ_TICKS_GLUE_IN_INP_SHIFT)) & INPUTMUX_AON_LCSENSE_SEQ_TICKS_GLUE_IN_INP_MASK)
 /*! @} */
 
-/*! @name ACMP0_TRIG - ACMP0 Input Connections */
+/*! @name LPACMP0_TRIG - LPACMP0 Input Connections */
 /*! @{ */
 
-#define INPUTMUX_AON_ACMP0_TRIG_TRIGIN_MASK      (0x3FU)
-#define INPUTMUX_AON_ACMP0_TRIG_TRIGIN_SHIFT     (0U)
-/*! TRIGIN - CMP0 input trigger
+#define INPUTMUX_AON_LPACMP0_TRIG_TRIGIN_MASK    (0x3FU)
+#define INPUTMUX_AON_LPACMP0_TRIG_TRIGIN_SHIFT   (0U)
+/*! TRIGIN - LPACMP0 input trigger
  *  0b000000..Reserved
  *  0b000001..AON_TRIG_IN0 input is selected
  *  0b000010..AON_TRIG_IN1 input is selected
@@ -738,11 +740,11 @@ typedef struct {
  *  0b100010..SoC_glue_XOR0_out is selected
  *  0b100011..Reserved
  */
-#define INPUTMUX_AON_ACMP0_TRIG_TRIGIN(x)        (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_ACMP0_TRIG_TRIGIN_SHIFT)) & INPUTMUX_AON_ACMP0_TRIG_TRIGIN_MASK)
+#define INPUTMUX_AON_LPACMP0_TRIG_TRIGIN(x)      (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_LPACMP0_TRIG_TRIGIN_SHIFT)) & INPUTMUX_AON_LPACMP0_TRIG_TRIGIN_MASK)
 /*! @} */
 
-/* The count of INPUTMUX_AON_ACMP0_TRIG */
-#define INPUTMUX_AON_ACMP0_TRIG_COUNT            (4U)
+/* The count of INPUTMUX_AON_LPACMP0_TRIG */
+#define INPUTMUX_AON_LPACMP0_TRIG_COUNT          (4U)
 
 /*! @name LPADC0_TRIG - LPADC trigger input connections */
 /*! @{ */
@@ -829,11 +831,11 @@ typedef struct {
 /* The count of INPUTMUX_AON_AON_TRIG_OUT */
 #define INPUTMUX_AON_AON_TRIG_OUT_COUNT          (2U)
 
-/*! @name CMP0_SAMPLE - ACMP0 SAMPLE trigger input connections */
+/*! @name ACMP0_SAMPLE - ACMP0 SAMPLE trigger input connections */
 /*! @{ */
 
-#define INPUTMUX_AON_CMP0_SAMPLE_TRIGIN_MASK     (0x3FU)
-#define INPUTMUX_AON_CMP0_SAMPLE_TRIGIN_SHIFT    (0U)
+#define INPUTMUX_AON_ACMP0_SAMPLE_TRIGIN_MASK    (0x3FU)
+#define INPUTMUX_AON_ACMP0_SAMPLE_TRIGIN_SHIFT   (0U)
 /*! TRIGIN - ACMP0 input trigger
  *  0b000000..Reserved
  *  0b000001..AON_TRIG_IN0 input is selected
@@ -872,14 +874,14 @@ typedef struct {
  *  0b100010..SoC_glue_XOR0_out is selected
  *  0b100011..Reserved
  */
-#define INPUTMUX_AON_CMP0_SAMPLE_TRIGIN(x)       (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_CMP0_SAMPLE_TRIGIN_SHIFT)) & INPUTMUX_AON_CMP0_SAMPLE_TRIGIN_MASK)
+#define INPUTMUX_AON_ACMP0_SAMPLE_TRIGIN(x)      (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_ACMP0_SAMPLE_TRIGIN_SHIFT)) & INPUTMUX_AON_ACMP0_SAMPLE_TRIGIN_MASK)
 /*! @} */
 
-/*! @name CMP0_RR_TRIG - ACMP0 RR trigger input connections */
+/*! @name ACMP0_RR_TRIG - ACMP0 RR trigger input connections */
 /*! @{ */
 
-#define INPUTMUX_AON_CMP0_RR_TRIG_TRIGIN_MASK    (0x3FU)
-#define INPUTMUX_AON_CMP0_RR_TRIG_TRIGIN_SHIFT   (0U)
+#define INPUTMUX_AON_ACMP0_RR_TRIG_TRIGIN_MASK   (0x3FU)
+#define INPUTMUX_AON_ACMP0_RR_TRIG_TRIGIN_SHIFT  (0U)
 /*! TRIGIN - ACMP0 input trigger
  *  0b000000..Reserved
  *  0b000001..AON_TRIG_IN0 input is selected
@@ -918,7 +920,7 @@ typedef struct {
  *  0b100010..SoC_glue_XOR0_out is selected
  *  0b100011..Reserved
  */
-#define INPUTMUX_AON_CMP0_RR_TRIG_TRIGIN(x)      (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_CMP0_RR_TRIG_TRIGIN_SHIFT)) & INPUTMUX_AON_CMP0_RR_TRIG_TRIGIN_MASK)
+#define INPUTMUX_AON_ACMP0_RR_TRIG_TRIGIN(x)     (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_ACMP0_RR_TRIG_TRIGIN_SHIFT)) & INPUTMUX_AON_ACMP0_RR_TRIG_TRIGIN_MASK)
 /*! @} */
 
 /*! @name LPI2C0_TRIG - LPI2C0 trigger input connections */

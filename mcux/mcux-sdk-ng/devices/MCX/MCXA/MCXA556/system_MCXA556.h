@@ -1,14 +1,15 @@
 /*
 ** ###################################################################
 **     Processor:           MCXA556VPN
-**     Compilers:           GNU C Compiler
+**     Compilers:
+**                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1_DraftC
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260119
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -16,7 +17,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

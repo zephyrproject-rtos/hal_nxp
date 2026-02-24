@@ -175,6 +175,8 @@ clock_attach_id_t CLOCK_GetClockAttachId(clock_attach_id_t connection)
     actual_sel      = CLOCK_GetClockSelect((clock_select_name_t)reg_offset);
     clock_attach_id = CLK_ATTACH_MUX(reg_offset, actual_sel);
 
+    assert(clock_attach_id < kNONE_to_NONE);
+
     return (clock_attach_id_t)clock_attach_id;
 }
 
@@ -703,7 +705,7 @@ static uint32_t CLOCK_GetFRO16KFreq(void)
 static uint32_t CLOCK_GetClk16KFreq(uint8_t id)
 {
     return (((VBAT0->FROCTLA & VBAT_FROCTLA_FRO_EN_MASK) != 0U) &&
-            ((VBAT0->FROCLKE & VBAT_FROCLKE_CLKE((((uint32_t)id) << 1U))) != 0U)) ?
+            ((VBAT0->FROCLKE & VBAT_FROCLKE_CLKE(1UL << (uint32_t)id)) != 0U)) ?
                16000U :
                0U;
 }
@@ -1590,7 +1592,7 @@ status_t CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz, run_mode_t m
         }
         case (uint32_t)kOD_Mode:
         {
-            if (system_freq_hz > 180000000U)
+            if (system_freq_hz > SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY)
             {
                 return kStatus_Fail;
             }
@@ -2006,6 +2008,7 @@ static pll_error_t CLOCK_GetPllConfig(uint32_t finHz, uint32_t foutHz, pll_setup
     s_PllSetupCacheStruct[s_PllSetupCacheIdx].pllsscg[0] = pSetup->pllsscg[0];
     s_PllSetupCacheStruct[s_PllSetupCacheIdx].pllsscg[1] = pSetup->pllsscg[1];
     /* Update the index for next available buffer. */
+    assert(s_PllSetupCacheIdx < UINT32_MAX);
     s_PllSetupCacheIdx = (s_PllSetupCacheIdx + 1U) % CLOCK_USR_CFG_PLL_CONFIG_CACHE_COUNT;
 #endif /* CLOCK_USR_CFG_PLL_CONFIG_CACHE_COUNT */
 
@@ -2155,7 +2158,7 @@ static pll_error_t CLOCK_GetPllConfigInternal(uint32_t finHz, uint32_t foutHz, p
         fc = ((uint64_t)(uint32_t)(fccoHz % nDivOutHz) << 25UL) / nDivOutHz;
 
         /* Set multiplier */
-        pSetup->pllsscg[0] = (uint32_t)(PLL_SSCG_MD_INT_SET(pllMultiplier) | PLL_SSCG_MD_FRACT_SET((uint32_t)fc));
+        pSetup->pllsscg[0] = (uint32_t)((PLL_SSCG_MD_INT_SET(pllMultiplier) | PLL_SSCG_MD_FRACT_SET((uint32_t)fc)) & 0xFFFFFFFFU);
         pSetup->pllsscg[1] = (uint32_t)(PLL_SSCG_MD_INT_SET(pllMultiplier) >> 32U) | SCG_SPLLSSCG1_SEL_SS_MDIV_MASK;
     }
 

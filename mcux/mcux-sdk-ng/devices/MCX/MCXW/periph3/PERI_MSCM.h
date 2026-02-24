@@ -1220,10 +1220,10 @@ static inline void Chip_GetUID(uint8_t *aOutUid16B, uint8_t *pOutLen)
     uint8_t i;
 
     /* Get the MCU uid */
-    uid.words[0] = MSCM->UID[0];
-    uid.words[1] = MSCM->UID[1];
-    uid.words[2] = MSCM->UID[2];
-    uid.words[3] = MSCM->UID[3];
+    uid.words[0] = MSCM->UID[0];;
+    uid.words[1] = MSCM->UID[1];;
+    uid.words[2] = MSCM->UID[2];;
+    uid.words[3] = MSCM->UID[3];;
 
     /* Copy bytes */
     for (i = 0U; i < 16U; i++)

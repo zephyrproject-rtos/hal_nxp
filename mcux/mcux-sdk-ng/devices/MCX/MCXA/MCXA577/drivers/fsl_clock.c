@@ -59,6 +59,8 @@
     set this to 0. Otherwise, set it to the exact rate in Hz this pin is
     being driven at. */
 volatile static uint32_t s_Ext_Clk_Freq = 16000000U;
+/*! @brief ENET TX CLK clock frequency. */
+volatile static uint32_t s_Enet_Tx_Clk_Freq = 0U;
 /*! @brief External XTAL32K clock frequency. */
 #define OSC32K_Freq (32768U)
 
@@ -75,20 +77,20 @@ static uint32_t CLOCK_GetClk1MFreq(void);
 static uint32_t CLOCK_GetFroHfFreq(void);
 /* Get HF FRO_DIV Clk */
 static uint32_t CLOCK_GetFroHfDivFreq(void);
-/* Get CLK 45M Clk */
-static uint32_t CLOCK_GetClk45MFreq(void);
+/* Get CLK 48M Clk */
+static uint32_t CLOCK_GetClk48MFreq(void);
 /* Get CLK 16K Clk */
 static uint32_t CLOCK_GetClk16KFreq(uint8_t id);
 /* Get EXT OSC Clk */
 static uint32_t CLOCK_GetExtClkFreq(void);
 /* Get Main_Clk */
-uint32_t CLOCK_GetMainClk(void);
+static uint32_t CLOCK_GetMainClk(void);
 /* Get FRO_16K */
 static uint32_t CLOCK_GetFRO16KFreq(void);
 /* Get Pll1ClkDiv */
 static uint32_t CLOCK_GetPll1ClkDivFreq(void);
 /* Get Pll1Clk */
-uint32_t CLOCK_GetPll1OutFreq(void);
+static uint32_t CLOCK_GetPll1ClkFreq(void);
 /* Get Osc32K */
 static uint32_t CLOCK_GetOsc32KFreq(uint32_t id);
 /* Get LP_OSC Clk */
@@ -97,10 +99,6 @@ static uint32_t CLOCK_GetLposcFreq(void);
 static uint32_t CLOCK_GetUsbPllFreq(void);
 /* Get UsbPfdClk */
 static uint32_t CLOCK_GetUsbPfdClkFreq(void);
-/* Get EnetTxClk */
-static uint32_t CLOCK_GetEnetTxClkFreq(void);
-
-#define CLOCK_GetPll1ClkFreq CLOCK_GetPll1OutFreq
 
 /* Find SELP, SELI, and SELR values for raw M value, max M = MVALMAX */
 static void pllFindSel(uint32_t M, uint32_t *pSelP, uint32_t *pSelI, uint32_t *pSelR);
@@ -318,19 +316,18 @@ status_t CLOCK_SetupFROHFClocking(uint32_t iFreq)
     /* Unlock FIRCCSR */
     SCG0->FIRCCSR &= ~SCG_FIRCCSR_LK_MASK;
 
-    /* Enable FIRC 45 MHz clock for peripheral use */
+    /* Enable FIRC 48 MHz clock for peripheral use */
     SCG0->FIRCCSR |= SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_MASK;
-    /* Enable FIRC 180 MHz clock for peripheral use */
+    /* Enable FIRC 192 MHz clock for peripheral use */
     SCG0->FIRCCSR |= SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_MASK;
 
     /* Enable FIRC */
     SCG0->FIRCCSR |= SCG_FIRCCSR_FIRCEN_MASK;
 
-    //// TODO: workaround for HAPS
-    //// /* Wait for FIRC clock to be valid. */
-    //// while ((SCG0->FIRCCSR & SCG_FIRCCSR_FIRCVLD_MASK) == 0U)
-    //// {
-    //// }
+    /* Wait for FIRC clock to be valid. */
+    while ((SCG0->FIRCCSR & SCG_FIRCCSR_FIRCVLD_MASK) == 0U)
+    {
+    }
 
     return kStatus_Success;
 }
@@ -347,11 +344,10 @@ status_t CLOCK_SetupFRO12MClocking(void)
     /* Lock SIRCCSR */
     SCG0->SIRCCSR |= SCG_SIRCCSR_LK_MASK;
 
-    //// TODO: workaround for HAPS
-    //// /* Wait for SIRC clock to be valid. */
-    //// while ((SCG0->SIRCCSR & SCG_SIRCCSR_SIRCVLD_MASK) == 0U)
-    //// {
-    //// }
+    /* Wait for SIRC clock to be valid. */
+    while ((SCG0->SIRCCSR & SCG_SIRCCSR_SIRCVLD_MASK) == 0U)
+    {
+    }
 
     /* Release FROLFDIV */
     SYSCON->FROLFDIV &= ~SYSCON_FROLFDIV_HALT_MASK;
@@ -632,8 +628,8 @@ uint32_t CLOCK_GetFreq(clock_name_t clockName)
         case kCLOCK_FroHfDiv: /* Divided by FROHF */
             freq = CLOCK_GetFroHfDivFreq();
             break;
-        case kCLOCK_Clk45M: /* CLK_45M */
-            freq = CLOCK_GetClk45MFreq();
+        case kCLOCK_Clk48M: /* CLK_48M */
+            freq = CLOCK_GetClk48MFreq();
             break;
         case kCLOCK_Fro12M: /* FRO12M */
             freq = CLOCK_GetFro12MFreq();
@@ -672,16 +668,16 @@ uint32_t CLOCK_GetFreq(clock_name_t clockName)
             freq = CLOCK_GetUsbPfdClkFreq();
             break;
         case kCLOCK_Osc32K0:
-            CLOCK_GetOsc32KFreq(0);
+            freq = CLOCK_GetOsc32KFreq(0);
             break;
         case kCLOCK_Osc32K1:
-            CLOCK_GetOsc32KFreq(0);
+            freq = CLOCK_GetOsc32KFreq(1);
             break;
         case kCLOCK_Osc32K2:
-            CLOCK_GetOsc32KFreq(2);
+            freq = CLOCK_GetOsc32KFreq(2);
             break;
         case kCLOCK_LpOsc:
-            CLOCK_GetLposcFreq();
+            freq = CLOCK_GetLposcFreq();
             break;
         default:
             freq = 0U;
@@ -696,9 +692,7 @@ uint32_t CLOCK_GetFreq(clock_name_t clockName)
  */
 static uint32_t CLOCK_GetFro12MFreq(void)
 {
-    //// TODO: workaround for HAPS
-    //// return ((SCG0->SIRCCSR & SCG_SIRCCSR_SIRC_CLK_PERIPH_EN_MASK) != 0U) ? 12000000U : 0U;
-    return 12000000U;
+    return ((SCG0->SIRCCSR & SCG_SIRCCSR_SIRC_CLK_PERIPH_EN_MASK) != 0U) ? 12000000U : 0U;
 }
 
 /* Get CLK 1M Clk */
@@ -719,9 +713,9 @@ static uint32_t CLOCK_GetFroHfFreq(void)
     uint32_t freq;
 
     if (((SCG0->FIRCCSR & SCG_FIRCCSR_FIRCEN_MASK) == 0U) ||
-        ((SCG0->FIRCCSR & SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_SHIFT) == 0U))
+        ((SCG0->FIRCCSR & SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_MASK) == 0U))
     {
-        freq = 0U;
+        return 0U;
     }
 
     switch ((SCG0->FIRCCFG & SCG_FIRCCFG_FREQ_SEL_MASK) >> SCG_FIRCCFG_FREQ_SEL_SHIFT)
@@ -764,11 +758,11 @@ static uint32_t CLOCK_GetFroLfDivFreq(void)
     return CLOCK_GetFro12MFreq() / ((SYSCON->FROLFDIV & SYSCON_FROLFDIV_DIV_MASK) + 1U);
 }
 
-/* Get CLK_45M frequency */
-/*! brief  Return Frequency of CLK 45MHz
- *  return Frequency of CLK 45MHz
+/* Get CLK_48M frequency */
+/*! brief  Return Frequency of CLK 48MHz
+ *  return Frequency of CLK 48MHz
  */
-static uint32_t CLOCK_GetClk45MFreq(void)
+static uint32_t CLOCK_GetClk48MFreq(void)
 {
     if ((SCG0->FIRCCSR & SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_MASK) == 0U)
     {
@@ -776,7 +770,7 @@ static uint32_t CLOCK_GetClk45MFreq(void)
     }
     else
     {
-        return 45000000U;
+        return 48000000U;
     }
 }
 
@@ -794,7 +788,7 @@ static uint32_t CLOCK_GetFRO16KFreq(void)
 static uint32_t CLOCK_GetClk16KFreq(uint8_t id)
 {
     return (((VBAT0->FROCTLA & VBAT_FROCTLA_FRO_EN_MASK) != 0U) &&
-            ((VBAT0->FROCLKE & VBAT_FROCLKE_CLKE((((uint32_t)id) << 1U))) != 0U)) ?
+            ((VBAT0->FROCLKE & VBAT_FROCLKE_CLKE(1UL << (uint32_t)id)) != 0U)) ?
                (16000U) :
                (0U);
 }
@@ -815,7 +809,7 @@ static uint32_t CLOCK_GetExtClkFreq(void)
 static uint32_t CLOCK_GetOsc32KFreq(uint32_t id)
 {
     return ((SCG0->ROSCCSR & SCG_ROSCCSR_ROSCVLD_MASK) != 0UL) ?
-               (((VBAT0->OSCCLKE & VBAT_OSCCLKE_CLKE(id)) != 0UL) ? OSC32K_Freq : 0U) :
+               (((VBAT0->OSCCLKE & VBAT_OSCCLKE_CLKE(1 << id)) != 0UL) ? OSC32K_Freq : 0U) :
                0U;
 }
 
@@ -849,25 +843,257 @@ static uint32_t CLOCK_GetPll1ClkDivFreq(void)
     return CLOCK_GetPll1ClkFreq() / ((SYSCON->PLL1CLKDIV & SYSCON_PLL1CLKDIV_DIV_MASK) + 1U);
 }
 
+/*! brief Enable USB HS PHY PLL clock.
+ *
+ * This function enables the internal 480MHz USB PHY PLL clock.
+ * param clockSourceFreq The frequency specified by src.
+ * retval true The clock is set successfully.
+ * retval false The clock source is invalid to get proper USB HS clock.
+ */
+bool CLOCK_EnableUsbhsPhyPllClock(uint32_t clockSourceFreq)
+{
+    uint32_t phyPllDiv  = 0U;
+    uint16_t multiplier = 0U;
+    bool err            = false;
+
+    USBHS1_PHY->CTRL_CLR    = USBPHY_CTRL_SFTRST_MASK;
+    USBHS1_PHY->ANACTRL_SET = USBPHY_ANACTRL_LVI_EN_MASK;
+    USBHS1_PHY->PLL_SIC_SET = USBPHY_PLL_SIC_PLL_REG_ENABLE_MASK;
+    SDK_DelayAtLeastUs(15U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+    USBHS1_PHY->PLL_SIC_SET = USBPHY_PLL_SIC_PLL_POWER(1);
+    if ((480000000UL % clockSourceFreq) != 0UL)
+    {
+        return false;
+    }
+    multiplier = (uint16_t)((480000000UL / clockSourceFreq) & 0xFFFFU);
+
+    switch (multiplier)
+    {
+        case 15:
+        {
+            phyPllDiv = USBPHY_PLL_SIC_PLL_DIV_SEL(0U);
+            break;
+        }
+        case 16:
+        {
+            phyPllDiv = USBPHY_PLL_SIC_PLL_DIV_SEL(1U);
+            break;
+        }
+        case 20:
+        {
+            phyPllDiv = USBPHY_PLL_SIC_PLL_DIV_SEL(2U);
+            break;
+        }
+        case 22:
+        {
+            phyPllDiv = USBPHY_PLL_SIC_PLL_DIV_SEL(3U);
+            break;
+        }
+        case 24:
+        {
+            phyPllDiv = USBPHY_PLL_SIC_PLL_DIV_SEL(4U);
+            break;
+        }
+        case 25:
+        {
+            phyPllDiv = USBPHY_PLL_SIC_PLL_DIV_SEL(5U);
+            break;
+        }
+        case 30:
+        {
+            phyPllDiv = USBPHY_PLL_SIC_PLL_DIV_SEL(6U);
+            break;
+        }
+        case 40:
+        {
+            phyPllDiv = USBPHY_PLL_SIC_PLL_DIV_SEL(7U);
+            break;
+        }
+        default:
+        {
+            err = true;
+            break;
+        }
+    }
+
+    if (err)
+    {
+        return false;
+    }
+
+    USBHS1_PHY->PLL_SIC = (USBHS1_PHY->PLL_SIC & ~(USBPHY_PLL_SIC_PLL_DIV_SEL_MASK)) | phyPllDiv;
+
+    USBHS1_PHY->PLL_SIC_CLR = USBPHY_PLL_SIC_PLL_BYPASS_MASK;
+    USBHS1_PHY->PLL_SIC_SET = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);
+
+    USBHS1_PHY->CTRL_CLR = USBPHY_CTRL_CLR_CLKGATE_MASK;
+    USBHS1_PHY->PWD      = 0x0U;
+
+    while (0UL == (USBHS1_PHY->PLL_SIC & USBPHY_PLL_SIC_PLL_LOCK_MASK))
+    {
+    }
+
+    return true;
+}
+
+/*! brief Disable USB HS PHY PLL clock.
+ *
+ * This function disables USB HS PHY PLL clock.
+ */
+void CLOCK_DisableUsbhsPhyPllClock(void)
+{
+    USBHS1_PHY->CTRL |= USBPHY_CTRL_CLKGATE_MASK; /* Set to 1U to gate clocks */
+}
+
+/*! brief Enable USB HS clock.
+ * retval true The clock is set successfully.
+ * retval false The clock source is invalid to get proper USB HS clock.
+ */
+bool CLOCK_EnableUsbhsClock(void)
+{
+    USBHS1__USBC->USBCMD |= USBHS_USBCMD_RST_MASK;
+    /* Add a delay between RST and RS so make sure there is a DP pullup sequence*/
+    for (uint32_t i = 0; i < 400000U; i++)
+    {
+        __ASM("nop");
+    }
+    return true;
+}
+
 /* Get UsbPll */
 static uint32_t CLOCK_GetUsbPllFreq(void)
 {
-    //// Todo
-    return 0;
+    if (0 == (USBHS1_PHY->CTRL & USBPHY_CTRL_CLKGATE_MASK))
+    {
+        return 480000000U;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+/* Enable USBPHY_PFD clock */
+bool CLOCK_EnableUsbhsPhyPfdClock(uint32_t pfdDiv, pfd_clkout_selection_t pfdClkSel)
+{
+    /* 480 MHz * 18 / n, where n = 18-35 */
+    if (pfdDiv < 18U || pfdDiv > 35U)
+    {
+        return kStatus_Fail;
+    }
+
+    /* Gate the PFD clock before configuration */
+    USBHS1_PHY->PFDA |= USBPHY_PFDA_PFD0_CLKGATE_MASK;
+
+    /* Reset USBPLL */
+    USBHS1_PHY->PLL_SIC &= ~USBPHY_PLL_SIC_PLL_POWER_MASK;
+    USBHS1_PHY->PLL_SIC |= USBPHY_PLL_SIC_PLL_POWER_MASK;
+
+    /* Wait for USBPLL to stabilize */
+    while (0 == (USBHS1_PHY->PLL_SIC & USBPHY_PLL_SIC_PLL_LOCK_MASK))
+    {
+        __NOP();
+    }
+
+    /* Select the PFD clock source */
+    USBHS1_PHY->ANACTRL =
+        (USBHS1_PHY->ANACTRL & ~USBPHY_ANACTRL_PFD_CLK_SEL_MASK) | USBPHY_ANACTRL_PFD_CLK_SEL((uint8_t)pfdClkSel);
+
+    /* 480 MHz * 18 / n, where n = 18-3 */
+    USBHS1_PHY->PFDA = (USBHS1_PHY->PFDA & ~USBPHY_PFDA_PFD0_FRAC_MASK) | USBPHY_PFDA_PFD0_FRAC((uint8_t)pfdDiv);
+
+    /* Ungate the PFD clock */
+    USBHS1_PHY->PFDA &= ~USBPHY_PFDA_PFD0_CLKGATE_MASK;
+
+    /* Wait for PFD to stabilize */
+    while (!(USBHS1_PHY->PFDA & USBPHY_PFDA_PFD0_STABLE_MASK))
+    {
+        __NOP();
+    }
+
+    return kStatus_Success;
 }
 
 /* Get UsbPfdClk */
 static uint32_t CLOCK_GetUsbPfdClkFreq(void)
 {
-    //// Todo
-    return 0;
+    uint32_t pfdDiv       = 0U;
+    uint32_t pfdClkSel    = 0U;
+    uint32_t pfdOutClk    = 0U;
+    uint32_t usbPhyClkSrc = 0U;
+    uint32_t freq         = 0U;
+
+    if ((0U != (USBHS1_PHY->CTRL & USBPHY_CTRL_CLKGATE_MASK)) || (0U != (USBHS1_PHY->PFDA & USBPHY_PFDA_PFD0_CLKGATE_MASK)))
+    {
+        return 0U;
+    }
+
+    pfdDiv    = (USBHS1_PHY->PFDA & USBPHY_PFDA_PFD0_FRAC_MASK) >> USBPHY_PFDA_PFD0_FRAC_SHIFT;
+    pfdClkSel = (USBHS1_PHY->ANACTRL & USBPHY_ANACTRL_PFD_CLK_SEL_MASK) >> USBPHY_ANACTRL_PFD_CLK_SEL_SHIFT;
+
+    if ((pfdDiv < 18U) || (pfdDiv > 35U))
+    {
+        return 0U;
+    }
+
+    pfdOutClk = 480000000U / pfdDiv * 18U;
+
+    /* pfdClkSel:0 - USB PHY CLK Source, 1 - PFD clock/4, 2 - PFD clock/2, 3 - PFD clock */
+    if (pfdClkSel == 0U)
+    {
+        usbPhyClkSrc = (MRCC0->MRCC_USB1_PHY_CLKSEL & MRCC_MRCC_USB1_PHY_CLKSEL_MUX_MASK);
+
+        if (usbPhyClkSrc == 1U)
+        {
+            freq = CLOCK_GetFroHfFreq();
+        }
+        else if (usbPhyClkSrc == 2U)
+        {
+            freq = CLOCK_GetExtClkFreq();
+        }
+        else
+        {
+            freq = 0U;
+        }
+    }
+    else if (pfdClkSel == 1U)
+    {
+        freq = (pfdOutClk >> 2U);
+    }
+    else if (pfdClkSel == 2U)
+    {
+        freq = (pfdOutClk >> 1U);
+    }
+    else if (pfdClkSel == 3U)
+    {
+        freq = pfdOutClk;
+    }
+    else
+    {
+        freq = 0U;
+    }
+
+    return freq;
 }
 
-/* Get EnetTxClk */
-static uint32_t CLOCK_GetEnetTxClkFreq(void)
+/* Get ENET TX CLK */
+/*! brief  Initialize the ENET TX CLK to given frequency.
+ *  return Nothing
+ */
+void CLOCK_SetupEnetTxClk(uint32_t iFreq)
 {
-    //// Todo
-    return 0;
+    s_Enet_Tx_Clk_Freq = iFreq;
+
+    return;
+}
+
+/* Get ENET TX CLK */
+/*! brief  Return Frequency of ENET TX CLK
+ *  return Frequency of ENET TX CLK
+ */
+uint32_t CLOCK_GetEnetTxClkFreq(void)
+{
+    return s_Enet_Tx_Clk_Freq;
 }
 
 /* Get MAIN Clk */
@@ -923,6 +1149,8 @@ uint32_t CLOCK_GetCTimerClkFreq(uint32_t id)
     uint32_t freq   = 0U;
     uint32_t clksel = 0U;
     uint32_t clkdiv = 0U;
+
+    assert(id <= 4U);
 
     switch (id)
     {
@@ -994,6 +1222,8 @@ uint32_t CLOCK_GetLpi2cClkFreq(uint32_t id)
     uint32_t clksel = 0U;
     uint32_t clkdiv = 0U;
 
+    assert(id <= 4U);
+
     switch (id)
     {
         case 0U:
@@ -1059,6 +1289,8 @@ uint32_t CLOCK_GetLpspiClkFreq(uint32_t id)
     uint32_t freq   = 0U;
     uint32_t clksel = 0U;
     uint32_t clkdiv = 0U;
+
+    assert(id <= 5U);
 
     switch (id)
     {
@@ -1129,6 +1361,8 @@ uint32_t CLOCK_GetLpuartClkFreq(uint32_t id)
     uint32_t freq   = 0U;
     uint32_t clksel = 0U;
     uint32_t clkdiv = 0U;
+
+    assert(id <= 5U);
 
     switch (id)
     {
@@ -1203,6 +1437,8 @@ uint32_t CLOCK_GetI3CFClkFreq(uint32_t id)
     uint32_t freq   = 0U;
     uint32_t clksel = 0U;
     uint32_t clkdiv = 0U;
+
+    assert(id <= 3U);
 
     switch (id)
     {
@@ -1326,6 +1562,7 @@ uint32_t CLOCK_GetOstimerClkFreq(void)
 uint32_t CLOCK_GetAdcClkFreq(uint32_t id)
 {
     uint32_t freq = 0U;
+    assert(id <= 1);
 
     uint32_t clksel = MRCC0->MRCC_ADC_CLKSEL;
     uint32_t clkdiv = MRCC0->MRCC_ADC_CLKDIV;
@@ -1368,6 +1605,7 @@ uint32_t CLOCK_GetAdcClkFreq(uint32_t id)
 uint32_t CLOCK_GetDacClkFreq(uint32_t id)
 {
     uint32_t freq = 0U;
+    assert(id <= 1);
 
     uint32_t clksel = (id == 0) ? (MRCC0->MRCC_DAC0_CLKSEL) : (MRCC0->MRCC_DAC1_CLKSEL);
     uint32_t clkdiv = (id == 0) ? (MRCC0->MRCC_DAC0_CLKDIV) : (MRCC0->MRCC_DAC1_CLKDIV);
@@ -1382,7 +1620,7 @@ uint32_t CLOCK_GetDacClkFreq(uint32_t id)
         case 0U:
             freq = CLOCK_GetFroLfDivFreq();
             break;
-        case 1U:
+        case 2U:
             freq = CLOCK_GetFroHfDivFreq();
             break;
         case 3U:
@@ -1652,6 +1890,7 @@ uint32_t CLOCK_GetWwdt1ClkFreq(void)
 uint32_t CLOCK_GetFlexcanClkFreq(uint32_t id)
 {
     uint32_t freq = 0U;
+    assert(id <= 1U);
 
     uint32_t clksel = (id == 0) ? (MRCC0->MRCC_FLEXCAN0_CLKSEL) : (MRCC0->MRCC_FLEXCAN1_CLKSEL);
     uint32_t clkdiv = (id == 0) ? (MRCC0->MRCC_FLEXCAN0_CLKDIV) : (MRCC0->MRCC_FLEXCAN1_CLKDIV);
@@ -1673,7 +1912,7 @@ uint32_t CLOCK_GetFlexcanClkFreq(uint32_t id)
             freq = CLOCK_GetExtClkFreq();
             break;
         case 4:
-            freq = CLOCK_GetPll1ClkDivFreq();
+            freq = CLOCK_GetUsbPllFreq();
             break;
         case 6:
             freq = CLOCK_GetPll1ClkDivFreq();
@@ -1822,10 +2061,10 @@ uint32_t CLOCK_GetEnetPtpRefClkFreq(void)
     return freq / ((clkdiv & 0xFFU) + 1U);
 }
 
-/*! brief  Return Frequency of T1S CLK
- *  return Frequency of T1S CLK.
+/*! brief  Return Frequency of TENBASET_PHY CLK
+ *  return Frequency of TENBASET_PHY CLK.
  */
-uint32_t CLOCK_GetT1sClkFreq(void)
+uint32_t CLOCK_GetTenbaset_PhyClkFreq(void)
 {
     uint32_t freq   = 0U;
     uint32_t clksel = MRCC0->MRCC_T1S0_CLKSEL;
@@ -1838,10 +2077,10 @@ uint32_t CLOCK_GetT1sClkFreq(void)
 
     switch (clksel)
     {
-        case 0U:
+        case 3U:
             freq = CLOCK_GetExtClkFreq();
             break;
-        case 1U:
+        case 6U:
             freq = CLOCK_GetPll1ClkFreq();
             break;
         default:
@@ -2062,10 +2301,10 @@ status_t CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz, run_mode_t m
 }
 
 /* Get SYSTEM PLL1 Clk */
-/*! brief  Return Frequency of PLL1
- *  return Frequency of PLL1
+/*! @brief  Return Frequency of PLL1
+ *  @return Frequency of PLL1
  */
-uint32_t CLOCK_GetPll1OutFreq(void)
+uint32_t CLOCK_GetPll1ClkFreq(void)
 {
     uint32_t clkRate = 0;
     uint32_t prediv, postdiv;
@@ -2119,7 +2358,7 @@ uint32_t CLOCK_GetPLL1InClockRate(void)
             clkRate = CLOCK_GetExtClkFreq();
             break;
         case 0x01U:
-            clkRate = CLOCK_GetClk45MFreq();
+            clkRate = CLOCK_GetClk48MFreq();
             break;
         case 0x03U:
             clkRate = CLOCK_GetFro12MFreq();
@@ -2179,7 +2418,7 @@ pll_error_t CLOCK_SetupPLLData(pll_config_t *pControl, pll_setup_t *pSetup)
             inRate = CLOCK_GetExtClkFreq();
             break;
         case (uint32_t)kPll_ClkSrcFirc:
-            inRate = CLOCK_GetClk45MFreq();
+            inRate = CLOCK_GetClk48MFreq();
             break;
         case (uint32_t)kPll_ClkSrcSirc:
             inRate = CLOCK_GetFro12MFreq();
@@ -2240,7 +2479,7 @@ pll_error_t CLOCK_SetPLL1Freq(const pll_setup_t *pSetup)
     /* Unlock SPLLLOCK_CNFG register */
     SCG0->TRIM_LOCK = 0x5a5a0001;
 
-    /* Configure lock time of APLL stable, value = 500μs/x+300, where x is the period of clk_ref (clk_in/N). */
+    /* Configure lock time of APLL stable, value = 500�s/x+300, where x is the period of clk_ref (clk_in/N). */
     inRate = CLOCK_GetPLL1InClockRate();
     prediv = findPll1PreDiv();
     /* Adjust input clock */
@@ -2255,7 +2494,7 @@ pll_error_t CLOCK_SetPLL1Freq(const pll_setup_t *pSetup)
     {
     }
 
-    if (pSetup->pllRate != CLOCK_GetPll1OutFreq())
+    if (pSetup->pllRate != CLOCK_GetPll1ClkFreq())
     {
         return kStatus_PLL_OutputError;
     }
@@ -2623,7 +2862,7 @@ static uint32_t CLOCK_GetPLLInClockRateFromSetup(pll_setup_t *pSetup)
             clkRate = CLOCK_GetExtClkFreq();
             break;
         case 0x01U:
-            clkRate = CLOCK_GetClk45MFreq();
+            clkRate = CLOCK_GetClk48MFreq();
             break;
         case 0x03U:
             clkRate = CLOCK_GetFro12MFreq();

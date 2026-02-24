@@ -24,7 +24,7 @@
 **                          MCXA153VLH
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b251210
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PWM

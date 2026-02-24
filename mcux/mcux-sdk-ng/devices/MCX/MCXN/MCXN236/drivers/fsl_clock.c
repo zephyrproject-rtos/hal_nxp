@@ -326,8 +326,6 @@ status_t CLOCK_SetupOsc32KClocking(uint32_t id)
     while ((VBAT0->STATUSA & VBAT_STATUSA_OSC_RDY_MASK) == 0U)
     {
     }
-    VBAT0->OSCLCKA = VBAT_OSCLCKA_LOCK_MASK;
-    VBAT0->OSCLCKB &= ~VBAT_OSCLCKA_LOCK_MASK;
 
     VBAT0->OSCCLKE |= VBAT_OSCCLKE_CLKE(id);
 

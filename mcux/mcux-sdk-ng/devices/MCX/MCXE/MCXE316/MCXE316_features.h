@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 2.0, 2025-10-23
-**     Build:               b251023
+**     Version:             rev. 2.1, 2025-11-17
+**     Build:               b251117
 **
 **     Abstract:
 **         Chip specific module features.
@@ -20,6 +20,8 @@
 **         Rev2 RM.
 **     - rev. 2.0 (2025-10-23)
 **         Fixed FlexCAN Features.
+**     - rev. 2.1 (2025-11-17)
+**         Update lpcmp feature align to shared definition changes
 **
 ** ###################################################################
 */
@@ -452,6 +454,8 @@
 #define FSL_FEATURE_LPCMP_HAS_RRCR2 (0)
 /* @brief Has CCR0 CMP_STOP_EN bitfield. */
 #define FSL_FEATURE_LPCMP_HAS_CCR0_CMP_STOP_EN (1)
+/* @brief CMP instance support CCR0 CMP_STOP_EN bitfield. */
+#define FSL_FEATURE_LPCMP_INSTANCE_SUPPORT_CCR0_CMP_STOP_ENn(x) (1)
 
 /* LPI2C module features */
 

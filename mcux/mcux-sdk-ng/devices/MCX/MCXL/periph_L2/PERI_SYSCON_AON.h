@@ -13,14 +13,14 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250901
+**     Version:             rev. 1.1, 2026-01-02
+**     Build:               b260105
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSCON_AON
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,14 +29,16 @@
 **     Revisions:
 **     - rev. 1.0 (2025-06-13)
 **         Generated based on Rev1 DraftH.
+**     - rev. 1.1 (2026-01-02)
+**         Generated based on Rev.1 RC.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_SYSCON_AON.h
- * @version 1.0
- * @date 2025-06-13
+ * @version 1.1
+ * @date 2026-01-02
  * @brief CMSIS Peripheral Access Layer for SYSCON_AON
  *
  * CMSIS Peripheral Access Layer for SYSCON_AON
@@ -114,7 +116,7 @@ typedef struct {
   __IO uint32_t SYNC_EN_INPUTMUX_AON;              /**< Synchronization Enable INPUTMUX, offset: 0x28 */
        uint8_t RESERVED_2[4];
   __IO uint32_t IPG_DEBUG_ENABLE;                  /**< IPG Debug Enable, offset: 0x30 */
-  __IO uint32_t XTAL_32K_CLKCTRL;                  /**< offset: 0x34 */
+  __IO uint32_t XTAL_32K_CLKCTRL;                  /**< XTAL32K Clock Control, offset: 0x34 */
   __IO uint32_t TAMPER_FLT_STAT;                   /**< Tamper Fault Status, offset: 0x38 */
   __IO uint32_t TAMPER_FLT_EN;                     /**< Tamper Fault Enable, offset: 0x3C */
   __IO uint32_t SECURITY_GLITCH_DETECT_ENABLE;     /**< Security Glitch Detect Enable, offset: 0x40 */
@@ -134,7 +136,7 @@ typedef struct {
 
 #define SYSCON_AON_SEQUENCE_TICK_SW_OVERRIDE_SEQ_CTRL_MASK (0x1U)
 #define SYSCON_AON_SEQUENCE_TICK_SW_OVERRIDE_SEQ_CTRL_SHIFT (0U)
-/*! SW_OVERRIDE_SEQ_CTRL - SW_OVERRIDE_SEQ_CTRL
+/*! SW_OVERRIDE_SEQ_CTRL - Software Sequence Override Control
  *  0b0..Sequence value is not overridden. Default LC Sense design configuration is observed.
  *  0b1..Sequence values can be overridden by software.
  */
@@ -142,17 +144,17 @@ typedef struct {
 
 #define SYSCON_AON_SEQUENCE_TICK_SW_PARKED_MASK  (0x2U)
 #define SYSCON_AON_SEQUENCE_TICK_SW_PARKED_SHIFT (1U)
-/*! SW_PARKED - SW_PARKED */
+/*! SW_PARKED - Software Parked */
 #define SYSCON_AON_SEQUENCE_TICK_SW_PARKED(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_AON_SEQUENCE_TICK_SW_PARKED_SHIFT)) & SYSCON_AON_SEQUENCE_TICK_SW_PARKED_MASK)
 
 #define SYSCON_AON_SEQUENCE_TICK_SW_OVERRIDE_MASK (0x3CU)
 #define SYSCON_AON_SEQUENCE_TICK_SW_OVERRIDE_SHIFT (2U)
-/*! SW_OVERRIDE - SW OVERRIDE SEQUENCE CONTROL */
+/*! SW_OVERRIDE - Software Override Control */
 #define SYSCON_AON_SEQUENCE_TICK_SW_OVERRIDE(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_AON_SEQUENCE_TICK_SW_OVERRIDE_SHIFT)) & SYSCON_AON_SEQUENCE_TICK_SW_OVERRIDE_MASK)
 
 #define SYSCON_AON_SEQUENCE_TICK_SW_CHANNEL_EN_MASK (0x1C0U)
 #define SYSCON_AON_SEQUENCE_TICK_SW_CHANNEL_EN_SHIFT (6U)
-/*! SW_CHANNEL_EN - SW_CHANNEL_EN_SEQ
+/*! SW_CHANNEL_EN - Software Channel Sequence Enable
  *  0b000..Channel is disabled
  *  0b001..Channel is enabled
  */
@@ -164,7 +166,7 @@ typedef struct {
 
 #define SYSCON_AON_LC_ROT_LOGIC_SW_OVERRIDE_ACMP_OUT_MASK (0x1U)
 #define SYSCON_AON_LC_ROT_LOGIC_SW_OVERRIDE_ACMP_OUT_SHIFT (0U)
-/*! SW_OVERRIDE_ACMP_OUT - SW_OVERRIDE_ACMP_OUT
+/*! SW_OVERRIDE_ACMP_OUT - Software ACMP Override Output
  *  0b0..SW override is disabled
  *  0b1..SW override is enabled
  */
@@ -172,7 +174,7 @@ typedef struct {
 
 #define SYSCON_AON_LC_ROT_LOGIC_SW_OVERRIDE_VALUE_MASK (0x1EU)
 #define SYSCON_AON_LC_ROT_LOGIC_SW_OVERRIDE_VALUE_SHIFT (1U)
-/*! SW_OVERRIDE_VALUE - SW_OVERRIDE_VALUE */
+/*! SW_OVERRIDE_VALUE - Software Override Value */
 #define SYSCON_AON_LC_ROT_LOGIC_SW_OVERRIDE_VALUE(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_AON_LC_ROT_LOGIC_SW_OVERRIDE_VALUE_SHIFT)) & SYSCON_AON_LC_ROT_LOGIC_SW_OVERRIDE_VALUE_MASK)
 
 #define SYSCON_AON_LC_ROT_LOGIC_CH_COMP_OUT_MASK (0x1E0U)
@@ -190,7 +192,7 @@ typedef struct {
 
 #define SYSCON_AON_POLARITY_CONTROL_CONTROL_PADS_POLARITY_CTRL_MASK (0x1U)
 #define SYSCON_AON_POLARITY_CONTROL_CONTROL_PADS_POLARITY_CTRL_SHIFT (0U)
-/*! CONTROL_PADS_POLARITY_CTRL - CONTROL_PADS_POLARITY_CTRL */
+/*! CONTROL_PADS_POLARITY_CTRL - PADS Polarity Control */
 #define SYSCON_AON_POLARITY_CONTROL_CONTROL_PADS_POLARITY_CTRL(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_AON_POLARITY_CONTROL_CONTROL_PADS_POLARITY_CTRL_SHIFT)) & SYSCON_AON_POLARITY_CONTROL_CONTROL_PADS_POLARITY_CTRL_MASK)
 
 #define SYSCON_AON_POLARITY_CONTROL_CTRL_PADS_VALUE_CTRL_MASK (0x2U)
@@ -453,12 +455,12 @@ typedef struct {
 #define SYSCON_AON_IPG_DEBUG_ENABLE_IPG_DEBUGEN_CM33_SEL(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_AON_IPG_DEBUG_ENABLE_IPG_DEBUGEN_CM33_SEL_SHIFT)) & SYSCON_AON_IPG_DEBUG_ENABLE_IPG_DEBUGEN_CM33_SEL_MASK)
 /*! @} */
 
-/*! @name XTAL_32K_CLKCTRL -  */
+/*! @name XTAL_32K_CLKCTRL - XTAL32K Clock Control */
 /*! @{ */
 
 #define SYSCON_AON_XTAL_32K_CLKCTRL_XTAL_32K_CLK_CTRL_MASK (0x1U)
 #define SYSCON_AON_XTAL_32K_CLKCTRL_XTAL_32K_CLK_CTRL_SHIFT (0U)
-/*! XTAL_32K_CLK_CTRL - This signal acts as a clock enable/disable signal for XTAL 32k clock
+/*! XTAL_32K_CLK_CTRL - This signal acts as a clock enable/disable signal for XTAL32K clock
  *  0b0..Clock is enabled
  *  0b1..Clock is disabled
  */

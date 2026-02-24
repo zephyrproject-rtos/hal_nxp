@@ -167,6 +167,280 @@ typedef struct _bootloader_tree
 /** FLASH API base pointer */
 #define FLASH_API (ROM_API->flash_driver)
 
+/*!
+ * @name Flash API
+ * @{
+ */
+
+/*!
+ * @brief Initializes the global flash properties structure members
+ *
+ * This function checks and initializes the Flash module for the other Flash APIs.
+ *
+ * @param config Pointer to the storage for the driver runtime state.
+ *
+ */
+static inline status_t FLASH_Init(flash_config_t *config)
+{
+    return FLASH_API->flash_init(config);
+}
+
+/*!
+ * @brief Erases the flash sectors encompassed by parameters passed into function
+ *
+ * This function erases the appropriate number of flash sectors based on the
+ * desired start address and length.
+ *
+ * @param config The pointer to the storage for the driver runtime state.
+ * @param start The start address of the desired flash memory to be erased.
+ *              NOTE: The start address need to be 4 Bytes-aligned.
+ *
+ * @param lengthInBytes The length, given in bytes need be 4 Bytes-aligned.
+ *
+ * @param key The value used to validate all flash erase APIs.
+ *
+ */
+static inline status_t FLASH_EraseSector(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key)
+{
+    return FLASH_API->flash_erase_sector(config, start, lengthInBytes, key);
+}
+
+/*!
+ * @brief Programs flash phrases with data at locations passed in through parameters
+ *
+ * This function programs the flash memory with the desired data for a given
+ * flash area as determined by the start address and the length.
+ *
+ * @param config A pointer to the storage for the driver runtime state.
+ * @param start The start address of the desired flash memory to be programmed. Must be
+ *              word-aligned.
+ * @param src A pointer to the source buffer of data that is to be programmed
+ *            into the flash.
+ * @param lengthInBytes The length, given in bytes (not words or long-words),
+ *                      to be programmed. Must be word-aligned.
+ *
+ */
+static inline status_t FLASH_ProgramPhrase(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes)
+{
+    return FLASH_API->flash_program_phrase(config, start, src, lengthInBytes);
+}
+
+/*!
+ * @brief Programs flash page with data at locations passed in through parameters
+ *
+ * This function programs the flash memory with the desired data for a given
+ * flash area as determined by the start address and the length.
+ *
+ * @param config A pointer to the storage for the driver runtime state.
+ * @param start The start address of the desired flash memory to be programmed. Must be
+ *              word-aligned.
+ * @param src A pointer to the source buffer of data that is to be programmed
+ *            into the flash.
+ * @param lengthInBytes The length, given in bytes (not words or long-words),
+ *                      to be programmed. Must be word-aligned.
+ *
+ */
+static inline status_t FLASH_ProgramPage(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes)
+{
+    return FLASH_API->flash_program_page(config, start, src, lengthInBytes);
+}
+
+/*!
+ * @brief Verifies programming of the desired flash area
+ *
+ * This function verifies the data programed in the flash memory using the
+ * Flash Program Check Command and compares it to the expected data for a given
+ * flash area as determined by the start address and length.
+ *
+ * @param config A pointer to the storage for the driver runtime state.
+ * @param start The start address of the desired flash memory to be verified. Must be word-aligned.
+ * @param lengthInBytes The length, given in bytes (not words or long-words),
+ *        to be verified. Must be word-aligned.
+ * @param expectedData A pointer to the expected data that is to be
+ *        verified against.
+ * @param failedAddress A pointer to the returned failing address.
+ * @param failedData A pointer to the returned failing data.  Some derivatives do
+ *        not include failed data as part of the FCCOBx registers.  In this
+ *        case, zeros are returned upon failure.
+ *
+ */
+static inline status_t FLASH_VerifyProgram(flash_config_t *config,
+                                           uint32_t start,
+                                           uint32_t lengthInBytes,
+                                           const uint8_t *expectedData,
+                                           uint32_t *failedAddress,
+                                           uint32_t *failedData)
+{
+    return FLASH_API->flash_verify_program(config, start, lengthInBytes, expectedData, failedAddress, failedData);
+}
+
+/*!
+ * @brief Verify that the flash phrases are erased
+ *
+ * This function checks the appropriate number of flash sectors based on
+ * the desired start address and length to check whether the flash is erased
+ *
+ * @param config A pointer to the storage for the driver runtime state.
+ * @param start The start address of the desired flash memory to be verified.
+ *        The start address does not need to be sector-aligned but must be word-aligned.
+ * @param lengthInBytes The length, given in bytes (not words or long-words),
+ *        to be verified. Must be word-aligned.
+ *
+ */
+static inline status_t FLASH_VerifyErasePhrase(flash_config_t *config, uint32_t start, uint32_t lengthInBytes)
+{
+    return FLASH_API->flash_verify_erase_phrase(config, start, lengthInBytes);
+}
+
+/*!
+ * @brief Verify that the flash pages are erased
+ *
+ * This function checks the appropriate number of flash sectors based on
+ * the desired start address and length to check whether the flash is erased
+ *
+ * @param config A pointer to the storage for the driver runtime state.
+ * @param start The start address of the desired flash memory to be verified.
+ *        The start address does not need to be sector-aligned but must be word-aligned.
+ * @param lengthInBytes The length, given in bytes (not words or long-words),
+ *        to be verified. Must be word-aligned.
+ *
+ */
+static inline status_t FLASH_VerifyErasePage(flash_config_t *config, uint32_t start, uint32_t lengthInBytes)
+{
+    return FLASH_API->flash_verify_erase_page(config, start, lengthInBytes);
+}
+
+/*!
+ * @brief Verify that the flash sectors are erased
+ *
+ * This function checks the appropriate number of flash sectors based on
+ * the desired start address and length to check whether the flash is erased
+ *
+ * @param config A pointer to the storage for the driver runtime state.
+ * @param start The start address of the desired flash memory to be verified.
+ *        The start address does not need to be sector-aligned but must be word-aligned.
+ * @param lengthInBytes The length, given in bytes (not words or long-words),
+ *        to be verified. Must be word-aligned.
+ *
+ */
+static inline status_t FLASH_VerifyEraseSector(flash_config_t *config, uint32_t start, uint32_t lengthInBytes)
+{
+    return FLASH_API->flash_verify_erase_sector(config, start, lengthInBytes);
+}
+
+/*!
+ * @brief Returns the desired flash property
+ *
+ * @param config A pointer to the storage for the driver runtime state.
+ * @param whichProperty The desired property from the list of properties in
+ *        enum flash_property_tag_t
+ * @param value A pointer to the value returned for the desired flash property.
+ *
+ */
+static inline status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichProperty, uint32_t *value)
+{
+    return FLASH_API->flash_get_property(config, whichProperty, value);
+}
+
+#if !(defined(FSL_FEATURE_ROMAPI_IFR) && (FSL_FEATURE_ROMAPI_IFR == 0U))
+/*!
+ * @brief Verify that the IFR0 phrases are erased
+ *
+ * This function checks the appropriate number of flash sectors based on
+ * the desired start address and length to check whether the flash is erased
+ *
+ * @param config A pointer to the storage for the driver runtime state.
+ * @param start The start address of the desired flash memory to be verified.
+ *        The start address does not need to be sector-aligned but must be word-aligned.
+ * @param lengthInBytes The length, given in bytes (not words or long-words),
+ *        to be verified. Must be word-aligned.
+ *
+ */
+static inline status_t IFR_VerifyErasePhrase(flash_config_t *config, uint32_t start, uint32_t lengthInBytes)
+{
+    return FLASH_API->ifr_verify_erase_phrase(config, start, lengthInBytes);
+}
+
+/*!
+ * @brief Verify that the IFR0 pages are erased
+ *
+ * This function checks the appropriate number of flash sectors based on
+ * the desired start address and length to check whether the flash is erased
+ *
+ * @param config A pointer to the storage for the driver runtime state.
+ * @param start The start address of the desired flash memory to be verified.
+ *        The start address does not need to be sector-aligned but must be word-aligned.
+ * @param lengthInBytes The length, given in bytes (not words or long-words),
+ *        to be verified. Must be word-aligned.
+ *
+ */
+static inline status_t IFR_VerifyErasePage(flash_config_t *config, uint32_t start, uint32_t lengthInBytes)
+{
+    return FLASH_API->ifr_verify_erase_page(config, start, lengthInBytes);
+}
+
+/*!
+ * @brief Verify that the IFR0 sectors are erased
+ *
+ * This function checks the appropriate number of flash sectors based on
+ * the desired start address and length to check whether the flash is erased
+ *
+ * @param config A pointer to the storage for the driver runtime state.
+ * @param start The start address of the desired flash memory to be verified.
+ *        The start address does not need to be sector-aligned but must be word-aligned.
+ * @param lengthInBytes The length, given in bytes (not words or long-words),
+ *        to be verified. Must be word-aligned.
+ *
+ */
+static inline status_t IFR_VerifyEraseSector(flash_config_t *config, uint32_t start, uint32_t lengthInBytes)
+{
+    return FLASH_API->ifr_verify_erase_sector(config, start, lengthInBytes);
+}
+#endif
+
+/*!
+ * @brief Reads flash at locations passed in through parameters
+ *
+ * This function read the flash memory from a given flash area as determined
+ * by the start address and the length.
+ *
+ * @param config A pointer to the storage for the driver runtime state.
+ * @param start The start address of the desired flash memory to be read.
+ * @param dest A pointer to the dest buffer of data that is to be read
+ *            from the flash.
+ * @param lengthInBytes The length, given in bytes (not words or long-words),
+ *                      to be read.
+ *
+ */
+static inline status_t FLASH_Read(flash_config_t *config, uint32_t start, uint8_t *dest, uint32_t lengthInBytes)
+{
+    return FLASH_API->flash_read(config, start, dest, lengthInBytes);
+}
+
+/*!
+ * @brief Get ROM API version.
+ *
+ * This function read the ROM API version.
+ *
+ */
+static inline uint32_t ROMAPI_GetVersion(void)
+{
+    return FLASH_API->version;
+}
+
+/*!
+ * @brief Run the Bootloader API  to force into the ISP mode base on the user arg
+ *
+ * @param arg Indicates API prototype fields definition.
+ *          Refer to the above #user_app_boot_invoke_option_t structure
+ */
+static inline void ROMAPI_RunBootloader(void *arg)
+{
+    ROM_API->run_bootloader(arg);
+}
+
+/* @} */
+
 /*! @} */
 
 #endif /* _FSL_RESET_H_ */

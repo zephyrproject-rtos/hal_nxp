@@ -13,14 +13,14 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250901
+**     Version:             rev. 1.1, 2026-01-02
+**     Build:               b260105
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MRCC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,14 +29,16 @@
 **     Revisions:
 **     - rev. 1.0 (2025-06-13)
 **         Generated based on Rev1 DraftH.
+**     - rev. 1.1 (2026-01-02)
+**         Generated based on Rev.1 RC.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_MRCC.h
- * @version 1.0
- * @date 2025-06-13
+ * @version 1.1
+ * @date 2026-01-02
  * @brief CMSIS Peripheral Access Layer for MRCC
  *
  * CMSIS Peripheral Access Layer for MRCC
@@ -213,13 +215,13 @@ typedef struct {
  */
 #define MRCC_GLB_RST0_UTICK0(x)                  (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_RST0_UTICK0_SHIFT)) & MRCC_GLB_RST0_UTICK0_MASK)
 
-#define MRCC_GLB_RST0_DMA0_MASK                  (0x80U)
-#define MRCC_GLB_RST0_DMA0_SHIFT                 (7U)
-/*! DMA0 - Resets DMA0
+#define MRCC_GLB_RST0_eDMA0_MASK                 (0x80U)
+#define MRCC_GLB_RST0_eDMA0_SHIFT                (7U)
+/*! eDMA0 - Resets eDMA0
  *  0b0..Peripheral is held in reset
  *  0b1..Peripheral is released from reset
  */
-#define MRCC_GLB_RST0_DMA0(x)                    (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_RST0_DMA0_SHIFT)) & MRCC_GLB_RST0_DMA0_MASK)
+#define MRCC_GLB_RST0_eDMA0(x)                   (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_RST0_eDMA0_SHIFT)) & MRCC_GLB_RST0_eDMA0_MASK)
 
 #define MRCC_GLB_RST0_AOI0_MASK                  (0x100U)
 #define MRCC_GLB_RST0_AOI0_SHIFT                 (8U)
@@ -301,13 +303,13 @@ typedef struct {
  */
 #define MRCC_GLB_RST0_CMP0(x)                    (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_RST0_CMP0_SHIFT)) & MRCC_GLB_RST0_CMP0_MASK)
 
-#define MRCC_GLB_RST0_DMA1_MASK                  (0x400000U)
-#define MRCC_GLB_RST0_DMA1_SHIFT                 (22U)
-/*! DMA1 - Resets DMA1
+#define MRCC_GLB_RST0_eDMA1_MASK                 (0x400000U)
+#define MRCC_GLB_RST0_eDMA1_SHIFT                (22U)
+/*! eDMA1 - Resets eDMA1
  *  0b0..Peripheral is held in reset
  *  0b1..Peripheral is released from reset
  */
-#define MRCC_GLB_RST0_DMA1(x)                    (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_RST0_DMA1_SHIFT)) & MRCC_GLB_RST0_DMA1_MASK)
+#define MRCC_GLB_RST0_eDMA1(x)                   (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_RST0_eDMA1_SHIFT)) & MRCC_GLB_RST0_eDMA1_MASK)
 
 #define MRCC_GLB_RST0_GPIO1_MASK                 (0x1000000U)
 #define MRCC_GLB_RST0_GPIO1_SHIFT                (24U)
@@ -497,13 +499,13 @@ typedef struct {
  */
 #define MRCC_GLB_CC0_WWDT0(x)                    (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_CC0_WWDT0_SHIFT)) & MRCC_GLB_CC0_WWDT0_MASK)
 
-#define MRCC_GLB_CC0_DMA0_MASK                   (0x80U)
-#define MRCC_GLB_CC0_DMA0_SHIFT                  (7U)
-/*! DMA0 - Clock gate control DMA0
+#define MRCC_GLB_CC0_eDMA0_MASK                  (0x80U)
+#define MRCC_GLB_CC0_eDMA0_SHIFT                 (7U)
+/*! eDMA0 - Clock gate control eDMA0
  *  0b0..Peripheral clock is disabled
  *  0b1..Peripheral clock is enabled
  */
-#define MRCC_GLB_CC0_DMA0(x)                     (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_CC0_DMA0_SHIFT)) & MRCC_GLB_CC0_DMA0_MASK)
+#define MRCC_GLB_CC0_eDMA0(x)                    (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_CC0_eDMA0_SHIFT)) & MRCC_GLB_CC0_eDMA0_MASK)
 
 #define MRCC_GLB_CC0_AOI0_MASK                   (0x100U)
 #define MRCC_GLB_CC0_AOI0_SHIFT                  (8U)
@@ -569,13 +571,13 @@ typedef struct {
  */
 #define MRCC_GLB_CC0_LPUART0(x)                  (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_CC0_LPUART0_SHIFT)) & MRCC_GLB_CC0_LPUART0_MASK)
 
-#define MRCC_GLB_CC0_ADC0_MASK                   (0x80000U)
-#define MRCC_GLB_CC0_ADC0_SHIFT                  (19U)
-/*! ADC0 - Clock gate control ADC0
+#define MRCC_GLB_CC0_HSADC0_MASK                 (0x80000U)
+#define MRCC_GLB_CC0_HSADC0_SHIFT                (19U)
+/*! HSADC0 - Clock gate control HSADC0
  *  0b0..Peripheral clock is disabled
  *  0b1..Peripheral clock is enabled
  */
-#define MRCC_GLB_CC0_ADC0(x)                     (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_CC0_ADC0_SHIFT)) & MRCC_GLB_CC0_ADC0_MASK)
+#define MRCC_GLB_CC0_HSADC0(x)                   (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_CC0_HSADC0_SHIFT)) & MRCC_GLB_CC0_HSADC0_MASK)
 
 #define MRCC_GLB_CC0_CMP0_MASK                   (0x200000U)
 #define MRCC_GLB_CC0_CMP0_SHIFT                  (21U)
@@ -585,13 +587,13 @@ typedef struct {
  */
 #define MRCC_GLB_CC0_CMP0(x)                     (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_CC0_CMP0_SHIFT)) & MRCC_GLB_CC0_CMP0_MASK)
 
-#define MRCC_GLB_CC0_DMA1_MASK                   (0x400000U)
-#define MRCC_GLB_CC0_DMA1_SHIFT                  (22U)
-/*! DMA1 - Clock gate control DMA1
+#define MRCC_GLB_CC0_eDMA1_MASK                  (0x400000U)
+#define MRCC_GLB_CC0_eDMA1_SHIFT                 (22U)
+/*! eDMA1 - Clock gate control eDMA1
  *  0b0..Peripheral clock is disabled
  *  0b1..Peripheral clock is enabled
  */
-#define MRCC_GLB_CC0_DMA1(x)                     (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_CC0_DMA1_SHIFT)) & MRCC_GLB_CC0_DMA1_MASK)
+#define MRCC_GLB_CC0_eDMA1(x)                    (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_CC0_eDMA1_SHIFT)) & MRCC_GLB_CC0_eDMA1_MASK)
 
 #define MRCC_GLB_CC0_SRAMA_MASK                  (0x800000U)
 #define MRCC_GLB_CC0_SRAMA_SHIFT                 (23U)
@@ -837,13 +839,13 @@ typedef struct {
  */
 #define MRCC_GLB_ACC0_WWDT0(x)                   (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_ACC0_WWDT0_SHIFT)) & MRCC_GLB_ACC0_WWDT0_MASK)
 
-#define MRCC_GLB_ACC0_DMA0_MASK                  (0x80U)
-#define MRCC_GLB_ACC0_DMA0_SHIFT                 (7U)
-/*! DMA0 - Automatic clock control DMA0
+#define MRCC_GLB_ACC0_eDMA0_MASK                 (0x80U)
+#define MRCC_GLB_ACC0_eDMA0_SHIFT                (7U)
+/*! eDMA0 - Automatic clock control eDMA0
  *  0b0..Automatic clock gating is disabled
  *  0b1..Automatic clock gating is enabled
  */
-#define MRCC_GLB_ACC0_DMA0(x)                    (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_ACC0_DMA0_SHIFT)) & MRCC_GLB_ACC0_DMA0_MASK)
+#define MRCC_GLB_ACC0_eDMA0(x)                   (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_ACC0_eDMA0_SHIFT)) & MRCC_GLB_ACC0_eDMA0_MASK)
 
 #define MRCC_GLB_ACC0_AOI0_MASK                  (0x100U)
 #define MRCC_GLB_ACC0_AOI0_SHIFT                 (8U)
@@ -949,13 +951,13 @@ typedef struct {
  */
 #define MRCC_GLB_ACC0_CMP0(x)                    (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_ACC0_CMP0_SHIFT)) & MRCC_GLB_ACC0_CMP0_MASK)
 
-#define MRCC_GLB_ACC0_DMA1_MASK                  (0x400000U)
-#define MRCC_GLB_ACC0_DMA1_SHIFT                 (22U)
-/*! DMA1 - Automatic clock control DMA1
+#define MRCC_GLB_ACC0_eDMA1_MASK                 (0x400000U)
+#define MRCC_GLB_ACC0_eDMA1_SHIFT                (22U)
+/*! eDMA1 - Automatic clock control eDMA1
  *  0b0..Automatic clock gating is disabled
  *  0b1..Automatic clock gating is enabled
  */
-#define MRCC_GLB_ACC0_DMA1(x)                    (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_ACC0_DMA1_SHIFT)) & MRCC_GLB_ACC0_DMA1_MASK)
+#define MRCC_GLB_ACC0_eDMA1(x)                   (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_ACC0_eDMA1_SHIFT)) & MRCC_GLB_ACC0_eDMA1_MASK)
 
 #define MRCC_GLB_ACC0_SRAMA_MASK                 (0x800000U)
 #define MRCC_GLB_ACC0_SRAMA_SHIFT                (23U)
@@ -1133,13 +1135,13 @@ typedef struct {
  */
 #define MRCC_GLB_PR0_UTICK0(x)                   (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_PR0_UTICK0_SHIFT)) & MRCC_GLB_PR0_UTICK0_MASK)
 
-#define MRCC_GLB_PR0_DMA0_MASK                   (0x80U)
-#define MRCC_GLB_PR0_DMA0_SHIFT                  (7U)
-/*! DMA0 - Enable/Disable DMA0
+#define MRCC_GLB_PR0_eDMA0_MASK                  (0x80U)
+#define MRCC_GLB_PR0_eDMA0_SHIFT                 (7U)
+/*! eDMA0 - Enable/Disable eDMA0
  *  0b0..Peripheral is disabled
  *  0b1..Peripheral is enabled
  */
-#define MRCC_GLB_PR0_DMA0(x)                     (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_PR0_DMA0_SHIFT)) & MRCC_GLB_PR0_DMA0_MASK)
+#define MRCC_GLB_PR0_eDMA0(x)                    (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_PR0_eDMA0_SHIFT)) & MRCC_GLB_PR0_eDMA0_MASK)
 
 #define MRCC_GLB_PR0_AOI0_MASK                   (0x100U)
 #define MRCC_GLB_PR0_AOI0_SHIFT                  (8U)
@@ -1221,13 +1223,13 @@ typedef struct {
  */
 #define MRCC_GLB_PR0_CMP0(x)                     (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_PR0_CMP0_SHIFT)) & MRCC_GLB_PR0_CMP0_MASK)
 
-#define MRCC_GLB_PR0_DMA1_MASK                   (0x400000U)
-#define MRCC_GLB_PR0_DMA1_SHIFT                  (22U)
-/*! DMA1 - Enable/Disable DMA1
+#define MRCC_GLB_PR0_eDMA1_MASK                  (0x400000U)
+#define MRCC_GLB_PR0_eDMA1_SHIFT                 (22U)
+/*! eDMA1 - Enable/Disable eDMA1
  *  0b0..Peripheral is disabled
  *  0b1..Peripheral is enabled
  */
-#define MRCC_GLB_PR0_DMA1(x)                     (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_PR0_DMA1_SHIFT)) & MRCC_GLB_PR0_DMA1_MASK)
+#define MRCC_GLB_PR0_eDMA1(x)                    (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_PR0_eDMA1_SHIFT)) & MRCC_GLB_PR0_eDMA1_MASK)
 
 #define MRCC_GLB_PR0_GPIO1_MASK                  (0x1000000U)
 #define MRCC_GLB_PR0_GPIO1_SHIFT                 (24U)
@@ -1369,8 +1371,8 @@ typedef struct {
 #define MRCC_CTIMERGRP0CLKSEL_MUX_SHIFT          (0U)
 /*! MUX - Functional Clock Mux Select
  *  0b00..FRO12M
- *  0b01..XTAL32K[2]
- *  0b10..CLK_16K
+ *  0b01..CLK_1M
+ *  0b10..CLK_16K[2]
  *  0b11..FRO_HF_DIV
  */
 #define MRCC_CTIMERGRP0CLKSEL_MUX(x)             (((uint32_t)(((uint32_t)(x)) << MRCC_CTIMERGRP0CLKSEL_MUX_SHIFT)) & MRCC_CTIMERGRP0CLKSEL_MUX_MASK)
@@ -1416,8 +1418,8 @@ typedef struct {
 #define MRCC_CTIMERGRP1CLKSEL_MUX_SHIFT          (0U)
 /*! MUX - Functional Clock Mux Select
  *  0b00..FRO12M
- *  0b01..XTAL32K[2]
- *  0b10..CLK_16K
+ *  0b01..CLK_1M
+ *  0b10..CLK_16K[2]
  *  0b11..FRO_HF_DIV
  */
 #define MRCC_CTIMERGRP1CLKSEL_MUX(x)             (((uint32_t)(((uint32_t)(x)) << MRCC_CTIMERGRP1CLKSEL_MUX_SHIFT)) & MRCC_CTIMERGRP1CLKSEL_MUX_MASK)
@@ -1464,7 +1466,7 @@ typedef struct {
 /*! MUX - Functional Clock Mux Select
  *  0b00..FRO12M
  *  0b01..CLK_1M
- *  0b10..CLK_16K
+ *  0b10..CLK_16K[2]
  *  0b11..FRO12M
  */
 #define MRCC_UTICK0CLKSEL_MUX(x)                 (((uint32_t)(((uint32_t)(x)) << MRCC_UTICK0CLKSEL_MUX_SHIFT)) & MRCC_UTICK0CLKSEL_MUX_MASK)
@@ -1638,7 +1640,7 @@ typedef struct {
 /*! MUX - Functional Clock Mux Select
  *  0b00..CPU_CLK
  *  0b01..CLK_1M
- *  0b10..CLK_16K
+ *  0b10..CLK_16K[2]
  *  0b11..Reserved
  */
 #define MRCC_DBGTRACECLKSEL_MUX(x)               (((uint32_t)(((uint32_t)(x)) << MRCC_DBGTRACECLKSEL_MUX_SHIFT)) & MRCC_DBGTRACECLKSEL_MUX_MASK)
@@ -1685,7 +1687,7 @@ typedef struct {
 /*! MUX - Functional Clock Mux Select
  *  0b000..FRO12M
  *  0b001..SLOW_CLK
- *  0b011..CLK_16K
+ *  0b011..CLK_16K[2]
  *  0b101..FRO10M
  *  0b111..FRO_HF_DIV
  */
@@ -1747,7 +1749,7 @@ typedef struct {
 /*! MUX - Functional Clock Mux Select
  *  0b00..FRO12M
  *  0b01..XTAL32K[2]
- *  0b10..CLK_16K
+ *  0b10..CLK_16K[2]
  *  0b11..FRO_HF_DIV
  */
 #define MRCC_PGRP0CLKSEL_MUX(x)                  (((uint32_t)(((uint32_t)(x)) << MRCC_PGRP0CLKSEL_MUX_SHIFT)) & MRCC_PGRP0CLKSEL_MUX_MASK)
@@ -1794,7 +1796,7 @@ typedef struct {
 /*! MUX - Functional Clock Mux Select
  *  0b00..FRO12M
  *  0b01..XTAL32K[2]
- *  0b10..CLK_16K
+ *  0b10..CLK_16K[2]
  *  0b11..FRO_HF_DIV
  */
 #define MRCC_PGRP1CLKSEL_MUX(x)                  (((uint32_t)(((uint32_t)(x)) << MRCC_PGRP1CLKSEL_MUX_SHIFT)) & MRCC_PGRP1CLKSEL_MUX_MASK)
@@ -1841,7 +1843,7 @@ typedef struct {
 /*! MUX - Functional Clock Mux Select
  *  0b00..CPU_CLK
  *  0b01..CLK_1M
- *  0b10..CLK_16K
+ *  0b10..CLK_16K[2]
  *  0b11..Reserved
  */
 #define MRCC_SYSTICKCLKSEL_MUX(x)                (((uint32_t)(((uint32_t)(x)) << MRCC_SYSTICKCLKSEL_MUX_SHIFT)) & MRCC_SYSTICKCLKSEL_MUX_MASK)

@@ -13,14 +13,14 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250901
+**     Version:             rev. 1.1, 2026-01-02
+**     Build:               b260105
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPACMP
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,14 +29,16 @@
 **     Revisions:
 **     - rev. 1.0 (2025-06-13)
 **         Generated based on Rev1 DraftH.
+**     - rev. 1.1 (2026-01-02)
+**         Generated based on Rev.1 RC.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_LPACMP.h
- * @version 1.0
- * @date 2025-06-13
+ * @version 1.1
+ * @date 2026-01-02
  * @brief CMSIS Peripheral Access Layer for LPACMP
  *
  * CMSIS Peripheral Access Layer for LPACMP
@@ -197,20 +199,20 @@ typedef struct {
 #define LPACMP_SEL_INN_SEL_MASK                  (0xF00U)
 #define LPACMP_SEL_INN_SEL_SHIFT                 (8U)
 /*! INN_SEL - Reference Value Select
- *  0b0000..Internal VREF value of - 1 x AVDD/15
- *  0b0001..Internal VREF value of - 2 x AVDD/15
- *  0b0010..Internal VREF value of - 3 x AVDD/15
- *  0b0011..Internal VREF value of - 4 x AVDD/15
- *  0b0100..Internal VREF value of - 5 x AVDD/15
- *  0b0101..Internal VREF value of - 6 x AVDD/15
- *  0b0110..Internal VREF value of - 7 x AVDD/15
- *  0b0111..Internal VREF value of - 8 x AVDD/15
- *  0b1000..Internal VREF value of - 9 x AVDD/15
- *  0b1001..Internal VREF value of - 10 x AVDD/15
- *  0b1010..Internal VREF value of - 11 x AVDD/15
- *  0b1011..Internal VREF value of - 12 x AVDD/15
- *  0b1100..Internal VREF value of - 13 x AVDD/15
- *  0b1101..Internal VREF value of - 14 x AVDD/15
+ *  0b0000..Internal VREF value of 1 x AVDD/15
+ *  0b0001..Internal VREF value of 2 x AVDD/15
+ *  0b0010..Internal VREF value of 3 x AVDD/15
+ *  0b0011..Internal VREF value of 4 x AVDD/15
+ *  0b0100..Internal VREF value of 5 x AVDD/15
+ *  0b0101..Internal VREF value of 6 x AVDD/15
+ *  0b0110..Internal VREF value of 7 x AVDD/15
+ *  0b0111..Internal VREF value of 8 x AVDD/15
+ *  0b1000..Internal VREF value of 9 x AVDD/15
+ *  0b1001..Internal VREF value of 10 x AVDD/15
+ *  0b1010..Internal VREF value of 11 x AVDD/15
+ *  0b1011..Internal VREF value of 12 x AVDD/15
+ *  0b1100..Internal VREF value of 13 x AVDD/15
+ *  0b1101..Internal VREF value of 14 x AVDD/15
  *  0b1110..External input connected to I/O pads comp_in4
  *  0b1111..External input connected to I/O pads comp_in5
  */

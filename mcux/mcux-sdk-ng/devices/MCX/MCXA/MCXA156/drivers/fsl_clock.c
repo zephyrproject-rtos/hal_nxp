@@ -539,7 +539,7 @@ static uint32_t CLOCK_GetFRO16KFreq(void)
 static uint32_t CLOCK_GetClk16KFreq(uint8_t id)
 {
     return (((VBAT0->FROCTLA & VBAT_FROCTLA_FRO_EN_MASK) != 0U) &&
-            ((VBAT0->FROCLKE & VBAT_FROCLKE_CLKE((((uint32_t)id) << 1U))) != 0U)) ?
+            ((VBAT0->FROCLKE & VBAT_FROCLKE_CLKE(1UL << (uint32_t)id)) != 0U)) ?
                16000U :
                0U;
 }

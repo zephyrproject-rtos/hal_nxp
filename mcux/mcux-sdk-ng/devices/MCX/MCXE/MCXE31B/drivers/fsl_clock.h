@@ -19,8 +19,8 @@
  *****************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.2.0 */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief CLOCK driver version 2.2.1 */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */
@@ -92,6 +92,12 @@ extern volatile uint32_t g_xtal0Freq;
 #define CLOCK_EMAC_RX_CLK      25U /*!< Ethernet MAC Receive clock*/
 #endif                             /* FSL_FEATURE_CLOCK_HAS_EMAC */
 #define CLOCK_CLKOUT_RUN_CLK 50U   /*!< Clock output in RUN mode*/
+
+/*! @brief Clock ip name array for CRC. */
+#define CRC_CLOCKS  \
+    {               \
+        kCLOCK_Crc0 \
+    }
 
 /*! @brief Clock ip name array for TEMPSENSE. */
 #define TEMPSENSOR_CLOCKS \

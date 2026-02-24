@@ -12,7 +12,7 @@
 **
 **     Reference manual:    MCXN23XRM
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250623
+**     Build:               b251201
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN235
@@ -2025,7 +2025,7 @@ typedef enum IRQn {
   #define PDM_BASE_PTRS                            { PDM }
 #endif
 /** Interrupt vectors for the PDM peripheral type */
-#define PDM_IRQS                                 { PDM_EVENT_IRQn }
+#define PDM_Event_IRQS                           { PDM_EVENT_IRQn }
 
 /* PINT - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -2240,6 +2240,8 @@ typedef enum IRQn {
   /** Array initializer of PUF peripheral base pointers */
   #define PUF_BASE_PTRS                            { PUF, PUF_ALIAS1, PUF_ALIAS2, PUF_ALIAS3 }
 #endif
+/** Interrupt vectors for the PUF peripheral type */
+#define PUF_IRQS                                 { PUF_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }
 
 /* PWM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -2861,6 +2863,8 @@ typedef enum IRQn {
   /** Array initializer of WUU peripheral base pointers */
   #define WUU_BASE_PTRS                            { WUU0 }
 #endif
+/** Interrupt vectors for the WUU peripheral type */
+#define WUU_IRQS                                 { WUU_IRQn }
 
 /* WWDT - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

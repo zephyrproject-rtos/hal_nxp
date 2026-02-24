@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2025-2026 NXP
  *
  * All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief advc driver version 2.0.2. */
-#define FSL_ADVC_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief advc driver version 2.0.3. */
+#define FSL_ADVC_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*!
@@ -31,17 +31,18 @@
  */
 typedef enum _advc_result
 {
-    kADVC_Stat_Ok                     = 0U,  /*!< ADVC Run Well. */
-    kADVC_Stat_Init                   = 1U,  /*!< ADVC is initialized. */
-    kADVC_Stat_SafeDoneFailed         = 2U,  /*!< Fail to set ADVC as safe mode. */
-    kADVC_Stat_Timeout                = 3U,  /*!< ADVC status done condition was not set before timeout */
-    kADVC_Stat_RingoMeasureFailed     = 4U,  /*!< Fail to measure ringo. */
-    kADVC_Stat_FFMeasureFailed        = 5U,  /*!< First fail measurement failed. */
-    kADVC_Stat_OptimalFailed          = 6U,  /*!< ADVC set optimal ended with error. */
-    kADVC_Stat_BadSignature           = 7U,  /*!< Wrong ADVC table. */
-    kADVC_Stat_NotEnabled             = 8U,  /*!< when trying to manipulate advc frequencies before it's enabled. */
-    kADVC_Stat_PreVoltageReqestFailed = 9U,  /*!< when pre-voltage request change is reaching timeout. */
-    kADVC_Stat_IllegalOperation       = 10U, /*!< When using illegal operation mode in ADVC_ENABLE. */
+    kADVC_Stat_Ok                        = 0U,  /*!< ADVC Run Well. */
+    kADVC_Stat_Init                      = 1U,  /*!< ADVC is initialized. */
+    kADVC_Stat_SafeDoneFailed            = 2U,  /*!< Fail to set ADVC as safe mode. */
+    kADVC_Stat_Timeout                   = 3U,  /*!< ADVC status done condition was not set before timeout */
+    kADVC_Stat_RingoMeasureFailed        = 4U,  /*!< Fail to measure ringo. */
+    kADVC_Stat_FFMeasureFailed           = 5U,  /*!< First fail measurement failed. */
+    kADVC_Stat_OptimalFailed             = 6U,  /*!< ADVC set optimal ended with error. */
+    kADVC_Stat_BadSignature              = 7U,  /*!< Wrong ADVC table. */
+    kADVC_Stat_NotEnabled                = 8U,  /*!< when trying to manipulate advc frequencies before it's enabled. */
+    kADVC_Stat_PreVoltageReqestFailed    = 9U,  /*!< when pre-voltage request change is reaching timeout. */
+    kADVC_Stat_IllegalOperation          = 10U, /*!< When using illegal operation mode in ADVC_ENABLE. */
+    kADVC_Stat_IllegalClockConfiguration = 11U, /*!< CGU clock is not configured to be any of supported frequencies. */
 } advc_result_t;
 
 /*!
@@ -65,7 +66,7 @@ extern "C" {
 /*!
  * @brief Load advc configuration table and initialize ADVC.
  *
- * @note This function checks if SysTick is enabled. If not, it temporarily 
+ * @note This function checks if SysTick is enabled. If not, it temporarily
  * enables SysTick and disables it before exiting.
  */
 void ADVC_Init(void);
@@ -85,7 +86,7 @@ bool ADVC_IsInitialized(void);
  * @param[in] mode Specify the mode of advc, please refer to @ref advc_mode_t.
  * @param[out] vddCode The value of VDD_AON, NULL means do not care voltage of VDD_AON.
  *
- * @note This function checks if SysTick is enabled. If not, it temporarily 
+ * @note This function checks if SysTick is enabled. If not, it temporarily
  * enables SysTick and disables it before exiting.
  *
  * @return The result outcome with enabling ADVC.
@@ -94,7 +95,7 @@ advc_result_t ADVC_Enable(advc_mode_t mode, uint8_t *vddCode);
 
 /*!
  * @brief Check if ADVC is enabled.
- * @note This function checks if SysTick is enabled. If not, it temporarily 
+ * @note This function checks if SysTick is enabled. If not, it temporarily
  * enables SysTick and disables it before exiting.
  *
  * @retval false ADVC is not enabled.
@@ -104,7 +105,7 @@ bool ADVC_IsEnabled(void);
 
 /*!
  * @brief Disable ADVC.
- * @note This function checks if SysTick is enabled. If not, it temporarily 
+ * @note This function checks if SysTick is enabled. If not, it temporarily
  * enables SysTick and disables it before exiting.
  *
  */
@@ -112,7 +113,7 @@ void ADVC_Disable(void);
 
 /*!
  * @brief Check if ADVC is disabled.
- * @note This function checks if SysTick is enabled. If not, it temporarily 
+ * @note This function checks if SysTick is enabled. If not, it temporarily
  * enables SysTick and disables it before exiting.
  *
  * @retval true ADVC is not disabled.
@@ -126,10 +127,11 @@ bool ADVC_IsDisabled(void);
  * @note This should be done every time we want to change frequency of any ADVC related clock.
  * @note  Pre Voltage request should be called before any clock change which is derived from CGU.
  * The paramter we pass is the the future cpu frequency, since we move to safe voltage according to that.
- * @note This function checks if SysTick is enabled. If not, it temporarily 
+ * @note This function checks if SysTick is enabled. If not, it temporarily
  * enables SysTick and disables it before exiting.
  *
- * @param aonCpuFreq The frequency of AON CPU, only 10MHz, 5MHz, 3.3MHz, 2.5MHz, 2MHz, 1MHz are allowed.
+ * @param aonCpuFreq The frequency of AON CPU, only 10MHz, 5MHz, 3.3MHz, 3MHz,
+ *               2.5MHz, 2.5MHz, 1.5MHz, 0.75MHz, 32768 are allowed.
  *
  * @return The result outcome with requesting to change frequency.
  */
@@ -137,7 +139,7 @@ advc_result_t ADVC_PreVoltageChangeRequest(uint32_t aonCpuFreq);
 
 /*!
  * @brief Move back to optimal after changing any ADVC related clock frequency.
- * @note This function checks if SysTick is enabled. If not, it temporarily 
+ * @note This function checks if SysTick is enabled. If not, it temporarily
  * enables SysTick and disables it before exiting.
  *
  * @return The observed result following the post-frequency change.

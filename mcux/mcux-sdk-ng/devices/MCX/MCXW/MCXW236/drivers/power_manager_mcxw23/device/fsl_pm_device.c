@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/*                           Copyright 2021-2025 NXP                          */
+/*                           Copyright 2021-2026 NXP                          */
 /*                    SPDX-License-Identifier: BSD-3-Clause                   */
 /* -------------------------------------------------------------------------- */
 
@@ -454,7 +454,8 @@ static void RequiredResourcesChanged(pm_board_resource_mask_t requiredResources,
 /* -------------------------------------------------------------------------- */
 void PMDEVICE_Init(void)
 {
-    TM_Open(&s_wakeupTimerHandle);
+    /* TM_Open function always return kStatus_TimerSuccess, explicitly discard return value */
+    (void)TM_Open(&s_wakeupTimerHandle);
     dcdc_mode_t mode = POWER_DCDC_GetSupplyMode();
     /* DCDC is not used in XR modes */
     s_dcdcUsed = (mode != kDCDC_MODE_XR_SM_SS) && (mode != kDCDC_MODE_XR_SM_DS);

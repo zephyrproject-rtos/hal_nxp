@@ -13,14 +13,14 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250901
+**     Version:             rev. 1.1, 2026-01-02
+**     Build:               b260105
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSCON
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,14 +29,16 @@
 **     Revisions:
 **     - rev. 1.0 (2025-06-13)
 **         Generated based on Rev1 DraftH.
+**     - rev. 1.1 (2026-01-02)
+**         Generated based on Rev.1 RC.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_SYSCON.h
- * @version 1.0
- * @date 2025-06-13
+ * @version 1.1
+ * @date 2026-01-02
  * @brief CMSIS Peripheral Access Layer for SYSCON
  *
  * CMSIS Peripheral Access Layer for SYSCON
@@ -137,34 +139,30 @@ typedef struct {
   __IO uint32_t CM33_SLEEPING_SELECT;              /**< Masking CM33 Sleeping For IPG_DOZE, offset: 0x810 */
        uint8_t RESERVED_14[16];
   __IO uint32_t LPCAC_CTRL;                        /**< LPCAC Control, offset: 0x824 */
-       uint8_t RESERVED_15[272];
-  __IO uint32_t PWM0SUBCTL;                        /**< PWM0 Sub-module Control, offset: 0x938 */
-       uint8_t RESERVED_16[4];
+       uint8_t RESERVED_15[280];
   __IO uint32_t CTIMERGLOBALSTARTEN;               /**< CTIMER Global Start Enable, offset: 0x940 */
   __IO uint32_t RAM_CTRL;                          /**< RAM Control, offset: 0x944 */
-       uint8_t RESERVED_17[536];
+       uint8_t RESERVED_16[536];
   __IO uint32_t GRAY_CODE_LSB;                     /**< Gray to Binary Converter Gray Code [31:0], offset: 0xB60 */
   __IO uint32_t GRAY_CODE_MSB;                     /**< Gray to Binary Converter Gray Code [41:32], offset: 0xB64 */
   __I  uint32_t BINARY_CODE_LSB;                   /**< Gray to Binary Converter Binary Code [31:0], offset: 0xB68 */
   __I  uint32_t BINARY_CODE_MSB;                   /**< Gray to Binary Converter Binary Code [41:32], offset: 0xB6C */
-       uint8_t RESERVED_18[684];
+       uint8_t RESERVED_17[684];
   __IO uint32_t FLASH_CFG;                         /**< Flash Configuration, offset: 0xE1C */
-       uint8_t RESERVED_19[28];
+       uint8_t RESERVED_18[28];
   __IO uint32_t ROP_STATE;                         /**< ROP State, offset: 0xE3C */
-       uint8_t RESERVED_20[24];
+       uint8_t RESERVED_19[24];
   __IO uint32_t SRAM_XEN;                          /**< RAM XEN Control, offset: 0xE58 */
   __IO uint32_t SRAM_XEN_DP;                       /**< RAM XEN Control (Duplicate), offset: 0xE5C */
-       uint8_t RESERVED_21[84];
-  __IO uint32_t CSS_BOOT_STATE_LOCK;               /**< CSS Boot State Lock Down, offset: 0xEB4 */
-       uint8_t RESERVED_22[232];
+       uint8_t RESERVED_20[320];
   __IO uint32_t DEBUG_LOCK_EN;                     /**< Control Write Access to Security, offset: 0xFA0 */
   __IO uint32_t DEBUG_FEATURES;                    /**< Cortex Debug Features Control, offset: 0xFA4 */
   __IO uint32_t DEBUG_FEATURES_DP;                 /**< Cortex Debug Features Control (Duplicate), offset: 0xFA8 */
-       uint8_t RESERVED_23[8];
+       uint8_t RESERVED_21[8];
   __IO uint32_t SWD_ACCESS_CM33;                   /**< CM33 Software Debug Access, offset: 0xFB4 */
-       uint8_t RESERVED_24[8];
+       uint8_t RESERVED_22[8];
   __IO uint32_t DEBUG_AUTH_BEACON;                 /**< Debug Authentication BEACON, offset: 0xFC0 */
-       uint8_t RESERVED_25[44];
+       uint8_t RESERVED_23[44];
   __I  uint32_t JTAG_ID;                           /**< JTAG Chip ID, offset: 0xFF0 */
   __I  uint32_t DEVICE_TYPE;                       /**< Device Type, offset: 0xFF4 */
   __I  uint32_t DEVICE_ID0;                        /**< Device ID, offset: 0xFF8 */
@@ -816,42 +814,6 @@ typedef struct {
 #define SYSCON_LPCAC_CTRL_LPCAC_MEM_REQ(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_LPCAC_CTRL_LPCAC_MEM_REQ_SHIFT)) & SYSCON_LPCAC_CTRL_LPCAC_MEM_REQ_MASK)
 /*! @} */
 
-/*! @name PWM0SUBCTL - PWM0 Sub-module Control */
-/*! @{ */
-
-#define SYSCON_PWM0SUBCTL_CLK0_EN_MASK           (0x1U)
-#define SYSCON_PWM0SUBCTL_CLK0_EN_SHIFT          (0U)
-/*! CLK0_EN - Enables PWM0 SUB Clock0
- *  0b0..Disable
- *  0b1..Enable
- */
-#define SYSCON_PWM0SUBCTL_CLK0_EN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_PWM0SUBCTL_CLK0_EN_SHIFT)) & SYSCON_PWM0SUBCTL_CLK0_EN_MASK)
-
-#define SYSCON_PWM0SUBCTL_CLK1_EN_MASK           (0x2U)
-#define SYSCON_PWM0SUBCTL_CLK1_EN_SHIFT          (1U)
-/*! CLK1_EN - Enables PWM0 SUB Clock1
- *  0b0..Disable
- *  0b1..Enable
- */
-#define SYSCON_PWM0SUBCTL_CLK1_EN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_PWM0SUBCTL_CLK1_EN_SHIFT)) & SYSCON_PWM0SUBCTL_CLK1_EN_MASK)
-
-#define SYSCON_PWM0SUBCTL_CLK2_EN_MASK           (0x4U)
-#define SYSCON_PWM0SUBCTL_CLK2_EN_SHIFT          (2U)
-/*! CLK2_EN - Enables PWM0 SUB Clock2
- *  0b0..Disable
- *  0b1..Enable
- */
-#define SYSCON_PWM0SUBCTL_CLK2_EN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_PWM0SUBCTL_CLK2_EN_SHIFT)) & SYSCON_PWM0SUBCTL_CLK2_EN_MASK)
-
-#define SYSCON_PWM0SUBCTL_CLK3_EN_MASK           (0x8U)
-#define SYSCON_PWM0SUBCTL_CLK3_EN_SHIFT          (3U)
-/*! CLK3_EN - Enables PWM0 SUB Clock3
- *  0b0..Disable
- *  0b1..Enable
- */
-#define SYSCON_PWM0SUBCTL_CLK3_EN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_PWM0SUBCTL_CLK3_EN_SHIFT)) & SYSCON_PWM0SUBCTL_CLK3_EN_MASK)
-/*! @} */
-
 /*! @name CTIMERGLOBALSTARTEN - CTIMER Global Start Enable */
 /*! @{ */
 
@@ -1125,15 +1087,6 @@ typedef struct {
 #define SYSCON_SRAM_XEN_DP_RAMB3_XEN_DP_SHIFT    (9U)
 /*! RAMB3_XEN_DP - Refer to RAMB3_XEN for more details. */
 #define SYSCON_SRAM_XEN_DP_RAMB3_XEN_DP(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAM_XEN_DP_RAMB3_XEN_DP_SHIFT)) & SYSCON_SRAM_XEN_DP_RAMB3_XEN_DP_MASK)
-/*! @} */
-
-/*! @name CSS_BOOT_STATE_LOCK - CSS Boot State Lock Down */
-/*! @{ */
-
-#define SYSCON_CSS_BOOT_STATE_LOCK_BOOT_STATE_LOCK_MASK (0xFU)
-#define SYSCON_CSS_BOOT_STATE_LOCK_BOOT_STATE_LOCK_SHIFT (0U)
-/*! BOOT_STATE_LOCK - Boot state lock down bit */
-#define SYSCON_CSS_BOOT_STATE_LOCK_BOOT_STATE_LOCK(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_CSS_BOOT_STATE_LOCK_BOOT_STATE_LOCK_SHIFT)) & SYSCON_CSS_BOOT_STATE_LOCK_BOOT_STATE_LOCK_MASK)
 /*! @} */
 
 /*! @name DEBUG_LOCK_EN - Control Write Access to Security */

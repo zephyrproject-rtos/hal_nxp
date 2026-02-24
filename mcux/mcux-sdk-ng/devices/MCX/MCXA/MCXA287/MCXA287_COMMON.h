@@ -12,13 +12,13 @@
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1_DraftC
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251124
+**     Build:               b260128
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXA287
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -443,6 +443,17 @@ typedef enum IRQn {
 #endif
 /** Interrupt vectors for the CMC peripheral type */
 #define CMC_IRQS                                 { CMC_IRQn }
+/* Backward compatibility for CMC */
+#define CMC_SRAMDIS_DIS_MASK                     (0xFFFFFFFFU)
+#define CMC_SRAMDIS_DIS_SHIFT                    (0U)
+/*! DIS - SRAM Disable */
+#define CMC_SRAMDIS_DIS(x)                       (((uint32_t)(((uint32_t)(x)) << CMC_SRAMDIS_DIS_SHIFT)) & CMC_SRAMDIS_DIS_MASK)
+
+#define CMC_SRAMRET_RET_MASK                     (0xFFFFFFFFU)
+#define CMC_SRAMRET_RET_SHIFT                    (0U)
+/*! RET - SRAM Retention */
+#define CMC_SRAMRET_RET(x)                       (((uint32_t)(((uint32_t)(x)) << CMC_SRAMRET_RET_SHIFT)) & CMC_SRAMRET_RET_MASK)
+
 
 /* CRC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -973,6 +984,8 @@ typedef enum IRQn {
   /** Array initializer of GDET peripheral base pointers */
   #define GDET_BASE_PTRS                           { DGDET0 }
 #endif
+/** Interrupt vectors for the GDET peripheral type */
+#define GDET_IRQS                                { GDET_IRQn }
 
 /* GLIKEY - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -2097,90 +2110,94 @@ typedef enum IRQn {
 
 /* USBHS - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral USB0 base address */
-  #define USB0_BASE                                (0x5002E000u)
-  /** Peripheral USB0 base address */
-  #define USB0_BASE_NS                             (0x4002E000u)
-  /** Peripheral USB0 base pointer */
-  #define USB0                                     ((USBHS_Type *)USB0_BASE)
-  /** Peripheral USB0 base pointer */
-  #define USB0_NS                                  ((USBHS_Type *)USB0_BASE_NS)
+  /** Peripheral USBHS1__USBC base address */
+  #define USBHS1__USBC_BASE                        (0x5002E000u)
+  /** Peripheral USBHS1__USBC base address */
+  #define USBHS1__USBC_BASE_NS                     (0x4002E000u)
+  /** Peripheral USBHS1__USBC base pointer */
+  #define USBHS1__USBC                             ((USBHS_Type *)USBHS1__USBC_BASE)
+  /** Peripheral USBHS1__USBC base pointer */
+  #define USBHS1__USBC_NS                          ((USBHS_Type *)USBHS1__USBC_BASE_NS)
   /** Array initializer of USBHS peripheral base addresses */
-  #define USBHS_BASE_ADDRS                         { USB0_BASE }
+  #define USBHS_BASE_ADDRS                         { USBHS1__USBC_BASE }
   /** Array initializer of USBHS peripheral base pointers */
-  #define USBHS_BASE_PTRS                          { USB0 }
+  #define USBHS_BASE_PTRS                          { USBHS1__USBC }
   /** Array initializer of USBHS peripheral base addresses */
-  #define USBHS_BASE_ADDRS_NS                      { USB0_BASE_NS }
+  #define USBHS_BASE_ADDRS_NS                      { USBHS1__USBC_BASE_NS }
   /** Array initializer of USBHS peripheral base pointers */
-  #define USBHS_BASE_PTRS_NS                       { USB0_NS }
+  #define USBHS_BASE_PTRS_NS                       { USBHS1__USBC_NS }
 #else
-  /** Peripheral USB0 base address */
-  #define USB0_BASE                                (0x4002E000u)
-  /** Peripheral USB0 base pointer */
-  #define USB0                                     ((USBHS_Type *)USB0_BASE)
+  /** Peripheral USBHS1__USBC base address */
+  #define USBHS1__USBC_BASE                        (0x4002E000u)
+  /** Peripheral USBHS1__USBC base pointer */
+  #define USBHS1__USBC                             ((USBHS_Type *)USBHS1__USBC_BASE)
   /** Array initializer of USBHS peripheral base addresses */
-  #define USBHS_BASE_ADDRS                         { USB0_BASE }
+  #define USBHS_BASE_ADDRS                         { USBHS1__USBC_BASE }
   /** Array initializer of USBHS peripheral base pointers */
-  #define USBHS_BASE_PTRS                          { USB0 }
+  #define USBHS_BASE_PTRS                          { USBHS1__USBC }
 #endif
+/** Interrupt vectors for the USBHS peripheral type */
+#define USBHS_IRQS                               { USB1_HS_IRQn }
 
 /* USBNC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral USBNC base address */
-  #define USBNC_BASE                               (0x5002E200u)
-  /** Peripheral USBNC base address */
-  #define USBNC_BASE_NS                            (0x4002E200u)
-  /** Peripheral USBNC base pointer */
-  #define USBNC                                    ((USBNC_Type *)USBNC_BASE)
-  /** Peripheral USBNC base pointer */
-  #define USBNC_NS                                 ((USBNC_Type *)USBNC_BASE_NS)
+  /** Peripheral USBHS1__USBNC base address */
+  #define USBHS1__USBNC_BASE                       (0x5002E200u)
+  /** Peripheral USBHS1__USBNC base address */
+  #define USBHS1__USBNC_BASE_NS                    (0x4002E200u)
+  /** Peripheral USBHS1__USBNC base pointer */
+  #define USBHS1__USBNC                            ((USBNC_Type *)USBHS1__USBNC_BASE)
+  /** Peripheral USBHS1__USBNC base pointer */
+  #define USBHS1__USBNC_NS                         ((USBNC_Type *)USBHS1__USBNC_BASE_NS)
   /** Array initializer of USBNC peripheral base addresses */
-  #define USBNC_BASE_ADDRS                         { USBNC_BASE }
+  #define USBNC_BASE_ADDRS                         { USBHS1__USBNC_BASE }
   /** Array initializer of USBNC peripheral base pointers */
-  #define USBNC_BASE_PTRS                          { USBNC }
+  #define USBNC_BASE_PTRS                          { USBHS1__USBNC }
   /** Array initializer of USBNC peripheral base addresses */
-  #define USBNC_BASE_ADDRS_NS                      { USBNC_BASE_NS }
+  #define USBNC_BASE_ADDRS_NS                      { USBHS1__USBNC_BASE_NS }
   /** Array initializer of USBNC peripheral base pointers */
-  #define USBNC_BASE_PTRS_NS                       { USBNC_NS }
+  #define USBNC_BASE_PTRS_NS                       { USBHS1__USBNC_NS }
 #else
-  /** Peripheral USBNC base address */
-  #define USBNC_BASE                               (0x4002E200u)
-  /** Peripheral USBNC base pointer */
-  #define USBNC                                    ((USBNC_Type *)USBNC_BASE)
+  /** Peripheral USBHS1__USBNC base address */
+  #define USBHS1__USBNC_BASE                       (0x4002E200u)
+  /** Peripheral USBHS1__USBNC base pointer */
+  #define USBHS1__USBNC                            ((USBNC_Type *)USBHS1__USBNC_BASE)
   /** Array initializer of USBNC peripheral base addresses */
-  #define USBNC_BASE_ADDRS                         { USBNC_BASE }
+  #define USBNC_BASE_ADDRS                         { USBHS1__USBNC_BASE }
   /** Array initializer of USBNC peripheral base pointers */
-  #define USBNC_BASE_PTRS                          { USBNC }
+  #define USBNC_BASE_PTRS                          { USBHS1__USBNC }
 #endif
 
 /* USBPHY - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral USBPHY0 base address */
-  #define USBPHY0_BASE                             (0x5002F000u)
-  /** Peripheral USBPHY0 base address */
-  #define USBPHY0_BASE_NS                          (0x4002F000u)
-  /** Peripheral USBPHY0 base pointer */
-  #define USBPHY0                                  ((USBPHY_Type *)USBPHY0_BASE)
-  /** Peripheral USBPHY0 base pointer */
-  #define USBPHY0_NS                               ((USBPHY_Type *)USBPHY0_BASE_NS)
+  /** Peripheral USBHS1_PHY base address */
+  #define USBHS1_PHY_BASE                          (0x5002F000u)
+  /** Peripheral USBHS1_PHY base address */
+  #define USBHS1_PHY_BASE_NS                       (0x4002F000u)
+  /** Peripheral USBHS1_PHY base pointer */
+  #define USBHS1_PHY                               ((USBPHY_Type *)USBHS1_PHY_BASE)
+  /** Peripheral USBHS1_PHY base pointer */
+  #define USBHS1_PHY_NS                            ((USBPHY_Type *)USBHS1_PHY_BASE_NS)
   /** Array initializer of USBPHY peripheral base addresses */
-  #define USBPHY_BASE_ADDRS                        { USBPHY0_BASE }
+  #define USBPHY_BASE_ADDRS                        { USBHS1_PHY_BASE }
   /** Array initializer of USBPHY peripheral base pointers */
-  #define USBPHY_BASE_PTRS                         { USBPHY0 }
+  #define USBPHY_BASE_PTRS                         { USBHS1_PHY }
   /** Array initializer of USBPHY peripheral base addresses */
-  #define USBPHY_BASE_ADDRS_NS                     { USBPHY0_BASE_NS }
+  #define USBPHY_BASE_ADDRS_NS                     { USBHS1_PHY_BASE_NS }
   /** Array initializer of USBPHY peripheral base pointers */
-  #define USBPHY_BASE_PTRS_NS                      { USBPHY0_NS }
+  #define USBPHY_BASE_PTRS_NS                      { USBHS1_PHY_NS }
 #else
-  /** Peripheral USBPHY0 base address */
-  #define USBPHY0_BASE                             (0x4002F000u)
-  /** Peripheral USBPHY0 base pointer */
-  #define USBPHY0                                  ((USBPHY_Type *)USBPHY0_BASE)
+  /** Peripheral USBHS1_PHY base address */
+  #define USBHS1_PHY_BASE                          (0x4002F000u)
+  /** Peripheral USBHS1_PHY base pointer */
+  #define USBHS1_PHY                               ((USBPHY_Type *)USBHS1_PHY_BASE)
   /** Array initializer of USBPHY peripheral base addresses */
-  #define USBPHY_BASE_ADDRS                        { USBPHY0_BASE }
+  #define USBPHY_BASE_ADDRS                        { USBHS1_PHY_BASE }
   /** Array initializer of USBPHY peripheral base pointers */
-  #define USBPHY_BASE_PTRS                         { USBPHY0 }
+  #define USBPHY_BASE_PTRS                         { USBHS1_PHY }
 #endif
+/** Interrupt vectors for the USBPHY peripheral type */
+#define USBPHY_IRQS                              { USB1_HS_PHY_IRQn }
 /* Backward compatibility */
 #define USBPHY_CTRL_ENDEVPLUGINDET_MASK     USBPHY_CTRL_ENDEVPLUGINDETECT_MASK
 #define USBPHY_CTRL_ENDEVPLUGINDET_SHIFT    USBPHY_CTRL_ENDEVPLUGINDETECT_SHIFT

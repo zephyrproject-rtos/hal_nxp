@@ -198,3 +198,29 @@ void DMA1_CH3_DriverIRQHandler(void)
     /* Instance 1 channel 3 */
     EDMA_DriverIRQHandler(1U, 3U);
 }
+
+/*!
+ * brief Enable or disable EDMA request for SoC.
+ *
+ */
+void EDMA_SocRequestEnable(DMA_Type *base, uint32_t request, bool value) 
+{
+    /* Calculate register index based on DMA instance and request number */
+    uint32_t regIndex = ((base == DMA0) ? 0U : 5U) + (request / 32U);
+    /* Calculate bit position within the register */
+    uint32_t bitPos = request % 32U;
+    /* Ensure the register index is within valid range */
+    assert(regIndex < AHBSC_SEC_GP_REG_COUNT);
+    assert(request < 160U);
+ 
+    if (value)
+    {
+        /* Set the bit to enable the EDMA request */
+        AHBSC->SEC_GP_REG[regIndex] |= (1U << bitPos);
+    }
+    else
+    {
+        /* Clear the bit to disable the EDMA request */
+        AHBSC->SEC_GP_REG[regIndex] &= ~(1U << bitPos);
+    }
+}

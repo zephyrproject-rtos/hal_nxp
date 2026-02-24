@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -10,7 +10,7 @@
 
 #include "fsl_common.h"
 
-#if defined(ADVC_DRIVER_USED) & ADVC_DRIVER_USED
+#ifdef CONFIG_ADVC_DRIVER_USED
 #include "fsl_advc.h"
 #endif
 
@@ -25,8 +25,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 1.2.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(1, 2, 0))
+/*! @brief CLOCK driver version 1.3.0. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(1, 3, 0))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -46,11 +46,30 @@
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
 #if __CORTEX_M == 33
-#define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (96000000U)
+#define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (DEFAULT_SYSTEM_CLOCK)
 #else
 #define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (10000000U)
 #endif
 #endif
+
+/* IFR trimming data pointer definitions for core voltage-related configurations */
+#define IFR1_VDD_CORE_MAIN_1P0_TRIM ((uint32_t *)0x01100884U)
+#define IFR1_VDD_CORE_MAIN_1P1_TRIM ((uint32_t *)0x01100888U)
+#define IFR1_VDD_CORE_MAIN_MASK (0xFFU)
+#define IFR1_LVD_HVD_TRIM_0 ((uint32_t *)0x01100890U)
+#define IFR1_LVD_HVD_TRIM_1 ((uint32_t *)0x01100894U)
+#define IFR1_LVD_LV_1P0_TRIM_SHIFT (12U)
+#define IFR1_LVD_LV_1P1_TRIM_SHIFT (16U)
+#define IFR1_HVD_LV_1P0_TRIM_SHIFT (28U)
+#define IFR1_HVD_LV_1P1_TRIM_SHIFT (0U)
+#define IFR1_LVD_HVD_TRIM_MASK (0xFU)
+
+/* AON FROs autotrim configuration */
+#define AON_FRO_AUTO_CAL_INT (0x1000U)
+#define AON_FRO_AUTO_CAL_3M_CAL_DWN_CNT (0xB4U)
+#define AON_FRO_AUTO_CAL_3M_TGT_LSB (0x205DU)
+#define AON_FRO_AUTO_CAL_10M_CAL_DWN_CNT (0x64U)
+#define AON_FRO_AUTO_CAL_10M_TGT_LSB (0x3C33U)
 
 /*! @brief Clock gate name used for CLOCK_EnableClock/CLOCK_DisableClock. */
 /*------------------------------------------------------------------------------
@@ -89,7 +108,9 @@ typedef enum _clock_ip_name
     kCLOCK_GateNVMNXPCTL     = (0x00U | (12U)),                        /*!< Clock gate name: NVM_NXP_CTL    */
     kCLOCK_GateFMU0          = (0x00U | (13U)),                        /*!< Clock gate name: FMU0           */
     kCLOCK_GateLPI2C0        = (0x00U | (14U)),                        /*!< Clock gate name: LPI2C0         */
-    kCLOCK_GateLPI2C1        = (0x00U | (15U)),                        /*!< Clock gate name: LPI2C0         */
+#if defined(LPI2C1)
+    kCLOCK_GateLPI2C1        = (0x00U | (15U)),                        /*!< Clock gate name: LPI2C1         */
+#endif
     kCLOCK_GateLPSPI0        = (0x00U | (16U)),                        /*!< Clock gate name: LPSPI0         */
     kCLOCK_GateLPSPI1        = (0x00U | (17U)),                        /*!< Clock gate name: LPSPI1         */
     kCLOCK_GateLPUART0       = (0x00U | (18U)),                        /*!< Clock gate name: LPUART0        */
@@ -113,7 +134,9 @@ typedef enum _clock_ip_name
     kCLOCK_GatePORT3         = ((0x4U << 16U) | (0x10U << 8U) | (3U)), /*!< Clock gate name: PORT3          */
     kCLOCK_GateROMCP         = ((0x4U << 16U) | (0x10U << 8U) | (4U)), /*!< Clock gate name: ROMCP          */
     kCLOCK_GateSGI0          = ((0x4U << 16U) | (0x10U << 8U) | (5U)), /*!< Clock gate name: SGI0           */
+#if defined(FSL_FEATURE_SOC_LCD_COUNT) && (FSL_FEATURE_SOC_LCD_COUNT > 0U)
     kCLOCK_GateSGLCD         = ((0x4U << 16U) | (0x10U << 8U) | (6U)), /*!< Clock gate name: SGLCD          */
+#endif
     kCLOCK_GateTCU           = ((0x4U << 16U) | (0x10U << 8U) | (7U)), /*!< Clock gate name: TCU            */
     kCLOCK_GateTRNG0         = ((0x4U << 16U) | (0x10U << 8U) | (8U)), /*!< Clock gate name: TRNG0          */
     kCLOCK_GateUDF0          = ((0x4U << 16U) | (0x10U << 8U) | (9U)), /*!< Clock gate name: UDF0           */
@@ -126,21 +149,38 @@ typedef enum _clock_ip_name
     kCLOCK_GateAonPORT       = ((1U<<24U) | (5U)),                     /*!< Clock gate name: AON PORT       */
     kCLOCK_GateAonGPIO       = ((1U<<24U) | (6U)),                     /*!< Clock gate name: AON GPIO       */
     kCLOCK_GateAonQTMR0      = ((1U<<24U) | (7U)),                     /*!< Clock gate name: AON QTMR0      */
+#if defined(AON__TMR1)
     kCLOCK_GateAonQTMR1      = ((1U<<24U) | (7U)),                     /*!< Clock gate name: AON QTMR1      */
+#endif
     kCLOCK_GateAonLPTMR      = ((1U<<24U) | (9U)),                     /*!< Clock gate name: AON LPTMR      */
+#if defined(FSL_FEATURE_SOC_KPP_COUNT) && (FSL_FEATURE_SOC_KPP_COUNT > 0U)
     kCLOCK_GateAonKPP        = ((1U<<24U) | (10U)),                    /*!< Clock gate name: AON KPP        */
+#endif
     kCLOCK_GateAonLPADC      = ((1U<<24U) | (11U)),                    /*!< Clock gate name: AON LPADC      */
     kCLOCK_GateAonSYS        = ((1U<<24U) | (12U)),                    /*!< Clock gate name: AON SYS (tick) */
-    kCLOCK_GateAonACMP0      = ((1U<<24U) | (13U)),                    /*!< Clock gate name: AON comparator */
+    kCLOCK_GateAonLPACMP     = ((1U<<24U) | (13U)),                    /*!< Clock gate name: AON LPACMP     */
+#if defined(FSL_FEATURE_SOC_LCD_COUNT) && (FSL_FEATURE_SOC_LCD_COUNT > 0U)
     kCLOCK_GateAonLCD        = ((1U<<24U) | (14U)),                    /*!< Clock gate name: AON LCD        */
+#endif
     kCLOCK_GateAonAVDC2P0    = ((1U<<24U) | (15U)),                    /*!< Clock gate name: AON AVDC2P0    */
+    /* AON__SYSCON_AON clock gates */
     kCLOCK_GateAonINPUTMUX1  = ((1U<<24U) | (16U)),                    /*!< Clock gate name: AON INPUTMUX   */
-    kCLOCK_GateAonRootAux    = ((1U<<24U) | (17U)),                    /*!< Clock gate name: AON Root Aux CLK*/
+    kCLOCK_GateXTAL32Clk     = ((1U<<24U) | (17U)),                    /*!< Clock gate name: XTAL32K clock */
+    /* AON_CGU_CLK_CONFIG clock gates */
+    kCLOCK_GateAonRootAux    = ((1U<<24U) | (18U)),                    /*!< Clock gate name: AON Root Aux CLK */
+    kCLOCK_GateXTAL32Out     = ((1U<<24U) | (19U)),                    /*!< Clock gate name: XTAL32K[1] Output Enable */
+    /* AON__RTC_AON clock gates */
+    kCLOCK_GateXTAL32ToCGU   = ((1U<<24U) | (20U)),                    /*!< Clock gate name: XTAL32K Enable towards CGU */
 
+#if defined(AON__ACMP0)
+    kCLOCK_GateAonACMP0      = ((1U<<24U) | (1U<<25U) | (1U)),         /*!< Clock gate name: AON ACMP functional clock */
+    kCLOCK_GateAonACMP0RR    = ((1U<<24U) | (1U<<25U) | (0U)),         /*!< Clock gate name: AON ACMP Round-Robin clock */
+#endif
     kCLOCK_GateNotAvail      = (0xFFFFFFFFU),                          /**< Clock gate name: None           */
 } clock_ip_name_t;
 
 /*! @brief Clock ip name array for SLCD. */
+#if defined(FSL_FEATURE_SOC_LCD_COUNT) && (FSL_FEATURE_SOC_LCD_COUNT > 0U)
 #if __CORTEX_M == (33U) /* Building on the main core */
 #define SLCD_FAULT_DETECT_CLOCKS \
     {                            \
@@ -156,17 +196,18 @@ typedef enum _clock_ip_name
     {                       \
         kCLOCK_GateAonLCD   \
     }
+#endif /* FSL_FEATURE_SOC_LCD_COUNT */
 
 /*! @brief Clock ip name array for LPACMP. */
-#define LPACMP_CLOCKS      \
-    {                   \
-        kCLOCK_GateAonACMP0 \
+#define LPACMP_CLOCKS        \
+    {                        \
+        kCLOCK_GateAonLPACMP \
     }
 
 /*! @brief Clock ip name array for AOI. */
 #define AOI_CLOCKS      \
     {                   \
-        kCLOCK_GateNotAvail \
+        kCLOCK_GateAOI0 \
     }
 /*! @brief Clock ip name array for ATX. */
 #define ATX_CLOCKS      \
@@ -174,11 +215,21 @@ typedef enum _clock_ip_name
         kCLOCK_GateNotAvail \
     }
 /*! @brief Clock ip name array for CRC. */
+#if __CORTEX_M == (33U) /* Building on the main core */
+#define CRC_CLOCKS      \
+    {                        \
+        kCLOCK_GateCrc \
+    }
+#else
 #define CRC_CLOCKS  \
     {               \
         kCLOCK_GateNotAvail \
     }
-/*! @brief Clock ip name array for CTIMER. */
+#endif
+/*! @brief Clock ip name array for CTIMER.
+ *
+ * CTIMER2 register access is only available when CTIMER1 clock is enabled and CTIMER1 is released from reset.
+*/
 #define CTIMER_CLOCKS                                              \
     {                                                              \
         kCLOCK_GateCTIMER0, kCLOCK_GateCTIMER1, kCLOCK_GateCTIMER2 \
@@ -234,29 +285,38 @@ typedef enum _clock_ip_name
 
 /*! @brief Clock ip name array for LPCMP. */
 #if __CORTEX_M == (33U) /* Building on the main core */
+#if defined(AON__ACMP0)
 #define LPCMP_CLOCKS                          \
     {                                         \
         kCLOCK_GateACMP0, kCLOCK_GateAonACMP0 \
     }
 #else
+#define LPCMP_CLOCKS      \
+    {                     \
+        kCLOCK_GateACMP0, \
+    }
+#endif /* AON__ACMP0 */
+#else
+#if defined(AON__ACMP0)
     #define LPCMP_CLOCKS                    \
     {                                       \
         kCLOCK_GateAonACMP0                 \
     }
+#endif /* AON__ACMP0 */
 #endif
 
 /*! @brief Clock ip name array for LPADC. */
 #if __CORTEX_M == (33U) /* Building on the main core */
 #define LPADC_CLOCKS    \
     {                   \
-         kCLOCK_GateADC0 \
+        kCLOCK_GateADC0 \
     }
 #endif
     
 /*! @brief Clock ip name array for LPADC. */
 #define AON_LPADC_CLOCKS    \
     {                   \
-         kCLOCK_GateAonLPADC \
+        kCLOCK_GateAonLPADC \
     }
 
 /*! @brief Clock ip name array for LPUART. */
@@ -272,13 +332,19 @@ typedef enum _clock_ip_name
     }
 #endif
 
-
 /*! @brief Clock ip name array for LPI2C. */
 #if __CORTEX_M == (33U) /* Building on the main core */
+#if defined(LPI2C1)
 #define LPI2C_CLOCKS      \
     {                     \
         kCLOCK_GateLPI2C0, kCLOCK_GateLPI2C1, kCLOCK_GateAonI2C \
     }
+#else
+#define LPI2C_CLOCKS      \
+    {                     \
+        kCLOCK_GateLPI2C0, kCLOCK_GateNotAvail, kCLOCK_GateAonI2C \
+    }
+#endif /* LPI2C1 */
 #else
 #define LPI2C_CLOCKS      \
     {                     \
@@ -346,16 +412,29 @@ typedef enum _clock_ip_name
 /*! @brief Peripherals clock source definition. */
 #define BUS_CLK kCLOCK_BusClk
 /*! @brief Clock ip name array for QTMRs. */
+#if defined(AON__TMR1)
 #define TMR_CLOCKS      \
     {                    \
         kCLOCK_GateAonQTMR0, kCLOCK_GateAonQTMR1 \
     }
+#else
+#define TMR_CLOCKS      \
+    {                       \
+        kCLOCK_GateAonQTMR0 \
+    }
+#endif /* AON__TMR1 */
+/*! @brief Clock ip name array for AON LPTMRs. */
+#define LPTMR_CLOCKS        \
+    {                       \
+        kCLOCK_GateAonLPTMR \
+    }
 /*! @brief Clock ip name array for QTMRs. */
+#if defined(FSL_FEATURE_SOC_KPP_COUNT) && (FSL_FEATURE_SOC_KPP_COUNT > 0U)
 #define KPP_CLOCKS      \
     {                    \
         kCLOCK_GateAonKPP \
     }
-
+#endif
 
 /*! @brief Clock name used to get clock frequency. */
 typedef enum _clock_name
@@ -375,7 +454,7 @@ typedef enum _clock_name
 #endif
     kCLOCK_RtcOscClk,  /*!< RTC OSC clock.             */
     kCLOCK_Fro16k,     /*!< AON PAC and SMM clock.     */
-    kCLOKC_FroAON      /*!< AON free runnin clock.     */
+    kCLOCK_FroAON      /*!< AON free running clock.    */
 } clock_name_t;
 
 /*! @brief Clock Mux Switches
@@ -410,6 +489,7 @@ typedef enum _clock_select_name
     kCLOCK_SelOSTIMER0      = (0x0E8U), /*!< OSTIMER0  clock selection        */
     kCLOCK_SelADC0          = (0x0C0U), /*!< ADC0      clock selection        */
     kCLOCK_SelCMP0_RR       = (0x0D0U), /*!< CMP0_RR   clock selection        */
+    kCLOCK_SelDBGTRACE      = (0x0D8U), /*!< DBGTRACE  clock selection        */
     kCLOCK_SelCLKOUT        = (0x0E0U), /*!< CLKOUT    clock selection        */
     kCLOCK_SelPERIPH_GROUP0 = (0x0F0U), /*!< PERIPH_GROUP_0 clock selection   */
     kCLOCK_SelPERIPH_GROUP1 = (0x0F8U), /*!< PERIPH_GROUP_1 clock selection   */
@@ -418,16 +498,22 @@ typedef enum _clock_select_name
     kCLOCK_SelFIRC          = (0x300U), /*!< FIRC Divider clock selection     */
 #endif
 
-    kCLOKC_SelAonROOT_AUX   = CLK_AON_SEL(0U,  4U, 1U), /*!< AON ROOT_AUX clock selection          */
-    kCLOKC_SelAonROOT       = CLK_AON_SEL(0U,  2U, 3U), /*!< AON ROOT clock selection              */
-    kCLOKC_SelAonACMP0      = CLK_AON_SEL(4U, 13U, 3U), /*!< AON ACMP0 clock selection             */
-    kCLOKC_SelAonLCD        = CLK_AON_SEL(4U, 12U, 1U), /*!< AON LCD clock selection               */
-    kCLOKC_SelAonLPADC      = CLK_AON_SEL(4U,  9U, 7U), /*!< AON LPADC clock selection             */
-    kCLOKC_SelAonSYSTICK    = CLK_AON_SEL(4U,  7U, 3U), /*!< AON SYS tick clock selection          */
-    kCLOKC_SelAonKPP        = CLK_AON_SEL(4U,  6U, 1U), /*!< AON KPP clock selection               */
-    kCLOKC_SelAonLPTMR      = CLK_AON_SEL(4U,  4U, 3U), /*!< AON LPTMR GRP clock selection         */
-    kCLOKC_SelAonTMR        = CLK_AON_SEL(4U,  2U, 3U), /*!< AON TMR GRP clock selection           */
-    kCLOKC_SelAonCOM        = CLK_AON_SEL(4U,  0U, 3U), /*!< AON COM comaprator (aon_per_clk) clock selection */
+    kCLOCK_SelAonROOT_AUX   = CLK_AON_SEL(0U,  4U, 1U), /*!< AON ROOT_AUX clock selection          */
+    kCLOCK_SelAonROOT       = CLK_AON_SEL(0U,  2U, 3U), /*!< AON ROOT clock selection              */
+#if defined(AON__ACMP0)
+    kCLOCK_SelAonACMP0      = CLK_AON_SEL(4U, 13U, 3U), /*!< AON ACMP0 clock selection             */
+#endif
+#if defined(FSL_FEATURE_SOC_LCD_COUNT) && (FSL_FEATURE_SOC_LCD_COUNT > 0U)
+    kCLOCK_SelAonLCD        = CLK_AON_SEL(4U, 12U, 1U), /*!< AON LCD clock selection               */
+#endif
+    kCLOCK_SelAonLPADC      = CLK_AON_SEL(4U,  9U, 7U), /*!< AON LPADC clock selection             */
+    kCLOCK_SelAonSYSTICK    = CLK_AON_SEL(4U,  7U, 3U), /*!< AON SYS tick clock selection          */
+#if defined(FSL_FEATURE_SOC_KPP_COUNT) && (FSL_FEATURE_SOC_KPP_COUNT > 0U)
+    kCLOCK_SelAonKPP        = CLK_AON_SEL(4U,  6U, 1U), /*!< AON KPP clock selection               */
+#endif
+    kCLOCK_SelAonLPTMR      = CLK_AON_SEL(4U,  4U, 3U), /*!< AON LPTMR GRP clock selection         */
+    kCLOCK_SelAonTMR        = CLK_AON_SEL(4U,  2U, 3U), /*!< AON TMR GRP clock selection           */
+    kCLOCK_SelAonCOM        = CLK_AON_SEL(4U,  0U, 3U), /*!< AON COM comaprator (aon_per_clk) clock selection */
 } clock_select_name_t;
 
 /*!
@@ -436,72 +522,80 @@ typedef enum _clock_select_name
 
 typedef enum _clock_attach_id
 {
-    kXTAL32K_to_AON_ROOT_AUX  = CLK_ATTACH_MUX(kCLOKC_SelAonROOT_AUX, 0U),         /*!< Attach XTAL32K to AON AUX.   */
-    kAUX_to_AON_ROOT_AUX      = CLK_ATTACH_MUX(kCLOKC_SelAonROOT_AUX, 1U),         /*!< Attach AUX to AON AUX.    */
+    kXTAL32K_to_AON_ROOT_AUX  = CLK_ATTACH_MUX(kCLOCK_SelAonROOT_AUX, 0U),         /*!< Attach XTAL32K to AON AUX.   */
+    kAUX_to_AON_ROOT_AUX      = CLK_ATTACH_MUX(kCLOCK_SelAonROOT_AUX, 1U),         /*!< Attach AUX to AON AUX.    */
 
-    kFROdiv1_to_AON_CPU     = CLK_ATTACH_MUX(kCLOKC_SelAonROOT, 0U),         /*!< Attach FRO div 1 to AON_CPU.   */
-    kFROdiv2_to_AON_CPU     = CLK_ATTACH_MUX(kCLOKC_SelAonROOT, 1U),         /*!< Attach FRO div 2 to AON_CPU.   */
-    kFROdiv4_to_AON_CPU     = CLK_ATTACH_MUX(kCLOKC_SelAonROOT, 2U),         /*!< Attach FRO div 4 to AON_CPU.   */
-    kROOT_AUX_to_AON_CPU    = CLK_ATTACH_MUX(kCLOKC_SelAonROOT, 3U),         /*!< Attach ROOT AUX to AON_CPU.    */
+    kFROdiv1_to_AON_CPU     = CLK_ATTACH_MUX(kCLOCK_SelAonROOT, 0U),         /*!< Attach FRO div 1 to AON_CPU.   */
+    kFROdiv2_to_AON_CPU     = CLK_ATTACH_MUX(kCLOCK_SelAonROOT, 1U),         /*!< Attach FRO div 2 to AON_CPU.   */
+    kFROdiv4_to_AON_CPU     = CLK_ATTACH_MUX(kCLOCK_SelAonROOT, 2U),         /*!< Attach FRO div 4 to AON_CPU.   */
+    kROOT_AUX_to_AON_CPU    = CLK_ATTACH_MUX(kCLOCK_SelAonROOT, 3U),         /*!< Attach ROOT AUX to AON_CPU.    */
 
-    kFROdiv1_to_AON_CMP0     = CLK_ATTACH_MUX(kCLOKC_SelAonACMP0, 0U),         /*!< Attach FRO div 1 to AON ACMP0.   */
-    kFROdiv2_to_AON_CMP0     = CLK_ATTACH_MUX(kCLOKC_SelAonACMP0, 1U),         /*!< Attach FRO div 2 to AON ACMP0.   */
-    kFROdiv4_to_AON_CMP0     = CLK_ATTACH_MUX(kCLOKC_SelAonACMP0, 2U),         /*!< Attach FRO div 4 to AON ACMP0.   */
-    kROOT_AUX_to_AON_CMP0    = CLK_ATTACH_MUX(kCLOKC_SelAonACMP0, 3U),         /*!< Attach ROOT AUX to AON ACMP0.    */
+    /*!< Attach XTAL32K to AON_CPU including control of kCLOCK_SelAonROOT_AUX mux. */
+    kXTAL32K_to_AON_CPU     = CLK_ATTACH_MUX(kCLOCK_SelAonROOT, 4U),
+    /*!< Attach AON_AUX to AON_CPU including control of kCLOCK_SelAonROOT_AUX mux. */
+    kAUX_to_AON_CPU         = CLK_ATTACH_MUX(kCLOCK_SelAonROOT, 5U),
 
-    kCLK_16K_to_AON_LCD     = CLK_ATTACH_MUX(kCLOKC_SelAonLCD, 0U),         /*!< Attach FRO clk_16k to AON LCD.   */
-    kFRO16K_to_AON_LCD      = CLK_ATTACH_MUX(kCLOKC_SelAonLCD, 1U),         /*!< Attach FRO fro16k to AON LCD.   */
+#if defined(AON__ACMP0)
+    kFROdiv1_to_AON_CMP0     = CLK_ATTACH_MUX(kCLOCK_SelAonACMP0, 0U),         /*!< Attach FRO div 1 to AON ACMP0.   */
+    kFROdiv2_to_AON_CMP0     = CLK_ATTACH_MUX(kCLOCK_SelAonACMP0, 1U),         /*!< Attach FRO div 2 to AON ACMP0.   */
+    kFROdiv4_to_AON_CMP0     = CLK_ATTACH_MUX(kCLOCK_SelAonACMP0, 2U),         /*!< Attach FRO div 4 to AON ACMP0.   */
+    kROOT_AUX_to_AON_CMP0    = CLK_ATTACH_MUX(kCLOCK_SelAonACMP0, 3U),         /*!< Attach ROOT AUX to AON ACMP0.    */
+#endif
 
-    kFROdiv1_to_AON_LPADC     = CLK_ATTACH_MUX(kCLOKC_SelAonLPADC, 0U),         /*!< Attach FRO div 1 to AON LPADC.   */
-    kFROdiv2_to_AON_LPADC     = CLK_ATTACH_MUX(kCLOKC_SelAonLPADC, 1U),         /*!< Attach FRO div 2 to AON LPADC.   */
-    kFROdiv4_to_AON_LPADC     = CLK_ATTACH_MUX(kCLOKC_SelAonLPADC, 2U),         /*!< Attach FRO div 4 to AON LPADC.   */
-    kROOT_AUX_to_AON_LPADC    = CLK_ATTACH_MUX(kCLOKC_SelAonLPADC, 3U),         /*!< Attach ROOT AUX to AON LPADC.    */
-    kXTAL32K_to_AON_LPADC     = CLK_ATTACH_MUX(kCLOKC_SelAonLPADC, 4U),         /*!< Attach FRO RTC to AON LPADC.     */
-    kFRO16K_to_AON_LPADC      = CLK_ATTACH_MUX(kCLOKC_SelAonLPADC, 5U),         /*!< Attach FRO fro16k to AON LPADC.  */
+#if defined(FSL_FEATURE_SOC_LCD_COUNT) && (FSL_FEATURE_SOC_LCD_COUNT > 0U)
+    kCLK_16K_to_AON_LCD     = CLK_ATTACH_MUX(kCLOCK_SelAonLCD, 0U),         /*!< Attach FRO clk_16k to AON LCD.   */
+    kFRO16K_to_AON_LCD      = CLK_ATTACH_MUX(kCLOCK_SelAonLCD, 1U),         /*!< Attach FRO fro16k to AON LCD.   */
+#endif
 
-    kFROdiv1_to_AON_SYSTICK     = CLK_ATTACH_MUX(kCLOKC_SelAonSYSTICK, 0U),     /*!< Attach FRO div 1 to AON SYSTICK.   */
-    kFROdiv2_to_AON_SYSTICK     = CLK_ATTACH_MUX(kCLOKC_SelAonSYSTICK, 1U),     /*!< Attach FRO div 2 to AON SYSTICK.   */
-    kFROdiv4_to_AON_SYSTICK     = CLK_ATTACH_MUX(kCLOKC_SelAonSYSTICK, 2U),     /*!< Attach FRO div 4 to AON SYSTICK.   */
-    kROOT_AUX_to_AON_SYSTICK    = CLK_ATTACH_MUX(kCLOKC_SelAonSYSTICK, 3U),     /*!< Attach ROOT AUX to AON SYSTICK.    */
+    kFROdiv1_to_AON_LPADC     = CLK_ATTACH_MUX(kCLOCK_SelAonLPADC, 0U),         /*!< Attach FRO div 1 to AON LPADC.   */
+    kFROdiv2_to_AON_LPADC     = CLK_ATTACH_MUX(kCLOCK_SelAonLPADC, 1U),         /*!< Attach FRO div 2 to AON LPADC.   */
+    kFROdiv4_to_AON_LPADC     = CLK_ATTACH_MUX(kCLOCK_SelAonLPADC, 2U),         /*!< Attach FRO div 4 to AON LPADC.   */
+    kROOT_AUX_to_AON_LPADC    = CLK_ATTACH_MUX(kCLOCK_SelAonLPADC, 3U),         /*!< Attach ROOT AUX to AON LPADC.    */
+    kXTAL32K_to_AON_LPADC     = CLK_ATTACH_MUX(kCLOCK_SelAonLPADC, 4U),         /*!< Attach FRO RTC to AON LPADC.     */
+    kFRO16K_to_AON_LPADC      = CLK_ATTACH_MUX(kCLOCK_SelAonLPADC, 5U),         /*!< Attach FRO fro16k to AON LPADC.  */
 
-    kXTAL32K_to_AON_KPP     = CLK_ATTACH_MUX(kCLOKC_SelAonKPP, 0U),         /*!< Attach XTAL32K to AON KPP.   */
-    kFRO16K_to_AON_KPP      = CLK_ATTACH_MUX(kCLOKC_SelAonKPP, 1U),         /*!< Attach FRO fro16k to AON KPP.   */
+    kFROdiv1_to_AON_SYSTICK     = CLK_ATTACH_MUX(kCLOCK_SelAonSYSTICK, 0U),     /*!< Attach FRO div 1 to AON SYSTICK.   */
+    kFROdiv2_to_AON_SYSTICK     = CLK_ATTACH_MUX(kCLOCK_SelAonSYSTICK, 1U),     /*!< Attach FRO div 2 to AON SYSTICK.   */
+    kFROdiv4_to_AON_SYSTICK     = CLK_ATTACH_MUX(kCLOCK_SelAonSYSTICK, 2U),     /*!< Attach FRO div 4 to AON SYSTICK.   */
+    kROOT_AUX_to_AON_SYSTICK    = CLK_ATTACH_MUX(kCLOCK_SelAonSYSTICK, 3U),     /*!< Attach ROOT AUX to AON SYSTICK.    */
 
-    AON_TMR_to_AON_LPTMR    = CLK_ATTACH_MUX(kCLOKC_SelAonLPTMR, 0U),       /*!< Attach AON TIMER CLK to AON LPTMR GRP.*/
-    kFRO16K_to_AON_LPTMR    = CLK_ATTACH_MUX(kCLOKC_SelAonLPTMR, 1U),       /*!< Attach FRO16K to AON LPTMR GRP.*/
-    kCLK_16K_to_AON_LPTMR   = CLK_ATTACH_MUX(kCLOKC_SelAonLPTMR, 2U),       /*!< Attach CLK_16K to AON LPTMR GRP.*/
+#if defined(FSL_FEATURE_SOC_KPP_COUNT) && (FSL_FEATURE_SOC_KPP_COUNT > 0U)
+    kXTAL32K_to_AON_KPP     = CLK_ATTACH_MUX(kCLOCK_SelAonKPP, 0U),         /*!< Attach XTAL32K to AON KPP.   */
+    kFRO16K_to_AON_KPP      = CLK_ATTACH_MUX(kCLOCK_SelAonKPP, 1U),         /*!< Attach FRO fro16k to AON KPP.   */
+#endif
 
-    kFROdiv1_to_AON_TMR     = CLK_ATTACH_MUX(kCLOKC_SelAonTMR, 0U),         /*!< Attach FRO div 1 to AON TMR GRP.*/
-    kFROdiv2_to_AON_TMR     = CLK_ATTACH_MUX(kCLOKC_SelAonTMR, 1U),         /*!< Attach FRO div 2 to AON TMR GRP.*/
-    kFROdiv4_to_AON_TMR     = CLK_ATTACH_MUX(kCLOKC_SelAonTMR, 2U),         /*!< Attach FRO div 4 to AON TMR GRP.*/
-    kROOT_AUX_to_AON_TMR    = CLK_ATTACH_MUX(kCLOKC_SelAonTMR, 3U),         /*!< Attach ROOT AUX to AON TMR GRP. */
+    AON_TMR_to_AON_LPTMR    = CLK_ATTACH_MUX(kCLOCK_SelAonLPTMR, 0U),       /*!< Attach AON TIMER CLK to AON LPTMR GRP.*/
+    kFRO16K_to_AON_LPTMR    = CLK_ATTACH_MUX(kCLOCK_SelAonLPTMR, 1U),       /*!< Attach FRO16K to AON LPTMR GRP.*/
+    kCLK_16K_to_AON_LPTMR   = CLK_ATTACH_MUX(kCLOCK_SelAonLPTMR, 2U),       /*!< Attach CLK_16K to AON LPTMR GRP.*/
 
-    kFROdiv1_to_AON_COM     = CLK_ATTACH_MUX(kCLOKC_SelAonCOM, 0U),         /*!< Attach FRO div 1 to AON COM GRP.*/
-    kFROdiv2_to_AON_COM     = CLK_ATTACH_MUX(kCLOKC_SelAonCOM, 1U),         /*!< Attach FRO div 2 to AON COM GRP.*/
-    kFROdiv4_to_AON_COM     = CLK_ATTACH_MUX(kCLOKC_SelAonCOM, 2U),         /*!< Attach FRO div 4 to AON COM GRP.*/
-    kROOT_AUX_to_AON_COM    = CLK_ATTACH_MUX(kCLOKC_SelAonCOM, 3U),         /*!< Attach ROOT AUX to AON COM GRP. */
+    kFROdiv1_to_AON_TMR     = CLK_ATTACH_MUX(kCLOCK_SelAonTMR, 0U),         /*!< Attach FRO div 1 to AON TMR GRP.*/
+    kFROdiv2_to_AON_TMR     = CLK_ATTACH_MUX(kCLOCK_SelAonTMR, 1U),         /*!< Attach FRO div 2 to AON TMR GRP.*/
+    kFROdiv4_to_AON_TMR     = CLK_ATTACH_MUX(kCLOCK_SelAonTMR, 2U),         /*!< Attach FRO div 4 to AON TMR GRP.*/
+    kROOT_AUX_to_AON_TMR    = CLK_ATTACH_MUX(kCLOCK_SelAonTMR, 3U),         /*!< Attach ROOT AUX to AON TMR GRP. */
+
+    kFROdiv1_to_AON_COM     = CLK_ATTACH_MUX(kCLOCK_SelAonCOM, 0U),         /*!< Attach FRO div 1 to AON COM GRP.*/
+    kFROdiv2_to_AON_COM     = CLK_ATTACH_MUX(kCLOCK_SelAonCOM, 1U),         /*!< Attach FRO div 2 to AON COM GRP.*/
+    kFROdiv4_to_AON_COM     = CLK_ATTACH_MUX(kCLOCK_SelAonCOM, 2U),         /*!< Attach FRO div 4 to AON COM GRP.*/
+    kROOT_AUX_to_AON_COM    = CLK_ATTACH_MUX(kCLOCK_SelAonCOM, 3U),         /*!< Attach ROOT AUX to AON COM GRP. */
 
 #if __CORTEX_M == (33U) /* Building on the main core */
-    /* MAIN domain below: */
-
-    kSOSC_to_MAIN_CLK   = CLK_ATTACH_MUX(kCLOCK_SelSCGSCS, 1U),             /*!< Attach SOSC to MAIN_CLK.   */
     kSIRC_to_MAIN_CLK   = CLK_ATTACH_MUX(kCLOCK_SelSCGSCS, 2U),             /*!< Attach SIRC to MAIN_CLK.   */
     kFIRC_to_MAIN_CLK   = CLK_ATTACH_MUX(kCLOCK_SelSCGSCS, 3U),             /*!< Attach FIRC to MAIN_CLK.   */
     kROSC_to_MAIN_CLK   = CLK_ATTACH_MUX(kCLOCK_SelSCGSCS, 4U),             /*!< Attach ROSC to MAIN_CLK.   */
     kPMUIRC_to_MAIN_CLK = CLK_ATTACH_MUX(kCLOCK_SelSCGSCS, 9U),             /*!< Attach PMUIRC to MAIN_CLK. */
-    kLPIRC_to_MAIN_CLK  = CLK_ATTACH_MUX(kCLOCK_SelSCGSCS,10U),             /*!< Attach LPIRC to MAIN_CLK.  */
+    kLPIRC_to_MAIN_CLK  = CLK_ATTACH_MUX(kCLOCK_SelSCGSCS,10U),             /*!< Attach LPIRC (FRO10M) to MAIN_CLK. */
 
     kFIRC_to_FRO_HF     = CLK_ATTACH_MUX(kCLOCK_SelFIRC, 0U),               /*!< Attach FIRC to FRO_HF.      */
     kFIRC_DIV_to_FRO_HF = CLK_ATTACH_MUX(kCLOCK_SelFIRC, 1U),               /*!< Attach FIRC_DIV to FRO_HF.  */
 
     kFRO12M_to_CTIMERg0     = CLK_ATTACH_MUX(kCLOCK_SelCTIMERg0, 0U),       /*!< Attach FRO12M to CTIMER0.     */
-    kXTAL32K_to_CTIMERg0    = CLK_ATTACH_MUX(kCLOCK_SelCTIMERg0, 1U),       /*!< Attach XTAL32K to CTIMER0.    */
-    kCLK_16K_to_CTIMERg0    = CLK_ATTACH_MUX(kCLOCK_SelCTIMERg0, 2U),       /*!< Attach CLK_16K to CTIMER0.    */
+    kCLK_1M_to_CTIMERg0     = CLK_ATTACH_MUX(kCLOCK_SelCTIMERg0, 1U),       /*!< Attach kCLK_1M to CTIMER0.    */
+    kCLK_16K_to_CTIMERg0    = CLK_ATTACH_MUX(kCLOCK_SelCTIMERg0, 2U),       /*!< Attach CLK_16K[2] to CTIMER0. */
     kFRO_HF_DIV_to_CTIMERg0 = CLK_ATTACH_MUX(kCLOCK_SelCTIMERg0, 3U),       /*!< Attach FRO_HF_DIV to CTIMER0. */
 
     kFRO12M_to_CTIMERg1     = CLK_ATTACH_MUX(kCLOCK_SelCTIMERg1, 0U),       /*!< Attach FRO12M to CTIMER1,2.     */
-    kXTAL32K_to_CTIMERg1    = CLK_ATTACH_MUX(kCLOCK_SelCTIMERg1, 1U),       /*!< Attach XTAL32K to CTIMER1,2.    */
-    kCLK_16K_to_CTIMERg1    = CLK_ATTACH_MUX(kCLOCK_SelCTIMERg1, 2U),       /*!< Attach CLK_16K to CTIMER1,2.    */
+    kCLK_1M_to_CTIMERg1     = CLK_ATTACH_MUX(kCLOCK_SelCTIMERg1, 1U),       /*!< Attach kCLK_1M to CTIMER1,2.    */
+    kCLK_16K_to_CTIMERg1    = CLK_ATTACH_MUX(kCLOCK_SelCTIMERg1, 2U),       /*!< Attach CLK_16K[2] to CTIMER1,2. */
     kFRO_HF_DIV_to_CTIMERg1 = CLK_ATTACH_MUX(kCLOCK_SelCTIMERg1, 3U),       /*!< Attach FRO_HF_DIV to CTIMER1,2. */
 
     kFRO12M_to_UTICK0  = CLK_ATTACH_MUX(kCLOCK_SelUTICK0, 0U),              /*!< Attach FRO12M to UTICK0.  */
@@ -509,7 +603,7 @@ typedef enum _clock_attach_id
     kCLK_16K_to_UTICK0 = CLK_ATTACH_MUX(kCLOCK_SelUTICK0, 2U),              /*!< Attach CLK_16K to UTICK0. */
 
     kCLK_16K_to_OSTIMER0 = CLK_ATTACH_MUX(kCLOCK_SelOSTIMER0, 0U),          /*!< Attach CLK_16K to OSTIMER0. */
-    kFRO_16k_to_OSTIMER0 = CLK_ATTACH_MUX(kCLOCK_SelOSTIMER0, 1U),          /*!< Attach FRO_16K to OSTIMER0. */
+    kFRO16K_to_OSTIMER0 = CLK_ATTACH_MUX(kCLOCK_SelOSTIMER0, 1U),           /*!< Attach FRO_16K to OSTIMER0. */
     kCLK_1M_to_OSTIMER0  = CLK_ATTACH_MUX(kCLOCK_SelOSTIMER0, 3U),          /*!< Attach CLK_1M to OSTIMER0.  */
 
     kFRO12M_to_ADC0     = CLK_ATTACH_MUX(kCLOCK_SelADC0, 0U),               /*!< Attach FRO12M to ADC0.     */
@@ -523,6 +617,7 @@ typedef enum _clock_attach_id
     kFRO12M_to_CLKOUT     = CLK_ATTACH_MUX(kCLOCK_SelCLKOUT, 0U),           /*!< Attach FRO12M to CLKOUT.     */
     kSLOW_CLK_to_CLKOUT   = CLK_ATTACH_MUX(kCLOCK_SelCLKOUT, 1U),           /*!< Attach SLOW_CLK to CLKOUT.   */
     kCLK_16K_to_CLKOUT    = CLK_ATTACH_MUX(kCLOCK_SelCLKOUT, 3U),           /*!< Attach CLK_16K to CLKOUT.    */
+    kFRO10M_to_CLKOUT     = CLK_ATTACH_MUX(kCLOCK_SelCLKOUT, 5U),           /*!< Attach FRO10M to CLKOUT.     */
     kFRO_HF_DIV_to_CLKOUT = CLK_ATTACH_MUX(kCLOCK_SelCLKOUT, 7U),           /*!< Attach FRO_HF_DIV to CLKOUT. */
 
     kFRO12M_to_PERIPH_GROUP0 = CLK_ATTACH_MUX(kCLOCK_SelPERIPH_GROUP0, 0U), /*!< Attach FRO12M to PERIPH_GROUP_0.   */
@@ -570,6 +665,10 @@ typedef enum _clock_attach_id
     kCPU_CLK_to_SYSTICK = CLK_ATTACH_MUX(kCLOCK_SelSYSTICK, 0U),          /*!< Attach CPU_CLK to SYSTICK.  */
     kCLK_1M_to_SYSTICK  = CLK_ATTACH_MUX(kCLOCK_SelSYSTICK, 1U),          /*!< Attach CLK_1M to SYSTICK.   */
     kCLK_16K_to_SYSTICK = CLK_ATTACH_MUX(kCLOCK_SelSYSTICK, 2U),          /*!< Attach kCLK_16K to SYSTICK. */
+
+    kCPU_CLK_to_DBGTRACE = CLK_ATTACH_MUX(kCLOCK_SelDBGTRACE, 0U),        /*!< Attach CPU_CLK to DEBUG TRACE.  */
+    kCLK_1M_to_DBGTRACE  = CLK_ATTACH_MUX(kCLOCK_SelDBGTRACE, 1U),        /*!< Attach CLK_1M to DEBUG TRACE.   */
+    kCLK_16K_to_DBGTRACE = CLK_ATTACH_MUX(kCLOCK_SelDBGTRACE, 2U),        /*!< Attach kCLK_16K to DEBUG TRACE. */
 #endif
 
     kNONE_to_NONE = (0xFFFFFFFFU),                                        /*!< Attach NONE to NONE. */
@@ -605,8 +704,10 @@ typedef enum _clock_div_name
     kCLOCK_DIVAonCPU       = (0x800U), /*!< Aon CPU    clock divider */
     kCLOCK_DIVAonCMP       = (0x801U), /*!< Aon Comp grp clock divider */
     kCLOCK_DIVAonSYS       = (0x802U), /*!< Aon SYSTICK clock divider */
+#if defined(AON__ACMP0)
     kCLOCK_DIVAonACMP0CLK0 = (0x810U), /*!< Aon CMP0 CLK0 clock divider */
     kCLOCK_DIVAonACMP0CLK1 = (0x811U), /*!< Aon CMP0 CLK1 clock divider */
+#endif
     kCLOCK_DivMax          = (0x811U), /*!< MAX clock divider */
 } clock_div_name_t;
 
@@ -616,6 +717,7 @@ typedef enum _clock_div_name
  */
 typedef enum _firc_trim_mode
 {
+    kSCG_FircTrimDisable = 0U, /*!< Disable trimming to external source */
     kSCG_FircTrimNonUpdate = SCG_FIRCCSR_FIRCTREN_MASK,
     /*!< Trim enable but not enable trim value update. In this mode, the
      trim value is fixed to the initialized value which is defined by
@@ -652,6 +754,7 @@ typedef struct _firc_trim_config
  */
 typedef enum _sirc_trim_mode
 {
+    kSCG_SircTrimDisable = 0U, /*!< Disable trimming to external source */
     kSCG_SircTrimNonUpdate = SCG_SIRCCSR_SIRCTREN_MASK,
     /*!< Trim enable but not enable trim value update. In this mode, the
      trim value is fixed to the initialized value which is defined by
@@ -703,6 +806,25 @@ typedef struct _scg_rosc_config
     scg_rosc_monitor_mode_t monitorMode; /*!< Clock monitor mode selected.     */
 } scg_rosc_config_t;
 
+/*!
+ * @brief VDD_CORE_MAIN related configuration.
+ */
+typedef struct _vdd_core_main_config
+{
+    uint8_t vddCoreMainAconfig; /*!< VDD_CORE DCDC_MAIN Active Configuration */
+    uint8_t lvdLvTrim; /*!< Trim bits for vdd_lv low voltage detect */
+    uint8_t hvdLvTrim; /*!< VBAT low voltage detect trim */
+} vdd_core_main_config_t;
+
+/*!
+ * @brief Main core drive modes.
+ */
+typedef enum _main_drive_t
+{
+    kCLOCK_MidDrive = 0U,   /*!< Mid drive mode */
+    kCLOCK_StandardDrive,   /*!< Standard drive mode */
+} main_drive_t;
+
 #endif /* Building on the main core */
 
 /*!
@@ -717,6 +839,35 @@ typedef struct _aon_fro_trim_config
     uint8_t cltrim;      /*!< Trim coarse freq value; 0-63 */
     uint8_t ccotrim;     /*!< Trim fine freq value; 0-63 */
 } aon_fro_trim_config_t;
+
+/*! @brief XTAL drive parameter structure containing dly_cap_sox, amp and gm values. */
+typedef struct _xtal_drive_param
+{
+    uint8_t dly_cap_sox; /*!< Pulse location */
+    uint8_t amp;         /*!< Amplitude control */
+    uint8_t gm;          /*!< GM setting */
+} xtal_drive_param_t;
+
+/*! @brief ROSC initialization configuration structure. */
+typedef struct _rosc_init_config
+{
+    uint8_t xtalDriveParamsSize; /*!< Size of xtal_drive_params array*/
+    xtal_drive_param_t (*xtal_drive_params)[]; /*!< Pointer to array of dly_cap_sox, amp and gm parameters */
+    uint32_t detectionDelay; /*!< Delay before start of rosc initialization detection */
+    uint32_t detectionTimeout; /*!< Timeout for detection of rosc initialization */
+    uint32_t detectionDelaySwitchedMode; /*!< Delay before start of rosc initialization detection in switched mode */
+    uint32_t detectionTimeoutSwitchedMode; /*!< Timeout for detection of rosc initialization in switched mode */
+    uint8_t cbXo; /*!< Selects the internal capacitance on XO or XTAL pin */
+    uint8_t cbXi; /*!< Selects the internal capacitance on XI or XTAL pin */
+    bool vbatOver3V; /*!< Initialization configuration for vbat voltage value */
+} rosc_init_config_t;
+
+/*! @brief AON FRO autotrim configuration. */
+typedef enum _aon_fro_autotrim_config_t
+{
+    kCLOCK_AonFro3M = 0xdc38U, /*!< ULPIRC target is 3MHz. */
+    kCLOCK_AonFro10M = 0xdc30U /*!< LPIRC target is 10MHz. */
+} aon_fro_autotrim_config_t;
 
 /*******************************************************************************
  * API
@@ -742,14 +893,32 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
 
     if (CLK_OF_AON(clk))
     {
-        if(clk == kCLOCK_GateAonINPUTMUX1) 
+        if (clk == kCLOCK_GateAonINPUTMUX1)
         {
             AON__SYSCON_AON->INPUTMUXCLKCTRL = SYSCON_AON_INPUTMUXCLKCTRL_INPUTMUX_CLK_CTRL(0);
         }
-        else if(clk == kCLOCK_GateAonRootAux) 
+        else if (clk == kCLOCK_GateXTAL32Clk)
+        {
+            AON__SYSCON_AON->XTAL_32K_CLKCTRL = SYSCON_AON_XTAL_32K_CLKCTRL_XTAL_32K_CLK_CTRL(0);
+        }
+        else if (clk == kCLOCK_GateAonRootAux)
         {
             AON__CGU->CLK_CONFIG |= CGU_CLK_CONFIG_ROOT_AUX_CLK_EN_MASK;
         }
+        else if (clk == kCLOCK_GateXTAL32Out)
+        {
+            AON__CGU->CLK_CONFIG |= CGU_CLK_CONFIG_XTAL32_OUT_EN_MASK;
+        }
+        else if (clk == kCLOCK_GateXTAL32ToCGU)
+        {
+            AON__RTC_AON->CONFIG |= RTC_CONFIG_XTAL32_EN_MASK;
+        }
+#if defined(AON__ACMP0)
+        else if (clk & (1U<<25U)) /* ACMP clock*/
+        {
+            AON__CGU->ACMP_CLK_DIV |= (1UL << bit_shift);
+        }
+#endif
         else
         {
             AON__CGU->PER_CLK_EN |= (1UL << bit_shift);
@@ -797,10 +966,32 @@ static inline void CLOCK_DisableClock(clock_ip_name_t clk)
 
     if (CLK_OF_AON(clk))
     {
-        if(clk == kCLOCK_GateAonRootAux) 
+        if (clk == kCLOCK_GateAonINPUTMUX1)
+        {
+            AON__SYSCON_AON->INPUTMUXCLKCTRL = SYSCON_AON_INPUTMUXCLKCTRL_INPUTMUX_CLK_CTRL(1);
+        }
+        else if (clk == kCLOCK_GateXTAL32Clk)
+        {
+            AON__SYSCON_AON->XTAL_32K_CLKCTRL = SYSCON_AON_XTAL_32K_CLKCTRL_XTAL_32K_CLK_CTRL(1);
+        }
+        else if (clk == kCLOCK_GateAonRootAux) 
         {
             AON__CGU->CLK_CONFIG &= ~(CGU_CLK_CONFIG_ROOT_AUX_CLK_EN_MASK);
         }
+        else if (clk == kCLOCK_GateXTAL32Out) 
+        {
+            AON__CGU->CLK_CONFIG &= ~(CGU_CLK_CONFIG_XTAL32_OUT_EN_MASK);
+        }
+        else if (clk == kCLOCK_GateXTAL32ToCGU)
+        {
+            AON__RTC_AON->CONFIG &= ~(RTC_CONFIG_XTAL32_EN_MASK);
+        }
+#if defined(AON__ACMP0)
+        else if (clk & (1U<<25U)) /* ACMP clock*/
+        {
+            AON__CGU->ACMP_CLK_DIV &= ~(1UL << bit_shift);
+        }
+#endif
         else
         {
             AON__CGU->PER_CLK_EN &= ~(1UL << bit_shift);
@@ -885,8 +1076,15 @@ uint32_t CLOCK_GetClockDiv(clock_div_name_t div_name);
 void CLOCK_HaltClockDiv(clock_div_name_t div_name);
 
 /**
- * @brief   Initialize the AON FRO to given frequency..
- * @param   iFreq   : Desired frequency (10M,2M,0=off).
+ * @brief   Initialize the AON FRO to given frequency.
+ * 
+ * Initialize the AON FRO to given frequency and selects the frequency
+ * as AON Root Clock source for Root_Clock1, 2, 3 clock signals.
+ * In case of LPIRC selection, it also disables ULPIRC as it has no
+ * other usage than AON Root Clock source. In case of ULPIRC selection,
+ * LPIRC is kept running as it can be used in main domain.
+ * 
+ * @param   iFreq : Desired frequency (10M, 3M, 0=off).
  * @return  returns success or fail status.
  */
 status_t CLOCK_SetupFROAonClocking(uint32_t iFreq);
@@ -895,6 +1093,19 @@ status_t CLOCK_SetupFROAonClocking(uint32_t iFreq);
  *  @return Frequency of the core
  */
 uint32_t CLOCK_GetAonCoreSysClkFreq(void);
+
+/*!
+ * @brief Enable/disable Aon LPIRC/ULPIRC auto trim feature
+ *
+ * Initialized ROSC (xtal32) is required.
+ *
+ * @see CLOCK_InitRosc()
+ *
+ * @param config : Autotrim target frequency configuration.
+ * @param enable : True to enable autotrim, false to disable it.
+ * @return kStatus_Fail on error, kStatus_Success otherwise.
+ */
+status_t CLOCK_AonFroAutoTrimEnable(aon_fro_autotrim_config_t config, bool enable);
 
 #if __CORTEX_M == (33U) /* Building on the main core */
 /**
@@ -933,14 +1144,48 @@ void CLOCK_DisableAutoClockGate(clock_ip_name_t clk);
 #endif /* Building on the main core */
 
 /*!
+ * @brief Fills the Rosc initialization configuration structure with default values.
+ *
+ * The default values are chosen for safe and common startup behavior.
+ * Delays and timeouts are defined in milliseconds.
+ * For example:
+ * @code
+ *  config->xtal_drive_params[0].dly_cap_sox            = 0U;
+ *  config->xtal_drive_params[0].amp                    = 0U;
+ *  config->xtal_drive_params[0].gm                     = 0U;
+ *  config->detectionDelay                              = 2000U;
+ *  config->detectionTimeout                            = 0U;
+ *  config->detectionDelaySwitchedMode                  = 500U;
+ *  config->detectionTimeoutSwitchedMode                = 0U;
+ *  config->cbXo                                        = 3U;
+ *  config->cbXi                                        = 3U;
+ *  config->vbatOver3V                                  = true;
+ * @endcode
+ * This function should be called before CLOCK_InitRosc if custom configuration is not fully provided.
+ *
+ * @param config Pointer to the rosc_init_config_t structure to be filled.
+ */
+void CLOCK_GetDefaultInitRoscConfig(rosc_init_config_t *config);
+
+/*!
+ * @brief Checks if ROSC (xtal32k) is initialized.
+ *
+ * This function enables the RTC alive detector temporarily to check if the
+ * ROSC (32kHz crystal oscillator) is properly initialized and running.
+ *
+ * @return true if ROSC is initialized and running properly, false if ROSC is not initialized or not running properly.
+ */
+bool CLOCK_IsRoscInitialized(void);
+
+/*!
  * @brief Initializes the ROSC (xtal32k).
  *
- * @param vbat_over3V  Set to true is vbat voltage is greater than 3V
- * @retval kStatus_Success ROSC is initialized.
- *        kStatus_Fail ROSC init failed.
- *        kStatus_Busy ROSC is used as core clock.
+ * @param config Pointer to the user-defined rosc_init_config_t structure.
+ * @return kStatus_Success ROSC is initialized.
+ *         kStatus_Fail ROSC init failed.
+ *         kStatus_Busy ROSC is used as core clock.
  */
-status_t CLOCK_InitRosc(bool vbat_over3V);
+status_t CLOCK_InitRosc(const rosc_init_config_t *config);
 
 /*!
  * brief De-initializes the SCG ROSC.
@@ -1055,18 +1300,27 @@ uint32_t CLOCK_GetSystickClkFreq(void);
 
 /**
  * @brief   Setup FROHF trim.
- * @param   config   : FROHF trim value
+ *
+ * Configures FROHF trimming for auto trim or non-auto trim. It does not
+ * start the auto trim, just configures it. For non-auto trim,
+ * coarse and fine trimming values are applied.
+ *
+ * @param   config Pointer to FROHF trim configuration
  * @return  returns success or fail status.
  */
-status_t CLOCK_FROHFTrimConfig(firc_trim_config_t config);
+status_t CLOCK_FROHFTrimConfig(const firc_trim_config_t *config);
 
 /**
  * @brief   Setup FRO 12M trim.
- * @param   config   : FRO 12M trim value
+ *
+ * Configures FRO 12M (SIRC) trimming for auto trim or non-auto trim. It does not
+ * start the auto trim, just configures it. For non-auto trim,
+ * CL and CCO trimming values are applied.
+ *
+ * @param   config Pointer to FRO 12M trim value
  * @return  returns success or fail status.
  */
-status_t CLOCK_FRO12MTrimConfig(sirc_trim_config_t config);
-
+status_t CLOCK_FRO12MTrimConfig(const sirc_trim_config_t *config);
 
 /*!
  * @brief Sets the ROSC monitor mode.
@@ -1152,8 +1406,15 @@ status_t CLOCK_FRO12MAutoTrimEnable(bool enable);
  */
 status_t CLOCK_FROHFAutoTrimEnable(bool enable);
 
-#endif /* Building on the main core */
+/*!
+ * @brief Get trimming data for VDD CORE MAIN, HVD and LVD.
+ * @param drive : Main core drive mode
+ * @param config : Pointer to configuration (trimmed parameters values) which are read from IFR1
+ * @return  Nothing
+ */
+void CLOCK_GetVDDCoreMainConfig(main_drive_t drive, vdd_core_main_config_t *config);
 
+#endif /* Building on the main core */
 
 #if defined(__cplusplus)
 }

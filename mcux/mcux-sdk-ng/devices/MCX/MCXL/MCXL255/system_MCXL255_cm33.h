@@ -51,12 +51,10 @@ extern "C" {
 
 #include <stdint.h>
 
-#define DEFAULT_SYSTEM_CLOCK           12000000u           /* Default System clock value */
-#define CLK_RTC_32K_CLK                   32768u           /* RTC oscillator 32 kHz output (32k_clk */
-#define CLK_FRO_12MHZ                  12000000u           /* FRO 12 MHz (fro_12m) */
-#define CLK_FRO_32MHZ                  32000000u           /* FRO 32 MHz (fro_32m) */
-#define CLK_FRO_48MHZ                  48000000u           /* FRO 48 MHz (fro_48m) */
-#define CLK_CLK_IN                     16000000u           /* Default CLK_IN pin clock */
+#define DEFAULT_SYSTEM_CLOCK           48000000u           /* Default System clock value */
+#define CLK_ROSC                       32768u              /* ROSC: RTC Oscillator (XTAL32K) */
+#define CLK_FRO_12MHZ                  12000000u           /* SIRC (FRO12M) */
+#define CLK_FRO_96MHZ                  96000000u           /* FIRC (FRO96M) */
 
 
 /**

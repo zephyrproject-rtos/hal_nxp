@@ -3,8 +3,8 @@
 **     Processors:          MCXC041VFG
 **                          MCXC041VFK
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Version:             rev. 3.0, 2025-11-17
+**     Build:               b251117
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RTC
@@ -22,14 +22,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-17)
+**         Update m0p core interrupts dedication
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_RTC.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2025-11-17
  * @brief CMSIS Peripheral Access Layer for RTC
  *
  * CMSIS Peripheral Access Layer for RTC

@@ -786,9 +786,22 @@ hal_timer_time_t TM_GetTimestamp(void)
 timer_status_t TM_Open(timer_handle_t timerHandle)
 {
     timer_handle_struct_t *timerState = timerHandle;
+    timer_handle_struct_t *th;
     assert(sizeof(timer_handle_struct_t) == TIMER_HANDLE_SIZE);
     assert(timerHandle);
     TIMER_ENTER_CRITICAL();
+    th = s_timermanager.timerHead;
+    while (th != NULL)
+    {
+        /* Determine if timer element is already in list */
+        if (th == timerState)
+        {
+            assert(0);
+            TIMER_EXIT_CRITICAL();
+            return kStatus_TimerSuccess;
+        }
+        th = th->next;
+    }
     TimerSetTimerStatus(timerState, (uint8_t)kTimerStateInactive_c);
     if (NULL == s_timermanager.timerHead)
     {

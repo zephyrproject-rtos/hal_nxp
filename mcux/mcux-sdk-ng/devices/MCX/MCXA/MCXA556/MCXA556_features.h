@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2024-03-26
-**     Build:               b251124
+**     Build:               b260129
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -182,6 +182,8 @@
 #define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
 /* @brief Has High Speed Mode Trim Request (bitfield CTRL[CALHS]). */
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (1)
+/* @brief Has Justified Left Enable (bitfield CFG2[JLEFT]). */
+#define FSL_FEATURE_LPADC_HAS_CFG2_JLEFT (1)
 /* @brief Has internal temperature sensor. */
 #define FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR (1)
 /* @brief Temperature sensor parameter A (slope). */
@@ -219,6 +221,8 @@
 #define FSL_FEATURE_MCX_CMC_HAS_BLR_REG (0)
 /* @brief Has no bitfield FLASHWAKE in FLASHCR register */
 #define FSL_FEATURE_MCX_CMC_HAS_NO_FLASHCR_WAKE (0)
+/* @brief Has SCR bit in BSR register */
+#define FSL_FEATURE_MCX_CMC_HAS_BSR_SCR_BIT (0)
 
 /* LPCMP module features */
 
@@ -732,6 +736,14 @@
 #define FSL_FEATURE_RTC_HAS_NO_GP_DATA_REG (1)
 /* @brief Has TIMER_STB_MASK bitfile in CTRL register. */
 #define FSL_FEATURE_RTC_HAS_NO_TIMER_STB_MASK (1)
+/* @brief Has RTC Tamper 45 Filter Configuration Register support */
+#define FSL_FEATURE_RTC_HAS_FILTER45_CFG (0)
+/* @brief Has RTC Tamper 67 Filter Configuration Register support */
+#define FSL_FEATURE_RTC_HAS_FILTER67_CFG (0)
+/* @brief Has RTC Minutes Count Down Timer Register support */
+#define FSL_FEATURE_RTC_HAS_MINUTES_TIMER_FEATURE (0)
+/* @brief Has RTC BCD mode support */
+#define FSL_FEATURE_RTC_HAS_BCD_MODE (0)
 
 /* SPC module features */
 
@@ -765,6 +777,20 @@
 #define FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT (0)
 /* @brief Has BLEED_EN */
 #define FSL_FEATURE_MCX_SPC_HAS_DCDC_CFG_BLEED_EN (0)
+/* @brief Has Power Request Status Flag */
+#define FSL_FEATURE_MCX_SPC_HAS_PD_STATUS_PWR_REQ_STATUS_BIT (1)
+/* @brief Support overdrive voltage */
+#define FSL_FEATURE_MCX_SPC_SUPPORT_OVERDRIVE_VOLTAGE (1)
+/* @brief Has SPC_LP_REQ bit in SC register */
+#define FSL_FEATURE_MCX_SPC_HAS_SC_SPC_LP_REQ_BIT (1)
+/* @brief Has SPC_LP_MODE bit in SC register */
+#define FSL_FEATURE_MCX_SPC_HAS_SC_SPC_LP_MODE_BIT (1)
+/* @brief Has SRAMCTL register */
+#define FSL_FEATURE_MCX_SPC_HAS_SRAMCTL_REG (1)
+/* @brief Has PD_STATUS register */
+#define FSL_FEATURE_MCX_SPC_HAS_PD_STATUS_REG (1)
+/* @brief Has SRAMRETLDO_REFTRIM register */
+#define FSL_FEATURE_MCX_SPC_HAS_SRAMRETLDO_REFTRIM_REG (0)
 
 /* SYSCON module features */
 
@@ -850,6 +876,31 @@
 #define FSL_FEATURE_MCX_VBAT_HAS_OSCCTLA_FINE_AMP_GAIN_BIT (0)
 /* @brief Has OSCCTLB register */
 #define FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG (0)
+
+/* VREF module features */
+
+/* @brief Has chop oscillator (bit TRM[CHOPEN]) */
+#define FSL_FEATURE_VREF_HAS_CHOP_OSC (0)
+/* @brief Has second order curvature compensation (bit SC[ICOMPEN]) */
+#define FSL_FEATURE_VREF_HAS_COMPENSATION (0)
+/* @brief If high/low buffer mode supported */
+#define FSL_FEATURE_VREF_MODE_LV_TYPE (0)
+/* @brief Module has also low reference (registers VREFL/VREFH) */
+#define FSL_FEATURE_VREF_HAS_LOW_REFERENCE (0)
+/* @brief Has VREF_TRM4. */
+#define FSL_FEATURE_VREF_HAS_TRM4 (0)
+/* @brief Has bitfield LPBG_BUF_EN in CSR register. */
+#define FSL_FEATURE_VREF_HAS_LOWPOWER_BUFFER (0)
+/* @brief Has bitfield LPBGEN in CSR register. */
+#define FSL_FEATURE_VREF_HAS_LPBGEN (0)
+/* @brief Has bitfield IBIAS_EN in CSR register. */
+#define FSL_FEATURE_VREF_HAS_IBIAS_EN (1)
+/* @brief Has bitfield REFCHSELN_EN in CSR register. */
+#define FSL_FEATURE_VREF_HAS_REFCHSELN_EN (1)
+/* @brief Has bitfield REFCHSELP_EN in CSR register. */
+#define FSL_FEATURE_VREF_HAS_REFCHSELP_EN (1)
+/* @brief Support max voltage of 2.5V. */
+#define FSL_FEATURE_VREF_SUPPORT_2V5 (1)
 
 /* WWDT module features */
 

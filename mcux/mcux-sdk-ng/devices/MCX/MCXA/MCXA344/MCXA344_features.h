@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Version:             rev. 1.0, 2024-03-26
-**     Build:               b251028
+**     Version:             rev. 1.1, 2025-11-17
+**     Build:               b260129
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -16,6 +16,8 @@
 **     Revisions:
 **     - rev. 1.0 (2024-03-26)
 **         Initial version based on Rev1 DraftC RM
+**     - rev. 1.1 (2025-11-17)
+**         Update lpcmp feature align to shared definition changes
 **
 ** ###################################################################
 */
@@ -233,6 +235,8 @@
 #define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
 /* @brief Has High Speed Mode Trim Request (bitfield CTRL[CALHS]). */
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (1)
+/* @brief Has Justified Left Enable (bitfield CFG2[JLEFT]). */
+#define FSL_FEATURE_LPADC_HAS_CFG2_JLEFT (1)
 /* @brief Has internal temperature sensor. */
 #define FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR (1)
 /* @brief Temperature sensor parameter A (slope). */
@@ -343,6 +347,10 @@
 #define FSL_FEATURE_MCX_CMC_HAS_RSTCNT_REG (0)
 /* @brief Has BLR register */
 #define FSL_FEATURE_MCX_CMC_HAS_BLR_REG (0)
+/* @brief Has no bitfield FLASHWAKE in FLASHCR register */
+#define FSL_FEATURE_MCX_CMC_HAS_NO_FLASHCR_WAKE (0)
+/* @brief Has SCR bit in BSR register */
+#define FSL_FEATURE_MCX_CMC_HAS_BSR_SCR_BIT (0)
 
 /* LPCMP module features */
 
@@ -356,6 +364,28 @@
 #define FSL_FEATURE_LPCMP_HAS_ROUNDROBIN_MODE (1)
 /* @brief Has window mode (related to existence of CCR1.WINDOW_CLS). */
 #define FSL_FEATURE_LPCMP_HAS_WINDOW_CONTROL (1)
+/* @brief Has no CCR0 CMP_STOP_EN bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_NO_CCR0_CMP_STOP_EN (0)
+/* @brief Has RRCR0 RR_CLK_SEL bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_CLK_SEL (1)
+/* @brief Has RRCR0 RR_TRG_SEL bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_TRG_SEL (1)
+/* @brief Has RRCR0 RR_SAMPLE_CNT bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_SAMPLE_CNT (1)
+/* @brief Has RRCR0 RR_SAMPLE_THRESHOLD bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_SAMPLE_THRESHOLD (1)
+/* @brief Has CCR2 INPSEL bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_CCR2_INPSEL (0)
+/* @brief Has CCR2 INMSEL bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_CCR2_INMSEL (0)
+/* @brief Has CCR2 CMP_NPMD bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_CCR2_CMP_NPMD (1)
+/* @brief Has DCR DAC_HPMD bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_DCR_DAC_HPMD (1)
+/* @brief Has CCR0 LINKEN bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_CCR0_LINKEN (0)
+/* @brief Has RRCR2 register. */
+#define FSL_FEATURE_LPCMP_HAS_RRCR2 (1)
 /* @brief Has CCR0 CMP_STOP_EN bitfield. */
 #define FSL_FEATURE_LPCMP_HAS_CCR0_CMP_STOP_EN (1)
 /* @brief CMP instance support CCR0 CMP_STOP_EN bitfield. */
@@ -455,8 +485,12 @@
 
 /* EQDC module features */
 
+/* @brief Is affected by errata with ID 051383 (Quadrature decoder CTRL[DMAEN] bit can not be cleared by SW). */
+#define FSL_FEATURE_EQDC_HAS_ERRATA_051383 (0)
 /* @brief If EQDC CTRL2 register has EMIP bit field. */
 #define FSL_FEATURE_EQDC_CTRL2_HAS_EMIP_BIT_FIELD (1)
+/* @brief If has compare interrupt. */
+#define FSL_FEATURE_EQDC_HAS_NO_COMPARE_INTERRUPT (0)
 
 /* PWM module features */
 
@@ -834,6 +868,18 @@
 #define FSL_FEATURE_MCX_SPC_HAS_DCDC_CFG_BLEED_EN (0)
 /* @brief Has Power Request Status Flag */
 #define FSL_FEATURE_MCX_SPC_HAS_PD_STATUS_PWR_REQ_STATUS_BIT (0)
+/* @brief Support overdrive voltage */
+#define FSL_FEATURE_MCX_SPC_SUPPORT_OVERDRIVE_VOLTAGE (1)
+/* @brief Has SPC_LP_REQ bit in SC register */
+#define FSL_FEATURE_MCX_SPC_HAS_SC_SPC_LP_REQ_BIT (1)
+/* @brief Has SPC_LP_MODE bit in SC register */
+#define FSL_FEATURE_MCX_SPC_HAS_SC_SPC_LP_MODE_BIT (1)
+/* @brief Has SRAMCTL register */
+#define FSL_FEATURE_MCX_SPC_HAS_SRAMCTL_REG (1)
+/* @brief Has PD_STATUS register */
+#define FSL_FEATURE_MCX_SPC_HAS_PD_STATUS_REG (1)
+/* @brief Has SRAMRETLDO_REFTRIM register */
+#define FSL_FEATURE_MCX_SPC_HAS_SRAMRETLDO_REFTRIM_REG (1)
 
 /* SYSCON module features */
 
@@ -859,6 +905,8 @@
 #define FSL_FEATURE_SYSCON_HAS_LPCAC_CTRL_PARITY_MISS_EN_BIT (0)
 /* @brief Has parity error report (bitfield LPCAC_CTRL[PARITY_FAULT_EN]). */
 #define FSL_FEATURE_SYSCON_HAS_LPCAC_CTRL_PARITY_FAULT_EN_BIT (0)
+/* @brief FIRC support 240M */
+#define FSL_FEATURE_FIRC_SUPPORT_240M (0)
 
 /* SysTick module features */
 
@@ -888,6 +936,15 @@
 #define FSL_FEATURE_MCX_VBAT_HAS_SWICTL_REG (0)
 /* @brief Has CLKMON register */
 #define FSL_FEATURE_MCX_VBAT_HAS_CLKMON_REG (0)
+/* @brief Has FINE_AMP_GAIN bitfield in register OSCCTLA */
+#define FSL_FEATURE_MCX_VBAT_HAS_OSCCTLA_FINE_AMP_GAIN_BIT (0)
+/* @brief Has OSCCTLB register */
+#define FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG (0)
+
+/* WUU module features */
+
+/* @brief Has MF register. */
+#define FSL_FEATURE_WUU_HAS_MF (0)
 
 /* WWDT module features */
 

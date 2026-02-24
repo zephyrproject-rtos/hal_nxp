@@ -115,8 +115,8 @@ typedef enum _clock_ip_name
     kCLOCK_GateFLEXSPI0      = ((0x20U << 16U) | (12U)), /*!< Clock gate name: FLEXSPI0      */
     kCLOCK_GateSPIFILTER0    = ((0x20U << 16U) | (13U)), /*!< Clock gate name: SPIFILTER0    */
     kCLOCK_GateESPI0         = ((0x20U << 16U) | (14U)), /*!< Clock gate name: ESPI0         */
-    kCLOCK_GateUSB1          = ((0x20U << 16U) | (18U)), /*!< Clock gate name: USB1          */
-    kCLOCK_GateUSB1_PHY      = ((0x20U << 16U) | (19U)), /*!< Clock gate name: USB1_PHY      */
+    kCLOCK_GateUSBHS         = ((0x20U << 16U) | (18U)), /*!< Clock gate name: USBHS          */
+    kCLOCK_GateUSBHS_PHY     = ((0x20U << 16U) | (19U)), /*!< Clock gate name: USBHS_PHY      */
     kCLOCK_GateEWM0          = ((0x20U << 16U) | (20U)), /*!< Clock gate name: EWM0          */
     kCLOCK_GateRAMA          = ((0x30U << 16U) | (16U)), /*!< Clock gate name: RAMA          */
     kCLOCK_GateRAMB          = ((0x30U << 16U) | (17U)), /*!< Clock gate name: RAMB          */
@@ -195,7 +195,7 @@ typedef enum _clock_ip_name
     {kCLOCK_GateLPUART0, kCLOCK_GateLPUART1, kCLOCK_GateLPUART2, \
      kCLOCK_GateLPUART3, kCLOCK_GateLPUART4, kCLOCK_GateLPUART5}
 /*! @brief Clock ip name array for LPI2C. */
-#define LPI2C_CLOCKS {kCLOCK_GateLPI2C0, kCLOCK_GateLPI2C1, kCLOCK_GateLPI2C3}
+#define LPI2C_CLOCKS {kCLOCK_GateLPI2C0, kCLOCK_GateLPI2C1, kCLOCK_GateLPI2C2, kCLOCK_GateLPI2C3, kCLOCK_GateLPI2C4}
 /*! @brief Clock ip name array for LSPI. */
 #define LPSPI_CLOCKS \
     {kCLOCK_GateLPSPI0, kCLOCK_GateLPSPI1, kCLOCK_GateLPSPI2, kCLOCK_GateLPSPI3, kCLOCK_GateLPSPI4, kCLOCK_GateLPSPI5}
@@ -217,9 +217,9 @@ typedef enum _clock_ip_name
 /*! @brief Clock ip name array for UTICK. */
 #define UTICK_CLOCKS {kCLOCK_GateUTICK0}
 /*! @brief Clock ip name array for USBHS. */
-#define USB_CLOCKS {kCLOCK_GateUSB1}
+#define USB_CLOCKS {kCLOCK_GateUSBHS}
 /*! @brief Clock ip name array for USBHSPHY. */
-#define USBPHY_CLOCKS {kCLOCK_GateUSB1PHY}
+#define USBPHY_CLOCKS {kCLOCK_GateUSBHSPHY}
 /*! @brief Clock ip name array for VREF. */
 #define VREF_CLOCKS {kCLOCK_GateVREF0}
 /*! @brief Clock gate name array for RTC. */
@@ -242,9 +242,9 @@ typedef enum _clock_name
     kCLOCK_Fro16K,     /*!< FRO16K                     */
     kCLOCK_Fro12M,     /*!< FRO12M                     */
     kCLOCK_Fro12MDiv,  /*!< FRO12MDiv                  */
-    kCLOCK_FroHf,      /*!< FRO180                     */
-    kCLOCK_FroHfDiv,   /*!< Divided by FRO180          */
-    kCLOCK_Clk45M,     /*!< CLK45M                     */
+    kCLOCK_FroHf,      /*!< FROHF                      */
+    kCLOCK_FroHfDiv,   /*!< Divided by FROHF           */
+    kCLOCK_Clk48M,     /*!< CLK48M                     */
     kCLOCK_Pll1Clk,    /*!< Pll1Clk                    */
     kCLOCK_Pll1ClkDiv, /*!< Pll1CkDiv                  */
     kCLOCK_Clk1M,      /*!< CLK1M                      */
@@ -293,8 +293,8 @@ typedef enum _clock_select_name
     kCLOCK_SelLPSPI4        = (0x178U), /*!< LPSPI4        clock selection */
     kCLOCK_SelLPSPI5        = (0x180U), /*!< LPSPI5        clock selection */
     kCLOCK_SelTENBASET_PHY0 = (0x188U), /*!< TENBASET_PHY0 clock selection */
-    kCLOCK_SelUSB1          = (0x190U), /*!< USB1          clock selection */
-    kCLOCK_SelUSB1_PHY      = (0x198U), /*!< USB1_PHY      clock selection */
+    kCLOCK_SelUSBHS         = (0x190U), /*!< USBHS          clock selection */
+    kCLOCK_SelUSBHS_PHY     = (0x198U), /*!< USBHS_PHY      clock selection */
     kCLOCK_SelFLEXIO0       = (0x1A0U), /*!< FLEXIO0       clock selection */
     kCLOCK_SelLPI2C0        = (0x1A8U), /*!< LPI2C0        clock selection */
     kCLOCK_SelLPI2C1        = (0x1B0U), /*!< LPI2C1        clock selection */
@@ -568,9 +568,14 @@ typedef enum _clock_attach_id
     kPll1ClkDiv_to_LPUART5 = CLK_ATTACH_MUX(kCLOCK_SelLPUART5, 6U),         /*!< Attach Pll1ClkDiv to LPUART5. */
     kNONE_to_LPUART5       = CLK_ATTACH_MUX(kCLOCK_SelLPUART5, 7U),         /*!< Attach NONE to LPUART5.       */
 
-    kFRO_HF_to_USB1 = CLK_ATTACH_MUX(kCLOCK_SelUSB1, 1U),                   /*!< Attach FRO_HF to USB1.*/
-    kCLK_IN_to_USB1 = CLK_ATTACH_MUX(kCLOCK_SelUSB1, 2U),                   /*!< Attach CLK_IN to USB1.*/
-    kNONE_to_USB1   = CLK_ATTACH_MUX(kCLOCK_SelUSB1, 3U),                   /*!< Attach NONE to USB1.  */
+    kCLK_32K_to_USBHS      = CLK_ATTACH_MUX(kCLOCK_SelUSBHS, 0U),           /*!< Attach FRO_HF to USBHS.*/
+    kCLK_1M_to_USBHS       = CLK_ATTACH_MUX(kCLOCK_SelUSBHS, 1U),           /*!< Attach CLK_IN to USBHS.*/
+    kPHY_CLK_XTAL_to_USBHS = CLK_ATTACH_MUX(kCLOCK_SelUSBHS, 2U),           /*!< Attach CLK_IN to USBHS.*/
+    kNONE_to_USBHS         = CLK_ATTACH_MUX(kCLOCK_SelUSBHS, 3U),           /*!< Attach NONE to USBHS.  */
+
+    kFRO_HF_to_USBHS_PHY = CLK_ATTACH_MUX(kCLOCK_SelUSBHS_PHY, 1U),         /*!< Attach FRO_HF to USBHS_PHY.*/
+    kCLK_IN_to_USBHS_PHY = CLK_ATTACH_MUX(kCLOCK_SelUSBHS_PHY, 2U),         /*!< Attach CLK_IN to USBHS_PHY.*/
+    kNONE_to_USBHS_PHY   = CLK_ATTACH_MUX(kCLOCK_SelUSBHS_PHY, 3U),         /*!< Attach NONE to USBHS_PHY.  */
 
     kFRO_LF_DIV_to_LPTMR0 = CLK_ATTACH_MUX(kCLOCK_SelLPTMR0, 0U),           /*!< Attach FRO_LF_DIV to LPTMR0. */
     kFRO_HF_DIV_to_LPTMR0 = CLK_ATTACH_MUX(kCLOCK_SelLPTMR0, 2U),           /*!< Attach FRO_HF_DIV to LPTMR0. */
@@ -640,14 +645,14 @@ typedef enum _clock_attach_id
     kPll1ClkDiv_to_TSI0 = CLK_ATTACH_MUX(kCLOCK_SelTSI0, 6U),               /*!< Attach Pll1ClkDiv to TSI0. */
     kNONE_to_TSI0       = CLK_ATTACH_MUX(kCLOCK_SelTSI0, 7U),               /*!< Attach NONE to TSI0.       */
 
-    kCLK_IN_to_ENETRMII  = CLK_ATTACH_MUX(kCLOCK_SelRMII, 3),               /*!< Attach CLK_IN to ENETRMII.  */
-    kPll1Clk_to_ENETRMII = CLK_ATTACH_MUX(kCLOCK_SelRMII, 6),               /*!< Attach Pll1Clk to ENETRMII. */
-    kNONE_to_ENETRMII    = CLK_ATTACH_MUX(kCLOCK_SelRMII, 70),              /*!< Attach NONE to ENETRMII.    */
+    kCLK_IN_to_ENETRMII  = CLK_ATTACH_MUX(kCLOCK_SelRMII, 3U),              /*!< Attach CLK_IN to ENETRMII.  */
+    kPll1Clk_to_ENETRMII = CLK_ATTACH_MUX(kCLOCK_SelRMII, 6U),              /*!< Attach Pll1Clk to ENETRMII. */
+    kNONE_to_ENETRMII    = CLK_ATTACH_MUX(kCLOCK_SelRMII, 7U),              /*!< Attach NONE to ENETRMII.    */
 
-    kCLK_IN_to_ENETPTPREF       = CLK_ATTACH_MUX(kCLOCK_SelE1588, 3),       /*!< Attach LK_IN to ENETPTPREF.        */
-    kENET0_TX_CLK_to_ENETPTPREF = CLK_ATTACH_MUX(kCLOCK_SelE1588, 4),       /*!< Attach ENET0_TX_CLK to ENETPTPREF. */
-    kPll1Clk_to_ENETPTPREF      = CLK_ATTACH_MUX(kCLOCK_SelE1588, 6),       /*!< Attach Pll1Clk to ENETRMII.        */
-    kNONE_to_ENETPTPREF         = CLK_ATTACH_MUX(kCLOCK_SelE1588, 7),       /*!< Attach NONE to ENETPTPREF.         */
+    kCLK_IN_to_ENETPTPREF       = CLK_ATTACH_MUX(kCLOCK_SelE1588, 3U),      /*!< Attach LK_IN to ENETPTPREF.        */
+    kENET0_TX_CLK_to_ENETPTPREF = CLK_ATTACH_MUX(kCLOCK_SelE1588, 4U),      /*!< Attach ENET0_TX_CLK to ENETPTPREF. */
+    kPll1Clk_to_ENETPTPREF      = CLK_ATTACH_MUX(kCLOCK_SelE1588, 6U),      /*!< Attach Pll1Clk to ENETRMII.        */
+    kNONE_to_ENETPTPREF         = CLK_ATTACH_MUX(kCLOCK_SelE1588, 7U),      /*!< Attach NONE to ENETPTPREF.         */
 
     kNONE_to_NONE = (0xFFFFFFFFU),                                          /*!< Attach NONE to NONE. */
 
@@ -675,7 +680,7 @@ typedef enum _clock_div_name
     kCLOCK_DivLPSPI4        = (0x17CU + 0x800U), /*!< LPSPI4        clock divider */
     kCLOCK_DivLPSPI5        = (0x184U + 0x800U), /*!< LPSPI5        clock divider */
     kCLOCK_DivTENBASET_PHY0 = (0x18CU + 0x800U), /*!< TENBASET_PHY0 clock divider */
-    kCLOCK_DivUSB1_PHY      = (0x19CU + 0x800U), /*!< USB1_PHY      clock divider */
+    kCLOCK_DivUSBHS_PHY     = (0x19CU + 0x800U), /*!< USBHS_PHY      clock divider */
     kCLOCK_DivFLEXIO0       = (0x1A4U + 0x800U), /*!< FLEXIO0       clock divider */
     kCLOCK_DivLPI2C0        = (0x1ACU + 0x800U), /*!< LPI2C0        clock divider */
     kCLOCK_DivLPI2C1        = (0x1B4U + 0x800U), /*!< LPI2C1        clock divider */
@@ -722,9 +727,10 @@ typedef enum _clock_div_name
  */
 typedef enum _clke_16k
 {
-    kCLKE_16K_SYSTEM   = VBAT_FROCLKE_CLKE(1U), /*!< To VSYS domain.     */
-    kCLKE_16K_COREMAIN = VBAT_FROCLKE_CLKE(2U), /*!< To VDD_CORE domain. */
-    kCLKE_16K_VBAT     = VBAT_FROCLKE_CLKE(4U)  /*!< To VBAT domain.     */
+    kCLKE_16K_SYSTEM   = VBAT_FROCLKE_CLKE(1U), /*!< To VSYS domain.               */
+    kCLKE_16K_COREMAIN = VBAT_FROCLKE_CLKE(2U), /*!< To VDD_CORE domain.           */
+    kCLKE_16K_VBAT     = VBAT_FROCLKE_CLKE(4U), /*!< To VBAT domain.               */
+    kCLKE_16K_ALL      = VBAT_FROCLKE_CLKE(7U)  /*!< To VSYS,VDD_CORE,VBAT domain. */
 } clke_16k_t;
 
 /*!
@@ -981,6 +987,15 @@ typedef struct _osc_32k_config
 
     osc32k_clk_gate_id_t id;
 } osc_32k_config_t;
+
+/*! @brief Source of PFD Clock Selection. */
+typedef enum _pfd_clkout_selection_t
+{
+    kPFDOUT_UsbPllRef  = 0,
+    kPFDOUT_PfdClkDiv4 = 1,
+    kPFDOUT_PfdClkDiv2 = 2,
+    kPFDOUT_PfdClk     = 3,
+} pfd_clkout_selection_t;
 
 /*******************************************************************************
  * API
@@ -1280,7 +1295,7 @@ uint32_t CLOCK_GetEnetPtpRefClkFreq(void);
 /*! @brief  Return Frequency of TENBASET_PHY CLK
  *  @return Frequency of TENBASET_PHY CLK.
  */
-uint32_t CLOCK_GetTENBASET_PHYClkFreq(void);
+uint32_t CLOCK_GetTenbaset_PhyClkFreq(void);
 
 /*! @brief  Return Frequency of ESPI CLK
  *  @return Frequency of ESPI CLK.
@@ -1291,6 +1306,57 @@ uint32_t CLOCK_GetEspiClkFreq(void);
  *  @return Frequency of FLEXIO FCLK.
  */
 uint32_t CLOCK_GetFlexioClkFreq(void);
+
+/**
+ * @brief   Initialize the ENET TX CLK to given frequency.
+ * @param   iFreq   : Desired frequency
+ * @return  Nothing
+ */
+void CLOCK_SetupEnetTxClk(uint32_t iFreq);
+
+/**
+ * @brief   Return Frequency of ENET TX CLK
+ * @return  Frequency of ENET TX CLK
+ */
+uint32_t CLOCK_GetEnetTxClkFreq(void);
+
+/*!
+ * @brief Enable USB HS PHY PLL clock.
+ *
+ * This function enables the USB HS PHY PLL clock.
+ *
+ * @param clockSourceFreq Frequency value.
+ * @return true if success, false if failure.
+ */
+bool CLOCK_EnableUsbhsPhyPllClock(uint32_t clockSourceFreq);
+
+/*!
+ * @brief Disable USB HS PHY PLL clock.
+ *
+ * This function disables the USB HS PHY PLL clock.
+ */
+void CLOCK_DisableUsbhsPhyPllClock(void);
+
+/*!
+ * @brief Enable USB HS clock.
+ *
+ * This function enables the USB HS clock.
+ *
+ * @return true if success, false if failure.
+ */
+bool CLOCK_EnableUsbhsClock(void);
+
+/*!
+ * @brief Enable USB HS PHY PFD clock.
+ *
+ * This function enables the USB HS PHY PFD clock.
+ *
+ * @param pfdDiv PFD fractional divider value.
+ * @param pfdClkSel PFD clock output selection.
+ * @return true if success, false if failure.
+ */
+bool CLOCK_EnableUsbhsPhyPfdClock(uint32_t pfdDiv, pfd_clkout_selection_t pfdClkSel);
+
 /**
  * @brief   Setup FRO 12M trim.
  * @param   config   : FRO 12M trim value
@@ -1441,7 +1507,7 @@ typedef struct _pll_setup
     uint32_t pllpdiv;    /*!< PLL P Divider register APLLPDIV */
     uint32_t pllmdiv;    /*!< PLL M Divider register APLLMDIV */
     uint32_t pllsscg[2]; /*!< PLL Spread Spectrum Control registers APLLSSCG*/
-    uint32_t pllRate;    /*!< Acutal PLL rate */
+    uint32_t pllRate;    /*!< Actual PLL rate */
 } pll_setup_t;
 
 /*! @brief PLL status definitions

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2025 NXP
+ * Copyright 2022-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -188,7 +188,7 @@ static void MeasureAndCorrect32kHzRTCdividers(freq_meas_ref_time_exponent_t refC
         ((uint64_t)val * (uint64_t)FREQ_32MHZ * 1000u) /
         (uint64_t)((refClockPowerOf2Cycles == 0)
             ? 1u
-            : ((1u << (uint32_t)refClockPowerOf2Cycles) - 1u))
+            : ((1ull << (uint32_t)refClockPowerOf2Cycles) - 1u))
     );
 
     /* Rounded 1 kHz divider (64-bit rounding, then cast) */

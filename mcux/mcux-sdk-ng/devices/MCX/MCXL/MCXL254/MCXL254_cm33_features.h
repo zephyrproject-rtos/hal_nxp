@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250814
+**     Build:               b251210
 **
 **     Abstract:
 **         Chip specific module features.
@@ -122,6 +122,8 @@
 #define FSL_FEATURE_LPCMP_HAS_RRCR2 (1)
 /* @brief Has CCR0 CMP_STOP_EN bitfield. */
 #define FSL_FEATURE_LPCMP_HAS_CCR0_CMP_STOP_EN (1)
+/* @brief CMP instance support CCR0 CMP_STOP_EN bitfield. */
+#define FSL_FEATURE_LPCMP_INSTANCE_SUPPORT_CCR0_CMP_STOP_ENn(x) (1)
 
 /* LPADC module features */
 
@@ -199,6 +201,8 @@
 #define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
 /* @brief Has High Speed Mode Trim Request (bitfield CTRL[CALHS]). */
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (1)
+/* @brief Has Justified Left Enable (bitfield CFG2[JLEFT]). */
+#define FSL_FEATURE_LPADC_HAS_CFG2_JLEFT (1)
 
 /* AOI module features */
 
@@ -231,6 +235,8 @@
     (((x) == AON__LPI2C0) ? (16) : (-1))))
 /* @brief Has dedicated interrupt for master and slave. */
 #define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPI2C_IS_LPFLEXCOMM (0)
 
 /* LPTMR module features */
 
@@ -366,7 +372,7 @@
 #define FSL_FEATURE_PORT_SUPPORT_DIFFERENT_VOLTAGE_RANGE (1)
 /* @brief Has EFT detect (registers EDFR, EDIER and EDCR). */
 #define FSL_FEATURE_PORT_SUPPORT_EFT (0)
-/* @brief Alt function 0 means GPIO (not analog). */
+/* @brief Function 0 is GPIO. */
 #define FSL_FEATURE_PORT_PCR_MUX_GPIO (0)
 /* @brief Has drive strength control (register bit PCR[DSE]). */
 #define FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH (1)
@@ -439,7 +445,9 @@
 #define FSL_FEATURE_MCX_CMC_HAS_RSTCNT_REG (1)
 /* @brief Has BLR register */
 #define FSL_FEATURE_MCX_CMC_HAS_BLR_REG (1)
-/* @brief Has SCR bit in  BSR register */
+/* @brief Has no bitfield FLASHWAKE in FLASHCR register */
+#define FSL_FEATURE_MCX_CMC_HAS_NO_FLASHCR_WAKE (0)
+/* @brief Has SCR bit in BSR register */
 #define FSL_FEATURE_MCX_CMC_HAS_BSR_SCR_BIT (1)
 
 /* CRC module features */
@@ -461,6 +469,8 @@
 #define FSL_FEATURE_CTIMER_HAS_CCR_CAP3 (1)
 /* @brief CTIMER Has register MSR */
 #define FSL_FEATURE_CTIMER_HAS_MSR (1)
+/* @brief Is affected by errata with ID 53024 (CTIMER will enter interrupt twice when function clock much slower than bus clock). */
+#define FSL_FEATURE_CTIMER_HAS_ERRATA_53024 (1)
 
 /* EDMA module features */
 
@@ -538,6 +548,8 @@
 #define FSL_FEATURE_EDMA_HAS_NO_CH_SBR_SEC (0)
 /* @brief edma5 has different tcd type. */
 #define FSL_FEATURE_EDMA_TCD_TYPEn(x) (0)
+/* @brief Number of DMA channels with asynchronous request capability. (Valid only for eDMA modules.) */
+#define FSL_FEATURE_EDMA_ASYNCHRO_REQUEST_CHANNEL_COUNT (4)
 
 /* FMU module features */
 
@@ -572,6 +584,8 @@
 #define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
 /* @brief Has no WIDTH bits in TCR register. */
 #define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPSPI_IS_LPFLEXCOMM (0)
 
 /* TRDC module features */
 
@@ -596,12 +610,16 @@
 
 /* @brief MU side for current core */
 #define FSL_FEATURE_MU_SIDE_A (1)
-/* @brief MU supports reset assert interrupt. CIER0[RAIE] or CR[RAIE] or BCR[RAIE] . */
+/* @brief MU supports reset assert interrupt. CIER0[RAIE] or CR[RAIE] or BCR[RAIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_ASSERT_INT (0)
 /* @brief MU supports reset de-assert interrupt. CR[RDIE] or BCR[RDIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT (0)
 /* @brief MU does not support core status. Register CSSR0 or CSR0. */
 #define FSL_FEATURE_MU_NO_CORE_STATUS (1)
+/* @brief MU does not support NMI. Register bit CCR0[NMI]. */
+#define FSL_FEATURE_MU_NO_NMI (1)
+/* @brief MU does not support core event pending. Register bit SR[CEP]. */
+#define FSL_FEATURE_MU_NO_CEP (1)
 /* @brief MU supports Power-Down mode entry interrupt. CIER0[PDIE] */
 #define FSL_FEATURE_MU_HAS_PD_INT (0)
 /* @brief MU supports STOP mode entry interrupt. CIER0[STOPIE] */
@@ -614,14 +632,10 @@
 #define FSL_FEATURE_MU_HAS_RUN_INT (0)
 /* @brief MU supports hardware reset interrupt. CSSR0[HRIP] or CSR0[HRIP]. */
 #define FSL_FEATURE_MU_HAS_SR_HRIP (0)
-/* @brief MU does not support enable clock of the other core, CR[CLKE] or CCR[CLKE]. */
-#define FSL_FEATURE_MU_NO_CLKE (1)
-/* @brief MU does not support NMI. Register bit CCR0[NMI]. */
-#define FSL_FEATURE_MU_NO_NMI (1)
-/* @brief MU does not support core event pending. Register bit SR[CEP]. */
-#define FSL_FEATURE_MU_NO_CEP (1)
 /* @brief MU supports reset interrupt. Register bit SR[MURIP]. */
 #define FSL_FEATURE_MU_HAS_SR_MURIP (0)
+/* @brief MU does not support enable clock of the other core, CR[CLKE] or CCR[CLKE]. */
+#define FSL_FEATURE_MU_NO_CLKE (1)
 /* @brief MU has bit CCR0[RSTH]. */
 #define FSL_FEATURE_MU_HAS_RSTH (0)
 /* @brief MU has bit CCR0[RSTH] by instance. */
@@ -671,8 +685,10 @@
 #define FSL_FEATURE_TRNG_HAS_RSTCTL (1)
 /* @brief TRNG does not support FOR_CLK mode. */
 #define FSL_FEATURE_TRNG_HAS_NO_TRNG_MCTL_FOR_CLK_MODE (1)
-/* @brief TRNG has two oscillators. */
+/* @brief TRNG supports dual oscillator mode. */
 #define FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS (1)
+/* @brief TRNG supports control pin. */
+#define FSL_FEATURE_TRNG_HAS_CTRL_PIN (0)
 
 /* UTICK module features */
 
@@ -686,8 +702,14 @@
 
 /* WWDT module features */
 
-/* @brief Has no RESET register. */
+/* @brief WWDT does not support oscillator lock. */
+#define FSL_FEATURE_WWDT_HAS_NO_OSCILLATOR_LOCK (0)
+/* @brief soc has reset. */
 #define FSL_FEATURE_WWDT_HAS_NO_RESET (1)
+/* @brief Has LPOSC as clock source. */
+#define FSL_FEATURE_WWDT_HAS_LPOSC_CLOCK_SOURCE (0)
+/* @brief WWDT WDTOF is not set in case of WD reset - get info from PMC instead. */
+#define FSL_FEATURE_WWDT_WDTRESET_FROM_PMC (0)
 
 #endif /* _MCXL254_cm33_FEATURES_H_ */
 

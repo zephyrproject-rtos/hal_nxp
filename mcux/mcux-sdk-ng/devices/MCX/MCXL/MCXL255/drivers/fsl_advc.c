@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2025-2026 NXP
  *
  * All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause
@@ -37,6 +37,7 @@ typedef enum
     ADVC_STATUS_IS_NOT_ENABLED,             /*< when trying to manipulate advc frequencies before it's enabled  */
     ADVC_STATUS_PRE_VOLTAGE_REQUEST_FAILED, /*< when pre-voltage request change is reaching timeout  */
     ADVC_STATUS_ILLEGAL_OPERATION,          /*< When using illegal operation mode in ADVC_ENABLE */
+    ADVC_STATUS_ILLEGAL_CLOCK_CONFIGURATION, /*< CGU clock is not configured to be any of supported frequencies */
 } ADVC_STATUS_t;
 
 typedef enum ADVC_MODE
@@ -49,12 +50,15 @@ typedef enum ADVC_MODE
 
 typedef enum ADVC_FREQUENCY_CODE
 {
-    ADVC_FREQUENCY_CODE_10MHZ  = 0, /**< 10 MHz, from FRO 10MHZ */
-    ADVC_FREQUENCY_CODE_5MHZ   = 1, /*< 5 MHz, from FRO 10MHZ */
-    ADVC_FREQUENCY_CODE_3P3MHZ = 2, /*< 3.3P3MHZ MHz, from FRO 10MHZ */
-    ADVC_FREQUENCY_CODE_2P5MHZ = 3, /*< 2.5P3MHZ MHz, from FRO 10MHZ */
-    ADVC_FREQUENCY_CODE_2MHZ   = 4, /*< 2MHZ MHz, from FRO 2MHZ */
-    ADVC_FREQUENCY_CODE_1MHZ   = 5, /*< 1MHZ MHz, from FRO 2MHZ */
+    ADVC_FREQUENCY_CODE_10MHZ   = 0,      /*< 10 MHz, from FRO 10MHZ */
+    ADVC_FREQUENCY_CODE_5MHZ    = 1,      /*< 5 MHz, from FRO 10MHZ */
+    ADVC_FREQUENCY_CODE_3P3MHZ  = 2,      /*< 3.3 MHz, from FRO 10MHZ */
+    ADVC_FREQUENCY_CODE_3MHZ    = 3,      /*< 3 MHz, from FRO 2MHZ(calibrated to 3MHZ) */
+    ADVC_FREQUENCY_CODE_2P5MHZ  = 4,      /*< 2.5 MHz, from FRO 10MHZ */
+    ADVC_FREQUENCY_CODE_1P5MHZ  = 5,      /*< 1.5 MHZ, from FRO 2MHZ(calibrated to 3MHZ) */
+    ADVC_FREQUENCY_CODE_0P75MHZ = 6,      /*< 0.75 MHz, from FRO 2MHZ(calibrated to 3MHZ) */
+    ADVC_FREQUENCY_CODE_32KHZ   = 7,      /*< 32KHz , from RTC */
+    ADVC_FREQUENCY_BAD_CODE     = 0xffff, /*< Could not determine code, hence not affecting */
 } ADVC_FREQUENCY_CODE_t;
 
 /**
@@ -123,29 +127,29 @@ static bool ADVC_CheckAONApbClockEnabled(void)
  */
 static bool ADVC_CheckSystickEnabled(void)
 {
-  bool enabled = ((SysTick->CTRL & SysTick_CTRL_ENABLE_Msk) != 0UL) ? true : false;
-  
-  if (enabled == false)
-  {
-      SysTick->LOAD = 0xFFFFFFL;
-      SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk;
-  }
-  
-  return enabled;
+    bool enabled = ((SysTick->CTRL & SysTick_CTRL_ENABLE_Msk) != 0UL) ? true : false;
+
+    if (enabled == false)
+    {
+        SysTick->LOAD = 0xFFFFFFL;
+        SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk;
+    }
+
+    return enabled;
 }
 
 /*!
  * @brief Restore configuration of systick.
- * 
+ *
  * @param enabled Indicated if systick is pre-enabled.
  */
 static void ADVC_RestoreSystickConfig(bool enabled)
 {
-   if (enabled == false)
-   {
-      SysTick->LOAD = 0U;
-      SysTick->CTRL &= ~(SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk);
-   }
+    if (enabled == false)
+    {
+        SysTick->LOAD = 0U;
+        SysTick->CTRL &= ~(SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk);
+    }
 }
 
 /*!
@@ -154,7 +158,7 @@ static void ADVC_RestoreSystickConfig(bool enabled)
 #if __CORTEX_M == 33U
 void ADVC_Init(void)
 {
-    bool isSystickEnabled = ADVC_CheckSystickEnabled();
+    bool isSystickEnabled  = ADVC_CheckSystickEnabled();
     bool isAhbClockEnabled = ADVC_CheckAONApbClockEnabled();
 
     ADVC_DRIVER_init(FSL_FEATURE_ADVC_CFG_TABLE_ADDR);
@@ -244,7 +248,7 @@ bool ADVC_IsEnabled(void)
 {
     bool isAhbClockEnabled = ADVC_CheckAONApbClockEnabled();
     bool ret               = false;
-    bool isSystickEnabled = ADVC_CheckSystickEnabled();
+    bool isSystickEnabled  = ADVC_CheckSystickEnabled();
 
     ret = ADVC_DRIVER_is_ADVC_enabled();
 
@@ -262,7 +266,7 @@ bool ADVC_IsEnabled(void)
 void ADVC_Disable(void)
 {
     bool isAhbClockEnabled = ADVC_CheckAONApbClockEnabled();
-    bool isSystickEnabled = ADVC_CheckSystickEnabled();
+    bool isSystickEnabled  = ADVC_CheckSystickEnabled();
 
     ADVC_DRIVER_Disable();
 
@@ -283,7 +287,7 @@ bool ADVC_IsDisabled(void)
 {
     bool isAhbClockEnabled = ADVC_CheckAONApbClockEnabled();
     bool ret               = false;
-    bool isSystickEnabled = ADVC_CheckSystickEnabled();
+    bool isSystickEnabled  = ADVC_CheckSystickEnabled();
 
     ret = !(ADVC_DRIVER_is_ADVC_enabled());
 
@@ -310,9 +314,9 @@ advc_result_t ADVC_PreVoltageChangeRequest(uint32_t aonCpuFreq)
     ADVC_STATUS_t status;
 
     bool isAhbClockEnabled = ADVC_CheckAONApbClockEnabled();
-    bool isSystickEnabled = ADVC_CheckSystickEnabled();
+    bool isSystickEnabled  = ADVC_CheckSystickEnabled();
 
-    status                 = ADVC_DRIVER_convert_frequency_to_code(aonCpuFreq, &advcFreqCode);
+    status = ADVC_DRIVER_convert_frequency_to_code(aonCpuFreq, &advcFreqCode);
 
     if (status == ADVC_STATUS_OK)
     {
@@ -337,7 +341,7 @@ advc_result_t ADVC_PostVoltageChangeRequest(void)
 {
     ADVC_STATUS_t status;
     bool isAhbClockEnabled = ADVC_CheckAONApbClockEnabled();
-    bool isSystickEnabled = ADVC_CheckSystickEnabled();
+    bool isSystickEnabled  = ADVC_CheckSystickEnabled();
 
     status = ADVC_DRIVER_post_voltage_change_request();
 

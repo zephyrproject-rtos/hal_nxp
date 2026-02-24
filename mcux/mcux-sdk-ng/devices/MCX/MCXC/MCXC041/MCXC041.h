@@ -10,8 +10,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MCXC041RM, Rev.1, Mar 2024
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Version:             rev. 3.0, 2025-11-17
+**     Build:               b251117
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXC041
@@ -29,14 +29,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-17)
+**         Update m0p core interrupts dedication
 **
 ** ###################################################################
 */
 
 /*!
  * @file MCXC041.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2025-11-17
  * @brief CMSIS Peripheral Access Layer for MCXC041
  *
  * CMSIS Peripheral Access Layer for MCXC041

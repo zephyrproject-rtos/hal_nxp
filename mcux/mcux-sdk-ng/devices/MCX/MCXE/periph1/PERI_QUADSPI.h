@@ -2,13 +2,13 @@
 ** ###################################################################
 **     Processor:           MCXE31BMPB
 **     Version:             rev. 1.0, 2025-07-18
-**     Build:               b250718
+**     Build:               b260127
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for QuadSPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -606,6 +606,11 @@ typedef struct {
 /*! AITEF - AHB illegal transaction error flag */
 #define QuadSPI_FR_AITEF(x)                      (((uint32_t)(((uint32_t)(x)) << QuadSPI_FR_AITEF_SHIFT)) & QuadSPI_FR_AITEF_MASK)
 
+#define QuadSPI_FR_AAEF_MASK                     (0x8000U)
+#define QuadSPI_FR_AAEF_SHIFT                    (15U)
+/*! AAEF - AHB abort error flag */
+#define QuadSPI_FR_AAEF(x)                       (((uint32_t)(((uint32_t)(x)) << QuadSPI_FR_AAEF_SHIFT)) & QuadSPI_FR_AAEF_MASK)
+
 #define QuadSPI_FR_RBDF_MASK                     (0x10000U)
 #define QuadSPI_FR_RBDF_SHIFT                    (16U)
 /*! RBDF - RX buffer drain flag */
@@ -683,6 +688,14 @@ typedef struct {
  */
 #define QuadSPI_RSER_AITIE(x)                    (((uint32_t)(((uint32_t)(x)) << QuadSPI_RSER_AITIE_SHIFT)) & QuadSPI_RSER_AITIE_MASK)
 
+#define QuadSPI_RSER_AAIE_MASK                   (0x8000U)
+#define QuadSPI_RSER_AAIE_SHIFT                  (15U)
+/*! AAIE - AHB abort error interrupt enable
+ *  0b0..No AAEF interrupt is generated
+ *  0b1..AAEF interrupt is generated
+ */
+#define QuadSPI_RSER_AAIE(x)                     (((uint32_t)(((uint32_t)(x)) << QuadSPI_RSER_AAIE_SHIFT)) & QuadSPI_RSER_AAIE_MASK)
+
 #define QuadSPI_RSER_RBDIE_MASK                  (0x10000U)
 #define QuadSPI_RSER_RBDIE_SHIFT                 (16U)
 /*! RBDIE - RX buffer drain interrupt enable
@@ -756,6 +769,16 @@ typedef struct {
  *  0b1..Clears the sequence pointer for IP accesses as defined in IPCR.
  */
 #define QuadSPI_SPTRCLR_IPPTRC(x)                (((uint32_t)(((uint32_t)(x)) << QuadSPI_SPTRCLR_IPPTRC_SHIFT)) & QuadSPI_SPTRCLR_IPPTRC_MASK)
+
+#define QuadSPI_SPTRCLR_ABRT_CLR_MASK            (0x10000U)
+#define QuadSPI_SPTRCLR_ABRT_CLR_SHIFT           (16U)
+/*! ABRT_CLR - Flash memory Abort/AHB buffer clear */
+#define QuadSPI_SPTRCLR_ABRT_CLR(x)              (((uint32_t)(((uint32_t)(x)) << QuadSPI_SPTRCLR_ABRT_CLR_SHIFT)) & QuadSPI_SPTRCLR_ABRT_CLR_MASK)
+
+#define QuadSPI_SPTRCLR_PREFETCH_DIS_MASK        (0x20000U)
+#define QuadSPI_SPTRCLR_PREFETCH_DIS_SHIFT       (17U)
+/*! PREFETCH_DIS - Prefetch disable */
+#define QuadSPI_SPTRCLR_PREFETCH_DIS(x)          (((uint32_t)(((uint32_t)(x)) << QuadSPI_SPTRCLR_PREFETCH_DIS_SHIFT)) & QuadSPI_SPTRCLR_PREFETCH_DIS_MASK)
 /*! @} */
 
 /*! @name SFA1AD - Serial Flash Memory A1 Top Address Register */

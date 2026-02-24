@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024,2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -18,8 +18,8 @@
 
  /*! @name Driver version */
 /*@{*/
-/*! @brief SYSTEM driver version 2.0.0. */
-#define FSL_SYSTEM_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief SYSTEM driver version 2.0.1. */
+#define FSL_SYSTEM_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 typedef enum chip_version_s
