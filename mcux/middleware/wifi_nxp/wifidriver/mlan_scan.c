@@ -4881,6 +4881,12 @@ mlan_status wlan_cmd_bgscan_config(IN mlan_private *pmpriv,
                     scan_dur = pmadapter->specific_scan_time;
                 }
             }
+
+#if defined(RW610) || defined(SD9177) || defined(IW610) || defined(SD8978) || defined(SD8987)
+            if(tlv_chan_list->chan_scan_param[chan_num].chan_scan_mode.passive_scan)
+                tlv_chan_list->chan_scan_param[chan_num].chan_scan_mode.passive_to_active_scan = MTRUE;
+#endif
+
             tlv_chan_list->chan_scan_param[chan_num].min_scan_time = wlan_cpu_to_le16(scan_dur);
             tlv_chan_list->chan_scan_param[chan_num].max_scan_time = wlan_cpu_to_le16(scan_dur);
             chan_num++;

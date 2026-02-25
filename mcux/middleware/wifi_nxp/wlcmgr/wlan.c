@@ -6761,6 +6761,9 @@ static void wifi_process_bg_scan_stopped(struct wifi_message *msg)
         PRINTF("Soft Roam: AP with better RSSI not found");
         CONNECTION_EVENT(WLAN_REASON_BGSCAN_NETWORK_NOT_FOUND, NULL);
     }
+#if CONFIG_WPA_SUPP
+    wm_wifi.supp_if_callbk_fns->sched_scan_stopped_callbk_fn(wm_wifi.if_priv);
+#endif
 }
 
 static void wlcm_process_bg_scan_report(void)
@@ -6769,6 +6772,9 @@ static void wlcm_process_bg_scan_report(void)
 #if (CONFIG_11K) || (CONFIG_11V) || (CONFIG_ROAMING)
     /* Set rssi low threshold and subscribe rssi low event again */
     (void)wifi_set_rssi_low_threshold(&wlan.rssi_low_threshold);
+#endif
+#if CONFIG_WPA_SUPP
+    wm_wifi.supp_if_callbk_fns->sched_scan_done_callbk_fn(wm_wifi.if_priv);
 #endif
 }
 #endif

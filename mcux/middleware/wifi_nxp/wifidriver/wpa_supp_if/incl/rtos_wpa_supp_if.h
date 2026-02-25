@@ -120,6 +120,9 @@ void wifi_nxp_wpa_supp_event_proc_scan_res(void *if_priv,
                                            unsigned int event_len,
                                            bool more_res);
 
+void wifi_nxp_wpa_supp_event_bg_scan_report(void *if_priv);
+void wifi_nxp_wpa_supp_event_bg_scan_stopped(void *if_priv);
+
 void wifi_nxp_wpa_supp_event_proc_auth_resp(void *if_priv,
                                             nxp_wifi_event_mlme_t *auth_resp_event,
                                             unsigned int event_len);

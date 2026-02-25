@@ -48,8 +48,6 @@ const rtos_wpa_supp_dev_ops wpa_supp_ops = {
 #if !CONFIG_WIFI_NM_WPA_SUPPLICANT
     .set_mac_addr             = wifi_nxp_wpa_supp_set_mac_addr,
     .set_default_scan_ies     = wifi_nxp_wpa_supp_set_default_scan_ies,
-    .sched_scan               = wifi_nxp_wpa_supp_sched_scan,
-    .stop_sched_scan          = wifi_nxp_wpa_supp_stop_sched_scan,
     .del_key                  = wifi_nxp_wpa_supp_del_key,
     .set_rekey_info           = wifi_nxp_wpa_supp_set_rekey_info,
     .set_country              = wifi_nxp_wpa_supp_set_country,
@@ -67,6 +65,8 @@ const rtos_wpa_supp_dev_ops wpa_supp_ops = {
 #endif
     .scan2                    = wifi_nxp_wpa_supp_scan2,
     .scan_abort               = wifi_nxp_wpa_supp_scan_abort,
+    .sched_scan               = wifi_nxp_wpa_supp_sched_scan,
+    .stop_sched_scan          = wifi_nxp_wpa_supp_stop_sched_scan,
     .get_scan_results2        = wifi_nxp_wpa_supp_scan_results_get,
     .deauthenticate           = wifi_nxp_wpa_supp_deauthenticate,
     .authenticate             = wifi_nxp_wpa_supp_authenticate,
@@ -147,6 +147,8 @@ static const wifi_nxp_callbk_fns_t supp_callbk_fns = {
     .get_wiphy_callbk_fn                = wifi_nxp_wpa_supp_event_get_wiphy,
     .is_supp_scan_in_progress_callbk_fn = wifi_nxp_wpa_is_supp_scan_in_progress,
     .signal_change_callbk_fn            = wifi_nxp_wpa_supp_event_signal_change,
+    .sched_scan_done_callbk_fn          = wifi_nxp_wpa_supp_event_bg_scan_report,
+    .sched_scan_stopped_callbk_fn       = wifi_nxp_wpa_supp_event_bg_scan_stopped,
 };
 
 int wifi_supp_init(void)

@@ -615,6 +615,8 @@ typedef MLAN_PACK_START struct _wifi_nxp_callbk_fns
     void (*dfs_cac_finished_callbk_fn)(void *if_priv, nxp_wifi_dfs_cac_info *ch_switch_info);
     int (*is_supp_scan_in_progress_callbk_fn)(void *if_priv);
     void (*signal_change_callbk_fn)(void *if_priv, t_s16 *rssi);
+    void (*sched_scan_done_callbk_fn)(void *if_priv);
+    void (*sched_scan_stopped_callbk_fn)(void *if_priv);
 } MLAN_PACK_END wifi_nxp_callbk_fns_t;
 
 typedef struct _chan_to_freq_t

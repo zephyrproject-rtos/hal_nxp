@@ -296,6 +296,44 @@ void wifi_nxp_wpa_supp_event_proc_scan_done(void *if_priv, int aborted, int exte
     }
 }
 
+void wifi_nxp_wpa_supp_event_bg_scan_report(void *if_priv)
+{
+    struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
+
+    if (!wifi_if_ctx_rtos)
+    {
+        return;
+    }
+
+    wpa_printf(MSG_DEBUG, "wifi_nxp: BG scan report - retrieving results");
+
+    /*
+     * Notify driver_zephyr that sched_scan results are ready
+     * This will trigger EVENT_SCAN_RESULTS to wpa_supplicant
+     */
+    if (wifi_if_ctx_rtos->supp_callbk_fns.scan_done)
+    {
+        wifi_if_ctx_rtos->supp_callbk_fns.scan_done(wifi_if_ctx_rtos->supp_drv_if_ctx, NULL);
+    }
+}
+
+void wifi_nxp_wpa_supp_event_bg_scan_stopped(void *if_priv)
+{
+    struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
+
+    if (!wifi_if_ctx_rtos)
+    {
+        return;
+    }
+
+    wpa_printf(MSG_DEBUG, "wifi_nxp: BG scan stopped");
+
+    if (wifi_if_ctx_rtos->supp_callbk_fns.sched_scan_stopped)
+    {
+        wifi_if_ctx_rtos->supp_callbk_fns.sched_scan_stopped(wifi_if_ctx_rtos->supp_drv_if_ctx);
+    }
+}
+
 #if !CONFIG_WIFI_NM_WPA_SUPPLICANT
 void wifi_nxp_wpa_supp_event_proc_survey_res(void *if_priv,
                                              nxp_wifi_event_new_survey_result_t *survey_res,
@@ -1000,70 +1038,176 @@ out:
 int wifi_nxp_wpa_supp_sched_scan(void *if_priv, struct wpa_driver_scan_params *params)
 {
     int status = -WM_FAIL;
-    // struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
+    struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
     int ret = -1;
     int i   = 0;
-    nxp_wifi_trigger_sched_scan_t *wifi_sched_scan_params;
+    nxp_wifi_trigger_sched_scan_t *wifi_sched_scan_params = NULL;
 
+    /* Input validation */
     if (!if_priv || !params)
     {
         supp_e("%s: Invalid params", __func__);
         goto out;
     }
 
-    // wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
+    wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
 
-    wifi_sched_scan_params = (nxp_wifi_trigger_sched_scan_t *)OSA_MemoryAllocate(sizeof(nxp_wifi_trigger_sched_scan_t));
-
-    if (!wifi_sched_scan_params)
+    /* Validate scan plans - Required for scheduled scan */
+    if (!params->sched_scan_plans || params->sched_scan_plans_num == 0)
     {
-        supp_e("%s:  wifi sched scan params calloc failed", __func__);
+        supp_e("%s: Invalid sched_scan_plans configuration", __func__);
+        ret = -1;
         goto out;
     }
 
+    supp_d("%s: Starting scheduled scan with %u plan(s)",
+           __func__, params->sched_scan_plans_num);
+
+    wifi_sched_scan_params = (nxp_wifi_trigger_sched_scan_t *)OSA_MemoryAllocate(
+        sizeof(nxp_wifi_trigger_sched_scan_t));
+    if (!wifi_sched_scan_params)
+    {
+        supp_e("%s: wifi sched scan params calloc failed", __func__);
+        ret = -1;
+        goto out;
+    }
+    memset(wifi_sched_scan_params, 0, sizeof(nxp_wifi_trigger_sched_scan_t));
+
+    /* Copy SSIDs */
     if (params->num_ssids != 0U)
     {
         wifi_sched_scan_params->num_ssids = MIN(WIFI_SCAN_MAX_NUM_SSIDS, params->num_ssids);
 
         for (i = 0; i < wifi_sched_scan_params->num_ssids; i++)
         {
-            memcpy(wifi_sched_scan_params->scan_ssids[i].ssid, (const unsigned char *)params->ssids[i].ssid,
-                   params->ssids[i].ssid_len);
+            if (params->ssids[i].ssid && params->ssids[i].ssid_len > 0)
+            {
+                memcpy(wifi_sched_scan_params->scan_ssids[i].ssid,
+                       (const unsigned char *)params->ssids[i].ssid,
+                       params->ssids[i].ssid_len);
+                wifi_sched_scan_params->scan_ssids[i].ssid_len = params->ssids[i].ssid_len;
 
-            wifi_sched_scan_params->scan_ssids[i].ssid_len = params->ssids[i].ssid_len;
+                supp_d("%s: SSID[%d]: %.*s (len=%d)", __func__, i,
+                       params->ssids[i].ssid_len, params->ssids[i].ssid,
+                       params->ssids[i].ssid_len);
+            }
+        }
+    }
+    else
+    {
+        supp_d("%s: No SSIDs specified (passive scan)", __func__);
+    }
+
+    /* Copy frequency list (channel list) */
+    if (params->freqs)
+    {
+        for (i = 0; i < WIFI_SCAN_MAX_NUM_CHAN && params->freqs[i]; i++)
+        {
+            wifi_sched_scan_params->chan_list[i] = freq_to_chan(params->freqs[i]);
+            supp_d("%s: Channel[%d]: freq=%u -> chan=%u", __func__, i,
+                   params->freqs[i], wifi_sched_scan_params->chan_list[i]);
+        }
+        wifi_sched_scan_params->num_chans = i;
+        supp_d("%s: Total channels: %d", __func__, i);
+    }
+    else
+    {
+        wifi_sched_scan_params->num_chans = 0;
+        supp_d("%s: No specific channels (scan all)", __func__);
+    }
+
+    /* Copy extra IEs */
+    if ((params->extra_ies) && (params->extra_ies_len))
+    {
+        if (params->extra_ies_len <= sizeof(wifi_sched_scan_params->extra_ies.ie))
+        {
+            memcpy(wifi_sched_scan_params->extra_ies.ie, params->extra_ies,
+                   params->extra_ies_len);
+            wifi_sched_scan_params->extra_ies.ie_len = params->extra_ies_len;
+            supp_d("%s: Extra IEs length: %zu", __func__, params->extra_ies_len);
+        }
+        else
+        {
+            supp_e("%s: Extra IEs too large (%zu > %zu)", __func__,
+                   params->extra_ies_len, sizeof(wifi_sched_scan_params->extra_ies.ie));
         }
     }
 
-    for (i = 0; params->freqs[i] && i < WIFI_SCAN_MAX_NUM_CHAN; i++)
+    /* Set channels per scan */
+    wifi_sched_scan_params->chan_per_scan = MIN(WLAN_BG_SCAN_CHAN_MAX,
+                                                 wifi_sched_scan_params->num_chans);
+    supp_d("%s: Channels per scan: %u", __func__, wifi_sched_scan_params->chan_per_scan);
+
+    /* Configure scan interval and repeat count from scan plans */
+    /* Use the first scan plan's interval */
+    if (params->sched_scan_plans_num > 0)
     {
-        wifi_sched_scan_params->chan_list[i] = freq_to_chan(params->freqs[i]);
+        /* Convert interval from seconds to milliseconds */
+        unsigned int interval_ms = params->sched_scan_plans[0].interval * 1000;
+
+        /* Ensure minimum interval */
+        wifi_sched_scan_params->scan_interval = MAX(CONFIG_NXP_WIFI_SCHED_SCAN_MIN_INTERVAL, interval_ms);
+
+        /* Set repeat count from iterations (0 means infinite) */
+        if (params->sched_scan_plans[0].iterations > 0)
+        {
+            wifi_sched_scan_params->repeat_count = params->sched_scan_plans[0].iterations;
+        }
+        else
+        {
+            /* Use default repeat count for infinite scans */
+            wifi_sched_scan_params->repeat_count = CONFIG_NXP_WIFI_SCHED_SCAN_DEFAULT_ITERATION;
+        }
+
+        /* Log scan plan details */
+        for (unsigned int plan_idx = 0; plan_idx < params->sched_scan_plans_num; plan_idx++)
+        {
+            supp_d("%s: sched_scan plan[%u]: interval=%u sec, iterations=%u",
+                   __func__, plan_idx,
+                   params->sched_scan_plans[plan_idx].interval,
+                   params->sched_scan_plans[plan_idx].iterations);
+        }
+    }
+    else
+    {
+        /* Fallback to defaults if no scan plans */
+        wifi_sched_scan_params->scan_interval = CONFIG_NXP_WIFI_SCHED_SCAN_MIN_INTERVAL;
+        wifi_sched_scan_params->repeat_count  = CONFIG_NXP_WIFI_SCHED_SCAN_DEFAULT_ITERATION;
     }
 
-    wifi_sched_scan_params->num_chans = i;
+    supp_d("%s: Final scan_interval: %u ms, repeat_count: %u",
+           __func__, wifi_sched_scan_params->scan_interval,
+           wifi_sched_scan_params->repeat_count);
 
-    if ((params->extra_ies) && (params->extra_ies_len))
-    {
-        memcpy(wifi_sched_scan_params->extra_ies.ie, params->extra_ies, params->extra_ies_len);
-        wifi_sched_scan_params->extra_ies.ie_len = params->extra_ies_len;
-    }
-
-    wifi_sched_scan_params->chan_per_scan = MIN(WLAN_BG_SCAN_CHAN_MAX, wifi_sched_scan_params->num_chans);
-
-    wifi_sched_scan_params->scan_interval = MIN_BGSCAN_INTERVAL;
-    wifi_sched_scan_params->repeat_count  = 2;
-
+    /* Set report condition */
     wifi_sched_scan_params->report_condition = BG_SCAN_SSID_MATCH | BG_SCAN_WAIT_ALL_CHAN_DONE;
 
+    /* Set RSSI filter */
     wifi_sched_scan_params->filter_rssi = params->filter_rssi;
+    if (params->filter_rssi)
+    {
+        supp_d("%s: RSSI filter: %d", __func__, params->filter_rssi);
+    }
 
+    /* Send scheduled scan command to firmware */
     status = wifi_send_sched_scan_cmd(wifi_sched_scan_params);
     if (status != WM_SUCCESS)
     {
-        supp_e("%s: Sched Scan trigger failed", __func__);
+        supp_e("%s: Sched Scan trigger failed: status=%d", __func__, status);
+        ret = -1;
         goto out;
     }
+
+    supp_d("%s: Scheduled scan started successfully", __func__);
     ret = 0;
+
 out:
+    /* Clean up allocated memory */
+    if (wifi_sched_scan_params)
+    {
+        OSA_MemoryFree((void *)wifi_sched_scan_params);
+    }
+
     return ret;
 }
 
@@ -1085,6 +1229,14 @@ int wifi_nxp_wpa_supp_stop_sched_scan(void *if_priv)
         goto out;
     }
     ret = 0;
+
+    /* cancel sched_scan does not trigger FW sched_scan stop event,
+     * so report it here to reset wpa_s flags
+     */
+    if (wm_wifi.supp_if_callbk_fns->sched_scan_stopped_callbk_fn)
+    {
+        wm_wifi.supp_if_callbk_fns->sched_scan_stopped_callbk_fn(wm_wifi.if_priv);
+    }
 out:
     return ret;
 }
@@ -2508,7 +2660,9 @@ int wifi_nxp_wpa_supp_get_capa(void *if_priv, struct wpa_driver_capa *capa)
 
     capa->max_scan_ssids       = 1;
     capa->max_sched_scan_ssids = 1;
-    capa->sched_scan_supported = 0;
+    capa->sched_scan_supported = 1;
+    capa->max_sched_scan_plan_interval = 65535;
+    capa->max_match_sets       = 1;
     capa->max_remain_on_chan   = 5000;
     capa->max_stations         = 32;
     capa->max_acl_mac_addrs    = 32;
