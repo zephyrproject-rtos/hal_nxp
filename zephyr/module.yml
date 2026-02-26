@@ -30,29 +30,29 @@ blobs:
 
 #For RW61x
   - path: rw61x/rw61x_sb_ble_15d4_combo_a2.bin
-    sha256: 38ae3cfbed2945987a8db3989c1f96345bb79a2d7675c13e19737704bb4c8384
+    sha256: f32896e2402c9240b5c6d81ec42062d36852edfb03f482cbd547ed76edaa7fdb
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.3.1/rw61x/rw61x_sb_ble_15d4_combo_a2.bin
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.3.3/rw61x/rw61x_sb_ble_15d4_combo_a2.bin
     description: "BLE and 15.4 combo firmware for RW612 A2 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.1/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.3/readme.txt
   - path: rw61x/rw61x_sb_ble_a2.bin
-    sha256: b1d319fc4cc8fb31e1b23c38da0e1c0ae1a53d1b5a884f95d398bddd1848f83d
+    sha256: e08131e98db0952f355d4194ff5c7512bdb01376207b0e51c130a545a12e8159
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.3.1/rw61x/rw61x_sb_ble_a2.bin
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.3.3/rw61x/rw61x_sb_ble_a2.bin
     description: "BLE firmware for RW612 A2 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.1/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.3/readme.txt
   - path: rw61x/rw61x_sb_wifi_a2.bin
-    sha256: 605ae8e09efeb30ea0b4c5691fd70b5a3807cbe52635847f2b9ec4135d651ad2
+    sha256: 731620c4cce9c14b80857ed2a1dacd03f12b1947ca5ed1981e3135993daa5fa9
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.3.1/rw61x/rw61x_sb_wifi_a2.bin
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.3.3/rw61x/rw61x_sb_wifi_a2.bin
     description: "WiFi firmware for RW612 A2 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.1/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.3/readme.txt
 
 #For MCXW23
   - path: mcxw23/libble_ll_os.a
@@ -182,29 +182,29 @@ blobs:
 
 #For IW610
   - path: IW610/sd_iw610.bin.se
-    sha256: e921a1d8eabc093f0b2b13a65bac8a30c67e43e92c779b67256f4505ed637a2c
+    sha256: 0c679a08fab908a3b8134bed5675760f73a7e444049ae5c5dfc1f617118f1cdf
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.3.1/IW610/sd_iw610.bin.se
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.3.3/IW610/sd_iw610.bin.se
     description: "Wi-Fi firmware for IW610 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.1/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.3/readme.txt
   - path: IW610/uart_iw610_bt.bin.se
-    sha256: 6ba60cec3844f029e37e5496d1e9a57497d6f115f4b4af06c21eda353780b896
+    sha256: eec3867ecd85c18c93645f9bd4b4e6c0adfda332ef27ce0197f688b78d41bc8e
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.3.1/IW610/uart_iw610_bt.bin.se
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.3.3/IW610/uart_iw610_bt.bin.se
     description: "BT firmware for IW610 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.1/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.3/readme.txt
   - path: IW610/sduart_iw610.bin.se
-    sha256: e3378f94e4ff0e7935e37cc098c86cd1d947ac72d66a5ab84f38aa61f92831b4
+    sha256: 1fff01622dfb167a80f770a03fd1f7b8e85372e4300e8fbbc5b863c046f9e872
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.3.1/IW610/sduart_iw610.bin.se
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.3.3/IW610/sduart_iw610.bin.se
     description: "Combo firmware for IW610 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.1/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.3/readme.txt
 
 #For imx-boot-firmware
   - path: imx-boot-firmware/imx95-19x19-lpddr5-evk-boot-firmware-0.1.bin
