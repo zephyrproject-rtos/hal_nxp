@@ -130,55 +130,55 @@ blobs:
 
 #For IW612
   - path: nw61x/sd_w61x.bin.se
-    sha256: fb16ac4b032c6ed32f809b40a014d8eadeb435a75b7def1a37baecf7165a756d
+    sha256: 1e91428fa4136dfac8bd4dfc08e0ef90a2edc5f54dea8fb3ebaa4948d00c31d1
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.3.1/nw61x/sd_w61x.bin.se
+    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.3.4/nw61x/sd_w61x.bin.se
     description: "Wi-Fi firmware for NW61x A1 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.1/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.4/readme.txt
   - path: nw61x/uartspi_n61x.bin.se
-    sha256: 2c86126faa1fdc25402ed6e982b794d07d016f4822bb807bd6a9ef5908475bf1
+    sha256: 5d111d8474c0d449e19fb54da6f76ae22a811957fc9a1c879424a6ee6baa64bf
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.3.2/nw61x/uartspi_n61x.bin.se
+    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.3.4/nw61x/uartspi_n61x.bin.se
     description: "BT firmware for NW61x A1 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.2/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.4/readme.txt
   - path: nw61x/sduart_nw61x.bin.se
-    sha256: 6deea42f913ff2a4a0dcd0e9bb9f2cd5961ebafd4d9e5395c5e4824f06778cbe
+    sha256: fc85d745abc2a9147b401aee1f480e64c63a76616b782305bd14822bde05fa4a
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.3.1/nw61x/sduart_nw61x.bin.se
+    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.3.4/nw61x/sduart_nw61x.bin.se
     description: "Combo firmware for NW61x A1 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.1/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.4/readme.txt
 
 #For IW416
   - path: IW416/sdIW416_wlan.bin
-    sha256: 29575c8c4a1ab8e19adcf45f26708640da9e6e42ebd0fc9289cf5d4b33ecc41a
+    sha256: 3a0db999801fa69ace882901e4c35a3127f37f9f6e1b0d4f9210b2313bfa7975
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.3.1/IW416/sdIW416_wlan.bin
+    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.3.4/IW416/sdIW416_wlan.bin
     description: "Wi-Fi firmware for IW416 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.1/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.4/readme.txt
   - path: IW416/uartIW416_bt.bin
-    sha256: a9918c321d2f985c84b9e0fa5620e24e0ece28db4ca7be53604ab124f6f2b748
+    sha256: 364bd1864f3134a46477371fc7e2cd868843aba6e3cbda6ca486bc71c40d358a
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.3.1/IW416/uartIW416_bt.bin
+    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.3.4/IW416/uartIW416_bt.bin
     description: "BT firmware for IW416 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.1/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.4/readme.txt
   - path: IW416/sduartIW416_wlan_bt.bin
-    sha256: 3d19514801110730b517e08b3e7efd8b26e3ad6c9902736e86697d72133763e4
+    sha256: a7dd7fded9b4819ef090e8912bf426777f3721c954a94fd75c2ad40c92232040
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.3.1/IW416/sduartIW416_wlan_bt.bin
+    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.3.4/IW416/sduartIW416_wlan_bt.bin
     description: "Combo firmware for IW416 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.1/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.4/readme.txt
 
 #For IW610
   - path: IW610/sd_iw610.bin.se
