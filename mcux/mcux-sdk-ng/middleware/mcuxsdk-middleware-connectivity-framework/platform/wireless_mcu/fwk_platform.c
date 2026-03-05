@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/*                           Copyright 2021-2025 NXP                          */
+/*                           Copyright 2021-2026 NXP                          */
 /*                    SPDX-License-Identifier: BSD-3-Clause                   */
 /* -------------------------------------------------------------------------- */
 
@@ -10,21 +10,17 @@
 #ifndef __ZEPHYR__
 /* Get some BOARD_***_DEFAULT macro values if defined in board.h for 32kHz settings */
 #include "board_platform.h"
-#include "fsl_trdc.h"
-#include "FunctionLib.h"
-#include "fsl_component_timer_manager.h"
-#include "fwk_debug.h"
 #endif
 
 #include "fwk_platform_definitions.h"
 #include "fwk_platform.h"
 #include "fwk_config.h"
 #include "fwk_platform_ics.h"
-#if defined(FPGA_TARGET) && (FPGA_TARGET == 1)
+#if (defined(FPGA_TARGET) && (FPGA_TARGET != 0))
 #include "fwk_platform_fpga.h"
 #endif
 
-#if !defined(FPGA_TARGET) || (FPGA_TARGET == 0)
+#if !(defined(FPGA_TARGET) && (FPGA_TARGET != 0))
 #include "fsl_ccm32k.h"
 #include "fsl_spc.h"
 #endif
@@ -34,6 +30,10 @@
 
 #include "rpmsg_platform.h"
 
+#if defined(gPlatformUseTimerManager_d) && (gPlatformUseTimerManager_d > 0)
+#include "fsl_component_timer_manager.h"
+#endif
+
 #if defined(gPlatformUseHwParameter_d) && (gPlatformUseHwParameter_d > 0)
 #include "HWParameter.h"
 #endif
@@ -42,17 +42,17 @@
 #include "fwk_platform_mws.h"
 #endif
 
+#if defined(gPlatformNbuDebugGpioDAccessEnabled_d) && (gPlatformNbuDebugGpioDAccessEnabled_d > 0)
+#include "fsl_trdc.h"
+#endif
+
+#include "fwk_debug.h"
 #include "mcmgr_imu_internal.h"
+#include "fwk_platform_mcu_nbu_common.h"
 
 /* -------------------------------------------------------------------------- */
 /*                               Private macros                               */
 /* -------------------------------------------------------------------------- */
-
-#ifdef __ZEPHYR__
-#define BOARD_DBGLPIOSET(...)
-#define DBG_NBU_GPIOD_ACCESS(...)
-#define FLib_MemCpy memcpy
-#endif
 
 /*! @brief XTAL 32Mhz clock source start up timeout */
 #ifndef FWK_PLATFORM_XTAL32M_STARTUP_TIMEOUT
@@ -60,7 +60,7 @@
 #endif /* FWK_PLATFORM_XTAL32M_STARTUP_TIMEOUT */
 
 /*! @brief Default load capacitance config for 32KHz crystal,
-      can be overidden from board_platform.h,
+      can be overridden from board_platform.h,
       user shall define this flag in board_platform.h file to set an other default value
       Values must be adjust to minimize the jitter on the crystal. This is to avoid
       a shift of 31.25us on the link layer timebase in NBU.
@@ -99,8 +99,23 @@
 #endif /* FWK_PLATFORM_XTAL32K_STARTUP_TIMEOUT */
 
 /*! @brief Remote active request timeout */
+#ifndef FWK_PLATFORM_INIT_NBU_TIMEOUT_US
+#define FWK_PLATFORM_INIT_NBU_TIMEOUT_US 1000U
+#endif /* FWK_PLATFORM_ACTIVE_REQ_TIMEOUT_US */
+
+/*! @brief Remote active request timeout */
 #ifndef FWK_PLATFORM_ACTIVE_REQ_TIMEOUT_US
 #define FWK_PLATFORM_ACTIVE_REQ_TIMEOUT_US 10000U
+#endif /* FWK_PLATFORM_ACTIVE_REQ_TIMEOUT_US */
+
+/*! @brief Timeout duration in microseconds for switching the 32kHz clock source to FRO32K */
+#ifndef FWK_PLATFORM_FRO32K_SWITCH_TIMEOUT_US
+#define FWK_PLATFORM_FRO32K_SWITCH_TIMEOUT_US 10000U
+#endif /* FWK_PLATFORM_FRO32K_SWITCH_TIMEOUT_US */
+
+/*! @brief Remote active release timeout */
+#ifndef FWK_PLATFORM_ACTIVE_REL_TIMEOUT_US
+#define FWK_PLATFORM_ACTIVE_REL_TIMEOUT_US 5000ULL
 #endif /* FWK_PLATFORM_ACTIVE_REQ_TIMEOUT_US */
 
 #define FWK_PLATFORM_NBU_WAKE_UP_INTERRUPT_MASK 0x8UL
@@ -109,15 +124,14 @@
  * the returned status will be negative  */
 #define RAISE_ERROR(__st, __error_code) -(int)((uint32_t)(((uint32_t)(__st) << 4) | (uint32_t)(__error_code)));
 
-#define TSTMR_MAX_VAL ((uint64_t)0x00FFFFFFFFFFFFFFULL)
+/* Basepri masking to allow high priority IRQs to execute */
+#define PLATFORM_MAX_INTERRUPT_PRIORITY         4U
+#define PLATFORM_MAX_INTERRUPT_PRIORITY_BASEPRI (PLATFORM_MAX_INTERRUPT_PRIORITY << (8 - __NVIC_PRIO_BITS))
 
-#define MRCC_TSTMR_CLK_DIS                   0x00u
-#define MRCC_TSTMR_CLK_EN_NO_LP_STALL        0x01u
-#define MRCC_TSTMR_CLK_EN_LP_STALL_IDLE      0x02u
-#define MRCC_TSTMR_CLK_EN_LP_STALL_DEEPSLEEP 0x03u
-
-#if (defined FSL_FEATURE_SOC_TSTMR_COUNT && (FSL_FEATURE_SOC_TSTMR_COUNT > 1))
-#define gPlatformHasTstmr32K_d 1
+#if (defined(FWK_KW43_MCXW70_FAMILIES) && (FWK_KW43_MCXW70_FAMILIES == 1))
+#define PLATFORM_MU_IRQn MU0_IRQn
+#else
+#define PLATFORM_MU_IRQn RF_IMU0_IRQn
 #endif
 
 /* -------------------------------------------------------------------------- */
@@ -142,7 +156,9 @@ typedef struct
 /*                         Private memory declarations                        */
 /* -------------------------------------------------------------------------- */
 
+#if defined(gPlatformUseTimerManager_d) && (gPlatformUseTimerManager_d > 0)
 static volatile int timer_manager_initialized = 0;
+#endif
 
 static int nbu_init    = 0;
 static int nbu_started = 0;
@@ -159,65 +175,17 @@ static const xtal_temp_comp_lut_t *pXtal32MTempCompLut = NULL;
 /* Number of request for CM3 to remain active */
 static int8_t active_request_nb = 0;
 
-extern PLATFORM_ErrorCallback_t pfPlatformErrorCallback;
-PLATFORM_ErrorCallback_t        pfPlatformErrorCallback = (void *)0;
+PLATFORM_ErrorCallback_t pfPlatformErrorCallback = (void *)0;
 
 /* Used and instantiated only if FRO6M calibration is linked */
 static Platform_Fro6MCalCtx_t fro6M_calibration_ctx = {
     .ratio = 1U, .started = false, .dwt_state = false, .trcena_state = false};
 
+static volatile uint32_t last_nbu_sw_state = 0U;
+
 /* -------------------------------------------------------------------------- */
 /*                              Private functions                              */
 /* -------------------------------------------------------------------------- */
-
-static uint64_t u64ReadTimeStamp(TSTMR_Type *base)
-{
-    uint32_t reg_l;
-    uint32_t reg_h;
-    uint32_t regPrimask;
-
-    regPrimask = DisableGlobalIRQ();
-
-    /* A complete read operation should include both TSTMR LOW and HIGH reads. If a HIGH read does not follow a LOW
-     * read, then any other Time Stamp value read will be locked at a fixed value. The TSTMR LOW read should occur
-     * first, followed by the TSTMR HIGH read.
-     * */
-    reg_l = base->L;
-    __DMB();
-    reg_h = base->H;
-
-    EnableGlobalIRQ(regPrimask);
-
-    return (uint64_t)reg_l | (((uint64_t)reg_h) << 32U);
-}
-
-/*!
- * \brief Compute number of ticks between 2 timestamps expressed in number of TSTMR ticks
- *
- * \param [in] timestamp0 start timestamp.
- * \param [in] timestamp1 end timestamp.
- *
- * \return uint64_t number of TSTMR ticks
- *
- */
-static uint64_t GetTimeStampDeltaTicks(uint64_t timestamp0, uint64_t timestamp1)
-{
-    uint64_t delta_ticks;
-
-    timestamp0 &= TSTMR_MAX_VAL; /* sanitize arguments */
-    timestamp1 &= TSTMR_MAX_VAL;
-
-    if (timestamp1 >= timestamp0)
-    {
-        delta_ticks = timestamp1 - timestamp0;
-    }
-    else
-    {
-        /* In case the 56-bit counter has wrapped */
-        delta_ticks = TSTMR_MAX_VAL - timestamp0 + timestamp1 + 1ULL;
-    }
-    return delta_ticks;
-}
 
 static int PLATFORM_SetXtalTempComp(const xtal_temp_comp_lut_t *lut, int16_t temperature)
 {
@@ -270,6 +238,58 @@ static int PLATFORM_SetXtalTempComp(const xtal_temp_comp_lut_t *lut, int16_t tem
     return ret;
 }
 
+/*!
+ * \brief Set interrupt mask to block interrupts below a certain priority level.
+ *
+ * This function sets the BASEPRI register to mask (disable) all interrupts
+ * with priority values numerically equal to or greater than
+ * PLATFORM_MAX_INTERRUPT_PRIORITY. It saves and returns the current BASEPRI
+ * value before modification, allowing it to be restored later.
+ *
+ * The function includes memory barriers (DSB and ISB) to ensure the interrupt
+ * masking takes effect immediately.
+ *
+ * \return uint32_t The previous BASEPRI register value. This value should be
+ *                  saved and passed to PLATFORM_ClearInterruptMask() to restore
+ *                  the original interrupt state.
+ *
+ * \note This function is typically used to enter a critical section where
+ *       interrupts below PLATFORM_MAX_INTERRUPT_PRIORITY must be disabled.
+ * \note The returned value must be used with PLATFORM_ClearInterruptMask()
+ *       to properly restore the interrupt state.
+ */
+static uint32_t PLATFORM_SetInterruptMask(void)
+{
+    uint32_t basepri = __get_BASEPRI();
+    __set_BASEPRI(PLATFORM_MAX_INTERRUPT_PRIORITY_BASEPRI);
+    __DSB();
+    __ISB();
+    return basepri;
+}
+
+/*!
+ * \brief Clear interrupt mask and restore previous interrupt priority level.
+ *
+ * This function restores the BASEPRI register to a previously saved value,
+ * effectively re-enabling interrupts that were masked by PLATFORM_SetInterruptMask().
+ * It includes memory barriers (DSB and ISB) to ensure the change takes effect
+ * immediately.
+ *
+ * \param[in] int_mask The previous BASEPRI value to restore. This should be
+ *                     the value returned by a prior call to PLATFORM_SetInterruptMask().
+ *
+ *
+ * \note This function is typically used to exit a critical section and restore
+ *       the interrupt state that existed before calling PLATFORM_SetInterruptMask().
+ * \note Always pair this function with PLATFORM_SetInterruptMask() to ensure
+ *       proper interrupt state management.
+ */
+static void PLATFORM_ClearInterruptMask(uint32_t int_mask)
+{
+    __set_BASEPRI(int_mask);
+    __DSB();
+    __ISB();
+}
 /* -------------------------------------------------------------------------- */
 /*                              Public functions                              */
 /* -------------------------------------------------------------------------- */
@@ -280,7 +300,6 @@ int PLATFORM_IsNbuStarted(void)
 
 void PLATFORM_SetLowPowerFlag(bool PwrDownOngoing)
 {
-#ifndef __ZEPHYR__
     uint32_t           val = 0UL;
     extern uint32_t    m_lowpower_flag_start[]; /* defined by linker */
     volatile uint32_t *p_lp_flag = (volatile uint32_t *)(uint32_t)m_lowpower_flag_start;
@@ -291,7 +310,6 @@ void PLATFORM_SetLowPowerFlag(bool PwrDownOngoing)
         val = PLATFORM_HOST_USE_POWER_DOWN;
     }
     *p_lp_flag = val;
-#endif
 }
 
 int PLATFORM_InitNbu(void)
@@ -300,10 +318,11 @@ int PLATFORM_InitNbu(void)
 
     if (nbu_init == 0)
     {
-        uint32_t rfmc_ctrl;
+        uint32_t rfmc_ctrl, regPrimask;
+        uint64_t timestamp;
         int      cnt = 0;
 
-#if !defined(FPGA_TARGET) || (FPGA_TARGET == 0)
+#if !(defined(FPGA_TARGET) && (FPGA_TARGET != 0))
 #if defined(gPlatformNbuDebugGpioDAccessEnabled_d) && (gPlatformNbuDebugGpioDAccessEnabled_d == 1)
         /* Init TRDC for NBU - Allow NBU to access GPIOD*/
         trdc_non_processor_domain_assignment_t domainAssignment;
@@ -328,37 +347,55 @@ int PLATFORM_InitNbu(void)
         RFMC->RF2P4GHZ_CTRL = rfmc_ctrl;
         RFMC->RF2P4GHZ_TIMER |= RFMC_RF2P4GHZ_TIMER_TIM_EN(0x1U);
 
-#if defined(FWK_KW47_MCXW72_FAMILIES) && (FWK_KW47_MCXW72_FAMILIES == 1)
+#if (defined(FWK_KW47_MCXW72_FAMILIES) && (FWK_KW47_MCXW72_FAMILIES == 1)) || \
+    (defined(FWK_KW43_MCXW70_FAMILIES) && (FWK_KW43_MCXW70_FAMILIES == 1))
         /* Allow the debugger to wakeup the target */
         RFMC->RF2P4GHZ_CFG |= RFMC_RF2P4GHZ_CFG_FORCE_DBG_PWRUP_ACK_MASK;
         CMC0->DBGCTL &= ~CMC_DBGCTL_SOD_MASK;
 #endif
-
-        /* Enabling BLE Power Controller (BLE_LP_EN) will automatically start the XTAL
-         * According to RM, we need to wait for the XTAL to be ready before accessing
-         * Radio domain ressources.
-         * Here, we make sure the XTAL is ready before releasing the CM3 from reset
-         * it will prevent any access issue when the CM3 is starting up.
-         * CM3 is released in HAL_RpmsgMcmgrInit */
-        BOARD_DBGLPIOSET(2, 1);
-        while ((cnt++ < FWK_PLATFORM_XTAL32M_STARTUP_TIMEOUT) && ((RFMC->XO_STAT & RFMC_XO_STAT_XTAL_RDY_MASK) == 0U))
+        regPrimask = DisableGlobalIRQ();
+        timestamp  = PLATFORM_GetTimeStamp();
+        /* Wait for the NBU to become active as BLE_LP_EN has been asserted */
+        while ((RFMC->RF2P4GHZ_STAT & RFMC_RF2P4GHZ_STAT_BLE_STATE_MASK) != RFMC_RF2P4GHZ_STAT_BLE_STATE(0x1U))
         {
-            BOARD_DBGLPIOSET(2, 0);
-            __ASM("NOP");
+            /* Trigger a timeout error if the register update takes too long */
+            if (PLATFORM_IsTimeoutExpired(timestamp, FWK_PLATFORM_INIT_NBU_TIMEOUT_US))
+            {
+                status = RAISE_ERROR(0, 2);
+                break;
+            }
+        }
+        EnableGlobalIRQ(regPrimask);
+
+        if (status == 0)
+        {
+            /* Enabling BLE Power Controller (BLE_LP_EN) will automatically start the XTAL
+             * According to RM, we need to wait for the XTAL to be ready before accessing
+             * Radio domain ressources.
+             * Here, we make sure the XTAL is ready before releasing the NBU from reset
+             * it will prevent any access issue when the NBU is starting up.
+             * NBU is released in HAL_RpmsgMcmgrInit */
             BOARD_DBGLPIOSET(2, 1);
-        }
-        BOARD_DBGLPIOSET(2, 0);
+            while ((cnt++ < FWK_PLATFORM_XTAL32M_STARTUP_TIMEOUT) &&
+                   ((RFMC->XO_STAT & RFMC_XO_STAT_XTAL_RDY_MASK) == 0U))
+            {
+                BOARD_DBGLPIOSET(2, 0);
+                __ASM("NOP");
+                BOARD_DBGLPIOSET(2, 1);
+            }
+            BOARD_DBGLPIOSET(2, 0);
 
-        if (cnt > FWK_PLATFORM_XTAL32M_STARTUP_TIMEOUT)
-        {
-            status = RAISE_ERROR(0, 1);
-        }
-        else
-        {
-            DBG_NBU_GPIOD_ACCESS();
+            if (cnt > FWK_PLATFORM_XTAL32M_STARTUP_TIMEOUT)
+            {
+                status = RAISE_ERROR(0, 1);
+            }
+            else
+            {
+                DBG_NBU_GPIOD_ACCESS();
 
-            /* nbu initialization completed */
-            nbu_init = 1;
+                /* nbu initialization completed */
+                nbu_init = 1;
+            }
         }
     }
     else
@@ -386,7 +423,7 @@ int PLATFORM_InitMulticore(void)
     if (rpmsg_status != kStatus_HAL_RpmsgSuccess)
     {
         status = RAISE_ERROR(rpmsg_status, 1);
-        assert(0);
+        assert(false);
     }
     else
     {
@@ -405,7 +442,8 @@ void PLATFORM_LoadHwParams(void)
 
     /* Load the HW parameters from Flash to RAM */
     status = NV_ReadHWParameters(&pHWParams);
-    if ((status == 0U) && (pHWParams->xtalTrim != 0xFFU))
+
+    if ((status == gHWParameterSuccess_c) && (pHWParams->xtalTrim != 0xFFU))
     {
         /* There is an existing trim value */
         xtal_32m_trim = pHWParams->xtalTrim;
@@ -418,22 +456,11 @@ void PLATFORM_LoadHwParams(void)
 /* get 4 words of information that uniquely identifies the MCU */
 void PLATFORM_GetMCUUid(uint8_t *aOutUid16B, uint8_t *pOutLen)
 {
-    uint32_t uid[4] = {0};
-
-    /* Get the MCU uid */
-    uid[0] = MSCM->UID[0];
-    uid[1] = MSCM->UID[1];
-    uid[2] = MSCM->UID[2];
-    uid[3] = MSCM->UID[3];
-
-    FLib_MemCpy(aOutUid16B, (uint8_t *)uid, sizeof(uid));
-    /* Get the uid length */
-    *pOutLen = (uint8_t)sizeof(uid);
-
-    return;
+    /* Get the MCU uid via abstraction */
+    Chip_GetUID(aOutUid16B, pOutLen);
 }
 
-#if !defined(FPGA_TARGET) || (FPGA_TARGET == 0)
+#if !(defined(FPGA_TARGET) && (FPGA_TARGET != 0))
 int PLATFORM_InitFro32K(void)
 {
     /* Enable the fro32k and select it as 32k clock source and disable osc32k
@@ -457,6 +484,23 @@ int PLATFORM_InitOsc32K(void)
     int      status;
     uint32_t osc32k_ctrl;
     uint8_t  xtalCap32K = BOARD_32KHZ_XTAL_CLOAD_DEFAULT;
+    uint64_t timestamp  = PLATFORM_GetTimeStamp();
+
+    /* Enable the fro32k and select it as 32k clock source, the switch to the OSC32K will be handle later on */
+    CCM32K_Enable32kFro(CCM32K, true);
+    CCM32K_SelectClockSource(CCM32K, kCCM32K_ClockSourceSelectFro32k);
+
+    /* Wait for the switch to fro32k to be effective */
+    while ((CCM32K_GetStatusFlag(CCM32K) & (uint32_t)kCCM32K_32kFroActiveStatusFlag) == 0U)
+    {
+        /* Exit the loop and trigger error callback if the FRO32K activation exceeds the timeout period. */
+        if (PLATFORM_IsTimeoutExpired(timestamp, FWK_PLATFORM_FRO32K_SWITCH_TIMEOUT_US) &&
+            (pfPlatformErrorCallback != NULL))
+        {
+            pfPlatformErrorCallback(PLATFORM_INIT_OSC_32K_ID, -1);
+            break;
+        }
+    }
 
     status = PLATFORM_GetOscCap32KValue(&xtalCap32K);
 
@@ -490,67 +534,97 @@ int PLATFORM_InitOsc32K(void)
 int PLATFORM_GetOscCap32KValue(uint8_t *xtalCap32K)
 {
     int status = 0;
-#if defined(gPlatformUseHwParameter_d) && (gPlatformUseHwParameter_d > 0)
-    hardwareParameters_t *pHWParams = NULL;
-
-    status = (int)NV_ReadHWParameters(&pHWParams);
-
-    if ((status == 0) && (pHWParams->xtalCap32K != 0xFFU))
+    if (xtalCap32K == NULL)
     {
-        uint32_t regPrimask;
-        regPrimask  = DisableGlobalIRQ();
-        *xtalCap32K = pHWParams->xtalCap32K;
-        EnableGlobalIRQ(regPrimask);
+        /* Null pointer : bad argument */
+        status = -1;
     }
     else
-#endif
     {
+        /* If no HWParameter or the production data unset it will keep the default value. */
         *xtalCap32K = BOARD_32KHZ_XTAL_CLOAD_DEFAULT;
+#if defined gPlatformUseHwParameter_d && (gPlatformUseHwParameter_d > 0)
+        do
+        {
+            hardwareParameters_t *pHWParams = NULL;
+            uint32_t              st;
+            st = NV_ReadHWParameters(&pHWParams);
+            if ((st != gHWParameterSuccess_c) && (st != gHWParameterBlank_c))
+            {
+                status = (int)st;
+                break;
+            }
+            status = 0;
+            if (st == gHWParameterSuccess_c)
+            {
+                if (pHWParams->xtalCap32K != 0xFFU)
+                {
+                    uint32_t regPrimask;
+                    regPrimask  = DisableGlobalIRQ();
+                    *xtalCap32K = pHWParams->xtalCap32K;
+                    EnableGlobalIRQ(regPrimask);
+                }
+                else
+                {
+                    /* Production Data not blank but no valid xtalCap32K, keep xtalCap32K default value and return no
+                     * error */
+                }
+            }
+            else
+            {
+                /* Production Data blank, keep xtalCap32K default value and return no error */
+            }
+        } while (false);
+#endif
     }
-    /* If the HWParameter are not set it will keep the value chosen by default so do nothing here */
     return status;
 }
 
 int PLATFORM_SetOscCap32KValue(uint8_t xtalCap32K)
 {
-    int                   status;
-    ccm32k_osc_config_t   osc32k_config;
-#if defined(gPlatformUseHwParameter_d) && (gPlatformUseHwParameter_d > 0)
-    uint32_t regPrimask;
-    hardwareParameters_t *pHWParams = NULL;
-#endif
-
-    do
+    int status = -1;
+    if (xtalCap32K <= BOARD_32KHZ_XTAL_CAPACITANCE_MAX_VALUE)
     {
-        if (xtalCap32K > BOARD_32KHZ_XTAL_CAPACITANCE_MAX_VALUE)
+        /* From now on xtalCap32K is sanitized */
+        status = 0;
+#if defined gPlatformUseHwParameter_d && (gPlatformUseHwParameter_d > 0)
+        do
         {
-            status = -1;
-            break;
-        }
+            hardwareParameters_t *pHWParams = NULL;
+            uint32_t              regPrimask;
+            uint32_t              st;
+            st = NV_ReadHWParameters(&pHWParams);
+            if ((st != gHWParameterSuccess_c) && (st != gHWParameterBlank_c))
+            {
+                status = (int)st;
+                break;
+            }
+            /* We have read the production data area, replace the previous xtalCap32K value by the new one */
+            regPrimask = DisableGlobalIRQ();
+            if (pHWParams->xtalCap32K != xtalCap32K)
+            {
+                /* update value only if it changed */
+                pHWParams->xtalCap32K = xtalCap32K;
+                (void)NV_WriteHWParameters();
+            }
+            EnableGlobalIRQ(regPrimask);
+        } while (false);
 
-#if defined(gPlatformUseHwParameter_d) && (gPlatformUseHwParameter_d > 0)
-        status = (int)NV_ReadHWParameters(&pHWParams);
-        if (status != 0)
-        {
-            break;
-        }
-
-        regPrimask            = DisableGlobalIRQ();
-        pHWParams->xtalCap32K = xtalCap32K;
-        (void)NV_WriteHWParameters();
-        EnableGlobalIRQ(regPrimask);
+        if (status == 0)
 #endif
 
-        osc32k_config.enableInternalCapBank = true;
-        osc32k_config.coarseAdjustment      = (ccm32k_osc_coarse_adjustment_value_t)BOARD_32KHZ_XTAL_COARSE_ADJ_DEFAULT;
+        {
+            ccm32k_osc_config_t osc32k_config;
 
-        osc32k_config.extalCap = (ccm32k_osc_extal_cap_t)xtalCap32K;
-        osc32k_config.xtalCap  = (ccm32k_osc_xtal_cap_t)xtalCap32K;
+            osc32k_config.enableInternalCapBank = true;
+            osc32k_config.coarseAdjustment = (ccm32k_osc_coarse_adjustment_value_t)BOARD_32KHZ_XTAL_COARSE_ADJ_DEFAULT;
 
-        CCM32K_Set32kOscConfig(CCM32K, kCCM32K_Enable32kHzCrystalOsc, &osc32k_config);
+            osc32k_config.extalCap = (ccm32k_osc_extal_cap_t)xtalCap32K;
+            osc32k_config.xtalCap  = (ccm32k_osc_xtal_cap_t)xtalCap32K;
 
-    } while (false);
-
+            CCM32K_Set32kOscConfig(CCM32K, kCCM32K_Enable32kHzCrystalOsc, &osc32k_config);
+        }
+    }
     return status;
 }
 
@@ -559,7 +633,7 @@ int PLATFORM_SwitchToOsc32k(void)
     int status = 0;
     int cnt    = 0;
 
-    assert((CCM32K->OSC32K_CTRL & CCM32K_OSC32K_CTRL_OSC_EN_MASK) != 0);
+    assert((CCM32K->OSC32K_CTRL & CCM32K_OSC32K_CTRL_OSC_EN_MASK) != 0U);
 
     do
     {
@@ -604,6 +678,7 @@ void PLATFORM_UninitOsc32K(void)
 
 uint8_t PLATFORM_GetXtal32MhzTrim(bool_t regRead)
 {
+    NOT_USED(regRead);
     uint8_t xtal32MhzTrim;
     xtal32MhzTrim = (uint8_t)((RFMC->XO_TEST & RFMC_XO_TEST_CDAC_MASK) >> RFMC_XO_TEST_CDAC_SHIFT);
     return xtal32MhzTrim;
@@ -612,19 +687,27 @@ uint8_t PLATFORM_GetXtal32MhzTrim(bool_t regRead)
 /* Calling this function assumes HWParameters in flash have been read */
 void PLATFORM_SetXtal32MhzTrim(uint8_t trimValue, bool_t saveToHwParams)
 {
-    uint32_t              rfmc_xo;
-#if defined(gPlatformUseHwParameter_d) && (gPlatformUseHwParameter_d > 0)
-    uint32_t              status;
-    hardwareParameters_t *pHWParams = NULL;
-    status                          = NV_ReadHWParameters(&pHWParams);
-    if ((TRUE == saveToHwParams) && (status == 0U))
-    {
-        /* update value only if it changed */
-        pHWParams->xtalTrim = trimValue;
-        (void)NV_WriteHWParameters();
-    }
-#endif
+    uint32_t rfmc_xo;
 
+#if defined gPlatformUseHwParameter_d && (gPlatformUseHwParameter_d > 0)
+    if (TRUE == saveToHwParams)
+    {
+        uint32_t              status;
+        hardwareParameters_t *pHWParams = NULL;
+        status                          = NV_ReadHWParameters(&pHWParams);
+        if ((status == gHWParameterSuccess_c) || (status == gHWParameterBlank_c))
+        {
+            /* update value only if it changed */
+            if (trimValue != pHWParams->xtalTrim)
+            {
+                pHWParams->xtalTrim = trimValue;
+                (void)NV_WriteHWParameters();
+            }
+        }
+    }
+#else
+    NOT_USED(saveToHwParams);
+#endif
     /* Apply a trim value to the crystal oscillator */
     rfmc_xo = RFMC->XO_TEST;
 
@@ -638,8 +721,8 @@ void PLATFORM_SetXtal32MhzTrim(uint8_t trimValue, bool_t saveToHwParams)
 int PLATFORM_InitTimerManager(void)
 {
     int status = 0;
-#ifndef __ZEPHYR__
 
+#if defined(gPlatformUseTimerManager_d) && (gPlatformUseTimerManager_d > 0)
     if (timer_manager_initialized == 0)
     {
         timer_status_t tm_st;
@@ -659,7 +742,7 @@ int PLATFORM_InitTimerManager(void)
         if (tm_st != kStatus_TimerSuccess)
         {
             status = RAISE_ERROR(tm_st, 1);
-            assert(0);
+            assert(false);
         }
         else
         {
@@ -672,47 +755,31 @@ int PLATFORM_InitTimerManager(void)
         /* Timer Manager already initialized */
         status = 1;
     }
-#else
-    timer_manager_initialized = 1;
 #endif
     return status;
 }
 
 void PLATFORM_DeinitTimerManager(void)
 {
+#if defined(gPlatformUseTimerManager_d) && (gPlatformUseTimerManager_d > 0)
     if (timer_manager_initialized == 1)
     {
-#ifndef __ZEPHYR__
         TM_Deinit();
-#endif
         timer_manager_initialized = 0;
     }
+#endif
 }
 
 uint64_t PLATFORM_GetTimeStamp(void)
 {
-    /* u64ReadTimeStamp mimics TSTMR_ReadTimeStamp(TSTMR0) but copied to avoid dependency
-     * with fsl_tstmr.h not present in include path
-     */
-    return u64ReadTimeStamp(TSTMR0);
-}
-
-uint64_t PLATFORM_Get32KTimeStamp(void)
-{
-#if defined gPlatformHasTstmr32K_d && (gPlatformHasTstmr32K_d > 0)
-    /* u64ReadTimeStamp mimics TSTMR_ReadTimeStamp(TSTMR0) but copied to avoid dependency
-     * with fsl_tstmr.h not present in include path
-     */
-    return u64ReadTimeStamp(TSTMR1_0);
-#else
-    return 0ULL;
-#endif
+    /* TSTMR0 counts 1MHz ticks */
+    return PLATFORM_TSTMR_ReadTimeStamp(0U);
 }
 
 uint64_t PLATFORM_GetMaxTimeStamp(void)
 {
     /* Max timestamp counter value (56 bits) */
-    return TSTMR_MAX_VAL;
+    return PLATFORM_TSTMR_MAX_VAL;
 }
 
 /*!
@@ -728,7 +795,7 @@ uint64_t PLATFORM_GetTimeStampDeltaUs(uint64_t timestamp0, uint64_t timestamp1)
 {
     uint64_t duration_us;
 
-    duration_us = GetTimeStampDeltaTicks(timestamp0, timestamp1);
+    duration_us = PLATFORM_GetTstmrDeltaTicks(timestamp0, timestamp1);
 
     if (fwk_platform_FRO6MHz_ratio > 1U)
     {
@@ -737,45 +804,11 @@ uint64_t PLATFORM_GetTimeStampDeltaUs(uint64_t timestamp0, uint64_t timestamp1)
          *  2MHz instead of 6MHz. A post wakeup calibration is executed to monitor such situation.
          */
         assert(fwk_platform_FRO6MHz_ratio == 3U);
-        val = (duration_us & TSTMR_MAX_VAL); /* cannot exceed 2^56 so guaranteed to be smaller than 2^64*/
-        val *= 3U;                           /* Guaranteed to be smaller than 2^58 */
+        val = (duration_us & PLATFORM_TSTMR_MAX_VAL); /* cannot exceed 2^56 so guaranteed to be smaller than 2^64*/
+        val *= 3U;                                    /* Guaranteed to be smaller than 2^58 */
         duration_us = val;
     }
     return duration_us;
-}
-
-/*!
- * \brief Compute number of microseconds between 2 timestamps expressed in number of TSTM 32kHz ticks
- *
- * \param [in] timestamp0 start timestamp from which duration is assessed.
- * \param [in] timestamp1 end timestamp till which duration is assessed.
- *
- * \return uint64_t number of microseconds
- *
- */
-uint64_t PLATFORM_Get32kTimeStampDeltaUs(uint64_t timestamp0, uint64_t timestamp1)
-{
-#if defined gPlatformHasTstmr32K_d && (gPlatformHasTstmr32K_d > 0)
-    uint64_t duration_us;
-
-    duration_us = GetTimeStampDeltaTicks(timestamp0, timestamp1);
-    /* Prevent overflow */
-    duration_us &= TSTMR_MAX_VAL;
-    /* Normally useless but let Coverity know that the input is necessarily less than 2^56 */
-    /* Multiply by 1000000 (2^6 * 5^6) and divide by 32768 (2^15) can be be simplified to Multiplication by 125*125 and
-     * division by 512 */
-    /* Multiply by 125, inserting the division by 64 and then multiply again by 125 and finally divide by 8 prevents the
-     * overflow considering the argument is smaller than 2^56
-     */
-    duration_us *= 125ULL; /* Since timestamps are no more than 56 bit wide, multiplying by 125 is smaller than 2^63 */
-    duration_us >>= 6;     /* Dividing by 64 (2^6) yields a result strictly smaller than 2^57 */
-    duration_us *= 125ULL; /* Multiplying by 125 is necessarily strictly smaller than 2^64-1 */
-    duration_us >>= 3;     /* Divide by 8 (2^3)  */
-
-    return duration_us;
-#else
-    return ~0ULL;
-#endif
 }
 
 /*!
@@ -819,7 +852,7 @@ void PLATFORM_Delay(uint64_t delayUs)
 
 void PLATFORM_DisableControllerLowPower(void)
 {
-#if !defined(FPGA_TARGET) || (FPGA_TARGET == 0)
+#if !(defined(FPGA_TARGET) && (FPGA_TARGET != 0))
     /* Increase active request number so it is always asserted while Controller
      * is not allowed to go to low power
      * This will avoid going through the wake up procedure each time
@@ -849,6 +882,27 @@ void PLATFORM_RemoteActiveReq(void)
         uint32_t rfmc_ctrl    = RFMC->RF2P4GHZ_CTRL;
         bool     remote_in_lp = false;
         uint64_t timestamp    = PLATFORM_GetTimeStamp();
+
+        /* Capture NBU software state before wake-up for race condition mitigation.
+         *
+         * The WKUP_TIME register (RFMC->RF2P4GHZ_MAN2) serves as a software handshake
+         * between NBU and host cores, encoding NBU power state as follows:
+         *   - Value 0:        NBU is awake and executing code
+         *   - Value non-zero: NBU is preparing for or in deep sleep
+         *                     Encoded as: (lowPowerEntryCount << 1 | 1)
+         *
+         * The lowPowerEntryCount increments on each deep sleep cycle, allowing us to
+         * detect if the NBU has executed any code since wake-up.
+         *
+         * Rationale: In PLATFORM_RemoteActiveRel(), we must verify the NBU has executed
+         * code before allowing it to return to deep sleep. By capturing this counter here,
+         * we can later detect either:
+         *   1. NBU became active (WKUP_TIME == 0), or
+         *   2. NBU completed execution and started a new deep sleep cycle
+         *      (WKUP_TIME != last_nbu_sw_state)
+         *
+         * Both conditions confirm the NBU processed our wake-up request. */
+        last_nbu_sw_state = RFMC->RF2P4GHZ_MAN2 & RFMC_RF2P4GHZ_MAN2_WKUP_TIME_MASK;
 
         /* Set lp wakeup delay to 0 to reduce time of execution on host side, NBU will wait XTAL to be ready before
          * starting execution */
@@ -933,6 +987,9 @@ void PLATFORM_RemoteActiveReq(void)
 
     OSA_InterruptEnable();
 
+    /* Re-initialize radio at the end of PLATFORM_RemoteActiveReq() */
+    PLATFORM_InitRadio();
+
     BOARD_DBGLPIOSET(0, 0);
 }
 
@@ -940,7 +997,32 @@ void PLATFORM_RemoteActiveRel(void)
 {
     BOARD_DBGLPIOSET(0, 1);
 
-    OSA_InterruptDisable();
+    /* Determine the context we are being called */
+    uint32_t isrNumber = __get_IPSR();
+
+    /* Security check: This function can only be safely called from:
+     * 1. Normal thread context (isrNumber == 0)
+     * 2. MU interrupt handler (for inter-core communication callbacks)
+     *
+     * Blocking calls from other ISRs prevents:
+     * - Race conditions on the reference counter
+     * - Unpredictable timing in the NBU handshake protocol */
+    if ((isrNumber != 0U) && (isrNumber != ((uint32_t)PLATFORM_MU_IRQn + (uint32_t)NVIC_USER_IRQ_OFFSET)))
+    {
+        /* Invalid calling context detected.
+         * This could corrupt the power management state machine */
+        if (pfPlatformErrorCallback != NULL)
+        {
+            pfPlatformErrorCallback(PLATFORM_REMOTE_ACTIVE_REL_ID, -2);
+        }
+        assert(false);
+    }
+
+    /* Use BASEPRI masking instead of PRIMASK to create a priority ceiling.
+     * This blocks lower priority interrupts (including MU) to protect our critical section,
+     * while still allowing high-priority system interrupts (priority < 4) to execute.
+     * This maintains system responsiveness during the handshake protocol */
+    uint32_t intMask = PLATFORM_SetInterruptMask();
 
     if (active_request_nb > 0)
     {
@@ -949,6 +1031,62 @@ void PLATFORM_RemoteActiveRel(void)
         if (active_request_nb == 0)
         {
             uint32_t rfmc_ctrl;
+            uint64_t timestamp = PLATFORM_GetTimeStamp();
+
+            do
+            {
+                /* Brief PRIMASK critical section to atomically check the handshake register.
+                 * We need to ensure the register read and timeout check are atomic to prevent
+                 * the NBU from changing state between our read and timeout evaluation */
+                uint32_t regPrimask = DisableGlobalIRQ();
+
+                /* Verify NBU code execution before allowing deep sleep re-entry.
+                 *
+                 * Race condition scenario: If PLATFORM_RemoteActiveRel() is called shortly
+                 * after PLATFORM_RemoteActiveReq(), the NBU may have woken up but not yet
+                 * executed meaningful code. Releasing the active request prematurely could
+                 * cause the NBU to enter deep sleep in an inconsistent state.
+                 *
+                 * Solution: Use the WKUP_TIME register to detect NBU execution:
+                 *
+                 * Pass condition 1: nbu_sw_state == 0
+                 *   The NBU is currently awake and actively running code.
+                 *
+                 * Pass condition 2: nbu_sw_state != last_nbu_sw_state
+                 *   The NBU woke up, executed code, and has prepared for a new deep sleep
+                 *   cycle (incrementing lowPowerEntryCount). The differing counter value
+                 *   proves execution occurred since PLATFORM_RemoteActiveReq().
+                 *
+                 * Failure mode: If neither condition is met within the timeout period,
+                 * trigger the error callback. This indicates the NBU is stuck in a
+                 * transitional state and unable to acknowledge the wake-up. */
+                uint32_t nbu_sw_state = RFMC->RF2P4GHZ_MAN2 & RFMC_RF2P4GHZ_MAN2_WKUP_TIME_MASK;
+                if ((last_nbu_sw_state != nbu_sw_state) || (nbu_sw_state == 0U))
+                {
+                    EnableGlobalIRQ(regPrimask);
+                    break;
+                }
+
+                /* Timeout protection: NBU must acknowledge within FWK_PLATFORM_ACTIVE_REL_TIMEOUT_US */
+                if (PLATFORM_IsTimeoutExpired(timestamp, FWK_PLATFORM_ACTIVE_REL_TIMEOUT_US) &&
+                    (pfPlatformErrorCallback != NULL))
+                {
+                    EnableGlobalIRQ(regPrimask);
+                    pfPlatformErrorCallback(PLATFORM_REMOTE_ACTIVE_REL_ID, -1);
+                    break;
+                }
+                /* Re-enable interrupts (except those masked by BASEPRI) to allow
+                 * peripheral ISRs to execute while we wait for NBU acknowledgment.
+                 * MU interrupts remain blocked to prevent re-entrance */
+                EnableGlobalIRQ(regPrimask);
+
+                /* Flush pipeline to allow any pending interrupts to execute before interrupts are masked again */
+                __ISB();
+            } while (true);
+
+            /* Clear the hardware wakeup request bit. This signals to the NBU hardware that it's now permitted to enter
+             * low power mode when its firmware determines it's appropriate.
+             * The NBU will honor this based on its internal activity schedule */
             rfmc_ctrl = RFMC->RF2P4GHZ_CTRL;
             rfmc_ctrl &= ~RFMC_RF2P4GHZ_CTRL_BLE_WKUP_MASK;
             RFMC->RF2P4GHZ_CTRL = rfmc_ctrl;
@@ -957,14 +1095,14 @@ void PLATFORM_RemoteActiveRel(void)
     }
     else
     {
-        assert(0);
+        assert(false);
     }
 
-    OSA_InterruptEnable();
+    /* Restore original interrupt masking state */
+    PLATFORM_ClearInterruptMask(intMask);
 
     BOARD_DBGLPIOSET(0, 0);
 }
-
 void PLATFORM_GetResetCause(PLATFORM_ResetStatus_t *reset_status)
 {
     uint32_t SSRS_value;
@@ -996,12 +1134,12 @@ void mcmgr_imu_remote_active_req(void)
 
 void PLATFORM_SetLdoCoreNormalDriveVoltage(void)
 {
-#if !defined(FPGA_TARGET) || (FPGA_TARGET == 0)
+#if !(defined(FPGA_TARGET) && (FPGA_TARGET != 0))
     spc_active_mode_core_ldo_option_t ldoOption;
     ldoOption.CoreLDOVoltage       = kSPC_CoreLDO_NormalVoltage;
     ldoOption.CoreLDODriveStrength = kSPC_CoreLDO_NormalDriveStrength;
     (void)SPC_SetActiveModeCoreLDORegulatorConfig(SPC0, &ldoOption);
-#endif /* !defined(FPGA_TARGET) || (FPGA_TARGET == 0) */
+#endif /* FPGA_TARGET */
 }
 
 void PLATFORM_SetNbuConstraintFrequency(PLATFORM_NbuConstraintFrequency_t freq_constraint)
@@ -1018,7 +1156,7 @@ void PLATFORM_RegisterErrorCallback(PLATFORM_ErrorCallback_t cb)
 int PLATFORM_ClearIoIsolationFromLowPower(void)
 {
     int ret = 0;
-#if !defined(FPGA_TARGET) || (FPGA_TARGET == 0)
+#if !(defined(FPGA_TARGET) && (FPGA_TARGET != 0))
     if ((SPC_CheckPowerDomainLowPowerRequest(SPC0, kSPC_PowerDomain0) == true) &&
         (SPC_GetPowerDomainLowPowerMode(SPC0, kSPC_PowerDomain0) >= kSPC_PowerDownWithSysClockOff))
     {
@@ -1040,7 +1178,7 @@ int PLATFORM_StartFro6MCalibration(void)
     ctx->trcena_state = (bool)((CoreDebug->DEMCR & CoreDebug_DEMCR_TRCENA_Msk) != 0U);
     ctx->dwt_state    = (bool)((DWT->CTRL & 1U) != 0U);
 
-    MRCC_TSTMR0_REG = MRCC_MRCC_TSTMR0_CLKSEL_CC(MRCC_TSTMR_CLK_EN_LP_STALL_IDLE);
+    *FWK_MRCC_TSTMR0_REG = FWK_MRCC_TSTMR0_CC(FWK_MRCC_TSTMR0_CLK_EN_LP_STALL_IDLE);
 
     CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
     ctx->initial_ts = PLATFORM_GetTimeStamp();
@@ -1077,7 +1215,7 @@ int PLATFORM_EndFro6MCalibration(void)
         now = PLATFORM_GetTimeStamp();
 
         /* tstmr_tick_diff should be a number of microseconds if FRO6M has correctly locked */
-        tstmr_ticks_delta = GetTimeStampDeltaTicks(ctx->initial_ts, now);
+        tstmr_ticks_delta = PLATFORM_GetTstmrDeltaTicks(ctx->initial_ts, now);
 
         if (tstmr_ticks_delta < (uint64_t)UINT32_MAX)
         {
@@ -1157,4 +1295,34 @@ int PLATFORM_CalibrateXtal32M(int16_t temperature)
     } while (false);
 
     return ret;
+}
+
+void PLATFORM_InitRadio(void)
+{
+#if defined(gPlatformEnableLdoForce) && (gPlatformEnableLdoForce > 0)
+    if (((RFMC->VERID & RFMC_VERID_RADIO_ID_MASK) == 0x4700U) || ((RFMC->VERID & RFMC_VERID_RADIO_ID_MASK) == 0x4500U))
+    {
+        uint32_t tmp;
+
+        /* Enable XTAL LDO force and update LDO trim value to 0.885V  */
+        RFMC->XO_TEST |= (RFMC_XO_TEST_LDO_FORCE(1) | RFMC_XO_TEST_LDO_TRIM(1));
+
+        /* Force LDOs */
+        XCVR_ANALOG->LDO_0 |= (XCVR_ANALOG_LDO_0_LDO_PLL_FORCE_MASK | XCVR_ANALOG_LDO_0_LDO_VCO_FORCE_MASK |
+                               XCVR_ANALOG_LDO_0_LDO_RXTXHF_FORCE_MASK | XCVR_ANALOG_LDO_0_LDO_RXTXLF_FORCE_MASK |
+                               XCVR_ANALOG_LDO_0_LDO_CAL_FORCE_MASK);
+
+        tmp = XCVR_MISC->LDO_TRIM_0;
+        tmp &= ~(XCVR_MISC_LDO_TRIM_0_LDO_RXTXHF_TRIM_OFFSET_MASK | XCVR_MISC_LDO_TRIM_0_LDO_RXTXLF_TRIM_OFFSET_MASK |
+                 XCVR_MISC_LDO_TRIM_0_LDO_VCO_TRIM_OFFSET_MASK | XCVR_MISC_LDO_TRIM_0_LDO_PLL_TRIM_OFFSET_MASK);
+
+        /* Update ldo trim offset values */
+        tmp |= (XCVR_MISC_LDO_TRIM_0_LDO_RXTXLF_TRIM_OFFSET(6) | XCVR_MISC_LDO_TRIM_0_LDO_RXTXHF_TRIM_OFFSET(6) |
+                XCVR_MISC_LDO_TRIM_0_LDO_VCO_TRIM_OFFSET(2) | /* resolution is 4 codes ... translates into +8 */
+                XCVR_MISC_LDO_TRIM_0_LDO_PLL_TRIM_OFFSET(6));
+
+        XCVR_MISC->LDO_TRIM_0 = tmp;
+    }
+#endif
+    return;
 }

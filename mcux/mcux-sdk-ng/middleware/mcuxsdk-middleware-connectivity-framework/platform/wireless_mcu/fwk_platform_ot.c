@@ -1,5 +1,5 @@
 /*!
- * Copyright 2021-2023, 2025 NXP
+ * Copyright 2021-2023, 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -10,7 +10,6 @@
 #include "SecLib.h"
 #include "RNG_Interface.h"
 #include "HWParameter.h"
-#include "FunctionLib.h"
 #endif
 
 #include "fsl_common.h"
@@ -19,16 +18,11 @@
 #include "fwk_platform.h"
 #include "fwk_platform_ics.h"
 #include "fwk_platform_ot.h"
+#include "FunctionLib.h"
 
 /* Default IEE EIU64 OUI */
 #ifndef IEEE802_15_4_ADDR_OUI
 #define IEEE802_15_4_ADDR_OUI 0x37U, 0x60U, 0x00U
-#endif
-
-#ifndef gPlatformUseOuiFromIfr
-/* Define to 1 to use OUI in IFR for the extented MAC adress. It will fallback to the static OUI if the IFR one is not
- * available. This feature is experimental as it has not been validated on programmed samples. */
-#define gPlatformUseOuiFromIfr 0
 #endif
 
 #ifndef __ZEPHYR__
@@ -42,7 +36,7 @@ static const uint8_t gIeee802_15_4_ADDR_OUI_c[MAC_ADDR_OUI_PART_SIZE] = {IEEE802
     {                                                                                              \
         if ((__st) < 0)                                                                            \
         {                                                                                          \
-            assert(0);                                                                             \
+            assert(false);                                                                         \
             (__st) = -(int)((uint32_t)(((uint32_t)(-(__st)) << 4) | (uint32_t)(-(__error_code)))); \
             break;                                                                                 \
         }                                                                                          \
@@ -134,7 +128,7 @@ static void PLATFORM_GenerateNewEui64Addr(uint8_t *eui64_address)
     FLib_MemCpy((void *)eui64_address, (const void *)macAddr, EUI_64_SZ - MAC_ADDR_OUI_PART_SIZE);
 
     /* Set 3 MSB from OUI */
-#if defined(gPlatformUseOuiFromIfr) && (gPlatformUseOuiFromIfr == 1)
+#if (defined(FWK_KW47_MCXW72_FAMILIES) && (FWK_KW47_MCXW72_FAMILIES == 1))
     /* If the IFR is not blank, copy its first three bytes to the OUI field of the extended address.
        Otherwise, use the static OUI as a fallback. */
     if (FLib_MemCmpToVal((const void *)IFR_BLE_BD_ADDR, 0xFFU, MAC_ADDR_OUI_PART_SIZE) == FALSE)

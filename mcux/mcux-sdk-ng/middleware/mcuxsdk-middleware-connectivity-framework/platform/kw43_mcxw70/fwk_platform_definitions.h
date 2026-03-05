@@ -10,6 +10,8 @@
 #include "fsl_device_registers.h"
 #include "fwk_hal_macros.h"
 
+#define FWK_KW43_MCXW70_FAMILIES 1
+
 #define gPlatformFlashStartAddress_c (FSL_FEATURE_FLASH_PFLASH_START_ADDRESS)
 #define gPlatformFlashEndAddress_c   (FSL_FEATURE_FLASH_PFLASH_BLOCK_SIZE)
 
@@ -28,13 +30,10 @@
 #define IFR_SECT_USER    1u /* Reserved for customer usage */
 #define IFR_SECT_CMAC    2u /* Reserved CMAC */
 #define IFR_SECT_OTA_CFG 3u /* OTACFG */
-#ifndef FSL_FEATURE_IFR0_START_ADDRESS
-#define FSL_FEATURE_IFR0_START_ADDRESS (0x02000000U)
-#endif
 
 #define IFR_SECTOR_SIZE FSL_FEATURE_FLASH_PFLASH_SECTOR_SIZE
 
-#define IFR0_BASE FSL_FEATURE_IFR0_START_ADDRESS
+#define IFR0_BASE FSL_FEATURE_FLASH_IFR0_START_ADDRESS
 //#define IFR1_BASE                     FSL_FEATURE_FLASH_BLOCK0_IFR1_START
 
 #define IFR_SECTOR_OFFSET(n) ((n)*IFR_SECTOR_SIZE)
@@ -84,13 +83,73 @@ extern uint32_t PROD_DATA_BASE_ADDR[];
 #define gPlatformRamStartAddress_c (0x20000000U)
 #define gPlatformRamEndAddress_c   (0x2001BFFFU)
 
-#define SPC_TEST_ADDR            (SPC0_BASE + 0xf0U)
-#define SPC_TRIM_LOCK            (SPC0_BASE + 0x18U)
+#define PLATFORM_CTCM0_IDX 0U
+#define PLATFORM_CTCM1_IDX 1U
+#define PLATFORM_STCM0_IDX 2U
+#define PLATFORM_STCM1_IDX 3U
+#define PLATFORM_STCM2_IDX 4U
+#define PLATFORM_STCM3_IDX 5U
+#define PLATFORM_STCM4_IDX 6U
+#define PLATFORM_STCM5_IDX 7U
+
+#define PLATFORM_CTCM0_START_ADDR (0x04000000U)
+#define PLATFORM_CTCM0_END_ADDR   (0x04001FFFU)
+#define PLATFORM_CTCM1_START_ADDR (0x04002000U)
+#define PLATFORM_CTCM1_END_ADDR   (0x04003FFFU)
+#define PLATFORM_STCM0_START_ADDR (0x20000000U)
+#define PLATFORM_STCM0_END_ADDR   (0x20003FFFU)
+#define PLATFORM_STCM1_START_ADDR (0x20004000U)
+#define PLATFORM_STCM1_END_ADDR   (0x20007FFFU)
+#define PLATFORM_STCM2_START_ADDR (0x20008000U)
+#define PLATFORM_STCM2_END_ADDR   (0x2000FFFFU)
+#define PLATFORM_STCM3_START_ADDR (0x20010000U)
+#define PLATFORM_STCM3_END_ADDR   (0x20017FFFU)
+#define PLATFORM_STCM4_START_ADDR (0x20018000U)
+#define PLATFORM_STCM4_END_ADDR   (0x20019FFFU)
+#define PLATFORM_STCM5_START_ADDR (0x2001A000U)
+#define PLATFORM_STCM5_END_ADDR   (0x2001BFFFU)
+
+#define PLATFORM_BANK_START_ADDR                                                                                \
+    PLATFORM_CTCM0_START_ADDR, PLATFORM_CTCM1_START_ADDR, PLATFORM_STCM0_START_ADDR, PLATFORM_STCM1_START_ADDR, \
+        PLATFORM_STCM2_START_ADDR, PLATFORM_STCM3_START_ADDR, PLATFORM_STCM4_START_ADDR, PLATFORM_STCM5_START_ADDR
+
+#define PLATFORM_BANK_END_ADDR                                                                          \
+    PLATFORM_CTCM0_END_ADDR, PLATFORM_CTCM1_END_ADDR, PLATFORM_STCM0_END_ADDR, PLATFORM_STCM1_END_ADDR, \
+        PLATFORM_STCM2_END_ADDR, PLATFORM_STCM3_END_ADDR, PLATFORM_STCM4_END_ADDR, PLATFORM_STCM5_END_ADDR
+
+#define PLATFORM_BANK_IS_ECC TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE
+
+#define PLATFORM_VBAT_LDORAM_IDX PLATFORM_STCM5_IDX
+
+#define SPC_TEST_ADDR            (SPC_0_BASE + 0xf0u)
+#define SPC_TRIM_LOCK            (SPC_0_BASE + 0x18u)
 #define RF_CMC_RADIO_LP_SHUTDOWN RF_CMC1_RADIO_LP_CK(0x2)
 
-#define FWK_MRCC_TSTMR0_REG       (volatile uint32_t *)(0x4001C0C0U)
+#define MRCC_TSTMR0_REG MRCC->MRCC_TSTMR0_CLKSEL
+
+/*********************************************************************
+ *        LPTMR FPGA settings
+ *********************************************************************/
+#if (defined(FPGA_TARGET) && (FPGA_TARGET != 0))
+#undef PLATFORM_TM_CLK_FREQ
+#undef PLATFORM_TM_STAMP_CLK_FREQ
+#define PLATFORM_TM_CLK_FREQ       16000000U
+#define PLATFORM_TM_STAMP_CLK_FREQ 16000000U
+#endif
+
+#define gPlatformHasIntercoreCommonTimestamp_d 1
+#define gPlatformTstmr0HasClkControl_d         1
+
+#define FWK_MRCC_TSTMR0_REG       (volatile uint32_t *)(0x401A1288U)
 #define FWK_MRCC_TSTMR0_CLKSEL_CC (0x3U)
-#define FWK_TSRMR0_BASE           (0x40030000U)
-#define FWK_TSTMR_NB_INST         1U
+
+#define FWK_TSRMR0_BASE   (0x40199000U)
+#define FWK_TSRMR1_BASE   (0x4019A000U)
+#define FWK_TSTMR_NB_INST 2U
+
+typedef enum _fwk_tstmr_clk_sel
+{
+    FwkTSTMR0_ClkSel_1MHz = 5U, /*!< TSTMR 1MHz configuration for gPlatformTstmr0HasClkControl_d */
+} fwk_tstmr_clk_sel_t;
 
 #endif /* _FWK_PLAT_DEFS_H_ */

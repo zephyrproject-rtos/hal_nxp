@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2026 NXP
+ * Copyright 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -12,9 +12,6 @@
 /*********************************************************************
  *        General
  *********************************************************************/
-
-/* This platform has an NBU domain */
-#define gPlatformHasNbu_d 1
 
 /* Defines the calibration duration of the ADC, it will block the task during this time in milisec before trigger the
  * ADC on a channel*/
@@ -32,7 +29,7 @@
  *********************************************************************/
 
 #if !defined(gPlatformUseHwParameter_d)
-#define gPlatformUseHwParameter_d 1
+#define gPlatformUseHwParameter_d 0
 #endif
 /*
  * gHwParamsProdDataMainFlashMode_c HWParameters PROD_DATA remain at top of main flash,
@@ -73,15 +70,14 @@
  *   - gHwParamsProdDataMainFlash_c if you mean to remain backward compatible.
  *   - gHwParamsProdDataMainFlash2IfrMode_c if you wish to conserve previous
  *     HWParameter setting (MAC addresses, xtal trimming data) during migration phase.
- *   - gHwParamsProdDataIfrMode_c for new devices or once gHwParamsProdDataMainFlash2IfrMode_c
+ *   - gHwParamsProdDataPlacementIfrMode_c for new devices or once gHwParamsProdDataMainFlash2IfrMode_c
  *     mode has populated the IFR with legacy values. -> after this phase update linker script to remove
  *     flash space reserved for PROD_DATA.
  */
 #ifndef gHwParamsProdDataPlacement_c
-/* Place HW Parameter section to IFR on KW47,MCXW72 */
 //#define gHwParamsProdDataPlacement_c gHwParamsProdDataMainFlashMode_c
-//#define gHwParamsProdDataPlacement_c gHwParamsProdDataMainFlash2IfrMode_c
-#define gHwParamsProdDataPlacement_c gHwParamsProdDataIfrMode_c
+#define gHwParamsProdDataPlacement_c gHwParamsProdDataMainFlash2IfrMode_c
+//#define gHwParamsProdDataPlacement_c gHwParamsProdDataIfrMode_c
 #endif
 
 #if (gHwParamsProdDataPlacement_c == gHwParamsProdDataMainFlashMode_c)
@@ -155,15 +151,16 @@
  *        RNG source of entropy
  *********************************************************************/
 
-/* On KW47 wireless_mcu platform the only available source of entropy is the S200 */
+/* On wireless_mcu platform the only source of entropy disponible is the S200 */
 #ifndef gRngUseSecureSubSystem_d
-#define gRngUseSecureSubSystem_d 1
+#define gRngUseSecureSubSystem_d 0
 #endif
 
-/* Enable RNG auto reseed using system workqueue */
-#ifndef gRngEnableAutoReseed_d
-#define gRngEnableAutoReseed_d 1
-#endif
+/* Use the RNG HAL API from the SDK */
+#define gRngUseRngAdapter_c 1
+
+/* do not use TRNG in RNG for now */
+#undef FSL_FEATURE_SOC_TRNG_COUNT
 
 /*********************************************************************
  *        SecLib
@@ -183,7 +180,7 @@
  *      in non secure mode.
  * */
 #if !defined(gPlatformNbuDebugGpioDAccessEnabled_d)
-#define gPlatformNbuDebugGpioDAccessEnabled_d 1
+#define gPlatformNbuDebugGpioDAccessEnabled_d 0
 #endif
 
 /*********************************************************************
@@ -214,10 +211,6 @@
 #endif
 #endif
 
-/* Address which can trigger a dummy interrupt on NBU. Used in PLATFORM_RemoteActiveReq() to ensure code is executed on
- * NBU when trying to access to its power domain. In some corner cases NBU could become irresponsive if the NBU power domain was woken up without executing any code on the core  */
-#define gPlatformNbuWakeUpInterruptAddr 0x48949410U
-
 /*! Enable/Disable shutdown of ECC RAM banks during low power period like Deep Sleep or Power Down
  *  Shutting down ECC RAM banks allows to save about 1uA
  *  The RAM banks can be selectively reinitialized by calling MEM_ReinitRamBank API
@@ -232,39 +225,18 @@
  * The ECC RAM banks can be selectively reinitialized with MEM_ReinitRamBank API
  * This API is also used by the Memory Manager Light */
 #define PLATFORM_SELECT_RAM_RET_START_IDX 0U
-#define PLATFORM_SELECT_RAM_RET_END_IDX   10U
+#define PLATFORM_SELECT_RAM_RET_END_IDX   7U
 #else
-/* STCM3, STCM4, STCM5, STCM6, STCM7 are non-ECC RAM banks
+/* STCM3 and STCM4 only are non-ECC RAM banks
  * NOTE: the following values should be aligned with PLATFORM_BANK_IS_ECC definition
  */
 #define PLATFORM_SELECT_RAM_RET_START_IDX 5U
-#define PLATFORM_SELECT_RAM_RET_END_IDX   9U
+#define PLATFORM_SELECT_RAM_RET_END_IDX   6U
 #endif /* gPlatformShutdownEccRamInLowPower */
 
-/* Allow verification of FRO6M frequency validity: in some extremely rare situations FRO6M was observed oscillating at 2
- * MHz instead of 6MHz.
- * Defining gPlatformEnableFro6MCalLowpower_d as 1 enables an assessment of its value at each wake up by comparing TSTMR tick against core clock.
- * This FRO6M assessment is performed in parallel of other wake up operations but causes the wake up procedure to last at least 6 usec.
- */
-#ifndef gPlatformEnableFro6MCalLowpower_d
-#define gPlatformEnableFro6MCalLowpower_d 1
-#endif
-
-/* Enable LDO force mode on the platform */
+/* Disable LDO force mode on the platform */
 #ifndef gPlatformEnableLdoForce
-#define gPlatformEnableLdoForce 1
-#endif
-
-/*!
- * \brief use the device unique Id for BD address
- *
- * \details 0 : Use the NXP OUI for the three first bytes and generate randomly the last three ones
- *          1 : Use the NXP OUI for the three first bytes and the UID_LSB from RADIO_CTRL to define the last three ones
- *          2 : Read full BD adress from IFR and fallback to 0 if not available
- *
- */
-#ifndef gPlatformUseUniqueDeviceIdForBdAddr_d
-#define gPlatformUseUniqueDeviceIdForBdAddr_d 2
+#define gPlatformEnableLdoForce 0
 #endif
 
 /* Automatically set BLE Max TX power when calling PLATFORM_InitBle()

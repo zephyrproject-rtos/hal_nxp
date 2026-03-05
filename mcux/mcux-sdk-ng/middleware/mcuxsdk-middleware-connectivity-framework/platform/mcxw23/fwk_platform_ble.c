@@ -1,5 +1,5 @@
 /*!
- * Copyright 2024-2025 NXP
+ * Copyright 2024-2026 NXP
  * SPDX-License-Identifier: BSD-3-Clause
  *
  * \file fwk_platform_ble.c
@@ -10,12 +10,11 @@
 /*                                  Includes                                  */
 /* -------------------------------------------------------------------------- */
 
-#ifndef __ZEPHYR__
-#include "fsl_rom_api.h"
-#include "fsl_debug_console.h"
-#endif
+#include <stdint.h>
+#include <stdbool.h>
 
 #include "fsl_common.h"
+#include "fwk_platform.h"
 #include "fwk_platform_ble.h"
 #include "ble_controller.h"
 
@@ -32,11 +31,21 @@ static blec_result_t PLATFORM_HciRxCallback(blec_hciPacketType_t packetType, voi
 #endif
 
 /* -------------------------------------------------------------------------- */
+/*                               Private macros                               */
+/* -------------------------------------------------------------------------- */
+
+#if gAppMaxTxPowerDbm_c > 6
+/* MCXW23 limits TX power to a maximum of 6 dBm */
+#undef gAppMaxTxPowerDbm_c
+#define gAppMaxTxPowerDbm_c 6
+#endif
+
+/* -------------------------------------------------------------------------- */
 /*                               Private memory                               */
 /* -------------------------------------------------------------------------- */
 
 static void (*hci_rx_callback)(uint8_t packetType, uint8_t *data, uint16_t len);
-static bool is_initialized = false;
+static bool initialized = false;
 
 /* -------------------------------------------------------------------------- */
 /*                              Public functions                              */
@@ -48,27 +57,28 @@ int PLATFORM_InitBle(void)
 
     do
     {
-        if (is_initialized)
+        if (initialized == true)
         {
             ret = 1;
             break;
         }
 
         /* Initialize the controller only when this flag is set, otherwise it means it
-        * will be initialized by upper layers */
-    #if defined(gUseHciTransportDownward_d) && (gUseHciTransportDownward_d > 0)
+         * will be initialized by upper layers */
+#if defined(gUseHciTransportDownward_d) && (gUseHciTransportDownward_d > 0)
         if (kBLEC_Success != BLEController_Init(PLATFORM_HciRxCallback, gAppMaxTxPowerDbm_c, NULL))
         {
             ret = -1;
+            break;
         }
-    #else
+#else
         uint8_t bdAddr[6];
 
         PLATFORM_GetBDAddr(bdAddr);
         (void)BLEController_WriteBdAddr(bdAddr);
-    #endif
+#endif
 
-        is_initialized = true;
+        initialized = true;
     } while (false);
 
     return ret;
@@ -97,40 +107,14 @@ int PLATFORM_SendHciMessageAlt(uint8_t packetType, uint8_t *msg, uint32_t len)
 
 int PLATFORM_StartHci(void)
 {
+    /* not implemented for this platform */
     return 0;
 }
 
 int PLATFORM_SetHciRxCallback(void (*callback)(uint8_t packetType, uint8_t *data, uint16_t len))
 {
     hci_rx_callback = callback;
-    (void)hci_rx_callback;
     return 0;
-}
-
-void PLATFORM_GetBDAddr(uint8_t *bleDeviceAddress)
-{
-#ifndef __ZEPHYR__
-    flash_config_t flashInstance;
-    status_t       status;
-
-    status = FLASH_Init(&flashInstance);
-    assert_equal(status, kStatus_Success);
-
-    if (status == kStatus_Success)
-    {
-        uint32_t location = kFFR_BdAddrLocationCmpa | kFFR_BdAddrLocationNmpa | kFFR_BdAddrLocationUuid;
-        status            = FFR_GetBdAddress(&flashInstance, bleDeviceAddress, &location);
-        assert_equal(status, kStatus_Success);
-        PRINTF("Using bdAddr from %s\r\n", location == kFFR_BdAddrLocationCmpa ? "CMPA" :
-                                           location == kFFR_BdAddrLocationNmpa ? "NMPA" :
-                                                                                 "UUID");
-    }
-#endif
-}
-
-bool PLATFORM_CheckNextBleConnectivityActivity(void)
-{
-    return true;
 }
 
 int PLATFORM_GetRadioIdleDuration32K(void)

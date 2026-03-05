@@ -97,7 +97,7 @@ typedef unsigned char uchar_t;
 #define NumberOfElements(x) (sizeof(x) / sizeof((x)[0]))
 
 /* Compute the size of a string initialized with quotation marks */
-#define SizeOfString(string) (sizeof(string) - 1)
+#define SizeOfString(_str_) (sizeof(_str_) - 1)
 
 #define GetRelAddr(strct, member)      ((uint32_t) & (((strct *)(void *)0)->member))
 #define GetSizeOfMember(strct, member) sizeof(((strct *)(void *)0)->member)

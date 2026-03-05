@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2024, 2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -80,6 +80,11 @@
  *********************************************************************/
 #ifndef gPlatformMcuBootUseRemap_d
 #define gPlatformMcuBootUseRemap_d 1
+#endif
+
+/* Enable TimerManager support */
+#ifndef gPlatformUseTimerManager_d
+#define gPlatformUseTimerManager_d 1
 #endif
 
 #endif /* _FWK_CONFIG_H_ */

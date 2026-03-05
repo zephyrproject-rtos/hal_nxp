@@ -1,4 +1,4 @@
-# Copyright 2024-2025 NXP
+# Copyright 2024-2026 NXP
 # SPDX-License-Identifier: BSD-3-Clause
 
 mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/sbtsnoop OPTIONAL)
@@ -7,7 +7,8 @@ mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/SWO OPTIONAL)
 if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.dbg.fault_handlers)
     mcux_add_source(
         SOURCES
-                fault_handlers/fwk_fault_handlers.c
+                fault_handlers/fwk_fault_handlers_common.c
+                fault_handlers/fwk_fault_handlers_common.h
                 fault_handlers/fwk_fault_handlers_utils.c
                 fault_handlers/fwk_fault_handlers_utils.h
     )
@@ -28,6 +29,20 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.dbg.fault_handlers)
     )
 endif()
 
+if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.dbg.fault_handlers.nbu_core)
+    mcux_add_source(
+        SOURCES
+                fault_handlers/nbu/fwk_fault_handlers.c
+    )
+endif()
+
+if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.dbg.fault_handlers.app_core)
+    mcux_add_source(
+        SOURCES
+                fault_handlers/host/fwk_fault_handlers.c
+    )
+endif()
+
 if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.dbg.nbu_debug_on_host)
     mcux_add_source(
         SOURCES
@@ -45,11 +60,19 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.dbg.nbu_debug)
     mcux_add_source(
         SOURCES
                 nbu_dbg/nbu_interface/fwk_nbu_dbg.c
+                nbu_dbg/nbu_interface/fwk_nbu_dbg.h
     )
 
     mcux_add_include(
         INCLUDES
                 nbu_dbg/nbu_interface
+    )
+
+    mcux_add_configuration(
+    # define to force initialization of sqram_debug_region after reset
+    # only required for GCC as IAR already initialize correctly this region
+        TOOLCHAINS armgcc
+        AS "        -DINIT_BLE_DEBUG_DAT"
     )
 endif()
 

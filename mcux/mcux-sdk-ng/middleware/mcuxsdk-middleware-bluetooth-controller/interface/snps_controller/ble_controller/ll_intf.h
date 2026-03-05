@@ -4067,20 +4067,21 @@ uint64_t ll_intf_get_sleep_timer_us();
 
 #if (SUPPORT_MASTER_CONNECTION || (SUPPORT_SLAVE_CONNECTION && SUPPORT_CHANNEL_CLASSIFICATION))
 /**
- * @brief  set channel assessment state.
+ * @brief  set local channel assessment state.
  *
  * @param  state		: [in] 0:inactive, >=1: active
  *
  */
 void ll_intf_set_channel_assessment_state(uint8_t state);
 /**
- * @brief  get the current channel assessment state.
+ * @brief  get the current local channel assessment state.
  *
  * @retval  state		: [in] 0:inactive, >=1: active
  *
  */
 uint8_t ll_intf_get_channel_assessment_state(void);
 #endif /* (SUPPORT_MASTER_CONNECTION || (SUPPORT_SLAVE_CONNECTION && SUPPORT_CHANNEL_CLASSIFICATION)) */
+
 #endif /* INCLUDE_LL_INTF_H */
 
 // reuse-pragma endSub nMAC_ONLY

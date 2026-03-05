@@ -1,4 +1,4 @@
-# Copyright 2024-2025 NXP
+# Copyright 2024-2026 NXP
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.platform.kw45_k32w1_mcxw71)
@@ -36,11 +36,4 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.platform.kw45_k32w1_mcxw7
         )
     endif()
 
-    if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.seclib_rng_port.mbedtls)
-        mcux_add_source(SOURCES
-            configs/SecLib_mbedtls_config.h
-            DEVICE_IDS ${KW45_FAMILY} ${MCXW71_FAMILY}
-            CORE_IDS "cm33_core0" "cm33"
-        )
-    endif()
 endif()

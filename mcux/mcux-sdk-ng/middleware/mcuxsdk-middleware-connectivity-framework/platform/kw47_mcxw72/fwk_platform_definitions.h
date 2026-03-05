@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2025 NXP
+ * Copyright 2022-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -8,16 +8,9 @@
 #define _FWK_PLAT_DEFS_H_
 
 #include "fsl_device_registers.h"
-#include <zephyr/sys/util.h>
+#include "fwk_hal_macros.h"
 
 #define FWK_KW47_MCXW72_FAMILIES 1
-
-#ifndef KB
-#define KB(x) (((uint32_t)x) << 10u)
-#endif
-#ifndef MB
-#define MB(x) (((uint32_t)x) << 20u)
-#endif
 
 #define gPlatformFlashStartAddress_c (FSL_FEATURE_FLASH_PFLASH_START_ADDRESS)
 #define gPlatformFlashEndAddress_c   (FSL_FEATURE_FLASH_PFLASH_BLOCK_SIZE)
@@ -30,12 +23,13 @@
 #define PLATFORM_EXTFLASH_TOTAL_SIZE  MB(2U)
 
 #define PLATFORM_INTFLASH_SECTOR_SIZE FSL_FEATURE_FLASH_PFLASH_SECTOR_SIZE
+#define PLATFORM_INTFLASH_PHRASE_SIZE FSL_FEATURE_FLASH_PFLASH_PHRASE_SIZE
 
 /* IFR has 4 sectors */
-#define IFR_SECT_ROMCFG  0u /* ROM Bootload configurations */
-#define IFR_SECT_USER    1u /* Reserved for customer usage */
-#define IFR_SECT_CMAC    2u /* Reserved CMAC */
-#define IFR_SECT_OTA_CFG 3u /* OTACFG */
+#define IFR_SECT_ROMCFG  0U /* ROM Bootload configurations */
+#define IFR_SECT_USER    1U /* Reserved for customer usage */
+#define IFR_SECT_CMAC    2U /* Reserved CMAC */
+#define IFR_SECT_OTA_CFG 3U /* OTACFG */
 #ifndef FSL_FEATURE_IFR0_START_ADDRESS
 #define FSL_FEATURE_IFR0_START_ADDRESS (0x02000000U)
 #endif
@@ -50,8 +44,8 @@
 /* OTA CFG is in sector 3 of IFR */
 #define IFR_OTA_CFG_ADDR (IFR0_BASE + IFR_SECTOR_OFFSET(IFR_SECT_OTA_CFG))
 #define IFR_USER_ADDR    (IFR0_BASE + IFR_SECTOR_OFFSET(IFR_SECT_USER))
-#define IFR_W_ONCE_DATA  (IFR0_BASE + IFR_SECTOR_OFFSET(IFR_SECT_ROMCFG) + 0x1000)
-#define IFR_BLE_BD_ADDR  (IFR0_BASE + IFR_SECTOR_OFFSET(IFR_SECT_ROMCFG) + 0xB00)
+#define IFR_W_ONCE_DATA  (IFR0_BASE + IFR_SECTOR_OFFSET(IFR_SECT_ROMCFG) + 0x1000U)
+#define IFR_BLE_BD_ADDR  (IFR0_BASE + IFR_SECTOR_OFFSET(IFR_SECT_ROMCFG) + 0xB00U)
 
 #define APP_FACTORY_DATA_MAX_LEN 0x800U
 #define PROD_DATA_LEN            0x80U
@@ -93,11 +87,13 @@ extern uint32_t PROD_DATA_BASE_ADDR[];
 #define gPlatformRamStartAddress_c (0x20000000U)
 #define gPlatformRamEndAddress_c   (0x2003FFFFU)
 
-#define SPC_TEST_ADDR            (SPC0_BASE + 0xf0u)
-#define SPC_TRIM_LOCK            (SPC0_BASE + 0x18u)
+#define SPC_TEST_ADDR            (SPC0_BASE + 0xf0U)
+#define SPC_TRIM_LOCK            (SPC0_BASE + 0x18U)
 #define RF_CMC_RADIO_LP_SHUTDOWN RF_CMC1_RADIO_LP_CK(0x2)
 
-#define MRCC_TSTMR0_REG            MRCC->MRCC_TSTMR0
-#define MRCC_MRCC_TSTMR0_CLKSEL_CC MRCC_MRCC_TSTMR0_CC
+#define FWK_MRCC_TSTMR0_REG       (volatile uint32_t *)(0x4001C0C0U)
+#define FWK_MRCC_TSTMR0_CLKSEL_CC (0x3U)
+#define FWK_TSRMR0_BASE           0x40030000U
+#define FWK_TSTMR_NB_INST         1U
 
 #endif /* _FWK_PLAT_DEFS_H_ */

@@ -1,5 +1,5 @@
 /*!
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2024, 2026 NXP
  * SPDX-License-Identifier: BSD-3-Clause
  *
  * \file fwk_platform.c
@@ -11,16 +11,18 @@
 /*                                  Includes                                  */
 /* -------------------------------------------------------------------------- */
 
-#ifndef __ZEPHYR__
-
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "fwk_config.h"
 #include "fwk_platform.h"
 #include "fwk_platform_rng.h"
 #include "fsl_clock.h"
+
+#if defined(gPlatformUseTimerManager_d) && (gPlatformUseTimerManager_d > 0)
 #include "fsl_component_timer_manager.h"
 #include "fsl_adapter_time_stamp.h"
+#endif
 
 /* -------------------------------------------------------------------------- */
 /*                               Private macros                               */
@@ -55,9 +57,11 @@
 /*                               Private memory                               */
 /* -------------------------------------------------------------------------- */
 
+#if defined(gPlatformUseTimerManager_d) && (gPlatformUseTimerManager_d > 0)
 static TIME_STAMP_HANDLE_DEFINE(timestampHandle);
 static bool timestampInitialized    = false;
 static bool timerManagerInitialized = false;
+#endif
 
 #if defined(TIMER_PORT_TYPE_CTIMER) && (TIMER_PORT_TYPE_CTIMER > 0)
 static const IRQn_Type s_ctimerIRQ[] = CTIMER_IRQS;
@@ -69,7 +73,8 @@ static const IRQn_Type s_ctimerIRQ[] = CTIMER_IRQS;
 
 int PLATFORM_InitTimerManager(void)
 {
-    int            ret = 0;
+    int ret = 0;
+#if defined(gPlatformUseTimerManager_d) && (gPlatformUseTimerManager_d > 0)
     timer_config_t config;
 
     do
@@ -99,12 +104,14 @@ int PLATFORM_InitTimerManager(void)
 
         timerManagerInitialized = true;
     } while (false);
+#endif
 
     return ret;
 }
 
 void PLATFORM_InitTimeStamp(void)
 {
+#if defined(gPlatformUseTimerManager_d) && (gPlatformUseTimerManager_d > 0)
     hal_time_stamp_config_t config;
 
     if (timestampInitialized == false)
@@ -119,38 +126,51 @@ void PLATFORM_InitTimeStamp(void)
 
         timestampInitialized = true;
     }
+#endif
 }
 
 uint64_t PLATFORM_GetTimeStamp(void)
 {
+#if defined(gPlatformUseTimerManager_d) && (gPlatformUseTimerManager_d > 0)
     return HAL_GetTimeStamp(timestampHandle);
+#else
+    return 0U;
+#endif
 }
 
 uint64_t PLATFORM_GetMaxTimeStamp(void)
 {
+#if defined(gPlatformUseTimerManager_d) && (gPlatformUseTimerManager_d > 0)
     /* The timestamp module always converts the timer counter to microsec
      * as the OSTIMER is a 64bits timer, the conversion can overflow after a certain counter value
      * So the timestamp module discards the 20 MSB to avoid this, so the max value of the counter is
      * 0xFFFFFFFFFFFU */
     return (uint64_t)COUNT_TO_USEC(0xFFFFFFFFFFFU, CLOCK_GetOSTimerClkFreq());
+#else
+    return 0U;
+#endif
 }
 
 void PLATFORM_TimeStampEnterLowPower(void)
 {
+#if defined(gPlatformUseTimerManager_d) && (gPlatformUseTimerManager_d > 0)
     if (timestampInitialized == true)
     {
         HAL_TimeStampEnterLowpower(timestampHandle);
         CLOCK_AttachClk(kNONE_to_OSTIMER_CLK);
     }
+#endif
 }
 
 void PLATFORM_TimeStampExitPowerDown(void)
 {
+#if defined(gPlatformUseTimerManager_d) && (gPlatformUseTimerManager_d > 0)
     if (timestampInitialized == true)
     {
         CLOCK_AttachClk(kCLK32K_to_OSTIMER_CLK);
         HAL_TimeStampExitLowpower(timestampHandle);
     }
+#endif
 }
 
 int PLATFORM_RequestRngSeed(void)
@@ -166,5 +186,3 @@ int PLATFORM_SendRngSeed(uint8_t *seed, uint16_t seed_size)
     (void)seed_size;
     return 1;
 }
-
-#endif /* __ZEPHYR__ */
