@@ -466,8 +466,9 @@ void FLib_MemCopy16Unaligned(void *pDst, uint16_t val16)
 {
     uint8_t *pData = (uint8_t *)pDst;
 
-    *pData++ = (uint8_t)(val16);
-    *pData   = (uint8_t)(val16 >> 8);
+    /* Copy byte by byte from LSB to MSB */
+    *pData++ = (uint8_t)(val16 & 0xFFU);
+    *pData   = (uint8_t)((val16 >> 8) & 0xFFU);
 
     return;
 }
@@ -484,10 +485,11 @@ void FLib_MemCopy32Unaligned(void *pDst, uint32_t val32)
 {
     uint8_t *pData = (uint8_t *)pDst;
 
-    *pData++ = (uint8_t)(val32);
-    *pData++ = (uint8_t)(val32 >> 8);
-    *pData++ = (uint8_t)(val32 >> 16);
-    *pData++ = (uint8_t)(val32 >> 24);
+    /* Copy byte by byte from LSB to MSB */
+    *pData++ = (uint8_t)(val32 & 0xFFU);
+    *pData++ = (uint8_t)((val32 >> 8) & 0xFFU);
+    *pData++ = (uint8_t)((val32 >> 16) & 0xFFU);
+    *pData++ = (uint8_t)((val32 >> 24) & 0xFFU);
 
     return;
 }
@@ -504,14 +506,15 @@ void FLib_MemCopy64Unaligned(void *pDst, uint64_t val64)
 {
     uint8_t *pData = (uint8_t *)pDst;
 
-    *pData++ = (uint8_t)(val64);
-    *pData++ = (uint8_t)(val64 >> 8);
-    *pData++ = (uint8_t)(val64 >> 16);
-    *pData++ = (uint8_t)(val64 >> 24);
-    *pData++ = (uint8_t)(val64 >> 32);
-    *pData++ = (uint8_t)(val64 >> 40);
-    *pData++ = (uint8_t)(val64 >> 48);
-    *pData   = (uint8_t)(val64 >> 56);
+    /* Copy byte by byte from LSB to MSB */
+    *pData++ = (uint8_t)(val64 & 0xFFU);
+    *pData++ = (uint8_t)((val64 >> 8) & 0xFFU);
+    *pData++ = (uint8_t)((val64 >> 16) & 0xFFU);
+    *pData++ = (uint8_t)((val64 >> 24) & 0xFFU);
+    *pData++ = (uint8_t)((val64 >> 32) & 0xFFU);
+    *pData++ = (uint8_t)((val64 >> 40) & 0xFFU);
+    *pData++ = (uint8_t)((val64 >> 48) & 0xFFU);
+    *pData   = (uint8_t)((val64 >> 56) & 0xFFU);
 
     return;
 }

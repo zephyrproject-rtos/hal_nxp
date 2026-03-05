@@ -141,9 +141,8 @@
 
 
 
-extern os_mutex_id g_ll_lock;
-#define LL_LOCK()	os_rcrsv_mutex_wait(g_ll_lock,0xffffffff)
-#define LL_UNLOCK()	os_rcrsv_mutex_release(g_ll_lock)
+#define LL_LOCK()	disable_irq()
+#define LL_UNLOCK()	enable_irq()
 
 #if SUPPORT_MAC && SUPPORT_OPENTHREAD_1_2
 /* compiler flag to control supporting of CSL transmitter , RADIO TX at specific time , 1  supported , 0 not supported */
@@ -384,7 +383,7 @@ typedef enum {
 /**
  * The default PHY periodic calibration period in second. this Macro can be set to any value , Zero means that phy periodic calibration is disabled
  */
-#define DEFAULT_PHY_CALIBRATION_PERIOD        		60	/* Time period for PHY calibration = 10s */
+#define DEFAULT_PHY_CALIBRATION_PERIOD        		60	/* In seconds */
 
 
 

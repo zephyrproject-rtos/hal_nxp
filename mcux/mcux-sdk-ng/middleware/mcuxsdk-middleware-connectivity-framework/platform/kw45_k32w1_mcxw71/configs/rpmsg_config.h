@@ -3,6 +3,7 @@
  * All rights reserved.
  * Copyright (c) 2015 Xilinx, Inc. All rights reserved.
  * Copyright 2016 Freescale Semiconductor, Inc. All rights reserved.
+ * Copyright 2025 NXP
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -58,9 +59,17 @@
     do                   \
     {                    \
         if (!(x))        \
+        {                \
             while (true) \
+            {            \
                 ;        \
+            }            \
+        }                \
     } while (false);
+
+/* Share the shared memory configuration with NBU to ensure both the application and NBU use the same settings */
+#define RL_ALLOW_CUSTOM_SHMEM_CONFIG (1)
+
 /* } END */
 
 #endif /* _RPMSG_CONFIG_H */

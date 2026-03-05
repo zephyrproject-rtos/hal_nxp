@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2025 NXP
+ * Copyright 2022-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -32,7 +32,7 @@
  *********************************************************************/
 
 #if !defined(gPlatformUseHwParameter_d)
-#define gPlatformUseHwParameter_d 0
+#define gPlatformUseHwParameter_d 1
 #endif
 /*
  * gHwParamsProdDataMainFlashMode_c HWParameters PROD_DATA remain at top of main flash,
@@ -88,10 +88,10 @@
 #define USER_DATA_SECTOR     PROD_DATA_FLASH_ADDR
 #else
 /*
- * IFR_RSVD_SZ may be undefined or set to 0 if no reserved space is required.
- * However keep it as 0x600 during the internal development phase.
+ * IFR_RSVD_SZ may be undefined or set to 0U if no reserved space is required.
+ * However keep it as 0x600U during the internal development phase.
  */
-#define IFR_RSVD_SZ 0x600
+#define IFR_RSVD_SZ 0x600U
 
 #if (defined IFR_RSVD_SZ) && (IFR_RSVD_SZ > 0)
 #define PROD_DATA_FLASH_ADDR (IFR_USER_ADDR + IFR_RSVD_SZ + PROD_DATA_OFFSET)
@@ -114,8 +114,16 @@
 #define gUseResetByLvdForce_c      2
 #define gUseResetByDeepPowerDown_c 3
 
+/* Select correct reset method based on application configuration */
+#if (defined(gAppForceLvdResetOnResetPinDet_d) && (gAppForceLvdResetOnResetPinDet_d != 0))
+#define gPlatResetMethod_c gUseResetByLvdForce_c
+#endif
+#if (defined(gAppForceDeepPowerDownResetOnResetPinDet_d) && (gAppForceDeepPowerDownResetOnResetPinDet_d != 0))
+#define gPlatResetMethod_c gUseResetByDeepPowerDown_c
+#endif
+
 #if !defined(gPlatResetMethod_c)
-#if defined(FPGA_TARGET) && (FPGA_TARGET == 1)
+#if ((defined(FPGA_TARGET) && (FPGA_TARGET != 0)))
 #define gPlatResetMethod_c gUseResetByNvicReset_c
 #else
 #define gPlatResetMethod_c gUseResetByDeepPowerDown_c
@@ -151,6 +159,11 @@
 #define gRngUseSecureSubSystem_d 1
 #endif
 
+/* Enable RNG auto reseed using system workqueue */
+#ifndef gRngEnableAutoReseed_d
+#define gRngEnableAutoReseed_d 1
+#endif
+
 /*********************************************************************
  *        SecLib
  *********************************************************************/
@@ -169,7 +182,7 @@
  *      in non secure mode.
  * */
 #if !defined(gPlatformNbuDebugGpioDAccessEnabled_d)
-#define gPlatformNbuDebugGpioDAccessEnabled_d 0
+#define gPlatformNbuDebugGpioDAccessEnabled_d 1
 #endif
 
 /*********************************************************************
@@ -182,7 +195,7 @@
  * thread stack (this can be configured).
  */
 #ifndef gPlatformIcsUseWorkqueueRxProcessing_d
-#define gPlatformIcsUseWorkqueueRxProcessing_d 0
+#define gPlatformIcsUseWorkqueueRxProcessing_d 1
 #endif
 
 /* Enable HCI RX processing in the system workqueue thread
@@ -234,6 +247,34 @@
  */
 #ifndef gPlatformEnableFro6MCalLowpower_d
 #define gPlatformEnableFro6MCalLowpower_d 1
+#endif
+
+/* Disable LDO force mode on the platform */
+#ifndef gPlatformEnableLdoForce
+#define gPlatformEnableLdoForce 0
+#endif
+
+/* Automatically set BLE Max TX power when calling PLATFORM_InitBle()
+ * The max TX power value is defined by gAppMaxTxPowerDbm_c */
+#ifndef gPlatformSetBleMaxTxPowerAtInit_d
+#define gPlatformSetBleMaxTxPowerAtInit_d 1
+#endif
+
+/* Automatically send the SFC config to the NBU when calling PLATFORM_InitBle()
+ * The SFC config will be sent only if the application is not using the default values */
+#ifndef gPlatformSetSfcConfigAtInit_d
+#define gPlatformSetSfcConfigAtInit_d 1
+#endif
+
+/* Automatically send the wake up delay to the NBU when calling PLATFORM_InitBle()
+ * The wake up delay will be sent only if the application is not using the default value */
+#ifndef gPlatformSetWakeUpDelayAtInit_d
+#define gPlatformSetWakeUpDelayAtInit_d 1
+#endif
+
+/* Enable TimerManager support */
+#ifndef gPlatformUseTimerManager_d
+#define gPlatformUseTimerManager_d 1
 #endif
 
 /*********************************************************************

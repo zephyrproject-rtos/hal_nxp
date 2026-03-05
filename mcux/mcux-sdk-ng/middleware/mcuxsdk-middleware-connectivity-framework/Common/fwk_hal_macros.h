@@ -1,5 +1,5 @@
 /*! *********************************************************************************
- * Copyright 2022-2025 NXP
+ * Copyright 2022-2026 NXP
  * SPDX-License-Identifier: BSD-3-Clause
  ********************************************************************************** */
 #ifndef _HAL_MACROS_H_
@@ -29,8 +29,8 @@
  *****************************************************************************************/
 #if defined(__GNUC__)
 
-#define HAL_CLZ(x) ((uint8_t)(__builtin_clz(x) & 0x3fUL))
-#define HAL_CTZ(x) ((uint8_t)(__builtin_ctz(x) & 0x3fUL))
+#define HAL_CLZ(x) ((uint8_t)((uint32_t)__builtin_clz(x) & 0x3fUL))
+#define HAL_CTZ(x) ((uint8_t)((uint32_t)__builtin_ctz(x) & 0x3fUL))
 static inline uint32_t __hal_revb(uint32_t x)
 {
     unsigned int res;
@@ -41,7 +41,7 @@ static inline uint32_t __hal_revb(uint32_t x)
 
 #elif defined(__IAR_SYSTEMS_ICC__)
 
-#define HAL_CLZ(x)  ((uint8_t)(__iar_builtin_CLZ(x) & 0x3fUL))
+#define HAL_CLZ(x)  ((uint8_t)((uint32_t)__iar_builtin_CLZ(x) & 0x3fUL))
 #define HAL_RBIT(x) ((uint32_t)(__iar_builtin_RBIT(x)))
 
 static inline uint8_t __hal_ctz(uint32_t x)
@@ -188,8 +188,7 @@ static inline uint8_t __hal_ctz(uint32_t x)
 #ifndef _DO_CONCAT
 #define _DO_CONCAT(x, y) x##y
 #endif
-
-#define _CONCAT(x, y)    _DO_CONCAT(x, y)
+#define _CONCAT(x, y) _DO_CONCAT(x, y)
 
 #define DECL_ALIGN(type) __aligned(__alignof(type)) type
 
@@ -238,7 +237,13 @@ static inline uint32_t HAL_GetPowerOfTwoShift(uint32_t x)
 
         /* Use Count Leading Zeros to round x to the smallest power of two greater than or equal to x */
         clz_result = (uint32_t)HAL_CLZ(x - 1U);
-        shift_nbr  = (uint32_t)32U - clz_result;
+        if (clz_result > 32U)
+        {
+            /* Should not happen */
+            assert(0);
+            clz_result = 32U;
+        }
+        shift_nbr = (uint32_t)32U - clz_result;
 
         x = (uint32_t)1U << shift_nbr;
 

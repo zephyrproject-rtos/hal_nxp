@@ -236,7 +236,7 @@ int PLATFORM_SendHdlcMessage(uint8_t *msg, uint32_t len)
             {
                 /* An error here means the IMU link is not ready yet, we can assert here as it shouldn't happen
                  * because we wait for the IMU link to be ready in PLATFORM_InitHdlcImumc() */
-                assert(0);
+                assert(false);
                 ret = -1;
                 break;
             }

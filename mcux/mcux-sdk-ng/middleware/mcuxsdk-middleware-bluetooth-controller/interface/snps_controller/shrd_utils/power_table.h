@@ -3,31 +3,21 @@
  * @file    power_table.h
  * @brief   This file contains APIs prototypes related to configuring the used power table and the external power amplifier (EPA) parameters
  ******************************************************************************
- * @copy
  *
  * Synopsys MIT License:
- * 
  * Copyright (c) 2020-Present Synopsys, Inc
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of the Software,
+ * to deal in the Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
+ * to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included in all copies or 
+ * substantial portions of the Software.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * the Software, to deal in the Software without restriction, including without
- * limitation the rights to use, copy, modify, merge, publish, distribute,
- * sublicense, and/or sell copies of the Software, and to permit persons to whom
- * the Software is furnished to do so, subject to the following conditions:
- * 
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
- *  
- * 
- * THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING, BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE ARISING FROM,
- * OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE
+ * THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,INCLUDING,
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE ARISING FROM,
+ * OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
  *
  * \n\n<b>References</b>\n
  * -Documents folder .
@@ -37,13 +27,9 @@
  *  Notice that changes are listed in reverse chronological order.\n
  * <table border>
  * <tr>
- *   <td><b> when </b></td>
- *   <td><b> who </b></td>
- *   <td><b> what, where, why </b></td>
- * </tr>
- * <tr>
- *
- *   <td>  Create the file</td>
+ *   <td><b> PLEASE UPDATE with when date </b></td>
+ *   <td><b> PLEASE UPDATE with who made the changes </b></td>
+ *   <td><b> PLEASE UPDATE WITH what, where, why the changes were made</b></td>
  * </tr>
  * </table>\n
  */

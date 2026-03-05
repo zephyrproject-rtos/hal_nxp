@@ -37,7 +37,9 @@
 #define PLATFORM_TM_INSTANCE 0U
 #endif
 #ifndef PLATFORM_TM_CLK_FREQ
+#if !(defined(FPGA_TARGET) && (FPGA_TARGET != 0))
 #define PLATFORM_TM_CLK_FREQ 32768U
+#endif
 #endif
 
 #ifndef PLATFORM_TM_CLK_SELECT
@@ -48,8 +50,11 @@
 #ifndef PLATFORM_TM_STAMP_INSTANCE
 #define PLATFORM_TM_STAMP_INSTANCE 1U
 #endif
+
 #ifndef PLATFORM_TM_STAMP_CLK_FREQ
+#if !(defined(FPGA_TARGET) && (FPGA_TARGET != 0))
 #define PLATFORM_TM_STAMP_CLK_FREQ 32768U
+#endif
 #endif
 
 #ifndef PLATFORM_TM_STAMP_CLK_SELECT
@@ -114,8 +119,10 @@ typedef enum
 {
     /* PLATFORM */
     PLATFORM_REMOTE_ACTIVE_REQ_ID,
+    PLATFORM_INIT_OSC_32K_ID,
+    PLATFORM_REMOTE_ACTIVE_REL_ID,
     /* PLATFORM_BLE */
-    PLATFORM_INIT_BLE_ID,
+    PLATFORM_INIT_BLE_ID = 0x10,
     PLATFORM_SEND_HCI_MESSAGE_ID,
 } PLATFORM_Id_t;
 
@@ -134,6 +141,11 @@ typedef struct
         [PLATFORM_XTAL_TEMP_COMP_LUT_SIZE]; /*!< The CDAC values for the LUT, stored in ascending temperature,
                                       from min to max with temp_step increments */
 } xtal_temp_comp_lut_t;
+
+/* -------------------------------------------------------------------------- */
+/*                         Public memory declarations                        */
+/* -------------------------------------------------------------------------- */
+extern PLATFORM_ErrorCallback_t pfPlatformErrorCallback;
 
 /* -------------------------------------------------------------------------- */
 /*                        Public functions declaration                        */
@@ -200,16 +212,18 @@ void PLATFORM_UninitOsc32K(void);
 
 /*!
  * \brief Get the oscillator capacitance value set in the HWparameters.
- *        If no value is set it will return value by default.
+ *       If no value is set, or gPlatformUseHwParameter_d is not enabled, it will
+ *       return a per board default value.
  *
- * \param[out] pointer to the capacitance value
+ * \param[out] pointer to the capacitance value to be returned.
  *
  * \return int 0 if success, other if error.
  */
 int PLATFORM_GetOscCap32KValue(uint8_t *xtalCap32K);
 
 /*!
- * \brief Set in HWparameters and in CCM32K register capacitance value that we want to set.
+ * \brief Apply required Xtal Capacitance value to CCM32K register.
+ *        Optionally save the value to HW parameters if gPlatformUseHwParameter_d is enabled.
  *
  * \param[in] capacitance value
  *
@@ -220,15 +234,16 @@ int PLATFORM_SetOscCap32KValue(uint8_t xtalCap32K);
 /*!
  * \brief get the XTAL trim value
  *
- * \param[in] regRead boolean to read value from Radio register or from HW parameters
+ * \param[in] regRead legacy boolean : not used.
  *
  * \return XTAL trim value
  */
 uint8_t PLATFORM_GetXtal32MhzTrim(bool_t regRead);
 
 /*!
- * \brief Set the XTAL trim value
- *        Calling this function assumes HWParameters in flash have been read
+ * \brief Apply the required XTAL trim value to RFMC XO register.
+ *        Optionally save trimming value to HWParameters depending on input flag
+ *        and gPlatformUseHwParameter_d configuration.
  *
  * \param[in] trimValue Trim value to be set
  * \param[in] saveToHwParams boolean to update value in HW parameters
@@ -237,6 +252,8 @@ void PLATFORM_SetXtal32MhzTrim(uint8_t trimValue, bool_t saveToHwParams);
 
 /*!
  * \brief Update 32MHz trim value with the one stored in HW parameters.
+ *
+ * \ note Does nothing if gPlatformUseHwParameter_d is not enabled.
  *
  */
 void PLATFORM_LoadHwParams(void);
@@ -302,14 +319,6 @@ void PLATFORM_GetResetCause(PLATFORM_ResetStatus_t *reset_status);
 uint64_t PLATFORM_GetTimeStamp(void);
 
 /*!
- * \brief Returns current timestamp in 32kHz ticks
- *
- * \return uint64_t timestamp (raw TSTMR 32kHz ticks)
- * \note implemented on KW43/MCXW70 platforms not KW45, KW47, MCXW71, MCXW72
- */
-uint64_t PLATFORM_Get32KTimeStamp(void);
-
-/*!
  * \brief Returns the max timestamp value that can be returned by PLATFORM_GetTimeStamp
  *        Can be used by the user to handle timestamp wrapping
  *
@@ -329,6 +338,15 @@ uint64_t PLATFORM_GetMaxTimeStamp(void);
 uint64_t PLATFORM_GetTimeStampDeltaUs(uint64_t timestamp0, uint64_t timestamp1);
 
 /*!
+ * \brief Returns current timestamp in 32kHz ticks
+ *
+ * \return uint64_t timestamp (raw TSTMR 32kHz ticks)
+ *
+ * \note implemented on platform having a 32kHz TSTMR instance (KW43/MCXW70)
+ * not KW45, KW47, MCXW71, MCXW72
+ */
+uint64_t PLATFORM_Get32KTimeStamp(void);
+/*!
  * \brief Compute number of microseconds between 2 timestamps expressed in number of 32kHz TSTMR ticks
  *
  * \param [in] timestamp0 start timestamp from which duration is assessed.
@@ -336,10 +354,11 @@ uint64_t PLATFORM_GetTimeStampDeltaUs(uint64_t timestamp0, uint64_t timestamp1);
  *
  * \return uint64_t number of microseconds - May return ~0ULL if not implemented.
  *
- *  \note only implemented on platforms having a 32kHz TSTMR instance (KW43/MCXW70)
+ * \note implemented on platform having a 32kHz TSTMR instance (KW43/MCXW70)
+ * not KW45, KW47, MCXW71, MCXW72
  *
  */
-uint64_t PLATFORM_Get32kTimeStampDeltaUs(uint64_t timestamp0, uint64_t timestamp1);
+uint64_t PLATFORM_Get32KTimeStampDeltaUs(uint64_t timestamp0, uint64_t timestamp1);
 
 /*!
  * \brief  Tells if the timeout is expired
@@ -470,6 +489,15 @@ int PLATFORM_CalibrateXtal32M(int16_t temperature);
  *         INT32_MAX for undefined Idle time (no next activity scheduled)
  */
 int PLATFORM_GetRadioIdleDuration32K(void);
+
+/*!
+ * \brief Initialize the radio
+ *
+ * \details Enable LDO force on the different LDOs and configure their trim values
+ *
+ * \note API need to be called on KW47/MCXW72 platforms.
+ */
+void PLATFORM_InitRadio(void);
 
 #if defined(__cplusplus)
 }

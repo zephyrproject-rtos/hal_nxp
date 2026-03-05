@@ -1,4 +1,4 @@
-# Copyright 2024-2025 NXP
+# Copyright 2024-2026 NXP
 # SPDX-License-Identifier: BSD-3-Clause
 
 mcux_set_list(RW61x_FAMILY "RW610 RW612")
@@ -14,14 +14,6 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.platform.rw61x)
         DEVICE_IDS ${RW61x_FAMILY}
     )
 
-    if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.seclib_rng_port.mbedtls)
-        mcux_add_source(SOURCES
-            configs/rw61x-mbedtls-config.h
-            configs/SecLib_mbedtls_config.h
-            DEVICE_IDS ${RW61x_FAMILY}
-        )
-    endif()
-
     if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.seclib_rng_port.psa)
         mcux_add_source(SOURCES
             configs/SecLib_psa_config.h
@@ -33,6 +25,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.platform.rw61x)
         .
         configs
         ../include
+        ../Common
         DEVICE_IDS ${RW61x_FAMILY}
     )
 
@@ -59,6 +52,7 @@ endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.platform.ota)
     mcux_add_source(SOURCES
+        ../Common/fwk_platform_mcuboot_ota.ch
         fwk_platform_ota.c
         ../include/fwk_platform_ota.h
         DEVICE_IDS ${RW61x_FAMILY}
@@ -67,6 +61,7 @@ endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.platform.external_flash)
     mcux_add_source(SOURCES
+        ../Common/fwk_platform_mflash.ch
         fwk_platform_extflash.c
         ../include/fwk_platform_extflash.h
         DEVICE_IDS ${RW61x_FAMILY}

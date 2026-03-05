@@ -1,5 +1,148 @@
 ## Connectivity framework CHANGELOG
 
+### 7.2.2 mcux SDK 26.03.00 pvw2
+
+#### Major Changes
+
+- [wireless_mcu][ble] Refactored BLE platform into separate core HCI and utilities modules for improved modularity and Zephyr compatibility. Core HCI transport functions remain in fwk_platform_ble.c while utility functions (BD address generation, security, TX power, timestamps) moved to new fwk_platform_ble_utils.c module. This enables minimal HCI-only builds without hardware parameter, RNG, or controller API dependencies.
+- [wireless_mcu][ble] Aligned HCI platform APIs with Zephyr driver requirements. `PLATFORM_SetHciRxCallback()` now returns int instead of void, added new `PLATFORM_StartHci()` API, and enhanced `PLATFORM_InitBle()` with initialization guard to prevent multiple initialization attempts.
+- [wireless_mcu][ble] Made optional initialization steps configurable in `PLATFORM_InitBle()` with new flags `gPlatformSetBleMaxTxPowerAtInit_d`, `gPlatformSetSfcConfigAtInit_d`, and `gPlatformSetWakeUpDelayAtInit_d` to enable cleaner integration with Zephyr and minimal configurations.
+- [wireless_mcu][wireless_nbu] Added new APIs: `PLATFORM_TSTMR_GetBase()`, `PLATFORM_TSTMR_Enable()`, and modified `PLATFORM_TSTMR_ReadTimeStamp()` to use TSTMR instance ID rather than pointer. Removed dependencies on MCUX component tstmr.
+- [SecLib_RNG] Removed legacy SecLib and RNG mbedtls framework implementations now replaced by PSA. Removed deprecated SecLib AES-MMO implementation.
+- [RNG] Introduced `gRngEnableAutoReseed_d` feature flag to control automatic reseeding via WorkQ. Defaults to enabled for platforms with NBU, disabled otherwise. This allows single-core platforms to use RNG without WorkQ dependency when handling reseeding manually.
+
+#### Minor Changes
+
+- [wireless_mcu][ot] Conditionally exclude MCUXpresso-specific dependencies (board_platform.h, pin_mux.h, SecLib.h, RNG_Interface.h, HWParameter.h) when building for Zephyr, with stubbed IEEE 802.15.4 address generation functions.
+- [wireless_mcu] Made TRDC driver dependency optional based on `gPlatformNbuDebugGpioDAccessEnabled_d` usage, changing from mandatory (select) to optional (imply) in Kconfig.
+- [wireless_nbu] Added new NBU APIs `PLATFORM_GetSharedMemConfig()` and `PLATFORM_GetDMemConfig()` to retrieve size of SMU/DMEM.
+- [NVM] Added `Nv_GetPartitionAddressAndSize()` API to retrieve NVM partition characteristics.
+- [DBG] Added warning ID tracking support with enhanced `NBUDBG_StateCheck()` to monitor NBU warnings. Added `PLATFORM_IsNbuWarningSet()` API with callback support for proactive warning monitoring.
+- [DBG] Added HCI vendor event transmission support with `NBUDBG_ConfigureHciVendorEvent()` API to enable/disable debug structure transmission over HCI.
+- [DBG] Added coredump support on fault handler with `gFaultHandlerCoredumpEnabled_d` conditional compilation.
+- [DBG] Initialized .debugbuf from flash into sqram_debug_region for GCC builds with `INIT_BLE_DEBUG_DAT`.
+- [Sensors] Added initialization guard to prevent redundant sensor initialization calls with `PLATFORM_InitSensors()`.
+- [Platform] Added missing localization dependency to XCVR in Kconfig.
+- [Platform] Fixed missing Kconfig dependencies for KW47 core1 variants (KW47B42ZB2, KW47B42ZB3, KW47B42ZB6, KW47B42Z96, KW47B42Z97).
+- [MCXW23] Enabled `gSecLibUseDspExtension_d` to leverage CM33 DSP extensions for ultra-fast cryptographic library.
+- [MCXW23] Changed temperature dummy value for sensors to support application enablement.
+- [OTA] Improved OTA coverage by allowing static functions to be invoked from unit tests.
+- [FSCI] Added UUID retrieval via `PLATFORM_GetMCUUid()` abstraction in `FSCI_ReadNbuVer()` API.
+- [Common] Made services CMakeLists optional to allow integration of only required services into Zephyr's hal_nxp.
+- [Platform] Made timer manager optional with configuration flag.
+- [wireless_mcu][lcl] Corrected FEM & COEX API functions with proper NBU wake-up handling and RF_GPO pin conflict checks.
+- [wireless_mcu] Consolidated KB() and MB() macro definitions by using fwk_hal_macros.h instead of platform-specific definitions to prevent conflicts and ensure Zephyr compatibility.
+- [Common] Added Zephyr RTOS compatibility to fwk_hal_macros.h by including <zephyr/sys/util.h> when `__ZEPHYR__` is defined and guarding _DO_CONCAT and CONTAINER_OF macros to prevent redefinition conflicts.
+
+#### Bug Fixes
+
+- [SecLib_RNG][PSA] Fixed RNG and PSA context release in `RNG_Deinit()` by invoking `mbedtls_psa_crypto_free()` and resetting rng_ctx.mRngInitialized to ensure proper reinitialization in `RNG_ReInit()`.
+- [NVM] Fixed `GetFlashTableVersion()` function to prevent recursion
+- [NVM] Treated missing error case in `NvCopyRecord()` if failed to find record.
+- [NVS] Fixed blank check procedure to return false (non-blank) when checking a 0 length area and corrected internal flash blank check of unaligned flash data.
+- [SecLib] Initialized CMAC context before using it to prevent usage of uninitialized memory.
+- [WorkQ] Increased workqueue stack size when coverage is enabled.
+- [wireless_mcu] Fixed build issue when ICS WorkQ is disabled.
+- [MISRA] Various MISRA and CERT-C compliance fixes in NVM, HWParameter, DBG (including platform dbg), LowPower, SecLib, Platform modules (platform_ics, platform_sensors), FSCI, FunctionLib, wireless_mcu, and Common modules.
+
+### 7.2.1 mcux SDK 26.03.00 pvw1
+
+#### Major Changes
+
+- [wireless_mcu][ot] Removed `gPlatformUseOuiFromIfr` configuration flag. OUI will now be read from IFR by default on mcxw72 platform, with a fallback to the static OUI if no value is found in IFR.
+- [wireless_mcu][ble] Enabled `gPlatformUseUniqueDeviceIdForBdAddr_d = 2` on kw47/mcxw72 platforms to read the complete BD address from IFR. If no address is found in IFR, the system will fall back to generating one using the RNG method.
+- [SecLib] Removed unused cryptographic implementations (SHA1, AES-EAX, AES-OFB) and obsolete `FSL_FEATURE_SOC_AES_HW` option to reduce code size and complexity.
+
+#### Minor Changes
+
+- [wireless_mcu][ble] Added callback registration for HCI log. Users can register a callback to log the HCI commands sent/received on the platform using new wrapper API.
+- [wireless_nbu][CS][COEX] Added Channel Sounding (CS) coexistence enablement support.
+
+#### Bug fixes
+
+- [wireless_nbu][lowpower] Fixed NBU low-power timing issue by forcing LPO delay to 0 during active NBU window. The delay is restored to the default parameter right before re-entering low-power mode to guarantee accurate Link Layer timing calculations.
+- [platform] Removed `PLATFORM_GetClockFreq()` API which contained MISRA violations, was unused, and duplicated `PLATFORM_GetNbuFreq()` functionality.
+- [MISRA] Various MISRA compliance fixes in SFC, SecLib, Platform (including platform_ics and platform low power), FSCI, and PDUM modules.
+
+### 7.1.3 mcux SDK 25.12.00 RFP
+
+#### Major Changes
+
+- [wireless_mcu][wireless_nbu] Replaced interrupt masking macros with static inline functions `PLATFORM_SetInterruptMask()` and `PLATFORM_ClearInterruptMask()` to ensure consistent BASEPRI value handling across all compilers. This addresses compiler-dependent behavior issues with the previous macro implementation.
+- [wireless_mcu] Added BASEPRI-based interrupt masking in `PLATFORM_RemoteActiveRel()` to allow high-priority IRQs while ensuring only IMU0 or thread context can call this function.
+- [wireless_mcu] Introduced `gPlatformUseHwParameter_d` compile flag to allow builds without HWParameter section. When undefined or set to 0, crystal trimming functions conditionally access HWParameters only when required.
+
+#### Minor Changes
+
+- [kw47_mcxw72] Introduced platform-specific library for KW47/MCXW72 platforms.
+- [kw47_mcxw72] Support for additional KW47 phantoms including ZB2/ZB3/ZB6/ZB7 and Z83/Z96/Z97.
+- [kw47_mcxw72] Removed SH_MEM_TOTAL_SIZE override as it is now automatically calculated to match rpmsg-lite configuration.
+- [wireless_mcu] Set RL_BUFFER_PAYLOAD_SIZE to word-aligned value as expected by rpmsg-lite.
+- [wireless_mcu] Added system-generated HCI vendor events capability for debug and diagnostic purposes.
+- [DBG] Added debug structure transmission over HCI vendor events with `NBUDBG_ConfigureHciVendorEvent()` API to enable/disable the feature.
+- [DBG] Added debug structure versioning and logging buffer address/size information to debug structure.
+- [DBG] Removed 15.4 region from debug structure as not supported on KW47.
+- [DBG] Added stack overflow detection for armv8_m_mainline architecture.
+- [Platform] Simplified enablement of reset features via pin detection
+    - Automatically selects `gUseResetByLvdForce_c` when `gAppForceLvdResetOnResetPinDet_d` is enabled.
+    - Automatically select `gUseResetByDeepPowerDown_c` when `gAppForceDeepPowerDownResetOnResetPinDet_d` is enabled.
+- [RNG] Replaced `gRngHasSecLibDependency_d` compilation switch with `gRngUseSecLib_d`.
+- [mcxw23] Defined `gRngIsrPrio_c` on the preprocessor to make it global and avoid redefinition warnings.
+- [mcxw23] Implemented `PLATFORM_ResetCrypto()` API called by RNG_reinit/SecLib_reinit.
+- [mcxw23] Added support of Timer Manager timestamp with OSTIMER.
+
+#### Bug fixes
+
+- [wireless_mcu] Fixed race condition in `PLATFORM_RemoteActiveRel()` by adding verification loop to confirm NBU core execution before releasing power domain.
+- [wireless_mcu] Added instruction synchronization barrier (__ISB()) after interrupt re-enable in `PLATFORM_RemoteActiveRel()` to ensure pending interrupts execute between critical sections.
+- [wireless_mcu] Fixed external IO voltage isolation issue during low-power initialization - isolation is now cleared at init to ensure proper behavior.
+- [wireless_mcu] Replaced spin-wait loops with event-based synchronization in NBU communication APIs. Added mutex protection to `PLATFORM_NbuApiReq()` and `PLATFORM_GetNbuInfo()` to prevent race conditions and deadlocks when multiple tasks call these APIs concurrently.
+- [wireless_mcu] Fixed OSA bare metal event race condition in ICS where auto-clear event feature could cause tasks to become permanently stuck. Disabled auto-clear feature in bare metal builds and manually clear event flags after `OSA_EventWait()` returns successfully.
+- [NVM] Fixed `NvIdle()` to prevent looping for more operations than the queue size.
+- [NVS] Fixed blank check procedure to return false (non-blank) when checking a 0 length area.
+- [NVS] Made external and internal flash ports consistent.
+- [DBG] Fixed debug structure size and callback access issues - corrected memory placement overlap between reg_info and assert_info.
+- [MISRA] Various MISRA compliance fixes in NVM, HWParameter, LowPower, SecLib, Platform modules and IFR offset definitions.
+
+### 7.1.2 mcux SDK 25.12.00 pvw2
+
+#### Major Changes
+
+- [wireless_mcu] Reduced RPMSG buffer payload size from 496 to 270 bytes on KW43/KW47 platforms, saving 226 bytes per buffer (1808 bytes total with 4 buffers on each core). This optimization is possible as rpmsg-lite no longer requires buffer sizes to be powers of two.
+- [configs] Introduced `RL_ALLOW_CUSTOM_SHMEM_CONFIG` flag in rpmsg_config.h to enable connectivity applications to use `platform_set_static_shmem_config()` and `platform_get_custom_shmem_config()`.
+
+#### Minor Changes
+
+- [wireless_mcu] Updated radio power management configuration with PLATFORM_InitRadio() API on kw47/mcxw72 platforms
+- [DBG] Added NBU assert indication support to host with line/file info using debug structure.
+- [DBG] Enhanced NBU debug framework with warning detection and notification capabilities. Extended `NBUDBG_StateCheck()` to monitor NBU warnings via `PLATFORM_IsNbuWarningSet()` with callback support for proactive warning monitoring.
+- [Sensors] Added periodic temperature measurement support allowing app/host to request periodic temperature measurement.
+- [Sensors] Added markdown documentation explaining periodic measurement functionality upon NBU requests.
+- [SecLib_RNG] Added documentation for asynchronous seed handling using `RNG_NotifyReseedNeeded()` and SecLib implementation flavors (Software, EdgeLock, PSA Crypto, MbedTLS).
+- [PSA] Simplified PSA configuration files and reduced imports/definitions for wireless MCU platforms.
+- [mcxw23] Changed temperature dummy value for sensors to progress on application enablement.
+- [NVS] Enhanced debug capabilities by adding `CONFIG_NVS_LOG_LEVEL` and improved LOG macros to adapt to PRINTF limitations.
+
+#### Bug fixes
+
+- [wireless_mcu] Fixed FRO32K as 32 kHz clock source with deferred OSC32K switching to improve initialization performance after warm reset.
+- [wireless_mcu] Added wait loop for NBU power domain readiness in `PLATFORM_InitNbu()` to prevent race conditions when accessing NBU power domain in applications without NBU images.
+- [wireless_mcu] Fixed external flash blank check procedure for LSPI external NOR Flash by correcting `PLATFORM_ExternalFlashAreaIsBlank()` to read from RAM buffer and perform erase pattern comparison in RAM with optimized 4-byte step loops.
+- [NVS] Removed mflash dependency from NVS external flash port and fixed internal flash blank check of unaligned flash data.
+- [mcxw23] Ensured TX power does not exceed 6dBm maximum limit.
+
+### 7.1.1 mcux SDK 25.12.00 pvw1
+
+#### Minor Changes
+
+- [wireless_mcu][wireless_nbu] Migrated TSTMR implementation to use SDK fsl_tstmr driver for better maintainability and consistency. This migration replaces custom TSTMR register definitions with official SDK driver APIs while maintaining existing `PLATFORM_*` API compatibility.
+
+#### Bug fixes
+
+- [SecLib_RNG][mbedtls] Enhanced ECDH context preservation across low-power transitions on KW45_MCXW71 and KW47_MCXW72 platforms using export/import APIs to ensure cryptographic context is retained when hardware accelerator loses internal memory during power-down mode.
+- [wireless_nbu] Fixed incorrect FRODIV values that were causing reduced peripheral clocks by updating `PLATFORM_FroDiv[]` mapping array to prevent over-division of flash APB and RF_CMC clocks.
+- [rw61x/rt1060/rt1170] Added missing common files for external and OTA support on rw61x/rt1060/rt1170 platforms.
+
 ### 7.0.3 RFP mcux SDK 25.09.00
 
 #### Major Changes

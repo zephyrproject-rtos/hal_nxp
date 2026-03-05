@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2025 NXP
+ * Copyright 2021-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -131,6 +131,17 @@ typedef PACKED_STRUCT
 }
 NbuEvent_t;
 
+/*! \brief  Interchange of FRO trimming information between MCU and NBU.
+ *
+ */
+typedef struct
+{
+    uint16_t freq;
+    int16_t  ppm_mean;
+    int16_t  ppm;
+    uint16_t fro_trim;
+} FroInfo_t;
+
 /*! \brief  FWK ICS message type.
  *
  *  \details enumarated values for FWK ICS messages
@@ -163,7 +174,8 @@ typedef enum
     gFwkSrvNbuSetRfSfcConfig_c                  = 0x89U,
     gFwkSrvFroEnableNotification_c              = 0x8AU,
     gFwkSrvRngReseed_c                          = 0x8BU,
-    gFwkSrvHost2NbuLast_c                       = 0x8CU,
+    gFwkSrvHostSetNbuSharedCtxAddr_c            = 0x8CU, /*! Intercore shared context */
+    gFwkSrvHost2NbuLast_c                       = 0x8DU,
 } eFwkSrvMsgType;
 
 typedef int32_t (*fwksrv_lowpower_constraint_func_t)(int32_t power_mode);
@@ -206,7 +218,7 @@ int PLATFORM_FwkSrvSendPacket(eFwkSrvMsgType msg_type, void *msg, uint16_t msg_l
 /*!
  * \brief Send NbuInfo request to NBU and spin waiting for response.
  *
- * \param[in] nbu_info_p pointer to externally allocated NbuInfo_t
+ * \param[out] nbu_info_p Pointer to structure that will be filled with NBU information.
  * \return int 0 if OK, -1 in case of Rpmsg error, -10 if NBU did not respond in time.
  */
 int PLATFORM_GetNbuInfo(NbuInfo_t *nbu_info_p);
@@ -330,6 +342,17 @@ void PLATFORM_RegisterReceivedSeedRequest(nbu_seed_request_event_callback_t cb);
  * \return int same as PLATFORM_FwkSrvSendPacket()
  */
 int PLATFORM_SendNBUXtal32MTrim(uint8_t trim);
+
+/*!
+ * @brief Send address of shared structure to other core.
+ *
+ * @param[in] None
+ *
+ * @return \return int same as PLATFORM_FwkSrvSendPacket() on KW43/MCXW70, -1 error code on other platforms.
+ *
+ * @note This function is implemented on KW43/MCXW70 platform only and has no effect on others.
+ */
+int PLATFORM_SetNbuSharedCtxAddress(void);
 
 /*!
  * @}  end of FWK_Platform_ICS addtogroup

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2025 NXP
+ * Copyright 2021-2026 NXP
  * SPDX-License-Identifier: BSD-3-Clause
  *
  */
@@ -8,20 +8,17 @@
 /*                                  Includes                                  */
 /* -------------------------------------------------------------------------- */
 
-#ifndef __ZEPHYR__
-#include "FunctionLib.h"
-#include "fwk_debug.h"
-#endif
-
 #include "fsl_common.h"
 #include "fwk_config.h"
 #include "fwk_platform_ics.h"
 #include "fwk_platform.h"
+#include "FunctionLib.h"
 #include "fsl_adapter_rpmsg.h"
+#include "fsl_os_abstraction.h"
+#include "fwk_debug.h"
 
 #if defined(gPlatformIcsUseWorkqueueRxProcessing_d) && (gPlatformIcsUseWorkqueueRxProcessing_d > 0)
 #include "fwk_workq.h"
-#include "fsl_os_abstraction.h"
 #endif
 
 #if defined(NBU_VERSION_DBG) && (NBU_VERSION_DBG == 1)
@@ -31,20 +28,25 @@
 /* -------------------------------------------------------------------------- */
 /*                               Private macros                               */
 /* -------------------------------------------------------------------------- */
-#ifdef __ZEPHYR__
-#define PWR_DBG_LOG(...)
-#define FLib_MemCpy memcpy
+
+#if defined(USE_RTOS) && (USE_RTOS > 0)
+#define ICS_EVT_AUTO_CLEAR 1U
+#else
+/* In bare-metal, we manually clear event flags to avoid altering the "haveToRun" property of the waiting task
+ * this is specific to OSA BM implementation */
+#define ICS_EVT_AUTO_CLEAR 0U
 #endif
 
-/* Number of loops we spin waiting for NBU processor to respond */
-#define MAX_WAIT_NBU_RESPONSE_LOOPS 10000U
+/* Event flags */
+#define ICS_EVT_NBU_API_IND (1U << 0U)
+#define ICS_EVT_NBU_INF_IND (1U << 1U)
 
-/* API wait loop counter */
-#define MAX_WAIT_NBU_API_RESPONSE_LOOPS 100000000U
+/* NBU indication wait timeout in milliseconds */
+#define MAX_WAIT_NBU_IND_MS 1000U
 
 #if defined(gPlatformIcsUseWorkqueueRxProcessing_d) && (gPlatformIcsUseWorkqueueRxProcessing_d > 0)
 #ifndef PLATFORM_ICS_RX_QUEUE_SIZE
-#define PLATFORM_ICS_RX_QUEUE_SIZE 10
+#define PLATFORM_ICS_RX_QUEUE_SIZE (10U)
 #endif
 #endif
 
@@ -60,17 +62,10 @@ typedef struct
 } ics_rx_data_t;
 #endif
 
-typedef struct
-{
-    uint16_t freq;
-    int16_t  ppm_mean;
-    int16_t  ppm;
-    uint16_t fro_trim;
-} fro_data_t;
-
 /* -------------------------------------------------------------------------- */
 /*                             Private prototypes                             */
 /* -------------------------------------------------------------------------- */
+static int                       PLATFORM_WaitForIcsEvent(uint32_t event_mask, uint32_t timeout_ms);
 static hal_rpmsg_return_status_t PLATFORM_FwkSrv_RxCallBack(void *param, uint8_t *data, uint32_t len);
 static bool                      FwkSrv_MsgTypeInExpectedSet(uint8_t msg_type);
 
@@ -107,12 +102,9 @@ static const hal_rpmsg_config_t fwkRpmsgConfig = {
 };
 
 /* flag notifying of NBU Infor reception from CM3 */
-static volatile bool g_nbu_info_resp_received = false;
-static NbuInfo_t    *g_nbu_info_p             = (NbuInfo_t *)NULL;
-static volatile bool g_nbu_init_done          = false;
+static NbuInfo_t     g_nbu_info      = {0};
+static volatile bool g_nbu_init_done = false;
 
-static uint32_t                      m_nbu_api_dbg_max_wait_loop = 0; /* maximum loop counter logged */
-static volatile bool                 m_nbu_api_ind_received;
 static volatile bool                 m_nbu_api_rpmsg_status;
 static volatile uint32_t             m_nbu_api_return_param_len;
 static uint8_t                       m_nbu_api_return_param[NBU_API_MAX_RETURN_PARAM_LENGTH];
@@ -126,8 +118,8 @@ static const FwkSrv_LowPowerConstraintCallbacks_t *pLowPowerConstraintCallbacks 
     (const FwkSrv_LowPowerConstraintCallbacks_t *)NULL;
 
 /* Array of pointer of function used in PLATFORM_FwkSrv_RxCallBack() */
-static void (*PLATFORM_RxCallbackService[gFwkSrvNbu2HostLast_c - gFwkSrvNbu2HostFirst_c - 1U])(uint8_t *data,
-                                                                                               uint32_t len) = {
+static void (*PLATFORM_RxCallbackService[(uint8_t)gFwkSrvNbu2HostLast_c - (uint8_t)gFwkSrvNbu2HostFirst_c - 1U])(
+    uint8_t *data, uint32_t len) = {
     PLATFORM_RxNbuInitDoneService,
     PLATFORM_RxNbuVersionIndicationService,
     PLATFORM_RxNbuApiIndicationService,
@@ -141,6 +133,10 @@ static void (*PLATFORM_RxCallbackService[gFwkSrvNbu2HostLast_c - gFwkSrvNbu2Host
     PLATFORM_RxNbuRequestTemperature,
     PLATFORM_RxFwkSrvNbuEventIndicationService,
 };
+
+static OSA_EVENT_HANDLE_DEFINE(icsEvent);
+static OSA_MUTEX_HANDLE_DEFINE(nbuApiMutex);
+static OSA_MUTEX_HANDLE_DEFINE(nbuInfoMutex);
 
 #if defined(gPlatformIcsUseWorkqueueRxProcessing_d) && (gPlatformIcsUseWorkqueueRxProcessing_d > 0)
 static OSA_MSGQ_HANDLE_DEFINE(icsMsgQueue, PLATFORM_ICS_RX_QUEUE_SIZE, sizeof(ics_rx_data_t));
@@ -159,6 +155,7 @@ int PLATFORM_FwkSrvInit(void)
 
     static bool_t      mFwkSrvInit  = FALSE;
     hal_rpmsg_config_t rpmsg_config = fwkRpmsgConfig;
+    osa_status_t       osa_status;
 
     uint32_t irqMask = DisableGlobalIRQ();
 
@@ -180,14 +177,38 @@ int PLATFORM_FwkSrvInit(void)
         /* We are using the OS message queue since it allows to allocate the memory safely (statically or during init)
          * and then copy ics_rx_data content in ISR context without allocating memory dynamically
          * This works with the workqueue only if we don't block when calling OSA_MsgQGet() */
-        osa_status_t osa_status = OSA_MsgQCreate(icsMsgQueue, PLATFORM_ICS_RX_QUEUE_SIZE, sizeof(ics_rx_data_t));
+        osa_status = OSA_MsgQCreate(icsMsgQueue, PLATFORM_ICS_RX_QUEUE_SIZE, sizeof(ics_rx_data_t));
         if (osa_status != KOSA_StatusSuccess)
         {
-            assert(0);
+            assert(false);
             result = -3;
             break;
         }
 #endif
+
+        osa_status = OSA_EventCreate(icsEvent, ICS_EVT_AUTO_CLEAR);
+        if (osa_status != KOSA_StatusSuccess)
+        {
+            assert(false);
+            result = -4;
+            break;
+        }
+
+        osa_status = OSA_MutexCreate(nbuApiMutex);
+        if (osa_status != KOSA_StatusSuccess)
+        {
+            assert(false);
+            result = -5;
+            break;
+        }
+
+        osa_status = OSA_MutexCreate(nbuInfoMutex);
+        if (osa_status != KOSA_StatusSuccess)
+        {
+            assert(false);
+            result = -6;
+            break;
+        }
 
         if (kStatus_HAL_RpmsgSuccess != HAL_RpmsgInit((hal_rpmsg_handle_t)fwkRpmsgHandle, &rpmsg_config))
         {
@@ -252,41 +273,64 @@ int PLATFORM_FwkSrvSendPacket(eFwkSrvMsgType msg_type, void *msg, uint16_t msg_l
 /* Returns negative value if info is not available, 0 otherwise */
 int PLATFORM_GetNbuInfo(NbuInfo_t *nbu_info_p)
 {
-    int st = -1;
+    int          st = -1;
+    osa_status_t mutex_status;
+
+    /* Since the GetNBUInfo request waits for a receive event, we can only
+     * perform one request at a time, otherwise we can't determine if the first
+     * received response is for this request or for another one.
+     * So, using a mutex to ensure only one request is active at a time. */
+    mutex_status = OSA_MutexLock(nbuInfoMutex, osaWaitForever_c);
 
     do
     {
-        uint32_t cnt;
-
-        g_nbu_info_resp_received = false;
-
-        /* Need a storage supplied by the caller to copy result from RPMSG memory */
+        if (mutex_status != KOSA_StatusSuccess)
+        {
+            st = -2;
+            break;
+        }
+        /* Verify the destination pointer given by the caller is valid */
         if (nbu_info_p == NULL)
         {
             break;
         }
-        g_nbu_info_p = nbu_info_p;
-        st           = PLATFORM_FwkSrvSendPacket(gFwkSrvNbuVersionRequest_c, (void *)NULL, 0);
+
+        if (!(FLib_MemCmpToVal(&g_nbu_info, 0U, sizeof(NbuInfo_t))))
+        {
+            /* g_nbu_info is already populated, no need to request it again */
+            st = 0;
+            break;
+        }
+
+        st = PLATFORM_FwkSrvSendPacket(gFwkSrvNbuVersionRequest_c, (void *)NULL, 0);
         if (0 != st)
         {
             break;
         }
-        /* Wait for NBU / CM3 to answer but not forever */
-        st = -10; /*default status in case NBU does not respond */
-        for (cnt = MAX_WAIT_NBU_RESPONSE_LOOPS * 10U; cnt > 0U; cnt--)
+
+        /* Wait for NBU to answer but not forever */
+        if (PLATFORM_WaitForIcsEvent(ICS_EVT_NBU_INF_IND, MAX_WAIT_NBU_IND_MS) == 0)
         {
-            if (g_nbu_info_resp_received)
-            {
-                /* NBU response received */
-                st = 0;
-                break;
-            }
+            st = 0;
+        }
+        else
+        {
+            /* default status in case NBU does not respond */
+            st = -10;
         }
     } while (false);
-    /* The Rx Call back has already filled the structure the global pointer can
-     be cleared. Should the indication arrive late - becasue of a breakpoint in
-     the CM3 for instance, the callback would simply drop the indication  */
-    g_nbu_info_p = NULL;
+    if (st == 0)
+    {
+        /* Copy the NBU info to the caller's buffer */
+        FLib_MemCpy(nbu_info_p, &g_nbu_info, sizeof(NbuInfo_t));
+    }
+
+    if (mutex_status == KOSA_StatusSuccess)
+    {
+        /* Unlock only if lock was successful */
+        (void)OSA_MutexUnlock(nbuInfoMutex);
+    }
+
     assert(st == 0);
     return st;
 }
@@ -332,20 +376,34 @@ int PLATFORM_SendChipRevision(void)
 
 bool_t PLATFORM_NbuApiReq(uint8_t *api_return, uint16_t api_id, const uint8_t *fmt, uint32_t *tab, uint32_t nb_returns)
 {
-    bool rpmsg_status = true;
-    bool nbu_rpmsg_status;
+    bool         rpmsg_status = true;
+    bool         nbu_received = false;
+    bool         nbu_rpmsg_status;
+    osa_status_t mutex_status;
 
-    /* Make sure remote CPU is awake */
-    PLATFORM_RemoteActiveReq();
+    /* Since the NBU API request waits for a receive event, we can only
+     * perform one request at a time, otherwise we can't determine if the first
+     * received response is for this request or for another one.
+     * So, using a mutex to ensure only one request is active at a time. */
+    mutex_status = OSA_MutexLock(nbuApiMutex, osaWaitForever_c);
 
     do
     {
+        if (mutex_status != KOSA_StatusSuccess)
+        {
+            rpmsg_status = false;
+            break;
+        }
+
+        /* Make sure remote CPU is awake */
+        PLATFORM_RemoteActiveReq();
+
         /* build the message payload */
         uint8_t data[2 + NBU_API_MAX_PARAM_LENGTH];
 
         /* start with API identifier */
-        data[0U] = (uint8_t)api_id;
-        data[1U] = (uint8_t)(api_id >> 8U) & 0xffU;
+        data[0U] = (uint8_t)(api_id & 0xFFU);
+        data[1U] = (uint8_t)((api_id >> 8U) & 0xFFU);
 
         uint16_t data_len = 2U;
         uint32_t param;
@@ -385,18 +443,18 @@ bool_t PLATFORM_NbuApiReq(uint8_t *api_return, uint16_t api_id, const uint8_t *f
                         }
                         else
                         {
-                            data[data_len++] = (uint8_t)param;
-                            data[data_len++] = (uint8_t)(param >> 8U);
+                            data[data_len++] = (uint8_t)(param & 0xFFU);
+                            data[data_len++] = (uint8_t)((param >> 8U) & 0xFFU);
                         }
                         break;
 
                     case 4U:
                         param = tab[j];
                         j++;
-                        data[data_len++] = (uint8_t)param;
-                        data[data_len++] = (uint8_t)(param >> 8U);
-                        data[data_len++] = (uint8_t)(param >> 16U);
-                        data[data_len++] = (uint8_t)(param >> 24U);
+                        data[data_len++] = (uint8_t)(param & 0xFFU);
+                        data[data_len++] = (uint8_t)((param >> 8U) & 0xFFU);
+                        data[data_len++] = (uint8_t)((param >> 16U) & 0xFFU);
+                        data[data_len++] = (uint8_t)((param >> 24U) & 0xFFU);
                         break;
 
                     default:
@@ -412,50 +470,32 @@ bool_t PLATFORM_NbuApiReq(uint8_t *api_return, uint16_t api_id, const uint8_t *f
         }
 
         /* send to NBU */
-        m_nbu_api_ind_received = false;
         if (0 != PLATFORM_FwkSrvSendPacket(gFwkSrvNbuApiRequest_c, (void *)&data, data_len))
         {
             rpmsg_status = false;
             break;
         }
 
-        /* Wait for NBU / CM3 to answer but not forever */
-        uint32_t cnt          = 0;
-        bool     nbu_received = m_nbu_api_ind_received;
-
-        while ((!m_nbu_api_ind_received) && (cnt < MAX_WAIT_NBU_API_RESPONSE_LOOPS))
-        {
-#if ((!defined(SDK_OS_FREE_RTOS)) && defined(gPlatformIcsUseWorkqueueRxProcessing_d) && \
-     (gPlatformIcsUseWorkqueueRxProcessing_d > 0))
-            /* On bare-metal systems, a deadlock can occur if the NBU exhausts its RPMSG Tx buffers
-             * before PLATFORM_NbuApiReq() is called. The application would block waiting for NBU response,
-             * but NBU cannot respond because the application hasn't processed incoming messages yet.
-             * Calling the ICS work handler here prevents this by freeing RPMSG messages. */
-            PLATFORM_IcsRxWorkHandler((fwk_work_t *)NULL);
-#endif
-            /* wait loop */
-            cnt++;
-            assert(cnt != MAX_WAIT_NBU_API_RESPONSE_LOOPS);
-        }
-        if (m_nbu_api_dbg_max_wait_loop < cnt)
-        {
-            // log for debug purpose
-            m_nbu_api_dbg_max_wait_loop = cnt;
-        }
+        nbu_received = (PLATFORM_WaitForIcsEvent(ICS_EVT_NBU_API_IND, MAX_WAIT_NBU_IND_MS) == 0);
 
         assert(m_nbu_api_rpmsg_status);
         nbu_rpmsg_status = m_nbu_api_rpmsg_status;
 
-        nbu_received = m_nbu_api_ind_received;
         rpmsg_status = nbu_received && nbu_rpmsg_status;
 
         /* API executed */
         assert(m_nbu_api_return_param_len == nb_returns);
         FLib_MemCpy(api_return, (void *)&m_nbu_api_return_param[0], m_nbu_api_return_param_len);
+
+        /* Release wake up to other CPU */
+        PLATFORM_RemoteActiveRel();
     } while (0U != 0U);
 
-    /* Release wake up to other CPU */
-    PLATFORM_RemoteActiveRel();
+    if (mutex_status == KOSA_StatusSuccess)
+    {
+        /* Unlock only if lock was successful */
+        (void)OSA_MutexUnlock(nbuApiMutex);
+    }
 
     /* return rmpsg status, API status in *api_status */
     assert(rpmsg_status);
@@ -529,6 +569,44 @@ int PLATFORM_SendNBUXtal32MTrim(uint8_t trim)
 /*                              Private functions                             */
 /* -------------------------------------------------------------------------- */
 
+static int PLATFORM_WaitForIcsEvent(uint32_t event_mask, uint32_t timeout_ms)
+{
+    int               ret   = 0;
+    osa_event_flags_t flags = 0U;
+
+#if defined(USE_RTOS) && (USE_RTOS > 0)
+    (void)OSA_EventWait(icsEvent, event_mask, 1U, timeout_ms, &flags);
+#else
+    uint64_t start = PLATFORM_GetTimeStamp();
+
+    /* On bare-metal, OSA_EventWait is non-blocking, so we need to poll in a loop
+     * and we handle the timeout manually using timestamps */
+    do
+    {
+#if defined(gPlatformIcsUseWorkqueueRxProcessing_d) && (gPlatformIcsUseWorkqueueRxProcessing_d > 0)
+        /* On bare-metal systems, we need to call the work handler to process any pending messages because
+         * we don't have preemptive OS */
+        PLATFORM_IcsRxWorkHandler((fwk_work_t *)NULL);
+#endif
+    } while ((OSA_EventWait(icsEvent, event_mask, 1U, osaWaitForever_c, &flags) != KOSA_StatusSuccess) &&
+             PLATFORM_IsTimeoutExpired(start, (uint64_t)timeout_ms * 1000ULL) == false);
+#endif
+
+    if ((flags & event_mask) != event_mask)
+    {
+        ret = -1;
+    }
+#if !defined(USE_RTOS) || (USE_RTOS == 0)
+    else
+    {
+        /* In bare-metal, we manually manage flag clearing */
+        (void)OSA_EventClear(icsEvent, flags);
+    }
+#endif
+
+    return ret;
+}
+
 #if defined(gPlatformIcsUseWorkqueueRxProcessing_d) && (gPlatformIcsUseWorkqueueRxProcessing_d > 0)
 static void PLATFORM_IcsRxWorkHandler(fwk_work_t *work)
 {
@@ -572,40 +650,32 @@ static hal_rpmsg_return_status_t PLATFORM_FwkSrv_RxCallBack(void *param, uint8_t
 #if defined(gPlatformIcsUseWorkqueueRxProcessing_d) && (gPlatformIcsUseWorkqueueRxProcessing_d > 0)
         bool process_now = false;
 
-        /* Some messages must be processed in ISR context (version and API indications) */
-        if ((msg_type != (uint8_t)gFwkSrvNbuVersionIndication_c) && (msg_type != (uint8_t)gFwkSrvNbuApiIndication_c))
-        {
-            ics_rx_data_t ics_rx_data = {.len = len, .data = data};
+        ics_rx_data_t ics_rx_data = {.len = len, .data = data};
 
-            /* Submit to workqueue first, to make sure no errors occur, we push the message to the queue after.
-             * If pushing to the queue fails, the work will be executed but won't do anything, so this is safe.
-             * Since we are in ISR context, the workqueue thread can't execute until we exit from ISR, so this is safe
-             * to do before pushing to the message queue. */
-            if (WORKQ_Submit(&ics_work) < 0)
-            {
-                /* Process message immediately but assert as this is not a desired path */
-                process_now = true;
-                assert(0);
-            }
-            else
-            {
-                osa_status_t status = OSA_MsgQPut(icsMsgQueue, (void *)&ics_rx_data);
-                if (status == KOSA_StatusSuccess)
-                {
-                    /* Submission to workqueue and message queue succeeded, hold the rpmsg buffer in shared memory */
-                    res = kStatus_HAL_RL_HOLD;
-                }
-                else
-                {
-                    /* Process message immediately but assert as this is not a desired path */
-                    process_now = true;
-                    assert(0);
-                }
-            }
+        /* Submit to workqueue first, to make sure no errors occur, we push the message to the queue after.
+         * If pushing to the queue fails, the work will be executed but won't do anything, so this is safe.
+         * Since we are in ISR context, the workqueue thread can't execute until we exit from ISR, so this is safe
+         * to do before pushing to the message queue. */
+        if (WORKQ_Submit(&ics_work) < 0)
+        {
+            /* Process message immediately but assert as this is not a desired path */
+            process_now = true;
+            assert(false);
         }
         else
         {
-            process_now = true;
+            osa_status_t status = OSA_MsgQPut(icsMsgQueue, (void *)&ics_rx_data);
+            if (status == KOSA_StatusSuccess)
+            {
+                /* Submission to workqueue and message queue succeeded, hold the rpmsg buffer in shared memory */
+                res = kStatus_HAL_RL_HOLD;
+            }
+            else
+            {
+                /* Process message immediately but assert as this is not a desired path */
+                process_now = true;
+                assert(false);
+            }
         }
 
         if (process_now == true)
@@ -622,19 +692,18 @@ static hal_rpmsg_return_status_t PLATFORM_FwkSrv_RxCallBack(void *param, uint8_t
 
 static void PLATFORM_RxNbuVersionIndicationService(uint8_t *data, uint32_t len)
 {
-    if (g_nbu_info_p != NULL)
-    {
-        g_nbu_info_resp_received = true;
-        FLib_MemCpy(g_nbu_info_p, &data[1], sizeof(NbuInfo_t));
+    FLib_MemCpy(&g_nbu_info, &data[1], sizeof(NbuInfo_t));
 
 #if defined(NBU_VERSION_DBG) && (NBU_VERSION_DBG == 1)
-        PRINTF("NBU v%d.%d.%d\r\n", g_nbu_info_p->versionNumber[0], g_nbu_info_p->versionNumber[1],
-               g_nbu_info_p->versionNumber[2]);
-        PRINTF("NBU SHA %02x%02x%02x%02x\r\n", g_nbu_info_p->repo_digest[0], g_nbu_info_p->repo_digest[1],
-               g_nbu_info_p->repo_digest[2], g_nbu_info_p->repo_digest[3]);
+    PRINTF("NBU v%d.%d.%d\r\n", g_nbu_info.versionNumber[0], g_nbu_info.versionNumber[1], g_nbu_info.versionNumber[2]);
+    PRINTF("NBU SHA %02x%02x%02x%02x\r\n", g_nbu_info.repo_digest[0], g_nbu_info.repo_digest[1],
+           g_nbu_info.repo_digest[2], g_nbu_info.repo_digest[3]);
 #endif
-        /* no longer required to hold since copy is done in allocated pointer */
-    }
+    /* no longer required to hold since copy is done in allocated pointer */
+
+    /* Notify waiting task that NBU information has been received */
+    (void)OSA_EventSet(icsEvent, ICS_EVT_NBU_INF_IND);
+
     NOT_USED(len);
 }
 
@@ -663,11 +732,13 @@ static void PLATFORM_RxNbuApiIndicationService(uint8_t *data, uint32_t len)
 {
     /* NBU API response received, most of the case 6 bytes */
     assert(len >= 6U && len <= (uint32_t)(2U + NBU_API_MAX_RETURN_PARAM_LENGTH));
-    m_nbu_api_ind_received = true;
     m_nbu_api_rpmsg_status = (data[1] == 0U) ? false : true;
 
     m_nbu_api_return_param_len = len - 2U;
     FLib_MemCpy((void *)&m_nbu_api_return_param[0U], &data[2U], m_nbu_api_return_param_len);
+
+    /* Notify waiting task that NBU API indication has been received */
+    (void)OSA_EventSet(icsEvent, ICS_EVT_NBU_API_IND);
 }
 
 static void PLATFORM_RxHostSetLowPowerConstraintService(uint8_t *data, uint32_t len)
@@ -696,15 +767,11 @@ static void PLATFORM_RxHostReleaseLowPowerConstraintService(uint8_t *data, uint3
 
 static void PLATFORM_RxFroNotificationService(uint8_t *data, uint32_t len)
 {
-    assert(len >= sizeof(fro_data_t) + 1U);
-    fro_data_t fro_notif_data;
+    assert(len >= sizeof(FroInfo_t) + 1U);
+    FroInfo_t fro_notif_data;
 
-    if (len >= (sizeof(fro_data_t) + 1U))
-    {
-        FLib_MemCpy((void *)&fro_notif_data, (void *)&data[1], sizeof(fro_data_t));
-        pfPlatformDebugCallback(fro_notif_data.freq, fro_notif_data.ppm_mean, fro_notif_data.ppm,
-                                fro_notif_data.fro_trim);
-    }
+    FLib_MemCpy((void *)&fro_notif_data, (void *)&data[1], sizeof(FroInfo_t));
+    pfPlatformDebugCallback(fro_notif_data.freq, fro_notif_data.ppm_mean, fro_notif_data.ppm, fro_notif_data.fro_trim);
 }
 
 static void PLATFORM_RxFwkSrvNbuIssueIndicationService(uint8_t *data, uint32_t len)
@@ -731,7 +798,7 @@ static void PLATFORM_RxFwkSrvNbuEventIndicationService(uint8_t *data, uint32_t l
         }
         else
         {
-            assert(0);
+            assert(false);
         }
     }
 }
@@ -759,12 +826,11 @@ static void PLATFORM_RxNbuRequestRngSeedService(uint8_t *data, uint32_t len)
 
 static void PLATFORM_RxNbuRequestTemperature(uint8_t *data, uint32_t len)
 {
-    uint32_t periodic_interval = 0;
+    uint32_t periodic_interval = 0UL;
 
     if (nbu_request_temperature_callback != NULL)
     {
-        assert(len == (sizeof(uint32_t) + 1));
-
+        assert(len == (sizeof(uint32_t) + 1UL));
         /* Data corresponds to the periodic measurement interval requested by NBU (in Ms) */
         FLib_MemCpy((void *)&periodic_interval, (void *)&data[1], sizeof(uint32_t));
         (*nbu_request_temperature_callback)(periodic_interval);
