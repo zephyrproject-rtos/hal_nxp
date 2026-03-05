@@ -1806,10 +1806,9 @@ static void do_scan(struct wlan_network *network)
 #if CONFIG_SCAN_CHANNEL_GAP
     t_u16 scan_chan_gap = 0;
 #endif
-    unsigned int channel = 0;
     IEEEtypes_Bss_t type;
-    wlan_scan_channel_list_t chan_list[1];
-    (void)memset((uint8_t *)chan_list, 0x00, sizeof(wlan_scan_channel_list_t) * 1);
+    wlan_scan_channel_list_t *chan_list = NULL;
+    int i = 0;
 
     wlcm_d("initiating scan for network \"%s\"", network->name);
 
@@ -1828,13 +1827,8 @@ static void do_scan(struct wlan_network *network)
     if (network->owe_trans_mode == OWE_TRANS_MODE_OPEN)
     {
         ssid    = network->trans_ssid;
-        channel = network->channel;
     }
 #endif
-    if (network->channel_specific != 0U)
-    {
-        channel = network->channel;
-    }
 
     switch (network->role)
     {
@@ -1876,49 +1870,33 @@ static void do_scan(struct wlan_network *network)
         }
 #endif
 
-        if (channel != 0)
+        if (network->chan_list_len != 0U)
         {
-            chan_list[0].chan_number = (t_u8)channel;
-            chan_list[0].scan_type   = MLAN_SCAN_TYPE_ACTIVE;
-            chan_list[0].scan_time   = 120;
-#if CONFIG_WLAN_BRIDGE
-            ret = wifi_send_scan_cmd((t_u8)type, bssid, ssid, bridge_ssid, 1, chan_list, 0,
-#if CONFIG_SCAN_CHANNEL_GAP
-                                     scan_chan_gap,
-#endif
-                                     false, false);
+#if !CONFIG_MEM_POOLS
+            chan_list = (wlan_scan_channel_list_t *)OSA_MemoryAllocate(sizeof(wlan_scan_channel_list_t) * network->chan_list_len);
 #else
-#if CONFIG_SCAN_WITH_RSSIFILTER
-            ret = wifi_send_scan_cmd((t_u8)type, bssid, ssid, 1, 1, chan_list, 0, 0,
-#if CONFIG_SCAN_CHANNEL_GAP
-                                     scan_chan_gap,
+            chan_list = (wlan_scan_channel_list_t *)OSA_MemoryPoolAllocate(buf_512_MemoryPool);
 #endif
-                                     false, false);
-#else
-            ret = wifi_send_scan_cmd((t_u8)type, bssid, ssid, 1, 1, chan_list, 0,
-#if CONFIG_SCAN_CHANNEL_GAP
-                                     scan_chan_gap,
-#endif
-                                     false, false);
-#endif
-#endif
+            if (chan_list != NULL)
+            {
+                wlan_sort_scan_channels(network->chan_list, network->chan_list_len);
+                for (i = 0; i < network->chan_list_len; i++)
+                {
+                    chan_list[i].chan_number = (t_u8)network->chan_list[i];
+                    chan_list[i].scan_type   = MLAN_SCAN_TYPE_ACTIVE;
+                    chan_list[i].scan_time   = 120;
+                }
+            }
         }
-        else
-        {
+
+        ret = wifi_send_scan_cmd((t_u8)type, bssid, ssid, 1, network->chan_list_len, chan_list, 0,
 #if CONFIG_SCAN_WITH_RSSIFILTER
-            ret = wifi_send_scan_cmd((t_u8)type, bssid, ssid, 1, 0, NULL, 0, 0,
+                                    0,
+#endif
 #if CONFIG_SCAN_CHANNEL_GAP
-                                     scan_chan_gap,
+                                    scan_chan_gap,
 #endif
-                                     false, false);
-#else
-            ret = wifi_send_scan_cmd((t_u8)type, bssid, ssid, 1, 0, NULL, 0,
-#if CONFIG_SCAN_CHANNEL_GAP
-                                     scan_chan_gap,
-#endif
-                                     false, false);
-#endif
-        }
+                                    false, false);
     }
     if (ret != 0)
     {
@@ -1928,6 +1906,15 @@ static void do_scan(struct wlan_network *network)
     else
     {
         wlan.scan_count++;
+    }
+
+    if (chan_list != NULL)
+    {
+#if !CONFIG_MEM_POOLS
+        OSA_MemoryFree((void *)chan_list);
+#else
+        OSA_MemoryPoolFree(buf_512_MemoryPool, (void *)chan_list);
+#endif
     }
 }
 
@@ -16473,3 +16460,159 @@ int wlan_supp_dpp_listen(int bss_type, int enable)
     return 0;
 }
 #endif
+
+int wlan_set_network_chanlist(char *name, const uint8_t *chan_list, uint8_t num_chans, enum wlan_frequency_bands freq_band)
+{
+    uint8_t idx;
+    uint8_t valid_cnt = 0;
+    struct wlan_network *network = NULL;
+    int ret = -WM_FAIL;
+
+    if (name == NULL || num_chans > WLAN_NETWORK_CHAN_LIST_MAX)
+    {
+        return -WM_E_INVAL;
+    }
+
+    for (int i = 0; i < ARRAY_SIZE(wlan.networks); i++)
+    {
+        if ((wlan.networks[i].name[0] != '\0')
+            && (wlan.networks[i].role == WLAN_BSS_ROLE_STA)
+            && !strcmp(wlan.networks[i].name, name))
+        {
+            network = &wlan.networks[i];
+            break;
+        }
+    }
+
+    if (network == NULL)
+    {
+        wlcm_e("Invalid network");
+        return -WM_E_INVAL;
+    }
+
+    if (wlan.sta_state == CM_STA_SCANNING)
+    {
+        wlcm_w("STA is scanning, operation aborted, please retry later");
+        return -WM_E_AGAIN;
+    }
+
+    /*
+     * Case 1: Network was added with a specific channel (channel_specific == 1)
+     * In this case, chan_list will only contain that single channel.
+     * If freq_band is specified, validate that the channel belongs to the freq_band.
+     */
+    if (network->channel_specific && network->channel != 0)
+    {
+        wlcm_d("Network has specific channel: %d", network->channel);
+
+        if (freq_band == WLAN_FREQ_BAND_2_4_GHZ)
+        {
+            if (wlan_find_cfp_by_band_and_channel(mlan_adap, BAND_G, network->channel) == NULL)
+            {
+                wlcm_e("Channel %d is not valid for frequency band 2.4GHz", network->channel);
+                return -WM_E_INVAL;
+            }
+        }
+#if CONFIG_5GHz_SUPPORT
+        else if (freq_band == WLAN_FREQ_BAND_5_GHZ)
+        {
+            if (wlan_find_cfp_by_band_and_channel(mlan_adap, BAND_A, network->channel) == NULL)
+            {
+                wlcm_e("Channel %d is not valid for frequency band 5GHz", network->channel);
+                return -WM_E_INVAL;
+            }
+        }
+#endif
+        else
+        {
+            /* Do nothing */
+        }
+
+        /* Set chan_list to only contain the specific channel */
+        network->chan_list[0] = (uint8_t)network->channel;
+        network->chan_list_len = 1;
+
+        wlcm_d("Channel list set to specific channel: %d", network->channel);
+        goto out;
+    }
+
+    /*
+     * Case 2: Network was added without a specific channel
+     */
+
+    /* Case 2a: Channel list is provided - use it directly */
+    if (num_chans > 0 && chan_list != NULL)
+    {
+        wlcm_d("Setting channel list from provided list (%d channels)", num_chans);
+
+        for (idx = 0, valid_cnt = 0; idx < num_chans && valid_cnt < WLAN_NETWORK_CHAN_LIST_MAX; idx++)
+        {
+            /* Validate channel is allowed by region */
+            if (!wlan_check_channel_by_region_table((mlan_private *)mlan_adap->priv[0], chan_list[idx]))
+            {
+                wlcm_w("Channel %d not allowed by region, skipping", chan_list[idx]);
+                continue;
+            }
+
+            network->chan_list[valid_cnt++] = chan_list[idx];
+        }
+
+        if (valid_cnt == 0)
+        {
+            wlcm_e("No valid channels in the provided list");
+            return -WM_E_INVAL;
+        }
+
+        network->chan_list_len = valid_cnt;
+
+        wlcm_d("Channel list set with %d valid channels", valid_cnt);
+        goto out;
+    }
+
+    /* Case 2b: Band is specified - use all channels of that band */
+    if (freq_band == WLAN_FREQ_BAND_2_4_GHZ)
+    {
+        wlcm_d("Setting channel list by frequency band 2.4GHz");
+        ret = wifi_get_chanlist_by_band(network->chan_list, &network->chan_list_len, BAND_2GHZ);
+        if (ret != WM_SUCCESS)
+        {
+            wlcm_e("Failed to get channel list for frequency band 2.4GHz");
+            return -WM_FAIL;
+        }
+
+        wlcm_d("Channel list set with %d channels from frequency band 2.4GHz", network->chan_list_len);
+        goto out;
+    }
+#if CONFIG_5GHz_SUPPORT
+    else if (freq_band == WLAN_FREQ_BAND_5_GHZ)
+    {
+        wlcm_d("Setting channel list by frequency band 5GHz");
+        ret = wifi_get_chanlist_by_band(network->chan_list, &network->chan_list_len, BAND_5GHZ);
+        if (ret != WM_SUCCESS)
+        {
+            wlcm_e("Failed to get channel list for frequency band 5GHz");
+            return -WM_FAIL;
+        }
+
+        wlcm_d("Channel list set with %d channels from frequency band 5GHz", network->chan_list_len);
+        goto out;
+    }
+#endif
+    else if (freq_band == WLAN_FREQ_BAND_BOTH)
+    {
+        /* Case 2c: freq_band is 0 (all bands) - use all channels in the region */
+        wlcm_d("Use all channels in the region");
+        /* Clear existing channel list */
+        (void)memset(network->chan_list, 0, sizeof(network->chan_list));
+        network->chan_list_len = 0;
+        goto out;
+    }
+    else
+    {
+        wlcm_e("Invalid frequency band: %d", freq_band);
+        return -WM_E_INVAL;
+    }
+
+out:
+    return WM_SUCCESS;
+}
