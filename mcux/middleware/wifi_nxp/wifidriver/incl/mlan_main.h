@@ -2704,6 +2704,9 @@ t_s32 wlan_find_bssid_in_list(IN mlan_private *pmpriv, IN const t_u8 *bssid, IN 
 /** Compare two SSIDs */
 t_s32 wlan_ssid_cmp(IN pmlan_adapter pmadapter, IN mlan_802_11_ssid *ssid1, IN mlan_802_11_ssid *ssid2);
 
+/** Sort scan channels in ascending order */
+t_void wlan_sort_scan_channels(t_u8 channels[], unsigned char num_chans);
+
 /** Associate */
 mlan_status wlan_associate(IN mlan_private *pmpriv, IN t_void *pioctl_buf, IN BSSDescriptor_t *pbss_desc);
 
