@@ -53,7 +53,8 @@ typedef struct _hal_rpmsg_peer_ept_state
 #ifndef RPMSG_GLOBAL_VARIABLE_ALLOC
 #if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
 #ifndef SH_MEM_TOTAL_SIZE
-#define SH_MEM_TOTAL_SIZE (6144U)
+#define SH_MEM_TOTAL_SIZE   (2U * RL_BUFFER_COUNT * (RL_WORD_ALIGN_UP(RL_BUFFER_PAYLOAD_SIZE + \
+                            sizeof(struct rpmsg_std_hdr))) + RL_VRING_OVERHEAD)
 #endif /* SH_MEM_TOTAL_SIZE */
 #if defined(__ICCARM__) /* IAR Workbench */
 #pragma location = "rpmsg_sh_mem_section"
