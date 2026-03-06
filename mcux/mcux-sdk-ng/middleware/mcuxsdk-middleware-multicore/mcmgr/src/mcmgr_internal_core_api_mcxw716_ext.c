@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -11,13 +11,16 @@
 #include "FreeRTOS.h"
 #endif
 
-#if defined(configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY)
-#ifndef IMU_ISR_PRIORITY
-#define IMU_ISR_PRIORITY (configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY)
-#endif
-#else
 #ifndef IMU_ISR_PRIORITY
 #define IMU_ISR_PRIORITY (4U)
+#endif
+
+/* The highest interrupt priority that can be used by any interrupt service
+ * routine that makes calls to interrupt safe FreeRTOS API functions 
+ * (higher priorities are lower numeric values) */ 
+#if defined(configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY)
+#if IMU_ISR_PRIORITY < configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY
+#error "IMU_ISR_PRIORITY value must be greater than or equal to configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY"
 #endif
 #endif
 
@@ -37,7 +40,7 @@ mcmgr_status_t mcmgr_late_init_internal(mcmgr_core_t coreNum)
 mcmgr_core_t mcmgr_get_current_core_internal(void)
 {
 #if defined(IMU_CPU_INDEX) && (IMU_CPU_INDEX == 1U)
-    return (mcmgr_core_t)MSCM->CPXNUM;
+    return kMCMGR_Core0;
 #elif defined(IMU_CPU_INDEX) && (IMU_CPU_INDEX == 2U)
     return kMCMGR_Core1;
 #endif

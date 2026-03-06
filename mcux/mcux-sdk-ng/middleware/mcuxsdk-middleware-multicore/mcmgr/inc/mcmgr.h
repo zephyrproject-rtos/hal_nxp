@@ -153,7 +153,7 @@ typedef void (*mcmgr_event_callback_t)(mcmgr_core_t coreNum, uint16_t data, void
  */
 enum mcmgr_version_enum
 {
-    kMCMGR_Version = 0x00050001
+    kMCMGR_Version = 0x00050002
 };
 
 #if defined(__cplusplus)

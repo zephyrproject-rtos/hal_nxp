@@ -16,6 +16,8 @@
 #elif defined(IMU_CPU_INDEX) && (IMU_CPU_INDEX == 2U)
 #define IMU_LINK kIMU_LinkCpu2Cpu1
 #define MCMGR_BUILD_FOR_CORE_1
+#else
+#error "Building for not supported platform!"
 #endif
 
 #define IMU_RX_ISR_Handler(x)    IMU_RX_ISR(x)
@@ -45,10 +47,19 @@ mcmgr_status_t mcmgr_early_init_internal(mcmgr_core_t coreNum)
 
     mcmgr_imu_remote_active_req();
 
-    if (kStatus_Success != IMU_Init(IMU_LINK))
+    /*
+     * $Branch Coverage Justification$
+     * (kStatus_Success != IMU_Init(IMU_LINK)) not covered, IMU_Init function link parameter is
+     * macro/enum and can't be changed during the runtime.
+     */
+    if (kStatus_Success != IMU_Init(IMU_LINK)) /* GCOVR_EXCL_BR_LINE */
     {
-        return kStatus_MCMGR_Error; /* coco validated: line never reached, IMU_Init function link parameter is
-                                       macro/enum and can't be changed during the runtime */
+        /*
+         * $Line Coverage Justification$
+         * Line never reached, IMU_Init function link parameter is
+         * macro/enum and can't be changed during the runtime.
+         */
+        return kStatus_MCMGR_Error; /* GCOVR_EXCL_LINE */
     }
 
     /* Trigger core up event here, core is starting! */
@@ -79,13 +90,20 @@ mcmgr_status_t mcmgr_start_core_internal(mcmgr_core_t coreNum, void *bootAddress
         {
             /* The CPU_RST bit is locked, which is used by boot ROM code to force the radio CPU to remain in reset if
              * the radio flash verification fails */
-            status = kStatus_MCMGR_Error;
-            break;
+            /*
+             * $Line Coverage Justification$
+             * Not able to emulate this situation in testing.
+             */
+            status = kStatus_MCMGR_Error; /* GCOVR_EXCL_LINE */
+            break; /* GCOVR_EXCL_LINE */
+        }
+        else
+        {
+            /* Release NBU CPU from reset */
+            RFMC->RF2P4GHZ_CTRL &= ~(RFMC_RF2P4GHZ_CTRL_CPU_RST_MASK);
+            CIU2->CIU2_CPU_CPU2_CTRL = 0x1;
         }
 
-        /* Release NBU CPU from reset */
-        RFMC->RF2P4GHZ_CTRL &= ~(RFMC_RF2P4GHZ_CTRL_CPU_RST_MASK);
-        CIU2->CIU2_CPU_CPU2_CTRL = 0x1;
     } while (false);
 
     return status;
@@ -141,7 +159,7 @@ mcmgr_status_t mcmgr_get_core_property_internal(mcmgr_core_t coreNum,
 
 mcmgr_status_t mcmgr_trigger_event_internal(mcmgr_core_t coreNum, uint32_t remoteData, bool forcedWrite)
 {
-    (void)coreNum; /* Unused. */
+    (void)coreNum; /* Unused. IMU_LINK is making selections what core to trigger */
     (void)forcedWrite;
 
     int32_t ret;
@@ -197,8 +215,13 @@ void mcmgr_imu_channel_handler(mcmgr_core_t coreNum)
             eventType = (uint16_t)(data >> 16u);
             eventData = (uint16_t)(data & 0x0000FFFFu);
 
+            /*
+            * $Branch Coverage Justification$
+            * (eventType >= kMCMGR_EventTableLength) case not covered, MCMGR_TriggerEvent() does not allow
+            * to trigger event with type >= kMCMGR_EventTableLength.
+            */
             if (((mcmgr_event_type_t)eventType >= kMCMGR_RemoteCoreUpEvent) &&
-                ((mcmgr_event_type_t)eventType < kMCMGR_EventTableLength))
+                ((mcmgr_event_type_t)eventType < kMCMGR_EventTableLength)) /* GCOVR_EXCL_BR_LINE */
             {
                 if (MCMGR_eventTable[(mcmgr_event_type_t)eventType].callback != ((void *)0))
                 {
@@ -212,6 +235,7 @@ void mcmgr_imu_channel_handler(mcmgr_core_t coreNum)
     mcmgr_imu_remote_active_rel();
 }
 
+#if (defined(MCMGR_DEFERRED_CALLBACK_ALLOWED) && (MCMGR_DEFERRED_CALLBACK_ALLOWED == 1U))
 mcmgr_status_t mcmgr_process_deferred_rx_isr_internal(void)
 {
 #if defined(MCMGR_BUILD_FOR_CORE_0)
@@ -221,10 +245,15 @@ mcmgr_status_t mcmgr_process_deferred_rx_isr_internal(void)
 #endif
     return kStatus_MCMGR_Success;
 }
+#endif
 
 #if defined(MCMGR_HANDLE_EXCEPTIONS) && (MCMGR_HANDLE_EXCEPTIONS == 1)
-/* coco begin validated: reached after __coveragescanner_save() call becasue it is not possible to return from this ISR
- * and coverage data would not be stored */
+/*
+ * $Line Coverage Justification$
+ * Reached after gcov_dump_data() call becasue it is not possible to return from this ISR
+ * and coverage data would not be stored.
+ */
+/* GCOVR_EXCL_START */
 /* This overrides the weak DefaultISR implementation from startup file */
 void DefaultISR(void)
 {
@@ -268,5 +297,5 @@ void UsageFault_Handler(void)
 {
     DefaultISR();
 }
-/* coco end */
+/* GCOVR_EXCL_STOP */
 #endif /* MCMGR_HANDLE_EXCEPTIONS */

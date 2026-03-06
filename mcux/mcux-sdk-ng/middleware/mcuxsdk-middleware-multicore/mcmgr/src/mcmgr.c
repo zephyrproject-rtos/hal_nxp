@@ -36,13 +36,22 @@ static mcmgr_status_t MCMGR_TriggerEventCommon(mcmgr_core_t coreNum, mcmgr_event
     }
 
     mcmgr_core_t currentCore = MCMGR_GetCurrentCore();
-    if ((uint32_t)currentCore < g_mcmgrSystem.coreCount)
+    /*
+     * $Branch Coverage Justification$
+     * (currentCore > g_mcmgrSystem.coreCount) not covered, MCMGR_GetCurrentCore() returns currentCore from
+     * register and g_mcmgrSystem is defined as const.
+     */
+    if ((uint32_t)currentCore < g_mcmgrSystem.coreCount) /* GCOVR_EXCL_BR_LINE */
     {
         remoteData = (((uint32_t)type) << 16) | eventData;
         return mcmgr_trigger_event_internal(coreNum, remoteData, forcedWrite);
     }
-    return kStatus_MCMGR_Error; /* coco validated: line never reached, MCMGR_GetCurrentCore() returns currentCore from
-                                   register and g_mcmgrSystem is defined as const */
+    /*
+     * $Line Coverage Justification$
+     * Line never reached, MCMGR_GetCurrentCore() returns currentCore from
+     * register and g_mcmgrSystem is defined as const.
+     */
+    return kStatus_MCMGR_Error; /* GCOVR_EXCL_LINE */
 }
 
 mcmgr_status_t MCMGR_TriggerEvent(mcmgr_core_t coreNum, mcmgr_event_type_t type, uint16_t eventData)
@@ -59,7 +68,11 @@ static void MCMGR_StartupDataEventHandler(mcmgr_core_t coreNum, uint16_t startup
 {
     mcmgr_core_context_t *coreContext = (mcmgr_core_context_t *)context;
 
-    switch (coreContext->state)
+    /*
+     * $Branch Coverage Justification$
+     * Not possible to get into default case/
+     */
+    switch (coreContext->state) /* GCOVR_EXCL_BR_LINE */
     {
         case kMCMGR_StartupGettingLowCoreState:
             coreContext->startupData = startupDataChunk; /* Receive the low part */
@@ -72,19 +85,27 @@ static void MCMGR_StartupDataEventHandler(mcmgr_core_t coreNum, uint16_t startup
             coreContext->state = kMCMGR_RunningCoreState;
             (void)MCMGR_TriggerEvent(coreNum, kMCMGR_FeedStartupDataEvent, (uint16_t)kMCMGR_RunningCoreState);
             break;
-        /* coco begin validated: not possible to get into this default case */
+        /*
+         * $Line Coverage Justification$
+         * Not possible to get into this default case.
+         */
+        /* GCOVR_EXCL_START */
         default:
             /* All the cases have been listed above, the default clause should not be reached. */
             break;
     }
-    /* coco end */
+    /* GCOVR_EXCL_STOP */
 }
 
 static void MCMGR_FeedStartupDataEventHandler(mcmgr_core_t coreNum, uint16_t startupDataChunk, void *context)
 {
     mcmgr_core_context_t *coreContext = &((mcmgr_core_context_t *)context)[coreNum];
 
-    switch ((mcmgr_core_state_t)startupDataChunk)
+    /*
+     * $Branch Coverage Justification$
+     * Not possible to get into default case/
+     */
+    switch ((mcmgr_core_state_t)startupDataChunk) /* GCOVR_EXCL_BR_LINE */
     {
         case kMCMGR_StartupGettingLowCoreState:
             (void)MCMGR_TriggerEvent(coreNum, kMCMGR_StartupDataEvent, (uint16_t)(coreContext->startupData & 0xFFFFU));
@@ -100,12 +121,16 @@ static void MCMGR_FeedStartupDataEventHandler(mcmgr_core_t coreNum, uint16_t sta
             coreContext->state = (mcmgr_core_state_t)startupDataChunk;
             break;
 
-        /* coco begin validated: not possible to get into this default case */
+        /*
+         * $Line Coverage Justification$
+         * Not possible to get into this default case.
+         */
+        /* GCOVR_EXCL_START */
         default:
             /* All the cases have been listed above, the default clause should not be reached. */
             break;
     }
-    /* coco end */
+    /* GCOVR_EXCL_STOP */
 }
 
 mcmgr_status_t MCMGR_EarlyInit(void)
@@ -115,40 +140,72 @@ mcmgr_status_t MCMGR_EarlyInit(void)
        Avoid using uninitialized data here. */
 
     mcmgr_core_t currentCore = MCMGR_GetCurrentCore();
-    if ((uint32_t)currentCore < g_mcmgrSystem.coreCount)
+    /*
+     * $Branch Coverage Justification$
+     * (currentCore > g_mcmgrSystem.coreCount) not covered, MCMGR_GetCurrentCore() returns currentCore from
+     * register and g_mcmgrSystem is defined as const.
+     */
+    if ((uint32_t)currentCore < g_mcmgrSystem.coreCount) /* GCOVR_EXCL_BR_LINE */
     {
         return mcmgr_early_init_internal(currentCore);
     }
-    return kStatus_MCMGR_Error; /* coco validated: line never reached, MCMGR_GetCurrentCore() returns currentCore from
-                                   register and g_mcmgrSystem is defined as const */
+    /*
+     * $Line Coverage Justification$
+     * Line never reached, MCMGR_GetCurrentCore() returns currentCore from
+     * register and g_mcmgrSystem is defined as const.
+     */
+    return kStatus_MCMGR_Error; /* GCOVR_EXCL_LINE */
 }
 
 mcmgr_status_t MCMGR_Init(void)
 {
     mcmgr_core_t currentCore = MCMGR_GetCurrentCore();
-    if ((uint32_t)currentCore < g_mcmgrSystem.coreCount)
+    /*
+     * $Branch Coverage Justification$
+     * (currentCore > g_mcmgrSystem.coreCount) not covered, MCMGR_GetCurrentCore() returns currentCore from
+     * register and g_mcmgrSystem is defined as const.
+     */
+    if ((uint32_t)currentCore < g_mcmgrSystem.coreCount) /* GCOVR_EXCL_BR_LINE */
     {
         /* Register critical and generic event handlers */
+        /*
+         * $Branch Coverage Justification$
+         * MCMGR_RegisterEvent() params are always correct here.
+         */
         if (kStatus_MCMGR_Success != MCMGR_RegisterEvent(kMCMGR_StartupDataEvent, MCMGR_StartupDataEventHandler,
-                                                         (void *)&s_mcmgrCoresContext[currentCore]))
+                                                         (void *)&s_mcmgrCoresContext[currentCore])) /* GCOVR_EXCL_BR_LINE */
         {
-            return kStatus_MCMGR_Error; /* coco validated: line never reached, MCMGR_RegisterEvent() params are always
-                                           correct here */
+            /*
+             * $Line Coverage Justification$
+             * Line never reached, MCMGR_RegisterEvent() params are always correct here.
+             */
+            return kStatus_MCMGR_Error; /* GCOVR_EXCL_LINE */
         }
+        /*
+         * $Branch Coverage Justification$
+         * MCMGR_RegisterEvent() params are always correct here.
+         */
         if (kStatus_MCMGR_Success !=
             MCMGR_RegisterEvent(kMCMGR_FeedStartupDataEvent, MCMGR_FeedStartupDataEventHandler,
-                                (void *)s_mcmgrCoresContext))
+                                (void *)s_mcmgrCoresContext)) /* GCOVR_EXCL_BR_LINE */
                                 /* In this handler we need access to whole s_mcmgrCoresContext structure
                                  * so we can service requests from any core number `mcmgr_core_t`.
                                  */
         {
-            return kStatus_MCMGR_Error; /* coco validated: line never reached, MCMGR_RegisterEvent() params are always
-                                           correct here */
+            /*
+             * $Line Coverage Justification$
+             * Line never reached, MCMGR_RegisterEvent() params are always correct here.
+             */
+            return kStatus_MCMGR_Error; /* GCOVR_EXCL_LINE */
         }
         return mcmgr_late_init_internal(currentCore);
     }
-    return kStatus_MCMGR_Error; /* coco validated: line never reached, MCMGR_GetCurrentCore() returns currentCore from
-                                   register and g_mcmgrSystem is defined as const */
+    /*
+     * $Line Coverage Justification$
+     * Line never reached, MCMGR_GetCurrentCore() returns currentCore from
+     * register and g_mcmgrSystem is defined as const.
+     */
+    return kStatus_MCMGR_Error; /* GCOVR_EXCL_LINE */
 }
 
 mcmgr_status_t MCMGR_StartCore(mcmgr_core_t coreNum, void *bootAddress, uint32_t startupData, mcmgr_start_mode_t mode)
@@ -166,13 +223,13 @@ mcmgr_status_t MCMGR_StartCore(mcmgr_core_t coreNum, void *bootAddress, uint32_t
         {
             if (mode == kMCMGR_Start_Synchronous)
             {
-#if MCMGR_BUSY_POLL_COUNT
+#if defined(MCMGR_BUSY_POLL_COUNT) && (MCMGR_BUSY_POLL_COUNT > 0)
                 uint32_t poll_count = MCMGR_BUSY_POLL_COUNT;
 #endif
                 /* Wait until the second core reads and confirms the startup data */
                 while (s_mcmgrCoresContext[coreNum].state != kMCMGR_RunningCoreState)
                 {
-#if MCMGR_BUSY_POLL_COUNT
+#if defined(MCMGR_BUSY_POLL_COUNT) && (MCMGR_BUSY_POLL_COUNT > 0)
                     if ((--poll_count) == 0u)
                     {
                         return kStatus_MCMGR_Error;
@@ -190,22 +247,38 @@ mcmgr_status_t MCMGR_GetStartupData(mcmgr_core_t coreNum, uint32_t *startupData)
 {
     mcmgr_core_t currentCore = MCMGR_GetCurrentCore();
 
-    if ((uint32_t)currentCore < g_mcmgrSystem.coreCount)
+    /*
+     * $Branch Coverage Justification$
+     * (currentCore > g_mcmgrSystem.coreCount) not covered, MCMGR_GetCurrentCore() returns currentCore from
+     * register and g_mcmgrSystem is defined as const.
+     */
+    if ((uint32_t)currentCore < g_mcmgrSystem.coreCount) /* GCOVR_EXCL_BR_LINE */
     {
         if (s_mcmgrCoresContext[currentCore].state == kMCMGR_ResetCoreState)
         {
             s_mcmgrCoresContext[currentCore].state = kMCMGR_StartupGettingLowCoreState;
+            /*
+             * $Branch Coverage Justification$
+             * MCMGR_TriggerEvent() params are always correct here.
+             */
             if (kStatus_MCMGR_Success !=
-                MCMGR_TriggerEvent(coreNum, kMCMGR_FeedStartupDataEvent, (uint16_t)kMCMGR_StartupGettingLowCoreState))
+                MCMGR_TriggerEvent(coreNum, kMCMGR_FeedStartupDataEvent, (uint16_t)kMCMGR_StartupGettingLowCoreState)) /* GCOVR_EXCL_BR_LINE */
             {
-                return kStatus_MCMGR_Error; /* coco validated: line never reached, MCMGR_TriggerEvent() params are
-                                               always correct here */
+                /*
+                 * $Line Coverage Justification$
+                 * Line never reached, MCMGR_TriggerEvent() params are always correct here.
+                 */
+                return kStatus_MCMGR_Error; /* GCOVR_EXCL_LINE */
             }
         }
         return mcmgr_get_startup_data_internal(currentCore, startupData);
     }
-    return kStatus_MCMGR_Error; /* coco validated: line never reached, MCMGR_GetCurrentCore() returns coreNum from
-                                   register and g_mcmgrSystem is defined as const */
+    /*
+     * $Line Coverage Justification$
+     * Line never reached, MCMGR_GetCurrentCore() returns coreNum from
+     * register and g_mcmgrSystem is defined as const.
+     */
+    return kStatus_MCMGR_Error; /* GCOVR_EXCL_LINE */
 }
 
 mcmgr_status_t MCMGR_StopCore(mcmgr_core_t coreNum)
