@@ -26,8 +26,14 @@
 void MU_TxEmptyFlagISR(mcmgr_core_t coreNum);
 void MU_RxFullFlagISR(mcmgr_core_t coreNum);
 
+/*
+ * $Line Coverage Justification$
+ * MU_TxEmptyFlagISR() and MU_RxFullFlagISR() weak functions overloaded by macros from mcmgr_imu_internal.c
+ */
+/* GCOVR_EXCL_START */
 __attribute__((weak)) void MU_TxEmptyFlagISR(mcmgr_core_t coreNum){};
 __attribute__((weak)) void MU_RxFullFlagISR(mcmgr_core_t coreNum){};
+/* GCOVR_EXCL_STOP */
 
 /* MU ISR router */
 static void imu_rx_isr(mcmgr_core_t coreNum)

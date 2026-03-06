@@ -2,7 +2,7 @@
  * Copyright (c) 2014, Mentor Graphics Corporation
  * Copyright (c) 2015 Xilinx, Inc.
  * Copyright (c) 2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2025 NXP
+ * Copyright 2016-2026 NXP
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -71,7 +71,7 @@ static struct k_sem env_sema    = {0};
 static struct k_event env_event = {0};
 
 /* Max supported ISR counts */
-#define ISR_COUNT (32U)
+#define ISR_COUNT RL_PLATFORM_MAX_ISR_COUNT
 /*!
  * Structure to keep track of registered ISR's.
  */
@@ -249,8 +249,9 @@ void env_free_memory(void *ptr)
  */
 void env_memset(void *ptr, int32_t value, uint32_t size)
 {
-    /* Explicitly convert value to unsigned char range to ensure consistent behavior */
-    (void)memset(ptr, (unsigned char)(value & 0xFF), size);
+    /* Mask to byte range for memset */
+    uint32_t masked = ((uint32_t)value) & 0xFFU;
+    (void)memset(ptr, (int)masked, size);
 }
 
 /*!
@@ -463,33 +464,6 @@ void env_delete_sync_lock(void *lock)
 }
 
 /*!
- * env_acquire_sync_lock
- *
- * Tries to acquire the lock, if lock is not available then call to
- * this function waits for lock to become available.
- */
-void env_acquire_sync_lock(void *lock)
-{
-    if (lock != ((void *)0))
-    {
-        env_lock_mutex(lock);
-    }
-}
-
-/*!
- * env_release_sync_lock
- *
- * Releases the given lock.
- */
-void env_release_sync_lock(void *lock)
-{
-    if (lock != ((void *)0))
-    {
-        env_unlock_mutex(lock);
-    }
-}
-
-/*!
  * env_sleep_msec
  *
  * Suspends the calling thread for given time , in msecs.
@@ -509,11 +483,11 @@ void env_sleep_msec(uint32_t num_msec)
  */
 void env_register_isr(uint32_t vector_id, void *data)
 {
-    RL_ASSERT(vector_id < ISR_COUNT);
     if (vector_id < ISR_COUNT)
     {
         isr_table[vector_id].data = data;
     }
+    RL_ASSERT(vector_id < ISR_COUNT);
 }
 
 /*!
@@ -525,11 +499,11 @@ void env_register_isr(uint32_t vector_id, void *data)
  */
 void env_unregister_isr(uint32_t vector_id)
 {
-    RL_ASSERT(vector_id < ISR_COUNT);
     if (vector_id < ISR_COUNT)
     {
         isr_table[vector_id].data = ((void *)0);
     }
+    RL_ASSERT(vector_id < ISR_COUNT);
 }
 
 /*!
@@ -606,13 +580,13 @@ void env_cache_invalidate(void *data, uint32_t len)
 
 void env_isr(uint32_t vector)
 {
-    struct isr_info *info;
-    RL_ASSERT(vector < ISR_COUNT);
+    struct isr_info *isr_entry;
     if (vector < ISR_COUNT)
     {
-        info = &isr_table[vector];
-        virtqueue_notification((struct virtqueue *)info->data);
+        isr_entry = &isr_table[vector];
+        virtqueue_notification((struct virtqueue *)isr_entry->data);
     }
+    RL_ASSERT(vector < ISR_COUNT);
 }
 
 /*

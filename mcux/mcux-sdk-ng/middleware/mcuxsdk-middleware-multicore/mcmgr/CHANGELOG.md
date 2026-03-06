@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Added mcxl14x parts support
+
+### Fixed
+
+- Fix MISRA C-2012 Rule 20.8 violations.
+
+## [v5.0.2]
+
+### Added
+
+- Added gcov options and configs to support mcmgr code coverage
+- Added new test_weak_mu_isr testcase for devices with MU peripheral
+- Added new test_heartbeat testcase showing heartbeat mechanism between primary and secondary cores using the MCMGR
+
 ## [v5.0.1]
 
 ### Added
@@ -163,7 +181,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/nxp-mcuxpresso/mcux-mcmgr/compare/v5.0.1...HEAD
+[Unreleased]: https://github.com/nxp-mcuxpresso/mcux-mcmgr/compare/v5.0.2...HEAD
+[v5.0.2]: https://github.com/nxp-mcuxpresso/mcux-mcmgr/compare/v5.0.1...v5.0.2
 [v5.0.1]: https://github.com/nxp-mcuxpresso/mcux-mcmgr/compare/v5.0.0...v5.0.1
 [v5.0.0]: https://github.com/nxp-mcuxpresso/mcux-mcmgr/compare/v4.1.7...v5.0.0
 [v4.1.7]: https://github.com/nxp-mcuxpresso/mcux-mcmgr/compare/v4.1.6...v4.1.7

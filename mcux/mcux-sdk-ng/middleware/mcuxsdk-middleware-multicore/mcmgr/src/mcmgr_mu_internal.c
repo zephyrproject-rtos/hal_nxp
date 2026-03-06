@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2025 NXP
+ * Copyright 2017-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -52,7 +52,12 @@ __attribute__((weak)) void MU_GenInt0FlagISR(MU_Type *base, mcmgr_core_t coreNum
      defined(MIMXRT735S_hifi1_SERIES) || defined(MIMXRT758S_hifi1_SERIES) ||                                \
      defined(MIMXRT798S_hifi1_SERIES) ||                                                                    \
      defined(KW43B43ZC7_SERIES) || defined(KW43B43ZC7_NBU_SERIES) ||                                        \
-     defined(MCXL255_cm0plus_SERIES) || defined(MCXL255_cm33_SERIES))
+     defined(MCXL255_cm0plus_SERIES) || defined(MCXL255_cm33_SERIES) ||                                     \
+     defined(MCXL254_cm0plus_SERIES) || defined(MCXL254_cm33_SERIES) ||                                     \
+     defined(MCXL253_cm0plus_SERIES) || defined(MCXL253_cm33_SERIES) ||                                     \
+     defined(MCXL144_cm0plus_SERIES) || defined(MCXL144_cm33_SERIES) ||                                     \
+     defined(MCXL143_cm0plus_SERIES) || defined(MCXL143_cm33_SERIES) ||                                     \
+     defined(MCXL142_cm0plus_SERIES) || defined(MCXL142_cm33_SERIES))
 
 /* MU ISR table */
 static void (*const MU_interrupts[MU_ISR_COUNT])(MU_Type *base, mcmgr_core_t coreNum) = {
@@ -105,7 +110,12 @@ static void mu_isr(MU_Type *base, mcmgr_core_t coreNum)
      defined(MIMXRT735S_hifi1_SERIES) || defined(MIMXRT758S_hifi1_SERIES) ||                                \
      defined(MIMXRT798S_hifi1_SERIES) ||                                                                    \
      defined(KW43B43ZC7_SERIES) || defined(KW43B43ZC7_NBU_SERIES) ||                                        \
-     defined(MCXL255_cm0plus_SERIES) || defined(MCXL255_cm33_SERIES))
+     defined(MCXL255_cm0plus_SERIES) || defined(MCXL255_cm33_SERIES) ||                                     \
+     defined(MCXL254_cm0plus_SERIES) || defined(MCXL254_cm33_SERIES) ||                                     \
+     defined(MCXL253_cm0plus_SERIES) || defined(MCXL253_cm33_SERIES) ||                                     \
+     defined(MCXL144_cm0plus_SERIES) || defined(MCXL144_cm33_SERIES) ||                                     \
+     defined(MCXL143_cm0plus_SERIES) || defined(MCXL143_cm33_SERIES) ||                                     \
+     defined(MCXL142_cm0plus_SERIES) || defined(MCXL142_cm33_SERIES))
 
     uint32_t tcr_tie_idx = 0;
     for (i = MU_ISR_FLAG_BASE; i < (MU_ISR_FLAG_BASE + MU_TR_COUNT); i++)
@@ -236,7 +246,9 @@ int MU0_IRQHandler(void)
     mu_isr(MU0_MUB, kMCMGR_Core0);
     return 0;
 }
-#elif (defined(MCXL255_cm33_SERIES))
+#elif (defined(MCXL255_cm33_SERIES) || defined(MCXL254_cm33_SERIES) || \
+       defined(MCXL253_cm33_SERIES) || defined(MCXL144_cm33_SERIES) || \
+       defined(MCXL143_cm33_SERIES) || defined(MCXL142_cm33_SERIES))
 int MU_A_TX_IRQHandler(void)
 {
     mu_isr(MUA, kMCMGR_Core1);
@@ -252,7 +264,9 @@ int MU_A_INT_IRQHandler(void)
     mu_isr(MUA, kMCMGR_Core1);
     return 0;
 }
-#elif (defined(MCXL255_cm0plus_SERIES))
+#elif (defined(MCXL255_cm0plus_SERIES) || defined(MCXL254_cm0plus_SERIES) || \
+       defined(MCXL253_cm0plus_SERIES) || defined(MCXL144_cm0plus_SERIES) || \
+       defined(MCXL143_cm0plus_SERIES) || defined(MCXL142_cm0plus_SERIES))
 int MU_B_TX_IRQHandler(void)
 {
     mu_isr(MUB, kMCMGR_Core0);

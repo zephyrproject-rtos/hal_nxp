@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,6 +9,7 @@
 
 #include <stdint.h>
 #include "virtio_ring.h"
+#include "rpmsg_default_config.h"
 
 /*
  * No need to align the VRING as defined in Linux because mcxw71x is not intended
@@ -34,6 +35,11 @@
 
 /* define shared memory space for VRINGS per one channel */
 #define RL_VRING_OVERHEAD (2UL * VRING_SIZE)
+
+/* Maximum Number of ISR Count. It is determined by the VQ_ID bit field size. */
+#ifndef RL_PLATFORM_MAX_ISR_COUNT
+#define RL_PLATFORM_MAX_ISR_COUNT (32U)
+#endif
 
 #define RL_GET_VQ_ID(link_id, queue_id) (((queue_id)&0x1U) | (((link_id) << 1U) & 0xFFFFFFFEU))
 #define RL_GET_LINK_ID(id)              (((id)&0xFFFFFFFEU) >> 1U)
@@ -67,14 +73,18 @@ void platform_time_delay(uint32_t num_msec);
 void platform_map_mem_region(uint32_t vrt_addr, uint32_t phy_addr, uint32_t size, uint32_t flags);
 void platform_cache_all_flush_invalidate(void);
 void platform_cache_disable(void);
+#if defined(RL_USE_DCACHE) && (RL_USE_DCACHE == 1)
 void platform_cache_invalidate(void *data, uint32_t len);
 void platform_cache_flush(void *data, uint32_t len);
+#endif /* defined(RL_USE_DCACHE) && (RL_USE_DCACHE == 1) */
 uintptr_t platform_vatopa(void *addr);
 void *platform_patova(uintptr_t addr);
 
 /* platform init/deinit */
 int32_t platform_init(void);
 int32_t platform_deinit(void);
+
+#if defined(RL_ALLOW_CUSTOM_SHMEM_CONFIG) && (RL_ALLOW_CUSTOM_SHMEM_CONFIG == 1)
 
 /*!
  * \brief Set static shared memory configuration from application core in SMU2 to be accessible from nbu later.
@@ -92,6 +102,7 @@ void platform_set_static_shmem_config(void);
  *
  * \return int 0 if success, other if error.
  */
-uint32_t platform_get_custom_shmem_config(uint32_t link_id, rpmsg_platform_shmem_config_t *config);
+int32_t platform_get_custom_shmem_config(uint32_t link_id, rpmsg_platform_shmem_config_t *config);
+#endif /* defined(RL_ALLOW_CUSTOM_SHMEM_CONFIG) && (RL_ALLOW_CUSTOM_SHMEM_CONFIG == 1) */
 
 #endif /* RPMSG_PLATFORM_H_ */

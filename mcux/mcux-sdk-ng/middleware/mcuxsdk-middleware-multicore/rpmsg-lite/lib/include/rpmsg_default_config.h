@@ -2,7 +2,7 @@
  * Copyright (c) 2014, Mentor Graphics Corporation
  * Copyright (c) 2015 Xilinx, Inc.
  * Copyright (c) 2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2025 NXP
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -77,9 +77,11 @@
 #if !(defined(RL_ALLOW_CUSTOM_SHMEM_CONFIG) && (RL_ALLOW_CUSTOM_SHMEM_CONFIG == 1))
 //! @def RL_BUFFER_PAYLOAD_SIZE
 //!
-//! Size of the buffer payload, it must be equal to (240, 496, 1008, ...)
-//! [2^n - 16]. Ensure the same value is defined on both sides of rpmsg
-//! communication. The default value is 496U.
+//! Size of the buffer payload, it must be more then 0.
+//! And should be word aligned with added plus 16 for rpmsg header.
+//! Value will be word align up if not already aligned.
+//! Ensure the same value is defined on both sides of rpmsg
+//! communication.
 #ifndef RL_BUFFER_PAYLOAD_SIZE
 #define RL_BUFFER_PAYLOAD_SIZE (496U)
 #endif
@@ -94,18 +96,6 @@
 //! in total are created in the shared memory.
 #ifndef RL_BUFFER_COUNT
 #define RL_BUFFER_COUNT (2U)
-#endif
-
-#else
-//! Define the buffer payload and count per different link IDs (rpmsg_lite instance) when RL_ALLOW_CUSTOM_SHMEM_CONFIG
-//! is set.
-//! Refer to the rpmsg_plaform.h for the used link IDs.
-#ifndef RL_BUFFER_PAYLOAD_SIZE
-#define RL_BUFFER_PAYLOAD_SIZE(link_id) (496U)
-#endif
-
-#ifndef RL_BUFFER_COUNT
-#define RL_BUFFER_COUNT(link_id) (((link_id) == 0U) ? 256U : 2U)
 #endif
 #endif /* !(defined(RL_ALLOW_CUSTOM_SHMEM_CONFIG) && (RL_ALLOW_CUSTOM_SHMEM_CONFIG == 1))*/
 
@@ -187,14 +177,18 @@
 //! @def RL_HANG
 //!
 //! Default implementation of hang assert function
-static inline void RL_HANG(void)
+/*
+ * $Line Coverage Justification$
+ * RL_HANG not reachable in unit tests when own RL_ASSERT implementation used.
+ */
+/* GCOVR_EXCL_START */
+__attribute__((noreturn)) static inline void RL_HANG(void)
 {
-    /* coco begin validated: RL_HANG not reachable in unit tests when own RL_ASSERT implementation used */
     for (;;)
     {
     }
 }
-/* coco end */
+/* GCOVR_EXCL_STOP */
 
 //! @def RL_ASSERT_BOOL
 //!

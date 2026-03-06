@@ -4,7 +4,7 @@
 /*-
  * Copyright (c) 2011, Bryan Venteicher <bryanv@FreeBSD.org>
  * Copyright (c) 2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2025 NXP
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,7 +34,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "rpmsg_default_config.h"
-typedef uint8_t boolean;
 
 #include "virtio_ring.h"
 #include "llist.h"
@@ -51,7 +50,9 @@ typedef uint8_t boolean;
 #define ERROR_VQUEUE_INVLD_PARAM (VQ_ERROR_BASE - 8)
 
 #define VQUEUE_SUCCESS (0)
+#ifndef VQUEUE_DEBUG
 #define VQUEUE_DEBUG   (false)
+#endif
 
 /* This is temporary macro to replace C NULL support.
  * At the moment all the RTL specific functions are present in env.
@@ -135,10 +136,10 @@ struct virtqueue
     uint16_t vq_available_idx;
     /* } 16bit aligned */
 
-    boolean avail_read;  /* 8bit wide */
-    boolean avail_write; /* 8bit wide */
-    boolean used_read;   /* 8bit wide */
-    boolean used_write;  /* 8bit wide */
+    bool avail_read;  /* 8bit wide */
+    bool avail_write; /* 8bit wide */
+    bool used_read;   /* 8bit wide */
+    bool used_write;  /* 8bit wide */
 
     uint16_t padd;       /* aligned to 32bits after this: */
 
@@ -173,7 +174,7 @@ typedef void vq_notify(struct virtqueue *vq);
     {                                                               \
         if (!(_exp))                                                \
         {                                                           \
-            env_print("%s: %s - "(_msg), __func__, (_vq)->vq_name); \
+            env_print("%s: %s - "_msg, __func__, (_vq)->vq_name);   \
             while (1)                                               \
             {                                                       \
             };                                                      \
@@ -189,14 +190,14 @@ typedef void vq_notify(struct virtqueue *vq);
         status_var = status_err;                        \
     }
 
-#define VQUEUE_BUSY(vq, dir)                                         \
-    if ((vq)->dir == false)                                          \
-    {                                                                \
-        (vq)->dir = true;                                            \
-    }                                                                \
-    else                                                             \
-    {                                                                \
-        VQASSERT(vq, (vq)->dir == false, "VirtQueue already in use") \
+#define VQUEUE_BUSY(vq, dir)                                          \
+    if ((vq)->dir == false)                                           \
+    {                                                                 \
+        (vq)->dir = true;                                             \
+    }                                                                 \
+    else                                                              \
+    {                                                                 \
+        VQASSERT(vq, (vq)->dir == false, "VirtQueue already in use"); \
     }
 
 #define VQUEUE_IDLE(vq, dir) ((vq)->dir = false)

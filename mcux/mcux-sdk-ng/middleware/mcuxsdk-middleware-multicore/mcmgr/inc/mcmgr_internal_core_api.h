@@ -172,8 +172,9 @@ mcmgr_status_t mcmgr_trigger_event_internal(mcmgr_core_t coreNum, uint32_t remot
  */
 mcmgr_core_t mcmgr_get_current_core_internal(void);
 
+#if (defined(MCMGR_DEFERRED_CALLBACK_ALLOWED) && (MCMGR_DEFERRED_CALLBACK_ALLOWED == 1U))
 mcmgr_status_t mcmgr_process_deferred_rx_isr_internal(void);
-
+#endif
 
 /*! @} */
 

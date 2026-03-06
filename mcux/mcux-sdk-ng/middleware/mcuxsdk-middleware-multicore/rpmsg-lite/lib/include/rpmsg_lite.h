@@ -4,7 +4,7 @@
  * Copyright (c) 2016 Freescale Semiconductor, Inc.
  * Copyright 2016-2025 NXP
  * Copyright 2021 ACRIOS Systems s.r.o.
- * All rights reserved.
+ * Copyright 2026 NXP
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -52,18 +52,15 @@ extern "C" {
  * Definitions
  ******************************************************************************/
 
-#define RL_VERSION "v5.2.1" /*!< Current RPMsg Lite version */
+#define RL_VERSION "v5.3.0" /*!< Current RPMsg Lite version */
 
 /* Shared memory "allocator" parameters */
 /*! @brief Word size used for alignment */
 #define RL_WORD_SIZE (sizeof(uint32_t))
 /*! @brief Align a value up to the next multiple of the word size */
-#define RL_WORD_ALIGN_UP(a)                                                                                  \
-    (((((uintptr_t)(a)) & (RL_WORD_SIZE - 1U)) != 0U) ? ((((uintptr_t)(a)) & (~(RL_WORD_SIZE - 1U))) + 4U) : \
-                                                        ((uintptr_t)(a)))
+#define RL_WORD_ALIGN_UP(a) (((uintptr_t)(a) + (RL_WORD_SIZE - 1U)) & (~((uintptr_t)(RL_WORD_SIZE - 1U))))
 /*! @brief Align a value down to a multiple of the word size */
-#define RL_WORD_ALIGN_DOWN(a) \
-    (((((uintptr_t)(a)) & (RL_WORD_SIZE - 1U)) != 0U) ? (((uintptr_t)(a)) & (~(RL_WORD_SIZE - 1U))) : ((uintptr_t)(a)))
+#define RL_WORD_ALIGN_DOWN(a) ((uintptr_t)(a) & (~((uintptr_t)(RL_WORD_SIZE - 1U))))
 
 /* Definitions for device types , null pointer, etc.*/
 /*! @brief Success status code */

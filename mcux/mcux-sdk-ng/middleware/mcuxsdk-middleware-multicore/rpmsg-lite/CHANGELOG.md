@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Added i.MX93W parts support
+- Added i.MX952 parts support
+- Added mcxl14x parts support
+
+### Changed
+
+- Port `platform_get_custom_shmem_config` change return value from uint32_t to int32_t for error handling consistency.
+
+### Fixed
+
+- Updated unit tests code to allow correct GCOV code coverage measurement.
+- Added missing dsb instructions into all ISRs for cm4/cm7 based platform layers.
+- Fixed CERT EXP34-C by adding `__attribute__((noreturn))` to `RL_HANG(void)` function.
+- **MISRA C-2012 Rule 14.3 compliance**: Simplified `RL_WORD_ALIGN_UP` and `RL_WORD_ALIGN_DOWN` macros to eliminate invariant controlling expression violations (CID 5011148)
+  - Replaced ternary operator implementations with standard bitwise alignment idioms
+  - Fixed hardcoded `4U` constant in `RL_WORD_ALIGN_UP` to use `RL_WORD_SIZE` for better portability
+- Fixed several MISRA compliance violations
+
+## [v5.3.0]
+
+### Added
+
+- RT700 porting layer added support to send rpmsg messages between CM33_0 <-> Hifi1 and CM33_1 <-> Hifi4 cores.
+- Add new platform macro `RL_PLATFORM_MAX_ISR_COUNT` this will set number of IRQ count per platform. This macro is then used in environment layers to set isr_table size where irq handles are registered. It size should match the bit length of VQ_ID so all combinations can fit into table.
+- Unit tests updated to improve code coverage, new unit tests added covering static allocations in rtos environment layers.
+
+### Fixed
+
+- virtio.h removed `typedef uint8_t boolean` and in its place use standard C99 `bool` type to avoid potential type conflicts.
+- env_acquire_sync_lock() and env_release_sync_lock() synchronization primitives removed
+- Kconfig consolidation, when RL_ALLOW_CUSTOM_SHMEM_CONFIG enabled the platform_get_custom_shmem_config() function needs to be implemented in platform layer to provide custom shared memory configuration for RPMsg-Lite instance.
+
 ## [v5.2.1]
 
 ### Added
@@ -12,6 +48,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Doc added RPMSG-Lite VirtIO Overview
 - Doc added RPSMG-Lite Design Consi​derations
 - Added frdmimxrt1186 unit testing
+
+### Changed
+
+- Remove limitation that `RL_BUFFER_SIZE` needs to be power of 2. It just has to be more than 16 bytes, e.g. 16 bytes of rpmsg header and payload size at least 1 byte and word aligned, if not it will be aligned up.
 
 ### Fixed
 
@@ -228,7 +268,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support of static API (without dynamic allocations).
 
 
-[Unreleased]: https://github.com/nxp-mcuxpresso/rpmsg-lite/compare/v5.2.1...HEAD
+[Unreleased]: https://github.com/nxp-mcuxpresso/rpmsg-lite/compare/v5.3.0...HEAD
+[v5.3.0]: https://github.com/nxp-mcuxpresso/rpmsg-lite/compare/v5.2.1...v5.3.0
 [v5.2.1]: https://github.com/nxp-mcuxpresso/rpmsg-lite/compare/v5.2.0...v5.2.1
 [v5.2.0]: https://github.com/nxp-mcuxpresso/rpmsg-lite/compare/v5.1.4...v5.2.0
 [v5.1.4]: https://github.com/nxp-mcuxpresso/rpmsg-lite/compare/v5.1.3...v5.1.4
