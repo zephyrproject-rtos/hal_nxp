@@ -8,14 +8,14 @@
     ],
     "licenseListVersion": "3.26"
   },
-  "name": "mcux-mcmgr-v5.0.2",
+  "name": "mcux-mcmgr-v5.1.0",
   "dataLicense": "CC0-1.0",
   "documentNamespace": "https://nxp.com/spdx/ace20cd0-3b98-4570-9bec-3dd91f1a1d3b",
   "packages": [
     {
       "SPDXID": "SPDXRef-package-ace20cd0-3b98-4570-9bec-3dd91f1a1d3b",
       "name": "mcux-mcmgr",
-      "versionInfo": "v5.0.2",
+      "versionInfo": "v5.1.0",
       "licenseConcluded": "(BSD-3-Clause)",
       "licenseDeclared": "(BSD-3-Clause)",
       "downloadLocation": "https://github.com/nxp-mcuxpresso/mcux-mcmgr",
