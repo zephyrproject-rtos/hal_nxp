@@ -57,7 +57,8 @@ __attribute__((weak)) void MU_GenInt0FlagISR(MU_Type *base, mcmgr_core_t coreNum
      defined(MCXL253_cm0plus_SERIES) || defined(MCXL253_cm33_SERIES) ||                                     \
      defined(MCXL144_cm0plus_SERIES) || defined(MCXL144_cm33_SERIES) ||                                     \
      defined(MCXL143_cm0plus_SERIES) || defined(MCXL143_cm33_SERIES) ||                                     \
-     defined(MCXL142_cm0plus_SERIES) || defined(MCXL142_cm33_SERIES))
+     defined(MCXL142_cm0plus_SERIES) || defined(MCXL142_cm33_SERIES) ||                                     \
+     defined(MCXW70AC_SERIES))
 
 /* MU ISR table */
 static void (*const MU_interrupts[MU_ISR_COUNT])(MU_Type *base, mcmgr_core_t coreNum) = {
@@ -115,7 +116,8 @@ static void mu_isr(MU_Type *base, mcmgr_core_t coreNum)
      defined(MCXL253_cm0plus_SERIES) || defined(MCXL253_cm33_SERIES) ||                                     \
      defined(MCXL144_cm0plus_SERIES) || defined(MCXL144_cm33_SERIES) ||                                     \
      defined(MCXL143_cm0plus_SERIES) || defined(MCXL143_cm33_SERIES) ||                                     \
-     defined(MCXL142_cm0plus_SERIES) || defined(MCXL142_cm33_SERIES))
+     defined(MCXL142_cm0plus_SERIES) || defined(MCXL142_cm33_SERIES) ||                                     \
+     defined(MCXW70AC_SERIES))
 
     uint32_t tcr_tie_idx = 0;
     for (i = MU_ISR_FLAG_BASE; i < (MU_ISR_FLAG_BASE + MU_TR_COUNT); i++)
@@ -234,7 +236,7 @@ void MU0_B_IRQHandler(void *arg)
 {
     mu_isr(MU0_MUB, kMCMGR_Core0);
 }
-#elif (defined(KW43B43ZC7_SERIES))
+#elif (defined(KW43B43ZC7_SERIES) || defined(MCXW70AC_SERIES))
 int MU0_IRQHandler(void)
 {
     mu_isr(MU0_MUA, kMCMGR_Core1);
