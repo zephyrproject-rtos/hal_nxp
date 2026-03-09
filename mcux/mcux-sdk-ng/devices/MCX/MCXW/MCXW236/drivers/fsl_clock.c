@@ -1027,12 +1027,12 @@ uint32_t CLOCK_GetFreq(clock_name_t clockName)
     return freq;
 }
 
-/* Get Systick Clk */
+/* Get OSTimer Clk */
 uint32_t CLOCK_GetOSTimerClkFreq(void)
 {
     uint32_t freq = 0U;
 
-    switch ((PMC->OSTIMERr & PMC_OSTIMER_OSTIMERCLKSEL_MASK) << PMC_OSTIMER_CLOCKENABLE_SHIFT)
+    switch ((PMC->OSTIMERr & PMC_OSTIMER_OSTIMERCLKSEL_MASK) >> PMC_OSTIMER_OSTIMERCLKSEL_SHIFT)
     {
         case OSTIMERCLKSEL_32768:
             freq = 32768;
