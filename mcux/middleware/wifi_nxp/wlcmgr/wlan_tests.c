@@ -28,6 +28,9 @@
 
 #include <cli_utils.h>
 #include "wifi_shell.h"
+#if CONFIG_CSI
+#include "wlan_test_csi.h"
+#endif
 
 /*
  * NXP Test Framework (MTF) functions
@@ -4950,13 +4953,6 @@ void set_csi_filter(t_u8 pkt_type, t_u8 subtype, t_u8 flags, int op_index, t_u8 
     }
 }
 
-int csi_data_recv_user(void *buffer, size_t data_len)
-{
-    PRINTF("CSI user callback: Event CSI data\r\n");
-    dump_hex(buffer, data_len);
-    return WM_SUCCESS;
-}
-
 static void test_wlan_set_csi_param_header(int argc, char **argv)
 {
     t_u8 bss_type           = 0;
@@ -5031,12 +5027,36 @@ static void test_wlan_set_csi_param_header(int argc, char **argv)
 
     if (csi_enable == 1)
     {
+        ret = csi_create_process_task();
+        if (ret != WM_SUCCESS)
+        {
+            PRINTF("Failed to create csi process task\r\n");
+        }
         ret = wlan_register_csi_user_callback(csi_data_recv_user);
         if (ret != WM_SUCCESS)
         {
             PRINTF("Error during register csi user callback\r\n");
         }
     }
+    else if(csi_enable == 2)
+    {
+        /* Graceful CSI shutdown sequence:
+         * 1. Unregister callback first (stop new events)
+         * 2. Destroy task second (cleanup resources)
+         *
+         * Prevents race conditions during shutdown.
+         */
+        ret = wlan_unregister_csi_user_callback();
+        if (ret != WM_SUCCESS)
+        {
+            PRINTF("Error during unregister csi user callback\r\n");
+        }
+        ret = csi_destroy_process_task();
+        if (ret != WM_SUCCESS)
+        {
+            PRINTF("Failed to destroy csi process task\r\n");
+        }
+     }
 
     memcpy((void *)&g_csi_params, (void *)wlan_get_csi_cfg_param_default(),
             sizeof(wlan_csi_config_params_t));
@@ -5320,6 +5340,7 @@ static void test_wlan_start_stop_ami(int argc, char **argv)
 {
     unsigned int value = 0;
     uint8_t start = 0;
+    int ret = 0;
 
     if(argc != 2)
     {
@@ -5345,7 +5366,17 @@ static void test_wlan_start_stop_ami(int argc, char **argv)
 
     if(start)
     {
-        wlan_unregister_csi_user_callback();
+        ret = wlan_unregister_csi_user_callback();
+        if (ret != WM_SUCCESS)
+        {
+            PRINTF("Error during unregister csi user callback\r\n");
+        }
+        ret = csi_destroy_process_task();
+        if (ret != WM_SUCCESS)
+        {
+            PRINTF("Failed to destroy csi process task\r\n");
+        }
+
     }
 
     wlan_start_stop_ami(start);

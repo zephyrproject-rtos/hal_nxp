@@ -42,13 +42,11 @@ wifi_os_mem_info wifi_os_mem_stat[OS_MEM_STAT_TABLE_SIZE];
 #endif
 
 #if CONFIG_CSI
-#define MAX_CSI_LOCAL_BUF        80
-#define CSI_LOCAL_BUF_ENTRY_SIZE 768
-t_u8 csi_local_buff[MAX_CSI_LOCAL_BUF][CSI_LOCAL_BUF_ENTRY_SIZE] = {
+t_u8 csi_local_buff[CONFIG_MAX_CSI_LOCAL_BUF][CONFIG_CSI_LOCAL_BUF_ENTRY_SIZE] = {
     0,
 };
 
-csi_local_buff_statu csi_buff_stat = {0, 0, 0};
+csi_local_buff_statu csi_buff_stat = {0, 0, 0, 0};
 
 int csi_event_cnt        = 0;
 t_u64 csi_event_data_len = 0;
@@ -4880,7 +4878,10 @@ void process_csi_info_callback(void *data, size_t len)
 {
     if (csi_data_recv != NULL)
     {
-        csi_data_recv(data, len);
+        if(csi_data_recv(data, len) != WM_SUCCESS)
+        {
+            csi_buff_stat.user_recv_drop_cnt++;
+        }
     }
 }
 
@@ -4889,9 +4890,10 @@ void csi_local_buff_init()
     csi_event_cnt      = 0;
     csi_event_data_len = 0;
 
-    csi_buff_stat.write_index    = 0;
-    csi_buff_stat.read_index     = 0;
-    csi_buff_stat.valid_data_cnt = 0;
+    csi_buff_stat.write_index        = 0;
+    csi_buff_stat.read_index         = 0;
+    csi_buff_stat.valid_data_cnt     = 0;
+    csi_buff_stat.user_recv_drop_cnt = 0;
 
     memset(csi_local_buff, 0x00, sizeof(csi_local_buff));
 }
@@ -4900,18 +4902,18 @@ void csi_save_data_to_local_buff(void *data)
 {
     OSA_SemaphoreWait((osa_semaphore_handle_t)csi_buff_stat.csi_data_sem, osaWaitForever_c);
 
-    if (csi_buff_stat.valid_data_cnt >= MAX_CSI_LOCAL_BUF)
+    if (csi_buff_stat.valid_data_cnt >= CONFIG_MAX_CSI_LOCAL_BUF)
     {
         OSA_SemaphorePost((osa_semaphore_handle_t)csi_buff_stat.csi_data_sem);
         wifi_w("******csi_local_buff is full******\r\n");
         return;
     }
 
-    memcpy(&csi_local_buff[csi_buff_stat.write_index][0], (t_u8 *)data, CSI_LOCAL_BUF_ENTRY_SIZE);
+    memcpy(&csi_local_buff[csi_buff_stat.write_index][0], (t_u8 *)data, CONFIG_CSI_LOCAL_BUF_ENTRY_SIZE);
 
     csi_buff_stat.valid_data_cnt++;
 
-    csi_buff_stat.write_index = (csi_buff_stat.write_index + 1) % MAX_CSI_LOCAL_BUF;
+    csi_buff_stat.write_index = (csi_buff_stat.write_index + 1) % CONFIG_MAX_CSI_LOCAL_BUF;
 
     OSA_SemaphorePost((osa_semaphore_handle_t)csi_buff_stat.csi_data_sem);
 }
@@ -4923,19 +4925,39 @@ void csi_deliver_data_to_user()
 
     OSA_SemaphoreWait((osa_semaphore_handle_t)csi_buff_stat.csi_data_sem, osaWaitForever_c);
 
-    for (i = 0; (i < MAX_CSI_LOCAL_BUF) && (csi_buff_stat.valid_data_cnt > 0); i++)
+    for (i = 0; (i < CONFIG_MAX_CSI_LOCAL_BUF) && (csi_buff_stat.valid_data_cnt > 0); i++)
     {
         pcsi_record_ds csi_record = (pcsi_record_ds)(&csi_local_buff[csi_buff_stat.read_index][0]);
         save_data_len             = (csi_record->Len & 0x1fff) * 4;
-        save_data_len = (save_data_len >= CSI_LOCAL_BUF_ENTRY_SIZE) ? CSI_LOCAL_BUF_ENTRY_SIZE : save_data_len;
+        save_data_len = (save_data_len >= CONFIG_CSI_LOCAL_BUF_ENTRY_SIZE)
+            ? CONFIG_CSI_LOCAL_BUF_ENTRY_SIZE : save_data_len;
 
         process_csi_info_callback((t_u8 *)csi_record, save_data_len);
 
         csi_buff_stat.valid_data_cnt--;
 
-        csi_buff_stat.read_index = (csi_buff_stat.read_index + 1) % MAX_CSI_LOCAL_BUF;
+        csi_buff_stat.read_index = (csi_buff_stat.read_index + 1) % CONFIG_MAX_CSI_LOCAL_BUF;
     }
 
     OSA_SemaphorePost((osa_semaphore_handle_t)csi_buff_stat.csi_data_sem);
 }
+
+/** Get current buffer status */
+void wifi_get_csi_buff_status(t_u8 *write_idx, t_u8 *read_idx,
+                              t_u8 *valid_cnt, t_u32 *drop_cnt)
+{
+    OSA_SemaphoreWait((osa_semaphore_handle_t)csi_buff_stat.csi_data_sem, osaWaitForever_c);
+
+    if (write_idx)
+        *write_idx = csi_buff_stat.write_index;
+    if (read_idx)
+        *read_idx = csi_buff_stat.read_index;
+    if (valid_cnt)
+        *valid_cnt = csi_buff_stat.valid_data_cnt;
+    if(drop_cnt)
+        *drop_cnt = csi_buff_stat.user_recv_drop_cnt;
+
+    OSA_SemaphorePost((osa_semaphore_handle_t)csi_buff_stat.csi_data_sem);
+}
+
 #endif
