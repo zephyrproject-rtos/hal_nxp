@@ -943,7 +943,7 @@ int wlan_send_host_sleep_int()
 
     if (!wlan_is_started())
     {
-        (void)PRINTF("Wakeup condition configure is not allowed when WIFI is disabled\r\n");
+        wlcm_e("Wakeup condition configure is not allowed when WIFI is disabled");
         ret = -WM_FAIL;
         goto exit;
     }
@@ -951,7 +951,7 @@ int wlan_send_host_sleep_int()
     /* Check if wake_up_conds is valid or not */
     if (wake_up_conds && (wake_up_conds != HOST_SLEEP_CFG_CANCEL) && (wake_up_conds & 0x20))
     {
-        (void)PRINTF("Invalid wake_up_conds. Bit 5 is reserved.\r\n");
+        wlcm_e("Invalid wake_up_conds. Bit 5 is reserved.");
         ret = -WM_FAIL;
         goto exit;
     }
@@ -965,7 +965,7 @@ int wlan_send_host_sleep_int()
         if ((wake_up_conds & (WAKE_ON_ALL_BROADCAST | WAKE_ON_UNICAST | WAKE_ON_MULTICAST
                                    | WAKE_ON_ARP_BROADCAST | WAKE_ON_MGMT_FRAME)) != 0)
         {
-            wlcm_e("Connection on STA or uAP is required for configured bitmap!\r\n");
+            wlcm_e("Connection on STA or uAP is required for configured bitmap!");
             ret = -WM_FAIL;
             goto exit;
         }
@@ -1034,7 +1034,7 @@ status_t wlan_hs_send_event(int id, void *data)
     msg.id  = id;
     if (OSA_MsgQPut((osa_msgq_handle_t)mon_thread_events, &msg) != KOSA_StatusSuccess)
     {
-        (void)PRINTF("PM: Failed to send msg to queue\r\n");
+        wlcm_e("PM: Failed to send msg to queue");
         return -WM_FAIL;
     }
     return WM_SUCCESS;
@@ -1061,14 +1061,14 @@ int wlan_wowlan_config(t_u32 wake_up_conds)
 
     if (!wlan_is_started())
     {
-        (void)PRINTF("Wakeup condition configure is not allowed when WIFI is disabled\r\n");
+        wlcm_e("Wakeup condition configure is not allowed when WIFI is disabled");
         return -WM_FAIL;
     }
 
     /* Check if wake_up_conds is valid or not */
     if (wake_up_conds && (wake_up_conds & 0x20))
     {
-        (void)PRINTF("Invalid wake_up_conds. Bit 5 is reserved.\r\n");
+        wlcm_e("Invalid wake_up_conds. Bit 5 is reserved.");
         return -WM_FAIL;
     }
 
@@ -1081,7 +1081,7 @@ int wlan_wowlan_config(t_u32 wake_up_conds)
 #if CONFIG_MEF_CFG
         if (is_mef)
         {
-            wlcm_e("Connection on STA or uAP is required for MEF configuration\r\n");
+            wlcm_e("Connection on STA or uAP is required for MEF configuration");
             ret = -WM_FAIL;
             return ret;
         }
@@ -1090,7 +1090,7 @@ int wlan_wowlan_config(t_u32 wake_up_conds)
              if ((wake_up_conds & (WAKE_ON_ALL_BROADCAST | WAKE_ON_UNICAST | WAKE_ON_MULTICAST
                                    | WAKE_ON_ARP_BROADCAST | WAKE_ON_MGMT_FRAME)) != 0)
         {
-            wlcm_e("Connection on STA or uAP is required for configured bitmap!\r\n");
+            wlcm_e("Connection on STA or uAP is required for configured bitmap!");
             ret = -WM_FAIL;
             return ret;
         }
@@ -1102,7 +1102,7 @@ int wlan_wowlan_config(t_u32 wake_up_conds)
         wlan.wakeup_conditions = 0;
         if (g_flt_cfg.nentries == 0)
         {
-            (void)PRINTF("No user configured MEF entries, use default ARP filters.\r\n");
+            wlcm_w("No user configured MEF entries, use default ARP filters.");
             /* User doesn't configure MEF, use default MEF entry */
             wlan_mef_set_auto_arp(MEF_ACTION_ALLOW_AND_WAKEUP_HOST);
         }
@@ -1165,7 +1165,7 @@ void wlan_config_host_sleep(bool is_manual, t_u8 is_periodic)
 #if CONFIG_POWER_MANAGER
 	if (!wlan_is_started())
         {
-            wlcm_e("Host sleep is not allowed when WIFI is disabled\r\n");
+            wlcm_e("Host sleep is not allowed when WIFI is disabled");
             return;
         }
         if (is_periodic)
@@ -1197,7 +1197,7 @@ void wlan_cancel_host_sleep(void)
 
     if (!wlan_is_started())
     {
-        PRINTF("Wlan not started, can't cancel host sleep\r\n");
+        wlcm_e("Wlan not started, can't cancel host sleep");
         return;
     }
 
@@ -1381,7 +1381,7 @@ static int security_profile_matches(const struct wlan_network *network, const st
 
         if (!mfpc && !mfpr)
         {
-            wlcm_e("As per WPA3 SAE Certification, PMF is mandatory.\r\n");
+            wlcm_e("As per WPA3 SAE Certification, PMF is mandatory.");
             return WM_SUCCESS;
         }
         if (config->type == WLAN_SECURITY_WPA3_SAE)
@@ -2253,14 +2253,14 @@ static int do_stop(struct wlan_network *network)
             ret = wlan_get_bandcfg(&bandcfg);
             if (ret != WM_SUCCESS)
             {
-                (void)PRINTF("Unable to get bandcfg\r\n");
+                wlcm_e("Unable to get bandcfg");
                 return -WM_FAIL;
             }
             bandcfg.config_bands = bandcfg.fw_bands;
             ret = wlan_set_bandcfg(&bandcfg);
             if (ret != WM_SUCCESS)
             {
-                (void)PRINTF("Unable to set bandcfg\r\n");
+                wlcm_e("Unable to set bandcfg");
                 return -WM_FAIL;
             }
         }
@@ -2819,7 +2819,7 @@ static void handle_scan_results(void)
     /* If reset is in process, skip re-scan */
     if (OSA_MutexLock((osa_mutex_handle_t)reset_lock, 0) != WM_SUCCESS)
     {
-        (void)PRINTF("skip re-scan when reset is in process\r\n");
+        wlcm_d("skip re-scan when reset is in process");
         return;
     }
     OSA_MutexUnlock((osa_mutex_handle_t)reset_lock);
@@ -3262,17 +3262,17 @@ void wlcm_process_csi_status_report(struct wifi_message *msg)
     {
         wifi_csi_status_info *pcsi_status = (wifi_csi_status_info *)msg->data;
         if (pcsi_status->status == csi_enabled)
-            (void)PRINTF("csi status report: enable and start csi on channel %d \r\n", pcsi_status->channel);
+            wlcm_d("csi status report: enable and start csi on channel %d ", pcsi_status->channel);
         if (pcsi_status->status == csi_disabled)
-            (void)PRINTF("csi status report: stop and disable csi\r\n");
+            wlcm_d("csi status report: stop and disable csi");
         if (pcsi_status->status == csiconfig_wrong)
-            (void)PRINTF("csi status report: channel or bandwidth config wrong\r\n");
+            wlcm_d("csi status report: channel or bandwidth config wrong");
         if (pcsi_status->status == csiinternal_restart)
-            (void)PRINTF("csi status report: FW internal restart csi on channel %d \r\n", pcsi_status->channel);
+            wlcm_d("csi status report: FW internal restart csi on channel %d ", pcsi_status->channel);
         if (pcsi_status->status == csiinternal_stop)
-            (void)PRINTF("csi status report: FW internal stop csi\r\n");
+            wlcm_d("csi status report: FW internal stop csi");
         if (pcsi_status->status == csiinternal_disabled)
-            (void)PRINTF("csi status report: FW internal stop and disable csi, user should put in csi cmd to enable csi\r\n");
+            wlcm_d("csi status report: FW internal stop and disable csi, user should put in csi cmd to enable csi");
 #if !CONFIG_MEM_POOLS
         OSA_MemoryFree((void *)msg->data);
 #else
@@ -3561,7 +3561,7 @@ static void wlcm_process_channel_switch_supp(struct wifi_message *msg)
                     }
                     else
                     {
-                        PRINTF("Unknown secondary channel information - following channel definition calculations may fail\r\n");
+                        wlcm_w("Unknown secondary channel information - following channel definition calculations may fail");
                     }
                     break;
            }
@@ -3570,14 +3570,14 @@ static void wlcm_process_channel_switch_supp(struct wifi_message *msg)
             if(is_uap_started())
             {
                 wm_wifi.supp_if_callbk_fns->ecsa_complete_callbk_fn(wm_wifi.hapd_if_priv, &chandef);
-                (void)PRINTF("uap switch to channel %d success!\r\n", channel);
+                wlcm_d("uap switch to channel %d success!", channel);
             }
 #endif
 
             if (is_sta_connected())
             {
                 wm_wifi.supp_if_callbk_fns->ecsa_complete_callbk_fn(wm_wifi.if_priv, &chandef);
-                (void)PRINTF("sta switch to channel %d success!\r\n", channel);
+                wlcm_d("sta switch to channel %d success!", channel);
             }
 #if !CONFIG_MEM_POOLS
             OSA_MemoryFree((void *)msg->data);
@@ -3619,14 +3619,14 @@ static void wlcm_process_channel_switch(struct wifi_message *msg)
 #if UAP_SUPPORT
             if(is_uap_started())
             {
-                (void)PRINTF("uap switch to channel %d success!\r\n", channel);
+                wlcm_d("uap switch to channel %d success!", channel);
                 wlan.networks[wlan.cur_uap_network_idx].channel = channel;
             }
 #endif
 
             if (is_sta_connected())
             {
-                (void)PRINTF("sta switch to channel %d success!\r\n", channel);
+                wlcm_d("sta switch to channel %d success!", channel);
                 wlan.networks[wlan.cur_network_idx].channel = channel;
                 wifi_set_curr_bss_channel(wlan.networks[wlan.cur_network_idx].channel);
             }
@@ -4305,7 +4305,7 @@ int wlan_11k_roam()
 
     if (is_state(CM_STA_IDLE))
     {
-        (void)PRINTF("Station is not connected\r\n");
+        wlcm_e("Station is not connected");
         return -WM_FAIL;
     }
 
@@ -4478,12 +4478,12 @@ int wlan_ft_roam(const t_u8 *bssid, const t_u8 channel)
 
     if (is_state(CM_STA_IDLE))
     {
-        (void)PRINTF("Station is not connected\r\n");
+        wlcm_e("Station is not connected");
         return -WM_FAIL;
     }
     if (wlan.roam_reassoc == true)
     {
-        (void)PRINTF("Roaming already in progress\r\n");
+        wlcm_d("Roaming already in progress");
         return WM_SUCCESS;
     }
 
@@ -4498,7 +4498,7 @@ int wlan_ft_roam(const t_u8 *bssid, const t_u8 channel)
             memcpy(curr_bss, wlan.networks[wlan.cur_network_idx].bssid, MLAN_MAC_ADDR_LENGTH);
             if(memcmp(curr_bss, bssid, MLAN_MAC_ADDR_LENGTH) == 0)
             {
-                (void)PRINTF("Already connected to this BSS. Skip roaming.\r\n");
+                wlcm_d("Already connected to this BSS. Skip roaming.");
                 return WM_SUCCESS;
             }
         }
@@ -4530,7 +4530,7 @@ int wlan_ft_roam(const t_u8 *bssid, const t_u8 channel)
 
     (void)OSA_TimerActivate((osa_timer_handle_t)wlan.ft_roam_timer);
 
-    (void)PRINTF("Started FT Roaming...\r\n");
+    wlcm_d("Started FT Roaming...");
 
     return WM_SUCCESS;
 }
@@ -4542,7 +4542,7 @@ int wlan_ft_roam(const t_u8 *bssid, const t_u8 channel)
 
     if (is_state(CM_STA_IDLE))
     {
-        (void)PRINTF("Station is not connected\r\n");
+        wlcm_e("Station is not connected");
         return -WM_FAIL;
     }
 
@@ -4577,7 +4577,7 @@ int wlan_ft_roam(const t_u8 *bssid, const t_u8 channel)
     }
     else
     {
-        (void)PRINTF("Current associated AP do not support FT BSS transition\r\n");
+        wlcm_e("Current associated AP do not support FT BSS transition");
     }
 
     return -WM_FAIL;
@@ -4643,7 +4643,7 @@ static int wlan_set_uap_ecsa_cfg(
 
     if (wlan_check_channel_by_region_table(pmpriv, channel) == MFALSE)
     {
-        (void)PRINTF("uAP target channel not allowed\n\r");
+        wlcm_e("uAP target channel not allowed");
         return -WM_FAIL;
     }
 
@@ -4841,21 +4841,21 @@ static void wlcm_process_network_switch_event(struct wifi_message *msg,
     char *p = OSA_MemoryAllocate(pnewNode->len_ssid + 1);
 
     /*print new network info*/
-    (void)PRINTF("\r\nBssid=");
+    wlcm_d("Bssid=");
     extern void print_mac(const char *mac);
     print_mac((char *)pnewNode->peer_mac_addr);
     if (p)
     {
         (void)memcpy((void *)p, (const void *)pnewNode->ssid, pnewNode->len_ssid);
-        (void)PRINTF("\r\nSsid=%s\r\n", p);
+        wlcm_d("Ssid=%s", p);
         OSA_MemoryFree(p);
     }
-    (void)PRINTF("channel=%d,chanBand=%d,chanWidth=%d,chan2Offset=%d,scanMode=%d", pnewNode->chanBand.chanNum,
+    wlcm_d("channel=%d,chanBand=%d,chanWidth=%d,chan2Offset=%d,scanMode=%d", pnewNode->chanBand.chanNum,
                  pnewNode->chanBand.bandConfig.chanBand, pnewNode->chanBand.bandConfig.chanWidth,
                  pnewNode->chanBand.bandConfig.chan2Offset, pnewNode->chanBand.bandConfig.scanMode);
-    (void)PRINTF("\r\nSecurityType=%d", pnewNode->secutype);
-    (void)PRINTF("\r\nmcstCipher=%d", pnewNode->mcstcipher);
-    (void)PRINTF("\r\nucstCipher=%d\r\n", pnewNode->ucstcipher);
+    wlcm_d("SecurityType=%d", pnewNode->secutype);
+    wlcm_d("mcstCipher=%d", pnewNode->mcstcipher);
+    wlcm_d("ucstCipher=%d", pnewNode->ucstcipher);
 
     OSA_MemoryFree(msg->data);
 }
@@ -6180,7 +6180,7 @@ static enum cm_uap_state uap_state_machine(struct wifi_message *msg)
                 {
                     while(!is_uap_started())
                         OSA_TimeDelay(10);
-                    PRINTF("Station has connection on channel %d, switch to this channel\r\n", sta_channel);
+                    wlcm_w("Station has connection on channel %d, switch to this channel", sta_channel);
                     wlan_notify_uap_chan_switch(sta_channel);
                 }
             }
@@ -6447,7 +6447,7 @@ static void wlcm_deinit(int action)
 {
     if ((wlan.status != WLCMGR_ACTIVATED) && (wlan.status != WLCMGR_INIT_DONE))
     {
-        wlcm_e("cannot deinit wlcmgr. unexpected status: %d\n\r", wlan.status);
+        wlcm_e("cannot deinit wlcmgr. unexpected status: %d", wlan.status);
         return;
     }
 
@@ -6484,7 +6484,7 @@ static void wlcm_request_disconnect(enum cm_sta_state *next, struct wlan_network
 #if CONFIG_HOST_SLEEP
         wakelock_put();
 #endif
-        wlcm_w("No interface is up\r\n");
+        wlcm_w("No interface is up");
         return;
     }
 #if defined(CONFIG_NET_DHCPV4)
@@ -6758,7 +6758,7 @@ static void wifi_process_bg_scan_stopped(struct wifi_message *msg)
     {
         wlan.bgscan_attempt = 0;
         wlan.roam_reassoc = false;
-        PRINTF("Soft Roam: AP with better RSSI not found");
+        wlcm_w("Soft Roam: AP with better RSSI not found");
         CONNECTION_EVENT(WLAN_REASON_BGSCAN_NETWORK_NOT_FOUND, NULL);
     }
 #if CONFIG_WPA_SUPP
@@ -6791,7 +6791,7 @@ static void wlcm_process_get_hw_spec_event(void)
     int ret = initNetwork();
     if (ret != WM_SUCCESS)
     {
-        PRINTF("FAILED to init network (ret=%d). Reboot the board and try again.\r\n", ret);
+        wlcm_e("FAILED to init network (ret=%d). Reboot the board and try again.", ret);
     }
 #endif
 
@@ -6931,19 +6931,18 @@ static void wlan_cpu_loading_info_display(void)
     }
 
     collect_time = ((cpu_loading.index - 1) * cpu_loading.sampling_period) /1000;
-    (void)PRINTF("\r\n");
     if(cpu_loading.status != CPU_LOADING_STATUS_ENDING)
-        (void)PRINTF("CPU loading: %ds ~ %ds \r\n", (collect_time - cpu_loading.sampling_period /1000) + 1, collect_time);
+        wlcm_d("CPU loading: %ds ~ %ds ", (collect_time - cpu_loading.sampling_period /1000) + 1, collect_time);
     else
-        (void)PRINTF("Total CPU loading info in previous %d seconds\r\n", cpu_loading.index * cpu_loading.sampling_period / 1000);
+        wlcm_d("Total CPU loading info in previous %d seconds", cpu_loading.index * cpu_loading.sampling_period / 1000);
 
-    (void)PRINTF("taskName             \t\tPercentage\r\n");
+    wlcm_d("taskName             \t\tPercentage");
     for(int i = 0; i < cpu_loading.task_nums; i++)
     {
         if(!memcmp(cpu_loading_task_name, cpu_loading.task_name[i], strlen(cpu_loading_task_name)))
             continue;
         task_runtime_percentage[i] = (float)(((float)(task_runtime[i]) / total_runtime) * 100);
-        (void)PRINTF("%s \t\t%6.2f%%\r\n", task_string_name[i], task_runtime_percentage[i]);
+        wlcm_d("%s \t\t%6.2f%%", task_string_name[i], task_runtime_percentage[i]);
     }
 }
 
@@ -6966,7 +6965,7 @@ static void wlan_cpu_loading_request()
     status = OSA_TimerDestroy((osa_timer_handle_t)cpu_loading.cpu_loading_timer);
     if (status != KOSA_StatusSuccess)
     {
-        (void)PRINTF("Failed to delete cpu loading timer: %d.\r\n", ret);
+        wlcm_e("Failed to delete cpu loading timer: %d.", ret);
     }
 
     OSA_MemoryFree(cpu_loading.cpu_loading_info);
@@ -6974,12 +6973,12 @@ static void wlan_cpu_loading_request()
     status = OSA_TaskDestroy((osa_task_handle_t)cpu_loading.cpu_loading_task_Handle);
     if (status != KOSA_StatusSuccess)
     {
-        (void)PRINTF("Failed to delete cpu_loading_task: %d.\r\n", ret);
+        wlcm_e("Failed to delete cpu_loading_task: %d.", ret);
     }
 
     cpu_loading.status = CPU_LOADING_STATUS_DEAD;
 
-    (void)PRINTF("Success to stop CPU loading test.\r\n");
+    wlcm_d("Success to stop CPU loading test.");
 }
 #endif
 
@@ -7676,14 +7675,14 @@ static void wps_task(void *data)
                 {
                     if (wlan_scan(prov_wps_scan_results) != 0)
                     {
-                        (void)PRINTF("Error: scan request failed, sta_state");
+                        wlcm_e("Error: scan request failed, sta_state");
 #if CONFIG_WLCMGR_DEBUG
-                        (void)PRINTF("(%s)", dbg_sta_state_name(wlan.sta_state));
+                        wlcm_d("(%s)", dbg_sta_state_name(wlan.sta_state));
 #else
-                        (void)PRINTF("(%d)", wlan.sta_state);
+                        wlcm_d("(%d)", wlan.sta_state);
 #endif
-                        (void)PRINTF(" is not idle/connected\r\n");
-                        (void)PRINTF("Wait or disconnect network\r\n");
+                        wlcm_d(" is not idle/connected");
+                        wlcm_d("Wait or disconnect network");
                         break;
                     }
                     OSA_SemaphoreWait((osa_semaphore_handle_t)wlan_wps.wps_scan_done, osaWaitForever_c);
@@ -7901,9 +7900,8 @@ int wlan_init(const uint8_t *fw_start_addr, const size_t size)
     (void)memcpy((void *)&wlan.uap_mac[0], (const void *)mac_addr_uap.mac, MLAN_MAC_ADDR_LENGTH);
 #endif
     (void)memcpy((void *)&wlan.sta_mac[0], (const void *)mac_addr.mac, MLAN_MAC_ADDR_LENGTH);
-    (void)PRINTF("STA MAC Address: ");
+    wlcm_d("STA MAC Address: ");
     print_mac((const char *)&wlan.sta_mac);
-    (void)PRINTF("\r\n");
 #if CONFIG_P2P
     (void)memcpy((void *)&wlan.wfd_mac[0], (const void *)mac_addr.mac, MLAN_MAC_ADDR_LENGTH);
     wlan.wfd_mac[0] |= (0x01 << 1);
@@ -8071,7 +8069,7 @@ static void temperature_mon_cb(osa_timer_arg_t arg)
     if (wifi_recovery_enable || wifi_fw_is_hang())
     {
         struct wlan_message msg;
-        (void)PRINTF("recovery_enable: %u, wifi_fw_is_hang: %u, reset_in_progress:%u\r\n",
+        wlcm_w("recovery_enable: %u, wifi_fw_is_hang: %u, reset_in_progress:%u",
                       wifi_recovery_enable, wifi_fw_is_hang(), wifi_reset_in_progress());
         /* Avoid repeatedly triggering recovery */
         if (wifi_reset_in_progress())
@@ -8084,7 +8082,7 @@ static void temperature_mon_cb(osa_timer_arg_t arg)
         msg.id  = WIFI_RECOVERY_REQ;
         if (OSA_MsgQPut((osa_msgq_handle_t)mon_thread_events, &msg) != KOSA_StatusSuccess)
         {
-            (void)PRINTF("Failed to send wifi recovery msg to queue\r\n");
+            wlcm_e("Failed to send wifi recovery msg to queue");
         }
         return;
     }
@@ -8386,7 +8384,7 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
     ret = wlan_test_mode_cli_init();
     if (ret != WM_SUCCESS)
     {
-        PRINTF("Failed to initialize WLAN RF test mode CLIs\r\n");
+        wlcm_e("Failed to initialize WLAN RF test mode CLIs");
         return 0;
     }
 #endif
@@ -8394,27 +8392,27 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
     ret = wlan_basic_cli_init();
     if (ret != WM_SUCCESS)
     {
-        PRINTF("Failed to initialize BASIC WLAN CLIs\r\n");
+        wlcm_e("Failed to initialize BASIC WLAN CLIs");
         return 0;
     }
     ret = wlan_cli_init();
     if (ret != WM_SUCCESS)
     {
-        PRINTF("Failed to initialize WLAN CLIs\r\n");
+        wlcm_e("Failed to initialize WLAN CLIs");
         return 0;
     }
 #if CONFIG_SIGMA_AGENT
     ret = ping_cli_init();
     if (ret != WM_SUCCESS)
     {
-        PRINTF("Failed to initialize PING CLI\r\n");
+        wlcm_e("Failed to initialize PING CLI");
         return 0;
     }
 #endif
     ret = wlan_enhanced_cli_init();
     if (ret != WM_SUCCESS)
     {
-        PRINTF("Failed to initialize WLAN Enhanced CLIs\r\n");
+        wlcm_e("Failed to initialize WLAN Enhanced CLIs");
         return 0;
     }
 #if CONFIG_WPA_SUPP
@@ -8422,7 +8420,7 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
     ret = wpa_cli_init();
     if (ret != WM_SUCCESS)
     {
-        PRINTF("Failed to initialize WPA SUPP CLIs\r\n");
+        wlcm_e("Failed to initialize WPA SUPP CLIs");
         return 0;
     }
 #endif
@@ -8544,8 +8542,8 @@ int wlan_stop(void)
 
     if (wlan.status != WLCMGR_THREAD_STOPPED && !num_iterations)
     {
-        wlcm_d("Timed out waiting for wlcmgr to stop\r\n");
-        wlcm_d("Forcing halt for wlcmgr thread\r\n");
+        wlcm_w("Timed out waiting for wlcmgr to stop");
+        wlcm_w("Forcing halt for wlcmgr thread");
         /* Reinitiailize variable states */
         wlan.status = WLCMGR_THREAD_STOPPED;
     }
@@ -10598,13 +10596,13 @@ void wlan_reset(cli_reset_option ResetOption)
 {
     if (OSA_MutexLock((osa_mutex_handle_t)reset_lock, 0) != WM_SUCCESS)
     {
-        PRINTF("already in process...\r\n");
+        wlcm_w("already in process...");
         return;
     }
 
     if (ResetOption == CLI_DISABLE_WIFI || ResetOption == CLI_RESET_WIFI)
     {
-        PRINTF("--- Disable WiFi ---\r\n");
+        wlcm_w("--- Disable WiFi ---");
         if (wlan_is_started())
         {
 #if CONFIG_HOST_SLEEP
@@ -10717,14 +10715,14 @@ void wlan_reset(cli_reset_option ResetOption)
 
     if (ResetOption == CLI_ENABLE_WIFI || ResetOption == CLI_RESET_WIFI)
     {
-        PRINTF("--- Enable WiFi ---\r\n");
+        wlcm_w("--- Enable WiFi ---");
         if (!wlan_is_started())
         {
-            PRINTF("Initialize WLAN Driver\r\n");
+            wlcm_d("Initialize WLAN Driver");
             /* Initialize WIFI Driver */
             if (WM_SUCCESS != (wlan_init(wlan_fw_bin, wlan_fw_bin_len)))
             {
-                wlcm_e("wlan init failed\r\n");
+                wlcm_e("wlan init failed");
                 OSA_MutexUnlock((osa_mutex_handle_t)reset_lock);
                 assert(0);
                 return;
@@ -10732,7 +10730,7 @@ void wlan_reset(cli_reset_option ResetOption)
 
             if (WM_SUCCESS != (wlan_start(wlan_event_callback)))
             {
-                wlcm_e("wlan start failed\r\n");
+                wlcm_e("wlan start failed");
                 OSA_MutexUnlock((osa_mutex_handle_t)reset_lock);
                 return;
             }
@@ -10770,7 +10768,7 @@ void wlan_reset(cli_reset_option ResetOption)
     wlan_uap_bandcfg_recfg();
     OSA_MutexUnlock((osa_mutex_handle_t)reset_lock);
 
-    PRINTF("--- Done ---\r\n");
+    wlcm_w("--- Done ---");
 }
 
 #if defined(RW610) || defined(IW610) || defined(SD9177) || defined(SD8978)
@@ -12359,7 +12357,7 @@ int wlan_save_cloud_keep_alive_params(wlan_cloud_keep_alive_t *cloud_keep_alive,
         uint8_t sta_mac[MLAN_MAC_ADDR_LENGTH];
         if (wlan_get_mac_address(sta_mac))
         {
-            wlcm_e("Unable to retrieve MAC address\r\n");
+            wlcm_e("Unable to retrieve MAC address");
         }
         (void)memcpy(cloud_keep_alive->src_mac, sta_mac, MLAN_MAC_ADDR_LENGTH);
 
@@ -12487,7 +12485,7 @@ static int pscan_cb(unsigned int count)
 
     if (count == 0U)
     {
-        (void)PRINTF("networks not found\r\n");
+        wlcm_e("networks not found");
         (void)OSA_SemaphorePost((osa_semaphore_handle_t)wlan_dtim_sem);
         return 0;
     }
@@ -12497,7 +12495,7 @@ static int pscan_cb(unsigned int count)
         err = wlan_get_scan_result(i, &res);
         if (err != 0)
         {
-            (void)PRINTF("Error: can't get scan res %d\r\n", i);
+            wlcm_e("Error: can't get scan res %d", i);
             continue;
         }
 
@@ -12521,7 +12519,7 @@ uint8_t wlan_get_dtim_period(void)
 
     if (wlan_pscan(pscan_cb) != 0)
     {
-        (void)PRINTF("Error: scan request failed\r\n");
+        wlcm_e("Error: scan request failed");
         (void)OSA_SemaphorePost((osa_semaphore_handle_t)wlan_dtim_sem);
         (void)OSA_SemaphoreDestroy((osa_semaphore_handle_t)wlan_dtim_sem);
         return 0;
@@ -12531,7 +12529,7 @@ uint8_t wlan_get_dtim_period(void)
     /*TODO:This need to be handled in better way. */
     if (OSA_SemaphoreWait((osa_semaphore_handle_t)wlan_dtim_sem, 500) != KOSA_StatusSuccess)
     {
-        wlcm_e("Do not call this API from wlan event handler\r\n");
+        wlcm_e("Do not call this API from wlan event handler");
         dtim_period = 0;
     }
     (void)OSA_SemaphoreDestroy((osa_semaphore_handle_t)wlan_dtim_sem);
@@ -12933,7 +12931,7 @@ int wlan_uap_set_hidden_ssid(const t_u8 hidden_ssid)
 
     if (is_uap_started())
     {
-        (void)PRINTF("Pls set hidden_ssid before start uAP.\r\n");
+        wlcm_d("Pls set hidden_ssid before start uAP.");
         return -WM_FAIL;
     }
 
@@ -13444,8 +13442,8 @@ void wlan_version_extended(void)
 
     version_str = wlan_get_firmware_version_ext();
 
-    (void)PRINTF("WLAN Driver Version   : %s\r\n", WLAN_DRV_VERSION);
-    (void)PRINTF("WLAN Firmware Version : %s\r\n", version_str);
+    wlcm_d("WLAN Driver Version   : %s", WLAN_DRV_VERSION);
+    wlcm_d("WLAN Firmware Version : %s", version_str);
 #endif
 }
 
@@ -13456,7 +13454,7 @@ void wlan_set_tx_pert(struct wlan_tx_pert_info *tx_pert, mlan_bss_type bss_type)
 
     ret = wifi_set_tx_pert((void *)tx_pert, bss_type);
     if (ret != WM_SUCCESS)
-        (void)PRINTF("Failed to set tx per tracking.\r\n");
+        wlcm_e("Failed to set tx per tracking.");
     return;
 }
 #endif
@@ -13468,7 +13466,7 @@ void wlan_set_txrx_histogram(struct wlan_txrx_histogram_info *txrx_histogram, t_
 
     wifi_set_txrx_histogram((void *)txrx_histogram, data);
     if (ret != WM_SUCCESS)
-        (void)PRINTF("Failed to set txrx histogram config.\r\n");
+        wlcm_e("Failed to set txrx histogram config.");
     return;
 }
 #endif
@@ -13810,13 +13808,13 @@ int wlan_send_debug_htc(const uint8_t count,
                             &reqd_len);
     if (ret == WM_SUCCESS)
     {
-        (void)PRINTF("Hostcmd success, response is\r\n");
+        wlcm_d("Hostcmd success, response is");
         for (i = 0; i < reqd_len; i++)
-            (void)PRINTF("%x\t", debug_resp_buf[i]);
+            wlcm_d("%x\t", debug_resp_buf[i]);
     }
     else
     {
-        (void)PRINTF("Hostcmd failed error: %d", ret);
+        wlcm_e("Hostcmd failed error: %d", ret);
     }
     return ret;
 }
@@ -13829,7 +13827,7 @@ int wlan_set_11ax_tx_omi(const t_u8 interface, const t_u16 tx_omi, const t_u8 tx
 
         if (num_data_pkts > 16)
         {
-            (void)PRINTF("Minimum value of num_data_pkts should be 1 and maximum should be 16");
+            wlcm_e("Minimum value of num_data_pkts should be 1 and maximum should be 16");
             return -WM_FAIL;
         }
 
@@ -14036,7 +14034,7 @@ int wlan_set_crypto_RC4_encrypt(
 
     if (!wlan_is_started())
     {
-        (void)PRINTF("Must enable Wi-Fi firstly\r\n");
+        wlcm_e("Must enable Wi-Fi firstly");
         return -WM_FAIL;
     }
 
@@ -14072,7 +14070,7 @@ int wlan_set_crypto_RC4_decrypt(
 
     if (!wlan_is_started())
     {
-        (void)PRINTF("Must enable Wi-Fi firstly\r\n");
+        wlcm_e("Must enable Wi-Fi firstly");
         return -WM_FAIL;
     }
 
@@ -14108,7 +14106,7 @@ int wlan_set_crypto_AES_ECB_encrypt(
 
     if (!wlan_is_started())
     {
-        (void)PRINTF("Must enable Wi-Fi firstly\r\n");
+        wlcm_e("Must enable Wi-Fi firstly");
         return -WM_FAIL;
     }
 
@@ -14144,7 +14142,7 @@ int wlan_set_crypto_AES_ECB_decrypt(
 
     if (!wlan_is_started())
     {
-        (void)PRINTF("Must enable Wi-Fi firstly\r\n");
+        wlcm_e("Must enable Wi-Fi firstly");
         return -WM_FAIL;
     }
 
@@ -14180,7 +14178,7 @@ int wlan_set_crypto_AES_WRAP_encrypt(
 
     if (!wlan_is_started())
     {
-        (void)PRINTF("Must enable Wi-Fi firstly\r\n");
+        wlcm_e("Must enable Wi-Fi firstly");
         return -WM_FAIL;
     }
 
@@ -14217,7 +14215,7 @@ int wlan_set_crypto_AES_WRAP_decrypt(
 
     if (!wlan_is_started())
     {
-        (void)PRINTF("Must enable Wi-Fi firstly\r\n");
+        wlcm_e("Must enable Wi-Fi firstly");
         return -WM_FAIL;
     }
 
@@ -14266,7 +14264,7 @@ int wlan_set_crypto_AES_CCMP_encrypt(const t_u8 *Key,
 
     if (!wlan_is_started())
     {
-        (void)PRINTF("Must enable Wi-Fi firstly\r\n");
+        wlcm_e("Must enable Wi-Fi firstly");
         return -WM_FAIL;
     }
 
@@ -14320,7 +14318,7 @@ int wlan_set_crypto_AES_CCMP_decrypt(const t_u8 *Key,
 
     if (!wlan_is_started())
     {
-        (void)PRINTF("Must enable Wi-Fi firstly\r\n");
+        wlcm_e("Must enable Wi-Fi firstly");
         return -WM_FAIL;
     }
 
@@ -14366,7 +14364,7 @@ int wlan_set_crypto_AES_GCMP_encrypt(const t_u8 *Key,
 
     if (!wlan_is_started())
     {
-        (void)PRINTF("Must enable Wi-Fi firstly\r\n");
+        wlcm_e("Must enable Wi-Fi firstly");
         return -WM_FAIL;
     }
 
@@ -14413,7 +14411,7 @@ int wlan_set_crypto_AES_GCMP_decrypt(const t_u8 *Key,
 
     if (!wlan_is_started())
     {
-        (void)PRINTF("Must enable Wi-Fi firstly\r\n");
+        wlcm_e("Must enable Wi-Fi firstly");
         return -WM_FAIL;
     }
 
@@ -14719,7 +14717,7 @@ int wlan_set_wmm_uapsd(t_u8 uapsd_enable)
 
     if (!is_uap_state(CM_UAP_INITIALIZING) || is_sta_connecting())
     {
-        (void)PRINTF("Failed to enable/disable UAPSD, because uAP is up/STA is connecting\n");
+        wlcm_e("Failed to enable/disable UAPSD, because uAP is up/STA is connecting\n");
         return -WM_FAIL;
     }
 
@@ -15088,7 +15086,7 @@ int wlan_config_mef(int type, t_u8 mef_action)
 
     if (!wlan_is_started())
     {
-        (void)PRINTF("MEF configure is not allowed when WIFI is disabled\r\n");
+        wlcm_e("MEF configure is not allowed when WIFI is disabled");
         return -WM_FAIL;
     }
 
@@ -15098,42 +15096,42 @@ int wlan_config_mef(int type, t_u8 mef_action)
             (void)memset(&g_flt_cfg, 0, sizeof(wlan_flt_cfg_t));
             ret = wifi_set_packet_filters(&g_flt_cfg);
             if(ret == WM_SUCCESS)
-                (void)PRINTF("delete all MEF entries Successful\n\r");
+                wlcm_d("delete all MEF entries Successful");
             else
-                (void)PRINTF("delete all MEF entries Failed\n\r");
+                wlcm_d("delete all MEF entries Failed");
             break;
         case MEF_TYPE_PING:
             ret = wlan_mef_set_auto_ping(mef_action);
             if (ret == WM_SUCCESS)
-                (void)PRINTF("Add ping MEF entry successful\n\r");
+                wlcm_d("Add ping MEF entry successful");
             else
-                (void)PRINTF("Add ping MEF entry Failed\n\r");
+                wlcm_d("Add ping MEF entry Failed");
             break;
         case MEF_TYPE_ARP:
             ret = wlan_mef_set_auto_arp(mef_action);
             if (ret == WM_SUCCESS)
             {
-                (void)PRINTF("Add ARP MEF entry successful\n\r");
+                wlcm_d("Add ARP MEF entry successful");
             }
             else
-                (void)PRINTF("Add ARP MEF entry Failed\n\r");
+                wlcm_d("Add ARP MEF entry Failed");
             break;
         case MEF_TYPE_MULTICAST:
             ret = wlan_mef_set_multicast(mef_action);
             if (ret == WM_SUCCESS)
-                (void)PRINTF("Add multicast MEF entry successful\n\r");
+                wlcm_d("Add multicast MEF entry successful");
             else
-                (void)PRINTF("Add multicast MEF entry Failed\n\r");
+                wlcm_d("Add multicast MEF entry Failed");
             break;
         case MEF_TYPE_IPV6_NS:
             ret = wlan_set_ipv6_ns_mef(mef_action);
             if (ret == WM_SUCCESS)
-                (void)PRINTF("Add ns MEF entry successful\n\r");
+                wlcm_d("Add ns MEF entry successful");
             else
-                (void)PRINTF("Add ns MEF entry Failed\n\r");
+                wlcm_d("Add ns MEF entry Failed");
             break;
         default:
-            (void)PRINTF("Error: unknown MEF type:%d", type);
+            wlcm_e("Error: unknown MEF type:%d", type);
             break;
     }
 
@@ -15752,7 +15750,7 @@ int wlan_net_monitor_cfg(wlan_net_monitor_t *monitor)
 
     if (is_sta_connected() || is_uap_started())
     {
-        (void)PRINTF("down the uap and disconnet sta first\n\r");
+        wlcm_e("down the uap and disconnet sta first");
         return WM_FAIL;
     }
 
@@ -15769,13 +15767,13 @@ int wlan_mgmtframe_tx_cfg(wlan_host_tx_frame_params_t *tx_frame)
 
     if (is_sta_connected() || is_uap_started())
     {
-        (void)PRINTF("monitor mode tx: disable uap and disconnect sta first\n\r");
+        wlcm_e("monitor mode tx: disable uap and disconnect sta first");
         return -WM_FAIL;
     }
 
     if(get_monitor_flag() != true)
     {
-        (void)PRINTF("enable monitor mode first\n\r");
+        wlcm_e("enable monitor mode first");
         return -WM_FAIL;
     }
 
@@ -16005,7 +16003,7 @@ int wlan_set_region_code(unsigned int region_code)
 
     if ((region_code == 0x40) || (region_code == 0x41) || (region_code == 0xFE))
     {
-        (void)PRINTF("Region code 0XFF is used for Japan to support channels of both 2.4GHz band and 5GHz band.\r\n");
+        wlcm_e("Region code 0XFF is used for Japan to support channels of both 2.4GHz band and 5GHz band.");
         return -WM_FAIL;
     }
 
@@ -16298,14 +16296,14 @@ static int wlan_cpu_loading_start(uint32_t number, uint8_t period)
                           &cpu_loading_cb, NULL, KOSA_TimerPeriodic, OSA_TIMER_NO_ACTIVATE);
         if (status != KOSA_StatusSuccess)
         {
-            (void)PRINTF("Unable to create cpu loading timer.\r\n");
+            wlcm_e("Unable to create cpu loading timer.");
             return -WM_FAIL;
         }
 
         status = OSA_TaskCreate((osa_task_handle_t)cpu_loading.cpu_loading_task_Handle, OSA_TASK(cpu_loading_task), NULL);
         if (status != KOSA_StatusSuccess)
         {
-            (void)PRINTF("Unable to create cpu loading thread.\r\n");
+            wlcm_e("Unable to create cpu loading thread.");
             return -WM_FAIL;
         }
 
@@ -16314,7 +16312,7 @@ static int wlan_cpu_loading_start(uint32_t number, uint8_t period)
         cpu_loading.cpu_loading_info = (char *)OSA_MemoryAllocate(cpu_loading.task_status_len);
         if (cpu_loading.cpu_loading_info == NULL)
         {
-            (void)PRINTF("%s: Failed to alloc cpu loading info\r\n", __func__);
+            wlcm_e("%s: Failed to alloc cpu loading info", __func__);
             return -WM_FAIL;
         }
 
@@ -16345,7 +16343,7 @@ int wlan_cpu_loading(uint8_t start, uint32_t number, uint8_t period)
     {
         if(cpu_loading.status == CPU_LOADING_STATUS_DEAD)
         {
-            (void)PRINTF("Collecting CPU loading info has already ended.\r\n");
+            wlcm_d("Collecting CPU loading info has already ended.");
             return WM_SUCCESS;
         }
         else
@@ -16423,7 +16421,7 @@ int wlan_uap_disconnect_sta(uint8_t *sta_addr)
 
     if(ret != WM_SUCCESS)
     {
-        (void)PRINTF("Error: Failed to disconnect sta.\r\n");
+        wlcm_e("Error: Failed to disconnect sta.");
     }
 
     return ret;
