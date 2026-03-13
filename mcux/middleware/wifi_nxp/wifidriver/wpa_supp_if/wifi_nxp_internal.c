@@ -114,21 +114,17 @@ void wifi_process_remain_on_channel(struct wifi_message *msg)
     if (!wifi_if_ctx_rtos || !wm_wifi.supp_if_callbk_fns)
        return;
 
-    if (wifi_if_ctx_rtos->supp_called_remain_on_chan == true)
+    if ((msg->reason == WIFI_EVENT_REASON_SUCCESS) &&
+        (wm_wifi.supp_if_callbk_fns->remain_on_channel_callbk_fn != NULL))
     {
-        if ((msg->reason == WIFI_EVENT_REASON_SUCCESS) &&
-            (wm_wifi.supp_if_callbk_fns->remain_on_channel_callbk_fn != NULL))
+        if (*(t_u8 *)(msg->data) == true)
         {
-            if (*(t_u8 *)(msg->data) == true)
-            {
-                wm_wifi.supp_if_callbk_fns->remain_on_channel_callbk_fn(wifi_if_ctx_rtos, 1);
-            }
-            else
-            {
-                wm_wifi.supp_if_callbk_fns->remain_on_channel_callbk_fn(wifi_if_ctx_rtos, 0);
-            }
+            wm_wifi.supp_if_callbk_fns->remain_on_channel_callbk_fn(wifi_if_ctx_rtos, 1);
         }
-        wifi_if_ctx_rtos->supp_called_remain_on_chan = false;
+        else
+        {
+            wm_wifi.supp_if_callbk_fns->remain_on_channel_callbk_fn(wifi_if_ctx_rtos, 0);
+        }
     }
     if (msg->data)
     {

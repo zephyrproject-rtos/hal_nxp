@@ -2717,7 +2717,6 @@ int wifi_nxp_wpa_supp_remain_on_channel(void *if_priv, unsigned int freq, unsign
 
     channel = freq_to_chan(wifi_if_ctx_rtos->remain_on_channel_freq);
 
-    wifi_if_ctx_rtos->supp_called_remain_on_chan = true;
     wifi_if_ctx_rtos->remain_on_chan_is_canceled = false;
     wifi_if_ctx_rtos->remain_on_channel_cookie   = (u64)(OSA_Rand() | host_cookie);
     if (wm_wifi.supp_if_callbk_fns->cookie_rsp_callbk_fn != NULL)
@@ -2760,7 +2759,6 @@ int wifi_nxp_wpa_supp_cancel_remain_on_channel(void *if_priv, u64 rpu_cookie)
         goto out;
     }
 
-    wifi_if_ctx_rtos->supp_called_remain_on_chan = true;
     wifi_if_ctx_rtos->remain_on_chan_is_canceled = true;
     status                                       = wifi_remain_on_channel(false, 0, 0);
 
