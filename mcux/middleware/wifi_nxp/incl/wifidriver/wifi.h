@@ -1758,12 +1758,15 @@ int unregister_csi_user_callback(void);
 void csi_local_buff_init();
 void csi_save_data_to_local_buff(void *data);
 void csi_deliver_data_to_user();
+void wifi_get_csi_buff_status(t_u8 *write_idx, t_u8 *read_idx,
+                              t_u8 *valid_cnt, t_u32 *drop_cnt);
 
 typedef struct _csi_local_buff_statu
 {
     t_u8 write_index;
     t_u8 read_index;
     t_u8 valid_data_cnt;
+    t_u32 user_recv_drop_cnt;
     /** Semaphore to protect data parameters */
     OSA_SEMAPHORE_HANDLE_DEFINE(csi_data_sem);
 } csi_local_buff_statu;

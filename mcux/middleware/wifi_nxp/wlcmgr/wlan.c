@@ -43,8 +43,11 @@
 #include "wifi_ping.h"
 #endif
 
-#if (CONFIG_CSI) && (CONFIG_CSI_AMI)
+#if (CONFIG_CSI)
+#include "wlan_test_csi.h"
+#if CONFIG_CSI_AMI
 #include "event.h"
+#endif
 #endif
 
 #if CONFIG_HOST_SLEEP
@@ -6913,7 +6916,7 @@ static void wlan_cpu_loading_info_display(void)
     uint64_t total_runtime = 0;
     uint64_t task_runtime[CPU_LOADING_TASK_NUM] = {0};
     float task_runtime_percentage[CPU_LOADING_TASK_NUM] = {0};
-    uint8_t task_index = 0, i = 0;
+    uint8_t i = 0;
     uint32_t collect_time = 0;
     char cpu_loading_task_name[] = "cpu_loading_task";
 
@@ -10625,6 +10628,12 @@ void wlan_reset(cli_reset_option ResetOption)
                     OSA_TimeDelay(1000);
                 }
             }
+#if CONFIG_CSI
+            wlan_reset_csi_filter_data();
+            /* CSI shutdown: unregister callback before destroying task to prevent race condition */
+            wlan_unregister_csi_user_callback();
+            csi_destroy_process_task();
+#endif
 
             /*Stop current uAP if uAP is started.*/
 #if UAP_SUPPORT
@@ -16283,7 +16292,6 @@ static void cpu_loading_cb(osa_timer_arg_t arg)
 
 static int wlan_cpu_loading_start(uint32_t number, uint8_t period)
 {
-    int ret;
     osa_status_t status;
 
     if(cpu_loading.status == CPU_LOADING_STATUS_DEAD)
@@ -16340,7 +16348,6 @@ static int wlan_cpu_loading_start(uint32_t number, uint8_t period)
 
 int wlan_cpu_loading(uint8_t start, uint32_t number, uint8_t period)
 {
-    int ret;
     if(start == CPU_LOADING_ACTION_STOP)
     {
         if(cpu_loading.status == CPU_LOADING_STATUS_DEAD)
