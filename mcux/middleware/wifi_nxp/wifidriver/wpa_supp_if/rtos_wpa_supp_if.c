@@ -870,9 +870,15 @@ int wifi_nxp_wpa_supp_scan2(void *if_priv, struct wpa_driver_scan_params *params
 
     if (wifi_is_remain_on_channel())
     {
-        supp_e("%s: Block scan while remaining on channel", __func__);
-        ret = -EBUSY;
-        goto out;
+        status = wifi_remain_on_channel(false, 0, 0);
+        if (status == WM_SUCCESS)
+        {
+            wifi_if_ctx_rtos->remain_on_channel = false;
+        }
+           else
+        {
+            supp_e("%s: Cancel remain on channel failed", __func__);
+        }
     }
 
     wifi_d("initiating wifi-scan");
@@ -2717,7 +2723,6 @@ int wifi_nxp_wpa_supp_remain_on_channel(void *if_priv, unsigned int freq, unsign
 
     channel = freq_to_chan(wifi_if_ctx_rtos->remain_on_channel_freq);
 
-    wifi_if_ctx_rtos->remain_on_chan_is_canceled = false;
     wifi_if_ctx_rtos->remain_on_channel_cookie   = (u64)(OSA_Rand() | host_cookie);
     if (wm_wifi.supp_if_callbk_fns->cookie_rsp_callbk_fn != NULL)
     {
@@ -2729,11 +2734,13 @@ int wifi_nxp_wpa_supp_remain_on_channel(void *if_priv, unsigned int freq, unsign
     if (status != WM_SUCCESS)
     {
         supp_e("%s: Remain on channel cmd failed", __func__);
+        wifi_if_ctx_rtos->remain_on_channel = false;
         ret = -1;
     }
     else
     {
         supp_d("%s:Remain on channel sent successfully", __func__);
+        wifi_if_ctx_rtos->remain_on_channel = true;
         ret = 0;
     }
 out:
@@ -2752,14 +2759,13 @@ int wifi_nxp_wpa_supp_cancel_remain_on_channel(void *if_priv, u64 rpu_cookie)
         goto out;
     }
     wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
-    if (wifi_if_ctx_rtos->remain_on_chan_is_canceled)
+    if (wifi_if_ctx_rtos->remain_on_channel == false)
     {
         supp_d("%s:Already canceled, ignore it", __func__);
         ret = 0;
         goto out;
     }
 
-    wifi_if_ctx_rtos->remain_on_chan_is_canceled = true;
     status                                       = wifi_remain_on_channel(false, 0, 0);
 
     if (status != WM_SUCCESS)
@@ -2770,6 +2776,7 @@ int wifi_nxp_wpa_supp_cancel_remain_on_channel(void *if_priv, u64 rpu_cookie)
     else
     {
         supp_d("%s:Cancel on channel sent successfully", __func__);
+        wifi_if_ctx_rtos->remain_on_channel = false;
         ret = 0;
     }
 out:
