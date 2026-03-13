@@ -4437,6 +4437,49 @@ int wifi_get_chanlist(wifi_chanlist_t *chanlist)
     return WM_SUCCESS;
 }
 
+
+int wifi_get_chanlist_by_band(t_u8 *chan_list, t_u8 *num_chans, t_u8 band)
+{
+    mlan_adapter *pmadapter      = mlan_adap->priv[0]->adapter;
+    const chan_freq_power_t *cfp = MNULL;
+    t_u8 cfp_no                  = 0;
+    t_u8 region_idx              = 0;
+    t_u8 i                       = 0;
+
+    *num_chans = 0;
+
+    if (band == 0U
+#if CONFIG_5GHz_SUPPORT
+        || band == 1U
+#endif
+    )
+    {
+        region_idx = band;
+
+        if (!pmadapter->region_channel[region_idx].valid)
+        {
+            return -WM_FAIL;
+        }
+
+        cfp    = pmadapter->region_channel[region_idx].pcfp;
+        cfp_no = pmadapter->region_channel[region_idx].num_cfp;
+        for (i = 0; i < cfp_no; i++)
+        {
+            if ((cfp[i].dynamic.flags & NXP_CHANNEL_DISABLED) == 0U)
+            {
+                *(chan_list++) = (t_u8)(cfp[i].channel);
+                *num_chans     = *num_chans + 1U;
+            }
+        }
+    }
+    else
+    {
+        return -WM_E_INVAL;  /* Invalid band */
+    }
+
+    return WM_SUCCESS;
+}
+
 #if UAP_SUPPORT
 void wifi_get_active_channel_list(t_u8 *chan_list, t_u8 *num_chans, t_u16 acs_band)
 {

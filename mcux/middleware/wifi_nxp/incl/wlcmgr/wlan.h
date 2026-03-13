@@ -94,6 +94,12 @@ typedef enum
 #define WLAN_NETWORK_NAME_MIN_LENGTH 1U
 /** Maximum length for network names, see \ref wlan_network */
 #define WLAN_NETWORK_NAME_MAX_LENGTH 32U
+/** Maximum number of channels storable in a network's scan channel list */
+#if CONFIG_5GHz_SUPPORT
+#define WLAN_NETWORK_CHAN_LIST_MAX 50U
+#else
+#define WLAN_NETWORK_CHAN_LIST_MAX 14U
+#endif
 /** Minimum WPA2 passphrase can be up to 8 ASCII chars */
 #define WLAN_PSK_MIN_LENGTH 8U
 /** Maximum WPA2 passphrase can be up to 63 ASCII chars or 64 hexadecimal digits + 1 '\0' char */
@@ -1877,6 +1883,15 @@ struct wlan_network
     uint8_t sec_channel_offset;
     /** The ACS (auto channel selection) band if set channel to 0. */
     uint16_t acs_band;
+    /** Array of channel list to scan or NULL for all
+     *
+     * This is a array of channels to include in scan requests when searching
+     * for this network. This can be used to speed up scanning when the network
+     * is known to not use all possible channels.
+    */
+    uint8_t chan_list[WLAN_NETWORK_CHAN_LIST_MAX];
+    /** Number of channels in the channel list */
+    uint8_t chan_list_len;
     /** RSSI (received signal strength indicator) value. */
     int rssi;
 #if CONFIG_SCAN_WITH_RSSIFILTER
@@ -2267,6 +2282,18 @@ typedef wifi_uap_client_disassoc_t wlan_uap_client_disassoc_t;
 #if CONFIG_INACTIVITY_TIMEOUT_EXT
 typedef wifi_inactivity_to_t wlan_inactivity_to_t;
 #endif
+
+enum wlan_frequency_bands
+{
+    /** 2.4 GHz band */
+    WLAN_FREQ_BAND_2_4_GHZ = 0,
+    /** 5 GHz band */
+    WLAN_FREQ_BAND_5_GHZ,
+    /** All bands */
+    WLAN_FREQ_BAND_BOTH,
+    /** Invalid frequency band */
+    WLAN_FREQ_BAND_UNKNOWN
+};
 
 /* Wi-Fi connection manager API */
 /** Initialize the Wi-Fi driver and create the Wi-Fi driver thread.
@@ -7410,4 +7437,20 @@ int wlan_uap_set_sta_ageout_timer(uint32_t sta_ageout_time);
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
 int wlan_supp_dpp_listen(int bss_type, int enable);
 #endif
+
+/**
+ * Set channel list for a network.
+ *
+ * Note: when both `chan_list` and `freq_band` are provided, the channel list takes
+ * precedence. The frequency band parameter will be ignored.
+ *
+ * \param[in]  name: A pointer to a string representing the name of the network.
+ * \param[in]  chan_list: A pointer to the channel list
+ * \param[in]  num_chans: Number of channels in the channel list
+ * \param[in]  freq_band: Frequency band for the channels (e.g., 2.4GHz, 5GHz)
+ *
+ * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
+ */
+int wlan_set_network_chanlist(char *name, const uint8_t *chan_list, uint8_t num_chans, enum wlan_frequency_bands freq_band);
+
 #endif /* __WLAN_H__ */
