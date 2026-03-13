@@ -2485,7 +2485,8 @@ static mlan_status wlan_process_802dot11_mgmt_pkt2(mlan_private *priv, t_u8 *pay
                 PRINTM(MINFO, "T2: %d, T3: %d, ingress: %lu\n", tstamps.t2, tstamps.t3, tstamps.ingress_time);
             }
 #endif
-            if (memcmp(pieee_pkt_hdr->addr1, broadcast, MLAN_MAC_ADDR_LENGTH))
+            if (memcmp(pieee_pkt_hdr->addr1, broadcast, MLAN_MAC_ADDR_LENGTH) &&
+                !is_mcast_addr(pieee_pkt_hdr->addr1))
                 unicast = MTRUE;
             break;
         default:
