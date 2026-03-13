@@ -2900,6 +2900,17 @@ t_u8 wlan_ft_akm_is_used(mlan_private *pmpriv, t_u8 *rsn_ie);
 t_u8 *wlan_get_specific_ie(pmlan_private priv, t_u8 *ie_buf, t_u8 ie_len, IEEEtypes_ElementId_e id, t_u8 ext_id);
 
 /**
+ *  @brief This function checks if address is multicast
+ *
+ *  @param addr  mac address
+ *  @return      1 - multicast, 0 - not multicast
+ */
+static INLINE t_bool is_mcast_addr(t_u8 *addr)
+{
+    return ((*(t_u8 *)addr & 0x01) == 0x01);
+}
+
+/**
  *  @brief This function checks tx_pause flag for peer
  *
  *  @param priv     A pointer to mlan_private
