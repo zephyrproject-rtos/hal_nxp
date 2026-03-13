@@ -1,0 +1,148 @@
+/*
+ * Copyright 2026 NXP
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
+#ifndef RPMSG_CONFIG_H_
+#define RPMSG_CONFIG_H_
+
+/*!
+ * @addtogroup config
+ * @{
+ * @file
+ */
+
+//! @name Configuration options
+//@{
+
+//! @def RL_MS_PER_INTERVAL
+//!
+//! Delay in milliseconds used in non-blocking API functions for polling.
+//! The default value is 1.
+#ifdef CONFIG_RL_MS_PER_INTERVAL
+#define RL_MS_PER_INTERVAL CONFIG_RL_MS_PER_INTERVAL
+#else
+#define RL_MS_PER_INTERVAL (1)
+#endif
+
+//! @def RL_ALLOW_CUSTOM_SHMEM_CONFIG
+//!
+//! This option allows to define custom shared memory configuration and replacing
+//! the shared memory related global settings from rpmsg_config.h This is useful
+//! when multiple instances are running in parallel but different shared memory
+//! arrangement (vring size & alignment, buffers size & count) is required. Note,
+//! that once enabled the platform_get_custom_shmem_config() function needs
+//! to be implemented in platform layer. The default value is 0 (all RPMsg_Lite
+//! instances use the same shared memory arrangement as defined by common config macros).
+#ifdef CONFIG_RL_ALLOW_CUSTOM_SHMEM_CONFIG
+#define RL_ALLOW_CUSTOM_SHMEM_CONFIG (1)
+#else
+#define RL_ALLOW_CUSTOM_SHMEM_CONFIG (0)
+#endif
+
+//! @def RL_BUFFER_PAYLOAD_SIZE
+//!
+//! Size of the buffer payload, it must be more then 0.
+//! And should be word aligned with added plus 16 for rpmsg header.
+//! Value will be word align up if not already aligned.
+//! Ensure the same value is defined on both sides of rpmsg
+//! communication.
+#ifdef CONFIG_RL_BUFFER_PAYLOAD_SIZE
+#define RL_BUFFER_PAYLOAD_SIZE (CONFIG_RL_BUFFER_PAYLOAD_SIZE)
+#else
+#define RL_BUFFER_PAYLOAD_SIZE (496U)
+#endif
+
+//! @def RL_BUFFER_COUNT
+//!
+//! Number of the buffers, it must be power of two (2, 4, ...).
+//! The default value is 2U.
+//! Note this value defines the buffer count for one direction of the rpmsg
+//! communication only, i.e. if the default value of 2 is used
+//! in rpmsg_config.h files for the master and the remote side, 4 buffers
+//! in total are created in the shared memory.
+#ifdef CONFIG_RL_BUFFER_COUNT
+#define RL_BUFFER_COUNT (CONFIG_RL_BUFFER_COUNT)
+#else
+#define RL_BUFFER_COUNT (2U)
+#endif
+
+//! @def RL_API_HAS_ZEROCOPY
+//!
+//! Zero-copy API functions enabled/disabled.
+//! The default value is 1 (enabled).
+#ifdef CONFIG_RL_API_HAS_ZEROCOPY
+#define RL_API_HAS_ZEROCOPY (1)
+#else
+#define RL_API_HAS_ZEROCOPY (0)
+#endif
+
+//! @def RL_USE_STATIC_API
+//!
+//! Static API functions (no dynamic allocation) enabled/disabled.
+//! The default value is 0 (static API disabled).
+#ifdef CONFIG_RL_USE_STATIC_API
+#define RL_USE_STATIC_API (1)
+#else
+#define RL_USE_STATIC_API (0)
+#endif
+
+//! @def RL_CLEAR_USED_BUFFERS
+//!
+//! Clearing used buffers before returning back to the pool of free buffers
+//! enabled/disabled.
+//! The default value is 0 (disabled).
+#ifdef CONFIG_RL_CLEAR_USED_BUFFERS
+#define RL_CLEAR_USED_BUFFERS (1)
+#else
+#define RL_CLEAR_USED_BUFFERS (0)
+#endif
+
+//! @def RL_USE_MCMGR_IPC_ISR_HANDLER
+//!
+//! When enabled IPC interrupts are managed by the Multicore Manager (IPC
+//! interrupts router), when disabled RPMsg-Lite manages IPC interrupts
+//! by itself.
+//! The default value is 0 (no MCMGR IPC ISR handler used).
+#ifdef CONFIG_RL_USE_MCMGR_IPC_ISR_HANDLER
+#define RL_USE_MCMGR_IPC_ISR_HANDLER (1)
+#else
+#define RL_USE_MCMGR_IPC_ISR_HANDLER (0)
+#endif
+
+//! @def RL_USE_ENVIRONMENT_CONTEXT
+//!
+//! When enabled the environment layer uses its own context.
+//! Added for QNX port mainly, but can be used if required.
+//! The default value is 0 (no context, saves some RAM).
+#ifdef CONFIG_RL_USE_ENVIRONMENT_CONTEXT
+#define RL_USE_ENVIRONMENT_CONTEXT (1)
+#else
+#define RL_USE_ENVIRONMENT_CONTEXT (0)
+#endif
+
+//! @def RL_DEBUG_CHECK_BUFFERS
+//!
+//! Do not use in RPMsg-Lite to Linux configuration
+#ifdef CONFIG_RL_DEBUG_CHECK_BUFFERS
+#define RL_DEBUG_CHECK_BUFFERS (1)
+#else
+#define RL_DEBUG_CHECK_BUFFERS (0)
+#endif
+
+//! @def RL_ALLOW_CONSUMED_BUFFERS_NOTIFICATION
+//!
+//! When enabled the opposite side is notified each time received buffers
+//! are consumed and put into the queue of available buffers.
+//! Enable this option in RPMsg-Lite to Linux configuration to allow unblocking
+//! of the Linux blocking send.
+//! The default value is 0 (RPMsg-Lite to RPMsg-Lite communication).
+#ifdef CONFIG_RL_ALLOW_CONSUMED_BUFFERS_NOTIFICATION
+#define RL_ALLOW_CONSUMED_BUFFERS_NOTIFICATION (1)
+#else
+#define RL_ALLOW_CONSUMED_BUFFERS_NOTIFICATION (0)
+#endif
+//@}
+
+#endif /* RPMSG_CONFIG_H_ */
