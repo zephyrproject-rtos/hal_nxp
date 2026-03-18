@@ -1003,7 +1003,7 @@ struct netif *net_get_uap_interface(void)
 
 int net_get_if_name_netif(char *pif_name, struct netif *iface)
 {
-    strncpy(pif_name, iface->if_dev->dev->name, NETIF_NAMESIZE);
+    strncpy(pif_name, net_if_get_device((struct net_if *)iface)->name, NETIF_NAMESIZE);
     return WM_SUCCESS;
 }
 
