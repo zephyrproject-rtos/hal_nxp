@@ -46,26 +46,8 @@
 /* copy zephyr struct net if */
 struct netif
 {
-    /** The net_if_dev instance the net_if is related to */
-    struct net_if_dev *if_dev;
-#if (CONFIG_NET_STATISTICS_PER_INTERFACE)
-    /** Network statistics related to this network interface */
-    struct net_stats stats;
-#endif /* CONFIG_NET_STATISTICS_PER_INTERFACE */
-
-    /** Network interface instance configuration */
-    struct net_if_config config;
-
-#if (CONFIG_NET_POWER_MANAGEMENT)
-    /** Keep track of packets pending in traffic queues. This is
-     * needed to avoid putting network device driver to sleep if
-     * there are packets waiting to be sent.
-     */
-    int tx_pending;
-#endif
-
-    struct k_mutex lock;
-    struct k_mutex tx_lock;
+    /** The struct net_if from zephyr, so this is the same size */
+    struct net_if if_dev;
 };
 
 /**
