@@ -1,5 +1,30 @@
 # LPI2C
 
+## [2.6.5]
+
+- Bug Fixes
+  - Removed write to STAR register in LPI2C_SlaveTransferHandleIRQ handler in case of kLPI2C_SlaveRepeatedStartDetectFlag or kLPI2C_SlaveStopDetectFlag.
+  - Removed configuration of FILTSDA from LPI2C_MasterSetBaudRate().
+  - Set minimal possible value for FILTSDA and FILTSCL to 0.
+  - Updated configuration of glitch filters in LPI2C_SlaveInit().
+  - Set minimal possible value for SCFGR2[CLKHOLD] to 1.
+  - Added error check to while loop in LPI2C_TransferStateMachineSendCommand().
+
+- Improvements
+  - Removed receive data size limitation in LPI2C_MasterTransferBlocking() and LPI2C_MasterTransferNonBlocking().
+
+## [2.6.4]
+
+- Bug Fixes
+  - Limited value of filtSda in LPI2C_MasterSetBaudRate().
+  - Updated LPI2C_MasterStop() and LPI2C_MasterTransferBlocking() to send I2C STOP also in case of error.
+  - Removed unused flag kLPI2C_TransferRepeatedStartFlag.
+
+## [2.6.3]
+
+- Bug Fixes
+  - Fixed static analysis identified issues.
+
 ## [2.6.2]
 
 - Improvements
