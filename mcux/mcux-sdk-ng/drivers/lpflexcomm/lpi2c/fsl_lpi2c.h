@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, 2024-2025 NXP
+ * Copyright 2022, 2024-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief LPI2C driver version. */
-#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 2, 6))
+#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 2, 8))
 /*! @} */
 
 /*! @brief Retry times for waiting flag. */
@@ -220,7 +220,6 @@ enum _lpi2c_master_transfer_flags
 {
     kLPI2C_TransferDefaultFlag       = 0x00U, /*!< Transfer starts with a start signal, stops with a stop signal. */
     kLPI2C_TransferNoStartFlag       = 0x01U, /*!< Don't send a start condition, address, and sub address */
-    kLPI2C_TransferRepeatedStartFlag = 0x02U, /*!< Send a repeated start condition */
     kLPI2C_TransferNoStopFlag        = 0x04U, /*!< Don't send a stop condition. */
 };
 
@@ -255,6 +254,7 @@ struct _lpi2c_master_handle
     lpi2c_master_transfer_t transfer;                    /*!< Copy of the current transfer info. */
     lpi2c_master_transfer_callback_t completionCallback; /*!< Callback function pointer. */
     void *userData;                                      /*!< Application data passed to callback. */
+    uint16_t chunkSize;                                  /*!< Remaining byte count in current chunk. */
 };
 
 /*! @brief Typedef for master interrupt handler, used internally for LPI2C master interrupt and EDMA transactional APIs.
