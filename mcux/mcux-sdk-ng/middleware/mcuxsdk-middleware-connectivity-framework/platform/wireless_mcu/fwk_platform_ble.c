@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <assert.h>
 
+#include "controller_api.h"
 #include "fsl_adapter_rpmsg.h"
 #include "fwk_config.h"
 #include "fwk_platform_definitions.h"
@@ -314,6 +315,36 @@ void PLATFORM_RegisterHciLogCallback(platform_hci_log_cb_t cb)
 {
     /* Register HCI logging callback - called by DBG module or application */
     platform_hci_log_cb = cb;
+}
+
+void PLATFORM_SetBleMaxTxPower(int8_t max_tx_power)
+{
+#ifndef LATENCY_TESTS
+    uint8_t ldo_ana_trim;
+
+    if (max_tx_power == 0)
+    {
+        ldo_ana_trim = 3U;
+    }
+    else if (max_tx_power == 7)
+    {
+        ldo_ana_trim = 9U;
+    }
+    else
+    {
+        if (max_tx_power != 10)
+        {
+            // set to 10dBm if setting is invalid
+            assert(false);
+            max_tx_power = 10;
+        }
+        ldo_ana_trim = 15U;
+    }
+    /* configure max tx power in controller */
+    (void)Controller_SetMaxTxPower(max_tx_power, ldo_ana_trim);
+#else
+    (void)max_tx_power;
+#endif
 }
 
 /* -------------------------------------------------------------------------- */

@@ -1,4 +1,4 @@
-# Copyright 2025 NXP
+# Copyright 2025-2026 NXP
 # SPDX-License-Identifier: BSD-3-Clause
 
 mcux_set_list(KW45_NBU_FAMILY "KW45B41Z52xxxA_NBU KW45B41Z53xxxA_NBU  KW45B41Z82xxxA_NBU  KW45B41Z83xxxA_NBU  K32W1480xxxA_NBU")
@@ -267,6 +267,16 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.controller_api)
                 interface/controller_api.h
                 interface/controller_interface.h
                 interface/hybrid_gfsk.h
+    )
+    mcux_add_include(
+        INCLUDES interface
+    )
+endif()
+
+if(CONFIG_MCUX_COMPONENT_middleware.wireless.controller_api_minimal)
+    mcux_add_source(
+        SOURCES src/controller_api.c
+                interface/controller_api.h
     )
     mcux_add_include(
         INCLUDES interface
