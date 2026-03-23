@@ -4,7 +4,7 @@
  ********************************************************************************** */
 /*! *********************************************************************************
 *
-* Copyright 2021-2024 NXP
+* Copyright 2021-2024, 2026 NXP
 *
 * \file
 *
@@ -19,7 +19,9 @@
 #include "fwk_platform_ics.h"
 #include "fwk_platform.h"
 #include "controller_api.h"
+#if !defined(__ZEPHYR__)
 #include "RNG_Interface.h"
+#endif
 
 /************************************************************************************
 *************************************************************************************
@@ -114,6 +116,7 @@ osa_status_t Controller_SetMaxTxPower(int8_t power_dBm, uint8_t ldo_ant_trim)
     return api_return;
 }
 
+#if !defined(__ZEPHYR__)
 osa_status_t Controller_SetRandomSeed(void)
 {
     osa_status_t api_return = KOSA_StatusSuccess;
@@ -134,6 +137,7 @@ osa_status_t Controller_SetRandomSeed(void)
     }
     return api_return;
 }
+#endif
 
 osa_status_t Controller_ConfigureAdvCodingScheme(advCodingScheme_t codingSch, uint8_t handle)
 {
