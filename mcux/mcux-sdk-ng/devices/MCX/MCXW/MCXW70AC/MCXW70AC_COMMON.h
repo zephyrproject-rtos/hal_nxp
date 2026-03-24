@@ -2954,6 +2954,7 @@ typedef enum IRQn {
 #define FMU0_NS FMU_NS
 #define MRCC_BASE MRCC_0_BASE
 #define PORTA_BASE PORT_A_BASE
+#define SPC0 SPC_0
 
 // #define FPGA_TARGET 1
 // #define FPGA_SUPPORT 1
