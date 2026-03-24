@@ -55,7 +55,7 @@
  * if XTAL0 is 8 MHz:
  * @code
  * CLOCK_InitSysOsc(...);
- * CLOCK_SetXtal0Freq(80000000);
+ * CLOCK_SetXtal0Freq(8000000);
  * @endcode
  *
  * This is important for the multicore platforms where only one core needs to set up the
@@ -190,8 +190,8 @@ extern volatile uint32_t g_xtal32Freq;
     }
 
 /*! @brief Clock gate name array for MU. */
-#define MU_CLOCKS  \
-    {              \
+#define MU_CLOCKS                                      \
+    {                                                  \
         kCLOCK_Mu0, kCLOCK_Mu0, kCLOCK_Mu1, kCLOCK_Mu1 \
     }
 
@@ -450,8 +450,8 @@ typedef enum _clock_clkout_src
  */
 typedef enum _scg_sosc_monitor_mode
 {
-    kSCG_SysOscMonitorDisable = 0U,                      /*!< Monitor disabled. */
-    kSCG_SysOscMonitorInt     = SCG_SOSCCSR_SOSCCM_MASK, /*!< Interrupt when the SOSC error is detected. */
+    kSCG_SysOscMonitorDisable = 0U,                         /*!< Monitor disabled. */
+    kSCG_SysOscMonitorInt     = SCG_SOSCCSR_SOSCCM_MASK,    /*!< Interrupt when the SOSC error is detected. */
     kSCG_SysOscMonitorReset =
         SCG_SOSCCSR_SOSCCM_MASK | SCG_SOSCCSR_SOSCCMRE_MASK /*!< Reset when the SOSC error is detected.     */
 } scg_sosc_monitor_mode_t;
@@ -479,8 +479,8 @@ typedef struct _scg_sosc_config
  */
 typedef enum _scg_rosc_monitor_mode
 {
-    kSCG_RoscMonitorDisable = 0U,                      /*!< Monitor disabled. */
-    kSCG_RoscMonitorInt     = SCG_ROSCCSR_ROSCCM_MASK, /*!< Interrupt when the RTC OSC error is detected. */
+    kSCG_RoscMonitorDisable = 0U,                           /*!< Monitor disabled. */
+    kSCG_RoscMonitorInt     = SCG_ROSCCSR_ROSCCM_MASK,      /*!< Interrupt when the RTC OSC error is detected. */
     kSCG_RoscMonitorReset =
         SCG_ROSCCSR_ROSCCM_MASK | SCG_ROSCCSR_ROSCCMRE_MASK /*!< Reset when the RTC OSC error is detected. */
 } scg_rosc_monitor_mode_t;
@@ -542,8 +542,8 @@ typedef struct _scg_firc_trim_config
     scg_firc_trim_src_t trimSrc;   /*!< Trim source.                          */
     uint16_t trimDiv;              /*!< Divider of SOSC for FIRC.             */
 
-    uint8_t trimCoar; /*!< Trim coarse value; Irrelevant if trimMode is kSCG_FircTrimUpdate. */
-    uint8_t trimFine; /*!< Trim fine value; Irrelevant if trimMode is kSCG_FircTrimUpdate. */
+    uint8_t trimCoar;              /*!< Trim coarse value; Irrelevant if trimMode is kSCG_FircTrimUpdate. */
+    uint8_t trimFine;              /*!< Trim fine value; Irrelevant if trimMode is kSCG_FircTrimUpdate. */
 } scg_firc_trim_config_t;
 
 /*! @brief FIRC enable mode. */
@@ -570,8 +570,8 @@ typedef enum _scg_firc_range
  */
 typedef struct _scg_firc_config_t
 {
-    uint32_t enableMode;    /*!< Enable mode. */
-    scg_firc_range_t range; /*!< Fast IRC frequency range. */
+    uint32_t enableMode;                      /*!< Enable mode. */
+    scg_firc_range_t range;                   /*!< Fast IRC frequency range. */
 
     const scg_firc_trim_config_t *trimConfig; /*!< Pointer to the FIRC trim configuration; set NULL to disable trim. */
 } scg_firc_config_t;
@@ -583,8 +583,8 @@ typedef enum _tstmr_clk_sel
     kTSTMR_ClkSel_SOSC,
     kTSTMR_ClkSel_32kHz,
     kTSTMR_ClkSel_200MHz,
-    kTSTMR_ClkSel_1MHz,        /*!< TSTMR 1MHz precision. */
-    kTSTMR_ClkSel_Null,        /*!< TSTMR not counting. */
+    kTSTMR_ClkSel_1MHz, /*!< TSTMR 1MHz precision. */
+    kTSTMR_ClkSel_Null, /*!< TSTMR not counting. */
     kTSTMR_ClkSel_IPCClkDiv,
 } tstmr_clk_sel_t;
 
@@ -615,7 +615,7 @@ static inline void CLOCK_StartTstmr0(tstmr_clk_sel_t src, clock_ip_control_t cc)
         CLOCK_REG(kCLOCK_Tstmr0) |= MRCC_RSTB_MASK;
     }
     reg &= ~(MRCC_MUX_MASK | MRCC_CC_MASK);
-    reg |= (MRCC_MUX(src) |  ((uint32_t)cc &MRCC_CC_MASK));
+    reg |= (MRCC_MUX(src) | ((uint32_t)cc &MRCC_CC_MASK));
 
     /*
      * If clock is already enabled, first disable it, then set the clock
@@ -625,144 +625,14 @@ static inline void CLOCK_StartTstmr0(tstmr_clk_sel_t src, clock_ip_control_t cc)
     CLOCK_REG(kCLOCK_Tstmr0) = reg;
 }
 
-/*!
- * @brief Enable the clock for specific IP.
+/**
+ * @brief Check if the clock has a clock divider register
  *
- * @param name  Which clock to enable, see \ref clock_ip_name_t.
+ * @param name Clock name
+ * @return true if clock divider exists, false otherwise
  */
-static inline void CLOCK_EnableClock(clock_ip_name_t name)
+static inline volatile uint32_t *CLOCK_GetClockDivider(clock_ip_name_t name)
 {
-    if (kCLOCK_NOGATE == name)
-    {
-        return;
-    }
-    if (kCLOCK_Tstmr0 == name)
-    {
-        CLOCK_StartTstmr0(kTSTMR_ClkSel_1MHz, kCLOCK_IpClkControl_fun1);
-    }
-    else
-    {
-        uint32_t reg = CLOCK_REG(name);
-
-        if (kCLOCK_IpClkControl_fun1 == (reg & MRCC_CC_MASK))
-        {
-            return;
-        }
-
-        CLOCK_REG(name) &= (~MRCC_CC_MASK);
-        CLOCK_REG(name) |= (MRCC_CC_MASK & (uint32_t)kCLOCK_IpClkControl_fun1);
-    }
-    if ((CLOCK_REG(name) & MRCC_PR_MASK) == MRCC_PR_MASK)
-    {
-        CLOCK_REG(name) |= MRCC_RSTB_MASK;
-    }
-
-    /* Make sure enable clock finished */
-    __ISB();
-    __DSB();
-}
-
-/*!
- * @brief Enable the clock for specific IP in low power mode.
- *
- * @param name  Which clock to enable, see \ref clock_ip_name_t.
- * @param control  Clock Config, see \ref clock_ip_control_t.
- */
-static inline void CLOCK_EnableClockLPMode(clock_ip_name_t name, clock_ip_control_t control)
-{
-    if (kCLOCK_NOGATE == name)
-    {
-        return;
-    }
-    if (kCLOCK_Tstmr0 == name)
-    {
-        CLOCK_StartTstmr0(kTSTMR_ClkSel_1MHz, kCLOCK_IpClkControl_fun1);
-        return;
-    }
-
-    assert(kCLOCK_IpClkControl_fun1 == control || kCLOCK_IpClkControl_fun2 == control ||
-           kCLOCK_IpClkControl_fun3 == control);
-
-    CLOCK_REG(name) &= (~MRCC_CC_MASK);
-    CLOCK_REG(name) |= (MRCC_CC_MASK & (uint32_t)control);
-
-    if ((CLOCK_REG(name) & MRCC_PR_MASK) == MRCC_PR_MASK)
-    {
-        CLOCK_REG(name) |= MRCC_RSTB_MASK;
-    }
-
-    /* Make sure enable clock finished */
-    __ISB();
-    __DSB();
-}
-
-/*!
- * @brief Disable the clock for specific IP.
- *
- * @param name  Which clock to disable, see \ref clock_ip_name_t.
- */
-static inline void CLOCK_DisableClock(clock_ip_name_t name)
-{
-    if (kCLOCK_NOGATE == name)
-    {
-        return;
-    }
-
-    CLOCK_REG(name) &= (uint32_t)kCLOCK_IpClkControl_fun0;
-
-    if ((CLOCK_REG(name) & MRCC_PR_MASK) == MRCC_PR_MASK)
-    {
-        CLOCK_REG(name) &= ~MRCC_RSTB_MASK;
-    }
-}
-
-/*!
- * @brief Set the clock source for specific IP module.
- *
- * Set the clock source for specific IP, not all modules need to set the
- * clock source, should only use this function for the modules need source
- * setting.
- *
- * @param name Which peripheral to check, see \ref clock_ip_name_t.
- * @param src Clock source to set.
- */
-static inline void CLOCK_SetIpSrc(clock_ip_name_t name, clock_ip_src_t src)
-{
-    if (kCLOCK_NOGATE == name)
-    {
-        return;
-    }
-
-    uint32_t reg = CLOCK_REG(name);
-
-    assert(reg & MRCC_PR_MASK);
-
-    reg = (reg & (~MRCC_MUX_MASK)) | MRCC_MUX(src);
-
-    /*
-     * If clock is already enabled, first disable it, then set the clock
-     * source and re-enable it.
-     */
-    CLOCK_REG(name) = reg & (~MRCC_CC_MASK);
-    CLOCK_REG(name) = reg;
-}
-
-/*!
- * @brief Set the clock source and divider for specific IP module.
- *
- * Set the clock source and divider for specific IP, not all modules need to
- * set the clock source and divider, should only use this function for the
- * modules need source and divider setting.
- *
- * Divider output clock = Divider input clock / (divValue + 1U)]).
- *
- * @param name Which peripheral to check, see \ref clock_ip_name_t.
- * @param value  The divider value.
- */
-static inline void CLOCK_SetIpSrcDiv(clock_ip_name_t name, uint8_t divValue)
-{
-    volatile uint32_t *pDivCtrl = 0;
-
     switch (name)
     {
         case kCLOCK_Lpadc0:
@@ -787,23 +657,177 @@ static inline void CLOCK_SetIpSrcDiv(clock_ip_name_t name, uint8_t divValue)
         case kCLOCK_Tpm4:
         case kCLOCK_Wdog0:
         case kCLOCK_Wdog1:
-            pDivCtrl = (volatile uint32_t *)((uint32_t)name + 4U);
-            break;
+            return (volatile uint32_t *)((uint32_t)name + 4U);
         default:
-            assert(false);
-            return;
+            return NULL;
     }
+}
 
-    /* halt and reset clock dividers */
-    *pDivCtrl = 0x3UL << 29U;
-
-    if (divValue == 0U) /*!<  halt */
+/*!
+ * @brief Enable the clock for specific IP in low power mode.
+ *
+ * @param name  Which clock to enable, see \ref clock_ip_name_t.
+ * @param control  Clock Config, see \ref clock_ip_control_t.
+ */
+static inline void CLOCK_EnableClockLPMode(clock_ip_name_t name, clock_ip_control_t control)
+{
+    if (kCLOCK_NOGATE == name)
     {
-        *pDivCtrl |= (1UL << 30U);
+        return;
+    }
+    if (kCLOCK_Tstmr0 == name)
+    {
+        CLOCK_StartTstmr0(kTSTMR_ClkSel_1MHz, kCLOCK_IpClkControl_fun1);
     }
     else
     {
-        *pDivCtrl = divValue;
+        assert(kCLOCK_IpClkControl_fun1 == control || kCLOCK_IpClkControl_fun2 == control ||
+            kCLOCK_IpClkControl_fun3 == control);
+
+        uint32_t reg = CLOCK_REG(name);
+
+        /* return early if the clock is already enabled with the same control mode */
+        if((reg & MRCC_CC_MASK) == control)
+        {
+            return;
+        }
+
+        CLOCK_REG(name) &= (~MRCC_CC_MASK);
+        CLOCK_REG(name) |= (MRCC_CC_MASK & (uint32_t)control);
+    }
+
+    if ((CLOCK_REG(name) & MRCC_PR_MASK) == MRCC_PR_MASK)
+    {
+        CLOCK_REG(name) |= MRCC_RSTB_MASK;
+    }
+
+    volatile uint32_t *pDivCtrl = NULL;
+
+    pDivCtrl = CLOCK_GetClockDivider(name);
+
+    if (NULL != pDivCtrl)
+    {
+        /* Enable divider clock and release it from reset state */
+        *pDivCtrl &= ~(MRCC_HALT_MASK | MRCC_RESET_MASK);
+    }
+
+    /* Make sure enable clock finished */
+    __ISB();
+    __DSB();
+}
+
+/*!
+ * @brief Enable the clock for specific IP.
+ *
+ * @param name  Which clock to enable, see \ref clock_ip_name_t.
+ */
+static inline void CLOCK_EnableClock(clock_ip_name_t name)
+{
+    CLOCK_EnableClockLPMode(name, kCLOCK_IpClkControl_fun1);
+}
+
+/*!
+ * @brief Disable the clock for specific IP.
+ *
+ * @param name  Which clock to disable, see \ref clock_ip_name_t.
+ */
+static inline void CLOCK_DisableClock(clock_ip_name_t name)
+{
+    if (kCLOCK_NOGATE == name)
+    {
+        return;
+    }
+
+    CLOCK_REG(name) &= ~MRCC_CC_MASK;
+
+    if ((CLOCK_REG(name) & MRCC_PR_MASK) == MRCC_PR_MASK)
+    {
+        CLOCK_REG(name) &= ~MRCC_RSTB_MASK;
+    }
+
+    volatile uint32_t *pDivCtrl = NULL;
+
+    pDivCtrl = CLOCK_GetClockDivider(name);
+
+    if (NULL != pDivCtrl)
+    {
+        /* Disable divider clock and put it in reset state */
+        *pDivCtrl |= (MRCC_HALT_MASK | MRCC_RESET_MASK);
+    }
+}
+
+/*!
+ * @brief Set the clock source for specific IP module.
+ *
+ * Set the clock source for specific IP, not all modules need to set the
+ * clock source, should only use this function for the modules need source
+ * setting.
+ *
+ * @param name Which peripheral to check, see \ref clock_ip_name_t.
+ * @param src Clock source to set.
+ */
+static inline void CLOCK_SetIpSrc(clock_ip_name_t name, clock_ip_src_t src)
+{
+    if (kCLOCK_NOGATE == name)
+    {
+        return;
+    }
+
+    uint32_t reg = CLOCK_REG(name);
+
+    assert(reg & MRCC_PR_MASK);
+    assert(src <= kCLOCK_IpSrc1M);
+
+    reg = (reg & (~MRCC_MUX_MASK)) | MRCC_MUX(src);
+
+    /*
+     * If clock is already enabled, first disable it, then set the clock
+     * source and re-enable it to avoid glitches
+     */
+    CLOCK_REG(name) = reg & (~MRCC_CC_MASK);
+    CLOCK_REG(name) = reg;
+}
+
+/*!
+ * @brief Set the clock source and divider for specific IP module.
+ *
+ * Set the clock source and divider for specific IP, not all modules need to
+ * set the clock source and divider, should only use this function for the
+ * modules need source and divider setting.
+ *
+ * Divider output clock = Divider input clock / (divValue + 1U)).
+ *
+ * @param name Which peripheral to check, see \ref clock_ip_name_t.
+ * @param divValue The divider value.
+ */
+static inline void CLOCK_SetIpSrcDiv(clock_ip_name_t name, uint8_t divValue)
+{
+    volatile uint32_t *pDivCtrl = NULL;
+
+    pDivCtrl = CLOCK_GetClockDivider(name);
+
+    if (NULL != pDivCtrl)
+    {
+        uint32_t reg = CLOCK_REG(name);
+
+        assert(0U != (reg & MRCC_PR_MASK));
+
+        /* Disable peripheral clock first */
+        CLOCK_REG(name) = reg & (~MRCC_CC_MASK);
+        __DSB();
+
+        /* Disable divider clock and put it in reset state */
+        *pDivCtrl |= (MRCC_HALT_MASK | MRCC_RESET_MASK);
+        __DSB();
+
+        /* Set the Functional Clock Divider.
+         * Enable divider clock and release it from reset state.
+         */
+        *pDivCtrl = divValue & MRCC_DIV_MASK;
+
+        /* Enable peripheral clocks */
+        CLOCK_REG(name) = reg;
+        __DSB();
     }
 }
 
@@ -891,7 +915,7 @@ static inline void CLOCK_SetRunModeSysClkConfig(const scg_sys_clk_config_t *conf
         uint32_t u32;
     } scgSysClkConfig;
 
-    scgSysClkConfig.config = *config;
+    scgSysClkConfig.config  = *config;
     CLOCK_REG(&SCG_0->RCCR) = scgSysClkConfig.u32;
 }
 
@@ -1189,31 +1213,31 @@ static inline void CLOCK_LockFircControlStatusReg(void)
 }
 
 /*!
- * brief Initializes the SCG ROSC.
+ * @brief Initializes the SCG ROSC.
  *
  * This function enables the SCG ROSC clock according to the
  * configuration.
  *
- * param config   Pointer to the configuration structure.
- * retval kStatus_Success ROSC is initialized.
- * retval kStatus_SCG_Busy ROSC has been enabled and is used by the system clock.
- * retval kStatus_ReadOnly ROSC control register is locked.
+ * @param config   Pointer to the configuration structure.
+ * @retval kStatus_Success ROSC is initialized.
+ * @retval kStatus_SCG_Busy ROSC has been enabled and is used by the system clock.
+ * @retval kStatus_ReadOnly ROSC control register is locked.
  *
- * note This function can't detect whether the system OSC has been enabled and
+ * @note This function can't detect whether the system OSC has been enabled and
  * used by an IP.
  */
 status_t CLOCK_InitRosc(const scg_rosc_config_t *config);
 
 /*!
- * brief De-initializes the SCG ROSC.
+ * @brief De-initializes the SCG ROSC.
  *
  * This function disables the SCG ROSC clock.
  *
- * retval kStatus_Success System OSC is deinitialized.
- * retval kStatus_SCG_Busy System OSC is used by the system clock.
- * retval kStatus_ReadOnly System OSC control register is locked.
+ * @retval kStatus_Success System OSC is deinitialized.
+ * @retval kStatus_SCG_Busy System OSC is used by the system clock.
+ * @retval kStatus_ReadOnly System OSC control register is locked.
  *
- * note This function can't detect whether the ROSC is used by an IP.
+ * @note This function can't detect whether the ROSC is used by an IP.
  */
 status_t CLOCK_DeinitRosc(void);
 
@@ -1316,6 +1340,7 @@ static inline void CLOCK_LockRoscControlStatusReg(void)
 static inline void CLOCK_SetXtal0Freq(uint32_t freq)
 {
     g_xtal0Freq = freq;
+    __DMB();
 }
 
 /*!

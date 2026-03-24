@@ -2955,8 +2955,8 @@ typedef enum IRQn {
 #define MRCC_BASE MRCC_0_BASE
 #define PORTA_BASE PORT_A_BASE
 
-#define FPGA_TARGET 1
-#define FPGA_SUPPORT 1
+// #define FPGA_TARGET 1
+// #define FPGA_SUPPORT 1
 
 #define NXP_RADIO_GEN (475)
 #define RADIO_IS_GEN_4P7 (1)
