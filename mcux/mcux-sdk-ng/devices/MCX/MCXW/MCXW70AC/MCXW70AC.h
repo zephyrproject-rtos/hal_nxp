@@ -1,6 +1,8 @@
 /*
 ** ###################################################################
-**     Processor:           MCXW70ACMFTA
+**     Processors:          MCXW70ACMFT
+**                          MCXW70ACMMP
+**
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
@@ -8,7 +10,7 @@
 **
 **     Reference manual:    Rev. 1 Draft F, 2025-10-18
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260109
+**     Build:               b260409
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXW70AC
@@ -77,20 +79,18 @@
 #include "PERI_LPTMR.h"
 #include "PERI_LPUART.h"
 #include "PERI_LTC.h"
+#include "PERI_MCM.h"
 #include "PERI_MRCC.h"
 #include "PERI_MSCM.h"
-#include "PERI_MSF1_B_TEST.h"
 #include "PERI_MU.h"
 #include "PERI_PKC.h"
 #include "PERI_PORT.h"
-#include "PERI_PPB_MCM2_CM4.h"
 #include "PERI_PWM.h"
 #include "PERI_RADIO_CTRL.h"
 #include "PERI_RBME.h"
 #include "PERI_REGFILE.h"
 #include "PERI_RFMC.h"
 #include "PERI_RF_CMC1.h"
-#include "PERI_ROMCP.h"
 #include "PERI_RTC.h"
 #include "PERI_RTU.h"
 #include "PERI_RX_PACKET_RAM.h"

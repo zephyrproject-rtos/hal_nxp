@@ -1,10 +1,13 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70ACMFTA
-**                          MCXW70ADMFTA
+**     Processors:          MCXW70AAMMP
+**                          MCXW70ACMFT
+**                          MCXW70ACMMP
+**                          MCXW70ADMFT
+**                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260109
+**     Build:               b260409
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AOI
@@ -35,9 +38,11 @@
 #if !defined(PERI_AOI_H_)
 #define PERI_AOI_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70ACMFTA))
+#if (defined(CPU_MCXW70AAMMP))
+#include "MCXW70AA_COMMON.h"
+#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
-#elif (defined(CPU_MCXW70ADMFTA))
+#elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
 #else
   #error "No valid CPU defined!"

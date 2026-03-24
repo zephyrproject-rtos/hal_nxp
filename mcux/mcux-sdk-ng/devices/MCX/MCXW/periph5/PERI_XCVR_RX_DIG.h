@@ -1,10 +1,13 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70ACMFTA
-**                          MCXW70ADMFTA
+**     Processors:          MCXW70AAMMP
+**                          MCXW70ACMFT
+**                          MCXW70ACMMP
+**                          MCXW70ADMFT
+**                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260109
+**     Build:               b260409
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for XCVR_RX_DIG
@@ -35,9 +38,11 @@
 #if !defined(PERI_XCVR_RX_DIG_H_)
 #define PERI_XCVR_RX_DIG_H_                      /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70ACMFTA))
+#if (defined(CPU_MCXW70AAMMP))
+#include "MCXW70AA_COMMON.h"
+#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
-#elif (defined(CPU_MCXW70ADMFTA))
+#elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -551,6 +556,24 @@ typedef struct {
  *  0b1..SAMPLE BUF 2 output
  */
 #define XCVR_RX_DIG_DFT_CTRL_DFT_RX_IQ_OUT_SAMPLE_BUF_OUT2(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_CTRL_DFT_RX_IQ_OUT_SAMPLE_BUF_OUT2_SHIFT)) & XCVR_RX_DIG_DFT_CTRL_DFT_RX_IQ_OUT_SAMPLE_BUF_OUT2_MASK)
+
+#define XCVR_RX_DIG_DFT_CTRL_CGM_OVRD_MASK       (0xFFF00000U)
+#define XCVR_RX_DIG_DFT_CTRL_CGM_OVRD_SHIFT      (20U)
+/*! CGM_OVRD - CGM Override
+ *  0b000000000001..RCCAL
+ *  0b000000000010..DCOC
+ *  0b000000000100..IF_MIXER
+ *  0b000000001000..CIC
+ *  0b000000010000..ACQ_CHF
+ *  0b000000100000..SRC
+ *  0b000001000000..SAMPLE_BUF and CFO_MIXER
+ *  0b000010000000..DEMOD_CHF and FRAC_CORR
+ *  0b000100000000..NB_NORM and HIGH_RES_NORM
+ *  0b001000000000..AGC
+ *  0b010000000000..IQ_MISMATCH
+ *  0b100000000000..DIG_GAIN
+ */
+#define XCVR_RX_DIG_DFT_CTRL_CGM_OVRD(x)         (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_CTRL_CGM_OVRD_SHIFT)) & XCVR_RX_DIG_DFT_CTRL_CGM_OVRD_MASK)
 /*! @} */
 
 /*! @name RCCAL_CTRL0 - RCCAL Control 0 */

@@ -1,10 +1,13 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70ACMFTA
-**                          MCXW70ADMFTA
+**     Processors:          MCXW70AAMMP
+**                          MCXW70ACMFT
+**                          MCXW70ACMMP
+**                          MCXW70ADMFT
+**                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260109
+**     Build:               b260421
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GPIO
@@ -35,9 +38,11 @@
 #if !defined(PERI_GPIO_H_)
 #define PERI_GPIO_H_                             /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70ACMFTA))
+#if (defined(CPU_MCXW70AAMMP))
+#include "MCXW70AA_COMMON.h"
+#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
-#elif (defined(CPU_MCXW70ADMFTA))
+#elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -3237,11 +3242,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group GPIO_Register_Masks */
-
-/* Interrupt vectors for the GPIO peripheral type when IRQS of ICR register is set to 0 */
-#define GPIO_IRQS   {GPIOA_INT0_IRQn, GPIOB_INT0_IRQn, GPIOC_INT0_IRQn, GPIOD_INT0_IRQn}
-/* Interrupt vectors for the GPIO peripheral type when IRQS of ICR register is set to 1 */
-#define GPIO_IRQS_1 {GPIOA_INT1_IRQn, GPIOB_INT1_IRQn, GPIOC_INT1_IRQn, GPIOD_INT1_IRQn}
 
 
 /*!

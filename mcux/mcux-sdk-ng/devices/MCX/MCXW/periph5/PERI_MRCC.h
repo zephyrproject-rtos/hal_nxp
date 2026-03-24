@@ -1,10 +1,13 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70ACMFTA
-**                          MCXW70ADMFTA
+**     Processors:          MCXW70AAMMP
+**                          MCXW70ACMFT
+**                          MCXW70ACMMP
+**                          MCXW70ADMFT
+**                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260109
+**     Build:               b260409
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MRCC
@@ -35,9 +38,11 @@
 #if !defined(PERI_MRCC_H_)
 #define PERI_MRCC_H_                             /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70ACMFTA))
+#if (defined(CPU_MCXW70AAMMP))
+#include "MCXW70AA_COMMON.h"
+#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
-#elif (defined(CPU_MCXW70ADMFTA))
+#elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -3267,6 +3272,12 @@ typedef struct {
 #define MRCC_PR_MASK                              (0x80000000U)
 #define MRCC_PR_SHIFT                             (31U)
 #define MRCC_PR(x)                                (((uint32_t)(((uint32_t)(x)) << MRCC_PR_SHIFT))  & MRCC_PR_MASK)
+#define MRCC_RESET_MASK                           (0x20000000U)
+#define MRCC_RESET_SHIFT                          (29U)
+#define MRCC_RESET(x)                             (((uint32_t)(((uint32_t)(x)) << MRCC_RESET_SHIFT))  & MRCC_RESET_MASK)
+#define MRCC_HALT_MASK                            (0x40000000U)
+#define MRCC_HALT_SHIFT                           (30U)
+#define MRCC_HALT(x)                              (((uint32_t)(((uint32_t)(x)) << MRCC_HALT_SHIFT))  & MRCC_HALT_MASK)
 
 
 /*!

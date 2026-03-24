@@ -1,6 +1,6 @@
 /*
- * Copyright 2025 NXP
- *  
+ * Copyright 2025-2026 NXP
+ *
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -23,7 +23,7 @@
  * @{
  */
 /*! @brief Flash driver version for SDK*/
-#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(1, 0, 0)) /*!< Version 1.0.0. */
+#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(1, 0, 1)) /*!< Version 1.0.1. */
 /*@}*/
 
 /*! @brief Constructs the four character code for the Flash driver API key. */
@@ -76,9 +76,9 @@ enum
     kStatus_FLASH_UnknownProperty = MAKE_STATUS(kStatusGroupFlashDriver, 6), /*!< Unknown property.*/
     kStatus_FLASH_EraseKeyError   = MAKE_STATUS(kStatusGroupFlashDriver, 7), /*!< API erase key is invalid.*/
     kStatus_FLASH_RegionExecuteOnly =
-        MAKE_STATUS(kStatusGroupFlashDriver, 8), /*!< The current region is execute-only.*/
+        MAKE_STATUS(kStatusGroupFlashDriver, 8),                             /*!< The current region is execute-only.*/
     kStatus_FLASH_ExecuteInRamFunctionNotReady =
-        MAKE_STATUS(kStatusGroupFlashDriver, 9), /*!< Execute-in-RAM function is not available.*/
+        MAKE_STATUS(kStatusGroupFlashDriver, 9),  /*!< Execute-in-RAM function is not available.*/
     kStatus_FLASH_PartitionStatusUpdateFailure =
         MAKE_STATUS(kStatusGroupFlashDriver, 10), /*!< Failed to update partition status.*/
     kStatus_FLASH_SetFlexramAsEepromError =
@@ -126,8 +126,8 @@ typedef enum _flash_property_tag
     kFLASH_PropertyPflash1AccessSegmentSize  = 0x16U, /*!< Pflash access segment size property.*/
     kFLASH_PropertyPflash1AccessSegmentCount = 0x17U, /*!< Pflash access segment count property.*/
 
-    kFLASH_PropertyFlexRamBlockBaseAddr = 0x20U, /*!< FlexRam block base address property.*/
-    kFLASH_PropertyFlexRamTotalSize     = 0x21U, /*!< FlexRam total size property.*/
+    kFLASH_PropertyFlexRamBlockBaseAddr = 0x20U,      /*!< FlexRam block base address property.*/
+    kFLASH_PropertyFlexRamTotalSize     = 0x21U,      /*!< FlexRam total size property.*/
 } flash_property_tag_t;
 
 /*!
@@ -190,7 +190,7 @@ typedef struct FlashDriverInterface
     status_t (*flash_program_page)(
         flash_config_t *config, FMU_Type *base, uint32_t start, uint32_t *src, uint32_t lengthInBytes);
     status_t (*flash_verify_erase_all)(FMU_Type *base);
-    status_t *reserved;
+    status_t (*flash_verify_erase_block)(flash_config_t *config, FMU_Type *base, uint32_t blockaddr);
     status_t (*flash_verify_erase_phrase)(flash_config_t *config,
                                           FMU_Type *base,
                                           uint32_t start,
@@ -346,6 +346,25 @@ status_t FLASH_ProgramPage(
  * @retval #kStatus_FLASH_CommandAborOption
  */
 status_t FLASH_VerifyEraseAll(FMU_Type *base);
+
+/*!
+ * @brief Verify that the flash block are erased
+ *
+ * @param config A pointer to the storage for the driver runtime state.
+ * @param base FMU base address.
+ * @param blockaddr The start address of the desired flash memory to be verified.
+ *        The start address need to be block-aligned.
+ *
+ * @retval #kStatus_FLASH_Success API was executed successfully.
+ * @retval #kStatus_FLASH_InvalidArgument An invalid argument is provided.
+ * @retval #kStatus_FLASH_AlignmentError Parameter is not aligned with specified baseline.
+ * @retval #kStatus_FLASH_AddressError Address is out of range.
+ * @retval #kStatus_FLASH_ExecuteInRamFunctionNotReady Execute-in-RAM function is not available.
+ * @retval #kStatus_FLASH_AccessError Invalid instruction codes and out-of bounds addresses.
+ * @retval #kStatus_FLASH_ProtectionViolation The program/erase operation is requested to execute on protected areas.
+ * @retval #kStatus_FLASH_CommandFailure Run-time error during the command execution.
+ */
+status_t FLASH_VerifyEraseBlock(flash_config_t *config, FMU_Type *base, uint32_t blockaddr);
 
 /*!
  * @brief Verify that the flash phrases are erased

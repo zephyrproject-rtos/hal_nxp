@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260109
+**     Build:               b260420
 **
 **     Abstract:
 **         Chip specific module features.
@@ -87,8 +87,6 @@
 #define FSL_FEATURE_SOC_PORT_COUNT (4)
 /* @brief PWM availability on the SoC. */
 #define FSL_FEATURE_SOC_PWM_COUNT (1)
-/* @brief ROMC availability on the SoC. */
-#define FSL_FEATURE_SOC_ROMC_COUNT (1)
 /* @brief RTC availability on the SoC. */
 #define FSL_FEATURE_SOC_RTC_COUNT (1)
 /* @brief SCG availability on the SoC. */
@@ -113,6 +111,203 @@
 #define FSL_FEATURE_SOC_WUU_COUNT (1)
 /* @brief ZLL availability on the SoC. */
 #define FSL_FEATURE_SOC_ZLL_COUNT (1)
+
+/* CCM32K module features */
+
+/* @brief Has Amplifier gain fine adjustment bits (register bit OSC32K_CTRL[FINE_AMP_GAIN]). */
+#define FSL_FEATURE_CCM32K_HAS_FINE_AMP_GAIN (0)
+/* @brief Has CGC32K register. */
+#define FSL_FEATURE_CCM32K_HAS_CGC32K (1)
+/* @brief Has CLKMON_CTRL register. */
+#define FSL_FEATURE_CCM32K_HAS_CLKMON_CTRL (1)
+
+/* AOI module features */
+
+/* @brief Maximum value of input mux. */
+#define FSL_FEATURE_AOI_MODULE_INPUTS (4)
+/* @brief Number of events related to number of registers AOIx_BFCRT01n/AOIx_BFCRT23n. */
+#define FSL_FEATURE_AOI_EVENT_COUNT (4)
+
+/* CDOG module features */
+
+/* @brief SOC has no reset driver. */
+#define FSL_FEATURE_CDOG_HAS_NO_RESET (1)
+/* @brief CDOG Load default configurations during init function */
+#define FSL_FEATURE_CDOG_NEED_LOAD_DEFAULT_CONF (0)
+
+/* CMC module features */
+
+/* @brief Has on chip TCMC0 */
+#define FSL_FEATURE_CMC_HAS_TCMC0 (0)
+/* @brief Has on chip SYSRAM0 */
+#define FSL_FEATURE_CMC_HAS_SYSRAM0 (0)
+/* @brief Has on chip SYSRAM1 */
+#define FSL_FEATURE_CMC_HAS_SYSRAM1 (0)
+/* @brief Has RSTCNT register */
+#define FSL_FEATURE_CMC_HAS_RSTCNT_REGISTER (1)
+/* @brief Does not have SRAMCTL register */
+#define FSL_FEATURE_CMC_HAS_NO_SRAMCTL_REGISTER (1)
+/* @brief Does not have BLR register */
+#define FSL_FEATURE_CMC_HAS_NO_BOOTROM_LOCK_REGISTER (0)
+/* @brief Has DIER register */
+#define FSL_FEATURE_CMC_HAS_DIER_REG (1)
+/* @brief Has system clock generation reset (register bit SCG[SRIE]) */
+#define FSL_FEATURE_CMC_HAS_SRIE_SCG_BIT (0)
+
+/* LPCMP module features */
+
+/* @brief Has CCR1 FUNC_CLK_SEL bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_CCR1_FUNC_CLK_SEL (0)
+/* @brief Has IER RRF_IE bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_IER_RRF_IE (0)
+/* @brief Has CSR RRF bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_CSR_RRF (0)
+/* @brief Has Round Robin mode (related to existence of registers RRCR0). */
+#define FSL_FEATURE_LPCMP_HAS_ROUNDROBIN_MODE (0)
+/* @brief Has window mode (related to existence of CCR1.WINDOW_CLS). */
+#define FSL_FEATURE_LPCMP_HAS_WINDOW_CONTROL (1)
+/* @brief Has no CCR0 CMP_STOP_EN bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_NO_CCR0_CMP_STOP_EN (0)
+/* @brief Has RRCR0 RR_CLK_SEL bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_CLK_SEL (0)
+/* @brief Has RRCR0 RR_TRG_SEL bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_TRG_SEL (0)
+/* @brief Has RRCR0 RR_SAMPLE_CNT bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_SAMPLE_CNT (0)
+/* @brief Has RRCR0 RR_SAMPLE_THRESHOLD bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_SAMPLE_THRESHOLD (0)
+/* @brief Has CCR2 INPSEL bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_CCR2_INPSEL (0)
+/* @brief Has CCR2 INMSEL bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_CCR2_INMSEL (0)
+/* @brief Has CCR2 CMP_NPMD bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_CCR2_CMP_NPMD (1)
+/* @brief Has DCR DAC_HPMD bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_DCR_DAC_HPMD (1)
+/* @brief Has CCR0 LINKEN bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_CCR0_LINKEN (0)
+/* @brief Has RRCR2 register. */
+#define FSL_FEATURE_LPCMP_HAS_RRCR2 (0)
+/* @brief Has CCR0 CMP_STOP_EN bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_CCR0_CMP_STOP_EN (1)
+/* @brief CMP instance support CCR0 CMP_STOP_EN bitfield. */
+#define FSL_FEATURE_LPCMP_INSTANCE_SUPPORT_CCR0_CMP_STOP_ENn(x) (1)
+
+/* CRC module features */
+
+/* @brief Has data register with name CRC */
+#define FSL_FEATURE_CRC_HAS_CRC_REG (0)
+
+/* EDMA module features */
+
+/* @brief Number of DMA channels (related to number of registers TCD, DCHPRI, bit fields ERQ[ERQn], EEI[EEIn], INT[INTn], ERR[ERRn], HRS[HRSn] and bit field widths ES[ERRCHN], CEEI[CEEI], SEEI[SEEI], CERQ[CERQ], SERQ[SERQ], CDNE[CDNE], SSRT[SSRT], CERR[CERR], CINT[CINT], TCDn_CITER_ELINKYES[LINKCH], TCDn_CSR[MAJORLINKCH], TCDn_BITER_ELINKYES[LINKCH]). (Valid only for eDMA modules.) */
+#define FSL_FEATURE_EDMA_MODULE_CHANNEL (16)
+/* @brief Soc requires secure master transfer. */
+#define FSL_FEATURE_EDMA_SOC_REQUIRES_SECURE_MASTER (1)
+/* @brief Number of DMA channel groups (register bit fields CR[ERGA], CR[GRPnPRI], ES[GPE], DCHPRIn[GRPPRI]). (Valid only for eDMA modules.) */
+#define FSL_FEATURE_EDMA_CHANNEL_GROUP_COUNT (1)
+/* @brief Has register bit fields CH_SBR[SEC]. */
+#define FSL_FEATURE_EDMA_HAS_CH_SBR_SEC (1)
+/* @brief Has DMA_Error interrupt vector. */
+#define FSL_FEATURE_EDMA_HAS_ERROR_IRQ (0)
+/* @brief Has register bit fields CH_SBR[EMI]. */
+#define FSL_FEATURE_EDMA_HAS_CH_SBR_EMI (1)
+/* @brief Has register access permission. */
+#define FSL_FEATURE_HAVE_DMA_CONTROL_REGISTER_ACCESS_PERMISSION (1)
+/* @brief If dma has common clock gate */
+#define FSL_FEATURE_EDMA_HAS_COMMON_CLOCK_GATE (1)
+/* @brief Number of channel for each EDMA instance, (only defined for soc with different channel numbers for difference instance) */
+#define FSL_FEATURE_EDMA_INSTANCE_CHANNELn(x) (16)
+/* @brief Has no EMI access bit (MP_CSR). */
+#define FSL_FEATURE_EDMA_HAS_NO_MP_CSR_EMI (0)
+/* @brief Has no EBW access bit (MP_CSR). */
+#define FSL_FEATURE_EDMA_HAS_NO_MP_CSR_EBW (1)
+/* @brief Has channel mux */
+#define FSL_FEATURE_EDMA_HAS_CHANNEL_MUX (1)
+/* @brief Has EDMA arbitration group (CHn_GRPRI). */
+#define FSL_FEATURE_EDMA_HAS_ARBITRATION_GROUP (1)
+
+/* EWM module features */
+
+/* @brief Has clock select (register CLKCTRL). */
+#define FSL_FEATURE_EWM_HAS_CLOCK_SELECT (1)
+/* @brief Has clock prescaler (register CLKPRESCALER). */
+#define FSL_FEATURE_EWM_HAS_PRESCALER (1)
+
+/* PWM module features */
+
+/* @brief If (e)FlexPWM has module A channels (outputs). */
+#define FSL_FEATURE_PWM_HAS_CHANNELA (1)
+/* @brief If (e)FlexPWM has module B channels (outputs). */
+#define FSL_FEATURE_PWM_HAS_CHANNELB (1)
+/* @brief If (e)FlexPWM has module X channels (outputs). */
+#define FSL_FEATURE_PWM_HAS_CHANNELX (1)
+/* @brief If (e)FlexPWM has fractional feature. */
+#define FSL_FEATURE_PWM_HAS_FRACTIONAL (0)
+/* @brief If (e)FlexPWM has mux trigger source select bit field. */
+#define FSL_FEATURE_PWM_HAS_MUX_TRIGGER_SOURCE_SEL (1)
+/* @brief Number of submodules in each (e)FlexPWM module. */
+#define FSL_FEATURE_PWM_SUBMODULE_COUNT (3)
+/* @brief Number of fault channel in each (e)FlexPWM module. */
+#define FSL_FEATURE_PWM_FAULT_CH_COUNT (1)
+/* @brief (e)FlexPWM has no WAITEN Bitfield In CTRL2 Register. */
+#define FSL_FEATURE_PWM_HAS_NO_WAITEN (1)
+/* @brief If (e)FlexPWM has phase delay feature. */
+#define FSL_FEATURE_PWM_HAS_PHASE_DELAY (1)
+/* @brief If (e)FlexPWM has input filter capture feature. */
+#define FSL_FEATURE_PWM_HAS_INPUT_FILTER_CAPTURE (1)
+/* @brief If (e)FlexPWM has module capture functionality on A channels (inputs). */
+#define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELA (0)
+/* @brief If (e)FlexPWM has module capture functionality on B channels (inputs). */
+#define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELB (0)
+/* @brief If (e)FlexPWM has module capture functionality on X channels (inputs). */
+#define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELX (1)
+/* @brief Is affected by errata with ID 51989. */
+#define FSL_FEATURE_PWM_HAS_ERRATA_51989 (0)
+
+/* MSF1 module features */
+
+/* @brief Is the flash module msf1? */
+#define FSL_FEATURE_FLASH_IS_MSF1 (1u)
+/* @brief P-Flash start address. */
+#define FSL_FEATURE_FLASH_PFLASH_START_ADDRESS (0x00000000u)
+/* @brief Flash IFR0 start address. */
+#define FSL_FEATURE_FLASH_IFR0_START_ADDRESS (0x01000000u)
+/* @brief Flash IFR0 size. */
+#define FSL_FEATURE_FLASH_IFR0_SIZE (0x8000u)
+/* @brief P-Flash block count. */
+#define FSL_FEATURE_FLASH_PFLASH_BLOCK_COUNT (1u)
+/* @brief P-Flash block size. */
+#define FSL_FEATURE_FLASH_PFLASH_BLOCK_SIZE (0x180000u)
+/* @brief P-Flash block size. */
+#define FSL_FEATURE_FLASH_PFLASH_BLOCK_SIZE_512KB (0x80000u)
+/* @brief Flash sector size. */
+#define FSL_FEATURE_FLASH_PFLASH_SECTOR_SIZE (8192u)
+/* @brief Flash page size. */
+#define FSL_FEATURE_FLASH_PFLASH_PAGE_SIZE (128u)
+/* @brief Flash phrase size. */
+#define FSL_FEATURE_FLASH_PFLASH_PHRASE_SIZE (16u)
+/* @brief RF P-Flash start address. */
+#define FSL_FEATURE_RF_FLASH_PFLASH_START_ADDRESS (0x02000000u)
+/* @brief RF P-Flash block count. */
+#define FSL_FEATURE_RF_FLASH_PFLASH_BLOCK_COUNT (1u)
+/* @brief RF P-Flash block size. */
+#define FSL_FEATURE_RF_FLASH_PFLASH_BLOCK_SIZE (0x180000u)
+
+/* GPIO module features */
+
+/* @brief Has GPIO attribute checker register (GACR). */
+#define FSL_FEATURE_GPIO_HAS_ATTRIBUTE_CHECKER (0)
+/* @brief GPIO registers width */
+#define FSL_FEATURE_GPIO_REGISTERS_WIDTH (32)
+/* @brief Has GPIO version ID register (VERID). */
+#define FSL_FEATURE_GPIO_HAS_VERSION_INFO_REGISTER (1)
+/* @brief Has secure/non-secure access protection registers (LOCK, PCNS, PCNP, ICNS, ICNP). */
+#define FSL_FEATURE_GPIO_HAS_SECURE_PRIVILEGE_CONTROL (1)
+/* @brief Has GPIO port input disable register (PIDR). */
+#define FSL_FEATURE_GPIO_HAS_PORT_INPUT_CONTROL (1)
+/* @brief Has GPIO interrupt/DMA request/trigger output selection. */
+#define FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT (1)
 
 /* LPADC module features */
 
@@ -195,197 +390,13 @@
 /* @brief Has internal temperature sensor. */
 #define FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR (1)
 /* @brief Temperature sensor parameter A (slope). */
-#define FSL_FEATURE_LPADC_TEMP_PARAMETER_A (787U)
+#define FSL_FEATURE_LPADC_TEMP_PARAMETER_A (738U)
 /* @brief Temperature sensor parameter B (offset). */
-#define FSL_FEATURE_LPADC_TEMP_PARAMETER_B (289U)
+#define FSL_FEATURE_LPADC_TEMP_PARAMETER_B (287.5f)
 /* @brief Temperature sensor parameter Alpha. */
-#define FSL_FEATURE_LPADC_TEMP_PARAMETER_ALPHA (9.1f)
+#define FSL_FEATURE_LPADC_TEMP_PARAMETER_ALPHA (10.06f)
 /* @brief The buffer size of temperature sensor. */
 #define FSL_FEATURE_LPADC_TEMP_SENS_BUFFER_SIZE (2U)
-
-/* CCM32K module features */
-
-/* @brief Has Amplifier gain fine adjustment bits (register bit OSC32K_CTRL[FINE_AMP_GAIN]). */
-#define FSL_FEATURE_CCM32K_HAS_FINE_AMP_GAIN (0)
-/* @brief Has CGC32K register. */
-#define FSL_FEATURE_CCM32K_HAS_CGC32K (1)
-/* @brief Has CLKMON_CTRL register. */
-#define FSL_FEATURE_CCM32K_HAS_CLKMON_CTRL (1)
-
-/* AOI module features */
-
-/* @brief Maximum value of input mux. */
-#define FSL_FEATURE_AOI_MODULE_INPUTS (4)
-/* @brief Number of events related to number of registers AOIx_BFCRT01n/AOIx_BFCRT23n. */
-#define FSL_FEATURE_AOI_EVENT_COUNT (4)
-
-/* CDOG module features */
-
-/* @brief SOC has no reset driver. */
-#define FSL_FEATURE_CDOG_HAS_NO_RESET (1)
-/* @brief CDOG Load default configurations during init function */
-#define FSL_FEATURE_CDOG_NEED_LOAD_DEFAULT_CONF (0)
-
-/* CMC module features */
-
-/* @brief Has on chip TCMC0 */
-#define FSL_FEATURE_CMC_HAS_TCMC0 (0)
-/* @brief Has on chip SYSRAM0 */
-#define FSL_FEATURE_CMC_HAS_SYSRAM0 (0)
-/* @brief Has on chip SYSRAM1 */
-#define FSL_FEATURE_CMC_HAS_SYSRAM1 (0)
-/* @brief Has RSTCNT register */
-#define FSL_FEATURE_CMC_HAS_RSTCNT_REGISTER (1)
-/* @brief Does not have SRAMCTL register */
-#define FSL_FEATURE_CMC_HAS_NO_SRAMCTL_REGISTER (1)
-/* @brief Does not have BLR register */
-#define FSL_FEATURE_CMC_HAS_NO_BOOTROM_LOCK_REGISTER (1)
-/* @brief Has DIER register */
-#define FSL_FEATURE_CMC_HAS_DIER_REG (1)
-/* @brief Has system clock generation reset (register bit SCG[SRIE]) */
-#define FSL_FEATURE_CMC_HAS_SRIE_SCG_BIT (0)
-
-/* LPCMP module features */
-
-/* @brief Has CCR1 FUNC_CLK_SEL bitfield. */
-#define FSL_FEATURE_LPCMP_HAS_CCR1_FUNC_CLK_SEL (0)
-/* @brief Has IER RRF_IE bitfield. */
-#define FSL_FEATURE_LPCMP_HAS_IER_RRF_IE (0)
-/* @brief Has CSR RRF bitfield. */
-#define FSL_FEATURE_LPCMP_HAS_CSR_RRF (0)
-/* @brief Has Round Robin mode (related to existence of registers RRCR0). */
-#define FSL_FEATURE_LPCMP_HAS_ROUNDROBIN_MODE (0)
-/* @brief Has window mode (related to existence of CCR1.WINDOW_CLS). */
-#define FSL_FEATURE_LPCMP_HAS_WINDOW_CONTROL (1)
-/* @brief Has no CCR0 CMP_STOP_EN bitfield. */
-#define FSL_FEATURE_LPCMP_HAS_NO_CCR0_CMP_STOP_EN (0)
-/* @brief Has RRCR0 RR_CLK_SEL bitfield. */
-#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_CLK_SEL (0)
-/* @brief Has RRCR0 RR_TRG_SEL bitfield. */
-#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_TRG_SEL (0)
-/* @brief Has RRCR0 RR_SAMPLE_CNT bitfield. */
-#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_SAMPLE_CNT (0)
-/* @brief Has RRCR0 RR_SAMPLE_THRESHOLD bitfield. */
-#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_SAMPLE_THRESHOLD (0)
-/* @brief Has CCR2 INPSEL bitfield. */
-#define FSL_FEATURE_LPCMP_HAS_CCR2_INPSEL (0)
-/* @brief Has CCR2 INMSEL bitfield. */
-#define FSL_FEATURE_LPCMP_HAS_CCR2_INMSEL (0)
-/* @brief Has CCR2 CMP_NPMD bitfield. */
-#define FSL_FEATURE_LPCMP_HAS_CCR2_CMP_NPMD (1)
-/* @brief Has DCR DAC_HPMD bitfield. */
-#define FSL_FEATURE_LPCMP_HAS_DCR_DAC_HPMD (1)
-/* @brief Has CCR0 LINKEN bitfield. */
-#define FSL_FEATURE_LPCMP_HAS_CCR0_LINKEN (0)
-/* @brief Has RRCR2 register. */
-#define FSL_FEATURE_LPCMP_HAS_RRCR2 (0)
-/* @brief Has CCR0 CMP_STOP_EN bitfield. */
-#define FSL_FEATURE_LPCMP_HAS_CCR0_CMP_STOP_EN (1)
-/* @brief CMP instance support CCR0 CMP_STOP_EN bitfield. */
-#define FSL_FEATURE_LPCMP_INSTANCE_SUPPORT_CCR0_CMP_STOP_ENn(x) (1)
-
-/* EDMA module features */
-
-/* @brief Number of DMA channels (related to number of registers TCD, DCHPRI, bit fields ERQ[ERQn], EEI[EEIn], INT[INTn], ERR[ERRn], HRS[HRSn] and bit field widths ES[ERRCHN], CEEI[CEEI], SEEI[SEEI], CERQ[CERQ], SERQ[SERQ], CDNE[CDNE], SSRT[SSRT], CERR[CERR], CINT[CINT], TCDn_CITER_ELINKYES[LINKCH], TCDn_CSR[MAJORLINKCH], TCDn_BITER_ELINKYES[LINKCH]). (Valid only for eDMA modules.) */
-#define FSL_FEATURE_EDMA_MODULE_CHANNEL (16)
-/* @brief Number of DMA channel groups (register bit fields CR[ERGA], CR[GRPnPRI], ES[GPE], DCHPRIn[GRPPRI]). (Valid only for eDMA modules.) */
-#define FSL_FEATURE_EDMA_CHANNEL_GROUP_COUNT (1)
-/* @brief Has DMA_Error interrupt vector. */
-#define FSL_FEATURE_EDMA_HAS_ERROR_IRQ (0)
-/* @brief Has register access permission. */
-#define FSL_FEATURE_HAVE_DMA_CONTROL_REGISTER_ACCESS_PERMISSION (1)
-/* @brief If dma has common clock gate */
-#define FSL_FEATURE_EDMA_HAS_COMMON_CLOCK_GATE (1)
-/* @brief Number of channel for each EDMA instance, (only defined for soc with different channel numbers for difference instance) */
-#define FSL_FEATURE_EDMA_INSTANCE_CHANNELn(x) (16)
-/* @brief Has no EMI access bit (MP_CSR). */
-#define FSL_FEATURE_EDMA_HAS_NO_MP_CSR_EMI (0)
-/* @brief Has no EBW access bit (MP_CSR). */
-#define FSL_FEATURE_EDMA_HAS_NO_MP_CSR_EBW (1)
-/* @brief Has channel mux control */
-#define FSL_FEATURE_EDMA_HAS_CHANNEL_MUX (1)
-/* @brief Has EDMA arbitration group (CHn_GRPRI). */
-#define FSL_FEATURE_EDMA_HAS_ARBITRATION_GROUP (1)
-
-/* EWM module features */
-
-/* @brief Has clock select (register CLKCTRL). */
-#define FSL_FEATURE_EWM_HAS_CLOCK_SELECT (1)
-/* @brief Has clock prescaler (register CLKPRESCALER). */
-#define FSL_FEATURE_EWM_HAS_PRESCALER (1)
-
-/* PWM module features */
-
-/* @brief If (e)FlexPWM has module A channels (outputs). */
-#define FSL_FEATURE_PWM_HAS_CHANNELA (1)
-/* @brief If (e)FlexPWM has module B channels (outputs). */
-#define FSL_FEATURE_PWM_HAS_CHANNELB (1)
-/* @brief If (e)FlexPWM has module X channels (outputs). */
-#define FSL_FEATURE_PWM_HAS_CHANNELX (1)
-/* @brief If (e)FlexPWM has fractional feature. */
-#define FSL_FEATURE_PWM_HAS_FRACTIONAL (0)
-/* @brief If (e)FlexPWM has mux trigger source select bit field. */
-#define FSL_FEATURE_PWM_HAS_MUX_TRIGGER_SOURCE_SEL (1)
-/* @brief Number of submodules in each (e)FlexPWM module. */
-#define FSL_FEATURE_PWM_SUBMODULE_COUNT (3)
-/* @brief Number of fault channel in each (e)FlexPWM module. */
-#define FSL_FEATURE_PWM_FAULT_CH_COUNT (1)
-/* @brief (e)FlexPWM has no WAITEN Bitfield In CTRL2 Register. */
-#define FSL_FEATURE_PWM_HAS_NO_WAITEN (1)
-/* @brief If (e)FlexPWM has phase delay feature. */
-#define FSL_FEATURE_PWM_HAS_PHASE_DELAY (1)
-/* @brief If (e)FlexPWM has input filter capture feature. */
-#define FSL_FEATURE_PWM_HAS_INPUT_FILTER_CAPTURE (1)
-/* @brief If (e)FlexPWM has module capture functionality on A channels (inputs). */
-#define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELA (0)
-/* @brief If (e)FlexPWM has module capture functionality on B channels (inputs). */
-#define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELB (0)
-/* @brief If (e)FlexPWM has module capture functionality on X channels (inputs). */
-#define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELX (1)
-/* @brief Is affected by errata with ID 51989. */
-#define FSL_FEATURE_PWM_HAS_ERRATA_51989 (0)
-
-/* MSF1 module features */
-
-/* @brief Is the flash module msf1? */
-#define FSL_FEATURE_FLASH_IS_MSF1 (1u)
-/* @brief P-Flash start address. */
-#define FSL_FEATURE_FLASH_PFLASH_START_ADDRESS (0x00000000u)
-/* @brief Flash IFR0 start address. */
-#define FSL_FEATURE_FLASH_IFR0_START_ADDRESS (0x01000000u)
-/* @brief Flash IFR0 size. */
-#define FSL_FEATURE_FLASH_IFR0_SIZE (0x8000u)
-/* @brief P-Flash block count. */
-#define FSL_FEATURE_FLASH_PFLASH_BLOCK_COUNT (1u)
-/* @brief P-Flash block size. */
-#define FSL_FEATURE_FLASH_PFLASH_BLOCK_SIZE (0x180000u)
-/* @brief P-Flash block size. */
-#define FSL_FEATURE_FLASH_PFLASH_BLOCK_SIZE_512KB (0x80000u)
-/* @brief Flash sector size. */
-#define FSL_FEATURE_FLASH_PFLASH_SECTOR_SIZE (8192u)
-/* @brief Flash page size. */
-#define FSL_FEATURE_FLASH_PFLASH_PAGE_SIZE (128u)
-/* @brief Flash phrase size. */
-#define FSL_FEATURE_FLASH_PFLASH_PHRASE_SIZE (16u)
-/* @brief RF P-Flash start address. */
-#define FSL_FEATURE_RF_FLASH_PFLASH_START_ADDRESS (0x02000000u)
-/* @brief RF P-Flash block count. */
-#define FSL_FEATURE_RF_FLASH_PFLASH_BLOCK_COUNT (1u)
-/* @brief RF P-Flash block size. */
-#define FSL_FEATURE_RF_FLASH_PFLASH_BLOCK_SIZE (0x180000u)
-
-/* GPIO module features */
-
-/* @brief Has GPIO attribute checker register (GACR). */
-#define FSL_FEATURE_GPIO_HAS_ATTRIBUTE_CHECKER (0)
-/* @brief Has GPIO version ID register (VERID). */
-#define FSL_FEATURE_GPIO_HAS_VERSION_INFO_REGISTER (1)
-/* @brief Has secure/non-secure access protection registers (LOCK, PCNS, PCNP, ICNS, ICNP). */
-#define FSL_FEATURE_GPIO_HAS_SECURE_PRIVILEGE_CONTROL (1)
-/* @brief Has GPIO port input disable register (PIDR). */
-#define FSL_FEATURE_GPIO_HAS_PORT_INPUT_CONTROL (1)
-/* @brief Has GPIO interrupt/DMA request/trigger output selection. */
-#define FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT (1)
 
 /* INTM module features */
 
@@ -542,16 +553,32 @@
 /* @brief LTC module has no clock control bit. */
 #define FSL_FEATURE_LTC_HAS_NO_CLOCK_CONTROL_BIT (1)
 
+/* MEMORY module features */
+
+/* @brief Memory map has offset between subsystems. */
+#define FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET (1)
+
+/* MSCM module features */
+
+/* @brief Number of configuration information for processors. */
+#define FSL_FEATURE_MSCM_HAS_CP_COUNT (1)
+/* @brief Has data cache. */
+#define FSL_FEATURE_MSCM_HAS_DATACACHE (0)
+
 /* MU module features */
 
 /* @brief MU side for current core */
 #define FSL_FEATURE_MU_SIDE_A (1)
-/* @brief MU supports reset assert interrupt. CIER0[RAIE] or CR[RAIE] or BCR[RAIE] . */
+/* @brief MU supports reset assert interrupt. CIER0[RAIE] or CR[RAIE] or BCR[RAIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_ASSERT_INT (0)
 /* @brief MU supports reset de-assert interrupt. CR[RDIE] or BCR[RDIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT (0)
 /* @brief MU does not support core status. Register CSSR0 or CSR0. */
 #define FSL_FEATURE_MU_NO_CORE_STATUS (1)
+/* @brief MU does not support NMI. Register bit CCR0[NMI]. */
+#define FSL_FEATURE_MU_NO_NMI (1)
+/* @brief MU does not support core event pending. Register bit SR[CEP]. */
+#define FSL_FEATURE_MU_NO_CEP (1)
 /* @brief MU supports Power-Down mode entry interrupt. CIER0[PDIE] */
 #define FSL_FEATURE_MU_HAS_PD_INT (0)
 /* @brief MU supports STOP mode entry interrupt. CIER0[STOPIE] */
@@ -564,14 +591,10 @@
 #define FSL_FEATURE_MU_HAS_RUN_INT (0)
 /* @brief MU supports hardware reset interrupt. CSSR0[HRIP] or CSR0[HRIP]. */
 #define FSL_FEATURE_MU_HAS_SR_HRIP (0)
-/* @brief MU does not support enable clock of the other core, CR[CLKE] or CCR[CLKE]. */
-#define FSL_FEATURE_MU_NO_CLKE (1)
-/* @brief MU does not support NMI. Register bit CCR0[NMI]. */
-#define FSL_FEATURE_MU_NO_NMI (1)
-/* @brief MU does not support core event pending. Register bit SR[CEP]. */
-#define FSL_FEATURE_MU_NO_CEP (1)
 /* @brief MU supports reset interrupt. Register bit SR[MURIP]. */
 #define FSL_FEATURE_MU_HAS_SR_MURIP (1)
+/* @brief MU does not support enable clock of the other core, CR[CLKE] or CCR[CLKE]. */
+#define FSL_FEATURE_MU_NO_CLKE (1)
 /* @brief MU has bit CCR0[RSTH]. */
 #define FSL_FEATURE_MU_HAS_RSTH (0)
 /* @brief MU has bit CCR0[RSTH] by instance. */
@@ -619,8 +642,6 @@
 #define FSL_FEATURE_PORT_SUPPORT_DIFFERENT_VOLTAGE_RANGE (1)
 /* @brief Has EFT detect (registers EDFR, EDIER and EDCR). */
 #define FSL_FEATURE_PORT_SUPPORT_EFT (0)
-/* @brief Has invert input (register bit PCR[INV]). */
-#define FSL_FEATURE_PORT_HAS_INVERT_INPUT (1)
 /* @brief Has drive strength control (register bit PCR[DSE]). */
 #define FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH (1)
 /* @brief Defines width of PCR[MUX] field. */
@@ -631,10 +652,35 @@
 #define FSL_FEATURE_PORT_HAS_INDEPENDENT_INTERRUPT_CONTROL (0)
 /* @brief Has multiple pin IRQ configuration (register GICLR and GICHR). */
 #define FSL_FEATURE_PORT_HAS_MULTIPLE_IRQ_CONFIG (0)
+/* @brief Has Input Buffer Enable (register bit field PCR[IBE]). */
+#define FSL_FEATURE_PORT_HAS_INPUT_BUFFER (0)
+/* @brief Has Invert Input (register bit field PCR[INV]). */
+#define FSL_FEATURE_PORT_HAS_INVERT_INPUT (1)
 /* @brief Defines whether PCR[IRQC] bit-field has flag states. */
 #define FSL_FEATURE_PORT_HAS_IRQC_FLAG (0)
 /* @brief Defines whether PCR[IRQC] bit-field has trigger states. */
 #define FSL_FEATURE_PORT_HAS_IRQC_TRIGGER (0)
+
+/* MCM module features */
+
+/* @brief Has cache parity error ISCR[CPEE]. */
+#define FSL_FEATURE_MCM_HAS_CACHE_PARITY_ERROR (0)
+/* @brief Has cache write buffer error ISCR[CWBEE]. */
+#define FSL_FEATURE_MCM_HAS_CACHE_WRITE_BUFFER_ERROR (1)
+/* @brief LMD lock. LMDR2[RO]. */
+#define FSL_FEATURE_MCM_HAS_LMD_RO (1)
+/* @brief MCM has PC Parity. LMDR2[PCPME] or LMDR2[PCPFE]. */
+#define FSL_FEATURE_MCM_HAS_PC_PARITY (0)
+/* @brief Has buffer fault, register FATR, FDR, FADR. */
+#define FSL_FEATURE_MCM_HAS_BUFFER_FAULT (1)
+/* @brief Has register CPCR2. */
+#define FSL_FEATURE_MCM_HAS_CPCR2 (1)
+/* @brief Has LMEM fault, register LMFAR, LMFDLR, LMFDHR, LMFATR. */
+#define FSL_FEATURE_MCM_HAS_LMEM_FAULT (0)
+/* @brief  MCM has LMEM control, register LMPECR, LMPEIR. */
+#define FSL_FEATURE_MCM_HAS_LMEM_PARITY (0)
+/* @brief  MCM has CPCR register (core platform control). */
+#define FSL_FEATURE_MCM_HAS_CPCR (0)
 
 /* SEMA42 module features */
 
@@ -682,11 +728,15 @@
 #define FSL_FEATURE_SPC_HAS_LPBUFF (0)
 /* @brief Has VD_SYS_CFG register. */
 #define FSL_FEATURE_SPC_HAS_VDD_SYS (0)
+/* @brief Has VDD1P8 low-voltage detect feature. */
+#define FSL_FEATURE_SPC_HAS_VDD1P8_LVD (1)
+/* @brief Has no DCDC frequency control (register bits DCDC_CFG[FREQ_CNTRL_ON/FREQ_CNTRL]). */
+#define FSL_FEATURE_SPC_HAS_NO_DCDC_FREQ_CNTRL (1)
 
 /* RTC module features */
 
 /* @brief Has wakeup pin. */
-#define FSL_FEATURE_RTC_HAS_WAKEUP_PIN (0)
+#define FSL_FEATURE_RTC_HAS_WAKEUP_PIN (1)
 /* @brief Has wakeup pin selection (bit field CR[WPS]). */
 #define FSL_FEATURE_RTC_HAS_WAKEUP_PIN_SELECTION (0)
 /* @brief Has low power features (registers MER, MCLR and MCHR). */
@@ -738,12 +788,14 @@
 
 /* SYSPM module features */
 
-/* @brief Temperature sensor parameter A (slope). */
+/* @brief SYSPM support disable counters if stopped or halted. */
 #define FSL_FEATURE_SYSPM_HAS_PMCR_DCIFSH (0)
-/* @brief Temperature sensor parameter B (offset). */
+/* @brief SYSPM has reset instruction counter. */
 #define FSL_FEATURE_SYSPM_HAS_PMCR_RICTR (1)
 /* @brief Number of PMCR registers signals number of performance monitors available in single SYSPM instance. */
 #define FSL_FEATURE_SYSPM_PMCR_COUNT (2)
+/* @brief SYSPM has instruction counter. */
+#define FSL_FEATURE_SYSPM_HAS_PMICTR (0)
 
 /* SysTick module features */
 
@@ -773,10 +825,6 @@
 #define FSL_FEATURE_TPM_HAS_TRIG (1)
 /* @brief Whether TRIG register has effect. */
 #define FSL_FEATURE_TPM_TRIG_HAS_EFFECTn(x) (1)
-/* @brief Has global time base enable. */
-#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (1)
-/* @brief Has global time base sync. */
-#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
 /* @brief Has counter pause on trigger. */
 #define FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER (1)
 /* @brief Has external trigger selection. */
@@ -801,11 +849,17 @@
 #define FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT (1)
 /* @brief Whether 32 bits counter has effect. */
 #define FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x) (1)
+/* @brief Has global time base enable. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (1)
+/* @brief Has global time base sync. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
+/* @brief Is affected by errata with ID 050050 (Incorrect duty output when EPWM mode is set to PS=0 during write 1 to CnV register). */
+#define FSL_FEATURE_TPM_HAS_ERRATA_050050 (0)
 
 /* TRDC module features */
 
 /* @brief Process master count. */
-#define FSL_FEATURE_TRDC_PROCESSOR_MASTER_COUNT (2)
+#define FSL_FEATURE_TRDC_PROCESSOR_MASTER_COUNT (1)
 /* @brief TRDC instance has PID configuration or not. */
 #define FSL_FEATURE_TRDC_INSTANCE_HAS_PID_CONFIGURATIONn(x) (0)
 /* @brief TRDC domain number (reset value of HWCFG0[NDID]). */
@@ -847,13 +901,10 @@
 #define FSL_FEATURE_TRNG_HAS_RSTCTL (0)
 /* @brief TRNG does not support FOR_CLK mode. */
 #define FSL_FEATURE_TRNG_HAS_NO_TRNG_MCTL_FOR_CLK_MODE (1)
-/* @brief TRNG has two oscillators. */
+/* @brief TRNG supports dual oscillator mode. */
 #define FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS (1)
-
-/* TSTMR module features */
-
-/* @brief Has clock frequency configuration. */
-#define FSL_FEATURE_TSTMR_HAS_CLOCK_FREQUENCY_CONFIGURATION (1)
+/* @brief TRNG supports control pin. */
+#define FSL_FEATURE_TRNG_HAS_CTRL_PIN (0)
 
 /* WDOG module features */
 
@@ -864,7 +915,8 @@
 
 /* WUU module features */
 
-/* No feature definitions */
+/* @brief Has MF register. */
+#define FSL_FEATURE_WUU_HAS_MF (0)
 
 #endif /* _MCXW70AD_FEATURES_H_ */
 

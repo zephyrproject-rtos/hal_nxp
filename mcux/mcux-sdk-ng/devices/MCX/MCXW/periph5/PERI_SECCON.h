@@ -1,10 +1,13 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70ACMFTA
-**                          MCXW70ADMFTA
+**     Processors:          MCXW70AAMMP
+**                          MCXW70ACMFT
+**                          MCXW70ACMMP
+**                          MCXW70ADMFT
+**                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260202
+**     Build:               b260409
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SECCON
@@ -35,9 +38,11 @@
 #if !defined(PERI_SECCON_H_)
 #define PERI_SECCON_H_                           /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70ACMFTA))
+#if (defined(CPU_MCXW70AAMMP))
+#include "MCXW70AA_COMMON.h"
+#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
-#elif (defined(CPU_MCXW70ADMFTA))
+#elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -1532,9 +1537,9 @@ typedef struct {
  *          least significant byte first.
  *
  * @param[out] aOutUid16B   Pointer to a buffer that will receive the 16-byte UID.
- *                          Must be at least 16 bytes in size. Cannot be NULL.
+ *                          Must be at least 16 bytes in size. Caller must ensure it is not NULL.
  * @param[out] pOutLen      Pointer to a variable that will receive the length
- *                          of the UID in bytes (always 16). Cannot be NULL.
+ *                          of the UID in bytes (always 16). Caller must ensure it is not NULL.
  *
  * @return None
  */
@@ -1560,8 +1565,6 @@ static inline void Chip_GetUID(uint8_t *aOutUid16B, uint8_t *pOutLen)
 
     /* Get the uid length */
     *pOutLen = 16U;
-
-    return;
 }
 
 

@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260109
+**     Build:               b260420
 **
 **     Abstract:
 **         Chip specific module features.
@@ -89,8 +89,6 @@
 #define FSL_FEATURE_SOC_PORT_COUNT (4)
 /* @brief PWM availability on the SoC. */
 #define FSL_FEATURE_SOC_PWM_COUNT (1)
-/* @brief ROMC availability on the SoC. */
-#define FSL_FEATURE_SOC_ROMC_COUNT (1)
 /* @brief RTC availability on the SoC. */
 #define FSL_FEATURE_SOC_RTC_COUNT (1)
 /* @brief SCG availability on the SoC. */
@@ -115,95 +113,6 @@
 #define FSL_FEATURE_SOC_WUU_COUNT (1)
 /* @brief ZLL availability on the SoC. */
 #define FSL_FEATURE_SOC_ZLL_COUNT (1)
-
-/* LPADC module features */
-
-/* @brief FIFO availability on the SoC. */
-#define FSL_FEATURE_LPADC_FIFO_COUNT (1)
-/* @brief Does not support two simultanious single ended conversions (bitfield TCTRL[FIFO_SEL_B]). */
-#define FSL_FEATURE_LPADC_HAS_NO_TCTRL_FIFO_SEL_B (1)
-/* @brief Has subsequent trigger priority (bitfield CFG[TPRICTRL]). */
-#define FSL_FEATURE_LPADC_HAS_CFG_SUBSEQUENT_PRIORITY (1)
-/* @brief Has differential mode (bitfield CMDLn[DIFF]). */
-#define FSL_FEATURE_LPADC_HAS_CMDL_DIFF (0)
-/* @brief Has channel scale (bitfield CMDLn[CSCALE]). */
-#define FSL_FEATURE_LPADC_HAS_CMDL_CSCALE (0)
-/* @brief Has conversion type select (bitfield CMDLn[CTYPE]). */
-#define FSL_FEATURE_LPADC_HAS_CMDL_CTYPE (1)
-/* @brief Has conversion resolution select  (bitfield CMDLn[MODE]). */
-#define FSL_FEATURE_LPADC_HAS_CMDL_MODE (1)
-/* @brief Has Wait for trigger assertion before execution (bitfield CMDHn[WAIT_TRIG]). */
-#define FSL_FEATURE_LPADC_HAS_CMDH_WAIT_TRIG (1)
-/* @brief Has offset calibration (bitfield CTRL[CALOFS]). */
-#define FSL_FEATURE_LPADC_HAS_CTRL_CALOFS (1)
-/* @brief Has gain calibration (bitfield CTRL[CAL_REQ]). */
-#define FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ (1)
-/* @brief Has calibration average (bitfield CTRL[CAL_AVGS]). */
-#define FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS (1)
-/* @brief Has internal clock (bitfield CFG[ADCKEN]). */
-#define FSL_FEATURE_LPADC_HAS_CFG_ADCKEN (0)
-/* @brief Enable support for low voltage reference on option 1 reference (bitfield CFG[VREF1RNG]). */
-#define FSL_FEATURE_LPADC_HAS_CFG_VREF1RNG (0)
-/* @brief Has calibration (bitfield CFG[CALOFS]). */
-#define FSL_FEATURE_LPADC_HAS_CFG_CALOFS (0)
-/* @brief Has offset trim (register OFSTRIM). */
-#define FSL_FEATURE_LPADC_HAS_OFSTRIM (1)
-/* @brief Has power select (bitfield CFG[PWRSEL]). */
-#define FSL_FEATURE_LPADC_HAS_CFG_PWRSEL (1)
-/* @brief Has alternate channel B scale (bitfield CMDLn[ALTB_CSCALE]). */
-#define FSL_FEATURE_LPADC_HAS_CMDL_ALTB_CSCALE (0)
-/* @brief Has alternate channel B select enable (bitfield CMDLn[ALTBEN]). */
-#define FSL_FEATURE_LPADC_HAS_CMDL_ALTBEN (0)
-/* @brief Has alternate channel input (bitfield CMDLn[ALTB_ADCH]). */
-#define FSL_FEATURE_LPADC_HAS_CMDL_ALTB_ADCH (0)
-/* @brief Has offset calibration mode (bitfield CTRL[CALOFSMODE]). */
-#define FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE (0)
-/* @brief Conversion averaged bitfiled width. */
-#define FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH (4)
-/* @brief Enable hardware trigger command selection */
-#define FSL_FEATURE_LPADC_HAS_TCTRL_CMD_SEL (0)
-/* @brief OFSTRIM availability on the SoC. */
-#define FSL_FEATURE_LPADC_OFSTRIM_COUNT (1)
-/* @brief Has Trigger status register. */
-#define FSL_FEATURE_LPADC_HAS_TSTAT (1)
-/* @brief Has B side channels. */
-#define FSL_FEATURE_LPADC_HAS_B_SIDE_CHANNELS (0)
-/* @brief Indicate whether the LPADC STAT register has trigger exception interrupt function (bitfield STAT[TEXC_INT]). */
-#define FSL_FEATURE_LPADC_HAS_STAT_TEXC_INT (1)
-/* @brief Indicate whether the LPADC STAT register has trigger completion interrupt function (bitfield STAT[TCOMP_INT]). */
-#define FSL_FEATURE_LPADC_HAS_STAT_TCOMP_INT (1)
-/* @brief Indicate whether the LPADC STAT register has calibration ready function (bitfield STAT[CAL_RDY]). */
-#define FSL_FEATURE_LPADC_HAS_STAT_CAL_RDY (1)
-/* @brief Indicate whether the LPADC STAT register has ADC active function (bitfield STAT[ADC_ACTIVE]). */
-#define FSL_FEATURE_LPADC_HAS_STAT_ADC_ACTIVE (1)
-/* @brief Indicate whether the LPADC IE register has trigger exception interrupt enable function (bitfield IE[TEXC_IE]). */
-#define FSL_FEATURE_LPADC_HAS_IE_TEXC_IE (1)
-/* @brief Indicate whether the LPADC IE register has trigger completion interrupt enable function (bitfield IE[TCOMP_IE]). */
-#define FSL_FEATURE_LPADC_HAS_IE_TCOMP_IE (1)
-/* @brief Indicate whether the LPADC CFG register has trigger resume/restart enable function (bitfield CFG[TRES]). */
-#define FSL_FEATURE_LPADC_HAS_CFG_TRES (1)
-/* @brief Indicate whether the LPADC CFG register has trigger command resume/restart enable function (bitfield CFG[TCMDRES]). */
-#define FSL_FEATURE_LPADC_HAS_CFG_TCMDRES (1)
-/* @brief Indicate whether the LPADC CFG register has high priority trigger exception disable function (bitfield CFG[HPT_EXDI]). */
-#define FSL_FEATURE_LPADC_HAS_CFG_HPT_EXDI (1)
-/* @brief Indicate LPADC CFG register TPRICTRL bitfield width. */
-#define FSL_FEATURE_LPADC_CFG_TPRICTRL_BITFIELD_WIDTH (2)
-/* @brief Has compare function enable (bitfield CMDHn[CMPEN]). */
-#define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
-/* @brief Has High Speed Mode Trim Request (bitfield CTRL[CALHS]). */
-#define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (1)
-/* @brief Has Justified Left Enable (bitfield CFG2[JLEFT]). */
-#define FSL_FEATURE_LPADC_HAS_CFG2_JLEFT (1)
-/* @brief Has internal temperature sensor. */
-#define FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR (1)
-/* @brief Temperature sensor parameter A (slope). */
-#define FSL_FEATURE_LPADC_TEMP_PARAMETER_A (787U)
-/* @brief Temperature sensor parameter B (offset). */
-#define FSL_FEATURE_LPADC_TEMP_PARAMETER_B (289U)
-/* @brief Temperature sensor parameter Alpha. */
-#define FSL_FEATURE_LPADC_TEMP_PARAMETER_ALPHA (9.1f)
-/* @brief The buffer size of temperature sensor. */
-#define FSL_FEATURE_LPADC_TEMP_SENS_BUFFER_SIZE (2U)
 
 /* CCM32K module features */
 
@@ -316,7 +225,7 @@
 /* @brief Does not have SRAMCTL register */
 #define FSL_FEATURE_CMC_HAS_NO_SRAMCTL_REGISTER (1)
 /* @brief Does not have BLR register */
-#define FSL_FEATURE_CMC_HAS_NO_BOOTROM_LOCK_REGISTER (1)
+#define FSL_FEATURE_CMC_HAS_NO_BOOTROM_LOCK_REGISTER (0)
 /* @brief Has DIER register */
 #define FSL_FEATURE_CMC_HAS_DIER_REG (1)
 /* @brief Has system clock generation reset (register bit SCG[SRIE]) */
@@ -361,14 +270,25 @@
 /* @brief CMP instance support CCR0 CMP_STOP_EN bitfield. */
 #define FSL_FEATURE_LPCMP_INSTANCE_SUPPORT_CCR0_CMP_STOP_ENn(x) (1)
 
+/* CRC module features */
+
+/* @brief Has data register with name CRC */
+#define FSL_FEATURE_CRC_HAS_CRC_REG (0)
+
 /* EDMA module features */
 
 /* @brief Number of DMA channels (related to number of registers TCD, DCHPRI, bit fields ERQ[ERQn], EEI[EEIn], INT[INTn], ERR[ERRn], HRS[HRSn] and bit field widths ES[ERRCHN], CEEI[CEEI], SEEI[SEEI], CERQ[CERQ], SERQ[SERQ], CDNE[CDNE], SSRT[SSRT], CERR[CERR], CINT[CINT], TCDn_CITER_ELINKYES[LINKCH], TCDn_CSR[MAJORLINKCH], TCDn_BITER_ELINKYES[LINKCH]). (Valid only for eDMA modules.) */
 #define FSL_FEATURE_EDMA_MODULE_CHANNEL (16)
+/* @brief Soc requires secure master transfer. */
+#define FSL_FEATURE_EDMA_SOC_REQUIRES_SECURE_MASTER (1)
 /* @brief Number of DMA channel groups (register bit fields CR[ERGA], CR[GRPnPRI], ES[GPE], DCHPRIn[GRPPRI]). (Valid only for eDMA modules.) */
 #define FSL_FEATURE_EDMA_CHANNEL_GROUP_COUNT (1)
+/* @brief Has register bit fields CH_SBR[SEC]. */
+#define FSL_FEATURE_EDMA_HAS_CH_SBR_SEC (1)
 /* @brief Has DMA_Error interrupt vector. */
 #define FSL_FEATURE_EDMA_HAS_ERROR_IRQ (0)
+/* @brief Has register bit fields CH_SBR[EMI]. */
+#define FSL_FEATURE_EDMA_HAS_CH_SBR_EMI (1)
 /* @brief Has register access permission. */
 #define FSL_FEATURE_HAVE_DMA_CONTROL_REGISTER_ACCESS_PERMISSION (1)
 /* @brief If dma has common clock gate */
@@ -379,7 +299,7 @@
 #define FSL_FEATURE_EDMA_HAS_NO_MP_CSR_EMI (0)
 /* @brief Has no EBW access bit (MP_CSR). */
 #define FSL_FEATURE_EDMA_HAS_NO_MP_CSR_EBW (1)
-/* @brief Has channel mux control */
+/* @brief Has channel mux */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_MUX (1)
 /* @brief Has EDMA arbitration group (CHn_GRPRI). */
 #define FSL_FEATURE_EDMA_HAS_ARBITRATION_GROUP (1)
@@ -455,6 +375,8 @@
 
 /* @brief Has GPIO attribute checker register (GACR). */
 #define FSL_FEATURE_GPIO_HAS_ATTRIBUTE_CHECKER (0)
+/* @brief GPIO registers width */
+#define FSL_FEATURE_GPIO_REGISTERS_WIDTH (32)
 /* @brief Has GPIO version ID register (VERID). */
 #define FSL_FEATURE_GPIO_HAS_VERSION_INFO_REGISTER (1)
 /* @brief Has secure/non-secure access protection registers (LOCK, PCNS, PCNP, ICNS, ICNP). */
@@ -463,6 +385,95 @@
 #define FSL_FEATURE_GPIO_HAS_PORT_INPUT_CONTROL (1)
 /* @brief Has GPIO interrupt/DMA request/trigger output selection. */
 #define FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT (1)
+
+/* LPADC module features */
+
+/* @brief FIFO availability on the SoC. */
+#define FSL_FEATURE_LPADC_FIFO_COUNT (1)
+/* @brief Does not support two simultanious single ended conversions (bitfield TCTRL[FIFO_SEL_B]). */
+#define FSL_FEATURE_LPADC_HAS_NO_TCTRL_FIFO_SEL_B (1)
+/* @brief Has subsequent trigger priority (bitfield CFG[TPRICTRL]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_SUBSEQUENT_PRIORITY (1)
+/* @brief Has differential mode (bitfield CMDLn[DIFF]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_DIFF (0)
+/* @brief Has channel scale (bitfield CMDLn[CSCALE]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_CSCALE (0)
+/* @brief Has conversion type select (bitfield CMDLn[CTYPE]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_CTYPE (1)
+/* @brief Has conversion resolution select  (bitfield CMDLn[MODE]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_MODE (1)
+/* @brief Has Wait for trigger assertion before execution (bitfield CMDHn[WAIT_TRIG]). */
+#define FSL_FEATURE_LPADC_HAS_CMDH_WAIT_TRIG (1)
+/* @brief Has offset calibration (bitfield CTRL[CALOFS]). */
+#define FSL_FEATURE_LPADC_HAS_CTRL_CALOFS (1)
+/* @brief Has gain calibration (bitfield CTRL[CAL_REQ]). */
+#define FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ (1)
+/* @brief Has calibration average (bitfield CTRL[CAL_AVGS]). */
+#define FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS (1)
+/* @brief Has internal clock (bitfield CFG[ADCKEN]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_ADCKEN (0)
+/* @brief Enable support for low voltage reference on option 1 reference (bitfield CFG[VREF1RNG]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_VREF1RNG (0)
+/* @brief Has calibration (bitfield CFG[CALOFS]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_CALOFS (0)
+/* @brief Has offset trim (register OFSTRIM). */
+#define FSL_FEATURE_LPADC_HAS_OFSTRIM (1)
+/* @brief Has power select (bitfield CFG[PWRSEL]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_PWRSEL (1)
+/* @brief Has alternate channel B scale (bitfield CMDLn[ALTB_CSCALE]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_ALTB_CSCALE (0)
+/* @brief Has alternate channel B select enable (bitfield CMDLn[ALTBEN]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_ALTBEN (0)
+/* @brief Has alternate channel input (bitfield CMDLn[ALTB_ADCH]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_ALTB_ADCH (0)
+/* @brief Has offset calibration mode (bitfield CTRL[CALOFSMODE]). */
+#define FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE (0)
+/* @brief Conversion averaged bitfiled width. */
+#define FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH (4)
+/* @brief Enable hardware trigger command selection */
+#define FSL_FEATURE_LPADC_HAS_TCTRL_CMD_SEL (0)
+/* @brief OFSTRIM availability on the SoC. */
+#define FSL_FEATURE_LPADC_OFSTRIM_COUNT (1)
+/* @brief Has Trigger status register. */
+#define FSL_FEATURE_LPADC_HAS_TSTAT (1)
+/* @brief Has B side channels. */
+#define FSL_FEATURE_LPADC_HAS_B_SIDE_CHANNELS (0)
+/* @brief Indicate whether the LPADC STAT register has trigger exception interrupt function (bitfield STAT[TEXC_INT]). */
+#define FSL_FEATURE_LPADC_HAS_STAT_TEXC_INT (1)
+/* @brief Indicate whether the LPADC STAT register has trigger completion interrupt function (bitfield STAT[TCOMP_INT]). */
+#define FSL_FEATURE_LPADC_HAS_STAT_TCOMP_INT (1)
+/* @brief Indicate whether the LPADC STAT register has calibration ready function (bitfield STAT[CAL_RDY]). */
+#define FSL_FEATURE_LPADC_HAS_STAT_CAL_RDY (1)
+/* @brief Indicate whether the LPADC STAT register has ADC active function (bitfield STAT[ADC_ACTIVE]). */
+#define FSL_FEATURE_LPADC_HAS_STAT_ADC_ACTIVE (1)
+/* @brief Indicate whether the LPADC IE register has trigger exception interrupt enable function (bitfield IE[TEXC_IE]). */
+#define FSL_FEATURE_LPADC_HAS_IE_TEXC_IE (1)
+/* @brief Indicate whether the LPADC IE register has trigger completion interrupt enable function (bitfield IE[TCOMP_IE]). */
+#define FSL_FEATURE_LPADC_HAS_IE_TCOMP_IE (1)
+/* @brief Indicate whether the LPADC CFG register has trigger resume/restart enable function (bitfield CFG[TRES]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_TRES (1)
+/* @brief Indicate whether the LPADC CFG register has trigger command resume/restart enable function (bitfield CFG[TCMDRES]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_TCMDRES (1)
+/* @brief Indicate whether the LPADC CFG register has high priority trigger exception disable function (bitfield CFG[HPT_EXDI]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_HPT_EXDI (1)
+/* @brief Indicate LPADC CFG register TPRICTRL bitfield width. */
+#define FSL_FEATURE_LPADC_CFG_TPRICTRL_BITFIELD_WIDTH (2)
+/* @brief Has compare function enable (bitfield CMDHn[CMPEN]). */
+#define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
+/* @brief Has High Speed Mode Trim Request (bitfield CTRL[CALHS]). */
+#define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (1)
+/* @brief Has Justified Left Enable (bitfield CFG2[JLEFT]). */
+#define FSL_FEATURE_LPADC_HAS_CFG2_JLEFT (1)
+/* @brief Has internal temperature sensor. */
+#define FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR (1)
+/* @brief Temperature sensor parameter A (slope). */
+#define FSL_FEATURE_LPADC_TEMP_PARAMETER_A (738U)
+/* @brief Temperature sensor parameter B (offset). */
+#define FSL_FEATURE_LPADC_TEMP_PARAMETER_B (287.5f)
+/* @brief Temperature sensor parameter Alpha. */
+#define FSL_FEATURE_LPADC_TEMP_PARAMETER_ALPHA (10.06f)
+/* @brief The buffer size of temperature sensor. */
+#define FSL_FEATURE_LPADC_TEMP_SENS_BUFFER_SIZE (2U)
 
 /* INTM module features */
 
@@ -619,16 +630,32 @@
 /* @brief LTC module has no clock control bit. */
 #define FSL_FEATURE_LTC_HAS_NO_CLOCK_CONTROL_BIT (1)
 
+/* MEMORY module features */
+
+/* @brief Memory map has offset between subsystems. */
+#define FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET (1)
+
+/* MSCM module features */
+
+/* @brief Number of configuration information for processors. */
+#define FSL_FEATURE_MSCM_HAS_CP_COUNT (1)
+/* @brief Has data cache. */
+#define FSL_FEATURE_MSCM_HAS_DATACACHE (0)
+
 /* MU module features */
 
 /* @brief MU side for current core */
 #define FSL_FEATURE_MU_SIDE_A (1)
-/* @brief MU supports reset assert interrupt. CIER0[RAIE] or CR[RAIE] or BCR[RAIE] . */
+/* @brief MU supports reset assert interrupt. CIER0[RAIE] or CR[RAIE] or BCR[RAIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_ASSERT_INT (0)
 /* @brief MU supports reset de-assert interrupt. CR[RDIE] or BCR[RDIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT (0)
 /* @brief MU does not support core status. Register CSSR0 or CSR0. */
 #define FSL_FEATURE_MU_NO_CORE_STATUS (1)
+/* @brief MU does not support NMI. Register bit CCR0[NMI]. */
+#define FSL_FEATURE_MU_NO_NMI (1)
+/* @brief MU does not support core event pending. Register bit SR[CEP]. */
+#define FSL_FEATURE_MU_NO_CEP (1)
 /* @brief MU supports Power-Down mode entry interrupt. CIER0[PDIE] */
 #define FSL_FEATURE_MU_HAS_PD_INT (0)
 /* @brief MU supports STOP mode entry interrupt. CIER0[STOPIE] */
@@ -641,14 +668,10 @@
 #define FSL_FEATURE_MU_HAS_RUN_INT (0)
 /* @brief MU supports hardware reset interrupt. CSSR0[HRIP] or CSR0[HRIP]. */
 #define FSL_FEATURE_MU_HAS_SR_HRIP (0)
-/* @brief MU does not support enable clock of the other core, CR[CLKE] or CCR[CLKE]. */
-#define FSL_FEATURE_MU_NO_CLKE (1)
-/* @brief MU does not support NMI. Register bit CCR0[NMI]. */
-#define FSL_FEATURE_MU_NO_NMI (1)
-/* @brief MU does not support core event pending. Register bit SR[CEP]. */
-#define FSL_FEATURE_MU_NO_CEP (1)
 /* @brief MU supports reset interrupt. Register bit SR[MURIP]. */
 #define FSL_FEATURE_MU_HAS_SR_MURIP (1)
+/* @brief MU does not support enable clock of the other core, CR[CLKE] or CCR[CLKE]. */
+#define FSL_FEATURE_MU_NO_CLKE (1)
 /* @brief MU has bit CCR0[RSTH]. */
 #define FSL_FEATURE_MU_HAS_RSTH (0)
 /* @brief MU has bit CCR0[RSTH] by instance. */
@@ -696,8 +719,6 @@
 #define FSL_FEATURE_PORT_SUPPORT_DIFFERENT_VOLTAGE_RANGE (1)
 /* @brief Has EFT detect (registers EDFR, EDIER and EDCR). */
 #define FSL_FEATURE_PORT_SUPPORT_EFT (0)
-/* @brief Has invert input (register bit PCR[INV]). */
-#define FSL_FEATURE_PORT_HAS_INVERT_INPUT (1)
 /* @brief Has drive strength control (register bit PCR[DSE]). */
 #define FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH (1)
 /* @brief Defines width of PCR[MUX] field. */
@@ -708,10 +729,35 @@
 #define FSL_FEATURE_PORT_HAS_INDEPENDENT_INTERRUPT_CONTROL (0)
 /* @brief Has multiple pin IRQ configuration (register GICLR and GICHR). */
 #define FSL_FEATURE_PORT_HAS_MULTIPLE_IRQ_CONFIG (0)
+/* @brief Has Input Buffer Enable (register bit field PCR[IBE]). */
+#define FSL_FEATURE_PORT_HAS_INPUT_BUFFER (0)
+/* @brief Has Invert Input (register bit field PCR[INV]). */
+#define FSL_FEATURE_PORT_HAS_INVERT_INPUT (1)
 /* @brief Defines whether PCR[IRQC] bit-field has flag states. */
 #define FSL_FEATURE_PORT_HAS_IRQC_FLAG (0)
 /* @brief Defines whether PCR[IRQC] bit-field has trigger states. */
 #define FSL_FEATURE_PORT_HAS_IRQC_TRIGGER (0)
+
+/* MCM module features */
+
+/* @brief Has cache parity error ISCR[CPEE]. */
+#define FSL_FEATURE_MCM_HAS_CACHE_PARITY_ERROR (0)
+/* @brief Has cache write buffer error ISCR[CWBEE]. */
+#define FSL_FEATURE_MCM_HAS_CACHE_WRITE_BUFFER_ERROR (1)
+/* @brief LMD lock. LMDR2[RO]. */
+#define FSL_FEATURE_MCM_HAS_LMD_RO (1)
+/* @brief MCM has PC Parity. LMDR2[PCPME] or LMDR2[PCPFE]. */
+#define FSL_FEATURE_MCM_HAS_PC_PARITY (0)
+/* @brief Has buffer fault, register FATR, FDR, FADR. */
+#define FSL_FEATURE_MCM_HAS_BUFFER_FAULT (1)
+/* @brief Has register CPCR2. */
+#define FSL_FEATURE_MCM_HAS_CPCR2 (1)
+/* @brief Has LMEM fault, register LMFAR, LMFDLR, LMFDHR, LMFATR. */
+#define FSL_FEATURE_MCM_HAS_LMEM_FAULT (0)
+/* @brief  MCM has LMEM control, register LMPECR, LMPEIR. */
+#define FSL_FEATURE_MCM_HAS_LMEM_PARITY (0)
+/* @brief  MCM has CPCR register (core platform control). */
+#define FSL_FEATURE_MCM_HAS_CPCR (0)
 
 /* SEMA42 module features */
 
@@ -759,11 +805,15 @@
 #define FSL_FEATURE_SPC_HAS_LPBUFF (0)
 /* @brief Has VD_SYS_CFG register. */
 #define FSL_FEATURE_SPC_HAS_VDD_SYS (0)
+/* @brief Has VDD1P8 low-voltage detect feature. */
+#define FSL_FEATURE_SPC_HAS_VDD1P8_LVD (1)
+/* @brief Has no DCDC frequency control (register bits DCDC_CFG[FREQ_CNTRL_ON/FREQ_CNTRL]). */
+#define FSL_FEATURE_SPC_HAS_NO_DCDC_FREQ_CNTRL (1)
 
 /* RTC module features */
 
 /* @brief Has wakeup pin. */
-#define FSL_FEATURE_RTC_HAS_WAKEUP_PIN (0)
+#define FSL_FEATURE_RTC_HAS_WAKEUP_PIN (1)
 /* @brief Has wakeup pin selection (bit field CR[WPS]). */
 #define FSL_FEATURE_RTC_HAS_WAKEUP_PIN_SELECTION (0)
 /* @brief Has low power features (registers MER, MCLR and MCHR). */
@@ -815,12 +865,14 @@
 
 /* SYSPM module features */
 
-/* @brief Temperature sensor parameter A (slope). */
+/* @brief SYSPM support disable counters if stopped or halted. */
 #define FSL_FEATURE_SYSPM_HAS_PMCR_DCIFSH (0)
-/* @brief Temperature sensor parameter B (offset). */
+/* @brief SYSPM has reset instruction counter. */
 #define FSL_FEATURE_SYSPM_HAS_PMCR_RICTR (1)
 /* @brief Number of PMCR registers signals number of performance monitors available in single SYSPM instance. */
 #define FSL_FEATURE_SYSPM_PMCR_COUNT (2)
+/* @brief SYSPM has instruction counter. */
+#define FSL_FEATURE_SYSPM_HAS_PMICTR (0)
 
 /* SysTick module features */
 
@@ -850,10 +902,6 @@
 #define FSL_FEATURE_TPM_HAS_TRIG (1)
 /* @brief Whether TRIG register has effect. */
 #define FSL_FEATURE_TPM_TRIG_HAS_EFFECTn(x) (1)
-/* @brief Has global time base enable. */
-#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (1)
-/* @brief Has global time base sync. */
-#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
 /* @brief Has counter pause on trigger. */
 #define FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER (1)
 /* @brief Has external trigger selection. */
@@ -878,11 +926,17 @@
 #define FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT (1)
 /* @brief Whether 32 bits counter has effect. */
 #define FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x) (1)
+/* @brief Has global time base enable. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (1)
+/* @brief Has global time base sync. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
+/* @brief Is affected by errata with ID 050050 (Incorrect duty output when EPWM mode is set to PS=0 during write 1 to CnV register). */
+#define FSL_FEATURE_TPM_HAS_ERRATA_050050 (0)
 
 /* TRDC module features */
 
 /* @brief Process master count. */
-#define FSL_FEATURE_TRDC_PROCESSOR_MASTER_COUNT (2)
+#define FSL_FEATURE_TRDC_PROCESSOR_MASTER_COUNT (1)
 /* @brief TRDC instance has PID configuration or not. */
 #define FSL_FEATURE_TRDC_INSTANCE_HAS_PID_CONFIGURATIONn(x) (0)
 /* @brief TRDC domain number (reset value of HWCFG0[NDID]). */
@@ -924,13 +978,10 @@
 #define FSL_FEATURE_TRNG_HAS_RSTCTL (0)
 /* @brief TRNG does not support FOR_CLK mode. */
 #define FSL_FEATURE_TRNG_HAS_NO_TRNG_MCTL_FOR_CLK_MODE (1)
-/* @brief TRNG has two oscillators. */
+/* @brief TRNG supports dual oscillator mode. */
 #define FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS (1)
-
-/* TSTMR module features */
-
-/* @brief Has clock frequency configuration. */
-#define FSL_FEATURE_TSTMR_HAS_CLOCK_FREQUENCY_CONFIGURATION (1)
+/* @brief TRNG supports control pin. */
+#define FSL_FEATURE_TRNG_HAS_CTRL_PIN (0)
 
 /* WDOG module features */
 
@@ -941,7 +992,8 @@
 
 /* WUU module features */
 
-/* No feature definitions */
+/* @brief Has MF register. */
+#define FSL_FEATURE_WUU_HAS_MF (0)
 
 #endif /* _MCXW70AC_FEATURES_H_ */
 

@@ -1,10 +1,13 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70ACMFTA
-**                          MCXW70ADMFTA
+**     Processors:          MCXW70AAMMP
+**                          MCXW70ACMFT
+**                          MCXW70ACMMP
+**                          MCXW70ADMFT
+**                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260109
+**     Build:               b260409
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CCM32K
@@ -35,9 +38,11 @@
 #if !defined(PERI_CCM32K_H_)
 #define PERI_CCM32K_H_                           /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70ACMFTA))
+#if (defined(CPU_MCXW70AAMMP))
+#include "MCXW70AA_COMMON.h"
+#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
-#elif (defined(CPU_MCXW70ADMFTA))
+#elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -243,8 +248,8 @@ typedef struct {
 #define CCM32K_OSC32K_CTRL_OSC_HP_EN_MASK        (0x80000U)
 #define CCM32K_OSC32K_CTRL_OSC_HP_EN_SHIFT       (19U)
 /*! OSC_HP_EN - Crystal Oscillator High Power Enable
- *  0b0..Oscillator internal clock monitor is disabled
- *  0b1..Oscillator internal clock monitor is enabled
+ *  0b0..Oscillator high-power mode is disabled
+ *  0b1..Oscillator high-power mode is enabled
  */
 #define CCM32K_OSC32K_CTRL_OSC_HP_EN(x)          (((uint32_t)(((uint32_t)(x)) << CCM32K_OSC32K_CTRL_OSC_HP_EN_SHIFT)) & CCM32K_OSC32K_CTRL_OSC_HP_EN_MASK)
 
