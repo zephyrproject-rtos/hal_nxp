@@ -2,6 +2,6 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-    config MCUX_COMPONENT_driver.romapi_soc
+    config MCUX_COMPONENT_driver.romapi
          bool "ROMAPI"
          default n

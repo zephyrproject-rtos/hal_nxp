@@ -1,6 +1,8 @@
 /*
 ** ###################################################################
-**     Processor:           MCXW70ADMFTA
+**     Processors:          MCXW70ADMFT
+**                          MCXW70ADMMP
+**
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
@@ -8,7 +10,7 @@
 **
 **     Reference manual:    Rev. 1 Draft F, 2025-10-18
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260109
+**     Build:               b260409
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -54,7 +56,8 @@ extern "C" {
   #define DISABLE_WDOG                 1
 #endif
 
-#define  DEFAULT_SYSTEM_CLOCK (32000000U) /* temporary value, will fix after clock driver is ready */
+#define DEFAULT_SYSTEM_CLOCK (32000000U)    /* temporary value, will fix after clock driver is ready */
+#define SYSCON_UNLOCK_CODE   (0xAAAAAAAAUL) /* Code to unlock SYSCON registers write restriction */
 
 
 

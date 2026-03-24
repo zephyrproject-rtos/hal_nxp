@@ -1,10 +1,13 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70ACMFTA
-**                          MCXW70ADMFTA
+**     Processors:          MCXW70AAMMP
+**                          MCXW70ACMFT
+**                          MCXW70ACMMP
+**                          MCXW70ADMFT
+**                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260109
+**     Build:               b260409
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for XCVR_PLL_DIG
@@ -35,9 +38,11 @@
 #if !defined(PERI_XCVR_PLL_DIG_H_)
 #define PERI_XCVR_PLL_DIG_H_                     /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70ACMFTA))
+#if (defined(CPU_MCXW70AAMMP))
+#include "MCXW70AA_COMMON.h"
+#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
-#elif (defined(CPU_MCXW70ADMFTA))
+#elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -91,7 +96,9 @@ typedef struct {
        uint8_t RESERVED_1[4];
   __IO uint32_t LOCK_DETECT;                       /**< PLL Lock Detect Control, offset: 0x18 */
   __IO uint32_t HPM_CTRL;                          /**< PLL High Port Modulator Control, offset: 0x1C */
-       uint8_t RESERVED_2[12];
+  __IO uint32_t HPMCAL_CTRL;                       /**< PLL High Port Calibration Control, offset: 0x20 */
+  __I  uint32_t HPM_CAL1;                          /**< PLL High Port Calibration Result 1, offset: 0x24 */
+  __I  uint32_t HPM_CAL2;                          /**< PLL High Port Calibration Result 2, offset: 0x28 */
   __IO uint32_t HPM_SDM_RES;                       /**< PLL High Port Sigma Delta Results, offset: 0x2C */
   __IO uint32_t LPM_CTRL;                          /**< PLL Low Port Modulator Control, offset: 0x30 */
   __IO uint32_t LPM_SDM_CTRL1;                     /**< PLL Low Port Sigma Delta Control 1, offset: 0x34 */
@@ -102,14 +109,14 @@ typedef struct {
   __IO uint32_t DELAY_MATCH;                       /**< PLL Delay Matching, offset: 0x48 */
   __IO uint32_t TUNING_CAP_TX_CTRL;                /**< Tuning Cap Settings in Transmit Mode, offset: 0x4C */
   __IO uint32_t TUNING_CAP_RX_CTRL;                /**< Tuning Cap Settings in Receive Mode, offset: 0x50 */
-       uint8_t RESERVED_3[4];
+       uint8_t RESERVED_2[4];
   __IO uint32_t MAX_MIN_TX_CFG1_FREQ;              /**< Max and Min Transmit Frequencies For TX Configuration 1, offset: 0x58 */
   __IO uint32_t CTUNE_CTRL;                        /**< PLL Coarse Tune Control, offset: 0x5C */
   __IO uint32_t DATA_RATE_OVRD_CTRL1;              /**< PLL Data Rate Override Control, offset: 0x60 */
   __IO uint32_t DATA_RATE_OVRD_CTRL2;              /**< PLL Data Rate Override Control, offset: 0x64 */
-       uint8_t RESERVED_4[28];
+       uint8_t RESERVED_3[28];
   __I  uint32_t CTUNE_RES;                         /**< PLL Coarse Tune Results, offset: 0x84 */
-       uint8_t RESERVED_5[24];
+       uint8_t RESERVED_4[24];
   __IO uint32_t HPM_CAL_TIMING;                    /**< PLL HPM Calibration Timing Attributes, offset: 0xA0 */
   __IO uint32_t PLL_OFFSET_CTRL;                   /**< PLL Offset Control, offset: 0xA4 */
   __IO uint32_t PLL_DATARATE_CTRL;                 /**< PLL Data Rate Switch Control, offset: 0xA8 */
@@ -514,6 +521,71 @@ typedef struct {
 #define XCVR_PLL_DIG_HPM_CTRL_HPM_MOD_IN_INVERT_SHIFT (31U)
 /*! HPM_MOD_IN_INVERT - Invert High Port Modulation */
 #define XCVR_PLL_DIG_HPM_CTRL_HPM_MOD_IN_INVERT(x) (((uint32_t)(((uint32_t)(x)) << XCVR_PLL_DIG_HPM_CTRL_HPM_MOD_IN_INVERT_SHIFT)) & XCVR_PLL_DIG_HPM_CTRL_HPM_MOD_IN_INVERT_MASK)
+/*! @} */
+
+/*! @name HPMCAL_CTRL - PLL High Port Calibration Control */
+/*! @{ */
+
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_FACTOR_MASK (0x1FFFU)
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_FACTOR_SHIFT (0U)
+/*! HPM_CAL_FACTOR - High Port Modulation Calibration Factor */
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_FACTOR(x) (((uint32_t)(((uint32_t)(x)) << XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_FACTOR_SHIFT)) & XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_FACTOR_MASK)
+
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_ARRAY_SIZE_MASK (0x2000U)
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_ARRAY_SIZE_SHIFT (13U)
+/*! HPM_CAL_ARRAY_SIZE - High Port Modulation Calibration Array Size
+ *  0b0..128
+ *  0b1..256
+ */
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_ARRAY_SIZE(x) (((uint32_t)(((uint32_t)(x)) << XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_ARRAY_SIZE_SHIFT)) & XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_ARRAY_SIZE_MASK)
+
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_COUNT_SCALE_MASK (0x4000U)
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_COUNT_SCALE_SHIFT (14U)
+/*! HPM_CAL_COUNT_SCALE - HPM_CAL_COUNT_SCALE */
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_COUNT_SCALE(x) (((uint32_t)(((uint32_t)(x)) << XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_COUNT_SCALE_SHIFT)) & XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_COUNT_SCALE_MASK)
+
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HP_CAL_DISABLE_MASK (0x8000U)
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HP_CAL_DISABLE_SHIFT (15U)
+/*! HP_CAL_DISABLE - Disable HPM Manual Calibration */
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HP_CAL_DISABLE(x) (((uint32_t)(((uint32_t)(x)) << XCVR_PLL_DIG_HPMCAL_CTRL_HP_CAL_DISABLE_SHIFT)) & XCVR_PLL_DIG_HPMCAL_CTRL_HP_CAL_DISABLE_MASK)
+
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_FACTOR_MANUAL_MASK (0x1FFF0000U)
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_FACTOR_MANUAL_SHIFT (16U)
+/*! HPM_CAL_FACTOR_MANUAL - Manual HPM Calibration Factor */
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_FACTOR_MANUAL(x) (((uint32_t)(((uint32_t)(x)) << XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_FACTOR_MANUAL_SHIFT)) & XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_FACTOR_MANUAL_MASK)
+
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_SKIP_MASK (0x20000000U)
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_SKIP_SHIFT (29U)
+/*! HPM_CAL_SKIP - HPM_CAL_SKIP */
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_SKIP(x) (((uint32_t)(((uint32_t)(x)) << XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_SKIP_SHIFT)) & XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_SKIP_MASK)
+
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_BUMPED_MASK (0xC0000000U)
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_BUMPED_SHIFT (30U)
+/*! HPM_CAL_BUMPED - HPM_CAL_BUMPED
+ *  0b00..No calibration boost
+ *  0b01..x2
+ *  0b10..x4
+ *  0b11..x8
+ */
+#define XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_BUMPED(x) (((uint32_t)(((uint32_t)(x)) << XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_BUMPED_SHIFT)) & XCVR_PLL_DIG_HPMCAL_CTRL_HPM_CAL_BUMPED_MASK)
+/*! @} */
+
+/*! @name HPM_CAL1 - PLL High Port Calibration Result 1 */
+/*! @{ */
+
+#define XCVR_PLL_DIG_HPM_CAL1_HPM_COUNT_1_MASK   (0x7FFFFU)
+#define XCVR_PLL_DIG_HPM_CAL1_HPM_COUNT_1_SHIFT  (0U)
+/*! HPM_COUNT_1 - High Port Modulation Counter Value 1 */
+#define XCVR_PLL_DIG_HPM_CAL1_HPM_COUNT_1(x)     (((uint32_t)(((uint32_t)(x)) << XCVR_PLL_DIG_HPM_CAL1_HPM_COUNT_1_SHIFT)) & XCVR_PLL_DIG_HPM_CAL1_HPM_COUNT_1_MASK)
+/*! @} */
+
+/*! @name HPM_CAL2 - PLL High Port Calibration Result 2 */
+/*! @{ */
+
+#define XCVR_PLL_DIG_HPM_CAL2_HPM_COUNT_2_MASK   (0x7FFFFU)
+#define XCVR_PLL_DIG_HPM_CAL2_HPM_COUNT_2_SHIFT  (0U)
+/*! HPM_COUNT_2 - High Port Modulation Counter Value 2 */
+#define XCVR_PLL_DIG_HPM_CAL2_HPM_COUNT_2(x)     (((uint32_t)(((uint32_t)(x)) << XCVR_PLL_DIG_HPM_CAL2_HPM_COUNT_2_SHIFT)) & XCVR_PLL_DIG_HPM_CAL2_HPM_COUNT_2_MASK)
 /*! @} */
 
 /*! @name HPM_SDM_RES - PLL High Port Sigma Delta Results */

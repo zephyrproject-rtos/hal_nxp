@@ -1,6 +1,8 @@
 /*
 ** ###################################################################
-**     Processor:           MCXW70ADMFTA
+**     Processors:          MCXW70ADMFT
+**                          MCXW70ADMMP
+**
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
@@ -8,7 +10,7 @@
 **
 **     Reference manual:    Rev. 1 Draft F, 2025-10-18
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260109
+**     Build:               b260409
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -44,7 +46,6 @@
 #include "fsl_device_registers.h"
 
 
-#define SYSCON_UNLOCK_CODE 0xaaaaaaaaUL
 
 /* ----------------------------------------------------------------------------
    -- Core clock
@@ -64,44 +65,52 @@ __attribute__ ((weak)) void SystemInit (void) {
   #endif /* (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
 #endif /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
 
-#if 0
 #if (DISABLE_WDOG)
-  while ((WDOG_0->CS & WDOG_CS_RCS_MASK) != WDOG_CS_RCS_MASK)
+  if ((WDOG_0->CS & WDOG_CS_EN_MASK) == WDOG_CS_EN_MASK)
   {
-  }
+    /* If EN bit is set to 1 then disable Watchdog */
+    while ((WDOG_0->CS & WDOG_CS_RCS_MASK) != WDOG_CS_RCS_MASK)
+    {
+    }
 
-  if ((WDOG_0->CS & WDOG_CS_CMD32EN_MASK) != 0U)
-  {
-      WDOG_0->CNT = 0xD928C520U;
-  }
-  else
-  {
-      WDOG_0->CNT = 0xC520U;
-      WDOG_0->CNT = 0xD928U;
-  }
+    if ((WDOG_0->CS & WDOG_CS_CMD32EN_MASK) != 0U)
+    {
+        WDOG_0->CNT = 0xD928C520U;
+    }
+    else
+    {
+        WDOG_0->CNT = 0xC520U;
+        WDOG_0->CNT = 0xD928U;
+    }
 
-  while ((WDOG_0->CS & WDOG_CS_ULK_MASK) != WDOG_CS_ULK_MASK)
-  {
-  }
+    while ((WDOG_0->CS & WDOG_CS_ULK_MASK) != WDOG_CS_ULK_MASK)
+    {
+    }
 
-  WDOG_0->TOVAL = 0xFFFF;
-  WDOG_0->CS = (uint32_t) ((WDOG_0->CS) & ~WDOG_CS_EN_MASK) | WDOG_CS_UPDATE_MASK;
+    WDOG_0->TOVAL = 0xFFFF;
+    WDOG_0->CS = (uint32_t) ((WDOG_0->CS) & ~WDOG_CS_EN_MASK) | WDOG_CS_UPDATE_MASK;
 
-  while ((WDOG_0->CS & WDOG_CS_RCS_MASK) != WDOG_CS_RCS_MASK)
-  {
+    while ((WDOG_0->CS & WDOG_CS_RCS_MASK) != WDOG_CS_RCS_MASK)
+    {
+    }
   }
 #endif /* (DISABLE_WDOG) */
-#endif
 
 #if defined(__MCUXPRESSO)
     extern void(*const g_pfnVectors[]) (void);
     SCB->VTOR = (uint32_t) &g_pfnVectors;
 #endif
 
-  /* Request Core#1 to stall when accessing busy flash */
   SYSCON->AUTHENTICATE = SYSCON_UNLOCK_CODE;
   __DMB();
+
+  /* Request Core#1 to stall when accessing busy flash */
   SYSCON->FMC1_CTRL = SYSCON_FMC1_CTRL_PFLEXSTALL(1);
+
+  /* Set AHB timeout to prevent Core#1 HardFaults during concurrent AHB peripheral access */
+  SYSCON->CPU1_AHB_TIMEOUT &= ~SYSCON_CPU1_AHB_TIMEOUT_ahb_timeout_cycle_MASK;
+  SYSCON->CPU1_AHB_TIMEOUT |= SYSCON_CPU1_AHB_TIMEOUT_ahb_timeout_cycle(2U);
+
   /* Lock again */
   __DMB();
   SYSCON->AUTHENTICATE = 0UL;
