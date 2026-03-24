@@ -391,7 +391,9 @@ bool CLOCK_IsSysPll2PfdEnabled(clock_pfd_t pfd)
 void CLOCK_InitPfd(clock_pll_t pll, clock_pfd_t pfd, uint8_t frac)
 {
     volatile uint32_t *pfdCtrl = NULL, *pfdUpdate = NULL, stable;
+    uint32_t shift = 8UL * (uint32_t)pfd;
     uint32_t regFracVal;
+    uint32_t val;
     bool pfdGated;
 
     assert(frac <= (uint8_t)PFD_FRAC_MAX);
@@ -413,27 +415,25 @@ void CLOCK_InitPfd(clock_pll_t pll, clock_pfd_t pfd, uint8_t frac)
             break;
     }
 
-    regFracVal = ((*pfdCtrl) & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC_MASK << (8UL * (uint32_t)pfd))) >>
-                 (8UL * (uint32_t)pfd);
-    pfdGated =
-        (bool)(((*pfdCtrl) & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << (8UL * (uint32_t)pfd))) >>
-               (8UL >> (uint32_t)pfd));
+    val = *pfdCtrl;
+    regFracVal = (val & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC_MASK << shift)) >> shift;
+    pfdGated = (val & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << shift)) != 0U;
     if ((regFracVal == (uint32_t)frac) && (!pfdGated))
     {
         return;
     }
 
-    stable = *pfdCtrl & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_STABLE_MASK << (8UL * (uint32_t)pfd));
-    *pfdCtrl |= ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << (8UL * (uint32_t)pfd));
+    stable = val & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_STABLE_MASK << shift);
+    *pfdCtrl |= ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << shift);
 
     /* all pfds support to be updated on-the-fly after corresponding PLL is stable */
-    *pfdCtrl &= ~((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC_MASK << (8UL * (uint32_t)pfd));
-    *pfdCtrl |= (ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC(frac) << (8UL * (uint32_t)pfd));
+    *pfdCtrl &= ~((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC_MASK << shift);
+    *pfdCtrl |= (ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC(frac) << shift);
 
     *pfdUpdate ^= ((uint32_t)ANADIG_PLL_SYS_PLL2_UPDATE_PFD0_UPDATE_MASK << (uint32_t)pfd);
-    *pfdCtrl &= ~((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << (8UL * (uint32_t)pfd));
+    *pfdCtrl &= ~((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << shift);
     /* Wait for stablizing */
-    while (stable == (*pfdCtrl & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_STABLE_MASK << (8UL * (uint32_t)pfd))))
+    while (stable == (*pfdCtrl & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_STABLE_MASK << shift)))
     {
     }
 }
