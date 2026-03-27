@@ -333,10 +333,6 @@ file(GLOB WIFI_SUPP_SRC ./wifidriver/wpa_supp_if/*.c)
 zephyr_library_sources(${WIFI_SUPP_SRC})
 endif()
 
-zephyr_include_directories_ifdef(CONFIG_WIFI_NM_WPA_SUPPLICANT_CRYPTO_ALT
-    incl/port/mbedtls
-)
-
 zephyr_library_compile_definitions_ifdef(CONFIG_WIFI_NM_HOSTAPD_AP
     HOSTAPD
 )
