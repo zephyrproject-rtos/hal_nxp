@@ -172,9 +172,7 @@ typedef enum _enet_mii_mode
 {
     kENET_MiiMode  = 0U, /*!< MII mode for data interface. */
     kENET_RmiiMode = 1U, /*!< RMII mode for data interface. */
-#if defined(FSL_FEATURE_ENET_HAS_AVB) && FSL_FEATURE_ENET_HAS_AVB
     kENET_RgmiiMode = 2U /*!< RGMII mode for data interface.  */
-#endif                   /* FSL_FEATURE_ENET_HAS_AVB */
 } enet_mii_mode_t;
 
 /*! @brief Defines the 10/100/1000 Mbps speed for the MII data interface.
@@ -185,9 +183,7 @@ typedef enum _enet_mii_speed
 {
     kENET_MiiSpeed10M  = 0U, /*!< Speed 10 Mbps. */
     kENET_MiiSpeed100M = 1U, /*!< Speed 100 Mbps. */
-#if defined(FSL_FEATURE_ENET_HAS_AVB) && FSL_FEATURE_ENET_HAS_AVB
     kENET_MiiSpeed1000M = 2U /*!< Speed 1000M bps. */
-#endif                       /* FSL_FEATURE_ENET_HAS_AVB */
 } enet_mii_speed_t;
 
 /*! @brief Defines the half or full duplex for the MII data interface. */
