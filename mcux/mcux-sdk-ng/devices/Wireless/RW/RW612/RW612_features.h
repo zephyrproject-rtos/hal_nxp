@@ -364,6 +364,8 @@
 #define FSL_FEATURE_FLEXSPI_HAS_ERRATA_051426 (0)
 /* @brief FlexSPI has AHBCR RESUMEDISABLE bit */
 #define FSL_FEATURE_FLEXSPI_HAS_RESUMEDISABLE_BIT_CONFIG_SUPPORT (1)
+/* @brief FlexSPI has address remapping support */
+#define FSL_FEATURE_FLEXSPI_HAS_ADDR_REMAP (1)
 
 /* ADC module features */
 
