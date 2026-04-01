@@ -17,7 +17,7 @@ if (CONFIG_MCUX_COMPONENT_utilities.misc_utilities)
     )
 
     mcux_add_source(
-        SOURCES fsl_memcpy.S
+        SOURCES fsl_memcpy.S fsl_memset.S
         TOOLCHAINS armgcc mcux mdk
         CORES cm3 cm4 cm4f cm7 cm7f cm33 cm33f
     )
