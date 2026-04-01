@@ -1384,6 +1384,8 @@ status_t LPI2C_MasterTransferNonBlocking(LPI2C_Type *base,
         /* Save transfer into handle. */
         handle->transfer = *transfer;
 
+        handle->chunkSize = 0U;
+
         /* Generate commands to send. */
         LPI2C_InitTransferStateMachine(handle);
 

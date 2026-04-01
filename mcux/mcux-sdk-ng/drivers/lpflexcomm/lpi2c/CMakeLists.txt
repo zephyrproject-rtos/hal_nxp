@@ -1,9 +1,9 @@
-# Copyright 2024-2025 NXP
+# Copyright 2024-2026 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.lpflexcomm_lpi2c)
-    mcux_component_version(2.2.7)
+    mcux_component_version(2.2.9)
 
     mcux_add_source(SOURCES fsl_lpi2c.h fsl_lpi2c.c)
 
