@@ -26,7 +26,7 @@
  * @{
  */
 /*! @brief LPI2C driver version. */
-#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 6, 5))
+#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 6, 6))
 /*! @} */
 
 /*! @brief Retry times for waiting flag. */

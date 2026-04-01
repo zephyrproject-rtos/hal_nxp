@@ -1,5 +1,11 @@
 # LPI2C
 
+
+## [2.2.9]
+
+- Bug Fixes
+  - Set handle->chunkSize to 0 in LPI2C_MasterTransferNonBlocking().
+
 ## [2.2.8]
 
 - Bug Fixes
