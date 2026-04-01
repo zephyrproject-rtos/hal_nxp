@@ -1876,7 +1876,9 @@ int wifi_dual_ant_duty_cycle(t_u16 enable, t_u16 nbTime, t_u16 wlanTime, t_u16 w
 int wifi_set_indrst_cfg(const wifi_indrst_cfg_t *indrst_cfg, mlan_bss_type bss_type);
 int wifi_get_indrst_cfg(wifi_indrst_cfg_t *indrst_cfg, mlan_bss_type bss_type);
 int wifi_trigger_inband_indrst();
+#if CONFIG_WIFI_IND_OOB_RESET
 int wifi_trigger_oob_indrst();
+#endif
 #endif
 
 #if CONFIG_WIFI_BOOT_SLEEP
