@@ -93,8 +93,7 @@
 #include "zephyr/net/dhcpv4_server.h"
 #endif
 
-#if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
-// #include "board.h"
+#if CONFIG_WIFI_IND_OOB_RESET
 #include "fsl_gpio.h"
 
 #if defined(CONFIG_SOC_PART_NUMBER_MIMXRT1062DVL6A)
@@ -8354,7 +8353,7 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
 #endif
 #endif
 
-#if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_OOB_RESET
 #ifdef IR_OUTBAND_TRIGGER_GPIO
     gpio_pin_config_t out_config = {kGPIO_DigitalOutput, 1, kGPIO_NoIntmode};
 
@@ -16085,6 +16084,15 @@ int wlan_host_set_sta_mac_filter(int filter_mode, int mac_count, unsigned char *
 #if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
 int wlan_set_indrst_cfg(const wlan_indrst_cfg_t *indrst_cfg)
 {
+    if (!indrst_cfg || (indrst_cfg->ir_mode != 0 && indrst_cfg->ir_mode != 2
+#if CONFIG_WIFI_IND_OOB_RESET
+         && indrst_cfg->ir_mode != 1
+#endif
+        )
+    )
+    {
+        return -WM_FAIL;
+    }
     wlan.ir_mode = indrst_cfg->ir_mode;
 
     return wifi_set_indrst_cfg(indrst_cfg, (mlan_bss_type)WLAN_BSS_TYPE_STA);
@@ -16100,6 +16108,7 @@ static int wlan_trigger_inband_ind_reset()
     return wifi_trigger_inband_indrst();
 }
 
+#if CONFIG_WIFI_IND_OOB_RESET
 static int wlan_trigger_oob_ind_reset()
 {
     (void)wlan_ieeeps_off();
@@ -16134,17 +16143,20 @@ static int wlan_trigger_oob_ind_reset()
         return WM_SUCCESS;
     }
 }
+#endif
 
 int wlan_independent_reset()
 {
-    if (wlan.ir_mode == 1)
-    {
-        return wlan_trigger_oob_ind_reset();
-    }
-    else if (wlan.ir_mode == 2)
+    if (wlan.ir_mode == 2)
     {
         return wlan_trigger_inband_ind_reset();
     }
+#if CONFIG_WIFI_IND_OOB_RESET
+    else if (wlan.ir_mode == 1)
+    {
+        return wlan_trigger_oob_ind_reset();
+    }
+#endif
 
     return -WM_FAIL;
 }
