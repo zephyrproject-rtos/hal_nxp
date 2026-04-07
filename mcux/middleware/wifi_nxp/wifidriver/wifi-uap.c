@@ -3794,9 +3794,9 @@ int wifi_nxp_beacon_config(nxp_wifi_ap_info_t *params)
             }
             wuap_d("wlan: AP started");
 
-            (void)wifi_set_rx_mgmt_indication(MLAN_BSS_TYPE_UAP, WIFI_MGMT_AUTH | MGMT_MASK_ASSOC_REQ |
-                                                                     MGMT_MASK_REASSOC_REQ | WIFI_MGMT_DEAUTH |
-                                                                     WIFI_MGMT_ACTION | WIFI_MGMT_DIASSOC);
+            (void)wifi_set_rx_mgmt_indication(
+                MLAN_BSS_TYPE_UAP, MGMT_MASK_PROBE_REQ | WIFI_MGMT_AUTH | MGMT_MASK_ASSOC_REQ | MGMT_MASK_REASSOC_REQ |
+                                       WIFI_MGMT_DEAUTH | WIFI_MGMT_ACTION | WIFI_MGMT_DIASSOC);
         }
 
     done:
