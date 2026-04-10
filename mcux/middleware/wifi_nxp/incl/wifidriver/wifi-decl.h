@@ -605,9 +605,34 @@ typedef PACK_START struct _wifi_ed_mac_ctrl_t
     t_s16 ed_offset_5g;
 } PACK_END wifi_ed_mac_ctrl_t;
 
+typedef PACK_START struct _wifi_set_band_config_t
+{
+    /**
+     * zero: legacy (B + G + A)
+     * bit 0: 11N
+     * bit 1: 11AC
+     * bit 2: 11AX
+     */
+    /** band configuration */
+    t_u16 band_cfg;
+    /** hardware supported bands */
+    t_u16 supp_bands;
+} PACK_END wifi_set_band_config_t;
+
 /** Type definition of wifi_bandcfg_t */
 typedef PACK_START struct _wifi_bandcfg_t
 {
+    /** Band Bitmap:
+     *  bit 0: B (Not configurable) \n
+     *  bit 1: G (Not configurable)\n
+     *  bit 2: A (Not configurable)\n
+     *  bit 3: GN \n
+     *  bit 4: AN \n
+     *  bit 5: GAC \n
+     *  bit 6: AAC \n
+     *  bit 8: GAX \n
+     *  bit 9: AAX
+     */
     /** Infra band */
     t_u16 config_bands;
     /** fw supported band */

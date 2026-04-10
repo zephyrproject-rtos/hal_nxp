@@ -1505,10 +1505,19 @@ typedef wifi_ds_rate wlan_ds_rate;
  * \ref wifi_ed_mac_ctrl_t
  */
 typedef wifi_ed_mac_ctrl_t wlan_ed_mac_ctrl_t;
+
+#define WLAN_BANDCFG_11N MBIT(0)
+#if CONFIG_11AC
+#define WLAN_BANDCFG_11AC MBIT(1)
+#endif
+#if CONFIG_11AX
+#define WLAN_BANDCFG_11AX MBIT(2)
+#endif
+
 /** Configuration for band from
- * \ref wifi_bandcfg_t
+ * \ref wifi_set_band_config_t
  */
-typedef wifi_bandcfg_t wlan_bandcfg_t;
+typedef wifi_set_band_config_t wlan_bandcfg_t;
 /** Configuration for CW mode parameters from
  * \ref wifi_cw_mode_ctrl_t
  */
@@ -7030,6 +7039,14 @@ int wlan_get_signal_info(wlan_rssi_info_t *signal);
 /**
  * Set band configuration.
  * \param[in] bandcfg:   band configuration
+ *
+ * \note 11AC or 11AX only mode is not supported. Supported modes are: \n
+ *   legacy (B + G + A)\n
+ *   11N only \n
+ *   11N + 11AC \n
+ *   11N + 11AX \n
+ *   11N + 11AC + 11AX\n
+ * \note B,G and A modes are enabled by default and not configurable.\n
  *
  * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
  */

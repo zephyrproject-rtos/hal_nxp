@@ -6489,14 +6489,6 @@ static void test_wlan_get_signal(int argc, char **argv)
 }
 #endif
 
-#define WLAN_BANDCFG_11N MBIT(0)
-#if CONFIG_11AC
-#define WLAN_BANDCFG_11AC MBIT(1)
-#endif
-#if CONFIG_11AX
-#define WLAN_BANDCFG_11AX MBIT(2)
-#endif
-
 static void dump_wlan_bandcfg_bit_usage(void)
 {
     (void)PRINTF("        Bits in Band:\r\n");
@@ -6513,8 +6505,6 @@ static void test_wlan_get_bandcfg(int argc, char **argv)
 {
     wlan_bandcfg_t bandcfg;
     int ret = WM_SUCCESS;
-    uint32_t val = 0;
-    uint32_t hw_val = 0;
 
     (void)memset(&bandcfg, 0, sizeof(bandcfg));
 
@@ -6525,45 +6515,28 @@ static void test_wlan_get_bandcfg(int argc, char **argv)
         return;
     }
 
-    if (bandcfg.config_bands & (BAND_AN | BAND_GN))
-    {
-        val |= WLAN_BANDCFG_11N;
-    }
-    if (bandcfg.fw_bands & (BAND_AN | BAND_GN))
-    {
-        hw_val |= WLAN_BANDCFG_11N;
-    }
-#if CONFIG_11AC
-    if (bandcfg.config_bands & (BAND_AAC | BAND_GAC))
-    {
-        val |= WLAN_BANDCFG_11AC;
-    }
-    if (bandcfg.fw_bands & (BAND_AAC | BAND_GAC))
-    {
-        hw_val |= WLAN_BANDCFG_11AC;
-    }
-#endif
-#if CONFIG_11AX
-    if (bandcfg.config_bands & (BAND_AAX | BAND_GAX))
-    {
-        val |= WLAN_BANDCFG_11AX;
-    }
-    if (bandcfg.fw_bands & (BAND_AAX | BAND_GAX))
-    {
-        hw_val |= WLAN_BANDCFG_11AX;
-    }
-#endif
-
-    (void)PRINTF("\tconfig band: 0x%x\r\n", val);
-    (void)PRINTF("\tfw band: 0x%x\r\n", hw_val);
+    (void)PRINTF("\tconfig band: 0x%x\r\n", bandcfg.band_cfg);
+    (void)PRINTF("\tfw band: 0x%x\r\n", bandcfg.supp_bands);
     dump_wlan_bandcfg_bit_usage();
 }
 
 static void dump_wlan_set_bandcfg(void)
 {
-    (void)PRINTF("Usage:\r\n");
-    (void)PRINTF("    wlan-set-bandcfg <value>\r\n");
-    dump_wlan_bandcfg_bit_usage();
+    (void)PRINTF(
+        "Usage:\r\n"
+        "    wlan-set-bandcfg <value>\r\n"
+        "        value -- 0x0: legacy\r\n"
+        "                 0x1: 11N\r\n"
+#ifdef CONFIG_11AC
+        "                 0x3: 11N + 11AC\r\n"
+#endif
+#ifdef CONFIG_11AX
+        "                 0x5: 11N + 11AX\r\n"
+#endif
+#if defined(CONFIG_11AC) && defined(CONFIG_11AX)
+        "                 0x7: 11N + 11AC + 11AX\r\n"
+#endif
+    );
 }
 
 static void test_wlan_set_bandcfg(int argc, char **argv)
@@ -6585,44 +6558,16 @@ static void test_wlan_set_bandcfg(int argc, char **argv)
         return;
     }
 
-    val = a2hex_or_atoi(argv[1]);
-    (void)memset(&bandcfg, 0, sizeof(bandcfg));
-    ret = wlan_get_bandcfg(&bandcfg);
-    if (ret != WM_SUCCESS)
+    val = (uint16_t)a2hex_or_atoi(argv[1]);
+    if (val != 0 && !(val & WLAN_BANDCFG_11N))
     {
-        (void)PRINTF("Unable to get bandcfg\r\n");
+        (void)PRINTF("Error: invalid parameter <value>\r\n");
+        dump_wlan_set_bandcfg();
         return;
     }
 
-    if (!(val & WLAN_BANDCFG_11N))
-    {
-        bandcfg.config_bands &= ~(BAND_AN | BAND_GN);
-    }
-    else
-    {
-        bandcfg.config_bands |= (BAND_AN | BAND_GN);
-    }
-#if CONFIG_11AC
-    if (!(val & WLAN_BANDCFG_11AC))
-    {
-        bandcfg.config_bands &= ~(BAND_AAC | BAND_GAC);
-    }
-    else
-    {
-        bandcfg.config_bands |= (BAND_AAC | BAND_GAC);
-    }
-#endif
-#if CONFIG_11AX
-    if (!(val & WLAN_BANDCFG_11AX))
-    {
-        bandcfg.config_bands &= ~(BAND_AAX | BAND_GAX);
-    }
-    else
-    {
-        bandcfg.config_bands |= (BAND_AAX | BAND_GAX);
-    }
-#endif
-
+    (void)memset(&bandcfg, 0, sizeof(bandcfg));
+    bandcfg.band_cfg = val;
     ret = wlan_set_bandcfg(&bandcfg);
     if (ret != WM_SUCCESS)
     {

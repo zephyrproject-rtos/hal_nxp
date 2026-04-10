@@ -2132,13 +2132,13 @@ static int do_start(struct wlan_network *network)
         if (network->channel == 14)
         {
             wlan_bandcfg_t bandcfg = {0};
-            bandcfg.config_bands &=
-                ~(BAND_AN | BAND_GN
+            bandcfg.band_cfg &=
+                ~(WLAN_BANDCFG_11N
 #if CONFIG_11AC
-                | BAND_AAC | BAND_GAC
+                | WLAN_BANDCFG_11AC
 #endif
 #if CONFIG_11AX
-                | BAND_AAX | BAND_GAX
+                | WLAN_BANDCFG_11AX
 #endif
                 );
             ret = wlan_set_bandcfg(&bandcfg);
@@ -2245,7 +2245,7 @@ static int do_stop(struct wlan_network *network)
                 wlcm_e("Unable to get bandcfg");
                 return -WM_FAIL;
             }
-            bandcfg.config_bands = bandcfg.fw_bands;
+            bandcfg.band_cfg = bandcfg.supp_bands;
             ret = wlan_set_bandcfg(&bandcfg);
             if (ret != WM_SUCCESS)
             {
@@ -15856,7 +15856,81 @@ static void wlan_uap_update_hostapd_bss(wlan_bandcfg_t *bandcfg)
 int wlan_set_bandcfg(wlan_bandcfg_t *bandcfg)
 {
     int ret = 0;
-    ret = wifi_get_set_bandcfg(bandcfg, MLAN_ACT_SET);
+    uint16_t enable_11n = bandcfg->band_cfg & WLAN_BANDCFG_11N;
+#if CONFIG_11AC
+    uint16_t enable_11ac = bandcfg->band_cfg & WLAN_BANDCFG_11AC;
+#endif
+#if CONFIG_11AX
+    uint16_t enable_11ax = bandcfg->band_cfg & WLAN_BANDCFG_11AX;
+#endif
+    wifi_bandcfg_t cfg;
+
+    if (is_sta_connected() || is_uap_started())
+    {
+        (void)PRINTF("Error: set-bandcfg command is not allowed when STA has connection or uAP is started\r\n");
+        return -WM_FAIL;
+    }
+
+#if CONFIG_11AC
+    if (enable_11ac && !enable_11n)
+    {
+        (void)PRINTF("Error! 11AC only mode is not supported! Should enable 11N, too.");
+        return -WM_FAIL;
+    }
+#endif
+#if CONFIG_11AX
+    if (enable_11ax && !enable_11n)
+    {
+        (void)PRINTF("Error! 11AX only mode is not supported! Should enable 11N, too.");
+        return -WM_FAIL;
+    }
+#endif
+
+    memset(&cfg, 0, sizeof(cfg));
+    ret = wifi_get_set_bandcfg(&cfg, MLAN_ACT_GET);
+    if (ret != WM_SUCCESS)
+    {
+        (void)PRINTF("Unable to get bandcfg\r\n");
+        return -WM_FAIL;
+    }
+
+    cfg.config_bands = 0;
+    /* Band B, G and A are not configurable. They are mandantory. */
+    cfg.config_bands |= (BAND_B | BAND_G | BAND_A);
+    if (enable_11n)
+    {
+        cfg.config_bands |= (BAND_GN | BAND_AN);
+    }
+#if CONFIG_11AC
+    if (enable_11ac)
+    {
+        uint16_t supp_11ac = cfg.fw_bands & (BAND_GAC | BAND_AAC);
+        if (supp_11ac)
+        {
+            cfg.config_bands |= (BAND_GAC | BAND_AAC);
+        }
+        else
+        {
+            (void)PRINTF("Warning: hardware doesn't support 11AC, ignore 11AC setting\r\n");
+        }
+    }
+#endif
+#if CONFIG_11AX
+    if (enable_11ax)
+    {
+        uint16_t supp_11ax = cfg.fw_bands & (BAND_GAX | BAND_AAX);
+        if (supp_11ax)
+        {
+            cfg.config_bands |= (BAND_GAX | BAND_AAX);
+        }
+        else
+        {
+            (void)PRINTF("Warning: hardware doesn't support 11AX, ignore 11AX setting\r\n");
+        }
+    }
+#endif
+
+    ret = wifi_get_set_bandcfg(&cfg, MLAN_ACT_SET);
 #ifdef CONFIG_WIFI_NM_HOSTAPD_AP
     if (ret == WM_SUCCESS)
     {
@@ -15869,7 +15943,46 @@ int wlan_set_bandcfg(wlan_bandcfg_t *bandcfg)
 
 int wlan_get_bandcfg(wlan_bandcfg_t *bandcfg)
 {
-    return wifi_get_set_bandcfg(bandcfg, MLAN_ACT_GET);
+    int ret = WM_SUCCESS;
+    wifi_bandcfg_t cfg;
+
+    memset(&cfg, 0, sizeof(cfg));
+    ret = wifi_get_set_bandcfg(&cfg, MLAN_ACT_GET);
+    if (ret != WM_SUCCESS)
+    {
+        (void)PRINTF("Unable to get bandcfg\r\n");
+        return -WM_FAIL;
+    }
+
+    if (cfg.config_bands & (BAND_AN | BAND_GN))
+    {
+        bandcfg->band_cfg |= WLAN_BANDCFG_11N;
+    }
+    if (cfg.fw_bands & (BAND_AN | BAND_GN))
+    {
+        bandcfg->supp_bands |= WLAN_BANDCFG_11N;
+    }
+#if CONFIG_11AC
+    if (cfg.config_bands & (BAND_AAC | BAND_GAC))
+    {
+        bandcfg->band_cfg |= WLAN_BANDCFG_11AC;
+    }
+    if (cfg.fw_bands & (BAND_AAC | BAND_GAC))
+    {
+        bandcfg->supp_bands |= WLAN_BANDCFG_11AC;
+    }
+#endif
+#if CONFIG_11AX
+    if (cfg.config_bands & (BAND_AAX | BAND_GAX))
+    {
+        bandcfg->band_cfg |= WLAN_BANDCFG_11AX;
+    }
+    if (cfg.fw_bands & (BAND_AAX | BAND_GAX))
+    {
+        bandcfg->supp_bands |= WLAN_BANDCFG_11AX;
+    }
+#endif
+    return ret;
 }
 
 void wlan_uap_bandcfg_recfg(void)
