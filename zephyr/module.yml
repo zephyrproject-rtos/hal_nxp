@@ -239,3 +239,47 @@ blobs:
     click-through: True
     url: https://www.nxp.com.cn/lgfiles/NMG/MAD/YOCTO/imx943-evk-boot-firmware-6.12.34-2.1.0.bin
     description: "Boot firmware for i.MX 943 evk board"
+
+#For NEUTRON NPU
+  - path: neutron/common/include/NeutronErrors.h
+    sha256: 6d7e1cda842cd4eb3388e2218018f89c91112e63dca38c19f8340e59400551cc
+    type: img
+    version: '2.2.2'
+    license-path: zephyr/blobs/license/BSD_3.txt
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/4a3cb9ad/neutron/common/include/NeutronErrors.h
+    description: "Neutron error definitions header"
+  - path: neutron/driver/include/NeutronDriver.h
+    sha256: 6d01d89fd69f0125282818c1d4aba073ff5cc0a65958c4c91a1419e17652db17
+    type: img
+    version: '2.2.2'
+    license-path: zephyr/blobs/license/BSD_3.txt
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/4a3cb9ad/neutron/driver/include/NeutronDriver.h
+    description: "Neutron driver header file"
+  - path: neutron/mcxn/libNeutronDriver.a
+    sha256: 452b1077a015265d1ab34831db3a25a4ef266c28c94afa6a308b28794baac358
+    type: lib
+    version: '2.2.2'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/4a3cb9ad/neutron/mcxn/libNeutronDriver.a
+    description: "Neutron driver library for MCXN"
+  - path: neutron/mcxn/libNeutronFirmware.a
+    sha256: ae2dd4cc45e0a7d89dd5e5688eb393269c3392bc4e0e5897f0a9429919af37f1
+    type: lib
+    version: '2.2.2'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/4a3cb9ad/neutron/mcxn/libNeutronFirmware.a
+    description: "Neutron firmware library for MCXN"
+  - path: neutron/rt700/cm33/libNeutronDriver.a
+    sha256: 2a8d004fea0bd21520c1df2d33749b74c8cb4f4615bc950a909313a0fcb942ad
+    type: lib
+    version: '2.2.2'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/4a3cb9ad/neutron/rt700/cm33/libNeutronDriver.a
+    description: "Neutron driver library for RT700 CM33"
+  - path: neutron/rt700/cm33/libNeutronFirmware.a
+    sha256: fc2f01e1f65fb4561cab5a086659f276822d6c29753b34cebd4b9176f7c4d8f0
+    type: lib
+    version: '2.2.2'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/4a3cb9ad/neutron/rt700/cm33/libNeutronFirmware.a
+    description: "Neutron firmware library for RT700 CM33"
