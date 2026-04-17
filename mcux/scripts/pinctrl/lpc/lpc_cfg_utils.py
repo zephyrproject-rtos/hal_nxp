@@ -405,7 +405,7 @@ class PinGroup:
         # group pins based on shared configuration
         self._pin_groups = collections.defaultdict(lambda: [])
         for pin in pins:
-            # find signal defintion for this pin
+            # find signal definition for this pin
             signal_name = pin.attrib.get('pin_signal')
             if not signal_name in signal_map:
                 logging.warning('Signal name %s not present in mapping', signal_name)
@@ -668,7 +668,7 @@ class NXPSdkUtil:
         """
         Writes all pin mux options into pinctrl header file. Board level pin
         groups can include this pinctrl header file to access pin control
-        defintions.
+        definitions.
         @param outputfile: file to write output pinctrl defs to
         """
         file_header = ("/*\n"

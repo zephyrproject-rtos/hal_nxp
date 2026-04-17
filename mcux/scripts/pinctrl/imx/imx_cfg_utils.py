@@ -881,7 +881,7 @@ class NXPSdkUtil:
         self._logger.setLevel(log_level)
         if not cfg_path.is_dir():
             raise RuntimeError("Provided configuration path must be directory")
-        # Find all required register and signal defintions
+        # Find all required register and signal definitions
         signal_path = cfg_path / 'signal_configuration.xml'
         register_path = cfg_path / 'registers/registers.xml'
         register_dir = cfg_path / 'registers'
@@ -889,9 +889,9 @@ class NXPSdkUtil:
             and register_dir.is_dir()):
             raise RuntimeError("Required processor configuration files not present")
         try:
-            # Load the register xml defintion
+            # Load the register xml definition
             register_xml = ET.parse(str(register_path))
-            # Load the peripheral defintions
+            # Load the peripheral definitions
             self._peripheral_map = self._load_peripheral_map(register_xml, register_dir)
         except ET.ParseError:
             raise RuntimeError(f"Malformed XML tree in {register_xml}")
@@ -912,7 +912,7 @@ class NXPSdkUtil:
                         "unknown signal configuration file path", file_path)
                 # Load and parse this signal configuration file
                 signal_xml = ET.parse(str(file_path))
-            # Load the signal file defintion
+            # Load the signal file definition
             self._signal_map = self._load_signal_map(signal_xml)
         except ET.ParseError:
             logging.error("Malformed XML tree %s", signal_file)
@@ -936,8 +936,8 @@ class NXPSdkUtil:
 
     def write_gpio_mux(self, outputfile):
         """
-        Write pinctrl defintions for GPIO mux. These defintions map GPIO port
-        and pin combinations to iomuxc options. Note that these defintions are
+        Write pinctrl definitions for GPIO mux. These definitions map GPIO port
+        and pin combinations to iomuxc options. Note that these definitions are
         not indended to be used directly, and will likely need to be hand edited.
         @param outputfile file to write gpio dtsi file to
         """
@@ -1030,7 +1030,7 @@ class NXPSdkUtil:
             soc_dtsi.write(header)
             # Write documentation block
             soc_dtsi.write("/*\n"
-                    " * SOC level pinctrl defintions\n"
+                    " * SOC level pinctrl definitions\n"
                     " * These definitions define SOC level defaults for each pin,\n"
                     " * and select the pinmux for the pin. Pinmux entries are a tuple of:\n"
                     " * <mux_register mux_mode input_register input_daisy config_register>\n"
@@ -1141,7 +1141,7 @@ class NXPSdkUtil:
         """
         Generates a mapping of peripheral names to peripheral objects
         @param reg_xml: XML tree for register file
-        @param reg_dir: directory where register defintion files are stored
+        @param reg_dir: directory where register definition files are stored
         @return dict mapping peripheral names to base addresses
         """
         periph_map = {}

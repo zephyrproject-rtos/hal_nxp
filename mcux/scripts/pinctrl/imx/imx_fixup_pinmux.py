@@ -6,7 +6,7 @@ import re
 import os
 
 HELPSTR = """
-Fix generated pinctrl defintions
+Fix generated pinctrl definitions
 Generated i.MX RT 4-digit (RT1xxx) pinctrl definitions may be incorrect,
 because the signal configuration XML file itself is not correct. Fix them
 using fsl_iomuxc definitions. Only applies to parts with the IOMUXC IP;

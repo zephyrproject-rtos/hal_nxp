@@ -20,8 +20,8 @@ within Zephyr. These definitions should be copied where appropriate.
 
 This tool is intended to be used with the configuration data downloaded
 from NXP's website. One way to extract this config data is to use the
-MCUXpresso configuration tool to download processor defintions, locate
-those defintions on the disk. Alternatively, individual processor config
+MCUXpresso configuration tool to download processor definitions, locate
+those definitions on the disk. Alternatively, individual processor config
 data packs can be downloaded from the MCUXpresso SDK builder tool. Either way,
 the path to the 'processors' directory must be provided as the 'cfg-tool-root'
 parameter.

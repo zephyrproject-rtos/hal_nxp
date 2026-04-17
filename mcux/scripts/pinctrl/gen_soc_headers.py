@@ -28,7 +28,7 @@ from lpc import lpc_cfg_utils
 HELPSTR = """
 Processes NXP signal configuration files
 
-Given a processor data pack, generates the SOC level pinctrl DTSI defintions
+Given a processor data pack, generates the SOC level pinctrl DTSI definitions
 required for Zephyr. This tool is intended to be used with the configuration
 data downloaded from NXP's MCUXpresso SDK builder.
 """
