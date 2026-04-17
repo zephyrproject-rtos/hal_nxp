@@ -328,7 +328,7 @@ class PinGroup:
         # group pins based on shared configuration
         self._pin_groups = collections.defaultdict(lambda: [])
         for pin in pins:
-            # find signal defintion for this pin
+            # find signal definition for this pin
             signal_name = pin.attrib.get('pin_signal')
             signal = signal_map[signal_name]
             if not signal:
@@ -534,7 +534,7 @@ class NXPSdkUtil:
     def write_pinctrl_defs(self, outputfile):
         """
         Writes all pin mux options into pinctrl DTSI file. Board level pin groups
-        can include this pinctrl dtsi file to access pin control defintions.
+        can include this pinctrl dtsi file to access pin control definitions.
         @param outputfile: file to write output pinctrl defs to
         """
         # Create list of all pin mux options
