@@ -20,6 +20,7 @@ import re
 
 # SOC configuration data support libraries
 from imx import imx_cfg_utils
+from imx import imx_fixup_pinmux
 from kinetis import kinetis_cfg_utils
 from lpc import lpc_cfg_utils
 
@@ -50,6 +51,9 @@ def parse_args():
     parser.add_argument('--controller', metavar = 'CTRL', type=str,
                         help=("SOC pin controller type."
                         "Currently supports: [IOMUX, IOCON, PORT]"))
+    parser.add_argument('--iomuxc-file', metavar = 'IOMUXC', type=str,
+                        help=('Path to fsl_iomuxc.h file for daisy register fixup. '
+                        'Required for IOMUX controller (i.MX RT 4-digit parts only)'))
 
     return parser.parse_args()
 
@@ -163,6 +167,11 @@ def main():
                 "but this is unsupported!")
             sys.exit(255)
 
+        if args.controller == 'IOMUX' and not args.iomuxc_file:
+            print("Error: --iomuxc-file is required for IOMUX controller "
+                "to fix daisy register values")
+            sys.exit(255)
+
         # Select correct config tool script for the signal file
         out_dir = args.soc_output.rstrip('/')
         if args.controller == 'IOMUX':
@@ -183,6 +192,15 @@ def main():
 
         cfg_util.write_pinctrl_defs(out_path)
         print(f"Wrote pinctrl headers to {out_path}")
+
+        if args.controller == 'IOMUX':
+            print(f"Running daisy register fixup using {args.iomuxc_file}")
+            ground_truth = imx_fixup_pinmux.parse_iomuxc_ground_truth(args.iomuxc_file)
+            error_count = imx_fixup_pinmux.fixup_pinctrl_file(out_path, ground_truth)
+            if error_count > 0:
+                print(f"Fixed {error_count} daisy register error(s) in {out_path}")
+            else:
+                print("No daisy register errors found")
 
 
 if __name__ == "__main__":
