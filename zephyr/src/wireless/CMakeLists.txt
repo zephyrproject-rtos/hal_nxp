@@ -4,6 +4,13 @@ if(CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_BT_H4_NXP_CTLR)
   set(binary_blobs_list)
   set(output_includes_list)
 
+  # Compressed firmware suffix for Wi-Fi / NBU
+  if(CONFIG_NXP_COMPRESSED_WIFI_NB_FW)
+    set(fw_suffix _compressed)
+  else()
+    set(fw_suffix)
+  endif()
+
   if(CONFIG_WIFI_NXP)
     if(CONFIG_NXP_IW61X)
       list(APPEND output_includes_list ${ZEPHYR_BINARY_DIR}/include/generated/nw61x_wifi_fw.bin.se.inc)
@@ -43,7 +50,7 @@ if(CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_BT_H4_NXP_CTLR)
       list(APPEND wifi_bt_binary_blobs_list ${hal_blobs_dir}/8801/${wifi_binary_blob_name})
     elseif(CONFIG_NXP_IW610)
       list(APPEND output_includes_list ${ZEPHYR_BINARY_DIR}/include/generated/iw610_wifi_fw.bin.se.inc)
-      set(wifi_binary_blob_name sd_iw610.bin.se)
+      set(wifi_binary_blob_name sd_iw610${fw_suffix}.bin.se)
       zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/IW610/IW610_cpu1.c)
       set_source_files_properties(
 		${CMAKE_CURRENT_LIST_DIR}/IW610/IW610_cpu1.c
@@ -76,7 +83,7 @@ if(CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_BT_H4_NXP_CTLR)
       list(APPEND wifi_bt_binary_blobs_list ${hal_blobs_dir}/IW416/${bt_binary_blob_name})
     elseif(CONFIG_BT_NXP_IW610)
       list(APPEND output_includes_list ${ZEPHYR_BINARY_DIR}/include/generated/iw610_bt_fw.bin.inc)
-      set(bt_binary_blob_name uart_iw610_bt.bin.se)
+      set(bt_binary_blob_name uart_iw610_bt${fw_suffix}.bin.se)
       zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/IW610/IW610_cpu2.c)
       set_source_files_properties(
 		${CMAKE_CURRENT_LIST_DIR}/IW610/IW610_cpu2.c

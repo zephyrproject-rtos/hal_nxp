@@ -5,10 +5,17 @@ if(CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_NXP_MONOLITHIC_NBU)
 	set(binary_blobs_list)
 	set(output_includes_list)
 
+	# Compressed firmware suffix for Wi-Fi / NBU
+	if(CONFIG_NXP_COMPRESSED_WIFI_NB_FW)
+		set(fw_suffix _compressed)
+	else()
+		set(fw_suffix)
+	endif()
+
 	if(CONFIG_NXP_MONOLITHIC_WIFI)
 		list(APPEND output_includes_list ${ZEPHYR_BINARY_DIR}/include/generated/rw61x_wifi_fw.bin.inc)
 
-		set(signed_binary_blob_name rw61x_sb_wifi_a2.bin)
+		set(signed_binary_blob_name rw61x_sb_wifi_a2${fw_suffix}.bin)
 
 		list(APPEND signed_binary_blobs_list ${hal_blobs_dir}/${signed_binary_blob_name})
 
@@ -16,9 +23,9 @@ if(CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_NXP_MONOLITHIC_NBU)
 	endif()
 	if(CONFIG_NXP_MONOLITHIC_NBU)
 		if(CONFIG_SOC_RW612)
-			set(signed_binary_blob_name rw61x_sb_ble_15d4_combo_a2.bin)
+			set(signed_binary_blob_name rw61x_sb_ble_15d4_combo_a2${fw_suffix}.bin)
 		else()
-			set(signed_binary_blob_name rw61x_sb_ble_a2.bin)
+			set(signed_binary_blob_name rw61x_sb_ble_a2${fw_suffix}.bin)
 		endif()
 		list(APPEND output_includes_list ${ZEPHYR_BINARY_DIR}/include/generated/rw61x_cpu2_fw.bin.inc)
 
