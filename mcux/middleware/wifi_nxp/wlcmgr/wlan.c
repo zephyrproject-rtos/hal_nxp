@@ -4939,7 +4939,9 @@ static void wlcm_process_deauthentication_event(struct wifi_message *msg,
     {
         while (is_sta_connected())
             OSA_TimeDelay(100);
+#if CONFIG_ECSA
         wlan_switch_to_nondfs_channel();
+#endif
     }
 #endif
 #endif
@@ -7167,16 +7169,16 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
             break;
         case WIFI_EVENT_RSSI_LOW:
             wlcm_d("got event: rssi low");
-#if CONFIG_WIFI_NM_WPA_SUPPLICANT
-            wlcm_process_rssi_low_event(msg);
-#else
             if (wlan.cur_network_idx >= WLAN_MAX_KNOWN_NETWORKS)
                 break;
 #if (CONFIG_11K) || (CONFIG_11V) || (CONFIG_ROAMING)
+#if CONFIG_WIFI_NM_WPA_SUPPLICANT
+            wlcm_process_rssi_low_event(msg);
+#else
             wlcm_process_rssi_low_event(msg, &next, network);
+#endif
 #else
             CONNECTION_EVENT(WLAN_REASON_RSSI_LOW, NULL);
-#endif
 #endif
             break;
 #if CONFIG_SUBSCRIBE_EVENT_SUPPORT
@@ -15766,11 +15768,13 @@ int wlan_mgmtframe_tx_cfg(wlan_host_tx_frame_params_t *tx_frame)
         return -WM_FAIL;
     }
 
+#if CONFIG_NET_MONITOR
     if(get_monitor_flag() != true)
     {
         wlcm_e("enable monitor mode first");
         return -WM_FAIL;
     }
+#endif
 
     //Todo: add this condition if (mlan_adap->cmd_tx_data == 1U)
     ret = wifi_mgmtframe_tx_cfg(tx_frame);
