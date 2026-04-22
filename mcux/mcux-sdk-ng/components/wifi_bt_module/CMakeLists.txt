@@ -5,9 +5,9 @@ if (CONFIG_MCUX_COMPONENT_component.wifi_bt_module.tx_pwr_limits)
     mcux_add_source(
         SOURCES AzureWave/tx_pwr_limits/wlan_txpwrlimit_cfg_WW.h
                 AzureWave/tx_pwr_limits/wlan_txpwrlimit_cfg_WW_rw610.h
-                Murata/tx_pwr_limits/wlan_txpwrlimit_cfg_murata_1XK_WW.h
+                Murata/tx_pwr_limits/wlan_txpwrlimit_cfg_murata_1XK.h
                 Murata/tx_pwr_limits/wlan_txpwrlimit_cfg_murata_1ZM_WW.h
-                Murata/tx_pwr_limits/wlan_txpwrlimit_cfg_murata_2EL_WW.h
+                Murata/tx_pwr_limits/wlan_txpwrlimit_cfg_murata_2EL.h
                 Murata/tx_pwr_limits/wlan_txpwrlimit_cfg_murata_NH.h
                 u-blox/tx_pwr_limits/wlan_txpwrlimit_cfg_jody_w5_WW.h
     )
