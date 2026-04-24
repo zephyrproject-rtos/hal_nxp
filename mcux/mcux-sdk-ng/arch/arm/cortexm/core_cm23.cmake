@@ -16,7 +16,7 @@ if (CONFIG_MCUX_PRJSEG_config.arm.core.cm23)
         AS "-mcpu=cortex-m23 --target=arm-arm-none-eabi"
         CC "-mcpu=cortex-m23"
         CX "-mcpu=cortex-m23"
-        LD "--cpu=Cortex-M33"
+        LD "--cpu=Cortex-M23"
     )
 
     mcux_add_armgcc_mcux_configuration(
@@ -42,7 +42,7 @@ if (CONFIG_MCUX_PRJSEG_config.arm.core.cm23_nosau)
         AS "-mcpu=cortex-m23 --target=arm-arm-none-eabi"
         CC "-mcpu=cortex-m23"
         CX "-mcpu=cortex-m23"
-        LD "--cpu=Cortex-M33"
+        LD "--cpu=Cortex-M23"
     )
 
     mcux_add_armgcc_mcux_configuration(
