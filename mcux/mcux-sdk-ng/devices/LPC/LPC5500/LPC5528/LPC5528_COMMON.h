@@ -12,13 +12,13 @@
 **
 **     Reference manual:    LPC55S6x/LPC55S2x/LPC552x User manual(UM11126) Rev.1.3  16 May 2019
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250529
+**     Build:               b260209
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC5528
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -139,9 +139,9 @@ typedef enum IRQn {
   PLU_IRQn                     = 52,               /**< PLU interrupt */
   SEC_VIO_IRQn                 = 53,               /**< SEC_VIO interrupt */
   Reserved70_IRQn              = 54,               /**< Reserved interrupt */
-  CASER_IRQn                   = 55,               /**< CASPER interrupt */
+  Reserved71_IRQn              = 55,               /**< Reserved interrupt */
   Reserved72_IRQn              = 56,               /**< Reserved interrupt */
-  PQ_IRQn                      = 57,               /**< PQ interrupt */
+  Reserved73_IRQn              = 57,               /**< Reserved interrupt */
   DMA1_IRQn                    = 58,               /**< DMA1 interrupt */
   FLEXCOMM8_IRQn               = 59                /**< Flexcomm Interface 8 (SPI, , FLEXCOMM) */
 } IRQn_Type;

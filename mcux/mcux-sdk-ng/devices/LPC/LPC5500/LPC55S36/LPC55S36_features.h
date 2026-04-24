@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 3.0, 2025-11-18
-**     Build:               b251118
+**     Build:               b260209
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -292,6 +292,8 @@
 #define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
 /* @brief Has High Speed Mode Trim Request (bitfield CTRL[CALHS]). */
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (0)
+/* @brief Has Justified Left Enable (bitfield CFG2[JLEFT]). */
+#define FSL_FEATURE_LPADC_HAS_CFG2_JLEFT (0)
 /* @brief Has internal temperature sensor. */
 #define FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR (1)
 /* @brief Temperature sensor parameter A (slope). */
@@ -319,6 +321,16 @@
 #define FSL_FEATURE_ANACTRL_HAS_AUX_BIAS_REG (1)
 /* @brief Has FREQ_ME_CTRL reigster. */
 #define FSL_FEATURE_ANACTRL_HAS_NO_FREQ_ME_CTRL (1)
+/* @brief ANACTRL interrupt control BOD1. */
+#define FSL_FEATURE_ANACTRL_CONTROL_BOD1_INT (0)
+/* @brief ANACTRL interrupt control BOD2. */
+#define FSL_FEATURE_ANACTRL_CONTROL_BOD2_INT (0)
+/* @brief BOD_DCDC_INT_CTRL reigster has BODCORE bit field. */
+#define FSL_FEATURE_ANACTRL_HAS_BODCORE_BIT_FIELD (1)
+/* @brief ANACTRL has XO32M_CTRL reigster. */
+#define FSL_FEATURE_ANACTRL_HAS_XO32M_CTRL (1)
+/* @brief FRO192M_CTRL reigster has 96MHz clock control. */
+#define FSL_FEATURE_ANACTRL_HAS_96MHZCLK_CONTROL (1)
 
 /* AOI module features */
 
@@ -589,6 +601,10 @@
 /* @brief The count of th port which are supported in GINT. */
 #define FSL_FEATURE_GINT_PORT_COUNT (2)
 
+/* I2C module features */
+
+/* No feature definitions */
+
 /* I2S module features */
 
 /* @brief I2S support dual channel transfer. */
@@ -657,7 +673,7 @@
 /* POWERQUAD module features */
 
 /* @brief Sine and Cossine fix errata */
-#define FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA  (1)
+#define FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA (1)
 
 /* PUF module features */
 
@@ -725,6 +741,14 @@
 #define FSL_FEATURE_RTC_HAS_NO_GP_DATA_REG (0)
 /* @brief Has TIMER_STB_MASK bitfile in CTRL register. */
 #define FSL_FEATURE_RTC_HAS_NO_TIMER_STB_MASK (0)
+/* @brief Has RTC Tamper 45 Filter Configuration Register support */
+#define FSL_FEATURE_RTC_HAS_FILTER45_CFG (0)
+/* @brief Has RTC Tamper 67 Filter Configuration Register support */
+#define FSL_FEATURE_RTC_HAS_FILTER67_CFG (0)
+/* @brief Has RTC Minutes Count Down Timer Register support */
+#define FSL_FEATURE_RTC_HAS_MINUTES_TIMER_FEATURE (0)
+/* @brief Has RTC BCD mode support */
+#define FSL_FEATURE_RTC_HAS_BCD_MODE (0)
 
 /* SCT module features */
 
@@ -799,6 +823,18 @@
 #define FSL_FEATURE_VREF_HAS_LOW_REFERENCE (0)
 /* @brief Has VREF_TRM4. */
 #define FSL_FEATURE_VREF_HAS_TRM4 (0)
+/* @brief Has bitfield LPBG_BUF_EN in CSR register. */
+#define FSL_FEATURE_VREF_HAS_LOWPOWER_BUFFER (1)
+/* @brief Has bitfield LPBGEN in CSR register. */
+#define FSL_FEATURE_VREF_HAS_LPBGEN (1)
+/* @brief Has bitfield IBIAS_EN in CSR register. */
+#define FSL_FEATURE_VREF_HAS_IBIAS_EN (0)
+/* @brief Has bitfield REFCHSELN_EN in CSR register. */
+#define FSL_FEATURE_VREF_HAS_REFCHSELN_EN (1)
+/* @brief Has bitfield REFCHSELP_EN in CSR register. */
+#define FSL_FEATURE_VREF_HAS_REFCHSELP_EN (1)
+/* @brief Support max voltage of 2.5V. */
+#define FSL_FEATURE_VREF_SUPPORT_2V5 (0)
 
 /* WWDT module features */
 

@@ -4,13 +4,13 @@
 **                          LPC51U68JBD64
 **
 **     Version:             rev. 3.0, 2025-11-18
-**     Build:               b251118
+**     Build:               b260209
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -68,9 +68,11 @@
  ******************************************************************************/
 
 /*!
- * @brief Enumeration for the DMA hardware request
+ * @brief Structure for the DMA hardware request
  *
- * Defines the enumeration for the DMA hardware request collections.
+ * Defines the structure for the DMA hardware request collections. The user can configure the
+ * hardware request to trigger the DMA transfer accordingly. The index
+ * of the hardware request varies according  to the to SoC.
  */
 typedef enum _dma_request_source
 {
