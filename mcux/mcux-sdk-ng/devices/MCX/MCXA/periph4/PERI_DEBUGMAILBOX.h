@@ -30,13 +30,13 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260323
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DEBUGMAILBOX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -159,7 +159,7 @@ typedef struct {
 #define DEBUGMAILBOX_CSW_REQ_PENDING_SHIFT       (1U)
 /*! REQ_PENDING - Request Pending
  *  0b0..No request pending
- *  0b1..Request for resynchronization pending
+ *  0b1..The debugger has written a value into the REQUEST register and it's pending the chip reading REQUEST
  */
 #define DEBUGMAILBOX_CSW_REQ_PENDING(x)          (((uint32_t)(((uint32_t)(x)) << DEBUGMAILBOX_CSW_REQ_PENDING_SHIFT)) & DEBUGMAILBOX_CSW_REQ_PENDING_MASK)
 

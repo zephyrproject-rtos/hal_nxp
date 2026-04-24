@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2025-02-21
-**     Build:               b250814
+**     Build:               b260209
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -580,10 +580,10 @@
 #define FSL_FEATURE_FTM_HAS_DITHERING (1)
 /* @brief FTM instance has PWM dithering. */
 #define FSL_FEATURE_FTM_INSTANCE_HAS_DITHERINGn(x) \
-    (((x) == FTM3) ? (0) : \
     (((x) == FTM0) ? (0) : \
     (((x) == FTM1) ? (1) : \
     (((x) == FTM2) ? (1) : \
+    (((x) == FTM3) ? (0) : \
     (((x) == FTM4) ? (0) : \
     (((x) == FTM5) ? (0) : (-1)))))))
 /* @brief Has trigger mode control. */
@@ -596,18 +596,18 @@
 #define FSL_FEATURE_FTM_HAS_CONF_CHOV_BIT (1)
 /* @brief FTM instance has Quadrature Decoder with input filter. */
 #define FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn(x) \
-    (((x) == FTM3) ? (0) : \
     (((x) == FTM0) ? (0) : \
     (((x) == FTM1) ? (1) : \
     (((x) == FTM2) ? (1) : \
+    (((x) == FTM3) ? (0) : \
     (((x) == FTM4) ? (0) : \
     (((x) == FTM5) ? (0) : (-1)))))))
 /* @brief FTM instance fault input number. */
 #define FSL_FEATURE_FTM_INSTANCE_FAULT_INPUT_NUMBERn(x) \
-    (((x) == FTM3) ? (4) : \
     (((x) == FTM0) ? (4) : \
     (((x) == FTM1) ? (4) : \
     (((x) == FTM2) ? (4) : \
+    (((x) == FTM3) ? (4) : \
     (((x) == FTM4) ? (2) : \
     (((x) == FTM5) ? (2) : (-1)))))))
 /* @brief Is affected by errata with ID 010856 (FTM: Safe state is not removed from channel outputs after fault condition ends if SWOCTRL is being used to control the pin). */
@@ -649,6 +649,8 @@
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (4)
 /* @brief Has dedicated interrupt for master and slave. */
 #define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (1)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPI2C_IS_LPFLEXCOMM (0)
 
 /* LPIT module features */
 
@@ -673,6 +675,8 @@
 #define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
 /* @brief Has ERRATA051472. */
 #define FSL_FEATURE_LPSPI_HAS_ERRATA_051472 (1)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPSPI_IS_LPFLEXCOMM (0)
 
 /* LPTMR module features */
 

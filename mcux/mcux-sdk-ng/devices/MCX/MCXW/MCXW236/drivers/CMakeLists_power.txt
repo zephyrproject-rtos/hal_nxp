@@ -1,9 +1,9 @@
-# Copyright 2024-2025 NXP
+# Copyright 2024-2026 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
 if (CONFIG_MCUX_COMPONENT_driver.power)
-    mcux_component_version(3.0.0)
+    mcux_component_version(3.0.1)
     mcux_add_source( SOURCES fsl_power.h fsl_system.h fsl_power.c fsl_system.c)
     mcux_add_include( INCLUDES . )
 endif()

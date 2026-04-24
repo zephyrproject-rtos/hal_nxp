@@ -42,6 +42,9 @@
 #define SCG_SPLL_REF_MIN 8000000UL
 #define SCG_SPLL_REF_MAX 16000000UL
 
+#define SCG_SPLL_OUT_MIN 90000000UL
+#define SCG_SPLL_OUT_MAX 160000000UL
+
 #define SCG_CSR_SCS_VAL ((SCG->CSR & SCG_CSR_SCS_MASK) >> SCG_CSR_SCS_SHIFT)
 #define SCG_SOSCDIV_SOSCDIV1_VAL ((SCG->SOSCDIV & SCG_SOSCDIV_SOSCDIV1_MASK) >> SCG_SOSCDIV_SOSCDIV1_SHIFT)
 #define SCG_SOSCDIV_SOSCDIV2_VAL ((SCG->SOSCDIV & SCG_SOSCDIV_SOSCDIV2_MASK) >> SCG_SOSCDIV_SOSCDIV2_SHIFT)
@@ -833,7 +836,7 @@ uint32_t CLOCK_GetFircAsyncFreq(scg_async_clk_t type)
  * parameters. If the desired frequency is not valid, this function returns 0.
  *
  * param refFreq     The input reference clock frequency.
- * param desireFreq  The desired output clock frequency.
+ * param desireFreq  The desired output clock frequency of the SPLL in Hz in range 90000000 - 160000000 (the SPLL VCO frequency is two times higher)
  * param mult        The value of MULT.
  * param prediv      The value of PREDIV.
  * return The PLL output frequency with the MULT and PREDIV; If
@@ -846,7 +849,7 @@ uint32_t CLOCK_GetSysPllMultDiv(uint32_t refFreq, uint32_t desireFreq, uint8_t *
     uint8_t prediv_min;              /* Minimal PREDIV value to make reference clock in allowed range. */
     uint8_t prediv_max;              /* Max PREDIV value to make reference clock in allowed range. */
     uint8_t prediv_cur;              /* PREDIV value for iteration. */
-    uint8_t mult_cur;                /* MULT value for iteration. */
+    uint32_t mult_cur;                /* MULT value for iteration. */
     uint32_t ret_freq = 0U;          /* Output frequency to return .*/
     uint32_t diff     = 0xFFFFFFFFU; /* Difference between desireFreq and return frequency. */
     uint32_t ref_div;                /* Reference frequency after PREDIV. */
@@ -871,6 +874,13 @@ uint32_t CLOCK_GetSysPllMultDiv(uint32_t refFreq, uint32_t desireFreq, uint8_t *
         return 0U;
     }
 
+    /* Output desired frequency is out of range. */
+    if ((desireFreq < SCG_SPLL_OUT_MIN) ||
+        (desireFreq > (SCG_SPLL_OUT_MAX )))
+    {
+        return 0U;
+    }
+
     /* refFreq/PREDIV must in a range. First get the allowed PREDIV range. */
     prediv_max = (uint8_t)(refFreq / SCG_SPLL_REF_MIN);
     prediv_min = (uint8_t)((refFreq + SCG_SPLL_REF_MAX - 1UL) / SCG_SPLL_REF_MAX);
@@ -888,7 +898,7 @@ uint32_t CLOCK_GetSysPllMultDiv(uint32_t refFreq, uint32_t desireFreq, uint8_t *
         /* Reference frequency after PREDIV. */
         ref_div = refFreq / prediv_cur;
 
-        mult_cur = (uint8_t)(desireFreq / ref_div);
+        mult_cur = desireFreq / ref_div;
 
         if ((mult_cur < SCG_SPLL_MULT_BASE_VALUE - 1U) ||
             (mult_cur > SCG_SPLL_MULT_BASE_VALUE + SCG_SPLL_MULT_MAX_VALUE))
@@ -904,14 +914,14 @@ uint32_t CLOCK_GetSysPllMultDiv(uint32_t refFreq, uint32_t desireFreq, uint8_t *
             if (ret_freq == desireFreq) /* If desire frequency is got. */
             {
                 *prediv = prediv_cur - SCG_SPLL_PREDIV_BASE_VALUE;
-                *mult   = mult_cur - SCG_SPLL_MULT_BASE_VALUE;
+                *mult   = (uint8_t)(mult_cur - SCG_SPLL_MULT_BASE_VALUE);
                 return ret_freq / 2U;
             }
             if (diff > desireFreq - ret_freq) /* New PRDIV/VDIV is closer. */
             {
                 diff       = desireFreq - ret_freq;
                 ret_prediv = prediv_cur;
-                ret_mult   = mult_cur;
+                ret_mult   = (uint8_t) mult_cur;
             }
         }
         mult_cur++;
@@ -922,7 +932,7 @@ uint32_t CLOCK_GetSysPllMultDiv(uint32_t refFreq, uint32_t desireFreq, uint8_t *
             {
                 diff       = ret_freq - desireFreq;
                 ret_prediv = prediv_cur;
-                ret_mult   = mult_cur;
+                ret_mult   = (uint8_t) mult_cur;
             }
         }
     }

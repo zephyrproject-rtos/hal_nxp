@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2026-01-02
-**     Build:               b260113
+**     Build:               b260210
 **
 **     Abstract:
 **         Chip specific module features.
@@ -27,6 +27,8 @@
 
 /* SOC module features */
 
+/* @brief AON_LPADC availability on the SoC. */
+#define FSL_FEATURE_SOC_AON_LPADC_COUNT (1)
 /* @brief AOI availability on the SoC. */
 #define FSL_FEATURE_SOC_AOI_COUNT (1)
 /* @brief ATX availability on the SoC. */
@@ -50,7 +52,7 @@
 /* @brief INPUTMUX availability on the SoC. */
 #define FSL_FEATURE_SOC_INPUTMUX_COUNT (2)
 /* @brief LPADC availability on the SoC. */
-#define FSL_FEATURE_SOC_LPADC_COUNT (2)
+#define FSL_FEATURE_SOC_LPADC_COUNT (1)
 /* @brief LPCMP availability on the SoC. */
 #define FSL_FEATURE_SOC_LPCMP_COUNT (1)
 /* @brief LPI2C availability on the SoC. */
@@ -76,7 +78,7 @@
 /* @brief SYSCON availability on the SoC. */
 #define FSL_FEATURE_SOC_SYSCON_COUNT (2)
 /* @brief TMR availability on the SoC. */
-#define FSL_FEATURE_SOC_TMR_COUNT (1)
+#define FSL_FEATURE_SOC_TMR_COUNT (2)
 /* @brief TRNG availability on the SoC. */
 #define FSL_FEATURE_SOC_TRNG_COUNT (1)
 /* @brief UTICK availability on the SoC. */
@@ -224,6 +226,10 @@
 /* @brief Has GPIO interrupt/DMA request/trigger output selection. */
 #define FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT (1)
 
+/* AON__LPADC module features */
+
+/* No feature definitions */
+
 /* LPI2C module features */
 
 /* @brief Has separate DMA RX and TX requests. */
@@ -246,11 +252,11 @@
 /* @brief Has timer DMA request enable (register bit CSR[TDRE]). */
 #define FSL_FEATURE_LPTMR_HAS_CSR_TDRE (1)
 /* @brief Do not has prescaler clock source 0. */
-#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_0_SUPPORT (0)
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_0_SUPPORT (1)
 /* @brief Do not has prescaler clock source 1. */
 #define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_1_SUPPORT (0)
 /* @brief Do not has prescaler clock source 2. */
-#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_2_SUPPORT (0)
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_2_SUPPORT (1)
 /* @brief Do not has prescaler clock source 3. */
 #define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_3_SUPPORT (0)
 

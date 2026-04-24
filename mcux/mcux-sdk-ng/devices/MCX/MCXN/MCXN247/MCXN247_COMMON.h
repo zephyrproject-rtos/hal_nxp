@@ -12,13 +12,13 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b251201
+**     Build:               b260209
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN247
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -160,7 +160,7 @@ typedef enum IRQn {
   ELS_IRQn                     = 73,               /**< ELS interrupt */
   PKC_IRQn                     = 74,               /**< PKC interrupt */
   PUF_IRQn                     = 75,               /**< Physical Unclonable Function interrupt */
-  PQ_IRQn                      = 76,               /**< Power Quad interrupt */
+  Reserved92_IRQn              = 76,               /**< Reserved interrupt */
   EDMA_1_CH0_IRQn              = 77,               /**< eDMA_1_CH0 error or transfer complete */
   EDMA_1_CH1_IRQn              = 78,               /**< eDMA_1_CH1 error or transfer complete */
   EDMA_1_CH2_IRQn              = 79,               /**< eDMA_1_CH2 error or transfer complete */
@@ -181,7 +181,7 @@ typedef enum IRQn {
   CDOG1_IRQn                   = 94,               /**< Code Watchdog Timer 1 interrupt */
   I3C0_IRQn                    = 95,               /**< Improved Inter Integrated Circuit interrupt 0 */
   I3C1_IRQn                    = 96,               /**< Improved Inter Integrated Circuit interrupt 1 */
-  NPU_IRQn                     = 97,               /**< NPU interrupt */
+  Reserved113_IRQn             = 97,               /**< Reserved interrupt */
   GDET_IRQn                    = 98,               /**< Digital Glitch Detect 0 interrupt  or Digital Glitch Detect 1 interrupt */
   VBAT0_IRQn                   = 99,               /**< VBAT interrupt( VBAT interrupt or digital tamper interrupt) */
   EWM0_IRQn                    = 100,              /**< External Watchdog Monitor interrupt */
@@ -585,6 +585,19 @@ typedef enum IRQn {
   /** Array initializer of CMC peripheral base pointers */
   #define CMC_BASE_PTRS                            { CMC0 }
 #endif
+/** Interrupt vectors for the CMC peripheral type */
+#define CMC_IRQS                                 { CMC0_IRQn }
+/* Backward compatibility for CMC */
+#define CMC_SRAMDIS_DIS_MASK                     (0xFFFFFFFFU)
+#define CMC_SRAMDIS_DIS_SHIFT                    (0U)
+/*! DIS - SRAM Disable */
+#define CMC_SRAMDIS_DIS(x)                       (((uint32_t)(((uint32_t)(x)) << CMC_SRAMDIS_DIS_SHIFT)) & CMC_SRAMDIS_DIS_MASK)
+
+#define CMC_SRAMRET_RET_MASK                     (0xFFFFFFFFU)
+#define CMC_SRAMRET_RET_SHIFT                    (0U)
+/*! RET - SRAM Retention */
+#define CMC_SRAMRET_RET(x)                       (((uint32_t)(((uint32_t)(x)) << CMC_SRAMRET_RET_SHIFT)) & CMC_SRAMRET_RET_MASK)
+
 
 /* CRC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

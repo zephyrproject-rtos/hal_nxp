@@ -20,8 +20,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.0.1. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief CLOCK driver version 2.0.2. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -1209,13 +1209,14 @@ typedef struct _osc_32k_config
     vbat_osc_dly_trim_t dlyTrim;
     vbat_osc_cap2_trim_t cap2Trim;
     vbat_osc_cmp_trim_t cmpTrim;
-    
+
     vbat_osc_mode_en_t mode;
     vbat_osc_xtal_cap_t xtalCap;
     vbat_osc_extal_cap_t extalCap;
     vbat_osc_coarse_adjustment_value_t ampGain;
-    
-    osc32k_clk_gate_id_t id;    
+
+    osc32k_clk_gate_id_t id;
+    bool updateTrim;
 } osc_32k_config_t;
 
 /*******************************************************************************

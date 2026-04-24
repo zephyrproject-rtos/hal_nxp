@@ -30,13 +30,13 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260323
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AHBSC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -3048,7 +3048,7 @@ typedef struct {
 
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_SMARTDMA_MASK (0x30U)
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_SMARTDMA_SHIFT (4U)
-/*! SMARTDMA - SMARTDMA Data
+/*! SMARTDMA
  *  0b00..Non-secure and non-privileged Master
  *  0b01..Non-secure and privileged Master
  *  0b10..Secure and non-privileged Master

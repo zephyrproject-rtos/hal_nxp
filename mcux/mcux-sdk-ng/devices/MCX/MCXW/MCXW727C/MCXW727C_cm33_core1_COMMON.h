@@ -8,13 +8,13 @@
 **
 **     Reference manual:    Rev. 2, 2025-05-01
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Build:               b260209
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXW727C_cm33_core1
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -511,6 +511,16 @@ typedef enum IRQn {
 #define MU_BASE_ADDRS                            { MUA_BASE }
 /** Array initializer of MU peripheral base pointers */
 #define MU_BASE_PTRS                             { MUA }
+/*!
+ * @brief Core boot mode.
+ */
+typedef enum _mu_core_boot_mode
+{
+    kMU_CoreBootFromSTCM5 = 0x00U, /*!< Boot from STCM5 0x20020000 (DSP-V SRAM). */
+    kMU_CoreBootFromSTCM6 = 0x01U, /*!< Boot from STCM6 0x20028000 (DSP-V SRAM). */
+    kMU_CoreBootFromSTCM7 = 0x10U, /*!< Boot from STCM7 0x20030000 (DSP-V SRAM). */
+} mu_core_boot_mode_t;
+
 
 /* NPX - Peripheral instance base addresses */
 /** Peripheral NPX base address */
@@ -752,6 +762,9 @@ typedef enum IRQn {
 #define TSTMR_BASE_ADDRS                         { TSTMR0_BASE }
 /** Array initializer of TSTMR peripheral base pointers */
 #define TSTMR_BASE_PTRS                          { TSTMR0 }
+/* Extra definition */
+#define TSTMR_CLOCK_FREQUENCY_MHZ                (1U)
+
 
 /* TX_PACKET_RAM - Peripheral instance base addresses */
 /** Peripheral TX_PACKET_RAM base address */
@@ -812,6 +825,10 @@ typedef enum IRQn {
 #define WDOG_BASE_ADDRS                          { WDOG0_BASE }
 /** Array initializer of WDOG peripheral base pointers */
 #define WDOG_BASE_PTRS                           { WDOG0 }
+/* Extra definition */
+#define WDOG_UPDATE_KEY                          (0xD928C520U)
+#define WDOG_REFRESH_KEY                         (0xB480A602U)
+
 
 /* WOR - Peripheral instance base addresses */
 /** Peripheral WOR_REGS base address */

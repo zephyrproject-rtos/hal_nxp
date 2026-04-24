@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.0, 2025-11-17
-**     Build:               b251118
+**     Build:               b260204
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -172,6 +172,8 @@
 #define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
 /* @brief Has High Speed Mode Trim Request (bitfield CTRL[CALHS]). */
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (0)
+/* @brief Has Justified Left Enable (bitfield CFG2[JLEFT]). */
+#define FSL_FEATURE_LPADC_HAS_CFG2_JLEFT (0)
 /* @brief Has internal temperature sensor. */
 #define FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR (1)
 /* @brief Temperature sensor parameter A (slope). */
@@ -547,6 +549,13 @@
 /* @brief Has L1 cache. */
 #define FSL_FEATURE_HAS_L1CACHE (1)
 
+/* MSCM module features */
+
+/* @brief Number of configuration information for processors. */
+#define FSL_FEATURE_MSCM_HAS_CP_COUNT (1)
+/* @brief Has data cache. */
+#define FSL_FEATURE_MSCM_HAS_DATACACHE (0)
+
 /* PORT module features */
 
 /* @brief Has control lock (register bit PCR[LK]). */
@@ -702,12 +711,14 @@
 
 /* SYSPM module features */
 
-/* @brief Temperature sensor parameter A (slope). */
-#define FSL_FEATURE_SYSPM_HAS_PMCR_DCIFSH (0)
-/* @brief Temperature sensor parameter B (offset). */
-#define FSL_FEATURE_SYSPM_HAS_PMCR_RICTR (0)
+/* @brief SYSPM support disable counters if stopped or halted. */
+#define FSL_FEATURE_SYSPM_HAS_PMCR_DCIFSH (1)
+/* @brief SYSPM has reset instruction counter. */
+#define FSL_FEATURE_SYSPM_HAS_PMCR_RICTR (1)
 /* @brief Number of PMCR registers signals number of performance monitors available in single SYSPM instance. */
 #define FSL_FEATURE_SYSPM_PMCR_COUNT (2)
+/* @brief SYSPM has instruction counter. */
+#define FSL_FEATURE_SYSPM_HAS_PMICTR (0)
 
 /* SysTick module features */
 
@@ -738,10 +749,6 @@
     (((x) == TPM0) ? (1) : \
     (((x) == TPM1) ? (1) : \
     (((x) == TPM2) ? (0) : (-1))))
-/* @brief Has global time base enable. */
-#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (1)
-/* @brief Has global time base sync. */
-#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
 /* @brief Has counter pause on trigger. */
 #define FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER (1)
 /* @brief Has external trigger selection. */
@@ -772,6 +779,12 @@
 #define FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT (1)
 /* @brief Whether 32 bits counter has effect. */
 #define FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x) (1)
+/* @brief Has global time base enable. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (1)
+/* @brief Has global time base sync. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
+/* @brief Is affected by errata with ID 050050 (Incorrect duty output when EPWM mode is set to PS=0 during write 1 to CnV register). */
+#define FSL_FEATURE_TPM_HAS_ERRATA_050050 (0)
 
 /* TRGMUX module features */
 
@@ -789,6 +802,18 @@
 #define FSL_FEATURE_VREF_HAS_LOW_REFERENCE (0)
 /* @brief Has VREF_TRM4. */
 #define FSL_FEATURE_VREF_HAS_TRM4 (0)
+/* @brief Has bitfield LPBG_BUF_EN in CSR register. */
+#define FSL_FEATURE_VREF_HAS_LOWPOWER_BUFFER (1)
+/* @brief Has bitfield LPBGEN in CSR register. */
+#define FSL_FEATURE_VREF_HAS_LPBGEN (1)
+/* @brief Has bitfield IBIAS_EN in CSR register. */
+#define FSL_FEATURE_VREF_HAS_IBIAS_EN (0)
+/* @brief Has bitfield REFCHSELN_EN in CSR register. */
+#define FSL_FEATURE_VREF_HAS_REFCHSELN_EN (1)
+/* @brief Has bitfield REFCHSELP_EN in CSR register. */
+#define FSL_FEATURE_VREF_HAS_REFCHSELP_EN (1)
+/* @brief Support max voltage of 2.5V. */
+#define FSL_FEATURE_VREF_SUPPORT_2V5 (0)
 
 /* WDOG module features */
 
@@ -799,7 +824,8 @@
 
 /* WUU module features */
 
-/* No feature definitions */
+/* @brief Has MF register. */
+#define FSL_FEATURE_WUU_HAS_MF (0)
 
 #endif /* _MCXW716A_FEATURES_H_ */
 

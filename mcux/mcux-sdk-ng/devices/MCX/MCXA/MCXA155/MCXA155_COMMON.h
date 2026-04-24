@@ -13,13 +13,13 @@
 **
 **     Reference manual:    MCXA18 User manual
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250807
+**     Build:               b260209
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXA155
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -277,6 +277,8 @@ typedef enum IRQn {
 #define CMC_BASE_ADDRS                           { CMC_BASE }
 /** Array initializer of CMC peripheral base pointers */
 #define CMC_BASE_PTRS                            { CMC }
+/** Interrupt vectors for the CMC peripheral type */
+#define CMC_IRQS                                 { CMC_IRQn }
 
 /* CRC - Peripheral instance base addresses */
 /** Peripheral CRC0 base address */
@@ -781,6 +783,8 @@ typedef enum IRQn {
 #define WUU_BASE_ADDRS                           { WUU0_BASE }
 /** Array initializer of WUU peripheral base pointers */
 #define WUU_BASE_PTRS                            { WUU0 }
+/** Interrupt vectors for the WUU peripheral type */
+#define WUU_IRQS                                 { WUU0_IRQn }
 
 /* WWDT - Peripheral instance base addresses */
 /** Peripheral WWDT0 base address */

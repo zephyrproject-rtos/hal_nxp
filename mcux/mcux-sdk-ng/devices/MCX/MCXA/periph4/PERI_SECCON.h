@@ -30,13 +30,13 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260323
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SECCON
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -289,23 +289,15 @@ typedef struct {
 
 #define SECCON_RAM_XEN_RAMX0_XEN_MASK            (0x1U)
 #define SECCON_RAM_XEN_RAMX0_XEN_SHIFT           (0U)
-/*! RAMX0_XEN - RAMX0-3 Execute permission control.
+/*! RAMX0_XEN - RAMX0 to RAMX3 Execute Permission Control.
  *  0b0..Execute permission is disabled, R/W are enabled.
  *  0b1..Execute permission is enabled, R/W/X are enabled.
  */
 #define SECCON_RAM_XEN_RAMX0_XEN(x)              (((uint32_t)(((uint32_t)(x)) << SECCON_RAM_XEN_RAMX0_XEN_SHIFT)) & SECCON_RAM_XEN_RAMX0_XEN_MASK)
 
-#define SECCON_RAM_XEN_RAMX1_XEN_MASK            (0x2U)
-#define SECCON_RAM_XEN_RAMX1_XEN_SHIFT           (1U)
-/*! RAMX1_XEN - RAMXn (excepts RAMA0-3) Execute permission control.
- *  0b0..Execute permission is disabled, R/W are enabled.
- *  0b1..Execute permission is enabled, R/W/X are enabled.
- */
-#define SECCON_RAM_XEN_RAMX1_XEN(x)              (((uint32_t)(((uint32_t)(x)) << SECCON_RAM_XEN_RAMX1_XEN_SHIFT)) & SECCON_RAM_XEN_RAMX1_XEN_MASK)
-
 #define SECCON_RAM_XEN_RAMA0_XEN_MASK            (0x4U)
 #define SECCON_RAM_XEN_RAMA0_XEN_SHIFT           (2U)
-/*! RAMA0_XEN - RAMA0 Execute permission control.
+/*! RAMA0_XEN - RAMA0 Execute Permission Control.
  *  0b0..Execute permission is disabled, R/W are enabled.
  *  0b1..Execute permission is enabled, R/W/X are enabled.
  */
@@ -313,7 +305,7 @@ typedef struct {
 
 #define SECCON_RAM_XEN_RAMA1_XEN_MASK            (0x8U)
 #define SECCON_RAM_XEN_RAMA1_XEN_SHIFT           (3U)
-/*! RAMA1_XEN - RAMAx (excepts RAMA0) Execute permission control.
+/*! RAMA1_XEN - RAMAx (excluding RAMA0) Execute Permission Control.
  *  0b0..Execute permission is disabled, R/W are enabled.
  *  0b1..Execute permission is enabled, R/W/X are enabled.
  */
@@ -321,7 +313,7 @@ typedef struct {
 
 #define SECCON_RAM_XEN_RAMB_XEN_MASK             (0x10U)
 #define SECCON_RAM_XEN_RAMB_XEN_SHIFT            (4U)
-/*! RAMB_XEN - RAMBx Execute permission control.
+/*! RAMB_XEN - RAMBx Execute Permission Control.
  *  0b0..Execute permission is disabled, R/W are enabled.
  *  0b1..Execute permission is enabled, R/W/X are enabled.
  */
@@ -344,11 +336,6 @@ typedef struct {
 #define SECCON_RAM_XEN_DP_RAMX0_XEN_SHIFT        (0U)
 /*! RAMX0_XEN - Refer to RAM_XEN for more details. */
 #define SECCON_RAM_XEN_DP_RAMX0_XEN(x)           (((uint32_t)(((uint32_t)(x)) << SECCON_RAM_XEN_DP_RAMX0_XEN_SHIFT)) & SECCON_RAM_XEN_DP_RAMX0_XEN_MASK)
-
-#define SECCON_RAM_XEN_DP_RAMX1_XEN_MASK         (0x2U)
-#define SECCON_RAM_XEN_DP_RAMX1_XEN_SHIFT        (1U)
-/*! RAMX1_XEN - Refer to RAM_XEN for more details. */
-#define SECCON_RAM_XEN_DP_RAMX1_XEN(x)           (((uint32_t)(((uint32_t)(x)) << SECCON_RAM_XEN_DP_RAMX1_XEN_SHIFT)) & SECCON_RAM_XEN_DP_RAMX1_XEN_MASK)
 
 #define SECCON_RAM_XEN_DP_RAMA0_XEN_MASK         (0x4U)
 #define SECCON_RAM_XEN_DP_RAMA0_XEN_SHIFT        (2U)

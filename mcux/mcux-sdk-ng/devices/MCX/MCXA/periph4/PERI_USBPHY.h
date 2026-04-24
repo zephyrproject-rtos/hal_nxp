@@ -30,13 +30,13 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260323
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USBPHY
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -700,8 +700,8 @@ typedef struct {
 #define USBPHY_CTRL_UTMI_SUSPENDM_MASK           (0x20000000U)
 #define USBPHY_CTRL_UTMI_SUSPENDM_SHIFT          (29U)
 /*! UTMI_SUSPENDM - UTMI Suspend
- *  0b0..Not suspended
- *  0b1..Suspended
+ *  0b0..Suspended
+ *  0b1..Not suspended
  */
 #define USBPHY_CTRL_UTMI_SUSPENDM(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_UTMI_SUSPENDM_SHIFT)) & USBPHY_CTRL_UTMI_SUSPENDM_MASK)
 
@@ -2673,14 +2673,6 @@ typedef struct {
 #define USBPHY_PFDA_PFD0_FRAC_SHIFT              (1U)
 /*! PFD0_FRAC - PFD0 Fractional Divider */
 #define USBPHY_PFDA_PFD0_FRAC(x)                 (((uint32_t)(((uint32_t)(x)) << USBPHY_PFDA_PFD0_FRAC_SHIFT)) & USBPHY_PFDA_PFD0_FRAC_MASK)
-
-#define USBPHY_PFDA_PFD0_STABLE_MASK             (0x80U)
-#define USBPHY_PFDA_PFD0_STABLE_SHIFT            (7U)
-/*! PFD0_STABLE - PFD0 Stable Signal
- *  0b0..Not stable
- *  0b1..Stable
- */
-#define USBPHY_PFDA_PFD0_STABLE(x)               (((uint32_t)(((uint32_t)(x)) << USBPHY_PFDA_PFD0_STABLE_SHIFT)) & USBPHY_PFDA_PFD0_STABLE_MASK)
 /*! @} */
 
 /*! @name PFDA_SET - PFD A */
@@ -2695,11 +2687,6 @@ typedef struct {
 #define USBPHY_PFDA_SET_PFD0_FRAC_SHIFT          (1U)
 /*! PFD0_FRAC - PFD0 Fractional Divider */
 #define USBPHY_PFDA_SET_PFD0_FRAC(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_PFDA_SET_PFD0_FRAC_SHIFT)) & USBPHY_PFDA_SET_PFD0_FRAC_MASK)
-
-#define USBPHY_PFDA_SET_PFD0_STABLE_MASK         (0x80U)
-#define USBPHY_PFDA_SET_PFD0_STABLE_SHIFT        (7U)
-/*! PFD0_STABLE - PFD0 Stable Signal */
-#define USBPHY_PFDA_SET_PFD0_STABLE(x)           (((uint32_t)(((uint32_t)(x)) << USBPHY_PFDA_SET_PFD0_STABLE_SHIFT)) & USBPHY_PFDA_SET_PFD0_STABLE_MASK)
 /*! @} */
 
 /*! @name PFDA_CLR - PFD A */
@@ -2714,11 +2701,6 @@ typedef struct {
 #define USBPHY_PFDA_CLR_PFD0_FRAC_SHIFT          (1U)
 /*! PFD0_FRAC - PFD0 Fractional Divider */
 #define USBPHY_PFDA_CLR_PFD0_FRAC(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_PFDA_CLR_PFD0_FRAC_SHIFT)) & USBPHY_PFDA_CLR_PFD0_FRAC_MASK)
-
-#define USBPHY_PFDA_CLR_PFD0_STABLE_MASK         (0x80U)
-#define USBPHY_PFDA_CLR_PFD0_STABLE_SHIFT        (7U)
-/*! PFD0_STABLE - PFD0 Stable Signal */
-#define USBPHY_PFDA_CLR_PFD0_STABLE(x)           (((uint32_t)(((uint32_t)(x)) << USBPHY_PFDA_CLR_PFD0_STABLE_SHIFT)) & USBPHY_PFDA_CLR_PFD0_STABLE_MASK)
 /*! @} */
 
 /*! @name PFDA_TOG - PFD A */
@@ -2733,11 +2715,6 @@ typedef struct {
 #define USBPHY_PFDA_TOG_PFD0_FRAC_SHIFT          (1U)
 /*! PFD0_FRAC - PFD0 Fractional Divider */
 #define USBPHY_PFDA_TOG_PFD0_FRAC(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_PFDA_TOG_PFD0_FRAC_SHIFT)) & USBPHY_PFDA_TOG_PFD0_FRAC_MASK)
-
-#define USBPHY_PFDA_TOG_PFD0_STABLE_MASK         (0x80U)
-#define USBPHY_PFDA_TOG_PFD0_STABLE_SHIFT        (7U)
-/*! PFD0_STABLE - PFD0 Stable Signal */
-#define USBPHY_PFDA_TOG_PFD0_STABLE(x)           (((uint32_t)(((uint32_t)(x)) << USBPHY_PFDA_TOG_PFD0_STABLE_SHIFT)) & USBPHY_PFDA_TOG_PFD0_STABLE_MASK)
 /*! @} */
 
 

@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2024-03-26
-**     Build:               b260129
+**     Build:               b260316
 **
 **     Abstract:
 **         Chip specific module features.
@@ -79,6 +79,8 @@
 #define FSL_FEATURE_SOC_LPUART_COUNT (6)
 /* @brief MCX_ENET availability on the SoC. */
 #define FSL_FEATURE_SOC_MCX_ENET_COUNT (1)
+/* @brief MPU availability on the SoC. */
+#define FSL_FEATURE_SOC_MPU_COUNT (1)
 /* @brief OSTIMER availability on the SoC. */
 #define FSL_FEATURE_SOC_OSTIMER_COUNT (1)
 /* @brief PKC availability on the SoC. */
@@ -97,6 +99,8 @@
 #define FSL_FEATURE_SOC_TRNG_COUNT (1)
 /* @brief USBHS availability on the SoC. */
 #define FSL_FEATURE_SOC_USBHS_COUNT (1)
+/* @brief USBHSDCD availability on the SoC. */
+#define FSL_FEATURE_SOC_USBHSDCD_COUNT (1)
 /* @brief USBNC availability on the SoC. */
 #define FSL_FEATURE_SOC_USBNC_COUNT (1)
 /* @brief USBPHY availability on the SoC. */
@@ -261,11 +265,9 @@
 /* @brief Does not support self wake feature(bitfield MCR[SLFWAK]) */
 #define FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT (0)
 /* @brief Has external time tick source (bitfield CTRL2[TIMER_SRC]). */
-#define FSL_FEATURE_FLEXCAN_HAS_EXTERNAL_TIME_TICK (1)
+#define FSL_FEATURE_FLEXCAN_HAS_EXTERNAL_TIME_TICK (0)
 /* @brief Instance has external time tick source (register bit field CTRL2[TIMER_SRC]). */
-#define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_EXTERNAL_TIME_TICKn(x) \
-    (((x) == CAN0) ? (1) : \
-    (((x) == CAN1) ? (0) : (-1)))
+#define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_EXTERNAL_TIME_TICKn(x) (0)
 /* @brief Has Time Stamp Capture Point(bitfield CTRL2[TSTAMPCAP]). */
 #define FSL_FEATURE_FLEXCAN_HAS_HIGH_RESOLUTION_TIMESTAMP (0)
 /* @brief Instance has Pretended Networking option (register bit field MCR[PNET_EN]). */
@@ -322,7 +324,7 @@
 /* @brief Has RRCR0 RR_CLK_SEL bitfield. */
 #define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_CLK_SEL (1)
 /* @brief Has RRCR0 RR_TRG_SEL bitfield. */
-#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_TRG_SEL (0)
+#define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_TRG_SEL (1)
 /* @brief Has RRCR0 RR_SAMPLE_CNT bitfield. */
 #define FSL_FEATURE_LPCMP_HAS_RRCR0_RR_SAMPLE_CNT (1)
 /* @brief Has RRCR0 RR_SAMPLE_THRESHOLD bitfield. */
@@ -343,6 +345,11 @@
 #define FSL_FEATURE_LPCMP_HAS_CCR0_CMP_STOP_EN (1)
 /* @brief CMP instance support CCR0 CMP_STOP_EN bitfield. */
 #define FSL_FEATURE_LPCMP_INSTANCE_SUPPORT_CCR0_CMP_STOP_ENn(x) (1)
+
+/* CRC module features */
+
+/* @brief Has data register with name CRC */
+#define FSL_FEATURE_CRC_HAS_CRC_REG (0)
 
 /* CTIMER module features */
 
@@ -390,52 +397,52 @@
 #define FSL_FEATURE_EDMA_HAS_ERROR_IRQ (1)
 /* @brief If 64 bytes transfer supported. */
 #define FSL_FEATURE_EDMA_SUPPORT_64_BYTES_TRANSFER (1)
-/* @brief whether has prot register */
-#define FSL_FEATURE_EDMA_INSTANCE_HAS_PROT_REGISTERn(x) (0)
-/* @brief If 128 bytes transfer supported. */
-#define FSL_FEATURE_EDMA_SUPPORT_128_BYTES_TRANSFER (1)
-/* @brief whether has MP channel mux */
-#define FSL_FEATURE_EDMA_INSTANCE_HAS_MP_CHANNEL_MUXn(x) (0)
-/* @brief If 128 bytes transfer supported. */
-#define FSL_FEATURE_EDMA_INSTANCE_SUPPORT_128_BYTES_TRANSFERn(x) (1)
 /* @brief If channel clock controlled independently */
 #define FSL_FEATURE_EDMA_CHANNEL_HAS_OWN_CLOCK_GATE (1)
-/* @brief Has register CH_CSR. */
-#define FSL_FEATURE_EDMA_HAS_CHANNEL_CONFIG (1)
+/* @brief If 128 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_SUPPORT_128_BYTES_TRANSFER (1)
 /* @brief Number of channel for each EDMA instance, (only defined for soc with different channel numbers for difference instance) */
 #define FSL_FEATURE_EDMA_INSTANCE_CHANNELn(x) \
     (((x) == DMA1) ? (4) : \
     (((x) == DMA0) ? (12) : (-1)))
-/* @brief Has channel mux */
-#define FSL_FEATURE_EDMA_HAS_CHANNEL_MUX (1)
+/* @brief If 128 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_INSTANCE_SUPPORT_128_BYTES_TRANSFERn(x) (1)
 /* @brief Has no register bit fields MP_CSR[EBW]. */
 #define FSL_FEATURE_EDMA_HAS_NO_MP_CSR_EBW (1)
-/* @brief Instance has channel mux */
-#define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_MUXn(x) (1)
+/* @brief Has register CH_CSR. */
+#define FSL_FEATURE_EDMA_HAS_CHANNEL_CONFIG (1)
 /* @brief If dma has common clock gate */
 #define FSL_FEATURE_EDMA_HAS_COMMON_CLOCK_GATE (0)
-/* @brief Has register CH_SBR. */
-#define FSL_FEATURE_EDMA_HAS_SBR (1)
+/* @brief Has channel mux */
+#define FSL_FEATURE_EDMA_HAS_CHANNEL_MUX (1)
 /* @brief If dma channel IRQ support parameter */
 #define FSL_FEATURE_EDMA_MODULE_CHANNEL_IRQ_ENTRY_SUPPORT_PARAMETER (0)
-/* @brief Has no register bit fields CH_SBR[ATTR]. */
-#define FSL_FEATURE_EDMA_HAS_NO_CH_SBR_ATTR (1)
+/* @brief Instance has channel mux */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_MUXn(x) (1)
 /* @brief NBYTES must be multiple of 8 when using scatter gather. */
 #define FSL_FEATURE_EDMA_HAS_ERRATA_51327 (0)
-/* @brief Has register bit field CH_CSR[SWAP]. */
-#define FSL_FEATURE_EDMA_HAS_CHANNEL_SWAP_SIZE (0)
+/* @brief Has register CH_SBR. */
+#define FSL_FEATURE_EDMA_HAS_SBR (1)
 /* @brief NBYTES must be multiple of 8 when using scatter gather. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_ERRATA_51327n(x) (0)
-/* @brief Instance has register bit field CH_CSR[SWAP]. */
-#define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_SWAP_SIZEn(x) (0)
+/* @brief Has no register bit fields CH_SBR[ATTR]. */
+#define FSL_FEATURE_EDMA_HAS_NO_CH_SBR_ATTR (1)
 /* @brief Has register bit fields MP_CSR[GMRC]. */
 #define FSL_FEATURE_EDMA_HAS_GLOBAL_MASTER_ID_REPLICATION (1)
+/* @brief Has register bit field CH_CSR[SWAP]. */
+#define FSL_FEATURE_EDMA_HAS_CHANNEL_SWAP_SIZE (0)
+/* @brief Whether instance has prot register. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_PROT_REGISTERn(x) (0)
+/* @brief Instance has register bit field CH_CSR[SWAP]. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_SWAP_SIZEn(x) (0)
+/* @brief Whether instance has MP channel mux. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_MP_CHANNEL_MUXn(x) (0)
 /* @brief Has register bit field CH_SBR[INSTR]. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_ACCESS_TYPE (0)
 /* @brief Instance has register bit field CH_SBR[INSTR]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_ACCESS_TYPEn(x) (0)
 /* @brief Has register bit fields CH_MATTR[WCACHE], CH_MATTR[RCACHE]. */
-#define FSL_FEATURE_EDMA_HAS_CHANNEL_MEMORY_ATTRIBUTE  (0)
+#define FSL_FEATURE_EDMA_HAS_CHANNEL_MEMORY_ATTRIBUTE (0)
 /* @brief Instance has register CH_MATTR. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_MEMORY_ATTRIBUTEn(x) (0)
 /* @brief Has register bit field CH_CSR[SIGNEXT]. */
@@ -454,6 +461,15 @@
 #define FSL_FEATURE_EDMA_HAS_NO_CH_SBR_SEC (0)
 /* @brief edma5 has different tcd type. */
 #define FSL_FEATURE_EDMA_TCD_TYPEn(x) (0)
+/* @brief Number of DMA channels with asynchronous request capability. */
+#define FSL_FEATURE_EDMA_ASYNCHRO_REQUEST_CHANNEL_COUNT (12)
+
+/* EWM module features */
+
+/* @brief Has clock select (register CLKCTRL). */
+#define FSL_FEATURE_EWM_HAS_CLOCK_SELECT (1)
+/* @brief Has clock prescaler (register CLKPRESCALER). */
+#define FSL_FEATURE_EWM_HAS_PRESCALER (1)
 
 /* FLEXIO module features */
 
@@ -914,6 +930,13 @@
 #define FSL_FEATURE_SYSCON_HAS_LPCAC_CTRL_PARITY_MISS_EN_BIT (0)
 /* @brief Has parity error report (bitfield LPCAC_CTRL[PARITY_FAULT_EN]). */
 #define FSL_FEATURE_SYSCON_HAS_LPCAC_CTRL_PARITY_FAULT_EN_BIT (0)
+
+/* SysTick module features */
+
+/* @brief Systick has external reference clock. */
+#define FSL_FEATURE_SYSTICK_HAS_EXT_REF (0)
+/* @brief Systick external reference clock is core clock divided by this value. */
+#define FSL_FEATURE_SYSTICK_EXT_REF_CORE_DIV (0)
 
 /* TRNG module features */
 

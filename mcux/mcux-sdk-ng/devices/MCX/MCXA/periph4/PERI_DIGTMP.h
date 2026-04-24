@@ -30,13 +30,13 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260323
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DIGTMP
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -896,6 +896,70 @@ typedef struct {
  *  0b1..Inverted
  */
 #define DIGTMP_PPR_TPP7(x)                       (((uint32_t)(((uint32_t)(x)) << DIGTMP_PPR_TPP7_SHIFT)) & DIGTMP_PPR_TPP7_MASK)
+
+#define DIGTMP_PPR_TPID0_MASK                    (0x10000U)
+#define DIGTMP_PPR_TPID0_SHIFT                   (16U)
+/*! TPID0 - Tamper Pin n Input Data
+ *  0b0..Zero
+ *  0b1..One
+ */
+#define DIGTMP_PPR_TPID0(x)                      (((uint32_t)(((uint32_t)(x)) << DIGTMP_PPR_TPID0_SHIFT)) & DIGTMP_PPR_TPID0_MASK)
+
+#define DIGTMP_PPR_TPID1_MASK                    (0x20000U)
+#define DIGTMP_PPR_TPID1_SHIFT                   (17U)
+/*! TPID1 - Tamper Pin n Input Data
+ *  0b0..Zero
+ *  0b1..One
+ */
+#define DIGTMP_PPR_TPID1(x)                      (((uint32_t)(((uint32_t)(x)) << DIGTMP_PPR_TPID1_SHIFT)) & DIGTMP_PPR_TPID1_MASK)
+
+#define DIGTMP_PPR_TPID2_MASK                    (0x40000U)
+#define DIGTMP_PPR_TPID2_SHIFT                   (18U)
+/*! TPID2 - Tamper Pin n Input Data
+ *  0b0..Zero
+ *  0b1..One
+ */
+#define DIGTMP_PPR_TPID2(x)                      (((uint32_t)(((uint32_t)(x)) << DIGTMP_PPR_TPID2_SHIFT)) & DIGTMP_PPR_TPID2_MASK)
+
+#define DIGTMP_PPR_TPID3_MASK                    (0x80000U)
+#define DIGTMP_PPR_TPID3_SHIFT                   (19U)
+/*! TPID3 - Tamper Pin n Input Data
+ *  0b0..Zero
+ *  0b1..One
+ */
+#define DIGTMP_PPR_TPID3(x)                      (((uint32_t)(((uint32_t)(x)) << DIGTMP_PPR_TPID3_SHIFT)) & DIGTMP_PPR_TPID3_MASK)
+
+#define DIGTMP_PPR_TPID4_MASK                    (0x100000U)
+#define DIGTMP_PPR_TPID4_SHIFT                   (20U)
+/*! TPID4 - Tamper Pin n Input Data
+ *  0b0..Zero
+ *  0b1..One
+ */
+#define DIGTMP_PPR_TPID4(x)                      (((uint32_t)(((uint32_t)(x)) << DIGTMP_PPR_TPID4_SHIFT)) & DIGTMP_PPR_TPID4_MASK)
+
+#define DIGTMP_PPR_TPID5_MASK                    (0x200000U)
+#define DIGTMP_PPR_TPID5_SHIFT                   (21U)
+/*! TPID5 - Tamper Pin n Input Data
+ *  0b0..Zero
+ *  0b1..One
+ */
+#define DIGTMP_PPR_TPID5(x)                      (((uint32_t)(((uint32_t)(x)) << DIGTMP_PPR_TPID5_SHIFT)) & DIGTMP_PPR_TPID5_MASK)
+
+#define DIGTMP_PPR_TPID6_MASK                    (0x400000U)
+#define DIGTMP_PPR_TPID6_SHIFT                   (22U)
+/*! TPID6 - Tamper Pin n Input Data
+ *  0b0..Zero
+ *  0b1..One
+ */
+#define DIGTMP_PPR_TPID6(x)                      (((uint32_t)(((uint32_t)(x)) << DIGTMP_PPR_TPID6_SHIFT)) & DIGTMP_PPR_TPID6_MASK)
+
+#define DIGTMP_PPR_TPID7_MASK                    (0x800000U)
+#define DIGTMP_PPR_TPID7_SHIFT                   (23U)
+/*! TPID7 - Tamper Pin n Input Data
+ *  0b0..Zero
+ *  0b1..One
+ */
+#define DIGTMP_PPR_TPID7(x)                      (((uint32_t)(((uint32_t)(x)) << DIGTMP_PPR_TPID7_SHIFT)) & DIGTMP_PPR_TPID7_MASK)
 /*! @} */
 
 /*! @name PGFR - Pin Glitch Filter */

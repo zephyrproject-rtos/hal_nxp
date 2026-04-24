@@ -1,7 +1,10 @@
 /*!
 @page driver_log Driver Change Log
 @section clock CLOCK
-  The current CLOCK driver version is 2.0.1.
+  The current CLOCK driver version is 2.0.2.
+
+  - 2.0.2
+    - Added configurable timeout support for endless while loop.
 
   - 2.0.1
     - Add 240M FRO HF support.
@@ -10,7 +13,10 @@
     - Initial version.
 
 @section reset RESET
-  The current RESET driver version is 2.0.0.
+  The current RESET driver version is 2.4.1.
+
+  - 2.4.1
+    - Added configurable timeout support for endless while loop.
 
   - 2.0.0
     - Initial version.

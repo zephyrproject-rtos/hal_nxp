@@ -1,5 +1,5 @@
 /*
- * Copyright 2017,2020-2025 NXP
+ * Copyright 2017,2020-2026 NXP
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -20,8 +20,8 @@
 
  /*! @name Driver version */
 /*@{*/
-/*! @brief POWER driver version 2.0.0. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief POWER driver version 3.0.1. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(3, 0, 1))
 /*@}*/
 
 /*!
@@ -361,7 +361,7 @@ typedef enum wakeup_irq_s
     kWAKEUP_SEC_VIO            = (1ULL << SEC_VIO_IRQn),            /**< [DEEP SLEEP] */
     kWAKEUP_TRNG               = (1ULL << TRNG_IRQn),               /**< [DEEP SLEEP] */
     kWAKEUP_DMA1               = (1ULL << DMA1_IRQn),               /**< [DEEP SLEEP] */
-    kWAKEUP_WAKE_PAD           = (1ULL << WAKE_PAD_IRQn),           /**< [DEEP POWER DOWN, POWER OFF] */
+    kWAKEUP_WAKE_PAD           = (1ULL << 63U),                     /**< [DEEP POWER DOWN, POWER OFF] */
 } wakeup_irq_t;
 
 #ifdef __cplusplus

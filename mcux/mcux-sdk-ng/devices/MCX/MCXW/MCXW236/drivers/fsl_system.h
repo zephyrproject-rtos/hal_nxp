@@ -18,8 +18,8 @@
 
  /*! @name Driver version */
 /*@{*/
-/*! @brief SYSTEM driver version 2.0.1. */
-#define FSL_SYSTEM_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief SYSTEM driver version 3.0.1. */
+#define FSL_SYSTEM_DRIVER_VERSION (MAKE_VERSION(3, 0, 1))
 /*@}*/
 
 typedef enum chip_version_s

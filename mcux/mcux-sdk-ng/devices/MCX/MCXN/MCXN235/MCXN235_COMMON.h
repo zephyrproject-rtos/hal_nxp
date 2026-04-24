@@ -12,13 +12,13 @@
 **
 **     Reference manual:    MCXN23XRM
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251201
+**     Build:               b260209
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN235
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -502,6 +502,19 @@ typedef enum IRQn {
   /** Array initializer of CMC peripheral base pointers */
   #define CMC_BASE_PTRS                            { CMC0 }
 #endif
+/** Interrupt vectors for the CMC peripheral type */
+#define CMC_IRQS                                 { CMC0_IRQn }
+/* Backward compatibility for CMC */
+#define CMC_SRAMDIS_DIS_MASK                     (0xFFFFFFFFU)
+#define CMC_SRAMDIS_DIS_SHIFT                    (0U)
+/*! DIS - SRAM Disable */
+#define CMC_SRAMDIS_DIS(x)                       (((uint32_t)(((uint32_t)(x)) << CMC_SRAMDIS_DIS_SHIFT)) & CMC_SRAMDIS_DIS_MASK)
+
+#define CMC_SRAMRET_RET_MASK                     (0xFFFFFFFFU)
+#define CMC_SRAMRET_RET_SHIFT                    (0U)
+/*! RET - SRAM Retention */
+#define CMC_SRAMRET_RET(x)                       (((uint32_t)(((uint32_t)(x)) << CMC_SRAMRET_RET_SHIFT)) & CMC_SRAMRET_RET_MASK)
+
 
 /* CRC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

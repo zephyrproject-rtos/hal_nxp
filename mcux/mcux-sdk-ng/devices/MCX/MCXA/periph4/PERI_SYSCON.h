@@ -30,13 +30,13 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260323
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSCON
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -958,9 +958,9 @@ typedef struct {
 
 #define SYSCON_RAM_CASP_CTRL_CASP_REQ_MASK       (0x10000U)
 #define SYSCON_RAM_CASP_CTRL_CASP_REQ_SHIFT      (16U)
-/*! CASP_REQ - Request EZH memories.
+/*! CASP_REQ - Request SmartDMA memories.
  *  0b0..Configure shared memories RAMX3 as general memories.
- *  0b1..Configure shared memories RAMX3 as EZH memories.
+ *  0b1..Configure shared memories RAMX3 as SmartDMA memories.
  */
 #define SYSCON_RAM_CASP_CTRL_CASP_REQ(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_RAM_CASP_CTRL_CASP_REQ_SHIFT)) & SYSCON_RAM_CASP_CTRL_CASP_REQ_MASK)
 /*! @} */
@@ -1035,14 +1035,6 @@ typedef struct {
  *  0b1..Enabled.
  */
 #define SYSCON_LPCAC_CTRL_LPCAC_XOM(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_LPCAC_CTRL_LPCAC_XOM_SHIFT)) & SYSCON_LPCAC_CTRL_LPCAC_XOM_MASK)
-
-#define SYSCON_LPCAC_CTRL_LPCAC_MEM_REQ_MASK     (0x100U)
-#define SYSCON_LPCAC_CTRL_LPCAC_MEM_REQ_SHIFT    (8U)
-/*! LPCAC_MEM_REQ - Request LPCAC memories.
- *  0b0..Configure shared memories RAMX1 as general memories.
- *  0b1..Configure shared memories RAMX1 as LPCAC memories, write one lock until a system reset.
- */
-#define SYSCON_LPCAC_CTRL_LPCAC_MEM_REQ(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_LPCAC_CTRL_LPCAC_MEM_REQ_SHIFT)) & SYSCON_LPCAC_CTRL_LPCAC_MEM_REQ_MASK)
 /*! @} */
 
 /*! @name I3C_MISC_CTRL - I3C Misc Control */
@@ -1051,64 +1043,64 @@ typedef struct {
 #define SYSCON_I3C_MISC_CTRL_I3C0_SCL_FILT_MASK  (0xFU)
 #define SYSCON_I3C_MISC_CTRL_I3C0_SCL_FILT_SHIFT (0U)
 /*! I3C0_SCL_FILT - Disables/enables the I3C0 filter function on SCL pin.
- *  0b0000..Disabled filter function when I3C0 SDA_FILT=0b0000
- *  0b0001..Enable Spike filter on SCL input. Non_zero value means width of Glitch on SCL line to be filtered in number of half cycles of CLK_FLT.
+ *  0b0000..Enable Spike filter on SCL input when clear both I3C0's SDA_FILT and SCL_FILT 0b0000. Width of Glitch on SCL line is 1 half cycle of FCLK.
+ *  0b0001..Disabled filter function when set both I3C0's SDA_FILT and SCL_FILT 0b0001
  */
 #define SYSCON_I3C_MISC_CTRL_I3C0_SCL_FILT(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_I3C_MISC_CTRL_I3C0_SCL_FILT_SHIFT)) & SYSCON_I3C_MISC_CTRL_I3C0_SCL_FILT_MASK)
 
 #define SYSCON_I3C_MISC_CTRL_I3C0_SDA_FILT_MASK  (0xF0U)
 #define SYSCON_I3C_MISC_CTRL_I3C0_SDA_FILT_SHIFT (4U)
 /*! I3C0_SDA_FILT - Disables/enables the I3C0 filter function on SDA pin.
- *  0b0000..Disabled filter function when I3C0 SCL_FILT=0b0000
- *  0b0001..Enable Spike filter on SDA input. Non_zero value means width of Glitch on SDA line to be filtered in number of half cycles of CLK_FLT.
+ *  0b0000..Enable Spike filter on SDA input when clear both I3C0's SDA_FILT and SCL_FILT 0b0000. Width of Glitch on SDA line is 1 half cycle of FCLK.
+ *  0b0001..Disabled filter function when set both I3C0's SDA_FILT and SCL_FILT 0b0001
  */
 #define SYSCON_I3C_MISC_CTRL_I3C0_SDA_FILT(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_I3C_MISC_CTRL_I3C0_SDA_FILT_SHIFT)) & SYSCON_I3C_MISC_CTRL_I3C0_SDA_FILT_MASK)
 
 #define SYSCON_I3C_MISC_CTRL_I3C1_SCL_FILT_MASK  (0xF00U)
 #define SYSCON_I3C_MISC_CTRL_I3C1_SCL_FILT_SHIFT (8U)
 /*! I3C1_SCL_FILT - Disables/enables the I3C1 filter I3C1 function on SCL pin.
- *  0b0000..Disabled filter function when SDA_FILT=0b0000
- *  0b0001..Enable Spike filter on SCL input. Non_zero value means width of Glitch on SCL line to be filtered in number of half cycles of CLK_FLT.
+ *  0b0000..Enable Spike filter on SCL input when clear both I3C1's SDA_FILT and SCL_FILT 0b0000. Width of Glitch on SCL line is 1 half cycle of FCLK.
+ *  0b0001..Disabled filter function when set both I3C1's SDA_FILT and SCL_FILT 0b0001
  */
 #define SYSCON_I3C_MISC_CTRL_I3C1_SCL_FILT(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_I3C_MISC_CTRL_I3C1_SCL_FILT_SHIFT)) & SYSCON_I3C_MISC_CTRL_I3C1_SCL_FILT_MASK)
 
 #define SYSCON_I3C_MISC_CTRL_I3C1_SDA_FILT_MASK  (0xF000U)
 #define SYSCON_I3C_MISC_CTRL_I3C1_SDA_FILT_SHIFT (12U)
 /*! I3C1_SDA_FILT - Disables/enables the I3C1 filter function on SDA pin.
- *  0b0000..Disabled filter function when I3C1 SCL_FILT=0b0000
- *  0b0001..Enable Spike filter on SDA input. Non_zero value means width of Glitch on SDA line to be filtered in number of half cycles of CLK_FLT.
+ *  0b0000..Enable Spike filter on SDA input when clear both I3C1's SDA_FILT and SCL_FILT 0b0000. Width of Glitch on SDA line is 1 half cycle of FCLK.
+ *  0b0001..Disabled filter function when set both I3C1's SDA_FILT and SCL_FILT 0b0001
  */
 #define SYSCON_I3C_MISC_CTRL_I3C1_SDA_FILT(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_I3C_MISC_CTRL_I3C1_SDA_FILT_SHIFT)) & SYSCON_I3C_MISC_CTRL_I3C1_SDA_FILT_MASK)
 
 #define SYSCON_I3C_MISC_CTRL_I3C2_SCL_FILT_MASK  (0xF0000U)
 #define SYSCON_I3C_MISC_CTRL_I3C2_SCL_FILT_SHIFT (16U)
 /*! I3C2_SCL_FILT - Disables/enables the I3C2 filter function on SCL pin.
- *  0b0000..Disabled filter function when I3C2 SDA_FILT=0b0000
- *  0b0001..Enable Spike filter on SCL input. Non_zero value means width of Glitch on SCL line to be filtered in number of half cycles of CLK_FLT.
+ *  0b0000..Enable Spike filter on SCL input when clear both I3C2's SDA_FILT and SCL_FILT 0b0000. Width of Glitch on SCL line is 1 half cycle of FCLK.
+ *  0b0001..Disabled filter function when set both I3C2's SDA_FILT and SCL_FILT 0b0001
  */
 #define SYSCON_I3C_MISC_CTRL_I3C2_SCL_FILT(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_I3C_MISC_CTRL_I3C2_SCL_FILT_SHIFT)) & SYSCON_I3C_MISC_CTRL_I3C2_SCL_FILT_MASK)
 
 #define SYSCON_I3C_MISC_CTRL_I3C2_SDA_FILT_MASK  (0xF00000U)
 #define SYSCON_I3C_MISC_CTRL_I3C2_SDA_FILT_SHIFT (20U)
 /*! I3C2_SDA_FILT - Disables/enables the I3C2 filter function on SDA pin.
- *  0b0000..Disabled filter function when I3C2 SCL_FILT=0b0000
- *  0b0001..Enable Spike filter on SDA input. Non_zero value means width of Glitch on SDA line to be filtered in number of half cycles of CLK_FLT.
+ *  0b0000..Enable Spike filter on SDA input when clear both I3C2's SDA_FILT and SCL_FILT 0b0000. Width of Glitch on SDA line is 1 half cycle of FCLK.
+ *  0b0001..Disabled filter function when set both I3C2's SDA_FILT and SCL_FILT 0b0001
  */
 #define SYSCON_I3C_MISC_CTRL_I3C2_SDA_FILT(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_I3C_MISC_CTRL_I3C2_SDA_FILT_SHIFT)) & SYSCON_I3C_MISC_CTRL_I3C2_SDA_FILT_MASK)
 
 #define SYSCON_I3C_MISC_CTRL_I3C3_SCL_FILT_MASK  (0xF000000U)
 #define SYSCON_I3C_MISC_CTRL_I3C3_SCL_FILT_SHIFT (24U)
 /*! I3C3_SCL_FILT - Disables/enables the I3C3 filter function on SCL pin.
- *  0b0000..Disabled filter function when I3C3 SDA_FILT=0b0000
- *  0b0001..Enable Spike filter on SCL input. Non_zero value means width of Glitch on SCL line to be filtered in number of half cycles of CLK_FLT.
+ *  0b0000..Enable Spike filter on SCL input when clear both I3C3's SDA_FILT and SCL_FILT 0b0000. Width of Glitch on SCL line is 1 half cycle of FCLK.
+ *  0b0001..Disabled filter function when set both I3C3's SDA_FILT and SCL_FILT 0b0001
  */
 #define SYSCON_I3C_MISC_CTRL_I3C3_SCL_FILT(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_I3C_MISC_CTRL_I3C3_SCL_FILT_SHIFT)) & SYSCON_I3C_MISC_CTRL_I3C3_SCL_FILT_MASK)
 
 #define SYSCON_I3C_MISC_CTRL_I3C3_SDA_FILT_MASK  (0xF0000000U)
 #define SYSCON_I3C_MISC_CTRL_I3C3_SDA_FILT_SHIFT (28U)
 /*! I3C3_SDA_FILT - Disables/enables the I3C3 filter function on SDA pin.
- *  0b0000..Disabled filter function when I3C3 SCL_FILT=0b0000
- *  0b0001..Enable Spike filter on SDA input. Non_zero value means width of Glitch on SDA line to be filtered in number of half cycles of CLK_FLT.
+ *  0b0000..Enable Spike filter on SDA input when clear both I3C3's SDA_FILT and SCL_FILT 0b0000. Width of Glitch on SDA line is 1 half cycle of FCLK.
+ *  0b0001..Disabled filter function when set both I3C3's SDA_FILT and SCL_FILT 0b0001
  */
 #define SYSCON_I3C_MISC_CTRL_I3C3_SDA_FILT(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_I3C_MISC_CTRL_I3C3_SDA_FILT_SHIFT)) & SYSCON_I3C_MISC_CTRL_I3C3_SDA_FILT_MASK)
 /*! @} */

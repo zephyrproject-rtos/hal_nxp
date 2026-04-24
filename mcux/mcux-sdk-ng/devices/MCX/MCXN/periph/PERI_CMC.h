@@ -76,13 +76,13 @@
 **                          MCXN947VPB_cm33_core1
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b251013
+**     Build:               b260209
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CMC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -1551,17 +1551,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group CMC_Register_Masks */
-
-/* Backward compatibility for CMC */
-#define CMC_SRAMDIS_DIS_MASK                     (0xFFFFFFFFU)
-#define CMC_SRAMDIS_DIS_SHIFT                    (0U)
-/*! DIS - SRAM Disable */
-#define CMC_SRAMDIS_DIS(x)                       (((uint32_t)(((uint32_t)(x)) << CMC_SRAMDIS_DIS_SHIFT)) & CMC_SRAMDIS_DIS_MASK)
-
-#define CMC_SRAMRET_RET_MASK                     (0xFFFFFFFFU)
-#define CMC_SRAMRET_RET_SHIFT                    (0U)
-/*! RET - SRAM Retention */
-#define CMC_SRAMRET_RET(x)                       (((uint32_t)(((uint32_t)(x)) << CMC_SRAMRET_RET_SHIFT)) & CMC_SRAMRET_RET_MASK)
 
 
 /*!

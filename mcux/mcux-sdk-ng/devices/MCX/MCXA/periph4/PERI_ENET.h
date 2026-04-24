@@ -30,13 +30,13 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251105
+**     Build:               b260323
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENET
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -1318,14 +1318,6 @@ typedef struct {
  */
 #define ENET_MAC_HW_FEAT_ARPOFFSEL(x)            (((uint32_t)(((uint32_t)(x)) << ENET_MAC_HW_FEAT_ARPOFFSEL_SHIFT)) & ENET_MAC_HW_FEAT_ARPOFFSEL_MASK)
 
-#define ENET_MAC_HW_FEAT_PDUPSEL_MASK            (0x200U)
-#define ENET_MAC_HW_FEAT_PDUPSEL_SHIFT           (9U)
-/*! PDUPSEL - Broadcast/Multicast Packet Duplication
- *  0b0..Broadcast/Multicast Packet Duplication feature is not selected
- *  0b1..Broadcast/Multicast Packet Duplication feature is selected
- */
-#define ENET_MAC_HW_FEAT_PDUPSEL(x)              (((uint32_t)(((uint32_t)(x)) << ENET_MAC_HW_FEAT_PDUPSEL_SHIFT)) & ENET_MAC_HW_FEAT_PDUPSEL_MASK)
-
 #define ENET_MAC_HW_FEAT_FRPSEL_MASK             (0x400U)
 #define ENET_MAC_HW_FEAT_FRPSEL_SHIFT            (10U)
 /*! FRPSEL - Flexible Receive Parser Selected
@@ -1389,14 +1381,6 @@ typedef struct {
  *  0b1..IEEE 1588 High Word Register option is selected
  */
 #define ENET_MAC_HW_FEAT_ADVTHWORD(x)            (((uint32_t)(((uint32_t)(x)) << ENET_MAC_HW_FEAT_ADVTHWORD_SHIFT)) & ENET_MAC_HW_FEAT_ADVTHWORD_MASK)
-
-#define ENET_MAC_HW_FEAT_EEESEL_MASK             (0x2000U)
-#define ENET_MAC_HW_FEAT_EEESEL_SHIFT            (13U)
-/*! EEESEL - Energy Efficient Ethernet Enabled
- *  0b0..Energy Efficient Ethernet Enable option is not selected
- *  0b1..Energy Efficient Ethernet Enable option is selected
- */
-#define ENET_MAC_HW_FEAT_EEESEL(x)               (((uint32_t)(((uint32_t)(x)) << ENET_MAC_HW_FEAT_EEESEL_SHIFT)) & ENET_MAC_HW_FEAT_EEESEL_MASK)
 
 #define ENET_MAC_HW_FEAT_FRPES_MASK              (0x6000U)
 #define ENET_MAC_HW_FEAT_FRPES_SHIFT             (13U)
@@ -1516,14 +1500,6 @@ typedef struct {
  */
 #define ENET_MAC_HW_FEAT_DBGMEMA(x)              (((uint32_t)(((uint32_t)(x)) << ENET_MAC_HW_FEAT_DBGMEMA_SHIFT)) & ENET_MAC_HW_FEAT_DBGMEMA_MASK)
 
-#define ENET_MAC_HW_FEAT_AVSEL_MASK              (0x100000U)
-#define ENET_MAC_HW_FEAT_AVSEL_SHIFT             (20U)
-/*! AVSEL - AV Feature Enable
- *  0b0..AV Feature is not selected
- *  0b1..AV Feature is selected
- */
-#define ENET_MAC_HW_FEAT_AVSEL(x)                (((uint32_t)(((uint32_t)(x)) << ENET_MAC_HW_FEAT_AVSEL_SHIFT)) & ENET_MAC_HW_FEAT_AVSEL_MASK)
-
 #define ENET_MAC_HW_FEAT_ESTWID_MASK             (0x300000U)
 #define ENET_MAC_HW_FEAT_ESTWID_SHIFT            (20U)
 /*! ESTWID - Width of the Time Interval field in the Gate Control List
@@ -1533,14 +1509,6 @@ typedef struct {
  *  0b11..24
  */
 #define ENET_MAC_HW_FEAT_ESTWID(x)               (((uint32_t)(((uint32_t)(x)) << ENET_MAC_HW_FEAT_ESTWID_SHIFT)) & ENET_MAC_HW_FEAT_ESTWID_MASK)
-
-#define ENET_MAC_HW_FEAT_RAVSEL_MASK             (0x200000U)
-#define ENET_MAC_HW_FEAT_RAVSEL_SHIFT            (21U)
-/*! RAVSEL - Rx Side Only AV Feature Enable
- *  0b0..Rx Side Only AV Feature is not selected
- *  0b1..Rx Side Only AV Feature is selected
- */
-#define ENET_MAC_HW_FEAT_RAVSEL(x)               (((uint32_t)(((uint32_t)(x)) << ENET_MAC_HW_FEAT_RAVSEL_SHIFT)) & ENET_MAC_HW_FEAT_RAVSEL_MASK)
 
 #define ENET_MAC_HW_FEAT_TDCSZ_MASK              (0xC00000U)
 #define ENET_MAC_HW_FEAT_TDCSZ_SHIFT             (22U)
