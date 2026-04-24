@@ -295,6 +295,7 @@ static inline void PORT_SetPinPullValue(PORT_Type *base, uint8_t pin, uint8_t va
 }
 /*! @}*/
 
+#if (defined(FSL_FEATURE_PORT_SUPPORT_EFT) && FSL_FEATURE_PORT_SUPPORT_EFT)
 /*!
  * @name EFT
  * {
@@ -360,6 +361,7 @@ static inline void PORT_ClearAllHighEFTDetectors(PORT_Type *base)
 }
 
 /*! @}*/
+#endif /* FSL_FEATURE_PORT_SUPPORT_EFT */
 
 /*!
  * @name Calibration

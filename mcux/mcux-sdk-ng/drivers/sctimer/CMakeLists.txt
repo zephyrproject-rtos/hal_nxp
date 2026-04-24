@@ -1,9 +1,9 @@
-# Copyright 2024 NXP
+# Copyright 2024, 2026 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.sctimer)
-    mcux_component_version(2.5.2)
+    mcux_component_version(2.5.3)
 
     mcux_add_source(SOURCES fsl_sctimer.h fsl_sctimer.c)
 

@@ -23,12 +23,14 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief TRNG driver version 2.0.20.
+/*! @brief TRNG driver version 2.0.21.
  *
- * Current version: 2.0.20
+ * Current version: 2.0.21
  *
  *
  * Change log:
+ * - version 2.0.21
+ *   - Added support for MCXC devices.
  * - version 2.0.20
  *   - Added support for MCXA devices.
  * - version 2.0.19
@@ -73,7 +75,7 @@
  *   - add support for KL8x and KL28Z
  *   - update default OSCDIV for K81 to divide by 2
  */
-#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 20))
+#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 21))
 /*! @} */
 
 /*! @brief TRNG sample mode. Used by trng_config_t. */

@@ -1,5 +1,12 @@
 # ENET_QOS
 
+## [2.7.4]
+
+- Bug Fixes
+  - Fixed ENET_QOS_EnableInterrupts to preserve already enabled interrupts.
+  - Fixed ENET_QOS_DisableInterrupts to correctly manage interrupt summary bits.
+  - Fixed IRQ handler to check interrupt enable status before processing events.
+
 ## [2.7.3]
 
 - Bug Fixes

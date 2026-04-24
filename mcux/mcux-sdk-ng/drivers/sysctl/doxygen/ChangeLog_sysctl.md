@@ -1,5 +1,10 @@
 # SYSCTL
 
+## [2.0.6]
+
+- Bug Fixes:
+  - Fixed violations of CERT-C.
+
 ## [2.0.5]
 
 - Bug Fixes:

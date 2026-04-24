@@ -1,5 +1,10 @@
 # IRQSTEER
 
+## [2.1.6]
+
+- Improvements
+  - Expand to support 640 extended interrupts
+
 ## [2.1.5]
 
 - Bug Fixes

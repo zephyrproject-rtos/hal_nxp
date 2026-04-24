@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2025 NXP
+ * Copyright 2016-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -198,6 +198,10 @@ static void ENET_SetDMAControl(ENET_Type *base, const enet_config_t *config)
     uint8_t index;
     uint32_t reg;
     uint32_t burstLen;
+    uint32_t cr;
+
+    /* Preserve CSR clock range for MDC clock before reset */
+    cr = base->MAC_MDIO_ADDR & ENET_MAC_MDIO_ADDR_CR_MASK;
 
     /* Reset first and wait for the complete
      * The reset bit will automatically be cleared after complete. */
@@ -205,6 +209,9 @@ static void ENET_SetDMAControl(ENET_Type *base, const enet_config_t *config)
     while ((base->DMA_MODE & ENET_DMA_MODE_SWR_MASK) != 0U)
     {
     }
+
+    /* Restore CSR clock range for MDC clock after reset */
+    base->MAC_MDIO_ADDR = (base->MAC_MDIO_ADDR & ~ENET_MAC_MDIO_ADDR_CR_MASK) | cr;
 
     /* Set the burst length. */
     for (index = 0; index < ENET_RING_NUM_MAX; index++)
@@ -610,12 +617,20 @@ void ENET_Init(ENET_Type *base, const enet_config_t *config, uint8_t *macAddr, u
  */
 void ENET_Deinit(ENET_Type *base)
 {
+    uint32_t cr;
+
+    /* Preserve CSR clock range for MDC clock before reset */
+    cr = base->MAC_MDIO_ADDR & ENET_MAC_MDIO_ADDR_CR_MASK;
+
     /* Reset first and wait for the complete
      * The reset bit will automatically be cleared after complete. */
     base->DMA_MODE |= ENET_DMA_MODE_SWR_MASK;
     while ((base->DMA_MODE & ENET_DMA_MODE_SWR_MASK) != 0U)
     {
     }
+
+    /* Restore CSR clock range for MDC clock after reset */
+    base->MAC_MDIO_ADDR = (base->MAC_MDIO_ADDR & ~ENET_MAC_MDIO_ADDR_CR_MASK) | cr;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Disables the clock source. */
@@ -719,8 +734,9 @@ void ENET_SetISRHandler(ENET_Type *base, enet_isr_t ISRHandler)
 /*!
  * brief Enables the ENET DMA and MAC interrupts.
  *
- * This function enables the ENET interrupt according to the provided mask. The mask
- * is a logical OR of enet_dma_interrupt_enable_t and enet_mac_interrupt_enable_t.
+ * This function enables the ENET interrupts according to the provided mask.
+ * Already enabled interrupts stay enabled even if not listed in the provided mask.
+ * The mask is a logical OR of enet_dma_interrupt_enable_t and enet_mac_interrupt_enable_t.
  * For example, to enable the dma and mac interrupt, do the following.
  * code
  *     ENET_EnableInterrupts(ENET, kENET_DmaRx | kENET_DmaTx | kENET_MacPmt);
@@ -750,7 +766,7 @@ void ENET_EnableInterrupts(ENET_Type *base, uint32_t mask)
             {
                 interrupt |= ENET_DMA_CH_DMA_CHX_INT_EN_NIE_MASK;
             }
-            base->DMA_CH[index].DMA_CHX_INT_EN = interrupt;
+            base->DMA_CH[index].DMA_CHX_INT_EN |= interrupt;
         }
     }
     interrupt = mask >> ENET_MACINT_ENUM_OFFSET;
@@ -811,6 +827,7 @@ void ENET_ClearMacInterruptStatus(ENET_Type *base, uint32_t mask)
 void ENET_DisableInterrupts(ENET_Type *base, uint32_t mask)
 {
     uint32_t interrupt = mask & 0xFFFFU;
+    uint32_t enabledInterrupts;
     uint8_t index;
 
     /* For dma interrupt. */
@@ -818,17 +835,22 @@ void ENET_DisableInterrupts(ENET_Type *base, uint32_t mask)
     {
         for (index = 0; index < ENET_RING_NUM_MAX; index++)
         {
-            /* Set for all abnormal interrupts. */
-            if ((ENET_ABNORM_INT_MASK & interrupt) != 0U)
+            /* Get actually enabled interrupts */
+            enabledInterrupts = base->DMA_CH[index].DMA_CHX_INT_EN;
+            /* Clear the desired interrupt bits */
+            enabledInterrupts &= ~interrupt;
+            /* Clear abnormal interrupt summary bit if none of abnormal interrupts stays enabled. */
+            if ((ENET_ABNORM_INT_MASK & enabledInterrupts) == 0U)
             {
-                interrupt |= ENET_DMA_CH_DMA_CHX_INT_EN_AIE_MASK;
+                enabledInterrupts &= ~ENET_DMA_CH_DMA_CHX_INT_EN_AIE_MASK;
             }
-            /* Set for all normal interrupts. */
-            if ((ENET_NORM_INT_MASK & interrupt) != 0U)
+            /* Clear normal interrupt summary bit if none of normal interrupts stays enabled. */
+            if ((ENET_NORM_INT_MASK & enabledInterrupts) == 0U)
             {
-                interrupt |= ENET_DMA_CH_DMA_CHX_INT_EN_NIE_MASK;
+                enabledInterrupts &= ~ENET_DMA_CH_DMA_CHX_INT_EN_NIE_MASK;
             }
-            base->DMA_CH[index].DMA_CHX_INT_EN &= ~interrupt;
+            /* Set the resulting mask */
+            base->DMA_CH[index].DMA_CHX_INT_EN = enabledInterrupts;
         }
     }
     interrupt = mask >> ENET_MACINT_ENUM_OFFSET;
@@ -912,9 +934,10 @@ void ENET_CreateHandler(ENET_Type *base,
             pbl = (base->DMA_CH[count].DMA_CHX_TX_CTRL & ENET_DMA_CH_DMA_CHX_TX_CTRL_TxPBL_MASK) >>
                   ENET_DMA_CH_DMA_CHX_TX_CTRL_TxPBL_SHIFT;
             pbl = ((base->DMA_CH[count].DMA_CHX_CTRL & ENET_DMA_CH_DMA_CHX_CTRL_PBLx8_MASK) != 0U) ? (8U * pbl) : pbl;
-            txFifoSize = (uint32_t)pow(
-                (double)2, (double)(uint32_t)(((base->MAC_HW_FEAT[1] & ENET_MAC_HW_FEAT_TXFIFOSIZE_MASK) >> ENET_MAC_HW_FEAT_TXFIFOSIZE_SHIFT) +
-                    7U));
+            txFifoSize                     = (uint32_t)pow((double)2,
+                                                           (double)(uint32_t)(((base->MAC_HW_FEAT[1] & ENET_MAC_HW_FEAT_TXFIFOSIZE_MASK) >>
+                                                           ENET_MAC_HW_FEAT_TXFIFOSIZE_SHIFT) +
+                                                          7U));
             handle->txLenLimitation[count] = txFifoSize - (pbl + 6U) * (32U / 8U);
         }
 
@@ -1575,7 +1598,7 @@ static inline void ENET_GetRxFrameErr(enet_rx_bd_struct_t *rxDesc, enet_rx_frame
     };
     union _frame_error error;
 
-    error.data = ENET_FRAME_RX_ERROR_BITS(rxDesc->rdes3);
+    error.data    = ENET_FRAME_RX_ERROR_BITS(rxDesc->rdes3);
     *rxFrameError = error.frameError;
 }
 
@@ -2378,8 +2401,9 @@ void ENET_IRQHandler(ENET_Type *base, enet_handle_t *handle)
     /* DMA CHANNEL 0. */
     if ((base->DMA_INTR_STAT & ENET_DMA_INTR_STAT_DC0IS_MASK) != 0U)
     {
-        uint32_t flag = base->DMA_CH[0].DMA_CHX_STAT;
-        if ((flag & ENET_DMA_CH_DMA_CHX_STAT_RI_MASK) != 0U)
+        uint32_t flag = base->DMA_CH[0].DMA_CHX_STAT & base->DMA_CH[0].DMA_CHX_INT_EN;
+        if ((flag & (ENET_DMA_CH_DMA_CHX_STAT_RI_MASK | ENET_DMA_CH_DMA_CHX_STAT_NIS_MASK)) ==
+            (ENET_DMA_CH_DMA_CHX_STAT_RI_MASK | ENET_DMA_CH_DMA_CHX_STAT_NIS_MASK))
         {
             base->DMA_CH[0].DMA_CHX_STAT = ENET_DMA_CH_DMA_CHX_STAT_RI_MASK | ENET_DMA_CH_DMA_CHX_STAT_NIS_MASK;
             if (handle->callback != NULL)
@@ -2387,7 +2411,8 @@ void ENET_IRQHandler(ENET_Type *base, enet_handle_t *handle)
                 handle->callback(base, handle, kENET_RxIntEvent, 0, NULL, handle->userData);
             }
         }
-        if ((flag & ENET_DMA_CH_DMA_CHX_STAT_TI_MASK) != 0U)
+        if ((flag & (ENET_DMA_CH_DMA_CHX_STAT_TI_MASK | ENET_DMA_CH_DMA_CHX_STAT_NIS_MASK)) ==
+            (ENET_DMA_CH_DMA_CHX_STAT_TI_MASK | ENET_DMA_CH_DMA_CHX_STAT_NIS_MASK))
         {
             base->DMA_CH[0].DMA_CHX_STAT = ENET_DMA_CH_DMA_CHX_STAT_TI_MASK | ENET_DMA_CH_DMA_CHX_STAT_NIS_MASK;
             ENET_ReclaimTxDescriptor(base, handle, 0);
@@ -2397,8 +2422,9 @@ void ENET_IRQHandler(ENET_Type *base, enet_handle_t *handle)
     /* DMA CHANNEL 1. */
     if ((base->DMA_INTR_STAT & ENET_DMA_INTR_STAT_DC1IS_MASK) != 0U)
     {
-        uint32_t flag = base->DMA_CH[1].DMA_CHX_STAT;
-        if ((flag & ENET_DMA_CH_DMA_CHX_STAT_RI_MASK) != 0U)
+        uint32_t flag = base->DMA_CH[1].DMA_CHX_STAT & base->DMA_CH[1].DMA_CHX_INT_EN;
+        if ((flag & (ENET_DMA_CH_DMA_CHX_STAT_RI_MASK | ENET_DMA_CH_DMA_CHX_STAT_NIS_MASK)) ==
+            (ENET_DMA_CH_DMA_CHX_STAT_RI_MASK | ENET_DMA_CH_DMA_CHX_STAT_NIS_MASK))
         {
             base->DMA_CH[1].DMA_CHX_STAT = ENET_DMA_CH_DMA_CHX_STAT_RI_MASK | ENET_DMA_CH_DMA_CHX_STAT_NIS_MASK;
             if (handle->callback != NULL)
@@ -2406,7 +2432,8 @@ void ENET_IRQHandler(ENET_Type *base, enet_handle_t *handle)
                 handle->callback(base, handle, kENET_RxIntEvent, 1, NULL, handle->userData);
             }
         }
-        if ((flag & ENET_DMA_CH_DMA_CHX_STAT_TI_MASK) != 0U)
+        if ((flag & (ENET_DMA_CH_DMA_CHX_STAT_TI_MASK | ENET_DMA_CH_DMA_CHX_STAT_NIS_MASK)) ==
+            (ENET_DMA_CH_DMA_CHX_STAT_TI_MASK | ENET_DMA_CH_DMA_CHX_STAT_NIS_MASK))
         {
             base->DMA_CH[1].DMA_CHX_STAT = ENET_DMA_CH_DMA_CHX_STAT_TI_MASK | ENET_DMA_CH_DMA_CHX_STAT_NIS_MASK;
             ENET_ReclaimTxDescriptor(base, handle, 1);
@@ -2417,7 +2444,7 @@ void ENET_IRQHandler(ENET_Type *base, enet_handle_t *handle)
     /* MAC TIMESTAMP. */
     if ((base->DMA_INTR_STAT & ENET_DMA_INTR_STAT_MACIS_MASK) != 0U)
     {
-        if ((base->MAC_INTR_STAT & ENET_MAC_INTR_STAT_TSIS_MASK) != 0U)
+        if ((base->MAC_INTR_STAT & base->MAC_INTR_EN & ENET_MAC_INTR_STAT_TSIS_MASK) != 0U)
         {
             if (handle->callback != NULL)
             {

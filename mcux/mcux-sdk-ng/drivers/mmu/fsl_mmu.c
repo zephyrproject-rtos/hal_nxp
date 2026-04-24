@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2025 NXP
  *
  * All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause
@@ -95,8 +95,11 @@ static mmu_lut_word_t MMU_TransferAddrToLUTWord(uint32_t addr)
     };
     mmu_lut_word_t lutWord;
     uint8_t unitSizeIndex = (uint8_t)g_selectedUnitSize;
+    uint32_t temp;
 
-    lutWord.mappedValue = (uint16_t)((addr & maskPerUnitSize[unitSizeIndex]) >> shiftPerUnitSize[unitSizeIndex]);
+    temp = (addr & maskPerUnitSize[unitSizeIndex]) >> shiftPerUnitSize[unitSizeIndex];
+    assert(temp <= UINT16_MAX); /* INT31-C: Validate before narrowing conversion */
+    lutWord.mappedValue = (uint16_t)temp;
     lutWord.valid = 1U;
 
     return lutWord;
@@ -136,7 +139,9 @@ static uint16_t MMU_TransferAddrToLUTIndex(uint32_t addr)
     uint8_t pageMode = (g_selectedPageOpt == kMMU_PageOpt_1Page) ? 0U : 1U;
 
 
-    lutPointer = (addr & maskPerUnitSize[pageMode][unitSizeIndex]) / factorPerUnitSize[unitSizeIndex];
+    uint32_t temp = (addr & maskPerUnitSize[pageMode][unitSizeIndex]) / factorPerUnitSize[unitSizeIndex];
+    assert(temp <= UINT16_MAX); /* INT31-C: Validate before narrowing conversion */
+    lutPointer = (uint16_t)temp;
     if (pageMode != 0U)
     {
         uint8_t pageSelect = ((uint8_t)g_selectedPageOpt) & 0x6U >> 1U;
@@ -494,7 +499,9 @@ void MMU_SetupRegionMap(MMU_Type *base, uint32_t virt, uint32_t phys, size_t reg
 
     mmu_lut_word_t lutWord = MMU_TransferAddrToLUTWord(phys);
     uint16_t lutIndex = MMU_TransferAddrToLUTIndex(virt);
-    uint16_t unitCount = (regionSize / MMU_UNIT_BYTE_SIZE);
+    uint32_t temp = regionSize / MMU_UNIT_BYTE_SIZE;
+    assert(temp <= UINT16_MAX); /* INT31-C: Validate before narrowing conversion */
+    uint16_t unitCount = (uint16_t)temp;
 
     MMU_UpdateLUTBlocking(base, lutIndex, &lutWord, unitCount, kMMU_LUTBurstWrite);
 }
@@ -513,7 +520,9 @@ void MMU_TearDownRegionMap(MMU_Type *base, uint32_t virt, size_t regionSize)
 
     mmu_lut_word_t lutWord;
     uint16_t lutIndex = MMU_TransferAddrToLUTIndex(virt);
-    uint16_t unitCount = (regionSize / MMU_UNIT_BYTE_SIZE);
+    uint32_t temp = regionSize / MMU_UNIT_BYTE_SIZE;
+    assert(temp <= UINT16_MAX); /* INT31-C: Validate before narrowing conversion */
+    uint16_t unitCount = (uint16_t)temp;
 
     MMU_ReadLUT(base, lutIndex, &lutWord, 1U);
     lutWord.valid = 0U;
@@ -538,7 +547,9 @@ void MMU_RemapRegion(MMU_Type *base, uint32_t oldVirt, uint32_t newVirt, size_t 
     mmu_lut_word_t lutWord;
     uint16_t oldLutIndex = MMU_TransferAddrToLUTIndex(oldVirt);
     uint16_t newLutIndex = MMU_TransferAddrToLUTIndex(newVirt);
-    uint16_t unitCount = (regionSize / MMU_UNIT_BYTE_SIZE);
+    uint32_t temp = regionSize / MMU_UNIT_BYTE_SIZE;
+    assert(temp <= UINT16_MAX); /* INT31-C: Validate before narrowing conversion */
+    uint16_t unitCount = (uint16_t)temp;
 
     /* Setup mapping of new virtual address. */
     MMU_ReadLUT(base, oldLutIndex, &lutWord, 1U);

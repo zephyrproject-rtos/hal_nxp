@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022, 2024-2025 NXP
+ * Copyright 2019-2022, 2024-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -105,7 +105,7 @@ void VREF_Init(VREF_Type *base, const vref_config_t *config)
 #endif
 
     /* After enabling low power bandgap, delay 20 us. */
-    SDK_DelayAtLeastUs(20U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+    SDK_DelayAtLeastUs(20U, SystemCoreClock);
 
 #if !(defined(FSL_FEATURE_VREF_HAS_LOWPOWER_BUFFER) && (FSL_FEATURE_VREF_HAS_LOWPOWER_BUFFER == 0U))
     /* Provides bias current for other peripherals. */
@@ -148,7 +148,7 @@ void VREF_Init(VREF_Type *base, const vref_config_t *config)
 
         base->CSR |= tmp32;
         /* After enabling high accurancy bandgap, delay 400 us. */
-        SDK_DelayAtLeastUs(400U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+        SDK_DelayAtLeastUs(400U, SystemCoreClock);
     }
 }
 
@@ -228,7 +228,7 @@ void VREF_SetVrefTrimVal(VREF_Type *base, uint8_t trimValue)
     if (VREF_CSR_CHOPEN_MASK == (base->CSR & VREF_CSR_CHOPEN_MASK))
     {
         /* After enabling high accurancy bandgap, delay 400 us. */
-        SDK_DelayAtLeastUs(400U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+        SDK_DelayAtLeastUs(400U, SystemCoreClock);
     }
     else
     {
@@ -269,7 +269,7 @@ void VREF_SetTrim21Val(VREF_Type *base, uint8_t trim21Value)
     if (VREF_CSR_CHOPEN_MASK == (base->CSR & VREF_CSR_CHOPEN_MASK))
     {
         /* After enabling high accurancy bandgap, delay 400 us. */
-        SDK_DelayAtLeastUs(400U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+        SDK_DelayAtLeastUs(400U, SystemCoreClock);
     }
     else
     {

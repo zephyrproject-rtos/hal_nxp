@@ -1285,6 +1285,37 @@ void PWM_SetupForceSignal(PWM_Type *base, pwm_submodule_t subModule, pwm_channel
 }
 
 /*!
+ * brief Updates the current polarity (MCTRL[IPOL]) for a PWM submodule.
+ *
+ * MCTRL[IPOL] is a double-buffered field. This function only writes the shadow register;
+ * the value does NOT take effect until a FORCE_OUT event occurs. Call PWM_EnableLocalForce()
+ * after this function to apply all pending changes atomically in one FORCE_OUT event.
+ *
+ * Only meaningful when the submodule operates in complementary mode (CTRL2[INDEP] = 0).
+ *
+ * param base      PWM peripheral base address
+ * param subModule PWM submodule to configure
+ * param polarity  kPWM_ComplementaryPwmA or kPWM_ComplementaryPwmB
+ */
+void PWM_UpdateCurrentPolarity(PWM_Type *base, pwm_submodule_t subModule, pwm_chnl_pair_operation_t polarity)
+{
+    uint16_t subModuleMsk = (1U << (uint16_t)subModule);
+
+    /* Write the new IPOL value to the double-buffered MCTRL[IPOL] field.
+     * This value will not take effect until a FORCE_OUT event occurs. */
+    if (polarity == kPWM_ComplementaryPwmA)
+    {
+        /* Clear the IPOL bit for this submodule: PWM23 drives the complementary pair */
+        base->MCTRL &= MCUX_MASK_INVERT_16((uint16_t)subModuleMsk << PWM_MCTRL_IPOL_SHIFT);
+    }
+    else
+    {
+        /* Set the IPOL bit for this submodule: PWM45 drives the complementary pair */
+        base->MCTRL |= ((uint16_t)subModuleMsk << PWM_MCTRL_IPOL_SHIFT);
+    }
+}
+
+/*!
  * brief Set PWM output in idle status (high or low).
  *
  * note This API should call after PWM_SetupPwm() APIs, and PWMX submodule is not supported.

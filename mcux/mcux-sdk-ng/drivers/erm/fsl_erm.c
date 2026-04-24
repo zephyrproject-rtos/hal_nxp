@@ -285,7 +285,7 @@ uint32_t ERM_GetSyndrome(ERM_Type *base, uint32_t channel)
             break;
 #endif
 #ifdef ERM_SYN9_SYNDROME_MASK
-        case 8U:
+        case 9U:
             syndrome = (base->SYN9 & ERM_SYN9_SYNDROME_MASK) >> ERM_SYN9_SYNDROME_SHIFT;
             break;
 #endif

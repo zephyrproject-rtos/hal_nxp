@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2025 NXP
+ * Copyright 2016-2022, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -250,7 +250,7 @@ size_t LPUART_TransferGetRxRingBufferLength(LPUART_Type *base, lpuart_handle_t *
 
     if (tmpRxRingBufferTail > tmpRxRingBufferHead)
     {
-        size = ((size_t)tmpRxRingBufferHead + tmpRxRingBufferSize - (size_t)tmpRxRingBufferTail);
+        size = tmpRxRingBufferSize - ((size_t)tmpRxRingBufferTail - (size_t)tmpRxRingBufferHead);
     }
     else
     {
@@ -376,6 +376,8 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
 {
     assert(NULL != config);
     assert(0U < config->baudRate_Bps);
+    assert(config->baudRate_Bps <= (UINT32_MAX / 32U));
+    assert(srcClock_Hz <= (UINT32_MAX / 2U));
 #if defined(FSL_FEATURE_LPUART_HAS_FIFO) && FSL_FEATURE_LPUART_HAS_FIFO
     assert(FSL_FEATURE_LPUART_FIFO_SIZEn(base) > 0);
     assert((uint8_t)FSL_FEATURE_LPUART_FIFO_SIZEn(base) > config->txFifoWatermark);
@@ -387,7 +389,7 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
     uint16_t sbr;
     uint8_t osr, osrTemp;
     uint32_t tempDiff, calculatedBaud, baudDiff;
-    uint64_t sbrTemp;
+    uint32_t sbrTemp;
 
     /* This LPUART instantiation uses a slightly different baud rate calculation
      * The idea is to use the best OSR (over-sampling rate) possible
@@ -401,7 +403,7 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
     for (osrTemp = 4U; osrTemp <= 32U; osrTemp++)
     {
         /* Calculate the temporary sbr value */
-        sbrTemp = ((((uint64_t)srcClock_Hz * 2U) / ((uint64_t)config->baudRate_Bps * (uint64_t)osrTemp)) + 1U) / 2U;
+        sbrTemp = (((srcClock_Hz * 2U) / (config->baudRate_Bps * (uint32_t)osrTemp)) + 1U) / 2U;
 
         /* Set sbrTemp to 1 if the srcClock_Hz can not satisfy the desired baud rate */
         if (sbrTemp == 0U)
@@ -488,7 +490,7 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
         base->BAUD &= ~LPUART_BAUD_M10_MASK;
 
         temp = base->CTRL & ~(LPUART_CTRL_PE_MASK | LPUART_CTRL_PT_MASK | LPUART_CTRL_M_MASK | LPUART_CTRL_ILT_MASK |
-                              LPUART_CTRL_IDLECFG_MASK);
+                              LPUART_CTRL_IDLECFG_MASK | LPUART_CTRL_TXINV_MASK);
 
         temp |= (uint8_t)config->parityMode | LPUART_CTRL_IDLECFG(config->rxIdleConfig) |
                 LPUART_CTRL_ILT(config->rxIdleType);
@@ -524,6 +526,10 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
             temp &= ~LPUART_CTRL_SWAP_MASK;
         }
 #endif
+        if (config->inverseTxd == true)
+        {
+            temp |= LPUART_CTRL_TXINV_MASK;
+        }
 
         base->CTRL = temp;
 
@@ -571,7 +577,22 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
         {
             /* Enable the receiver RTS(request-to-send) function. */
             base->MODIR |= LPUART_MODIR_RXRTSE_MASK;
+
+            /* NOTE: Do not set both RXRTSE and TXRTSE */
+            assert(false == config->enableTxRTS);
         }
+        else
+        {
+            if (true == config->enableTxRTS)
+            {
+                /* Enable the transmitter RTS(request-to-send) function */
+                base->MODIR |= LPUART_MODIR_TXRTSE_MASK;
+
+                /* Set the transmitter RTS(request-to-send) polarity */
+                base->MODIR |= LPUART_MODIR_TXRTSPOL(config->txRtsPolarity);
+            }
+        }
+
         if (true == config->enableTxCTS)
         {
             /* Enable the CTS(clear-to-send) function. */
@@ -726,9 +747,11 @@ void LPUART_GetDefaultConfig(lpuart_config_t *config)
 #endif
 #if defined(FSL_FEATURE_LPUART_HAS_MODEM_SUPPORT) && FSL_FEATURE_LPUART_HAS_MODEM_SUPPORT
     config->enableRxRTS = false;
+    config->enableTxRTS = false;
     config->enableTxCTS = false;
     config->txCtsConfig = kLPUART_CtsSampleAtStart;
     config->txCtsSource = kLPUART_CtsSourcePin;
+    config->txRtsPolarity = kLPUART_RtsPolarityLow;
 #if defined(FSL_FEATURE_LPUART_HAS_MODIR_RTSWATER) && FSL_FEATURE_LPUART_HAS_MODIR_RTSWATER
     config->rtsWatermark = 0U;
 #endif
@@ -740,6 +763,7 @@ void LPUART_GetDefaultConfig(lpuart_config_t *config)
 #if defined(FSL_FEATURE_LPUART_HAS_CTRL_SWAP) && FSL_FEATURE_LPUART_HAS_CTRL_SWAP
     config->swapTxdRxd   = false;
 #endif
+    config->inverseTxd = false;
 }
 
 /*!
@@ -760,13 +784,14 @@ void LPUART_GetDefaultConfig(lpuart_config_t *config)
 status_t LPUART_SetBaudRate(LPUART_Type *base, uint32_t baudRate_Bps, uint32_t srcClock_Hz)
 {
     assert(0U < baudRate_Bps);
-
+    assert(baudRate_Bps <= (UINT32_MAX / 32U));
+    assert(srcClock_Hz <= (UINT32_MAX / 2U));
     status_t status = kStatus_Success;
     uint32_t temp, oldCtrl;
     uint16_t sbr;
     uint8_t osr, osrTemp;
     uint32_t tempDiff, calculatedBaud, baudDiff;
-    uint64_t sbrTemp;
+    uint32_t sbrTemp;
 
     /* This LPUART instantiation uses a slightly different baud rate calculation
      * The idea is to use the best OSR (over-sampling rate) possible
@@ -780,7 +805,7 @@ status_t LPUART_SetBaudRate(LPUART_Type *base, uint32_t baudRate_Bps, uint32_t s
     for (osrTemp = 4U; osrTemp <= 32U; osrTemp++)
     {
         /* Calculate the temporary sbr value */
-        sbrTemp = ((((uint64_t)srcClock_Hz * 2U) / ((uint64_t)baudRate_Bps * (uint64_t)osrTemp)) + 1U) / 2U;
+        sbrTemp = (((srcClock_Hz * 2U) / (baudRate_Bps * (uint32_t)osrTemp)) + 1U) / 2U;
 
         /* Set sbrTemp to 1 if the srcClock_Hz can not satisfy the desired baud rate */
         if (sbrTemp == 0U)
@@ -2285,6 +2310,10 @@ void LPUART_TransferHandleErrorIRQ(LPUART_Type *base, void *irqHandle)
     /* To be implemented by User. */
 }
 
+/*
+ * $Branch Coverage Justification$
+ * Usage of LPUART_DriverIRQHandler is device specific.
+ */
 void LPUART_DriverIRQHandler(uint32_t instance)
 {
     if (instance < ARRAY_SIZE(s_lpuartBases))
@@ -2294,6 +2323,13 @@ void LPUART_DriverIRQHandler(uint32_t instance)
     SDK_ISR_EXIT_BARRIER;
 }
 
+/*
+ * $Branch Coverage Justification$
+ * The individual LPUART IRQ handler functions are instance-specific and depend on
+ * the hardware configuration and application usage.
+ * Only the IRQ handlers for the LPUART instances actually used in the application will be invoked,
+ * therefore not all handlers need to be covered.
+ */
 #if defined(FSL_FEATURE_LPUART_HAS_SHARED_IRQ0_IRQ1) && FSL_FEATURE_LPUART_HAS_SHARED_IRQ0_IRQ1
 #if defined(FSL_FEATURE_LPUART_HAS_SEPARATE_RX_TX_IRQ) && FSL_FEATURE_LPUART_HAS_SEPARATE_RX_TX_IRQ
 void LPUART0_LPUART1_RX_DriverIRQHandler(void);

@@ -155,8 +155,7 @@ uint32_t FREQME_CalculateTargetClkFreq(FREQME_Type *base, uint32_t refClkFrequen
         tmp64         = ((uint64_t)measureResult - 2ULL) * (uint64_t)refClkFrequency;
         refCountCycle = 1ULL << (uint64_t)FREQME_GetReferenceClkScaleValue(base);
 
-        assert(tmp64 / refCountCycle <= 0xFFFFFFFFU);
-        targetFreq    = (uint32_t)(tmp64 / refCountCycle);
+        targetFreq    = (uint32_t)((tmp64 / refCountCycle) & 0xFFFFFFFFU);
     }
 
     return targetFreq;

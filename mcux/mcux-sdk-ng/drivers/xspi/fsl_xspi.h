@@ -30,7 +30,7 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-#define FSL_XSPI_DRIVER_VERSION (MAKE_VERSION(2, 7, 0))
+#define FSL_XSPI_DRIVER_VERSION (MAKE_VERSION(2, 7, 2))
 /*@{*/
 
 /*! @brief Formula to form XSPI instructions in LUT table. */

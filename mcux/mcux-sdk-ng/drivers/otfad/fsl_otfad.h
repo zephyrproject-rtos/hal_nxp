@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2021, 2026 NXP
  * All rights reserved.
  *
  *
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Driver version. */
-#define FSL_OTFAD_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 3U))
+#define FSL_OTFAD_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 4U))
 /*! @} */
 
 /*! @brief Status codes for the OTFAD driver. */

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -112,9 +112,12 @@ void SPIFI_Init(SPIFI_Type *base, const spifi_config_t *config)
 
     /* Set time delay parameter */
     base->CTRL = SPIFI_CTRL_TIMEOUT(config->timeout) | SPIFI_CTRL_CSHIGH(config->csHighTime) |
-                 SPIFI_CTRL_D_PRFTCH_DIS(config->disablePrefetch) | SPIFI_CTRL_MODE3(config->spiMode) |
-                 SPIFI_CTRL_PRFTCH_DIS(config->disableCachePrefech) | SPIFI_CTRL_DUAL(config->dualMode) |
-                 SPIFI_CTRL_RFCLK(config->isReadFullClockCycle) | SPIFI_CTRL_FBCLK(config->isFeedbackClock);
+                 /* INT31-C: Explicit bool to unsigned long conversion */
+                 SPIFI_CTRL_D_PRFTCH_DIS(config->disablePrefetch ? 1U : 0U) | SPIFI_CTRL_MODE3(config->spiMode) |
+                 /* INT31-C: Explicit bool to unsigned long conversion */
+                 SPIFI_CTRL_PRFTCH_DIS(config->disableCachePrefech ? 1U : 0U) | SPIFI_CTRL_DUAL(config->dualMode) |
+                 /* INT31-C: Explicit bool to unsigned long conversions */
+                 SPIFI_CTRL_RFCLK(config->isReadFullClockCycle ? 1U : 0U) | SPIFI_CTRL_FBCLK(config->isFeedbackClock ? 1U : 0U);
 }
 
 /*!
@@ -149,7 +152,8 @@ void SPIFI_SetCommand(SPIFI_Type *base, spifi_command_t *cmd)
     {
     }
 
-    base->CMD = SPIFI_CMD_DATALEN(cmd->dataLen) | SPIFI_CMD_POLL(cmd->isPollMode) | SPIFI_CMD_DOUT(cmd->direction) |
+    /* INT31-C: Explicit bool to unsigned long conversion */
+    base->CMD = SPIFI_CMD_DATALEN(cmd->dataLen) | SPIFI_CMD_POLL(cmd->isPollMode ? 1U : 0U) | SPIFI_CMD_DOUT(cmd->direction) |
                 SPIFI_CMD_INTLEN(cmd->intermediateBytes) | SPIFI_CMD_FIELDFORM(cmd->format) |
                 SPIFI_CMD_FRAMEFORM(cmd->type) | SPIFI_CMD_OPCODE(cmd->opcode);
 }
@@ -191,7 +195,8 @@ void SPIFI_WriteDataHalfword(SPIFI_Type *base, uint16_t data)
 {
     volatile uint8_t *dataReg = ((volatile uint8_t *)(&(base->DATA)));
 
-    *dataReg = ((uint8_t)data & 0xFFU);
+    /* INT31-C: Explicit narrowing with mask ensures safe conversion */
+    *dataReg = (uint8_t)(data & 0xFFU);
     dataReg++;
     *dataReg = (((uint8_t)(data >> 8U)) & 0xFFU);
 }

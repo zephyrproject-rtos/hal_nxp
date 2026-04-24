@@ -635,6 +635,45 @@ _Pragma("diag_suppress=Pm120")
 /*! @} */
 
 /*!
+ * @name Label for Deprecated or Experimental functions
+ *
+ * The deprecated functions will be removed in next release.
+ * The experimental functions might be removed at any time.
+ * Avoid using them.
+ * @{
+ */
+
+/*!
+ * @brief Deprecated APIs
+ */
+#define MCUX_DEPRECATED __attribute__((deprecated("Deprecated feature")))
+
+/*!
+ * @brief Deprecated macros
+ */
+#if (defined(__ICCARM__))
+#define MCUX_DEPRECATED_MACRO _Pragma("message(\"Warning: Deprecated macro\")")
+#else
+#define MCUX_DEPRECATED_MACRO _Pragma("GCC warning \"Deprecated macro\"")
+#endif
+
+/*!
+ * @brief Experimental APIs
+ */
+#define MCUX_EXPERIMENTAL __attribute__((deprecated("Experimental feature")))
+
+/*!
+ * @brief Experimental macros
+ */
+#if (defined(__ICCARM__))
+#define MCUX_EXPERIMENTAL_MACRO _Pragma("message(\"Warning: Experimental macro\")")
+#else
+#define MCUX_EXPERIMENTAL_MACRO _Pragma("GCC warning \"Experimental macro\"")
+#endif
+
+/*! @} */
+
+/*!
  * @def MSDK_REG_SECURE_ADDR(x)
  * Convert the register address to the one used in secure mode.
  *

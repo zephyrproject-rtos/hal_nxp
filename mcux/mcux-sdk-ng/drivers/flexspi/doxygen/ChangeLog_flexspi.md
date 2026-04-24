@@ -1,9 +1,22 @@
 # FLEXSPI
 
+## [2.9.1]
+
+- Bug Fixes
+  - Fixed CERT INT31-C violations: added masks before uint8_t casts and replaced bool fields with ternary expressions.
+
 ## [2.9.0]
 
 - New Features
   - Added FlexSPI root clock divider configuration.
+
+- Bug Fixes
+  - Add explicit boolean to integer conversions (? 1U : 0U) for all enable flags
+  - Add assertions to prevent unsigned integer overflow in buffer size calculations
+  - Add assertions to prevent unsigned integer underflow in watermark calculations
+  - Add safe type conversion for uint32_t to uint8_t operations
+  - Add bounds checking assertion for LUT index operations
+  - Follow INT30-C and INT31-C CERT coding standards
 
 ## [2.8.1]
 

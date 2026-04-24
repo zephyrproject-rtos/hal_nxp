@@ -2444,49 +2444,55 @@ void EDMA_StartTransfer(edma_handle_t *handle)
         }
     }
 #else
+    bool ch_mux_configured = false;
 #if defined FSL_FEATURE_EDMA_HAS_CHANNEL_MUX && FSL_FEATURE_EDMA_HAS_CHANNEL_MUX
 #if defined FSL_FEATURE_EDMA_HAS_MP_CHANNEL_MUX && FSL_FEATURE_EDMA_HAS_MP_CHANNEL_MUX
-    if (((uint32_t)FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_MUXn(handle->base) == 1U) &&
-        (EDMA_MP_BASE(handle->base)->MP_REGS.EDMA5_REG.CH_MUX[handle->channel] == 0U) &&
-        ((uint32_t)FSL_FEATURE_EDMA_INSTANCE_HAS_MP_CHANNEL_MUXn(handle->base) == 1U))
+    if ((uint32_t)FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_MUXn(handle->base) == 1U)
     {
-        EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) |= DMA_CSR_START_MASK;
+        if ((uint32_t)FSL_FEATURE_EDMA_INSTANCE_HAS_MP_CHANNEL_MUXn(handle->base) == 1U)
+        {
+            ch_mux_configured = (EDMA_MP_BASE(handle->base)->MP_REGS.EDMA5_REG.CH_MUX[handle->channel] == 0U);
+        }
+        else
+        {
+            ch_mux_configured = (handle->channelBase->CH_REGS.EDMA4_REG.CH_MUX == 0U);
+        }
     }
-    else if (((uint32_t)FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_MUXn(handle->base) == 1U) &&
-             handle->channelBase->CH_REGS.EDMA4_REG.CH_MUX == 0U &&
-             !((uint32_t)FSL_FEATURE_EDMA_INSTANCE_HAS_MP_CHANNEL_MUXn(handle->base) == 1U))
-    {
-        EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) |= DMA_CSR_START_MASK;
-    }
-    else
 #else
     if (((uint32_t)FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_MUXn(handle->base) == 1U) &&
-        handle->channelBase->CH_REGS.EDMA4_REG.CH_MUX == 0U)
+        (handle->channelBase->CH_REGS.EDMA4_REG.CH_MUX == 0U))
+    {
+        ch_mux_configured = true;
+    }
+#endif
+#endif
+
+    if (ch_mux_configured)
     {
         EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) |= DMA_CSR_START_MASK;
     }
     else
-#endif
-#endif
+    {
         if (handle->tcdPool == NULL)
-    {
-        handle->channelBase->CH_CSR |= DMA_CH_CSR_ERQ_MASK;
-    }
-    else
-    {
-        /* Check if channel request is actually disable. */
-        if ((handle->channelBase->CH_CSR & DMA_CH_CSR_ERQ_MASK) == 0U)
         {
-            /* Avoiding misra_c_2012_rule_13_5_violation event */
-            uint16_t esgStatus = EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) & DMA_CSR_ESG_MASK;
-            /* Check if transfer is paused. */
-            if ((!((handle->channelBase->CH_CSR & DMA_CH_CSR_DONE_MASK) != 0U)) || (esgStatus != 0U))
+            handle->channelBase->CH_CSR |= DMA_CH_CSR_ERQ_MASK;
+        }
+        else
+        {
+            /* Check if channel request is actually disable. */
+            if ((handle->channelBase->CH_CSR & DMA_CH_CSR_ERQ_MASK) == 0U)
             {
-                /*
-                    Re-enable channel request must be as soon as possible, so must put it into
-                    critical section to avoid task switching or interrupt service routine.
-                */
-                handle->channelBase->CH_CSR |= DMA_CH_CSR_ERQ_MASK;
+                /* Avoiding misra_c_2012_rule_13_5_violation event */
+                uint16_t esgStatus = EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) & DMA_CSR_ESG_MASK;
+                /* Check if transfer is paused. */
+                if ((!((handle->channelBase->CH_CSR & DMA_CH_CSR_DONE_MASK) != 0U)) || (esgStatus != 0U))
+                {
+                    /*
+                        Re-enable channel request must be as soon as possible, so must put it into
+                        critical section to avoid task switching or interrupt service routine.
+                    */
+                    handle->channelBase->CH_CSR |= DMA_CH_CSR_ERQ_MASK;
+                }
             }
         }
     }

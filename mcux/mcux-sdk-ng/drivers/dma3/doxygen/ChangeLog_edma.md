@@ -1,5 +1,11 @@
 # EDMA (DMA3)
 
+## [2.6.0]
+
+- Improvements
+  - Add API EDMA_EnableChannelMasterIDReplication, EDMA_SetChannelSecurityLevel and EDMA_SetChannelProtectionLevel to support edma CH_SBR register configuration.
+  - Add FSL_FEATURE_EDMA_SOC_REQUIRES_SECURE_MASTER macro to separate SOC with secure master requirement.
+
 ## [2.5.3]
 
 - Bug Fixes

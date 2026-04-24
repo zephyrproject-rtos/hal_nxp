@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.wdog01)
-    mcux_component_version(2.2.1)
+    mcux_component_version(2.2.2)
 
     mcux_add_source(SOURCES fsl_wdog.h fsl_wdog.c)
 

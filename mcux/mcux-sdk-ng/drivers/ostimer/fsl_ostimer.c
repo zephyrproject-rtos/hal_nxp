@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021, 2023, 2025 NXP
+ * Copyright 2018-2021, 2023, 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -142,7 +142,7 @@ uint64_t OSTIMER_GrayToDecimal(uint64_t gray)
  *
  * @param base OSTIMER peripheral base address.
  * @param enable enable/disable the IRQ and module interrupt enablement.
- *               - true: Disable the IRQ and module interrupt enablement.
+ *               - true: Enable the IRQ and module interrupt enablement.
  *               - false: Disable the IRQ and module interrupt enablement.
  * @return none
  */
@@ -165,7 +165,7 @@ static void OSTIMER_EnableInterrupt(OSTIMER_Type *base, bool enable)
 }
 
 /*!
- * @brief Initializes an OSTIMER by turning it's clock on.
+ * @brief Initializes an OSTIMER by turning its clock on.
  *
  */
 void OSTIMER_Init(OSTIMER_Type *base)
@@ -204,7 +204,7 @@ void OSTIMER_Deinit(OSTIMER_Type *base)
     /* Disable pending interrupts before disabling the OSTIMER clock
      to avoid interrupts being triggered when the clock is disabled. */
     OSTIMER_EnableInterrupt(base, false);
-    /* Enable clock for OSTIMER. */
+    /* Disable clock for OSTIMER. */
     CLOCK_DisableClock(s_ostimerClock[OSTIMER_GetInstance(base)]);
 #if (defined(FSL_FEATURE_SYSCTRL_HAS_CODE_GRAY) && FSL_FEATURE_SYSCTRL_HAS_CODE_GRAY)
     CLOCK_DisableClock(kCLOCK_Sysctl);
@@ -229,7 +229,7 @@ uint32_t OSTIMER_GetStatusFlags(OSTIMER_Type *base)
 /*!
  * @brief Clear Status Interrupt Flags.
  *
- * This clears intr status flag.
+ * This clears interrupt status flag.
  * Currently, only match interrupt flag can be cleared.
  *
  * @param base OSTIMER peripheral base address.
@@ -246,17 +246,16 @@ void OSTIMER_ClearStatusFlags(OSTIMER_Type *base, uint32_t mask)
  *
  * This function will set a match value for OSTIMER with an optional callback. And this callback
  * will be called while the data in dedicated pair match register is equals to the value of central EVTIMER.
- * Please note that, the data format may be gray-code, if so, please using OSTIMER_SetMatchValue().
+ * Please note that, the data format may be gray-code, if so, please use OSTIMER_SetMatchValue().
  *
  * @param base   OSTIMER peripheral base address.
  * @param count  OSTIMER timer match value.(Value may be gray-code format)
  *
  * @param cb     OSTIMER callback (can be left as NULL if none, otherwise should be a void func(void)).
- * @retval kStatus_Success                    - Set match raw value and enable interrupt Successfully.
+ * @retval kStatus_Success  Match raw value written and interrupt enabled successfully.
  */
 status_t OSTIMER_SetMatchRawValue(OSTIMER_Type *base, uint64_t count, ostimer_callback_t cb)
 {
-    uint64_t tmp      = count;
     uint32_t instance = OSTIMER_GetInstance(base);
 
     /* Clear interrupt flag, disable the IRQ and module interrupt enablement. */
@@ -265,7 +264,7 @@ status_t OSTIMER_SetMatchRawValue(OSTIMER_Type *base, uint64_t count, ostimer_ca
     s_ostimerIsr              = OSTIMER_HandleIRQ;
     s_ostimerHandle[instance] = cb;
 
-    OSTIMER_SetMatchRegister(base, tmp);
+    OSTIMER_SetMatchRegister(base, count);
     OSTIMER_EnableInterrupt(base, true);
 
     return kStatus_Success;
@@ -277,11 +276,19 @@ status_t OSTIMER_SetMatchRawValue(OSTIMER_Type *base, uint64_t count, ostimer_ca
  * This function will set a match value for OSTIMER with an optional callback. And this callback
  * will be called while the data in dedicated pair match register is equals to the value of central EVTIMER.
  *
+ * The function disables the match interrupt before writing the match registers and re-enables it
+ * immediately after. This function is suitable when the delta between the current timer value and @p count is
+ * comfortably larger than the match-register synchronisation latency (more than 7 OSTimer ticks).
+ * However, it does NOT wait for OSEVENT_CTRL[MATCH_WR_RDY]) after writing MATCH, and it does NOT check whether
+ * the requested match time has already passed. If there is any possibility that @p count is close to or has already
+ * passed the current timer value, use @ref OSTIMER_SetMatchValueSafe() instead, which polls MATCH_WR_RDY and checks
+ * whether the match moment has been missed.
+ *
  * @param base   OSTIMER peripheral base address.
- * @param count  OSTIMER timer match value.(Value is decimal format, and this value will be translate to Gray code in
- * API if the IP counter is gray encoded. )
- * @param cb  OSTIMER callback (can be left as NULL if none, otherwise should be a void func(void)).
- * @retval kStatus_Success                    - Set match raw value and enable interrupt Successfully.
+ * @param count  Match value in decimal (binary) format. The driver converts to Gray code internally
+ *               when the hardware counter is Gray-encoded.
+ * @param cb     OSTIMER callback (can be left as NULL if none, otherwise should be a void func(void)).
+ * @retval kStatus_Success  Match value written and interrupt enabled successfully.
  */
 status_t OSTIMER_SetMatchValue(OSTIMER_Type *base, uint64_t count, ostimer_callback_t cb)
 {
@@ -292,6 +299,114 @@ status_t OSTIMER_SetMatchValue(OSTIMER_Type *base, uint64_t count, ostimer_callb
 
     return OSTIMER_SetMatchRawValue(base, tmp, cb);
 #endif /* FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER */
+}
+
+/*!
+ * @brief Set the match value for OSTIMER with full synchronisation and missed-event detection.
+ *
+ * This function will set a match value for OSTIMER with an optional callback. And this callback
+ * will be called while the data in dedicated pair match register is equals to the value of central EVTIMER.
+ *
+ * Unlike @ref OSTIMER_SetMatchValue(), this function performs the following additional steps after
+ * writing the match registers:
+ *
+ * 1. Wait for write synchronisation (MATCH_WR_RDY).
+ *    On devices that expose OSEVENT_CTRL[MATCH_WR_RDY], the function spins until that bit is
+ *    cleared, which indicates that the written value has been transferred from the shadow registers
+ *    to the active compare registers in the OSTimer clock domain. This eliminates the race condition
+ *    where the timer advances past the match value before the hardware has latched it.
+ *
+ * 2. Check whether the match moment has already been missed.
+ *    After MATCH_WR_RDY clears, the function reads the current timer value and compares it with @p count:
+ *    - If the current timer value is still below @p count, the match has not yet occurred.
+ *      The interrupt is enabled and the function returns @ref kStatus_Success.
+ *    - If the current timer value has reached or passed @p count:
+ *      - If the hardware interrupt flag (OSTIMER_INTRFLAG) is already set, the match event was
+ *        captured by hardware. The interrupt is enabled so the pending flag triggers the ISR, and
+ *        the function returns @ref kStatus_Success.
+ *      - If the interrupt flag is NOT set, the match moment passed without the hardware
+ *        capturing it (the compare logic had not yet latched the value when the timer advanced).
+ *        The interrupt is left DISABLED and the function returns @ref kStatus_Fail. The caller
+ *        is responsible for handling this missed event, for example by scheduling a new match
+ *        immediately or executing the intended action directly.
+ *
+ * @note This function is recommended whenever the requested match delta is small or unpredictable
+ *       relative to the OSTimer source clock period.
+ *       If the overhead of polling MATCH_WR_RDY is unacceptable (e.g. at 32 KHz with tight
+ *       real-time constraints), use @ref OSTIMER_SetMatchValue() and ensure the match delta is
+ *       always large enough.
+ *
+ * @param base   OSTIMER peripheral base address.
+ * @param count  Match value in decimal (binary) format. The driver converts to Gray code internally
+ *               when the hardware counter is Gray-encoded.
+ * @param cb     OSTIMER callback (can be left as NULL if none, otherwise should be a void func(void)).
+ *
+ * @retval kStatus_Success  Match value written and interrupt enabled. The match event will occur
+ *                          in the future, or the hardware interrupt flag was already set and the
+ *                          pending interrupt will fire immediately upon enabling.
+ * @retval kStatus_Fail     Match time already passed and the hardware interrupt flag was not set.
+ *                          The interrupt remains disabled. The caller must handle the missed event.
+ */
+status_t OSTIMER_SetMatchValueSafe(OSTIMER_Type *base, uint64_t count, ostimer_callback_t cb)
+{
+#ifdef OSTIMER_OSEVENT_CTRL_MATCH_WR_RDY_MASK
+    uint64_t decValueTimer;
+#endif
+    status_t status;
+    uint32_t instance = OSTIMER_GetInstance(base);
+
+    /* Clear interrupt flag, disable the IRQ and module interrupt enablement. */
+    OSTIMER_EnableInterrupt(base, false);
+
+    s_ostimerIsr              = OSTIMER_HandleIRQ;
+    s_ostimerHandle[instance] = cb;
+
+    /* Set the match value. */
+#if (defined(FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER) && FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER)
+    base->MATCH_L = (uint32_t)(count & 0xFFFFFFFFU);
+    base->MATCH_H = (uint32_t)(count >> 32U);
+#else
+    uint64_t tmp = OSTIMER_DecimalToGray(count);
+    base->MATCH_L = (uint32_t)(tmp & 0xFFFFFFFFU);
+    base->MATCH_H = (uint32_t)(tmp >> 32U);
+#endif
+
+#ifdef OSTIMER_OSEVENT_CTRL_MATCH_WR_RDY_MASK
+    /* Workaround-2019-12-30:
+     * Since OSTimer's counter register is Gray-encoded, it would cost more time to write register. When EVTimer Match
+     * Write Ready bit is low, which means the previous match value has been updated successfully by that time, it is
+     * safe to reload (write) the Match Registers. Even if there is the RM comment that "In typical applications, it
+     * should not be necessary to test this bit", but we found the interruption would not be reported when the delta
+     * timer user added is smaller(IE: RT595 11us in 1MHz typical application) in release version." To prevent such
+     * issue from happening, we'd better wait for the match value to update successfully before enabling IRQ.
+     */
+    while (0U != (base->OSEVENT_CTRL & OSTIMER_OSEVENT_CTRL_MATCH_WR_RDY_MASK))
+    {
+    }
+
+    /* Check whether the current timer value has gone ahead of the match value.
+     * On MATCH_WR_RDY platforms this check is performed after the synchronization
+     * window completes; on other platforms it is a simple post-write check.
+     * (1) If current timer value has gone ahead of the match value, the interrupt will not be reported before 64-bit
+     * timer value over flow. We need to check whether the interrupt flag has been set or not: if yes, we will enable
+     * interrupt and return success; if not, we will return fail directly.
+     * (2) If current timer value has not gone ahead of match value, we will enable interrupt and return success.
+     */
+    decValueTimer = OSTIMER_GetCurrentTimerValue(base);
+    if ((decValueTimer >= count) &&
+        (0U == (base->OSEVENT_CTRL & (uint32_t)kOSTIMER_MatchInterruptFlag)))
+    {
+        status = kStatus_Fail;
+    }
+    else
+#endif /* OSTIMER_OSEVENT_CTRL_MATCH_WR_RDY_MASK */
+    {
+        /* Enable the module interrupt enablement. */
+        OSTIMER_EnableInterrupt(base, true);
+        status = kStatus_Success;
+    }
+
+    return status;
 }
 
 /*!

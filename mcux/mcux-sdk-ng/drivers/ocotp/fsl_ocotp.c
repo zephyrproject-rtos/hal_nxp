@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020, 2024 NXP
+ * Copyright 2019-2020, 2024, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -188,19 +188,19 @@ void OCOTP_Deinit(OCOTP_Type *base)
 #endif
 }
 
-/* Read the fuse shadow register. */
-uint32_t OCOTP_ReadFuseShadowRegister(OCOTP_Type *base, uint32_t address)
+/* Read the fuse word. */
+uint32_t OCOTP_ReadFuse(OCOTP_Type *base, uint32_t address)
 {
     assert(NULL != base);
 
     uint32_t data = 0U;
 
-    (void)OCOTP_ReadFuseShadowRegisterExt(base, address, &data, 1);
+    (void)OCOTP_ReadFuseExt(base, address, &data, 1);
 
     return data;
 }
 
-status_t OCOTP_ReadFuseShadowRegisterExt(OCOTP_Type *base, uint32_t address, uint32_t *data, uint8_t fuseWords)
+status_t OCOTP_ReadFuseExt(OCOTP_Type *base, uint32_t address, uint32_t *data, uint8_t fuseWords)
 {
     assert((fuseWords > 0U) && (fuseWords <= OCOTP_READ_FUSE_DATA_COUNT));
     assert(NULL != data);
@@ -291,13 +291,13 @@ status_t OCOTP_ReadFuseShadowRegisterExt(OCOTP_Type *base, uint32_t address, uin
     return status;
 }
 
-/* Write the fuse shadow register. */
-status_t OCOTP_WriteFuseShadowRegister(OCOTP_Type *base, uint32_t address, uint32_t data)
+/* Write the fuse word. */
+status_t OCOTP_WriteFuse(OCOTP_Type *base, uint32_t address, uint32_t data)
 {
-    return OCOTP_WriteFuseShadowRegisterWithLock(base, address, data, false);
+    return OCOTP_WriteFuseWithLock(base, address, data, false);
 }
 
-status_t OCOTP_WriteFuseShadowRegisterWithLock(OCOTP_Type *base, uint32_t address, uint32_t data, bool lock)
+status_t OCOTP_WriteFuseWithLock(OCOTP_Type *base, uint32_t address, uint32_t data, bool lock)
 {
     assert(NULL != base);
 

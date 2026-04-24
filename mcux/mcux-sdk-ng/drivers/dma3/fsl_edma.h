@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief eDMA driver version */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 3)) /*!< Version 2.5.3. */
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 0)) /*!< Version 2.6.0. */
 /*! @} */
 
 /*! @brief eDMA transfer configuration */
@@ -90,6 +90,20 @@ typedef enum _edma_channel_link_type
     kEDMA_MinorLink,       /*!< Channel link after each minor loop */
     kEDMA_MajorLink,       /*!< Channel link while major loop count exhausted */
 } edma_channel_link_type_t;
+
+/*! @brief eDMA channel security level */
+typedef enum _edma_channel_security_level
+{
+    kEDMA_ChannelSecurityLevelNonSecure = 0x0U, /*!< Channel executes in non-secure mode */
+    kEDMA_ChannelSecurityLevelSecure    = 0x1U, /*!< Channel executes in secure mode */
+} edma_channel_security_level_t;
+
+/*! @brief eDMA channel protection level */
+typedef enum _edma_channel_protection_level
+{
+    kEDMA_ChannelProtectionLevelUser       = 0x0U, /*!< Channel executes at user privilege level */
+    kEDMA_ChannelProtectionLevelPrivileged = 0x1U, /*!< Channel executes at privileged level */
+} edma_channel_protection_level_t;
 
 /*!@brief eDMA channel status flags, _edma_channel_status_flags */
 enum
@@ -454,6 +468,75 @@ static inline void EDMA_SetChannelPreemptionConfig(DMA_Type *base,
 static inline uint32_t EDMA_GetChannelSystemBusInformation(DMA_Type *base, uint32_t channel)
 {
     return base->CH[channel].CH_SBR;
+}
+
+#if defined(FSL_FEATURE_EDMA_HAS_CH_SBR_EMI) && FSL_FEATURE_EDMA_HAS_CH_SBR_EMI
+/*!
+ * @brief Set channel master ID replication.
+ *
+ * @param base eDMA peripheral base address.
+ * @param channel eDMA channel number.
+ * @param enable true is enable, false is disable.
+ */
+static inline void EDMA_EnableChannelMasterIDReplication(DMA_Type *base, uint32_t channel, bool enable)
+{
+    assert(channel < (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL);
+
+    if (enable)
+    {
+        base->CH[channel].CH_SBR |= DMA_CH_SBR_EMI_MASK;
+    }
+    else
+    {
+        base->CH[channel].CH_SBR &= ~DMA_CH_SBR_EMI_MASK;
+    }
+}
+#endif /* FSL_FEATURE_EDMA_HAS_CH_SBR_EMI */
+
+#if defined(FSL_FEATURE_EDMA_HAS_CH_SBR_SEC) && FSL_FEATURE_EDMA_HAS_CH_SBR_SEC
+/*!
+ * @brief Set channel security level.
+ *
+ * @param base eDMA peripheral base address.
+ * @param channel eDMA channel number.
+ * @param level security level.
+ */
+static inline void EDMA_SetChannelSecurityLevel(DMA_Type *base, uint32_t channel, edma_channel_security_level_t level)
+{
+    assert(channel < (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL);
+
+    if (level == kEDMA_ChannelSecurityLevelSecure)
+    {
+        base->CH[channel].CH_SBR |= DMA_CH_SBR_SEC_MASK;
+    }
+    else
+    {
+        base->CH[channel].CH_SBR &= ~DMA_CH_SBR_SEC_MASK;
+    }
+}
+#endif
+
+/*!
+ * @brief Set channel protection level.
+ *
+ * @param base eDMA peripheral base address.
+ * @param channel eDMA channel number.
+ * @param level protection level.
+ */
+static inline void EDMA_SetChannelProtectionLevel(DMA_Type *base,
+                                                  uint32_t channel,
+                                                  edma_channel_protection_level_t level)
+{
+    assert(channel < (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL);
+
+    if (level == kEDMA_ChannelProtectionLevelPrivileged)
+    {
+        base->CH[channel].CH_SBR |= DMA_CH_SBR_PAL_MASK;
+    }
+    else
+    {
+        base->CH[channel].CH_SBR &= ~DMA_CH_SBR_PAL_MASK;
+    }
 }
 
 /*!

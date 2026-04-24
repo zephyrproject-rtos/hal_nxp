@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2023-2025 NXP
+ * Copyright 2016-2019, 2023-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -770,7 +770,7 @@ void IRTC_ConfigClockOut(RTC_Type *base, irtc_clockout_sel_t clkOut)
 {
     uint16_t ctrlVal = base->CTRL;
 
-    ctrlVal &= (uint16_t)(~RTC_CTRL_CLKOUT_MASK);
+    ctrlVal &= MCUX_MASK_INVERT_16(RTC_CTRL_CLKOUT_MASK);
 
     ctrlVal |= RTC_CTRL_CLKOUT((uint16_t)clkOut);
 
@@ -807,7 +807,7 @@ void IRTC_ConfigClockSelect(RTC_Type *base, irtc_clock_select_t clkSelect)
 {
     uint16_t ctrlVal = base->CTRL;
 
-    ctrlVal &= (uint16_t)(~RTC_CTRL_CLK_SEL_MASK);
+    ctrlVal &= MCUX_MASK_INVERT_16(RTC_CTRL_CLK_SEL_MASK);
 
     ctrlVal |= RTC_CTRL_CLK_SEL((uint16_t)clkSelect);
 

@@ -194,7 +194,7 @@ status_t TMU_GetImmediateTemperature(TMU_Type *base, tmu_probe_select_t probe, i
         ; /* For MISRA C-2012 rule 15.7. */
     }
 
-    rawVal       = (int8_t)temp;
+    rawVal       = (int8_t)(temp & 0xFFU);
     *temperature = rawVal;
     return status;
 }
@@ -241,7 +241,7 @@ status_t TMU_GetAverageTemperature(TMU_Type *base, tmu_probe_select_t probe, int
         ; /* For MISRA C-2012 rule 15.7. */
     }
 
-    rawVal       = (int8_t)temp;
+    rawVal       = (int8_t)(temp & 0xFFU);
     *temperature = rawVal;
     return status;
 }

@@ -109,7 +109,7 @@ status_t VREF_Init(VREF_Type *base, const vref_config_t *config)
     reg      = base->SC;
 #endif /* FSL_FEATURE_VREF_HAS_LOW_REFERENCE */
     /* Clear old buffer mode selection bits */
-    reg &= ~(uint8_t)VREF_SC_MODE_LV_MASK;
+    reg &= (uint8_t)(~(uint32_t)VREF_SC_MODE_LV_MASK & 0xFFU);
     /* Set buffer Mode selection and Regulator enable bit */
     reg |= VREF_SC_MODE_LV(config->bufferMode) | VREF_SC_REGEN(1U);
 #if defined(FSL_FEATURE_VREF_HAS_COMPENSATION) && FSL_FEATURE_VREF_HAS_COMPENSATION
@@ -248,7 +248,7 @@ status_t VREF_SetTrimVal(VREF_Type *base, uint8_t trimValue)
 
     /* Set TRIM bits value in voltage reference */
     reg       = base->TRM;
-    reg       = (uint8_t)((reg & ~VREF_TRM_TRIM_MASK) | VREF_TRM_TRIM(trimValue));
+    reg       = (uint8_t)((((uint32_t)reg & ~(uint32_t)VREF_TRM_TRIM_MASK) | VREF_TRM_TRIM(trimValue)) & 0xFFU);
     base->TRM = reg;
 /* Wait until internal voltage stable */
 #if VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT

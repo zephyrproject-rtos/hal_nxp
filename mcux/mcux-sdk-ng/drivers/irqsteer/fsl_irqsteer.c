@@ -340,5 +340,17 @@ void IRQSTEER_7_DriverIRQHandler(void)
 {
     IRQSTEER_CommonIRQHandler(IRQSTEER, kIRQSTEER_InterruptMaster7);
 }
+
+void IRQSTEER_8_DriverIRQHandler(void);
+void IRQSTEER_8_DriverIRQHandler(void)
+{
+    IRQSTEER_CommonIRQHandler(IRQSTEER, kIRQSTEER_InterruptMaster8);
+}
+
+void IRQSTEER_9_DriverIRQHandler(void);
+void IRQSTEER_9_DriverIRQHandler(void)
+{
+    IRQSTEER_CommonIRQHandler(IRQSTEER, kIRQSTEER_InterruptMaster9);
+}
 #endif /* defined(IRQSTEER) */
 #endif /* FSL_IRQSTEER_USE_DRIVER_IRQ_HANDLER */

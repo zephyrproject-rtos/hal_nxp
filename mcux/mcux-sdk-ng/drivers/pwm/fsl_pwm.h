@@ -19,7 +19,7 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*! @{ */
-#define FSL_PWM_DRIVER_VERSION (MAKE_VERSION(2, 9, 4)) /*!< Version 2.9.4 */
+#define FSL_PWM_DRIVER_VERSION (MAKE_VERSION(2, 10, 0)) /*!< Version 2.10.0 */
 /*! @} */
 
 /*! Number of bits per submodule for software output control */
@@ -746,6 +746,43 @@ void PWM_SetupForceSignal(PWM_Type *base,
                           pwm_submodule_t subModule,
                           pwm_channels_t pwmChannel,
                           pwm_force_signal_t mode);
+
+/*!
+ * @brief Enables local software force initialization on a PWM submodule.
+ *
+ * This function performs a software-controlled initialization, causes a FORCE_OUT
+ * event which latches all double-buffered fields (DTSRCSEL, MCTRL[IPOL], SWCOUT)
+ * into their active registers and, if MCTRL[LDOK] is set, also triggers a register reload.
+ *
+ * Call this function after updating the desired buffered registers (e.g. after
+ * PWM_SetupForceSignal()) to apply the new values synchronously.
+ *
+ * @param base      PWM peripheral base address
+ * @param subModule PWM submodule to enable local force on
+ */
+static inline void PWM_EnableLocalForce(PWM_Type *base, pwm_submodule_t subModule)
+{
+    /* Select local FORCE signal source (FORCE_SEL = 000) */
+    base->SM[subModule].CTRL2 &= MCUX_MASK_INVERT_16(PWM_CTRL2_FORCE_SEL_MASK);
+    /* Enable local force (FORCE = 1): software-controlled initialization + shadow register latch */
+    base->SM[subModule].CTRL2 |= PWM_CTRL2_FORCE_MASK;
+}
+
+/*!
+ * @brief Updates the current polarity (MCTRL[IPOL]) for a PWM submodule.
+ *
+ * MCTRL[IPOL] is a double-buffered field. This function only writes the shadow register;
+ * the value does NOT take effect until a FORCE_OUT event occurs. Call PWM_EnableLocalForce()
+ * after this function to apply all pending changes atomically in one FORCE_OUT event.
+ *
+ * Only meaningful when the submodule operates in complementary mode (CTRL2[INDEP] = 0).
+ *
+ * @param base      PWM peripheral base address
+ * @param subModule PWM submodule to configure
+ * @param polarity  kPWM_ComplementaryPwmA: PWM23 (VAL2/VAL3) drives the complementary pair
+ *                  kPWM_ComplementaryPwmB: PWM45 (VAL4/VAL5) drives the complementary pair
+ */
+void PWM_UpdateCurrentPolarity(PWM_Type *base, pwm_submodule_t subModule, pwm_chnl_pair_operation_t polarity);
 
 /*!
  * @name Interrupts Interface

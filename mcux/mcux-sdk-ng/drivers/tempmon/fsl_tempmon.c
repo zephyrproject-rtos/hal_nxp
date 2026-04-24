@@ -162,8 +162,16 @@ void TEMPMON_SetTempAlarm(TEMPMON_Type *base, int16_t tempVal, tempmon_alarm_mod
     /* INT32-C: Use 64-bit intermediate to prevent signed integer overflow */
     int64_t tempDiff = (int64_t)(s_hotTemp - (int32_t)tempVal);
     int64_t tempProduct = tempDiff * (int64_t)s_roomC_hotC;
-    int64_t tempResult = (int64_t)s_hotCount + (tempProduct / (int64_t)s_hotT_ROOM);
-    tempCodeVal = (int32_t)tempResult;
+    int64_t tempResult;
+    if (s_hotT_ROOM != 0)
+    {
+        tempResult = (int64_t)s_hotCount + (tempProduct / (int64_t)s_hotT_ROOM);
+    }
+    else
+    {
+        tempResult = (int64_t)s_hotCount;
+    }
+    tempCodeVal = (int32_t)(tempResult & (int64_t)0xFFFFFFFF);
 
     switch (alarmMode)
     {
@@ -171,7 +179,7 @@ void TEMPMON_SetTempAlarm(TEMPMON_Type *base, int16_t tempVal, tempmon_alarm_mod
             /* Clear alarm value and set a new high alarm temperature code value */
             tempRegVal = base->TEMPSENSE0;
             tempRegVal =
-                (tempRegVal & ~TEMPMON_TEMPSENSE0_ALARM_VALUE_MASK) | TEMPMON_TEMPSENSE0_ALARM_VALUE(tempCodeVal);
+                (tempRegVal & ~TEMPMON_TEMPSENSE0_ALARM_VALUE_MASK) | TEMPMON_TEMPSENSE0_ALARM_VALUE((uint32_t)tempCodeVal);
             base->TEMPSENSE0 = tempRegVal;
             break;
 
@@ -179,7 +187,7 @@ void TEMPMON_SetTempAlarm(TEMPMON_Type *base, int16_t tempVal, tempmon_alarm_mod
             /* Clear panic alarm value and set a new panic alarm temperature code value */
             tempRegVal = base->TEMPSENSE2;
             tempRegVal = (tempRegVal & ~TEMPMON_TEMPSENSE2_PANIC_ALARM_VALUE_MASK) |
-                         TEMPMON_TEMPSENSE2_PANIC_ALARM_VALUE(tempCodeVal);
+                         TEMPMON_TEMPSENSE2_PANIC_ALARM_VALUE((uint32_t)tempCodeVal);
             base->TEMPSENSE2 = tempRegVal;
             break;
 
@@ -187,7 +195,7 @@ void TEMPMON_SetTempAlarm(TEMPMON_Type *base, int16_t tempVal, tempmon_alarm_mod
             /* Clear low alarm value and set a new low alarm temperature code value */
             tempRegVal = base->TEMPSENSE2;
             tempRegVal = (tempRegVal & ~TEMPMON_TEMPSENSE2_LOW_ALARM_VALUE_MASK) |
-                         TEMPMON_TEMPSENSE2_LOW_ALARM_VALUE(tempCodeVal);
+                         TEMPMON_TEMPSENSE2_LOW_ALARM_VALUE((uint32_t)tempCodeVal);
             base->TEMPSENSE2 = tempRegVal;
             break;
 

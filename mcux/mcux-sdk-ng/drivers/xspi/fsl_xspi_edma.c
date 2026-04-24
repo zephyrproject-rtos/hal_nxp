@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -58,11 +58,13 @@ static void XSPI_TransferEDMACallback(edma_handle_t *handle, void *param, bool t
 /*******************************************************************************
  * Code
  ******************************************************************************/
-static uint8_t XSPI_CalculatePower(uint8_t value)
+static uint8_t XSPI_CalculatePower(uint32_t value)
 {
     uint8_t power = 0;
     while (value >> 1 != 0U)
     {
+        /* INT30-C: Prevent unsigned integer overflow */
+        assert(power < UINT8_MAX);
         power++;
         value = value >> 1;
     }
@@ -158,7 +160,6 @@ void XSPI_TransferUpdateSizeEDMA(XSPI_Type *base, xspi_edma_handle_t *handle, xs
  */
 status_t XSPI_TransferEDMA(XSPI_Type *base, xspi_edma_handle_t *handle, xspi_transfer_t *xfer)
 {
-    //    uint32_t configValue = 0;
     status_t status = kStatus_Success;
     edma_transfer_config_t xferConfig;
     uint32_t instance = XSPI_GetInstance(base);
@@ -224,7 +225,7 @@ status_t XSPI_TransferEDMA(XSPI_Type *base, xspi_edma_handle_t *handle, xspi_tra
             return status;
         }
         XSPI_ClearRxBuffer(base);
-        handle->count = (uint8_t)(base->RBCT) + 1U;
+        handle->count = (uint8_t)((base->RBCT) & XSPI_RBCT_WMRK_MASK) + 1U;
 
         if (xfer->dataSize < 4U * (uint32_t)handle->count)
         {

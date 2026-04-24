@@ -1,4 +1,4 @@
-# Copyright 2024-2025 NXP
+# Copyright 2024-2026 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
@@ -12,7 +12,7 @@ if(CONFIG_MCUX_COMPONENT_driver.flexcan_edma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.flexcan)
-    mcux_component_version(2.15.0)
+    mcux_component_version(2.15.1)
 
     mcux_add_source(SOURCES fsl_flexcan.h fsl_flexcan.c)
 
