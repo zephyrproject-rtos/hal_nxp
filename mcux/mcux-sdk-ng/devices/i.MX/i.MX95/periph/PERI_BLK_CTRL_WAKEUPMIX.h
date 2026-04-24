@@ -247,14 +247,14 @@
 **                          MIMX95N6XVZXN_cm33
 **                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 3.0, 2025-11-24
-**     Build:               b251124
+**     Version:             rev. 4.0, 2026-02-28
+**     Build:               b260305
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BLK_CTRL_WAKEUPMIX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -268,14 +268,16 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-11-24)
 **         Header RFP.
+**     - rev. 4.0 (2026-02-28)
+**         Update Interrupts mapping.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_BLK_CTRL_WAKEUPMIX.h
- * @version 3.0
- * @date 2025-11-24
+ * @version 4.0
+ * @date 2026-02-28
  * @brief CMSIS Peripheral Access Layer for BLK_CTRL_WAKEUPMIX
  *
  * CMSIS Peripheral Access Layer for BLK_CTRL_WAKEUPMIX
@@ -557,32 +559,50 @@ typedef struct {
 
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_AON_MASK (0x1U)
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_AON_SHIFT (0U)
-/*! supply_detector_AON - Voltage detectors output of AON */
+/*! supply_detector_AON - Voltage detectors output of AON
+ *  0b0..The input voltage of the domain is 1.8 V.
+ *  0b1..The input voltage of the domain is 3.3 V.
+ */
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_AON(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_AON_SHIFT)) & BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_AON_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_GPIO_MASK (0x2U)
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_GPIO_SHIFT (1U)
-/*! supply_detector_GPIO - Voltage detectors output of GPIO */
+/*! supply_detector_GPIO - Voltage detectors output of GPIO
+ *  0b0..The input voltage of the domain is 1.8 V.
+ *  0b1..The input voltage of the domain is 3.3 V.
+ */
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_GPIO(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_GPIO_SHIFT)) & BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_GPIO_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_SD2_MASK (0x4U)
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_SD2_SHIFT (2U)
-/*! supply_detector_SD2 - Voltage detectors output of SD2 */
+/*! supply_detector_SD2 - Voltage detectors output of SD2
+ *  0b0..The input voltage of the domain is 1.8 V.
+ *  0b1..The input voltage of the domain is 3.3 V.
+ */
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_SD2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_SD2_SHIFT)) & BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_SD2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_WAKEUP_MASK (0x8U)
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_WAKEUP_SHIFT (3U)
-/*! supply_detector_WAKEUP - Voltage detectors output of WAKEUP */
+/*! supply_detector_WAKEUP - Voltage detectors output of WAKEUP
+ *  0b0..The input voltage of the domain is 1.8 V.
+ *  0b1..The input voltage of the domain is 3.3 V.
+ */
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_WAKEUP(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_WAKEUP_SHIFT)) & BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_WAKEUP_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_CCM_DAP_MASK (0x10U)
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_CCM_DAP_SHIFT (4U)
-/*! supply_detector_CCM_DAP - Voltage detectors output of CCM DAP */
+/*! supply_detector_CCM_DAP - Voltage detectors output of CCM DAP
+ *  0b0..The input voltage of the domain is 1.8 V.
+ *  0b1..The input voltage of the domain is 3.3 V.
+ */
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_CCM_DAP(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_CCM_DAP_SHIFT)) & BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_CCM_DAP_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_ENET_MASK (0x20U)
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_ENET_SHIFT (5U)
-/*! supply_detector_ENET - Voltage detectors output of ENET */
+/*! supply_detector_ENET - Voltage detectors output of ENET
+ *  0b0..The input voltage of the domain is 1.8 V.
+ *  0b1..The input voltage of the domain is 3.3 V.
+ */
 #define BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_ENET(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_ENET_SHIFT)) & BLK_CTRL_WAKEUPMIX_VOLT_DETECT_supply_detector_ENET_MASK)
 /*! @} */
 

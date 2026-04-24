@@ -26,13 +26,13 @@
 **                          MIMX8MM6DVTLZ_cm4
 **
 **     Version:             rev. 5.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260205
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SEMA4
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -133,27 +133,13 @@
  */
 
 /** SEMA4 - Size of Registers Arrays */
+#define SEMA4_GATE_COUNT                          16u
 #define SEMA4_CPINE_COUNT                         2u
 #define SEMA4_CPNTF_COUNT                         2u
 
 /** SEMA4 - Register Layout Typedef */
 typedef struct {
-  __IO uint8_t Gate00;                             /**< Semaphores Gate 0 Register, offset: 0x0 */
-  __IO uint8_t Gate01;                             /**< Semaphores Gate 1 Register, offset: 0x1 */
-  __IO uint8_t Gate02;                             /**< Semaphores Gate 2 Register, offset: 0x2 */
-  __IO uint8_t Gate03;                             /**< Semaphores Gate 3 Register, offset: 0x3 */
-  __IO uint8_t Gate04;                             /**< Semaphores Gate 4 Register, offset: 0x4 */
-  __IO uint8_t Gate05;                             /**< Semaphores Gate 5 Register, offset: 0x5 */
-  __IO uint8_t Gate06;                             /**< Semaphores Gate 6 Register, offset: 0x6 */
-  __IO uint8_t Gate07;                             /**< Semaphores Gate 7 Register, offset: 0x7 */
-  __IO uint8_t Gate08;                             /**< Semaphores Gate 8 Register, offset: 0x8 */
-  __IO uint8_t Gate09;                             /**< Semaphores Gate 9 Register, offset: 0x9 */
-  __IO uint8_t Gate10;                             /**< Semaphores Gate 10 Register, offset: 0xA */
-  __IO uint8_t Gate11;                             /**< Semaphores Gate 11 Register, offset: 0xB */
-  __IO uint8_t Gate12;                             /**< Semaphores Gate 12 Register, offset: 0xC */
-  __IO uint8_t Gate13;                             /**< Semaphores Gate 13 Register, offset: 0xD */
-  __IO uint8_t Gate14;                             /**< Semaphores Gate 14 Register, offset: 0xE */
-  __IO uint8_t Gate15;                             /**< Semaphores Gate 15 Register, offset: 0xF */
+  __IO uint8_t GATE[SEMA4_GATE_COUNT];             /**< Semaphores Gate 0 Register..Semaphores Gate 15 Register, array offset: 0x0, array step: 0x1 */
        uint8_t RESERVED_0[48];
   struct {                                         /* offset: 0x40, array step: 0x8 */
     __IO uint16_t CPINE;                             /**< Semaphores Processor n IRQ Notification Enable, array offset: 0x40, array step: 0x8 */
@@ -179,11 +165,11 @@ typedef struct {
  * @{
  */
 
-/*! @name Gate00 - Semaphores Gate 0 Register */
+/*! @name GATE - Semaphores Gate 0 Register..Semaphores Gate 15 Register */
 /*! @{ */
 
-#define SEMA4_Gate00_GTFSM_MASK                  (0x3U)
-#define SEMA4_Gate00_GTFSM_SHIFT                 (0U)
+#define SEMA4_GATE_GTFSM_MASK                    (0x3U)
+#define SEMA4_GATE_GTFSM_SHIFT                   (0U)
 /*! GTFSM - Gate Finite State Machine.
  *  0b00..The gate is unlocked (free).
  *  0b01..The gate has been locked by processor 0.
@@ -191,232 +177,7 @@ typedef struct {
  *  0b11..This state encoding is never used and therefore reserved. Attempted writes of 0x03 are treated as "no
  *        operation" and do not affect the gate state machine.
  */
-#define SEMA4_Gate00_GTFSM(x)                    (((uint8_t)(((uint8_t)(x)) << SEMA4_Gate00_GTFSM_SHIFT)) & SEMA4_Gate00_GTFSM_MASK)
-/*! @} */
-
-/*! @name Gate01 - Semaphores Gate 1 Register */
-/*! @{ */
-
-#define SEMA4_Gate01_GTFSM_MASK                  (0x3U)
-#define SEMA4_Gate01_GTFSM_SHIFT                 (0U)
-/*! GTFSM - Gate Finite State Machine.
- *  0b00..The gate is unlocked (free).
- *  0b01..The gate has been locked by processor 0.
- *  0b10..The gate has been locked by processor 1.
- *  0b11..This state encoding is never used and therefore reserved. Attempted writes of 0x03 are treated as "no
- *        operation" and do not affect the gate state machine.
- */
-#define SEMA4_Gate01_GTFSM(x)                    (((uint8_t)(((uint8_t)(x)) << SEMA4_Gate01_GTFSM_SHIFT)) & SEMA4_Gate01_GTFSM_MASK)
-/*! @} */
-
-/*! @name Gate02 - Semaphores Gate 2 Register */
-/*! @{ */
-
-#define SEMA4_Gate02_GTFSM_MASK                  (0x3U)
-#define SEMA4_Gate02_GTFSM_SHIFT                 (0U)
-/*! GTFSM - Gate Finite State Machine.
- *  0b00..The gate is unlocked (free).
- *  0b01..The gate has been locked by processor 0.
- *  0b10..The gate has been locked by processor 1.
- *  0b11..This state encoding is never used and therefore reserved. Attempted writes of 0x03 are treated as "no
- *        operation" and do not affect the gate state machine.
- */
-#define SEMA4_Gate02_GTFSM(x)                    (((uint8_t)(((uint8_t)(x)) << SEMA4_Gate02_GTFSM_SHIFT)) & SEMA4_Gate02_GTFSM_MASK)
-/*! @} */
-
-/*! @name Gate03 - Semaphores Gate 3 Register */
-/*! @{ */
-
-#define SEMA4_Gate03_GTFSM_MASK                  (0x3U)
-#define SEMA4_Gate03_GTFSM_SHIFT                 (0U)
-/*! GTFSM - Gate Finite State Machine.
- *  0b00..The gate is unlocked (free).
- *  0b01..The gate has been locked by processor 0.
- *  0b10..The gate has been locked by processor 1.
- *  0b11..This state encoding is never used and therefore reserved. Attempted writes of 0x03 are treated as "no
- *        operation" and do not affect the gate state machine.
- */
-#define SEMA4_Gate03_GTFSM(x)                    (((uint8_t)(((uint8_t)(x)) << SEMA4_Gate03_GTFSM_SHIFT)) & SEMA4_Gate03_GTFSM_MASK)
-/*! @} */
-
-/*! @name Gate04 - Semaphores Gate 4 Register */
-/*! @{ */
-
-#define SEMA4_Gate04_GTFSM_MASK                  (0x3U)
-#define SEMA4_Gate04_GTFSM_SHIFT                 (0U)
-/*! GTFSM - Gate Finite State Machine.
- *  0b00..The gate is unlocked (free).
- *  0b01..The gate has been locked by processor 0.
- *  0b10..The gate has been locked by processor 1.
- *  0b11..This state encoding is never used and therefore reserved. Attempted writes of 0x03 are treated as "no
- *        operation" and do not affect the gate state machine.
- */
-#define SEMA4_Gate04_GTFSM(x)                    (((uint8_t)(((uint8_t)(x)) << SEMA4_Gate04_GTFSM_SHIFT)) & SEMA4_Gate04_GTFSM_MASK)
-/*! @} */
-
-/*! @name Gate05 - Semaphores Gate 5 Register */
-/*! @{ */
-
-#define SEMA4_Gate05_GTFSM_MASK                  (0x3U)
-#define SEMA4_Gate05_GTFSM_SHIFT                 (0U)
-/*! GTFSM - Gate Finite State Machine.
- *  0b00..The gate is unlocked (free).
- *  0b01..The gate has been locked by processor 0.
- *  0b10..The gate has been locked by processor 1.
- *  0b11..This state encoding is never used and therefore reserved. Attempted writes of 0x03 are treated as "no
- *        operation" and do not affect the gate state machine.
- */
-#define SEMA4_Gate05_GTFSM(x)                    (((uint8_t)(((uint8_t)(x)) << SEMA4_Gate05_GTFSM_SHIFT)) & SEMA4_Gate05_GTFSM_MASK)
-/*! @} */
-
-/*! @name Gate06 - Semaphores Gate 6 Register */
-/*! @{ */
-
-#define SEMA4_Gate06_GTFSM_MASK                  (0x3U)
-#define SEMA4_Gate06_GTFSM_SHIFT                 (0U)
-/*! GTFSM - Gate Finite State Machine.
- *  0b00..The gate is unlocked (free).
- *  0b01..The gate has been locked by processor 0.
- *  0b10..The gate has been locked by processor 1.
- *  0b11..This state encoding is never used and therefore reserved. Attempted writes of 0x03 are treated as "no
- *        operation" and do not affect the gate state machine.
- */
-#define SEMA4_Gate06_GTFSM(x)                    (((uint8_t)(((uint8_t)(x)) << SEMA4_Gate06_GTFSM_SHIFT)) & SEMA4_Gate06_GTFSM_MASK)
-/*! @} */
-
-/*! @name Gate07 - Semaphores Gate 7 Register */
-/*! @{ */
-
-#define SEMA4_Gate07_GTFSM_MASK                  (0x3U)
-#define SEMA4_Gate07_GTFSM_SHIFT                 (0U)
-/*! GTFSM - Gate Finite State Machine.
- *  0b00..The gate is unlocked (free).
- *  0b01..The gate has been locked by processor 0.
- *  0b10..The gate has been locked by processor 1.
- *  0b11..This state encoding is never used and therefore reserved. Attempted writes of 0x03 are treated as "no
- *        operation" and do not affect the gate state machine.
- */
-#define SEMA4_Gate07_GTFSM(x)                    (((uint8_t)(((uint8_t)(x)) << SEMA4_Gate07_GTFSM_SHIFT)) & SEMA4_Gate07_GTFSM_MASK)
-/*! @} */
-
-/*! @name Gate08 - Semaphores Gate 8 Register */
-/*! @{ */
-
-#define SEMA4_Gate08_GTFSM_MASK                  (0x3U)
-#define SEMA4_Gate08_GTFSM_SHIFT                 (0U)
-/*! GTFSM - Gate Finite State Machine.
- *  0b00..The gate is unlocked (free).
- *  0b01..The gate has been locked by processor 0.
- *  0b10..The gate has been locked by processor 1.
- *  0b11..This state encoding is never used and therefore reserved. Attempted writes of 0x03 are treated as "no
- *        operation" and do not affect the gate state machine.
- */
-#define SEMA4_Gate08_GTFSM(x)                    (((uint8_t)(((uint8_t)(x)) << SEMA4_Gate08_GTFSM_SHIFT)) & SEMA4_Gate08_GTFSM_MASK)
-/*! @} */
-
-/*! @name Gate09 - Semaphores Gate 9 Register */
-/*! @{ */
-
-#define SEMA4_Gate09_GTFSM_MASK                  (0x3U)
-#define SEMA4_Gate09_GTFSM_SHIFT                 (0U)
-/*! GTFSM - Gate Finite State Machine.
- *  0b00..The gate is unlocked (free).
- *  0b01..The gate has been locked by processor 0.
- *  0b10..The gate has been locked by processor 1.
- *  0b11..This state encoding is never used and therefore reserved. Attempted writes of 0x03 are treated as "no
- *        operation" and do not affect the gate state machine.
- */
-#define SEMA4_Gate09_GTFSM(x)                    (((uint8_t)(((uint8_t)(x)) << SEMA4_Gate09_GTFSM_SHIFT)) & SEMA4_Gate09_GTFSM_MASK)
-/*! @} */
-
-/*! @name Gate10 - Semaphores Gate 10 Register */
-/*! @{ */
-
-#define SEMA4_Gate10_GTFSM_MASK                  (0x3U)
-#define SEMA4_Gate10_GTFSM_SHIFT                 (0U)
-/*! GTFSM - Gate Finite State Machine.
- *  0b00..The gate is unlocked (free).
- *  0b01..The gate has been locked by processor 0.
- *  0b10..The gate has been locked by processor 1.
- *  0b11..This state encoding is never used and therefore reserved. Attempted writes of 0x03 are treated as "no
- *        operation" and do not affect the gate state machine.
- */
-#define SEMA4_Gate10_GTFSM(x)                    (((uint8_t)(((uint8_t)(x)) << SEMA4_Gate10_GTFSM_SHIFT)) & SEMA4_Gate10_GTFSM_MASK)
-/*! @} */
-
-/*! @name Gate11 - Semaphores Gate 11 Register */
-/*! @{ */
-
-#define SEMA4_Gate11_GTFSM_MASK                  (0x3U)
-#define SEMA4_Gate11_GTFSM_SHIFT                 (0U)
-/*! GTFSM - Gate Finite State Machine.
- *  0b00..The gate is unlocked (free).
- *  0b01..The gate has been locked by processor 0.
- *  0b10..The gate has been locked by processor 1.
- *  0b11..This state encoding is never used and therefore reserved. Attempted writes of 0x03 are treated as "no
- *        operation" and do not affect the gate state machine.
- */
-#define SEMA4_Gate11_GTFSM(x)                    (((uint8_t)(((uint8_t)(x)) << SEMA4_Gate11_GTFSM_SHIFT)) & SEMA4_Gate11_GTFSM_MASK)
-/*! @} */
-
-/*! @name Gate12 - Semaphores Gate 12 Register */
-/*! @{ */
-
-#define SEMA4_Gate12_GTFSM_MASK                  (0x3U)
-#define SEMA4_Gate12_GTFSM_SHIFT                 (0U)
-/*! GTFSM - Gate Finite State Machine.
- *  0b00..The gate is unlocked (free).
- *  0b01..The gate has been locked by processor 0.
- *  0b10..The gate has been locked by processor 1.
- *  0b11..This state encoding is never used and therefore reserved. Attempted writes of 0x03 are treated as "no
- *        operation" and do not affect the gate state machine.
- */
-#define SEMA4_Gate12_GTFSM(x)                    (((uint8_t)(((uint8_t)(x)) << SEMA4_Gate12_GTFSM_SHIFT)) & SEMA4_Gate12_GTFSM_MASK)
-/*! @} */
-
-/*! @name Gate13 - Semaphores Gate 13 Register */
-/*! @{ */
-
-#define SEMA4_Gate13_GTFSM_MASK                  (0x3U)
-#define SEMA4_Gate13_GTFSM_SHIFT                 (0U)
-/*! GTFSM - Gate Finite State Machine.
- *  0b00..The gate is unlocked (free).
- *  0b01..The gate has been locked by processor 0.
- *  0b10..The gate has been locked by processor 1.
- *  0b11..This state encoding is never used and therefore reserved. Attempted writes of 0x03 are treated as "no
- *        operation" and do not affect the gate state machine.
- */
-#define SEMA4_Gate13_GTFSM(x)                    (((uint8_t)(((uint8_t)(x)) << SEMA4_Gate13_GTFSM_SHIFT)) & SEMA4_Gate13_GTFSM_MASK)
-/*! @} */
-
-/*! @name Gate14 - Semaphores Gate 14 Register */
-/*! @{ */
-
-#define SEMA4_Gate14_GTFSM_MASK                  (0x3U)
-#define SEMA4_Gate14_GTFSM_SHIFT                 (0U)
-/*! GTFSM - Gate Finite State Machine.
- *  0b00..The gate is unlocked (free).
- *  0b01..The gate has been locked by processor 0.
- *  0b10..The gate has been locked by processor 1.
- *  0b11..This state encoding is never used and therefore reserved. Attempted writes of 0x03 are treated as "no
- *        operation" and do not affect the gate state machine.
- */
-#define SEMA4_Gate14_GTFSM(x)                    (((uint8_t)(((uint8_t)(x)) << SEMA4_Gate14_GTFSM_SHIFT)) & SEMA4_Gate14_GTFSM_MASK)
-/*! @} */
-
-/*! @name Gate15 - Semaphores Gate 15 Register */
-/*! @{ */
-
-#define SEMA4_Gate15_GTFSM_MASK                  (0x3U)
-#define SEMA4_Gate15_GTFSM_SHIFT                 (0U)
-/*! GTFSM - Gate Finite State Machine.
- *  0b00..The gate is unlocked (free).
- *  0b01..The gate has been locked by processor 0.
- *  0b10..The gate has been locked by processor 1.
- *  0b11..This state encoding is never used and therefore reserved. Attempted writes of 0x03 are treated as "no
- *        operation" and do not affect the gate state machine.
- */
-#define SEMA4_Gate15_GTFSM(x)                    (((uint8_t)(((uint8_t)(x)) << SEMA4_Gate15_GTFSM_SHIFT)) & SEMA4_Gate15_GTFSM_MASK)
+#define SEMA4_GATE_GTFSM(x)                      (((uint8_t)(((uint8_t)(x)) << SEMA4_GATE_GTFSM_SHIFT)) & SEMA4_GATE_GTFSM_MASK)
 /*! @} */
 
 /*! @name CPINE - Semaphores Processor n IRQ Notification Enable */

@@ -247,14 +247,14 @@
 **                          MIMX95N6XVZXN_cm33
 **                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 3.0, 2025-11-24
-**     Build:               b251124
+**     Version:             rev. 4.0, 2026-02-28
+**     Build:               b260305
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RGBIR
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -268,14 +268,16 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-11-24)
 **         Header RFP.
+**     - rev. 4.0 (2026-02-28)
+**         Update Interrupts mapping.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_RGBIR.h
- * @version 3.0
- * @date 2025-11-24
+ * @version 4.0
+ * @date 2026-02-28
  * @brief CMSIS Peripheral Access Layer for RGBIR
  *
  * CMSIS Peripheral Access Layer for RGBIR
@@ -441,6 +443,22 @@ typedef struct {
 
 /*! @name CTRL_CAM - Camera 0 RGBIR Control Register */
 /*! @{ */
+
+#define RGBIR_CTRL_CAM_RGGBOUT_MASK              (0x1U)
+#define RGBIR_CTRL_CAM_RGGBOUT_SHIFT             (0U)
+/*! RGGBOUT
+ *  0b0..Select the RGGB data to be processed in Pipe2
+ *  0b1..Select the IR data to be processed in Pipe2
+ */
+#define RGBIR_CTRL_CAM_RGGBOUT(x)                (((uint32_t)(((uint32_t)(x)) << RGBIR_CTRL_CAM_RGGBOUT_SHIFT)) & RGBIR_CTRL_CAM_RGGBOUT_MASK)
+
+#define RGBIR_CTRL_CAM_IROUT_MASK                (0x2U)
+#define RGBIR_CTRL_CAM_IROUT_SHIFT               (1U)
+/*! IROUT
+ *  0b0..Select the IR data to the compressed output
+ *  0b1..Select the RGGB data to the compressed output
+ */
+#define RGBIR_CTRL_CAM_IROUT(x)                  (((uint32_t)(((uint32_t)(x)) << RGBIR_CTRL_CAM_IROUT_SHIFT)) & RGBIR_CTRL_CAM_IROUT_MASK)
 
 #define RGBIR_CTRL_CAM_ENABLE_MASK               (0x80000000U)
 #define RGBIR_CTRL_CAM_ENABLE_SHIFT              (31U)

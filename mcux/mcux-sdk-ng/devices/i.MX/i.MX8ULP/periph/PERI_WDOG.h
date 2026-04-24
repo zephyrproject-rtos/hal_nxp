@@ -62,13 +62,13 @@
 **                          MIMX8US5DVP08_dsp1
 **
 **     Version:             rev. 6.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260205
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for WDOG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -365,10 +365,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group WDOG_Register_Masks */
-
-/* Extra definition */
-#define WDOG_UPDATE_KEY                          (0xD928C520U)
-#define WDOG_REFRESH_KEY                         (0xB480A602U)
 
 
 /*!

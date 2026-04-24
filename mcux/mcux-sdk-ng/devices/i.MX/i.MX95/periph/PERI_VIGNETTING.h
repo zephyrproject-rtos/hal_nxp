@@ -247,14 +247,14 @@
 **                          MIMX95N6XVZXN_cm33
 **                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 3.0, 2025-11-24
-**     Build:               b251124
+**     Version:             rev. 4.0, 2026-02-28
+**     Build:               b260305
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for VIGNETTING
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -268,14 +268,16 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-11-24)
 **         Header RFP.
+**     - rev. 4.0 (2026-02-28)
+**         Update Interrupts mapping.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_VIGNETTING.h
- * @version 3.0
- * @date 2025-11-24
+ * @version 4.0
+ * @date 2026-02-28
  * @brief CMSIS Peripheral Access Layer for VIGNETTING
  *
  * CMSIS Peripheral Access Layer for VIGNETTING
@@ -415,7 +417,9 @@ typedef struct {
     __IO uint32_t BLK_SIZE_CAM;                      /**< Camera 0 Block Size Register, array offset: 0x8, array step: 0x2C */
     __IO uint32_t BLK_STEPY_CAM;                     /**< Camera 0 Block Y Step Register, array offset: 0xC, array step: 0x2C */
     __IO uint32_t BLK_STEPX_CAM;                     /**< Camera 0 Block X Step Register, array offset: 0x10, array step: 0x2C */
-         uint8_t RESERVED_0[12];
+    __IO uint32_t BLK_INIT_CAM;                      /**< Camera 0 Block INIT Configuration Register, array offset: 0x14, array step: 0x2C */
+    __IO uint32_t BLK_FRACT_INIT_CAM;                /**< Camera 0 INIT Fraction Register, array offset: 0x18, array step: 0x2C */
+         uint8_t RESERVED_0[4];
     __I  uint32_t BLK_C_LINE_CAM;                    /**< Camera 0 Current Line Inside Block Register, array offset: 0x20, array step: 0x2C */
     __I  uint32_t BLK_C_ROW_CAM;                     /**< Camera 0 Current Block Row Register, array offset: 0x24, array step: 0x2C */
     __I  uint32_t BLK_C_FRACY_CAM;                   /**< Camera 0 Current Y Step Register, array offset: 0x28, array step: 0x2C */
@@ -497,6 +501,44 @@ typedef struct {
 
 /* The count of VIGNETTING_BLK_STEPX_CAM */
 #define VIGNETTING_BLK_STEPX_CAM_COUNT           (1U)
+
+/*! @name BLK_INIT_CAM - Camera 0 Block INIT Configuration Register */
+/*! @{ */
+
+#define VIGNETTING_BLK_INIT_CAM_XPIX_MASK        (0x7FFU)
+#define VIGNETTING_BLK_INIT_CAM_XPIX_SHIFT       (0U)
+#define VIGNETTING_BLK_INIT_CAM_XPIX(x)          (((uint32_t)(((uint32_t)(x)) << VIGNETTING_BLK_INIT_CAM_XPIX_SHIFT)) & VIGNETTING_BLK_INIT_CAM_XPIX_MASK)
+
+#define VIGNETTING_BLK_INIT_CAM_XBLK_MASK        (0xF800U)
+#define VIGNETTING_BLK_INIT_CAM_XBLK_SHIFT       (11U)
+#define VIGNETTING_BLK_INIT_CAM_XBLK(x)          (((uint32_t)(((uint32_t)(x)) << VIGNETTING_BLK_INIT_CAM_XBLK_SHIFT)) & VIGNETTING_BLK_INIT_CAM_XBLK_MASK)
+
+#define VIGNETTING_BLK_INIT_CAM_YPIX_MASK        (0x7FF0000U)
+#define VIGNETTING_BLK_INIT_CAM_YPIX_SHIFT       (16U)
+#define VIGNETTING_BLK_INIT_CAM_YPIX(x)          (((uint32_t)(((uint32_t)(x)) << VIGNETTING_BLK_INIT_CAM_YPIX_SHIFT)) & VIGNETTING_BLK_INIT_CAM_YPIX_MASK)
+
+#define VIGNETTING_BLK_INIT_CAM_YBLK_MASK        (0xF8000000U)
+#define VIGNETTING_BLK_INIT_CAM_YBLK_SHIFT       (27U)
+#define VIGNETTING_BLK_INIT_CAM_YBLK(x)          (((uint32_t)(((uint32_t)(x)) << VIGNETTING_BLK_INIT_CAM_YBLK_SHIFT)) & VIGNETTING_BLK_INIT_CAM_YBLK_MASK)
+/*! @} */
+
+/* The count of VIGNETTING_BLK_INIT_CAM */
+#define VIGNETTING_BLK_INIT_CAM_COUNT            (1U)
+
+/*! @name BLK_FRACT_INIT_CAM - Camera 0 INIT Fraction Register */
+/*! @{ */
+
+#define VIGNETTING_BLK_FRACT_INIT_CAM_XFRACT_MASK (0xFFFFU)
+#define VIGNETTING_BLK_FRACT_INIT_CAM_XFRACT_SHIFT (0U)
+#define VIGNETTING_BLK_FRACT_INIT_CAM_XFRACT(x)  (((uint32_t)(((uint32_t)(x)) << VIGNETTING_BLK_FRACT_INIT_CAM_XFRACT_SHIFT)) & VIGNETTING_BLK_FRACT_INIT_CAM_XFRACT_MASK)
+
+#define VIGNETTING_BLK_FRACT_INIT_CAM_YFRACT_MASK (0xFFFF0000U)
+#define VIGNETTING_BLK_FRACT_INIT_CAM_YFRACT_SHIFT (16U)
+#define VIGNETTING_BLK_FRACT_INIT_CAM_YFRACT(x)  (((uint32_t)(((uint32_t)(x)) << VIGNETTING_BLK_FRACT_INIT_CAM_YFRACT_SHIFT)) & VIGNETTING_BLK_FRACT_INIT_CAM_YFRACT_MASK)
+/*! @} */
+
+/* The count of VIGNETTING_BLK_FRACT_INIT_CAM */
+#define VIGNETTING_BLK_FRACT_INIT_CAM_COUNT      (1U)
 
 /*! @name BLK_C_LINE_CAM - Camera 0 Current Line Inside Block Register */
 /*! @{ */

@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 3.0, 2025-11-12
-**     Build:               b251112
+**     Build:               b260205
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -339,12 +339,12 @@
 
 /* @brief SPBA module start address. */
 #define FSL_FEATURE_SPBA_STARTn(x) \
-    (((x) == SPBA2) ? (0x30000000) : \
-    (((x) == SPBA1) ? (0x30800000) : (-1)))
+    (((x) == SPBA1) ? (0x30800000) : \
+    (((x) == SPBA2) ? (0x30000000) : (-1)))
 /* @brief SPBA module end address. */
 #define FSL_FEATURE_SPBA_ENDn(x) \
-    (((x) == SPBA2) ? (0x300FFFFF) : \
-    (((x) == SPBA1) ? (0x308FFFFF) : (-1)))
+    (((x) == SPBA1) ? (0x308FFFFF) : \
+    (((x) == SPBA2) ? (0x300FFFFF) : (-1)))
 
 /* SysTick module features */
 

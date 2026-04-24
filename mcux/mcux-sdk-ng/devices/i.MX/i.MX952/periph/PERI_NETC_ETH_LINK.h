@@ -1,260 +1,50 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX9506AVZXN_ca55
-**                          MIMX9506AVZXN_cm33
-**                          MIMX9506AVZXN_cm7
-**                          MIMX9506XVZXN_ca55
-**                          MIMX9506XVZXN_cm33
-**                          MIMX9506XVZXN_cm7
-**                          MIMX9534AVZXN_ca55
-**                          MIMX9534AVZXN_cm33
-**                          MIMX9534AVZXN_cm7
-**                          MIMX9534CVTXN_ca55
-**                          MIMX9534CVTXN_cm33
-**                          MIMX9534CVTXN_cm7
-**                          MIMX9534CVZXN_ca55
-**                          MIMX9534CVZXN_cm33
-**                          MIMX9534CVZXN_cm7
-**                          MIMX9534DVTXN_ca55
-**                          MIMX9534DVTXN_cm33
-**                          MIMX9534DVTXN_cm7
-**                          MIMX9534DVZXN_ca55
-**                          MIMX9534DVZXN_cm33
-**                          MIMX9534DVZXN_cm7
-**                          MIMX9534XVTXN_ca55
-**                          MIMX9534XVTXN_cm33
-**                          MIMX9534XVTXN_cm7
-**                          MIMX9534XVZXN_ca55
-**                          MIMX9534XVZXN_cm33
-**                          MIMX9534XVZXN_cm7
-**                          MIMX9536AVZXN_ca55
-**                          MIMX9536AVZXN_cm33
-**                          MIMX9536AVZXN_cm7
-**                          MIMX9536CVTXN_ca55
-**                          MIMX9536CVTXN_cm33
-**                          MIMX9536CVTXN_cm7
-**                          MIMX9536CVZXN_ca55
-**                          MIMX9536CVZXN_cm33
-**                          MIMX9536CVZXN_cm7
-**                          MIMX9536DVTXN_ca55
-**                          MIMX9536DVTXN_cm33
-**                          MIMX9536DVTXN_cm7
-**                          MIMX9536DVZXN_ca55
-**                          MIMX9536DVZXN_cm33
-**                          MIMX9536DVZXN_cm7
-**                          MIMX9536DVZXQ_ca55
-**                          MIMX9536DVZXQ_cm33
-**                          MIMX9536DVZXQ_cm7
-**                          MIMX9536XVTXN_ca55
-**                          MIMX9536XVTXN_cm33
-**                          MIMX9536XVTXN_cm7
-**                          MIMX9536XVZXN_ca55
-**                          MIMX9536XVZXN_cm33
-**                          MIMX9536XVZXN_cm7
-**                          MIMX9546AVZXN_ca55
-**                          MIMX9546AVZXN_cm33
-**                          MIMX9546AVZXN_cm7
-**                          MIMX9546XVZXN_ca55
-**                          MIMX9546XVZXN_cm33
-**                          MIMX9546XVZXN_cm7
-**                          MIMX9554AVTXN_ca55
-**                          MIMX9554AVTXN_cm33
-**                          MIMX9554AVTXN_cm7
-**                          MIMX9554AVZXN_ca55
-**                          MIMX9554AVZXN_cm33
-**                          MIMX9554AVZXN_cm7
-**                          MIMX9554CVTXN_ca55
-**                          MIMX9554CVTXN_cm33
-**                          MIMX9554CVTXN_cm7
-**                          MIMX9554CVZXN_ca55
-**                          MIMX9554CVZXN_cm33
-**                          MIMX9554CVZXN_cm7
-**                          MIMX9554DVTXN_ca55
-**                          MIMX9554DVTXN_cm33
-**                          MIMX9554DVTXN_cm7
-**                          MIMX9554DVZXN_ca55
-**                          MIMX9554DVZXN_cm33
-**                          MIMX9554DVZXN_cm7
-**                          MIMX9554XVTXN_ca55
-**                          MIMX9554XVTXN_cm33
-**                          MIMX9554XVTXN_cm7
-**                          MIMX9554XVZXN_ca55
-**                          MIMX9554XVZXN_cm33
-**                          MIMX9554XVZXN_cm7
-**                          MIMX9556AVZXN_ca55
-**                          MIMX9556AVZXN_cm33
-**                          MIMX9556AVZXN_cm7
-**                          MIMX9556CVTXN_ca55
-**                          MIMX9556CVTXN_cm33
-**                          MIMX9556CVTXN_cm7
-**                          MIMX9556CVZXN_ca55
-**                          MIMX9556CVZXN_cm33
-**                          MIMX9556CVZXN_cm7
-**                          MIMX9556DVTXN_ca55
-**                          MIMX9556DVTXN_cm33
-**                          MIMX9556DVTXN_cm7
-**                          MIMX9556DVZXN_ca55
-**                          MIMX9556DVZXN_cm33
-**                          MIMX9556DVZXN_cm7
-**                          MIMX9556XVTXN_ca55
-**                          MIMX9556XVTXN_cm33
-**                          MIMX9556XVTXN_cm7
-**                          MIMX9556XVZXN_ca55
-**                          MIMX9556XVZXN_cm33
-**                          MIMX9556XVZXN_cm7
-**                          MIMX9574AVZXN_ca55
-**                          MIMX9574AVZXN_cm33
-**                          MIMX9574AVZXN_cm7
-**                          MIMX9574CVTXN_ca55
-**                          MIMX9574CVTXN_cm33
-**                          MIMX9574CVTXN_cm7
-**                          MIMX9574CVZXN_ca55
-**                          MIMX9574CVZXN_cm33
-**                          MIMX9574CVZXN_cm7
-**                          MIMX9574DVTXN_ca55
-**                          MIMX9574DVTXN_cm33
-**                          MIMX9574DVTXN_cm7
-**                          MIMX9574DVZXN_ca55
-**                          MIMX9574DVZXN_cm33
-**                          MIMX9574DVZXN_cm7
-**                          MIMX9574XVTXN_ca55
-**                          MIMX9574XVTXN_cm33
-**                          MIMX9574XVTXN_cm7
-**                          MIMX9574XVZXN_ca55
-**                          MIMX9574XVZXN_cm33
-**                          MIMX9574XVZXN_cm7
-**                          MIMX9576AVZXN_ca55
-**                          MIMX9576AVZXN_cm33
-**                          MIMX9576AVZXN_cm7
-**                          MIMX9576CVTXN_ca55
-**                          MIMX9576CVTXN_cm33
-**                          MIMX9576CVTXN_cm7
-**                          MIMX9576CVZXN_ca55
-**                          MIMX9576CVZXN_cm33
-**                          MIMX9576CVZXN_cm7
-**                          MIMX9576DVTXN_ca55
-**                          MIMX9576DVTXN_cm33
-**                          MIMX9576DVTXN_cm7
-**                          MIMX9576DVZXN_ca55
-**                          MIMX9576DVZXN_cm33
-**                          MIMX9576DVZXN_cm7
-**                          MIMX9576XVTXN_ca55
-**                          MIMX9576XVTXN_cm33
-**                          MIMX9576XVTXN_cm7
-**                          MIMX9576XVZXN_ca55
-**                          MIMX9576XVZXN_cm33
-**                          MIMX9576XVZXN_cm7
-**                          MIMX9586AVZXN_ca55
-**                          MIMX9586AVZXN_cm33
-**                          MIMX9586AVZXN_cm7
-**                          MIMX9586XVZXN_ca55
-**                          MIMX9586XVZXN_cm33
-**                          MIMX9586XVZXN_cm7
-**                          MIMX9594AVZXN_ca55
-**                          MIMX9594AVZXN_cm33
-**                          MIMX9594AVZXN_cm7
-**                          MIMX9594CVTXN_ca55
-**                          MIMX9594CVTXN_cm33
-**                          MIMX9594CVTXN_cm7
-**                          MIMX9594CVZXN_ca55
-**                          MIMX9594CVZXN_cm33
-**                          MIMX9594CVZXN_cm7
-**                          MIMX9594DVTXN_ca55
-**                          MIMX9594DVTXN_cm33
-**                          MIMX9594DVTXN_cm7
-**                          MIMX9594DVZXN_ca55
-**                          MIMX9594DVZXN_cm33
-**                          MIMX9594DVZXN_cm7
-**                          MIMX9594XVTXN_ca55
-**                          MIMX9594XVTXN_cm33
-**                          MIMX9594XVTXN_cm7
-**                          MIMX9594XVZXN_ca55
-**                          MIMX9594XVZXN_cm33
-**                          MIMX9594XVZXN_cm7
-**                          MIMX9596AVZXN_ca55
-**                          MIMX9596AVZXN_cm33
-**                          MIMX9596AVZXN_cm7
-**                          MIMX9596CVTXN_ca55
-**                          MIMX9596CVTXN_cm33
-**                          MIMX9596CVTXN_cm7
-**                          MIMX9596CVZXN_ca55
-**                          MIMX9596CVZXN_cm33
-**                          MIMX9596CVZXN_cm7
-**                          MIMX9596DVTXN_ca55
-**                          MIMX9596DVTXN_cm33
-**                          MIMX9596DVTXN_cm7
-**                          MIMX9596DVZXN_ca55
-**                          MIMX9596DVZXN_cm33
-**                          MIMX9596DVZXN_cm7
-**                          MIMX9596DVZXQ_ca55
-**                          MIMX9596DVZXQ_cm33
-**                          MIMX9596DVZXQ_cm7
-**                          MIMX9596XVTXN_ca55
-**                          MIMX9596XVTXN_cm33
-**                          MIMX9596XVTXN_cm7
-**                          MIMX9596XVZXN_ca55
-**                          MIMX9596XVZXN_cm33
-**                          MIMX9596XVZXN_cm7
-**                          MIMX95N4AVTXN_ca55
-**                          MIMX95N4AVTXN_cm33
-**                          MIMX95N4AVTXN_cm7
-**                          MIMX95N4AVZXN_ca55
-**                          MIMX95N4AVZXN_cm33
-**                          MIMX95N4AVZXN_cm7
-**                          MIMX95N4CVTXN_ca55
-**                          MIMX95N4CVTXN_cm33
-**                          MIMX95N4CVTXN_cm7
-**                          MIMX95N4CVZXN_ca55
-**                          MIMX95N4CVZXN_cm33
-**                          MIMX95N4CVZXN_cm7
-**                          MIMX95N4DVTXN_ca55
-**                          MIMX95N4DVTXN_cm33
-**                          MIMX95N4DVTXN_cm7
-**                          MIMX95N4DVZXN_ca55
-**                          MIMX95N4DVZXN_cm33
-**                          MIMX95N4DVZXN_cm7
-**                          MIMX95N4XVTXN_ca55
-**                          MIMX95N4XVTXN_cm33
-**                          MIMX95N4XVTXN_cm7
-**                          MIMX95N4XVZXN_ca55
-**                          MIMX95N4XVZXN_cm33
-**                          MIMX95N4XVZXN_cm7
-**                          MIMX95N6AVTXN_ca55
-**                          MIMX95N6AVTXN_cm33
-**                          MIMX95N6AVTXN_cm7
-**                          MIMX95N6AVZXN_ca55
-**                          MIMX95N6AVZXN_cm33
-**                          MIMX95N6AVZXN_cm7
-**                          MIMX95N6CVTXN_ca55
-**                          MIMX95N6CVTXN_cm33
-**                          MIMX95N6CVTXN_cm7
-**                          MIMX95N6CVYXN_ca55
-**                          MIMX95N6CVYXN_cm33
-**                          MIMX95N6CVYXN_cm7
-**                          MIMX95N6CVZXN_ca55
-**                          MIMX95N6CVZXN_cm33
-**                          MIMX95N6CVZXN_cm7
-**                          MIMX95N6DVTXN_ca55
-**                          MIMX95N6DVTXN_cm33
-**                          MIMX95N6DVTXN_cm7
-**                          MIMX95N6DVZXN_ca55
-**                          MIMX95N6DVZXN_cm33
-**                          MIMX95N6DVZXN_cm7
-**                          MIMX95N6XVTXN_ca55
-**                          MIMX95N6XVTXN_cm33
-**                          MIMX95N6XVTXN_cm7
-**                          MIMX95N6XVZXN_ca55
-**                          MIMX95N6XVZXN_cm33
-**                          MIMX95N6XVZXN_cm7
+**     Processors:          MIMX9522xxVTx_ca55
+**                          MIMX9522xxVTx_cm33
+**                          MIMX9522xxVTx_cm7
+**                          MIMX9522xxVZx_ca55
+**                          MIMX9522xxVZx_cm33
+**                          MIMX9522xxVZx_cm7
+**                          MIMX9523xxVTx_ca55
+**                          MIMX9523xxVTx_cm33
+**                          MIMX9523xxVTx_cm7
+**                          MIMX9523xxVZx_ca55
+**                          MIMX9523xxVZx_cm33
+**                          MIMX9523xxVZx_cm7
+**                          MIMX9524xxVTx_ca55
+**                          MIMX9524xxVTx_cm33
+**                          MIMX9524xxVTx_cm7
+**                          MIMX9524xxVZx_ca55
+**                          MIMX9524xxVZx_cm33
+**                          MIMX9524xxVZx_cm7
+**                          MIMX9525xxVTx_ca55
+**                          MIMX9525xxVTx_cm33
+**                          MIMX9525xxVTx_cm7
+**                          MIMX9525xxVZx_ca55
+**                          MIMX9525xxVZx_cm33
+**                          MIMX9525xxVZx_cm7
+**                          MIMX9528xxVTx_ca55
+**                          MIMX9528xxVTx_cm33
+**                          MIMX9528xxVTx_cm7
+**                          MIMX9528xxVZx_ca55
+**                          MIMX9528xxVZx_cm33
+**                          MIMX9528xxVZx_cm7
+**                          MIMX9529xxVTx_ca55
+**                          MIMX9529xxVTx_cm33
+**                          MIMX9529xxVTx_cm7
+**                          MIMX9529xxVZx_ca55
+**                          MIMX9529xxVZx_cm33
+**                          MIMX9529xxVZx_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b260324
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NETC_ETH_LINK
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -282,7 +72,45 @@
 #if !defined(PERI_NETC_ETH_LINK_H_)
 #define PERI_NETC_ETH_LINK_H_                    /**< Symbol preventing repeated inclusion */
 
-#include "MIMX95294_cm7_COMMON.h"
+#if (defined(CPU_MIMX9522xxVTx_ca55) || defined(CPU_MIMX9522xxVZx_ca55))
+#include "MIMX9522_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9522xxVTx_cm33) || defined(CPU_MIMX9522xxVZx_cm33))
+#include "MIMX9522_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9522xxVTx_cm7) || defined(CPU_MIMX9522xxVZx_cm7))
+#include "MIMX9522_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9523xxVTx_ca55) || defined(CPU_MIMX9523xxVZx_ca55))
+#include "MIMX9523_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9523xxVTx_cm33) || defined(CPU_MIMX9523xxVZx_cm33))
+#include "MIMX9523_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9523xxVTx_cm7) || defined(CPU_MIMX9523xxVZx_cm7))
+#include "MIMX9523_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9524xxVTx_ca55) || defined(CPU_MIMX9524xxVZx_ca55))
+#include "MIMX9524_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9524xxVTx_cm33) || defined(CPU_MIMX9524xxVZx_cm33))
+#include "MIMX9524_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9524xxVTx_cm7) || defined(CPU_MIMX9524xxVZx_cm7))
+#include "MIMX9524_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9525xxVTx_ca55) || defined(CPU_MIMX9525xxVZx_ca55))
+#include "MIMX9525_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9525xxVTx_cm33) || defined(CPU_MIMX9525xxVZx_cm33))
+#include "MIMX9525_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9525xxVTx_cm7) || defined(CPU_MIMX9525xxVZx_cm7))
+#include "MIMX9525_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9528xxVTx_ca55) || defined(CPU_MIMX9528xxVZx_ca55))
+#include "MIMX9528_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9528xxVTx_cm33) || defined(CPU_MIMX9528xxVZx_cm33))
+#include "MIMX9528_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9528xxVTx_cm7) || defined(CPU_MIMX9528xxVZx_cm7))
+#include "MIMX9528_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9529xxVTx_ca55) || defined(CPU_MIMX9529xxVZx_ca55))
+#include "MIMX9529_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9529xxVTx_cm33) || defined(CPU_MIMX9529xxVZx_cm33))
+#include "MIMX9529_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9529xxVTx_cm7) || defined(CPU_MIMX9529xxVZx_cm7))
+#include "MIMX9529_cm7_COMMON.h"
+#else
+  #error "No valid CPU defined!"
+#endif
 
 /* ----------------------------------------------------------------------------
    -- Device Peripheral Access Layer
@@ -329,13 +157,15 @@ typedef struct {
   __I  uint32_t PM0_MAC_ADDR_0;                    /**< Port MAC 0 MAC Address Register 0, offset: 0xC */
   __I  uint32_t PM0_MAC_ADDR_1;                    /**< Port MAC 0 MAC Address Register 1, offset: 0x10 */
   __IO uint32_t PM0_MAXFRM;                        /**< Port MAC 0 Maximum Frame Length Register, offset: 0x14 */
-       uint8_t RESERVED_1[24];
-  __IO uint32_t PM0_MDIO_CFG;                      /**< Port MAC 0 Internal MDIO Configuration Register, offset: 0x30, not available in all instances (available on 82 out of 246) */
-  __IO uint32_t PM0_MDIO_CTL;                      /**< Port MAC 0 Internal MDIO Interface Control Register, offset: 0x34, not available in all instances (available on 82 out of 246) */
-  __IO uint32_t PM0_MDIO_DATA;                     /**< Port MAC 0 Internal MDIO Interface Data Register, offset: 0x38, not available in all instances (available on 82 out of 246) */
-  __IO uint32_t PM0_MDIO_ADDR;                     /**< Port MAC 0 Internal MDIO Register Address Register, offset: 0x3C, not available in all instances (available on 82 out of 246) */
+  __IO uint32_t PM0_MINFRM;                        /**< Port MAC 0 Minimum Frame Length Register, offset: 0x18 */
+       uint8_t RESERVED_1[20];
+  __IO uint32_t PM0_MDIO_CFG;                      /**< Port MAC 0 Internal MDIO Configuration Register, offset: 0x30 */
+  __IO uint32_t PM0_MDIO_CTL;                      /**< Port MAC 0 Internal MDIO Interface Control Register, offset: 0x34 */
+  __IO uint32_t PM0_MDIO_DATA;                     /**< Port MAC 0 Internal MDIO Interface Data Register, offset: 0x38 */
+  __IO uint32_t PM0_MDIO_ADDR;                     /**< Port MAC 0 Internal MDIO Register Address Register, offset: 0x3C */
   __IO uint32_t PM0_IEVENT;                        /**< Port MAC 0 Interrupt Event Register, offset: 0x40 */
-       uint8_t RESERVED_2[8];
+  __IO uint32_t PM0_TX_IPG_PREAMBLE;               /**< Port MAC 0 Transmit Inter-Packet Gap Length and Flexible Preamble length Register, offset: 0x44 */
+       uint8_t RESERVED_2[4];
   __IO uint32_t PM0_IMASK;                         /**< Port MAC 0 Interrupt Mask Register(INT_MASK), offset: 0x4C */
        uint8_t RESERVED_3[4];
   __IO uint32_t PM0_PAUSE_QUANTA;                  /**< Port MAC 0 Pause Quanta Register, offset: 0x54 */
@@ -379,7 +209,8 @@ typedef struct {
   __I  uint64_t PM0_RFRGN;                         /**< Port MAC 0 Receive Fragment Packet Counter Register(etherStatsFragmentsn, offset: 0x1B8 */
   __I  uint64_t PM0_RCNPN;                         /**< Port MAC 0 Receive Control Packet Counter Register, offset: 0x1C0 */
   __I  uint64_t PM0_RDRNTPN;                       /**< Port MAC 0 Receive Dropped Not Truncated Packets Counter Register(etherStatsDropEventsn), offset: 0x1C8 */
-       uint8_t RESERVED_11[48];
+  __I  uint64_t PM0_RMIN63N;                       /**< Port MAC 0 Receive Valid Small Packet Counter Register, offset: 0x1D0 */
+       uint8_t RESERVED_11[40];
   __I  uint64_t PM0_TEOCTN;                        /**< Port MAC 0 Transmit Ethernet Octets Counter(etherStatsOctetsn), offset: 0x200 */
   __I  uint64_t PM0_TOCTN;                         /**< Port MAC 0 Transmit Octets Counter Register(ifOutOctetsn), offset: 0x208 */
        uint8_t RESERVED_12[8];
@@ -404,107 +235,110 @@ typedef struct {
        uint8_t RESERVED_14[24];
   __I  uint64_t PM0_TCNPN;                         /**< Port MAC 0 Transmit Control Packet Counter Register, offset: 0x2C0 */
        uint8_t RESERVED_15[8];
-  __I  uint64_t PM0_TDFRN;                         /**< Port MAC 0 Transmit Deferred Packet Counter Register(aFramesWithDeferredXmissions), offset: 0x2D0, not available in all instances (available on 164 out of 246) */
-  __I  uint64_t PM0_TMCOLN;                        /**< Port MAC 0 Transmit Multiple Collisions Counter Register(aMultipleCollisionFrames), offset: 0x2D8, not available in all instances (available on 164 out of 246) */
-  __I  uint64_t PM0_TSCOLN;                        /**< Port MAC 0 Transmit Single Collision Counter(aSingleCollisionFrames) Register, offset: 0x2E0, not available in all instances (available on 164 out of 246) */
-  __I  uint64_t PM0_TLCOLN;                        /**< Port MAC 0 Transmit Late Collision Counter(aLateCollisions) Register, offset: 0x2E8, not available in all instances (available on 164 out of 246) */
-  __I  uint64_t PM0_TECOLN;                        /**< Port MAC 0 Transmit Excessive Collisions Counter Register, offset: 0x2F0, not available in all instances (available on 164 out of 246) */
+  __I  uint64_t PM0_TDFRN;                         /**< Port MAC 0 Transmit Deferred Packet Counter Register(aFramesWithDeferredXmissions), offset: 0x2D0 */
+  __I  uint64_t PM0_TMCOLN;                        /**< Port MAC 0 Transmit Multiple Collisions Counter Register(aMultipleCollisionFrames), offset: 0x2D8 */
+  __I  uint64_t PM0_TSCOLN;                        /**< Port MAC 0 Transmit Single Collision Counter(aSingleCollisionFrames) Register, offset: 0x2E0 */
+  __I  uint64_t PM0_TLCOLN;                        /**< Port MAC 0 Transmit Late Collision Counter(aLateCollisions) Register, offset: 0x2E8 */
+  __I  uint64_t PM0_TECOLN;                        /**< Port MAC 0 Transmit Excessive Collisions Counter Register, offset: 0x2F0 */
        uint8_t RESERVED_16[8];
   __IO uint32_t PM0_IF_MODE;                       /**< Port MAC 0 Interface Mode Control Register, offset: 0x300 */
   __I  uint32_t PM0_IF_STATUS;                     /**< Port MAC 0 Interface Status Register, offset: 0x304 */
        uint8_t RESERVED_17[256];
-  __IO uint32_t PM1_COMMAND_CONFIG;                /**< Port MAC 1 Command and Configuration Register, offset: 0x408, not available in all instances (available on 82 out of 246) */
-  __I  uint32_t PM1_MAC_ADDR_0;                    /**< Port MAC 1 MAC Address Register 0, offset: 0x40C, not available in all instances (available on 82 out of 246) */
-  __I  uint32_t PM1_MAC_ADDR_1;                    /**< Port MAC 1 MAC Address Register 1, offset: 0x410, not available in all instances (available on 82 out of 246) */
-  __IO uint32_t PM1_MAXFRM;                        /**< Port MAC 1 Maximum Frame Length Register, offset: 0x414, not available in all instances (available on 82 out of 246) */
-       uint8_t RESERVED_18[40];
-  __IO uint32_t PM1_IEVENT;                        /**< Port MAC 1 Interrupt Event Register, offset: 0x440, not available in all instances (available on 82 out of 246) */
-       uint8_t RESERVED_19[8];
-  __IO uint32_t PM1_IMASK;                         /**< Port MAC 1 Interrupt Mask Register(INT_MASK), offset: 0x44C, not available in all instances (available on 82 out of 246) */
+  __IO uint32_t PM1_COMMAND_CONFIG;                /**< Port MAC 1 Command and Configuration Register, offset: 0x408, not available in all instances (available on 12 out of 24) */
+  __I  uint32_t PM1_MAC_ADDR_0;                    /**< Port MAC 1 MAC Address Register 0, offset: 0x40C, not available in all instances (available on 12 out of 24) */
+  __I  uint32_t PM1_MAC_ADDR_1;                    /**< Port MAC 1 MAC Address Register 1, offset: 0x410, not available in all instances (available on 12 out of 24) */
+  __IO uint32_t PM1_MAXFRM;                        /**< Port MAC 1 Maximum Frame Length Register, offset: 0x414, not available in all instances (available on 12 out of 24) */
+  __IO uint32_t PM1_MINFRM;                        /**< Port MAC 1 Minimum Frame Length Register, offset: 0x418, not available in all instances (available on 12 out of 24) */
+       uint8_t RESERVED_18[36];
+  __IO uint32_t PM1_IEVENT;                        /**< Port MAC 1 Interrupt Event Register, offset: 0x440, not available in all instances (available on 12 out of 24) */
+  __IO uint32_t PM1_TX_IPG_PREAMBLE;               /**< Port MAC 1 Transmit Inter-Packet Gap Length and Flexible Preamble length Register, offset: 0x444, not available in all instances (available on 12 out of 24) */
+       uint8_t RESERVED_19[4];
+  __IO uint32_t PM1_IMASK;                         /**< Port MAC 1 Interrupt Mask Register(INT_MASK), offset: 0x44C, not available in all instances (available on 12 out of 24) */
        uint8_t RESERVED_20[4];
-  __IO uint32_t PM1_PAUSE_QUANTA;                  /**< Port MAC 1 Pause Quanta Register, offset: 0x454, not available in all instances (available on 82 out of 246) */
+  __IO uint32_t PM1_PAUSE_QUANTA;                  /**< Port MAC 1 Pause Quanta Register, offset: 0x454, not available in all instances (available on 12 out of 24) */
        uint8_t RESERVED_21[12];
-  __IO uint32_t PM1_PAUSE_THRESH;                  /**< Port MAC 1 Pause Quanta Threshold Register, offset: 0x464, not available in all instances (available on 82 out of 246) */
+  __IO uint32_t PM1_PAUSE_THRESH;                  /**< Port MAC 1 Pause Quanta Threshold Register, offset: 0x464, not available in all instances (available on 12 out of 24) */
        uint8_t RESERVED_22[12];
-  __I  uint32_t PM1_RX_PAUSE_STATUS;               /**< Port MAC 1 Receive Pause Status Register, offset: 0x474, not available in all instances (available on 82 out of 246) */
+  __I  uint32_t PM1_RX_PAUSE_STATUS;               /**< Port MAC 1 Receive Pause Status Register, offset: 0x474, not available in all instances (available on 12 out of 24) */
        uint8_t RESERVED_23[64];
-  __IO uint32_t PM1_LPWAKE_TIMER;                  /**< Port MAC 1 EEE Low Power Wakeup Timer Register, offset: 0x4B8, not available in all instances (available on 82 out of 246) */
-  __IO uint32_t PM1_SLEEP_TIMER;                   /**< Port MAC 1 Transmit EEE Low Power Timer Register, offset: 0x4BC, not available in all instances (available on 82 out of 246) */
-  __IO uint32_t PM1_SINGLE_STEP;                   /**< Port MAC 1 IEEE1588 Single-Step Control Register, offset: 0x4C0, not available in all instances (available on 82 out of 246) */
+  __IO uint32_t PM1_LPWAKE_TIMER;                  /**< Port MAC 1 EEE Low Power Wakeup Timer Register, offset: 0x4B8, not available in all instances (available on 12 out of 24) */
+  __IO uint32_t PM1_SLEEP_TIMER;                   /**< Port MAC 1 Transmit EEE Low Power Timer Register, offset: 0x4BC, not available in all instances (available on 12 out of 24) */
+  __IO uint32_t PM1_SINGLE_STEP;                   /**< Port MAC 1 IEEE1588 Single-Step Control Register, offset: 0x4C0, not available in all instances (available on 12 out of 24) */
        uint8_t RESERVED_24[12];
-  __IO uint32_t PM1_HD_BACKOFF_ENTROPY;            /**< Port MAC 1 half-duplex backoff entropy register, offset: 0x4D0, not available in all instances (available on 82 out of 246) */
-  __IO uint32_t PM1_HD_FLOW_CTRL;                  /**< Port MAC 1 Half-Duplex Flow Control Register, offset: 0x4D4, not available in all instances (available on 82 out of 246) */
+  __IO uint32_t PM1_HD_BACKOFF_ENTROPY;            /**< Port MAC 1 half-duplex backoff entropy register, offset: 0x4D0, not available in all instances (available on 12 out of 24) */
+  __IO uint32_t PM1_HD_FLOW_CTRL;                  /**< Port MAC 1 Half-Duplex Flow Control Register, offset: 0x4D4, not available in all instances (available on 12 out of 24) */
        uint8_t RESERVED_25[8];
-  __IO uint32_t PM1_STATN_CONFIG;                  /**< Port MAC 1 Statistics Configuration Register, offset: 0x4E0, not available in all instances (available on 82 out of 246) */
+  __IO uint32_t PM1_STATN_CONFIG;                  /**< Port MAC 1 Statistics Configuration Register, offset: 0x4E0, not available in all instances (available on 12 out of 24) */
        uint8_t RESERVED_26[28];
-  __I  uint64_t PM1_REOCTN;                        /**< Port MAC 1 Receive Ethernet Octets Counter(etherStatsOctetsn), offset: 0x500, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_ROCTN;                         /**< Port MAC 1 Receive Octets Counter(iflnOctetsn), offset: 0x508, not available in all instances (available on 82 out of 246) */
+  __I  uint64_t PM1_REOCTN;                        /**< Port MAC 1 Receive Ethernet Octets Counter(etherStatsOctetsn), offset: 0x500, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_ROCTN;                         /**< Port MAC 1 Receive Octets Counter(iflnOctetsn), offset: 0x508, not available in all instances (available on 12 out of 24) */
        uint8_t RESERVED_27[8];
-  __I  uint64_t PM1_RXPFN;                         /**< Port MAC 1 Receive Valid Pause Frame Counter Register(aPAUSEMACCtrlFramesReceivedn), offset: 0x518, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_RFRMN;                         /**< Port MAC 1 Receive Frame Counter Register(aFramesReceivedOKn), offset: 0x520, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_RFCSN;                         /**< Port MAC 1 Receive Frame Check Sequence Error Counter Register(), offset: 0x528, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_RVLANN;                        /**< Port MAC 1 Receive VLAN Frame Counter Register(VLANReceivedOKn), offset: 0x530, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_RERRN;                         /**< Port MAC 1 Receive Frame Error Counter Register(ifInErrorsn), offset: 0x538, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_RUCAN;                         /**< Port MAC 1 Receive Unicast Frame Counter Register(ifInUcastPktsn), offset: 0x540, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_RMCAN;                         /**< Port MAC 1 Receive Multicast Frame Counter Register(ifInMulticastPktsn), offset: 0x548, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_RBCAN;                         /**< Port MAC 1 Receive Broadcast Frame Counter Register(ifInBroadcastPktsn), offset: 0x550, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_RDRPN;                         /**< Port MAC 1 Receive Dropped Packets Counter Register(etherStatsDropEventsn), offset: 0x558, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_RPKTN;                         /**< Port MAC 1 Receive Packets Counter Register(etherStatsPktsn), offset: 0x560, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_RUNDN;                         /**< Port MAC 1 Receive Undersized Packet Counter Register(etherStatsUndersizePktsn), offset: 0x568, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_R64N;                          /**< Port MAC 1 Receive 64-Octet Packet Counter Register(etherStatsPkts64OctetsN), offset: 0x570, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_R127N;                         /**< Port MAC 1 Receive 65 to 127-Octet Packet Counter Register(etherStatsPkts65to127OctetsN), offset: 0x578, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_R255N;                         /**< Port MAC 1 Receive 128 to 255-Octet Packet Counter Register(etherStatsPkts128to255OctetsN), offset: 0x580, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_R511N;                         /**< Port MAC 1 Receive 256 to 511-Octet Packet Counter Register(etherStatsPkts256to511OctetsN), offset: 0x588, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_R1023N;                        /**< Port MAC 1 Receive 512 to 1023-Octet Packet Counter Register(etherStatsPkts512to1023OctetsN), offset: 0x590, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_R1522N;                        /**< Port MAC 1 Receive 1024 to 1522-Octet Packet Counter Register(etherStatsPkts1024to1522OctetsN), offset: 0x598, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_R1523XN;                       /**< Port MAC 1 Receive 1523 to Max-Octet Packet Counter Register(etherStatsPkts1523toMaxOctetsN), offset: 0x5A0, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_ROVRN;                         /**< Port MAC 1 Receive Oversized Packet Counter Register(etherStatsOversizePktsn), offset: 0x5A8, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_RJBRN;                         /**< Port MAC 1 Receive Jabber Packet Counter Register(etherStatsJabbersn), offset: 0x5B0, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_RFRGN;                         /**< Port MAC 1 Receive Fragment Packet Counter Register(etherStatsFragmentsn, offset: 0x5B8, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_RCNPN;                         /**< Port MAC 1 Receive Control Packet Counter Register, offset: 0x5C0, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_RDRNTPN;                       /**< Port MAC 1 Receive Dropped Not Truncated Packets Counter Register(etherStatsDropEventsn), offset: 0x5C8, not available in all instances (available on 82 out of 246) */
-       uint8_t RESERVED_28[48];
-  __I  uint64_t PM1_TEOCTN;                        /**< Port MAC 1 Transmit Ethernet Octets Counter(etherStatsOctetsn), offset: 0x600, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_TOCTN;                         /**< Port MAC 1 Transmit Octets Counter Register(ifOutOctetsn), offset: 0x608, not available in all instances (available on 82 out of 246) */
+  __I  uint64_t PM1_RXPFN;                         /**< Port MAC 1 Receive Valid Pause Frame Counter Register(aPAUSEMACCtrlFramesReceivedn), offset: 0x518, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_RFRMN;                         /**< Port MAC 1 Receive Frame Counter Register(aFramesReceivedOKn), offset: 0x520, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_RFCSN;                         /**< Port MAC 1 Receive Frame Check Sequence Error Counter Register(), offset: 0x528, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_RVLANN;                        /**< Port MAC 1 Receive VLAN Frame Counter Register(VLANReceivedOKn), offset: 0x530, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_RERRN;                         /**< Port MAC 1 Receive Frame Error Counter Register(ifInErrorsn), offset: 0x538, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_RUCAN;                         /**< Port MAC 1 Receive Unicast Frame Counter Register(ifInUcastPktsn), offset: 0x540, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_RMCAN;                         /**< Port MAC 1 Receive Multicast Frame Counter Register(ifInMulticastPktsn), offset: 0x548, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_RBCAN;                         /**< Port MAC 1 Receive Broadcast Frame Counter Register(ifInBroadcastPktsn), offset: 0x550, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_RDRPN;                         /**< Port MAC 1 Receive Dropped Packets Counter Register(etherStatsDropEventsn), offset: 0x558, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_RPKTN;                         /**< Port MAC 1 Receive Packets Counter Register(etherStatsPktsn), offset: 0x560, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_RUNDN;                         /**< Port MAC 1 Receive Undersized Packet Counter Register(etherStatsUndersizePktsn), offset: 0x568, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_R64N;                          /**< Port MAC 1 Receive 64-Octet Packet Counter Register(etherStatsPkts64OctetsN), offset: 0x570, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_R127N;                         /**< Port MAC 1 Receive 65 to 127-Octet Packet Counter Register(etherStatsPkts65to127OctetsN), offset: 0x578, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_R255N;                         /**< Port MAC 1 Receive 128 to 255-Octet Packet Counter Register(etherStatsPkts128to255OctetsN), offset: 0x580, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_R511N;                         /**< Port MAC 1 Receive 256 to 511-Octet Packet Counter Register(etherStatsPkts256to511OctetsN), offset: 0x588, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_R1023N;                        /**< Port MAC 1 Receive 512 to 1023-Octet Packet Counter Register(etherStatsPkts512to1023OctetsN), offset: 0x590, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_R1522N;                        /**< Port MAC 1 Receive 1024 to 1522-Octet Packet Counter Register(etherStatsPkts1024to1522OctetsN), offset: 0x598, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_R1523XN;                       /**< Port MAC 1 Receive 1523 to Max-Octet Packet Counter Register(etherStatsPkts1523toMaxOctetsN), offset: 0x5A0, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_ROVRN;                         /**< Port MAC 1 Receive Oversized Packet Counter Register(etherStatsOversizePktsn), offset: 0x5A8, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_RJBRN;                         /**< Port MAC 1 Receive Jabber Packet Counter Register(etherStatsJabbersn), offset: 0x5B0, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_RFRGN;                         /**< Port MAC 1 Receive Fragment Packet Counter Register(etherStatsFragmentsn, offset: 0x5B8, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_RCNPN;                         /**< Port MAC 1 Receive Control Packet Counter Register, offset: 0x5C0, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_RDRNTPN;                       /**< Port MAC 1 Receive Dropped Not Truncated Packets Counter Register(etherStatsDropEventsn), offset: 0x5C8, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_RMIN63N;                       /**< Port MAC 1 Receive Valid Small Packet Counter Register, offset: 0x5D0, not available in all instances (available on 12 out of 24) */
+       uint8_t RESERVED_28[40];
+  __I  uint64_t PM1_TEOCTN;                        /**< Port MAC 1 Transmit Ethernet Octets Counter(etherStatsOctetsn), offset: 0x600, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_TOCTN;                         /**< Port MAC 1 Transmit Octets Counter Register(ifOutOctetsn), offset: 0x608, not available in all instances (available on 12 out of 24) */
        uint8_t RESERVED_29[8];
-  __I  uint64_t PM1_TXPFN;                         /**< Port MAC 1 Transmit Valid Pause Frame Counter Register(aPAUSEMACCtrlFramesReceivedn), offset: 0x618, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_TFRMN;                         /**< Port MAC 1 Transmit Frame Counter Register(aFramesTransmittedOKn), offset: 0x620, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_TFCSN;                         /**< Port MAC 1 Transmit Frame Check Sequence Error Counter Register(), offset: 0x628, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_TVLANN;                        /**< Port MAC 1 Transmit VLAN Frame Counter Register(VLANTransmittedOKn), offset: 0x630, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_TERRN;                         /**< Port MAC 1 Transmit Frame Error Counter Register(ifOutErrorsn), offset: 0x638, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_TUCAN;                         /**< Port MAC 1 Transmit Unicast Frame Counter Register(ifOutUcastPktsn), offset: 0x640, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_TMCAN;                         /**< Port MAC 1 Transmit Multicast Frame Counter Register(ifOutMulticastPktsn), offset: 0x648, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_TBCAN;                         /**< Port MAC 1 Transmit Broadcast Frame Counter Register(ifOutBroadcastPktsn), offset: 0x650, not available in all instances (available on 82 out of 246) */
+  __I  uint64_t PM1_TXPFN;                         /**< Port MAC 1 Transmit Valid Pause Frame Counter Register(aPAUSEMACCtrlFramesReceivedn), offset: 0x618, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_TFRMN;                         /**< Port MAC 1 Transmit Frame Counter Register(aFramesTransmittedOKn), offset: 0x620, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_TFCSN;                         /**< Port MAC 1 Transmit Frame Check Sequence Error Counter Register(), offset: 0x628, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_TVLANN;                        /**< Port MAC 1 Transmit VLAN Frame Counter Register(VLANTransmittedOKn), offset: 0x630, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_TERRN;                         /**< Port MAC 1 Transmit Frame Error Counter Register(ifOutErrorsn), offset: 0x638, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_TUCAN;                         /**< Port MAC 1 Transmit Unicast Frame Counter Register(ifOutUcastPktsn), offset: 0x640, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_TMCAN;                         /**< Port MAC 1 Transmit Multicast Frame Counter Register(ifOutMulticastPktsn), offset: 0x648, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_TBCAN;                         /**< Port MAC 1 Transmit Broadcast Frame Counter Register(ifOutBroadcastPktsn), offset: 0x650, not available in all instances (available on 12 out of 24) */
        uint8_t RESERVED_30[8];
-  __I  uint64_t PM1_TPKTN;                         /**< Port MAC 1 Transmit Packets Counter Register(etherStatsPktsn), offset: 0x660, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_TUNDN;                         /**< Port MAC 1 Transmit Undersized Packet Counter Register(etherStatsUndersizePktsn), offset: 0x668, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_T64N;                          /**< Port MAC 1 Transmit 64-Octet Packet Counter Register (etherStatsPkts64OctetsN), offset: 0x670, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_T127N;                         /**< Port MAC 1 Transmit 65 to 127-Octet Packet Counter Register (etherStatsPkts65to127OctetsN), offset: 0x678, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_T255N;                         /**< Port MAC 1 Transmit 128 to 255-Octet Packet Counter Register (etherStatsPkts128to255OctetsN), offset: 0x680, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_T511N;                         /**< Port MAC 1 Transmit 256 to 511-Octet Packet Counter Register (etherStatsPkts256to511OctetsN), offset: 0x688, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_T1023N;                        /**< Port MAC 1 Transmit 512 to 1023-Octet Packet Counter Register (etherStatsPkts512to1023OctetsN), offset: 0x690, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_T1522N;                        /**< Port MAC 1 Transmit 1024 to 1522-Octet Packet Counter Register (etherStatsPkts1024to1522OctetsN), offset: 0x698, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_T1523XN;                       /**< Port MAC 1 Transmit 1523 to TX_MTU-Octet Packet Counter Register (etherStatsPkts1523toMaxOctetsN), offset: 0x6A0, not available in all instances (available on 82 out of 246) */
+  __I  uint64_t PM1_TPKTN;                         /**< Port MAC 1 Transmit Packets Counter Register(etherStatsPktsn), offset: 0x660, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_TUNDN;                         /**< Port MAC 1 Transmit Undersized Packet Counter Register(etherStatsUndersizePktsn), offset: 0x668, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_T64N;                          /**< Port MAC 1 Transmit 64-Octet Packet Counter Register (etherStatsPkts64OctetsN), offset: 0x670, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_T127N;                         /**< Port MAC 1 Transmit 65 to 127-Octet Packet Counter Register (etherStatsPkts65to127OctetsN), offset: 0x678, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_T255N;                         /**< Port MAC 1 Transmit 128 to 255-Octet Packet Counter Register (etherStatsPkts128to255OctetsN), offset: 0x680, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_T511N;                         /**< Port MAC 1 Transmit 256 to 511-Octet Packet Counter Register (etherStatsPkts256to511OctetsN), offset: 0x688, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_T1023N;                        /**< Port MAC 1 Transmit 512 to 1023-Octet Packet Counter Register (etherStatsPkts512to1023OctetsN), offset: 0x690, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_T1522N;                        /**< Port MAC 1 Transmit 1024 to 1522-Octet Packet Counter Register (etherStatsPkts1024to1522OctetsN), offset: 0x698, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_T1523XN;                       /**< Port MAC 1 Transmit 1523 to TX_MTU-Octet Packet Counter Register (etherStatsPkts1523toMaxOctetsN), offset: 0x6A0, not available in all instances (available on 12 out of 24) */
        uint8_t RESERVED_31[24];
-  __I  uint64_t PM1_TCNPN;                         /**< Port MAC 1 Transmit Control Packet Counter Register, offset: 0x6C0, not available in all instances (available on 82 out of 246) */
+  __I  uint64_t PM1_TCNPN;                         /**< Port MAC 1 Transmit Control Packet Counter Register, offset: 0x6C0, not available in all instances (available on 12 out of 24) */
        uint8_t RESERVED_32[8];
-  __I  uint64_t PM1_TDFRN;                         /**< Port MAC 1 Transmit Deferred Packet Counter Register(aFramesWithDeferredXmissions), offset: 0x6D0, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_TMCOLN;                        /**< Port MAC 1 Transmit Multiple Collisions Counter Register(aMultipleCollisionFrames), offset: 0x6D8, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_TSCOLN;                        /**< Port MAC 1 Transmit Single Collision Counter(aSingleCollisionFrames) Register, offset: 0x6E0, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_TLCOLN;                        /**< Port MAC 1 Transmit Late Collision Counter(aLateCollisions) Register, offset: 0x6E8, not available in all instances (available on 82 out of 246) */
-  __I  uint64_t PM1_TECOLN;                        /**< Port MAC 1 Transmit Excessive Collisions Counter Register, offset: 0x6F0, not available in all instances (available on 82 out of 246) */
+  __I  uint64_t PM1_TDFRN;                         /**< Port MAC 1 Transmit Deferred Packet Counter Register(aFramesWithDeferredXmissions), offset: 0x6D0, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_TMCOLN;                        /**< Port MAC 1 Transmit Multiple Collisions Counter Register(aMultipleCollisionFrames), offset: 0x6D8, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_TSCOLN;                        /**< Port MAC 1 Transmit Single Collision Counter(aSingleCollisionFrames) Register, offset: 0x6E0, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_TLCOLN;                        /**< Port MAC 1 Transmit Late Collision Counter(aLateCollisions) Register, offset: 0x6E8, not available in all instances (available on 12 out of 24) */
+  __I  uint64_t PM1_TECOLN;                        /**< Port MAC 1 Transmit Excessive Collisions Counter Register, offset: 0x6F0, not available in all instances (available on 12 out of 24) */
        uint8_t RESERVED_33[8];
-  __IO uint32_t PM1_IF_MODE;                       /**< Port MAC 1 Interface Mode Control Register, offset: 0x700, not available in all instances (available on 82 out of 246) */
-  __I  uint32_t PM1_IF_STATUS;                     /**< Port MAC 1 Interface Status Register, offset: 0x704, not available in all instances (available on 82 out of 246) */
+  __IO uint32_t PM1_IF_MODE;                       /**< Port MAC 1 Interface Mode Control Register, offset: 0x700, not available in all instances (available on 12 out of 24) */
+  __I  uint32_t PM1_IF_STATUS;                     /**< Port MAC 1 Interface Status Register, offset: 0x704, not available in all instances (available on 12 out of 24) */
        uint8_t RESERVED_34[248];
-  __IO uint32_t MAC_MERGE_MMCSR;                   /**< Port MAC Merge Control and Status Register, offset: 0x800, not available in all instances (available on 82 out of 246) */
+  __IO uint32_t MAC_MERGE_MMCSR;                   /**< Port MAC Merge Control and Status Register, offset: 0x800, not available in all instances (available on 12 out of 24) */
        uint8_t RESERVED_35[4];
-  __IO uint32_t MAC_MERGE_MMFAECR;                 /**< Port MAC Merge Frame Assembly Error Count Register, offset: 0x808, not available in all instances (available on 82 out of 246) */
-  __IO uint32_t MAC_MERGE_MMFSECR;                 /**< Port MAC Merge Frame SMD Error Count Register, offset: 0x80C, not available in all instances (available on 82 out of 246) */
-  __IO uint32_t MAC_MERGE_MMFAOCR;                 /**< Port MAC Merge Frame Assembly OK Count Register, offset: 0x810, not available in all instances (available on 82 out of 246) */
-  __IO uint32_t MAC_MERGE_MMFCRXR;                 /**< Port MAC Merge Fragment Count RX Register, offset: 0x814, not available in all instances (available on 82 out of 246) */
-  __IO uint32_t MAC_MERGE_MMFCTXR;                 /**< Port MAC Merge Fragment Count TX Register, offset: 0x818, not available in all instances (available on 82 out of 246) */
-  __IO uint32_t MAC_MERGE_MMHCR;                   /**< Port MAC Merge Hold Count Register, offset: 0x81C, not available in all instances (available on 82 out of 246) */
+  __IO uint32_t MAC_MERGE_MMFAECR;                 /**< Port MAC Merge Frame Assembly Error Count Register, offset: 0x808, not available in all instances (available on 12 out of 24) */
+  __IO uint32_t MAC_MERGE_MMFSECR;                 /**< Port MAC Merge Frame SMD Error Count Register, offset: 0x80C, not available in all instances (available on 12 out of 24) */
+  __IO uint32_t MAC_MERGE_MMFAOCR;                 /**< Port MAC Merge Frame Assembly OK Count Register, offset: 0x810, not available in all instances (available on 12 out of 24) */
+  __IO uint32_t MAC_MERGE_MMFCRXR;                 /**< Port MAC Merge Fragment Count RX Register, offset: 0x814, not available in all instances (available on 12 out of 24) */
+  __IO uint32_t MAC_MERGE_MMFCTXR;                 /**< Port MAC Merge Fragment Count TX Register, offset: 0x818, not available in all instances (available on 12 out of 24) */
+  __IO uint32_t MAC_MERGE_MMHCR;                   /**< Port MAC Merge Hold Count Register, offset: 0x81C, not available in all instances (available on 12 out of 24) */
        uint8_t RESERVED_36[992];
   __IO uint32_t PEMDIOCR;                          /**< Port external MDIO configuration register, offset: 0xC00 */
   __IO uint32_t PEMDIOICR;                         /**< Port external MDIO interface control register, offset: 0xC04 */
@@ -577,15 +411,10 @@ typedef struct {
 /*! TXP - Enable padding of frames in transmit direction (1, default). */
 #define NETC_ETH_LINK_PM0_COMMAND_CONFIG_TXP(x)  (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_COMMAND_CONFIG_TXP_SHIFT)) & NETC_ETH_LINK_PM0_COMMAND_CONFIG_TXP_MASK)
 
-#define NETC_ETH_LINK_PM0_COMMAND_CONFIG_SEND_IDLE_MASK (0x10000U)
-#define NETC_ETH_LINK_PM0_COMMAND_CONFIG_SEND_IDLE_SHIFT (16U)
-/*! SEND_IDLE - Force send idle */
-#define NETC_ETH_LINK_PM0_COMMAND_CONFIG_SEND_IDLE(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_COMMAND_CONFIG_SEND_IDLE_SHIFT)) & NETC_ETH_LINK_PM0_COMMAND_CONFIG_SEND_IDLE_MASK)
-
-#define NETC_ETH_LINK_PM0_COMMAND_CONFIG_SFD_MASK (0x200000U)
-#define NETC_ETH_LINK_PM0_COMMAND_CONFIG_SFD_SHIFT (21U)
-/*! SFD - Disable check of SFD (0xd5) character at frame start. */
-#define NETC_ETH_LINK_PM0_COMMAND_CONFIG_SFD(x)  (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_COMMAND_CONFIG_SFD_SHIFT)) & NETC_ETH_LINK_PM0_COMMAND_CONFIG_SFD_MASK)
+#define NETC_ETH_LINK_PM0_COMMAND_CONFIG_HD_FCEN_MASK (0x40000U)
+#define NETC_ETH_LINK_PM0_COMMAND_CONFIG_HD_FCEN_SHIFT (18U)
+/*! HD_FCEN - Half Duplex Flow Control Enable */
+#define NETC_ETH_LINK_PM0_COMMAND_CONFIG_HD_FCEN(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_COMMAND_CONFIG_HD_FCEN_SHIFT)) & NETC_ETH_LINK_PM0_COMMAND_CONFIG_HD_FCEN_MASK)
 
 #define NETC_ETH_LINK_PM0_COMMAND_CONFIG_TX_FLUSH_MASK (0x400000U)
 #define NETC_ETH_LINK_PM0_COMMAND_CONFIG_TX_FLUSH_SHIFT (22U)
@@ -657,6 +486,15 @@ typedef struct {
 #define NETC_ETH_LINK_PM0_MAXFRM_TX_MTU_SHIFT    (16U)
 /*! TX_MTU - Maximum transmit frame length */
 #define NETC_ETH_LINK_PM0_MAXFRM_TX_MTU(x)       (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_MAXFRM_TX_MTU_SHIFT)) & NETC_ETH_LINK_PM0_MAXFRM_TX_MTU_MASK)
+/*! @} */
+
+/*! @name PM0_MINFRM - Port MAC 0 Minimum Frame Length Register */
+/*! @{ */
+
+#define NETC_ETH_LINK_PM0_MINFRM_NUM_BYTES_MASK  (0x7FU)
+#define NETC_ETH_LINK_PM0_MINFRM_NUM_BYTES_SHIFT (0U)
+/*! NUM_BYTES - Receive Minimum Frame Length size in bytes. */
+#define NETC_ETH_LINK_PM0_MINFRM_NUM_BYTES(x)    (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_MINFRM_NUM_BYTES_SHIFT)) & NETC_ETH_LINK_PM0_MINFRM_NUM_BYTES_MASK)
 /*! @} */
 
 /*! @name PM0_MDIO_CFG - Port MAC 0 Internal MDIO Configuration Register */
@@ -758,16 +596,6 @@ typedef struct {
 /*! @name PM0_IEVENT - Port MAC 0 Interrupt Event Register */
 /*! @{ */
 
-#define NETC_ETH_LINK_PM0_IEVENT_LOC_FAULT_MASK  (0x1U)
-#define NETC_ETH_LINK_PM0_IEVENT_LOC_FAULT_SHIFT (0U)
-/*! LOC_FAULT - Local fault event (XGMII) */
-#define NETC_ETH_LINK_PM0_IEVENT_LOC_FAULT(x)    (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_IEVENT_LOC_FAULT_SHIFT)) & NETC_ETH_LINK_PM0_IEVENT_LOC_FAULT_MASK)
-
-#define NETC_ETH_LINK_PM0_IEVENT_REM_FAULT_MASK  (0x2U)
-#define NETC_ETH_LINK_PM0_IEVENT_REM_FAULT_SHIFT (1U)
-/*! REM_FAULT - Remote fault event (XGMII) */
-#define NETC_ETH_LINK_PM0_IEVENT_REM_FAULT(x)    (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_IEVENT_REM_FAULT_SHIFT)) & NETC_ETH_LINK_PM0_IEVENT_REM_FAULT_MASK)
-
 #define NETC_ETH_LINK_PM0_IEVENT_RX_LOWP_MASK    (0x10U)
 #define NETC_ETH_LINK_PM0_IEVENT_RX_LOWP_SHIFT   (4U)
 /*! RX_LOWP - Low Power Idle event */
@@ -783,10 +611,10 @@ typedef struct {
 /*! RX_EMPTY - Receive idle event */
 #define NETC_ETH_LINK_PM0_IEVENT_RX_EMPTY(x)     (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_IEVENT_RX_EMPTY_SHIFT)) & NETC_ETH_LINK_PM0_IEVENT_RX_EMPTY_MASK)
 
-#define NETC_ETH_LINK_PM0_IEVENT_LI_FAULT_MASK   (0x80U)
-#define NETC_ETH_LINK_PM0_IEVENT_LI_FAULT_SHIFT  (7U)
-/*! LI_FAULT - Link Interruption fault event (XGMII) */
-#define NETC_ETH_LINK_PM0_IEVENT_LI_FAULT(x)     (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_IEVENT_LI_FAULT_SHIFT)) & NETC_ETH_LINK_PM0_IEVENT_LI_FAULT_MASK)
+#define NETC_ETH_LINK_PM0_IEVENT_TX_LOWP_MASK    (0x300U)
+#define NETC_ETH_LINK_PM0_IEVENT_TX_LOWP_SHIFT   (8U)
+/*! TX_LOWP - Transmit low power status */
+#define NETC_ETH_LINK_PM0_IEVENT_TX_LOWP(x)      (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_IEVENT_TX_LOWP_SHIFT)) & NETC_ETH_LINK_PM0_IEVENT_TX_LOWP_MASK)
 
 #define NETC_ETH_LINK_PM0_IEVENT_TX_OVFL_MASK    (0x400U)
 #define NETC_ETH_LINK_PM0_IEVENT_TX_OVFL_SHIFT   (10U)
@@ -849,18 +677,27 @@ typedef struct {
 #define NETC_ETH_LINK_PM0_IEVENT_MRG_AERR(x)     (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_IEVENT_MRG_AERR_SHIFT)) & NETC_ETH_LINK_PM0_IEVENT_MRG_AERR_MASK)
 /*! @} */
 
-/*! @name PM0_IMASK - Port MAC 0 Interrupt Mask Register(INT_MASK) */
+/*! @name PM0_TX_IPG_PREAMBLE - Port MAC 0 Transmit Inter-Packet Gap Length and Flexible Preamble length Register */
 /*! @{ */
 
-#define NETC_ETH_LINK_PM0_IMASK_LOC_FAULT_MASK   (0x1U)
-#define NETC_ETH_LINK_PM0_IMASK_LOC_FAULT_SHIFT  (0U)
-/*! LOC_FAULT - Local fault event (XGMII) mask */
-#define NETC_ETH_LINK_PM0_IMASK_LOC_FAULT(x)     (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_IMASK_LOC_FAULT_SHIFT)) & NETC_ETH_LINK_PM0_IMASK_LOC_FAULT_MASK)
+#define NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_IPG_LEN_MASK (0x7FU)
+#define NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_IPG_LEN_SHIFT (0U)
+/*! IPG_LEN - Transmit inter-packet gap value */
+#define NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_IPG_LEN(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_IPG_LEN_SHIFT)) & NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_IPG_LEN_MASK)
 
-#define NETC_ETH_LINK_PM0_IMASK_REM_FAULT_MASK   (0x2U)
-#define NETC_ETH_LINK_PM0_IMASK_REM_FAULT_SHIFT  (1U)
-/*! REM_FAULT - Remote fault event (XGMII) mask */
-#define NETC_ETH_LINK_PM0_IMASK_REM_FAULT(x)     (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_IMASK_REM_FAULT_SHIFT)) & NETC_ETH_LINK_PM0_IMASK_REM_FAULT_MASK)
+#define NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_CNT_MASK (0x700U)
+#define NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_CNT_SHIFT (8U)
+/*! FLEX_PREAMBLE_CNT - Flexible Preamble Count */
+#define NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_CNT(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_CNT_SHIFT)) & NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_CNT_MASK)
+
+#define NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_EN_MASK (0x80000000U)
+#define NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_EN_SHIFT (31U)
+/*! FLEX_PREAMBLE_EN - Enable Flexible Preamble Count */
+#define NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_EN(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_EN_SHIFT)) & NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_EN_MASK)
+/*! @} */
+
+/*! @name PM0_IMASK - Port MAC 0 Interrupt Mask Register(INT_MASK) */
+/*! @{ */
 
 #define NETC_ETH_LINK_PM0_IMASK_LI_FAULT_MASK    (0x80U)
 #define NETC_ETH_LINK_PM0_IMASK_LI_FAULT_SHIFT   (7U)
@@ -1253,6 +1090,17 @@ typedef struct {
 #define NETC_ETH_LINK_PM0_RDRNTPN_RDRNTPn(x)     (((uint64_t)(((uint64_t)(x)) << NETC_ETH_LINK_PM0_RDRNTPN_RDRNTPn_SHIFT)) & NETC_ETH_LINK_PM0_RDRNTPN_RDRNTPn_MASK)
 /*! @} */
 
+/*! @name PM0_RMIN63N - Port MAC 0 Receive Valid Small Packet Counter Register */
+/*! @{ */
+
+#define NETC_ETH_LINK_PM0_RMIN63N_RMIN63n_MASK   (0xFFFFFFFFFFFFFFFFU)
+#define NETC_ETH_LINK_PM0_RMIN63N_RMIN63n_SHIFT  (0U)
+/*! RMIN63n - Incremented for each valid small packet less than 64B but greater or equal to the
+ *    length programmed in PMa_MINFRM register
+ */
+#define NETC_ETH_LINK_PM0_RMIN63N_RMIN63n(x)     (((uint64_t)(((uint64_t)(x)) << NETC_ETH_LINK_PM0_RMIN63N_RMIN63n_SHIFT)) & NETC_ETH_LINK_PM0_RMIN63N_RMIN63n_MASK)
+/*! @} */
+
 /*! @name PM0_TEOCTN - Port MAC 0 Transmit Ethernet Octets Counter(etherStatsOctetsn) */
 /*! @{ */
 
@@ -1497,10 +1345,6 @@ typedef struct {
 
 #define NETC_ETH_LINK_PM0_IF_MODE_M10_MASK       (0x10U)
 #define NETC_ETH_LINK_PM0_IF_MODE_M10_SHIFT      (4U)
-/*! M10
- *  0b0..100 Mbps
- *  0b1..10 Mbps
- */
 #define NETC_ETH_LINK_PM0_IF_MODE_M10(x)         (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_IF_MODE_M10_SHIFT)) & NETC_ETH_LINK_PM0_IF_MODE_M10_MASK)
 
 #define NETC_ETH_LINK_PM0_IF_MODE_HD_MASK        (0x40U)
@@ -1605,6 +1449,11 @@ typedef struct {
 /*! TXP - Enable padding of frames in transmit direction (1, default). */
 #define NETC_ETH_LINK_PM1_COMMAND_CONFIG_TXP(x)  (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_COMMAND_CONFIG_TXP_SHIFT)) & NETC_ETH_LINK_PM1_COMMAND_CONFIG_TXP_MASK)
 
+#define NETC_ETH_LINK_PM1_COMMAND_CONFIG_HD_FCEN_MASK (0x40000U)
+#define NETC_ETH_LINK_PM1_COMMAND_CONFIG_HD_FCEN_SHIFT (18U)
+/*! HD_FCEN - Half Duplex Flow Control Enable */
+#define NETC_ETH_LINK_PM1_COMMAND_CONFIG_HD_FCEN(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_COMMAND_CONFIG_HD_FCEN_SHIFT)) & NETC_ETH_LINK_PM1_COMMAND_CONFIG_HD_FCEN_MASK)
+
 #define NETC_ETH_LINK_PM1_COMMAND_CONFIG_TX_FLUSH_MASK (0x400000U)
 #define NETC_ETH_LINK_PM1_COMMAND_CONFIG_TX_FLUSH_SHIFT (22U)
 /*! TX_FLUSH - Tx flush */
@@ -1618,6 +1467,11 @@ typedef struct {
  *       line. It is advised to inspect IEVENT[TX_EMPTY] is set before enabling the LPI.
  */
 #define NETC_ETH_LINK_PM1_COMMAND_CONFIG_TX_LOWP_ENA(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_COMMAND_CONFIG_TX_LOWP_ENA_SHIFT)) & NETC_ETH_LINK_PM1_COMMAND_CONFIG_TX_LOWP_ENA_MASK)
+
+#define NETC_ETH_LINK_PM1_COMMAND_CONFIG_REG_LOWP_RXETY_MASK (0x1000000U)
+#define NETC_ETH_LINK_PM1_COMMAND_CONFIG_REG_LOWP_RXETY_SHIFT (24U)
+/*! REG_LOWP_RXETY - Rx low power empty indicator */
+#define NETC_ETH_LINK_PM1_COMMAND_CONFIG_REG_LOWP_RXETY(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_COMMAND_CONFIG_REG_LOWP_RXETY_SHIFT)) & NETC_ETH_LINK_PM1_COMMAND_CONFIG_REG_LOWP_RXETY_MASK)
 
 #define NETC_ETH_LINK_PM1_COMMAND_CONFIG_SWR_MASK (0x4000000U)
 #define NETC_ETH_LINK_PM1_COMMAND_CONFIG_SWR_SHIFT (26U)
@@ -1672,6 +1526,15 @@ typedef struct {
 #define NETC_ETH_LINK_PM1_MAXFRM_TX_MTU(x)       (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_MAXFRM_TX_MTU_SHIFT)) & NETC_ETH_LINK_PM1_MAXFRM_TX_MTU_MASK)
 /*! @} */
 
+/*! @name PM1_MINFRM - Port MAC 1 Minimum Frame Length Register */
+/*! @{ */
+
+#define NETC_ETH_LINK_PM1_MINFRM_NUM_BYTES_MASK  (0x7FU)
+#define NETC_ETH_LINK_PM1_MINFRM_NUM_BYTES_SHIFT (0U)
+/*! NUM_BYTES - Receive Minimum Frame Length size in bytes. */
+#define NETC_ETH_LINK_PM1_MINFRM_NUM_BYTES(x)    (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_MINFRM_NUM_BYTES_SHIFT)) & NETC_ETH_LINK_PM1_MINFRM_NUM_BYTES_MASK)
+/*! @} */
+
 /*! @name PM1_IEVENT - Port MAC 1 Interrupt Event Register */
 /*! @{ */
 
@@ -1684,6 +1547,11 @@ typedef struct {
 #define NETC_ETH_LINK_PM1_IEVENT_RX_EMPTY_SHIFT  (6U)
 /*! RX_EMPTY - Receive idle event */
 #define NETC_ETH_LINK_PM1_IEVENT_RX_EMPTY(x)     (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_IEVENT_RX_EMPTY_SHIFT)) & NETC_ETH_LINK_PM1_IEVENT_RX_EMPTY_MASK)
+
+#define NETC_ETH_LINK_PM1_IEVENT_TX_LOWP_MASK    (0x300U)
+#define NETC_ETH_LINK_PM1_IEVENT_TX_LOWP_SHIFT   (8U)
+/*! TX_LOWP - Transmit low power status */
+#define NETC_ETH_LINK_PM1_IEVENT_TX_LOWP(x)      (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_IEVENT_TX_LOWP_SHIFT)) & NETC_ETH_LINK_PM1_IEVENT_TX_LOWP_MASK)
 
 #define NETC_ETH_LINK_PM1_IEVENT_TX_OVFL_MASK    (0x400U)
 #define NETC_ETH_LINK_PM1_IEVENT_TX_OVFL_SHIFT   (10U)
@@ -1720,6 +1588,21 @@ typedef struct {
 /*! SPD_DUP - Speed/Duplex Change */
 #define NETC_ETH_LINK_PM1_IEVENT_SPD_DUP(x)      (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_IEVENT_SPD_DUP_SHIFT)) & NETC_ETH_LINK_PM1_IEVENT_SPD_DUP_MASK)
 
+#define NETC_ETH_LINK_PM1_IEVENT_LINK_UP_MASK    (0x1000000U)
+#define NETC_ETH_LINK_PM1_IEVENT_LINK_UP_SHIFT   (24U)
+/*! LINK_UP - Link Up */
+#define NETC_ETH_LINK_PM1_IEVENT_LINK_UP(x)      (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_IEVENT_LINK_UP_SHIFT)) & NETC_ETH_LINK_PM1_IEVENT_LINK_UP_MASK)
+
+#define NETC_ETH_LINK_PM1_IEVENT_LINK_DOWN_MASK  (0x2000000U)
+#define NETC_ETH_LINK_PM1_IEVENT_LINK_DOWN_SHIFT (25U)
+/*! LINK_DOWN - Link Down */
+#define NETC_ETH_LINK_PM1_IEVENT_LINK_DOWN(x)    (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_IEVENT_LINK_DOWN_SHIFT)) & NETC_ETH_LINK_PM1_IEVENT_LINK_DOWN_MASK)
+
+#define NETC_ETH_LINK_PM1_IEVENT_AN_DONE_MASK    (0x4000000U)
+#define NETC_ETH_LINK_PM1_IEVENT_AN_DONE_SHIFT   (26U)
+/*! AN_DONE - Auto-Negotiation Done */
+#define NETC_ETH_LINK_PM1_IEVENT_AN_DONE(x)      (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_IEVENT_AN_DONE_SHIFT)) & NETC_ETH_LINK_PM1_IEVENT_AN_DONE_MASK)
+
 #define NETC_ETH_LINK_PM1_IEVENT_MRG_SERR_MASK   (0x8000000U)
 #define NETC_ETH_LINK_PM1_IEVENT_MRG_SERR_SHIFT  (27U)
 /*! MRG_SERR - MAC merge frame SMD error received event */
@@ -1731,8 +1614,32 @@ typedef struct {
 #define NETC_ETH_LINK_PM1_IEVENT_MRG_AERR(x)     (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_IEVENT_MRG_AERR_SHIFT)) & NETC_ETH_LINK_PM1_IEVENT_MRG_AERR_MASK)
 /*! @} */
 
+/*! @name PM1_TX_IPG_PREAMBLE - Port MAC 1 Transmit Inter-Packet Gap Length and Flexible Preamble length Register */
+/*! @{ */
+
+#define NETC_ETH_LINK_PM1_TX_IPG_PREAMBLE_IPG_LEN_MASK (0x7FU)
+#define NETC_ETH_LINK_PM1_TX_IPG_PREAMBLE_IPG_LEN_SHIFT (0U)
+/*! IPG_LEN - Transmit inter-packet gap value */
+#define NETC_ETH_LINK_PM1_TX_IPG_PREAMBLE_IPG_LEN(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_TX_IPG_PREAMBLE_IPG_LEN_SHIFT)) & NETC_ETH_LINK_PM1_TX_IPG_PREAMBLE_IPG_LEN_MASK)
+
+#define NETC_ETH_LINK_PM1_TX_IPG_PREAMBLE_FLEX_PREAMBLE_CNT_MASK (0x700U)
+#define NETC_ETH_LINK_PM1_TX_IPG_PREAMBLE_FLEX_PREAMBLE_CNT_SHIFT (8U)
+/*! FLEX_PREAMBLE_CNT - Flexible Preamble Count */
+#define NETC_ETH_LINK_PM1_TX_IPG_PREAMBLE_FLEX_PREAMBLE_CNT(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_TX_IPG_PREAMBLE_FLEX_PREAMBLE_CNT_SHIFT)) & NETC_ETH_LINK_PM1_TX_IPG_PREAMBLE_FLEX_PREAMBLE_CNT_MASK)
+
+#define NETC_ETH_LINK_PM1_TX_IPG_PREAMBLE_FLEX_PREAMBLE_EN_MASK (0x80000000U)
+#define NETC_ETH_LINK_PM1_TX_IPG_PREAMBLE_FLEX_PREAMBLE_EN_SHIFT (31U)
+/*! FLEX_PREAMBLE_EN - Enable Flexible Preamble Count */
+#define NETC_ETH_LINK_PM1_TX_IPG_PREAMBLE_FLEX_PREAMBLE_EN(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_TX_IPG_PREAMBLE_FLEX_PREAMBLE_EN_SHIFT)) & NETC_ETH_LINK_PM1_TX_IPG_PREAMBLE_FLEX_PREAMBLE_EN_MASK)
+/*! @} */
+
 /*! @name PM1_IMASK - Port MAC 1 Interrupt Mask Register(INT_MASK) */
 /*! @{ */
+
+#define NETC_ETH_LINK_PM1_IMASK_LI_FAULT_MASK    (0x80U)
+#define NETC_ETH_LINK_PM1_IMASK_LI_FAULT_SHIFT   (7U)
+/*! LI_FAULT - Link Interruption fault (XGMII) event mask */
+#define NETC_ETH_LINK_PM1_IMASK_LI_FAULT(x)      (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_IMASK_LI_FAULT_SHIFT)) & NETC_ETH_LINK_PM1_IMASK_LI_FAULT_MASK)
 
 #define NETC_ETH_LINK_PM1_IMASK_MGI_MASK         (0x4000U)
 #define NETC_ETH_LINK_PM1_IMASK_MGI_SHIFT        (14U)
@@ -1753,6 +1660,21 @@ typedef struct {
 #define NETC_ETH_LINK_PM1_IMASK_SPD_DUP_SHIFT    (23U)
 /*! SPD_DUP - Speed/Duplex change event mask. */
 #define NETC_ETH_LINK_PM1_IMASK_SPD_DUP(x)       (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_IMASK_SPD_DUP_SHIFT)) & NETC_ETH_LINK_PM1_IMASK_SPD_DUP_MASK)
+
+#define NETC_ETH_LINK_PM1_IMASK_LINK_UP_MASK     (0x1000000U)
+#define NETC_ETH_LINK_PM1_IMASK_LINK_UP_SHIFT    (24U)
+/*! LINK_UP - Link Up */
+#define NETC_ETH_LINK_PM1_IMASK_LINK_UP(x)       (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_IMASK_LINK_UP_SHIFT)) & NETC_ETH_LINK_PM1_IMASK_LINK_UP_MASK)
+
+#define NETC_ETH_LINK_PM1_IMASK_LINK_DOWN_MASK   (0x2000000U)
+#define NETC_ETH_LINK_PM1_IMASK_LINK_DOWN_SHIFT  (25U)
+/*! LINK_DOWN - Link Down */
+#define NETC_ETH_LINK_PM1_IMASK_LINK_DOWN(x)     (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_IMASK_LINK_DOWN_SHIFT)) & NETC_ETH_LINK_PM1_IMASK_LINK_DOWN_MASK)
+
+#define NETC_ETH_LINK_PM1_IMASK_AN_DONE_MASK     (0x4000000U)
+#define NETC_ETH_LINK_PM1_IMASK_AN_DONE_SHIFT    (26U)
+/*! AN_DONE - Auto-Negotiation Done */
+#define NETC_ETH_LINK_PM1_IMASK_AN_DONE(x)       (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_IMASK_AN_DONE_SHIFT)) & NETC_ETH_LINK_PM1_IMASK_AN_DONE_MASK)
 
 #define NETC_ETH_LINK_PM1_IMASK_MRG_SERR_MASK    (0x8000000U)
 #define NETC_ETH_LINK_PM1_IMASK_MRG_SERR_SHIFT   (27U)
@@ -2105,6 +2027,17 @@ typedef struct {
 #define NETC_ETH_LINK_PM1_RDRNTPN_RDRNTPn(x)     (((uint64_t)(((uint64_t)(x)) << NETC_ETH_LINK_PM1_RDRNTPN_RDRNTPn_SHIFT)) & NETC_ETH_LINK_PM1_RDRNTPN_RDRNTPn_MASK)
 /*! @} */
 
+/*! @name PM1_RMIN63N - Port MAC 1 Receive Valid Small Packet Counter Register */
+/*! @{ */
+
+#define NETC_ETH_LINK_PM1_RMIN63N_RMIN63n_MASK   (0xFFFFFFFFFFFFFFFFU)
+#define NETC_ETH_LINK_PM1_RMIN63N_RMIN63n_SHIFT  (0U)
+/*! RMIN63n - Incremented for each valid small packet less than 64B but greater or equal to the
+ *    length programmed in PMa_MINFRM register
+ */
+#define NETC_ETH_LINK_PM1_RMIN63N_RMIN63n(x)     (((uint64_t)(((uint64_t)(x)) << NETC_ETH_LINK_PM1_RMIN63N_RMIN63n_SHIFT)) & NETC_ETH_LINK_PM1_RMIN63N_RMIN63n_MASK)
+/*! @} */
+
 /*! @name PM1_TEOCTN - Port MAC 1 Transmit Ethernet Octets Counter(etherStatsOctetsn) */
 /*! @{ */
 
@@ -2349,10 +2282,6 @@ typedef struct {
 
 #define NETC_ETH_LINK_PM1_IF_MODE_M10_MASK       (0x10U)
 #define NETC_ETH_LINK_PM1_IF_MODE_M10_SHIFT      (4U)
-/*! M10
- *  0b0..100 Mbps
- *  0b1..10 Mbps
- */
 #define NETC_ETH_LINK_PM1_IF_MODE_M10(x)         (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_IF_MODE_M10_SHIFT)) & NETC_ETH_LINK_PM1_IF_MODE_M10_MASK)
 
 #define NETC_ETH_LINK_PM1_IF_MODE_HD_MASK        (0x40U)

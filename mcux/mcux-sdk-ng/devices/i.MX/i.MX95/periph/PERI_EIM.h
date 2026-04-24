@@ -247,14 +247,14 @@
 **                          MIMX95N6XVZXN_cm33
 **                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 3.0, 2025-11-24
-**     Build:               b251124
+**     Version:             rev. 4.0, 2026-02-28
+**     Build:               b260305
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for EIM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -268,14 +268,16 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-11-24)
 **         Header RFP.
+**     - rev. 4.0 (2026-02-28)
+**         Update Interrupts mapping.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_EIM.h
- * @version 3.0
- * @date 2025-11-24
+ * @version 4.0
+ * @date 2026-02-28
  * @brief CMSIS Peripheral Access Layer for EIM
  *
  * CMSIS Peripheral Access Layer for EIM
@@ -409,60 +411,57 @@ typedef struct {
   __IO uint32_t EIMCR;                             /**< Error Injection Module Configuration Register, offset: 0x0 */
   __IO uint32_t EICHEN;                            /**< Error Injection Channel Enable register, offset: 0x4 */
        uint8_t RESERVED_0[248];
-  __IO uint32_t EICHD0_WORD0;                      /**< Error Injection Channel Descriptor 0, Word0, offset: 0x100 */
+  __IO uint32_t EICHD0_WORD0;                      /**< Error Injection Channel Descriptor 0, Word0, offset: 0x100, not available in all instances (available on 328 out of 410) */
   __IO uint32_t EICHD0_WORD1;                      /**< Error Injection Channel Descriptor 0, Word1, offset: 0x104 */
-  __IO uint32_t EICHD0_WORD2;                      /**< Error Injection Channel Descriptor 0, Word2, offset: 0x108 */
-  __IO uint32_t EICHD0_WORD3;                      /**< Error Injection Channel Descriptor 0, Word3, offset: 0x10C, not available in all instances (available on 82 out of 328) */
-  __IO uint32_t EICHD0_WORD4;                      /**< Error Injection Channel Descriptor 0, Word4, offset: 0x110, not available in all instances (available on 82 out of 328) */
+  __IO uint32_t EICHD0_WORD2;                      /**< Error Injection Channel Descriptor 0, Word2, offset: 0x108, not available in all instances (available on 328 out of 410) */
+  __IO uint32_t EICHD0_WORD3;                      /**< Error Injection Channel Descriptor 0, Word3, offset: 0x10C, not available in all instances (available on 82 out of 410) */
+  __IO uint32_t EICHD0_WORD4;                      /**< Error Injection Channel Descriptor 0, Word4, offset: 0x110, not available in all instances (available on 82 out of 410) */
        uint8_t RESERVED_1[44];
-  __IO uint32_t EICHD1_WORD0;                      /**< Error Injection Channel Descriptor 1, Word0, offset: 0x140 */
-  __IO uint32_t EICHD1_WORD1;                      /**< Error Injection Channel Descriptor 1, Word1, offset: 0x144 */
-  __IO uint32_t EICHD1_WORD2;                      /**< Error Injection Channel Descriptor 1, Word2, offset: 0x148, not available in all instances (available on 164 out of 328) */
-  __IO uint32_t EICHD1_WORD3;                      /**< Error Injection Channel Descriptor 1, Word3, offset: 0x14C, not available in all instances (available on 82 out of 328) */
-  __IO uint32_t EICHD1_WORD4;                      /**< Error Injection Channel Descriptor 1, Word4, offset: 0x150, not available in all instances (available on 82 out of 328) */
+  __IO uint32_t EICHD1_WORD0;                      /**< Error Injection Channel Descriptor 1, Word0, offset: 0x140, not available in all instances (available on 328 out of 410) */
+  __IO uint32_t EICHD1_WORD1;                      /**< Error Injection Channel Descriptor 1, Word1, offset: 0x144, not available in all instances (available on 328 out of 410) */
+  __IO uint32_t EICHD1_WORD2;                      /**< Error Injection Channel Descriptor 1, Word2, offset: 0x148, not available in all instances (available on 164 out of 410) */
+  __IO uint32_t EICHD1_WORD3;                      /**< Error Injection Channel Descriptor 1, Word3, offset: 0x14C, not available in all instances (available on 82 out of 410) */
+  __IO uint32_t EICHD1_WORD4;                      /**< Error Injection Channel Descriptor 1, Word4, offset: 0x150, not available in all instances (available on 82 out of 410) */
        uint8_t RESERVED_2[44];
-  __IO uint32_t EICHD2_WORD0;                      /**< Error Injection Channel Descriptor 2, Word0, offset: 0x180, not available in all instances (available on 246 out of 328) */
-  __IO uint32_t EICHD2_WORD1;                      /**< Error Injection Channel Descriptor 2, Word1, offset: 0x184, not available in all instances (available on 246 out of 328) */
-  __IO uint32_t EICHD2_WORD2;                      /**< Error Injection Channel Descriptor 2, Word2, offset: 0x188, not available in all instances (available on 164 out of 328) */
-  __IO uint32_t EICHD2_WORD3;                      /**< Error Injection Channel Descriptor 2, Word3, offset: 0x18C, not available in all instances (available on 82 out of 328) */
-  __IO uint32_t EICHD2_WORD4;                      /**< Error Injection Channel Descriptor 2, Word4, offset: 0x190, not available in all instances (available on 82 out of 328) */
+  __IO uint32_t EICHD2_WORD0;                      /**< Error Injection Channel Descriptor 2, Word0, offset: 0x180, not available in all instances (available on 246 out of 410) */
+  __IO uint32_t EICHD2_WORD1;                      /**< Error Injection Channel Descriptor 2, Word1, offset: 0x184, not available in all instances (available on 164 out of 410) */
+  __IO uint32_t EICHD2_WORD2;                      /**< Error Injection Channel Descriptor 2, Word2, offset: 0x188, not available in all instances (available on 164 out of 410) */
+  __IO uint32_t EICHD2_WORD3;                      /**< Error Injection Channel Descriptor 2, Word3, offset: 0x18C, not available in all instances (available on 82 out of 410) */
+  __IO uint32_t EICHD2_WORD4;                      /**< Error Injection Channel Descriptor 2, Word4, offset: 0x190, not available in all instances (available on 82 out of 410) */
        uint8_t RESERVED_3[44];
-  __IO uint32_t EICHD3_WORD0;                      /**< Error Injection Channel Descriptor 3, Word0, offset: 0x1C0, not available in all instances (available on 164 out of 328) */
-  __IO uint32_t EICHD3_WORD1;                      /**< Error Injection Channel Descriptor 3, Word1, offset: 0x1C4, not available in all instances (available on 164 out of 328) */
-  __IO uint32_t EICHD3_WORD2;                      /**< Error Injection Channel Descriptor 3, Word2, offset: 0x1C8, not available in all instances (available on 164 out of 328) */
-  __IO uint32_t EICHD3_WORD3;                      /**< Error Injection Channel Descriptor 3, Word3, offset: 0x1CC, not available in all instances (available on 82 out of 328) */
-  __IO uint32_t EICHD3_WORD4;                      /**< Error Injection Channel Descriptor 3, Word4, offset: 0x1D0, not available in all instances (available on 82 out of 328) */
+  __IO uint32_t EICHD3_WORD0;                      /**< Error Injection Channel Descriptor 3, Word0, offset: 0x1C0, not available in all instances (available on 164 out of 410) */
+  __IO uint32_t EICHD3_WORD1;                      /**< Error Injection Channel Descriptor 3, Word1, offset: 0x1C4, not available in all instances (available on 164 out of 410) */
+  __IO uint32_t EICHD3_WORD2;                      /**< Error Injection Channel Descriptor 3, Word2, offset: 0x1C8, not available in all instances (available on 164 out of 410) */
+  __IO uint32_t EICHD3_WORD3;                      /**< Error Injection Channel Descriptor 3, Word3, offset: 0x1CC, not available in all instances (available on 82 out of 410) */
+  __IO uint32_t EICHD3_WORD4;                      /**< Error Injection Channel Descriptor 3, Word4, offset: 0x1D0, not available in all instances (available on 82 out of 410) */
        uint8_t RESERVED_4[44];
-  __IO uint32_t EICHD4_WORD0;                      /**< Error Injection Channel Descriptor 4, Word0, offset: 0x200, not available in all instances (available on 164 out of 328) */
-  __IO uint32_t EICHD4_WORD1;                      /**< Error Injection Channel Descriptor 4, Word1, offset: 0x204, not available in all instances (available on 246 out of 328) */
-  __IO uint32_t EICHD4_WORD2;                      /**< Error Injection Channel Descriptor 4, Word2, offset: 0x208, not available in all instances (available on 82 out of 328) */
-  __IO uint32_t EICHD4_WORD3;                      /**< Error Injection Channel Descriptor 4, Word3, offset: 0x20C, not available in all instances (available on 82 out of 328) */
-  __IO uint32_t EICHD4_WORD4;                      /**< Error Injection Channel Descriptor 4, Word4, offset: 0x210, not available in all instances (available on 82 out of 328) */
+  __IO uint32_t EICHD4_WORD0;                      /**< Error Injection Channel Descriptor 4, Word0, offset: 0x200, not available in all instances (available on 164 out of 410) */
+  __IO uint32_t EICHD4_WORD1;                      /**< Error Injection Channel Descriptor 4, Word1, offset: 0x204, not available in all instances (available on 246 out of 410) */
+  __IO uint32_t EICHD4_WORD2;                      /**< Error Injection Channel Descriptor 4, Word2, offset: 0x208, not available in all instances (available on 82 out of 410) */
+  __IO uint32_t EICHD4_WORD3;                      /**< Error Injection Channel Descriptor 4, Word3, offset: 0x20C, not available in all instances (available on 82 out of 410) */
+  __IO uint32_t EICHD4_WORD4;                      /**< Error Injection Channel Descriptor 4, Word4, offset: 0x210, not available in all instances (available on 82 out of 410) */
        uint8_t RESERVED_5[44];
-  __IO uint32_t EICHD5_WORD0;                      /**< Error Injection Channel Descriptor 5, Word0, offset: 0x240, not available in all instances (available on 164 out of 328) */
-  __IO uint32_t EICHD5_WORD1;                      /**< Error Injection Channel Descriptor 5, Word1, offset: 0x244, not available in all instances (available on 246 out of 328) */
+  __IO uint32_t EICHD5_WORD0;                      /**< Error Injection Channel Descriptor 5, Word0, offset: 0x240, not available in all instances (available on 164 out of 410) */
+  __IO uint32_t EICHD5_WORD1;                      /**< Error Injection Channel Descriptor 5, Word1, offset: 0x244, not available in all instances (available on 246 out of 410) */
        uint8_t RESERVED_6[56];
-  __IO uint32_t EICHD6_WORD0;                      /**< Error Injection Channel Descriptor 6, Word0, offset: 0x280, not available in all instances (available on 164 out of 328) */
-  __IO uint32_t EICHD6_WORD1;                      /**< Error Injection Channel Descriptor 6, Word1, offset: 0x284, not available in all instances (available on 246 out of 328) */
+  __IO uint32_t EICHD6_WORD0;                      /**< Error Injection Channel Descriptor 6, Word0, offset: 0x280, not available in all instances (available on 164 out of 410) */
+  __IO uint32_t EICHD6_WORD1;                      /**< Error Injection Channel Descriptor 6, Word1, offset: 0x284, not available in all instances (available on 246 out of 410) */
        uint8_t RESERVED_7[56];
-  __IO uint32_t EICHD7_WORD0;                      /**< Error Injection Channel Descriptor 7, Word0, offset: 0x2C0, not available in all instances (available on 164 out of 328) */
-  __IO uint32_t EICHD7_WORD1;                      /**< Error Injection Channel Descriptor 7, Word1, offset: 0x2C4, not available in all instances (available on 164 out of 328) */
-  __IO uint32_t EICHD7_WORD2;                      /**< Error Injection Channel Descriptor 7, Word2, offset: 0x2C8, not available in all instances (available on 82 out of 328) */
+  __IO uint32_t EICHD7_WORD0;                      /**< Error Injection Channel Descriptor 7, Word0, offset: 0x2C0, not available in all instances (available on 164 out of 410) */
+  __IO uint32_t EICHD7_WORD1;                      /**< Error Injection Channel Descriptor 7, Word1, offset: 0x2C4, not available in all instances (available on 164 out of 410) */
+  __IO uint32_t EICHD7_WORD2;                      /**< Error Injection Channel Descriptor 7, Word2, offset: 0x2C8, not available in all instances (available on 82 out of 410) */
        uint8_t RESERVED_8[52];
-  __IO uint32_t EICHD8_WORD0;                      /**< Error Injection Channel Descriptor 8, Word0, offset: 0x300, not available in all instances (available on 164 out of 328) */
-  __IO uint32_t EICHD8_WORD1;                      /**< Error Injection Channel Descriptor 8, Word1, offset: 0x304, not available in all instances (available on 164 out of 328) */
+  __IO uint32_t EICHD8_WORD0;                      /**< Error Injection Channel Descriptor 8, Word0, offset: 0x300, not available in all instances (available on 164 out of 410) */
+  __IO uint32_t EICHD8_WORD1;                      /**< Error Injection Channel Descriptor 8, Word1, offset: 0x304, not available in all instances (available on 82 out of 410) */
        uint8_t RESERVED_9[56];
-  __IO uint32_t EICHD9_WORD0;                      /**< Error Injection Channel Descriptor 9, Word0, offset: 0x340, not available in all instances (available on 82 out of 328) */
-  __IO uint32_t EICHD9_WORD1;                      /**< Error Injection Channel Descriptor 9, Word1, offset: 0x344, not available in all instances (available on 82 out of 328) */
+  __IO uint32_t EICHD9_WORD0;                      /**< Error Injection Channel Descriptor 9, Word0, offset: 0x340, not available in all instances (available on 82 out of 410) */
+  __IO uint32_t EICHD9_WORD1;                      /**< Error Injection Channel Descriptor 9, Word1, offset: 0x344, not available in all instances (available on 82 out of 410) */
        uint8_t RESERVED_10[56];
-  __IO uint32_t EICHD10_WORD0;                     /**< Error Injection Channel Descriptor 10, Word0, offset: 0x380, not available in all instances (available on 82 out of 328) */
-  __IO uint32_t EICHD10_WORD1;                     /**< Error Injection Channel Descriptor 10, Word1, offset: 0x384, not available in all instances (available on 82 out of 328) */
-       uint8_t RESERVED_11[56];
-  __IO uint32_t EICHD11_WORD0;                     /**< Error Injection Channel Descriptor 11, Word0, offset: 0x3C0, not available in all instances (available on 82 out of 328) */
-  __IO uint32_t EICHD11_WORD1;                     /**< Error Injection Channel Descriptor 11, Word1, offset: 0x3C4, not available in all instances (available on 82 out of 328) */
-       uint8_t RESERVED_12[56];
-  __IO uint32_t EICHD12_WORD0;                     /**< Error Injection Channel Descriptor 12, Word0, offset: 0x400, not available in all instances (available on 82 out of 328) */
-  __IO uint32_t EICHD12_WORD1;                     /**< Error Injection Channel Descriptor 12, Word1, offset: 0x404, not available in all instances (available on 82 out of 328) */
+  __IO uint32_t EICHD10_WORD0;                     /**< Error Injection Channel Descriptor 10, Word0, offset: 0x380, not available in all instances (available on 82 out of 410) */
+       uint8_t RESERVED_11[60];
+  __IO uint32_t EICHD11_WORD0;                     /**< Error Injection Channel Descriptor 11, Word0, offset: 0x3C0, not available in all instances (available on 82 out of 410) */
+       uint8_t RESERVED_12[60];
+  __IO uint32_t EICHD12_WORD0;                     /**< Error Injection Channel Descriptor 12, Word0, offset: 0x400, not available in all instances (available on 82 out of 410) */
 } EIM_Type;
 
 /* ----------------------------------------------------------------------------
@@ -606,10 +605,10 @@ typedef struct {
 /*! @name EICHD0_WORD1 - Error Injection Channel Descriptor 0, Word1 */
 /*! @{ */
 
-#define EIM_EICHD0_WORD1_B0_3DATA_MASK_MASK      (0xFFFFFFFFU)  /* Merged from fields with different position or width, of widths (4, 12, 32), largest definition used */
+#define EIM_EICHD0_WORD1_B0_3DATA_MASK_MASK      (0xFFFFFFFFU)  /* Merged from fields with different position or width, of widths (4, 5, 12, 32), largest definition used */
 #define EIM_EICHD0_WORD1_B0_3DATA_MASK_SHIFT     (0U)
 /*! B0_3DATA_MASK - Data Mask Field */
-#define EIM_EICHD0_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD0_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD0_WORD1_B0_3DATA_MASK_MASK)  /* Merged from fields with different position or width, of widths (4, 12, 32), largest definition used */
+#define EIM_EICHD0_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD0_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD0_WORD1_B0_3DATA_MASK_MASK)  /* Merged from fields with different position or width, of widths (4, 5, 12, 32), largest definition used */
 /*! @} */
 
 /*! @name EICHD0_WORD2 - Error Injection Channel Descriptor 0, Word2 */
@@ -642,19 +641,19 @@ typedef struct {
 /*! @name EICHD1_WORD0 - Error Injection Channel Descriptor 1, Word0 */
 /*! @{ */
 
-#define EIM_EICHD1_WORD0_CHKBIT_MASK_MASK        (0xFFFF0000U)  /* Merged from fields with different position or width, of widths (1, 8, 16), largest definition used */
+#define EIM_EICHD1_WORD0_CHKBIT_MASK_MASK        (0xFFFF0000U)  /* Merged from fields with different position or width, of widths (1, 5, 8, 16), largest definition used */
 #define EIM_EICHD1_WORD0_CHKBIT_MASK_SHIFT       (16U)
 /*! CHKBIT_MASK - Checkbit Mask */
-#define EIM_EICHD1_WORD0_CHKBIT_MASK(x)          (((uint32_t)(((uint32_t)(x)) << EIM_EICHD1_WORD0_CHKBIT_MASK_SHIFT)) & EIM_EICHD1_WORD0_CHKBIT_MASK_MASK)  /* Merged from fields with different position or width, of widths (1, 8, 16), largest definition used */
+#define EIM_EICHD1_WORD0_CHKBIT_MASK(x)          (((uint32_t)(((uint32_t)(x)) << EIM_EICHD1_WORD0_CHKBIT_MASK_SHIFT)) & EIM_EICHD1_WORD0_CHKBIT_MASK_MASK)  /* Merged from fields with different position or width, of widths (1, 5, 8, 16), largest definition used */
 /*! @} */
 
 /*! @name EICHD1_WORD1 - Error Injection Channel Descriptor 1, Word1 */
 /*! @{ */
 
-#define EIM_EICHD1_WORD1_B0_3DATA_MASK_MASK      (0xFFFFFFFFU)  /* Merged from fields with different position or width, of widths (1, 4, 32), largest definition used */
+#define EIM_EICHD1_WORD1_B0_3DATA_MASK_MASK      (0xFFFFFFFFU)  /* Merged from fields with different position or width, of widths (1, 4, 8, 32), largest definition used */
 #define EIM_EICHD1_WORD1_B0_3DATA_MASK_SHIFT     (0U)
 /*! B0_3DATA_MASK - Data Mask Field */
-#define EIM_EICHD1_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD1_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD1_WORD1_B0_3DATA_MASK_MASK)  /* Merged from fields with different position or width, of widths (1, 4, 32), largest definition used */
+#define EIM_EICHD1_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD1_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD1_WORD1_B0_3DATA_MASK_MASK)  /* Merged from fields with different position or width, of widths (1, 4, 8, 32), largest definition used */
 /*! @} */
 
 /*! @name EICHD1_WORD2 - Error Injection Channel Descriptor 1, Word2 */
@@ -687,19 +686,19 @@ typedef struct {
 /*! @name EICHD2_WORD0 - Error Injection Channel Descriptor 2, Word0 */
 /*! @{ */
 
-#define EIM_EICHD2_WORD0_CHKBIT_MASK_MASK        (0xFFFFFFF0U)  /* Merged from fields with different position or width, of widths (8, 28), largest definition used */
+#define EIM_EICHD2_WORD0_CHKBIT_MASK_MASK        (0xFFFFFFF0U)  /* Merged from fields with different position or width, of widths (2, 8, 28), largest definition used */
 #define EIM_EICHD2_WORD0_CHKBIT_MASK_SHIFT       (4U)
 /*! CHKBIT_MASK - Checkbit Mask */
-#define EIM_EICHD2_WORD0_CHKBIT_MASK(x)          (((uint32_t)(((uint32_t)(x)) << EIM_EICHD2_WORD0_CHKBIT_MASK_SHIFT)) & EIM_EICHD2_WORD0_CHKBIT_MASK_MASK)  /* Merged from fields with different position or width, of widths (8, 28), largest definition used */
+#define EIM_EICHD2_WORD0_CHKBIT_MASK(x)          (((uint32_t)(((uint32_t)(x)) << EIM_EICHD2_WORD0_CHKBIT_MASK_SHIFT)) & EIM_EICHD2_WORD0_CHKBIT_MASK_MASK)  /* Merged from fields with different position or width, of widths (2, 8, 28), largest definition used */
 /*! @} */
 
 /*! @name EICHD2_WORD1 - Error Injection Channel Descriptor 2, Word1 */
 /*! @{ */
 
-#define EIM_EICHD2_WORD1_B0_3DATA_MASK_MASK      (0xFFU)  /* Merged from fields with different position or width, of widths (1, 4, 8), largest definition used */
+#define EIM_EICHD2_WORD1_B0_3DATA_MASK_MASK      (0xFFU)  /* Merged from fields with different position or width, of widths (4, 8), largest definition used */
 #define EIM_EICHD2_WORD1_B0_3DATA_MASK_SHIFT     (0U)
 /*! B0_3DATA_MASK - Data Mask Field */
-#define EIM_EICHD2_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD2_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD2_WORD1_B0_3DATA_MASK_MASK)  /* Merged from fields with different position or width, of widths (1, 4, 8), largest definition used */
+#define EIM_EICHD2_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD2_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD2_WORD1_B0_3DATA_MASK_MASK)  /* Merged from fields with different position or width, of widths (4, 8), largest definition used */
 /*! @} */
 
 /*! @name EICHD2_WORD2 - Error Injection Channel Descriptor 2, Word2 */
@@ -894,10 +893,10 @@ typedef struct {
 /*! @name EICHD8_WORD1 - Error Injection Channel Descriptor 8, Word1 */
 /*! @{ */
 
-#define EIM_EICHD8_WORD1_B0_3DATA_MASK_MASK      (0xFFFFFFFFU)  /* Merged from fields with different position or width, of widths (1, 32), largest definition used */
+#define EIM_EICHD8_WORD1_B0_3DATA_MASK_MASK      (0xFFFFFFFFU)
 #define EIM_EICHD8_WORD1_B0_3DATA_MASK_SHIFT     (0U)
 /*! B0_3DATA_MASK - Data Mask Field */
-#define EIM_EICHD8_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD8_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD8_WORD1_B0_3DATA_MASK_MASK)  /* Merged from fields with different position or width, of widths (1, 32), largest definition used */
+#define EIM_EICHD8_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD8_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD8_WORD1_B0_3DATA_MASK_MASK)
 /*! @} */
 
 /*! @name EICHD9_WORD0 - Error Injection Channel Descriptor 9, Word0 */
@@ -927,15 +926,6 @@ typedef struct {
 #define EIM_EICHD10_WORD0_CHKBIT_MASK(x)         (((uint32_t)(((uint32_t)(x)) << EIM_EICHD10_WORD0_CHKBIT_MASK_SHIFT)) & EIM_EICHD10_WORD0_CHKBIT_MASK_MASK)
 /*! @} */
 
-/*! @name EICHD10_WORD1 - Error Injection Channel Descriptor 10, Word1 */
-/*! @{ */
-
-#define EIM_EICHD10_WORD1_B0_3DATA_MASK_MASK     (0x1U)
-#define EIM_EICHD10_WORD1_B0_3DATA_MASK_SHIFT    (0U)
-/*! B0_3DATA_MASK - Data Mask Field */
-#define EIM_EICHD10_WORD1_B0_3DATA_MASK(x)       (((uint32_t)(((uint32_t)(x)) << EIM_EICHD10_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD10_WORD1_B0_3DATA_MASK_MASK)
-/*! @} */
-
 /*! @name EICHD11_WORD0 - Error Injection Channel Descriptor 11, Word0 */
 /*! @{ */
 
@@ -945,15 +935,6 @@ typedef struct {
 #define EIM_EICHD11_WORD0_CHKBIT_MASK(x)         (((uint32_t)(((uint32_t)(x)) << EIM_EICHD11_WORD0_CHKBIT_MASK_SHIFT)) & EIM_EICHD11_WORD0_CHKBIT_MASK_MASK)
 /*! @} */
 
-/*! @name EICHD11_WORD1 - Error Injection Channel Descriptor 11, Word1 */
-/*! @{ */
-
-#define EIM_EICHD11_WORD1_B0_3DATA_MASK_MASK     (0x1U)
-#define EIM_EICHD11_WORD1_B0_3DATA_MASK_SHIFT    (0U)
-/*! B0_3DATA_MASK - Data Mask Field */
-#define EIM_EICHD11_WORD1_B0_3DATA_MASK(x)       (((uint32_t)(((uint32_t)(x)) << EIM_EICHD11_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD11_WORD1_B0_3DATA_MASK_MASK)
-/*! @} */
-
 /*! @name EICHD12_WORD0 - Error Injection Channel Descriptor 12, Word0 */
 /*! @{ */
 
@@ -961,15 +942,6 @@ typedef struct {
 #define EIM_EICHD12_WORD0_CHKBIT_MASK_SHIFT      (25U)
 /*! CHKBIT_MASK - Checkbit Mask */
 #define EIM_EICHD12_WORD0_CHKBIT_MASK(x)         (((uint32_t)(((uint32_t)(x)) << EIM_EICHD12_WORD0_CHKBIT_MASK_SHIFT)) & EIM_EICHD12_WORD0_CHKBIT_MASK_MASK)
-/*! @} */
-
-/*! @name EICHD12_WORD1 - Error Injection Channel Descriptor 12, Word1 */
-/*! @{ */
-
-#define EIM_EICHD12_WORD1_B0_3DATA_MASK_MASK     (0x1U)
-#define EIM_EICHD12_WORD1_B0_3DATA_MASK_SHIFT    (0U)
-/*! B0_3DATA_MASK - Data Mask Field */
-#define EIM_EICHD12_WORD1_B0_3DATA_MASK(x)       (((uint32_t)(((uint32_t)(x)) << EIM_EICHD12_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD12_WORD1_B0_3DATA_MASK_MASK)
 /*! @} */
 
 

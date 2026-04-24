@@ -247,14 +247,14 @@
 **                          MIMX95N6XVZXN_cm33
 **                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 3.0, 2025-11-24
-**     Build:               b251124
+**     Version:             rev. 4.0, 2026-02-28
+**     Build:               b260305
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PACKETIZER
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -268,14 +268,16 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-11-24)
 **         Header RFP.
+**     - rev. 4.0 (2026-02-28)
+**         Update Interrupts mapping.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_PACKETIZER.h
- * @version 3.0
- * @date 2025-11-24
+ * @version 4.0
+ * @date 2026-02-28
  * @brief CMSIS Peripheral Access Layer for PACKETIZER
  *
  * CMSIS Peripheral Access Layer for PACKETIZER
@@ -428,15 +430,9 @@ typedef struct {
 /*! @name CH0_CTRL_CAM - Camera 0 Channel 0 Control Register */
 /*! @{ */
 
-#define PACKETIZER_CH0_CTRL_CAM_OBPP_MASK        (0xFU)
-#define PACKETIZER_CH0_CTRL_CAM_OBPP_SHIFT       (0U)
-/*! OBPP
- *  0b0000..12bpp
- *  0b0010..16bpp
- *  0b0100..10bpp
- *  0b0110..8bpp
- */
-#define PACKETIZER_CH0_CTRL_CAM_OBPP(x)          (((uint32_t)(((uint32_t)(x)) << PACKETIZER_CH0_CTRL_CAM_OBPP_SHIFT)) & PACKETIZER_CH0_CTRL_CAM_OBPP_MASK)
+#define PACKETIZER_CH0_CTRL_CAM_OBITS_MASK       (0x1FU)
+#define PACKETIZER_CH0_CTRL_CAM_OBITS_SHIFT      (0U)
+#define PACKETIZER_CH0_CTRL_CAM_OBITS(x)         (((uint32_t)(((uint32_t)(x)) << PACKETIZER_CH0_CTRL_CAM_OBITS_SHIFT)) & PACKETIZER_CH0_CTRL_CAM_OBITS_MASK)
 
 #define PACKETIZER_CH0_CTRL_CAM_RSA_MASK         (0x700U)
 #define PACKETIZER_CH0_CTRL_CAM_RSA_SHIFT        (8U)
@@ -453,15 +449,9 @@ typedef struct {
 /*! @name CH12_CTRL_CAM - Camera 0 Channel 1,2 Control Register */
 /*! @{ */
 
-#define PACKETIZER_CH12_CTRL_CAM_OBPP_MASK       (0xFU)
-#define PACKETIZER_CH12_CTRL_CAM_OBPP_SHIFT      (0U)
-/*! OBPP
- *  0b0000..12bpp
- *  0b0010..16bpp - Should be set only for YUV Semiplanar storage type
- *  0b0100..10bpp
- *  0b0110..8bpp
- */
-#define PACKETIZER_CH12_CTRL_CAM_OBPP(x)         (((uint32_t)(((uint32_t)(x)) << PACKETIZER_CH12_CTRL_CAM_OBPP_SHIFT)) & PACKETIZER_CH12_CTRL_CAM_OBPP_MASK)
+#define PACKETIZER_CH12_CTRL_CAM_OBITS_MASK      (0x1FU)
+#define PACKETIZER_CH12_CTRL_CAM_OBITS_SHIFT     (0U)
+#define PACKETIZER_CH12_CTRL_CAM_OBITS(x)        (((uint32_t)(((uint32_t)(x)) << PACKETIZER_CH12_CTRL_CAM_OBITS_SHIFT)) & PACKETIZER_CH12_CTRL_CAM_OBITS_MASK)
 
 #define PACKETIZER_CH12_CTRL_CAM_RSA_MASK        (0x700U)
 #define PACKETIZER_CH12_CTRL_CAM_RSA_SHIFT       (8U)

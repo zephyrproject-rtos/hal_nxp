@@ -9,7 +9,7 @@
 **
 **     Reference manual:    IMX93RM, Internal, November. 2021
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260113
+**     Build:               b260205
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX9301_cm33
@@ -3516,6 +3516,10 @@ typedef enum _mu_core_boot_mode
 #endif
 /** Interrupt vectors for the WDOG peripheral type */
 #define WDOG_IRQS                                { WDOG1_IRQn, WDOG2_IRQn, WDOG3_IRQn, WDOG4_IRQn, WDOG5_IRQn }
+/* Extra definition */
+#define WDOG_UPDATE_KEY                          (0xD928C520U)
+#define WDOG_REFRESH_KEY                         (0xB480A602U)
+
 
 /* XCACHE - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: BSD-3-Clause */
 /**
- * Copyright 2019-2023 NXP
+ * Copyright 2019-2023, 2026 NXP
  *
  * KEYWORDS: micro-power uPower driver API
  * -----------------------------------------------------------------------------
@@ -66,7 +66,7 @@ void *memcpy(void *dest, const void *src, size_t n)
  */
 
 /* tests Service Group busy */
-#define UPWR_SG_BUSY(sg) ((sg_busy & (1U << sg)) == 1U)
+#define UPWR_SG_BUSY(sg) ((sg_busy & (1U << sg)) == (1U << sg))
 
 #ifndef false
 #define false 0
@@ -2983,7 +2983,7 @@ upwr_req_status_t upwr_req_status(upwr_sg_t     sg,
 							sg_rsp_msg[sg].hdr.ret);
     }
 
-	status = ((sg_busy & (1UL << sg)) == 1U) ? UPWR_REQ_BUSY :
+	status = UPWR_SG_BUSY(sg) ? UPWR_REQ_BUSY :
 	         (sg_rsp_msg[sg].hdr.errcode == UPWR_RESP_OK)? UPWR_REQ_OK   :
 							       UPWR_REQ_ERR  ;
 	upwr_lock(0);
