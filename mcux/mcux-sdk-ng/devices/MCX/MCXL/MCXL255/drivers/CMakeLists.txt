@@ -5,7 +5,7 @@
 mcux_add_cmakelists(${SdkRootDirPath}/${device_root}/MCX/MCXL/MCXL255/drivers/romapi)
 
 if (CONFIG_MCUX_COMPONENT_driver.clock)
-    mcux_component_version(1.3.0)
+    mcux_component_version(1.5.0)
     mcux_add_source( SOURCES fsl_clock.c fsl_clock.h )
     mcux_add_include( INCLUDES . )
 endif()
@@ -53,7 +53,7 @@ endif()
 if (CONFIG_MCUX_COMPONENT_driver.power)
     mcux_add_source( SOURCES fsl_power.c fsl_power.h )
     mcux_add_include( INCLUDES . )
-    mcux_component_version(2.2.0)
+    mcux_component_version(2.3.0)
 endif()
 
 if (CONFIG_MCUX_COMPONENT_driver.reset)

@@ -30,13 +30,13 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260323
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TENBASET_PHY
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -162,7 +162,7 @@ typedef struct {
   __IO uint16_t WKCFG;                             /**< Wake Configuration, offset: 0x122 */
        uint8_t RESERVED_7[2];
   __IO uint16_t WUPCTRL;                           /**< Wake Control, offset: 0x126 */
-  __IO uint16_t WUPCFG;                            /**< Wakeup Confguration, offset: 0x128 */
+  __IO uint16_t WUPCFG;                            /**< Wakeup Configuration, offset: 0x128 */
   __I  uint16_t WUPSTAT;                           /**< Wakeup Status, offset: 0x12A */
        uint8_t RESERVED_8[20];
   __IO uint16_t SMIDATA;                           /**< SMI Frame DATA, offset: 0x140 */
@@ -253,7 +253,7 @@ typedef struct {
 
 #define TENBASET_PHY_PHYID0_OUI_03_18_MASK       (0xFFFFU)
 #define TENBASET_PHY_PHYID0_OUI_03_18_SHIFT      (0U)
-/*! OUI_03_18 - Organizationally Unique Idendifier */
+/*! OUI_03_18 - Organizationally Unique Identifier */
 #define TENBASET_PHY_PHYID0_OUI_03_18(x)         (((uint16_t)(((uint16_t)(x)) << TENBASET_PHY_PHYID0_OUI_03_18_SHIFT)) & TENBASET_PHY_PHYID0_OUI_03_18_MASK)
 /*! @} */
 
@@ -272,7 +272,7 @@ typedef struct {
 
 #define TENBASET_PHY_PHYID1_OUI_19_24_MASK       (0xFC00U)
 #define TENBASET_PHY_PHYID1_OUI_19_24_SHIFT      (10U)
-/*! OUI_19_24 - Organizationally Unique Idendifier */
+/*! OUI_19_24 - Organizationally Unique Identifier */
 #define TENBASET_PHY_PHYID1_OUI_19_24(x)         (((uint16_t)(((uint16_t)(x)) << TENBASET_PHY_PHYID1_OUI_19_24_SHIFT)) & TENBASET_PHY_PHYID1_OUI_19_24_MASK)
 /*! @} */
 
@@ -631,7 +631,7 @@ typedef struct {
 #define TENBASET_PHY_WUPCTRL_ABORTCMD(x)         (((uint16_t)(((uint16_t)(x)) << TENBASET_PHY_WUPCTRL_ABORTCMD_SHIFT)) & TENBASET_PHY_WUPCTRL_ABORTCMD_MASK)
 /*! @} */
 
-/*! @name WUPCFG - Wakeup Confguration */
+/*! @name WUPCFG - Wakeup Configuration */
 /*! @{ */
 
 #define TENBASET_PHY_WUPCFG_LCLWKWUP_MASK        (0x1U)
@@ -657,7 +657,7 @@ typedef struct {
  *  0b00..IDLE
  *  0b01..WAITLINK
  *  0b10..PENDING
- *  0b10..TRANSMIT
+ *  0b11..TRANSMIT
  */
 #define TENBASET_PHY_WUPSTAT_STAT(x)             (((uint16_t)(((uint16_t)(x)) << TENBASET_PHY_WUPSTAT_STAT_SHIFT)) & TENBASET_PHY_WUPSTAT_STAT_MASK)
 
@@ -866,7 +866,7 @@ typedef struct {
 
 #define TENBASET_PHY_INTENCAPT1_SSPDET_MASK      (0x800U)
 #define TENBASET_PHY_INTENCAPT1_SSPDET_SHIFT     (11U)
-/*! SSPDET - Suaspend Symbol Detects
+/*! SSPDET - Suspend Symbol Detects
  *  0b0..NO Effect
  *  0b1..Clear
  */
@@ -1362,7 +1362,7 @@ typedef struct {
 
 #define TENBASET_PHY_INTENCAPT2_SSPDET_MASK      (0x800U)
 #define TENBASET_PHY_INTENCAPT2_SSPDET_SHIFT     (11U)
-/*! SSPDET - Suaspend Symbol Detects
+/*! SSPDET - Suspend Symbol Detects
  *  0b0..NO Effect
  *  0b1..Clear
  */
@@ -1843,7 +1843,7 @@ typedef struct {
 
 #define TENBASET_PHY_PLCADIAG4_TOCNT_MASK        (0xFFFFU)
 #define TENBASET_PHY_PLCADIAG4_TOCNT_SHIFT       (0U)
-/*! TOCNT - Transmit Oppurtunity Counter */
+/*! TOCNT - Transmit Opportunity Counter */
 #define TENBASET_PHY_PLCADIAG4_TOCNT(x)          (((uint16_t)(((uint16_t)(x)) << TENBASET_PHY_PLCADIAG4_TOCNT_SHIFT)) & TENBASET_PHY_PLCADIAG4_TOCNT_MASK)
 /*! @} */
 

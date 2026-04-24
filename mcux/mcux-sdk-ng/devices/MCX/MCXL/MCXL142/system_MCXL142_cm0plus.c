@@ -10,7 +10,7 @@
 **
 **     Reference manual:    MCXL25x RM Rev.1 RC
 **     Version:             rev. 1.1, 2026-01-02
-**     Build:               b260113
+**     Build:               b260320
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -64,12 +64,14 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
 
 __attribute__ ((weak)) void SystemInit (void) {
 
+#if !defined(__ZEPHYR__)
 #if defined(__MCUXPRESSO)
     extern void(*const g_pfnVectors[]) (void);
     SCB->VTOR = (uint32_t) &g_pfnVectors;
 #else
     extern void *__Vectors;
     SCB->VTOR = (uint32_t) &__Vectors;
+#endif
 #endif
   SystemInitHook();
 }

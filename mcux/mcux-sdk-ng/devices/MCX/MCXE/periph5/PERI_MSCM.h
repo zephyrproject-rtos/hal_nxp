@@ -6,13 +6,13 @@
 **                          MCXE316MPA
 **
 **     Version:             rev. 1.0, 2025-07-18
-**     Build:               b250718
+**     Build:               b260209
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MSCM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -91,13 +91,13 @@
 
 /** MSCM - Register Layout Typedef */
 typedef struct {
-  __I  uint32_t CPXTYPE;                           /**< Processor X Type, offset: 0x0 */
-  __I  uint32_t CPXNUM;                            /**< Processor X Number, offset: 0x4 */
-  __I  uint32_t CPXREV;                            /**< Processor X Revision, offset: 0x8 */
-  __I  uint32_t CPXCFG0;                           /**< Processor X Configuration 0, offset: 0xC */
-  __I  uint32_t CPXCFG1;                           /**< Processor X Configuration 1, offset: 0x10 */
-  __I  uint32_t CPXCFG2;                           /**< Processor X Configuration 2, offset: 0x14 */
-  __I  uint32_t CPXCFG3;                           /**< Processor x Configuration 3, offset: 0x18 */
+  __I  uint32_t CPxTYPE;                           /**< Processor X Type, offset: 0x0 */
+  __I  uint32_t CPxNUM;                            /**< Processor X Number, offset: 0x4 */
+  __I  uint32_t CPxREV;                            /**< Processor X Revision, offset: 0x8 */
+  __I  uint32_t CPxCFG0;                           /**< Processor X Configuration 0, offset: 0xC */
+  __I  uint32_t CPxCFG1;                           /**< Processor X Configuration 1, offset: 0x10 */
+  __I  uint32_t CPxCFG2;                           /**< Processor X Configuration 2, offset: 0x14 */
+  __I  uint32_t CPxCFG3;                           /**< Processor x Configuration 3, offset: 0x18 */
        uint8_t RESERVED_0[4];
   struct {                                         /* offset: 0x20, array step: 0x1C */
     __I  uint32_t TYPE;                              /**< Processor 0 Type, array offset: 0x20, array step: 0x1C */
@@ -146,130 +146,130 @@ typedef struct {
  * @{
  */
 
-/*! @name CPXTYPE - Processor X Type */
+/*! @name CPxTYPE - Processor X Type */
 /*! @{ */
 
-#define MSCM_CPXTYPE_PERSONALITY_MASK            (0xFFFFFFFFU)
-#define MSCM_CPXTYPE_PERSONALITY_SHIFT           (0U)
+#define MSCM_CPxTYPE_PERSONALITY_MASK            (0xFFFFFFFFU)
+#define MSCM_CPxTYPE_PERSONALITY_SHIFT           (0U)
 /*! PERSONALITY - Personality of CPx */
-#define MSCM_CPXTYPE_PERSONALITY(x)              (((uint32_t)(((uint32_t)(x)) << MSCM_CPXTYPE_PERSONALITY_SHIFT)) & MSCM_CPXTYPE_PERSONALITY_MASK)
+#define MSCM_CPxTYPE_PERSONALITY(x)              (((uint32_t)(((uint32_t)(x)) << MSCM_CPxTYPE_PERSONALITY_SHIFT)) & MSCM_CPxTYPE_PERSONALITY_MASK)
 /*! @} */
 
-/*! @name CPXNUM - Processor X Number */
+/*! @name CPxNUM - Processor X Number */
 /*! @{ */
 
-#define MSCM_CPXNUM_CPN_MASK                     (0x3U)
-#define MSCM_CPXNUM_CPN_SHIFT                    (0U)
+#define MSCM_CPxNUM_CPN_MASK                     (0x3U)
+#define MSCM_CPxNUM_CPN_SHIFT                    (0U)
 /*! CPN - Processor Number
  *  0b00..Cortex-M7 core 0
  *  0b01..Cortex-M7 core 1
  */
-#define MSCM_CPXNUM_CPN(x)                       (((uint32_t)(((uint32_t)(x)) << MSCM_CPXNUM_CPN_SHIFT)) & MSCM_CPXNUM_CPN_MASK)
+#define MSCM_CPxNUM_CPN(x)                       (((uint32_t)(((uint32_t)(x)) << MSCM_CPxNUM_CPN_SHIFT)) & MSCM_CPxNUM_CPN_MASK)
 /*! @} */
 
-/*! @name CPXREV - Processor X Revision */
+/*! @name CPxREV - Processor X Revision */
 /*! @{ */
 
-#define MSCM_CPXREV_RYPZ_MASK                    (0xFFU)
-#define MSCM_CPXREV_RYPZ_SHIFT                   (0U)
+#define MSCM_CPxREV_RYPZ_MASK                    (0xFFU)
+#define MSCM_CPxREV_RYPZ_SHIFT                   (0U)
 /*! RYPZ - Processor Revision */
-#define MSCM_CPXREV_RYPZ(x)                      (((uint32_t)(((uint32_t)(x)) << MSCM_CPXREV_RYPZ_SHIFT)) & MSCM_CPXREV_RYPZ_MASK)
+#define MSCM_CPxREV_RYPZ(x)                      (((uint32_t)(((uint32_t)(x)) << MSCM_CPxREV_RYPZ_SHIFT)) & MSCM_CPxREV_RYPZ_MASK)
 /*! @} */
 
-/*! @name CPXCFG0 - Processor X Configuration 0 */
+/*! @name CPxCFG0 - Processor X Configuration 0 */
 /*! @{ */
 
-#define MSCM_CPXCFG0_DCWY_MASK                   (0xFFU)
-#define MSCM_CPXCFG0_DCWY_SHIFT                  (0U)
+#define MSCM_CPxCFG0_DCWY_MASK                   (0xFFU)
+#define MSCM_CPxCFG0_DCWY_SHIFT                  (0U)
 /*! DCWY - L1 Data Cache Ways */
-#define MSCM_CPXCFG0_DCWY(x)                     (((uint32_t)(((uint32_t)(x)) << MSCM_CPXCFG0_DCWY_SHIFT)) & MSCM_CPXCFG0_DCWY_MASK)
+#define MSCM_CPxCFG0_DCWY(x)                     (((uint32_t)(((uint32_t)(x)) << MSCM_CPxCFG0_DCWY_SHIFT)) & MSCM_CPxCFG0_DCWY_MASK)
 
-#define MSCM_CPXCFG0_DCSZ_MASK                   (0xFF00U)
-#define MSCM_CPXCFG0_DCSZ_SHIFT                  (8U)
+#define MSCM_CPxCFG0_DCSZ_MASK                   (0xFF00U)
+#define MSCM_CPxCFG0_DCSZ_SHIFT                  (8U)
 /*! DCSZ - L1 Data Cache Size */
-#define MSCM_CPXCFG0_DCSZ(x)                     (((uint32_t)(((uint32_t)(x)) << MSCM_CPXCFG0_DCSZ_SHIFT)) & MSCM_CPXCFG0_DCSZ_MASK)
+#define MSCM_CPxCFG0_DCSZ(x)                     (((uint32_t)(((uint32_t)(x)) << MSCM_CPxCFG0_DCSZ_SHIFT)) & MSCM_CPxCFG0_DCSZ_MASK)
 
-#define MSCM_CPXCFG0_ICWY_MASK                   (0xFF0000U)
-#define MSCM_CPXCFG0_ICWY_SHIFT                  (16U)
+#define MSCM_CPxCFG0_ICWY_MASK                   (0xFF0000U)
+#define MSCM_CPxCFG0_ICWY_SHIFT                  (16U)
 /*! ICWY - L1 Instruction Cache Ways */
-#define MSCM_CPXCFG0_ICWY(x)                     (((uint32_t)(((uint32_t)(x)) << MSCM_CPXCFG0_ICWY_SHIFT)) & MSCM_CPXCFG0_ICWY_MASK)
+#define MSCM_CPxCFG0_ICWY(x)                     (((uint32_t)(((uint32_t)(x)) << MSCM_CPxCFG0_ICWY_SHIFT)) & MSCM_CPxCFG0_ICWY_MASK)
 
-#define MSCM_CPXCFG0_ICSZ_MASK                   (0xFF000000U)
-#define MSCM_CPXCFG0_ICSZ_SHIFT                  (24U)
+#define MSCM_CPxCFG0_ICSZ_MASK                   (0xFF000000U)
+#define MSCM_CPxCFG0_ICSZ_SHIFT                  (24U)
 /*! ICSZ - Level 1 Instruction Cache Size */
-#define MSCM_CPXCFG0_ICSZ(x)                     (((uint32_t)(((uint32_t)(x)) << MSCM_CPXCFG0_ICSZ_SHIFT)) & MSCM_CPXCFG0_ICSZ_MASK)
+#define MSCM_CPxCFG0_ICSZ(x)                     (((uint32_t)(((uint32_t)(x)) << MSCM_CPxCFG0_ICSZ_SHIFT)) & MSCM_CPxCFG0_ICSZ_MASK)
 /*! @} */
 
-/*! @name CPXCFG1 - Processor X Configuration 1 */
+/*! @name CPxCFG1 - Processor X Configuration 1 */
 /*! @{ */
 
-#define MSCM_CPXCFG1_L2WY_MASK                   (0xFF0000U)
-#define MSCM_CPXCFG1_L2WY_SHIFT                  (16U)
+#define MSCM_CPxCFG1_L2WY_MASK                   (0xFF0000U)
+#define MSCM_CPxCFG1_L2WY_SHIFT                  (16U)
 /*! L2WY - L2 Cache Ways */
-#define MSCM_CPXCFG1_L2WY(x)                     (((uint32_t)(((uint32_t)(x)) << MSCM_CPXCFG1_L2WY_SHIFT)) & MSCM_CPXCFG1_L2WY_MASK)
+#define MSCM_CPxCFG1_L2WY(x)                     (((uint32_t)(((uint32_t)(x)) << MSCM_CPxCFG1_L2WY_SHIFT)) & MSCM_CPxCFG1_L2WY_MASK)
 
-#define MSCM_CPXCFG1_L2SZ_MASK                   (0xFF000000U)
-#define MSCM_CPXCFG1_L2SZ_SHIFT                  (24U)
+#define MSCM_CPxCFG1_L2SZ_MASK                   (0xFF000000U)
+#define MSCM_CPxCFG1_L2SZ_SHIFT                  (24U)
 /*! L2SZ - L2 Cache Size */
-#define MSCM_CPXCFG1_L2SZ(x)                     (((uint32_t)(((uint32_t)(x)) << MSCM_CPXCFG1_L2SZ_SHIFT)) & MSCM_CPXCFG1_L2SZ_MASK)
+#define MSCM_CPxCFG1_L2SZ(x)                     (((uint32_t)(((uint32_t)(x)) << MSCM_CPxCFG1_L2SZ_SHIFT)) & MSCM_CPxCFG1_L2SZ_MASK)
 /*! @} */
 
-/*! @name CPXCFG2 - Processor X Configuration 2 */
+/*! @name CPxCFG2 - Processor X Configuration 2 */
 /*! @{ */
 
-#define MSCM_CPXCFG2_ITCMSZ_MASK                 (0xFF0000U)
-#define MSCM_CPXCFG2_ITCMSZ_SHIFT                (16U)
+#define MSCM_CPxCFG2_ITCMSZ_MASK                 (0xFF0000U)
+#define MSCM_CPxCFG2_ITCMSZ_SHIFT                (16U)
 /*! ITCMSZ - Instruction Tightly Coupled Memory Size */
-#define MSCM_CPXCFG2_ITCMSZ(x)                   (((uint32_t)(((uint32_t)(x)) << MSCM_CPXCFG2_ITCMSZ_SHIFT)) & MSCM_CPXCFG2_ITCMSZ_MASK)
+#define MSCM_CPxCFG2_ITCMSZ(x)                   (((uint32_t)(((uint32_t)(x)) << MSCM_CPxCFG2_ITCMSZ_SHIFT)) & MSCM_CPxCFG2_ITCMSZ_MASK)
 
-#define MSCM_CPXCFG2_DTCMSZ_MASK                 (0xFF000000U)
-#define MSCM_CPXCFG2_DTCMSZ_SHIFT                (24U)
+#define MSCM_CPxCFG2_DTCMSZ_MASK                 (0xFF000000U)
+#define MSCM_CPxCFG2_DTCMSZ_SHIFT                (24U)
 /*! DTCMSZ - Tightly Coupled Data Memory Size */
-#define MSCM_CPXCFG2_DTCMSZ(x)                   (((uint32_t)(((uint32_t)(x)) << MSCM_CPXCFG2_DTCMSZ_SHIFT)) & MSCM_CPXCFG2_DTCMSZ_MASK)
+#define MSCM_CPxCFG2_DTCMSZ(x)                   (((uint32_t)(((uint32_t)(x)) << MSCM_CPxCFG2_DTCMSZ_SHIFT)) & MSCM_CPxCFG2_DTCMSZ_MASK)
 /*! @} */
 
-/*! @name CPXCFG3 - Processor x Configuration 3 */
+/*! @name CPxCFG3 - Processor x Configuration 3 */
 /*! @{ */
 
-#define MSCM_CPXCFG3_FPU_MASK                    (0x1U)
-#define MSCM_CPXCFG3_FPU_SHIFT                   (0U)
+#define MSCM_CPxCFG3_FPU_MASK                    (0x1U)
+#define MSCM_CPxCFG3_FPU_SHIFT                   (0U)
 /*! FPU - Floating Point Unit
  *  0b0..Not provided
  *  0b1..Provided
  */
-#define MSCM_CPXCFG3_FPU(x)                      (((uint32_t)(((uint32_t)(x)) << MSCM_CPXCFG3_FPU_SHIFT)) & MSCM_CPXCFG3_FPU_MASK)
+#define MSCM_CPxCFG3_FPU(x)                      (((uint32_t)(((uint32_t)(x)) << MSCM_CPxCFG3_FPU_SHIFT)) & MSCM_CPxCFG3_FPU_MASK)
 
-#define MSCM_CPXCFG3_SIMD_MASK                   (0x2U)
-#define MSCM_CPXCFG3_SIMD_SHIFT                  (1U)
+#define MSCM_CPxCFG3_SIMD_MASK                   (0x2U)
+#define MSCM_CPxCFG3_SIMD_SHIFT                  (1U)
 /*! SIMD - SIMD/NEON Instruction Support
  *  0b0..Not included
  *  0b1..Included
  */
-#define MSCM_CPXCFG3_SIMD(x)                     (((uint32_t)(((uint32_t)(x)) << MSCM_CPXCFG3_SIMD_SHIFT)) & MSCM_CPXCFG3_SIMD_MASK)
+#define MSCM_CPxCFG3_SIMD(x)                     (((uint32_t)(((uint32_t)(x)) << MSCM_CPxCFG3_SIMD_SHIFT)) & MSCM_CPxCFG3_SIMD_MASK)
 
-#define MSCM_CPXCFG3_MMU_MASK                    (0x4U)
-#define MSCM_CPXCFG3_MMU_SHIFT                   (2U)
+#define MSCM_CPxCFG3_MMU_MASK                    (0x4U)
+#define MSCM_CPxCFG3_MMU_SHIFT                   (2U)
 /*! MMU - Memory Management Unit
  *  0b0..Not supported
  *  0b1..Supported
  */
-#define MSCM_CPXCFG3_MMU(x)                      (((uint32_t)(((uint32_t)(x)) << MSCM_CPXCFG3_MMU_SHIFT)) & MSCM_CPXCFG3_MMU_MASK)
+#define MSCM_CPxCFG3_MMU(x)                      (((uint32_t)(((uint32_t)(x)) << MSCM_CPxCFG3_MMU_SHIFT)) & MSCM_CPxCFG3_MMU_MASK)
 
-#define MSCM_CPXCFG3_CMP_MASK                    (0x8U)
-#define MSCM_CPXCFG3_CMP_SHIFT                   (3U)
+#define MSCM_CPxCFG3_CMP_MASK                    (0x8U)
+#define MSCM_CPxCFG3_CMP_SHIFT                   (3U)
 /*! CMP - Core Memory Protection Unit
  *  0b0..Not included
  *  0b1..Included
  */
-#define MSCM_CPXCFG3_CMP(x)                      (((uint32_t)(((uint32_t)(x)) << MSCM_CPXCFG3_CMP_SHIFT)) & MSCM_CPXCFG3_CMP_MASK)
+#define MSCM_CPxCFG3_CMP(x)                      (((uint32_t)(((uint32_t)(x)) << MSCM_CPxCFG3_CMP_SHIFT)) & MSCM_CPxCFG3_CMP_MASK)
 
-#define MSCM_CPXCFG3_CPY_MASK                    (0x10U)
-#define MSCM_CPXCFG3_CPY_SHIFT                   (4U)
+#define MSCM_CPxCFG3_CPY_MASK                    (0x10U)
+#define MSCM_CPxCFG3_CPY_SHIFT                   (4U)
 /*! CPY - Cryptography
  *  0b0..Not supported
  *  0b1..Supported
  */
-#define MSCM_CPXCFG3_CPY(x)                      (((uint32_t)(((uint32_t)(x)) << MSCM_CPXCFG3_CPY_SHIFT)) & MSCM_CPXCFG3_CPY_MASK)
+#define MSCM_CPxCFG3_CPY(x)                      (((uint32_t)(((uint32_t)(x)) << MSCM_CPxCFG3_CPY_SHIFT)) & MSCM_CPxCFG3_CPY_MASK)
 /*! @} */
 
 /*! @name TYPE - Processor 0 Type */

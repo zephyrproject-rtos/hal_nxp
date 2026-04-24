@@ -12,7 +12,7 @@
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1_DraftC
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260119
+**     Build:               b260323
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -82,7 +82,6 @@ __attribute__ ((weak)) void SystemInit (void) {
     SCB->NSACR |= ((3UL << 0) | (3UL << 10));   /* enable CP0, CP1, CP10, CP11 Non-secure Access */
 
     /* Enable the LPCAC */
-    SYSCON->LPCAC_CTRL |= SYSCON_LPCAC_CTRL_LPCAC_MEM_REQ_MASK;
     SYSCON->LPCAC_CTRL &= ~SYSCON_LPCAC_CTRL_DIS_LPCAC_MASK;
 
     /* Enables flash speculation */

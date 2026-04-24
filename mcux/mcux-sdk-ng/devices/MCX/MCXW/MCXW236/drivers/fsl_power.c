@@ -1,5 +1,5 @@
 /*
- * Copyright 2016,2020-2025 NXP
+ * Copyright 2016,2020-2026 NXP
  * SPDX-License-Identifier: BSD-3-Clause
  */
 #include "fsl_device_registers.h"
@@ -12,7 +12,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief MCXW23 power control version. */
-#define FSL_MCXW23_POWER_CONTROL_VERSION (MAKE_VERSION(3, 0, 0))
+#define FSL_MCXW23_POWER_CONTROL_VERSION (MAKE_VERSION(3, 0, 1))
 /*@}*/
 
 /* The settling time in microseconds of the BOD. After changing BOD level, POWER_IsBODActive is only valid after this

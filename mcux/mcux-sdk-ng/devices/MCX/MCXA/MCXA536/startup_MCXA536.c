@@ -2,7 +2,7 @@
 //*****************************************************************************
 // MCXA536 startup code
 //
-// Version : 190126
+// Version : 230326
 //*****************************************************************************
 //
 // Copyright 2016-2026 NXP
@@ -203,7 +203,7 @@ WEAK void SMARTDMA_IRQHandler(void);
 WEAK void CDOG1_IRQHandler(void);
 WEAK void PKC_IRQHandler(void);
 WEAK void SGI_IRQHandler(void);
-WEAK void SPI_FILTER_IRQHandler(void);
+WEAK void Reserved128_IRQHandler(void);
 WEAK void TRNG0_IRQHandler(void);
 WEAK void SECURE_ERR_IRQHandler(void);
 WEAK void SEC_HYPERVISOR_CALL_IRQHandler(void);
@@ -213,8 +213,8 @@ WEAK void Reserved134_IRQHandler(void);
 WEAK void RTC_IRQHandler(void);
 WEAK void Reserved136_IRQHandler(void);
 WEAK void Reserved137_IRQHandler(void);
-WEAK void GDET_IRQHandler(void);
-WEAK void EWM0_IRQHandler(void);
+WEAK void DGDET0_IRQHandler(void);
+WEAK void EWM_IRQHandler(void);
 WEAK void TSI_END_OF_SCAN_IRQHandler(void);
 WEAK void TSI_OUT_OF_SCAN_IRQHandler(void);
 WEAK void GPIO0_1_IRQHandler(void);
@@ -333,7 +333,7 @@ void Reserved101_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved102_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved103_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved104_DriverIRQHandler(void) ALIAS(DefaultISR);
-void ESPI_DriverIRQHandler(void) ALIAS(DefaultISR);
+void ESPI_DriverIRQHandler(uint32_t instance) ALIAS(DefaultISR1);
 void ETHERNET_DriverIRQHandler(void) ALIAS(DefaultISR);
 void ETHERNET_PMT_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved108_DriverIRQHandler(void) ALIAS(DefaultISR);
@@ -356,7 +356,7 @@ void SMARTDMA_DriverIRQHandler(void) ALIAS(DefaultISR);
 void CDOG1_DriverIRQHandler(void) ALIAS(DefaultISR);
 void PKC_DriverIRQHandler(void) ALIAS(DefaultISR);
 void SGI_DriverIRQHandler(void) ALIAS(DefaultISR);
-void SPI_FILTER_DriverIRQHandler(uint32_t instance) ALIAS(DefaultISR1);
+void Reserved128_DriverIRQHandler(void) ALIAS(DefaultISR);
 void TRNG0_DriverIRQHandler(void) ALIAS(DefaultISR);
 void SECURE_ERR_DriverIRQHandler(void) ALIAS(DefaultISR);
 void SEC_HYPERVISOR_CALL_DriverIRQHandler(void) ALIAS(DefaultISR);
@@ -366,8 +366,8 @@ void Reserved134_DriverIRQHandler(void) ALIAS(DefaultISR);
 void RTC_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved136_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved137_DriverIRQHandler(void) ALIAS(DefaultISR);
-void GDET_DriverIRQHandler(void) ALIAS(DefaultISR);
-void EWM0_DriverIRQHandler(void) ALIAS(DefaultISR);
+void DGDET0_DriverIRQHandler(void) ALIAS(DefaultISR);
+void EWM_DriverIRQHandler(void) ALIAS(DefaultISR);
 void TSI_END_OF_SCAN_DriverIRQHandler(void) ALIAS(DefaultISR);
 void TSI_OUT_OF_SCAN_DriverIRQHandler(void) ALIAS(DefaultISR);
 void GPIO0_1_DriverIRQHandler(void) ALIAS(DefaultISR);
@@ -613,7 +613,7 @@ __attribute__((used, section(".isr_vector"))) void (*const __isr_vector[])(void)
     CDOG1_IRQHandler,               // 125: Code Watchdog Timer 1 interrupt
     PKC_IRQHandler,                 // 126: PKC interrupt
     SGI_IRQHandler,                 // 127: SGI interrupt
-    SPI_FILTER_IRQHandler,          // 128: Reserved interrupt
+    Reserved128_IRQHandler,         // 128: Reserved interrupt
     TRNG0_IRQHandler,               // 129: True Random Number Generator interrupt
     SECURE_ERR_IRQHandler,          // 130: Secure IP Error interrupt. It OR SGI, PKC, TRNG error together.
     SEC_HYPERVISOR_CALL_IRQHandler, // 131: AHB Secure Controller hypervisor call interrupt
@@ -623,8 +623,8 @@ __attribute__((used, section(".isr_vector"))) void (*const __isr_vector[])(void)
     RTC_IRQHandler,                 // 135: RTC alarm interrupt
     Reserved136_IRQHandler,         // 136: Reserved interrupt
     Reserved137_IRQHandler,         // 137: Reserved interrupt
-    GDET_IRQHandler,                // 138: Digital Glitch Detect 0 interrupt
-    EWM0_IRQHandler,                // 139: External Watchdog Monitor interrupt
+    DGDET0_IRQHandler,              // 138: Digital Glitch Detect 0 interrupt
+    EWM_IRQHandler,                 // 139: External Watchdog Monitor interrupt
     TSI_END_OF_SCAN_IRQHandler,     // 140: TSI End of Scan interrupt
     TSI_OUT_OF_SCAN_IRQHandler,     // 141: TSI Out of Scan interrupt
     GPIO0_1_IRQHandler,             // 142: General Purpose Input/Output 0 interrupt 1
@@ -1389,7 +1389,7 @@ WEAK void Reserved104_IRQHandler(void)
 
 WEAK void ESPI_IRQHandler(void)
 {
-    ESPI_DriverIRQHandler();
+    ESPI_DriverIRQHandler(0U);
 }
 
 WEAK void ETHERNET_IRQHandler(void)
@@ -1502,9 +1502,9 @@ WEAK void SGI_IRQHandler(void)
     SGI_DriverIRQHandler();
 }
 
-WEAK void SPI_FILTER_IRQHandler(void)
+WEAK void Reserved128_IRQHandler(void)
 {
-	SPI_FILTER_DriverIRQHandler(0U);
+    Reserved128_DriverIRQHandler();
 }
 
 WEAK void TRNG0_IRQHandler(void)
@@ -1552,14 +1552,14 @@ WEAK void Reserved137_IRQHandler(void)
     Reserved137_DriverIRQHandler();
 }
 
-WEAK void GDET_IRQHandler(void)
+WEAK void DGDET0_IRQHandler(void)
 {
-    GDET_DriverIRQHandler();
+    DGDET0_DriverIRQHandler();
 }
 
-WEAK void EWM0_IRQHandler(void)
+WEAK void EWM_IRQHandler(void)
 {
-    EWM0_DriverIRQHandler();
+    EWM_DriverIRQHandler();
 }
 
 WEAK void TSI_END_OF_SCAN_IRQHandler(void)

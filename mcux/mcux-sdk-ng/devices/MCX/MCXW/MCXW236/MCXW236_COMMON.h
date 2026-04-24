@@ -13,13 +13,13 @@
 **
 **     Reference manual:    MCXW23x User manual Rev. 1.0 - 7 April 2025
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250819
+**     Build:               b260224
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXW236
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -64,7 +64,7 @@
  */
 
 /** Interrupt Number Definitions */
-#define NUMBER_OF_INT_VECTORS 80                 /**< Number of interrupts in the Vector table */
+#define NUMBER_OF_INT_VECTORS 77                 /**< Number of interrupts in the Vector table */
 
 typedef enum IRQn {
   /* Auxiliary constants */
@@ -143,10 +143,7 @@ typedef enum IRQn {
   TRNG_IRQn                    = 57,               /**< TRNG interrupt */
   DMA1_IRQn                    = 58,               /**< DMA1 interrupt */
   Reserved75_IRQn              = 59,               /**< Reserved interrupt */
-  CDOG_IRQn                    = 60,               /**< CDOG interrupt */
-  Reserved77_IRQn              = 61,               /**< Reserved interrupt */
-  Reserved78_IRQn              = 62,               /**< Reserved interrupt */
-  WAKE_PAD_IRQn                = 63                /**< Wakeup from pin interrupt */
+  CDOG_IRQn                    = 60                /**< CDOG interrupt */
 } IRQn_Type;
 
 /*!

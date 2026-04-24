@@ -1,10 +1,10 @@
 //*****************************************************************************
 // MCXW236 startup code
 //
-// Version : 181125
+// Version : 240226
 //*****************************************************************************
 //
-// Copyright 2016-2025 NXP
+// Copyright 2016-2026 NXP
 //
 // SPDX-License-Identifier: BSD-3-Clause
 //*****************************************************************************
@@ -150,9 +150,6 @@ WEAK void TRNG_IRQHandler(void);
 WEAK void DMA1_IRQHandler(void);
 WEAK void Reserved75_IRQHandler(void);
 WEAK void CDOG_IRQHandler(void);
-WEAK void Reserved77_IRQHandler(void);
-WEAK void Reserved78_IRQHandler(void);
-WEAK void WAKE_PAD_IRQHandler(void);
 
 //*****************************************************************************
 // Forward declaration of the driver IRQ handlers. These are aliased
@@ -221,9 +218,6 @@ void TRNG_DriverIRQHandler(void) ALIAS(DefaultISR);
 void DMA1_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved75_DriverIRQHandler(void) ALIAS(DefaultISR);
 void CDOG_DriverIRQHandler(void) ALIAS(DefaultISR);
-void Reserved77_DriverIRQHandler(void) ALIAS(DefaultISR);
-void Reserved78_DriverIRQHandler(void) ALIAS(DefaultISR);
-void WAKE_PAD_DriverIRQHandler(void) ALIAS(DefaultISR);
 
 //*****************************************************************************
 // The entry point for the application.
@@ -273,12 +267,15 @@ extern uint32_t __StackLimit[];
 #define _vStackTop  __StackTop
 #define _vStackBase __StackLimit
 
+/*
+ * Data section ROM and RAM addresses
+ */
 extern uint32_t __etext[];
 extern uint32_t __data_start__[];
 extern uint32_t __data_end__[];
-
 extern uint32_t __bss_start__[];
 extern uint32_t __bss_end__[];
+
 #else
 #error Unsupported toolchain!
 #endif //(__CC_ARM) || (__ARMCC_VERSION)
@@ -393,9 +390,6 @@ __attribute__((used, section(".isr_vector"))) void (*const __isr_vector[])(void)
     DMA1_IRQHandler,                // 74: DMA1 interrupt
     Reserved75_IRQHandler,          // 75: Reserved interrupt
     CDOG_IRQHandler,                // 76: CDOG interrupt
-    Reserved77_IRQHandler,          // 77: Reserved interrupt
-    Reserved78_IRQHandler,          // 78: Reserved interrupt
-    WAKE_PAD_IRQHandler,            // 79: Wakeup from pin interrupt
 };                                     /* End of __vector_table */
 
 #if defined(__MCUXPRESSO)
@@ -457,7 +451,6 @@ void Reset_Handler_C(void)
 #if defined(__CC_ARM) || defined(__ARMCC_VERSION)
     __asm volatile ("cpsie i");
     __main();
-
 #elif defined(__MCUXPRESSO)
     //
     // Copy the data sections from flash to SRAM.
@@ -511,7 +504,7 @@ void Reset_Handler_C(void)
     /*     Loop to copy data from read only memory to RAM. The ranges
      *      of copy from/to are specified by following symbols evaluated in
      *      linker script.
-     *      1. __etext/_data_start__/__data_end__
+     *      *. __etext/_data_start__/__data_end__
      *      Note: All must be aligned to 4 bytes boundary.
      */
     uint32_t *pDataSrc, *pDataDest;
@@ -988,21 +981,6 @@ WEAK void Reserved75_IRQHandler(void)
 WEAK void CDOG_IRQHandler(void)
 {
     CDOG_DriverIRQHandler();
-}
-
-WEAK void Reserved77_IRQHandler(void)
-{
-    Reserved77_DriverIRQHandler();
-}
-
-WEAK void Reserved78_IRQHandler(void)
-{
-    Reserved78_DriverIRQHandler();
-}
-
-WEAK void WAKE_PAD_IRQHandler(void)
-{
-    WAKE_PAD_DriverIRQHandler();
 }
 
 //*****************************************************************************

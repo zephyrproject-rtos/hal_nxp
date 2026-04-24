@@ -30,13 +30,13 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260323
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CTIMER
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -183,22 +183,22 @@ typedef struct {
 
 #define CTIMER_IR_CR0INT_MASK                    (0x10U)
 #define CTIMER_IR_CR0INT_SHIFT                   (4U)
-/*! CR0INT - Interrupt Flag for Capture Channel 0 Event */
+/*! CR0INT - Flag for Capture Channel 0 Event */
 #define CTIMER_IR_CR0INT(x)                      (((uint32_t)(((uint32_t)(x)) << CTIMER_IR_CR0INT_SHIFT)) & CTIMER_IR_CR0INT_MASK)
 
 #define CTIMER_IR_CR1INT_MASK                    (0x20U)
 #define CTIMER_IR_CR1INT_SHIFT                   (5U)
-/*! CR1INT - Interrupt Flag for Capture Channel 1 Event */
+/*! CR1INT - Flag for Capture Channel 1 Event */
 #define CTIMER_IR_CR1INT(x)                      (((uint32_t)(((uint32_t)(x)) << CTIMER_IR_CR1INT_SHIFT)) & CTIMER_IR_CR1INT_MASK)
 
 #define CTIMER_IR_CR2INT_MASK                    (0x40U)
 #define CTIMER_IR_CR2INT_SHIFT                   (6U)
-/*! CR2INT - Interrupt Flag for Capture Channel 2 Event */
+/*! CR2INT - Flag for Capture Channel 2 Event */
 #define CTIMER_IR_CR2INT(x)                      (((uint32_t)(((uint32_t)(x)) << CTIMER_IR_CR2INT_SHIFT)) & CTIMER_IR_CR2INT_MASK)
 
 #define CTIMER_IR_CR3INT_MASK                    (0x80U)
 #define CTIMER_IR_CR3INT_SHIFT                   (7U)
-/*! CR3INT - Interrupt Flag for Capture Channel 3 Event */
+/*! CR3INT - Flag for Capture Channel 3 Event */
 #define CTIMER_IR_CR3INT(x)                      (((uint32_t)(((uint32_t)(x)) << CTIMER_IR_CR3INT_SHIFT)) & CTIMER_IR_CR3INT_MASK)
 /*! @} */
 

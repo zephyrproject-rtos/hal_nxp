@@ -30,13 +30,13 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260323
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for VBAT
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -180,7 +180,7 @@ typedef struct {
   __IO uint32_t SWILCKA;                           /**< Switch Lock A, offset: 0x618 */
        uint8_t RESERVED_23[228];
   struct {                                         /* offset: 0x700, array step: 0x8 */
-    __IO uint32_t WAKEUPA;                           /**< Wakeup 0 Register A, array offset: 0x700, array step: 0x8 */
+    __IO uint32_t WAKEUPA;                           /**< Wakeup 0 Register A..Wakeup 1 Register A, array offset: 0x700, array step: 0x8 */
          uint8_t RESERVED_0[4];
   } WAKEUP[VBAT_WAKEUP_COUNT];
        uint8_t RESERVED_24[232];
@@ -963,7 +963,7 @@ typedef struct {
 #define VBAT_SWILCKA_LOCK(x)                     (((uint32_t)(((uint32_t)(x)) << VBAT_SWILCKA_LOCK_SHIFT)) & VBAT_SWILCKA_LOCK_MASK)
 /*! @} */
 
-/*! @name WAKEUP_WAKEUPA - Wakeup 0 Register A */
+/*! @name WAKEUP_WAKEUPA - Wakeup 0 Register A..Wakeup 1 Register A */
 /*! @{ */
 
 #define VBAT_WAKEUP_WAKEUPA_REG_MASK             (0xFFFFFFFFU)

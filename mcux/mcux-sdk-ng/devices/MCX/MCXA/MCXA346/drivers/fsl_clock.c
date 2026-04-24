@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, NXP
+ * Copyright 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -58,6 +58,15 @@
 #define PLL_SSCG_MD_INT_M            ((uint64_t)0xFFUL << PLL_SSCG_MD_INT_P)
 #define PLL_SSCG_MD_FRACT_SET(value) (((uint64_t)(value) << PLL_SSCG_MD_FRACT_P) & PLL_SSCG_MD_FRACT_M)
 #define PLL_SSCG_MD_INT_SET(value)   (((uint64_t)(value) << PLL_SSCG_MD_INT_P) & PLL_SSCG_MD_INT_M)
+
+/*! @brief Retry times for waiting flag. */
+#ifndef SOC_DRIVER_RETRY_TIMES
+#ifdef CONFIG_SOC_DRIVER_RETRY_TIMES
+#define SOC_DRIVER_RETRY_TIMES CONFIG_SOC_DRIVER_RETRY_TIMES
+#else
+#define SOC_DRIVER_RETRY_TIMES 0U /* Defining to zero means to keep waiting for the flag until it is assert/deassert. */
+#endif
+#endif
 
 /*******************************************************************************
  * Variables
@@ -181,7 +190,7 @@ clock_attach_id_t CLOCK_GetClockAttachId(clock_attach_id_t connection)
 }
 
 /* Set the clock selection value */
-void CLOCK_SetClockSelect(clock_select_name_t sel_name, uint32_t value)
+status_t CLOCK_SetClockSelect(clock_select_name_t sel_name, uint32_t value)
 {
     volatile uint32_t *pClkCtrl = (volatile uint32_t *)(MRCC0_BASE + (uint32_t)sel_name);
     assert(sel_name <= kCLOCK_SelMax);
@@ -189,8 +198,19 @@ void CLOCK_SetClockSelect(clock_select_name_t sel_name, uint32_t value)
     if (sel_name == kCLOCK_SelSCGSCS)
     {
         SCG0->RCCR = (SCG0->RCCR & ~(SCG_RCCR_SCS_MASK)) | SCG_RCCR_SCS(value);
+
+#if (SOC_DRIVER_RETRY_TIMES != 0U)
+        uint32_t waitTimes = SOC_DRIVER_RETRY_TIMES;
+#endif
         while ((SCG0->CSR & SCG_CSR_SCS_MASK) != SCG_CSR_SCS(value))
         {
+#if (SOC_DRIVER_RETRY_TIMES != 0U)
+            if (--waitTimes == 0U)
+            {
+                assert(false);
+                return kStatus_Timeout;
+            }
+#endif
         }
     }
     else
@@ -203,6 +223,8 @@ void CLOCK_SetClockSelect(clock_select_name_t sel_name, uint32_t value)
         /* Freeze clock configuration */
         SYSCON->CLKUNLOCK |= SYSCON_CLKUNLOCK_UNLOCK_MASK;
     }
+
+    return kStatus_Success;
 }
 
 /* Get the clock selection value */
@@ -366,9 +388,19 @@ status_t CLOCK_SetupFROHFClocking(uint32_t iFreq)
     /* Lock FIRCCSR */
     SCG0->FIRCCSR |= SCG_FIRCCSR_LK_MASK;
 
+#if (SOC_DRIVER_RETRY_TIMES != 0U)
+    uint32_t waitTimes = SOC_DRIVER_RETRY_TIMES;
+#endif
     /* Wait for FIRC clock to be stable. */
     while ((SCG0->FIRCCSR & SCG_FIRCCSR_FIRCACC_MASK) == 0U)
     {
+#if (SOC_DRIVER_RETRY_TIMES != 0U)
+        if (--waitTimes == 0U)
+        {
+            assert(false);
+            return kStatus_Timeout;
+        }
+#endif
     }
 
     /* Switch back to FRO HF */
@@ -392,9 +424,19 @@ status_t CLOCK_SetupFRO12MClocking(void)
     /* Lock SIRCCSR */
     SCG0->SIRCCSR |= SCG_SIRCCSR_LK_MASK;
 
+#if (SOC_DRIVER_RETRY_TIMES != 0U)
+    uint32_t waitTimes = SOC_DRIVER_RETRY_TIMES;
+#endif
     /* Wait for SIRC clock to be valid. */
     while ((SCG0->SIRCCSR & SCG_SIRCCSR_SIRCVLD_MASK) == 0U)
     {
+#if (SOC_DRIVER_RETRY_TIMES != 0U)
+        if (--waitTimes == 0U)
+        {
+            assert(false);
+            return kStatus_Timeout;
+        }
+#endif
     }
 
     /* Release FROLFDIV */
@@ -471,9 +513,19 @@ status_t CLOCK_SetupExtClocking(uint32_t iFreq)
     /* Enable SOSC clock monitor and Enable SOSC */
     SCG0->SOSCCSR |= (SCG_SOSCCSR_SOSCCM_MASK | SCG_SOSCCSR_SOSCEN_MASK);
 
+#if (SOC_DRIVER_RETRY_TIMES != 0U)
+    uint32_t waitTimes = SOC_DRIVER_RETRY_TIMES;
+#endif
     /* Wait for SOSC clock to be valid. */
     while ((SCG0->SOSCCSR & SCG_SOSCCSR_SOSCVLD_MASK) == 0U)
     {
+#if (SOC_DRIVER_RETRY_TIMES != 0U)
+        if (--waitTimes == 0U)
+        {
+            assert(false);
+            return kStatus_Timeout;
+        }
+#endif
     }
 
     s_Ext_Clk_Freq = iFreq;
@@ -514,9 +566,19 @@ status_t CLOCK_SetupExtRefClocking(uint32_t iFreq)
     /* Enable SOSC clock monitor and Enable SOSC */
     SCG0->SOSCCSR |= (SCG_SOSCCSR_SOSCCM_MASK | SCG_SOSCCSR_SOSCEN_MASK);
 
+#if (SOC_DRIVER_RETRY_TIMES != 0U)
+    uint32_t waitTimes = SOC_DRIVER_RETRY_TIMES;
+#endif
     /* Wait for SOSC clock to be valid. */
     while ((SCG0->SOSCCSR & SCG_SOSCCSR_SOSCVLD_MASK) == 0U)
     {
+#if (SOC_DRIVER_RETRY_TIMES != 0U)
+        if (--waitTimes == 0U)
+        {
+            assert(false);
+            return kStatus_Timeout;
+        }
+#endif
     }
 
     s_Ext_Clk_Freq = iFreq;
@@ -1814,9 +1876,19 @@ pll_error_t CLOCK_SetPLL1Freq(const pll_setup_t *pSetup)
     /* Power on PLL1 and enable PLL1 clock */
     SCG0->SPLLCSR |= (SCG_SPLLCSR_SPLLPWREN_MASK | SCG_SPLLCSR_SPLLCLKEN_MASK);
 
+#if (SOC_DRIVER_RETRY_TIMES != 0U)
+    uint32_t waitTimes = SOC_DRIVER_RETRY_TIMES;
+#endif
     /* Wait for APLL lock */
     while (CLOCK_IsPLL1Locked() == false)
     {
+#if (SOC_DRIVER_RETRY_TIMES != 0U)
+        if (--waitTimes == 0U)
+        {
+            assert(false);
+            return kStatus_PLL_Timeout;
+        }
+#endif
     }
 
     if (pSetup->pllRate != CLOCK_GetPll1OutFreq())

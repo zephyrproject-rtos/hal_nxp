@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, NXP
+ * Copyright 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.0.1. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief CLOCK driver version 2.0.2. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -883,7 +883,7 @@ clock_attach_id_t CLOCK_GetClockAttachId(clock_attach_id_t connection);
  * @param   sel_name : Clock select.
  * @param   value    : value to be set.
  */
-void CLOCK_SetClockSelect(clock_select_name_t sel_name, uint32_t value);
+status_t CLOCK_SetClockSelect(clock_select_name_t sel_name, uint32_t value);
 
 /**
  * @brief   Get the clock select value.
@@ -1212,7 +1212,8 @@ typedef enum _pll_error
     kStatus_PLL_InputTooHigh    = MAKE_STATUS(kStatusGroup_Generic, 5), /*!< PLL input rate is too high */
     kStatus_PLL_OutsideIntLimit = MAKE_STATUS(kStatusGroup_Generic, 6), /*!< Requested output rate isn't possible */
     kStatus_PLL_CCOTooLow       = MAKE_STATUS(kStatusGroup_Generic, 7), /*!< Requested CCO rate isn't possible */
-    kStatus_PLL_CCOTooHigh      = MAKE_STATUS(kStatusGroup_Generic, 8)  /*!< Requested CCO rate isn't possible */
+    kStatus_PLL_CCOTooHigh      = MAKE_STATUS(kStatusGroup_Generic, 8), /*!< Requested CCO rate isn't possible */
+    kStatus_PLL_Timeout         = MAKE_STATUS(kStatusGroup_Generic, 9)  /*!< Generic status for timeout */
 } pll_error_t;
 
 /*! @brief    Return PLL0 output clock rate from setup structure

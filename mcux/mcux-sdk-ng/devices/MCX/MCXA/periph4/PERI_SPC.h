@@ -30,13 +30,13 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260323
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SPC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -355,10 +355,9 @@ typedef struct {
 #define SPC_ACTIVE_CFG_CORELDO_VDD_LVL_MASK      (0xCU)
 #define SPC_ACTIVE_CFG_CORELDO_VDD_LVL_SHIFT     (2U)
 /*! CORELDO_VDD_LVL - LDO_CORE VDD Regulator Voltage Level
- *  0b00..
  *  0b01..Regulate to mid voltage (1.0 V)
  *  0b10..Regulate to normal voltage (1.1 V)
- *  0b11..Regulate to overdrive voltage (1.15 V)
+ *  0b11..Regulate to overdrive voltage (1.2 V)
  */
 #define SPC_ACTIVE_CFG_CORELDO_VDD_LVL(x)        (((uint32_t)(((uint32_t)(x)) << SPC_ACTIVE_CFG_CORELDO_VDD_LVL_SHIFT)) & SPC_ACTIVE_CFG_CORELDO_VDD_LVL_MASK)
 
@@ -455,7 +454,8 @@ typedef struct {
  *  0b00..Reserved
  *  0b01..Mid voltage (1.0 V)
  *  0b10..Normal voltage (1.1 V)
- *  0b11..Overdrive voltage (1.15 V)
+ *  0b11..Overdrive voltage (1.2 V)
+ *  0b11..Reserved
  */
 #define SPC_LP_CFG_CORELDO_VDD_LVL(x)            (((uint32_t)(((uint32_t)(x)) << SPC_LP_CFG_CORELDO_VDD_LVL_SHIFT)) & SPC_LP_CFG_CORELDO_VDD_LVL_MASK)
 
@@ -765,16 +765,16 @@ typedef struct {
 #define SPC_GLITCH_DETECT_SC_RE_MASK             (0x40U)
 #define SPC_GLITCH_DETECT_SC_RE_SHIFT            (6U)
 /*! RE - Glitch Detect Reset Enable
- *  0b0..GLITCH_DETECT_FLAG[CNT_SELECT] does not generate POR/LVD reset
- *  0b1..GLITCH_DETECT_FLAG[CNT_SELECT] does generate POR/LVD reset
+ *  0b0..Disables POR/LVD reset generation
+ *  0b1..Enables POR/LVD reset generation
  */
 #define SPC_GLITCH_DETECT_SC_RE(x)               (((uint32_t)(((uint32_t)(x)) << SPC_GLITCH_DETECT_SC_RE_SHIFT)) & SPC_GLITCH_DETECT_SC_RE_MASK)
 
 #define SPC_GLITCH_DETECT_SC_IE_MASK             (0x80U)
 #define SPC_GLITCH_DETECT_SC_IE_SHIFT            (7U)
 /*! IE - Glitch Detect Interrupt Enable
- *  0b0..GLITCH_DETECT_FLAG[CNT_SELECT] does not generate hardware interrupt (user polling)
- *  0b1..GLITCH_DETECT_FLAG[CNT_SELECT] does generate hardware interrupt
+ *  0b0..Disables automatic interrupt generation (user polling)
+ *  0b1..Enables automatic interrupt generation
  */
 #define SPC_GLITCH_DETECT_SC_IE(x)               (((uint32_t)(((uint32_t)(x)) << SPC_GLITCH_DETECT_SC_IE_SHIFT)) & SPC_GLITCH_DETECT_SC_IE_MASK)
 
@@ -829,16 +829,16 @@ typedef struct {
 #define SPC_GLITCH_VDDA_DETECT_SC_RE_MASK        (0x40U)
 #define SPC_GLITCH_VDDA_DETECT_SC_RE_SHIFT       (6U)
 /*! RE - Glitch Detect Reset Enable
- *  0b0..GLITCH_DETECT_FLAG[CNT_SELECT] does not generate POR/LVD reset
- *  0b1..GLITCH_DETECT_FLAG[CNT_SELECT] does generate POR/LVD reset
+ *  0b0..Disables POR/LVD reset generation
+ *  0b1..Enables POR/LVD reset generation
  */
 #define SPC_GLITCH_VDDA_DETECT_SC_RE(x)          (((uint32_t)(((uint32_t)(x)) << SPC_GLITCH_VDDA_DETECT_SC_RE_SHIFT)) & SPC_GLITCH_VDDA_DETECT_SC_RE_MASK)
 
 #define SPC_GLITCH_VDDA_DETECT_SC_IE_MASK        (0x80U)
 #define SPC_GLITCH_VDDA_DETECT_SC_IE_SHIFT       (7U)
 /*! IE - Glitch Detect Interrupt Enable
- *  0b0..GLITCH_DETECT_FLAG[CNT_SELECT] does not generate hardware interrupt (user polling)
- *  0b1..GLITCH_DETECT_FLAG[CNT_SELECT] does generate hardware interrupt
+ *  0b0..Disables automatic interrupt generation (user polling)
+ *  0b1..Enables automatic interrupt generation
  */
 #define SPC_GLITCH_VDDA_DETECT_SC_IE(x)          (((uint32_t)(((uint32_t)(x)) << SPC_GLITCH_VDDA_DETECT_SC_IE_SHIFT)) & SPC_GLITCH_VDDA_DETECT_SC_IE_MASK)
 

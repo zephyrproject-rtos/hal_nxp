@@ -5,15 +5,14 @@
 **                          MCXW235BIHNAR
 **                          MCXW235BIUKAR
 **
-**     Compilers:
-**                          GNU C Compiler
+**     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MCXW23x User manual Rev. 1.0 - 7 April 2025
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250819
+**     Build:               b260224
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -21,7 +20,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -91,7 +90,7 @@ __attribute__ ((weak)) void SystemInit (void)
 
 #if defined(SUPPORT_MASTER_CONNECTION) || defined(SUPPORT_SLAVE_CONNECTION)
     /* Make sure BLE link layer interrupts have highest priority in the system (prerequisite of the system). */
-    for (int irq = 0; irq <= WAKE_PAD_IRQn; irq++)
+    for (int irq = 0; irq <= CDOG_IRQn; irq++)
     {
         if (irq == BLE_LL_IRQn || irq == BLE_SLP_TMR_IRQn)
         {

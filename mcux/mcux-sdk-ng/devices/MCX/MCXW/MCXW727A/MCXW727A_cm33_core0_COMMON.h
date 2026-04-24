@@ -8,13 +8,13 @@
 **
 **     Reference manual:    Rev. 2, 2025-05-01
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Build:               b260209
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXW727A_cm33_core0
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -1853,6 +1853,9 @@ typedef enum IRQn {
   /** Array initializer of TSTMR peripheral base pointers */
   #define TSTMR_BASE_PTRS                          { TSTMR0 }
 #endif
+/* Extra definition */
+#define TSTMR_CLOCK_FREQUENCY_MHZ                (1U)
+
 
 /* TX_PACKET_RAM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1981,6 +1984,10 @@ typedef enum IRQn {
   /** Array initializer of WDOG peripheral base pointers */
   #define WDOG_BASE_PTRS                           { WDOG0, WDOG1 }
 #endif
+/* Extra definition */
+#define WDOG_UPDATE_KEY                          (0xD928C520U)
+#define WDOG_REFRESH_KEY                         (0xB480A602U)
+
 
 /* WOR - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
