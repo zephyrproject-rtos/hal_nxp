@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.2, 2017-06-08
-**     Build:               b251118
+**     Build:               b260209
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -115,10 +115,6 @@
 
 /* @brief Inputmux clock source. */
 #define FSL_FEATURE_INPUTMUX_HAS_NO_INPUTMUX_CLOCK_SOURCE (1)
-
-/* IOCON module features */
-
-/* No feature definitions */
 
 /* MRT module features */
 

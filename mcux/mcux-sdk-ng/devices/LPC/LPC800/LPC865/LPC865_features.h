@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251118
+**     Version:             rev. 3.0, 2026-02-09
+**     Build:               b260209
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -21,6 +21,8 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-09)
+**         Update FTM feature align to common feature definitions.
 **
 ** ###################################################################
 */
@@ -137,6 +139,8 @@
 #define FSL_FEATURE_FTM_HAS_CHANNEL6_TRIGGER (1)
 /* @brief If channel 7 is used to generate channel trigger, bitfield EXTTRIG[CH7TRIG]. */
 #define FSL_FEATURE_FTM_HAS_CHANNEL7_TRIGGER (1)
+/* @brief Has no QDCTRL. */
+#define FSL_FEATURE_FTM_HAS_NO_QDCTRL (0)
 /* @brief If instance has only TPM function. */
 #define FSL_FEATURE_FTM_IS_TPM_ONLY_INSTANCEn(x) (0)
 /* @brief Has frequency of the reload opportunities, bitfield CONF[LDFQ]. */
@@ -147,6 +151,32 @@
 #define FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(x) \
     (((x) == FTM0) ? (0) : \
     (((x) == FTM1) ? (1) : (-1)))
+/* @brief Has filter prescaler. */
+#define FSL_FEATURE_FTM_HAS_FILTER_PRESCALER (0)
+/* @brief Has fault output state configurable. */
+#define FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE (1)
+/* @brief Has paired deadtime. */
+#define FSL_FEATURE_FTM_HAS_PAIRED_DEADTIME (0)
+/* @brief Has PWM dithering. */
+#define FSL_FEATURE_FTM_HAS_DITHERING (1)
+/* @brief FTM instance has PWM dithering. */
+#define FSL_FEATURE_FTM_INSTANCE_HAS_DITHERINGn(x) (1)
+/* @brief Has trigger mode control. */
+#define FSL_FEATURE_FTM_HAS_TRIGGER_MODE (1)
+/* @brief Has modified combine mode. */
+#define FSL_FEATURE_FTM_HAS_MODIFIED_COMBINE_PWM (0)
+/* @brief Has configurable channel input state. */
+#define FSL_FEATURE_FTM_HAS_CONF_CHIS_BIT (1)
+/* @brief Has configurable channel output value. */
+#define FSL_FEATURE_FTM_HAS_CONF_CHOV_BIT (0)
+/* @brief FTM instance has Quadrature Decoder with input filter. */
+#define FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn(x) (1)
+/* @brief FTM instance fault input number. */
+#define FSL_FEATURE_FTM_INSTANCE_FAULT_INPUT_NUMBERn(x) \
+    (((x) == FTM0) ? (4) : \
+    (((x) == FTM1) ? (0) : (-1)))
+/* @brief Is affected by errata with ID 010856 (FTM: Safe state is not removed from channel outputs after fault condition ends if SWOCTRL is being used to control the pin). */
+#define FSL_FEATURE_FTM_HAS_ERRATA_010856 (0)
 
 /* I3C module features */
 
@@ -183,10 +213,6 @@
 #define FSL_FEATURE_INPUTMUX_HAS_CHANNEL_MUX (0)
 /* @brief Inputmux clock source. */
 #define FSL_FEATURE_INPUTMUX_HAS_NO_INPUTMUX_CLOCK_SOURCE (1)
-
-/* IOCON module features */
-
-/* No feature definitions */
 
 /* MRT module features */
 

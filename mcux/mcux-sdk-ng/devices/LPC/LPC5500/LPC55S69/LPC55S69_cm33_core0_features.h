@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Version:             rev. 2.0, 2025-11-18
-**     Build:               b251118
+**     Version:             rev. 2.1, 2025-12-01
+**     Build:               b260209
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -20,6 +20,8 @@
 **         Initial A1 version based on v1.3UM
 **     - rev. 2.0 (2025-11-18)
 **         Update puf feature align to shared definition changes.
+**     - rev. 2.1 (2025-12-01)
+**         Add FSL_FEATURE_PUF_HAS_KEYRESET to indicate if PUF hardware has key reset feature.
 **
 ** ###################################################################
 */
@@ -184,6 +186,8 @@
 #define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
 /* @brief Has High Speed Mode Trim Request (bitfield CTRL[CALHS]). */
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (0)
+/* @brief Has Justified Left Enable (bitfield CFG2[JLEFT]). */
+#define FSL_FEATURE_LPADC_HAS_CFG2_JLEFT (0)
 /* @brief Has internal temperature sensor. */
 #define FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR (1)
 /* @brief Chip Rev 0A Temperature sensor parameter A (slope). */
@@ -209,14 +213,24 @@
 #define FSL_FEATURE_ANACTRL_HAS_XO32M_ADC_CLK_MODE_BIF_FIELD (0)
 /* @brief Has auxiliary bias(register AUX_BIAS). */
 #define FSL_FEATURE_ANACTRL_HAS_AUX_BIAS_REG (1)
+/* @brief ANACTRL interrupt control BOD1. */
+#define FSL_FEATURE_ANACTRL_CONTROL_BOD1_INT (0)
+/* @brief ANACTRL interrupt control BOD2. */
+#define FSL_FEATURE_ANACTRL_CONTROL_BOD2_INT (0)
+/* @brief BOD_DCDC_INT_CTRL reigster has BODCORE bit field. */
+#define FSL_FEATURE_ANACTRL_HAS_BODCORE_BIT_FIELD (1)
+/* @brief ANACTRL has XO32M_CTRL reigster. */
+#define FSL_FEATURE_ANACTRL_HAS_XO32M_CTRL (1)
+/* @brief FRO192M_CTRL reigster has 96MHz clock control. */
+#define FSL_FEATURE_ANACTRL_HAS_96MHZCLK_CONTROL (1)
 
 /* CASPER module features */
 
-/* @brief Base address of the CASPER dedicated RAM */
+/* @brief Base address of the CASPER dedicated RAM. */
 #define FSL_FEATURE_CASPER_RAM_BASE_ADDRESS (0x04000000)
-/* @brief SW interleaving of the CASPER dedicated RAM */
+/* @brief SW interleaving of the CASPER dedicated RAM. */
 #define FSL_FEATURE_CASPER_RAM_IS_INTERLEAVED (1)
-/* @brief CASPER dedicated RAM offset */
+/* @brief CASPER dedicated RAM offset. */
 #define FSL_FEATURE_CASPER_RAM_OFFSET (0xE)
 
 /* CTIMER module features */
@@ -324,6 +338,10 @@
 /* @brief the address of alias offset */
 #define FSL_FEATURE_HASHCRYPT_ALIAS_OFFSET (0x00000000)
 
+/* I2C module features */
+
+/* No feature definitions */
+
 /* I2S module features */
 
 /* @brief I2S support dual channel transfer. */
@@ -378,7 +396,7 @@
 /* POWERQUAD module features */
 
 /* @brief Sine and Cossine fix errata */
-#define FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA  (1)
+#define FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA (1)
 
 /* PUF module features */
 
@@ -392,6 +410,8 @@
 #define FSL_FEATURE_PUF_ACTIVATION_CODE_ADDRESS (648704)
 /* @brief Puf Activation Code Size. */
 #define FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE (1192)
+/* @brief PUF has KEYRESET register. */
+#define FSL_FEATURE_PUF_HAS_KEYRESET (1)
 
 /* RTC module features */
 
@@ -490,6 +510,8 @@
 #define FSL_FEATURE_USBHSH_USB_RAM_BASE_ADDRESS (0x40100000)
 /* @brief USBHSH version */
 #define FSL_FEATURE_USBHSH_VERSION (300)
+/* @brief USBHSH has packet turnaround time-out register */
+#define FSL_FEATURE_USBHSH_HAS_TURNAROUND_TIMEOUT (0)
 
 /* USBPHY module features */
 
