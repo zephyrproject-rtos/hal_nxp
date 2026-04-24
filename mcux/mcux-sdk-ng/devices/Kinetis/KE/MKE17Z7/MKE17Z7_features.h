@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Version:             rev. 3.0, 2025-11-11
-**     Build:               b251111
+**     Version:             rev. 3.1, 2026-01-30
+**     Build:               b260202
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -20,6 +20,8 @@
 **         Based on Rev.1 RM.
 **     - rev. 3.0 (2025-11-11)
 **         Add "belong to flexcomm" feature for LPI2C/LPSPI.
+**     - rev. 3.1 (2026-01-30)
+**         Added prescaler clock source features for LPTMR.
 **
 ** ###################################################################
 */
@@ -658,6 +660,8 @@
     (((x) == FTM0) ? (4) : \
     (((x) == FTM1) ? (0) : \
     (((x) == FTM2) ? (0) : (-1))))
+/* @brief Is affected by errata with ID 010856 (FTM: Safe state is not removed from channel outputs after fault condition ends if SWOCTRL is being used to control the pin). */
+#define FSL_FEATURE_FTM_HAS_ERRATA_010856 (0)
 
 /* GPIO module features */
 
@@ -707,6 +711,14 @@
 #define FSL_FEATURE_LPTMR_CNR_WIDTH_IS_32B (0)
 /* @brief Has timer DMA request enable (register bit CSR[TDRE]). */
 #define FSL_FEATURE_LPTMR_HAS_CSR_TDRE (1)
+/* @brief Do not has prescaler clock source 0. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_0_SUPPORT (0)
+/* @brief Do not has prescaler clock source 1. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_1_SUPPORT (0)
+/* @brief Do not has prescaler clock source 2. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_2_SUPPORT (0)
+/* @brief Do not has prescaler clock source 3. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_3_SUPPORT (0)
 
 /* LPUART module features */
 
@@ -1032,6 +1044,8 @@
 #define FSL_FEATURE_TSI_HAS_M_TX_USED (1)
 /* @brief Number of TSI channels. */
 #define FSL_FEATURE_TSI_CHANNEL_COUNT (25)
+/* @brief Has SHIELD register. */
+#define FSL_FEATURE_TSI_HAS_SHIELD_REGISTER (0)
 
 /* WDOG module features */
 

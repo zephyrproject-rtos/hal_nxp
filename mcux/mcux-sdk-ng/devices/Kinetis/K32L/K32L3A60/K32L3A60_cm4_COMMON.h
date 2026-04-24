@@ -8,13 +8,13 @@
 **
 **     Reference manual:    K32L3ARM, Rev. 0 , 05/2019
 **     Version:             rev. 2.1, 2025-11-10
-**     Build:               b251111
+**     Build:               b260202
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for K32L3A60_cm4
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -737,6 +737,9 @@ typedef enum _mu_power_mode
 #define TSTMR_BASE_ADDRS                         { TSTMRA_BASE }
 /** Array initializer of TSTMR peripheral base pointers */
 #define TSTMR_BASE_PTRS                          { TSTMRA }
+/* Extra definition */
+#define TSTMR_CLOCK_FREQUENCY_MHZ                (1U)
+
 
 /* USB - Peripheral instance base addresses */
 /** Peripheral USB0 base address */
@@ -797,6 +800,10 @@ typedef enum _mu_power_mode
 #define WDOG_BASE_PTRS                           { WDOG0, WDOG1 }
 /** Interrupt vectors for the WDOG peripheral type */
 #define WDOG_IRQS                                { WDOG0_IRQn, NotAvail_IRQn }
+/* Extra definition */
+#define WDOG_UPDATE_KEY                          (0xD928C520U)
+#define WDOG_REFRESH_KEY                         (0xB480A602U)
+
 
 /* XRDC - Peripheral instance base addresses */
 /** Peripheral XRDC base address */

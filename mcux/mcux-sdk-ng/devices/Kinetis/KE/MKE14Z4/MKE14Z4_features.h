@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Version:             rev. 2.0, 2025-11-11
-**     Build:               b251111
+**     Version:             rev. 2.1, 2026-01-30
+**     Build:               b260202
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -18,6 +18,8 @@
 **         Initial version.
 **     - rev. 2.0 (2025-11-11)
 **         Update RTC feature for common updates, add "belong to flexcomm" feature for LPI2C/LPSPI.
+**     - rev. 2.1 (2026-01-30)
+**         Added prescaler clock source features for LPTMR.
 **
 ** ###################################################################
 */
@@ -558,6 +560,8 @@
 #define FSL_FEATURE_FTM_HAS_CHANNEL6_TRIGGER (0)
 /* @brief If channel 7 is used to generate channel trigger, bitfield EXTTRIG[CH7TRIG]. */
 #define FSL_FEATURE_FTM_HAS_CHANNEL7_TRIGGER (0)
+/* @brief Has no QDCTRL. */
+#define FSL_FEATURE_FTM_HAS_NO_QDCTRL (0)
 /* @brief If instance has only TPM function. */
 #define FSL_FEATURE_FTM_IS_TPM_ONLY_INSTANCEn(x) (0)
 /* @brief Has frequency of the reload opportunities, bitfield CONF[LDFQ]. */
@@ -584,6 +588,8 @@
 #define FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn(x) (1)
 /* @brief FTM instance fault input number. */
 #define FSL_FEATURE_FTM_INSTANCE_FAULT_INPUT_NUMBERn(x) (4)
+/* @brief Is affected by errata with ID 010856 (FTM: Safe state is not removed from channel outputs after fault condition ends if SWOCTRL is being used to control the pin). */
+#define FSL_FEATURE_FTM_HAS_ERRATA_010856 (0)
 
 /* GPIO module features */
 
@@ -633,6 +639,14 @@
 #define FSL_FEATURE_LPTMR_CNR_WIDTH_IS_32B (0)
 /* @brief Has timer DMA request enable (register bit CSR[TDRE]). */
 #define FSL_FEATURE_LPTMR_HAS_CSR_TDRE (1)
+/* @brief Do not has prescaler clock source 0. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_0_SUPPORT (0)
+/* @brief Do not has prescaler clock source 1. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_1_SUPPORT (0)
+/* @brief Do not has prescaler clock source 2. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_2_SUPPORT (0)
+/* @brief Do not has prescaler clock source 3. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_3_SUPPORT (0)
 
 /* LPUART module features */
 
@@ -712,10 +726,6 @@
 #define FSL_FEATURE_LPUART_FIFO_SIZEn(x) (4)
 /* @brief UART support receive rts configuration (has bit MODIR[RTSWATER]). */
 #define FSL_FEATURE_LPUART_HAS_MODIR_RTSWATER (1)
-
-/* MMDVSQ module features */
-
-/* No feature definitions */
 
 /* interrupt module features */
 
@@ -837,7 +847,7 @@
 /* RTC module features */
 
 /* @brief Has wakeup pin. */
-#define FSL_FEATURE_RTC_HAS_WAKEUP_PIN (0)
+#define FSL_FEATURE_RTC_HAS_WAKEUP_PIN (1)
 /* @brief Has wakeup pin selection (bit field CR[WPS]). */
 #define FSL_FEATURE_RTC_HAS_WAKEUP_PIN_SELECTION (1)
 /* @brief Has low power features (registers MER, MCLR and MCHR). */

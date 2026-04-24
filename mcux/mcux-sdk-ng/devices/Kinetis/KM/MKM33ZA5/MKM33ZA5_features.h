@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Version:             rev. 1.2, 2015-05-25
-**     Build:               b250801
+**     Version:             rev. 1.4, 2026-01-30
+**     Build:               b260202
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -18,8 +18,14 @@
 **         Initial version.
 **     - rev. 1.1 (2015-01-21)
 **         Added FSL_FEATURE_SOC_peripheral_COUNT with number of peripheral instances
-**     - rev. 1.2 (2015-05-25)
+**     - rev. 1.2 (2015-05-19)
+**         FSL_FEATURE_SOC_CAU_COUNT remamed to FSL_FEATURE_SOC_MMCAU_COUNT.
+**         Added FSL_FEATURE_SOC_peripheral_COUNT for TRNG and HSADC.
+**         Added features for PORT.
+**     - rev. 1.3 (2015-05-25)
 **         Added FSL_FEATURE_FLASH_PFLASH_START_ADDRESS
+**     - rev. 1.4 (2026-01-30)
+**         Added prescaler clock source features for LPTMR.
 **
 ** ###################################################################
 */
@@ -1110,6 +1116,14 @@
 #define FSL_FEATURE_LPTMR_CNR_WIDTH_IS_32B (0)
 /* @brief Has timer DMA request enable (register bit CSR[TDRE]). */
 #define FSL_FEATURE_LPTMR_HAS_CSR_TDRE (0)
+/* @brief Do not has prescaler clock source 0. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_0_SUPPORT (0)
+/* @brief Do not has prescaler clock source 1. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_1_SUPPORT (0)
+/* @brief Do not has prescaler clock source 2. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_2_SUPPORT (0)
+/* @brief Do not has prescaler clock source 3. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_3_SUPPORT (0)
 
 /* MCG module features */
 
@@ -1709,6 +1723,8 @@
 #define FSL_FEATURE_VREF_MODE_LV_TYPE (1)
 /* @brief Module has also low reference (registers VREFL/VREFH) */
 #define FSL_FEATURE_VREF_HAS_LOW_REFERENCE (1)
+/* @brief Has VREF_TRM4. */
+#define FSL_FEATURE_VREF_HAS_TRM4 (0)
 
 /* WDOG module features */
 

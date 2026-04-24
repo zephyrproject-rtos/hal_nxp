@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Version:             rev. 2.0, 2025-11-10
-**     Build:               b251110
+**     Version:             rev. 2.1, 2026-01-30
+**     Build:               b260130
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -18,6 +18,9 @@
 **         Initial version.
 **     - rev. 2.0 (2025-11-10)
 **         Update RTC feature for common updates.
+**     - rev. 2.1 (2026-01-30)
+**         Added prescaler clock source features for LPTMR,
+**         Added global time features for LPTPM.
 **
 ** ###################################################################
 */
@@ -712,6 +715,14 @@
 #define FSL_FEATURE_LPTMR_CNR_WIDTH_IS_32B (0)
 /* @brief Has timer DMA request enable (register bit CSR[TDRE]). */
 #define FSL_FEATURE_LPTMR_HAS_CSR_TDRE (0)
+/* @brief Do not has prescaler clock source 0. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_0_SUPPORT (0)
+/* @brief Do not has prescaler clock source 1. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_1_SUPPORT (0)
+/* @brief Do not has prescaler clock source 2. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_2_SUPPORT (0)
+/* @brief Do not has prescaler clock source 3. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_3_SUPPORT (0)
 
 /* LPUART module features */
 
@@ -1302,8 +1313,6 @@
 
 /* TPM module features */
 
-/* @brief Bus clock is the source clock for the module. */
-#define FSL_FEATURE_TPM_BUS_CLOCK (0)
 /* @brief Number of channels. */
 #define FSL_FEATURE_TPM_CHANNEL_COUNTn(x) \
     (((x) == TPM0) ? (6) : \
@@ -1344,10 +1353,14 @@
 #define FSL_FEATURE_TPM_HAS_QDCTRL (0)
 /* @brief Whether QDCTRL register has effect. */
 #define FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(x) (0)
-/* @brief Is affected by errata with ID 050050 (Incorrect duty output when EPWM mode is set to PS=0 during write 1 to CnV register). */
-#define FSL_FEATURE_TPM_HAS_ERRATA_050050 (0)
 /* @brief Whether 32 bits counter has effect. */
 #define FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x) (0)
+/* @brief Has global time base enable. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (1)
+/* @brief Has global time base sync. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
+/* @brief Is affected by errata with ID 050050 (Incorrect duty output when EPWM mode is set to PS=0 during write 1 to CnV register). */
+#define FSL_FEATURE_TPM_HAS_ERRATA_050050 (0)
 
 /* UART module features */
 

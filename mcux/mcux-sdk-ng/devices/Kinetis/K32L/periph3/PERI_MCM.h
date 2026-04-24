@@ -4,13 +4,13 @@
 **                          K32L3A60VPJ1A_cm4
 **
 **     Version:             rev. 2.1, 2025-11-10
-**     Build:               b251110
+**     Build:               b260130
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
