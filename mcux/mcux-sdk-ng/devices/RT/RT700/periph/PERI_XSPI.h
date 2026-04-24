@@ -28,13 +28,13 @@
 **                          MIMXRT798SGFOB_hifi4
 **
 **     Version:             rev. 5.1, 2025-12-08
-**     Build:               b251208
+**     Build:               b260205
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for XSPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -2438,7 +2438,7 @@ typedef struct {
 #define XSPI_IPEDCTRL_IPED_XEX_EN_MASK           (0x800U)
 #define XSPI_IPEDCTRL_IPED_XEX_EN_SHIFT          (11U)
 /*! IPED_XEX_EN - IPED XEX Interface Enable
- *  0b0..Bypasses IPED logic and writes unencrypted or undecrypted data
+ *  0b0..Bypasses IPED logic and writes data without encryption or decryption
  *  0b1..Enables
  */
 #define XSPI_IPEDCTRL_IPED_XEX_EN(x)             (((uint32_t)(((uint32_t)(x)) << XSPI_IPEDCTRL_IPED_XEX_EN_SHIFT)) & XSPI_IPEDCTRL_IPED_XEX_EN_MASK)

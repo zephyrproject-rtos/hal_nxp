@@ -26,13 +26,13 @@
 **                          MIMXRT106SDVL6A
 **
 **     Version:             rev. 3.0, 2025-11-13
-**     Build:               b251113
+**     Build:               b260205
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FLEXSPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -230,7 +230,7 @@ typedef struct {
 
 #define FLEXSPI_MCR0_SERCLKDIV_MASK              (0x700U)
 #define FLEXSPI_MCR0_SERCLKDIV_SHIFT             (8U)
-/*! SERCLKDIV - Serial root clock
+/*! SERCLKDIV - The serial root clock could be divided inside FlexSPI . Refer to "Clocks" chapter for more details on clocking.
  *  0b000..Divided by 1
  *  0b001..Divided by 2
  *  0b010..Divided by 3
@@ -244,7 +244,7 @@ typedef struct {
 
 #define FLEXSPI_MCR0_HSEN_MASK                   (0x800U)
 #define FLEXSPI_MCR0_HSEN_SHIFT                  (11U)
-/*! HSEN - Half Speed Serial Flash Access Enable.
+/*! HSEN - Half Speed Serial Flash access Enable.
  *  0b0..Disable divide by 2 of serial flash clock for half speed commands.
  *  0b1..Enable divide by 2 of serial flash clock for half speed commands.
  */
@@ -269,8 +269,9 @@ typedef struct {
 
 #define FLEXSPI_MCR0_SCKFREERUNEN_MASK           (0x4000U)
 #define FLEXSPI_MCR0_SCKFREERUNEN_SHIFT          (14U)
-/*! SCKFREERUNEN - This bit is used to enable SCLK output free-running. For FPGA applications, the
- *    external device may use SCLK as reference clock to its internal PLL.
+/*! SCKFREERUNEN - This bit is used to force SCLK output free-running. For FPGA applications,
+ *    external device may use SCLK as reference clock to its internal PLL. If SCLK free-running is
+ *    enabled, data sampling with loopback clock from SCLK pad is not supported (MCR0[RXCLKSRC]=2).
  *  0b0..Disable.
  *  0b1..Enable.
  */
@@ -278,7 +279,7 @@ typedef struct {
 
 #define FLEXSPI_MCR0_IPGRANTWAIT_MASK            (0xFF0000U)
 #define FLEXSPI_MCR0_IPGRANTWAIT_SHIFT           (16U)
-/*! IPGRANTWAIT - Timeout wait cycle for IP command grant. */
+/*! IPGRANTWAIT - Time out wait cycle for IP command grant. */
 #define FLEXSPI_MCR0_IPGRANTWAIT(x)              (((uint32_t)(((uint32_t)(x)) << FLEXSPI_MCR0_IPGRANTWAIT_SHIFT)) & FLEXSPI_MCR0_IPGRANTWAIT_MASK)
 
 #define FLEXSPI_MCR0_AHBGRANTWAIT_MASK           (0xFF000000U)
@@ -292,16 +293,10 @@ typedef struct {
 
 #define FLEXSPI_MCR1_AHBBUSWAIT_MASK             (0xFFFFU)
 #define FLEXSPI_MCR1_AHBBUSWAIT_SHIFT            (0U)
-/*! AHBBUSWAIT - AHB Bus wait */
 #define FLEXSPI_MCR1_AHBBUSWAIT(x)               (((uint32_t)(((uint32_t)(x)) << FLEXSPI_MCR1_AHBBUSWAIT_SHIFT)) & FLEXSPI_MCR1_AHBBUSWAIT_MASK)
 
 #define FLEXSPI_MCR1_SEQWAIT_MASK                (0xFFFF0000U)
 #define FLEXSPI_MCR1_SEQWAIT_SHIFT               (16U)
-/*! SEQWAIT - Command Sequence Execution will timeout and abort after SEQWAIT * 1024 Serial Root
- *    Clock cycles. When sequence execution timeout occurs, there will be an interrupt generated
- *    (INTR[SEQTIMEOUT]) if this interrupt is enabled (INTEN[SEQTIMEOUTEN] is set 0x1) and AHB command is
- *    ignored by arbitrator.
- */
 #define FLEXSPI_MCR1_SEQWAIT(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXSPI_MCR1_SEQWAIT_SHIFT)) & FLEXSPI_MCR1_SEQWAIT_MASK)
 /*! @} */
 
@@ -310,20 +305,23 @@ typedef struct {
 
 #define FLEXSPI_MCR2_CLRAHBBUFOPT_MASK           (0x800U)
 #define FLEXSPI_MCR2_CLRAHBBUFOPT_SHIFT          (11U)
-/*! CLRAHBBUFOPT - Clear AHB buffer
- *  0b0..AHB RX/TX Buffer will not be cleared automatically when FlexSPI returns Stop mode ACK.
- *  0b1..AHB RX/TX Buffer will be cleared automatically when FlexSPI returns Stop mode ACK.
+/*! CLRAHBBUFOPT - This bit determines whether AHB RX Buffer and AHB TX Buffer will be cleaned
+ *    automatically when FlexSPI returns STOP mode ACK. Software should set this bit if AHB RX Buffer or
+ *    AHB TX Buffer will be powered off in STOP mode. Otherwise AHB read access after exiting STOP
+ *    mode may hit AHB RX Buffer or AHB TX Buffer but their data entries are invalid.
+ *  0b0..AHB RX/TX Buffer will not be cleaned automatically when FlexSPI return Stop mode ACK.
+ *  0b1..AHB RX/TX Buffer will be cleaned automatically when FlexSPI return Stop mode ACK.
  */
 #define FLEXSPI_MCR2_CLRAHBBUFOPT(x)             (((uint32_t)(((uint32_t)(x)) << FLEXSPI_MCR2_CLRAHBBUFOPT_SHIFT)) & FLEXSPI_MCR2_CLRAHBBUFOPT_MASK)
 
 #define FLEXSPI_MCR2_SAMEDEVICEEN_MASK           (0x8000U)
 #define FLEXSPI_MCR2_SAMEDEVICEEN_SHIFT          (15U)
-/*! SAMEDEVICEEN - All external devices are same devices (both in type and size) for A1/A2/B1/B2.
+/*! SAMEDEVICEEN - All external devices are same devices (both in types and size) for A1/A2/B1/B2.
  *  0b0..In Individual mode, FLSHA1CRx/FLSHA2CRx/FLSHB1CRx/FLSHB2CRx register setting will be applied to Flash
  *       A1/A2/B1/B2 separately. In Parallel mode, FLSHA1CRx register setting will be applied to Flash A1 and B1,
- *       FLSHA2CRx register setting will be applied to Flash A2 and B2. FLSHB1CRx/FLSHB2CRx register setting will be
+ *       FLSHA2CRx register setting will be applied to Flash A2 and B2. FLSHB1CRx/FLSHB2CRx register settings will be
  *       ignored.
- *  0b1..FLSHA1CR0/FLSHA1CR1/FLSHA1CR2 register setting will be applied to Flash A1/A2/B1/B2. FLSHA2CRx/FLSHB1CRx/FLSHB2CRx will be ignored.
+ *  0b1..FLSHA1CR0/FLSHA1CR1/FLSHA1CR2 register settings will be applied to Flash A1/A2/B1/B2. FLSHA2CRx/FLSHB1CRx/FLSHB2CRx will be ignored.
  */
 #define FLEXSPI_MCR2_SAMEDEVICEEN(x)             (((uint32_t)(((uint32_t)(x)) << FLEXSPI_MCR2_SAMEDEVICEEN_SHIFT)) & FLEXSPI_MCR2_SAMEDEVICEEN_MASK)
 
@@ -348,7 +346,7 @@ typedef struct {
 
 #define FLEXSPI_AHBCR_APAREN_MASK                (0x1U)
 #define FLEXSPI_AHBCR_APAREN_SHIFT               (0U)
-/*! APAREN - Parallel mode enabled for AHB triggered Command (both read and write).
+/*! APAREN - Parallel mode enabled for AHB triggered Command (both read and write) .
  *  0b0..Flash will be accessed in Individual mode.
  *  0b1..Flash will be accessed in Parallel mode.
  */
@@ -374,9 +372,10 @@ typedef struct {
 
 #define FLEXSPI_AHBCR_BUFFERABLEEN_MASK          (0x10U)
 #define FLEXSPI_AHBCR_BUFFERABLEEN_SHIFT         (4U)
-/*! BUFFERABLEEN - Enable AHB bus bufferable write access support.
- *  0b0..Disabled. For all AHB write accesses (bufferable or non-bufferable), FlexSPI will return AHB Bus ready
- *       after all data is transmitted to external device and AHB command finished.
+/*! BUFFERABLEEN - Enable AHB bus bufferable write access support. This field affects the last beat
+ *    of AHB write access, refer for more details about AHB bufferable write.
+ *  0b0..Disabled. For all AHB write access (no matter bufferable or non-bufferable ), FlexSPI will return AHB Bus
+ *       ready after all data is transmitted to External device and AHB command finished.
  *  0b1..Enabled. For AHB bufferable write access, FlexSPI will return AHB Bus ready when the AHB command is
  *       granted by arbitrator and will not wait for AHB command finished.
  */
@@ -389,7 +388,7 @@ typedef struct {
 
 #define FLEXSPI_AHBCR_READADDROPT_MASK           (0x40U)
 #define FLEXSPI_AHBCR_READADDROPT_SHIFT          (6U)
-/*! READADDROPT - AHB Read Address option bit. This option bit is intended to remove AHB burst start address alignment limitation.
+/*! READADDROPT - AHB Read Address option bit. This option bit is intend to remove AHB burst start address alignment limitation.
  *  0b0..There is AHB read burst start address alignment limitation when flash is accessed in parallel mode or flash is word-addressable.
  *  0b1..There is no AHB read burst start address alignment limitation. FlexSPI will fetch more data than AHB
  *       burst required to meet the alignment requirement.
@@ -403,6 +402,16 @@ typedef struct {
  *  0b1..AHB read size to up size to 8 bytes aligned, no prefetching
  */
 #define FLEXSPI_AHBCR_READSZALIGN(x)             (((uint32_t)(((uint32_t)(x)) << FLEXSPI_AHBCR_READSZALIGN_SHIFT)) & FLEXSPI_AHBCR_READSZALIGN_MASK)
+
+#define FLEXSPI_AHBCR_ALIGNMENT_MASK             (0x300000U)
+#define FLEXSPI_AHBCR_ALIGNMENT_SHIFT            (20U)
+/*! ALIGNMENT - Decides all AHB read/write boundary. All access cross the boundary will be divided into smaller sub accesses.
+ *  0b00..No limit
+ *  0b01..1 KBytes
+ *  0b10..512 Bytes
+ *  0b11..256 Bytes
+ */
+#define FLEXSPI_AHBCR_ALIGNMENT(x)               (((uint32_t)(((uint32_t)(x)) << FLEXSPI_AHBCR_ALIGNMENT_SHIFT)) & FLEXSPI_AHBCR_ALIGNMENT_MASK)
 /*! @} */
 
 /*! @name INTEN - Interrupt Enable Register */
@@ -455,12 +464,12 @@ typedef struct {
 
 #define FLEXSPI_INTEN_AHBBUSTIMEOUTEN_MASK       (0x400U)
 #define FLEXSPI_INTEN_AHBBUSTIMEOUTEN_SHIFT      (10U)
-/*! AHBBUSTIMEOUTEN - AHB Bus timeout interrupt. */
+/*! AHBBUSTIMEOUTEN - AHB Bus timeout interrupt.Refer Interrupts chapter for more details. */
 #define FLEXSPI_INTEN_AHBBUSTIMEOUTEN(x)         (((uint32_t)(((uint32_t)(x)) << FLEXSPI_INTEN_AHBBUSTIMEOUTEN_SHIFT)) & FLEXSPI_INTEN_AHBBUSTIMEOUTEN_MASK)
 
 #define FLEXSPI_INTEN_SEQTIMEOUTEN_MASK          (0x800U)
 #define FLEXSPI_INTEN_SEQTIMEOUTEN_SHIFT         (11U)
-/*! SEQTIMEOUTEN - Sequence execution timeout interrupt enable. */
+/*! SEQTIMEOUTEN - Sequence execution timeout interrupt enable.Refer Interrupts chapter for more details. */
 #define FLEXSPI_INTEN_SEQTIMEOUTEN(x)            (((uint32_t)(((uint32_t)(x)) << FLEXSPI_INTEN_SEQTIMEOUTEN_SHIFT)) & FLEXSPI_INTEN_SEQTIMEOUTEN_MASK)
 /*! @} */
 
@@ -520,7 +529,7 @@ typedef struct {
 
 #define FLEXSPI_INTR_AHBBUSTIMEOUT_MASK          (0x400U)
 #define FLEXSPI_INTR_AHBBUSTIMEOUT_SHIFT         (10U)
-/*! AHBBUSTIMEOUT - AHB Bus timeout interrupt. */
+/*! AHBBUSTIMEOUT - AHB Bus timeout interrupt.Refer Interrupts chapter for more details. */
 #define FLEXSPI_INTR_AHBBUSTIMEOUT(x)            (((uint32_t)(((uint32_t)(x)) << FLEXSPI_INTR_AHBBUSTIMEOUT_SHIFT)) & FLEXSPI_INTR_AHBBUSTIMEOUT_MASK)
 
 #define FLEXSPI_INTR_SEQTIMEOUT_MASK             (0x800U)
@@ -572,7 +581,7 @@ typedef struct {
 
 #define FLEXSPI_AHBRXBUFCR0_REGIONEN_MASK        (0x40000000U)
 #define FLEXSPI_AHBRXBUFCR0_REGIONEN_SHIFT       (30U)
-/*! REGIONEN - AHB RX Buffer address region function enable */
+/*! REGIONEN - AHB RX Buffer address region funciton enable */
 #define FLEXSPI_AHBRXBUFCR0_REGIONEN(x)          (((uint32_t)(((uint32_t)(x)) << FLEXSPI_AHBRXBUFCR0_REGIONEN_SHIFT)) & FLEXSPI_AHBRXBUFCR0_REGIONEN_MASK)
 
 #define FLEXSPI_AHBRXBUFCR0_PREFETCHEN_MASK      (0x80000000U)
@@ -623,9 +632,9 @@ typedef struct {
 
 #define FLEXSPI_FLSHCR1_CSINTERVAL_MASK          (0xFFFF0000U)
 #define FLEXSPI_FLSHCR1_CSINTERVAL_SHIFT         (16U)
-/*! CSINTERVAL - This field is used to set the minimum interval between flash device chip select
- *    deassertion and flash device chip select assertion. If external flash has a limitation on the
- *    interval between command sequences, this field should be set accordingly. If there is no
+/*! CSINTERVAL - This field is used to set the minimum interval between flash device Chip selection
+ *    deassertion and flash device Chip selection assertion. If external flash has a limitation on
+ *    the interval between command sequences, this field should be set accordingly. If there is no
  *    limitation, set this field with value 0x0.
  */
 #define FLEXSPI_FLSHCR1_CSINTERVAL(x)            (((uint32_t)(((uint32_t)(x)) << FLEXSPI_FLSHCR1_CSINTERVAL_SHIFT)) & FLEXSPI_FLSHCR1_CSINTERVAL_MASK)
@@ -656,33 +665,27 @@ typedef struct {
 
 #define FLEXSPI_FLSHCR2_AWRWAIT_MASK             (0xFFF0000U)
 #define FLEXSPI_FLSHCR2_AWRWAIT_SHIFT            (16U)
-/*! AWRWAIT - For certain devices (such as FPGA), it need some time to write data into internal
- *    memory after the command sequences finished on FlexSPI interface. If another Read command sequence
- *    comes before previous programming finished internally, the read data may be wrong. This field
- *    is used to hold AHB Bus ready for AHB write access to wait the programming finished in
- *    external device. Then there will be no AHB read command triggered before the programming finished in
- *    external device. The Wait cycle between AHB triggered command sequences finished on FlexSPI
- *    interface and AHB return Bus ready: AWRWAIT * AWRWAITUNIT
- */
 #define FLEXSPI_FLSHCR2_AWRWAIT(x)               (((uint32_t)(((uint32_t)(x)) << FLEXSPI_FLSHCR2_AWRWAIT_SHIFT)) & FLEXSPI_FLSHCR2_AWRWAIT_MASK)
 
 #define FLEXSPI_FLSHCR2_AWRWAITUNIT_MASK         (0x70000000U)
 #define FLEXSPI_FLSHCR2_AWRWAITUNIT_SHIFT        (28U)
 /*! AWRWAITUNIT - AWRWAIT unit
- *  0b000..The AWRWAIT unit is 2 AHB clock cycle
- *  0b001..The AWRWAIT unit is 8 AHB clock cycle
- *  0b010..The AWRWAIT unit is 32 AHB clock cycle
- *  0b011..The AWRWAIT unit is 128 AHB clock cycle
- *  0b100..The AWRWAIT unit is 512 AHB clock cycle
- *  0b101..The AWRWAIT unit is 2048 AHB clock cycle
- *  0b110..The AWRWAIT unit is 8192 AHB clock cycle
- *  0b111..The AWRWAIT unit is 32768 AHB clock cycle
+ *  0b000..The AWRWAIT unit is 2 ahb clock cycle
+ *  0b001..The AWRWAIT unit is 8 ahb clock cycle
+ *  0b010..The AWRWAIT unit is 32 ahb clock cycle
+ *  0b011..The AWRWAIT unit is 128 ahb clock cycle
+ *  0b100..The AWRWAIT unit is 512 ahb clock cycle
+ *  0b101..The AWRWAIT unit is 2048 ahb clock cycle
+ *  0b110..The AWRWAIT unit is 8192 ahb clock cycle
+ *  0b111..The AWRWAIT unit is 32768 ahb clock cycle
  */
 #define FLEXSPI_FLSHCR2_AWRWAITUNIT(x)           (((uint32_t)(((uint32_t)(x)) << FLEXSPI_FLSHCR2_AWRWAITUNIT_SHIFT)) & FLEXSPI_FLSHCR2_AWRWAITUNIT_MASK)
 
 #define FLEXSPI_FLSHCR2_CLRINSTRPTR_MASK         (0x80000000U)
 #define FLEXSPI_FLSHCR2_CLRINSTRPTR_SHIFT        (31U)
-/*! CLRINSTRPTR - Clear the instruction pointer which is internally saved pointer by JMP_ON_CS. */
+/*! CLRINSTRPTR - Clear the instruction pointer which is internally saved pointer by JMP_ON_CS.
+ *    Refer Programmable Sequence Engine for details.
+ */
 #define FLEXSPI_FLSHCR2_CLRINSTRPTR(x)           (((uint32_t)(((uint32_t)(x)) << FLEXSPI_FLSHCR2_CLRINSTRPTR_SHIFT)) & FLEXSPI_FLSHCR2_CLRINSTRPTR_MASK)
 /*! @} */
 
@@ -691,12 +694,11 @@ typedef struct {
 
 #define FLEXSPI_FLSHCR4_WMOPT1_MASK              (0x1U)
 #define FLEXSPI_FLSHCR4_WMOPT1_SHIFT             (0U)
-/*! WMOPT1 - Write mask option bit 1. This option bit could be used to remove AHB and IP write burst
- *    start address alignment limitation.
- *  0b0..DQS pin will be used as Write Mask when writing to external device. There is no limitation on AHB/IP
- *       write burst start address alignment when flash is accessed in individual mode.
- *  0b1..DQS pin will not be used as Write Mask when writing to external device. There is limitation on AHB/IP
- *       write burst start address alignment when flash is accessed in individual mode.
+/*! WMOPT1 - Write mask option bit 1. This option bit could be used to remove AHB write burst start address alignment limitation.
+ *  0b0..DQS pin will be used as Write Mask when writing to external device. There is no limitation on AHB write
+ *       burst start address alignment when flash is accessed in individual mode.
+ *  0b1..DQS pin will not be used as Write Mask when writing to external device. There is limitation on AHB write
+ *       burst start address alignment when flash is accessed in individual mode.
  */
 #define FLEXSPI_FLSHCR4_WMOPT1(x)                (((uint32_t)(((uint32_t)(x)) << FLEXSPI_FLSHCR4_WMOPT1_SHIFT)) & FLEXSPI_FLSHCR4_WMOPT1_MASK)
 
@@ -704,7 +706,7 @@ typedef struct {
 #define FLEXSPI_FLSHCR4_WMENA_SHIFT              (2U)
 /*! WMENA - Write mask enable bit for flash device on port A. When write mask function is needed for
  *    memory device on port A, this bit must be set.
- *  0b0..Write mask is disabled, DQS(RWDS) pin will not be driven when writing to external device.
+ *  0b0..Write mask is disabled, DQS(RWDS) pin will be un-driven when writing to external device.
  *  0b1..Write mask is enabled, DQS(RWDS) pin will be driven by FlexSPI as write mask output when writing to external device.
  */
 #define FLEXSPI_FLSHCR4_WMENA(x)                 (((uint32_t)(((uint32_t)(x)) << FLEXSPI_FLSHCR4_WMENA_SHIFT)) & FLEXSPI_FLSHCR4_WMENA_MASK)
@@ -713,10 +715,20 @@ typedef struct {
 #define FLEXSPI_FLSHCR4_WMENB_SHIFT              (3U)
 /*! WMENB - Write mask enable bit for flash device on port B. When write mask function is needed for
  *    memory device on port B, this bit must be set.
- *  0b0..Write mask is disabled, DQS(RWDS) pin will not be driven when writing to external device.
+ *  0b0..Write mask is disabled, DQS(RWDS) pin will be un-driven when writing to external device.
  *  0b1..Write mask is enabled, DQS(RWDS) pin will be driven by FlexSPI as write mask output when writing to external device.
  */
 #define FLEXSPI_FLSHCR4_WMENB(x)                 (((uint32_t)(((uint32_t)(x)) << FLEXSPI_FLSHCR4_WMENB_SHIFT)) & FLEXSPI_FLSHCR4_WMENB_MASK)
+
+#define FLEXSPI_FLSHCR4_PAR_WM_MASK              (0x600U)
+#define FLEXSPI_FLSHCR4_PAR_WM_SHIFT             (9U)
+/*! PAR_WM - Enable APMEM 16 bit write mask function, bit 9 for A1-B1 pair, bit 10 for A2-B2 pair. */
+#define FLEXSPI_FLSHCR4_PAR_WM(x)                (((uint32_t)(((uint32_t)(x)) << FLEXSPI_FLSHCR4_PAR_WM_SHIFT)) & FLEXSPI_FLSHCR4_PAR_WM_MASK)
+
+#define FLEXSPI_FLSHCR4_PAR_ADDR_ADJ_DIS_MASK    (0x800U)
+#define FLEXSPI_FLSHCR4_PAR_ADDR_ADJ_DIS_SHIFT   (11U)
+/*! PAR_ADDR_ADJ_DIS - Disable the address shift logic for lower density of 16 bit PSRAM. */
+#define FLEXSPI_FLSHCR4_PAR_ADDR_ADJ_DIS(x)      (((uint32_t)(((uint32_t)(x)) << FLEXSPI_FLSHCR4_PAR_ADDR_ADJ_DIS_SHIFT)) & FLEXSPI_FLSHCR4_PAR_ADDR_ADJ_DIS_MASK)
 /*! @} */
 
 /*! @name IPCR0 - IP Control Register 0 */
@@ -782,7 +794,7 @@ typedef struct {
 
 #define FLEXSPI_IPRXFCR_RXWMRK_MASK              (0x3CU)
 #define FLEXSPI_IPRXFCR_RXWMRK_SHIFT             (2U)
-/*! RXWMRK - Watermark level is (RXWMRK+1)*64 bits. */
+/*! RXWMRK - Watermark level is (RXWMRK+1)*64 Bits. */
 #define FLEXSPI_IPRXFCR_RXWMRK(x)                (((uint32_t)(((uint32_t)(x)) << FLEXSPI_IPRXFCR_RXWMRK_SHIFT)) & FLEXSPI_IPRXFCR_RXWMRK_MASK)
 /*! @} */
 
@@ -818,7 +830,11 @@ typedef struct {
 
 #define FLEXSPI_DLLCR_DLLRESET_MASK              (0x2U)
 #define FLEXSPI_DLLCR_DLLRESET_SHIFT             (1U)
-/*! DLLRESET - DLL reset */
+/*! DLLRESET - Software could force a reset on DLL by setting this field to 0x1. This will cause the
+ *    DLL to lose lock and re-calibrate to detect an ref_clock half period phase shift. The reset
+ *    action is edge triggered, so software need to clear this bit after set this bit (no delay
+ *    limitation).
+ */
 #define FLEXSPI_DLLCR_DLLRESET(x)                (((uint32_t)(((uint32_t)(x)) << FLEXSPI_DLLCR_DLLRESET_SHIFT)) & FLEXSPI_DLLCR_DLLRESET_MASK)
 
 #define FLEXSPI_DLLCR_SLVDLYTARGET_MASK          (0x78U)
@@ -838,6 +854,11 @@ typedef struct {
 #define FLEXSPI_DLLCR_OVRDVAL_SHIFT              (9U)
 /*! OVRDVAL - Slave clock delay line delay cell number selection override value. */
 #define FLEXSPI_DLLCR_OVRDVAL(x)                 (((uint32_t)(((uint32_t)(x)) << FLEXSPI_DLLCR_OVRDVAL_SHIFT)) & FLEXSPI_DLLCR_OVRDVAL_MASK)
+
+#define FLEXSPI_DLLCR_REFPHASEGAP_MASK           (0x18000U)
+#define FLEXSPI_DLLCR_REFPHASEGAP_SHIFT          (15U)
+/*! REFPHASEGAP - Reference clock delay line phase adjust gap. */
+#define FLEXSPI_DLLCR_REFPHASEGAP(x)             (((uint32_t)(((uint32_t)(x)) << FLEXSPI_DLLCR_REFPHASEGAP_SHIFT)) & FLEXSPI_DLLCR_REFPHASEGAP_MASK)
 /*! @} */
 
 /*! @name STS0 - Status Register 0 */
@@ -863,9 +884,9 @@ typedef struct {
 #define FLEXSPI_STS0_ARBCMDSRC_SHIFT             (2U)
 /*! ARBCMDSRC - This status field indicates the trigger source of current command sequence granted
  *    by arbitrator. This field value is meaningless when ARB_CTL is not busy (STS0[ARBIDLE]=0x1).
- *  0b00..Triggered by AHB read command.
- *  0b01..Triggered by AHB write command.
- *  0b10..Triggered by IP command (triggered by setting register bit IPCMD[TRG]).
+ *  0b00..Triggered by AHB read command (triggered by AHB read).
+ *  0b01..Triggered by AHB write command (triggered by AHB Write).
+ *  0b10..Triggered by IP command (triggered by setting register bit IPCMD.TRG).
  *  0b11..Triggered by suspended command (resumed).
  */
 #define FLEXSPI_STS0_ARBCMDSRC(x)                (((uint32_t)(((uint32_t)(x)) << FLEXSPI_STS0_ARBCMDSRC_SHIFT)) & FLEXSPI_STS0_ARBCMDSRC_MASK)
@@ -896,7 +917,9 @@ typedef struct {
 
 #define FLEXSPI_STS1_IPCMDERRID_MASK             (0xF0000U)
 #define FLEXSPI_STS1_IPCMDERRID_SHIFT            (16U)
-/*! IPCMDERRID - Indicates the sequence Index when IP command error detected. */
+/*! IPCMDERRID - Indicates the sequence Index when IP command error detected. This field will be
+ *    cleared when INTR[IPCMDERR] is write-1-clear(w1c).
+ */
 #define FLEXSPI_STS1_IPCMDERRID(x)               (((uint32_t)(((uint32_t)(x)) << FLEXSPI_STS1_IPCMDERRID_SHIFT)) & FLEXSPI_STS1_IPCMDERRID_MASK)
 
 #define FLEXSPI_STS1_IPCMDERRCODE_MASK           (0xF000000U)

@@ -8,6 +8,10 @@
 **                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
 **                          MIMXRT1182XVP2C
+**                          MIMXRT1185CVJ8C_cm33
+**                          MIMXRT1185CVJ8C_cm7
+**                          MIMXRT1185XVJ8C_cm33
+**                          MIMXRT1185XVJ8C_cm7
 **                          MIMXRT1186CVJ8C_cm33
 **                          MIMXRT1186CVJ8C_cm7
 **                          MIMXRT1186XVJ8C_cm33
@@ -32,15 +36,19 @@
 **                          MIMXRT1189XVM8B_cm7
 **                          MIMXRT1189XVM8C_cm33
 **                          MIMXRT1189XVM8C_cm7
+**                          MIMXRT118CCVJ8C_cm33
+**                          MIMXRT118CCVJ8C_cm7
+**                          MIMXRT118CXVJ8C_cm33
+**                          MIMXRT118CXVJ8C_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250721
+**     Build:               b260206
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ERM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -74,6 +82,10 @@
 #include "MIMXRT1181_COMMON.h"
 #elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
+#elif (defined(CPU_MIMXRT1185CVJ8C_cm33) || defined(CPU_MIMXRT1185XVJ8C_cm33))
+#include "MIMXRT1185_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1185CVJ8C_cm7) || defined(CPU_MIMXRT1185XVJ8C_cm7))
+#include "MIMXRT1185_cm7_COMMON.h"
 #elif (defined(CPU_MIMXRT1186CVJ8C_cm33) || defined(CPU_MIMXRT1186XVJ8C_cm33))
 #include "MIMXRT1186_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT1186CVJ8C_cm7) || defined(CPU_MIMXRT1186XVJ8C_cm7))
@@ -86,6 +98,10 @@
 #include "MIMXRT1189_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189CVM8C_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7) || defined(CPU_MIMXRT1189XVM8C_cm7))
 #include "MIMXRT1189_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118CCVJ8C_cm33) || defined(CPU_MIMXRT118CXVJ8C_cm33))
+#include "MIMXRT118C_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118CCVJ8C_cm7) || defined(CPU_MIMXRT118CXVJ8C_cm7))
+#include "MIMXRT118C_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -128,19 +144,19 @@
  * @{
  */
 
-/** ERM - Size of Registers Arrays */
-#define ERM_CORR_ERR_CNT_COUNT                    4u
-
 /** ERM - Register Layout Typedef */
 typedef struct {
   __IO uint32_t CR0;                               /**< ERM Configuration Register 0, offset: 0x0 */
        uint8_t RESERVED_0[12];
   __IO uint32_t SR0;                               /**< ERM Status Register 0, offset: 0x10 */
        uint8_t RESERVED_1[244];
-  struct {                                         /* offset: 0x108, array step: 0x10 */
-    __IO uint32_t CORR_ERR;                          /**< ERM Memory 0 Correctable Error Count Register..ERM Memory 3 Correctable Error Count Register, array offset: 0x108, array step: 0x10 */
-         uint8_t RESERVED_0[12];
-  } CORR_ERR_CNT[ERM_CORR_ERR_CNT_COUNT];
+  __IO uint32_t CORR_ERR_CNT0;                     /**< ERM Memory 0 Correctable Error Count Register, offset: 0x108 */
+       uint8_t RESERVED_2[12];
+  __IO uint32_t CORR_ERR_CNT1;                     /**< ERM Memory 1 Correctable Error Count Register, offset: 0x118 */
+       uint8_t RESERVED_3[12];
+  __IO uint32_t CORR_ERR_CNT2;                     /**< ERM Memory 2 Correctable Error Count Register, offset: 0x128 */
+       uint8_t RESERVED_4[12];
+  __IO uint32_t CORR_ERR_CNT3;                     /**< ERM Memory 3 Correctable Error Count Register, offset: 0x138 */
 } ERM_Type;
 
 /* ----------------------------------------------------------------------------
@@ -288,17 +304,41 @@ typedef struct {
 #define ERM_SR0_SBC0(x)                          (((uint32_t)(((uint32_t)(x)) << ERM_SR0_SBC0_SHIFT)) & ERM_SR0_SBC0_MASK)
 /*! @} */
 
-/*! @name CORR_ERR - ERM Memory 0 Correctable Error Count Register..ERM Memory 3 Correctable Error Count Register */
+/*! @name CORR_ERR_CNT0 - ERM Memory 0 Correctable Error Count Register */
 /*! @{ */
 
-#define ERM_CORR_ERR_COUNT_MASK                  (0xFFU)
-#define ERM_CORR_ERR_COUNT_SHIFT                 (0U)
+#define ERM_CORR_ERR_CNT0_COUNT_MASK             (0xFFU)
+#define ERM_CORR_ERR_CNT0_COUNT_SHIFT            (0U)
 /*! COUNT - Memory n Correctable Error Count */
-#define ERM_CORR_ERR_COUNT(x)                    (((uint32_t)(((uint32_t)(x)) << ERM_CORR_ERR_COUNT_SHIFT)) & ERM_CORR_ERR_COUNT_MASK)
+#define ERM_CORR_ERR_CNT0_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << ERM_CORR_ERR_CNT0_COUNT_SHIFT)) & ERM_CORR_ERR_CNT0_COUNT_MASK)
 /*! @} */
 
-/* The count of ERM_CORR_ERR */
-#define ERM_CORR_ERR_CNT_CORR_ERR_COUNT          (4U)
+/*! @name CORR_ERR_CNT1 - ERM Memory 1 Correctable Error Count Register */
+/*! @{ */
+
+#define ERM_CORR_ERR_CNT1_COUNT_MASK             (0xFFU)
+#define ERM_CORR_ERR_CNT1_COUNT_SHIFT            (0U)
+/*! COUNT - Memory n Correctable Error Count */
+#define ERM_CORR_ERR_CNT1_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << ERM_CORR_ERR_CNT1_COUNT_SHIFT)) & ERM_CORR_ERR_CNT1_COUNT_MASK)
+/*! @} */
+
+/*! @name CORR_ERR_CNT2 - ERM Memory 2 Correctable Error Count Register */
+/*! @{ */
+
+#define ERM_CORR_ERR_CNT2_COUNT_MASK             (0xFFU)
+#define ERM_CORR_ERR_CNT2_COUNT_SHIFT            (0U)
+/*! COUNT - Memory n Correctable Error Count */
+#define ERM_CORR_ERR_CNT2_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << ERM_CORR_ERR_CNT2_COUNT_SHIFT)) & ERM_CORR_ERR_CNT2_COUNT_MASK)
+/*! @} */
+
+/*! @name CORR_ERR_CNT3 - ERM Memory 3 Correctable Error Count Register */
+/*! @{ */
+
+#define ERM_CORR_ERR_CNT3_COUNT_MASK             (0xFFU)
+#define ERM_CORR_ERR_CNT3_COUNT_SHIFT            (0U)
+/*! COUNT - Memory n Correctable Error Count */
+#define ERM_CORR_ERR_CNT3_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << ERM_CORR_ERR_CNT3_COUNT_SHIFT)) & ERM_CORR_ERR_CNT3_COUNT_MASK)
+/*! @} */
 
 
 /*!

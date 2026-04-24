@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Version:             rev. 5.0, 2025-11-13
-**     Build:               b251113
+**     Version:             rev. 5.1, 2025-12-01
+**     Build:               b260205
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -24,6 +24,8 @@
 **         Base on Rev.B RM.
 **     - rev. 5.0 (2025-11-13)
 **         Update mu/cache64 feature to align with shared definition changes.
+**     - rev. 5.1 (2025-12-01)
+**         Add FSL_FEATURE_PUF_HAS_KEYRESET to indicate if PUF hardware has key reset feature.
 **
 ** ###################################################################
 */
@@ -253,6 +255,8 @@
 #define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
 /* @brief Has High Speed Mode Trim Request (bitfield CTRL[CALHS]). */
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (0)
+/* @brief Has Justified Left Enable (bitfield CFG2[JLEFT]). */
+#define FSL_FEATURE_LPADC_HAS_CFG2_JLEFT (0)
 
 /* CACHE64_CTRL module features */
 
@@ -557,6 +561,10 @@
 /* @brief hashcrypt has reload feature */
 #define FSL_FEATURE_HASHCRYPT_HAS_RELOAD_FEATURE (1)
 
+/* I2C module features */
+
+/* No feature definitions */
+
 /* I2S module features */
 
 /* @brief I2S support dual channel transfer. */
@@ -675,6 +683,10 @@
 /* @brief Has no OS Timer control register in PMC. */
 #define FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG (1)
 
+/* POWERQUAD module features */
+
+/* No feature definitions */
+
 /* PUF module features */
 
 /* @brief PUF need to setup SRAM manually */
@@ -683,6 +695,8 @@
 #define FSL_FEATURE_PUF_HAS_SHIFT_STATUS (0)
 /* @brief PUF has IDXBLK_SHIFT register. */
 #define FSL_FEATURE_PUF_HAS_IDXBLK_SHIFT (0)
+/* @brief PUF has KEYRESET register. */
+#define FSL_FEATURE_PUF_HAS_KEYRESET (1)
 
 /* RTC module features */
 
