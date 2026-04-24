@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief XBAR driver version. */
-#define FSL_XBAR_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_XBAR_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*! @} */
 
 /*******************************************************************************
@@ -34,7 +34,12 @@
  * @defgroup xbar_driver_log The Driver Change Log
  * @ingroup xbar
  * @{
- * The current XBAR driver version is 2.0.1.
+ * The current XBAR driver version is 2.0.2.
+ *
+ * - 2.0.2
+ *   - Improvements
+ *     - Updated XBARA_SELx_SELn_MASK macro to use SOC register bit field macros
+ *       (XBARA_SEL0_SEL0_MASK / XBARA_SEL0_SEL1_MASK) instead of hardcoded values.
  *
  * - 2.0.1
  *   - Bug Fixes
@@ -128,7 +133,8 @@
 #define XBARA_SELx_SELn_SHIFT(output) ((((uint8_t)(output)&0x01U) != 0U) ? 8U : 0U)
 
 /*! @brief Macro function to get SELn field mask in XBARA_SELx register for a given output signal. */
-#define XBARA_SELx_SELn_MASK(output) ((((uint8_t)(output)&0x01U) != 0U) ? 0x3F00U : 0x003FU)
+#define XBARA_SELx_SELn_MASK(output) \
+    ((((uint8_t)(output)&0x01U) != 0U) ? XBARA_SEL0_SEL1_MASK : XBARA_SEL0_SEL0_MASK)
 
 /*! @brief Macro function to create SELn field value in XBARA_SELx register for given output signal
  *         and input signal value input_signal, see xbar_input_signal_t. */

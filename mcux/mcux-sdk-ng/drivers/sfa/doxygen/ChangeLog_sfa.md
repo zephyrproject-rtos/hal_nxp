@@ -1,5 +1,20 @@
 # SFA
 
+## [2.1.6]
+
+- Bug Fixes
+  - Updated timeout-related macro definitions and `#if` conditions to use explicit constant expressions for MISRA compliance.
+  - Improved `SFA_Mode0Calculate()` checks and rounding behavior for safer frequency calculation.
+
+## [2.1.5]
+
+- Bug Fixes
+  - Add assertions to prevent unsigned integer underflow in subtraction operations.
+  - Add assertions to prevent unsigned integer overflow in multiplication calculations.
+  - Add safe type conversion with temporary variables for uint32_t operations.
+  - Add bounds checking for narrowing conversions from uint64_t to uint32_t.
+  - Follow INT30-C and INT31-C CERT coding standards for safe integer operations.
+
 ## [2.1.4]
 
 - Bug Fixes

@@ -1,5 +1,10 @@
 # FLEXSPI DMA Driver
 
+## [2.2.2]
+
+- Bug Fixes
+  - Fixed CERT INT31-C violations: added masks before uint8_t casts and explicit uint32_t casts for division results.
+
 ## [2.2.1]
 
 - Bug Fixes

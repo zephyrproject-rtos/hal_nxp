@@ -1,5 +1,5 @@
 /*
- * Copyright  2019 NXP
+ * Copyright  2019, 2026 NXP
  * All rights reserved.
  *
  *
@@ -29,7 +29,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Group sysctl driver version for SDK */
-#define FSL_SYSCTL_DRIVER_VERSION (MAKE_VERSION(2, 0, 5)) /*!< Version 2.0.5. */
+#define FSL_SYSCTL_DRIVER_VERSION (MAKE_VERSION(2, 0, 6)) /*!< Version 2.0.6. */
 /*! @} */
 
 /*! @brief SYSCTL share set*/
@@ -127,10 +127,10 @@ void SYSCTL_Deinit(SYSCTL_Type *base);
  */
 void SYSCTL_SetFlexcommShareSet(SYSCTL_Type *base,
                                 uint32_t flexCommIndex,
-                                uint32_t sckSet,
-                                uint32_t wsSet,
-                                uint32_t dataInSet,
-                                uint32_t dataOutSet);
+                                uint8_t sckSet,
+                                uint8_t wsSet,
+                                uint8_t dataInSet,
+                                uint8_t dataOutSet);
 
 /*!
  * @brief SYSCTL share set configure for separate signal
@@ -141,7 +141,7 @@ void SYSCTL_SetFlexcommShareSet(SYSCTL_Type *base,
  * @param set share set for sck, reference _sysctl_share_set_index
  *
  */
-void SYSCTL_SetShareSet(SYSCTL_Type *base, uint32_t flexCommIndex, sysctl_fcctrlsel_signal_t signal, uint32_t set);
+void SYSCTL_SetShareSet(SYSCTL_Type *base, uint32_t flexCommIndex, sysctl_fcctrlsel_signal_t signal, uint8_t set);
 
 /*!
  * @brief SYSCTL share set source configure

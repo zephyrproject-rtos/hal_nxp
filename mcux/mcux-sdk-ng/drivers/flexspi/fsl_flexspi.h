@@ -25,7 +25,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FLEXSPI driver version. */
-#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 9, 0))
+#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 9, 1))
 /*! @} */
 
 #define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(0)

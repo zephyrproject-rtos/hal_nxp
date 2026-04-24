@@ -161,10 +161,12 @@ void WWDT_Init(WWDT_Type *base, const wwdt_config_t *config)
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
 
 #if !(defined(FSL_FEATURE_WWDT_HAS_NO_OSCILLATOR_LOCK) && FSL_FEATURE_WWDT_HAS_NO_OSCILLATOR_LOCK)
-    value = WWDT_MOD_WDEN(config->enableWwdt) | WWDT_MOD_WDRESET(config->enableWatchdogReset) |
-            WWDT_MOD_LOCK(config->enableLockOscillator);
+    value = WWDT_MOD_WDEN(config->enableWwdt ? 1U : 0U) |
+            WWDT_MOD_WDRESET(config->enableWatchdogReset ? 1U : 0U) |
+            WWDT_MOD_LOCK(config->enableLockOscillator ? 1U : 0U);
 #else
-    value = WWDT_MOD_WDEN(config->enableWwdt) | WWDT_MOD_WDRESET(config->enableWatchdogReset);
+    value = WWDT_MOD_WDEN(config->enableWwdt ? 1U : 0U) |
+            WWDT_MOD_WDRESET(config->enableWatchdogReset ? 1U : 0U);
 #endif
     /* Clear legacy flag in the MOD register by software writing a "1" to this bit field.. */
     if (0U != (base->MOD & WWDT_MOD_WDINT_MASK))

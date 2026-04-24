@@ -22,7 +22,7 @@
  * @{
  */
 /*! @brief MU driver version. */
-#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 8, 3))
+#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 8, 4))
 /*! @} */
 
 #define MU_CORE_INTR(intr) ((uint32_t)(intr) << 0U)
@@ -214,32 +214,33 @@ enum _mu_interrupt_trigger
 enum _mu_core_status_flags
 {
 #if !(defined(FSL_FEATURE_MU_HAS_RUN_INT) && (FSL_FEATURE_MU_HAS_RUN_INT == 0))
-    kMU_OtherSideEnterRunFlag = MU_CSSR0_RUN_MASK, /*!< The other side in run mode. */
+    kMU_OtherSideEnterRunFlag  = (uint32_t)MU_CSSR0_RUN_MASK,  /*!< The other side in run mode. */
 #endif
 
 #if !(defined(FSL_FEATURE_MU_HAS_HALT_INT) && (FSL_FEATURE_MU_HAS_HALT_INT == 0))
-    kMU_OtherSideEnterHaltFlag = MU_CSSR0_HALT_MASK, /*!< The other side in halt mode. */
+    kMU_OtherSideEnterHaltFlag = (uint32_t)MU_CSSR0_HALT_MASK, /*!< The other side in halt mode. */
 #endif
 
 #if !(defined(FSL_FEATURE_MU_HAS_WAIT_INT) && (FSL_FEATURE_MU_HAS_WAIT_INT == 0))
-    kMU_OtherSideEnterWaitFlag = MU_CSSR0_WAIT_MASK, /*!< The other side in wait mode. */
+    kMU_OtherSideEnterWaitFlag = (uint32_t)MU_CSSR0_WAIT_MASK, /*!< The other side in wait mode. */
 #endif
 
 #if !(defined(FSL_FEATURE_MU_HAS_STOP_INT) && (FSL_FEATURE_MU_HAS_STOP_INT == 0))
-    kMU_OtherSideEnterStopFlag = MU_CSSR0_STOP_MASK, /*!< The other side in stop mode. */
+    kMU_OtherSideEnterStopFlag = (uint32_t)MU_CSSR0_STOP_MASK, /*!< The other side in stop mode. */
 #endif
 
 #if !(defined(FSL_FEATURE_MU_HAS_PD_INT) && (FSL_FEATURE_MU_HAS_PD_INT == 0))
-    kMU_OtherSideEnterPowerDownFlag = MU_CSSR0_PD_MASK, /*!< The other side in power down mode. */
+    kMU_OtherSideEnterPowerDownFlag = (uint32_t)MU_CSSR0_PD_MASK, /*!< The other side in power down mode. */
 #endif
 
 #if !(defined(FSL_FEATURE_MU_HAS_RESET_ASSERT_INT) && (FSL_FEATURE_MU_HAS_RESET_ASSERT_INT == 0))
-    kMU_OtherSideEnterResetFlag = MU_CSSR0_RAIP_MASK, /*!< The other core entered reset. */
+    kMU_OtherSideEnterResetFlag = (uint32_t)MU_CSSR0_RAIP_MASK, /*!< The other core entered reset. */
 #endif
 
 #if !(defined(FSL_FEATURE_MU_HAS_SR_HRIP) && (FSL_FEATURE_MU_HAS_SR_HRIP == 0))
-    kMU_HardwareResetFlag = MU_CSSR0_HRIP_MASK, /*!< Current side has been hardware reset by the other side. */
+    kMU_HardwareResetFlag = (uint32_t)MU_CSSR0_HRIP_MASK, /*!< Current side has been hardware reset by the other side. */
 #endif
+    kMU_CoreStatusReserved = 0U /*!< Reserved entry to prevent empty enum */
 };
 #endif /* FSL_FEATURE_MU_NO_CORE_STATUS */
 

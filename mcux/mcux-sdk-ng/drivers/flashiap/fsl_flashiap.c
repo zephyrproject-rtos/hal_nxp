@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2022, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,16 +19,22 @@
  * Code
  ******************************************************************************/
 
-static status_t translate_iap_status(int32_t status)
+static status_t translate_iap_status(uint32_t status)
 {
+    const int32_t status_max = (int32_t)kStatus_FLASHIAP_Max - MAKE_STATUS((int32_t)kStatusGroup_FLASHIAP, 0);
+
     /* Translate IAP return code to sdk status code */
-    if (status == (int32_t)kStatus_Success)
+    if (status == (uint32_t)kStatus_Success)
     {
-        return status;
+        return kStatus_Success;
+    }
+    else if (status >= (uint32_t)status_max)
+    {
+        return kStatus_Fail;
     }
     else
     {
-        return MAKE_STATUS((int32_t)kStatusGroup_FLASHIAP, status);
+        return MAKE_STATUS((int32_t)kStatusGroup_FLASHIAP, (int32_t)status);
     }
 }
 
@@ -62,7 +68,7 @@ status_t FLASHIAP_PrepareSectorForWrite(uint32_t startSector, uint32_t endSector
     command[2] = endSector;
     iap_entry(command, result);
 
-    return translate_iap_status((int32_t)result[0]);
+    return translate_iap_status(result[0]);
 }
 
 /*!
@@ -103,7 +109,7 @@ status_t FLASHIAP_CopyRamToFlash(uint32_t dstAddr, uint32_t *srcAddr, uint32_t n
     command[4] = systemCoreClock / HZ_TO_KHZ_DIV;
     iap_entry(command, result);
 
-    return translate_iap_status((int32_t)result[0]);
+    return translate_iap_status(result[0]);
 }
 
 /*!
@@ -139,7 +145,7 @@ status_t FLASHIAP_EraseSector(uint32_t startSector, uint32_t endSector, uint32_t
     command[3] = systemCoreClock / HZ_TO_KHZ_DIV;
     iap_entry(command, result);
 
-    return translate_iap_status((int32_t)result[0]);
+    return translate_iap_status(result[0]);
 }
 
 /*!
@@ -174,7 +180,7 @@ status_t FLASHIAP_ErasePage(uint32_t startPage, uint32_t endPage, uint32_t syste
     command[3] = systemCoreClock / HZ_TO_KHZ_DIV;
     iap_entry(command, result);
 
-    return translate_iap_status((int32_t)result[0]);
+    return translate_iap_status(result[0]);
 }
 
 /*!
@@ -202,7 +208,7 @@ status_t FLASHIAP_BlankCheckSector(uint32_t startSector, uint32_t endSector)
     command[2] = endSector;
     iap_entry(command, result);
 
-    return translate_iap_status((int32_t)result[0]);
+    return translate_iap_status(result[0]);
 }
 
 /*!
@@ -236,5 +242,5 @@ status_t FLASHIAP_Compare(uint32_t dstAddr, uint32_t *srcAddr, uint32_t numOfByt
     command[3] = numOfBytes;
     iap_entry(command, result);
 
-    return translate_iap_status((int32_t)result[0]);
+    return translate_iap_status(result[0]);
 }

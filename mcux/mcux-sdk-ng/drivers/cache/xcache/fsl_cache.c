@@ -61,8 +61,6 @@ uint32_t XCACHE_GetInstanceByAddr(uint32_t address)
         }
     }
 
-    assert(i < ARRAY_SIZE(s_xcachectrlBases));
-
     return i;
 }
 

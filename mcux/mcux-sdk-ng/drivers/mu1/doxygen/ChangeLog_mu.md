@@ -1,5 +1,10 @@
 # MU
 
+## [2.8.4]
+
+- Improvements
+  - Minor update to allow use in DSC projects.
+  
 ## [2.8.3]
 
 - Improvements

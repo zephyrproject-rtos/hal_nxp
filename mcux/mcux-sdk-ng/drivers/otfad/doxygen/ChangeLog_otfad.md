@@ -4,6 +4,8 @@
 
 - Bug fixes
   - Fixed MISRA 2012 issue: 10.1.
+  - Fixed CERT INT31-C violations: bool fields cast to unsigned long in register macros now use explicit ternary.
+  - Fixed CERT INT30-C violation: guarded totalHits increment in OTFAD_HitDetermination against overflow.
 
 ## [2.1.3]
 

@@ -495,11 +495,23 @@ void FLEXIO_SetPinConfig(FLEXIO_Type *base, uint32_t pin, flexio_gpio_config_t *
 }
 #endif /*FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER*/
 
+/*
+ * $Branch Coverage Justification$
+ * Code coverage of FLEXIO_DriverIRQHandler is device specific.
+ */
 void FLEXIO_DriverIRQHandler(void);
 void FLEXIO_DriverIRQHandler(void)
 {
     FLEXIO_CommonIRQHandler();
 }
+
+/*
+ * $Branch Coverage Justification$
+ * The individual FLEXIO IRQ handler functions are instance-specific and depend on
+ * the hardware configuration and application usage.
+ * Only the IRQ handlers for the FLEXIO instances actually used in the application will be invoked,
+ * therefore not all handlers need to be covered.
+ */
 
 void FLEXIO0_DriverIRQHandler(void);
 void FLEXIO0_DriverIRQHandler(void)

@@ -1,5 +1,16 @@
 # OCOTP
 
+## [2.1.5]
+
+- Improvements
+  - Renamed API functions to clarify that they operate on fuse words, not shadow registers:
+    - `OCOTP_ReadFuseShadowRegister` -> `OCOTP_ReadFuse`
+    - `OCOTP_ReadFuseShadowRegisterExt` -> `OCOTP_ReadFuseExt`
+    - `OCOTP_WriteFuseShadowRegister` -> `OCOTP_WriteFuse`
+    - `OCOTP_WriteFuseShadowRegisterWithLock` -> `OCOTP_WriteFuseWithLock`
+  - Added backward compatibility macros for old API names, which will be removed
+    in later releases.
+
 ## [2.1.4]
 
 - Bug fixes

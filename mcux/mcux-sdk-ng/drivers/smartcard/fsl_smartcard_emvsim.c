@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -40,6 +40,7 @@ static void smartcard_emvsim_SetTransferType(EMVSIM_Type *base,
                                              smartcard_context_t *context,
                                              smartcard_control_t control);
 static uint32_t smartcard_emvsim_GetInstance(EMVSIM_Type *base);
+static inline uint8_t smartcard_emvsim_GetTxFifoDepth(EMVSIM_Type *base);
 
 /*******************************************************************************
  * Code
@@ -68,6 +69,21 @@ static uint32_t smartcard_emvsim_GetInstance(EMVSIM_Type *base)
 
     return instance;
 }
+
+/*!
+ * @brief Get the transmit FIFO depth.
+ *
+ * @param base The EMVSIM peripheral base address.
+ * @return The transmit FIFO depth value.
+ */
+static inline uint8_t smartcard_emvsim_GetTxFifoDepth(EMVSIM_Type *base)
+{
+    uint8_t tdt = (uint8_t)((base->PARAM & EMVSIM_PARAM_TX_FIFO_DEPTH_MASK) >> EMVSIM_PARAM_TX_FIFO_DEPTH_SHIFT);
+    assert(tdt > 0u);
+    tdt = tdt - 1u;
+    return tdt;
+}
+
 /*!
  * @brief Finish up a transmit by completing the process of sending data and disabling the interrupt.
  *
@@ -116,7 +132,7 @@ static void smartcard_emvsim_CompleteReceiveData(EMVSIM_Type *base, smartcard_co
     while (((base->RX_STATUS & EMVSIM_RX_STATUS_RX_CNT_MASK) != 0u) && ((context->xSize) > 0u))
     {
         /* Get data and put into receive buffer */
-        *context->xBuff = (uint8_t)(base->RX_BUF);
+        *context->xBuff = (uint8_t)(base->RX_BUF & EMVSIM_RX_BUF_RX_BYTE_MASK);
         ++context->xBuff;
         --context->xSize;
     }
@@ -246,6 +262,7 @@ static void smartcard_emvsim_SetTransferType(EMVSIM_Type *base,
            (control == kSMARTCARD_SetupT1Mode));
 
     uint16_t temp16 = 0u;
+    uint32_t temp32 = 0u;
     uint32_t bwiVal = 0u;
     uint8_t tdt     = 0u;
 
@@ -276,7 +293,7 @@ static void smartcard_emvsim_SetTransferType(EMVSIM_Type *base,
            sent either due to parity error or wrong INIT char*/
         base->RX_THD = EMVSIM_RX_THD_RDT(1);
         /* Setting up Tx NACK threshold */
-        tdt = (uint8_t)(((base->PARAM & EMVSIM_PARAM_TX_FIFO_DEPTH_MASK) >> EMVSIM_PARAM_TX_FIFO_DEPTH_SHIFT) - 1u);
+        tdt = smartcard_emvsim_GetTxFifoDepth(base);
         base->TX_THD = (EMVSIM_TX_THD_TNCK_THD(SMARTCARD_EMV_TX_NACK_THRESHOLD) | EMVSIM_TX_THD_TDT(tdt));
         /* Clear all pending interrupts */
         base->RX_STATUS = 0xFFFFFFFFu;
@@ -295,8 +312,10 @@ static void smartcard_emvsim_SetTransferType(EMVSIM_Type *base,
               EMVSIM_CTRL_XMT_CRC_LRC_MASK | EMVSIM_CTRL_LRC_EN_MASK | EMVSIM_CTRL_ICM_MASK);
         /* EMV expectation: WWT = (960 x D x WI) + (D x 480)
          * EMVSIM formula: BWT_VAL[15:0] = CWT_VAL[15:0]  */
-        temp16 = (960u * context->cardParams.currentD * context->cardParams.WI) +
+        temp32 = (960u * context->cardParams.currentD * context->cardParams.WI) +
                  (context->cardParams.currentD * 480u) + SMARTCARD_WWT_ADJUSTMENT;
+        assert(temp32 <= 0xFFFFu);
+        temp16 = (uint16_t)(temp32 & 0xFFFFU);
         base->CWT_VAL = temp16;
         base->BWT_VAL = temp16;
         /* Set Extended Guard Timer value
@@ -309,7 +328,7 @@ static void smartcard_emvsim_SetTransferType(EMVSIM_Type *base,
         sent either due to parity error or wrong INIT char */
         base->RX_THD = (EMVSIM_RX_THD_RNCK_THD(SMARTCARD_EMV_RX_NACK_THRESHOLD) | EMVSIM_RX_THD_RDT(1));
         /* Setting up Tx NACK threshold */
-        tdt = (uint8_t)(((base->PARAM & EMVSIM_PARAM_TX_FIFO_DEPTH_MASK) >> EMVSIM_PARAM_TX_FIFO_DEPTH_SHIFT) - 1u);
+        tdt = smartcard_emvsim_GetTxFifoDepth(base);
         base->TX_THD = (EMVSIM_TX_THD_TNCK_THD(SMARTCARD_EMV_TX_NACK_THRESHOLD) | EMVSIM_TX_THD_TDT(tdt));
         /* Enable Tx NACK threshold interrupt to occur */
         base->INT_MASK &= ~EMVSIM_INT_MASK_TNACK_IM_MASK;
@@ -367,7 +386,7 @@ static void smartcard_emvsim_SetTransferType(EMVSIM_Type *base,
         /* Setting Rx threshold */
         base->RX_THD = (EMVSIM_RX_THD_RNCK_THD(SMARTCARD_EMV_RX_NACK_THRESHOLD) | EMVSIM_RX_THD_RDT(1));
         /* Setting up Tx threshold */
-        tdt = (uint8_t)(((base->PARAM & EMVSIM_PARAM_TX_FIFO_DEPTH_MASK) >> EMVSIM_PARAM_TX_FIFO_DEPTH_SHIFT) - 1u);
+        tdt = smartcard_emvsim_GetTxFifoDepth(base);
         base->TX_THD = (EMVSIM_TX_THD_TDT(tdt) | EMVSIM_TX_THD_TNCK_THD(SMARTCARD_EMV_TX_NACK_THRESHOLD));
         /* Set transport type to T=1 in SMARTCARD context structure */
         context->tType = kSMARTCARD_T1Transport;
@@ -881,7 +900,7 @@ void SMARTCARD_EMVSIM_IRQHandler(EMVSIM_Type *base, smartcard_context_t *context
         while (((base->RX_STATUS & EMVSIM_RX_STATUS_RX_CNT_MASK) != 0u) && ((context->xSize) > 0u))
         {
             /* Get data and put into receive buffer */
-            *context->xBuff = (uint8_t)(base->RX_BUF);
+            *context->xBuff = (uint8_t)(base->RX_BUF & EMVSIM_RX_BUF_RX_BYTE_MASK);
             ++context->xBuff;
             --context->xSize;
         }
@@ -989,7 +1008,7 @@ status_t SMARTCARD_EMVSIM_Control(EMVSIM_Type *base,
     }
 
     status_t status = kStatus_SMARTCARD_Success;
-    uint32_t temp32 = 0u;
+    uint64_t temp64 = 0u;
 
     switch (control)
     {
@@ -1118,12 +1137,16 @@ status_t SMARTCARD_EMVSIM_Control(EMVSIM_Type *base,
             base->CTRL &= ~EMVSIM_CTRL_BWT_EN_MASK;
             /* Reset Wait Timer Multiplier
              * EMV Formula : WTX x (11 + ((2^BWI + 1) x 960 x D)) */
-            temp32 = ((uint8_t)param) *
-                     (11u + ((((uint32_t)1u << context->cardParams.BWI) + 1u) * 960u * context->cardParams.currentD));
+            temp64 = (param & 0xFFU) *
+                     (11ull + (((1ul << context->cardParams.BWI) + 1ull) * 960ull * context->cardParams.currentD));
 #ifdef CARDSIM_EXTRADELAY_USED
-            temp32 += context->cardParams.currentD * 50;
+            temp64 += context->cardParams.currentD * 50;
 #endif
-            base->BWT_VAL = temp32;
+            if (temp64 > 0xFFFFFFFFU)
+            {
+                return kStatus_SMARTCARD_InvalidInput;
+            }
+            base->BWT_VAL = (uint32_t)temp64;
             /* Set flag to SMARTCARD context accordingly */
             if (param > 1u)
             {

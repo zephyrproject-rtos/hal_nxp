@@ -1,5 +1,9 @@
 # GPIO
 
+## [2.8.5]
+- Improvements
+  - Add AND logic in GPIO_GpioClearInterruptFlags to support clearing multiple interrupt flags simultaneously.
+
 ## [2.8.4]
 - Improvements
   - Make function `GPIO_PortGetInterruptFlags` and `GPIO_PortClearInterruptFlags`

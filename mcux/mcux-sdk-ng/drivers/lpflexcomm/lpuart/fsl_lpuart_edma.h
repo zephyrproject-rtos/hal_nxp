@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, 2025 NXP
+ * Copyright 2022, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief LPUART EDMA driver version. */
-#define FSL_LPUART_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_LPUART_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*! @} */
 
 /*! @brief LPUART TX transfer callback mode. */
@@ -52,15 +52,20 @@ struct _lpuart_edma_handle
     size_t rxDataSizeAll;                     /*!< Size of the data to receive. */
     size_t txDataSizeAll;                     /*!< Size of the data to send out. */
 
+    const uint8_t *rxData; /*!< Address of RX data buffer, used for calculation of received data */
+    const uint8_t *txData; /*!< Address of TX data buffer, used for calculation of written data */
+
     edma_handle_t *txEdmaHandle; /*!< The eDMA TX channel used. */
     edma_handle_t *rxEdmaHandle; /*!< The eDMA RX channel used. */
 
-    uint8_t nbytes; /*!< eDMA minor byte transfer count initially configured. */
-
-    volatile uint8_t txState; /*!< TX transfer state. */
+    volatile uint8_t txState; /*!< TX transfer state */
     volatile uint8_t rxState; /*!< RX transfer state */
 
     lpuart_tx_callback_mode_t txCbMode; /*!< TX transfer callback mode. */
+
+    volatile int8_t oneFifoBlockRxWatermark; /*!< Used to change RXWATER */
+
+    edma_tcd_t edmaTcd[3]; /*!< eDMA TCDs for internal use */
 };
 
 /*******************************************************************************

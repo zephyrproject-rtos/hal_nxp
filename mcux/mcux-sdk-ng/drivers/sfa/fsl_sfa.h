@@ -1,5 +1,5 @@
-/*
- * Copyright 2019-2023, 2025 NXP
+﻿/*
+ * Copyright 2019-2023, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief SFA driver version 2.1.4 */
-#define FSL_SFA_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
+/*! @brief SFA driver version 2.1.6 */
+#define FSL_SFA_DRIVER_VERSION (MAKE_VERSION(2, 1, 6))
 /*! @} */
 
 /*! @name Configuration
@@ -37,7 +37,7 @@
  */
 #ifndef SFA_MEASUREMENT_START_TIMEOUT
     #ifdef CONFIG_SFA_MEASUREMENT_START_TIMEOUT
-        #define SFA_MEASUREMENT_START_TIMEOUT CONFIG_SFA_MEASUREMENT_START_TIMEOUT
+        #define SFA_MEASUREMENT_START_TIMEOUT (CONFIG_SFA_MEASUREMENT_START_TIMEOUT)
     #else
         #define SFA_MEASUREMENT_START_TIMEOUT 0U
     #endif
@@ -51,7 +51,7 @@
  */
 #ifndef SFA_CUT_COUNTER_STOP_TIMEOUT
     #ifdef CONFIG_SFA_CUT_COUNTER_STOP_TIMEOUT
-        #define SFA_CUT_COUNTER_STOP_TIMEOUT CONFIG_SFA_CUT_COUNTER_STOP_TIMEOUT
+        #define SFA_CUT_COUNTER_STOP_TIMEOUT (CONFIG_SFA_CUT_COUNTER_STOP_TIMEOUT)
     #else
         #define SFA_CUT_COUNTER_STOP_TIMEOUT 0U
     #endif
@@ -65,7 +65,7 @@
  */
 #ifndef SFA_REF_COUNTER_STOP_TIMEOUT
     #ifdef CONFIG_SFA_REF_COUNTER_STOP_TIMEOUT
-        #define SFA_REF_COUNTER_STOP_TIMEOUT CONFIG_SFA_REF_COUNTER_STOP_TIMEOUT
+        #define SFA_REF_COUNTER_STOP_TIMEOUT (CONFIG_SFA_REF_COUNTER_STOP_TIMEOUT)
     #else
         #define SFA_REF_COUNTER_STOP_TIMEOUT 0U
     #endif
@@ -660,3 +660,4 @@ static inline uint32_t SFA_GetREFHighLimitClockCount(SFA_Type *base)
 /*! @}*/
 
 #endif /* FSL_SFA_H_ */
+

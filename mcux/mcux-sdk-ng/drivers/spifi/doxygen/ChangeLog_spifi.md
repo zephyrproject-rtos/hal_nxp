@@ -1,9 +1,17 @@
 # SPI Flash Interface
 
+## [2.0.4]
+
+- Bug Fixes
+  - Add explicit boolean to integer conversions (? 1U : 0U) for enable flags in SPIFI control register.
+  - Add explicit boolean to integer conversions (? 1U : 0U) for poll mode flag in command register.
+  - Add safe type conversion with explicit masking for uint16_t to uint8_t narrowing conversion.
+  - Follow INT31-C CERT coding standard for safe boolean to unsigned long conversions.
+
 ## [2.0.3]
 
 - Bug Fixes
-- MISRA C-2012 issue fixed: rule 10.3, 10.4, and 14.4.
+  - MISRA C-2012 issue fixed: rule 10.3, 10.4, and 14.4.
 
 ## [2.0.2]
 

@@ -1,5 +1,20 @@
 # FLEXCAN
 
+## [2.15.1]
+
+- Improvements
+  - Wait for RX Message Buffer busy state cleared before reading in following APIs.
+    - `FLEXCAN_ReadRxMb`
+    - `FLEXCAN_ReadFDRxMb`
+  - Simplify RX Message Buffer handling sequence in interrupt handler `FLEXCAN_SubHandlerForMB`.
+  - Aligned watermark comparison logic between `FLEXCAN_EnhancedRxFifoHandleIRQ` and
+    `FLEXCAN_TransferReceiveEnhancedFifoNonBlocking` for consistency.
+  - Fixed `Ehanced` typo issue.
+  - Remove redundant feature macro for FlexCAN engine clock selection in `FLEXCAN_Init`.
+- Bug Fixes
+  - Fixed Enhanced Rx FIFO filter configuration assertion `idFilterPairNum` in `FLEXCAN_SetEnhancedRxFifoConfig`.
+  - Fix Bus Off Done interrupt and Data Phase of Fast CAN FD Frames Error interrupt enable mask shift for CTRL2 register.
+
 ## [2.15.0]
 
 - Improvements

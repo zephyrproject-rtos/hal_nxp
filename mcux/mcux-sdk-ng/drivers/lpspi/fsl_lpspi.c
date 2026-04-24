@@ -2557,6 +2557,10 @@ static void LPSPI_CommonIRQHandler(LPSPI_Type *base, void *param)
     SDK_ISR_EXIT_BARRIER;
 }
 
+/*
+ * $Branch Coverage Justification$
+ * Code coverage of LPSPI_DriverIRQHandler is device specific.
+ */
 void LPSPI_DriverIRQHandler(uint32_t instance)
 {
     if (instance < ARRAY_SIZE(s_lpspiBases))

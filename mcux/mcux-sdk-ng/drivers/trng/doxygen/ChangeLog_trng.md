@@ -1,5 +1,10 @@
 # TRNG
 
+## [2.0.21]
+
+- New features:
+  - Added support for MCXC devices.
+
 ## [2.0.20]
 
 - New features:

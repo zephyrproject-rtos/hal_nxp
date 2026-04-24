@@ -145,7 +145,8 @@ static uint32_t LPADC_GetGainConvResult(float gainAdjustment)
     /* Get GCALR value calculated. */
     for (i = 0x11U; i > 0U; i--)
     {
-        GCALR += GCRa[i - 1U] * ((uint32_t)(1UL << (uint32_t)(i - 1UL)));
+        uint32_t product = GCRa[i - 1U] * ((uint32_t)(1UL << ((uint32_t)i - 1UL)));
+        GCALR += product;
     }
 
     /* to return GCALR value calculated */
@@ -971,7 +972,7 @@ status_t LPADC_FinishAutoCalibration(ADC_Type *base)
 #else
     if ((GCCa & (((ADC_GCC_GAIN_CAL_MASK >> ADC_GCC_GAIN_CAL_SHIFT) + 1U) >> 1U)) != 0U)
     {
-        GCCa |= (~(ADC_GCC_GAIN_CAL_MASK >> ADC_GCC_GAIN_CAL_SHIFT));
+        GCCa |= (~(uint32_t)(ADC_GCC_GAIN_CAL_MASK >> ADC_GCC_GAIN_CAL_SHIFT));
     }
 #endif /* FSL_FEATURE_LPADC_FIFO_COUNT */
     GCRa         = (float)((131072.0) /
@@ -1045,7 +1046,7 @@ void LPADC_GetCalibrationValue(ADC_Type *base, lpadc_calibration_value_t *ptrCal
     }
 #endif /* FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ */
 
-    ptrCalibrationValue->gainCalibrationResultA = (uint16_t)(base->GCR[0] & ADC_GCR_GCALR_MASK);
+    ptrCalibrationValue->gainCalibrationResultA = (uint16_t)((base->GCR[0] & ADC_GCR_GCALR_MASK) & 0xFFFFU);
 #if (defined(FSL_FEATURE_LPADC_FIFO_COUNT) && (FSL_FEATURE_LPADC_FIFO_COUNT == 2))
     ptrCalibrationValue->gainCalibrationResultB = (uint16_t)(base->GCR[1] & ADC_GCR_GCALR_MASK);
 #endif /* FSL_FEATURE_LPADC_FIFO_COUNT */

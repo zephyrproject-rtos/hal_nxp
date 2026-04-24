@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -28,7 +28,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief INTC driver version. */
-#define FSL_INTC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_INTC_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*! @} */
 
 /*******************************************************************************
@@ -38,7 +38,11 @@
  * @defgroup intc_driver_log The Driver Change Log
  * @ingroup intc
  * @{
- * The current INTC driver version is 2.0.1
+ * The current INTC driver version is 2.0.2
+ *
+ * - 2.0.2
+ *   - Improvements
+ *     - Support SOC with different vector base address (VBA) shift.
  *
  * - 2.0.1
  *   - Improvements
@@ -263,6 +267,11 @@
  * @}
  */
 
+/*! @brief VBA register address shift. The default value is 8, SOC can override this macro. */
+#ifndef FSL_FEATURE_INTC_VBA_ADDR_SHIFT
+#define FSL_FEATURE_INTC_VBA_ADDR_SHIFT (8U)
+#endif
+
 /*! @brief Macro to disable the IRQ. */
 #define INTC_DisableIRQ(x) INTC_SetIRQPriorityLevel(x, 0U)
 /*! @brief Helper Macro function to extract IRQ pending register index comparing to INTC_IRQP0. */
@@ -339,7 +348,7 @@ static inline void INTC_SetIRQPriorityNum(IRQn_Type eIrq, uint8_t u8PriorityNum)
  */
 static inline void INTC_SetVectorBaseAddress(uint32_t u32VectorBaseAddr)
 {
-    INTC->VBA = ((uint32_t)u32VectorBaseAddr) >> 8U;
+    INTC->VBA = ((uint32_t)u32VectorBaseAddr) >> FSL_FEATURE_INTC_VBA_ADDR_SHIFT;
 }
 /*! @} */
 

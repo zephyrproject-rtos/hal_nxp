@@ -1,5 +1,9 @@
 # SMC
 
+## [2.0.9]
+- Bug Fixes
+  - Replace width-unsafe register mask inversion with a `smc_reg_t`-aware helper for INT31-C compliance
+
 ## [2.0.8]
 - Bug Fixes
   - Replace direct boolean to integer casts with explicit ternary operators for INT31-C compliance

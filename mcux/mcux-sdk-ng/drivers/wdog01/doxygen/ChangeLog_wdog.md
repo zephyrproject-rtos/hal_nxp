@@ -1,5 +1,12 @@
 # WDOG
 
+## [2.2.2]
+- Bug Fixes
+  - Added workaround for ERR051322: On affected devices, WDOG_GetDefaultConfig() now
+    defaults enableTimeOutAssert to true, so that the WDOG_B pin is correctly asserted
+    on watchdog timeout. This compensates for the ROM not configuring WCR[WDT] when the
+    WDOG_B_PIN_EN fuse is blown.
+
 ## [2.2.1]
 - Bug Fixes
   - Fixed CERT INT31-C violations.

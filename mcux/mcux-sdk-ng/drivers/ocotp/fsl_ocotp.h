@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020, 2024 NXP
+ * Copyright 2019-2020, 2024, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief OCOTP driver version. */
-#define FSL_OCOTP_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
+#define FSL_OCOTP_DRIVER_VERSION (MAKE_VERSION(2, 1, 5))
 /*! @} */
 
 #ifndef OCOTP_READ_FUSE_DATA_COUNT
@@ -58,6 +58,22 @@ typedef struct _ocotp_timing
     uint32_t strobe_read; /*!< Storbe read time value to fill in the TIMING register. */
 } ocotp_timing_t;
 #endif /* FSL_FEATURE_OCOTP_HAS_TIMING_CTRL */
+
+
+/*******************************************************************************
+ * Backward Compatibility Macros
+ *******************************************************************************/
+#define OCOTP_ReadFuseShadowRegister(base, address) \
+    OCOTP_ReadFuse(base, address)
+
+#define OCOTP_ReadFuseShadowRegisterExt(base, address, data, fuseWords) \
+    OCOTP_ReadFuseExt(base, address, data, fuseWords)
+
+#define OCOTP_WriteFuseShadowRegister(base, address, data) \
+    OCOTP_WriteFuse(base, address, data)
+
+#define OCOTP_WriteFuseShadowRegisterWithLock(base, address, data, lock) \
+    OCOTP_WriteFuseWithLock(base, address, data, lock)
 
 /*******************************************************************************
  * API
@@ -129,18 +145,18 @@ static inline void OCOTP_ClearErrorStatus(OCOTP_Type *base)
 status_t OCOTP_ReloadShadowRegister(OCOTP_Type *base);
 
 /*!
- * @brief Read the fuse shadow register with the fuse addess.
+ * @brief Read the fuse word with the fuse address.
  *
- * @deprecated Use @ref OCOTP_ReadFuseShadowRegisterExt instead of this function.
+ * @deprecated Use @ref OCOTP_ReadFuseExt instead of this function.
  *
  * @param base     OCOTP peripheral base address.
  * @param address  the fuse address to be read from.
  * @return The read out data.
  */
-uint32_t OCOTP_ReadFuseShadowRegister(OCOTP_Type *base, uint32_t address);
+uint32_t OCOTP_ReadFuse(OCOTP_Type *base, uint32_t address);
 
 /*!
- * @brief Read the fuse shadow register from the fuse addess.
+ * @brief Read the fuse word from the fuse address.
  *
  * This function reads fuse from @p address, how many words to read is specified
  * by the parameter @p fuseWords. This function could read at most
@@ -153,23 +169,25 @@ uint32_t OCOTP_ReadFuseShadowRegister(OCOTP_Type *base, uint32_t address);
  * @retval kStatus_Success Read success.
  * @retval kStatus_Fail Error occurs during read.
  */
-status_t OCOTP_ReadFuseShadowRegisterExt(OCOTP_Type *base, uint32_t address, uint32_t *data, uint8_t fuseWords);
+status_t OCOTP_ReadFuseExt(OCOTP_Type *base, uint32_t address, uint32_t *data, uint8_t fuseWords);
 
 /*!
- * @brief Write the fuse shadow register with the fuse addess and data.
- * Please make sure the wrtie address is not locked while calling this API.
+ * @brief Write the fuse word with the fuse address and data.
+ * Please make sure the write address is not locked while calling this API.
+ *
+ * @warning This function burns fuses permanently. Once fuses are burned, they cannot be reversed.
  *
  * @param base     OCOTP peripheral base address.
  * @param address  the fuse address to be written.
  * @param data     the value will be writen to fuse address.
  * @retval   write status, kStatus_Success for success and kStatus_Fail for failed.
  */
-status_t OCOTP_WriteFuseShadowRegister(OCOTP_Type *base, uint32_t address, uint32_t data);
+status_t OCOTP_WriteFuse(OCOTP_Type *base, uint32_t address, uint32_t data);
 
 /*!
- * @brief Write the fuse shadow register and lock it.
+ * @brief Write the fuse word and lock it.
  *
- * Please make sure the wrtie address is not locked while calling this API.
+ * Please make sure the write address is not locked while calling this API.
  *
  * Some OCOTP controller supports ECC mode and redundancy mode (see reference mananual
  * for more details). OCOTP controller will auto select ECC or redundancy
@@ -178,10 +196,12 @@ status_t OCOTP_WriteFuseShadowRegister(OCOTP_Type *base, uint32_t address, uint3
  * be written more than once as long as they are different fuse bits. Set parameter
  * @p lock as true to force use ECC mode.
  *
+ * @warning This function burns fuses permanently. Once fuses are burned, they cannot be reversed.
+ *
  * @param base     OCOTP peripheral base address.
  * @param address  The fuse address to be written.
  * @param data     The value will be writen to fuse address.
- * @param lock     Lock or unlock write fuse shadow register operation.
+ * @param lock     Lock or unlock write fuse operation.
  * @retval kStatus_Success Program and reload success.
  * @retval kStatus_OCOTP_Locked The eFuse word is locked and cannot be programmed.
  * @retval kStatus_OCOTP_ProgramFail eFuse word programming failed.
@@ -189,7 +209,7 @@ status_t OCOTP_WriteFuseShadowRegister(OCOTP_Type *base, uint32_t address, uint3
  *         error happens during reload the values.
  * @retval kStatus_OCOTP_AccessError Cannot access eFuse word.
  */
-status_t OCOTP_WriteFuseShadowRegisterWithLock(OCOTP_Type *base, uint32_t address, uint32_t data, bool lock);
+status_t OCOTP_WriteFuseWithLock(OCOTP_Type *base, uint32_t address, uint32_t data, bool lock);
 
 /*!
  * @brief Get the OCOTP controller version from the register.

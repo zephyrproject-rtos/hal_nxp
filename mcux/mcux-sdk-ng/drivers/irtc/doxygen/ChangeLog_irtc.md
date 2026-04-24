@@ -1,5 +1,9 @@
 # IRTC
 
+## [2.3.4]
+- Bug Fixes
+  - Fixed CERT INT31-C violations to ensure safe integer conversions.
+
 ## [2.3.3]
 
 - Bug Fixes

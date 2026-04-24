@@ -183,14 +183,14 @@ void TMU_GetInterruptStatusFlags(TMU_Type *base, tmu_interrupt_status_t *status)
     assert(NULL != status);
 
     status->interruptDetectMask         = base->TIDR;
-    status->immediateInterruptsSiteMask = (uint16_t)((TMU_TIISCR_SITE_MASK & base->TIISCR) >> TMU_TIISCR_SITE_SHIFT);
-    status->averageInterruptsSiteMask   = (uint16_t)((TMU_TIASCR_SITE_MASK & base->TIASCR) >> TMU_TIASCR_SITE_SHIFT);
+    status->immediateInterruptsSiteMask = (uint16_t)(((TMU_TIISCR_SITE_MASK & base->TIISCR) >> TMU_TIISCR_SITE_SHIFT) & 0xFFFFU);
+    status->averageInterruptsSiteMask   = (uint16_t)(((TMU_TIASCR_SITE_MASK & base->TIASCR) >> TMU_TIASCR_SITE_SHIFT) & 0xFFFFU);
     status->averageCriticalInterruptsSiteMask =
-        (uint16_t)((TMU_TICSCR_SITE_MASK & base->TICSCR) >> TMU_TICSCR_SITE_SHIFT);
+        (uint16_t)(((TMU_TICSCR_SITE_MASK & base->TICSCR) >> TMU_TICSCR_SITE_SHIFT) & 0xFFFFU);
     status->risingCriticalInterruptsSiteMask =
-        (uint16_t)((TMU_TICSCR_SITE_MASK & base->TICSCR) >> TMU_TICSCR_SITE_SHIFT);
+        (uint16_t)(((TMU_TICSCR_SITE_MASK & base->TICSCR) >> TMU_TICSCR_SITE_SHIFT) & 0xFFFFU);
     status->fallingCriticalInterruptsSiteMask =
-        (uint16_t)((TMU_TICSCR_SITE_MASK & base->TICSCR) >> TMU_TICSCR_SITE_SHIFT);
+        (uint16_t)(((TMU_TICSCR_SITE_MASK & base->TICSCR) >> TMU_TICSCR_SITE_SHIFT) & 0xFFFFU);
 }
 
 /*!

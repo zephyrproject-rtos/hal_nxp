@@ -25,11 +25,32 @@ extern TSI_Type *const s_tsiBases[];
  ******************************************************************************/
 
 /*! @brief TSI driver version */
-#define FSL_TSI_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_TSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 
 /*! @brief TSI status flags macro collection */
 #define ALL_FLAGS_MASK (TSI_DATA_EOSF_MASK | TSI_DATA_OUTRGF_MASK)
 
+/**
+ * @brief Count trailing zeros (CTZ) - finds position of first set bit in a 32-bit mask.
+ * @param x Input value (uint32_t).
+ * @return Position of first set bit (0-31), or 32 if x is 0.
+ */
+#define FSL_TSI_CTZ(x) \
+    ({ \
+        uint32_t _x = (x); \
+        uint8_t _count = 0U; \
+        if (_x == 0U) { \
+            _count = 32U; \
+        } else { \
+            while ((_x & 1U) == 0U) { \
+                _x >>= 1U; \
+                _count++; \
+            } \
+        } \
+        _count; \
+    })
+
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_SETCLK) && FSL_FEATURE_TSI_HAS_NO_SETCLK)
 /*!
  * @brief TSI main clock selection.
  *
@@ -42,6 +63,20 @@ typedef enum _tsi_main_clock_selection
     kTSI_MainClockSlection_2 = 2U, /*!< Set TSI main clock frequency to 13.87MHz */
     kTSI_MainClockSlection_3 = 3U, /*!< Set TSI main clock frequency to 11.91MHz */
 } tsi_main_clock_selection_t;
+#endif
+
+#if defined(FSL_FEATURE_TSI_HAS_CLK_SEL) && FSL_FEATURE_TSI_HAS_CLK_SEL
+/*!
+ * @brief TSI low power wake-up clock selection.
+ *
+ * These constants set the TSI wake-up clock source in low power modes (Deep-Power-Down/DPD).
+ */
+typedef enum _tsi_wakeup_clock_selection
+{
+    kTSI_WakeupClock_16kHz = 0U, /*!< Select 16 kHz clock source for TSI wake-up in DPD mode */
+    kTSI_WakeupClock_32kHz = 1U, /*!< Select 32 kHz clock source for TSI wake-up in DPD mode */
+} tsi_wakeup_clock_selection_t;
+#endif
 
 /*!
  * @brief TSI sensing mode selection.
@@ -61,18 +96,30 @@ typedef enum _tsi_sensing_mode_selection
  */
 typedef enum _tsi_dvolt_option
 {
-    kTSI_DvoltOption_0 = 0U, /*!< DVOLT value option 0, the value may differ on different platforms */
-    kTSI_DvoltOption_1 = 1U, /*!< DVOLT value option 1, the value may differ on different platforms */
-    kTSI_DvoltOption_2 = 2U, /*!< DVOLT value option 2, the value may differ on different platforms */
-    kTSI_DvoltOption_3 = 3U, /*!< DVOLT value option 3, the value may differ on different platforms */
-    kTSI_DvoltOption_4 = 4U, /*!< DVOLT value option 4, the value may differ on different platforms */
-    kTSI_DvoltOption_5 = 5U  /*!< DVOLT value option 5, the value may differ on different platforms */
+    kTSI_DvoltOption_0  = 0U, /*!< DVOLT value option 0, the value may differ on different platforms */
+    kTSI_DvoltOption_1  = 1U, /*!< DVOLT value option 1, the value may differ on different platforms */
+    kTSI_DvoltOption_2  = 2U, /*!< DVOLT value option 2, the value may differ on different platforms */
+    kTSI_DvoltOption_3  = 3U, /*!< DVOLT value option 3, the value may differ on different platforms */
+    kTSI_DvoltOption_4  = 4U, /*!< DVOLT value option 4, the value may differ on different platforms */
+    kTSI_DvoltOption_5  = 5U, /*!< DVOLT value option 5, the value may differ on different platforms */
+#if defined(FSL_FEATURE_TSI_DVOLT_OPTION_NUM) && (FSL_FEATURE_TSI_DVOLT_OPTION_NUM == 15U)
+    kTSI_DvoltOption_6  = 6U,   /*!< DVOLT value option 6, the value may differ on different platforms */
+    kTSI_DvoltOption_7  = 7U,   /*!< DVOLT value option 7, the value may differ on different platforms */
+    kTSI_DvoltOption_8  = 8U,   /*!< DVOLT value option 8, the value may differ on different platforms */
+    kTSI_DvoltOption_9  = 9U,   /*!< DVOLT value option 9, the value may differ on different platforms */
+    kTSI_DvoltOption_10 = 10U,  /*!< DVOLT value option 10, the value may differ on different platforms */
+    kTSI_DvoltOption_11 = 11U,  /*!< DVOLT value option 11, the value may differ on different platforms */
+    kTSI_DvoltOption_12 = 12U,  /*!< DVOLT value option 12, the value may differ on different platforms */
+    kTSI_DvoltOption_13 = 13U,  /*!< DVOLT value option 13, the value may differ on different platforms */
+    kTSI_DvoltOption_14 = 14U,  /*!< DVOLT value option 14, the value may differ on different platforms */
+    kTSI_DvoltOption_15 = 15U,  /*!< DVOLT value option 15, the value may differ on different platforms */
+#endif
 } tsi_dvolt_option_t;
 
 /*!
- * @brief TSI sensitivity ajustment (XDN option).
+ * @brief TSI sensitivity adjustment (XDN option).
  *
- * These constants define the tsi sensitivity ajustment in self-cap mode, when TSI_MODE[S_SEN] = 1.
+ * These constants define the tsi sensitivity adjustment in self-cap mode, when TSI_MODE[S_SEN] = 1.
  */
 typedef enum _tsi_sensitivity_xdn_option
 {
@@ -86,6 +133,7 @@ typedef enum _tsi_sensitivity_xdn_option
     kTSI_SensitivityXdnOption_7 = 7U, /*!< Adjust sensitivity in self-cap mode, 8/1  */
 } tsi_sensitivity_xdn_option_t;
 
+#if !(defined(FSL_FEATURE_TSI_HAS_SHIELD_SEL) && FSL_FEATURE_TSI_HAS_SHIELD_SEL)
 /*!
  * @brief TSI Shield setting (S_W_SHIELD option).
  *
@@ -107,16 +155,18 @@ typedef enum _tsi_shield
     kTSI_shield3and0On     = 9U,  /*!< Shield 3,0     pins used */
     kTSI_shield3and1On     = 10U, /*!< Shield 3,1     pins used */
     kTSI_shield3and1and0On = 11U, /*!< Shield 3,1,0   pins used */
-    kTSI_shield3and2On     = 12U, /*!< Shield 3,2     pin used */
+    kTSI_shield3and2On     = 12U, /*!< Shield 3,2     pins used */
     kTSI_shield3and2and0On = 13U, /*!< Shield 3,2,0   pins used */
     kTSI_shield3and2and1On = 14U, /*!< Shield 3,2,1   pins used */
     kTSI_shieldAllOn       = 15U, /*!< Shield 3,2,1,0 pins used */
 } tsi_shield_t;
+#endif
 
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_S_CTRIM) && FSL_FEATURE_TSI_HAS_NO_S_CTRIM)
 /*!
- * @brief TSI sensitivity ajustment (CTRIM option).
+ * @brief TSI sensitivity adjustment (CTRIM option).
  *
- * These constants define the tsi sensitivity ajustment in self-cap mode, when TSI_MODE[S_SEN] = 1.
+ * These constants define the tsi sensitivity adjustment in self-cap mode, when TSI_MODE[S_SEN] = 1.
  */
 typedef enum _tsi_sensitivity_ctrim_option
 {
@@ -129,9 +179,10 @@ typedef enum _tsi_sensitivity_ctrim_option
     kTSI_SensitivityCtrimOption_6 = 6U, /*!< Adjust sensitivity in self-cap mode, 17.5p */
     kTSI_SensitivityCtrimOption_7 = 7U, /*!< Adjust sensitivity in self-cap mode, 20.0p */
 } tsi_sensitivity_ctrim_option_t;
+#endif
 
 /*!
- * @brief TSI current ajustment (Input current multiple).
+ * @brief TSI current adjustment (Input current multiple).
  *
  * These constants set the tsi input current multiple in self-cap mode.
  */
@@ -142,7 +193,7 @@ typedef enum _tsi_current_multiple_input
 } tsi_current_multiple_input_t;
 
 /*!
- * @brief TSI current ajustment (Charge/Discharge current multiple).
+ * @brief TSI current adjustment (Charge/Discharge current multiple).
  *
  * These constants set the tsi charge/discharge current multiple in self-cap mode.
  */
@@ -297,6 +348,7 @@ typedef enum _tsi_mutual_tx_drive_mode
 {
     kTSI_MutualTxDriveModeOption_0 = 0U, /*!< TX drive mode is -5v ~ +5v, used in mutual-cap mode */
     kTSI_MutualTxDriveModeOption_1 = 1U, /*!< TX drive mode is  0v ~ +5v, used in mutual-cap mode */
+    kTSI_MutualTxDriveModeOption_2 = 2U, /*!< TX drive mode is -5v ~  0v, used in mutual-cap mode */
 } tsi_mutual_tx_drive_mode_t;
 
 /*!
@@ -537,6 +589,18 @@ typedef enum _tsi_ssc_prescaler
     kTSI_ssc_div_by_256 = 0xffU, /*!< Set SSC divider to 11111111 div256(2^8) */
 } tsi_ssc_prescaler_t;
 
+#if defined(FSL_FEATURE_TSI_HAS_CHANNEL_SEL) && FSL_FEATURE_TSI_HAS_CHANNEL_SEL
+/*!
+ * @brief TSI channel mask structure.
+ */
+typedef struct _tsi_channel_mask
+{
+    uint32_t channel_31_0;   /*!< channels 0-31 mask */
+    uint32_t channel_63_32;  /*!< channels 32-63 mask */
+    uint32_t channel_69_64;  /*!< channels 64-69 mask */
+} tsi_channel_mask_t;
+#endif
+
 /*! @brief TSI calibration data storage. */
 typedef struct _tsi_calibration_data
 {
@@ -551,7 +615,9 @@ typedef struct _tsi_calibration_data
  */
 typedef struct _tsi_common_config
 {
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_SETCLK) && FSL_FEATURE_TSI_HAS_NO_SETCLK)
     tsi_main_clock_selection_t mainClock;   /*!< Set main clock. */
+#endif
     tsi_sensing_mode_selection_t mode;      /*!< Choose sensing mode. */
     tsi_dvolt_option_t dvolt;               /*!< DVOLT option value.  */
     tsi_sinc_cutoff_div_t cutoff;           /*!< Cutoff divider.  */
@@ -576,9 +642,15 @@ typedef struct _tsi_selfCap_config
 {
     tsi_common_config_t commonConfig;            /*!< Common settings.          */
     bool enableSensitivity;                      /*!< Enable sensitivity boost of self-cap or not. */
+#if defined(FSL_FEATURE_TSI_HAS_SHIELD_SEL) && FSL_FEATURE_TSI_HAS_SHIELD_SEL
+    tsi_channel_mask_t shieldChannelMask;       /*!< Shield mask for self-cap mode. */
+#else
     tsi_shield_t enableShield;                   /*!< Enable shield of self-cap mode or not. */
+#endif
     tsi_sensitivity_xdn_option_t xdn;            /*!< Sensitivity XDN option.   */
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_S_CTRIM) && FSL_FEATURE_TSI_HAS_NO_S_CTRIM)
     tsi_sensitivity_ctrim_option_t ctrim;        /*!< Sensitivity CTRIM option. */
+#endif
     tsi_current_multiple_input_t inputCurrent;   /*!< Input current multiple.   */
     tsi_current_multiple_charge_t chargeCurrent; /*!< Charge/Discharge current multiple. */
 } tsi_selfCap_config_t;
@@ -657,7 +729,9 @@ void TSI_Deinit(TSI_Type *base);
  * includes the settings for the whole TSI.
  * The user configure is set to a value:
  * @code
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_SETCLK) && FSL_FEATURE_TSI_HAS_NO_SETCLK)
     userConfig->commonConfig.mainClock     = kTSI_MainClockSlection_0;
+#endif
     userConfig->commonConfig.mode          = kTSI_SensingModeSlection_Self;
     userConfig->commonConfig.dvolt         = kTSI_DvoltOption_2;
     userConfig->commonConfig.cutoff        = kTSI_SincCutoffDiv_1;
@@ -669,9 +743,17 @@ void TSI_Deinit(TSI_Type *base);
     userConfig->commonConfig.ssc_mode      = kTSI_ssc_prbs_method;
     userConfig->commonConfig.ssc_prescaler = kTSI_ssc_div_by_1;
     userConfig->enableSensitivity          = true;
-    userConfig->enableShield               = false;
+#if defined(FSL_FEATURE_TSI_HAS_SHIELD_SEL) && FSL_FEATURE_TSI_HAS_SHIELD_SEL
+    userConfig->selfChannelMask.channel_31_0  = 0U;
+    userConfig->selfChannelMask.channel_63_32 = 0U;
+    userConfig->selfChannelMask.channel_69_64 = 0U;
+#else
+    userConfig->enableShield                = kTSI_shieldAllOff;
+#endif
     userConfig->xdn                        = kTSI_SensitivityXdnOption_1;
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_S_CTRIM) && FSL_FEATURE_TSI_HAS_NO_S_CTRIM)
     userConfig->ctrim                      = kTSI_SensitivityCtrimOption_7;
+#endif
     userConfig->inputCurrent               = kTSI_CurrentMultipleInputValue_0;
     userConfig->chargeCurrent              = kTSI_CurrentMultipleChargeValue_1;
    @endcode
@@ -686,7 +768,9 @@ void TSI_GetSelfCapModeDefaultConfig(tsi_selfCap_config_t *userConfig);
  * includes the settings for the whole TSI.
  * The user configure is set to a value:
  * @code
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_SETCLK) && FSL_FEATURE_TSI_HAS_NO_SETCLK)
     userConfig->commonConfig.mainClock     = kTSI_MainClockSlection_1;
+#endif
     userConfig->commonConfig.mode          = kTSI_SensingModeSlection_Mutual;
     userConfig->commonConfig.dvolt         = kTSI_DvoltOption_0;
     userConfig->commonConfig.cutoff        = kTSI_SincCutoffDiv_1;
@@ -800,12 +884,10 @@ static inline void TSI_EnableModule(TSI_Type *base, bool enable)
 {
     if (enable)
     {
-        base->DATA  = base->DATA & ~ALL_FLAGS_MASK;
         base->GENCS = base->GENCS | TSI_GENCS_TSIEN_MASK; /* Enable module */
     }
     else
     {
-        base->DATA  = base->DATA & ~ALL_FLAGS_MASK;
         base->GENCS = base->GENCS & ~TSI_GENCS_TSIEN_MASK; /* Disable module */
     }
 }
@@ -824,13 +906,23 @@ static inline void TSI_EnableLowPower(TSI_Type *base, bool enable)
 {
     if (enable)
     {
+#if defined TSI_GENCS_TSIEN_DPD_MASK
         base->GENCS =
-            (base->GENCS & ~ALL_FLAGS_MASK) | TSI_GENCS_STPE_MASK; /* Module enabled in low power stop modes */
+            base->GENCS | TSI_GENCS_TSIEN_DPD_MASK; /* Module enabled in deep power down modes */
+#else
+        base->GENCS =
+            base->GENCS | TSI_GENCS_STPE_MASK; /* Module enabled in low power stop modes */
+#endif
     }
     else
     {
+#if defined TSI_GENCS_TSIEN_DPD_MASK
         base->GENCS =
-            (base->GENCS & ~ALL_FLAGS_MASK) & (~TSI_GENCS_STPE_MASK); /* Module disabled in low power stop modes */
+            base->GENCS & (~TSI_GENCS_TSIEN_DPD_MASK); /* Module disabled in  deep power down modes */
+#else
+        base->GENCS =
+            base->GENCS & (~TSI_GENCS_STPE_MASK); /* Module disabled in low power stop modes */
+#endif
     }
 }
 
@@ -847,18 +939,16 @@ static inline void TSI_EnableHardwareTriggerScan(TSI_Type *base, bool enable)
 {
     if (enable)
     {
-        base->DATA  = base->DATA & ~ALL_FLAGS_MASK;
         base->GENCS = base->GENCS | TSI_GENCS_STM_MASK; /* Enable hardware trigger scan */
     }
     else
     {
-        base->DATA  = base->DATA & ~ALL_FLAGS_MASK;
         base->GENCS = base->GENCS & ~TSI_GENCS_STM_MASK; /* Enable software trigger scan */
     }
 }
 
 /*!
- * @brief Start one sotware trigger measurement (trigger a new measurement).
+ * @brief Start one software trigger measurement (trigger a new measurement).
  *
  * @param    base TSI peripheral base address.
  * @return   none.
@@ -868,11 +958,42 @@ static inline void TSI_StartSoftwareTrigger(TSI_Type *base)
     base->GENCS |= TSI_GENCS_SWTS_MASK;
 }
 
+#if defined(FSL_FEATURE_TSI_HAS_SELF_SEL) && FSL_FEATURE_TSI_HAS_SELF_SEL
+/*!
+ * @brief Set the measured channels number for self-cap mode.
+ *
+ * @param    base    TSI peripheral base address.
+ * @param    selfChannelMask mask of Channel number.
+ * @return   none.
+ * @note     This API can only be used in self-cap mode!
+ */
+static inline void TSI_SetSelfCapMeasuredChannels(TSI_Type *base, const tsi_channel_mask_t *selfChannelMask)
+{
+    base->SELF_SEL_31_0 = TSI_SELF_SEL_31_0_AS_SELF_31_0(selfChannelMask->channel_31_0);
+    base->SELF_SEL_63_32 = TSI_SELF_SEL_63_32_AS_SELF_63_32(selfChannelMask->channel_63_32);
+    base->SELF_SEL_69_64 = TSI_SELF_SEL_69_64_AS_SELF_69_64(selfChannelMask->channel_69_64);
+}
+
+/*!
+ * @brief Get all enabled channel mask in self-cap mode.
+ *
+ * @param    base    TSI peripheral base address.
+ * @param    mask    Pointer to structure to store channel masks.
+ * @return   none.
+ */
+static inline void TSI_GetSelfCapEnabledChannels(TSI_Type *base, tsi_channel_mask_t *mask)
+{
+    mask->channel_31_0  = base->SELF_SEL_31_0;
+    mask->channel_63_32 = base->SELF_SEL_63_32;
+    mask->channel_69_64 = base->SELF_SEL_69_64;
+}
+#endif
+
 /*!
  * @brief Set the measured channel number for self-cap mode.
  *
  * @param    base    TSI peripheral base address.
- * @param    channel Channel number 0 ... 24.
+ * @param    channel Channel number.
  * @return   none.
  * @note     This API can only be used in self-cap mode!
  */
@@ -880,41 +1001,134 @@ static inline void TSI_SetSelfCapMeasuredChannel(TSI_Type *base, uint8_t channel
 {
     assert(channel < (uint8_t)FSL_FEATURE_TSI_CHANNEL_COUNT);
 
+#if defined(FSL_FEATURE_TSI_HAS_SELF_SEL) && FSL_FEATURE_TSI_HAS_SELF_SEL
+    base->SELF_SEL_31_0 &= (~TSI_SELF_SEL_31_0_AS_SELF_31_0_MASK);
+    base->SELF_SEL_63_32 &= (~TSI_SELF_SEL_63_32_AS_SELF_63_32_MASK);
+    base->SELF_SEL_69_64 &= (~TSI_SELF_SEL_69_64_AS_SELF_69_64_MASK);
+
+    if (channel < 32U)
+    {
+        base->SELF_SEL_31_0 |= TSI_SELF_SEL_31_0_AS_SELF_31_0(1U << channel);
+    }
+    else if (channel < 64U)
+    {
+        base->SELF_SEL_63_32 |= TSI_SELF_SEL_63_32_AS_SELF_63_32(1U << (channel - 32U));
+    }
+    else
+    {
+        base->SELF_SEL_69_64 |= TSI_SELF_SEL_69_64_AS_SELF_69_64(1U << (channel - 64U));
+    }
+#else
     base->CONFIG = ((base->CONFIG) & ~TSI_CONFIG_TSICH_MASK) | (TSI_CONFIG_TSICH(channel));
+#endif
 }
 
 /*!
  * @brief Get the current measured channel number, in self-cap mode.
  *
  * @param    base    TSI peripheral base address.
- * @return   uint8_t    Channel number 0 ... 24.
+ * @return   uint8_t Channel number.
  * @note     This API can only be used in self-cap mode!
+ *           It is not recommended to use this API when multiple channels are enabled.
  */
 static inline uint8_t TSI_GetSelfCapMeasuredChannel(TSI_Type *base)
 {
+#if defined(FSL_FEATURE_TSI_HAS_SELF_SEL) && FSL_FEATURE_TSI_HAS_SELF_SEL
+    uint32_t mask = base->SELF_SEL_31_0;
+    
+    if (mask != 0U)
+    {
+        return (uint8_t)FSL_TSI_CTZ(mask);
+    }
+
+    mask = base->SELF_SEL_63_32;
+    if (mask != 0U)
+    {
+        return (uint8_t)(32U + FSL_TSI_CTZ(mask));
+    }
+
+    mask = base->SELF_SEL_69_64;
+    if (mask != 0U)
+    {
+        return (uint8_t)(64U + FSL_TSI_CTZ(mask));
+    }
+
+    return 0xFFU;
+#else
     return (uint8_t)((base->CONFIG & TSI_CONFIG_TSICH_MASK) >> TSI_CONFIG_TSICH_SHIFT);
+#endif
 }
+
+#if defined(FSL_FEATURE_TSI_HAS_SHIELD_SEL) && FSL_FEATURE_TSI_HAS_SHIELD_SEL
+/*!
+ * @brief Enable shield pin(s) for hardware shielding functionality.
+ *
+ * @param    base      TSI peripheral base address.
+ * @param    shield    Shield pin selection from tsi_shield_t enum.
+ * @return   none.
+ * @note     This API is used in self-cap mode for hardware shielding.
+ */
+static inline void TSI_SetShieldChannel(TSI_Type *base, tsi_channel_mask_t selfChannelMask )
+{
+    base->SHIELD_SEL_31_0 = TSI_SHIELD_SEL_31_0_AS_SHIELD_31_0(selfChannelMask.channel_31_0);
+    base->SHIELD_SEL_63_32 = TSI_SHIELD_SEL_63_32_AS_SHIELD_63_32(selfChannelMask.channel_63_32);
+    base->SHIELD_SEL_69_64 = TSI_SHIELD_SEL_69_64_AS_SHIELD_69_64(selfChannelMask.channel_69_64);
+}
+#else /* FSL_FEATURE_TSI_HAS_SHIELD_SEL == 0 */
+
+/*!
+ * @brief Enable shield pin(s) for hardware shielding functionality.
+ *
+ * @param    base      TSI peripheral base address.
+ * @param    shield    Shield pin selection from tsi_shield_t enum.
+ * @return   none.
+ * @note     This API is used in self-cap mode for hardware shielding.
+ */
+static inline void TSI_SetShieldChannel(TSI_Type *base, uint32_t selfChannelMask )
+{
+    base->SHIELD = ((base->SHIELD) & ~TSI_SHIELD_SHIELD_ENABLE_MASK) | (TSI_SHIELD_SHIELD_ENABLE(selfChannelMask ));
+}
+#endif /* FSL_FEATURE_TSI_HAS_SHIELD_SEL */
 
 /*!
  * @brief Decide whether to enable End of Scan DMA transfer request only.
  *
  * @param    base TSI peripheral base address.
- * @param    enable  Choose whether to enable End of Scan DMA transfer request only.
- *                   - true  Enable End of Scan DMA transfer request only;
- *                   - false Both End-of-Scan and Out-of-Range can generate DMA transfer request.
+ * @param    enable  Choose whether to enable End of Scan DMA transfer request.
+ *                   - true  Enable End of Scan DMA transfer request.
+ *                   - false Disable End of Scan DMA transfer request.
  * @return   none.
  */
 static inline void TSI_EnableEndOfScanDmaTransferOnly(TSI_Type *base, bool enable)
 {
     if (enable)
     {
-        base->GENCS = (base->GENCS & ~ALL_FLAGS_MASK) |
-                      TSI_GENCS_DMAEN_EOS_MASK; /* Enable End of Scan DMA transfer request only; */
+        base->GENCS |= TSI_GENCS_DMAEN_EOS_MASK; /* Enable End of Scan DMA transfer request only; */
     }
     else
     {
-        base->GENCS = (base->GENCS & ~ALL_FLAGS_MASK) &
-                      (~TSI_GENCS_DMAEN_EOS_MASK); /* Both types of events can generate DMA transfer request. */
+        base->GENCS &= (~TSI_GENCS_DMAEN_EOS_MASK); /* Disable End of Scan DMA transfer request. */
+    }
+}
+
+/*!
+ * @brief Decide whether to enable Out of Range DMA transfer request only.
+ *
+ * @param    base TSI peripheral base address.
+ * @param    enable  Choose whether to enable Out of Range DMA transfer request only.
+ *                   - true  Enable Out of Range DMA transfer request.
+ *                   - false Disable Out of Range DMA transfer request.
+ * @return   none.
+ */
+static inline void TSI_EnableOutOfRangeDmaTransferOnly(TSI_Type *base, bool enable)
+{
+    if (enable)
+    {
+        base->GENCS |= TSI_GENCS_DMAEN_OUTRG_MASK; /* Enable Out of Range DMA transfer request. */
+    }
+    else
+    {
+        base->GENCS &= (~TSI_GENCS_DMAEN_OUTRG_MASK); /* Disable Out of Range DMA transfer request. */
     }
 }
 
@@ -953,6 +1167,7 @@ static inline void TSI_SetHighThreshold(TSI_Type *base, uint16_t high_threshold)
     base->TSHD = ((base->TSHD) & ~TSI_TSHD_THRESH_MASK) | (TSI_TSHD_THRESH(high_threshold));
 }
 
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_SETCLK) && FSL_FEATURE_TSI_HAS_NO_SETCLK)
 /*!
  * @brief Set the main clock of the TSI module.
  *
@@ -964,6 +1179,30 @@ static inline void TSI_SetMainClock(TSI_Type *base, tsi_main_clock_selection_t m
 {
     base->GENCS = ((base->GENCS) & ~TSI_GENCS_SETCLK_MASK) | (TSI_GENCS_SETCLK(mainClock));
 }
+#endif
+
+#if defined(FSL_FEATURE_TSI_HAS_CLK_SEL) && FSL_FEATURE_TSI_HAS_CLK_SEL
+/*!
+ * @brief Set the TSI wake-up clock source for low power modes.
+ *
+ * This function configures the clock source used by TSI module when waking up from
+ * Deep-Power-Down (DPD) or other low power modes. The selected clock determines the
+ * TSI operation frequency during wake-up sequence.
+ *
+ * @param base TSI peripheral base address.
+ * @param clockSource Wake-up clock source selection:
+ *                    - kTSI_WakeupClock_32kHz: Use 32 kHz clock source
+ *                    - kTSI_WakeupClock_16kHz: Use 16 kHz clock source
+ * @return none.
+ * 
+ * @note This setting only affects TSI operation in low power wake-up scenarios.
+ * @note Ensure the selected clock source is available and stable before entering DPD mode.
+ */
+static inline void TSI_SetWakeupClockSource(TSI_Type *base, tsi_wakeup_clock_selection_t clockSource)
+{
+    base->GENCS = ((base->GENCS) & ~TSI_GENCS_CLK_SEL_MASK) | (TSI_GENCS_CLK_SEL(clockSource));
+}
+#endif
 
 /*!
  * @brief Set the sensing mode of the TSI module.
@@ -997,7 +1236,7 @@ static inline tsi_sensing_mode_selection_t TSI_GetSensingMode(TSI_Type *base)
  */
 static inline void TSI_SetDvolt(TSI_Type *base, tsi_dvolt_option_t dvolt)
 {
-    base->GENCS = (base->GENCS & ~(TSI_GENCS_DVOLT_MASK | ALL_FLAGS_MASK)) | (TSI_GENCS_DVOLT(dvolt));
+    base->GENCS = (base->GENCS & ~(TSI_GENCS_DVOLT_MASK)) | (TSI_GENCS_DVOLT(dvolt));
 }
 
 /*!
@@ -1014,56 +1253,205 @@ static inline void TSI_EnableNoiseCancellation(TSI_Type *base, bool enableCancel
     base->CONFIG = ((base->CONFIG) & ~TSI_CONFIG_S_NOISE_MASK) | (TSI_CONFIG_S_NOISE(enableCancellation));
 }
 
+#if defined(FSL_FEATURE_TSI_HAS_MUTUAL_TX_SEL) && FSL_FEATURE_TSI_HAS_MUTUAL_TX_SEL
+/*!
+ * @brief Set the mutual-cap mode TX channels.
+ *
+ * @param    base           TSI peripheral base address.
+ * @param    txChannelMask  Mutual-cap mode TX channel number
+ * @return   none.
+ */
+static inline void TSI_SetMutualCapTxChannels(TSI_Type *base, const tsi_channel_mask_t *txChannelMask)
+{
+    base->MUTUAL_TX_SEL_31_0 = TSI_MUTUAL_TX_SEL_31_0_AS_MUTUAL_TX_31_0(txChannelMask->channel_31_0);
+    base->MUTUAL_TX_SEL_63_32 = TSI_MUTUAL_TX_SEL_63_32_AS_MUTUAL_TX_63_32(txChannelMask->channel_63_32);
+    base->MUTUAL_TX_SEL_69_64 = TSI_MUTUAL_TX_SEL_69_64_AS_MUTUAL_TX_69_64(txChannelMask->channel_69_64);
+}
+
+/*!
+ * @brief Get all enabled TX channel mask in mutual-cap mode.
+ *
+ * @param    base    TSI peripheral base address.
+ * @param    mask    Pointer to structure to store channel masks.
+ * @return   none.
+ */
+static inline void TSI_GetTxMutualCapMeasuredChannels(TSI_Type *base, tsi_channel_mask_t *mask)
+{
+    mask->channel_31_0  = base->MUTUAL_TX_SEL_31_0;
+    mask->channel_63_32 = base->MUTUAL_TX_SEL_63_32;
+    mask->channel_69_64 = base->MUTUAL_TX_SEL_69_64;
+}
+#endif
 /*!
  * @brief Set the mutual-cap mode TX channel.
  *
  * @param    base       TSI peripheral base address.
  * @param    txChannel  Mutual-cap mode TX channel number
  * @return   none.
+ * @note     For fully functional channels, any channel can be selected. 
+ *           For limited channels, refer to @ref tsi_mutual_tx_channel_t.
  */
-static inline void TSI_SetMutualCapTxChannel(TSI_Type *base, tsi_mutual_tx_channel_t txChannel)
+static inline void TSI_SetMutualCapTxChannel(TSI_Type *base, uint8_t txChannel)
 {
+    assert(txChannel < (uint8_t)FSL_FEATURE_TSI_CHANNEL_COUNT);
+#if defined(FSL_FEATURE_TSI_HAS_MUTUAL_TX_SEL) && FSL_FEATURE_TSI_HAS_MUTUAL_TX_SEL
+    base->MUTUAL_TX_SEL_31_0 &= (~TSI_MUTUAL_TX_SEL_31_0_AS_MUTUAL_TX_31_0_MASK);
+    base->MUTUAL_TX_SEL_63_32 &= (~TSI_MUTUAL_TX_SEL_63_32_AS_MUTUAL_TX_63_32_MASK);
+    base->MUTUAL_TX_SEL_69_64 &= (~TSI_MUTUAL_TX_SEL_69_64_AS_MUTUAL_TX_69_64_MASK);
+
+    if (txChannel < 32U)
+    {
+        base->MUTUAL_TX_SEL_31_0 |= TSI_MUTUAL_TX_SEL_31_0_AS_MUTUAL_TX_31_0(1U << txChannel);
+    }
+    else if (txChannel < 64U)
+    {
+        base->MUTUAL_TX_SEL_63_32 |= TSI_MUTUAL_TX_SEL_63_32_AS_MUTUAL_TX_63_32(1U << (txChannel - 32U));
+    }
+    else
+    {
+        base->MUTUAL_TX_SEL_69_64 |= TSI_MUTUAL_TX_SEL_69_64_AS_MUTUAL_TX_69_64(1U << (txChannel - 64U));
+    }
+#else
     base->CONFIG_MUTUAL =
         ((base->CONFIG_MUTUAL) & ~TSI_CONFIG_MUTUAL_M_SEL_TX_MASK) | (TSI_CONFIG_MUTUAL_M_SEL_TX(txChannel));
+#endif
 }
 
 /*!
  * @brief Get the current measured TX channel number, in mutual-cap mode.
  *
  * @param    base    TSI peripheral base address;
- * @return           Tx Channel number 0 ... 5;
+ * @return           Tx Channel number;
  * @note     This API can only be used in mutual-cap mode!
+ *           It is not recommended to use this API when multiple channels are enabled.
  */
-static inline tsi_mutual_tx_channel_t TSI_GetTxMutualCapMeasuredChannel(TSI_Type *base)
+static inline uint8_t TSI_GetTxMutualCapMeasuredChannel(TSI_Type *base)
 {
-    return (tsi_mutual_tx_channel_t)(uint32_t)((base->CONFIG_MUTUAL & TSI_CONFIG_MUTUAL_M_SEL_TX_MASK) >>
+#if defined(FSL_FEATURE_TSI_HAS_MUTUAL_TX_SEL) && FSL_FEATURE_TSI_HAS_MUTUAL_TX_SEL
+    uint32_t mask = base->MUTUAL_TX_SEL_31_0;
+    
+    if (mask != 0U)
+    {
+        return (uint8_t)FSL_TSI_CTZ(mask);
+    }
+
+    mask = base->MUTUAL_TX_SEL_63_32;
+    if (mask != 0U)
+    {
+        return (uint8_t)(32U + FSL_TSI_CTZ(mask));
+    }
+
+    mask = base->MUTUAL_TX_SEL_69_64;
+    if (mask != 0U)
+    {
+        return (uint8_t)(64U + FSL_TSI_CTZ(mask));
+    }
+
+    return 0xFFU;
+#else
+    return (uint8_t)((base->CONFIG_MUTUAL & TSI_CONFIG_MUTUAL_M_SEL_TX_MASK) >>
                                                TSI_CONFIG_MUTUAL_M_SEL_TX_SHIFT);
+#endif
 }
 
+#if defined(FSL_FEATURE_TSI_HAS_MUTUAL_RX_SEL) && FSL_FEATURE_TSI_HAS_MUTUAL_RX_SEL
+/*!
+ * @brief Set the mutual-cap mode RX channels.
+ *
+ * @param    base       TSI peripheral base address.
+ * @param    rxChannel  Mutual-cap mode RX channel number
+ * @return   none.
+ */
+static inline void TSI_SetMutualCapRxChannels(TSI_Type *base, const tsi_channel_mask_t *rxChannelMask)
+{
+    base->MUTUAL_RX_SEL_31_0 = TSI_MUTUAL_RX_SEL_31_0_AS_MUTUAL_RX_31_0(rxChannelMask->channel_31_0);
+    base->MUTUAL_RX_SEL_63_32 = TSI_MUTUAL_RX_SEL_63_32_AS_MUTUAL_RX_63_32(rxChannelMask->channel_63_32);
+    base->MUTUAL_RX_SEL_69_64 = TSI_MUTUAL_RX_SEL_69_64_AS_MUTUAL_RX_69_64(rxChannelMask->channel_69_64);
+}
+/*!
+ * @brief Get all enabled RX channel mask in mutual-cap mode.
+ *
+ * @param    base    TSI peripheral base address.
+ * @param    mask    Pointer to structure to store channel masks.
+ * @return   none.
+ */
+static inline void TSI_GetRxMutualCapMeasuredChannels(TSI_Type *base, tsi_channel_mask_t *mask)
+{
+    mask->channel_31_0  = base->MUTUAL_RX_SEL_31_0;
+    mask->channel_63_32 = base->MUTUAL_RX_SEL_63_32;
+    mask->channel_69_64 = base->MUTUAL_RX_SEL_69_64;
+}
+#endif
 /*!
  * @brief Set the mutual-cap mode RX channel.
  *
  * @param    base       TSI peripheral base address.
  * @param    rxChannel  Mutual-cap mode RX channel number
  * @return   none.
+ * @note     For fully functional channels, any channel can be selected. 
+ *           For limited channels, refer to @ref tsi_mutual_rx_channel_t.
  */
-static inline void TSI_SetMutualCapRxChannel(TSI_Type *base, tsi_mutual_rx_channel_t rxChannel)
+static inline void TSI_SetMutualCapRxChannel(TSI_Type *base, uint8_t rxChannel)
 {
+    assert(rxChannel < (uint8_t)FSL_FEATURE_TSI_CHANNEL_COUNT);
+#if defined(FSL_FEATURE_TSI_HAS_MUTUAL_RX_SEL) && FSL_FEATURE_TSI_HAS_MUTUAL_RX_SEL
+    base->MUTUAL_RX_SEL_31_0 &= (~TSI_MUTUAL_RX_SEL_31_0_AS_MUTUAL_RX_31_0_MASK);
+    base->MUTUAL_RX_SEL_63_32 &= (~TSI_MUTUAL_RX_SEL_63_32_AS_MUTUAL_RX_63_32_MASK);
+    base->MUTUAL_RX_SEL_69_64 &= (~TSI_MUTUAL_RX_SEL_69_64_AS_MUTUAL_RX_69_64_MASK);
+
+    if (rxChannel < 32U)
+    {
+        base->MUTUAL_RX_SEL_31_0 |= TSI_MUTUAL_RX_SEL_31_0_AS_MUTUAL_RX_31_0(1U << rxChannel);
+    }
+    else if (rxChannel < 64U)
+    {
+        base->MUTUAL_RX_SEL_63_32 |= TSI_MUTUAL_RX_SEL_63_32_AS_MUTUAL_RX_63_32(1U << (rxChannel - 32U));
+    }
+    else
+    {
+        base->MUTUAL_RX_SEL_69_64 |= TSI_MUTUAL_RX_SEL_69_64_AS_MUTUAL_RX_69_64(1U << (rxChannel - 64U));
+    }
+#else
     base->CONFIG_MUTUAL =
         ((base->CONFIG_MUTUAL) & ~TSI_CONFIG_MUTUAL_M_SEL_RX_MASK) | (TSI_CONFIG_MUTUAL_M_SEL_RX(rxChannel));
+#endif
 }
 
 /*!
  * @brief Get the current measured RX channel number, in mutual-cap mode.
  *
  * @param    base    TSI peripheral base address;
- * @return           Rx Channel number 6 ... 11;
+ * @return           Rx Channel number;
  * @note     This API can only be used in mutual-cap mode!
+ *           It is not recommended to use this API when multiple channels are enabled.
  */
-static inline tsi_mutual_rx_channel_t TSI_GetRxMutualCapMeasuredChannel(TSI_Type *base)
+static inline uint8_t TSI_GetRxMutualCapMeasuredChannel(TSI_Type *base)
 {
-    return (tsi_mutual_rx_channel_t)(uint32_t)((base->CONFIG_MUTUAL & TSI_CONFIG_MUTUAL_M_SEL_RX_MASK) >>
+#if defined(FSL_FEATURE_TSI_HAS_MUTUAL_RX_SEL) && FSL_FEATURE_TSI_HAS_MUTUAL_RX_SEL
+    uint32_t mask = base->MUTUAL_RX_SEL_31_0;
+    
+    if (mask != 0U)
+    {
+        return (uint8_t)FSL_TSI_CTZ(mask);
+    }
+
+    mask = base->MUTUAL_RX_SEL_63_32;
+    if (mask != 0U)
+    {
+        return (uint8_t)(32U + FSL_TSI_CTZ(mask));
+    }
+
+    mask = base->MUTUAL_RX_SEL_69_64;
+    if (mask != 0U)
+    {
+        return (uint8_t)(64U + FSL_TSI_CTZ(mask));
+    }
+
+    return 0xFFU;
+#else
+    return (uint8_t)((base->CONFIG_MUTUAL & TSI_CONFIG_MUTUAL_M_SEL_RX_MASK) >>
                                                TSI_CONFIG_MUTUAL_M_SEL_RX_SHIFT);
+#endif
 }
 
 /*!
@@ -1090,6 +1478,7 @@ static inline void TSI_SetSscPrescaler(TSI_Type *base, tsi_ssc_prescaler_t presc
     base->SSC0 = ((base->SSC0) & ~TSI_SSC0_SSC_PRESCALE_NUM_MASK) | (TSI_SSC0_SSC_PRESCALE_NUM(prescaler));
 }
 
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_MUTUAL_TX_USED) && FSL_FEATURE_TSI_HAS_NO_MUTUAL_TX_USED)
 /*!
  * @brief Set used mutual-cap TX channel.
  *
@@ -1113,6 +1502,7 @@ static inline void TSI_ClearUsedTxChannel(TSI_Type *base, tsi_mutual_tx_channel_
 {
     base->MUL &= ~TSI_MUL_M_TX_USED(1UL << (uint8_t)txChannel);
 }
+#endif
 
 #ifdef __cplusplus
 }

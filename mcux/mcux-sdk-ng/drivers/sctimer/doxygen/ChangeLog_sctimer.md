@@ -1,5 +1,10 @@
 # SCTIMER
 
+## [2.5.3]
+
+- Bug Fixes
+  - Fixed overflow error in SCT_EV_STATE_STATEMSKn macro definition.
+
 ## [2.5.2]
 
 - Bug Fixes

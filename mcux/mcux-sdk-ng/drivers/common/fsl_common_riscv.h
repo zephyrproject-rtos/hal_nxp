@@ -64,6 +64,26 @@
 #define MSDK_REG_SECURE_ADDR(x) ((typeof(x))((uintptr_t)(x) | (0x1UL << 28)))
 #define MSDK_REG_NONSECURE_ADDR(x) ((typeof(x))((uintptr_t)(x) & ~(0x1UL << 28)))
 
+/*!
+ * @brief Deprecated APIs
+ */
+#define MCUX_DEPRECATED __attribute__((deprecated("Deprecated feature")))
+
+/*!
+ * @brief Deprecated macros
+ */
+#define MCUX_DEPRECATED_MACRO _Pragma("GCC warning \"Deprecated macro\"")
+
+/*!
+ * @brief Experimental APIs
+ */
+#define MCUX_EXPERIMENTAL __attribute__((deprecated("Experimental feature")))
+
+/*!
+ * @brief Experimental macros
+ */
+#define MCUX_EXPERIMENTAL_MACRO _Pragma("GCC warning \"Experimental macro\"")
+
 /*
  * The fsl_clock.h is included here because it needs MAKE_VERSION/MAKE_STATUS/status_t
  * defined in previous of this file.

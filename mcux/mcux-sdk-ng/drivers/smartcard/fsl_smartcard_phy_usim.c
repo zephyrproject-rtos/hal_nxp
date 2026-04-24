@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2022, 2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -19,7 +19,7 @@
 /*******************************************************************************
  * Private Functions
  ******************************************************************************/
-static void SMARTCARD_PHY_USIM_InterfaceClockInit(USIM_Type *base,
+static status_t SMARTCARD_PHY_USIM_InterfaceClockInit(USIM_Type *base,
                                                   const smartcard_interface_config_t *config,
                                                   uint32_t srcClock_Hz);
 
@@ -30,24 +30,32 @@ static void SMARTCARD_PHY_USIM_InterfaceClockInit(USIM_Type *base,
 /*!
  * @brief This function initializes clock module used for card clock generation
  */
-static void SMARTCARD_PHY_USIM_InterfaceClockInit(USIM_Type *base,
-                                                  const smartcard_interface_config_t *config,
-                                                  uint32_t srcClock_Hz)
+static status_t SMARTCARD_PHY_USIM_InterfaceClockInit(USIM_Type *base,
+                                                      const smartcard_interface_config_t *config,
+                                                      uint32_t srcClock_Hz)
 {
     assert((NULL != config) && (0u != srcClock_Hz));
 
     uint32_t usimClkMhz = 0u;
-    uint8_t usimPRSCValue;
+    uint32_t usimPRSCValue;
 
     /* Retrieve USIM clock */
     usimClkMhz = srcClock_Hz / 1000000u;
     /* Calculate MOD value */
-    usimPRSCValue = (uint8_t)((usimClkMhz * 1000u) / (config->smartCardClock / 1000u) / 2U);
+
+    usimPRSCValue = (usimClkMhz * 1000u) / (config->smartCardClock / 1000u) / 2U;
+    if (usimPRSCValue > (USIM_CLKR_DIVISOR_MASK >> USIM_CLKR_DIVISOR_SHIFT))
+    {
+        return kStatus_SMARTCARD_InvalidInput;
+    }
+
     while (0UL != (base->CLKR & USIM_CLKR_RQST_MASK))
     {
     }
     /* Set clock prescaler */
     base->CLKR = (base->CLKR & ~USIM_CLKR_DIVISOR_MASK) | USIM_CLKR_DIVISOR(usimPRSCValue);
+
+    return kStatus_SMARTCARD_Success;
 }
 
 void SMARTCARD_PHY_GetDefaultConfig(smartcard_interface_config_t *config)
@@ -70,9 +78,7 @@ status_t SMARTCARD_PHY_Init(void *base, smartcard_interface_config_t const *conf
     USIM_Type *usimBase = (USIM_Type *)base;
 
     /* SMARTCARD clock initialization. Clock is still not active after this call */
-    SMARTCARD_PHY_USIM_InterfaceClockInit(usimBase, config, srcClock_Hz);
-
-    return kStatus_SMARTCARD_Success;
+    return SMARTCARD_PHY_USIM_InterfaceClockInit(usimBase, config, srcClock_Hz);
 }
 
 void SMARTCARD_PHY_Deinit(void *base, smartcard_interface_config_t const *config)
@@ -128,17 +134,27 @@ status_t SMARTCARD_PHY_Activate(void *base, smartcard_context_t *context, smartc
         return kStatus_SMARTCARD_InvalidInput;
     }
     /* Calculate time delay needed for reset */
-    uint32_t temp =
-        ((((uint32_t)10000u * context->interfaceConfig.clockToResetDelay) / context->interfaceConfig.smartCardClock) *
-         100u) +
-        1u;
-    context->timeDelay(temp);
+    uint64_t temp =
+        (((10000ull * (uint64_t)context->interfaceConfig.clockToResetDelay) / (uint64_t)context->interfaceConfig.smartCardClock) *
+         100ull) +
+        1ull;
+    if (temp > UINT32_MAX)
+    {
+        return kStatus_SMARTCARD_InvalidInput;
+    }
+    context->timeDelay((uint32_t)(temp &0xFFFFFFFFu));
     /* Pull reset HIGH Now to mark the end of Activation sequence */
     usimBase->USCCR |= USIM_USCCR_RST_CARD_N_MASK;
 
     /* Enable external timer for TS detection time-out */
-    SMARTCARD_USIM_TimerStart((SMARTCARD_INIT_DELAY_CLOCK_CYCLES + SMARTCARD_INIT_DELAY_CLOCK_CYCLES_ADJUSTMENT) *
-                              (SystemCoreClock / context->interfaceConfig.smartCardClock));
+    temp = ((uint64_t)SMARTCARD_INIT_DELAY_CLOCK_CYCLES + (uint64_t)SMARTCARD_INIT_DELAY_CLOCK_CYCLES_ADJUSTMENT) *
+           (uint64_t)(SystemCoreClock / context->interfaceConfig.smartCardClock);
+    if (temp > UINT32_MAX)
+    {
+        return kStatus_SMARTCARD_InvalidInput;
+    }
+
+    SMARTCARD_USIM_TimerStart((uint32_t)(temp & 0xFFFFFFFFu));
     /* Here the card was activated */
     context->cardParams.active = true;
 
@@ -193,7 +209,7 @@ status_t SMARTCARD_PHY_Control(void *base,
     {
         case kSMARTCARD_InterfaceSetVcc:
             /* Only 3.3V interface supported by the interface */
-            assert((smartcard_card_voltage_class_t)param == kSMARTCARD_VoltageClassB3_3V);
+            assert(param == (uint32_t)kSMARTCARD_VoltageClassB3_3V);
             context->interfaceConfig.vcc = (smartcard_card_voltage_class_t)param;
             break;
         case kSMARTCARD_InterfaceSetClockToResetDelay:

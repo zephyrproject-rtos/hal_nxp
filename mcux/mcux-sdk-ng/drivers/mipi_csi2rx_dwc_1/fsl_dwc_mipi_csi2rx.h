@@ -132,14 +132,14 @@ extern "C" {
  * @param base CSI2RX peripheral base address.
  * @return CSIRX instance.
  */
-uint32_t MIPI_CSI2RX_GetInstance(PRIMARY_CSI2_CONTROLLER_Type *base);
+uint32_t MIPI_CSI2RX_GetInstance(CSI2_CONTROLLER_Type *base);
 
 /*!
  * @brief This function start up the CSI host controller.
  *
  * @param base CSI2RX peripheral address.
  */
-void MIPI_CSI2RX_Startup(PRIMARY_CSI2_CONTROLLER_Type *base, SECONDARY_CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config);
+void MIPI_CSI2RX_Startup(CSI2_CONTROLLER_Type *base, CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config);
 
 /*!
  * @brief This function deal with CSI and PHY initialization.
@@ -149,7 +149,7 @@ void MIPI_CSI2RX_Startup(PRIMARY_CSI2_CONTROLLER_Type *base, SECONDARY_CSI2_CONT
  * @param phybase PHY module periperal address.
  * @param config CSI2RX module configuration structure.
  */
-status_t MIPI_CSI2RX_InitInterface(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config);
+status_t MIPI_CSI2RX_InitInterface(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config);
 /*!
  * @brief The CSI host interface is basically configured and ready to receive sensor data after this function.
  *
@@ -158,7 +158,7 @@ status_t MIPI_CSI2RX_InitInterface(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY
  * @param phybase PHY module periperal address.
  * @param config CSI2RX module configuration structure.
  */
-status_t MIPI_CSI2RX_Init(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config);
+status_t MIPI_CSI2RX_Init(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config);
 
 /*!
  * @brief This function disables the CSI2 host and PHY module.
@@ -167,7 +167,7 @@ status_t MIPI_CSI2RX_Init(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CON
  * @param csi2 CSI2 secondary peripheral address.
  * @param instance CSI interface number.
  */
-void MIPI_CSI2RX_Deinit(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, uint8_t instance);
+void MIPI_CSI2RX_Deinit(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, uint8_t instance);
 
 #if defined(__cplusplus)
 }

@@ -88,7 +88,11 @@ typedef enum _irqsteer_int_group
     kIRQSTEER_InterruptGroup12, /*!< Interrupt Group 12: interrupt source 415 - 384 */
     kIRQSTEER_InterruptGroup13, /*!< Interrupt Group 13: interrupt source 447 - 416 */
     kIRQSTEER_InterruptGroup14, /*!< Interrupt Group 14: interrupt source 479 - 448 */
-    kIRQSTEER_InterruptGroup15  /*!< Interrupt Group 15: interrupt source 511 - 480 */
+    kIRQSTEER_InterruptGroup15, /*!< Interrupt Group 15: interrupt source 511 - 480 */
+    kIRQSTEER_InterruptGroup16, /*!< Interrupt Group 16: interrupt source 543 - 512 */
+    kIRQSTEER_InterruptGroup17, /*!< Interrupt Group 17: interrupt source 575 - 544 */
+    kIRQSTEER_InterruptGroup18, /*!< Interrupt Group 18: interrupt source 607 - 576 */
+    kIRQSTEER_InterruptGroup19  /*!< Interrupt Group 19: interrupt source 639 - 608 */
 } irqsteer_int_group_t;
 
 /*! @brief IRQSTEER master interrupts mapping. */
@@ -102,6 +106,8 @@ typedef enum _irqsteer_int_master
     kIRQSTEER_InterruptMaster5, /*!< Interrupt Master 5: interrupt source 383 - 320 */
     kIRQSTEER_InterruptMaster6, /*!< Interrupt Master 6: interrupt source 447 - 384 */
     kIRQSTEER_InterruptMaster7, /*!< Interrupt Master 7: interrupt source 511 - 448 */
+    kIRQSTEER_InterruptMaster8, /*!< Interrupt Master 8: interrupt source 575 - 512 */
+    kIRQSTEER_InterruptMaster9, /*!< Interrupt Master 9: interrupt source 639 - 576 */
 } irqsteer_int_master_t;
 
 /*******************************************************************************

@@ -48,7 +48,7 @@ void AUDMIX_Init(WAKEUP_AUDMIX_Type *base)
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the clock. */
-    CLOCK_EnableClock(kCLOCK_Audmix);
+    CLOCK_EnableClock(kCLOCK_audmix);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
@@ -67,7 +67,7 @@ void AUDMIX_Deinit(WAKEUP_AUDMIX_Type *base)
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Disable the clock. */
-    CLOCK_DisableClock(kCLOCK_Audmix);
+    CLOCK_DisableClock(kCLOCK_audmix);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 

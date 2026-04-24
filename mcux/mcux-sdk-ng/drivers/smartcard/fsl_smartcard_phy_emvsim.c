@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -39,12 +39,17 @@ static uint32_t smartcard_phy_emvsim_InterfaceClockInit(EMVSIM_Type *base,
     assert((NULL != config) && (0u != srcClock_Hz));
 
     uint32_t emvsimClkMhz = 0u;
-    uint8_t emvsimPRSCValue;
+    uint32_t emvsimPRSCValue;
 
     /* Retrieve EMV SIM clock */
     emvsimClkMhz = srcClock_Hz / 1000000u;
     /* Calculate MOD value */
-    emvsimPRSCValue = (uint8_t)((emvsimClkMhz * 1000u) / (config->smartCardClock / 1000u));
+    emvsimPRSCValue = (emvsimClkMhz * 1000u) / (config->smartCardClock / 1000u);
+    if (emvsimPRSCValue > (EMVSIM_CLKCFG_CLK_PRSC_MASK >> EMVSIM_CLKCFG_CLK_PRSC_SHIFT))
+    {
+        return 0;
+    }
+
     /* Set clock prescaler */
     base->CLKCFG = (base->CLKCFG & ~EMVSIM_CLKCFG_CLK_PRSC_MASK) | EMVSIM_CLKCFG_CLK_PRSC(emvsimPRSCValue);
 
@@ -71,7 +76,10 @@ status_t SMARTCARD_PHY_Init(void *base, smartcard_interface_config_t const *conf
     EMVSIM_Type *emvsimBase = (EMVSIM_Type *)base;
 
     /* SMARTCARD clock initialization. Clock is still not active after this call */
-    (void)smartcard_phy_emvsim_InterfaceClockInit(emvsimBase, config, srcClock_Hz);
+    if (0U == smartcard_phy_emvsim_InterfaceClockInit(emvsimBase, config, srcClock_Hz))
+    {
+        return kStatus_SMARTCARD_InvalidInput;
+    }
 
     /* Configure EMVSIM direct interface driver interrupt occur according card presence */
     if ((emvsimBase->PCSR & EMVSIM_PCSR_SPDP_MASK) != 0u)
@@ -205,7 +213,7 @@ status_t SMARTCARD_PHY_Control(void *base,
     {
         case kSMARTCARD_InterfaceSetVcc:
             /* Only 3.3V interface supported by the direct interface */
-            assert((smartcard_card_voltage_class_t)param == kSMARTCARD_VoltageClassB3_3V);
+            assert(param == (uint32_t)kSMARTCARD_VoltageClassB3_3V);
             context->interfaceConfig.vcc = (smartcard_card_voltage_class_t)param;
             break;
         case kSMARTCARD_InterfaceSetClockToResetDelay:

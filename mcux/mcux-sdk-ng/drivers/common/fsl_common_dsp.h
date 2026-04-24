@@ -111,6 +111,10 @@
 #define NVIC_GetActive(value) do {} while(0)
 #define MSDK_REG_SECURE_ADDR(x) (x)
 #define MSDK_REG_NONSECURE_ADDR(x) (x)
+#define MCUX_DEPRECATED
+#define MCUX_DEPRECATED_MACRO
+#define MCUX_EXPERIMENTAL
+#define MCUX_EXPERIMENTAL_MACRO
 
 /*
  * The fsl_clock.h is included here because it needs MAKE_VERSION/MAKE_STATUS/status_t

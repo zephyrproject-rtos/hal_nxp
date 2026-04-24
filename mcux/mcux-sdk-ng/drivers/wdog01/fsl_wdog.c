@@ -60,7 +60,13 @@ static uint32_t WDOG_GetInstance(WDOG_Type *base)
  *   wdogConfig->resetExtension = flase;
  *   wdogConfig->timeoutValue = 0xFFU;
  *   wdogConfig->interruptTimeValue = 0x04u;
+ *   wdogConfig->enableTimeOutAssert = false;
  * endcode
+ *
+ * note On devices affected by errata ERR051322, enableTimeOutAssert defaults to true
+ * as a workaround. The ROM does not configure the WDOG_B pin to assert on timeout even
+ * when the WDOG_B_PIN_EN fuse is blown. Setting WCR[WDT] from application code compensates
+ * for this missing ROM behavior.
  *
  * param config Pointer to the WDOG configuration structure.
  * see wdog_config_t
@@ -81,7 +87,14 @@ void WDOG_GetDefaultConfig(wdog_config_t *config)
     config->enablePowerDown        = false;
     config->timeoutValue           = 0xffu;
     config->interruptTimeValue     = 0x04u;
+
+#if (defined(FSL_FEATURE_WDOG_HAS_ERRATA_051322) && FSL_FEATURE_WDOG_HAS_ERRATA_051322)
+    /* ERR051322: ROM does not configure the WDOG_B pin to assert on timeout.
+     * Enable WCR[WDT] by default to compensate for the missing ROM behavior. */
+    config->enableTimeOutAssert    = true;
+#else
     config->enableTimeOutAssert    = false;
+#endif
 }
 
 /*!

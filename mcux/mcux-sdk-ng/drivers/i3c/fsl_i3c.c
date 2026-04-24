@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2025 NXP
+ * Copyright 2018-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -886,7 +886,7 @@ void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_H
 #endif
                    (config->ignoreS0S1Error ? I3C_SCONFIG_S0IGNORE_MASK : 0U) |
                    (config->matchSlaveStartStop ? I3C_SCONFIG_MATCHSS_MASK : 0U) |
-                   (config->nakAllRequest ? I3C_SCONFIG_NACK_MASK : 0U) | I3C_SCONFIG_SLVENA(config->enableSlave);
+                   (config->nakAllRequest ? I3C_SCONFIG_NACK_MASK : 0U) | I3C_SCONFIG_SLVENA(config->enableSlave ? 1U : 0U);
 
     base->SVENDORID &= ~I3C_SVENDORID_VID_MASK;
     base->SVENDORID |= I3C_SVENDORID_VID(config->vendorID);

@@ -1,5 +1,10 @@
 # COMMON
 
+## [2.6.4]
+
+- New Features
+  - Add macros to tag deprecated features and experimental features.
+
 ## [2.6.3]
 
 - New Features

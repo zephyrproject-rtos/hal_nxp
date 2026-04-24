@@ -1,5 +1,11 @@
 # MCX_SPC
 
+## [2.12.0]
+
+- New Features
+  - Add kSPC_controlVbat and kSPC_controlTsi0 to spc_analog_module_control_t for
+    TSI0 and VBAT control support.
+
 ## [2.11.0]
 
 - New Features

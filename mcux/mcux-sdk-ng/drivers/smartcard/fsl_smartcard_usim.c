@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2022, 2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -80,7 +80,7 @@ static uint32_t SMARTCARD_USIM_GetInstance(USIM_Type *base)
  * @param fi clock rate conversion integer.
  * @param di baud rate divisor.
  */
-static bool SMARTCARD_USIM_SetBaudRate(USIM_Type *base, uint32_t fi, uint32_t di)
+static bool SMARTCARD_USIM_SetBaudRate(USIM_Type *base, uint16_t fi, uint8_t di)
 {
     uint32_t clkDivisor = (base->CLKR & USIM_CLKR_DIVISOR_MASK) * 2UL * fi;
     uint32_t facTmp, divTmp;
@@ -153,7 +153,7 @@ static void SMARTCARD_USIM_CompleteReceiveData(USIM_Type *base, smartcard_contex
     while (((base->FSR & USIM_FSR_RX_LENGTH_MASK) != 0u) && ((context->xSize) > 0u))
     {
         /* Get data and put into receive buffer */
-        *context->xBuff = (uint8_t)(base->RBR);
+        *context->xBuff = (uint8_t)(base->RBR & USIM_RBR_RB_MASK);
         ++context->xBuff;
         --context->xSize;
     }
@@ -248,6 +248,7 @@ static bool SMARTCARD_USIM_SetTransferType(USIM_Type *base, smartcard_context_t 
            (control == kSMARTCARD_SetupT1Mode));
 
     uint16_t temp16 = 0u;
+    uint32_t temp32 = 0u;
     uint32_t bwiVal = 0u;
 
     if (control == kSMARTCARD_SetupATRMode)
@@ -261,7 +262,7 @@ static bool SMARTCARD_USIM_SetTransferType(USIM_Type *base, smartcard_context_t 
         context->cardParams.WI       = 0x0Au;
         context->cardParams.GTN      = 0x00u;
         /* Set default baudrate/ETU time based on EMV parameters */
-        if (!SMARTCARD_USIM_SetBaudRate(base, (uint32_t)context->cardParams.Fi, (uint32_t)context->cardParams.currentD))
+        if (!SMARTCARD_USIM_SetBaudRate(base, context->cardParams.Fi, context->cardParams.currentD))
         {
             return false;
         }
@@ -294,7 +295,12 @@ static bool SMARTCARD_USIM_SetTransferType(USIM_Type *base, smartcard_context_t 
         base->LCR &= ~(USIM_LCR_TX_T1_MASK | USIM_LCR_RX_T1_MASK);
         /* EMV expectation: WWT = (960 x D x WI) + (D x 480)
          * USIM formula under T=0: CWTR[15:0] = WWT -12 */
-        temp16 = (960u * context->cardParams.currentD * context->cardParams.WI) + (context->cardParams.currentD * 480u);
+        temp32 = (960u * context->cardParams.currentD * context->cardParams.WI) + (context->cardParams.currentD * 480u);
+        /* For CERT INT31-C */
+        assert(temp32 <= 0xFFFFu);
+        temp16 = (uint16_t)(temp32 & 0xFFFFU);
+        /* For CERT INT30-C */
+        assert(temp16 >= MAX(SMARTCARD_T0_CWT_ADJUSTMENT, SMARTCARD_T0_BWT_ADJUSTMENT));
         base->CWTR = (uint32_t)temp16 - SMARTCARD_T0_CWT_ADJUSTMENT;
         base->BWTR = (uint32_t)temp16 - SMARTCARD_T0_BWT_ADJUSTMENT;
         /* Set Extended Guard Timer value
@@ -824,7 +830,7 @@ void SMARTCARD_USIM_IRQHandler(USIM_Type *base, smartcard_context_t *context)
             SMARTCARD_USIM_TimerStop();
 #endif /* FSL_FEATURE_SOC_CTIMER_COUNT */
             /* Read TS byte */
-            uint8_t ts = (uint8_t)base->RBR;
+            uint8_t ts = (uint8_t)(base->RBR & USIM_RBR_RB_MASK);
             if (ts == SMARTCARD_TS_INVERSE_CONVENTION)
             {
                 /* Received valid TS */
@@ -855,7 +861,7 @@ void SMARTCARD_USIM_IRQHandler(USIM_Type *base, smartcard_context_t *context)
             while (((base->FSR & USIM_FSR_RX_LENGTH_MASK) != 0u) && ((context->xSize) > 0u))
             {
                 /* Get data and put into receive buffer */
-                *context->xBuff = (uint8_t)(base->RBR);
+                *context->xBuff = (uint8_t)(base->RBR & USIM_RBR_RB_MASK);
                 ++context->xBuff;
                 --context->xSize;
             }
@@ -924,7 +930,7 @@ status_t SMARTCARD_USIM_Control(USIM_Type *base,
     }
 
     status_t status = kStatus_SMARTCARD_Success;
-    uint32_t temp32 = 0u;
+    uint64_t temp64 = 0u;
 
     switch (control)
     {
@@ -990,8 +996,8 @@ status_t SMARTCARD_USIM_Control(USIM_Type *base,
             break;
         case kSMARTCARD_ConfigureBaudrate:
             /* Set baudrate/ETU time based on Fi/Di parameters. */
-            if (!SMARTCARD_USIM_SetBaudRate(base, (uint32_t)context->cardParams.Fi,
-                                            (uint32_t)context->cardParams.currentD))
+            if (!SMARTCARD_USIM_SetBaudRate(base, context->cardParams.Fi,
+                                            context->cardParams.currentD))
             {
                 status = kStatus_SMARTCARD_InvalidInput;
             }
@@ -1036,9 +1042,17 @@ status_t SMARTCARD_USIM_Control(USIM_Type *base,
         case kSMARTCARD_ResetWaitTimeMultiplier:
             /* Reset Wait Timer Multiplier
              * EMV Formula : WTX x (11 + ((2^BWI + 1) x 960 x D)) */
-            temp32 = ((uint8_t)param) *
-                     (11u + ((((uint32_t)1u << context->cardParams.BWI) + 1u) * 960u * context->cardParams.currentD));
-            base->BWTR = temp32 - SMARTCARD_T1_BWT_ADJUSTMENT;
+            /* WTX is always smaller than 255. */
+            temp64 = (param & 0xFFU) *
+                     (11ull + (((1ul << context->cardParams.BWI) + 1ull) * 960ull * context->cardParams.currentD));
+
+            temp64 -= SMARTCARD_T1_BWT_ADJUSTMENT;
+            if (temp64 > (USIM_BWTR_BWT_MASK >> USIM_BWTR_BWT_SHIFT))
+            {
+                return kStatus_SMARTCARD_InvalidInput;
+            }
+
+            base->BWTR = (uint32_t)temp64;
             /* Set flag to SMARTCARD context accordingly */
             if (param > 1u)
             {

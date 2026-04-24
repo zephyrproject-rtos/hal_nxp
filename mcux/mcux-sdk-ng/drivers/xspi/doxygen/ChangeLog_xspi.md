@@ -1,5 +1,19 @@
 # XSPI
 
+## [2.7.2]
+
+- Bug Fixes
+  - Fixed typo where ptrSubBuffer2Config incorrectly used XSPI_BUFCR_SUBBUF1_DIV instead of XSPI_BUFCR_SUBBUF2_DIV.
+
+## [2.7.1]
+
+- Bug Fixes
+  - TGIPCRS[VLD] bit polling fix for cortex-m33 core1 in NETCMIX on i.MX943
+    Skip checking the TGIPCRS[VLD] bit to resolve an issue where the bit transition from 0 to 1 is extremely short,
+    causing the master to read 0 and poll indefinitely.
+    This issue occurs when the master is Cortex-M33 Core1 in NETCMIX on i.MX943.
+    Note: The bit functions correctly when the master is Cortex-M7 Core0 in M7MIX0 or Cortex-M7 Core1 in M7MIX1.
+
 ## [2.7.0]
 
 - New Features
@@ -13,6 +27,16 @@
 - Improvements
   - Support for macro to place functions in RAM. Functions of file needs to be place in RAM while using XSPI1 for RT700.
   - Support added to place variables in RAM. Its required when code from ram is using these variables.
+
+- Bug Fixes
+  - Add explicit boolean to integer conversions (? 1UL : 0UL) for enable flags in DLL configuration, 
+    data learning, device config, and AHB buffer settings.
+  - Add assertions to prevent unsigned integer overflow in address increment operations.
+  - Add assertions to prevent unsigned integer underflow in size subtraction operations.
+  - Add safe type conversion with temporary variables for uint64_t to uint32_t operations in interrupt mask handling.
+  - Add bounds checking for array access and enum value validation.
+  - Add assertions for narrowing conversions in byte extraction operations.
+  - Follow INT30-C and INT31-C CERT coding standards for safe integer operations.
 
 ## [2.6.0]
 

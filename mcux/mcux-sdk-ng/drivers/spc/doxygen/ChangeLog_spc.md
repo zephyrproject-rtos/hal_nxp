@@ -1,5 +1,26 @@
 # SPC
 
+## [2.8.3]
+
+- Bug Fixes
+  - Fixed voltage detect status accumulation in Active, High Power, and Low Power mode helpers so VDD_SYS status bits are returned correctly when present.
+
+## [2.8.2]
+
+- Bug Fixes
+  - Mask voltage detect status bits to return only valid SPC VD status flags.
+  - Mask external domain status bits before shifting to return only EVDSTAT field values.
+
+
+## [2.8.1]
+
+- Bug Fixes
+  - Add explicit boolean to integer conversions (? 1U : 0U) for enable flags in DCDC burst configuration.
+  - Add explicit boolean to integer conversions (? 1U : 0U) for reset and interrupt 
+    enable flags in VDD core glitch detector.
+  - Follow INT31-C CERT coding standard for safe boolean to unsigned long conversions.
+
+
 ## [2.8.0]
 
 - Improvements

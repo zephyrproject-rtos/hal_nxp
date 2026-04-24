@@ -320,7 +320,7 @@ void TMPSNS_SetTempAlarm(TMPSNS_Type *base, int32_t tempVal, tmpsns_alarm_mode_t
             /* Clear alarm value and set a new high alarm temperature code value */
 #if defined(FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE) && FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE
             tempRegVal = TMPSNS_AIReadAccess((uint32_t) & (base->RANGE0));
-            tempRegVal = (tempRegVal & ~TMPSNS_RANGE0_HIGH_TEMP_VAL_MASK) | TMPSNS_RANGE0_HIGH_TEMP_VAL(tempCodeVal);
+            tempRegVal = (tempRegVal & ~TMPSNS_RANGE0_HIGH_TEMP_VAL_MASK) | TMPSNS_RANGE0_HIGH_TEMP_VAL((uint32_t)tempCodeVal);
             TMPSNS_AIWriteAccess((uint32_t) & (base->RANGE0), tempRegVal);
 #else
             tempRegVal = (base->RANGE0 & ~TMPSNS_RANGE0_HIGH_TEMP_VAL_MASK) | TMPSNS_RANGE0_HIGH_TEMP_VAL(tempCodeVal);
@@ -334,7 +334,7 @@ void TMPSNS_SetTempAlarm(TMPSNS_Type *base, int32_t tempVal, tmpsns_alarm_mode_t
             /* Clear panic alarm value and set a new panic alarm temperature code value */
 #if defined(FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE) && FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE
             tempRegVal = TMPSNS_AIReadAccess((uint32_t) & (base->RANGE1));
-            tempRegVal = (tempRegVal & ~TMPSNS_RANGE1_PANIC_TEMP_VAL_MASK) | TMPSNS_RANGE1_PANIC_TEMP_VAL(tempCodeVal);
+            tempRegVal = (tempRegVal & ~TMPSNS_RANGE1_PANIC_TEMP_VAL_MASK) | TMPSNS_RANGE1_PANIC_TEMP_VAL((uint32_t)tempCodeVal);
             TMPSNS_AIWriteAccess((uint32_t) & (base->RANGE1), tempRegVal);
 #else
             tempRegVal =
@@ -349,10 +349,10 @@ void TMPSNS_SetTempAlarm(TMPSNS_Type *base, int32_t tempVal, tmpsns_alarm_mode_t
             /* Clear low alarm value and set a new low alarm temperature code value */
 #if defined(FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE) && FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE
             tempRegVal = TMPSNS_AIReadAccess((uint32_t) & (base->RANGE0));
-            tempRegVal = (tempRegVal & ~TMPSNS_RANGE0_LOW_TEMP_VAL_MASK) | TMPSNS_RANGE0_LOW_TEMP_VAL(tempCodeVal);
+            tempRegVal = (tempRegVal & ~TMPSNS_RANGE0_LOW_TEMP_VAL_MASK) | TMPSNS_RANGE0_LOW_TEMP_VAL((uint32_t)tempCodeVal);
             TMPSNS_AIWriteAccess((uint32_t) & (base->RANGE0_SET), tempRegVal);
 #else
-            tempRegVal   = (base->RANGE0 & ~TMPSNS_RANGE0_LOW_TEMP_VAL_MASK) | TMPSNS_RANGE0_LOW_TEMP_VAL(tempCodeVal);
+            tempRegVal   = (base->RANGE0 & ~TMPSNS_RANGE0_LOW_TEMP_VAL_MASK) | TMPSNS_RANGE0_LOW_TEMP_VAL((uint32_t)tempCodeVal);
             base->RANGE0 = tempRegVal;
 #endif
             /* Enable low temperature interrupt */

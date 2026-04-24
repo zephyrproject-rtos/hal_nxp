@@ -1,5 +1,28 @@
 # OSTIMER
 
+## [2.3.0]
+
+- New Features
+  - Added `OSTIMER_SetMatchValueSafe()` with post-write synchronization and missed-event detection.
+    After writing the match registers, it waits for `OSEVENT_CTRL[MATCH_WR_RDY]` to clear, then
+    checks whether the match moment has already passed:
+    - Returns `kStatus_Success` and enables the interrupt if the match is still in the future, or if
+      the hardware interrupt flag is already set (ISR fires immediately on enable).
+    - Returns `kStatus_Fail` and leaves the interrupt **disabled** if the match was missed without
+      the hardware capturing it; the caller must handle the missed event.
+  - **API selection guide — `OSTIMER_SetMatchValue` vs `OSTIMER_SetMatchValueSafe`:**
+    - Use `OSTIMER_SetMatchValue()` when the delta between now and `count` is reliably larger than
+      ~7 OSTimer ticks (e.g. > 200 µs at 32 kHz). It omits the post-write `MATCH_WR_RDY` poll and
+      missed-event check, so it returns faster. It's suitable for **most use cases**.
+    - Use `OSTIMER_SetMatchValueSafe()` when the match delta is small or unpredictable. The extra
+      synchronization cost (~7 OSTimer ticks) is the trade-off for a guaranteed success/fail result.
+- Bug Fixes
+  - Fixed `OSTIMER_GetMatchValue()` missing binary-encoded counter guard; it now returns the raw
+    binary value on devices with binary-encoded registers.
+- Improvements
+  - Removed useless `tmp` variable in `OSTIMER_SetMatchRawValue()`.
+  - Clarified return value type for counter get APIs.
+
 ## [2.2.6]
 
 - Improvements

@@ -1466,7 +1466,6 @@ RAMFUNC status_t XSPI_StartIpAccess(
     XSPI_Type *base, uint32_t addr, uint8_t seqIndex, size_t byteSize, xspi_target_group_t tgId, bool lockArbitration)
 {
     uint32_t tgSfarsRegAddr     = XSPI_TG_REG_ADDR(base, tgId, TGSFARS);
-    uint32_t tgIpcrsRegAddr     = XSPI_TG_REG_ADDR(base, tgId, TGIPCRS);
     uint32_t sfpTgIpcrRegAddr   = XSPI_TG_REG_ADDR_SFP_IPCR(base, tgId);
     uint32_t sfpTgIpSfarRegAddr = XSPI_TG_REG_ADDR_SFP_SFAR(base, tgId);
     uint32_t tgMdadRegAddr      = XSPI_TG_REG_ADDR_MDAD(base, tgId);
@@ -1507,17 +1506,6 @@ RAMFUNC status_t XSPI_StartIpAccess(
     (*(uint32_t *)sfpTgIpcrRegAddr) = XSPI_SFP_TG_IPCR_IDATSZ(byteSize) |
                                       XSPI_SFP_TG_IPCR_ARB_LOCK(lockArbitration ? 1U : 0U) |
                                       XSPI_SFP_TG_IPCR_SEQID(seqIndex);
-    if (mdadEnabled && mdadValid)
-    {
-        do
-        {
-            tmp32 = (*(volatile uint32_t *)tgIpcrsRegAddr & (XSPI_TGIPCRS_ERR_MASK | XSPI_TGIPCRS_VLD_MASK));
-            if ((tmp32 & XSPI_TGIPCRS_ERR_MASK) != 0UL)
-            {
-                return kStatus_XSPI_IpAccessIPCRInvalid;
-            }
-        } while ((tmp32 & XSPI_TGIPCRS_VLD_MASK) == 0UL);
-    }
 
     /* Blocking until the IP request is granted. */
 #if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
@@ -2438,7 +2426,7 @@ RAMFUNC status_t XSPI_SetAhbBufferConfig(XSPI_Type *base,
             base->BUFCR[i] |= XSPI_BUFCR_SUB_DIV_EN_MASK |
                               XSPI_BUFCR_SUBBUF0_DIV(ahbBufferConfigs[i]->ptrSubBuffer0Config->divFactor) |
                               XSPI_BUFCR_SUBBUF1_DIV(ahbBufferConfigs[i]->ptrSubBuffer1Config->divFactor) |
-                              XSPI_BUFCR_SUBBUF1_DIV(ahbBufferConfigs[i]->ptrSubBuffer2Config->divFactor);
+                              XSPI_BUFCR_SUBBUF2_DIV(ahbBufferConfigs[i]->ptrSubBuffer2Config->divFactor);
 
             /* Set AHB buffer sub buffer start and end address range. */
             for (uint8_t j = 0U; j < XSPI_BUF_ADDR_RANGE_COUNT2; j++)

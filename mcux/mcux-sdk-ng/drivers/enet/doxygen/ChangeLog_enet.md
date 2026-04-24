@@ -1,5 +1,13 @@
 # ENET
 
+## [2.11.1]
+
+- Bug Fixes
+  - Fixed TX timestamp second value being incorrect when second rollover occurs between
+    frame transmission and descriptor reclaim. The driver now reconstructs the correct
+    second value by comparing TX nanoseconds with current nanoseconds, following the
+    same pattern used for RX timestamps in SDK examples.
+
 ## [2.11.0]
 
 - New Features

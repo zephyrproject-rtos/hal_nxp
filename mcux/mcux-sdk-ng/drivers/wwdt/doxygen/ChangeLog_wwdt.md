@@ -1,6 +1,11 @@
 # WWDT
 
+## [2.1.11]
+- Bug Fixes
+  - Fixed CERT INT31-C static analysis finding by clamping boolean configuration values (WDEN/WDRESET/LOCK) to 0/1 before writing the MOD register in WWDT_Init.
+
 ## [2.1.10]
+
 - Bug Fixes
   - Chek WWDT_RSTS instead of FSL_FEATURE_WWDT_HAS_NO_RESET to determine whether the peripheral can be reset.
 

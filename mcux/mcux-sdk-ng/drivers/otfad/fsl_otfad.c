@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2021, 2026 NXP
  * All rights reserved.
  *
  *
@@ -76,23 +76,23 @@ AT_QUICKACCESS_SECTION_CODE(void OTFAD_Init(OTFAD_Type *base, const otfad_config
     uint32_t status = 0U;
 
     /* Set OTFAD operate mode, IRQ eable, key blob and restricted register access */
-    temp = OTFAD_CR_FLDM(config->forceLDM) |
+    temp = OTFAD_CR_FLDM(config->forceLDM ? 1UL : 0UL) |
 #if defined(FSL_FEATURE_OTFAD_HAS_HAS_IRQ_ENABLE) && (FSL_FEATURE_OTFAD_HAS_HAS_IRQ_ENABLE > 0)
-           OTFAD_CR_IRQE(config->enableIntRequest) |
+           OTFAD_CR_IRQE(config->enableIntRequest ? 1UL : 0UL) |
 #endif /* FSL_FEATURE_OTFAD_HAS_HAS_IRQ_ENABLE */
 #if defined(FSL_FEATURE_OTFAD_HAS_FORCE_ERR) && (FSL_FEATURE_OTFAD_HAS_FORCE_ERR > 0)
-           OTFAD_CR_FERR(config->forceError) |
+           OTFAD_CR_FERR(config->forceError ? 1UL : 0UL) |
 #endif /* FSL_FEATURE_OTFAD_HAS_FORCE_ERR */
 #if defined(FSL_FEATURE_OTFAD_HAS_SVM_MODE) && FSL_FEATURE_OTFAD_HAS_SVM_MODE
-           OTFAD_CR_FSVM(config->forceSVM) |
+           OTFAD_CR_FSVM(config->forceSVM ? 1UL : 0UL) |
 #endif /* FSL_FEATURE_OTFAD_HAS_SVM_MODE */
 #if defined(FSL_FEATURE_OTFAD_HAS_KEYBLOB_PROCESSING) && (FSL_FEATURE_OTFAD_HAS_KEYBLOB_PROCESSING > 0)
-           OTFAD_CR_KBSE(config->keyBlobScramble) | OTFAD_CR_KBPE(config->keyBlobProcess) |
+           OTFAD_CR_KBSE(config->keyBlobScramble ? 1UL : 0UL) | OTFAD_CR_KBPE(config->keyBlobProcess ? 1UL : 0UL) |
 #endif /* FSL_FEATURE_OTFAD_HAS_KEYBLOB_PROCESSING */
-           OTFAD_CR_RRAE(config->restrictedRegAccess);
+           OTFAD_CR_RRAE(config->restrictedRegAccess ? 1UL : 0UL);
 
     /* Enable global OTFAD operation */
-    temp |= OTFAD_CR_GE(config->enableOTFAD);
+    temp |= OTFAD_CR_GE(config->enableOTFAD ? 1UL : 0UL);
 
     /* Wait for AHB bus idle, otherwise the keyblob process will fail */
     status = ((FLEXSPI_Type *)config->flexspiBaseAddr)->STS0;
@@ -159,7 +159,7 @@ status_t OTFAD_SetEncryptionConfig(OTFAD_Type *base, const otfad_encryption_conf
             endAddr   = (endAddr & OTFAD_RGD_W1_ENDADDR_MASK) >> OTFAD_RGD_W1_ENDADDR_SHIFT;
 
             temp |= OTFAD_RGD_W1_ENDADDR(endAddr) | OTFAD_RGD_W1_RO(config->readOnly) |
-                    OTFAD_RGD_W1_ADE(config->AESdecryption) | OTFAD_RGD_W1_VLD(config->valid);
+                    OTFAD_RGD_W1_ADE(config->AESdecryption ? 1UL : 0UL) | OTFAD_RGD_W1_VLD(config->valid ? 1UL : 0UL);
 
             /* Set context n start address  */
             base->CTX[contextIndex].RGD_W0 = OTFAD_RGD_W0_SRTADDR(startAddr);
@@ -249,7 +249,10 @@ status_t OTFAD_HitDetermination(OTFAD_Type *base, uint32_t address, uint8_t *con
         /* Check address hits context n or not */
         if ((tempAddr >= startAddr) && (tempAddr <= endAddr) && contextValid)
         {
-            totalHits++;
+            if (totalHits < (uint8_t)OTFAD_RGD_W1_COUNT)
+            {
+                totalHits++;
+            }
             hitNumber = i;
         }
 

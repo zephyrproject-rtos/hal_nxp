@@ -1,5 +1,11 @@
 # EDMA
 
+## [2.10.10]
+
+- Bug Fixes
+  - Fixed `EDMA_StartTransfer` could read an incorrect address when checking the channelmux status, 
+    potentially causing a hard fault issue.
+
 ## [2.10.9]
 
 - Bug Fixes

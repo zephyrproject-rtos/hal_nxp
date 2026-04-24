@@ -1,9 +1,9 @@
-# Copyright 2024 NXP
+# Copyright 2024, 2026 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.smartcard_emvsim)
-    mcux_component_version(2.3.0)
+    mcux_component_version(2.3.1)
 
     mcux_add_source(
         SOURCES
@@ -17,7 +17,7 @@ if(CONFIG_MCUX_COMPONENT_driver.smartcard_emvsim)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.smartcard_phy_emvsim)
-    mcux_component_version(2.3.0)
+    mcux_component_version(2.3.1)
 
     mcux_add_source(SOURCES fsl_smartcard_phy.h fsl_smartcard_phy_emvsim.c)
 
@@ -28,7 +28,7 @@ if(CONFIG_MCUX_COMPONENT_driver.smartcard_phy_emvsim)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.smartcard_phy_gpio)
-    mcux_component_version(2.3.0)
+    mcux_component_version(2.3.1)
 
     mcux_add_source(SOURCES fsl_smartcard_phy.h fsl_smartcard_phy_gpio.c)
 
@@ -39,7 +39,7 @@ if(CONFIG_MCUX_COMPONENT_driver.smartcard_phy_gpio)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.smartcard_phy_tda8035)
-    mcux_component_version(2.3.0)
+    mcux_component_version(2.3.1)
 
     mcux_add_source(SOURCES fsl_smartcard_phy.h fsl_smartcard_phy_tda8035.c)
 
@@ -50,7 +50,7 @@ if(CONFIG_MCUX_COMPONENT_driver.smartcard_phy_tda8035)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.smartcard_phy_usim)
-    mcux_component_version(2.3.0)
+    mcux_component_version(2.3.1)
 
     mcux_add_source(SOURCES fsl_smartcard_phy.h fsl_smartcard_phy_usim.c)
 
@@ -61,7 +61,7 @@ if(CONFIG_MCUX_COMPONENT_driver.smartcard_phy_usim)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.smartcard_uart)
-    mcux_component_version(2.3.0)
+    mcux_component_version(2.3.1)
 
     mcux_add_source(
         SOURCES
@@ -75,7 +75,7 @@ if(CONFIG_MCUX_COMPONENT_driver.smartcard_uart)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.smartcard_usim)
-    mcux_component_version(2.3.0)
+    mcux_component_version(2.3.1)
 
     mcux_add_source(
         SOURCES
