@@ -355,9 +355,7 @@ bool CLOCK_IsSysPll2PfdEnabled(clock_pfd_t pfd)
 void CLOCK_InitPfd(clock_pll_t pll, clock_pfd_t pfd, uint8_t frac)
 {
     volatile uint32_t *pfdCtrl = NULL, *pfdUpdate = NULL, stable;
-    uint32_t shift = 8UL * (uint32_t)pfd;
     uint32_t regFracVal;
-    uint32_t val;
     bool pfdGated;
 
     assert(frac <= (uint8_t)PFD_FRAC_MAX);
@@ -378,27 +376,28 @@ void CLOCK_InitPfd(clock_pll_t pll, clock_pfd_t pfd, uint8_t frac)
             assert(false);
             break;
     }
-
-    val = *pfdCtrl;
-    regFracVal = (val >> shift) & (uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC_MASK;
-    pfdGated = ((val >> shift) & (uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK) != 0U;
+    regFracVal = ((*pfdCtrl) & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC_MASK << (8UL * (uint32_t)pfd))) >>
+                 (8UL * (uint32_t)pfd);
+    pfdGated =
+        (bool)(((*pfdCtrl) & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << (8UL * (uint32_t)pfd))) >>
+               (8UL >> (uint32_t)pfd));
     if ((regFracVal == (uint32_t)frac) && (!pfdGated))
     {
         return;
     }
 
-    stable = val & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_STABLE_MASK << shift);
-    *pfdCtrl |= ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << shift);
+    stable = *pfdCtrl & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_STABLE_MASK << (8UL * (uint32_t)pfd));
+    *pfdCtrl |= ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << (8UL * (uint32_t)pfd));
 
     /* all pfds support to be updated on-the-fly after corresponding PLL is stable */
-    *pfdCtrl &= ~((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC_MASK << shift);
-    *pfdCtrl |= (ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC(frac) << shift);
+    *pfdCtrl &= ~((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC_MASK << (8UL * (uint32_t)pfd));
+    *pfdCtrl |= (ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC(frac) << (8UL * (uint32_t)pfd));
 
     *pfdUpdate ^= ((uint32_t)ANADIG_PLL_SYS_PLL2_UPDATE_PFD0_UPDATE_MASK << (uint32_t)pfd);
-    *pfdCtrl &= ~((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << shift);
+    *pfdCtrl &= ~((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << (8UL * (uint32_t)pfd));
 
     /* Wait for stablizing */
-    while (stable == (*pfdCtrl & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_STABLE_MASK << shift)))
+    while (stable == (*pfdCtrl & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_STABLE_MASK << (8UL * (uint32_t)pfd))))
     {
     }
 }
@@ -1809,7 +1808,7 @@ void CLOCK_DisableUsbhs0PhyPllClock(void)
     USBPHY1->PLL_SIC_CLR = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);
     USBPHY1->CTRL |= USBPHY_CTRL_CLKGATE_MASK; /* Set to 1U to gate clocks */
 }
-#if !(defined(MIMXRT1186_cm33_SERIES) || defined(MIMXRT1186_cm7_SERIES))
+#if !(defined(MIMXRT1186_cm33_SERIES) || defined(MIMXRT1186_cm7_SERIES) || defined(MIMXRT1185_cm33_SERIES) || defined(MIMXRT1185_cm7_SERIES) || defined(MIMXRT118C_cm33_SERIES) || defined(MIMXRT118C_cm7_SERIES))
 bool CLOCK_EnableUsbhs1Clock(clock_usb_src_t src, uint32_t freq)
 {
     return true;

@@ -8,6 +8,10 @@
 **                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
 **                          MIMXRT1182XVP2C
+**                          MIMXRT1185CVJ8C_cm33
+**                          MIMXRT1185CVJ8C_cm7
+**                          MIMXRT1185XVJ8C_cm33
+**                          MIMXRT1185XVJ8C_cm7
 **                          MIMXRT1186CVJ8C_cm33
 **                          MIMXRT1186CVJ8C_cm7
 **                          MIMXRT1186XVJ8C_cm33
@@ -32,15 +36,19 @@
 **                          MIMXRT1189XVM8B_cm7
 **                          MIMXRT1189XVM8C_cm33
 **                          MIMXRT1189XVM8C_cm7
+**                          MIMXRT118CCVJ8C_cm33
+**                          MIMXRT118CCVJ8C_cm7
+**                          MIMXRT118CXVJ8C_cm33
+**                          MIMXRT118CXVJ8C_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250721
+**     Build:               b260206
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA4
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -74,6 +82,10 @@
 #include "MIMXRT1181_COMMON.h"
 #elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
+#elif (defined(CPU_MIMXRT1185CVJ8C_cm33) || defined(CPU_MIMXRT1185XVJ8C_cm33))
+#include "MIMXRT1185_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1185CVJ8C_cm7) || defined(CPU_MIMXRT1185XVJ8C_cm7))
+#include "MIMXRT1185_cm7_COMMON.h"
 #elif (defined(CPU_MIMXRT1186CVJ8C_cm33) || defined(CPU_MIMXRT1186XVJ8C_cm33))
 #include "MIMXRT1186_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT1186CVJ8C_cm7) || defined(CPU_MIMXRT1186XVJ8C_cm7))
@@ -86,6 +98,10 @@
 #include "MIMXRT1189_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189CVM8C_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7) || defined(CPU_MIMXRT1189XVM8C_cm7))
 #include "MIMXRT1189_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118CCVJ8C_cm33) || defined(CPU_MIMXRT118CXVJ8C_cm33))
+#include "MIMXRT118C_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118CCVJ8C_cm7) || defined(CPU_MIMXRT118CXVJ8C_cm7))
+#include "MIMXRT118C_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -292,7 +308,6 @@ typedef enum _dma_request_source
     kDma4RequestMuxSINC3Request3    = 219|0x200U,  /**< SINC3 Request 3 */
     kDma4RequestMuxADC1Request1     = 220|0x200U,  /**< ADC1 Request 1 */
     kDma4RequestMuxADC2Request1     = 221|0x200U,  /**< ADC2 Request 1 */
-    kDma4RequestMuxCAN2             = 1|0x200U,    /**< CAN2 */
     kDma4RequestMuxLPTMR2Request    = 16|0x200U,   /**< LPTMR2 */
     kDma4RequestMuxTPM4Request0Request2 = 28|0x200U, /**< TPM4 request 0 and request 2 */
     kDma4RequestMuxTPM4Request1Request3 = 29|0x200U, /**< TPM4 request 1 and request 3 */
@@ -362,6 +377,7 @@ typedef enum _dma_request_source
     kDma4RequestMuxSINC2Request3    = 215|0x200U,  /**< SINC2 Request 3 */
     kDma3RequestMuxLPUART12Tx       = 31|0x100U,   /**< LPUART12 TX */
     kDma3RequestMuxLPUART12Rx       = 32|0x100U,   /**< LPUART12 RX */
+    kDma4RequestMuxCAN2             = 1|0x200U,    /**< CAN2 */
     kDma4RequestMuxTPM5Request0Request2 = 31|0x200U, /**< TPM5 request 0 and request 2 */
     kDma4RequestMuxTPM5Request1Request3 = 32|0x200U, /**< TPM5 request 1 and request 3 */
     kDma4RequestMuxTPM5OverflowRequest = 33|0x200U, /**< TPM5 Overflow request */

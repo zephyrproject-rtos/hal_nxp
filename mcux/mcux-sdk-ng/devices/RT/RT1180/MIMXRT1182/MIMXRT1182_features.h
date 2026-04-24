@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2025-11-13
-**     Build:               b251210
+**     Build:               b260206
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -1077,7 +1077,7 @@
 /* @brief Has TPM_TRIG. */
 #define FSL_FEATURE_TPM_HAS_TRIG (1)
 /* @brief Whether TRIG register has effect. */
-#define FSL_FEATURE_TPM_TRIG_HAS_EFFECTn(x) (0)
+#define FSL_FEATURE_TPM_TRIG_HAS_EFFECTn(x) (1)
 /* @brief Has counter pause on trigger. */
 #define FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER (1)
 /* @brief Has external trigger selection. */
@@ -1089,7 +1089,7 @@
 /* @brief Has TPM_POL. */
 #define FSL_FEATURE_TPM_HAS_POL (1)
 /* @brief Whether POL register has effect. */
-#define FSL_FEATURE_TPM_POL_HAS_EFFECTn(x) (0)
+#define FSL_FEATURE_TPM_POL_HAS_EFFECTn(x) (1)
 /* @brief Has TPM_FILTER register. */
 #define FSL_FEATURE_TPM_HAS_FILTER (1)
 /* @brief Whether FILTER register has effect. */
@@ -1106,6 +1106,8 @@
 #define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (1)
 /* @brief Has global time base sync. */
 #define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
+/* @brief Is affected by errata with ID 050050 (Incorrect duty output when EPWM mode is set to PS=0 during write 1 to CnV register). */
+#define FSL_FEATURE_TPM_HAS_ERRATA_050050 (0)
 
 /* TRDC module features */
 

@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Version:             rev. 1.0, 2025-11-13
-**     Build:               b251114
+**     Version:             rev. 1.1, 2025-12-01
+**     Build:               b260205
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -21,6 +21,8 @@
 **         Add eUSB PHY support feature to usb.
 **         Add otfad feature.
 **         Update pdm feature align to shared definition changes.
+**     - rev. 1.1 (2025-12-01)
+**         Add FSL_FEATURE_PUF_HAS_KEYRESET to indicate if PUF hardware has key reset feature.
 **
 ** ###################################################################
 */
@@ -38,8 +40,6 @@
 #define FSL_FEATURE_SOC_ASRC_COUNT (1)
 /* @brief CAAM availability on the SoC. */
 #define FSL_FEATURE_SOC_CAAM_COUNT (1)
-/* @brief CAU availability on the SoC. */
-#define FSL_FEATURE_SOC_CAU_COUNT (1)
 /* @brief CCM availability on the SoC. */
 #define FSL_FEATURE_SOC_CCM_COUNT (1)
 /* @brief CDOG availability on the SoC. */
@@ -98,6 +98,8 @@
 #define FSL_FEATURE_SOC_LPUART_COUNT (12)
 /* @brief MCM availability on the SoC. */
 #define FSL_FEATURE_SOC_MCM_COUNT (1)
+/* @brief MMCAU availability on the SoC. */
+#define FSL_FEATURE_SOC_MMCAU_COUNT (1)
 /* @brief MPU availability on the SoC. */
 #define FSL_FEATURE_SOC_MPU_COUNT (1)
 /* @brief MU availability on the SoC. */
@@ -574,6 +576,8 @@
 #define FSL_FEATURE_PUF_HAS_NO_RESET (1)
 /* @brief Number of PUF key slots available on device. */
 #define FSL_FEATURE_PUF_HAS_KEYSLOTS (2)
+/* @brief PUF has KEYRESET register. */
+#define FSL_FEATURE_PUF_HAS_KEYRESET (1)
 
 /* LCDIF module features */
 
@@ -684,6 +688,8 @@
 #define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
 /* @brief Has High Speed Mode Trim Request (bitfield CTRL[CALHS]). */
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (0)
+/* @brief Has Justified Left Enable (bitfield CFG2[JLEFT]). */
+#define FSL_FEATURE_LPADC_HAS_CFG2_JLEFT (0)
 
 /* LPI2C module features */
 
@@ -1008,6 +1014,11 @@
 #define FSL_FEATURE_SAI_HAS_BIT_CLOCK_SWAP (1)
 /* @brief SAI5 and SAI6 share one irq number. */
 #define FSL_FEATURE_SAI_SAI5_SAI6_SHARE_IRQ (0)
+
+/* SEMA4 module features */
+
+/* @brief Gate counts */
+#define FSL_FEATURE_SEMA4_GATE_COUNT (16)
 
 /* SEMC module features */
 
