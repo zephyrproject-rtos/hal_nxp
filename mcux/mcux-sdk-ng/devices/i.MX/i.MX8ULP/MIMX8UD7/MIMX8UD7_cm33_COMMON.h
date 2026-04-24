@@ -10,13 +10,13 @@
 **
 **     Reference manual:    IMX8ULPRM, Rev. D, December. 2022
 **     Version:             rev. 6.0, 2024-10-29
-**     Build:               b251201
+**     Build:               b260205
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX8UD7_cm33
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -2955,6 +2955,9 @@ typedef enum _mu_core_boot_mode
   /** Array initializer of TSTMR peripheral base pointers */
   #define TSTMR_BASE_PTRS                          { TSTMR0__TIMESTAMP0, TSTMR1__TIMESTAMP0 }
 #endif
+/* Extra definition */
+#define TSTMR_CLOCK_FREQUENCY_MHZ                (1U)
+
 
 /* USB - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -3301,6 +3304,10 @@ typedef enum _mu_core_boot_mode
 #endif
 /** Interrupt vectors for the WDOG peripheral type */
 #define WDOG_IRQS                                { WDOG0_IRQn, WDOG1_IRQn, WDOG2_IRQn, WDOG3_IRQn, WDOG4_IRQn, NotAvail_IRQn }
+/* Extra definition */
+#define WDOG_UPDATE_KEY                          (0xD928C520U)
+#define WDOG_REFRESH_KEY                         (0xB480A602U)
+
 
 /* WUU - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

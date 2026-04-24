@@ -44,8 +44,12 @@
 /*! @brief pmic voltage. */
 /* 1.1 V */
 #define PMIC_VOLTAGE_1_1V (1100 * 1000)
+/* 1.05 V */
+#define PMIC_VOLTAGE_1_05V (1050 * 1000)
 /* 1.0 V */
 #define PMIC_VOLTAGE_1_0V (1000 * 1000)
+/* 0.95 V */
+#define PMIC_VOLTAGE_0_95V (950 * 1000)
 /* 0.9 V */
 #define PMIC_VOLTAGE_0_9V (900 * 1000)
 

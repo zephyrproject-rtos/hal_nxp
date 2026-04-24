@@ -12,15 +12,15 @@
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **
-**     Reference manual:    iMX95RM rev3
-**     Version:             rev. 3.0, 2025-11-24
-**     Build:               b251124
+**     Reference manual:    iMX95RM rev4
+**     Version:             rev. 4.0, 2026-02-28
+**     Build:               b260305
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX9594_cm7
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -34,14 +34,16 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-11-24)
 **         Header RFP.
+**     - rev. 4.0 (2026-02-28)
+**         Update Interrupts mapping.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMX9594_cm7.h
- * @version 3.0
- * @date 2025-11-24
+ * @version 4.0
+ * @date 2026-02-28
  * @brief CMSIS Peripheral Access Layer for MIMX9594_cm7
  *
  * CMSIS Peripheral Access Layer for MIMX9594_cm7
@@ -198,7 +200,6 @@
 #include "PERI_NEUTRON_NPU.h"
 #include "PERI_NOC_BLK_CTRL_NOCMIX.h"
 #include "PERI_NOC_CMU.h"
-#include "PERI_NOC_EIM.h"
 #include "PERI_NOC_GICA.h"
 #include "PERI_NOC_GICD.h"
 #include "PERI_NOC_GICDA.h"

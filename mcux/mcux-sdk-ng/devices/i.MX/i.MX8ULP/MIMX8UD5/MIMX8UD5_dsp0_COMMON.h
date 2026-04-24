@@ -7,13 +7,13 @@
 **     Compiler:            Xtensa Compiler
 **     Reference manual:    IMX8ULPRM, Rev. D, December. 2022
 **     Version:             rev. 6.0, 2024-10-29
-**     Build:               b251201
+**     Build:               b260205
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMX8UD5_dsp0
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -1030,6 +1030,9 @@ typedef enum _mu_core_boot_mode
 #define TSTMR_BASE_ADDRS                         { TSTMR0__TIMESTAMP0_BASE, TSTMR1__TIMESTAMP0_BASE }
 /** Array initializer of TSTMR peripheral base pointers */
 #define TSTMR_BASE_PTRS                          { TSTMR0__TIMESTAMP0, TSTMR1__TIMESTAMP0 }
+/* Extra definition */
+#define TSTMR_CLOCK_FREQUENCY_MHZ                (1U)
+
 
 /* USB - Peripheral instance base addresses */
 /** Peripheral USB0 base address */
@@ -1152,6 +1155,10 @@ typedef enum _mu_core_boot_mode
 #define WDOG_BASE_PTRS                           { WDOG0, WDOG1, WDOG2, WDOG3, WDOG4, WDOG5 }
 /** Interrupt vectors for the WDOG peripheral type */
 #define WDOG_IRQS                                { NotAvail_IRQn, NotAvail_IRQn, WDOG2_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }
+/* Extra definition */
+#define WDOG_UPDATE_KEY                          (0xD928C520U)
+#define WDOG_REFRESH_KEY                         (0xB480A602U)
+
 
 /* WUU - Peripheral instance base addresses */
 /** Peripheral WUU0 base address */

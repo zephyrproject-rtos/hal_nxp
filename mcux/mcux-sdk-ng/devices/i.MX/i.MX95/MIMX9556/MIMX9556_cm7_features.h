@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2021-11-16
-**     Build:               b251124
+**     Build:               b260228
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -112,10 +112,6 @@
 #define FSL_FEATURE_ADC_THRESHOLDS_COUNT (8)
 /* @brief Self-test threshold counts of ADC. */
 #define FSL_FEATURE_ADC_SELF_TEST_THRESHOLDS_COUNT (6)
-
-/* AXBS module features */
-
-/* No feature definitions */
 
 /* BLK_CTRL_CAMERAMIX module features */
 
@@ -758,11 +754,11 @@
 /* @brief OTFAD has Security Violation Mode (SVM) */
 #define FSL_FEATURE_OTFAD_HAS_SVM_MODE (0)
 /* @brief OTFAD has Key Blob Processing */
-#define FSL_FEATURE_OTFAD_HAS_KEYBLOB_PROCESSING (1)
+#define FSL_FEATURE_OTFAD_HAS_KEYBLOB_PROCESSING (0)
 /* @brief OTFAD has interrupt request enable */
 #define FSL_FEATURE_OTFAD_HAS_HAS_IRQ_ENABLE (0)
 /* @brief OTFAD has Force Error */
-#define FSL_FEATURE_OTFAD_HAS_FORCE_ERR (1)
+#define FSL_FEATURE_OTFAD_HAS_FORCE_ERR (0)
 
 /* PDM module features */
 
@@ -880,10 +876,6 @@
 #define FSL_FEATURE_TPM_HAS_TRIG (1)
 /* @brief Whether TRIG register has effect. */
 #define FSL_FEATURE_TPM_TRIG_HAS_EFFECTn(x) (0)
-/* @brief Has global time base enable. */
-#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (1)
-/* @brief Has global time base sync. */
-#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
 /* @brief Has counter pause on trigger. */
 #define FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER (1)
 /* @brief Has external trigger selection. */
@@ -908,6 +900,12 @@
 #define FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT (1)
 /* @brief Whether 32 bits counter has effect. */
 #define FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x) (1)
+/* @brief Has global time base enable. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (1)
+/* @brief Has global time base sync. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
+/* @brief Is affected by errata with ID 050050 (Incorrect duty output when EPWM mode is set to PS=0 during write 1 to CnV register). */
+#define FSL_FEATURE_TPM_HAS_ERRATA_050050 (0)
 
 /* TRDC module features */
 

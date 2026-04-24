@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 4.0, 2018-01-26
-**     Build:               b250723
+**     Build:               b260205
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -93,6 +93,8 @@
 #define FSL_FEATURE_SOC_RDC_SEMAPHORE_COUNT (2)
 /* @brief ROMC availability on the SoC. */
 #define FSL_FEATURE_SOC_ROMC_COUNT (1)
+/* @brief SDMA availability on the SoC. */
+#define FSL_FEATURE_SOC_SDMA_COUNT (2)
 /* @brief SEMA4 availability on the SoC. */
 #define FSL_FEATURE_SOC_SEMA4_COUNT (1)
 /* @brief SNVS availability on the SoC. */

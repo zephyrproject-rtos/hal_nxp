@@ -787,10 +787,13 @@ uint32_t CLOCK_GetFracPllFreq(CCM_ANALOG_Type *base, clock_pll_ctrl_t type, uint
     uint32_t dsm     = CCM_BIT_FIELD_EXTRACTION(fracCfg2, CCM_ANALOG_AUDIO_PLL1_FDIV_CTL1_PLL_DSM_MASK,
                                             CCM_ANALOG_AUDIO_PLL1_FDIV_CTL1_PLL_DSM_SHIFT);
 
-    fracClk = (uint64_t)((uint64_t)refClkFreq * ((uint64_t)mainDiv * 65536ULL + dsm) /
-                         (65536ULL * (uint32_t)preDiv * (1ULL << postDiv)));
+    assert(preDiv != 0U);
+    assert(postDiv < 63U);
+    uint64_t denom = 65536ULL * (uint64_t)preDiv * ((uint64_t)1U << postDiv);
+    uint64_t numer = (uint64_t)refClkFreq * (((uint64_t)mainDiv * 65536ULL) + (uint64_t)dsm);
+    fracClk = numer / denom;
 
-    return (uint32_t)fracClk;
+    return (uint32_t)(fracClk & 0xFFFFFFFFULL);
 }
 
 /*!
@@ -864,10 +867,13 @@ uint32_t CLOCK_GetIntegerPllFreq(CCM_ANALOG_Type *base, clock_pll_ctrl_t type, u
 
     else
     {
-        pllOutClock = (uint64_t)refClkFreq * mainDiv / (((uint64_t)(1U) << postDiv) * preDiv);
+        assert(preDiv != 0U);
+        assert(postDiv < 63U);
+        uint64_t denom = ((uint64_t)1U << postDiv) * (uint64_t)preDiv;
+        pllOutClock = (uint64_t)refClkFreq * (uint64_t)mainDiv / denom;
     }
 
-    return (uint32_t)pllOutClock;
+    return (uint32_t)(pllOutClock & 0xFFFFFFFFULL);
 }
 
 /*!
@@ -918,26 +924,42 @@ void CLOCK_UpdateRoot(clock_root_control_t ccmRootClk, uint32_t mux, uint32_t pr
  */
 void CLOCK_EnableClock(clock_ip_name_t ccmGate)
 {
+    assert(ccmGate != kCLOCK_IpInvalid);
+
     uint32_t clockType = CLOCK_GATE_TYPE(ccmGate);
-    uint32_t ccgr      = CCM_TUPLE_CCGR(ccmGate);
-    uint32_t rootClk   = 0U;
+    uintptr_t rootClk  = 0U;
+    uintptr_t ccgr     = 0U;
 
     if (CLOCK_GATE_IN_AUDIOMIX == clockType)
     {
         uint32_t offset = AUDIOMIX_TUPLE_OFFSET(ccmGate);
         uint32_t gate   = AUDIOMIX_TUPLE_GATE(ccmGate);
-        rootClk         = AUDIOMIX_TUPLE_ROOT(ccmGate);
+        uint32_t rootIdx = AUDIOMIX_TUPLE_ROOT(ccmGate);
 
         *(volatile uint32_t *)((uintptr_t)AUDIOMIX + offset) |= (uint32_t)1U << gate;
+
+        if (rootIdx != 0xFFFFU)
+        {
+            assert(rootIdx < (uint32_t)(sizeof(CCM->ROOT) / sizeof(CCM->ROOT[0U])));
+            rootClk = (uintptr_t)(&(CCM)->ROOT[rootIdx].TARGET_ROOT);
+        }
     }
     else
     {
+        uint32_t rootIdx = ((uint32_t)ccmGate) & 0xFFFFU;
+
+        ccgr = CCM_TUPLE_CCGR(ccmGate);
         CCM_REG_SET(ccgr) = (uint32_t)kCLOCK_ClockNeededAll;
-        rootClk           = CCM_TUPLE_ROOT(ccmGate);
+
+        if (rootIdx != 0xFFFFU)
+        {
+            assert(rootIdx < (uint32_t)(sizeof(CCM->ROOT) / sizeof(CCM->ROOT[0U])));
+            rootClk = (uintptr_t)(&(CCM)->ROOT[rootIdx].TARGET_ROOT);
+        }
     }
 
-    /* if root clock is 0xFFFFU, then skip enable root clock */
-    if (rootClk != 0xFFFFU)
+    /* if root clock is 0U, then skip enable root clock */
+    if (rootClk != 0U)
     {
         CCM_REG_SET(rootClk) = CCM_TARGET_ROOT_SET_ENABLE_MASK;
     }
@@ -954,26 +976,42 @@ void CLOCK_EnableClock(clock_ip_name_t ccmGate)
  */
 void CLOCK_DisableClock(clock_ip_name_t ccmGate)
 {
-    uint32_t ccgr      = CCM_TUPLE_CCGR(ccmGate);
-    uint32_t clockType = CLOCK_GATE_TYPE(ccmGate);
-    uint32_t rootClk   = 0U;
+    assert(ccmGate != kCLOCK_IpInvalid);
+
+    uintptr_t ccgr      = 0U;
+    uint32_t clockType  = CLOCK_GATE_TYPE(ccmGate);
+    uintptr_t rootClk   = 0U;
 
     if (CLOCK_GATE_IN_AUDIOMIX == clockType)
     {
         uint32_t offset = AUDIOMIX_TUPLE_OFFSET(ccmGate);
         uint32_t gate   = AUDIOMIX_TUPLE_GATE(ccmGate);
-        rootClk         = AUDIOMIX_TUPLE_ROOT(ccmGate);
+        uint32_t rootIdx = AUDIOMIX_TUPLE_ROOT(ccmGate);
 
         *(volatile uint32_t *)((uintptr_t)AUDIOMIX + offset) &= ~((uint32_t)1U << gate);
+
+        if (rootIdx != 0xFFFFU)
+        {
+            assert(rootIdx < (uint32_t)(sizeof(CCM->ROOT) / sizeof(CCM->ROOT[0U])));
+            rootClk = (uintptr_t)(&(CCM)->ROOT[rootIdx].TARGET_ROOT);
+        }
     }
     else
     {
+        uint32_t rootIdx = ((uint32_t)ccmGate) & 0xFFFFU;
+
+        ccgr = CCM_TUPLE_CCGR(ccmGate);
         CCM_REG(ccgr) = (uint32_t)kCLOCK_ClockNotNeeded;
-        rootClk       = CCM_TUPLE_ROOT(ccmGate);
+
+        if (rootIdx != 0xFFFFU)
+        {
+            assert(rootIdx < (uint32_t)(sizeof(CCM->ROOT) / sizeof(CCM->ROOT[0U])));
+            rootClk = (uintptr_t)(&(CCM)->ROOT[rootIdx].TARGET_ROOT);
+        }
     }
 
-    /* if root clock is 0xFFFFU, then skip disable root clock */
-    if (rootClk != 0xFFFFU)
+    /* if root clock is 0U, then skip disable root clock */
+    if (rootClk != 0U)
     {
         CCM_REG_CLR(rootClk) = CCM_TARGET_ROOT_CLR_ENABLE_MASK;
     }

@@ -247,14 +247,14 @@
 **                          MIMX95N6XVZXN_cm33
 **                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 3.0, 2025-11-24
-**     Build:               b251124
+**     Version:             rev. 4.0, 2026-02-28
+**     Build:               b260305
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for OTFAD
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -268,14 +268,16 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-11-24)
 **         Header RFP.
+**     - rev. 4.0 (2026-02-28)
+**         Update Interrupts mapping.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_OTFAD.h
- * @version 3.0
- * @date 2025-11-24
+ * @version 4.0
+ * @date 2026-02-28
  * @brief CMSIS Peripheral Access Layer for OTFAD
  *
  * CMSIS Peripheral Access Layer for OTFAD
@@ -413,7 +415,7 @@
 typedef struct {
        uint8_t RESERVED_0[3072];
   __IO uint32_t CR;                                /**< Control Register, offset: 0xC00 */
-  __IO uint32_t SR;                                /**< Status Register, offset: 0xC04 */
+  __I  uint32_t SR;                                /**< Status Register, offset: 0xC04 */
        uint8_t RESERVED_1[248];
   struct {                                         /* offset: 0xD00, array step: 0x40 */
     __IO uint32_t KEY[OTFAD_CTX_CTXN_KEYM_COUNT];    /**< AES Key Word, array offset: 0xD00, array step: index*0x40, index2*0x4 */
@@ -436,14 +438,6 @@ typedef struct {
 /*! @name CR - Control Register */
 /*! @{ */
 
-#define OTFAD_CR_FERR_MASK                       (0x2U)
-#define OTFAD_CR_FERR_SHIFT                      (1U)
-/*! FERR - Force Error
- *  0b0..No effect on the SR[KBERE] indicator.
- *  0b1..SR[KBERR] is immediately set after a write with this data bit set.
- */
-#define OTFAD_CR_FERR(x)                         (((uint32_t)(((uint32_t)(x)) << OTFAD_CR_FERR_SHIFT)) & OTFAD_CR_FERR_MASK)
-
 #define OTFAD_CR_FLDM_MASK                       (0x8U)
 #define OTFAD_CR_FLDM_SHIFT                      (3U)
 /*! FLDM - Force Logically Disabled Mode
@@ -451,22 +445,6 @@ typedef struct {
  *  0b1..Force entry into LDM after a write with this data bit set. SR[MODE] signals the operating mode.
  */
 #define OTFAD_CR_FLDM(x)                         (((uint32_t)(((uint32_t)(x)) << OTFAD_CR_FLDM_SHIFT)) & OTFAD_CR_FLDM_MASK)
-
-#define OTFAD_CR_KBSE_MASK                       (0x10U)
-#define OTFAD_CR_KBSE_SHIFT                      (4U)
-/*! KBSE - Key Blob Scramble Enable
- *  0b0..Key blob KEK scrambling is disabled.
- *  0b1..Key blob KEK scrambling is enabled.
- */
-#define OTFAD_CR_KBSE(x)                         (((uint32_t)(((uint32_t)(x)) << OTFAD_CR_KBSE_SHIFT)) & OTFAD_CR_KBSE_MASK)
-
-#define OTFAD_CR_KBPE_MASK                       (0x20U)
-#define OTFAD_CR_KBPE_SHIFT                      (5U)
-/*! KBPE - Key Blob Processing Enable
- *  0b0..Key blob processing is disabled.
- *  0b1..Key blob processing is enabled.
- */
-#define OTFAD_CR_KBPE(x)                         (((uint32_t)(((uint32_t)(x)) << OTFAD_CR_KBPE_SHIFT)) & OTFAD_CR_KBPE_MASK)
 
 #define OTFAD_CR_RRAE_MASK                       (0x80U)
 #define OTFAD_CR_RRAE_SHIFT                      (7U)
@@ -476,33 +454,17 @@ typedef struct {
  */
 #define OTFAD_CR_RRAE(x)                         (((uint32_t)(((uint32_t)(x)) << OTFAD_CR_RRAE_SHIFT)) & OTFAD_CR_RRAE_MASK)
 
-#define OTFAD_CR_SKBP_MASK                       (0x40000000U)
-#define OTFAD_CR_SKBP_SHIFT                      (30U)
-/*! SKBP - Start key blob processing
- *  0b0..Key blob processing is not initiated.
- *  0b1..Properly-enabled key blob processing is initiated.
- */
-#define OTFAD_CR_SKBP(x)                         (((uint32_t)(((uint32_t)(x)) << OTFAD_CR_SKBP_SHIFT)) & OTFAD_CR_SKBP_MASK)
-
 #define OTFAD_CR_GE_MASK                         (0x80000000U)
 #define OTFAD_CR_GE_SHIFT                        (31U)
 /*! GE - Global OTFAD Enable
- *  0b0..OTFAD has decryption disabled. All data fetched by the QuadSPI bypasses OTFAD processing.
- *  0b1..OTFAD has decryption enabled, and processes data fetched by the QuadSPI as defined by the hardware configuration.
+ *  0b0..OTFAD has decryption disabled. All data fetched by the FlexSPI bypasses OTFAD processing.
+ *  0b1..OTFAD has decryption enabled, and processes data fetched by the FlexSPI as defined by the hardware configuration.
  */
 #define OTFAD_CR_GE(x)                           (((uint32_t)(((uint32_t)(x)) << OTFAD_CR_GE_SHIFT)) & OTFAD_CR_GE_MASK)
 /*! @} */
 
 /*! @name SR - Status Register */
 /*! @{ */
-
-#define OTFAD_SR_KBERR_MASK                      (0x1U)
-#define OTFAD_SR_KBERR_SHIFT                     (0U)
-/*! KBERR - Key Blob Error
- *  0b0..No key blob error detected.
- *  0b1..One or more key blob errors has been detected.
- */
-#define OTFAD_SR_KBERR(x)                        (((uint32_t)(((uint32_t)(x)) << OTFAD_SR_KBERR_SHIFT)) & OTFAD_SR_KBERR_MASK)
 
 #define OTFAD_SR_MDPCP_MASK                      (0x2U)
 #define OTFAD_SR_MDPCP_SHIFT                     (1U)
@@ -524,70 +486,6 @@ typedef struct {
 /*! NCTX - Number of Contexts */
 #define OTFAD_SR_NCTX(x)                         (((uint32_t)(((uint32_t)(x)) << OTFAD_SR_NCTX_SHIFT)) & OTFAD_SR_NCTX_MASK)
 
-#define OTFAD_SR_CTXER0_MASK                     (0x100U)
-#define OTFAD_SR_CTXER0_SHIFT                    (8U)
-/*! CTXER0 - Context Error
- *  0b0..No key blob error was detected for context "n".
- *  0b1..A key blob integrity error might have been detected in context "n".
- */
-#define OTFAD_SR_CTXER0(x)                       (((uint32_t)(((uint32_t)(x)) << OTFAD_SR_CTXER0_SHIFT)) & OTFAD_SR_CTXER0_MASK)
-
-#define OTFAD_SR_CTXER1_MASK                     (0x200U)
-#define OTFAD_SR_CTXER1_SHIFT                    (9U)
-/*! CTXER1 - Context Error
- *  0b0..No key blob error was detected for context "n".
- *  0b1..A key blob integrity error might have been detected in context "n".
- */
-#define OTFAD_SR_CTXER1(x)                       (((uint32_t)(((uint32_t)(x)) << OTFAD_SR_CTXER1_SHIFT)) & OTFAD_SR_CTXER1_MASK)
-
-#define OTFAD_SR_CTXER2_MASK                     (0x400U)
-#define OTFAD_SR_CTXER2_SHIFT                    (10U)
-/*! CTXER2 - Context Error
- *  0b0..No key blob error was detected for context "n".
- *  0b1..A key blob integrity error might have been detected in context "n".
- */
-#define OTFAD_SR_CTXER2(x)                       (((uint32_t)(((uint32_t)(x)) << OTFAD_SR_CTXER2_SHIFT)) & OTFAD_SR_CTXER2_MASK)
-
-#define OTFAD_SR_CTXER3_MASK                     (0x800U)
-#define OTFAD_SR_CTXER3_SHIFT                    (11U)
-/*! CTXER3 - Context Error
- *  0b0..No key blob error was detected for context "n".
- *  0b1..A key blob integrity error might have been detected in context "n".
- */
-#define OTFAD_SR_CTXER3(x)                       (((uint32_t)(((uint32_t)(x)) << OTFAD_SR_CTXER3_SHIFT)) & OTFAD_SR_CTXER3_MASK)
-
-#define OTFAD_SR_CTXIE0_MASK                     (0x10000U)
-#define OTFAD_SR_CTXIE0_SHIFT                    (16U)
-/*! CTXIE0 - Context Integrity Error
- *  0b0..No key blob integrity error was detected for context "n".
- *  0b1..A key blob integrity error was detected in context "n".
- */
-#define OTFAD_SR_CTXIE0(x)                       (((uint32_t)(((uint32_t)(x)) << OTFAD_SR_CTXIE0_SHIFT)) & OTFAD_SR_CTXIE0_MASK)
-
-#define OTFAD_SR_CTXIE1_MASK                     (0x20000U)
-#define OTFAD_SR_CTXIE1_SHIFT                    (17U)
-/*! CTXIE1 - Context Integrity Error
- *  0b0..No key blob integrity error was detected for context "n".
- *  0b1..A key blob integrity error was detected in context "n".
- */
-#define OTFAD_SR_CTXIE1(x)                       (((uint32_t)(((uint32_t)(x)) << OTFAD_SR_CTXIE1_SHIFT)) & OTFAD_SR_CTXIE1_MASK)
-
-#define OTFAD_SR_CTXIE2_MASK                     (0x40000U)
-#define OTFAD_SR_CTXIE2_SHIFT                    (18U)
-/*! CTXIE2 - Context Integrity Error
- *  0b0..No key blob integrity error was detected for context "n".
- *  0b1..A key blob integrity error was detected in context "n".
- */
-#define OTFAD_SR_CTXIE2(x)                       (((uint32_t)(((uint32_t)(x)) << OTFAD_SR_CTXIE2_SHIFT)) & OTFAD_SR_CTXIE2_MASK)
-
-#define OTFAD_SR_CTXIE3_MASK                     (0x80000U)
-#define OTFAD_SR_CTXIE3_SHIFT                    (19U)
-/*! CTXIE3 - Context Integrity Error
- *  0b0..No key blob integrity error was detected for context "n".
- *  0b1..A key blob integrity error was detected in context "n".
- */
-#define OTFAD_SR_CTXIE3(x)                       (((uint32_t)(((uint32_t)(x)) << OTFAD_SR_CTXIE3_SHIFT)) & OTFAD_SR_CTXIE3_MASK)
-
 #define OTFAD_SR_HRL_MASK                        (0xF000000U)
 #define OTFAD_SR_HRL_SHIFT                       (24U)
 /*! HRL - Hardware Revision Level */
@@ -604,26 +502,10 @@ typedef struct {
 #define OTFAD_SR_GEM_MASK                        (0x20000000U)
 #define OTFAD_SR_GEM_SHIFT                       (29U)
 /*! GEM - Global Enable Mode
- *  0b0..OTFAD is disabled. All data fetched by the QuadSPI bypasses OTFAD processing.
- *  0b1..OTFAD is enabled, and processes data fetched by the QuadSPI as defined by the hardware configuration.
+ *  0b0..OTFAD is disabled. All data fetched by the FlexSPI bypasses OTFAD processing.
+ *  0b1..OTFAD is enabled, and processes data fetched by the FlexSPI as defined by the hardware configuration.
  */
 #define OTFAD_SR_GEM(x)                          (((uint32_t)(((uint32_t)(x)) << OTFAD_SR_GEM_SHIFT)) & OTFAD_SR_GEM_MASK)
-
-#define OTFAD_SR_KBPE_MASK                       (0x40000000U)
-#define OTFAD_SR_KBPE_SHIFT                      (30U)
-/*! KBPE - Key Blob Processing Enable
- *  0b0..Key blob processing is not enabled.
- *  0b1..Key blob processing is enabled.
- */
-#define OTFAD_SR_KBPE(x)                         (((uint32_t)(((uint32_t)(x)) << OTFAD_SR_KBPE_SHIFT)) & OTFAD_SR_KBPE_MASK)
-
-#define OTFAD_SR_KBD_MASK                        (0x80000000U)
-#define OTFAD_SR_KBD_SHIFT                       (31U)
-/*! KBD - Key Blob Processing Done
- *  0b0..Key blob processing was not enabled, or is not complete.
- *  0b1..Key blob processing was enabled and is complete.
- */
-#define OTFAD_SR_KBD(x)                          (((uint32_t)(((uint32_t)(x)) << OTFAD_SR_KBD_SHIFT)) & OTFAD_SR_KBD_MASK)
 /*! @} */
 
 /*! @name KEY - AES Key Word */

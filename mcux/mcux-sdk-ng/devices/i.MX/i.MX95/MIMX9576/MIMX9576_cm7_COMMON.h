@@ -12,15 +12,15 @@
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **
-**     Reference manual:    iMX95RM rev3
-**     Version:             rev. 3.0, 2025-11-24
-**     Build:               b251126
+**     Reference manual:    iMX95RM rev4
+**     Version:             rev. 4.0, 2026-02-28
+**     Build:               b260305
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX9576_cm7
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -34,14 +34,16 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-11-24)
 **         Header RFP.
+**     - rev. 4.0 (2026-02-28)
+**         Update Interrupts mapping.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMX9576_cm7_COMMON.h
- * @version 3.0
- * @date 2025-11-24
+ * @version 4.0
+ * @date 2026-02-28
  * @brief CMSIS Peripheral Access Layer for MIMX9576_cm7
  *
  * CMSIS Peripheral Access Layer for MIMX9576_cm7
@@ -52,7 +54,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0300U
+#define MCU_MEM_MAP_VERSION 0x0400U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -67,7 +69,7 @@
  */
 
 /** Interrupt Number Definitions */
-#define NUMBER_OF_INT_VECTORS 402                /**< Number of interrupts in the Vector table */
+#define NUMBER_OF_INT_VECTORS 834                /**< Number of interrupts in the Vector table */
 
 typedef enum IRQn {
   /* Auxiliary constants */
@@ -307,7 +309,7 @@ typedef enum IRQn {
   DISP_IRQSTEER7_IRQn          = 219,              /**< DISPLAYMIX IRQSTEER 7 */
   Reserved236_IRQn             = 220,              /**< CAMERAMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
   ISI_IRQn                     = 221,              /**< CAMERAMIX ISI interrupt Channel 0 */
-  Reserved238_IRQn             = 222,              /**< ISP Processing Interrupt - Context 0 */
+  ISP_IRQn                     = 222,              /**< ISP Processing Interrupt - Context 0 */
   Reserved239_IRQn             = 223,              /**< M7MIX MCM interrupt */
   IRQSTEER_0_IRQn              = 224,              /**< IRQSTEER0 interrupt */
   IRQSTEER_1_IRQn              = 225,              /**< IRQSTEER1 interrupt */
@@ -335,142 +337,574 @@ typedef enum IRQn {
   MSGINTR2_IRQn                = 247,              /**< MSGINTR Instance 2, Interrupts */
   Reserved264_IRQn             = 248,              /**< V2X-FH MU APCH1 (APP1) interrupt */
   Reserved265_IRQn             = 249,              /**< V2X-FH MU APHSM2 (HSM2) interrupt */
-  Reserved266_IRQn             = 250,              /**< CAMERAMIX TRDC transfer error interrupt */
-  Reserved267_IRQn             = 251,              /**< DISPLAYMIX TRDC transfer error interrupt */
-  Reserved268_IRQn             = 252,              /**< NETCMIX TRDC transfer error interrupt */
-  Reserved269_IRQn             = 253,              /**< GPUMIX TRDC transfer error interrupt */
-  Reserved270_IRQn             = 254,              /**< HSIOMIX TRDC transfer error interrupt */
-  Reserved271_IRQn             = 255,              /**< VPUMIX TRDC transfer error interrupt */
-  Reserved272_IRQn             = 256,              /**< AONMIX ERM Single bit corrected ECC Error */
-  Reserved273_IRQn             = 257,              /**< M7MIX ERM Single bit corrected ECC Error */
-  Reserved274_IRQn             = 258,              /**< WAKEUPMIX ERM Single bit corrected ECC Error */
-  Reserved275_IRQn             = 259,              /**< NPUMIX ERM Single bit corrected ECC Error */
-  Reserved276_IRQn             = 260,              /**< WAKEUPMIX ACP EDMA error interrupt */
-  Reserved277_IRQn             = 261,              /**< OCRAM_C ECC multiple bit or address error */
-  Reserved278_IRQn             = 262,              /**< CAMERAMIX Cortex-M0+ Cache write-buffer error */
-  Reserved279_IRQn             = 263,              /**< CAMERAMIX Cortex-M0+ Cache data parity error */
-  Reserved280_IRQn             = 264,              /**< V2X-FH MU APSHE (SHE) interrupt */
-  Reserved281_IRQn             = 265,              /**< V2X-FH MU SCU/APDEBUG (DEBUG) interrupt */
-  DMA5_3_0_1_IRQn              = 266,              /**< eDMA3 channel 0/1 interrupt */
-  DMA5_3_2_3_IRQn              = 267,              /**< eDMA3 channel 2/3 interrupt */
-  DMA5_3_4_5_IRQn              = 268,              /**< eDMA3 channel 4/5 interrupt */
-  DMA5_3_6_7_IRQn              = 269,              /**< eDMA3 channel 6/7 interrupt */
-  DMA5_3_8_9_IRQn              = 270,              /**< eDMA3 channel 8/9 interrupt */
-  DMA5_3_10_11_IRQn            = 271,              /**< eDMA3 channel 10/11 interrupt */
-  DMA5_3_12_13_IRQn            = 272,              /**< eDMA3 channel 12/13 interrupt */
-  DMA5_3_14_15_IRQn            = 273,              /**< eDMA3 channel 14/15 interrupt */
-  DMA5_3_16_17_IRQn            = 274,              /**< eDMA3 channel 16/17 interrupt */
-  DMA5_3_18_19_IRQn            = 275,              /**< eDMA3 channel 18/19 interrupt */
-  DMA5_3_20_21_IRQn            = 276,              /**< eDMA3 channel 20/21 interrupt */
-  DMA5_3_22_23_IRQn            = 277,              /**< eDMA3 channel 22/23 interrupt */
-  DMA5_3_24_25_IRQn            = 278,              /**< eDMA3 channel 24/25 interrupt */
-  DMA5_3_26_27_IRQn            = 279,              /**< eDMA3 channel 26/27 interrupt */
-  DMA5_3_28_29_IRQn            = 280,              /**< eDMA3 channel 29/29 interrupt */
-  DMA5_3_30_31_IRQn            = 281,              /**< eDMA3 channel 30/31 interrupt */
-  DMA5_3_32_33_IRQn            = 282,              /**< eDMA3 channel 32/33 interrupt */
-  DMA5_3_34_35_IRQn            = 283,              /**< eDMA3 channel 34/35 interrupt */
-  DMA5_3_36_37_IRQn            = 284,              /**< eDMA3 channel 36/37 interrupt */
-  DMA5_3_38_39_IRQn            = 285,              /**< eDMA3 channel 38/39 interrupt */
-  DMA5_3_40_41_IRQn            = 286,              /**< eDMA3 channel 40/41 interrupt */
-  DMA5_3_42_43_IRQn            = 287,              /**< eDMA3 channel 42/43 interrupt */
-  DMA5_3_44_45_IRQn            = 288,              /**< eDMA3 channel 44/45 interrupt */
-  DMA5_3_46_47_IRQn            = 289,              /**< eDMA3 channel 46/47 interrupt */
-  DMA5_3_48_49_IRQn            = 290,              /**< eDMA3 channel 48/49 interrupt */
-  DMA5_3_50_51_IRQn            = 291,              /**< eDMA3 channel 50/51 interrupt */
-  DMA5_3_52_53_IRQn            = 292,              /**< eDMA3 channel 52/53 interrupt */
-  DMA5_3_54_55_IRQn            = 293,              /**< eDMA3 channel 54/55 interrupt */
-  DMA5_3_56_57_IRQn            = 294,              /**< eDMA3 channel 56/57 interrupt */
-  DMA5_3_58_59_IRQn            = 295,              /**< eDMA3 channel 58/59 interrupt */
-  DMA5_3_60_61_IRQn            = 296,              /**< eDMA3 channel 60/61 interrupt */
-  DMA5_3_62_63_IRQn            = 297,              /**< eDMA3 channel 62/63 interrupt */
-  Reserved314_IRQn             = 298,              /**< GPUMIX GPU Interrupt */
-  Reserved315_IRQn             = 299,              /**< GPUMIX Job Interrupt */
-  Reserved316_IRQn             = 300,              /**< GPUMIX MMU Interrupt */
-  Reserved317_IRQn             = 301,              /**< Reserved INTERRUPT */
-  Reserved318_IRQn             = 302,              /**< Reserved interrupt */
-  Reserved319_IRQn             = 303,              /**< Reserved interrupt */
-  Reserved320_IRQn             = 304,              /**< Reserved interrupt */
-  Reserved321_IRQn             = 305,              /**< Reserved interrupt */
-  Reserved322_IRQn             = 306,              /**< Reserved interrupt */
-  Reserved323_IRQn             = 307,              /**< Reserved interrupt */
-  Reserved324_IRQn             = 308,              /**< Reserved interrupt */
-  Reserved325_IRQn             = 309,              /**< Reserved interrupt */
-  Reserved326_IRQn             = 310,              /**< Reserved interrupt */
-  Reserved327_IRQn             = 311,              /**< Reserved interrupt */
-  Reserved328_IRQn             = 312,              /**< Reserved interrupt */
-  Reserved329_IRQn             = 313,              /**< Reserved interrupt */
-  Reserved330_IRQn             = 314,              /**< NETC iEPRC PCI INT */
-  Reserved331_IRQn             = 315,              /**< NETC iEPRC PCI INT */
-  Reserved332_IRQn             = 316,              /**< PCIe Controller 1 INTA */
-  Reserved333_IRQn             = 317,              /**< PCIe Controller 1 INTB */
-  Reserved334_IRQn             = 318,              /**< PCIe Controller 1 INTC */
-  Reserved335_IRQn             = 319,              /**< PCIe Controller 1 INTD */
-  Reserved336_IRQn             = 320,              /**< PCIe interrupts */
-  Reserved337_IRQn             = 321,              /**< PCIe Controller EDMA channel interrupt */
-  Reserved338_IRQn             = 322,              /**< PCIe Controller 1 INTA */
-  Reserved339_IRQn             = 323,              /**< PCIe Controller 1 INTB */
-  Reserved340_IRQn             = 324,              /**< PCIe Controller 1 INTC */
-  Reserved341_IRQn             = 325,              /**< PCIe Controller 1 INTD */
-  Reserved342_IRQn             = 326,              /**< PCIe miscellaneous interrupts */
-  Reserved343_IRQn             = 327,              /**< PCIe Controller EDMA channel interrupt */
-  Reserved344_IRQn             = 328,              /**< Wakeup interrupt from CLKREQ#, WAKEUP#, BEACON_DET */
-  Reserved345_IRQn             = 329,              /**< NPUMIX Functional interrupt */
-  Reserved346_IRQn             = 330,              /**< DISPLAYMIX Real-time traffic TBU: Fault Handling RAS Interrupt for a contained error */
-  Reserved347_IRQn             = 331,              /**< DISPLAYMIX Real-time traffic TBU: Error Handling RAS Interrupt for an uncontained error */
-  Reserved348_IRQn             = 332,              /**< DISPLAYMIX Real-time traffic TBU: Critical Error Interrupt for an uncontainable error */
-  Reserved349_IRQn             = 333,              /**< DISPLAYMIX Real-time traffic TBU: PMU Interrupt */
-  Reserved350_IRQn             = 334,              /**< TCU Event queue, secure interrupt */
-  Reserved351_IRQn             = 335,              /**< TCU Event queue, non-secure interrupt */
-  Reserved352_IRQn             = 336,              /**< TCU SYNC complete, non-secure interrupt */
-  Reserved353_IRQn             = 337,              /**< TCU SYNC complete, secure interrupt */
-  Reserved354_IRQn             = 338,              /**< TCU global non-secure interrupt */
-  Reserved355_IRQn             = 339,              /**< TCU global secure interrupt */
-  Reserved356_IRQn             = 340,              /**< TCU fault handling RAS interrupt for a contained error */
-  Reserved357_IRQn             = 341,              /**< TCU error recovery RAS interrupt for an uncontained error */
-  Reserved358_IRQn             = 342,              /**< TCU critical error interrupt, for an uncontainable uncorrected error */
-  Reserved359_IRQn             = 343,              /**< TCU PMU interrupt */
-  Reserved360_IRQn             = 344,              /**< TCU Page Request Interface */
-  Reserved361_IRQn             = 345,              /**< SRC GPC Low Power Handshake Gasket interrupt request for system management */
-  Reserved362_IRQn             = 346,              /**< CAMERAMIX MU Ored of all */
-  Reserved363_IRQn             = 347,              /**< CAMERAMIX MU Ored of all */
-  Reserved364_IRQn             = 348,              /**< CAMERAMIX MU Ored of all */
-  Reserved365_IRQn             = 349,              /**< CAMERAMIX MU Ored of all */
-  Reserved366_IRQn             = 350,              /**< CAMERAMIX MU Ored of all */
-  Reserved367_IRQn             = 351,              /**< CAMERAMIX MU Ored of all */
-  Reserved368_IRQn             = 352,              /**< CAMERAMIX MU Ored of all */
-  Reserved369_IRQn             = 353,              /**< CAMERAMIX MU Ored of all */
-  Reserved370_IRQn             = 354,              /**< CAMERAMIX ISI interrupt Channel 1 */
-  Reserved371_IRQn             = 355,              /**< CAMERAMIX ISI interrupt Channel 2 */
-  Reserved372_IRQn             = 356,              /**< CAMERAMIX ISI interrupt Channel 3 */
-  Reserved373_IRQn             = 357,              /**< CAMERAMIX ISI interrupt Channel 4 */
-  Reserved374_IRQn             = 358,              /**< CAMERAMIX ISI interrupt Channel 5 */
-  Reserved375_IRQn             = 359,              /**< CAMERAMIX ISI interrupt Channel 6 */
-  Reserved376_IRQn             = 360,              /**< CAMERAMIX ISI interrupt Channel 7 */
-  DMA5_4_ERROR_IRQn            = 361,              /**< CAMERAMIX EDMA error interrupt */
-  DMA5_4_0_1_IRQn              = 362,              /**< CAMERAMIX EDMA channel 0 interrupt */
-  DMA5_4_2_3_IRQn              = 363,              /**< CAMERAMIX EDMA channel 2 interrupt */
-  DMA5_4_4_5_IRQn              = 364,              /**< CAMERAMIX EDMA channel 4 interrupt */
-  DMA5_4_6_7_IRQn              = 365,              /**< CAMERAMIX EDMA channel 6 interrupt */
-  DMA5_4_8_9_IRQn              = 366,              /**< CAMERAMIX EDMA channel 8 interrupt */
-  DMA5_4_10_11_IRQn            = 367,              /**< CAMERAMIX EDMA channel 10 interrupt */
-  DMA5_4_12_13_IRQn            = 368,              /**< CAMERAMIX EDMA channel 12 interrupt */
-  DMA5_4_14_15_IRQn            = 369,              /**< CAMERAMIX EDMA channel 14 interrupt */
-  DMA5_4_16_17_IRQn            = 370,              /**< CAMERAMIX EDMA channel 16 interrupt */
-  DMA5_4_18_19_IRQn            = 371,              /**< CAMERAMIX EDMA channel 18 interrupt */
-  DMA5_4_20_21_IRQn            = 372,              /**< CAMERAMIX EDMA channel 20 interrupt */
-  DMA5_4_22_23_IRQn            = 373,              /**< CAMERAMIX EDMA channel 22 interrupt */
-  DMA5_4_24_25_IRQn            = 374,              /**< CAMERAMIX EDMA channel 24 interrupt */
-  DMA5_4_26_27_IRQn            = 375,              /**< CAMERAMIX EDMA channel 26 interrupt */
-  DMA5_4_28_29_IRQn            = 376,              /**< CAMERAMIX EDMA channel 28 interrupt */
-  DMA5_4_30_31_IRQn            = 377,              /**< CAMERAMIX EDMA channel 30 interrupt */
-  Reserved394_IRQn             = 378,              /**< CAMERAMIX CSI Formatting Unit 1: Buffer overflow */
-  Reserved395_IRQn             = 379,              /**< CAMERAMIX CSI Formatting Unit 1: Interlaced Error */
-  Reserved396_IRQn             = 380,              /**< CAMERAMIX CSI Formatting Unit 1: Pixel Data Type Error */
-  Reserved397_IRQn             = 381,              /**< CAMERAMIX CSI Formatting Unit 2: Buffer overflow */
-  Reserved398_IRQn             = 382,              /**< CAMERAMIX CSI Formatting Unit 2: Interlaced Error */
-  Reserved399_IRQn             = 383,              /**< CAMERAMIX CSI Formatting Unit 2: Pixel Data Type Error */
-  Reserved400_IRQn             = 384,              /**< CAMERAMIX CSI1 */
-  Reserved401_IRQn             = 385               /**< CAMERAMIX CSI2 */
+  Reserved266_IRQn             = 250,              /**< Reserved interrupt */
+  Reserved267_IRQn             = 251,              /**< Reserved interrupt */
+  Reserved268_IRQn             = 252,              /**< Reserved interrupt */
+  Reserved269_IRQn             = 253,              /**< Reserved interrupt */
+  Reserved270_IRQn             = 254,              /**< Reserved interrupt */
+  Reserved271_IRQn             = 255,              /**< Reserved interrupt */
+  Reserved272_IRQn             = 256,              /**< Reserved interrupt */
+  Reserved273_IRQn             = 257,              /**< Reserved interrupt */
+  Reserved274_IRQn             = 258,              /**< Reserved interrupt */
+  Reserved275_IRQn             = 259,              /**< Reserved interrupt */
+  Reserved276_IRQn             = 260,              /**< Reserved interrupt */
+  Reserved277_IRQn             = 261,              /**< Reserved interrupt */
+  Reserved278_IRQn             = 262,              /**< Reserved interrupt */
+  Reserved279_IRQn             = 263,              /**< Reserved interrupt */
+  Reserved280_IRQn             = 264,              /**< Reserved interrupt */
+  Reserved281_IRQn             = 265,              /**< Reserved interrupt */
+  Reserved282_IRQn             = 266,              /**< Reserved interrupt */
+  Reserved283_IRQn             = 267,              /**< Reserved interrupt */
+  Reserved284_IRQn             = 268,              /**< Reserved interrupt */
+  Reserved285_IRQn             = 269,              /**< Reserved interrupt */
+  Reserved286_IRQn             = 270,              /**< Reserved interrupt */
+  Reserved287_IRQn             = 271,              /**< Reserved interrupt */
+  Reserved288_IRQn             = 272,              /**< Reserved interrupt */
+  Reserved289_IRQn             = 273,              /**< Reserved interrupt */
+  Reserved290_IRQn             = 274,              /**< Reserved interrupt */
+  Reserved291_IRQn             = 275,              /**< Reserved interrupt */
+  Reserved292_IRQn             = 276,              /**< Reserved interrupt */
+  Reserved293_IRQn             = 277,              /**< Reserved interrupt */
+  Reserved294_IRQn             = 278,              /**< Reserved interrupt */
+  Reserved295_IRQn             = 279,              /**< Reserved interrupt */
+  Reserved296_IRQn             = 280,              /**< Reserved interrupt */
+  Reserved297_IRQn             = 281,              /**< Reserved interrupt */
+  Reserved298_IRQn             = 282,              /**< Reserved interrupt */
+  Reserved299_IRQn             = 283,              /**< Reserved interrupt */
+  Reserved300_IRQn             = 284,              /**< Reserved interrupt */
+  Reserved301_IRQn             = 285,              /**< Reserved interrupt */
+  Reserved302_IRQn             = 286,              /**< Reserved interrupt */
+  Reserved303_IRQn             = 287,              /**< Reserved interrupt */
+  Reserved304_IRQn             = 288,              /**< Reserved interrupt */
+  Reserved305_IRQn             = 289,              /**< Reserved interrupt */
+  Reserved306_IRQn             = 290,              /**< Reserved interrupt */
+  Reserved307_IRQn             = 291,              /**< Reserved interrupt */
+  Reserved308_IRQn             = 292,              /**< Reserved interrupt */
+  Reserved309_IRQn             = 293,              /**< Reserved interrupt */
+  Reserved310_IRQn             = 294,              /**< Reserved interrupt */
+  Reserved311_IRQn             = 295,              /**< Reserved interrupt */
+  Reserved312_IRQn             = 296,              /**< Reserved interrupt */
+  Reserved313_IRQn             = 297,              /**< Reserved interrupt */
+  Reserved314_IRQn             = 298,              /**< CAMERAMIX TRDC transfer error interrupt */
+  Reserved315_IRQn             = 299,              /**< DISPLAYMIX TRDC transfer error interrupt */
+  Reserved316_IRQn             = 300,              /**< NETCMIX TRDC transfer error interrupt */
+  Reserved317_IRQn             = 301,              /**< GPUMIX TRDC transfer error interrupt */
+  Reserved318_IRQn             = 302,              /**< HSIOMIX TRDC transfer error interrupt */
+  Reserved319_IRQn             = 303,              /**< VPUMIX TRDC transfer error interrupt */
+  Reserved320_IRQn             = 304,              /**< AONMIX ERM Single bit corrected ECC Error */
+  Reserved321_IRQn             = 305,              /**< M7MIX ERM Single bit corrected ECC Error */
+  Reserved322_IRQn             = 306,              /**< WAKEUPMIX ERM Single bit corrected ECC Error */
+  Reserved323_IRQn             = 307,              /**< NPUMIX ERM Single bit corrected ECC Error */
+  Reserved324_IRQn             = 308,              /**< WAKEUPMIX ACP EDMA error interrupt */
+  Reserved325_IRQn             = 309,              /**< OCRAM_C ECC multiple bit or address error */
+  Reserved326_IRQn             = 310,              /**< CAMERAMIX Cortex-M0+ Cache write-buffer error */
+  Reserved327_IRQn             = 311,              /**< CAMERAMIX Cortex-M0+ Cache data parity error */
+  Reserved328_IRQn             = 312,              /**< V2X-FH MU APSHE (SHE) interrupt */
+  Reserved329_IRQn             = 313,              /**< V2X-FH MU SCU/APDEBUG (DEBUG) interrupt */
+  Reserved330_IRQn             = 314,              /**< Reserved interrupt */
+  Reserved331_IRQn             = 315,              /**< Reserved interrupt */
+  Reserved332_IRQn             = 316,              /**< Reserved interrupt */
+  Reserved333_IRQn             = 317,              /**< Reserved interrupt */
+  Reserved334_IRQn             = 318,              /**< Reserved interrupt */
+  Reserved335_IRQn             = 319,              /**< Reserved interrupt */
+  Reserved336_IRQn             = 320,              /**< Reserved interrupt */
+  Reserved337_IRQn             = 321,              /**< Reserved interrupt */
+  Reserved338_IRQn             = 322,              /**< Reserved interrupt */
+  Reserved339_IRQn             = 323,              /**< Reserved interrupt */
+  Reserved340_IRQn             = 324,              /**< Reserved interrupt */
+  Reserved341_IRQn             = 325,              /**< Reserved interrupt */
+  Reserved342_IRQn             = 326,              /**< Reserved interrupt */
+  Reserved343_IRQn             = 327,              /**< Reserved interrupt */
+  Reserved344_IRQn             = 328,              /**< Reserved interrupt */
+  Reserved345_IRQn             = 329,              /**< Reserved interrupt */
+  Reserved346_IRQn             = 330,              /**< Reserved interrupt */
+  Reserved347_IRQn             = 331,              /**< Reserved interrupt */
+  Reserved348_IRQn             = 332,              /**< Reserved interrupt */
+  Reserved349_IRQn             = 333,              /**< Reserved interrupt */
+  Reserved350_IRQn             = 334,              /**< Reserved interrupt */
+  Reserved351_IRQn             = 335,              /**< Reserved interrupt */
+  Reserved352_IRQn             = 336,              /**< Reserved interrupt */
+  Reserved353_IRQn             = 337,              /**< Reserved interrupt */
+  Reserved354_IRQn             = 338,              /**< Reserved interrupt */
+  Reserved355_IRQn             = 339,              /**< Reserved interrupt */
+  Reserved356_IRQn             = 340,              /**< Reserved interrupt */
+  Reserved357_IRQn             = 341,              /**< Reserved interrupt */
+  Reserved358_IRQn             = 342,              /**< Reserved interrupt */
+  Reserved359_IRQn             = 343,              /**< Reserved interrupt */
+  Reserved360_IRQn             = 344,              /**< Reserved interrupt */
+  Reserved361_IRQn             = 345,              /**< Reserved interrupt */
+  Reserved362_IRQn             = 346,              /**< Reserved interrupt */
+  Reserved363_IRQn             = 347,              /**< Reserved interrupt */
+  Reserved364_IRQn             = 348,              /**< Reserved interrupt */
+  Reserved365_IRQn             = 349,              /**< Reserved interrupt */
+  Reserved366_IRQn             = 350,              /**< Reserved interrupt */
+  Reserved367_IRQn             = 351,              /**< Reserved interrupt */
+  Reserved368_IRQn             = 352,              /**< Reserved interrupt */
+  Reserved369_IRQn             = 353,              /**< Reserved interrupt */
+  Reserved370_IRQn             = 354,              /**< Reserved interrupt */
+  Reserved371_IRQn             = 355,              /**< Reserved interrupt */
+  Reserved372_IRQn             = 356,              /**< Reserved interrupt */
+  Reserved373_IRQn             = 357,              /**< Reserved interrupt */
+  Reserved374_IRQn             = 358,              /**< Reserved interrupt */
+  Reserved375_IRQn             = 359,              /**< Reserved interrupt */
+  Reserved376_IRQn             = 360,              /**< Reserved interrupt */
+  Reserved377_IRQn             = 361,              /**< Reserved interrupt */
+  DMA5_3_0_1_IRQn              = 362,              /**< eDMA3 channel 0/1 interrupt */
+  DMA5_3_2_3_IRQn              = 363,              /**< eDMA3 channel 2/3 interrupt */
+  DMA5_3_4_5_IRQn              = 364,              /**< eDMA3 channel 4/5 interrupt */
+  DMA5_3_6_7_IRQn              = 365,              /**< eDMA3 channel 6/7 interrupt */
+  DMA5_3_8_9_IRQn              = 366,              /**< eDMA3 channel 8/9 interrupt */
+  DMA5_3_10_11_IRQn            = 367,              /**< eDMA3 channel 10/11 interrupt */
+  DMA5_3_12_13_IRQn            = 368,              /**< eDMA3 channel 12/13 interrupt */
+  DMA5_3_14_15_IRQn            = 369,              /**< eDMA3 channel 14/15 interrupt */
+  DMA5_3_16_17_IRQn            = 370,              /**< eDMA3 channel 16/17 interrupt */
+  DMA5_3_18_19_IRQn            = 371,              /**< eDMA3 channel 18/19 interrupt */
+  DMA5_3_20_21_IRQn            = 372,              /**< eDMA3 channel 20/21 interrupt */
+  DMA5_3_22_23_IRQn            = 373,              /**< eDMA3 channel 22/23 interrupt */
+  DMA5_3_24_25_IRQn            = 374,              /**< eDMA3 channel 24/25 interrupt */
+  DMA5_3_26_27_IRQn            = 375,              /**< eDMA3 channel 26/27 interrupt */
+  DMA5_3_28_29_IRQn            = 376,              /**< eDMA3 channel 28/29 interrupt */
+  DMA5_3_30_31_IRQn            = 377,              /**< eDMA3 channel 30/31 interrupt */
+  Reserved394_IRQn             = 378,              /**< Reserved interrupt */
+  Reserved395_IRQn             = 379,              /**< Reserved interrupt */
+  Reserved396_IRQn             = 380,              /**< Reserved interrupt */
+  Reserved397_IRQn             = 381,              /**< Reserved interrupt */
+  Reserved398_IRQn             = 382,              /**< Reserved interrupt */
+  Reserved399_IRQn             = 383,              /**< Reserved interrupt */
+  Reserved400_IRQn             = 384,              /**< Reserved interrupt */
+  Reserved401_IRQn             = 385,              /**< Reserved interrupt */
+  Reserved402_IRQn             = 386,              /**< Reserved interrupt */
+  Reserved403_IRQn             = 387,              /**< Reserved interrupt */
+  Reserved404_IRQn             = 388,              /**< Reserved interrupt */
+  Reserved405_IRQn             = 389,              /**< Reserved interrupt */
+  Reserved406_IRQn             = 390,              /**< Reserved interrupt */
+  Reserved407_IRQn             = 391,              /**< Reserved interrupt */
+  Reserved408_IRQn             = 392,              /**< Reserved interrupt */
+  Reserved409_IRQn             = 393,              /**< Reserved interrupt */
+  Reserved410_IRQn             = 394,              /**< Reserved interrupt */
+  Reserved411_IRQn             = 395,              /**< Reserved interrupt */
+  Reserved412_IRQn             = 396,              /**< Reserved interrupt */
+  Reserved413_IRQn             = 397,              /**< Reserved interrupt */
+  Reserved414_IRQn             = 398,              /**< Reserved interrupt */
+  Reserved415_IRQn             = 399,              /**< Reserved interrupt */
+  Reserved416_IRQn             = 400,              /**< Reserved interrupt */
+  Reserved417_IRQn             = 401,              /**< Reserved interrupt */
+  Reserved418_IRQn             = 402,              /**< Reserved interrupt */
+  Reserved419_IRQn             = 403,              /**< Reserved interrupt */
+  Reserved420_IRQn             = 404,              /**< Reserved interrupt */
+  Reserved421_IRQn             = 405,              /**< Reserved interrupt */
+  Reserved422_IRQn             = 406,              /**< Reserved interrupt */
+  Reserved423_IRQn             = 407,              /**< Reserved interrupt */
+  Reserved424_IRQn             = 408,              /**< Reserved interrupt */
+  Reserved425_IRQn             = 409,              /**< Reserved interrupt */
+  Reserved426_IRQn             = 410,              /**< Reserved interrupt */
+  Reserved427_IRQn             = 411,              /**< Reserved interrupt */
+  Reserved428_IRQn             = 412,              /**< Reserved interrupt */
+  Reserved429_IRQn             = 413,              /**< Reserved interrupt */
+  Reserved430_IRQn             = 414,              /**< Reserved interrupt */
+  Reserved431_IRQn             = 415,              /**< Reserved interrupt */
+  Reserved432_IRQn             = 416,              /**< Reserved interrupt */
+  Reserved433_IRQn             = 417,              /**< Reserved interrupt */
+  Reserved434_IRQn             = 418,              /**< Reserved interrupt */
+  Reserved435_IRQn             = 419,              /**< Reserved interrupt */
+  Reserved436_IRQn             = 420,              /**< Reserved interrupt */
+  Reserved437_IRQn             = 421,              /**< Reserved interrupt */
+  Reserved438_IRQn             = 422,              /**< Reserved interrupt */
+  Reserved439_IRQn             = 423,              /**< Reserved interrupt */
+  Reserved440_IRQn             = 424,              /**< Reserved interrupt */
+  Reserved441_IRQn             = 425,              /**< Reserved interrupt */
+  DMA5_3_32_33_IRQn            = 426,              /**< eDMA3 channel 32/33 interrupt */
+  DMA5_3_34_35_IRQn            = 427,              /**< eDMA3 channel 34/35 interrupt */
+  DMA5_3_36_37_IRQn            = 428,              /**< eDMA3 channel 36/37 interrupt */
+  DMA5_3_38_39_IRQn            = 429,              /**< eDMA3 channel 38/39 interrupt */
+  DMA5_3_40_41_IRQn            = 430,              /**< eDMA3 channel 40/41 interrupt */
+  DMA5_3_42_43_IRQn            = 431,              /**< eDMA3 channel 42/43 interrupt */
+  DMA5_3_44_45_IRQn            = 432,              /**< eDMA3 channel 44/45 interrupt */
+  DMA5_3_46_47_IRQn            = 433,              /**< eDMA3 channel 46/47 interrupt */
+  DMA5_3_48_49_IRQn            = 434,              /**< eDMA3 channel 48/49 interrupt */
+  DMA5_3_50_51_IRQn            = 435,              /**< eDMA3 channel 50/51 interrupt */
+  DMA5_3_52_53_IRQn            = 436,              /**< eDMA3 channel 52/53 interrupt */
+  DMA5_3_54_55_IRQn            = 437,              /**< eDMA3 channel 54/55 interrupt */
+  DMA5_3_56_57_IRQn            = 438,              /**< eDMA3 channel 56/57 interrupt */
+  DMA5_3_58_59_IRQn            = 439,              /**< eDMA3 channel 58/59 interrupt */
+  DMA5_3_60_61_IRQn            = 440,              /**< eDMA3 channel 60/61 interrupt */
+  DMA5_3_62_63_IRQn            = 441,              /**< eDMA3 channel 62/63 interrupt */
+  Reserved458_IRQn             = 442,              /**< Reserved interrupt */
+  Reserved459_IRQn             = 443,              /**< Reserved interrupt */
+  Reserved460_IRQn             = 444,              /**< Reserved interrupt */
+  Reserved461_IRQn             = 445,              /**< Reserved interrupt */
+  Reserved462_IRQn             = 446,              /**< Reserved interrupt */
+  Reserved463_IRQn             = 447,              /**< Reserved interrupt */
+  Reserved464_IRQn             = 448,              /**< Reserved interrupt */
+  Reserved465_IRQn             = 449,              /**< Reserved interrupt */
+  Reserved466_IRQn             = 450,              /**< Reserved interrupt */
+  Reserved467_IRQn             = 451,              /**< Reserved interrupt */
+  Reserved468_IRQn             = 452,              /**< Reserved interrupt */
+  Reserved469_IRQn             = 453,              /**< Reserved interrupt */
+  Reserved470_IRQn             = 454,              /**< Reserved interrupt */
+  Reserved471_IRQn             = 455,              /**< Reserved interrupt */
+  Reserved472_IRQn             = 456,              /**< Reserved interrupt */
+  Reserved473_IRQn             = 457,              /**< Reserved interrupt */
+  Reserved474_IRQn             = 458,              /**< Reserved interrupt */
+  Reserved475_IRQn             = 459,              /**< Reserved interrupt */
+  Reserved476_IRQn             = 460,              /**< Reserved interrupt */
+  Reserved477_IRQn             = 461,              /**< Reserved interrupt */
+  Reserved478_IRQn             = 462,              /**< Reserved interrupt */
+  Reserved479_IRQn             = 463,              /**< Reserved interrupt */
+  Reserved480_IRQn             = 464,              /**< Reserved interrupt */
+  Reserved481_IRQn             = 465,              /**< Reserved interrupt */
+  Reserved482_IRQn             = 466,              /**< Reserved interrupt */
+  Reserved483_IRQn             = 467,              /**< Reserved interrupt */
+  Reserved484_IRQn             = 468,              /**< Reserved interrupt */
+  Reserved485_IRQn             = 469,              /**< Reserved interrupt */
+  Reserved486_IRQn             = 470,              /**< Reserved interrupt */
+  Reserved487_IRQn             = 471,              /**< Reserved interrupt */
+  Reserved488_IRQn             = 472,              /**< Reserved interrupt */
+  Reserved489_IRQn             = 473,              /**< Reserved interrupt */
+  Reserved490_IRQn             = 474,              /**< Reserved interrupt */
+  Reserved491_IRQn             = 475,              /**< Reserved interrupt */
+  Reserved492_IRQn             = 476,              /**< Reserved interrupt */
+  Reserved493_IRQn             = 477,              /**< Reserved interrupt */
+  Reserved494_IRQn             = 478,              /**< Reserved interrupt */
+  Reserved495_IRQn             = 479,              /**< Reserved interrupt */
+  Reserved496_IRQn             = 480,              /**< Reserved interrupt */
+  Reserved497_IRQn             = 481,              /**< Reserved interrupt */
+  Reserved498_IRQn             = 482,              /**< Reserved interrupt */
+  Reserved499_IRQn             = 483,              /**< Reserved interrupt */
+  Reserved500_IRQn             = 484,              /**< Reserved interrupt */
+  Reserved501_IRQn             = 485,              /**< Reserved interrupt */
+  Reserved502_IRQn             = 486,              /**< Reserved interrupt */
+  Reserved503_IRQn             = 487,              /**< Reserved interrupt */
+  Reserved504_IRQn             = 488,              /**< Reserved interrupt */
+  Reserved505_IRQn             = 489,              /**< Reserved interrupt */
+  Reserved506_IRQn             = 490,              /**< GPUMIX GPU Interrupt */
+  Reserved507_IRQn             = 491,              /**< GPUMIX Job Interrupt */
+  Reserved508_IRQn             = 492,              /**< GPUMIX MMU Interrupt */
+  Reserved509_IRQn             = 493,              /**< Reserved INTERRUPT */
+  Reserved510_IRQn             = 494,              /**< Reserved interrupt */
+  Reserved511_IRQn             = 495,              /**< Reserved interrupt */
+  Reserved512_IRQn             = 496,              /**< Reserved interrupt */
+  Reserved513_IRQn             = 497,              /**< Reserved interrupt */
+  Reserved514_IRQn             = 498,              /**< Reserved interrupt */
+  Reserved515_IRQn             = 499,              /**< Reserved interrupt */
+  Reserved516_IRQn             = 500,              /**< Reserved interrupt */
+  Reserved517_IRQn             = 501,              /**< Reserved interrupt */
+  Reserved518_IRQn             = 502,              /**< Reserved interrupt */
+  Reserved519_IRQn             = 503,              /**< Reserved interrupt */
+  Reserved520_IRQn             = 504,              /**< Reserved interrupt */
+  Reserved521_IRQn             = 505,              /**< Reserved interrupt */
+  Reserved522_IRQn             = 506,              /**< Reserved interrupt */
+  Reserved523_IRQn             = 507,              /**< Reserved interrupt */
+  Reserved524_IRQn             = 508,              /**< Reserved interrupt */
+  Reserved525_IRQn             = 509,              /**< Reserved interrupt */
+  Reserved526_IRQn             = 510,              /**< Reserved interrupt */
+  Reserved527_IRQn             = 511,              /**< Reserved interrupt */
+  Reserved528_IRQn             = 512,              /**< Reserved interrupt */
+  Reserved529_IRQn             = 513,              /**< Reserved interrupt */
+  Reserved530_IRQn             = 514,              /**< Reserved interrupt */
+  Reserved531_IRQn             = 515,              /**< Reserved interrupt */
+  Reserved532_IRQn             = 516,              /**< Reserved interrupt */
+  Reserved533_IRQn             = 517,              /**< Reserved interrupt */
+  Reserved534_IRQn             = 518,              /**< Reserved interrupt */
+  Reserved535_IRQn             = 519,              /**< Reserved interrupt */
+  Reserved536_IRQn             = 520,              /**< Reserved interrupt */
+  Reserved537_IRQn             = 521,              /**< Reserved interrupt */
+  Reserved538_IRQn             = 522,              /**< Reserved interrupt */
+  Reserved539_IRQn             = 523,              /**< Reserved interrupt */
+  Reserved540_IRQn             = 524,              /**< Reserved interrupt */
+  Reserved541_IRQn             = 525,              /**< Reserved interrupt */
+  Reserved542_IRQn             = 526,              /**< Reserved interrupt */
+  Reserved543_IRQn             = 527,              /**< Reserved interrupt */
+  Reserved544_IRQn             = 528,              /**< Reserved interrupt */
+  Reserved545_IRQn             = 529,              /**< Reserved interrupt */
+  Reserved546_IRQn             = 530,              /**< Reserved interrupt */
+  Reserved547_IRQn             = 531,              /**< Reserved interrupt */
+  Reserved548_IRQn             = 532,              /**< Reserved interrupt */
+  Reserved549_IRQn             = 533,              /**< Reserved interrupt */
+  Reserved550_IRQn             = 534,              /**< Reserved interrupt */
+  Reserved551_IRQn             = 535,              /**< Reserved interrupt */
+  Reserved552_IRQn             = 536,              /**< Reserved interrupt */
+  Reserved553_IRQn             = 537,              /**< Reserved interrupt */
+  Reserved554_IRQn             = 538,              /**< Reserved interrupt */
+  Reserved555_IRQn             = 539,              /**< Reserved interrupt */
+  Reserved556_IRQn             = 540,              /**< Reserved interrupt */
+  Reserved557_IRQn             = 541,              /**< Reserved interrupt */
+  Reserved558_IRQn             = 542,              /**< Reserved interrupt */
+  Reserved559_IRQn             = 543,              /**< Reserved interrupt */
+  Reserved560_IRQn             = 544,              /**< Reserved interrupt */
+  Reserved561_IRQn             = 545,              /**< Reserved interrupt */
+  Reserved562_IRQn             = 546,              /**< Reserved interrupt */
+  Reserved563_IRQn             = 547,              /**< Reserved interrupt */
+  Reserved564_IRQn             = 548,              /**< Reserved interrupt */
+  Reserved565_IRQn             = 549,              /**< Reserved interrupt */
+  Reserved566_IRQn             = 550,              /**< Reserved interrupt */
+  Reserved567_IRQn             = 551,              /**< Reserved interrupt */
+  Reserved568_IRQn             = 552,              /**< Reserved interrupt */
+  Reserved569_IRQn             = 553,              /**< Reserved interrupt */
+  Reserved570_IRQn             = 554,              /**< NETC iEPRC PCI INT */
+  Reserved571_IRQn             = 555,              /**< NETC iEPRC PCI INT */
+  Reserved572_IRQn             = 556,              /**< PCIe Controller 1 INTA */
+  Reserved573_IRQn             = 557,              /**< PCIe Controller 1 INTB */
+  Reserved574_IRQn             = 558,              /**< PCIe Controller 1 INTC */
+  Reserved575_IRQn             = 559,              /**< PCIe Controller 1 INTD */
+  Reserved576_IRQn             = 560,              /**< PCIe interrupts */
+  Reserved577_IRQn             = 561,              /**< PCIe Controller EDMA channel interrupt */
+  Reserved578_IRQn             = 562,              /**< PCIe Controller 1 INTA */
+  Reserved579_IRQn             = 563,              /**< PCIe Controller 1 INTB */
+  Reserved580_IRQn             = 564,              /**< PCIe Controller 1 INTC */
+  Reserved581_IRQn             = 565,              /**< PCIe Controller 1 INTD */
+  Reserved582_IRQn             = 566,              /**< PCIe miscellaneous interrupts */
+  Reserved583_IRQn             = 567,              /**< PCIe Controller EDMA channel interrupt */
+  Reserved584_IRQn             = 568,              /**< Wakeup interrupt from CLKREQ#, WAKEUP#, BEACON_DET */
+  Reserved585_IRQn             = 569,              /**< NPUMIX Functional interrupt */
+  Reserved586_IRQn             = 570,              /**< Reserved interrupt */
+  Reserved587_IRQn             = 571,              /**< Reserved interrupt */
+  Reserved588_IRQn             = 572,              /**< Reserved interrupt */
+  Reserved589_IRQn             = 573,              /**< Reserved interrupt */
+  Reserved590_IRQn             = 574,              /**< Reserved interrupt */
+  Reserved591_IRQn             = 575,              /**< Reserved interrupt */
+  Reserved592_IRQn             = 576,              /**< Reserved interrupt */
+  Reserved593_IRQn             = 577,              /**< Reserved interrupt */
+  Reserved594_IRQn             = 578,              /**< Reserved interrupt */
+  Reserved595_IRQn             = 579,              /**< Reserved interrupt */
+  Reserved596_IRQn             = 580,              /**< Reserved interrupt */
+  Reserved597_IRQn             = 581,              /**< Reserved interrupt */
+  Reserved598_IRQn             = 582,              /**< Reserved interrupt */
+  Reserved599_IRQn             = 583,              /**< Reserved interrupt */
+  Reserved600_IRQn             = 584,              /**< Reserved interrupt */
+  Reserved601_IRQn             = 585,              /**< Reserved interrupt */
+  Reserved602_IRQn             = 586,              /**< Reserved interrupt */
+  Reserved603_IRQn             = 587,              /**< Reserved interrupt */
+  Reserved604_IRQn             = 588,              /**< Reserved interrupt */
+  Reserved605_IRQn             = 589,              /**< Reserved interrupt */
+  Reserved606_IRQn             = 590,              /**< Reserved interrupt */
+  Reserved607_IRQn             = 591,              /**< Reserved interrupt */
+  Reserved608_IRQn             = 592,              /**< Reserved interrupt */
+  Reserved609_IRQn             = 593,              /**< Reserved interrupt */
+  Reserved610_IRQn             = 594,              /**< Reserved interrupt */
+  Reserved611_IRQn             = 595,              /**< Reserved interrupt */
+  Reserved612_IRQn             = 596,              /**< Reserved interrupt */
+  Reserved613_IRQn             = 597,              /**< Reserved interrupt */
+  Reserved614_IRQn             = 598,              /**< Reserved interrupt */
+  Reserved615_IRQn             = 599,              /**< Reserved interrupt */
+  Reserved616_IRQn             = 600,              /**< Reserved interrupt */
+  Reserved617_IRQn             = 601,              /**< Reserved interrupt */
+  Reserved618_IRQn             = 602,              /**< Reserved interrupt */
+  Reserved619_IRQn             = 603,              /**< Reserved interrupt */
+  Reserved620_IRQn             = 604,              /**< Reserved interrupt */
+  Reserved621_IRQn             = 605,              /**< Reserved interrupt */
+  Reserved622_IRQn             = 606,              /**< Reserved interrupt */
+  Reserved623_IRQn             = 607,              /**< Reserved interrupt */
+  Reserved624_IRQn             = 608,              /**< Reserved interrupt */
+  Reserved625_IRQn             = 609,              /**< Reserved interrupt */
+  Reserved626_IRQn             = 610,              /**< Reserved interrupt */
+  Reserved627_IRQn             = 611,              /**< Reserved interrupt */
+  Reserved628_IRQn             = 612,              /**< Reserved interrupt */
+  Reserved629_IRQn             = 613,              /**< Reserved interrupt */
+  Reserved630_IRQn             = 614,              /**< Reserved interrupt */
+  Reserved631_IRQn             = 615,              /**< Reserved interrupt */
+  Reserved632_IRQn             = 616,              /**< Reserved interrupt */
+  Reserved633_IRQn             = 617,              /**< Reserved interrupt */
+  Reserved634_IRQn             = 618,              /**< DISPLAYMIX Real-time traffic TBU: Fault Handling RAS Interrupt for a contained error */
+  Reserved635_IRQn             = 619,              /**< DISPLAYMIX Real-time traffic TBU: Error Handling RAS Interrupt for an uncontained error */
+  Reserved636_IRQn             = 620,              /**< DISPLAYMIX Real-time traffic TBU: Critical Error Interrupt for an uncontainable error */
+  Reserved637_IRQn             = 621,              /**< DISPLAYMIX Real-time traffic TBU: PMU Interrupt */
+  Reserved638_IRQn             = 622,              /**< TCU Event queue, secure interrupt */
+  Reserved639_IRQn             = 623,              /**< TCU Event queue, non-secure interrupt */
+  Reserved640_IRQn             = 624,              /**< TCU SYNC complete, non-secure interrupt */
+  Reserved641_IRQn             = 625,              /**< TCU SYNC complete, secure interrupt */
+  Reserved642_IRQn             = 626,              /**< TCU global non-secure interrupt */
+  Reserved643_IRQn             = 627,              /**< TCU global secure interrupt */
+  Reserved644_IRQn             = 628,              /**< TCU fault handling RAS interrupt for a contained error */
+  Reserved645_IRQn             = 629,              /**< TCU error recovery RAS interrupt for an uncontained error */
+  Reserved646_IRQn             = 630,              /**< TCU critical error interrupt, for an uncontainable uncorrected error */
+  Reserved647_IRQn             = 631,              /**< TCU PMU interrupt */
+  Reserved648_IRQn             = 632,              /**< TCU Page Request Interface */
+  Reserved649_IRQn             = 633,              /**< SRC GPC Low Power Handshake Gasket interrupt request for system management */
+  Reserved650_IRQn             = 634,              /**< Reserved interrupt */
+  Reserved651_IRQn             = 635,              /**< Reserved interrupt */
+  Reserved652_IRQn             = 636,              /**< Reserved interrupt */
+  Reserved653_IRQn             = 637,              /**< Reserved interrupt */
+  Reserved654_IRQn             = 638,              /**< Reserved interrupt */
+  Reserved655_IRQn             = 639,              /**< Reserved interrupt */
+  Reserved656_IRQn             = 640,              /**< Reserved interrupt */
+  Reserved657_IRQn             = 641,              /**< Reserved interrupt */
+  Reserved658_IRQn             = 642,              /**< Reserved interrupt */
+  Reserved659_IRQn             = 643,              /**< Reserved interrupt */
+  Reserved660_IRQn             = 644,              /**< Reserved interrupt */
+  Reserved661_IRQn             = 645,              /**< Reserved interrupt */
+  Reserved662_IRQn             = 646,              /**< Reserved interrupt */
+  Reserved663_IRQn             = 647,              /**< Reserved interrupt */
+  Reserved664_IRQn             = 648,              /**< Reserved interrupt */
+  Reserved665_IRQn             = 649,              /**< Reserved interrupt */
+  Reserved666_IRQn             = 650,              /**< Reserved interrupt */
+  Reserved667_IRQn             = 651,              /**< Reserved interrupt */
+  Reserved668_IRQn             = 652,              /**< Reserved interrupt */
+  Reserved669_IRQn             = 653,              /**< Reserved interrupt */
+  Reserved670_IRQn             = 654,              /**< Reserved interrupt */
+  Reserved671_IRQn             = 655,              /**< Reserved interrupt */
+  Reserved672_IRQn             = 656,              /**< Reserved interrupt */
+  Reserved673_IRQn             = 657,              /**< Reserved interrupt */
+  Reserved674_IRQn             = 658,              /**< Reserved interrupt */
+  Reserved675_IRQn             = 659,              /**< Reserved interrupt */
+  Reserved676_IRQn             = 660,              /**< Reserved interrupt */
+  Reserved677_IRQn             = 661,              /**< Reserved interrupt */
+  Reserved678_IRQn             = 662,              /**< Reserved interrupt */
+  Reserved679_IRQn             = 663,              /**< Reserved interrupt */
+  Reserved680_IRQn             = 664,              /**< Reserved interrupt */
+  Reserved681_IRQn             = 665,              /**< Reserved interrupt */
+  Reserved682_IRQn             = 666,              /**< Reserved interrupt */
+  Reserved683_IRQn             = 667,              /**< Reserved interrupt */
+  Reserved684_IRQn             = 668,              /**< Reserved interrupt */
+  Reserved685_IRQn             = 669,              /**< Reserved interrupt */
+  Reserved686_IRQn             = 670,              /**< Reserved interrupt */
+  Reserved687_IRQn             = 671,              /**< Reserved interrupt */
+  Reserved688_IRQn             = 672,              /**< Reserved interrupt */
+  Reserved689_IRQn             = 673,              /**< Reserved interrupt */
+  Reserved690_IRQn             = 674,              /**< Reserved interrupt */
+  Reserved691_IRQn             = 675,              /**< Reserved interrupt */
+  Reserved692_IRQn             = 676,              /**< Reserved interrupt */
+  Reserved693_IRQn             = 677,              /**< Reserved interrupt */
+  Reserved694_IRQn             = 678,              /**< Reserved interrupt */
+  Reserved695_IRQn             = 679,              /**< Reserved interrupt */
+  Reserved696_IRQn             = 680,              /**< Reserved interrupt */
+  Reserved697_IRQn             = 681,              /**< Reserved interrupt */
+  Reserved698_IRQn             = 682,              /**< CAMERAMIX MU Ored of all */
+  Reserved699_IRQn             = 683,              /**< CAMERAMIX MU Ored of all */
+  Reserved700_IRQn             = 684,              /**< CAMERAMIX MU Ored of all */
+  Reserved701_IRQn             = 685,              /**< CAMERAMIX MU Ored of all */
+  Reserved702_IRQn             = 686,              /**< CAMERAMIX MU Ored of all */
+  Reserved703_IRQn             = 687,              /**< CAMERAMIX MU Ored of all */
+  Reserved704_IRQn             = 688,              /**< CAMERAMIX MU Ored of all */
+  Reserved705_IRQn             = 689,              /**< CAMERAMIX MU Ored of all */
+  Reserved706_IRQn             = 690,              /**< CAMERAMIX ISI interrupt Channel 1 */
+  Reserved707_IRQn             = 691,              /**< CAMERAMIX ISI interrupt Channel 2 */
+  Reserved708_IRQn             = 692,              /**< CAMERAMIX ISI interrupt Channel 3 */
+  Reserved709_IRQn             = 693,              /**< CAMERAMIX ISI interrupt Channel 4 */
+  Reserved710_IRQn             = 694,              /**< CAMERAMIX ISI interrupt Channel 5 */
+  Reserved711_IRQn             = 695,              /**< CAMERAMIX ISI interrupt Channel 6 */
+  Reserved712_IRQn             = 696,              /**< CAMERAMIX ISI interrupt Channel 7 */
+  DMA5_4_ERROR_IRQn            = 697,              /**< CAMERAMIX EDMA error interrupt */
+  Reserved714_IRQn             = 698,              /**< Reserved interrupt */
+  Reserved715_IRQn             = 699,              /**< Reserved interrupt */
+  Reserved716_IRQn             = 700,              /**< Reserved interrupt */
+  Reserved717_IRQn             = 701,              /**< Reserved interrupt */
+  Reserved718_IRQn             = 702,              /**< Reserved interrupt */
+  Reserved719_IRQn             = 703,              /**< Reserved interrupt */
+  Reserved720_IRQn             = 704,              /**< Reserved interrupt */
+  Reserved721_IRQn             = 705,              /**< Reserved interrupt */
+  Reserved722_IRQn             = 706,              /**< Reserved interrupt */
+  Reserved723_IRQn             = 707,              /**< Reserved interrupt */
+  Reserved724_IRQn             = 708,              /**< Reserved interrupt */
+  Reserved725_IRQn             = 709,              /**< Reserved interrupt */
+  Reserved726_IRQn             = 710,              /**< Reserved interrupt */
+  Reserved727_IRQn             = 711,              /**< Reserved interrupt */
+  Reserved728_IRQn             = 712,              /**< Reserved interrupt */
+  Reserved729_IRQn             = 713,              /**< Reserved interrupt */
+  Reserved730_IRQn             = 714,              /**< Reserved interrupt */
+  Reserved731_IRQn             = 715,              /**< Reserved interrupt */
+  Reserved732_IRQn             = 716,              /**< Reserved interrupt */
+  Reserved733_IRQn             = 717,              /**< Reserved interrupt */
+  Reserved734_IRQn             = 718,              /**< Reserved interrupt */
+  Reserved735_IRQn             = 719,              /**< Reserved interrupt */
+  Reserved736_IRQn             = 720,              /**< Reserved interrupt */
+  Reserved737_IRQn             = 721,              /**< Reserved interrupt */
+  Reserved738_IRQn             = 722,              /**< Reserved interrupt */
+  Reserved739_IRQn             = 723,              /**< Reserved interrupt */
+  Reserved740_IRQn             = 724,              /**< Reserved interrupt */
+  Reserved741_IRQn             = 725,              /**< Reserved interrupt */
+  Reserved742_IRQn             = 726,              /**< Reserved interrupt */
+  Reserved743_IRQn             = 727,              /**< Reserved interrupt */
+  Reserved744_IRQn             = 728,              /**< Reserved interrupt */
+  Reserved745_IRQn             = 729,              /**< Reserved interrupt */
+  Reserved746_IRQn             = 730,              /**< Reserved interrupt */
+  Reserved747_IRQn             = 731,              /**< Reserved interrupt */
+  Reserved748_IRQn             = 732,              /**< Reserved interrupt */
+  Reserved749_IRQn             = 733,              /**< Reserved interrupt */
+  Reserved750_IRQn             = 734,              /**< Reserved interrupt */
+  Reserved751_IRQn             = 735,              /**< Reserved interrupt */
+  Reserved752_IRQn             = 736,              /**< Reserved interrupt */
+  Reserved753_IRQn             = 737,              /**< Reserved interrupt */
+  Reserved754_IRQn             = 738,              /**< Reserved interrupt */
+  Reserved755_IRQn             = 739,              /**< Reserved interrupt */
+  Reserved756_IRQn             = 740,              /**< Reserved interrupt */
+  Reserved757_IRQn             = 741,              /**< Reserved interrupt */
+  Reserved758_IRQn             = 742,              /**< Reserved interrupt */
+  Reserved759_IRQn             = 743,              /**< Reserved interrupt */
+  Reserved760_IRQn             = 744,              /**< Reserved interrupt */
+  Reserved761_IRQn             = 745,              /**< Reserved interrupt */
+  DMA5_4_0_1_IRQn              = 746,              /**< CAMERAMIX EDMA channel 0 interrupt */
+  DMA5_4_2_3_IRQn              = 747,              /**< CAMERAMIX EDMA channel 2 interrupt */
+  DMA5_4_4_5_IRQn              = 748,              /**< CAMERAMIX EDMA channel 4 interrupt */
+  DMA5_4_6_7_IRQn              = 749,              /**< CAMERAMIX EDMA channel 6 interrupt */
+  DMA5_4_8_9_IRQn              = 750,              /**< CAMERAMIX EDMA channel 8 interrupt */
+  DMA5_4_10_11_IRQn            = 751,              /**< CAMERAMIX EDMA channel 10 interrupt */
+  DMA5_4_12_13_IRQn            = 752,              /**< CAMERAMIX EDMA channel 12 interrupt */
+  DMA5_4_14_15_IRQn            = 753,              /**< CAMERAMIX EDMA channel 14 interrupt */
+  DMA5_4_16_17_IRQn            = 754,              /**< CAMERAMIX EDMA channel 16 interrupt */
+  DMA5_4_18_19_IRQn            = 755,              /**< CAMERAMIX EDMA channel 18 interrupt */
+  DMA5_4_20_21_IRQn            = 756,              /**< CAMERAMIX EDMA channel 20 interrupt */
+  DMA5_4_22_23_IRQn            = 757,              /**< CAMERAMIX EDMA channel 22 interrupt */
+  DMA5_4_24_25_IRQn            = 758,              /**< CAMERAMIX EDMA channel 24 interrupt */
+  DMA5_4_26_27_IRQn            = 759,              /**< CAMERAMIX EDMA channel 26 interrupt */
+  DMA5_4_28_29_IRQn            = 760,              /**< CAMERAMIX EDMA channel 28 interrupt */
+  DMA5_4_30_31_IRQn            = 761,              /**< CAMERAMIX EDMA channel 30 interrupt */
+  Reserved778_IRQn             = 762,              /**< Reserved interrupt */
+  Reserved779_IRQn             = 763,              /**< Reserved interrupt */
+  Reserved780_IRQn             = 764,              /**< Reserved interrupt */
+  Reserved781_IRQn             = 765,              /**< Reserved interrupt */
+  Reserved782_IRQn             = 766,              /**< Reserved interrupt */
+  Reserved783_IRQn             = 767,              /**< Reserved interrupt */
+  Reserved784_IRQn             = 768,              /**< Reserved interrupt */
+  Reserved785_IRQn             = 769,              /**< Reserved interrupt */
+  Reserved786_IRQn             = 770,              /**< Reserved interrupt */
+  Reserved787_IRQn             = 771,              /**< Reserved interrupt */
+  Reserved788_IRQn             = 772,              /**< Reserved interrupt */
+  Reserved789_IRQn             = 773,              /**< Reserved interrupt */
+  Reserved790_IRQn             = 774,              /**< Reserved interrupt */
+  Reserved791_IRQn             = 775,              /**< Reserved interrupt */
+  Reserved792_IRQn             = 776,              /**< Reserved interrupt */
+  Reserved793_IRQn             = 777,              /**< Reserved interrupt */
+  Reserved794_IRQn             = 778,              /**< Reserved interrupt */
+  Reserved795_IRQn             = 779,              /**< Reserved interrupt */
+  Reserved796_IRQn             = 780,              /**< Reserved interrupt */
+  Reserved797_IRQn             = 781,              /**< Reserved interrupt */
+  Reserved798_IRQn             = 782,              /**< Reserved interrupt */
+  Reserved799_IRQn             = 783,              /**< Reserved interrupt */
+  Reserved800_IRQn             = 784,              /**< Reserved interrupt */
+  Reserved801_IRQn             = 785,              /**< Reserved interrupt */
+  Reserved802_IRQn             = 786,              /**< Reserved interrupt */
+  Reserved803_IRQn             = 787,              /**< Reserved interrupt */
+  Reserved804_IRQn             = 788,              /**< Reserved interrupt */
+  Reserved805_IRQn             = 789,              /**< Reserved interrupt */
+  Reserved806_IRQn             = 790,              /**< Reserved interrupt */
+  Reserved807_IRQn             = 791,              /**< Reserved interrupt */
+  Reserved808_IRQn             = 792,              /**< Reserved interrupt */
+  Reserved809_IRQn             = 793,              /**< Reserved interrupt */
+  Reserved810_IRQn             = 794,              /**< Reserved interrupt */
+  Reserved811_IRQn             = 795,              /**< Reserved interrupt */
+  Reserved812_IRQn             = 796,              /**< Reserved interrupt */
+  Reserved813_IRQn             = 797,              /**< Reserved interrupt */
+  Reserved814_IRQn             = 798,              /**< Reserved interrupt */
+  Reserved815_IRQn             = 799,              /**< Reserved interrupt */
+  Reserved816_IRQn             = 800,              /**< Reserved interrupt */
+  Reserved817_IRQn             = 801,              /**< Reserved interrupt */
+  Reserved818_IRQn             = 802,              /**< Reserved interrupt */
+  Reserved819_IRQn             = 803,              /**< Reserved interrupt */
+  Reserved820_IRQn             = 804,              /**< Reserved interrupt */
+  Reserved821_IRQn             = 805,              /**< Reserved interrupt */
+  Reserved822_IRQn             = 806,              /**< Reserved interrupt */
+  Reserved823_IRQn             = 807,              /**< Reserved interrupt */
+  Reserved824_IRQn             = 808,              /**< Reserved interrupt */
+  Reserved825_IRQn             = 809,              /**< Reserved interrupt */
+  Reserved826_IRQn             = 810,              /**< CAMERAMIX CSI Formatting Unit 1: Buffer overflow */
+  Reserved827_IRQn             = 811,              /**< CAMERAMIX CSI Formatting Unit 1: Interlaced Error */
+  Reserved828_IRQn             = 812,              /**< CAMERAMIX CSI Formatting Unit 1: Pixel Data Type Error */
+  Reserved829_IRQn             = 813,              /**< CAMERAMIX CSI Formatting Unit 2: Buffer overflow */
+  Reserved830_IRQn             = 814,              /**< CAMERAMIX CSI Formatting Unit 2: Interlaced Error */
+  Reserved831_IRQn             = 815,              /**< CAMERAMIX CSI Formatting Unit 2: Pixel Data Type Error */
+  Reserved832_IRQn             = 816,              /**< CAMERAMIX CSI1 */
+  Reserved833_IRQn             = 817               /**< CAMERAMIX CSI2 */
 } IRQn_Type;
 
 /*!
@@ -1215,6 +1649,10 @@ typedef enum IRQn {
 #define M7__EIM_BASE                             (0x4A060000u)
 /** Peripheral M7__EIM base pointer */
 #define M7__EIM                                  ((EIM_Type *)M7__EIM_BASE)
+/** Peripheral NOC__EIMN base address */
+#define NOC__EIMN_BASE                           (0x49270000u)
+/** Peripheral NOC__EIMN base pointer */
+#define NOC__EIMN                                ((EIM_Type *)NOC__EIMN_BASE)
 /** Peripheral NPU__EIM_NPUMIX base address */
 #define NPU__EIM_NPUMIX_BASE                     (0x4A860000u)
 /** Peripheral NPU__EIM_NPUMIX base pointer */
@@ -1224,9 +1662,9 @@ typedef enum IRQn {
 /** Peripheral WAKEUP__EIMW base pointer */
 #define WAKEUP__EIMW                             ((EIM_Type *)WAKEUP__EIMW_BASE)
 /** Array initializer of EIM peripheral base addresses */
-#define EIM_BASE_ADDRS                           { AON__EIMA_BASE, M7__EIM_BASE, NPU__EIM_NPUMIX_BASE, WAKEUP__EIMW_BASE }
+#define EIM_BASE_ADDRS                           { AON__EIMA_BASE, M7__EIM_BASE, NOC__EIMN_BASE, NPU__EIM_NPUMIX_BASE, WAKEUP__EIMW_BASE }
 /** Array initializer of EIM peripheral base pointers */
-#define EIM_BASE_PTRS                            { AON__EIMA, M7__EIM, NPU__EIM_NPUMIX, WAKEUP__EIMW }
+#define EIM_BASE_PTRS                            { AON__EIMA, M7__EIM, NOC__EIMN, NPU__EIM_NPUMIX, WAKEUP__EIMW }
 
 /* ENETC - Peripheral instance base addresses */
 /** Peripheral ENETC0_GLOBAL base address */
@@ -2364,16 +2802,6 @@ typedef enum IRQn {
 /** Array initializer of NOC_CMU peripheral base pointers */
 #define NOC_CMU_BASE_PTRS                        { NOC_CMUN0, NOC_CMUN1 }
 
-/* NOC_EIM - Peripheral instance base addresses */
-/** Peripheral NOC__EIMN base address */
-#define NOC__EIMN_BASE                           (0x49270000u)
-/** Peripheral NOC__EIMN base pointer */
-#define NOC__EIMN                                ((NOC_EIM_Type *)NOC__EIMN_BASE)
-/** Array initializer of NOC_EIM peripheral base addresses */
-#define NOC_EIM_BASE_ADDRS                       { NOC__EIMN_BASE }
-/** Array initializer of NOC_EIM peripheral base pointers */
-#define NOC_EIM_BASE_PTRS                        { NOC__EIMN }
-
 /* NOC_GICA - Peripheral instance base addresses */
 /** Peripheral NOC__GIC__GICA base address */
 #define NOC__GIC__GICA_BASE                      (0x48010000u)
@@ -3178,6 +3606,9 @@ typedef enum IRQn {
 #define TSTMR_BASE_ADDRS                         { 0u, TSTMR1_BASE, TSTMR2_BASE }
 /** Array initializer of TSTMR peripheral base pointers */
 #define TSTMR_BASE_PTRS                          { (TSTMR_Type *)0u, TSTMR1, TSTMR2 }
+/* Extra definition */
+#define TSTMR_CLOCK_FREQUENCY_MHZ                (24U)
+
 
 /* USB - Peripheral instance base addresses */
 /** Peripheral USBC base address */
@@ -3386,6 +3817,10 @@ typedef enum IRQn {
 #define WDOG_BASE_ADDRS                          { WDOG1_BASE, WDOG2_BASE, WDOG3_BASE, WDOG4_BASE, WDOG5_BASE }
 /** Array initializer of WDOG peripheral base pointers */
 #define WDOG_BASE_PTRS                           { WDOG1, WDOG2, WDOG3, WDOG4, WDOG5 }
+/* Extra definition */
+#define WDOG_UPDATE_KEY                          (0xD928C520U)
+#define WDOG_REFRESH_KEY                         (0xB480A602U)
+
 
 /* XCACHE - Peripheral instance base addresses */
 /** Peripheral M33_CACHE_CTRLPC base address */

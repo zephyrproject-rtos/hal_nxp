@@ -1,50 +1,50 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX95294AVTN_ca55
-**                          MIMX95294AVTN_cm33
-**                          MIMX95294AVTN_cm7
-**                          MIMX95294AVYN_ca55
-**                          MIMX95294AVYN_cm33
-**                          MIMX95294AVYN_cm7
-**                          MIMX95294AVZN_ca55
-**                          MIMX95294AVZN_cm33
-**                          MIMX95294AVZN_cm7
-**                          MIMX95294CVTN_ca55
-**                          MIMX95294CVTN_cm33
-**                          MIMX95294CVTN_cm7
-**                          MIMX95294CVYN_ca55
-**                          MIMX95294CVYN_cm33
-**                          MIMX95294CVYN_cm7
-**                          MIMX95294CVZN_ca55
-**                          MIMX95294CVZN_cm33
-**                          MIMX95294CVZN_cm7
-**                          MIMX95294DVTN_ca55
-**                          MIMX95294DVTN_cm33
-**                          MIMX95294DVTN_cm7
-**                          MIMX95294DVYN_ca55
-**                          MIMX95294DVYN_cm33
-**                          MIMX95294DVYN_cm7
-**                          MIMX95294DVZN_ca55
-**                          MIMX95294DVZN_cm33
-**                          MIMX95294DVZN_cm7
-**                          MIMX95294XVTN_ca55
-**                          MIMX95294XVTN_cm33
-**                          MIMX95294XVTN_cm7
-**                          MIMX95294XVYN_ca55
-**                          MIMX95294XVYN_cm33
-**                          MIMX95294XVYN_cm7
-**                          MIMX95294XVZN_ca55
-**                          MIMX95294XVZN_cm33
-**                          MIMX95294XVZN_cm7
+**     Processors:          MIMX9522xxVTx_ca55
+**                          MIMX9522xxVTx_cm33
+**                          MIMX9522xxVTx_cm7
+**                          MIMX9522xxVZx_ca55
+**                          MIMX9522xxVZx_cm33
+**                          MIMX9522xxVZx_cm7
+**                          MIMX9523xxVTx_ca55
+**                          MIMX9523xxVTx_cm33
+**                          MIMX9523xxVTx_cm7
+**                          MIMX9523xxVZx_ca55
+**                          MIMX9523xxVZx_cm33
+**                          MIMX9523xxVZx_cm7
+**                          MIMX9524xxVTx_ca55
+**                          MIMX9524xxVTx_cm33
+**                          MIMX9524xxVTx_cm7
+**                          MIMX9524xxVZx_ca55
+**                          MIMX9524xxVZx_cm33
+**                          MIMX9524xxVZx_cm7
+**                          MIMX9525xxVTx_ca55
+**                          MIMX9525xxVTx_cm33
+**                          MIMX9525xxVTx_cm7
+**                          MIMX9525xxVZx_ca55
+**                          MIMX9525xxVZx_cm33
+**                          MIMX9525xxVZx_cm7
+**                          MIMX9528xxVTx_ca55
+**                          MIMX9528xxVTx_cm33
+**                          MIMX9528xxVTx_cm7
+**                          MIMX9528xxVZx_ca55
+**                          MIMX9528xxVZx_cm33
+**                          MIMX9528xxVZx_cm7
+**                          MIMX9529xxVTx_ca55
+**                          MIMX9529xxVTx_cm33
+**                          MIMX9529xxVTx_cm7
+**                          MIMX9529xxVZx_ca55
+**                          MIMX9529xxVZx_cm33
+**                          MIMX9529xxVZx_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250903
+**     Build:               b260324
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for VPU_VPU_DEC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -72,12 +72,42 @@
 #if !defined(PERI_VPU_VPU_DEC_H_)
 #define PERI_VPU_VPU_DEC_H_                      /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX95294AVTN_ca55) || defined(CPU_MIMX95294AVYN_ca55) || defined(CPU_MIMX95294AVZN_ca55) || defined(CPU_MIMX95294CVTN_ca55) || defined(CPU_MIMX95294CVYN_ca55) || defined(CPU_MIMX95294CVZN_ca55) || defined(CPU_MIMX95294DVTN_ca55) || defined(CPU_MIMX95294DVYN_ca55) || defined(CPU_MIMX95294DVZN_ca55) || defined(CPU_MIMX95294XVTN_ca55) || defined(CPU_MIMX95294XVYN_ca55) || defined(CPU_MIMX95294XVZN_ca55))
-#include "MIMX95294_ca55_COMMON.h"
-#elif (defined(CPU_MIMX95294AVTN_cm33) || defined(CPU_MIMX95294AVYN_cm33) || defined(CPU_MIMX95294AVZN_cm33) || defined(CPU_MIMX95294CVTN_cm33) || defined(CPU_MIMX95294CVYN_cm33) || defined(CPU_MIMX95294CVZN_cm33) || defined(CPU_MIMX95294DVTN_cm33) || defined(CPU_MIMX95294DVYN_cm33) || defined(CPU_MIMX95294DVZN_cm33) || defined(CPU_MIMX95294XVTN_cm33) || defined(CPU_MIMX95294XVYN_cm33) || defined(CPU_MIMX95294XVZN_cm33))
-#include "MIMX95294_cm33_COMMON.h"
-#elif (defined(CPU_MIMX95294AVTN_cm7) || defined(CPU_MIMX95294AVYN_cm7) || defined(CPU_MIMX95294AVZN_cm7) || defined(CPU_MIMX95294CVTN_cm7) || defined(CPU_MIMX95294CVYN_cm7) || defined(CPU_MIMX95294CVZN_cm7) || defined(CPU_MIMX95294DVTN_cm7) || defined(CPU_MIMX95294DVYN_cm7) || defined(CPU_MIMX95294DVZN_cm7) || defined(CPU_MIMX95294XVTN_cm7) || defined(CPU_MIMX95294XVYN_cm7) || defined(CPU_MIMX95294XVZN_cm7))
-#include "MIMX95294_cm7_COMMON.h"
+#if (defined(CPU_MIMX9522xxVTx_ca55) || defined(CPU_MIMX9522xxVZx_ca55))
+#include "MIMX9522_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9522xxVTx_cm33) || defined(CPU_MIMX9522xxVZx_cm33))
+#include "MIMX9522_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9522xxVTx_cm7) || defined(CPU_MIMX9522xxVZx_cm7))
+#include "MIMX9522_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9523xxVTx_ca55) || defined(CPU_MIMX9523xxVZx_ca55))
+#include "MIMX9523_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9523xxVTx_cm33) || defined(CPU_MIMX9523xxVZx_cm33))
+#include "MIMX9523_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9523xxVTx_cm7) || defined(CPU_MIMX9523xxVZx_cm7))
+#include "MIMX9523_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9524xxVTx_ca55) || defined(CPU_MIMX9524xxVZx_ca55))
+#include "MIMX9524_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9524xxVTx_cm33) || defined(CPU_MIMX9524xxVZx_cm33))
+#include "MIMX9524_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9524xxVTx_cm7) || defined(CPU_MIMX9524xxVZx_cm7))
+#include "MIMX9524_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9525xxVTx_ca55) || defined(CPU_MIMX9525xxVZx_ca55))
+#include "MIMX9525_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9525xxVTx_cm33) || defined(CPU_MIMX9525xxVZx_cm33))
+#include "MIMX9525_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9525xxVTx_cm7) || defined(CPU_MIMX9525xxVZx_cm7))
+#include "MIMX9525_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9528xxVTx_ca55) || defined(CPU_MIMX9528xxVZx_ca55))
+#include "MIMX9528_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9528xxVTx_cm33) || defined(CPU_MIMX9528xxVZx_cm33))
+#include "MIMX9528_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9528xxVTx_cm7) || defined(CPU_MIMX9528xxVZx_cm7))
+#include "MIMX9528_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9529xxVTx_ca55) || defined(CPU_MIMX9529xxVZx_ca55))
+#include "MIMX9529_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9529xxVTx_cm33) || defined(CPU_MIMX9529xxVZx_cm33))
+#include "MIMX9529_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9529xxVTx_cm7) || defined(CPU_MIMX9529xxVZx_cm7))
+#include "MIMX9529_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif

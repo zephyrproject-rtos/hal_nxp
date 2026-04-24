@@ -247,14 +247,14 @@
 **                          MIMX95N6XVZXN_cm33
 **                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 3.0, 2025-11-24
-**     Build:               b251124
+**     Version:             rev. 4.0, 2026-02-28
+**     Build:               b260305
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PIPE_CONF
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -268,14 +268,16 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-11-24)
 **         Header RFP.
+**     - rev. 4.0 (2026-02-28)
+**         Update Interrupts mapping.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_PIPE_CONF.h
- * @version 3.0
- * @date 2025-11-24
+ * @version 4.0
+ * @date 2026-02-28
  * @brief CMSIS Peripheral Access Layer for PIPE_CONF
  *
  * CMSIS Peripheral Access Layer for PIPE_CONF
@@ -435,6 +437,7 @@ typedef struct {
   __IO uint32_t OUTCH1_LS_CAM0;                    /**< NEO Camera 0 Output Channel 1 Component Line Stride Register, offset: 0x5C */
   __IO uint32_t OUTIR_LS_CAM0;                     /**< NEO Camera 0 Output IR Component Line Stride Register, offset: 0x60 */
   __IO uint32_t SKIP_CTRL0;                        /**< NEO Camera 0 Pixel Skip Control Register, offset: 0x64 */
+  __I  uint32_t VERSION;                           /**< NEO Version, offset: 0x68 */
 } PIPE_CONF_Type;
 
 /* ----------------------------------------------------------------------------
@@ -898,6 +901,14 @@ typedef struct {
 #define PIPE_CONF_SKIP_CTRL0_POSTSKIP_MASK       (0xFFFF0000U)
 #define PIPE_CONF_SKIP_CTRL0_POSTSKIP_SHIFT      (16U)
 #define PIPE_CONF_SKIP_CTRL0_POSTSKIP(x)         (((uint32_t)(((uint32_t)(x)) << PIPE_CONF_SKIP_CTRL0_POSTSKIP_SHIFT)) & PIPE_CONF_SKIP_CTRL0_POSTSKIP_MASK)
+/*! @} */
+
+/*! @name VERSION - NEO Version */
+/*! @{ */
+
+#define PIPE_CONF_VERSION_VERSION_MASK           (0xFFFFFFFFU)
+#define PIPE_CONF_VERSION_VERSION_SHIFT          (0U)
+#define PIPE_CONF_VERSION_VERSION(x)             (((uint32_t)(((uint32_t)(x)) << PIPE_CONF_VERSION_VERSION_SHIFT)) & PIPE_CONF_VERSION_VERSION_MASK)
 /*! @} */
 
 

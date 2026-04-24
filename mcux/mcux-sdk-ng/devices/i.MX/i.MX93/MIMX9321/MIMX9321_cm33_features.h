@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.0, 2025-11-12
-**     Build:               b260113
+**     Build:               b260205
 **
 **     Abstract:
 **         Chip specific module features.
@@ -763,10 +763,6 @@
 #define FSL_FEATURE_TPM_HAS_TRIG (1)
 /* @brief Whether TRIG register has effect. */
 #define FSL_FEATURE_TPM_TRIG_HAS_EFFECTn(x) (0)
-/* @brief Has global time base enable. */
-#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (0)
-/* @brief Has global time base sync. */
-#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
 /* @brief Has counter pause on trigger. */
 #define FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER (1)
 /* @brief Has external trigger selection. */
@@ -791,6 +787,12 @@
 #define FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT (1)
 /* @brief Whether 32 bits counter has effect. */
 #define FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x) (1)
+/* @brief Has global time base enable. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (0)
+/* @brief Has global time base sync. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
+/* @brief Is affected by errata with ID 050050 (Incorrect duty output when EPWM mode is set to PS=0 during write 1 to CnV register). */
+#define FSL_FEATURE_TPM_HAS_ERRATA_050050 (0)
 
 /* TRDC module features */
 

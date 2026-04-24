@@ -247,14 +247,14 @@
 **                          MIMX95N6XVZXN_cm33
 **                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 3.0, 2025-11-24
-**     Build:               b251124
+**     Version:             rev. 4.0, 2026-02-28
+**     Build:               b260305
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DISPLAY_INTERLEAVER
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -268,14 +268,16 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-11-24)
 **         Header RFP.
+**     - rev. 4.0 (2026-02-28)
+**         Update Interrupts mapping.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_DISPLAY_INTERLEAVER.h
- * @version 3.0
- * @date 2025-11-24
+ * @version 4.0
+ * @date 2026-02-28
  * @brief CMSIS Peripheral Access Layer for DISPLAY_INTERLEAVER
  *
  * CMSIS Peripheral Access Layer for DISPLAY_INTERLEAVER

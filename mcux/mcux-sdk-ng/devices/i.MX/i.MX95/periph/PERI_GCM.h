@@ -247,14 +247,14 @@
 **                          MIMX95N6XVZXN_cm33
 **                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 3.0, 2025-11-24
-**     Build:               b251124
+**     Version:             rev. 4.0, 2026-02-28
+**     Build:               b260305
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GCM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -268,14 +268,16 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-11-24)
 **         Header RFP.
+**     - rev. 4.0 (2026-02-28)
+**         Update Interrupts mapping.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_GCM.h
- * @version 3.0
- * @date 2025-11-24
+ * @version 4.0
+ * @date 2026-02-28
  * @brief CMSIS Peripheral Access Layer for GCM
  *
  * CMSIS Peripheral Access Layer for GCM
@@ -409,38 +411,41 @@
 
 /** GCM - Register Layout Typedef */
 typedef struct {
-  struct {                                         /* offset: 0x0, array step: 0x84 */
-    __IO uint32_t IMAT0_CAM;                         /**< Camera 0 GCM Input Matrix 0 Register, array offset: 0x0, array step: 0x84 */
-    __IO uint32_t IMAT1_CAM;                         /**< Camera 0 GCM Input Matrix 1 Register, array offset: 0x4, array step: 0x84 */
+  struct {                                         /* offset: 0x0, array step: 0x90 */
+    __IO uint32_t IMAT0_CAM;                         /**< Camera 0 GCM Input Matrix 0 Register, array offset: 0x0, array step: 0x90 */
+    __IO uint32_t IMAT1_CAM;                         /**< Camera 0 GCM Input Matrix 1 Register, array offset: 0x4, array step: 0x90 */
          uint8_t RESERVED_0[4];
-    __IO uint32_t IMAT2_CAM;                         /**< Camera 0 GCM Input Matrix 2 Register, array offset: 0xC, array step: 0x84 */
-    __IO uint32_t IMAT3_CAM;                         /**< Camera 0 GCM Input Matrix 3 Register, array offset: 0x10, array step: 0x84 */
+    __IO uint32_t IMAT2_CAM;                         /**< Camera 0 GCM Input Matrix 2 Register, array offset: 0xC, array step: 0x90 */
+    __IO uint32_t IMAT3_CAM;                         /**< Camera 0 GCM Input Matrix 3 Register, array offset: 0x10, array step: 0x90 */
          uint8_t RESERVED_1[4];
-    __IO uint32_t IMAT4_CAM;                         /**< Camera 0 GCM Input Matrix 4 Register, array offset: 0x18, array step: 0x84 */
-    __IO uint32_t IMAT5_CAM;                         /**< Camera 0 GCM Input Matrix 5 Register, array offset: 0x1C, array step: 0x84 */
-    __IO uint32_t IOFFSET0_CAM;                      /**< Camera 0 GCM Input Offset0 Register, array offset: 0x20, array step: 0x84 */
-    __IO uint32_t IOFFSET1_CAM;                      /**< Camera 0 GCM Input Offset1 Register, array offset: 0x24, array step: 0x84 */
-    __IO uint32_t IOFFSET2_CAM;                      /**< Camera 0 GCM Input Offset2 Register, array offset: 0x28, array step: 0x84 */
+    __IO uint32_t IMAT4_CAM;                         /**< Camera 0 GCM Input Matrix 4 Register, array offset: 0x18, array step: 0x90 */
+    __IO uint32_t IMAT5_CAM;                         /**< Camera 0 GCM Input Matrix 5 Register, array offset: 0x1C, array step: 0x90 */
+    __IO uint32_t IOFFSET0_CAM;                      /**< Camera 0 GCM Input Offset0 Register, array offset: 0x20, array step: 0x90 */
+    __IO uint32_t IOFFSET1_CAM;                      /**< Camera 0 GCM Input Offset1 Register, array offset: 0x24, array step: 0x90 */
+    __IO uint32_t IOFFSET2_CAM;                      /**< Camera 0 GCM Input Offset2 Register, array offset: 0x28, array step: 0x90 */
          uint8_t RESERVED_2[4];
-    __IO uint32_t OMAT0_CAM;                         /**< Camera 0 GCM Output Matrix 0 Register, array offset: 0x30, array step: 0x84 */
-    __IO uint32_t OMAT1_CAM;                         /**< Camera 0 GCM Output Matrix 1 Register, array offset: 0x34, array step: 0x84 */
-    __IO uint32_t OMAT2_CAM;                         /**< Camera 0 GCM Output Matrix 2 Register, array offset: 0x38, array step: 0x84 */
-    __IO uint32_t OMAT3_CAM;                         /**< Camera 0 GCM Output Matrix 3 Register, array offset: 0x3C, array step: 0x84 */
-    __IO uint32_t OMAT4_CAM;                         /**< Camera 0 GCM Output Matrix 4 Register, array offset: 0x40, array step: 0x84 */
-    __IO uint32_t OMAT5_CAM;                         /**< Camera 0 GCM Output Matrix 5 Register, array offset: 0x44, array step: 0x84 */
-    __IO uint32_t OOFFSET0_CAM;                      /**< Camera 0 GCM Output Offset 0 Register, array offset: 0x48, array step: 0x84 */
-    __IO uint32_t OOFFSET1_CAM;                      /**< Camera 0 GCM Output Offset 1 Register, array offset: 0x4C, array step: 0x84 */
-    __IO uint32_t OOFFSET2_CAM;                      /**< Camera 0 GCM Output Offset 2 Register, array offset: 0x50, array step: 0x84 */
+    __IO uint32_t OMAT0_CAM;                         /**< Camera 0 GCM Output Matrix 0 Register, array offset: 0x30, array step: 0x90 */
+    __IO uint32_t OMAT1_CAM;                         /**< Camera 0 GCM Output Matrix 1 Register, array offset: 0x34, array step: 0x90 */
+    __IO uint32_t OMAT2_CAM;                         /**< Camera 0 GCM Output Matrix 2 Register, array offset: 0x38, array step: 0x90 */
+    __IO uint32_t OMAT3_CAM;                         /**< Camera 0 GCM Output Matrix 3 Register, array offset: 0x3C, array step: 0x90 */
+    __IO uint32_t OMAT4_CAM;                         /**< Camera 0 GCM Output Matrix 4 Register, array offset: 0x40, array step: 0x90 */
+    __IO uint32_t OMAT5_CAM;                         /**< Camera 0 GCM Output Matrix 5 Register, array offset: 0x44, array step: 0x90 */
+    __IO uint32_t OOFFSET0_CAM;                      /**< Camera 0 GCM Output Offset 0 Register, array offset: 0x48, array step: 0x90 */
+    __IO uint32_t OOFFSET1_CAM;                      /**< Camera 0 GCM Output Offset 1 Register, array offset: 0x4C, array step: 0x90 */
+    __IO uint32_t OOFFSET2_CAM;                      /**< Camera 0 GCM Output Offset 2 Register, array offset: 0x50, array step: 0x90 */
          uint8_t RESERVED_3[12];
-    __IO uint32_t GAMMA0_CAM;                        /**< Camera 0 GCM Gamma 0 Register, array offset: 0x60, array step: 0x84 */
-    __IO uint32_t GAMMA1_CAM;                        /**< Camera 0 GCM Gamma 1 Register, array offset: 0x64, array step: 0x84 */
-    __IO uint32_t GAMMA2_CAM;                        /**< Camera 0 GCM Gamma 2 Register, array offset: 0x68, array step: 0x84 */
-    __IO uint32_t BLKLVL0_CTRL_CAM;                  /**< Camera 0 Linear 0 Control, array offset: 0x6C, array step: 0x84 */
-    __IO uint32_t BLKLVL1_CTRL_CAM;                  /**< Camera 0 Linear 1 Control, array offset: 0x70, array step: 0x84 */
-    __IO uint32_t BLKLVL2_CTRL_CAM;                  /**< Camera 0 Linear 2 Control, array offset: 0x74, array step: 0x84 */
-    __IO uint32_t LOWTH_CTRL01_CAM;                  /**< Camera 0 Linear Threshold channel 0 and 1, array offset: 0x78, array step: 0x84 */
-    __IO uint32_t LOWTH_CTRL2_CAM;                   /**< Camera 0 Threshold channel 2, array offset: 0x7C, array step: 0x84 */
-    __IO uint32_t MAT_CONFG_CAM;                     /**< Camera 0 GCM Configuration Register, array offset: 0x80, array step: 0x84 */
+    __IO uint32_t GAMMA0_CAM;                        /**< Camera 0 GCM Gamma 0 Register, array offset: 0x60, array step: 0x90 */
+    __IO uint32_t GAMMA1_CAM;                        /**< Camera 0 GCM Gamma 1 Register, array offset: 0x64, array step: 0x90 */
+    __IO uint32_t GAMMA2_CAM;                        /**< Camera 0 GCM Gamma 2 Register, array offset: 0x68, array step: 0x90 */
+    __IO uint32_t BLKLVL0_CTRL_CAM;                  /**< Camera 0 Linear 0 Control, array offset: 0x6C, array step: 0x90 */
+    __IO uint32_t BLKLVL1_CTRL_CAM;                  /**< Camera 0 Linear 1 Control, array offset: 0x70, array step: 0x90 */
+    __IO uint32_t BLKLVL2_CTRL_CAM;                  /**< Camera 0 Linear 2 Control, array offset: 0x74, array step: 0x90 */
+    __IO uint32_t LOWTH_CTRL01_CAM;                  /**< Camera 0 Linear Threshold channel 0 and 1, array offset: 0x78, array step: 0x90 */
+    __IO uint32_t LOWTH_CTRL2_CAM;                   /**< Camera 0 Threshold channel 2, array offset: 0x7C, array step: 0x90 */
+    __IO uint32_t MAT_CONFG_CAM;                     /**< Camera 0 GCM Configuration Register, array offset: 0x80, array step: 0x90 */
+    __IO uint32_t R_GAIN_CAM;                        /**< Camera 0 GCM Red Output Gain Register, array offset: 0x84, array step: 0x90 */
+    __IO uint32_t G_GAIN_CAM;                        /**< Camera 0 GCM Green Output Gain Register, array offset: 0x88, array step: 0x90 */
+    __IO uint32_t B_GAIN_CAM;                        /**< Camera 0 GCM Blue Output Gain Register, array offset: 0x8C, array step: 0x90 */
   } NEO_PIPE2_GCM_CONF[GCM_NEO_PIPE2_GCM_CONF_COUNT];
 } GCM_Type;
 
@@ -805,6 +810,39 @@ typedef struct {
 
 /* The count of GCM_MAT_CONFG_CAM */
 #define GCM_MAT_CONFG_CAM_COUNT                  (1U)
+
+/*! @name R_GAIN_CAM - Camera 0 GCM Red Output Gain Register */
+/*! @{ */
+
+#define GCM_R_GAIN_CAM_GAIN_MASK                 (0xFFFFU)
+#define GCM_R_GAIN_CAM_GAIN_SHIFT                (0U)
+#define GCM_R_GAIN_CAM_GAIN(x)                   (((uint32_t)(((uint32_t)(x)) << GCM_R_GAIN_CAM_GAIN_SHIFT)) & GCM_R_GAIN_CAM_GAIN_MASK)
+/*! @} */
+
+/* The count of GCM_R_GAIN_CAM */
+#define GCM_R_GAIN_CAM_COUNT                     (1U)
+
+/*! @name G_GAIN_CAM - Camera 0 GCM Green Output Gain Register */
+/*! @{ */
+
+#define GCM_G_GAIN_CAM_GAIN_MASK                 (0xFFFFU)
+#define GCM_G_GAIN_CAM_GAIN_SHIFT                (0U)
+#define GCM_G_GAIN_CAM_GAIN(x)                   (((uint32_t)(((uint32_t)(x)) << GCM_G_GAIN_CAM_GAIN_SHIFT)) & GCM_G_GAIN_CAM_GAIN_MASK)
+/*! @} */
+
+/* The count of GCM_G_GAIN_CAM */
+#define GCM_G_GAIN_CAM_COUNT                     (1U)
+
+/*! @name B_GAIN_CAM - Camera 0 GCM Blue Output Gain Register */
+/*! @{ */
+
+#define GCM_B_GAIN_CAM_GAIN_MASK                 (0xFFFFU)
+#define GCM_B_GAIN_CAM_GAIN_SHIFT                (0U)
+#define GCM_B_GAIN_CAM_GAIN(x)                   (((uint32_t)(((uint32_t)(x)) << GCM_B_GAIN_CAM_GAIN_SHIFT)) & GCM_B_GAIN_CAM_GAIN_MASK)
+/*! @} */
+
+/* The count of GCM_B_GAIN_CAM */
+#define GCM_B_GAIN_CAM_COUNT                     (1U)
 
 
 /*!

@@ -15,18 +15,6 @@ uint32_t CLOCK_GetIpFreq(clock_root_t name)
     return 0U;
 }
 
-/*!
- * @brief Get CCM Root Clock Source.
- *
- * @param root Which root clock node to get, see \ref clock_root_t.
- * @param src Clock mux value to get, see \ref clock_root_mux_source_t.
- * @return Clock source
- */
-clock_name_t CLOCK_GetRootClockSource(clock_root_t root, uint32_t src)
-{
-    return s_clockSourceName[root][src];
-}
-
 
 /*!
  * @brief Power Off Root Clock
