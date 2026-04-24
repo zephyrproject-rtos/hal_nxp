@@ -11,13 +11,13 @@
 **
 **     Reference manual:    KM34P144M75SF0RM, Rev.1, Jan 2015
 **     Version:             rev. 2.1, 2025-11-11
-**     Build:               b251111
+**     Build:               b260130
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MKM34Z7
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

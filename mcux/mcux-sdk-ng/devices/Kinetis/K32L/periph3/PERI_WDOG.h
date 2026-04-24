@@ -4,13 +4,13 @@
 **                          K32L3A60VPJ1A_cm4
 **
 **     Version:             rev. 2.1, 2025-11-10
-**     Build:               b251110
+**     Build:               b260130
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for WDOG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -270,10 +270,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group WDOG_Register_Masks */
-
-/* Extra definition */
-#define WDOG_UPDATE_KEY                          (0xD928C520U)
-#define WDOG_REFRESH_KEY                         (0xB480A602U)
 
 
 /*!

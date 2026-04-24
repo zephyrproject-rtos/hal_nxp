@@ -15,13 +15,13 @@
 **
 **     Reference manual:    KE1xZP100M72SF1RM, Rev. 1, Jun. 2021
 **     Version:             rev. 4.1, 2025-11-11
-**     Build:               b251111
+**     Build:               b260202
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MKE17Z7
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -586,6 +586,10 @@ typedef enum IRQn {
 #define WDOG_BASE_PTRS                           { WDOG }
 /** Interrupt vectors for the WDOG peripheral type */
 #define WDOG_IRQS                                { WDOG_EWM_IRQn }
+/* Extra definition */
+#define WDOG_UPDATE_KEY                          (0xD928C520U)
+#define WDOG_REFRESH_KEY                         (0xB480A602U)
+
 
 /* ----------------------------------------------------------------------------
    -- Macros for use with bit field definitions (xxx_SHIFT, xxx_MASK).
