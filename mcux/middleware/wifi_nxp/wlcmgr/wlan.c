@@ -6164,7 +6164,6 @@ static enum cm_uap_state uap_state_machine(struct wifi_message *msg)
                 t_u8 sta_channel = mlan_adap->priv[0]->curr_bss_params.bss_descriptor.channel;
                 t_u8 uap_channel = mlan_adap->priv[1]->uap_channel;
 
-                CONNECTION_EVENT(WLAN_REASON_UAP_SUCCESS, NULL);
                 if(is_sta_connected() && uap_channel != sta_channel)
                 {
                     while(!is_uap_started())
@@ -6300,7 +6299,6 @@ static enum cm_uap_state uap_state_machine(struct wifi_message *msg)
                 (void)net_get_if_ipv6_addr((struct net_ip_config *)&network->ip, if_handle);
 #endif
                 next = CM_UAP_IP_UP;
-                CONNECTION_EVENT(WLAN_REASON_UAP_SUCCESS, NULL);
             }
             else
             {
@@ -7574,6 +7572,9 @@ static void wlcmgr_task(void *data)
 
                 wlcm_d("SM uAP %s -> %s", dbg_uap_state_name(wlan.uap_state), dbg_uap_state_name(next_uap_state));
                 wlan.uap_state = next_uap_state;
+                if (wlan.uap_state == CM_UAP_STARTED) {
+                    CONNECTION_EVENT(WLAN_REASON_UAP_SUCCESS, NULL);
+                }
 #else
                 wlcm_w("UAP feature disabled recv wlcm msg %d", msg.event);
 #endif
