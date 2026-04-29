@@ -8097,6 +8097,24 @@ static void wlan_wait_wlmgr_ready()
     }
 }
 
+#ifdef CONFIG_WIFI_NM_WPA_SUPPLICANT_NAN
+static int wlan_set_nan_mcast_addr()
+{
+    uint8_t nan_network_addr[6] = {0x51, 0x6f, 0x9a, 0x01, 0, 0};
+
+    /* Add NAN network mcast addr to multicast table */
+    return wifi_add_mcast_filter(nan_network_addr);
+}
+
+static int wlan_remove_nan_mcast_addr()
+{
+    uint8_t nan_network_addr[6] = {0x51, 0x6f, 0x9a, 0x01, 0, 0};
+
+    /* Remove NAN network mcast addr from multicast table */
+    return wifi_remove_mcast_filter(nan_network_addr);
+}
+#endif
+
 int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
 {
     static bool reset_mutex_init = 0;
@@ -8417,6 +8435,15 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
 #endif
 #endif
 
+#ifdef CONFIG_WIFI_NM_WPA_SUPPLICANT_NAN
+    ret = wlan_set_nan_mcast_addr();
+    if (ret != WM_SUCCESS)
+    {
+        wlcm_e("Add NAN network mcast addr to multicast table failed\r\n");
+        return 0;
+    }
+#endif
+
     return WM_SUCCESS;
 }
 
@@ -8440,6 +8467,12 @@ int wlan_stop(void)
         wlcm_e("cannot stop wlcmgr. unexpected wlan.running: %d", wlan.running);
         return WLAN_ERROR_STATE;
     }
+
+#ifdef CONFIG_WIFI_NM_WPA_SUPPLICANT_NAN
+    /* Remove NAN multicast filter before deinit */
+    (void)wlan_remove_nan_mcast_addr();
+#endif
+
 #if OTP_CHANINFO
     wifi_free_fw_region_and_cfp_tables();
 #endif
