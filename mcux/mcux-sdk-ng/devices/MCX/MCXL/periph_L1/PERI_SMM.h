@@ -14,7 +14,7 @@
 **                          MCXL144VLL_cm33
 **
 **     Version:             rev. 1.1, 2026-01-02
-**     Build:               b260109
+**     Build:               b260129
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SMM
@@ -121,13 +121,14 @@ typedef struct {
   __IO uint32_t MSB_BCKP1;                         /**< Backup MSB1, offset: 0x30 */
   __IO uint32_t LSB_BCKP2;                         /**< Backup LSB2, offset: 0x34 */
   __IO uint32_t MSB_BCKP2;                         /**< Backup MSB2, offset: 0x38 */
-       uint8_t RESERVED_1[8];
+  __IO uint32_t STALL1;                            /**< Stall1, offset: 0x3C */
+  __IO uint32_t STALL2;                            /**< Stall2, offset: 0x40 */
   __IO uint32_t RTC_ANLG_XTAL;                     /**< RTC analog XTAL, offset: 0x44 */
   __IO uint32_t MEMORY_RTN;                        /**< Memory retain, offset: 0x48 */
   __IO uint32_t BIAS_CTRL;                         /**< RTC analog XTAL bias control, offset: 0x4C */
-       uint8_t RESERVED_2[12];
+       uint8_t RESERVED_1[12];
   __IO uint32_t XTAL_TRIM;                         /**< XTAL Trim, offset: 0x5C */
-       uint8_t RESERVED_3[224];
+       uint8_t RESERVED_2[224];
   __IO uint32_t TAMP_CTRL;                         /**< Tamper Control, offset: 0x140 */
   __I  uint32_t LATCHED_RTC_COUNTER[SMM_LTCHD_CNT_RTC_COUNT]; /**< Latched RTC Counter, array offset: 0x144, array step: 0x4 */
 } SMM_Type;
@@ -534,6 +535,29 @@ typedef struct {
 #define SMM_MSB_BCKP2_MSB2_SHIFT                 (0U)
 /*! MSB2 - MSB2 */
 #define SMM_MSB_BCKP2_MSB2(x)                    (((uint32_t)(((uint32_t)(x)) << SMM_MSB_BCKP2_MSB2_SHIFT)) & SMM_MSB_BCKP2_MSB2_MASK)
+/*! @} */
+
+/*! @name STALL1 - Stall1 */
+/*! @{ */
+
+#define SMM_STALL1_STALL_SHRT_MASK               (0xFU)
+#define SMM_STALL1_STALL_SHRT_SHIFT              (0U)
+/*! STALL_SHRT - Short stall */
+#define SMM_STALL1_STALL_SHRT(x)                 (((uint32_t)(((uint32_t)(x)) << SMM_STALL1_STALL_SHRT_SHIFT)) & SMM_STALL1_STALL_SHRT_MASK)
+
+#define SMM_STALL1_STALL_MID_MASK                (0xFF0U)
+#define SMM_STALL1_STALL_MID_SHIFT               (4U)
+/*! STALL_MID - Mid stall */
+#define SMM_STALL1_STALL_MID(x)                  (((uint32_t)(((uint32_t)(x)) << SMM_STALL1_STALL_MID_SHIFT)) & SMM_STALL1_STALL_MID_MASK)
+/*! @} */
+
+/*! @name STALL2 - Stall2 */
+/*! @{ */
+
+#define SMM_STALL2_STALL_LNG_MASK                (0xFFFFU)
+#define SMM_STALL2_STALL_LNG_SHIFT               (0U)
+/*! STALL_LNG - Long stall */
+#define SMM_STALL2_STALL_LNG(x)                  (((uint32_t)(((uint32_t)(x)) << SMM_STALL2_STALL_LNG_SHIFT)) & SMM_STALL2_STALL_LNG_MASK)
 /*! @} */
 
 /*! @name RTC_ANLG_XTAL - RTC analog XTAL */

@@ -1,5 +1,15 @@
 # TPM
 
+## [2.4.4]
+
+- Bug Fixes
+  - Fixed CERT INT31-C: removed unsafe `(uint8_t)` cast on `FSL_FEATURE_TPM_HAS_32BIT_COUNTERn()` (which returns int with possible value -1) in `TPM_MAX_COUNTER_VALUE` macro and `TPM_SetTimerPeriod`; now uses direct int comparison to avoid truncation.
+
+## [2.4.3]
+
+- Bug Fixes
+  - Fixed CERT INT31-C Coverity issue: Casting from int to unsigned char without checking its value may result in lost or misinterpreted data.
+
 ## [2.4.2]
 
 - Bug Fixes

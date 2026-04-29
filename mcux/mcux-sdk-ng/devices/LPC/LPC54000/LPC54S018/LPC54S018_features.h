@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Version:             rev. 2.0, 2025-11-18
-**     Build:               b251118
+**     Version:             rev. 2.1, 2026-02-09
+**     Build:               b260209
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -25,6 +25,8 @@
 **         Remove RESET and HALT from SYSCON_AHBCLKDIV.
 **     - rev. 2.0 (2025-11-18)
 **         Update puf feature align to shared definition changes.
+**     - rev. 2.1 (2026-02-09)
+**         Add DMIC feature definitions.
 **
 ** ###################################################################
 */
@@ -165,6 +167,23 @@
 /* @brief DMA head link descriptor table align size */
 #define FSL_FEATURE_DMA_LINK_DESCRIPTOR_ALIGN_SIZE (16U)
 
+/* DMIC module features */
+
+/* @brief Number of channels */
+#define FSL_FEATURE_DMIC_CHANNEL_NUM (2)
+/* @brief DMIC channel support stereo data */
+#define FSL_FEATURE_DMIC_IO_HAS_STEREO_2_4_6 (0)
+/* @brief DMIC does not support bypass channel clock */
+#define FSL_FEATURE_DMIC_IO_HAS_NO_BYPASS (0)
+/* @brief DMIC channel FIFO register support sign extended */
+#define FSL_FEATURE_DMIC_CHANNEL_HAS_SIGNEXTEND (0)
+/* @brief DMIC has no IOCFG register */
+#define FSL_FEATURE_DMIC_HAS_NO_IOCFG (0)
+/* @brief DMIC has decimator reset function */
+#define FSL_FEATURE_DMIC_HAS_DECIMATOR_RESET_FUNC (0)
+/* @brief DMIC has global channel synchronization function */
+#define FSL_FEATURE_DMIC_HAS_GLOBAL_SYNC_FUNC (0)
+
 /* FLEXCOMM module features */
 
 /* @brief FLEXCOMM0 USART INDEX 0 */
@@ -249,6 +268,10 @@
 
 /* No feature definitions */
 
+/* I2C module features */
+
+/* No feature definitions */
+
 /* I2S module features */
 
 /* @brief I2S support dual channel transfer. */
@@ -284,6 +307,8 @@
 #define FSL_FEATURE_PUF_HAS_SHIFT_STATUS (0)
 /* @brief PUF has IDXBLK_SHIFT register. */
 #define FSL_FEATURE_PUF_HAS_IDXBLK_SHIFT (0)
+/* @brief PUF has KEYRESET register. */
+#define FSL_FEATURE_PUF_HAS_KEYRESET (0)
 
 /* RTC module features */
 
@@ -328,6 +353,8 @@
 #define FSL_FEATURE_SPIFI_START_ADDR (0x10000000)
 /* @brief SPIFI end address */
 #define FSL_FEATURE_SPIFI_END_ADDR (0x17FFFFFF)
+/* @brief SPIFI DATALEN bitfile in CMD register */
+#define FSL_FEATURE_SPIFI_DATALEN_CTRL (1)
 
 /* SYSCON module features */
 
@@ -384,6 +411,8 @@
 #define FSL_FEATURE_USBHSH_USB_RAM_BASE_ADDRESS (0x40100000)
 /* @brief USBHSH version */
 #define FSL_FEATURE_USBHSH_VERSION (300)
+/* @brief USBHSH has packet turnaround time-out register */
+#define FSL_FEATURE_USBHSH_HAS_TURNAROUND_TIMEOUT (0)
 
 /* UTICK module features */
 

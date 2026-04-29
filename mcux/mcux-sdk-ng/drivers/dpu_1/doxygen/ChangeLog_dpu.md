@@ -1,5 +1,10 @@
 # DPU
 
+## [2.4.0]
+
+- New feature.
+  - Supported the localdimming function.
+
 ## [2.3.1]
 
 - Bug Fixes

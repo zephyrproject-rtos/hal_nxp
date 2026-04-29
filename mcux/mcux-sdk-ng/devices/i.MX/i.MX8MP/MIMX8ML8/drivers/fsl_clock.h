@@ -1583,13 +1583,17 @@ static inline void CLOCK_DisableAnalogClock(CCM_ANALOG_Type *base, clock_pll_clk
  */
 static inline void CLOCK_OverridePllClke(CCM_ANALOG_Type *base, clock_pll_clke_t ovClock, bool override)
 {
+    uint32_t shift = CCM_ANALOG_TUPLE_SHIFT(ovClock);
+    assert(shift > 0U);
+    shift -= 1U;
+
     if (override)
     {
-        CCM_ANALOG_TUPLE_REG(base, ovClock) |= 1UL << (CCM_ANALOG_TUPLE_SHIFT(ovClock) - 1UL);
+        CCM_ANALOG_TUPLE_REG(base, ovClock) |= 1UL << shift;
     }
     else
     {
-        CCM_ANALOG_TUPLE_REG(base, ovClock) &= ~(1UL << (CCM_ANALOG_TUPLE_SHIFT(ovClock) - 1UL));
+        CCM_ANALOG_TUPLE_REG(base, ovClock) &= ~(1UL << shift);
     }
 }
 
@@ -1604,13 +1608,17 @@ static inline void CLOCK_OverridePllClke(CCM_ANALOG_Type *base, clock_pll_clke_t
  */
 static inline void CLOCK_OverridePllPd(CCM_ANALOG_Type *base, clock_pll_ctrl_t pdClock, bool override)
 {
+    uint32_t shift = CCM_ANALOG_TUPLE_SHIFT(pdClock);
+    assert(shift > 0U);
+    shift -= 1U;
+
     if (override)
     {
-        CCM_ANALOG_TUPLE_REG(base, pdClock) |= 1UL << (CCM_ANALOG_TUPLE_SHIFT(pdClock) - 1UL);
+        CCM_ANALOG_TUPLE_REG(base, pdClock) |= 1UL << shift;
     }
     else
     {
-        CCM_ANALOG_TUPLE_REG(base, pdClock) &= ~(1UL << (CCM_ANALOG_TUPLE_SHIFT(pdClock) - 1UL));
+        CCM_ANALOG_TUPLE_REG(base, pdClock) &= ~(1UL << shift);
     }
 }
 

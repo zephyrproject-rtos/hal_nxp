@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023, 2025 NXP
+ * Copyright 2016-2023, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,11 +23,11 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 5, 2)) /*!< Version */
+#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 5, 3)) /*!< Version */
 /*! @} */
 
 #ifndef SCT_EV_STATE_STATEMSKn
-#define SCT_EV_STATE_STATEMSKn(x) ((uint32_t)(x) & (((uint32_t)1UL << FSL_FEATURE_SCT_NUMBER_OF_STATES) - 1UL))
+#define SCT_EV_STATE_STATEMSKn(x) ((uint32_t)(x) & (uint32_t)(((uint64_t)1ULL << FSL_FEATURE_SCT_NUMBER_OF_STATES) - 1ULL))
 #endif
 
 /*! @brief SCTimer PWM operation modes */

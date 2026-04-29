@@ -322,7 +322,8 @@ void GPIO_PortClearInterruptFlags(GPIO_Type *base, uint32_t mask)
  */
 void GPIO_GpioClearInterruptFlags(GPIO_Type *base, uint32_t mask)
 {
-    base->ISFR[0] = GPIO_FIT_REG(mask);
+    /* Perform a dummy read before writing to ensure the write succeeds.*/
+    base->ISFR[0] &= GPIO_FIT_REG(mask);
 }
 #if (defined(FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT) && FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT)
 /*!

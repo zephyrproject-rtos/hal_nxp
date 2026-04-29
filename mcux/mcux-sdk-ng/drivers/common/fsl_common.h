@@ -59,7 +59,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief common driver version. */
-#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 6, 3))
+#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 6, 4))
 /*! @} */
 
 /*! @name Debug console type definition. */

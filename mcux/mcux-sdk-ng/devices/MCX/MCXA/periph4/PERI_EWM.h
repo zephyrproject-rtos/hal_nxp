@@ -30,13 +30,13 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260323
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for EWM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -132,7 +132,7 @@ typedef struct {
   __IO uint8_t SERV;                               /**< Service, offset: 0x1 */
   __IO uint8_t CMPL;                               /**< Compare Low, offset: 0x2 */
   __IO uint8_t CMPH;                               /**< Compare High, offset: 0x3 */
-       uint8_t RESERVED_0[1];
+  __IO uint8_t CLKCTRL;                            /**< Clock Control, offset: 0x4 */
   __IO uint8_t CLKPRESCALER;                       /**< Clock Prescaler, offset: 0x5 */
 } EWM_Type;
 
@@ -206,6 +206,15 @@ typedef struct {
 #define EWM_CMPH_COMPAREH_SHIFT                  (0U)
 /*! COMPAREH - Compare High */
 #define EWM_CMPH_COMPAREH(x)                     (((uint8_t)(((uint8_t)(x)) << EWM_CMPH_COMPAREH_SHIFT)) & EWM_CMPH_COMPAREH_MASK)
+/*! @} */
+
+/*! @name CLKCTRL - Clock Control */
+/*! @{ */
+
+#define EWM_CLKCTRL_CLKSEL_MASK                  (0x3U)
+#define EWM_CLKCTRL_CLKSEL_SHIFT                 (0U)
+/*! CLKSEL - Clock Select */
+#define EWM_CLKCTRL_CLKSEL(x)                    (((uint8_t)(((uint8_t)(x)) << EWM_CLKCTRL_CLKSEL_SHIFT)) & EWM_CLKCTRL_CLKSEL_MASK)
 /*! @} */
 
 /*! @name CLKPRESCALER - Clock Prescaler */

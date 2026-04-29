@@ -1,5 +1,23 @@
 # SEMC
 
+## [2.8.0]
+
+- Bug Fixes
+  - Fixed IOCR pinmux field masking so `SEMC_ConfigureSRAMWithChipSelection()` can reliably configure SRAM CE on chip selects other than CS0.
+  - Extended SRAM timing parameters in `semc_sram_config_t` to 32-bit and updated timing conversion to safely handle values greater than 255 ns.
+  - Guard readback in `SEMC_SendIPCommand()` and return `kStatus_InvalidArgument` when a read command is 
+  issued with a null output pointer
+
+## [2.7.2]
+
+- Bug Fixes
+  - Add assertions to prevent unsigned integer overflow in increment operations
+  - Add assertions to prevent unsigned integer overflow in multiplication calculations
+  - Add safe type conversion with temporary variables for uint32_t to uint16_t and uint8_t operations
+  - Add explicit boolean to integer conversions (? 1U : 0U) for enable flags
+  - Add bounds checking for narrowing conversions in prescale and dataSize calculations
+  - Follow INT30-C and INT31-C CERT coding standards for safe integer operations
+
 ## [2.7.1]
 
 - Bug Fixes

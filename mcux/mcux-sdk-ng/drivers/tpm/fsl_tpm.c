@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021, 2025 NXP
+ * Copyright 2016-2021, 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -29,8 +29,7 @@
  * Hardware limitations make this code impossible to implement.
  * 
  * $Justification tpm_c_ref_6$
- * Following TPM IRQ handle functions are invoked in specific platform startup file or specific core.
- * It is hard to update startup file for unit test, so add Justification.
+ * TPM IRQ handle functions are invoked in specific platform startup file or specific core.
  */
 
 /*******************************************************************************
@@ -572,7 +571,7 @@ status_t TPM_SetupPwm(TPM_Type *base,
 
             /*
              * $Branch Coverage Justification$
-             * (mod > counterMax) not covered. $ref tpm_c_tpm_3$.
+             * (mod > counterMax) not covered. $ref tpm_c_ref_3$.
              */
             if ((mod > counterMax) || (mod == 0U)) /* GCOVR_EXCL_BR_LINE */
             {
@@ -586,7 +585,7 @@ status_t TPM_SetupPwm(TPM_Type *base,
             mod = tpmClock / (pwmFreq_Hz * 2u);
             /*
              * $Branch Coverage Justification$
-             * (mod > counterMax >> 1U) not covered. $ref tpm_c_tpm_3$.
+             * (mod > counterMax >> 1U) not covered. $ref tpm_c_ref_3$.
              */
             if ((mod > (counterMax >> 1U)) || (mod == 0U)) /* GCOVR_EXCL_BR_LINE */
             {
@@ -643,7 +642,7 @@ status_t TPM_SetupPwm(TPM_Type *base,
 
 #if defined(FSL_FEATURE_TPM_HAS_QDCTRL) && FSL_FEATURE_TPM_HAS_QDCTRL
     /* The TPM's QDCTRL register required to be effective */
-    if (1U == (uint8_t)FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(base))
+    if (1 == (int8_t)FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(base))
     {
         /* Clear quadrature Decoder mode because in quadrature Decoder mode PWM doesn't operate*/
         base->QDCTRL &= ~TPM_QDCTRL_QUADEN_MASK;
@@ -861,7 +860,7 @@ void TPM_SetupInputCapture(TPM_Type *base, tpm_chnl_t chnlNumber, tpm_input_capt
 
 #if defined(FSL_FEATURE_TPM_HAS_QDCTRL) && FSL_FEATURE_TPM_HAS_QDCTRL
     /* The TPM's QDCTRL register required to be effective */
-    if (1U == (uint8_t)FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(base))
+    if (1 == (int8_t)FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(base))
     {
         /* Clear quadrature Decoder mode for channel 0 or 1*/
         if (((uint32_t)chnlNumber == 0u) || ((uint32_t)chnlNumber == 1u))
@@ -913,7 +912,7 @@ status_t TPM_SetupOutputCompare(TPM_Type *base,
 
 #if defined(FSL_FEATURE_TPM_HAS_QDCTRL) && FSL_FEATURE_TPM_HAS_QDCTRL
     /* The TPM's QDCTRL register required to be effective */
-    if (1U == (uint8_t)FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(base))
+    if (1 == (int8_t)FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(base))
     {
         /* Clear quadrature Decoder mode for channel 0 or 1 */
         if (((uint32_t)chnlNumber == 0U) || ((uint32_t)chnlNumber == 1U))
@@ -978,7 +977,7 @@ void TPM_SetupDualEdgeCapture(TPM_Type *base,
 
 #if defined(FSL_FEATURE_TPM_HAS_QDCTRL) && FSL_FEATURE_TPM_HAS_QDCTRL
     /* The TPM's QDCTRL register required to be effective */
-    if (1U == (uint8_t)FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(base))
+    if (1 == (int8_t)FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(base))
     {
         /* Clear quadrature Decoder mode for channel 0 or 1*/
         if (chnlId == 0u)
@@ -1045,7 +1044,7 @@ void TPM_SetupQuadDecode(TPM_Type *base,
 {
     assert(NULL != phaseAParams);
     assert(NULL != phaseBParams);
-    assert(1U == (uint8_t)FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(base));
+    assert(1 == (int8_t)FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(base));
 
     /* Disable channel 0 */
     (void)TPM_DisableChannel(base, kTPM_Chnl_0);
@@ -1237,11 +1236,8 @@ void TPM_RegisterCallBack(TPM_Type *base, tpm_callback_t callback)
 
 /*
  * $Function Coverage Justification$
- * Following functions are not covered. $ref tpm_c_ref_6$.
- *  - TPM_DriverIRQHandler()
- *  - TPM2_DriverIRQHandler()
+ * $ref tpm_c_ref_6$.
  */
-
 /*!
  * @brief TPM driver IRQ handler common entry.
  *
@@ -1281,6 +1277,10 @@ void TPM1_DriverIRQHandler(void)
 
 #if defined(TPM2)
 void TPM2_DriverIRQHandler(void);
+/*
+ * $Function Coverage Justification$
+ * $ref tpm_c_ref_6$.
+ */
 void TPM2_DriverIRQHandler(void) /* GCOVR_EXCL_FUNCTION */
 {
     assert(NULL != s_tpmCallback[2]);

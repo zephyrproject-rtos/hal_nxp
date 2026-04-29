@@ -30,13 +30,13 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260323
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -569,10 +569,10 @@ typedef struct {
 /*! @name MP_HRS - Management Page Hardware Request Status */
 /*! @{ */
 
-#define DMA_MP_HRS_HRS_MASK                      (0xFFFFFFFFU)
+#define DMA_MP_HRS_HRS_MASK                      (0xFFFU)  /* Merged from fields with different position or width, of widths (4, 12), largest definition used */
 #define DMA_MP_HRS_HRS_SHIFT                     (0U)
 /*! HRS - Hardware Request Status */
-#define DMA_MP_HRS_HRS(x)                        (((uint32_t)(((uint32_t)(x)) << DMA_MP_HRS_HRS_SHIFT)) & DMA_MP_HRS_HRS_MASK)
+#define DMA_MP_HRS_HRS(x)                        (((uint32_t)(((uint32_t)(x)) << DMA_MP_HRS_HRS_SHIFT)) & DMA_MP_HRS_HRS_MASK)  /* Merged from fields with different position or width, of widths (4, 12), largest definition used */
 /*! @} */
 
 /*! @name CH_GRPRI - Channel Arbitration Group */

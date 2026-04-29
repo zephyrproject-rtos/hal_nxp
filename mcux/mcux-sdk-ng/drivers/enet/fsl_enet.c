@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015 - 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2025 NXP
+ * Copyright 2016-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -32,8 +32,7 @@
 
 /* @brief Floor division which always rounds towards negative infinity.
  * Note that, in contrast, integer division would round towards zero. */
-#define DIV_FLOOR(x, y)                                                        \
-  (((x) >= 0 || (x) % (y) == 0) ? (x) / (y) : (x) / (y) - 1)
+#define DIV_FLOOR(x, y) (((x) >= 0 || (x) % (y) == 0) ? (x) / (y) : (x) / (y)-1)
 
 #if defined(ENET_RSTS_N)
 #define ENET_RESETS_ARRAY ENET_RSTS_N
@@ -996,7 +995,7 @@ static void ENET_RxBufferFreeAll(ENET_Type *base, enet_handle_t *handle)
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
                 buffer = MEMORY_ConvertMemoryMapAddress(curBuffDescrip->buffer, kMEMORY_DMA2Local);
 #else
-                buffer = curBuffDescrip->buffer;
+                buffer   = curBuffDescrip->buffer;
 #endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
                 handle->rxBuffFree(base, (void *)(uint8_t *)buffer, handle->userData, ringId);
                 curBuffDescrip->buffer = 0;
@@ -2161,11 +2160,26 @@ void ENET_ReclaimTxDescriptor(ENET_Type *base, enet_handle_t *handle, uint8_t ri
             txDirty->isTsAvail = false;
             if ((curBuffDescrip->controlExtend1 & ENET_BUFFDESCRIPTOR_TX_TIMESTAMP_MASK) != 0U)
             {
-                enet_ptp_time_t *ts = &txDirty->timeStamp;
-                /* Get transmit time stamp second. */
-                txDirty->isTsAvail = true;
-                ts->second         = handle->msTimerSecond;
-                ts->nanosecond     = curBuffDescrip->timestamp;
+                enet_ptp_time_t currentTime;
+
+                /* Get current PTP time */
+                ENET_Ptp1588GetTimer(base, handle, &currentTime);
+
+                /* Reconstruct the second when TX nanoseconds were captured.
+                 * If current nanoseconds < TX nanoseconds, second rolled over
+                 * between TX and reclaim, so TX happened in previous second.
+                 */
+                if (currentTime.nanosecond < curBuffDescrip->timestamp)
+                {
+                    if (currentTime.second > 0U)
+                    {
+                        currentTime.second--;
+                    }
+                }
+
+                txDirty->timeStamp.second     = currentTime.second;
+                txDirty->timeStamp.nanosecond = curBuffDescrip->timestamp;
+                txDirty->isTsAvail            = true;
             }
 #endif
             /* For tx buffer free or requeue for last descriptor.
@@ -2402,7 +2416,7 @@ status_t ENET_GetRxFrame(ENET_Type *base, enet_handle_t *handle, enet_rx_frame_s
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
             buffer = MEMORY_ConvertMemoryMapAddress(newBuff, kMEMORY_Local2DMA);
 #else
-            buffer = newBuff;
+            buffer  = newBuff;
 #endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
 #if defined(FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL) && FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
             if (handle->rxMaintainEnable[ringId])
@@ -2595,7 +2609,7 @@ status_t ENET_StartTxFrame(ENET_Type *base, enet_handle_t *handle, enet_tx_frame
             /* Map loacl memory address to DMA for special platform. */
             buffer = MEMORY_ConvertMemoryMapAddress((uintptr_t)(uint8_t *)txBuff->buffer, kMEMORY_Local2DMA);
 #else
-            buffer = (uintptr_t)(uint8_t *)txBuff->buffer;
+            buffer  = (uintptr_t)(uint8_t *)txBuff->buffer;
 #endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
 
             /* Set data buffer and length. */
@@ -2953,7 +2967,8 @@ void ENET_Ptp1588StartTimer(ENET_Type *base, uint32_t ptpClkSrc)
  * param base  ENET peripheral base address.
  * param handle The ENET state pointer. This is the same state pointer used in the ENET_Init.
  */
-static void ENET_Ptp1588CaptureBlocking(ENET_Type *base, enet_handle_t *handle) {
+static void ENET_Ptp1588CaptureBlocking(ENET_Type *base, enet_handle_t *handle)
+{
     /* Get the nanosecond from the master timer. */
     base->ATCR |= ENET_ATCR_CAPTURE_MASK;
 
@@ -3012,7 +3027,8 @@ void ENET_Ptp1588GetTimer(ENET_Type *base, enet_handle_t *handle, enet_ptp_time_
     ENET_Ptp1588GetTimerNoIrqDisable(base, handle, ptpTime);
 
     /* Get PTP timer wrap event. */
-    if ((0U != (base->EIR & (uint32_t)kENET_TsTimerInterrupt)) && (ptpTime->nanosecond < (ENET_NANOSECOND_ONE_SECOND / 2)))
+    if ((0U != (base->EIR & (uint32_t)kENET_TsTimerInterrupt)) &&
+        (ptpTime->nanosecond < (ENET_NANOSECOND_ONE_SECOND / 2)))
     {
         ptpTime->second++;
     }
@@ -3058,7 +3074,7 @@ void ENET_Ptp1588SetTimer(ENET_Type *base, enet_handle_t *handle, enet_ptp_time_
  */
 void ENET_Ptp1588JumpTimer(ENET_Type *base, int64_t nanosecondDiff)
 {
-    uint32_t instance = ENET_GetInstance(base);
+    uint32_t instance     = ENET_GetInstance(base);
     enet_handle_t *handle = s_ENETHandle[instance];
 
     /* Disables interrupts */
@@ -3068,7 +3084,7 @@ void ENET_Ptp1588JumpTimer(ENET_Type *base, int64_t nanosecondDiff)
     if (nanosecondDiff >= 0)
     {
         uint32_t nanosecondTime = base->ATVR % ENET_NANOSECOND_ONE_SECOND;
-        uint64_t secondDiff = (uint64_t)nanosecondDiff / ENET_NANOSECOND_ONE_SECOND;
+        uint64_t secondDiff     = (uint64_t)nanosecondDiff / ENET_NANOSECOND_ONE_SECOND;
 
         nanosecondTime += (uint32_t)nanosecondDiff % ENET_NANOSECOND_ONE_SECOND;
 
@@ -3095,8 +3111,7 @@ void ENET_Ptp1588JumpTimer(ENET_Type *base, int64_t nanosecondDiff)
         /* Note that nanosecondDiff + (int64_t)nanosecondTime does not result in an overflow
          * as nanosecondDiff < 0 and 0 <= nanosecondTime < 1e9. */
         int32_t nanosecondTime = (int32_t)(base->ATVR % ENET_NANOSECOND_ONE_SECOND);
-        int64_t secondDiff = DIV_FLOOR(nanosecondDiff + (int64_t)nanosecondTime,
-                         (int64_t)ENET_NANOSECOND_ONE_SECOND);
+        int64_t secondDiff = DIV_FLOOR(nanosecondDiff + (int64_t)nanosecondTime, (int64_t)ENET_NANOSECOND_ONE_SECOND);
 
         nanosecondTime += (int32_t)(nanosecondDiff % (int64_t)ENET_NANOSECOND_ONE_SECOND);
 
@@ -3104,7 +3119,7 @@ void ENET_Ptp1588JumpTimer(ENET_Type *base, int64_t nanosecondDiff)
         if (handle->msTimerSecond < (uint64_t)INT64_MAX && (int64_t)handle->msTimerSecond < -secondDiff)
         {
             handle->msTimerSecond = 0;
-            base->ATVR = 0;
+            base->ATVR            = 0;
 
             /* Enables the interrupt. */
             EnableGlobalIRQ(primask);
@@ -3115,8 +3130,7 @@ void ENET_Ptp1588JumpTimer(ENET_Type *base, int64_t nanosecondDiff)
         /* Note that simply doing base->ATVR = nanosecondTime % ENET_NANOSECOND_ONE_SECOND
          * could result in an uint32_t underflow if nanosecondDiff is negative. */
         handle->msTimerSecond -= (uint64_t)(-secondDiff);
-        base->ATVR = ((uint32_t)nanosecondTime + ENET_NANOSECOND_ONE_SECOND) %
-               ENET_NANOSECOND_ONE_SECOND;
+        base->ATVR = ((uint32_t)nanosecondTime + ENET_NANOSECOND_ONE_SECOND) % ENET_NANOSECOND_ONE_SECOND;
     }
 
     /* Enables the interrupt. */

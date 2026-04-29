@@ -198,6 +198,20 @@ void EDMA_Init(DMA_Type *base, const edma_config_t *config)
     base->MP_CSR = tmpreg;
     base->MP_CSR &= (~DMA_MP_CSR_HALT_MASK);
 #endif /* FSL_FETURE_HAVE_DMA_CONTROL_REGISTER_ACCESS_PERMISSION */
+
+#if defined FSL_FEATURE_EDMA_SOC_REQUIRES_SECURE_MASTER && FSL_FEATURE_EDMA_SOC_REQUIRES_SECURE_MASTER
+    /* Initialize SBR register for all channels */
+    for (uint32_t i = 0U; i < (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL; i++)
+    {
+#if defined(FSL_FEATURE_EDMA_HAS_CH_SBR_EMI) && FSL_FEATURE_EDMA_HAS_CH_SBR_EMI
+        EDMA_EnableChannelMasterIDReplication(base, i, true);
+#endif /* FSL_FEATURE_EDMA_HAS_CH_SBR_EMI */
+#if defined(FSL_FEATURE_EDMA_HAS_CH_SBR_SEC) && FSL_FEATURE_EDMA_HAS_CH_SBR_SEC
+        EDMA_SetChannelSecurityLevel(base, i, kEDMA_ChannelSecurityLevelSecure);
+#endif /* FSL_FEATURE_EDMA_HAS_CH_SBR_SEC */
+        EDMA_SetChannelProtectionLevel(base, i, kEDMA_ChannelProtectionLevelPrivileged);
+    }
+#endif /* FSL_FEATURE_EDMA_SOC_REQUIRES_SECURE_MASTER */
 }
 
 /*!

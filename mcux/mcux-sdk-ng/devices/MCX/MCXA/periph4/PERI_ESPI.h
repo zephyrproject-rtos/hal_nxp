@@ -30,13 +30,13 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260323
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ESPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -1586,9 +1586,9 @@ typedef struct {
 #define ESPI_STAT_RPMC_FLASH_DEVICE_SHIFT        (21U)
 /*! RPMC_FLASH_DEVICE - RPMC Flash Device
  *  0b00..First device
- *  0b01..Fourth device
  *  0b01..Second device
  *  0b10..Third device
+ *  0b11..Fourth device
  */
 #define ESPI_STAT_RPMC_FLASH_DEVICE(x)           (((uint32_t)(((uint32_t)(x)) << ESPI_STAT_RPMC_FLASH_DEVICE_SHIFT)) & ESPI_STAT_RPMC_FLASH_DEVICE_MASK)
 /*! @} */

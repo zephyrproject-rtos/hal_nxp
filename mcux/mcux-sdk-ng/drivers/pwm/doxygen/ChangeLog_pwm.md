@@ -1,5 +1,15 @@
 # PWM
 
+## [2.10.0]
+
+- Improvements
+  - Added API `PWM_EnableLocalForce` to perform a software-controlled local force
+    initialization, causing a FORCE_OUT event that latches all pending FORCE-buffered
+    shadow registers (DTSRCSEL, MCTRL[IPOL], SWCOUT) into their active registers.
+  - Added API `PWM_UpdateCurrentPolarity` to selecting which VAL comparator pair drives
+    the complementary output pair. The change takes effect only after a subsequent FORCE_OUT
+    event (e.g. via PWM_EnableLocalForce).
+
 ## [2.9.4]
 - Bug Fixes
   - Fixed CERT INT31-C issues.

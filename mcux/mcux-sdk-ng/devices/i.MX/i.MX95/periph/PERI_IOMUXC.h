@@ -247,14 +247,14 @@
 **                          MIMX95N6XVZXN_cm33
 **                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 3.0, 2025-11-24
-**     Build:               b251124
+**     Version:             rev. 4.0, 2026-02-28
+**     Build:               b260305
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -268,14 +268,16 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-11-24)
 **         Header RFP.
+**     - rev. 4.0 (2026-02-28)
+**         Update Interrupts mapping.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_IOMUXC.h
- * @version 3.0
- * @date 2025-11-24
+ * @version 4.0
+ * @date 2026-02-28
  * @brief CMSIS Peripheral Access Layer for IOMUXC
  *
  * CMSIS Peripheral Access Layer for IOMUXC
@@ -460,21 +462,21 @@ typedef struct {
 #define IOMUXC_SW_PAD_CTL_PAD_DSE_SHIFT          (1U)
 /*! DSE - Drive Strength Field
  *  0b000000..No drive
- *  0b000001..x1
- *  0b000011..x2
- *  0b000111..x3
- *  0b001111..x4
- *  0b011111..x5
- *  0b111111..X6
+ *  0b000001..X1 (for 1.8 V and 3.3 V NVCC IO supply voltage)
+ *  0b000011..X2 (for 1.8 V and 3.3 V NVCC IO supply voltage)
+ *  0b000111..X3 (for 1.8 V and 3.3 V NVCC IO supply voltage)
+ *  0b001111..X4 (for 1.8 V and 3.3 V NVCC IO supply voltage)
+ *  0b011111..X5 (for 1.8 V NVCC IO supply voltage)
+ *  0b111111..X6 (for 1.8 V NVCC IO supply voltage)
  */
 #define IOMUXC_SW_PAD_CTL_PAD_DSE(x)             (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_PAD_CTL_PAD_DSE_SHIFT)) & IOMUXC_SW_PAD_CTL_PAD_DSE_MASK)
 
 #define IOMUXC_SW_PAD_CTL_PAD_FSEL1_MASK         (0x180U)
 #define IOMUXC_SW_PAD_CTL_PAD_FSEL1_SHIFT        (7U)
 /*! FSEL1 - Slew Rate Field
- *  0b00..
- *  0b01..
- *  0b10..Slight Fast Slew Rate
+ *  0b00..Reserved
+ *  0b01..Reserved
+ *  0b10..Fast Slew Rate
  *  0b11..Fast Slew Rate
  */
 #define IOMUXC_SW_PAD_CTL_PAD_FSEL1(x)           (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_PAD_CTL_PAD_FSEL1_SHIFT)) & IOMUXC_SW_PAD_CTL_PAD_FSEL1_MASK)
@@ -543,21 +545,21 @@ typedef struct {
 #define IOMUXC_SW_PAD_CTL_PAD_FCCU_ERR0_DSE_SHIFT (1U)
 /*! DSE - Drive Strength Field
  *  0b000000..No drive
- *  0b000001..x1
- *  0b000011..x2
- *  0b000111..x3
- *  0b001111..x4
- *  0b011111..x5
- *  0b111111..X6
+ *  0b000001..X1 (for 1.8 V and 3.3 V NVCC IO supply voltage)
+ *  0b000011..X2 (for 1.8 V and 3.3 V NVCC IO supply voltage)
+ *  0b000111..X3 (for 1.8 V and 3.3 V NVCC IO supply voltage)
+ *  0b001111..X4 (for 1.8 V and 3.3 V NVCC IO supply voltage)
+ *  0b011111..X5 (for 1.8 V NVCC IO supply voltage)
+ *  0b111111..X6 (for 1.8 V NVCC IO supply voltage)
  */
 #define IOMUXC_SW_PAD_CTL_PAD_FCCU_ERR0_DSE(x)   (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_PAD_CTL_PAD_FCCU_ERR0_DSE_SHIFT)) & IOMUXC_SW_PAD_CTL_PAD_FCCU_ERR0_DSE_MASK)
 
 #define IOMUXC_SW_PAD_CTL_PAD_FCCU_ERR0_FSEL1_MASK (0x180U)
 #define IOMUXC_SW_PAD_CTL_PAD_FCCU_ERR0_FSEL1_SHIFT (7U)
 /*! FSEL1 - Slew Rate Field
- *  0b00..
- *  0b01..
- *  0b10..Slight Fast Slew Rate
+ *  0b00..Reserved
+ *  0b01..Reserved
+ *  0b10..Fast Slew Rate
  *  0b11..Fast Slew Rate
  */
 #define IOMUXC_SW_PAD_CTL_PAD_FCCU_ERR0_FSEL1(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_PAD_CTL_PAD_FCCU_ERR0_FSEL1_SHIFT)) & IOMUXC_SW_PAD_CTL_PAD_FCCU_ERR0_FSEL1_MASK)

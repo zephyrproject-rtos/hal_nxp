@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2022, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,7 +24,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_FLASHIAP_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
+#define FSL_FLASHIAP_DRIVER_VERSION (MAKE_VERSION(2, 0, 7))
 /*! @} */
 
 /*!
@@ -62,6 +62,7 @@ enum _flashiap_status
     kStatus_FLASHIAP_NoPower = MAKE_STATUS(kStatusGroup_FLASHIAP, 24U), /*!< Flash memory block is powered down */
     kStatus_FLASHIAP_NoClock =
         MAKE_STATUS(kStatusGroup_FLASHIAP, 27U), /*!< Flash memory block or controller is not clocked */
+    kStatus_FLASHIAP_Max,                        /*!< The max value of FLASHIAP return status. */
 };
 
 /*!

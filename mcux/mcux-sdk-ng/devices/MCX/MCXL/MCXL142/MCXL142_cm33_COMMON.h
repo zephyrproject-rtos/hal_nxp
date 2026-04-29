@@ -10,7 +10,7 @@
 **
 **     Reference manual:    MCXL25x RM Rev.1 RC
 **     Version:             rev. 1.1, 2026-01-02
-**     Build:               b260113
+**     Build:               b260129
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXL142_cm33
@@ -133,10 +133,11 @@ typedef enum IRQn {
   RTC_ALARM0_IRQn              = 140,              /**< RTC alarm 0 */
   RTC_ALARM1_IRQn              = 141,              /**< RTC alarm 1 */
   RTC_ALARM2_IRQn              = 142,              /**< RTC alarm 2 */
-  RTC_WDT_IRQn                 = 142,              /**< RTC watchdog */
+  RTC_WDT_IRQn                 = 143,              /**< RTC watchdog */
   RTC_XTAL_IRQn                = 144,              /**< RTC XTAL Fail */
   LPADC_AON_IRQn               = 149,              /**< ADC Summary Interrupt */
   TMR0_AON_IRQn                = 151,              /**< ORed QTMR Interrupts */
+  TMR1_AON_IRQn                = 152,              /**< ORed QTMR Interrupts */
   LCSENSE_IRQn                 = 154,              /**< LCSense Fault/Tamper Interrupt */
   LPTMR_AON_IRQn               = 155,              /**< Low Power Timer 0 interrupt */
   ADVC_IRQn                    = 158               /**< ADVC_2.0 Controller Interrupt */
@@ -1513,23 +1514,35 @@ typedef enum IRQn {
   #define AON__TMR0                                ((TMR_Type *)AON__TMR0_BASE)
   /** Peripheral AON__TMR0 base pointer */
   #define AON__TMR0_NS                             ((TMR_Type *)AON__TMR0_BASE_NS)
+  /** Peripheral AON__TMR1 base address */
+  #define AON__TMR1_BASE                           (0xB008F000u)
+  /** Peripheral AON__TMR1 base address */
+  #define AON__TMR1_BASE_NS                        (0xA008F000u)
+  /** Peripheral AON__TMR1 base pointer */
+  #define AON__TMR1                                ((TMR_Type *)AON__TMR1_BASE)
+  /** Peripheral AON__TMR1 base pointer */
+  #define AON__TMR1_NS                             ((TMR_Type *)AON__TMR1_BASE_NS)
   /** Array initializer of TMR peripheral base addresses */
-  #define TMR_BASE_ADDRS                           { AON__TMR0_BASE }
+  #define TMR_BASE_ADDRS                           { AON__TMR0_BASE, AON__TMR1_BASE }
   /** Array initializer of TMR peripheral base pointers */
-  #define TMR_BASE_PTRS                            { AON__TMR0 }
+  #define TMR_BASE_PTRS                            { AON__TMR0, AON__TMR1 }
   /** Array initializer of TMR peripheral base addresses */
-  #define TMR_BASE_ADDRS_NS                        { AON__TMR0_BASE_NS }
+  #define TMR_BASE_ADDRS_NS                        { AON__TMR0_BASE_NS, AON__TMR1_BASE_NS }
   /** Array initializer of TMR peripheral base pointers */
-  #define TMR_BASE_PTRS_NS                         { AON__TMR0_NS }
+  #define TMR_BASE_PTRS_NS                         { AON__TMR0_NS, AON__TMR1_NS }
 #else
   /** Peripheral AON__TMR0 base address */
   #define AON__TMR0_BASE                           (0xA008E000u)
   /** Peripheral AON__TMR0 base pointer */
   #define AON__TMR0                                ((TMR_Type *)AON__TMR0_BASE)
+  /** Peripheral AON__TMR1 base address */
+  #define AON__TMR1_BASE                           (0xA008F000u)
+  /** Peripheral AON__TMR1 base pointer */
+  #define AON__TMR1                                ((TMR_Type *)AON__TMR1_BASE)
   /** Array initializer of TMR peripheral base addresses */
-  #define TMR_BASE_ADDRS                           { AON__TMR0_BASE }
+  #define TMR_BASE_ADDRS                           { AON__TMR0_BASE, AON__TMR1_BASE }
   /** Array initializer of TMR peripheral base pointers */
-  #define TMR_BASE_PTRS                            { AON__TMR0 }
+  #define TMR_BASE_PTRS                            { AON__TMR0, AON__TMR1 }
 #endif
 
 /* TRDC - Peripheral instance base addresses */

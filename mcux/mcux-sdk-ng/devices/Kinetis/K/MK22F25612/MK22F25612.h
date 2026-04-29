@@ -15,13 +15,13 @@
 **
 **     Reference manual:    K22P121M120SF8RM, Rev. 1, March 24, 2014
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b260130
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MK22F25612
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

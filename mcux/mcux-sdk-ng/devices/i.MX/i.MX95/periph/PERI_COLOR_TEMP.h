@@ -247,14 +247,14 @@
 **                          MIMX95N6XVZXN_cm33
 **                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 3.0, 2025-11-24
-**     Build:               b251124
+**     Version:             rev. 4.0, 2026-02-28
+**     Build:               b260305
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for COLOR_TEMP
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -268,14 +268,16 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-11-24)
 **         Header RFP.
+**     - rev. 4.0 (2026-02-28)
+**         Update Interrupts mapping.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_COLOR_TEMP.h
- * @version 3.0
- * @date 2025-11-24
+ * @version 4.0
+ * @date 2026-02-28
  * @brief CMSIS Peripheral Access Layer for COLOR_TEMP
  *
  * CMSIS Peripheral Access Layer for COLOR_TEMP
@@ -443,9 +445,9 @@ typedef struct {
     __I  uint32_t SUMBGH_CAM;                        /**< Camera 0 COLORTEMP B/G Sum High Register, array offset: 0x74, array step: 0x1A4 */
          uint8_t RESERVED_0[8];
     __IO uint32_t STAT_BLK_SIZE;                     /**< Camera 0 COLORTEMP Statistics Block Size Register, array offset: 0x80, array step: 0x1A4 */
+    __IO uint32_t STAT_BLK_INIT_CAM;                 /**< Camera 0 Block Stat Init Register, array offset: 0x84, array step: 0x1A4 */
          uint8_t RESERVED_1[4];
-    __I  uint32_t STAT_CURR_BLK_Y;                   /**< Camera 0 COLORTEMP Statistics Block Y Status, array offset: 0x88, array step: 0x1A4 */
-         uint8_t RESERVED_2[4];
+    __I  uint32_t STAT_CURR_BLK_Y;                   /**< Camera 0 COLORTEMP Statistics Block Y Status, array offset: 0x8C, array step: 0x1A4 */
     struct {                                         /* offset: 0x90, array step: index*0x1A4, index2*0x18 */
       __IO uint32_t CROI_POS_CAM;                      /**< Camera 0 Color ROI 0 Position Register..Camera 0 Color ROI 9 Position Register, array offset: 0x90, array step: index*0x1A4, index2*0x18 */
            uint8_t RESERVED_0[4];
@@ -454,7 +456,7 @@ typedef struct {
       __I  uint32_t CROI_SUMGREEN_CAM;                 /**< Camera 0 Color ROI 0 SUM Green Register..Camera 0 Color ROI 9 SUM Green Register, array offset: 0xA0, array step: index*0x1A4, index2*0x18 */
       __I  uint32_t CROI_SUMBLUE_CAM;                  /**< Camera 0 Color ROI 0 SUM Blue Register..Camera 0 Color ROI 9 SUM Blue Register, array offset: 0xA4, array step: index*0x1A4, index2*0x18 */
     } ROI[COLOR_TEMP_PIPE1_COLORTEMP_CONF_ROI_COUNT];
-         uint8_t RESERVED_3[4];
+         uint8_t RESERVED_2[4];
     __IO uint32_t GR_AVG_IN_CAM;                     /**< Camera 0 GR average input value, array offset: 0x184, array step: 0x1A4 */
     __IO uint32_t GB_AVG_IN_CAM;                     /**< Camera 0 GB average input value, array offset: 0x188, array step: 0x1A4 */
     __I  uint32_t GR_GB_CNT_CAM;                     /**< Camera 0 Pixel count for the GR vs GB sums, array offset: 0x18C, array step: 0x1A4 */
@@ -909,6 +911,29 @@ typedef struct {
 
 /* The count of COLOR_TEMP_STAT_BLK_SIZE */
 #define COLOR_TEMP_STAT_BLK_SIZE_COUNT           (1U)
+
+/*! @name STAT_BLK_INIT_CAM - Camera 0 Block Stat Init Register */
+/*! @{ */
+
+#define COLOR_TEMP_STAT_BLK_INIT_CAM_XPIX_MASK   (0x7FFU)
+#define COLOR_TEMP_STAT_BLK_INIT_CAM_XPIX_SHIFT  (0U)
+#define COLOR_TEMP_STAT_BLK_INIT_CAM_XPIX(x)     (((uint32_t)(((uint32_t)(x)) << COLOR_TEMP_STAT_BLK_INIT_CAM_XPIX_SHIFT)) & COLOR_TEMP_STAT_BLK_INIT_CAM_XPIX_MASK)
+
+#define COLOR_TEMP_STAT_BLK_INIT_CAM_XBLK_MASK   (0x3800U)
+#define COLOR_TEMP_STAT_BLK_INIT_CAM_XBLK_SHIFT  (11U)
+#define COLOR_TEMP_STAT_BLK_INIT_CAM_XBLK(x)     (((uint32_t)(((uint32_t)(x)) << COLOR_TEMP_STAT_BLK_INIT_CAM_XBLK_SHIFT)) & COLOR_TEMP_STAT_BLK_INIT_CAM_XBLK_MASK)
+
+#define COLOR_TEMP_STAT_BLK_INIT_CAM_YPIX_MASK   (0x7FF0000U)
+#define COLOR_TEMP_STAT_BLK_INIT_CAM_YPIX_SHIFT  (16U)
+#define COLOR_TEMP_STAT_BLK_INIT_CAM_YPIX(x)     (((uint32_t)(((uint32_t)(x)) << COLOR_TEMP_STAT_BLK_INIT_CAM_YPIX_SHIFT)) & COLOR_TEMP_STAT_BLK_INIT_CAM_YPIX_MASK)
+
+#define COLOR_TEMP_STAT_BLK_INIT_CAM_YBLK_MASK   (0x38000000U)
+#define COLOR_TEMP_STAT_BLK_INIT_CAM_YBLK_SHIFT  (27U)
+#define COLOR_TEMP_STAT_BLK_INIT_CAM_YBLK(x)     (((uint32_t)(((uint32_t)(x)) << COLOR_TEMP_STAT_BLK_INIT_CAM_YBLK_SHIFT)) & COLOR_TEMP_STAT_BLK_INIT_CAM_YBLK_MASK)
+/*! @} */
+
+/* The count of COLOR_TEMP_STAT_BLK_INIT_CAM */
+#define COLOR_TEMP_STAT_BLK_INIT_CAM_COUNT       (1U)
 
 /*! @name STAT_CURR_BLK_Y - Camera 0 COLORTEMP Statistics Block Y Status */
 /*! @{ */

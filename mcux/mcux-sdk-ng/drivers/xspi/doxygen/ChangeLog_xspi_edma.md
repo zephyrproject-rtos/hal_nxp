@@ -1,5 +1,10 @@
 # XSPI EDMA Driver
 
+## [2.0.3]
+
+- Bug Fixes
+  - Fixed violations of MSG.
+
 ## [2.0.2]
 
 - Bug Fixes

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015 - 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2025 NXP
+ * Copyright 2016-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Defines the driver version. */
-#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 11, 0))
+#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 11, 1))
 /*! @} */
 
 /*! @name ENET DESCRIPTOR QUEUE */
@@ -341,11 +341,12 @@ typedef enum _enet_tx_accelerator
  */
 typedef enum _enet_rx_accelerator
 {
-    kENET_RxAccelPadRemoveEnabled  = ENET_RACC_PADREM_MASK,  /*!< Padding removal for short IP frames. */
-    kENET_RxAccelIpCheckEnabled    = ENET_RACC_IPDIS_MASK,   /*!< Discard with wrong IP header checksum. */
-    kENET_RxAccelProtoCheckEnabled = ENET_RACC_PRODIS_MASK,  /*!< Discard with wrong protocol checksum (TCP, UDP, ICMPv4). */
-    kENET_RxAccelMacCheckEnabled   = ENET_RACC_LINEDIS_MASK, /*!< Discard with Mac layer errors. */
-    kENET_RxAccelisShift16Enabled  = ENET_RACC_SHIFT16_MASK  /*!< Receive FIFO shift-16. */
+    kENET_RxAccelPadRemoveEnabled = ENET_RACC_PADREM_MASK, /*!< Padding removal for short IP frames. */
+    kENET_RxAccelIpCheckEnabled   = ENET_RACC_IPDIS_MASK,  /*!< Discard with wrong IP header checksum. */
+    kENET_RxAccelProtoCheckEnabled =
+        ENET_RACC_PRODIS_MASK, /*!< Discard with wrong protocol checksum (TCP, UDP, ICMPv4). */
+    kENET_RxAccelMacCheckEnabled  = ENET_RACC_LINEDIS_MASK, /*!< Discard with Mac layer errors. */
+    kENET_RxAccelisShift16Enabled = ENET_RACC_SHIFT16_MASK  /*!< Receive FIFO shift-16. */
 } enet_rx_accelerator_t;
 
 #ifdef ENET_ENHANCEDBUFFERDESCRIPTOR_MODE
@@ -1958,7 +1959,7 @@ void ENET_Ptp1588GetTimer(ENET_Type *base, enet_handle_t *handle, enet_ptp_time_
  */
 static inline uint32_t ENET_Ptp1588GetChannelCaptureValue(ENET_Type *base, enet_ptp_timer_channel_t channel)
 {
-  return base->CHANNEL[channel].TCCR;
+    return base->CHANNEL[channel].TCCR;
 }
 
 /*!

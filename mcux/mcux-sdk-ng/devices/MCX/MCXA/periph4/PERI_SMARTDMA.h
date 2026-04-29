@@ -30,13 +30,13 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260323
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SMARTDMA
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -214,12 +214,17 @@ typedef struct {
 
 #define SMARTDMA_ARM2EZH_IE_MASK                 (0x3U)
 #define SMARTDMA_ARM2EZH_IE_SHIFT                (0U)
-/*! IE - Interrupt Enable */
+/*! IE - Interrupt Enable
+ *  0b00..Reserved
+ *  0b01..Reserved
+ *  0b10..SmartDMA write to EZH2ARM triggers an interrupt to Arm core
+ *  0b11..SmartDMA write to EZH2ARM, or SmartDMA write 3FFFFFFFh to GP triggers an RXEV to Arm core
+ */
 #define SMARTDMA_ARM2EZH_IE(x)                   (((uint32_t)(((uint32_t)(x)) << SMARTDMA_ARM2EZH_IE_SHIFT)) & SMARTDMA_ARM2EZH_IE_MASK)
 
 #define SMARTDMA_ARM2EZH_GP_MASK                 (0xFFFFFFFCU)
 #define SMARTDMA_ARM2EZH_GP_SHIFT                (2U)
-/*! GP - General purpose register bits */
+/*! GP - GPR Bits */
 #define SMARTDMA_ARM2EZH_GP(x)                   (((uint32_t)(((uint32_t)(x)) << SMARTDMA_ARM2EZH_GP_SHIFT)) & SMARTDMA_ARM2EZH_GP_MASK)
 /*! @} */
 
@@ -228,7 +233,7 @@ typedef struct {
 
 #define SMARTDMA_EZH2ARM_GP_MASK                 (0xFFFFFFFFU)
 #define SMARTDMA_EZH2ARM_GP_SHIFT                (0U)
-/*! GP - General purpose register bits Writing to EZH2ARM triggers the ARM interrupt when ARM2EZH [1:0] == 2h */
+/*! GP - GPR Bits */
 #define SMARTDMA_EZH2ARM_GP(x)                   (((uint32_t)(((uint32_t)(x)) << SMARTDMA_EZH2ARM_GP_SHIFT)) & SMARTDMA_EZH2ARM_GP_MASK)
 /*! @} */
 

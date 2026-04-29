@@ -12,7 +12,7 @@
 
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
-#define FSL_COMPONENT_ID "platform.drivers.rtc"
+#define FSL_COMPONENT_ID "platform.drivers.rtc_analog"
 #endif
 
 #define YEAR_RANGE_START (2000U)

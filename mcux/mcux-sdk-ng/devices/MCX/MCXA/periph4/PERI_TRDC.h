@@ -30,13 +30,13 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260323
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TRDC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -316,8 +316,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_MBC_DOM0_MEM0_BLK_CFG_W_NSE0_MASK (0x8U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_MBC_DOM0_MEM0_BLK_CFG_W_NSE0_SHIFT (3U)
 /*! NSE0 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -340,8 +340,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_MBC_DOM0_MEM0_BLK_CFG_W_NSE1_MASK (0x80U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_MBC_DOM0_MEM0_BLK_CFG_W_NSE1_SHIFT (7U)
 /*! NSE1 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -364,8 +364,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_MBC_DOM0_MEM0_BLK_CFG_W_NSE2_MASK (0x800U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_MBC_DOM0_MEM0_BLK_CFG_W_NSE2_SHIFT (11U)
 /*! NSE2 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -388,8 +388,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_MBC_DOM0_MEM0_BLK_CFG_W_NSE3_MASK (0x8000U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_MBC_DOM0_MEM0_BLK_CFG_W_NSE3_SHIFT (15U)
 /*! NSE3 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -412,8 +412,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_MBC_DOM0_MEM0_BLK_CFG_W_NSE4_MASK (0x80000U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_MBC_DOM0_MEM0_BLK_CFG_W_NSE4_SHIFT (19U)
 /*! NSE4 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -436,8 +436,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_MBC_DOM0_MEM0_BLK_CFG_W_NSE5_MASK (0x800000U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_MBC_DOM0_MEM0_BLK_CFG_W_NSE5_SHIFT (23U)
 /*! NSE5 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -460,8 +460,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_MBC_DOM0_MEM0_BLK_CFG_W_NSE6_MASK (0x8000000U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_MBC_DOM0_MEM0_BLK_CFG_W_NSE6_SHIFT (27U)
 /*! NSE6 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -484,8 +484,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_MBC_DOM0_MEM0_BLK_CFG_W_NSE7_MASK (0x80000000U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_MBC_DOM0_MEM0_BLK_CFG_W_NSE7_SHIFT (31U)
 /*! NSE7 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -518,8 +518,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM1_BLK_CFG_W_MBC_DOM0_MEM1_BLK_CFG_W_NSE0_MASK (0x8U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM1_BLK_CFG_W_MBC_DOM0_MEM1_BLK_CFG_W_NSE0_SHIFT (3U)
 /*! NSE0 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -542,8 +542,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM1_BLK_CFG_W_MBC_DOM0_MEM1_BLK_CFG_W_NSE1_MASK (0x80U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM1_BLK_CFG_W_MBC_DOM0_MEM1_BLK_CFG_W_NSE1_SHIFT (7U)
 /*! NSE1 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -566,8 +566,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM1_BLK_CFG_W_MBC_DOM0_MEM1_BLK_CFG_W_NSE2_MASK (0x800U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM1_BLK_CFG_W_MBC_DOM0_MEM1_BLK_CFG_W_NSE2_SHIFT (11U)
 /*! NSE2 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -590,8 +590,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM1_BLK_CFG_W_MBC_DOM0_MEM1_BLK_CFG_W_NSE3_MASK (0x8000U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM1_BLK_CFG_W_MBC_DOM0_MEM1_BLK_CFG_W_NSE3_SHIFT (15U)
 /*! NSE3 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -614,8 +614,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM1_BLK_CFG_W_MBC_DOM0_MEM1_BLK_CFG_W_NSE4_MASK (0x80000U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM1_BLK_CFG_W_MBC_DOM0_MEM1_BLK_CFG_W_NSE4_SHIFT (19U)
 /*! NSE4 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -638,8 +638,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM1_BLK_CFG_W_MBC_DOM0_MEM1_BLK_CFG_W_NSE5_MASK (0x800000U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM1_BLK_CFG_W_MBC_DOM0_MEM1_BLK_CFG_W_NSE5_SHIFT (23U)
 /*! NSE5 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -662,8 +662,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM1_BLK_CFG_W_MBC_DOM0_MEM1_BLK_CFG_W_NSE6_MASK (0x8000000U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM1_BLK_CFG_W_MBC_DOM0_MEM1_BLK_CFG_W_NSE6_SHIFT (27U)
 /*! NSE6 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -686,8 +686,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM1_BLK_CFG_W_MBC_DOM0_MEM1_BLK_CFG_W_NSE7_MASK (0x80000000U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM1_BLK_CFG_W_MBC_DOM0_MEM1_BLK_CFG_W_NSE7_SHIFT (31U)
 /*! NSE7 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -720,8 +720,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM2_BLK_CFG_W_MBC_DOM0_MEM2_BLK_CFG_W_NSE0_MASK (0x8U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM2_BLK_CFG_W_MBC_DOM0_MEM2_BLK_CFG_W_NSE0_SHIFT (3U)
 /*! NSE0 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -744,8 +744,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM2_BLK_CFG_W_MBC_DOM0_MEM2_BLK_CFG_W_NSE1_MASK (0x80U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM2_BLK_CFG_W_MBC_DOM0_MEM2_BLK_CFG_W_NSE1_SHIFT (7U)
 /*! NSE1 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -768,8 +768,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM2_BLK_CFG_W_MBC_DOM0_MEM2_BLK_CFG_W_NSE2_MASK (0x800U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM2_BLK_CFG_W_MBC_DOM0_MEM2_BLK_CFG_W_NSE2_SHIFT (11U)
 /*! NSE2 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -792,8 +792,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM2_BLK_CFG_W_MBC_DOM0_MEM2_BLK_CFG_W_NSE3_MASK (0x8000U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM2_BLK_CFG_W_MBC_DOM0_MEM2_BLK_CFG_W_NSE3_SHIFT (15U)
 /*! NSE3 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -816,8 +816,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM2_BLK_CFG_W_MBC_DOM0_MEM2_BLK_CFG_W_NSE4_MASK (0x80000U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM2_BLK_CFG_W_MBC_DOM0_MEM2_BLK_CFG_W_NSE4_SHIFT (19U)
 /*! NSE4 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -840,8 +840,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM2_BLK_CFG_W_MBC_DOM0_MEM2_BLK_CFG_W_NSE5_MASK (0x800000U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM2_BLK_CFG_W_MBC_DOM0_MEM2_BLK_CFG_W_NSE5_SHIFT (23U)
 /*! NSE5 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -864,8 +864,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM2_BLK_CFG_W_MBC_DOM0_MEM2_BLK_CFG_W_NSE6_MASK (0x8000000U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM2_BLK_CFG_W_MBC_DOM0_MEM2_BLK_CFG_W_NSE6_SHIFT (27U)
 /*! NSE6 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
@@ -888,8 +888,8 @@ typedef struct {
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM2_BLK_CFG_W_MBC_DOM0_MEM2_BLK_CFG_W_NSE7_MASK (0x80000000U)
 #define TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM2_BLK_CFG_W_MBC_DOM0_MEM2_BLK_CFG_W_NSE7_SHIFT (31U)
 /*! NSE7 - NonSecure Enable for block B
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
- *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
+ *  0b0..Secure read and write to block B are based on corresponding MBACSEL field in this register
+ *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), secure execution and nonsecure accesses to block B are not allowed.
  *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
  *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */

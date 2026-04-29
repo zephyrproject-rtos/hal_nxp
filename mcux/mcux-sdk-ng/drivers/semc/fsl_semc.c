@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2023, 2025 NXP
+ * Copyright 2017-2023, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,10 @@
 #define SEMC_IPCOMMANDMAGICKEY        (0xA55A)
 #if defined(FSL_FEATURE_SEMC_SUPPORT_SRAM_COUNT) && (FSL_FEATURE_SEMC_SUPPORT_SRAM_COUNT > 0x01U)
 #define SEMC_IOCR_PINMUXBITWIDTH (0x4UL)
+#define SEMC_IOCR_PINMUXBITMASK  (0xFUL)
 #else
 #define SEMC_IOCR_PINMUXBITWIDTH (0x3UL)
+#define SEMC_IOCR_PINMUXBITMASK  (0x7UL)
 #endif /* FSL_FEATURE_SEMC_SUPPORT_SRAM_COUNT */
 #define SEMC_IOCR_NAND_CE   (4UL)
 #define SEMC_IOCR_NOR_CE    (5UL)
@@ -207,19 +209,30 @@ static uint8_t SEMC_ConvertTiming(uint32_t time_ns, uint32_t clkSrc_Hz)
 {
     assert(clkSrc_Hz != 0x00U);
 
-    uint8_t clockCycles = 0;
-    uint32_t tClk_ps;
+    /* Use ps for higher resolution; avoid narrowing/overflow for large time_ns. */
+    uint64_t tClk_ps = 1000000000000ULL / (uint64_t)clkSrc_Hz;
+    uint64_t time_ps = (uint64_t)time_ns * 1000ULL;
 
-    clkSrc_Hz /= 1000000U;
-    /* Using ps for high resolution */
-    tClk_ps = 1000000U / clkSrc_Hz;
-
-    while (tClk_ps * clockCycles < time_ns * 1000U)
+    if ((time_ns == 0x00U) || (tClk_ps == 0x00ULL))
     {
-        clockCycles++;
+        return 0x00U;
     }
 
-    return (clockCycles == 0x00U) ? clockCycles : (clockCycles - 0x01U);
+    /* Ceiling(time_ps / tClk_ps). */
+    uint64_t requiredCycles = (time_ps + tClk_ps - 1ULL) / tClk_ps;
+    if (requiredCycles == 0ULL)
+    {
+        return 0x00U;
+    }
+
+    /* HW encoding is (cycles - 1). Saturate to avoid uint8_t wrap/infinite loop. */
+    requiredCycles -= 1ULL;
+    if (requiredCycles > (uint64_t)UINT8_MAX)
+    {
+        requiredCycles = (uint64_t)UINT8_MAX;
+    }
+
+    return (uint8_t)requiredCycles;
 }
 
 static status_t SEMC_ConfigureIPCommand(SEMC_Type *base, uint8_t size_bytes)
@@ -428,7 +441,10 @@ status_t SEMC_ConfigureSDRAM(SEMC_Type *base, semc_sdram_cs_t cs, semc_sdram_con
     uint8_t memsize;
     uint8_t times;
     status_t result   = kStatus_Success;
-    uint16_t prescale = (uint16_t)(config->tPrescalePeriod_Ns / 16U / (1000000000U / clkSrc_Hz));
+    /* INT31-C: Validate before narrowing conversion to uint16_t */
+    uint32_t prescale_temp = config->tPrescalePeriod_Ns / 16U / (1000000000U / clkSrc_Hz);
+    assert(prescale_temp <= UINT16_MAX);
+    uint16_t prescale = (uint16_t)prescale_temp;
     uint32_t refresh;
     uint32_t urgentRef;
     uint32_t idle;
@@ -581,7 +597,7 @@ status_t SEMC_ConfigureNAND(SEMC_Type *base, semc_nand_config_t *config, uint32_
     base->MCR |= SEMC_MCR_MDIS_MASK;
 
     uint32_t iocReg =
-        base->IOCR & (~((SEMC_IOCR_PINMUXBITWIDTH << (uint32_t)config->cePinMux) | SEMC_IOCR_MUX_RDY_MASK));
+        base->IOCR & (~((SEMC_IOCR_PINMUXBITMASK << (uint32_t)config->cePinMux) | SEMC_IOCR_MUX_RDY_MASK));
 
     /* Base control. */
     if (config->rdyactivePolarity == kSEMC_RdyActivehigh)
@@ -617,7 +633,8 @@ status_t SEMC_ConfigureNAND(SEMC_Type *base, semc_nand_config_t *config, uint32_
     }
 
     base->NANDCR0 = SEMC_NANDCR0_PS(config->portSize) | SEMC_NANDCR0_BL(config->burstLen) |
-                    SEMC_NANDCR0_EDO(config->edoModeEnabled) | SEMC_NANDCR0_COL(config->columnAddrBitNum);
+                    /* INT31-C: Use conditional expression for bool to integer conversion */
+                    SEMC_NANDCR0_EDO(config->edoModeEnabled ? 1U : 0U) | SEMC_NANDCR0_COL(config->columnAddrBitNum);
 
     timing = SEMC_NANDCR1_CES(SEMC_ConvertTiming(config->timingConfig->tCeSetup_Ns, clkSrc_Hz));
     timing |= SEMC_NANDCR1_CEH(SEMC_ConvertTiming(config->timingConfig->tCeHold_Ns, clkSrc_Hz));
@@ -668,7 +685,7 @@ status_t SEMC_ConfigureNOR(SEMC_Type *base, semc_nor_config_t *config, uint32_t 
         return kStatus_SEMC_InvalidBaseAddress;
     }
 
-    uint32_t iocReg = base->IOCR & (~(SEMC_IOCR_PINMUXBITWIDTH << (uint32_t)config->cePinMux));
+    uint32_t iocReg = base->IOCR & (~(SEMC_IOCR_PINMUXBITMASK << (uint32_t)config->cePinMux));
     uint32_t muxCe  = (config->cePinMux == kSEMC_MUXRDY) ?
                          (SEMC_IOCR_NOR_CE - 1U) :
                          ((config->cePinMux == kSEMC_MUXA8) ? SEMC_IOCR_NOR_CE_A8 : SEMC_IOCR_NOR_CE);
@@ -834,7 +851,7 @@ status_t SEMC_ConfigureSRAMWithChipSelection(SEMC_Type *base,
         return kStatus_SEMC_InvalidBaseAddress;
     }
 
-    uint32_t iocReg = base->IOCR & (~(SEMC_IOCR_PINMUXBITWIDTH << (uint32_t)config->cePinMux));
+    uint32_t iocReg = base->IOCR & (~(SEMC_IOCR_PINMUXBITMASK << (uint32_t)config->cePinMux));
 
     uint32_t muxCe = (config->cePinMux == kSEMC_MUXRDY) ?
                          (SEMC_IOCR_PSRAM_CE - 1U) :
@@ -958,7 +975,8 @@ status_t SEMC_ConfigureSRAMWithChipSelection(SEMC_Type *base,
                       SEMC_SRAMCR0_SYNCEN(config->syncMode) |
 #endif /* FSL_FEATURE_SEMC_HAS_SRAM_SYNCEN */
 #if defined(FSL_FEATURE_SEMC_HAS_SRAM_WAITEN) && (FSL_FEATURE_SEMC_HAS_SRAM_WAITEN)
-                      SEMC_SRAMCR0_WAITEN(waitEnable) |
+                      /* INT31-C: Use conditional expression for bool to integer conversion */
+                      SEMC_SRAMCR0_WAITEN(waitEnable ? 1U : 0U) |
 #endif /* FSL_FEATURE_SEMC_HAS_SRAM_WAITEN */
 #if defined(FSL_FEATURE_SEMC_HAS_SRAM_WAITSP) && (FSL_FEATURE_SEMC_HAS_SRAM_WAITSP)
                       SEMC_SRAMCR0_WAITSP(waitSample) |
@@ -1128,7 +1146,7 @@ status_t SEMC_ConfigureDBI(SEMC_Type *base, semc_dbi_config_t *config, uint32_t 
         return kStatus_SEMC_InvalidBaseAddress;
     }
 
-    uint32_t iocReg = base->IOCR & (~(SEMC_IOCR_PINMUXBITWIDTH << (uint32_t)config->csxPinMux));
+    uint32_t iocReg = base->IOCR & (~(SEMC_IOCR_PINMUXBITMASK << (uint32_t)config->csxPinMux));
     uint32_t muxCsx = (config->csxPinMux == kSEMC_MUXRDY) ?
                           (SEMC_IOCR_DBI_CSX - 1U) :
                           ((config->csxPinMux == kSEMC_MUXA8) ? SEMC_IOCR_DBI_CSX_A8 : SEMC_IOCR_DBI_CSX);
@@ -1238,6 +1256,11 @@ status_t SEMC_SendIPCommand(
         default:
             assert(false);
             break;
+    }
+
+    if (readCmd && (read == NULL))
+    {
+        return kStatus_InvalidArgument;
     }
 
     if (writeCmd)
@@ -1375,7 +1398,10 @@ status_t SEMC_IPCommandNorRead(SEMC_Type *base, uint32_t address, uint8_t *data,
 
     uint32_t tempData = 0;
     status_t result   = kStatus_Success;
-    uint8_t dataSize  = (uint8_t)base->NORCR0 & SEMC_NORCR0_PS_MASK;
+    /* INT31-C: Validate before narrowing conversion to uint8_t */
+    uint32_t dataSize_temp = base->NORCR0 & SEMC_NORCR0_PS_MASK;
+    assert(dataSize_temp <= UINT8_MAX);
+    uint8_t dataSize = (uint8_t)dataSize_temp;
 
     /* Configure IP command data size. */
     (void)SEMC_ConfigureIPCommand(base, SEMC_IPCOMMANDDATASIZEBYTEMAX);
@@ -1422,7 +1448,10 @@ status_t SEMC_IPCommandNorWrite(SEMC_Type *base, uint32_t address, uint8_t *data
 
     uint32_t tempData = 0;
     status_t result   = kStatus_Success;
-    uint8_t dataSize  = (uint8_t)base->NORCR0 & SEMC_NORCR0_PS_MASK;
+    /* INT31-C: Validate before narrowing conversion to uint8_t */
+    uint32_t dataSize_temp = base->NORCR0 & SEMC_NORCR0_PS_MASK;
+    assert(dataSize_temp <= UINT8_MAX);
+    uint8_t dataSize = (uint8_t)dataSize_temp;
 
     /* Write command built */
     while (size_bytes >= SEMC_IPCOMMANDDATASIZEBYTEMAX)

@@ -30,13 +30,13 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251029
+**     Build:               b260323
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SCG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -575,17 +575,17 @@ typedef struct {
 
 #define SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_MASK     (0x10U)
 #define SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_SHIFT    (4U)
-/*! FIRC_SCLK_PERIPH_EN - FIRC 48 MHz Clock to peripherals Enable
- *  0b0..FIRC 48 MHz to peripherals is disabled
- *  0b1..FIRC 48 MHz to peripherals is enabled
+/*! FIRC_SCLK_PERIPH_EN - FIRC_48MHz Clock to Peripherals Enable
+ *  0b0..FIRC_48MHz disabled
+ *  0b1..FIRC_48MHz enabled
  */
 #define SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN(x)       (((uint32_t)(((uint32_t)(x)) << SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_SHIFT)) & SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_MASK)
 
 #define SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_MASK     (0x20U)
 #define SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_SHIFT    (5U)
-/*! FIRC_FCLK_PERIPH_EN - FRO_HF Clock to peripherals Enable
- *  0b0..FRO_HF to peripherals is disabled
- *  0b1..FRO_HF to peripherals is enabled
+/*! FIRC_FCLK_PERIPH_EN - FRO_HF_GATED to Peripherals Enable
+ *  0b0..FRO_HF_GATED disabled
+ *  0b1..FRO_HF_GATED enabled
  */
 #define SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN(x)       (((uint32_t)(((uint32_t)(x)) << SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_SHIFT)) & SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_MASK)
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2025-2026 NXP
  *
  * All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 2.2.0. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief power driver version 2.3.0. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 #if __CORTEX_M == 33U
@@ -62,6 +62,10 @@ enum
     kStatus_Power_WakeupFromDPD1    = MAKE_STATUS(kStatusGroup_POWER, 7), /*!< Woke up from DPD1 successfully. */
     kStatus_Power_WakeupFromDPD2    = MAKE_STATUS(kStatusGroup_POWER, 8), /*!< Woke up from DPD2 successfully. */
     kStatus_Power_DualCoreNotSynced = MAKE_STATUS(kStatusGroup_POWER, 9), /*!< The two cores are not synchronized. */
+    kStatus_Power_AdvcPreVoltageChangeFailed =
+        MAKE_STATUS(kStatusGroup_POWER, 10), /*!< ADVC pre-voltage change request failed. */
+    kStatus_Power_AdvcPostVoltageChangeFailed =
+        MAKE_STATUS(kStatusGroup_POWER, 11), /*!< ADVC post-voltage change request failed. */
 };
 
 /*!
@@ -245,17 +249,29 @@ enum _power_main_domain_sram_array
 typedef enum _power_vdd_core_aon_output_voltage
 {
     kPower_VddCoreAon_820mV       = 0x14U, /*!< The output voltage of VDD_CORE_AON is about 820mV. */
+    kPower_VddCoreAon_810_5mV     = 0x15U, /*!< The output voltage of VDD_CORE_AON is about 810.5mV. */
     kPower_VddCoreAon_801mV       = 0x16U, /*!< The output voltage of VDD_CORE_AON is about 801mV. */
+    kPower_VddCoreAon_791_5mV     = 0x17U, /*!< The output voltage of VDD_CORE_AON is about 791.5mV. */
     kPower_VddCoreAon_782mV       = 0x18U, /*!< The output voltage of VDD_CORE_AON is about 782mV. */
+    kPower_VddCoreAon_772_5mV     = 0x19U, /*!< The output voltage of VDD_CORE_AON is about 772.5mV. */
     kPower_VddCoreAon_763mV       = 0x1AU, /*!< The output voltage of VDD_CORE_AON is about 763mV. */
+    kPower_VddCoreAon_753_5mV     = 0x1BU, /*!< The output voltage of VDD_CORE_AON is about 753.5mV. */
     kPower_VddCoreAon_744mV       = 0x1CU, /*!< The output voltage of VDD_CORE_AON is about 744mV. */
+    kPower_VddCoreAon_734_5mV     = 0x1DU, /*!< The output voltage of VDD_CORE_AON is about 734.5mV. */
     kPower_VddCoreAon_725mV       = 0x1EU, /*!< The output voltage of VDD_CORE_AON is about 725mV. */
+    kPower_VddCoreAon_715_5mV     = 0x1FU, /*!< The output voltage of VDD_CORE_AON is about 715.5mV. */
     kPower_VddCoreAon_706mV       = 0x20U, /*!< The output voltage of VDD_CORE_AON is about 706mV. */
+    kPower_VddCoreAon_696_5mV     = 0x21U, /*!< The output voltage of VDD_CORE_AON is about 696.5mV. */
     kPower_VddCoreAon_687mV       = 0x22U, /*!< The output voltage of VDD_CORE_AON is about 687mV. */
+    kPower_VddCoreAon_677_5mV     = 0x23U, /*!< The output voltage of VDD_CORE_AON is about 677.5mV. */
     kPower_VddCoreAon_668mV       = 0x24U, /*!< The output voltage of VDD_CORE_AON is about 668mV. */
+    kPower_VddCoreAon_658_5mV     = 0x25U, /*!< The output voltage of VDD_CORE_AON is about 658.5mV. */
     kPower_VddCoreAon_649mV       = 0x26U, /*!< The output voltage of VDD_CORE_AON is about 649mV. */
+    kPower_VddCoreAon_639_5mV     = 0x27U, /*!< The output voltage of VDD_CORE_AON is about 639.5mV. */
     kPower_VddCoreAon_630mV       = 0x28U, /*!< The output voltage of VDD_CORE_AON is about 630mV. */
+    kPower_VddCoreAon_620_5mV     = 0x29U, /*!< The output voltage of VDD_CORE_AON is about 620.5mV. */
     kPower_VddCoreAon_611mV       = 0x2AU, /*!< The output voltage of VDD_CORE_AON is about 611mV. */
+    kPower_VddCoreAon_601_5mV     = 0x2BU, /*!< The output voltage of VDD_CORE_AON is about 601.5mV. */
     kPower_VddCoreAon_592mV       = 0x2CU, /*!< The output voltage of VDD_CORE_AON is about 592mV. */
     kPower_VddCoreAon_AdvcControl = 0xFFU, /*!< The output voltage of VDD_CORE_AON is controlled by ADVC. */
 } power_vdd_core_output_voltage_t;
@@ -321,10 +337,11 @@ typedef struct _power_pd1_config
                                             control any wakeup source. Pre-enabled wakeup sources are not affected.
                                              Wakeup sources can also be enabled manually by
                                              invoking Power_EnableWakeupSource().  */
-    uint32_t mainRamArraysToRetain : 16U;   /*!< Bitmask representing the main domain RAM
-                                                  arrays to retain during power down */
+    uint32_t mainRamArraysToRetain : 16U;   /*!< @deprecated: This field is no longer used, In PD1 mode, all RAM 
+                                            arrays retained. */
     uint32_t disableBandgap : 1U;           /*!< Flag to indicate whether to disable the bandgap during power down */
     uint32_t enableIVSMode : 1U;            /*!< Enable/disable IVS mode for the Main domain SRAM retention. */
+    pmu_fro16k_output_freq_t fro16KOutputFreq : 1U; /*!< Specify the output frequency of FRO16K */
 } power_pd1_config_t;
 
 /*!
@@ -344,14 +361,16 @@ typedef struct _power_pd2_config
                                             control any wakeup source. Pre-enabled wakeup sources are not affected.
                                              Wakeup sources can also be enabled manually by
                                              invoking Power_EnableWakeupSource(). */
-    uint32_t mainRamArraysToRetain : 16U;   /*!< Bitmask representing the main domain RAM arrays
-                                              to retain during DPD2 mode */
-    uint32_t aonRamArraysToRetain : 16U;    /*!< Bitmask representing the AON domain RAM arrays
-                                              to retain during DPD2 mode */
+    uint32_t mainRamArraysToRetain : 16U;   /*!< @deprecated: This field is no longer used, In PD2 mode,
+                                                all RAM arrays retained. */
+    uint32_t aonRamArraysToRetain : 16U;    /*!< @deprecated: This field is no longer used, In PD2 mode,
+                                                all RAM arrays retained. */
     uint32_t enableIVSMode : 1U;            /*!< Enable/disable IVS mode for the Main domain SRAM retention. */
     uint32_t disableBandgap : 1U;           /*!< Flag to indicate whether to disable the bandgap during DPD2 mode */
     uint32_t disableFRO10M : 1U; /*!< Flag to indicate whether to disable the FRO10M clock during DPD2 mode */
-    power_vdd_core_output_voltage_t vddCoreAonVoltage : 8U; /*!< Specify output voltage of VDD_CORE_AON */
+    power_vdd_core_output_voltage_t vddCoreAonVoltage : 8U; /*!< @deprecated: Voltage is now automatically selected based
+                                                               on frequency. This field is ignored. */
+    pmu_fro16k_output_freq_t fro16KOutputFreq : 1U;              /*!< Specify the output frequency of FRO16K */
 } power_pd2_config_t;
 
 /*!
@@ -381,11 +400,13 @@ typedef struct _power_dpd1_config
     uint32_t disableBandgap : 1U;    /*!< Flag to indicate whether to disable the bandgap during power down */
     uint32_t enableIVSMode : 1U;     /*!< Enable/disable IVS mode for the Main domain SRAM retention. */
     power_dpd1_transition_t
-             nextTrans : 2U;         /*!< Next transition after DPD1 mode, refer to @ref power_dpd1_transition_t */
+        nextTrans : 2U;              /*!< Next transition after DPD1 mode, refer to @ref power_dpd1_transition_t */
     uint32_t saveContext : 1U;       /*!< True to save basic register context into stack, false to do not save. */
     uint32_t disableFRO10M : 1U;     /*!< Flag to indicate whether to disable the FRO10M clock during DPD1 mode */
-    uint32_t reserved : 2U;          /*!< Reserved for using. */
-    power_vdd_core_output_voltage_t vddCoreAonVoltage : 8U; /*!< Specify output voltage of VDD_CORE_AON */
+    pmu_fro16k_output_freq_t fro16KOutputFreq : 1U;         /*!< Specify the output frequency of FRO16K */
+    uint32_t reserved : 1U;                                 /*!< Reserved for using. */
+    power_vdd_core_output_voltage_t vddCoreAonVoltage : 8U; /*!< @deprecated Voltage is now automatically selected based
+                                                               on frequency. Specify output voltage of VDD_CORE_AON */
 } power_dpd1_config_t;
 
 /*!
@@ -415,11 +436,12 @@ typedef struct _power_dpd2_config
     uint32_t disableFRO10M : 1U;     /*!< Flag to indicate whether to disable the FRO10M clock during DPD2 mode */
     uint32_t wakeToDpd1 : 1U;        /*!< Flag to indicate whether to wake up to DPD1 mode after DPD2 mode */
     uint32_t saveContext : 1U;       /*!< True to save basic register context into stack, false to do not save. */
-    uint32_t disableFRO2M : 1U;      /*!< True to disable FRO2M, false to do not disable. */
-    uint32_t reserved : 1U;          /*!< Reserved for using. */
+    uint32_t disableFRO3M : 1U;      /*!< True to disable FRO2M, false to do not disable. */
+    pmu_fro16k_output_freq_t fro16KOutputFreq : 1U; /*!< Specify the output frequency of FRO16K */
     power_vdd_core_output_voltage_t
-        dpd2VddCoreAonVoltage : 8U;  /*!< Specify output voltage of VDD_CORE AON in DPD2 mode,
-                                     in type of @ref power_vdd_core_output_voltage_t. */
+        dpd2VddCoreAonVoltage : 8U; /*!< @deprecated Voltage is now automatically selected based on frequency. Specify
+                                    output voltage of VDD_CORE AON in DPD2 mode, in type of @ref
+                                    power_vdd_core_output_voltage_t. */
 } power_dpd2_config_t;
 
 /*!
@@ -433,6 +455,9 @@ typedef struct _power_dpd3_config
                                             control any wakeup source. Pre-enabled wakeup sources are not affected.
                                              Wakeup sources can also be enabled manually by
                                              invoking Power_EnableWakeupSource(). */
+    pmu_fro16k_output_freq_t fro16KOutputFreq; /*!< Specify the output frequency of FRO16K */
+    bool keepFro16kActive;                     /*!< Flag to indicate whether to keep FRO16K active during SD mode.
+                                If false, the fro16KOutputFreq configuration is ignored. */
 } power_dpd3_config_t;
 
 /*!
@@ -447,6 +472,8 @@ typedef struct _power_sd_config
                                              Wakeup sources can also be enabled manually by
                                              invoking Power_EnableWakeupSource().  */
     pmu_fro16k_output_freq_t fro16KOutputFreq; /*!< Specify the output frequency of FRO16K */
+    bool keepFro16kActive;                     /*!< Flag to indicate whether to keep FRO16K active during SD mode.
+                                If false, the fro16KOutputFreq configuration is ignored. */
 } power_sd_config_t;
 
 /*!
@@ -464,19 +491,19 @@ typedef struct _power_wakeup_source_info
 typedef struct _power_handle
 {
     uint32_t lpConfig[4U]; /*!< Buffer (4 x 32-bit words) for storing the most recent low-power configuration. */
-    power_user_callback_t cm33Callback;                /*!< Callback function for CM33 core operations,
-                                                             in type of @ref power_user_callback_t */
-    void                 *cm33UserData;                /*!< User data pointer for CM33 core operations */
-    power_user_callback_t cm0pCallback;                /*!< Callback function for CM0+ core operations,
-                                                             in type of @ref power_user_callback_t */
-    void                      *cm0pUserData;           /*!< User data pointer for CM0+ core operations */
-    power_wakeup_source_info_t enabledWsInfo;          /*!< Used to record all enabled wakeup sources. */
-    uint32_t                   muChannelId : 4U;       /*!< MU channel ID used for power communication. */
-    power_low_power_mode_t     targetPowerMode : 4U;   /*!< Target low-power mode requested by this core. */
-    power_low_power_mode_t     previousPowerMode : 4U; /*!< Previously entered low-power mode. */
-    uint32_t                   dualCoreSynced : 1U;    /*!< Set when the two cores are synchronized. */
-    uint32_t                   requestCM33Start : 1U;  /*!< CM0P-side flag requesting CM33 to run the entry sequence. */
-    uint32_t                   cm0pWFI : 1U;           /*!< CM0P has executed WFI (used for PD2/DPD2/DPD3/SD). */
+    power_user_callback_t cm33Callback;            /*!< Callback function for CM33 core operations,
+                                                         in type of @ref power_user_callback_t */
+    void *cm33UserData;                            /*!< User data pointer for CM33 core operations */
+    power_user_callback_t cm0pCallback;            /*!< Callback function for CM0+ core operations,
+                                                         in type of @ref power_user_callback_t */
+    void *cm0pUserData;                            /*!< User data pointer for CM0+ core operations */
+    power_wakeup_source_info_t enabledWsInfo;      /*!< Used to record all enabled wakeup sources. */
+    volatile uint32_t muChannelId : 4U;                     /*!< MU channel ID used for power communication. */
+    volatile power_low_power_mode_t targetPowerMode : 4U;   /*!< Target low-power mode requested by this core. */
+    volatile power_low_power_mode_t previousPowerMode : 4U; /*!< Previously entered low-power mode. */
+    volatile uint32_t dualCoreSynced : 1U;                  /*!< Set when the two cores are synchronized. */
+    volatile uint32_t requestCM33Start : 1U;                /*!< CM0P-side flag requesting CM33 to run the entry sequence. */
+    volatile uint32_t cm0pWFI : 1U;                         /*!< CM0P has executed WFI (used for PD2/DPD2/DPD3/SD). */
 } power_handle_t;
 
 /*!
@@ -781,8 +808,16 @@ power_dpd1_transition_t Power_GetDeepPowerDown1NextTransition(void);
  * @brief Enter Deep Power Down 2 mode.
  *
  * This function attempts to put the system into Deep Power Down 2 mode with the provided configuration.
+ * The function automatically manages clock switching and voltage scaling during DPD2 entry and wakeup:
+ * - On entry: Switches AON CPU clock to target frequency (32kHz or FRO/4 based on switchToX32K flag)
+ * - On wakeup (with saveContext=true): Restores original clock frequency
+ * - Voltage is automatically selected based on target frequency
+ * - When ADVC is enabled: Uses ADVC Pre/Post VoltageChangeRequest APIs for voltage management
+ * - When ADVC is disabled: Directly updates VddCore voltage based on frequency requirements
  *
  * @note If attempting to enable context saving feature, please ensure RAM blocks used by stack are retained.
+ * @note The dpd2VddCoreAonVoltage field in config is deprecated and ignored. Voltage is now automatically
+ *       selected based on the target clock frequency.
  *
  * @param[in] config Pointer to the Deep Power Down 2 mode configuration.
  *
@@ -897,6 +932,7 @@ uint32_t Power_PushContext(uint32_t handleAddr);
  */
 void Power_LowPowerBoot(void);
 
+void Power_NotifyCM33ToRun(void);
 /*!
  * @}
  *

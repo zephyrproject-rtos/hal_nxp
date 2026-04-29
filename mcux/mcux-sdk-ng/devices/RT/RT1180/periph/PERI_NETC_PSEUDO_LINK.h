@@ -8,6 +8,10 @@
 **                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
 **                          MIMXRT1182XVP2C
+**                          MIMXRT1185CVJ8C_cm33
+**                          MIMXRT1185CVJ8C_cm7
+**                          MIMXRT1185XVJ8C_cm33
+**                          MIMXRT1185XVJ8C_cm7
 **                          MIMXRT1186CVJ8C_cm33
 **                          MIMXRT1186CVJ8C_cm7
 **                          MIMXRT1186XVJ8C_cm33
@@ -32,15 +36,19 @@
 **                          MIMXRT1189XVM8B_cm7
 **                          MIMXRT1189XVM8C_cm33
 **                          MIMXRT1189XVM8C_cm7
+**                          MIMXRT118CCVJ8C_cm33
+**                          MIMXRT118CCVJ8C_cm7
+**                          MIMXRT118CXVJ8C_cm33
+**                          MIMXRT118CXVJ8C_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250721
+**     Build:               b260206
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NETC_PSEUDO_LINK
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -74,6 +82,10 @@
 #include "MIMXRT1181_COMMON.h"
 #elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
+#elif (defined(CPU_MIMXRT1185CVJ8C_cm33) || defined(CPU_MIMXRT1185XVJ8C_cm33))
+#include "MIMXRT1185_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1185CVJ8C_cm7) || defined(CPU_MIMXRT1185XVJ8C_cm7))
+#include "MIMXRT1185_cm7_COMMON.h"
 #elif (defined(CPU_MIMXRT1186CVJ8C_cm33) || defined(CPU_MIMXRT1186XVJ8C_cm33))
 #include "MIMXRT1186_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT1186CVJ8C_cm7) || defined(CPU_MIMXRT1186XVJ8C_cm7))
@@ -86,6 +98,10 @@
 #include "MIMXRT1189_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189CVM8C_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7) || defined(CPU_MIMXRT1189XVM8C_cm7))
 #include "MIMXRT1189_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118CCVJ8C_cm33) || defined(CPU_MIMXRT118CXVJ8C_cm33))
+#include "MIMXRT118C_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118CCVJ8C_cm7) || defined(CPU_MIMXRT118CXVJ8C_cm7))
+#include "MIMXRT118C_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -142,7 +158,7 @@
 typedef struct {
   __I  uint32_t PPMSR;                             /**< Port pseudo MAC status register, offset: 0x0 */
        uint8_t RESERVED_0[12];
-  __IO uint32_t PPMCR;                             /**< Port pseudo MAC configuration register, offset: 0x10, available only on: ENETC1_PSEUDO_MAC_PORT (missing on SW0_PSEUDO_MAC_PORT4) */
+  __IO uint32_t PPMCR;                             /**< Port pseudo MAC configuration register, offset: 0x10, not available in all instances (available on 22 out of 44) */
        uint8_t RESERVED_1[108];
   __I  uint32_t PPMROCR[NETC_PSEUDO_LINK_PPMROCR_COUNT]; /**< Port pseudo MAC receive octets counter, array offset: 0x80, array step: 0x4 */
   __I  uint32_t PPMRUFCR[NETC_PSEUDO_LINK_PPMRUFCR_COUNT]; /**< Port pseudo MAC receive unicast frame counter register, array offset: 0x88, array step: 0x4 */

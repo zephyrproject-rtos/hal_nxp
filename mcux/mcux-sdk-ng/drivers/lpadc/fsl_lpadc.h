@@ -1261,7 +1261,7 @@ status_t LPADC_DoAutoCalibration(ADC_Type *base);
  */
 static inline void LPADC_SetOffsetValue(ADC_Type *base, int16_t value)
 {
-    base->OFSTRIM = ADC_OFSTRIM_OFSTRIM(value);
+    base->OFSTRIM = ADC_OFSTRIM_OFSTRIM((uint32_t)(uint16_t)value);
 }
 
 /*!
@@ -1279,7 +1279,7 @@ static inline void LPADC_GetOffsetValue(ADC_Type *base, int16_t *pValue)
     if ((ofstrim & ADC_OFSTRIM_OFSTRIM_SIGN) != 0U)
     {
         /* If the sign bit is set, then set the other MSB. */
-        ofstrim |= (uint16_t)(~ADC_OFSTRIM_OFSTRIM_MAX);
+        ofstrim |= (uint16_t)(~(uint32_t)ADC_OFSTRIM_OFSTRIM_MAX & 0xFFFFU);
     }
 
     *pValue = (int16_t)ofstrim;
@@ -1494,7 +1494,7 @@ static inline void LPADC_RequestHighSpeedModeTrim(ADC_Type *base)
  */
 static inline int8_t LPADC_GetHighSpeedTrimValue(ADC_Type *base)
 {
-    return (int8_t)(base->HSTRIM);
+    return (int8_t)(uint8_t)(base->HSTRIM & 0xFFU);
 }
 
 /*!
@@ -1507,7 +1507,7 @@ static inline int8_t LPADC_GetHighSpeedTrimValue(ADC_Type *base)
  */
 static inline void LPADC_SetHighSpeedTrimValue(ADC_Type *base, int8_t trimValue)
 {
-    base->HSTRIM = ADC_HSTRIM_HSTRIM(trimValue);
+    base->HSTRIM = ADC_HSTRIM_HSTRIM((uint32_t)(uint8_t)trimValue);
 }
 
 /*!

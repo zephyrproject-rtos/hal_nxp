@@ -516,7 +516,7 @@ void ADC_GetCalibrationLastFailedTestResult(ADC_Type *base, int16_t *result)
 
     if (0U != (tempResult & ADC_CALSTAT_SIGN))
     {
-        tempResult |= (uint16_t)(~ADC_CALSTAT_MAX);
+        tempResult |= (uint16_t)((~(uint32_t)ADC_CALSTAT_MAX) & 0xFFFFU);
     }
 
     *result = (int16_t)tempResult;
@@ -535,11 +535,13 @@ void ADC_SetUserOffsetAndGainConfig(ADC_Type *base, const adc_user_offset_gain_c
     assert(config != NULL);
 #if !(defined(FSL_FEATURE_ADC_HAS_USROFSGN) && (FSL_FEATURE_ADC_HAS_USROFSGN==0U))
     base->USROFSGN = ((base->USROFSGN & (~(ADC_USROFSGN_GAINUSER_MASK | ADC_USROFSGN_OFFSUSER_MASK))) |
-                      (ADC_USROFSGN_OFFSUSER(config->userOffset) | ADC_USROFSGN_GAINUSER(config->userGain)));
+                      (ADC_USROFSGN_OFFSUSER((uint32_t)(uint8_t)config->userOffset) |
+                       ADC_USROFSGN_GAINUSER((uint32_t)(uint16_t)config->userGain)));
 #endif /* FSL_FEATURE_ADC_HAS_USROFSGN */
 #if defined(FSL_FEATURE_ADC_HAS_OFSGNUSR) && (FSL_FEATURE_ADC_HAS_OFSGNUSR==1U)
     base->OFSGNUSR = ((base->OFSGNUSR & (~(ADC_OFSGNUSR_GAIN_USER_MASK | ADC_OFSGNUSR_OFFSET_USER_MASK))) |
-                      (ADC_OFSGNUSR_OFFSET_USER(config->userOffset) | ADC_OFSGNUSR_GAIN_USER(config->userGain)));
+                      (ADC_OFSGNUSR_OFFSET_USER((uint32_t)(uint8_t)config->userOffset) |
+                       ADC_OFSGNUSR_GAIN_USER((uint32_t)(uint16_t)config->userGain)));
 #endif /* FSL_FEATURE_ADC_HAS_OFSGNUSR */
 }
 

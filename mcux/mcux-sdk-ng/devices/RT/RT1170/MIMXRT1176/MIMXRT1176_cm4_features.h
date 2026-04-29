@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.1, 2025-12-01
-**     Build:               b260106
+**     Build:               b260205
 **
 **     Abstract:
 **         Chip specific module features.
@@ -42,8 +42,6 @@
 #define FSL_FEATURE_SOC_ASRC_COUNT (1)
 /* @brief CAAM availability on the SoC. */
 #define FSL_FEATURE_SOC_CAAM_COUNT (1)
-/* @brief CAU availability on the SoC. */
-#define FSL_FEATURE_SOC_CAU_COUNT (1)
 /* @brief CCM availability on the SoC. */
 #define FSL_FEATURE_SOC_CCM_COUNT (1)
 /* @brief CDOG availability on the SoC. */
@@ -104,6 +102,8 @@
 #define FSL_FEATURE_SOC_LPUART_COUNT (12)
 /* @brief MCM availability on the SoC. */
 #define FSL_FEATURE_SOC_MCM_COUNT (1)
+/* @brief MMCAU availability on the SoC. */
+#define FSL_FEATURE_SOC_MMCAU_COUNT (1)
 /* @brief MPU availability on the SoC. */
 #define FSL_FEATURE_SOC_MPU_COUNT (1)
 /* @brief MU availability on the SoC. */

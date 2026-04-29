@@ -4,13 +4,13 @@
 **                          MCXE247VLQ
 **
 **     Version:             rev. 1.0, 2025-02-21
-**     Build:               b250417
+**     Build:               b260209
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENET
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -1690,9 +1690,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group ENET_Register_Masks */
-
-/* ENET Buffer Descriptor and Buffer Address Alignment. */
-#define ENET_BUFF_ALIGNMENT                      (16U)
 
 
 /*!

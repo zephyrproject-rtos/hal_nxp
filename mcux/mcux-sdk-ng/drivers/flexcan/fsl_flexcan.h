@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2025 NXP
+ * Copyright 2016-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FlexCAN driver version. */
-#define FSL_FLEXCAN_DRIVER_VERSION (MAKE_VERSION(2, 15, 0))
+#define FSL_FLEXCAN_DRIVER_VERSION (MAKE_VERSION(2, 15, 1))
 /*! @} */
 
 #if !(defined(FLEXCAN_WAIT_TIMEOUT) && FLEXCAN_WAIT_TIMEOUT)
@@ -48,6 +48,17 @@
 #define FLEXCAN_MODULE_TIMEOUT CONFIG_FLEXCAN_MODULE_TIMEOUT
 #else
 #define FLEXCAN_MODULE_TIMEOUT 0     /* Wait forever until FlexCAN register access complete. */
+#endif
+#endif
+
+/*!
+ * @brief Max loops to wait for FlexCAN RX Message Buffer busy.
+ */
+#ifndef FLEXCAN_MB_BUSY_TIMEOUT
+#ifdef CONFIG_FLEXCAN_MB_BUSY_TIMEOUT
+#define FLEXCAN_MB_BUSY_TIMEOUT CONFIG_FLEXCAN_MB_BUSY_TIMEOUT
+#else
+#define FLEXCAN_MB_BUSY_TIMEOUT 0     /* Wait forever until FlexCAN RX Message Buffer busy. */
 #endif
 #endif
 
@@ -1069,7 +1080,7 @@ typedef struct _flexcan_fifo_transfer
     flexcan_fd_frame_t *framefd; /*!< The buffer of CAN Message to be received from Enhanced Rx FIFO. */
 #endif
     flexcan_frame_t *frame; /*!< The buffer of CAN Message to be received from Legacy Rx FIFO. */
-    size_t frameNum;        /*!< Number of CAN Message need to be received from Legacy or Ehanced Rx FIFO. */
+    size_t frameNum;        /*!< Depth of CAN Message receive array of Legacy or Enhanced Rx FIFO. */
 } flexcan_fifo_transfer_t;
 
 /*! @brief FlexCAN handle structure definition. */
@@ -1111,10 +1122,10 @@ struct _flexcan_handle
 #endif
     flexcan_frame_t *volatile rxFifoFrameBuf; /*!< The buffer for received CAN data from Legacy Rx FIFO. */
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
-    flexcan_fd_frame_t *volatile rxFifoFDFrameBuf; /*!< The buffer for received CAN FD data from Ehanced Rx FIFO. */
+    flexcan_fd_frame_t *volatile rxFifoFDFrameBuf; /*!< The buffer for received CAN FD data from Enhanced Rx FIFO. */
 #endif
-    size_t rxFifoFrameNum; /*!< The number of CAN messages remaining to be received from Legacy or Ehanced Rx FIFO. */
-    size_t rxFifoTransferTotalNum; /*!< Total CAN Message number need to be received from Legacy or Ehanced Rx FIFO. */
+    size_t rxFifoFrameNum; /*!< The number of CAN messages remaining to be received from Legacy or Enhanced Rx FIFO. */
+    size_t rxFifoTransferTotalNum; /*!< Total CAN Message number need to be received from Legacy or Enhanced Rx FIFO. */
     volatile uint8_t mbState[CAN_WORD1_COUNT];    /*!< Message Buffer transfer state. */
     volatile uint8_t rxFifoState;                 /*!< Rx FIFO transfer state. */
     volatile uint32_t timestamp[CAN_WORD1_COUNT]; /*!< Mailbox transfer timestamp. */
@@ -2230,7 +2241,8 @@ status_t FLEXCAN_WriteTxMb(CAN_Type *base, uint8_t mbIdx, const flexcan_frame_t 
  * @param pRxFrame Pointer to CAN message frame structure for reception.
  * @retval kStatus_Success            - Rx Message Buffer is full and has been read successfully.
  * @retval kStatus_FLEXCAN_RxOverflow - Rx Message Buffer is already overflowed and has been read successfully.
- * @retval kStatus_Fail               - Rx Message Buffer is empty.
+ * @retval kStatus_Fail               - Rx Message Buffer is empty or inactive.
+ * @retval kStatus_Timeout            - Timeout when wait for Rx Message Buffer busy.
  */
 status_t FLEXCAN_ReadRxMb(CAN_Type *base, uint8_t mbIdx, flexcan_frame_t *pRxFrame);
 
@@ -2263,7 +2275,8 @@ status_t FLEXCAN_WriteFDTxMb(CAN_Type *base, uint8_t mbIdx, const flexcan_fd_fra
  * @param pRxFrame Pointer to CAN FD message frame structure for reception.
  * @retval kStatus_Success            - Rx Message Buffer is full and has been read successfully.
  * @retval kStatus_FLEXCAN_RxOverflow - Rx Message Buffer is already overflowed and has been read successfully.
- * @retval kStatus_Fail               - Rx Message Buffer is empty.
+ * @retval kStatus_Fail               - Rx Message Buffer is empty or inactive.
+ * @retval kStatus_Timeout            - Timeout when wait for Rx Message Buffer busy.
  */
 status_t FLEXCAN_ReadFDRxMb(CAN_Type *base, uint8_t mbIdx, flexcan_fd_frame_t *pRxFrame);
 #endif
@@ -2560,7 +2573,7 @@ status_t FLEXCAN_TransferReceiveFifoNonBlocking(CAN_Type *base,
                                                 flexcan_fifo_transfer_t *pFifoXfer);
 
 /*!
- * @brief Gets the Legacy Rx Fifo transfer status during a interrupt non-blocking receive.
+ * @brief Gets the Rx Fifo transfer status during a interrupt non-blocking receive.
  *
  * @param base FlexCAN peripheral base address.
  * @param handle FlexCAN handle pointer.
@@ -2699,12 +2712,12 @@ void FLEXCAN_MbHandleIRQ(CAN_Type *base, flexcan_handle_t *handle, uint32_t star
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
 /*!
- * @brief FlexCAN Ehanced Rx FIFO IRQ handle function.
+ * @brief FlexCAN Enhanced Rx FIFO IRQ handle function.
  *
  * @param base FlexCAN peripheral base address.
  * @param handle FlexCAN handle pointer.
  */
-void FLEXCAN_EhancedRxFifoHandleIRQ(CAN_Type *base, flexcan_handle_t *handle);
+void FLEXCAN_EnhancedRxFifoHandleIRQ(CAN_Type *base, flexcan_handle_t *handle);
 #endif
 
 /*!

@@ -1,5 +1,10 @@
 # SMARTCARD
 
+## [2.3.1]
+
+- Bug Fixes:
+  - Fix CERT-C scan issues.
+
 ## [2.3.0]
 
 - New features:

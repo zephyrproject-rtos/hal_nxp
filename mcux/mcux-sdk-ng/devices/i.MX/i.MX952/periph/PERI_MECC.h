@@ -1,0 +1,447 @@
+/*
+** ###################################################################
+**     Processors:          MIMX9522xxVTx_ca55
+**                          MIMX9522xxVTx_cm33
+**                          MIMX9522xxVTx_cm7
+**                          MIMX9522xxVZx_ca55
+**                          MIMX9522xxVZx_cm33
+**                          MIMX9522xxVZx_cm7
+**                          MIMX9523xxVTx_ca55
+**                          MIMX9523xxVTx_cm33
+**                          MIMX9523xxVTx_cm7
+**                          MIMX9523xxVZx_ca55
+**                          MIMX9523xxVZx_cm33
+**                          MIMX9523xxVZx_cm7
+**                          MIMX9524xxVTx_ca55
+**                          MIMX9524xxVTx_cm33
+**                          MIMX9524xxVTx_cm7
+**                          MIMX9524xxVZx_ca55
+**                          MIMX9524xxVZx_cm33
+**                          MIMX9524xxVZx_cm7
+**                          MIMX9525xxVTx_ca55
+**                          MIMX9525xxVTx_cm33
+**                          MIMX9525xxVTx_cm7
+**                          MIMX9525xxVZx_ca55
+**                          MIMX9525xxVZx_cm33
+**                          MIMX9525xxVZx_cm7
+**                          MIMX9528xxVTx_ca55
+**                          MIMX9528xxVTx_cm33
+**                          MIMX9528xxVTx_cm7
+**                          MIMX9528xxVZx_ca55
+**                          MIMX9528xxVZx_cm33
+**                          MIMX9528xxVZx_cm7
+**                          MIMX9529xxVTx_ca55
+**                          MIMX9529xxVTx_cm33
+**                          MIMX9529xxVTx_cm7
+**                          MIMX9529xxVZx_ca55
+**                          MIMX9529xxVZx_cm33
+**                          MIMX9529xxVZx_cm7
+**
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b260324
+**
+**     Abstract:
+**         CMSIS Peripheral Access Layer for MECC
+**
+**     Copyright 1997-2016 Freescale Semiconductor, Inc.
+**     Copyright 2016-2026 NXP
+**     SPDX-License-Identifier: BSD-3-Clause
+**
+**     http:                 www.nxp.com
+**     mail:                 support@nxp.com
+**
+**     Revisions:
+**     - rev. 1.0 (2023-01-10)
+**         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
+**
+** ###################################################################
+*/
+
+/*!
+ * @file PERI_MECC.h
+ * @version 2.0
+ * @date 2024-10-29
+ * @brief CMSIS Peripheral Access Layer for MECC
+ *
+ * CMSIS Peripheral Access Layer for MECC
+ */
+
+#if !defined(PERI_MECC_H_)
+#define PERI_MECC_H_                             /**< Symbol preventing repeated inclusion */
+
+#if (defined(CPU_MIMX9522xxVTx_ca55) || defined(CPU_MIMX9522xxVZx_ca55))
+#include "MIMX9522_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9522xxVTx_cm33) || defined(CPU_MIMX9522xxVZx_cm33))
+#include "MIMX9522_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9522xxVTx_cm7) || defined(CPU_MIMX9522xxVZx_cm7))
+#include "MIMX9522_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9523xxVTx_ca55) || defined(CPU_MIMX9523xxVZx_ca55))
+#include "MIMX9523_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9523xxVTx_cm33) || defined(CPU_MIMX9523xxVZx_cm33))
+#include "MIMX9523_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9523xxVTx_cm7) || defined(CPU_MIMX9523xxVZx_cm7))
+#include "MIMX9523_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9524xxVTx_ca55) || defined(CPU_MIMX9524xxVZx_ca55))
+#include "MIMX9524_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9524xxVTx_cm33) || defined(CPU_MIMX9524xxVZx_cm33))
+#include "MIMX9524_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9524xxVTx_cm7) || defined(CPU_MIMX9524xxVZx_cm7))
+#include "MIMX9524_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9525xxVTx_ca55) || defined(CPU_MIMX9525xxVZx_ca55))
+#include "MIMX9525_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9525xxVTx_cm33) || defined(CPU_MIMX9525xxVZx_cm33))
+#include "MIMX9525_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9525xxVTx_cm7) || defined(CPU_MIMX9525xxVZx_cm7))
+#include "MIMX9525_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9528xxVTx_ca55) || defined(CPU_MIMX9528xxVZx_ca55))
+#include "MIMX9528_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9528xxVTx_cm33) || defined(CPU_MIMX9528xxVZx_cm33))
+#include "MIMX9528_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9528xxVTx_cm7) || defined(CPU_MIMX9528xxVZx_cm7))
+#include "MIMX9528_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9529xxVTx_ca55) || defined(CPU_MIMX9529xxVZx_ca55))
+#include "MIMX9529_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9529xxVTx_cm33) || defined(CPU_MIMX9529xxVZx_cm33))
+#include "MIMX9529_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9529xxVTx_cm7) || defined(CPU_MIMX9529xxVZx_cm7))
+#include "MIMX9529_cm7_COMMON.h"
+#else
+  #error "No valid CPU defined!"
+#endif
+
+/* ----------------------------------------------------------------------------
+   -- Device Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup Peripheral_access_layer Device Peripheral Access Layer
+ * @{
+ */
+
+
+/*
+** Start of section using anonymous unions
+*/
+
+#if defined(__ARMCC_VERSION)
+  #if (__ARMCC_VERSION >= 6010050)
+    #pragma clang diagnostic push
+  #else
+    #pragma push
+    #pragma anon_unions
+  #endif
+#elif defined(__GNUC__)
+  /* anonymous unions are enabled by default */
+#elif defined(__IAR_SYSTEMS_ICC__)
+  #pragma language=extended
+#else
+  #error Not supported compiler type
+#endif
+
+/* ----------------------------------------------------------------------------
+   -- MECC Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup MECC_Peripheral_Access_Layer MECC Peripheral Access Layer
+ * @{
+ */
+
+/** MECC - Register Layout Typedef */
+typedef struct {
+  __IO uint32_t RAMCR;                             /**< RAM Control, offset: 0x0 */
+  __IO uint32_t RAMIAS;                            /**< RAM Initialization Address Start, offset: 0x4 */
+  __IO uint32_t RAMIAE;                            /**< RAM Initialization Address End, offset: 0x8 */
+  __IO uint32_t RAMSR;                             /**< RAM Status, offset: 0xC */
+  __I  uint32_t RAMMEMA;                           /**< RAM ECC Address, offset: 0x10 */
+       uint8_t RESERVED_0[4];
+  __I  uint32_t RAMSYSA;                           /**< RAM System Address, offset: 0x18 */
+  __IO uint32_t RAMECCNT;                          /**< RAM Correctable Error Count, offset: 0x1C */
+  __IO uint32_t RAMEID0;                           /**< RAM Error Injection Data 0, offset: 0x20 */
+  __IO uint32_t RAMEID1;                           /**< RAM Error Injection Data 1, offset: 0x24 */
+  __IO uint32_t RAMEIDC;                           /**< RAM Error Injection Data Control, offset: 0x28 */
+       uint8_t RESERVED_1[4];
+  __IO uint32_t RAMEIA;                            /**< RAM Error Injection Base Address, offset: 0x30 */
+  __IO uint32_t RAMEIAM;                           /**< RAM Error Injection Address Mask, offset: 0x34 */
+       uint8_t RESERVED_2[8];
+  __IO uint32_t RAMMAXA;                           /**< RAM Maximum-Value Address, offset: 0x40 */
+       uint8_t RESERVED_3[60];
+       uint32_t RAMCR2;                            /**< RAM Control 2, offset: 0x80 */
+} MECC_Type;
+
+/* ----------------------------------------------------------------------------
+   -- MECC Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup MECC_Register_Masks MECC Register Masks
+ * @{
+ */
+
+/*! @name RAMCR - RAM Control */
+/*! @{ */
+
+#define MECC_RAMCR_INIT_MASK                     (0x1U)
+#define MECC_RAMCR_INIT_SHIFT                    (0U)
+/*! INIT - Initialization Request
+ *  0b0..Not requested
+ *  0b1..Requested
+ */
+#define MECC_RAMCR_INIT(x)                       (((uint32_t)(((uint32_t)(x)) << MECC_RAMCR_INIT_SHIFT)) & MECC_RAMCR_INIT_MASK)
+
+#define MECC_RAMCR_IWS_MASK                      (0x6U)
+#define MECC_RAMCR_IWS_SHIFT                     (1U)
+/*! IWS - Initialization Wait States
+ *  0b00..Zero
+ *  0b01..One
+ *  0b10..Two
+ *  0b11..Three
+ */
+#define MECC_RAMCR_IWS(x)                        (((uint32_t)(((uint32_t)(x)) << MECC_RAMCR_IWS_SHIFT)) & MECC_RAMCR_IWS_MASK)
+
+#define MECC_RAMCR_INIT_SYSA_MASK                (0x100U)
+#define MECC_RAMCR_INIT_SYSA_SHIFT               (8U)
+/*! INIT_SYSA - Initialize With System Address
+ *  0b0..Local
+ *  0b1..System
+ */
+#define MECC_RAMCR_INIT_SYSA(x)                  (((uint32_t)(((uint32_t)(x)) << MECC_RAMCR_INIT_SYSA_SHIFT)) & MECC_RAMCR_INIT_SYSA_MASK)
+/*! @} */
+
+/*! @name RAMIAS - RAM Initialization Address Start */
+/*! @{ */
+
+#define MECC_RAMIAS_IAS_MASK                     (0xFFFFFFFFU)
+#define MECC_RAMIAS_IAS_SHIFT                    (0U)
+/*! IAS - Initialization Address Start */
+#define MECC_RAMIAS_IAS(x)                       (((uint32_t)(((uint32_t)(x)) << MECC_RAMIAS_IAS_SHIFT)) & MECC_RAMIAS_IAS_MASK)
+/*! @} */
+
+/*! @name RAMIAE - RAM Initialization Address End */
+/*! @{ */
+
+#define MECC_RAMIAE_IAE_MASK                     (0xFFFFFFFFU)
+#define MECC_RAMIAE_IAE_SHIFT                    (0U)
+/*! IAE - Initialization Address End */
+#define MECC_RAMIAE_IAE(x)                       (((uint32_t)(((uint32_t)(x)) << MECC_RAMIAE_IAE_SHIFT)) & MECC_RAMIAE_IAE_MASK)
+/*! @} */
+
+/*! @name RAMSR - RAM Status */
+/*! @{ */
+
+#define MECC_RAMSR_IDONE_MASK                    (0x1U)
+#define MECC_RAMSR_IDONE_SHIFT                   (0U)
+/*! IDONE - Initialization Done
+ *  0b0..An initialization was not requested, is in progress, or did not complete
+ *  0b1..An initialization completed successfully
+ */
+#define MECC_RAMSR_IDONE(x)                      (((uint32_t)(((uint32_t)(x)) << MECC_RAMSR_IDONE_SHIFT)) & MECC_RAMSR_IDONE_MASK)
+
+#define MECC_RAMSR_BUSERR_MASK                   (0x2U)
+#define MECC_RAMSR_BUSERR_SHIFT                  (1U)
+/*! BUSERR - Bus Error
+ *  0b0..No error occurred since the last time this field was cleared
+ *  0b1..An error occurred
+ */
+#define MECC_RAMSR_BUSERR(x)                     (((uint32_t)(((uint32_t)(x)) << MECC_RAMSR_BUSERR_SHIFT)) & MECC_RAMSR_BUSERR_MASK)
+
+#define MECC_RAMSR_IPEND_MASK                    (0x4U)
+#define MECC_RAMSR_IPEND_SHIFT                   (2U)
+/*! IPEND - Initialization Pending
+ *  0b0..Not in progress
+ *  0b1..In progress
+ */
+#define MECC_RAMSR_IPEND(x)                      (((uint32_t)(((uint32_t)(x)) << MECC_RAMSR_IPEND_SHIFT)) & MECC_RAMSR_IPEND_MASK)
+
+#define MECC_RAMSR_AVALID_MASK                   (0x8U)
+#define MECC_RAMSR_AVALID_SHIFT                  (3U)
+/*! AVALID - Addresses Valid
+ *  0b0..Addresses do not correspond to an event
+ *  0b1..Addresses correspond to an event
+ */
+#define MECC_RAMSR_AVALID(x)                     (((uint32_t)(((uint32_t)(x)) << MECC_RAMSR_AVALID_SHIFT)) & MECC_RAMSR_AVALID_MASK)
+
+#define MECC_RAMSR_AERR_MASK                     (0x20U)
+#define MECC_RAMSR_AERR_SHIFT                    (5U)
+/*! AERR - ECC Address Error
+ *  0b0..No error occurred
+ *  0b1..An error occurred
+ */
+#define MECC_RAMSR_AERR(x)                       (((uint32_t)(((uint32_t)(x)) << MECC_RAMSR_AERR_SHIFT)) & MECC_RAMSR_AERR_MASK)
+
+#define MECC_RAMSR_MLTERR_MASK                   (0x40U)
+#define MECC_RAMSR_MLTERR_SHIFT                  (6U)
+/*! MLTERR - ECC Multi-Bit Error
+ *  0b0..No error occurred
+ *  0b1..An error occurred
+ */
+#define MECC_RAMSR_MLTERR(x)                     (((uint32_t)(((uint32_t)(x)) << MECC_RAMSR_MLTERR_SHIFT)) & MECC_RAMSR_MLTERR_MASK)
+
+#define MECC_RAMSR_SGLERR_MASK                   (0x80U)
+#define MECC_RAMSR_SGLERR_SHIFT                  (7U)
+/*! SGLERR - ECC Single-Bit Error
+ *  0b0..No error occurred
+ *  0b1..An error occurred
+ */
+#define MECC_RAMSR_SGLERR(x)                     (((uint32_t)(((uint32_t)(x)) << MECC_RAMSR_SGLERR_SHIFT)) & MECC_RAMSR_SGLERR_MASK)
+
+#define MECC_RAMSR_SYND_MASK                     (0xFF00U)
+#define MECC_RAMSR_SYND_SHIFT                    (8U)
+/*! SYND - ECC Syndrome Value */
+#define MECC_RAMSR_SYND(x)                       (((uint32_t)(((uint32_t)(x)) << MECC_RAMSR_SYND_SHIFT)) & MECC_RAMSR_SYND_MASK)
+
+#define MECC_RAMSR_EINFO_MASK                    (0xFF0000U)
+#define MECC_RAMSR_EINFO_SHIFT                   (16U)
+/*! EINFO - Event Information */
+#define MECC_RAMSR_EINFO(x)                      (((uint32_t)(((uint32_t)(x)) << MECC_RAMSR_EINFO_SHIFT)) & MECC_RAMSR_EINFO_MASK)
+/*! @} */
+
+/*! @name RAMMEMA - RAM ECC Address */
+/*! @{ */
+
+#define MECC_RAMMEMA_MEMA_MASK                   (0x1FFFFU)
+#define MECC_RAMMEMA_MEMA_SHIFT                  (0U)
+/*! MEMA - RAM Bank Address */
+#define MECC_RAMMEMA_MEMA(x)                     (((uint32_t)(((uint32_t)(x)) << MECC_RAMMEMA_MEMA_SHIFT)) & MECC_RAMMEMA_MEMA_MASK)
+
+#define MECC_RAMMEMA_BANK_MASK                   (0x1F00000U)
+#define MECC_RAMMEMA_BANK_SHIFT                  (20U)
+/*! BANK - RAM Bank ID */
+#define MECC_RAMMEMA_BANK(x)                     (((uint32_t)(((uint32_t)(x)) << MECC_RAMMEMA_BANK_SHIFT)) & MECC_RAMMEMA_BANK_MASK)
+/*! @} */
+
+/*! @name RAMSYSA - RAM System Address */
+/*! @{ */
+
+#define MECC_RAMSYSA_SYSA_MASK                   (0xFFFFFFFFU)
+#define MECC_RAMSYSA_SYSA_SHIFT                  (0U)
+/*! SYSA - System Address */
+#define MECC_RAMSYSA_SYSA(x)                     (((uint32_t)(((uint32_t)(x)) << MECC_RAMSYSA_SYSA_SHIFT)) & MECC_RAMSYSA_SYSA_MASK)
+/*! @} */
+
+/*! @name RAMECCNT - RAM Correctable Error Count */
+/*! @{ */
+
+#define MECC_RAMECCNT_ECCNT_MASK                 (0xFFU)
+#define MECC_RAMECCNT_ECCNT_SHIFT                (0U)
+/*! ECCNT - ECC Correctable Error Count */
+#define MECC_RAMECCNT_ECCNT(x)                   (((uint32_t)(((uint32_t)(x)) << MECC_RAMECCNT_ECCNT_SHIFT)) & MECC_RAMECCNT_ECCNT_MASK)
+/*! @} */
+
+/*! @name RAMEID0 - RAM Error Injection Data 0 */
+/*! @{ */
+
+#define MECC_RAMEID0_EID_W0_MASK                 (0xFFFFFFFFU)
+#define MECC_RAMEID0_EID_W0_SHIFT                (0U)
+/*! EID_W0 - Error Injection Data Word 0 */
+#define MECC_RAMEID0_EID_W0(x)                   (((uint32_t)(((uint32_t)(x)) << MECC_RAMEID0_EID_W0_SHIFT)) & MECC_RAMEID0_EID_W0_MASK)
+/*! @} */
+
+/*! @name RAMEID1 - RAM Error Injection Data 1 */
+/*! @{ */
+
+#define MECC_RAMEID1_EID_W1_MASK                 (0xFFFFFFFFU)
+#define MECC_RAMEID1_EID_W1_SHIFT                (0U)
+/*! EID_W1 - Error Injection Data Word 1 */
+#define MECC_RAMEID1_EID_W1(x)                   (((uint32_t)(((uint32_t)(x)) << MECC_RAMEID1_EID_W1_SHIFT)) & MECC_RAMEID1_EID_W1_MASK)
+/*! @} */
+
+/*! @name RAMEIDC - RAM Error Injection Data Control */
+/*! @{ */
+
+#define MECC_RAMEIDC_EID_CKB_MASK                (0xFFU)
+#define MECC_RAMEIDC_EID_CKB_SHIFT               (0U)
+/*! EID_CKB - Error Injection Data Checkbits */
+#define MECC_RAMEIDC_EID_CKB(x)                  (((uint32_t)(((uint32_t)(x)) << MECC_RAMEIDC_EID_CKB_SHIFT)) & MECC_RAMEIDC_EID_CKB_MASK)
+
+#define MECC_RAMEIDC_EIP_EN_MASK                 (0x1000000U)
+#define MECC_RAMEIDC_EIP_EN_SHIFT                (24U)
+/*! EIP_EN - Error Injection Into Pipeline Enable
+ *  0b0..No error injected
+ *  0b1..Error injected
+ */
+#define MECC_RAMEIDC_EIP_EN(x)                   (((uint32_t)(((uint32_t)(x)) << MECC_RAMEIDC_EIP_EN_SHIFT)) & MECC_RAMEIDC_EIP_EN_MASK)
+
+#define MECC_RAMEIDC_EIA_EN_MASK                 (0x40000000U)
+#define MECC_RAMEIDC_EIA_EN_SHIFT                (30U)
+/*! EIA_EN - Error Injection Address Enable
+ *  0b0..Ignore RAMEIA and RAMEIAM
+ *  0b1..Enable RAMEIA and RAMEIAM
+ */
+#define MECC_RAMEIDC_EIA_EN(x)                   (((uint32_t)(((uint32_t)(x)) << MECC_RAMEIDC_EIA_EN_SHIFT)) & MECC_RAMEIDC_EIA_EN_MASK)
+
+#define MECC_RAMEIDC_EID_EN_MASK                 (0x80000000U)
+#define MECC_RAMEIDC_EID_EN_SHIFT                (31U)
+/*! EID_EN - Error Injection Data Enable
+ *  0b0..No injection
+ *  0b1..Local injection
+ */
+#define MECC_RAMEIDC_EID_EN(x)                   (((uint32_t)(((uint32_t)(x)) << MECC_RAMEIDC_EID_EN_SHIFT)) & MECC_RAMEIDC_EID_EN_MASK)
+/*! @} */
+
+/*! @name RAMEIA - RAM Error Injection Base Address */
+/*! @{ */
+
+#define MECC_RAMEIA_EIA_MASK                     (0xFFFFFFFFU)
+#define MECC_RAMEIA_EIA_SHIFT                    (0U)
+/*! EIA - Error Injection Base Address */
+#define MECC_RAMEIA_EIA(x)                       (((uint32_t)(((uint32_t)(x)) << MECC_RAMEIA_EIA_SHIFT)) & MECC_RAMEIA_EIA_MASK)
+/*! @} */
+
+/*! @name RAMEIAM - RAM Error Injection Address Mask */
+/*! @{ */
+
+#define MECC_RAMEIAM_EIAM_MASK                   (0xFFFFFFFFU)
+#define MECC_RAMEIAM_EIAM_SHIFT                  (0U)
+/*! EIAM - Error Injection Address Mask */
+#define MECC_RAMEIAM_EIAM(x)                     (((uint32_t)(((uint32_t)(x)) << MECC_RAMEIAM_EIAM_SHIFT)) & MECC_RAMEIAM_EIAM_MASK)
+/*! @} */
+
+/*! @name RAMMAXA - RAM Maximum-Value Address */
+/*! @{ */
+
+#define MECC_RAMMAXA_MAXA_MASK                   (0xFFFFFFFFU)
+#define MECC_RAMMAXA_MAXA_SHIFT                  (0U)
+/*! MAXA - Maximum Address */
+#define MECC_RAMMAXA_MAXA(x)                     (((uint32_t)(((uint32_t)(x)) << MECC_RAMMAXA_MAXA_SHIFT)) & MECC_RAMMAXA_MAXA_MASK)
+/*! @} */
+
+
+/*!
+ * @}
+ */ /* end of group MECC_Register_Masks */
+
+
+/*!
+ * @}
+ */ /* end of group MECC_Peripheral_Access_Layer */
+
+
+/*
+** End of section using anonymous unions
+*/
+
+#if defined(__ARMCC_VERSION)
+  #if (__ARMCC_VERSION >= 6010050)
+    #pragma clang diagnostic pop
+  #else
+    #pragma pop
+  #endif
+#elif defined(__GNUC__)
+  /* leave anonymous unions enabled */
+#elif defined(__IAR_SYSTEMS_ICC__)
+  #pragma language=default
+#else
+  #error Not supported compiler type
+#endif
+
+/*!
+ * @}
+ */ /* end of group Peripheral_access_layer */
+
+
+#endif  /* PERI_MECC_H_ */
+

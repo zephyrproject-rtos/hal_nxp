@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2025-2026 NXP
  *
  * All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause
@@ -25,8 +25,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief smm driver version 2.1.1. */
-#define FSL_SMM_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief smm driver version 2.1.2. */
+#define FSL_SMM_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*@}*/
 
 /*!
@@ -608,10 +608,11 @@ static inline uint16_t SMM_ReadDeepSleepCounter(SMM_Type *base)
  */
 static inline void SMM_EnableInterrupts(SMM_Type *base, uint32_t masks)
 {
+    const uint32_t allSupportedInts = (uint32_t)kSMM_AllSupportedInts;
     uint32_t tmp32 = base->STAT;
 
-    tmp32 &= (uint32_t)(~(kSMM_AllSupportedInts));
-    base->STAT = (tmp32 | (masks & kSMM_AllSupportedInts));
+    tmp32 &= ~allSupportedInts;
+    base->STAT = (tmp32 | (masks & allSupportedInts));
 }
 
 /*!
@@ -622,10 +623,11 @@ static inline void SMM_EnableInterrupts(SMM_Type *base, uint32_t masks)
  */
 static inline void SMM_DisableInterrupts(SMM_Type *base, uint32_t masks)
 {
+    const uint32_t allSupportedInts = (uint32_t)kSMM_AllSupportedInts;
     uint32_t tmp32 = base->STAT;
 
-     tmp32 &= (uint32_t)(~(kSMM_AllSupportedInts));
-    base->STAT = tmp32 & (~(masks & kSMM_AllSupportedInts));
+    tmp32 &= ~allSupportedInts;
+    base->STAT = tmp32 & ~(masks & allSupportedInts);
 }
 
 /*!

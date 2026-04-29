@@ -110,7 +110,10 @@ uint32_t AUDIOMIX_GetAudioPllFreq(AUDIOMIX_Type *base)
     uint32_t dsm = (fracCfg2 & AUDIOMIX_SAI_PLL_FDIV_CTL1_DSM_MASK) >> AUDIOMIX_SAI_PLL_FDIV_CTL1_DSM_SHIFT;
 
     /* calculate the audio pll frequ */
-    fracClk = (uint64_t)refClkFreq * ((uint64_t)mainDiv * 65536UL + dsm) / (65536UL * preDiv * (1UL << postDiv));
+    assert(preDiv != 0U);
+    assert(postDiv < 63U);
+    uint64_t denom = 65536ULL * (uint64_t)preDiv * ((uint64_t)1U << postDiv);
+    fracClk = (uint64_t)refClkFreq * (((uint64_t)mainDiv * 65536ULL) + (uint64_t)dsm) / denom;
 
-    return (uint32_t)fracClk;
+    return (uint32_t)(fracClk & 0xFFFFFFFFULL);
 }

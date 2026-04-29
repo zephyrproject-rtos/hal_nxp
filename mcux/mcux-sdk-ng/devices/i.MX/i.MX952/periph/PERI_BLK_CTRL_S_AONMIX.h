@@ -1,50 +1,50 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX95294AVTN_ca55
-**                          MIMX95294AVTN_cm33
-**                          MIMX95294AVTN_cm7
-**                          MIMX95294AVYN_ca55
-**                          MIMX95294AVYN_cm33
-**                          MIMX95294AVYN_cm7
-**                          MIMX95294AVZN_ca55
-**                          MIMX95294AVZN_cm33
-**                          MIMX95294AVZN_cm7
-**                          MIMX95294CVTN_ca55
-**                          MIMX95294CVTN_cm33
-**                          MIMX95294CVTN_cm7
-**                          MIMX95294CVYN_ca55
-**                          MIMX95294CVYN_cm33
-**                          MIMX95294CVYN_cm7
-**                          MIMX95294CVZN_ca55
-**                          MIMX95294CVZN_cm33
-**                          MIMX95294CVZN_cm7
-**                          MIMX95294DVTN_ca55
-**                          MIMX95294DVTN_cm33
-**                          MIMX95294DVTN_cm7
-**                          MIMX95294DVYN_ca55
-**                          MIMX95294DVYN_cm33
-**                          MIMX95294DVYN_cm7
-**                          MIMX95294DVZN_ca55
-**                          MIMX95294DVZN_cm33
-**                          MIMX95294DVZN_cm7
-**                          MIMX95294XVTN_ca55
-**                          MIMX95294XVTN_cm33
-**                          MIMX95294XVTN_cm7
-**                          MIMX95294XVYN_ca55
-**                          MIMX95294XVYN_cm33
-**                          MIMX95294XVYN_cm7
-**                          MIMX95294XVZN_ca55
-**                          MIMX95294XVZN_cm33
-**                          MIMX95294XVZN_cm7
+**     Processors:          MIMX9522xxVTx_ca55
+**                          MIMX9522xxVTx_cm33
+**                          MIMX9522xxVTx_cm7
+**                          MIMX9522xxVZx_ca55
+**                          MIMX9522xxVZx_cm33
+**                          MIMX9522xxVZx_cm7
+**                          MIMX9523xxVTx_ca55
+**                          MIMX9523xxVTx_cm33
+**                          MIMX9523xxVTx_cm7
+**                          MIMX9523xxVZx_ca55
+**                          MIMX9523xxVZx_cm33
+**                          MIMX9523xxVZx_cm7
+**                          MIMX9524xxVTx_ca55
+**                          MIMX9524xxVTx_cm33
+**                          MIMX9524xxVTx_cm7
+**                          MIMX9524xxVZx_ca55
+**                          MIMX9524xxVZx_cm33
+**                          MIMX9524xxVZx_cm7
+**                          MIMX9525xxVTx_ca55
+**                          MIMX9525xxVTx_cm33
+**                          MIMX9525xxVTx_cm7
+**                          MIMX9525xxVZx_ca55
+**                          MIMX9525xxVZx_cm33
+**                          MIMX9525xxVZx_cm7
+**                          MIMX9528xxVTx_ca55
+**                          MIMX9528xxVTx_cm33
+**                          MIMX9528xxVTx_cm7
+**                          MIMX9528xxVZx_ca55
+**                          MIMX9528xxVZx_cm33
+**                          MIMX9528xxVZx_cm7
+**                          MIMX9529xxVTx_ca55
+**                          MIMX9529xxVTx_cm33
+**                          MIMX9529xxVTx_cm7
+**                          MIMX9529xxVZx_ca55
+**                          MIMX9529xxVZx_cm33
+**                          MIMX9529xxVZx_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250903
+**     Build:               b260324
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BLK_CTRL_S_AONMIX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -72,12 +72,42 @@
 #if !defined(PERI_BLK_CTRL_S_AONMIX_H_)
 #define PERI_BLK_CTRL_S_AONMIX_H_                /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX95294AVTN_ca55) || defined(CPU_MIMX95294AVYN_ca55) || defined(CPU_MIMX95294AVZN_ca55) || defined(CPU_MIMX95294CVTN_ca55) || defined(CPU_MIMX95294CVYN_ca55) || defined(CPU_MIMX95294CVZN_ca55) || defined(CPU_MIMX95294DVTN_ca55) || defined(CPU_MIMX95294DVYN_ca55) || defined(CPU_MIMX95294DVZN_ca55) || defined(CPU_MIMX95294XVTN_ca55) || defined(CPU_MIMX95294XVYN_ca55) || defined(CPU_MIMX95294XVZN_ca55))
-#include "MIMX95294_ca55_COMMON.h"
-#elif (defined(CPU_MIMX95294AVTN_cm33) || defined(CPU_MIMX95294AVYN_cm33) || defined(CPU_MIMX95294AVZN_cm33) || defined(CPU_MIMX95294CVTN_cm33) || defined(CPU_MIMX95294CVYN_cm33) || defined(CPU_MIMX95294CVZN_cm33) || defined(CPU_MIMX95294DVTN_cm33) || defined(CPU_MIMX95294DVYN_cm33) || defined(CPU_MIMX95294DVZN_cm33) || defined(CPU_MIMX95294XVTN_cm33) || defined(CPU_MIMX95294XVYN_cm33) || defined(CPU_MIMX95294XVZN_cm33))
-#include "MIMX95294_cm33_COMMON.h"
-#elif (defined(CPU_MIMX95294AVTN_cm7) || defined(CPU_MIMX95294AVYN_cm7) || defined(CPU_MIMX95294AVZN_cm7) || defined(CPU_MIMX95294CVTN_cm7) || defined(CPU_MIMX95294CVYN_cm7) || defined(CPU_MIMX95294CVZN_cm7) || defined(CPU_MIMX95294DVTN_cm7) || defined(CPU_MIMX95294DVYN_cm7) || defined(CPU_MIMX95294DVZN_cm7) || defined(CPU_MIMX95294XVTN_cm7) || defined(CPU_MIMX95294XVYN_cm7) || defined(CPU_MIMX95294XVZN_cm7))
-#include "MIMX95294_cm7_COMMON.h"
+#if (defined(CPU_MIMX9522xxVTx_ca55) || defined(CPU_MIMX9522xxVZx_ca55))
+#include "MIMX9522_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9522xxVTx_cm33) || defined(CPU_MIMX9522xxVZx_cm33))
+#include "MIMX9522_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9522xxVTx_cm7) || defined(CPU_MIMX9522xxVZx_cm7))
+#include "MIMX9522_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9523xxVTx_ca55) || defined(CPU_MIMX9523xxVZx_ca55))
+#include "MIMX9523_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9523xxVTx_cm33) || defined(CPU_MIMX9523xxVZx_cm33))
+#include "MIMX9523_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9523xxVTx_cm7) || defined(CPU_MIMX9523xxVZx_cm7))
+#include "MIMX9523_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9524xxVTx_ca55) || defined(CPU_MIMX9524xxVZx_ca55))
+#include "MIMX9524_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9524xxVTx_cm33) || defined(CPU_MIMX9524xxVZx_cm33))
+#include "MIMX9524_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9524xxVTx_cm7) || defined(CPU_MIMX9524xxVZx_cm7))
+#include "MIMX9524_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9525xxVTx_ca55) || defined(CPU_MIMX9525xxVZx_ca55))
+#include "MIMX9525_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9525xxVTx_cm33) || defined(CPU_MIMX9525xxVZx_cm33))
+#include "MIMX9525_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9525xxVTx_cm7) || defined(CPU_MIMX9525xxVZx_cm7))
+#include "MIMX9525_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9528xxVTx_ca55) || defined(CPU_MIMX9528xxVZx_ca55))
+#include "MIMX9528_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9528xxVTx_cm33) || defined(CPU_MIMX9528xxVZx_cm33))
+#include "MIMX9528_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9528xxVTx_cm7) || defined(CPU_MIMX9528xxVZx_cm7))
+#include "MIMX9528_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9529xxVTx_ca55) || defined(CPU_MIMX9529xxVZx_ca55))
+#include "MIMX9529_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9529xxVTx_cm33) || defined(CPU_MIMX9529xxVZx_cm33))
+#include "MIMX9529_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9529xxVTx_cm7) || defined(CPU_MIMX9529xxVZx_cm7))
+#include "MIMX9529_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -207,10 +237,10 @@ typedef struct {
 /*! @name CM33_IRQ_MASK - Cortex-M33 Interrupt Mask0..Cortex-M33 Interrupt Mask7 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_m_MASK   (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_m_SHIFT  (0U)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_M_MASK   (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_M_SHIFT  (0U)
 /*! m - Cortex-M33 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_m(x)     (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_m_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_m_MASK)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_M(x)     (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_M_MASK)
 /*! @} */
 
 /* The count of BLK_CTRL_S_AONMIX_CM33_IRQ_MASK */
@@ -219,55 +249,55 @@ typedef struct {
 /*! @name CM33_IRQ_MASK8 - Cortex-M33 Interrupt Mask8 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK8_m_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK8_m_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK8_M_MASK  (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK8_M_SHIFT (0U)
 /*! m - Cortex-M33 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK8_m(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK8_m_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK8_m_MASK)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK8_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK8_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK8_M_MASK)
 /*! @} */
 
 /*! @name CM33_IRQ_MASK9 - Cortex-M33 Interrupt Mask9 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK9_m_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK9_m_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK9_M_MASK  (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK9_M_SHIFT (0U)
 /*! m - Cortex-M33 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK9_m(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK9_m_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK9_m_MASK)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK9_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK9_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK9_M_MASK)
 /*! @} */
 
 /*! @name CM33_IRQ_MASK10 - Cortex-M33 Interrupt Mask10 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK10_m_MASK (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK10_m_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK10_M_MASK (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK10_M_SHIFT (0U)
 /*! m - Cortex-M33 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK10_m(x)   (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK10_m_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK10_m_MASK)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK10_M(x)   (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK10_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK10_M_MASK)
 /*! @} */
 
 /*! @name CM33_IRQ_MASK11 - Cortex-M33 Interrupt Mask11 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK11_m_MASK (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK11_m_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK11_M_MASK (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK11_M_SHIFT (0U)
 /*! m - Cortex-M33 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK11_m(x)   (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK11_m_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK11_m_MASK)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK11_M(x)   (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK11_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK11_M_MASK)
 /*! @} */
 
 /*! @name CM33_IRQ_MASK12 - Cortex-M33 Interrupt Mask12 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK12_m_MASK (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK12_m_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK12_M_MASK (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK12_M_SHIFT (0U)
 /*! m - Cortex-M33 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK12_m(x)   (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK12_m_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK12_m_MASK)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK12_M(x)   (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK12_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK12_M_MASK)
 /*! @} */
 
 /*! @name CA55_IRQ_MASK - Cortex-A55 Interrupt Mask0..Cortex-A55 Interrupt Mask5 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK_m_MASK   (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK_m_SHIFT  (0U)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK_M_MASK   (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK_M_SHIFT  (0U)
 /*! m - Cortex-A55 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK_m(x)     (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK_m_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK_m_MASK)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK_M(x)     (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK_M_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK_M_MASK)
 /*! @} */
 
 /* The count of BLK_CTRL_S_AONMIX_CA55_IRQ_MASK */
@@ -276,73 +306,73 @@ typedef struct {
 /*! @name CA55_IRQ_MASK6 - Cortex-A55 Interrupt Mask6 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK6_m_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK6_m_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK6_M_MASK  (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK6_M_SHIFT (0U)
 /*! m - Cortex-A55 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK6_m(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK6_m_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK6_m_MASK)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK6_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK6_M_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK6_M_MASK)
 /*! @} */
 
 /*! @name CA55_IRQ_MASK7 - Cortex-A55 Interrupt Mask7 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK7_m_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK7_m_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK7_M_MASK  (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK7_M_SHIFT (0U)
 /*! m - Cortex-A55 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK7_m(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK7_m_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK7_m_MASK)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK7_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK7_M_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK7_M_MASK)
 /*! @} */
 
 /*! @name CA55_IRQ_MASK8 - Cortex-A55 Interrupt Mask8 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK8_m_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK8_m_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK8_M_MASK  (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK8_M_SHIFT (0U)
 /*! m - Cortex-A55 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK8_m(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK8_m_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK8_m_MASK)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK8_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK8_M_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK8_M_MASK)
 /*! @} */
 
 /*! @name CA55_IRQ_MASK9 - Cortex-A55 Interrupt Mask9 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK9_m_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK9_m_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK9_M_MASK  (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK9_M_SHIFT (0U)
 /*! m - Cortex-A55 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK9_m(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK9_m_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK9_m_MASK)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK9_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK9_M_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK9_M_MASK)
 /*! @} */
 
 /*! @name CA55_IRQ_MASK10 - Cortex-A55 Interrupt Mask10 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK10_m_MASK (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK10_m_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK10_M_MASK (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK10_M_SHIFT (0U)
 /*! m - Cortex-A55 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK10_m(x)   (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK10_m_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK10_m_MASK)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK10_M(x)   (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK10_M_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK10_M_MASK)
 /*! @} */
 
 /*! @name CA55_IRQ_MASK11 - Cortex-A55 Interrupt Mask11 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK11_m_MASK (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK11_m_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK11_M_MASK (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK11_M_SHIFT (0U)
 /*! m - Cortex-A55 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK11_m(x)   (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK11_m_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK11_m_MASK)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK11_M(x)   (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK11_M_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK11_M_MASK)
 /*! @} */
 
 /*! @name CA55_IRQ_MASK12 - Cortex-A55 Interrupt Mask12 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK12_m_MASK (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK12_m_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK12_M_MASK (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK12_M_SHIFT (0U)
 /*! m - Cortex-A55 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK12_m(x)   (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK12_m_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK12_m_MASK)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK12_M(x)   (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK12_M_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK12_M_MASK)
 /*! @} */
 
 /*! @name CM7_IRQ_MASK - Cortex-M7 Interrupt Mask0..Cortex-M7 Interrupt Mask7 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK_m_MASK    (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK_m_SHIFT   (0U)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK_M_MASK    (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK_M_SHIFT   (0U)
 /*! m - Cortex-M7 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK_m(x)      (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM7_IRQ_MASK_m_SHIFT)) & BLK_CTRL_S_AONMIX_CM7_IRQ_MASK_m_MASK)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK_M(x)      (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM7_IRQ_MASK_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM7_IRQ_MASK_M_MASK)
 /*! @} */
 
 /* The count of BLK_CTRL_S_AONMIX_CM7_IRQ_MASK */
@@ -351,64 +381,64 @@ typedef struct {
 /*! @name CM7_IRQ_MASK8 - Cortex-M7 Interrupt Mask8 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK8_m_MASK   (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK8_m_SHIFT  (0U)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK8_M_MASK   (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK8_M_SHIFT  (0U)
 /*! m - Cortex-M7 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK8_m(x)     (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM7_IRQ_MASK8_m_SHIFT)) & BLK_CTRL_S_AONMIX_CM7_IRQ_MASK8_m_MASK)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK8_M(x)     (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM7_IRQ_MASK8_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM7_IRQ_MASK8_M_MASK)
 /*! @} */
 
 /*! @name CM7_IRQ_MASK9 - Cortex-M7 Interrupt Mask9 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK9_m_MASK   (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK9_m_SHIFT  (0U)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK9_M_MASK   (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK9_M_SHIFT  (0U)
 /*! m - Cortex-M7 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK9_m(x)     (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM7_IRQ_MASK9_m_SHIFT)) & BLK_CTRL_S_AONMIX_CM7_IRQ_MASK9_m_MASK)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK9_M(x)     (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM7_IRQ_MASK9_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM7_IRQ_MASK9_M_MASK)
 /*! @} */
 
 /*! @name CM7_IRQ_MASK10 - Cortex-M7 Interrupt Mask10 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK10_m_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK10_m_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK10_M_MASK  (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK10_M_SHIFT (0U)
 /*! m - Cortex-M7 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK10_m(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM7_IRQ_MASK10_m_SHIFT)) & BLK_CTRL_S_AONMIX_CM7_IRQ_MASK10_m_MASK)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK10_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM7_IRQ_MASK10_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM7_IRQ_MASK10_M_MASK)
 /*! @} */
 
 /*! @name CM7_IRQ_MASK11 - Cortex-M7 Interrupt Mask11 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK11_m_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK11_m_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK11_M_MASK  (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK11_M_SHIFT (0U)
 /*! m - Cortex-M7 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK11_m(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM7_IRQ_MASK11_m_SHIFT)) & BLK_CTRL_S_AONMIX_CM7_IRQ_MASK11_m_MASK)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK11_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM7_IRQ_MASK11_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM7_IRQ_MASK11_M_MASK)
 /*! @} */
 
 /*! @name CM7_IRQ_MASK12 - Cortex-M7 Interrupt Mask12 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK12_m_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK12_m_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK12_M_MASK  (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK12_M_SHIFT (0U)
 /*! m - Cortex-M7 Interrupt Mask */
-#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK12_m(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM7_IRQ_MASK12_m_SHIFT)) & BLK_CTRL_S_AONMIX_CM7_IRQ_MASK12_m_MASK)
+#define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK12_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM7_IRQ_MASK12_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM7_IRQ_MASK12_M_MASK)
 /*! @} */
 
 /*! @name INITSVTOR - Cortex-M33 Restart Secure Address */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_INITSVTOR_m33_MASK     (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_INITSVTOR_m33_SHIFT    (0U)
+#define BLK_CTRL_S_AONMIX_INITSVTOR_M33_MASK     (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_INITSVTOR_M33_SHIFT    (0U)
 /*! m33 - Cortex-M33 Restart Secure Address */
-#define BLK_CTRL_S_AONMIX_INITSVTOR_m33(x)       (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_INITSVTOR_m33_SHIFT)) & BLK_CTRL_S_AONMIX_INITSVTOR_m33_MASK)
+#define BLK_CTRL_S_AONMIX_INITSVTOR_M33(x)       (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_INITSVTOR_M33_SHIFT)) & BLK_CTRL_S_AONMIX_INITSVTOR_M33_MASK)
 /*! @} */
 
 /*! @name INITNSVTOR - Cortex-M33 Restart Non-Secure Address */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_INITNSVTOR_m33_MASK    (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_INITNSVTOR_m33_SHIFT   (0U)
+#define BLK_CTRL_S_AONMIX_INITNSVTOR_M33_MASK    (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_INITNSVTOR_M33_SHIFT   (0U)
 /*! m33 - Cortex-M33 Restart Non-Secure Address */
-#define BLK_CTRL_S_AONMIX_INITNSVTOR_m33(x)      (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_INITNSVTOR_m33_SHIFT)) & BLK_CTRL_S_AONMIX_INITNSVTOR_m33_MASK)
+#define BLK_CTRL_S_AONMIX_INITNSVTOR_M33(x)      (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_INITNSVTOR_M33_SHIFT)) & BLK_CTRL_S_AONMIX_INITNSVTOR_M33_MASK)
 /*! @} */
 
 /*! @name INITVTOR - Cortex-M7 Restart Address */
@@ -556,21 +586,21 @@ typedef struct {
 /*! @name LP_HANDSHAKE_ELE - Low Power Handshake for ELE */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_aonmix_MASK (0x2U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_aonmix_SHIFT (1U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_AONMIX_MASK (0x2U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_AONMIX_SHIFT (1U)
 /*! aonmix - AON Domain Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_aonmix(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_aonmix_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_aonmix_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_AONMIX(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_AONMIX_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_AONMIX_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_M33_platform_MASK (0x4U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_M33_platform_SHIFT (2U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_M33_PLATFORM_MASK (0x4U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_M33_PLATFORM_SHIFT (2U)
 /*! M33_platform - Cortex-M33 Platform Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_M33_platform(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_M33_platform_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_M33_platform_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_M33_PLATFORM(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_M33_PLATFORM_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_M33_PLATFORM_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_ELE_MASK (0x8U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_ELE_SHIFT (3U)
@@ -580,329 +610,329 @@ typedef struct {
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_ELE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_ELE_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_ELE_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_Cameramix_MASK (0x20U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_Cameramix_SHIFT (5U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_CAMERAMIX_MASK (0x20U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_CAMERAMIX_SHIFT (5U)
 /*! Cameramix - Camera Domain Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_Cameramix(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_Cameramix_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_Cameramix_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_CAMERAMIX(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_CAMERAMIX_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_CAMERAMIX_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu0_MASK (0x80U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu0_SHIFT (7U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU0_MASK (0x80U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU0_SHIFT (7U)
 /*! A55_cpu0 - Cortex-A55 CPU0 Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu0_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu0_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU0_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU0_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu1_MASK (0x100U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu1_SHIFT (8U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU1_MASK (0x100U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU1_SHIFT (8U)
 /*! A55_cpu1 - Cortex-A55 CPU1 Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu1_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu1_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU1_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU1_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu2_MASK (0x200U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu2_SHIFT (9U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU2_MASK (0x200U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU2_SHIFT (9U)
 /*! A55_cpu2 - Cortex-A55 CPU2 Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu2_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu2_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU2_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU2_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu3_MASK (0x400U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu3_SHIFT (10U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU3_MASK (0x400U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU3_SHIFT (10U)
 /*! A55_cpu3 - Cortex-A55 CPU3 Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu3_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_cpu3_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU3_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_CPU3_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_platform_MASK (0x800U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_platform_SHIFT (11U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_PLATFORM_MASK (0x800U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_PLATFORM_SHIFT (11U)
 /*! A55_platform - Cortex-A55 Platform Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_platform(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_platform_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_platform_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_PLATFORM(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_PLATFORM_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_A55_PLATFORM_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_ddrmix_top_MASK (0x1000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_ddrmix_top_SHIFT (12U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_DDRMIX_TOP_MASK (0x1000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_DDRMIX_TOP_SHIFT (12U)
 /*! ddrmix_top - DDR Domain Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_ddrmix_top(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_ddrmix_top_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_ddrmix_top_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_DDRMIX_TOP(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_DDRMIX_TOP_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_DDRMIX_TOP_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_ddr_phy_MASK (0x2000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_ddr_phy_SHIFT (13U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_DDR_PHY_MASK (0x2000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_DDR_PHY_SHIFT (13U)
 /*! ddr_phy - DDR PHY Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_ddr_phy(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_ddr_phy_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_ddr_phy_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_DDR_PHY(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_DDR_PHY_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_DDR_PHY_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_display_MASK (0x4000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_display_SHIFT (14U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_DISPLAY_MASK (0x4000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_DISPLAY_SHIFT (14U)
 /*! display - Display Domain Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_display(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_display_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_display_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_DISPLAY(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_DISPLAY_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_DISPLAY_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_gpu_MASK (0x8000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_gpu_SHIFT (15U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_GPU_MASK (0x8000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_GPU_SHIFT (15U)
 /*! gpu - GPU Domain Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_gpu(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_gpu_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_gpu_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_GPU(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_GPU_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_GPU_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_hsio_top_MASK (0x10000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_hsio_top_SHIFT (16U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_HSIO_TOP_MASK (0x10000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_HSIO_TOP_SHIFT (16U)
 /*! hsio_top - HSIO Domain Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_hsio_top(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_hsio_top_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_hsio_top_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_HSIO_TOP(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_HSIO_TOP_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_HSIO_TOP_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_hsio_aon_MASK (0x20000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_hsio_aon_SHIFT (17U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_HSIO_AON_MASK (0x20000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_HSIO_AON_SHIFT (17U)
 /*! hsio_aon - HSIO AON Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_hsio_aon(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_hsio_aon_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_hsio_aon_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_HSIO_AON(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_HSIO_AON_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_HSIO_AON_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_m7mix_MASK (0x40000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_m7mix_SHIFT (18U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_M7MIX_MASK (0x40000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_M7MIX_SHIFT (18U)
 /*! m7mix - Cortex-M7 Domain Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_m7mix(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_m7mix_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_m7mix_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_M7MIX(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_M7MIX_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_M7MIX_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_netc_MASK (0x80000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_netc_SHIFT (19U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_NETC_MASK (0x80000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_NETC_SHIFT (19U)
 /*! netc - NETC Domain Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_netc(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_netc_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_netc_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_NETC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_NETC_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_NETC_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_noc_MASK (0x100000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_noc_SHIFT (20U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_NOC_MASK (0x100000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_NOC_SHIFT (20U)
 /*! noc - NOC Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_noc(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_noc_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_noc_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_NOC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_NOC_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_NOC_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_npu_MASK (0x200000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_npu_SHIFT (21U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_NPU_MASK (0x200000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_NPU_SHIFT (21U)
 /*! npu - NPU Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_npu(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_npu_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_npu_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_NPU(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_NPU_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_NPU_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_vpu_MASK (0x400000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_vpu_SHIFT (22U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_VPU_MASK (0x400000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_VPU_SHIFT (22U)
 /*! vpu - VPU Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_vpu(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_vpu_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_vpu_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_VPU(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_VPU_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_VPU_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_top_MASK (0x800000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_top_SHIFT (23U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_TOP_MASK (0x800000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_TOP_SHIFT (23U)
 /*! wakeupmix_top - WAKEUPMIX TOP Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_top(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_top_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_top_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_TOP(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_TOP_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_TOP_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_jtag_MASK (0x1000000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_jtag_SHIFT (24U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_JTAG_MASK (0x1000000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_JTAG_SHIFT (24U)
 /*! wakeupmix_jtag - WAKEUPMIX JTAG Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_jtag(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_jtag_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_jtag_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_JTAG(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_JTAG_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_JTAG_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_wdog_3_4_MASK (0x2000000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_wdog_3_4_SHIFT (25U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_WDOG_3_4_MASK (0x2000000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_WDOG_3_4_SHIFT (25U)
 /*! wakeupmix_wdog_3_4 - WAKEUPMIX WDOG3 and WDOG4 Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_wdog_3_4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_wdog_3_4_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_wdog_3_4_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_WDOG_3_4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_WDOG_3_4_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_WDOG_3_4_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_wdog5_MASK (0x4000000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_wdog5_SHIFT (26U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_WDOG5_MASK (0x4000000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_WDOG5_SHIFT (26U)
 /*! wakeupmix_wdog5 - WAKEUPMIX WDOG5 Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_wdog5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_wdog5_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_wakeupmix_wdog5_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_WDOG5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_WDOG5_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_WAKEUPMIX_WDOG5_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_aonmix_power_MASK (0x40000000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_aonmix_power_SHIFT (30U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_AONMIX_POWER_MASK (0x40000000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_AONMIX_POWER_SHIFT (30U)
 /*! aonmix_power - AON Domain Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_aonmix_power(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_aonmix_power_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_aonmix_power_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_AONMIX_POWER(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_AONMIX_POWER_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_ELE_AONMIX_POWER_MASK)
 /*! @} */
 
 /*! @name LP_HANDSHAKE2_ELE - Low Power Handshake 2 for ELE */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_cameramix_MASK (0x1U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_cameramix_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_CAMERAMIX_MASK (0x1U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_CAMERAMIX_SHIFT (0U)
 /*! cameramix - Camera Domain Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_cameramix(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_cameramix_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_cameramix_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_CAMERAMIX(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_CAMERAMIX_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_CAMERAMIX_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu0_MASK (0x4U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu0_SHIFT (2U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU0_MASK (0x4U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU0_SHIFT (2U)
 /*! A55_cpu0 - Cortex-A55 CPU0 Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu0_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu0_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU0_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU0_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu1_MASK (0x8U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu1_SHIFT (3U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU1_MASK (0x8U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU1_SHIFT (3U)
 /*! A55_cpu1 - Cortex-A55 CPU1 Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu1_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu1_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU1_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU1_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu2_MASK (0x10U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu2_SHIFT (4U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU2_MASK (0x10U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU2_SHIFT (4U)
 /*! A55_cpu2 - Cortex-A55 CPU2 Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu2_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu2_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU2_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU2_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu3_MASK (0x20U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu3_SHIFT (5U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU3_MASK (0x20U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU3_SHIFT (5U)
 /*! A55_cpu3 - Cortex-A55 CPU3 Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu3_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_cpu3_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU3_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_CPU3_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_platform_MASK (0x40U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_platform_SHIFT (6U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_PLATFORM_MASK (0x40U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_PLATFORM_SHIFT (6U)
 /*! A55_platform - Cortex-A55 Platform Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_platform(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_platform_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_platform_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_PLATFORM(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_PLATFORM_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_A55_PLATFORM_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_ddr_MASK (0x80U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_ddr_SHIFT (7U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_DDR_MASK (0x80U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_DDR_SHIFT (7U)
 /*! ddr - DDR Domain Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_ddr(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_ddr_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_ddr_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_DDR(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_DDR_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_DDR_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_display_MASK (0x100U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_display_SHIFT (8U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_DISPLAY_MASK (0x100U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_DISPLAY_SHIFT (8U)
 /*! display - Display Domain Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_display(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_display_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_display_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_DISPLAY(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_DISPLAY_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_DISPLAY_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_gpu_MASK (0x200U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_gpu_SHIFT (9U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_GPU_MASK (0x200U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_GPU_SHIFT (9U)
 /*! gpu - GPU Domain Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_gpu(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_gpu_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_gpu_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_GPU(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_GPU_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_GPU_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_hsio_top_MASK (0x400U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_hsio_top_SHIFT (10U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_HSIO_TOP_MASK (0x400U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_HSIO_TOP_SHIFT (10U)
 /*! hsio_top - HSIO Domain Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_hsio_top(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_hsio_top_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_hsio_top_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_HSIO_TOP(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_HSIO_TOP_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_HSIO_TOP_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_hsio_aon_MASK (0x800U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_hsio_aon_SHIFT (11U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_HSIO_AON_MASK (0x800U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_HSIO_AON_SHIFT (11U)
 /*! hsio_aon - HSIO_AON Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_hsio_aon(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_hsio_aon_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_hsio_aon_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_HSIO_AON(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_HSIO_AON_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_HSIO_AON_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_m7_platform_MASK (0x1000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_m7_platform_SHIFT (12U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_M7_PLATFORM_MASK (0x1000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_M7_PLATFORM_SHIFT (12U)
 /*! m7_platform - Cortex-M7 Platform Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_m7_platform(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_m7_platform_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_m7_platform_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_M7_PLATFORM(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_M7_PLATFORM_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_M7_PLATFORM_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_netc_MASK (0x2000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_netc_SHIFT (13U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_NETC_MASK (0x2000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_NETC_SHIFT (13U)
 /*! netc - NETC domain Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_netc(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_netc_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_netc_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_NETC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_NETC_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_NETC_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_noc_MASK (0x4000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_noc_SHIFT (14U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_NOC_MASK (0x4000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_NOC_SHIFT (14U)
 /*! noc - NOC Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_noc(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_noc_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_noc_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_NOC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_NOC_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_NOC_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_npu_MASK (0x8000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_npu_SHIFT (15U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_NPU_MASK (0x8000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_NPU_SHIFT (15U)
 /*! npu - NPU Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_npu(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_npu_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_npu_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_NPU(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_NPU_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_NPU_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_vpu_MASK (0x10000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_vpu_SHIFT (16U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_VPU_MASK (0x10000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_VPU_SHIFT (16U)
 /*! vpu - VPU Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_vpu(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_vpu_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_vpu_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_VPU(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_VPU_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_VPU_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_wakeup_MASK (0x20000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_wakeup_SHIFT (17U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_WAKEUP_MASK (0x20000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_WAKEUP_SHIFT (17U)
 /*! wakeup - WAKEUP Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_wakeup(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_wakeup_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_wakeup_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_WAKEUP(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_WAKEUP_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_WAKEUP_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_osc24mhz_MASK (0x100000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_osc24mhz_SHIFT (20U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_OSC24MHZ_MASK (0x100000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_OSC24MHZ_SHIFT (20U)
 /*! osc24mhz - OSC 24MHz Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_osc24mhz(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_osc24mhz_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_osc24mhz_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_OSC24MHZ(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_OSC24MHZ_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_ELE_OSC24MHZ_MASK)
 /*! @} */
 
 /*! @name LP_HANDSHAKE3_ELE - Low Power Handshake 3 for ELE */
@@ -1152,21 +1182,21 @@ typedef struct {
 /*! @name LP_HANDSHAKE_SM - Low Power Handshake for System Manager */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_aonmix_MASK (0x2U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_aonmix_SHIFT (1U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_AONMIX_MASK (0x2U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_AONMIX_SHIFT (1U)
 /*! aonmix - AON Domain Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_aonmix(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_aonmix_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_aonmix_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_AONMIX(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_AONMIX_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_AONMIX_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_M33_platform_MASK (0x4U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_M33_platform_SHIFT (2U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_M33_PLATFORM_MASK (0x4U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_M33_PLATFORM_SHIFT (2U)
 /*! M33_platform - Cortex-M33 Platform Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_M33_platform(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_M33_platform_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_M33_platform_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_M33_PLATFORM(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_M33_PLATFORM_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_M33_PLATFORM_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_ELE_MASK (0x8U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_ELE_SHIFT (3U)
@@ -1176,329 +1206,329 @@ typedef struct {
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_ELE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_ELE_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_ELE_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_Cameramix_MASK (0x20U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_Cameramix_SHIFT (5U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_CAMERAMIX_MASK (0x20U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_CAMERAMIX_SHIFT (5U)
 /*! Cameramix - Camera Domain Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_Cameramix(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_Cameramix_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_Cameramix_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_CAMERAMIX(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_CAMERAMIX_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_CAMERAMIX_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu0_MASK (0x80U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu0_SHIFT (7U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU0_MASK (0x80U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU0_SHIFT (7U)
 /*! A55_cpu0 - Cortex-A55 CPU0 Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu0_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu0_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU0_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU0_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu1_MASK (0x100U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu1_SHIFT (8U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU1_MASK (0x100U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU1_SHIFT (8U)
 /*! A55_cpu1 - Cortex-A55 CPU1 Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu1_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu1_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU1_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU1_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu2_MASK (0x200U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu2_SHIFT (9U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU2_MASK (0x200U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU2_SHIFT (9U)
 /*! A55_cpu2 - Cortex-A55 CPU2 Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu2_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu2_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU2_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU2_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu3_MASK (0x400U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu3_SHIFT (10U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU3_MASK (0x400U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU3_SHIFT (10U)
 /*! A55_cpu3 - Cortex-A55 CPU3 Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu3_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_cpu3_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU3_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_CPU3_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_platform_MASK (0x800U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_platform_SHIFT (11U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_PLATFORM_MASK (0x800U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_PLATFORM_SHIFT (11U)
 /*! A55_platform - Cortex-A55 Platform Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_platform(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_platform_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_platform_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_PLATFORM(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_PLATFORM_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_A55_PLATFORM_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_ddrmix_top_MASK (0x1000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_ddrmix_top_SHIFT (12U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_DDRMIX_TOP_MASK (0x1000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_DDRMIX_TOP_SHIFT (12U)
 /*! ddrmix_top - DDR Domain Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_ddrmix_top(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_ddrmix_top_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_ddrmix_top_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_DDRMIX_TOP(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_DDRMIX_TOP_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_DDRMIX_TOP_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_ddr_phy_MASK (0x2000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_ddr_phy_SHIFT (13U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_DDR_PHY_MASK (0x2000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_DDR_PHY_SHIFT (13U)
 /*! ddr_phy - DDR PHY Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_ddr_phy(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_ddr_phy_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_ddr_phy_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_DDR_PHY(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_DDR_PHY_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_DDR_PHY_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_display_MASK (0x4000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_display_SHIFT (14U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_DISPLAY_MASK (0x4000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_DISPLAY_SHIFT (14U)
 /*! display - Display Domain Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_display(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_display_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_display_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_DISPLAY(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_DISPLAY_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_DISPLAY_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_gpu_MASK (0x8000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_gpu_SHIFT (15U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_GPU_MASK (0x8000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_GPU_SHIFT (15U)
 /*! gpu - GPU Domain Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_gpu(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_gpu_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_gpu_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_GPU(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_GPU_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_GPU_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_hsio_top_MASK (0x10000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_hsio_top_SHIFT (16U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_HSIO_TOP_MASK (0x10000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_HSIO_TOP_SHIFT (16U)
 /*! hsio_top - HSIO Domain Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_hsio_top(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_hsio_top_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_hsio_top_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_HSIO_TOP(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_HSIO_TOP_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_HSIO_TOP_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_hsio_aon_MASK (0x20000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_hsio_aon_SHIFT (17U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_HSIO_AON_MASK (0x20000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_HSIO_AON_SHIFT (17U)
 /*! hsio_aon - HSIO AON Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_hsio_aon(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_hsio_aon_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_hsio_aon_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_HSIO_AON(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_HSIO_AON_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_HSIO_AON_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_m7mix_MASK (0x40000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_m7mix_SHIFT (18U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_M7MIX_MASK (0x40000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_M7MIX_SHIFT (18U)
 /*! m7mix - Cortex-M7 Domain Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_m7mix(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_m7mix_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_m7mix_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_M7MIX(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_M7MIX_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_M7MIX_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_netc_MASK (0x80000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_netc_SHIFT (19U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_NETC_MASK (0x80000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_NETC_SHIFT (19U)
 /*! netc - NETC Domain Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_netc(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_netc_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_netc_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_NETC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_NETC_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_NETC_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_noc_MASK (0x100000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_noc_SHIFT (20U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_NOC_MASK (0x100000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_NOC_SHIFT (20U)
 /*! noc - NOC Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_noc(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_noc_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_noc_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_NOC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_NOC_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_NOC_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_npu_MASK (0x200000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_npu_SHIFT (21U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_NPU_MASK (0x200000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_NPU_SHIFT (21U)
 /*! npu - NPU Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_npu(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_npu_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_npu_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_NPU(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_NPU_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_NPU_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_vpu_MASK (0x400000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_vpu_SHIFT (22U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_VPU_MASK (0x400000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_VPU_SHIFT (22U)
 /*! vpu - VPU Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_vpu(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_vpu_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_vpu_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_VPU(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_VPU_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_VPU_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_top_MASK (0x800000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_top_SHIFT (23U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_TOP_MASK (0x800000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_TOP_SHIFT (23U)
 /*! wakeupmix_top - WAKEUPMIX TOP Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_top(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_top_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_top_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_TOP(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_TOP_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_TOP_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_jtag_MASK (0x1000000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_jtag_SHIFT (24U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_JTAG_MASK (0x1000000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_JTAG_SHIFT (24U)
 /*! wakeupmix_jtag - WAKEUPMIX JTAG Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_jtag(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_jtag_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_jtag_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_JTAG(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_JTAG_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_JTAG_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_wdog_3_4_MASK (0x2000000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_wdog_3_4_SHIFT (25U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_WDOG_3_4_MASK (0x2000000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_WDOG_3_4_SHIFT (25U)
 /*! wakeupmix_wdog_3_4 - WAKEUPMIX WDOG3 and WDOG4 Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_wdog_3_4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_wdog_3_4_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_wdog_3_4_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_WDOG_3_4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_WDOG_3_4_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_WDOG_3_4_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_wdog5_MASK (0x4000000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_wdog5_SHIFT (26U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_WDOG5_MASK (0x4000000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_WDOG5_SHIFT (26U)
 /*! wakeupmix_wdog5 - WAKEUPMIX WDOG5 Cold Reset Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_wdog5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_wdog5_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_wakeupmix_wdog5_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_WDOG5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_WDOG5_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_WAKEUPMIX_WDOG5_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_aonmix_power_MASK (0x40000000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_aonmix_power_SHIFT (30U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_AONMIX_POWER_MASK (0x40000000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_AONMIX_POWER_SHIFT (30U)
 /*! aonmix_power - AON Domain Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_aonmix_power(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_aonmix_power_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_aonmix_power_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_AONMIX_POWER(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_AONMIX_POWER_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_SM_AONMIX_POWER_MASK)
 /*! @} */
 
 /*! @name LP_HANDSHAKE2_SM - Low Power Handshake 2 for System Manager */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_cameramix_MASK (0x1U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_cameramix_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_CAMERAMIX_MASK (0x1U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_CAMERAMIX_SHIFT (0U)
 /*! cameramix - Camera Domain Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_cameramix(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_cameramix_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_cameramix_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_CAMERAMIX(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_CAMERAMIX_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_CAMERAMIX_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu0_MASK (0x4U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu0_SHIFT (2U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU0_MASK (0x4U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU0_SHIFT (2U)
 /*! A55_cpu0 - Cortex-A55 CPU0 Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu0_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu0_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU0_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU0_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu1_MASK (0x8U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu1_SHIFT (3U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU1_MASK (0x8U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU1_SHIFT (3U)
 /*! A55_cpu1 - Cortex-A55 CPU1 Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu1_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu1_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU1_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU1_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu2_MASK (0x10U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu2_SHIFT (4U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU2_MASK (0x10U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU2_SHIFT (4U)
 /*! A55_cpu2 - Cortex-A55 CPU2 Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu2_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu2_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU2_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU2_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu3_MASK (0x20U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu3_SHIFT (5U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU3_MASK (0x20U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU3_SHIFT (5U)
 /*! A55_cpu3 - Cortex-A55 CPU3 Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu3_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_cpu3_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU3_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_CPU3_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_platform_MASK (0x40U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_platform_SHIFT (6U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_PLATFORM_MASK (0x40U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_PLATFORM_SHIFT (6U)
 /*! A55_platform - Cortex-A55 Platform Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_platform(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_platform_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_platform_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_PLATFORM(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_PLATFORM_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_A55_PLATFORM_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_ddr_MASK (0x80U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_ddr_SHIFT (7U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_DDR_MASK (0x80U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_DDR_SHIFT (7U)
 /*! ddr - DDR Domain Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_ddr(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_ddr_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_ddr_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_DDR(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_DDR_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_DDR_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_display_MASK (0x100U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_display_SHIFT (8U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_DISPLAY_MASK (0x100U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_DISPLAY_SHIFT (8U)
 /*! display - Display Domain Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_display(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_display_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_display_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_DISPLAY(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_DISPLAY_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_DISPLAY_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_gpu_MASK (0x200U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_gpu_SHIFT (9U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_GPU_MASK (0x200U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_GPU_SHIFT (9U)
 /*! gpu - GPU Domain Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_gpu(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_gpu_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_gpu_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_GPU(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_GPU_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_GPU_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_hsio_top_MASK (0x400U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_hsio_top_SHIFT (10U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_HSIO_TOP_MASK (0x400U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_HSIO_TOP_SHIFT (10U)
 /*! hsio_top - HSIO Domain Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_hsio_top(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_hsio_top_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_hsio_top_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_HSIO_TOP(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_HSIO_TOP_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_HSIO_TOP_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_hsio_aon_MASK (0x800U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_hsio_aon_SHIFT (11U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_HSIO_AON_MASK (0x800U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_HSIO_AON_SHIFT (11U)
 /*! hsio_aon - HSIO AON Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_hsio_aon(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_hsio_aon_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_hsio_aon_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_HSIO_AON(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_HSIO_AON_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_HSIO_AON_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_m7_platform_MASK (0x1000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_m7_platform_SHIFT (12U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_M7_PLATFORM_MASK (0x1000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_M7_PLATFORM_SHIFT (12U)
 /*! m7_platform - Cortex-M7 Platform Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_m7_platform(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_m7_platform_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_m7_platform_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_M7_PLATFORM(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_M7_PLATFORM_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_M7_PLATFORM_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_netc_MASK (0x2000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_netc_SHIFT (13U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_NETC_MASK (0x2000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_NETC_SHIFT (13U)
 /*! netc - NETC Domain Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_netc(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_netc_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_netc_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_NETC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_NETC_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_NETC_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_noc_MASK (0x4000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_noc_SHIFT (14U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_NOC_MASK (0x4000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_NOC_SHIFT (14U)
 /*! noc - NOC Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_noc(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_noc_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_noc_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_NOC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_NOC_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_NOC_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_npu_MASK (0x8000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_npu_SHIFT (15U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_NPU_MASK (0x8000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_NPU_SHIFT (15U)
 /*! npu - NPU Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_npu(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_npu_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_npu_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_NPU(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_NPU_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_NPU_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_vpu_MASK (0x10000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_vpu_SHIFT (16U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_VPU_MASK (0x10000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_VPU_SHIFT (16U)
 /*! vpu - VPU Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_vpu(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_vpu_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_vpu_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_VPU(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_VPU_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_VPU_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_wakeup_MASK (0x20000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_wakeup_SHIFT (17U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_WAKEUP_MASK (0x20000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_WAKEUP_SHIFT (17U)
 /*! wakeup - WAKEUP Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_wakeup(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_wakeup_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_wakeup_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_WAKEUP(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_WAKEUP_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_WAKEUP_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_osc24mhz_MASK (0x100000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_osc24mhz_SHIFT (20U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_OSC24MHZ_MASK (0x100000U)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_OSC24MHZ_SHIFT (20U)
 /*! osc24mhz - OSC 24MHz Low Power Handshake Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_osc24mhz(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_osc24mhz_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_osc24mhz_MASK)
+#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_OSC24MHZ(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_OSC24MHZ_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE2_SM_OSC24MHZ_MASK)
 /*! @} */
 
 /*! @name LP_HANDSHAKE3_SM - Low Power Handshake 3 for System Manager */
@@ -1748,34 +1778,34 @@ typedef struct {
 /*! @name SM_LP_HANDSHAKE_STATUS - Low Power Handshake Status for System Manager */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_ack_MASK (0x1U)
-#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_ack_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_ACK_MASK (0x1U)
+#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_ACK_SHIFT (0U)
 /*! ack - Low Power Request Acknowledge
  *  0b0..No acknowledgement
  *  0b1..Acknowledgement
  */
-#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_ack(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_ack_SHIFT)) & BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_ack_MASK)
+#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_ACK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_ACK_SHIFT)) & BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_ACK_MASK)
 
-#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_stat_MASK (0x2U)
-#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_stat_SHIFT (1U)
+#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_STAT_MASK (0x2U)
+#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_STAT_SHIFT (1U)
 /*! stat - Clock/Reset/Power Status
  *  0b0..OFF
  *  0b1..ON
  */
-#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_stat(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_stat_SHIFT)) & BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_stat_MASK)
+#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_STAT(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_STAT_SHIFT)) & BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_STAT_MASK)
 
-#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_idx_MASK (0x1FCU)
-#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_idx_SHIFT (2U)
+#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_IDX_MASK (0x1FCU)
+#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_IDX_SHIFT (2U)
 /*! idx - Active Low Power Request ID */
-#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_idx(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_idx_SHIFT)) & BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_idx_MASK)
+#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_IDX(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_IDX_SHIFT)) & BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_IDX_MASK)
 
-#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_autoack_MASK (0x200U)
-#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_autoack_SHIFT (9U)
+#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_AUTOACK_MASK (0x200U)
+#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_AUTOACK_SHIFT (9U)
 /*! autoack - Auto Acknowledge Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_autoack(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_autoack_SHIFT)) & BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_autoack_MASK)
+#define BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_AUTOACK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_AUTOACK_SHIFT)) & BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_AUTOACK_MASK)
 /*! @} */
 
 /*! @name CA55_CPUWAIT - CPU Wait Mode Configuration for Cortex-A55 */
@@ -1889,273 +1919,273 @@ typedef struct {
 /*! @name ELE_IRQ_MASK - ELE Interrupt Mask */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet0_MASK (0x1U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet0_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET0_MASK (0x1U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET0_SHIFT (0U)
 /*! noclk_fdet0 - ELE fdet0 Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet0_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet0_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET0_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET0_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet1_MASK (0x2U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet1_SHIFT (1U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET1_MASK (0x2U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET1_SHIFT (1U)
 /*! noclk_fdet1 - ELE fdet1 Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet1_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet1_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET1_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET1_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet2_MASK (0x4U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet2_SHIFT (2U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET2_MASK (0x4U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET2_SHIFT (2U)
 /*! noclk_fdet2 - ELE fdet2 Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet2_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet2_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET2_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET2_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet3_MASK (0x8U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet3_SHIFT (3U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET3_MASK (0x8U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET3_SHIFT (3U)
 /*! noclk_fdet3 - ELE fdet3 Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet3_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_noclk_fdet3_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET3_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_FDET3_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_reset_req_32k_MASK (0x10U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_reset_req_32k_SHIFT (4U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_RESET_REQ_32K_MASK (0x10U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_RESET_REQ_32K_SHIFT (4U)
 /*! reset_req_32k - LMDA Reset Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_reset_req_32k(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_reset_req_32k_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_reset_req_32k_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_RESET_REQ_32K(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_RESET_REQ_32K_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_RESET_REQ_32K_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_reset_req_MASK (0x20U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_reset_req_SHIFT (5U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_RESET_REQ_MASK (0x20U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_RESET_REQ_SHIFT (5U)
 /*! reset_req - LMDA Reset Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_reset_req(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_reset_req_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_reset_req_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_RESET_REQ(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_RESET_REQ_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_RESET_REQ_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_sys_fail_MASK (0x40U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_sys_fail_SHIFT (6U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_SYS_FAIL_MASK (0x40U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_SYS_FAIL_SHIFT (6U)
 /*! sys_fail - LMDA System Failure Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_sys_fail(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_sys_fail_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_sys_fail_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_SYS_FAIL(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_SYS_FAIL_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_SYS_FAIL_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_lc_bricked_MASK (0x80U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_lc_bricked_SHIFT (7U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_LC_BRICKED_MASK (0x80U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_LC_BRICKED_SHIFT (7U)
 /*! lc_bricked - LMDA BRICK Lifecycle Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_lc_bricked(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_lc_bricked_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_lc_bricked_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_LC_BRICKED(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_LC_BRICKED_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_LC_BRICKED_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_wdg_reset_MASK (0x200U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_wdg_reset_SHIFT (9U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_WDG_RESET_MASK (0x200U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_WDG_RESET_SHIFT (9U)
 /*! wdg_reset - WDOG Reset Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_wdg_reset(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_wdg_reset_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_wdg_reset_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_WDG_RESET(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_WDG_RESET_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_WDG_RESET_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu0a_int_rx_full_mask_MASK (0x10000U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu0a_int_rx_full_mask_SHIFT (16U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU0A_INT_RX_FULL_MASK_MASK (0x10000U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU0A_INT_RX_FULL_MASK_SHIFT (16U)
 /*! mu0a_int_rx_full_mask - MU0A Rx Full Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu0a_int_rx_full_mask(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu0a_int_rx_full_mask_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu0a_int_rx_full_mask_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU0A_INT_RX_FULL_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU0A_INT_RX_FULL_MASK_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU0A_INT_RX_FULL_MASK_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu0a_int_tx_empty_mask_MASK (0x20000U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu0a_int_tx_empty_mask_SHIFT (17U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU0A_INT_TX_EMPTY_MASK_MASK (0x20000U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU0A_INT_TX_EMPTY_MASK_SHIFT (17U)
 /*! mu0a_int_tx_empty_mask - MU0A Tx Empty Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu0a_int_tx_empty_mask(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu0a_int_tx_empty_mask_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu0a_int_tx_empty_mask_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU0A_INT_TX_EMPTY_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU0A_INT_TX_EMPTY_MASK_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU0A_INT_TX_EMPTY_MASK_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu1a_int_rx_full_mask_MASK (0x40000U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu1a_int_rx_full_mask_SHIFT (18U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU1A_INT_RX_FULL_MASK_MASK (0x40000U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU1A_INT_RX_FULL_MASK_SHIFT (18U)
 /*! mu1a_int_rx_full_mask - MU1A Rx Full Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu1a_int_rx_full_mask(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu1a_int_rx_full_mask_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu1a_int_rx_full_mask_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU1A_INT_RX_FULL_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU1A_INT_RX_FULL_MASK_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU1A_INT_RX_FULL_MASK_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu1a_int_tx_empty_mask_MASK (0x80000U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu1a_int_tx_empty_mask_SHIFT (19U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU1A_INT_TX_EMPTY_MASK_MASK (0x80000U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU1A_INT_TX_EMPTY_MASK_SHIFT (19U)
 /*! mu1a_int_tx_empty_mask - MU1A Tx Empty Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu1a_int_tx_empty_mask(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu1a_int_tx_empty_mask_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu1a_int_tx_empty_mask_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU1A_INT_TX_EMPTY_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU1A_INT_TX_EMPTY_MASK_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU1A_INT_TX_EMPTY_MASK_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu2a_int_rx_full_mask_MASK (0x100000U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu2a_int_rx_full_mask_SHIFT (20U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU2A_INT_RX_FULL_MASK_MASK (0x100000U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU2A_INT_RX_FULL_MASK_SHIFT (20U)
 /*! mu2a_int_rx_full_mask - MU2A Rx Full Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu2a_int_rx_full_mask(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu2a_int_rx_full_mask_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu2a_int_rx_full_mask_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU2A_INT_RX_FULL_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU2A_INT_RX_FULL_MASK_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU2A_INT_RX_FULL_MASK_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu2a_int_tx_empty_mask_MASK (0x200000U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu2a_int_tx_empty_mask_SHIFT (21U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU2A_INT_TX_EMPTY_MASK_MASK (0x200000U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU2A_INT_TX_EMPTY_MASK_SHIFT (21U)
 /*! mu2a_int_tx_empty_mask - MU2A Tx Empty Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu2a_int_tx_empty_mask(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu2a_int_tx_empty_mask_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu2a_int_tx_empty_mask_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU2A_INT_TX_EMPTY_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU2A_INT_TX_EMPTY_MASK_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU2A_INT_TX_EMPTY_MASK_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu3a_int_rx_full_mask_MASK (0x400000U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu3a_int_rx_full_mask_SHIFT (22U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU3A_INT_RX_FULL_MASK_MASK (0x400000U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU3A_INT_RX_FULL_MASK_SHIFT (22U)
 /*! mu3a_int_rx_full_mask - MU3A Rx Full Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu3a_int_rx_full_mask(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu3a_int_rx_full_mask_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu3a_int_rx_full_mask_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU3A_INT_RX_FULL_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU3A_INT_RX_FULL_MASK_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU3A_INT_RX_FULL_MASK_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu3a_int_tx_empty_mask_MASK (0x800000U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu3a_int_tx_empty_mask_SHIFT (23U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU3A_INT_TX_EMPTY_MASK_MASK (0x800000U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU3A_INT_TX_EMPTY_MASK_SHIFT (23U)
 /*! mu3a_int_tx_empty_mask - MU3A Tx Empty Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu3a_int_tx_empty_mask(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu3a_int_tx_empty_mask_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu3a_int_tx_empty_mask_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU3A_INT_TX_EMPTY_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU3A_INT_TX_EMPTY_MASK_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU3A_INT_TX_EMPTY_MASK_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu4a_int_rx_full_mask_MASK (0x1000000U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu4a_int_rx_full_mask_SHIFT (24U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU4A_INT_RX_FULL_MASK_MASK (0x1000000U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU4A_INT_RX_FULL_MASK_SHIFT (24U)
 /*! mu4a_int_rx_full_mask - MU4A Rx Full Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu4a_int_rx_full_mask(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu4a_int_rx_full_mask_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu4a_int_rx_full_mask_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU4A_INT_RX_FULL_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU4A_INT_RX_FULL_MASK_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU4A_INT_RX_FULL_MASK_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu4a_int_tx_empty_mask_MASK (0x2000000U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu4a_int_tx_empty_mask_SHIFT (25U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU4A_INT_TX_EMPTY_MASK_MASK (0x2000000U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU4A_INT_TX_EMPTY_MASK_SHIFT (25U)
 /*! mu4a_int_tx_empty_mask - MU4A Tx Empty Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu4a_int_tx_empty_mask(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu4a_int_tx_empty_mask_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu4a_int_tx_empty_mask_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU4A_INT_TX_EMPTY_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU4A_INT_TX_EMPTY_MASK_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU4A_INT_TX_EMPTY_MASK_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu5a_int_rx_full_mask_MASK (0x4000000U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu5a_int_rx_full_mask_SHIFT (26U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU5A_INT_RX_FULL_MASK_MASK (0x4000000U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU5A_INT_RX_FULL_MASK_SHIFT (26U)
 /*! mu5a_int_rx_full_mask - MU5A Rx Full Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu5a_int_rx_full_mask(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu5a_int_rx_full_mask_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu5a_int_rx_full_mask_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU5A_INT_RX_FULL_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU5A_INT_RX_FULL_MASK_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU5A_INT_RX_FULL_MASK_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu5a_int_tx_empty_mask_MASK (0x8000000U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu5a_int_tx_empty_mask_SHIFT (27U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU5A_INT_TX_EMPTY_MASK_MASK (0x8000000U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU5A_INT_TX_EMPTY_MASK_SHIFT (27U)
 /*! mu5a_int_tx_empty_mask - MU5A Tx Empty Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu5a_int_tx_empty_mask(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu5a_int_tx_empty_mask_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_mu5a_int_tx_empty_mask_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU5A_INT_TX_EMPTY_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU5A_INT_TX_EMPTY_MASK_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_MU5A_INT_TX_EMPTY_MASK_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_event_sys_mask_MASK (0x10000000U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_event_sys_mask_SHIFT (28U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_EVENT_SYS_MASK_MASK (0x10000000U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_EVENT_SYS_MASK_SHIFT (28U)
 /*! event_sys_mask - EVENT_SYS Reset Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_event_sys_mask(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_event_sys_mask_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_event_sys_mask_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_EVENT_SYS_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_EVENT_SYS_MASK_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_EVENT_SYS_MASK_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_ocotp_cont_edc_err_MASK (0x20000000U)
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_ocotp_cont_edc_err_SHIFT (29U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_OCOTP_CONT_EDC_ERR_MASK (0x20000000U)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_OCOTP_CONT_EDC_ERR_SHIFT (29U)
 /*! ocotp_cont_edc_err - OCOTP Controller Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_ocotp_cont_edc_err(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_ocotp_cont_edc_err_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_ocotp_cont_edc_err_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_OCOTP_CONT_EDC_ERR(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_OCOTP_CONT_EDC_ERR_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_OCOTP_CONT_EDC_ERR_MASK)
 /*! @} */
 
 /*! @name ELE_RESET_REQ_MASK - ELE Reset Mask */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet0_MASK (0x1U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet0_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET0_MASK (0x1U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET0_SHIFT (0U)
 /*! noclk_fdet0 - ELE fdet0 Reset Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet0_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet0_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET0_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET0_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet1_MASK (0x2U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet1_SHIFT (1U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET1_MASK (0x2U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET1_SHIFT (1U)
 /*! noclk_fdet1 - ELE fdet1 Reset Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet1_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet1_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET1_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET1_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet2_MASK (0x4U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet2_SHIFT (2U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET2_MASK (0x4U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET2_SHIFT (2U)
 /*! noclk_fdet2 - ELE fdet2 Reset Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet2_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet2_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET2_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET2_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet3_MASK (0x8U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet3_SHIFT (3U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET3_MASK (0x8U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET3_SHIFT (3U)
 /*! noclk_fdet3 - ELE fdet3 Reset Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet3_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_noclk_fdet3_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET3_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_NOCLK_FDET3_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_sys_reset_req_MASK (0x10U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_sys_reset_req_SHIFT (4U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_SYS_RESET_REQ_MASK (0x10U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_SYS_RESET_REQ_SHIFT (4U)
 /*! sys_reset_req - System Reset Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_sys_reset_req(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_sys_reset_req_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_sys_reset_req_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_SYS_RESET_REQ(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_SYS_RESET_REQ_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_SYS_RESET_REQ_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_reset_req_32k_MASK (0x20U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_reset_req_32k_SHIFT (5U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_RESET_REQ_32K_MASK (0x20U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_RESET_REQ_32K_SHIFT (5U)
 /*! reset_req_32k - LMDA Reset Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_reset_req_32k(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_reset_req_32k_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_reset_req_32k_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_RESET_REQ_32K(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_RESET_REQ_32K_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_RESET_REQ_32K_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_reset_req_MASK (0x40U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_reset_req_SHIFT (6U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_RESET_REQ_MASK (0x40U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_RESET_REQ_SHIFT (6U)
 /*! reset_req - LMDA Reset Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_reset_req(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_reset_req_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_reset_req_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_RESET_REQ(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_RESET_REQ_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_RESET_REQ_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_sys_fail_MASK (0x80U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_sys_fail_SHIFT (7U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_SYS_FAIL_MASK (0x80U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_SYS_FAIL_SHIFT (7U)
 /*! sys_fail - LMDA System Failure Reset Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_sys_fail(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_sys_fail_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_sys_fail_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_SYS_FAIL(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_SYS_FAIL_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_SYS_FAIL_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_lc_bricked_MASK (0x100U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_lc_bricked_SHIFT (8U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_LC_BRICKED_MASK (0x100U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_LC_BRICKED_SHIFT (8U)
 /*! lc_bricked - LMDA BRICK Lifecycle Reset Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_lc_bricked(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_lc_bricked_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_lc_bricked_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_LC_BRICKED(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_LC_BRICKED_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_LC_BRICKED_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_wdg_reset_MASK (0x400U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_wdg_reset_SHIFT (10U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_WDG_RESET_MASK (0x400U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_WDG_RESET_SHIFT (10U)
 /*! wdg_reset - WDOG Reset Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_wdg_reset(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_wdg_reset_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_wdg_reset_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_WDG_RESET(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_WDG_RESET_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_MASK_WDG_RESET_MASK)
 /*! @} */
 
 /*! @name ELE_HALT_STATUS - ELE Halt Status */
@@ -2225,10 +2255,10 @@ typedef struct {
 /*! @name CA55_MODE - Cortex-A55 Cores Boot Mode Control */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CA55_MODE_AA64nAA32_MASK (0xFU)
-#define BLK_CTRL_S_AONMIX_CA55_MODE_AA64nAA32_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CA55_MODE_AA64NAA32_MASK (0xFU)
+#define BLK_CTRL_S_AONMIX_CA55_MODE_AA64NAA32_SHIFT (0U)
 /*! AA64nAA32 - Cortex-A55 Core Initial Mode Control */
-#define BLK_CTRL_S_AONMIX_CA55_MODE_AA64nAA32(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_MODE_AA64nAA32_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_MODE_AA64nAA32_MASK)
+#define BLK_CTRL_S_AONMIX_CA55_MODE_AA64NAA32(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_MODE_AA64NAA32_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_MODE_AA64NAA32_MASK)
 /*! @} */
 
 /*! @name NMI_MASK - NMI Mask */
@@ -2322,57 +2352,57 @@ typedef struct {
 /*! @name WDOG_ANY_MASK - Watchdog Any Mask */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog1_MASK (0x1U)
-#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog1_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG1_MASK (0x1U)
+#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG1_SHIFT (0U)
 /*! wdog1 - WDOG1 Timeout Signal Masks
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog1_SHIFT)) & BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog1_MASK)
+#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG1_SHIFT)) & BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG1_MASK)
 
-#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog2_MASK (0x2U)
-#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog2_SHIFT (1U)
+#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG2_MASK (0x2U)
+#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG2_SHIFT (1U)
 /*! wdog2 - WDOG2 Timeout Signal Masks
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog2_SHIFT)) & BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog2_MASK)
+#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG2_SHIFT)) & BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG2_MASK)
 
-#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog3_MASK (0x4U)
-#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog3_SHIFT (2U)
+#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG3_MASK (0x4U)
+#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG3_SHIFT (2U)
 /*! wdog3 - WDOG3 Timeout Signal Masks
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog3_SHIFT)) & BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog3_MASK)
+#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG3_SHIFT)) & BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG3_MASK)
 
-#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog4_MASK (0x8U)
-#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog4_SHIFT (3U)
+#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG4_MASK (0x8U)
+#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG4_SHIFT (3U)
 /*! wdog4 - WDOG4 Timeout Signal Masks
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog4_SHIFT)) & BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog4_MASK)
+#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG4_SHIFT)) & BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG4_MASK)
 
-#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog5_MASK (0x10U)
-#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog5_SHIFT (4U)
+#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG5_MASK (0x10U)
+#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG5_SHIFT (4U)
 /*! wdog5 - WDOG5 Timeout Signal Masks
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog5_SHIFT)) & BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_wdog5_MASK)
+#define BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG5_SHIFT)) & BLK_CTRL_S_AONMIX_WDOG_ANY_MASK_WDOG5_MASK)
 /*! @} */
 
 /*! @name MISC_CFG - Miscellaneous Configuration */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_MISC_CFG_netc_cfg_ierb_lock_MASK (0x1U)
-#define BLK_CTRL_S_AONMIX_MISC_CFG_netc_cfg_ierb_lock_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_MISC_CFG_NETC_CFG_IERB_LOCK_MASK (0x1U)
+#define BLK_CTRL_S_AONMIX_MISC_CFG_NETC_CFG_IERB_LOCK_SHIFT (0U)
 /*! netc_cfg_ierb_lock - IERB Register Access Configuration
  *  0b0..Unlocked after NETC reset. Normal read/write access to all IERB registers.
  *  0b1..Locked after NETC reset. Write access inhibited to all IERB registers, except NETCRR.
  */
-#define BLK_CTRL_S_AONMIX_MISC_CFG_netc_cfg_ierb_lock(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_MISC_CFG_netc_cfg_ierb_lock_SHIFT)) & BLK_CTRL_S_AONMIX_MISC_CFG_netc_cfg_ierb_lock_MASK)
+#define BLK_CTRL_S_AONMIX_MISC_CFG_NETC_CFG_IERB_LOCK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_MISC_CFG_NETC_CFG_IERB_LOCK_SHIFT)) & BLK_CTRL_S_AONMIX_MISC_CFG_NETC_CFG_IERB_LOCK_MASK)
 /*! @} */
 
 /*! @name ELE_GPO_STATUS - ELE GPO Status */
@@ -2410,105 +2440,105 @@ typedef struct {
 /*! @name VDET_CORE - VDETECT Interrupt Mask */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_VDET_CORE_hvd_out_latch_lv_mask_MASK (0x1U)
-#define BLK_CTRL_S_AONMIX_VDET_CORE_hvd_out_latch_lv_mask_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_VDET_CORE_HVD_OUT_LATCH_LV_MASK_MASK (0x1U)
+#define BLK_CTRL_S_AONMIX_VDET_CORE_HVD_OUT_LATCH_LV_MASK_SHIFT (0U)
 /*! hvd_out_latch_lv_mask - VDET High Voltage Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_VDET_CORE_hvd_out_latch_lv_mask(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_VDET_CORE_hvd_out_latch_lv_mask_SHIFT)) & BLK_CTRL_S_AONMIX_VDET_CORE_hvd_out_latch_lv_mask_MASK)
+#define BLK_CTRL_S_AONMIX_VDET_CORE_HVD_OUT_LATCH_LV_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_VDET_CORE_HVD_OUT_LATCH_LV_MASK_SHIFT)) & BLK_CTRL_S_AONMIX_VDET_CORE_HVD_OUT_LATCH_LV_MASK_MASK)
 
-#define BLK_CTRL_S_AONMIX_VDET_CORE_lvd_out_latch_lv_mask_MASK (0x2U)
-#define BLK_CTRL_S_AONMIX_VDET_CORE_lvd_out_latch_lv_mask_SHIFT (1U)
+#define BLK_CTRL_S_AONMIX_VDET_CORE_LVD_OUT_LATCH_LV_MASK_MASK (0x2U)
+#define BLK_CTRL_S_AONMIX_VDET_CORE_LVD_OUT_LATCH_LV_MASK_SHIFT (1U)
 /*! lvd_out_latch_lv_mask - VDET Low Voltage Interrupt Mask
  *  0b0..Unmask
  *  0b1..Mask
  */
-#define BLK_CTRL_S_AONMIX_VDET_CORE_lvd_out_latch_lv_mask(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_VDET_CORE_lvd_out_latch_lv_mask_SHIFT)) & BLK_CTRL_S_AONMIX_VDET_CORE_lvd_out_latch_lv_mask_MASK)
+#define BLK_CTRL_S_AONMIX_VDET_CORE_LVD_OUT_LATCH_LV_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_VDET_CORE_LVD_OUT_LATCH_LV_MASK_SHIFT)) & BLK_CTRL_S_AONMIX_VDET_CORE_LVD_OUT_LATCH_LV_MASK_MASK)
 /*! @} */
 
 /*! @name ELE_RESET_REQ_LOCK - EdgeLock Enclave Reset Requests Mask Lock */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet0_MASK (0x1U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet0_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET0_MASK (0x1U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET0_SHIFT (0U)
 /*! noclk_fdet0 - ELE fdet0 Reset Mask Lock Bit
  *  0b0..Unlocks
  *  0b1..Locks
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet0_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet0_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET0_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET0_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet1_MASK (0x2U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet1_SHIFT (1U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET1_MASK (0x2U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET1_SHIFT (1U)
 /*! noclk_fdet1 - ELE fdet1 Reset Mask Lock Bit
  *  0b0..Unlocks
  *  0b1..Locks
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet1_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet1_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET1_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET1_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet2_MASK (0x4U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet2_SHIFT (2U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET2_MASK (0x4U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET2_SHIFT (2U)
 /*! noclk_fdet2 - ELE fdet2 Reset Mask Lock Bit
  *  0b0..Unlocks
  *  0b1..Locks
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet2_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet2_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET2_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET2_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet3_MASK (0x8U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet3_SHIFT (3U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET3_MASK (0x8U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET3_SHIFT (3U)
 /*! noclk_fdet3 - ELE fdet3 Reset Mask Lock Bit
  *  0b0..Unlocks
  *  0b1..Locks
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet3_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_noclk_fdet3_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET3_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_NOCLK_FDET3_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_sys_reset_req_MASK (0x10U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_sys_reset_req_SHIFT (4U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_SYS_RESET_REQ_MASK (0x10U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_SYS_RESET_REQ_SHIFT (4U)
 /*! sys_reset_req - System Reset Mask Lock
  *  0b0..Unlocks
  *  0b1..Locks
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_sys_reset_req(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_sys_reset_req_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_sys_reset_req_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_SYS_RESET_REQ(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_SYS_RESET_REQ_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_SYS_RESET_REQ_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lmda_32k_reset_req_MASK (0x20U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lmda_32k_reset_req_SHIFT (5U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LMDA_32K_RESET_REQ_MASK (0x20U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LMDA_32K_RESET_REQ_SHIFT (5U)
 /*! lmda_32k_reset_req - LMDA Reset Interrupt Mask Lock
  *  0b0..Unlocks
  *  0b1..Locks
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lmda_32k_reset_req(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lmda_32k_reset_req_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lmda_32k_reset_req_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LMDA_32K_RESET_REQ(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LMDA_32K_RESET_REQ_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LMDA_32K_RESET_REQ_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lmda_reset_req_MASK (0x40U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lmda_reset_req_SHIFT (6U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LMDA_RESET_REQ_MASK (0x40U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LMDA_RESET_REQ_SHIFT (6U)
 /*! lmda_reset_req - LMDA Reset Mask Lock
  *  0b0..Unlocks
  *  0b1..Locks
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lmda_reset_req(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lmda_reset_req_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lmda_reset_req_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LMDA_RESET_REQ(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LMDA_RESET_REQ_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LMDA_RESET_REQ_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lmda_sys_fail_MASK (0x80U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lmda_sys_fail_SHIFT (7U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LMDA_SYS_FAIL_MASK (0x80U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LMDA_SYS_FAIL_SHIFT (7U)
 /*! lmda_sys_fail - LMDA System Failure Reset Mask Lock
  *  0b0..Unlocks
  *  0b1..Locks
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lmda_sys_fail(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lmda_sys_fail_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lmda_sys_fail_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LMDA_SYS_FAIL(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LMDA_SYS_FAIL_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LMDA_SYS_FAIL_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lc_bricked_MASK (0x100U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lc_bricked_SHIFT (8U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LC_BRICKED_MASK (0x100U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LC_BRICKED_SHIFT (8U)
 /*! lc_bricked - LMDA BRICK Lifecycle Reset Mask Lock
  *  0b0..Unlocks
  *  0b1..Locks
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lc_bricked(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lc_bricked_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_lc_bricked_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LC_BRICKED(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LC_BRICKED_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_LC_BRICKED_MASK)
 
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_wdg_reset_MASK (0x400U)
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_wdg_reset_SHIFT (10U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_WDG_RESET_MASK (0x400U)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_WDG_RESET_SHIFT (10U)
 /*! wdg_reset - WDOG Reset Mask Lock
  *  0b0..Unlocks
  *  0b1..Locks
  */
-#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_wdg_reset(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_wdg_reset_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_wdg_reset_MASK)
+#define BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_WDG_RESET(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_WDG_RESET_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_RESET_REQ_LOCK_WDG_RESET_MASK)
 /*! @} */
 
 

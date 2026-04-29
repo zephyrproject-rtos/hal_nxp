@@ -1,5 +1,10 @@
 # I3C
 
+## [2.14.5]
+
+- Bug Fixes
+  - Fixed CERT INT31-C violation: cast bool field enableSlave to uint via ternary in I3C_Init.
+
 ## [2.14.4]
 
 - Improvements

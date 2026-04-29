@@ -7,13 +7,13 @@
 **                          MCIMX7U5DVP07
 **
 **     Version:             rev. 8.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b260205
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TRNG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -855,7 +855,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group TRNG_Register_Masks */
-
 
 
 /*!

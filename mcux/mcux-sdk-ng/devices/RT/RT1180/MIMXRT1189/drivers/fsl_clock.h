@@ -2167,7 +2167,7 @@ bool CLOCK_EnableUsbhs0PhyPllClock(clock_usb_phy_src_t src, uint32_t freq);
  */
 void CLOCK_DisableUsbhs0PhyPllClock(void);
 
-#if !(defined(MIMXRT1186_cm33_SERIES) || defined(MIMXRT1186_cm7_SERIES))
+#if !(defined(MIMXRT1186_cm33_SERIES) || defined(MIMXRT1186_cm7_SERIES) || defined(MIMXRT1185_cm33_SERIES) || defined(MIMXRT1185_cm7_SERIES) || defined(MIMXRT118C_cm33_SERIES) || defined(MIMXRT118C_cm7_SERIES))
 /*! @brief Enable USB HS clock.
  *
  * This function only enables the access to USB HS prepheral, upper layer

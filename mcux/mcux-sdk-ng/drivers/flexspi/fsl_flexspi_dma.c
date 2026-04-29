@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 NXP
+ * Copyright 2019-2022, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -172,7 +172,7 @@ static status_t FLEXSPI_WriteDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *h
     }
 
     handle->count =
-        8U * ((uint8_t)(((base->IPTXFCR & FLEXSPI_IPTXFCR_TXWMRK_MASK) >> FLEXSPI_IPTXFCR_TXWMRK_SHIFT) + 1U));
+        8U * (uint8_t)((((base->IPTXFCR & FLEXSPI_IPTXFCR_TXWMRK_MASK) >> FLEXSPI_IPTXFCR_TXWMRK_SHIFT) + 1U) & 0xFFU);
 
     /* Check the handle->count is power of 2 */
     if (((handle->count) & (handle->count - 1U)) != 0U)
@@ -227,7 +227,7 @@ static status_t FLEXSPI_WriteDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *h
         /* Check the handle->nbytes is power of 2 */
         if (((handle->nbytes) & (handle->nbytes - 1U)) != 0U)
         {
-            handle->nbytes = 2U * ((handle->nbytes) & (handle->nbytes - 1U));
+            handle->nbytes = (uint8_t)((2U * ((uint32_t)(handle->nbytes) & ((uint32_t)(handle->nbytes) - 1U))) & 0xFFU);
         }
 
         desCount = 1U;
@@ -258,7 +258,7 @@ static status_t FLEXSPI_WriteDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *h
             }
         }
         /* Store the initially configured dma minor byte transfer count into the FLEXSPI handle */
-        handle->nbytes = handle->count / (uint8_t)handle->nsize;
+        handle->nbytes = (uint8_t)((uint32_t)handle->count / (uint32_t)handle->nsize);
 
         /* Check if dataSize exceeds the maximum transfer count supported by the driver. */
         if ((dataSize - handle->count + 1U) / ((uint32_t)handle->nsize) > 1024U)
@@ -325,7 +325,7 @@ static status_t FLEXSPI_ReadDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *ha
     dstInc = kDMA_AddressInterleave1xWidth;
 
     handle->count =
-        8U * (uint8_t)(((base->IPRXFCR & FLEXSPI_IPRXFCR_RXWMRK_MASK) >> FLEXSPI_IPRXFCR_RXWMRK_SHIFT) + 1U);
+        8U * (uint8_t)((((base->IPRXFCR & FLEXSPI_IPRXFCR_RXWMRK_MASK) >> FLEXSPI_IPRXFCR_RXWMRK_SHIFT) + 1U) & 0xFFU);
 
     /* Check the watermark is power of 2U */
     if ((handle->count & (handle->count - 1U)) != 0U)
@@ -379,7 +379,7 @@ static status_t FLEXSPI_ReadDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *ha
         /* Check the handle->nbytes is power of 2 */
         if (((handle->nbytes) & (handle->nbytes - 1U)) != 0U)
         {
-            handle->nbytes = 2U * ((handle->nbytes) & (handle->nbytes - 1U));
+            handle->nbytes = (uint8_t)((2U * ((uint32_t)(handle->nbytes) & ((uint32_t)(handle->nbytes) - 1U))) & 0xFFU);
         }
         desCount = 1U;
     }
@@ -409,7 +409,7 @@ static status_t FLEXSPI_ReadDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *ha
             }
         }
         /* Store the initially configured dma minor byte transfer count into the FLEXSPI handle */
-        handle->nbytes = handle->count / (uint8_t)handle->nsize;
+        handle->nbytes = (uint8_t)((uint32_t)handle->count / (uint32_t)handle->nsize);
 
         /* Check dataSize exceeds the maximum transfer count supported by the driver. */
         if ((dataSize - handle->count + 1U) / ((uint32_t)handle->nsize) > 1024U)

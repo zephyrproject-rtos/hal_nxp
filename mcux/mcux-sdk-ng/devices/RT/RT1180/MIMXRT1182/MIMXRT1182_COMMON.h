@@ -12,13 +12,13 @@
 **
 **     Reference manual:    IMXRT1180RM, Rev 5, 01/2024
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b251217
+**     Build:               b260206
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1182
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -5591,7 +5591,7 @@ typedef enum _xbar_output_signal
 /** XCACHE physical memory base address */
  #define XCACHE_PHYMEM_BASES                       { 0x10000000u, 0x30000000u }
 /** XCACHE physical memory size */
- #define XCACHE_PHYMEM_SIZES                       { 0x20000000u, 0xE0000000u }
+ #define XCACHE_PHYMEM_SIZES                       { 0x20000000u, 0xD0000000u }
 /** XCACHE physical memory base address */
  #define XCACHE_PHYMEM_BASES_NS                    { 0x00000000u, 0x20000000u }
 /** XCACHE physical memory size */

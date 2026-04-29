@@ -10,13 +10,13 @@
 **                          MKM35Z512VLQ7R
 **
 **     Version:             rev. 3.1, 2025-11-11
-**     Build:               b251111
+**     Build:               b260130
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, NXP
+ * Copyright 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -13,6 +13,7 @@
 #include <stdint.h>
 #include <string.h>
 #include "fsl_device_registers.h"
+#include "fsl_common.h"
 
 /*!
  * @addtogroup reset
@@ -25,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief reset driver version 2.4.0 */
-#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+/*! @brief reset driver version 2.4.1 */
+#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
 /*@}*/
 
 /*!
@@ -269,7 +270,7 @@ extern "C" {
  * @param peripheral Assert reset to this peripheral. The enum argument contains encoding of reset register
  *                   and reset bit position in the reset register.
  */
-void RESET_SetPeripheralReset(reset_ip_name_t peripheral);
+status_t RESET_SetPeripheralReset(reset_ip_name_t peripheral);
 
 /*!
  * @brief Clear reset to peripheral.
@@ -279,7 +280,7 @@ void RESET_SetPeripheralReset(reset_ip_name_t peripheral);
  * @param peripheral Clear reset to this peripheral. The enum argument contains encoding of reset register
  *                   and reset bit position in the reset register.
  */
-void RESET_ClearPeripheralReset(reset_ip_name_t peripheral);
+status_t RESET_ClearPeripheralReset(reset_ip_name_t peripheral);
 
 /*!
  * @brief Reset peripheral module.

@@ -13,7 +13,7 @@
 **
 **     Reference manual:    K22P121M100SF9RM, Rev. 1, April 25, 2014
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251106
+**     Build:               b260130
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -21,7 +21,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

@@ -10,13 +10,13 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b251201
+**     Build:               b260209
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN526_cm33_core1
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -179,7 +179,7 @@ typedef enum IRQn {
   CDOG1_IRQn                   = 94,               /**< Code Watchdog Timer 1 interrupt */
   I3C0_IRQn                    = 95,               /**< Improved Inter Integrated Circuit interrupt 0 */
   I3C1_IRQn                    = 96,               /**< Improved Inter Integrated Circuit interrupt 1 */
-  NPU_IRQn                     = 97,               /**< NPU interrupt */
+  Reserved113_IRQn             = 97,               /**< Reserved interrupt */
   GDET_IRQn                    = 98,               /**< Digital Glitch Detect 0 interrupt  or Digital Glitch Detect 1 interrupt */
   VBAT0_IRQn                   = 99,               /**< VBAT interrupt( VBAT interrupt or digital tamper interrupt) */
   EWM0_IRQn                    = 100,              /**< External Watchdog Monitor interrupt */
@@ -194,12 +194,12 @@ typedef enum IRQn {
   HSCMP0_IRQn                  = 109,              /**< High-Speed comparator0 interrupt */
   HSCMP1_IRQn                  = 110,              /**< High-Speed comparator1 interrupt */
   HSCMP2_IRQn                  = 111,              /**< High-Speed comparator2 interrupt */
-  FLEXPWM0_RELOAD_ERROR_IRQn   = 112,              /**< FlexPWM0_reload_error interrupt */
-  FLEXPWM0_FAULT_IRQn          = 113,              /**< FlexPWM0_fault interrupt */
-  FLEXPWM0_SUBMODULE0_IRQn     = 114,              /**< FlexPWM0 Submodule 0 capture/compare/reload interrupt */
-  FLEXPWM0_SUBMODULE1_IRQn     = 115,              /**< FlexPWM0 Submodule 1 capture/compare/reload interrupt */
-  FLEXPWM0_SUBMODULE2_IRQn     = 116,              /**< FlexPWM0 Submodule 2 capture/compare/reload interrupt */
-  FLEXPWM0_SUBMODULE3_IRQn     = 117,              /**< FlexPWM0 Submodule 3 capture/compare/reload interrupt */
+  Reserved128_IRQn             = 112,              /**< Reserved interrupt */
+  Reserved129_IRQn             = 113,              /**< Reserved interrupt */
+  Reserved130_IRQn             = 114,              /**< Reserved interrupt */
+  Reserved131_IRQn             = 115,              /**< Reserved interrupt */
+  Reserved132_IRQn             = 116,              /**< Reserved interrupt */
+  Reserved133_IRQn             = 117,              /**< Reserved interrupt */
   Reserved134_IRQn             = 118,              /**< Reserved interrupt */
   Reserved135_IRQn             = 119,              /**< Reserved interrupt */
   Reserved136_IRQn             = 120,              /**< Reserved interrupt */
@@ -564,6 +564,19 @@ typedef enum IRQn {
   /** Array initializer of CMC peripheral base pointers */
   #define CMC_BASE_PTRS                            { CMC0 }
 #endif
+/** Interrupt vectors for the CMC peripheral type */
+#define CMC_IRQS                                 { CMC0_IRQn }
+/* Backward compatibility for CMC */
+#define CMC_SRAMDIS_DIS_MASK                     (0xFFFFFFFFU)
+#define CMC_SRAMDIS_DIS_SHIFT                    (0U)
+/*! DIS - SRAM Disable */
+#define CMC_SRAMDIS_DIS(x)                       (((uint32_t)(((uint32_t)(x)) << CMC_SRAMDIS_DIS_SHIFT)) & CMC_SRAMDIS_DIS_MASK)
+
+#define CMC_SRAMRET_RET_MASK                     (0xFFFFFFFFU)
+#define CMC_SRAMRET_RET_SHIFT                    (0U)
+/*! RET - SRAM Retention */
+#define CMC_SRAMRET_RET(x)                       (((uint32_t)(((uint32_t)(x)) << CMC_SRAMRET_RET_SHIFT)) & CMC_SRAMRET_RET_MASK)
+
 
 /* CRC - Peripheral instance base addresses */
 #if ((defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2)) || defined(CPU1_IS_SECURE_MASTER))

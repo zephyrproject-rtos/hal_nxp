@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2025 NXP
+ * Copyright 2023-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Driver version. */
-#define FSL_DPU_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+#define FSL_DPU_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*@}*/
 
 /*! @brief DPU palette entery number. */
@@ -1682,6 +1682,27 @@ void DPU_CorrdinatesGetDefaultConfig(dpu_coordinates_config_t *config);
  */
 status_t DPU_InitWarpCoordinates(DISPLAY_SEERIS_Type *base, dpu_unit_t unit, const dpu_coordinates_config_t *config);
 
+#if defined(FSL_FEATURE_DISPLAY_SEERIS_MDR7) && FSL_FEATURE_DISPLAY_SEERIS_MDR7
+/*!
+ * @brief Initializes the localdimming setting.
+ *
+ * This function configs the localdimming setting.
+ *
+ * @param ld DPU localdimming peripheral base address.
+ *
+ */
+void DPU_Init_Localdimming_Env(DISPLAY_SEERIS_LD_Type *ld);
+
+/*!
+ * @brief Start the localdimming.
+ *
+ * This function starts the localdimming.
+ *
+ * @param base DPU localdimming peripheral base address.
+ *
+ */
+void DPU_Localdimming_Start(DISPLAY_SEERIS_LD_Type *base);
+#endif
 /*! @} */
 
 #if defined(__cplusplus)

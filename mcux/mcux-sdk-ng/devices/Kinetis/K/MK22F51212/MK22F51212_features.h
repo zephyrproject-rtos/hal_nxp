@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Version:             rev. 3.0, 2025-11-07
-**     Build:               b251107
+**     Version:             rev. 3.1, 2026-01-30
+**     Build:               b260130
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -60,6 +60,8 @@
 **         Added MK22FN512VFX12 part.
 **     - rev. 3.0 (2025-11-07)
 **         Common updates for RTC feature.
+**     - rev. 3.1 (2026-01-30)
+**         Added prescaler clock source features for LPTMR.
 **
 ** ###################################################################
 */
@@ -325,14 +327,6 @@
 /* @brief Has clock prescaler (register CLKPRESCALER). */
 #define FSL_FEATURE_EWM_HAS_PRESCALER (1)
 
-/* FLEXBUS module features */
-
-#if defined(CPU_MK22FN512CAP12) || defined(CPU_MK22FN512VDC12) || defined(CPU_MK22FN512VLH12) || defined(CPU_MK22FN512VLL12) || \
-    defined(CPU_MK22FN512VMP12)
-/* No feature definitions */
-#endif /* defined(CPU_MK22FN512CAP12) || defined(CPU_MK22FN512VDC12) || defined(CPU_MK22FN512VLH12) || defined(CPU_MK22FN512VLL12) || \
-    defined(CPU_MK22FN512VMP12) */
-
 /* FLASH module features */
 
 /* @brief Is of type FTFA. */
@@ -582,6 +576,8 @@
 #define FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn(x) (1)
 /* @brief FTM instance fault input number. */
 #define FSL_FEATURE_FTM_INSTANCE_FAULT_INPUT_NUMBERn(x) (4)
+/* @brief Is affected by errata with ID 010856 (FTM: Safe state is not removed from channel outputs after fault condition ends if SWOCTRL is being used to control the pin). */
+#define FSL_FEATURE_FTM_HAS_ERRATA_010856 (0)
 
 /* GPIO module features */
 
@@ -1367,6 +1363,14 @@
 #define FSL_FEATURE_LPTMR_CNR_WIDTH_IS_32B (0)
 /* @brief Has timer DMA request enable (register bit CSR[TDRE]). */
 #define FSL_FEATURE_LPTMR_HAS_CSR_TDRE (0)
+/* @brief Do not has prescaler clock source 0. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_0_SUPPORT (0)
+/* @brief Do not has prescaler clock source 1. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_1_SUPPORT (0)
+/* @brief Do not has prescaler clock source 2. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_2_SUPPORT (0)
+/* @brief Do not has prescaler clock source 3. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_3_SUPPORT (0)
 
 /* LPUART module features */
 
@@ -1676,7 +1680,7 @@
 /* @brief Has read/write access control (registers WAR and RAR). */
 #define FSL_FEATURE_RTC_HAS_ACCESS_CONTROL (1)
 /* @brief Has security features (registers TTSR, MER, MCLR and MCHR). */
-#define FSL_FEATURE_RTC_HAS_SECURITY (1)
+#define FSL_FEATURE_RTC_HAS_SECURITY (0)
 /* @brief Has RTC_CLKIN available. */
 #define FSL_FEATURE_RTC_HAS_RTC_CLKIN (0)
 /* @brief Has prescaler adjust for LPO. */

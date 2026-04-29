@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Version:             rev. 1.0, 2022-03-08
-**     Build:               b250819
+**     Version:             rev. 1.2, 2025-12-01
+**     Build:               b260209
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -16,6 +16,10 @@
 **     Revisions:
 **     - rev. 1.0 (2022-03-08)
 **         Initial version based on v0.1UM
+**     - rev. 1.1 (2025-08-19)
+**         Added missing features for SYSCON
+**     - rev. 1.2 (2025-12-01)
+**         Add FSL_FEATURE_PUF_HAS_KEYRESET to indicate if PUF hardware has key reset feature.
 **
 ** ###################################################################
 */
@@ -111,11 +115,11 @@
 
 /* CASPER module features */
 
-/* @brief Base address of the CASPER dedicated RAM */
+/* @brief Base address of the CASPER dedicated RAM. */
 #define FSL_FEATURE_CASPER_RAM_BASE_ADDRESS (0x04000000)
-/* @brief HW interleaving of the CASPER dedicated RAM */
+/* @brief HW interleaving of the CASPER dedicated RAM. */
 #define FSL_FEATURE_CASPER_RAM_HW_INTERLEAVE (1)
-/* @brief CASPER dedicated RAM offset */
+/* @brief CASPER dedicated RAM offset. */
 #define FSL_FEATURE_CASPER_RAM_OFFSET (0xC)
 
 /* CDOG module features */
@@ -170,12 +174,20 @@
 /* @brief FLEXCOMM2 I2C INDEX 2 */
 #define FSL_FEATURE_FLEXCOMM2_I2C_INDEX  (2)
 
+/* GINT module features */
+
+/* No feature definitions */
+
 /* HASHCRYPT module features */
 
 /* @brief the address of alias offset */
 #define FSL_FEATURE_HASHCRYPT_ALIAS_OFFSET (0x00000000)
 /* @brief hashcrypt has reload feature */
 #define FSL_FEATURE_HASHCRYPT_HAS_RELOAD_FEATURE (1)
+
+/* I2C module features */
+
+/* No feature definitions */
 
 /* INPUTMUX module features */
 
@@ -192,7 +204,7 @@
 /* MRT module features */
 
 /* @brief number of channels. */
-#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS  (4)
+#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS (4)
 
 /* PINT module features */
 
@@ -218,17 +230,19 @@
 
 /* PUF module features */
 
+/* @brief PUF has SHIFT_STATUS register. */
+#define FSL_FEATURE_PUF_HAS_SHIFT_STATUS (1)
+/* @brief PUF has IDXBLK_SHIFT register. */
+#define FSL_FEATURE_PUF_HAS_IDXBLK_SHIFT (0)
 /* @brief Number of PUF key slots available on device. */
 #define FSL_FEATURE_PUF_HAS_KEYSLOTS (5)
-/* @brief the shift status value */
-#define FSL_FEATURE_PUF_HAS_SHIFT_STATUS (1)
 /* @brief PUF has dedicated SRAM control */
 #define FSL_FEATURE_PUF_HAS_SRAM_CTRL (1)
 /* @brief Puf Activation Code Address. */
 #define FSL_FEATURE_PUF_ACTIVATION_CODE_ADDRESS (1079304)
 /* @brief Puf Activation Code Size. */
 #define FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE (1192)
-/* @brief PUF has key reset. */
+/* @brief PUF has KEYRESET register. */
 #define FSL_FEATURE_PUF_HAS_KEYRESET (1)
 
 /* RTC module features */
@@ -265,6 +279,8 @@
 #define FSL_FEATURE_SPIFI_START_ADDR (0x28000000)
 /* @brief SPIFI end address */
 #define FSL_FEATURE_SPIFI_END_ADDR (0x2FFFFFFF)
+/* @brief SPIFI DATALEN bitfile in CMD register */
+#define FSL_FEATURE_SPIFI_DATALEN_CTRL (1)
 
 /* SYSCON module features */
 

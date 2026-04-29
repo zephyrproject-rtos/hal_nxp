@@ -30,19 +30,19 @@
  * Code
  ******************************************************************************/
 
-void MIPI_CSI2RX_Startup(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config)
+void MIPI_CSI2RX_Startup(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config)
 {
     if (config->phyNumber == KCSI2RX_DPHY_Primary)
     {
         /* Release DWC mipi csi2 host from reset */
-        csi1->CSI2_RESETN &= ~PRIMARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
-        csi1->CSI2_RESETN |= PRIMARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
+        csi1->CSI2_RESETN &= ~CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
+        csi1->CSI2_RESETN |= CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
     }
     else
     {
         /* Release DWC mipi csi2 host from reset */
-        csi2->CSI2_RESETN &= ~SECONDARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
-        csi2->CSI2_RESETN |= SECONDARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
+        csi2->CSI2_RESETN &= ~CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
+        csi2->CSI2_RESETN |= CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
     }
 
     /* Apply PHY reset*/
@@ -52,7 +52,7 @@ void MIPI_CSI2RX_Startup(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONT
     DWC_DPHY_TestCodeReset(csi1, csi2, config);
 }
 
-void MIPI_CSI2RX_PhyConfigure(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2,
+void MIPI_CSI2RX_PhyConfigure(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2,
                               uint8_t hsfreq,  uint16_t ddl_osc_freq, const csi2rx_config_t *config)
 {
     uint8_t lowbyte_ddl_osc_freq = ddl_osc_freq & 0xFF;
@@ -153,7 +153,7 @@ void MIPI_CSI2RX_PhyConfigure(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2
     }
 }
 
-status_t MIPI_CSI2RX_InitInterface(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2,
+status_t MIPI_CSI2RX_InitInterface(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2,
                                    CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config)
 {
     assert(NULL != config);
@@ -170,19 +170,19 @@ status_t MIPI_CSI2RX_InitInterface(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY
         if (config->phyNumber == KCSI2RX_DPHY_Primary)
         {
             /* Put Synopsys DPHY to reset status */
-            csi1->DPHY_RSTZ &= ~PRIMARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
-            csi1->PHY_SHUTDOWNZ &= ~PRIMARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+            csi1->DPHY_RSTZ &= ~CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+            csi1->PHY_SHUTDOWNZ &= ~CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
 
             phy_testclr = 1;
             phy_testdin = 0;
             phy_testen = 0;
             phy_testclk = 0;
 
-            csi1->PHY_TEST_CTRL1 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
-            csi1->PHY_TEST_CTRL0 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+            csi1->PHY_TEST_CTRL1 = (CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
+            csi1->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
             SDK_DelayAtLeastUs(1, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
             phy_testclr = 0;
-            csi1->PHY_TEST_CTRL0 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+            csi1->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
 
             MIPI_CSI2RX_PhyConfigure(csi1, csi2, config->hsFreqrange, config->ddl_osc_freq, config);
             DWC_DPHY_InitNormal(csi1, csi2, phybase, config);
@@ -204,19 +204,19 @@ status_t MIPI_CSI2RX_InitInterface(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY
         else
         {
             /* Put Synopsys DPHY to reset status */
-            csi2->DPHY_RSTZ &= ~SECONDARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
-            csi2->PHY_SHUTDOWNZ &= ~SECONDARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+            csi2->DPHY_RSTZ &= ~CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+            csi2->PHY_SHUTDOWNZ &= ~CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
 
             phy_testclr = 1;
             phy_testdin = 0;
             phy_testen = 0;
             phy_testclk = 0;
 
-            csi2->PHY_TEST_CTRL1 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
-            csi2->PHY_TEST_CTRL0 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+            csi2->PHY_TEST_CTRL1 = (CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
+            csi2->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
             SDK_DelayAtLeastUs(1, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
             phy_testclr = 0;
-            csi2->PHY_TEST_CTRL0 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+            csi2->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
 
             MIPI_CSI2RX_PhyConfigure(csi1, csi2, config->hsFreqrange, config->ddl_osc_freq, config);
             DWC_DPHY_InitNormal(csi1, csi2, phybase, config);
@@ -239,32 +239,32 @@ status_t MIPI_CSI2RX_InitInterface(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY
     else
     {
         /* Put Synopsys DPHY to reset status */
-        csi1->DPHY_RSTZ &= ~PRIMARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
-        csi1->PHY_SHUTDOWNZ &= ~PRIMARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+        csi1->DPHY_RSTZ &= ~CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+        csi1->PHY_SHUTDOWNZ &= ~CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
         phy_testclr = 1;
         phy_testdin = 0;
         phy_testen = 0;
         phy_testclk = 0;
-        csi1->PHY_TEST_CTRL1 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
-        csi1->PHY_TEST_CTRL0 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+        csi1->PHY_TEST_CTRL1 = (CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
+        csi1->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
         SDK_DelayAtLeastUs(1, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
         phy_testclr = 0;
-        csi1->PHY_TEST_CTRL0 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+        csi1->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
 
         /* Put Synopsys DPHY to reset status */
-        csi2->DPHY_RSTZ &= ~SECONDARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
-        csi2->PHY_SHUTDOWNZ &= ~SECONDARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+        csi2->DPHY_RSTZ &= ~CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+        csi2->PHY_SHUTDOWNZ &= ~CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
 
         phy_testclr = 1;
         phy_testdin = 0;
         phy_testen = 0;
         phy_testclk = 0;
 
-        csi2->PHY_TEST_CTRL1 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
-        csi2->PHY_TEST_CTRL0 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+        csi2->PHY_TEST_CTRL1 = (CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
+        csi2->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
         SDK_DelayAtLeastUs(1, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
         phy_testclr = 0;
-        csi2->PHY_TEST_CTRL0 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+        csi2->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
 
         MIPI_CSI2RX_PhyConfigure(csi1, csi2, config->hsFreqrange, config->ddl_osc_freq, config);
 
@@ -276,7 +276,7 @@ status_t MIPI_CSI2RX_InitInterface(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY
     return result;
 }
 
-status_t MIPI_CSI2RX_Init(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config)
+status_t MIPI_CSI2RX_Init(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config)
 {
     status_t result = kStatus_Success;
 
@@ -301,21 +301,21 @@ status_t MIPI_CSI2RX_Init(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CON
     return result;
 }
 
-void MIPI_CSI2RX_Deinit(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, uint8_t instance)
+void MIPI_CSI2RX_Deinit(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, uint8_t instance)
 {
     if (instance == KCSI2RX_DPHY_Primary)
     {
-        csi1->CSI2_RESETN &= ~PRIMARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
+        csi1->CSI2_RESETN &= ~CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
         /* Poweroff DWC RX DPHY module */
-        csi1->DPHY_RSTZ &= ~PRIMARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
-        csi1->PHY_SHUTDOWNZ &= ~PRIMARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+        csi1->DPHY_RSTZ &= ~CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+        csi1->PHY_SHUTDOWNZ &= ~CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
     }
     else
     {
-        csi2->CSI2_RESETN &= ~SECONDARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
+        csi2->CSI2_RESETN &= ~CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
         /* Poweroff DWC RX DPHY module */
-        csi2->DPHY_RSTZ &= ~SECONDARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
-        csi2->PHY_SHUTDOWNZ &= ~SECONDARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+        csi2->DPHY_RSTZ &= ~CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+        csi2->PHY_SHUTDOWNZ &= ~CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
     }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright  2019 NXP
+ * Copyright  2019, 2026 NXP
  * All rights reserved.
  *
  *
@@ -105,7 +105,7 @@ void SYSCTL_Deinit(SYSCTL_Type *base)
  * @param setIndex share set for sck, reference _sysctl_share_set_index
  *
  */
-void SYSCTL_SetShareSet(SYSCTL_Type *base, uint32_t flexCommIndex, sysctl_fcctrlsel_signal_t signal, uint32_t set)
+void SYSCTL_SetShareSet(SYSCTL_Type *base, uint32_t flexCommIndex, sysctl_fcctrlsel_signal_t signal, uint8_t set)
 {
     uint32_t tempReg = base->FCCTRLSEL[flexCommIndex];
 
@@ -127,7 +127,7 @@ void SYSCTL_SetShareSet(SYSCTL_Type *base, uint32_t flexCommIndex, sysctl_fcctrl
  *
  */
 void SYSCTL_SetFlexcommShareSet(
-    SYSCTL_Type *base, uint32_t flexCommIndex, uint32_t sckSet, uint32_t wsSet, uint32_t dataInSet, uint32_t dataOutSet)
+    SYSCTL_Type *base, uint32_t flexCommIndex, uint8_t sckSet, uint8_t wsSet, uint8_t dataInSet, uint8_t dataOutSet)
 {
     uint32_t tempReg = base->FCCTRLSEL[flexCommIndex];
 

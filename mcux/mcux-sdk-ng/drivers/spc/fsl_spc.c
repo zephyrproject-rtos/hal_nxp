@@ -1383,7 +1383,8 @@ status_t SPC_SetDCDCBurstConfig(SPC_Type *base, spc_dcdc_burst_config_t *config)
     /* Clear DCDC burst acknowledge flag. */
     base->DCDC_BURST_CFG |= SPC_DCDC_BURST_CFG_BURST_ACK_MASK;
 
-    base->DCDC_BURST_CFG |= SPC_DCDC_BURST_CFG_EXT_BURST_EN(config->externalBurstRequest);
+    /* INT31-C: Use conditional expression for bool to unsigned long conversion */
+    base->DCDC_BURST_CFG |= SPC_DCDC_BURST_CFG_EXT_BURST_EN(config->externalBurstRequest ? 1U : 0U);
 
     if (config->sofwareBurstRequest)
     {
@@ -1959,8 +1960,9 @@ void SPC_ConfigVddCoreGlitchDetector(SPC_Type *base, const spc_vdd_core_glitch_d
 
     reg |= SPC_VDD_CORE_GLITCH_DETECT_SC_CNT_SELECT(config->rippleCounterSelect) |
            SPC_VDD_CORE_GLITCH_DETECT_SC_TIMEOUT(config->resetTimeoutValue) |
-           SPC_VDD_CORE_GLITCH_DETECT_SC_RE(config->enableReset) |
-           SPC_VDD_CORE_GLITCH_DETECT_SC_IE(config->enableInterrupt);
+           /* INT31-C: Use conditional expression for bool to unsigned long conversion */
+           SPC_VDD_CORE_GLITCH_DETECT_SC_RE(config->enableReset ? 1U : 0U) |
+           SPC_VDD_CORE_GLITCH_DETECT_SC_IE(config->enableInterrupt ? 1U : 0U);
 
     base->VDD_CORE_GLITCH_DETECT_SC = reg;
 }

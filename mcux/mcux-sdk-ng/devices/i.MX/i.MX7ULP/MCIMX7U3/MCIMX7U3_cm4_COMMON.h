@@ -9,13 +9,13 @@
 **
 **     Reference manual:    IMX7ULPRM, Rev. 0, Nov. 2018
 **     Version:             rev. 8.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b260205
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCIMX7U3_cm4
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -1028,6 +1028,9 @@ typedef enum IRQn {
 #define TSTMR_BASE_ADDRS                         { TSTMRA_BASE, TSTMRB_BASE }
 /** Array initializer of TSTMR peripheral base pointers */
 #define TSTMR_BASE_PTRS                          { TSTMRA, TSTMRB }
+/* Extra definition */
+#define TSTMR_CLOCK_FREQUENCY_MHZ                (1U)
+
 
 /* USB - Peripheral instance base addresses */
 /** Peripheral USB0 base address */
@@ -1124,6 +1127,10 @@ typedef enum IRQn {
 #define WDOG_BASE_PTRS                           { WDOG0, WDOG1, WDOG2 }
 /** Interrupt vectors for the WDOG peripheral type */
 #define WDOG_IRQS                                { WDOG0_IRQn, WDOG1_IRQn, WDOG2_IRQn }
+/* Extra definition */
+#define WDOG_UPDATE_KEY                          (0xD928C520U)
+#define WDOG_REFRESH_KEY                         (0xB480A602U)
+
 
 /* XRDC - Peripheral instance base addresses */
 /** Peripheral XRDC base address */

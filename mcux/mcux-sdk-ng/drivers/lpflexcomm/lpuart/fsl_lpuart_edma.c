@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, 2025 NXP
+ * Copyright 2022, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -124,6 +124,13 @@ static void LPUART_ReceiveEDMACallback(edma_handle_t *handle, void *param, bool 
     handle = handle;
     tcds   = tcds;
 
+    if (lpuartPrivateHandle->handle->oneFifoBlockRxWatermark > -1)
+    {
+        LPUART_SetRxFifoWatermark(lpuartPrivateHandle->base, (uint8_t)lpuartPrivateHandle->handle->oneFifoBlockRxWatermark);
+        lpuartPrivateHandle->handle->oneFifoBlockRxWatermark = -1;
+        return;
+    }
+
     if (transferDone)
     {
         /* Disable transfer. */
@@ -188,21 +195,6 @@ void LPUART_TransferCreateHandleEDMAExt(LPUART_Type *base,
 
     handle->txCbMode = txCbMode;
 
-#if defined(FSL_FEATURE_LPUART_HAS_FIFO) && FSL_FEATURE_LPUART_HAS_FIFO
-    /* Note:
-       Take care of the RX FIFO, EDMA request only assert when received bytes
-       equal or more than RX water mark, there is potential issue if RX water
-       mark larger than 1.
-       For example, if RX FIFO water mark is 2, upper layer needs 5 bytes and
-       5 bytes are received. the last byte will be saved in FIFO but not trigger
-       EDMA transfer because the water mark is 2.
-     */
-    if (NULL != rxEdmaHandle)
-    {
-        base->WATER &= (~LPUART_WATER_RXWATER_MASK);
-    }
-#endif
-
     if (handle->txCbMode == kLPUART_TxFifoEmpty)
     {
         handler.lpuart_handler = LPUART_TransferEdmaHandleIRQ;
@@ -251,8 +243,9 @@ status_t LPUART_SendEDMA(LPUART_Type *base, lpuart_edma_handle_t *handle, lpuart
     assert(NULL != xfer);
     assert(NULL != xfer->data);
     assert(0U != xfer->dataSize);
+    assert(FSL_FEATURE_LPUART_FIFO_SIZEn(base) >= 8);
 
-    edma_transfer_config_t xferConfig;
+    edma_transfer_config_t transferConfigTx = {0};
     status_t status;
 
     /* If previous TX not finished. */
@@ -264,21 +257,84 @@ status_t LPUART_SendEDMA(LPUART_Type *base, lpuart_edma_handle_t *handle, lpuart
     {
         handle->txState       = (uint8_t)kLPUART_TxBusy;
         handle->txDataSizeAll = xfer->dataSize;
+        handle->txData        = xfer->txData;
 
-        /* Prepare transfer. */
-        EDMA_PrepareTransfer(&xferConfig, xfer->data, sizeof(uint8_t),
-                             (void *)(uint32_t *)LPUART_GetDataRegisterAddress(base), sizeof(uint8_t), sizeof(uint8_t),
-                             xfer->dataSize, kEDMA_MemoryToPeripheral);
+        uint32_t txAddr = LPUART_GetDataRegisterAddress(base);
 
-        /* Store the initially configured eDMA minor byte transfer count into the LPUART handle */
-        handle->nbytes = (uint8_t)sizeof(uint8_t);
+        edma_tcd_t *softwareTCD_oneFifoBlockTx = (edma_tcd_t *)((uint32_t)(&handle->edmaTcd[1]) & ~(EDMA_TCD_ALIGN_SIZE - 1U));
+        edma_tcd_t *nextTcd = NULL;
 
-        /* Submit transfer. */
-        if (kStatus_Success !=
-            EDMA_SubmitTransfer(handle->txEdmaHandle, (const edma_transfer_config_t *)(uint32_t)&xferConfig))
+        /* Count of blocks aligned to 4 FIFO words */
+        uint32_t fourFifoBlocks = xfer->dataSize / 4U;
+        assert(fourFifoBlocks <= (DMA_CITER_ELINKNO_CITER_MASK >> DMA_CITER_ELINKNO_CITER_SHIFT));
+
+        /* Count of blocks aligned to 1 FIFO words */
+        uint32_t oneFifoBlocks = xfer->dataSize % 4U;
+
+        LPUART_SetTxFifoWatermark(base, 4U);
+
+        EDMA_ResetChannel(handle->txEdmaHandle->base, handle->txEdmaHandle->channel);
+
+        if (oneFifoBlocks > 0U)
         {
-            return kStatus_Fail;
+            /* Transfer config for remaining FIFO words (1-3) */
+            transferConfigTx.srcAddr   = (uint32_t)xfer->txData + xfer->dataSize - oneFifoBlocks;
+            transferConfigTx.srcOffset = 1;
+
+            transferConfigTx.destAddr         = (uint32_t)txAddr;
+            transferConfigTx.destOffset       = 0;
+            transferConfigTx.srcTransferSize  = kEDMA_TransferSize1Bytes;
+            transferConfigTx.destTransferSize = kEDMA_TransferSize1Bytes;
+            transferConfigTx.minorLoopBytes   = oneFifoBlocks;
+            transferConfigTx.majorLoopCounts  = 1U;
+
+            if (fourFifoBlocks > 0U)
+            {
+                EDMA_TcdResetExt(handle->txEdmaHandle->base, softwareTCD_oneFifoBlockTx);
+                EDMA_TcdSetTransferConfigExt(handle->txEdmaHandle->base, softwareTCD_oneFifoBlockTx,
+                                            &transferConfigTx, nextTcd);
+                EDMA_TcdEnableInterruptsExt(handle->txEdmaHandle->base, softwareTCD_oneFifoBlockTx,
+                                            (uint32_t)kEDMA_MajorInterruptEnable);
+
+                nextTcd = softwareTCD_oneFifoBlockTx;
+            }
+            else
+            {
+                EDMA_SetTransferConfig(handle->txEdmaHandle->base, handle->txEdmaHandle->channel,
+                                    &transferConfigTx, nextTcd);
+
+                /* Enable eDMA interrupt to finish transfer */
+                EDMA_EnableChannelInterrupts(handle->txEdmaHandle->base,
+                                            handle->txEdmaHandle->channel,
+                                            (uint32_t)kEDMA_MajorInterruptEnable);
+            }
         }
+
+        if (fourFifoBlocks > 0U)
+        {
+            /* Transfer config for part of data aligned to 4 FIFO entry */
+            transferConfigTx.srcAddr   = (uint32_t)xfer->txData;
+            transferConfigTx.srcOffset = 1;
+
+            transferConfigTx.destAddr         = (uint32_t)txAddr;
+            transferConfigTx.destOffset       = 0;
+            transferConfigTx.srcTransferSize  = kEDMA_TransferSize1Bytes;
+            transferConfigTx.destTransferSize = kEDMA_TransferSize1Bytes;
+            transferConfigTx.minorLoopBytes   = 4U;
+            transferConfigTx.majorLoopCounts  = fourFifoBlocks;
+
+            EDMA_SetTransferConfig(handle->txEdmaHandle->base, handle->txEdmaHandle->channel,
+                                &transferConfigTx, nextTcd);
+
+            if (oneFifoBlocks == 0U)
+            {
+                /* Enable eDMA interrupt to finish transfer */
+                EDMA_EnableChannelInterrupts(handle->txEdmaHandle->base,
+                                            handle->txEdmaHandle->channel,
+                                            (uint32_t)kEDMA_MajorInterruptEnable);
+            }
+        }
+
         EDMA_StartTransfer(handle->txEdmaHandle);
 
         /* Enable LPUART TX EDMA. */
@@ -311,7 +367,7 @@ status_t LPUART_ReceiveEDMA(LPUART_Type *base, lpuart_edma_handle_t *handle, lpu
     assert(NULL != xfer->data);
     assert(0U != xfer->dataSize);
 
-    edma_transfer_config_t xferConfig;
+    edma_transfer_config_t transferConfigRx = {0};
     status_t status;
 
     /* If previous RX not finished. */
@@ -323,20 +379,93 @@ status_t LPUART_ReceiveEDMA(LPUART_Type *base, lpuart_edma_handle_t *handle, lpu
     {
         handle->rxState       = (uint8_t)kLPUART_RxBusy;
         handle->rxDataSizeAll = xfer->dataSize;
+        handle->rxData        = xfer->rxData;
 
-        /* Prepare transfer. */
-        EDMA_PrepareTransfer(&xferConfig, (void *)(uint32_t *)LPUART_GetDataRegisterAddress(base), sizeof(uint8_t),
-                             xfer->data, sizeof(uint8_t), sizeof(uint8_t), xfer->dataSize, kEDMA_PeripheralToMemory);
+        handle->oneFifoBlockRxWatermark = -1;
 
-        /* Store the initially configured eDMA minor byte transfer count into the LPUART handle */
-        handle->nbytes = (uint8_t)sizeof(uint8_t);
+        uint32_t rxAddr = LPUART_GetDataRegisterAddress(base);
 
-        /* Submit transfer. */
-        if (kStatus_Success !=
-            EDMA_SubmitTransfer(handle->rxEdmaHandle, (const edma_transfer_config_t *)(uint32_t)&xferConfig))
+        edma_tcd_t *softwareTCD_oneFifoBlockRx  = (edma_tcd_t *)((uint32_t)(&handle->edmaTcd[2]) & ~(EDMA_TCD_ALIGN_SIZE - 1U));
+        edma_tcd_t *nextTcd                     = NULL;
+
+        /* Count of blocks aligned to 4 FIFO words */
+        uint32_t fourFifoBlocks = xfer->dataSize / 4U;
+        assert(fourFifoBlocks <= (DMA_CITER_ELINKNO_CITER_MASK >> DMA_CITER_ELINKNO_CITER_SHIFT));
+
+        /* Count of blocks aligned to 1 FIFO words */
+        uint32_t oneFifoBlocks = xfer->dataSize % 4U;
+
+        EDMA_ResetChannel(handle->rxEdmaHandle->base, handle->rxEdmaHandle->channel);
+
+        if (oneFifoBlocks > 0U)
         {
-            return kStatus_Fail;
+            /* Transfer config for remaining FIFO words (1-3) */
+            transferConfigRx.srcAddr   = rxAddr;
+            transferConfigRx.srcOffset = 0;
+
+            transferConfigRx.destAddr   = (uint32_t)xfer->rxData + xfer->dataSize - oneFifoBlocks;
+            transferConfigRx.destOffset = 1;
+
+            transferConfigRx.srcTransferSize  = kEDMA_TransferSize1Bytes;
+            transferConfigRx.destTransferSize = kEDMA_TransferSize1Bytes;
+            transferConfigRx.minorLoopBytes   = oneFifoBlocks;
+            transferConfigRx.majorLoopCounts  = 1U;
+
+            if (fourFifoBlocks > 0U)
+            {
+                EDMA_TcdResetExt(handle->rxEdmaHandle->base, softwareTCD_oneFifoBlockRx);
+                EDMA_TcdSetTransferConfigExt(handle->rxEdmaHandle->base, softwareTCD_oneFifoBlockRx,
+                                            &transferConfigRx, nextTcd);
+                EDMA_TcdEnableInterruptsExt(handle->rxEdmaHandle->base, softwareTCD_oneFifoBlockRx,
+                                            (uint32_t)kEDMA_MajorInterruptEnable);
+
+                nextTcd = softwareTCD_oneFifoBlockRx;
+            }
+            else
+            {
+                EDMA_SetTransferConfig(handle->rxEdmaHandle->base, handle->rxEdmaHandle->channel,
+                                    &transferConfigRx, nextTcd);
+
+                /* Enable edma interrupt to finish transfer */
+                EDMA_EnableChannelInterrupts(handle->rxEdmaHandle->base,
+                                            handle->rxEdmaHandle->channel,
+                                            (uint32_t)kEDMA_MajorInterruptEnable);
+
+                LPUART_SetRxFifoWatermark(base, (uint8_t)oneFifoBlocks - 1U);
+            }
         }
+
+        if (fourFifoBlocks > 0U)
+        {
+            /* Transfer config for part of data aligned to 4 FIFO entry */
+            transferConfigRx.srcAddr   = (uint32_t)rxAddr;
+            transferConfigRx.srcOffset = 0;
+
+            transferConfigRx.destAddr   = (uint32_t)xfer->rxData;
+            transferConfigRx.destOffset = 1;
+
+            transferConfigRx.srcTransferSize  = kEDMA_TransferSize1Bytes;
+            transferConfigRx.destTransferSize = kEDMA_TransferSize1Bytes;
+            transferConfigRx.minorLoopBytes   = 4U;
+            transferConfigRx.majorLoopCounts  = fourFifoBlocks;
+
+            if (oneFifoBlocks > 0U)
+            {
+                /* Set value of RX FIFO watermark for next part of data, used in LPUART_ReceiveEDMACallback() */
+                handle->oneFifoBlockRxWatermark = (int8_t)oneFifoBlocks - 1;
+            }
+
+            EDMA_SetTransferConfig(handle->rxEdmaHandle->base, handle->rxEdmaHandle->channel,
+                                &transferConfigRx, nextTcd);
+
+            /* Enable eDMA interrupt to finish transfer or change RX FIFO watermark */
+            EDMA_EnableChannelInterrupts(handle->rxEdmaHandle->base, handle->rxEdmaHandle->channel,
+                                        (uint32_t)kEDMA_MajorInterruptEnable);
+
+            /* Configure RX FIFO watermark to be possible read 4 FIFO entry per each DMA request */
+            LPUART_SetRxFifoWatermark(base, 3U);
+        }
+
         EDMA_StartTransfer(handle->rxEdmaHandle);
 
         /* Enable LPUART RX EDMA. */
@@ -415,9 +544,8 @@ status_t LPUART_TransferGetReceiveCountEDMA(LPUART_Type *base, lpuart_edma_handl
         return kStatus_NoTransferInProgress;
     }
 
-    *count = handle->rxDataSizeAll -
-             ((uint32_t)handle->nbytes *
-              EDMA_GetRemainingMajorLoopCount(handle->rxEdmaHandle->base, handle->rxEdmaHandle->channel));
+    uint32_t tcdDaddr = EDMA_TCD_DADDR(handle->rxEdmaHandle->tcdBase, EDMA_TCD_TYPE(handle->rxEdmaHandle->base));
+    *count = tcdDaddr - (uint32_t)handle->rxData;
 
     return kStatus_Success;
 }
@@ -446,9 +574,16 @@ status_t LPUART_TransferGetSendCountEDMA(LPUART_Type *base, lpuart_edma_handle_t
         return kStatus_NoTransferInProgress;
     }
 
-    *count = handle->txDataSizeAll -
-             ((uint32_t)handle->nbytes *
-              EDMA_GetRemainingMajorLoopCount(handle->txEdmaHandle->base, handle->txEdmaHandle->channel));
+    /* eDMA transfer can be done, but data can be in TX FIFO and shift register */
+    if (DMA_GET_DONE_STATUS(handle->txEdmaHandle->base, handle->txEdmaHandle->channel) != 0U)
+    {
+        return kStatus_NoTransferInProgress;
+    }
+    else
+    {
+        uint32_t tcdSaddr = EDMA_TCD_SADDR(handle->txEdmaHandle->tcdBase, EDMA_TCD_TYPE(handle->txEdmaHandle->base));
+        *count = tcdSaddr - (uint32_t)handle->txData;
+    }
 
     return kStatus_Success;
 }

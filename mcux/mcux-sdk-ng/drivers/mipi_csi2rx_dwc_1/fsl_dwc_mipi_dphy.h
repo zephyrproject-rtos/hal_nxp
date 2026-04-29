@@ -76,7 +76,7 @@ extern "C" {
  * @param csi2 CSI2RX secondary peripheral address.
  * @param config CSI2RX module configuration structure.
  */
-void DWC_DPHY_Reset(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config);
+void DWC_DPHY_Reset(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config);
 
 /*!
  * @brief This function resets the PHY module configuration test code.
@@ -85,7 +85,7 @@ void DWC_DPHY_Reset(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLE
  * @param csi2 CSI2RX secondary peripheral address.
  * @param config CSI2RX module configuration structure.
  */
-void DWC_DPHY_TestCodeReset(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config);
+void DWC_DPHY_TestCodeReset(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config);
 
 /*!
  * @brief This function configures the PHY module register.
@@ -94,7 +94,7 @@ void DWC_DPHY_TestCodeReset(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_C
  * @param address Address in the PHY module to configure.
  * @param values Configuration value to write to the specified PHY address.
  */
-void DWC_DPHY_SetTestConfigureCSI1(PRIMARY_CSI2_CONTROLLER_Type *csi1, uint32_t address, uint8_t values);
+void DWC_DPHY_SetTestConfigureCSI1(CSI2_CONTROLLER_Type *csi1, uint32_t address, uint8_t values);
 
 /*!
  * @brief This function configure the PHY module register.
@@ -103,7 +103,7 @@ void DWC_DPHY_SetTestConfigureCSI1(PRIMARY_CSI2_CONTROLLER_Type *csi1, uint32_t 
  * @param address set by PHY module.
  * @param values change characteristics by writing this value to the PHY address.
  */
-void DWC_DPHY_SetTestConfigureCSI2(SECONDARY_CSI2_CONTROLLER_Type *csi2, uint32_t address, uint8_t values);
+void DWC_DPHY_SetTestConfigureCSI2(CSI2_CONTROLLER_Type *csi2, uint32_t address, uint8_t values);
 
 /*!
  * @brief This function read the PHY module register.
@@ -111,7 +111,7 @@ void DWC_DPHY_SetTestConfigureCSI2(SECONDARY_CSI2_CONTROLLER_Type *csi2, uint32_
  * @param base CSI2RX peripheral address.
  * @param address read by phy module.
  */
-uint32_t DWC_DPHY_ReadTestConfigure(PRIMARY_CSI2_CONTROLLER_Type *base, uint8_t address);
+uint32_t DWC_DPHY_ReadTestConfigure(CSI2_CONTROLLER_Type *base, uint8_t address);
 
 /*!
  * @brief This function configure PHY module hsfreqrange and cfgclkfreqrange.
@@ -119,7 +119,7 @@ uint32_t DWC_DPHY_ReadTestConfigure(PRIMARY_CSI2_CONTROLLER_Type *base, uint8_t 
  * @param base CSI2RX peripheral address.
  * @param config CSI2RX module configuration structure.
  */
-void DWC_DPHY_TestCodeConfig(PRIMARY_CSI2_CONTROLLER_Type *base, const csi2rx_config_t *config);
+void DWC_DPHY_TestCodeConfig(CSI2_CONTROLLER_Type *base, const csi2rx_config_t *config);
 
 /*!
  * @brief This function init the PHY module as normal mode.
@@ -129,7 +129,7 @@ void DWC_DPHY_TestCodeConfig(PRIMARY_CSI2_CONTROLLER_Type *base, const csi2rx_co
  * @param phybase PHY module peripheral address.
  * @param config CSI2RX module configuration structure.
  */
-void DWC_DPHY_InitNormal(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config);
+void DWC_DPHY_InitNormal(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config);
 
 /*!
  * @brief This function init the PHY module as aggregate mode.
@@ -139,7 +139,7 @@ void DWC_DPHY_InitNormal(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONT
  * @param phybase PHY module peripheral address.
  * @param config CSI2RX module configuration structure.
  */
-void DWC_DPHY_InitAggr(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config);
+void DWC_DPHY_InitAggr(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config);
 
 #if defined(__cplusplus)
 }

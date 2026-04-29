@@ -11,13 +11,13 @@
 **
 **     Reference manual:    K32L2AxRM, Rev. 1, 12/2019
 **     Version:             rev. 2.1, 2025-11-10
-**     Build:               b251110
+**     Build:               b260202
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for K32L2A41A
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -704,6 +704,9 @@ typedef enum IRQn {
 #define TSTMR_BASE_ADDRS                         { TSTMR0_BASE }
 /** Array initializer of TSTMR peripheral base pointers */
 #define TSTMR_BASE_PTRS                          { TSTMR0 }
+/* Extra definition */
+#define TSTMR_CLOCK_FREQUENCY_MHZ                (1U)
+
 
 /* USB - Peripheral instance base addresses */
 /** Peripheral USB0 base address */
@@ -738,6 +741,10 @@ typedef enum IRQn {
 #define WDOG_BASE_PTRS                           { WDOG0 }
 /** Interrupt vectors for the WDOG peripheral type */
 #define WDOG_IRQS                                { WDOG0_IRQn }
+/* Extra definition */
+#define WDOG_UPDATE_KEY                          (0xD928C520U)
+#define WDOG_REFRESH_KEY                         (0xB480A602U)
+
 
 /* ----------------------------------------------------------------------------
    -- Macros for use with bit field definitions (xxx_SHIFT, xxx_MASK).

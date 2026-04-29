@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2017-05-19
-**     Build:               b250603
+**     Build:               b260130
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -139,6 +139,8 @@
 #define FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn(x) (0)
 /* @brief FTM instance fault input number. */
 #define FSL_FEATURE_FTM_INSTANCE_FAULT_INPUT_NUMBERn(x) (4)
+/* @brief Is affected by errata with ID 010856 (FTM: Safe state is not removed from channel outputs after fault condition ends if SWOCTRL is being used to control the pin). */
+#define FSL_FEATURE_FTM_HAS_ERRATA_010856 (0)
 /* @brief TPM Has no CONF. */
 #define FSL_FEATURE_TPM_HAS_NO_CONF (1)
 /* @brief There is CLKS bit in SC register. */

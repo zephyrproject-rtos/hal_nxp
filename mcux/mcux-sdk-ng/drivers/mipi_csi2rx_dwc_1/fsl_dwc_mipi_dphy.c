@@ -6,54 +6,54 @@
 
 #include "fsl_dwc_mipi_dphy.h"
 
-void DWC_DPHY_Reset(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config)
+void DWC_DPHY_Reset(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config)
 {
     if (config->phyNumber == KCSI2RX_DPHY_Primary)
     {
         /* Put DPHY into reset state */
-        csi1->DPHY_RSTZ &= ~PRIMARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
-        csi1->PHY_SHUTDOWNZ &= ~PRIMARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+        csi1->DPHY_RSTZ &= CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+        csi1->PHY_SHUTDOWNZ &= ~CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
         SDK_DelayAtLeastUs(1, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 
         /* Remove the DPHY from reset state */
-        csi1->PHY_SHUTDOWNZ = ((csi1->PHY_SHUTDOWNZ & ~ PRIMARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK) | PRIMARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK);
+        csi1->PHY_SHUTDOWNZ = ((csi1->PHY_SHUTDOWNZ & ~ CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK) | CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK);
         SDK_DelayAtLeastUs(1, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
-        csi1->DPHY_RSTZ = ((csi1->DPHY_RSTZ & ~PRIMARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK) | PRIMARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK);
+        csi1->DPHY_RSTZ = ((csi1->DPHY_RSTZ & ~CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK) | CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK);
     }
     else
     {
         /* Put DPHY into reset state */
-        csi2->DPHY_RSTZ &= ~SECONDARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
-        csi2->PHY_SHUTDOWNZ &= ~SECONDARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+        csi2->DPHY_RSTZ &= ~CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+        csi2->PHY_SHUTDOWNZ &= ~CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
         SDK_DelayAtLeastUs(1, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 
         /* Remove the DPHY from reset state */
-        csi2->PHY_SHUTDOWNZ = ((csi2->PHY_SHUTDOWNZ & ~ SECONDARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK) | SECONDARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK);
+        csi2->PHY_SHUTDOWNZ = ((csi2->PHY_SHUTDOWNZ & ~ CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK) | CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK);
         SDK_DelayAtLeastUs(1, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
-        csi2->DPHY_RSTZ = ((csi2->DPHY_RSTZ & ~SECONDARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK) | SECONDARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK);
+        csi2->DPHY_RSTZ = ((csi2->DPHY_RSTZ & ~CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK) | CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK);
     }
 }
 
-void DWC_DPHY_TestCodeReset(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config)
+void DWC_DPHY_TestCodeReset(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config)
 {
     if (config->phyNumber == KCSI2RX_DPHY_Primary)
     {
         /* Set PHY test codes from reset */
-        csi1->PHY_TEST_CTRL0 = ((csi1->PHY_TEST_CTRL0 & ~PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclr_MASK) | PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclr_MASK);
+        csi1->PHY_TEST_CTRL0 = ((csi1->PHY_TEST_CTRL0 & ~CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclr_MASK) | CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclr_MASK);
 
         /* release PHY test codes from reset */
-        csi1->PHY_TEST_CTRL0 &= ~PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclr_MASK;
+        csi1->PHY_TEST_CTRL0 &= ~CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclr_MASK;
     }
     else
     {
-        csi2->PHY_TEST_CTRL0 = ((csi2->PHY_TEST_CTRL0 & ~SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclr_MASK) | SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclr_MASK);
+        csi2->PHY_TEST_CTRL0 = ((csi2->PHY_TEST_CTRL0 & ~CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclr_MASK) | CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclr_MASK);
 
         /* release PHY test codes from reset */
-        csi2->PHY_TEST_CTRL0 &= ~SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclr_MASK;
+        csi2->PHY_TEST_CTRL0 &= ~CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclr_MASK;
     }
 }
 
-void DWC_DPHY_SetTestConfigureCSI1(PRIMARY_CSI2_CONTROLLER_Type *csi1, uint32_t address, uint8_t values)
+void DWC_DPHY_SetTestConfigureCSI1(CSI2_CONTROLLER_Type *csi1, uint32_t address, uint8_t values)
 {
     uint8_t phy_testclr;
     uint8_t phy_testdin;
@@ -65,26 +65,26 @@ void DWC_DPHY_SetTestConfigureCSI1(PRIMARY_CSI2_CONTROLLER_Type *csi1, uint32_t 
     phy_testdin   = address;
     phy_testen    = 1;
 
-    csi1->PHY_TEST_CTRL1 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
+    csi1->PHY_TEST_CTRL1 = (CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
 
-    csi1->PHY_TEST_CTRL0 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+    csi1->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
 
     phy_testclk   = 0;
-    csi1->PHY_TEST_CTRL0 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+    csi1->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
 
     phy_testclk   = 0;
     phy_testen    = 0;
     phy_testdin   = values;
-    csi1->PHY_TEST_CTRL1 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
-    csi1->PHY_TEST_CTRL0 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+    csi1->PHY_TEST_CTRL1 = (CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
+    csi1->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
 
     phy_testclk   = 1;
-    csi1->PHY_TEST_CTRL0 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+    csi1->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
     phy_testclk   = 0;
-    csi1->PHY_TEST_CTRL0 = (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+    csi1->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
 }
 
-void DWC_DPHY_SetTestConfigureCSI2(SECONDARY_CSI2_CONTROLLER_Type *csi2, uint32_t address, uint8_t values)
+void DWC_DPHY_SetTestConfigureCSI2(CSI2_CONTROLLER_Type *csi2, uint32_t address, uint8_t values)
 {
     uint8_t phy_testclr;
     uint8_t phy_testdin;
@@ -96,50 +96,50 @@ void DWC_DPHY_SetTestConfigureCSI2(SECONDARY_CSI2_CONTROLLER_Type *csi2, uint32_
     phy_testdin   = address;
     phy_testen    = 1;
 
-    csi2->PHY_TEST_CTRL1 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
+    csi2->PHY_TEST_CTRL1 = (CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
 
-    csi2->PHY_TEST_CTRL0 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+    csi2->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
 
     phy_testclk   = 0;
-    csi2->PHY_TEST_CTRL0 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+    csi2->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
 
     phy_testclk   = 0;
     phy_testen    = 0;
     phy_testdin   = values;
-    csi2->PHY_TEST_CTRL1 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
-    csi2->PHY_TEST_CTRL0 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+    csi2->PHY_TEST_CTRL1 = (CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
+    csi2->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
 
     phy_testclk   = 1;
-    csi2->PHY_TEST_CTRL0 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+    csi2->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
     phy_testclk   = 0;
-    csi2->PHY_TEST_CTRL0 = (SECONDARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
+    csi2->PHY_TEST_CTRL0 = (CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk(phy_testclk) | phy_testclr);
 }
 
-uint32_t DWC_DPHY_ReadTestConfigure(PRIMARY_CSI2_CONTROLLER_Type *base, uint8_t address)
+uint32_t DWC_DPHY_ReadTestConfigure(CSI2_CONTROLLER_Type *base, uint8_t address)
 {
     uint32_t values = 0;
 
     /* enable address writing operation and set dphy offset address */
-    base->PHY_TEST_CTRL1 = ((base->PHY_TEST_CTRL1 & ~(PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen_MASK |
-                                                      PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testdin(address))) |
-                                                     (PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen_MASK |
-                                                      PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testdin(address)));
+    base->PHY_TEST_CTRL1 = ((base->PHY_TEST_CTRL1 & ~(CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen_MASK |
+                                                      CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testdin(address))) |
+                                                     (CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen_MASK |
+                                                      CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testdin(address)));
 
     /* Set then clear phy_testclk */
-    base->PHY_TEST_CTRL0 = ((base->PHY_TEST_CTRL0 & ~PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk_MASK) | PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk_MASK);
-    base->PHY_TEST_CTRL0 &= ~PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk_MASK;
+    base->PHY_TEST_CTRL0 = ((base->PHY_TEST_CTRL0 & ~CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk_MASK) | CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk_MASK);
+    base->PHY_TEST_CTRL0 &= ~CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclk_MASK;
 
     /* Read dphy test address values */
     values = base->PHY_TEST_CTRL1;
-    values = (uint32_t)(PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testdout(values));
+    values = (uint32_t)(CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testdout(values));
 
     /* disable address writing operation and configure dphy register values */
-    base->PHY_TEST_CTRL1 &= ~PRIMARY_CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen_MASK;
+    base->PHY_TEST_CTRL1 &= ~CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen_MASK;
 
     return values;
 }
 
-void DWC_DPHY_InitNormal(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config)
+void DWC_DPHY_InitNormal(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config)
 {
     if (config->phyNumber == KCSI2RX_DPHY_Primary)
     {
@@ -167,17 +167,17 @@ void DWC_DPHY_InitNormal(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONT
         SDK_DelayAtLeastUs(5, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 
         /* Set PHY_SHUTDOWNZ = 1'b1, DPHY_RSTZ = 1'b1 */
-        csi1->PHY_SHUTDOWNZ = (csi1->PHY_SHUTDOWNZ & ~PRIMARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK) | PRIMARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+        csi1->PHY_SHUTDOWNZ = (csi1->PHY_SHUTDOWNZ & ~CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK) | CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
         /* delay 5ns */
         SDK_DelayAtLeastUs(5, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
-        csi1->DPHY_RSTZ = (csi1->DPHY_RSTZ & ~PRIMARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK) | PRIMARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
-        csi1->CSI2_RESETN |= PRIMARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
+        csi1->DPHY_RSTZ = (csi1->DPHY_RSTZ & ~CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK) | CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+        csi1->CSI2_RESETN |= CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
 
         /* Configure the number of active lanes for CSI host controller */
         csi1->N_LANES = config->laneNum - 1U;
 
         /* Wait until clock lane at stop state */
-        while ((csi1->PHY_STOPSTATE & PRIMARY_CSI2_CONTROLLER_PHY_STOPSTATE_phy_stopstateclk_MASK) != PRIMARY_CSI2_CONTROLLER_PHY_STOPSTATE_phy_stopstateclk_MASK)
+        while ((csi1->PHY_STOPSTATE & CSI2_CONTROLLER_PHY_STOPSTATE_phy_stopstateclk_MASK) != CSI2_CONTROLLER_PHY_STOPSTATE_phy_stopstateclk_MASK)
         {
         }
     }
@@ -207,23 +207,23 @@ void DWC_DPHY_InitNormal(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONT
         SDK_DelayAtLeastUs(5, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 
         /* Set PHY_SHUTDOWNZ = 1'b1, DPHY_RSTZ = 1'b1 */
-        csi2->PHY_SHUTDOWNZ = (csi2->PHY_SHUTDOWNZ & ~SECONDARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK) | SECONDARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+        csi2->PHY_SHUTDOWNZ = (csi2->PHY_SHUTDOWNZ & ~CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK) | CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
         /* delay 5ns */
         SDK_DelayAtLeastUs(5, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
-        csi2->DPHY_RSTZ = (csi2->DPHY_RSTZ & ~SECONDARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK) | SECONDARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
-        csi2->CSI2_RESETN |= SECONDARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
+        csi2->DPHY_RSTZ = (csi2->DPHY_RSTZ & ~CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK) | CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+        csi2->CSI2_RESETN |= CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
 
         /* Configure the number of active lanes for CSI host controller */
         csi2->N_LANES = config->laneNum - 1U;
 
         /* Wait until clock lane at stop state */
-        while ((csi2->PHY_STOPSTATE & SECONDARY_CSI2_CONTROLLER_PHY_STOPSTATE_phy_stopstateclk_MASK) != SECONDARY_CSI2_CONTROLLER_PHY_STOPSTATE_phy_stopstateclk_MASK)
+        while ((csi2->PHY_STOPSTATE & CSI2_CONTROLLER_PHY_STOPSTATE_phy_stopstateclk_MASK) != CSI2_CONTROLLER_PHY_STOPSTATE_phy_stopstateclk_MASK)
         {
         }
     }
 }
 
-void DWC_DPHY_InitAggr(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config)
+void DWC_DPHY_InitAggr(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config)
 {
     /* configure DPHY hsfreqrange and clk, hsfreqrange operation ranging from 80 Mbps to 2.5Gbps. it can be override by DPHY PHY_TEST_CTRL1 interface*/
     phybase->PRIMARY_PHY_FREQ_CONTROL = (phybase->PRIMARY_PHY_FREQ_CONTROL & ~(CAMERA_PHY_CSR_PRIMARY_PHY_FREQ_CONTROL_Phy_cfgclkfreqrange_MASK |
@@ -307,22 +307,22 @@ void DWC_DPHY_InitAggr(PRIMARY_CSI2_CONTROLLER_Type *csi1, SECONDARY_CSI2_CONTRO
     phybase->CSI2_4L_2L_AGGR_COMPLEX_MODE_CONTROL |= CAMERA_PHY_CSR_CSI2_4L_2L_AGGR_COMPLEX_MODE_CONTROL_Aggr_mode_MASK;
     SDK_DelayAtLeastUs(5, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 
-    csi1->PHY_SHUTDOWNZ = (csi1->PHY_SHUTDOWNZ & ~PRIMARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK) | PRIMARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+    csi1->PHY_SHUTDOWNZ = (csi1->PHY_SHUTDOWNZ & ~CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK) | CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
     SDK_DelayAtLeastUs(5, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
-    csi1->DPHY_RSTZ = (csi1->DPHY_RSTZ & ~PRIMARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK) | PRIMARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+    csi1->DPHY_RSTZ = (csi1->DPHY_RSTZ & ~CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK) | CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
     SDK_DelayAtLeastUs(5, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
-    csi1->CSI2_RESETN |= PRIMARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
+    csi1->CSI2_RESETN |= CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
     csi1->N_LANES = config->laneNum - 1U;
 
     /* Set PHY_SHUTDOWNZ = 1'b1, DPHY_RSTZ = 1'b1 */
-    csi2->PHY_SHUTDOWNZ = (csi2->PHY_SHUTDOWNZ & ~SECONDARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK) | SECONDARY_CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
+    csi2->PHY_SHUTDOWNZ = (csi2->PHY_SHUTDOWNZ & ~CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK) | CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
     /* delay 5ns */
     SDK_DelayAtLeastUs(5, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
-    csi2->DPHY_RSTZ = (csi2->DPHY_RSTZ & ~SECONDARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK) | SECONDARY_CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
-    csi2->CSI2_RESETN |= SECONDARY_CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
+    csi2->DPHY_RSTZ = (csi2->DPHY_RSTZ & ~CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK) | CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
+    csi2->CSI2_RESETN |= CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
 
     /* Wait until clock lane at stop state */
-    while ((csi1->PHY_STOPSTATE & PRIMARY_CSI2_CONTROLLER_PHY_STOPSTATE_phy_stopstateclk_MASK) != PRIMARY_CSI2_CONTROLLER_PHY_STOPSTATE_phy_stopstateclk_MASK)
+    while ((csi1->PHY_STOPSTATE & CSI2_CONTROLLER_PHY_STOPSTATE_phy_stopstateclk_MASK) != CSI2_CONTROLLER_PHY_STOPSTATE_phy_stopstateclk_MASK)
     {
     }
 }

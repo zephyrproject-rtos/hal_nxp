@@ -83,17 +83,26 @@ void TSI_InitSelfCapMode(TSI_Type *base, const tsi_selfCap_config_t *config)
     base->CONFIG =
         temp | (TSI_CONFIG_MUTUAL_MODE(config->commonConfig.mode) | TSI_CONFIG_S_SEN(config->enableSensitivity));
 
-    temp        = (base->GENCS) & ~(TSI_GENCS_SETCLK_MASK);
-    base->GENCS = temp | (TSI_GENCS_SETCLK(config->commonConfig.mainClock));
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_SETCLK) && FSL_FEATURE_TSI_HAS_NO_SETCLK)
+    TSI_SetMainClock(base, config->commonConfig.mainClock);
+#endif
 
-    temp         = (base->SHIELD) & ~(TSI_SHIELD_SHIELD_ENABLE_MASK);
-    base->SHIELD = temp | (TSI_SHIELD_SHIELD_ENABLE(config->enableShield));
-
-    base->DATA  = base->DATA & ~(ALL_FLAGS_MASK);
+#if defined(FSL_FEATURE_TSI_HAS_SHIELD_SEL) && FSL_FEATURE_TSI_HAS_SHIELD_SEL
+    TSI_SetShieldChannel(base, config->shieldChannelMask);
+#else
+    TSI_SetShieldChannel(base, config->enableShield);
+#endif
     base->GENCS = (base->GENCS & (~(TSI_GENCS_DVOLT_MASK))) | TSI_GENCS_DVOLT(config->commonConfig.dvolt);
+
+#if defined(FSL_FEATURE_TSI_HAS_SINC_SINC_BITFIELD) && FSL_FEATURE_TSI_HAS_SINC_SINC_BITFIELD
+    temp        = (base->SINC) & ~(TSI_SINC_SINC_CUTOFF_MASK | TSI_SINC_SINC_ORDER_MASK | TSI_SINC_SINC_DECIMATION_MASK);
+    base->SINC  = temp | (TSI_SINC_SINC_CUTOFF(config->commonConfig.cutoff) | TSI_SINC_SINC_ORDER(config->commonConfig.order) |
+                         TSI_SINC_SINC_DECIMATION(config->commonConfig.decimation));
+#else
     temp        = (base->SINC) & ~(TSI_SINC_CUTOFF_MASK | TSI_SINC_ORDER_MASK | TSI_SINC_DECIMATION_MASK);
     base->SINC  = temp | (TSI_SINC_CUTOFF(config->commonConfig.cutoff) | TSI_SINC_ORDER(config->commonConfig.order) |
                          TSI_SINC_DECIMATION(config->commonConfig.decimation));
+#endif
 
     temp = (base->SSC0) & ~(TSI_SSC0_CHARGE_NUM_MASK | TSI_SSC0_BASE_NOCHARGE_NUM_MASK | TSI_SSC0_PRBS_OUTSEL_MASK |
                             TSI_SSC0_SSC_PRESCALE_NUM_MASK | TSI_SSC0_SSC_MODE_MASK);
@@ -105,10 +114,18 @@ void TSI_InitSelfCapMode(TSI_Type *base, const tsi_selfCap_config_t *config)
 
     /* Self-cap mode specific settings */
     temp = (base->CONFIG) &
-           ~(TSI_CONFIG_S_XDN_MASK | TSI_CONFIG_S_CTRIM_MASK | TSI_CONFIG_S_XIN_MASK | TSI_CONFIG_S_XCH_MASK);
-    base->CONFIG = temp | (TSI_CONFIG_S_XDN(config->xdn) | TSI_CONFIG_S_CTRIM(config->ctrim) |
-                           TSI_CONFIG_S_XIN(config->inputCurrent) | TSI_CONFIG_S_XCH(config->chargeCurrent));
-
+           ~(TSI_CONFIG_S_XDN_MASK |
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_S_CTRIM) && FSL_FEATURE_TSI_HAS_NO_S_CTRIM)
+             TSI_CONFIG_S_CTRIM_MASK |
+#endif
+             TSI_CONFIG_S_XIN_MASK |
+             TSI_CONFIG_S_XCH_MASK);
+    base->CONFIG = temp | (TSI_CONFIG_S_XDN(config->xdn) |
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_S_CTRIM) && FSL_FEATURE_TSI_HAS_NO_S_CTRIM)
+                           TSI_CONFIG_S_CTRIM(config->ctrim) |
+#endif
+                           TSI_CONFIG_S_XIN(config->inputCurrent) |
+                           TSI_CONFIG_S_XCH(config->chargeCurrent));
     if (is_module_enabled)
     {
         TSI_EnableModule(base, true);
@@ -151,15 +168,21 @@ void TSI_InitMutualCapMode(TSI_Type *base, const tsi_mutualCap_config_t *config)
     temp                = (base->CONFIG_MUTUAL) & ~(TSI_CONFIG_MUTUAL_MODE_MASK);
     base->CONFIG_MUTUAL = temp | (TSI_CONFIG_MUTUAL_MODE(config->commonConfig.mode));
 
-    temp        = (base->GENCS) & ~(TSI_GENCS_SETCLK_MASK);
-    base->GENCS = temp | (TSI_GENCS_SETCLK(config->commonConfig.mainClock));
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_SETCLK) && FSL_FEATURE_TSI_HAS_NO_SETCLK)
+    TSI_SetMainClock(base, config->commonConfig.mainClock);
+#endif
 
-    base->DATA  = base->DATA & ~(ALL_FLAGS_MASK);
     base->GENCS = (base->GENCS & (~(TSI_GENCS_DVOLT_MASK))) | TSI_GENCS_DVOLT(config->commonConfig.dvolt);
 
+#if defined(FSL_FEATURE_TSI_HAS_SINC_SINC_BITFIELD) && FSL_FEATURE_TSI_HAS_SINC_SINC_BITFIELD
+    temp       = (base->SINC) & ~(TSI_SINC_SINC_CUTOFF_MASK | TSI_SINC_SINC_ORDER_MASK | TSI_SINC_SINC_DECIMATION_MASK);
+    base->SINC = temp | (TSI_SINC_SINC_CUTOFF(config->commonConfig.cutoff) | TSI_SINC_SINC_ORDER(config->commonConfig.order) |
+                         TSI_SINC_SINC_DECIMATION(config->commonConfig.decimation));
+#else
     temp       = (base->SINC) & ~(TSI_SINC_CUTOFF_MASK | TSI_SINC_ORDER_MASK | TSI_SINC_DECIMATION_MASK);
     base->SINC = temp | (TSI_SINC_CUTOFF(config->commonConfig.cutoff) | TSI_SINC_ORDER(config->commonConfig.order) |
                          TSI_SINC_DECIMATION(config->commonConfig.decimation));
+#endif
 
     temp = (base->SSC0) & ~(TSI_SSC0_CHARGE_NUM_MASK | TSI_SSC0_BASE_NOCHARGE_NUM_MASK | TSI_SSC0_PRBS_OUTSEL_MASK |
                             TSI_SSC0_SSC_PRESCALE_NUM_MASK | TSI_SSC0_SSC_MODE_MASK);
@@ -222,7 +245,9 @@ void TSI_Deinit(TSI_Type *base)
  * includes the settings for the whole TSI.
  * The user configure is set to a value:
  * code
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_SETCLK) && FSL_FEATURE_TSI_HAS_NO_SETCLK)
     userConfig->commonConfig.mainClock     = kTSI_MainClockSlection_0;
+#endif
     userConfig->commonConfig.mode          = kTSI_SensingModeSlection_Self;
     userConfig->commonConfig.dvolt         = kTSI_DvoltOption_2;
     userConfig->commonConfig.cutoff        = kTSI_SincCutoffDiv_1;
@@ -233,10 +258,18 @@ void TSI_Deinit(TSI_Type *base)
     userConfig->commonConfig.noChargeNum   = kTSI_SscNoChargeNumValue_2;
     userConfig->commonConfig.ssc_mode      = kTSI_ssc_prbs_method;
     userConfig->commonConfig.ssc_prescaler = kTSI_ssc_div_by_1;
-    userConfig->enableSensitivity          = true;
-    userConfig->enableShield               = false;
+    userConfig->enableSensitivity          = false;
+#if defined(FSL_FEATURE_TSI_HAS_SHIELD_SEL) && FSL_FEATURE_TSI_HAS_SHIELD_SEL
+    userConfig->selfChannelMask.channel_31_0  = 0U;
+    userConfig->selfChannelMask.channel_63_32 = 0U;
+    userConfig->selfChannelMask.channel_69_64 = 0U;
+#else
+    userConfig->enableShield               = kTSI_shieldAllOff;
+#endif
     userConfig->xdn                        = kTSI_SensitivityXdnOption_1;
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_S_CTRIM) && FSL_FEATURE_TSI_HAS_NO_S_CTRIM)
     userConfig->ctrim                      = kTSI_SensitivityCtrimOption_7;
+#endif
     userConfig->inputCurrent               = kTSI_CurrentMultipleInputValue_0;
     userConfig->chargeCurrent              = kTSI_CurrentMultipleChargeValue_1;
    endcode
@@ -248,7 +281,9 @@ void TSI_GetSelfCapModeDefaultConfig(tsi_selfCap_config_t *userConfig)
     /* Initializes the configure structure to zero. */
     (void)memset(userConfig, 0, sizeof(*userConfig));
 
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_SETCLK) && FSL_FEATURE_TSI_HAS_NO_SETCLK)
     userConfig->commonConfig.mainClock     = kTSI_MainClockSlection_0;
+#endif
     userConfig->commonConfig.mode          = kTSI_SensingModeSlection_Self;
     userConfig->commonConfig.dvolt         = kTSI_DvoltOption_2;
     userConfig->commonConfig.cutoff        = kTSI_SincCutoffDiv_1;
@@ -259,12 +294,20 @@ void TSI_GetSelfCapModeDefaultConfig(tsi_selfCap_config_t *userConfig)
     userConfig->commonConfig.noChargeNum   = kTSI_SscNoChargeNumValue_2;
     userConfig->commonConfig.ssc_mode      = kTSI_ssc_prbs_method;
     userConfig->commonConfig.ssc_prescaler = kTSI_ssc_div_by_1;
-    userConfig->enableSensitivity          = true;
+    userConfig->enableSensitivity          = false;
+#if defined(FSL_FEATURE_TSI_HAS_SHIELD_SEL) && FSL_FEATURE_TSI_HAS_SHIELD_SEL
+    userConfig->shieldChannelMask.channel_31_0  = 0U;
+    userConfig->shieldChannelMask.channel_63_32 = 0U;
+    userConfig->shieldChannelMask.channel_69_64 = 0U;
+#else
     userConfig->enableShield               = kTSI_shieldAllOff;
+#endif
     userConfig->xdn                        = kTSI_SensitivityXdnOption_1;
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_S_CTRIM) && FSL_FEATURE_TSI_HAS_NO_S_CTRIM)
     userConfig->ctrim                      = kTSI_SensitivityCtrimOption_7;
+#endif
     userConfig->inputCurrent               = kTSI_CurrentMultipleInputValue_0;
-    userConfig->chargeCurrent              = kTSI_CurrentMultipleChargeValue_1;
+    userConfig->chargeCurrent              = kTSI_CurrentMultipleChargeValue_0;
 }
 
 /*!
@@ -273,7 +316,9 @@ void TSI_GetSelfCapModeDefaultConfig(tsi_selfCap_config_t *userConfig)
  * includes the settings for the whole TSI.
  * The user configure is set to a value:
  * code
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_SETCLK) && FSL_FEATURE_TSI_HAS_NO_SETCLK)
     userConfig->commonConfig.mainClock     = kTSI_MainClockSlection_1;
+#endif
     userConfig->commonConfig.mode          = kTSI_SensingModeSlection_Mutual;
     userConfig->commonConfig.dvolt         = kTSI_DvoltOption_0;
     userConfig->commonConfig.cutoff        = kTSI_SincCutoffDiv_1;
@@ -302,7 +347,9 @@ void TSI_GetMutualCapModeDefaultConfig(tsi_mutualCap_config_t *userConfig)
     /* Initializes the configure structure to zero. */
     (void)memset(userConfig, 0, sizeof(*userConfig));
 
+#if !(defined(FSL_FEATURE_TSI_HAS_NO_SETCLK) && FSL_FEATURE_TSI_HAS_NO_SETCLK)
     userConfig->commonConfig.mainClock     = kTSI_MainClockSlection_1;
+#endif
     userConfig->commonConfig.mode          = kTSI_SensingModeSlection_Mutual;
     userConfig->commonConfig.dvolt         = kTSI_DvoltOption_0;
     userConfig->commonConfig.cutoff        = kTSI_SincCutoffDiv_1;
@@ -392,7 +439,6 @@ void TSI_EnableInterrupts(TSI_Type *base, uint32_t mask)
     {
         regValue |= TSI_GENCS_ESOR_MASK;
     }
-    base->DATA &= ~(ALL_FLAGS_MASK);
     base->GENCS = regValue; /* write value to register */
 }
 
@@ -409,7 +455,6 @@ void TSI_DisableInterrupts(TSI_Type *base, uint32_t mask)
 {
     uint32_t regValue = base->GENCS;
 
-    base->DATA &= ~(ALL_FLAGS_MASK);
     if ((bool)(mask & (uint32_t)kTSI_OutOfRangeInterruptEnable))
     {
         regValue &= (~TSI_GENCS_OUTRG_EN_MASK);
