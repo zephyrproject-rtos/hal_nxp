@@ -1,23 +1,25 @@
 /*
 ** ###################################################################
 **     Processors:          MCXW70ACMFTA
+**                          MCXW70ACMFYA
 **                          MCXW70ADMFTA
+**                          MCXW70ADMFYA
 **
-**     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260109
+**     Version:             rev. 1.0, 2020-05-12
+**     Build:               b251117
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MRCC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2026 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2026-01-09)
+**     - rev. 1.0 (2020-05-12)
 **         Initial version.
 **
 ** ###################################################################
@@ -26,7 +28,7 @@
 /*!
  * @file PERI_MRCC.h
  * @version 1.0
- * @date 2026-01-09
+ * @date 2020-05-12
  * @brief CMSIS Peripheral Access Layer for MRCC
  *
  * CMSIS Peripheral Access Layer for MRCC
@@ -35,9 +37,9 @@
 #if !defined(PERI_MRCC_H_)
 #define PERI_MRCC_H_                             /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70ACMFTA))
+#if (defined(CPU_MCXW70ACMFTA) || defined(CPU_MCXW70ACMFYA))
 #include "MCXW70AC_COMMON.h"
-#elif (defined(CPU_MCXW70ADMFTA))
+#elif (defined(CPU_MCXW70ADMFTA) || defined(CPU_MCXW70ADMFYA))
 #include "MCXW70AD_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -3267,7 +3269,12 @@ typedef struct {
 #define MRCC_PR_MASK                              (0x80000000U)
 #define MRCC_PR_SHIFT                             (31U)
 #define MRCC_PR(x)                                (((uint32_t)(((uint32_t)(x)) << MRCC_PR_SHIFT))  & MRCC_PR_MASK)
-
+#define MRCC_RESET_MASK                           (0x20000000U)
+#define MRCC_RESET_SHIFT                          (29U)
+#define MRCC_RESET(x)                             (((uint32_t)(((uint32_t)(x)) << MRCC_RESET_SHIFT))  & MRCC_RESET_MASK)
+#define MRCC_HALT_MASK                            (0x40000000U)
+#define MRCC_HALT_SHIFT                           (30U)
+#define MRCC_HALT(x)                              (((uint32_t)(((uint32_t)(x)) << MRCC_HALT_SHIFT))  & MRCC_HALT_MASK)
 
 /*!
  * @}

@@ -187,19 +187,13 @@ uint32_t CLOCK_GetIpFreq(clock_ip_name_t name)
             switch (MRCC_MUX_VAL(reg))
             {
                 case (uint32_t)kCLOCK_IpSrcFro6M:
-                    /* FIXME */
-                    // freq = CLOCK_GetSircFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
-                    freq = 16000000U;  // FPGA, needs to update for real silicon
+                    freq = CLOCK_GetSircFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
                     break;
                 case (uint32_t)kCLOCK_IpSrcFro192M:
-                    /* FIXME */
-                    // freq = CLOCK_GetFircFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
-                    freq = 32000000U;  // FPGA, needs to update for real silicon
+                    freq = CLOCK_GetFircFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
                     break;
                 case (uint32_t)kCLOCK_IpSrcSoscClk:
-                    /* FIXME */
-                    // freq = CLOCK_GetSysOscFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
-                    freq = 32000000U;  // FPGA, needs to update for real silicon
+                    freq = CLOCK_GetSysOscFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
                     break;
                 default:
                     freq = 0U;
@@ -216,24 +210,16 @@ uint32_t CLOCK_GetIpFreq(clock_ip_name_t name)
             switch (MRCC_MUX_VAL(reg))
             {
                 case (uint32_t)kCLOCK_IpSrcFro6M:
-                    /* FIXME */
-                    // freq = CLOCK_GetSircFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
-                    freq = 16000000U;  // FPGA, needs to update for real silicon
+                    freq = CLOCK_GetSircFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
                     break;
                 case (uint32_t)kCLOCK_IpSrcFro192M:
-                    /* FIXME */
-                    // freq = CLOCK_GetFircFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
-                    freq = 32000000U;  // FPGA, needs to update for real silicon
+                    freq = CLOCK_GetFircFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
                     break;
                 case (uint32_t)kCLOCK_IpSrcSoscClk:
-                    /* FIXME */
-                    // freq = CLOCK_GetSysOscFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
-                    freq = 32000000U;  // FPGA, needs to update for real silicon
+                    freq = CLOCK_GetSysOscFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
                     break;
                 case (uint32_t)kCLOCK_IpSrc32kClk:
-                    /* FIXME */
-                    // freq = CLOCK_GetRtcOscFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
-                    freq = 32768U;  // FPGA, needs to update for real silicon
+                    freq = CLOCK_GetRtcOscFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
                     break;
                 default:
                     freq = 0U;
@@ -244,14 +230,10 @@ uint32_t CLOCK_GetIpFreq(clock_ip_name_t name)
             switch (MRCC_MUX_VAL(reg))
             {
                 case (uint32_t)kCLOCK_IpSrcFro192M:
-                    /* FIXME */
-                    // freq = CLOCK_GetFircFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
-                    freq = 32000000U;  // FPGA, needs to update for real silicon
+                    freq = CLOCK_GetFircFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
                     break;
                 case (uint32_t)kCLOCK_IpSrcSoscClk:
-                    /* FIXME */
-                    // freq = CLOCK_GetSysOscFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
-                    freq = 32000000U;  // FPGA, needs to update for real silicon
+                    freq = CLOCK_GetSysOscFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
                     break;
                 case (uint32_t)kCLOCK_IpSrcFro200M:
                     freq = 2000000U / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
@@ -265,24 +247,16 @@ uint32_t CLOCK_GetIpFreq(clock_ip_name_t name)
             switch (MRCC_MUX_VAL(reg))
             {
                 case (uint32_t)kCLOCK_IpSrcFro6M:
-                    /* FIXME */
-                    // freq = CLOCK_GetSircFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
-                    freq = 16000000U;  // FPGA, needs to update for real silicon
+                    freq = CLOCK_GetSircFreq();
                     break;
                 case (uint32_t)kCLOCK_IpSrcFro192M:
-                    /* FIXME */
-                    // freq = CLOCK_GetFircFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
-                    freq = 32000000U;  // FPGA, needs to update for real silicon
+                    freq = CLOCK_GetFircFreq();
                     break;
                 case (uint32_t)kCLOCK_IpSrcSoscClk:
-                    /* FIXME */
-                    // freq = CLOCK_GetSysOscFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
-                    freq = 32000000U;  // FPGA, needs to update for real silicon
+                    freq = CLOCK_GetSysOscFreq();
                     break;
                 case (uint32_t)kCLOCK_IpSrc32kClk:
-                    /* FIXME */
-                    // freq = CLOCK_GetRtcOscFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
-                    freq = 32768U;  // FPGA, needs to update for real silicon
+                    freq = CLOCK_GetRtcOscFreq();
                     break;
                 case (uint32_t)kCLOCK_IpSrc1M:
                     freq = CLOCK_Get1MClkFreq();
@@ -296,19 +270,13 @@ uint32_t CLOCK_GetIpFreq(clock_ip_name_t name)
             switch (MRCC_MUX_VAL(reg))
             {
                 case (uint32_t)kCLOCK_IpSrcFro6M:
-                    /* FIXME */
-                    // freq = CLOCK_GetSircFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
-                    freq = 16000000U;  // FPGA, needs to update for real silicon
+                    freq = CLOCK_GetSircFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
                     break;
                 case (uint32_t)kCLOCK_IpSrcFro192M:
-                    /* FIXME */
-                    // freq = CLOCK_GetFircFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
-                    freq = 32000000U;  // FPGA, needs to update for real silicon
+                    freq = CLOCK_GetFircFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
                     break;
                 case (uint32_t)kCLOCK_IpSrcSoscClk:
-                    /* FIXME */
-                    // freq = CLOCK_GetSysOscFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
-                    freq = 32000000U;  // FPGA, needs to update for real silicon
+                    freq = CLOCK_GetSysOscFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
                     break;
                 case (uint32_t)kCLOCK_IpSrc1M:
                     freq = CLOCK_Get1MClkFreq();
@@ -565,7 +533,6 @@ status_t CLOCK_DeinitSirc(void)
  */
 uint32_t CLOCK_GetSircFreq(void)
 {
-#if !defined(FPGA_TARGET) || (FPGA_TARGET == 0)
     /*
      * $Branch Coverage Justification$
      * (CLOCK_REG(&SCG_0->SIRCCSR) & SCG_SIRCCSR_SIRCVLD_MASK) != SCG_SIRCCSR_SIRCVLD_MASK
@@ -580,9 +547,6 @@ uint32_t CLOCK_GetSircFreq(void)
     {
         return 0U;
     }
-#else
-    return 16000000U;
-#endif
 }
 
 /*!
@@ -688,7 +652,6 @@ status_t CLOCK_DeinitFirc(void)
  */
 uint32_t CLOCK_GetFircFreq(void)
 {
-#if !defined(FPGA_TARGET) || (FPGA_TARGET == 0)
     static const uint32_t fircFreq[] = {48000000U, 64000000U, 96000000U, 192000000U};
 
     if ((CLOCK_REG(&SCG_0->FIRCCSR) & SCG_FIRCCSR_FIRCVLD_MASK) == SCG_FIRCCSR_FIRCVLD_MASK) /* FIRC is valid. */
@@ -699,9 +662,6 @@ uint32_t CLOCK_GetFircFreq(void)
     {
         return 0U;
     }
-#else
-    return 32000000U;
-#endif
 }
 
 /*!
