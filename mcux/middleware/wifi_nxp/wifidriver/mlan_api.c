@@ -1525,6 +1525,30 @@ int wifi_set_rf_test_mode(void)
     return -WM_FAIL;
 }
 
+int wifi_rf_disable_11ax(void)
+{
+    int ret;
+    wifi_mfg_cmd_generic_cfg_t wifi_mfg_cmd_generic_cfg;
+
+    (void)memset(&wifi_mfg_cmd_generic_cfg, 0x00, sizeof(wifi_mfg_cmd_generic_cfg_t));
+
+    wifi_mfg_cmd_generic_cfg.mfg_cmd = MFG_CMD_WRITE_PATCH_BLOCK_OTP;
+    wifi_mfg_cmd_generic_cfg.action  = HostCmd_ACT_GEN_SET;
+    wifi_mfg_cmd_generic_cfg.device_id = 0;
+    wifi_mfg_cmd_generic_cfg.data1  = 8;
+    wifi_mfg_cmd_generic_cfg.data2  = 0x0002014f;
+    wifi_mfg_cmd_generic_cfg.data3  = 0;
+
+    ret = wifi_get_set_rf_test_generic(HostCmd_ACT_GEN_SET, &wifi_mfg_cmd_generic_cfg);
+    if (ret == WM_SUCCESS && wifi_mfg_cmd_generic_cfg.error == 0)
+    {
+        return WM_SUCCESS;
+    }
+
+    wifi_e("wifi set 11AX fails, error code: 0x%x\r\n", wifi_mfg_cmd_generic_cfg.error);
+    return -WM_FAIL;
+}
+
 int wifi_unset_rf_test_mode(void)
 {
     wifi_mfg_cmd_generic_cfg_t wifi_mfg_cmd_generic_cfg;
@@ -1709,6 +1733,53 @@ int wifi_get_rf_band(uint8_t *band)
     }
 
     wifi_e("Wifi get rf band fails, error code: 0x%x\r\n", wifi_mfg_cmd_generic_cfg.error);
+    return -WM_FAIL;
+}
+
+int wifi_set_rf_xtal(const uint8_t xtal_cal)
+{
+    int ret;
+
+    wifi_mfg_cmd_generic_cfg_t wifi_mfg_cmd_generic_cfg;
+
+    (void)memset(&wifi_mfg_cmd_generic_cfg, 0x00, sizeof(wifi_mfg_cmd_generic_cfg_t));
+
+    wifi_mfg_cmd_generic_cfg.mfg_cmd = MFG_CMD_RFXTAL_CTRL;
+    wifi_mfg_cmd_generic_cfg.action  = HostCmd_ACT_GEN_SET;
+
+    wifi_mfg_cmd_generic_cfg.data1 &= ~((uint32_t)0xFF << 8);
+    wifi_mfg_cmd_generic_cfg.data1 |= ((uint32_t)xtal_cal << 8);
+
+    ret = wifi_get_set_rf_test_generic(HostCmd_ACT_GEN_SET, &wifi_mfg_cmd_generic_cfg);
+    if (ret == WM_SUCCESS && wifi_mfg_cmd_generic_cfg.error == 0)
+    {
+        return WM_SUCCESS;
+    }
+
+    wifi_e("Wifi set rf xtal fails, error code: 0x%x", wifi_mfg_cmd_generic_cfg.error);
+    return -WM_FAIL;
+}
+
+int wifi_get_rf_xtal(uint8_t *extension, uint8_t *xtal_cal)
+{
+    int ret;
+
+    wifi_mfg_cmd_generic_cfg_t wifi_mfg_cmd_generic_cfg;
+
+    (void)memset(&wifi_mfg_cmd_generic_cfg, 0x00, sizeof(wifi_mfg_cmd_generic_cfg_t));
+
+    wifi_mfg_cmd_generic_cfg.mfg_cmd = MFG_CMD_RFXTAL_CTRL;
+    wifi_mfg_cmd_generic_cfg.action  = HostCmd_ACT_GEN_GET;
+
+    ret = wifi_get_set_rf_test_generic(HostCmd_ACT_GEN_GET, &wifi_mfg_cmd_generic_cfg);
+    if (ret == WM_SUCCESS && wifi_mfg_cmd_generic_cfg.error == 0)
+    {
+        *extension = wifi_mfg_cmd_generic_cfg.data1 & 0xFF;
+        *xtal_cal = (wifi_mfg_cmd_generic_cfg.data1 >> 8) & 0xFF;
+        return WM_SUCCESS;
+    }
+
+    wifi_e("Wifi get rf xtal fails, error code: 0x%x\r\n", wifi_mfg_cmd_generic_cfg.error);
     return -WM_FAIL;
 }
 
@@ -2013,7 +2084,15 @@ int wifi_set_rf_tx_frame(const uint32_t enable,
                          const uint32_t tx_bf,
                          const uint32_t gf_mode,
                          const uint32_t stbc,
-                         const uint8_t *bssid)
+                         const uint8_t *bssid,
+                         const uint32_t signal_bw,
+                         const uint32_t NumPkt,
+                         const uint32_t MaxPE,
+                         const uint32_t BeamChange,
+                         const uint32_t Dcm,
+                         const uint32_t Doppler,
+                         const uint32_t MidP,
+                         const uint32_t QNum)
 {
     wifi_mfg_cmd_tx_frame_t wifi_mfg_cmd_tx_frame;
     wifi_mfg_cmd_generic_cfg_t wifi_mfg_cmd_generic_cfg;
@@ -2023,6 +2102,25 @@ int wifi_set_rf_tx_frame(const uint32_t enable,
         act_sub_ch == 2U || act_sub_ch > 3U || short_gi > 1U || adv_coding > 1U || tx_bf > 1U || gf_mode > 1U ||
         stbc > 1U)
         return -WM_FAIL;
+
+    if (signal_bw != (uint32_t)-1 &&
+        signal_bw != 0U &&
+        signal_bw != 1U &&
+        signal_bw != 4U)
+    {
+        return -WM_FAIL;
+    }
+
+    /* 11ax parameter validation */
+    if ((Dcm != (uint32_t)-1 && Dcm != 0U && Dcm != 1U) ||
+        (Doppler != (uint32_t)-1 && Doppler != 0U && Doppler != 1U) ||
+        (MidP != (uint32_t)-1 && MidP != 10U && MidP != 20U) ||
+        (MaxPE != (uint32_t)-1 && MaxPE != 0U && MaxPE != 8U && MaxPE != 16U) ||
+        (BeamChange != (uint32_t)-1 && BeamChange != 0U && BeamChange != 1U) ||
+        (QNum != (uint32_t)-1 && ((QNum > 12U && QNum < 17U) || QNum > 20U)))
+    {
+        return -WM_FAIL;
+    }
 
     (void)memset(&wifi_mfg_cmd_tx_frame, 0x00, sizeof(wifi_mfg_cmd_tx_frame_t));
     (void)memset(&wifi_mfg_cmd_generic_cfg, 0x00, sizeof(wifi_mfg_cmd_generic_cfg_t));
@@ -2053,14 +2151,15 @@ int wifi_set_rf_tx_frame(const uint32_t enable,
     wifi_mfg_cmd_tx_frame.tx_bf             = tx_bf;
     wifi_mfg_cmd_tx_frame.gf_mode           = gf_mode;
     wifi_mfg_cmd_tx_frame.stbc              = stbc;
-    wifi_mfg_cmd_tx_frame.signal_bw         = -1;
-    wifi_mfg_cmd_tx_frame.NumPkt            = -1;
-    wifi_mfg_cmd_tx_frame.MaxPE             = -1;
-    wifi_mfg_cmd_tx_frame.BeamChange        = -1;
-    wifi_mfg_cmd_tx_frame.Dcm               = -1;
-    wifi_mfg_cmd_tx_frame.Doppler           = -1;
-    wifi_mfg_cmd_tx_frame.MidP              = -1;
-    wifi_mfg_cmd_tx_frame.QNum              = -1;
+    wifi_mfg_cmd_tx_frame.signal_bw         = signal_bw;
+    /* Set 11ax parameters */
+    wifi_mfg_cmd_tx_frame.NumPkt            = NumPkt;
+    wifi_mfg_cmd_tx_frame.MaxPE             = MaxPE;
+    wifi_mfg_cmd_tx_frame.BeamChange        = BeamChange;
+    wifi_mfg_cmd_tx_frame.Dcm               = Dcm;
+    wifi_mfg_cmd_tx_frame.Doppler           = Doppler;
+    wifi_mfg_cmd_tx_frame.MidP              = MidP;
+    wifi_mfg_cmd_tx_frame.QNum              = QNum;
 
     ret = wifi_get_set_rf_test_tx_frame(HostCmd_ACT_GEN_SET, &wifi_mfg_cmd_tx_frame, &wifi_mfg_cmd_generic_cfg);
     if (WM_SUCCESS == ret && wifi_mfg_cmd_generic_cfg.error == 0)
@@ -2106,9 +2205,15 @@ int wifi_rf_trigger_frame_cfg(uint32_t Enable_tx,
                               uint8_t AC_PL,
                               uint8_t Pref_AC)
 {
+#if CONFIG_11AX
     wifi_mfg_cmd_IEEEtypes_CtlBasicTrigHdr_t wifi_mfg_cmd_IEEEtypes_CtlBasicTrigHdr;
     wifi_mfg_cmd_generic_cfg_t wifi_mfg_cmd_generic_cfg;
     int ret;
+
+    if (!IS_FW_SUPPORT_11AX(mlan_adap))
+    {
+        return -WM_FAIL;
+    }
 
     (void)memset(&wifi_mfg_cmd_IEEEtypes_CtlBasicTrigHdr, 0x00, sizeof(wifi_mfg_cmd_IEEEtypes_CtlBasicTrigHdr_t));
     (void)memset(&wifi_mfg_cmd_generic_cfg, 0x00, sizeof(wifi_mfg_cmd_generic_cfg_t));
@@ -2160,15 +2265,22 @@ int wifi_rf_trigger_frame_cfg(uint32_t Enable_tx,
     }
 
     wifi_e("wifi set rf tx frame fail, error code: 0x%x\r\n", wifi_mfg_cmd_generic_cfg.error);
+#endif
     return -WM_FAIL;
 }
 
 int wifi_cfg_rf_he_tb_tx(uint16_t enable, uint16_t qnum, uint16_t aid, uint16_t axq_mu_timer, int16_t tx_power)
 {
+#if CONFIG_11AX
     wifi_mfg_cmd_he_tb_tx_t wifi_mfg_cmd_he_tb_tx;
 
     wifi_mfg_cmd_generic_cfg_t wifi_mfg_cmd_generic_cfg;
     int ret;
+
+    if (!IS_FW_SUPPORT_11AX(mlan_adap))
+    {
+        return -WM_FAIL;
+    }
 
     (void)memset(&wifi_mfg_cmd_he_tb_tx, 0x00, sizeof(wifi_mfg_cmd_he_tb_tx_t));
     (void)memset(&wifi_mfg_cmd_generic_cfg, 0x00, sizeof(wifi_mfg_cmd_generic_cfg_t));
@@ -2188,6 +2300,7 @@ int wifi_cfg_rf_he_tb_tx(uint16_t enable, uint16_t qnum, uint16_t aid, uint16_t 
     }
 
     wifi_e("wifi set rf tx frame fail, error code: 0x%x\r\n", wifi_mfg_cmd_generic_cfg.error);
+#endif
     return -WM_FAIL;
 }
 
@@ -2302,6 +2415,63 @@ int wifi_get_rf_otp_cal_data(uint8_t *cal_data)
 
     (void)OSA_MemoryFree(wifi_mfg_cmd_otp_cal_data_rd_wr);
 
+    return ret;
+}
+
+int wifi_set_rf_rx_mac_filter(uint8_t *addr)
+{
+    int ret;
+    mlan_ds_misc_cfg *misc = NULL;
+    HostCmd_DS_COMMAND *cmd;
+    HostCmd_DS_MFG_CMD_RX_MAC_FILTER_T *filter;
+
+#if !CONFIG_MEM_POOLS
+    misc = OSA_MemoryAllocate(sizeof(mlan_ds_misc_cfg));
+#else
+    misc = OSA_MemoryPoolAllocate(buf_3072_MemoryPool);
+#endif
+    if (misc == NULL)
+    {
+        return -WM_FAIL;
+    }
+
+    wifi_get_command_lock();
+    cmd = wifi_get_command_buffer();
+    cmd->command = wlan_cpu_to_le16(HostCmd_CMD_MFG_COMMAND);
+    cmd->size    = wlan_cpu_to_le16(sizeof(HostCmd_DS_MFG_CMD_RX_MAC_FILTER_T) + S_DS_GEN);
+    cmd->seq_num   = 0x0;
+    cmd->result    = 0x0;
+
+    filter = &cmd->params.mfg_rx_mac_filter;
+    memset(filter, 0x00, sizeof(HostCmd_DS_MFG_CMD_RX_MAC_FILTER_T));
+    filter->mfg_cmd = MFG_CMD_RX_MAC_FILTER;
+    filter->action  = HostCmd_ACT_GEN_SET;
+    filter->mode = 1;
+    memcpy(filter->bssid, addr, MLAN_MAC_ADDR_LENGTH);
+
+    ret = wifi_wait_for_cmdresp(misc);
+    if (ret == WM_SUCCESS && misc->param.mfg_generic_cfg.error == 0)
+    {
+        goto out;
+    }
+
+    ret = misc->param.mfg_generic_cfg.error;
+out:
+    wifi_put_command_lock();
+
+    if(misc != NULL)
+    {
+#if !CONFIG_MEM_POOLS
+        OSA_MemoryFree(misc);
+#else
+        OSA_MemoryPoolFree(buf_3072_MemoryPool, misc);
+#endif
+    }
+
+    if (ret != 0)
+    {
+        wifi_e("wifi set rx mac filter fails, error code: 0x%x\r\n", ret);
+    }
     return ret;
 }
 #endif
@@ -2535,6 +2705,16 @@ int wifi_send_sched_scan_cmd(nxp_wifi_trigger_sched_scan_t *params)
     pmpriv->scan_cfg.scan_interval    = params->scan_interval;
     pmpriv->scan_cfg.chan_per_scan    = params->chan_per_scan;
     pmpriv->scan_cfg.num_probes       = 2;
+#if CONFIG_SCAN_CHANNEL_GAP
+    if (is_uap_started() || is_sta_connected())
+    {
+        pmpriv->scan_cfg.scan_chan_gap = SCAN_CHANNEL_GAP_VALUE;
+    }
+    else
+    {
+        pmpriv->scan_cfg.scan_chan_gap = 0;
+    }
+#endif
 
     pmpriv->scan_cfg.bss_type = MLAN_BSS_MODE_INFRA;
     pmpriv->scan_cfg.action   = BG_SCAN_ACT_SET;
@@ -4436,7 +4616,6 @@ int wifi_get_chanlist(wifi_chanlist_t *chanlist)
 
     return WM_SUCCESS;
 }
-
 
 int wifi_get_chanlist_by_band(t_u8 *chan_list, t_u8 *num_chans, t_u8 band)
 {

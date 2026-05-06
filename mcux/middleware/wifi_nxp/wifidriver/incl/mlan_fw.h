@@ -6687,6 +6687,9 @@ typedef MLAN_PACK_START struct _MrvlIEtypes_action_chan_switch_t
 #define MFG_CMD_CONFIG_TRIGGER_FRAME 0x110C
 #define MFG_CMD_OTP_MAC_ADD          0x108C
 #define MFG_CMD_OTP_CAL_DATA         0x121A
+#define MFG_CMD_WRITE_PATCH_BLOCK_OTP    0x1093
+#define MFG_CMD_RX_MAC_FILTER        0x102F
+#define MFG_CMD_RFXTAL_CTRL          0x1037
 
 typedef MLAN_PACK_START struct _HostCmd_DS_MFG_CMD_GENERIC_CFG
 {
@@ -6874,6 +6877,32 @@ typedef MLAN_PACK_START struct _HostCmd_DS_MFG_CMD_OTP_CAL_DATA_T
     /** Destination MAC Address */
     t_u8 cal_data[CAL_DATA_LEN];
 } MLAN_PACK_END HostCmd_DS_MFG_CMD_OTP_CAL_DATA_T;
+
+typedef MLAN_PACK_START struct _HostCmd_DS_MFG_CMD_RX_MAC_FILTER_T
+{
+    /** MFG command code */
+    t_u32 mfg_cmd;
+    /** Action */
+    t_u16 action;
+    /** Device ID */
+    t_u16 device_id;
+    /** MFG Error code */
+    t_u32 error;
+    /**
+     * 0: Set Receiver in Promiscuous Mode
+     * 1: Enable BSSID Filter
+     * 2: Read BSSID Registers Setting. (default)
+     * 3: Disable Promiscuous Mode
+     * 4: Disable BSSID Filter
+     */
+    t_u32 mode;
+    /** Optional ssid filter */
+    t_u8 ssid[MLAN_MAX_SSID_LENGTH];
+    /** Mandatory mac filter */
+    t_u8 bssid[MLAN_MAC_ADDR_LENGTH];
+    /** Reserved */
+    t_u8 reserved[2];
+} MLAN_PACK_END HostCmd_DS_MFG_CMD_RX_MAC_FILTER_T;
 #endif
 
 #ifdef OTP_CHANINFO
@@ -8162,6 +8191,7 @@ typedef MLAN_PACK_START struct _HostCmd_DS_COMMAND
         HostCmd_MFG_CMD_IEEETYPES_CTLBASICTRIGHDR_T mfg_tx_trigger_config;
         HostCmd_DS_MFG_CMD_OTP_MAC_ADD_T mfg_otp_mac_addr_rd_wr;
         HostCmd_DS_MFG_CMD_OTP_CAL_DATA_T mfg_otp_cal_data_rd_wr;
+        HostCmd_DS_MFG_CMD_RX_MAC_FILTER_T mfg_rx_mac_filter;
 #endif
 #if CONFIG_WIFI_TX_PER_TRACK
         HostCmd_DS_TX_RX_PKT_STATS pkt_stats;

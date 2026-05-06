@@ -3396,10 +3396,6 @@ int wifi_process_cmd_response(HostCmd_DS_COMMAND *resp)
     wcmdr_d("CMD_RESP - : 0x%x, result %d, len %d, seqno 0x%x", resp->command, resp->result, resp->size, resp->seq_num);
 #endif
 
-#if CONFIG_FW_VDLL
-    mlan_adap->vdll_in_progress = MFALSE;
-#endif
-
     mlan_bss_type bss_type = (mlan_bss_type)HostCmd_GET_BSS_TYPE(resp->seq_num);
 
     if (bss_type == MLAN_BSS_TYPE_UAP)
@@ -9624,9 +9620,11 @@ void wifi_ftm_process_event(void *p_data)
 void wifi_dump_driver_info()
 {
 #ifdef RW610
+    volatile uint32_t *sleep_flag = (volatile uint32_t *)0x4138248C;
     ImuTxFifoStatus = IMU_TX_FIFO_STATUS(kIMU_LinkCpu1Cpu3);
     ImuRxFifoStatus = IMU_RX_FIFO_STATUS(kIMU_LinkCpu1Cpu3);
     PRINTF("IMU TxFifoStatus: 0x%x, RxFifoStatus: 0x%x\r\n", ImuTxFifoStatus, ImuRxFifoStatus);
+    PRINTF("IMU sleep grant flag: 0x%x\r\n", *sleep_flag);
 #else
     uint32_t resp = 0;
     int ret;

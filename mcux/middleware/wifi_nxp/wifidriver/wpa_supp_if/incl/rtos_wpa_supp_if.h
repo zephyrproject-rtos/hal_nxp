@@ -28,6 +28,7 @@
 #include <wifi_nxp_internal.h>
 
 #define supp_e(...) wmlog_e("supp_if", ##__VA_ARGS__)
+#define supp_i(...) wmlog("supp_if", ##__VA_ARGS__)
 
 #if CONFIG_SUPP_DEBUG
 #define supp_d(...) wmlog("supp_if", ##__VA_ARGS__)

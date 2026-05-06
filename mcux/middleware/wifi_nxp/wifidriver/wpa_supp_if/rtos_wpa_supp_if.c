@@ -305,7 +305,7 @@ void wifi_nxp_wpa_supp_event_bg_scan_report(void *if_priv)
         return;
     }
 
-    wpa_printf(MSG_DEBUG, "wifi_nxp: BG scan report - retrieving results");
+    wpa_printf(MSG_INFO, "wifi_nxp: BG scan report - retrieving results");
 
     /*
      * Notify driver_zephyr that sched_scan results are ready
@@ -326,7 +326,7 @@ void wifi_nxp_wpa_supp_event_bg_scan_stopped(void *if_priv)
         return;
     }
 
-    wpa_printf(MSG_DEBUG, "wifi_nxp: BG scan stopped");
+    wpa_printf(MSG_INFO, "wifi_nxp: BG scan stopped");
 
     if (wifi_if_ctx_rtos->supp_callbk_fns.sched_scan_stopped)
     {
@@ -1060,9 +1060,6 @@ int wifi_nxp_wpa_supp_sched_scan(void *if_priv, struct wpa_driver_scan_params *p
         goto out;
     }
 
-    supp_d("%s: Starting scheduled scan with %u plan(s)",
-           __func__, params->sched_scan_plans_num);
-
     wifi_sched_scan_params = (nxp_wifi_trigger_sched_scan_t *)OSA_MemoryAllocate(
         sizeof(nxp_wifi_trigger_sched_scan_t));
     if (!wifi_sched_scan_params)
@@ -1189,6 +1186,12 @@ int wifi_nxp_wpa_supp_sched_scan(void *if_priv, struct wpa_driver_scan_params *p
         supp_d("%s: RSSI filter: %d", __func__, params->filter_rssi);
     }
 
+    supp_i("Start scheduled scan interval %u count %hu ssid %hhu chan %hhu",
+           wifi_sched_scan_params->scan_interval,
+           wifi_sched_scan_params->repeat_count,
+           wifi_sched_scan_params->num_ssids,
+           wifi_sched_scan_params->num_chans);
+
     /* Send scheduled scan command to firmware */
     status = wifi_send_sched_scan_cmd(wifi_sched_scan_params);
     if (status != WM_SUCCESS)
@@ -1198,7 +1201,6 @@ int wifi_nxp_wpa_supp_sched_scan(void *if_priv, struct wpa_driver_scan_params *p
         goto out;
     }
 
-    supp_d("%s: Scheduled scan started successfully", __func__);
     ret = 0;
 
 out:
@@ -1221,6 +1223,8 @@ int wifi_nxp_wpa_supp_stop_sched_scan(void *if_priv)
         supp_e("%s: Invalid params", __func__);
         goto out;
     }
+
+    supp_i("Stop scheduled scan");
 
     status = wifi_send_stop_sched_scan_cmd();
     if (status != WM_SUCCESS)

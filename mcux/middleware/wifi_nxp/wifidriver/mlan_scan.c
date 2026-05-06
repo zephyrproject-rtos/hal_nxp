@@ -4569,7 +4569,8 @@ static t_u8 wlan_bgscan_create_channel_list(IN mlan_private *pmpriv,
 
     for (region_idx = 0; region_idx < NELEMENTS(pmadapter->region_channel); region_idx++)
     {
-        if (wlan_11d_is_enabled(pmpriv) && pmpriv->media_connected != MTRUE)
+        if (wlan_11d_is_enabled(pmpriv) && pmpriv->media_connected != MTRUE
+            && wlan_11d_is_region_code_valid((t_u8)pmadapter->region_code) != MTRUE)
         {
             /* Scan all the supported chan for the first scan */
             if (!pmadapter->universal_channel[region_idx].valid)

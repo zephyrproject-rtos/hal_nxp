@@ -2160,7 +2160,6 @@ static mlan_status wlan_get_vdll_image(pmlan_adapter pmadapter, t_u32 vdll_len)
     {
         ctrl->vdll_mem = (t_u8 *)(pmadapter->fw_start_addr + (wlan_fw_bin_len - vdll_len));
         ctrl->vdll_len = vdll_len;
-        ctrl->cmd_buf  = (t_u8 *)wifi_get_vdllcommand_buffer();
     }
     LEAVE();
     return MLAN_STATUS_SUCCESS;
@@ -2198,20 +2197,23 @@ mlan_status wlan_process_vdll_event(pmlan_private pmpriv, t_u8 *pevent)
             if (offset <= ctrl->vdll_len)
             {
                 block_len = MIN(block_len, ctrl->vdll_len - offset);
-                status    = wlan_download_vdll_block(pmadapter, ctrl->vdll_mem + offset, block_len);
-                if (status)
+                if (!pmadapter->cmd_sent)
                 {
-                    wevt_d("Fail to download VDLL block");
-                }
-                if (pmadapter->vdll_in_progress == MFALSE)
-                {
-                    (void)pmadapter->callbacks.moal_start_timer(pmadapter->pmoal_handle, pmadapter->vdll_timer, MFALSE,
-                                                                2000);
-                    pmadapter->vdll_in_progress = MTRUE;
+                    status = wlan_download_vdll_block(pmadapter, ctrl->vdll_mem + offset, block_len);
+                    if (status)
+                    {
+                        wevt_d("Fail to download VDLL block");
+                    }
                 }
                 else
                 {
-                    (void)pmadapter->callbacks.moal_reset_timer(pmadapter->pmoal_handle, pmadapter->vdll_timer);
+                    /* 1. vdll process is only in wifi core task,
+                     * 2. cmd_sent is checked before vdll process,
+                     * so it is safe to pend here and wait for next int process
+                     */
+                    wevt_d("cmd_sent=1, delay download VDLL block");
+                    ctrl->pending_block_len = block_len;
+                    ctrl->pending_block = ctrl->vdll_mem + offset;
                 }
             }
             else

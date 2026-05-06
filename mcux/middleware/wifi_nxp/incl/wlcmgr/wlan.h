@@ -19,7 +19,7 @@
 #include <wifi_events.h>
 #include <wifi.h>
 
-#define WLAN_DRV_VERSION "v1.3.r53.z_up.p3"
+#define WLAN_DRV_VERSION "v1.3.r53.z_up.p9"
 
 #if CONFIG_WPA2_ENTP
 #include <wm_mbedtls_helper_api.h>
@@ -1505,10 +1505,19 @@ typedef wifi_ds_rate wlan_ds_rate;
  * \ref wifi_ed_mac_ctrl_t
  */
 typedef wifi_ed_mac_ctrl_t wlan_ed_mac_ctrl_t;
+
+#define WLAN_BANDCFG_11N MBIT(0)
+#if CONFIG_11AC
+#define WLAN_BANDCFG_11AC MBIT(1)
+#endif
+#if CONFIG_11AX
+#define WLAN_BANDCFG_11AX MBIT(2)
+#endif
+
 /** Configuration for band from
- * \ref wifi_bandcfg_t
+ * \ref wifi_set_band_config_t
  */
-typedef wifi_bandcfg_t wlan_bandcfg_t;
+typedef wifi_set_band_config_t wlan_bandcfg_t;
 /** Configuration for CW mode parameters from
  * \ref wifi_cw_mode_ctrl_t
  */
@@ -5240,6 +5249,15 @@ static inline void print_mac(const char *mac)
 int wlan_set_rf_test_mode(void);
 
 /**
+ * Disable the RF 11AX in Wi-Fi firmware.
+ *
+ * \note  call \ref wlan_set_rf_test_mode API before using this API.
+ *
+ * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
+ */
+int wlan_rf_disable_11ax(void);
+
+/**
  * Unset the RF test mode in Wi-Fi firmware.
  *
  * \return WM_SUCCESS if successful.
@@ -5317,6 +5335,31 @@ int wlan_set_rf_band(const uint8_t band);
  *
  */
 int wlan_get_rf_band(uint8_t *band);
+
+/**
+ * Set the RF crystal calibration in Wi-Fi firmware.
+ *
+ * \note  call \ref wlan_set_rf_test_mode API before using this API.
+ *
+ * \param[in] xtal_cal: The crystal calibration offset to be set in Wi-Fi firmware.
+ *
+ * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
+ *
+ */
+int wlan_set_rf_xtal(const uint8_t xtal_cal);
+
+/**
+ * Get the RF crystal calibration from Wi-Fi firmware.
+ *
+ * \note  call \ref wlan_set_rf_test_mode API before using this API.
+ *
+ * \param[out] extension: A Pointer to a variable indicate RF xtal from internal or external crystal.
+ * \param[out] xtal_cal: A Pointer to a variable where RF crystal calibration is to be stored.
+ *
+ * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
+ *
+ */
+int wlan_get_rf_xtal(uint8_t *extension, uint8_t *xtal_cal);
 
 /**
  * Set the RF bandwidth in Wi-Fi firmware.
@@ -5530,7 +5573,7 @@ int wlan_get_rf_rx_antenna(uint8_t *antenna);
  * \note  call \ref wlan_set_rf_test_mode API before using this API.
  *
  * \param[in] power: The RF RX power to be set in Wi-Fi firmware.
- *                  For RW610, 20M bandwidth max linear output power is 20db per data sheet.
+ *                  For RW610, transmit output power level control range is -10 to 22dBm as per the datasheet.
  * \param[in] mod: The modulation to be set in Wi-Fi firmware.
  * \param[in] path_id: The Path ID to be set in Wi-Fi firmware.
  *
@@ -5558,6 +5601,14 @@ int wlan_set_rf_tx_power(const uint32_t power, const uint8_t mod, const uint8_t 
  * \param[in] gf_mode: Enable/Disable green field mode
  * \param[in] stbc: Enable/Disable STBC
  * \param[in] bssid: BSSID
+ * \param[in] signal_bw: Signal BW
+ * \param[in] NumPkt: Number of packets
+ * \param[in] MaxPE: Max pkt extension
+ * \param[in] BeamChange: Beam change
+ * \param[in] Dcm: DCM enable
+ * \param[in] Doppler: Doppler enable
+ * \param[in] MidP: Midamble periodicity
+ * \param[in] QNum: Tx queue num that holds the trigger-based response pkts
  *
  * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
  *
@@ -5575,7 +5626,16 @@ int wlan_set_rf_tx_frame(const uint32_t enable,
                          const uint32_t tx_bf,
                          const uint32_t gf_mode,
                          const uint32_t stbc,
-                         const uint8_t *bssid);
+                         const uint8_t *bssid,
+                         /* 11ax parameters */
+                         const uint32_t signal_bw,
+                         const uint32_t NumPkt,
+                         const uint32_t MaxPE,
+                         const uint32_t BeamChange,
+                         const uint32_t Dcm,
+                         const uint32_t Doppler,
+                         const uint32_t MidP,
+                         const uint32_t QNum);
 
 /**
  * Set the RF OTP (one-time password) MAC address in Wi-Fi firmware.
@@ -5625,6 +5685,18 @@ int wlan_set_rf_otp_cal_data(const uint8_t *cal_data, uint32_t cal_data_len);
  *
  */
 int wlan_get_rf_otp_cal_data(uint8_t *cal_data);
+
+/**
+ * Add RX peer mac filter.
+ *
+ * \note  call \ref wlan_set_rf_test_mode API before using this API.
+ *
+ * \param[int] addr: only receive packets from this mac address.
+ *
+ * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
+ *
+ */
+int wlan_set_rf_rx_mac_filter(uint8_t *addr);
 #endif
 #if CONFIG_WIFI_FW_DEBUG
 /** This function registers callbacks which are used to generate firmware dump on USB
@@ -7030,6 +7102,14 @@ int wlan_get_signal_info(wlan_rssi_info_t *signal);
 /**
  * Set band configuration.
  * \param[in] bandcfg:   band configuration
+ *
+ * \note 11AC or 11AX only mode is not supported. Supported modes are: \n
+ *   legacy (B + G + A) \n
+ *   11N only \n
+ *   11N + 11AC \n
+ *   11N + 11AX \n
+ *   11N + 11AC + 11AX\n
+ * \note B,G and A modes are enabled by default and are not configurable.\n
  *
  * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
  */
