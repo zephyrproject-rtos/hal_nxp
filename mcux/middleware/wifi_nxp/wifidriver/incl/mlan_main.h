@@ -2207,10 +2207,6 @@ struct _mlan_adapter
 #if CONFIG_FW_VDLL
     /** vdll ctrl */
     vdll_dnld_ctrl vdll_ctrl;
-    /** VDLL operation in progress */
-    volatile t_bool vdll_in_progress;
-    /** Timer for vdll */
-    OSA_TIMER_HANDLE_DEFINE(vdll_timer);
 #endif
     /** pint_lock for interrupt handling */
     t_void *pint_lock;

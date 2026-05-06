@@ -1364,6 +1364,8 @@ int wifi_get_tsf_info(wifi_tsf_info_t *tsf_info);
 
 int wifi_set_rf_test_mode(void);
 
+int wifi_rf_disable_11ax(void);
+
 int wifi_unset_rf_test_mode(void);
 
 int wifi_set_rf_channel(const uint8_t channel);
@@ -1377,6 +1379,10 @@ int wifi_get_rf_radio_mode(uint8_t *mode);
 int wifi_set_rf_band(const uint8_t band);
 
 int wifi_get_rf_band(uint8_t *band);
+
+int wifi_set_rf_xtal(const uint8_t xtal_cal);
+
+int wifi_get_rf_xtal(uint8_t *extension, uint8_t *xtal_cal);
 
 int wifi_set_rf_bandwidth(const uint8_t bandwidth);
 
@@ -1450,7 +1456,15 @@ int wifi_set_rf_tx_frame(const uint32_t enable,
                          const uint32_t tx_bf,
                          const uint32_t gf_mode,
                          const uint32_t stbc,
-                         const uint8_t *bssid);
+                         const uint8_t *bssid,
+                         const uint32_t signal_bw,
+                         const uint32_t NumPkt,
+                         const uint32_t MaxPE,
+                         const uint32_t BeamChange,
+                         const uint32_t Dcm,
+                         const uint32_t Doppler,
+                         const uint32_t MidP,
+                         const uint32_t QNum);
 
 int wifi_set_rf_otp_mac_addr(uint8_t *mac);
 
@@ -1459,6 +1473,8 @@ int wifi_get_rf_otp_mac_addr(uint8_t *mac);
 int wifi_set_rf_otp_cal_data(const uint8_t *cal_data, uint32_t cal_data_len);
 
 int wifi_get_rf_otp_cal_data(uint8_t *cal_data);
+
+int wifi_set_rf_rx_mac_filter(uint8_t *addr);
 #endif
 #if CONFIG_WIFI_FW_DEBUG
 /** This function registers callbacks which are used to generate FW Dump on USB

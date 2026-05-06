@@ -553,13 +553,6 @@ resend:
     }
 #endif
 
-#if CONFIG_FW_VDLL
-    while (pmadapter->vdll_in_progress == MTRUE)
-    {
-        OSA_TimeDelay(50);
-    }
-#endif
-
     if (cmd->size > WIFI_FW_CMDBUF_SIZE)
     {
         /*
@@ -592,7 +585,8 @@ resend:
     }
 
 #ifndef RW610
-    tx_blocks = ((t_u32)cmd->size + MLAN_SDIO_BLOCK_SIZE - 1U) / MLAN_SDIO_BLOCK_SIZE;
+    /* First 4 bytes reserved for SDIO pkt header */
+    tx_blocks = ((t_u32)cmd->size + INTF_HEADER_LEN + MLAN_SDIO_BLOCK_SIZE - 1U) / MLAN_SDIO_BLOCK_SIZE;
 #endif
 
 #if !CONFIG_UART_WIFI_BRIDGE
@@ -600,6 +594,7 @@ resend:
     if (ret != WM_SUCCESS)
     {
         wifi_e("Failed to wakeup card");
+        wifi_dump_driver_info();
         // wakelock_put(WL_ID_LL_OUTPUT);
         (void)wifi_put_command_lock();
 #if CONFIG_WIFI_FW_DEBUG
@@ -662,8 +657,6 @@ resend:
      */
     (void)OSA_RWLockReadUnlock(&sleep_rwlock);
 #endif
-
-    pmadapter->cmd_sent = MTRUE;
 
     /* Wait max 20 sec for the command response */
     ret = wifi_get_command_resp_sem(WIFI_COMMAND_RESPONSE_WAIT_MS);
@@ -1237,7 +1230,15 @@ static void wifi_core_task(void *argv)
         (void)wifi_sdio_lock();
 
         (void)wlan_process_int_status(mlan_adap);
-
+#if CONFIG_FW_VDLL
+        if (!mlan_adap->cmd_sent && mlan_adap->vdll_ctrl.pending_block)
+        {
+            wlan_download_vdll_block(
+                mlan_adap, mlan_adap->vdll_ctrl.pending_block,
+                mlan_adap->vdll_ctrl.pending_block_len);
+            mlan_adap->vdll_ctrl.pending_block = MNULL;
+        }
+#endif
         wifi_sdio_unlock();
         // wakelock_put(WL_ID_WIFI_CORE_INPUT);
     } /* for ;; */
@@ -1310,20 +1311,6 @@ static void wifi_scan_task(void *argv)
         OSA_TimeDelay(60000);
     }
 }
-
-#if CONFIG_FW_VDLL
-/**
- *  @brief This function flushes all data
- *
- *  @param context      Reorder context pointer
- *
- *  @return 	   	    N/A
- */
-static t_void wlan_vdll_complete(osa_timer_arg_t tmr_handle)
-{
-    mlan_adap->vdll_in_progress = MFALSE;
-}
-#endif
 
 static void wifi_core_deinit(void);
 static int wifi_low_level_input(const uint8_t interface, const uint8_t *buffer, const uint16_t len);
@@ -1483,11 +1470,6 @@ static int wifi_core_init(void)
     OSA_SemaphorePost((osa_semaphore_handle_t)csi_buff_stat.csi_data_sem);
 #endif
 
-#if CONFIG_FW_VDLL
-    (void)mlan_adap->callbacks.moal_init_timer(mlan_adap->pmoal_handle, &mlan_adap->vdll_timer, wlan_vdll_complete,
-                                               NULL);
-#endif
-
     wm_wifi.wifi_core_init_done = 1;
 
 #if UAP_SUPPORT
@@ -1569,11 +1551,6 @@ static void wifi_core_deinit(void)
 
 #if CONFIG_CSI
     (void)OSA_SemaphoreDestroy((osa_semaphore_handle_t)csi_buff_stat.csi_data_sem);
-#endif
-
-#if CONFIG_FW_VDLL
-    (void)mlan_adap->callbacks.moal_stop_timer(mlan_adap->pmoal_handle, mlan_adap->vdll_timer);
-    (void)mlan_adap->callbacks.moal_free_timer(mlan_adap->pmoal_handle, &mlan_adap->vdll_timer);
 #endif
 }
 
@@ -3130,7 +3107,8 @@ static mlan_status wifi_xmit_pkts(mlan_private *priv, t_u8 ac, raListTbl *ralist
     ret = wlan_xmit_wmm_pkt(priv->bss_index, buf->tx_pd.tx_pkt_length + sizeof(TxPD) + INTF_HEADER_LEN,
                             (t_u8 *)&buf->intf_header[0]);
 #endif
-    if (ret != MLAN_STATUS_SUCCESS)
+    /* other cases we return as normal and pass the errcode */
+    if (ret == MLAN_STATUS_FAILURE)
     {
 #ifdef RW610
         ASSERT(0);
@@ -3139,7 +3117,7 @@ static mlan_status wifi_xmit_pkts(mlan_private *priv, t_u8 ac, raListTbl *ralist
         util_enqueue_list_head(mlan_adap->pmoal_handle, &ralist->buf_head, &buf->entry, MNULL, MNULL);
         ralist->total_pkts++;
         mlan_adap->callbacks.moal_semaphore_put(mlan_adap->pmoal_handle, &ralist->buf_head.plock);
-        return MLAN_STATUS_RESOURCE;
+        return MLAN_STATUS_FAILURE;
 #endif
     }
 
@@ -3148,7 +3126,7 @@ static mlan_status wifi_xmit_pkts(mlan_private *priv, t_u8 ac, raListTbl *ralist
 #endif
     priv->wmm.pkts_queued[ac]--;
 
-    return MLAN_STATUS_SUCCESS;
+    return ret;
 }
 
 /*
@@ -3176,8 +3154,14 @@ static mlan_status wifi_xmit_ralist_pkts(mlan_private *priv, t_u8 ac, raListTbl 
 #endif
             ret = wifi_xmit_pkts(priv, ac, ralist);
 
-        if (ret != MLAN_STATUS_SUCCESS)
+        if (ret == MLAN_STATUS_FAILURE)
             return ret;
+
+        if (ret == MLAN_STATUS_PENDING)
+        {
+            (*pkt_cnt)++;
+            return ret;
+        }
 
         /*
          * in amsdu case,
@@ -4715,6 +4699,11 @@ int wifi_nxp_send_mlme(unsigned int bss_type, int channel, unsigned int wait_tim
 
     if ((bss_type == BSS_TYPE_STA) && (pmpriv->media_connected == MFALSE))
     {
+        if (wifi_is_remain_on_channel())
+        {
+            wifi_remain_on_channel(false, 0, 0);
+        }
+
         if (wait_time == 0)
         {
             wait_time = 1000;
@@ -4734,50 +4723,6 @@ int wifi_nxp_send_mlme(unsigned int bss_type, int channel, unsigned int wait_tim
            data_len - (sizeof(wlan_802_11_header) - MLAN_MAC_ADDR_LENGTH));
 
     data_len = pmgmt_pkt_hdr->frm_len + 2U;
-
-#if CONFIG_11AX
-    if (bss_type == BSS_TYPE_UAP)
-    {
-        t_u16 fc	  = le_to_host16(pieee_pkt_hdr->frm_ctl);
-        t_u16 stype = WLAN_FC_GET_STYPE(fc);
-
-        if ((stype == WLAN_FC_STYPE_ASSOC_RESP) ||
-            (stype == WLAN_FC_STYPE_REASSOC_RESP))
-        {
-            wlan_bandcfg_t bandcfg_get = {0};
-            int ret = WM_SUCCESS;
-            t_u8 config_11ax = 1;
-            t_u8 *tlv = MNULL;
-
-            ret = wlan_get_bandcfg(&bandcfg_get);
-            if (ret == WM_SUCCESS)
-            {
-                if ((bandcfg_get.config_bands & MBIT(8)) &&
-                    (bandcfg_get.config_bands & MBIT(9)))
-                {
-                    config_11ax = 1;
-                }
-                else
-                {
-                    config_11ax = 0;
-                }
-            }
-            else
-            {
-                wifi_e("Failed to get Wi-Fi bandcfg");
-            }
-
-            if (config_11ax == 0)
-            {
-                size_t remove_len = 0;
-                tlv = (t_u8 *)pieee_pkt_hdr + sizeof(wlan_802_11_header) + 6;
-                remove_len = wifi_remove_he_ies(tlv, data_len - sizeof(wlan_mgmt_pkt) - 6);
-                data_len -= remove_len;
-                pmgmt_pkt_hdr->frm_len -= remove_len;
-            }
-        }
-    }
-#endif
 
     return wifi_inject_frame((enum wlan_bss_type)bss_type, buf, data_len);
 }

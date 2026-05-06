@@ -2132,13 +2132,13 @@ static int do_start(struct wlan_network *network)
         if (network->channel == 14)
         {
             wlan_bandcfg_t bandcfg = {0};
-            bandcfg.config_bands &=
-                ~(BAND_AN | BAND_GN
+            bandcfg.band_cfg &=
+                ~(WLAN_BANDCFG_11N
 #if CONFIG_11AC
-                | BAND_AAC | BAND_GAC
+                | WLAN_BANDCFG_11AC
 #endif
 #if CONFIG_11AX
-                | BAND_AAX | BAND_GAX
+                | WLAN_BANDCFG_11AX
 #endif
                 );
             ret = wlan_set_bandcfg(&bandcfg);
@@ -2245,7 +2245,7 @@ static int do_stop(struct wlan_network *network)
                 wlcm_e("Unable to get bandcfg");
                 return -WM_FAIL;
             }
-            bandcfg.config_bands = bandcfg.fw_bands;
+            bandcfg.band_cfg = bandcfg.supp_bands;
             ret = wlan_set_bandcfg(&bandcfg);
             if (ret != WM_SUCCESS)
             {
@@ -4899,7 +4899,7 @@ static void wlcm_process_deauthentication_event(struct wifi_message *msg,
     struct wifi_connect_req_params params = {0};
 
     wlan_handle_disconnect_event(mlan_adap->priv[0]);
-    supplicant_get_wifi_conn_params(net_if_get_device((void *)netif), &params);
+    supplicant_get_wifi_conn_params(net_if_get_device((void *)netif), (void *)netif, &params);
 #endif
 
 #if CONFIG_WPA2_ENTP
@@ -4933,7 +4933,7 @@ static void wlcm_process_deauthentication_event(struct wifi_message *msg,
         wlan_pmksa_flush();
     }
 
-#if CONFIG_WIFI_NM_WPA_SUPPLICANT
+#if CONFIG_ECSA
 #if UAP_SUPPORT
     if(is_uap_started())
     {
@@ -6047,7 +6047,7 @@ static void wlcm_process_fw_hang_event(struct wifi_message *msg, enum cm_sta_sta
     if (wlan.sta_state > CM_STA_IDLE)
     {
 #if CONFIG_WPA_SUPP
-        supplicant_disconnect(net_if_get_device((void *)netif));
+        supplicant_disconnect(net_if_get_device((void *)netif), (void *)netif);
 #else
         wlcm_request_disconnect(next, &wlan.networks[wlan.cur_network_idx]);
         wlan_dhcp_cleanup();
@@ -7005,7 +7005,7 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
 
         case CM_STA_USER_REQUEST_DISCONNECT:
 #if CONFIG_WPA_SUPP
-            supplicant_disconnect(net_if_get_device((void *)netif));
+            supplicant_disconnect(net_if_get_device((void *)netif), (void *)netif);
 #else
             if ((network->role == WLAN_BSS_ROLE_STA) &&
                 (network->security.type != WLAN_SECURITY_NONE && network->security.type != WLAN_SECURITY_WEP_OPEN))
@@ -7168,7 +7168,9 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
         case WIFI_EVENT_RSSI_LOW:
             wlcm_d("got event: rssi low");
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
+#if (CONFIG_11K) || (CONFIG_11V) || (CONFIG_ROAMING)
             wlcm_process_rssi_low_event(msg);
+#endif
 #else
             if (wlan.cur_network_idx >= WLAN_MAX_KNOWN_NETWORKS)
                 break;
@@ -7749,7 +7751,9 @@ static int wifi_wakeup_card_cb(osa_rw_lock_t *plock, unsigned int wait_time)
     int pm_wakeup_retry     = 0;
     mlan_private *pmpriv    = (mlan_private *)mlan_adap->priv[0];
     mlan_adapter *pmadapter = pmpriv->adapter;
-
+#ifdef RW610
+    uint32_t pmu_wlan_ctrl_reg = 0;
+#endif
     osa_status_t status = OSA_SemaphoreWait((osa_semaphore_handle_t)plock->rw_lock, 0);
 
     do
@@ -7758,9 +7762,14 @@ static int wifi_wakeup_card_cb(osa_rw_lock_t *plock, unsigned int wait_time)
         {
             if (pmadapter->ps_state == PS_STATE_SLEEP)
             {
-#if CONFIG_WIFI_PS_DEBUG
-                wifi_w("Wake up card attempt: %d, ps_state=%d", pm_wakeup_retry + 1, pmadapter->ps_state);
+                if (pm_wakeup_retry)
+                {
+                    wifi_w("Wake up card attempt: %d, ps_state=%d", pm_wakeup_retry, pmadapter->ps_state);
+#ifdef RW610
+                    pmu_wlan_ctrl_reg = PMU->WLAN_CTRL;
+                    wifi_w("Wake up card register: 0x%x", pmu_wlan_ctrl_reg);
 #endif
+                }
                 wlan_wake_up_card();
                 status = OSA_SemaphoreWait((osa_semaphore_handle_t)plock->rw_lock, wait_time);
                 pm_wakeup_retry++;
@@ -10020,7 +10029,7 @@ int wlan_get_current_network_bssid(char *bssid)
     struct wifi_iface_status status;
 
     memset(&status, 0x0, sizeof(status));
-    supplicant_status(net_if_get_device((void *)netif), &status);
+    supplicant_status(net_if_get_device((void *)netif), (void *)netif, &status);
     memcpy(bssid, status.bssid, MLAN_MAC_ADDR_LENGTH);
     return WM_SUCCESS;
 #else
@@ -13395,7 +13404,7 @@ int wlan_pmksa_flush(void)
 #if !CONFIG_WIFI_NM_WPA_SUPPLICANT
     return wpa_supp_pmksa_flush(netif);
 #else
-    return supplicant_pmksa_flush(net_if_get_device((void *)netif));
+    return supplicant_pmksa_flush(net_if_get_device((void *)netif), (void *)netif);
 #endif
 }
 
@@ -13534,6 +13543,11 @@ int wlan_set_rf_test_mode(void)
     return wifi_set_rf_test_mode();
 }
 
+int wlan_rf_disable_11ax(void)
+{
+    return wifi_rf_disable_11ax();
+}
+
 int wlan_unset_rf_test_mode(void)
 {
     (void)wifi_unset_rf_test_mode();
@@ -13586,6 +13600,19 @@ int wlan_get_rf_band(uint8_t *band)
         return wifi_get_rf_band(band);
 
     return -WM_FAIL;
+}
+
+int wlan_set_rf_xtal(const uint8_t xtal_cal)
+{
+    return wifi_set_rf_xtal(xtal_cal);
+}
+
+int wlan_get_rf_xtal(uint8_t *extension, uint8_t *xtal_cal)
+{
+    if (extension == NULL || xtal_cal == NULL)
+        return -WM_FAIL;
+
+    return wifi_get_rf_xtal(extension, xtal_cal);
 }
 
 int wlan_get_rf_bandwidth(uint8_t *bandwidth)
@@ -13684,10 +13711,19 @@ int wlan_set_rf_tx_frame(const uint32_t enable,
                          const uint32_t tx_bf,
                          const uint32_t gf_mode,
                          const uint32_t stbc,
-                         const uint8_t *bssid)
+                         const uint8_t *bssid,
+                         const uint32_t signal_bw,
+                         const uint32_t NumPkt,
+                         const uint32_t MaxPE,
+                         const uint32_t BeamChange,
+                         const uint32_t Dcm,
+                         const uint32_t Doppler,
+                         const uint32_t MidP,
+                         const uint32_t QNum)
 {
     return wifi_set_rf_tx_frame(enable, data_rate, frame_pattern, frame_length, adjust_burst_sifs, burst_sifs_in_us,
-                                short_preamble, act_sub_ch, short_gi, adv_coding, tx_bf, gf_mode, stbc, bssid);
+                                short_preamble, act_sub_ch, short_gi, adv_coding, tx_bf, gf_mode, stbc, bssid,
+                                signal_bw, NumPkt, MaxPE, BeamChange, Dcm, Doppler, MidP, QNum);
 }
 
 int wlan_set_rf_otp_mac_addr(uint8_t *mac)
@@ -13712,6 +13748,14 @@ int wlan_get_rf_otp_cal_data(uint8_t *cal_data)
 {
     if (cal_data != NULL)
       return wifi_get_rf_otp_cal_data(cal_data);
+
+    return -WM_FAIL;
+}
+
+int wlan_set_rf_rx_mac_filter(uint8_t *addr)
+{
+    if (addr != NULL)
+        return wifi_set_rf_rx_mac_filter(addr);
 
     return -WM_FAIL;
 }
@@ -15766,11 +15810,13 @@ int wlan_mgmtframe_tx_cfg(wlan_host_tx_frame_params_t *tx_frame)
         return -WM_FAIL;
     }
 
+#if CONFIG_NET_MONITOR
     if(get_monitor_flag() != true)
     {
         wlcm_e("enable monitor mode first");
         return -WM_FAIL;
     }
+#endif
 
     //Todo: add this condition if (mlan_adap->cmd_tx_data == 1U)
     ret = wifi_mgmtframe_tx_cfg(tx_frame);
@@ -15822,32 +15868,32 @@ static void wlan_uap_update_hostapd_bss(wlan_bandcfg_t *bandcfg)
 {
     struct netif *netif = net_get_uap_interface();
 
-    if (bandcfg->config_bands & (BAND_AN | BAND_GN))
+    if (bandcfg->band_cfg & WLAN_BANDCFG_11N)
     {
-        hostapd_11n_cfg(net_if_get_device((void *)netif), 1);
+        hostapd_11n_cfg(net_if_get_device((void *)netif), (void *)netif, 1);
     }
     else
     {
-        hostapd_11n_cfg(net_if_get_device((void *)netif), 0);
+        hostapd_11n_cfg(net_if_get_device((void *)netif), (void *)netif, 0);
     }
 #if CONFIG_11AC
-    if (bandcfg->config_bands & (BAND_AAC | BAND_GAC))
+    if (bandcfg->band_cfg & WLAN_BANDCFG_11AC)
     {
-        hostapd_11ac_cfg(net_if_get_device((void *)netif), 1);
+        hostapd_11ac_cfg(net_if_get_device((void *)netif), (void *)netif, 1);
     }
     else
     {
-        hostapd_11ac_cfg(net_if_get_device((void *)netif), 0);
+        hostapd_11ac_cfg(net_if_get_device((void *)netif), (void *)netif, 0);
     }
 #endif
 #if CONFIG_11AX
-    if (bandcfg->config_bands & (BAND_AAX | BAND_GAX))
+    if (bandcfg->band_cfg & WLAN_BANDCFG_11AX)
     {
-        hostapd_11ax_cfg(net_if_get_device((void *)netif), 1);
+        hostapd_11ax_cfg(net_if_get_device((void *)netif), (void *)netif, 1);
     }
     else
     {
-        hostapd_11ax_cfg(net_if_get_device((void *)netif), 0);
+        hostapd_11ax_cfg(net_if_get_device((void *)netif), (void *)netif, 0);
     }
 #endif
 }
@@ -15856,7 +15902,81 @@ static void wlan_uap_update_hostapd_bss(wlan_bandcfg_t *bandcfg)
 int wlan_set_bandcfg(wlan_bandcfg_t *bandcfg)
 {
     int ret = 0;
-    ret = wifi_get_set_bandcfg(bandcfg, MLAN_ACT_SET);
+    uint16_t enable_11n = bandcfg->band_cfg & WLAN_BANDCFG_11N;
+#if CONFIG_11AC
+    uint16_t enable_11ac = bandcfg->band_cfg & WLAN_BANDCFG_11AC;
+#endif
+#if CONFIG_11AX
+    uint16_t enable_11ax = bandcfg->band_cfg & WLAN_BANDCFG_11AX;
+#endif
+    wifi_bandcfg_t cfg;
+
+    if (is_sta_connected() || is_uap_started())
+    {
+        wlcm_e("Error: set-bandcfg command is not allowed when STA has connection or uAP is started");
+        return -WM_FAIL;
+    }
+
+#if CONFIG_11AC
+    if (enable_11ac && !enable_11n)
+    {
+        wlcm_e("Error! 11AC only mode is not supported! Should enable 11N, too.");
+        return -WM_FAIL;
+    }
+#endif
+#if CONFIG_11AX
+    if (enable_11ax && !enable_11n)
+    {
+        wlcm_e("Error! 11AX only mode is not supported! Should enable 11N, too.");
+        return -WM_FAIL;
+    }
+#endif
+
+    memset(&cfg, 0, sizeof(cfg));
+    ret = wifi_get_set_bandcfg(&cfg, MLAN_ACT_GET);
+    if (ret != WM_SUCCESS)
+    {
+        wlcm_e("Unable to get bandcfg");
+        return -WM_FAIL;
+    }
+
+    cfg.config_bands = 0;
+    /* Band B, G and A are not configurable. They are mandatory. */
+    cfg.config_bands |= (BAND_B | BAND_G | BAND_A);
+    if (enable_11n)
+    {
+        cfg.config_bands |= (BAND_GN | BAND_AN);
+    }
+#if CONFIG_11AC
+    if (enable_11ac)
+    {
+        uint16_t supp_11ac = cfg.fw_bands & (BAND_GAC | BAND_AAC);
+        if (supp_11ac)
+        {
+            cfg.config_bands |= (BAND_GAC | BAND_AAC);
+        }
+        else
+        {
+            wlcm_w("Warning: hardware doesn't support 11AC, ignore 11AC setting");
+        }
+    }
+#endif
+#if CONFIG_11AX
+    if (enable_11ax)
+    {
+        uint16_t supp_11ax = cfg.fw_bands & (BAND_GAX | BAND_AAX);
+        if (supp_11ax)
+        {
+            cfg.config_bands |= (BAND_GAX | BAND_AAX);
+        }
+        else
+        {
+            wlcm_w("Warning: hardware doesn't support 11AX, ignore 11AX setting");
+        }
+    }
+#endif
+
+    ret = wifi_get_set_bandcfg(&cfg, MLAN_ACT_SET);
 #ifdef CONFIG_WIFI_NM_HOSTAPD_AP
     if (ret == WM_SUCCESS)
     {
@@ -15869,15 +15989,61 @@ int wlan_set_bandcfg(wlan_bandcfg_t *bandcfg)
 
 int wlan_get_bandcfg(wlan_bandcfg_t *bandcfg)
 {
-    return wifi_get_set_bandcfg(bandcfg, MLAN_ACT_GET);
+    int ret = WM_SUCCESS;
+    wifi_bandcfg_t cfg;
+
+    memset(&cfg, 0, sizeof(cfg));
+    ret = wifi_get_set_bandcfg(&cfg, MLAN_ACT_GET);
+    if (ret != WM_SUCCESS)
+    {
+        wlcm_e("Unable to get bandcfg");
+        return -WM_FAIL;
+    }
+
+    if (cfg.config_bands & (BAND_AN | BAND_GN))
+    {
+        bandcfg->band_cfg |= WLAN_BANDCFG_11N;
+    }
+    if (cfg.fw_bands & (BAND_AN | BAND_GN))
+    {
+        bandcfg->supp_bands |= WLAN_BANDCFG_11N;
+    }
+#if CONFIG_11AC
+    if (cfg.config_bands & (BAND_AAC | BAND_GAC))
+    {
+        bandcfg->band_cfg |= WLAN_BANDCFG_11AC;
+    }
+    if (cfg.fw_bands & (BAND_AAC | BAND_GAC))
+    {
+        bandcfg->supp_bands |= WLAN_BANDCFG_11AC;
+    }
+#endif
+#if CONFIG_11AX
+    if (cfg.config_bands & (BAND_AAX | BAND_GAX))
+    {
+        bandcfg->band_cfg |= WLAN_BANDCFG_11AX;
+    }
+    if (cfg.fw_bands & (BAND_AAX | BAND_GAX))
+    {
+        bandcfg->supp_bands |= WLAN_BANDCFG_11AX;
+    }
+#endif
+    return ret;
 }
 
 void wlan_uap_bandcfg_recfg(void)
 {
 #ifdef CONFIG_WIFI_NM_HOSTAPD_AP
     wlan_bandcfg_t bandcfg = {0};
+    int ret = 0;
 
-    bandcfg.config_bands = mlan_adap->priv[1]->config_bands;
+    ret = wlan_get_bandcfg(&bandcfg);
+    if (ret != WM_SUCCESS)
+    {
+        wlcm_e("Unable to get bandcfg");
+        return;
+    }
+
     wlan_uap_update_hostapd_bss(&bandcfg);
 #endif
 }

@@ -333,6 +333,8 @@ static mlan_status wlan_cmd_mfg(pmlan_private pmpriv, HostCmd_DS_COMMAND *cmd, t
         case MFG_CMD_RF_CHANNELBW:
         case MFG_CMD_RFPWR:
         case MFG_CMD_RADIO_MODE_CFG:
+        case MFG_CMD_WRITE_PATCH_BLOCK_OTP:
+        case MFG_CMD_RFXTAL_CTRL:
             break;
         default:
             ret = MLAN_STATUS_FAILURE;

@@ -60,6 +60,42 @@ static void wlan_rf_test_mode_set(int argc, char *argv[])
     }
 }
 
+static void dump_rf_disable_11ax_set_usage(void)
+{
+    (void)PRINTF("Usage:\r\n");
+    (void)PRINTF("wlan-set-rf-disable-11ax \r\n");
+    (void)PRINTF("\r\n");
+}
+
+static void wlan_rf_disable_11ax_set(int argc, char *argv[])
+{
+    int ret;
+
+    if (!rf_test_mode)
+    {
+        dump_wlan_set_rf_test_mode();
+        return;
+    }
+
+    if (argc != 1)
+    {
+        dump_rf_disable_11ax_set_usage();
+        return;
+    }
+
+    ret = wlan_rf_disable_11ax();
+    if (ret == WM_SUCCESS)
+    {
+        (void)PRINTF("RF Disable 11AX configuration successful\r\n");
+    }
+    else
+    {
+        (void)PRINTF("RF Disable 11AX configuration failed\r\n");
+        dump_rf_disable_11ax_set_usage();
+    }
+
+}
+
 static void dump_wlan_unset_rf_test_mode_usage(void)
 {
     (void)PRINTF("Usage:\r\n");
@@ -297,6 +333,80 @@ static void wlan_rf_band_get(int argc, char *argv[])
     {
         (void)PRINTF("RF Band configuration read failed\r\n");
         dump_wlan_get_rf_band_usage();
+    }
+}
+
+static void dump_wlan_set_rf_xtal_usage(void)
+{
+    (void)PRINTF("Usage:\r\n");
+    (void)PRINTF("wlan-set-rf-xtal <xtal_cal> \r\n");
+    (void)PRINTF("\r\n");
+}
+
+static void wlan_rf_xtal_set(int argc, char *argv[])
+{
+    int ret;
+    uint8_t xtal_cal;
+
+    if (!rf_test_mode)
+    {
+        dump_wlan_set_rf_test_mode();
+        return;
+    }
+
+    if (argc != 2)
+    {
+        dump_wlan_set_rf_xtal_usage();
+        return;
+    }
+
+    xtal_cal = strtol(argv[1], NULL, 10);
+
+    ret = wlan_set_rf_xtal(xtal_cal);
+    if (ret == WM_SUCCESS)
+    {
+        (void)PRINTF("RF xtal configuration successful\r\n");
+    }
+    else
+    {
+        (void)PRINTF("RF xtal configuration failed\r\n");
+        dump_wlan_set_rf_xtal_usage();
+    }
+}
+
+static void dump_wlan_get_rf_xtal_usage(void)
+{
+    (void)PRINTF("Usage:\r\n");
+    (void)PRINTF("wlan-get-rf-xtal \r\n");
+}
+
+static void wlan_rf_xtal_get(int argc, char *argv[])
+{
+    int ret;
+    uint8_t extension;
+    uint8_t xtal_cal;
+
+    if (!rf_test_mode)
+    {
+        dump_wlan_set_rf_test_mode();
+        return;
+    }
+
+    if (argc != 1)
+    {
+        dump_wlan_get_rf_xtal_usage();
+        return;
+    }
+
+    ret = wlan_get_rf_xtal(&extension, &xtal_cal);
+    if (ret == WM_SUCCESS)
+    {
+        (void)PRINTF("Configured RF xtal_cal is: %d from %s crystal\r\n", xtal_cal, extension ? "external" : "internal");
+    }
+    else
+    {
+        (void)PRINTF("RF xtal configuration read failed\r\n");
+        dump_wlan_get_rf_xtal_usage();
     }
 }
 
@@ -673,7 +783,7 @@ static void dump_wlan_set_tx_power_usage(void)
     (void)PRINTF("Usage:\r\n");
     (void)PRINTF("wlan-set-rf-tx-power <tx_power> <modulation> <path_id> \r\n");
 #ifdef RW610
-    (void)PRINTF("Power       (0 to 20 dBm)\r\n");
+    (void)PRINTF("Power       (-10 to 22 dBm)\r\n");
 #else
     (void)PRINTF("Power       (0 to 24 dBm)\r\n");
 #endif
@@ -711,7 +821,11 @@ static void PowerLevelToDUT11Bits(int Pwr, uint32_t *PowerLevel)
 static void wlan_rf_tx_power_set(int argc, char *argv[])
 {
     int ret;
+#ifdef RW610
+    int power;
+#else
     uint32_t power;
+#endif
     uint8_t mod;
     uint8_t path_id;
 #if !defined(SD8978) && !defined(SD8987) && !defined(SD9177) && !defined(SD8801) && !defined(IW610)
@@ -735,7 +849,8 @@ static void wlan_rf_tx_power_set(int argc, char *argv[])
     path_id = strtol(argv[3], NULL, 10);
 
 #ifdef RW610
-    if (power > 20U)
+    /* For RW610, transmit output power level control range is -10 to 22dBm as per the datasheet. */
+    if (power > 22 || power < -10)
 #else
     if (power > 24U)
 #endif
@@ -782,7 +897,8 @@ static void dump_wlan_set_tx_frame_usage(void)
     (void)PRINTF("Usage:\r\n");
     (void)PRINTF(
         "wlan-set-rf-tx-frame <start> <data_rate> <frame_pattern> <frame_len> <adjust_burst_sifs> <burst_sifs_in_us> "
-        "<short_preamble> <act_sub_ch> <short_gi> <adv_coding> <tx_bf> <gf_mode> <stbc> <bssid>\r\n");
+        "<short_preamble> <act_sub_ch> <short_gi> <adv_coding> <tx_bf> <gf_mode> <stbc> <bssid> <signal_bw> <NumPkt> "
+        "<MaxPE> <BeamChange> <Dcm> <Doppler> <MidP> <QNum>\r\n");
     (void)PRINTF("Enable                 (0:disable, 1:enable)\r\n");
     (void)PRINTF(
         "Tx Data Rate           (Rate Index corresponding to legacy/HT/VHT rates)(Enter hexadecimal value)\r\n");
@@ -798,6 +914,16 @@ static void dump_wlan_set_tx_frame_usage(void)
     (void)PRINTF("GreenField Mode        (0:disable, 1:enable)\r\n");
     (void)PRINTF("STBC                   (0:disable, 1:enable)\r\n");
     (void)PRINTF("BSSID                  (xx:xx:xx:xx:xx:xx)\r\n");
+    (void)PRINTF("Signal BW              (0: 20Mhz, 1: 40Mhz, 4:80Mhz, -1: Set to default)\r\n");
+    (void)PRINTF("Note: NumPkt, MaxPE, BeamChange, DCM, Doppler, MidP and QNum are 11ax parameters,\r\n");
+    (void)PRINTF("11ax parameters must be provided in order if any is used\r\n");
+    (void)PRINTF("NumPkt                 (-1:Set to default value, 1 to 0xfffffffe to specify number of packets to send)\r\n");
+    (void)PRINTF("MaxPE                  (0|8|16us, -1:Set to default Value 2)\r\n");
+    (void)PRINTF("BeamChange             (0|1, -1:Set to default Value 1)\r\n");
+    (void)PRINTF("Dcm                    (0|1, -1:Set to default Value 0)\r\n");
+    (void)PRINTF("Doppler                (0|1, -1:Set to default Value 0)\r\n");
+    (void)PRINTF("MidP                   (10|20, -1:Set to default Value 0)\r\n");
+    (void)PRINTF("QNum                   (0-12|17-20, -1:Set to default Value if 11ax QNum:17 else QNum:0)\r\n");
     (void)PRINTF("\r\n");
     (void)PRINTF("To Disable:\r\n");
     (void)PRINTF("wlan-set-rf-tx-frame 0\r\n");
@@ -821,6 +947,14 @@ static void wlan_rf_tx_frame_set(int argc, char *argv[])
     uint32_t gf_mode;
     uint32_t stbc;
     uint8_t bssid[MLAN_MAC_ADDR_LENGTH];
+    uint32_t signal_bw = (uint32_t)-1;
+    uint32_t NumPkt    = (uint32_t)-1;
+    uint32_t MaxPE     = (uint32_t)-1;
+    uint32_t BeamChange= (uint32_t)-1;
+    uint32_t Dcm       = (uint32_t)-1;
+    uint32_t Doppler   = (uint32_t)-1;
+    uint32_t MidP      = (uint32_t)-1;
+    uint32_t QNum      = (uint32_t)-1;
 
     if (!rf_test_mode)
     {
@@ -846,8 +980,9 @@ static void wlan_rf_tx_frame_set(int argc, char *argv[])
         (void)memset(bssid, 0, MLAN_MAC_ADDR_LENGTH);
         goto disable;
     }
-    else if (argc != 15)
+    else if (argc != 16 && argc != 23)
     {
+        (void)PRINTF("Invalid number of arguments\r\n");
         dump_wlan_set_tx_frame_usage();
         return;
     }
@@ -881,6 +1016,17 @@ static void wlan_rf_tx_frame_set(int argc, char *argv[])
         dump_wlan_set_tx_frame_usage();
         return;
     }
+    signal_bw  = strtol(argv[15], NULL, 10);
+    if (signal_bw != (uint32_t)-1 &&
+        signal_bw != 0U &&
+        signal_bw != 1U &&
+        signal_bw != 4U)
+    {
+        (void)PRINTF("Invalid Signal BW\r\n");
+        dump_wlan_set_tx_frame_usage();
+        return;
+    }
+
 
     if (enable > 1U || frame_length < 1 || frame_length > 0x400U || burst_sifs_in_us > 255U || short_preamble > 1U ||
         act_sub_ch == 2 || act_sub_ch > 3 || short_gi > 1U || adv_coding > 1U || tx_bf > 1U || gf_mode > 1U ||
@@ -890,9 +1036,35 @@ static void wlan_rf_tx_frame_set(int argc, char *argv[])
         return;
     }
 
+    /* Parse 11ax optional parameters if provided */
+    if (argc == 23)
+    {
+        NumPkt     = strtol(argv[16], NULL, 0);
+        MaxPE      = strtol(argv[17], NULL, 10);
+        BeamChange = strtol(argv[18], NULL, 10);
+        Dcm        = strtol(argv[19], NULL, 10);
+        Doppler    = strtol(argv[20], NULL, 10);
+        MidP       = strtol(argv[21], NULL, 10);
+        QNum       = strtol(argv[22], NULL, 10);
+
+        /* 11ax parameter validation */
+        if ((Dcm != (uint32_t)-1 && Dcm != 0U && Dcm != 1U) ||
+            (Doppler != (uint32_t)-1 && Doppler != 0U && Doppler != 1U) ||
+            (MidP != (uint32_t)-1 && MidP != 10U && MidP != 20U) ||
+            (MaxPE != (uint32_t)-1 && MaxPE != 0U && MaxPE != 8U && MaxPE != 16U) ||
+            (BeamChange != (uint32_t)-1 && BeamChange != 0U && BeamChange != 1U) ||
+            (QNum != (uint32_t)-1 && ((QNum > 12U && QNum < 17U) || QNum > 20U)))
+        {
+            (void)PRINTF("Invalid 11ax arguments\r\n");
+            dump_wlan_set_tx_frame_usage();
+            return;
+        }
+    }
+
 disable:
     ret = wlan_set_rf_tx_frame(enable, data_rate, frame_pattern, frame_length, adjust_burst_sifs, burst_sifs_in_us,
-                               short_preamble, act_sub_ch, short_gi, adv_coding, tx_bf, gf_mode, stbc, bssid);
+                               short_preamble, act_sub_ch, short_gi, adv_coding, tx_bf, gf_mode, stbc, bssid,
+                               signal_bw, NumPkt, MaxPE, BeamChange, Dcm, Doppler, MidP, QNum);
     if (ret == WM_SUCCESS)
     {
         (void)PRINTF("Tx Frame configuration successful\r\n");
@@ -914,6 +1086,14 @@ disable:
         (void)PRINTF("  BSSID                     : ");
         print_mac((const char *)bssid);
         (void)PRINTF("\r\n");
+        (void)PRINTF("  Signal BW                 : %d\r\n", signal_bw);
+        (void)PRINTF("  NumPkt                    : %d\r\n", NumPkt);
+        (void)PRINTF("  MaxPE                     : %d us\r\n", MaxPE);
+        (void)PRINTF("  BeamChange                : %d\r\n", BeamChange);
+        (void)PRINTF("  Dcm                       : %d\r\n", Dcm);
+        (void)PRINTF("  Doppler                   : %d\r\n", Doppler);
+        (void)PRINTF("  MidP                      : %d\r\n", MidP);
+        (void)PRINTF("  QNum                      : %d\r\n", QNum);
     }
     else
     {
@@ -1376,8 +1556,45 @@ static void wlan_rf_otp_cal_data_get(int argc, char *argv[])
 }
 #endif
 
+static void dump_wlan_rf_rx_mac_filter_usage(void)
+{
+    (void)PRINTF("Usage:\r\n");
+    (void)PRINTF("wlan-set-rf-rx-mac-filter xx:xx:xx:xx:xx:xx\r\n");
+}
+
+static void wlan_rf_rx_mac_filter_set(int argc, char *argv[])
+{
+    int ret;
+    char bssid[6] = {0};
+
+    if (argc < 2)
+    {
+        dump_wlan_rf_rx_mac_filter_usage();
+        return;
+    }
+
+    if (get_mac(argv[1], bssid, ':') != false)
+    {
+        dump_wlan_rf_rx_mac_filter_usage();
+        return;
+    }
+
+    ret = wlan_set_rf_rx_mac_filter((uint8_t *)bssid);
+    if (ret == WM_SUCCESS)
+    {
+        (void)PRINTF("Set RX mac filter success ");
+        print_mac(bssid);
+        (void)PRINTF("\r\n");
+    }
+    else
+    {
+        (void)PRINTF("Set RX mac filter failed ret %d", ret);
+    }
+}
+
 static struct cli_command wlan_test_mode_commands[] = {
     {"wlan-set-rf-test-mode", NULL, wlan_rf_test_mode_set},
+    {"wlan-set-rf-disable-11ax", NULL, wlan_rf_disable_11ax_set},
     {"wlan-unset-rf-test-mode", NULL, wlan_rf_test_mode_unset},
     {"wlan-set-rf-tx-antenna", "<antenna>", wlan_rf_tx_antenna_set},
     {"wlan-get-rf-tx-antenna", NULL, wlan_rf_tx_antenna_get},
@@ -1385,6 +1602,8 @@ static struct cli_command wlan_test_mode_commands[] = {
     {"wlan-get-rf-rx-antenna", NULL, wlan_rf_rx_antenna_get},
     {"wlan-set-rf-band", "<band>", wlan_rf_band_set},
     {"wlan-get-rf-band", NULL, wlan_rf_band_get},
+    {"wlan-set-rf-xtal", "<xtal_cal>", wlan_rf_xtal_set},
+    {"wlan-get-rf-xtal", NULL, wlan_rf_xtal_get},
     {"wlan-set-rf-bandwidth", "<bandwidth>", wlan_rf_bandwidth_set},
     {"wlan-get-rf-bandwidth", NULL, wlan_rf_bandwidth_get},
     {"wlan-set-rf-channel", "<channel>", wlan_rf_channel_set},
@@ -1398,7 +1617,8 @@ static struct cli_command wlan_test_mode_commands[] = {
      wlan_rf_tx_cont_mode_set},
     {"wlan-set-rf-tx-frame",
      "<start> <data_rate> <frame_pattern> <frame_len> <adjust_burst_sifs> <burst_sifs_in_us> <short_preamble> "
-     "<act_sub_ch> <short_gi> <adv_coding> <tx_bf> <gf_mode> <stbc> <bssid>",
+     "<act_sub_ch> <short_gi> <adv_coding> <tx_bf> <gf_mode> <stbc> <bssid> <signal_bw> <NumPkt> <MaxPE> <BeamChange> "
+     "<Dcm> <Doppler> <MidP> <QNum>",
      wlan_rf_tx_frame_set},
 #if !defined(SD8978)
     {"wlan-set-rf-trigger-frame-cfg",
@@ -1417,6 +1637,7 @@ static struct cli_command wlan_test_mode_commands[] = {
     {"wlan-set-rf-otp-cal-data", NULL, wlan_rf_otp_cal_data_set},
     {"wlan-get-rf-otp-cal-data", NULL, wlan_rf_otp_cal_data_get},
 #endif
+    {"wlan-set-rf-rx-mac-filter", NULL, wlan_rf_rx_mac_filter_set},
 };
 
 int wlan_test_mode_cli_init(void)

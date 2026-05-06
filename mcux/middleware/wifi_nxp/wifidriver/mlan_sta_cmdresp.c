@@ -282,6 +282,8 @@ mlan_status wlan_ret_mfg(pmlan_private pmpriv, HostCmd_DS_COMMAND *resp, void *p
         LEAVE();
         return MLAN_STATUS_FAILURE;
     }
+
+    cfg = (mlan_ds_mfg_cmd_generic_cfg *)&(misc_cfg->param);
     switch (wlan_le32_to_cpu(mcmd->mfg_cmd))
     {
         case MFG_CMD_TX_CONT:
@@ -312,18 +314,20 @@ mlan_status wlan_ret_mfg(pmlan_private pmpriv, HostCmd_DS_COMMAND *resp, void *p
         case MFG_CMD_RF_CHANNELBW:
         case MFG_CMD_RADIO_MODE_CFG:
         case MFG_CMD_RFPWR:
+        case MFG_CMD_WRITE_PATCH_BLOCK_OTP:
+        case MFG_CMD_RFXTAL_CTRL:
+        case MFG_CMD_RX_MAC_FILTER:
             break;
         default:
             ret = MLAN_STATUS_FAILURE;
             goto cmd_mfg_done;
     }
-    cfg = (mlan_ds_mfg_cmd_generic_cfg *)&(misc_cfg->param);
 
-    cfg->error = wlan_le32_to_cpu(mcmd->error);
     cfg->data1 = wlan_le32_to_cpu(mcmd->data1);
     cfg->data2 = wlan_le32_to_cpu(mcmd->data2);
     cfg->data3 = wlan_le32_to_cpu(mcmd->data3);
 cmd_mfg_done:
+    cfg->error = wlan_le32_to_cpu(mcmd->error);
     LEAVE();
     return ret;
 }
