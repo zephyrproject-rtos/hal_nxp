@@ -10,7 +10,7 @@
 
 #include <string.h>
 #include <osa.h>
-#include <wm_net.h> /* for net_inet_aton */
+#include <nxp_wifi_net.h> /* for net_inet_aton */
 #include <wlan.h>
 #include <wifi.h>
 #include <wlan_tests.h>

@@ -22,7 +22,7 @@
 
 #include <wmtypes.h>
 #include <time.h>
-#include <wm_net.h>
+#include <nxp_wifi_net.h>
 
 /*! @brief Structure is used to hold the date and time */
 struct datetime_t

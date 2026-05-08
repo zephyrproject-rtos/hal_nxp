@@ -18,7 +18,7 @@ Change Log:
 #include <wmerrno.h>
 #include <osa.h>
 #if CONFIG_WIFI_PKT_FWD
-#include <wm_net.h>
+#include <nxp_wifi_net.h>
 #if defined(RW610)
 #include "wifi-imu.h"
 #else

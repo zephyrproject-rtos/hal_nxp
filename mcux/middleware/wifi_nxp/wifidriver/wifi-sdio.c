@@ -28,7 +28,7 @@
 #include "firmware_dnld.h"
 #include "fwdnld_sdio.h"
 #if CONFIG_TX_RX_ZERO_COPY
-#include "wm_net.h"
+#include "nxp_wifi_net.h"
 #endif
 
 #define SDIO_COMMAND_RESPONSE_WAIT_MS 20000

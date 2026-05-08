@@ -2413,12 +2413,6 @@ int wlan_remove_all_network_profiles(void);
  */
 void wlan_reset(cli_reset_option ResetOption);
 
-/** Stop and remove all Wi-Fi network (access point).
- *
- *  \return WM_SUCCESS if successful.
- */
-int wlan_remove_all_networks(void);
-
 /**
  * This API destroys all tasks.
  */

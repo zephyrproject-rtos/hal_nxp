@@ -16,7 +16,7 @@
 #include <osa.h>
 
 #include "wifi-internal.h"
-#include <wm_net.h>
+#include <nxp_wifi_net.h>
 #if defined(RW610)
 #include "wifi-imu.h"
 #else
@@ -1998,7 +1998,6 @@ t_u8 wifi_uap_ampdu_rx_enable_per_tid_is_allowed(t_u8 tid)
 }
 #endif /* CONFIG_STA_AMPDU_RX */
 
-#if !CONFIG_WIFI_RX_REORDER
 int wifi_register_data_input_callback(void (*data_input_callback)(const uint8_t interface,
                                                                   const uint8_t *buffer,
                                                                   const uint16_t len))
@@ -2036,45 +2035,6 @@ void wifi_deregister_data_input_callback(void)
 {
     wm_wifi.data_input_callback = NULL;
 }
-#else
-int wifi_register_gen_pbuf_from_data2_callback(void *(*gen_pbuf_from_data2)(t_u8 *payload,
-                                                                            t_u16 datalen,
-                                                                            void **p_payload))
-{
-#if CONFIG_HEAP_DEBUG
-    static bool mem_stat_sem_init = 0;
-    int ret;
-#endif
-    if (wm_wifi.gen_pbuf_from_data2 != NULL)
-    {
-        return -WM_FAIL;
-    }
-
-    wm_wifi.gen_pbuf_from_data2 = gen_pbuf_from_data2;
-
-#if CONFIG_HEAP_DEBUG
-    /* Semaphore to protect os mem stat */
-    if (!mem_stat_sem_init)
-    {
-        ret = OSA_SemaphoreCreateBinary((osa_semaphore_handle_t)os_mem_stat_sem);
-        if (ret != WM_SUCCESS)
-        {
-            PRINTF("Create os mem stat sem failed");
-            return -WM_FAIL;
-        }
-        OSA_SemaphorePost((osa_semaphore_handle_t)os_mem_stat_sem);
-        mem_stat_sem_init = 1;
-    }
-#endif
-
-    return WM_SUCCESS;
-}
-
-void wifi_deregister_gen_pbuf_from_data2_callback(void)
-{
-    wm_wifi.gen_pbuf_from_data2 = NULL;
-}
-#endif
 
 int wifi_register_amsdu_data_input_callback(void (*amsdu_data_input_callback)(uint8_t interface,
                                                                               uint8_t *buffer,
@@ -2801,36 +2761,11 @@ static int wifi_low_level_input(const uint8_t interface, const uint8_t *buffer, 
         goto consumed;
     }
 
-#if CONFIG_WIFI_RX_REORDER
-    RxPD *rxpd        = (RxPD *)(void *)((t_u8 *)buffer + INTF_HEADER_LEN);
-    t_u8 *payload     = MNULL;
-    t_u16 payload_len = (t_u16)0U;
-    void *p           = MNULL;
-    void *p_payload   = MNULL;
-
-    if (wm_wifi.gen_pbuf_from_data2 != MNULL)
-    {
-        payload     = (t_u8 *)rxpd + rxpd->rx_pkt_offset;
-        payload_len = rxpd->rx_pkt_length;
-
-        p = wm_wifi.gen_pbuf_from_data2(payload, payload_len, &p_payload);
-
-        if (p == MNULL)
-        {
-            ret = -WM_FAIL;
-            goto consumed;
-        }
-
-        return wrapper_wlan_handle_rx_packet(len, rxpd, p, p_payload);
-    }
-#else
     if (wm_wifi.data_input_callback != NULL)
     {
         wm_wifi.data_input_callback(interface, buffer, len);
         return WM_SUCCESS;
     }
-
-#endif
 
 consumed:
 #if CONFIG_TX_RX_ZERO_COPY && !defined(RW610)

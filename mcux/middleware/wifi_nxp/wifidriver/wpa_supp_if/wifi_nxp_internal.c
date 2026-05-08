@@ -11,7 +11,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <osa.h>
-#include <wm_net.h>
 #include <wifi.h>
 #include <wifi_nxp.h>
 #include <wifi-internal.h>

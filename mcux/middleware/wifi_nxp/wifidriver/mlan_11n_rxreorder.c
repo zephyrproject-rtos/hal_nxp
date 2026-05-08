@@ -17,7 +17,7 @@ Change log:
 /* Additional WMSDK header files */
 #include <wmerrno.h>
 #include <osa.h>
-#include <wm_net.h>
+#include <nxp_wifi_net.h>
 
 /* Always keep this include at the end of all include files */
 #include <mlan_remap_mem_operations.h>

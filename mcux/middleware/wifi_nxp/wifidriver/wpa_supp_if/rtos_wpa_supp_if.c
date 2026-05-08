@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include "fsl_os_abstraction.h"
 #include "wifi.h"
-#include <wm_net.h>
+#include <nxp_wifi_net.h>
 
 #if CONFIG_WPA_SUPP
 
@@ -671,7 +671,6 @@ void wifi_nxp_wpa_supp_event_proc_disassoc(void *if_priv, nxp_wifi_event_mlme_t 
 
 int wifi_nxp_supp_state(void)
 {
-    struct net_if *iface = (struct net_if *)(void *)net_get_sta_interface();
     struct wpa_supplicant *wpa_s;
     char if_name[CONFIG_NET_INTERFACE_NAME_LEN + 1];
     int ret;
@@ -681,13 +680,13 @@ int wifi_nxp_supp_state(void)
         return 0;
     }
 
-    ret = net_if_get_name(iface, if_name, sizeof(if_name));
+    ret = nxp_net_if_get_name((void *)net_get_sta_interface(), if_name, sizeof(if_name));
     if (!ret) {
         supp_e("Cannot get interface name (%d)", ret);
         return 0;
     }
 
-    wpa_s = zephyr_get_handle_by_ifname(if_name);
+    wpa_s = nxp_zep_get_handle_by_ifname(if_name);
     if (!wpa_s) {
         supp_e("Interface %s not found", if_name);
         return 0;
@@ -699,7 +698,6 @@ int wifi_nxp_supp_state(void)
 int wifi_nxp_hapd_state(void)
 {
 #if CONFIG_WIFI_NM_HOSTAPD_AP
-    struct net_if *iface = (struct net_if *)(void *)net_get_uap_interface();
     struct hostapd_iface *hapd_if;
     char if_name[CONFIG_NET_INTERFACE_NAME_LEN + 1];
     int ret;
@@ -709,13 +707,13 @@ int wifi_nxp_hapd_state(void)
         return 0;
     }
 
-    ret = net_if_get_name(iface, if_name, sizeof(if_name));
+    ret = nxp_net_if_get_name((void *)net_get_uap_interface(), if_name, sizeof(if_name));
     if (!ret) {
         supp_e("Cannot get interface name (%d)", ret);
         return 0;
     }
 
-    hapd_if = zephyr_get_hapd_handle_by_ifname(if_name);
+    hapd_if = nxp_zep_get_hapd_handle_by_ifname(if_name);
     if (!hapd_if) {
         supp_e("Interface %s not found", if_name);
         return 0;
