@@ -12,7 +12,7 @@
 #define __WIFI_NXP_H__
 
 #include <stdio.h>
-#include <wm_net.h>
+#include <nxp_wifi_net.h>
 #if CONFIG_WPA_SUPP
 #include <drivers/driver_zephyr.h>
 

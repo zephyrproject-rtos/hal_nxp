@@ -12,7 +12,7 @@
 #include <wifi_shell.h>
 #include <cli_utils.h>
 #include <string.h>
-#include <wm_net.h> /* for net_inet_aton */
+#include <nxp_wifi_net.h> /* for net_inet_aton */
 #include <wifi.h>
 #include <wlan_tests.h>
 

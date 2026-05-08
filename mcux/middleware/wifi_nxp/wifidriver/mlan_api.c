@@ -18,7 +18,7 @@
 #include <osa.h>
 
 #include <wifi.h>
-#include <wm_net.h>
+#include <nxp_wifi_net.h>
 
 #if defined(RW610)
 #include "wifi-imu.h"

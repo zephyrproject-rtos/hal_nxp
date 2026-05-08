@@ -91,15 +91,10 @@ typedef struct
 
     osa_msgq_handle_t *wlc_mgr_event_queue;
 
-#if !CONFIG_WIFI_RX_REORDER
     void (*data_input_callback)(const uint8_t interface, const uint8_t *buffer, const uint16_t len);
-#endif
     void (*amsdu_data_input_callback)(uint8_t interface, uint8_t *buffer, uint16_t len);
     void (*deliver_packet_above_callback)(void *rxpd, t_u8 interface, t_void *lwip_pbuf);
     bool (*wrapper_net_is_ip_or_ipv6_callback)(const t_u8 *buffer);
-#if CONFIG_WIFI_RX_REORDER
-    void *(*gen_pbuf_from_data2)(t_u8 *payload, t_u16 datalen, void **p_payload);
-#endif
 
 #if CONFIG_P2P
     osa_msgq_handle_t *wfd_event_queue;
@@ -474,10 +469,6 @@ int wifi_nxp_scan_res_num(void);
 int wifi_nxp_scan_res_get2(t_u32 table_idx, nxp_wifi_event_new_scan_result_t *scan_res);
 int wifi_get_bandwidth(void);
 #endif /* CONFIG_WPA_SUPP */
-
-#if CONFIG_WIFI_RX_REORDER
-int wrapper_wlan_handle_rx_packet(t_u16 datalen, RxPD *rxpd, void *p, void *payload);
-#endif
 
 #if CONFIG_WMM
 int send_wifi_driver_tx_data_event(t_u8 interface);

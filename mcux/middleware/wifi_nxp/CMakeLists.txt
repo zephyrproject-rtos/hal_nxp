@@ -254,9 +254,7 @@ zephyr_include_directories(
     incl/wifidriver
     incl/wlcmgr
     incl/port/osa
-    incl/port/net/zephyr
     port/osa
-    port/net/zephyr
     sdio_nxp_abs/incl
     firmware_dnld
     fwdnld_intf_abs
@@ -280,8 +278,6 @@ zephyr_library_sources(
     port/osa/osa.c
     port/osa/osa_zephyr.c
 )
-# net stack abstraction layer source
-zephyr_library_sources(port/net/zephyr/net.c)
 
 file(GLOB WIFI_SRC ./wifidriver/*.c)
 list(FILTER WIFI_SRC EXCLUDE REGEX ".*imu.c$")
@@ -364,29 +360,6 @@ if(CONFIG_SPEED_OPTIMIZATIONS OR CONFIG_SIZE_OPTIMIZATIONS)
 # critical path code relocated to SRAM
 zephyr_code_relocate(FILES port/osa/osa.c
                      FILTER ".*\\.OSA_RWLockReadLock|.*\\.OSA_RWLockReadUnlock"
-                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
-
-string(JOIN "" NXP_PORT_NET_FILTER
-       ".*\\.deliver_packet_above|"
-       ".*\\.gen_pkt_from_data|"
-       ".*\\.gen_tx_pkt_from_data|"
-       ".*\\.gen_pkt_from_data_for_zerocopy|"
-       ".*\\.process_data_packet|"
-       ".*\\.handle_data_packet|"
-       ".*\\.handle_amsdu_data_packet|"
-       ".*\\.handle_deliver_packet_above|"
-       ".*\\.nxp_wifi_internal_tx|"
-       ".*\\.net_wifi_packet_send|"
-       ".*\\.net_stack_buffer_copy_partial|"
-       ".*\\.net_tx_zerocopy_process_cb|"
-       ".*\\.net_stack_buffer_alloc_rx|"
-       ".*\\.net_stack_buffer_clone_tx_frag|"
-       ".*\\.net_stack_buffer_push|"
-       ".*\\.net_stack_buffer_set_iface"
-)
-
-zephyr_code_relocate(FILES port/net/zephyr/net.c
-                     FILTER "${NXP_PORT_NET_FILTER}"
                      LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
 
 string(JOIN "" NXP_WIFIDRIVER_WIFI_FILTER
@@ -512,13 +485,7 @@ zephyr_code_relocate(FILES wifidriver/wifi-sdio.c
 
 zephyr_code_relocate(FILES
                      sdio_nxp_abs/mlan_sdio.c
-                     ${ZEPHYR_BASE}/subsys/sd/sdio.c
-                     ${ZEPHYR_BASE}/drivers/sdhc/imx_usdhc.c
                      ${MCUX_SDK_DIR}/drivers/usdhc/fsl_usdhc.c
-                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
-
-zephyr_code_relocate(FILES ${ZEPHYR_BASE}/drivers/wifi/nxp/nxp_wifi_drv.c
-                     FILTER ".*\\.nxp_wifi_send|.*\\.nxp_wifi_recv"
                      LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
 endif()
 
@@ -579,49 +546,6 @@ zephyr_code_relocate(FILES
                      ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/components/misc_utilities/fsl_memset.S
                      LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
 
-file(GLOB ZPERF_SRC ${ZEPHYR_BASE}/subsys/net/lib/zperf/*.c)
-zephyr_code_relocate(FILES ${ZPERF_SRC} LOCATION ${QUICK_ACCESS_CODE_AREA_2} NOKEEP)
-
-zephyr_code_relocate(FILES
-                     ${ZEPHYR_BASE}/subsys/net/ip/ipv6_fragment.c
-                     ${ZEPHYR_BASE}/subsys/net/ip/ipv4_fragment.c
-                     LOCATION RAM_TEXT NOKEEP)
-
-zephyr_code_relocate(FILES
-                     ${ZEPHYR_BASE}/subsys/net/ip/connection.c
-                     ${ZEPHYR_BASE}/subsys/net/ip/packet_socket.c
-                     ${ZEPHYR_BASE}/subsys/net/ip/utils.c
-                     ${ZEPHYR_BASE}/subsys/net/lib/sockets/sockets_inet.c
-                     ${ZEPHYR_BASE}/subsys/net/lib/sockets/sockets.c
-                     ${ZEPHYR_BASE}/subsys/net/ip/ipv4.c
-                     ${ZEPHYR_BASE}/subsys/net/ip/ipv6.c
-                     ${ZEPHYR_BASE}/subsys/net/ip/net_context.c
-                     ${ZEPHYR_BASE}/subsys/net/ip/net_core.c
-                     ${ZEPHYR_BASE}/subsys/net/ip/net_if.c
-                     ${ZEPHYR_BASE}/subsys/net/ip/net_pkt.c
-                     ${ZEPHYR_BASE}/subsys/net/ip/net_tc.c
-                     ${ZEPHYR_BASE}/subsys/net/ip/tcp.c
-                     ${ZEPHYR_BASE}/subsys/net/ip/udp.c
-                     ${ZEPHYR_BASE}/subsys/net/l2/ethernet/ethernet.c
-                     ${ZEPHYR_BASE}/lib/net_buf/buf.c
-                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
-
-zephyr_code_relocate(FILES
-                     ${ZEPHYR_BASE}/kernel/mem_slab.c
-                     ${ZEPHYR_BASE}/kernel/mempool.c
-                     ${ZEPHYR_BASE}/kernel/msg_q.c
-                     ${ZEPHYR_BASE}/kernel/mutex.c
-                     ${ZEPHYR_BASE}/kernel/queue.c
-                     ${ZEPHYR_BASE}/kernel/sched.c
-                     ${ZEPHYR_BASE}/kernel/sem.c
-                     ${ZEPHYR_BASE}/kernel/thread.c
-                     ${ZEPHYR_BASE}/kernel/work.c
-                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
-
-zephyr_code_relocate(FILES
-                     ${ZEPHYR_BASE}/lib/net_buf/buf_simple.c
-                     ${ZEPHYR_BASE}/subsys/net/lib/sockets/sockets_service.c
-                     LOCATION ${QUICK_ACCESS_CODE_AREA_2} NOKEEP)
 endif()
 endif()
 

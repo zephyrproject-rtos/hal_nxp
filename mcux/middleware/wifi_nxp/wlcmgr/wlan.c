@@ -13,7 +13,7 @@
 #include <wlan.h>
 #include <wifi.h>
 #include <osa.h>
-#include <wm_net.h>
+#include <nxp_wifi_net.h>
 #include <wifi-debug.h>
 #include <wlan_11d.h>
 #if CONFIG_WMSTATS
@@ -60,14 +60,9 @@
 #include  <wps_def.h>
 #endif
 #if CONFIG_WPA_SUPP
-#include <supp_main.h>
-#include <supp_api.h>
 #include <wifi_nxp.h>
 #include "utils/common.h"
 #include "rtos_wpa_supp_if.h"
-#ifdef CONFIG_WIFI_NM_HOSTAPD_AP
-#include <hapd_api.h>
-#endif
 #if CONFIG_WIFI_SHELL
 #if !CONFIG_WIFI_NM_WPA_SUPPLICANT
 #include "wpa_cli.h"
@@ -87,10 +82,6 @@
 
 #if CONFIG_NCP_BRIDGE
 #include "app_notify.h"
-#endif
-
-#if CONFIG_WIFI_RECOVERY
-#include "zephyr/net/dhcpv4_server.h"
 #endif
 
 #if CONFIG_WIFI_IND_OOB_RESET
@@ -4899,7 +4890,7 @@ static void wlcm_process_deauthentication_event(struct wifi_message *msg,
     struct wifi_connect_req_params params = {0};
 
     wlan_handle_disconnect_event(mlan_adap->priv[0]);
-    supplicant_get_wifi_conn_params(net_if_get_device((void *)netif), (void *)netif, &params);
+    nxp_supp_get_wifi_conn_params((void *)netif, &params);
 #endif
 
 #if CONFIG_WPA2_ENTP
@@ -6047,7 +6038,7 @@ static void wlcm_process_fw_hang_event(struct wifi_message *msg, enum cm_sta_sta
     if (wlan.sta_state > CM_STA_IDLE)
     {
 #if CONFIG_WPA_SUPP
-        supplicant_disconnect(net_if_get_device((void *)netif), (void *)netif);
+        nxp_supp_disconnect((void *)netif);
 #else
         wlcm_request_disconnect(next, &wlan.networks[wlan.cur_network_idx]);
         wlan_dhcp_cleanup();
@@ -6058,8 +6049,7 @@ static void wlcm_process_fw_hang_event(struct wifi_message *msg, enum cm_sta_sta
     if (is_uap_starting())
     {
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
-        netif = net_get_uap_interface();
-        net_mgmt(NET_REQUEST_WIFI_AP_DISABLE, (struct net_if *)netif, NULL, 0);
+        nxp_net_request_ap_disable();
 #else
         (void)do_stop(&wlan.networks[wlan.cur_uap_network_idx]);
 #endif
@@ -6120,9 +6110,6 @@ static enum cm_uap_state uap_state_machine(struct wifi_message *msg)
 #if !CONFIG_WIFI_NM_WPA_SUPPLICANT
     int ret                      = 0;
 #endif
-#if CONFIG_WPA_SUPP
-    struct netif *netif = net_get_uap_interface();
-#endif
 
     network = &wlan.networks[wlan.cur_uap_network_idx];
 
@@ -6138,7 +6125,7 @@ static enum cm_uap_state uap_state_machine(struct wifi_message *msg)
             break;
         case CM_UAP_USER_REQUEST_STOP:
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
-            net_mgmt(NET_REQUEST_WIFI_AP_DISABLE, (struct net_if *)netif, NULL, 0);
+            nxp_net_request_ap_disable();
 #else
             if (wlan.uap_state < CM_UAP_CONFIGURED)
             {
@@ -6196,12 +6183,6 @@ static enum cm_uap_state uap_state_machine(struct wifi_message *msg)
                     if_handle = net_get_wfd_handle();
                 }
 #endif /* CONFIG_P2P */
-#if CONFIG_WPA_SUPP
-                OSA_TimerDeactivate((osa_timer_handle_t)wlan.supp_status_timer);
-                wlan.status_timeout = 0;
-
-                wpa_supp_network_status(netif, network);
-#endif
                 ret = net_configure_address((struct net_ip_config *)&network->ip, if_handle);
                 if (ret != 0)
                 {
@@ -7005,7 +6986,7 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
 
         case CM_STA_USER_REQUEST_DISCONNECT:
 #if CONFIG_WPA_SUPP
-            supplicant_disconnect(net_if_get_device((void *)netif), (void *)netif);
+            nxp_supp_disconnect((void *)netif);
 #else
             if ((network->role == WLAN_BSS_ROLE_STA) &&
                 (network->security.type != WLAN_SECURITY_NONE && network->security.type != WLAN_SECURITY_WEP_OPEN))
@@ -8459,7 +8440,7 @@ int wlan_stop(void)
      * is called in 0xb2 CMD response. So it needs to be called here to stop DHCP server
      */
     if (wifi_recovery_enable)
-        net_dhcpv4_server_stop((struct net_if *)net_get_uap_interface());
+        nxp_net_dhcpv4_server_stop((void *)net_get_uap_interface());
 #endif
 #endif
 
@@ -10029,7 +10010,7 @@ int wlan_get_current_network_bssid(char *bssid)
     struct wifi_iface_status status;
 
     memset(&status, 0x0, sizeof(status));
-    supplicant_status(net_if_get_device((void *)netif), (void *)netif, &status);
+    nxp_supp_status((void *)netif, &status);
     memcpy(bssid, status.bssid, MLAN_MAC_ADDR_LENGTH);
     return WM_SUCCESS;
 #else
@@ -10521,44 +10502,6 @@ int wlan_stop_network(const char *name)
 #endif /* UAP_SUPPORT */
 }
 
-int wlan_remove_all_networks(void)
-{
-    void *intrfc_handle = NULL;
-
-    /* No need to remove net interfaces here, as they are added only once.
-     * Moreover, removing and adding net interface will increase netif_num cumulatively,
-     * which will mismatch with "ua2" during creating dhcpd.
-     */
-    wifi_reset_set_state(true);
-    wlan_remove_all_network_profiles();
-
-    intrfc_handle = net_get_sta_handle();
-    net_if_down(((interface_t *)intrfc_handle)->netif);
-
-#if UAP_SUPPORT
-    intrfc_handle = net_get_uap_handle();
-    net_if_down(((interface_t *)intrfc_handle)->netif);
-#endif
-    /* wait for mgmt_event handled */
-    OSA_TimeDelay(500);
-
-    return WM_SUCCESS;
-}
-
-int wlan_enable_all_networks(void)
-{
-    void *intrfc_handle = NULL;
-
-    intrfc_handle = net_get_sta_handle();
-    net_if_up(((interface_t *)intrfc_handle)->netif);
-
-#if UAP_SUPPORT
-    intrfc_handle = net_get_uap_handle();
-    net_if_up(((interface_t *)intrfc_handle)->netif);
-#endif
-    return WM_SUCCESS;
-}
-
 void wlan_destroy_all_tasks(void)
 {
     OSA_LockSchedule();
@@ -10669,7 +10612,7 @@ void wlan_reset(cli_reset_option ResetOption)
                 uap_prov_deinit_cb();
 #endif
             /* Stop and Remove all network interfaces */
-            wlan_remove_all_networks();
+            nxp_net_remove_all_networks();
 
             (void)net_wlan_deinit();
 
@@ -10749,7 +10692,7 @@ void wlan_reset(cli_reset_option ResetOption)
             net_wlan_set_mac_address(&wlan.sta_mac[0], NULL);
 #endif
 #endif
-            wlan_enable_all_networks();
+            nxp_net_enable_all_networks();
 
             /* Unblock TX data */
             wifi_set_tx_status(WIFI_DATA_RUNNING);
@@ -13404,7 +13347,7 @@ int wlan_pmksa_flush(void)
 #if !CONFIG_WIFI_NM_WPA_SUPPLICANT
     return wpa_supp_pmksa_flush(netif);
 #else
-    return supplicant_pmksa_flush(net_if_get_device((void *)netif), (void *)netif);
+    return nxp_supp_pmksa_flush((void *)netif);
 #endif
 }
 
@@ -15870,30 +15813,30 @@ static void wlan_uap_update_hostapd_bss(wlan_bandcfg_t *bandcfg)
 
     if (bandcfg->band_cfg & WLAN_BANDCFG_11N)
     {
-        hostapd_11n_cfg(net_if_get_device((void *)netif), (void *)netif, 1);
+        nxp_hapd_11n_cfg((void *)netif, 1);
     }
     else
     {
-        hostapd_11n_cfg(net_if_get_device((void *)netif), (void *)netif, 0);
+        nxp_hapd_11n_cfg((void *)netif, 0);
     }
 #if CONFIG_11AC
     if (bandcfg->band_cfg & WLAN_BANDCFG_11AC)
     {
-        hostapd_11ac_cfg(net_if_get_device((void *)netif), (void *)netif, 1);
+        nxp_hapd_11ac_cfg((void *)netif, 1);
     }
     else
     {
-        hostapd_11ac_cfg(net_if_get_device((void *)netif), (void *)netif, 0);
+        nxp_hapd_11ac_cfg((void *)netif, 0);
     }
 #endif
 #if CONFIG_11AX
     if (bandcfg->band_cfg & WLAN_BANDCFG_11AX)
     {
-        hostapd_11ax_cfg(net_if_get_device((void *)netif), (void *)netif, 1);
+        nxp_hapd_11ax_cfg((void *)netif, 1);
     }
     else
     {
-        hostapd_11ax_cfg(net_if_get_device((void *)netif), (void *)netif, 0);
+        nxp_hapd_11ax_cfg((void *)netif, 0);
     }
 #endif
 }

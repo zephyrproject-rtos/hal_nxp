@@ -12,7 +12,7 @@
 #include <string.h>
 
 #include <osa.h>
-#include <wm_net.h>
+#include <nxp_wifi_net.h>
 #include <wifi.h>
 #include <wifi-debug.h>
 

@@ -16,7 +16,7 @@
 #include <wm_utils.h>
 #include <cli_utils.h>
 #include <ctype.h>
-#include <wm_net.h> /* for errno */
+#include <nxp_wifi_net.h> /* for errno */
 
 bool string_equal(const char *s1, const char *s2)
 {

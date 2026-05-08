@@ -246,7 +246,6 @@ void wifi_set_rx_status(t_u8 status);
  */
 void reset_ie_index();
 
-#if !CONFIG_WIFI_RX_REORDER
 /**
  * Register Data callback function with Wi-Fi Driver to receive
  * DATA from SDIO.
@@ -264,13 +263,6 @@ int wifi_register_data_input_callback(void (*data_input_callback)(const uint8_t 
 
 /** Deregister Data callback function from Wi-Fi Driver */
 void wifi_deregister_data_input_callback(void);
-#else
-int wifi_register_gen_pbuf_from_data2_callback(void *(*gen_pbuf_from_data2)(t_u8 *payload,
-                                                                            t_u16 datalen,
-                                                                            void **p_payload));
-
-void wifi_deregister_gen_pbuf_from_data2_callback(void);
-#endif
 
 /**
  * Register Data callback function with Wi-Fi Driver to receive

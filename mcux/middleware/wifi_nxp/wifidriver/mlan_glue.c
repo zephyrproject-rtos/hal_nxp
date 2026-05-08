@@ -29,7 +29,7 @@
 #include <stdio.h>
 #endif
 
-#include <wm_net.h>
+#include <nxp_wifi_net.h>
 #if CONFIG_WPA_SUPP
 #include "wifi_nxp.h"
 #endif

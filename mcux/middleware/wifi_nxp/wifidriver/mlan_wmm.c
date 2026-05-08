@@ -19,7 +19,7 @@ Change log:
 #include <wmerrno.h>
 #include <osa.h>
 #if CONFIG_TX_RX_ZERO_COPY
-#include <wm_net.h>
+#include <nxp_wifi_net.h>
 #endif
 /* Always keep this include at the end of all include files */
 #include <mlan_remap_mem_operations.h>

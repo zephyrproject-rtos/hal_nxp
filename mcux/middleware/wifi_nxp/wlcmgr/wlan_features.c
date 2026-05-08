@@ -11,7 +11,7 @@
 #include <wlan.h>
 #include <cli_utils.h>
 #include <string.h>
-#include <wm_net.h> /* for net_inet_aton */
+#include <nxp_wifi_net.h> /* for net_inet_aton */
 #include <wifi.h>
 
 #if CONFIG_WIFI_FEATURES
