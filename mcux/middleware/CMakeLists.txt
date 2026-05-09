@@ -43,3 +43,9 @@ if(CONFIG_ENTROPY_NXP_ELE_TRNG)
         ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/src/sscp/fsl_sscp_mu.c
     )
 endif()
+
+if(CONFIG_NXP_NEUTRON)
+  add_subdirectory(
+    ${CMAKE_CURRENT_LIST_DIR}/neutron
+  )
+endif()
