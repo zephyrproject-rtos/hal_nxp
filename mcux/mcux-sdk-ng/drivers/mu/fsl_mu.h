@@ -784,7 +784,7 @@ static inline void MU_MaskHardwareReset(MU_Type *base, bool mask)
     {
         base->CCR &= ~MU_CCR_HRM_MASK;
     }
-#else  /* FSL_FEATURE_MU_HAS_CCR */
+#elif defined(MU_CR_HRM_MASK)  /* FSL_FEATURE_MU_HAS_CCR */
     if (mask)
     {
         base->CR |= MU_CR_HRM_MASK;
@@ -793,7 +793,16 @@ static inline void MU_MaskHardwareReset(MU_Type *base, bool mask)
     {
         base->CR &= ~MU_CR_HRM_MASK;
     }
-#endif /* FSL_FEATURE_MU_HAS_CCR */
+#else
+    /*
+     * Some MU variants (e.g. i.MX 8M Plus PERI_MU.h) do not define
+     * MU_CR_HRM_MASK because the MU has neither a CCR register nor an
+     * HRM bit in CR. The HRM feature is unsupported on these parts,
+     * so this function is a no-op.
+     */
+    (void)base;
+    (void)mask;
+#endif /* FSL_FEATURE_MU_HAS_CCR / MU_CR_HRM_MASK */
 }
 #endif /* FSL_FEATURE_MU_HAS_HRM */
 
@@ -902,9 +911,20 @@ static inline void MU_SetClockOnOtherCoreEnable(MU_Type *base, bool enable)
  */
 static inline mu_power_mode_t MU_GetOtherCorePowerMode(MU_Type *base)
 {
+#if defined(MU_SR_PM_MASK) && defined(MU_SR_PM_SHIFT)
     uint32_t ret = (base->SR & MU_SR_PM_MASK) >> MU_SR_PM_SHIFT;
 
     return (mu_power_mode_t)ret;
+#else
+    /*
+     * Some MU variants (e.g. i.MX 8M Plus PERI_MU.h) do not define
+     * MU_SR_PM_MASK / MU_SR_PM_SHIFT because the MU SR register has
+     * no PM (other-core power-mode) field. Return a benign default
+     * (kMU_PowerModeRun) on those parts.
+     */
+    (void)base;
+    return (mu_power_mode_t)0;
+#endif /* MU_SR_PM_MASK && MU_SR_PM_SHIFT */
 }
 #endif /* FSL_FEATURE_MU_NO_PM */
 
