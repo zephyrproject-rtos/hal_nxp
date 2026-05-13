@@ -1,4 +1,4 @@
-/* Copyright 2021-2025 NXP
+/* Copyright 2021-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -381,7 +381,7 @@ blec_result_t BLEController_Init(blecHostHciRecvCallback_t callback,
     const int ll_irq_prio = NVIC_GetPriority(BLE_LL_IRQn);
 
     /* Make sure LL interrupt has the highest priority (only check enabled interrupts). This is a prerequisite of the system. */
-    for (int irq = 0; irq <= WAKE_PAD_IRQn; irq++)
+    for (int irq = 0; irq <= CDOG_IRQn; irq++)
     {
         if(NVIC_GetEnableIRQ(irq) &&
                 irq != BLE_LL_IRQn &&
