@@ -53,9 +53,11 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#ifndef CONFIG_ARM_SCMI
 #include "scmi.h"
 #include "scmi_internal.h"
 #include "smt.h"
+#endif
 
 #define DEFAULT_SYSTEM_CLOCK 800000000u
 
