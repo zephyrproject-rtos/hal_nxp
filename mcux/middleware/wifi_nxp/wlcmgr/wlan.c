@@ -4773,7 +4773,7 @@ static void wlcm_process_link_loss_event(struct wifi_message *msg,
     }
     else
     {
-#if defined(CONFIG_NET_DHCPV4)
+#if defined(CONFIG_WIFI_STA_AUTO_DHCPV4)
         /* Stop the dhcp timer first after link lost occurs, as the dhcp timer
          * callback may lead to that the connection state is out-of-sync with FW */
         net_stop_dhcp_timer();
@@ -5013,7 +5013,9 @@ static void wlcm_process_net_dhcp_config(struct wifi_message *msg,
         g_wm_stats.wm_dhcp_succ++;
 #endif /* CONFIG_WMSTATS */
         wlcm_d("got event: DHCP success");
+#if defined(CONFIG_WIFI_STA_AUTO_DHCPV4)
         net_stop_dhcp_timer();
+#endif
         net_configure_dns((struct net_ip_config *)&network->ip, network->role);
         if (network->type == WLAN_BSS_TYPE_STA)
         {
@@ -6457,7 +6459,7 @@ static void wlcm_request_disconnect(enum cm_sta_state *next, struct wlan_network
         wlcm_w("No interface is up");
         return;
     }
-#if defined(CONFIG_NET_DHCPV4)
+#if defined(CONFIG_WIFI_STA_AUTO_DHCPV4)
     net_stop_dhcp_timer();
 #endif
     /* Forcefully stop dhcp on given interface.
@@ -8595,7 +8597,7 @@ void wlan_initialize_sta_network(struct wlan_network *net)
     net->type = WLAN_BSS_TYPE_STA;
     /* Set network role to sta */
     net->role = WLAN_BSS_ROLE_STA;
-#if defined(CONFIG_NET_DHCPV4)
+#if defined(CONFIG_WIFI_STA_AUTO_DHCPV4)
     /* Specify address type as dynamic assignment */
     net->ip.ipv4.addr_type = ADDR_TYPE_DHCP;
 #endif
