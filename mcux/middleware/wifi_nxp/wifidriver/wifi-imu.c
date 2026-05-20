@@ -142,7 +142,7 @@ static uint8_t dev_fw_ver_ext[MLAN_MAX_VER_STR_LEN];
 #if CONFIG_HOST_SLEEP
 extern int is_hs_handshake_done;
 extern bool skip_hs_handshake;
-extern void wlan_hs_hanshake_cfg(bool skip);
+extern void wlan_hs_handshake_cfg(bool skip);
 #endif
 
 static void wifi_init_imulink(void)
@@ -181,7 +181,7 @@ static hal_imumc_status_t wifi_send_fw_cmd(t_u16 cmd_type, t_u8 *cmd_payload, t_
 #if CONFIG_HOST_SLEEP
     if (is_hs_handshake_done == WLAN_HOSTSLEEP_SUCCESS)
     {
-        wlan_hs_hanshake_cfg(false);
+        wlan_hs_handshake_cfg(false);
     }
 #endif
     return kStatus_HAL_ImumcSuccess;
@@ -195,7 +195,7 @@ static hal_imumc_status_t wifi_send_fw_data(t_u8 *data, t_u32 length)
 #if CONFIG_HOST_SLEEP
     if (is_hs_handshake_done == WLAN_HOSTSLEEP_SUCCESS)
     {
-        wlan_hs_hanshake_cfg(false);
+        wlan_hs_handshake_cfg(false);
     }
 #endif
     return HAL_ImuSendTxData(kIMU_LinkCpu1Cpu3, data, length);
@@ -1273,7 +1273,7 @@ mlan_status wlan_flush_wmm_pkt(int pkt_cnt)
 #if CONFIG_HOST_SLEEP
     if (is_hs_handshake_done == WLAN_HOSTSLEEP_SUCCESS)
     {
-        wlan_hs_hanshake_cfg(false);
+        wlan_hs_handshake_cfg(false);
     }
 #endif
 
@@ -1395,7 +1395,7 @@ hal_imumc_status_t imumc_cmdrsp_handler(IMU_Msg_t *pImuMsg, uint32_t length)
     /* Clear host sleep flags to enable host sleep for next low power round */
     else if (skip_hs_handshake == true)
     {
-        wlan_hs_hanshake_cfg(false);
+        wlan_hs_handshake_cfg(false);
     }
 #endif
 
@@ -1421,7 +1421,7 @@ hal_imumc_status_t imumc_event_handler(IMU_Msg_t *pImuMsg, uint32_t length)
     }
     else if (skip_hs_handshake == true)
     {
-        wlan_hs_hanshake_cfg(false);
+        wlan_hs_handshake_cfg(false);
     }
 #endif
 
@@ -1460,7 +1460,7 @@ hal_imumc_status_t imumc_rxpkt_handler(IMU_Msg_t *pImuMsg, uint32_t length)
     }
     else if (skip_hs_handshake == true)
     {
-        wlan_hs_hanshake_cfg(false);
+        wlan_hs_handshake_cfg(false);
     }
 #endif
 
