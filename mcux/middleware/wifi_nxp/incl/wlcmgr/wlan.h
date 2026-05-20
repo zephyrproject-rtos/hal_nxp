@@ -2425,6 +2425,12 @@ void wlan_destroy_all_tasks(void);
  */
 int wlan_is_started(void);
 
+/** Retrieve the status information if Wi-Fi is stopped.
+ * \return TRUE if Wi-Fi network is stopped.
+ * \return FALSE if not stopped.
+ */
+int wlan_is_stopped(void);
+
 #if CONFIG_NCP_BRIDGE
 /** uAP provisioning deinit callback function */
 void wlan_register_uap_prov_deinit_cb(int (*cb)(void));
