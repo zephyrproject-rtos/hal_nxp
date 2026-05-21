@@ -1,6 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/*                           Copyright 2021-2024 NXP                          */
-/*                            All rights reserved.                            */
+/*                           Copyright 2021-2026 NXP                          */
 /*                    SPDX-License-Identifier: BSD-3-Clause                   */
 /* -------------------------------------------------------------------------- */
 
@@ -76,6 +75,15 @@ int PLATFORM_SetHciRxCallback(void (*callback)(uint8_t packetType, uint8_t *data
  * \return int return status: >=0 for success, <0 for errors
  */
 int PLATFORM_SendHciMessage(uint8_t *msg, uint32_t len);
+
+/*!
+ * \brief Remap the BLE Controller priority to higher
+ *
+ * \param[in] enable: 1 - remap the ble priority to higher
+ *                    0 - remap the ble priority to default
+ * \return int return status: >=0 for success, <0 for errors
+ */
+int PLATFORM_BlePriorityRemap(uint8_t enable);
 
 /*!
  * \brief Allows BLE Controller to enter low power

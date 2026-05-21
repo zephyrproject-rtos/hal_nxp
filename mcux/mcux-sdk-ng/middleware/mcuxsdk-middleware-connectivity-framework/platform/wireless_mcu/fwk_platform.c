@@ -16,17 +16,18 @@
 #include "fwk_platform.h"
 #include "fwk_config.h"
 #include "fwk_platform_ics.h"
-// #if (defined(FPGA_TARGET) && (FPGA_TARGET != 0))
-// #include "fwk_platform_fpga.h"
-// #endif
+#if (defined(FPGA_TARGET) && (FPGA_TARGET != 0))
+#include "fwk_platform_fpga.h"
+#endif
 
-#if !(defined(FPGA_TARGET) && (FPGA_TARGET != 0))
 #include "fsl_ccm32k.h"
 #include "fsl_spc.h"
-#endif
 
 #include "fsl_os_abstraction.h"
 #include "fsl_adapter_rpmsg.h"
+#if (defined gPlatformHasRFPowerDomain_d && (gPlatformHasRFPowerDomain_d == 1))
+#include "fsl_cmc.h"
+#endif
 
 #include "rpmsg_platform.h"
 
@@ -144,14 +145,14 @@
  */
 typedef struct
 {
-    uint64_t initial_ts;      /*< Timestamp Read from TSTMR L and H */
-    uint32_t core_cycles_1us; /*< Number of cycles per microsecond */
-    uint8_t  ratio;           /*< result of calibration : normally 1 may be 3 if FRO is beating at 2MHz */
-    bool     started;         /*< true if calibration initiated */
-    bool     trcena_state;    /*< tells whether trace was enabled or not */
-    bool     dwt_state;       /*< true whether DWT was enabled already or not */
+    uint64_t initial_ts;            /*< Timestamp Read from TSTMR L and H */
+    uint32_t core_cycles_1us;       /*< Number of cycles per microsecond */
+    uint32_t initial_systick_count; /*< Initial SysTick counter value */
+    uint32_t saved_systick_ctrl;    /*< Saved SysTick CTRL register */
+    uint32_t saved_systick_load;    /*< Saved SysTick LOAD register */
+    uint8_t  ratio;                 /*< result of calibration : normally 1 may be 3 if FRO is beating at 2MHz */
+    bool     started;               /*< true if calibration initiated */
 } Platform_Fro6MCalCtx_t;
-
 /* -------------------------------------------------------------------------- */
 /*                         Private memory declarations                        */
 /* -------------------------------------------------------------------------- */
@@ -172,21 +173,24 @@ static uint8_t fwk_platform_FRO6MHz_ratio = 1u;
 static const xtal_temp_comp_lut_t *pXtal32MTempCompLut = NULL;
 
 /****************** LOWPOWER ***********************/
-/* Number of request for CM3 to remain active */
+#if ((defined(gPlatformRequiresPowerDomainWakeup)) && (gPlatformRequiresPowerDomainWakeup > 0))
+/* Number of request for radio domain to remain active */
 static int8_t active_request_nb = 0;
+#endif
 
 PLATFORM_ErrorCallback_t pfPlatformErrorCallback = (void *)0;
 
 /* Used and instantiated only if FRO6M calibration is linked */
 static Platform_Fro6MCalCtx_t fro6M_calibration_ctx = {
-    .ratio = 1U, .started = false, .dwt_state = false, .trcena_state = false};
+    .ratio   = 1U,
+    .started = false,
+};
 
 static volatile uint32_t last_nbu_sw_state = 0U;
 
 /* -------------------------------------------------------------------------- */
 /*                              Private functions                              */
 /* -------------------------------------------------------------------------- */
-
 static int PLATFORM_SetXtalTempComp(const xtal_temp_comp_lut_t *lut, int16_t temperature)
 {
     int     ret = 0;
@@ -237,7 +241,7 @@ static int PLATFORM_SetXtalTempComp(const xtal_temp_comp_lut_t *lut, int16_t tem
 
     return ret;
 }
-
+#if ((defined(gPlatformRequiresPowerDomainWakeup)) && (gPlatformRequiresPowerDomainWakeup > 0))
 /*!
  * \brief Set interrupt mask to block interrupts below a certain priority level.
  *
@@ -290,6 +294,48 @@ static void PLATFORM_ClearInterruptMask(uint32_t int_mask)
     __DSB();
     __ISB();
 }
+#endif
+/*!
+ * \brief Allow keeping debugger on other core as one goes to sleep.
+ */
+static void PLATFORM_DebuggerLowPowerConfigure(void)
+{
+#if (defined(FWK_KW47_MCXW72_FAMILIES) && (FWK_KW47_MCXW72_FAMILIES == 1)) || \
+    (defined(FWK_KW43_MCXW70_FAMILIES) && (FWK_KW43_MCXW70_FAMILIES == 1))
+    /* Allow the debugger to wakeup the target */
+    RFMC->RF2P4GHZ_CFG |= RFMC_RF2P4GHZ_CFG_FORCE_DBG_PWRUP_ACK_MASK;
+    CMC0->DBGCTL &= ~CMC_DBGCTL_SOD_MASK;
+#endif
+}
+
+#if (defined(gPlatformHasRFPowerDomain_d) && (gPlatformHasRFPowerDomain_d == 1))
+/*!
+ * \brief Set Power Mode for RF / NBU power domain (sleep or deep sleep).
+ */
+static void PLATFORM_SetNbuPowerMode(void)
+{
+    uint32_t lpm_val     = kCMC_SleepMode; /* TODO replace by kCMC_DeepSleepMode when ready */
+    uint32_t cur_pm_prot = CMC_0->PMPROT;
+    if ((CMC_0->PMPROT & CMC_PMPROT_LOCK_MASK) == 0)
+    {
+        cur_pm_prot &= CMC_PMPROT_LPMODE_MASK;
+        cur_pm_prot >>= CMC_PMPROT_LPMODE_SHIFT;
+        if ((cur_pm_prot & lpm_val) != lpm_val)
+        {
+            CMC_SetPowerModeProtection(CMC_0, kCMC_AllowAllLowPowerModes);
+        }
+        CMC_0->PMCTRL[2] = CMC_PMCTRL_LPMODE(lpm_val); /* rf : PMCTRLPD2 */
+    }
+    else
+    {
+        if ((cur_pm_prot & lpm_val) != lpm_val)
+        {
+            assert(0);
+        }
+    }
+}
+#endif
+
 /* -------------------------------------------------------------------------- */
 /*                              Public functions                              */
 /* -------------------------------------------------------------------------- */
@@ -309,6 +355,7 @@ void PLATFORM_SetLowPowerFlag(bool PwrDownOngoing)
     {
         val = PLATFORM_HOST_USE_POWER_DOWN;
     }
+
     *p_lp_flag = val;
 }
 
@@ -347,11 +394,9 @@ int PLATFORM_InitNbu(void)
         RFMC->RF2P4GHZ_CTRL = rfmc_ctrl;
         RFMC->RF2P4GHZ_TIMER |= RFMC_RF2P4GHZ_TIMER_TIM_EN(0x1U);
 
-#if (defined(FWK_KW47_MCXW72_FAMILIES) && (FWK_KW47_MCXW72_FAMILIES == 1)) || \
-    (defined(FWK_KW43_MCXW70_FAMILIES) && (FWK_KW43_MCXW70_FAMILIES == 1))
-        /* Allow the debugger to wakeup the target */
-        RFMC->RF2P4GHZ_CFG |= RFMC_RF2P4GHZ_CFG_FORCE_DBG_PWRUP_ACK_MASK;
-        CMC0->DBGCTL &= ~CMC_DBGCTL_SOD_MASK;
+        PLATFORM_DebuggerLowPowerConfigure();
+#if (defined(gPlatformHasRFPowerDomain_d) && (gPlatformHasRFPowerDomain_d == 1))
+        PLATFORM_SetNbuPowerMode();
 #endif
         regPrimask = DisableGlobalIRQ();
         timestamp  = PLATFORM_GetTimeStamp();
@@ -460,7 +505,6 @@ void PLATFORM_GetMCUUid(uint8_t *aOutUid16B, uint8_t *pOutLen)
     Chip_GetUID(aOutUid16B, pOutLen);
 }
 
-#if !(defined(FPGA_TARGET) && (FPGA_TARGET != 0))
 int PLATFORM_InitFro32K(void)
 {
     /* Enable the fro32k and select it as 32k clock source and disable osc32k
@@ -716,7 +760,6 @@ void PLATFORM_SetXtal32MhzTrim(uint8_t trimValue, bool_t saveToHwParams)
 
     RFMC->XO_TEST = rfmc_xo;
 }
-#endif
 
 int PLATFORM_InitTimerManager(void)
 {
@@ -852,7 +895,6 @@ void PLATFORM_Delay(uint64_t delayUs)
 
 void PLATFORM_DisableControllerLowPower(void)
 {
-#if !(defined(FPGA_TARGET) && (FPGA_TARGET != 0))
     /* Increase active request number so it is always asserted while Controller
      * is not allowed to go to low power
      * This will avoid going through the wake up procedure each time
@@ -867,11 +909,11 @@ void PLATFORM_DisableControllerLowPower(void)
      * Note: If NBU is already in low power, this will apply to next Idle period
      */
     RF_CMC1->RADIO_LP |= RF_CMC1_RADIO_LP_BLE_WKUP_MASK;
-#endif
 }
 
 void PLATFORM_RemoteActiveReq(void)
 {
+#if ((defined(gPlatformRequiresPowerDomainWakeup)) && (gPlatformRequiresPowerDomainWakeup > 0))
     BOARD_DBGLPIOSET(1, 1);
     BOARD_DBGLPIOSET(0, 1);
 
@@ -991,10 +1033,12 @@ void PLATFORM_RemoteActiveReq(void)
     PLATFORM_InitRadio();
 
     BOARD_DBGLPIOSET(0, 0);
+#endif
 }
 
 void PLATFORM_RemoteActiveRel(void)
 {
+#if ((defined(gPlatformRequiresPowerDomainWakeup)) && (gPlatformRequiresPowerDomainWakeup > 0))
     BOARD_DBGLPIOSET(0, 1);
 
     /* Determine the context we are being called */
@@ -1102,6 +1146,7 @@ void PLATFORM_RemoteActiveRel(void)
     PLATFORM_ClearInterruptMask(intMask);
 
     BOARD_DBGLPIOSET(0, 0);
+#endif
 }
 void PLATFORM_GetResetCause(PLATFORM_ResetStatus_t *reset_status)
 {
@@ -1170,22 +1215,45 @@ int PLATFORM_ClearIoIsolationFromLowPower(void)
 #endif
     return ret;
 }
-
 int PLATFORM_StartFro6MCalibration(void)
 {
     Platform_Fro6MCalCtx_t *ctx = &fro6M_calibration_ctx;
-    /* Remember initial state to be able to restore as was */
-    ctx->trcena_state = (bool)((CoreDebug->DEMCR & CoreDebug_DEMCR_TRCENA_Msk) != 0U);
-    ctx->dwt_state    = (bool)((DWT->CTRL & 1U) != 0U);
 
     *FWK_MRCC_TSTMR0_REG = FWK_MRCC_TSTMR0_CC(FWK_MRCC_TSTMR0_CLK_EN_LP_STALL_IDLE);
 
-    CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
-    ctx->initial_ts = PLATFORM_GetTimeStamp();
+    /* Save current SysTick state */
+    ctx->saved_systick_ctrl = SysTick->CTRL;
+    ctx->saved_systick_load = SysTick->LOAD; /* Save original LOAD value */
 
-    DWT->CYCCNT = 0U;                                   /* Reset cycle counter */
-    DWT->CTRL |= 1U;                                    /* enable cycle counter */
-    ctx->core_cycles_1us = SystemCoreClock / 1000000UL; /* after the start of CYCCNT to consume time */
+    if (ctx->saved_systick_ctrl == 0x0U)
+    {
+        /* SysTick not in use - we own it, configure freely */
+
+        /* Configure with max reload value for longest period without wrap */
+        SysTick->LOAD = 0x00FFFFFFU;
+        SysTick->VAL  = 0U; /* Clear to force reload */
+
+        /* Enable with processor clock, no interrupt */
+        SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk;
+    }
+    else
+    {
+        /* SysTick in use - don't touch LOAD or VAL, just ensure it's running */
+
+        /* If disabled (tickless idle), temporarily enable it */
+        if ((ctx->saved_systick_ctrl & SysTick_CTRL_ENABLE_Msk) == 0U)
+        {
+            SysTick->CTRL = ctx->saved_systick_ctrl | SysTick_CTRL_ENABLE_Msk;
+        }
+        /* VAL and LOAD remain untouched */
+    }
+
+    /* Capture timing references as close together as possible for better accuracy */
+    ctx->initial_ts            = PLATFORM_GetTimeStamp();
+    ctx->initial_systick_count = SysTick->VAL;
+
+    /* Compute this after taking measurements to use time efficiently */
+    ctx->core_cycles_1us = SystemCoreClock / 1000000UL;
 
     ctx->started = true;
     return 0;
@@ -1195,44 +1263,47 @@ int PLATFORM_EndFro6MCalibration(void)
 {
     int                     st;
     Platform_Fro6MCalCtx_t *ctx = &fro6M_calibration_ctx;
-    volatile uint32_t       cyc;
+    uint32_t                current_systick_count;
+    uint32_t                elapsed_cycles;
     uint64_t                now;
     uint64_t                tstmr_ticks_delta;
     uint32_t                cyc_for_6us;
     uint32_t                nb_usec_core;
     uint32_t                nb_usec_tstmr;
     uint32_t                ratio;
+
     if (ctx->started)
     {
         cyc_for_6us = 6u * ctx->core_cycles_1us;
+
+        /* Wait until 6us have elapsed using SysTick counter */
         do
         {
-            /* spin here until 6us have elapsed since the DWT->CYCNT reset in PLATFORM_StartFro6MCalibration() */
-            cyc = DWT->CYCCNT;
-        } while (cyc < cyc_for_6us);
+            current_systick_count = SysTick->VAL;
+            /* Calculate elapsed cycles (SysTick counts down) */
+            if (current_systick_count <= ctx->initial_systick_count)
+            {
+                elapsed_cycles = ctx->initial_systick_count - current_systick_count;
+            }
+            else
+            {
+                /* Handle wrap - read LOAD directly from register */
+                elapsed_cycles = (ctx->initial_systick_count + (SysTick->LOAD - current_systick_count) + 1U);
+            }
+        } while (elapsed_cycles < cyc_for_6us);
 
         /* Read current TSTMR value */
         now = PLATFORM_GetTimeStamp();
 
-        /* tstmr_tick_diff should be a number of microseconds if FRO6M has correctly locked */
         tstmr_ticks_delta = PLATFORM_GetTstmrDeltaTicks(ctx->initial_ts, now);
 
         if (tstmr_ticks_delta < (uint64_t)UINT32_MAX)
         {
-            nb_usec_core  = cyc / ctx->core_cycles_1us;
+            nb_usec_core  = elapsed_cycles / ctx->core_cycles_1us;
             nb_usec_tstmr = (uint32_t)tstmr_ticks_delta;
 
-            /* Multiply nb_usec_core by 10 so as to avoid loss of precision when dividing */
             ratio = (10u * nb_usec_core) / nb_usec_tstmr;
 
-            /* FRO-6M is supposed to oscillate at 6MHz as its name hints : if by lack of luck it has locked on 2MHz,
-             * the actual ratio between the clocks is 6MHz/2MHz i.e. 3.
-             * In the worst case, having waited for a duration of 6us guarantees to have nb_usec_core >= 6.
-             * tstmr_ticks_delta is guaranteed to be greater than 4 if the clock was actually 6MHz.
-             * In the 2MHz case, tstmr_ticks_delta will be comprised between 1 and 3.
-             * Hence the comparison of the ratio with 20.
-             *
-             */
             if (ratio < 20U)
             {
                 ctx->ratio = 1U; /* 6MHz Ok */
@@ -1246,31 +1317,36 @@ int PLATFORM_EndFro6MCalibration(void)
         }
         else
         {
-            /* Error case the tick difference ought to remain relatively small and remain much smaller than UINT32_MAX
-             */
-            ctx->ratio = 1u; /* 6MHz Ok */
+            ctx->ratio = 1u;
             st         = 2;
             assert(tstmr_ticks_delta < (uint64_t)UINT32_MAX);
         }
+
         fwk_platform_FRO6MHz_ratio = ctx->ratio;
-        if (!ctx->trcena_state)
+
+        /* Restore SysTick state */
+        if (ctx->saved_systick_ctrl == 0x0U)
         {
-            CoreDebug->DEMCR &= ~CoreDebug_DEMCR_TRCENA_Msk;
-            ctx->trcena_state = false;
+            /* We owned SysTick - restore it to original unused state */
+            SysTick->CTRL = 0U;                      /* Disable first */
+            SysTick->LOAD = ctx->saved_systick_load; /* Restore original LOAD */
+            SysTick->VAL  = 0U;                      /* Clear VAL */
         }
-        if (!ctx->dwt_state)
+        else
         {
-            DWT->CTRL &= ~1U;
+            /* SysTick was in use - just restore CTRL (may re-disable if in tickless) */
+            SysTick->CTRL = ctx->saved_systick_ctrl;
+            /* LOAD and VAL remain as they are */
         }
+
         ctx->started = false;
     }
     else
     {
-        st = 1; /* was not started */
+        st = 1;
     }
     return st;
 }
-
 void PLATFORM_RegisterXtal32MTempCompLut(const xtal_temp_comp_lut_t *lut)
 {
     pXtal32MTempCompLut = lut;

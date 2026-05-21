@@ -17,12 +17,17 @@
  * ADC on a channel*/
 #define gSensorsAdcCalibrationDurationInMs_c 4U
 
+/* Platform does not require a power-domain wakeup sequence prior to access */
+#define gPlatformRequiresPowerDomainWakeup 0
+
 /*
- * KW45/K32W148 CM33 core has the DSP extension (__DSP_PRESENT), which allows the use of the NXP UltraFast EC P256
+ * KW43/MCXW70 CM33 core has the DSP extension (__DSP_PRESENT), which allows the use of the NXP UltraFast EC P256
  * library. The flags may be set to 0 if this library is not required. It mainly makes sense for Matter SPAKE2P
  * procedures and for BLE point validation.
  */
+#ifndef gSecLibUseDspExtension_d
 #define gSecLibUseDspExtension_d 1
+#endif
 
 /*********************************************************************
  *        HW parameters enablement and placement
@@ -76,8 +81,8 @@
  */
 #ifndef gHwParamsProdDataPlacement_c
 //#define gHwParamsProdDataPlacement_c gHwParamsProdDataMainFlashMode_c
-#define gHwParamsProdDataPlacement_c gHwParamsProdDataMainFlash2IfrMode_c
-//#define gHwParamsProdDataPlacement_c gHwParamsProdDataIfrMode_c
+//#define gHwParamsProdDataPlacement_c gHwParamsProdDataMainFlash2IfrMode_c
+#define gHwParamsProdDataPlacement_c gHwParamsProdDataIfrMode_c
 #endif
 
 #if (gHwParamsProdDataPlacement_c == gHwParamsProdDataMainFlashMode_c)
@@ -158,9 +163,6 @@
 
 /* Use the RNG HAL API from the SDK */
 #define gRngUseRngAdapter_c 1
-
-/* do not use TRNG in RNG for now */
-#undef FSL_FEATURE_SOC_TRNG_COUNT
 
 /*********************************************************************
  *        SecLib

@@ -93,4 +93,13 @@ extern uint32_t PROD_DATA_BASE_ADDR[];
 #define FWK_TSRMR0_BASE           (0x40030000U)
 #define FWK_TSTMR_NB_INST         1U
 
+/*********************************************************************
+ *        LPTMR settings
+ *********************************************************************/
+
+/*Lptmr timer use (kLPTMR_PrescalerClock_2) 32k clock*/
+#ifndef PLATFORM_TM_CLK_SELECT
+#define PLATFORM_TM_CLK_SELECT 2U
+#endif
+
 #endif /* _FWK_PLAT_DEFS_H_ */

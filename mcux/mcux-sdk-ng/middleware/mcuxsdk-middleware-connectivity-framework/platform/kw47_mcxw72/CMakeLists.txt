@@ -56,19 +56,4 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.platform.kw47_mcxw72)
             CORE_IDS "cm33_core0" "cm33"
         )
     endif()
-
-    if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.platform.dbg)
-        mcux_add_source(SOURCES
-            fwk_platform_dbg.c
-            ../wireless_mcu/fwk_platform_dbg.h
-            DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY}
-            CORE_IDS "cm33_core0" "cm33"
-        )
-        mcux_add_include(INCLUDES
-            .
-            ../wireless_mcu
-            DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY}
-            CORE_IDS "cm33_core0" "cm33"
-        )
-    endif()
 endif()

@@ -1,4 +1,4 @@
-# Copyright 2024-2025 NXP
+# Copyright 2024-2026 NXP
 # SPDX-License-Identifier: BSD-3-Clause
 
 mcux_set_list(KW45_FAMILY "KW45B41Z52xxxA KW45B41Z53xxxA  KW45B41Z82xxxA  KW45B41Z83xxxA  K32W1480xxxA")
@@ -6,7 +6,8 @@ mcux_set_list(MCXW71_FAMILY "MCXW716CxxxA MCXW716AxxxA")
 mcux_set_list(KW47_FAMILY "KW47B42Z83xxxA KW47B42Z96xxxA KW47B42Z97xxxA KW47B42ZB2xxxA KW47B42ZB3xxxA KW47B42ZB6xxxA KW47B42ZB7xxxA KW47Z42082xxxA KW47Z42092xxxA KW47Z420B2xxxA KW47Z420B3xxxA")
 mcux_set_list(MCXW72_FAMILY "MCXW727CxxxA")
 mcux_set_list(MCXW23_FAMILY "MCXW236 MCXW235")
-mcux_set_list(KW43_FAMILY "KW43B43ZC7xxxA")
+mcux_set_list(KW43_FAMILY "KW43B43ZC7xxx")
+mcux_set_list(MCXW70_FAMILY "MCXW70ACxxx")
 
 if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.platform.kw45_k32w1_mcxw71)
     mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/mcu_nbu_common)

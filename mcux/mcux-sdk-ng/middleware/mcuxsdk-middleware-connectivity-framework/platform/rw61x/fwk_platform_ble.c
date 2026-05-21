@@ -1,6 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/*                           Copyright 2021-2024 NXP                          */
-/*                            All rights reserved.                            */
+/*                           Copyright 2021-2026 NXP                          */
 /*                    SPDX-License-Identifier: BSD-3-Clause                   */
 /* -------------------------------------------------------------------------- */
 
@@ -61,6 +60,9 @@
 
 #define HCI_CMD_BT_DISABLE_LEPC_TIMER_OCF           0x9FU
 #define HCI_CMD_BT_DISABLE_LEPC_CONFIG_PARAM_LENGTH 0
+
+#define HCI_CMD_BLE_PRIORITY_REMAP_OCF    0x2A1U
+#define HCI_CMD_BLE_PRIORITY_REMAP_LENGTH 1
 
 #define HCI_EVT_PS_SLEEP_OCF 0x20U
 
@@ -600,6 +602,23 @@ int PLATFORM_SendHciMessage(uint8_t *msg, uint32_t len)
             break;
         }
     } while (false);
+
+    return ret;
+}
+
+int PLATFORM_BlePriorityRemap(uint8_t enable)
+{
+    int      ret = 0;
+    uint8_t  buffer[1 + HCI_CMD_PACKET_HEADER_LENGTH + HCI_CMD_BLE_PRIORITY_REMAP_LENGTH];
+    uint16_t opcode = get_opcode(HCI_CMD_VENDOR_OCG, HCI_CMD_BLE_PRIORITY_REMAP_OCF);
+
+    PLATFORM_FillInHciCmdMsg(&buffer[0], opcode, 1, &enable);
+
+    ret = PLATFORM_SendHciMessage(buffer, sizeof(buffer));
+    if (ret != 0)
+    {
+        ret = -1;
+    }
 
     return ret;
 }

@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/*                           Copyright 2020-2023, 2025 NXP                          */
+/*                     Copyright 2020-2023, 2025-2026 NXP                     */
 /*                    SPDX-License-Identifier: BSD-3-Clause                   */
 /* -------------------------------------------------------------------------- */
 
@@ -40,10 +40,6 @@
 #if !(defined(FPGA_TARGET) && (FPGA_TARGET != 0))
 #define PLATFORM_TM_CLK_FREQ 32768U
 #endif
-#endif
-
-#ifndef PLATFORM_TM_CLK_SELECT
-#define PLATFORM_TM_CLK_SELECT 2U /*Lptmr timer use (kLPTMR_PrescalerClock_2) 32k clock*/
 #endif
 
 /*! @brief The configuration of timer stamp. */

@@ -16,6 +16,9 @@
 /* This platform has an NBU domain */
 #define gPlatformHasNbu_d 1
 
+/* Platform requires a power-domain wakeup sequence prior to access */
+#define gPlatformRequiresPowerDomainWakeup 1
+
 /* Defines the calibration duration of the ADC, it will block the task during this time in milisec before trigger the
  * ADC on a channel*/
 #define gSensorsAdcCalibrationDurationInMs_c 4U
@@ -25,7 +28,9 @@
  * library. The flags may be set to 0 if this library is not required. It mainly makes sense for Matter SPAKE2P
  * procedures and for BLE point validation.
  */
+#if !defined gSecLibUseDspExtension_d
 #define gSecLibUseDspExtension_d 1
+#endif
 
 /*********************************************************************
  *        HW parameters enablement and placement
