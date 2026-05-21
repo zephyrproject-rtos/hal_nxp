@@ -2860,6 +2860,7 @@ typedef enum IRQn {
 #define LPSPI1 LPSPI_1
 #define LPSPI2 LPSPI_2
 #define LPCMP0 CMP_0
+#define FMU0_NS FMU_NS
 #define LPTMR0 LPTMR_0
 #define CCM32K ANAREG_0
 #define MU0_MUA MU_0__MUA
