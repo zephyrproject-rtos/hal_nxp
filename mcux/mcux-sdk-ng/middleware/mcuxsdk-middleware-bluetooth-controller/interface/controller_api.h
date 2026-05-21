@@ -324,6 +324,16 @@ osa_status_t Controller_ConfigureIDSSecurityEventReporting(nbu_security_event_ca
  ********************************************************************************** */
 osa_status_t Controller_ReadMemory(uint32_t address, uint32_t size, void* pBuffer);
 
+#if defined(FWK_KW43_MCXW70_FAMILIES) && (FWK_KW43_MCXW70_FAMILIES > 0)
+/*! *********************************************************************************
+ * \brief  Suspend or resume controller radio activities
+ * \param[in]  suspend: 1 for suspend and 0 for resume
+ *
+ * \return KOSA_StatusSuccess in case of success otherwise error.
+ ********************************************************************************** */
+osa_status_t Controller_SuspendResume(uint32_t suspend);
+#endif
+
 #ifdef __cplusplus
 }
 #endif
