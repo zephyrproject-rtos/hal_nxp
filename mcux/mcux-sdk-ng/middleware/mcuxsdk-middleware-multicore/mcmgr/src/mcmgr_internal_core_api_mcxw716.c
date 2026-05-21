@@ -38,7 +38,7 @@ static const mcmgr_core_info_t s_mcmgrCores[MCMGR_CORECOUNT] = {
 const mcmgr_system_info_t g_mcmgrSystem = {
     .coreCount = MCMGR_CORECOUNT, .memRegCount = MCMGR_MEMREGCOUNT, .cores = s_mcmgrCores};
 
-mcmgr_status_t mcmgr_early_init_internal(mcmgr_core_t coreNum)
+mcmgr_status_t mcmgr_platform_init_internal_early(mcmgr_core_t coreNum)
 {
     /* This function is intended to be called as close to the reset entry as possible,
        (within the startup sequence in SystemInitHook) to allow CoreUp event triggering.

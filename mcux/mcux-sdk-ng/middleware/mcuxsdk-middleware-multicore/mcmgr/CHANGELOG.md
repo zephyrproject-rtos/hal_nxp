@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Merged internal platform initialization into a single `mcmgr_platform_init_internal()` function.
+- Simplified initialization API: `MCMGR_Init()` now handles both early and standard initialization internally.
+
+### Deprecated
+
+- `MCMGR_EarlyInit()` is now deprecated and a no-op. It remains for backward compatibility and may be removed in a future major version. Replace calls to `MCMGR_EarlyInit()` + `MCMGR_Init()` with a single `MCMGR_Init()` call.
+
+### Migration Guide
+
+**Before:**
+```c
+MCMGR_EarlyInit();
+// ...
+MCMGR_Init();
+```
+
+**After:**
+```c
+MCMGR_Init();
+```
+
 ## [v5.1.0]
 
 ### Added

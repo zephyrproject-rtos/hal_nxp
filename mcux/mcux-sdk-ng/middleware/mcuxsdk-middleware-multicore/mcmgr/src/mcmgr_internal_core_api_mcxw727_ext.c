@@ -12,6 +12,8 @@
 #include "FreeRTOS.h"
 #endif
 
+mcmgr_status_t mcmgr_platform_init_internal_early(mcmgr_core_t coreNum);
+
 #ifndef IMU_ISR_PRIORITY
 #define IMU_ISR_PRIORITY (4U)
 #endif
@@ -25,8 +27,14 @@
 #endif
 #endif
 
-mcmgr_status_t mcmgr_late_init_internal(mcmgr_core_t coreNum)
+mcmgr_status_t mcmgr_platform_init_internal(mcmgr_core_t coreNum)
 {
+    mcmgr_status_t status = mcmgr_platform_init_internal_early(coreNum);
+    if (status != kStatus_MCMGR_Success)
+    {
+        return status;
+    }
+
 #if defined(IMU_CPU_INDEX) && (IMU_CPU_INDEX == 1U)
     NVIC_SetPriority((IRQn_Type)RF_IMU0_IRQn, IMU_ISR_PRIORITY);
     NVIC_EnableIRQ((IRQn_Type)RF_IMU0_IRQn);
