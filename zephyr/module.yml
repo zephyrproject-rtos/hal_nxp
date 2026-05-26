@@ -77,6 +77,13 @@ blobs:
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.0/rw61x/rw61x_sb_wifi_a2_compressed.bin
     description: "WiFi firmware for RW612 A2 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.0/readme.txt
+  - path: rw61x/libieee/libieee-802.15.4_MAC_intf.a
+    sha256: ec11b34705364f372d9d781d1289a09691572f41da05222516500091b68ad57f
+    type: lib
+    version: '26.03.00-pvw2'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/26.03.00-pvw2/ieee_802_15_4/lib/libieee-802.15.4_MAC_intf.a
+    description: "IEEE 802.15.4 MAC & PHY library for RW612 boards"
 
 #For MCXW23
   - path: mcxw23/libble_ll_os.a
@@ -125,7 +132,7 @@ blobs:
     description: "BLE Controller and IEEE 802.15.4 MAC & PHY combo firmware for MCXW71 boards"
   - path: mcxw71/libieee/libieee-802.15.4_MAC_intf.a
     sha256: ec11b34705364f372d9d781d1289a09691572f41da05222516500091b68ad57f
-    type: img
+    type: lib
     version: '26.03.00-pvw2'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/26.03.00-pvw2/ieee_802_15_4/lib/libieee-802.15.4_MAC_intf.a
