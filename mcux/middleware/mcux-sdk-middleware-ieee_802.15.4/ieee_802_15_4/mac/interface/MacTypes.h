@@ -285,17 +285,57 @@ typedef enum
 /*! \endcond */
 #endif
 
-/*! \brief The MAC Capability Information \ref macCapabilityInfo_tag */
+/*! \brief The MAC Capability Information \ref macCapabilityInfoBit_t */
 typedef uint8_t macCapabilityInfo_t;
+
+/* Bit positions for MAC Capability Information */
 typedef enum
 {
-    gCapInfoAltPanCoord_c           = 0x01,        /*!< The device is capable of becoming the PAN coordinator.*/
-    gCapInfoDeviceFfd_c             = 0x02,        /*!< The device is an FFD.*/
-    gCapInfoPowerMains_c            = 0x04,        /*!< The device is mains-powered, and not battery-powered.*/
-    gCapInfoRxWhenIdle_c            = 0x08,        /*!< Receiver is on when unit is idle.*/
-    gCapInfoSecurity_c              = 0x40,        /*!< The device can send/receive secured MAC frames.*/
-    gCapInfoAllocAddr_c             = 0x80,        /*!< The device asks the coordinator to allocate a 16-bit short address as a result of the association procedure.*/
-}macCapabilityInfo_tag;
+    gCapInfoAltPanCoordBitPosition_c           = 0,        /*!< The bit to set for alternate PAN coordinator.*/
+    gCapInfoDeviceTypeBitPosition_c            = 1,        /*!< The bit to set device type: 0 for RFD, 1 for FFD.*/
+    gCapInfoPowerSourceBitPosition_c           = 2,        /*!< The bit to set for device power source: 0 for battery-powered, 1 for alternating (mains-powered).*/
+    gCapInfoReceiveOnWhenIdleBitPosition_c     = 3,        /*!< The bit to set for receiver state when idle: 0 for RX off when idle, 1 for RX on when idle.*/
+    gCapInfoSecurityCapabilityBitPosition_c    = 6,        /*!< The bit to set for MAC security: 1 for enabled (device can send/receive secured MAC frames), 0 for disabled.*/
+    gCapInfoAllocateAddressBitPosition_c       = 7,        /*!< The bit to set for asking the coordinator to allocate a 16-bit short address as a result of the association procedure. 0 for disabling address allocation, 1 for enabling address allocation.*/
+} macCapabilityInfoBit_t;
+
+/* Bit masks for MAC Capability Information */
+typedef enum
+{
+    gCapInfoAltPanCoordMask_c          = (1 << gCapInfoAltPanCoordBitPosition_c),           /*!< Mask for alternate PAN coordinator capability.*/
+    gCapInfoDeviceTypeMask_c           = (1 << gCapInfoDeviceTypeBitPosition_c),            /*!< Mask for device type: FFD/RFD capability.*/
+    gCapInfoPowerSourceMask_c          = (1 << gCapInfoPowerSourceBitPosition_c),           /*!< Mask for power source: mains-powered capability.*/
+    gCapInfoReceiveOnWhenIdleMask_c    = (1 << gCapInfoReceiveOnWhenIdleBitPosition_c),     /*!< Mask for receiver state when idle capability.*/
+    gCapInfoSecurityCapabilityMask_c   = (1 << gCapInfoSecurityCapabilityBitPosition_c),    /*!< Mask for security capability.*/
+    gCapInfoAllocateAddressMask_c      = (1 << gCapInfoAllocateAddressBitPosition_c),       /*!< Mask for address allocation request.*/
+} macCapabilityInfoMask_t;
+
+/* Usage of MAC Capability Information
+ - Using bit positions (for bit manipulation)
+    macCapabilityInfo_t capInfo = 0;
+    capInfo |= (1 << gCapInfoDeviceTypeBit_c);
+    capInfo |= (1 << gCapInfoPowerSourceBit_c);
+
+ - Using masks
+    macCapabilityInfo_t capInfo2 = 0;
+    capInfo2 |= gCapInfoDeviceTypeMask_c;
+    capInfo2 |= gCapInfoPowerSourceMask_c;
+    capInfo2 |= gCapInfoReceiveOnWhenIdleMask_c;
+
+ - Combining multiple masks
+    macCapabilityInfo_t capInfo3 = gCapInfoDeviceTypeMask_c |
+                                   gCapInfoPowerSourceMask_c |
+                                   gCapInfoAllocateAddressMask_c;
+
+ - Testing capabilities
+    if (capInfo & gCapInfoSecurityCapabilityMask_c)
+    {
+
+    }
+
+ - Clearing capabilities
+    capInfo &= ~gCapInfoReceiveOnWhenIdleMask_c;
+*/
 
 typedef enum
 {

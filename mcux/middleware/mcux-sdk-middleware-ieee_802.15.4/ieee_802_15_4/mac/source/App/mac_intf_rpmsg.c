@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -556,9 +556,11 @@ instanceId_t BindToMAC(instanceId_t nwkId)
     mac[mac_id].MCPS_NWK_SapHandler = NULL;
     mac[mac_id].MLME_NWK_SapHandler = NULL;
 
+#ifndef __ZEPHYR__
     /* send RNG seed to NBU */
     int RNG_SetSeed(void);
     RNG_SetSeed();
+#endif
 
     return mac_id;
 }

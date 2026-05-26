@@ -42,7 +42,7 @@
       defined(MCXW716C_SERIES) || defined(MCXW716A_SERIES) ||                  \
       defined(MCXW727C_cm33_core0_SERIES)
     #define gPhyIrqNo_d (RF_802_15_4_IRQn)
-#elif defined(KW43B43ZC7_SERIES)
+#elif defined(MCXW70AC_SERIES)
     #define gPhyIrqNo_d (RF_ZIGBEE_IRQn)
 #endif
 

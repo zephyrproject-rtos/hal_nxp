@@ -1,6 +1,6 @@
 /*! *********************************************************************************
 * Copyright (c) 2015, Freescale Semiconductor, Inc.
-* Copyright 2018, 2023-2025 NXP
+* Copyright 2018, 2023-2026 NXP
 * All rights reserved.
 *
 * \file
@@ -93,8 +93,6 @@ typedef enum
 
 
 #define PHY_TMR_CMP_MIN 4   /* symbols (64 us). Comparator threshold */
-
-#define PHY_RX_TIME_POLL 6250   /* symbols */
 
 #define PHY_TEN_SYMBOLS_US 160
 #define PHY_SYMBOLS_US 16

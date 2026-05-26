@@ -61,12 +61,18 @@
 
 /*! PHY flag that reflects the state of the RxOnWhenIdle function */
 #define gPhyFlagRxOnWhenIdle_c  (1u << 0)
+
 /*! PHY flag that indicate that an automatic RX sequence is ongoing */
 #define gPhyFlagIdleRx_c        (1u << 1)
+
 /*! PHY flag that reflects the state of the FP bit of the last ACK frame received */
 #define gPhyFlagRxFP_c          (1u << 2)
+
 /*! PHY flag that reflects the state of the FP bit of the last ACK frame transmitted */
 #define gPhyFlagTxAckFP_c       (1u << 3)
+
+#define gPhyFlagRxSilent_c      (1u << 4)
+
 /*! PHY flag that indicates FP was set as result of no neighbour table entry found */
 #define gPhyFlagNbTblRxAckFP_c  (1u << 7)
 
@@ -74,7 +80,14 @@
 /*! This constant defines the identification value of an invalid timer. */
 #define gInvalidTimerId_c (0xFF)
 
+#if defined(MCXW70AC_SERIES) || defined(KW43B43ZC7_NBU_SERIES)
+#define gPhyTimeShift_c   (28)
+#endif
+
+#ifndef gPhyTimeShift_c
 #define gPhyTimeShift_c   (24)          /* 24bit hw timer */
+#endif
+
 #define gPhyTimeMask_c    ((uint32_t)(1 << gPhyTimeShift_c) - 1)
 
 /* Security defines */
@@ -151,6 +164,7 @@ typedef enum
 {
     gPhyForceTRxOff_c = 0x03,              /*!< The transceiver is to be switched off immediately.*/
     gPhySetRxOn_c     = 0x12,              /*!< The transceiver is to be configured into the receiver enabled state.*/
+    gPhySetRxSilent_c
 } phyState_t;
 
 /*! This type is used to filter the next received frames, and to accept only Ack frames. */

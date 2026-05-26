@@ -1,5 +1,5 @@
 /*! *********************************************************************************
-* Copyright 2021-2025 NXP
+* Copyright 2021-2026 NXP
 * All rights reserved.
 *
 *
@@ -58,7 +58,7 @@ static hal_rpmsg_config_t phyRpmsgConfig = {
 };
 
 static uint8_t wait_phy_rsp = FALSE;
-static plmeGetReq_t phy_get_rsp;
+static macToPlmeMessage_t response;
 
 static OSA_EVENT_HANDLE_DEFINE(get_event);
 
@@ -186,11 +186,11 @@ static hal_rpmsg_return_status_t PhyRpmsgRxCallback(void *param, uint8_t *data, 
     phyMessageHeader_t *pMsg = (phyMessageHeader_t *)data;
     uint8_t msg_type = (pMsg->ctx_id >> CTX_ID_SIZE) & CTX_CMD_MASK;
 
-    if ((msg_type == CTX_CMD) && (pMsg->msgType == gPlmeGetReq_c))
+    if ((msg_type == CTX_CMD) && ((pMsg->msgType == gPlmeGetReq_c) || (pMsg->msgType == gPlmeGetTxPowerCapabilities)))
     {
         if (wait_phy_rsp)
         {
-            phy_get_rsp = ((macToPlmeMessage_t *)pMsg)->msgData.getReq;
+            response = *(macToPlmeMessage_t *)pMsg;
 
             OSA_EventSet(get_event, 1);
         }
@@ -330,10 +330,8 @@ phyStatus_t MAC_PLME_SapHandler(macToPlmeMessage_t *pMsg, instanceId_t phyInstan
         /* Bind Event with current task (main_task usually) in case RPMSG response is faster than
          * OSA_EventWait in the loop below.
          */
-        if (pMsg->msgType == gPlmeGetReq_c)
+        if (pMsg->msgType == gPlmeGetReq_c || pMsg->msgType == gPlmeGetTxPowerCapabilities)
         {
-            phy_get_rsp.PibAttributeValue = 0;
-
             OSA_EventWait(get_event, 1, 1, osaWaitNone_c, &flags);
             wait_phy_rsp = TRUE;
         }
@@ -344,12 +342,12 @@ phyStatus_t MAC_PLME_SapHandler(macToPlmeMessage_t *pMsg, instanceId_t phyInstan
             break;
         }
 
-        if (pMsg->msgType == gPlmeGetReq_c)
+        if (pMsg->msgType == gPlmeGetReq_c || pMsg->msgType == gPlmeGetTxPowerCapabilities)
         {
             wait_response();
             wait_phy_rsp = FALSE;
 
-            pMsg->msgData.getReq.PibAttributeValue = phy_get_rsp.PibAttributeValue;
+            pMsg->msgData = response.msgData;
         }
     } while(0);
 
