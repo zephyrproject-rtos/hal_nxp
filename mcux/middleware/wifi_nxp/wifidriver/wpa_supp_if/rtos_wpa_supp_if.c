@@ -866,14 +866,14 @@ int wifi_nxp_wpa_supp_scan2(void *if_priv, struct wpa_driver_scan_params *params
         goto out;
     }
 
-    if (wifi_is_remain_on_channel())
+    if (wifi_if_ctx_rtos->remain_on_channel == true)
     {
-        status = wifi_remain_on_channel(false, 0, 0);
+        status = wifi_remain_on_channel(wifi_if_ctx_rtos->bss_type, false, 0, 0);
         if (status == WM_SUCCESS)
         {
             wifi_if_ctx_rtos->remain_on_channel = false;
         }
-           else
+        else
         {
             supp_e("%s: Cancel remain on channel failed", __func__);
         }
@@ -1653,6 +1653,11 @@ int wifi_nxp_wpa_supp_authenticate(void *if_priv, struct wpa_driver_auth_params 
         supp_d("%s:Authentication request sent successfully", __func__);
         ret = 0;
     }
+
+    if (wifi_if_ctx_rtos->remain_on_channel == true)
+    {
+        wifi_if_ctx_rtos->remain_on_channel_freq = params->freq;
+    }
 out:
     return ret;
 }
@@ -1760,6 +1765,7 @@ int wifi_nxp_wpa_supp_associate(void *if_priv, struct wpa_driver_associate_param
         supp_d("%s: Association request sent successfully", __func__);
         ret = 0;
     }
+    wifi_if_ctx_rtos->remain_on_channel = mlan_adap->remain_on_channel;
     OSA_MemoryFree((void *)assoc_params);
 
 out:
@@ -2341,7 +2347,7 @@ int wifi_nxp_wpa_supp_send_mlme(void *if_priv,
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
     const struct ieee80211_hdr *hdr;
     u16 fc, stype;
-    mlan_private *pmpriv;
+    unsigned int bss_type = 0;
 
     hdr   = (const struct ieee80211_hdr *)data;
     fc    = le_to_host16(hdr->frame_control);
@@ -2363,15 +2369,38 @@ int wifi_nxp_wpa_supp_send_mlme(void *if_priv,
 
     wifi_if_ctx_rtos->mgmt_tx_status = 0;
 
-    pmpriv = (mlan_private *)mlan_adap->priv[wifi_if_ctx_rtos->bss_type];
-
-    if (stype == WLAN_FC_STYPE_PROBE_RESP && GET_BSS_ROLE(pmpriv) == MLAN_BSS_ROLE_UAP)
+    bss_type = wifi_if_ctx_rtos->bss_type;
+    if (stype == WLAN_FC_STYPE_PROBE_RESP && bss_type == MLAN_BSS_ROLE_UAP)
     {
         /* Since we support offload probe resp, we need to skip probe
          * resp in uAP or GO mode */
         supp_d("%s: Skip send probe_resp in GO/UAP mode", __func__);
         status = WM_SUCCESS;
         goto out;
+    }
+
+    if (stype == WLAN_FC_STYPE_ACTION && bss_type != BSS_TYPE_UAP)
+    {
+        if (wifi_if_ctx_rtos->remain_on_channel == true)
+        {
+            status = wifi_remain_on_channel(bss_type, false, 0, 0);
+            if (status != WM_SUCCESS)
+            {
+                supp_e("%s: Failed to cancel remain on channel", __func__);
+            }
+            wifi_if_ctx_rtos->remain_on_channel = false;
+        }
+        if (wait_time == 0)
+        {
+            wait_time = 1000;
+        }
+        status = wifi_remain_on_channel(bss_type, true, freq_to_chan(freq), wait_time);
+        if (status == WM_SUCCESS)
+        {
+            wifi_if_ctx_rtos->remain_on_channel = true;
+            wifi_if_ctx_rtos->remain_on_channel_freq = freq;
+            wifi_if_ctx_rtos->remain_on_channel_duration = wait_time;
+        }
     }
 
     status = wifi_nxp_send_mlme(wifi_if_ctx_rtos->bss_type, freq_to_chan(freq), wait_time, data, data_len);
@@ -2719,52 +2748,55 @@ out:
 int wifi_nxp_wpa_supp_remain_on_channel(void *if_priv, unsigned int freq, unsigned int duration, u64 host_cookie)
 {
     int status                                 = -WM_FAIL;
-    int ret                                    = -1;
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
     int channel;
 
-    if (!if_priv)
+    if (!if_priv || !freq)
     {
         supp_e("%s: Invalid params", __func__);
         goto out;
     }
     wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
-    if (freq)
+    /* If previous remain on channel is in progress on different channel, cancel it first */
+    if (wifi_if_ctx_rtos->remain_on_channel &&
+        wifi_if_ctx_rtos->remain_on_channel_freq != freq)
     {
-        wifi_if_ctx_rtos->remain_on_channel_freq = freq;
+        status = wifi_remain_on_channel(wifi_if_ctx_rtos->bss_type, false, 0, 0);
+        if (status != WM_SUCCESS)
+        {
+            supp_e("%s: Cancel remain on channel failed", __func__);
+            goto out;
+        }
+        wifi_if_ctx_rtos->remain_on_channel_cookie = 0;
+        wifi_if_ctx_rtos->remain_on_channel = false;
     }
+
+    wifi_if_ctx_rtos->remain_on_channel_freq     = freq;
     wifi_if_ctx_rtos->remain_on_channel_duration = duration;
-
     channel = freq_to_chan(wifi_if_ctx_rtos->remain_on_channel_freq);
-
     wifi_if_ctx_rtos->remain_on_channel_cookie   = (u64)(OSA_Rand() | host_cookie);
-    if (wm_wifi.supp_if_callbk_fns->cookie_rsp_callbk_fn != NULL)
-    {
-        wm_wifi.supp_if_callbk_fns->cookie_rsp_callbk_fn(wifi_if_ctx_rtos);
-    }
 
-    status                                       = wifi_remain_on_channel(true, channel, duration);
+    status = wifi_remain_on_channel(wifi_if_ctx_rtos->bss_type, true, channel, duration);
 
     if (status != WM_SUCCESS)
     {
         supp_e("%s: Remain on channel cmd failed", __func__);
-        wifi_if_ctx_rtos->remain_on_channel = false;
-        ret = -1;
+        wifi_if_ctx_rtos->remain_on_channel_cookie   = 0;
+        wifi_if_ctx_rtos->remain_on_channel_freq     = 0;
+        wifi_if_ctx_rtos->remain_on_channel_duration = 0;
+        goto out;
     }
-    else
-    {
-        supp_d("%s:Remain on channel sent successfully", __func__);
-        wifi_if_ctx_rtos->remain_on_channel = true;
-        ret = 0;
-    }
+
+    supp_d("%s:Remain on channel sent successfully", __func__);
+    wifi_if_ctx_rtos->remain_on_channel = true;
+
 out:
-    return ret;
+    return status;
 }
 
 int wifi_nxp_wpa_supp_cancel_remain_on_channel(void *if_priv, u64 rpu_cookie)
 {
     int status                                 = -WM_FAIL;
-    int ret                                    = -1;
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
 
     if (!if_priv)
@@ -2776,25 +2808,26 @@ int wifi_nxp_wpa_supp_cancel_remain_on_channel(void *if_priv, u64 rpu_cookie)
     if (wifi_if_ctx_rtos->remain_on_channel == false)
     {
         supp_d("%s:Already canceled, ignore it", __func__);
-        ret = 0;
+        status = WM_SUCCESS;
         goto out;
     }
 
-    status                                       = wifi_remain_on_channel(false, 0, 0);
+    status = wifi_remain_on_channel(wifi_if_ctx_rtos->bss_type, false, 0, 0);
 
     if (status != WM_SUCCESS)
     {
         supp_e("%s: Cancel on channel cmd failed", __func__);
-        ret = -1;
     }
     else
     {
         supp_d("%s:Cancel on channel sent successfully", __func__);
-        wifi_if_ctx_rtos->remain_on_channel = false;
-        ret = 0;
+        wifi_if_ctx_rtos->remain_on_channel          = false;
+        wifi_if_ctx_rtos->remain_on_channel_freq     = 0;
+        wifi_if_ctx_rtos->remain_on_channel_duration = 0;
+        status = WM_SUCCESS;
     }
 out:
-    return ret;
+    return status;
 }
 
 void wifi_nxp_wpa_supp_event_proc_remain_on_channel(void *if_priv, int cancel_channel)
@@ -3818,6 +3851,7 @@ bool wifi_nxp_wpa_get_modes(void *if_priv)
 void wifi_nxp_wpa_supp_cancel_action_wait(void *if_priv)
 {
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
+    int ret = -1;
 
     if (!if_priv)
     {
@@ -3828,7 +3862,18 @@ void wifi_nxp_wpa_supp_cancel_action_wait(void *if_priv)
     wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
     if (wifi_if_ctx_rtos->bss_type == BSS_TYPE_STA)
     {
-        (void)wifi_remain_on_channel(false, 0, 0);
+        if (wifi_if_ctx_rtos->remain_on_channel == true)
+        {
+            ret = wifi_remain_on_channel(wifi_if_ctx_rtos->bss_type, false, 0, 0);
+            if (ret != WM_SUCCESS)
+            {
+                supp_e("%s: Cancel remain on channel failed", __func__);
+            }
+            else
+            {
+                wifi_if_ctx_rtos->remain_on_channel = false;
+            }
+        }
     }
 
 out:
