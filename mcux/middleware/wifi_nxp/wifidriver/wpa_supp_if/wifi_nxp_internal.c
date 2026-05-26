@@ -109,6 +109,7 @@ void wifi_scan_done(struct wifi_message *msg)
 void wifi_process_remain_on_channel(struct wifi_message *msg)
 {
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)wm_wifi.if_priv;
+    wifi_remain_channel_info *remain_channel_info = (wifi_remain_channel_info *)msg->data;
 
     if (!wifi_if_ctx_rtos || !wm_wifi.supp_if_callbk_fns)
        return;
@@ -116,20 +117,35 @@ void wifi_process_remain_on_channel(struct wifi_message *msg)
     if ((msg->reason == WIFI_EVENT_REASON_SUCCESS) &&
         (wm_wifi.supp_if_callbk_fns->remain_on_channel_callbk_fn != NULL))
     {
-        if (*(t_u8 *)(msg->data) == true)
+        if (remain_channel_info->cancel_channel == true)
         {
-            wm_wifi.supp_if_callbk_fns->remain_on_channel_callbk_fn(wifi_if_ctx_rtos, 1);
+            wifi_if_ctx_rtos->remain_on_channel          = false;
+            wifi_if_ctx_rtos->remain_on_channel_freq     = 0;
+            wifi_if_ctx_rtos->remain_on_channel_duration = 0;
+            if (wifi_if_ctx_rtos->remain_on_channel_cookie != 0)
+            {
+                wm_wifi.supp_if_callbk_fns->remain_on_channel_callbk_fn(wifi_if_ctx_rtos, 1);
+                wifi_if_ctx_rtos->remain_on_channel_cookie = 0;
+            }
         }
         else
         {
-            wm_wifi.supp_if_callbk_fns->remain_on_channel_callbk_fn(wifi_if_ctx_rtos, 0);
+            wifi_if_ctx_rtos->remain_on_channel = true;
+            if (wifi_if_ctx_rtos->remain_on_channel_cookie != 0)
+            {
+                if (wm_wifi.supp_if_callbk_fns->cookie_rsp_callbk_fn != NULL)
+                {
+                    wm_wifi.supp_if_callbk_fns->cookie_rsp_callbk_fn(wifi_if_ctx_rtos);
+                }
+                wm_wifi.supp_if_callbk_fns->remain_on_channel_callbk_fn(wifi_if_ctx_rtos, 0);
+            }
         }
     }
-    if (msg->data)
-    {
-        OSA_MemoryFree(msg->data);
-        msg->data = NULL;
-    }
+#if !CONFIG_MEM_POOLS
+    OSA_MemoryFree(msg->data);
+#else
+    OSA_MemoryPoolFree(buf_32_MemoryPool, msg->data);
+#endif
 }
 
 void wifi_process_mgmt_tx_status(struct wifi_message *msg)

@@ -3486,7 +3486,7 @@ int wifi_nxp_beacon_config(nxp_wifi_ap_info_t *params)
     if (wifi_is_remain_on_channel() && remain_priv)
     {
         wuap_d("Cancel Remain on Channel before Starting AP");
-        wifi_remain_on_channel(false, 0, 0);
+        wifi_remain_on_channel(priv->bss_type, false, 0, 0);
     }
 
     if (params->beacon_set)

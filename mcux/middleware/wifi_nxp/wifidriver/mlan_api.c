@@ -6461,6 +6461,7 @@ int wifi_send_mgmt_auth_request(const t_u8 channel,
 {
     mlan_private *pmpriv = (mlan_private *)mlan_adap->priv[0];
     int ret;
+    int status = -WM_FAIL;
 
     if ((pmpriv->auth_alg != WLAN_AUTH_SAE) && (pmpriv->auth_flag & HOST_MLME_AUTH_PENDING))
     {
@@ -6479,7 +6480,21 @@ int wifi_send_mgmt_auth_request(const t_u8 channel,
     {
         wifi_set_rx_mgmt_indication(MLAN_BSS_TYPE_STA, WIFI_MGMT_AUTH | WIFI_MGMT_DEAUTH | WIFI_MGMT_DIASSOC);
 
-        wifi_remain_on_channel(true, channel, 2400);
+        if (wifi_is_remain_on_channel() == MTRUE)
+        {
+            status = wifi_remain_on_channel(pmpriv->bss_type, false, 0, 0);
+            if (status != WM_SUCCESS)
+            {
+                wifi_w("%s: Failed to cancel remain on channel", __func__);
+            }
+        }
+
+        status = wifi_remain_on_channel(pmpriv->bss_type, true, channel, 2400);
+        if (status != WM_SUCCESS)
+        {
+            wifi_e("%s: Failed to set remain on channel", __func__);
+            return status;
+        }
     }
 
     pmpriv->curr_bss_params.host_mlme = 1;
@@ -6492,7 +6507,14 @@ int wifi_send_mgmt_auth_request(const t_u8 channel,
     if (ret != WM_SUCCESS)
     {
         wifi_set_rx_mgmt_indication(MLAN_BSS_TYPE_STA, 0);
-        wifi_remain_on_channel(false, 0, 0);
+        if (wifi_is_remain_on_channel() == MTRUE)
+        {
+            status = wifi_remain_on_channel(pmpriv->bss_type, false, 0, 0);
+            if (status != WM_SUCCESS)
+            {
+                wifi_w("%s: Failed to cancel remain on channel", __func__);
+            }
+        }
 
         pmpriv->curr_bss_params.host_mlme = 0;
         pmpriv->auth_flag                 = 0;
