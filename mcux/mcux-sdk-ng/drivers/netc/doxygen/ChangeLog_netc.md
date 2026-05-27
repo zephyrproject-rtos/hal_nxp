@@ -1,5 +1,10 @@
 # NETC
 
+## [2.10.5]
+
+- Bug Fixes
+  - Fixed some code quality issues.
+
 ## [2.10.4]
 
 - New Features

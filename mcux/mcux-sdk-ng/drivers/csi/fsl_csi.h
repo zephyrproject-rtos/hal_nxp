@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021,2024 NXP
+ * Copyright 2017-2021, 2024, 2026 NXP
  * All rights reserved.
  *
  *
@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_CSI_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_CSI_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*! @} */
 
 #define CSI_REG_CR1(base)       (base)->CR1

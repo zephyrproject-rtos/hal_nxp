@@ -1,5 +1,10 @@
 # UTICK
 
+## [2.0.6]
+
+- New Features
+  - Added common IRQ handler entry UTICK_CommonDriverIRQHandler.
+
 ## [2.0.5]
 
 - Improvements

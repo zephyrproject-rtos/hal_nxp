@@ -27,26 +27,26 @@
 extern "C" {
 #endif
 
-#define DSI_PPI_INTERFACE_EXTENDED_CONTROL_0_OFFSET       0x60
-#define CORE_DIG_IOCTRL_RW_AFE_LANE0_CTRL_2_2_OFFSET      0x4088
-#define CORE_DIG_IOCTRL_RW_AFE_LANE0_CTRL_2_3_OFFSET      0x408C
-#define CORE_DIG_IOCTRL_RW_AFE_LANE1_CTRL_2_2_OFFSET      0x4888
-#define CORE_DIG_IOCTRL_RW_AFE_LANE1_CTRL_2_3_OFFSET      0x488C
-#define CORE_DIG_IOCTRL_RW_AFE_LANE2_CTRL_2_2_OFFSET      0x5088
-#define CORE_DIG_IOCTRL_RW_AFE_LANE2_CTRL_2_3_OFFSET      0x508C
-#define CORE_DIG_IOCTRL_RW_AFE_LANE3_CTRL_2_2_OFFSET      0x5888
-#define CORE_DIG_IOCTRL_RW_AFE_LANE3_CTRL_2_3_OFFSET      0x588C
-#define CORE_DIG_IOCTRL_RW_AFE_LANE4_CTRL_2_2_OFFSET      0x6088
-#define CORE_DIG_IOCTRL_RW_AFE_LANE4_CTRL_2_3_OFFSET      0x608C
-#define CORE_DIG_IOCTRL_RW_AFE_CB_CTRL_2_2                0x7088
-#define CORE_DIG_IOCTRL_RW_AFE_CB_CTRL_2_4                0x7090
-#define CORE_DIG_IOCTRL_RW_AFE_CB_CTRL_2_6                0x7098
-#define CORE_DIG_ANACTRL_RW_COMMON_ANACTRL_2_OFFSET       0x73C8
-#define CORE_DIG_DLANE_0_RW_HS_TX_3_OFFSET                0xC40C
-#define CORE_DIG_DLANE_1_RW_HS_TX_3_OFFSET                0xCC0C
-#define CORE_DIG_DLANE_2_RW_HS_TX_3_OFFSET                0xD40C
-#define CORE_DIG_DLANE_3_RW_HS_TX_3_OFFSET                0xDC0C
-#define CORE_DIG_DLANE_CLK_RW_HS_TX_3_OFFSET              0xE40C
+#define DSI_PPI_INTERFACE_EXTENDED_CONTROL_0_OFFSET       0x60U
+#define CORE_DIG_IOCTRL_RW_AFE_LANE0_CTRL_2_2_OFFSET      0x4088U
+#define CORE_DIG_IOCTRL_RW_AFE_LANE0_CTRL_2_3_OFFSET      0x408CU
+#define CORE_DIG_IOCTRL_RW_AFE_LANE1_CTRL_2_2_OFFSET      0x4888U
+#define CORE_DIG_IOCTRL_RW_AFE_LANE1_CTRL_2_3_OFFSET      0x488CU
+#define CORE_DIG_IOCTRL_RW_AFE_LANE2_CTRL_2_2_OFFSET      0x5088U
+#define CORE_DIG_IOCTRL_RW_AFE_LANE2_CTRL_2_3_OFFSET      0x508CU
+#define CORE_DIG_IOCTRL_RW_AFE_LANE3_CTRL_2_2_OFFSET      0x5888U
+#define CORE_DIG_IOCTRL_RW_AFE_LANE3_CTRL_2_3_OFFSET      0x588CU
+#define CORE_DIG_IOCTRL_RW_AFE_LANE4_CTRL_2_2_OFFSET      0x6088U
+#define CORE_DIG_IOCTRL_RW_AFE_LANE4_CTRL_2_3_OFFSET      0x608CU
+#define CORE_DIG_IOCTRL_RW_AFE_CB_CTRL_2_2                0x7088U
+#define CORE_DIG_IOCTRL_RW_AFE_CB_CTRL_2_4                0x7090U
+#define CORE_DIG_IOCTRL_RW_AFE_CB_CTRL_2_6                0x7098U
+#define CORE_DIG_ANACTRL_RW_COMMON_ANACTRL_2_OFFSET       0x73C8U
+#define CORE_DIG_DLANE_0_RW_HS_TX_3_OFFSET                0xC40CU
+#define CORE_DIG_DLANE_1_RW_HS_TX_3_OFFSET                0xCC0CU
+#define CORE_DIG_DLANE_2_RW_HS_TX_3_OFFSET                0xD40CU
+#define CORE_DIG_DLANE_3_RW_HS_TX_3_OFFSET                0xDC0CU
+#define CORE_DIG_DLANE_CLK_RW_HS_TX_3_OFFSET              0xE40CU
 #define D2A_HSTX_DLY           3U
 #define DSI_PHY_CPBIAS_CNTRL50 0x10U
 
@@ -91,13 +91,13 @@ static inline void DSI_ClearPpiInterfaceControl(DISPLAY_DSI_CSR_Type *base)
  * @brief Configure Dphy setting.
  *
  * @param base MIPI DSI CSR base peripheral base address
- * @param phyRefClkFreq_Hz Dphy reference clock frequency in Hz
- * @param dataRateFreq_Hz line rate clock frequency
+ * @param phyRefClkHz Dphy reference clock frequency in Hz
+ * @param dataRateHz line rate clock frequency
  * @param config Pointer to dsi ipi configuration structure
  */
 void DSI_ConfigDphy(DISPLAY_DSI_CSR_Type *base,
-                    uint32_t phyRefClkFreq_Hz,
-                    uint32_t dataRateFreq_Hz,
+                    uint32_t phyRefClkHz,
+                    uint32_t dataRateHz,
                     const dsi_ipi_config_t *config);
 
 /*!

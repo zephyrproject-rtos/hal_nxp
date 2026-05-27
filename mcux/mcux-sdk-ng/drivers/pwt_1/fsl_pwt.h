@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 NXP
+ * Copyright 2017, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -17,7 +17,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define FSL_PWT_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1 */
+#define FSL_PWT_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2 */
 
 /*! @brief PWT clock source selection */
 typedef enum _pwt_clock_source
@@ -94,7 +94,9 @@ typedef struct _pwt_config
     pwt_clock_source_t clockSource; /*!< Clock source for the counter */
     pwt_clock_prescale_t prescale;  /*!< Pre-scaler to divide down the clock */
     pwt_input_select_t inputSelect; /*!< PWT Pulse input port selection */
+#if !(defined(FSL_FEATURE_PWT_HAS_NO_EDGE_SENSE) && FSL_FEATURE_PWT_HAS_NO_EDGE_SENSE)
     pwt_input_edge_t edge;          /*!< PWT Input Edge */
+#endif
 } pwt_config_t;
 
 /*******************************************************************************

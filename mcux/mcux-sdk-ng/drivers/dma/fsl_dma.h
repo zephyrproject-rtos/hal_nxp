@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief DMA driver version 2.1.3. */
-#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
+/*! @brief DMA driver version 2.1.4. */
+#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
 /*! @} */
 
 /*! @brief _dma_channel_status_flags status flag for the DMA driver. */
@@ -628,6 +628,17 @@ void DMA_AbortTransfer(dma_handle_t *handle);
  * @param handle DMA handle pointer.
  */
 void DMA_HandleIRQ(dma_handle_t *handle);
+
+/*!
+ * @brief DMA IRQ handler for a given instance and channel.
+ *
+ * This is a common parameterized IRQ handler entry that dispatches to the
+ * appropriate channel handle based on the instance and channel number.
+ *
+ * @param instance DMA instance number.
+ * @param channel DMA channel number.
+ */
+void DMA_DriverIRQHandler(uint32_t instance, uint32_t channel);
 
 /*! @} */
 

@@ -1,5 +1,5 @@
 /*
- * Copyright  2017-2021 NXP
+ * Copyright  2017-2021, 2026 NXP
  * All rights reserved.
  *
  *
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief USART driver version. */
-#define FSL_USART_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+#define FSL_USART_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*! @} */
 
 /*! @brief Retry times for waiting flag. */
@@ -915,6 +915,13 @@ status_t USART_TransferGetReceiveCount(USART_Type *base, usart_handle_t *handle,
  * @param handle USART handle pointer.
  */
 void USART_TransferHandleIRQ(USART_Type *base, usart_handle_t *handle);
+
+/*!
+ * @brief Common IRQ handler entry for USART, dispatches to the registered ISR.
+ *
+ * @param instance USART peripheral instance number.
+ */
+void USART_DriverIRQHandler(uint32_t instance);
 
 /*! @} */
 

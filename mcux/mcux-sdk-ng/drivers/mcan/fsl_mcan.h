@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2025 NXP
+ * Copyright 2016-2022, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief MCAN driver version. */
-#define FSL_MCAN_DRIVER_VERSION (MAKE_VERSION(2, 4, 3))
+#define FSL_MCAN_DRIVER_VERSION (MAKE_VERSION(2, 4, 4))
 /*! @} */
 
 #ifndef MCAN_RETRY_TIMES
@@ -1178,6 +1178,16 @@ void MCAN_TransferAbortReceiveFifo(CAN_Type *base, uint8_t fifoBlock, mcan_handl
  * @param handle MCAN handle pointer.
  */
 void MCAN_TransferHandleIRQ(CAN_Type *base, mcan_handle_t *handle);
+
+/*!
+ * @brief Common IRQ handler entry for all MCAN instances.
+ *
+ * This function dispatches the IRQ to the correct instance handler using
+ * the instance index.
+ *
+ * @param instance MCAN instance number.
+ */
+void MCAN_DriverIRQHandler(uint32_t instance);
 
 /*! @} */
 

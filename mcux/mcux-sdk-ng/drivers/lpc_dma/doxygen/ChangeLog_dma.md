@@ -1,5 +1,10 @@
 # LPC_DMA
 
+## [2.5.5]
+
+- New Features
+  - Added common IRQ handler entry DMA_DriverIRQHandler.
+
 ## [2.5.4]
 
 - Bug Fixes

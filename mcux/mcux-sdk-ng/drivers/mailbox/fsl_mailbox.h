@@ -29,7 +29,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief MAILBOX driver version */
-#define FSL_MAILBOX_DRIVER_VERSION (MAKE_VERSION(2, 3, 4))
+#define FSL_MAILBOX_DRIVER_VERSION (MAKE_VERSION(2, 3, 6))
 /*! @} */
 
 /*!
@@ -53,10 +53,20 @@ typedef enum _mailbox_cpu_id
        defined(MCXN547_cm33_core0_SERIES) || defined(MCXN547_cm33_core1_SERIES) || \
        defined(MCXN546_cm33_core0_SERIES) || defined(MCXN546_cm33_core1_SERIES) || \
        defined(MCXN556S_cm33_core0_SERIES) || defined(MCXN556S_cm33_core1_SERIES) || \
+       defined(MCXN556T_cm33_core0_SERIES) || defined(MCXN556T_cm33_core1_SERIES) || \
+       defined(MCXN557S_cm33_core0_SERIES) || defined(MCXN557S_cm33_core1_SERIES) || \
+       defined(MCXN557T_cm33_core0_SERIES) || defined(MCXN557T_cm33_core1_SERIES) || \
        defined(MCXN537_cm33_core0_SERIES) || defined(MCXN537_cm33_core1_SERIES) || \
        defined(MCXN536_cm33_core0_SERIES) || defined(MCXN536_cm33_core1_SERIES) || \
        defined(MCXN527_cm33_core0_SERIES) || defined(MCXN527_cm33_core1_SERIES) || \
-       defined(MCXN526_cm33_core0_SERIES) || defined(MCXN526_cm33_core1_SERIES))
+       defined(MCXN526_cm33_core0_SERIES) || defined(MCXN526_cm33_core1_SERIES) || \
+       defined(MCXN527T_cm33_core0_SERIES) || defined(MCXN527T_cm33_core1_SERIES) || \
+       defined(MCXN536T_cm33_core0_SERIES) || defined(MCXN536T_cm33_core1_SERIES) || \
+       defined(MCXN537T_cm33_core0_SERIES) || defined(MCXN537T_cm33_core1_SERIES) || \
+       defined(MCXN546T_cm33_core0_SERIES) || defined(MCXN546T_cm33_core1_SERIES) || \
+       defined(MCXN547T_cm33_core0_SERIES) || defined(MCXN547T_cm33_core1_SERIES) || \
+       defined(MCXN946T_cm33_core0_SERIES) || defined(MCXN946T_cm33_core1_SERIES) || \
+       defined(MCXN947T_cm33_core0_SERIES) || defined(MCXN947T_cm33_core1_SERIES))
 typedef enum _mailbox_cpu_id
 {
     kMAILBOX_CM33_Core0 = 0,
@@ -118,10 +128,20 @@ static inline void MAILBOX_Deinit(MAILBOX_Type *base)
      defined(MCXN547_cm33_core0_SERIES) || defined(MCXN547_cm33_core1_SERIES) || \
      defined(MCXN546_cm33_core0_SERIES) || defined(MCXN546_cm33_core1_SERIES) || \
      defined(MCXN556S_cm33_core0_SERIES) || defined(MCXN556S_cm33_core1_SERIES) || \
+     defined(MCXN556T_cm33_core0_SERIES) || defined(MCXN556T_cm33_core1_SERIES) || \
+     defined(MCXN557S_cm33_core0_SERIES) || defined(MCXN557S_cm33_core1_SERIES) || \
+     defined(MCXN557T_cm33_core0_SERIES) || defined(MCXN557T_cm33_core1_SERIES) || \
      defined(MCXN537_cm33_core0_SERIES) || defined(MCXN537_cm33_core1_SERIES) || \
      defined(MCXN536_cm33_core0_SERIES) || defined(MCXN536_cm33_core1_SERIES) || \
      defined(MCXN527_cm33_core0_SERIES) || defined(MCXN527_cm33_core1_SERIES) || \
      defined(MCXN526_cm33_core0_SERIES) || defined(MCXN526_cm33_core1_SERIES) || \
+     defined(MCXN527T_cm33_core0_SERIES) || defined(MCXN527T_cm33_core1_SERIES) || \
+     defined(MCXN536T_cm33_core0_SERIES) || defined(MCXN536T_cm33_core1_SERIES) || \
+     defined(MCXN537T_cm33_core0_SERIES) || defined(MCXN537T_cm33_core1_SERIES) || \
+     defined(MCXN546T_cm33_core0_SERIES) || defined(MCXN546T_cm33_core1_SERIES) || \
+     defined(MCXN547T_cm33_core0_SERIES) || defined(MCXN547T_cm33_core1_SERIES) || \
+     defined(MCXN946T_cm33_core0_SERIES) || defined(MCXN946T_cm33_core1_SERIES) || \
+     defined(MCXN947T_cm33_core0_SERIES) || defined(MCXN947T_cm33_core1_SERIES) || \
      defined(LPC54114_cm4_SERIES) || defined(LPC54114_cm0plus_SERIES))
 /*!
  * @brief Set data value in the mailbox based on the CPU ID.
@@ -142,10 +162,20 @@ static inline void MAILBOX_SetValue(MAILBOX_Type *base, mailbox_cpu_id_t cpu_id,
      defined(MCXN547_cm33_core0_SERIES) || defined(MCXN547_cm33_core1_SERIES) || \
      defined(MCXN546_cm33_core0_SERIES) || defined(MCXN546_cm33_core1_SERIES) || \
      defined(MCXN556S_cm33_core0_SERIES) || defined(MCXN556S_cm33_core1_SERIES) || \
+     defined(MCXN556T_cm33_core0_SERIES) || defined(MCXN556T_cm33_core1_SERIES) || \
+     defined(MCXN557S_cm33_core0_SERIES) || defined(MCXN557S_cm33_core1_SERIES) || \
+     defined(MCXN557T_cm33_core0_SERIES) || defined(MCXN557T_cm33_core1_SERIES) || \
      defined(MCXN537_cm33_core0_SERIES) || defined(MCXN537_cm33_core1_SERIES) || \
      defined(MCXN536_cm33_core0_SERIES) || defined(MCXN536_cm33_core1_SERIES) || \
      defined(MCXN527_cm33_core0_SERIES) || defined(MCXN527_cm33_core1_SERIES) || \
-     defined(MCXN526_cm33_core0_SERIES) || defined(MCXN526_cm33_core1_SERIES))
+     defined(MCXN526_cm33_core0_SERIES) || defined(MCXN526_cm33_core1_SERIES) || \
+     defined(MCXN527T_cm33_core0_SERIES) || defined(MCXN527T_cm33_core1_SERIES) || \
+     defined(MCXN536T_cm33_core0_SERIES) || defined(MCXN536T_cm33_core1_SERIES) || \
+     defined(MCXN537T_cm33_core0_SERIES) || defined(MCXN537T_cm33_core1_SERIES) || \
+     defined(MCXN546T_cm33_core0_SERIES) || defined(MCXN546T_cm33_core1_SERIES) || \
+     defined(MCXN547T_cm33_core0_SERIES) || defined(MCXN547T_cm33_core1_SERIES) || \
+     defined(MCXN946T_cm33_core0_SERIES) || defined(MCXN946T_cm33_core1_SERIES) || \
+     defined(MCXN947T_cm33_core0_SERIES) || defined(MCXN947T_cm33_core1_SERIES))
     assert((cpu_id == kMAILBOX_CM33_Core0) || (cpu_id == kMAILBOX_CM33_Core1));
 #elif ((defined(LPC54114_cm4_SERIES) || defined(LPC54114_cm0plus_SERIES)))
     assert((cpu_id == kMAILBOX_CM0Plus) || (cpu_id == kMAILBOX_CM4));
@@ -171,10 +201,20 @@ static inline uint32_t MAILBOX_GetValue(MAILBOX_Type *base, mailbox_cpu_id_t cpu
      defined(MCXN547_cm33_core0_SERIES) || defined(MCXN547_cm33_core1_SERIES) || \
      defined(MCXN546_cm33_core0_SERIES) || defined(MCXN546_cm33_core1_SERIES) || \
      defined(MCXN556S_cm33_core0_SERIES) || defined(MCXN556S_cm33_core1_SERIES) || \
+     defined(MCXN556T_cm33_core0_SERIES) || defined(MCXN556T_cm33_core1_SERIES) || \
+     defined(MCXN557S_cm33_core0_SERIES) || defined(MCXN557S_cm33_core1_SERIES) || \
+     defined(MCXN557T_cm33_core0_SERIES) || defined(MCXN557T_cm33_core1_SERIES) || \
      defined(MCXN537_cm33_core0_SERIES) || defined(MCXN537_cm33_core1_SERIES) || \
      defined(MCXN536_cm33_core0_SERIES) || defined(MCXN536_cm33_core1_SERIES) || \
      defined(MCXN527_cm33_core0_SERIES) || defined(MCXN527_cm33_core1_SERIES) || \
-     defined(MCXN526_cm33_core0_SERIES) || defined(MCXN526_cm33_core1_SERIES))
+     defined(MCXN526_cm33_core0_SERIES) || defined(MCXN526_cm33_core1_SERIES) || \
+     defined(MCXN527T_cm33_core0_SERIES) || defined(MCXN527T_cm33_core1_SERIES) || \
+     defined(MCXN536T_cm33_core0_SERIES) || defined(MCXN536T_cm33_core1_SERIES) || \
+     defined(MCXN537T_cm33_core0_SERIES) || defined(MCXN537T_cm33_core1_SERIES) || \
+     defined(MCXN546T_cm33_core0_SERIES) || defined(MCXN546T_cm33_core1_SERIES) || \
+     defined(MCXN547T_cm33_core0_SERIES) || defined(MCXN547T_cm33_core1_SERIES) || \
+     defined(MCXN946T_cm33_core0_SERIES) || defined(MCXN946T_cm33_core1_SERIES) || \
+     defined(MCXN947T_cm33_core0_SERIES) || defined(MCXN947T_cm33_core1_SERIES))
     assert((cpu_id == kMAILBOX_CM33_Core0) || (cpu_id == kMAILBOX_CM33_Core1));
 #elif ((defined(LPC54114_cm4_SERIES) || defined(LPC54114_cm0plus_SERIES)))
     assert((cpu_id == kMAILBOX_CM0Plus) || (cpu_id == kMAILBOX_CM4));
@@ -202,10 +242,20 @@ static inline void MAILBOX_SetValueBits(MAILBOX_Type *base, mailbox_cpu_id_t cpu
      defined(MCXN547_cm33_core0_SERIES) || defined(MCXN547_cm33_core1_SERIES) || \
      defined(MCXN546_cm33_core0_SERIES) || defined(MCXN546_cm33_core1_SERIES) || \
      defined(MCXN556S_cm33_core0_SERIES) || defined(MCXN556S_cm33_core1_SERIES) || \
+     defined(MCXN556T_cm33_core0_SERIES) || defined(MCXN556T_cm33_core1_SERIES) || \
+     defined(MCXN557S_cm33_core0_SERIES) || defined(MCXN557S_cm33_core1_SERIES) || \
+     defined(MCXN557T_cm33_core0_SERIES) || defined(MCXN557T_cm33_core1_SERIES) || \
      defined(MCXN537_cm33_core0_SERIES) || defined(MCXN537_cm33_core1_SERIES) || \
      defined(MCXN536_cm33_core0_SERIES) || defined(MCXN536_cm33_core1_SERIES) || \
      defined(MCXN527_cm33_core0_SERIES) || defined(MCXN527_cm33_core1_SERIES) || \
-     defined(MCXN526_cm33_core0_SERIES) || defined(MCXN526_cm33_core1_SERIES))
+     defined(MCXN526_cm33_core0_SERIES) || defined(MCXN526_cm33_core1_SERIES) || \
+     defined(MCXN527T_cm33_core0_SERIES) || defined(MCXN527T_cm33_core1_SERIES) || \
+     defined(MCXN536T_cm33_core0_SERIES) || defined(MCXN536T_cm33_core1_SERIES) || \
+     defined(MCXN537T_cm33_core0_SERIES) || defined(MCXN537T_cm33_core1_SERIES) || \
+     defined(MCXN546T_cm33_core0_SERIES) || defined(MCXN546T_cm33_core1_SERIES) || \
+     defined(MCXN547T_cm33_core0_SERIES) || defined(MCXN547T_cm33_core1_SERIES) || \
+     defined(MCXN946T_cm33_core0_SERIES) || defined(MCXN946T_cm33_core1_SERIES) || \
+     defined(MCXN947T_cm33_core0_SERIES) || defined(MCXN947T_cm33_core1_SERIES))
     assert((cpu_id == kMAILBOX_CM33_Core0) || (cpu_id == kMAILBOX_CM33_Core1));
 #elif ((defined(LPC54114_cm4_SERIES) || defined(LPC54114_cm0plus_SERIES)))
     assert((cpu_id == kMAILBOX_CM0Plus) || (cpu_id == kMAILBOX_CM4));
@@ -233,10 +283,20 @@ static inline void MAILBOX_ClearValueBits(MAILBOX_Type *base, mailbox_cpu_id_t c
      defined(MCXN547_cm33_core0_SERIES) || defined(MCXN547_cm33_core1_SERIES) || \
      defined(MCXN546_cm33_core0_SERIES) || defined(MCXN546_cm33_core1_SERIES) || \
      defined(MCXN556S_cm33_core0_SERIES) || defined(MCXN556S_cm33_core1_SERIES) || \
+     defined(MCXN556T_cm33_core0_SERIES) || defined(MCXN556T_cm33_core1_SERIES) || \
+     defined(MCXN557S_cm33_core0_SERIES) || defined(MCXN557S_cm33_core1_SERIES) || \
+     defined(MCXN557T_cm33_core0_SERIES) || defined(MCXN557T_cm33_core1_SERIES) || \
      defined(MCXN537_cm33_core0_SERIES) || defined(MCXN537_cm33_core1_SERIES) || \
      defined(MCXN536_cm33_core0_SERIES) || defined(MCXN536_cm33_core1_SERIES) || \
      defined(MCXN527_cm33_core0_SERIES) || defined(MCXN527_cm33_core1_SERIES) || \
-     defined(MCXN526_cm33_core0_SERIES) || defined(MCXN526_cm33_core1_SERIES))
+     defined(MCXN526_cm33_core0_SERIES) || defined(MCXN526_cm33_core1_SERIES) || \
+     defined(MCXN527T_cm33_core0_SERIES) || defined(MCXN527T_cm33_core1_SERIES) || \
+     defined(MCXN536T_cm33_core0_SERIES) || defined(MCXN536T_cm33_core1_SERIES) || \
+     defined(MCXN537T_cm33_core0_SERIES) || defined(MCXN537T_cm33_core1_SERIES) || \
+     defined(MCXN546T_cm33_core0_SERIES) || defined(MCXN546T_cm33_core1_SERIES) || \
+     defined(MCXN547T_cm33_core0_SERIES) || defined(MCXN547T_cm33_core1_SERIES) || \
+     defined(MCXN946T_cm33_core0_SERIES) || defined(MCXN946T_cm33_core1_SERIES) || \
+     defined(MCXN947T_cm33_core0_SERIES) || defined(MCXN947T_cm33_core1_SERIES))
     assert((cpu_id == kMAILBOX_CM33_Core0) || (cpu_id == kMAILBOX_CM33_Core1));
 #elif ((defined(LPC54114_cm4_SERIES) || defined(LPC54114_cm0plus_SERIES)))
     assert((cpu_id == kMAILBOX_CM0Plus) || (cpu_id == kMAILBOX_CM4));

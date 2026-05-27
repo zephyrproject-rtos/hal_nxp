@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -1143,13 +1143,13 @@ status_t RTC_ConfigureTamperInput(RTC_Type *base,
     tamperCtrl &= ~(((1 << tamperInputId) << RTC_TAMP_CTRL_TAMP_EN_SHIFT) |
                     ((1 << tamperInputId) << RTC_TAMP_CTRL_TAMP_POL_SHIFT) |
                     ((1 << tamperInputId) << RTC_TAMP_CTRL_TAMP_PULL_CTRL_SHIFT) |
-                    ((1 << tamperInputId) << RTC_TAMP_CTRL_TAMP_CTRL_SHIFT));
+                    ((1 << tamperInputId) << RTC_TAMP_CTRL_PFE_CNTRL_SHIFT));
 
     /* Configure tamper global settings */
     tamperCtrl |= RTC_TAMP_CTRL_TAMP_EN((config->enableTamperInput ? 1U : 0U) << tamperInputId) |
                   RTC_TAMP_CTRL_TAMP_POL(config->polarity << tamperInputId) |
                   RTC_TAMP_CTRL_TAMP_PULL_CTRL(config->pullup << tamperInputId) |
-                  RTC_TAMP_CTRL_TAMP_CTRL(config->filter << tamperInputId);
+                  RTC_TAMP_CTRL_PFE_CNTRL(config->filter << tamperInputId);
 
     if (config->enableTamperInput)
     {

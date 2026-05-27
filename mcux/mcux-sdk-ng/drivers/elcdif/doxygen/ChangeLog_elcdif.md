@@ -1,5 +1,12 @@
 # ELCDIF
 
+## [2.1.1]
+
+- Improvements
+  - Added 8-byte buffer address alignment check (assert) in ELCDIF_RgbModeInit,
+    ELCDIF_SetAlphaSurfaceBufferConfig, ELCDIF_SetNextBufferAddr, and
+    ELCDIF_SetNextAlphaSurfaceBufferAddr.
+
 ## [2.1.0]
 
 - New Features

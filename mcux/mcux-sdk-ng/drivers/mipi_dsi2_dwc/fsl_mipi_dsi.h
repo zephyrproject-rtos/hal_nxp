@@ -19,7 +19,7 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*! @{ */
-#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*! @} */
 
 /*! @brief Error codes for the MIPI DSI driver. */
@@ -542,12 +542,12 @@ uint32_t DSI_GetInstance(DSI_V2_HOST_DSI_Type *base);
  * This function initializes the MIPI DSI host with the configuration, it should
  * be called before other MIPI DSI driver functions.
  *
- * @param main MIPI DSI main peripheral base address.
+ * @param base MIPI DSI main peripheral base address.
  * @param dsi  MIPI DSI dsi peripheral base address.
  * @param inter MIPI DSI int peripheral base address.
  * @param config Pointer to the dsi configuration structure.
  */
-void DSI_Init(DSI_V2_HOST_MAIN_Type *main,
+void DSI_Init(DSI_V2_HOST_MAIN_Type *base,
               DSI_V2_HOST_DSI_Type *dsi,
               DSI_V2_HOST_INT_Type *inter,
               const dsi_config_t *config);

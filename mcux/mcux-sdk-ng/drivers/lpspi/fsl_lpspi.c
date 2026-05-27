@@ -1774,7 +1774,7 @@ void LPSPI_MasterTransferHandleIRQ(LPSPI_Type *base, lpspi_master_handle_t *hand
              * If the remaining number is 0, the FIFO must be 0, and the condition after will not be judged.(will
              * improve)
              */
-            while ((LPSPI_GetRxFifoCount(base) != 0U) && (handle->rxRemainingByteCount != 0U))
+            while ((LPSPI_GetRxFifoCount(base) != 0U) && (handle->rxRemainingByteCount != 0U)) /* GCOVR_EXCL_BR_LINE */
             {
                 /*Read out the data*/
                 readData = LPSPI_ReadData(base);
@@ -2558,10 +2558,10 @@ static void LPSPI_CommonIRQHandler(LPSPI_Type *base, void *param)
 }
 
 /*
- * $Branch Coverage Justification$
+ * $Function Coverage Justification$
  * Code coverage of LPSPI_DriverIRQHandler is device specific.
  */
-void LPSPI_DriverIRQHandler(uint32_t instance)
+void LPSPI_DriverIRQHandler(uint32_t instance) /* GCOVR_EXCL_FUNCTION */
 {
     if (instance < ARRAY_SIZE(s_lpspiBases))
     {

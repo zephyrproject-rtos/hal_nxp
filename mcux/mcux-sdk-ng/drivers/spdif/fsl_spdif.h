@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2020, 2026 NXP
  * All rights reserved.
  *
  *
@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 8)) /*!< Version 2.0.8 */
+#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 9)) /*!< Version 2.0.9 */
 /*! @} */
 
 /*! @brief SPDIF return status*/

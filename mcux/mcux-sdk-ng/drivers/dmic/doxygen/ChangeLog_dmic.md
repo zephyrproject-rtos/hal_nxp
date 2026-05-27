@@ -1,5 +1,10 @@
 # DMIC
 
+## [2.3.4]
+
+- New Features
+  - Added common IRQ handler entry DMIC_CommonDriverIRQHandler.
+
 ## [2.3.3]
 
 - Bug Fixes

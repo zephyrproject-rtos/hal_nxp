@@ -680,8 +680,12 @@ status_t TPM_UpdatePwmDutycycle(TPM_Type *base,
 
     /* Return error if requested chnlNumber is greater than the max allowed */
     /* Return error if requested dutycycle/chnlNumber is greater than the max allowed */
-    if ((-1 == (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) ||
-        (chnlId >= (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)))
+    /*
+     * $Branch Coverage Justification$
+     * (-1 == (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) not covered. $ref tpm_c_ref_2$.
+     */
+    if ((-1 == (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) || /* GCOVR_EXCL_BR_LINE */
+        (chnlId >= (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base))) /* GCOVR_EXCL_BR_LINE */
     {
         return kStatus_InvalidArgument;
     }
@@ -771,7 +775,11 @@ status_t TPM_UpdatePwmDutycycle(TPM_Type *base,
 #endif
             assert(cnvFirstEdge <= 0xFFFFFFFFU - cnv);
             base->CONTROLS[(chnlId * 2U) + 1U].CnV = cnvFirstEdge + cnv;
-        } while ((cnvFirstEdge + cnv) != base->CONTROLS[(chnlId * 2U) + 1U].CnV);
+        /*
+         * $Branch Coverage Justification$
+         * ((cnvFirstEdge + cnv) != base->CONTROLS[(chnlId * 2U) + 1U].CnV) not covered. $ref tpm_c_ref_1$.
+         */
+        } while ((cnvFirstEdge + cnv) != base->CONTROLS[(chnlId * 2U) + 1U].CnV); /* GCOVR_EXCL_BR_LINE */
     }
     else
     {

@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief OSTIMER driver version. */
-#define FSL_OSTIMER_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+#define FSL_OSTIMER_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*! @} */
 
 
@@ -352,6 +352,14 @@ uint64_t OSTIMER_GetCaptureValue(OSTIMER_Type *base);
  * @return       none
  */
 void OSTIMER_HandleIRQ(OSTIMER_Type *base, ostimer_callback_t cb);
+
+/*!
+ * @brief OSTIMER parameterized IRQ handler entry.
+ *
+ * @param instance OSTIMER instance index.
+ */
+void OSTIMER_DriverIRQHandler(uint32_t instance);
+
 /*! @} */
 
 #if defined(__cplusplus)

@@ -415,7 +415,7 @@ void SCTIMER_UpdatePwmDutycycle(SCT_Type *base, sctimer_out_t output, uint8_t du
 
     uint32_t periodMatchReg, pulseMatchReg;
     uint32_t pulsePeriod = 0, period;
-    assert(event < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS);
+    assert(event < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS - 1U);
     bool isHighTrue      = (0U != (base->OUT[output].CLR & (1UL << (event + 1U))));
 
     /* Retrieve the match register number for the PWM period */
@@ -423,6 +423,9 @@ void SCTIMER_UpdatePwmDutycycle(SCT_Type *base, sctimer_out_t output, uint8_t du
 
     /* Retrieve the match register number for the PWM pulse period */
     pulseMatchReg = base->EV[event + 1U].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
+
+    assert((periodMatchReg < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE) &&
+        (pulseMatchReg < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE));
 
     period = base->MATCH[periodMatchReg];
 
@@ -817,6 +820,15 @@ void SCTIMER_EventHandleIRQ(SCT_Type *base)
 
     /* Clear event interrupt flag */
     base->EVFLAG = clearFlag;
+}
+
+void SCTIMER_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_sctBases))
+    {
+        s_sctimerIsr(s_sctBases[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if defined(SCT0)

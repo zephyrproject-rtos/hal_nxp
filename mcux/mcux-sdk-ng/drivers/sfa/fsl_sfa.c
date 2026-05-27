@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright 2019-2023, 2025-2026 NXP
  * All rights reserved.
  *
@@ -998,6 +998,16 @@ static void SFA_CommonIRQHandler(SFA_Type *base)
 
     s_sfaIsr[instance](status);
 
+    SDK_ISR_EXIT_BARRIER;
+}
+
+void SFA_DriverIRQHandler(uint32_t instance);
+void SFA_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_sfaBases))
+    {
+        SFA_CommonIRQHandler(s_sfaBases[instance]);
+    }
     SDK_ISR_EXIT_BARRIER;
 }
 

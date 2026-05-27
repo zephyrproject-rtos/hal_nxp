@@ -1,5 +1,10 @@
 # FLEXIO_MCU_LCD_SMARTDMA
 
+## [2.0.7]
+
+- Other Changes
+  - Add more MCXA devices support.
+
 ## [2.0.6]
 
 - Other Changes

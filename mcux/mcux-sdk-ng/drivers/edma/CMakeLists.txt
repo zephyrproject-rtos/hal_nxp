@@ -1,9 +1,9 @@
-# Copyright 2024 NXP
+# Copyright 2024, 2026 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.edma)
-    mcux_component_version(2.4.7)
+    mcux_component_version(2.4.8)
 
     mcux_add_source(SOURCES fsl_edma.h fsl_edma.c)
 

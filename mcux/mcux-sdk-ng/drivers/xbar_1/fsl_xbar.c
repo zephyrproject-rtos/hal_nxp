@@ -171,6 +171,8 @@ status_t XBAR_SetSignalsConnection(xbar_input_signal_t input, xbar_output_signal
     uint16_t inputIndex  = XBAR_EXTRACT_INPUT(input);
     volatile xbar_reg_t *selRegAddr;
 
+    assert(inputIndex <= (uint16_t)XBAR_SEL_MAX_MASK);
+
 #if defined(FSL_FEATURE_XBAR_DSC_REG_WIDTH) && (FSL_FEATURE_XBAR_DSC_REG_WIDTH == 32)
     if ((inst > ARRAY_SIZE(s_xbarInfo)) || (outputIndex > (s_xbarInfo[inst - 1U].regSelNum)))
     {

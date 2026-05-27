@@ -1,5 +1,15 @@
 # MAILBOX
 
+## [2.3.6]
+
+- Improvements
+  - Added support for the MCXNxxxT series
+
+## [2.3.5]
+
+- Improvements
+  - Added support for the MCXN556T, MCXN557S and MCXN557T series
+
 ## [2.3.4]
 
 - Improvements

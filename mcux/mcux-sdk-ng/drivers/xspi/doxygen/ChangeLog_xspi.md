@@ -1,5 +1,16 @@
 # XSPI
 
+## [2.7.4]
+
+- New Features
+  - Added common IRQ handler entry XSPI_DriverIRQHandler.
+
+## [2.7.3]
+
+- Bug Fixes
+  - Fixed CERT-C INT30-C and ARR30-C violations in XSPI_TransferBlocking, XSPI_WriteBlockingTG,
+    XSPI_ReadBlockingTG, and XSPI_IRQHandler.
+
 ## [2.7.2]
 
 - Bug Fixes

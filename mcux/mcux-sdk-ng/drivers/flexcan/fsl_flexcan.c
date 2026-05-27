@@ -4561,8 +4561,8 @@ status_t FLEXCAN_TransferReceiveEnhancedFifoNonBlocking(CAN_Type *base,
 
     status_t status;
     uint32_t watermark = ((base->ERFCR & CAN_ERFCR_ERFWM_MASK) >> CAN_ERFCR_ERFWM_SHIFT) + 1U;
-    uint64_t irqMask =
-        FLEXCAN_EFIFO_INT_MASK(CAN_ERFIER_ERFUFWIE_MASK) | FLEXCAN_EFIFO_INT_MASK(CAN_ERFIER_ERFOVFIE_MASK);
+    uint64_t irqMask = FLEXCAN_EFIFO_INT_MASK(CAN_ERFIER_ERFUFWIE_MASK) |
+                       FLEXCAN_EFIFO_INT_MASK(CAN_ERFIER_ERFOVFIE_MASK);
 
     /* Check if Enhanced Rx FIFO is idle. */
     if ((uint8_t)kFLEXCAN_StateIdle == handle->rxFifoState)
@@ -4960,21 +4960,24 @@ static status_t FLEXCAN_SubHandlerForEnhancedRxFifo(CAN_Type *base, flexcan_hand
 
     status_t status;
     /* Solve Enhanced Rx FIFO interrupt. */
-    if ((0u != (flags & (uint64_t)kFLEXCAN_ERxFifoUnderflowIntFlag)) &&
-        (0u != (base->ERFIER & CAN_ERFIER_ERFUFWIE_MASK)))
+    if ((0U != (flags & FLEXCAN_EFIFO_STATUS_MASK(CAN_ERFSR_ERFUFW_MASK))) &&
+        (0U != (base->ERFIER & CAN_ERFIER_ERFUFWIE_MASK)))
     {
+        /* Enhanced Rx FIFO underflow Interrupt. */
         status = kStatus_FLEXCAN_RxFifoUnderflow;
-        FLEXCAN_ClearStatusFlags(base, (uint64_t)kFLEXCAN_ERxFifoUnderflowIntFlag);
+        FLEXCAN_ClearStatusFlags(base, FLEXCAN_EFIFO_STATUS_MASK(CAN_ERFSR_ERFUFW_MASK));
     }
-    else if ((0u != (flags & (uint64_t)kFLEXCAN_ERxFifoOverflowIntFlag)) &&
-             (0u != (base->ERFIER & CAN_ERFIER_ERFOVFIE_MASK)))
+    else if ((0U != (flags & FLEXCAN_EFIFO_STATUS_MASK(CAN_ERFSR_ERFOVF_MASK))) &&
+             (0U != (base->ERFIER & CAN_ERFIER_ERFOVFIE_MASK)))
     {
+        /* Enhanced Rx FIFO overflow Interrupt. */
         status = kStatus_FLEXCAN_RxFifoOverflow;
-        FLEXCAN_ClearStatusFlags(base, (uint64_t)kFLEXCAN_ERxFifoOverflowIntFlag);
+        FLEXCAN_ClearStatusFlags(base, FLEXCAN_EFIFO_STATUS_MASK(CAN_ERFSR_ERFOVF_MASK));
     }
-    else if ((0u != (flags & (uint64_t)kFLEXCAN_ERxFifoWatermarkIntFlag)) &&
-             (0u != (base->ERFIER & CAN_ERFIER_ERFWMIIE_MASK)))
+    else if ((0U != (flags & FLEXCAN_EFIFO_STATUS_MASK(CAN_ERFSR_ERFWMI_MASK))) &&
+             (0U != (base->ERFIER & CAN_ERFIER_ERFWMIIE_MASK)))
     {
+        /* Enhanced Rx FIFO watermark Interrupt. */
         /* Whether the number of CAN messages remaining to be received is greater than the watermark. */
         transferFrames = (handle->rxFifoFrameNum >= watermark) ? watermark : handle->rxFifoFrameNum;
 
@@ -5004,8 +5007,8 @@ static status_t FLEXCAN_SubHandlerForEnhancedRxFifo(CAN_Type *base, flexcan_hand
         else if (handle->rxFifoFrameNum < watermark)
         {
             /* Disable watermark interrupt and enable data avaliable interrupt. */
-            FLEXCAN_DisableInterrupts(base, (uint64_t)kFLEXCAN_ERxFifoWatermarkInterruptEnable);
-            FLEXCAN_EnableInterrupts(base, (uint64_t)kFLEXCAN_ERxFifoDataAvlInterruptEnable);
+            FLEXCAN_DisableInterrupts(base, FLEXCAN_EFIFO_INT_MASK(CAN_ERFIER_ERFWMIIE_MASK));
+            FLEXCAN_EnableInterrupts(base, FLEXCAN_EFIFO_INT_MASK(CAN_ERFIER_ERFDAIE_MASK));
             status = kStatus_FLEXCAN_RxFifoBusy;
         }
         else
@@ -5016,6 +5019,7 @@ static status_t FLEXCAN_SubHandlerForEnhancedRxFifo(CAN_Type *base, flexcan_hand
     }
     else
     {
+        /* Enhanced Rx FIFO data available Interrupt. */
         /* Data available status, check Whether still has CAN messages remaining to be received. */
         if (handle->rxFifoFrameNum > 0U)
         {
@@ -5473,8 +5477,7 @@ void FLEXCAN_EnhancedRxFifoHandleIRQ(CAN_Type *base, flexcan_handle_t *handle) /
     status_t status;
     uint64_t result;
     uint32_t enableInt;
-    uint32_t tempmask;
-    uint32_t tempflag;
+    uint32_t statusReg;
     bool fgRet = false;
     enableInt = base->ERFIER;
     enableInt &= (CAN_ERFIER_ERFUFWIE_MASK | CAN_ERFIER_ERFOVFIE_MASK | CAN_ERFIER_ERFWMIIE_MASK |
@@ -5494,9 +5497,11 @@ void FLEXCAN_EnhancedRxFifoHandleIRQ(CAN_Type *base, flexcan_handle_t *handle) /
         }
 
         /* Checking whether exist enhanced RX FIFO interrupt status. */
-        tempmask = base->ERFIER;
-        tempflag = base->ERFSR;
-        fgRet    = (0U != (tempmask & tempflag));
+        enableInt = base->ERFIER;
+        enableInt &= (CAN_ERFIER_ERFUFWIE_MASK | CAN_ERFIER_ERFOVFIE_MASK | CAN_ERFIER_ERFWMIIE_MASK |
+                      CAN_ERFIER_ERFDAIE_MASK);
+        statusReg = base->ERFSR;
+        fgRet     = (0U != (enableInt & statusReg));
     } while (fgRet);
 }
 #endif

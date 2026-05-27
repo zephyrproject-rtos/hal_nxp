@@ -1,5 +1,9 @@
 # GDET
 
+## [2.1.3]
+
+- Update to KW43 GDET offering
+
 ## [2.1.2]
 
 - Update to MCXA577 GDET offering

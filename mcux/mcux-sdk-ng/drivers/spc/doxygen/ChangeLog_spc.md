@@ -1,5 +1,23 @@
 # SPC
 
+## [2.9.0]
+
+- New Features
+  - Added VDD1P8 low-voltage detect APIs (config, Active/LP/HP enable, status flag)
+    guarded by FSL_FEATURE_SPC_HAS_VDD1P8_LVD for SPC variants that monitor the
+    VDD_FRO rail.
+  - Added kSPC_PowerDomain3 and kSPC_INFRAPowerDomainRetain for SPC variants with
+    a 4-domain topology.
+  - Added VDD_GLITCH_DETECT_SC -> VDD_CORE_GLITCH_DETECT_SC alias block so both
+    GLITCH_DETECT_SC and VDD_GLITCH_DETECT_SC register names resolve to a single
+    unified set of driver macros.
+
+- Improvements
+  - Guarded DCDC_CFG FREQ_CNTRL access with FSL_FEATURE_SPC_HAS_NO_DCDC_FREQ_CNTRL
+    for SPC variants that omit the frequency-control field.
+  - Extended VD_STAT valid-flags mask to include VDD1P8 and composed it from
+    per-domain sub-masks for cleaner compile-time selection.
+
 ## [2.8.3]
 
 - Bug Fixes
@@ -16,7 +34,7 @@
 
 - Bug Fixes
   - Add explicit boolean to integer conversions (? 1U : 0U) for enable flags in DCDC burst configuration.
-  - Add explicit boolean to integer conversions (? 1U : 0U) for reset and interrupt 
+  - Add explicit boolean to integer conversions (? 1U : 0U) for reset and interrupt
     enable flags in VDD core glitch detector.
   - Follow INT31-C CERT coding standard for safe boolean to unsigned long conversions.
 
@@ -28,7 +46,7 @@
 
 
 - Bug Fixes
-  - Fixed doxygen warnings: 
+  - Fixed doxygen warnings:
     1. unbalanced grouping commands.
     2. Argument 'base' of command @param is not found in the argument
       list of sfa_callback_t(status_t status)

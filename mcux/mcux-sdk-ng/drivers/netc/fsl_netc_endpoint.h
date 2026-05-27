@@ -565,8 +565,10 @@ status_t EP_RxIPFInit(ep_handle_t *handle, netc_ep_ipf_config_t *config);
  */
 static inline uint32_t EP_RxIPFGetTableRemainWordNum(ep_handle_t *handle)
 {
-    return (handle->hw.common->IPFTCAPR & NETC_SW_ENETC_IPFTCAPR_NUM_WORDS_MASK) -
-           (handle->hw.common->IPFTMOR & NETC_SW_ENETC_IPFTMOR_NUM_WORDS_MASK);
+    uint32_t cap = handle->hw.common->IPFTCAPR & NETC_SW_ENETC_IPFTCAPR_NUM_WORDS_MASK;
+    uint32_t op = handle->hw.common->IPFTMOR & NETC_SW_ENETC_IPFTMOR_NUM_WORDS_MASK;
+
+    return cap > op ? (cap - op) : 0U;
 }
 
 /*!
@@ -645,8 +647,10 @@ static inline status_t EP_RxPSFPInit(ep_handle_t *handle, const netc_ep_psfp_con
  */
 static inline uint32_t EP_RxPSFPGetISITableRemainEntryNum(ep_handle_t *handle)
 {
-    return (handle->hw.common->HTMCAPR & NETC_SW_ENETC_HTMCAPR_NUM_WORDS_MASK) -
-           (handle->hw.common->HTMOR & NETC_SW_ENETC_HTMOR_AMOUNT_MASK);
+    uint32_t cap = handle->hw.common->HTMCAPR & NETC_SW_ENETC_HTMCAPR_NUM_WORDS_MASK;
+    uint32_t op = handle->hw.common->HTMOR & NETC_SW_ENETC_HTMOR_AMOUNT_MASK;
+
+    return cap > op ? (cap - op) : 0U;
 }
 
 /*!
@@ -679,8 +683,10 @@ status_t EP_RxPSFPDelISITableEntry(ep_handle_t *handle, uint32_t entryID);
  */
 static inline uint32_t EP_RxPSFPGetISTableRemainEntryNum(ep_handle_t *handle)
 {
-    return (handle->hw.common->ISITCAPR & NETC_SW_ENETC_ISITCAPR_NUM_ENTRIES_MASK) -
-           (handle->hw.common->ISITOR & NETC_SW_ENETC_ISITOR_NUM_ENTRIES_MASK);
+    uint32_t cap = handle->hw.common->ISITCAPR & NETC_SW_ENETC_ISITCAPR_NUM_ENTRIES_MASK;
+    uint32_t op = handle->hw.common->ISITOR & NETC_SW_ENETC_ISITOR_NUM_ENTRIES_MASK;
+
+    return cap > op ? (cap - op) : 0U;
 }
 
 /*!
@@ -722,8 +728,10 @@ status_t EP_RxPSFPDelISTableEntry(ep_handle_t *handle, uint32_t entryID);
  */
 static inline uint32_t EP_RxPSFPGetISFTableRemainEntryNum(ep_handle_t *handle)
 {
-    return (handle->hw.common->HTMCAPR & NETC_SW_ENETC_HTMCAPR_NUM_WORDS_MASK) -
-           (handle->hw.common->HTMOR & NETC_SW_ENETC_HTMOR_AMOUNT_MASK);
+    uint32_t cap = handle->hw.common->HTMCAPR & NETC_SW_ENETC_HTMCAPR_NUM_WORDS_MASK;
+    uint32_t op = handle->hw.common->HTMOR & NETC_SW_ENETC_HTMOR_AMOUNT_MASK;
+
+    return cap > op ? (cap - op) : 0U;
 }
 
 /*!
@@ -766,8 +774,10 @@ status_t EP_RxPSFPDelISFTableEntry(ep_handle_t *handle, uint32_t entryID);
  */
 static inline uint32_t EP_RxPSFPGetRPTableRemainEntryNum(ep_handle_t *handle)
 {
-    return (handle->hw.common->RPITCAPR & NETC_SW_ENETC_RPITCAPR_NUM_ENTRIES_MASK) -
-           (handle->hw.common->RPITOR & NETC_SW_ENETC_RPITOR_NUM_ENTRIES_MASK);
+    uint32_t cap = handle->hw.common->RPITCAPR & NETC_SW_ENETC_RPITCAPR_NUM_ENTRIES_MASK;
+    uint32_t op = handle->hw.common->RPITOR & NETC_SW_ENETC_RPITOR_NUM_ENTRIES_MASK;
+
+    return cap > op ? (cap - op) : 0U;
 }
 
 /*!
@@ -829,8 +839,10 @@ status_t EP_RxPSFPGetRPStatistic(ep_handle_t *handle, uint32_t entryID, netc_tb_
  */
 static inline uint32_t EP_RxPSFPGetISCTableRemainEntryNum(ep_handle_t *handle)
 {
-    return (handle->hw.common->ISCITCAPR & NETC_SW_ENETC_ISCITCAPR_NUM_ENTRIES_MASK) -
-           (handle->hw.common->ISCITOR & NETC_SW_ENETC_ISCITOR_NUM_ENTRIES_MASK);
+    uint32_t cap = handle->hw.common->ISCITCAPR & NETC_SW_ENETC_ISCITCAPR_NUM_ENTRIES_MASK;
+    uint32_t op = handle->hw.common->ISCITOR & NETC_SW_ENETC_ISCITOR_NUM_ENTRIES_MASK;
+
+    return cap > op ? (cap - op) : 0U;
 }
 
 /*!
@@ -873,8 +885,10 @@ status_t EP_RxPSFPResetISCStatistic(ep_handle_t *handle, uint32_t entryID);
  */
 static inline uint32_t EP_RxPSFPGetSGITableRemainEntryNum(ep_handle_t *handle)
 {
-    return (handle->hw.common->SGIITCAPR & NETC_SW_ENETC_SGIITCAPR_NUM_ENTRIES_MASK) -
-           (handle->hw.common->SGIITOR & NETC_SW_ENETC_SGIITOR_NUM_ENTRIES_MASK);
+    uint32_t cap = handle->hw.common->SGIITCAPR & NETC_SW_ENETC_SGIITCAPR_NUM_ENTRIES_MASK;
+    uint32_t op = handle->hw.common->SGIITOR & NETC_SW_ENETC_SGIITOR_NUM_ENTRIES_MASK;
+
+    return cap > op ? (cap - op) : 0U;
 }
 
 /*!
@@ -929,8 +943,10 @@ status_t EP_RxPSFPGetSGIState(ep_handle_t *handle, uint32_t entryID, netc_tb_sgi
  */
 static inline uint32_t EP_RxPSFPGetSGCLTableRemainWordNum(ep_handle_t *handle)
 {
-    return (handle->hw.common->SGCLITCAPR & NETC_SW_ENETC_SGCLITCAPR_NUM_WORDS_MASK) -
-           (handle->hw.common->SGCLTMOR & NETC_SW_ENETC_SGCLTMOR_NUM_WORDS_MASK);
+    uint32_t cap = handle->hw.common->SGCLITCAPR & NETC_SW_ENETC_SGCLITCAPR_NUM_WORDS_MASK;
+    uint32_t op = handle->hw.common->SGCLTMOR & NETC_SW_ENETC_SGCLTMOR_NUM_WORDS_MASK;
+
+    return cap > op ? (cap - op) : 0U;
 }
 
 /*!
@@ -1484,6 +1500,7 @@ static inline void EP_WaitUnitilTxComplete(ep_handle_t *handle, uint8_t ring)
     {
         /* Switch management ENETC Tx BD hardware ring 0 can't be used to send regular frame, so the index need increase
          * 1 */
+        assert(hwRing <= (UINT8_MAX - handle->ringShift));
         hwRing += handle->ringShift;
     }
 #endif

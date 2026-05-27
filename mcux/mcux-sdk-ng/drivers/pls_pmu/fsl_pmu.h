@@ -26,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief pls_pmu driver version 2.1.0. */
-#define FSL_PMU_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief pls_pmu driver version 2.2.0. */
+#define FSL_PMU_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 /*!
@@ -133,11 +133,16 @@ static inline void PMU_UpdateVDDCore1P1InLpMode(PMU_Type *base, uint8_t value)
 /*!
  * @brief Enable/disable FRO16K.
  * 
+ * @deprecated Will be removed in next release.
+ *
  * @param base PMU peripheral base address.
  * @param enable Specify the behavior of FRO16K, true to enable FRO16K, false to disable FRO16K.
  */
 static inline void PMU_EnableFRO16K(PMU_Type *base, bool enable)
 {
+    (void)base;
+    (void)enable;
+#if 0  
     if (enable == false)
     {
         /* Disable FRO16K clock. */
@@ -151,6 +156,7 @@ static inline void PMU_EnableFRO16K(PMU_Type *base, bool enable)
 #if CONFIG_PLS_PMU_REG_WRITE_DELAY_VAL
     SDK_DelayAtLeastUs(CONFIG_PLS_PMU_REG_WRITE_DELAY_VAL, SystemCoreClock);
 #endif /* CONFIG_PLS_PMU_REG_WRITE_DELAY_VAL */
+#endif
 }
 
 /*!
@@ -201,17 +207,15 @@ static inline void PMU_KeepFRO16KActiveInDpd3AndSD(PMU_Type *base, bool keepActi
 /*!
  * @brief Update DCDC watchdog counter value.
  * 
+ * @deprecated Will be removed in next release.
+ *
  * @param base PMU peripheral base address.
  * @param timeoutValue DCDC watchdog counter value.
  */
 static inline void PMU_UpdateDCDCWakeupWatchdogCounterValue(PMU_Type *base, uint16_t timeoutValue)
 {
-    base->PMU_DPD3_CTRL = ((base->PMU_DPD3_CTRL) & ~PMU_VDD_CORE_AON_WKUP_WDTC_DCDC_AON_WKUP_WDOG_MASK) | \
-                        PMU_VDD_CORE_AON_WKUP_WDTC_DCDC_AON_WKUP_WDOG(timeoutValue);
-
-#if CONFIG_PLS_PMU_REG_WRITE_DELAY_VAL
-    SDK_DelayAtLeastUs(CONFIG_PLS_PMU_REG_WRITE_DELAY_VAL, SystemCoreClock);
-#endif /* CONFIG_PLS_PMU_REG_WRITE_DELAY_VAL */
+    (void)base;
+    (void)timeoutValue;
 }
 
 /*!

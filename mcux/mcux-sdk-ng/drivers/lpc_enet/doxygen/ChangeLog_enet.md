@@ -1,5 +1,10 @@
 # LPC_ENET
 
+## [2.3.8]
+
+- New Features
+  - Added common IRQ handler entry ENET_DriverIRQHandler.
+
 ## [2.3.7]
 
 - Bug Fixes

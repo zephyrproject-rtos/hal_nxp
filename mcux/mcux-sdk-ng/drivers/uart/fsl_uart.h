@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief UART driver version. */
-#define FSL_UART_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
+#define FSL_UART_DRIVER_VERSION (MAKE_VERSION(2, 5, 2))
 /*! @} */
 
 /*! @brief Retry times for waiting flag. */
@@ -967,6 +967,17 @@ void UART_TransferHandleIRQ(UART_Type *base, void *irqHandle);
  * @param irqHandle UART handle pointer.
  */
 void UART_TransferHandleErrorIRQ(UART_Type *base, void *irqHandle);
+
+/*!
+ * @brief UART common IRQ handler.
+ *
+ * This function handles the UART IRQ request. It can be used by new SOCs where
+ * each vector table entry calls this common handler with the instance index,
+ * instead of defining a separate handler per instance.
+ *
+ * @param instance UART instance index.
+ */
+void UART_DriverIRQHandler(uint32_t instance);
 
 /*! @} */
 

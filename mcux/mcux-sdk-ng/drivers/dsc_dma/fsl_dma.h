@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 NXP
+ * Copyright 2021, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief DMA driver version. */
-#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*! @} */
 
 /*******************************************************************************
@@ -898,6 +898,14 @@ void DMA_TransferChannelAbort(dma_handle_t *psHandle);
  * @param psHandle DMA handle pointer.
  */
 void DMA_TransferChannelHandleIRQ(dma_handle_t *psHandle);
+
+/*!
+ * @brief DMA common IRQ handler entry, dispatches to the channel handler.
+ *
+ * @param instance DMA peripheral instance number.
+ * @param channel  DMA channel number within the instance.
+ */
+void DMA_DriverIRQHandler(uint32_t instance, uint32_t channel);
 
 /*! @} */
 

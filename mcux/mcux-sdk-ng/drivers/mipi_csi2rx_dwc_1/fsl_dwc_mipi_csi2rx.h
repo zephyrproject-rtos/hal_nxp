@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -19,7 +19,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief CSI2RX driver version. */
-#define FSL_CSI2RX_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_CSI2RX_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*! @brief CSI2RX data lanes.  */
@@ -139,7 +139,7 @@ uint32_t MIPI_CSI2RX_GetInstance(CSI2_CONTROLLER_Type *base);
  *
  * @param base CSI2RX peripheral address.
  */
-void MIPI_CSI2RX_Startup(CSI2_CONTROLLER_Type *base, CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config);
+void MIPI_CSI2RX_Startup(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config);
 
 /*!
  * @brief This function deal with CSI and PHY initialization.

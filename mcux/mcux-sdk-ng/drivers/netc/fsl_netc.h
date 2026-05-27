@@ -50,10 +50,10 @@
  */
 
 /*! @brief Driver Version */
-#define FSL_NETC_DRIVER_VERSION (MAKE_VERSION(2, 10, 4))
+#define FSL_NETC_DRIVER_VERSION (MAKE_VERSION(2, 10, 5))
 
 /*! @brief Macro to divides an address into a low 32 bits and a possible high 32 bits */
-#define NETC_ADDR_LOW_32BIT(x)  ((uint32_t)(x) & 0xFFFFFFFFU)
+#define NETC_ADDR_LOW_32BIT(x)  ((uint32_t)((x) & 0xFFFFFFFFU))
 #define NETC_ADDR_HIGH_32BIT(x) ((4U != sizeof(uintptr_t)) ? (((uintptr_t)(x) >> 32U) & 0xFFFFFFFFU) : 0U)
 
 /*! @brief Status code for the NETC module */
@@ -227,7 +227,6 @@ typedef enum _netc_tx_ext_flags
  */
 /*! @brief Get SI information from netc_hw_si_idx_t. */
 #define getSiInstance(si) ((uint8_t)((uint16_t)(si) >> 8U))          /*!< The ENETC instance of this SI. */
-#define getSiNum(si)      ((uint8_t)(((uint16_t)(si) >> 4U) & 0xFU)) /*!< The SI number in the ENETC. */
 #define getSiIdx(si)      ((uint8_t)((uint16_t)(si) & 0xFU))         /*!< The actaul index in the netc_hw_si_idx_t. */
 
 /*! @brief ENETC index enumerator */
@@ -4083,6 +4082,41 @@ extern "C" {
 /*******************************************************************************
  * API
  ******************************************************************************/
+
+/*!
+ * @brief Get SI number in the ENETC from netc_hw_si_idx_t.
+ *
+ * @param si
+ * @return uint8_t
+ */
+static inline uint8_t getSiNum(uint16_t si)
+{
+    uint8_t num = (si >> 4U) & 0xFU;
+
+    assert(num < NETC_ENETC_NUM_SI_COUNT);
+
+    return num;
+}
+
+#if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+/*!
+ * @brief Convert address between local memory and DMA. Maximum address size can be 64-bit.
+ *
+ * @param addr
+ * @param direction
+ * @return uint64_t
+ */
+static inline uint64_t NETC_ConvertMemoryMapAddress(uint64_t addr, mem_direction_t direction)
+{
+#if UINTPTR_MAX == UINT32_MAX
+    return (uint64_t)MEMORY_ConvertMemoryMapAddress((uint32_t)(addr & 0xffffffffU), direction);
+#elif UINTPTR_MAX == UINT64_MAX
+    return MEMORY_ConvertMemoryMapAddress(addr, direction);
+#else
+#error "Unsupported pointer size"
+#endif
+}
+#endif
 
 #if defined(__cplusplus)
 }

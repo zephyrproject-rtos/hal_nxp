@@ -1,5 +1,10 @@
 # FLASH
 
+## [2.3.4]
+
+- Improvement
+  - Add the support for KW43/MCXW70 platforms.
+
 ## [2.3.3]
 - Improvements
   - Added timeout for while loop in flash_command_pre_sequence, flash_command_sequence,

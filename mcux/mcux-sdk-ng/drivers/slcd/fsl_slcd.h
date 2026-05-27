@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2021, 2023, 2025 NXP
+ * Copyright 2016-2019, 2021, 2023, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SLCD driver version. */
-#define FSL_SLCD_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_SLCD_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*! @} */
 
 /*! @brief SLCD clock prescaler to generate frame frequency. */
@@ -202,10 +202,12 @@ typedef enum _slcd_duty_cycle
     kSLCD_1Div2DutyCycle,      /*!< LCD use 2 BP 1/2 duty cycle. */
     kSLCD_1Div3DutyCycle,      /*!< LCD use 3 BP 1/3 duty cycle. */
     kSLCD_1Div4DutyCycle,      /*!< LCD use 4 BP 1/4 duty cycle. */
+#if LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT == 16
     kSLCD_1Div5DutyCycle,      /*!< LCD use 5 BP 1/5 duty cycle. */
     kSLCD_1Div6DutyCycle,      /*!< LCD use 6 BP 1/6 duty cycle. */
     kSLCD_1Div7DutyCycle,      /*!< LCD use 7 BP 1/7 duty cycle. */
     kSLCD_1Div8DutyCycle       /*!< LCD use 8 BP 1/8 duty cycle. */
+#endif /* LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT == 16 */
 } slcd_duty_cycle_t;
 
 /*! @brief SLCD segment phase type. */
@@ -216,10 +218,12 @@ typedef enum _slcd_phase_type
     kSLCD_PhaseBActivate  = 0x02U, /*!< LCD waveform phase B activates. */
     kSLCD_PhaseCActivate  = 0x04U, /*!< LCD waveform phase C activates. */
     kSLCD_PhaseDActivate  = 0x08U, /*!< LCD waveform phase D activates. */
+#if LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT == 16
     kSLCD_PhaseEActivate  = 0x10U, /*!< LCD waveform phase E activates. */
     kSLCD_PhaseFActivate  = 0x20U, /*!< LCD waveform phase F activates. */
     kSLCD_PhaseGActivate  = 0x40U, /*!< LCD waveform phase G activates. */
     kSLCD_PhaseHActivate  = 0x80U  /*!< LCD waveform phase H activates. */
+#endif /* LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT == 16 */
 } slcd_phase_type_t;
 
 /*! @brief SLCD segment phase bit index. */
@@ -229,10 +233,12 @@ typedef enum _slcd_phase_index
     kSLCD_PhaseBIndex = 0x1U, /*!< LCD phase B bit index. */
     kSLCD_PhaseCIndex = 0x2U, /*!< LCD phase C bit index. */
     kSLCD_PhaseDIndex = 0x3U, /*!< LCD phase D bit index. */
+#if LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT == 16
     kSLCD_PhaseEIndex = 0x4U, /*!< LCD phase E bit index. */
     kSLCD_PhaseFIndex = 0x5U, /*!< LCD phase F bit index. */
     kSLCD_PhaseGIndex = 0x6U, /*!< LCD phase G bit index. */
     kSLCD_PhaseHIndex = 0x7U  /*!< LCD phase H bit index. */
+#endif /* LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT == 16 */
 } slcd_phase_index_t;
 
 /*! @brief SLCD display mode. */
@@ -299,7 +305,7 @@ typedef struct _slcd_fault_detect_config
 {
     bool faultDetectIntEnable;       /*!< Fault frame detection interrupt enable flag.*/
     bool faultDetectBackPlaneEnable; /*!< True means the pin id fault detected is back plane otherwise front plane. */
-    uint8_t faultDetectPinIndex;     /*!< Fault detected pin id  from 0 to 63. */
+    uint8_t faultDetectPinIndex;     /*!< Fault detected pin id from 0 to (LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT * 4 - 1). */
     slcd_fault_detect_clock_prescaler_t faultPrescaler; /*!< Fault detect clock prescaler. */
     slcd_fault_detect_sample_window_width_t width;      /*!< Fault detect sample window width. */
 } slcd_fault_detect_config_t;
@@ -327,12 +333,13 @@ typedef struct _slcd_config
     bool frameFreqIntEnable;    /*!< Frame frequency interrupt enable flag.*/
 #endif                          /* FSL_FEATURE_SLCD_HAS_FAST_FRAME_RATE */
     uint32_t slcdLowPinEnabled; /*!< Setting enabled SLCD pin 0 ~ pin 31. Setting bit n to 1 means enable pin n. */
-    uint32_t
-        slcdHighPinEnabled; /*!< Setting enabled SLCD pin 32 ~ pin 63. Setting bit n to 1 means enable pin (n + 32). */
+    uint32_t slcdHighPinEnabled; /*!< Setting enabled SLCD pin 32 ~ pin (LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT * 4 - 1).
+                                      Setting bit n to 1 means enable pin (n + 32). */
     uint32_t backPlaneLowPin;  /*!< Setting back plane pin 0 ~ pin 31. Setting bit n to 1 means setting pin n as back
                                   plane. It should never have the same bit setting as the frontPlane Pin. */
-    uint32_t backPlaneHighPin; /*!< Setting back plane pin 32 ~ pin 63. Setting bit n to 1 means setting pin (n + 32) as
-                                  back plane. It should never have the same bit setting as the frontPlane Pin. */
+    uint32_t backPlaneHighPin; /*!< Setting back plane pin 32 ~ pin (LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT * 4 - 1).
+                                  Setting bit n to 1 means setting pin (n + 32) as back plane.
+                                  It should never have the same bit setting as the frontPlane Pin. */
     slcd_fault_detect_config_t *faultConfig; /*!< Fault frame detection configure. If not requirement, set to NULL. */
 } slcd_config_t;
 /*******************************************************************************
@@ -449,11 +456,13 @@ static inline void SLCD_StopBlinkMode(LCD_Type *base)
  * @endcode
  *
  * @param base    SLCD peripheral base address.
- * @param pinIndx SLCD back plane pin index. Range from 0 to 63.
+ * @param pinIndx SLCD back plane pin index. Range from 0 to (LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT * 4 - 1).
  * @param phase   The phase activates for the back plane pin.
  */
 static inline void SLCD_SetBackPlanePhase(LCD_Type *base, uint32_t pinIndx, slcd_phase_type_t phase)
 {
+    assert(pinIndx < (uint32_t)(LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT * 4U));
+
     base->WF8B[pinIndx] = (uint8_t)phase;
 }
 
@@ -470,12 +479,14 @@ static inline void SLCD_SetBackPlanePhase(LCD_Type *base, uint32_t pinIndx, slcd
  * @endcode
  *
  * @param base      SLCD peripheral base address.
- * @param pinIndx   SLCD back plane pin index. Range from 0 to 63.
+ * @param pinIndx   SLCD front plane pin index. Range from 0 to (LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT * 4 - 1).
  * @param operation The operation for the segment on the front plane pin.
  *                  This is a logical OR of the enumeration :: slcd_phase_type_t.
  */
 static inline void SLCD_SetFrontPlaneSegments(LCD_Type *base, uint32_t pinIndx, uint8_t operation)
 {
+    assert(pinIndx < (uint32_t)(LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT * 4U));
+
     base->WF8B[pinIndx] = operation;
 }
 
@@ -491,7 +502,7 @@ static inline void SLCD_SetFrontPlaneSegments(LCD_Type *base, uint32_t pinIndx, 
  * @endcode
  *
  * @param base      SLCD peripheral base address.
- * @param pinIndx   SLCD back plane pin index. Range from 0 to 63.
+ * @param pinIndx   SLCD front plane pin index. Range from 0 to (LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT * 4 - 1).
  * @param phaseIndx The phase bit index @ref slcd_phase_index_t.
  * @param enable    True to turn on the segment for phaseIndx phase
  *                  false to turn off the segment for phaseIndx phase.
@@ -501,6 +512,8 @@ static inline void SLCD_SetFrontPlaneOnePhase(LCD_Type *base,
                                               slcd_phase_index_t phaseIndx,
                                               bool enable)
 {
+    assert(pinIndx < (uint32_t)(LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT * 4U));
+
     uint8_t reg = base->WF8B[pinIndx];
 
     if (enable)

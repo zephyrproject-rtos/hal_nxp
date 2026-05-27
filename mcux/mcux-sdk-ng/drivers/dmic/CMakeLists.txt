@@ -1,4 +1,4 @@
-# Copyright 2024 NXP
+# Copyright 2024, 2026 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
@@ -21,7 +21,7 @@ if(CONFIG_MCUX_COMPONENT_driver.dmic_hwvad)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.dmic)
-    mcux_component_version(2.3.3)
+    mcux_component_version(2.3.4)
 
     mcux_add_source(SOURCES fsl_dmic.c fsl_dmic.h)
 

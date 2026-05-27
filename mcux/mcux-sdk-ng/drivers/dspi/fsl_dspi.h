@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2024 NXP
+ * Copyright 2016-2022, 2024, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief DSPI driver version 2.2.7. */
-#define FSL_DSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 7))
+/*! @brief DSPI driver version 2.2.8. */
+#define FSL_DSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 8))
 /*! @} */
 
 #ifndef DSPI_DUMMY_DATA
@@ -1267,6 +1267,13 @@ void DSPI_SlaveTransferHandleIRQ(SPI_Type *base, dspi_slave_handle_t *handle);
  * param base DSPI peripheral base address.
  */
 uint8_t DSPI_GetDummyDataInstance(SPI_Type *base);
+
+/*!
+ * @brief Common IRQ handler for DSPI, which can be used for DSPI IRQ remapping.
+ *
+ * @param instance DSPI instance number.
+ */
+void DSPI_DriverIRQHandler(uint32_t instance);
 
 /*!
  *@}

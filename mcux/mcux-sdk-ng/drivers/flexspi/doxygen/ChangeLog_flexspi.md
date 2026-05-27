@@ -1,9 +1,21 @@
 # FLEXSPI
 
+## [2.9.2]
+
+- New Features
+  - Added common IRQ handler entry FLEXSPI_CommonDriverIRQHandler.
+
 ## [2.9.1]
 
 - Bug Fixes
   - Fixed CERT INT31-C violations: added masks before uint8_t casts and replaced bool fields with ternary expressions.
+- Improvements
+  - Modified FLEXSPI_WriteBlocking() to trigger IP command after TX FIFO is filled
+    or when all data has been written, preventing premature command execution
+  - Updated `FLEXSPI_TransferBlocking()` to distinguish between Write and Read operation flows according to FlexSPI IP command specification.
+    - For Write/Program operations: Fill IP transmit FIFO with data before triggering the IP command.
+    - For Read operations: Trigger IP command first, then read data from IP receive FIFO.
+    - Added detailed flow comments for both Write and Read operations.
 
 ## [2.9.0]
 

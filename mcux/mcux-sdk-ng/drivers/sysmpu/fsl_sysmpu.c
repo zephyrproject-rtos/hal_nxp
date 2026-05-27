@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015 - 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -129,8 +129,8 @@ void SYSMPU_SetRegionConfig(SYSMPU_Type *base, const sysmpu_region_config_t *reg
                         (uint32_t)regionConfig->accessRights1[msPortNum].userAccessRights));
 
 #if FSL_FEATURE_SYSMPU_HAS_PROCESS_IDENTIFIER
-        wordReg |= SYSMPU_REGION_RWXRIGHTS_MASTER_PE(msPortNum,
-                                                     regionConfig->accessRights1[msPortNum].processIdentifierEnable);
+        uint32_t tmp32 = regionConfig->accessRights1[msPortNum].processIdentifierEnable ? 1UL : 0UL;
+        wordReg |= SYSMPU_REGION_RWXRIGHTS_MASTER_PE(msPortNum, tmp32);
 #endif /* FSL_FEATURE_SYSMPU_HAS_PROCESS_IDENTIFIER */
     }
 
@@ -222,7 +222,8 @@ void SYSMPU_SetRegionRwxMasterAccessRights(SYSMPU_Type *base,
     right |= SYSMPU_REGION_RWXRIGHTS_MASTER(
         masterNum, (((uint32_t)accessRights->superAccessRights << 3U) | (uint32_t)accessRights->userAccessRights));
 #if FSL_FEATURE_SYSMPU_HAS_PROCESS_IDENTIFIER
-    right |= SYSMPU_REGION_RWXRIGHTS_MASTER_PE(masterNum, accessRights->processIdentifierEnable);
+    uint32_t tmp32 = accessRights->processIdentifierEnable ? 1UL : 0UL;
+    right |= SYSMPU_REGION_RWXRIGHTS_MASTER_PE(masterNum, tmp32);
 #endif /* FSL_FEATURE_SYSMPU_HAS_PROCESS_IDENTIFIER */
 
     /* Set low master region access rights. */
@@ -278,10 +279,13 @@ void SYSMPU_SetRegionRwMasterAccessRights(SYSMPU_Type *base,
  */
 bool SYSMPU_GetSlavePortErrorStatus(SYSMPU_Type *base, sysmpu_slave_t slaveNum)
 {
-    uint8_t sperr;
+    uint32_t sperr;
+    uint32_t tmpShift;
 
-    sperr = (uint8_t)(((base->CESR & SYSMPU_CESR_SPERR_MASK) >> SYSMPU_CESR_SPERR_SHIFT) &
-                      (0x1U << ((uint32_t)FSL_FEATURE_SYSMPU_SLAVE_COUNT - (uint32_t)slaveNum - 1U)));
+    assert((uint32_t)slaveNum < (uint32_t)FSL_FEATURE_SYSMPU_SLAVE_COUNT);
+
+    tmpShift = ((uint32_t)FSL_FEATURE_SYSMPU_SLAVE_COUNT - 1U) - (uint32_t)slaveNum;
+    sperr = ((base->CESR & SYSMPU_CESR_SPERR_MASK) >> SYSMPU_CESR_SPERR_SHIFT) & (0x1UL << tmpShift);
 
     return (sperr != 0U) ? true : false;
 }
@@ -296,6 +300,7 @@ bool SYSMPU_GetSlavePortErrorStatus(SYSMPU_Type *base, sysmpu_slave_t slaveNum)
 void SYSMPU_GetDetailErrorAccessInfo(SYSMPU_Type *base, sysmpu_slave_t slaveNum, sysmpu_access_err_info_t *errInform)
 {
     assert(errInform);
+    assert((uint32_t)slaveNum < (uint32_t)FSL_FEATURE_SYSMPU_SLAVE_COUNT);
 
     uint32_t value;
     uint32_t cesReg;
@@ -332,8 +337,9 @@ void SYSMPU_GetDetailErrorAccessInfo(SYSMPU_Type *base, sysmpu_slave_t slaveNum,
 #endif
 
     /* Clears error slave port bit. */
+    uint32_t tmpShift = ((uint32_t)FSL_FEATURE_SYSMPU_SLAVE_COUNT - 1U) - (uint32_t)slaveNum;
     cesReg =
         (base->CESR & ~SYSMPU_CESR_SPERR_MASK) |
-        ((0x1UL << ((uint32_t)FSL_FEATURE_SYSMPU_SLAVE_COUNT - (uint32_t)slaveNum - 1U)) << SYSMPU_CESR_SPERR_SHIFT);
+        ((0x1UL << tmpShift) << SYSMPU_CESR_SPERR_SHIFT);
     base->CESR = cesReg;
 }

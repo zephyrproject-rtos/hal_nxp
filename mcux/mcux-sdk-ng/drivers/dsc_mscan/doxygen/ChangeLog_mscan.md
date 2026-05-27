@@ -1,5 +1,10 @@
 # MSCAN
 
+## [2.1.1]
+
+- New Features
+  - Added common IRQ handler entry MSCAN_DriverIRQHandler.
+
 ## [2.1.0]
 
 - Improvements

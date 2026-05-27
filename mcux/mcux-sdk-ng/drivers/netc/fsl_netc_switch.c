@@ -120,7 +120,7 @@ status_t SWT_MsixSetGlobalMask(swt_handle_t *handle, bool mask)
     }
     else
     {
-        handle->hw.func->PCI_CFC_MSIX_MSG_CTL &= (uint16_t)(~ENETC_VF_PCI_TYPE0_PCI_CFC_MSIX_MSG_CTL_FUNC_MASK_MASK);
+        handle->hw.func->PCI_CFC_MSIX_MSG_CTL &= (uint16_t)((~ENETC_VF_PCI_TYPE0_PCI_CFC_MSIX_MSG_CTL_FUNC_MASK_MASK) & 0xFFFFU);
     }
 
     return kStatus_Success;
@@ -132,7 +132,7 @@ status_t SWT_MsixSetEntryMask(swt_handle_t *handle, uint8_t entryIdx, bool mask)
 
     if (entryIdx < handle->cfg.entryNum)
     {
-        handle->hw.msixTable[entryIdx].control = (uint32_t)mask;
+        handle->hw.msixTable[entryIdx].control = mask ? 1U : 0U;
         result                                 = kStatus_Success;
     }
     else
@@ -565,7 +565,7 @@ status_t SWT_RxMirrorConfig(swt_handle_t *handle, const netc_swt_imr_config_t *c
     handle->hw.base->IMDCR0 =
         NETC_SW_IMDCR0_PORT((kNETC_SWTMPort != config->destPort) ? (uint32_t)config->destPort : 0U) |
         NETC_SW_IMDCR0_DR(config->dr) | NETC_SW_IMDCR0_IPV(config->ipv) |
-        NETC_SW_IMDCR0_MIRDEST((kNETC_SWTMPort == config->destPort) ? 1U : 0U) | NETC_SW_IMDCR0_MIREN(config->enMirror);
+        NETC_SW_IMDCR0_MIRDEST((kNETC_SWTMPort == config->destPort) ? 1U : 0U) | NETC_SW_IMDCR0_MIREN(config->enMirror ? 1U : 0U);
     if ((kNETC_SWTMPort == config->destPort) && (0xFFFFU != config->efmEntryID))
     {
         return kStatus_Fail;
@@ -619,9 +619,9 @@ status_t SWT_ManagementTxRxConfig(swt_handle_t *handle, ep_handle_t *epHandle, c
     {
         rxRingConfig = &txRxConfig->mgmtRxBdrConfig;
         /* Get Management Rx ring hardware index */
-        mgmtRxBdRingIdx = (uint8_t)(((epHandle->hw.base->NUM_SI[0].PSICFGR0 & NETC_ENETC_PSICFGR0_NUM_RX_BDR_MASK) >>
+        mgmtRxBdRingIdx = (uint8_t)((((epHandle->hw.base->NUM_SI[0].PSICFGR0 & NETC_ENETC_PSICFGR0_NUM_RX_BDR_MASK) >>
                                      NETC_ENETC_PSICFGR0_NUM_RX_BDR_SHIFT) -
-                                    1U);
+                                    1U) & 0xFFU);
         if (NETC_SIConfigRxBDR(epHandle->hw.si, mgmtRxBdRingIdx, rxRingConfig) != kStatus_Success)
         {
             return kStatus_Fail;
@@ -677,7 +677,7 @@ status_t SWT_ManagementTxRxConfig(swt_handle_t *handle, ep_handle_t *epHandle, c
             }
 
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-            buffAddr = MEMORY_ConvertMemoryMapAddress((uintptr_t)buffAddr, kMEMORY_Local2DMA);
+            buffAddr = NETC_ConvertMemoryMapAddress(buffAddr, kMEMORY_Local2DMA);
 #endif
             rxDesc->standard.addr = buffAddr;
             rxDesc++;
@@ -697,7 +697,7 @@ status_t SWT_ManagementTxRxConfig(swt_handle_t *handle, ep_handle_t *epHandle, c
         handle->mgmtTxBdRing.bdBase    = txRxConfig->mgmtTxBdrConfig.bdArray;
         handle->mgmtTxBdRing.dirtyBase = txRxConfig->mgmtTxBdrConfig.dirtyArray;
         handle->mgmtTxBdRing.len       = txRxConfig->mgmtTxBdrConfig.len;
-        handle->mgmtTxBdRing.enableInterrupt = txRxConfig->mgmtTxBdrConfig.enIntr;
+        handle->mgmtTxBdRing.enableInterrupt = txRxConfig->mgmtTxBdrConfig.enIntr ? 1U : 0U;
     }
 
     return kStatus_Success;
@@ -723,12 +723,12 @@ status_t SWT_SendFrame(swt_handle_t *handle, netc_frame_struct_t *frame, void *c
 
         if ((opt->flags & (uint32_t)kSWT_TX_OPT_OFFLOAD) != 0U)
         {
-            txDesc[0].standard.flags = NETC_SI_TXDESCRIP_RD_FL(1) | NETC_SI_TXDESCRIP_RD_LSO(opt->offload.lso) |
-                                       NETC_SI_TXDESCRIP_RD_L4CS(opt->offload.l4Checksum) |
+            txDesc[0].standard.flags = NETC_SI_TXDESCRIP_RD_FL(1) | NETC_SI_TXDESCRIP_RD_LSO(opt->offload.lso ? 1U : 0U) |
+                                       NETC_SI_TXDESCRIP_RD_L4CS(opt->offload.l4Checksum ? 1U : 0U) |
                                        NETC_SI_TXDESCRIP_RD_L4T(opt->offload.l4Type) |
                                        NETC_SI_TXDESCRIP_RD_L3T(opt->offload.l3Type) |
                                        NETC_SI_TXDESCRIP_RD_L3HDRSIZE(opt->offload.l3HeaderSize) |
-                                       NETC_SI_TXDESCRIP_RD_IPCS(opt->offload.ipv4Checksum) |
+                                       NETC_SI_TXDESCRIP_RD_IPCS(opt->offload.ipv4Checksum ? 1U : 0U) |
                                        NETC_SI_TXDESCRIP_RD_L3START(opt->offload.l3Start);
 
             txDesc[0].standard.isExtended = (opt->offload.lso) ? 1U : 0U;
@@ -779,7 +779,7 @@ status_t SWT_SendFrame(swt_handle_t *handle,
         {
             /* Switch management ENETC Tx BD hardware ring 0 can't be used to send port masqueradeque frame, so the
              * index need increase 1 */
-            hwRing = txArg.ring + 1U;
+            hwRing = (txArg.ring + 1U) & 0xFFU;
         }
         else
         {
@@ -842,7 +842,7 @@ void SWT_ReclaimTxDescriptor(swt_handle_t *handle, bool enMasquerade, uint8_t ri
         if (enMasquerade)
         {
             /* Port masquerade still use ep transfer handle */
-            frameInfo = EP_ReclaimTxDescCommon(handle->epHandle, &handle->epHandle->txBdRing[ring], ring + 1U,
+            frameInfo = EP_ReclaimTxDescCommon(handle->epHandle, &handle->epHandle->txBdRing[ring], (ring + 1U) & 0xFFU,
                                                (handle->epHandle->cfg.reclaimCallback != NULL));
         }
         else
@@ -904,7 +904,7 @@ status_t SWT_GetTimestampRefResp(swt_handle_t *handle, swt_tsr_resp_t *tsr)
         index     = rxBdRing->extendDesc ? (rxBdRing->index / 2U) : rxBdRing->index;
         rxDmaBuff = rxBdRing->buffArray[index];
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-        rxDmaBuff = (uint64_t)MEMORY_ConvertMemoryMapAddress((uintptr_t)rxDmaBuff, kMEMORY_Local2DMA);
+        rxDmaBuff = NETC_ConvertMemoryMapAddress(rxDmaBuff, kMEMORY_Local2DMA);
 #endif
         rxDesc->standard.addr = rxDmaBuff;
         /* Updates the receive buffer descriptors flags, only clear necessary field. */
@@ -1043,6 +1043,7 @@ status_t SWT_ReceiveFrame(swt_handle_t *handle, netc_frame_struct_t *frame, netc
             index = rxBdRing->index;
             do
             {
+                assert(buffNum <= UINT32_MAX - 1U);
                 buffNum++;
 
                 /* Find the last BD of this frame. */
@@ -1073,8 +1074,9 @@ status_t SWT_ReceiveFrame(swt_handle_t *handle, netc_frame_struct_t *frame, netc
                 newBuff = handle->cfg.rxBuffAlloc(handle, rxBdRing->buffSize, handle->cfg.userData);
                 if (newBuff == NULL)
                 {
-                    while (index-- > 0U)
+                    while (index > 0U)
                     {
+                        index--;
                         handle->cfg.rxBuffFree(handle, frame->buffArray[index].buffer, handle->cfg.userData);
                     }
                     /* When appliction buffer pool is not enough, drop frame in the BD to keep frame latest. */
@@ -1084,6 +1086,8 @@ status_t SWT_ReceiveFrame(swt_handle_t *handle, netc_frame_struct_t *frame, netc
 
                 /* Store in this strcuture, and exchange the buffer in the BD in below code. */
                 frame->buffArray[index].buffer = newBuff;
+
+                assert(index <= UINT16_MAX - 1U);
                 index++;
             } while (--buffNum != 0U);
         }
@@ -1222,8 +1226,8 @@ status_t SWT_BridgeInit(swt_handle_t *handle, const netc_swt_bridge_config_t *co
     assert(config != NULL);
 
     /* Configure switch default VLAN filter entry */
-    handle->hw.base->VFHTDECR0 = NETC_SW_VFHTDECR0_IPMFLE(config->dVFCfg.enIPMFlood) |
-                                 NETC_SW_VFHTDECR0_IPMFE(config->dVFCfg.enIPMFilter) |
+    handle->hw.base->VFHTDECR0 = NETC_SW_VFHTDECR0_IPMFLE(config->dVFCfg.enIPMFlood ? 1U : 0U) |
+                                 NETC_SW_VFHTDECR0_IPMFE(config->dVFCfg.enIPMFilter ? 1U : 0U) |
                                  NETC_SW_VFHTDECR0_STG_ID(config->dVFCfg.stgID) |
                                  ((config->dVFCfg.portMembership << NETC_SW_VFHTDECR0_PORT0_SHIFT) &
                                   (
@@ -1237,7 +1241,7 @@ status_t SWT_BridgeInit(swt_handle_t *handle, const netc_swt_bridge_config_t *co
 #else
     handle->hw.base->VFHTDECR1 = NETC_SW_VFHTDECR1_BASE_ETEID(config->dVFCfg.baseETEID) |
 #endif
-                                 NETC_SW_VFHTDECR1_VL_MODE(config->dVFCfg.enUseFilterID) |
+                                 NETC_SW_VFHTDECR1_VL_MODE(config->dVFCfg.enUseFilterID ? 1U : 0U) |
                                  NETC_SW_VFHTDECR1_FID(config->dVFCfg.filterID);
     handle->hw.base->VFHTDECR2 = NETC_SW_VFHTDECR2_MFO(config->dVFCfg.mfo) | NETC_SW_VFHTDECR2_MLO(config->dVFCfg.mlo) |
 #if defined(NETC_SW_VFHTDECR2_ETA_PORT0_SHIFT)
@@ -2405,6 +2409,7 @@ status_t SWT_TxTGSConfigAdminGcl(swt_handle_t *handle, netc_tb_tgs_gcl_t *config
             NETC_TimerGetTime(TMR0_BASE, &time);
             /* The minimum base time = current time + advance time (0.1us) + command processing time (~90us) + (2 *
              * operational cycle times) */
+            assert(time <= UINT64_MAX - 100100U);
             minBaseTime = time + 100100U + (2U * cycleTime);
             /* Check, if there is operating GCL and if admin base time is in range described in ERR051587*/
             if ((config->numEntries > 0U) && (config->baseTime < minBaseTime))
@@ -2555,6 +2560,8 @@ status_t SWT_FMDUpdateTableEntry(swt_handle_t *handle, netc_tb_fmd_update_config
 
     if (SWT_GetIdleCmdBDRing(handle, &cdbrHandle) == kStatus_Success)
     {
+        assert(length <= UINT32_MAX - 8U);
+
         (void)memset(cdbrHandle.buffer, 0, sizeof(netc_tb_fmd_req_data_t));
         cdbrHandle.buffer->fmd.request.entryID                    = config->entryID;
         cdbrHandle.buffer->fmd.request.commonHeader.updateActions = 1U;
@@ -2583,6 +2590,8 @@ status_t SWT_FMDQueryTableEntry(swt_handle_t *handle, netc_tb_fmd_query_buffer_t
 
     if (SWT_GetIdleCmdBDRing(handle, &cdbrHandle) == kStatus_Success)
     {
+        assert(length <= UINT32_MAX - 4U);
+
         (void)memset(cdbrHandle.buffer, 0, length + 4U);
         cdbrHandle.buffer->fmd.request.entryID                    = query->entryID;
         cdbrHandle.buffer->fmd.request.commonHeader.updateActions = 0U;

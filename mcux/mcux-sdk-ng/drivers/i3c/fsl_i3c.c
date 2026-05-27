@@ -3565,6 +3565,14 @@ static void I3C_CommonIRQHandler(I3C_Type *base, uint32_t instance)
     SDK_ISR_EXIT_BARRIER;
 }
 
+void I3C_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(kI3cBases))
+    {
+        I3C_CommonIRQHandler(kI3cBases[instance], instance);
+    }
+}
+
 #if defined(I3C)
 /* Implementation of I3C handler named in startup code. */
 void I3C0_DriverIRQHandler(void);

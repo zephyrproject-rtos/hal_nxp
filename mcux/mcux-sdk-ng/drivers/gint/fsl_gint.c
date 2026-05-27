@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020, 2024 NXP
+ * Copyright 2016-2017, 2020, 2024, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -260,6 +260,21 @@ void GINT_Deinit(GINT_Type *base)
     /* Disable the peripheral clock */
     CLOCK_DisableClock(s_gintClocks[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+}
+
+void GINT_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_gintBases))
+    {
+        /* Clear interrupt before callback */
+        s_gintBases[instance]->CTRL |= GINT_CTRL_INT_MASK;
+        /* Call user function */
+        if (s_gintCallback[instance] != NULL)
+        {
+            s_gintCallback[instance]();
+        }
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 /* IRQ handler functions overloading weak symbols in the startup */

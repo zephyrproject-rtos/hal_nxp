@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 NXP
+ * Copyright 2019-2023,2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -154,14 +154,14 @@ status_t DSI_TransferWriteMemorySMARTDMA(MIPI_DSI_HOST_Type *base,
                 handle->param2d.minorLoopOffset      = xfer->minorLoopOffset;
                 handle->param2d.majorLoop            = xfer->majorLoop;
                 handle->param2d.smartdma_stack       = handle->smartdmaStack;
-                handle->param2d.disablePixelByteSwap = (uint32_t)xfer->disablePixelByteSwap;
+                handle->param2d.disablePixelByteSwap = xfer->disablePixelByteSwap ? 1U : 0U;
             }
             else
             {
                 handle->param.p_buffer             = xfer->data;
                 handle->param.buffersize           = xfer->dataSize;
                 handle->param.smartdma_stack       = handle->smartdmaStack;
-                handle->param.disablePixelByteSwap = (uint32_t)xfer->disablePixelByteSwap;
+                handle->param.disablePixelByteSwap = xfer->disablePixelByteSwap ? 1U : 0U;
             }
 
             handle->isBusy = true;

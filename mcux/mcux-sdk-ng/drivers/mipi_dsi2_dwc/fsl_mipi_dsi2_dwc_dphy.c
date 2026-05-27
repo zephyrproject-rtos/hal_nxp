@@ -87,8 +87,8 @@ uint32_t DSI_DphyGetPllDivider(dsi_dphypll_config_t *config, uint32_t refClkFreq
             for (mCur = 256U; mCur <= 4096U; mCur += 4U)
             {
                 uint64_t num   = (uint64_t)refClkFreq_Hz * (uint64_t)mCur / 4U;
-                uint64_t denom = (uint64_t)(nCur + 1U) * (uint64_t)pCur;
-                curOutFreq = (uint32_t)(num / denom);
+                uint64_t denom = ((uint64_t)nCur + 1U) * (uint64_t)pCur;
+                curOutFreq = (uint32_t)((num / denom) & 0xFFFFFFFFULL);
                 diffCur    = (curOutFreq > desiredOutFreq_Hz) ? (curOutFreq - desiredOutFreq_Hz) :
                                                                 (desiredOutFreq_Hz - curOutFreq);
 
@@ -135,46 +135,55 @@ void DSI_DphySetPllVcoParam(uint32_t pll_freq_sel, dsi_dphypll_config_t *config)
         i = ARRAY_SIZE(Vco_Cpbias_Table) - 1U;
     }
 
-    config->vcoctrl = (uint16_t)Vco_Cpbias_Table[i][1U];
-    config->cpbias  = (uint16_t)(Vco_Cpbias_Table[i][2U] << 6U | DSI_PHY_CPBIAS_CNTRL50);
+    config->vcoctrl = (uint16_t)(Vco_Cpbias_Table[i][1U] & 0xFFFFU);
+    config->cpbias  = (uint8_t)(((((uint32_t)Vco_Cpbias_Table[i][2U] << 6U) | (uint32_t)DSI_PHY_CPBIAS_CNTRL50)) & 0xFFU);
 }
 
 /*!
  * @brief Configure Dphy setting.
  *
- * @param phyRefClkFreq_Hz Dphy reference clock frequency in Hz.
- * @param dataRateFreq_Hz line rate clock frequency.
+ * @param phyRefClkHz Dphy reference clock frequency in Hz.
+ * @param dataRateHz line rate clock frequency.
  * @param config Pointer to dsi ipi configuration structure.
  */
 void DSI_ConfigDphy(DISPLAY_DSI_CSR_Type *base,
-                    uint32_t phyRefClkFreq_Hz,
-                    uint32_t dataRateFreq_Hz,
+                    uint32_t phyRefClkHz,
+                    uint32_t dataRateHz,
                     const dsi_ipi_config_t *config)
 {
     assert(config != NULL);
     uint16_t dphyClkFreq_Mhz;
-    uint8_t dsi_csr_format = 0U;
+    dsi_csr_pixel_format_t dsi_csr_format;
     dsi_dphypll_config_t DphyPllCfg = {0};
-    dphyClkFreq_Mhz                = dataRateFreq_Hz / 1000000U;
-    DSI_DphyGetPllDivider(&DphyPllCfg, phyRefClkFreq_Hz, dataRateFreq_Hz);
+    dphyClkFreq_Mhz = (uint16_t)(dataRateHz / 1000000U);
+    (void)DSI_DphyGetPllDivider(&DphyPllCfg, phyRefClkHz, dataRateHz);
     DSI_DphySetPllVcoParam(dphyClkFreq_Mhz, &DphyPllCfg);
-    uint8_t bpp = DSI_GetBitsPerPixel(config);
+    uint8_t bpp;
+    bool isFormatValid = true;
+
+    bpp = DSI_GetBitsPerPixel(config);
 
     switch (bpp)
     {
-        case 24:
+        case 24U:
             dsi_csr_format = kDSI_PixelFormatRGB24Bit;
             break;
-        case 18:
+        case 18U:
             dsi_csr_format = kDSI_PixelFormatRGB18Bit;
             break;
-        case 16:
+        case 16U:
             dsi_csr_format = kDSI_PixelFormatRGB16Bit;
             break;
         default:
-            assert(false);
+            isFormatValid = false;
             break;
     }
+
+    if (!isFormatValid)
+    {
+        return;
+    }
+
     base->DSI_CLOCK_CNTL = 0U;
     /* Reset & shutdown */
     base->DSI_PHY_MODE_CONTROL &=
@@ -189,8 +198,8 @@ void DSI_ConfigDphy(DISPLAY_DSI_CSR_Type *base,
 
     /* Set value M and VCOCTRL */
     base->DSI_PLL_CTRL0 |=
-        DISPLAY_DSI_CSR_DSI_PLL_CTRL0_INT_CNTRL(0x0) | DISPLAY_DSI_CSR_DSI_PLL_CTRL0_VCO_CNTRL(DphyPllCfg.vcoctrl) |
-        DISPLAY_DSI_CSR_DSI_PLL_CTRL0_M(DphyPllCfg.m) | DISPLAY_DSI_CSR_DSI_PLL_CTRL0_PROP_CNTRL(0x5);
+        DISPLAY_DSI_CSR_DSI_PLL_CTRL0_INT_CNTRL(0x0U) | DISPLAY_DSI_CSR_DSI_PLL_CTRL0_VCO_CNTRL(DphyPllCfg.vcoctrl) |
+        DISPLAY_DSI_CSR_DSI_PLL_CTRL0_M(DphyPllCfg.m) | DISPLAY_DSI_CSR_DSI_PLL_CTRL0_PROP_CNTRL(0x5U);
 
     /* Clear cpbias and gmp ctrl */
     base->DSI_PLL_CTRL1 &=
@@ -198,21 +207,25 @@ void DSI_ConfigDphy(DISPLAY_DSI_CSR_Type *base,
 
     /* Set value P */
     base->DSI_PLL_CTRL1 |=
-        DISPLAY_DSI_CSR_DSI_PLL_CTRL1_CPBIAS_CNTRL(DphyPllCfg.cpbias) | DISPLAY_DSI_CSR_DSI_PLL_CTRL1_GMP_CNTRL(0x1);
+        DISPLAY_DSI_CSR_DSI_PLL_CTRL1_CPBIAS_CNTRL(DphyPllCfg.cpbias) | DISPLAY_DSI_CSR_DSI_PLL_CTRL1_GMP_CNTRL(0x1U);
 
     /* Set value N */
     base->DSI_PLL_CTRL2 =
-        (base->DSI_PLL_CTRL2 & ~(DISPLAY_DSI_CSR_DSI_PLL_CTRL2_N_MASK | DISPLAY_DSI_CSR_DSI_PLL_CTRL2_PLL_PRG_MASK)) | DISPLAY_DSI_CSR_DSI_PLL_CTRL2_N(DphyPllCfg.n) | DISPLAY_DSI_CSR_DSI_PLL_CTRL2_PLL_PRG(0x3);
+        (base->DSI_PLL_CTRL2 & ~(DISPLAY_DSI_CSR_DSI_PLL_CTRL2_N_MASK | DISPLAY_DSI_CSR_DSI_PLL_CTRL2_PLL_PRG_MASK)) | DISPLAY_DSI_CSR_DSI_PLL_CTRL2_N(DphyPllCfg.n) | DISPLAY_DSI_CSR_DSI_PLL_CTRL2_PLL_PRG(0x3U);
 
-    base->DSI_PLL_CTRL3 = DISPLAY_DSI_CSR_DSI_PLL_CTRL3_PLL_TH1(0x1) | DISPLAY_DSI_CSR_DSI_PLL_CTRL3_PLL_TH2(0xFF) | DISPLAY_DSI_CSR_DSI_PLL_CTRL3_PLL_TH3(0x3);
+    base->DSI_PLL_CTRL3 = DISPLAY_DSI_CSR_DSI_PLL_CTRL3_PLL_TH1(0x1U) | DISPLAY_DSI_CSR_DSI_PLL_CTRL3_PLL_TH2(0xFFU) | DISPLAY_DSI_CSR_DSI_PLL_CTRL3_PLL_TH3(0x3U);
 
     /* Set Dsi pixel link format */
     base->DSI_HOST_CONFIGURATION =
         (base->DSI_HOST_CONFIGURATION & ~DISPLAY_DSI_CSR_DSI_HOST_CONFIGURATION_Pixel_link_format_MASK) |
-        DISPLAY_DSI_CSR_DSI_HOST_CONFIGURATION_Pixel_link_format(dsi_csr_format);
+        DISPLAY_DSI_CSR_DSI_HOST_CONFIGURATION_Pixel_link_format((uint32_t)dsi_csr_format);
 
     /* Lock PLL */
-    *(volatile uint32_t *)((uintptr_t)base + DSI_PPI_INTERFACE_EXTENDED_CONTROL_0_OFFSET) = 0x7AU;
+    {
+        uintptr_t reg_addr = (uintptr_t)base + DSI_PPI_INTERFACE_EXTENDED_CONTROL_0_OFFSET;
+        volatile uint32_t *ppi_reg = (volatile uint32_t *)reg_addr;
+        *ppi_reg = 0x7AU;
+    }
 
     /* Set RST_N & SHUTDOWN_N */
     base->DSI_PHY_MODE_CONTROL |=
@@ -226,6 +239,9 @@ void DSI_ConfigDphy(DISPLAY_DSI_CSR_Type *base,
  */
 void DSI_StartupTxStaticSetting(DISPLAY_MIPI_DSI_PHY_Type *base)
 {
+    volatile uint32_t *reg_ptr;
+    uintptr_t reg_addr;
+
     /* start dphy tx seq */
     base->CORE_DIG_ANACTRL_RW_COMMON_ANACTRL_0 = 0x1BFDU;
     base->PPI_STARTUP_RW_COMMON_STARTUP_1_1 = 0x233U;
@@ -233,7 +249,11 @@ void DSI_StartupTxStaticSetting(DISPLAY_MIPI_DSI_PHY_Type *base)
     base->PPI_STARTUP_RW_COMMON_DPHY_3 = 0x26U;
     base->PPI_STARTUP_RW_COMMON_DPHY_6 = 0x10U;
     base->PPI_STARTUP_RW_COMMON_DPHY_A = 0x21U;
-    *(volatile uint32_t *)((uintptr_t)base + CORE_DIG_ANACTRL_RW_COMMON_ANACTRL_2_OFFSET) = 0x1444U;
+
+    reg_addr = (uintptr_t)base + CORE_DIG_ANACTRL_RW_COMMON_ANACTRL_2_OFFSET;
+    reg_ptr = (volatile uint32_t *)reg_addr;
+    *reg_ptr = 0x1444U;
+
     base->PPI_CALIBCTRL_RW_COMMON_BG_0 = 0x1F4U;
     base->PPI_RW_TERMCAL_CFG_0 = 0x17U;
     base->PPI_RW_LPDCOCAL_TIMEBASE = 0x5FU;
@@ -277,7 +297,7 @@ void DSI_DphyTxDynamicSetting(DISPLAY_MIPI_DSI_PHY_Type *base,
     uint32_t hs_trail, hs_trail_reg, hs_trail_dco_reg;
     uint32_t tlptxoverlap_reg, tlp11init_dco_reg, tlpx_dco_reg;
     double lptx_io_sr0_fall_dly;
-    float t_hs_trail, t_eot;
+    double t_hs_trail, t_eot;
 
     assert(hs_clk_freq != 0U);
     assert(lp_clk_freq != 0U);
@@ -285,8 +305,8 @@ void DSI_DphyTxDynamicSetting(DISPLAY_MIPI_DSI_PHY_Type *base,
     double ui = 1000000000.0 / (double)hs_clk_freq;
     double tdco_max = 4.77;
     double mult = 5.0;
-    float tlpx = 50 * mult;
-    double wordclk_period = ui * 8;
+    double tlpx = 50.0 * mult;
+    double wordclk_period = ui * 8.0;
 
     /* startup dphy tx seq specification */
     *(volatile uint32_t *)((uintptr_t)base + CORE_DIG_IOCTRL_RW_AFE_LANE0_CTRL_2_2_OFFSET) = 0U;
@@ -304,94 +324,109 @@ void DSI_DphyTxDynamicSetting(DISPLAY_MIPI_DSI_PHY_Type *base,
 
     /* set tlptxoverlap reg */
     tlptxoverlap_reg = 0x2U;
-    *(volatile uint32_t *)((uintptr_t)base + CORE_DIG_DLANE_0_RW_HS_TX_3_OFFSET) &= ~0xFF;
+    *(volatile uint32_t *)((uintptr_t)base + CORE_DIG_DLANE_0_RW_HS_TX_3_OFFSET) &= ~0xFFU;
     *(volatile uint32_t *)((uintptr_t)base + CORE_DIG_DLANE_0_RW_HS_TX_3_OFFSET) = tlptxoverlap_reg;
-    *(volatile uint32_t *)((uintptr_t)base + CORE_DIG_DLANE_1_RW_HS_TX_3_OFFSET) &= ~0xFF;
+    *(volatile uint32_t *)((uintptr_t)base + CORE_DIG_DLANE_1_RW_HS_TX_3_OFFSET) &= ~0xFFU;
     *(volatile uint32_t *)((uintptr_t)base + CORE_DIG_DLANE_1_RW_HS_TX_3_OFFSET) = tlptxoverlap_reg;
-    *(volatile uint32_t *)((uintptr_t)base + CORE_DIG_DLANE_2_RW_HS_TX_3_OFFSET) &= ~0xFF;
+    *(volatile uint32_t *)((uintptr_t)base + CORE_DIG_DLANE_2_RW_HS_TX_3_OFFSET) &= ~0xFFU;
     *(volatile uint32_t *)((uintptr_t)base + CORE_DIG_DLANE_2_RW_HS_TX_3_OFFSET) = tlptxoverlap_reg;
-    *(volatile uint32_t *)((uintptr_t)base + CORE_DIG_DLANE_3_RW_HS_TX_3_OFFSET) &= ~0xFF;
+    *(volatile uint32_t *)((uintptr_t)base + CORE_DIG_DLANE_3_RW_HS_TX_3_OFFSET) &= ~0xFFU;
     *(volatile uint32_t *)((uintptr_t)base + CORE_DIG_DLANE_3_RW_HS_TX_3_OFFSET) = tlptxoverlap_reg;
 
     /* set tlp11init_dco reg */
-    tlp11init_dco_reg = (uint32_t)ceil((5 * 1000000000.0 / (double)(lp_clk_freq) / tdco_max) - 1.0);
-    base->CORE_DIG_DLANE_0_RW_HS_TX_10 = tlp11init_dco_reg;
-    base->CORE_DIG_DLANE_1_RW_HS_TX_10 = tlp11init_dco_reg;
-    base->CORE_DIG_DLANE_2_RW_HS_TX_10 = tlp11init_dco_reg;
-    base->CORE_DIG_DLANE_3_RW_HS_TX_10 = tlp11init_dco_reg;
+    tlp11init_dco_reg = (uint32_t)ceil((5.0 * 1000000000.0 / (double)lp_clk_freq / tdco_max) - 1.0);
+    uint16_t tlp11init_dco_reg_u16 = (uint16_t)(tlp11init_dco_reg & 0xFFFFU);
+    base->CORE_DIG_DLANE_0_RW_HS_TX_10 = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_0_RW_HS_TX_10_HS_TX_10_TLP11INIT_DCO_REG(tlp11init_dco_reg_u16);
+    base->CORE_DIG_DLANE_1_RW_HS_TX_10 = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_1_RW_HS_TX_10_HS_TX_10_TLP11INIT_DCO_REG(tlp11init_dco_reg_u16);
+    base->CORE_DIG_DLANE_2_RW_HS_TX_10 = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_2_RW_HS_TX_10_HS_TX_10_TLP11INIT_DCO_REG(tlp11init_dco_reg_u16);
+    base->CORE_DIG_DLANE_3_RW_HS_TX_10 = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_3_RW_HS_TX_10_HS_TX_10_TLP11INIT_DCO_REG(tlp11init_dco_reg_u16);
 
     /* set tlpx_dco_reg */
-    tlpx_dco_reg = (uint32_t)ceil((tlpx / tdco_max) - 1.0);
-    base->CORE_DIG_DLANE_0_RW_HS_TX_4  = tlpx_dco_reg;
-    base->CORE_DIG_DLANE_1_RW_HS_TX_4  = tlpx_dco_reg;
-    base->CORE_DIG_DLANE_2_RW_HS_TX_4  = tlpx_dco_reg;
-    base->CORE_DIG_DLANE_3_RW_HS_TX_4  = tlpx_dco_reg;
+    tlpx_dco_reg = (uint32_t)ceil(((double)tlpx / tdco_max) - 1.0);
+    uint16_t tlpx_dco_reg_u16 = (uint16_t)(tlpx_dco_reg & 0xFFFFU);
+    base->CORE_DIG_DLANE_0_RW_HS_TX_4  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_0_RW_HS_TX_4_HS_TX_4_TLPX_DCO_REG(tlpx_dco_reg_u16);
+    base->CORE_DIG_DLANE_1_RW_HS_TX_4  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_1_RW_HS_TX_4_HS_TX_4_TLPX_DCO_REG(tlpx_dco_reg_u16);
+    base->CORE_DIG_DLANE_2_RW_HS_TX_4  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_2_RW_HS_TX_4_HS_TX_4_TLPX_DCO_REG(tlpx_dco_reg_u16);
+    base->CORE_DIG_DLANE_3_RW_HS_TX_4  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_3_RW_HS_TX_4_HS_TX_4_TLPX_DCO_REG(tlpx_dco_reg_u16);
 
     /* set hs_prepare_dco reg */
     hs_prepare_dco = (uint32_t)floor((40.0 + 4.0 * ui) + (((85.0 + 6.0 * ui) - (40.0 + 4.0 * ui)) / 2.0));
     lptx_io_sr0_fall_dly = 12.5;
-    hs_prepare_dco_reg = (uint32_t)ceil(((hs_prepare_dco * 1.0) + (lptx_io_sr0_fall_dly * 1.0)) / tdco_max - 1.0);
-    base->CORE_DIG_DLANE_0_RW_HS_TX_9  = hs_prepare_dco_reg;
-    base->CORE_DIG_DLANE_1_RW_HS_TX_9  = hs_prepare_dco_reg;
-    base->CORE_DIG_DLANE_2_RW_HS_TX_9  = hs_prepare_dco_reg;
-    base->CORE_DIG_DLANE_3_RW_HS_TX_9  = hs_prepare_dco_reg;
+    hs_prepare_dco_reg = (uint32_t)ceil((((double)hs_prepare_dco + lptx_io_sr0_fall_dly) / tdco_max) - 1.0);
+    uint16_t hs_prepare_dco_reg_u16 = (uint16_t)(hs_prepare_dco_reg & 0xFFFFU);
+    base->CORE_DIG_DLANE_0_RW_HS_TX_9  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_0_RW_HS_TX_9_HS_TX_9_THSPRPR_DCO_REG(hs_prepare_dco_reg_u16);
+    base->CORE_DIG_DLANE_1_RW_HS_TX_9  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_1_RW_HS_TX_9_HS_TX_9_THSPRPR_DCO_REG(hs_prepare_dco_reg_u16);
+    base->CORE_DIG_DLANE_2_RW_HS_TX_9  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_2_RW_HS_TX_9_HS_TX_9_THSPRPR_DCO_REG(hs_prepare_dco_reg_u16);
+    base->CORE_DIG_DLANE_3_RW_HS_TX_9  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_3_RW_HS_TX_9_HS_TX_9_THSPRPR_DCO_REG(hs_prepare_dco_reg_u16);
 
     /* set hs_zero reg */
-    hs_zero = (uint32_t)floor((145.0 + 10.0 * ui) - (hs_prepare_dco * 1.0));
-    hs_zero_reg = (uint32_t)ceil(((hs_zero * 1.0) + tlpx + (hs_prepare_dco) + 5 * tdco_max - 3 * wordclk_period) / wordclk_period - 1);
-    base->CORE_DIG_DLANE_0_RW_HS_TX_1  = hs_zero_reg;
-    base->CORE_DIG_DLANE_1_RW_HS_TX_1  = hs_zero_reg;
-    base->CORE_DIG_DLANE_2_RW_HS_TX_1  = hs_zero_reg;
-    base->CORE_DIG_DLANE_3_RW_HS_TX_1  = hs_zero_reg;
+    hs_zero = (uint32_t)floor((145.0 + 10.0 * ui) - (double)hs_prepare_dco);
+    hs_zero_reg = (uint32_t)ceil((((double)hs_zero + (double)tlpx + (double)hs_prepare_dco + 5.0 * tdco_max - 3.0 * wordclk_period) /
+                                  wordclk_period) -
+                                 1.0);
+    uint16_t hs_zero_reg_u16 = (uint16_t)(hs_zero_reg & 0xFFFFU);
+    base->CORE_DIG_DLANE_0_RW_HS_TX_1  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_0_RW_HS_TX_1_HS_TX_1_THSZERO_REG(hs_zero_reg_u16);
+    base->CORE_DIG_DLANE_1_RW_HS_TX_1  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_1_RW_HS_TX_1_HS_TX_1_THSZERO_REG(hs_zero_reg_u16);
+    base->CORE_DIG_DLANE_2_RW_HS_TX_1  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_2_RW_HS_TX_1_HS_TX_1_THSZERO_REG(hs_zero_reg_u16);
+    base->CORE_DIG_DLANE_3_RW_HS_TX_1  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_3_RW_HS_TX_1_HS_TX_1_THSZERO_REG(hs_zero_reg_u16);
 
     /* set hs_trail_reg */
     t_hs_trail = ((8.0 * ui) > (60.0 + 4.0 * ui)) ? (8.0 * ui) : (60.0 + 4.0 * ui);
     t_eot = 105.0 + 12.0 * ui;
-    hs_trail = (uint32_t)floor(t_hs_trail + (t_eot - t_hs_trail) / 2.0);
-    hs_trail_reg = (uint32_t)ceil(hs_trail / wordclk_period - 1.0) +  D2A_HSTX_DLY;
-    base->CORE_DIG_DLANE_0_RW_HS_TX_0  = hs_trail_reg;
-    base->CORE_DIG_DLANE_1_RW_HS_TX_0  = hs_trail_reg;
-    base->CORE_DIG_DLANE_2_RW_HS_TX_0  = hs_trail_reg;
-    base->CORE_DIG_DLANE_3_RW_HS_TX_0  = hs_trail_reg;
+    hs_trail = (uint32_t)floor((double)t_hs_trail + (((double)t_eot - (double)t_hs_trail) / 2.0));
+    hs_trail_reg = (uint32_t)ceil(((double)hs_trail / wordclk_period) - 1.0) + (uint32_t)D2A_HSTX_DLY;
+    uint16_t hs_trail_reg_u16 = (uint16_t)(hs_trail_reg & 0xFFFFU);
+    base->CORE_DIG_DLANE_0_RW_HS_TX_0  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_0_RW_HS_TX_0_HS_TX_0_THSTRAIL_REG(hs_trail_reg_u16);
+    base->CORE_DIG_DLANE_1_RW_HS_TX_0  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_1_RW_HS_TX_0_HS_TX_0_THSTRAIL_REG(hs_trail_reg_u16);
+    base->CORE_DIG_DLANE_2_RW_HS_TX_0  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_2_RW_HS_TX_0_HS_TX_0_THSTRAIL_REG(hs_trail_reg_u16);
+    base->CORE_DIG_DLANE_3_RW_HS_TX_0  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_3_RW_HS_TX_0_HS_TX_0_THSTRAIL_REG(hs_trail_reg_u16);
 
     /* set hs_trail_dco reg */
-    hs_trail_dco_reg = (uint32_t)floor(((hs_trail_reg + 1) * wordclk_period - wordclk_period - 4 * tdco_max) / tdco_max - 1.0);
-    base->CORE_DIG_DLANE_0_RW_HS_TX_5  = hs_trail_dco_reg;
-    base->CORE_DIG_DLANE_1_RW_HS_TX_5  = hs_trail_dco_reg;
-    base->CORE_DIG_DLANE_2_RW_HS_TX_5  = hs_trail_dco_reg;
-    base->CORE_DIG_DLANE_3_RW_HS_TX_5  = hs_trail_dco_reg;
+    hs_trail_dco_reg =
+        (uint32_t)floor((((double)hs_trail_reg + 1.0) * wordclk_period - wordclk_period - 4.0 * tdco_max) / tdco_max - 1.0);
+    uint16_t hs_trail_dco_reg_u16 = (uint16_t)(hs_trail_dco_reg & 0xFFFFU);
+    base->CORE_DIG_DLANE_0_RW_HS_TX_5  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_0_RW_HS_TX_5_HS_TX_5_THSTRAIL_DCO_REG(hs_trail_dco_reg_u16);
+    base->CORE_DIG_DLANE_1_RW_HS_TX_5  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_1_RW_HS_TX_5_HS_TX_5_THSTRAIL_DCO_REG(hs_trail_dco_reg_u16);
+    base->CORE_DIG_DLANE_2_RW_HS_TX_5  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_2_RW_HS_TX_5_HS_TX_5_THSTRAIL_DCO_REG(hs_trail_dco_reg_u16);
+    base->CORE_DIG_DLANE_3_RW_HS_TX_5  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_3_RW_HS_TX_5_HS_TX_5_THSTRAIL_DCO_REG(hs_trail_dco_reg_u16);
 
-    base->CORE_DIG_DLANE_0_RW_HS_TX_6  = tlp11init_dco_reg;
-    base->CORE_DIG_DLANE_1_RW_HS_TX_6  = tlp11init_dco_reg;
-    base->CORE_DIG_DLANE_2_RW_HS_TX_6  = tlp11init_dco_reg;
-    base->CORE_DIG_DLANE_3_RW_HS_TX_6  = tlp11init_dco_reg;
+    base->CORE_DIG_DLANE_0_RW_HS_TX_6  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_0_RW_HS_TX_6_HS_TX_6_TLP11END_DCO_REG(tlp11init_dco_reg_u16);
+    base->CORE_DIG_DLANE_1_RW_HS_TX_6  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_1_RW_HS_TX_6_HS_TX_6_TLP11END_DCO_REG(tlp11init_dco_reg_u16);
+    base->CORE_DIG_DLANE_2_RW_HS_TX_6  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_2_RW_HS_TX_6_HS_TX_6_TLP11END_DCO_REG(tlp11init_dco_reg_u16);
+    base->CORE_DIG_DLANE_3_RW_HS_TX_6  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_3_RW_HS_TX_6_HS_TX_6_TLP11END_DCO_REG(tlp11init_dco_reg_u16);
 
     /* set hs_exit reg */
     hs_exit_reg = (uint32_t)ceil(100.0 * mult / tdco_max - 1.0);
-    base->CORE_DIG_DLANE_0_RW_HS_TX_12 = hs_exit_reg;
-    base->CORE_DIG_DLANE_1_RW_HS_TX_12 = hs_exit_reg;
-    base->CORE_DIG_DLANE_2_RW_HS_TX_12 = hs_exit_reg;
-    base->CORE_DIG_DLANE_3_RW_HS_TX_12 = hs_exit_reg;
+    uint16_t hs_exit_reg_u16 = (uint16_t)(hs_exit_reg & 0xFFFFU);
+    base->CORE_DIG_DLANE_0_RW_HS_TX_12 = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_0_RW_HS_TX_12_HS_TX_12_THSEXIT_DCO_REG(hs_exit_reg_u16);
+    base->CORE_DIG_DLANE_1_RW_HS_TX_12 = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_1_RW_HS_TX_12_HS_TX_12_THSEXIT_DCO_REG(hs_exit_reg_u16);
+    base->CORE_DIG_DLANE_2_RW_HS_TX_12 = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_2_RW_HS_TX_12_HS_TX_12_THSEXIT_DCO_REG(hs_exit_reg_u16);
+    base->CORE_DIG_DLANE_3_RW_HS_TX_12 = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_3_RW_HS_TX_12_HS_TX_12_THSEXIT_DCO_REG(hs_exit_reg_u16);
 
     /* clock lane setting */
-    *(volatile uint32_t *)((uintptr_t)base + CORE_DIG_DLANE_CLK_RW_HS_TX_3_OFFSET) &= ~0xFF;
+    *(volatile uint32_t *)((uintptr_t)base + CORE_DIG_DLANE_CLK_RW_HS_TX_3_OFFSET) &= ~0xFFU;
     *(volatile uint32_t *)((uintptr_t)base + CORE_DIG_DLANE_CLK_RW_HS_TX_3_OFFSET) = tlptxoverlap_reg;
-    base->CORE_DIG_DLANE_CLK_RW_HS_TX_10 = tlp11init_dco_reg;
-    base->CORE_DIG_DLANE_CLK_RW_HS_TX_4  = tlpx_dco_reg;
-    base->CORE_DIG_DLANE_CLK_RW_HS_TX_9  = hs_prepare_dco_reg;
+    base->CORE_DIG_DLANE_CLK_RW_HS_TX_10 = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_CLK_RW_HS_TX_10_HS_TX_10_TLP11INIT_DCO_REG(tlp11init_dco_reg_u16);
+    base->CORE_DIG_DLANE_CLK_RW_HS_TX_4  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_CLK_RW_HS_TX_4_HS_TX_4_TLPX_DCO_REG(tlpx_dco_reg_u16);
+    base->CORE_DIG_DLANE_CLK_RW_HS_TX_9  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_CLK_RW_HS_TX_9_HS_TX_9_THSPRPR_DCO_REG(hs_prepare_dco_reg_u16);
 
     /* set clk_zero reg */
-    clk_prepare = (uint32_t)floor(38.0 + ((95.0 - 38.0) / 2));
-    clk_zero = (uint32_t)floor((300.0 - (clk_prepare * 1.0)) * mult);
-    clk_zero_reg = (uint32_t)ceil((tlpx + (clk_prepare) + (clk_zero) + 5 * tdco_max - 3 * wordclk_period) / wordclk_period - 1.0);
-    base->CORE_DIG_DLANE_CLK_RW_HS_TX_1  = clk_zero_reg;
-    base->CORE_DIG_DLANE_CLK_RW_HS_TX_2  = D2A_HSTX_DLY;
-    base->CORE_DIG_DLANE_CLK_RW_HS_TX_0  = hs_trail_reg;
-    base->CORE_DIG_DLANE_CLK_RW_HS_TX_5  = hs_trail_dco_reg;
+    clk_prepare = (uint32_t)floor(38.0 + ((95.0 - 38.0) / 2.0));
+    clk_zero = (uint32_t)floor((300.0 - (double)clk_prepare) * mult);
+    clk_zero_reg =
+        (uint32_t)ceil((((double)tlpx + (double)clk_prepare + (double)clk_zero + 5.0 * tdco_max - 3.0 * wordclk_period) /
+                        wordclk_period) -
+                       1.0);
+    uint16_t clk_zero_reg_u16 = (uint16_t)(clk_zero_reg & 0xFFFFU);
+    base->CORE_DIG_DLANE_CLK_RW_HS_TX_1  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_CLK_RW_HS_TX_1_HS_TX_1_THSZERO_REG(clk_zero_reg_u16);
+    base->CORE_DIG_DLANE_CLK_RW_HS_TX_2  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_CLK_RW_HS_TX_2_HS_TX_2_TCLKPRE_REG((uint32_t)D2A_HSTX_DLY);
+    base->CORE_DIG_DLANE_CLK_RW_HS_TX_0  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_CLK_RW_HS_TX_0_HS_TX_0_THSTRAIL_REG(hs_trail_reg_u16);
+    base->CORE_DIG_DLANE_CLK_RW_HS_TX_5  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_CLK_RW_HS_TX_5_HS_TX_5_THSTRAIL_DCO_REG(hs_trail_dco_reg_u16);
     /* set clk_post reg */
     clk_post = (uint32_t)floor((60.0 + 52.0 * ui) * mult);
-    clk_post_reg = (uint32_t)ceil((clk_post * 1.0) / wordclk_period - 3);
-    base->CORE_DIG_DLANE_CLK_RW_HS_TX_8  = clk_post_reg;
-    base->CORE_DIG_DLANE_CLK_RW_HS_TX_6  = tlp11init_dco_reg;
-    base->CORE_DIG_DLANE_CLK_RW_HS_TX_12 = hs_exit_reg;
+    clk_post_reg = (uint32_t)ceil(((double)clk_post / wordclk_period) - 3.0);
+    uint16_t clk_post_reg_u16 = (uint16_t)(clk_post_reg & 0xFFFFU);
+    base->CORE_DIG_DLANE_CLK_RW_HS_TX_8  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_CLK_RW_HS_TX_8_HS_TX_8_TCLKPOST_REG(clk_post_reg_u16);
+    base->CORE_DIG_DLANE_CLK_RW_HS_TX_6  = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_CLK_RW_HS_TX_6_HS_TX_6_TLP11END_DCO_REG(tlp11init_dco_reg_u16);
+    base->CORE_DIG_DLANE_CLK_RW_HS_TX_12 = DISPLAY_MIPI_DSI_PHY_CORE_DIG_DLANE_CLK_RW_HS_TX_12_HS_TX_12_THSEXIT_DCO_REG(hs_exit_reg_u16);
 }

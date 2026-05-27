@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 NXP
+ * Copyright 2021, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -490,4 +490,14 @@ void DMA3_DriverIRQHandler(void);
 void DMA3_DriverIRQHandler(void)
 {
     DMA_TransferChannelHandleIRQ(s_DMAHandle[3]);
+}
+
+void DMA_DriverIRQHandler(uint32_t instance, uint32_t channel)
+{
+    uint32_t index = instance * (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL + channel;
+    if (index < ARRAY_SIZE(s_DMAHandle))
+    {
+        DMA_TransferChannelHandleIRQ(s_DMAHandle[index]);
+    }
+    SDK_ISR_EXIT_BARRIER;
 }

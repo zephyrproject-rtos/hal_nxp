@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief LPSCI driver version. */
-#define FSL_LPSCI_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_LPSCI_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*! @{ */
 
 /*! @brief Error codes for the LPSCI driver. */
@@ -748,6 +748,8 @@ void LPSCI_TransferHandleIRQ(UART0_Type *base, void *irqHandle);
  * @param handle LPSCI handle pointer.
  */
 void LPSCI_TransferHandleErrorIRQ(UART0_Type *base, void *handle);
+
+void LPSCI_DriverIRQHandler(uint32_t instance);
 
 /*! @} */
 

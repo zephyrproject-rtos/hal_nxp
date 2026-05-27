@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022, 2025 NXP
+ * Copyright 2017-2022, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -344,7 +344,9 @@ void QTMR_EnableInterrupts(TMR_Type *base, qtmr_channel_selection_t channel, uin
     if ((mask & (uint16_t)kQTMR_EdgeInterruptEnable) != 0UL)
     {
         /* Restriction: Do not set both SCTRL[IEFIE] and DMA[IEFDE] */
+#if !(defined(FSL_FEATURE_TMR_HAS_NO_DMA_REGISTER) && FSL_FEATURE_TMR_HAS_NO_DMA_REGISTER)
         base->CHANNEL[channel].DMA &= MCUX_MASK_INVERT_16(TMR_DMA_IEFDE_MASK);
+#endif /* FSL_FEATURE_TMR_HAS_NO_DMA_REGISTER */
         reg |= TMR_SCTRL_IEFIE_MASK;
     }
     base->CHANNEL[channel].SCTRL = reg;
@@ -511,7 +513,10 @@ void QTMR_ClearStatusFlags(TMR_Type *base, qtmr_channel_selection_t channel, uin
 {
     qtmrRegType reg;
 
-    reg = base->CHANNEL[channel].SCTRL;
+    /* Pre-set all W0C status bits to 1 so that flags raised between the read and
+     * write-back are not accidentally cleared by writing 0 to bits not in mask.
+     */
+    reg = base->CHANNEL[channel].SCTRL | (qtmrRegType)(TMR_SCTRL_TCF_MASK | TMR_SCTRL_TOF_MASK | TMR_SCTRL_IEF_MASK);
     /* Timer compare flag */
     if ((mask & (uint32_t)kQTMR_CompareFlag) != 0U)
     {
@@ -529,7 +534,8 @@ void QTMR_ClearStatusFlags(TMR_Type *base, qtmr_channel_selection_t channel, uin
     }
     base->CHANNEL[channel].SCTRL = reg;
 
-    reg = base->CHANNEL[channel].CSCTRL;
+    /* Pre-set all W0C status bits to 1 for the same race-condition protection. */
+    reg = base->CHANNEL[channel].CSCTRL | (qtmrRegType)(TMR_CSCTRL_TCF1_MASK | TMR_CSCTRL_TCF2_MASK);
     /* Compare 1 flag */
     if ((mask & (uint32_t)kQTMR_Compare1Flag) != 0U)
     {
@@ -620,6 +626,7 @@ void QTMR_SetCompareValue(TMR_Type *base, qtmr_channel_selection_t channel, uint
     }
 }
 
+#if !(defined(FSL_FEATURE_TMR_HAS_NO_DMA_REGISTER) && FSL_FEATURE_TMR_HAS_NO_DMA_REGISTER)
 /*!
  * brief Enable the Quad Timer DMA.
  *
@@ -683,6 +690,7 @@ void QTMR_DisableDma(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t 
     }
     base->CHANNEL[channel].DMA = reg;
 }
+#endif /* FSL_FEATURE_TMR_HAS_NO_DMA_REGISTER */
 
 /*!
  * brief Set PWM output in idle status (high or low).

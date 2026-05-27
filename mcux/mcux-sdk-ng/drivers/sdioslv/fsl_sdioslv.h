@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2019, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Driver version 2.0.0. */
-#define FSL_SDIOSLV_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 0U))
+#define FSL_SDIOSLV_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*! @} */
 
 #ifndef SDIOSLV_TRANSMIT_QUEUE_SIZE

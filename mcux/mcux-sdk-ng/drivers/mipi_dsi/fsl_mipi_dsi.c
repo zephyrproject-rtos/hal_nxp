@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2019-2025 NXP
+ * Copyright 2017, 2019-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -1476,3 +1476,13 @@ void DSI_DriverIRQHandler(void)
     s_dsiIsr(MIPI_DSI, s_dsiHandle[0]);
 }
 #endif
+
+void MIPI_DSI_CommonDriverIRQHandler(uint32_t instance);
+void MIPI_DSI_CommonDriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_dsiBases))
+    {
+        s_dsiIsr(s_dsiBases[instance], s_dsiHandle[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
+}

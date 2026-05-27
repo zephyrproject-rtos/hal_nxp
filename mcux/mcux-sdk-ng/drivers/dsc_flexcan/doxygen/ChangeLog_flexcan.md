@@ -1,5 +1,20 @@
 # FLEXCAN
 
+## [2.2.0]
+
+- Improvement
+  - Support Automatic Remote Response feature.
+  - Support Payload Endianness Selection feature.
+  - Support Fault Reaction Mode feature.
+  - Support TX Pin Override feature.
+  - Support Restricted Operation Mode feature.
+  - Support Retransmission Requests Number feature.
+  - Support FD Error, Bus Off Done interrupt; Active to Passive, Passive to Active status flag.
+  - Add instance specific feature macro.
+  - Remove feature macro `FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER` and `uint64_t`.
+  - Add new FlexCAN parameterized IRQ Handler `FLEXCAN_DriverIRQHandler`.
+  - Enable the callback function to receive FlexCAN status flags.
+
 ## [2.1.2]
 
 - Bug Fixes

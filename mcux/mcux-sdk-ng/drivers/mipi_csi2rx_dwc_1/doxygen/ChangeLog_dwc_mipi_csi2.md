@@ -1,5 +1,11 @@
 # MIPI_CSI_DWC_1
 
+## [2.1.0]
+
+- Bug Fixes.
+  - Fixed MISRA issues.
+  - Fixed CERT-C issues.
+
 ## [2.0.2]
 
 - Adaptation header file

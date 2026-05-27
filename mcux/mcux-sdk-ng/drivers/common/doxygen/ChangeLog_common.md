@@ -1,5 +1,10 @@
 # COMMON
 
+## [2.6.5]
+- Bug Fixes
+  - Fixed the issue that the function SDK_DelayAtLeastUs may underflow and 
+    cause a long delay when the input parameter is small and the system clock is low.
+
 ## [2.6.4]
 
 - New Features

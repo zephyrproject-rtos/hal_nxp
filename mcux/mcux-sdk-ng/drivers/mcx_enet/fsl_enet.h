@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Defines the driver version. */
-#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
 /*@}*/
 
 /*! @name Control and status region bit masks of the receive buffer descriptor. */
@@ -1349,6 +1349,12 @@ void ENET_ReclaimTxDescriptor(ENET_Type *base, enet_handle_t *handle, uint8_t ch
  * @param handle The ENET handler pointer.
  */
 void ENET_IRQHandler(ENET_Type *base, enet_handle_t *handle);
+/*!
+ * @brief Common IRQ handler entry for ENET parameterized by instance.
+ *
+ * @param instance  ENET instance index.
+ */
+void ENET_DriverIRQHandler(uint32_t instance);
 
 /* @} */
 

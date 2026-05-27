@@ -1,5 +1,10 @@
 # MCM
 
+## [2.2.1]
+
+- Improvements
+  - Add feature to support platforms that do not have the MCM CPCR (Core Platform Control Register).
+
 ## [2.2.0]
 
 - Improvements

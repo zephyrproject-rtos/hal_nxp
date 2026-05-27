@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -482,6 +482,8 @@ static uint32_t SDIF_ReadDataPort(SDIF_Type *base, sdif_data_t *data, uint32_t t
 
         totalWords = ((data->blockCount * data->blockSize) / sizeof(uint32_t));
 
+        assert(totalWords >= transferredWords);
+
         /* If watermark level is equal or bigger than totalWords, transfers totalWords data. */
         if (readWatermark >= totalWords)
         {
@@ -500,6 +502,9 @@ static uint32_t SDIF_ReadDataPort(SDIF_Type *base, sdif_data_t *data, uint32_t t
         {
             wordsCanBeRead = (totalWords - transferredWords);
         }
+
+        assert(transferredWords < UINT32_MAX - wordsCanBeRead);
+        assert(SDIF_FIFO_COUNT >= wordsCanBeRead);
 
         i = 0U;
         while (i < wordsCanBeRead)
@@ -529,6 +534,8 @@ static uint32_t SDIF_WriteDataPort(SDIF_Type *base, sdif_data_t *data, uint32_t 
 
         totalWords = ((data->blockCount * data->blockSize) / sizeof(uint32_t));
 
+        assert(totalWords >= transferredWords);
+
         /* If watermark level is equal or bigger than totalWords, transfers totalWords data. */
         if (writeWatermark >= totalWords)
         {
@@ -547,6 +554,9 @@ static uint32_t SDIF_WriteDataPort(SDIF_Type *base, sdif_data_t *data, uint32_t 
         {
             wordsCanBeWrite = (totalWords - transferredWords);
         }
+
+        assert(transferredWords < UINT32_MAX - wordsCanBeWrite);
+        assert(SDIF_FIFO_COUNT >= wordsCanBeWrite);
 
         i = 0U;
         while (i < wordsCanBeWrite)
@@ -1034,6 +1044,9 @@ status_t SDIF_InternalDMAConfig(SDIF_Type *base, sdif_dma_config_t *config, cons
     {
         dmaEntry = 1UL;
     }
+
+    assert(dmaEntry <= (UINT32_MAX / sizeof(sdif_dma_descriptor_t)));
+    assert(dmaEntry * sizeof(sdif_dma_descriptor_t) <= UINT32_MAX - config->dmaDesSkipLen);
 
     /* check the DMA descriptor buffer len one more time,it is user's responsibility to make sure the DMA descriptor
     table
@@ -1686,3 +1699,13 @@ void SDIF_DriverIRQHandler(void)
     SDK_ISR_EXIT_BARRIER;
 }
 #endif
+
+void SDIF_CommonDriverIRQHandler(uint32_t instance);
+void SDIF_CommonDriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_sdifBase))
+    {
+        s_sdifIsr(s_sdifBase[instance], s_sdifHandle[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
+}

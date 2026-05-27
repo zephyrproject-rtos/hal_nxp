@@ -1,5 +1,10 @@
 # CTIMER
 
+## [2.3.5]
+
+- Bug Fixes
+  - MISRA C-2012 issue fixed: rule 10.7
+
 ## [2.3.4]
 - Bug Fixes
   - Fixed ERRATA ERR053024 CTIMER will enter interrupt twice when function clock much slower than bus clock.

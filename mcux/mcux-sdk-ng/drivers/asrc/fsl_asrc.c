@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2021, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1055,6 +1055,7 @@ void ASRC_TransferHandleIRQ(ASRC_Type *base, asrc_handle_t *handle)
     }
 }
 
+
 #if defined ASRC
 void ASRC_DriverIRQHandler(void);
 void ASRC_DriverIRQHandler(void)
@@ -1123,3 +1124,27 @@ void ASRC2_DriverIRQHandler(void)
     SDK_ISR_EXIT_BARRIER;
 }
 #endif /* ASRC2 */
+
+void ASRC_CommonDriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_asrcBases))
+    {
+        ASRC_Type *base = s_asrcBases[instance];
+        /* channel PAIR A interrupt handling*/
+        if ((base->ASRSTR & (uint32_t)kASRC_StatusPairAInterrupt) != 0U)
+        {
+            s_asrcIsr(base, s_asrcHandle[instance][0U]);
+        }
+        /* channel PAIR B interrupt handling*/
+        if ((base->ASRSTR & (uint32_t)kASRC_StatusPairBInterrupt) != 0U)
+        {
+            s_asrcIsr(base, s_asrcHandle[instance][1U]);
+        }
+        /* channel PAIR C interrupt handling*/
+        if ((base->ASRSTR & (uint32_t)kASRC_StatusPairCInterrupt) != 0U)
+        {
+            s_asrcIsr(base, s_asrcHandle[instance][2U]);
+        }
+    }
+    SDK_ISR_EXIT_BARRIER;
+}

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021, 2025 NXP
+ * Copyright 2016-2021, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief UART driver version. */
-#define FSL_UART_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
+#define FSL_UART_DRIVER_VERSION (MAKE_VERSION(2, 3, 4))
 /*! @} */
 
 /*! @brief Retry times for waiting flag. */
@@ -866,6 +866,13 @@ status_t UART_TransferGetReceiveCount(UART_Type *base, uart_handle_t *handle, ui
  * @param irqHandle UART handle pointer.
  */
 void UART_TransferHandleIRQ(UART_Type *base, void *irqHandle);
+
+/*!
+ * @brief UART common IRQ handler.
+ *
+ * @param instance UART instance index.
+ */
+void UART_DriverIRQHandler(uint32_t instance);
 
 /*! @} */
 

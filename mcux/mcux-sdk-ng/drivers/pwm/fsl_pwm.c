@@ -211,12 +211,12 @@ static void PWM_SetDutycycleRegister(PWM_Type *base,
             if (pwmSignal == kPWM_PwmA)
             {
                 base->SM[subModule].VAL2 = (pulseCnt - pwmHighPulse) / 2U;
-                base->SM[subModule].VAL3 = (((uint32_t)pulseCnt + (uint32_t)pwmHighPulse) / 2U) & 0xFFFFU;
+                base->SM[subModule].VAL3 = (uint16_t)((((uint32_t)pulseCnt + (uint32_t)pwmHighPulse) / 2U) & 0xFFFFU);
             }
             else if (pwmSignal == kPWM_PwmB)
             {
                 base->SM[subModule].VAL4 = (pulseCnt - pwmHighPulse) / 2U;
-                base->SM[subModule].VAL5 = (((uint32_t)pulseCnt + (uint32_t)pwmHighPulse) / 2U) & 0xFFFFU;
+                base->SM[subModule].VAL5 = (uint16_t)((((uint32_t)pulseCnt + (uint32_t)pwmHighPulse) / 2U) & 0xFFFFU);
             }
             else
             {
@@ -312,7 +312,7 @@ status_t PWM_Init(PWM_Type *base, pwm_submodule_t subModule, const pwm_config_t 
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Ungate the PWM submodule clock*/
-    CLOCK_EnableClock(s_pwmClocks[PWM_GetInstance(base)][subModule]);
+    (void)CLOCK_EnableClock(s_pwmClocks[PWM_GetInstance(base)][subModule]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if defined(PWM_RESETS_ARRAY)
@@ -334,12 +334,15 @@ status_t PWM_Init(PWM_Type *base, pwm_submodule_t subModule, const pwm_config_t 
     /* Setup the submodule clock-source, control source of the INIT signal,
      * source of the force output signal, operation in debug & wait modes and reload source select
      */
-    reg &=
-        MCUX_MASK_INVERT_16(PWM_CTRL2_CLK_SEL_MASK | PWM_CTRL2_FORCE_SEL_MASK | PWM_CTRL2_INIT_SEL_MASK | PWM_CTRL2_INDEP_MASK |
+    /* Compute clear mask outside macro to avoid preprocessor directive inside macro argument (MISRA C-2012 Rule 20.6) */
+    {
+        uint16_t ctrl2ClearMask = PWM_CTRL2_CLK_SEL_MASK | PWM_CTRL2_FORCE_SEL_MASK | PWM_CTRL2_INIT_SEL_MASK |
+                                  PWM_CTRL2_INDEP_MASK | PWM_CTRL2_DBGEN_MASK | PWM_CTRL2_RELOAD_SEL_MASK;
 #if !(defined(FSL_FEATURE_PWM_HAS_NO_WAITEN) && FSL_FEATURE_PWM_HAS_NO_WAITEN)
-                    PWM_CTRL2_WAITEN_MASK |
+        ctrl2ClearMask |= PWM_CTRL2_WAITEN_MASK;
 #endif /* FSL_FEATURE_PWM_HAS_NO_WAITEN */
-                    PWM_CTRL2_DBGEN_MASK | PWM_CTRL2_RELOAD_SEL_MASK);
+        reg &= MCUX_MASK_INVERT_16(ctrl2ClearMask);
+    }
 
     reg |= (PWM_CTRL2_CLK_SEL(config->clockSource) | PWM_CTRL2_FORCE_SEL(config->forceTrigger) |
             PWM_CTRL2_INIT_SEL(config->initializationControl) | PWM_CTRL2_RELOAD_SEL(config->reloadSelect));
@@ -427,7 +430,7 @@ void PWM_Deinit(PWM_Type *base, pwm_submodule_t subModule)
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Gate the PWM submodule clock*/
-    CLOCK_DisableClock(s_pwmClocks[PWM_GetInstance(base)][subModule]);
+    (void)CLOCK_DisableClock(s_pwmClocks[PWM_GetInstance(base)][subModule]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
@@ -705,7 +708,7 @@ status_t PWM_SetupPwmPhaseShift(PWM_Type *base,
         pwmHighPulse = pulseCnt / 2U;
 
         assert(complement <= 0xFFFFU - shift);
-        ticksTemp = complement + shift;
+        ticksTemp = (uint32_t)complement + (uint32_t)shift;
 
         assert(ticksTemp <= 0x10000U - pwmHighPulse);
 
@@ -999,7 +1002,9 @@ status_t PWM_GetInputCaptureValue(PWM_Type *base,
                                   uint16_t *captureValue)
 {
     assert(captureIndex <= 1U);
-    assert((uint32_t)subModule < FSL_FEATURE_PWM_SUBMODULE_COUNT);
+    assert((uint32_t)subModule < (uint32_t)FSL_FEATURE_PWM_SUBMODULE_COUNT);
+
+    status_t status = kStatus_Success;
 
     switch (pwmChannel)
     {
@@ -1063,10 +1068,11 @@ status_t PWM_GetInputCaptureValue(PWM_Type *base,
 #endif /* FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELX */
 
         default:
-            return kStatus_InvalidArgument;
+            status = kStatus_InvalidArgument;
+            break;
     }
 
-    return kStatus_Success;
+    return status;
 }
 
 /*!
@@ -1275,10 +1281,10 @@ void PWM_SetupForceSignal(PWM_Type *base, pwm_submodule_t subModule, pwm_channel
     /* Validate shift to prevent register overflow. Since mode occupies 2 bits, the maximum safe shift
      * is 14 bits to keep the result within 16-bit bounds.
      */
-    assert(mode <= 3U && shift <= 14U);
+    assert((uint32_t)mode <= 3U && shift <= 14U);
     /* Setup the signal to be passed upon occurrence of a FORCE_OUT signal */
     reg = base->DTSRCSEL;
-    reg &= MCUX_MASK_INVERT_16((0x3U << shift) & 0xFFFFU);
+    reg &= MCUX_MASK_INVERT_16(((uint32_t)0x3U << shift) & 0xFFFFU);
 
     reg |= (((uint16_t)mode << shift) & 0xFFFFU);
     base->DTSRCSEL = reg;
@@ -1299,7 +1305,7 @@ void PWM_SetupForceSignal(PWM_Type *base, pwm_submodule_t subModule, pwm_channel
  */
 void PWM_UpdateCurrentPolarity(PWM_Type *base, pwm_submodule_t subModule, pwm_chnl_pair_operation_t polarity)
 {
-    uint16_t subModuleMsk = (1U << (uint16_t)subModule);
+    uint16_t subModuleMsk = (uint16_t)(((uint32_t)1U << (uint32_t)subModule) & 0xFFFFU);
 
     /* Write the new IPOL value to the double-buffered MCTRL[IPOL] field.
      * This value will not take effect until a FORCE_OUT event occurs. */
@@ -1545,13 +1551,13 @@ void PWM_SetChannelOutput(PWM_Type *base,
     if (kPWM_PwmA == pwmChannel)
     {
         mask        = PWM_MASK_MASKA(subModuleMsk);
-        swcout      = (uint16_t)((PWM_SWCOUT_SM0OUT23_MASK << swcoutShift) & 0xFFFFU);
+        swcout      = (uint16_t)(((uint32_t)PWM_SWCOUT_SM0OUT23_MASK << swcoutShift) & 0xFFFFU);
         sourceShift = (uint16_t)PWM_DTSRCSEL_SM0SEL23_SHIFT + dtsrcselShift;
     }
     else if (kPWM_PwmB == pwmChannel)
     {
         mask        = PWM_MASK_MASKB(subModuleMsk);
-        swcout      = (uint16_t)((PWM_SWCOUT_SM0OUT45_MASK << swcoutShift) & 0xFFFFU);
+        swcout      = (uint16_t)(((uint32_t)PWM_SWCOUT_SM0OUT45_MASK << swcoutShift) & 0xFFFFU);
         sourceShift = (uint16_t)PWM_DTSRCSEL_SM0SEL45_SHIFT + dtsrcselShift;
     }
     else
@@ -1574,7 +1580,7 @@ void PWM_SetChannelOutput(PWM_Type *base,
         base->MASK &= MCUX_MASK_INVERT_16(mask);
 
         dtsrcselTemp = base->DTSRCSEL;
-        dtsrcselTemp &= MCUX_MASK_INVERT_16((uint16_t)((3U << sourceShift) & 0xFFFFU));
+        dtsrcselTemp &= MCUX_MASK_INVERT_16((uint16_t)(((uint32_t)3U << sourceShift) & 0xFFFFU));
 
         /* PwmX only support MASK mode */
         if (kPWM_PwmX != pwmChannel)

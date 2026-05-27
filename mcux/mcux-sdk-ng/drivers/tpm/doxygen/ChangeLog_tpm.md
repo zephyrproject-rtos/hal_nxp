@@ -1,5 +1,9 @@
 # TPM
 
+## [2.4.5]
+- Improvements
+  - Added branch coverage justification comments and GCOVR_EXCL_BR_LINE markers for structurally unreachable branches in `TPM_UpdatePwmDutycycle`.
+
 ## [2.4.4]
 
 - Bug Fixes

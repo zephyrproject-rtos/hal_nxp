@@ -27,6 +27,7 @@ static uint8_t EP_RxL2MFFreeNum(ep_handle_t *handle)
     {
         if (handle->macFilterCount[i] == 0U)
         {
+            assert(n <= UINT8_MAX - 1U);
             n++;
         }
     }
@@ -52,6 +53,8 @@ static status_t EP_RxL2MFFreeIndex(ep_handle_t *handle, uint16_t *idx)
 
 static void EP_RxL2MFQueryEMTableEntry(ep_handle_t *handle, uint8_t *macAddr, emtable_query_result_t *result)
 {
+    assert((uint64_t)macAddr[4U] << 32U <= UINT64_MAX - ((uint64_t)macAddr[5U] << 40U));
+
     uint64_t address =
         ((uint64_t)macAddr[4U] << 32U) + ((uint64_t)macAddr[5U] << 40U) + *(uint32_t *)(uintptr_t)&macAddr[0];
     ENETC_SI_Type *base = handle->hw.si;
@@ -138,6 +141,7 @@ static uint16_t EP_RxL2MFQueryAddEMTableEntry(ep_handle_t *handle, uint8_t si, u
         }
         if (result[i].match == 1U)
         {
+            assert(match_num <= UINT8_MAX - 1U);
             match_num++;
         }
     }
@@ -151,6 +155,7 @@ static uint16_t EP_RxL2MFQueryAddEMTableEntry(ep_handle_t *handle, uint8_t si, u
     for (i = 0U; i < count; i++)
     {
         m       = 6U * i;
+	assert((uint64_t)macAddr[m + 4U] << 32U <= UINT64_MAX - ((uint64_t)macAddr[m + 5U] << 40U));
         address = ((uint64_t)macAddr[m + 4U] << 32U) + ((uint64_t)macAddr[m + 5U] << 40U) +
                   *(uint32_t *)(uintptr_t)&macAddr[m];
 
@@ -234,6 +239,7 @@ static uint16_t EP_RxL2MFQueryDeleteEMTableEntry(ep_handle_t *handle, uint8_t si
         else
         {
             m                  = 6U * i;
+            assert((uint64_t)macAddr[m + 4U] << 32U <= UINT64_MAX - ((uint64_t)macAddr[m + 5U] << 40U));
             cmdBd.generic.addr = ((uint64_t)macAddr[m + 4U] << 32U) + ((uint64_t)macAddr[m + 5U] << 40U) +
                                  *(uint32_t *)(uintptr_t)&macAddr[m];
         }
@@ -493,6 +499,7 @@ static uint8_t EP_RxL2VFFreeNum(ep_handle_t *handle)
     {
         if (handle->vlanFilterCount[i] == 0U)
         {
+            assert(n <= UINT8_MAX - 1U);
             n++;
         }
     }
@@ -602,6 +609,7 @@ static uint16_t EP_RxL2VFQueryAddEMTableEntry(ep_handle_t *handle, uint8_t si, u
         }
         if (result[i].match == 1U)
         {
+            assert(match_num <= UINT8_MAX - 1U);
             match_num++;
         }
     }
@@ -906,11 +914,11 @@ static uint16_t EP_PsiHandleLinkStatus(ep_handle_t *handle, uint8_t vsi, netc_ps
             ret = EP_GetLinkStatus(handle);
             break;
         case (uint8_t)kNETC_MsgLinkStatusEnableNotify:
-            handle->vsiBitMapNotifyLinkStatus |= ((uint16_t)1U << vsi);
+            handle->vsiBitMapNotifyLinkStatus |= ((1U << vsi) & 0xFFFFU);
             ret = NETC_MSG_RETURN_CODE(kNETC_MsgClassDone, 0U, 0U);
             break;
         case (uint8_t)kNETC_MsgLinkStatusCancelNotify:
-            handle->vsiBitMapNotifyLinkStatus &= ~((uint16_t)1U << vsi);
+            handle->vsiBitMapNotifyLinkStatus &= ((~(1U << vsi)) & 0xFFFFU);
             ret = NETC_MSG_RETURN_CODE(kNETC_MsgClassDone, 0U, 0U);
             break;
         default:
@@ -981,11 +989,11 @@ static uint16_t EP_PsiHandleLinkSpeed(ep_handle_t *handle, uint8_t vsi, netc_psi
             ret = EP_GetLinkSpeed(handle);
             break;
         case (uint8_t)kNETC_MsgLinkSpeedEnableNotify:
-            handle->vsiBitMapNotifyLinkSpeed |= ((uint16_t)1U << vsi);
+            handle->vsiBitMapNotifyLinkSpeed |= ((1U << vsi) & 0xFFFFU);
             ret = NETC_MSG_RETURN_CODE(kNETC_MsgClassDone, 0U, 0U);
             break;
         case (uint8_t)kNETC_MsgLinkSpeedCancelNotify:
-            handle->vsiBitMapNotifyLinkSpeed &= ~((uint16_t)1U << vsi);
+            handle->vsiBitMapNotifyLinkSpeed &= ((~(1U << vsi)) & 0xFFFFU);
             ret = NETC_MSG_RETURN_CODE(kNETC_MsgClassDone, 0U, 0U);
             break;
         default:
@@ -1048,8 +1056,8 @@ status_t EP_PsiRxMsg(ep_handle_t *handle, netc_vsi_number_t vsi, netc_psi_rx_msg
 {
     ENETC_SI_Type *base = handle->hw.si;
     status_t result     = kStatus_Fail;
-    uint16_t siBitMap   = (uint16_t)base->PSI_A.PSIMSGRR;
-    uint8_t vsiIdx      = (uint8_t)NETC_SIGetVsiIndex(vsi);
+    uint16_t siBitMap   = base->PSI_A.PSIMSGRR & 0xFFFFU;
+    uint8_t vsiIdx      = NETC_SIGetVsiIndex(vsi) & 0xFFU;
     uint64_t address;
     uint8_t msgSize;
     uint32_t addrH;
@@ -1057,11 +1065,13 @@ status_t EP_PsiRxMsg(ep_handle_t *handle, netc_vsi_number_t vsi, netc_psi_rx_msg
 
     if ((siBitMap & (uint16_t)vsi) != 0U)
     {
+        assert(vsiIdx < ENETC_SI_MSGSR_PSI_A_VSI_NUM_COUNT);
+
         addrH   = base->PSI_A.VSI_NUM[vsiIdx].PSIVMSGRCVAR1;
         addrL   = base->PSI_A.VSI_NUM[vsiIdx].PSIVMSGRCVAR0 & ENETC_SI_PSIVMSGRCVAR0_ADDRL_MASK;
         address = ((uint64_t)addrH << 32U) + addrL;
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-        address = (uint64_t)MEMORY_ConvertMemoryMapAddress((uintptr_t)address, kMEMORY_DMA2Local);
+        address = NETC_ConvertMemoryMapAddress(address, kMEMORY_DMA2Local);
 #endif
         msgInfo->msgBuff = (uint8_t *)(uintptr_t)address;
         msgSize          = (uint8_t)(base->PSI_A.VSI_NUM[vsiIdx].PSIVMSGRCVAR0 & ENETC_SI_PSIVMSGRCVAR0_MSIZE_MASK);

@@ -23,9 +23,9 @@ void NETC_EnetcGetCapability(NETC_ENETC_Type *base, netc_enetc_cap_t *capability
     capability->msixNum = (cap & NETC_ENETC_ECAPR1_NUM_MSIX_MASK) >> NETC_ENETC_ECAPR1_NUM_MSIX_SHIFT;
     capability->tcsNum  = 1U + ((cap & NETC_ENETC_ECAPR1_NUM_TCS_MASK) >> NETC_ENETC_ECAPR1_NUM_TCS_SHIFT);
     capability->uchNum =
-        64U * ((uint16_t)1U << ((cap & NETC_ENETC_ECAPR1_NUM_UCH_MASK) >> NETC_ENETC_ECAPR1_NUM_UCH_SHIFT));
+        (64U * (1U << ((cap & NETC_ENETC_ECAPR1_NUM_UCH_MASK) >> NETC_ENETC_ECAPR1_NUM_UCH_SHIFT))) & 0xFFFFU;
     capability->mchNum =
-        64U * ((uint16_t)1U << ((cap & NETC_ENETC_ECAPR1_NUM_MCH_MASK) >> NETC_ENETC_ECAPR1_NUM_MCH_SHIFT));
+        (64U * (1U << ((cap & NETC_ENETC_ECAPR1_NUM_MCH_MASK) >> NETC_ENETC_ECAPR1_NUM_MCH_SHIFT))) & 0xFFFFU;
 
     cap                  = base->ECAPR2;
     capability->rxBdrNum = (uint16_t)((cap & NETC_ENETC_ECAPR2_NUM_RX_BDR_MASK) >> NETC_ENETC_ECAPR2_NUM_RX_BDR_SHIFT);
@@ -58,6 +58,9 @@ status_t NETC_EnetcConfigureSI(NETC_ENETC_Type *base, uint8_t si, const netc_hw_
         (uint16_t)(1U + ((base->ECAPR1 & NETC_ENETC_ECAPR1_NUM_VSI_MASK) >> NETC_ENETC_ECAPR1_NUM_VSI_SHIFT));
     uint16_t txLeftBdr = txBdrMax;
     uint16_t rxLeftBdr = rxBdrMax;
+    uint16_t usedBdr;
+
+    assert(si < NETC_ENETC_NUM_SI_COUNT);
 
     /* SI index ranges from 0 ~ max-1. */
     if (si >= siMax)
@@ -68,10 +71,15 @@ status_t NETC_EnetcConfigureSI(NETC_ENETC_Type *base, uint8_t si, const netc_hw_
     /* Minus the ring number used by SIs in front. */
     for (uint8_t i = 0; i < si; i++)
     {
-        txLeftBdr -= (uint16_t)((base->NUM_SI[i].PSICFGR0 & NETC_ENETC_PSICFGR0_NUM_TX_BDR_MASK) >>
-                                NETC_ENETC_PSICFGR0_NUM_TX_BDR_SHIFT);
-        rxLeftBdr -= (uint16_t)((base->NUM_SI[i].PSICFGR0 & NETC_ENETC_PSICFGR0_NUM_RX_BDR_MASK) >>
-                                NETC_ENETC_PSICFGR0_NUM_RX_BDR_SHIFT);
+        usedBdr = ((base->NUM_SI[i].PSICFGR0 & NETC_ENETC_PSICFGR0_NUM_TX_BDR_MASK) >>
+                  NETC_ENETC_PSICFGR0_NUM_TX_BDR_SHIFT) & 0xFFFFU;
+        assert(txLeftBdr >= usedBdr);
+        txLeftBdr -= usedBdr;
+
+        usedBdr = ((base->NUM_SI[i].PSICFGR0 & NETC_ENETC_PSICFGR0_NUM_RX_BDR_MASK) >>
+                  NETC_ENETC_PSICFGR0_NUM_RX_BDR_SHIFT) & 0xFFFFU;
+        assert(rxLeftBdr >= usedBdr);
+        rxLeftBdr -= usedBdr;
     }
 
     if ((psConfig->txRingUse > txLeftBdr) || (psConfig->rxRingUse > rxLeftBdr))
@@ -103,7 +111,7 @@ status_t NETC_EnetcConfigureSI(NETC_ENETC_Type *base, uint8_t si, const netc_hw_
     }
 
     base->NUM_SI[si].PSIVLANR =
-        NETC_ENETC_PSIVLANR_E(psConfig->enSIBaseVlan) | NETC_ENETC_PSIVLANR_TPID(psConfig->siBaseVlan.tpid) |
+        NETC_ENETC_PSIVLANR_E(psConfig->enSIBaseVlan ? 1U : 0U) | NETC_ENETC_PSIVLANR_TPID(psConfig->siBaseVlan.tpid) |
         NETC_ENETC_PSIVLANR_PCP(psConfig->siBaseVlan.pcp) | NETC_ENETC_PSIVLANR_DEI(psConfig->siBaseVlan.dei) |
         NETC_ENETC_PSIVLANR_VID(psConfig->siBaseVlan.vid);
 
@@ -116,13 +124,16 @@ status_t NETC_EnetcSetMsixEntryNum(NETC_ENETC_Type *base, uint8_t si, uint32_t m
     uint16_t msixEntryMax =
         (uint16_t)(((base->ECAPR1 & NETC_ENETC_ECAPR1_NUM_MSIX_MASK) >> NETC_ENETC_ECAPR1_NUM_MSIX_SHIFT) + 1U);
     uint16_t leftEntry = msixEntryMax;
+    uint16_t usedEntry;
     uint32_t entryNum;
 
     /* Minus the MSIX entry used by SIs in front. */
     for (uint8_t i = 0; i < si; i++)
     {
-        leftEntry -= (uint16_t)(1U + ((base->NUM_SI[i].PSICFGR2 & NETC_ENETC_PSICFGR2_NUM_MSIX_MASK) >>
-                                      NETC_ENETC_PSICFGR2_NUM_MSIX_SHIFT));
+        usedEntry = (1U + ((base->NUM_SI[i].PSICFGR2 & NETC_ENETC_PSICFGR2_NUM_MSIX_MASK) >>
+                           NETC_ENETC_PSICFGR2_NUM_MSIX_SHIFT)) & 0xFFFFU;
+        assert(leftEntry >= usedEntry);
+        leftEntry -= usedEntry;
     }
 
     if (msixNum > leftEntry)
@@ -194,7 +205,7 @@ void NETC_EnetcConfigureVlanFilter(NETC_ENETC_Type *base, uint8_t si, netc_si_l2
         base->PSIPVMR &= ~((uint32_t)NETC_ENETC_PSIPVMR_SI0_VLAN_P_MASK << si);
     }
 
-    base->PSIVLANFMR = NETC_ENETC_PSIVLANFMR_VS(config->useOuterVlanTag);
+    base->PSIVLANFMR = NETC_ENETC_PSIVLANFMR_VS(config->useOuterVlanTag ? 1U : 0U);
 }
 
 void NETC_EnetcAddMacAddrHash(NETC_ENETC_Type *base, uint8_t si, netc_packet_type_t type, uint8_t hashIndex)

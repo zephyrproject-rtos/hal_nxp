@@ -25,6 +25,8 @@ void NETC_SocGetBaseResource(netc_enetc_hw_t *hw, netc_hw_si_idx_t si)
     uint8_t siNum    = getSiNum(si);
     uint8_t siIdx    = getSiIdx(si);
 
+    assert(1U + siIdx < sizeof(s_netcBases) / sizeof(s_netcBases[0]));
+
     hw->si             = s_enetcSiBases[siIdx];
     hw->base           = s_netcEnetcBases[instance];
     hw->common         = (NETC_SW_ENETC_Type *)((uintptr_t)hw->base + 0x1000U);
@@ -38,6 +40,7 @@ void NETC_SocGetBaseResource(netc_enetc_hw_t *hw, netc_hw_si_idx_t si)
     }
     else
     {
+        assert(siIdx >= 3U);
         hw->func.vf   = s_netcVfBases[siIdx - 3];
         hw->msixTable = (netc_msix_entry_t *)((uintptr_t)hw->si + 0x60000U);
     }
@@ -53,7 +56,7 @@ uint32_t NETC_SocGetFuncInstance(netc_hw_eth_port_idx_t port)
     return ((uint32_t)port + 1U);
 }
 
-static uint32_t NETC_SocPHYRead(netc_mdio_handle_t *handle, uint8_t portAddr, uint8_t devAddr, uint16_t regAddr)
+static uint16_t NETC_SocPHYRead(netc_mdio_handle_t *handle, uint8_t portAddr, uint8_t devAddr, uint16_t regAddr)
 {
     uint16_t val = 0U;
     status_t status;
@@ -82,7 +85,7 @@ status_t NETC_PHYInit(netc_mdio_handle_t *handle, phy_mode_t mode)
 {
     static int already_done      = 0;
     static uint32_t ref_clk_init = 0;
-    uint32_t value;
+    uint16_t value;
     uint32_t sel_mplla = 0;
     uint32_t sel_mpllb = 0;
     int portId = 0;

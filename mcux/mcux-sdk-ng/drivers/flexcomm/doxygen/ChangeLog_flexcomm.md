@@ -1,5 +1,10 @@
 # FLEXCOMM
 
+## [2.0.3]
+
+- New Features
+  - Added common IRQ handler entry FLEXCOMM_DriverIRQHandler.
+
 ## [2.0.2]
 
 - Bug Fixes

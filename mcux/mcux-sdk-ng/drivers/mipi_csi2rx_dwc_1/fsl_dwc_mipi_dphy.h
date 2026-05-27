@@ -113,13 +113,6 @@ void DWC_DPHY_SetTestConfigureCSI2(CSI2_CONTROLLER_Type *csi2, uint32_t address,
  */
 uint32_t DWC_DPHY_ReadTestConfigure(CSI2_CONTROLLER_Type *base, uint8_t address);
 
-/*!
- * @brief This function configure PHY module hsfreqrange and cfgclkfreqrange.
- *
- * @param base CSI2RX peripheral address.
- * @param config CSI2RX module configuration structure.
- */
-void DWC_DPHY_TestCodeConfig(CSI2_CONTROLLER_Type *base, const csi2rx_config_t *config);
 
 /*!
  * @brief This function init the PHY module as normal mode.

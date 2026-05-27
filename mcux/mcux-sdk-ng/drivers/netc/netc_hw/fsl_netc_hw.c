@@ -40,10 +40,11 @@ uint16_t NETC_SIGetVsiIndex(netc_vsi_number_t vsi)
 
     do
     {
+        assert(index < UINT16_MAX - 1U);
         index++;
         vsiIdx >>= 1U;
     } while ((vsiIdx & 0x1U) == 0U);
-    return (index - 1U);
+    return (index - 1U) & 0xFFFFU;
 }
 
 void NETC_PSFPKcProfileInit(NETC_SW_ENETC_Type *base, const netc_isi_kc_rule_t *rule, bool enKcPair1)
@@ -81,9 +82,9 @@ void NETC_PSFPKcProfileInit(NETC_SW_ENETC_Type *base, const netc_isi_kc_rule_t *
 void NETC_RxVlanCInit(NETC_SW_ENETC_Type *base, const netc_vlan_classify_config_t *config, bool enRtag)
 {
     base->CVLANR1 =
-        NETC_SW_ENETC_CVLANR1_V(config->enableCustom1) | NETC_SW_ENETC_CVLANR1_ETYPE(config->custom1EtherType);
+        NETC_SW_ENETC_CVLANR1_V(config->enableCustom1 ? 1U : 0U) | NETC_SW_ENETC_CVLANR1_ETYPE(config->custom1EtherType);
     base->CVLANR2 =
-        NETC_SW_ENETC_CVLANR2_V(config->enableCustom2) | NETC_SW_ENETC_CVLANR2_ETYPE(config->custom2EtherType);
+        NETC_SW_ENETC_CVLANR2_V(config->enableCustom2 ? 1U : 0U) | NETC_SW_ENETC_CVLANR2_ETYPE(config->custom2EtherType);
     if (enRtag)
     {
 #if !(defined(FSL_FEATURE_NETC_HAS_NO_SWITCH) && FSL_FEATURE_NETC_HAS_NO_SWITCH)
@@ -134,9 +135,8 @@ status_t NETC_CmdBDRInit(netc_cbdr_hw_t *base, const netc_cmd_bdr_config_t *conf
     }
     else
     {
-        /* Map function only supports 32-bit now, so here limit 32-bit first */
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-        address = MEMORY_ConvertMemoryMapAddress((uintptr_t)config->bdBase, kMEMORY_Local2DMA);
+        address = NETC_ConvertMemoryMapAddress((uintptr_t)config->bdBase, kMEMORY_Local2DMA);
 #else
         address = (uintptr_t)config->bdBase;
 #endif
@@ -171,7 +171,7 @@ static void EP_CleanUsedBD(netc_cbdr_hw_t *base, netc_cmd_bdr_t *cbdr)
     while (curCleanIndex != base->CBDRCIR)
     {
         (void)memset((void *)&cbdr->bdBase[curCleanIndex], 0, sizeof(netc_cmd_bd_t));
-        curCleanIndex = (curCleanIndex + 1U) % cbdr->bdLength;
+        curCleanIndex = ((curCleanIndex + 1U) % cbdr->bdLength) & 0xFFFFU;
     }
     cbdr->cleanIndex = curCleanIndex;
 }
@@ -196,7 +196,13 @@ status_t NETC_CmdBDSendCommand(netc_cbdr_hw_t *base,
     {
         if (version == kNETC_NtmpV2_0)
         {
-            if (((uintptr_t)cbd->req.addr % 16U) != 0U)
+#if UINTPTR_MAX == UINT32_MAX
+            if (((uint32_t)(cbd->req.addr & 0xFFFFFFFFU) % 16U) != 0U)
+#elif UINTPTR_MAX == UINT64_MAX
+            if ((cbd->req.addr % 16U) != 0U)
+#else
+#error "Unsupported pointer size"
+#endif
             {
                 /* The request and response data buffers start address must be 16-byte aligned */
                 return kStatus_InvalidArgument;
@@ -206,7 +212,7 @@ status_t NETC_CmdBDSendCommand(netc_cbdr_hw_t *base,
                 cbd->req.version = 0x2;
                 cbd->req.npf     = 1;
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-                cbd->req.addr = (uintptr_t)MEMORY_ConvertMemoryMapAddress((uint32_t)cbd->req.addr, kMEMORY_Local2DMA);
+                cbd->req.addr = NETC_ConvertMemoryMapAddress(cbd->req.addr, kMEMORY_Local2DMA);
 #endif
             }
         }
@@ -214,7 +220,7 @@ status_t NETC_CmdBDSendCommand(netc_cbdr_hw_t *base,
         /* Copy command data to ring */
         cbdr->bdBase[curIndex] = *cbd;
         /* Update BD ring producer index */
-        cbdr->producerIndex = (curIndex + 1U) % cbdr->bdLength;
+        cbdr->producerIndex = (uint16_t)(((curIndex + 1U) % cbdr->bdLength) & 0xFFFFU);
 
         /* Make sure all data in the command BD is ready. */
         __DSB();
@@ -1178,6 +1184,10 @@ status_t NETC_GetTGSOperationList(netc_cbdr_handle_t *handle, netc_tb_tgs_gcl_t 
     {
         /* Get the administrative gate control list length from Response Data Buffer */
         adminLen    = handle->buffer->tgs.response.cfge.adminControlListLength;
+        if (adminLen > (UINT32_MAX - 36U) / 8U)
+        {
+            return kStatus_OutOfRange;
+        }
         resOlseBase = (netc_tb_tgs_olse_t *)(uintptr_t)(&((uint8_t *)handle->buffer)[36U + 8U * adminLen]);
         if (resOlseBase->operControlListLength > length)
         {

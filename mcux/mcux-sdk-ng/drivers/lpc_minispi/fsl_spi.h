@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020,2022,2025 NXP
+ * Copyright 2017-2020, 2022, 2025-2026 NXP
  * All rights reserved.
  *
  *
@@ -25,7 +25,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SPI driver version. */
-#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 8))
+#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 9))
 /*! @} */
 
 #ifndef SPI_DUMMYDATA
@@ -671,6 +671,13 @@ static inline void SPI_SlaveTransferAbort(SPI_Type *base, spi_slave_handle_t *ha
  * @param handle pointer to spi_slave_handle_t structure which stores the transfer state
  */
 void SPI_SlaveTransferHandleIRQ(SPI_Type *base, spi_slave_handle_t *handle);
+
+/*!
+ * @brief Common IRQ handler entry for SPI, dispatches to the registered ISR.
+ *
+ * @param instance SPI peripheral instance number.
+ */
+void SPI_DriverIRQHandler(uint32_t instance);
 /*! @} */
 #endif /* FSL_SDK_ENABLE_SPI_DRIVER_TRANSACTIONAL_APIS */
 

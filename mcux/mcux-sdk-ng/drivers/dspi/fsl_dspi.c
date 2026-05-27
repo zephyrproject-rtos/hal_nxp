@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2024 NXP
+ * Copyright 2016-2019, 2024, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -2228,6 +2228,15 @@ static void DSPI_CommonIRQHandler(SPI_Type *base, void *param)
         s_dspiSlaveIsr(base, (dspi_slave_handle_t *)param);
     }
 #endif
+    SDK_ISR_EXIT_BARRIER;
+}
+
+void DSPI_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_dspiBases))
+    {
+        DSPI_CommonIRQHandler(s_dspiBases[instance], g_dspiHandle[instance]);
+    }
     SDK_ISR_EXIT_BARRIER;
 }
 

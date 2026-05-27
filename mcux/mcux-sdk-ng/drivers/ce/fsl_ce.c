@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 NXP
+ * Copyright 2024-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -30,6 +30,11 @@ void CE_Init(ce_copy_image_t *ceCopyImage)
            ceCopyImage->destAddr == CE_STCM7_BASE);
 
     CE_InstallFirmware(ceCopyImage);
+#elif (defined(KW43_core0_SERIES) || defined(MCXW70_core0_SERIES))
+    assert(NULL != ceCopyImage);
+    assert(0U != ceCopyImage->destAddr);
+
+    CE_InstallFirmware(ceCopyImage);
 #endif
 
     CE_InitWithoutFirmware();
@@ -55,6 +60,22 @@ void CE_Init(ce_copy_image_t *ceCopyImage)
             MU_BootOtherCore(MUA, kMU_CoreBootFromSTCM5);
             break;
     } /* GCOVR_EXCL_STOP */
+#elif (defined(KW43_core0_SERIES) || defined(MCXW70_core0_SERIES))
+    /* By default, TRDC configuration does not enable the DSP's master permissions.
+     * This statement configures the DSP's DID (Domain ID) and its Secure/Non-secure
+     * attributes. Additionally, since there is PRESET data, the ROM has already
+     * configured SRAM access permissions, but these permissions are mapped to a
+     * specific DID. Therefore, it's necessary to configure the DSP's DID in TRDC
+     * to match the DID that has SRAM access permissions. */
+    TRDC_0_MGR->MDA_DFMT0[6].MDA_W_DFMT0[0] = 0x80000011;
+    /* Unlock SYSCON */
+    SYSCON->AUTHENTICATE = SYSCON_UNLOCK_CODE;
+    /* Set ZENV vector start address */
+    SYSCON->ZENV_CTRL = ceCopyImage->destAddr;
+    /* Release reset of ZENV CORE */
+    SYSCON->ZENV_RESET_CTRL = 0UL;
+    /* Lock SYSCON again */
+    SYSCON->AUTHENTICATE = 0UL;
 #endif
 }
 
@@ -65,7 +86,7 @@ void CE_Init(ce_copy_image_t *ceCopyImage)
  */
 void CE_InstallFirmware(ce_copy_image_t *ceCopyImage)
 {
-#if (defined(KW47_core0_SERIES) || defined(MCXW72_core0_SERIES))
+#if (defined(KW47_core0_SERIES) || defined(MCXW72_core0_SERIES) || defined(KW43_core0_SERIES) || defined(MCXW70_core0_SERIES))
     uint32_t dstAddr;
     uint32_t srcAddr;
     uint32_t size;
@@ -91,8 +112,19 @@ void CE_InstallFirmware(ce_copy_image_t *ceCopyImage)
  */
 void CE_InitWithoutFirmware(void)
 {
+#if (defined(KW47_core0_SERIES) || defined(MCXW72_core0_SERIES))
     CLOCK_EnableClock(kCLOCK_DSP0);
     CLOCK_EnableClock(kCLOCK_DSP0_MUA);
 
     MU_Init(MUA);
+#elif (defined(KW43_core0_SERIES) || defined(MCXW70_core0_SERIES))
+    /* Enable DSP RAM clock */
+    CLOCK_EnableClock(kCLOCK_Dsp_ramc0);
+    /* Enable LCE clock */
+    CLOCK_EnableClock(kCLOCK_Zenv_core);
+    /*Enable MU clock */
+    CLOCK_EnableClock(kCLOCK_Mu1);
+
+    MU_Init(MU1_MUA);
+#endif
 }

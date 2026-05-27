@@ -1,5 +1,10 @@
 # I3C
 
+## [2.14.6]
+
+- New Features
+  - Added common IRQ handler entry I3C_DriverIRQHandler.
+
 ## [2.14.5]
 
 - Bug Fixes

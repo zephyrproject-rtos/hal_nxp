@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2019, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -974,3 +974,13 @@ void SDIOSLV_DriverIRQHandler(void)
     s_sdioslvIsr(s_sdioslvBase[0], s_sdioslvHandle[0]);
 }
 #endif
+
+void SDIOSLV_CommonDriverIRQHandler(uint32_t instance);
+void SDIOSLV_CommonDriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_sdioslvBase))
+    {
+        s_sdioslvIsr(s_sdioslvBase[instance], s_sdioslvHandle[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
+}

@@ -1,5 +1,10 @@
 # ENET
 
+## [2.11.2]
+
+- Improvements
+  - Removed conditional compiling of kENET_RgmiiMode/kENET_MiiSpeed1000M definition.
+
 ## [2.11.1]
 
 - Bug Fixes

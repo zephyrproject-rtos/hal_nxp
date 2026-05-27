@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2025 NXP
+ * Copyright 2016-2020, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I2C driver version. */
-#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 10))
+#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 11))
 /*! @} */
 
 /*! @brief Retry times for waiting flag. */
@@ -797,6 +797,13 @@ status_t I2C_SlaveTransferGetCount(I2C_Type *base, i2c_slave_handle_t *handle, s
  * @param i2cHandle pointer to i2c_slave_handle_t structure which stores the transfer state
  */
 void I2C_SlaveTransferHandleIRQ(I2C_Type *base, void *i2cHandle);
+
+/*!
+ * @brief I2C driver IRQ handler common entry.
+ *
+ * @param instance I2C peripheral instance number.
+ */
+void I2C_DriverIRQHandler(uint32_t instance);
 
 /*! @} */
 #if defined(__cplusplus)

@@ -1,5 +1,5 @@
 /*
- * Copyright  2017-2021 NXP
+ * Copyright  2017-2021, 2026 NXP
  * All rights reserved.
  *
  *
@@ -1693,6 +1693,15 @@ void USART_TransferHandleIRQ(USART_Type *base, usart_handle_t *handle)
                  VFIFO_USART_CFGUSART_RXTHRESHOLD(tmpsize - 1U));
         }
     }
+}
+
+void USART_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < (uint32_t)FSL_FEATURE_SOC_USART_COUNT)
+    {
+        s_usartIsr((USART_Type *)(uint32_t)s_usartBaseAddrs[instance], s_usartHandle[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if defined(USART0)

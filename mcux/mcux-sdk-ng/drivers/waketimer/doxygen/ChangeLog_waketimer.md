@@ -1,5 +1,10 @@
 # WAKETIMER
 
+## [2.0.2]
+
+- New Features
+  - Added common IRQ handler entry WAKETIMER_DriverIRQHandler.
+
 ## [2.0.1]
 
 - Bug Fix

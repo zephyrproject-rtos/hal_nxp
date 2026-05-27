@@ -1,5 +1,11 @@
 # MSCAN
 
+## [2.1.2]
+
+- Improvements
+  - Added parameterized IRQ handler MSCAN_CommonDriverIRQHandler(uint32_t instance) to support
+    multiple instances.
+
 ## [2.1.1]
 
 - Bug Fixes

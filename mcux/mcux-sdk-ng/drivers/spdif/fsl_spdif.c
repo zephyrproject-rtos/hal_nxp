@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2020, 2026 NXP
  * All rights reserved.
  *
  *
@@ -854,6 +854,20 @@ void SPDIF_TransferRxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
             SPDIF_TransferAbortReceive(base, handle);
         }
     }
+}
+
+void SPDIF_CommonDriverIRQHandler(uint32_t instance)
+{
+    if ((s_spdifHandle[instance][0] != NULL) && (s_spdifTxIsr != NULL))
+    {
+        s_spdifTxIsr(s_spdifBases[instance], s_spdifHandle[instance][0]);
+    }
+
+    if ((s_spdifHandle[instance][1] != NULL) && (s_spdifRxIsr != NULL))
+    {
+        s_spdifRxIsr(s_spdifBases[instance], s_spdifHandle[instance][1]);
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if defined(SPDIF)

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2023, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -961,6 +961,15 @@ static void ECSPI_CommonIRQHandler(ECSPI_Type *base, ecspi_master_handle_t *hand
     else
     {
         s_ecspiSlaveIsr(base, handle);
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
+
+void ECSPI_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_ecspiBases))
+    {
+        ECSPI_CommonIRQHandler(s_ecspiBases[instance], s_ecspiHandle[instance]);
     }
     SDK_ISR_EXIT_BARRIER;
 }

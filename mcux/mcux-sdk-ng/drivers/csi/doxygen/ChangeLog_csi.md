@@ -1,5 +1,10 @@
 # CSI
 
+## [2.2.1]
+
+- New Features
+  - Added common IRQ handler entry CSI_CommonDriverIRQHandler.
+
 ## [2.2.0]
 
 - Improvements

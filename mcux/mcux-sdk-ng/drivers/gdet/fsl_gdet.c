@@ -32,8 +32,10 @@ static const clock_ip_name_t s_gdetClocks[] = GDET_CLOCKS;
 static const clock_ip_name_t s_gdetRefClocks[] = GDET_REF_CLOCKS;
 #endif
 
+#if defined(GDET_IRQS)
 /* Array of GDET peripheral IRQs */
 static const IRQn_Type s_gdetIrqs[] = GDET_IRQS;
+#endif
 
 /*******************************************************************************
  * Prototypes
@@ -91,7 +93,7 @@ status_t GDET_Init(GDET_Type *base)
 /*!
  * brief Deinitialize GDET
  *
- * This function stops GDET clocs.
+ * This function stops GDET clocks.
  *
  * param base GDET peripheral base address
  */
@@ -115,8 +117,14 @@ void GDET_Deinit(GDET_Type *base)
  */
 status_t GDET_Enable(GDET_Type *base)
 {
+#if  defined(GDET_GDET_ENABLE1_EN1_MASK) || defined(GDET_GDET_ENABLE1_EN1_MASK)
     base->GDET_ENABLE1 = GDET_GDET_ENABLE1_EN1(1u);
+#elif defined(GDET_GDET_RENABLE1_REN1_MASK) || defined(GDET_GDET_RENABLE1_REN1_MASK)
+    base->GDET_RENABLE1 = GDET_GDET_RENABLE1_REN1(1u);
+#endif /* GDET_GDET_ENABLE1_EN1_MASK */
+#if defined(GDET_IRQS)
     NVIC_EnableIRQ(s_gdetIrqs[GDET_GetInstance(base)]);
+#endif
 
     return kStatus_Success;
 }
@@ -131,8 +139,14 @@ status_t GDET_Enable(GDET_Type *base)
  */
 status_t GDET_Disable(GDET_Type *base)
 {
+#if  defined(GDET_GDET_ENABLE1_EN1_MASK) || defined(GDET_GDET_ENABLE1_EN1_MASK)
     base->GDET_ENABLE1 = GDET_GDET_ENABLE1_EN1(0u);
+#elif defined(GDET_GDET_RENABLE1_REN1_MASK) || defined(GDET_GDET_RENABLE1_REN1_MASK)
+    base->GDET_RENABLE1 = GDET_GDET_RENABLE1_REN1(0u);
+#endif /* GDET_GDET_ENABLE1_EN1_MASK */
+#if defined(GDET_IRQS)
     NVIC_DisableIRQ(s_gdetIrqs[GDET_GetInstance(base)]);
+#endif
 
     return kStatus_Success;
 }
@@ -173,6 +187,19 @@ status_t GDET_IsolateOn(GDET_Type *base)
         SECCON->GDET_CTRL[0u] = syscon_tmp;
 
         if ((SECCON->GDET_CTRL[0u] & SYSCON_GDET_ISOLATION_SW_MASK) != ISOLATE_ON)
+        {
+            return kStatus_Fail;
+        }
+    }
+#elif defined(SECCON_GDET0_CTRL_GDET_ISO_CTR_MASK) || defined(SECCON_GDET0_CTRL_GDET_ISO_CTR_MASK)
+    /* GDET0 */
+    if (instance == 0u)
+    {
+        syscon_tmp = SECCON->GDET0_CTRL & ~(SYSCON_GDET_ISOLATION_SW_MASK);
+        syscon_tmp |= ISOLATE_ON;
+        SECCON->GDET0_CTRL = syscon_tmp;
+
+        if ((SECCON->GDET0_CTRL & SYSCON_GDET_ISOLATION_SW_MASK) != ISOLATE_ON)
         {
             return kStatus_Fail;
         }
@@ -234,6 +261,18 @@ status_t GDET_IsolateOff(GDET_Type *base)
         SECCON->GDET_CTRL[0u] = syscon_tmp;
 
         if ((SECCON->GDET_CTRL[0u] & SYSCON_GDET_ISOLATION_SW_MASK) != ISOLATE_OFF)
+        {
+            return kStatus_Fail;
+        }
+    }
+#elif defined(SECCON_GDET0_CTRL_GDET_ISO_CTR_MASK) || defined(SECCON_GDET0_CTRL_GDET_ISO_CTR_MASK)
+    if (instance == 0u)
+    {
+        syscon_tmp = SECCON->GDET0_CTRL & ~(SYSCON_GDET_ISOLATION_SW_MASK);
+        syscon_tmp |= ISOLATE_OFF;
+        SECCON->GDET0_CTRL = syscon_tmp;
+
+        if ((SECCON->GDET0_CTRL & SYSCON_GDET_ISOLATION_SW_MASK) != ISOLATE_OFF)
         {
             return kStatus_Fail;
         }

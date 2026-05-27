@@ -25,8 +25,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief smm driver version 2.1.2. */
-#define FSL_SMM_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+/*! @brief smm driver version 2.2.0. */
+#define FSL_SMM_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 /*!
@@ -113,7 +113,7 @@ void SMM_SetExtInterruptConfig(SMM_Type *base, const smm_ext_int_config_t *ptrCo
 
 /*!
  * @brief Disable the AON CPU I/O signals on exit from DPD2.
- * 
+ * @deprecated Please use SMM_DisableAonCpuIso() as instead.
  * @param base SMM base address.
  */
 static inline void SMM_DisableAonCpuIsoSingal(SMM_Type *base)
@@ -123,7 +123,7 @@ static inline void SMM_DisableAonCpuIsoSingal(SMM_Type *base)
 
 /*!
  * @brief Disable the Main CPU I/O signals on exit from DPD1.
- * 
+ * @deprecated Please use SMM_DisableMainCpuIso() as instead.
  * @param base SMM base address.
  */
 static inline void SMM_DisableMainCpuIsoSingal(SMM_Type *base)
@@ -212,6 +212,17 @@ static inline uint32_t SMM_GetWakeupSourceStatus(SMM_Type *base)
 }
 
 /*!
+ * @brief Clear wakeup source status.
+ * 
+ * @param base SMM base address.
+ * @param wakeupSources Mask value of wakeup sources to clear.
+ */
+static inline void SMM_ClearWakeupSourceStatus(SMM_Type *base, uint32_t wakeupSources)
+{
+    base->WKUP_STAT = wakeupSources & SMM_WKUP_STAT_WKUP_SRCS_MASK;
+}
+
+/*!
  * @brief Shutdown bangdap in low power modes.
  * 
  * @param base SMM base address.
@@ -221,12 +232,12 @@ static inline void SMM_ShutDownBandgapInLowPowerModes(SMM_Type *base, bool shutd
 {
     if (shutdown)
     {
-        base->PWDN_CONFIG |= SMM_PWDN_CONFIG_BGR_PULSE_MASK;
+        base->PWDN_CONFIG |= SMM_PWDN_CONFIG_BGR_PULSE_MODE_EN_MASK;
         base->PWDN_CONFIG |= SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK;
     }
     else
     {
-        base->PWDN_CONFIG &= ~SMM_PWDN_CONFIG_BGR_PULSE_MASK;
+        base->PWDN_CONFIG &= ~SMM_PWDN_CONFIG_BGR_PULSE_MODE_EN_MASK;
         base->PWDN_CONFIG &= ~SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK;
     }
 }
@@ -319,7 +330,7 @@ static inline void SMM_PowerOnAonSramManually(SMM_Type *base, uint8_t sramCuts)
  */
 static inline void SMM_PowerOffAonSramAutomatically(SMM_Type *base, uint8_t sramCuts)
 {
-    base->PWDN_CONFIG |=  SMM_PWDN_CONFIG_CTRL_SRAM_DPD2_MASK;
+    base->PWDN_CONFIG |=  SMM_PWDN_CONFIG_SRAM_ISO_CTRL_MASK;
     base->MEMORY_RTN  = ((base->MEMORY_RTN & ~SMM_MEMORY_RTN_CPU_SRAMBn_PWD_MASK) | SMM_MEMORY_RTN_CPU_SRAMBn_PWD(sramCuts));
 }
 
@@ -331,7 +342,7 @@ static inline void SMM_PowerOffAonSramAutomatically(SMM_Type *base, uint8_t sram
  */
 static inline void SMM_DisableAonSramAutoControl(SMM_Type *base, uint8_t sramCuts)
 {
-    base->PWDN_CONFIG &= ~SMM_PWDN_CONFIG_CTRL_SRAM_DPD2_MASK;
+    base->PWDN_CONFIG &= ~SMM_PWDN_CONFIG_SRAM_ISO_CTRL_MASK;
 }
 
 /*!
@@ -438,27 +449,13 @@ static inline void SMM_ClearExternalIntFlag(SMM_Type *base)
  */
 static inline void SMM_DisableMainCpuIso(SMM_Type *base)
 {
-    base->CNFG |= (SMM_CNFG_MAIN_ISO_DSBL_MASK);
-    for (uint32_t i = 0UL; i < 1000UL; i++)
-    {
-        i++;
-    }
-    base->CNFG &= ~(SMM_CNFG_MAIN_ISO_DSBL_MASK);
-    
-    for (uint32_t i = 0UL; i < 1000UL; i++)
-    {
-        i++;
-    }
-    base->CNFG |= (SMM_CNFG_MAIN_ISO_DSBL_MASK);
-    for (uint32_t i = 0UL; i < 1000UL; i++)
-    {
-        i++;
-    }
-    base->CNFG &= ~(SMM_CNFG_MAIN_ISO_DSBL_MASK);
-    for (uint32_t i = 0UL; i < 1000UL; i++)
-    {
-        i++;
-    }
+   base->CNFG |= SMM_CNFG_MAIN_ISO_DSBL_MASK;
+#if __CORTEX_M == 33U
+   SDK_DelayAtLeastUs(10, CLOCK_GetCoreSysClkFreq());
+#else
+   SDK_DelayAtLeastUs(10, CLOCK_GetAonCoreSysClkFreq());
+#endif /* __CORTEX_M */
+   base->CNFG &= ~SMM_CNFG_MAIN_ISO_DSBL_MASK;
 }
 
 /*!
@@ -469,25 +466,12 @@ static inline void SMM_DisableMainCpuIso(SMM_Type *base)
 static inline void SMM_DisableAonCpuIso(SMM_Type *base)
 {
     base->CNFG |= (SMM_CNFG_AON_ISO_DSBL_MASK);
-    for (uint32_t i = 0UL; i < 1000UL; i++)
-    {
-        i++;
-    }
+    #if __CORTEX_M == (33U)
+    SDK_DelayAtLeastUs(10, CLOCK_GetCoreSysClkFreq());
+    #else
+    SDK_DelayAtLeastUs(10, CLOCK_GetAonCoreSysClkFreq());
+    #endif /* __CORTEX_M */
     base->CNFG &= ~(SMM_CNFG_AON_ISO_DSBL_MASK);
-    for (uint32_t i = 0UL; i < 1000UL; i++)
-    {
-        i++;
-    }
-    base->CNFG |= (SMM_CNFG_AON_ISO_DSBL_MASK);
-    for (uint32_t i = 0UL; i < 1000UL; i++)
-    {
-        i++;
-    }
-    base->CNFG &= ~(SMM_CNFG_AON_ISO_DSBL_MASK);
-    for (uint32_t i = 0UL; i < 1000UL; i++)
-    {
-        i++;
-    }
 }
 
 /*!
@@ -539,7 +523,7 @@ static inline void SMM_ConfigWatchdogAlarmUse(SMM_Type *base, smm_watchdog_alarm
  */
 static inline void SMM_UseDeepSleepCounterInSoftwareMethod(SMM_Type *base)
 {
-    base->CNFG |= SMM_CNFG_DSLP_COUNT_USE_MASK;
+    base->CNFG |= SMM_CNFG_DS_CNTR_USE_MASK;
 }
 
 /*!
@@ -549,7 +533,7 @@ static inline void SMM_UseDeepSleepCounterInSoftwareMethod(SMM_Type *base)
  */
 static inline void SMM_UseDeepSleepCounterInHardwareMethod(SMM_Type *base)
 {
-    base->CNFG &= ~SMM_CNFG_DSLP_COUNT_USE_MASK;
+    base->CNFG &= ~SMM_CNFG_DS_CNTR_USE_MASK;
 }
 
 /*!
@@ -559,12 +543,12 @@ static inline void SMM_UseDeepSleepCounterInHardwareMethod(SMM_Type *base)
  */
 static inline void SMM_ResetAndDisableDeepSleepCounter(SMM_Type *base)
 {
-    base->CNFG |= SMM_CNFG_DSLP_COUNT_RST_MASK;
+    base->CNFG |= SMM_CNFG_DS_CNTR_RST_MASK;
     for (uint32_t i = 0UL; i < 1000UL; i++)
     {
         i++;
     }
-    base->CNFG &= ~SMM_CNFG_DSLP_COUNT_RST_MASK;
+    base->CNFG &= ~SMM_CNFG_DS_CNTR_RST_MASK;
 }
 
 /*!
@@ -574,7 +558,7 @@ static inline void SMM_ResetAndDisableDeepSleepCounter(SMM_Type *base)
  */
 static inline void SMM_StartDeepSleepCounter(SMM_Type *base)
 {
-    base->CNFG |= SMM_CNFG_DSLP_COUNT_STRT_MASK;
+    base->CNFG |= SMM_CNFG_DS_CNTR_STRT_MASK;
 }
 
 /*!
@@ -585,7 +569,7 @@ static inline void SMM_StartDeepSleepCounter(SMM_Type *base)
  */
 static inline void SMM_UpdateDeepSleepCounter(SMM_Type *base, uint16_t value)
 {
-    base->DPSLP_COUNT = SMM_DPSLP_COUNT_DPSLP_CNT(value);
+    base->DEEP_SLEEP_CNT = SMM_DEEP_SLEEP_CNT_DS_CNTR(value);
 }
 
 /*!
@@ -597,7 +581,7 @@ static inline void SMM_UpdateDeepSleepCounter(SMM_Type *base, uint16_t value)
  */
 static inline uint16_t SMM_ReadDeepSleepCounter(SMM_Type *base)
 {
-    return (uint16_t)((base->DPSLP_COUNT) & SMM_DPSLP_COUNT_DPSLP_CNT_MASK);
+    return (uint16_t)((base->DEEP_SLEEP_CNT) & SMM_DEEP_SLEEP_CNT_DS_CNTR_MASK);
 }
 
 /*!
@@ -672,7 +656,7 @@ static inline void SMM_ClearInterruptFlags(SMM_Type *base, uint32_t flags)
  */
 static inline bool SMM_CheckDeepSleepCounterMatch(SMM_Type *base)
 {
-    return ((base->STAT & SMM_STAT_DPSLP_CNTR_M_MASK) != 0UL);
+    return ((base->STAT & SMM_STAT_DS_CNTR_M_MASK) != 0UL);
 }
 
 /*!
@@ -682,7 +666,7 @@ static inline bool SMM_CheckDeepSleepCounterMatch(SMM_Type *base)
  */
 static inline void SMM_ClearDeepSleepCounterMatchFlag(SMM_Type *base)
 {
-    base->STAT = SMM_STAT_DPSLP_CNTR_M_MASK;
+    base->STAT = SMM_STAT_DS_CNTR_M_MASK;
 }
 
 /*!
@@ -695,7 +679,7 @@ static inline void SMM_ClearDeepSleepCounterMatchFlag(SMM_Type *base)
  */
 static inline bool SMM_CheckComparatorMatch(SMM_Type *base)
 {
-    return ((base->STAT & SMM_STAT_COMP_MATCH_MASK) != 0UL);
+    return ((base->STAT & SMM_STAT_LPACMP_MATCH_MASK) != 0UL);
 }
 
 /*!
@@ -705,7 +689,7 @@ static inline bool SMM_CheckComparatorMatch(SMM_Type *base)
  */
 static inline void SMM_ClearComparatorMatchFlag(SMM_Type *base)
 {
-    base->STAT = SMM_STAT_COMP_MATCH_MASK;
+    base->STAT = SMM_STAT_LPACMP_MATCH_MASK;
 }
 
 #if defined(__cplusplus)

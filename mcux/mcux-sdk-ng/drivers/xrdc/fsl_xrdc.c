@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2023-2025 NXP
+ * Copyright 2016-2017, 2023-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -677,7 +677,7 @@ void XRDC_SetMemAccessConfig(XRDC_Type *base, const xrdc_mem_access_config_t *co
     }
 
 #if !(defined(FSL_FEATURE_XRDC_NO_MRGD_SE) && FSL_FEATURE_XRDC_NO_MRGD_SE)
-    regValue |= XRDC_MRGD_W_SE(config->enableSema) | XRDC_MRGD_W_SNUM(config->semaNum);
+    regValue |= XRDC_MRGD_W_SE(config->enableSema ? 1U : 0U) | XRDC_MRGD_W_SNUM(config->semaNum);
 #endif /* FSL_FEATURE_XRDC_NO_MRGD_SE */
 
     base->MRGD[index].MRGD_W[2] = regValue;
@@ -911,7 +911,7 @@ void XRDC_SetPeriphAccessConfig(XRDC_Type *base, const xrdc_periph_access_config
     }
 
 #if !(defined(FSL_FEATURE_XRDC_NO_MRGD_SE) && FSL_FEATURE_XRDC_NO_MRGD_SE)
-    regValue |= (XRDC_PDAC_W_SE(config->enableSema) | XRDC_PDAC_W_SNUM(config->semaNum));
+    regValue |= (XRDC_PDAC_W_SE(config->enableSema ? 1U : 0U) | XRDC_PDAC_W_SNUM(config->semaNum));
 #endif /* FSL_FEATURE_XRDC_NO_MRGD_SE */
 
     /* Set PDAC_W0. */

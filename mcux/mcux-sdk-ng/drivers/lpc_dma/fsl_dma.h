@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2022, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief DMA driver version */
-#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 4)) /*!< Version 2.5.4. */
+#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 5)) /*!< Version 2.5.5. */
 /*! @} */
 
 /*! @brief DMA max transfer size */
@@ -890,6 +890,13 @@ void DMA_StartTransfer(dma_handle_t *handle);
  * @param base DMA base address.
  */
 void DMA_IRQHandle(DMA_Type *base);
+
+/*!
+ * @brief DMA common IRQ handler entry for parameterized dispatch.
+ *
+ * @param instance DMA peripheral instance number.
+ */
+void DMA_DriverIRQHandler(uint32_t instance);
 
 /*! @} */
 

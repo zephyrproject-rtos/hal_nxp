@@ -108,7 +108,7 @@ void NETC_TimerDeinit(netc_timer_handle_t *handle)
 
     /* Disable master bus and memory access for PCIe and MSI-X. */
     TMR_PCI_HDR_TYPE0->PCI_CFH_CMD &=
-        (uint16_t)(~(ENETC_PCI_TYPE0_PCI_CFH_CMD_MEM_ACCESS_MASK | ENETC_PCI_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_MASK));
+        (uint16_t)((~(ENETC_PCI_TYPE0_PCI_CFH_CMD_MEM_ACCESS_MASK | ENETC_PCI_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_MASK)) & 0xFFFFU);
 
     (void)memset(handle, 0, sizeof(netc_timer_handle_t));
 }
@@ -134,17 +134,17 @@ void NETC_TimerConfigureAlarm(netc_timer_handle_t *handle,
     control = handle->hw.base->TMR_CTRL;
     control &=
         (alarmId == kNETC_TimerAlarm1) ? (~ENETC_PF_TMR_TMR_CTRL_ALM1P_MASK) : (~ENETC_PF_TMR_TMR_CTRL_ALM2P_MASK);
-    control |= (alarmId == kNETC_TimerAlarm1) ? (ENETC_PF_TMR_TMR_CTRL_ALM1P(alarm->polarity)) :
-                                                ENETC_PF_TMR_TMR_CTRL_ALM2P(alarm->polarity);
+    control |= (alarmId == kNETC_TimerAlarm1) ? (ENETC_PF_TMR_TMR_CTRL_ALM1P(alarm->polarity ? 1U : 0U)) :
+                                                ENETC_PF_TMR_TMR_CTRL_ALM2P(alarm->polarity ? 1U : 0U);
     handle->hw.base->TMR_CTRL = control;
 
     control = handle->hw.base->TMR_ALARM_CTRL;
     control &= (alarmId == kNETC_TimerAlarm1) ?
                    (~(ENETC_PF_TMR_TMR_ALARM_CTRL_PG1_MASK | ENETC_PF_TMR_TMR_ALARM_CTRL_ALARM1_PW_MASK)) :
                    (~(ENETC_PF_TMR_TMR_ALARM_CTRL_PG2_MASK | ENETC_PF_TMR_TMR_ALARM_CTRL_ALARM2_PW_MASK));
-    control |= (alarmId == kNETC_TimerAlarm1) ? (ENETC_PF_TMR_TMR_ALARM_CTRL_PG1(alarm->pulseGenSync) |
+    control |= (alarmId == kNETC_TimerAlarm1) ? (ENETC_PF_TMR_TMR_ALARM_CTRL_PG1(alarm->pulseGenSync ? 1U : 0U) |
                                                  ENETC_PF_TMR_TMR_ALARM_CTRL_ALARM1_PW(alarm->pulseWidth)) :
-                                                (ENETC_PF_TMR_TMR_ALARM_CTRL_PG2(alarm->pulseGenSync) |
+                                                (ENETC_PF_TMR_TMR_ALARM_CTRL_PG2(alarm->pulseGenSync ? 1U : 0U) |
                                                  ENETC_PF_TMR_TMR_ALARM_CTRL_ALARM2_PW(alarm->pulseWidth));
     handle->hw.base->TMR_ALARM_CTRL = control;
 
@@ -152,8 +152,8 @@ void NETC_TimerConfigureAlarm(netc_timer_handle_t *handle,
     control = handle->hw.base->TMR_TEMASK;
     control &= (alarmId == kNETC_TimerAlarm1) ? (~ENETC_PF_TMR_TMR_TEMASK_ALM1EN_MASK) :
                                                 (~ENETC_PF_TMR_TMR_TEMASK_ALM2EN_MASK);
-    control |= (alarmId == kNETC_TimerAlarm1) ? ENETC_PF_TMR_TMR_TEMASK_ALM1EN(alarm->enableInterrupt) :
-                                                ENETC_PF_TMR_TMR_TEMASK_ALM2EN(alarm->enableInterrupt);
+    control |= (alarmId == kNETC_TimerAlarm1) ? ENETC_PF_TMR_TMR_TEMASK_ALM1EN(alarm->enableInterrupt ? 1U : 0U) :
+                                                ENETC_PF_TMR_TMR_TEMASK_ALM2EN(alarm->enableInterrupt ? 1U : 0U);
     handle->hw.base->TMR_TEMASK = control;
 }
 
@@ -161,12 +161,12 @@ void NETC_TimerStartAlarm(netc_timer_handle_t *handle, netc_timer_alarm_index_t 
 {
     if (alarmId == kNETC_TimerAlarm1)
     {
-        handle->hw.base->TMR_ALARMM[0].TMR_ALARM_L = (uint32_t)nanosecond;
+        handle->hw.base->TMR_ALARMM[0].TMR_ALARM_L = (uint32_t)(nanosecond & 0xFFFFFFFFU);
         handle->hw.base->TMR_ALARMM[0].TMR_ALARM_H = (uint32_t)(nanosecond >> 32U);
     }
     else
     {
-        handle->hw.base->TMR_ALARMM[1].TMR_ALARM_L = (uint32_t)nanosecond;
+        handle->hw.base->TMR_ALARMM[1].TMR_ALARM_L = (uint32_t)(nanosecond & 0xFFFFFFFFU);
         handle->hw.base->TMR_ALARMM[1].TMR_ALARM_H = (uint32_t)(nanosecond >> 32U);
     }
 }
@@ -189,9 +189,9 @@ void NETC_TimerConfigureFIPER(netc_timer_handle_t *handle, const netc_timer_fipe
 
     handle->hw.base->TMR_CTRL &=
         ~(ENETC_PF_TMR_TMR_CTRL_FS_MASK | ENETC_PF_TMR_TMR_CTRL_PP1L_MASK | ENETC_PF_TMR_TMR_CTRL_PP2L_MASK);
-    handle->hw.base->TMR_CTRL |= ENETC_PF_TMR_TMR_CTRL_FS(config->startCondition) |
-                                 ENETC_PF_TMR_TMR_CTRL_PP1L(config->fiper1Loopback) |
-                                 ENETC_PF_TMR_TMR_CTRL_PP2L(config->fiper1Loopback);
+    handle->hw.base->TMR_CTRL |= ENETC_PF_TMR_TMR_CTRL_FS(config->startCondition ? 1U : 0U) |
+                                 ENETC_PF_TMR_TMR_CTRL_PP1L(config->fiper1Loopback ? 1U : 0U) |
+                                 ENETC_PF_TMR_TMR_CTRL_PP2L(config->fiper1Loopback ? 1U : 0U);
     handle->hw.base->TMR_PRSC = config->prescale;
 }
 
@@ -208,10 +208,10 @@ void NETC_TimerStartFIPER(netc_timer_handle_t *handle,
         handle->hw.base->TMR_FIPER_CTRL |= ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER1_DIS_MASK;
 
         handle->hw.base->TMR_TEMASK &= ~ENETC_PF_TMR_TMR_TEMASK_PP1EN_MASK;
-        handle->hw.base->TMR_TEMASK |= ENETC_PF_TMR_TMR_TEMASK_PP1EN(fiper->enableInterrupt);
+        handle->hw.base->TMR_TEMASK |= ENETC_PF_TMR_TMR_TEMASK_PP1EN(fiper->enableInterrupt ? 1U : 0U);
         clear   = ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER1_PW_MASK | ENETC_PF_TMR_TMR_FIPER_CTRL_PG1_MASK;
         control = ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER1_PW(fiper->pulseWidth) |
-                  ENETC_PF_TMR_TMR_FIPER_CTRL_PG1(fiper->pulseGenSync);
+                  ENETC_PF_TMR_TMR_FIPER_CTRL_PG1(fiper->pulseGenSync ? 1U : 0U);
     }
     else if (fiperId == kNETC_TimerFiper2)
     {
@@ -219,10 +219,10 @@ void NETC_TimerStartFIPER(netc_timer_handle_t *handle,
         handle->hw.base->TMR_FIPER_CTRL |= ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER2_DIS_MASK;
 
         handle->hw.base->TMR_TEMASK &= ~ENETC_PF_TMR_TMR_TEMASK_PP2EN_MASK;
-        handle->hw.base->TMR_TEMASK |= ENETC_PF_TMR_TMR_TEMASK_PP2EN(fiper->enableInterrupt);
+        handle->hw.base->TMR_TEMASK |= ENETC_PF_TMR_TMR_TEMASK_PP2EN(fiper->enableInterrupt ? 1U : 0U);
         clear   = ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER2_PW_MASK | ENETC_PF_TMR_TMR_FIPER_CTRL_PG2_MASK;
         control = ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER2_PW(fiper->pulseWidth) |
-                  ENETC_PF_TMR_TMR_FIPER_CTRL_PG2(fiper->pulseGenSync);
+                  ENETC_PF_TMR_TMR_FIPER_CTRL_PG2(fiper->pulseGenSync ? 1U : 0U);
     }
     else
     {
@@ -230,10 +230,10 @@ void NETC_TimerStartFIPER(netc_timer_handle_t *handle,
         handle->hw.base->TMR_FIPER_CTRL |= ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER3_DIS_MASK;
 
         handle->hw.base->TMR_TEMASK &= ~ENETC_PF_TMR_TMR_TEMASK_PP3EN_MASK;
-        handle->hw.base->TMR_TEMASK |= ENETC_PF_TMR_TMR_TEMASK_PP3EN(fiper->enableInterrupt);
+        handle->hw.base->TMR_TEMASK |= ENETC_PF_TMR_TMR_TEMASK_PP3EN(fiper->enableInterrupt ? 1U : 0U);
         clear   = ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER3_PW_MASK | ENETC_PF_TMR_TMR_FIPER_CTRL_PG3_MASK;
         control = ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER3_PW(fiper->pulseWidth) |
-                  ENETC_PF_TMR_TMR_FIPER_CTRL_PG3(fiper->pulseGenSync);
+                  ENETC_PF_TMR_TMR_FIPER_CTRL_PG3(fiper->pulseGenSync ? 1U : 0U);
     }
 
     handle->hw.base->TMR_FIPER[fiperId] = fiper->pulsePeriod;
@@ -271,8 +271,8 @@ void NETC_TimerConfigureExtPulseTrig(netc_timer_handle_t *handle,
     uint32_t clear;
 
     clear   = (extTrigId == kNETC_TimerExtTrig1) ? ENETC_PF_TMR_TMR_CTRL_ETEP1_MASK : ENETC_PF_TMR_TMR_CTRL_ETEP2_MASK;
-    control = (extTrigId == kNETC_TimerExtTrig1) ? ENETC_PF_TMR_TMR_CTRL_ETEP1(extTrig->polarity) :
-                                                   ENETC_PF_TMR_TMR_CTRL_ETEP2(extTrig->polarity);
+    control = (extTrigId == kNETC_TimerExtTrig1) ? ENETC_PF_TMR_TMR_CTRL_ETEP1(extTrig->polarity ? 1U : 0U) :
+                                                   ENETC_PF_TMR_TMR_CTRL_ETEP2(extTrig->polarity ? 1U : 0U);
     handle->hw.base->TMR_CTRL &= ~clear;
     handle->hw.base->TMR_CTRL |= control;
 
@@ -282,12 +282,12 @@ void NETC_TimerConfigureExtPulseTrig(netc_timer_handle_t *handle,
                   (ENETC_PF_TMR_TMR_TEMASK_ETS2EN_MASK | ENETC_PF_TMR_TMR_TEMASK_ETS2_THREN_MASK |
                  ENETC_PF_TMR_TMR_TEMASK_ETS2_OVEN_MASK);
     control = (extTrigId == kNETC_TimerExtTrig1) ?
-                  (ENETC_PF_TMR_TMR_TEMASK_ETS1EN(extTrig->enableTsAvailInterrupt) |
-                   ENETC_PF_TMR_TMR_TEMASK_ETS1_THREN(extTrig->enableFifoThresholdHitInterrupt) |
-                   ENETC_PF_TMR_TMR_TEMASK_ETS1_OVEN(extTrig->enableFifoOverflowInterrupt)) :
-                  (ENETC_PF_TMR_TMR_TEMASK_ETS2EN(extTrig->enableTsAvailInterrupt) |
-                   ENETC_PF_TMR_TMR_TEMASK_ETS2_THREN(extTrig->enableFifoThresholdHitInterrupt) |
-                   ENETC_PF_TMR_TMR_TEMASK_ETS2_OVEN(extTrig->enableFifoOverflowInterrupt));
+                  (ENETC_PF_TMR_TMR_TEMASK_ETS1EN(extTrig->enableTsAvailInterrupt ? 1U : 0U) |
+                   ENETC_PF_TMR_TMR_TEMASK_ETS1_THREN(extTrig->enableFifoThresholdHitInterrupt ? 1U : 0U) |
+                   ENETC_PF_TMR_TMR_TEMASK_ETS1_OVEN(extTrig->enableFifoOverflowInterrupt ? 1U : 0U)) :
+                  (ENETC_PF_TMR_TMR_TEMASK_ETS2EN(extTrig->enableTsAvailInterrupt ? 1U : 0U) |
+                   ENETC_PF_TMR_TMR_TEMASK_ETS2_THREN(extTrig->enableFifoThresholdHitInterrupt ? 1U : 0U) |
+                   ENETC_PF_TMR_TMR_TEMASK_ETS2_OVEN(extTrig->enableFifoOverflowInterrupt ? 1U : 0U));
     handle->hw.base->TMR_TEMASK &= ~clear;
     handle->hw.base->TMR_TEMASK |= control;
 }
@@ -395,6 +395,7 @@ void NETC_TimerAddOffset(netc_timer_handle_t *handle, int64_t nanosecond)
     }
 
     /* Calculate a new offset value based on the current one. */
+    assert(offset <= UINT64_MAX - ((uint64_t)handle->hw.base->TMROFF_H << 32U) - handle->hw.base->TMROFF_L);
     offset += ((uint64_t)handle->hw.base->TMROFF_H << 32U) + handle->hw.base->TMROFF_L;
     /* Update the latest offset. */
     handle->hw.base->TMROFF_L = (uint32_t)offset;
@@ -407,6 +408,8 @@ void NETC_TimerAdjustFreq(netc_timer_handle_t *handle, int32_t ppb)
     uint64_t addend;
     uint32_t control;
 
+    assert(offset > 0U);
+
     /* period (in ns) is given by: 10^9 / freq */
     /* ppb is applied to period: period' = period * (1 + ppb / 10^9) */
     /* addend is the fractional part of the period (in ns) scaled by 2^32, */
@@ -417,7 +420,7 @@ void NETC_TimerAdjustFreq(netc_timer_handle_t *handle, int32_t ppb)
     control = handle->hw.base->TMR_CTRL & ~ENETC_PF_TMR_TMR_CTRL_TCLK_PERIOD_MASK;
     handle->hw.base->TMR_CTRL = control | ENETC_PF_TMR_TMR_CTRL_TCLK_PERIOD((uint32_t)(addend >> 32));
 
-    handle->hw.base->TMR_ADD = (uint32_t)addend;
+    handle->hw.base->TMR_ADD = (uint32_t)(addend & 0xFFFFFFFFU);
 }
 
 void NETC_TimerGetFrtSrtTime(netc_timer_handle_t *handle, uint64_t *frt, uint64_t *srt)
@@ -442,7 +445,7 @@ status_t NETC_TimerMsixSetGlobalMask(netc_timer_handle_t *handle, bool mask)
     }
     else
     {
-        handle->hw.func->PCI_CFC_MSIX_MSG_CTL &= ~(uint16_t)ENETC_VF_PCI_TYPE0_PCI_CFC_MSIX_MSG_CTL_FUNC_MASK_MASK;
+        handle->hw.func->PCI_CFC_MSIX_MSG_CTL &= (uint16_t)((~ENETC_VF_PCI_TYPE0_PCI_CFC_MSIX_MSG_CTL_FUNC_MASK_MASK) & 0xFFFFU);
     }
 
     return kStatus_Success;
@@ -454,7 +457,7 @@ status_t NETC_TimerMsixSetEntryMask(netc_timer_handle_t *handle, uint8_t entryId
 
     if (entryIdx < handle->entryNum)
     {
-        handle->hw.msixTable[entryIdx].control = (uint32_t)mask;
+        handle->hw.msixTable[entryIdx].control = mask ? 1U : 0U;
         result                                 = kStatus_Success;
     }
     else

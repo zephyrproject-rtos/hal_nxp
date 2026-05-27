@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020,2022,2025 NXP
+ * Copyright 2017-2020, 2022, 2025-2026 NXP
  * All rights reserved.
  *
  *
@@ -930,6 +930,15 @@ static void SPI_CommonIRQHandler(SPI_Type *base, void *param)
     {
         s_spiSlaveIsr(base, (spi_slave_handle_t *)param);
     }
+}
+
+void SPI_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < (uint32_t)FSL_FEATURE_SOC_SPI_COUNT)
+    {
+        SPI_CommonIRQHandler((SPI_Type *)(uint32_t)s_spiBaseAddrs[instance], s_spiHandle[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if defined(SPI0)

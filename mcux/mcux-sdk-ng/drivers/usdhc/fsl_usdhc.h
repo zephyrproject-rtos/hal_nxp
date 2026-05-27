@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021, 2025 NXP
+ * Copyright 2016-2021, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Driver version 2.8.8. */
-#define FSL_USDHC_DRIVER_VERSION (MAKE_VERSION(2U, 8U, 8U))
+/*! @brief Driver version */
+#define FSL_USDHC_DRIVER_VERSION (MAKE_VERSION(2U, 8U, 9U))
 /*! @} */
 
 /*! @brief Maximum block count can be set one time */
@@ -763,6 +763,8 @@ struct _usdhc_handle
 
     usdhc_transfer_callback_t callback; /*!< Callback function. */
     void *userData;                     /*!< Parameter for transfer complete callback. */
+
+    bool enDMA;                         /*!< Transfer parameter. Was DMA used? */
 };
 
 /*! @brief USDHC transfer function. */
@@ -1698,6 +1700,8 @@ status_t USDHC_TransferBlocking(USDHC_Type *base, usdhc_adma_config_t *dmaConfig
  * @param handle USDHC handle.
  */
 void USDHC_TransferHandleIRQ(USDHC_Type *base, usdhc_handle_t *handle);
+
+void USDHC_DriverIRQHandler(uint32_t instance);
 
 /*! @} */
 

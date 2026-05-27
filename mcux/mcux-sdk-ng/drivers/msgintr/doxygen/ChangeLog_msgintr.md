@@ -1,5 +1,10 @@
 # MSGINTR
 
+## [2.0.3]
+
+- New Features
+  - Added common IRQ handler entry MSGINTR_DriverIRQHandler.
+
 ## [2.0.2]
 
 - Improvements

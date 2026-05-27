@@ -263,6 +263,14 @@ void SDK_DelayAtLeastUs(uint32_t delayTime_us, uint32_t coreClock_Hz)
 #else
         count = count / 4U;
 #endif
+        /* Ensure at least one loop iteration when delayTime_us > 0.
+         * USEC_TO_COUNT truncates, so at low clocks (e.g. 32 kHz) small delays
+         * yield count 0 after division. DelayLoop(0) would underflow its
+         * unsigned counter and spin for ~2^32 iterations instead of returning. */
+        if (count == 0U)
+        {
+            count = 1U;
+        }
         DelayLoop((uint32_t)count);
 #endif /* defined(SDK_DELAY_USE_DWT) && defined(DWT) */
     }

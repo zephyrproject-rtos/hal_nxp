@@ -1,5 +1,11 @@
 # DPU
 
+## [2.4.1]
+
+- Bug Fixes.
+  - Fixed CERT-C violations.
+  - Fixed MISRA issues.
+
 ## [2.4.0]
 
 - New feature.

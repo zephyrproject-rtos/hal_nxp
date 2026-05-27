@@ -323,6 +323,26 @@ void SPC_SetCoreVoltageDetectConfig(SPC_Type *base, const spc_core_voltage_detec
     base->VD_CORE_CFG = reg;
 }
 
+#if (defined(FSL_FEATURE_SPC_HAS_VDD1P8_LVD) && FSL_FEATURE_SPC_HAS_VDD1P8_LVD)
+/*!
+ * brief Configs VDD1P8 low voltage detect options.
+ *
+ * param base       SPC peripheral base address.
+ * param config     Pointer to spc_vdd1p8_voltage_detect_config_t structure.
+ */
+void SPC_SetVDD1P8VoltageDetectConfig(SPC_Type *base, const spc_vdd1p8_voltage_detect_config_t *config)
+{
+    assert(config != NULL);
+
+    uint32_t reg = base->VD_VDD1P8_CFG;
+
+    reg &= ~SPC_VD_VDD1P8_CFG_LVDIE_MASK;
+    reg |= (config->LVDInterruptEnable) ? SPC_VD_VDD1P8_CFG_LVDIE(1U) : SPC_VD_VDD1P8_CFG_LVDIE(0U);
+
+    base->VD_VDD1P8_CFG = reg;
+}
+#endif /* FSL_FEATURE_SPC_HAS_VDD1P8_LVD */
+
 /*!
  * brief Enables the Core High Voltage Detector in Active mode.
  *
@@ -439,6 +459,66 @@ status_t SPC_EnableLowPowerModeCoreLowVoltageDetect(SPC_Type *base, bool enable)
 
     return status;
 }
+
+#if (defined(FSL_FEATURE_SPC_HAS_VDD1P8_LVD) && FSL_FEATURE_SPC_HAS_VDD1P8_LVD)
+/*!
+ * brief Enables the VDD1P8 Low Voltage Detector in Active mode.
+ *
+ * note If the VDD1P8 low voltage detect is enabled in Active mode, please note that the bandgap must be enabled
+ * and the drive strength of each regulator must not set to low in Active mode.
+ *
+ * param base SPC peripheral base address.
+ * param enable Enable/Disable VDD1P8 LVD.
+ *          true    -   Enable VDD1P8 low voltage detector in active mode.
+ *          false   -   Disable VDD1P8 low voltage detector in active mode.
+ *
+ * retval kStatus_Success Enable VDD1P8 Low Voltage Detect successfully.
+ */
+status_t SPC_EnableActiveModeVDD1P8LowVoltageDetect(SPC_Type *base, bool enable)
+{
+    status_t status = kStatus_Success;
+
+    if (enable)
+    {
+        base->ACTIVE_CFG |= SPC_ACTIVE_CFG_VDD1P8_LVDE_MASK;
+    }
+    else
+    {
+        base->ACTIVE_CFG &= ~SPC_ACTIVE_CFG_VDD1P8_LVDE_MASK;
+    }
+
+    return status;
+}
+
+/*!
+ * brief Enables the VDD1P8 Low Voltage Detector in Low Power mode.
+ *
+ * note If the VDD1P8 low voltage detect is enabled in Low Power mode, please note that the bandgap must be enabled
+ * and the drive strength of each regulator must not set to low in Low Power mode.
+ *
+ * param base SPC peripheral base address.
+ * param enable Enable/Disable VDD1P8 LVD.
+ *          true    -   Enable VDD1P8 low voltage detector in low power mode.
+ *          false   -   Disable VDD1P8 low voltage detector in low power mode.
+ *
+ * retval kStatus_Success Enable VDD1P8 Low Voltage Detect in low power mode successfully.
+ */
+status_t SPC_EnableLowPowerModeVDD1P8LowVoltageDetect(SPC_Type *base, bool enable)
+{
+    status_t status = kStatus_Success;
+
+    if (enable)
+    {
+        base->LP_CFG |= SPC_LP_CFG_VDD1P8_LVDE_MASK;
+    }
+    else
+    {
+        base->LP_CFG &= ~SPC_LP_CFG_VDD1P8_LVDE_MASK;
+    }
+
+    return status;
+}
+#endif /* FSL_FEATURE_SPC_HAS_VDD1P8_LVD */
 
 #if (defined(FSL_FEATURE_SPC_HAS_VDD_SYS) && FSL_FEATURE_SPC_HAS_VDD_SYS)
 /*!
@@ -1366,19 +1446,17 @@ status_t SPC_SetDCDCBurstConfig(SPC_Type *base, spc_dcdc_burst_config_t *config)
 {
     assert(config != NULL);
 
-    uint32_t reg;
-
 #if SPC_DCDC_ACK_TIMEOUT
     uint32_t timeout = SPC_DCDC_ACK_TIMEOUT;
 #endif
 
-    reg = base->DCDC_CFG;
-
+#if !(defined(FSL_FEATURE_SPC_HAS_NO_DCDC_FREQ_CNTRL) && FSL_FEATURE_SPC_HAS_NO_DCDC_FREQ_CNTRL)
+    uint32_t reg = base->DCDC_CFG;
     reg &= ~(SPC_DCDC_CFG_FREQ_CNTRL_MASK | SPC_DCDC_CFG_FREQ_CNTRL_ON_MASK);
     reg |= SPC_DCDC_CFG_FREQ_CNTRL(config->freq);
     reg |= config->stabilizeBurstFreq ? SPC_DCDC_CFG_FREQ_CNTRL_ON(1U) : SPC_DCDC_CFG_FREQ_CNTRL_ON(0U);
-
     base->DCDC_CFG = reg;
+#endif
 
     /* Clear DCDC burst acknowledge flag. */
     base->DCDC_BURST_CFG |= SPC_DCDC_BURST_CFG_BURST_ACK_MASK;

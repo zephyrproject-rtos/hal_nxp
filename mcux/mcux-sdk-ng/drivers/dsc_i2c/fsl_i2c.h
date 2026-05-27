@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 NXP
+ * Copyright 2020-2021, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I2C driver version. */
-#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*! @} */
 
 /*******************************************************************************
@@ -1809,6 +1809,13 @@ status_t I2C_SlaveTransferGetCount(i2c_slave_transfer_handle_t *psHandle, uint16
  * @param psHandle pointer to @ref i2c_slave_transfer_handle_t structure which stores the transfer state.
  */
 void I2C_SlaveTransferAbort(i2c_slave_transfer_handle_t *psHandle);
+
+/*!
+ * @brief I2C common IRQ handler entry, dispatches to the instance handler.
+ *
+ * @param instance I2C peripheral instance number.
+ */
+void I2C_DriverIRQHandler(uint32_t instance);
 /*! @} */
 /* ========================================= End of Transactional API Group ========================================= */
 

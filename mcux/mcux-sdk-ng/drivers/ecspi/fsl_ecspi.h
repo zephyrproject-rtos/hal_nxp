@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2023, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief ECSPI driver version. */
-#define FSL_ECSPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
+#define FSL_ECSPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 4))
 /*! @} */
 
 #ifndef ECSPI_DUMMYDATA
@@ -728,6 +728,13 @@ static inline void ECSPI_SlaveTransferAbort(ECSPI_Type *base, ecspi_slave_handle
  * @param handle pointer to ecspi_slave_handle_t structure which stores the transfer state
  */
 void ECSPI_SlaveTransferHandleIRQ(ECSPI_Type *base, ecspi_slave_handle_t *handle);
+
+/*!
+ * @brief Common IRQ handler for ECSPI, which can be used for ECSPI IRQ remapping.
+ *
+ * @param instance ECSPI instance number.
+ */
+void ECSPI_DriverIRQHandler(uint32_t instance);
 
 /*! @} */
 

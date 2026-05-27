@@ -1,5 +1,10 @@
 # LPSCI
 
+## [2.1.2]
+
+- New Features
+  - Added common IRQ handler entry LPSCI_DriverIRQHandler.
+
 ## [2.1.1]
 
 - Improvements

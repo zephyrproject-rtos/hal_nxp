@@ -45,6 +45,8 @@ static status_t NETC_PEMDIO_Init(netc_mdio_hw_t *base, netc_mdio_config_t *mdioC
     uint32_t config;
     uint32_t div;
 
+    assert(mdioConfig->srcClockHz != 0U);
+
     /* Set the divisor MDC. */
     div = mdioConfig->srcClockHz / NETC_MDC_FREQUENCY / 2U;
     if (div > NETC_MDIO_CLK_MAX_DIV_FIELD)
@@ -70,8 +72,8 @@ static status_t NETC_PEMDIO_Init(netc_mdio_hw_t *base, netc_mdio_config_t *mdioC
         mdioHold = holdCycle / 2U;
     }
 
-    config = ENETC_PF_EMDIO_EMDIO_CFG_NEG(mdioConfig->isNegativeDriven) | ENETC_PF_EMDIO_EMDIO_CFG_MDIO_CLK_DIV(div) |
-             ENETC_PF_EMDIO_EMDIO_CFG_PRE_DIS(mdioConfig->isPreambleDisable) |
+    config = ENETC_PF_EMDIO_EMDIO_CFG_NEG(mdioConfig->isNegativeDriven ? 1U : 0U) | ENETC_PF_EMDIO_EMDIO_CFG_MDIO_CLK_DIV(div) |
+             ENETC_PF_EMDIO_EMDIO_CFG_PRE_DIS(mdioConfig->isPreambleDisable ? 1U : 0U) |
              ENETC_PF_EMDIO_EMDIO_CFG_MDIO_HOLD(mdioHold) | ENETC_PF_EMDIO_EMDIO_CFG_EHOLD(eHold);
     base->EMDIO_CFG = config;
 
@@ -129,7 +131,7 @@ static status_t NETC_PEMDIO_Read(netc_mdio_hw_t *base, uint8_t phyAddr, uint8_t 
     {
         result = kStatus_Fail;
     }
-    *pData = (uint16_t)base->EMDIO_DATA;
+    *pData = (uint16_t)(base->EMDIO_DATA & 0xFFFFU);
 
     return result;
 }
@@ -184,7 +186,7 @@ static status_t NETC_PEMDIO_C45Read(
         return kStatus_Fail;
     }
 
-    *pData = (uint16_t)base->EMDIO_DATA;
+    *pData = (uint16_t)(base->EMDIO_DATA & 0xFFFFU);
     return kStatus_Success;
 }
 
@@ -197,6 +199,8 @@ static status_t NETC_PIMDIO_Init(NETC_ETH_LINK_Type *base, netc_mdio_config_t *m
     uint32_t holdCycle;
     uint32_t mdioHold;
     uint32_t div;
+
+    assert(mdioConfig->srcClockHz != 0U);
 
     /* Set the divisor MDC. */
     div = mdioConfig->srcClockHz / NETC_MDC_FREQUENCY / 2U;
@@ -219,7 +223,7 @@ static status_t NETC_PIMDIO_Init(NETC_ETH_LINK_Type *base, netc_mdio_config_t *m
     }
 
     base->PM0_MDIO_CFG = NETC_ETH_LINK_PM0_MDIO_CFG_MDIO_CLK_DIV(div) |
-                         NETC_ETH_LINK_PM0_MDIO_CFG_PRE_DIS(mdioConfig->isPreambleDisable) |
+                         NETC_ETH_LINK_PM0_MDIO_CFG_PRE_DIS(mdioConfig->isPreambleDisable ? 1U : 0U) |
                          NETC_ETH_LINK_PM0_MDIO_CFG_MDIO_HOLD(mdioHold);
 
     return kStatus_Success;
@@ -249,7 +253,7 @@ static void NETC_PIMDIO_Read(NETC_ETH_LINK_Type *base, uint8_t phyAddr, uint8_t 
     {
     }
 
-    *pData = (uint16_t)base->PM0_MDIO_DATA;
+    *pData = (uint16_t)(base->PM0_MDIO_DATA & 0xFFFFU);
 }
 
 /* Internal MDIO supports C45 */
@@ -294,7 +298,7 @@ static status_t NETC_PIMDIO_C45Read(
         return kStatus_Fail;
     }
 
-    *pData = (uint16_t)base->PM0_MDIO_DATA;
+    *pData = (uint16_t)(base->PM0_MDIO_DATA & 0xFFFFU);
     return kStatus_Success;
 }
 #endif

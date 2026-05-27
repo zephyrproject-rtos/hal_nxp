@@ -8,6 +8,11 @@
 
 void DWC_DPHY_PowerOff(CAMERA_MIPI_CSI2_Type *base)
 {
+    if (base == NULL)
+    {
+        return;
+    }
+
     /* Poweroff DWC RX DPHY module */
     base->DPHY_RSTZ &= ~CAMERA_MIPI_CSI2_DPHY_RSTZ_dphy_rstz_MASK;
 
@@ -16,6 +21,11 @@ void DWC_DPHY_PowerOff(CAMERA_MIPI_CSI2_Type *base)
 
 void DWC_DPHY_Reset(CAMERA_MIPI_CSI2_Type *base)
 {
+    if (base == NULL)
+    {
+        return;
+    }
+
     /* Put DPHY into reset state */
     base->DPHY_RSTZ &= ~CAMERA_MIPI_CSI2_DPHY_RSTZ_dphy_rstz_MASK;
     base->PHY_SHUTDOWNZ &= ~CAMERA_MIPI_CSI2_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
@@ -29,6 +39,11 @@ void DWC_DPHY_Reset(CAMERA_MIPI_CSI2_Type *base)
 
 void DWC_DPHY_TestCodeReset(CAMERA_MIPI_CSI2_Type *base)
 {
+    if (base == NULL)
+    {
+        return;
+    }
+
     /* Set PHY test codes from reset */
     base->PHY_TEST_CTRL0 |= CAMERA_MIPI_CSI2_PHY_TEST_CTRL0_phy_testclr_MASK;
 
@@ -38,6 +53,11 @@ void DWC_DPHY_TestCodeReset(CAMERA_MIPI_CSI2_Type *base)
 
 void DWC_DPHY_SetTestConfigure(CAMERA_MIPI_CSI2_Type *base, uint32_t address, uint8_t values)
 {
+    if (base == NULL)
+    {
+        return;
+    }
+
     /* enable address writing operation and set dphy offset address */
     base->PHY_TEST_CTRL1 |= (CAMERA_MIPI_CSI2_PHY_TEST_CTRL1_phy_testen_MASK | CAMERA_MIPI_CSI2_PHY_TEST_CTRL1_phy_testdin(address));
 
@@ -57,6 +77,11 @@ void DWC_DPHY_SetTestConfigure(CAMERA_MIPI_CSI2_Type *base, uint32_t address, ui
 uint32_t DWC_DPHY_ReadTestConfigure(CAMERA_MIPI_CSI2_Type *base, uint8_t address)
 {
     uint32_t values = 0;
+
+    if (base == NULL)
+    {
+        return 0U;
+    }
 
     /* enable address writing operation and set dphy offset address */
     base->PHY_TEST_CTRL1 |= (CAMERA_MIPI_CSI2_PHY_TEST_CTRL1_phy_testen_MASK | CAMERA_MIPI_CSI2_PHY_TEST_CTRL1_phy_testdin(address));
@@ -79,7 +104,10 @@ status_t DWC_DPHY_Init(CAMERA_MIPI_CSI2_Type *csibase, CAMERA_DSI_OR_CSI_PHY_CSR
 {
     status_t result = kStatus_Success;
 
-    assert(NULL != config);
+    if ((csibase == NULL) || (phybase == NULL) || (config == NULL))
+    {
+        return kStatus_InvalidArgument;
+    }
 
     csibase->DPHY_RSTZ &= ~CAMERA_MIPI_CSI2_DPHY_RSTZ_dphy_rstz_MASK;
     csibase->PHY_SHUTDOWNZ &= ~CAMERA_MIPI_CSI2_PHY_SHUTDOWNZ_phy_shutdownz_MASK;
@@ -99,16 +127,17 @@ status_t DWC_DPHY_Init(CAMERA_MIPI_CSI2_Type *csibase, CAMERA_DSI_OR_CSI_PHY_CSR
     if (config->laneNum == 2U)
     {
         /* Enable lane control, default enable four data lanes */
-        phybase->STANDALONE_PHY_MODE_CONTROL |= CAMERA_DSI_OR_CSI_PHY_CSR_STANDALONE_PHY_MODE_CONTROL_PHY_ENABLE_EXT(DWC_DPHY_DATALANE1) | 
-                                                CAMERA_DSI_OR_CSI_PHY_CSR_STANDALONE_PHY_MODE_CONTROL_PHY_ENABLE_EXT(DWC_DPHY_DATALANE2);
+        phybase->STANDALONE_PHY_MODE_CONTROL |=
+            (CAMERA_DSI_OR_CSI_PHY_CSR_STANDALONE_PHY_MODE_CONTROL_PHY_ENABLE_EXT(DWC_DPHY_DATALANE1) |
+             CAMERA_DSI_OR_CSI_PHY_CSR_STANDALONE_PHY_MODE_CONTROL_PHY_ENABLE_EXT(DWC_DPHY_DATALANE2));
     }
-    else if(config->laneNum == 4U)
+    else if (config->laneNum == 4U)
     {
         phybase->STANDALONE_PHY_MODE_CONTROL = CAMERA_DSI_OR_CSI_PHY_CSR_STANDALONE_PHY_MODE_CONTROL_PHY_ENABLE_EXT_MASK;
     }
     else
     {
-        /* Fix misra c-2012 issue */
+        return kStatus_InvalidArgument;
     }
 
     phybase->STANDALONE_PHY_TEST_MODE_CONTROL = 0;

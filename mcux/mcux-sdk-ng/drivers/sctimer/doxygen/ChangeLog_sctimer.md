@@ -1,10 +1,23 @@
 # SCTIMER
 
-## [2.5.4]
+
+## [2.5.6]
 
 - Bug Fixes
-  - Fixed SCTIMER_CreateAndScheduleEvent setting EV[n].CTRL[HEVENT] no longer exclusively for
-    match-based events.
+  - Fixed SCTIMER_CreateAndScheduleEvent setting EV[n].CTRL[HEVENT] only for
+    match-based events. IO-only events (COMBMODE = 2) bound to Counter_H in
+    16-bit mode (UNIFY = 0) now correctly have HEVENT = 1, so their state
+    mask is compared against STATE_H instead of STATE_L.
+
+## [2.5.5]
+
+- Bug Fixes
+  - Fixed CERT-C Array (CERT ARR30-C) violation issues.
+
+## [2.5.4]
+
+- New Features
+  - Added common IRQ handler entry SCTIMER_DriverIRQHandler.
 
 ## [2.5.3]
 

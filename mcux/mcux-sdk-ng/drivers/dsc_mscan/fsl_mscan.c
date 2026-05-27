@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2023, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1025,4 +1025,13 @@ void CAN0_DriverIRQHandler(void)
     assert(NULL != s_mscanHandle[0]);
 
     s_mscanIsr(CAN0, s_mscanHandle[0]);
+}
+
+void MSCAN_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_mscanBases))
+    {
+        s_mscanIsr(s_mscanBases[instance], s_mscanHandle[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
 }

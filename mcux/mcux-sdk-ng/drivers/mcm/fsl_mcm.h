@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022, 2025 NXP
+ * Copyright 2021-2022, 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -30,7 +30,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief MCM driver version. */
-#define FSL_MCM_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_MCM_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*! @} */
 
 /*! @brief Enum _mcm_interrupt_flag. Interrupt status flag mask.
@@ -107,6 +107,7 @@ typedef union _mcm_lmem_fault_attribute
 extern "C" {
 #endif
 
+#if !(defined(FSL_FEATURE_MCM_HAS_CPCR) && (FSL_FEATURE_MCM_HAS_CPCR == 0))
 /*!
  * @brief Enables/Disables crossbar round robin.
  *
@@ -139,6 +140,7 @@ static inline void MCM_EnableCrossbarRoundRobin(MCM_Type *base, bool enable)
 #error Unsupported MCM peripheral
 #endif
 }
+#endif /* FSL_FEATURE_MCM_HAS_CPCR */
 
 /*!
  * @brief Enables the interrupt.

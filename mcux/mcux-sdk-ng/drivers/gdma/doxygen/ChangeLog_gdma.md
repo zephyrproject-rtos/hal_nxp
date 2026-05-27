@@ -1,5 +1,10 @@
 # GDMA
 
+## [2.0.4]
+
+- New Features
+  - Added common IRQ handler entry GDMA_CommonDriverIRQHandler.
+
 ## [2.0.3]
 
 - Bug Fixes

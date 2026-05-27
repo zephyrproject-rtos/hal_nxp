@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2019 NXP
+ * Copyright 2017, 2019, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -77,8 +77,11 @@ void PWT_Init(PWT_Type *base, const pwt_config_t *config)
     PWT_Reset(base);
 
     /* Set clock source, prescale, input source and edge */
-    base->R1 |= PWT_R1_PCLKS(config->clockSource) | PWT_R1_PRE(config->prescale) | PWT_R1_PINSEL(config->inputSelect) |
-                PWT_R1_EDGE(config->edge);
+    base->R1 |= PWT_R1_PCLKS(config->clockSource) | PWT_R1_PRE(config->prescale) | PWT_R1_PINSEL(config->inputSelect)
+#if !(defined(FSL_FEATURE_PWT_HAS_NO_EDGE_SENSE) && FSL_FEATURE_PWT_HAS_NO_EDGE_SENSE)
+                | PWT_R1_EDGE(config->edge)
+#endif
+        ;
 }
 
 /*!
@@ -123,5 +126,7 @@ void PWT_GetDefaultConfig(pwt_config_t *config)
     /* PWT input signal coming from Port 0 */
     config->inputSelect = kPWT_InputPort_0;
     /* The first rising edge starts, and the pulse width is captured on rising and falling edge */
+#if !(defined(FSL_FEATURE_PWT_HAS_NO_EDGE_SENSE) && FSL_FEATURE_PWT_HAS_NO_EDGE_SENSE)
     config->edge = kPWT_StartRise_CaptureRiseAndFall_Edge;
+#endif
 }

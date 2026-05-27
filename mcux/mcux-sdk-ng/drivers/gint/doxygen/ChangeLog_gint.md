@@ -1,5 +1,10 @@
 # GINT
 
+## [2.1.2]
+
+- New Features
+  - Added common IRQ handler entry GINT_DriverIRQHandler.
+
 ## [2.1.1]
 
 - Improvements

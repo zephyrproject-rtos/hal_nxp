@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 NXP.
+ * Copyright 2018-2019, 2026 NXP.
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1469,6 +1469,15 @@ static void I2C_TransferCommonIRQHandler(I2C0_Type *base, void *handle)
     else
     {
         s_i2cSlaveIsr(base, handle);
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
+
+void I2C_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_i2cBases))
+    {
+        I2C_TransferCommonIRQHandler(s_i2cBases[instance], s_i2cHandle[instance]);
     }
     SDK_ISR_EXIT_BARRIER;
 }

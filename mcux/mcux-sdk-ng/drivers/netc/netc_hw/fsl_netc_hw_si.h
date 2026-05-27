@@ -112,6 +112,8 @@ static inline void NETC_SIEnable(ENETC_SI_Type *base, bool enable)
  */
 static inline void NETC_SIRxRingEnable(ENETC_SI_Type *base, uint8_t ring, bool enable)
 {
+    assert(ring < ENETC_SI_BDR_COUNT);
+
     if (enable)
     {
         base->BDR[ring].RBMR |= ENETC_SI_RBMR_EN_MASK;
@@ -150,6 +152,8 @@ static inline void NETC_SIEnablePromisc(ENETC_SI_Type *base, netc_packet_type_t 
  */
 static inline void NETC_SISetTxProducer(ENETC_SI_Type *base, uint8_t ring, uint16_t producer)
 {
+    assert(ring < ENETC_SI_BDR_COUNT);
+
     base->BDR[ring].TBPIR = producer;
 }
 
@@ -162,7 +166,9 @@ static inline void NETC_SISetTxProducer(ENETC_SI_Type *base, uint8_t ring, uint1
  */
 static inline uint16_t NETC_SIGetTxConsumer(ENETC_SI_Type *base, uint8_t ring)
 {
-    return (uint16_t)base->BDR[ring].TBCIR;
+    assert(ring < ENETC_SI_BDR_COUNT);
+
+    return base->BDR[ring].TBCIR & 0xFFFFU;
 }
 
 /*!
@@ -174,6 +180,8 @@ static inline uint16_t NETC_SIGetTxConsumer(ENETC_SI_Type *base, uint8_t ring)
  */
 static inline void NETC_SISetRxConsumer(ENETC_SI_Type *base, uint8_t ring, uint16_t consumer)
 {
+    assert(ring < ENETC_SI_BDR_COUNT);
+
     base->BDR[ring].RBCIR = consumer;
 }
 
@@ -186,7 +194,9 @@ static inline void NETC_SISetRxConsumer(ENETC_SI_Type *base, uint8_t ring, uint1
  */
 static inline uint16_t NETC_SIGetRxProducer(ENETC_SI_Type *base, uint8_t ring)
 {
-    return (uint16_t)base->BDR[ring].RBPIR;
+    assert(ring < ENETC_SI_BDR_COUNT);
+
+    return base->BDR[ring].RBPIR & 0xFFFFU;
 }
 
 /*!

@@ -1,5 +1,10 @@
 # DSPI
 
+## [2.2.8]
+
+- New Features
+  - Added common IRQ handler entry DSPI_DriverIRQHandler.
+
 ## [2.2.7]
 
 - Improvements

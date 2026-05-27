@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -241,6 +241,16 @@ static void WAKETIMER_GenericIRQHandler(WAKETIMER_Type *base, waketimer_callback
     {
         callback();
     }
+}
+
+void WAKETIMER_DriverIRQHandler(uint32_t instance);
+void WAKETIMER_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_waketimerBases))
+    {
+        WAKETIMER_GenericIRQHandler(s_waketimerBases[instance], s_waketimerCallback[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if defined(WAKETIMER0)
