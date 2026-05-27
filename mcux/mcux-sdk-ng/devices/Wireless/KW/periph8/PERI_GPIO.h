@@ -10,7 +10,7 @@
 **                          KW43L43Z97MFT
 **
 **     Version:             rev. 1.0, 2020-05-12
-**     Build:               b260316
+**     Build:               b260421
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GPIO
@@ -3255,11 +3255,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group GPIO_Register_Masks */
-
-/* Interrupt vectors for the GPIO peripheral type when IRQS of ICR register is set to 0 */
-#define GPIO_IRQS   {GPIOA_INT0_IRQn, GPIOB_INT0_IRQn, GPIOC_INT0_IRQn, GPIOD_INT0_IRQn}
-/* Interrupt vectors for the GPIO peripheral type when IRQS of ICR register is set to 1 */
-#define GPIO_IRQS_1 {GPIOA_INT1_IRQn, GPIOB_INT1_IRQn, GPIOC_INT1_IRQn, GPIOD_INT1_IRQn}
 
 
 /*!

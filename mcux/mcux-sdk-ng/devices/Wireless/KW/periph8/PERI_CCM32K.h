@@ -10,7 +10,7 @@
 **                          KW43L43Z97MFT
 **
 **     Version:             rev. 1.0, 2020-05-12
-**     Build:               b260316
+**     Build:               b260407
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CCM32K
@@ -261,8 +261,8 @@ typedef struct {
 #define CCM32K_OSC32K_CTRL_OSC_HP_EN_MASK        (0x80000U)
 #define CCM32K_OSC32K_CTRL_OSC_HP_EN_SHIFT       (19U)
 /*! OSC_HP_EN - Crystal Oscillator High Power Enable
- *  0b0..Oscillator internal clock monitor is disabled
- *  0b1..Oscillator internal clock monitor is enabled
+ *  0b0..Oscillator high-power mode is disabled
+ *  0b1..Oscillator high-power mode is enabled
  */
 #define CCM32K_OSC32K_CTRL_OSC_HP_EN(x)          (((uint32_t)(((uint32_t)(x)) << CCM32K_OSC32K_CTRL_OSC_HP_EN_SHIFT)) & CCM32K_OSC32K_CTRL_OSC_HP_EN_MASK)
 

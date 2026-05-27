@@ -5,3 +5,4 @@
 include(../../KW43B43ZC7/drivers/CMakeLists_clock.txt)
 include(../../KW43B43ZC7/drivers/CMakeLists_romapi.txt)
 include(../../KW43B43ZC7/drivers/CMakeLists_memory.txt)
+include(../../KW43B43ZC7/drivers/CMakeLists_trdc_soc.txt)

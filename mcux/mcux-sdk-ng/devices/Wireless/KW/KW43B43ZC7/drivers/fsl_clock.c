@@ -339,13 +339,13 @@ uint32_t CLOCK_GetSysClkFreq(scg_sys_clk_t type)
     switch (type)
     {
         case kSCG_SysClkSlow:
-            freq /= ((sysClkConfig.divCore + 1U) * (sysClkConfig.divSlow + 1U));
+            freq /= ((sysClkConfig.divCore + 1U) * (sysClkConfig.divSlow + 1U)); /* Divided by the DIVSLOW. */
             break;
         case kSCG_SysClkBus:
-            freq /= ((sysClkConfig.divCore + 1U) * (sysClkConfig.divBus + 1U));
+            freq /= ((sysClkConfig.divCore + 1U) * (sysClkConfig.divBus + 1U)); /* Divided by the DIVBUS. */
             break;
         case kSCG_SysClkPlatform:
-            freq /= (sysClkConfig.divPlat + 1U); /* Divided by the DIVPLAT. */
+            freq /= ((sysClkConfig.divCore + 1U) * (sysClkConfig.divPlat + 1U)); /* Divided by the DIVPLAT. */
             break;
         case kSCG_SysClkCore:
             freq /= (sysClkConfig.divCore + 1U); /* Divided by the DIVCORE. */

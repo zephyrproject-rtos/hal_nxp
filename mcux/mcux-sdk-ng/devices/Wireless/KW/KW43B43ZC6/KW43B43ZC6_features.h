@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260316
+**     Build:               b260416
 **
 **     Abstract:
 **         Chip specific module features.
@@ -95,8 +95,6 @@
 #define FSL_FEATURE_SOC_SEMA42_COUNT (1)
 /* @brief SFA availability on the SoC. */
 #define FSL_FEATURE_SOC_SFA_COUNT (2)
-/* @brief SYSCON availability on the SoC. */
-#define FSL_FEATURE_SOC_SYSCON_COUNT (1)
 /* @brief SYSPM availability on the SoC. */
 #define FSL_FEATURE_SOC_SYSPM_COUNT (1)
 /* @brief TPM availability on the SoC. */
@@ -298,6 +296,8 @@
 
 /* @brief Has GPIO attribute checker register (GACR). */
 #define FSL_FEATURE_GPIO_HAS_ATTRIBUTE_CHECKER (0)
+/* @brief GPIO registers width */
+#define FSL_FEATURE_GPIO_REGISTERS_WIDTH (32)
 /* @brief Has GPIO version ID register (VERID). */
 #define FSL_FEATURE_GPIO_HAS_VERSION_INFO_REGISTER (1)
 /* @brief Has secure/non-secure access protection registers (LOCK, PCNS, PCNP, ICNS, ICNP). */
@@ -388,11 +388,11 @@
 /* @brief Has internal temperature sensor. */
 #define FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR (1)
 /* @brief Temperature sensor parameter A (slope). */
-#define FSL_FEATURE_LPADC_TEMP_PARAMETER_A (787U)
+#define FSL_FEATURE_LPADC_TEMP_PARAMETER_A (738U)
 /* @brief Temperature sensor parameter B (offset). */
-#define FSL_FEATURE_LPADC_TEMP_PARAMETER_B (289U)
+#define FSL_FEATURE_LPADC_TEMP_PARAMETER_B (287.5f)
 /* @brief Temperature sensor parameter Alpha. */
-#define FSL_FEATURE_LPADC_TEMP_PARAMETER_ALPHA (9.1f)
+#define FSL_FEATURE_LPADC_TEMP_PARAMETER_ALPHA (10.06f)
 /* @brief The buffer size of temperature sensor. */
 #define FSL_FEATURE_LPADC_TEMP_SENS_BUFFER_SIZE (2U)
 
@@ -640,8 +640,6 @@
 #define FSL_FEATURE_PORT_SUPPORT_DIFFERENT_VOLTAGE_RANGE (1)
 /* @brief Has EFT detect (registers EDFR, EDIER and EDCR). */
 #define FSL_FEATURE_PORT_SUPPORT_EFT (0)
-/* @brief Has invert input (register bit PCR[INV]). */
-#define FSL_FEATURE_PORT_HAS_INVERT_INPUT (1)
 /* @brief Has drive strength control (register bit PCR[DSE]). */
 #define FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH (1)
 /* @brief Defines width of PCR[MUX] field. */
@@ -652,10 +650,35 @@
 #define FSL_FEATURE_PORT_HAS_INDEPENDENT_INTERRUPT_CONTROL (0)
 /* @brief Has multiple pin IRQ configuration (register GICLR and GICHR). */
 #define FSL_FEATURE_PORT_HAS_MULTIPLE_IRQ_CONFIG (0)
+/* @brief Has Input Buffer Enable (register bit field PCR[IBE]). */
+#define FSL_FEATURE_PORT_HAS_INPUT_BUFFER (0)
+/* @brief Has Invert Input (register bit field PCR[INV]). */
+#define FSL_FEATURE_PORT_HAS_INVERT_INPUT (1)
 /* @brief Defines whether PCR[IRQC] bit-field has flag states. */
 #define FSL_FEATURE_PORT_HAS_IRQC_FLAG (0)
 /* @brief Defines whether PCR[IRQC] bit-field has trigger states. */
 #define FSL_FEATURE_PORT_HAS_IRQC_TRIGGER (0)
+
+/* MCM module features */
+
+/* @brief Has cache parity error ISCR[CPEE]. */
+#define FSL_FEATURE_MCM_HAS_CACHE_PARITY_ERROR (0)
+/* @brief Has cache write buffer error ISCR[CWBEE]. */
+#define FSL_FEATURE_MCM_HAS_CACHE_WRITE_BUFFER_ERROR (1)
+/* @brief LMD lock. LMDR2[RO]. */
+#define FSL_FEATURE_MCM_HAS_LMD_RO (1)
+/* @brief MCM has PC Parity. LMDR2[PCPME] or LMDR2[PCPFE]. */
+#define FSL_FEATURE_MCM_HAS_PC_PARITY (0)
+/* @brief Has buffer fault, register FATR, FDR, FADR. */
+#define FSL_FEATURE_MCM_HAS_BUFFER_FAULT (1)
+/* @brief Has register CPCR2. */
+#define FSL_FEATURE_MCM_HAS_CPCR2 (1)
+/* @brief Has LMEM fault, register LMFAR, LMFDLR, LMFDHR, LMFATR. */
+#define FSL_FEATURE_MCM_HAS_LMEM_FAULT (0)
+/* @brief  MCM has LMEM control, register LMPECR, LMPEIR. */
+#define FSL_FEATURE_MCM_HAS_LMEM_PARITY (0)
+/* @brief  MCM has CPCR register (core platform control). */
+#define FSL_FEATURE_MCM_HAS_CPCR (0)
 
 /* SEMA42 module features */
 
@@ -703,6 +726,10 @@
 #define FSL_FEATURE_SPC_HAS_LPBUFF (0)
 /* @brief Has VD_SYS_CFG register. */
 #define FSL_FEATURE_SPC_HAS_VDD_SYS (0)
+/* @brief Has VDD1P8 low-voltage detect feature. */
+#define FSL_FEATURE_SPC_HAS_VDD1P8_LVD (1)
+/* @brief Has no DCDC frequency control (register bits DCDC_CFG[FREQ_CNTRL_ON/FREQ_CNTRL]). */
+#define FSL_FEATURE_SPC_HAS_NO_DCDC_FREQ_CNTRL (1)
 
 /* RTC module features */
 
@@ -830,7 +857,7 @@
 /* TRDC module features */
 
 /* @brief Process master count. */
-#define FSL_FEATURE_TRDC_PROCESSOR_MASTER_COUNT (2)
+#define FSL_FEATURE_TRDC_PROCESSOR_MASTER_COUNT (1)
 /* @brief TRDC instance has PID configuration or not. */
 #define FSL_FEATURE_TRDC_INSTANCE_HAS_PID_CONFIGURATIONn(x) (0)
 /* @brief TRDC domain number (reset value of HWCFG0[NDID]). */

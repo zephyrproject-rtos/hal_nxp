@@ -8,7 +8,7 @@
 **
 **     Reference manual:    Rev. 1 Draft F, 2025-10-18
 **     Version:             rev. 1.0, 2020-05-12
-**     Build:               b260316
+**     Build:               b260407
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -64,29 +64,33 @@ __attribute__ ((weak)) void SystemInit (void) {
 #endif /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
 
 #if (DISABLE_WDOG)
-  while ((WDOG_0->CS & WDOG_CS_RCS_MASK) != WDOG_CS_RCS_MASK)
+  if ((WDOG_0->CS & WDOG_CS_EN_MASK) == WDOG_CS_EN_MASK)
   {
-  }
+    /* If EN bit is set to 1 then disable Watchdog */
+    while ((WDOG_0->CS & WDOG_CS_RCS_MASK) != WDOG_CS_RCS_MASK)
+    {
+    }
 
-  if ((WDOG_0->CS & WDOG_CS_CMD32EN_MASK) != 0U)
-  {
-      WDOG_0->CNT = 0xD928C520U;
-  }
-  else
-  {
-      WDOG_0->CNT = 0xC520U;
-      WDOG_0->CNT = 0xD928U;
-  }
+    if ((WDOG_0->CS & WDOG_CS_CMD32EN_MASK) != 0U)
+    {
+        WDOG_0->CNT = 0xD928C520U;
+    }
+    else
+    {
+        WDOG_0->CNT = 0xC520U;
+        WDOG_0->CNT = 0xD928U;
+    }
 
-  while ((WDOG_0->CS & WDOG_CS_ULK_MASK) != WDOG_CS_ULK_MASK)
-  {
-  }
+    while ((WDOG_0->CS & WDOG_CS_ULK_MASK) != WDOG_CS_ULK_MASK)
+    {
+    }
 
-  WDOG_0->TOVAL = 0xFFFF;
-  WDOG_0->CS = (uint32_t) ((WDOG_0->CS) & ~WDOG_CS_EN_MASK) | WDOG_CS_UPDATE_MASK;
+    WDOG_0->TOVAL = 0xFFFF;
+    WDOG_0->CS = (uint32_t) ((WDOG_0->CS) & ~WDOG_CS_EN_MASK) | WDOG_CS_UPDATE_MASK;
 
-  while ((WDOG_0->CS & WDOG_CS_RCS_MASK) != WDOG_CS_RCS_MASK)
-  {
+    while ((WDOG_0->CS & WDOG_CS_RCS_MASK) != WDOG_CS_RCS_MASK)
+    {
+    }
   }
 #endif /* (DISABLE_WDOG) */
 
@@ -95,10 +99,16 @@ __attribute__ ((weak)) void SystemInit (void) {
     SCB->VTOR = (uint32_t) &g_pfnVectors;
 #endif
 
-  /* Request Core#1 to stall when accessing busy flash */
   SYSCON->AUTHENTICATE = SYSCON_UNLOCK_CODE;
   __DMB();
+
+  /* Request Core#1 to stall when accessing busy flash */
   SYSCON->FMC1_CTRL = SYSCON_FMC1_CTRL_PFLEXSTALL(1);
+
+  /* Set AHB timeout to prevent Core#1 HardFaults during concurrent AHB peripheral access */
+  SYSCON->CPU1_AHB_TIMEOUT &= ~SYSCON_CPU1_AHB_TIMEOUT_ahb_timeout_cycle_MASK;
+  SYSCON->CPU1_AHB_TIMEOUT |= SYSCON_CPU1_AHB_TIMEOUT_ahb_timeout_cycle(2U);
+
   /* Lock again */
   __DMB();
   SYSCON->AUTHENTICATE = 0UL;

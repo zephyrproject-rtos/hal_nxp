@@ -8,7 +8,7 @@
 **
 **     Reference manual:    Rev. 1 Draft F, 2025-10-18
 **     Version:             rev. 1.0, 2020-05-12
-**     Build:               b260316
+**     Build:               b260407
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -93,8 +93,7 @@ void SystemCoreClockUpdate (void);
  *
  * This weak function allows to call specific initialization code during the
  * SystemInit() execution.This can be used when an application specific code needs
- * to be called as close to the reset entry as possible (for example the Multicore
- * Manager MCMGR_EarlyInit() function call).
+ * to be called as close to the reset entry as possible.
  * NOTE: No global r/w variables can be used in this hook function because the
  * initialization of these variables happens after this function.
  */

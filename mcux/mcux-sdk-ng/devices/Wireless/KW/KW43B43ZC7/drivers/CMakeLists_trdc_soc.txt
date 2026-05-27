@@ -2,9 +2,8 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-if (CONFIG_MCUX_COMPONENT_driver.clock)
+if (CONFIG_MCUX_COMPONENT_driver.trdc_soc)
     mcux_component_version(1.0.0)
-
-    mcux_add_source( SOURCES fsl_clock.c fsl_clock.h )
+    mcux_add_source( SOURCES fsl_trdc_soc.h )
     mcux_add_include( INCLUDES . )
 endif()
