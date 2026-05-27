@@ -4,7 +4,7 @@ MCUXpresso SDK
 Origin:
    NXP MCUXpresso SDK
    https://github.com/nxp-mcuxpresso/mcuxsdk-manifests
-   SHA: 971d465ec0173ef2c4b759773d8cdd3ed58abc04
+   SHA: 9a24b036e90bc84884a36779bc11f5ff657b9d8d
 
    NXP Kinetis Connectivity Software
    https://www.nxp.com/webapp/Download?colCode=KW40Z-CONNECTIVITY-SOFTWARE&appType=license&Parent_nodeId=1432854896956716810497&Parent_pageType=product
@@ -40,7 +40,7 @@ Origin:
 
    NXP MCUXpresso SDK Core
    https://github.com/nxp-mcuxpresso/mcuxsdk-core
-   SHA: a8c62b78efc225b08c1587ec3ffd0d5bfee5b8f0
+   SHA: 551fb112e280cbff4812c69982836cf2c8cb823e
    Source folder: cmake/extension
    Destination folder: mcux-sdk-ng/cmake/extension
 
@@ -58,37 +58,37 @@ Origin:
 
    NXP MCUXpresso SDK Device i.MX
    https://github.com/nxp-mcuxpresso/mcux-devices-imx
-   SHA: e3fd9445b544841f6f85b2677f7cb457eaa181cd
+   SHA: e9f0d90a565bf83b0b6d471adc17fa29c66dfa3d
    Source folder: Root folder of the NXP MCUXpresso SDK Device i.MX Repository
    Destination folder: mcux-sdk-ng/devices/i.MX
 
    NXP MCUXpresso SDK Device RT
    https://github.com/nxp-mcuxpresso/mcux-devices-rt
-   SHA: 3664324bd1240a92e05a31301f6636a7a19f01d2
+   SHA: df5ff4c08de0f55c704321521fdeb83f47ed2ab3
    Source folder: Root folder of the NXP MCUXpresso SDK Device RT Repository
    Destination folder: mcux-sdk-ng/devices/RT
 
    NXP MCUXpresso SDK Device Kinetis
    https://github.com/nxp-mcuxpresso/mcux-devices-kinetis
-   SHA: 748c452a7afe87b30e3aa6460a172b7a0e0ae433
+   SHA: b51c1c02835c1338080d2183dc43ddc27f5c228a
    Source folder: Root folder of the NXP MCUXpresso SDK Device Kinetis Repository
    Destination folder: mcux-sdk-ng/devices/Kinetis
 
    NXP MCUXpresso SDK Device LPC
    https://github.com/nxp-mcuxpresso/mcux-devices-lpc
-   SHA: 68bb24aeed5cccc1e758b061f7ffe1ef1c3ae926
+   SHA: fd30421ef6f83e3870836414c49c1a1d0122cc35
    Source folder: Root folder of the NXP MCUXpresso SDK Device LPC Repository
    Destination folder: mcux-sdk-ng/devices/LPC
 
    NXP MCUXpresso SDK Device MCX
    https://github.com/nxp-mcuxpresso/mcux-devices-mcx
-   SHA: 5cd233f7bdebd6de33c200d2bf423fc7548d79b2
+   SHA: 5b93587ceb3e5f30163312dd7e39d42e98f91127
    Source folder: Root folder of the NXP MCUXpresso SDK Device MCX Repository
    Destination folder: mcux-sdk-ng/devices/MCX
 
    NXP MCUXpresso SDK Device Wireless
    https://github.com/nxp-mcuxpresso/mcux-devices-wireless
-   SHA: aad7450547c4f96d705219c4ecd8bacba2ee6ef1
+   SHA: 441f36d15a29e952439df53f920367def039035b
    Source folder: Root folder of the NXP MCUXpresso SDK Device Wireless Repository
    Destination folder: mcux-sdk-ng/devices/Wireless
 
@@ -219,14 +219,11 @@ Patch List:
      Also since the additions about C40 Flash geometry in S32K344_features.h and defining local Flash Aliases in
      S32K344_glue_mcux.h, are for S32K344 SoC so they are not present in the mcusdk-core repo.
 
-  - mcux: devices: rw612: Enable ADDR_REMAP in feature header
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/7d7a56c7766d570367a5944286985dbdfdf20800
+  - mcux-sdk-ng: MCXW70: Added the missing FMU_NS definition
+   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/91bd9377e18d002822f6d920804bad7d00e0c38c
 
-  - mcux-sdk-ng: drivers: enet: improve kENET_RgmiiMode/kENET_MiiSpeed1000M definition
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/f3c6334875cff89b6915665eb93571289effba13
-
-  - mcux: drivers: lpi2c: update to latest version
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/24f0c9283d93d1f4b43c18584d1576f5dcb87350
+  - mcux: mimx8ml8: clock: Add missing media display clock root definitions
+   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/8c43cb9d24036c3f9e41aae3da5984dd60e035bf
 
 Note:
    - The CAAM driver should not be updated during hal_nxp updates, since the latest CAAM driver will cause runtime issues
