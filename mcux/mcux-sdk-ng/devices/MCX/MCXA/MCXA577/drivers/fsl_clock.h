@@ -1338,6 +1338,7 @@ bool CLOCK_EnableUsbhsPhyPllClock(uint32_t clockSourceFreq);
  */
 void CLOCK_DisableUsbhsPhyPllClock(void);
 
+#ifdef USBHS1
 /*!
  * @brief Enable USB HS clock.
  *
@@ -1346,6 +1347,7 @@ void CLOCK_DisableUsbhsPhyPllClock(void);
  * @return true if success, false if failure.
  */
 bool CLOCK_EnableUsbhsClock(void);
+#endif
 
 /*!
  * @brief Enable USB HS PHY PFD clock.

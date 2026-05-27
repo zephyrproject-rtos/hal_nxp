@@ -13,14 +13,14 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250901
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPSPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,14 +29,18 @@
 **     Revisions:
 **     - rev. 1.0 (2025-06-13)
 **         Generated based on Rev1 DraftH.
+**     - rev. 1.1 (2026-01-02)
+**         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_LPSPI.h
- * @version 1.0
- * @date 2025-06-13
+ * @version 2.0
+ * @date 2026-04-22
  * @brief CMSIS Peripheral Access Layer for LPSPI
  *
  * CMSIS Peripheral Access Layer for LPSPI
@@ -507,11 +511,11 @@ typedef struct {
  */
 #define LPSPI_CFGR1_PARTIAL(x)                   (((uint32_t)(((uint32_t)(x)) << LPSPI_CFGR1_PARTIAL_SHIFT)) & LPSPI_CFGR1_PARTIAL_MASK)
 
-#define LPSPI_CFGR1_PCSPOL_MASK                  (0xF00U)
+#define LPSPI_CFGR1_PCSPOL_MASK                  (0x300U)
 #define LPSPI_CFGR1_PCSPOL_SHIFT                 (8U)
 /*! PCSPOL - Peripheral Chip Select Polarity
- *  0b0000..Active low
- *  0b0001..Active high
+ *  0b00..Active low
+ *  0b01..Active high
  */
 #define LPSPI_CFGR1_PCSPOL(x)                    (((uint32_t)(((uint32_t)(x)) << LPSPI_CFGR1_PCSPOL_SHIFT)) & LPSPI_CFGR1_PCSPOL_MASK)
 
@@ -546,14 +550,6 @@ typedef struct {
  *  0b1..3-stated
  */
 #define LPSPI_CFGR1_OUTCFG(x)                    (((uint32_t)(((uint32_t)(x)) << LPSPI_CFGR1_OUTCFG_SHIFT)) & LPSPI_CFGR1_OUTCFG_MASK)
-
-#define LPSPI_CFGR1_PCSCFG_MASK                  (0x8000000U)
-#define LPSPI_CFGR1_PCSCFG_SHIFT                 (27U)
-/*! PCSCFG - Peripheral Chip Select Configuration
- *  0b0..PCS[3:2] configured for chip select function
- *  0b1..PCS[3:2] configured for half-duplex 4-bit transfers (PCS[3:2] = DATA[3:2])
- */
-#define LPSPI_CFGR1_PCSCFG(x)                    (((uint32_t)(((uint32_t)(x)) << LPSPI_CFGR1_PCSCFG_SHIFT)) & LPSPI_CFGR1_PCSCFG_MASK)
 /*! @} */
 
 /*! @name DMR0 - Data Match 0 */
@@ -658,16 +654,6 @@ typedef struct {
 /*! FRAMESZ - Frame Size */
 #define LPSPI_TCR_FRAMESZ(x)                     (((uint32_t)(((uint32_t)(x)) << LPSPI_TCR_FRAMESZ_SHIFT)) & LPSPI_TCR_FRAMESZ_MASK)
 
-#define LPSPI_TCR_WIDTH_MASK                     (0x30000U)
-#define LPSPI_TCR_WIDTH_SHIFT                    (16U)
-/*! WIDTH - Transfer Width
- *  0b00..1-bit transfer
- *  0b01..2-bit transfer
- *  0b10..4-bit transfer
- *  0b11..Reserved
- */
-#define LPSPI_TCR_WIDTH(x)                       (((uint32_t)(((uint32_t)(x)) << LPSPI_TCR_WIDTH_SHIFT)) & LPSPI_TCR_WIDTH_MASK)
-
 #define LPSPI_TCR_TXMSK_MASK                     (0x40000U)
 #define LPSPI_TCR_TXMSK_SHIFT                    (18U)
 /*! TXMSK - Transmit Data Mask
@@ -716,13 +702,11 @@ typedef struct {
  */
 #define LPSPI_TCR_LSBF(x)                        (((uint32_t)(((uint32_t)(x)) << LPSPI_TCR_LSBF_SHIFT)) & LPSPI_TCR_LSBF_MASK)
 
-#define LPSPI_TCR_PCS_MASK                       (0x3000000U)
+#define LPSPI_TCR_PCS_MASK                       (0x1000000U)
 #define LPSPI_TCR_PCS_SHIFT                      (24U)
 /*! PCS - Peripheral Chip Select
- *  0b00..Transfer using PCS[0]
- *  0b01..Transfer using PCS[1]
- *  0b10..Transfer using PCS[2]
- *  0b11..Transfer using PCS[3]
+ *  0b0..Transfer using PCS[0]
+ *  0b1..Transfer using PCS[1]
  */
 #define LPSPI_TCR_PCS(x)                         (((uint32_t)(((uint32_t)(x)) << LPSPI_TCR_PCS_SHIFT)) & LPSPI_TCR_PCS_MASK)
 

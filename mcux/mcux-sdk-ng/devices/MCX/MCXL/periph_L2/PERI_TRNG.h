@@ -13,14 +13,14 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250901
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TRNG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,14 +29,18 @@
 **     Revisions:
 **     - rev. 1.0 (2025-06-13)
 **         Generated based on Rev1 DraftH.
+**     - rev. 1.1 (2026-01-02)
+**         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_TRNG.h
- * @version 1.0
- * @date 2025-06-13
+ * @version 2.0
+ * @date 2026-04-22
  * @brief CMSIS Peripheral Access Layer for TRNG
  *
  * CMSIS Peripheral Access Layer for TRNG
@@ -476,6 +480,7 @@ typedef struct {
 
 #define TRNG_ENT_ENT_MASK                        (0xFFFFFFFFU)
 #define TRNG_ENT_ENT_SHIFT                       (0U)
+/*! ENT - Entropy Value */
 #define TRNG_ENT_ENT(x)                          (((uint32_t)(((uint32_t)(x)) << TRNG_ENT_ENT_SHIFT)) & TRNG_ENT_ENT_MASK)
 /*! @} */
 
@@ -571,7 +576,7 @@ typedef struct {
 
 #define TRNG_INT_STATUS_HW_ERR_MASK              (0x1U)
 #define TRNG_INT_STATUS_HW_ERR_SHIFT             (0U)
-/*! HW_ERR
+/*! HW_ERR - TRNG Error.
  *  0b0..No error.
  *  0b1..Error detected.
  */
@@ -579,7 +584,7 @@ typedef struct {
 
 #define TRNG_INT_STATUS_ENT_VAL_MASK             (0x2U)
 #define TRNG_INT_STATUS_ENT_VAL_SHIFT            (1U)
-/*! ENT_VAL
+/*! ENT_VAL - Entropy Valid.
  *  0b0..Busy generating entropy. Any value read from the Entropy registers is invalid.
  *  0b1..Values read from the Entropy registers are valid.
  */
@@ -587,7 +592,7 @@ typedef struct {
 
 #define TRNG_INT_STATUS_FRQ_CT_FAIL_MASK         (0x4U)
 #define TRNG_INT_STATUS_FRQ_CT_FAIL_SHIFT        (2U)
-/*! FRQ_CT_FAIL
+/*! FRQ_CT_FAIL - Frequency Count Fail.
  *  0b0..No hardware nor self test frequency errors.
  *  0b1..The frequency counter has detected a failure.
  */
@@ -595,7 +600,7 @@ typedef struct {
 
 #define TRNG_INT_STATUS_INTG_FLT_MASK            (0x8U)
 #define TRNG_INT_STATUS_INTG_FLT_SHIFT           (3U)
-/*! INTG_FLT
+/*! INTG_FLT - Integrity Fault.
  *  0b0..No internal fault has been detected.
  *  0b1..TRNG has detected internal fault.
  */
@@ -619,7 +624,7 @@ typedef struct {
 
 #define TRNG_CSCLR_RED_FSM_CLR_MASK              (0x2U)
 #define TRNG_CSCLR_RED_FSM_CLR_SHIFT             (1U)
-/*! RED_FSM_CLR
+/*! RED_FSM_CLR - Redundant FSM error/fault detected.
  *  0b0..No effect, ignored
  *  0b1..Clears the CSER[RED_FSM] bit.
  */

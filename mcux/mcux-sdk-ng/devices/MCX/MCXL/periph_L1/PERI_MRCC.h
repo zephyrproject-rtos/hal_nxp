@@ -13,8 +13,8 @@
 **                          MCXL144VLL_cm0plus
 **                          MCXL144VLL_cm33
 **
-**     Version:             rev. 1.1, 2026-01-02
-**     Build:               b260109
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MRCC
@@ -31,14 +31,16 @@
 **         Generated based on Rev1 DraftH.
 **     - rev. 1.1 (2026-01-02)
 **         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_MRCC.h
- * @version 1.1
- * @date 2026-01-02
+ * @version 2.0
+ * @date 2026-04-22
  * @brief CMSIS Peripheral Access Layer for MRCC
  *
  * CMSIS Peripheral Access Layer for MRCC
@@ -132,12 +134,12 @@ typedef struct {
   __IO uint32_t UTICK0CLKSEL;                      /**< UTICK0 clock selection control, offset: 0xB0 */
        uint8_t RESERVED_6[8];
   __IO uint32_t WWDT0CLKDIV;                       /**< WWDT0 clock divider control, offset: 0xBC */
-  __IO uint32_t ADC0CLKSEL;                        /**< ADC0 clock selection control, offset: 0xC0 */
-  __IO uint32_t ADC0CLKDIV;                        /**< ADC0 clock divider control, offset: 0xC4 */
+  __IO uint32_t ADC0CLKSEL;                        /**< HSADC0 clock selection control, offset: 0xC0 */
+  __IO uint32_t ADC0CLKDIV;                        /**< HSADC0 clock divider control, offset: 0xC4 */
        uint8_t RESERVED_7[4];
-  __IO uint32_t CMP0FUNCCLKDIV;                    /**< CMP0_FUNC clock divider control, offset: 0xCC */
-  __IO uint32_t CMP0RRCLKSEL;                      /**< CMP0_RR clock selection control, offset: 0xD0 */
-  __IO uint32_t CMP0RRCLKDIV;                      /**< CMP0_RR clock divider control, offset: 0xD4 */
+  __IO uint32_t CMP0FUNCCLKDIV;                    /**< ACMP0_FUNC clock divider control, offset: 0xCC */
+  __IO uint32_t CMP0RRCLKSEL;                      /**< ACMP0_RR clock selection control, offset: 0xD0 */
+  __IO uint32_t CMP0RRCLKDIV;                      /**< ACMP0_RR clock divider control, offset: 0xD4 */
   __IO uint32_t DBGTRACECLKSEL;                    /**< DBG_TRACE clock selection control, offset: 0xD8 */
   __IO uint32_t DBGTRACECLKDIV;                    /**< DBG_TRACE clock divider control, offset: 0xDC */
   __IO uint32_t CLKOUTCLKSEL;                      /**< CLKOUT clock selection control, offset: 0xE0 */
@@ -289,7 +291,7 @@ typedef struct {
 
 #define MRCC_GLB_RST0_ADC0_MASK                  (0x80000U)
 #define MRCC_GLB_RST0_ADC0_SHIFT                 (19U)
-/*! ADC0 - Resets ADC0
+/*! ADC0 - Resets HSADC0
  *  0b0..Peripheral is held in reset
  *  0b1..Peripheral is released from reset
  */
@@ -297,7 +299,7 @@ typedef struct {
 
 #define MRCC_GLB_RST0_CMP0_MASK                  (0x200000U)
 #define MRCC_GLB_RST0_CMP0_SHIFT                 (21U)
-/*! CMP0 - Resets CMP0
+/*! CMP0 - Resets ACMP0
  *  0b0..Peripheral is held in reset
  *  0b1..Peripheral is released from reset
  */
@@ -337,7 +339,7 @@ typedef struct {
 
 #define MRCC_GLB_RST0_LPUART1_MASK               (0x8000000U)
 #define MRCC_GLB_RST0_LPUART1_SHIFT              (27U)
-/*! LPUART1 - Resets LPUART1
+/*! LPUART1 - Resets LPUART1-2
  *  0b0..Peripheral is held in reset
  *  0b1..Peripheral is released from reset
  */
@@ -581,7 +583,7 @@ typedef struct {
 
 #define MRCC_GLB_CC0_CMP0_MASK                   (0x200000U)
 #define MRCC_GLB_CC0_CMP0_SHIFT                  (21U)
-/*! CMP0 - Clock gate control CMP0
+/*! CMP0 - Clock gate control ACMP0
  *  0b0..Peripheral clock is disabled
  *  0b1..Peripheral clock is enabled
  */
@@ -629,19 +631,11 @@ typedef struct {
 
 #define MRCC_GLB_CC0_LPUART1_MASK                (0x8000000U)
 #define MRCC_GLB_CC0_LPUART1_SHIFT               (27U)
-/*! LPUART1 - Clock gate control LPUART1
+/*! LPUART1 - Clock gate control LPUART1-2
  *  0b0..Peripheral clock is disabled
  *  0b1..Peripheral clock is enabled
  */
 #define MRCC_GLB_CC0_LPUART1(x)                  (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_CC0_LPUART1_SHIFT)) & MRCC_GLB_CC0_LPUART1_MASK)
-
-#define MRCC_GLB_CC0_MTR_MASK                    (0x10000000U)
-#define MRCC_GLB_CC0_MTR_SHIFT                   (28U)
-/*! MTR - Clock gate control MTR
- *  0b0..Peripheral clock is disabled
- *  0b1..Peripheral clock is enabled
- */
-#define MRCC_GLB_CC0_MTR(x)                      (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_CC0_MTR_SHIFT)) & MRCC_GLB_CC0_MTR_MASK)
 
 #define MRCC_GLB_CC0_OSTIMER0_MASK               (0x20000000U)
 #define MRCC_GLB_CC0_OSTIMER0_SHIFT              (29U)
@@ -744,14 +738,6 @@ typedef struct {
  *  0b1..Peripheral clock is enabled
  */
 #define MRCC_GLB_CC1_SLCD0(x)                    (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_CC1_SLCD0_SHIFT)) & MRCC_GLB_CC1_SLCD0_MASK)
-
-#define MRCC_GLB_CC1_TCU_MASK                    (0x80U)
-#define MRCC_GLB_CC1_TCU_SHIFT                   (7U)
-/*! TCU - Clock gate control TCU
- *  0b0..Peripheral clock is disabled
- *  0b1..Peripheral clock is enabled
- */
-#define MRCC_GLB_CC1_TCU(x)                      (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_CC1_TCU_SHIFT)) & MRCC_GLB_CC1_TCU_MASK)
 
 #define MRCC_GLB_CC1_TRNG0_MASK                  (0x100U)
 #define MRCC_GLB_CC1_TRNG0_SHIFT                 (8U)
@@ -937,7 +923,7 @@ typedef struct {
 
 #define MRCC_GLB_ACC0_ADC0_MASK                  (0x80000U)
 #define MRCC_GLB_ACC0_ADC0_SHIFT                 (19U)
-/*! ADC0 - Automatic clock control ADC0
+/*! ADC0 - Automatic clock control HSADC0
  *  0b0..Automatic clock gating is disabled
  *  0b1..Automatic clock gating is enabled
  */
@@ -945,7 +931,7 @@ typedef struct {
 
 #define MRCC_GLB_ACC0_CMP0_MASK                  (0x200000U)
 #define MRCC_GLB_ACC0_CMP0_SHIFT                 (21U)
-/*! CMP0 - Automatic clock control CMP0
+/*! CMP0 - Automatic clock control ACMP0
  *  0b0..Automatic clock gating is disabled
  *  0b1..Automatic clock gating is enabled
  */
@@ -993,7 +979,7 @@ typedef struct {
 
 #define MRCC_GLB_ACC0_LPUART1_MASK               (0x8000000U)
 #define MRCC_GLB_ACC0_LPUART1_SHIFT              (27U)
-/*! LPUART1 - Automatic clock control LPUART1
+/*! LPUART1 - Automatic clock control LPUART1-2
  *  0b0..Automatic clock gating is disabled
  *  0b1..Automatic clock gating is enabled
  */
@@ -1209,7 +1195,7 @@ typedef struct {
 
 #define MRCC_GLB_PR0_ADC0_MASK                   (0x80000U)
 #define MRCC_GLB_PR0_ADC0_SHIFT                  (19U)
-/*! ADC0 - Enable/Disable ADC0
+/*! ADC0 - Enable/Disable HSADC0
  *  0b0..Peripheral is disabled
  *  0b1..Peripheral is enabled
  */
@@ -1217,7 +1203,7 @@ typedef struct {
 
 #define MRCC_GLB_PR0_CMP0_MASK                   (0x200000U)
 #define MRCC_GLB_PR0_CMP0_SHIFT                  (21U)
-/*! CMP0 - Enable/Disable CMP0
+/*! CMP0 - Enable/Disable ACMP0
  *  0b0..Peripheral is disabled
  *  0b1..Peripheral is enabled
  */
@@ -1257,19 +1243,11 @@ typedef struct {
 
 #define MRCC_GLB_PR0_LPUART1_MASK                (0x8000000U)
 #define MRCC_GLB_PR0_LPUART1_SHIFT               (27U)
-/*! LPUART1 - Enable/Disable LPUART1
+/*! LPUART1 - Enable/Disable LPUART1-2
  *  0b0..Peripheral is disabled
  *  0b1..Peripheral is enabled
  */
 #define MRCC_GLB_PR0_LPUART1(x)                  (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_PR0_LPUART1_SHIFT)) & MRCC_GLB_PR0_LPUART1_MASK)
-
-#define MRCC_GLB_PR0_MTR_MASK                    (0x10000000U)
-#define MRCC_GLB_PR0_MTR_SHIFT                   (28U)
-/*! MTR - Enable/Disable MTR
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_GLB_PR0_MTR(x)                      (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_PR0_MTR_SHIFT)) & MRCC_GLB_PR0_MTR_MASK)
 
 #define MRCC_GLB_PR0_OSTIMER0_MASK               (0x20000000U)
 #define MRCC_GLB_PR0_OSTIMER0_SHIFT              (29U)
@@ -1347,14 +1325,6 @@ typedef struct {
  */
 #define MRCC_GLB_PR1_SLCD0(x)                    (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_PR1_SLCD0_SHIFT)) & MRCC_GLB_PR1_SLCD0_MASK)
 
-#define MRCC_GLB_PR1_TCU_MASK                    (0x80U)
-#define MRCC_GLB_PR1_TCU_SHIFT                   (7U)
-/*! TCU - Enable/Disable TCU
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_GLB_PR1_TCU(x)                      (((uint32_t)(((uint32_t)(x)) << MRCC_GLB_PR1_TCU_SHIFT)) & MRCC_GLB_PR1_TCU_MASK)
-
 #define MRCC_GLB_PR1_TRNG0_MASK                  (0x100U)
 #define MRCC_GLB_PR1_TRNG0_SHIFT                 (8U)
 /*! TRNG0 - Enable/Disable TRNG0
@@ -1372,7 +1342,7 @@ typedef struct {
 /*! MUX - Functional Clock Mux Select
  *  0b00..FRO12M
  *  0b01..CLK_1M
- *  0b10..CLK_16K[2]
+ *  0b10..CLK_16K_LS
  *  0b11..FRO_HF_DIV
  */
 #define MRCC_CTIMERGRP0CLKSEL_MUX(x)             (((uint32_t)(((uint32_t)(x)) << MRCC_CTIMERGRP0CLKSEL_MUX_SHIFT)) & MRCC_CTIMERGRP0CLKSEL_MUX_MASK)
@@ -1419,7 +1389,7 @@ typedef struct {
 /*! MUX - Functional Clock Mux Select
  *  0b00..FRO12M
  *  0b01..CLK_1M
- *  0b10..CLK_16K[2]
+ *  0b10..CLK_16K_LS
  *  0b11..FRO_HF_DIV
  */
 #define MRCC_CTIMERGRP1CLKSEL_MUX(x)             (((uint32_t)(((uint32_t)(x)) << MRCC_CTIMERGRP1CLKSEL_MUX_SHIFT)) & MRCC_CTIMERGRP1CLKSEL_MUX_MASK)
@@ -1466,7 +1436,7 @@ typedef struct {
 /*! MUX - Functional Clock Mux Select
  *  0b00..FRO12M
  *  0b01..CLK_1M
- *  0b10..CLK_16K[2]
+ *  0b10..CLK_16K_LS
  *  0b11..FRO12M
  */
 #define MRCC_UTICK0CLKSEL_MUX(x)                 (((uint32_t)(((uint32_t)(x)) << MRCC_UTICK0CLKSEL_MUX_SHIFT)) & MRCC_UTICK0CLKSEL_MUX_MASK)
@@ -1505,7 +1475,7 @@ typedef struct {
 #define MRCC_WWDT0CLKDIV_UNSTAB(x)               (((uint32_t)(((uint32_t)(x)) << MRCC_WWDT0CLKDIV_UNSTAB_SHIFT)) & MRCC_WWDT0CLKDIV_UNSTAB_MASK)
 /*! @} */
 
-/*! @name ADC0CLKSEL - ADC0 clock selection control */
+/*! @name ADC0CLKSEL - HSADC0 clock selection control */
 /*! @{ */
 
 #define MRCC_ADC0CLKSEL_MUX_MASK                 (0x3U)
@@ -1519,7 +1489,7 @@ typedef struct {
 #define MRCC_ADC0CLKSEL_MUX(x)                   (((uint32_t)(((uint32_t)(x)) << MRCC_ADC0CLKSEL_MUX_SHIFT)) & MRCC_ADC0CLKSEL_MUX_MASK)
 /*! @} */
 
-/*! @name ADC0CLKDIV - ADC0 clock divider control */
+/*! @name ADC0CLKDIV - HSADC0 clock divider control */
 /*! @{ */
 
 #define MRCC_ADC0CLKDIV_DIV_MASK                 (0xFU)
@@ -1552,7 +1522,7 @@ typedef struct {
 #define MRCC_ADC0CLKDIV_UNSTAB(x)                (((uint32_t)(((uint32_t)(x)) << MRCC_ADC0CLKDIV_UNSTAB_SHIFT)) & MRCC_ADC0CLKDIV_UNSTAB_MASK)
 /*! @} */
 
-/*! @name CMP0FUNCCLKDIV - CMP0_FUNC clock divider control */
+/*! @name CMP0FUNCCLKDIV - ACMP0_FUNC clock divider control */
 /*! @{ */
 
 #define MRCC_CMP0FUNCCLKDIV_DIV_MASK             (0xFU)
@@ -1585,7 +1555,7 @@ typedef struct {
 #define MRCC_CMP0FUNCCLKDIV_UNSTAB(x)            (((uint32_t)(((uint32_t)(x)) << MRCC_CMP0FUNCCLKDIV_UNSTAB_SHIFT)) & MRCC_CMP0FUNCCLKDIV_UNSTAB_MASK)
 /*! @} */
 
-/*! @name CMP0RRCLKSEL - CMP0_RR clock selection control */
+/*! @name CMP0RRCLKSEL - ACMP0_RR clock selection control */
 /*! @{ */
 
 #define MRCC_CMP0RRCLKSEL_MUX_MASK               (0x3U)
@@ -1599,7 +1569,7 @@ typedef struct {
 #define MRCC_CMP0RRCLKSEL_MUX(x)                 (((uint32_t)(((uint32_t)(x)) << MRCC_CMP0RRCLKSEL_MUX_SHIFT)) & MRCC_CMP0RRCLKSEL_MUX_MASK)
 /*! @} */
 
-/*! @name CMP0RRCLKDIV - CMP0_RR clock divider control */
+/*! @name CMP0RRCLKDIV - ACMP0_RR clock divider control */
 /*! @{ */
 
 #define MRCC_CMP0RRCLKDIV_DIV_MASK               (0xFU)
@@ -1640,7 +1610,7 @@ typedef struct {
 /*! MUX - Functional Clock Mux Select
  *  0b00..CPU_CLK
  *  0b01..CLK_1M
- *  0b10..CLK_16K[2]
+ *  0b10..CLK_16K_LS
  *  0b11..Reserved
  */
 #define MRCC_DBGTRACECLKSEL_MUX(x)               (((uint32_t)(((uint32_t)(x)) << MRCC_DBGTRACECLKSEL_MUX_SHIFT)) & MRCC_DBGTRACECLKSEL_MUX_MASK)
@@ -1687,7 +1657,7 @@ typedef struct {
 /*! MUX - Functional Clock Mux Select
  *  0b000..FRO12M
  *  0b001..SLOW_CLK
- *  0b011..CLK_16K[2]
+ *  0b011..CLK_16K_LS
  *  0b101..FRO10M
  *  0b111..FRO_HF_DIV
  */
@@ -1749,7 +1719,7 @@ typedef struct {
 /*! MUX - Functional Clock Mux Select
  *  0b00..FRO12M
  *  0b01..XTAL32K[2]
- *  0b10..CLK_16K[2]
+ *  0b10..CLK_16K_LS
  *  0b11..FRO_HF_DIV
  */
 #define MRCC_PGRP0CLKSEL_MUX(x)                  (((uint32_t)(((uint32_t)(x)) << MRCC_PGRP0CLKSEL_MUX_SHIFT)) & MRCC_PGRP0CLKSEL_MUX_MASK)
@@ -1796,7 +1766,7 @@ typedef struct {
 /*! MUX - Functional Clock Mux Select
  *  0b00..FRO12M
  *  0b01..XTAL32K[2]
- *  0b10..CLK_16K[2]
+ *  0b10..CLK_16K_LS
  *  0b11..FRO_HF_DIV
  */
 #define MRCC_PGRP1CLKSEL_MUX(x)                  (((uint32_t)(((uint32_t)(x)) << MRCC_PGRP1CLKSEL_MUX_SHIFT)) & MRCC_PGRP1CLKSEL_MUX_MASK)
@@ -1843,7 +1813,7 @@ typedef struct {
 /*! MUX - Functional Clock Mux Select
  *  0b00..CPU_CLK
  *  0b01..CLK_1M
- *  0b10..CLK_16K[2]
+ *  0b10..CLK_16K_LS
  *  0b11..Reserved
  */
 #define MRCC_SYSTICKCLKSEL_MUX(x)                (((uint32_t)(((uint32_t)(x)) << MRCC_SYSTICKCLKSEL_MUX_SHIFT)) & MRCC_SYSTICKCLKSEL_MUX_MASK)
@@ -1905,7 +1875,7 @@ typedef struct {
 #define MRCC_P16KCLKSEL_MUX_MASK                 (0x1U)
 #define MRCC_P16KCLKSEL_MUX_SHIFT                (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b0..FRO16K
+ *  0b0..FRO16K (PMU internal reference clock)
  *  0b1..CLK_16K[2]
  */
 #define MRCC_P16KCLKSEL_MUX(x)                   (((uint32_t)(((uint32_t)(x)) << MRCC_P16KCLKSEL_MUX_SHIFT)) & MRCC_P16KCLKSEL_MUX_MASK)

@@ -214,6 +214,18 @@ status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichPro
 }
 
 /*!
+ * @brief Reads data from the desired flash area.
+ *
+ * This function reads data from the flash memory for a given flash area as
+ * determined by the start address and the length.
+ */
+status_t FLASH_Read(flash_config_t *config, uint32_t start, uint8_t *dest, uint32_t lengthInBytes)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    return FLASH_DRIVER->flash_read(config, start, dest, lengthInBytes);
+}
+
+/*!
  * @brief Verifies an erasure of the desired IFR area at a specified margin level.
  *
  * This function checks the appropriate number of flash sectors based on

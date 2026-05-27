@@ -9,7 +9,7 @@
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1_DraftC
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260323
+**     Build:               b260407
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXA556
@@ -642,41 +642,6 @@ typedef enum IRQn {
   /** Array initializer of EIM peripheral base pointers */
   #define EIM_BASE_PTRS                            { EIM0 }
 #endif
-
-/* ENET - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral ENET0 base address */
-  #define ENET0_BASE                               (0x5001C000u)
-  /** Peripheral ENET0 base address */
-  #define ENET0_BASE_NS                            (0x4001C000u)
-  /** Peripheral ENET0 base pointer */
-  #define ENET0                                    ((ENET_Type *)ENET0_BASE)
-  /** Peripheral ENET0 base pointer */
-  #define ENET0_NS                                 ((ENET_Type *)ENET0_BASE_NS)
-  /** Array initializer of ENET peripheral base addresses */
-  #define ENET_BASE_ADDRS                          { ENET0_BASE }
-  /** Array initializer of ENET peripheral base pointers */
-  #define ENET_BASE_PTRS                           { ENET0 }
-  /** Array initializer of ENET peripheral base addresses */
-  #define ENET_BASE_ADDRS_NS                       { ENET0_BASE_NS }
-  /** Array initializer of ENET peripheral base pointers */
-  #define ENET_BASE_PTRS_NS                        { ENET0_NS }
-#else
-  /** Peripheral ENET0 base address */
-  #define ENET0_BASE                               (0x4001C000u)
-  /** Peripheral ENET0 base pointer */
-  #define ENET0                                    ((ENET_Type *)ENET0_BASE)
-  /** Array initializer of ENET peripheral base addresses */
-  #define ENET_BASE_ADDRS                          { ENET0_BASE }
-  /** Array initializer of ENET peripheral base pointers */
-  #define ENET_BASE_PTRS                           { ENET0 }
-#endif
-/** Interrupt vectors for the ENET peripheral type */
-#define ENET_IRQS                                { ETHERNET_IRQn }
-#define ENET_PMT_IRQS                            { ETHERNET_PMT_IRQn }
-/* Backward compatibility */
-#define ENET ENET0
-
 
 /* ERM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

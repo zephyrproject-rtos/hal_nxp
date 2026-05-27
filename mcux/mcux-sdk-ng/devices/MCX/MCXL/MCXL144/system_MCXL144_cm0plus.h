@@ -8,9 +8,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MCXL25x RM Rev.1 RC
-**     Version:             rev. 1.1, 2026-01-02
-**     Build:               b260113
+**     Reference manual:    MCXL25x RM Rev.2 DraftA
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -29,14 +29,16 @@
 **         Generated based on Rev1 DraftH.
 **     - rev. 1.1 (2026-01-02)
 **         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MCXL144_cm0plus
- * @version 1.1
- * @date 2026-01-02
+ * @version 2.0
+ * @date 2026-04-22
  * @brief Device specific configuration file for MCXL144_cm0plus (header file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -91,8 +93,7 @@ void SystemCoreClockUpdate (void);
  *
  * This weak function allows to call specific initialization code during the
  * SystemInit() execution.This can be used when an application specific code needs
- * to be called as close to the reset entry as possible (for example the Multicore
- * Manager MCMGR_EarlyInit() function call).
+ * to be called as close to the reset entry as possible.
  * NOTE: No global r/w variables can be used in this hook function because the
  * initialization of these variables happens after this function.
  */

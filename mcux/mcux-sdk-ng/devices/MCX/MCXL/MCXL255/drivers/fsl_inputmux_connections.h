@@ -977,7 +977,7 @@ typedef enum _inputmux_connection_t
     kINPUTMUXAON_AonTrigIn6ToLpadc0Trign              = 7U + (LPADC0_TRIGn_REG << PMUX_SHIFT),  /*!< aon_trig_in6 is selected */
     kINPUTMUXAON_AonTrigIn7ToLpadc0Trign              = 8U + (LPADC0_TRIGn_REG << PMUX_SHIFT),  /*!< aon_trig_in7 is selected */
     kINPUTMUXAON_Cm33TeToLpadc0Trign                  = 9U + (LPADC0_TRIGn_REG << PMUX_SHIFT),  /*!< cm33 transmit event is selected */
-    kINPUTMUXAON_LpcmpOutToLpadc0Trign                = 10U + (LPADC0_TRIGn_REG << PMUX_SHIFT),  /*!< lpcmp_out is selected */
+    kINPUTMUXAON_AonAcmpOutToLpadc0Trign              = 10U + (LPADC0_TRIGn_REG << PMUX_SHIFT),  /*!< aon.acmp_out is selected */
     kINPUTMUXAON_Qtmr0Channel0ToLpadc0Trign           = 12U + (LPADC0_TRIGn_REG << PMUX_SHIFT),  /*!< qtmr0 channel[0] output is selected */
     kINPUTMUXAON_Qtmr0Channel1ToLpadc0Trign           = 13U + (LPADC0_TRIGn_REG << PMUX_SHIFT),  /*!< qtmr0 channel[1] output is selected */
     kINPUTMUXAON_Qtmr0Channel2ToLpadc0Trign           = 14U + (LPADC0_TRIGn_REG << PMUX_SHIFT),  /*!< qtmr0 channel[2] output is selected */
@@ -1123,10 +1123,10 @@ typedef enum _inputmux_connection_t
     kINPUTMUXAON_AonTrigIn6ToLcRotSocLogicIn          = 7U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< aon_trig_in6 input is selected */
     kINPUTMUXAON_AonTrigIn7ToLcRotSocLogicIn          = 8U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< aon_trig_in7 input is selected */
     kINPUTMUXAON_Cm33TeToLcRotSocLogicIn              = 9U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< cm33 transmit event is selected */
-    kINPUTMUXAON_Qtmr1Channel0ToLcRotSocLogicIn       = 10U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[0] output is selected */
-    kINPUTMUXAON_Qtmr1Channel1ToLcRotSocLogicIn       = 11U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[1] output is selected */
-    kINPUTMUXAON_Qtmr1Channel2ToLcRotSocLogicIn       = 12U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[2] output is selected */
-    kINPUTMUXAON_Qtmr1Channel3ToLcRotSocLogicIn       = 13U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[3] output is selected */
+    kINPUTMUXAON_Qtmr0Channel0ToLcRotSocLogicIn       = 10U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[0] output is selected */
+    kINPUTMUXAON_Qtmr0Channel1ToLcRotSocLogicIn       = 11U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[1] output is selected */
+    kINPUTMUXAON_Qtmr0Channel2ToLcRotSocLogicIn       = 12U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[2] output is selected */
+    kINPUTMUXAON_Qtmr0Channel3ToLcRotSocLogicIn       = 13U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[3] output is selected */
     kINPUTMUXAON_Cmp0OutToLcRotSocLogicIn             = 14U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< cmp0_out is selected */
     kINPUTMUXAON_Lpi2c0CeopToLcRotSocLogicIn          = 16U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< lpi2c0 controller end of packet is selected */
     kINPUTMUXAON_Lpi2c0TeopToLcRotSocLogicIn          = 17U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< lpi2c0 target end of packet is selected */
@@ -1157,10 +1157,10 @@ typedef enum _inputmux_connection_t
     kINPUTMUXAON_WuuOToLcRotSocLogicIn                = 48U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< wuu output is selected */
     kINPUTMUXAON_GpioApet0ToLcRotSocLogicIn           = 49U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< gpio (aon) pin event trig 0 input is selected */
     kINPUTMUXAON_SocGlueXor0OutToLcRotSocLogicIn      = 51U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< soc_glue_xor0_out is selected */
-    kINPUTMUXAON_Qtmr0Channel0ToLcRotSocLogicIn       = 53U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[0] output is selected */
-    kINPUTMUXAON_Qtmr0Channel1ToLcRotSocLogicIn       = 54U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[1] output is selected */
-    kINPUTMUXAON_Qtmr0Channel2ToLcRotSocLogicIn       = 55U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[2] output is selected */
-    kINPUTMUXAON_Qtmr0Channel3ToLcRotSocLogicIn       = 56U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[3] output is selected */
+    kINPUTMUXAON_Qtmr1Channel0ToLcRotSocLogicIn       = 53U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[0] output is selected */
+    kINPUTMUXAON_Qtmr1Channel1ToLcRotSocLogicIn       = 54U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[1] output is selected */
+    kINPUTMUXAON_Qtmr1Channel2ToLcRotSocLogicIn       = 55U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[2] output is selected */
+    kINPUTMUXAON_Qtmr1Channel3ToLcRotSocLogicIn       = 56U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[3] output is selected */
     kINPUTMUXAON_LcsenseSequencerPrimaryTriggerGlueOutToLcRotSocLogicIn = 57U + (LC_ROT_SOC_LOGIC_IN_REG << PMUX_SHIFT),  /*!< lcsense_sequencer_primary_trigger_glue_out is selected */
 
     /*!< LCSENSE_SEQ_PTRIG_GLUE_IN: LCSENSE_SEQ_PTRIG_GLUE_IN trigger input connections */
@@ -1173,10 +1173,10 @@ typedef enum _inputmux_connection_t
     kINPUTMUXAON_AonTrigIn6ToLcsenseSeqPtrigGlueIn    = 7U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< aon_trig_in6 input is selected */
     kINPUTMUXAON_AonTrigIn7ToLcsenseSeqPtrigGlueIn    = 8U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< aon_trig_in7 input is selected */
     kINPUTMUXAON_Cm33TeToLcsenseSeqPtrigGlueIn        = 9U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< cm33 transmit event is selected */
-    kINPUTMUXAON_Qtmr1Channel0ToLcsenseSeqPtrigGlueIn = 10U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[0] output is selected */
-    kINPUTMUXAON_Qtmr1Channel1ToLcsenseSeqPtrigGlueIn = 11U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[1] output is selected */
-    kINPUTMUXAON_Qtmr1Channel2ToLcsenseSeqPtrigGlueIn = 12U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[2] output is selected */
-    kINPUTMUXAON_Qtmr1Channel3ToLcsenseSeqPtrigGlueIn = 13U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[3] output is selected */
+    kINPUTMUXAON_Qtmr0Channel0ToLcsenseSeqPtrigGlueIn = 10U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[0] output is selected */
+    kINPUTMUXAON_Qtmr0Channel1ToLcsenseSeqPtrigGlueIn = 11U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[1] output is selected */
+    kINPUTMUXAON_Qtmr0Channel2ToLcsenseSeqPtrigGlueIn = 12U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[2] output is selected */
+    kINPUTMUXAON_Qtmr0Channel3ToLcsenseSeqPtrigGlueIn = 13U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[3] output is selected */
     kINPUTMUXAON_Cmp0OutToLcsenseSeqPtrigGlueIn       = 14U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< cmp0_out is selected */
     kINPUTMUXAON_Lpi2c0CeopToLcsenseSeqPtrigGlueIn    = 16U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< lpi2c0 controller end of packet is selected */
     kINPUTMUXAON_Lpi2c0TeopToLcsenseSeqPtrigGlueIn    = 17U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< lpi2c0 target end of packet is selected */
@@ -1207,10 +1207,10 @@ typedef enum _inputmux_connection_t
     kINPUTMUXAON_WuuOToLcsenseSeqPtrigGlueIn          = 48U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< wuu output is selected */
     kINPUTMUXAON_GpioApet0ToLcsenseSeqPtrigGlueIn     = 49U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< gpio (aon) pin event trig 0 input is selected */
     kINPUTMUXAON_SocGlueXor0OutToLcsenseSeqPtrigGlueIn = 51U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< soc_glue_xor0_out is selected */
-    kINPUTMUXAON_Qtmr0Channel0ToLcsenseSeqPtrigGlueIn = 53U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[0] output is selected */
-    kINPUTMUXAON_Qtmr0Channel1ToLcsenseSeqPtrigGlueIn = 54U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[1] output is selected */
-    kINPUTMUXAON_Qtmr0Channel2ToLcsenseSeqPtrigGlueIn = 55U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[2] output is selected */
-    kINPUTMUXAON_Qtmr0Channel3ToLcsenseSeqPtrigGlueIn = 56U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[3] output is selected */
+    kINPUTMUXAON_Qtmr1Channel0ToLcsenseSeqPtrigGlueIn = 53U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[0] output is selected */
+    kINPUTMUXAON_Qtmr1Channel1ToLcsenseSeqPtrigGlueIn = 54U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[1] output is selected */
+    kINPUTMUXAON_Qtmr1Channel2ToLcsenseSeqPtrigGlueIn = 55U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[2] output is selected */
+    kINPUTMUXAON_Qtmr1Channel3ToLcsenseSeqPtrigGlueIn = 56U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[3] output is selected */
     kINPUTMUXAON_LcsenseSequencerPrimaryTriggerGlueOutToLcsenseSeqPtrigGlueIn = 57U + (LCSENSE_SEQ_PTRIG_GLUE_IN_REG << PMUX_SHIFT),  /*!< lcsense_sequencer_primary_trigger_glue_out is selected */
 
     /*!< LCSENSE_SEQ_TICKS_GLUE_IN: LCSENSE_SEQ_TICKS_GLUE_IN trigger input connections */
@@ -1223,10 +1223,10 @@ typedef enum _inputmux_connection_t
     kINPUTMUXAON_AonTrigIn6ToLcsenseSeqTicksGlueIn    = 7U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< aon_trig_in6 input is selected */
     kINPUTMUXAON_AonTrigIn7ToLcsenseSeqTicksGlueIn    = 8U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< aon_trig_in7 input is selected */
     kINPUTMUXAON_Cm33TeToLcsenseSeqTicksGlueIn        = 9U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< cm33 transmit event is selected */
-    kINPUTMUXAON_Qtmr1Channel0ToLcsenseSeqTicksGlueIn = 10U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[0] output is selected */
-    kINPUTMUXAON_Qtmr1Channel1ToLcsenseSeqTicksGlueIn = 11U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[1] output is selected */
-    kINPUTMUXAON_Qtmr1Channel2ToLcsenseSeqTicksGlueIn = 12U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[2] output is selected */
-    kINPUTMUXAON_Qtmr1Channel3ToLcsenseSeqTicksGlueIn = 13U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[3] output is selected */
+    kINPUTMUXAON_Qtmr0Channel0ToLcsenseSeqTicksGlueIn = 10U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[0] output is selected */
+    kINPUTMUXAON_Qtmr0Channel1ToLcsenseSeqTicksGlueIn = 11U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[1] output is selected */
+    kINPUTMUXAON_Qtmr0Channel2ToLcsenseSeqTicksGlueIn = 12U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[2] output is selected */
+    kINPUTMUXAON_Qtmr0Channel3ToLcsenseSeqTicksGlueIn = 13U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[3] output is selected */
     kINPUTMUXAON_Cmp0OutToLcsenseSeqTicksGlueIn       = 14U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< cmp0_out is selected */
     kINPUTMUXAON_Lpi2c0CeopToLcsenseSeqTicksGlueIn    = 16U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< lpi2c0 controller end of packet is selected */
     kINPUTMUXAON_Lpi2c0TeopToLcsenseSeqTicksGlueIn    = 17U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< lpi2c0 target end of packet is selected */
@@ -1257,10 +1257,10 @@ typedef enum _inputmux_connection_t
     kINPUTMUXAON_WuuOToLcsenseSeqTicksGlueIn          = 48U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< wuu output is selected */
     kINPUTMUXAON_GpioApet0ToLcsenseSeqTicksGlueIn     = 49U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< gpio (aon) pin event trig 0 input is selected */
     kINPUTMUXAON_SocGlueXor0OutToLcsenseSeqTicksGlueIn = 51U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< soc_glue_xor0_out is selected */
-    kINPUTMUXAON_Qtmr0Channel0ToLcsenseSeqTicksGlueIn = 53U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[0] output is selected */
-    kINPUTMUXAON_Qtmr0Channel1ToLcsenseSeqTicksGlueIn = 54U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[1] output is selected */
-    kINPUTMUXAON_Qtmr0Channel2ToLcsenseSeqTicksGlueIn = 55U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[2] output is selected */
-    kINPUTMUXAON_Qtmr0Channel3ToLcsenseSeqTicksGlueIn = 56U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr0 channel[3] output is selected */
+    kINPUTMUXAON_Qtmr1Channel0ToLcsenseSeqTicksGlueIn = 53U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[0] output is selected */
+    kINPUTMUXAON_Qtmr1Channel1ToLcsenseSeqTicksGlueIn = 54U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[1] output is selected */
+    kINPUTMUXAON_Qtmr1Channel2ToLcsenseSeqTicksGlueIn = 55U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[2] output is selected */
+    kINPUTMUXAON_Qtmr1Channel3ToLcsenseSeqTicksGlueIn = 56U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< qtmr1 channel[3] output is selected */
     kINPUTMUXAON_LcsenseSequencerPrimaryTriggerGlueOutToLcsenseSeqTicksGlueIn = 57U + (LCSENSE_SEQ_TICKS_GLUE_IN_REG << PMUX_SHIFT),  /*!< lcsense_sequencer_primary_trigger_glue_out is selected */
 
     /*!< ACMP0_SAMPLE: ACMP0 SAMPLE trigger input connections */
@@ -1273,7 +1273,7 @@ typedef enum _inputmux_connection_t
     kINPUTMUXAON_AonTrigIn6ToAcmp0Sample              = 7U + (ACMP0_SAMPLE_REG << PMUX_SHIFT),  /*!< aon_trig_in6 input is selected */
     kINPUTMUXAON_AonTrigIn7ToAcmp0Sample              = 8U + (ACMP0_SAMPLE_REG << PMUX_SHIFT),  /*!< aon_trig_in7 input is selected */
     kINPUTMUXAON_Cm33TeToAcmp0Sample                  = 9U + (ACMP0_SAMPLE_REG << PMUX_SHIFT),  /*!< cm33 transmit event is selected */
-    kINPUTMUXAON_LpcmpOutToAcmp0Sample                = 10U + (ACMP0_SAMPLE_REG << PMUX_SHIFT),  /*!< lpcmp_out is selected */
+    kINPUTMUXAON_AonAcmpOutToAcmp0Sample              = 10U + (ACMP0_SAMPLE_REG << PMUX_SHIFT),  /*!< aon.acmp_out is selected */
     kINPUTMUXAON_Qtmr0Channel0ToAcmp0Sample           = 12U + (ACMP0_SAMPLE_REG << PMUX_SHIFT),  /*!< qtmr0 channel[0] output is selected */
     kINPUTMUXAON_Qtmr0Channel1ToAcmp0Sample           = 13U + (ACMP0_SAMPLE_REG << PMUX_SHIFT),  /*!< qtmr0 channel[1] output is selected */
     kINPUTMUXAON_Qtmr0Channel2ToAcmp0Sample           = 14U + (ACMP0_SAMPLE_REG << PMUX_SHIFT),  /*!< qtmr0 channel[2] output is selected */
@@ -1301,7 +1301,7 @@ typedef enum _inputmux_connection_t
     kINPUTMUXAON_AonTrigIn6ToAcmp0RrTrig              = 7U + (ACMP0_RR_TRIG_REG << PMUX_SHIFT),  /*!< aon_trig_in6 input is selected */
     kINPUTMUXAON_AonTrigIn7ToAcmp0RrTrig              = 8U + (ACMP0_RR_TRIG_REG << PMUX_SHIFT),  /*!< aon_trig_in7 input is selected */
     kINPUTMUXAON_Cm33TeToAcmp0RrTrig                  = 9U + (ACMP0_RR_TRIG_REG << PMUX_SHIFT),  /*!< cm33 transmit event is selected */
-    kINPUTMUXAON_LpcmpOutToAcmp0RrTrig                = 10U + (ACMP0_RR_TRIG_REG << PMUX_SHIFT),  /*!< lpcmp_out is selected */
+    kINPUTMUXAON_AonAcmpOutToAcmp0RrTrig              = 10U + (ACMP0_RR_TRIG_REG << PMUX_SHIFT),  /*!< aon.acmp_out is selected */
     kINPUTMUXAON_Qtmr0Channel0ToAcmp0RrTrig           = 12U + (ACMP0_RR_TRIG_REG << PMUX_SHIFT),  /*!< qtmr0 channel[0] output is selected */
     kINPUTMUXAON_Qtmr0Channel1ToAcmp0RrTrig           = 13U + (ACMP0_RR_TRIG_REG << PMUX_SHIFT),  /*!< qtmr0 channel[1] output is selected */
     kINPUTMUXAON_Qtmr0Channel2ToAcmp0RrTrig           = 14U + (ACMP0_RR_TRIG_REG << PMUX_SHIFT),  /*!< qtmr0 channel[2] output is selected */
@@ -1329,7 +1329,7 @@ typedef enum _inputmux_connection_t
     kINPUTMUXAON_AonTrigIn6ToLpi2c0Trig               = 7U + (LPI2C0_TRIG_REG << PMUX_SHIFT),  /*!< aon_trig_in6 input is selected */
     kINPUTMUXAON_AonTrigIn7ToLpi2c0Trig               = 8U + (LPI2C0_TRIG_REG << PMUX_SHIFT),  /*!< aon_trig_in7 input is selected */
     kINPUTMUXAON_Cm33TeToLpi2c0Trig                   = 9U + (LPI2C0_TRIG_REG << PMUX_SHIFT),  /*!< cm33 transmit event is selected */
-    kINPUTMUXAON_LpcmpOutToLpi2c0Trig                 = 10U + (LPI2C0_TRIG_REG << PMUX_SHIFT),  /*!< lpcmp_out is selected */
+    kINPUTMUXAON_AonAcmpOutToLpi2c0Trig               = 10U + (LPI2C0_TRIG_REG << PMUX_SHIFT),  /*!< aon.acmp_out is selected */
     kINPUTMUXAON_Qtmr0Channel0ToLpi2c0Trig            = 12U + (LPI2C0_TRIG_REG << PMUX_SHIFT),  /*!< qtmr0 channel[0] output is selected */
     kINPUTMUXAON_Qtmr0Channel1ToLpi2c0Trig            = 13U + (LPI2C0_TRIG_REG << PMUX_SHIFT),  /*!< qtmr0 channel[1] output is selected */
     kINPUTMUXAON_Qtmr0Channel2ToLpi2c0Trig            = 14U + (LPI2C0_TRIG_REG << PMUX_SHIFT),  /*!< qtmr0 channel[2] output is selected */
@@ -1359,7 +1359,7 @@ typedef enum _inputmux_connection_t
     kINPUTMUXAON_AonTrigIn6ToLPUART0                  = 7U + (LPUART0_REG << PMUX_SHIFT),  /*!< aon_trig_in6 input is selected */
     kINPUTMUXAON_AonTrigIn7ToLPUART0                  = 8U + (LPUART0_REG << PMUX_SHIFT),  /*!< aon_trig_in7 input is selected */
     kINPUTMUXAON_Cm33TeToLPUART0                      = 9U + (LPUART0_REG << PMUX_SHIFT),  /*!< cm33 transmit event is selected */
-    kINPUTMUXAON_LpcmpOutToLPUART0                    = 10U + (LPUART0_REG << PMUX_SHIFT),  /*!< lpcmp_out is selected */
+    kINPUTMUXAON_AonAcmpOutToLPUART0                  = 10U + (LPUART0_REG << PMUX_SHIFT),  /*!< aon.acmp_out is selected */
     kINPUTMUXAON_Qtmr0Channel0ToLPUART0               = 12U + (LPUART0_REG << PMUX_SHIFT),  /*!< qtmr0 channel[0] output is selected */
     kINPUTMUXAON_Qtmr0Channel1ToLPUART0               = 13U + (LPUART0_REG << PMUX_SHIFT),  /*!< qtmr0 channel[1] output is selected */
     kINPUTMUXAON_Qtmr0Channel2ToLPUART0               = 14U + (LPUART0_REG << PMUX_SHIFT),  /*!< qtmr0 channel[2] output is selected */

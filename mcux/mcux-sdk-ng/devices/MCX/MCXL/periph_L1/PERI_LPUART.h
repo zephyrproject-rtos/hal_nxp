@@ -13,8 +13,8 @@
 **                          MCXL144VLL_cm0plus
 **                          MCXL144VLL_cm33
 **
-**     Version:             rev. 1.1, 2026-01-02
-**     Build:               b260109
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPUART
@@ -31,14 +31,16 @@
 **         Generated based on Rev1 DraftH.
 **     - rev. 1.1 (2026-01-02)
 **         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_LPUART.h
- * @version 1.1
- * @date 2026-01-02
+ * @version 2.0
+ * @date 2026-04-22
  * @brief CMSIS Peripheral Access Layer for LPUART
  *
  * CMSIS Peripheral Access Layer for LPUART
@@ -489,8 +491,8 @@ typedef struct {
 #define LPUART_STAT_RXINV_MASK                   (0x10000000U)
 #define LPUART_STAT_RXINV_SHIFT                  (28U)
 /*! RXINV - Receive Data Inversion
- *  0b0..Inverted
- *  0b1..Not inverted
+ *  0b0..Not inverted
+ *  0b1..Inverted
  */
 #define LPUART_STAT_RXINV(x)                     (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_RXINV_SHIFT)) & LPUART_STAT_RXINV_MASK)
 

@@ -337,7 +337,7 @@ typedef struct _power_pd1_config
                                             control any wakeup source. Pre-enabled wakeup sources are not affected.
                                              Wakeup sources can also be enabled manually by
                                              invoking Power_EnableWakeupSource().  */
-    uint32_t mainRamArraysToRetain : 16U;   /*!< @deprecated: This field is no longer used, In PD1 mode, all RAM 
+    uint32_t mainRamArraysToRetain : 16U;   /*!< @deprecated: This field is no longer used, In PD1 mode, all RAM
                                             arrays retained. */
     uint32_t disableBandgap : 1U;           /*!< Flag to indicate whether to disable the bandgap during power down */
     uint32_t enableIVSMode : 1U;            /*!< Enable/disable IVS mode for the Main domain SRAM retention. */
@@ -368,9 +368,9 @@ typedef struct _power_pd2_config
     uint32_t enableIVSMode : 1U;            /*!< Enable/disable IVS mode for the Main domain SRAM retention. */
     uint32_t disableBandgap : 1U;           /*!< Flag to indicate whether to disable the bandgap during DPD2 mode */
     uint32_t disableFRO10M : 1U; /*!< Flag to indicate whether to disable the FRO10M clock during DPD2 mode */
-    power_vdd_core_output_voltage_t vddCoreAonVoltage : 8U; /*!< @deprecated: Voltage is now automatically selected based
-                                                               on frequency. This field is ignored. */
-    pmu_fro16k_output_freq_t fro16KOutputFreq : 1U;              /*!< Specify the output frequency of FRO16K */
+    power_vdd_core_output_voltage_t vddCoreAonVoltage : 8U; /*!< @deprecated: Voltage is now automatically selected
+                                                               based on frequency. This field is ignored. */
+    pmu_fro16k_output_freq_t fro16KOutputFreq : 1U;         /*!< Specify the output frequency of FRO16K */
 } power_pd2_config_t;
 
 /*!
@@ -433,10 +433,12 @@ typedef struct _power_dpd2_config
     uint32_t enableIVSMode : 1U;     /*!< Enable/disable IVS mode for the Main domain SRAM retention. */
     uint32_t disableBandgap : 1U;    /*!< Flag to indicate whether to disable the bandgap during DPD2 mode */
     uint32_t switchToX32K : 1U;      /*!< Flag to indicate whether to switch to X32K clock source during DPD2 mode */
-    uint32_t disableFRO10M : 1U;     /*!< Flag to indicate whether to disable the FRO10M clock during DPD2 mode */
+    uint32_t disableFRO10M : 1U;     /*!< Flag to indicate whether to disable the FRO10M clock during DPD2 mode.
+                                        Please note, if switchToX32K is disable, FRO10M can not be disable if it is using as clock source. */
     uint32_t wakeToDpd1 : 1U;        /*!< Flag to indicate whether to wake up to DPD1 mode after DPD2 mode */
     uint32_t saveContext : 1U;       /*!< True to save basic register context into stack, false to do not save. */
-    uint32_t disableFRO3M : 1U;      /*!< True to disable FRO2M, false to do not disable. */
+    uint32_t disableFRO3M : 1U;      /*!< True to disable FRO3M, false to do not disable.
+                                        Please note, if switchToX32K is disable, FRO3M can not be disable if it is using as clock source. */
     pmu_fro16k_output_freq_t fro16KOutputFreq : 1U; /*!< Specify the output frequency of FRO16K */
     power_vdd_core_output_voltage_t
         dpd2VddCoreAonVoltage : 8U; /*!< @deprecated Voltage is now automatically selected based on frequency. Specify
@@ -486,24 +488,52 @@ typedef struct _power_wakeup_source_info
 } power_wakeup_source_info_t;
 
 /*!
+ * @brief Dual-core synchronization state stored in power_handle_t::dualCoreSynced.
+ *
+ * This 2-bit field acts as a lightweight state machine to coordinate CM33 and CM0+
+ * around low-power wakeup sequences, preventing CM0+ from clearing AON__SMM->STAT
+ * while CM33 ROM is still reading it.
+ *
+ *  State | Meaning
+ *  ------|--------
+ *  00    | Not initialised (handle not yet created on both cores)
+ *  01    | CM33 ROM wakeup path active (DPD1->Active or DPD2->Active).
+ *          CM0+ must skip the STAT write in Power_ClearLpPowerSettings().
+ *          CM33 will perform the write after exiting its spin-wait.
+ *  10    | DPD2 entered with wakeToDpd1=true (DPD2->DPD1 transition).
+ *          CM0+ is allowed to write STAT (CM33 ROM does not run on this path),
+ *          then immediately restores state to 01 for the subsequent DPD1->Active step.
+ *  11    | MU link established; both cores are fully operational.
+ */
+typedef enum _power_dual_core_sync_state
+{
+    kPower_DualCoreNotSynced  = 0U, /*!< 00: handle not initialised */
+    kPower_DualCoreAonOnly    = 1U, /*!< 01: CM33 ROM wakeup path active, CM0+ must defer STAT write */
+    kPower_DualCoreDpd2ToDpd1 = 2U, /*!< 10: DPD2->DPD1 path, CM0+ writes STAT then restores to 01 */
+    kPower_DualCoreSynced     = 3U, /*!< 11: both cores operational via MU */
+} power_dual_core_sync_state_t;
+
+/*!
  * @brief Structure to handle power management operations.
  */
 typedef struct _power_handle
 {
     uint32_t lpConfig[4U]; /*!< Buffer (4 x 32-bit words) for storing the most recent low-power configuration. */
-    power_user_callback_t cm33Callback;            /*!< Callback function for CM33 core operations,
-                                                         in type of @ref power_user_callback_t */
-    void *cm33UserData;                            /*!< User data pointer for CM33 core operations */
-    power_user_callback_t cm0pCallback;            /*!< Callback function for CM0+ core operations,
-                                                         in type of @ref power_user_callback_t */
-    void *cm0pUserData;                            /*!< User data pointer for CM0+ core operations */
-    power_wakeup_source_info_t enabledWsInfo;      /*!< Used to record all enabled wakeup sources. */
+    power_user_callback_t cm33Callback;                     /*!< Callback function for CM33 core operations,
+                                                                  in type of @ref power_user_callback_t */
+    void *cm33UserData;                                     /*!< User data pointer for CM33 core operations */
+    power_user_callback_t cm0pCallback;                     /*!< Callback function for CM0+ core operations,
+                                                                  in type of @ref power_user_callback_t */
+    void *cm0pUserData;                                     /*!< User data pointer for CM0+ core operations */
+    power_wakeup_source_info_t enabledWsInfo;               /*!< Used to record all enabled wakeup sources. */
     volatile uint32_t muChannelId : 4U;                     /*!< MU channel ID used for power communication. */
     volatile power_low_power_mode_t targetPowerMode : 4U;   /*!< Target low-power mode requested by this core. */
     volatile power_low_power_mode_t previousPowerMode : 4U; /*!< Previously entered low-power mode. */
-    volatile uint32_t dualCoreSynced : 1U;                  /*!< Set when the two cores are synchronized. */
-    volatile uint32_t requestCM33Start : 1U;                /*!< CM0P-side flag requesting CM33 to run the entry sequence. */
-    volatile uint32_t cm0pWFI : 1U;                         /*!< CM0P has executed WFI (used for PD2/DPD2/DPD3/SD). */
+    volatile power_dual_core_sync_state_t
+        dualCoreSynced : 2U;                 /*!< Dual-core sync state; see @ref power_dual_core_sync_state_t. */
+    volatile uint32_t requestCM33Start : 1U; /*!< CM0P-side flag requesting CM33 to run the entry sequence. */
+    volatile uint32_t cm0pWFI : 1U;          /*!< CM0P has executed WFI (used for PD2/DPD2/DPD3/SD). */
+    volatile uint32_t cm33SavedSP;           /*!< CM33 saved SP for context restore (offset 44). */
 } power_handle_t;
 
 /*!
@@ -899,12 +929,6 @@ status_t Power_EnterShutDown(power_sd_config_t *config);
         ---------
         |  R4   |
         ---------
-        | handle|
-        | value |
-        ---------
-        | handle|
-        | addr  |
-        ---------
         | ASPR  |
         ---------
         | PSR   |
@@ -912,11 +936,11 @@ status_t Power_EnterShutDown(power_sd_config_t *config);
         |PRIMASK|
         ---------
         |CONTROL|
-        ---------  <------ SP Address saved in backup register
+        ---------  <------ SP saved to handle (CM33) or backup2 LSB (CM0P)
  *
  * @note User can use this function to save context before entering low power modes which will reset system.
- * @note For CM33 project, LSB_BCKP1, LSB_BCKP2, MSB_BCKP2 are used.
- * @note For CM0P project, MSB_BCKP1 is used.
+ * @note For CM33 project, LSB_BCKP1, MSB_BCKP1, MSB_BCKP2 are used.
+ * @note For CM0P project, LSB_BCKP2 is used.
  *
  * @param handleAddr The address of handle.
  *
@@ -932,6 +956,15 @@ uint32_t Power_PushContext(uint32_t handleAddr);
  */
 void Power_LowPowerBoot(void);
 
+/*!
+ * @brief Notify CM33 that CM0+ is ready to proceed after DPD2 wakeup with context restore.
+ *
+ * This function waits for CM33 to signal that it has restored context (by writing a sync
+ * pattern to SMM backup1 registers), then acknowledges by setting dualCoreSynced to
+ * kPower_DualCoreSynced, allowing both cores to continue in sync.
+ *
+ * @note Called from CM0+ side only after waking up from DPD2 with context saving enabled.
+ */
 void Power_NotifyCM33ToRun(void);
 /*!
  * @}

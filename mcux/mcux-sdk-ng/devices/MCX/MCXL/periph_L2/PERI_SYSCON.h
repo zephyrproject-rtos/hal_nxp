@@ -13,8 +13,8 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.1, 2026-01-02
-**     Build:               b260105
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSCON
@@ -31,14 +31,16 @@
 **         Generated based on Rev1 DraftH.
 **     - rev. 1.1 (2026-01-02)
 **         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_SYSCON.h
- * @version 1.1
- * @date 2026-01-02
+ * @version 2.0
+ * @date 2026-04-22
  * @brief CMSIS Peripheral Access Layer for SYSCON
  *
  * CMSIS Peripheral Access Layer for SYSCON
@@ -141,7 +143,7 @@ typedef struct {
   __IO uint32_t LPCAC_CTRL;                        /**< LPCAC Control, offset: 0x824 */
        uint8_t RESERVED_15[280];
   __IO uint32_t CTIMERGLOBALSTARTEN;               /**< CTIMER Global Start Enable, offset: 0x940 */
-  __IO uint32_t RAM_CTRL;                          /**< RAM Control, offset: 0x944 */
+  __IO uint32_t SRAM_CTRL;                         /**< SRAM Control, offset: 0x944 */
        uint8_t RESERVED_16[536];
   __IO uint32_t GRAY_CODE_LSB;                     /**< Gray to Binary Converter Gray Code [31:0], offset: 0xB60 */
   __IO uint32_t GRAY_CODE_MSB;                     /**< Gray to Binary Converter Gray Code [41:32], offset: 0xB64 */
@@ -152,17 +154,15 @@ typedef struct {
        uint8_t RESERVED_18[28];
   __IO uint32_t ROP_STATE;                         /**< ROP State, offset: 0xE3C */
        uint8_t RESERVED_19[24];
-  __IO uint32_t SRAM_XEN;                          /**< RAM XEN Control, offset: 0xE58 */
-  __IO uint32_t SRAM_XEN_DP;                       /**< RAM XEN Control (Duplicate), offset: 0xE5C */
+  __IO uint32_t SRAM_XEN;                          /**< SRAM XEN Control, offset: 0xE58 */
+  __IO uint32_t SRAM_XEN_DP;                       /**< SRAM XEN Control (Duplicate), offset: 0xE5C */
        uint8_t RESERVED_20[320];
   __IO uint32_t DEBUG_LOCK_EN;                     /**< Control Write Access to Security, offset: 0xFA0 */
   __IO uint32_t DEBUG_FEATURES;                    /**< Cortex Debug Features Control, offset: 0xFA4 */
   __IO uint32_t DEBUG_FEATURES_DP;                 /**< Cortex Debug Features Control (Duplicate), offset: 0xFA8 */
        uint8_t RESERVED_21[8];
   __IO uint32_t SWD_ACCESS_CM33;                   /**< CM33 Software Debug Access, offset: 0xFB4 */
-       uint8_t RESERVED_22[8];
-  __IO uint32_t DEBUG_AUTH_BEACON;                 /**< Debug Authentication BEACON, offset: 0xFC0 */
-       uint8_t RESERVED_23[44];
+       uint8_t RESERVED_22[56];
   __I  uint32_t JTAG_ID;                           /**< JTAG Chip ID, offset: 0xFF0 */
   __I  uint32_t DEVICE_TYPE;                       /**< Device Type, offset: 0xFF4 */
   __I  uint32_t DEVICE_ID0;                        /**< Device ID, offset: 0xFF8 */
@@ -191,7 +191,7 @@ typedef struct {
 
 #define SYSCON_REMAP_REMAP_DMA0_MASK             (0xCU)
 #define SYSCON_REMAP_REMAP_DMA0_SHIFT            (2U)
-/*! REMAP_DMA0 - RAMX0 address remap for DMA0
+/*! REMAP_DMA0 - RAMX0 address remap for eDMA0
  *  0b00..RAMX0: 0x04000000 - 0x04001fff
  *  0b01..RAMX0: 0x27ffe000 - 0x27ffffff
  */
@@ -207,7 +207,7 @@ typedef struct {
 
 #define SYSCON_REMAP_REMAP_DMA1_MASK             (0xC0U)
 #define SYSCON_REMAP_REMAP_DMA1_SHIFT            (6U)
-/*! REMAP_DMA1 - RAMX0 address remap for DMA1
+/*! REMAP_DMA1 - RAMX0 address remap for eDMA1
  *  0b00..RAMX0: 0x04000000 - 0x04001fff
  *  0b01..RAMX0: 0x27ffe000 - 0x27ffffff
  */
@@ -247,7 +247,7 @@ typedef struct {
 
 #define SYSCON_AHBMATPRIO_DMA0_MASK              (0x300U)
 #define SYSCON_AHBMATPRIO_DMA0_SHIFT             (8U)
-/*! DMA0 - DMA0 controller priority level
+/*! DMA0 - eDMA0 controller priority level
  *  0b00..level 0
  *  0b01..level 1
  *  0b10..level 2
@@ -257,7 +257,7 @@ typedef struct {
 
 #define SYSCON_AHBMATPRIO_DMA1_MASK              (0xC00U)
 #define SYSCON_AHBMATPRIO_DMA1_SHIFT             (10U)
-/*! DMA1 - DMA1 controller priority level
+/*! DMA1 - eDMA1 controller priority level
  *  0b00..level 0
  *  0b01..level 1
  *  0b10..level 2
@@ -462,16 +462,16 @@ typedef struct {
 
 #define SYSCON_ROMCPCLKCTRL_ROMCP_SLEEPING_OVERRIDE_MASK (0x1U)
 #define SYSCON_ROMCPCLKCTRL_ROMCP_SLEEPING_OVERRIDE_SHIFT (0U)
-/*! ROMCP_SLEEPING_OVERRIDE - This bit is used to override UTEAL sleeping clock gating to ROMCP HCLK
- *  0b0..Disable UTEAL sleeping clock gating to ROMCP HCLK
- *  0b1..Enables UTEAL sleeping clock gating to ROMCP HCLK
+/*! ROMCP_SLEEPING_OVERRIDE - This bit is used to override CM33 sleeping clock gating to ROMCP HCLK
+ *  0b0..Disables CM33 sleeping clock gating to ROMCP HCLK
+ *  0b1..Enables CM33 sleeping clock gating to ROMCP HCLK
  */
 #define SYSCON_ROMCPCLKCTRL_ROMCP_SLEEPING_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_ROMCPCLKCTRL_ROMCP_SLEEPING_OVERRIDE_SHIFT)) & SYSCON_ROMCPCLKCTRL_ROMCP_SLEEPING_OVERRIDE_MASK)
 
 #define SYSCON_ROMCPCLKCTRL_ROMCP_AUTOCG_OVERRIDE_MASK (0x2U)
 #define SYSCON_ROMCPCLKCTRL_ROMCP_AUTOCG_OVERRIDE_SHIFT (1U)
 /*! ROMCP_AUTOCG_OVERRIDE - This bit is used to override auto clock gating to ROMCP HCLK
- *  0b0..Disable auto clock gating to ROMCP HCLK
+ *  0b0..Disables auto clock gating to ROMCP HCLK
  *  0b1..Enables auto clock gating to ROMCP HCLK
  */
 #define SYSCON_ROMCPCLKCTRL_ROMCP_AUTOCG_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_ROMCPCLKCTRL_ROMCP_AUTOCG_OVERRIDE_SHIFT)) & SYSCON_ROMCPCLKCTRL_ROMCP_AUTOCG_OVERRIDE_MASK)
@@ -685,22 +685,6 @@ typedef struct {
 /*! DIV - Clock divider value */
 #define SYSCON_AONAUXCLKDIV_DIV(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_AONAUXCLKDIV_DIV_SHIFT)) & SYSCON_AONAUXCLKDIV_DIV_MASK)
 
-#define SYSCON_AONAUXCLKDIV_RESET_MASK           (0x20000000U)
-#define SYSCON_AONAUXCLKDIV_RESET_SHIFT          (29U)
-/*! RESET - Resets the divider counter
- *  0b0..Divider is not reset
- *  0b1..Divider is reset
- */
-#define SYSCON_AONAUXCLKDIV_RESET(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_AONAUXCLKDIV_RESET_SHIFT)) & SYSCON_AONAUXCLKDIV_RESET_MASK)
-
-#define SYSCON_AONAUXCLKDIV_HALT_MASK            (0x40000000U)
-#define SYSCON_AONAUXCLKDIV_HALT_SHIFT           (30U)
-/*! HALT - Halts the divider counter
- *  0b0..Divider clock is running
- *  0b1..Divider clock is stopped
- */
-#define SYSCON_AONAUXCLKDIV_HALT(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_AONAUXCLKDIV_HALT_SHIFT)) & SYSCON_AONAUXCLKDIV_HALT_MASK)
-
 #define SYSCON_AONAUXCLKDIV_UNSTAB_MASK          (0x80000000U)
 #define SYSCON_AONAUXCLKDIV_UNSTAB_SHIFT         (31U)
 /*! UNSTAB - Divider status flag
@@ -842,40 +826,40 @@ typedef struct {
 #define SYSCON_CTIMERGLOBALSTARTEN_CTIMER2_CLK_EN(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_CTIMERGLOBALSTARTEN_CTIMER2_CLK_EN_SHIFT)) & SYSCON_CTIMERGLOBALSTARTEN_CTIMER2_CLK_EN_MASK)
 /*! @} */
 
-/*! @name RAM_CTRL - RAM Control */
+/*! @name SRAM_CTRL - SRAM Control */
 /*! @{ */
 
-#define SYSCON_RAM_CTRL_RAMA_ECC_ENABLE_MASK     (0x1U)
-#define SYSCON_RAM_CTRL_RAMA_ECC_ENABLE_SHIFT    (0U)
+#define SYSCON_SRAM_CTRL_RAMA_ECC_ENABLE_MASK    (0x1U)
+#define SYSCON_SRAM_CTRL_RAMA_ECC_ENABLE_SHIFT   (0U)
 /*! RAMA_ECC_ENABLE - RAMA ECC enable.
  *  0b0..ECC is disabled
  *  0b1..ECC is enabled
  */
-#define SYSCON_RAM_CTRL_RAMA_ECC_ENABLE(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_RAM_CTRL_RAMA_ECC_ENABLE_SHIFT)) & SYSCON_RAM_CTRL_RAMA_ECC_ENABLE_MASK)
+#define SYSCON_SRAM_CTRL_RAMA_ECC_ENABLE(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAM_CTRL_RAMA_ECC_ENABLE_SHIFT)) & SYSCON_SRAM_CTRL_RAMA_ECC_ENABLE_MASK)
 
-#define SYSCON_RAM_CTRL_RAMA_CG_OVERRIDE_MASK    (0x10000U)
-#define SYSCON_RAM_CTRL_RAMA_CG_OVERRIDE_SHIFT   (16U)
+#define SYSCON_SRAM_CTRL_RAMA_CG_OVERRIDE_MASK   (0x10000U)
+#define SYSCON_SRAM_CTRL_RAMA_CG_OVERRIDE_SHIFT  (16U)
 /*! RAMA_CG_OVERRIDE - RAMA bank clock gating control
  *  0b0..Memory bank clock is gated automatically if no access more than 16 clock cycles
  *  0b1..Auto clock gating feature is disabled
  */
-#define SYSCON_RAM_CTRL_RAMA_CG_OVERRIDE(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_RAM_CTRL_RAMA_CG_OVERRIDE_SHIFT)) & SYSCON_RAM_CTRL_RAMA_CG_OVERRIDE_MASK)
+#define SYSCON_SRAM_CTRL_RAMA_CG_OVERRIDE(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAM_CTRL_RAMA_CG_OVERRIDE_SHIFT)) & SYSCON_SRAM_CTRL_RAMA_CG_OVERRIDE_MASK)
 
-#define SYSCON_RAM_CTRL_RAMX_CG_OVERRIDE_MASK    (0x20000U)
-#define SYSCON_RAM_CTRL_RAMX_CG_OVERRIDE_SHIFT   (17U)
+#define SYSCON_SRAM_CTRL_RAMX_CG_OVERRIDE_MASK   (0x20000U)
+#define SYSCON_SRAM_CTRL_RAMX_CG_OVERRIDE_SHIFT  (17U)
 /*! RAMX_CG_OVERRIDE - RAMX bank clock gating control
  *  0b0..Memory bank clock is gated automatically if no access more than 16 clock cycles
  *  0b1..Auto clock gating feature is disabled
  */
-#define SYSCON_RAM_CTRL_RAMX_CG_OVERRIDE(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_RAM_CTRL_RAMX_CG_OVERRIDE_SHIFT)) & SYSCON_RAM_CTRL_RAMX_CG_OVERRIDE_MASK)
+#define SYSCON_SRAM_CTRL_RAMX_CG_OVERRIDE(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAM_CTRL_RAMX_CG_OVERRIDE_SHIFT)) & SYSCON_SRAM_CTRL_RAMX_CG_OVERRIDE_MASK)
 
-#define SYSCON_RAM_CTRL_RAMB_CG_OVERRIDE_MASK    (0x40000U)
-#define SYSCON_RAM_CTRL_RAMB_CG_OVERRIDE_SHIFT   (18U)
+#define SYSCON_SRAM_CTRL_RAMB_CG_OVERRIDE_MASK   (0x40000U)
+#define SYSCON_SRAM_CTRL_RAMB_CG_OVERRIDE_SHIFT  (18U)
 /*! RAMB_CG_OVERRIDE - RAMB bank clock gating control
  *  0b0..Memory bank clock is gated automatically if no access more than 16 clock cycles
  *  0b1..Auto clock gating feature is disabled
  */
-#define SYSCON_RAM_CTRL_RAMB_CG_OVERRIDE(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_RAM_CTRL_RAMB_CG_OVERRIDE_SHIFT)) & SYSCON_RAM_CTRL_RAMB_CG_OVERRIDE_MASK)
+#define SYSCON_SRAM_CTRL_RAMB_CG_OVERRIDE(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAM_CTRL_RAMB_CG_OVERRIDE_SHIFT)) & SYSCON_SRAM_CTRL_RAMB_CG_OVERRIDE_MASK)
 /*! @} */
 
 /*! @name GRAY_CODE_LSB - Gray to Binary Converter Gray Code [31:0] */
@@ -943,7 +927,7 @@ typedef struct {
 #define SYSCON_ROP_STATE_ROP_STATE(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_ROP_STATE_ROP_STATE_SHIFT)) & SYSCON_ROP_STATE_ROP_STATE_MASK)
 /*! @} */
 
-/*! @name SRAM_XEN - RAM XEN Control */
+/*! @name SRAM_XEN - SRAM XEN Control */
 /*! @{ */
 
 #define SYSCON_SRAM_XEN_RAMX0_XEN_MASK           (0x1U)
@@ -1035,7 +1019,7 @@ typedef struct {
 #define SYSCON_SRAM_XEN_LOCK(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAM_XEN_LOCK_SHIFT)) & SYSCON_SRAM_XEN_LOCK_MASK)
 /*! @} */
 
-/*! @name SRAM_XEN_DP - RAM XEN Control (Duplicate) */
+/*! @name SRAM_XEN_DP - SRAM XEN Control (Duplicate) */
 /*! @{ */
 
 #define SYSCON_SRAM_XEN_DP_RAMX0_XEN_DP_MASK     (0x1U)
@@ -1233,17 +1217,6 @@ typedef struct {
 #define SYSCON_SWD_ACCESS_CM33_SEC_CODE(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_SWD_ACCESS_CM33_SEC_CODE_SHIFT)) & SYSCON_SWD_ACCESS_CM33_SEC_CODE_MASK)
 /*! @} */
 
-/*! @name DEBUG_AUTH_BEACON - Debug Authentication BEACON */
-/*! @{ */
-
-#define SYSCON_DEBUG_AUTH_BEACON_BEACON_MASK     (0xFFFFFFFFU)
-#define SYSCON_DEBUG_AUTH_BEACON_BEACON_SHIFT    (0U)
-/*! BEACON - Sets by the debug authentication code in ROM to pass the debug beacons (Credential
- *    Beacon and Authentication Beacon) to the application code.
- */
-#define SYSCON_DEBUG_AUTH_BEACON_BEACON(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_AUTH_BEACON_BEACON_SHIFT)) & SYSCON_DEBUG_AUTH_BEACON_BEACON_MASK)
-/*! @} */
-
 /*! @name JTAG_ID - JTAG Chip ID */
 /*! @{ */
 
@@ -1256,19 +1229,84 @@ typedef struct {
 /*! @name DEVICE_TYPE - Device Type */
 /*! @{ */
 
-#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_MASK      (0xFFFFFFFFU)
-#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_SHIFT     (0U)
-/*! DEVICE_TYPE - Indicates the device type */
-#define SYSCON_DEVICE_TYPE_DEVICE_TYPE(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_TYPE_DEVICE_TYPE_SHIFT)) & SYSCON_DEVICE_TYPE_DEVICE_TYPE_MASK)
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_NUM_MASK  (0xFFFFU)
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_NUM_SHIFT (0U)
+/*! DEVICE_TYPE_NUM - Indicates the device part number */
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_NUM(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_TYPE_DEVICE_TYPE_NUM_SHIFT)) & SYSCON_DEVICE_TYPE_DEVICE_TYPE_NUM_MASK)
+
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_SEC_MASK  (0x10000U)
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_SEC_SHIFT (16U)
+/*! DEVICE_TYPE_SEC - Indicates the device secure type
+ *  0b0..Non-secure part
+ *  0b1..Secure part
+ */
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_SEC(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_TYPE_DEVICE_TYPE_SEC_SHIFT)) & SYSCON_DEVICE_TYPE_DEVICE_TYPE_SEC_MASK)
+
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_PKG_MASK  (0xF00000U)
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_PKG_SHIFT (20U)
+/*! DEVICE_TYPE_PKG - Indicates the device package type
+ *  0b0000..HLQFP
+ *  0b0001..HTQFP
+ *  0b0010..BGA
+ *  0b0011..MAXQFP (HDQFP)
+ *  0b0100..QFN
+ *  0b0101..CSP
+ *  0b0110..LQFP
+ *  *..Reserved
+ */
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_PKG(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_TYPE_DEVICE_TYPE_PKG_SHIFT)) & SYSCON_DEVICE_TYPE_DEVICE_TYPE_PKG_MASK)
+
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_PIN_MASK  (0xFF000000U)
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_PIN_SHIFT (24U)
+/*! DEVICE_TYPE_PIN - Indicates the device's pin number */
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_PIN(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_TYPE_DEVICE_TYPE_PIN_SHIFT)) & SYSCON_DEVICE_TYPE_DEVICE_TYPE_PIN_MASK)
 /*! @} */
 
 /*! @name DEVICE_ID0 - Device ID */
 /*! @{ */
 
+#define SYSCON_DEVICE_ID0_RAMSIZE_MASK           (0xFU)
+#define SYSCON_DEVICE_ID0_RAMSIZE_SHIFT          (0U)
+/*! RAMSIZE - Indicates SRAM size of the device
+ *  0b0000..8 KB
+ *  0b0001..16 KB
+ *  0b0010..32 KB
+ *  0b0011..64 KB
+ *  0b0100..96 KB
+ *  0b0101..128 KB
+ *  0b0110..160 KB
+ *  0b0111..192 KB
+ *  0b1000..256 KB
+ *  0b1001..288 KB
+ *  0b1010..352 KB
+ *  0b1011..512 KB
+ */
+#define SYSCON_DEVICE_ID0_RAMSIZE(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_RAMSIZE_SHIFT)) & SYSCON_DEVICE_ID0_RAMSIZE_MASK)
+
+#define SYSCON_DEVICE_ID0_FLASHSIZE_MASK         (0xF0U)
+#define SYSCON_DEVICE_ID0_FLASHSIZE_SHIFT        (4U)
+/*! FLASHSIZE - Indicates Flash size of the device
+ *  0b0000..32 KB
+ *  0b0001..64 KB
+ *  0b0010..128 KB
+ *  0b0011..256 KB
+ *  0b0100..512 KB
+ *  0b0101..768 KB
+ *  0b0110..1 MB
+ *  0b0111..1.5 MB
+ *  0b1000..2 MB
+ */
+#define SYSCON_DEVICE_ID0_FLASHSIZE(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_FLASHSIZE_SHIFT)) & SYSCON_DEVICE_ID0_FLASHSIZE_MASK)
+
 #define SYSCON_DEVICE_ID0_ROM_REV_MINOR_MASK     (0xF00000U)
 #define SYSCON_DEVICE_ID0_ROM_REV_MINOR_SHIFT    (20U)
-/*! ROM_REV_MINOR - ROM revision. */
+/*! ROM_REV_MINOR - ROM Patch version */
 #define SYSCON_DEVICE_ID0_ROM_REV_MINOR(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_ROM_REV_MINOR_SHIFT)) & SYSCON_DEVICE_ID0_ROM_REV_MINOR_MASK)
+
+#define SYSCON_DEVICE_ID0_CUSTOMER_RID_MASK      (0xF000000U)
+#define SYSCON_DEVICE_ID0_CUSTOMER_RID_SHIFT     (24U)
+/*! CUSTOMER_RID - Customer Revision ID */
+#define SYSCON_DEVICE_ID0_CUSTOMER_RID(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_CUSTOMER_RID_SHIFT)) & SYSCON_DEVICE_ID0_CUSTOMER_RID_MASK)
 /*! @} */
 
 /*! @name DIEID - Chip Revision ID and Number */

@@ -1,7 +1,6 @@
 /*
 ** ###################################################################
-**     Processors:          MCXN537VAB_cm33_core0
-**                          MCXN537VDF_cm33_core0
+**     Processors:          MCXN537VDF_cm33_core0
 **                          MCXN537VKL_cm33_core0
 **                          MCXN537VPB_cm33_core0
 **
@@ -12,13 +11,13 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250901
+**     Build:               b260417
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN537_cm33_core0
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

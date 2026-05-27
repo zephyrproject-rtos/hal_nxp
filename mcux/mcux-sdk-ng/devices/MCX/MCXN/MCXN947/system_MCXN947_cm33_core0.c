@@ -1,7 +1,6 @@
 /*
 ** ###################################################################
-**     Processors:          MCXN947VAB_cm33_core0
-**                          MCXN947VDF_cm33_core0
+**     Processors:          MCXN947VDF_cm33_core0
 **                          MCXN947VKL_cm33_core0
 **                          MCXN947VNL_cm33_core0
 **                          MCXN947VPB_cm33_core0
@@ -13,7 +12,7 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250703
+**     Build:               b260417
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -21,7 +20,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

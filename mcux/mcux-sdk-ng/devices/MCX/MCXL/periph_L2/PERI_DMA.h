@@ -13,14 +13,14 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250901
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,14 +29,18 @@
 **     Revisions:
 **     - rev. 1.0 (2025-06-13)
 **         Generated based on Rev1 DraftH.
+**     - rev. 1.1 (2026-01-02)
+**         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_DMA.h
- * @version 1.0
- * @date 2025-06-13
+ * @version 2.0
+ * @date 2026-04-22
  * @brief CMSIS Peripheral Access Layer for DMA
  *
  * CMSIS Peripheral Access Layer for DMA
@@ -134,6 +138,7 @@ typedef enum _dma_request_source
 
 /* @} */
 #endif /* DMA_REQUEST_SOURCE_T_ */
+
 
 /*!
  * @}
@@ -414,7 +419,7 @@ typedef struct {
 /*! @name MP_HRS - Management Page Hardware Request Status */
 /*! @{ */
 
-#define DMA_MP_HRS_HRS_MASK                      (0xFFFFFFFFU)
+#define DMA_MP_HRS_HRS_MASK                      (0xFU)
 #define DMA_MP_HRS_HRS_SHIFT                     (0U)
 /*! HRS - Hardware Request Status */
 #define DMA_MP_HRS_HRS(x)                        (((uint32_t)(((uint32_t)(x)) << DMA_MP_HRS_HRS_SHIFT)) & DMA_MP_HRS_HRS_MASK)

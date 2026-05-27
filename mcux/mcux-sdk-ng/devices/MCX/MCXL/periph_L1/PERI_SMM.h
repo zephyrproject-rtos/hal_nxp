@@ -13,8 +13,8 @@
 **                          MCXL144VLL_cm0plus
 **                          MCXL144VLL_cm33
 **
-**     Version:             rev. 1.1, 2026-01-02
-**     Build:               b260129
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SMM
@@ -31,14 +31,16 @@
 **         Generated based on Rev1 DraftH.
 **     - rev. 1.1 (2026-01-02)
 **         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_SMM.h
- * @version 1.1
- * @date 2026-01-02
+ * @version 2.0
+ * @date 2026-04-22
  * @brief CMSIS Peripheral Access Layer for SMM
  *
  * CMSIS Peripheral Access Layer for SMM
@@ -101,19 +103,16 @@
  * @{
  */
 
-/** SMM - Size of Registers Arrays */
-#define SMM_LTCHD_CNT_RTC_COUNT                   3u
-
 /** SMM - Register Layout Typedef */
 typedef struct {
   __IO uint32_t CNFG;                              /**< Configuration, offset: 0x0 */
   __IO uint32_t WKUP_MAIN;                         /**< Main CPU wakeup source, offset: 0x4 */
   __IO uint32_t AON_CPU;                           /**< AON CPU wakeup source, offset: 0x8 */
-  __I  uint32_t WKUP_STAT;                         /**< Wakeup sources status, offset: 0xC */
+  __IO uint32_t WKUP_STAT;                         /**< Wakeup sources status, offset: 0xC */
   __IO uint32_t STAT;                              /**< Status, offset: 0x10 */
   __IO uint32_t PWDN_CONFIG;                       /**< Power Down configuration, offset: 0x14 */
-  __IO uint32_t DPSLP_COUNT;                       /**< Deep Sleep count, offset: 0x18 */
-  __IO uint32_t RTC_DCDC_CNTRL;                    /**< RTC DCDC Control, offset: 0x1C */
+  __IO uint32_t DEEP_SLEEP_CNT;                    /**< Deep Sleep Counter, offset: 0x18 */
+  __IO uint32_t RTC_LDO_CNTRL;                     /**< RTC LDO Control, offset: 0x1C */
   __IO uint32_t RTC_XTAL_CONFG1;                   /**< RTC analog XTAL configuration, offset: 0x20 */
   __IO uint32_t RTC_XTAL_CONFG2;                   /**< RTC analog XTAL configuration, offset: 0x24 */
        uint8_t RESERVED_0[4];
@@ -128,9 +127,6 @@ typedef struct {
   __IO uint32_t BIAS_CTRL;                         /**< RTC analog XTAL bias control, offset: 0x4C */
        uint8_t RESERVED_1[12];
   __IO uint32_t XTAL_TRIM;                         /**< XTAL Trim, offset: 0x5C */
-       uint8_t RESERVED_2[224];
-  __IO uint32_t TAMP_CTRL;                         /**< Tamper Control, offset: 0x140 */
-  __I  uint32_t LATCHED_RTC_COUNTER[SMM_LTCHD_CNT_RTC_COUNT]; /**< Latched RTC Counter, array offset: 0x144, array step: 0x4 */
 } SMM_Type;
 
 /* ----------------------------------------------------------------------------
@@ -155,23 +151,35 @@ typedef struct {
 
 #define SMM_CNFG_EXT_INTP_MASK_MASK              (0x2U)
 #define SMM_CNFG_EXT_INTP_MASK_SHIFT             (1U)
-/*! EXT_INTP_MASK - External interrupt mask */
+/*! EXT_INTP_MASK - External interrupt mask
+ *  0b0..Disables external interrupts
+ *  0b1..Enable external interrupts
+ */
 #define SMM_CNFG_EXT_INTP_MASK(x)                (((uint32_t)(((uint32_t)(x)) << SMM_CNFG_EXT_INTP_MASK_SHIFT)) & SMM_CNFG_EXT_INTP_MASK_MASK)
 
-#define SMM_CNFG_DSLP_COUNT_USE_MASK             (0x4U)
-#define SMM_CNFG_DSLP_COUNT_USE_SHIFT            (2U)
-/*! DSLP_COUNT_USE - Deep Sleep counter for use */
-#define SMM_CNFG_DSLP_COUNT_USE(x)               (((uint32_t)(((uint32_t)(x)) << SMM_CNFG_DSLP_COUNT_USE_SHIFT)) & SMM_CNFG_DSLP_COUNT_USE_MASK)
+#define SMM_CNFG_DS_CNTR_USE_MASK                (0x4U)
+#define SMM_CNFG_DS_CNTR_USE_SHIFT               (2U)
+/*! DS_CNTR_USE - Deep Sleep counter for use
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define SMM_CNFG_DS_CNTR_USE(x)                  (((uint32_t)(((uint32_t)(x)) << SMM_CNFG_DS_CNTR_USE_SHIFT)) & SMM_CNFG_DS_CNTR_USE_MASK)
 
-#define SMM_CNFG_DSLP_COUNT_STRT_MASK            (0x8U)
-#define SMM_CNFG_DSLP_COUNT_STRT_SHIFT           (3U)
-/*! DSLP_COUNT_STRT - Deep Sleep counter start */
-#define SMM_CNFG_DSLP_COUNT_STRT(x)              (((uint32_t)(((uint32_t)(x)) << SMM_CNFG_DSLP_COUNT_STRT_SHIFT)) & SMM_CNFG_DSLP_COUNT_STRT_MASK)
+#define SMM_CNFG_DS_CNTR_STRT_MASK               (0x8U)
+#define SMM_CNFG_DS_CNTR_STRT_SHIFT              (3U)
+/*! DS_CNTR_STRT - Deep Sleep counter start
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define SMM_CNFG_DS_CNTR_STRT(x)                 (((uint32_t)(((uint32_t)(x)) << SMM_CNFG_DS_CNTR_STRT_SHIFT)) & SMM_CNFG_DS_CNTR_STRT_MASK)
 
-#define SMM_CNFG_DSLP_COUNT_RST_MASK             (0x10U)
-#define SMM_CNFG_DSLP_COUNT_RST_SHIFT            (4U)
-/*! DSLP_COUNT_RST - Deep Sleep counter reset */
-#define SMM_CNFG_DSLP_COUNT_RST(x)               (((uint32_t)(((uint32_t)(x)) << SMM_CNFG_DSLP_COUNT_RST_SHIFT)) & SMM_CNFG_DSLP_COUNT_RST_MASK)
+#define SMM_CNFG_DS_CNTR_RST_MASK                (0x10U)
+#define SMM_CNFG_DS_CNTR_RST_SHIFT               (4U)
+/*! DS_CNTR_RST - Deep Sleep Counter Reset
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define SMM_CNFG_DS_CNTR_RST(x)                  (((uint32_t)(((uint32_t)(x)) << SMM_CNFG_DS_CNTR_RST_SHIFT)) & SMM_CNFG_DS_CNTR_RST_MASK)
 
 #define SMM_CNFG_WTCHDG_USE_INT_MASK             (0x20U)
 #define SMM_CNFG_WTCHDG_USE_INT_SHIFT            (5U)
@@ -183,12 +191,18 @@ typedef struct {
 
 #define SMM_CNFG_MAIN_ISO_DSBL_MASK              (0x40U)
 #define SMM_CNFG_MAIN_ISO_DSBL_SHIFT             (6U)
-/*! MAIN_ISO_DSBL - Main CPU I/O ISO */
+/*! MAIN_ISO_DSBL - Main CPU ISO Disable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define SMM_CNFG_MAIN_ISO_DSBL(x)                (((uint32_t)(((uint32_t)(x)) << SMM_CNFG_MAIN_ISO_DSBL_SHIFT)) & SMM_CNFG_MAIN_ISO_DSBL_MASK)
 
 #define SMM_CNFG_AON_ISO_DSBL_MASK               (0x80U)
 #define SMM_CNFG_AON_ISO_DSBL_SHIFT              (7U)
-/*! AON_ISO_DSBL - AON CPU I/O ISO signals */
+/*! AON_ISO_DSBL - AON CPU ISO Disable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define SMM_CNFG_AON_ISO_DSBL(x)                 (((uint32_t)(((uint32_t)(x)) << SMM_CNFG_AON_ISO_DSBL_SHIFT)) & SMM_CNFG_AON_ISO_DSBL_MASK)
 /*! @} */
 
@@ -197,7 +211,7 @@ typedef struct {
 
 #define SMM_WKUP_MAIN_WKUP_SRC_MAIN_CPU_MASK     (0xFFFFU)
 #define SMM_WKUP_MAIN_WKUP_SRC_MAIN_CPU_SHIFT    (0U)
-/*! WKUP_SRC_MAIN_CPU - Bit selection of the wakeup sources to the main CPU */
+/*! WKUP_SRC_MAIN_CPU - Bit selection of the wakeup sources to the Main CPU */
 #define SMM_WKUP_MAIN_WKUP_SRC_MAIN_CPU(x)       (((uint32_t)(((uint32_t)(x)) << SMM_WKUP_MAIN_WKUP_SRC_MAIN_CPU_SHIFT)) & SMM_WKUP_MAIN_WKUP_SRC_MAIN_CPU_MASK)
 /*! @} */
 
@@ -229,7 +243,7 @@ typedef struct {
 
 #define SMM_STAT_DPD_STATE_MASK                  (0xEU)
 #define SMM_STAT_DPD_STATE_SHIFT                 (1U)
-/*! DPD_STATE - Deep Sleep, Power Down, and Deep Power Down state
+/*! DPD_STATE - Deep Sleep, Power Down, and Deep Power Down State
  *  0b000..All on
  *  0b001..Deep Sleep
  *  0b010..DPD1
@@ -246,30 +260,33 @@ typedef struct {
 /*! EXT_INT_A - External interrupt active */
 #define SMM_STAT_EXT_INT_A(x)                    (((uint32_t)(((uint32_t)(x)) << SMM_STAT_EXT_INT_A_SHIFT)) & SMM_STAT_EXT_INT_A_MASK)
 
-#define SMM_STAT_COMP_MATCH_MASK                 (0x20U)
-#define SMM_STAT_COMP_MATCH_SHIFT                (5U)
-/*! COMP_MATCH - Comparator match */
-#define SMM_STAT_COMP_MATCH(x)                   (((uint32_t)(((uint32_t)(x)) << SMM_STAT_COMP_MATCH_SHIFT)) & SMM_STAT_COMP_MATCH_MASK)
+#define SMM_STAT_LPACMP_MATCH_MASK               (0x20U)
+#define SMM_STAT_LPACMP_MATCH_SHIFT              (5U)
+/*! LPACMP_MATCH - Comparator match */
+#define SMM_STAT_LPACMP_MATCH(x)                 (((uint32_t)(((uint32_t)(x)) << SMM_STAT_LPACMP_MATCH_SHIFT)) & SMM_STAT_LPACMP_MATCH_MASK)
 
-#define SMM_STAT_DPSLP_CNTR_M_MASK               (0x40U)
-#define SMM_STAT_DPSLP_CNTR_M_SHIFT              (6U)
-/*! DPSLP_CNTR_M - Deep Sleep counter match */
-#define SMM_STAT_DPSLP_CNTR_M(x)                 (((uint32_t)(((uint32_t)(x)) << SMM_STAT_DPSLP_CNTR_M_SHIFT)) & SMM_STAT_DPSLP_CNTR_M_MASK)
+#define SMM_STAT_DS_CNTR_M_MASK                  (0x40U)
+#define SMM_STAT_DS_CNTR_M_SHIFT                 (6U)
+/*! DS_CNTR_M - Deep Sleep counter match */
+#define SMM_STAT_DS_CNTR_M(x)                    (((uint32_t)(((uint32_t)(x)) << SMM_STAT_DS_CNTR_M_SHIFT)) & SMM_STAT_DS_CNTR_M_MASK)
 
 #define SMM_STAT_DPD_SEQ_END_MASK                (0x80U)
 #define SMM_STAT_DPD_SEQ_END_SHIFT               (7U)
-/*! DPD_SEQ_END - Deep Sleep, Powe Down, and Deep Power Down sequence end */
+/*! DPD_SEQ_END - Deep Sleep, Power Down, and Deep Power Down sequence end */
 #define SMM_STAT_DPD_SEQ_END(x)                  (((uint32_t)(((uint32_t)(x)) << SMM_STAT_DPD_SEQ_END_SHIFT)) & SMM_STAT_DPD_SEQ_END_MASK)
 
-#define SMM_STAT_COMP_MATCH_IE_EN_MASK           (0x100U)
-#define SMM_STAT_COMP_MATCH_IE_EN_SHIFT          (8U)
-/*! COMP_MATCH_IE_EN - Comparator match interrupt enable */
-#define SMM_STAT_COMP_MATCH_IE_EN(x)             (((uint32_t)(((uint32_t)(x)) << SMM_STAT_COMP_MATCH_IE_EN_SHIFT)) & SMM_STAT_COMP_MATCH_IE_EN_MASK)
+#define SMM_STAT_LPACMP_MATCH_IE_EN_MASK         (0x100U)
+#define SMM_STAT_LPACMP_MATCH_IE_EN_SHIFT        (8U)
+/*! LPACMP_MATCH_IE_EN - Comparator Match Interrupt Enable */
+#define SMM_STAT_LPACMP_MATCH_IE_EN(x)           (((uint32_t)(((uint32_t)(x)) << SMM_STAT_LPACMP_MATCH_IE_EN_SHIFT)) & SMM_STAT_LPACMP_MATCH_IE_EN_MASK)
 
-#define SMM_STAT_DPSLP_CNTR_IE_EN_MASK           (0x200U)
-#define SMM_STAT_DPSLP_CNTR_IE_EN_SHIFT          (9U)
-/*! DPSLP_CNTR_IE_EN - Deep Sleep counter interrupt enable */
-#define SMM_STAT_DPSLP_CNTR_IE_EN(x)             (((uint32_t)(((uint32_t)(x)) << SMM_STAT_DPSLP_CNTR_IE_EN_SHIFT)) & SMM_STAT_DPSLP_CNTR_IE_EN_MASK)
+#define SMM_STAT_DS_CNTR_IE_EN_MASK              (0x200U)
+#define SMM_STAT_DS_CNTR_IE_EN_SHIFT             (9U)
+/*! DS_CNTR_IE_EN - Deep Sleep counter interrupt enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define SMM_STAT_DS_CNTR_IE_EN(x)                (((uint32_t)(((uint32_t)(x)) << SMM_STAT_DS_CNTR_IE_EN_SHIFT)) & SMM_STAT_DS_CNTR_IE_EN_MASK)
 
 #define SMM_STAT_RST_B_WKP_MASK                  (0x400U)
 #define SMM_STAT_RST_B_WKP_SHIFT                 (10U)
@@ -278,7 +295,10 @@ typedef struct {
 
 #define SMM_STAT_QCH_TIMEOUT_EN_MASK             (0x1000U)
 #define SMM_STAT_QCH_TIMEOUT_EN_SHIFT            (12U)
-/*! QCH_TIMEOUT_EN - Q channel timeout enable */
+/*! QCH_TIMEOUT_EN - Q channel timeout enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define SMM_STAT_QCH_TIMEOUT_EN(x)               (((uint32_t)(((uint32_t)(x)) << SMM_STAT_QCH_TIMEOUT_EN_SHIFT)) & SMM_STAT_QCH_TIMEOUT_EN_MASK)
 
 #define SMM_STAT_QCH_TIMEOUT_INT_MASK            (0x2000U)
@@ -302,54 +322,72 @@ typedef struct {
 
 #define SMM_PWDN_CONFIG_DPD_STRT_MASK            (0x1U)
 #define SMM_PWDN_CONFIG_DPD_STRT_SHIFT           (0U)
-/*! DPD_STRT - Start */
+/*! DPD_STRT - Start
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define SMM_PWDN_CONFIG_DPD_STRT(x)              (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_DPD_STRT_SHIFT)) & SMM_PWDN_CONFIG_DPD_STRT_MASK)
 
 #define SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK (0x2U)
 #define SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_SHIFT (1U)
-/*! DPD1_VDD_CORE_MAIN_SRC - DPD1_MAIN power supply
+/*! DPD1_VDD_CORE_MAIN_SRC - DPD1 MAIN Power Supply
  *  0b0..Keep as is
- *  0b1..Move to Low Power mode of the DCDC fixed.
+ *  0b1..Move to Low Power mode of the DCDC_MAIN.
  */
 #define SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC(x) (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_SHIFT)) & SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK)
 
 #define SMM_PWDN_CONFIG_ADVC2P0_DPD2_ACT_MASK    (0x4U)
 #define SMM_PWDN_CONFIG_ADVC2P0_DPD2_ACT_SHIFT   (2U)
-/*! ADVC2P0_DPD2_ACT - ADVC2P0 DPD2 active */
+/*! ADVC2P0_DPD2_ACT - ADVC2P0 DPD2 active
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define SMM_PWDN_CONFIG_ADVC2P0_DPD2_ACT(x)      (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_ADVC2P0_DPD2_ACT_SHIFT)) & SMM_PWDN_CONFIG_ADVC2P0_DPD2_ACT_MASK)
 
-#define SMM_PWDN_CONFIG_BGR_PULSE_MASK           (0x8U)
-#define SMM_PWDN_CONFIG_BGR_PULSE_SHIFT          (3U)
-/*! BGR_PULSE - BGR Move To Pulse Mode
- *  0b0..Disable shutdown of BGR in DPD1/2 modes
- *  0b1..Enable shutdown of BGR in DPD1/2 modes
+#define SMM_PWDN_CONFIG_BGR_PULSE_MODE_EN_MASK   (0x8U)
+#define SMM_PWDN_CONFIG_BGR_PULSE_MODE_EN_SHIFT  (3U)
+/*! BGR_PULSE_MODE_EN - BGR Pulse Mode Enable
+ *  0b0..BGR operates in high-power mode
+ *  0b1..BGR operates in pulse mode, which helps reduce overall power consumption during DPD1/2 modes
  */
-#define SMM_PWDN_CONFIG_BGR_PULSE(x)             (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_BGR_PULSE_SHIFT)) & SMM_PWDN_CONFIG_BGR_PULSE_MASK)
+#define SMM_PWDN_CONFIG_BGR_PULSE_MODE_EN(x)     (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_BGR_PULSE_MODE_EN_SHIFT)) & SMM_PWDN_CONFIG_BGR_PULSE_MODE_EN_MASK)
 
 #define SMM_PWDN_CONFIG_DPD3_SHTDWN_MASK         (0x20U)
 #define SMM_PWDN_CONFIG_DPD3_SHTDWN_SHIFT        (5U)
-/*! DPD3_SHTDWN - Shutdown */
+/*! DPD3_SHTDWN - Shutdown
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define SMM_PWDN_CONFIG_DPD3_SHTDWN(x)           (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_DPD3_SHTDWN_SHIFT)) & SMM_PWDN_CONFIG_DPD3_SHTDWN_MASK)
 
 #define SMM_PWDN_CONFIG_DPD2_AON_MASK            (0x40U)
 #define SMM_PWDN_CONFIG_DPD2_AON_SHIFT           (6U)
-/*! DPD2_AON - DPD2 AON */
+/*! DPD2_AON - DPD2 AON
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define SMM_PWDN_CONFIG_DPD2_AON(x)              (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_DPD2_AON_SHIFT)) & SMM_PWDN_CONFIG_DPD2_AON_MASK)
 
 #define SMM_PWDN_CONFIG_DPD_ABRT_MASK            (0x80U)
 #define SMM_PWDN_CONFIG_DPD_ABRT_SHIFT           (7U)
-/*! DPD_ABRT - Abort DPD Mode Entry */
+/*! DPD_ABRT - Abort DPD Mode Entry
+ *  0b0..Not abort
+ *  0b1..Abort
+ */
 #define SMM_PWDN_CONFIG_DPD_ABRT(x)              (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_DPD_ABRT_SHIFT)) & SMM_PWDN_CONFIG_DPD_ABRT_MASK)
 
 #define SMM_PWDN_CONFIG_Q_TMT_EN_MASK            (0x100U)
 #define SMM_PWDN_CONFIG_Q_TMT_EN_SHIFT           (8U)
-/*! Q_TMT_EN - Q timeout enable */
+/*! Q_TMT_EN - Q timeout enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define SMM_PWDN_CONFIG_Q_TMT_EN(x)              (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_Q_TMT_EN_SHIFT)) & SMM_PWDN_CONFIG_Q_TMT_EN_MASK)
 
 #define SMM_PWDN_CONFIG_AON_DPD_CLK_SEL_MASK     (0x200U)
 #define SMM_PWDN_CONFIG_AON_DPD_CLK_SEL_SHIFT    (9U)
 /*! AON_DPD_CLK_SEL - AON DPD2 Clock Selector
- *  0b0..Move to 32KHz at DPD2
+ *  0b0..Move to 32 kHz at DPD2
  *  0b1..Remain at AON_CLK at DPD2
  */
 #define SMM_PWDN_CONFIG_AON_DPD_CLK_SEL(x)       (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_AON_DPD_CLK_SEL_SHIFT)) & SMM_PWDN_CONFIG_AON_DPD_CLK_SEL_MASK)
@@ -361,61 +399,67 @@ typedef struct {
 
 #define SMM_PWDN_CONFIG_SRAM_CNTRL_MASK          (0x3800U)
 #define SMM_PWDN_CONFIG_SRAM_CNTRL_SHIFT         (11U)
-/*! SRAM_CNTRL - SRAM Bn PS control */
+/*! SRAM_CNTRL - AON SRAM Power Switch Control */
 #define SMM_PWDN_CONFIG_SRAM_CNTRL(x)            (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_SRAM_CNTRL_SHIFT)) & SMM_PWDN_CONFIG_SRAM_CNTRL_MASK)
 
-#define SMM_PWDN_CONFIG_CTRL_SRAM_DPD2_MASK      (0x4000U)
-#define SMM_PWDN_CONFIG_CTRL_SRAM_DPD2_SHIFT     (14U)
-/*! CTRL_SRAM_DPD2 - SRAM Bn PS control during DPD2 */
-#define SMM_PWDN_CONFIG_CTRL_SRAM_DPD2(x)        (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_CTRL_SRAM_DPD2_SHIFT)) & SMM_PWDN_CONFIG_CTRL_SRAM_DPD2_MASK)
+#define SMM_PWDN_CONFIG_SRAM_ISO_CTRL_MASK       (0x4000U)
+#define SMM_PWDN_CONFIG_SRAM_ISO_CTRL_SHIFT      (14U)
+/*! SRAM_ISO_CTRL - SRAM ISO Control
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define SMM_PWDN_CONFIG_SRAM_ISO_CTRL(x)         (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_SRAM_ISO_CTRL_SHIFT)) & SMM_PWDN_CONFIG_SRAM_ISO_CTRL_MASK)
 /*! @} */
 
-/*! @name DPSLP_COUNT - Deep Sleep count */
+/*! @name DEEP_SLEEP_CNT - Deep Sleep Counter */
 /*! @{ */
 
-#define SMM_DPSLP_COUNT_DPSLP_CNT_MASK           (0xFFFFU)
-#define SMM_DPSLP_COUNT_DPSLP_CNT_SHIFT          (0U)
-/*! DPSLP_CNT - Deep Sleep counter */
-#define SMM_DPSLP_COUNT_DPSLP_CNT(x)             (((uint32_t)(((uint32_t)(x)) << SMM_DPSLP_COUNT_DPSLP_CNT_SHIFT)) & SMM_DPSLP_COUNT_DPSLP_CNT_MASK)
+#define SMM_DEEP_SLEEP_CNT_DS_CNTR_MASK          (0xFFFFU)
+#define SMM_DEEP_SLEEP_CNT_DS_CNTR_SHIFT         (0U)
+/*! DS_CNTR - Deep Sleep counter */
+#define SMM_DEEP_SLEEP_CNT_DS_CNTR(x)            (((uint32_t)(((uint32_t)(x)) << SMM_DEEP_SLEEP_CNT_DS_CNTR_SHIFT)) & SMM_DEEP_SLEEP_CNT_DS_CNTR_MASK)
 /*! @} */
 
-/*! @name RTC_DCDC_CNTRL - RTC DCDC Control */
+/*! @name RTC_LDO_CNTRL - RTC LDO Control */
 /*! @{ */
 
-#define SMM_RTC_DCDC_CNTRL_LDO_CONFIG_MASK       (0x3FU)
-#define SMM_RTC_DCDC_CNTRL_LDO_CONFIG_SHIFT      (0U)
+#define SMM_RTC_LDO_CNTRL_LDO_CONFIG_MASK        (0x3FU)
+#define SMM_RTC_LDO_CNTRL_LDO_CONFIG_SHIFT       (0U)
 /*! LDO_CONFIG - RTC LP LDO voltage configuration */
-#define SMM_RTC_DCDC_CNTRL_LDO_CONFIG(x)         (((uint32_t)(((uint32_t)(x)) << SMM_RTC_DCDC_CNTRL_LDO_CONFIG_SHIFT)) & SMM_RTC_DCDC_CNTRL_LDO_CONFIG_MASK)
+#define SMM_RTC_LDO_CNTRL_LDO_CONFIG(x)          (((uint32_t)(((uint32_t)(x)) << SMM_RTC_LDO_CNTRL_LDO_CONFIG_SHIFT)) & SMM_RTC_LDO_CNTRL_LDO_CONFIG_MASK)
 
-#define SMM_RTC_DCDC_CNTRL_LDO_EN_MASK           (0x40U)
-#define SMM_RTC_DCDC_CNTRL_LDO_EN_SHIFT          (6U)
-/*! LDO_EN - RTC LDO enable */
-#define SMM_RTC_DCDC_CNTRL_LDO_EN(x)             (((uint32_t)(((uint32_t)(x)) << SMM_RTC_DCDC_CNTRL_LDO_EN_SHIFT)) & SMM_RTC_DCDC_CNTRL_LDO_EN_MASK)
+#define SMM_RTC_LDO_CNTRL_LDO_EN_MASK            (0x40U)
+#define SMM_RTC_LDO_CNTRL_LDO_EN_SHIFT           (6U)
+/*! LDO_EN - RTC LDO enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define SMM_RTC_LDO_CNTRL_LDO_EN(x)              (((uint32_t)(((uint32_t)(x)) << SMM_RTC_LDO_CNTRL_LDO_EN_SHIFT)) & SMM_RTC_LDO_CNTRL_LDO_EN_MASK)
 
-#define SMM_RTC_DCDC_CNTRL_ANA_RESET_N_MASK      (0x200U)
-#define SMM_RTC_DCDC_CNTRL_ANA_RESET_N_SHIFT     (9U)
+#define SMM_RTC_LDO_CNTRL_ANA_RESET_N_MASK       (0x200U)
+#define SMM_RTC_LDO_CNTRL_ANA_RESET_N_SHIFT      (9U)
 /*! ANA_RESET_N - RTC analog reset */
-#define SMM_RTC_DCDC_CNTRL_ANA_RESET_N(x)        (((uint32_t)(((uint32_t)(x)) << SMM_RTC_DCDC_CNTRL_ANA_RESET_N_SHIFT)) & SMM_RTC_DCDC_CNTRL_ANA_RESET_N_MASK)
+#define SMM_RTC_LDO_CNTRL_ANA_RESET_N(x)         (((uint32_t)(((uint32_t)(x)) << SMM_RTC_LDO_CNTRL_ANA_RESET_N_SHIFT)) & SMM_RTC_LDO_CNTRL_ANA_RESET_N_MASK)
 
-#define SMM_RTC_DCDC_CNTRL_DGTL_RST_N_MASK       (0x400U)
-#define SMM_RTC_DCDC_CNTRL_DGTL_RST_N_SHIFT      (10U)
+#define SMM_RTC_LDO_CNTRL_DGTL_RST_N_MASK        (0x400U)
+#define SMM_RTC_LDO_CNTRL_DGTL_RST_N_SHIFT       (10U)
 /*! DGTL_RST_N - RTC digital block reset */
-#define SMM_RTC_DCDC_CNTRL_DGTL_RST_N(x)         (((uint32_t)(((uint32_t)(x)) << SMM_RTC_DCDC_CNTRL_DGTL_RST_N_SHIFT)) & SMM_RTC_DCDC_CNTRL_DGTL_RST_N_MASK)
+#define SMM_RTC_LDO_CNTRL_DGTL_RST_N(x)          (((uint32_t)(((uint32_t)(x)) << SMM_RTC_LDO_CNTRL_DGTL_RST_N_SHIFT)) & SMM_RTC_LDO_CNTRL_DGTL_RST_N_MASK)
 
-#define SMM_RTC_DCDC_CNTRL_ISO_MASK              (0x800U)
-#define SMM_RTC_DCDC_CNTRL_ISO_SHIFT             (11U)
+#define SMM_RTC_LDO_CNTRL_ISO_MASK               (0x800U)
+#define SMM_RTC_LDO_CNTRL_ISO_SHIFT              (11U)
 /*! ISO - RTC ISO signal */
-#define SMM_RTC_DCDC_CNTRL_ISO(x)                (((uint32_t)(((uint32_t)(x)) << SMM_RTC_DCDC_CNTRL_ISO_SHIFT)) & SMM_RTC_DCDC_CNTRL_ISO_MASK)
+#define SMM_RTC_LDO_CNTRL_ISO(x)                 (((uint32_t)(((uint32_t)(x)) << SMM_RTC_LDO_CNTRL_ISO_SHIFT)) & SMM_RTC_LDO_CNTRL_ISO_MASK)
 
-#define SMM_RTC_DCDC_CNTRL_STOP_DIG_CLK_MASK     (0x1000U)
-#define SMM_RTC_DCDC_CNTRL_STOP_DIG_CLK_SHIFT    (12U)
+#define SMM_RTC_LDO_CNTRL_STOP_DIG_CLK_MASK      (0x1000U)
+#define SMM_RTC_LDO_CNTRL_STOP_DIG_CLK_SHIFT     (12U)
 /*! STOP_DIG_CLK - Stop digital clock */
-#define SMM_RTC_DCDC_CNTRL_STOP_DIG_CLK(x)       (((uint32_t)(((uint32_t)(x)) << SMM_RTC_DCDC_CNTRL_STOP_DIG_CLK_SHIFT)) & SMM_RTC_DCDC_CNTRL_STOP_DIG_CLK_MASK)
+#define SMM_RTC_LDO_CNTRL_STOP_DIG_CLK(x)        (((uint32_t)(((uint32_t)(x)) << SMM_RTC_LDO_CNTRL_STOP_DIG_CLK_SHIFT)) & SMM_RTC_LDO_CNTRL_STOP_DIG_CLK_MASK)
 
-#define SMM_RTC_DCDC_CNTRL_LDO_PULDWN_EN_MASK    (0x2000U)
-#define SMM_RTC_DCDC_CNTRL_LDO_PULDWN_EN_SHIFT   (13U)
+#define SMM_RTC_LDO_CNTRL_LDO_PULDWN_EN_MASK     (0x2000U)
+#define SMM_RTC_LDO_CNTRL_LDO_PULDWN_EN_SHIFT    (13U)
 /*! LDO_PULDWN_EN - RTC LDO pulldown */
-#define SMM_RTC_DCDC_CNTRL_LDO_PULDWN_EN(x)      (((uint32_t)(((uint32_t)(x)) << SMM_RTC_DCDC_CNTRL_LDO_PULDWN_EN_SHIFT)) & SMM_RTC_DCDC_CNTRL_LDO_PULDWN_EN_MASK)
+#define SMM_RTC_LDO_CNTRL_LDO_PULDWN_EN(x)       (((uint32_t)(((uint32_t)(x)) << SMM_RTC_LDO_CNTRL_LDO_PULDWN_EN_SHIFT)) & SMM_RTC_LDO_CNTRL_LDO_PULDWN_EN_MASK)
 /*! @} */
 
 /*! @name RTC_XTAL_CONFG1 - RTC analog XTAL configuration */
@@ -423,7 +467,10 @@ typedef struct {
 
 #define SMM_RTC_XTAL_CONFG1_XTAL_EN_MASK         (0x1U)
 #define SMM_RTC_XTAL_CONFG1_XTAL_EN_SHIFT        (0U)
-/*! XTAL_EN - XTAL enable */
+/*! XTAL_EN - XTAL Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define SMM_RTC_XTAL_CONFG1_XTAL_EN(x)           (((uint32_t)(((uint32_t)(x)) << SMM_RTC_XTAL_CONFG1_XTAL_EN_SHIFT)) & SMM_RTC_XTAL_CONFG1_XTAL_EN_MASK)
 
 #define SMM_RTC_XTAL_CONFG1_AMPSEL_MASK          (0x6U)
@@ -448,7 +495,10 @@ typedef struct {
 
 #define SMM_RTC_XTAL_CONFG1_FAIL_RST_EN_MASK     (0x4000U)
 #define SMM_RTC_XTAL_CONFG1_FAIL_RST_EN_SHIFT    (14U)
-/*! FAIL_RST_EN - Enable XTAL fail reset */
+/*! FAIL_RST_EN - Enable XTAL Fail Reset
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define SMM_RTC_XTAL_CONFG1_FAIL_RST_EN(x)       (((uint32_t)(((uint32_t)(x)) << SMM_RTC_XTAL_CONFG1_FAIL_RST_EN_SHIFT)) & SMM_RTC_XTAL_CONFG1_FAIL_RST_EN_MASK)
 
 #define SMM_RTC_XTAL_CONFG1_CRNT_MROR_EN_MASK    (0x8000U)
@@ -573,7 +623,10 @@ typedef struct {
 
 #define SMM_RTC_ANLG_XTAL_RTC_ALV_DTCT_EN_MASK   (0x8000U)
 #define SMM_RTC_ANLG_XTAL_RTC_ALV_DTCT_EN_SHIFT  (15U)
-/*! RTC_ALV_DTCT_EN - RTC alive detection enable */
+/*! RTC_ALV_DTCT_EN - RTC alive detection enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define SMM_RTC_ANLG_XTAL_RTC_ALV_DTCT_EN(x)     (((uint32_t)(((uint32_t)(x)) << SMM_RTC_ANLG_XTAL_RTC_ALV_DTCT_EN_SHIFT)) & SMM_RTC_ANLG_XTAL_RTC_ALV_DTCT_EN_MASK)
 /*! @} */
 
@@ -582,7 +635,10 @@ typedef struct {
 
 #define SMM_MEMORY_RTN_RETAIN_EN_MASK            (0x1U)
 #define SMM_MEMORY_RTN_RETAIN_EN_SHIFT           (0U)
-/*! RETAIN_EN - Retain enable */
+/*! RETAIN_EN - Retain enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define SMM_MEMORY_RTN_RETAIN_EN(x)              (((uint32_t)(((uint32_t)(x)) << SMM_MEMORY_RTN_RETAIN_EN_SHIFT)) & SMM_MEMORY_RTN_RETAIN_EN_MASK)
 
 #define SMM_MEMORY_RTN_MAIN_CPU_SRAM_RET_MASK    (0x3FEU)
@@ -592,12 +648,15 @@ typedef struct {
 
 #define SMM_MEMORY_RTN_CPU_SRAMBn_PWD_MASK       (0x1C00U)
 #define SMM_MEMORY_RTN_CPU_SRAMBn_PWD_SHIFT      (10U)
-/*! CPU_SRAMBn_PWD - AON CPU core RAM powerdown */
+/*! CPU_SRAMBn_PWD - AON core SRAMs Powerdown */
 #define SMM_MEMORY_RTN_CPU_SRAMBn_PWD(x)         (((uint32_t)(((uint32_t)(x)) << SMM_MEMORY_RTN_CPU_SRAMBn_PWD_SHIFT)) & SMM_MEMORY_RTN_CPU_SRAMBn_PWD_MASK)
 
 #define SMM_MEMORY_RTN_IVS_EN_MASK               (0x4000U)
 #define SMM_MEMORY_RTN_IVS_EN_SHIFT              (14U)
-/*! IVS_EN - IVS enable */
+/*! IVS_EN - IVS enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define SMM_MEMORY_RTN_IVS_EN(x)                 (((uint32_t)(((uint32_t)(x)) << SMM_MEMORY_RTN_IVS_EN_SHIFT)) & SMM_MEMORY_RTN_IVS_EN_MASK)
 /*! @} */
 
@@ -606,7 +665,10 @@ typedef struct {
 
 #define SMM_BIAS_CTRL_BIAS_EN_MASK               (0x1U)
 #define SMM_BIAS_CTRL_BIAS_EN_SHIFT              (0U)
-/*! BIAS_EN - Enable XTAL */
+/*! BIAS_EN - Enable XTAL
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define SMM_BIAS_CTRL_BIAS_EN(x)                 (((uint32_t)(((uint32_t)(x)) << SMM_BIAS_CTRL_BIAS_EN_SHIFT)) & SMM_BIAS_CTRL_BIAS_EN_MASK)
 
 #define SMM_BIAS_CTRL_COARSE_MASK                (0x3CU)
@@ -643,47 +705,6 @@ typedef struct {
 /*! TRIM_UP - XTAL Trim up */
 #define SMM_XTAL_TRIM_TRIM_UP(x)                 (((uint32_t)(((uint32_t)(x)) << SMM_XTAL_TRIM_TRIM_UP_SHIFT)) & SMM_XTAL_TRIM_TRIM_UP_MASK)
 /*! @} */
-
-/*! @name TAMP_CTRL - Tamper Control */
-/*! @{ */
-
-#define SMM_TAMP_CTRL_READ_CNTR_STRT_MASK        (0x80U)
-#define SMM_TAMP_CTRL_READ_CNTR_STRT_SHIFT       (7U)
-/*! READ_CNTR_STRT - Read RTC Counter Latched Start */
-#define SMM_TAMP_CTRL_READ_CNTR_STRT(x)          (((uint32_t)(((uint32_t)(x)) << SMM_TAMP_CTRL_READ_CNTR_STRT_SHIFT)) & SMM_TAMP_CTRL_READ_CNTR_STRT_MASK)
-
-#define SMM_TAMP_CTRL_READ_SEC_KEY_MASK          (0x100U)
-#define SMM_TAMP_CTRL_READ_SEC_KEY_SHIFT         (8U)
-/*! READ_SEC_KEY - Read Secure Key Start */
-#define SMM_TAMP_CTRL_READ_SEC_KEY(x)            (((uint32_t)(((uint32_t)(x)) << SMM_TAMP_CTRL_READ_SEC_KEY_SHIFT)) & SMM_TAMP_CTRL_READ_SEC_KEY_MASK)
-
-#define SMM_TAMP_CTRL_READ_CNTR_READY_MASK       (0x200U)
-#define SMM_TAMP_CTRL_READ_CNTR_READY_SHIFT      (9U)
-/*! READ_CNTR_READY - Read RTC Counter Latched Ready */
-#define SMM_TAMP_CTRL_READ_CNTR_READY(x)         (((uint32_t)(((uint32_t)(x)) << SMM_TAMP_CTRL_READ_CNTR_READY_SHIFT)) & SMM_TAMP_CTRL_READ_CNTR_READY_MASK)
-
-#define SMM_TAMP_CTRL_SEC_KEY_READY_MASK         (0x400U)
-#define SMM_TAMP_CTRL_SEC_KEY_READY_SHIFT        (10U)
-/*! SEC_KEY_READY - Secure Key Ready */
-#define SMM_TAMP_CTRL_SEC_KEY_READY(x)           (((uint32_t)(((uint32_t)(x)) << SMM_TAMP_CTRL_SEC_KEY_READY_SHIFT)) & SMM_TAMP_CTRL_SEC_KEY_READY_MASK)
-
-#define SMM_TAMP_CTRL_TEMP_DET_MASK              (0x3000U)
-#define SMM_TAMP_CTRL_TEMP_DET_SHIFT             (12U)
-/*! TEMP_DET - Tamper Detected */
-#define SMM_TAMP_CTRL_TEMP_DET(x)                (((uint32_t)(((uint32_t)(x)) << SMM_TAMP_CTRL_TEMP_DET_SHIFT)) & SMM_TAMP_CTRL_TEMP_DET_MASK)
-/*! @} */
-
-/*! @name LATCHED_RTC_COUNTER - Latched RTC Counter */
-/*! @{ */
-
-#define SMM_LATCHED_RTC_COUNTER_Latched_RTC_Counter_MASK (0xFFFFU)
-#define SMM_LATCHED_RTC_COUNTER_Latched_RTC_Counter_SHIFT (0U)
-/*! Latched_RTC_Counter - Latched_RTC_Counter[x+15:x] */
-#define SMM_LATCHED_RTC_COUNTER_Latched_RTC_Counter(x) (((uint32_t)(((uint32_t)(x)) << SMM_LATCHED_RTC_COUNTER_Latched_RTC_Counter_SHIFT)) & SMM_LATCHED_RTC_COUNTER_Latched_RTC_Counter_MASK)
-/*! @} */
-
-/* The count of SMM_LATCHED_RTC_COUNTER */
-#define SMM_LATCHED_RTC_COUNTER_COUNT            (3U)
 
 
 /*!
