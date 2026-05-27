@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2023, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -367,5 +367,17 @@ void GDMA_DriverIRQHandler(void);
 void GDMA_DriverIRQHandler(void)
 {
     s_gdmaIsr(GDMA);
+    SDK_ISR_EXIT_BARRIER;
+}
+
+void GDMA_CommonDriverIRQHandler(uint32_t instance);
+void GDMA_CommonDriverIRQHandler(uint32_t instance)
+{
+    assert(instance < FSL_FEATURE_SOC_GDMA_COUNT);
+    /* Currently, GDMA has a single instance; call the ISR unconditionally for instance 0. */
+    if (instance == 0U)
+    {
+        s_gdmaIsr(GDMA);
+    }
     SDK_ISR_EXIT_BARRIER;
 }

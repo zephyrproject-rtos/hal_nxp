@@ -196,8 +196,8 @@ uint16_t NETC_SIGetVsiIndex(netc_vsi_number_t vsi);
  */
 static inline void NETC_IPFInit(NETC_SW_ENETC_Type *base, const netc_ipf_config_t *config)
 {
-    base->DOSL2CR = NETC_SW_ENETC_DOSL2CR_SAMEADDR(config->l2DiscardSmacEquDmac) |
-                    NETC_SW_ENETC_DOSL2CR_MSAMCC(config->l2DiscardMCSmac);
+    base->DOSL2CR = NETC_SW_ENETC_DOSL2CR_SAMEADDR(config->l2DiscardSmacEquDmac ? 1U : 0U) |
+                    NETC_SW_ENETC_DOSL2CR_MSAMCC(config->l2DiscardMCSmac ? 1U : 0U);
     //    base->DOSL3CR = NETC_SW_ENETC_DOSL3CR_SAMEADDR(config->l3DiscardSipEquDip);
 }
 

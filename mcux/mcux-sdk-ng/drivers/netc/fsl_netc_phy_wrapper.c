@@ -10,14 +10,14 @@ status_t NETC_PHYRead(netc_mdio_handle_t *handle, bool pcs, uint8_t devAddr, uin
 {
     uint8_t portAddr = pcs ? 0x0U : 0x10U;
 
-    return NETC_MDIOC45Read(handle, portAddr, devAddr, (regAddr >> 1U), val);
+    return NETC_MDIOC45Read(handle, portAddr, devAddr, (regAddr >> 1U) & 0xFFFFU, val);
 }
 
 status_t NETC_PHYWrite(netc_mdio_handle_t *handle, bool pcs, uint8_t devAddr, uint32_t regAddr, uint16_t val)
 {
     uint8_t portAddr = pcs ? 0x0U : 0x10U;
 
-    return NETC_MDIOC45Write(handle, portAddr, devAddr, (regAddr >> 1U), val);
+    return NETC_MDIOC45Write(handle, portAddr, devAddr, (regAddr >> 1U) & 0xFFFFU, val);
 }
 
 status_t NETC_PHYWriteBits(
@@ -27,7 +27,7 @@ status_t NETC_PHYWriteBits(
     uint16_t regValue;
     status_t status;
 
-    status = NETC_MDIOC45Read(handle, portAddr, devAddr, (regAddr >> 1U), &regValue);
+    status = NETC_MDIOC45Read(handle, portAddr, devAddr, (regAddr >> 1U) & 0xFFFFU, &regValue);
     if (status != kStatus_Success)
     {
         return status;
@@ -40,7 +40,7 @@ status_t NETC_PHYWriteBits(
         regValue |= val;
     }
 
-    return NETC_MDIOC45Write(handle, portAddr, devAddr, (regAddr >> 1U), regValue);
+    return NETC_MDIOC45Write(handle, portAddr, devAddr, (regAddr >> 1U) & 0xFFFFU, regValue);
 }
 
 status_t NETC_PHYPollBit(

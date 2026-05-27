@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2024 NXP
+ * Copyright 2017-2024,2026 NXP
  * All rights reserved.
  *
  *
@@ -27,7 +27,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief eLCDIF driver version */
-#define FSL_ELCDIF_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_ELCDIF_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*! @} */
 
 /* All IRQ flags in CTRL1 register. */
@@ -403,6 +403,7 @@ void ELCDIF_RgbModeStop(LCDIF_Type *base);
  */
 static inline void ELCDIF_SetNextBufferAddr(LCDIF_Type *base, uint32_t bufferAddr)
 {
+    assert(0U == (bufferAddr & 0x7U));
     base->NEXT_BUF = ELCDIF_ADDR_CPU_2_IP(bufferAddr);
 }
 
@@ -644,6 +645,7 @@ void ELCDIF_SetAlphaSurfaceBlendConfig(LCDIF_Type *base, const elcdif_as_blend_c
  */
 static inline void ELCDIF_SetNextAlphaSurfaceBufferAddr(LCDIF_Type *base, uint32_t bufferAddr)
 {
+    assert(0U == (bufferAddr & 0x7U));
     base->AS_NEXT_BUF = ELCDIF_ADDR_CPU_2_IP(bufferAddr);
 }
 

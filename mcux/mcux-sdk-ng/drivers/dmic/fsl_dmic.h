@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020,2025 NXP
+ * Copyright 2016-2020, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,8 +27,8 @@
  * @{
  */
 
-/*! @brief DMIC driver version 2.3.3. */
-#define FSL_DMIC_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
+/*! @brief DMIC driver version 2.3.4. */
+#define FSL_DMIC_DRIVER_VERSION (MAKE_VERSION(2, 3, 4))
 /*! @} */
 
 /*! @brief _dmic_status DMIC transfer status.*/
@@ -503,6 +503,7 @@ void DMIC_EnableIntCallback(DMIC_Type *base, dmic_callback_t cb);
  * @retval None.
  */
 void DMIC_DisableIntCallback(DMIC_Type *base, dmic_callback_t cb);
+
 /*! @} */
 
 /*!

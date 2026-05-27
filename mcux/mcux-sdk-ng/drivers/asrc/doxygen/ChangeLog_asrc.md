@@ -1,5 +1,9 @@
 # ASRC
 
+## [2.1.5]
+- New Features
+  - Added common IRQ handler entry ASRC_CommonDriverIRQHandler.
+
 ## [2.1.4]
 - Improvements
   - Aligned clock source configuration for ASRC peripheral

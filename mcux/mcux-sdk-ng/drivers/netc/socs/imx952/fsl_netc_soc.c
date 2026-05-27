@@ -25,6 +25,8 @@ void NETC_SocGetBaseResource(netc_enetc_hw_t *hw, netc_hw_si_idx_t si)
     uint8_t siNum    = getSiNum(si);
     uint8_t siIdx    = getSiIdx(si);
 
+    assert(1U + siIdx < sizeof(s_netcBases) / sizeof(s_netcBases[0]));
+
     hw->si             = s_enetcSiBases[siIdx];
     hw->base           = s_netcEnetcBases[instance];
     hw->common         = (NETC_SW_ENETC_Type *)((uintptr_t)hw->base + 0x1000U);
@@ -38,6 +40,7 @@ void NETC_SocGetBaseResource(netc_enetc_hw_t *hw, netc_hw_si_idx_t si)
     }
     else
     {
+        assert(siIdx >= 2U);
         hw->func.vf   = s_netcVfBases[siIdx - 2U];
         hw->msixTable = (netc_msix_entry_t *)((uintptr_t)hw->si + 0x60000U);
     }
@@ -66,7 +69,7 @@ static status_t NETC_PHYSelectMPLL(netc_mdio_handle_t *handle, bool is_2p5g)
                       REG_GLOBAL_CTRL_EX_4_PHY_PMA_PWR_STABLE);
 
     NETC_PHYRead(handle, false, PHY_DEV_GLOBAL, REG_GLOBAL_CTRL_EX_0, &val);
-    val = is_2p5g ? (val | REG_GLOBAL_CTRL_EX_0_MPLLB_SEL) : (val & ~REG_GLOBAL_CTRL_EX_0_MPLLB_SEL);
+    val = (uint16_t)((is_2p5g ? (val | REG_GLOBAL_CTRL_EX_0_MPLLB_SEL) : (val & ~REG_GLOBAL_CTRL_EX_0_MPLLB_SEL)) & 0xFFFFU);
     NETC_PHYWrite(handle, false, PHY_DEV_GLOBAL, REG_GLOBAL_CTRL_EX_0, val);
 
     SDK_DelayAtLeastUs(1000, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2023, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_GDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+#define FSL_GDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*! @} */
 
 /*!
@@ -523,6 +523,13 @@ void GDMA_AbortTransfer(gdma_handle_t *handle);
  * @param base GDMA peripheral.
  */
 void GDMA_IRQHandle(GDMA_Type *base);
+
+/*!
+ * @brief GDMA parameterized IRQ handler entry.
+ *
+ * @param instance GDMA instance index.
+ */
+void GDMA_CommonDriverIRQHandler(uint32_t instance);
 
 /*! @} */
 

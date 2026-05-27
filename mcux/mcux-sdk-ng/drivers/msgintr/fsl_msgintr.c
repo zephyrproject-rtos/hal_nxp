@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2023, 2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -69,6 +69,26 @@ status_t MSGINTR_Deinit(MSGINTR_Type *base)
     }
 
     return kStatus_Success;
+}
+
+void MSGINTR_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_msgintrBases))
+    {
+        if (s_msgintrCallback[instance] != NULL)
+        {
+            uint32_t pendingIntr;
+            for (uint8_t channel = 0U; channel < FSL_MSGINTR_CHANNEL_NUM; channel++)
+            {
+                pendingIntr = s_msgintrBases[instance]->MSI[channel].MSIR;
+                if (pendingIntr != 0U)
+                {
+                    s_msgintrCallback[instance](s_msgintrBases[instance], channel, pendingIntr);
+                }
+            }
+        }
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if defined(MSGINTR1)

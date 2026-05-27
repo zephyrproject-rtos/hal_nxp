@@ -1,5 +1,12 @@
 # SLCD
 
+## [2.1.1]
+
+- Improvements
+  - Update slcd_duty_cycle_t, slcd_phase_type_t and slcd_phase_index_t, MCXA3xx SoCs only have
+    48 pins and 4 pack plane phases.
+  - Added check for front plane pin index and back plane phase index.
+
 ## [2.1.0]
 
 - New Features

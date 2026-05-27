@@ -22,9 +22,12 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Defines GDET driver version 2.1.2.
+/*! @brief Defines GDET driver version 2.1.3.
  *
  * Change log:
+ *
+ * - Version 2.1.3
+ *   - Update to KW43 GDET offering
  *
  * - Version 2.1.2
  *   - Update to MCXA577 GDET offering
@@ -43,7 +46,7 @@
  * - Version 2.0.0
  *   - initial version
  */
-#define FSL_GDET_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+#define FSL_GDET_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
 /*! @} */
 
 /*!

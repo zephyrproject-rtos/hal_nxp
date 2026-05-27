@@ -1,5 +1,10 @@
 # EDMA
 
+## [2.4.8]
+
+- New Features
+  - Added common IRQ handler entry EDMA_DriverIRQHandler.
+
 ## [2.4.7]
 
 - Bug Fixes

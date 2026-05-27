@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2025 NXP
+ * Copyright 2016-2022, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -2365,6 +2365,15 @@ void MCAN_TransferHandleIRQ(CAN_Type *base, mcan_handle_t *handle)
         /* Store Current MCAN Module Error and Status. */
         valueIR = base->IR;
     } while (0U != valueIR);
+}
+
+void MCAN_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_mcanBases))
+    {
+        s_mcanIsr(s_mcanBases[instance], s_mcanHandle[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if defined(CAN0)

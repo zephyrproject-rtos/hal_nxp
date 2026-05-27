@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I3C driver version */
-#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 14, 5))
+#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 14, 6))
 /*! @} */
 
 /*!
@@ -768,15 +768,11 @@ void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_H
 
 /*! @} */
 
-/*!
- * @addtogroup i3c_master_driver
- * @{
- */
-
 /*! @name Initialization and deinitialization */
 /*! @{ */
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Provides a default configuration for the I3C master peripheral.
  *
  * This function provides the following default configuration for the I3C master peripheral:
@@ -798,6 +794,7 @@ void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_H
 void I3C_MasterGetDefaultConfig(i3c_master_config_t *masterConfig);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Initializes the I3C master peripheral.
  *
  * This function enables the peripheral clock and initializes the I3C master peripheral as described by the user
@@ -812,6 +809,7 @@ void I3C_MasterGetDefaultConfig(i3c_master_config_t *masterConfig);
 void I3C_MasterInit(I3C_Type *base, const i3c_master_config_t *masterConfig, uint32_t sourceClock_Hz);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Deinitializes the I3C master peripheral.
  *
  * This function disables the I3C master peripheral and gates the clock. It also performs a software
@@ -831,6 +829,7 @@ status_t I3C_MasterWaitForCtrlDone(I3C_Type *base, bool waitIdle);
 status_t I3C_CheckForBusyBus(I3C_Type *base);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Set I3C module master mode.
  *
  * @param base The I3C peripheral base address.
@@ -847,6 +846,7 @@ static inline void I3C_MasterEnable(I3C_Type *base, i3c_master_enable_t enable)
 /*! @{ */
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Gets the I3C master status flags.
  *
  * A bit mask with the state of all I3C master status flags is returned. For each flag, the corresponding bit
@@ -864,6 +864,7 @@ static inline uint32_t I3C_MasterGetStatusFlags(I3C_Type *base)
 }
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Clears the I3C master status flag state.
  *
  * The following status register flags can be cleared:
@@ -887,6 +888,7 @@ static inline void I3C_MasterClearStatusFlags(I3C_Type *base, uint32_t statusMas
 }
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Gets the I3C master error status flags.
  *
  * A bit mask with the state of all I3C master error status flags is returned. For each flag, the corresponding bit
@@ -904,6 +906,7 @@ static inline uint32_t I3C_MasterGetErrorStatusFlags(I3C_Type *base)
 }
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Clears the I3C master error status flag state.
  *
  * @param base The I3C peripheral base address.
@@ -921,6 +924,7 @@ static inline void I3C_MasterClearErrorStatusFlags(I3C_Type *base, uint32_t stat
 }
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Gets the I3C master state.
  *
  * @param base The I3C peripheral base address.
@@ -934,6 +938,7 @@ i3c_master_state_t I3C_MasterGetState(I3C_Type *base);
 /*! @{ */
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Enables the I3C master interrupt requests.
  *
  * All flags except #kI3C_MasterBetweenFlag and #kI3C_MasterNackDetectFlag can be enabled as
@@ -949,6 +954,7 @@ static inline void I3C_MasterEnableInterrupts(I3C_Type *base, uint32_t interrupt
 }
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Disables the I3C master interrupt requests.
  *
  * All flags except #kI3C_MasterBetweenFlag and #kI3C_MasterNackDetectFlag can be enabled as
@@ -964,6 +970,7 @@ static inline void I3C_MasterDisableInterrupts(I3C_Type *base, uint32_t interrup
 }
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Returns the set of currently enabled I3C master interrupt requests.
  *
  * @param base The I3C peripheral base address.
@@ -976,6 +983,7 @@ static inline uint32_t I3C_MasterGetEnabledInterrupts(I3C_Type *base)
 }
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Returns the set of pending I3C master interrupt requests.
  *
  * @param base The I3C peripheral base address.
@@ -993,6 +1001,7 @@ static inline uint32_t I3C_MasterGetPendingInterrupts(I3C_Type *base)
 /*! @{ */
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Enables or disables I3C master DMA requests.
  *
  * @param base The I3C peripheral base address.
@@ -1008,6 +1017,7 @@ static inline void I3C_MasterEnableDMA(I3C_Type *base, bool enableTx, bool enabl
 }
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Gets I3C master transmit data register address for DMA transfer.
  *
  * @param base The I3C peripheral base address.
@@ -1021,6 +1031,7 @@ static inline uint32_t I3C_MasterGetTxFifoAddress(I3C_Type *base, uint32_t width
 }
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Gets I3C master receive data register address for DMA transfer.
  *
  * @param base The I3C peripheral base address.
@@ -1039,6 +1050,7 @@ static inline uint32_t I3C_MasterGetRxFifoAddress(I3C_Type *base, uint32_t width
 /*! @{ */
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Sets the watermarks for I3C master FIFOs.
  *
  * @param base The I3C peripheral base address.
@@ -1057,6 +1069,7 @@ static inline void I3C_MasterSetWatermarks(
 }
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Gets the current number of bytes in the I3C master FIFOs.
  *
  * @param base The I3C peripheral base address.
@@ -1083,6 +1096,7 @@ static inline void I3C_MasterGetFifoCounts(I3C_Type *base, size_t *rxCount, size
 /*! @{ */
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Sets the I3C bus frequency for master transactions.
  *
  * The I3C master is automatically disabled and re-enabled as necessary to configure the baud
@@ -1095,6 +1109,7 @@ static inline void I3C_MasterGetFifoCounts(I3C_Type *base, size_t *rxCount, size
 void I3C_MasterSetBaudRate(I3C_Type *base, const i3c_baudrate_hz_t *baudRate_Hz, uint32_t sourceClock_Hz);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Returns whether the bus is idle.
  *
  * Requires the master mode to be enabled.
@@ -1109,6 +1124,7 @@ static inline bool I3C_MasterGetBusIdleState(I3C_Type *base)
 }
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Sends a START signal and slave address on the I2C/I3C bus, receive size is also specified
  * in the call.
  *
@@ -1130,6 +1146,7 @@ status_t I3C_MasterStartWithRxSize(
     I3C_Type *base, i3c_bus_type_t type, uint8_t address, i3c_direction_t dir, uint8_t rxSize);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Sends a START signal and slave address on the I2C/I3C bus.
  *
  * This function is used to initiate a new master mode transfer. First, the bus state is checked to ensure
@@ -1148,6 +1165,7 @@ status_t I3C_MasterStartWithRxSize(
 status_t I3C_MasterStart(I3C_Type *base, i3c_bus_type_t type, uint8_t address, i3c_direction_t dir);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Sends a repeated START signal and slave address on the I2C/I3C bus, receive size is also specified
  * in the call.
  *
@@ -1172,6 +1190,7 @@ status_t I3C_MasterRepeatedStartWithRxSize(
     I3C_Type *base, i3c_bus_type_t type, uint8_t address, i3c_direction_t dir, uint8_t rxSize);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Sends a repeated START signal and slave address on the I2C/I3C bus.
  *
  * This function is used to send a Repeated START signal when a transfer is already in progress. Like
@@ -1196,6 +1215,7 @@ static inline status_t I3C_MasterRepeatedStart(I3C_Type *base,
 }
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Performs a polling send transfer on the I2C/I3C bus.
  *
  * Sends up to @a txSize number of bytes to the previously addressed slave device. The slave may
@@ -1218,6 +1238,7 @@ static inline status_t I3C_MasterRepeatedStart(I3C_Type *base,
 status_t I3C_MasterSend(I3C_Type *base, const void *txBuff, size_t txSize, uint32_t flags);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Performs a polling receive transfer on the I2C/I3C bus.
  *
  * @param base  The I3C peripheral base address.
@@ -1237,6 +1258,7 @@ status_t I3C_MasterSend(I3C_Type *base, const void *txBuff, size_t txSize, uint3
 status_t I3C_MasterReceive(I3C_Type *base, void *rxBuff, size_t rxSize, uint32_t flags);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Sends a STOP signal on the I2C/I3C bus.
  *
  * This function does not return until the STOP signal is seen on the bus, or an error occurs.
@@ -1250,6 +1272,7 @@ status_t I3C_MasterReceive(I3C_Type *base, void *rxBuff, size_t rxSize, uint32_t
 status_t I3C_MasterStop(I3C_Type *base);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief I3C master emit request.
  *
  * @param base The I3C peripheral base address.
@@ -1258,6 +1281,7 @@ status_t I3C_MasterStop(I3C_Type *base);
 void I3C_MasterEmitRequest(I3C_Type *base, i3c_bus_request_t masterReq);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief I3C master emit request.
  *
  * @param base The I3C peripheral base address.
@@ -1272,6 +1296,7 @@ static inline void I3C_MasterEmitIBIResponse(I3C_Type *base, i3c_ibi_response_t 
 }
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief I3C master register IBI rule.
  *
  * @param base The I3C peripheral base address.
@@ -1280,6 +1305,7 @@ static inline void I3C_MasterEmitIBIResponse(I3C_Type *base, i3c_ibi_response_t 
 void I3C_MasterRegisterIBI(I3C_Type *base, i3c_register_ibi_addr_t *ibiRule);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief I3C master get IBI rule.
  *
  * @param base The I3C peripheral base address.
@@ -1288,6 +1314,7 @@ void I3C_MasterRegisterIBI(I3C_Type *base, i3c_register_ibi_addr_t *ibiRule);
 void I3C_MasterGetIBIRules(I3C_Type *base, i3c_register_ibi_addr_t *ibiRule);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief I3C master get IBI Type.
  *
  * @param base The I3C peripheral base address.
@@ -1296,6 +1323,7 @@ void I3C_MasterGetIBIRules(I3C_Type *base, i3c_register_ibi_addr_t *ibiRule);
 i3c_ibi_type_t I3C_GetIBIType(I3C_Type *base);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief I3C master get IBI Address.
  *
  * @param base The I3C peripheral base address.
@@ -1307,6 +1335,7 @@ static inline uint8_t I3C_GetIBIAddress(I3C_Type *base)
 }
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Performs a DAA in the i3c bus with specified temporary baud rate.
  *
  * @param base The I3C peripheral base address.
@@ -1325,6 +1354,7 @@ status_t I3C_MasterProcessDAASpecifiedBaudrate(I3C_Type *base,
                                                i3c_master_daa_baudrate_t *daaBaudRate);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Performs a DAA in the i3c bus.
  *
  * @param base The I3C peripheral base address.
@@ -1342,6 +1372,7 @@ static inline status_t I3C_MasterProcessDAA(I3C_Type *base, uint8_t *addressList
 }
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Get device information list after DAA process is done.
  *
  * @param base The I3C peripheral base address.
@@ -1351,6 +1382,7 @@ static inline status_t I3C_MasterProcessDAA(I3C_Type *base, uint8_t *addressList
 i3c_device_info_t *I3C_MasterGetDeviceListAfterDAA(I3C_Type *base, uint8_t *count);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Clear the global device count which represents current devices number on the bus.
  * When user resets all dynamic addresses on the bus, should call this API.
  *
@@ -1359,6 +1391,7 @@ i3c_device_info_t *I3C_MasterGetDeviceListAfterDAA(I3C_Type *base, uint8_t *coun
 void I3C_MasterClearDeviceCount(I3C_Type *base);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Performs a master polling transfer on the I2C/I3C bus.
  *
  * @note The API does not return until the transfer succeeds or fails due
@@ -1388,6 +1421,7 @@ status_t I3C_MasterTransferBlocking(I3C_Type *base, i3c_master_transfer_t *trans
 /*! @{ */
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Creates a new handle for the I3C master non-blocking APIs.
  *
  * The creation of a handle is for use with the non-blocking APIs. Once a handle
@@ -1410,6 +1444,7 @@ void I3C_MasterTransferCreateHandle(I3C_Type *base,
                                     void *userData);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Performs a non-blocking transaction on the I2C/I3C bus.
  *
  * @param base The I3C peripheral base address.
@@ -1422,6 +1457,7 @@ void I3C_MasterTransferCreateHandle(I3C_Type *base,
 status_t I3C_MasterTransferNonBlocking(I3C_Type *base, i3c_master_handle_t *handle, i3c_master_transfer_t *transfer);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Returns number of bytes transferred so far.
  * @param base The I3C peripheral base address.
  * @param handle Pointer to the I3C master driver handle.
@@ -1432,6 +1468,7 @@ status_t I3C_MasterTransferNonBlocking(I3C_Type *base, i3c_master_handle_t *hand
 status_t I3C_MasterTransferGetCount(I3C_Type *base, i3c_master_handle_t *handle, size_t *count);
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Terminates a non-blocking I3C master transmission early.
  *
  * @note It is not safe to call this function from an IRQ handler that has a higher priority than the
@@ -1448,6 +1485,7 @@ void I3C_MasterTransferAbort(I3C_Type *base, i3c_master_handle_t *handle);
 /*! @{ */
 
 /*!
+ * @ingroup i3c_master_driver
  * @brief Reusable routine to handle master interrupts.
  * @note This function does not need to be called unless you are reimplementing the
  *  nonblocking API's interrupt handler routines to add special functionality.
@@ -1460,15 +1498,11 @@ void I3C_MasterTransferHandleIRQ(I3C_Type *base, void *intHandle);
 
 /*! @} */
 
-/*!
- * @addtogroup i3c_slave_driver
- * @{
- */
-
 /*! @name Initialization and deinitialization */
 /*! @{ */
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Provides a default configuration for the I3C slave peripheral.
  *
  * This function provides the following default configuration for the I3C slave peripheral:
@@ -1484,6 +1518,7 @@ void I3C_MasterTransferHandleIRQ(I3C_Type *base, void *intHandle);
 void I3C_SlaveGetDefaultConfig(i3c_slave_config_t *slaveConfig);
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Initializes the I3C slave peripheral.
  *
  * This function enables the peripheral clock and initializes the I3C slave peripheral as described by the user
@@ -1498,6 +1533,7 @@ void I3C_SlaveGetDefaultConfig(i3c_slave_config_t *slaveConfig);
 void I3C_SlaveInit(I3C_Type *base, const i3c_slave_config_t *slaveConfig, uint32_t slowClock_Hz);
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Deinitializes the I3C slave peripheral.
  *
  * This function disables the I3C slave peripheral and gates the clock.
@@ -1507,6 +1543,7 @@ void I3C_SlaveInit(I3C_Type *base, const i3c_slave_config_t *slaveConfig, uint32
 void I3C_SlaveDeinit(I3C_Type *base);
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Enable/Disable Slave.
  *
  * @param base The I3C peripheral base address.
@@ -1523,6 +1560,7 @@ static inline void I3C_SlaveEnable(I3C_Type *base, bool isEnable)
 /*! @{ */
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Gets the I3C slave status flags.
  *
  * A bit mask with the state of all I3C slave status flags is returned. For each flag, the corresponding bit
@@ -1540,6 +1578,7 @@ static inline uint32_t I3C_SlaveGetStatusFlags(I3C_Type *base)
 }
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Clears the I3C slave status flag state.
  *
  * The following status register flags can be cleared:
@@ -1561,6 +1600,7 @@ static inline void I3C_SlaveClearStatusFlags(I3C_Type *base, uint32_t statusMask
 }
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Gets the I3C slave error status flags.
  *
  * A bit mask with the state of all I3C slave error status flags is returned. For each flag, the corresponding bit
@@ -1578,6 +1618,7 @@ static inline uint32_t I3C_SlaveGetErrorStatusFlags(I3C_Type *base)
 }
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Clears the I3C slave error status flag state.
  *
  * @param base The I3C peripheral base address.
@@ -1592,6 +1633,7 @@ static inline void I3C_SlaveClearErrorStatusFlags(I3C_Type *base, uint32_t statu
 }
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Gets the I3C slave state.
  *
  * @param base The I3C peripheral base address.
@@ -1607,6 +1649,7 @@ status_t I3C_SlaveCheckAndClearError(I3C_Type *base, uint32_t status);
 /*! @{ */
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Enables the I3C slave interrupt requests.
  *
  * Only below flags can be enabled as interrupts.
@@ -1632,6 +1675,7 @@ static inline void I3C_SlaveEnableInterrupts(I3C_Type *base, uint32_t interruptM
 }
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Disables the I3C slave interrupt requests.
  *
  * Only below flags can be disabled as interrupts.
@@ -1657,6 +1701,7 @@ static inline void I3C_SlaveDisableInterrupts(I3C_Type *base, uint32_t interrupt
 }
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Returns the set of currently enabled I3C slave interrupt requests.
  *
  * @param base The I3C peripheral base address.
@@ -1669,6 +1714,7 @@ static inline uint32_t I3C_SlaveGetEnabledInterrupts(I3C_Type *base)
 }
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Returns the set of pending I3C slave interrupt requests.
  *
  * @param base The I3C peripheral base address.
@@ -1686,6 +1732,7 @@ static inline uint32_t I3C_SlaveGetPendingInterrupts(I3C_Type *base)
 /*! @{ */
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Enables or disables I3C slave DMA requests.
  *
  * @param base The I3C peripheral base address.
@@ -1701,6 +1748,7 @@ static inline void I3C_SlaveEnableDMA(I3C_Type *base, bool enableTx, bool enable
 }
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Gets I3C slave transmit data register address for DMA transfer.
  *
  * @param base The I3C peripheral base address.
@@ -1714,6 +1762,7 @@ static inline uint32_t I3C_SlaveGetTxFifoAddress(I3C_Type *base, uint32_t width)
 }
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Gets I3C slave receive data register address for DMA transfer.
  *
  * @param base The I3C peripheral base address.
@@ -1732,6 +1781,7 @@ static inline uint32_t I3C_SlaveGetRxFifoAddress(I3C_Type *base, uint32_t width)
 /*! @{ */
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Sets the watermarks for I3C slave FIFOs.
  *
  * @param base The I3C peripheral base address.
@@ -1750,6 +1800,7 @@ static inline void I3C_SlaveSetWatermarks(
 }
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Gets the current number of bytes in the I3C slave FIFOs.
  *
  * @param base The I3C peripheral base address.
@@ -1777,6 +1828,7 @@ static inline void I3C_SlaveGetFifoCounts(I3C_Type *base, size_t *rxCount, size_
 
 #if !(defined(FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ) && FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ)
 /*!
+ * @ingroup i3c_slave_driver
  * @brief I3C slave request event.
  *
  * @param base The I3C peripheral base address.
@@ -1786,6 +1838,7 @@ void I3C_SlaveRequestEvent(I3C_Type *base, i3c_slave_event_t event);
 #endif
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Performs a polling send transfer on the I3C bus.
  *
  * @param base  The I3C peripheral base address.
@@ -1796,6 +1849,7 @@ void I3C_SlaveRequestEvent(I3C_Type *base, i3c_slave_event_t event);
 status_t I3C_SlaveSend(I3C_Type *base, const void *txBuff, size_t txSize);
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Performs a polling receive transfer on the I3C bus.
  *
  * @param base  The I3C peripheral base address.
@@ -1811,6 +1865,7 @@ status_t I3C_SlaveReceive(I3C_Type *base, void *rxBuff, size_t rxSize);
 /*! @{ */
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Creates a new handle for the I3C slave non-blocking APIs.
  *
  * The creation of a handle is for use with the non-blocking APIs. Once a handle
@@ -1832,6 +1887,7 @@ void I3C_SlaveTransferCreateHandle(I3C_Type *base,
                                    void *userData);
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Starts accepting slave transfers.
  *
  * Call this API after calling I2C_SlaveInit() and I3C_SlaveTransferCreateHandle() to start processing
@@ -1858,6 +1914,7 @@ void I3C_SlaveTransferCreateHandle(I3C_Type *base,
 status_t I3C_SlaveTransferNonBlocking(I3C_Type *base, i3c_slave_handle_t *handle, uint32_t eventMask);
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Gets the slave transfer status during a non-blocking transfer.
  * @param base The I3C peripheral base address.
  * @param handle Pointer to i2c_slave_handle_t structure.
@@ -1869,6 +1926,7 @@ status_t I3C_SlaveTransferNonBlocking(I3C_Type *base, i3c_slave_handle_t *handle
 status_t I3C_SlaveTransferGetCount(I3C_Type *base, i3c_slave_handle_t *handle, size_t *count);
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Aborts the slave non-blocking transfers.
  * @note This API could be called at any time to stop slave for handling the bus events.
  * @param base The I3C peripheral base address.
@@ -1882,6 +1940,7 @@ void I3C_SlaveTransferAbort(I3C_Type *base, i3c_slave_handle_t *handle);
 /*! @{ */
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief Reusable routine to handle slave interrupts.
  * @note This function does not need to be called unless you are reimplementing the
  *  non blocking API's interrupt handler routines to add special functionality.
@@ -1892,6 +1951,7 @@ void I3C_SlaveTransferHandleIRQ(I3C_Type *base, void *intHandle);
 
 #if !(defined(FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ) && FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ)
 /*!
+ * @ingroup i3c_slave_driver
  * @brief I3C slave request IBI event with data payload(mandatory and extended).
  *
  * @param base The I3C peripheral base address.
@@ -1901,6 +1961,7 @@ void I3C_SlaveTransferHandleIRQ(I3C_Type *base, void *intHandle);
 void I3C_SlaveRequestIBIWithData(I3C_Type *base, uint8_t *data, size_t dataSize);
 
 /*!
+ * @ingroup i3c_slave_driver
  * @brief I3C slave request IBI event with single data.
  * @deprecated Do not use this function. It has been superseded by @ref I3C_SlaveRequestIBIWithData.
  *
@@ -1913,6 +1974,22 @@ void I3C_SlaveRequestIBIWithSingleData(I3C_Type *base, uint8_t data, size_t data
 
 /*! @} */
 /*! @} */
+
+/*! @name IRQ handler */
+/*! @{ */
+
+/*!
+ * @brief Common IRQ handler entry for all I3C instances.
+ *
+ * This function dispatches the IRQ to the correct instance handler using
+ * the instance index.
+ *
+ * @param instance I3C instance number.
+ */
+void I3C_DriverIRQHandler(uint32_t instance);
+
+/*! @} */
+
 #if defined(__cplusplus)
 }
 #endif

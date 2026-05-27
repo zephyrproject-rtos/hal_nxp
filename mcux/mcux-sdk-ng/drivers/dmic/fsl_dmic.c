@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019,2025 NXP
+ * Copyright 2016-2019, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -368,6 +368,19 @@ void DMIC_HwvadDisableIntCallback(DMIC_Type *base, dmic_hwvad_callback_t vadcb)
     (void)DisableIRQ(s_dmicHwvadIRQ[instance]);
     s_dmicHwvadCallback[instance] = NULL;
     NVIC_ClearPendingIRQ(s_dmicHwvadIRQ[instance]);
+}
+
+void DMIC_CommonDriverIRQHandler(uint32_t instance);
+void DMIC_CommonDriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_dmicBases))
+    {
+        if (s_dmicCallback[instance] != NULL)
+        {
+            s_dmicCallback[instance]();
+        }
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 /* IRQ handler functions overloading weak symbols in the startup */

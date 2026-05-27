@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1802,6 +1802,15 @@ void UART_TransferHandleIRQ(UART_Type *base, void *irqHandle)
 void UART_TransferHandleErrorIRQ(UART_Type *base, void *irqHandle)
 {
     /* To be implemented by User. */
+}
+
+void UART_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_uartBases))
+    {
+        s_uartIsr(s_uartBases[instance], s_uartHandle[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if defined(FSL_FEATURE_UART_HAS_SHARED_IRQ0_IRQ1_IRQ2_IRQ3) && FSL_FEATURE_UART_HAS_SHARED_IRQ0_IRQ1_IRQ2_IRQ3

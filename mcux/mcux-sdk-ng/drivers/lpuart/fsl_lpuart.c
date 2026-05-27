@@ -2311,10 +2311,10 @@ void LPUART_TransferHandleErrorIRQ(LPUART_Type *base, void *irqHandle)
 }
 
 /*
- * $Branch Coverage Justification$
+ * $Function Coverage Justification$
  * Usage of LPUART_DriverIRQHandler is device specific.
  */
-void LPUART_DriverIRQHandler(uint32_t instance)
+void LPUART_DriverIRQHandler(uint32_t instance) /* GCOVR_EXCL_FUNCTION */
 {
     if (instance < ARRAY_SIZE(s_lpuartBases))
     {
@@ -2324,7 +2324,7 @@ void LPUART_DriverIRQHandler(uint32_t instance)
 }
 
 /*
- * $Branch Coverage Justification$
+ * $Function Coverage Justification$
  * The individual LPUART IRQ handler functions are instance-specific and depend on
  * the hardware configuration and application usage.
  * Only the IRQ handlers for the LPUART instances actually used in the application will be invoked,
@@ -2421,7 +2421,7 @@ void LPUART1_RX_DriverIRQHandler(void)
 }
 #else
 void LPUART1_DriverIRQHandler(void);
-void LPUART1_DriverIRQHandler(void)
+void LPUART1_DriverIRQHandler(void) /* GCOVR_EXCL_FUNCTION */
 {
     s_lpuartIsr[1](LPUART1, s_lpuartHandle[1]);
     SDK_ISR_EXIT_BARRIER;

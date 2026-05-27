@@ -216,6 +216,7 @@ enum _status_groups
     kStatusGroup_FLEXIO_T_FORMAT= 175, /*!< Group number for T-format status codes. */
     kStatusGroup_FLEXIO_A_FORMAT= 176, /*!< Group number for A-format status codes. */
     kStatusGroup_LPC_QSPI       = 177, /*!< Group number for LPC QSPI status codes. */
+    kStatusGroup_EVENT_CTRL     = 178, /*!< Group number for Event controller status codes. */
 };
 
 /*! \public

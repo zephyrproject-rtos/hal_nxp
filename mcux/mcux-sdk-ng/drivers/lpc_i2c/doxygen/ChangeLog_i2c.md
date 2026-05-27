@@ -1,5 +1,10 @@
 # I2C
 
+## [2.2.2]
+
+- New Features
+  - Added common IRQ handler entry I2C_DriverIRQHandler.
+
 ## [2.2.1]
 
 - Bug Fixes

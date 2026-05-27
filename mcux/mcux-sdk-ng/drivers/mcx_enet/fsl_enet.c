@@ -2639,6 +2639,15 @@ void ENET_IRQHandler(ENET_Type *base, enet_handle_t *handle)
     SDK_ISR_EXIT_BARRIER;
 }
 
+void ENET_DriverIRQHandler(uint32_t instance);
+void ENET_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_enetBases))
+    {
+        s_enetIsr(s_enetBases[instance], s_ENETHandle[instance]);
+    }
+}
+
 void ETHERNET_DriverIRQHandler(void);
 void ETHERNET_DriverIRQHandler(void)
 {

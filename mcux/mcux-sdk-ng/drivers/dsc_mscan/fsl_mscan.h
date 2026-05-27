@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2023, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief MsCAN driver version. */
-#define FSL_MSCAN_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_MSCAN_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*! @} */
 
 /*******************************************************************************
@@ -862,6 +862,13 @@ void MSCAN_TransferAbortReceive(CAN_Type *base, mscan_handle_t *handle, uint8_t 
  * @param handle MSCAN handle pointer.
  */
 void MSCAN_TransferHandleIRQ(CAN_Type *base, mscan_handle_t *handle);
+
+/*!
+ * @brief MSCAN common IRQ handler entry, dispatches to the instance handler.
+ *
+ * @param instance MSCAN peripheral instance number.
+ */
+void MSCAN_DriverIRQHandler(uint32_t instance);
 
 /*! @}*/
 

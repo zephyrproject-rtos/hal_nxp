@@ -1,5 +1,10 @@
 # USART
 
+## [2.3.2]
+
+- New Features
+  - Added common IRQ handler entry USART_DriverIRQHandler.
+
 ## [2.3.1]
 
 - Improvements

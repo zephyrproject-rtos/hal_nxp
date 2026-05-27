@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 NXP
+ * Copyright 2024-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -10,7 +10,12 @@
 
 #include "fsl_ce_if.h"
 
+#if (defined(KW47_core0_SERIES) || defined(MCXW72_core0_SERIES) || defined(KW47_core1_SERIES) || \
+     defined(MCXW72_core1_SERIES))
 #define DSP0_MU_BASE_ADDR MUA_BASE
+#elif (defined(KW43_core0_SERIES) || defined(MCXW70_core0_SERIES))
+#define DSP0_MU_BASE_ADDR MU_1__MUA
+#endif
 
 /*!
  * @ingroup ce
@@ -54,7 +59,7 @@ extern "C" {
  * @details This function must to be called once after power-up or reset,
  * or when the command queue mode needs to be changed. Once configured,
  * the command mode remains unchanged till reset or re-initialization.
- * 
+ *
  * @param [out] psCmdBuffer  Pointer to the command buffer structure.
  * Must be allocated in ARM memory (not ZV2117).
  * @param [in]  cmdbuffer    Command buffer. Must be 256 words in ZV2117 data memory.
@@ -68,15 +73,15 @@ extern "C" {
  * @retval 0 Initialization is successful.
  */
 int32_t CE_CmdInitBuffer(ce_cmdbuffer_t *psCmdBuffer,
-                     volatile uint32_t cmdbuffer[],
-                     volatile int32_t statusbuffer[],
-                     ce_cmd_mode_t cmdmode);
+                         volatile uint32_t cmdbuffer[],
+                         volatile int32_t statusbuffer[],
+                         ce_cmd_mode_t cmdmode);
 
 /*!
  * @brief Resets the CM33-ZV2117 command queue.
  *
  * @details Any pending commands in the queue will be flushed.
- * 
+ *
  * @retval 0 Reset is successful.
  */
 int32_t CE_CmdReset(void);
@@ -89,7 +94,7 @@ int32_t CE_CmdReset(void);
  * in the current release.
  * @param [in] cmdargs Arguments structure detailing the arguments
  * for the function/command.
- * 
+ *
  * @retval 0  Command added successfully.
  * @retval -1 Command not added (queue is full).
  */
@@ -108,22 +113,22 @@ int32_t CE_CmdLaunch(int32_t force_launch);
 
 /*!
  * @brief Launches the current command queue and waits for completion.
- * 
+ *
  * @retval 0 Launch is successful.
  */
 int32_t CE_CmdLaunchBlocking(void);
 
 /*!
  * @brief Launches the current command queue and returns immediately.
- * 
+ *
  * @details ZV2117 will send an interrupt via MUA->GCR to ARM upon task completion.
- * Alternatively, the user can poll for completion. 
- * 
+ * Alternatively, the user can poll for completion.
+ *
  * If using interrupt, the user must call CE_CmdReset() in the IRQ handler.
  * IRQ::DSP_IRQn must be enabled.
- * 
+ *
  * The user can optionally also poll to figure out the command queue execution status.
- * 
+ *
  * @retval 0 Launch is successful.
  */
 int32_t CE_CmdLaunchNonBlocking(void);
@@ -131,7 +136,7 @@ int32_t CE_CmdLaunchNonBlocking(void);
 /*!
  * @brief Checks the execution status of the current command queue.
  * Only applicable in non-blocking mode.
- * 
+ *
  * @return
  * - @ref CE_STATUS_BUSY ZV2117 is still executing.
  * - @ref CE_STATUS_IDLE Execution completed; ZV2117 is ready for new commands.

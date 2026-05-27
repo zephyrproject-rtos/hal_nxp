@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP.
+ * Copyright 2018-2020, 2026 NXP.
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I2C driver version 2.0.1. */
-#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*! @} */
 
 /*! @brief Retry times for waiting flag. */
@@ -620,6 +620,13 @@ status_t I2C_MasterTransferAbort(I2C0_Type *base, i2c_master_handle_t *handle);
  * @param i2cHandle Pointer to the I2C master driver handle i2c_master_handle_t.
  */
 void I2C_MasterTransferHandleIRQ(I2C0_Type *base, void *i2cHandle);
+
+/*!
+ * @brief I2C common IRQ handler entry for parameterized dispatch.
+ *
+ * @param instance I2C peripheral instance number.
+ */
+void I2C_DriverIRQHandler(uint32_t instance);
 
 /*! @} */
 

@@ -1,5 +1,10 @@
 # ECSPI
 
+## [2.3.4]
+
+- New Features
+  - Added common IRQ handler entry ECSPI_DriverIRQHandler.
+
 ## [2.3.3]
 
 - Bug Fixes

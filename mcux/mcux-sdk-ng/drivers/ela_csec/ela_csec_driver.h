@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -102,10 +102,11 @@ typedef enum {
     CSEC_KEY_9,
     CSEC_KEY_10,
     CSEC_RAM_KEY = 0xFU,
-    CSEC_KEY_11 = 0x14U, /* *************** !! WARNING !!************************************************* */
-                         /* CSEC_KEY_11 may be corupted when using FLASH/EEPROM Quick Write functionality. */
-                         /* See errata ERR011450 for more details */
-    CSEC_KEY_12,
+    /* CSEC_KEY_11 = 0x14U, */ /* *************** !! WARNING !!************************************************* */
+                               /* CSEC_KEY_11 may be corupted when using FLASH/EEPROM Quick Write functionality. */
+                               /* See errata ERR011450 for more details. */
+                               /* Disabling CSEC_KEY_11. */
+    CSEC_KEY_12 = 0x15U,
     CSEC_KEY_13,
     CSEC_KEY_14,
     CSEC_KEY_15,
@@ -758,6 +759,13 @@ void CSEC_DRV_InstallCallback(security_callback_t callbackFunc, void *callbackPa
  * @brief Cancels a previously launched asynchronous command.
  */
 void CSEC_DRV_CancelCommand(void);
+
+/*!
+ * @brief ELA_CSEC parameterized IRQ handler entry.
+ *
+ * @param instance ELA_CSEC instance index.
+ */
+void ELA_CSEC_DriverIRQHandler(uint32_t instance);
 
 #if defined(__cplusplus)
 }

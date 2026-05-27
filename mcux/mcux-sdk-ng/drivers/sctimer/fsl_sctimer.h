@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 5, 3)) /*!< Version */
+#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 5, 4)) /*!< Version */
 /*! @} */
 
 #ifndef SCT_EV_STATE_STATEMSKn
@@ -1294,6 +1294,13 @@ static inline uint32_t SCTIMER_GetCaptureValue(SCT_Type *base, sctimer_counter_t
  * @param base SCTimer peripheral base address.
  */
 void SCTIMER_EventHandleIRQ(SCT_Type *base);
+
+/*!
+ * @brief Common IRQ handler for SCTimer, which can be used for SCTimer IRQ remapping.
+ *
+ * @param instance SCTimer instance number.
+ */
+void SCTIMER_DriverIRQHandler(uint32_t instance);
 
 /*! @}*/
 

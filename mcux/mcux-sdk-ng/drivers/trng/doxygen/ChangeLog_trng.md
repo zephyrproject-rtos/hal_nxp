@@ -1,5 +1,10 @@
 # TRNG
 
+## [2.0.22]
+
+- New features:
+  - Added support for KW43 and MCXW70 devices.
+
 ## [2.0.21]
 
 - New features:

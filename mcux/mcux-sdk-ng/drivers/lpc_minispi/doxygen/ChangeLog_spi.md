@@ -1,5 +1,10 @@
 # SPI
 
+## [2.0.9]
+
+- New Features
+  - Added common IRQ handler entry SPI_DriverIRQHandler.
+
 ## [2.0.8]
 
 - Bug Fixes

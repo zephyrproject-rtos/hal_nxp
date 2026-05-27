@@ -396,7 +396,12 @@ void NETC_PortGetPhyMacTxStatistic(NETC_ETH_LINK_Type *base,
             NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_CNT_SHIFT;
         if ((base->PM0_TX_IPG_PREAMBLE & NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_EN_MASK) != 0U)
         {
+            assert(base->PM0_TXPFN <= UINT32_MAX / ((uint64_t)7U - flexPreambleCnt));
+            assert(base->PM0_TEOCTN >= base->PM0_TXPFN * ((uint64_t)7U - flexPreambleCnt));
             statistic->totalOctet = base->PM0_TEOCTN - base->PM0_TXPFN * ((uint64_t)7U - flexPreambleCnt);
+
+            assert(base->PM0_TXPFN <= UINT32_MAX / ((uint64_t)7U - flexPreambleCnt));
+            assert(base->PM0_TOCTN >= base->PM0_TXPFN * ((uint64_t)7U - flexPreambleCnt));
             statistic->validOctet = base->PM0_TOCTN - base->PM0_TXPFN * ((uint64_t)7U - flexPreambleCnt);
         }
         else
@@ -413,6 +418,8 @@ void NETC_PortGetPhyMacTxStatistic(NETC_ETH_LINK_Type *base,
         /* ERRATA051710: After one or more late collision or excessive collision events, counters PMa_TOCTn and
            PMa_TFRMn will be higher than expected. The accurate value cannot be recovered for PMa_TOCTn, but PMa_TRFMn
            can be recovered as follows formula. */
+        assert(base->PM0_TFRMN >= base->PM0_TLCOLN);
+        assert(base->PM0_TFRMN - base->PM0_TLCOLN >= base->PM0_TECOLN);
         statistic->validFrame = base->PM0_TFRMN - base->PM0_TLCOLN - base->PM0_TECOLN;
 #else
         statistic->validFrame = base->PM0_TFRMN;
@@ -440,6 +447,8 @@ void NETC_PortGetPhyMacTxStatistic(NETC_ETH_LINK_Type *base,
         /* ERRATA051710: After one or more late collision or excessive collision events, counters PMa_TOCTn and
            PMa_TFRMn will be higher than expected. The accurate value cannot be recovered for PMa_TOCTn, but PMa_TRFMn
            can be recovered as follows formula. */
+        assert(base->PM1_TFRMN >= base->PM1_TLCOLN);
+        assert(base->PM1_TFRMN - base->PM1_TLCOLN >= base->PM1_TECOLN);
         statistic->validFrame = base->PM1_TFRMN - base->PM1_TLCOLN - base->PM1_TECOLN;
 #else
         statistic->validFrame = base->PM1_TFRMN;
@@ -668,6 +677,7 @@ status_t NETC_PortConfigTcCBS(NETC_PORT_Type *base, netc_hw_tc_idx_t tcIdx, cons
 
         if (0U != (base->TCT_NUM[index].PTCCBSR0 & NETC_PORT_PTCCBSR0_CBSE_MASK))
         {
+            assert(usedBw <= UINT8_MAX - (uint8_t)(base->TCT_NUM[index].PTCCBSR0 & NETC_PORT_PTCCBSR0_BW_MASK));
             usedBw += (uint8_t)(base->TCT_NUM[index].PTCCBSR0 & NETC_PORT_PTCCBSR0_BW_MASK);
         }
     }

@@ -645,6 +645,8 @@ static inline status_t SWT_RxIPFConfigPort(swt_handle_t *handle,
  */
 static inline uint32_t SWT_RxIPFGetTableRemainWordNum(swt_handle_t *handle)
 {
+    assert((handle->hw.common->IPFTCAPR & NETC_SW_ENETC_IPFTCAPR_NUM_WORDS_MASK) >=
+           (handle->hw.common->IPFTMOR & NETC_SW_ENETC_IPFTMOR_NUM_WORDS_MASK));
     return (handle->hw.common->IPFTCAPR & NETC_SW_ENETC_IPFTCAPR_NUM_WORDS_MASK) -
            (handle->hw.common->IPFTMOR & NETC_SW_ENETC_IPFTMOR_NUM_WORDS_MASK);
 }
@@ -760,6 +762,8 @@ static inline status_t SWT_RxPSFPConfigPortISI(swt_handle_t *handle,
  */
 static inline uint32_t SWT_RxPSFPGetISITableRemainEntryNum(swt_handle_t *handle)
 {
+    assert((handle->hw.common->HTMCAPR & NETC_SW_ENETC_HTMCAPR_NUM_WORDS_MASK) >=
+           (handle->hw.common->HTMOR & NETC_SW_ENETC_HTMOR_AMOUNT_MASK));
     return (handle->hw.common->HTMCAPR & NETC_SW_ENETC_HTMCAPR_NUM_WORDS_MASK) -
            (handle->hw.common->HTMOR & NETC_SW_ENETC_HTMOR_AMOUNT_MASK);
 }
@@ -816,6 +820,8 @@ status_t SWT_RxPSFPDelISITableEntry(swt_handle_t *handle, uint32_t entryID);
  */
 static inline uint32_t SWT_RxPSFPGetISTableRemainEntryNum(swt_handle_t *handle)
 {
+    assert((handle->hw.common->ISITCAPR & NETC_SW_ENETC_ISITCAPR_NUM_ENTRIES_MASK) >=
+           (handle->hw.common->ISITOR & NETC_SW_ENETC_ISITOR_NUM_ENTRIES_MASK));
     return (handle->hw.common->ISITCAPR & NETC_SW_ENETC_ISITCAPR_NUM_ENTRIES_MASK) -
            (handle->hw.common->ISITOR & NETC_SW_ENETC_ISITOR_NUM_ENTRIES_MASK);
 }
@@ -871,6 +877,8 @@ status_t SWT_RxPSFPDelISTableEntry(swt_handle_t *handle, uint32_t entryID);
  */
 static inline uint32_t SWT_RxPSFPGetISFTableRemainEntryNum(swt_handle_t *handle)
 {
+    assert((handle->hw.common->HTMCAPR & NETC_SW_ENETC_HTMCAPR_NUM_WORDS_MASK) >=
+           (handle->hw.common->HTMOR & NETC_SW_ENETC_HTMOR_AMOUNT_MASK));
     return (handle->hw.common->HTMCAPR & NETC_SW_ENETC_HTMCAPR_NUM_WORDS_MASK) -
            (handle->hw.common->HTMOR & NETC_SW_ENETC_HTMOR_AMOUNT_MASK);
 }
@@ -929,6 +937,8 @@ status_t SWT_RxPSFPDelISFTableEntry(swt_handle_t *handle, uint32_t entryID);
  */
 static inline uint32_t SWT_RxPSFPGetRPTableRemainEntryNum(swt_handle_t *handle)
 {
+    assert((handle->hw.common->RPITCAPR & NETC_SW_ENETC_RPITCAPR_NUM_ENTRIES_MASK) >=
+           (handle->hw.common->RPITOR & NETC_SW_ENETC_RPITOR_NUM_ENTRIES_MASK));
     return (handle->hw.common->RPITCAPR & NETC_SW_ENETC_RPITCAPR_NUM_ENTRIES_MASK) -
            (handle->hw.common->RPITOR & NETC_SW_ENETC_RPITOR_NUM_ENTRIES_MASK);
 }
@@ -1026,6 +1036,8 @@ status_t SWT_RxPSFPResetMRRPTableEntry(swt_handle_t *handle, uint32_t entryID);
  */
 static inline uint32_t SWT_RxPSFPGetISCTableRemainEntryNum(swt_handle_t *handle)
 {
+    assert((handle->hw.common->ISCITCAPR & NETC_SW_ENETC_ISCITCAPR_NUM_ENTRIES_MASK) >=
+           (handle->hw.common->ISCITOR & NETC_SW_ENETC_ISCITOR_NUM_ENTRIES_MASK));
     return (handle->hw.common->ISCITCAPR & NETC_SW_ENETC_ISCITCAPR_NUM_ENTRIES_MASK) -
            (handle->hw.common->ISCITOR & NETC_SW_ENETC_ISCITOR_NUM_ENTRIES_MASK);
 }
@@ -1080,6 +1092,8 @@ status_t SWT_RxPSFPResetISCStatistic(swt_handle_t *handle, uint32_t entryID);
  */
 static inline uint32_t SWT_RxPSFPGetSGITableRemainEntryNum(swt_handle_t *handle)
 {
+    assert((handle->hw.common->SGIITCAPR & NETC_SW_ENETC_SGIITCAPR_NUM_ENTRIES_MASK) >=
+           (handle->hw.common->SGIITOR & NETC_SW_ENETC_SGIITOR_NUM_ENTRIES_MASK));
     return (handle->hw.common->SGIITCAPR & NETC_SW_ENETC_SGIITCAPR_NUM_ENTRIES_MASK) -
            (handle->hw.common->SGIITOR & NETC_SW_ENETC_SGIITOR_NUM_ENTRIES_MASK);
 }
@@ -1166,6 +1180,8 @@ status_t SWT_RxPSFPQuerySGITableEntry(swt_handle_t *handle, uint32_t entryID, ne
  */
 static inline uint32_t SWT_RxPSFPGetSGCLTableRemainWordNum(swt_handle_t *handle)
 {
+    assert((handle->hw.common->SGCLITCAPR & NETC_SW_ENETC_SGCLITCAPR_NUM_WORDS_MASK) >=
+           (handle->hw.common->SGCLTMOR & NETC_SW_ENETC_SGCLTMOR_NUM_WORDS_MASK));
     return (handle->hw.common->SGCLITCAPR & NETC_SW_ENETC_SGCLITCAPR_NUM_WORDS_MASK) -
            (handle->hw.common->SGCLTMOR & NETC_SW_ENETC_SGCLTMOR_NUM_WORDS_MASK);
 }
@@ -1290,6 +1306,8 @@ status_t SWT_BridgeConfigPortDefaultVid(swt_handle_t *handle, netc_hw_port_idx_t
  */
 static inline uint32_t SWT_BridgeGetVFTableRemainEntryNum(swt_handle_t *handle)
 {
+    assert((handle->hw.common->HTMCAPR & NETC_SW_ENETC_HTMCAPR_NUM_WORDS_MASK) >=
+           (handle->hw.common->HTMOR & NETC_SW_ENETC_HTMOR_AMOUNT_MASK));
     return (handle->hw.common->HTMCAPR & NETC_SW_ENETC_HTMCAPR_NUM_WORDS_MASK) -
            (handle->hw.common->HTMOR & NETC_SW_ENETC_HTMOR_AMOUNT_MASK);
 }
@@ -1362,6 +1380,8 @@ status_t SWT_BridgeSearchVFTableEntry(swt_handle_t *handle,
  */
 static inline uint32_t SWT_BridgeGetFDBTableRemainEntryNum(swt_handle_t *handle)
 {
+    assert((handle->hw.common->HTMCAPR & NETC_SW_ENETC_HTMCAPR_NUM_WORDS_MASK) >=
+           (handle->hw.common->HTMOR & NETC_SW_ENETC_HTMOR_AMOUNT_MASK));
     return (handle->hw.common->HTMCAPR & NETC_SW_ENETC_HTMCAPR_NUM_WORDS_MASK) -
            (handle->hw.common->HTMOR & NETC_SW_ENETC_HTMOR_AMOUNT_MASK);
 }
@@ -1445,6 +1465,8 @@ status_t SWT_BridgeGetFDBActivityState(swt_handle_t *handle, uint32_t entryID, n
  */
 static inline uint32_t SWT_BridgeGetL2MCFTableRemainEntryNum(swt_handle_t *handle)
 {
+    assert((handle->hw.common->HTMCAPR & NETC_SW_ENETC_HTMCAPR_NUM_WORDS_MASK) >=
+           (handle->hw.common->HTMOR & NETC_SW_ENETC_HTMOR_AMOUNT_MASK));
     return (handle->hw.common->HTMCAPR & NETC_SW_ENETC_HTMCAPR_NUM_WORDS_MASK) -
            (handle->hw.common->HTMOR & NETC_SW_ENETC_HTMOR_AMOUNT_MASK);
 }
@@ -1540,6 +1562,8 @@ static inline status_t SWT_FMConfigPort(swt_handle_t *handle,
  */
 static inline uint32_t SWT_FMGetTableRemainEntryNum(swt_handle_t *handle)
 {
+    assert((handle->hw.common->FMITCAPR & NETC_SW_ENETC_FMITCAPR_NUM_ENTRIES_MASK) >=
+           (handle->hw.common->FMITOR & NETC_SW_ENETC_FMITOR_NUM_ENTRIES_MASK));
     return (handle->hw.common->FMITCAPR & NETC_SW_ENETC_FMITCAPR_NUM_ENTRIES_MASK) -
            (handle->hw.common->FMITOR & NETC_SW_ENETC_FMITOR_NUM_ENTRIES_MASK);
 }
@@ -1646,6 +1670,8 @@ status_t SWT_FMDQueryTableEntry(swt_handle_t *handle, netc_tb_fmd_query_buffer_t
  */
 static inline uint32_t SWT_FRERGetISEQGTableRemainEntryNum(swt_handle_t *handle)
 {
+    assert((handle->hw.common->ISQGITCAPR & NETC_SW_ENETC_ETTCAPR_NUM_ENTRIES_MASK) >=
+           (handle->hw.common->ISQGITOR & NETC_SW_ENETC_ETTOR_NUM_ENTRIES_MASK));
     return (handle->hw.common->ISQGITCAPR & NETC_SW_ENETC_ETTCAPR_NUM_ENTRIES_MASK) -
            (handle->hw.common->ISQGITOR & NETC_SW_ENETC_ETTOR_NUM_ENTRIES_MASK);
 }
@@ -1936,6 +1962,8 @@ status_t SWT_TxPortTGSEnable(swt_handle_t *handle, netc_hw_port_idx_t portIdx, b
  */
 static inline uint32_t SWT_TxEPPGetETTableRemainEntryNum(swt_handle_t *handle)
 {
+    assert((handle->hw.common->ETTCAPR & NETC_SW_ENETC_ETTCAPR_NUM_ENTRIES_MASK) >=
+           (handle->hw.common->ETTOR & NETC_SW_ENETC_ETTOR_NUM_ENTRIES_MASK));
     return (handle->hw.common->ETTCAPR & NETC_SW_ENETC_ETTCAPR_NUM_ENTRIES_MASK) -
            (handle->hw.common->ETTOR & NETC_SW_ENETC_ETTOR_NUM_ENTRIES_MASK);
 }
@@ -2427,11 +2455,11 @@ static inline status_t SWT_ClearPortDiscardReason(swt_handle_t *handle,
 static inline status_t SWT_GetFDBInUseEntriesNumber(swt_handle_t *handle, netc_switch_inuse_fdb_statistic_t *statistic)
 {
     statistic->staticEntries     = (uint16_t)(handle->hw.base->FDBHTOR0 & NETC_SW_FDBHTOR0_STATIC_ENTRIES_MASK);
-    statistic->camEntries        = (uint16_t)((handle->hw.base->FDBHTOR0 >> NETC_SW_FDBHTOR0_NUM_GENTRIES_SHIFT) &
-                                       NETC_SW_FDBHTOR0_NUM_GENTRIES_MASK);
+    statistic->camEntries        = (uint16_t)(((handle->hw.base->FDBHTOR0 >> NETC_SW_FDBHTOR0_NUM_GENTRIES_SHIFT) &
+                                       NETC_SW_FDBHTOR0_NUM_GENTRIES_MASK) & 0xFFFFU);
     statistic->dynamicEntries    = (uint16_t)(handle->hw.base->FDBHTOR1 & NETC_SW_FDBHTOR1_DYN_ENTRIES_MASK);
-    statistic->dynamicEntriesHWM = (uint16_t)((handle->hw.base->FDBHTOR1 >> NETC_SW_FDBHTOR1_HWM_DYN_ENTRIES_SHIFT) &
-                                              NETC_SW_FDBHTOR1_HWM_DYN_ENTRIES_MASK);
+    statistic->dynamicEntriesHWM = (uint16_t)(((handle->hw.base->FDBHTOR1 >> NETC_SW_FDBHTOR1_HWM_DYN_ENTRIES_SHIFT) &
+                                              NETC_SW_FDBHTOR1_HWM_DYN_ENTRIES_MASK) & 0xFFFFU);
     return kStatus_Success;
 }
 
@@ -2501,9 +2529,9 @@ static inline status_t SWT_EnablePortMacStationMove(swt_handle_t *handle, netc_h
 static inline status_t SWT_SetPortSR(swt_handle_t *handle, netc_hw_port_idx_t portIdx, netc_swt_port_sr_config_t *sr)
 {
     handle->hw.ports[portIdx].port->PSRCR = NETC_PORT_PSRCR_ISQG_EID(sr->isqEID) | NETC_PORT_PSRCR_PATHID(sr->pathId) |
-                                            NETC_PORT_PSRCR_TX_SQTA(sr->txSqta) |
-                                            NETC_PORT_PSRCR_SRC_PORT_FLT(sr->srcPortFlt) |
-                                            NETC_PORT_PSRCR_SDFA(sr->sdfa) | NETC_PORT_PSRCR_SR_PORT(sr->srPort);
+                                            NETC_PORT_PSRCR_TX_SQTA(sr->txSqta ? 1U : 0U) |
+                                            NETC_PORT_PSRCR_SRC_PORT_FLT(sr->srcPortFlt ? 1U : 0U) |
+                                            NETC_PORT_PSRCR_SDFA(sr->sdfa ? 1U : 0U) | NETC_PORT_PSRCR_SR_PORT(sr->srPort ? 1U : 0U);
     return kStatus_Success;
 }
 #endif

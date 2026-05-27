@@ -20,8 +20,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief FTM driver version 2.7.5. */
-#define FSL_FTM_DRIVER_VERSION (MAKE_VERSION(2, 7, 5))
+/*! @brief FTM driver version 2.7.6. */
+#define FSL_FTM_DRIVER_VERSION (MAKE_VERSION(2, 7, 6))
 /*! @} */
 
 /*!
@@ -40,6 +40,7 @@ typedef enum _ftm_chnl
     kFTM_Chnl_7       /*!< FTM channel number 7 */
 } ftm_chnl_t;
 
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_FLTCTRL) && FSL_FEATURE_FTM_HAS_NO_FLTCTRL)
 /*! @brief List of FTM faults */
 typedef enum _ftm_fault_input
 {
@@ -48,6 +49,7 @@ typedef enum _ftm_fault_input
     kFTM_Fault_2,      /*!< FTM fault 2 input pin */
     kFTM_Fault_3       /*!< FTM fault 3 input pin */
 } ftm_fault_input_t;
+#endif  /* FSL_FEATURE_FTM_HAS_NO_FLTCTRL */
 
 /*! @brief FTM PWM operation modes */
 typedef enum _ftm_pwm_mode
@@ -212,6 +214,7 @@ typedef struct _ftm_phase_param
     ftm_phase_polarity_t phasePolarity; /*!< Phase polarity */
 } ftm_phase_params_t;
 
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_FLTCTRL) && FSL_FEATURE_FTM_HAS_NO_FLTCTRL)
 /*! @brief Structure is used to hold the parameters to configure a FTM fault */
 typedef struct _ftm_fault_param
 {
@@ -221,6 +224,7 @@ typedef struct _ftm_fault_param
     bool useFaultFilter;   /*!< True: Use the filtered fault signal;
                                 False: Use the direct path from fault input */
 } ftm_fault_param_t;
+#endif  /* FSL_FEATURE_FTM_HAS_NO_FLTCTRL */
 
 #if (defined(FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE) && FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE)
 /*! @brief FlexTimer pre-scaler factor for the dead time insertion*/
@@ -312,6 +316,7 @@ typedef enum _ftm_bdm_mode
        C(n)V registers is in fully functional mode */
 } ftm_bdm_mode_t;
 
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM) && FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM)
 /*! @brief Options for the FTM fault control mode */
 typedef enum _ftm_fault_mode
 {
@@ -320,6 +325,7 @@ typedef enum _ftm_fault_mode
     kFTM_Fault_AllChnlsMan,  /*!< Enabled for all channels with manual fault clearing */
     kFTM_Fault_AllChnlsAuto  /*!< Enabled for all channels with automatic fault clearing */
 } ftm_fault_mode_t;
+#endif  /* FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM */
 
 /*!
  * @brief FTM external trigger options
@@ -389,7 +395,9 @@ typedef enum _ftm_interrupt_enable
     kFTM_Chnl5InterruptEnable        = (1U << 5), /*!< Channel 5 interrupt */
     kFTM_Chnl6InterruptEnable        = (1U << 6), /*!< Channel 6 interrupt */
     kFTM_Chnl7InterruptEnable        = (1U << 7), /*!< Channel 7 interrupt */
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE) && FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE)
     kFTM_FaultInterruptEnable        = (1U << 8), /*!< Fault interrupt */
+#endif  /* FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE */
     kFTM_TimeOverflowInterruptEnable = (1U << 9), /*!< Time overflow interrupt */
     kFTM_ReloadInterruptEnable       = (1U << 10) /*!< Reload interrupt; Available only on certain SoC's */
 } ftm_interrupt_enable_t;
@@ -408,7 +416,9 @@ typedef enum _ftm_status_flags
     kFTM_Chnl5Flag        = (1U << 5),  /*!< Channel 5 Flag */
     kFTM_Chnl6Flag        = (1U << 6),  /*!< Channel 6 Flag */
     kFTM_Chnl7Flag        = (1U << 7),  /*!< Channel 7 Flag */
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF) && FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF)
     kFTM_FaultFlag        = (1U << 8),  /*!< Fault Flag */
+#endif  /* FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF */
     kFTM_TimeOverflowFlag = (1U << 9),  /*!< Time overflow Flag */
     kFTM_ChnlTriggerFlag  = (1U << 10), /*!< Channel trigger Flag */
     kFTM_ReloadFlag       = (1U << 11)  /*!< Reload Flag; Available only on certain SoC's */
@@ -465,8 +475,12 @@ typedef struct _ftm_config
                                                    synchronization is not required. Multiple reload points can be used by providing
                                                    an OR'ed list of options available in
                                                    enumeration ::ftm_reload_point_t. */
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM) && FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM)
     ftm_fault_mode_t faultMode;               /*!< FTM fault control mode */
+#endif  /* FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM */
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_FLTCTRL) && FSL_FEATURE_FTM_HAS_NO_FLTCTRL)
     uint8_t faultFilterValue;                 /*!< Fault input filter value */
+#endif  /* FSL_FEATURE_FTM_HAS_NO_FLTCTRL */
 #if (defined(FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE) && FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE)
     ftm_fault_output_state_t faultOutputState;  /*!< Fault output state */
 #endif  /* FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE */
@@ -606,6 +620,23 @@ status_t FTM_SetupPwm(FTM_Type *base,
 /*!
  * @brief Updates the duty cycle of an active PWM signal.
  *
+ * @note This function only writes the new duty cycle value to the CnV buffer register.
+ *       FTM_Init() unconditionally enables enhanced PWM synchronization mode by setting
+ *       SYNCONF.SYNCMODE = 1 and COMBINE.SYNCENn = 1 in FTM_SetPwmSync(), regardless of the
+ *       configuration passed by the user. Therefore, the buffered CnV value does NOT take effect
+ *       immediately. The caller must trigger a register reload after this function returns, using
+ *       one of the following methods:
+ *       - Software trigger: call FTM_SetSoftwareTrigger(base, true) (if pwmSyncMode includes
+ *         kFTM_SoftwareTrigger). Note that if swTriggerResetCount was set to true during
+ *         initialization, this trigger will also force the FTM counter to the CNTIN value
+ *         (SYNCONF.SWRSTCNT = 1).
+ *       - Hardware trigger: no software call is needed. If pwmSyncMode includes
+ *         kFTM_HardwareTrigger_0/1/2, the reload happens automatically when the
+ *         corresponding hardware trigger fires (SYNCONF.HWWRBUF is set by FTM_Init()).
+ *       - LDOK: call FTM_SetLdok(base, true). The new value becomes active at the next
+ *         reload point: by default at counter overflow (MOD to CNTIN), or at earlier
+ *         events if additional reload points are configured via FTM_SetReloadPoints().
+ *
  * @param base              FTM peripheral base address
  * @param chnlNumber        The channel/channel pair number. In combined mode, this represents
  *                          the channel pair number
@@ -744,7 +775,9 @@ void FTM_SetupDualEdgeCapture(FTM_Type *base,
  * @param faultNumber FTM fault to configure.
  * @param faultParams Parameters passed in to set up the fault
  */
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_FLTCTRL) && FSL_FEATURE_FTM_HAS_NO_FLTCTRL)
 void FTM_SetupFaultInput(FTM_Type *base, ftm_fault_input_t faultNumber, const ftm_fault_param_t *faultParams);
+#endif  /* FSL_FEATURE_FTM_HAS_NO_FLTCTRL */
 
 #if (defined(FSL_FEATURE_FTM_HAS_ERRATA_010856) && FSL_FEATURE_FTM_HAS_ERRATA_010856)
 /*!
@@ -1106,23 +1139,25 @@ static inline void FTM_SetPwmOutputEnable(FTM_Type *base, ftm_chnl_t chnlNumber,
  * @param chnlPairNumber The FTM channel pair number; options are 0, 1, 2, 3
  * @param value          true: Enable fault control for this channel pair; false: No fault control
  */
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_COMBINE_FAULTEN) && FSL_FEATURE_FTM_HAS_NO_COMBINE_FAULTEN) && \
+    !(defined(FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1) && FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1)
 static inline void FTM_SetFaultControlEnable(FTM_Type *base, ftm_chnl_t chnlPairNumber, bool value)
 {
     /* Fault input is not supported if the instance has only basic feature.*/
 #if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
     assert(0 == FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base));
 #endif
+    uint32_t tmp = (1UL << (FTM_COMBINE_FAULTEN0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlPairNumber)));
     if (value)
     {
-        base->COMBINE |=
-            (1UL << (FTM_COMBINE_FAULTEN0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlPairNumber)));
+        base->COMBINE |= tmp;
     }
     else
     {
-        base->COMBINE &=
-            ~(1UL << (FTM_COMBINE_FAULTEN0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlPairNumber)));
+        base->COMBINE &= ~tmp;
     }
 }
+#endif  /* FSL_FEATURE_FTM_HAS_NO_COMBINE_FAULTEN && FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1 */
 
 /*!
  * @brief This function enables/disables the dead time insertion in a channel pair.
@@ -1133,13 +1168,20 @@ static inline void FTM_SetFaultControlEnable(FTM_Type *base, ftm_chnl_t chnlPair
  */
 static inline void FTM_SetDeadTimeEnable(FTM_Type *base, ftm_chnl_t chnlPairNumber, bool value)
 {
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1) && FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1)
+    uint32_t tmp = (1UL << (FTM_COMBINE_DTEN0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlPairNumber)));
+#else
+    /* Only pair 0 is supported */
+    assert((uint32_t)chnlPairNumber == 0U);
+    uint32_t tmp = (1UL << (FTM_COMBINE_DTEN0_SHIFT));
+#endif
     if (value)
     {
-        base->COMBINE |= (1UL << (FTM_COMBINE_DTEN0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlPairNumber)));
+        base->COMBINE |= tmp;
     }
     else
     {
-        base->COMBINE &= ~(1UL << (FTM_COMBINE_DTEN0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlPairNumber)));
+        base->COMBINE &= ~tmp;
     }
 }
 
@@ -1152,13 +1194,20 @@ static inline void FTM_SetDeadTimeEnable(FTM_Type *base, ftm_chnl_t chnlPairNumb
  */
 static inline void FTM_SetComplementaryEnable(FTM_Type *base, ftm_chnl_t chnlPairNumber, bool value)
 {
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1) && FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1)
+    uint32_t tmp = (1UL << (FTM_COMBINE_COMP0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlPairNumber)));
+#else
+    /* Only pair 0 is supported */
+    assert((uint32_t)chnlPairNumber == 0U);
+    uint32_t tmp = (1UL << FTM_COMBINE_COMP0_SHIFT);
+#endif  /* FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1 */
     if (value)
     {
-        base->COMBINE |= (1UL << (FTM_COMBINE_COMP0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlPairNumber)));
+        base->COMBINE |= tmp;
     }
     else
     {
-        base->COMBINE &= ~(1UL << (FTM_COMBINE_COMP0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlPairNumber)));
+        base->COMBINE &= ~tmp;
     }
 }
 

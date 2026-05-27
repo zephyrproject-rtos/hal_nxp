@@ -1,5 +1,10 @@
 # MIPI_DSI
 
+## [2.3.1]
+
+- New Features
+  - Added common IRQ handler entry MIPI_DSI_CommonDriverIRQHandler.
+
 ## [2.3.0]
 
 - Bug Fixes

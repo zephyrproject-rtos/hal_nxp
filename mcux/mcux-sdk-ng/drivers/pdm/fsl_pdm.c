@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020,2025 NXP
+ * Copyright 2018-2020,2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -93,7 +93,6 @@ uint32_t PDM_GetInstance(PDM_Type *base)
 
 /*!
  * brief PDM read fifo.
- * Note: This function support 16 bit only for IP version that only supports 16bit.
  *
  * param base PDM base pointer.
  * param startChannel start channel number.
@@ -107,6 +106,13 @@ void PDM_ReadFifo(
 {
     uint32_t i = 0, j = 0U;
     uint32_t *dataAddr = (uint32_t *)buffer;
+#if defined(FSL_FEATURE_PDM_FIFO_WIDTH) && (FSL_FEATURE_PDM_FIFO_WIDTH != 2U)
+    uint32_t shift = 0U;
+
+    assert((dataWidth >= 1U) && (dataWidth <= 4U));
+
+    shift = (4U - dataWidth) * 8U; /* 4/3/2/1 -> 0/8/16/24 */
+#endif
 
     for (i = 0U; i < size; i++)
     {
@@ -115,7 +121,7 @@ void PDM_ReadFifo(
 #if defined(FSL_FEATURE_PDM_FIFO_WIDTH) && (FSL_FEATURE_PDM_FIFO_WIDTH != 2U)
             if ((SIZE_MAX - j) >= startChannel)
             {
-                *dataAddr = base->DATACH[startChannel + j] >> (dataWidth == 4U ? 0U : 8U);
+                *dataAddr = base->DATACH[startChannel + j] >> shift;
                 dataAddr  = (uint32_t *)((uint32_t)dataAddr + dataWidth);
             }
             else

@@ -1,5 +1,10 @@
 # SCTIMER
 
+## [2.5.4]
+
+- New Features
+  - Added common IRQ handler entry SCTIMER_DriverIRQHandler.
+
 ## [2.5.3]
 
 - Bug Fixes

@@ -1,5 +1,10 @@
 # UART
 
+## [2.5.2]
+
+- New Features
+  - Added common IRQ handler entry UART_DriverIRQHandler.
+
 ## [2.5.1]
 
 - Improvements

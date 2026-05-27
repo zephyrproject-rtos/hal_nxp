@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, 2025 NXP
+ * Copyright 2023, 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief FLEXSPI FOLLOWER driver version. */
-#define FSL_FLEXSPI_SLV_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_FLEXSPI_SLV_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 #define FLEXSPI_SLV_CMD_DDR(x) (((uint16_t)(x) << 8U) | (uint16_t)(x))

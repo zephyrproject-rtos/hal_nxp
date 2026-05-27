@@ -1,5 +1,5 @@
 /*
- * Copyright  2018 NXP
+ * Copyright  2018, 2026 NXP
  * All rights reserved.
  *
  *
@@ -670,6 +670,15 @@ void SPI_TransferHandleIRQ(SPI0_Type *base, spi_master_handle_t *handle)
             (handle->callback)(base, handle, handle->state, handle->userData);
         }
     }
+}
+
+void SPI_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < 1UL)
+    {
+        s_spiIsr(SPI0, s_spiHandle);
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if defined(SPI0)

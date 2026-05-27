@@ -1,5 +1,10 @@
 # SYSMPU
 
+## [2.2.4]
+
+- Bug Fixes
+  - Fixed CERT INT30-C and CERT INT31-C violations.
+
 ## [2.2.3]
 
 - Bug Fixes

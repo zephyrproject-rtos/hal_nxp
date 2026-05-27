@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020, 2023 NXP
+ * Copyright 2017-2020, 2023, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief MsCAN driver version. */
-#define FSL_MSCAN_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_MSCAN_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*! @} */
 
 /*! @brief MsCAN Rx Message Buffer Mask helper macro. */

@@ -490,14 +490,14 @@ typedef struct
 } DPU_DISPLAY_Type;
 
 #if defined(FSL_FEATURE_DISPLAY_SEERIS_MDR7) && FSL_FEATURE_DISPLAY_SEERIS_MDR7
-static inline void writel(uint32_t value, volatile void *addr)
+static inline void writel(uint32_t value, volatile uint32_t *addr)
 {
-    *(volatile uint32_t *)addr = value;
+    *addr = value;
 }
 
 static inline void DPU_LdWrite(DISPLAY_SEERIS_LD_Type *base, uint32_t offset, uint32_t value)
 {
-    writel(value, (void *)((uintptr_t)base + offset));
+    writel(value, (volatile uint32_t *)((uintptr_t)base + (uintptr_t)offset));
 }
 #endif
 
@@ -1076,7 +1076,8 @@ static uint32_t DPU_ConvertFloat(float floatValue, uint8_t intBits, uint8_t frac
     /* Set the sign bit. */
     if (0U != (floatBits & 0x80000000UL))
     {
-        ret = ((~(uint32_t)ret) + 1U) & ~(0xFFFFFFFFU << (intBits + fracBits + 1U));
+        ret = (uint32_t)(((((~(uint64_t)ret) & 0xFFFFFFFFULL) + 1ULL) &
+                          ~(0xFFFFFFFFULL << (intBits + fracBits + 1U))) & 0xFFFFFFFFULL);
     }
 
     return ret;
@@ -2328,19 +2329,32 @@ void DPU_InitDisplayTiming(DISPLAY_SEERIS_Type *base, uint8_t displayIndex, cons
     diseng->DITHER.POLARITYCTRL = reg;
 
     /* Set timing. */
-    vtotal = config->height + config->vfp + config->vbp + config->vsw - 1U;
+    vtotal = (uint16_t)(((((uint64_t)config->height | config->vfp | config->vbp | config->vsw) != 0ULL) ?
+                             (((uint64_t)config->height + config->vfp + config->vbp + config->vsw) - 1ULL) :
+                             0ULL) &
+                         0xFFFFULL);
     display->HTCFG1 =
-        DPU_FRAMEGEN_HTCFG1_Htotal((uint32_t)config->width + config->hfp + config->hbp + config->hsw - 1UL) |
+        DPU_FRAMEGEN_HTCFG1_Htotal(
+            (uint32_t)((((uint64_t)(uint32_t)config->width + (uint64_t)(uint32_t)config->hfp + (uint64_t)(uint32_t)config->hbp +
+                           (uint64_t)(uint32_t)config->hsw) -
+                          1ULL) &
+                         0xFFFFFFFFULL)) |
         DPU_FRAMEGEN_HTCFG1_Hact(config->width);
 
-    display->HTCFG2 = DPU_FRAMEGEN_HTCFG2_Hsync(config->hsw - 1UL) |
-                      DPU_FRAMEGEN_HTCFG2_Hsbp((uint32_t)config->hbp + config->hsw - 1UL) |
-                      DPU_FRAMEGEN_HTCFG2_HsEn_MASK;
+    display->HTCFG2 =
+        DPU_FRAMEGEN_HTCFG2_Hsync((config->hsw > 0U) ? ((uint32_t)config->hsw - 1UL) : 0U) |
+        DPU_FRAMEGEN_HTCFG2_Hsbp((((uint64_t)config->hbp + config->hsw) > 0ULL) ?
+                                    (uint32_t)(((uint64_t)config->hbp + config->hsw) - 1ULL) :
+                                    0U) |
+        DPU_FRAMEGEN_HTCFG2_HsEn_MASK;
 
     display->VTCFG1 = DPU_FRAMEGEN_VTCFG1_Vtotal(vtotal) | DPU_FRAMEGEN_VTCFG1_Vact(config->height);
 
-    display->VTCFG2 = DPU_FRAMEGEN_VTCFG2_Vsync(config->vsw - 1UL) |
-                      DPU_FRAMEGEN_VTCFG2_Vsbp((uint32_t)config->vbp + config->vsw - 1UL) |
+    display->VTCFG2 =
+        DPU_FRAMEGEN_VTCFG2_Vsync((config->vsw > 0U) ? ((uint32_t)config->vsw - 1UL) : 0U) |
+        DPU_FRAMEGEN_VTCFG2_Vsbp((((uint64_t)config->vbp + config->vsw) > 0ULL) ?
+                                    (uint32_t)(((uint64_t)config->vbp + config->vsw) - 1ULL) :
+                                    0U) |
 #if defined(FSL_FEATURE_DISPLAY_SEERIS_MDR7) && FSL_FEATURE_DISPLAY_SEERIS_MDR7
                       DPU_FRAMEGEN_VTCFG2_VsEn_MASK | DPU_FRAMEGEN_VTCFG2_VsAlign_MASK;
 #else

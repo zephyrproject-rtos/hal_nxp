@@ -1,5 +1,10 @@
 # DMA
 
+## [2.1.4]
+
+- New Features
+  - Added common IRQ handler entry DMA_DriverIRQHandler.
+
 ## [2.1.3]
 
 - Bug Fixes

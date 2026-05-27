@@ -1,5 +1,10 @@
 # SFA
 
+## [2.1.7]
+
+- New Features
+  - Added common IRQ handler entry SFA_DriverIRQHandler.
+
 ## [2.1.6]
 
 - Bug Fixes

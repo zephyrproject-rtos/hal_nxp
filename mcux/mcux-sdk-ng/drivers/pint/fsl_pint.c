@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023, 2025 NXP
+ * Copyright 2016-2023, 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -959,6 +959,23 @@ static void PINT_CommonIRQHanlder(uint32_t instance, pint_pin_int_t pintr)
         s_pintCallback[instance](pintr, &pintStatus);
     }
 #endif
+}
+
+void PINT_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_pintBases))
+    {
+        uint32_t flags = (s_pintBases[instance]->IST & PINT_IST_PSTAT_MASK) |
+                         PINT_PatternMatchGetStatusAll(s_pintBases[instance]);
+        for (uint8_t i = 0U; i < (uint8_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+        {
+            if ((flags & (1UL << i)) != 0UL)
+            {
+                PINT_CommonIRQHanlder(instance, (pint_pin_int_t)i);
+            }
+        }
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)

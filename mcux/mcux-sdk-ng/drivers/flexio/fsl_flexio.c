@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2024-2025 NXP
+ * Copyright 2016-2020, 2024-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -45,6 +45,18 @@ static void *s_flexioType[FLEXIO_HANDLE_COUNT];
 
 /*< @brief pointer to array of FLEXIO Isr. */
 static flexio_isr_t s_flexioIsr[FLEXIO_HANDLE_COUNT];
+
+/*!
+ * @brief Common initial layout for FlexIO simulated peripheral types.
+ *
+ * @note This assumes all FlexIO simulated peripheral base types registered by
+ * FLEXIO_RegisterHandleIRQ() have FLEXIO_Type * as their first structure
+ * member.
+ */
+typedef struct _flexio_simulated_type
+{
+    FLEXIO_Type *flexioBase; /*!< FlexIO base pointer. */
+} flexio_simulated_type_t;
 
 /* FlexIO common IRQ Handler. */
 static void FLEXIO_CommonIRQHandler(void);
@@ -496,17 +508,17 @@ void FLEXIO_SetPinConfig(FLEXIO_Type *base, uint32_t pin, flexio_gpio_config_t *
 #endif /*FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER*/
 
 /*
- * $Branch Coverage Justification$
+ * $Function Coverage Justification$
  * Code coverage of FLEXIO_DriverIRQHandler is device specific.
  */
 void FLEXIO_DriverIRQHandler(void);
-void FLEXIO_DriverIRQHandler(void)
+void FLEXIO_DriverIRQHandler(void) /* GCOVR_EXCL_FUNCTION */
 {
     FLEXIO_CommonIRQHandler();
 }
 
 /*
- * $Branch Coverage Justification$
+ * $Function Coverage Justification$
  * The individual FLEXIO IRQ handler functions are instance-specific and depend on
  * the hardware configuration and application usage.
  * Only the IRQ handlers for the FLEXIO instances actually used in the application will be invoked,
@@ -520,25 +532,45 @@ void FLEXIO0_DriverIRQHandler(void)
 }
 
 void FLEXIO1_DriverIRQHandler(void);
-void FLEXIO1_DriverIRQHandler(void)
+void FLEXIO1_DriverIRQHandler(void) /* GCOVR_EXCL_FUNCTION */
 {
     FLEXIO_CommonIRQHandler();
 }
 
 void UART2_FLEXIO_DriverIRQHandler(void);
-void UART2_FLEXIO_DriverIRQHandler(void)
+void UART2_FLEXIO_DriverIRQHandler(void) /* GCOVR_EXCL_FUNCTION */
 {
     FLEXIO_CommonIRQHandler();
 }
 
 void FLEXIO2_DriverIRQHandler(void);
-void FLEXIO2_DriverIRQHandler(void)
+void FLEXIO2_DriverIRQHandler(void) /* GCOVR_EXCL_FUNCTION */
 {
     FLEXIO_CommonIRQHandler();
 }
 
 void FLEXIO3_DriverIRQHandler(void);
-void FLEXIO3_DriverIRQHandler(void)
+void FLEXIO3_DriverIRQHandler(void) /* GCOVR_EXCL_FUNCTION */
 {
     FLEXIO_CommonIRQHandler();
+}
+
+void FLEXIO_CommonDriverIRQHandler(uint32_t instance);
+void FLEXIO_CommonDriverIRQHandler(uint32_t instance)
+{
+    uint32_t index;
+
+    if (instance < ARRAY_SIZE(s_flexioBases))
+    {
+        for (index = 0U; index < FLEXIO_HANDLE_COUNT; index++)
+        {
+            if ((s_flexioHandle[index] != NULL) &&
+                (MSDK_REG_SECURE_ADDR(((flexio_simulated_type_t *)s_flexioType[index])->flexioBase) ==
+                 MSDK_REG_SECURE_ADDR(s_flexioBases[instance])))
+            {
+                s_flexioIsr[index](s_flexioType[index], s_flexioHandle[index]);
+            }
+        }
+    }
+    SDK_ISR_EXIT_BARRIER;
 }

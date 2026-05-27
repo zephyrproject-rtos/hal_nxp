@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022, 2025 NXP
+ * Copyright 2017-2022, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,7 +27,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 3, 1)) /*!< Version */
+#define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 3, 3)) /*!< Version */
 /*! @} */
 
 #if (defined(FSL_FEATURE_TMR_HAS_32BIT_REGISTER) && FSL_FEATURE_TMR_HAS_32BIT_REGISTER)
@@ -155,6 +155,7 @@ typedef enum _qtmr_channel_selection
     kQTMR_Channel_3,      /*!< TMR Channel 3 */
 } qtmr_channel_selection_t;
 
+#if !(defined(FSL_FEATURE_TMR_HAS_NO_DMA_REGISTER) && FSL_FEATURE_TMR_HAS_NO_DMA_REGISTER)
 /*! @brief List of Quad Timer DMA enable */
 typedef enum _qtmr_dma_enable
 {
@@ -162,6 +163,7 @@ typedef enum _qtmr_dma_enable
     kQTMR_ComparatorPreload1DmaEnable = (1U << 1), /*!< Comparator Preload Register 1 DMA Enable.*/
     kQTMR_ComparatorPreload2DmaEnable = (1U << 2), /*!< Comparator Preload Register 2 DMA Enable.*/
 } qtmr_dma_enable_t;
+#endif /* FSL_FEATURE_TMR_HAS_NO_DMA_REGISTER */
 
 /*!
  * @brief Quad Timer config structure
@@ -487,6 +489,7 @@ static inline void QTMR_StopTimer(TMR_Type *base, qtmr_channel_selection_t chann
 
 /*! @}*/
 
+#if !(defined(FSL_FEATURE_TMR_HAS_NO_DMA_REGISTER) && FSL_FEATURE_TMR_HAS_NO_DMA_REGISTER)
 /*!
  * @name Enable and Disable the Quad Timer DMA
  * @{
@@ -511,6 +514,9 @@ void QTMR_EnableDma(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t m
  *                  enumeration ::qtmr_dma_enable_t
  */
 void QTMR_DisableDma(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t mask);
+
+/*! @}*/
+#endif /* FSL_FEATURE_TMR_HAS_NO_DMA_REGISTER */
 
 /*!
  * @brief Set PWM output in idle status (high or low).

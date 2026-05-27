@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1215,6 +1215,31 @@ void ESAI_TransferRxHandleIRQ(ESAI_Type *base, esai_handle_t *handle)
         ESAI_TransferAbortReceive(base, handle);
     }
 }
+
+void ESAI_CommonDriverIRQHandler(uint32_t instance);
+void ESAI_CommonDriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_esaiBases))
+    {
+        ESAI_Type *base = s_esaiBases[instance];
+
+        /* Handle Rx operation */
+        if (((ESAI_GetStatusFlag(base) & (uint32_t)kESAI_ReceiveFIFOFullFlag) != 0U) &&
+            ((base->RCR & (uint32_t)kESAI_TransmitInterruptEnable) != 0U))
+        {
+            s_esaiRxIsr(base, s_esaiHandle[instance][1]);
+        }
+
+        /* Handle Tx operation */
+        if (((ESAI_GetStatusFlag(base) & (uint32_t)kESAI_TransmitFIFOEmptyFlag) != 0U) &&
+            ((base->TCR & (uint32_t)kESAI_TransmitInterruptEnable) != 0U))
+        {
+            s_esaiTxIsr(base, s_esaiHandle[instance][0]);
+        }
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
 
 #ifdef AUDIO__ESAI0
 #define ESAI AUDIO__ESAI0

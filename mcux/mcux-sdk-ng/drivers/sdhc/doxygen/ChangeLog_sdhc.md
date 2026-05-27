@@ -1,5 +1,10 @@
 # SDHC
 
+## [2.1.14]
+
+- New Features
+  - Added common IRQ handler entry SDHC_CommonDriverIRQHandler.
+
 ## [2.1.13]
 
 - Improvements

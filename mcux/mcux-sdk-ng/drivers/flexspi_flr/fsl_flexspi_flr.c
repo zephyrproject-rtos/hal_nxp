@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, 2025 NXP
+ * Copyright 2023, 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -240,5 +240,15 @@ void FLEXSPI_SLV_DriverIRQHandler(void);
 void FLEXSPI_SLV_DriverIRQHandler(void)
 {
     s_flexspiSlvIsr(s_flexspiSlvBases[0], s_flexspiSlvHandle[0]);
+    SDK_ISR_EXIT_BARRIER;
+}
+
+void FLEXSPI_SLV_CommonDriverIRQHandler(uint32_t instance);
+void FLEXSPI_SLV_CommonDriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_flexspiSlvBases))
+    {
+        s_flexspiSlvIsr(s_flexspiSlvBases[instance], s_flexspiSlvHandle[instance]);
+    }
     SDK_ISR_EXIT_BARRIER;
 }

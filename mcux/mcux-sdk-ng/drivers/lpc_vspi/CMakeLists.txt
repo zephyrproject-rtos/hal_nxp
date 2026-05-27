@@ -1,4 +1,4 @@
-# Copyright 2024 NXP
+# Copyright 2024, 2026 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
@@ -12,7 +12,7 @@ if(CONFIG_MCUX_COMPONENT_driver.vspi_dma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.vspi)
-    mcux_component_version(2.0.6)
+    mcux_component_version(2.0.7)
 
     mcux_add_source(SOURCES fsl_spi.c fsl_spi.h)
 

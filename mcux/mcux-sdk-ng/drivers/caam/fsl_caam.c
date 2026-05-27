@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -56,9 +56,10 @@
 #define DESC_LC1_MASK          0x00020000u
 #define DESC_TAG_SIZE_MASK     0xFFu
 #define DESC_HALT              0xA0C00000u
-#define DESC_JUMP_2            0xA0000002u
-#define DESC_JUMP_4            0xA0000004u
-#define DESC_JUMP_6            0xA0000006u
+#define DESC_JUMP(x)           (0xA0000000u | ((x) & 0xFFu))
+#define DESC_JUMP_2            DESC_JUMP(0x2u)
+#define DESC_JUMP_4            DESC_JUMP(0x4u)
+#define DESC_JUMP_6            DESC_JUMP(0x6u)
 #define DESC_BLACKKEY_NOMMEN   0x4u
 #define SEC_MEM                0x8u
 
@@ -221,10 +222,6 @@ static uint32_t s_jrIndex2              = 0;    /*!< Current index in the input 
 static caam_job_ring_interface_t *s_jr3 = NULL; /*!< Pointer to job ring interface 3. */
 static uint32_t s_jrIndex3              = 0;    /*!< Current index in the input job ring 3. */
 
-AT_NONCACHEABLE_SECTION(static caam_rng_config_t rngConfig);
-AT_NONCACHEABLE_SECTION(static caam_desc_rng_t rngGenSeckey);
-AT_NONCACHEABLE_SECTION(static caam_desc_rng_t rngInstantiate);
-AT_NONCACHEABLE_SECTION(static caam_desc_rng_t descBuf);
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -568,6 +565,26 @@ static status_t caam_in_job_ring_add(CAAM_Type *base, caam_job_ring_t jobRing, u
     return kStatus_Success;
 }
 
+static status_t caam_in_job_ring_add_and_wait(CAAM_Type *base,
+                                              caam_handle_t *handle,
+                                              uint32_t *descriptor,
+                                              caam_wait_mode_t mode)
+{
+    status_t status = kStatus_Fail;
+
+    do
+    {
+        status = caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    } while (status == kStatus_CAAM_Again);
+
+    if (kStatus_Success != status)
+    {
+        return status;
+    }
+
+    return CAAM_Wait(base, handle, descriptor, mode);
+}
+
 /* this function shall be only called inside CAAM driver critical section
  * because it accesses global variables.
  */
@@ -796,37 +813,37 @@ static const uint32_t templateAesGcm[] = {
     /* 25 */ 0x00000000u, /* place: received ICV address */
 };
 
-status_t caam_aes_gcm_non_blocking(CAAM_Type *base,
-                                   caam_handle_t *handle,
-                                   caam_desc_aes_gcm_t descriptor,
-                                   const uint8_t *input,
-                                   uint8_t *output,
-                                   size_t size,
-                                   const uint8_t *iv,
-                                   size_t ivSize,
-                                   const uint8_t *aad,
-                                   size_t aadSize,
-                                   const uint8_t *key,
-                                   size_t keySize,
-                                   uint32_t tag,
-                                   size_t tagSize,
-                                   int encrypt);
+status_t s_caam_aes_gcm_non_blocking(CAAM_Type *base,
+                                     caam_handle_t *handle,
+                                     caam_desc_aes_gcm_t descriptor,
+                                     const uint8_t *input,
+                                     uint8_t *output,
+                                     size_t size,
+                                     const uint8_t *iv,
+                                     size_t ivSize,
+                                     const uint8_t *aad,
+                                     size_t aadSize,
+                                     const uint8_t *key,
+                                     size_t keySize,
+                                     uint32_t tag,
+                                     size_t tagSize,
+                                     int encrypt);
 
-status_t caam_aes_gcm_non_blocking(CAAM_Type *base,
-                                   caam_handle_t *handle,
-                                   caam_desc_aes_gcm_t descriptor,
-                                   const uint8_t *input,
-                                   uint8_t *output,
-                                   size_t size,
-                                   const uint8_t *iv,
-                                   size_t ivSize,
-                                   const uint8_t *aad,
-                                   size_t aadSize,
-                                   const uint8_t *key,
-                                   size_t keySize,
-                                   uint32_t tag,
-                                   size_t tagSize,
-                                   int encrypt)
+status_t s_caam_aes_gcm_non_blocking(CAAM_Type *base,
+                                     caam_handle_t *handle,
+                                     caam_desc_aes_gcm_t descriptor,
+                                     const uint8_t *input,
+                                     uint8_t *output,
+                                     size_t size,
+                                     const uint8_t *iv,
+                                     size_t ivSize,
+                                     const uint8_t *aad,
+                                     size_t aadSize,
+                                     const uint8_t *key,
+                                     size_t keySize,
+                                     uint32_t tag,
+                                     size_t tagSize,
+                                     int encrypt)
 {
     BUILD_ASSURE(sizeof(templateAesGcm) <= sizeof(caam_desc_aes_gcm_t), caam_desc_aes_gcm_t_size);
     status_t status;
@@ -907,8 +924,103 @@ status_t caam_aes_gcm_non_blocking(CAAM_Type *base,
         descriptor[16] = DESC_HALT; /* always halt with status 0x0 (normal) */
     }
 
-    /* add operation specified by descriptor to CAAM Job Ring */
-    return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    return kStatus_Success;
+}
+
+status_t caam_aes_gcm_non_blocking(CAAM_Type *base,
+                                   caam_handle_t *handle,
+                                   caam_desc_aes_gcm_t descriptor,
+                                   const uint8_t *input,
+                                   uint8_t *output,
+                                   size_t size,
+                                   const uint8_t *iv,
+                                   size_t ivSize,
+                                   const uint8_t *aad,
+                                   size_t aadSize,
+                                   const uint8_t *key,
+                                   size_t keySize,
+                                   uint32_t tag,
+                                   size_t tagSize,
+                                   int encrypt);
+
+status_t caam_aes_gcm_non_blocking(CAAM_Type *base,
+                                   caam_handle_t *handle,
+                                   caam_desc_aes_gcm_t descriptor,
+                                   const uint8_t *input,
+                                   uint8_t *output,
+                                   size_t size,
+                                   const uint8_t *iv,
+                                   size_t ivSize,
+                                   const uint8_t *aad,
+                                   size_t aadSize,
+                                   const uint8_t *key,
+                                   size_t keySize,
+                                   uint32_t tag,
+                                   size_t tagSize,
+                                   int encrypt)
+{
+    status_t status = s_caam_aes_gcm_non_blocking(base, handle, descriptor, input, output, size, iv, ivSize, aad,
+                                                  aadSize, key, keySize, tag, tagSize, encrypt);
+
+    if (status == kStatus_Success)
+    {
+        /* add operation specified by descriptor to CAAM Job Ring */
+        return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    }
+    else
+    {
+        return status;
+    }
+}
+
+status_t caam_aes_gcm_non_blocking_extended(CAAM_Type *base,
+                                            caam_handle_t *handle,
+                                            caam_desc_aes_gcm_t descriptor,
+                                            const uint8_t *input,
+                                            uint8_t *output,
+                                            size_t size,
+                                            const uint8_t *iv,
+                                            size_t ivSize,
+                                            const uint8_t *aad,
+                                            size_t aadSize,
+                                            const uint8_t *key,
+                                            size_t keySize,
+                                            uint32_t tag,
+                                            size_t tagSize,
+                                            int encrypt,
+                                            caam_key_type_t blackKeyType);
+
+status_t caam_aes_gcm_non_blocking_extended(CAAM_Type *base,
+                                            caam_handle_t *handle,
+                                            caam_desc_aes_gcm_t descriptor,
+                                            const uint8_t *input,
+                                            uint8_t *output,
+                                            size_t size,
+                                            const uint8_t *iv,
+                                            size_t ivSize,
+                                            const uint8_t *aad,
+                                            size_t aadSize,
+                                            const uint8_t *key,
+                                            size_t keySize,
+                                            uint32_t tag,
+                                            size_t tagSize,
+                                            int encrypt,
+                                            caam_key_type_t blackKeyType)
+{
+    status_t status = s_caam_aes_gcm_non_blocking(base, handle, descriptor, input, output, size, iv, ivSize, aad,
+                                                  aadSize, key, keySize, tag, tagSize, encrypt);
+
+    if (status == kStatus_Success)
+    {
+        descriptor[1] |= (uint32_t)blackKeyType;
+
+        /* add operation specified by descriptor to CAAM Job Ring */
+        return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    }
+    else
+    {
+        return status;
+    }
 }
 
 static status_t caam_aes_ccm_check_input_args(CAAM_Type *base,
@@ -1036,37 +1148,37 @@ static const uint32_t templateAesCcm[] = {
 
 };
 
-status_t caam_aes_ccm_non_blocking(CAAM_Type *base,
-                                   caam_handle_t *handle,
-                                   caam_desc_aes_ccm_t descriptor,
-                                   const uint8_t *input,
-                                   uint8_t *output,
-                                   size_t size,
-                                   const uint8_t *iv,
-                                   size_t ivSize,
-                                   const uint8_t *aad,
-                                   size_t aadSize,
-                                   const uint8_t *key,
-                                   size_t keySize,
-                                   uint32_t tag,
-                                   size_t tagSize,
-                                   int encrypt);
+status_t s_caam_aes_ccm_non_blocking(CAAM_Type *base,
+                                     caam_handle_t *handle,
+                                     caam_desc_aes_ccm_t descriptor,
+                                     const uint8_t *input,
+                                     uint8_t *output,
+                                     size_t size,
+                                     const uint8_t *iv,
+                                     size_t ivSize,
+                                     const uint8_t *aad,
+                                     size_t aadSize,
+                                     const uint8_t *key,
+                                     size_t keySize,
+                                     uint32_t tag,
+                                     size_t tagSize,
+                                     int encrypt);
 
-status_t caam_aes_ccm_non_blocking(CAAM_Type *base,
-                                   caam_handle_t *handle,
-                                   caam_desc_aes_ccm_t descriptor,
-                                   const uint8_t *input,
-                                   uint8_t *output,
-                                   size_t size,
-                                   const uint8_t *iv,
-                                   size_t ivSize,
-                                   const uint8_t *aad,
-                                   size_t aadSize,
-                                   const uint8_t *key,
-                                   size_t keySize,
-                                   uint32_t tag,
-                                   size_t tagSize,
-                                   int encrypt)
+status_t s_caam_aes_ccm_non_blocking(CAAM_Type *base,
+                                     caam_handle_t *handle,
+                                     caam_desc_aes_ccm_t descriptor,
+                                     const uint8_t *input,
+                                     uint8_t *output,
+                                     size_t size,
+                                     const uint8_t *iv,
+                                     size_t ivSize,
+                                     const uint8_t *aad,
+                                     size_t aadSize,
+                                     const uint8_t *key,
+                                     size_t keySize,
+                                     uint32_t tag,
+                                     size_t tagSize,
+                                     int encrypt)
 {
     BUILD_ASSURE(sizeof(templateAesCcm) <= sizeof(caam_desc_aes_ccm_t), caam_desc_aes_ccm_t_size);
     status_t status;
@@ -1165,8 +1277,102 @@ status_t caam_aes_ccm_non_blocking(CAAM_Type *base,
         descriptor[24] = DESC_HALT; /* always halt with status 0x0 (normal) */
     }
 
-    /* add operation specified by descriptor to CAAM Job Ring */
-    return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    return kStatus_Success;
+}
+
+status_t caam_aes_ccm_non_blocking(CAAM_Type *base,
+                                   caam_handle_t *handle,
+                                   caam_desc_aes_ccm_t descriptor,
+                                   const uint8_t *input,
+                                   uint8_t *output,
+                                   size_t size,
+                                   const uint8_t *iv,
+                                   size_t ivSize,
+                                   const uint8_t *aad,
+                                   size_t aadSize,
+                                   const uint8_t *key,
+                                   size_t keySize,
+                                   uint32_t tag,
+                                   size_t tagSize,
+                                   int encrypt);
+
+status_t caam_aes_ccm_non_blocking(CAAM_Type *base,
+                                   caam_handle_t *handle,
+                                   caam_desc_aes_ccm_t descriptor,
+                                   const uint8_t *input,
+                                   uint8_t *output,
+                                   size_t size,
+                                   const uint8_t *iv,
+                                   size_t ivSize,
+                                   const uint8_t *aad,
+                                   size_t aadSize,
+                                   const uint8_t *key,
+                                   size_t keySize,
+                                   uint32_t tag,
+                                   size_t tagSize,
+                                   int encrypt)
+{
+    status_t status = s_caam_aes_ccm_non_blocking(base, handle, descriptor, input, output, size, iv, ivSize, aad,
+                                                  aadSize, key, keySize, tag, tagSize, encrypt);
+    if (status == kStatus_Success)
+    {
+        /* add operation specified by descriptor to CAAM Job Ring */
+        return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    }
+    else
+    {
+        return status;
+    }
+}
+
+status_t caam_aes_ccm_non_blocking_extended(CAAM_Type *base,
+                                            caam_handle_t *handle,
+                                            caam_desc_aes_ccm_t descriptor,
+                                            const uint8_t *input,
+                                            uint8_t *output,
+                                            size_t size,
+                                            const uint8_t *iv,
+                                            size_t ivSize,
+                                            const uint8_t *aad,
+                                            size_t aadSize,
+                                            const uint8_t *key,
+                                            size_t keySize,
+                                            uint32_t tag,
+                                            size_t tagSize,
+                                            int encrypt,
+                                            caam_key_type_t blackKeyType);
+
+status_t caam_aes_ccm_non_blocking_extended(CAAM_Type *base,
+                                            caam_handle_t *handle,
+                                            caam_desc_aes_ccm_t descriptor,
+                                            const uint8_t *input,
+                                            uint8_t *output,
+                                            size_t size,
+                                            const uint8_t *iv,
+                                            size_t ivSize,
+                                            const uint8_t *aad,
+                                            size_t aadSize,
+                                            const uint8_t *key,
+                                            size_t keySize,
+                                            uint32_t tag,
+                                            size_t tagSize,
+                                            int encrypt,
+                                            caam_key_type_t blackKeyType)
+{
+    status_t status = s_caam_aes_ccm_non_blocking(base, handle, descriptor, input, output, size, iv, ivSize, aad,
+                                                  aadSize, key, keySize, tag, tagSize, encrypt);
+
+    if (status == kStatus_Success)
+    {
+        descriptor[1] |= (uint32_t)blackKeyType;
+
+        /* add operation specified by descriptor to CAAM Job Ring */
+        return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    }
+    else
+    {
+        return status;
+    }
 }
 
 /*!
@@ -1231,7 +1437,6 @@ status_t CAAM_AES_EncryptTagCcmNonBlocking(CAAM_Type *base,
  *                14, or 16.
  * return Status from job descriptor push
  */
-
 status_t CAAM_AES_DecryptTagCcmNonBlocking(CAAM_Type *base,
                                            caam_handle_t *handle,
                                            caam_desc_aes_ccm_t descriptor,
@@ -1249,6 +1454,89 @@ status_t CAAM_AES_DecryptTagCcmNonBlocking(CAAM_Type *base,
 {
     return caam_aes_ccm_non_blocking(base, handle, descriptor, ciphertext, plaintext, size, iv, ivSize, aad, aadSize,
                                      key, keySize, (uint32_t)tag, tagSize, 0);
+}
+
+/*!
+ * brief Encrypts AES and tags using CCM block mode.
+ *
+ * Puts AES CCM encrypt and tag descriptor to CAAM input job ring.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param[out] descriptor Memory for the CAAM descriptor.
+ * param plaintext Input plain text to encrypt
+ * param[out] ciphertext Output cipher text.
+ * param size Size of input and output data in bytes. Zero means authentication only.
+ * param iv Nonce
+ * param ivSize Length of the Nonce in bytes. Must be 7, 8, 9, 10, 11, 12, or 13.
+ * param aad Input additional authentication data. Can be NULL if aadSize is zero.
+ * param aadSize Input size in bytes of AAD. Zero means data mode only (authentication skipped).
+ * param key Input key to use for encryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param[out] tag Generated output tag. Set to NULL to skip tag processing.
+ * param tagSize Input size of the tag to generate, in bytes. Must be 4, 6, 8, 10, 12, 14, or 16.
+ * return Status from job descriptor push
+ */
+status_t CAAM_AES_EncryptTagCcmNonBlockingExtended(CAAM_Type *base,
+                                                   caam_handle_t *handle,
+                                                   caam_desc_aes_ccm_t descriptor,
+                                                   const uint8_t *plaintext,
+                                                   uint8_t *ciphertext,
+                                                   size_t size,
+                                                   const uint8_t *iv,
+                                                   size_t ivSize,
+                                                   const uint8_t *aad,
+                                                   size_t aadSize,
+                                                   const uint8_t *key,
+                                                   size_t keySize,
+                                                   uint8_t *tag,
+                                                   size_t tagSize,
+                                                   caam_key_type_t blackKeyType)
+{
+    return caam_aes_ccm_non_blocking_extended(base, handle, descriptor, plaintext, ciphertext, size, iv, ivSize, aad,
+                                              aadSize, key, keySize, (uint32_t)tag, tagSize, 1, blackKeyType);
+}
+
+/*!
+ * brief Decrypts AES and authenticates using CCM block mode.
+ *
+ * Puts AES CCM decrypt and check tag descriptor to CAAM input job ring.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param[out] descriptor Memory for the CAAM descriptor.
+ * param ciphertext Input cipher text to decrypt
+ * param[out] plaintext Output plain text.
+ * param size Size of input and output data in bytes. Zero means authentication data only.
+ * param iv Nonce
+ * param ivSize Length of the Nonce in bytes. Must be 7, 8, 9, 10, 11, 12, or 13.
+ * param aad Input additional authentication data. Can be NULL if aadSize is zero.
+ * param aadSize Input size in bytes of AAD. Zero means data mode only (authentication data skipped).
+ * param key Input key to use for decryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param tag Received tag. Set to NULL to skip tag processing.
+ * param tagSize Input size of the received tag to compare with the computed tag, in bytes. Must be 4, 6, 8, 10, 12,
+ *                14, or 16.
+ * return Status from job descriptor push
+ */
+status_t CAAM_AES_DecryptTagCcmNonBlockingExtended(CAAM_Type *base,
+                                                   caam_handle_t *handle,
+                                                   caam_desc_aes_ccm_t descriptor,
+                                                   const uint8_t *ciphertext,
+                                                   uint8_t *plaintext,
+                                                   size_t size,
+                                                   const uint8_t *iv,
+                                                   size_t ivSize,
+                                                   const uint8_t *aad,
+                                                   size_t aadSize,
+                                                   const uint8_t *key,
+                                                   size_t keySize,
+                                                   const uint8_t *tag,
+                                                   size_t tagSize,
+                                                   caam_key_type_t blackKeyType)
+{
+    return caam_aes_ccm_non_blocking_extended(base, handle, descriptor, ciphertext, plaintext, size, iv, ivSize, aad,
+                                              aadSize, key, keySize, (uint32_t)tag, tagSize, 0, blackKeyType);
 }
 
 static const uint32_t templateAesCtr[] = {
@@ -1309,17 +1597,17 @@ static const uint32_t templateAesCtr[] = {
  * are not used.
  * return Status from job descriptor push
  */
-status_t CAAM_AES_CryptCtrNonBlocking(CAAM_Type *base,
-                                      caam_handle_t *handle,
-                                      caam_desc_aes_ctr_t descriptor,
-                                      const uint8_t *input,
-                                      uint8_t *output,
-                                      size_t size,
-                                      uint8_t *counter,
-                                      const uint8_t *key,
-                                      size_t keySize,
-                                      uint8_t *counterlast,
-                                      size_t *szLeft)
+static status_t s_CAAM_AES_CryptCtrNonBlocking(CAAM_Type *base,
+                                        caam_handle_t *handle,
+                                        caam_desc_aes_ctr_t descriptor,
+                                        const uint8_t *input,
+                                        uint8_t *output,
+                                        size_t size,
+                                        uint8_t *counter,
+                                        const uint8_t *key,
+                                        size_t keySize,
+                                        uint8_t *counterlast,
+                                        size_t *szLeft)
 {
     BUILD_ASSURE(sizeof(templateAesCtr) <= sizeof(caam_desc_aes_ctr_t), caam_desc_aes_ctr_t_size);
     uint32_t descriptorSize;
@@ -1394,8 +1682,115 @@ status_t CAAM_AES_CryptCtrNonBlocking(CAAM_Type *base,
     /* read last CTRi from AES back to caller */
     descriptor[24] = ADD_OFFSET((uint32_t)counter);
 
-    /* add operation specified by descriptor to CAAM Job Ring */
-    return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    return kStatus_Success;
+}
+
+/*!
+ * brief Encrypts or decrypts AES using CTR block mode.
+ *
+ * Encrypts or decrypts AES using CTR block mode.
+ * AES CTR mode uses only forward AES cipher and same algorithm for encryption and decryption.
+ * The only difference between encryption and decryption is that, for encryption, the input argument
+ * is plain text and the output argument is cipher text. For decryption, the input argument is cipher text
+ * and the output argument is plain text.
+ *
+ * Puts AES CTR crypt descriptor to CAAM input job ring.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param[out] descriptor Memory for the CAAM descriptor.
+ * param input Input data for CTR block mode
+ * param[out] output Output data for CTR block mode
+ * param size Size of input and output data in bytes
+ * param[in,out] counter Input counter (updates on return)
+ * param key Input key to use for forward AES cipher
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param[out] counterlast Output cipher of last counter, for chained CTR calls. NULL can be passed if chained calls are
+ * not used.
+ * param[out] szLeft Output number of bytes in left unused in counterlast block. NULL can be passed if chained calls
+ * are not used.
+ * return Status from job descriptor push
+ */
+status_t CAAM_AES_CryptCtrNonBlocking(CAAM_Type *base,
+                                      caam_handle_t *handle,
+                                      caam_desc_aes_ctr_t descriptor,
+                                      const uint8_t *input,
+                                      uint8_t *output,
+                                      size_t size,
+                                      uint8_t *counter,
+                                      const uint8_t *key,
+                                      size_t keySize,
+                                      uint8_t *counterlast,
+                                      size_t *szLeft)
+{
+    status_t status = s_CAAM_AES_CryptCtrNonBlocking(base, handle, descriptor, input, output, size, counter, key,
+                                                     keySize, counterlast, szLeft);
+
+    if (status == kStatus_Success)
+    {
+        /* add operation specified by descriptor to CAAM Job Ring */
+        return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    }
+    else
+    {
+        return status;
+    }
+}
+
+/*!
+ * brief Encrypts or decrypts AES using CTR block mode using black key.
+ *
+ * Encrypts or decrypts AES using CTR block mode.
+ * AES CTR mode uses only forward AES cipher and same algorithm for encryption and decryption.
+ * The only difference between encryption and decryption is that, for encryption, the input argument
+ * is plain text and the output argument is cipher text. For decryption, the input argument is cipher text
+ * and the output argument is plain text.
+ *
+ * Puts AES CTR crypt descriptor to CAAM input job ring.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param[out] descriptor Memory for the CAAM descriptor.
+ * param input Input data for CTR block mode
+ * param[out] output Output data for CTR block mode
+ * param size Size of input and output data in bytes
+ * param[in,out] counter Input counter (updates on return)
+ * param key Input key to use for forward AES cipher
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param[out] counterlast Output cipher of last counter, for chained CTR calls. NULL can be passed if chained calls are
+ * not used.
+ * param[out] szLeft Output number of bytes in left unused in counterlast block. NULL can be passed if chained calls
+ * are not used.
+ * param blackKeyType Type of black key
+ * return Status from job descriptor push
+ */
+status_t CAAM_AES_CryptCtrNonBlockingExtended(CAAM_Type *base,
+                                              caam_handle_t *handle,
+                                              caam_desc_aes_ctr_t descriptor,
+                                              const uint8_t *input,
+                                              uint8_t *output,
+                                              size_t size,
+                                              uint8_t *counter,
+                                              const uint8_t *key,
+                                              size_t keySize,
+                                              uint8_t *counterlast,
+                                              size_t *szLeft,
+                                              caam_key_type_t blackKeyType)
+{
+    status_t status = s_CAAM_AES_CryptCtrNonBlocking(base, handle, descriptor, input, output, size, counter, key,
+                                                     keySize, counterlast, szLeft);
+
+    if (status == kStatus_Success)
+    {
+        descriptor[1] |= (uint32_t)blackKeyType;
+
+        /* add operation specified by descriptor to CAAM Job Ring */
+        return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    }
+    else
+    {
+        return status;
+    }
 }
 
 static const uint32_t templateAesEcb[] = {
@@ -1425,14 +1820,14 @@ static const uint32_t templateAesEcb[] = {
  * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
  * return Status from job descriptor push
  */
-status_t CAAM_AES_EncryptEcbNonBlocking(CAAM_Type *base,
-                                        caam_handle_t *handle,
-                                        caam_desc_aes_ecb_t descriptor,
-                                        const uint8_t *plaintext,
-                                        uint8_t *ciphertext,
-                                        size_t size,
-                                        const uint8_t *key,
-                                        size_t keySize)
+static status_t s_CAAM_AES_EncryptEcbNonBlocking(CAAM_Type *base,
+                                          caam_handle_t *handle,
+                                          caam_desc_aes_ecb_t descriptor,
+                                          const uint8_t *plaintext,
+                                          uint8_t *ciphertext,
+                                          size_t size,
+                                          const uint8_t *key,
+                                          size_t keySize)
 {
     BUILD_ASSURE(sizeof(templateAesEcb) <= sizeof(caam_desc_aes_ecb_t), caam_desc_aes_ecb_t_size);
     uint32_t descriptorSize;
@@ -1460,7 +1855,95 @@ status_t CAAM_AES_EncryptEcbNonBlocking(CAAM_Type *base,
     descriptor[8] = size; /* FIFO STORE EXT size */
     descriptor[9] |= 1u;  /* add ENC bit to specify Encrypt OPERATION */
 
-    return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    return kStatus_Success;
+}
+
+/*!
+ * brief Encrypts AES using the ECB block mode.
+ *
+ * Puts AES ECB encrypt descriptor to CAAM input job ring.
+ *
+ * param base CAAM peripheral base address
+ * param plaintext Input plain text to encrypt
+ * param[out] descriptor Memory for the CAAM descriptor.
+ * param[out] ciphertext Output cipher text
+ * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * param key Input key to use for encryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * return Status from job descriptor push
+ */
+status_t CAAM_AES_EncryptEcbNonBlocking(CAAM_Type *base,
+                                        caam_handle_t *handle,
+                                        caam_desc_aes_ecb_t descriptor,
+                                        const uint8_t *plaintext,
+                                        uint8_t *ciphertext,
+                                        size_t size,
+                                        const uint8_t *key,
+                                        size_t keySize)
+{
+    status_t status =
+        s_CAAM_AES_EncryptEcbNonBlocking(base, handle, descriptor, plaintext, ciphertext, size, key, keySize);
+
+    if (status == kStatus_Success)
+    {
+        /* add operation specified by descriptor to CAAM Job Ring */
+        return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    }
+    else
+    {
+        return status;
+    }
+}
+
+/*!
+ * brief Decrypts AES using ECB block mode.
+ *
+ * Puts AES ECB decrypt descriptor to CAAM input job ring.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param[out] descriptor Memory for the CAAM descriptor.
+ * param ciphertext Input cipher text to decrypt
+ * param[out] plaintext Output plain text
+ * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * param key Input key.
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * return Status from job descriptor push
+ */
+static status_t s_CAAM_AES_DecryptEcbNonBlocking(CAAM_Type *base,
+                                          caam_handle_t *handle,
+                                          caam_desc_aes_ecb_t descriptor,
+                                          const uint8_t *ciphertext,
+                                          uint8_t *plaintext,
+                                          size_t size,
+                                          const uint8_t *key,
+                                          size_t keySize)
+{
+    uint32_t descriptorSize;
+
+    if (!caam_check_key_size(keySize))
+    {
+        return kStatus_InvalidArgument;
+    }
+    /* ECB mode, size must be non-zero 16-byte multiple */
+    if (0U != (size % 16u))
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    descriptorSize = ARRAY_SIZE(templateAesEcb);
+    (void)caam_memcpy(descriptor, templateAesEcb, sizeof(templateAesEcb));
+    descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
+    descriptor[1] |= (keySize & DESC_KEY_SIZE_MASK);
+    descriptor[2] = (uint32_t)ADD_OFFSET((uint32_t)key);
+    /* descriptor[3] FIFO LOAD copied from template */
+    descriptor[4] = (uint32_t)ADD_OFFSET((uint32_t)ciphertext);
+    descriptor[5] = size;
+    /* descriptor[6] FIFO STORE copied from template */
+    descriptor[7] = (uint32_t)ADD_OFFSET((uint32_t)plaintext);
+    descriptor[8] = size; /* FIFO STORE EXT size */
+
+    return kStatus_Success;
 }
 
 /*!
@@ -1487,31 +1970,101 @@ status_t CAAM_AES_DecryptEcbNonBlocking(CAAM_Type *base,
                                         const uint8_t *key,
                                         size_t keySize)
 {
-    uint32_t descriptorSize;
+    status_t status =
+        s_CAAM_AES_DecryptEcbNonBlocking(base, handle, descriptor, ciphertext, plaintext, size, key, keySize);
 
-    if (!caam_check_key_size(keySize))
+    if (status == kStatus_Success)
     {
-        return kStatus_InvalidArgument;
+        /* add operation specified by descriptor to CAAM Job Ring */
+        return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
     }
-    /* ECB mode, size must be non-zero 16-byte multiple */
-    if (0U != (size % 16u))
+    else
     {
-        return kStatus_InvalidArgument;
+        return status;
     }
+}
 
-    descriptorSize = ARRAY_SIZE(templateAesEcb);
-    (void)caam_memcpy(descriptor, templateAesEcb, sizeof(templateAesEcb));
-    descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
-    descriptor[1] |= (keySize & DESC_KEY_SIZE_MASK);
-    descriptor[2] = (uint32_t)ADD_OFFSET((uint32_t)key);
-    /* descriptor[3] FIFO LOAD copied from template */
-    descriptor[4] = (uint32_t)ADD_OFFSET((uint32_t)ciphertext);
-    descriptor[5] = size;
-    /* descriptor[6] FIFO STORE copied from template */
-    descriptor[7] = (uint32_t)ADD_OFFSET((uint32_t)plaintext);
-    descriptor[8] = size; /* FIFO STORE EXT size */
+/*!
+ * brief Encrypts AES using the ECB block mode using black key.
+ *
+ * Puts AES ECB encrypt descriptor to CAAM input job ring.
+ *
+ * param base CAAM peripheral base address
+ * param plaintext Input plain text to encrypt
+ * param[out] descriptor Memory for the CAAM descriptor.
+ * param[out] ciphertext Output cipher text
+ * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * param key Input key to use for encryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param blackKeyType Type of black key
+ * return Status from job descriptor push
+ */
+status_t CAAM_AES_EncryptEcbNonBlockingExtended(CAAM_Type *base,
+                                                caam_handle_t *handle,
+                                                caam_desc_aes_ecb_t descriptor,
+                                                const uint8_t *plaintext,
+                                                uint8_t *ciphertext,
+                                                size_t size,
+                                                const uint8_t *key,
+                                                size_t keySize,
+                                                caam_key_type_t blackKeyType)
+{
+    status_t status =
+        s_CAAM_AES_EncryptEcbNonBlocking(base, handle, descriptor, plaintext, ciphertext, size, key, keySize);
 
-    return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    if (status == kStatus_Success)
+    {
+        descriptor[1] |= (uint32_t)blackKeyType;
+
+        /* add operation specified by descriptor to CAAM Job Ring */
+        return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    }
+    else
+    {
+        return status;
+    }
+}
+
+/*!
+ * brief Decrypts AES using ECB block mode using black key.
+ *
+ * Puts AES ECB decrypt descriptor to CAAM input job ring.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param[out] descriptor Memory for the CAAM descriptor.
+ * param ciphertext Input cipher text to decrypt
+ * param[out] plaintext Output plain text
+ * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * param key Input key.
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param blackKeyType Type of black key
+ * return Status from job descriptor push
+ */
+status_t CAAM_AES_DecryptEcbNonBlockingExtended(CAAM_Type *base,
+                                                caam_handle_t *handle,
+                                                caam_desc_aes_ecb_t descriptor,
+                                                const uint8_t *ciphertext,
+                                                uint8_t *plaintext,
+                                                size_t size,
+                                                const uint8_t *key,
+                                                size_t keySize,
+                                                caam_key_type_t blackKeyType)
+{
+    status_t status =
+        s_CAAM_AES_DecryptEcbNonBlocking(base, handle, descriptor, ciphertext, plaintext, size, key, keySize);
+
+    if (status == kStatus_Success)
+    {
+        descriptor[1] |= (uint32_t)blackKeyType;
+
+        /* add operation specified by descriptor to CAAM Job Ring */
+        return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    }
+    else
+    {
+        return status;
+    }
 }
 
 static const uint32_t templateAesCbc[] = {
@@ -1534,8 +2087,6 @@ static const uint32_t templateAesCbc[] = {
  *
  * Puts AES CBC encrypt descriptor to CAAM input job ring.
  *
- * param base CAAM peripheral base address
- * param handle Handle used for this request. Specifies jobRing.
  * param[out] descriptor Memory for the CAAM descriptor.
  * param plaintext Input plain text to encrypt
  * param[out] ciphertext Output cipher text
@@ -1545,15 +2096,13 @@ static const uint32_t templateAesCbc[] = {
  * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
  * return Status from job descriptor push
  */
-status_t CAAM_AES_EncryptCbcNonBlocking(CAAM_Type *base,
-                                        caam_handle_t *handle,
-                                        caam_desc_aes_cbc_t descriptor,
-                                        const uint8_t *plaintext,
-                                        uint8_t *ciphertext,
-                                        size_t size,
-                                        const uint8_t *iv,
-                                        const uint8_t *key,
-                                        size_t keySize)
+static status_t s_CAAM_AES_EncryptCbc(caam_desc_aes_cbc_t descriptor,
+                                      const uint8_t *plaintext,
+                                      uint8_t *ciphertext,
+                                      size_t size,
+                                      const uint8_t *iv,
+                                      const uint8_t *key,
+                                      size_t keySize)
 {
     BUILD_ASSURE(sizeof(templateAesCbc) <= sizeof(caam_desc_aes_cbc_t), caam_desc_aes_cbc_t_size);
     uint32_t descriptorSize;
@@ -1594,8 +2143,46 @@ status_t CAAM_AES_EncryptCbcNonBlocking(CAAM_Type *base,
     /* AES CBC */
     descriptor[11] |= 1u; /* add ENC bit to specify Encrypt OPERATION */
 
-    /* add operation specified by descriptor to CAAM Job Ring */
-    return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    return kStatus_Success;
+}
+
+/*!
+ * brief Encrypts AES using CBC block mode.
+ *
+ * Puts AES CBC encrypt descriptor to CAAM input job ring.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param[out] descriptor Memory for the CAAM descriptor.
+ * param plaintext Input plain text to encrypt
+ * param[out] ciphertext Output cipher text
+ * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * param iv Input initial vector to combine with the first input block.
+ * param key Input key to use for encryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * return Status from job descriptor push
+ */
+status_t CAAM_AES_EncryptCbcNonBlocking(CAAM_Type *base,
+                                        caam_handle_t *handle,
+                                        caam_desc_aes_cbc_t descriptor,
+                                        const uint8_t *plaintext,
+                                        uint8_t *ciphertext,
+                                        size_t size,
+                                        const uint8_t *iv,
+                                        const uint8_t *key,
+                                        size_t keySize)
+{
+    status_t status = s_CAAM_AES_EncryptCbc(descriptor, plaintext, ciphertext, size, iv, key, keySize);
+
+    if (status == kStatus_Success)
+    {
+        /* add operation specified by descriptor to CAAM Job Ring */
+        return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    }
+    else
+    {
+        return status;
+    }
 }
 
 /*!
@@ -1603,8 +2190,6 @@ status_t CAAM_AES_EncryptCbcNonBlocking(CAAM_Type *base,
  *
  * Puts AES CBC decrypt descriptor to CAAM input job ring.
  *
- * param base CAAM peripheral base address
- * param handle Handle used for this request. Specifies jobRing.
  * param[out] descriptor Memory for the CAAM descriptor.
  * param ciphertext Input cipher text to decrypt
  * param[out] plaintext Output plain text
@@ -1614,15 +2199,13 @@ status_t CAAM_AES_EncryptCbcNonBlocking(CAAM_Type *base,
  * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
  * return Status from job descriptor push
  */
-status_t CAAM_AES_DecryptCbcNonBlocking(CAAM_Type *base,
-                                        caam_handle_t *handle,
-                                        caam_desc_aes_cbc_t descriptor,
-                                        const uint8_t *ciphertext,
-                                        uint8_t *plaintext,
-                                        size_t size,
-                                        const uint8_t *iv,
-                                        const uint8_t *key,
-                                        size_t keySize)
+static status_t s_CAAM_AES_DecryptCbc(caam_desc_aes_cbc_t descriptor,
+                                      const uint8_t *ciphertext,
+                                      uint8_t *plaintext,
+                                      size_t size,
+                                      const uint8_t *iv,
+                                      const uint8_t *key,
+                                      size_t keySize)
 {
     uint32_t descriptorSize;
 
@@ -1662,7 +2245,131 @@ status_t CAAM_AES_DecryptCbcNonBlocking(CAAM_Type *base,
     /* AES CBC Decrypt OPERATION in descriptor[11] */
 
     /* add operation specified by descriptor to CAAM Job Ring */
-    return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    return kStatus_Success;
+}
+/*!
+ * brief Decrypts AES using CBC block mode.
+ *
+ * Puts AES CBC decrypt descriptor to CAAM input job ring.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param[out] descriptor Memory for the CAAM descriptor.
+ * param ciphertext Input cipher text to decrypt
+ * param[out] plaintext Output plain text
+ * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * param iv Input initial vector to combine with the first input block.
+ * param key Input key to use for decryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * return Status from job descriptor push
+ */
+status_t CAAM_AES_DecryptCbcNonBlocking(CAAM_Type *base,
+                                        caam_handle_t *handle,
+                                        caam_desc_aes_cbc_t descriptor,
+                                        const uint8_t *ciphertext,
+                                        uint8_t *plaintext,
+                                        size_t size,
+                                        const uint8_t *iv,
+                                        const uint8_t *key,
+                                        size_t keySize)
+{
+    status_t status = s_CAAM_AES_DecryptCbc(descriptor, ciphertext, plaintext, size, iv, key, keySize);
+
+    if (status == kStatus_Success)
+    {
+        /* add operation specified by descriptor to CAAM Job Ring */
+        return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    }
+    else
+    {
+        return status;
+    }
+}
+
+/*!
+ * brief Encrypts AES using CBC block mode using black key.
+ *
+ * Puts AES CBC encrypt descriptor to CAAM input job ring.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param[out] descriptor Memory for the CAAM descriptor.
+ * param plaintext Input plain text to encrypt
+ * param[out] ciphertext Output cipher text
+ * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * param iv Input initial vector to combine with the first input block.
+ * param key Input key to use for encryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param blackKeyType Type of black key
+ * return Status from job descriptor push
+ */
+status_t CAAM_AES_EncryptCbcNonBlockingExtended(CAAM_Type *base,
+                                                caam_handle_t *handle,
+                                                caam_desc_aes_cbc_t descriptor,
+                                                const uint8_t *plaintext,
+                                                uint8_t *ciphertext,
+                                                size_t size,
+                                                const uint8_t *iv,
+                                                const uint8_t *key,
+                                                size_t keySize,
+                                                caam_key_type_t blackKeyType)
+{
+    status_t status = s_CAAM_AES_EncryptCbc(descriptor, plaintext, ciphertext, size, iv, key, keySize);
+
+    if (status == kStatus_Success)
+    {
+        descriptor[1] |= (uint32_t)blackKeyType;
+
+        /* add operation specified by descriptor to CAAM Job Ring */
+        return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    }
+    else
+    {
+        return status;
+    }
+}
+
+/*!
+ * brief Decrypts AES using CBC block mode using black key.
+ *
+ * Puts AES CBC decrypt descriptor to CAAM input job ring.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param[out] descriptor Memory for the CAAM descriptor.
+ * param ciphertext Input cipher text to decrypt
+ * param[out] plaintext Output plain text
+ * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * param iv Input initial vector to combine with the first input block.
+ * param key Input key to use for decryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param blackKeyType Type of black key
+ * return Status from job descriptor push
+ */
+status_t CAAM_AES_DecryptCbcNonBlockingExtended(CAAM_Type *base,
+                                                caam_handle_t *handle,
+                                                caam_desc_aes_cbc_t descriptor,
+                                                const uint8_t *ciphertext,
+                                                uint8_t *plaintext,
+                                                size_t size,
+                                                const uint8_t *iv,
+                                                const uint8_t *key,
+                                                size_t keySize,
+                                                caam_key_type_t blackKeyType)
+{
+    status_t status = s_CAAM_AES_DecryptCbc(descriptor, ciphertext, plaintext, size, iv, key, keySize);
+
+    if (status == kStatus_Success)
+    {
+        descriptor[1] |= (uint32_t)blackKeyType;
+
+        /* add operation specified by descriptor to CAAM Job Ring */
+        return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
+    }
+    else
+    {
+        return status;
+    }
 }
 
 /*!
@@ -1747,6 +2454,92 @@ status_t CAAM_AES_DecryptTagGcmNonBlocking(CAAM_Type *base,
 {
     return caam_aes_gcm_non_blocking(base, handle, descriptor, ciphertext, plaintext, size, iv, ivSize, aad, aadSize,
                                      key, keySize, (uint32_t)tag, tagSize, 0);
+}
+
+/*!
+ * brief Encrypts AES and tags using GCM block mode.
+ *
+ * Encrypts AES and optionally tags using GCM block mode. If plaintext is NULL, only the GHASH is calculated and output
+ * in the 'tag' field.
+ * Puts AES GCM encrypt and tag descriptor to CAAM input job ring.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param[out] descriptor Memory for the CAAM descriptor.
+ * param plaintext Input plain text to encrypt
+ * param[out] ciphertext Output cipher text.
+ * param size Size of input and output data in bytes
+ * param iv Input initial vector
+ * param ivSize Size of the IV
+ * param aad Input additional authentication data
+ * param aadSize Input size in bytes of AAD
+ * param key Input key to use for encryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param[out] tag Output hash tag. Set to NULL to skip tag processing.
+ * param tagSize Input size of the tag to generate, in bytes. Must be 4,8,12,13,14,15 or 16.
+ * return Status from job descriptor push
+ */
+status_t CAAM_AES_EncryptTagGcmNonBlockingExtended(CAAM_Type *base,
+                                                   caam_handle_t *handle,
+                                                   caam_desc_aes_gcm_t descriptor,
+                                                   const uint8_t *plaintext,
+                                                   uint8_t *ciphertext,
+                                                   size_t size,
+                                                   const uint8_t *iv,
+                                                   size_t ivSize,
+                                                   const uint8_t *aad,
+                                                   size_t aadSize,
+                                                   const uint8_t *key,
+                                                   size_t keySize,
+                                                   uint8_t *tag,
+                                                   size_t tagSize,
+                                                   caam_key_type_t blackKeyType)
+{
+    return caam_aes_gcm_non_blocking_extended(base, handle, descriptor, plaintext, ciphertext, size, iv, ivSize, aad,
+                                              aadSize, key, keySize, (uint32_t)tag, tagSize, 1, blackKeyType);
+}
+
+/*!
+ * brief Decrypts AES and authenticates using GCM block mode.
+ *
+ * Decrypts AES and optionally authenticates using GCM block mode. If ciphertext is NULL, only the GHASH is calculated
+ * and compared with the received GHASH in 'tag' field.
+ * Puts AES GCM decrypt and check tag descriptor to CAAM input job ring.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param[out] descriptor Memory for the CAAM descriptor.
+ * param ciphertext Input cipher text to decrypt
+ * param[out] plaintext Output plain text.
+ * param size Size of input and output data in bytes
+ * param iv Input initial vector
+ * param ivSize Size of the IV
+ * param aad Input additional authentication data
+ * param aadSize Input size in bytes of AAD
+ * param key Input key to use for encryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param tag Input hash tag to compare. Set to NULL to skip tag processing.
+ * param tagSize Input size of the tag, in bytes. Must be 4, 8, 12, 13, 14, 15, or 16.
+ * return Status from job descriptor push
+ */
+status_t CAAM_AES_DecryptTagGcmNonBlockingExtended(CAAM_Type *base,
+                                                   caam_handle_t *handle,
+                                                   caam_desc_aes_gcm_t descriptor,
+                                                   const uint8_t *ciphertext,
+                                                   uint8_t *plaintext,
+                                                   size_t size,
+                                                   const uint8_t *iv,
+                                                   size_t ivSize,
+                                                   const uint8_t *aad,
+                                                   size_t aadSize,
+                                                   const uint8_t *key,
+                                                   size_t keySize,
+                                                   const uint8_t *tag,
+                                                   size_t tagSize,
+                                                   caam_key_type_t blackKeyType)
+{
+    return caam_aes_gcm_non_blocking_extended(base, handle, descriptor, ciphertext, plaintext, size, iv, ivSize, aad,
+                                              aadSize, key, keySize, (uint32_t)tag, tagSize, 0, blackKeyType);
 }
 
 /*!
@@ -1846,6 +2639,7 @@ status_t CAAM_Init(CAAM_Type *base, const caam_config_t *config)
      * for FIFO STORE command to be able to store Key register as Black key
      * for example during AES XCBC-MAC context switch (need to store derived key K1 to memory)
      */
+    caam_rng_config_t rngConfig;
     (void)CAAM_RNG_GetDefaultConfig(&rngConfig);
 
     /* reset RNG */
@@ -2150,6 +2944,99 @@ status_t CAAM_AES_DecryptEcb(CAAM_Type *base,
 }
 
 /*!
+ * brief Encrypts AES using the ECB block mode using black key.
+ *
+ * Encrypts AES using the ECB block mode.
+ *
+ * param base CAAM peripheral base address
+ * param plaintext Input plain text to encrypt
+ * param[out] ciphertext Output cipher text
+ * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * param key Input key to use for encryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param blackKeyType Type of black key
+ * return Status from encrypt operation
+ */
+status_t CAAM_AES_EncryptEcbExtended(CAAM_Type *base,
+                                     caam_handle_t *handle,
+                                     const uint8_t *plaintext,
+                                     uint8_t *ciphertext,
+                                     size_t size,
+                                     const uint8_t *key,
+                                     size_t keySize,
+                                     caam_key_type_t blackKeyType)
+{
+    caam_desc_aes_ecb_t descBuf;
+    status_t status;
+
+    do
+    {
+        status = CAAM_AES_EncryptEcbNonBlockingExtended(base, handle, descBuf, plaintext, ciphertext, size, key,
+                                                        keySize, blackKeyType);
+    } while (status == kStatus_CAAM_Again);
+
+    if (status != 0)
+    {
+        return status;
+    }
+
+    status = CAAM_Wait(base, handle, descBuf, kCAAM_Blocking);
+#if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
+    /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
+    /* Invalidate unaligned data can cause memory corruption in write-back mode   */
+    DCACHE_InvalidateByRange((uint32_t)ciphertext, size);
+#endif /* CAAM_OUT_INVALIDATE */
+    return status;
+}
+
+/*!
+ * brief Decrypts AES using ECB block mode using black key.
+ *
+ * Decrypts AES using ECB block mode.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param ciphertext Input cipher text to decrypt
+ * param[out] plaintext Output plain text
+ * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * param key Input key.
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param blackKeyType Type of black key
+ * return Status from decrypt operation
+ */
+status_t CAAM_AES_DecryptEcbExtended(CAAM_Type *base,
+                                     caam_handle_t *handle,
+                                     const uint8_t *ciphertext,
+                                     uint8_t *plaintext,
+                                     size_t size,
+                                     const uint8_t *key,
+                                     size_t keySize,
+                                     caam_key_type_t blackKeyType)
+{
+    caam_desc_aes_ecb_t descBuf;
+    status_t status;
+
+    do
+    {
+        status = CAAM_AES_DecryptEcbNonBlockingExtended(base, handle, descBuf, ciphertext, plaintext, size, key,
+                                                        keySize, blackKeyType);
+    } while (status == kStatus_CAAM_Again);
+
+    if (status != 0)
+    {
+        return status;
+    }
+
+    status = CAAM_Wait(base, handle, descBuf, kCAAM_Blocking);
+#if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
+    /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
+    /* Invalidate unaligned data can cause memory corruption in write-back mode   */
+    DCACHE_InvalidateByRange((uint32_t)plaintext, size);
+#endif /* CAAM_OUT_INVALIDATE */
+    return status;
+}
+
+/*!
  * brief Encrypts AES using CBC block mode.
  *
  * param base CAAM peripheral base address
@@ -2238,6 +3125,100 @@ status_t CAAM_AES_DecryptCbc(CAAM_Type *base,
 }
 
 /*!
+ * brief Encrypts AES using CBC block mode using black key.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param plaintext Input plain text to encrypt
+ * param[out] ciphertext Output cipher text
+ * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * param iv Input initial vector to combine with the first input block.
+ * param key Input key to use for encryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param blackKeyType Type of black key
+ * return Status from encrypt operation
+ */
+status_t CAAM_AES_EncryptCbcExtended(CAAM_Type *base,
+                                     caam_handle_t *handle,
+                                     const uint8_t *plaintext,
+                                     uint8_t *ciphertext,
+                                     size_t size,
+                                     const uint8_t iv[16],
+                                     const uint8_t *key,
+                                     size_t keySize,
+                                     caam_key_type_t blackKeyType)
+{
+    caam_desc_aes_cbc_t descBuf;
+    status_t status;
+
+    do
+    {
+        status = CAAM_AES_EncryptCbcNonBlockingExtended(base, handle, descBuf, plaintext, ciphertext, size, iv, key,
+                                                        keySize, blackKeyType);
+    } while (status == kStatus_CAAM_Again);
+
+    if (status != 0)
+    {
+        return status;
+    }
+
+    status = CAAM_Wait(base, handle, descBuf, kCAAM_Blocking);
+#if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
+    /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
+    /* Invalidate unaligned data can cause memory corruption in write-back mode   */
+    DCACHE_InvalidateByRange((uint32_t)ciphertext, size);
+#endif /* CAAM_OUT_INVALIDATE */
+    return status;
+}
+
+/*!
+ * brief Decrypts AES using CBC block mode using black key.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param ciphertext Input cipher text to decrypt
+ * param[out] plaintext Output plain text
+ * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * param iv Input initial vector to combine with the first input block.
+ * param key Input key to use for decryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param blackKeyType Type of black key
+ * return Status from decrypt operation
+ */
+status_t CAAM_AES_DecryptCbcExtended(CAAM_Type *base,
+                                     caam_handle_t *handle,
+                                     const uint8_t *ciphertext,
+                                     uint8_t *plaintext,
+                                     size_t size,
+                                     const uint8_t iv[16],
+                                     const uint8_t *key,
+                                     size_t keySize,
+                                     caam_key_type_t blackKeyType)
+{
+    caam_desc_aes_cbc_t descBuf;
+    status_t status;
+
+    do
+    {
+        status = CAAM_AES_DecryptCbcNonBlockingExtended(base, handle, descBuf, ciphertext, plaintext, size, iv, key,
+                                                        keySize, blackKeyType);
+    } while (status == kStatus_CAAM_Again);
+
+    if (status != 0)
+    {
+        return status;
+    }
+
+    status = CAAM_Wait(base, handle, descBuf, kCAAM_Blocking);
+#if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
+    /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
+    /* Invalidate unaligned data can cause memory corruption in write-back mode   */
+    DCACHE_InvalidateByRange((uint32_t)plaintext, size);
+#endif /* CAAM_OUT_INVALIDATE */
+    return status;
+}
+
+/*!
  * brief Encrypts or decrypts AES using CTR block mode.
  *
  * Encrypts or decrypts AES using CTR block mode.
@@ -2278,6 +3259,71 @@ status_t CAAM_AES_CryptCtr(CAAM_Type *base,
     {
         status = CAAM_AES_CryptCtrNonBlocking(base, handle, descBuf, input, output, size, counter, key, keySize,
                                               counterlast, szLeft);
+    } while (status == kStatus_CAAM_Again);
+
+    if (status != 0)
+    {
+        return status;
+    }
+
+    status = CAAM_Wait(base, handle, descBuf, kCAAM_Blocking);
+#if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
+    /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
+    /* Invalidate unaligned data can cause memory corruption in write-back mode   */
+    DCACHE_InvalidateByRange((uint32_t)output, size);
+    DCACHE_InvalidateByRange((uint32_t)counter, 16u);
+    DCACHE_InvalidateByRange((uint32_t)szLeft, sizeof(szLeft));
+    if (counterlast != NULL)
+    {
+        DCACHE_InvalidateByRange((uint32_t)counterlast, 16u);
+    }
+#endif /* CAAM_OUT_INVALIDATE */
+    return status;
+}
+
+/*!
+ * brief Encrypts or decrypts AES using CTR block mode using black key.
+ *
+ * Encrypts or decrypts AES using CTR block mode.
+ * AES CTR mode uses only forward AES cipher and same algorithm for encryption and decryption.
+ * The only difference between encryption and decryption is that, for encryption, the input argument
+ * is plain text and the output argument is cipher text. For decryption, the input argument is cipher text
+ * and the output argument is plain text.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param input Input data for CTR block mode
+ * param[out] output Output data for CTR block mode
+ * param size Size of input and output data in bytes
+ * param[in,out] counter Input counter (updates on return)
+ * param key Input key to use for forward AES cipher
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param[out] counterlast Output cipher of last counter, for chained CTR calls. NULL can be passed if chained calls are
+ * not used.
+ * param[out] szLeft Output number of bytes in left unused in counterlast block. NULL can be passed if chained calls
+ * are not used.
+ * param blackKeyType Type of black key
+ * return Status from encrypt operation
+ */
+status_t CAAM_AES_CryptCtrExtended(CAAM_Type *base,
+                                   caam_handle_t *handle,
+                                   const uint8_t *input,
+                                   uint8_t *output,
+                                   size_t size,
+                                   uint8_t counter[16],
+                                   const uint8_t *key,
+                                   size_t keySize,
+                                   uint8_t counterlast[16],
+                                   size_t *szLeft,
+                                   caam_key_type_t blackKeyType)
+{
+    caam_desc_aes_ctr_t descBuf;
+    status_t status;
+
+    do
+    {
+        status = CAAM_AES_CryptCtrNonBlockingExtended(base, handle, descBuf, input, output, size, counter, key, keySize,
+                                                      counterlast, szLeft, blackKeyType);
     } while (status == kStatus_CAAM_Again);
 
     if (status != 0)
@@ -2417,6 +3463,127 @@ status_t CAAM_AES_DecryptTagCcm(CAAM_Type *base,
 }
 
 /*!
+ * brief Encrypts AES and tags using CCM block mode using black key.
+ *
+ * Encrypts AES and optionally tags using CCM block mode.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param plaintext Input plain text to encrypt
+ * param[out] ciphertext Output cipher text.
+ * param size Size of input and output data in bytes. Zero means authentication only.
+ * param iv Nonce
+ * param ivSize Length of the Nonce in bytes. Must be 7, 8, 9, 10, 11, 12, or 13.
+ * param aad Input additional authentication data. Can be NULL if aadSize is zero.
+ * param aadSize Input size in bytes of AAD. Zero means data mode only (authentication skipped).
+ * param key Input key to use for encryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param[out] tag Generated output tag. Set to NULL to skip tag processing.
+ * param tagSize Input size of the tag to generate, in bytes. Must be 4, 6, 8, 10, 12, 14, or 16.
+ * param blackKeyType Type of black key
+ * return Status from encrypt operation
+ */
+status_t CAAM_AES_EncryptTagCcmExtended(CAAM_Type *base,
+                                        caam_handle_t *handle,
+                                        const uint8_t *plaintext,
+                                        uint8_t *ciphertext,
+                                        size_t size,
+                                        const uint8_t *iv,
+                                        size_t ivSize,
+                                        const uint8_t *aad,
+                                        size_t aadSize,
+                                        const uint8_t *key,
+                                        size_t keySize,
+                                        uint8_t *tag,
+                                        size_t tagSize,
+                                        caam_key_type_t blackKeyType)
+{
+    caam_desc_aes_ccm_t descBuf;
+    status_t status;
+
+    do
+    {
+        status =
+            CAAM_AES_EncryptTagCcmNonBlockingExtended(base, handle, descBuf, plaintext, ciphertext, size, iv, ivSize,
+                                                      aad, aadSize, key, keySize, tag, tagSize, blackKeyType);
+    } while (status == kStatus_CAAM_Again);
+
+    if (status != 0)
+    {
+        return status;
+    }
+
+    status = CAAM_Wait(base, handle, descBuf, kCAAM_Blocking);
+
+#if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
+    /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
+    /* Invalidate unaligned data can cause memory corruption in write-back mode   */
+    DCACHE_InvalidateByRange((uint32_t)ciphertext, size);
+    DCACHE_InvalidateByRange((uint32_t)tag, tagSize);
+#endif /* CAAM_OUT_INVALIDATE */
+    return status;
+}
+
+/*!
+ * brief Decrypts AES and authenticates using CCM block mode using black key.
+ *
+ * Decrypts AES and optionally authenticates using CCM block mode.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param ciphertext Input cipher text to decrypt
+ * param[out] plaintext Output plain text.
+ * param size Size of input and output data in bytes. Zero means authentication data only.
+ * param iv Nonce
+ * param ivSize Length of the Nonce in bytes. Must be 7, 8, 9, 10, 11, 12, or 13.
+ * param aad Input additional authentication data. Can be NULL if aadSize is zero.
+ * param aadSize Input size in bytes of AAD. Zero means data mode only (authentication data skipped).
+ * param key Input key to use for decryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param tag Received tag. Set to NULL to skip tag processing.
+ * param tagSize Input size of the received tag to compare with the computed tag, in bytes. Must be 4, 6, 8, 10, 12,
+ *                14, or 16.
+ * param blackKeyType Type of black key
+ * return Status from decrypt operation
+ */
+status_t CAAM_AES_DecryptTagCcmExtended(CAAM_Type *base,
+                                        caam_handle_t *handle,
+                                        const uint8_t *ciphertext,
+                                        uint8_t *plaintext,
+                                        size_t size,
+                                        const uint8_t *iv,
+                                        size_t ivSize,
+                                        const uint8_t *aad,
+                                        size_t aadSize,
+                                        const uint8_t *key,
+                                        size_t keySize,
+                                        const uint8_t *tag,
+                                        size_t tagSize,
+                                        caam_key_type_t blackKeyType)
+{
+    caam_desc_aes_ccm_t descBuf;
+    status_t status;
+
+    do
+    {
+        status =
+            CAAM_AES_DecryptTagCcmNonBlockingExtended(base, handle, descBuf, ciphertext, plaintext, size, iv, ivSize,
+                                                      aad, aadSize, key, keySize, tag, tagSize, blackKeyType);
+    } while (status == kStatus_CAAM_Again);
+
+    if (status != 0)
+    {
+        return status;
+    }
+    status = CAAM_Wait(base, handle, descBuf, kCAAM_Blocking);
+#if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
+    /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
+    /* Invalidate unaligned data can cause memory corruption in write-back mode   */
+    DCACHE_InvalidateByRange((uint32_t)plaintext, size);
+#endif /* CAAM_OUT_INVALIDATE */
+    return status;
+}
+/*!
  * brief Encrypts AES and tags using GCM block mode.
  *
  * Encrypts AES and optionally tags using GCM block mode. If plaintext is NULL, only the GHASH is calculated and output
@@ -2521,6 +3688,131 @@ status_t CAAM_AES_DecryptTagGcm(CAAM_Type *base,
     {
         status = CAAM_AES_DecryptTagGcmNonBlocking(base, handle, descBuf, ciphertext, plaintext, size, iv, ivSize, aad,
                                                    aadSize, key, keySize, tag, tagSize);
+    } while (status == kStatus_CAAM_Again);
+
+    if (status != 0)
+    {
+        return status;
+    }
+    status = CAAM_Wait(base, handle, descBuf, kCAAM_Blocking);
+
+#if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
+    /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
+    /* Invalidate unaligned data can cause memory corruption in write-back mode   */
+    DCACHE_InvalidateByRange((uint32_t)plaintext, size);
+#endif /* CAAM_OUT_INVALIDATE */
+    return status;
+}
+
+/*!
+ * brief Encrypts AES and tags using GCM block mode.
+ *
+ * Encrypts AES and optionally tags using GCM block mode. If plaintext is NULL, only the GHASH is calculated and output
+ * in the 'tag' field.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param plaintext Input plain text to encrypt
+ * param[out] ciphertext Output cipher text.
+ * param size Size of input and output data in bytes
+ * param iv Input initial vector
+ * param ivSize Size of the IV
+ * param aad Input additional authentication data
+ * param aadSize Input size in bytes of AAD
+ * param key Input key to use for encryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param[out] tag Output hash tag. Set to NULL to skip tag processing.
+ * param tagSize Input size of the tag to generate, in bytes. Must be 4,8,12,13,14,15 or 16.
+ * return Status from encrypt operation
+ */
+status_t CAAM_AES_EncryptTagGcmExtended(CAAM_Type *base,
+                                        caam_handle_t *handle,
+                                        const uint8_t *plaintext,
+                                        uint8_t *ciphertext,
+                                        size_t size,
+                                        const uint8_t *iv,
+                                        size_t ivSize,
+                                        const uint8_t *aad,
+                                        size_t aadSize,
+                                        const uint8_t *key,
+                                        size_t keySize,
+                                        uint8_t *tag,
+                                        size_t tagSize,
+                                        caam_key_type_t blackKeyType)
+{
+    caam_desc_aes_gcm_t descBuf;
+    status_t status;
+
+    do
+    {
+        status =
+            CAAM_AES_EncryptTagGcmNonBlockingExtended(base, handle, descBuf, plaintext, ciphertext, size, iv, ivSize,
+                                                      aad, aadSize, key, keySize, tag, tagSize, blackKeyType);
+    } while (status == kStatus_CAAM_Again);
+
+    if (status != 0)
+    {
+        return status;
+    }
+
+    status = CAAM_Wait(base, handle, descBuf, kCAAM_Blocking);
+
+#if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
+    /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
+    /* Invalidate unaligned data can cause memory corruption in write-back mode   */
+    DCACHE_InvalidateByRange((uint32_t)ciphertext, size);
+    if (tag != NULL)
+    {
+        DCACHE_InvalidateByRange((uint32_t)tag, tagSize);
+    }
+#endif /* CAAM_OUT_INVALIDATE */
+    return status;
+}
+
+/*!
+ * brief Decrypts AES and authenticates using GCM block mode.
+ *
+ * Decrypts AES and optionally authenticates using GCM block mode. If ciphertext is NULL, only the GHASH is calculated
+ * and compared with the received GHASH in 'tag' field.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param ciphertext Input cipher text to decrypt
+ * param[out] plaintext Output plain text.
+ * param size Size of input and output data in bytes
+ * param iv Input initial vector
+ * param ivSize Size of the IV
+ * param aad Input additional authentication data
+ * param aadSize Input size in bytes of AAD
+ * param key Input key to use for encryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param tag Input hash tag to compare. Set to NULL to skip tag processing.
+ * param tagSize Input size of the tag, in bytes. Must be 4, 8, 12, 13, 14, 15, or 16.
+ * return Status from decrypt operation
+ */
+status_t CAAM_AES_DecryptTagGcmExtended(CAAM_Type *base,
+                                        caam_handle_t *handle,
+                                        const uint8_t *ciphertext,
+                                        uint8_t *plaintext,
+                                        size_t size,
+                                        const uint8_t *iv,
+                                        size_t ivSize,
+                                        const uint8_t *aad,
+                                        size_t aadSize,
+                                        const uint8_t *key,
+                                        size_t keySize,
+                                        const uint8_t *tag,
+                                        size_t tagSize,
+                                        caam_key_type_t blackKeyType)
+{
+    caam_desc_aes_gcm_t descBuf;
+    status_t status;
+
+    do
+    {
+        status =
+            CAAM_AES_DecryptTagGcmNonBlockingExtended(base, handle, descBuf, ciphertext, plaintext, size, iv, ivSize,
+                                                      aad, aadSize, key, keySize, tag, tagSize, blackKeyType);
     } while (status == kStatus_CAAM_Again);
 
     if (status != 0)
@@ -4447,6 +5739,7 @@ status_t CAAM_RNG_Init(CAAM_Type *base,
     status_t status;
 
     /* create job descriptor */
+    caam_desc_rng_t rngInstantiate = {0};
     rngInstantiate[0]              = 0xB0800006u;
     rngInstantiate[1]              = 0x12200020u; /* LOAD 32 bytes of  to Class 1 Context Register. Offset 0 bytes. */
     rngInstantiate[2]              = (uint32_t)ADD_OFFSET((uint32_t)config->personalString);
@@ -4542,6 +5835,7 @@ status_t CAAM_RNG_GenerateSecureKey(CAAM_Type *base, caam_handle_t *handle, caam
     status_t status;
 
     /* create job descriptor */
+    caam_desc_rng_t rngGenSeckey = {0};
     rngGenSeckey[0]              = 0xB0800004u; /* HEADER */
     rngGenSeckey[1]              = 0x12200020u; /* LOAD 32 bytes of  to Class 1 Context Register. Offset 0 bytes. */
     rngGenSeckey[2]              = ADD_OFFSET((uint32_t)additionalEntropy);
@@ -4648,6 +5942,7 @@ status_t CAAM_RNG_GetRandomData(CAAM_Type *base,
                                 caam_rng_generic256_t additionalEntropy)
 {
     status_t status;
+    caam_desc_rng_t descBuf;
 
     do
     {
@@ -4753,6 +6048,35 @@ status_t CAAM_RNG_GetRandomDataNonBlocking(CAAM_Type *base,
 /*******************************************************************************
  * BLACK Code public
  ******************************************************************************/
+
+size_t CAAM_BLACK_KeyBlackenSize(caam_fifost_type_t fifostType, size_t dataSize)
+{
+    size_t output;
+
+    switch (fifostType)
+    {
+        case kCAAM_FIFOST_Type_Ecb_Jkek:
+        case kCAAM_FIFOST_Type_Ecb_Tkek:
+        {
+            output = CAAM_BLACKEN_ECB_SIZE(dataSize);
+            break;
+        }
+        case kCAAM_FIFOST_Type_Ccm_Jkek:
+        case kCAAM_FIFOST_Type_Ccm_Tkek:
+        {
+            output = CAAM_BLACKEN_CCM_SIZE(dataSize);
+            break;
+        }
+        default:
+        {
+            output = 0;
+            break;
+        }
+    }
+
+    return output;
+}
+
 static const uint32_t templateBlack[] = {
     /* 00 */ 0xB0800000u, /* HEADER */
     /* 01 */ 0x02000000u, /* KEY command of  to Class 1 Context Register. */
@@ -4800,21 +6124,11 @@ status_t CAAM_BLACK_GetKeyBlacken(CAAM_Type *base,
     descriptor[3] |= ((uint32_t)fifostType << 16) | (dataSize & DESC_PAYLOAD_SIZE_MASK);
     descriptor[4] = ADD_OFFSET((uint32_t)blackdata);
 
-    do
-    {
-        status = caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
-    } while (status == kStatus_CAAM_Again);
-
-    if (kStatus_Success != status)
-    {
-        return status;
-    }
-
-    status = CAAM_Wait(base, handle, descriptor, kCAAM_Blocking);
+    status = caam_in_job_ring_add_and_wait(base, handle, descriptor, kCAAM_Blocking);
 #if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
     /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
     /* Invalidate unaligned data can cause memory corruption in write-back mode   */
-    DCACHE_InvalidateByRange((uint32_t)blackdata, dataSize);
+    DCACHE_InvalidateByRange((uint32_t)blackdata, CAAM_BLACK_KeyBlackenSize(fifostType, dataSize));
 #endif /* CAAM_OUT_INVALIDATE */
     return status;
 }
@@ -4879,7 +6193,7 @@ status_t CAAM_RedBlob_Encapsule(CAAM_Type *base,
 #if defined(KEYBLOB_USE_SECURE_MEMORY)
     descriptor[1] |= 8u;                               // KEY command to Class 2 Context Register,  64bits RNG KEY.
 #else
-    descriptor[1] |= 16u;                  // KEY command to Class 2 Context Register, 128bits RNG KEY.
+    descriptor[1] |= 16u; // KEY command to Class 2 Context Register, 128bits RNG KEY.
 #endif                                                 /* (KEYBLOB_USE_SECURE_MEMORY) */
     descriptor[2] = ADD_OFFSET((uint32_t)keyModifier); // Key modifier adress
     descriptor[3] |= dataSize;                         // SEQ IN PTR command to load plain data
@@ -4889,21 +6203,11 @@ status_t CAAM_RedBlob_Encapsule(CAAM_Type *base,
 #if defined(KEYBLOB_USE_SECURE_MEMORY)
     descriptor[7] |= (7UL << 24) | SEC_MEM;            // OPERATION:Encrypt Red Blob in secure memory
 #else
-    descriptor[7] |= (7UL << 24);          // OPERATION:Encrypt Red Blob in normal memory
+    descriptor[7] |= (7UL << 24); // OPERATION:Encrypt Red Blob in normal memory
 #endif                                                 /* (KEYBLOB_USE_SECURE_MEMORY) */
 
     // schedule the job and block wait for result
-    do
-    {
-        status = caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
-    } while (status == kStatus_CAAM_Again);
-
-    if (kStatus_Success != status)
-    {
-        return status;
-    }
-
-    status = CAAM_Wait(base, handle, descriptor, kCAAM_Blocking);
+    status = caam_in_job_ring_add_and_wait(base, handle, descriptor, kCAAM_Blocking);
 #if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
     /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
     /* Invalidate unaligned data can cause memory corruption in write-back mode   */
@@ -4958,7 +6262,7 @@ status_t CAAM_RedBlob_Decapsule(CAAM_Type *base,
 #if defined(KEYBLOB_USE_SECURE_MEMORY)
     descriptor[1] |= 8u;                               // KEY command to Class 2 Context Register, 64bits RNG KEY.
 #else
-    descriptor[1] |= 16u;                  // KEY command to Class 2 Context Register, 128bits RNG KEY.
+    descriptor[1] |= 16u; // KEY command to Class 2 Context Register, 128bits RNG KEY.
 #endif                                                 /* (KEYBLOB_USE_SECURE_MEMORY) */
     descriptor[2] = ADD_OFFSET((uint32_t)keyModifier); // Key modifier adress
     descriptor[3] |= blob_size;                        // SEQ IN PTR command to load blob data
@@ -4968,20 +6272,10 @@ status_t CAAM_RedBlob_Decapsule(CAAM_Type *base,
 #if defined(KEYBLOB_USE_SECURE_MEMORY)
     descriptor[7] |= (6UL << 24) | SEC_MEM;            // OPERATION:Decrypt red blob in secure memory
 #else
-    descriptor[7] |= (6UL << 24);          // OPERATION:Decrypt red blob in normal memory
+    descriptor[7] |= (6UL << 24); // OPERATION:Decrypt red blob in normal memory
 #endif                                                 /* (KEYBLOB_USE_SECURE_MEMORY) */
     // schedule the job and block wait for result
-    do
-    {
-        status = caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
-    } while (status == kStatus_CAAM_Again);
-
-    if (kStatus_Success != status)
-    {
-        return status;
-    }
-
-    status = CAAM_Wait(base, handle, descriptor, kCAAM_Blocking);
+    status = caam_in_job_ring_add_and_wait(base, handle, descriptor, kCAAM_Blocking);
 #if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
     /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
     /* Invalidate unaligned data can cause memory corruption in write-back mode   */
@@ -5037,7 +6331,7 @@ status_t CAAM_BlackBlob_Encapsule(CAAM_Type *base,
 #if defined(KEYBLOB_USE_SECURE_MEMORY)
     descriptor[1] |= 8u;                               // KEY command to Class 2 Context Register, 64bits RNG KEY.
 #else
-    descriptor[1] |= 16u;                  // KEY command to Class 2 Context Register, 128bits RNG KEY.
+    descriptor[1] |= 16u; // KEY command to Class 2 Context Register, 128bits RNG KEY.
 #endif                                                 /* (KEYBLOB_USE_SECURE_MEMORY) */
     descriptor[2] = ADD_OFFSET((uint32_t)keyModifier); // Key modifier adress
     descriptor[3] |= dataSize;                         // SEQ IN PTR command to load plain data
@@ -5053,17 +6347,7 @@ status_t CAAM_BlackBlob_Encapsule(CAAM_Type *base,
 #endif                        /* (KEYBLOB_USE_SECURE_MEMORY) */
 
     // schedule the job and block wait for result
-    do
-    {
-        status = caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
-    } while (status == kStatus_CAAM_Again);
-
-    if (kStatus_Success != status)
-    {
-        return status;
-    }
-
-    status = CAAM_Wait(base, handle, descriptor, kCAAM_Blocking);
+    status = caam_in_job_ring_add_and_wait(base, handle, descriptor, kCAAM_Blocking);
 #if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
     /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
     /* Invalidate unaligned data can cause memory corruption in write-back mode   */
@@ -5120,7 +6404,7 @@ status_t CAAM_BlackBlob_Decapsule(CAAM_Type *base,
 #if defined(KEYBLOB_USE_SECURE_MEMORY)
     descriptor[1] |= 8u;                               // KEY command to Class 2 Context Register, 64bits RNG KEY.
 #else
-    descriptor[1] |= 16u;                  // KEY command to Class 2 Context Register, 128bits RNG KEY.
+    descriptor[1] |= 16u; // KEY command to Class 2 Context Register, 128bits RNG KEY.
 #endif                                                 /* (KEYBLOB_USE_SECURE_MEMORY) */
     descriptor[2] = ADD_OFFSET((uint32_t)keyModifier); // Key modifier adress
     descriptor[3] |= blob_size;                        // SEQ IN PTR command to load blob data
@@ -5135,17 +6419,7 @@ status_t CAAM_BlackBlob_Decapsule(CAAM_Type *base,
                      DESC_BLACKKEY_NOMMEN; // OPERATION:Decrypt black blob in normal memory
 #endif                        /* (KEYBLOB_USE_SECURE_MEMORY) */
     // schedule the job and block wait for result
-    do
-    {
-        status = caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
-    } while (status == kStatus_CAAM_Again);
-
-    if (kStatus_Success != status)
-    {
-        return status;
-    }
-
-    status = CAAM_Wait(base, handle, descriptor, kCAAM_Blocking);
+    status = caam_in_job_ring_add_and_wait(base, handle, descriptor, kCAAM_Blocking);
 #if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
     /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
     /* Invalidate unaligned data can cause memory corruption in write-back mode   */
@@ -9296,5 +10570,460 @@ status_t CAAM_PKHA_MontgomeryToNormal(CAAM_Type *base,
             return status;
         }
     }
+    return status;
+}
+
+/*******************************************************************************
+ * ECC
+ ******************************************************************************/
+
+/*!
+ * @brief Return bit value based on domain.
+ *
+ * @param[in] ecdsel Ecc curve type
+ *
+ * @return uint8_t Return 1 when ecc curve is f2m type otherwise 0
+ */
+static inline uint8_t CAAM_ECC_DomainBit(caam_ecc_ecdsel_t ecdsel)
+{
+    return (((uint32_t)ecdsel) >= 0x40u) ? 1u : 0u;
+}
+
+size_t CAAM_ECC_PrivateKeySize(caam_ecc_encryption_type_t encryptKeyType, caam_ecc_ecdsel_t ecdsel)
+{
+    size_t output = CAAM_ECC_PRIVATE_KEY_LENGTH(ecdsel);
+
+    switch (encryptKeyType)
+    {
+        case kCAAM_Ecc_Encryption_Type_Ecb_Jkek:
+        {
+            output = CAAM_BLACKEN_ECB_SIZE(output);
+            break;
+        }
+        case kCAAM_Ecc_Encryption_Type_Ccm_Jkek:
+        {
+            output = CAAM_BLACKEN_CCM_SIZE(output);
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+
+    return output;
+}
+
+static const uint32_t templateEccKeyPair[] = {
+    /* 00 */ 0xB0840000u, /* HEADER */
+    /* 01 */ 0x02000000u, /* ECC domain */
+    /* 02 */ 0x00000000u, /* s */
+    /* 03 */ 0x00000000u, /* Wx,y */
+    /* 04 */ 0x80000002u, /* operation */
+};
+
+/*!
+ * brief Generates public and private key for ECC.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param ecdsel Elliptic curve domain selection
+ * param encryptKeyType Type of key encryption
+ * param[out] privKey Private key
+ * param[out] pubKey Public key
+ * return Operation status.
+ */
+status_t CAAM_ECC_KeyPair(CAAM_Type *base,
+                          caam_handle_t *handle,
+                          caam_ecc_ecdsel_t ecdsel,
+                          caam_ecc_encryption_type_t encryptKeyType,
+                          uint8_t *privKey,
+                          uint8_t *pubKey)
+{
+    caam_desc_rsa_t descriptor;
+    uint32_t descriptorSize = ARRAY_SIZE(templateEccKeyPair);
+
+    (void)caam_memcpy(descriptor, templateEccKeyPair, sizeof(templateEccKeyPair));
+
+    descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
+    descriptor[1] |= (((uint32_t)ecdsel) & 0x7Fu) << 7;
+    descriptor[2] |= ADD_OFFSET((uint32_t)privKey);
+    descriptor[3] |= ADD_OFFSET((uint32_t)pubKey);
+    descriptor[4] |= (0x14UL << 16) | ((uint32_t)encryptKeyType) | CAAM_ECC_DomainBit(ecdsel);
+
+    status_t status = caam_in_job_ring_add_and_wait(base, handle, descriptor, kCAAM_Blocking);
+
+#if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
+    /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
+    /* Invalidate unaligned data can cause memory corruption in write-back mode   */
+    DCACHE_InvalidateByRange((uint32_t)privKey, CAAM_ECC_PrivateKeySize(encryptKeyType, ecdsel));
+    DCACHE_InvalidateByRange((uint32_t)pubKey, CAAM_ECC_PUBLIC_KEY_LENGTH(ecdsel));
+#endif /* CAAM_OUT_INVALIDATE */
+
+    return status;
+}
+
+static const uint32_t templateEccSign[] = {
+    /* 00 */ 0xB0870000u, /* HEADER */
+    /* 01 */ 0x00400000u, /* ECC domain */
+    /* 02 */ 0x00000000u, /* s */
+    /* 03 */ 0x00000000u, /* f */
+    /* 04 */ 0x00000000u, /* c */
+    /* 05 */ 0x00000000u, /* d */
+    /* 06 */ 0x00000000u, /* ml */
+    /* 07 */ 0x80000802u, /* operation */
+};
+
+/*!
+ * brief Generates signature using ECC.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param privKey Private key
+ * param data Hashed data
+ * param dataSize Hashed data length
+ * param ecdsel Elliptic curve domain selection
+ * param encryptKeyType Type of key encryption
+ * param[out] signFirst First part of the signature
+ * param[out] signSecond Second part of the signature
+ * return Operation status.
+ */
+status_t CAAM_ECC_Sign(CAAM_Type *base,
+                       caam_handle_t *handle,
+                       const uint8_t *privKey,
+                       const uint8_t *data,
+                       size_t dataSize,
+                       caam_ecc_ecdsel_t ecdsel,
+                       caam_ecc_encryption_type_t encryptKeyType,
+                       uint8_t *signFirst,
+                       uint8_t *signSecond)
+{
+    caam_desc_rsa_t descriptor;
+    uint32_t descriptorSize = ARRAY_SIZE(templateEccSign);
+
+    (void)caam_memcpy(descriptor, templateEccSign, sizeof(templateEccSign));
+
+    descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
+    descriptor[1] |= (((uint32_t)ecdsel) & 0x7Fu) << 7;
+    descriptor[2] |= ADD_OFFSET((uint32_t)privKey);
+    descriptor[3] |= ADD_OFFSET((uint32_t)data);
+    descriptor[4] |= ADD_OFFSET((uint32_t)signFirst);
+    descriptor[5] |= ADD_OFFSET((uint32_t)signSecond);
+    descriptor[6] = dataSize;
+    descriptor[7] |= (0x15UL << 16) | ((uint32_t)encryptKeyType) | CAAM_ECC_DomainBit(ecdsel);
+
+    status_t status = caam_in_job_ring_add_and_wait(base, handle, descriptor, kCAAM_Blocking);
+
+#if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
+    /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
+    /* Invalidate unaligned data can cause memory corruption in write-back mode   */
+    DCACHE_InvalidateByRange((uint32_t)signFirst, CAAM_ECC_PRIVATE_KEY_LENGTH(ecdsel));
+    DCACHE_InvalidateByRange((uint32_t)signSecond, CAAM_ECC_SECOND_SIGN_BUFFER_SIZE(ecdsel));
+#endif /* CAAM_OUT_INVALIDATE */
+
+    return status;
+}
+
+static const uint32_t templateEccVerifyPublic[] = {
+    /* 00 */ 0xB0880000u, /* HEADER */
+    /* 01 */ 0x00400000u, /* ECC domain */
+    /* 02 */ 0x00000000u, /* Wx,y */
+    /* 03 */ 0x00000000u, /* f */
+    /* 04 */ 0x00000000u, /* c */
+    /* 05 */ 0x00000000u, /* d */
+    /* 06 */ 0x00000000u, /* tmp */
+    /* 07 */ 0x00000000u, /* ml */
+    /* 08 */ 0x80000802u, /* operation */
+};
+
+/*!
+ * brief Verify ECC signature using public key
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param pubKey Public key
+ * param data Hashed data
+ * param dataSize Hashed data length
+ * param signFirst First part of the signature
+ * param signSecond Second part of the signature
+ * param ecdsel Elliptic curve domain selection
+ * param[in,out] tmp Temporary storage for intermediate results
+ * return Operation status.
+ */
+status_t CAAM_ECC_VerifyPublicKey(CAAM_Type *base,
+                                  caam_handle_t *handle,
+                                  const uint8_t *pubKey,
+                                  const uint8_t *data,
+                                  size_t dataSize,
+                                  const uint8_t *signFirst,
+                                  const uint8_t *signSecond,
+                                  caam_ecc_ecdsel_t ecdsel,
+                                  uint8_t *tmp)
+{
+    caam_desc_rsa_t descriptor;
+    uint32_t descriptorSize = ARRAY_SIZE(templateEccVerifyPublic);
+
+    (void)caam_memcpy(descriptor, templateEccVerifyPublic, sizeof(templateEccVerifyPublic));
+
+    descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
+    descriptor[1] |= (((uint32_t)ecdsel) & 0x7Fu) << 7;
+    descriptor[2] |= ADD_OFFSET((uint32_t)pubKey);
+    descriptor[3] |= ADD_OFFSET((uint32_t)data);
+    descriptor[4] |= ADD_OFFSET((uint32_t)signFirst);
+    descriptor[5] |= ADD_OFFSET((uint32_t)signSecond);
+    descriptor[6] |= ADD_OFFSET((uint32_t)tmp);
+    descriptor[7] = dataSize;
+    descriptor[8] |= (0x16UL << 16) | CAAM_ECC_DomainBit(ecdsel);
+
+    status_t status = caam_in_job_ring_add_and_wait(base, handle, descriptor, kCAAM_Blocking);
+
+#if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
+    /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
+    /* Invalidate unaligned data can cause memory corruption in write-back mode   */
+    DCACHE_InvalidateByRange((uint32_t)tmp, CAAM_ECC_PUBLIC_KEY_LENGTH(ecdsel));
+#endif /* CAAM_OUT_INVALIDATE */
+
+    return status;
+}
+
+static const uint32_t templateEccVerifyPrivate[] = {
+    /* 00 */ 0xB0870000u, /* HEADER */
+    /* 01 */ 0x00400000u, /* ECC domain */
+    /* 02 */ 0x00000000u, /* Wx,y */
+    /* 03 */ 0x00000000u, /* f */
+    /* 04 */ 0x00000000u, /* c */
+    /* 05 */ 0x00000000u, /* d */
+    /* 06 */ 0x00000000u, /* ml */
+    /* 07 */ 0x80000802u, /* operation */
+};
+
+/*!
+ * brief Verify ECC signature using private key
+ *
+ * Faster that verifying using public key.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request. Specifies jobRing.
+ * param privKey Private key
+ * param data Hashed data
+ * param dataSize Hashed data length
+ * param signFirst First part of the signature
+ * param signSecond Second part of the signature
+ * param ecdsel Elliptic curve domain selection
+ * param encryptKeyType Type of key encryption
+ * return Operation status.
+ */
+status_t CAAM_ECC_VerifyPrivateKey(CAAM_Type *base,
+                                   caam_handle_t *handle,
+                                   const uint8_t *privKey,
+                                   const uint8_t *data,
+                                   size_t dataSize,
+                                   const uint8_t *signFirst,
+                                   const uint8_t *signSecond,
+                                   caam_ecc_ecdsel_t ecdsel,
+                                   caam_ecc_encryption_type_t encryptKeyType)
+{
+    caam_desc_rsa_t descriptor;
+    uint32_t descriptorSize = ARRAY_SIZE(templateEccVerifyPrivate);
+
+    (void)caam_memcpy(descriptor, templateEccVerifyPrivate, sizeof(templateEccVerifyPrivate));
+
+    descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
+    descriptor[1] |= (((uint32_t)ecdsel) & 0x7Fu) << 7;
+    descriptor[2] |= ADD_OFFSET((uint32_t)privKey);
+    descriptor[3] |= ADD_OFFSET((uint32_t)data);
+    descriptor[4] |= ADD_OFFSET((uint32_t)signFirst);
+    descriptor[5] |= ADD_OFFSET((uint32_t)signSecond);
+    descriptor[6] = dataSize;
+    descriptor[7] |= (0x12UL << 16) | ((uint32_t)encryptKeyType) | CAAM_ECC_DomainBit(ecdsel);
+
+    status_t status = caam_in_job_ring_add_and_wait(base, handle, descriptor, kCAAM_Blocking);
+
+    return status;
+}
+
+/*******************************************************************************
+ * RSA
+ ******************************************************************************/
+
+size_t CAAM_RSA_PrivateExponentSize(caam_rsa_key_type_t prvKeyType, uint32_t privExponentSize)
+{
+    size_t output = privExponentSize;
+
+    switch (prvKeyType)
+    {
+        case kCAAM_Rsa_Key_Type_Ecb_Jkek:
+        {
+            output = CAAM_BLACKEN_ECB_SIZE(output);
+            break;
+        }
+        case kCAAM_Rsa_Key_Type_Ccm_Jkek:
+        {
+            output = CAAM_BLACKEN_CCM_SIZE(output);
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+
+    return output;
+}
+
+static const uint32_t templateRsaKeyPair[] = {
+    /* 00 */ 0xB08A0000u, /* HEADER */
+    /* 01 */ 0x00000000u, /* */
+    /* 02 */ 0x00000000u, /* #p */
+    /* 03 */ 0x00000000u, /* #n size #e size */
+    /* 04 */ 0x00000000u, /* p */
+    /* 05 */ 0x00000000u, /* q */
+    /* 06 */ 0x00000000u, /* e */
+    /* 07 */ 0x00000000u, /* n */
+    /* 08 */ 0x00000000u, /* d */
+    /* 09 */ 0x00000000u, /* d size */
+    /* 10 */ 0x801A0082u, /* OPERATION: RSA Keygen */
+};
+
+status_t CAAM_RSA_KeyPair(CAAM_Type *base,
+                          caam_handle_t *handle,
+                          const uint8_t *primeP,
+                          const uint8_t *primeQ,
+                          uint32_t primesSize,
+                          const uint8_t *pubExponent,
+                          uint32_t pubExponentSize,
+                          caam_rsa_key_type_t prvKeyType,
+                          uint8_t *modulus,
+                          uint32_t modulusSize,
+                          uint8_t *privExponent,
+                          size_t *privExponentSize)
+{
+    caam_desc_rsa_t descriptor;
+    uint32_t descriptorSize = ARRAY_SIZE(templateRsaKeyPair);
+
+    (void)caam_memcpy(descriptor, templateRsaKeyPair, sizeof(templateRsaKeyPair));
+
+    descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
+    // descriptor[1] |=; // reserved
+    descriptor[2] |= primesSize & 0x1FFu;
+    descriptor[3] |= ((modulusSize & 0x3FFu) << 16) | (pubExponentSize & 0x3FFu);
+    descriptor[4] |= ADD_OFFSET((uint32_t)primeP);
+    descriptor[5] |= ADD_OFFSET((uint32_t)primeQ);
+    descriptor[6] |= ADD_OFFSET((uint32_t)pubExponent);
+    descriptor[7] |= ADD_OFFSET((uint32_t)modulus);
+    descriptor[8] |= ADD_OFFSET((uint32_t)privExponent);
+    descriptor[9] |= ADD_OFFSET((uint32_t)privExponentSize);
+    descriptor[10] |= (uint32_t)prvKeyType;
+
+    status_t status = caam_in_job_ring_add_and_wait(base, handle, descriptor, kCAAM_Blocking);
+
+#if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
+    /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
+    /* Invalidate unaligned data can cause memory corruption in write-back mode   */
+    DCACHE_InvalidateByRange((uint32_t)modulus, modulusSize);
+    DCACHE_InvalidateByRange((uint32_t)privExponentSize, sizeof(*privExponentSize));
+    DCACHE_InvalidateByRange((uint32_t)privExponent, *privExponentSize);
+#endif /* CAAM_OUT_INVALIDATE */
+
+    return status;
+}
+
+static const uint32_t templateRsaEncrypt[] = {
+    /* 00 */ 0xB0870000u, /* HEADER */
+    /* 01 */ 0x00000000u, /* #e size #n size */
+    /* 02 */ 0x00000000u, /* f */
+    /* 03 */ 0x00000000u, /* g */
+    /* 04 */ 0x00000000u, /* n */
+    /* 05 */ 0x00000000u, /* e */
+    /* 06 */ 0x00000000u, /* #f*/
+    /* 07 */ 0x80180000u, /* OPERATION: RSA Encrrypt */
+};
+
+status_t CAAM_RSA_Encrypt(CAAM_Type *base,
+                          caam_handle_t *handle,
+                          const uint8_t *plainText,
+                          uint32_t plainTextSize,
+                          const uint8_t *modulus,
+                          uint32_t modulusSize,
+                          const uint8_t *pubExponent,
+                          uint32_t pubExponentSize,
+                          caam_rsa_encryption_type_t dataOutType,
+                          caam_rsa_format_type_t format,
+                          uint8_t *cipherText)
+{
+    caam_desc_rsa_t descriptor;
+    uint32_t descriptorSize = ARRAY_SIZE(templateRsaEncrypt);
+
+    (void)caam_memcpy(descriptor, templateRsaEncrypt, sizeof(templateRsaEncrypt));
+
+    descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
+    descriptor[1] |= ((pubExponentSize & 0xFFFu) << 12) | (modulusSize & 0xFFFu);
+    descriptor[2] |= ADD_OFFSET((uint32_t)plainText);
+    descriptor[3] |= ADD_OFFSET((uint32_t)cipherText);
+    descriptor[4] |= ADD_OFFSET((uint32_t)modulus);
+    descriptor[5] |= ADD_OFFSET((uint32_t)pubExponent);
+    descriptor[6] |= plainTextSize & 0xFFFu;
+    descriptor[7] |= (((uint32_t)dataOutType) << 4) | (((uint32_t)format) << 12);
+
+    status_t status = caam_in_job_ring_add_and_wait(base, handle, descriptor, kCAAM_Blocking);
+
+#if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
+    /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
+    /* Invalidate unaligned data can cause memory corruption in write-back mode   */
+    DCACHE_InvalidateByRange((uint32_t)cipherText, modulusSize);
+#endif /* CAAM_OUT_INVALIDATE */
+
+    return status;
+}
+
+static const uint32_t templateRsaDecrypt[] = {
+    /* 00 */ 0xB0860000u, /* HEADER */
+    /* 01 */ 0x00000000u, /* #d size #n size */
+    /* 02 */ 0x00000000u, /* g */
+    /* 03 */ 0x00000000u, /* f */
+    /* 04 */ 0x00000000u, /* n */
+    /* 05 */ 0x00000000u, /* d */
+    /* 06 */ 0x80190000u, /* OPERATION: Decrypt */
+    /* 07 */ 0x56080404u, /* store math0 in rsaDecSize */
+    /* 08 */ 0x00000000u, /* rsaDecSize address */
+};
+
+status_t CAAM_RSA_Decrypt(CAAM_Type *base,
+                          caam_handle_t *handle,
+                          const uint8_t *cipherText,
+                          const uint8_t *modulus,
+                          uint32_t modulusSize,
+                          const uint8_t *privExponent,
+                          uint32_t privExponentSize,
+                          caam_rsa_encryption_type_t prvKeyType,
+                          caam_rsa_encryption_type_t dataOutType,
+                          caam_rsa_format_type_t format,
+                          uint8_t *plainText,
+                          size_t *rsaDecSize)
+{
+    caam_desc_rsa_t descriptor;
+    uint32_t descriptorSize = ARRAY_SIZE(templateRsaDecrypt);
+    *rsaDecSize             = 0;
+
+    (void)caam_memcpy(descriptor, templateRsaDecrypt, sizeof(templateRsaDecrypt));
+
+    descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
+    descriptor[1] |= ((privExponentSize & 0xFFFu) << 12) | (modulusSize & 0xFFFu);
+    descriptor[2] |= ADD_OFFSET((uint32_t)cipherText);
+    descriptor[3] |= ADD_OFFSET((uint32_t)plainText);
+    descriptor[4] |= ADD_OFFSET((uint32_t)modulus);
+    descriptor[5] |= ADD_OFFSET((uint32_t)privExponent);
+    descriptor[6] |= (((uint32_t)prvKeyType) << 8) | (((uint32_t)dataOutType) << 4) | (((uint32_t)format) << 12);
+    descriptor[8] = ADD_OFFSET((uint32_t)rsaDecSize); /* place: tag address */
+
+    status_t status = caam_in_job_ring_add_and_wait(base, handle, descriptor, kCAAM_Blocking);
+
+#if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
+    /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
+    /* Invalidate unaligned data can cause memory corruption in write-back mode   */
+    DCACHE_InvalidateByRange((uint32_t)rsaDecSize, sizeof(*rsaDecSize));
+    DCACHE_InvalidateByRange((uint32_t)plainText, *rsaDecSize);
+#endif /* CAAM_OUT_INVALIDATE */
+
     return status;
 }

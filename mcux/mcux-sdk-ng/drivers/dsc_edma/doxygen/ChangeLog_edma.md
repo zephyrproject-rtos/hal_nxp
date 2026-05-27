@@ -1,5 +1,10 @@
 # EDMA
 
+## [2.0.4]
+
+- New Features
+  - Added common IRQ handler entry EDMA_DriverIRQHandler.
+
 ## [2.0.3]
 
 - Fixed the MISRA-2012 violations.

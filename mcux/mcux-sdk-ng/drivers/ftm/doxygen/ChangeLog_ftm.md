@@ -1,5 +1,23 @@
 # FTM
 
+## [2.7.6]
+
+- Bug Fixes
+  - Fixed QUADEN bit not cleared in FTM_SetupPwm() and FTM_SetupPwmMode() when switching from
+    quadrature decoder mode to PWM mode. QUADEN has higher priority and overrides PWM
+    operation if left set.
+
+- Improvements
+  - Added support for devices with reduced FTM register set by introducing new feature macros:
+    - `FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1`: COMBINE register has no per-pair grouping.
+    - `FSL_FEATURE_FTM_HAS_NO_COMBINE_FAULTEN`: COMBINE register has no FAULTEN field.
+    - `FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM`: MODE register has no FAULTM field.
+    - `FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE`: MODE register has no FAULTIE field.
+    - `FSL_FEATURE_FTM_HAS_NO_FLTCTRL`: FLTCTRL register is not present.
+    - `FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF`: FMS register has no FAULTF field.
+  - Added assert checks to detect unsupported channel pair numbers on devices where
+    COMBINE has no per-pair grouping (only pair 0 is valid).
+
 ## [2.7.5]
 
 - Bug Fixes

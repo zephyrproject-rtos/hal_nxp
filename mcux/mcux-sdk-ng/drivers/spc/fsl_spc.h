@@ -27,8 +27,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief SPC driver version 2.8.2. */
-#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 8, 3))
+/*! @brief SPC driver version 2.9.0. */
+#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 9, 0))
 /*! @} */
 
 /*! @name Configuration */
@@ -134,6 +134,17 @@ enum
 
 /*!
  * @brief Voltage Detect Status Flags.
+ *
+ * @note VDD_SYS vs VDD1P8 — these flags correspond to DIFFERENT physical rails
+ * on different derivatives, not a renamed register.  The registers at SPC
+ * offset 0x138 (VD_SYS_CFG vs VD_VDD1P8_CFG) and their feature flags
+ * (FSL_FEATURE_SPC_HAS_VDD_SYS vs FSL_FEATURE_SPC_HAS_VDD1P8_LVD) are
+ * intentionally separate and must not be merged.
+ * - VDD_SYS variant: monitors VDD_SYS (~1.8 V from LDO_SYS, powers AON domain);
+ *   supports HVD + LVD with LVDRE/LVDIE/HVDRE/HVDIE/LVSEL fields.
+ * - VDD1P8 variant: monitors VDD_FRO (~1.6 V from LDO_FRO, powers FRO block);
+ *   supports LVD only with LVDIE field.  AON on these parts is supplied by
+ *   VDD_SYS_LV (from LDO_LV_SYS) and has no user-accessible detector.
  */
 enum _spc_voltage_detect_flags
 {
@@ -143,20 +154,31 @@ enum _spc_voltage_detect_flags
 #endif                                                                  /* FSL_FEATURE_SPC_HAS_VDD_SYS */
     kSPC_CoreVDDHighVoltageDetectFlag = SPC_VD_STAT_COREVDD_HVDF_MASK,  /*!< Core VDD High-Voltage detect flag. */
     kSPC_IOVDDLowVoltageDetectFlag    = SPC_VD_STAT_IOVDD_LVDF_MASK,    /*!< IO VDD Low-Voltage detect flag. */
+#if (defined(FSL_FEATURE_SPC_HAS_VDD1P8_LVD) && FSL_FEATURE_SPC_HAS_VDD1P8_LVD)
+    kSPC_VDD1P8LowVoltageDetectFlag   = SPC_VD_STAT_VDD1P8_LVDF_MASK,   /*!< VDD1P8 Low-Voltage detect flag.
+                                                                            Monitors VDD_FRO; see enum @note. */
+#endif                                                                     /* FSL_FEATURE_SPC_HAS_VDD1P8_LVD */
 #if (defined(FSL_FEATURE_SPC_HAS_VDD_SYS) && FSL_FEATURE_SPC_HAS_VDD_SYS)
     kSPC_SystemVDDLowVoltageDetectFlag = SPC_VD_STAT_SYSVDD_LVDF_MASK,  /*!< System VDD Low-Voltage detect flag. */
 #endif                                                                  /* FSL_FEATURE_SPC_HAS_VDD_SYS */
     kSPC_CoreVDDLowVoltageDetectFlag = SPC_VD_STAT_COREVDD_LVDF_MASK,   /*!< Core VDD Low-Voltage detect flag. */
 };
 
-#if (defined(FSL_FEATURE_SPC_HAS_VDD_SYS) && FSL_FEATURE_SPC_HAS_VDD_SYS)
-#define SPC_VD_STAT_VALID_FLAGS_MASK \
-    (SPC_VD_STAT_IOVDD_HVDF_MASK | SPC_VD_STAT_COREVDD_HVDF_MASK | SPC_VD_STAT_IOVDD_LVDF_MASK | \
-     SPC_VD_STAT_COREVDD_LVDF_MASK | SPC_VD_STAT_SYSVDD_HVDF_MASK | SPC_VD_STAT_SYSVDD_LVDF_MASK)
-#else
-#define SPC_VD_STAT_VALID_FLAGS_MASK \
+#define SPC_VD_STAT_VALID_FLAGS_BASE_MASK \
     (SPC_VD_STAT_IOVDD_HVDF_MASK | SPC_VD_STAT_COREVDD_HVDF_MASK | SPC_VD_STAT_IOVDD_LVDF_MASK | \
      SPC_VD_STAT_COREVDD_LVDF_MASK)
+
+#if (defined(FSL_FEATURE_SPC_HAS_VDD_SYS) && FSL_FEATURE_SPC_HAS_VDD_SYS)
+#define SPC_VD_STAT_VALID_FLAGS_SYS_MASK (SPC_VD_STAT_SYSVDD_HVDF_MASK | SPC_VD_STAT_SYSVDD_LVDF_MASK)
+#else
+#define SPC_VD_STAT_VALID_FLAGS_SYS_MASK (0U)
+#endif
+
+#if (defined(FSL_FEATURE_SPC_HAS_VDD1P8_LVD) && FSL_FEATURE_SPC_HAS_VDD1P8_LVD)
+#define SPC_VD_STAT_VALID_FLAGS_MASK \
+    (SPC_VD_STAT_VALID_FLAGS_BASE_MASK | SPC_VD_STAT_VALID_FLAGS_SYS_MASK | SPC_VD_STAT_VDD1P8_LVDF_MASK)
+#else
+#define SPC_VD_STAT_VALID_FLAGS_MASK (SPC_VD_STAT_VALID_FLAGS_BASE_MASK | SPC_VD_STAT_VALID_FLAGS_SYS_MASK)
 #endif
 
 /*!
@@ -164,11 +186,12 @@ enum _spc_voltage_detect_flags
  */
 enum _spc_power_domains
 {
-    kSPC_MAINPowerDomainRetain = 1UL << 16U, /*!< Peripherals and IO pads retain in MAIN Power Domain. */
-    kSPC_WAKEPowerDomainRetain = 1UL << 17U, /*!< Peripherals and IO pads retain in WAKE Power Domain. */
+    kSPC_MAINPowerDomainRetain  = 1UL << 16U, /*!< Peripherals and IO pads retain in MAIN Power Domain. */
+    kSPC_WAKEPowerDomainRetain  = 1UL << 17U, /*!< Peripherals and IO pads retain in WAKE Power Domain. */
 #if defined(FSL_FEATURE_SPC_HAS_2P4G_POWER_DOMAIN) && FSL_FEATURE_SPC_HAS_2P4G_POWER_DOMAIN
-    kSPC_2P4GPowerDoaminRetain = 1UL << 18U, /*!< Peripherals and IO pads retion in 2.4G Power Domain. */
-#endif                                       /* FSL_FEATURE_SPC_HAS_2P4G_POWER_DOMAIN */
+    kSPC_2P4GPowerDoaminRetain  = 1UL << 18U, /*!< Peripherals and IO pads retion in 2.4G Power Domain. */
+#endif                                        /* FSL_FEATURE_SPC_HAS_2P4G_POWER_DOMAIN */
+    kSPC_INFRAPowerDomainRetain = 1UL << 19U, /*!< Peripherals and IO pads retain in INFRA Power Domain. */
 };
 
 /*!
@@ -180,6 +203,7 @@ typedef enum _spc_power_domain_id
     kSPC_PowerDomain0 = 0U, /*!< Power domain0, the connected power domain is chip specific. */
     kSPC_PowerDomain1 = 1U, /*!< Power domain1, the connected power domain is chip specific. */
     kSPC_PowerDomain2 = 2U, /*!< Power domain2, the connected power domain is chip specific. */
+    kSPC_PowerDomain3 = 3U, /*!< Power domain3, the connected power domain is chip specific. */
 } spc_power_domain_id_t;
 
 /*!
@@ -437,6 +461,16 @@ typedef struct _spc_core_voltage_detect_config
 {
     spc_voltage_detect_option_t option; /*!< Core VDD Voltage Detect option. */
 } spc_core_voltage_detect_config_t;
+
+#if (defined(FSL_FEATURE_SPC_HAS_VDD1P8_LVD) && FSL_FEATURE_SPC_HAS_VDD1P8_LVD)
+/*!
+ * @brief VDD1P8 Voltage Detect configuration.
+ */
+typedef struct _spc_vdd1p8_voltage_detect_config
+{
+    bool LVDInterruptEnable; /*!< VDD1P8 Low Voltage Detect interrupt enable. */
+} spc_vdd1p8_voltage_detect_config_t;
+#endif /* FSL_FEATURE_SPC_HAS_VDD1P8_LVD */
 
 #if (defined(FSL_FEATURE_SPC_HAS_VDD_SYS) && FSL_FEATURE_SPC_HAS_VDD_SYS)
 /*!
@@ -868,6 +902,9 @@ static inline uint32_t SPC_GetHighPowerModeVoltageDetectStatus(SPC_Type *base)
 #if (defined(FSL_FEATURE_SPC_HAS_VDD_SYS) && FSL_FEATURE_SPC_HAS_VDD_SYS)
     state |= (base->HP_CFG & (SPC_HP_CFG_SYS_LVDE_MASK | SPC_HP_CFG_SYS_HVDE_MASK));
 #endif
+#if (defined(FSL_FEATURE_SPC_HAS_VDD1P8_LVD) && FSL_FEATURE_SPC_HAS_VDD1P8_LVD)
+    state |= (base->HP_CFG & SPC_HP_CFG_VDD1P8_LVDE_MASK);
+#endif
     return state;
 }
 
@@ -1066,6 +1103,28 @@ static inline void SPC_EnableHighPowerModeSystemHighVoltageDetect(SPC_Type *base
 }
 #endif /* FSL_FEATURE_SPC_HAS_VDD_SYS */
 
+#if (defined(FSL_FEATURE_SPC_HAS_VDD1P8_LVD) && FSL_FEATURE_SPC_HAS_VDD1P8_LVD)
+/*!
+ * @brief Enable/disable low voltage detect for VDD1P8 in high power mode.
+ *
+ * @param base SPC peripheral base address.
+ * @param enable Used to enable/disable low voltage detect feature for VDD1P8 in high power mode:
+ *          - \b true Enable low voltage detect feature for VDD1P8 in high power mode;
+ *          - \b false Disable low voltage detect feature for VDD1P8 in high power mode.
+ */
+static inline void SPC_EnableHighPowerModeVDD1P8LowVoltageDetect(SPC_Type *base, bool enable)
+{
+    if (enable)
+    {
+        base->HP_CFG |= SPC_HP_CFG_VDD1P8_LVDE_MASK;
+    }
+    else
+    {
+        base->HP_CFG &= ~SPC_HP_CFG_VDD1P8_LVDE_MASK;
+    }
+}
+#endif /* FSL_FEATURE_SPC_HAS_VDD1P8_LVD */
+
 /*!
  * @brief Enable/disable low voltage detect for VDD_IO_ABC in high power mode.
  *
@@ -1156,6 +1215,9 @@ static inline uint32_t SPC_GetActiveModeVoltageDetectStatus(SPC_Type *base)
 #if (defined(FSL_FEATURE_SPC_HAS_VDD_SYS) && FSL_FEATURE_SPC_HAS_VDD_SYS)
     state |= (base->ACTIVE_CFG & (SPC_ACTIVE_CFG_SYS_LVDE_MASK | SPC_ACTIVE_CFG_SYS_HVDE_MASK));
 #endif /* FSL_FEATURE_SPC_HAS_VDD_SYS */
+#if (defined(FSL_FEATURE_SPC_HAS_VDD1P8_LVD) && FSL_FEATURE_SPC_HAS_VDD1P8_LVD)
+    state |= (base->ACTIVE_CFG & SPC_ACTIVE_CFG_VDD1P8_LVDE_MASK);
+#endif /* FSL_FEATURE_SPC_HAS_VDD1P8_LVD */
 
     return state;
 }
@@ -1353,6 +1415,9 @@ static inline uint32_t SPC_GetLowPowerModeVoltageDetectStatus(SPC_Type *base)
 #if (defined(FSL_FEATURE_SPC_HAS_VDD_SYS) && FSL_FEATURE_SPC_HAS_VDD_SYS)
     state |= (base->LP_CFG & (SPC_LP_CFG_SYS_HVDE_MASK | SPC_LP_CFG_SYS_LVDE_MASK));
 #endif /* FSL_FEATURE_SPC_HAS_VDD_SYS */
+#if (defined(FSL_FEATURE_SPC_HAS_VDD1P8_LVD) && FSL_FEATURE_SPC_HAS_VDD1P8_LVD)
+    state |= (base->LP_CFG & SPC_LP_CFG_VDD1P8_LVDE_MASK);
+#endif /* FSL_FEATURE_SPC_HAS_VDD1P8_LVD */
 
     return state;
 }
@@ -1643,6 +1708,54 @@ status_t SPC_EnableLowPowerModeCoreHighVoltageDetect(SPC_Type *base, bool enable
 status_t SPC_EnableLowPowerModeCoreLowVoltageDetect(SPC_Type *base, bool enable);
 
 /*! @} */
+
+#if (defined(FSL_FEATURE_SPC_HAS_VDD1P8_LVD) && FSL_FEATURE_SPC_HAS_VDD1P8_LVD)
+/*!
+ * @name Voltage detect configuration for VDD1P8 voltage domain.
+ * @{
+ */
+/*!
+ * @brief Configs VDD1P8 low voltage detect options.
+ *
+ * This function configures the VDD1P8 low-voltage detect interrupt.
+ *
+ * @param base       SPC peripheral base address.
+ * @param config     Pointer to spc_vdd1p8_voltage_detect_config_t structure.
+ */
+void SPC_SetVDD1P8VoltageDetectConfig(SPC_Type *base, const spc_vdd1p8_voltage_detect_config_t *config);
+
+/*!
+ * @brief Enables/Disables the VDD1P8 Low Voltage Detector in Active mode.
+ *
+ * @note If the VDD1P8 low voltage detect is enabled in Active mode, please note that the bandgap must be enabled
+ * and the drive strength of each regulator must not set to low in Active mode.
+ *
+ * @param base SPC peripheral base address.
+ * @param enable Enable/Disable VDD1P8 LVD.
+ *          true    -   Enable VDD1P8 low voltage detector in active mode.
+ *          false   -   Disable VDD1P8 low voltage detector in active mode.
+ *
+ * @retval #kStatus_Success Enable/Disable VDD1P8 Low Voltage Detect successfully.
+ */
+status_t SPC_EnableActiveModeVDD1P8LowVoltageDetect(SPC_Type *base, bool enable);
+
+/*!
+ * @brief Enables/Disables the VDD1P8 Low Voltage Detector in Low Power mode.
+ *
+ * @note If the VDD1P8 low voltage detect is enabled in Low Power mode, please note that the bandgap must be enabled
+ * and the drive strength of each regulator must not set to low in Low Power mode.
+ *
+ * @param base SPC peripheral base address.
+ * @param enable Enable/Disable VDD1P8 LVD.
+ *          true    -   Enable VDD1P8 low voltage detector in low power mode.
+ *          false   -   Disable VDD1P8 low voltage detector in low power mode.
+ *
+ * @retval #kStatus_Success Enable/Disable VDD1P8 Low Voltage Detect in low power mode successfully.
+ */
+status_t SPC_EnableLowPowerModeVDD1P8LowVoltageDetect(SPC_Type *base, bool enable);
+
+/*! @} */
+#endif /* FSL_FEATURE_SPC_HAS_VDD1P8_LVD */
 
 #if (defined(FSL_FEATURE_SPC_HAS_VDD_SYS) && FSL_FEATURE_SPC_HAS_VDD_SYS)
 /*!
