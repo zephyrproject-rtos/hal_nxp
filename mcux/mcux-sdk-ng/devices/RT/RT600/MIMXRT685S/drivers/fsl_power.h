@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2023, NXP
+ * Copyright 2018-2023, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,9 +19,23 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 2.5.0. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+/*! @brief power driver version 2.5.1. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
 /*@}*/
+
+/*! @brief Define the default PMIC modes for power modes.
+ * NOTE: When using PMIC mode 0 (default mode) for low‑power operation, the supply voltage must be carefully considered,
+ * since a CPU reset may not cause the PMIC mode to change.
+ */
+#ifndef POWER_DEFAULT_PMICMODE_DS
+#define POWER_DEFAULT_PMICMODE_DS 1U
+#endif
+#ifndef POWER_DEFAULT_PMICMODE_DPD
+#define POWER_DEFAULT_PMICMODE_DPD 2U
+#endif
+#ifndef POWER_DEFAULT_PMICMODE_FDPD
+#define POWER_DEFAULT_PMICMODE_FDPD 3U
+#endif
 
 #define MAKE_PD_BITS(reg, slot)  (((reg) << 8) | (slot))
 #define SYSCTL0_PDRCFGSET_REG(x) (*((volatile uint32_t *)((uint32_t)(&(SYSCTL0->PDRUNCFG0_SET)) + ((x) << 2U))))

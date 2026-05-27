@@ -2,10 +2,11 @@
 ** ###################################################################
 **     Processors:          MIMXRT758SGAWBR_ezhv
 **                          MIMXRT758SGFOB_ezhv
+**                          MIMXRT758SGVKB_ezhv
 **
 **     Reference manual:    iMXRT700RM Rev.5, 10/2025
-**     Version:             rev. 5.1, 2025-12-08
-**     Build:               b251208
+**     Version:             rev. 6.0, 2025-12-29
+**     Build:               b260330
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -13,7 +14,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,6 +34,8 @@
 **         Add puf/sdadc irq and cache64 compatibility macros to common header.
 **     - rev. 5.1 (2025-12-08)
 **         Update RM version and add pdm irq for hifi1/hifi4.
+**     - rev. 6.0 (2025-12-29)
+**         Add new part number.
 **
 ** ###################################################################
 */
@@ -40,7 +43,7 @@
 /*!
  * @file MIMXRT758S_ezhv
  * @version 1.0
- * @date 2025-12-08
+ * @date 2026-03-30
  * @brief Device specific configuration file for MIMXRT758S_ezhv (header file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -106,8 +109,7 @@ void SystemCoreClockUpdate (void);
  *
  * This weak function allows to call specific initialization code during the
  * SystemInit() execution.This can be used when an application specific code needs
- * to be called as close to the reset entry as possible (for example the Multicore
- * Manager MCMGR_EarlyInit() function call).
+ * to be called as close to the reset entry as possible.
  * NOTE: No global r/w variables can be used in this hook function because the
  * initialization of these variables happens after this function.
  */
