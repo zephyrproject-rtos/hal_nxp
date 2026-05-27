@@ -9,7 +9,7 @@
 **
 **     Reference manual:    IMX8MPRM, Rev.D, 12/2020
 **     Version:             rev. 6.0, 2024-10-29
-**     Build:               b260205
+**     Build:               b260409
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -107,8 +107,7 @@ void SystemCoreClockUpdate (void);
  *
  * This weak function allows to call specific initialization code during the
  * SystemInit() execution.This can be used when an application specific code needs
- * to be called as close to the reset entry as possible (for example the Multicore
- * Manager MCMGR_EarlyInit() function call).
+ * to be called as close to the reset entry as possible.
  * NOTE: No global r/w variables can be used in this hook function because the
  * initialization of these variables happens after this function.
  */

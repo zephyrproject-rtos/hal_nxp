@@ -9,7 +9,7 @@
 **
 **     Reference manual:    IMX8MPRM, Rev.D, 12/2020
 **     Version:             rev. 6.0, 2024-10-29
-**     Build:               b260205
+**     Build:               b260409
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -119,20 +119,10 @@ uint32_t GetFracPllFreq(const volatile uint32_t *base)
     {
        refClkFreq = CLK_PAD_CLK;  /* CLK_PAD_CLK Clock, please note that the value is 0hz by default, it could be set at system_MIMX8MLx_cm7.h :65 */
     }
+    fracClk = (uint64_t)refClkFreq * ((uint64_t)mainDiv * 65536UL + (uint64_t)dsm) /
+              ((uint64_t)65536UL * preDiv * (1UL << postDiv));
 
-    if ((preDiv == 0U) || (postDiv >= 63U))
-    {
-        return 0U;
-    }
-
-    uint64_t denom = 65536ULL * (uint64_t)preDiv * ((uint64_t)1ULL << postDiv);
-    if (denom == 0ULL)
-    {
-        return 0U;
-    }
-    fracClk = (uint64_t)refClkFreq * (((uint64_t)mainDiv * 65536ULL) + (uint64_t)dsm) / denom;
-
-    return (uint32_t)(fracClk & 0xFFFFFFFFULL);
+    return (uint32_t)fracClk;
 }
 
 uint32_t GetIntegerPllFreq(const volatile uint32_t *base)
@@ -169,20 +159,10 @@ uint32_t GetIntegerPllFreq(const volatile uint32_t *base)
 
     else
     {
-        if ((preDiv == 0U) || (postDiv >= 63U))
-        {
-            return 0U;
-        }
-
-        uint64_t denom = ((uint64_t)1ULL << postDiv) * (uint64_t)preDiv;
-        if (denom == 0ULL)
-        {
-            return 0U;
-        }
-        pllOutClock = (uint64_t)refClkFreq * (uint64_t)mainDiv / denom;
+        pllOutClock = (uint64_t)refClkFreq * mainDiv / (((uint64_t)(1U) << postDiv) * preDiv);
     }
 
-    return (uint32_t)(pllOutClock & 0xFFFFFFFFULL);
+    return (uint32_t)pllOutClock;
 }
 
 

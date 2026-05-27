@@ -9,7 +9,7 @@
 **
 **     Reference manual:    IMX8MPRM, Rev.D, 12/2020
 **     Version:             rev. 6.0, 2024-10-29
-**     Build:               b260205
+**     Build:               b260409
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
