@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2023 NXP
+ * Copyright 2018-2023, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -919,8 +919,8 @@ AT_QUICKACCESS_SECTION_CODE(void POWER_EnterDeepSleep(const uint32_t exclude_fro
                SYSCTL0_PDSLEEPCFG0_PMIC_MODE0_SHIFT;
     if (pmicMode == 0U) /* Use default PMIC Mode configuration. */
     {
-        /* Set PMIC mode pin as 0b01 to let PMC turn on vdd1v8 and vddcore*/
-        SYSCTL0->PDSLEEPCFG0 |= SYSCTL0_PDSLEEPCFG0_PMIC_MODE0(1) | SYSCTL0_PDSLEEPCFG0_PMIC_MODE1(0);
+        /* Set PMIC mode pin as POWER_DEFAULT_PMICMODE_DS(0b01) to let PMC turn on vdd1v8 and vddcore*/
+        SYSCTL0->PDSLEEPCFG0 |= (POWER_DEFAULT_PMICMODE_DS & 0x3U) << SYSCTL0_PDSLEEPCFG0_PMIC_MODE0_SHIFT;
     }
     else /* User defined PMIC mode. */
     {
@@ -1187,8 +1187,8 @@ void POWER_EnterDeepPowerDown(const uint32_t exclude_from_pd[4])
                SYSCTL0_PDSLEEPCFG0_PMIC_MODE0_SHIFT;
     if (pmicMode == 0U) /* Use default PMIC Mode configuration. */
     {
-        /* Set PMIC mode pin as 0b10 to let PMC trun off VDDCORE */
-        POWER_SetPmicMode(0x2U, kCfg_Sleep);
+        /* Set PMIC mode pin as POWER_DEFAULT_PMICMODE_DPD(0b10) to let PMC turn off VDDCORE */
+        POWER_SetPmicMode(POWER_DEFAULT_PMICMODE_DPD, kCfg_Sleep);
     }
     else /* User defined PMIC mode. */
     {
@@ -1231,8 +1231,8 @@ void POWER_EnterFullDeepPowerDown(const uint32_t exclude_from_pd[4])
                SYSCTL0_PDSLEEPCFG0_PMIC_MODE0_SHIFT;
     if (pmicMode == 0U) /* Use default PMIC Mode configuration. */
     {
-        /* Set PMIC mode pin as 0b11 to let PMC trun off VDDCORE and VDD1V8*/
-        POWER_SetPmicMode(0x3U, kCfg_Sleep);
+        /* Set PMIC mode pin as POWER_DEFAULT_PMICMODE_FDPD(0b11) to let PMC turn off VDDCORE and VDD1V8*/
+        POWER_SetPmicMode(POWER_DEFAULT_PMICMODE_FDPD, kCfg_Sleep);
     }
     else /* User defined PMIC mode. */
     {
