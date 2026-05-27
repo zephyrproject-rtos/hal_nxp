@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 6.0, 2025-11-12
-**     Build:               b251112
+**     Build:               b260409
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -385,10 +385,6 @@
 #define FSL_FEATURE_SAI_HAS_BIT_CLOCK_SWAP (1)
 /* @brief SAI5 and SAI6 share one irq number. */
 #define FSL_FEATURE_SAI_SAI5_SAI6_SHARE_IRQ (1)
-
-/* ISI module features */
-
-/* No feature definitions */
 
 /* MEMORY module features */
 

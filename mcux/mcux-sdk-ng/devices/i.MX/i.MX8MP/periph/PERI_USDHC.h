@@ -34,13 +34,13 @@
 **                          MIMX8ML8DVNLZ_dsp
 **
 **     Version:             rev. 6.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260409
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USDHC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -2071,17 +2071,17 @@ typedef struct {
 
 #define USDHC_CQVER_VERSION_SUFFIX_MASK          (0xFU)
 #define USDHC_CQVER_VERSION_SUFFIX_SHIFT         (0U)
-/*! VERSION_SUFFIX - e •MMC version suffix */
+/*! VERSION_SUFFIX - e *MMC version suffix */
 #define USDHC_CQVER_VERSION_SUFFIX(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_CQVER_VERSION_SUFFIX_SHIFT)) & USDHC_CQVER_VERSION_SUFFIX_MASK)
 
 #define USDHC_CQVER_MINOR_VN_MASK                (0xF0U)
 #define USDHC_CQVER_MINOR_VN_SHIFT               (4U)
-/*! MINOR_VN - e •MMC minor version number */
+/*! MINOR_VN - e *MMC minor version number */
 #define USDHC_CQVER_MINOR_VN(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_CQVER_MINOR_VN_SHIFT)) & USDHC_CQVER_MINOR_VN_MASK)
 
 #define USDHC_CQVER_MAJOR_VN_MASK                (0xF00U)
 #define USDHC_CQVER_MAJOR_VN_SHIFT               (8U)
-/*! MAJOR_VN - e •MMC major version number */
+/*! MAJOR_VN - e *MMC major version number */
 #define USDHC_CQVER_MAJOR_VN(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_CQVER_MAJOR_VN_SHIFT)) & USDHC_CQVER_MAJOR_VN_MASK)
 /*! @} */
 

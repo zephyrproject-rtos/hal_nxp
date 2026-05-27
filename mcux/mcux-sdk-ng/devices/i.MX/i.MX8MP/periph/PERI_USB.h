@@ -34,13 +34,13 @@
 **                          MIMX8ML8DVNLZ_dsp
 **
 **     Version:             rev. 6.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260409
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USB
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -168,7 +168,6 @@ typedef struct {
   __I  uint32_t HCCPARAMS2;                        /**< Host Controller Capability Parameters 2, offset: 0x1C */
   __IO uint32_t USBCMD;                            /**< USB Command Register, offset: 0x20 */
   __IO uint32_t USBSTS;                            /**< USB Status Register, offset: 0x24 */
-#undef PAGESIZE
   __I  uint32_t PAGESIZE;                          /**< Page Size Register, offset: 0x28 */
        uint8_t RESERVED_0[8];
   __IO uint32_t DNCTRL;                            /**< Device Notification Register, offset: 0x34 */

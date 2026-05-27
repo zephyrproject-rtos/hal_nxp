@@ -745,11 +745,6 @@ typedef enum _clock_root_control
 
     kCLOCK_RootPdm = (uintptr_t)CCM_BASE + offsetof(CCM_Type, ROOT[132].TARGET_ROOT), /*!< PDM Clock control name.*/
 
-    kCLOCK_RootMediaMipiPhy1Ref =
-        (uintptr_t)CCM_BASE + offsetof(CCM_Type, ROOT[123].TARGET_ROOT), /*!< MEDIA MIPI_PHY1 control name.*/
-    kCLOCK_RootMediaDisp1Pix =
-        (uintptr_t)CCM_BASE + offsetof(CCM_Type, ROOT[124].TARGET_ROOT), /*!< MEDIA DISP1 control name.*/
-
 } clock_root_control_t;
 
 /*! @brief ccm clock root used to get clock frequency. */

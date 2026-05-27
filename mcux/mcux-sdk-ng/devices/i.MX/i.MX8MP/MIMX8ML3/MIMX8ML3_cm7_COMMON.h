@@ -9,13 +9,13 @@
 **
 **     Reference manual:    IMX8MPRM, Rev.D, 12/2020
 **     Version:             rev. 6.0, 2024-10-29
-**     Build:               b251201
+**     Build:               b260409
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX8ML3_cm7
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -1021,7 +1021,7 @@ typedef enum IRQn {
 
 /* MIPI_DSI - Peripheral instance base addresses */
 /** Peripheral MIPI_DSI base address */
-#define MIPI_DSI_BASE                            (0x32E10000u)
+#define MIPI_DSI_BASE                            (0x32E60000u)
 /** Peripheral MIPI_DSI base pointer */
 #define MIPI_DSI                                 ((MIPI_DSI_Type *)MIPI_DSI_BASE)
 /** Array initializer of MIPI_DSI peripheral base addresses */
