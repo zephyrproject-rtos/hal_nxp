@@ -865,9 +865,9 @@ AT_QUICKACCESS_SECTION_CODE(static bool POWER_PostPowerMode(uint32_t mode))
     }
     else if (mode == 3U)
     {
+        initXip();
         SystemInit();
         POWER_RestoreNvicState();
-        initXip();
         BUCK18->BUCK_CTRL_ELEVEN_REG &= ~(BUCK18_BUCK_CTRL_ELEVEN_REG_USE_EXT_SUP(1));
     }
     else

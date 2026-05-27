@@ -8,7 +8,7 @@
 **
 **     Reference manual:    Rev. 1 Draft F, 2025-10-18
 **     Version:             rev. 1.0, 2020-05-12
-**     Build:               b260316
+**     Build:               b260410
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for KW43L43Z93
@@ -77,13 +77,12 @@
 #include "PERI_LPTMR.h"
 #include "PERI_LPUART.h"
 #include "PERI_LTC.h"
+#include "PERI_MCM.h"
 #include "PERI_MRCC.h"
 #include "PERI_MSCM.h"
-#include "PERI_MSF1_B_TEST.h"
 #include "PERI_MU.h"
 #include "PERI_PKC.h"
 #include "PERI_PORT.h"
-#include "PERI_PPB_MCM2_CM4.h"
 #include "PERI_PWM.h"
 #include "PERI_RADIO_CTRL.h"
 #include "PERI_RBME.h"
