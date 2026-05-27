@@ -13,8 +13,8 @@
 **                          MCXL144VLL_cm0plus
 **                          MCXL144VLL_cm33
 **
-**     Version:             rev. 1.1, 2026-01-02
-**     Build:               b260109
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for INPUTMUX_MAIN
@@ -31,14 +31,16 @@
 **         Generated based on Rev1 DraftH.
 **     - rev. 1.1 (2026-01-02)
 **         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_INPUTMUX_MAIN.h
- * @version 1.1
- * @date 2026-01-02
+ * @version 2.0
+ * @date 2026-04-22
  * @brief CMSIS Peripheral Access Layer for INPUTMUX_MAIN
  *
  * CMSIS Peripheral Access Layer for INPUTMUX_MAIN
@@ -186,10 +188,10 @@ typedef struct {
  *  0b0010111..AOI0_OUT1 input is selected
  *  0b0011000..AOI0_OUT2 input is selected
  *  0b0011001..AOI0_OUT3 input is selected
- *  0b0011010..ADC0_tcomp[0]
- *  0b0011011..ADC0_tcomp[1]
- *  0b0011100..ADC0_tcomp[2]
- *  0b0011101..ADC0_tcomp[3] input is selected
+ *  0b0011010..ADC0_TCOMP[0]
+ *  0b0011011..ADC0_TCOMP[1]
+ *  0b0011100..ADC0_TCOMP[2]
+ *  0b0011101..ADC0_TCOMP[3] input is selected
  *  0b0011110..CMP0_OUT is selected
  *  0b0011111..Reserved
  *  0b0100000..Reserved
@@ -264,10 +266,10 @@ typedef struct {
  *  0b0010111..AOI0_OUT1 input is selected
  *  0b0011000..AOI0_OUT2 input is selected
  *  0b0011001..AOI0_OUT3 input is selected
- *  0b0011010..ADC0_tcomp[0]
- *  0b0011011..ADC0_tcomp[1]
- *  0b0011100..ADC0_tcomp[2]
- *  0b0011101..ADC0_tcomp[3] input is selected
+ *  0b0011010..ADC0_TCOMP[0]
+ *  0b0011011..ADC0_TCOMP[1]
+ *  0b0011100..ADC0_TCOMP[2]
+ *  0b0011101..ADC0_TCOMP[3] input is selected
  *  0b0011110..CMP0_OUT is selected
  *  0b0011111..Reserved
  *  0b0100000..Reserved
@@ -339,10 +341,10 @@ typedef struct {
  *  0b0010111..AOI0_OUT1 input is selected
  *  0b0011000..AOI0_OUT2 input is selected
  *  0b0011001..AOI0_OUT3 input is selected
- *  0b0011010..ADC0_tcomp[0]
- *  0b0011011..ADC0_tcomp[1]
- *  0b0011100..ADC0_tcomp[2]
- *  0b0011101..ADC0_tcomp[3] input is selected
+ *  0b0011010..ADC0_TCOMP[0]
+ *  0b0011011..ADC0_TCOMP[1]
+ *  0b0011100..ADC0_TCOMP[2]
+ *  0b0011101..ADC0_TCOMP[3] input is selected
  *  0b0011110..CMP0_OUT is selected
  *  0b0011111..Reserved
  *  0b0100000..Reserved
@@ -417,10 +419,10 @@ typedef struct {
  *  0b0010111..AOI0_OUT1 input is selected
  *  0b0011000..AOI0_OUT2 input is selected
  *  0b0011001..AOI0_OUT3 input is selected
- *  0b0011010..ADC0_tcomp[0]
- *  0b0011011..ADC0_tcomp[1]
- *  0b0011100..ADC0_tcomp[2]
- *  0b0011101..ADC0_tcomp[3] input is selected
+ *  0b0011010..ADC0_TCOMP[0]
+ *  0b0011011..ADC0_TCOMP[1]
+ *  0b0011100..ADC0_TCOMP[2]
+ *  0b0011101..ADC0_TCOMP[3] input is selected
  *  0b0011110..CMP0_OUT is selected
  *  0b0011111..Reserved
  *  0b0100000..Reserved
@@ -492,10 +494,10 @@ typedef struct {
  *  0b0010111..AOI0_OUT1 input is selected
  *  0b0011000..AOI0_OUT2 input is selected
  *  0b0011001..AOI0_OUT3 input is selected
- *  0b0011010..ADC0_tcomp[0]
- *  0b0011011..ADC0_tcomp[1]
- *  0b0011100..ADC0_tcomp[2]
- *  0b0011101..ADC0_tcomp[3] input is selected
+ *  0b0011010..ADC0_TCOMP[0]
+ *  0b0011011..ADC0_TCOMP[1]
+ *  0b0011100..ADC0_TCOMP[2]
+ *  0b0011101..ADC0_TCOMP[3] input is selected
  *  0b0011110..CMP0_OUT is selected
  *  0b0011111..Reserved
  *  0b0100000..Reserved
@@ -570,10 +572,10 @@ typedef struct {
  *  0b0010111..AOI0_OUT1 input is selected
  *  0b0011000..AOI0_OUT2 input is selected
  *  0b0011001..AOI0_OUT3 input is selected
- *  0b0011010..ADC0_tcomp[0]
- *  0b0011011..ADC0_tcomp[1]
- *  0b0011100..ADC0_tcomp[2]
- *  0b0011101..ADC0_tcomp[3] input is selected
+ *  0b0011010..ADC0_TCOMP[0]
+ *  0b0011011..ADC0_TCOMP[1]
+ *  0b0011100..ADC0_TCOMP[2]
+ *  0b0011101..ADC0_TCOMP[3] input is selected
  *  0b0011110..CMP0_OUT is selected
  *  0b0011111..Reserved
  *  0b0100000..Reserved
@@ -760,10 +762,10 @@ typedef struct {
 #define INPUTMUX_MAIN_AOI0_MUX_INP_SHIFT         (0U)
 /*! INP - AOI0 trigger input connections
  *  0b000000..Reserved
- *  0b000001..ADC0_tcomp[0] input is selected
- *  0b000010..ADC0_tcomp[1] input is selected
- *  0b000011..ADC0_tcomp[2] input is selected
- *  0b000100..ADC0_tcomp[3] input is selected
+ *  0b000001..ADC0_TCOMP[0] input is selected
+ *  0b000010..ADC0_TCOMP[1] input is selected
+ *  0b000011..ADC0_TCOMP[2] input is selected
+ *  0b000100..ADC0_TCOMP[3] input is selected
  *  0b000101..CMP0_OUT input is selected
  *  0b000110..Reserved
  *  0b000111..Reserved

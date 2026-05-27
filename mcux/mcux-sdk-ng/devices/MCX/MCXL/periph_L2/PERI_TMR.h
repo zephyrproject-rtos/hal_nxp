@@ -13,14 +13,14 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250901
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TMR
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,14 +29,18 @@
 **     Revisions:
 **     - rev. 1.0 (2025-06-13)
 **         Generated based on Rev1 DraftH.
+**     - rev. 1.1 (2026-01-02)
+**         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_TMR.h
- * @version 1.0
- * @date 2025-06-13
+ * @version 2.0
+ * @date 2026-04-22
  * @brief CMSIS Peripheral Access Layer for TMR
  *
  * CMSIS Peripheral Access Layer for TMR
@@ -117,8 +121,7 @@ typedef struct {
     __IO uint32_t CMPLD2;                            /**< Timer Channel Comparator Load Register 2, array offset: 0x24, array step: 0x40 */
     __IO uint32_t CSCTRL;                            /**< Timer Channel Comparator Status and Control Register, array offset: 0x28, array step: 0x40 */
     __IO uint32_t FILT;                              /**< Timer Channel Input Filter Register, array offset: 0x2C, array step: 0x40 */
-    __IO uint32_t DMA;                               /**< Timer Channel DMA Enable Register, array offset: 0x30, array step: 0x40 */
-         uint8_t RESERVED_0[8];
+         uint8_t RESERVED_0[12];
     __IO uint32_t ENBL;                              /**< Timer Channel Enable Register, array offset: 0x3C, array step: 0x40, valid indices: [0] */
   } CHANNEL[TMR_CHANNEL_COUNT];
 } TMR_Type;
@@ -546,28 +549,6 @@ typedef struct {
 
 /* The count of TMR_FILT */
 #define TMR_FILT_COUNT                           (4U)
-
-/*! @name DMA - Timer Channel DMA Enable Register */
-/*! @{ */
-
-#define TMR_DMA_IEFDE_MASK                       (0x1U)
-#define TMR_DMA_IEFDE_SHIFT                      (0U)
-/*! IEFDE - Input Edge Flag DMA Enable */
-#define TMR_DMA_IEFDE(x)                         (((uint32_t)(((uint32_t)(x)) << TMR_DMA_IEFDE_SHIFT)) & TMR_DMA_IEFDE_MASK)
-
-#define TMR_DMA_CMPLD1DE_MASK                    (0x2U)
-#define TMR_DMA_CMPLD1DE_SHIFT                   (1U)
-/*! CMPLD1DE - Comparator Preload Register 1 DMA Enable */
-#define TMR_DMA_CMPLD1DE(x)                      (((uint32_t)(((uint32_t)(x)) << TMR_DMA_CMPLD1DE_SHIFT)) & TMR_DMA_CMPLD1DE_MASK)
-
-#define TMR_DMA_CMPLD2DE_MASK                    (0x4U)
-#define TMR_DMA_CMPLD2DE_SHIFT                   (2U)
-/*! CMPLD2DE - Comparator Preload Register 2 DMA Enable */
-#define TMR_DMA_CMPLD2DE(x)                      (((uint32_t)(((uint32_t)(x)) << TMR_DMA_CMPLD2DE_SHIFT)) & TMR_DMA_CMPLD2DE_MASK)
-/*! @} */
-
-/* The count of TMR_DMA */
-#define TMR_DMA_COUNT                            (4U)
 
 /*! @name ENBL - Timer Channel Enable Register */
 /*! @{ */

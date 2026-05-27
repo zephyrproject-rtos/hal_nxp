@@ -13,14 +13,14 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250901
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AHBSC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,14 +29,18 @@
 **     Revisions:
 **     - rev. 1.0 (2025-06-13)
 **         Generated based on Rev1 DraftH.
+**     - rev. 1.1 (2026-01-02)
+**         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_AHBSC.h
- * @version 1.0
- * @date 2025-06-13
+ * @version 2.0
+ * @date 2026-04-22
  * @brief CMSIS Peripheral Access Layer for AHBSC
  *
  * CMSIS Peripheral Access Layer for AHBSC
@@ -977,16 +981,6 @@ typedef struct {
  *  0b11..Secure and privilege user access allowed
  */
 #define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE2_FMU0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE2_FMU0_SHIFT)) & AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE2_FMU0_MASK)
-
-#define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE2_FMU0_TST_MASK (0x3000000U)
-#define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE2_FMU0_TST_SHIFT (24U)
-/*! FMU0_TST - FMU0_TST
- *  0b00..Non-secure and non-privilege user access allowed
- *  0b01..Non-secure and privilege access allowed
- *  0b10..Secure and non-privilege user access allowed
- *  0b11..Secure and privilege user access allowed
- */
-#define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE2_FMU0_TST(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE2_FMU0_TST_SHIFT)) & AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE2_FMU0_TST_MASK)
 /*! @} */
 
 /*! @name AIPS_BRIDGE_GROUP0_MEM_RULE3 - AIPS Bridge Group 0 Memory Rule 3 */
@@ -1060,16 +1054,6 @@ typedef struct {
 /*! @name AIPS_BRIDGE_GROUP2_MEM_RULE1 - AIPS Bridge Group 2 Memory Rule 1 */
 /*! @{ */
 
-#define AHBSC_AIPS_BRIDGE_GROUP2_MEM_RULE1_FLEXPWM0_MASK (0x30U)
-#define AHBSC_AIPS_BRIDGE_GROUP2_MEM_RULE1_FLEXPWM0_SHIFT (4U)
-/*! FLEXPWM0 - FLEXPWM0
- *  0b00..Non-secure and non-privilege user access allowed
- *  0b01..Non-secure and privilege access allowed
- *  0b10..Secure and non-privilege user access allowed
- *  0b11..Secure and privilege user access allowed
- */
-#define AHBSC_AIPS_BRIDGE_GROUP2_MEM_RULE1_FLEXPWM0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AIPS_BRIDGE_GROUP2_MEM_RULE1_FLEXPWM0_SHIFT)) & AHBSC_AIPS_BRIDGE_GROUP2_MEM_RULE1_FLEXPWM0_MASK)
-
 #define AHBSC_AIPS_BRIDGE_GROUP2_MEM_RULE1_OSTIMER0_MASK (0x300000U)
 #define AHBSC_AIPS_BRIDGE_GROUP2_MEM_RULE1_OSTIMER0_SHIFT (20U)
 /*! OSTIMER0 - OSTIMER0
@@ -1094,15 +1078,15 @@ typedef struct {
 /*! @name AIPS_BRIDGE_GROUP2_MEM_RULE2 - AIPS Bridge Group 2 Memory Rule 2 */
 /*! @{ */
 
-#define AHBSC_AIPS_BRIDGE_GROUP2_MEM_RULE2_CMP0_MASK (0x30U)
-#define AHBSC_AIPS_BRIDGE_GROUP2_MEM_RULE2_CMP0_SHIFT (4U)
-/*! CMP0 - CMP0
+#define AHBSC_AIPS_BRIDGE_GROUP2_MEM_RULE2_ACMP0_MASK (0x30U)
+#define AHBSC_AIPS_BRIDGE_GROUP2_MEM_RULE2_ACMP0_SHIFT (4U)
+/*! ACMP0 - ACMP0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHBSC_AIPS_BRIDGE_GROUP2_MEM_RULE2_CMP0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AIPS_BRIDGE_GROUP2_MEM_RULE2_CMP0_SHIFT)) & AHBSC_AIPS_BRIDGE_GROUP2_MEM_RULE2_CMP0_MASK)
+#define AHBSC_AIPS_BRIDGE_GROUP2_MEM_RULE2_ACMP0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AIPS_BRIDGE_GROUP2_MEM_RULE2_ACMP0_SHIFT)) & AHBSC_AIPS_BRIDGE_GROUP2_MEM_RULE2_ACMP0_MASK)
 /*! @} */
 
 /*! @name AIPS_BRIDGE_GROUP2_MEM_RULE3 - AIPS Bridge Group 2 Memory Rule 3 */
@@ -1142,15 +1126,15 @@ typedef struct {
 /*! @name AIPS_BRIDGE_GROUP3_MEM_RULE0 - AIPS Bridge Group 3 Rule 0 */
 /*! @{ */
 
-#define AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE0_MU0_MASK (0x30000U)
-#define AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE0_MU0_SHIFT (16U)
-/*! MU0 - MU0
+#define AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE0_MUA_MASK (0x30000U)
+#define AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE0_MUA_SHIFT (16U)
+/*! MUA - MUA
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE0_MU0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE0_MU0_SHIFT)) & AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE0_MU0_MASK)
+#define AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE0_MUA(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE0_MUA_SHIFT)) & AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE0_MUA_MASK)
 /*! @} */
 
 /*! @name AIPS_BRIDGE_GROUP3_MEM_RULE2 - AIPS Bridge Group 3 Rule 2 */
@@ -1185,16 +1169,6 @@ typedef struct {
  *  0b11..Secure and privilege user access allowed
  */
 #define AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE2_TRNG0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE2_TRNG0_SHIFT)) & AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE2_TRNG0_MASK)
-
-#define AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE2_UDF0_MASK (0x3000U)
-#define AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE2_UDF0_SHIFT (12U)
-/*! UDF0 - CAN0 RULE0
- *  0b00..Non-secure and non-privilege user access allowed
- *  0b01..Non-secure and privilege access allowed
- *  0b10..Secure and non-privilege user access allowed
- *  0b11..Secure and privilege user access allowed
- */
-#define AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE2_UDF0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE2_UDF0_SHIFT)) & AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE2_UDF0_MASK)
 
 #define AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE2_eMDA_1_MP_MASK (0x30000000U)
 #define AHBSC_AIPS_BRIDGE_GROUP3_MEM_RULE2_eMDA_1_MP_SHIFT (28U)
@@ -1298,25 +1272,25 @@ typedef struct {
 /*! @name AON_DOMAIN_PERIPHERAL_MEM_RULE0 - AON Domain Peripheral Rule 0 */
 /*! @{ */
 
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_LPI2C_MASK (0x3U)
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_LPI2C_SHIFT (0U)
-/*! LPI2C - LPI2C
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_AON_LPI2C0_MASK (0x3U)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_AON_LPI2C0_SHIFT (0U)
+/*! AON_LPI2C0 - AON_LPI2C0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_LPI2C(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_LPI2C_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_LPI2C_MASK)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_AON_LPI2C0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_AON_LPI2C0_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_AON_LPI2C0_MASK)
 
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_LPUART_MASK (0x300U)
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_LPUART_SHIFT (8U)
-/*! LPUART - LPUART
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_AON_LPUART0_MASK (0x300U)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_AON_LPUART0_SHIFT (8U)
+/*! AON_LPUART0 - AON_LPUART0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_LPUART(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_LPUART_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_LPUART_MASK)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_AON_LPUART0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_AON_LPUART0_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_AON_LPUART0_MASK)
 
 #define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_MUB_MASK (0x30000U)
 #define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_MUB_SHIFT (16U)
@@ -1338,107 +1312,107 @@ typedef struct {
  */
 #define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_PORT0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_PORT0_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_PORT0_MASK)
 
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_ACMP_MASK (0x3000000U)
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_ACMP_SHIFT (24U)
-/*! ACMP - ACMP
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_AON_ACMP0_MASK (0x3000000U)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_AON_ACMP0_SHIFT (24U)
+/*! AON_ACMP0 - AON_ACMP0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_ACMP(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_ACMP_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_ACMP_MASK)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_AON_ACMP0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_AON_ACMP0_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE0_AON_ACMP0_MASK)
 /*! @} */
 
 /*! @name AON_DOMAIN_PERIPHERAL_MEM_RULE1 - AON Domain Peripheral Rule 1 */
 /*! @{ */
 
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_LPTIMER_MASK (0x3U)
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_LPTIMER_SHIFT (0U)
-/*! LPTIMER - LPTIMER
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_LPTMR0_MASK (0x3U)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_LPTMR0_SHIFT (0U)
+/*! LPTMR0 - LPTMR0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_LPTIMER(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_LPTIMER_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_LPTIMER_MASK)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_LPTMR0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_LPTMR0_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_LPTMR0_MASK)
 
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR32_0_MASK (0x3000000U)
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR32_0_SHIFT (24U)
-/*! QTMR32_0 - QTMR32_0
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR0_MASK (0x3000000U)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR0_SHIFT (24U)
+/*! QTMR0 - QTMR0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR32_0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR32_0_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR32_0_MASK)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR0_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR0_MASK)
 
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR32_1_MASK (0x30000000U)
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR32_1_SHIFT (28U)
-/*! QTMR32_1 - QTMR32_1
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR1_MASK (0x30000000U)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR1_SHIFT (28U)
+/*! QTMR1 - QTMR1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR32_1(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR32_1_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR32_1_MASK)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR1(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR1_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE1_QTMR1_MASK)
 /*! @} */
 
 /*! @name AON_DOMAIN_PERIPHERAL_MEM_RULE2 - AON Domain Peripheral Rule 2 */
 /*! @{ */
 
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_GP_GPR_MASK (0x3U)
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_GP_GPR_SHIFT (0U)
-/*! GP_GPR - GP_GPR
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_SYSCON_MASK (0x3U)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_SYSCON_SHIFT (0U)
+/*! SYSCON - SYSCON
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_GP_GPR(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_GP_GPR_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_GP_GPR_MASK)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_SYSCON(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_SYSCON_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_SYSCON_MASK)
 
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_INPUTMUX_MASK (0x30U)
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_INPUTMUX_SHIFT (4U)
-/*! INPUTMUX - INPUTMUX
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_INPUTMUX0_MASK (0x30U)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_INPUTMUX0_SHIFT (4U)
+/*! INPUTMUX0 - INPUTMUX0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_INPUTMUX(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_INPUTMUX_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_INPUTMUX_MASK)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_INPUTMUX0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_INPUTMUX0_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_INPUTMUX0_MASK)
 
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_LPADC_MASK (0x300U)
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_LPADC_SHIFT (8U)
-/*! LPADC - LPADC
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_LPADC0_MASK (0x300U)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_LPADC0_SHIFT (8U)
+/*! LPADC0 - LPADC0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_LPADC(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_LPADC_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_LPADC_MASK)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_LPADC0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_LPADC0_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_LPADC0_MASK)
 
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_SGLCD_MASK (0x30000U)
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_SGLCD_SHIFT (16U)
-/*! SGLCD - SGLCD0
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_SLCD0_MASK (0x30000U)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_SLCD0_SHIFT (16U)
+/*! SLCD0 - SLCD0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_SGLCD(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_SGLCD_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_SGLCD_MASK)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_SLCD0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_SLCD0_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_SLCD0_MASK)
 
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_KPP_MASK (0x300000U)
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_KPP_SHIFT (20U)
-/*! KPP - KPP
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_KPP0_MASK (0x300000U)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_KPP0_SHIFT (20U)
+/*! KPP0 - KPP0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_KPP(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_KPP_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_KPP_MASK)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_KPP0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_KPP0_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_KPP0_MASK)
 
 #define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_ADVC2_MASK (0x30000000U)
 #define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE2_ADVC2_SHIFT (28U)
-/*! ADVC2 - KPP
+/*! ADVC2 - KPP0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
@@ -1450,15 +1424,15 @@ typedef struct {
 /*! @name AON_DOMAIN_PERIPHERAL_MEM_RULE3 - AON Domain Peripheral Rule 3 */
 /*! @{ */
 
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_PMIC_CTRL_MASK (0x3U)
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_PMIC_CTRL_SHIFT (0U)
-/*! PMIC_CTRL - PMIC_CTRL
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_PMU_MASK (0x3U)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_PMU_SHIFT (0U)
+/*! PMU - PMU
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_PMIC_CTRL(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_PMIC_CTRL_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_PMIC_CTRL_MASK)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_PMU(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_PMU_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_PMU_MASK)
 
 #define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_CGU_MASK (0x30U)
 #define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_CGU_SHIFT (4U)
@@ -1480,25 +1454,25 @@ typedef struct {
  */
 #define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_SMM(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_SMM_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_SMM_MASK)
 
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_LPCMP_MASK (0x3000U)
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_LPCMP_SHIFT (12U)
-/*! LPCMP - LPCMP
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_LPACMP_MASK (0x3000U)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_LPACMP_SHIFT (12U)
+/*! LPACMP - LPACMP
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_LPCMP(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_LPCMP_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_LPCMP_MASK)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_LPACMP(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_LPACMP_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_LPACMP_MASK)
 
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_AON_GPIO_MASK (0x30000000U)
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_AON_GPIO_SHIFT (28U)
-/*! AON_GPIO - AON_GPIO
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_AON_GPIO0_MASK (0x30000000U)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_AON_GPIO0_SHIFT (28U)
+/*! AON_GPIO0 - AON_GPIO0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_AON_GPIO(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_AON_GPIO_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_AON_GPIO_MASK)
+#define AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_AON_GPIO0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_AON_GPIO0_SHIFT)) & AHBSC_AON_DOMAIN_PERIPHERAL_MEM_RULE3_AON_GPIO0_MASK)
 /*! @} */
 
 /*! @name AON_DOMAIN_SRAM_MEM_RULE - AON Domain SRAM Memory Rule */
@@ -1626,8 +1600,8 @@ typedef struct {
 /*! SEC_VIO_INFO_MASTER - Security violation master number
  *  0b00000..M33 Code
  *  0b00001..M33 System
- *  0b00101..DMA0
- *  0b00111..DMA1
+ *  0b00101..eDMA0
+ *  0b00111..eDMA1
  *  0b01100..PKC
  */
 #define AHBSC_SEC_VIO_MISC_INFO_SEC_VIO_INFO_MASTER(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_VIO_MISC_INFO_SEC_VIO_INFO_MASTER_SHIFT)) & AHBSC_SEC_VIO_MISC_INFO_SEC_VIO_INFO_MASTER_MASK)
@@ -1715,21 +1689,21 @@ typedef struct {
  */
 #define AHBSC_SEC_GP_REG_AON_GPIO_INT_0(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_AON_GPIO_INT_0_SHIFT)) & AHBSC_SEC_GP_REG_AON_GPIO_INT_0_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_0_MASK     (0x1U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_0_SHIFT    (0U)
-/*! DMA0_IPD_REQ_0 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_0_MASK    (0x1U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_0_SHIFT   (0U)
+/*! eDMA0_IPD_REQ_0 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_0(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_0_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_0_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_0(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_0_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_0_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_0_MASK     (0x1U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_0_SHIFT    (0U)
-/*! DMA1_IPD_REQ_0 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_0_MASK    (0x1U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_0_SHIFT   (0U)
+/*! eDMA1_IPD_REQ_0 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_0(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_0_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_0_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_0(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_0_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_0_MASK)
 
 #define AHBSC_SEC_GP_REG_AON_GPIO_INT_1_MASK     (0x2U)
 #define AHBSC_SEC_GP_REG_AON_GPIO_INT_1_SHIFT    (1U)
@@ -1739,515 +1713,515 @@ typedef struct {
  */
 #define AHBSC_SEC_GP_REG_AON_GPIO_INT_1(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_AON_GPIO_INT_1_SHIFT)) & AHBSC_SEC_GP_REG_AON_GPIO_INT_1_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_1_MASK     (0x2U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_1_SHIFT    (1U)
-/*! DMA0_IPD_REQ_1 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_1_MASK    (0x2U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_1_SHIFT   (1U)
+/*! eDMA0_IPD_REQ_1 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_1(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_1_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_1_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_1(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_1_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_1_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_1_MASK     (0x2U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_1_SHIFT    (1U)
-/*! DMA1_IPD_REQ_1 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_1_MASK    (0x2U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_1_SHIFT   (1U)
+/*! eDMA1_IPD_REQ_1 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_1(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_1_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_1_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_1(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_1_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_1_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_2_MASK     (0x4U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_2_SHIFT    (2U)
-/*! DMA0_IPD_REQ_2 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_2_MASK    (0x4U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_2_SHIFT   (2U)
+/*! eDMA0_IPD_REQ_2 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_2(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_2_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_2_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_2(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_2_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_2_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_2_MASK     (0x4U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_2_SHIFT    (2U)
-/*! DMA1_IPD_REQ_2 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_2_MASK    (0x4U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_2_SHIFT   (2U)
+/*! eDMA1_IPD_REQ_2 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_2(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_2_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_2_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_2(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_2_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_2_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_3_MASK     (0x8U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_3_SHIFT    (3U)
-/*! DMA0_IPD_REQ_3 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_3_MASK    (0x8U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_3_SHIFT   (3U)
+/*! eDMA0_IPD_REQ_3 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_3(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_3_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_3_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_3(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_3_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_3_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_3_MASK     (0x8U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_3_SHIFT    (3U)
-/*! DMA1_IPD_REQ_3 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_3_MASK    (0x8U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_3_SHIFT   (3U)
+/*! eDMA1_IPD_REQ_3 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_3(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_3_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_3_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_3(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_3_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_3_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_4_MASK     (0x10U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_4_SHIFT    (4U)
-/*! DMA0_IPD_REQ_4 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_4_MASK    (0x10U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_4_SHIFT   (4U)
+/*! eDMA0_IPD_REQ_4 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_4(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_4_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_4_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_4(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_4_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_4_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_4_MASK     (0x10U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_4_SHIFT    (4U)
-/*! DMA1_IPD_REQ_4 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_4_MASK    (0x10U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_4_SHIFT   (4U)
+/*! eDMA1_IPD_REQ_4 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_4(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_4_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_4_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_4(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_4_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_4_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_5_MASK     (0x20U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_5_SHIFT    (5U)
-/*! DMA0_IPD_REQ_5 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_5_MASK    (0x20U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_5_SHIFT   (5U)
+/*! eDMA0_IPD_REQ_5 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_5(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_5_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_5_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_5(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_5_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_5_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_5_MASK     (0x20U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_5_SHIFT    (5U)
-/*! DMA1_IPD_REQ_5 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_5_MASK    (0x20U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_5_SHIFT   (5U)
+/*! eDMA1_IPD_REQ_5 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_5(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_5_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_5_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_5(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_5_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_5_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_6_MASK     (0x40U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_6_SHIFT    (6U)
-/*! DMA0_IPD_REQ_6 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_6_MASK    (0x40U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_6_SHIFT   (6U)
+/*! eDMA0_IPD_REQ_6 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_6(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_6_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_6_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_6(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_6_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_6_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_6_MASK     (0x40U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_6_SHIFT    (6U)
-/*! DMA1_IPD_REQ_6 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_6_MASK    (0x40U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_6_SHIFT   (6U)
+/*! eDMA1_IPD_REQ_6 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_6(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_6_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_6_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_6(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_6_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_6_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_7_MASK     (0x80U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_7_SHIFT    (7U)
-/*! DMA0_IPD_REQ_7 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_7_MASK    (0x80U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_7_SHIFT   (7U)
+/*! eDMA0_IPD_REQ_7 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_7(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_7_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_7_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_7(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_7_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_7_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_7_MASK     (0x80U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_7_SHIFT    (7U)
-/*! DMA1_IPD_REQ_7 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_7_MASK    (0x80U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_7_SHIFT   (7U)
+/*! eDMA1_IPD_REQ_7 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_7(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_7_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_7_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_7(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_7_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_7_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_8_MASK     (0x100U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_8_SHIFT    (8U)
-/*! DMA0_IPD_REQ_8 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_8_MASK    (0x100U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_8_SHIFT   (8U)
+/*! eDMA0_IPD_REQ_8 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_8(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_8_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_8_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_8(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_8_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_8_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_8_MASK     (0x100U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_8_SHIFT    (8U)
-/*! DMA1_IPD_REQ_8 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_8_MASK    (0x100U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_8_SHIFT   (8U)
+/*! eDMA1_IPD_REQ_8 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_8(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_8_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_8_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_8(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_8_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_8_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_9_MASK     (0x200U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_9_SHIFT    (9U)
-/*! DMA0_IPD_REQ_9 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_9_MASK    (0x200U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_9_SHIFT   (9U)
+/*! eDMA0_IPD_REQ_9 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_9(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_9_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_9_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_9(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_9_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_9_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_9_MASK     (0x200U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_9_SHIFT    (9U)
-/*! DMA1_IPD_REQ_9 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_9_MASK    (0x200U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_9_SHIFT   (9U)
+/*! eDMA1_IPD_REQ_9 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_9(x)       (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_9_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_9_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_9(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_9_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_9_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_10_MASK    (0x400U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_10_SHIFT   (10U)
-/*! DMA0_IPD_REQ_10 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_10_MASK   (0x400U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_10_SHIFT  (10U)
+/*! eDMA0_IPD_REQ_10 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_10(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_10_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_10_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_10(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_10_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_10_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_10_MASK    (0x400U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_10_SHIFT   (10U)
-/*! DMA1_IPD_REQ_10 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_10_MASK   (0x400U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_10_SHIFT  (10U)
+/*! eDMA1_IPD_REQ_10 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_10(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_10_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_10_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_10(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_10_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_10_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_11_MASK    (0x800U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_11_SHIFT   (11U)
-/*! DMA0_IPD_REQ_11 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_11_MASK   (0x800U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_11_SHIFT  (11U)
+/*! eDMA0_IPD_REQ_11 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_11(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_11_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_11_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_11(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_11_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_11_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_11_MASK    (0x800U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_11_SHIFT   (11U)
-/*! DMA1_IPD_REQ_11 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_11_MASK   (0x800U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_11_SHIFT  (11U)
+/*! eDMA1_IPD_REQ_11 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_11(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_11_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_11_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_11(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_11_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_11_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_12_MASK    (0x1000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_12_SHIFT   (12U)
-/*! DMA0_IPD_REQ_12 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_12_MASK   (0x1000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_12_SHIFT  (12U)
+/*! eDMA0_IPD_REQ_12 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_12(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_12_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_12_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_12(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_12_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_12_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_12_MASK    (0x1000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_12_SHIFT   (12U)
-/*! DMA1_IPD_REQ_12 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_12_MASK   (0x1000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_12_SHIFT  (12U)
+/*! eDMA1_IPD_REQ_12 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_12(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_12_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_12_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_12(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_12_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_12_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_13_MASK    (0x2000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_13_SHIFT   (13U)
-/*! DMA0_IPD_REQ_13 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_13_MASK   (0x2000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_13_SHIFT  (13U)
+/*! eDMA0_IPD_REQ_13 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_13(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_13_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_13_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_13(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_13_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_13_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_13_MASK    (0x2000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_13_SHIFT   (13U)
-/*! DMA1_IPD_REQ_13 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_13_MASK   (0x2000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_13_SHIFT  (13U)
+/*! eDMA1_IPD_REQ_13 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_13(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_13_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_13_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_13(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_13_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_13_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_14_MASK    (0x4000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_14_SHIFT   (14U)
-/*! DMA0_IPD_REQ_14 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_14_MASK   (0x4000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_14_SHIFT  (14U)
+/*! eDMA0_IPD_REQ_14 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_14(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_14_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_14_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_14(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_14_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_14_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_14_MASK    (0x4000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_14_SHIFT   (14U)
-/*! DMA1_IPD_REQ_14 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_14_MASK   (0x4000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_14_SHIFT  (14U)
+/*! eDMA1_IPD_REQ_14 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_14(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_14_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_14_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_14(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_14_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_14_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_15_MASK    (0x8000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_15_SHIFT   (15U)
-/*! DMA0_IPD_REQ_15 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_15_MASK   (0x8000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_15_SHIFT  (15U)
+/*! eDMA0_IPD_REQ_15 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_15(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_15_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_15_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_15(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_15_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_15_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_15_MASK    (0x8000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_15_SHIFT   (15U)
-/*! DMA1_IPD_REQ_15 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_15_MASK   (0x8000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_15_SHIFT  (15U)
+/*! eDMA1_IPD_REQ_15 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_15(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_15_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_15_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_15(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_15_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_15_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_16_MASK    (0x10000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_16_SHIFT   (16U)
-/*! DMA0_IPD_REQ_16 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_16_MASK   (0x10000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_16_SHIFT  (16U)
+/*! eDMA0_IPD_REQ_16 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_16(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_16_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_16_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_16(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_16_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_16_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_16_MASK    (0x10000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_16_SHIFT   (16U)
-/*! DMA1_IPD_REQ_16 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_16_MASK   (0x10000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_16_SHIFT  (16U)
+/*! eDMA1_IPD_REQ_16 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_16(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_16_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_16_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_16(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_16_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_16_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_17_MASK    (0x20000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_17_SHIFT   (17U)
-/*! DMA0_IPD_REQ_17 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_17_MASK   (0x20000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_17_SHIFT  (17U)
+/*! eDMA0_IPD_REQ_17 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_17(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_17_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_17_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_17(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_17_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_17_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_17_MASK    (0x20000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_17_SHIFT   (17U)
-/*! DMA1_IPD_REQ_17 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_17_MASK   (0x20000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_17_SHIFT  (17U)
+/*! eDMA1_IPD_REQ_17 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_17(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_17_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_17_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_17(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_17_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_17_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_18_MASK    (0x40000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_18_SHIFT   (18U)
-/*! DMA0_IPD_REQ_18 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_18_MASK   (0x40000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_18_SHIFT  (18U)
+/*! eDMA0_IPD_REQ_18 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_18(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_18_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_18_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_18(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_18_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_18_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_18_MASK    (0x40000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_18_SHIFT   (18U)
-/*! DMA1_IPD_REQ_18 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_18_MASK   (0x40000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_18_SHIFT  (18U)
+/*! eDMA1_IPD_REQ_18 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_18(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_18_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_18_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_18(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_18_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_18_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_19_MASK    (0x80000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_19_SHIFT   (19U)
-/*! DMA0_IPD_REQ_19 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_19_MASK   (0x80000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_19_SHIFT  (19U)
+/*! eDMA0_IPD_REQ_19 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_19(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_19_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_19_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_19(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_19_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_19_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_19_MASK    (0x80000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_19_SHIFT   (19U)
-/*! DMA1_IPD_REQ_19 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_19_MASK   (0x80000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_19_SHIFT  (19U)
+/*! eDMA1_IPD_REQ_19 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_19(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_19_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_19_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_19(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_19_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_19_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_20_MASK    (0x100000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_20_SHIFT   (20U)
-/*! DMA0_IPD_REQ_20 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_20_MASK   (0x100000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_20_SHIFT  (20U)
+/*! eDMA0_IPD_REQ_20 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_20(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_20_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_20_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_20(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_20_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_20_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_20_MASK    (0x100000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_20_SHIFT   (20U)
-/*! DMA1_IPD_REQ_20 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_20_MASK   (0x100000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_20_SHIFT  (20U)
+/*! eDMA1_IPD_REQ_20 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_20(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_20_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_20_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_20(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_20_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_20_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_21_MASK    (0x200000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_21_SHIFT   (21U)
-/*! DMA0_IPD_REQ_21 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_21_MASK   (0x200000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_21_SHIFT  (21U)
+/*! eDMA0_IPD_REQ_21 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_21(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_21_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_21_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_21(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_21_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_21_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_21_MASK    (0x200000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_21_SHIFT   (21U)
-/*! DMA1_IPD_REQ_21 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_21_MASK   (0x200000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_21_SHIFT  (21U)
+/*! eDMA1_IPD_REQ_21 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_21(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_21_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_21_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_21(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_21_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_21_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_22_MASK    (0x400000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_22_SHIFT   (22U)
-/*! DMA0_IPD_REQ_22 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_22_MASK   (0x400000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_22_SHIFT  (22U)
+/*! eDMA0_IPD_REQ_22 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_22(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_22_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_22_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_22(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_22_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_22_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_22_MASK    (0x400000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_22_SHIFT   (22U)
-/*! DMA1_IPD_REQ_22 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_22_MASK   (0x400000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_22_SHIFT  (22U)
+/*! eDMA1_IPD_REQ_22 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_22(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_22_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_22_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_22(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_22_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_22_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_23_MASK    (0x800000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_23_SHIFT   (23U)
-/*! DMA0_IPD_REQ_23 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_23_MASK   (0x800000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_23_SHIFT  (23U)
+/*! eDMA0_IPD_REQ_23 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_23(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_23_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_23_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_23(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_23_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_23_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_23_MASK    (0x800000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_23_SHIFT   (23U)
-/*! DMA1_IPD_REQ_23 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_23_MASK   (0x800000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_23_SHIFT  (23U)
+/*! eDMA1_IPD_REQ_23 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_23(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_23_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_23_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_23(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_23_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_23_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_24_MASK    (0x1000000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_24_SHIFT   (24U)
-/*! DMA0_IPD_REQ_24 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_24_MASK   (0x1000000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_24_SHIFT  (24U)
+/*! eDMA0_IPD_REQ_24 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_24(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_24_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_24_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_24(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_24_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_24_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_24_MASK    (0x1000000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_24_SHIFT   (24U)
-/*! DMA1_IPD_REQ_24 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_24_MASK   (0x1000000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_24_SHIFT  (24U)
+/*! eDMA1_IPD_REQ_24 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_24(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_24_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_24_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_24(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_24_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_24_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_25_MASK    (0x2000000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_25_SHIFT   (25U)
-/*! DMA0_IPD_REQ_25 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_25_MASK   (0x2000000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_25_SHIFT  (25U)
+/*! eDMA0_IPD_REQ_25 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_25(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_25_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_25_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_25(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_25_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_25_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_25_MASK    (0x2000000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_25_SHIFT   (25U)
-/*! DMA1_IPD_REQ_25 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_25_MASK   (0x2000000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_25_SHIFT  (25U)
+/*! eDMA1_IPD_REQ_25 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_25(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_25_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_25_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_25(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_25_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_25_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_26_MASK    (0x4000000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_26_SHIFT   (26U)
-/*! DMA0_IPD_REQ_26 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_26_MASK   (0x4000000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_26_SHIFT  (26U)
+/*! eDMA0_IPD_REQ_26 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_26(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_26_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_26_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_26(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_26_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_26_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_26_MASK    (0x4000000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_26_SHIFT   (26U)
-/*! DMA1_IPD_REQ_26 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_26_MASK   (0x4000000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_26_SHIFT  (26U)
+/*! eDMA1_IPD_REQ_26 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_26(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_26_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_26_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_26(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_26_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_26_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_27_MASK    (0x8000000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_27_SHIFT   (27U)
-/*! DMA0_IPD_REQ_27 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_27_MASK   (0x8000000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_27_SHIFT  (27U)
+/*! eDMA0_IPD_REQ_27 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_27(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_27_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_27_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_27(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_27_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_27_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_27_MASK    (0x8000000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_27_SHIFT   (27U)
-/*! DMA1_IPD_REQ_27 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_27_MASK   (0x8000000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_27_SHIFT  (27U)
+/*! eDMA1_IPD_REQ_27 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_27(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_27_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_27_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_27(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_27_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_27_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_28_MASK    (0x10000000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_28_SHIFT   (28U)
-/*! DMA0_IPD_REQ_28 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_28_MASK   (0x10000000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_28_SHIFT  (28U)
+/*! eDMA0_IPD_REQ_28 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_28(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_28_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_28_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_28(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_28_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_28_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_28_MASK    (0x10000000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_28_SHIFT   (28U)
-/*! DMA1_IPD_REQ_28 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_28_MASK   (0x10000000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_28_SHIFT  (28U)
+/*! eDMA1_IPD_REQ_28 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_28(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_28_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_28_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_28(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_28_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_28_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_29_MASK    (0x20000000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_29_SHIFT   (29U)
-/*! DMA0_IPD_REQ_29 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_29_MASK   (0x20000000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_29_SHIFT  (29U)
+/*! eDMA0_IPD_REQ_29 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_29(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_29_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_29_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_29(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_29_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_29_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_29_MASK    (0x20000000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_29_SHIFT   (29U)
-/*! DMA1_IPD_REQ_29 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_29_MASK   (0x20000000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_29_SHIFT  (29U)
+/*! eDMA1_IPD_REQ_29 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_29(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_29_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_29_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_29(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_29_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_29_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_30_MASK    (0x40000000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_30_SHIFT   (30U)
-/*! DMA0_IPD_REQ_30 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_30_MASK   (0x40000000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_30_SHIFT  (30U)
+/*! eDMA0_IPD_REQ_30 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_30(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_30_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_30_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_30(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_30_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_30_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_30_MASK    (0x40000000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_30_SHIFT   (30U)
-/*! DMA1_IPD_REQ_30 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_30_MASK   (0x40000000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_30_SHIFT  (30U)
+/*! eDMA1_IPD_REQ_30 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_30(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_30_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_30_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_30(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_30_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_30_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_31_MASK    (0x80000000U)
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_31_SHIFT   (31U)
-/*! DMA0_IPD_REQ_31 - DMA0 IPD_REQ
- *  0b0..Indicates that DMA0 is masked for IPD_REQ
- *  0b1..Indicates that DMA0 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_31_MASK   (0x80000000U)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_31_SHIFT  (31U)
+/*! eDMA0_IPD_REQ_31 - eDMA0 IPD_REQ
+ *  0b0..Indicates that eDMA0 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA0 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA0_IPD_REQ_31(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA0_IPD_REQ_31_SHIFT)) & AHBSC_SEC_GP_REG_DMA0_IPD_REQ_31_MASK)
+#define AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_31(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_31_SHIFT)) & AHBSC_SEC_GP_REG_eDMA0_IPD_REQ_31_MASK)
 
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_31_MASK    (0x80000000U)
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_31_SHIFT   (31U)
-/*! DMA1_IPD_REQ_31 - DMA1 IPD_REQ
- *  0b0..Indicates that DMA1 is masked for IPD_REQ
- *  0b1..Indicates that DMA1 is enabled for IPD_REQ
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_31_MASK   (0x80000000U)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_31_SHIFT  (31U)
+/*! eDMA1_IPD_REQ_31 - eDMA1 IPD_REQ
+ *  0b0..Indicates that eDMA1 is masked for IPD_REQ
+ *  0b1..Indicates that eDMA1 is enabled for IPD_REQ
  */
-#define AHBSC_SEC_GP_REG_DMA1_IPD_REQ_31(x)      (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_DMA1_IPD_REQ_31_SHIFT)) & AHBSC_SEC_GP_REG_DMA1_IPD_REQ_31_MASK)
+#define AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_31(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_31_SHIFT)) & AHBSC_SEC_GP_REG_eDMA1_IPD_REQ_31_MASK)
 /*! @} */
 
 /*! @name MASTER_SEC_LEVEL - Master Secure Level */
 /*! @{ */
 
-#define AHBSC_MASTER_SEC_LEVEL_DMA0_MASK         (0xCU)
-#define AHBSC_MASTER_SEC_LEVEL_DMA0_SHIFT        (2U)
-/*! DMA0 - DMA0
+#define AHBSC_MASTER_SEC_LEVEL_eDMA0_MASK        (0xCU)
+#define AHBSC_MASTER_SEC_LEVEL_eDMA0_SHIFT       (2U)
+/*! eDMA0 - eDMA0
  *  0b00..Non-secure and non-privileged Master
  *  0b01..Non-secure and privileged Master
  *  0b10..Secure and non-privileged Master
  *  0b11..Secure and privileged Master
  */
-#define AHBSC_MASTER_SEC_LEVEL_DMA0(x)           (((uint32_t)(((uint32_t)(x)) << AHBSC_MASTER_SEC_LEVEL_DMA0_SHIFT)) & AHBSC_MASTER_SEC_LEVEL_DMA0_MASK)
+#define AHBSC_MASTER_SEC_LEVEL_eDMA0(x)          (((uint32_t)(((uint32_t)(x)) << AHBSC_MASTER_SEC_LEVEL_eDMA0_SHIFT)) & AHBSC_MASTER_SEC_LEVEL_eDMA0_MASK)
 
 #define AHBSC_MASTER_SEC_LEVEL_PKC_MASK          (0x30U)
 #define AHBSC_MASTER_SEC_LEVEL_PKC_SHIFT         (4U)
@@ -2259,29 +2233,29 @@ typedef struct {
  */
 #define AHBSC_MASTER_SEC_LEVEL_PKC(x)            (((uint32_t)(((uint32_t)(x)) << AHBSC_MASTER_SEC_LEVEL_PKC_SHIFT)) & AHBSC_MASTER_SEC_LEVEL_PKC_MASK)
 
-#define AHBSC_MASTER_SEC_LEVEL_DMA1_MASK         (0xC0U)
-#define AHBSC_MASTER_SEC_LEVEL_DMA1_SHIFT        (6U)
-/*! DMA1 - DMA1
+#define AHBSC_MASTER_SEC_LEVEL_eDMA1_MASK        (0xC0U)
+#define AHBSC_MASTER_SEC_LEVEL_eDMA1_SHIFT       (6U)
+/*! eDMA1 - eDMA1
  *  0b00..Non-secure and non-privileged Master
  *  0b01..Non-secure and privileged Master
  *  0b10..Secure and non-privileged Master
  *  0b11..Secure and privileged Master
  */
-#define AHBSC_MASTER_SEC_LEVEL_DMA1(x)           (((uint32_t)(((uint32_t)(x)) << AHBSC_MASTER_SEC_LEVEL_DMA1_SHIFT)) & AHBSC_MASTER_SEC_LEVEL_DMA1_MASK)
+#define AHBSC_MASTER_SEC_LEVEL_eDMA1(x)          (((uint32_t)(((uint32_t)(x)) << AHBSC_MASTER_SEC_LEVEL_eDMA1_SHIFT)) & AHBSC_MASTER_SEC_LEVEL_eDMA1_MASK)
 /*! @} */
 
 /*! @name MASTER_SEC_ANTI_POL_REG - Master Secure Level */
 /*! @{ */
 
-#define AHBSC_MASTER_SEC_ANTI_POL_REG_DMA0_MASK  (0xCU)
-#define AHBSC_MASTER_SEC_ANTI_POL_REG_DMA0_SHIFT (2U)
-/*! DMA0 - DMA0
+#define AHBSC_MASTER_SEC_ANTI_POL_REG_eDMA0_MASK (0xCU)
+#define AHBSC_MASTER_SEC_ANTI_POL_REG_eDMA0_SHIFT (2U)
+/*! eDMA0 - eDMA0
  *  0b00..Secure and privileged Master
  *  0b01..Secure and non-privileged Master
  *  0b10..Non-secure and privileged Master
  *  0b11..Non-secure and non-privileged Master
  */
-#define AHBSC_MASTER_SEC_ANTI_POL_REG_DMA0(x)    (((uint32_t)(((uint32_t)(x)) << AHBSC_MASTER_SEC_ANTI_POL_REG_DMA0_SHIFT)) & AHBSC_MASTER_SEC_ANTI_POL_REG_DMA0_MASK)
+#define AHBSC_MASTER_SEC_ANTI_POL_REG_eDMA0(x)   (((uint32_t)(((uint32_t)(x)) << AHBSC_MASTER_SEC_ANTI_POL_REG_eDMA0_SHIFT)) & AHBSC_MASTER_SEC_ANTI_POL_REG_eDMA0_MASK)
 
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_PKC_MASK   (0x30U)
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_PKC_SHIFT  (4U)
@@ -2293,15 +2267,15 @@ typedef struct {
  */
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_PKC(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_MASTER_SEC_ANTI_POL_REG_PKC_SHIFT)) & AHBSC_MASTER_SEC_ANTI_POL_REG_PKC_MASK)
 
-#define AHBSC_MASTER_SEC_ANTI_POL_REG_DMA1_MASK  (0xC0U)
-#define AHBSC_MASTER_SEC_ANTI_POL_REG_DMA1_SHIFT (6U)
-/*! DMA1 - DMA1
+#define AHBSC_MASTER_SEC_ANTI_POL_REG_eDMA1_MASK (0xC0U)
+#define AHBSC_MASTER_SEC_ANTI_POL_REG_eDMA1_SHIFT (6U)
+/*! eDMA1 - eDMA1
  *  0b00..Secure and privileged Master
  *  0b01..Secure and non-privileged Master
  *  0b10..Non-secure and privileged Master
  *  0b11..Non-secure and non-privileged Master
  */
-#define AHBSC_MASTER_SEC_ANTI_POL_REG_DMA1(x)    (((uint32_t)(((uint32_t)(x)) << AHBSC_MASTER_SEC_ANTI_POL_REG_DMA1_SHIFT)) & AHBSC_MASTER_SEC_ANTI_POL_REG_DMA1_MASK)
+#define AHBSC_MASTER_SEC_ANTI_POL_REG_eDMA1(x)   (((uint32_t)(((uint32_t)(x)) << AHBSC_MASTER_SEC_ANTI_POL_REG_eDMA1_SHIFT)) & AHBSC_MASTER_SEC_ANTI_POL_REG_eDMA1_MASK)
 /*! @} */
 
 /*! @name CPU0_LOCK_REG - Miscellaneous CPU0 Control Signals */

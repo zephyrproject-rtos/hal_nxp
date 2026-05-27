@@ -13,14 +13,14 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250901
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ADC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,14 +29,18 @@
 **     Revisions:
 **     - rev. 1.0 (2025-06-13)
 **         Generated based on Rev1 DraftH.
+**     - rev. 1.1 (2026-01-02)
+**         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_ADC.h
- * @version 1.0
- * @date 2025-06-13
+ * @version 2.0
+ * @date 2026-04-22
  * @brief CMSIS Peripheral Access Layer for ADC
  *
  * CMSIS Peripheral Access Layer for ADC
@@ -104,7 +108,7 @@
 #define ADC_GCC_COUNT                             1u
 #define ADC_GCR_COUNT                             1u
 #define ADC_CMD_COUNT                             7u
-#define ADC_CV_COUNT                              15u
+#define ADC_CV_COUNT                              7u
 #define ADC_CAL_GAR_COUNT                         33u
 
 /** ADC - Register Layout Typedef */
@@ -140,7 +144,7 @@ typedef struct {
   } CMD[ADC_CMD_COUNT];
        uint8_t RESERVED_9[200];
   __IO uint32_t CV[ADC_CV_COUNT];                  /**< Compare Value Register, array offset: 0x200, array step: 0x4 */
-       uint8_t RESERVED_10[196];
+       uint8_t RESERVED_10[228];
   __I  uint32_t RESFIFO;                           /**< Data Result FIFO Register, offset: 0x300 */
        uint8_t RESERVED_11[252];
   __IO uint32_t CAL_GAR[ADC_CAL_GAR_COUNT];        /**< Calibration General A-Side Registers, array offset: 0x400, array step: 0x4 */

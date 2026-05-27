@@ -1,6 +1,8 @@
 /*
 ** ###################################################################
-**     Processor:           MCXE31BMPB
+**     Processors:          MCXE31BMLL
+**                          MCXE31BMPB
+**
 **     Compilers:
 **                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
@@ -9,7 +11,7 @@
 **
 **     Reference manual:    MCXE31 RM Rev2
 **     Version:             rev. 1.0, 2025-07-18
-**     Build:               b250728
+**     Build:               b260420
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXE31B

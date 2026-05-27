@@ -13,14 +13,14 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250901
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RTC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,14 +29,18 @@
 **     Revisions:
 **     - rev. 1.0 (2025-06-13)
 **         Generated based on Rev1 DraftH.
+**     - rev. 1.1 (2026-01-02)
+**         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_RTC.h
- * @version 1.0
- * @date 2025-06-13
+ * @version 2.0
+ * @date 2026-04-22
  * @brief CMSIS Peripheral Access Layer for RTC
  *
  * CMSIS Peripheral Access Layer for RTC
@@ -123,7 +127,7 @@ typedef struct {
   __O  uint32_t BCD_ALARM_L;                       /**< BCD Alarm Low, offset: 0x138 */
   __IO uint32_t WDT_SET_VA;                        /**< WDT Set Value, offset: 0x13C */
   __IO uint32_t TAMP_CTRL;                         /**< Tamper Control, offset: 0x140 */
-  __IO uint32_t RTC_COUNT[RTC_RTC_COUNT_COUNT];    /**< Latched RTC Counter, array offset: 0x144, array step: 0x4 */
+  __I  uint32_t RTC_COUNT[RTC_RTC_COUNT_COUNT];    /**< Latched RTC Counter, array offset: 0x144, array step: 0x4 */
   __IO uint32_t SECURE_KEY[RTC_SECURE_KEY_COUNT];  /**< Secure Key, array offset: 0x150, array step: 0x4 */
   __IO uint32_t RTC_ALV_DTCT;                      /**< RTC Alive Detector, offset: 0x170 */
 } RTC_Type;
@@ -207,7 +211,7 @@ typedef struct {
 
 #define RTC_CONFIG_XTAL32_EN_MASK                (0x1000U)
 #define RTC_CONFIG_XTAL32_EN_SHIFT               (12U)
-/*! XTAL32_EN - XTAL32 Enable */
+/*! XTAL32_EN - XTAL32K Enable */
 #define RTC_CONFIG_XTAL32_EN(x)                  (((uint32_t)(((uint32_t)(x)) << RTC_CONFIG_XTAL32_EN_SHIFT)) & RTC_CONFIG_XTAL32_EN_MASK)
 /*! @} */
 
@@ -558,16 +562,16 @@ typedef struct {
 #define RTC_TAMP_CTRL_TAMP_POL_MASK              (0x18U)
 #define RTC_TAMP_CTRL_TAMP_POL_SHIFT             (3U)
 /*! TAMP_POL - Tamper Polarity
- *  0b00..Active Low
- *  0b01..Active High
+ *  0b00..Active Low Tamper
+ *  0b01..Active High Tamper
  */
 #define RTC_TAMP_CTRL_TAMP_POL(x)                (((uint32_t)(((uint32_t)(x)) << RTC_TAMP_CTRL_TAMP_POL_SHIFT)) & RTC_TAMP_CTRL_TAMP_POL_MASK)
 
 #define RTC_TAMP_CTRL_TAMP_PULL_CTRL_MASK        (0x60U)
 #define RTC_TAMP_CTRL_TAMP_PULL_CTRL_SHIFT       (5U)
 /*! TAMP_PULL_CTRL - Tamper Pull Control
- *  0b00..Enabled
- *  0b01..Disabled
+ *  0b00..Enable
+ *  0b01..Disable
  */
 #define RTC_TAMP_CTRL_TAMP_PULL_CTRL(x)          (((uint32_t)(((uint32_t)(x)) << RTC_TAMP_CTRL_TAMP_PULL_CTRL_SHIFT)) & RTC_TAMP_CTRL_TAMP_PULL_CTRL_MASK)
 
@@ -594,31 +598,32 @@ typedef struct {
 #define RTC_TAMP_CTRL_WRITE_LCK_MASK             (0x800U)
 #define RTC_TAMP_CTRL_WRITE_LCK_SHIFT            (11U)
 /*! WRITE_LCK - Write Lock
- *  0b1..Lock
+ *  0b0..Lock disabled
+ *  0b1..Lock enabled
  */
 #define RTC_TAMP_CTRL_WRITE_LCK(x)               (((uint32_t)(((uint32_t)(x)) << RTC_TAMP_CTRL_WRITE_LCK_SHIFT)) & RTC_TAMP_CTRL_WRITE_LCK_MASK)
 
-#define RTC_TAMP_CTRL_TAMP_DET_MASK              (0x3000U)
-#define RTC_TAMP_CTRL_TAMP_DET_SHIFT             (12U)
-/*! TAMP_DET - Tamper Detected */
-#define RTC_TAMP_CTRL_TAMP_DET(x)                (((uint32_t)(((uint32_t)(x)) << RTC_TAMP_CTRL_TAMP_DET_SHIFT)) & RTC_TAMP_CTRL_TAMP_DET_MASK)
+#define RTC_TAMP_CTRL_TEMP_DET_MASK              (0x3000U)
+#define RTC_TAMP_CTRL_TEMP_DET_SHIFT             (12U)
+/*! TEMP_DET - Tamper Detect Status */
+#define RTC_TAMP_CTRL_TEMP_DET(x)                (((uint32_t)(((uint32_t)(x)) << RTC_TAMP_CTRL_TEMP_DET_SHIFT)) & RTC_TAMP_CTRL_TEMP_DET_MASK)
 
-#define RTC_TAMP_CTRL_TAMP_CTRL_MASK             (0xC000U)
-#define RTC_TAMP_CTRL_TAMP_CTRL_SHIFT            (14U)
-/*! TAMP_CTRL - Tamper Control
- *  0b00..Filter Disabled
- *  0b01..Filter Enabled
+#define RTC_TAMP_CTRL_PFE_CNTRL_MASK             (0xC000U)
+#define RTC_TAMP_CTRL_PFE_CNTRL_SHIFT            (14U)
+/*! PFE_CNTRL - Tamper PFE control
+ *  0b00..Disabled
+ *  0b01..Enabled
  */
-#define RTC_TAMP_CTRL_TAMP_CTRL(x)               (((uint32_t)(((uint32_t)(x)) << RTC_TAMP_CTRL_TAMP_CTRL_SHIFT)) & RTC_TAMP_CTRL_TAMP_CTRL_MASK)
+#define RTC_TAMP_CTRL_PFE_CNTRL(x)               (((uint32_t)(((uint32_t)(x)) << RTC_TAMP_CTRL_PFE_CNTRL_SHIFT)) & RTC_TAMP_CTRL_PFE_CNTRL_MASK)
 /*! @} */
 
 /*! @name RTC_COUNT - Latched RTC Counter */
 /*! @{ */
 
-#define RTC_RTC_COUNT_RTC_COUNT_MASK             (0xFFFFU)
-#define RTC_RTC_COUNT_RTC_COUNT_SHIFT            (0U)
-/*! RTC_COUNT - Latched RTC Count[x+15:x] */
-#define RTC_RTC_COUNT_RTC_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << RTC_RTC_COUNT_RTC_COUNT_SHIFT)) & RTC_RTC_COUNT_RTC_COUNT_MASK)
+#define RTC_RTC_COUNT_Latched_RTC_Counter_MASK   (0xFFFFU)
+#define RTC_RTC_COUNT_Latched_RTC_Counter_SHIFT  (0U)
+/*! Latched_RTC_Counter - Latched_RTC_Counter[x+15:x] */
+#define RTC_RTC_COUNT_Latched_RTC_Counter(x)     (((uint32_t)(((uint32_t)(x)) << RTC_RTC_COUNT_Latched_RTC_Counter_SHIFT)) & RTC_RTC_COUNT_Latched_RTC_Counter_MASK)
 /*! @} */
 
 /*! @name SECURE_KEY - Secure Key */

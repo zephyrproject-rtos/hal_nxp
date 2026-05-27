@@ -1,6 +1,7 @@
 /*
 ** ###################################################################
-**     Processors:          MCXE317MPA
+**     Processors:          MCXE317MLL
+**                          MCXE317MPA
 **                          MCXE317MPB
 **
 **     Compilers:
@@ -11,7 +12,7 @@
 **
 **     Reference manual:    MCXE31 RM Rev2
 **     Version:             rev. 1.0, 2025-07-18
-**     Build:               b250718
+**     Build:               b260420
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXE317

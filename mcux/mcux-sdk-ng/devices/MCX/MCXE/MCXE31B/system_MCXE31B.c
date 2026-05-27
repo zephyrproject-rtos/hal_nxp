@@ -1,6 +1,8 @@
 /*
 ** ###################################################################
-**     Processor:           MCXE31BMPB
+**     Processors:          MCXE31BMLL
+**                          MCXE31BMPB
+**
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
@@ -8,7 +10,7 @@
 **
 **     Reference manual:    MCXE31 RM Rev2
 **     Version:             rev. 1.0, 2025-07-18
-**     Build:               b250811
+**     Build:               b260420
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -34,7 +36,7 @@
 /*!
  * @file MCXE31B
  * @version 1.0
- * @date 2025-08-11
+ * @date 2026-04-20
  * @brief Device specific configuration file for MCXE31B (implementation file)
  *
  * Provides a system configuration function and a global variable that contains

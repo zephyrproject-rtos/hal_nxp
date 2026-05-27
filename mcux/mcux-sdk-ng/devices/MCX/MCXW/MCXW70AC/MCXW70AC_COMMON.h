@@ -2897,14 +2897,12 @@ typedef enum IRQn {
 #define LPSPI1 LPSPI_1
 #define LPSPI2 LPSPI_2
 #define LPCMP0 CMP_0
-#define FMU0_NS FMU_NS
 #define LPTMR0 LPTMR_0
 #define CCM32K ANAREG_0
 #define MU0_MUA MU_0__MUA
 #define MU0_MUB MU_0__MUB
 #define MU1_MUA MU_1__MUA
 #define MU1_MUB MU_1__MUB
-#define MRCC_BASE MRCC_0_BASE
 #define PORTA_BASE PORT_A_BASE
 #define PORTB_BASE PORT_B_BASE
 #define PORTC_BASE PORT_C_BASE

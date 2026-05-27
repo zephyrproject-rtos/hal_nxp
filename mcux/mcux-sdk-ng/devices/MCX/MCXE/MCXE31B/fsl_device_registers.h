@@ -1,6 +1,6 @@
 /*
  * Copyright 2014-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2025 NXP
+ * Copyright 2016-2026 NXP
  * SPDX-License-Identifier: BSD-3-Clause
  *
  */
@@ -13,7 +13,7 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_MCXE31BMPB))
+#if (defined(CPU_MCXE31BMLL) || defined(CPU_MCXE31BMPB))
 #include "MCXE31B.h"
 #else
   #error "No valid CPU defined!"

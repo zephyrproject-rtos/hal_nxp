@@ -13,8 +13,8 @@
 **                          MCXL144VLL_cm0plus
 **                          MCXL144VLL_cm33
 **
-**     Version:             rev. 1.1, 2026-01-02
-**     Build:               b260109
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for INPUTMUX_AON
@@ -31,14 +31,16 @@
 **         Generated based on Rev1 DraftH.
 **     - rev. 1.1 (2026-01-02)
 **         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_INPUTMUX_AON.h
- * @version 1.1
- * @date 2026-01-02
+ * @version 2.0
+ * @date 2026-04-22
  * @brief CMSIS Peripheral Access Layer for INPUTMUX_AON
  *
  * CMSIS Peripheral Access Layer for INPUTMUX_AON
@@ -509,10 +511,10 @@ typedef struct {
  *  0b000111..AON_TRIG_IN6 input is selected
  *  0b001000..AON_TRIG_IN7 input is selected
  *  0b001001..CM33 transmit event is selected
- *  0b001010..QTMR1 channel[0] output is selected
- *  0b001011..QTMR1 channel[1] output is selected
- *  0b001100..QTMR1 channel[2] output is selected
- *  0b001101..QTMR1 channel[3] output is selected
+ *  0b001010..QTMR0 channel[0] output is selected
+ *  0b001011..QTMR0 channel[1] output is selected
+ *  0b001100..QTMR0 channel[2] output is selected
+ *  0b001101..QTMR0 channel[3] output is selected
  *  0b001110..CMP0_OUT is selected
  *  0b001111..Reserved
  *  0b010000..LPI2C0 Controller End of Packet is selected
@@ -552,10 +554,10 @@ typedef struct {
  *  0b110010..Reserved
  *  0b110011..soc_glue_XOR0_out is selected
  *  0b110100..Reserved
- *  0b110101..QTMR0 channel[0] output is selected
- *  0b110110..QTMR0 channel[1] output is selected
- *  0b110111..QTMR0 channel[2] output is selected
- *  0b111000..QTMR0 channel[3] output is selected
+ *  0b110101..QTMR1 channel[0] output is selected
+ *  0b110110..QTMR1 channel[1] output is selected
+ *  0b110111..QTMR1 channel[2] output is selected
+ *  0b111000..QTMR1 channel[3] output is selected
  *  0b111001..LCSense_Sequencer_Primary_Trigger_glue_out is selected
  */
 #define INPUTMUX_AON_LC_ROT_SOC_LOGIC_IN_INP(x)  (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_LC_ROT_SOC_LOGIC_IN_INP_SHIFT)) & INPUTMUX_AON_LC_ROT_SOC_LOGIC_IN_INP_MASK)
@@ -577,10 +579,10 @@ typedef struct {
  *  0b000111..AON_TRIG_IN6 input is selected
  *  0b001000..AON_TRIG_IN7 input is selected
  *  0b001001..CM33 transmit event is selected
- *  0b001010..QTMR1 channel[0] output is selected
- *  0b001011..QTMR1 channel[1] output is selected
- *  0b001100..QTMR1 channel[2] output is selected
- *  0b001101..QTMR1 channel[3] output is selected
+ *  0b001010..QTMR0 channel[0] output is selected
+ *  0b001011..QTMR0 channel[1] output is selected
+ *  0b001100..QTMR0 channel[2] output is selected
+ *  0b001101..QTMR0 channel[3] output is selected
  *  0b001110..CMP0_OUT is selected
  *  0b001111..Reserved
  *  0b010000..LPI2C0 Controller End of Packet is selected
@@ -620,10 +622,10 @@ typedef struct {
  *  0b110010..Reserved
  *  0b110011..soc_glue_XOR0_out is selected
  *  0b110100..Reserved
- *  0b110101..QTMR0 channel[0] output is selected
- *  0b110110..QTMR0 channel[1] output is selected
- *  0b110111..QTMR0 channel[2] output is selected
- *  0b111000..QTMR0 channel[3] output is selected
+ *  0b110101..QTMR1 channel[0] output is selected
+ *  0b110110..QTMR1 channel[1] output is selected
+ *  0b110111..QTMR1 channel[2] output is selected
+ *  0b111000..QTMR1 channel[3] output is selected
  *  0b111001..LCSense_Sequencer_Primary_Trigger_glue_out is selected
  */
 #define INPUTMUX_AON_LCSENSE_SEQ_PTRIG_GLUE_IN_INP(x) (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_LCSENSE_SEQ_PTRIG_GLUE_IN_INP_SHIFT)) & INPUTMUX_AON_LCSENSE_SEQ_PTRIG_GLUE_IN_INP_MASK)
@@ -645,10 +647,10 @@ typedef struct {
  *  0b000111..AON_TRIG_IN6 input is selected
  *  0b001000..AON_TRIG_IN7 input is selected
  *  0b001001..CM33 transmit event is selected
- *  0b001010..QTMR1 channel[0] output is selected
- *  0b001011..QTMR1 channel[1] output is selected
- *  0b001100..QTMR1 channel[2] output is selected
- *  0b001101..QTMR1 channel[3] output is selected
+ *  0b001010..QTMR0 channel[0] output is selected
+ *  0b001011..QTMR0 channel[1] output is selected
+ *  0b001100..QTMR0 channel[2] output is selected
+ *  0b001101..QTMR0 channel[3] output is selected
  *  0b001110..CMP0_OUT is selected
  *  0b001111..Reserved
  *  0b010000..LPI2C0 Controller End of Packet is selected
@@ -688,10 +690,10 @@ typedef struct {
  *  0b110010..Reserved
  *  0b110011..soc_glue_XOR0_out is selected
  *  0b110100..Reserved
- *  0b110101..QTMR0 channel[0] output is selected
- *  0b110110..QTMR0 channel[1] output is selected
- *  0b110111..QTMR0 channel[2] output is selected
- *  0b111000..QTMR0 channel[3] output is selected
+ *  0b110101..QTMR1 channel[0] output is selected
+ *  0b110110..QTMR1 channel[1] output is selected
+ *  0b110111..QTMR1 channel[2] output is selected
+ *  0b111000..QTMR1 channel[3] output is selected
  *  0b111001..LCSense_Sequencer_Primary_Trigger_glue_out is selected
  */
 #define INPUTMUX_AON_LCSENSE_SEQ_TICKS_GLUE_IN_INP(x) (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_LCSENSE_SEQ_TICKS_GLUE_IN_INP_SHIFT)) & INPUTMUX_AON_LCSENSE_SEQ_TICKS_GLUE_IN_INP_MASK)
@@ -737,7 +739,7 @@ typedef struct {
  *  0b011111..ACMP0_AON_cout is selected
  *  0b100000..Reserved
  *  0b100001..Reserved
- *  0b100010..SoC_glue_XOR0_out is selected
+ *  0b100010..soc_glue_XOR0_out is selected
  *  0b100011..Reserved
  */
 #define INPUTMUX_AON_LPACMP0_TRIG_TRIGIN(x)      (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_LPACMP0_TRIG_TRIGIN_SHIFT)) & INPUTMUX_AON_LPACMP0_TRIG_TRIGIN_MASK)
@@ -762,7 +764,7 @@ typedef struct {
  *  0b00111..AON_TRIG_IN6 is selected
  *  0b01000..AON_TRIG_IN7 is selected
  *  0b01001..CM33 transmit event is selected
- *  0b01010..LPCMP_OUT is selected
+ *  0b01010..AON.ACMP_OUT is selected
  *  0b01011..Reserved
  *  0b01100..QTMR0 channel[0] output is selected
  *  0b01101..QTMR0 channel[1] output is selected
@@ -847,7 +849,7 @@ typedef struct {
  *  0b000111..AON_TRIG_IN6 input is selected
  *  0b001000..AON_TRIG_IN7 input is selected
  *  0b001001..CM33 transmit event is selected
- *  0b001010..LPCMP_OUT is selected
+ *  0b001010..AON.ACMP_OUT is selected
  *  0b001011..Reserved
  *  0b001100..QTMR0 channel[0] output is selected
  *  0b001101..QTMR0 channel[1] output is selected
@@ -871,7 +873,7 @@ typedef struct {
  *  0b011111..Reserved
  *  0b100000..Reserved
  *  0b100001..Reserved
- *  0b100010..SoC_glue_XOR0_out is selected
+ *  0b100010..soc_glue_XOR0_out is selected
  *  0b100011..Reserved
  */
 #define INPUTMUX_AON_ACMP0_SAMPLE_TRIGIN(x)      (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_ACMP0_SAMPLE_TRIGIN_SHIFT)) & INPUTMUX_AON_ACMP0_SAMPLE_TRIGIN_MASK)
@@ -893,7 +895,7 @@ typedef struct {
  *  0b000111..AON_TRIG_IN6 input is selected
  *  0b001000..AON_TRIG_IN7 input is selected
  *  0b001001..CM33 transmit event is selected
- *  0b001010..LPCMP_OUT is selected
+ *  0b001010..AON.ACMP_OUT is selected
  *  0b001011..Reserved
  *  0b001100..QTMR0 channel[0] output is selected
  *  0b001101..QTMR0 channel[1] output is selected
@@ -917,7 +919,7 @@ typedef struct {
  *  0b011111..Reserved
  *  0b100000..Reserved
  *  0b100001..Reserved
- *  0b100010..SoC_glue_XOR0_out is selected
+ *  0b100010..soc_glue_XOR0_out is selected
  *  0b100011..Reserved
  */
 #define INPUTMUX_AON_ACMP0_RR_TRIG_TRIGIN(x)     (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_ACMP0_RR_TRIG_TRIGIN_SHIFT)) & INPUTMUX_AON_ACMP0_RR_TRIG_TRIGIN_MASK)
@@ -939,7 +941,7 @@ typedef struct {
  *  0b000111..AON_TRIG_IN6 input is selected
  *  0b001000..AON_TRIG_IN7 input is selected
  *  0b001001..CM33 transmit event is selected
- *  0b001010..LPCMP_OUT is selected
+ *  0b001010..AON.ACMP_OUT is selected
  *  0b001011..Reserved
  *  0b001100..QTMR0 channel[0] output is selected
  *  0b001101..QTMR0 channel[1] output is selected
@@ -963,7 +965,7 @@ typedef struct {
  *  0b011111..ACMP0_AON_cout is selected
  *  0b100000..Reserved
  *  0b100001..Reserved
- *  0b100010..SoC_glue_XOR0_out is selected
+ *  0b100010..soc_glue_XOR0_out is selected
  *  0b100011..Reserved
  */
 #define INPUTMUX_AON_LPI2C0_TRIG_INP(x)          (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_LPI2C0_TRIG_INP_SHIFT)) & INPUTMUX_AON_LPI2C0_TRIG_INP_MASK)
@@ -985,7 +987,7 @@ typedef struct {
  *  0b000111..AON_TRIG_IN6 input is selected
  *  0b001000..AON_TRIG_IN7 input is selected
  *  0b001001..CM33 transmit event is selected
- *  0b001010..LPCMP_OUT is selected
+ *  0b001010..AON.ACMP_OUT is selected
  *  0b001011..Reserved
  *  0b001100..QTMR0 channel[0] output is selected
  *  0b001101..QTMR0 channel[1] output is selected
@@ -1009,7 +1011,7 @@ typedef struct {
  *  0b011111..ACMP0_AON_cout is selected
  *  0b100000..Reserved
  *  0b100001..Reserved
- *  0b100010..SoC_glue_XOR0_out is selected
+ *  0b100010..soc_glue_XOR0_out is selected
  *  0b100011..Reserved
  */
 #define INPUTMUX_AON_LPUART0_INP(x)              (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_LPUART0_INP_SHIFT)) & INPUTMUX_AON_LPUART0_INP_MASK)

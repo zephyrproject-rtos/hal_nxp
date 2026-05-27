@@ -13,14 +13,14 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250901
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CMC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,14 +29,18 @@
 **     Revisions:
 **     - rev. 1.0 (2025-06-13)
 **         Generated based on Rev1 DraftH.
+**     - rev. 1.1 (2026-01-02)
+**         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_CMC.h
- * @version 1.0
- * @date 2025-06-13
+ * @version 2.0
+ * @date 2026-04-22
  * @brief CMSIS Peripheral Access Layer for CMC
  *
  * CMSIS Peripheral Access Layer for CMC
@@ -665,6 +669,14 @@ typedef struct {
  *  0b1..Interrupt enabled
  */
 #define CMC_SRIE_CDOG1(x)                        (((uint32_t)(((uint32_t)(x)) << CMC_SRIE_CDOG1_SHIFT)) & CMC_SRIE_CDOG1_MASK)
+
+#define CMC_SRIE_TAMPER_MASK                     (0x80000000U)
+#define CMC_SRIE_TAMPER_SHIFT                    (31U)
+/*! TAMPER - Tamper Reset
+ *  0b0..Reset not generated
+ *  0b1..Reset generated
+ */
+#define CMC_SRIE_TAMPER(x)                       (((uint32_t)(((uint32_t)(x)) << CMC_SRIE_TAMPER_SHIFT)) & CMC_SRIE_TAMPER_MASK)
 /*! @} */
 
 /*! @name SRIF - System Reset Interrupt Flag */
@@ -694,6 +706,14 @@ typedef struct {
  */
 #define CMC_SRIF_LPACK(x)                        (((uint32_t)(((uint32_t)(x)) << CMC_SRIF_LPACK_SHIFT)) & CMC_SRIF_LPACK_MASK)
 
+#define CMC_SRIF_SCG_MASK                        (0x1000U)
+#define CMC_SRIF_SCG_SHIFT                       (12U)
+/*! SCG - System Clock Generation Reset
+ *  0b0..Interrupt disabled
+ *  0b1..Interrupt enabled
+ */
+#define CMC_SRIF_SCG(x)                          (((uint32_t)(((uint32_t)(x)) << CMC_SRIF_SCG_SHIFT)) & CMC_SRIF_SCG_MASK)
+
 #define CMC_SRIF_WWDT0_MASK                      (0x2000U)
 #define CMC_SRIF_WWDT0_SHIFT                     (13U)
 /*! WWDT0 - Windowed Watchdog 0 Reset
@@ -718,14 +738,6 @@ typedef struct {
  */
 #define CMC_SRIF_LOCKUP(x)                       (((uint32_t)(((uint32_t)(x)) << CMC_SRIF_LOCKUP_SHIFT)) & CMC_SRIF_LOCKUP_MASK)
 
-#define CMC_SRIF_ADVC_MASK                       (0x800000U)
-#define CMC_SRIF_ADVC_SHIFT                      (23U)
-/*! ADVC - ADVC Critical Reset
- *  0b0..Reset source not pending
- *  0b1..Reset source pending
- */
-#define CMC_SRIF_ADVC(x)                         (((uint32_t)(((uint32_t)(x)) << CMC_SRIF_ADVC_SHIFT)) & CMC_SRIF_ADVC_MASK)
-
 #define CMC_SRIF_CDOG0_MASK                      (0x4000000U)
 #define CMC_SRIF_CDOG0_SHIFT                     (26U)
 /*! CDOG0 - Code Watchdog 0 Reset
@@ -741,6 +753,14 @@ typedef struct {
  *  0b1..Reset source pending
  */
 #define CMC_SRIF_CDOG1(x)                        (((uint32_t)(((uint32_t)(x)) << CMC_SRIF_CDOG1_SHIFT)) & CMC_SRIF_CDOG1_MASK)
+
+#define CMC_SRIF_TAMPER_MASK                     (0x80000000U)
+#define CMC_SRIF_TAMPER_SHIFT                    (31U)
+/*! TAMPER - Tamper Reset
+ *  0b0..Reset not generated
+ *  0b1..Reset generated
+ */
+#define CMC_SRIF_TAMPER(x)                       (((uint32_t)(((uint32_t)(x)) << CMC_SRIF_TAMPER_SHIFT)) & CMC_SRIF_TAMPER_MASK)
 /*! @} */
 
 /*! @name RSTCNT - Reset Count Register */

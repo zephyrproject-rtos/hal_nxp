@@ -635,21 +635,34 @@ static inline void CLOCK_StartTstmr0(tstmr_clk_sel_t src, clock_ip_control_t cc)
  */
 static inline volatile uint32_t *CLOCK_GetClockDivider(clock_ip_name_t name)
 {
-    volatile uint32_t *pDiv = NULL;
-
-    if ((name == kCLOCK_Lpadc0) || (name == kCLOCK_Ewm0) || (name == kCLOCK_Can0) ||
-        (name == kCLOCK_Fro_hf_div) || (name == kCLOCK_Gdet_wrapper) || (name == kCLOCK_Lpi2c0) ||
-        (name == kCLOCK_Lpi2c1) || (name == kCLOCK_Lpit0) || (name == kCLOCK_Lpspi0) ||
-        (name == kCLOCK_Lpspi1) || (name == kCLOCK_Lpspi2) || (name == kCLOCK_Lptmr0) ||
-        (name == kCLOCK_Lptmr1) || (name == kCLOCK_Lpuart0) || (name == kCLOCK_Lpuart1) ||
-        (name == kCLOCK_Tpm0) || (name == kCLOCK_Tpm1) || (name == kCLOCK_Tpm2) ||
-        (name == kCLOCK_Tpm3) || (name == kCLOCK_Tpm4) || (name == kCLOCK_Wdog0) ||
-        (name == kCLOCK_Wdog1))
+    switch (name)
     {
-        pDiv = (volatile uint32_t *)((uint32_t)name + 4U);
+        case kCLOCK_Lpadc0:
+        case kCLOCK_Ewm0:
+        case kCLOCK_Can0:
+        case kCLOCK_Fro_hf_div:
+        case kCLOCK_Gdet_wrapper:
+        case kCLOCK_Lpi2c0:
+        case kCLOCK_Lpi2c1:
+        case kCLOCK_Lpit0:
+        case kCLOCK_Lpspi0:
+        case kCLOCK_Lpspi1:
+        case kCLOCK_Lpspi2:
+        case kCLOCK_Lptmr0:
+        case kCLOCK_Lptmr1:
+        case kCLOCK_Lpuart0:
+        case kCLOCK_Lpuart1:
+        case kCLOCK_Tpm0:
+        case kCLOCK_Tpm1:
+        case kCLOCK_Tpm2:
+        case kCLOCK_Tpm3:
+        case kCLOCK_Tpm4:
+        case kCLOCK_Wdog0:
+        case kCLOCK_Wdog1:
+            return (volatile uint32_t *)((uint32_t)name + 4U);
+        default:
+            return NULL;
     }
-
-    return pDiv;
 }
 
 /*!
@@ -676,7 +689,7 @@ static inline void CLOCK_EnableClockLPMode(clock_ip_name_t name, clock_ip_contro
         uint32_t reg = CLOCK_REG(name);
 
         /* return early if the clock is already enabled with the same control mode */
-        if ((reg & MRCC_CC_MASK) == (uint32_t)control)
+        if ((reg & MRCC_CC_MASK) == control)
         {
             return;
         }
@@ -812,7 +825,7 @@ static inline void CLOCK_SetIpSrcDiv(clock_ip_name_t name, uint8_t divValue)
         /* Set the Functional Clock Divider.
          * Enable divider clock and release it from reset state.
          */
-        *pDivCtrl = (uint32_t)divValue & MRCC_DIV_MASK;
+        *pDivCtrl = divValue & MRCC_DIV_MASK;
 
         /* Enable peripheral clocks */
         CLOCK_REG(name) = reg;

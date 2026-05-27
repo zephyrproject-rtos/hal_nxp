@@ -2248,6 +2248,9 @@ typedef enum IRQn {
 
 #define RADIO_IS_GEN_4P5 (1)
 #define NXP_RADIO_GEN (450)
+#ifndef MCXW71_core0_SERIES
+#define MCXW71_core0_SERIES
+#endif
 
 /*! @brief define LTC0 from LTC. */
 #define LTC0 LTC

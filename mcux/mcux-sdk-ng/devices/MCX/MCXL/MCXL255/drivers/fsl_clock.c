@@ -41,7 +41,7 @@ static xtal_drive_param_t s_XtalDriveParamsDefault[1] = {
 };
 
 #ifdef CONFIG_ADVC_DRIVER_USED
-static bool s_advcControlEnabled = true;
+static bool s_advcControlEnabled = false;
 #endif /* CONFIG_ADVC_DRIVER_USED */
 
 /*******************************************************************************
@@ -164,14 +164,11 @@ static void ADVC_PreChg(const clock_aon_chg_t change, uint32_t newValue)
 
             if (change == kClockAonChg_cpuClkDiv)
             {
-                if (0U == newValue)
-                {
-                    freq = 0U; /* disable */
-                }
-                else
+                if (0U != newValue)
                 {
                     freq /= newValue;
                 }
+                /* else: no division needed when newValue is 0. Divider is bypassed. */
             }
             else
             {
@@ -182,10 +179,7 @@ static void ADVC_PreChg(const clock_aon_chg_t change, uint32_t newValue)
 
                     freq /= aon_cpu_clk_div + 1U;
                 }
-                else
-                {
-                    freq = 0U; /* AON_CPU_CLK is Disabled*/
-                }
+                /* else: no division needed when newValue is 0. Divider is bypassed. */
             }
         }
 
@@ -437,7 +431,7 @@ void CLOCK_AttachClk(clock_attach_id_t connection)
             case kFROdiv1_to_AON_CMP0:
             case kFROdiv2_to_AON_CMP0:
             case kFROdiv4_to_AON_CMP0:
-            case kROOT_AUX_to_AON_CMP0:
+            case kFRO16K_to_AON_CMP0:
 #endif
             case kFROdiv1_to_AON_TMR:
             case kFROdiv2_to_AON_TMR:
@@ -586,7 +580,6 @@ void CLOCK_SetClockDiv(clock_div_name_t div_name, uint32_t value)
             ADVC_PreChg(kClockAonChg_noCpuClkChange, 0);
             if (value == 0)
             {
-                AON__CGU->ACMP_CLK_DIV &= ~(CGU_ACMP_CLK_DIV_ACMP0_CLK0_EN_MASK);
                 AON__CGU->ACMP_CLK_DIV &= ~(CGU_ACMP_CLK_DIV_ACMP_CLK0_DIV_EN_MASK);
             }
             else
@@ -595,7 +588,6 @@ void CLOCK_SetClockDiv(clock_div_name_t div_name, uint32_t value)
                 AON__CGU->ACMP_CLK_DIV |= (value - 1U) << CGU_ACMP_CLK_DIV_AON_ACMP_CLK0_DIV_SHIFT;
 
                 AON__CGU->ACMP_CLK_DIV |= CGU_ACMP_CLK_DIV_ACMP_CLK0_DIV_EN_MASK;
-                AON__CGU->ACMP_CLK_DIV |= CGU_ACMP_CLK_DIV_ACMP0_CLK0_EN_MASK;
             }
             ADVC_PostChg();
         }
@@ -604,7 +596,6 @@ void CLOCK_SetClockDiv(clock_div_name_t div_name, uint32_t value)
             ADVC_PreChg(kClockAonChg_noCpuClkChange, 0);
             if (value == 0)
             {
-                AON__CGU->ACMP_CLK_DIV &= ~(CGU_ACMP_CLK_DIV_ACMP0_CLK1_EN_MASK);
                 AON__CGU->ACMP_CLK_DIV &= ~(CGU_ACMP_CLK_DIV_ACMP_CLK1_DIV_EN_MASK);
             }
             else
@@ -613,7 +604,6 @@ void CLOCK_SetClockDiv(clock_div_name_t div_name, uint32_t value)
                 AON__CGU->ACMP_CLK_DIV |= (value - 1U) << CGU_ACMP_CLK_DIV_AON_ACMP_CLK1_DIV_SHIFT;
 
                 AON__CGU->ACMP_CLK_DIV |= CGU_ACMP_CLK_DIV_ACMP_CLK1_DIV_EN_MASK;
-                AON__CGU->ACMP_CLK_DIV |= CGU_ACMP_CLK_DIV_ACMP0_CLK1_EN_MASK;
             }
             ADVC_PostChg();
         }
@@ -710,10 +700,9 @@ uint32_t CLOCK_GetClockDiv(clock_div_name_t div_name)
         if (div_name == 0x810U)
         { /* AON ACMP CLK 0*/
             uint32_t reg_val = AON__CGU->ACMP_CLK_DIV;
-            if ((!(reg_val & CGU_ACMP_CLK_DIV_ACMP0_CLK0_EN_MASK)) ||
-                (!(reg_val & CGU_ACMP_CLK_DIV_ACMP_CLK0_DIV_EN_MASK)))
+            if ((reg_val & CGU_ACMP_CLK_DIV_ACMP_CLK0_DIV_EN_MASK) == 0U)
             {
-                return 0; /* Not enabled clk or div*/
+                return 0U; /* Divider disabled */
             }
             else
             {
@@ -725,10 +714,9 @@ uint32_t CLOCK_GetClockDiv(clock_div_name_t div_name)
         else if (div_name == 0x811U)
         { /* AON ACMP CLK 1*/
             uint32_t reg_val = AON__CGU->ACMP_CLK_DIV;
-            if ((!(reg_val & CGU_ACMP_CLK_DIV_ACMP0_CLK1_EN_MASK)) ||
-                (!(reg_val & CGU_ACMP_CLK_DIV_ACMP_CLK1_DIV_EN_MASK)))
+            if ((reg_val & CGU_ACMP_CLK_DIV_ACMP_CLK1_DIV_EN_MASK) == 0U)
             {
-                return 0; /* Not enabled clk or div*/
+                return 0U; /* Divider disabled */
             }
             else
             {
@@ -750,7 +738,7 @@ uint32_t CLOCK_GetClockDiv(clock_div_name_t div_name)
             }
             else
             {
-                return 0;
+                return 0U;
             }
         }
     }
@@ -778,7 +766,7 @@ uint32_t CLOCK_GetClockDiv(clock_div_name_t div_name)
 
             if (((*pDivCtrl) & (1UL << 30U)) != 0U)
             {
-                return 0;
+                return 0U;
             }
             else
             {
@@ -1133,10 +1121,10 @@ status_t CLOCK_InitRosc(const rosc_init_config_t *config)
     uint32_t timeout;
 
     /* Set RTC_ANA_RESET_N_VBAT and RTC_DIG_RESE_N to 1'b0 to put in reset */
-    AON__SMM->RTC_DCDC_CNTRL &= ~(SMM_RTC_DCDC_CNTRL_DGTL_RST_N_MASK | SMM_RTC_DCDC_CNTRL_ANA_RESET_N_MASK);
+    AON__SMM->RTC_LDO_CNTRL &= ~(SMM_RTC_LDO_CNTRL_DGTL_RST_N_MASK | SMM_RTC_LDO_CNTRL_ANA_RESET_N_MASK);
 
     /* Release reset for ANA */
-    AON__SMM->RTC_DCDC_CNTRL |= SMM_RTC_DCDC_CNTRL_ANA_RESET_N_MASK;
+    AON__SMM->RTC_LDO_CNTRL |= SMM_RTC_LDO_CNTRL_ANA_RESET_N_MASK;
 
     /* Enable current mirror */
     AON__SMM->RTC_XTAL_CONFG1 |= SMM_RTC_XTAL_CONFG1_CRNT_MROR_EN_MASK;
@@ -1222,15 +1210,15 @@ status_t CLOCK_InitRosc(const rosc_init_config_t *config)
     }
 
     /* Enable LDO, set voltage to 0.8V */
-    AON__SMM->RTC_DCDC_CNTRL = SMM_RTC_DCDC_CNTRL_ISO_MASK | SMM_RTC_DCDC_CNTRL_DGTL_RST_N_MASK |
-                               SMM_RTC_DCDC_CNTRL_ANA_RESET_N_MASK | SMM_RTC_DCDC_CNTRL_LDO_EN_MASK |
-                               SMM_RTC_DCDC_CNTRL_LDO_PULDWN_EN_MASK | SMM_RTC_DCDC_CNTRL_LDO_CONFIG(0x15);
+    AON__SMM->RTC_LDO_CNTRL = SMM_RTC_LDO_CNTRL_ISO_MASK | SMM_RTC_LDO_CNTRL_DGTL_RST_N_MASK |
+                               SMM_RTC_LDO_CNTRL_ANA_RESET_N_MASK | SMM_RTC_LDO_CNTRL_LDO_EN_MASK |
+                               SMM_RTC_LDO_CNTRL_LDO_PULDWN_EN_MASK | SMM_RTC_LDO_CNTRL_LDO_CONFIG(0x15);
     delay_ms(10U);
 
     /* Disable pull down */
-    AON__SMM->RTC_DCDC_CNTRL &= ~SMM_RTC_DCDC_CNTRL_LDO_PULDWN_EN_MASK;
-    AON__SMM->RTC_DCDC_CNTRL &= ~SMM_RTC_DCDC_CNTRL_ISO_MASK;
-    AON__SMM->RTC_DCDC_CNTRL |= SMM_RTC_DCDC_CNTRL_DGTL_RST_N_MASK;
+    AON__SMM->RTC_LDO_CNTRL &= ~SMM_RTC_LDO_CNTRL_LDO_PULDWN_EN_MASK;
+    AON__SMM->RTC_LDO_CNTRL &= ~SMM_RTC_LDO_CNTRL_ISO_MASK;
+    AON__SMM->RTC_LDO_CNTRL |= SMM_RTC_LDO_CNTRL_DGTL_RST_N_MASK;
 
     /* Disable RTC alive detector in SMM, enable it in RTC*/
     AON__SMM->RTC_ANLG_XTAL &= ~SMM_RTC_ANLG_XTAL_RTC_ALV_DTCT_EN_MASK;
@@ -1271,7 +1259,7 @@ status_t CLOCK_DeinitRosc(void)
     }
 #endif
 
-    AON__SMM->RTC_DCDC_CNTRL &= ~(SMM_RTC_DCDC_CNTRL_ANA_RESET_N_MASK | SMM_RTC_DCDC_CNTRL_DGTL_RST_N_MASK);
+    AON__SMM->RTC_LDO_CNTRL &= ~(SMM_RTC_LDO_CNTRL_ANA_RESET_N_MASK | SMM_RTC_LDO_CNTRL_DGTL_RST_N_MASK);
 
     return (status_t)kStatus_Success;
 }
@@ -1364,31 +1352,33 @@ static uint32_t CLOCK_getAonPerClkFreq(void)
 {
     uint32_t freq = 0U;
 
+    const uint32_t sel =
+        (AON__CGU->PER_CLK_CONFIG & CGU_PER_CLK_CONFIG_COM_GRP_SEL_MASK) >> CGU_PER_CLK_CONFIG_COM_GRP_SEL_SHIFT;
+    const uint32_t div =
+        (AON__CGU->CLOCK_DIV & CGU_CLOCK_DIV_COM_GRP_CLK_DIV_MASK) >> CGU_CLOCK_DIV_COM_GRP_CLK_DIV_SHIFT;
+
+    switch (sel)
+    {
+        case 0U:
+            freq = CLOCK_GetFroAonFreq();
+            break;
+        case 1U:
+            freq = CLOCK_GetFroAonFreq() / 2U;
+            break;
+        case 2U:
+            freq = CLOCK_GetFroAonFreq() / 4U;
+            break;
+        case 3U:
+            freq = CLOCK_GetAonRootAuxFreq();
+            break;
+    }
+
     if (AON__CGU->CLOCK_DIV & CGU_CLOCK_DIV_COM_GRP_CLK_DIV_EN_MASK)
     {
-        const uint32_t sel =
-            (AON__CGU->PER_CLK_CONFIG & CGU_PER_CLK_CONFIG_COM_GRP_SEL_MASK) >> CGU_PER_CLK_CONFIG_COM_GRP_SEL_SHIFT;
-        const uint32_t div =
-            (AON__CGU->CLOCK_DIV & CGU_CLOCK_DIV_COM_GRP_CLK_DIV_MASK) >> CGU_CLOCK_DIV_COM_GRP_CLK_DIV_SHIFT;
-
-        switch (sel)
-        {
-            case 0U:
-                freq = CLOCK_GetFroAonFreq();
-                break;
-            case 1U:
-                freq = CLOCK_GetFroAonFreq() / 2U;
-                break;
-            case 2U:
-                freq = CLOCK_GetFroAonFreq() / 4U;
-                break;
-            case 3U:
-                freq = CLOCK_GetAonRootAuxFreq();
-                break;
-        }
-
         freq /= div + 1U;
     }
+    /* else: no division needed when newValue is 0. Divider is bypassed. */
+
     return freq;
 }
 
@@ -1396,31 +1386,25 @@ static uint32_t CLOCK_getAonTmrClkFreq(void)
 {
     uint32_t freq = 0U;
 
-    if (AON__CGU->CLOCK_DIV & CGU_CLOCK_DIV_COM_GRP_CLK_DIV_EN_MASK)
+    const uint32_t sel =
+        (AON__CGU->PER_CLK_CONFIG & CGU_PER_CLK_CONFIG_TMR_GRP_SEL_MASK) >> CGU_PER_CLK_CONFIG_TMR_GRP_SEL_SHIFT;
+
+    switch (sel)
     {
-        const uint32_t sel =
-            (AON__CGU->PER_CLK_CONFIG & CGU_PER_CLK_CONFIG_TMR_GRP_SEL_MASK) >> CGU_PER_CLK_CONFIG_TMR_GRP_SEL_SHIFT;
-        const uint32_t div =
-            (AON__CGU->CLOCK_DIV & CGU_CLOCK_DIV_COM_GRP_CLK_DIV_MASK) >> CGU_CLOCK_DIV_COM_GRP_CLK_DIV_SHIFT;
-
-        switch (sel)
-        {
-            case 0U:
-                freq = CLOCK_GetFroAonFreq();
-                break;
-            case 1U:
-                freq = CLOCK_GetFroAonFreq() / 2U;
-                break;
-            case 2U:
-                freq = CLOCK_GetFroAonFreq() / 4U;
-                break;
-            case 3U:
-                freq = CLOCK_GetAonRootAuxFreq();
-                break;
-        }
-
-        freq /= div + 1U;
+        case 0U:
+            freq = CLOCK_GetFroAonFreq();
+            break;
+        case 1U:
+            freq = CLOCK_GetFroAonFreq() / 2U;
+            break;
+        case 2U:
+            freq = CLOCK_GetFroAonFreq() / 4U;
+            break;
+        case 3U:
+            freq = CLOCK_GetAonRootAuxFreq();
+            break;
     }
+
     return freq;
 }
 
@@ -1525,31 +1509,33 @@ uint32_t CLOCK_GetAonCoreSysClkFreq(void)
 {
     uint32_t freq = 0U;
 
+    const uint32_t sel =
+        (AON__CGU->CLK_CONFIG & CGU_CLK_CONFIG_ROOT_CLK_SEL_MASK) >> CGU_CLK_CONFIG_ROOT_CLK_SEL_SHIFT;
+    const uint32_t div =
+        (AON__CGU->CLOCK_DIV & CGU_CLOCK_DIV_AON_CPU_CLK_DIV_MASK) >> CGU_CLOCK_DIV_AON_CPU_CLK_DIV_SHIFT;
+
+    switch (sel)
+    {
+        case 0U:
+            freq = CLOCK_GetFroAonFreq();
+            break;
+        case 1U:
+            freq = CLOCK_GetFroAonFreq() / 2U;
+            break;
+        case 2U:
+            freq = CLOCK_GetFroAonFreq() / 4U;
+            break;
+        case 3U:
+            freq = CLOCK_GetAonRootAuxFreq();
+            break;
+    }
+
     if (AON__CGU->CLOCK_DIV & CGU_CLOCK_DIV_CLK_DIV_EN_MASK)
     {
-        const uint32_t sel =
-            (AON__CGU->CLK_CONFIG & CGU_CLK_CONFIG_ROOT_CLK_SEL_MASK) >> CGU_CLK_CONFIG_ROOT_CLK_SEL_SHIFT;
-        const uint32_t div =
-            (AON__CGU->CLOCK_DIV & CGU_CLOCK_DIV_AON_CPU_CLK_DIV_MASK) >> CGU_CLOCK_DIV_AON_CPU_CLK_DIV_SHIFT;
-
-        switch (sel)
-        {
-            case 0U:
-                freq = CLOCK_GetFroAonFreq();
-                break;
-            case 1U:
-                freq = CLOCK_GetFroAonFreq() / 2U;
-                break;
-            case 2U:
-                freq = CLOCK_GetFroAonFreq() / 4U;
-                break;
-            case 3U:
-                freq = CLOCK_GetAonRootAuxFreq();
-                break;
-        }
-
         freq /= div + 1U;
     }
+    /* else: no division needed when newValue is 0. Divider is bypassed. */
+
     return freq;
 }
 
@@ -1595,7 +1581,7 @@ static uint32_t CLOCK_GetPeriphGrpFreq(uint32_t id)
 
     if (true == CLOCK_IsDivHalt(clkdiv))
     {
-        return 0;
+        return 0U;
     }
 
     switch (clksel)
@@ -1686,7 +1672,7 @@ uint32_t CLOCK_GetCTimerClkFreq(uint32_t id)
 
     if (true == CLOCK_IsDivHalt(clkdiv))
     {
-        return 0;
+        return 0U;
     }
 
     switch (clksel)
@@ -1844,7 +1830,7 @@ uint32_t CLOCK_GetWwdtClkFreq(void)
 
     if (true == CLOCK_IsDivHalt(clkdiv))
     {
-        return 0;
+        return 0U;
     }
 
     return freq / ((clkdiv & 0xFFU) + 1U);
@@ -1888,7 +1874,7 @@ uint32_t CLOCK_GetAdcClkFreq(void)
 
     if (true == CLOCK_IsDivHalt(clkdiv))
     {
-        return 0;
+        return 0U;
     }
 
     switch (clksel)
@@ -1921,7 +1907,7 @@ uint32_t CLOCK_GetCmpFClkFreq(void)
 
     if (true == CLOCK_IsDivHalt(clkdiv))
     {
-        return 0;
+        return 0U;
     }
 
     switch (clksel)
@@ -1954,7 +1940,7 @@ uint32_t CLOCK_GetCmpRRClkFreq(void)
 
     if (true == CLOCK_IsDivHalt(clkdiv))
     {
-        return 0;
+        return 0U;
     }
 
     switch (clksel)
@@ -1987,7 +1973,7 @@ uint32_t CLOCK_GetTraceClkFreq(void)
 
     if (true == CLOCK_IsDivHalt(clkdiv))
     {
-        return 0;
+        return 0U;
     }
 
     switch (clksel)
@@ -2020,7 +2006,7 @@ uint32_t CLOCK_GetClkoutClkFreq(void)
 
     if (true == CLOCK_IsDivHalt(clkdiv))
     {
-        return 0;
+        return 0U;
     }
 
     switch (clksel)
@@ -2057,7 +2043,7 @@ uint32_t CLOCK_GetPeriphGroupClkFreq(uint32_t id)
 
     if (true == CLOCK_IsDivHalt(clkdiv))
     {
-        return 0;
+        return 0U;
     }
 
     switch (clksel)
@@ -2090,7 +2076,7 @@ uint32_t CLOCK_GetSystickClkFreq(void)
 
     if (true == CLOCK_IsDivHalt(clkdiv))
     {
-        return 0;
+        return 0U;
     }
 
     switch (clksel)
@@ -2160,8 +2146,8 @@ status_t CLOCK_AonFroAutoTrimEnable(aon_fro_autotrim_config_t config, bool enabl
         AON__CGU->RST_SUB_BLK |= CGU_RST_SUB_BLK_CAL_RST_N(1);
 
         /* Disable autotrim*/
-        AON__CGU->CAL_CONFIG &= ~(1 << CGU_CAL_CONFIG_AUTO_CAL_SHIFT);
-        AON__CGU->CAL_CONFIG &= ~(1 << CGU_CAL_CONFIG_CAL_CLK_EN_SHIFT);
+        AON__CGU->CAL_CONFIG &= ~(1U << CGU_CAL_CONFIG_AUTO_CAL_SHIFT);
+        AON__CGU->CAL_CONFIG &= ~(1U << CGU_CAL_CONFIG_CAL_CLK_EN_SHIFT);
 
         /* Set calibration interval*/
         AON__CGU->AUTO_CAL_INT = AON_FRO_AUTO_CAL_INT;
@@ -2174,7 +2160,7 @@ status_t CLOCK_AonFroAutoTrimEnable(aon_fro_autotrim_config_t config, bool enabl
         }
         else
         {
-            AON__CGU->CAL_CONFIG |= (1 << CGU_CAL_CONFIG_CAL_SRC_SHIFT);
+            AON__CGU->CAL_CONFIG |= (1U << CGU_CAL_CONFIG_CAL_SRC_SHIFT);
             AON__CGU->CAL_DWN_CNT      = AON_FRO_AUTO_CAL_3M_CAL_DWN_CNT;
             AON__CGU->AUTO_CAL_TGT_LSB = AON_FRO_AUTO_CAL_3M_TGT_LSB;
         }
@@ -2195,7 +2181,7 @@ status_t CLOCK_AonFroAutoTrimEnable(aon_fro_autotrim_config_t config, bool enabl
     else
     {
         /* Disable auto trim */
-        AON__CGU->CAL_CONFIG &= ~(1 << CGU_CAL_CONFIG_AUTO_CAL_SHIFT);
+        AON__CGU->CAL_CONFIG &= ~(1U << CGU_CAL_CONFIG_AUTO_CAL_SHIFT);
     }
 
     return status;

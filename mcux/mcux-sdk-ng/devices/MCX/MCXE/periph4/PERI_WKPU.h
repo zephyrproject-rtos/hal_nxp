@@ -1,10 +1,11 @@
 /*
 ** ###################################################################
-**     Processors:          MCXE317MPA
+**     Processors:          MCXE317MLL
+**                          MCXE317MPA
 **                          MCXE317MPB
 **
 **     Version:             rev. 1.0, 2025-07-18
-**     Build:               b250718
+**     Build:               b260420
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for WKPU
@@ -37,7 +38,7 @@
 #if !defined(PERI_WKPU_H_)
 #define PERI_WKPU_H_                             /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXE317MPA) || defined(CPU_MCXE317MPB))
+#if (defined(CPU_MCXE317MLL) || defined(CPU_MCXE317MPA) || defined(CPU_MCXE317MPB))
 #include "MCXE317_COMMON.h"
 #else
   #error "No valid CPU defined!"

@@ -1,7 +1,6 @@
 /*
 ** ###################################################################
-**     Processors:          MCXN536VAB_cm33_core0
-**                          MCXN536VDF_cm33_core0
+**     Processors:          MCXN536VDF_cm33_core0
 **                          MCXN536VKL_cm33_core0
 **                          MCXN536VPB_cm33_core0
 **
@@ -12,7 +11,7 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260209
+**     Build:               b260417
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN536_cm33_core0
@@ -1264,6 +1263,9 @@ typedef enum IRQn {
   /** Array initializer of GPIO peripheral base pointers */
   #define GPIO_BASE_PTRS                           { GPIO0, GPIO1, GPIO2, GPIO3, GPIO4, GPIO5, GPIO0_ALIAS1, GPIO1_ALIAS1, GPIO2_ALIAS1, GPIO3_ALIAS1, GPIO4_ALIAS1, GPIO5_ALIAS1 }
 #endif
+/** Interrupt vectors for the GPIO peripheral type */
+#define GPIO_IRQS                                { GPIO00_IRQn, GPIO10_IRQn, GPIO20_IRQn, GPIO30_IRQn, GPIO40_IRQn, GPIO50_IRQn, GPIO00_IRQn, GPIO10_IRQn, GPIO20_IRQn, GPIO30_IRQn, GPIO40_IRQn, GPIO50_IRQn }
+#define GPIO_S_IRQS                              { GPIO01_IRQn, GPIO11_IRQn, GPIO21_IRQn, GPIO31_IRQn, GPIO41_IRQn, GPIO51_IRQn, GPIO01_IRQn, GPIO11_IRQn, GPIO21_IRQn, GPIO31_IRQn, GPIO41_IRQn, GPIO51_IRQn }
 
 /* I2S - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -2506,6 +2508,8 @@ typedef enum IRQn {
   /** Array initializer of PORT peripheral base pointers */
   #define PORT_BASE_PTRS                           { PORT0, PORT1, PORT2, PORT3, PORT4, PORT5 }
 #endif
+/** Interrupt vectors for the PORT peripheral type */
+#define PORT_IRQS                                { PORT_EFT_IRQn, PORT_EFT_IRQn, PORT_EFT_IRQn, PORT_EFT_IRQn, PORT_EFT_IRQn, PORT_EFT_IRQn }
 
 /* POWERQUAD - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

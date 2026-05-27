@@ -13,8 +13,8 @@
 **                          MCXL144VLL_cm0plus
 **                          MCXL144VLL_cm33
 **
-**     Version:             rev. 1.1, 2026-01-02
-**     Build:               b260109
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SCG
@@ -31,14 +31,16 @@
 **         Generated based on Rev1 DraftH.
 **     - rev. 1.1 (2026-01-02)
 **         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_SCG.h
- * @version 1.1
- * @date 2026-01-02
+ * @version 2.0
+ * @date 2026-04-22
  * @brief CMSIS Peripheral Access Layer for SCG
  *
  * CMSIS Peripheral Access Layer for SCG
@@ -127,9 +129,9 @@ typedef struct {
        uint8_t RESERVED_7[228];
   __IO uint32_t ROSCCSR;                           /**< ROSC Control Status, offset: 0x400 */
        uint8_t RESERVED_8[60];
-  __IO uint32_t PMUIRCCSR;                         /**< PMUIRCCSR Control Status, offset: 0x440 */
+  __IO uint32_t PMUIRCCSR;                         /**< PMUIRC Control Status, offset: 0x440 */
        uint8_t RESERVED_9[60];
-  __IO uint32_t LPIRCCSR;                          /**< LPIRCCSR Control Status, offset: 0x480 */
+  __IO uint32_t LPIRCCSR;                          /**< LPIRC Control Status, offset: 0x480 */
 } SCG_Type;
 
 /* ----------------------------------------------------------------------------
@@ -421,17 +423,17 @@ typedef struct {
 
 #define SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_MASK     (0x10U)
 #define SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_SHIFT    (4U)
-/*! FIRC_SCLK_PERIPH_EN - FIRC 48 MHz Clock to peripherals Enable
- *  0b0..FIRC 48 MHz to peripherals is disabled
- *  0b1..FIRC 48 MHz to peripherals is enabled
+/*! FIRC_SCLK_PERIPH_EN - FIRC_48MHz Clock to Peripherals Enable
+ *  0b0..FIRC_48MHz disabled
+ *  0b1..FIRC_48MHz enabled
  */
 #define SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN(x)       (((uint32_t)(((uint32_t)(x)) << SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_SHIFT)) & SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_MASK)
 
 #define SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_MASK     (0x20U)
 #define SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_SHIFT    (5U)
-/*! FIRC_FCLK_PERIPH_EN - FRO_HF Clock to peripherals Enable
- *  0b0..FRO_HF to peripherals is disabled
- *  0b1..FRO_HF to peripherals is enabled
+/*! FIRC_FCLK_PERIPH_EN - FRO_HF_GATED to Peripherals Enable
+ *  0b0..FRO_HF_GATED disabled
+ *  0b1..FRO_HF_GATED enabled
  */
 #define SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN(x)       (((uint32_t)(((uint32_t)(x)) << SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_SHIFT)) & SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_MASK)
 
@@ -649,12 +651,12 @@ typedef struct {
 #define SCG_ROSCCSR_ROSCERR_SHIFT                (26U)
 /*! ROSCERR - ROSC Clock Error
  *  0b0..ROSC Clock Monitor is disabled or has not detected an error
- *  0b1..ROSC Clock Monitor is enabled and detected an RTC loss of clock error has detected an error
+ *  0b1..ROSC Clock Monitor is enabled and has detected an error
  */
 #define SCG_ROSCCSR_ROSCERR(x)                   (((uint32_t)(((uint32_t)(x)) << SCG_ROSCCSR_ROSCERR_SHIFT)) & SCG_ROSCCSR_ROSCERR_MASK)
 /*! @} */
 
-/*! @name PMUIRCCSR - PMUIRCCSR Control Status */
+/*! @name PMUIRCCSR - PMUIRC Control Status */
 /*! @{ */
 
 #define SCG_PMUIRCCSR_PMUIRCVLD_MASK             (0x1000000U)
@@ -690,7 +692,7 @@ typedef struct {
 #define SCG_PMUIRCCSR_PMUIRCERR_IE(x)            (((uint32_t)(((uint32_t)(x)) << SCG_PMUIRCCSR_PMUIRCERR_IE_SHIFT)) & SCG_PMUIRCCSR_PMUIRCERR_IE_MASK)
 /*! @} */
 
-/*! @name LPIRCCSR - LPIRCCSR Control Status */
+/*! @name LPIRCCSR - LPIRC Control Status */
 /*! @{ */
 
 #define SCG_LPIRCCSR_LPIRCVLD_MASK               (0x1000000U)

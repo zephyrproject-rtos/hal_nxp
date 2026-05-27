@@ -114,33 +114,33 @@ static power_vdd_core_output_voltage_t Power_GetVddCoreForFreq(uint32_t targetFr
 
     if (targetFreqHz == 10000000U)
     {
-        /* 10MHz requires 770mV */
-        voltage = kPower_VddCoreAon_772_5mV;
+        /* 10MHz requires 791.5mV */
+        voltage = kPower_VddCoreAon_791_5mV;
     }
     else if (targetFreqHz == 5000000U)
     {
-        /* 5MHz requires 740mV */
-        voltage = kPower_VddCoreAon_744mV;
+        /* 5MHz requires 763mV */
+        voltage = kPower_VddCoreAon_763mV;
     }
     else if (targetFreqHz == 3000000U)
     {
-        /* 3MHz requires 720mV */
-        voltage = kPower_VddCoreAon_725mV;
+        /* 3MHz requires 753.5mV */
+        voltage = kPower_VddCoreAon_753_5mV;
     }
     else if (targetFreqHz == 2500000U)
     {
-        /* 2.5MHz requires 730mV */
-        voltage = kPower_VddCoreAon_734_5mV;
+        /* 2.5MHz requires 744mV */
+        voltage = kPower_VddCoreAon_744mV;
     }
     else if (targetFreqHz >= 750000U)
     {
-        /* 0.75MHz requires 680mV */
-        voltage = kPower_VddCoreAon_687mV;
+        /* 0.75MHz requires 706mV */
+        voltage = kPower_VddCoreAon_706mV;
     }
     else
     {
-        /* 32kHz and below require 600mV */
-        voltage = kPower_VddCoreAon_601_5mV;
+        /* 32kHz and below require 630mV */
+        voltage = kPower_VddCoreAon_630mV;
     }
 
     return voltage;
@@ -194,7 +194,6 @@ static uint32_t Power_GetDpd2TargetFreq(const power_dpd2_config_t *config)
  */
 static void Power_ConfigureStallForMode(power_low_power_mode_t mode, uint32_t freqHz)
 {
-#if 0
     /* Configure stall values based on frequency and power mode */
     if (mode == kPower_DeepPowerDown3 || mode == kPower_ShutDown)
     {
@@ -243,7 +242,6 @@ static void Power_ConfigureStallForMode(power_low_power_mode_t mode, uint32_t fr
             POWER_UPDATE_SMM_STALL(150U, 60U, 2U);
         }
     }
-#endif
 }
 
 static status_t Power_VerifyMuMessage(uint32_t message)
@@ -288,7 +286,7 @@ static power_mu_nack_reason_t Power_GetMuNackReason(uint32_t message)
 
 static status_t Power_PrepareVddCoreAndFro10M(power_vdd_core_output_voltage_t vddCoreAonVoltage, bool disableFRO10M)
 {
-    if ((vddCoreAonVoltage == kPower_VddCoreAon_AdvcControl) && ADVC_IsEnabled())
+    if (ADVC_IsEnabled())
     {
         if (disableFRO10M)
         {
@@ -365,7 +363,7 @@ static status_t Power_ReqestCM33StartLpSeq(power_low_power_mode_t targetMode)
  */
 static status_t Power_CM33RequestLowPowerMode(power_low_power_mode_t targetMode, uint32_t muChannelId)
 {
-    uint32_t tmp32 = Power_PopulateMuMessage(kPower_MsgTypeRequest, kPower_MsgDirMainToAon, targetMode, 0UL);
+    uint32_t tmp32         = Power_PopulateMuMessage(kPower_MsgTypeRequest, kPower_MsgDirMainToAon, targetMode, 0UL);
     g_powerMuTransferState = kPower_MuTransferStart;
     MU_SendMsg(POWER_USED_MU, muChannelId, tmp32);
 #if POWER_MU_TRANSFER_TIMEOUT
@@ -411,8 +409,8 @@ static status_t Power_MuDoSync(uint32_t muChannelId)
 #else
     power_mu_message_direction_t dir = kPower_MsgDirAonToMain;
 #endif
-    uint32_t tmp32 = Power_PopulateMuMessage(kPower_MsgTypeSync, dir, kPower_Active,
-                                             (uint16_t)(g_Handle_Offset & 0xFFFFUL));
+    uint32_t tmp32 =
+        Power_PopulateMuMessage(kPower_MsgTypeSync, dir, kPower_Active, (uint16_t)(g_Handle_Offset & 0xFFFFUL));
     g_powerMuTransferState = kPower_MuTransferStart;
     MU_SendMsg(POWER_USED_MU, muChannelId, tmp32);
 #if POWER_MU_TRANSFER_TIMEOUT
@@ -448,11 +446,13 @@ static status_t Power_MuDoSync(uint32_t muChannelId)
  * @param disableBandgap   Whether to shut down bandgap in low power.
  * @param enableIVS        Whether to enable IVS mode for SRAM retention.
  */
-static void Power_ConfigSleepModeManager(uint8_t aonSramToRetain, uint32_t mainSramToRetain,
-                                         bool disableBandgap, bool enableIVS)
+static void Power_ConfigSleepModeManager(uint8_t aonSramToRetain,
+                                         uint32_t mainSramToRetain,
+                                         bool disableBandgap,
+                                         bool enableIVS)
 {
     SMM_PowerOffAonSramAutomatically(AON__SMM, (uint8_t)(~aonSramToRetain & 0xFFUL));
-    SMM_EnableMainDomainSramRetention(AON__SMM, mainSramToRetain);
+    SMM_EnableMainDomainSramRetention(AON__SMM, (uint16_t)(mainSramToRetain & 0xFFFFUL));
     SMM_ShutDownBandgapInLowPowerModes(AON__SMM, disableBandgap);
     SMM_EnableIvsModeForSramRetention(AON__SMM, enableIVS);
 }
@@ -481,8 +481,12 @@ static void Power_EnableDualDomainWakeupSources(power_wakeup_source_t mainWs, po
 static status_t Power_SetDpd2AdvcWorkaround(power_dpd2_config_t *config)
 {
     advc_result_t advcRet;
+    bool clockAdvcControlEnabled = CLOCK_GetADVCControlState();
     /* Per platform requirement, DPD2+ADVC workaround must be executed on CM0P (AON core). */
-    CLOCK_DisableADVCControl();
+    if (clockAdvcControlEnabled)
+    {
+        CLOCK_DisableADVCControl();
+    }
 
     uint32_t targetFreq = Power_GetDpd2TargetFreq(config);
 
@@ -520,7 +524,10 @@ static status_t Power_SetDpd2AdvcWorkaround(power_dpd2_config_t *config)
         return kStatus_Power_AdvcPostVoltageChangeFailed;
     }
 
-    Power_ConfigureStallForMode(kPower_DeepPowerDown2, targetFreq);
+    if (clockAdvcControlEnabled)
+    {
+        CLOCK_EnableADVCControl();
+    }
     return kStatus_Success;
 }
 #endif /* __CORTEX_M */
@@ -554,7 +561,7 @@ status_t Power_CreateHandle(power_handle_t *handle, const power_drv_config_t *co
     handle->targetPowerMode   = kPower_Active;
     handle->previousPowerMode = kPower_Active;
 
-    handle->dualCoreSynced   = false;
+    handle->dualCoreSynced   = kPower_DualCoreNotSynced;
     handle->requestCM33Start = false;
 
     /* Record offset of handle. */
@@ -567,11 +574,11 @@ status_t Power_CreateHandle(power_handle_t *handle, const power_drv_config_t *co
         {
             return syncStatus;
         }
-        handle->dualCoreSynced = true;
+        handle->dualCoreSynced = kPower_DualCoreSynced;
     }
     else
     {
-        handle->dualCoreSynced = false;
+        handle->dualCoreSynced = kPower_DualCoreNotSynced;
     }
 
     return kStatus_Success;
@@ -624,7 +631,7 @@ status_t Power_SyncDualCoreBlocking(void)
     {
         return syncStatus;
     }
-    sharedHandle->dualCoreSynced = true;
+    sharedHandle->dualCoreSynced = kPower_DualCoreSynced;
 
     return kStatus_Success;
 }
@@ -806,7 +813,7 @@ void Power_DisableAllWakeupSources(void)
     SMM_DisableWakeupSourceToMainCpu(AON__SMM, SMM_WKUP_MAIN_WKUP_SRC_MAIN_CPU_MASK);
     SMM_DisableWakeupSourceToAonCpu(AON__SMM, SMM_AON_CPU_WKUP_SRC_AON_CPU_MASK);
     sharedHandle->enabledWsInfo.mainWakeupSourceMask = 0UL;
-    sharedHandle->enabledWsInfo.aonWakeupSourceMask = 0UL;
+    sharedHandle->enabledWsInfo.aonWakeupSourceMask  = 0UL;
 }
 
 /*!
@@ -1095,18 +1102,30 @@ void Power_ClearLpPowerSettings(void)
     CMC_SetClockMode(CMC, kCMC_GateNoneClock);
     CMC_SetGlobalPowerMode(CMC, kCMC_ActiveOrSleepMode);
     AON__SMM->STAT = SMM_STAT_DPD_SEQ_END_MASK | SMM_STAT_DPD_END_MASK;
-    AON__SMM->PWDN_CONFIG &= ~(SMM_PWDN_CONFIG_BGR_PULSE_MASK | SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK |
-                               SMM_PWDN_CONFIG_CTRL_SRAM_DPD2_MASK);
+    AON__SMM->PWDN_CONFIG &= ~(SMM_PWDN_CONFIG_BGR_PULSE_MODE_EN_MASK | SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK |
+                               SMM_PWDN_CONFIG_SRAM_ISO_CTRL_MASK);
 #elif __CORTEX_M == 0U
+    assert(g_Handle_Offset != POWER_HANDLE_OFFSET_NOT_INIT_VALUE);
+    power_handle_t *sharedHandle = (power_handle_t *)(POWER_SHARED_RAM_BASE_ADDR + g_Handle_Offset);
     SMM_DisableAonCpuIso(AON__SMM);
     SMM_ClearAllLowPowerSequence(AON__SMM);
     SMM_ClearAonCpuWakeupSources(AON__SMM);
-    AON__SMM->STAT = SMM_STAT_DPD_SEQ_END_MASK | SMM_STAT_DPD_END_MASK;
-    AON__SMM->PWDN_CONFIG &= ~SMM_PWDN_CONFIG_CTRL_SRAM_DPD2_MASK;
+    /* Guard: skip STAT write when CM33 ROM is running (state 01).
+     * For state 10 (DPD2->DPD1), write STAT now (CM33 ROM does not execute on this path)
+     * then restore to 01 so the subsequent DPD1->Active step is also protected. */
+    if (sharedHandle->dualCoreSynced != kPower_DualCoreAonOnly)
+    {
+        AON__SMM->STAT = SMM_STAT_DPD_SEQ_END_MASK | SMM_STAT_DPD_END_MASK;
+    }
+    if (sharedHandle->dualCoreSynced == kPower_DualCoreDpd2ToDpd1)
+    {
+        sharedHandle->dualCoreSynced = kPower_DualCoreAonOnly;
+    }
+    AON__SMM->PWDN_CONFIG &= ~SMM_PWDN_CONFIG_SRAM_ISO_CTRL_MASK;
     if (SMM_GetPowerState(AON__SMM) != 2U)
     {
         /* If current mode is deep power down1 mode, keep bandgap setting and VDD_CORE_MAIN SRC no changed. */
-        AON__SMM->PWDN_CONFIG &= ~(SMM_PWDN_CONFIG_BGR_PULSE_MASK | SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK);
+        AON__SMM->PWDN_CONFIG &= ~(SMM_PWDN_CONFIG_BGR_PULSE_MODE_EN_MASK | SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK);
     }
 #endif /* __CORTEX_M */
 }
@@ -1312,7 +1331,7 @@ status_t Power_EnterPowerDown2(power_pd2_config_t *config)
     memset(sharedHandle->lpConfig, 0UL, 16UL);
     memcpy(sharedHandle->lpConfig, config, sizeof(power_pd2_config_t));
 
-    if (sharedHandle->dualCoreSynced == false)
+    if (sharedHandle->dualCoreSynced != kPower_DualCoreSynced)
     {
         return kStatus_Power_DualCoreNotSynced;
     }
@@ -1343,8 +1362,7 @@ status_t Power_EnterPowerDown2(power_pd2_config_t *config)
     SMM_EnableWakeupSourceToAonCpu(AON__SMM, sharedHandle->enabledWsInfo.aonWakeupSourceMask);
 
     /* 3. Configuration for SMM and PMU. */
-    Power_ConfigSleepModeManager(kPower_AonDomainAllRams, kPower_MainDomainAllRams,
-                                 false, config->enableIVSMode);
+    Power_ConfigSleepModeManager(kPower_AonDomainAllRams, kPower_MainDomainAllRams, false, config->enableIVSMode);
     SMM_StartPowerDownSequence(AON__SMM);
 
     PMU_DoHandshakeBetweenPMUAndPAC(AON__PMU);
@@ -1371,6 +1389,7 @@ status_t Power_EnterPowerDown2(power_pd2_config_t *config)
         __DSB();
         __ISB();
         __WFI();
+        Power_ClearLpPowerSettings();
         return kStatus_Success;
     }
 
@@ -1405,8 +1424,8 @@ status_t Power_EnterPowerDown2(power_pd2_config_t *config)
             SMM_EnableWakeupSourceToAonCpu(AON__SMM, sharedHandle->enabledWsInfo.aonWakeupSourceMask);
 
             /*2. Update SMM settings. */
-            Power_ConfigSleepModeManager(kPower_AonDomainAllRams, kPower_MainDomainAllRams,
-                                         false, config->enableIVSMode);
+            Power_ConfigSleepModeManager(kPower_AonDomainAllRams, kPower_MainDomainAllRams, false,
+                                         config->enableIVSMode);
 
             PMU_DoHandshakeBetweenPMUAndPAC(AON__PMU);
 
@@ -1417,12 +1436,31 @@ status_t Power_EnterPowerDown2(power_pd2_config_t *config)
             __DSB();
             __ISB();
             __WFI();
+            /* PD2-from-PD1: CM33 is not involved so it never clears
+             * cm0pWFI.  Clear here to avoid stale true on next DPD2. */
+            sharedHandle->cm0pWFI = false;
         }
     }
 
     return status;
 #endif /* __CORTEX_M == 33U */
 }
+
+#if __CORTEX_M == 33U
+extern void Reset_Handler(void);
+/* ROM reads backup1 as an address, fetches [addr] as SP and [addr+4] as PC,
+ * then jumps.  Because the vector table sits at 0x0 on MCXL255 (VTOR == 0),
+ * we cannot point backup1 there (ROM would see 0 and skip the jump).
+ * This const array lives in flash at a non-zero address that ROM can read.
+ *
+ * __INITIAL_SP is defined by CMSIS per-toolchain headers:
+ *   IAR:         CSTACK$$Limit          (cmsis_iccarm_m.h)
+ *   GCC/armgcc:  __stack                (cmsis_clang_m.h / cmsis_gcc.h)
+ *   MDK(AC6):    __stack                (cmsis_clang_m.h)
+ */
+extern uint32_t __INITIAL_SP;
+static const uint32_t g_RomWakeupVector[2] = {(uint32_t)&__INITIAL_SP, (uint32_t)Reset_Handler};
+#endif
 
 /*!
  * brief Enter Deep Power Down 1 mode.
@@ -1436,7 +1474,19 @@ status_t Power_EnterPowerDown2(power_pd2_config_t *config)
  * retval kStatus_POWER_RequestNotAllowed Request not allowed by another core.
  * retval kStatus_Power_WakeupFromDPD1 Enter and wakeup from DPD1 successfully.
  */
+#ifdef __IAR_SYSTEMS_ICC__
+#pragma optimize = none
+#pragma inline = never
 status_t Power_EnterDeepPowerDown1(power_dpd1_config_t *config)
+#elif (defined(__CC_ARM) || defined(__ARMCC_VERSION))
+status_t __attribute__((optnone, noinline)) Power_EnterDeepPowerDown1(power_dpd1_config_t *config)
+#elif (defined(__GNUC__)) || defined(DOXYGEN_OUTPUT)
+#pragma GCC push_options
+#pragma GCC optimize("O0")
+__attribute__((noinline)) status_t Power_EnterDeepPowerDown1(power_dpd1_config_t *config)
+#else
+status_t Power_EnterDeepPowerDown1(power_dpd1_config_t *config)
+#endif
 {
     assert(g_Handle_Offset != POWER_HANDLE_OFFSET_NOT_INIT_VALUE);
 
@@ -1458,7 +1508,7 @@ status_t Power_EnterDeepPowerDown1(power_dpd1_config_t *config)
     Power_ConfigureStallForMode(kPower_DeepPowerDown1, CLOCK_GetAonCoreSysClkFreq());
     PMU_UpdateFRO16KFreq(AON__PMU, config->fro16KOutputFreq);
     SMM_EnableMainDomainSramRetention(AON__SMM, config->mainRamArraysToRetain);
-    SMM_PowerOffAonSramAutomatically(AON__SMM, (uint8_t)(~kPower_AonDomainAllRams & 0xFFUL));
+    SMM_PowerOffAonSramAutomatically(AON__SMM, (uint8_t)(~(uint32_t)kPower_AonDomainAllRams & 0xFFUL));
     SMM_ShutDownBandgapInLowPowerModes(AON__SMM, config->disableBandgap);
     SMM_EnableIvsModeForSramRetention(AON__SMM, config->enableIVSMode);
     SMM_StartPowerDownSequence(AON__SMM);
@@ -1476,8 +1526,15 @@ status_t Power_EnterDeepPowerDown1(power_dpd1_config_t *config)
 
     if ((config->mainRamArraysToRetain != kPower_MainDomainNoneRams) && (config->saveContext == true))
     {
-        AON__SMM->LSB_BCKP1 = 0UL;
-        AON__SMM->MSB_BCKP1 = 0UL;
+        sharedHandle->dualCoreSynced = kPower_DualCoreAonOnly;
+        /* Write g_RomWakeupVector address (flash, non-zero) to backup1.
+         * ROM reads [addr] as SP and [addr+4] as PC, then jumps. */
+        AON__SMM->LSB_BCKP1      = SMM_LSB_BCKP1_LSB1((uint32_t)g_RomWakeupVector);
+        AON__SMM->MSB_BCKP1      = SMM_MSB_BCKP1_MSB1((uint32_t)g_RomWakeupVector >> 16UL);
+        /* backup2 MSB = g_Handle_Offset (non-zero = context saved flag).
+         * backup2 LSB is written by CM0P PushContext (only needed in DPD2). */
+        AON__SMM->MSB_BCKP2      = SMM_MSB_BCKP2_MSB2(g_Handle_Offset);
+        AON__SMM->LSB_BCKP2      = 0UL;
         if (Power_PushContext((uint32_t)sharedHandle) == 0UL)
         {
             SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
@@ -1485,13 +1542,22 @@ status_t Power_EnterDeepPowerDown1(power_dpd1_config_t *config)
             __ISB();
             __WFI();
         }
-        while(AON__SMM->MSB_BCKP1 != 0x5A5AU)
-        {}
-        AON__SMM->MSB_BCKP1 = 0UL;
-        AON__SMM->LSB_BCKP1 = 0UL;
 
+        /* DPD1: only CM33 resets; CM0P stays alive and does not run
+         * Power_LowPowerBoot, so backup registers can be cleared immediately.
+         * Use backup1 as sync signal to CM0P (Power_NotifyCM33ToRun). */
+        AON__SMM->LSB_BCKP1 = 0x5A5AUL;
+        AON__SMM->MSB_BCKP1 = 0xA55AUL;
+        __DSB();
+        __ISB();
+        while (sharedHandle->dualCoreSynced != kPower_DualCoreSynced)
+        {
+        }
+        AON__SMM->LSB_BCKP1 = 0UL;
+        AON__SMM->MSB_BCKP1 = 0UL;
         AON__SMM->LSB_BCKP2 = 0UL;
         AON__SMM->MSB_BCKP2 = 0UL;
+        Power_ClearLpPowerSettings();
         return kStatus_Power_WakeupFromDPD1;
     }
     else
@@ -1510,6 +1576,9 @@ status_t Power_EnterDeepPowerDown1(power_dpd1_config_t *config)
     return Power_ReqestCM33StartLpSeq(kPower_DeepPowerDown1);
 #endif /* __CORTEX_M == 33U */
 }
+#if (defined(__GNUC__)) && !defined(__IAR_SYSTEMS_ICC__) && !defined(__CC_ARM) && !defined(__ARMCC_VERSION)
+#pragma GCC pop_options
+#endif
 
 /*!
  * brief Get the next transition after Deep Power Down 1 mode.
@@ -1541,23 +1610,36 @@ power_dpd1_transition_t Power_GetDeepPowerDown1NextTransition(void)
  * retval kStatus_Power_DualCoreNotSynced Cores are not synchronized.
  * retval kStatus_Timeout                 Timed out while waiting for MU response / cross-core sync.
  */
+#ifdef __IAR_SYSTEMS_ICC__
+#pragma optimize = none
+#pragma inline = never
 status_t Power_EnterDeepPowerDown2(power_dpd2_config_t *config)
+#elif (defined(__CC_ARM) || defined(__ARMCC_VERSION))
+status_t __attribute__((optnone, noinline)) Power_EnterDeepPowerDown2(power_dpd2_config_t *config)
+#elif (defined(__GNUC__)) || defined(DOXYGEN_OUTPUT)
+#pragma GCC push_options
+#pragma GCC optimize("O0")
+__attribute__((noinline)) status_t Power_EnterDeepPowerDown2(power_dpd2_config_t *config)
+#else
+status_t Power_EnterDeepPowerDown2(power_dpd2_config_t *config)
+#endif
 {
     assert(g_Handle_Offset != POWER_HANDLE_OFFSET_NOT_INIT_VALUE);
 
     power_handle_t *sharedHandle = (power_handle_t *)(POWER_SHARED_RAM_BASE_ADDR + g_Handle_Offset);
 
-    if (sharedHandle->dualCoreSynced == false)
+#if __CORTEX_M == 33U
+    if (sharedHandle->dualCoreSynced != kPower_DualCoreSynced)
     {
         return kStatus_Power_DualCoreNotSynced;
     }
 
     memset(sharedHandle->lpConfig, 0UL, 16UL);
     memcpy(sharedHandle->lpConfig, config, sizeof(power_dpd2_config_t));
-#if __CORTEX_M == 33U
     /*1. Inform CM0P that CM33 request to set whole system into DPD2 mode, require CM0P execute WFI. */
     if (sharedHandle->requestCM33Start != true)
     {
+        sharedHandle->cm0pWFI = false;
         status_t muStatus = Power_CM33RequestLowPowerMode(kPower_DeepPowerDown2, sharedHandle->muChannelId);
         if (muStatus != kStatus_Success)
         {
@@ -1565,8 +1647,9 @@ status_t Power_EnterDeepPowerDown2(power_dpd2_config_t *config)
         }
     }
 
-    while(sharedHandle->cm0pWFI == false)
-    {}
+    while (sharedHandle->cm0pWFI == false)
+    {
+    }
 
     /*2. Enable wakeup sources for main and aon domain. */
     Power_EnableDualDomainWakeupSources(config->mainWakeupSource, config->aonWakeupSource);
@@ -1585,11 +1668,19 @@ status_t Power_EnterDeepPowerDown2(power_dpd2_config_t *config)
         {
             CLOCK_AttachClk(kFROdiv4_to_AON_CPU);
         }
+        if (config->disableFRO10M)
+        {
+            AON__CGU->CLK_CONFIG &= ~CGU_CLK_CONFIG_LPIRC_EN_MASK;
+        }
+        if (config->disableFRO3M)
+        {
+            AON__CGU->CLK_CONFIG &= ~CGU_CLK_CONFIG_ULPIRC_EN_MASK;
+        }
     }
-    Power_ConfigSleepModeManager(config->aonRamArraysToRetain, config->mainRamArraysToRetain,
+    Power_ConfigureStallForMode(kPower_DeepPowerDown2, Power_GetDpd2TargetFreq(config));
+    Power_ConfigSleepModeManager((uint8_t)(config->aonRamArraysToRetain & 0xFFUL), config->mainRamArraysToRetain,
                                  config->disableBandgap, config->enableIVSMode);
     SMM_SwitchToXTAL32(AON__SMM, config->switchToX32K);
-    /* TODO: Configure stall values based on target frequency */
     PMU_UpdateFRO16KFreq(AON__PMU, config->fro16KOutputFreq);
     SMM_StartAonDPD2Sequence(AON__SMM);
     PMU_DoHandshakeBetweenPMUAndPAC(AON__PMU);
@@ -1608,7 +1699,14 @@ status_t Power_EnterDeepPowerDown2(power_dpd2_config_t *config)
     if ((config->mainRamArraysToRetain != kPower_MainDomainNoneRams) &&
         (config->aonRamArraysToRetain != kPower_AonDomainNoneRams) && (config->saveContext == true))
     {
-        AON__SMM->LSB_BCKP1 = 0UL;
+        /* Write g_RomWakeupVector address to backup1 (same approach as DPD1). */
+        AON__SMM->LSB_BCKP1      = SMM_LSB_BCKP1_LSB1((uint32_t)g_RomWakeupVector);
+        AON__SMM->MSB_BCKP1      = SMM_MSB_BCKP1_MSB1((uint32_t)g_RomWakeupVector >> 16UL);
+        /* backup2 MSB = g_Handle_Offset (non-zero = context saved flag).
+         * backup2 LSB will be written by CM0P PushContext with CM0P SP.
+         * Do NOT clear backup2 LSB here: CM0P may have already written
+         * its SP there (PushContext runs before cm0pWFI is signalled). */
+        AON__SMM->MSB_BCKP2      = SMM_MSB_BCKP2_MSB2(g_Handle_Offset);
         if (Power_PushContext((uint32_t)sharedHandle) == 0UL)
         {
             SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
@@ -1616,17 +1714,23 @@ status_t Power_EnterDeepPowerDown2(power_dpd2_config_t *config)
             __ISB();
             __WFI();
         }
-        while(AON__SMM->MSB_BCKP1 != 0x5A5AU)
-        {}
-        AON__SMM->MSB_BCKP1 = 0UL;
+        /* DPD2: both cores reset.  CM0P reads backup2 MSB in
+         * Power_LowPowerBoot to decide whether context was saved.
+         * Use backup1 as sync signal; delay clearing backup2 until
+         * after dual-core sync so CM0P can read it during wakeup. */
+        AON__SMM->LSB_BCKP1 = 0x5A5AUL;
+        AON__SMM->MSB_BCKP1 = 0xA55AUL;
+        while (sharedHandle->dualCoreSynced != kPower_DualCoreSynced)
+        {
+        }
         __DSB();
         __ISB();
-        Power_ClearLpPowerSettings();
-
         AON__SMM->LSB_BCKP1 = 0UL;
         AON__SMM->MSB_BCKP1 = 0UL;
         AON__SMM->LSB_BCKP2 = 0UL;
         AON__SMM->MSB_BCKP2 = 0UL;
+        Power_ClearLpPowerSettings();
+
         return kStatus_Power_WakeupFromDPD2;
     }
     else
@@ -1638,6 +1742,9 @@ status_t Power_EnterDeepPowerDown2(power_dpd2_config_t *config)
         return kStatus_Fail;
     }
 #else
+
+    memset(sharedHandle->lpConfig, 0UL, 16UL);
+    memcpy(sharedHandle->lpConfig, config, sizeof(power_dpd2_config_t));
     status_t status = kStatus_Success;
     power_low_power_mode_t curLpMode;
     status = Power_GetCurrentPowerMode(&curLpMode);
@@ -1702,17 +1809,52 @@ status_t Power_EnterDeepPowerDown2(power_dpd2_config_t *config)
 
             if ((config->aonRamArraysToRetain != kPower_AonDomainNoneRams) && (config->saveContext == true))
             {
-                if (Power_PushContext((uint32_t)sharedHandle) == 0UL)
+                sharedHandle->dualCoreSynced =
+                    (config->wakeToDpd1 != 0U) ? kPower_DualCoreDpd2ToDpd1 : kPower_DualCoreAonOnly;
+                if (sharedHandle->dualCoreSynced == kPower_DualCoreDpd2ToDpd1)
                 {
-                    SMM_StartAonDPD2Sequence(AON__SMM);
-                    (void)AON__SMM->PWDN_CONFIG;
-                    __DSB();
+                    if (Power_PushContext((uint32_t)sharedHandle) == 0UL)
+                    {
+                        SMM_StartAonDPD2Sequence(AON__SMM);
+                        (void)AON__SMM->PWDN_CONFIG;
+                        __DSB();
+                        __ISB();
+                        __WFI();
+                    }
+                    /* Code below only executes when context saving is enabled (saveContext == true).
+                    * Power_PushContext() returns 0 on first call (enters DPD2 via WFI above),
+                    * and returns non-zero on wakeup after context restore, resuming here. */
                     __ISB();
-                    __WFI();
+                    __DSB();
                 }
-                __ISB();
-                __DSB();
+                else
+                {
+                    if (Power_PushContext((uint32_t)sharedHandle) == 0UL)
+                    {
+                        SMM_StartAonDPD2Sequence(AON__SMM);
+                        (void)AON__SMM->PWDN_CONFIG;
+                        __DSB();
+                        __ISB();
+                        __WFI();
+                    }
+                    /* Code below only executes when context saving is enabled (saveContext == true).
+                    * Power_PushContext() returns 0 on first call (enters DPD2 via WFI above),
+                    * and returns non-zero on wakeup after context restore, resuming here. */
+                    __ISB();
+                    __DSB();
+                    while ((AON__SMM->LSB_BCKP1 != 0x5A5AUL) || (AON__SMM->MSB_BCKP1 != 0xA55AUL))
+                    {
+                        /* Wait until CM33 has restored context and written sync signal to backup1. */
+                    }
+                }
+
                 Power_ClearLpPowerSettings();
+                /* cm0pWFI was set true at DPD2 entry (line above PushContext).
+                 * In this CM0+-initiated DPD2-from-DPD1 path, CM33 is NOT
+                 * involved in the DPD2 entry so it never clears cm0pWFI.
+                 * A stale true would let the next CM33-initiated DPD2 skip
+                 * the while(cm0pWFI==false) synchronisation wait. */
+                sharedHandle->cm0pWFI = false;
                 return kStatus_Power_WakeupFromDPD2;
             }
             else
@@ -1731,6 +1873,9 @@ status_t Power_EnterDeepPowerDown2(power_dpd2_config_t *config)
     return status;
 #endif /* __CORTEX_M == 33U */
 }
+#if (defined(__GNUC__)) && !defined(__IAR_SYSTEMS_ICC__) && !defined(__CC_ARM) && !defined(__ARMCC_VERSION)
+#pragma GCC pop_options
+#endif
 
 /*!
  * brief Enter Deep Power Down 3 mode.
@@ -1751,7 +1896,7 @@ status_t Power_EnterDeepPowerDown3(power_dpd3_config_t *config)
 
     power_handle_t *sharedHandle = (power_handle_t *)(POWER_SHARED_RAM_BASE_ADDR + g_Handle_Offset);
 
-    if (sharedHandle->dualCoreSynced == false)
+    if (sharedHandle->dualCoreSynced != kPower_DualCoreSynced)
     {
         return kStatus_Power_DualCoreNotSynced;
     }
@@ -1774,6 +1919,7 @@ status_t Power_EnterDeepPowerDown3(power_dpd3_config_t *config)
     SMM_EnableWakeupSourceToMainCpu(AON__SMM, sharedHandle->enabledWsInfo.mainWakeupSourceMask);
     SMM_EnableWakeupSourceToAonCpu(AON__SMM, sharedHandle->enabledWsInfo.aonWakeupSourceMask);
     PMU_UpdateFRO16KFreq(AON__PMU, config->fro16KOutputFreq);
+    PMU_KeepFRO16KActiveInDpd3AndSD(AON__PMU, false);
     Power_ConfigureStallForMode(kPower_ShutDown, (config->fro16KOutputFreq == kPMU_FRO16KOutput16KHz) ? 16000 : 8000);
 
     /*3. Configuration of SMM. */
@@ -1841,7 +1987,7 @@ status_t Power_EnterShutDown(power_sd_config_t *config)
 
     power_handle_t *sharedHandle = (power_handle_t *)(POWER_SHARED_RAM_BASE_ADDR + g_Handle_Offset);
 
-    if (sharedHandle->dualCoreSynced == false)
+    if (sharedHandle->dualCoreSynced != kPower_DualCoreSynced)
     {
         return kStatus_Power_DualCoreNotSynced;
     }
@@ -1867,8 +2013,9 @@ status_t Power_EnterShutDown(power_sd_config_t *config)
     /*3. Configuration of SMM and PMU. */
     PMU_UpdateFRO16KFreq(AON__PMU, config->fro16KOutputFreq);
     Power_ConfigureStallForMode(kPower_ShutDown, (config->fro16KOutputFreq == kPMU_FRO16KOutput16KHz) ? 16000 : 8000);
+    PMU_KeepFRO16KActiveInDpd3AndSD(AON__PMU, false);
     /* Clean all settings of RTC. */
-    AON__SMM->RTC_DCDC_CNTRL  = 0xe00;
+    AON__SMM->RTC_LDO_CNTRL  = 0xe00;
     AON__SMM->RTC_XTAL_CONFG1 = 0x0UL;
     AON__SMM->RTC_XTAL_CONFG2 = 0x0UL;
     SMM_StartAonShutDownSequence(AON__SMM);
@@ -1954,12 +2101,6 @@ status_t Power_EnterShutDown(power_sd_config_t *config)
         ---------
         |  R4   |
         ---------
-        | handle|
-        | value |
-        ---------
-        | handle|
-        | addr  |
-        ---------
         | ASPR  |
         ---------
         | PSR   |
@@ -1967,13 +2108,23 @@ status_t Power_EnterShutDown(power_sd_config_t *config)
         |PRIMASK|
         ---------
         |CONTROL|
-        ---------  <------ SP Address saved in backup register
+        ---------  <------ SP saved to handle (CM33) or backup2 LSB (CM0P)
  * param handleAddr The address of handle.
  *
  * retval 0 Return 0 before entering low power modes.
  * retval 1 Return 1 after waking up from low power modes.
  */
+#ifdef __IAR_SYSTEMS_ICC__
+#pragma optimize = none
+#pragma inline = never
 uint32_t Power_PushContext(uint32_t handleAddr)
+#elif (defined(__CC_ARM) || defined(__ARMCC_VERSION))
+uint32_t __attribute__((naked, noinline)) Power_PushContext(uint32_t handleAddr)
+#elif (defined(__GNUC__)) || defined(DOXYGEN_OUTPUT)
+uint32_t __attribute__((naked, noinline)) Power_PushContext(uint32_t handleAddr)
+#else
+uint32_t Power_PushContext(uint32_t handleAddr)
+#endif
 {
     /* Stack layout:
         ---------    <-----High address
@@ -2013,12 +2164,6 @@ uint32_t Power_PushContext(uint32_t handleAddr)
         ---------
         |  R4   |
         ---------
-        | handle|
-        | value |
-        ---------
-        | handle|
-        | addr  |
-        ---------
         | ASPR  |
         ---------
         | PSR   |
@@ -2026,7 +2171,7 @@ uint32_t Power_PushContext(uint32_t handleAddr)
         |PRIMASK|
         ---------
         |CONTROL|
-        ---------  <------ SP Address saved in backup register
+        ---------  <------ SP saved to handle (CM33) or backup2 LSB (CM0P)
     */
 #ifdef __ARMVFP__
     /* push FPU registers. */
@@ -2059,32 +2204,6 @@ uint32_t Power_PushContext(uint32_t handleAddr)
     /* push r7, r6, r5, r4. */
     __ASM volatile("PUSH {r4-r7}");
 
-    /* push value of current handle.*/
-    __ASM volatile("MOV r0, r12");
-    __ASM volatile("LDR r1, [r0, #40]"); /* Latest word */
-    __ASM volatile("PUSH {r1}");
-    __ASM volatile("LDR r1, [r0, #36]"); /* handle->enabledWsInfo.mainWakeupSourceMask. */
-    __ASM volatile("PUSH {r1}");
-    __ASM volatile("LDR r1, [r0, #32]"); /* handle->enabledWsInfo.aonWakeupSourceMask. */
-    __ASM volatile("PUSH {r1}");
-    __ASM volatile("LDR r1, [r0, #28]"); /* handle->cm0pUserData. */
-    __ASM volatile("PUSH {r1}");
-    __ASM volatile("LDR r1, [r0, #24]"); /* handle->cm0pCallback. */
-    __ASM volatile("PUSH {r1}");
-    __ASM volatile("LDR r1, [r0, #20]"); /* handle->cm33UserData. */
-    __ASM volatile("PUSH {r1}");
-    __ASM volatile("LDR r1, [r0, #16]"); /* handle->cm33Callback. */
-    __ASM volatile("PUSH {r1}");
-    __ASM volatile("LDR r1, [r0, #12]"); /* handle->lpConfig[3]. */
-    __ASM volatile("PUSH {r1}");
-    __ASM volatile("LDR r1, [r0, #8]");  /* handle->lpConfig[2]. */
-    __ASM volatile("PUSH {r1}");
-    __ASM volatile("LDR r1, [r0, #4]");  /* handle->lpConfig[1]. */
-    __ASM volatile("PUSH {r1}");
-    __ASM volatile("LDR r1, [r0, #0]");  /* handle->lpConfig[0]. */
-    __ASM volatile("PUSH {r1}");
-    __ASM volatile("PUSH {r0}");
-
     /* push aspr, psr, PRIMASK, CONTROL */
     __ASM volatile("MRS r0, CONTROL");
     __ASM volatile("MRS r1, PRIMASK");
@@ -2092,43 +2211,47 @@ uint32_t Power_PushContext(uint32_t handleAddr)
     __ASM volatile("MRS r3, APSR");
     __ASM volatile("PUSH {r0-r3}");
 
-    /* save current sp to backup register */
+    /* save current sp */
 #if __CORTEX_M == 33U
+    /* CM33: save SP to handle->cm33SavedSP (offset 44 in handle). */
     __ASM volatile("MOV R0, SP");
-    __ASM volatile("UXTH R1, R0");
-    __ASM volatile("LDR R2, =0xA009A034");
-    __ASM volatile("STR R1, [R2]");
-    __ASM volatile("LSRS R1, R0, #16");
-    __ASM volatile("LDR R2, =0xA009A038");
-    __ASM volatile("STR R1, [R2]");
+    __ASM volatile("MOV R2, R12");
+    __ASM volatile("STR R0, [R2, #44]");
 #else
+    /* CM0P: save SP to backup2 LSB.
+     * CM33 has already written g_Handle_Offset to backup2 MSB. */
     __ASM volatile("MOV R0, SP");
-    __ASM volatile("LDR R2, =0xA009A030");
+    __ASM volatile("LDR R2, =0xA009A034");
     __ASM volatile("STR R0, [R2]");
 #endif
 
     __ASM volatile("MOVS R0, #0");
     __ASM volatile("BX LR");
 
+#ifdef __IAR_SYSTEMS_ICC__
     return 0;
+#endif
 }
 
-#define POWER_BCKP1_MSB_VALUE (uint32_t)(AON__SMM->MSB_BCKP1 & SMM_MSB_BCKP1_MSB1_MASK)
+#define POWER_BCKP2_MSB_VALUE (uint32_t)(AON__SMM->MSB_BCKP2 & SMM_MSB_BCKP2_MSB2_MASK)
+#define POWER_BCKP2_LSB_VALUE (uint32_t)(AON__SMM->LSB_BCKP2 & SMM_LSB_BCKP2_LSB2_MASK)
 
-#define POWER_BCKP2_VALUE                                        \
-    (uint32_t)((AON__SMM->LSB_BCKP2 & SMM_LSB_BCKP2_LSB2_MASK) | \
-               ((AON__SMM->MSB_BCKP2 & SMM_MSB_BCKP2_MSB2_MASK) << 16UL))
+#define POWER_CM33_SAVED_SP_VALUE \
+    (*(volatile uint32_t *)(POWER_SHARED_RAM_BASE_ADDR + POWER_BCKP2_MSB_VALUE + 44U))
 
 /*!
  * brief Restore saved context from stack.
  */
 #ifdef __IAR_SYSTEMS_ICC__
 #pragma optimize = none
+#pragma inline  = never
 void Power_LowPowerBoot(void)
 #elif (defined(__CC_ARM) || defined(__ARMCC_VERSION))
-void Power_LowPowerBoot(void)
+void __attribute__((optnone, noinline)) Power_LowPowerBoot(void)
 #elif (defined(__GNUC__)) || defined(DOXYGEN_OUTPUT)
-void __attribute__((optimize("O0"))) Power_LowPowerBoot(void)
+#pragma GCC push_options
+#pragma GCC optimize("O0")
+__attribute__((noinline)) void Power_LowPowerBoot(void)
 #else
 void Power_LowPowerBoot(void)
 #endif
@@ -2136,20 +2259,26 @@ void Power_LowPowerBoot(void)
     AON__CGU->PER_CLK_EN |= CGU_PER_CLK_EN_APB_CLK_MASK;
     __ISB();
 #if __CORTEX_M == 33U
-    if (POWER_BCKP2_VALUE != 0UL)
+    if (POWER_BCKP2_MSB_VALUE != 0UL)
     {
+        /* Recover g_Handle_Offset from backup2 MSB first. */
+        g_Handle_Offset = POWER_BCKP2_MSB_VALUE;
+        /* Load CM33 SP from handle->cm33SavedSP. */
         __ASM volatile("MOV sp, %[input]"
                        : // no C variable outputs
-                       : [input] "r"(POWER_BCKP2_VALUE)
+                       : [input] "r"(POWER_CM33_SAVED_SP_VALUE)
                        : // No need to tell nothing to the compiler
         );
         __ASM volatile("ISB");
 #else
-    if (POWER_BCKP1_MSB_VALUE != 0UL)
+    if (POWER_BCKP2_MSB_VALUE != 0UL)
     {
+        /* Recover g_Handle_Offset from backup2 MSB. */
+        g_Handle_Offset = POWER_BCKP2_MSB_VALUE;
+        /* Load CM0P SP from backup2 LSB. */
         __ASM volatile("MOV sp, %[input]"
                        : // no C variable outputs
-                       : [input] "r"(POWER_BCKP1_MSB_VALUE)
+                       : [input] "r"(POWER_BCKP2_LSB_VALUE)
                        : // No need to tell nothing to the compiler
         );
 #endif
@@ -2166,100 +2295,19 @@ void Power_LowPowerBoot(void)
 #endif
         __ASM volatile("ISB");
 
-        /* Restore handle value. */
-        __ASM volatile("POP {r0}"); /* handle address. */
-#if (defined(__ICCARM__)) || ((defined(__CC_ARM) || defined(__ARMCC_VERSION)))
-        __ASM volatile("SUBS %[output], r0, %[offset]"
-                       : [output] "=r"(g_Handle_Offset)
-                       : [offset] "r"(POWER_SHARED_RAM_BASE_ADDR)
-                       : "r0");
-#else
-        __ASM volatile("SUB %[output], r0, %[offset]"
-                       : [output] "=r"(g_Handle_Offset)
-                       : [offset] "r"(POWER_SHARED_RAM_BASE_ADDR)
-                       : "r0");
-#endif
-        __ASM volatile("ISB");
-
-        __ASM volatile("MOV r0, %[input]"
-                       :               // no C variable outputs
-                       : [input] "r"(g_Handle_Offset + POWER_SHARED_RAM_BASE_ADDR)
-                       :               // No need to tell nothing to the compiler
-        );
-        __ASM volatile("POP {r1-r7}"); /* first 7 words of handle. */
-        __ASM volatile("STR r1, [r0]");
-#if (defined(__ICCARM__)) || ((defined(__CC_ARM) || defined(__ARMCC_VERSION)))
-        __ASM volatile("ADDS r0, r0, #4");
-#else
-        __ASM volatile("ADD r0, r0, #4");
-#endif
-        __ASM volatile("STR r2, [r0]");
-#if (defined(__ICCARM__)) || ((defined(__CC_ARM) || defined(__ARMCC_VERSION)))
-        __ASM volatile("ADDS r0, r0, #4");
-#else
-        __ASM volatile("ADD r0, r0, #4");
-#endif
-        __ASM volatile("STR r3, [r0]");
-#if (defined(__ICCARM__)) || ((defined(__CC_ARM) || defined(__ARMCC_VERSION)))
-        __ASM volatile("ADDS r0, r0, #4");
-#else
-        __ASM volatile("ADD r0, r0, #4");
-#endif
-        __ASM volatile("STR r4, [r0]");
-#if (defined(__ICCARM__)) || ((defined(__CC_ARM) || defined(__ARMCC_VERSION)))
-        __ASM volatile("ADDS r0, r0, #4");
-#else
-        __ASM volatile("ADD r0, r0, #4");
-#endif
-        __ASM volatile("STR r5, [r0]");
-#if (defined(__ICCARM__)) || ((defined(__CC_ARM) || defined(__ARMCC_VERSION)))
-        __ASM volatile("ADDS r0, r0, #4");
-#else
-        __ASM volatile("ADD r0, r0, #4");
-#endif
-        __ASM volatile("STR r6, [r0]");
-#if (defined(__ICCARM__)) || ((defined(__CC_ARM) || defined(__ARMCC_VERSION)))
-        __ASM volatile("ADDS r0, r0, #4");
-#else
-        __ASM volatile("ADD r0, r0, #4");
-#endif
-        __ASM volatile("STR r7, [r0]");
-#if (defined(__ICCARM__)) || ((defined(__CC_ARM) || defined(__ARMCC_VERSION)))
-        __ASM volatile("ADDS r0, r0, #4");
-#else
-        __ASM volatile("ADD r0, r0, #4");
-#endif
-        __ASM volatile("POP {r1-r4}"); /*left 4 words of handle. */
-        __ASM volatile("STR r1, [r0]");
-#if (defined(__ICCARM__)) || ((defined(__CC_ARM) || defined(__ARMCC_VERSION)))
-        __ASM volatile("ADDS r0, r0, #4");
-#else
-        __ASM volatile("ADD r0, r0, #4");
-#endif
-        __ASM volatile("STR r2, [r0]");
-#if (defined(__ICCARM__)) || ((defined(__CC_ARM) || defined(__ARMCC_VERSION)))
-        __ASM volatile("ADDS r0, r0, #4");
-#else
-        __ASM volatile("ADD r0, r0, #4");
-#endif
-        __ASM volatile("STR r3, [r0]");
-#if (defined(__ICCARM__)) || ((defined(__CC_ARM) || defined(__ARMCC_VERSION)))
-        __ASM volatile("ADDS r0, r0, #4");
-#else
-        __ASM volatile("ADD r0, r0, #4");
-#endif
-        __ASM volatile("STR r4, [r0]");
-        __ASM volatile("ISB");
         /* Restore r4-r7. */
         __ASM volatile("POP {r4-r7}");
         __ASM volatile("ISB");
-        /* Restore r8-r12. */
-        __ASM volatile("POP {r0-r4}");
+        /* Restore r8-r11 (use r0-r3 as temporaries). */
+        __ASM volatile("POP {r0-r3}");
         __ASM volatile("MOV r8, r0");
         __ASM volatile("MOV r9, r1");
         __ASM volatile("MOV r10, r2");
         __ASM volatile("MOV r11, r3");
-        __ASM volatile("MOV r12, r4");
+        /* Restore r12 separately — must NOT use r4 as temporary,
+         * because r4 was already restored by the POP {r4-r7} above. */
+        __ASM volatile("POP {r0}");
+        __ASM volatile("MOV r12, r0");
         __ASM volatile("ISB");
         /* Restore LR */
         __ASM volatile("POP {r0}"); /* saved PC */
@@ -2279,11 +2327,30 @@ void Power_LowPowerBoot(void)
         __ASM volatile("BX lr");
     }
 }
+#if (defined(__GNUC__)) && !defined(__IAR_SYSTEMS_ICC__) && !defined(__CC_ARM) && !defined(__ARMCC_VERSION)
+#pragma GCC pop_options
+#endif
 
-
+/*!
+ * brief Notify CM33 that CM0+ is ready to proceed after DPD2 wakeup with context restore.
+ *
+ * This function waits for CM33 to signal that it has restored context (by writing a sync
+ * pattern to SMM backup1 registers), then acknowledges by setting dualCoreSynced to
+ * kPower_DualCoreSynced, allowing both cores to continue in sync.
+ *
+ * note Called from CM0+ side only after waking up from DPD2 with context saving enabled.
+ */
 void Power_NotifyCM33ToRun(void)
 {
-    AON__SMM->MSB_BCKP1 = 0x5A5AU;
+    while ((AON__SMM->LSB_BCKP1 != 0x5A5AUL) || (AON__SMM->MSB_BCKP1 != 0xA55AUL))
+    {
+        /* Wait until CM33 has restored context and written sync signal to backup1. */
+    }
+    assert(g_Handle_Offset != POWER_HANDLE_OFFSET_NOT_INIT_VALUE);
+    power_handle_t *sharedHandle = (power_handle_t *)(POWER_SHARED_RAM_BASE_ADDR + g_Handle_Offset);
+    sharedHandle->dualCoreSynced = kPower_DualCoreSynced;
+    __DSB();
+    __ISB();
 }
 
 /*!
@@ -2417,7 +2484,19 @@ status_t Power_MuSyncCallback(uint32_t message, uint32_t channelId)
  * retval kStatus_POWER_RequestNotAllowed Request is not allowed.
  * retval kStatus_Success Interpret request message successfully.
  */
+#ifdef __IAR_SYSTEMS_ICC__
+#pragma optimize = none
+#pragma inline = never
 status_t Power_InterpretRequest(uint32_t message)
+#elif (defined(__CC_ARM) || defined(__ARMCC_VERSION))
+status_t __attribute__((optnone, noinline)) Power_InterpretRequest(uint32_t message)
+#elif (defined(__GNUC__)) || defined(DOXYGEN_OUTPUT)
+#pragma GCC push_options
+#pragma GCC optimize("O0")
+__attribute__((noinline)) status_t Power_InterpretRequest(uint32_t message)
+#else
+status_t Power_InterpretRequest(uint32_t message)
+#endif
 {
     assert(g_Handle_Offset != POWER_HANDLE_OFFSET_NOT_INIT_VALUE);
 
@@ -2475,7 +2554,12 @@ status_t Power_InterpretRequest(uint32_t message)
 #if __CORTEX_M == 0U
     if (userAllowed && (targetLowPowerMode == kPower_DeepPowerDown2) && ADVC_IsEnabled())
     {
-        Power_SetDpd2AdvcWorkaround((power_dpd2_config_t *)lpConfigAddr);
+        if (Power_SetDpd2AdvcWorkaround((power_dpd2_config_t *)lpConfigAddr) != kStatus_Success)
+        {
+            lowerHalfWordValue |= kPower_MsgNACK_TargetModeNotAllowed;
+            resType = kPower_MsgTypeNACK;
+            status  = kStatus_POWER_RequestNotAllowed;
+        }
     }
 #endif /* __CORTEX_M == 0U */
 
@@ -2494,24 +2578,51 @@ status_t Power_InterpretRequest(uint32_t message)
         {
             /* If CM0P approve to enter target low power mode, execute WFI. */
             sharedHandle->targetPowerMode   = targetLowPowerMode;
-            sharedHandle->previousPowerMode = targetLowPowerMode;            
+            sharedHandle->previousPowerMode = targetLowPowerMode;
             if ((targetLowPowerMode == kPower_DeepPowerDown2) &&
                 (((power_dpd2_config_t *)lpConfigAddr)->aonRamArraysToRetain != kPower_AonDomainNoneRams) &&
                 (((power_dpd2_config_t *)lpConfigAddr)->saveContext == true))
             {
-                if (Power_PushContext((uint32_t)sharedHandle) == 0UL)
+                sharedHandle->dualCoreSynced = (((power_dpd2_config_t *)lpConfigAddr)->wakeToDpd1 != 0U) ?
+                                                   kPower_DualCoreDpd2ToDpd1 :
+                                                   kPower_DualCoreAonOnly;
+                if (sharedHandle->dualCoreSynced == kPower_DualCoreDpd2ToDpd1)
                 {
-                    sharedHandle->cm0pWFI = true;
-                    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
-                    __DSB();
+                    if (Power_PushContext((uint32_t)sharedHandle) == 0UL)
+                    {
+                        sharedHandle->cm0pWFI = true;
+                        SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
+                        __DSB();
+                        __ISB();
+                        __WFI();
+                    }
+                    /* Code below only executes when context saving is enabled (saveContext == true).
+                    * Power_PushContext() returns 0 on first call (enters DPD2 via WFI above),
+                    * and returns non-zero on wakeup after context restore, resuming here. */
                     __ISB();
-                    __WFI();
+                    __DSB();
                 }
-                __ISB();
-                __DSB();
-
+                else
+                {
+                    if (Power_PushContext((uint32_t)sharedHandle) == 0UL)
+                    {
+                        sharedHandle->cm0pWFI = true;
+                        SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
+                        __DSB();
+                        __ISB();
+                        __WFI();
+                    }
+                    /* Code below only executes when context saving is enabled (saveContext == true).
+                    * Power_PushContext() returns 0 on first call (enters DPD2 via WFI above),
+                    * and returns non-zero on wakeup after context restore, resuming here. */
+                    __ISB();
+                    __DSB();
+                    while ((AON__SMM->LSB_BCKP1 != 0x5A5AUL) || (AON__SMM->MSB_BCKP1 != 0xA55AUL))
+                    {
+                        /* Wait until CM33 has restored context and written sync signal to backup1. */
+                    }
+                }
                 Power_ClearLpPowerSettings();
-                AON__SMM->MSB_BCKP1 = SMM_MSB_BCKP1_MSB1(0U);
             }
             else
             {
@@ -2519,13 +2630,18 @@ status_t Power_InterpretRequest(uint32_t message)
                 __DSB();
                 __ISB();
                 __WFI();
+                Power_ClearLpPowerSettings();
             }
+            sharedHandle->cm0pWFI = false;
         }
 #endif /* __CORTEX_M */
     }
 
     return status;
 }
+#if (defined(__GNUC__)) && !defined(__IAR_SYSTEMS_ICC__) && !defined(__CC_ARM) && !defined(__ARMCC_VERSION)
+#pragma GCC pop_options
+#endif
 
 /*!
  * brief Interpret a MU response message.

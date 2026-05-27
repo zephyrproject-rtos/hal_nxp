@@ -555,6 +555,8 @@ status_t CLOCK_SetupOsc32KClocking(uint32_t id)
 
     /* Enable LDO */
     SCG0->LDOCSR |= SCG_LDOCSR_LDOEN_MASK;
+    
+    VBAT0->OSCCFGA = (VBAT0->OSCCFGA & ~VBAT_OSCCFGA_INIT_TRIM_MASK) | VBAT_OSCCFGA_INIT_TRIM(3);
 
     temp32 = VBAT0->OSCCTLA;
 
@@ -562,7 +564,7 @@ status_t CLOCK_SetupOsc32KClocking(uint32_t id)
     temp32 |= (VBAT_OSCCTLA_EXTAL_CAP_SEL(0x6) | VBAT_OSCCTLA_XTAL_CAP_SEL(0x6) | VBAT_OSCCTLA_COARSE_AMP_GAIN(1));
 
     temp32 &= ~(VBAT_OSCCTLA_MODE_EN_MASK | VBAT_OSCCTLA_CAP_SEL_EN_MASK | VBAT_OSCCTLA_OSC_EN_MASK);
-    temp32 |= VBAT_OSCCTLA_MODE_EN(0x0) | VBAT_OSCCTLA_CAP_SEL_EN_MASK | VBAT_OSCCTLA_OSC_EN_MASK;
+    temp32 |= VBAT_OSCCTLA_MODE_EN(0x1) | VBAT_OSCCTLA_CAP_SEL_EN_MASK | VBAT_OSCCTLA_OSC_EN_MASK;
 
     VBAT0->OSCCTLA = temp32;
 
@@ -580,9 +582,6 @@ status_t CLOCK_SetupOsc32KClocking(uint32_t id)
         }
 #endif
     }
-
-    /* Clear CAP_SEL */
-    VBAT0->OSCCTLA &= ~(VBAT_OSCCTLA_EXTAL_CAP_SEL_MASK | VBAT_OSCCTLA_XTAL_CAP_SEL_MASK);
 
     VBAT0->OSCCLKE |= VBAT_OSCCLKE_CLKE(id);
 
@@ -1140,6 +1139,7 @@ void CLOCK_DisableUsbhsPhyPllClock(void)
     USBHS1_PHY->CTRL |= USBPHY_CTRL_CLKGATE_MASK; /* Set to 1U to gate clocks */
 }
 
+#ifdef USBHS1
 /*! brief Enable USB HS clock.
  * retval true The clock is set successfully.
  * retval false The clock source is invalid to get proper USB HS clock.
@@ -1154,6 +1154,7 @@ bool CLOCK_EnableUsbhsClock(void)
     }
     return true;
 }
+#endif
 
 /* Get UsbPll */
 static uint32_t CLOCK_GetUsbPllFreq(void)
@@ -1320,7 +1321,7 @@ uint32_t CLOCK_GetMainClk(void)
             freq = CLOCK_GetClk16KFreq(1);
             break;
         case 6U:
-            freq = CLOCK_GetPll1ClkFreq();
+            freq = CLOCK_GetPll1ClkFreq() / ((SCG0->SPLLCSR & SCG_SPLLCSR_SPLL_DIV2_EN_MASK) ? 2U : 1U);
             break;
         case 7U:
             freq = CLOCK_GetUsbPfdClkFreq();

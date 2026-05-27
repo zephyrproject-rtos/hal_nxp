@@ -805,10 +805,6 @@
 #define FSL_FEATURE_SPC_HAS_LPBUFF (0)
 /* @brief Has VD_SYS_CFG register. */
 #define FSL_FEATURE_SPC_HAS_VDD_SYS (0)
-/* @brief Has VDD1P8 low-voltage detect feature. */
-#define FSL_FEATURE_SPC_HAS_VDD1P8_LVD (1)
-/* @brief Has no DCDC frequency control (register bits DCDC_CFG[FREQ_CNTRL_ON/FREQ_CNTRL]). */
-#define FSL_FEATURE_SPC_HAS_NO_DCDC_FREQ_CNTRL (1)
 
 /* RTC module features */
 
