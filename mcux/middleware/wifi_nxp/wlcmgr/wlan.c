@@ -279,6 +279,7 @@ bool usart_suspend_flag = false;
 #endif
 #if CONFIG_WAKE_TIMER_ENABLE
 OSA_TIMER_HANDLE_DEFINE(wake_timer);
+#define WAKE_TIMEOUT (5 * 1000)
 #endif
 #endif
 int is_hs_handshake_done = 0;
@@ -307,10 +308,6 @@ static t_u16 scan_channel_gap = (t_u16)SCAN_CHANNEL_GAP_VALUE;
 #if CONFIG_WPA_SUPP
 #define FT_ROAM_TIMEOUT (20 * 1000)
 #endif
-#endif
-
-#if CONFIG_POWER_MANAGER
-#define WAKE_TIMEOUT (5 * 1000)
 #endif
 
 #ifdef RW610
@@ -868,6 +865,11 @@ int wlan_is_started(void)
     return ((wlan.running == 1) && (wlan.status == WLCMGR_ACTIVATED));
 }
 
+int wlan_is_stopped(void)
+{
+    return (wlan.status == WLCMGR_THREAD_STOPPED);
+}
+
 static bool is_user_scanning(void)
 {
     return (wlan.sta_state == CM_STA_SCANNING_USER);
@@ -1016,6 +1018,63 @@ int wlan_get_wakeup_reason(uint16_t *hs_wakeup_reason)
 
 #endif
 
+#ifdef RW610
+static void temperature_mon_cb(osa_timer_arg_t arg)
+{
+#if CONFIG_WIFI_RECOVERY
+    if (wifi_recovery_enable || wifi_fw_is_hang())
+    {
+        struct wlan_message msg;
+        wlcm_w("recovery_enable: %u, wifi_fw_is_hang: %u, reset_in_progress:%u",
+               wifi_recovery_enable, wifi_fw_is_hang(), wifi_reset_in_progress());
+        /* Avoid repeatedly triggering recovery */
+        if (wifi_reset_in_progress())
+        {
+            return;
+        }
+
+        (void)memset(&msg, 0U, sizeof(struct wlan_message));
+        msg.data = NULL;
+        msg.id  = WIFI_RECOVERY_REQ;
+        if (OSA_MsgQPut((osa_msgq_handle_t)mon_thread_events, &msg) != KOSA_StatusSuccess)
+        {
+            wlcm_e("Failed to send wifi recovery msg to queue");
+        }
+        return;
+    }
+#endif
+    /*
+     *  get CAU module temperature and write to firmware SMU in every 5s
+     *  can also read FW power status by REG PMU->WLAN_CTRL 0x4003_1068
+     *  bit[3:2] == 3 means FW is in sleep status
+     */
+    if ((mlan_adap != NULL) && (mlan_adap->ps_state == PS_STATE_AWAKE))
+    {
+        cau_temperature_write_to_firmware();
+    }
+}
+
+#if CONFIG_POWER_MANAGER
+static void start_temperature_mon_timer(void)
+{
+    /* Check fw status and write temperature to firmware after waking up */
+    temperature_mon_cb(NULL);
+    if (OSA_TimerIsRunning((osa_timer_handle_t)temperature_mon_timer) == false)
+    {
+        (void)OSA_TimerActivate((osa_timer_handle_t)temperature_mon_timer);
+    }
+}
+
+static void stop_temperature_mon_timer(void)
+{
+    if (OSA_TimerIsRunning((osa_timer_handle_t)temperature_mon_timer) == true)
+    {
+        (void)OSA_TimerDeactivate((osa_timer_handle_t)temperature_mon_timer);
+    }
+}
+#endif
+#endif
+
 #if CONFIG_HOST_SLEEP
 #if defined(RW610) || defined(IW610) || defined(SD8978) || defined(SD9177)
 status_t wlan_hs_send_event(int id, void *data)
@@ -1032,6 +1091,21 @@ status_t wlan_hs_send_event(int id, void *data)
     }
     return WM_SUCCESS;
 }
+
+void wlan_hs_handshake_cfg(bool skip)
+{
+    /* Clear flags to do host sleep hanshake */
+    if (skip == false)
+    {
+        skip_hs_handshake = false;
+        is_hs_handshake_done = 0;
+    }
+    /* Skip host sleep handshake */
+    else
+    {
+        skip_hs_handshake = true;
+    }
+}
 #endif
 
 #if CONFIG_POWER_MANAGER
@@ -1040,6 +1114,21 @@ static void wake_timer_cb(osa_timer_arg_t arg)
 {
     if(wakelock_isheld())
         wakelock_put();
+}
+
+static void wlan_start_wake_timer(void)
+{
+    wakelock_get();
+    (void)OSA_TimerActivate((osa_timer_handle_t)wake_timer);
+}
+
+static void wlan_stop_wake_timer(void)
+{
+    if (OSA_TimerIsRunning((osa_timer_handle_t)wake_timer))
+    {
+        OSA_TimerDeactivate((osa_timer_handle_t)wake_timer);
+        wakelock_put();
+    }
 }
 #endif
 #endif
@@ -1156,11 +1245,6 @@ void wlan_config_host_sleep(bool is_manual, t_u8 is_periodic)
     if (!wlan_is_manual)
     {
 #if CONFIG_POWER_MANAGER
-	if (!wlan_is_started())
-        {
-            wlcm_e("Host sleep is not allowed when WIFI is disabled");
-            return;
-        }
         if (is_periodic)
             wlan_host_sleep_state = HOST_SLEEP_PERIODIC;
         else
@@ -1173,11 +1257,7 @@ void wlan_config_host_sleep(bool is_manual, t_u8 is_periodic)
         /* Reset flag and stop timer if manual mode is selected without cancel periodic sleep */
         wlan_host_sleep_state = HOST_SLEEP_DISABLE;
 #if CONFIG_WAKE_TIMER_ENABLE
-        if (OSA_TimerIsRunning((osa_timer_handle_t)wake_timer))
-        {
-            OSA_TimerDeactivate((osa_timer_handle_t)wake_timer);
-            wakelock_put();
-        }
+        wlan_stop_wake_timer();
 #endif
 #endif
     }
@@ -1216,25 +1296,24 @@ void wlan_clear_host_sleep_config(void)
     usart_suspend_flag = MFALSE;
 #endif
 #if CONFIG_WAKE_TIMER_ENABLE
-    if (OSA_TimerIsRunning((osa_timer_handle_t)wake_timer))
-    {
-        OSA_TimerDeactivate((osa_timer_handle_t)wake_timer);
-        wakelock_put();
-    }
+    wlan_stop_wake_timer();
 #endif
-    is_hs_handshake_done = 0;
+    wlan_hs_handshake_cfg(false);
 #endif
 #if CONFIG_MEF_CFG
     memset(&g_flt_cfg, 0x0, sizeof(wlan_flt_cfg_t));
 
     if (wlan_is_started())
     {
-	wifi_set_packet_filters(&g_flt_cfg);
+        wifi_set_packet_filters(&g_flt_cfg);
     }
 #endif
     wakeup_by = 0;
     wifi_clear_wakeup_reason();
     wlan.wakeup_conditions = 0;
+#ifdef RW610
+    start_temperature_mon_timer();
+#endif
 }
 #endif
 
@@ -7218,7 +7297,7 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
             {
                 is_hs_handshake_done = WLAN_HOSTSLEEP_SUCCESS;
 #ifdef RW610
-                (void)OSA_TimerDeactivate((osa_timer_handle_t)temperature_mon_timer);
+                stop_temperature_mon_timer();
 #endif
             }
 #endif
@@ -7833,14 +7912,6 @@ int wlan_init(const uint8_t *fw_start_addr, const size_t size)
     }
     OSA_SemaphorePost((osa_semaphore_handle_t)uapsd_sem);
 #endif
-#if CONFIG_HOST_SLEEP
-    status = OSA_SemaphoreCreate((osa_semaphore_handle_t)wakelock, 0);
-    if (status != KOSA_StatusSuccess)
-    {
-        wifi_e("Failed to create wake-lock semaphore");
-        return ret;
-    }
-#endif
 
 #if (CONFIG_WIFI_IND_DNLD) && (CONFIG_WIFI_IND_RESET)
     if (wifi_reset_in_progress() == true)
@@ -8041,43 +8112,6 @@ static void ft_roam_timer_cb(osa_timer_arg_t arg)
     wlan.roam_reassoc = false;
 }
 #endif
-#endif
-
-#ifdef RW610
-static void temperature_mon_cb(osa_timer_arg_t arg)
-{
-#if CONFIG_WIFI_RECOVERY
-    if (wifi_recovery_enable || wifi_fw_is_hang())
-    {
-        struct wlan_message msg;
-        wlcm_w("recovery_enable: %u, wifi_fw_is_hang: %u, reset_in_progress:%u",
-                      wifi_recovery_enable, wifi_fw_is_hang(), wifi_reset_in_progress());
-        /* Avoid repeatedly triggering recovery */
-        if (wifi_reset_in_progress())
-        {
-            return;
-        }
-
-        (void)memset(&msg, 0U, sizeof(struct wlan_message));
-        msg.data = NULL;
-        msg.id  = WIFI_RECOVERY_REQ;
-        if (OSA_MsgQPut((osa_msgq_handle_t)mon_thread_events, &msg) != KOSA_StatusSuccess)
-        {
-            wlcm_e("Failed to send wifi recovery msg to queue");
-        }
-        return;
-    }
-#endif
-    /*
-     *  get CAU module temperature and write to firmware SMU in every 5s
-     *  can also read FW power status by REG PMU->WLAN_CTRL 0x4003_1068
-     *  bit[3:2] == 3 means FW is in sleep status
-     */
-    if ((mlan_adap != NULL) && (mlan_adap->ps_state == PS_STATE_AWAKE))
-    {
-        cau_temperature_write_to_firmware();
-    }
-}
 #endif
 
 static void wlan_wait_wlmgr_ready()
@@ -8583,9 +8617,6 @@ int wlan_stop(void)
         return WLAN_ERROR_STATE;
     }
 
-#if CONFIG_HOST_SLEEP
-    OSA_SemaphoreDestroy((osa_semaphore_handle_t)wakelock);
-#endif
 #if ((CONFIG_11MC) || (CONFIG_11AZ)) && (CONFIG_WLS_CSI_PROC)
     (void)OSA_SemaphoreDestroy((osa_semaphore_handle_t)wls_csi_sem);
 #endif
@@ -10581,14 +10612,8 @@ void wlan_reset(cli_reset_option ResetOption)
         wlcm_w("--- Disable WiFi ---");
         if (wlan_is_started())
         {
-#if CONFIG_HOST_SLEEP
-#if CONFIG_POWER_MANAGER
-            /* Reset host sleep state flag first */
-            wlan_host_sleep_state = HOST_SLEEP_DISABLE;
-#endif
-#endif
 #if (CONFIG_WPA_SUPP) && (CONFIG_UAP_STA_MAC_ADDR_FILTER)
-        wlan_set_sta_mac_filter(0, 0, NULL);
+            wlan_set_sta_mac_filter(0, 0, NULL);
 #endif
             /*Disconnect form AP if station is associated with an AP.*/
             if (is_sta_connecting())
@@ -10693,6 +10718,9 @@ void wlan_reset(cli_reset_option ResetOption)
 #if defined(RW610)
         power_off_device(LOAD_WIFI_FIRMWARE);
 #endif
+#if CONFIG_HOST_SLEEP
+        wlan.status = WLCMGR_THREAD_STOPPED;
+#endif
     }
 
     if (ResetOption == CLI_ENABLE_WIFI || ResetOption == CLI_RESET_WIFI)
@@ -10700,6 +10728,9 @@ void wlan_reset(cli_reset_option ResetOption)
         wlcm_w("--- Enable WiFi ---");
         if (!wlan_is_started())
         {
+#if CONFIG_HOST_SLEEP
+            wlan.status = WLCMGR_INACTIVE;
+#endif
             wlcm_d("Initialize WLAN Driver");
             /* Initialize WIFI Driver */
             if (WM_SUCCESS != (wlan_init(wlan_fw_bin, wlan_fw_bin_len)))
@@ -10735,14 +10766,6 @@ void wlan_reset(cli_reset_option ResetOption)
             wifi_set_rx_status(WIFI_DATA_RUNNING);
             wifi_tx_block_cnt = 0;
             wifi_rx_block_cnt = 0;
-#if (CONFIG_WIFI_BLE_COEX_APP) && (CONFIG_WIFI_BLE_COEX_APP == 1)
-#if CONFIG_HOST_SLEEP
-#if CONFIG_POWER_MANAGER
-            /* Re-enable host sleep for coex app */
-            wlan_host_sleep_state = HOST_SLEEP_PERIODIC;
-#endif
-#endif
-#endif
         }
     }
 
@@ -10754,23 +10777,6 @@ void wlan_reset(cli_reset_option ResetOption)
 }
 
 #if defined(RW610) || defined(IW610) || defined(SD9177) || defined(SD8978)
-#if CONFIG_HOST_SLEEP
-void wlan_hs_hanshake_cfg(bool skip)
-{
-    /* Clear flags to do host sleep hanshake */
-    if (skip == false)
-    {
-        skip_hs_handshake = false;
-        is_hs_handshake_done = 0;
-    }
-    /* Skip host sleep handshake */
-    else
-    {
-        skip_hs_handshake = true;
-    }
-}
-#endif
-
 static void wlcmgr_mon_task(void * data)
 {
 #if CONFIG_HOST_SLEEP
@@ -10788,6 +10794,11 @@ static void wlcmgr_mon_task(void * data)
         wlcm_e("Unable to create wake timer");
     }
 #endif
+     status = OSA_SemaphoreCreate((osa_semaphore_handle_t)wakelock, 0);
+    if (status != KOSA_StatusSuccess)
+    {
+        wifi_e("Failed to create wake-lock semaphore");
+    }
 #endif
     while (1)
     {
@@ -10816,8 +10827,7 @@ static void wlcmgr_mon_task(void * data)
 #if CONFIG_WAKE_TIMER_ENABLE
                     if(!wlan_is_manual && wlan_host_sleep_state == HOST_SLEEP_PERIODIC)
                     {
-                        wakelock_get();
-                        (void)OSA_TimerActivate((osa_timer_handle_t)wake_timer);
+                        wlan_start_wake_timer();
                     }
 #endif
 #endif
@@ -10831,8 +10841,7 @@ static void wlcmgr_mon_task(void * data)
                     wlan_cancel_host_sleep();
 #ifdef RW610
                     /* Check fw status and write temperature to firmware after waking up */
-                    temperature_mon_cb(NULL);
-                    (void)OSA_TimerActivate((osa_timer_handle_t)temperature_mon_timer);
+                    start_temperature_mon_timer();
 #endif
                     break;
 #ifndef CONFIG_BT
@@ -10840,8 +10849,7 @@ static void wlcmgr_mon_task(void * data)
                 case HOST_SLEEP_HANDSHAKE_SKIP:
                     if(wlan_host_sleep_state == HOST_SLEEP_PERIODIC)
                     {
-                        wakelock_get();
-                        (void)OSA_TimerActivate((osa_timer_handle_t)wake_timer);
+                        wlan_start_wake_timer();
                     }
                     break;
 #endif

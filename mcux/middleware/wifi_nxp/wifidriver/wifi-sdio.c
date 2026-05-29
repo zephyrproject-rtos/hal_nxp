@@ -100,7 +100,7 @@ static uint8_t dev_fw_ver_ext[MLAN_MAX_VER_STR_LEN];
 #if CONFIG_HOST_SLEEP
 extern int is_hs_handshake_done;
 extern bool skip_hs_handshake;
-extern void wlan_hs_hanshake_cfg(bool skip);
+extern void wlan_hs_handshake_cfg(bool skip);
 #endif
 
 #if CONFIG_TX_RX_ZERO_COPY
@@ -866,7 +866,7 @@ static mlan_status wifi_send_fw_data(t_u8 *data, t_u32 txlen)
 #if CONFIG_HOST_SLEEP
     if (skip_hs_handshake == true)
     {
-        wlan_hs_hanshake_cfg(false);
+        wlan_hs_handshake_cfg(false);
     }
 #endif
 
@@ -2253,7 +2253,7 @@ int wlan_send_sdio_cmd(t_u8 *buf, t_u32 tx_blocks, t_u32 buflen)
 #if CONFIG_HOST_SLEEP
     if (skip_hs_handshake == true)
     {
-        wlan_hs_hanshake_cfg(false);
+        wlan_hs_handshake_cfg(false);
     }
 #endif
     wait_for_cmd_dnld_ready();
@@ -2513,7 +2513,7 @@ static mlan_status wifi_tx_data(t_u8 start_port, t_u8 ports, t_u8 pkt_cnt, t_u32
 #if CONFIG_HOST_SLEEP
     if (skip_hs_handshake == true)
     {
-        wlan_hs_hanshake_cfg(false);
+        wlan_hs_handshake_cfg(false);
     }
 #endif
 
@@ -3500,7 +3500,7 @@ mlan_status wlan_process_int_status(mlan_adapter *pmadapter)
 #if CONFIG_HOST_SLEEP
 	if (skip_hs_handshake == true)
     {
-        wlan_hs_hanshake_cfg(false);
+        wlan_hs_handshake_cfg(false);
     }
 #endif
 
