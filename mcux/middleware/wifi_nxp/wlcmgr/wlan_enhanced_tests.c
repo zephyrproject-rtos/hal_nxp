@@ -1380,7 +1380,7 @@ static void test_wlan_set_chanlist(int argc, char **argv)
     wlan_chanlist_t chanlist;
 
 #if (CONFIG_COMPRESS_TX_PWTBL)
-#if !defined(RW610) && !defined(IW610)
+#if defined(SD8987)
     ARG_UNUSED(rg_table_fc);
     ARG_UNUSED(rg_table_fc_len);
 #endif
@@ -1463,8 +1463,8 @@ static void test_wlan_set_rutxpwrlimit(int argc, char **argv)
 {
     int rv;
 
-#if CONFIG_COMPRESS_RU_TX_PWTBL
-#if defined(RW610) || defined(IW610)
+#if (CONFIG_COMPRESS_RU_TX_PWTBL) && (CONFIG_11AX)
+#if defined(RW610) || defined(IW610) || defined(SD9177)
     if (argc != 2)
     {
         (void)PRINTF("Usage:\r\n");

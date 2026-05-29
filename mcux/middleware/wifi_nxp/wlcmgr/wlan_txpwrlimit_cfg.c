@@ -27,8 +27,8 @@
 #error "Region tx power config not defined"
 #endif
 
-#if (CONFIG_COMPRESS_TX_PWTBL || ((CONFIG_COMPRESS_RU_TX_PWTBL) && (CONFIG_11AX)))
-#if defined(RW610) || defined(IW610)
+#if CONFIG_COMPRESS_TX_PWTBL || ((CONFIG_COMPRESS_RU_TX_PWTBL) && (CONFIG_11AX))
+#if !defined(SD8987)
 typedef struct _rg_power_info
 {
     t_u8 *rg_power_table;
@@ -37,8 +37,8 @@ typedef struct _rg_power_info
 #endif
 #endif
 
-#if ((CONFIG_COMPRESS_RU_TX_PWTBL) && (CONFIG_11AX))
-#if defined(RW610) || defined(IW610)
+#if CONFIG_COMPRESS_RU_TX_PWTBL && CONFIG_11AX
+#if defined(RW610) || defined(IW610) || defined(SD9177)
 typedef struct _ru_power_cfg
 {
     t_u16 region_code;
@@ -50,7 +50,7 @@ ru_power_cfg ru_power_cfg_info[] = {
     {0x00, .power_info = {(t_u8 *)rutxpowerlimit_cfg_set_WW, sizeof(rutxpowerlimit_cfg_set_WW)}},
     {0x10, .power_info = {(t_u8 *)rutxpowerlimit_cfg_set_US, sizeof(rutxpowerlimit_cfg_set_US)}},
     {0x30, .power_info = {(t_u8 *)rutxpowerlimit_cfg_set_EU, sizeof(rutxpowerlimit_cfg_set_EU)}},
-    {0x50, .power_info = {(t_u8 *)rutxpowerlimit_cfg_set_CN, sizeof(rutxpowerlimit_cfg_set_CN)}},
+    {0x50, .power_info = {(t_u8 *)rutxpowerlimit_cfg_set_CA, sizeof(rutxpowerlimit_cfg_set_CA)}},
     {0xFF, .power_info = {(t_u8 *)rutxpowerlimit_cfg_set_JP, sizeof(rutxpowerlimit_cfg_set_JP)}},
 };
 
@@ -182,24 +182,34 @@ typedef struct _rg_power_cfg
     t_u16 rg_len;
 } rg_power_cfg;
 
-rg_power_cfg rg_power_cfg_FC[] = {
-    {
-        0x00,
-        (t_u8 *)rg_table_fc,
-        sizeof(rg_table_fc),
-    },
+#if defined(SD9177)
+rg_power_cfg rg_power_cfg_info[] = {
+	{ 0x00, (t_u8 *)rg_table_SD9177_WW, sizeof(rg_table_SD9177_WW)},
+	{ 0xFF, (t_u8 *)rg_table_SD9177_JP, sizeof(rg_table_SD9177_JP)},
+	{ 0x10, (t_u8 *)rg_table_SD9177_US, sizeof(rg_table_SD9177_US)},
+	{ 0x30, (t_u8 *)rg_table_SD9177_EU, sizeof(rg_table_SD9177_EU)},
+	{ 0x20, (t_u8 *)rg_table_SD9177_CA, sizeof(rg_table_SD9177_CA)}
 };
+#elif defined(SD8978)
+rg_power_cfg rg_power_cfg_info[] = {
+	{ 0x00, (t_u8 *)rg_table_SD8978_WW, sizeof(rg_table_SD8978_WW)},
+	{ 0xFF, (t_u8 *)rg_table_SD8978_JP, sizeof(rg_table_SD8978_JP)},
+	{ 0x10, (t_u8 *)rg_table_SD8978_US, sizeof(rg_table_SD8978_US)},
+	{ 0x30, (t_u8 *)rg_table_SD8978_EU, sizeof(rg_table_SD8978_EU)},
+	{ 0x20, (t_u8 *)rg_table_SD8978_CA, sizeof(rg_table_SD8978_CA)}
+};
+#endif
 
 int wlan_set_rg_power_cfg(t_u16 region_code)
 {
     int i  = 0;
     int rv = WM_SUCCESS;
 
-    for (i = 0; i < sizeof(rg_power_cfg_FC) / sizeof(rg_power_cfg); i++)
+    for (i = 0; i < sizeof(rg_power_cfg_info) / sizeof(rg_power_cfg); i++)
     {
-        if (region_code == rg_power_cfg_FC[i].region_code)
+        if (region_code == rg_power_cfg_info[i].region_code)
         {
-            rv = wlan_set_region_power_cfg(rg_power_cfg_FC[i].rg_power_table, rg_power_cfg_FC[i].rg_len);
+            rv = wlan_set_region_power_cfg(rg_power_cfg_info[i].rg_power_table, rg_power_cfg_info[i].rg_len);
             if (rv != WM_SUCCESS)
                 (void)PRINTF("Unable to set compressed TX power table configuration\r\n");
             return rv;
@@ -215,7 +225,7 @@ int wlan_set_rg_power_cfg(t_u16 region_code)
 int wlan_set_wwsm_txpwrlimit()
 {
     int rv = WM_SUCCESS;
-#if defined(RW610) || defined(IW610)
+#if !defined (SD8987)
     unsigned int region_code = 0;
 #endif
 #ifdef WLAN_REGION_CODE
@@ -255,7 +265,7 @@ int wlan_set_wwsm_txpwrlimit()
 #endif
 #endif
 
-#if defined(RW610) || defined(IW610)
+#if !defined (SD8987)
     wlan_get_region_code(&region_code);
 #if CONFIG_COMPRESS_TX_PWTBL
     rv = wlan_set_rg_power_cfg(region_code);
@@ -287,7 +297,7 @@ int wlan_set_wwsm_txpwrlimit()
     }
 #endif /* RW610 and IW610 */
 
-#if !defined RW610 && !defined IW610
+#if !defined RW610 && !defined IW610 && !defined SD9177
 #if CONFIG_11AX
 #if CONFIG_COMPRESS_RU_TX_PWTBL
     rv = wlan_set_11ax_rutxpowerlimit(rutxpowerlimit_cfg_set, sizeof(rutxpowerlimit_cfg_set));
@@ -347,7 +357,7 @@ int wlan_set_wwsm_txpwrlimit(void)
     }
 #endif
 
-#if !defined RW610 && !defined IW610
+#if !defined RW610 && !defined IW610 && !defined SD9177
 #if CONFIG_11AX
 #if CONFIG_COMPRESS_RU_TX_PWTBL
     rv = wlan_set_11ax_rutxpowerlimit(rutxpowerlimit_cfg_set, sizeof(rutxpowerlimit_cfg_set));
