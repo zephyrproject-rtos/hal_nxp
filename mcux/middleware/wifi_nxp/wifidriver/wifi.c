@@ -4625,27 +4625,12 @@ size_t wifi_remove_he_ies(const t_u8 *data, size_t data_len)
 
 int wifi_nxp_send_mlme(unsigned int bss_type, int channel, unsigned int wait_time, const t_u8 *data, size_t data_len)
 {
-    mlan_private *pmpriv              = (mlan_private *)mlan_adap->priv[bss_type];
     wlan_mgmt_pkt *pmgmt_pkt_hdr      = MNULL;
     wlan_802_11_header *pieee_pkt_hdr = MNULL;
     t_u8 buf[1580];
 
     // dump_hex(data, data_len);
     memset(buf, 0x00, sizeof(buf));
-
-    if ((bss_type == BSS_TYPE_STA) && (pmpriv->media_connected == MFALSE))
-    {
-        if (wifi_is_remain_on_channel())
-        {
-            wifi_remain_on_channel(false, 0, 0);
-        }
-
-        if (wait_time == 0)
-        {
-            wait_time = 1000;
-        }
-        wifi_remain_on_channel(true, channel, wait_time);
-    }
 
     pmgmt_pkt_hdr = (wlan_mgmt_pkt *)&buf[0];
 
@@ -4678,7 +4663,7 @@ bool wifi_is_remain_on_channel(void)
     return (mlan_adap->remain_on_channel ? true : false);
 }
 
-int wifi_remain_on_channel(const bool status, const uint8_t channel, const uint32_t duration)
+int wifi_remain_on_channel(const enum wlan_bss_type bss_type, const bool status, const uint8_t channel, const uint32_t duration)
 {
     wifi_remain_on_channel_t roc;
 
@@ -4721,7 +4706,7 @@ int wifi_remain_on_channel(const bool status, const uint8_t channel, const uint3
     }
 #endif
 
-    return wifi_send_remain_on_channel_cmd(MLAN_BSS_TYPE_STA, &roc);
+    return wifi_send_remain_on_channel_cmd(bss_type, &roc);
 }
 
 #ifdef RW610

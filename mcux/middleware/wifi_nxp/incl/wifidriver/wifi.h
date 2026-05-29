@@ -138,6 +138,12 @@ typedef struct wifi_uap_client_disassoc
     t_u8 sta_addr[MLAN_MAC_ADDR_LENGTH];
 } wifi_uap_client_disassoc_t;
 
+typedef struct wifi_remain_channel_info
+{
+    t_u8 cancel_channel;
+    t_u8 bss_type;
+} wifi_remain_channel_info;
+
 /**
  * Initialize Wi-Fi driver module.
  *
