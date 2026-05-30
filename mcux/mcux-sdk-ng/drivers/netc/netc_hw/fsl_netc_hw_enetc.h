@@ -195,7 +195,7 @@ void NETC_EnetcDelVlanHash(NETC_ENETC_Type *base, uint8_t si, uint8_t hashIndex)
  */
 static inline status_t NETC_EnetcPortEnableTSD(NETC_ENETC_Type *base, netc_hw_tc_idx_t tcIdx, bool isEnable)
 {
-    base->PTCTSDR[tcIdx] = NETC_ENETC_PTCTSDR_TSDE(isEnable);
+    base->PTCTSDR[tcIdx] = NETC_ENETC_PTCTSDR_TSDE(isEnable ? 1U : 0U);
     return kStatus_Success;
 }
 
@@ -214,15 +214,15 @@ static inline void NETC_EnetcPortSetNativeVLAN(NETC_ENETC_Type *base,
 {
     if (isOuter)
     {
-        base->PONVLANR = NETC_ENETC_PONVLANR_VZE(config->enUnderZeroVid) |
-                         NETC_ENETC_PONVLANR_PNE(config->enUnderNoVlan) |
+        base->PONVLANR = NETC_ENETC_PONVLANR_VZE(config->enUnderZeroVid ? 1U : 0U) |
+                         NETC_ENETC_PONVLANR_PNE(config->enUnderNoVlan ? 1U : 0U) |
                          NETC_ENETC_PONVLANR_TPID(config->vlanTag.tpid) | NETC_ENETC_PONVLANR_PCP(config->vlanTag.pcp) |
                          NETC_ENETC_PONVLANR_DEI(config->vlanTag.dei) | NETC_ENETC_PONVLANR_VID(config->vlanTag.vid);
     }
     else
     {
-        base->PINVLANR = NETC_ENETC_PINVLANR_VZE(config->enUnderZeroVid) |
-                         NETC_ENETC_PINVLANR_PNE(config->enUnderNoVlan) |
+        base->PINVLANR = NETC_ENETC_PINVLANR_VZE(config->enUnderZeroVid ? 1U : 0U) |
+                         NETC_ENETC_PINVLANR_PNE(config->enUnderNoVlan ? 1U : 0U) |
                          NETC_ENETC_PINVLANR_TPID(config->vlanTag.tpid) | NETC_ENETC_PINVLANR_PCP(config->vlanTag.pcp) |
                          NETC_ENETC_PINVLANR_DEI(config->vlanTag.dei) | NETC_ENETC_PINVLANR_VID(config->vlanTag.vid);
     }
@@ -238,11 +238,11 @@ static inline void NETC_EnetcPortSetNativeVLAN(NETC_ENETC_Type *base,
  */
 static inline void NETC_EnetcSetParser(NETC_ENETC_Type *base, const netc_enetc_parser_config_t *config)
 {
-    base->PARCSCR = NETC_ENETC_PARCSCR_L3CD(config->disL3Checksum) | NETC_ENETC_PARCSCR_L4CD(config->disL4Checksum);
+    base->PARCSCR = NETC_ENETC_PARCSCR_L3CD(config->disL3Checksum ? 1U : 0U) | NETC_ENETC_PARCSCR_L4CD(config->disL4Checksum ? 1U : 0U);
     for (uint8_t i = 0u; i < 4U; i++)
     {
         base->PARCECR[i] = NETC_ENETC_PARCECR_ETYPE(config->custEtype[i].etype) |
-                           NETC_ENETC_PARCECR_EN(config->custEtype[i].en) |
+                           NETC_ENETC_PARCECR_EN(config->custEtype[i].en ? 1U : 0U) |
                            NETC_ENETC_PARCECR_CP(config->custEtype[i].cp);
     }
 }
@@ -260,7 +260,7 @@ static inline void NETC_EnetcEnableWakeOnLan(NETC_ENETC_Type *base, bool isEnabl
 {
     if (0U != (base->ECAPR0 & NETC_ENETC_ECAPR0_WO_MASK))
     {
-        base->PLPMR = NETC_ENETC_PLPMR_WME(isEnable);
+        base->PLPMR = NETC_ENETC_PLPMR_WME(isEnable ? 1U : 0U);
     }
 }
 /*! @} */ // end of netc_hw_enetc

@@ -1,5 +1,10 @@
 # PINT
 
+## [2.3.1]
+
+- New Features
+  - Added common IRQ handler entry PINT_DriverIRQHandler.
+
 ## [2.3.0]
 
 - Improvements

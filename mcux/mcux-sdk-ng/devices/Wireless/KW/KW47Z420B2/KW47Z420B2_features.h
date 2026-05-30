@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 3.0, 2026-02-09
-**     Build:               b260209
+**     Build:               b260420
 **
 **     Abstract:
 **         Chip specific module features.
@@ -67,6 +67,8 @@
 #define FSL_FEATURE_SOC_LTC_COUNT (1)
 /* @brief MCM availability on the SoC. */
 #define FSL_FEATURE_SOC_MCM_COUNT (1)
+/* @brief MPU availability on the SoC. */
+#define FSL_FEATURE_SOC_MPU_COUNT (1)
 /* @brief MSCM availability on the SoC. */
 #define FSL_FEATURE_SOC_MSCM_COUNT (1)
 /* @brief PORT availability on the SoC. */
@@ -87,6 +89,8 @@
 #define FSL_FEATURE_SOC_TRGMUX_COUNT (1)
 /* @brief TSTMR availability on the SoC. */
 #define FSL_FEATURE_SOC_TSTMR_COUNT (1)
+/* @brief VBAT availability on the SoC. */
+#define FSL_FEATURE_SOC_VBAT_COUNT (1)
 /* @brief VREF availability on the SoC. */
 #define FSL_FEATURE_SOC_VREF_COUNT (1)
 /* @brief WDOG availability on the SoC. */
@@ -232,7 +236,7 @@
 #define FSL_FEATURE_EDMA_HAS_NO_MP_CSR_EMI (0)
 /* @brief Has no EBW access bit (MP_CSR). */
 #define FSL_FEATURE_EDMA_HAS_NO_MP_CSR_EBW (1)
-/* @brief Has channel mux control */
+/* @brief Has channel mux */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_MUX (1)
 /* @brief Has EDMA arbitration group (CHn_GRPRI). */
 #define FSL_FEATURE_EDMA_HAS_ARBITRATION_GROUP (1)
@@ -588,8 +592,6 @@
 #define FSL_FEATURE_PORT_SUPPORT_DIFFERENT_VOLTAGE_RANGE (1)
 /* @brief Has EFT detect (registers EDFR, EDIER and EDCR). */
 #define FSL_FEATURE_PORT_SUPPORT_EFT (1)
-/* @brief Has invert input (register bit PCR[INV]). */
-#define FSL_FEATURE_PORT_HAS_INVERT_INPUT (1)
 /* @brief Has drive strength control (register bit PCR[DSE]). */
 #define FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH (1)
 /* @brief Defines width of PCR[MUX] field. */
@@ -600,6 +602,10 @@
 #define FSL_FEATURE_PORT_HAS_INDEPENDENT_INTERRUPT_CONTROL (0)
 /* @brief Has multiple pin IRQ configuration (register GICLR and GICHR). */
 #define FSL_FEATURE_PORT_HAS_MULTIPLE_IRQ_CONFIG (0)
+/* @brief Has Input Buffer Enable (register bit field PCR[IBE]). */
+#define FSL_FEATURE_PORT_HAS_INPUT_BUFFER (0)
+/* @brief Has Invert Input (register bit field PCR[INV]). */
+#define FSL_FEATURE_PORT_HAS_INVERT_INPUT (1)
 /* @brief Defines whether PCR[IRQC] bit-field has flag states. */
 #define FSL_FEATURE_PORT_HAS_IRQC_FLAG (0)
 /* @brief Defines whether PCR[IRQC] bit-field has trigger states. */

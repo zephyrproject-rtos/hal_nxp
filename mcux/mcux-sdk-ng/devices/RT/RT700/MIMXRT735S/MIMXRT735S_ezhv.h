@@ -2,16 +2,17 @@
 ** ###################################################################
 **     Processors:          MIMXRT735SGAWBR_ezhv
 **                          MIMXRT735SGFOB_ezhv
+**                          MIMXRT735SGVKB_ezhv
 **
 **     Reference manual:    iMXRT700RM Rev.5, 10/2025
-**     Version:             rev. 5.1, 2025-12-08
-**     Build:               b251208
+**     Version:             rev. 6.0, 2025-12-29
+**     Build:               b260330
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMXRT735S_ezhv
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -31,14 +32,16 @@
 **         Add puf/sdadc irq and cache64 compatibility macros to common header.
 **     - rev. 5.1 (2025-12-08)
 **         Update RM version and add pdm irq for hifi1/hifi4.
+**     - rev. 6.0 (2025-12-29)
+**         Add new part number.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT735S_ezhv.h
- * @version 5.1
- * @date 2025-12-08
+ * @version 6.0
+ * @date 2025-12-29
  * @brief Peripheral Access Layer for MIMXRT735S_ezhv
  *
  * Peripheral Access Layer for MIMXRT735S_ezhv

@@ -1,9 +1,9 @@
-# Copyright 2024,2026 NXP
+# Copyright 2024, 2026 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.sfa)
-    mcux_component_version(2.1.6)
+    mcux_component_version(2.1.7)
 
     mcux_add_source(SOURCES fsl_sfa.c fsl_sfa.h)
 

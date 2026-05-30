@@ -95,15 +95,6 @@ void DWC_DPHY_SetTestConfigure(CAMERA_MIPI_CSI2_Type *base, uint32_t address, ui
 uint32_t DWC_DPHY_ReadTestConfigure(CAMERA_MIPI_CSI2_Type *base, uint8_t address);
 
 /*!
- * @brief introduce function DWC_DPHY_TestCodeConfig.
- * This function configure PHY module hsfreqrange and cfgclkfreqrange.
- *
- * @param base CSI2RX peripheral address.
- * @param config CSI2RX module configuration structure.
- */
-void DWC_DPHY_TestCodeConfig(CAMERA_MIPI_CSI2_Type *base, csi2rx_config_t *config);
-
-/*!
  * @brief introduce function DWC_DPHY_Init.
  * This function deal with PHY module initialization.
  *

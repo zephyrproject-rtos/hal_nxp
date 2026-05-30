@@ -271,7 +271,7 @@ static inline void NETC_PortConfigTcPreemption(NETC_PORT_Type *base, netc_hw_tc_
     uint32_t temp = base->PFPCR;
 
     temp &= (~((uint32_t)1U << (uint8_t)tcIdx));
-    temp |= ((uint32_t)enable << (uint8_t)tcIdx);
+    temp |= ((enable ? 1U : 0U) << (uint8_t)tcIdx);
     base->PFPCR = temp;
 }
 

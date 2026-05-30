@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 NXP
+ * Copyright 2020-2021, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -3183,4 +3183,13 @@ void I2C3_DriverIRQHandler(void)
     I2C_TransferCommonIRQHandler(I2C3, s_pI2cHandles[3]);
 }
 #endif
+
+void I2C_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_pfI2cBases))
+    {
+        I2C_TransferCommonIRQHandler(s_pfI2cBases[instance], s_pI2cHandles[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
 /* =================================== End of Second Layer IRQhandler definition ==================================== */

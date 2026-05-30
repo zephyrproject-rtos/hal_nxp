@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023, 2025 NXP
+ * Copyright 2016-2023, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -813,6 +813,15 @@ void SCTIMER_EventHandleIRQ(SCT_Type *base)
 
     /* Clear event interrupt flag */
     base->EVFLAG = clearFlag;
+}
+
+void SCTIMER_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_sctBases))
+    {
+        s_sctimerIsr(s_sctBases[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if defined(SCT0)

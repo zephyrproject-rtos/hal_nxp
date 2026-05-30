@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright 2019-2023, 2025-2026 NXP
  * All rights reserved.
  *
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief SFA driver version 2.1.6 */
-#define FSL_SFA_DRIVER_VERSION (MAKE_VERSION(2, 1, 6))
+/*! @brief SFA driver version 2.1.7 */
+#define FSL_SFA_DRIVER_VERSION (MAKE_VERSION(2, 1, 7))
 /*! @} */
 
 /*! @name Configuration

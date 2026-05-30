@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2022, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -2855,3 +2855,15 @@ void DMA31_DriverIRQHandler(void)
 
 #endif /* 4/8/16/32 channels (No Shared)  */
 #endif /* FSL_FEATURE_EDMA_MODULE_CHANNEL_IRQ_ENTRY_SHARED_OFFSET */
+
+void EDMA_DriverIRQHandler(uint32_t instance, uint32_t channel);
+void EDMA_DriverIRQHandler(uint32_t instance, uint32_t channel)
+{
+    if ((instance < ARRAY_SIZE(s_edmaBases)) && (channel < (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL))
+    {
+        uint32_t channelIndex = (EDMA_GetInstanceOffset(instance) * (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL) + channel;
+        EDMA_HandleIRQ(s_EDMAHandle[channelIndex]);
+    }
+
+    SDK_ISR_EXIT_BARRIER;
+}

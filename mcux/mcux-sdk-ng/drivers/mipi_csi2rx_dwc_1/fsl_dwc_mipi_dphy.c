@@ -8,7 +8,11 @@
 
 void DWC_DPHY_Reset(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config)
 {
-    if (config->phyNumber == KCSI2RX_DPHY_Primary)
+    if ((csi1 == NULL) || (csi2 == NULL) || (config == NULL))
+    {
+        return;
+    }
+    if (config->phyNumber == (uint32_t)KCSI2RX_DPHY_Primary)
     {
         /* Put DPHY into reset state */
         csi1->DPHY_RSTZ &= CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
@@ -36,7 +40,11 @@ void DWC_DPHY_Reset(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, cons
 
 void DWC_DPHY_TestCodeReset(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, const csi2rx_config_t *config)
 {
-    if (config->phyNumber == KCSI2RX_DPHY_Primary)
+    if ((csi1 == NULL) || (csi2 == NULL) || (config == NULL))
+    {
+        return;
+    }
+    if (config->phyNumber == (uint32_t)KCSI2RX_DPHY_Primary)
     {
         /* Set PHY test codes from reset */
         csi1->PHY_TEST_CTRL0 = ((csi1->PHY_TEST_CTRL0 & ~CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclr_MASK) | CSI2_CONTROLLER_PHY_TEST_CTRL0_phy_testclr_MASK);
@@ -60,9 +68,14 @@ void DWC_DPHY_SetTestConfigureCSI1(CSI2_CONTROLLER_Type *csi1, uint32_t address,
     uint8_t phy_testen;
     uint8_t phy_testclk;
 
+    if ((csi1 == NULL) || (address > 0xFFU))
+    {
+        return;
+    }
+
     phy_testclr   = 0;
     phy_testclk   = 1;
-    phy_testdin   = address;
+    phy_testdin   = (uint8_t)address;
     phy_testen    = 1;
 
     csi1->PHY_TEST_CTRL1 = (CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
@@ -91,9 +104,14 @@ void DWC_DPHY_SetTestConfigureCSI2(CSI2_CONTROLLER_Type *csi2, uint32_t address,
     uint8_t phy_testen;
     uint8_t phy_testclk;
 
+    if ((csi2 == NULL) || (address > 0xFFU))
+    {
+        return;
+    }
+
     phy_testclr   = 0;
     phy_testclk   = 1;
-    phy_testdin   = address;
+    phy_testdin   = (uint8_t)address;
     phy_testen    = 1;
 
     csi2->PHY_TEST_CTRL1 = (CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen(phy_testen) | phy_testdin);
@@ -119,6 +137,11 @@ uint32_t DWC_DPHY_ReadTestConfigure(CSI2_CONTROLLER_Type *base, uint8_t address)
 {
     uint32_t values = 0;
 
+    if (base == NULL)
+    {
+        return 0U;
+    }
+
     /* enable address writing operation and set dphy offset address */
     base->PHY_TEST_CTRL1 = ((base->PHY_TEST_CTRL1 & ~(CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testen_MASK |
                                                       CSI2_CONTROLLER_PHY_TEST_CTRL1_phy_testdin(address))) |
@@ -141,7 +164,7 @@ uint32_t DWC_DPHY_ReadTestConfigure(CSI2_CONTROLLER_Type *base, uint8_t address)
 
 void DWC_DPHY_InitNormal(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, CAMERA_PHY_CSR_Type *phybase, const csi2rx_config_t *config)
 {
-    if (config->phyNumber == KCSI2RX_DPHY_Primary)
+    if (config->phyNumber == (uint32_t)KCSI2RX_DPHY_Primary)
     {
         /* configure DPHY hsfreqrange and clk, hsfreqrange operation ranging from 80 Mbps to 2.5Gbps. it can be override by DPHY PHY_TEST_CTRL1 interface*/
         phybase->PRIMARY_PHY_FREQ_CONTROL = (phybase->PRIMARY_PHY_FREQ_CONTROL & ~(CAMERA_PHY_CSR_PRIMARY_PHY_FREQ_CONTROL_Phy_cfgclkfreqrange_MASK |
@@ -174,7 +197,7 @@ void DWC_DPHY_InitNormal(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2,
         csi1->CSI2_RESETN |= CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
 
         /* Configure the number of active lanes for CSI host controller */
-        csi1->N_LANES = config->laneNum - 1U;
+        csi1->N_LANES = (config->laneNum == 0U) ? 0U : (config->laneNum - 1U);
 
         /* Wait until clock lane at stop state */
         while ((csi1->PHY_STOPSTATE & CSI2_CONTROLLER_PHY_STOPSTATE_phy_stopstateclk_MASK) != CSI2_CONTROLLER_PHY_STOPSTATE_phy_stopstateclk_MASK)
@@ -214,7 +237,7 @@ void DWC_DPHY_InitNormal(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2,
         csi2->CSI2_RESETN |= CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
 
         /* Configure the number of active lanes for CSI host controller */
-        csi2->N_LANES = config->laneNum - 1U;
+        csi2->N_LANES = (config->laneNum == 0U) ? 0U : (config->laneNum - 1U);
 
         /* Wait until clock lane at stop state */
         while ((csi2->PHY_STOPSTATE & CSI2_CONTROLLER_PHY_STOPSTATE_phy_stopstateclk_MASK) != CSI2_CONTROLLER_PHY_STOPSTATE_phy_stopstateclk_MASK)
@@ -312,7 +335,7 @@ void DWC_DPHY_InitAggr(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, C
     csi1->DPHY_RSTZ = (csi1->DPHY_RSTZ & ~CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK) | CSI2_CONTROLLER_DPHY_RSTZ_dphy_rstz_MASK;
     SDK_DelayAtLeastUs(5, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
     csi1->CSI2_RESETN |= CSI2_CONTROLLER_CSI2_RESETN_csi2_resetn_MASK;
-    csi1->N_LANES = config->laneNum - 1U;
+    csi1->N_LANES = (config->laneNum == 0U) ? 0U : (config->laneNum - 1U);
 
     /* Set PHY_SHUTDOWNZ = 1'b1, DPHY_RSTZ = 1'b1 */
     csi2->PHY_SHUTDOWNZ = (csi2->PHY_SHUTDOWNZ & ~CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK) | CSI2_CONTROLLER_PHY_SHUTDOWNZ_phy_shutdownz_MASK;

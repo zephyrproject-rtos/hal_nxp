@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020, 2022 NXP
+ * Copyright 2016-2017, 2020, 2022, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,7 +24,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_GINT_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Driver version. */
+#define FSL_GINT_DRIVER_VERSION (MAKE_VERSION(2, 1, 2)) /*!< Driver version. */
 /*! @} */
 
 /*! @brief GINT combine inputs type */
@@ -214,6 +214,9 @@ static inline uint32_t GINT_GetStatus(GINT_Type *base)
  * @retval None.
  */
 void GINT_Deinit(GINT_Type *base);
+
+/*! @brief Common IRQ handler for all GINT instances. */
+void GINT_DriverIRQHandler(uint32_t instance);
 
 #ifdef __cplusplus
 }

@@ -2,6 +2,7 @@
 ** ###################################################################
 **     Processors:          MIMXRT758SGAWBR_cm33_core1
 **                          MIMXRT758SGFOB_cm33_core1
+**                          MIMXRT758SGVKB_cm33_core1
 **
 **     Compilers:
 **                          GNU C Compiler
@@ -10,14 +11,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    iMXRT700RM Rev.5, 10/2025
-**     Version:             rev. 5.1, 2025-12-08
-**     Build:               b251217
+**     Version:             rev. 6.0, 2025-12-29
+**     Build:               b260330
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT758S_cm33_core1
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -37,14 +38,16 @@
 **         Add puf/sdadc irq and cache64 compatibility macros to common header.
 **     - rev. 5.1 (2025-12-08)
 **         Update RM version and add pdm irq for hifi1/hifi4.
+**     - rev. 6.0 (2025-12-29)
+**         Add new part number.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT758S_cm33_core1_COMMON.h
- * @version 5.1
- * @date 2025-12-08
+ * @version 6.0
+ * @date 2025-12-29
  * @brief CMSIS Peripheral Access Layer for MIMXRT758S_cm33_core1
  *
  * CMSIS Peripheral Access Layer for MIMXRT758S_cm33_core1
@@ -55,9 +58,9 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0500U
+#define MCU_MEM_MAP_VERSION 0x0600U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0001U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
 
 /* ----------------------------------------------------------------------------

@@ -453,10 +453,10 @@ static void LIN_LPUART_CheckWakeupSignal(uint32_t instance)
 
         /* If length of the dominant signal is from 150us to 5ms, it is a wakeup signal */
         /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_15$ */
-        if (wakeupSignalLength >= 150000U)
+        if (wakeupSignalLength >= 150000U) /* GCOVR_EXCL_BR_LINE */
         {
             /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_15$ */
-            if (wakeupSignalLength <= 5000000U)
+            if (wakeupSignalLength <= 5000000U) /* GCOVR_EXCL_BR_LINE */
             {
                 linCurrentState->currentEventId = LIN_WAKEUP_SIGNAL;
 

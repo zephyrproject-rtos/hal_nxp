@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2021, 2023, 2025 NXP
+ * Copyright 2016-2019, 2021, 2023, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -82,6 +82,12 @@ void SLCD_Init(LCD_Type *base, slcd_config_t *configure)
 #if !(defined(FSL_FEATURE_SLCD_LP_CONTROL) && FSL_FEATURE_SLCD_LP_CONTROL)
     assert(configure->clkConfig);
 #endif
+
+#if LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT != 16
+    /* Ensure no pins beyond the device maximum (LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT * 4 - 1) are configured. */
+    assert(0U == (configure->slcdHighPinEnabled >> (LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT * 4U - 32U)));
+    assert(0U == (configure->backPlaneHighPin   >> (LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT * 4U - 32U)));
+#endif /* LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT != 16 */
 
     uint32_t gcrReg   = 0;
     bool intEnabled   = false;

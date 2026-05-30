@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021,2024 NXP
+ * Copyright 2017-2021, 2024, 2026 NXP
  * All rights reserved.
  *
  *
@@ -1347,6 +1347,16 @@ void CSI_FragModeTransferHandleIRQ(CSI_Type *base, csi_frag_handle_t *handle)
     }
 }
 #endif /* CSI_DRIVER_FRAG_MODE */
+
+void CSI_CommonDriverIRQHandler(uint32_t instance);
+void CSI_CommonDriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_csiBases))
+    {
+        s_csiIsr(s_csiBases[instance], s_csiHandle[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
 
 #if defined(CSI)
 void CSI_DriverIRQHandler(void);

@@ -2395,7 +2395,7 @@ typedef enum IRQn {
 /** Array initializer of LPUART peripheral base pointers */
 #define LPUART_BASE_PTRS                         { (LPUART_Type *)0u, LPUART1, LPUART2, LPUART3, LPUART4, LPUART5, LPUART6, LPUART7, LPUART8 }
 /** Interrupt vectors for the LPUART peripheral type */
-#define LPUART_RX_TX_IRQS                        { NotAvail_IRQn, LPUART1_IRQn, LPUART2_IRQn, LPUART3_IRQn, LPUART4_IRQn, LPUART5_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }
+#define LPUART_RX_TX_IRQS                        { NotAvail_IRQn, LPUART1_IRQn, LPUART2_IRQn, LPUART3_IRQn, LPUART4_IRQn, LPUART5_IRQn, LPUART6_IRQn, LPUART7_IRQn, LPUART8_IRQn }
 
 /* LSTCU - Peripheral instance base addresses */
 /** Peripheral AON__LSTCUA base address */

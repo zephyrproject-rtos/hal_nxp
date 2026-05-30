@@ -105,7 +105,11 @@ static void FTM_SetPwmSync(FTM_Type *base, uint32_t syncMethod, bool swRstCnt, b
     for (chnlNumber = 0; chnlNumber < ((uint8_t)FSL_FEATURE_FTM_CHANNEL_COUNTn(base) / 2U); chnlNumber++)
     {
         /* Enable PWM synchronization of registers C(n)V and C(n+1)V */
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1) && FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1)
         reg |= (1UL << (FTM_COMBINE_SYNCEN0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * chnlNumber)));
+#else
+        reg |= (1UL << FTM_COMBINE_SYNCEN0_SHIFT);
+#endif  /* FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1 */
     }
     base->COMBINE = reg;
 
@@ -173,7 +177,11 @@ static void FTM_SetReloadPoints(FTM_Type *base, uint32_t reloadPoints)
     for (chnlNumber = 0; chnlNumber < ((uint32_t)chnlCount / 2U); chnlNumber++)
     {
         /* Need SYNCEN bit to be 1 for CnV reg to update with its buffer value on reload  */
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1) && FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1)
         reg |= (1UL << (FTM_COMBINE_SYNCEN0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * chnlNumber)));
+#else
+        reg |= (1UL << FTM_COMBINE_SYNCEN0_SHIFT);
+#endif  /* FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1 */
     }
     base->COMBINE = reg;
 
@@ -241,8 +249,6 @@ status_t FTM_Init(FTM_Type *base, const ftm_config_t *config)
     assert((FSL_FEATURE_FTM_IS_TPM_ONLY_INSTANCE(base) == 0U));
 #endif /* FSL_FEATURE_FTM_IS_TPM_ONLY_INSTANCE */
 
-    uint32_t reg;
-
     if ((config->pwmSyncMode & (uint32_t)((uint32_t)FTM_SYNC_TRIG0_MASK | (uint32_t)FTM_SYNC_TRIG1_MASK |
                                           (uint32_t)FTM_SYNC_TRIG2_MASK | (uint32_t)FTM_SYNC_SWSYNC_MASK)) == 0U)
     {
@@ -259,7 +265,10 @@ status_t FTM_Init(FTM_Type *base, const ftm_config_t *config)
     RESET_ReleasePeripheralReset(s_ftmResets[FTM_GetInstance(base)]);
 #endif
 
-#if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
+#if (defined(FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM) && FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM)
+    /* FAULTM field is not present on this device, enable FTM mode and disable write protection */
+    base->MODE = FTM_MODE_FTMEN_MASK | FTM_MODE_WPDIS_MASK;
+#elif (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
     if (0 != FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base))
     {
         /* Enable FTM mode and disable write protection */
@@ -273,7 +282,7 @@ status_t FTM_Init(FTM_Type *base, const ftm_config_t *config)
 #else
     /* Configure the fault mode, enable FTM mode and disable write protection */
     base->MODE = FTM_MODE_FAULTM(config->faultMode) | FTM_MODE_FTMEN_MASK | FTM_MODE_WPDIS_MASK;
-#endif
+#endif  /* FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM */
 
     /* Configure the update mechanism for buffered registers */
     FTM_SetPwmSync(base, config->pwmSyncMode, config->swTriggerResetCount, config->hwTriggerResetCount);
@@ -319,7 +328,10 @@ status_t FTM_Init(FTM_Type *base, const ftm_config_t *config)
 #endif /* FSL_FEATURE_FTM_HAS_EXTENDED_DEADTIME_VALUE */
                       FTM_DEADTIME_DTPS(config->deadTimePrescale) | FTM_DEADTIME_DTVAL(config->deadTimeValue));
 
-#if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
+#if (defined(FSL_FEATURE_FTM_HAS_NO_FLTCTRL) && FSL_FEATURE_FTM_HAS_NO_FLTCTRL)
+    /* FLTCTRL register is not present on this device, skip fault filter configuration */
+#elif (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
+    uint32_t reg;
     if (0 == FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base))
     {
         /* FTM fault filter value */
@@ -333,6 +345,7 @@ status_t FTM_Init(FTM_Type *base, const ftm_config_t *config)
         base->FLTCTRL = reg;
     }
 #else
+    uint32_t reg;
     /* FTM fault filter value */
     reg = base->FLTCTRL;
     reg &= ~FTM_FLTCTRL_FFVAL_MASK;
@@ -343,7 +356,7 @@ status_t FTM_Init(FTM_Type *base, const ftm_config_t *config)
     reg |= FTM_FLTCTRL_FSTATE(config->faultOutputState);
 #endif  /* FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE */
     base->FLTCTRL = reg;
-#endif
+#endif  /* FSL_FEATURE_FTM_HAS_NO_FLTCTRL */
 
     return kStatus_Success;
 }
@@ -405,10 +418,14 @@ void FTM_GetDefaultConfig(ftm_config_t *config)
     config->pwmSyncMode = (uint32_t)kFTM_SoftwareTrigger;
     /* No intermediate register load */
     config->reloadPoints = 0;
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM) && FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM)
     /* Fault control disabled for all channels */
     config->faultMode = kFTM_Fault_Disable;
+#endif  /* FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM */
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_FLTCTRL) && FSL_FEATURE_FTM_HAS_NO_FLTCTRL)
     /* Disable the fault filter */
     config->faultFilterValue = 0;
+#endif  /* FSL_FEATURE_FTM_HAS_NO_FLTCTRL */
 #if (defined(FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE) && FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE)
     /* Configure fault output state. */
     config->faultOutputState = kFTM_FaultOutput_PreDefined;
@@ -465,6 +482,19 @@ status_t FTM_SetupPwm(FTM_Type *base,
     {
         return kStatus_InvalidArgument;
     }
+
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_QDCTRL) && FSL_FEATURE_FTM_HAS_NO_QDCTRL)
+#if defined(FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn)
+    if (FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn(base) == 1)
+    {
+        /* Clear the quadrature decoder mode because it's higher priority */
+        base->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
+    }
+#else
+    /* Clear the quadrature decoder mode because it's higher priority */
+    base->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
+#endif
+#endif
 
     if (mode == kFTM_CenterAlignedPwm)
     {
@@ -581,8 +611,12 @@ status_t FTM_SetupPwm(FTM_Type *base,
             base->CONTROLS[(((uint32_t)chnlParams->chnlNumber) * 2U) + 1U].CnSC = reg;
 
             /* Set the combine bit for the channel pair */
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1) && FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1)
             base->COMBINE |=
                 (1UL << (FTM_COMBINE_COMBINE0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlParams->chnlNumber)));
+#else
+            base->COMBINE |= (1UL << FTM_COMBINE_COMBINE0_SHIFT);
+#endif  /* FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1 */
 
             /* Set the channel pair values */
             base->CONTROLS[((uint32_t)chnlParams->chnlNumber) * 2U].CnV        = cnvFirstEdge;
@@ -607,6 +641,23 @@ status_t FTM_SetupPwm(FTM_Type *base,
 
 /*!
  * brief Updates the duty cycle of an active PWM signal.
+ *
+ * note This function only writes the new duty cycle value to the CnV buffer register.
+ *       FTM_Init() unconditionally enables enhanced PWM synchronization mode by setting
+ *       SYNCONF.SYNCMODE = 1 and COMBINE.SYNCENn = 1 in FTM_SetPwmSync(), regardless of the
+ *       configuration passed by the user. Therefore, the buffered CnV value does NOT take effect
+ *       immediately. The caller must trigger a register reload after this function returns, using
+ *       one of the following methods:
+ *       - Software trigger: call FTM_SetSoftwareTrigger(base, true) (if pwmSyncMode includes
+ *         kFTM_SoftwareTrigger). Note that if swTriggerResetCount was set to true during
+ *         initialization, this trigger will also force the FTM counter to the CNTIN value
+ *         (SYNCONF.SWRSTCNT = 1).
+ *       - Hardware trigger: no software call is needed. If pwmSyncMode includes
+ *         kFTM_HardwareTrigger_0/1/2, the reload happens automatically when the
+ *         corresponding hardware trigger fires (SYNCONF.HWWRBUF is set by FTM_Init()).
+ *       - LDOK: call FTM_SetLdok(base, true). The new value becomes active at the next
+ *         reload point: by default at counter overflow (MOD to CNTIN), or at earlier
+ *         events if additional reload points are configured via FTM_SetReloadPoints().
  *
  * param base              FTM peripheral base address
  * param chnlNumber        The channel/channel pair number. In combined mode, this represents
@@ -736,6 +787,19 @@ status_t FTM_SetupPwmMode(FTM_Type *base,
     uint32_t mod, cnvFirstEdge;
     uint8_t i;
 
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_QDCTRL) && FSL_FEATURE_FTM_HAS_NO_QDCTRL)
+#if defined(FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn)
+    if (FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn(base) == 1)
+    {
+        /* Clear the quadrature decoder mode because it's higher priority */
+        base->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
+    }
+#else
+    /* Clear the quadrature decoder mode because it's higher priority */
+    base->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
+#endif
+#endif
+
     switch (mode)
     {
         case kFTM_EdgeAlignedPwm:
@@ -833,8 +897,12 @@ status_t FTM_SetupPwmMode(FTM_Type *base,
             base->CONTROLS[(((uint32_t)chnlParams->chnlNumber) * 2U) + 1U].CnSC = reg;
 
             /* Set the combine bit for the channel pair */
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1) && FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1)
             base->COMBINE |=
                 (1UL << (FTM_COMBINE_COMBINE0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlParams->chnlNumber)));
+#else
+            base->COMBINE |= (1UL << FTM_COMBINE_COMBINE0_SHIFT);
+#endif  /* FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1 */
 
             /* Set the channel pair values */
             base->CONTROLS[((uint32_t)chnlParams->chnlNumber) * 2U].CnV        = cnvFirstEdge;
@@ -967,14 +1035,22 @@ void FTM_ConfigCombinePWM(FTM_Type *base,
     base->CONTROLS[((uint32_t)chnlPairNumber * 2U) + 1U].CnSC = reg;
 
     /* Set the combine bit for the channel pair */
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1) && FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1)
     base->COMBINE |= (1UL << (FTM_COMBINE_COMBINE0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlPairNumber)));
+#else
+    base->COMBINE |= (1UL << FTM_COMBINE_COMBINE0_SHIFT);
+#endif  /* FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1 */
 
 #if (defined(FSL_FEATURE_FTM_HAS_MODIFIED_COMBINE_PWM) && FSL_FEATURE_FTM_HAS_MODIFIED_COMBINE_PWM)
     if (chnlParams->mode == kFTM_ModifiedCombinedPwm)
     {
         /* Set the modified combine bit for the channel pair */
-        base->COMBINE |= 
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1) && FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1)
+        base->COMBINE |=
             (1UL << (FTM_COMBINE_MCOMBINE0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlPairNumber)));
+#else
+        base->COMBINE |= (1UL << FTM_COMBINE_MCOMBINE0_SHIFT);
+#endif  /* FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1 */
     }
 #endif  /* FSL_FEATURE_FTM_HAS_MODIFIED_COMBINE_PWM */
 
@@ -1027,11 +1103,19 @@ void FTM_SetupInputCapture(FTM_Type *base,
     uint32_t reg;
 
     /* Clear the combine bit for the channel pair */
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1) && FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1)
     base->COMBINE &=
         ~(1UL << (FTM_COMBINE_COMBINE0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * ((uint32_t)chnlNumber >> 1))));
     /* Clear the dual edge capture mode because it's it's higher priority */
     base->COMBINE &=
         ~(1UL << (FTM_COMBINE_DECAPEN0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * ((uint32_t)chnlNumber >> 1))));
+#else
+    /* Only channel pair 0 (channels 0-1) is supported */
+    assert((uint32_t)chnlNumber < 2U);
+    base->COMBINE &= ~(1UL << FTM_COMBINE_COMBINE0_SHIFT);
+    /* Clear the dual edge capture mode because it's it's higher priority */
+    base->COMBINE &= ~(1UL << FTM_COMBINE_DECAPEN0_SHIFT);
+#endif  /* FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1 */
 #if !(defined(FSL_FEATURE_FTM_HAS_NO_QDCTRL) && FSL_FEATURE_FTM_HAS_NO_QDCTRL)
 #if defined(FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn)
     if (FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn(base) == 1)
@@ -1083,11 +1167,19 @@ void FTM_SetupOutputCompare(FTM_Type *base,
     uint32_t reg;
 
     /* Clear the combine bit for the channel pair */
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1) && FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1)
     base->COMBINE &=
         ~(1UL << (FTM_COMBINE_COMBINE0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * ((uint32_t)chnlNumber >> 1))));
     /* Clear the dual edge capture mode because it's it's higher priority */
     base->COMBINE &=
         ~(1UL << (FTM_COMBINE_DECAPEN0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * ((uint32_t)chnlNumber >> 1))));
+#else
+    /* Only channel pair 0 (channels 0-1) is supported */
+    assert((uint32_t)chnlNumber < 2U);
+    base->COMBINE &= ~(1UL << FTM_COMBINE_COMBINE0_SHIFT);
+    /* Clear the dual edge capture mode because it's it's higher priority */
+    base->COMBINE &= ~(1UL << FTM_COMBINE_DECAPEN0_SHIFT);
+#endif  /* FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1 */
 #if !(defined(FSL_FEATURE_FTM_HAS_NO_QDCTRL) && FSL_FEATURE_FTM_HAS_NO_QDCTRL)
 #if defined(FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn)
     if (FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn(base) == 1)
@@ -1140,10 +1232,19 @@ void FTM_SetupDualEdgeCapture(FTM_Type *base,
 
     reg = base->COMBINE;
     /* Clear the combine bit for the channel pair */
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1) && FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1)
     reg &= ~(1UL << (FTM_COMBINE_COMBINE0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlPairNumber)));
     /* Enable the DECAPEN bit */
     reg |= (1UL << (FTM_COMBINE_DECAPEN0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlPairNumber)));
     reg |= (1UL << (FTM_COMBINE_DECAP0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlPairNumber)));
+#else
+    /* Only pair 0 is supported */
+    assert((uint32_t)chnlPairNumber == 0U);
+    reg &= ~(1UL << FTM_COMBINE_COMBINE0_SHIFT);
+    /* Enable the DECAPEN bit */
+    reg |= (1UL << FTM_COMBINE_DECAPEN0_SHIFT);
+    reg |= (1UL << FTM_COMBINE_DECAP0_SHIFT);
+#endif  /* FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1 */
     base->COMBINE = reg;
 
     /* Setup the edge detection from channel n and n + 1 */
@@ -1234,6 +1335,7 @@ void FTM_SetupQuadDecode(FTM_Type *base,
  * param faultNumber FTM fault to configure.
  * param faultParams Parameters passed in to set up the fault input
  */
+#if !(defined(FSL_FEATURE_FTM_HAS_NO_FLTCTRL) && FSL_FEATURE_FTM_HAS_NO_FLTCTRL)
 void FTM_SetupFaultInput(FTM_Type *base, ftm_fault_input_t faultNumber, const ftm_fault_param_t *faultParams)
 {
     assert(faultParams != NULL);
@@ -1279,6 +1381,7 @@ void FTM_SetupFaultInput(FTM_Type *base, ftm_fault_input_t faultNumber, const ft
         base->FLTCTRL &= ~((uint32_t)FTM_FLTCTRL_FAULT0EN_MASK << (uint32_t)faultNumber);
     }
 }
+#endif  /* FSL_FEATURE_FTM_HAS_NO_FLTCTRL */
 
 /*!
  * brief Enables the selected FTM interrupts.
@@ -1301,7 +1404,9 @@ void FTM_EnableInterrupts(FTM_Type *base, uint32_t mask)
     }
 
     /* Fault input is not supported if the instance has only basic feature.*/
-#if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
+#if (defined(FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE) && FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE)
+    /* FAULTIE field is not present on this device, skip enabling fault interrupt */
+#elif (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
     if (0 == FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base))
     {
         /* Enable the fault interrupt */
@@ -1316,7 +1421,7 @@ void FTM_EnableInterrupts(FTM_Type *base, uint32_t mask)
     {
         base->MODE |= FTM_MODE_FAULTIE_MASK;
     }
-#endif
+#endif  /* FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE */
 
 #if defined(FSL_FEATURE_FTM_HAS_RELOAD_INTERRUPT) && (FSL_FEATURE_FTM_HAS_RELOAD_INTERRUPT)
     /* Enable the reload interrupt available only on certain SoC's */
@@ -1356,7 +1461,9 @@ void FTM_DisableInterrupts(FTM_Type *base, uint32_t mask)
         base->SC &= ~FTM_SC_TOIE_MASK;
     }
     /* Fault input is not supported if the instance has only basic feature.*/
-#if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
+#if (defined(FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE) && FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE)
+    /* FAULTIE field is not present on this device, skip disabling fault interrupt */
+#elif (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
     if (0 == FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base))
     {
         /* Disable the fault interrupt */
@@ -1371,7 +1478,7 @@ void FTM_DisableInterrupts(FTM_Type *base, uint32_t mask)
     {
         base->MODE &= ~FTM_MODE_FAULTIE_MASK;
     }
-#endif
+#endif  /* FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE */
 
 #if defined(FSL_FEATURE_FTM_HAS_RELOAD_INTERRUPT) && (FSL_FEATURE_FTM_HAS_RELOAD_INTERRUPT)
     /* Disable the reload interrupt available only on certain SoC's */
@@ -1413,7 +1520,9 @@ uint32_t FTM_GetEnabledInterrupts(FTM_Type *base)
         enabledInterrupts |= (uint32_t)kFTM_TimeOverflowInterruptEnable;
     }
     /* Fault input is not supported if the instance has only basic feature.*/
-#if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
+#if (defined(FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE) && FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE)
+    /* FAULTIE field is not present on this device, fault interrupt is never enabled */
+#elif (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
     if (0 == FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base))
     {
         /* Check if fault interrupt is enabled */
@@ -1428,7 +1537,7 @@ uint32_t FTM_GetEnabledInterrupts(FTM_Type *base)
     {
         enabledInterrupts |= (uint32_t)kFTM_FaultInterruptEnable;
     }
-#endif
+#endif  /* FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE */
 
 #if defined(FSL_FEATURE_FTM_HAS_RELOAD_INTERRUPT) && (FSL_FEATURE_FTM_HAS_RELOAD_INTERRUPT)
     /* Check if the reload interrupt is enabled */
@@ -1468,7 +1577,9 @@ uint32_t FTM_GetStatusFlags(FTM_Type *base)
         statusFlags |= (uint32_t)kFTM_TimeOverflowFlag;
     }
     /* Fault input is not supported if the instance has only basic feature.*/
-#if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
+#if (defined(FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF) && FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF)
+    /* FAULTF field is not present on this device, fault flag is never set */
+#elif (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
     if (0 == FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base))
     {
         /* Check fault flag */
@@ -1483,7 +1594,7 @@ uint32_t FTM_GetStatusFlags(FTM_Type *base)
     {
         statusFlags |= (uint32_t)kFTM_FaultFlag;
     }
-#endif
+#endif  /* FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF */
     /* Check channel trigger flag */
     if ((base->EXTTRIG & FTM_EXTTRIG_TRIGF_MASK) != 0U)
     {
@@ -1518,7 +1629,9 @@ void FTM_ClearStatusFlags(FTM_Type *base, uint32_t mask)
         base->SC &= ~FTM_SC_TOF_MASK;
     }
     /* Fault input is not supported if the instance has only basic feature.*/
-#if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
+#if (defined(FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF) && FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF)
+    /* FAULTF field is not present on this device, skip clearing fault flag */
+#elif (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
     if (0 == FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base))
     {
         /* Clear fault flag by writing a 0 to the bit while it is set */
@@ -1533,7 +1646,7 @@ void FTM_ClearStatusFlags(FTM_Type *base, uint32_t mask)
     {
         base->FMS &= ~FTM_FMS_FAULTF_MASK;
     }
-#endif
+#endif  /* FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF */
     /* Clear channel trigger flag */
     if ((mask & (uint32_t)kFTM_ChnlTriggerFlag) != 0U)
     {
@@ -1551,7 +1664,8 @@ void FTM_ClearStatusFlags(FTM_Type *base, uint32_t mask)
     base->STATUS &= ~(mask & 0xFFU);
 }
 
-#if (defined(FSL_FEATURE_FTM_HAS_ERRATA_010856) && FSL_FEATURE_FTM_HAS_ERRATA_010856)
+#if (defined(FSL_FEATURE_FTM_HAS_ERRATA_010856) && FSL_FEATURE_FTM_HAS_ERRATA_010856) && \
+    !(defined(FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF) && FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF)
 /*!
  * brief Workaround for ERR010856.
  *
@@ -1569,7 +1683,7 @@ void FTM_ClearStatusFlags(FTM_Type *base, uint32_t mask)
  */
 void FTM_ERRATA_010856(FTM_Type *base, uint8_t *faultFlag, uint32_t channel, uint32_t channelValue)
 {
-    /* 
+    /*
      * Step1: Check the value of FMS[FAULTF].
      *  - If FMS[FAULTF] = 1 (fault occurred or is occurring), then set a variable to indicate
      *    that a fault was detected and continue to step 2.
@@ -1580,7 +1694,7 @@ void FTM_ERRATA_010856(FTM_Type *base, uint8_t *faultFlag, uint32_t channel, uin
     {
         *faultFlag = 1U;
 
-        /* 
+        /*
          * Step2: Write OUTMASK register to set bits corresponding to any channels that are
          * controlled by SWOCTRL to temporarily inactivate the channel output.
          */
@@ -1617,4 +1731,4 @@ void FTM_ERRATA_010856(FTM_Type *base, uint8_t *faultFlag, uint32_t channel, uin
         base->SC &= ~FTM_SC_TOF_MASK;
     }
 }
-#endif
+#endif  /* FSL_FEATURE_FTM_HAS_ERRATA_010856 && FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF */

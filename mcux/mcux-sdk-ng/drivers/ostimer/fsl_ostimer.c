@@ -464,6 +464,15 @@ void OSTIMER_HandleIRQ(OSTIMER_Type *base, ostimer_callback_t cb)
     }
 }
 
+void OSTIMER_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_ostimerBases))
+    {
+        s_ostimerIsr(s_ostimerBases[instance], s_ostimerHandle[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
+
 void OS_EVENT_DriverIRQHandler(void);
 void OS_EVENT_DriverIRQHandler(void)
 {

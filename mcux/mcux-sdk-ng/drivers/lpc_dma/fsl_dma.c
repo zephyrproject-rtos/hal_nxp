@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2024 NXP
+ * Copyright 2016-2022, 2024, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1050,6 +1050,15 @@ void DMA_IRQHandle(DMA_Type *base)
             }
         }
     }
+}
+
+void DMA_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_dmaBases))
+    {
+        DMA_IRQHandle(s_dmaBases[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 void DMA0_DriverIRQHandler(void);

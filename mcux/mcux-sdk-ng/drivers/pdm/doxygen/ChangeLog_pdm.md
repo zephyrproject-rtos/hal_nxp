@@ -1,5 +1,9 @@
 # PDM
 
+## [2.9.5]
+- Improvements
+  - Updated PDM_ReadFifo shifting logic for variable dataWidth (4/3/2/1 -> shift 0/8/16/24).
+
 ## [2.9.4]
 - Improvements
   - support multiple IRQ handlers

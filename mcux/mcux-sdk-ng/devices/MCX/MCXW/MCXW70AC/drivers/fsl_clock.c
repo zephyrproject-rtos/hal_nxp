@@ -777,7 +777,7 @@ uint32_t CLOCK_Get1MClkFreq(void)
             return 0U;
         }
 
-        if ((reg & MRCC_CC_MASK) == (uint32_t)kCLOCK_IpClkControl_fun0)
+        if ((reg & MRCC_CC_MASK) == kCLOCK_IpClkControl_fun0)
         {
             /* Clock 1M is disabled */
             return 0U;
@@ -798,21 +798,17 @@ uint32_t CLOCK_GetTstmrFreq(uint32_t instance)
 {
     assert(instance < FSL_FEATURE_SOC_TSTMR_COUNT);
 
-    uint32_t freq;
-
     switch (instance)
     {
       case 0U:
-        freq = CLOCK_GetIpFreq(kCLOCK_Tstmr0);
+        return CLOCK_GetIpFreq(kCLOCK_Tstmr0);
         break;
       case 1U:
       case 2U:
-        freq = CLOCK_GetRtcOscFreq();
+        return CLOCK_GetRtcOscFreq();
         break;
       default:
-        freq = 0U;
+        return 0U;
         break;
     }
-
-    return freq;
 }

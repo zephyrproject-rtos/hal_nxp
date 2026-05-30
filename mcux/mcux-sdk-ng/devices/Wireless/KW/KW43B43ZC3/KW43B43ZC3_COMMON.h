@@ -8,7 +8,7 @@
 **
 **     Reference manual:    Rev. 1 Draft F, 2025-10-18
 **     Version:             rev. 1.0, 2020-05-12
-**     Build:               b260316
+**     Build:               b260421
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for KW43B43ZC3
@@ -165,7 +165,7 @@ typedef enum IRQn {
   SGI_IRQn                     = 94,               /**< SGI Interrupt */
   SECURE_ERR_IRQn              = 95,               /**< Secure IP Error Interrupt */
   PKC_IRQn                     = 96,               /**< PKC Module Error */
-  TRNG_IRQn                    = 97,               /**< TRNG Module Error */
+  TRNG0_IRQn                   = 97,               /**< TRNG Module Error */
   FLASH_Arbiter_IRQn           = 98,               /**< Combined interrupt from Flash Arbiter  */
   BLE_INT0_IRQn                = 99,               /**< BLE LL interrupt Set 0 (BLE_INT0_IRQn) */
   BLE_INT1_IRQn                = 100,              /**< BLE LL interrupt Set 1 (BLE_INT1_IRQn) */
@@ -247,6 +247,8 @@ typedef enum IRQn {
   /** Array initializer of ADC peripheral base pointers */
   #define ADC_BASE_PTRS                            { HSADC_0 }
 #endif
+/** Interrupt vectors for the ADC peripheral type */
+#define ADC_IRQS                                 { ADC0_IRQn }
 
 /* AOI - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1098,6 +1100,9 @@ typedef enum IRQn {
   /** Array initializer of GPIO peripheral base pointers */
   #define GPIO_BASE_PTRS                           { GPIO_A, GPIO_B, GPIO_C, GPIO_D }
 #endif
+/** Interrupt vectors for the GPIO peripheral type */
+#define GPIO_IRQS                                { GPIOA_INT0_IRQn, GPIOB_INT0_IRQn, GPIOC_INT0_IRQn, GPIOD_INT0_IRQn }
+#define GPIO_S_IRQS                              { GPIOA_INT1_IRQn, GPIOB_INT1_IRQn, GPIOC_INT1_IRQn, GPIOD_INT1_IRQn }
 
 /* INTM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1460,6 +1465,16 @@ typedef enum IRQn {
   #define LTC_BASE_PTRS                            { LTC }
 #endif
 
+/* MCM - Peripheral instance base addresses */
+/** Peripheral PPB_MCM2_CM4 base address */
+#define PPB_MCM2_CM4_BASE                        (0xE0080000u)
+/** Peripheral PPB_MCM2_CM4 base pointer */
+#define PPB_MCM2_CM4                             ((MCM_Type *)PPB_MCM2_CM4_BASE)
+/** Array initializer of MCM peripheral base addresses */
+#define MCM_BASE_ADDRS                           { PPB_MCM2_CM4_BASE }
+/** Array initializer of MCM peripheral base pointers */
+#define MCM_BASE_PTRS                            { PPB_MCM2_CM4 }
+
 /* MRCC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
   /** Peripheral MRCC_0 base address */
@@ -1516,35 +1531,6 @@ typedef enum IRQn {
   #define MSCM_BASE_ADDRS                          { MSCM_BASE }
   /** Array initializer of MSCM peripheral base pointers */
   #define MSCM_BASE_PTRS                           { MSCM }
-#endif
-
-/* MSF1_B_test - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral TEST base address */
-  #define TEST_BASE                                (0x50032000u)
-  /** Peripheral TEST base address */
-  #define TEST_BASE_NS                             (0x40032000u)
-  /** Peripheral TEST base pointer */
-  #define TEST                                     ((MSF1_B_test_Type *)TEST_BASE)
-  /** Peripheral TEST base pointer */
-  #define TEST_NS                                  ((MSF1_B_test_Type *)TEST_BASE_NS)
-  /** Array initializer of MSF1_B_test peripheral base addresses */
-  #define MSF1_B_test_BASE_ADDRS                   { TEST_BASE }
-  /** Array initializer of MSF1_B_test peripheral base pointers */
-  #define MSF1_B_test_BASE_PTRS                    { TEST }
-  /** Array initializer of MSF1_B_test peripheral base addresses */
-  #define MSF1_B_test_BASE_ADDRS_NS                { TEST_BASE_NS }
-  /** Array initializer of MSF1_B_test peripheral base pointers */
-  #define MSF1_B_test_BASE_PTRS_NS                 { TEST_NS }
-#else
-  /** Peripheral TEST base address */
-  #define TEST_BASE                                (0x40032000u)
-  /** Peripheral TEST base pointer */
-  #define TEST                                     ((MSF1_B_test_Type *)TEST_BASE)
-  /** Array initializer of MSF1_B_test peripheral base addresses */
-  #define MSF1_B_test_BASE_ADDRS                   { TEST_BASE }
-  /** Array initializer of MSF1_B_test peripheral base pointers */
-  #define MSF1_B_test_BASE_PTRS                    { TEST }
 #endif
 
 /* MU - Peripheral instance base addresses */
@@ -1704,35 +1690,6 @@ typedef enum IRQn {
   #define PORT_BASE_ADDRS                          { PORT_A_BASE, PORT_B_BASE, PORT_C_BASE, PORT_D_BASE }
   /** Array initializer of PORT peripheral base pointers */
   #define PORT_BASE_PTRS                           { PORT_A, PORT_B, PORT_C, PORT_D }
-#endif
-
-/* PPB_MCM2_CM4 - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral PPB_MCM2_CM4 base address */
-  #define PPB_MCM2_CM4_BASE                        (0xF0080000u)
-  /** Peripheral PPB_MCM2_CM4 base address */
-  #define PPB_MCM2_CM4_BASE_NS                     (0xE0080000u)
-  /** Peripheral PPB_MCM2_CM4 base pointer */
-  #define PPB_MCM2_CM4                             ((PPB_MCM2_CM4_Type *)PPB_MCM2_CM4_BASE)
-  /** Peripheral PPB_MCM2_CM4 base pointer */
-  #define PPB_MCM2_CM4_NS                          ((PPB_MCM2_CM4_Type *)PPB_MCM2_CM4_BASE_NS)
-  /** Array initializer of PPB_MCM2_CM4 peripheral base addresses */
-  #define PPB_MCM2_CM4_BASE_ADDRS                  { PPB_MCM2_CM4_BASE }
-  /** Array initializer of PPB_MCM2_CM4 peripheral base pointers */
-  #define PPB_MCM2_CM4_BASE_PTRS                   { PPB_MCM2_CM4 }
-  /** Array initializer of PPB_MCM2_CM4 peripheral base addresses */
-  #define PPB_MCM2_CM4_BASE_ADDRS_NS               { PPB_MCM2_CM4_BASE_NS }
-  /** Array initializer of PPB_MCM2_CM4 peripheral base pointers */
-  #define PPB_MCM2_CM4_BASE_PTRS_NS                { PPB_MCM2_CM4_NS }
-#else
-  /** Peripheral PPB_MCM2_CM4 base address */
-  #define PPB_MCM2_CM4_BASE                        (0xE0080000u)
-  /** Peripheral PPB_MCM2_CM4 base pointer */
-  #define PPB_MCM2_CM4                             ((PPB_MCM2_CM4_Type *)PPB_MCM2_CM4_BASE)
-  /** Array initializer of PPB_MCM2_CM4 peripheral base addresses */
-  #define PPB_MCM2_CM4_BASE_ADDRS                  { PPB_MCM2_CM4_BASE }
-  /** Array initializer of PPB_MCM2_CM4 peripheral base pointers */
-  #define PPB_MCM2_CM4_BASE_PTRS                   { PPB_MCM2_CM4 }
 #endif
 
 /* PWM - Peripheral instance base addresses */
@@ -1940,6 +1897,9 @@ typedef enum IRQn {
   /** Array initializer of RTC peripheral base pointers */
   #define RTC_BASE_PTRS                            { SRTC_0 }
 #endif
+/** Interrupt vectors for the RTC peripheral type */
+#define RTC_IRQS                                 { RTC_Alarm_IRQn }
+#define RTC_SECONDS_IRQS                         { RTC_Seconds_IRQn }
 
 /* RTU - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -2848,13 +2808,22 @@ typedef enum IRQn {
  * @{
  */
 
+#define RTC  SRTC_0
+#define CDOG CDOG_0
 #define FMU0 FMU
+#define PKC0 PKC
+#define CAN0 CAN_0
+#define CRC0 CRC_0
 #define SCG0 SCG_0
+#define SFA0 SFA_0
 #define CMC0 CMC_0
 #define DSB0 DSB_0
+#define SGI0 SGI_0
 #define SPC0 SPC_0
 #define WUU0 WUU_0
 #define MRCC MRCC_0
+#define TRNG0 TRNG_0
+#define INTM0 INTM_0
 #define GPIOA GPIO_A
 #define GPIOB GPIO_B
 #define GPIOC GPIO_C
@@ -2863,16 +2832,26 @@ typedef enum IRQn {
 #define PORTB PORT_B
 #define PORTC PORT_C
 #define PORTD PORT_D
-#define CCM32K ANAREG_0
+#define RF_SFA SFA_0
+#define LPSPI0 LPSPI_0
+#define LPSPI1 LPSPI_1
+#define LPSPI2 LPSPI_2
+#define LPCMP0 CMP_0
 #define LPTMR0 LPTMR_0
+#define CCM32K ANAREG_0
 #define MU0_MUA MU_0__MUA
 #define MU0_MUB MU_0__MUB
 #define MU1_MUA MU_1__MUA
 #define MU1_MUB MU_1__MUB
 #define PORTA_BASE PORT_A_BASE
-
-#define FPGA_TARGET 1
-#define FPGA_SUPPORT 1
+#define PORTB_BASE PORT_B_BASE
+#define PORTC_BASE PORT_C_BASE
+#define PORTD_BASE PORT_D_BASE
+#define LPUART0 LPUART_0
+#define LPUART1 LPUART_1
+#define MCM PPB_MCM2_CM4
+#define ADC0 HSADC_0
+#define TRDC TRDC_0_MGR
 
 #define NXP_RADIO_GEN (475)
 #define RADIO_IS_GEN_4P7 (1)

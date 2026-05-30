@@ -20,8 +20,10 @@
 #define FSL_COMPONENT_ID "platform.drivers.dwc_mipi_csi2rx"
 #endif
 
-#define DWC_MIPI_CSI2_DATA_IDS1(vc, dt)            (uint32_t)(0x3FU)&(dt) << (uint32_t)(0x8U)*(vc)
-#define DWC_MIPI_CSI2_DATA_IDS_VC1(vc)             (uint32_t)(0xFU)&(vc) << (uint32_t)(0x8U)*(vc)
+#define DWC_MIPI_CSI2_DATA_IDS1(vc, dt) \
+    ((((uint32_t)(dt)) & 0x3FU) << (8U * ((uint32_t)(vc))))
+#define DWC_MIPI_CSI2_DATA_IDS_VC1(vc) \
+    ((((uint32_t)(vc)) & 0xFU) << (8U * ((uint32_t)(vc))))
 
 #define DWC_MIPI_CSI2_INT_MSK_PHY_FATAL_MASK            (uint32_t)(0xFU)
 #define DWC_MIPI_CSI2_INT_MSK_PKT_FATAL_MASK            (uint32_t)(0x3U)
@@ -47,22 +49,28 @@ static const clock_ip_name_t s_csi2rxClocks[] = CSI_CLOCKS;
 uint32_t CSI2RX_GetInstance(CAMERA_MIPI_CSI2_Type *base)
 {
     uint32_t i;
+    uint32_t instance = 0U;
 
     for (i = 0U; i < ARRAY_SIZE(s_csi2rxBaseAddrs); i++)
     {
         if (MSDK_REG_SECURE_ADDR((uint32_t)base) == MSDK_REG_SECURE_ADDR(s_csi2rxBaseAddrs[i]))
         {
-            return i;
+            instance = i;
+            break;
         }
     }
 
-    assert(false);
-
-    return 0;
+    /* If base is not recognized, return instance 0 by default. */
+    return instance;
 }
 
 void MIPI_CSI2RX_Startup(CAMERA_MIPI_CSI2_Type *base)
 {
+    if (base == NULL)
+    {
+        return;
+    }
+
     /* Release DWC mipi csi2 host from reset */
     base->CSI2_RESETN &= ~CAMERA_MIPI_CSI2_CSI2_RESETN_csi2_resetn_MASK;
     base->CSI2_RESETN |= CAMERA_MIPI_CSI2_CSI2_RESETN_csi2_resetn_MASK;
@@ -76,8 +84,12 @@ void MIPI_CSI2RX_Startup(CAMERA_MIPI_CSI2_Type *base)
 
 status_t MIPI_CSI2RX_InitInterface(CAMERA_MIPI_CSI2_Type *base, CAMERA_DSI_OR_CSI_PHY_CSR_Type *phybase, csi2rx_config_t *config)
 {
-    assert(NULL != config);
     status_t result = kStatus_Success;
+
+    if ((base == NULL) || (phybase == NULL) || (config == NULL))
+    {
+        return kStatus_InvalidArgument;
+    }
 
     /* Put Synopsys DPHY to reset status */
     base->DPHY_RSTZ &= ~CAMERA_MIPI_CSI2_DPHY_RSTZ_dphy_rstz_MASK;
@@ -103,7 +115,10 @@ status_t MIPI_CSI2RX_Init(CAMERA_MIPI_CSI2_Type *base, CAMERA_DSI_OR_CSI_PHY_CSR
 {
     status_t result = kStatus_Success;
 
-    assert(NULL != config);
+    if ((base == NULL) || (phybase == NULL) || (config == NULL))
+    {
+        return kStatus_InvalidArgument;
+    }
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* un-gate clock */
@@ -127,6 +142,11 @@ status_t MIPI_CSI2RX_Init(CAMERA_MIPI_CSI2_Type *base, CAMERA_DSI_OR_CSI_PHY_CSR
 
 void CSI2RX_Deinit(CAMERA_MIPI_CSI2_Type *base)
 {
+    if (base == NULL)
+    {
+        return;
+    }
+
     base->CSI2_RESETN &= ~CAMERA_MIPI_CSI2_CSI2_RESETN_csi2_resetn_MASK;
     DWC_DPHY_PowerOff(base);
 

@@ -1,5 +1,10 @@
 # PWM
 
+## [2.10.1]
+
+- Bug Fixes
+  - Fixed MISRA C-2012 Rule 17.7, 20.6, 16.3, 10.8
+
 ## [2.10.0]
 
 - Improvements

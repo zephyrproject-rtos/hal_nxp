@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief WAKETIMER driver version. */
-#define FSL_WAKETIMER_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_WAKETIMER_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*! @} */
 
 /*!

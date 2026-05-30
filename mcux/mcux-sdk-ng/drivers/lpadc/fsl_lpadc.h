@@ -899,6 +899,11 @@ static inline void LPADC_ClearStatusFlags(ADC_Type *base, uint32_t mask)
  * @brief Get trigger status flags to indicate which trigger sequences have been completed or interrupted by a high
  * priority trigger exception.
  *
+ * @note On some devices, the trigger completion status may be asserted before the final command in a chained trigger
+ * sequence starts to execute. When using chained commands, do not rely on trigger completion status alone to guarantee
+ * that all conversion results are already available in the FIFO. Use FIFO ready indication together with result tags,
+ * or stall the last command with WAIT_TRIG when that sequencing model is acceptable for the application.
+ *
  * @param base LPADC peripheral base address.
  * @return The OR'ed value of @ref _lpadc_trigger_status_flags.
  */
@@ -932,6 +937,11 @@ static inline void LPADC_ClearTriggerStatusFlags(ADC_Type *base, uint32_t mask)
 
 /*!
  * @brief Enable interrupts.
+ *
+ * @note When enabling trigger completion interrupts (`kLPADC_TriggerXCompletionInterruptEnable`) on some devices,
+ * the interrupt may occur before the final command in a chained trigger sequence starts to execute. For multi-command
+ * trigger sequences, do not use the trigger completion interrupt alone as the indication that all expected results
+ * are already stored in the FIFO.
  *
  * @param base LPADC peripheral base address.
  * @param mask Mask value for interrupt events. See to #_lpadc_interrupt_enable.

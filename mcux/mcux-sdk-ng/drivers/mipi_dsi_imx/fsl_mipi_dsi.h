@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2025 NXP
+ * Copyright 2023-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,7 +20,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*! @} */
 
 #define TX_DPHY_TX_PLL_1             0x15E
@@ -773,10 +773,10 @@ uint16_t Pll_Set_Pll_Vco_Param(uint32_t pll_freq_sel);
 /*!
  * @brief config to set Dphy.
  *
- * @param phyRefClkFreq_Hz Dphy reference clock frequency in Hz
- * @param dataRateFreq_Hz line rate clock frequency.
+ * @param phyRefClkFreqHz Dphy reference clock frequency in Hz
+ * @param dataRateFreqHz line rate clock frequency.
  */
-void DSI_ConfigDphy(MIPI_DSI_Type *base, uint32_t phyRefClkFreq_Hz, uint32_t dataRateFreq_Hz);
+void DSI_ConfigDphy(MIPI_DSI_Type *base, uint32_t phyRefClkFreqHz, uint32_t dataRateFreqHz);
 /*! @} */
 
 #if defined(__cplusplus)

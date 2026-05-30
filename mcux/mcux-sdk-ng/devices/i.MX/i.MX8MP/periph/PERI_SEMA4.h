@@ -34,7 +34,7 @@
 **                          MIMX8ML8DVNLZ_dsp
 **
 **     Version:             rev. 6.0, 2024-10-29
-**     Build:               b260205
+**     Build:               b260409
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SEMA4

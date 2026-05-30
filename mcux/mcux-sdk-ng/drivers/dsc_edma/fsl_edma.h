@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief EDMA driver version. */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*! @} */
 
 /*******************************************************************************
@@ -1664,6 +1664,14 @@ void EDMA_TransferAbort(edma_handle_t *psHandle);
  * @param psHandle eDMA handle pointer.
  */
 void EDMA_TransferHandleIRQ(edma_handle_t *psHandle);
+
+/*!
+ * @brief eDMA common IRQ handler entry, dispatches to the channel handler.
+ *
+ * @param instance eDMA peripheral instance number.
+ * @param channel  eDMA channel number within the instance.
+ */
+void EDMA_DriverIRQHandler(uint32_t instance, uint32_t channel);
 
 /*! @} */
 

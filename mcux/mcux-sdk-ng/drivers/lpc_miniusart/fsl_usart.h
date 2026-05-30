@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022, 2025 NXP
+ * Copyright 2017-2022, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief USART driver version. */
-#define FSL_USART_DRIVER_VERSION (MAKE_VERSION(2, 5, 2))
+#define FSL_USART_DRIVER_VERSION (MAKE_VERSION(2, 5, 3))
 /*! @} */
 
 /*! @brief Macro gate for enable transaction API.  1 for enable, 0 for disable. */
@@ -812,6 +812,12 @@ status_t USART_TransferGetReceiveCount(USART_Type *base, usart_handle_t *handle,
  */
 void USART_TransferHandleIRQ(USART_Type *base, usart_handle_t *handle);
 
+/*!
+ * @brief Common IRQ handler entry for USART, dispatches to the registered ISR.
+ *
+ * @param instance USART peripheral instance number.
+ */
+void USART_DriverIRQHandler(uint32_t instance);
 /*! @} */
 #endif
 

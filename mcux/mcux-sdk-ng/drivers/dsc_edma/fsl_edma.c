@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1355,4 +1355,14 @@ void DMA3_DriverIRQHandler(void);
 void DMA3_DriverIRQHandler(void)
 {
     EDMA_TransferHandleIRQ(s_EDMAHandle[3]);
+}
+
+void EDMA_DriverIRQHandler(uint32_t instance, uint32_t channel)
+{
+    uint32_t index = EDMA_GetInstanceOffset(instance) * (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL + channel;
+    if (index < ARRAY_SIZE(s_EDMAHandle))
+    {
+        EDMA_TransferHandleIRQ(s_EDMAHandle[index]);
+    }
+    SDK_ISR_EXIT_BARRIER;
 }

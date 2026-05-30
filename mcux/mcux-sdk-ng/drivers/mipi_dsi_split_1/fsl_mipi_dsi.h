@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*! @} */
 
 /* The max APB transfer size. */

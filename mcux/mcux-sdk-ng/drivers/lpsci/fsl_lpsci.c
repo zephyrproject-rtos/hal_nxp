@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1503,6 +1503,15 @@ void LPSCI_TransferHandleIRQ(UART0_Type *base, void *irqHandle)
 void LPSCI_TransferHandleErrorIRQ(UART0_Type *base, void *handle)
 {
     /* To be implemented by User. */
+}
+
+void LPSCI_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_lpsciBases))
+    {
+        s_lpsciIsr(s_lpsciBases[instance], s_lpsciHandle[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if defined(UART0)

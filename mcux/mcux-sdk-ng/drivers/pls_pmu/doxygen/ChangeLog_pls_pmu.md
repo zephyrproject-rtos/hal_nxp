@@ -1,5 +1,9 @@
 # PLS_PMU
 
+## [2.2.0]
+- Deprecated APIs
+    - Deprecate PMU_EnableFRO16K and PMU_UpdateDCDCWakeupWatchdogCounterValue functions
+
 ## [2.1.0]
 - New Features
     - Added PMU_UpdateHvdLvTrim() API to update PMU_TRIM4[HVD_LV_TRIM] bitfield.

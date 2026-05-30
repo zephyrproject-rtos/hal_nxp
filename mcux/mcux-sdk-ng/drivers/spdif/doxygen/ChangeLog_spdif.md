@@ -1,5 +1,10 @@
 # SPDIF
 
+## [2.0.9]
+
+- New Features
+  - Added common IRQ handler entry SPIDIF_CommonDriverIRQHandler.
+
 ## [2.0.8]
 
 - Bug fixes

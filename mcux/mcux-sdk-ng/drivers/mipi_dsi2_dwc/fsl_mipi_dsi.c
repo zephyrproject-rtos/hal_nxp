@@ -20,11 +20,11 @@
 #define FSL_MIPI_DSI_TIMEOUT 0x1000U
 #endif
 
-typedef union _u32_f32
+typedef union _mipi_u32_f32
 {
     float f32;
     uint32_t u32;
-} u32_f32_t;
+} mipi_u32_f32_t;
 
 /*******************************************************************************
  * Variables
@@ -41,7 +41,7 @@ static DSI_V2_HOST_DSI_Type *const s_dsiBases[] = DSI_V2_HOST_DSI_BASE_PTRS;
  * @param base MIPI DSI main peripheral base address.
  * @param config Pointer to dsi config .
  */
-static uint8_t DSI_ApbCheckFifoState(DSI_V2_HOST_MAIN_Type *base, const dsi_config_t *config);
+static status_t DSI_ApbCheckFifoState(DSI_V2_HOST_MAIN_Type *base, const dsi_config_t *config, dsi_fifo_status_t *fifoState);
 /*!
  * @brief Prepares and starts the DSI APB transfer.
  *
@@ -59,37 +59,46 @@ static status_t DSI_PrepareApbTransfer(DSI_V2_HOST_DSI_Type *base, DSI_V2_HOST_I
 /*******************************************************************************
  * Code
  ******************************************************************************/
-static uint8_t DSI_ApbCheckFifoState(DSI_V2_HOST_MAIN_Type *base, const dsi_config_t *config)
+static status_t DSI_ApbCheckFifoState(DSI_V2_HOST_MAIN_Type *base, const dsi_config_t *config, dsi_fifo_status_t *fifoState)
 {
     uint32_t fifostatus;
 
+    assert(fifoState != NULL);
+
     /* Set the MIPI DSI FIFO whose status you want to read. */
-    base->OBS_FIFO_SEL = config->fifo;
+    base->OBS_FIFO_SEL = (uint32_t)config->fifo;
 
     fifostatus = base->OBS_FIFO_STATUS;
 
-    if ((fifostatus & DSI_V2_HOST_MAIN_OBS_FIFO_STATUS_EMPTY_MASK) != 0)
+    if ((fifostatus & DSI_V2_HOST_MAIN_OBS_FIFO_STATUS_EMPTY_MASK) != 0U)
     {
-        return kDSI_FifoEmpty;
+        *fifoState = kDSI_FifoEmpty;
+        return kStatus_Success;
     }
-    else if ((fifostatus & DSI_V2_HOST_MAIN_OBS_FIFO_STATUS_ALMOST_EMPTY_MASK) != 0)
+    else if ((fifostatus & DSI_V2_HOST_MAIN_OBS_FIFO_STATUS_ALMOST_EMPTY_MASK) != 0U)
     {
-        return kDSI_FifoAlmostEmpty;
+        *fifoState = kDSI_FifoAlmostEmpty;
+        return kStatus_Success;
     }
-    else if ((fifostatus & DSI_V2_HOST_MAIN_OBS_FIFO_STATUS_HALF_FULL_MASK) != 0)
+    else if ((fifostatus & DSI_V2_HOST_MAIN_OBS_FIFO_STATUS_HALF_FULL_MASK) != 0U)
     {
-        return kDSI_FifoHalfFull;
+        *fifoState = kDSI_FifoHalfFull;
+        return kStatus_Success;
     }
-    else if ((fifostatus & DSI_V2_HOST_MAIN_OBS_FIFO_STATUS_ALMOST_FULL_MASK) != 0)
+    else if ((fifostatus & DSI_V2_HOST_MAIN_OBS_FIFO_STATUS_ALMOST_FULL_MASK) != 0U)
     {
-        return kDSI_FifoAlmostfFull;
+        *fifoState = kDSI_FifoAlmostfFull;
+        return kStatus_Success;
     }
-    else if ((fifostatus & DSI_V2_HOST_MAIN_OBS_FIFO_STATUS_FULL_MASK) != 0)
+    else if ((fifostatus & DSI_V2_HOST_MAIN_OBS_FIFO_STATUS_FULL_MASK) != 0U)
     {
-        return kDSI_FifoFull;
+        *fifoState = kDSI_FifoFull;
+        return kStatus_Success;
     }
-
-    return kStatus_Fail;
+    else
+    {
+        return kStatus_Fail;
+    }
 }
 
 /*!
@@ -107,7 +116,7 @@ uint32_t MIPI_ConvertFloat(float floatValue, uint8_t intBits, uint8_t fracBits)
     /* One bit reserved for sign bit. */
     assert(intBits + fracBits + 1U < 32U);
 
-    u32_f32_t u32_f32;
+    mipi_u32_f32_t u32_f32;
     uint32_t ret;
     uint32_t expBits;
 
@@ -137,7 +146,16 @@ uint32_t MIPI_ConvertFloat(float floatValue, uint8_t intBits, uint8_t fracBits)
     /* Set the sign bit. */
     if (0U != (floatBits & 0x80000000UL))
     {
-        ret = ((~(uint32_t)ret) + 1U) & ~(0xFFFFFFFFU << (intBits + fracBits + 1U));
+        uint32_t mask = ~(0xFFFFFFFFU << (intBits + fracBits + 1U));
+
+        if (ret != 0U)
+        {
+            ret = ((~ret) + 1U) & mask;
+        }
+        else
+        {
+            ret = 0U;
+        }
     }
 
     return ret;
@@ -153,10 +171,10 @@ uint32_t MIPI_ConvertFloat(float floatValue, uint8_t intBits, uint8_t fracBits)
 void DSI_ConfigHorizontalParams(DSI_V2_HOST_IPI_Type *ipi, const dsi_ipi_config_t *config, float ratio)
 {
     /* Update and configure the horizontal timing parameters. */
-    ipi->IPI_VID_HSA_MAN_CFG   = MIPI_ConvertFloat(ratio * config->hsa, 14, 16);
-    ipi->IPI_VID_HBP_MAN_CFG   = MIPI_ConvertFloat(ratio * config->hbp, 14, 16);
-    ipi->IPI_VID_HACT_MAN_CFG  = MIPI_ConvertFloat(ratio * config->hactive, 14, 16);
-    ipi->IPI_VID_HLINE_MAN_CFG = MIPI_ConvertFloat(ratio * config->hline, 14, 16);
+    ipi->IPI_VID_HSA_MAN_CFG   = MIPI_ConvertFloat(ratio * (float)config->hsa, 14U, 16U);
+    ipi->IPI_VID_HBP_MAN_CFG   = MIPI_ConvertFloat(ratio * (float)config->hbp, 14U, 16U);
+    ipi->IPI_VID_HACT_MAN_CFG  = MIPI_ConvertFloat(ratio * (float)config->hactive, 14U, 16U);
+    ipi->IPI_VID_HLINE_MAN_CFG = MIPI_ConvertFloat(ratio * (float)config->hline, 14U, 16U);
 }
 /*!
  * @brief Gets the MIPI DSI host controller instance from peripheral base address.
@@ -195,13 +213,13 @@ uint32_t DSI_GetInstance(DSI_V2_HOST_DSI_Type *base)
  */
 void DSI_Init(DSI_V2_HOST_MAIN_Type *base, DSI_V2_HOST_DSI_Type *dsi, DSI_V2_HOST_INT_Type *inter, const dsi_config_t *config)
 {
-    assert(config);
+    assert(config != NULL);
 
     /* Reset the module before configuration. */
     base->PWR_UP     = 0U;
     base->SOFT_RESET = 0U;
     /* Select manual mode as default. */
-    base->MANUAL_MODE_CFG = config->manualmode;
+    base->MANUAL_MODE_CFG = (uint32_t)config->manualmode;
 
     /*
      * Set the PHY timeout, timeout function is disabled if set into 0U.
@@ -216,16 +234,21 @@ void DSI_Init(DSI_V2_HOST_MAIN_Type *base, DSI_V2_HOST_DSI_Type *dsi, DSI_V2_HOS
     base->TO_BTA_CFG      = config->BtaTimeout;
 
     /* Check and clear RX fifo into initial state. */
-    while (DSI_ApbCheckFifoState(base, config) == kDSI_FifoFull)
+    dsi_fifo_status_t fifoState;
+    status_t apbFifoStatus;
+
+    apbFifoStatus = DSI_ApbCheckFifoState(base, config, &fifoState);
+    while ((apbFifoStatus == kStatus_Success) && (fifoState == kDSI_FifoFull))
     {
         base->OBS_FIFO_CTRL = DSI_V2_HOST_MAIN_OBS_FIFO_CTRL_FIFO_MANUAL_INIT_MASK;
+        apbFifoStatus = DSI_ApbCheckFifoState(base, config, &fifoState);
     }
 
     /* Configure package flags, whether to enable BTA. */
     dsi->DSI_GENERAL_CFG = (uint32_t)config->packageFlags;
     dsi->CRI_FIFO_DEPTH_CFG = DSI_V2_HOST_DSI_CRI_FIFO_DEPTH_CFG_WR_VALUE(0x20) | DSI_V2_HOST_DSI_CRI_FIFO_DEPTH_CFG_RD_VALUE(0x80);
     /* Disable dsi virtual channel */
-    dsi->DSI_VCID_CFG |= config->dsivirtualchannel;
+    dsi->DSI_VCID_CFG |= (uint32_t)config->dsivirtualchannel;
 
     /* Disable all interrupts by default, user could enable the desired interrupts later. */
     inter->INT_UNMASK_PHY = 0U;
@@ -271,7 +294,7 @@ void DSI_Deinit(DSI_V2_HOST_MAIN_Type *base)
  */
 void DSI_GetDefaultConfig(dsi_config_t *config)
 {
-    assert(config);
+    assert(config != NULL);
 
     /* Initializes the configure structure to zero. */
     (void)memset(config, 0, sizeof(*config));
@@ -301,9 +324,10 @@ void DSI_GetDefaultConfig(dsi_config_t *config)
  */
 void DSI_SetIpiConfig(DSI_V2_HOST_IPI_Type *ipi, const dsi_ipi_config_t *config)
 {
-    assert(config);
+    assert(config != NULL);
 
-    uint8_t ipi_format = 0U, ipi_depth = 0U;
+    dsi_ipi_color_format_t ipi_format = kDSI_IPIRGB;
+    dsi_ipi_color_depth_t ipi_depth   = kDSI_IPIdepth8bits;
 
     switch (config->dsi_fmt)
     {
@@ -328,7 +352,8 @@ void DSI_SetIpiConfig(DSI_V2_HOST_IPI_Type *ipi, const dsi_ipi_config_t *config)
     uint32_t reg = ipi->IPI_COLOR_MAN_CFG;
 
     reg &= ~(DSI_V2_HOST_IPI_IPI_COLOR_MAN_CFG_IPI_FORMAT_MASK | DSI_V2_HOST_IPI_IPI_COLOR_MAN_CFG_IPI_DEPTH_MASK);
-    reg |= DSI_V2_HOST_IPI_IPI_COLOR_MAN_CFG_IPI_FORMAT(ipi_format) | DSI_V2_HOST_IPI_IPI_COLOR_MAN_CFG_IPI_DEPTH(ipi_depth);
+    reg |= DSI_V2_HOST_IPI_IPI_COLOR_MAN_CFG_IPI_FORMAT((uint32_t)ipi_format) |
+           DSI_V2_HOST_IPI_IPI_COLOR_MAN_CFG_IPI_DEPTH((uint32_t)ipi_depth);
 
     ipi->IPI_COLOR_MAN_CFG = reg;
 
@@ -348,9 +373,9 @@ void DSI_SetIpiConfig(DSI_V2_HOST_IPI_Type *ipi, const dsi_ipi_config_t *config)
     ipi->IPI_HIBERNATE_CFG = (ipi->IPI_HIBERNATE_CFG & ~DSI_V2_HOST_IPI_IPI_HIBERNATE_CFG_HIB_TYPE_MASK) |
                              DSI_V2_HOST_IPI_IPI_HIBERNATE_CFG_HIB_TYPE(config->hibernateType);
 
-    ipi->IPI_LANES_MAN_CFG  = config->dsi_ipi_lane;
+    ipi->IPI_LANES_MAN_CFG  = (uint32_t)config->dsi_ipi_lane;
     ipi->IPI_PIX_PKT_CFG    = config->hactive;
-    ipi->IPI_MAPPING_CFG    = config->dsi_ipi_mapping;
+    ipi->IPI_MAPPING_CFG    = (uint32_t)config->dsi_ipi_mapping;
     ipi->IPI_FIFO_DEPTH_CFG = config->ipi_fifo_depth_value;
 }
 
@@ -365,14 +390,14 @@ void DSI_SetIpiConfig(DSI_V2_HOST_IPI_Type *ipi, const dsi_ipi_config_t *config)
  */
 void DSI_SetOperateMode(DSI_V2_HOST_MAIN_Type *base, DSI_V2_HOST_DSI_Type *dsi, const dsi_config_t *config)
 {
-    assert(config);
+    assert(config != NULL);
 
     if (config->operatemode == kDSI_VideoMode)
     {
         uint32_t reg = dsi->DSI_VID_TX_CFG;
         reg &= ~(DSI_V2_HOST_DSI_DSI_VID_TX_CFG_BLK_HSA_HS_EN_MASK | DSI_V2_HOST_DSI_DSI_VID_TX_CFG_BLK_HBP_HS_EN_MASK |
                  DSI_V2_HOST_DSI_DSI_VID_TX_CFG_BLK_HFP_HS_EN_MASK | DSI_V2_HOST_DSI_DSI_VID_TX_CFG_VID_MODE_TYPE_MASK);
-        reg |= config->videoMode;
+        reg |= (uint32_t)config->videoMode;
 
         /* Set video transmission options according into user configuration. */
         dsi->DSI_VID_TX_CFG = reg;
@@ -391,7 +416,7 @@ void DSI_SetOperateMode(DSI_V2_HOST_MAIN_Type *base, DSI_V2_HOST_DSI_Type *dsi, 
  */
 void DSI_SetPhyConfig(DSI_V2_HOST_PHY_Type *dsi_phy, const dsi_phy_config_t *phyConfig)
 {
-    assert(phyConfig);
+    assert(phyConfig != NULL);
 
     dsi_phy->PHY_MODE_CFG = (dsi_phy->PHY_MODE_CFG & ~(DSI_V2_HOST_PHY_PHY_MODE_CFG_PHY_TYPE_MASK |
                                                        DSI_V2_HOST_PHY_PHY_MODE_CFG_PHY_LANES_MASK |
@@ -401,7 +426,7 @@ void DSI_SetPhyConfig(DSI_V2_HOST_PHY_Type *dsi_phy, const dsi_phy_config_t *phy
                             DSI_V2_HOST_PHY_PHY_MODE_CFG_PPI_WIDTH(phyConfig->ppiwidth);
 
     dsi_phy->PHY_CLK_CFG = DSI_V2_HOST_PHY_PHY_CLK_CFG_PHY_LPTX_CLK_DIV(phyConfig->lptx_clkdiv) |
-                           DSI_V2_HOST_PHY_PHY_CLK_CFG_CLK_TYPE(phyConfig->enableNoncontinuousClk);
+                           DSI_V2_HOST_PHY_PHY_CLK_CFG_CLK_TYPE(phyConfig->enableNoncontinuousClk ? 1U : 0U);
 
     dsi_phy->PHY_LP2HS_MAN_CFG = DSI_V2_HOST_PHY_PHY_LP2HS_MAN_CFG_PHY_LP2HS_TIME(phyConfig->lp2hs_time);
 
@@ -468,10 +493,12 @@ void DSI_WriteTxHeader(DSI_V2_HOST_DSI_Type *base,
                        uint8_t virtualChannel,
                        dsi_tx_data_type_t dataType)
 {
+    uint8_t wcLsb = (uint8_t)(wordCount & 0xFFU);
+    uint8_t wcMsb = (uint8_t)((wordCount >> 8U) & 0xFFU);
     uint32_t header = DSI_V2_HOST_DSI_CRI_TX_HDR_DATA_TYPE(dataType) |
                       DSI_V2_HOST_DSI_CRI_TX_HDR_VIRTUAL_CHANNEL(virtualChannel) |
-                      DSI_V2_HOST_DSI_CRI_TX_HDR_WC_LSB((uint8_t)wordCount) |
-                      DSI_V2_HOST_DSI_CRI_TX_HDR_WC_MSB((uint8_t)(wordCount >> 8U));
+                      DSI_V2_HOST_DSI_CRI_TX_HDR_WC_LSB(wcLsb) |
+                      DSI_V2_HOST_DSI_CRI_TX_HDR_WC_MSB(wcMsb);
     base->CRI_TX_HDR = header;
 }
 
@@ -516,8 +543,17 @@ void DSI_WriteTxPayloadExt(
     uint8_t i;
     uint32_t wordToWrite;
     uint8_t byteEachWrite = (uint8_t)sizeof(uint32_t);
+    uint16_t actualPayloadSize;
 
-    payloadSize = sendDcsCmd ? payloadSize + 1U : payloadSize;
+    if (sendDcsCmd)
+    {
+        assert(payloadSize < 0xFFFFU);
+        actualPayloadSize = (uint16_t)(payloadSize + 1U);
+    }
+    else
+    {
+        actualPayloadSize = payloadSize;
+    }
 
     /* Write the first 4-byte. */
     if (sendDcsCmd)
@@ -530,15 +566,18 @@ void DSI_WriteTxPayloadExt(
         payload++;
     }
 
-    payloadSize--;
+    if (actualPayloadSize > 0U)
+    {
+        actualPayloadSize--;
+    }
 
     for (i = 1U; i < 4U; i++)
     {
-        if (payloadSize > 0U)
+        if (actualPayloadSize > 0U)
         {
             wordToWrite |= ((uint32_t)(*payload) << (i << 3U));
             payload++;
-            payloadSize--;
+            actualPayloadSize--;
         }
         else
         {
@@ -549,19 +588,19 @@ void DSI_WriteTxPayloadExt(
     base->CRI_TX_PLD = wordToWrite;
 
     /* Write the rest payload data if any. */
-    while (payloadSize != 0U)
+    while (actualPayloadSize != 0U)
     {
-        if (payloadSize < byteEachWrite)
+        if (actualPayloadSize < byteEachWrite)
         {
-            memcpy((void *)&wordToWrite, (const void *)payload, payloadSize);
+            (void)memcpy((void *)&wordToWrite, (const void *)payload, actualPayloadSize);
             base->CRI_TX_PLD = wordToWrite;
-            payloadSize      = 0U;
+            actualPayloadSize = 0U;
         }
         else
         {
-            memcpy((void *)&wordToWrite, (const void *)payload, byteEachWrite);
+            (void)memcpy((void *)&wordToWrite, (const void *)payload, byteEachWrite);
             base->CRI_TX_PLD = wordToWrite;
-            payloadSize -= byteEachWrite;
+            actualPayloadSize -= byteEachWrite;
             payload += byteEachWrite;
         }
     }
@@ -587,12 +626,12 @@ void DSI_ReadRxData(DSI_V2_HOST_DSI_Type *base, uint8_t *payload, uint16_t paylo
         readWord = base->CRI_RX_PLD;
         if (payloadSize < byteEachRead)
         {
-            memcpy((void *)payload, (const void *)&readWord, payloadSize);
+            (void)memcpy((void *)payload, (const void *)&readWord, payloadSize);
             payloadSize = 0U;
         }
         else
         {
-            memcpy((void *)payload, (const void *)&readWord, byteEachRead);
+            (void)memcpy((void *)payload, (const void *)&readWord, byteEachRead);
             payloadSize -= byteEachRead;
             payload += byteEachRead;
         }
@@ -701,7 +740,7 @@ status_t DSI_TransferBlocking(DSI_V2_HOST_MAIN_Type *base,
     while (true)
     {
         /* Wait for CRI FIFO is empty */
-        if ((base->CORE_STATUS & pktStatus) == 0)
+        if ((base->CORE_STATUS & pktStatus) == 0U)
         {
             break;
         }
@@ -800,7 +839,7 @@ status_t DSI_TransferBlocking(DSI_V2_HOST_MAIN_Type *base,
                  ((uint32_t)kDSI_RxDataDcsLongRdResponse == rxDataType))
         {
             readRxDataFromPayload = true;
-            actualRxByteCount     = (uint16_t)(rxPktHeader >> 8U);
+            actualRxByteCount     = (uint16_t)((rxPktHeader >> 8U) & 0xFFFFU);
         }
         else /* kDSI_RxDataEoTp */
         {

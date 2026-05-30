@@ -13,7 +13,7 @@
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260303
+**     Build:               b260304
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXC161
@@ -75,7 +75,7 @@ typedef enum IRQn {
   SysTick_IRQn                 = -1,               /**< Cortex-M23 System Tick Interrupt */
 
   /* Device specific interrupts */
-  Reserved16_IRQn              = 0,                /**< OR IRQ1 to IRQ53 */
+  OR_IRQn                      = 0,                /**< OR IRQ1 to IRQ53 */
   CMC_IRQn                     = 1,                /**< Core Mode Controller interrupt */
   DMA_CH0_IRQn                 = 2,                /**< DMA3_0_CH0 error or transfer complete */
   DMA_CH1_IRQn                 = 3,                /**< DMA3_0_CH1 error or transfer complete */
@@ -87,7 +87,7 @@ typedef enum IRQn {
   MBC0_IRQn                    = 14,               /**< MBC secure violation interrupt */
   SCG0_IRQn                    = 15,               /**< System Clock Generator interrupt */
   SPC0_IRQn                    = 16,               /**< System Power Controller interrupt */
-  Reserved33_IRQn              = 17,               /**< Reserved interrupt */
+  TRNG0_IRQn                   = 17,               /**< TRNG Interrupt or TRNG Error */
   WUU0_IRQn                    = 18,               /**< Wake Up Unit interrupt */
   LPI2C0_IRQn                  = 26,               /**< Low-Power Inter Integrated Circuit 0 interrupt */
   LPSPI0_IRQn                  = 28,               /**< Low-Power Serial Peripheral Interface 0 interrupt */
@@ -95,7 +95,7 @@ typedef enum IRQn {
   LPUART1_IRQn                 = 32,               /**< Low-Power Universal Asynchronous Receive/Transmit 1 interrupt */
   LPUART2_IRQn                 = 33,               /**< Low-Power Universal Asynchronous Receive/Transmit 2 interrupt */
   LPUART3_IRQn                 = 34,               /**< Low-Power Universal Asynchronous Receive/Transmit 3 interrupt */
-  LPUART4_IRQn                 = 35,               /**< Low-Power Universal Asynchronous Receive/Transmit 4 interrupt */
+  Reserved51_IRQn              = 35,               /**< Reserved interrupt */
   CTIMER0_IRQn                 = 39,               /**< Standard counter/timer 0 interrupt */
   CTIMER1_IRQn                 = 40,               /**< Standard counter/timer 1 interrupt */
   FLEXPWM0_RELOAD_ERROR_IRQn   = 44,               /**< FlexPWM0_reload_error interrupt */
@@ -103,12 +103,13 @@ typedef enum IRQn {
   FLEXPWM0_SUBMODULE0_IRQn     = 46,               /**< FlexPWM0 Submodule 0 capture/compare/reload interrupt */
   FLEXPWM0_SUBMODULE1_IRQn     = 47,               /**< FlexPWM0 Submodule 1 capture/compare/reload interrupt */
   FLEXPWM0_SUBMODULE2_IRQn     = 48,               /**< FlexPWM0 Submodule 2 capture/compare/reload interrupt */
-  EQDC0_COMPARE_IRQn           = 50,               /**< Compare */
-  EQDC0_HOME_IRQn              = 51,               /**< Home */
-  EQDC0_WATCHDOG_IRQn          = 52,               /**< Watchdog / Simultaneous A and B Change */
-  EQDC0_INDEX_IRQn             = 53,               /**< Index / Roll Over / Roll Under */
+  Reserved66_IRQn              = 50,               /**< Reserved interrupt */
+  Reserved67_IRQn              = 51,               /**< Reserved interrupt */
+  Reserved68_IRQn              = 52,               /**< Reserved interrupt */
+  Reserved69_IRQn              = 53,               /**< Reserved interrupt */
   FREQME0_IRQn                 = 54,               /**< Frequency Measurement interrupt */
   LPTMR0_IRQn                  = 55,               /**< Low Power Timer 0 interrupt */
+  VBAT0_IRQn                   = 57,               /**< VBAT OSC32K ready interrupt */
   RTC_IRQn                     = 58,               /**< RTC alarm interrupt */
   RTC_1HZ_IRQn                 = 59,               /**< RTC 1Hz interrupt */
   WWDT0_IRQn                   = 60,               /**< Windowed Watchdog Timer 0 interrupt */
@@ -511,6 +512,8 @@ typedef enum IRQn {
 #define TRNG_BASE_ADDRS                          { TRNG0_BASE }
 /** Array initializer of TRNG peripheral base pointers */
 #define TRNG_BASE_PTRS                           { TRNG0 }
+/** Interrupt vectors for the TRNG peripheral type */
+#define TRNG_IRQS                                { TRNG0_IRQn }
 
 /* VBAT - Peripheral instance base addresses */
 /** Peripheral VBAT0 base address */

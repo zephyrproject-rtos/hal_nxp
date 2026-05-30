@@ -1,5 +1,10 @@
 # ESAI
 
+## [2.1.2]
+
+- New Features
+  - Added common IRQ handler entry ESAI_CommonDriverIRQHandler.
+
 ## [2.1.1]
 
 - Bug Fixes

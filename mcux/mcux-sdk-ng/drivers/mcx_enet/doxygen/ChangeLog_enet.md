@@ -1,5 +1,10 @@
 # MCX_ENET
 
+## [2.2.3]
+
+- New Features
+  - Added common IRQ handler entry ENET_DriverIRQHandler.
+
 ## [2.2.2]
 
 - Bug Fixes

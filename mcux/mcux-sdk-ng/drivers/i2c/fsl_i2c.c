@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021, 2025 NXP
+ * Copyright 2016-2021, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -2370,6 +2370,15 @@ void I2C_SlaveTransferHandleIRQ(I2C_Type *base, void *i2cHandle)
 #endif /* !FSL_FEATURE_I2C_HAS_START_STOP_DETECT or !FSL_FEATURE_I2C_HAS_STOP_DETECT */
         }
     }
+}
+
+void I2C_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_i2cBases))
+    {
+        I2C_TransferCommonIRQHandler(s_i2cBases[instance], s_i2cHandle[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if defined(FSL_FEATURE_I2C_HAS_SHARED_IRQ0_IRQ1) && FSL_FEATURE_I2C_HAS_SHARED_IRQ0_IRQ1

@@ -99,6 +99,9 @@ status_t FLASH_Erase(flash_config_t *config, FMU_Type *base, uint32_t start, uin
     assert(NULL != config);
     assert(NULL != base);
 
+    /* Clear flash cache before every erase to prevent the possibility of returning stale data */
+    MCM->CPCR2 |= MCM_CPCR2_CCBC_MASK;
+
     status_t status;
     status = BOOTLOADER_API_TREE_POINTER->flashDriver->flash_erase_sector(config, base, start, lengthInBytes, key);
 
@@ -120,6 +123,8 @@ status_t FLASH_Program(flash_config_t *config, FMU_Type *base, uint32_t start, u
     status = flash_check_param(config, base, start, lengthInBytes, FSL_FEATURE_FLASH_PFLASH_PHRASE_SIZE);
     if (status == kStatus_FLASH_Success)
     {
+        /* Clear flash cache before every erase to prevent the possibility of returning stale data */
+        MCM->CPCR2 |= MCM_CPCR2_CCBC_MASK;
         /* Align length to whole phrase */
         uint32_t alignedLength = ALIGN_DOWN(lengthInBytes, sizeof(uint8_t) * FSL_FEATURE_FLASH_PFLASH_PHRASE_SIZE);
         uint32_t extraBytes    = lengthInBytes - alignedLength;
@@ -198,6 +203,8 @@ status_t FLASH_ProgramPage(
     status = flash_check_param(config, base, start, lengthInBytes, FSL_FEATURE_FLASH_PFLASH_PAGE_SIZE);
     if (status == kStatus_FLASH_Success)
     {
+        /* Clear flash cache before every erase to prevent the possibility of returning stale data */
+        MCM->CPCR2 |= MCM_CPCR2_CCBC_MASK;
         /* Align length to whole phrase. */
         uint32_t alignedLength = ALIGN_DOWN(lengthInBytes, sizeof(uint8_t) * FSL_FEATURE_FLASH_PFLASH_PAGE_SIZE);
         uint32_t extraBytes    = lengthInBytes - alignedLength;
@@ -728,22 +735,6 @@ nboot_status_t NBOOT_SB3LoaderBlock(nboot_context_t *context, uint32_t *block)
 }
 
 /*!
- * @brief Authenticate and load Sentinel200 firmware at once
- *
- * This function verifies and decrypts SB3.1 file with S200 firmware. Decryption is performed to S200 RAM and firmware
- * automaticly started after sucessfull load. The NBOOT context has to be initialized by the function nboot_context_init
- * before calling this function.
- */
-nboot_status_t NBOOT_SB3LoaderS200Fw(nboot_context_t *context, uint32_t *sb3Data)
-{
-    assert(NULL != BOOTLOADER_API_TREE_POINTER);
-    assert(NULL != context);
-    assert(NULL != sb3Data);
-
-    return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_sb3_load_s200_fw(context, sb3Data);
-}
-
-/*!
  * @brief Secure boot image authentication
  *
  * This function authenticates image with asymmetric cryptography.
@@ -828,4 +819,31 @@ nboot_status_t NBOOT_PropertyGet(nboot_context_t *context, uint32_t propertyId, 
     assert(NULL != dataLen);
 
     return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_property_get(context, propertyId, destData, dataLen);
+}
+
+/*!
+ * @brief Switch ELE to specified secure level access for next command.
+ */
+nboot_status_t NBOOT_ForceOneShotSecureLevel(nboot_context_t *context, nboot_security_level_t secLvl)
+{
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != context);
+
+    return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_force_one_shot_secure_level(context, secLvl);
+}
+
+/*!
+ * @brief Authenticate SB3 header and verifies consistency of blocks.
+ *
+ * This function authenticates SB3 header and verifies consistency of all data blocks to avoid processing of corrupted
+ * data.
+ */
+nboot_status_t NBOOT_Sb3ConsistencyVerify(nboot_context_t *context, uint8_t sb3Data[], nboot_bool_t *isConsistent)
+{
+    assert(NULL != BOOTLOADER_API_TREE_POINTER);
+    assert(NULL != context);
+    assert(NULL != sb3Data);
+    assert(NULL != isConsistent);
+
+    return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_sb3_consistency_verify(context, sb3Data, isConsistent);
 }

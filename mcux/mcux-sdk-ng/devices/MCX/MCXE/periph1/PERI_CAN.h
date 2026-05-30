@@ -1,8 +1,10 @@
 /*
 ** ###################################################################
-**     Processor:           MCXE31BMPB
+**     Processors:          MCXE31BMLL
+**                          MCXE31BMPB
+**
 **     Version:             rev. 1.0, 2025-07-18
-**     Build:               b250718
+**     Build:               b260420
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CAN
@@ -35,7 +37,7 @@
 #if !defined(PERI_CAN_H_)
 #define PERI_CAN_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXE31BMPB))
+#if (defined(CPU_MCXE31BMLL) || defined(CPU_MCXE31BMPB))
 #include "MCXE31B_COMMON.h"
 #else
   #error "No valid CPU defined!"

@@ -116,6 +116,8 @@ void XBARB_SetSignalsConnection(XBARB_Type *base, xbar_input_signal_t input, xba
     uint8_t byteInReg;
     uint8_t outputIndex = (uint8_t)((unsigned)output & 0xFFU);
 
+    assert(outputIndex < sizeof(XBARB_Type));
+
     byteInReg = outputIndex % 2U;
 
     regVal._u16 = XBARB_SELx(base, outputIndex);

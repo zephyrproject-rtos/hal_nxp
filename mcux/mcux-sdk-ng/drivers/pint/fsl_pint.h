@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023, 2025 NXP
+ * Copyright 2016-2023, 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_PINT_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+#define FSL_PINT_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*! @} */
 
 /* Legacy code sets callback for each PINT event resource. */
@@ -652,6 +652,13 @@ void PINT_DisableInterruptByIndex(PINT_Type *base, pint_pin_int_t pintIdx);
  * @retval None.
  */
 void PINT_DisableCallbackByIndex(PINT_Type *base, pint_pin_int_t pintIdx);
+
+/*!
+ * @brief PINT parameterized IRQ handler entry.
+ *
+ * @param instance PINT instance index.
+ */
+void PINT_DriverIRQHandler(uint32_t instance);
 
 #ifdef __cplusplus
 }

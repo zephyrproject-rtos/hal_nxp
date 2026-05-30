@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2025 NXP
+ * Copyright 2016-2020, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SPI driver version. */
-#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
+#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 5))
 /*! @} */
 
 #ifndef SPI_DUMMYDATA
@@ -701,6 +701,13 @@ static inline void SPI_SlaveTransferAbort(SPI_Type *base, spi_slave_handle_t *ha
  * @param handle pointer to spi_slave_handle_t structure which stores the transfer state
  */
 void SPI_SlaveTransferHandleIRQ(SPI_Type *base, spi_slave_handle_t *handle);
+
+/*!
+ * @brief SPI driver IRQ handler common entry.
+ *
+ * @param instance SPI peripheral instance number.
+ */
+void SPI_DriverIRQHandler(uint32_t instance);
 
 /*! @} */
 

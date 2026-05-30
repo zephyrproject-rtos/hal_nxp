@@ -19,6 +19,7 @@
 **                          MCXA537VLQ
 **                          MCXA537VPN
 **                          MCXA556VPN
+**                          MCXA557VPN
 **                          MCXA566VLL
 **                          MCXA566VLQ
 **                          MCXA566VPN
@@ -30,7 +31,7 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260323
+**     Build:               b260407
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CAN
@@ -78,6 +79,8 @@
 #include "MCXA537_COMMON.h"
 #elif (defined(CPU_MCXA556VPN))
 #include "MCXA556_COMMON.h"
+#elif (defined(CPU_MCXA557VPN))
+#include "MCXA557_COMMON.h"
 #elif (defined(CPU_MCXA566VLL) || defined(CPU_MCXA566VLQ) || defined(CPU_MCXA566VPN))
 #include "MCXA566_COMMON.h"
 #elif (defined(CPU_MCXA567VLL) || defined(CPU_MCXA567VLQ) || defined(CPU_MCXA567VPN))

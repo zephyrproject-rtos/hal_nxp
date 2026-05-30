@@ -158,7 +158,7 @@ static status_t EP_RxBufferAllocAll(ep_handle_t *handle, const ep_config_t *conf
             }
 
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-            buffAddr = MEMORY_ConvertMemoryMapAddress((uintptr_t)buffAddr, kMEMORY_Local2DMA);
+            buffAddr = NETC_ConvertMemoryMapAddress(buffAddr, kMEMORY_Local2DMA);
 #endif
             rxDesc->standard.addr = buffAddr;
             rxDesc++;
@@ -410,11 +410,11 @@ static uint16_t EP_GetIdleTxBDNum(netc_tx_bdr_t *txBdRing)
 {
     if (txBdRing->producerIndex >= txBdRing->cleanIndex)
     {
-        return (uint16_t)((txBdRing->len - txBdRing->producerIndex) + txBdRing->cleanIndex - 1U);
+        return (txBdRing->len - txBdRing->producerIndex + txBdRing->cleanIndex - 1U) & 0xFFFFU;
     }
     else
     {
-        return (txBdRing->cleanIndex - txBdRing->producerIndex - 1U);
+        return (txBdRing->cleanIndex - txBdRing->producerIndex - 1U) & 0xFFFFU;
     }
 }
 
@@ -772,7 +772,7 @@ status_t EP_SendFrameCommon(ep_handle_t *handle,
     uint32_t frameLen            = 0;
     bool isExtEnable             = (bool)txDesc[0].standard.isExtended;
     netc_tx_bd_t *txDesTemp = NULL;
-    uint32_t address;
+    uint64_t address;
 
     /* The first descriptor in a chain must not have a BUFF_LEN that is less than 16 bytes. */
     if ((frame->buffArray[0].length < NETC_ENETC_TXFRAME_LEN_MIN) || (frame->length == 0U))
@@ -783,6 +783,7 @@ status_t EP_SendFrameCommon(ep_handle_t *handle,
     /* Calculate frame length and Tx data buffer number. */
     do
     {
+        assert(frameLen <= UINT32_MAX - txBuff->length);
         frameLen += txBuff->length;
         txBuff++;
     } while (--totBdNum != 0U);
@@ -826,8 +827,7 @@ status_t EP_SendFrameCommon(ep_handle_t *handle,
             txDesTemp = &txBdRing->bdBase[txBdRing->producerIndex];
             NETC_ClearTxDescriptor(txDesTemp);
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-            address =
-                (uintptr_t)MEMORY_ConvertMemoryMapAddress((uintptr_t)(uint8_t *)txBuff->buffer, kMEMORY_Local2DMA);
+            address = NETC_ConvertMemoryMapAddress((uintptr_t)(uint8_t *)txBuff->buffer, kMEMORY_Local2DMA);
 #else
             address = (uintptr_t)(uint32_t *)txBuff->buffer;
 #endif
@@ -923,6 +923,7 @@ status_t EP_SendFrame(ep_handle_t *handle, uint8_t ring, netc_frame_struct_t *fr
     {
         /* Switch management ENETC Tx BD hardware ring 0 can't be used to send regular frame, so the index need increase
          * 1 */
+        assert(hwRing <= UINT8_MAX - handle->ringShift);
         hwRing += handle->ringShift;
     }
 #endif
@@ -938,10 +939,10 @@ status_t EP_SendFrame(ep_handle_t *handle, uint8_t ring, netc_frame_struct_t *fr
         else
         {
             txDesc[0].standard.flags =
-                NETC_SI_TXDESCRIP_RD_LSO(opt->offload.lso) | NETC_SI_TXDESCRIP_RD_L4CS(opt->offload.l4Checksum) |
+                NETC_SI_TXDESCRIP_RD_LSO(opt->offload.lso ? 1U : 0U) | NETC_SI_TXDESCRIP_RD_L4CS(opt->offload.l4Checksum ? 1U : 0U) |
                 NETC_SI_TXDESCRIP_RD_L4T(opt->offload.l4Type) | NETC_SI_TXDESCRIP_RD_L3T(opt->offload.l3Type) |
                 NETC_SI_TXDESCRIP_RD_L3HDRSIZE(opt->offload.l3HeaderSize) |
-                NETC_SI_TXDESCRIP_RD_IPCS(opt->offload.ipv4Checksum) |
+                NETC_SI_TXDESCRIP_RD_IPCS(opt->offload.ipv4Checksum ? 1U : 0U) |
                 NETC_SI_TXDESCRIP_RD_L3START(opt->offload.l3Start);
         }
 #endif
@@ -989,11 +990,13 @@ netc_tx_frame_info_t *EP_ReclaimTxDescCommon(ep_handle_t *handle,
     }
     else
     {
-        cleanNum = (uint16_t)(txBdRing->len - txBdRing->cleanIndex + consumer);
+        cleanNum = (txBdRing->len - txBdRing->cleanIndex + consumer) & 0xFFFFU;
     }
 
-    while (cleanNum-- != 0U)
+    while (cleanNum > 0U)
     {
+        cleanNum--;
+
         /* When callback enable, get the reclaim information. */
         if (enCallback)
         {
@@ -1055,7 +1058,7 @@ netc_tx_frame_info_t *EP_ReclaimTxDescCommon(ep_handle_t *handle,
             }
             else
             {
-                cleanNum = (uint16_t)(txBdRing->len - txBdRing->cleanIndex + consumer);
+                cleanNum = (txBdRing->len - txBdRing->cleanIndex + consumer) & 0xFFFFU;
             }
         }
     }
@@ -1129,6 +1132,8 @@ status_t EP_GetRxFrameSizeCommon(ep_handle_t *handle, netc_rx_bdr_t *rxBdRing, u
                     result = kStatus_NETC_RxFrameError;
                     break;
                 }
+
+                assert(totlen <= UINT32_MAX - rxDesc->writeback.bufLen);
                 totlen += rxDesc->writeback.bufLen;
 
                 /* Find the last buffer descriptor. */
@@ -1226,7 +1231,7 @@ void EP_DropFrame(ep_handle_t *handle, netc_rx_bdr_t *rxBdRing, uint8_t ring)
         index     = rxBdRing->extendDesc ? (rxBdRing->index / 2U) : rxBdRing->index;
         rxDmaBuff = rxBdRing->buffArray[index];
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-        rxDmaBuff = (uint64_t)MEMORY_ConvertMemoryMapAddress((uintptr_t)rxDmaBuff, kMEMORY_Local2DMA);
+        rxDmaBuff = NETC_ConvertMemoryMapAddress(rxDmaBuff, kMEMORY_Local2DMA);
 #endif
         rxDesc->standard.addr = rxDmaBuff;
 
@@ -1299,7 +1304,14 @@ status_t EP_ReceiveFrameCopyCommon(ep_handle_t *handle,
 
                 data    = (uintptr_t)(uint8_t *)buffer + offset;
                 copyLen = (leftLen > rxDesc->writeback.bufLen) ? rxDesc->writeback.bufLen : (uint16_t)leftLen;
-                (void)memcpy((void *)(uint8_t *)data, (void *)(uint8_t *)(uintptr_t)rxDmaBuff, copyLen);
+#if UINTPTR_MAX == UINT32_MAX
+                (void)memcpy((void *)(uint8_t *)data, (void *)(uint8_t *)(uint32_t)(rxDmaBuff & 0xFFFFFFFFU), copyLen);
+#elif UINTPTR_MAX == UINT64_MAX
+                (void)memcpy((void *)(uint8_t *)data, (void *)(uint8_t *)rxDmaBuff, copyLen);
+#else
+#error "Unsupported pointer size"
+#endif
+                assert(offset <= UINTPTR_MAX - copyLen);
                 offset += copyLen;
                 leftLen -= copyLen;
             }
@@ -1308,7 +1320,7 @@ status_t EP_ReceiveFrameCopyCommon(ep_handle_t *handle,
             index     = rxBdRing->extendDesc ? (rxBdRing->index / 2U) : rxBdRing->index;
             rxDmaBuff = rxBdRing->buffArray[index];
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-            rxDmaBuff = (uintptr_t)MEMORY_ConvertMemoryMapAddress((uintptr_t)rxDmaBuff, kMEMORY_Local2DMA);
+            rxDmaBuff = NETC_ConvertMemoryMapAddress(rxDmaBuff, kMEMORY_Local2DMA);
 #endif
             rxDesc->standard.addr = rxDmaBuff;
 
@@ -1399,8 +1411,16 @@ status_t EP_ReceiveFrameCommon(ep_handle_t *handle,
         }
 
         newBuff                        = frame->buffArray[index].buffer;
-        frame->buffArray[index].buffer = (void *)(uint8_t *)(uintptr_t)rxDmaBuff;
+#if UINTPTR_MAX == UINT32_MAX
+        frame->buffArray[index].buffer = (void *)(uint8_t *)(uint32_t)(rxDmaBuff & 0xFFFFFFFFU);
+#elif UINTPTR_MAX == UINT64_MAX
+        frame->buffArray[index].buffer = (void *)(uint8_t *)rxDmaBuff;
+#else
+#error "Unsupported pointer size"
+#endif
         frame->buffArray[index].length = rxDesc->writeback.bufLen;
+
+        assert(index <= UINT16_MAX - 1U);
         index++;
 
         /* Update the buffer address array. */
@@ -1408,7 +1428,7 @@ status_t EP_ReceiveFrameCommon(ep_handle_t *handle,
 
         rxDmaBuff = (uint64_t)(uintptr_t)(uint8_t *)newBuff;
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-        rxDmaBuff = (uint64_t)MEMORY_ConvertMemoryMapAddress((uintptr_t)rxDmaBuff, kMEMORY_Local2DMA);
+        rxDmaBuff = NETC_ConvertMemoryMapAddress(rxDmaBuff, kMEMORY_Local2DMA);
 #endif
         rxDesc->standard.addr = rxDmaBuff;
 
@@ -1498,6 +1518,7 @@ status_t EP_ReceiveFrame(ep_handle_t *handle, uint8_t ring, netc_frame_struct_t 
             index = rxBdRing->index;
             do
             {
+                assert(buffNum <= UINT32_MAX - 1U);
                 buffNum++;
 
                 /* Find the last BD of this frame. */
@@ -1528,8 +1549,9 @@ status_t EP_ReceiveFrame(ep_handle_t *handle, uint8_t ring, netc_frame_struct_t 
                 newBuff = handle->cfg.rxBuffAlloc(handle, ring, rxBdRing->buffSize, handle->cfg.userData);
                 if (newBuff == NULL)
                 {
-                    while (index-- > 0U)
+                    while (index > 0U)
                     {
+                        index--;
                         handle->cfg.rxBuffFree(handle, ring, frame->buffArray[index].buffer, handle->cfg.userData);
                     }
                     /* When appliction buffer pool is not enough, drop frame in the BD to keep frame latest. */
@@ -1539,6 +1561,8 @@ status_t EP_ReceiveFrame(ep_handle_t *handle, uint8_t ring, netc_frame_struct_t 
 
                 /* Store in this strcuture, and exchange the buffer in the BD in below code. */
                 frame->buffArray[index].buffer = newBuff;
+
+                assert(index <= UINT16_MAX - 1U);
                 index++;
             } while (--buffNum != 0U);
         }
@@ -1798,7 +1822,7 @@ status_t EP_MsixSetGlobalMask(ep_handle_t *handle, bool mask)
         else
         {
             handle->hw.func.pf->PCI_CFC_MSIX_MSG_CTL &=
-                (uint16_t)(~ENETC_PCI_TYPE0_PCI_CFC_MSIX_MSG_CTL_FUNC_MASK_MASK);
+                (uint16_t)((~ENETC_PCI_TYPE0_PCI_CFC_MSIX_MSG_CTL_FUNC_MASK_MASK) & 0xFFFFU);
         }
     }
     else
@@ -1811,7 +1835,7 @@ status_t EP_MsixSetGlobalMask(ep_handle_t *handle, bool mask)
         else
         {
             handle->hw.func.vf->PCI_CFC_MSIX_MSG_CTL &=
-                (uint16_t)(~ENETC_VF_PCI_TYPE0_PCI_CFC_MSIX_MSG_CTL_FUNC_MASK_MASK);
+                (uint16_t)((~ENETC_VF_PCI_TYPE0_PCI_CFC_MSIX_MSG_CTL_FUNC_MASK_MASK) & 0xFFFFU);
         }
     }
 
@@ -1824,7 +1848,7 @@ status_t EP_MsixSetEntryMask(ep_handle_t *handle, uint8_t entryIdx, bool mask)
 
     if (entryIdx < handle->cfg.entryNum)
     {
-        handle->hw.msixTable[entryIdx].control = (uint32_t)mask;
+        handle->hw.msixTable[entryIdx].control = mask ? 1U : 0U;
         result                                 = kStatus_Success;
     }
     else
@@ -1915,10 +1939,12 @@ status_t EP_RxL2MFAddHashEntry(ep_handle_t *handle, netc_packet_type_t type, uin
     /* Added the used count of hash index. */
     if (type == kNETC_PacketUnicast)
     {
+        assert(handle->unicastHashCount[hashIndex] <= UINT8_MAX - 1U);
         handle->unicastHashCount[hashIndex]++;
     }
     else
     {
+        assert(handle->multicastHashCount[hashIndex] <= UINT8_MAX - 1U);
         handle->multicastHashCount[hashIndex]++;
     }
 
@@ -2044,6 +2070,7 @@ status_t EP_RxL2VFAddHashEntry(ep_handle_t *handle, uint16_t vlanId)
     NETC_EnetcAddVlanHash(handle->hw.base, siNum, hashIndex);
 
     /* Added the used count of hash index. */
+    assert(handle->vlanHashCount[hashIndex] <= UINT8_MAX - 1U);
     handle->vlanHashCount[hashIndex]++;
 
     return kStatus_Success;
@@ -2208,6 +2235,7 @@ status_t EP_TxTGSConfigAdminGcl(ep_handle_t *handle, netc_tb_tgs_gcl_t *config)
 
         /* The minimum base time = current time + advance time (0.1us) + command processing time (~90us) + (2 *
          * operational cycle times) */
+        assert(time <= UINT64_MAX - 100100U);
         minBaseTime = time + 100100U + (2U * cycleTime);
         /* Check, if there is operating GCL and if admin base time is in range described in ERR051587*/
         if ((config->numEntries > 0U) && (config->baseTime < minBaseTime))
@@ -2380,8 +2408,8 @@ status_t EP_RxPSFPResetISCStatistic(ep_handle_t *handle, uint32_t entryID)
 void EP_PsiEnableInterrupt(ep_handle_t *handle, uint32_t mask, bool enable)
 {
     /* Check whether VSI number is over the capability. */
-    assert(((uint16_t)mask >> handle->capability.vsiNum) <= 1U);
-    assert(((uint16_t)(mask >> 16U) >> handle->capability.vsiNum) <= 1U);
+    assert(((mask & 0xFFFFU) >> handle->capability.vsiNum) <= 1U);
+    assert(((mask >> 16U) >> handle->capability.vsiNum) <= 1U);
     assert(getSiNum(handle->cfg.si) == 0U);
     NETC_SIPsiEnableInterrupt(handle->hw.si, mask, enable);
 }
@@ -2396,8 +2424,8 @@ uint32_t EP_PsiGetStatus(ep_handle_t *handle)
 void EP_PsiClearStatus(ep_handle_t *handle, uint32_t mask)
 {
     /* Check whether VSI number is over the capability. */
-    assert(((uint16_t)mask >> handle->capability.vsiNum) <= 1U);
-    assert(((uint16_t)(mask >> 16U) >> handle->capability.vsiNum) <= 1U);
+    assert(((mask & 0xFFFFU) >> handle->capability.vsiNum) <= 1U);
+    assert(((mask >> 16U) >> handle->capability.vsiNum) <= 1U);
     assert(handle->capability.vsiNum > 0U);
     assert(getSiNum(handle->cfg.si) == 0U);
     NETC_SIPsiClearStatus(handle->hw.si, mask);

@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 1.1, 2026-01-02
-**     Build:               b260210
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         Chip specific module features.
@@ -18,6 +18,8 @@
 **         Generated based on Rev1 DraftH.
 **     - rev. 1.1 (2026-01-02)
 **         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
@@ -54,6 +56,8 @@
 
 /* @brief Has GPIO attribute checker register (GACR). */
 #define FSL_FEATURE_GPIO_HAS_ATTRIBUTE_CHECKER (0)
+/* @brief GPIO registers width */
+#define FSL_FEATURE_GPIO_REGISTERS_WIDTH (32)
 /* @brief Has GPIO version ID register (VERID). */
 #define FSL_FEATURE_GPIO_HAS_VERSION_INFO_REGISTER (1)
 /* @brief Has secure/non-secure access protection registers (LOCK, PCNS, PCNP, ICNS, ICNP). */
@@ -241,6 +245,8 @@
 
 /* @brief Has 32-bit width register. */
 #define FSL_FEATURE_TMR_HAS_32BIT_REGISTER (1)
+/* @brief Has no Timer Channel DMA Enable Register. */
+#define FSL_FEATURE_TMR_HAS_NO_DMA_REGISTER (1)
 
 /* MU module features */
 

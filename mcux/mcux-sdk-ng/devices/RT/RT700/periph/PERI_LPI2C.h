@@ -8,6 +8,10 @@
 **                          MIMXRT735SGFOB_cm33_core1
 **                          MIMXRT735SGFOB_ezhv
 **                          MIMXRT735SGFOB_hifi1
+**                          MIMXRT735SGVKB_cm33_core0
+**                          MIMXRT735SGVKB_cm33_core1
+**                          MIMXRT735SGVKB_ezhv
+**                          MIMXRT735SGVKB_hifi1
 **                          MIMXRT758SGAWBR_cm33_core0
 **                          MIMXRT758SGAWBR_cm33_core1
 **                          MIMXRT758SGAWBR_ezhv
@@ -16,6 +20,10 @@
 **                          MIMXRT758SGFOB_cm33_core1
 **                          MIMXRT758SGFOB_ezhv
 **                          MIMXRT758SGFOB_hifi1
+**                          MIMXRT758SGVKB_cm33_core0
+**                          MIMXRT758SGVKB_cm33_core1
+**                          MIMXRT758SGVKB_ezhv
+**                          MIMXRT758SGVKB_hifi1
 **                          MIMXRT798SGAWBR_cm33_core0
 **                          MIMXRT798SGAWBR_cm33_core1
 **                          MIMXRT798SGAWBR_ezhv
@@ -26,15 +34,20 @@
 **                          MIMXRT798SGFOB_ezhv
 **                          MIMXRT798SGFOB_hifi1
 **                          MIMXRT798SGFOB_hifi4
+**                          MIMXRT798SGVKB_cm33_core0
+**                          MIMXRT798SGVKB_cm33_core1
+**                          MIMXRT798SGVKB_ezhv
+**                          MIMXRT798SGVKB_hifi1
+**                          MIMXRT798SGVKB_hifi4
 **
-**     Version:             rev. 5.1, 2025-12-08
-**     Build:               b251208
+**     Version:             rev. 6.0, 2025-12-29
+**     Build:               b260330
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPI2C
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -54,14 +67,16 @@
 **         Add puf/sdadc irq and cache64 compatibility macros to common header.
 **     - rev. 5.1 (2025-12-08)
 **         Update RM version and add pdm irq for hifi1/hifi4.
+**     - rev. 6.0 (2025-12-29)
+**         Add new part number.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_LPI2C.h
- * @version 5.1
- * @date 2025-12-08
+ * @version 6.0
+ * @date 2025-12-29
  * @brief CMSIS Peripheral Access Layer for LPI2C
  *
  * CMSIS Peripheral Access Layer for LPI2C
@@ -70,31 +85,31 @@
 #if !defined(PERI_LPI2C_H_)
 #define PERI_LPI2C_H_                            /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMXRT735SGAWBR_cm33_core0) || defined(CPU_MIMXRT735SGFOB_cm33_core0))
+#if (defined(CPU_MIMXRT735SGAWBR_cm33_core0) || defined(CPU_MIMXRT735SGFOB_cm33_core0) || defined(CPU_MIMXRT735SGVKB_cm33_core0))
 #include "MIMXRT735S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWBR_cm33_core1) || defined(CPU_MIMXRT735SGFOB_cm33_core1))
+#elif (defined(CPU_MIMXRT735SGAWBR_cm33_core1) || defined(CPU_MIMXRT735SGFOB_cm33_core1) || defined(CPU_MIMXRT735SGVKB_cm33_core1))
 #include "MIMXRT735S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWBR_ezhv) || defined(CPU_MIMXRT735SGFOB_ezhv))
+#elif (defined(CPU_MIMXRT735SGAWBR_ezhv) || defined(CPU_MIMXRT735SGFOB_ezhv) || defined(CPU_MIMXRT735SGVKB_ezhv))
 #include "MIMXRT735S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWBR_hifi1) || defined(CPU_MIMXRT735SGFOB_hifi1))
+#elif (defined(CPU_MIMXRT735SGAWBR_hifi1) || defined(CPU_MIMXRT735SGFOB_hifi1) || defined(CPU_MIMXRT735SGVKB_hifi1))
 #include "MIMXRT735S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core0) || defined(CPU_MIMXRT758SGFOB_cm33_core0))
+#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core0) || defined(CPU_MIMXRT758SGFOB_cm33_core0) || defined(CPU_MIMXRT758SGVKB_cm33_core0))
 #include "MIMXRT758S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core1) || defined(CPU_MIMXRT758SGFOB_cm33_core1))
+#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core1) || defined(CPU_MIMXRT758SGFOB_cm33_core1) || defined(CPU_MIMXRT758SGVKB_cm33_core1))
 #include "MIMXRT758S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWBR_ezhv) || defined(CPU_MIMXRT758SGFOB_ezhv))
+#elif (defined(CPU_MIMXRT758SGAWBR_ezhv) || defined(CPU_MIMXRT758SGFOB_ezhv) || defined(CPU_MIMXRT758SGVKB_ezhv))
 #include "MIMXRT758S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWBR_hifi1) || defined(CPU_MIMXRT758SGFOB_hifi1))
+#elif (defined(CPU_MIMXRT758SGAWBR_hifi1) || defined(CPU_MIMXRT758SGFOB_hifi1) || defined(CPU_MIMXRT758SGVKB_hifi1))
 #include "MIMXRT758S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core0) || defined(CPU_MIMXRT798SGFOB_cm33_core0))
+#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core0) || defined(CPU_MIMXRT798SGFOB_cm33_core0) || defined(CPU_MIMXRT798SGVKB_cm33_core0))
 #include "MIMXRT798S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core1) || defined(CPU_MIMXRT798SGFOB_cm33_core1))
+#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core1) || defined(CPU_MIMXRT798SGFOB_cm33_core1) || defined(CPU_MIMXRT798SGVKB_cm33_core1))
 #include "MIMXRT798S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_ezhv) || defined(CPU_MIMXRT798SGFOB_ezhv))
+#elif (defined(CPU_MIMXRT798SGAWBR_ezhv) || defined(CPU_MIMXRT798SGFOB_ezhv) || defined(CPU_MIMXRT798SGVKB_ezhv))
 #include "MIMXRT798S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_hifi1) || defined(CPU_MIMXRT798SGFOB_hifi1))
+#elif (defined(CPU_MIMXRT798SGAWBR_hifi1) || defined(CPU_MIMXRT798SGFOB_hifi1) || defined(CPU_MIMXRT798SGVKB_hifi1))
 #include "MIMXRT798S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_hifi4) || defined(CPU_MIMXRT798SGFOB_hifi4))
+#elif (defined(CPU_MIMXRT798SGAWBR_hifi4) || defined(CPU_MIMXRT798SGFOB_hifi4) || defined(CPU_MIMXRT798SGVKB_hifi4))
 #include "MIMXRT798S_hifi4_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -172,24 +187,24 @@ typedef struct {
        uint8_t RESERVED_6[4];
   __I  uint32_t MRDROR;                            /**< Controller Receive Data Read Only, offset: 0x78 */
        uint8_t RESERVED_7[148];
-  __IO uint32_t SCR;                               /**< Target Control, offset: 0x110, not available in all instances (available on 108 out of 114) */
-  __IO uint32_t SSR;                               /**< Target Status, offset: 0x114, not available in all instances (available on 108 out of 114) */
-  __IO uint32_t SIER;                              /**< Target Interrupt Enable, offset: 0x118, not available in all instances (available on 108 out of 114) */
-  __IO uint32_t SDER;                              /**< Target DMA Enable, offset: 0x11C, not available in all instances (available on 108 out of 114) */
-  __IO uint32_t SCFGR0;                            /**< Target Configuration 0, offset: 0x120, not available in all instances (available on 108 out of 114) */
-  __IO uint32_t SCFGR1;                            /**< Target Configuration 1, offset: 0x124, not available in all instances (available on 108 out of 114) */
-  __IO uint32_t SCFGR2;                            /**< Target Configuration 2, offset: 0x128, not available in all instances (available on 108 out of 114) */
+  __IO uint32_t SCR;                               /**< Target Control, offset: 0x110, not available in all instances (available on 162 out of 171) */
+  __IO uint32_t SSR;                               /**< Target Status, offset: 0x114, not available in all instances (available on 162 out of 171) */
+  __IO uint32_t SIER;                              /**< Target Interrupt Enable, offset: 0x118, not available in all instances (available on 162 out of 171) */
+  __IO uint32_t SDER;                              /**< Target DMA Enable, offset: 0x11C, not available in all instances (available on 162 out of 171) */
+  __IO uint32_t SCFGR0;                            /**< Target Configuration 0, offset: 0x120, not available in all instances (available on 162 out of 171) */
+  __IO uint32_t SCFGR1;                            /**< Target Configuration 1, offset: 0x124, not available in all instances (available on 162 out of 171) */
+  __IO uint32_t SCFGR2;                            /**< Target Configuration 2, offset: 0x128, not available in all instances (available on 162 out of 171) */
        uint8_t RESERVED_8[20];
-  __IO uint32_t SAMR;                              /**< Target Address Match, offset: 0x140, not available in all instances (available on 108 out of 114) */
+  __IO uint32_t SAMR;                              /**< Target Address Match, offset: 0x140, not available in all instances (available on 162 out of 171) */
        uint8_t RESERVED_9[12];
-  __I  uint32_t SASR;                              /**< Target Address Status, offset: 0x150, not available in all instances (available on 108 out of 114) */
-  __IO uint32_t STAR;                              /**< Target Transmit ACK, offset: 0x154, not available in all instances (available on 108 out of 114) */
+  __I  uint32_t SASR;                              /**< Target Address Status, offset: 0x150, not available in all instances (available on 162 out of 171) */
+  __IO uint32_t STAR;                              /**< Target Transmit ACK, offset: 0x154, not available in all instances (available on 162 out of 171) */
        uint8_t RESERVED_10[8];
-  __O  uint32_t STDR;                              /**< Target Transmit Data, offset: 0x160, not available in all instances (available on 108 out of 114) */
+  __O  uint32_t STDR;                              /**< Target Transmit Data, offset: 0x160, not available in all instances (available on 162 out of 171) */
        uint8_t RESERVED_11[12];
-  __I  uint32_t SRDR;                              /**< Target Receive Data, offset: 0x170, not available in all instances (available on 108 out of 114) */
+  __I  uint32_t SRDR;                              /**< Target Receive Data, offset: 0x170, not available in all instances (available on 162 out of 171) */
        uint8_t RESERVED_12[4];
-  __I  uint32_t SRDROR;                            /**< Target Receive Data Read Only, offset: 0x178, not available in all instances (available on 108 out of 114) */
+  __I  uint32_t SRDROR;                            /**< Target Receive Data Read Only, offset: 0x178, not available in all instances (available on 162 out of 171) */
        uint8_t RESERVED_13[132];
   __O  uint32_t MTCBR[LPI2C_MTCBR_COUNT];          /**< Controller Transmit Command Burst, array offset: 0x200, array step: 0x4 */
   __O  uint32_t MTDBR[LPI2C_MTDBR_COUNT];          /**< Transmit Data Burst, array offset: 0x400, array step: 0x4, irregular array, not all indices are valid */

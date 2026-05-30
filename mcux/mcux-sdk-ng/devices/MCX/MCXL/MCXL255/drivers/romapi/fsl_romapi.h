@@ -27,8 +27,8 @@
 /*! @name Driver version */
 /*@{*/
 
-/*! @brief romapi driver version 2.0.0. */
-#define FSL_ROMAPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief romapi driver version 2.0.1. */
+#define FSL_ROMAPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*!
@@ -75,6 +75,19 @@ typedef struct _flash_config
     flash_ffr_config_t ffrConfig;
 } flash_config_t;
 
+/*! @brief Structure of version property. */
+typedef union StandardVersion
+{
+    struct
+    {
+        uint8_t bugfix; /*!< bugfix version [7:0] */
+        uint8_t minor;  /*!< minor version [15:8] */
+        uint8_t major;  /*!< major version [23:16] */
+        char name;      /*!< name [31:24] */
+    };
+    uint32_t version;   /*!< combined version numbers */
+} standard_version_t;
+
 /*! @brief Interface for the flash driver. */
 typedef struct _flash_driver_interface
 {
@@ -93,13 +106,9 @@ typedef struct _flash_driver_interface
     status_t (*flash_verify_erase_page)(flash_config_t *config, uint32_t start, uint32_t lengthInBytes);
     status_t (*flash_verify_erase_sector)(flash_config_t *config, uint32_t start, uint32_t lengthInBytes);
     status_t (*flash_get_property)(flash_config_t *config, flash_property_tag_t whichProperty, uint32_t *value);
-    /* IFR driver */
-    status_t (*ifr_verify_erase_phrase)(flash_config_t *config, uint32_t start, uint32_t lengthInBytes);
-    status_t (*ifr_verify_erase_page)(flash_config_t *config, uint32_t start, uint32_t lengthInBytes);
-    status_t (*ifr_verify_erase_sector)(flash_config_t *config, uint32_t start, uint32_t lengthInBytes);
     status_t (*flash_read)(flash_config_t *config, uint32_t start, uint8_t *dest, uint32_t lengthInBytes);
     /* version */
-    uint32_t version;
+    standard_version_t version;
 } flash_driver_interface_t;
 
 /*! @brief Constructs the four character code for the Flash driver API key. */
@@ -342,62 +351,6 @@ static inline status_t FLASH_GetProperty(flash_config_t *config, flash_property_
     return FLASH_API->flash_get_property(config, whichProperty, value);
 }
 
-#if !(defined(FSL_FEATURE_ROMAPI_IFR) && (FSL_FEATURE_ROMAPI_IFR == 0U))
-/*!
- * @brief Verify that the IFR0 phrases are erased
- *
- * This function checks the appropriate number of flash sectors based on
- * the desired start address and length to check whether the flash is erased
- *
- * @param config A pointer to the storage for the driver runtime state.
- * @param start The start address of the desired flash memory to be verified.
- *        The start address does not need to be sector-aligned but must be word-aligned.
- * @param lengthInBytes The length, given in bytes (not words or long-words),
- *        to be verified. Must be word-aligned.
- *
- */
-static inline status_t IFR_VerifyErasePhrase(flash_config_t *config, uint32_t start, uint32_t lengthInBytes)
-{
-    return FLASH_API->ifr_verify_erase_phrase(config, start, lengthInBytes);
-}
-
-/*!
- * @brief Verify that the IFR0 pages are erased
- *
- * This function checks the appropriate number of flash sectors based on
- * the desired start address and length to check whether the flash is erased
- *
- * @param config A pointer to the storage for the driver runtime state.
- * @param start The start address of the desired flash memory to be verified.
- *        The start address does not need to be sector-aligned but must be word-aligned.
- * @param lengthInBytes The length, given in bytes (not words or long-words),
- *        to be verified. Must be word-aligned.
- *
- */
-static inline status_t IFR_VerifyErasePage(flash_config_t *config, uint32_t start, uint32_t lengthInBytes)
-{
-    return FLASH_API->ifr_verify_erase_page(config, start, lengthInBytes);
-}
-
-/*!
- * @brief Verify that the IFR0 sectors are erased
- *
- * This function checks the appropriate number of flash sectors based on
- * the desired start address and length to check whether the flash is erased
- *
- * @param config A pointer to the storage for the driver runtime state.
- * @param start The start address of the desired flash memory to be verified.
- *        The start address does not need to be sector-aligned but must be word-aligned.
- * @param lengthInBytes The length, given in bytes (not words or long-words),
- *        to be verified. Must be word-aligned.
- *
- */
-static inline status_t IFR_VerifyEraseSector(flash_config_t *config, uint32_t start, uint32_t lengthInBytes)
-{
-    return FLASH_API->ifr_verify_erase_sector(config, start, lengthInBytes);
-}
-#endif
-
 /*!
  * @brief Reads flash at locations passed in through parameters
  *
@@ -425,7 +378,7 @@ static inline status_t FLASH_Read(flash_config_t *config, uint32_t start, uint8_
  */
 static inline uint32_t ROMAPI_GetVersion(void)
 {
-    return FLASH_API->version;
+    return FLASH_API->version.version;
 }
 
 /*!

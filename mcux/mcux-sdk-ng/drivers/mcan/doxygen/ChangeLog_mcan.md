@@ -1,5 +1,10 @@
 # MCAN
 
+## [2.4.4]
+
+- New Features
+  - Added common IRQ handler entry MCAN_DriverIRQHandler.
+
 ## [2.4.3]
 
 - Bug Fixes

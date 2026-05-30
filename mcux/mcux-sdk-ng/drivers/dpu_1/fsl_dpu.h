@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Driver version. */
-#define FSL_DPU_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+#define FSL_DPU_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
 /*@}*/
 
 /*! @brief DPU palette entery number. */

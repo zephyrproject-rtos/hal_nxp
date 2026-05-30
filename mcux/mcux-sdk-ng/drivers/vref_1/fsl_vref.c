@@ -225,7 +225,14 @@ void VREF_SetVrefTrimVal(VREF_Type *base, uint8_t trimValue)
 
     base->UTRIM = tmp32;
 
-    if (VREF_CSR_CHOPEN_MASK == (base->CSR & VREF_CSR_CHOPEN_MASK))
+    /*
+     * $Branch Coverage Justification$
+     * (VREF_CSR_CHOPEN_MASK != (base->CSR & VREF_CSR_CHOPEN_MASK)) not covered.
+     * Test unfeasible, clearing CHOPEN routes execution to the VREFST polling
+     * path below, and the hardware stable transition cannot be observed
+     * reliably in unit test.
+     */
+    if (VREF_CSR_CHOPEN_MASK == (base->CSR & VREF_CSR_CHOPEN_MASK)) /* GCOVR_EXCL_BR_LINE */
     {
         /* After enabling high accurancy bandgap, delay 400 us. */
         SDK_DelayAtLeastUs(400U, SystemCoreClock);
@@ -235,12 +242,14 @@ void VREF_SetVrefTrimVal(VREF_Type *base, uint8_t trimValue)
         /*Wait internal HC voltage reference stable*/
         /*
          * $Branch Coverage Justification$
-         * while ((base->CSR & VREF_CSR_VREFST_MASK) != 0U) not covered. Test unfeasible,
+         * while ((base->CSR & VREF_CSR_VREFST_MASK) == 0U) not covered. Test unfeasible,
          * the internal HC voltage stable state is too short not to catch.
          */
+        /* GCOVR_EXCL_START */
         while ((base->CSR & VREF_CSR_VREFST_MASK) == 0U) /* GCOVR_EXCL_BR_LINE */
         {
         }
+        /* GCOVR_EXCL_STOP */
     }
 }
 
@@ -266,7 +275,14 @@ void VREF_SetTrim21Val(VREF_Type *base, uint8_t trim21Value)
 
     base->UTRIM = tmp32;
 
-    if (VREF_CSR_CHOPEN_MASK == (base->CSR & VREF_CSR_CHOPEN_MASK))
+    /*
+     * $Branch Coverage Justification$
+     * (VREF_CSR_CHOPEN_MASK != (base->CSR & VREF_CSR_CHOPEN_MASK)) not covered.
+     * Test unfeasible, clearing CHOPEN routes execution to the VREFST polling
+     * path below, and the hardware stable transition cannot be observed
+     * reliably in unit test.
+     */
+    if (VREF_CSR_CHOPEN_MASK == (base->CSR & VREF_CSR_CHOPEN_MASK)) /* GCOVR_EXCL_BR_LINE */
     {
         /* After enabling high accurancy bandgap, delay 400 us. */
         SDK_DelayAtLeastUs(400U, SystemCoreClock);
@@ -276,12 +292,14 @@ void VREF_SetTrim21Val(VREF_Type *base, uint8_t trim21Value)
         /*Wait internal HC voltage reference stable*/
         /*
          * $Branch Coverage Justification$
-         * while ((base->CSR & VREF_CSR_VREFST_MASK) != 0U) not covered. Test unfeasible,
+         * while ((base->CSR & VREF_CSR_VREFST_MASK) == 0U) not covered. Test unfeasible,
          * the internal HC voltage stable state is too short not to catch.
          */
+        /* GCOVR_EXCL_START */
         while ((base->CSR & VREF_CSR_VREFST_MASK) == 0U) /* GCOVR_EXCL_BR_LINE */
         {
         }
+        /* GCOVR_EXCL_STOP */
     }
 }
 #endif /* FSL_FEATURE_VREF_HAS_TRIM2V1 */

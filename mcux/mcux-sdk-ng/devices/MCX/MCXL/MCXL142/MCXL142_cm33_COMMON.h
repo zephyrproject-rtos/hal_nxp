@@ -8,9 +8,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MCXL25x RM Rev.1 RC
-**     Version:             rev. 1.1, 2026-01-02
-**     Build:               b260129
+**     Reference manual:    MCXL25x RM Rev.2 DraftA
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXL142_cm33
@@ -27,14 +27,16 @@
 **         Generated based on Rev1 DraftH.
 **     - rev. 1.1 (2026-01-02)
 **         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MCXL142_cm33_COMMON.h
- * @version 1.1
- * @date 2026-01-02
+ * @version 2.0
+ * @date 2026-04-22
  * @brief CMSIS Peripheral Access Layer for MCXL142_cm33
  *
  * CMSIS Peripheral Access Layer for MCXL142_cm33
@@ -45,9 +47,9 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0001U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
 
 /* ----------------------------------------------------------------------------
@@ -1062,6 +1064,8 @@ typedef enum IRQn {
   /** Array initializer of LPTMR peripheral base pointers */
   #define LPTMR_BASE_PTRS                          { AON__LPTMR0 }
 #endif
+/** Interrupt vectors for the LPTMR peripheral type */
+#define LPTMR_IRQS                               { LPTMR_AON_IRQn }
 
 /* LPUART - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1573,6 +1577,8 @@ typedef enum IRQn {
   /** Array initializer of TRDC peripheral base pointers */
   #define TRDC_BASE_PTRS                           { MBC0 }
 #endif
+/** Interrupt vectors for the TRDC peripheral type */
+#define TRDC_IRQS                                { MBC0_IRQn }
 #define MBC0_MEMORY_CFG_WORD_COUNT {1,2,4,1}
 #define MBC1_MEMORY_CFG_WORD_COUNT {1,1,1,1}
 #define MBC2_MEMORY_CFG_WORD_COUNT {9,6,1,1}

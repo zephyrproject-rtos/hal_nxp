@@ -1,7 +1,6 @@
 /*
 ** ###################################################################
-**     Processors:          MCXN247VAB
-**                          MCXN247VDF
+**     Processors:          MCXN247VDF
 **                          MCXN247VKL
 **                          MCXN247VPB
 **
@@ -12,13 +11,13 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250901
+**     Build:               b260417
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN247
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

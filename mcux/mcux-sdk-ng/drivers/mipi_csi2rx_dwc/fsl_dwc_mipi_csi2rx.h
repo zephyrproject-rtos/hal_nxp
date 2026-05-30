@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -19,7 +19,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief CSI2RX driver version. */
-#define FSL_CSI2RX_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_CSI2RX_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*! @brief CSI2RX data lanes.  */

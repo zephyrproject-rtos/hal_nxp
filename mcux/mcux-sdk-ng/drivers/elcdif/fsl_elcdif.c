@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2024 NXP
+ * Copyright 2017-2024,2026 NXP
  * All rights reserved.
  *
  *
@@ -102,6 +102,7 @@ void ELCDIF_RgbModeInit(LCDIF_Type *base, const elcdif_rgb_mode_config_t *config
 {
     assert(NULL != config);
     assert((uint32_t)config->pixelFormat < ARRAY_SIZE(s_pixelFormatReg));
+    assert(0U == (config->bufferAddr & 0x7U));
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && (0 != FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL))
     uint32_t instance = ELCDIF_GetInstance(base);
@@ -314,6 +315,7 @@ void ELCDIF_Reset(LCDIF_Type *base)
 void ELCDIF_SetAlphaSurfaceBufferConfig(LCDIF_Type *base, const elcdif_as_buffer_config_t *config)
 {
     assert(NULL != config);
+    assert(0U == (config->bufferAddr & 0x7U));
 
     base->AS_CTRL     = (base->AS_CTRL & ~LCDIF_AS_CTRL_FORMAT_MASK) | LCDIF_AS_CTRL_FORMAT(config->pixelFormat);
     base->AS_BUF      = ELCDIF_ADDR_CPU_2_IP(config->bufferAddr);

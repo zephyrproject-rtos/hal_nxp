@@ -1,5 +1,17 @@
 # QTMR
 
+## [2.3.3]
+
+- Improvements
+  - Added support for platforms without Timer Channel DMA Enable Register using FSL_FEATURE_TMR_HAS_NO_DMA_REGISTER.
+
+## [2.3.2]
+
+- Bug Fixes
+  - Fixed race condition in QTMR_ClearStatusFlags() where a status flag raised between
+    the SCTRL/CSCTRL register read and write-back could be accidentally cleared even if
+    not included in the mask parameter.
+
 ## [2.3.1]
 - Bug Fixes
   - Fixed CERT INT31-C and INT30-C violations.

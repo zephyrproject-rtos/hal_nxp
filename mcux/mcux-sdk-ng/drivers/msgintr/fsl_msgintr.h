@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022, 2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -16,7 +16,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief MSGINTR driver version. */
-#define FSL_MSGINTR_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+#define FSL_MSGINTR_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*! @} */
 
 #define FSL_MSGINTR_CHANNEL_NUM (3U)
@@ -64,6 +64,13 @@ static inline uint32_t MSGINTR_GetIntrSelectAddr(MSGINTR_Type *base, uint8_t cha
 
     return (uintptr_t)(&base->MSI[channel].MSIIR);
 }
+
+/*!
+ * @brief MSGINTR parameterized IRQ handler entry.
+ *
+ * @param instance MSGINTR instance index.
+ */
+void MSGINTR_DriverIRQHandler(uint32_t instance);
 
 #if defined(__cplusplus)
 }

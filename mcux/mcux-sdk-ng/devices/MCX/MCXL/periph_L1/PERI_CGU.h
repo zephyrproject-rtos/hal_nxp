@@ -13,8 +13,8 @@
 **                          MCXL144VLL_cm0plus
 **                          MCXL144VLL_cm33
 **
-**     Version:             rev. 1.1, 2026-01-02
-**     Build:               b260109
+**     Version:             rev. 2.0, 2026-04-22
+**     Build:               b260422
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CGU
@@ -31,14 +31,16 @@
 **         Generated based on Rev1 DraftH.
 **     - rev. 1.1 (2026-01-02)
 **         Generated based on Rev.1 RC.
+**     - rev. 2.0 (2026-04-22)
+**         Generated based on Rev. 2 DraftA.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_CGU.h
- * @version 1.1
- * @date 2026-01-02
+ * @version 2.0
+ * @date 2026-04-22
  * @brief CMSIS Peripheral Access Layer for CGU
  *
  * CMSIS Peripheral Access Layer for CGU
@@ -145,8 +147,8 @@ typedef struct {
 #define CGU_CLK_CONFIG_SEL_MODE_MASK             (0x2U)
 #define CGU_CLK_CONFIG_SEL_MODE_SHIFT            (1U)
 /*! SEL_MODE - Select Mode
- *  0b0..10 MHz
- *  0b1..2 MHz
+ *  0b0..LPIRC (10 MHz)
+ *  0b1..ULPIRC (3 MHz)
  */
 #define CGU_CLK_CONFIG_SEL_MODE(x)               (((uint32_t)(((uint32_t)(x)) << CGU_CLK_CONFIG_SEL_MODE_SHIFT)) & CGU_CLK_CONFIG_SEL_MODE_MASK)
 

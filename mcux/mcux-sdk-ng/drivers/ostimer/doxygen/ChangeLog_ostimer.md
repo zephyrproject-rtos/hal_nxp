@@ -1,5 +1,10 @@
 # OSTIMER
 
+## [2.3.1]
+
+- New Features
+  - Added common IRQ handler entry OSTIMER_DriverIRQHandler.
+
 ## [2.3.0]
 
 - New Features

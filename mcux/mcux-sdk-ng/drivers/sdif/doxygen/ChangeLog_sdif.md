@@ -1,5 +1,12 @@
 # SDIF
 
+## [2.1.1]
+
+- Bug Fixes
+  - Fixed some code quality issues.
+- New Features
+  - Added common IRQ handler entry SDIF_CommonDriverIRQHandler.
+
 ## [2.1.0]
 
 - Improvements

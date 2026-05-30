@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2022, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief eDMA driver version */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 7)) /*!< Version 2.4.7. */
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 8)) /*!< Version 2.4.8. */
 /*! @} */
 
 /*! @brief Compute the offset unit from DCHPRI3 */
@@ -1006,6 +1006,17 @@ static inline uint32_t EDMA_GetNextTCDAddress(edma_handle_t *handle)
  * @param handle eDMA handle pointer.
  */
 void EDMA_HandleIRQ(edma_handle_t *handle);
+
+/*!
+ * @brief EDMA IRQ handler for a given instance and channel.
+ *
+ * This is a common parameterized IRQ handler entry that dispatches to the
+ * appropriate channel handle based on the instance and channel number.
+ *
+ * @param instance EDMA instance number.
+ * @param channel EDMA channel number.
+ */
+void EDMA_DriverIRQHandler(uint32_t instance, uint32_t channel);
 
 /*! @} */
 

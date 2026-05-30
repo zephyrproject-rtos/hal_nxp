@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2025 NXP
+ * Copyright 2023-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,9 +22,13 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Defines TDET driver version 2.3.0.
+/*! @brief Defines TDET driver version 2.3.2.
  *
  * Change log:
+ * - Version 2.3.2
+ *   - Added common IRQ handler entry TDET_DriverIRQHandler.
+ * - Version 2.3.1
+ *   - Added support for KW43 device.
  * - Version 2.3.0
  *   - Added enum for TIF10.
  * - Version 2.2.0
@@ -37,7 +41,7 @@
  * - Version 2.0.0
  *   - Initial version
  */
-#define FSL_TDET_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+#define FSL_TDET_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*! @} */
 
 /*!
@@ -259,9 +263,11 @@ typedef enum _tdet_status_flag
     kTDET_StatusTamperPinTamper0 = 1U << DIGTMP_SR_TPF0_SHIFT,  /*!< TDET Tamper Pin 0 Tamper detected */
     kTDET_StatusTamperPinTamper1 = 1U << DIGTMP_SR_TPF1_SHIFT,  /*!< TDET Tamper Pin 1 Tamper detected */
     kTDET_StatusTamperPinTamper2 = 1U << DIGTMP_SR_TPF2_SHIFT,  /*!< TDET Tamper Pin 2 Tamper detected */
+#if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3)
     kTDET_StatusTamperPinTamper3 = 1U << DIGTMP_SR_TPF3_SHIFT,  /*!< TDET Tamper Pin 3 Tamper detected */
     kTDET_StatusTamperPinTamper4 = 1U << DIGTMP_SR_TPF4_SHIFT,  /*!< TDET Tamper Pin 4 Tamper detected */
     kTDET_StatusTamperPinTamper5 = 1U << DIGTMP_SR_TPF5_SHIFT,  /*!< TDET Tamper Pin 5 Tamper detected */
+#endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3) */
 #if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6)
     kTDET_StatusTamperPinTamper6 = 1U << DIGTMP_SR_TPF6_SHIFT,  /*!< TDET Tamper Pin 6 Tamper detected */
     kTDET_StatusTamperPinTamper7 = 1U << DIGTMP_SR_TPF7_SHIFT,  /*!< TDET Tamper Pin 7 Tamper detected */
@@ -272,8 +278,10 @@ typedef enum _tdet_status_flag
 #if defined(DIGTMP_SR_TIF10_MASK) && (DIGTMP_SR_TIF10_MASK > 0)
                       DIGTMP_SR_TIF10_MASK |
 #endif /* defined(DIGTMP_SR_TIF10_MASK) && (DIGTMP_SR_TIF10_MASK > 0) */
-                      DIGTMP_SR_TPF0_MASK | DIGTMP_SR_TPF1_MASK | DIGTMP_SR_TPF2_MASK | DIGTMP_SR_TPF3_MASK | DIGTMP_SR_TPF4_MASK |
-                      DIGTMP_SR_TPF5_MASK
+                      DIGTMP_SR_TPF0_MASK | DIGTMP_SR_TPF1_MASK | DIGTMP_SR_TPF2_MASK
+#if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3)
+                      | DIGTMP_SR_TPF3_MASK | DIGTMP_SR_TPF4_MASK | DIGTMP_SR_TPF5_MASK
+#endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3) */
 #if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6)
                       | DIGTMP_SR_TPF6_MASK | DIGTMP_SR_TPF7_MASK
 #endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6) */
@@ -307,15 +315,19 @@ typedef enum _tdet_interrupt
     kTDET_InterruptTamperPinTamper0 = 1U << DIGTMP_IER_TPIE0_SHIFT,  /*!< TDET Tamper Pin Tamper 0 Interrupt */
     kTDET_InterruptTamperPinTamper1 = 1U << DIGTMP_IER_TPIE1_SHIFT,  /*!< TDET Tamper Pin Tamper 1 Interrupt */
     kTDET_InterruptTamperPinTamper2 = 1U << DIGTMP_IER_TPIE2_SHIFT,  /*!< TDET Tamper Pin Tamper 2 Interrupt */
+#if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3)
     kTDET_InterruptTamperPinTamper3 = 1U << DIGTMP_IER_TPIE3_SHIFT,  /*!< TDET Tamper Pin Tamper 3 Interrupt */
     kTDET_InterruptTamperPinTamper4 = 1U << DIGTMP_IER_TPIE4_SHIFT,  /*!< TDET Tamper Pin Tamper 4 Interrupt */
     kTDET_InterruptTamperPinTamper5 = 1U << DIGTMP_IER_TPIE5_SHIFT,  /*!< TDET Tamper Pin Tamper 5 Interrupt */
+#endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3) */
 #if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6)
     kTDET_InterruptTamperPinTamper6 = 1U << DIGTMP_IER_TPIE6_SHIFT,  /*!< TDET Tamper Pin Tamper 6 Interrupt */
     kTDET_InterruptTamperPinTamper7 = 1U << DIGTMP_IER_TPIE7_SHIFT,  /*!< TDET Tamper Pin Tamper 7 Interrupt */
 #endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6) */
-    kTDET_InterruptTamperPinTamper_All = DIGTMP_IER_TPIE0_MASK | DIGTMP_IER_TPIE1_MASK | DIGTMP_IER_TPIE2_MASK |
-                                         DIGTMP_IER_TPIE3_MASK | DIGTMP_IER_TPIE4_MASK | DIGTMP_IER_TPIE5_MASK
+    kTDET_InterruptTamperPinTamper_All = DIGTMP_IER_TPIE0_MASK | DIGTMP_IER_TPIE1_MASK | DIGTMP_IER_TPIE2_MASK 
+#if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3)
+                                         | DIGTMP_IER_TPIE3_MASK | DIGTMP_IER_TPIE4_MASK | DIGTMP_IER_TPIE5_MASK
+#endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3) */
 #if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6)
                                          | DIGTMP_IER_TPIE6_MASK | DIGTMP_IER_TPIE7_MASK
 #endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6) */
@@ -326,7 +338,10 @@ typedef enum _tdet_interrupt
 #if defined(DIGTMP_IER_TIIE10_MASK) && (DIGTMP_IER_TIIE10_MASK > 0)
                          DIGTMP_IER_TIIE10_MASK |
 #endif /* defined(DIGTMP_IER_TIIE10_MASK) && (DIGTMP_IER_TIIE10_MASK > 0) */
-                         DIGTMP_IER_TPIE0_MASK | DIGTMP_IER_TPIE1_MASK | DIGTMP_IER_TPIE2_MASK | DIGTMP_IER_TPIE3_MASK | DIGTMP_IER_TPIE4_MASK | DIGTMP_IER_TPIE5_MASK
+                         DIGTMP_IER_TPIE0_MASK | DIGTMP_IER_TPIE1_MASK | DIGTMP_IER_TPIE2_MASK 
+#if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3)
+                         | DIGTMP_IER_TPIE3_MASK | DIGTMP_IER_TPIE4_MASK | DIGTMP_IER_TPIE5_MASK
+#endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3) */
 #if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6)
                          | DIGTMP_IER_TPIE6_MASK | DIGTMP_IER_TPIE7_MASK
 #endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6) */
@@ -360,15 +375,19 @@ typedef enum _tdet_tamper
     kTDET_TamperTamperPin0 = 1U << DIGTMP_TER_TPE0_SHIFT,  /*!< Tamper Pin 0 Tamper Enable */
     kTDET_TamperTamperPin1 = 1U << DIGTMP_TER_TPE1_SHIFT,  /*!< Tamper Pin 1 Tamper Enable */
     kTDET_TamperTamperPin2 = 1U << DIGTMP_TER_TPE2_SHIFT,  /*!< Tamper Pin 2 Tamper Enable */
+#if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3)
     kTDET_TamperTamperPin3 = 1U << DIGTMP_TER_TPE3_SHIFT,  /*!< Tamper Pin 3 Tamper Enable */
     kTDET_TamperTamperPin4 = 1U << DIGTMP_TER_TPE4_SHIFT,  /*!< Tamper Pin 4 Tamper Enable */
     kTDET_TamperTamperPin5 = 1U << DIGTMP_TER_TPE5_SHIFT,  /*!< Tamper Pin 5 Tamper Enable */
+#endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3) */
 #if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6)
     kTDET_TamperTamperPin6 = 1U << DIGTMP_TER_TPE6_SHIFT,  /*!< Tamper Pin 6 Tamper Enable */
     kTDET_TamperTamperPin7 = 1U << DIGTMP_TER_TPE7_SHIFT,  /*!< Tamper Pin 7 Tamper Enable */
 #endif                                                     /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6) */
-    kTDET_TamperTamperPinAll = DIGTMP_TER_TPE0_MASK | DIGTMP_TER_TPE1_MASK | DIGTMP_TER_TPE2_MASK |
-                               DIGTMP_TER_TPE3_MASK | DIGTMP_TER_TPE4_MASK | DIGTMP_TER_TPE5_MASK
+    kTDET_TamperTamperPinAll = DIGTMP_TER_TPE0_MASK | DIGTMP_TER_TPE1_MASK | DIGTMP_TER_TPE2_MASK 
+#if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3)
+                               | DIGTMP_TER_TPE3_MASK | DIGTMP_TER_TPE4_MASK | DIGTMP_TER_TPE5_MASK
+#endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3) */
 #if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6)
                                | DIGTMP_TER_TPE6_MASK | DIGTMP_TER_TPE7_MASK
 #endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6) */
@@ -379,8 +398,10 @@ typedef enum _tdet_tamper
 #if defined(DIGTMP_TER_TIE10_MASK) && (DIGTMP_TER_TIE10_MASK > 6)
                       DIGTMP_TER_TIE10_MASK |
 #endif /* defined(DIGTMP_TER_TIE10_MASK) && (DIGTMP_TER_TIE10_MASK > 6) */
-                      DIGTMP_TER_TPE0_MASK | DIGTMP_TER_TPE1_MASK | DIGTMP_TER_TPE2_MASK |
-                      DIGTMP_TER_TPE3_MASK | DIGTMP_TER_TPE4_MASK | DIGTMP_TER_TPE5_MASK
+                      DIGTMP_TER_TPE0_MASK | DIGTMP_TER_TPE1_MASK | DIGTMP_TER_TPE2_MASK 
+#if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3)
+                        | DIGTMP_TER_TPE3_MASK | DIGTMP_TER_TPE4_MASK | DIGTMP_TER_TPE5_MASK
+#endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3) */
 #if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6)
                       | DIGTMP_TER_TPE6_MASK | DIGTMP_TER_TPE7_MASK
 #endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6) */
@@ -412,9 +433,11 @@ typedef enum _tdet_register
     kTDET_GlitchFilter0 = 1U << DIGTMP_LR_GFL0_SHIFT,  /*!< Glitch Filter Register 0 */
     kTDET_GlitchFilter1 = 1U << DIGTMP_LR_GFL1_SHIFT,  /*!< Glitch Filter Register 1 */
     kTDET_GlitchFilter2 = 1U << DIGTMP_LR_GFL2_SHIFT,  /*!< Glitch Filter Register 2 */
+#if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3)
     kTDET_GlitchFilter3 = 1U << DIGTMP_LR_GFL3_SHIFT,  /*!< Glitch Filter Register 3 */
     kTDET_GlitchFilter4 = 1U << DIGTMP_LR_GFL4_SHIFT,  /*!< Glitch Filter Register 4 */
     kTDET_GlitchFilter5 = 1U << DIGTMP_LR_GFL5_SHIFT,  /*!< Glitch Filter Register 5 */
+#endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3) */
 #if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6)
     kTDET_GlitchFilter6 = 1U << DIGTMP_LR_GFL6_SHIFT,  /*!< Glitch Filter Register 6 */
     kTDET_GlitchFilter7 = 1U << DIGTMP_LR_GFL7_SHIFT,  /*!< Glitch Filter Register 7 */
@@ -423,8 +446,10 @@ typedef enum _tdet_register
 #if defined(TDET_HAS_ACTIVE_TAMPER)
                                       | DIGTMP_LR_PDL_MASK | DIGTMP_LR_ATL0_MASK | DIGTMP_LR_ATL1_MASK
 #endif /* defined(TDET_HAS_ACTIVE_TAMPER) */
-                                      | DIGTMP_LR_GFL0_MASK | DIGTMP_LR_GFL1_MASK | DIGTMP_LR_GFL2_MASK |
-                                      DIGTMP_LR_GFL3_MASK | DIGTMP_LR_GFL4_MASK | DIGTMP_LR_GFL5_MASK
+                                      | DIGTMP_LR_GFL0_MASK | DIGTMP_LR_GFL1_MASK | DIGTMP_LR_GFL2_MASK
+#if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3)
+                                      | DIGTMP_LR_GFL3_MASK | DIGTMP_LR_GFL4_MASK | DIGTMP_LR_GFL5_MASK
+#endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3) */
 #if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6)
                                       | DIGTMP_LR_GFL6_MASK | DIGTMP_LR_GFL7_MASK
 #endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6) */
@@ -434,8 +459,10 @@ typedef enum _tdet_register
 #if defined(TDET_HAS_ACTIVE_TAMPER)
                          | DIGTMP_LR_PDL_MASK | DIGTMP_LR_ATL0_MASK | DIGTMP_LR_ATL1_MASK
 #endif /* defined(TDET_HAS_ACTIVE_TAMPER) */
-                         | DIGTMP_LR_GFL0_MASK | DIGTMP_LR_GFL1_MASK | DIGTMP_LR_GFL2_MASK | DIGTMP_LR_GFL3_MASK |
-                         DIGTMP_LR_GFL4_MASK | DIGTMP_LR_GFL5_MASK
+                         | DIGTMP_LR_GFL0_MASK | DIGTMP_LR_GFL1_MASK | DIGTMP_LR_GFL2_MASK
+#if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3)
+                         | DIGTMP_LR_GFL3_MASK | DIGTMP_LR_GFL4_MASK | DIGTMP_LR_GFL5_MASK
+#endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 3) */
 #if defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6)
                          | DIGTMP_LR_GFL6_MASK | DIGTMP_LR_GFL7_MASK
 #endif /* defined(DIGTMP_PGFR_COUNT) && (DIGTMP_PGFR_COUNT > 6) */

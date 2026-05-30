@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -162,6 +162,16 @@ void FLEXCOMM_SetIRQHandler(void *base, flexcomm_irq_handler_t handler, void *fl
     s_flexcommIrqHandler[instance] = NULL;
     s_flexcommHandle[instance]     = flexcommHandle;
     s_flexcommIrqHandler[instance] = handler;
+    SDK_ISR_EXIT_BARRIER;
+}
+
+void FLEXCOMM_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_flexcommBaseAddrs))
+    {
+        assert(s_flexcommIrqHandler[instance] != NULL);
+        s_flexcommIrqHandler[instance]((uint32_t *)s_flexcommBaseAddrs[instance], s_flexcommHandle[instance]);
+    }
     SDK_ISR_EXIT_BARRIER;
 }
 

@@ -25,8 +25,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 1.5.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(1, 5, 0))
+/*! @brief CLOCK driver version 1.6.0. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(1, 6, 0))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -540,7 +540,7 @@ typedef enum _clock_attach_id
     kFROdiv1_to_AON_CMP0     = CLK_ATTACH_MUX(kCLOCK_SelAonACMP0, 0U),         /*!< Attach FRO div 1 to AON ACMP0.   */
     kFROdiv2_to_AON_CMP0     = CLK_ATTACH_MUX(kCLOCK_SelAonACMP0, 1U),         /*!< Attach FRO div 2 to AON ACMP0.   */
     kFROdiv4_to_AON_CMP0     = CLK_ATTACH_MUX(kCLOCK_SelAonACMP0, 2U),         /*!< Attach FRO div 4 to AON ACMP0.   */
-    kROOT_AUX_to_AON_CMP0    = CLK_ATTACH_MUX(kCLOCK_SelAonACMP0, 3U),         /*!< Attach ROOT AUX to AON ACMP0.    */
+    kFRO16K_to_AON_CMP0      = CLK_ATTACH_MUX(kCLOCK_SelAonACMP0, 3U),         /*!< Attach FRO16K to AON ACMP0.     */
 #endif
 
 #if defined(FSL_FEATURE_SOC_LCD_COUNT) && (FSL_FEATURE_SOC_LCD_COUNT > 0U)
