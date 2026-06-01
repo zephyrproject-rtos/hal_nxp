@@ -1,5 +1,11 @@
 # SCTIMER
 
+## [2.5.4]
+
+- Bug Fixes
+  - Fixed SCTIMER_CreateAndScheduleEvent setting EV[n].CTRL[HEVENT] no longer exclusively for
+    match-based events.
+
 ## [2.5.3]
 
 - Bug Fixes
