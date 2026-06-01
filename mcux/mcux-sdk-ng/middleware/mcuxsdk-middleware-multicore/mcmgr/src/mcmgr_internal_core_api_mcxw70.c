@@ -59,7 +59,7 @@ static const mcmgr_core_info_t s_mcmgrCores[MCMGR_CORECOUNT] = {
 const mcmgr_system_info_t g_mcmgrSystem = {
     .coreCount = MCMGR_CORECOUNT, .memRegCount = MCMGR_MEMREGCOUNT, .cores = s_mcmgrCores};
 
-mcmgr_status_t mcmgr_early_init_internal(mcmgr_core_t coreNum)
+static mcmgr_status_t mcmgr_platform_init_internal_early(mcmgr_core_t coreNum)
 {
     /* This function is intended to be called as close to the reset entry as possible,
        (within the startup sequence in SystemInitHook) to allow CoreUp event triggering.
@@ -98,8 +98,14 @@ mcmgr_status_t mcmgr_early_init_internal(mcmgr_core_t coreNum)
     return MCMGR_TriggerEvent(target_core, kMCMGR_RemoteCoreUpEvent, 0);
 }
 
-mcmgr_status_t mcmgr_late_init_internal(mcmgr_core_t coreNum)
+mcmgr_status_t mcmgr_platform_init_internal(mcmgr_core_t coreNum)
 {
+    mcmgr_status_t status = mcmgr_platform_init_internal_early(coreNum);
+    if (status != kStatus_MCMGR_Success)
+    {
+        return status;
+    }
+
 #if defined(MCMGR_BUILD_FOR_CORE_0)
     MU_EnableInterrupts(MU0_MUA, (uint32_t)mcmgr_mu_channel_flag);
 

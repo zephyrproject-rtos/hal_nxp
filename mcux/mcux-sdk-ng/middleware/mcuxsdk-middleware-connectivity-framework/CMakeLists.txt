@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/Common OPTIONAL)
-mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/FactoryDataProvider OPTIONAL)
 mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/DBG OPTIONAL)
 mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/FunctionLib OPTIONAL)
 mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/HWParameter OPTIONAL)

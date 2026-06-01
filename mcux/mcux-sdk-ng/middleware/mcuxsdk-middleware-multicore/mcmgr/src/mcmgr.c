@@ -135,26 +135,8 @@ static void MCMGR_FeedStartupDataEventHandler(mcmgr_core_t coreNum, uint16_t sta
 
 mcmgr_status_t MCMGR_EarlyInit(void)
 {
-    /* This function is intended to be called as close to the reset entry as possible,
-       (within the startup sequence in SystemInitHook) to allow CoreUp event triggering.
-       Avoid using uninitialized data here. */
-
-    mcmgr_core_t currentCore = MCMGR_GetCurrentCore();
-    /*
-     * $Branch Coverage Justification$
-     * (currentCore > g_mcmgrSystem.coreCount) not covered, MCMGR_GetCurrentCore() returns currentCore from
-     * register and g_mcmgrSystem is defined as const.
-     */
-    if ((uint32_t)currentCore < g_mcmgrSystem.coreCount) /* GCOVR_EXCL_BR_LINE */
-    {
-        return mcmgr_early_init_internal(currentCore);
-    }
-    /*
-     * $Line Coverage Justification$
-     * Line never reached, MCMGR_GetCurrentCore() returns currentCore from
-     * register and g_mcmgrSystem is defined as const.
-     */
-    return kStatus_MCMGR_Error; /* GCOVR_EXCL_LINE */
+    /* Compatibility no-op (kept to not break existing public API). */
+    return kStatus_MCMGR_Success;
 }
 
 mcmgr_status_t MCMGR_Init(void)
@@ -198,7 +180,7 @@ mcmgr_status_t MCMGR_Init(void)
              */
             return kStatus_MCMGR_Error; /* GCOVR_EXCL_LINE */
         }
-        return mcmgr_late_init_internal(currentCore);
+        return mcmgr_platform_init_internal(currentCore);
     }
     /*
      * $Line Coverage Justification$

@@ -19,4 +19,11 @@
 #define PLATFORM_EXTFLASH_PAGE_SIZE   256U
 #define PLATFORM_EXTFLASH_TOTAL_SIZE  MB(8U)
 
+/*********************************************************************
+ *        Service definitions
+ *********************************************************************/
+
+/* Map the RNG TRNG IRQ handler to the TRNG0 IRQ handler */
+#define RNG_TrngIrqHandler TRNG_IRQHandler
+
 #endif /* _FWK_PLAT_DEFS_H_ */

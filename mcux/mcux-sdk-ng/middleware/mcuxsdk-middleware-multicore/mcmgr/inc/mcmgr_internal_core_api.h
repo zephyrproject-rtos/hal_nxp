@@ -81,23 +81,13 @@ extern mcmgr_event_t MCMGR_eventTable[];
 extern volatile mcmgr_core_context_t s_mcmgrCoresContext[];
 
 /*!
- * @brief Internal platform-specific early MCMGR initialize function,
- * usually called during the startup.
+ * @brief Internal platform-specific MCMGR initialize function.
  *
  * @param[in] coreNum Current core number.
  *
  * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_Error on failure.
  */
-mcmgr_status_t mcmgr_early_init_internal(mcmgr_core_t coreNum);
-
-/*!
- * @brief Internal platform-specific late MCMGR initialize function.
- *
- * @param[in] coreNum Current core number.
- *
- * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_Error on failure.
- */
-mcmgr_status_t mcmgr_late_init_internal(mcmgr_core_t coreNum);
+mcmgr_status_t mcmgr_platform_init_internal(mcmgr_core_t coreNum);
 
 /*!
  * @brief Internal platform-specific start core function.

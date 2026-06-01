@@ -128,7 +128,7 @@ extern uint32_t PROD_DATA_BASE_ADDR[];
 #define MRCC_TSTMR0_REG MRCC->MRCC_TSTMR0_CLKSEL
 
 /*********************************************************************
- *        LPTMR FPGA settings
+ *        LPTMR settings
  *********************************************************************/
 #if (defined(FPGA_TARGET) && (FPGA_TARGET != 0))
 #undef PLATFORM_TM_CLK_FREQ
@@ -151,5 +151,20 @@ typedef enum _fwk_tstmr_clk_sel
 {
     FwkTSTMR0_ClkSel_1MHz = 5U, /*!< TSTMR 1MHz configuration for gPlatformTstmr0HasClkControl_d */
 } fwk_tstmr_clk_sel_t;
+
+/*Lptmr timer use (kLPTMR_PrescalerClock_0) 32k clock*/
+#ifndef PLATFORM_TM_CLK_SELECT
+#define PLATFORM_TM_CLK_SELECT 0U
+#endif
+
+/* KW43 / MCXW70 require RF power domain configuration */
+#define gPlatformHasRFPowerDomain_d 1
+
+/*********************************************************************
+ *        Service definitions
+ *********************************************************************/
+
+/* Map the RNG TRNG IRQ handler to the TRNG0 IRQ handler */
+#define RNG_TrngIrqHandler TRNG0_IRQHandler
 
 #endif /* _FWK_PLAT_DEFS_H_ */

@@ -281,12 +281,11 @@ int PLATFORM_SendHciVendorEvent(uint8_t *data, uint32_t len)
 {
     int ret = 0;
 
-    /* len shall be strictly positive as message shall not be empty */
-    assert((data != NULL) && (len > 0U) && (len <= (uint16_t)UINT16_MAX));
     do
     {
         if ((data == NULL) || (len == 0U) || (len > (uint16_t)UINT16_MAX))
         {
+            /* len shall be strictly positive as message shall not be empty */
             ret = -1;
             break;
         }

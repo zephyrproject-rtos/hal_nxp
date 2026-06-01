@@ -8,14 +8,14 @@
     ],
     "licenseListVersion": "3.26"
   },
-  "name": "mcux-sdk-middleware-multicore-v25.12.00",
+  "name": "mcux-sdk-middleware-multicore-v26.03.00",
   "dataLicense": "CC0-1.0",
   "documentNamespace": "https://nxp.com/spdx/0500c056-6f56-4c62-a43d-b01e8bc18c28",
   "packages": [
     {
       "SPDXID": "SPDXRef-package-0500c056-6f56-4c62-a43d-b01e8bc18c28",
       "name": "mcux-sdk-middleware-multicore",
-      "versionInfo": "v25.12.00",
+      "versionInfo": "v26.03.00",
       "licenseConcluded": "(BSD-3-Clause)",
       "licenseDeclared": "(BSD-3-Clause)",
       "downloadLocation": "https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-multicore",

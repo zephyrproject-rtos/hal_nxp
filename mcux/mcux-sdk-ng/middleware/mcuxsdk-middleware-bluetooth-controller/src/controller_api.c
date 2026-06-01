@@ -54,6 +54,7 @@ typedef enum
     API_Controller_ConfigureSCA,
     API_Controller_ConfigureIDSSecurityEvent,
     API_Controller_ReadMemory,
+    API_Controller_SuspendResume,
     API_Last
 } PLATFORM_NbuApiId;
 
@@ -497,3 +498,24 @@ osa_status_t Controller_ReadMemory(uint32_t address, uint32_t size, void* pBuffe
     }
     return api_status;
 }
+
+#if defined(FWK_KW43_MCXW70_FAMILIES) && (FWK_KW43_MCXW70_FAMILIES > 0)
+osa_status_t Controller_SuspendResume(uint32_t suspend)
+{
+    osa_status_t api_status;
+    uint32_t     ret;
+    uint32_t     tab[1] = {suspend != 0U ? 1U : 0U};
+    bool rpmsg_status = PLATFORM_NbuApiReq((uint8_t*)&ret, API_Controller_SuspendResume,
+                                (const uint8_t*)"\x01", tab, 4U);
+    if (rpmsg_status)
+    {
+      api_status = (osa_status_t)ret;
+    }
+    else
+    {
+      api_status = KOSA_StatusError;
+    }
+
+    return api_status;
+}
+#endif

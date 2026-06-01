@@ -42,12 +42,7 @@ Example of MCMGR usage to start secondary core:
 
 void main()
 {
-    /* Initialize MCMGR - low level multicore management library.
-       Call this function as close to the reset entry as possible,
-       (into the startup sequence) to allow CoreUp event triggering. */
-    MCMGR_EarlyInit();
-
-    /* Initialize MCMGR, install generic event handlers */
+    /* Initialize MCMGR, low level multicore management library */
     MCMGR_Init();
 
     /* Boot secondary core application from the CORE1_BOOT_ADDRESS, pass "1" as startup data, starting synchronously. */
@@ -90,12 +85,7 @@ void main()
 {
     uint16_t RPMsgRemoteReadyEventData[NUMBER_OF_CORES] = {0};
 
-    /* Initialize MCMGR - low level multicore management library.
-       Call this function as close to the reset entry as possible,
-       (into the startup sequence) to allow CoreUp event triggering. */
-    MCMGR_EarlyInit();
-
-    /* Initialize MCMGR, install generic event handlers */
+    /* Initialize MCMGR, low level multicore management library */
     MCMGR_Init();
 
     /* Register the application event before starting the secondary core */
@@ -121,12 +111,7 @@ Code for the secondary side:
 
 void main()
 {
-    /* Initialize MCMGR - low level multicore management library.
-       Call this function as close to the reset entry as possible,
-       (into the startup sequence) to allow CoreUp event triggering. */
-    MCMGR_EarlyInit();
-
-    /* Initialize MCMGR, install generic event handlers */
+    /* Initialize MCMGR, low level multicore management library */
     MCMGR_Init();
 .
 .
