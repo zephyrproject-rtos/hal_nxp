@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 5, 3)) /*!< Version */
+#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 5, 4)) /*!< Version */
 /*! @} */
 
 #ifndef SCT_EV_STATE_STATEMSKn
