@@ -6422,20 +6422,28 @@ static void wlcm_request_scan(struct wifi_message *msg, enum cm_sta_state *next)
         return;
     }
 
-    memcpy(ssid+ssid_off, wlan_scan_param->ssid[0], strlen(wlan_scan_param->ssid[0]));
+#if CONFIG_COMBO_SCAN
+    memcpy(ssid + ssid_off, wlan_scan_param->ssid[0], strlen(wlan_scan_param->ssid[0]));
     ssid_off += strlen(wlan_scan_param->ssid[0]);
     ssid[ssid_off] = '\0';
     ssid_off++;
     ssid_num++;
-#if CONFIG_COMBO_SCAN
+
     if (strlen(wlan_scan_param->ssid[1]))
     {
-        memcpy(ssid+ssid_off, wlan_scan_param->ssid[1], strlen(wlan_scan_param->ssid[1]));
+        memcpy(ssid + ssid_off, wlan_scan_param->ssid[1], strlen(wlan_scan_param->ssid[1]));
         ssid_off += strlen(wlan_scan_param->ssid[1]);
         ssid[ssid_off] = '\0';
         ssid_num++;
     }
+#else
+    memcpy(ssid + ssid_off, wlan_scan_param->ssid, strlen(wlan_scan_param->ssid));
+    ssid_off += strlen(wlan_scan_param->ssid);
+    ssid[ssid_off] = '\0';
+    ssid_off++;
+    ssid_num++;
 #endif
+
 #if CONFIG_SCAN_CHANNEL_GAP
     if (is_uap_started() || is_sta_connected())
         wlan_scan_param->scan_chan_gap = scan_channel_gap;
@@ -13080,19 +13088,26 @@ void wlan_rrm_request_scan(wlan_scan_params_v2_t *wlan_scan_param, wlan_rrm_scan
 {
     char ssid[(MLAN_MAX_SSID_LENGTH + 1) * MRVDRV_MAX_SSID_LIST_LENGTH]  = {0};
     uint8_t ssid_num = 0, ssid_off = 0;
-    memcpy(ssid+ssid_off, wlan_scan_param->ssid[0], strlen(wlan_scan_param->ssid[0]));
+#if CONFIG_COMBO_SCAN
+    memcpy(ssid + ssid_off, wlan_scan_param->ssid[0], strlen(wlan_scan_param->ssid[0]));
     ssid_off += strlen(wlan_scan_param->ssid[0]);
     ssid[ssid_off] = '\0';
     ssid_off++;
     ssid_num++;
-#if CONFIG_COMBO_SCAN
+
     if (strlen(wlan_scan_param->ssid[1]))
     {
-        memcpy(ssid+ssid_off, wlan_scan_param->ssid[1], strlen(wlan_scan_param->ssid[1]));
+        memcpy(ssid + ssid_off, wlan_scan_param->ssid[1], strlen(wlan_scan_param->ssid[1]));
         ssid_off += strlen(wlan_scan_param->ssid[1]);
         ssid[ssid_off] = '\0';
         ssid_num++;
     }
+#else
+    memcpy(ssid + ssid_off, wlan_scan_param->ssid, strlen(wlan_scan_param->ssid));
+    ssid_off += strlen(wlan_scan_param->ssid);
+    ssid[ssid_off] = '\0';
+    ssid_off++;
+    ssid_num++;
 #endif
 
     if (wlan_scan_param == NULL || scan_cb_param == NULL)
