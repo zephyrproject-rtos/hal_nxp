@@ -114,7 +114,7 @@ typedef enum IRQn {
   USB0_NEEDCLK_IRQn            = 27,               /**< USB Activity Wake-up Interrupt */
   USB0_IRQn                    = 28,               /**< USB device */
   RTC_IRQn                     = 29,               /**< RTC alarm and wake-up interrupts */
-  Reserved46_IRQn              = 30,               /**< Reserved interrupt */
+  EZH_IRQn                     = 30,               /**< EZH interrupt */
   MAILBOX_IRQn                 = 31,               /**< WAKEUP,Mailbox interrupt (present on selected devices) */
   PIN_INT4_IRQn                = 32,               /**< Pin interrupt 4 or pattern match engine slice 4 int */
   PIN_INT5_IRQn                = 33,               /**< Pin interrupt 5 or pattern match engine slice 5 int */

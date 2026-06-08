@@ -129,6 +129,7 @@
 #define INPUTMUX_TIMER0CAPTSEL_COUNT              4u
 #define INPUTMUX_TIMER1CAPTSEL_COUNT              4u
 #define INPUTMUX_TIMER2CAPTSEL_COUNT              4u
+#define INPUTMUX_EZH_COUNT                        8u
 #define INPUTMUX_PINTSEL_COUNT                    8u
 #define INPUTMUX_DMA0_ITRIG_INMUX_COUNT           23u
 #define INPUTMUX_DMA0_OTRIG_INMUX_COUNT           4u
@@ -147,7 +148,8 @@ typedef struct {
   __IO uint32_t TIMER1CAPTSEL[INPUTMUX_TIMER1CAPTSEL_COUNT]; /**< Capture select registers for TIMER1 inputs, array offset: 0x40, array step: 0x4 */
        uint8_t RESERVED_2[16];
   __IO uint32_t TIMER2CAPTSEL[INPUTMUX_TIMER2CAPTSEL_COUNT]; /**< Capture select registers for TIMER2 inputs, array offset: 0x60, array step: 0x4 */
-       uint8_t RESERVED_3[80];
+       uint8_t RESERVED_3[48];
+  __IO uint32_t EZH_SLICE_INMUX[INPUTMUX_EZH_COUNT];        /**< Input mux registers for EZH inputs, array offset: 0xA0, array step: 0x4 */
   __IO uint32_t PINTSEL[INPUTMUX_PINTSEL_COUNT];   /**< Pin interrupt select register, array offset: 0xC0, array step: 0x4 */
   __IO uint32_t DMA0_ITRIG_INMUX[INPUTMUX_DMA0_ITRIG_INMUX_COUNT]; /**< Trigger select register for DMA0 channel, array offset: 0xE0, array step: 0x4 */
        uint8_t RESERVED_4[36];
