@@ -431,6 +431,14 @@
                 kCLOCK_Osc24MClk,       kCLOCK_SysPll1Div6Clk, kCLOCK_SysPll1Div5Clk,                                 \
                 kCLOCK_VpuPllClk,       kCLOCK_SysPll2Div8Clk, kCLOCK_SysPll3Clk,                                     \
                 kCLOCK_SysPll1Div10Clk, kCLOCK_SysPll2Div6Clk}, /* WDOG Clock ROOT */                                 \
+           {                                                                                                          \
+                kCLOCK_Osc24MClk,       kCLOCK_SysPll2Div3Clk, kCLOCK_SysPll2Div10Clk,                                \
+                kCLOCK_SysPll1Clk,      kCLOCK_SysPll2Clk,     kCLOCK_ExtClk2,                                        \
+                kCLOCK_AudioPll2Clk,    kCLOCK_VideoPll1Clk}, /* MEDIA MIPI PHY1 REF Clock ROOT */                    \
+           {                                                                                                          \
+                kCLOCK_Osc24MClk,       kCLOCK_VideoPll1Clk,   kCLOCK_AudioPll2Clk,                                   \
+                kCLOCK_AudioPll1Clk,    kCLOCK_SysPll1Clk,     kCLOCK_SysPll2Clk,                                     \
+                kCLOCK_SysPll3Clk,      kCLOCK_ExtClk4}, /* MEDIA DISP1 PIX Clock ROOT */                             \
             {                                                                                                         \
                 kCLOCK_Osc24MClk,  kCLOCK_SysPll2Div10Clk, kCLOCK_AudioPll1Clk, kCLOCK_SysPll1Clk, kCLOCK_SysPll2Clk, \
                 kCLOCK_SysPll3Clk, kCLOCK_ExtClk3,         kCLOCK_AudioPll2Clk}, /* PDM Clock ROOT */                 \
@@ -449,7 +457,7 @@
             kCLOCK_RootUart3, kCLOCK_RootUart4, kCLOCK_RootGic, kCLOCK_RootEcspi1, kCLOCK_RootEcspi2,               \
             kCLOCK_RootEcspi3, kCLOCK_RootPwm1, kCLOCK_RootPwm2, kCLOCK_RootPwm3, kCLOCK_RootPwm4, kCLOCK_RootGpt1, \
             kCLOCK_RootGpt2, kCLOCK_RootGpt3, kCLOCK_RootGpt4, kCLOCK_RootGpt5, kCLOCK_RootGpt6, kCLOCK_RootWdog,   \
-            kCLOCK_RootPdm,                                                                                         \
+            kCLOCK_RootMediaMipiPhy1Ref, kCLOCK_RootMediaDisp1Pix, kCLOCK_RootPdm,                                  \
     }
 
 /*! @brief Clock name used to get clock frequency. */
@@ -823,6 +831,9 @@ typedef enum _clock_root
 
     kCLOCK_WdogClkRoot, /*!< WDOG Clock control name.*/
 
+    kCLOCK_MediaMipiPhy1RefClkRoot, /*!< MEDIA MIPI PHY1 Reference Clock control name.*/
+    kCLOCK_MediaDisp1PixClkRoot,    /*!< MEDIA Display 1 Pixel Clock control name.*/
+
     kCLOCK_PdmClkRoot, /*!< PDM Clock control name.*/
 
 } clock_root_t;
@@ -1072,6 +1083,32 @@ typedef enum _clock_rootmux_sai_clk_sel
     kCLOCK_SaiRootmuxExtClk1     = 6U, /*!< SAI Clock from External Clock1, External Clock2, External Clock3.*/
     kCLOCK_SaiRootmuxExtClk2     = 7U, /*!< SAI Clock from External Clock2, External Clock3, External Clock4.*/
 } clock_rootmux_sai_clk_sel_t;
+
+/*! @brief Root clock select enumeration for MEDIA MIPI PHY1 REF clock. */
+typedef enum _clock_rootmux_media_mipi_phy1_ref_clk_sel
+{
+    kCLOCK_MediaMipiPhy1RefRootmuxOsc24M       = 0U, /*!< MEDIA MIPI PHY1 REF Clock from OSC 24M.*/
+    kCLOCK_MediaMipiPhy1RefRootmuxSysPll2Div3  = 1U, /*!< MEDIA MIPI PHY1 REF Clock from SYSTEM PLL2 divided by 3.*/
+    kCLOCK_MediaMipiPhy1RefRootmuxSysPll2Div10 = 2U, /*!< MEDIA MIPI PHY1 REF Clock from SYSTEM PLL2 divided by 10.*/
+    kCLOCK_MediaMipiPhy1RefRootmuxSysPll1      = 3U, /*!< MEDIA MIPI PHY1 REF Clock from SYSTEM PLL1.*/
+    kCLOCK_MediaMipiPhy1RefRootmuxSysPll2      = 4U, /*!< MEDIA MIPI PHY1 REF Clock from SYSTEM PLL2.*/
+    kCLOCK_MediaMipiPhy1RefRootmuxExtClk2      = 5U, /*!< MEDIA MIPI PHY1 REF Clock from External Clock2.*/
+    kCLOCK_MediaMipiPhy1RefRootmuxAudioPll2    = 6U, /*!< MEDIA MIPI PHY1 REF Clock from AUDIO PLL2.*/
+    kCLOCK_MediaMipiPhy1RefRootmuxVideoPll1    = 7U, /*!< MEDIA MIPI PHY1 REF Clock from VIDEO PLL1.*/
+} clock_rootmux_media_mipi_phy1_ref_clk_sel_t;
+
+/*! @brief Root clock select enumeration for MEDIA DISP1 PIX clock. */
+typedef enum _clock_rootmux_media_disp1_pix_clk_sel
+{
+    kCLOCK_MediaDisp1PixRootmuxOsc24M    = 0U, /*!< MEDIA DISP1 PIX Clock from OSC 24M.*/
+    kCLOCK_MediaDisp1PixRootmuxVideoPll1 = 1U, /*!< MEDIA DISP1 PIX Clock from VIDEO PLL1.*/
+    kCLOCK_MediaDisp1PixRootmuxAudioPll2 = 2U, /*!< MEDIA DISP1 PIX Clock from AUDIO PLL2.*/
+    kCLOCK_MediaDisp1PixRootmuxAudioPll1 = 3U, /*!< MEDIA DISP1 PIX Clock from AUDIO PLL1.*/
+    kCLOCK_MediaDisp1PixRootmuxSysPll1   = 4U, /*!< MEDIA DISP1 PIX Clock from SYSTEM PLL1.*/
+    kCLOCK_MediaDisp1PixRootmuxSysPll2   = 5U, /*!< MEDIA DISP1 PIX Clock from SYSTEM PLL2.*/
+    kCLOCK_MediaDisp1PixRootmuxSysPll3   = 6U, /*!< MEDIA DISP1 PIX Clock from SYSTEM PLL3.*/
+    kCLOCK_MediaDisp1PixRootmuxExtClk4   = 7U, /*!< MEDIA DISP1 PIX Clock from External Clock4.*/
+} clock_rootmux_media_disp1_pix_clk_sel_t;
 
 /*! @brief Root clock select enumeration for PDM peripheral. */
 typedef enum _clock_rootmux_pdm_clk_sel
