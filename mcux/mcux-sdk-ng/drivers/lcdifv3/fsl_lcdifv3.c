@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023, 2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -67,30 +67,30 @@ static uint32_t LCDIFV3_GetInstance(const LCDIF_Type *base)
 
 static void LCDIFV3_ResetRegister(LCDIF_Type *base)
 {
-    base->DISP_PARA         = 0U;
-    base->CTRL.RW           = 0x80000000U;
-    base->DISP_SIZE         = 0U;
-    base->HSYN_PARA         = 0x30003U;
-    base->VSYN_PARA         = 0x30003U;
-    base->VSYN_HSYN_WIDTH   = 0x30003U;
-    base->INT_ENABLE_D0     = 0U;
-    base->INT_ENABLE_D1     = 0U;
+    base->DISP_PARA                  = 0U;
+    base->LCDIFV3_CTRL_REG           = 0x80000000U;
+    base->DISP_SIZE                  = 0U;
+    base->HSYN_PARA                  = 0x30003U;
+    base->VSYN_PARA                  = 0x30003U;
+    base->VSYN_HSYN_WIDTH            = 0x30003U;
+    base->INT_ENABLE_D0              = 0U;
+    base->INT_ENABLE_D1              = 0U;
     /* Clear interrupt status. */
-    base->INT_STATUS_D0     = 0xFFFFFFFFU;
-    base->INT_STATUS_D1     = 0xFFFFFFFFU;
+    base->INT_STATUS_D0              = 0xFFFFFFFFU;
+    base->INT_STATUS_D1              = 0xFFFFFFFFU;
 
-    base->CTRLDESCL_1[0]       = 0U;
-    base->CTRLDESCL_3[0]       = 0U;
-    base->CTRLDESCL_LOW_4[0]   = 0U;
-    base->CTRLDESCL_HIGH_4[0]  = 0U;
-    base->CTRLDESCL_5[0]       = 0U;
+    base->LCDIFV3_CTRLDESCL_1_REG       = 0U;
+    base->LCDIFV3_CTRLDESCL_3_REG       = 0U;
+    base->LCDIFV3_CTRLDESCL_LOW_4_REG   = 0U;
+    base->LCDIFV3_CTRLDESCL_HIGH_4_REG  = 0U;
+    base->LCDIFV3_CTRLDESCL_5_REG       = 0U;
 
-    base->CSC_COEF0[0] = 0x0U;
-    base->CSC_COEF1[0] = 0x0U;
-    base->CSC_COEF2[0] = 0x0U;
-    base->CSC_COEF3[0] = 0x0U;
-    base->CSC_COEF4[0] = 0x0U;
-    base->CSC_COEF5[0] = 0x0U;
+    base->LCDIFV3_CSC_COEF0_REG = 0x0U;
+    base->LCDIFV3_CSC_COEF1_REG = 0x0U;
+    base->LCDIFV3_CSC_COEF2_REG = 0x0U;
+    base->LCDIFV3_CSC_COEF3_REG = 0x0U;
+    base->LCDIFV3_CSC_COEF4_REG = 0x0U;
+    base->LCDIFV3_CSC_COEF5_REG = 0x0U;
 }
 
 /*!
@@ -111,7 +111,7 @@ void LCDIFV3_Init(LCDIF_Type *base)
     LCDIFV3_ResetRegister(base);
 
     /* Out of reset. */
-    base->CTRL.RW = 0U;
+    base->LCDIFV3_CTRL_REG = 0U;
 }
 
 /*!
@@ -140,7 +140,7 @@ void LCDIFV3_Reset(LCDIF_Type *base)
     LCDIFV3_ResetRegister(base);
 
     /* Release and ready to work. */
-    base->CTRL.RW = 0U;
+    base->LCDIFV3_CTRL_REG = 0U;
 }
 
 /*!
@@ -191,7 +191,7 @@ void LCDIFV3_SetDisplayConfig(LCDIF_Type *base, const lcdifv3_display_config_t *
 
     base->DISP_PARA = LCDIF_DISP_PARA_LINE_PATTERN((uint32_t)config->lineOrder);
 
-    base->CTRL.RW = (uint32_t)(config->polarityFlags);
+    base->LCDIFV3_CTRL_REG = (uint32_t)(config->polarityFlags);
 }
 
 /*!
@@ -219,50 +219,50 @@ void LCDIFV3_SetCscMode(LCDIF_Type *base, lcdifv3_csc_mode_t mode)
      * V = C1*R + C2*G + C3*B + D3
      */
 
-    base->CSC_CTRL[0] &= ~(LCDIF_CSC_CTRL_CSC_MODE_MASK | LCDIF_CSC_CTRL_BYPASS_MASK);
+    base->LCDIFV3_CSC_CTRL_REG &= ~(LCDIF_CSC_CTRL_CSC_MODE_MASK | LCDIF_CSC_CTRL_BYPASS_MASK);
     if (kLCDIFV3_CscYUV2RGB == mode || kLCDIFV3_CscYCbCr2RGB == mode)
     {
-        base->CSC_COEF0[0] = LCDIF_CSC_COEF0_A1(0x0U)
+        base->LCDIFV3_CSC_COEF0_REG = LCDIF_CSC_COEF0_A1(0x0U)
                                             | LCDIF_CSC_COEF0_A2(0x0U);
-        base->CSC_COEF1[0] = LCDIF_CSC_COEF1_A3(0x0U)
+        base->LCDIFV3_CSC_COEF1_REG = LCDIF_CSC_COEF1_A3(0x0U)
                                             | LCDIF_CSC_COEF1_B1(0x0U);
-        base->CSC_COEF2[0] = LCDIF_CSC_COEF2_B2(0x0U)
+        base->LCDIFV3_CSC_COEF2_REG = LCDIF_CSC_COEF2_B2(0x0U)
                                             | LCDIF_CSC_COEF2_B3(0x0U);
-        base->CSC_COEF3[0] = LCDIF_CSC_COEF3_C1(0x0U)
+        base->LCDIFV3_CSC_COEF3_REG = LCDIF_CSC_COEF3_C1(0x0U)
                                             | LCDIF_CSC_COEF3_C2(0x0U);
-        base->CSC_COEF4[0] = LCDIF_CSC_COEF4_C3(0x0U)
+        base->LCDIFV3_CSC_COEF4_REG = LCDIF_CSC_COEF4_C3(0x0U)
                                             | LCDIF_CSC_COEF4_D1(0x0U);
-        base->CSC_COEF5[0] = LCDIF_CSC_COEF5_D2(0x0U)
+        base->LCDIFV3_CSC_COEF5_REG = LCDIF_CSC_COEF5_D2(0x0U)
                                             | LCDIF_CSC_COEF5_D3(0x0U);
 
     }
     else if (kLCDIFV3_CscRGB2YUV == mode || kLCDIFV3_CscRGB2YCbCr == mode)
     {
 
-        base->CSC_COEF0[0] = LCDIF_CSC_COEF0_A1(0x0U)
+        base->LCDIFV3_CSC_COEF0_REG = LCDIF_CSC_COEF0_A1(0x0U)
                                             | LCDIF_CSC_COEF0_A2(0x0U);
-        base->CSC_COEF1[0] = LCDIF_CSC_COEF1_A3(0x0U)
+        base->LCDIFV3_CSC_COEF1_REG = LCDIF_CSC_COEF1_A3(0x0U)
                                             | LCDIF_CSC_COEF1_B1(0x0U);
-        base->CSC_COEF2[0] = LCDIF_CSC_COEF2_B2(0x0U)
+        base->LCDIFV3_CSC_COEF2_REG = LCDIF_CSC_COEF2_B2(0x0U)
                                             | LCDIF_CSC_COEF2_B3(0x0U);
-        base->CSC_COEF3[0] = LCDIF_CSC_COEF3_C1(0x0U)
+        base->LCDIFV3_CSC_COEF3_REG = LCDIF_CSC_COEF3_C1(0x0U)
                                             | LCDIF_CSC_COEF3_C2(0x0U);
-        base->CSC_COEF4[0] = LCDIF_CSC_COEF4_C3(0x0U)
+        base->LCDIFV3_CSC_COEF4_REG = LCDIF_CSC_COEF4_C3(0x0U)
                                             | LCDIF_CSC_COEF4_D1(0x0U);
-        base->CSC_COEF5[0] = LCDIF_CSC_COEF5_D2(0x0U)
+        base->LCDIFV3_CSC_COEF5_REG = LCDIF_CSC_COEF5_D2(0x0U)
                                             | LCDIF_CSC_COEF5_D3(0x0U);
     }
     else
     {
-        base->CSC_COEF0[0] = 0x0U;
-        base->CSC_COEF1[0] = 0x0U;
-        base->CSC_COEF2[0] = 0x0U;
-        base->CSC_COEF3[0] = 0x0U;
-        base->CSC_COEF4[0] = 0x0U;
-        base->CSC_COEF5[0] = 0x0U;
-        base->CSC_CTRL[0] |= LCDIF_CSC_CTRL_BYPASS(1);
+        base->LCDIFV3_CSC_COEF0_REG = 0x0U;
+        base->LCDIFV3_CSC_COEF1_REG = 0x0U;
+        base->LCDIFV3_CSC_COEF2_REG = 0x0U;
+        base->LCDIFV3_CSC_COEF3_REG = 0x0U;
+        base->LCDIFV3_CSC_COEF4_REG = 0x0U;
+        base->LCDIFV3_CSC_COEF5_REG = 0x0U;
+        base->LCDIFV3_CSC_CTRL_REG |= LCDIF_CSC_CTRL_BYPASS(1);
     }
-    base->CSC_CTRL[0] |= LCDIF_CSC_CTRL_CSC_MODE(mode);
+    base->LCDIFV3_CSC_CTRL_REG |= LCDIF_CSC_CTRL_CSC_MODE(mode);
 }
 
 /*!
@@ -275,11 +275,11 @@ void LCDIFV3_SetLayerBufferConfig(LCDIF_Type *base, uint8_t layerIndex, const lc
 {
     assert(NULL != config);
     uint32_t reg;
-    base->CTRLDESCL_3[0] = config->strideBytes;
-    reg = base->CTRLDESCL_5[0];
+    base->LCDIFV3_CTRLDESCL_3_REG = config->strideBytes;
+    reg = base->LCDIFV3_CTRLDESCL_5_REG;
     reg = (reg & ~(LCDIF_CTRLDESCL_5_BPP_MASK | LCDIF_CTRLDESCL_5_YUV_FORMAT_MASK)) | (uint32_t)config->pixelFormat;
 
-    base->CTRLDESCL_5[0] = reg;
+    base->LCDIFV3_CTRLDESCL_5_REG = reg;
 }
 
 /*!
@@ -305,7 +305,7 @@ void LCDIFV3_EnablePlanePanic(LCDIF_Type *base)
     panic_thres = thres_low << LCDIF_PANIC_THRES_PANIC_THRES_LOW_SHIFT |
                   thres_high << LCDIF_PANIC_THRES_PANIC_THRES_HIGH_SHIFT;
 
-    base->PANIC_THRES[0] = panic_thres;
+    base->LCDIFV3_PANIC_THRES_REG = panic_thres;
 
     /* Enable Panic:
      *
