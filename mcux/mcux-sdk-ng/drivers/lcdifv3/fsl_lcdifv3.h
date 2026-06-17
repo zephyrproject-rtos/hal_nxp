@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023, 2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,10 +22,94 @@
  * Definitions
  ******************************************************************************/
 
+/*
+ * Compatibility layer for two peripheral header formats:
+ *
+ * Format A: non-array register names with the layer index embedded
+ *           (e.g. CTRLDESCL0_5, CSC0_CTRL) and a flat CTRL register.
+ * Format B: array-indexed register names (e.g. CTRLDESCL_5[n], CSC_CTRL[n])
+ *           and a CTRL struct with .RW/.SET/.CLR/.TOG members.
+ *
+ * The macros below map register member names so the driver source compiles
+ * with both header formats.
+ */
+#if defined(LCDIF_CTRLDESCL0_5_BPP_MASK) && !defined(LCDIF_CTRLDESCL_5_BPP_MASK)
+/* ---------- Format A header detected ---------- */
+
+/* Bit-field macros: map Format B names used by the driver to Format A names */
+#define LCDIF_CTRLDESCL_1_WIDTH_SHIFT      LCDIF_CTRLDESCL0_1_WIDTH_SHIFT
+#define LCDIF_CTRLDESCL_1_HEIGHT_SHIFT     LCDIF_CTRLDESCL0_1_HEIGHT_SHIFT
+
+#define LCDIF_CTRLDESCL_5_BPP_MASK             LCDIF_CTRLDESCL0_5_BPP_MASK
+#define LCDIF_CTRLDESCL_5_BPP_SHIFT            LCDIF_CTRLDESCL0_5_BPP_SHIFT
+#define LCDIF_CTRLDESCL_5_BPP(x)               LCDIF_CTRLDESCL0_5_BPP(x)
+#define LCDIF_CTRLDESCL_5_YUV_FORMAT_MASK      LCDIF_CTRLDESCL0_5_YUV_FORMAT_MASK
+#define LCDIF_CTRLDESCL_5_YUV_FORMAT_SHIFT     LCDIF_CTRLDESCL0_5_YUV_FORMAT_SHIFT
+#define LCDIF_CTRLDESCL_5_YUV_FORMAT(x)        LCDIF_CTRLDESCL0_5_YUV_FORMAT(x)
+#define LCDIF_CTRLDESCL_5_EN_MASK              LCDIF_CTRLDESCL0_5_EN_MASK
+#define LCDIF_CTRLDESCL_5_SHADOW_LOAD_EN_MASK  LCDIF_CTRLDESCL0_5_SHADOW_LOAD_EN_MASK
+
+#define LCDIF_CSC_CTRL_CSC_MODE_MASK       LCDIF_CSC0_CTRL_CSC_MODE_MASK
+#define LCDIF_CSC_CTRL_BYPASS_MASK         LCDIF_CSC0_CTRL_BYPASS_MASK
+#define LCDIF_CSC_CTRL_BYPASS(x)           LCDIF_CSC0_CTRL_BYPASS(x)
+#define LCDIF_CSC_CTRL_CSC_MODE(x)         LCDIF_CSC0_CTRL_CSC_MODE(x)
+
+#define LCDIF_CSC_COEF0_A1(x)             LCDIF_CSC0_COEF0_A1(x)
+#define LCDIF_CSC_COEF0_A2(x)             LCDIF_CSC0_COEF0_A2(x)
+#define LCDIF_CSC_COEF1_A3(x)             LCDIF_CSC0_COEF1_A3(x)
+#define LCDIF_CSC_COEF1_B1(x)             LCDIF_CSC0_COEF1_B1(x)
+#define LCDIF_CSC_COEF2_B2(x)             LCDIF_CSC0_COEF2_B2(x)
+#define LCDIF_CSC_COEF2_B3(x)             LCDIF_CSC0_COEF2_B3(x)
+#define LCDIF_CSC_COEF3_C1(x)             LCDIF_CSC0_COEF3_C1(x)
+#define LCDIF_CSC_COEF3_C2(x)             LCDIF_CSC0_COEF3_C2(x)
+#define LCDIF_CSC_COEF4_C3(x)             LCDIF_CSC0_COEF4_C3(x)
+#define LCDIF_CSC_COEF4_D1(x)             LCDIF_CSC0_COEF4_D1(x)
+#define LCDIF_CSC_COEF5_D2(x)             LCDIF_CSC0_COEF5_D2(x)
+#define LCDIF_CSC_COEF5_D3(x)             LCDIF_CSC0_COEF5_D3(x)
+
+#define LCDIF_PANIC_THRES_PANIC_THRES_LOW_SHIFT   LCDIF_PANIC0_THRES_PANIC_THRES_LOW_SHIFT
+#define LCDIF_PANIC_THRES_PANIC_THRES_HIGH_SHIFT  LCDIF_PANIC0_THRES_PANIC_THRES_HIGH_SHIFT
+
+/* Register member-name macros: Format A flat registers */
+#define LCDIFV3_CTRL_REG             CTRL
+#define LCDIFV3_CTRLDESCL_1_REG      CTRLDESCL0_1
+#define LCDIFV3_CTRLDESCL_3_REG      CTRLDESCL0_3
+#define LCDIFV3_CTRLDESCL_LOW_4_REG  CTRLDESCL_LOW0_4
+#define LCDIFV3_CTRLDESCL_HIGH_4_REG CTRLDESCL_HIGH0_4
+#define LCDIFV3_CTRLDESCL_5_REG      CTRLDESCL0_5
+#define LCDIFV3_CSC_CTRL_REG         CSC0_CTRL
+#define LCDIFV3_CSC_COEF0_REG        CSC0_COEF0
+#define LCDIFV3_CSC_COEF1_REG        CSC0_COEF1
+#define LCDIFV3_CSC_COEF2_REG        CSC0_COEF2
+#define LCDIFV3_CSC_COEF3_REG        CSC0_COEF3
+#define LCDIFV3_CSC_COEF4_REG        CSC0_COEF4
+#define LCDIFV3_CSC_COEF5_REG        CSC0_COEF5
+#define LCDIFV3_PANIC_THRES_REG      PANIC0_THRES
+
+#else
+/* ---------- Format B header (array-indexed, CTRL is a struct) ---------- */
+
+#define LCDIFV3_CTRL_REG             CTRL.RW
+#define LCDIFV3_CTRLDESCL_1_REG      CTRLDESCL_1[0]
+#define LCDIFV3_CTRLDESCL_3_REG      CTRLDESCL_3[0]
+#define LCDIFV3_CTRLDESCL_LOW_4_REG  CTRLDESCL_LOW_4[0]
+#define LCDIFV3_CTRLDESCL_HIGH_4_REG CTRLDESCL_HIGH_4[0]
+#define LCDIFV3_CTRLDESCL_5_REG      CTRLDESCL_5[0]
+#define LCDIFV3_CSC_CTRL_REG         CSC_CTRL[0]
+#define LCDIFV3_CSC_COEF0_REG        CSC_COEF0[0]
+#define LCDIFV3_CSC_COEF1_REG        CSC_COEF1[0]
+#define LCDIFV3_CSC_COEF2_REG        CSC_COEF2[0]
+#define LCDIFV3_CSC_COEF3_REG        CSC_COEF3[0]
+#define LCDIFV3_CSC_COEF4_REG        CSC_COEF4[0]
+#define LCDIFV3_CSC_COEF5_REG        CSC_COEF5[0]
+#define LCDIFV3_PANIC_THRES_REG      PANIC_THRES[0]
+
+#endif /* Format A vs Format B header compatibility */
+
 /*! @name Driver version */
 /*! @{ */
 /*! @brief LCDIF v3 driver version */
-#define FSL_LCDIFV3_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_LCDIFV3_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*! @} */
 
 #if defined(FSL_FEATURE_LCDIFV3_LAYER_COUNT) && (!defined(LCDIFV3_LAYER_COUNT))
@@ -353,7 +437,7 @@ static inline void LCDIFV3_ClearInterruptStatus(LCDIF_Type *base, uint32_t mask)
  */
 static inline void LCDIFV3_SetLayerSize(LCDIF_Type *base, uint8_t layerIndex, uint16_t width, uint16_t height)
 {
-    base->CTRLDESCL_1[0] =
+    base->LCDIFV3_CTRLDESCL_1_REG =
         ((uint32_t)height << LCDIF_CTRLDESCL_1_HEIGHT_SHIFT) | ((uint32_t)width << LCDIF_CTRLDESCL_1_WIDTH_SHIFT);
 }
 
@@ -377,7 +461,7 @@ void LCDIFV3_SetLayerBufferConfig(LCDIF_Type *base, uint8_t layerIndex, const lc
  */
 static inline void LCDIFV3_SetLayerBufferAddr(LCDIF_Type *base, uint8_t layerIndex, uint32_t addr)
 {
-    base->CTRLDESCL_LOW_4[0] = LCDIFV3_ADDR_CPU_2_IP(addr);
+    base->LCDIFV3_CTRLDESCL_LOW_4_REG = LCDIFV3_ADDR_CPU_2_IP(addr);
 }
 
 /*!
@@ -387,16 +471,15 @@ static inline void LCDIFV3_SetLayerBufferAddr(LCDIF_Type *base, uint8_t layerInd
  * @param layerIndex Layer layerIndex.
  * @param enable Pass in true to enable, false to disable.
  */
-
 static inline void LCDIFV3_EnableLayer(LCDIF_Type *base, uint8_t layerIndex, bool enable)
 {
     if (enable)
     {
-        base->CTRLDESCL_5[0] |= LCDIF_CTRLDESCL_5_EN_MASK;
+        base->LCDIFV3_CTRLDESCL_5_REG |= LCDIF_CTRLDESCL_5_EN_MASK;
     }
     else
     {
-        base->CTRLDESCL_5[0] &= ~LCDIF_CTRLDESCL_5_EN_MASK;
+        base->LCDIFV3_CTRLDESCL_5_REG &= ~LCDIF_CTRLDESCL_5_EN_MASK;
     }
 }
 
@@ -414,7 +497,7 @@ static inline void LCDIFV3_EnableLayer(LCDIF_Type *base, uint8_t layerIndex, boo
  */
 static inline void LCDIFV3_TriggerLayerShadowLoad(LCDIF_Type *base, uint8_t layerIndex)
 {
-    base->CTRLDESCL_5[0] |= LCDIF_CTRLDESCL_5_SHADOW_LOAD_EN_MASK;
+    base->LCDIFV3_CTRLDESCL_5_REG |= LCDIF_CTRLDESCL_5_SHADOW_LOAD_EN_MASK;
 }
 
 /*!
