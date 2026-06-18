@@ -183,4 +183,44 @@ size_ge_1:                         /* Bit 0 of r2 set → 1 more byte to fill. *
 ret:
     pop     {r0, r4, r5, r6, r7, pc}
 
+/*
+ * ARM EABI memory helpers.
+ *
+ * __aeabi_memset(void *dest, size_t n, int c)  — r1 and r2 are swapped
+ *   relative to memset(dest, c, n).
+ * __aeabi_memclr(void *dest, size_t n)         — memset with c = 0.
+ *
+ * The 4/8 aligned variants share the same entry because the optimised
+ * memset above already handles aligned stores efficiently.
+ */
+
+    .thumb_func
+    .align 2
+    .global __aeabi_memset
+    .type   __aeabi_memset, %function
+    .global __aeabi_memset4
+    .thumb_set __aeabi_memset4, __aeabi_memset
+    .global __aeabi_memset8
+    .thumb_set __aeabi_memset8, __aeabi_memset
+__aeabi_memset:
+    /* swap r1 (n) and r2 (c) to match memset(dest, c, n) */
+    mov     r3, r1
+    mov     r1, r2
+    mov     r2, r3
+    b       memset
+
+    .thumb_func
+    .align 2
+    .global __aeabi_memclr
+    .type   __aeabi_memclr, %function
+    .global __aeabi_memclr4
+    .thumb_set __aeabi_memclr4, __aeabi_memclr
+    .global __aeabi_memclr8
+    .thumb_set __aeabi_memclr8, __aeabi_memclr
+__aeabi_memclr:
+    /* memset(dest, 0, n): move n from r1 to r2, set c = 0 */
+    mov     r2, r1
+    movs    r1, #0
+    b       memset
+
 #endif /* MSDK_MISC_OVERRIDE_MEMSET */
