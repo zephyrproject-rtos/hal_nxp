@@ -8,6 +8,7 @@
 #define FSL_LCDIFV3_H_
 
 #include "fsl_common.h"
+#include "fsl_lcdifv3_soc.h"
 
 #if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (0 != FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET))
 #include "fsl_memory.h"
