@@ -882,13 +882,6 @@ AT_QUICKACCESS_SECTION_CODE(static bool POWER_PostPowerMode(uint32_t mode))
         s_gdetSensorContext.disableCount--;
     }
 
-    if ((mode == 3U) && (PMU->PWR_MODE_STATUS != 2U))
-    {
-        /* Failed resumed from PM3, GDET is not enabled by ROM. */
-        assert(s_gdetSensorContext.disableCount > 0);
-        s_gdetSensorContext.disableCount = 0;
-    }
-
     SysTick->CTRL = s_systickContext.CTRL;
     SysTick->LOAD = s_systickContext.LOAD;
 
