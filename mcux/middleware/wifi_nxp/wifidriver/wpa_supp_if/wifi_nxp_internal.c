@@ -164,13 +164,6 @@ void wifi_process_mgmt_tx_status(struct wifi_message *msg)
             wm_wifi.supp_if_callbk_fns->mgmt_tx_status_callbk_fn(wm_wifi.if_priv, resp, resp->frame.frame_len, msg->reason);
         }
     }
-
-#if CONFIG_ROAMING
-    if (msg->reason != WIFI_EVENT_REASON_SUCCESS)
-    {
-        wlan_subscribe_rssi_low_event();
-    }
-#endif
 }
 
 int wifi_setup_ht_cap(t_u16 *ht_capab, t_u8 *pmcs_set, t_u8 *a_mpdu_params, t_u8 band)

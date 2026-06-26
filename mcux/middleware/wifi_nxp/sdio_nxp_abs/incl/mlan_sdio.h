@@ -131,7 +131,10 @@ t_void wlan_interrupt(mlan_adapter *pmadapter);
 /* wmsdk */
 /* mlan_status wlan_process_int_status(mlan_adapter * pmadapter); */
 
-#if CONFIG_WIFI_IND_DNLD
+#if CONFIG_WIFI_IND_RESET
 mlan_status wlan_reset_fw(pmlan_adapter pmadapter);
+#if CONFIG_WIFI_IND_OOB_RESET
+void sdio_oob_reset(void);
+#endif
 #endif
 #endif /* _MLAN_SDIO_H */

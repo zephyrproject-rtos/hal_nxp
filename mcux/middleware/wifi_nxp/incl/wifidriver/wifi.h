@@ -160,7 +160,7 @@ typedef struct wifi_remain_channel_info
  */
 int wifi_init(const uint8_t *fw_start_addr, const size_t size);
 
-#if (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
 /**
  * Re-initialize Wi-Fi driver module.
  *
@@ -171,12 +171,14 @@ int wifi_init(const uint8_t *fw_start_addr, const size_t size);
  *
  * \param[in] fw_start_addr address of stored Wi-Fi Firmware.
  * \param[in] size Size of Wi-Fi Firmware.
- * \param[in] fw_reload Type of Firmware reset.
  *
  * \return WM_SUCCESS on success or -WM_FAIL on error.
  *
  */
-int wifi_reinit(const uint8_t *fw_start_addr, const size_t size, uint8_t fw_reload);
+int wifi_reinit(const uint8_t *fw_start_addr, const size_t size);
+
+void wifi_reset_mode_set(uint8_t mode);
+uint8_t wifi_reset_mode_get(void);
 #endif
 
 /**
@@ -246,11 +248,6 @@ void wifi_set_tx_status(t_u8 status);
  *
  */
 void wifi_set_rx_status(t_u8 status);
-
-/**
- * This API can be used to reset mgmt_ie_index_bitmap.
- */
-void reset_ie_index();
 
 /**
  * Register Data callback function with Wi-Fi Driver to receive
@@ -496,11 +493,13 @@ int wifi_set_tx_pert(void *cfg, mlan_bss_type bss_type);
 #endif
 
 #if CONFIG_TX_RX_HISTOGRAM
-int wifi_set_txrx_histogram(void *cfg, t_u8 *data);
+int wifi_set_txrx_histogram(int bss_type, void *cfg, t_u8 *data);
 #endif
 
 #if CONFIG_ROAMING
-int wifi_config_roaming(const int enable, uint8_t *rssi_low);
+int wifi_config_roaming(const int enable, uint8_t rssi_low);
+int wifi_roaming_subscribe_event(uint8_t bitmap, uint8_t rssi_low, uint8_t snr_low);
+int wifi_roaming_clear_subscribe(void);
 #endif
 #if CONFIG_BG_SCAN
 int wifi_config_bgscan_and_rssi(const char *ssid);
@@ -780,12 +779,20 @@ int wifi_get_antenna(t_u32 *ant_mode, t_u16 *evaluate_time, t_u8 *evaluate_mode,
 void wifi_process_hs_cfg_resp(t_u8 *cmd_res_buffer);
 enum wifi_event_reason wifi_process_ps_enh_response(t_u8 *cmd_res_buffer, t_u16 *ps_event, t_u16 *action);
 
+enum wifi_csu_target_type {
+    MLAN_CSU_TARGET_CAU = 1,
+    MLAN_CSU_TARGET_PSU,
+};
+
 typedef enum
 {
     REG_MAC = 1,
     REG_BBP,
     REG_RF,
-    REG_CAU
+    REG_CAU,
+    REG_PSU,
+    REG_BCA,
+    REG_CIU = 8
 } wifi_reg_t;
 
 int wifi_mem_access(uint16_t action, uint32_t addr, uint32_t *value);
@@ -1258,8 +1265,6 @@ typedef struct _wlan_nlist_report_param
 } wlan_nlist_report_param;
 #endif
 
-int wifi_clear_mgmt_ie(mlan_bss_type bss_type, IEEEtypes_ElementId_t index, int mgmt_bitmap_index);
-
 #if CONFIG_UAP_STA_MAC_ADDR_FILTER
 int wifi_set_sta_mac_filter(int filter_mode, int mac_count, unsigned char *mac_addr);
 #endif
@@ -1290,6 +1295,7 @@ int wifi_set_11ax_tx_omi(const mlan_bss_type bss_type,
                          const t_u16 tx_omi,
                          const t_u8 tx_option,
                          const t_u8 num_data_pkts);
+int wifi_set_11ax_htc(const mlan_bss_type bss_type, const t_u8 enable);
 int wifi_set_11ax_tol_time(const t_u32 tol_time);
 int wifi_set_11ax_rutxpowerlimit(const void *rutx_pwr_cfg, uint32_t rutx_pwr_cfg_len);
 int wifi_set_11ax_rutxpowerlimit_legacy(const wifi_rutxpwrlimit_t *ru_pwr_cfg);
@@ -1498,8 +1504,6 @@ t_u8 wifi_wmm_get_packet_cnt(void);
 void wifi_handle_event_data_pause(void *data);
 void wifi_wmm_tx_stats_dump(int bss_type);
 #endif /* CONFIG_WMM */
-
-int wifi_set_rssi_low_threshold(uint8_t *low_rssi);
 
 #if CONFIG_HEAP_DEBUG
 /**
@@ -1886,13 +1890,9 @@ int wifi_single_ant_duty_cycle(t_u16 enable, t_u16 nbTime, t_u16 wlanTime);
 int wifi_dual_ant_duty_cycle(t_u16 enable, t_u16 nbTime, t_u16 wlanTime, t_u16 wlanBlockTime);
 #endif
 
-#if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
 int wifi_set_indrst_cfg(const wifi_indrst_cfg_t *indrst_cfg, mlan_bss_type bss_type);
 int wifi_get_indrst_cfg(wifi_indrst_cfg_t *indrst_cfg, mlan_bss_type bss_type);
-int wifi_trigger_inband_indrst();
-#if CONFIG_WIFI_IND_OOB_RESET
-int wifi_trigger_oob_indrst();
-#endif
 #endif
 
 #if CONFIG_WIFI_BOOT_SLEEP
@@ -2072,4 +2072,8 @@ void wifi_uap_client_deauth(t_u8 *sta_addr);
 #endif
 #endif /* UAP_SUPPORT */
 void wifi_get_fw_info(mlan_bss_type type, t_u16 *fw_bands);
+
+#if !defined(RW610) && CONFIG_WIFI_RECOVERY
+void wlan_reset_async(void);
+#endif
 #endif /* __WIFI_H__ */

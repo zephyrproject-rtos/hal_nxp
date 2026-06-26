@@ -417,106 +417,6 @@ static void send_sleep_cfm_no_wait(void)
 #endif
 }
 
-#if (CONFIG_WIFI_IND_DNLD)
-t_u8 wifi_rx_block_cnt;
-t_u8 wifi_tx_block_cnt;
-
-int wlan_process_hang(uint8_t fw_reload)
-{
-    int i, ret = WM_SUCCESS, poll_num = 10;
-
-    if (mlan_adap->in_reset == true)
-    {
-        wifi_d("Already in process hanging");
-        return WM_SUCCESS;
-    }
-
-    wifi_d("Start to process hanging");
-
-#if CONFIG_WIFI_IND_RESET
-    if (fw_reload == FW_RELOAD_NO_EMULATION)
-    {
-        if(wlan_sdio_check_fw_status(poll_num) == true)
-        {
-            PRINTF("WLAN FW already running! Skip FW download\r\n");
-            PRINTF("FW download skipped because fly wire is not connected from MCU to Wi-Fi SoC\r\n");
-
-            return -WM_FAIL;
-        }
-    }
-    wifi_ind_reset_start();
-#endif
-
-    /* Block TX data */
-    wifi_set_tx_status(WIFI_DATA_BLOCK);
-    /* Block RX data */
-    wifi_set_rx_status(WIFI_DATA_BLOCK);
-
-    if (is_split_scan_complete() == false)
-    {
-        wifi_user_scan_config_cleanup();
-        (void)wifi_event_completion(WIFI_EVENT_SCAN_RESULT, WIFI_EVENT_REASON_FAILURE, NULL);
-    }
-
-    mlan_adap->in_reset = true;
-    for (i = 0; i < (int)(MIN(MLAN_MAX_BSS_NUM, mlan_adap->priv_num)); i++)
-    {
-        if (mlan_adap->priv[i]->media_connected == MTRUE)
-        {
-            mlan_adap->priv[i]->media_connected = MFALSE;
-
-            if (mlan_adap->priv[i]->bss_type == MLAN_BSS_TYPE_STA)
-            {
-            }
-#if UAP_SUPPORT
-            else if (mlan_adap->priv[i]->bss_type == MLAN_BSS_TYPE_UAP)
-            {
-                mlan_adap->priv[i]->uap_bss_started = MFALSE;
-            }
-#endif
-        }
-
-        if (mlan_adap->priv[i])
-        {
-            wlan_clean_txrx(mlan_adap->priv[i]);
-        }
-    }
-
-    (void)wifi_event_completion(WIFI_EVENT_FW_HANG, WIFI_EVENT_REASON_SUCCESS, NULL);
-
-    ret = wifi_reinit(wm_wifi.fw_start_addr, wm_wifi.size, fw_reload);
-
-    if (ret != WM_SUCCESS && ret != -WIFI_ERROR_FW_DNLD_SKIP)
-    {
-        ASSERT(0);
-    }
-
-    /* Unblock TX data */
-    wifi_set_tx_status(WIFI_DATA_RUNNING);
-    /* Unblock RX data */
-    wifi_set_rx_status(WIFI_DATA_RUNNING);
-    mlan_adap->in_reset = false;
-    wifi_tx_block_cnt   = 0;
-    wifi_rx_block_cnt   = 0;
-
-    /* Put sleep_rwlock before resetting FW to avoid wakeing up FW
-       before enabling ieee-ps/deep-ps */
-    if (mlan_adap->ps_state == PS_STATE_SLEEP)
-    {
-        OSA_RWLockWriteUnlock(&sleep_rwlock);
-        mlan_adap->ps_state = PS_STATE_AWAKE;
-    }
-
-    /* Only send FW_RESET event if FW was actually reloaded */
-    if (ret == WM_SUCCESS)
-    {
-        (void)wifi_event_completion(WIFI_EVENT_FW_RESET, WIFI_EVENT_REASON_SUCCESS, NULL);
-    }
-
-    return ret;
-}
-#endif
-
 int wifi_wait_for_cmdresp(void *cmd_resp_priv)
 {
     int ret;
@@ -542,15 +442,6 @@ resend:
 #endif
 
 #endif /* CONFIG_ENABLE_WARNING_LOGS || CONFIG_WIFI_CMD_RESP_DEBUG*/
-#endif
-
-#if CONFIG_WIFI_IND_RESET
-    /* IR is in progress so any CMD coming during progress should be ignored */
-    if (wifi_ind_reset_in_progress() == true)
-    {
-        (void)wifi_put_command_lock();
-        return WM_SUCCESS;
-    }
 #endif
 
     if (cmd->size > WIFI_FW_CMDBUF_SIZE)
@@ -698,10 +589,7 @@ resend:
 #ifdef RW610
         wifi_recovery_enable = true;
 #else
-        /* assert as command flow cannot work anymore */
-#if CONFIG_WIFI_IND_DNLD
-        wlan_process_hang(FW_RELOAD_SDIO_INBAND_RESET);
-#endif /* CONFIG_WIFI_IND_DNLD */
+        wlan_reset_async();
 #endif /* RW610 */
 #else
         ASSERT(0);
@@ -1520,6 +1408,8 @@ static void wifi_core_deinit(void)
     wifi_wmm_buf_pool_deinit();
     wifi_bypass_txq_deinit();
 
+    wifi_mgmt_ie_deinit();
+
     (void)OSA_SemaphoreDestroy((osa_semaphore_handle_t)txbuf_sem);
 #endif
 
@@ -1563,9 +1453,6 @@ int wifi_init(const uint8_t *fw_start_addr, const size_t size)
     }
 
     (void)memset(&wm_wifi, 0, sizeof(wm_wifi_t));
-
-    wm_wifi.fw_start_addr = fw_start_addr;
-    wm_wifi.size          = size;
 
 #if defined(RW610)
     ret = (int)imu_wifi_init(WLAN_TYPE_NORMAL, fw_start_addr, size);
@@ -1629,28 +1516,33 @@ int wifi_init(const uint8_t *fw_start_addr, const size_t size)
     return ret;
 }
 
-#if (CONFIG_WIFI_IND_DNLD)
-int wifi_reinit(const uint8_t *fw_start_addr, const size_t size, uint8_t fw_reload)
+#if CONFIG_WIFI_IND_RESET
+static uint8_t ir_mode;
+
+void wifi_reset_mode_set(uint8_t mode)
+{
+    ir_mode = mode;
+}
+
+uint8_t wifi_reset_mode_get(void)
+{
+    return ir_mode;
+}
+
+int wifi_reinit(const uint8_t *fw_start_addr, const size_t size)
 {
     int ret = WM_SUCCESS;
+    uint8_t fw_reload = wifi_reset_mode_get() == 1 ?
+                        FW_RELOAD_NO_EMULATION : FW_RELOAD_SDIO_INBAND_RESET;
 
-#if CONFIG_WIFI_IND_RESET
-    if (wifi_reset_in_progress() == true)
+    if (wm_wifi.wifi_init_done != 0U)
     {
-        (void)memset(&wm_wifi, 0, sizeof(wm_wifi_t));
+        return WM_SUCCESS;
+    }
 
-        wm_wifi.fw_start_addr = fw_start_addr;
-        wm_wifi.size          = size;
-    }
-    else
-    { /* Do Nothing */
-    }
-#endif
+    (void)memset(&wm_wifi, 0, sizeof(wm_wifi_t));
 
     ret = (int)sd_wifi_reinit(WLAN_TYPE_NORMAL, fw_start_addr, size, fw_reload);
-#if CONFIG_WIFI_IND_RESET
-    wifi_ind_reset_stop();
-#endif
     if (ret != WM_SUCCESS)
     {
         if (ret != MLAN_STATUS_FW_DNLD_SKIP)
@@ -1687,18 +1579,14 @@ int wifi_reinit(const uint8_t *fw_start_addr, const size_t size, uint8_t fw_relo
         }
         return ret;
     }
+
 #ifndef RW610
-#if CONFIG_WIFI_IND_RESET
-    if (wifi_reset_in_progress() == true)
+    ret = wifi_core_init();
+    if (ret != WM_SUCCESS)
     {
-        ret = wifi_core_init();
-        if (ret != WM_SUCCESS)
-        {
-            wifi_e("wifi core re-init failed. status code %d", ret);
-            return ret;
-        }
+        wifi_e("wifi core re-init failed. status code %d", ret);
+        return ret;
     }
-#endif
 
     ret = (int)sd_wifi_post_init(WLAN_TYPE_NORMAL);
     if (ret != WM_SUCCESS)

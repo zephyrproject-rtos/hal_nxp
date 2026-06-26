@@ -984,6 +984,7 @@ mlan_status wlan_cmd_txrx_histogram(pmlan_private pmpriv, IN HostCmd_DS_COMMAND 
     cmd->command      = wlan_cpu_to_le16(HostCmd_CMD_TX_RX_PKT_STATS);
     histogram->action = cfg->action;
     histogram->enable = cfg->enable;
+    cmd->seq_num      = HostCmd_SET_SEQ_NO_BSS_INFO(0U /* seq_num */, 0U /* bss_num */, pmpriv->bss_type);
     cmd->size         = wlan_cpu_to_le16(S_DS_GEN + sizeof(HostCmd_DS_TX_RX_HISTOGRAM));
 
     LEAVE();
@@ -1194,6 +1195,29 @@ mlan_status wlan_ret_get_hw_spec(IN pmlan_private pmpriv, IN HostCmd_DS_COMMAND 
     for (i = 1; i <= (unsigned)(MAX_PORT - pmadapter->mp_end_port); i++)
     {
         pmadapter->mp_data_port_mask &= ~(1U << (MAX_PORT - i));
+    }
+#endif
+
+    pmadapter->max_mgmt_buf_count = wlan_le16_to_cpu(hw_spec->mgmt_buf_count);
+    PRINTM(MCMND, "GET_HW_SPEC: mgmt IE count=%d\n", pmadapter->max_mgmt_buf_count);
+    if (!pmadapter->max_mgmt_buf_count || pmadapter->max_mgmt_buf_count > MAX_MGMT_IE_FW_INDEX)
+    {
+        pmadapter->max_mgmt_buf_count = MAX_MGMT_IE_FW_INDEX;
+    }
+#if 0
+    pmadapter->mgmt_ie_cnt_sm = wlan_le16_to_cpu(hw_spec->mgmt_buf_cnt_sm);
+    pmadapter->mgmt_ie_cnt_md = wlan_le16_to_cpu(hw_spec->mgmt_buf_cnt_md);
+    pmadapter->mgmt_ie_cnt_lg = wlan_le16_to_cpu(hw_spec->mgmt_buf_cnt_lg);
+    if (pmadapter->mgmt_ie_cnt_sm +
+        pmadapter->mgmt_ie_cnt_md +
+        pmadapter->mgmt_ie_cnt_lg != pmadapter->max_mgmt_buf_count)
+    {
+        PRINTM(MWARN, "GET_HW_SPEC: mgmt IE count mismatch (sm %d + md %d + lg %d != total %d)\n",
+               pmadapter->mgmt_ie_cnt_sm, pmadapter->mgmt_ie_cnt_md, pmadapter->mgmt_ie_cnt_lg,
+               pmadapter->max_mgmt_buf_count);
+        pmadapter->mgmt_ie_cnt_sm = MLAN_MGMT_BUF_SM_CNT;
+        pmadapter->mgmt_ie_cnt_md = MLAN_MGMT_BUF_MD_CNT;
+        pmadapter->mgmt_ie_cnt_lg = MLAN_MGMT_BUF_LG_CNT;
     }
 #endif
 
@@ -2257,7 +2281,7 @@ mlan_status wlan_process_vdll_event(pmlan_private pmpriv, t_u8 *pevent)
 }
 #endif /* CONFIG_FW_VDLL */
 
-#if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
 /**
  *  @brief This function prepares command of independent reset.
  *

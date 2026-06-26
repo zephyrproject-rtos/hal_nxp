@@ -204,7 +204,7 @@ int32_t firmware_download(const uint8_t *fw_start_addr, const size_t size, void 
         }
     }
 
-#if (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
     if ((fw_reload != 0) && (intf->intf_s.fwdnld_intf_check_reload))
     {
         ret = intf->intf_s.fwdnld_intf_check_reload(intf, fw_reload);

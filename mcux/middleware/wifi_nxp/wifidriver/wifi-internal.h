@@ -224,7 +224,6 @@ typedef struct
 } wm_wifi_t;
 
 extern wm_wifi_t wm_wifi;
-extern bool split_scan_in_progress;
 
 /* fixme: This structure seems to have been removed from mlan. This was
    copied from userif_ext.h file temporarily. Change the handling of events to
@@ -410,12 +409,6 @@ void wifi_imu_unlock(void);
 #else
 int wifi_sdio_lock(void);
 void wifi_sdio_unlock(void);
-#endif
-
-#if CONFIG_WIFI_IND_RESET
-bool wifi_ind_reset_in_progress(void);
-void wifi_ind_reset_start(void);
-void wifi_ind_reset_stop(void);
 #endif
 
 mlan_status wrapper_wlan_cmd_mgmt_ie(int bss_type, void *buffer, unsigned int len, t_u16 action);

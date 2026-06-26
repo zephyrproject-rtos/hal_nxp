@@ -315,7 +315,7 @@ typedef t_u8 mlan_802_11_mac_addr[MLAN_MAC_ADDR_LENGTH];
 /** Default memory allocation flag */
 #define MLAN_MEM_DEF 0U
 
-#if CONFIG_WIFI_IND_DNLD
+#if CONFIG_WIFI_IND_RESET
 /** driver initial the fw reset */
 #define FW_RELOAD_SDIO_INBAND_RESET 1
 /** out band reset trigger reset, no interface re-emulation */
@@ -499,7 +499,7 @@ typedef struct _mlan_fw_image
     t_u8 *pfw_buf;
     /** Firmware image length */
     t_u32 fw_len;
-#if CONFIG_WIFI_IND_DNLD
+#if CONFIG_WIFI_IND_RESET
     /** Firmware reload flag */
     t_u8 fw_reload;
 #endif
@@ -731,6 +731,34 @@ typedef MLAN_PACK_START struct
 /** Max Ie length */
 #define MAX_IE_SIZE 256U
 
+/** custom IE header */
+typedef MLAN_PACK_START struct _custom_ie_hdr
+{
+    /** IE Index */
+    t_u16 ie_index;
+    /** Mgmt Subtype Mask */
+    t_u16 mgmt_subtype_mask;
+    /** IE Length */
+    t_u16 ie_length;
+    /** dirty flag, 1: modified, not yet committed to FW */
+    t_u8 dirty;
+    /** IE buffer */
+    t_u8 *ie_buf;
+} MLAN_PACK_END custom_ie_hdr;
+
+/** Driver custom IE control entry */
+typedef MLAN_PACK_START struct _custom_ie_entry
+{
+    /** BSS type (STA/UAP/WIFIDIRECT) this IE belongs to */
+    mlan_bss_type bss_type;
+    /** Pointer to custom IE header */
+    custom_ie_hdr *cust_ie;
+    /** Offset of this IE within the shared IE buffer */
+    t_u16 ie_offset;
+    /** Length of this IE data in bytes */
+    t_u16 cur_ie_len;
+} MLAN_PACK_END custom_ie_entry;
+
 /** custom IE */
 typedef MLAN_PACK_START struct _custom_ie
 {
@@ -757,8 +785,10 @@ typedef MLAN_PACK_START struct _tlvbuf_custom_ie
 
 /** Max IE index to FW */
 #define MAX_MGMT_IE_INDEX_TO_FW 4U
-/** Max IE index per BSS */
-#define MAX_MGMT_IE_INDEX 16
+/** Max IE index supported by FW */
+#define MAX_MGMT_IE_FW_INDEX 16
+/** Max IE index maintained by DRV */
+#define MAX_MGMT_IE_DRV_INDEX 20
 
 /** custom IE info */
 typedef MLAN_PACK_START struct _custom_ie_info
@@ -779,7 +809,7 @@ typedef MLAN_PACK_START struct _tlvbuf_max_mgmt_ie
     /** No of tuples */
     t_u16 count;
     /** custom IE info tuples */
-    custom_ie_info info[MAX_MGMT_IE_INDEX];
+    custom_ie_info info[MAX_MGMT_IE_FW_INDEX];
 } MLAN_PACK_END tlvbuf_max_mgmt_ie;
 
 /** TLV buffer : custom IE */

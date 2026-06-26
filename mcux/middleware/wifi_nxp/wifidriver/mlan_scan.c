@@ -117,6 +117,25 @@ bool is_split_scan_complete(void)
     return (split_scan_in_progress == false);
 }
 
+void wlan_set_split_scan_status(bool in_progress)
+{
+    split_scan_in_progress = in_progress;
+}
+
+bool wlan_get_split_scan_status(void)
+{
+    return split_scan_in_progress;
+}
+
+void wlan_set_abort_split_scan(bool abort)
+{
+    abort_split_scan = abort;
+}
+
+bool wlan_get_abort_split_scan(void)
+{
+    return abort_split_scan;
+}
 /*
  * wmsdk: Split scan needs to be aborted at times by the application. This
  * API will help the caller do that.
@@ -132,15 +151,16 @@ void wlan_abort_split_scan(void)
     }
 #endif
     /*Also check the state of supplicant scan, if it is in progress, abort it*/
-    if ((split_scan_in_progress == true)
+    if ((wlan_get_split_scan_status() == true)
 #if CONFIG_WPA_SUPP
         || (supp_scan_in_process == true)
 #endif
         )
     {
-        if(split_scan_in_progress)
+        if(wlan_get_split_scan_status())
         {
-            abort_split_scan = true;
+            wlan_set_abort_split_scan(true);
+            wlan_set_split_scan_status(false);
         }
 #if CONFIG_WPA_SUPP
         if (wm_wifi.supp_if_callbk_fns->scan_done_callbk_fn)
@@ -905,7 +925,7 @@ static mlan_status wlan_scan_channel_list(IN mlan_private *pmpriv,
          * Fw will delay all events if handshake is not done
          * yet after ps sleep event.
          */
-        if (mlan_adap->ps_state == PS_STATE_PRE_SLEEP && split_scan_in_progress)
+        if (mlan_adap->ps_state == PS_STATE_PRE_SLEEP && wlan_get_split_scan_status())
         {
             send_sleep_confirm_command((mlan_bss_type)WLAN_BSS_TYPE_STA);
         }
@@ -916,7 +936,7 @@ static mlan_status wlan_scan_channel_list(IN mlan_private *pmpriv,
                send event to the WLC manager. Since the event is send
                only after command response we can be sure that there
                is no race condition */
-            split_scan_in_progress = false;
+            wlan_set_split_scan_status(false);
         }
 
         /* Send the scan command to the firmware with the specified cfg */
@@ -941,14 +961,14 @@ static mlan_status wlan_scan_channel_list(IN mlan_private *pmpriv,
             OSA_TimeDelay((uint32_t)get_split_scan_delay_ms());
         }
 
-        if (abort_split_scan)
+        if (wlan_get_abort_split_scan())
         {
 #if CONFIG_WPA_SUPP
             BSSDescriptor_t *bss_entry = NULL;
             int i;
 #endif
-            abort_split_scan       = false;
-            split_scan_in_progress = false;
+            wlan_set_abort_split_scan(false);
+            wlan_set_split_scan_status(false);
 #if CONFIG_WPA_SUPP
             for (i = 0; i < pmadapter->num_in_scan_table; i++)
             {
@@ -971,7 +991,7 @@ static mlan_status wlan_scan_channel_list(IN mlan_private *pmpriv,
     /* Do sleep confirm handshake if sleep event is received while preparing
      * to send scan cmd for the last channel or in case scan cmd was already sent
      * for the last channel */
-    if (mlan_adap->ps_state == PS_STATE_PRE_SLEEP && (split_scan_in_progress == false))
+    if (mlan_adap->ps_state == PS_STATE_PRE_SLEEP && is_split_scan_complete())
     {
         send_sleep_confirm_command((mlan_bss_type)WLAN_BSS_TYPE_STA);
     }
@@ -1267,31 +1287,28 @@ static mlan_status wlan_scan_setup_scan_config(IN mlan_private *pmpriv,
 #if CONFIG_SCAN_WITH_RSSIFILTER
     /*
      * Append rssi threshold tlv
-     *
      * Note: According to the value of rssi_threshold, it is divided into three situations:
      *     rssi_threshold  |  rssi_threshold_enable  |  Whether to carry TLV
      *           <0        |          MTRUE          |          Yes
      *            0        |          MFALSE         |          No
      *           >0        |          MFALSE         |          Yes
      */
-    if (rssi_threshold)
-    {
-        prssi_threshold_tlv              = (MrvlIEtypes_RssiThresholdParamSet_t *)ptlv_pos;
-        prssi_threshold_tlv->header.type = wlan_cpu_to_le16(TLV_TYPE_RSSI_THRESHOLD);
-        prssi_threshold_tlv->header.len =
-            (t_u16)(sizeof(prssi_threshold_tlv->enable) + sizeof(prssi_threshold_tlv->rssi_threshold) +
-                    sizeof(prssi_threshold_tlv->reserved));
-        prssi_threshold_tlv->enable         = rssi_threshold_enable;
-        prssi_threshold_tlv->rssi_threshold = rssi_threshold;
+    prssi_threshold_tlv              = (MrvlIEtypes_RssiThresholdParamSet_t *)ptlv_pos;
+    prssi_threshold_tlv->header.type = wlan_cpu_to_le16(TLV_TYPE_RSSI_THRESHOLD);
+    prssi_threshold_tlv->header.len =
+        (t_u16)(sizeof(prssi_threshold_tlv->enable) + sizeof(prssi_threshold_tlv->rssi_threshold) +
+                sizeof(prssi_threshold_tlv->reserved));
+    prssi_threshold_tlv->enable         = rssi_threshold_enable;
+    prssi_threshold_tlv->rssi_threshold = rssi_threshold;
 
-        ptlv_pos += sizeof(prssi_threshold_tlv->header) + prssi_threshold_tlv->header.len;
+    ptlv_pos += sizeof(prssi_threshold_tlv->header) + prssi_threshold_tlv->header.len;
 
-        prssi_threshold_tlv->header.len = wlan_cpu_to_le16(prssi_threshold_tlv->header.len);
+    prssi_threshold_tlv->header.len = wlan_cpu_to_le16(prssi_threshold_tlv->header.len);
 
-        pmadapter->rssi_threshold = (rssi_threshold < 0 ? rssi_threshold : 0);
+    pmadapter->rssi_threshold = (rssi_threshold < 0 ? rssi_threshold : 0);
 
-        PRINTM(MINFO, "SCAN_CMD: Rssi threshold = %d\n", rssi_threshold);
-    }
+    PRINTM(MINFO, "SCAN_CMD: Rssi threshold = %d\n", rssi_threshold);
+
 #endif
 
 #if CONFIG_WPA_SUPP
@@ -2719,7 +2736,7 @@ mlan_status wlan_scan_networks(IN mlan_private *pmpriv,
     pmadapter->idx_chan_stats = 0;
 #endif
 
-    split_scan_in_progress = true;
+    wlan_set_split_scan_status(true);
     ret = wlan_scan_channel_list(pmpriv, pioctl_buf, max_chan_per_scan, filtered_scan, &pscan_cfg_out->config,
                                  pchan_list_out, pscan_chan_list);
 #if !CONFIG_MEM_POOLS

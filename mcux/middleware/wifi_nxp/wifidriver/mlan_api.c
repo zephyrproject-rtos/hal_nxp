@@ -47,8 +47,6 @@
 static const char driver_version_format[] = "SD878x-%s-%s-WM";
 static const char driver_version[]        = "702.1.0";
 
-static unsigned int mgmt_ie_index_bitmap = 0x0000000F;
-
 #if (CONFIG_11MC) || (CONFIG_11AZ) || (CONFIG_CSI)
 #if (CONFIG_11MC) || (CONFIG_11AZ)
 ftm_start_param ftm_param;
@@ -249,6 +247,7 @@ int wifi_reg_access(wifi_reg_t reg_type, uint16_t action, uint32_t offset, uint3
     mlan_ds_reg_rw reg_rw;
     reg_rw.offset = offset;
     reg_rw.value  = *value;
+    reg_rw.type = (t_u32)reg_type;
     uint16_t hostcmd;
     int ret = WM_SUCCESS;
     switch (reg_type)
@@ -264,6 +263,15 @@ int wifi_reg_access(wifi_reg_t reg_type, uint16_t action, uint32_t offset, uint3
             break;
         case REG_CAU:
             hostcmd = HostCmd_CMD_CAU_REG_ACCESS;
+            break;
+        case REG_PSU:
+            hostcmd = HostCmd_CMD_TARGET_ACCESS;
+            break;
+        case REG_BCA:
+            hostcmd = HostCmd_CMD_BCA_REG_ACCESS;
+            break;
+        case REG_CIU:
+            hostcmd = HostCmd_CMD_REG_ACCESS;
             break;
         default:
             wifi_e("Incorrect register type");
@@ -2675,26 +2683,22 @@ int wifi_send_sched_scan_cmd(nxp_wifi_trigger_sched_scan_t *params)
         }
     }
 
-    if (pmpriv->probe_req_index != -1)
+    if (pmpriv->probe_req_index != MLAN_MGMT_IE_INVALID_IDX && params->extra_ies.ie_len == 0U)
     {
-        ret = wifi_clear_mgmt_ie2(MLAN_BSS_TYPE_STA, pmpriv->probe_req_index);
-
+        ret = wifi_mgmt_ie_clear(pmpriv, &pmpriv->probe_req_index);
         if (ret != WM_SUCCESS)
         {
-            wifi_e("Clear probe req IE failed");
+            wuap_e("Clear probereq IE failed");
             return -WM_FAIL;
         }
-        pmpriv->probe_req_index = -1;
     }
 
-    if (params->extra_ies.ie_len)
+    if (params->extra_ies.ie_len != 0U)
     {
-        pmpriv->probe_req_index = wifi_set_mgmt_ie2(MLAN_BSS_TYPE_STA, MGMT_MASK_PROBE_REQ,
-                                                    (void *)params->extra_ies.ie, params->extra_ies.ie_len);
-
-        if (pmpriv->probe_req_index == -1)
+        ret = wifi_mgmt_ie_set(pmpriv, MGMT_MASK_PROBE_REQ, (t_u8 *)params->extra_ies.ie, params->extra_ies.ie_len, &pmpriv->probe_req_index);
+        if (ret != WM_SUCCESS)
         {
-            wifi_e("Set probe req IE failed");
+            wifi_e("Set probereq IE failed");
             return -WM_FAIL;
         }
     }
@@ -3922,36 +3926,6 @@ bool wifi_is_ecsa_enabled(void)
     return mlan_adap->ecsa_enable;
 }
 
-static int get_free_mgmt_ie_index(unsigned int *mgmt_ie_index)
-{
-    unsigned int idx;
-
-    for (idx = 0; idx < 32; idx++)
-    {
-        if ((mgmt_ie_index_bitmap & MBIT((t_u32)idx)) == 0U)
-        {
-            *mgmt_ie_index = idx;
-            return WM_SUCCESS;
-        }
-    }
-    return -WM_FAIL;
-}
-
-static void set_ie_index(unsigned int index)
-{
-    mgmt_ie_index_bitmap |= (MBIT(index));
-}
-
-static void clear_ie_index(unsigned int index)
-{
-    mgmt_ie_index_bitmap &= ~(MBIT(index));
-}
-
-unsigned int get_ie_index()
-{
-    return mgmt_ie_index_bitmap;
-}
-
 #ifdef SD8801
 static int wifi_config_ext_coex(int action,
                                 const wifi_ext_coex_config_t *ext_coex_config,
@@ -3995,354 +3969,6 @@ static int wifi_config_ext_coex(int action,
     return ret;
 }
 #endif
-
-static bool ie_index_is_set(unsigned int index)
-{
-    return (mgmt_ie_index_bitmap & (MBIT(index))) ? MTRUE : MFALSE;
-}
-
-void reset_ie_index()
-{
-    mgmt_ie_index_bitmap = 0x0000000F;
-}
-
-static int wifi_config_mgmt_ie(mlan_bss_type bss_type,
-                               t_u16 action,
-                               IEEEtypes_ElementId_t index,
-                               void *buffer,
-                               unsigned int *ie_len,
-                               int mgmt_bitmap_index)
-{
-    uint8_t *buf, *pos;
-    IEEEtypes_Header_t *ptlv_header = NULL;
-    uint16_t buf_len                = 0;
-    tlvbuf_custom_ie *tlv           = NULL;
-    custom_ie *ie_ptr               = NULL;
-    unsigned int mgmt_ie_index      = -1;
-    int total_len =
-        sizeof(tlvbuf_custom_ie) + 2U * (sizeof(custom_ie) - MAX_IE_SIZE) + sizeof(IEEEtypes_Header_t) + *ie_len;
-    int ret = WM_SUCCESS;
-
-#if !CONFIG_MEM_POOLS
-    buf = (uint8_t *)OSA_MemoryAllocate(total_len);
-#else
-    buf = OSA_MemoryPoolAllocate(buf_512_MemoryPool);
-#endif
-    if (buf == MNULL)
-    {
-        wifi_e("Cannot allocate memory");
-        return -WM_FAIL;
-    }
-
-    (void)memset(buf, 0, total_len);
-
-    tlv       = (tlvbuf_custom_ie *)(void *)buf;
-    tlv->type = MRVL_MGMT_IE_LIST_TLV_ID;
-
-    /* Locate headers */
-    ie_ptr = (custom_ie *)(tlv->ie_data);
-    /* Set TLV fields */
-    buf_len = sizeof(tlvbuf_custom_ie);
-
-    if (action == HostCmd_ACT_GEN_SET)
-    {
-        if (*ie_len == 0U)
-        {
-            /*
-               MGMT_WPA_IE = MGMT_VENDOR_SPECIFIC_221
-               MGMT_WPS_IE = MGMT_VENDOR_SPECIFIC_221
-               */
-
-            if (!ie_index_is_set(mgmt_bitmap_index))
-            {
-#if !CONFIG_MEM_POOLS
-                OSA_MemoryFree(buf);
-#else
-                OSA_MemoryPoolFree(buf_512_MemoryPool, buf);
-#endif
-                return -WM_FAIL;
-            }
-
-            ie_ptr->mgmt_subtype_mask = MGMT_MASK_CLEAR;
-            ie_ptr->ie_length         = 0;
-            ie_ptr->ie_index          = (t_u16)mgmt_bitmap_index;
-
-            tlv->length = sizeof(custom_ie) - MAX_IE_SIZE;
-            buf_len += tlv->length;
-            clear_ie_index(mgmt_bitmap_index);
-        }
-        else
-        {
-            ret = get_free_mgmt_ie_index(&mgmt_ie_index);
-
-            if (WM_SUCCESS != ret)
-            {
-#if !CONFIG_MEM_POOLS
-                OSA_MemoryFree(buf);
-#else
-                OSA_MemoryPoolFree(buf_512_MemoryPool, buf);
-#endif
-                return -WM_FAIL;
-            }
-
-            pos         = ie_ptr->ie_buffer;
-            ptlv_header = (IEEEtypes_Header_t *)(void *)pos;
-            pos += sizeof(IEEEtypes_Header_t);
-
-            ptlv_header->element_id = (IEEEtypes_ElementId_e)index;
-            ptlv_header->len        = *ie_len;
-            if (bss_type == MLAN_BSS_TYPE_UAP)
-            {
-                ie_ptr->mgmt_subtype_mask =
-                    MGMT_MASK_BEACON | MGMT_MASK_PROBE_RESP | MGMT_MASK_ASSOC_RESP | MGMT_MASK_REASSOC_RESP;
-            }
-            else if (bss_type == MLAN_BSS_TYPE_STA)
-            {
-                ie_ptr->mgmt_subtype_mask = MGMT_MASK_PROBE_REQ | MGMT_MASK_ASSOC_REQ | MGMT_MASK_REASSOC_REQ;
-            }
-            else
-            { /* Do Nothing */
-            }
-
-            tlv->length       = sizeof(custom_ie) + sizeof(IEEEtypes_Header_t) + *ie_len - MAX_IE_SIZE;
-            ie_ptr->ie_length = sizeof(IEEEtypes_Header_t) + *ie_len;
-            ie_ptr->ie_index  = mgmt_ie_index;
-
-            buf_len += tlv->length;
-
-            (void)memcpy((void *)pos, (const void *)buffer, *ie_len);
-        }
-    }
-    else if (action == HostCmd_ACT_GEN_GET)
-    {
-        /* Get WPS IE */
-        tlv->length = 0;
-    }
-    else
-    { /* Do Nothing */
-    }
-
-    mlan_status rv = wrapper_wlan_cmd_mgmt_ie(bss_type, buf, buf_len, action);
-
-    if (rv != MLAN_STATUS_SUCCESS && rv != MLAN_STATUS_PENDING)
-    {
-#if !CONFIG_MEM_POOLS
-        OSA_MemoryFree(buf);
-#else
-        OSA_MemoryPoolFree(buf_512_MemoryPool, buf);
-#endif
-        return -WM_FAIL;
-    }
-
-    if (action == HostCmd_ACT_GEN_GET)
-    {
-        if (wm_wifi.cmd_resp_status != 0)
-        {
-            wifi_w("Unable to get mgmt ie buffer");
-#if !CONFIG_MEM_POOLS
-            OSA_MemoryFree(buf);
-#else
-            OSA_MemoryPoolFree(buf_512_MemoryPool, buf);
-#endif
-            return wm_wifi.cmd_resp_status;
-        }
-        ie_ptr = (custom_ie *)(void *)(buf);
-        (void)memcpy((void *)buffer, (const void *)ie_ptr->ie_buffer, ie_ptr->ie_length);
-        *ie_len = ie_ptr->ie_length;
-    }
-#if !CONFIG_MEM_POOLS
-    OSA_MemoryFree(buf);
-#else
-    OSA_MemoryPoolFree(buf_512_MemoryPool, buf);
-#endif
-
-    if ((action == HostCmd_ACT_GEN_SET) && *ie_len)
-    {
-        set_ie_index(mgmt_ie_index);
-        return mgmt_ie_index;
-    }
-    else
-    {
-        return WM_SUCCESS;
-    }
-}
-
-int wifi_get_mgmt_ie(mlan_bss_type bss_type, IEEEtypes_ElementId_t index, void *buf, unsigned int *buf_len)
-{
-    return wifi_config_mgmt_ie(bss_type, HostCmd_ACT_GEN_GET, index, buf, buf_len, 0);
-}
-
-int wifi_set_mgmt_ie(mlan_bss_type bss_type, IEEEtypes_ElementId_t id, void *buf, unsigned int buf_len)
-{
-    unsigned int data_len = buf_len;
-
-    return wifi_config_mgmt_ie(bss_type, HostCmd_ACT_GEN_SET, id, buf, &data_len, 0);
-}
-
-int wifi_clear_mgmt_ie(mlan_bss_type bss_type, IEEEtypes_ElementId_t index, int mgmt_bitmap_index)
-{
-    unsigned int data_len = 0;
-    return wifi_config_mgmt_ie(bss_type, HostCmd_ACT_GEN_SET, index, NULL, &data_len, mgmt_bitmap_index);
-}
-
-static int wifi_config_mgmt_ie2(
-    mlan_bss_type bss_type, t_u16 action, t_u16 mask, void *buffer, unsigned int *ie_len, int mgmt_bitmap_index)
-{
-    uint8_t *buf;
-    uint16_t buf_len           = 0;
-    tlvbuf_custom_ie *tlv      = NULL;
-    custom_ie *ie_ptr          = NULL;
-    unsigned int mgmt_ie_index = -1;
-    int total_len              = sizeof(tlvbuf_custom_ie) + (sizeof(custom_ie) - MAX_IE_SIZE) + *ie_len;
-    int ret                    = WM_SUCCESS;
-
-#if !CONFIG_MEM_POOLS
-    buf = (uint8_t *)OSA_MemoryAllocate(total_len);
-#else
-    buf = OSA_MemoryPoolAllocate(buf_512_MemoryPool);
-#endif
-    if (buf == MNULL)
-    {
-        wifi_e("Cannot allocate memory");
-        return -WM_FAIL;
-    }
-
-    (void)memset(buf, 0, total_len);
-
-    tlv       = (tlvbuf_custom_ie *)(void *)buf;
-    tlv->type = MRVL_MGMT_IE_LIST_TLV_ID;
-
-    /* Locate headers */
-    ie_ptr = (custom_ie *)(tlv->ie_data);
-    /* Set TLV fields */
-    buf_len = sizeof(tlvbuf_custom_ie);
-
-    if (action == HostCmd_ACT_GEN_SET)
-    {
-        if (*ie_len == 0U)
-        {
-            /*
-               MGMT_WPA_IE = MGMT_VENDOR_SPECIFIC_221
-               MGMT_WPS_IE = MGMT_VENDOR_SPECIFIC_221
-               */
-
-            if (!ie_index_is_set(mgmt_bitmap_index))
-            {
-#if !CONFIG_MEM_POOLS
-                OSA_MemoryFree(buf);
-#else
-                OSA_MemoryPoolFree(buf_512_MemoryPool, buf);
-#endif
-                return -WM_FAIL;
-            }
-
-            ie_ptr->mgmt_subtype_mask = MGMT_MASK_CLEAR;
-            ie_ptr->ie_length         = 0;
-            ie_ptr->ie_index          = (t_u16)mgmt_bitmap_index;
-
-            tlv->length = sizeof(custom_ie) - MAX_IE_SIZE;
-            buf_len += tlv->length;
-            clear_ie_index(mgmt_bitmap_index);
-        }
-        else
-        {
-            ret = get_free_mgmt_ie_index(&mgmt_ie_index);
-
-            if (WM_SUCCESS != ret)
-            {
-#if !CONFIG_MEM_POOLS
-                OSA_MemoryFree(buf);
-#else
-                OSA_MemoryPoolFree(buf_512_MemoryPool, buf);
-#endif
-                return -WM_FAIL;
-            }
-
-            tlv->length      = (sizeof(custom_ie) - MAX_IE_SIZE) + *ie_len;
-            ie_ptr->ie_index = mgmt_ie_index;
-
-            ie_ptr->mgmt_subtype_mask = mask;
-
-            ie_ptr->ie_length = *ie_len;
-
-            buf_len += tlv->length;
-
-            (void)memcpy((void *)&ie_ptr->ie_buffer, (const void *)buffer, *ie_len);
-        }
-    }
-    else if (action == HostCmd_ACT_GEN_GET)
-    {
-        /* Get WPS IE */
-        tlv->length = 0;
-    }
-    else
-    { /* Do Nothing */
-    }
-
-    mlan_status rv = wrapper_wlan_cmd_mgmt_ie(bss_type, buf, buf_len, action);
-
-    if (rv != MLAN_STATUS_SUCCESS && rv != MLAN_STATUS_PENDING)
-    {
-#if !CONFIG_MEM_POOLS
-        OSA_MemoryFree(buf);
-#else
-        OSA_MemoryPoolFree(buf_512_MemoryPool, buf);
-#endif
-        return -WM_FAIL;
-    }
-
-    if (action == HostCmd_ACT_GEN_GET)
-    {
-        if (wm_wifi.cmd_resp_status != 0)
-        {
-            wifi_w("Unable to get mgmt ie buffer");
-#if !CONFIG_MEM_POOLS
-            OSA_MemoryFree(buf);
-#else
-            OSA_MemoryPoolFree(buf_512_MemoryPool, buf);
-#endif
-            return wm_wifi.cmd_resp_status;
-        }
-        ie_ptr = (custom_ie *)(void *)(buf);
-        (void)memcpy((void *)buffer, (const void *)ie_ptr->ie_buffer, ie_ptr->ie_length);
-        *ie_len = ie_ptr->ie_length;
-    }
-
-#if !CONFIG_MEM_POOLS
-    OSA_MemoryFree(buf);
-#else
-    OSA_MemoryPoolFree(buf_512_MemoryPool, buf);
-#endif
-
-    if ((action == HostCmd_ACT_GEN_SET) && *ie_len)
-    {
-        set_ie_index(mgmt_ie_index);
-        return mgmt_ie_index;
-    }
-    else
-    {
-        return WM_SUCCESS;
-    }
-}
-
-int wifi_get_mgmt_ie2(mlan_bss_type bss_type, void *buf, unsigned int *buf_len)
-{
-    return wifi_config_mgmt_ie2(bss_type, HostCmd_ACT_GEN_GET, 0, buf, buf_len, 0);
-}
-
-int wifi_set_mgmt_ie2(mlan_bss_type bss_type, unsigned short mask, void *buf, unsigned int buf_len)
-{
-    unsigned int data_len = buf_len;
-
-    return wifi_config_mgmt_ie2(bss_type, HostCmd_ACT_GEN_SET, mask, buf, &data_len, 0);
-}
-
-int wifi_clear_mgmt_ie2(mlan_bss_type bss_type, int mgmt_bitmap_index)
-{
-    unsigned int data_len = 0;
-
-    return wifi_config_mgmt_ie2(bss_type, HostCmd_ACT_GEN_SET, 0, NULL, &data_len, mgmt_bitmap_index);
-}
 
 int wifi_get_mgmt_ie_by_index(mlan_bss_type bss_type, void *buf, unsigned int *buf_len, int index)
 {
@@ -4417,92 +4043,6 @@ int wifi_set_ext_coex_config(const wifi_ext_coex_config_t *ext_coex_config)
 #endif
 
 #if CONFIG_WPA_SUPP
-#if UAP_SUPPORT
-int wifi_set_custom_ie(custom_ie *beacon_ies_data,
-                       custom_ie *beacon_wps_ies_data,
-                       custom_ie *proberesp_ies_data,
-                       custom_ie *assocresp_ies_data)
-{
-    mlan_ds_misc_custom_ie *pcustom_ie = NULL;
-    t_u8 *pos                          = NULL;
-    t_u16 len                          = 0;
-    mlan_status status                 = MLAN_STATUS_SUCCESS;
-    t_u32 remain_len                   = 0;
-    HostCmd_DS_COMMAND *cmd            = NULL;
-
-    ENTER();
-
-    pcustom_ie = OSA_MemoryAllocate(sizeof(mlan_ds_misc_custom_ie));
-    if (!pcustom_ie)
-    {
-        PRINTM(MERROR, "Fail to allocate custome_ie\n");
-        status = MLAN_STATUS_FAILURE;
-        goto done;
-    }
-
-    pcustom_ie->type = TLV_TYPE_MGMT_IE;
-
-    pos        = (t_u8 *)pcustom_ie->ie_data_list;
-    remain_len = sizeof(pcustom_ie->ie_data_list);
-    if (beacon_ies_data)
-    {
-        len = sizeof(*beacon_ies_data) - MAX_IE_SIZE + beacon_ies_data->ie_length;
-        memcpy(pos, beacon_ies_data, len);
-        pos += len;
-        remain_len -= len;
-        pcustom_ie->len += len;
-    }
-
-    if (beacon_wps_ies_data)
-    {
-        len = sizeof(*beacon_wps_ies_data) - MAX_IE_SIZE + beacon_wps_ies_data->ie_length;
-        memcpy(pos, beacon_wps_ies_data, len);
-        pos += len;
-        remain_len -= len;
-        pcustom_ie->len += len;
-    }
-
-    if (proberesp_ies_data)
-    {
-        len = sizeof(*proberesp_ies_data) - MAX_IE_SIZE + proberesp_ies_data->ie_length;
-        memcpy(pos, proberesp_ies_data, len);
-        pos += len;
-        remain_len -= len;
-        pcustom_ie->len += len;
-    }
-
-    if (assocresp_ies_data)
-    {
-        len = sizeof(*assocresp_ies_data) - MAX_IE_SIZE + assocresp_ies_data->ie_length;
-        memcpy(pos, assocresp_ies_data, len);
-        pos += len;
-        remain_len -= len;
-        pcustom_ie->len += len;
-    }
-
-    (void)wifi_get_command_lock();
-
-    cmd = wifi_get_command_buffer();
-
-    (void)memset(cmd, 0x00, sizeof(HostCmd_DS_COMMAND));
-
-    cmd->seq_num = HostCmd_SET_SEQ_NO_BSS_INFO(0U /* seq_num */, 0U /* bss_num */, MLAN_BSS_TYPE_UAP);
-
-    cmd->result = 0x0;
-
-    status = wlan_ops_uap_prepare_cmd((mlan_private *)mlan_adap->priv[1], HOST_CMD_APCMD_SYS_CONFIGURE,
-                                      HostCmd_ACT_GEN_SET, 0, NULL, (void *)pcustom_ie, cmd);
-
-    (void)wifi_wait_for_cmdresp(NULL);
-
-    OSA_MemoryFree(pcustom_ie);
-
-done:
-    LEAVE();
-    return status;
-}
-#endif
-
 void wifi_get_scan_table(mlan_private *pmpriv, mlan_scan_resp *pscan_resp)
 {
     mlan_adapter *pmadapter = pmpriv->adapter;
@@ -5060,11 +4600,14 @@ int wifi_host_11k_cfg(int enable_11k)
 #if !CONFIG_WPA_SUPP
     if (enable_11k == 1)
     {
-        if (pmpriv->rrm_mgmt_bitmap_index != -1)
+        if (pmpriv->rrm_mgmt_bitmap_index != MLAN_MGMT_IE_INVALID_IDX)
         {
-            ret = wifi_clear_mgmt_ie(MLAN_BSS_TYPE_STA, MGMT_RRM_ENABLED_CAP, pmpriv->rrm_mgmt_bitmap_index);
-
-            pmpriv->rrm_mgmt_bitmap_index = -1;
+            ret = wifi_mgmt_ie_clear(pmpriv, &pmpriv->rrm_mgmt_bitmap_index);
+            if (ret != (int)MLAN_STATUS_SUCCESS)
+            {
+                wifi_e("Failed to clear RRM IE");
+                return ret;
+            }
         }
         rrmCap.element_id = (t_u8)MGMT_RRM_ENABLED_CAP;
         rrmCap.len        = (t_u8)sizeof(IEEEtypes_RrmEnabledCapabilities_t);
@@ -5133,14 +4676,21 @@ int wifi_host_mbo_cfg(int enable_mbo)
         pos                       = wlan_add_mbo_cellular_cap(pos);
         meas_vend_hdr_len         = pos - mboie.vend_hdr.oui;
         mboie.vend_hdr.len        = (t_u8)meas_vend_hdr_len;
-        pmpriv->mbo_mgmt_bitmap_index =
-            wifi_set_mgmt_ie(MLAN_BSS_TYPE_STA, MGMT_MBO_IE, (void *)&(mboie.vend_hdr.oui), mboie.vend_hdr.len);
+        ret = wifi_mgmt_ie_set(pmpriv, MGMT_MASK_PROBE_REQ | MGMT_MASK_ASSOC_REQ | MGMT_MASK_REASSOC_REQ,
+                               (t_u8 *)&mboie, meas_vend_hdr_len + sizeof(IEEEtypes_Header_t), &pmpriv->mbo_index);
     }
     else
     {
-        ret = wifi_clear_mgmt_ie(MLAN_BSS_TYPE_STA, MGMT_MBO_IE, pmpriv->mbo_mgmt_bitmap_index);
+        if (pmpriv->mbo_index != MLAN_MGMT_IE_INVALID_IDX)
+        {
+            ret = wifi_mgmt_ie_clear(pmpriv, &pmpriv->mbo_index);
+        }
     }
-    pmpriv->enable_mbo = (t_u8)enable_mbo;
+
+    if (ret == MLAN_STATUS_SUCCESS)
+    {
+        pmpriv->enable_mbo = (t_u8)enable_mbo;
+    }
 
     return ret;
 }
@@ -5162,7 +4712,6 @@ int wifi_mbo_preferch_cfg(t_u8 ch0, t_u8 pefer0, t_u8 ch1, t_u8 pefer1)
     if (pmpriv->enable_mbo != 0U)
     {
         /* remove MBO OCE IE in case there is already a MBO OCE IE. */
-        ret                       = wifi_clear_mgmt_ie(MLAN_BSS_TYPE_STA, MGMT_MBO_IE, pmpriv->mbo_mgmt_bitmap_index);
         mboie.vend_hdr.element_id = (IEEEtypes_ElementId_e)MGMT_MBO_IE;
         pos                       = mboie.vend_hdr.oui;
         pos                       = wlan_add_mbo_oui(pos);
@@ -5171,8 +4720,8 @@ int wifi_mbo_preferch_cfg(t_u8 ch0, t_u8 pefer0, t_u8 ch1, t_u8 pefer1)
         pos                       = wlan_add_mbo_prefer_ch(pos, ch0, pefer0, ch1, pefer1);
         meas_vend_hdr_len         = pos - mboie.vend_hdr.oui;
         mboie.vend_hdr.len        = (t_u8)meas_vend_hdr_len;
-        pmpriv->mbo_mgmt_bitmap_index =
-            wifi_set_mgmt_ie(MLAN_BSS_TYPE_STA, MGMT_MBO_IE, (void *)&(mboie.vend_hdr.oui), mboie.vend_hdr.len);
+        ret = wifi_mgmt_ie_set(pmpriv, MGMT_MASK_PROBE_REQ | MGMT_MASK_ASSOC_REQ | MGMT_MASK_REASSOC_REQ,
+                               (t_u8 *)&mboie, meas_vend_hdr_len + sizeof(IEEEtypes_Header_t), &pmpriv->mbo_index);
     }
 
     return ret;
@@ -5932,7 +5481,6 @@ int wifi_set_ecsa_cfg(t_u8 block_tx, t_u8 oper_class, t_u8 channel, t_u8 switch_
 {
     IEEEtypes_ExtChanSwitchAnn_t *ext_chan_switch = NULL;
     IEEEtypes_ChanSwitchAnn_t *chan_switch        = NULL;
-    custom_ie *pcust_chansw_ie                    = NULL;
     t_u32 usr_dot_11n_dev_cap                     = 0;
     mlan_private *pmpriv                          = (mlan_private *)mlan_adap->priv[1];
     BSSDescriptor_t *pbss_desc;
@@ -5946,54 +5494,40 @@ int wifi_set_ecsa_cfg(t_u8 block_tx, t_u8 oper_class, t_u8 channel, t_u8 switch_
     IEEEtypes_WideBWChanSwitch_t *pbwchansw_ie = NULL;
     IEEEtypes_VhtTpcEnvelope_t *pvhttpcEnv_ie  = NULL;
 #endif
-    uint8_t *buf               = NULL;
-    tlvbuf_custom_ie *tlv      = NULL;
-    unsigned int mgmt_ie_index = -1;
-    int total_len = sizeof(tlvbuf_custom_ie) + (sizeof(custom_ie) - MAX_IE_SIZE) + sizeof(IEEEtypes_ChanSwitchAnn_t) +
-                    sizeof(IEEEtypes_ExtChanSwitchAnn_t);
+    t_u16 ecsa_mgmt_ie_index = MLAN_MGMT_IE_INVALID_IDX;
+    t_u8 *ie_buf = NULL;
+    t_u8 *pos    = NULL;
+    int total_len = sizeof(IEEEtypes_ChanSwitchAnn_t) + sizeof(IEEEtypes_ExtChanSwitchAnn_t);
 #if (CONFIG_11AC)
     total_len += sizeof(IEEEtypes_WideBWChanSwitch_t) + sizeof(IEEEtypes_VhtTpcEnvelope_t) + sizeof(IEEEtypes_Header_t);
 #endif
-    uint16_t buf_len = 0;
+    t_u16 ie_len = 0;
 
 #if !CONFIG_MEM_POOLS
-    buf = (uint8_t *)OSA_MemoryAllocate(total_len);
+    ie_buf = (uint8_t *)OSA_MemoryAllocate(total_len);
 #else
-    buf = OSA_MemoryPoolAllocate(buf_1024_MemoryPool);
+    ie_buf = OSA_MemoryPoolAllocate(buf_1024_MemoryPool);
 #endif
-    if (!buf)
+    if (!ie_buf)
     {
         wifi_e("ECSA allocate memory failed \r\n");
         return -WM_FAIL;
     }
 
-    (void)memset(buf, 0, total_len);
-    tlv       = (tlvbuf_custom_ie *)buf;
-    tlv->type = MRVL_MGMT_IE_LIST_TLV_ID;
+    (void)memset(ie_buf, 0, total_len);
 
-    ret = get_free_mgmt_ie_index(&mgmt_ie_index);
-    if (WM_SUCCESS != ret)
-    {
-#if !CONFIG_MEM_POOLS
-        OSA_MemoryFree(buf);
-#else
-        OSA_MemoryPoolFree(buf_1024_MemoryPool, buf);
-#endif
-        return -WM_FAIL;
-    }
+    pos = ie_buf;
 
-    pcust_chansw_ie                    = (custom_ie *)(tlv->ie_data);
-    pcust_chansw_ie->ie_index          = mgmt_ie_index;
-    pcust_chansw_ie->ie_length         = sizeof(IEEEtypes_ChanSwitchAnn_t);
-    pcust_chansw_ie->mgmt_subtype_mask = MGMT_MASK_BEACON | MGMT_MASK_PROBE_RESP; /*Add IE for
-                                                                 BEACON/probe resp*/
-    chan_switch                    = (IEEEtypes_ChanSwitchAnn_t *)pcust_chansw_ie->ie_buffer;
+    chan_switch                    = (IEEEtypes_ChanSwitchAnn_t *)pos;
     chan_switch->element_id        = CHANNEL_SWITCH_ANN;
     chan_switch->len               = 3;
     chan_switch->chan_switch_mode  = block_tx;
     chan_switch->new_channel_num   = channel;
     chan_switch->chan_switch_count = switch_count;
-    DBG_HEXDUMP(MCMD_D, "CSA IE", (t_u8 *)pcust_chansw_ie->ie_buffer, pcust_chansw_ie->ie_length);
+
+    pos += sizeof(IEEEtypes_ChanSwitchAnn_t);
+
+    DBG_HEXDUMP(MCMD_D, "CSA IE", (t_u8 *)chan_switch, sizeof(IEEEtypes_ChanSwitchAnn_t));
 
 #if CONFIG_5GHz_SUPPORT
     if (pbss_desc->bss_band & BAND_A)
@@ -6031,17 +5565,16 @@ int wifi_set_ecsa_cfg(t_u8 block_tx, t_u8 oper_class, t_u8 channel, t_u8 switch_
 
     if (new_oper_class)
     {
-        pcust_chansw_ie->ie_length += sizeof(IEEEtypes_ExtChanSwitchAnn_t);
-        ext_chan_switch =
-            (IEEEtypes_ExtChanSwitchAnn_t *)(pcust_chansw_ie->ie_buffer + sizeof(IEEEtypes_ChanSwitchAnn_t));
+        ext_chan_switch                    = (IEEEtypes_ExtChanSwitchAnn_t *)pos;
         ext_chan_switch->element_id        = EXTEND_CHANNEL_SWITCH_ANN;
         ext_chan_switch->len               = 4;
         ext_chan_switch->chan_switch_mode  = block_tx;
         ext_chan_switch->new_oper_class    = new_oper_class;
         ext_chan_switch->new_channel_num   = channel;
         ext_chan_switch->chan_switch_count = switch_count;
-        DBG_HEXDUMP(MCMD_D, "ECSA IE", (t_u8 *)(pcust_chansw_ie->ie_buffer + sizeof(IEEEtypes_ChanSwitchAnn_t)),
-                    pcust_chansw_ie->ie_length - sizeof(IEEEtypes_ChanSwitchAnn_t));
+        pos += sizeof(IEEEtypes_ExtChanSwitchAnn_t);
+
+        DBG_HEXDUMP(MCMD_D, "ECSA IE", (t_u8 *)ext_chan_switch, sizeof(IEEEtypes_ExtChanSwitchAnn_t));
     }
 
 #if (CONFIG_11AC)
@@ -6049,7 +5582,7 @@ int wifi_set_ecsa_cfg(t_u8 block_tx, t_u8 oper_class, t_u8 channel, t_u8 switch_
      * channel*/
     if (band_width && channel > 14)
     {
-        pChanSwWrap_ie             = (IEEEtypes_Header_t *)(pcust_chansw_ie->ie_buffer + pcust_chansw_ie->ie_length);
+        pChanSwWrap_ie             = (IEEEtypes_Header_t *)pos;
         pChanSwWrap_ie->element_id = EXT_POWER_CONSTR;
         pChanSwWrap_ie->len        = sizeof(IEEEtypes_WideBWChanSwitch_t);
 
@@ -6090,72 +5623,50 @@ int wifi_set_ecsa_cfg(t_u8 block_tx, t_u8 oper_class, t_u8 channel, t_u8 switch_
         pvhttpcEnv_ie->local_max_tp_80mhz           = 0xff;
         pvhttpcEnv_ie->local_max_tp_160mhz_80_80mhz = 0xff;
         pChanSwWrap_ie->len += sizeof(IEEEtypes_VhtTpcEnvelope_t);
-        pcust_chansw_ie->ie_length += pChanSwWrap_ie->len + sizeof(IEEEtypes_Header_t);
+
+        pos += sizeof(IEEEtypes_Header_t) + pChanSwWrap_ie->len;
+
         DBG_HEXDUMP(MCMD_D, "Channel switch wrapper IE", (t_u8 *)pChanSwWrap_ie,
                     pChanSwWrap_ie->len + sizeof(IEEEtypes_Header_t));
     }
 #endif
-    tlv->length = sizeof(custom_ie) + pcust_chansw_ie->ie_length - MAX_IE_SIZE;
+    ie_len = pos - ie_buf;
 
-    buf_len = pcust_chansw_ie->ie_length + sizeof(tlvbuf_custom_ie) + sizeof(custom_ie) - MAX_IE_SIZE;
-
-    ret = wrapper_wlan_cmd_mgmt_ie(MLAN_BSS_TYPE_UAP, buf, buf_len, HostCmd_ACT_GEN_SET);
+    ret = wifi_mgmt_ie_set(mlan_adap->priv[1], MGMT_MASK_BEACON | MGMT_MASK_PROBE_RESP, ie_buf, ie_len, &ecsa_mgmt_ie_index);
     if (ret != MLAN_STATUS_SUCCESS && ret != MLAN_STATUS_PENDING)
     {
         wifi_e("Failed to set ECSA IE");
-#if !CONFIG_MEM_POOLS
-        OSA_MemoryFree(buf);
-#else
-        OSA_MemoryPoolFree(buf_1024_MemoryPool, buf);
-#endif
-        return -WM_FAIL;
+        ret = -WM_FAIL;
+        goto done;
     }
-    set_ie_index(mgmt_ie_index);
 
     OSA_TimeDelay((switch_count + 2) * wm_wifi.beacon_period);
     set_ecsa_block_tx_flag(false);
 
-    if (!ie_index_is_set(mgmt_ie_index))
-    {
-#if !CONFIG_MEM_POOLS
-        OSA_MemoryFree(buf);
-#else
-        OSA_MemoryPoolFree(buf_1024_MemoryPool, buf);
-#endif
-        return -WM_FAIL;
-    }
-
     /*Clear ECSA ie*/
-    (void)memset(buf, 0, total_len);
-    tlv         = (tlvbuf_custom_ie *)buf;
-    tlv->type   = MRVL_MGMT_IE_LIST_TLV_ID;
-    tlv->length = sizeof(custom_ie) - MAX_IE_SIZE;
-
-    pcust_chansw_ie->mgmt_subtype_mask = MGMT_MASK_CLEAR;
-    pcust_chansw_ie->ie_length         = 0;
-    pcust_chansw_ie->ie_index          = mgmt_ie_index;
-    buf_len                            = sizeof(tlvbuf_custom_ie) + tlv->length;
-
-    ret = wrapper_wlan_cmd_mgmt_ie(MLAN_BSS_TYPE_UAP, buf, buf_len, HostCmd_ACT_GEN_SET);
-    if (ret != MLAN_STATUS_SUCCESS && ret != MLAN_STATUS_PENDING)
+    if (ecsa_mgmt_ie_index != MLAN_MGMT_IE_INVALID_IDX)
     {
-        wifi_e("Failed to clear ECSA IE");
-#if !CONFIG_MEM_POOLS
-        OSA_MemoryFree(buf);
-#else
-        OSA_MemoryPoolFree(buf_1024_MemoryPool, buf);
-#endif
-        return -WM_FAIL;
+        (void)memset(ie_buf, 0, total_len);
+        ret = wifi_mgmt_ie_clear(mlan_adap->priv[1], &ecsa_mgmt_ie_index);
+        if (ret != MLAN_STATUS_SUCCESS && ret != MLAN_STATUS_PENDING)
+        {
+            wifi_e("Failed to clear ECSA IE");
+            ret = -WM_FAIL;
+            goto done;
+        }
     }
-    clear_ie_index(mgmt_ie_index);
 
+done:
+    if (ie_buf != NULL)
+    {
 #if !CONFIG_MEM_POOLS
-    OSA_MemoryFree(buf);
+        OSA_MemoryFree(ie_buf);
 #else
-    OSA_MemoryPoolFree(buf_1024_MemoryPool, buf);
+        OSA_MemoryPoolFree(buf_1024_MemoryPool, ie_buf);
 #endif
+    }
 
-    return WM_SUCCESS;
+    return ret;
 }
 
 int wifi_set_action_ecsa_cfg(t_u8 block_tx, t_u8 oper_class, t_u8 channel, t_u8 switch_count)

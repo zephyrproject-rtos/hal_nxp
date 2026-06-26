@@ -1492,7 +1492,7 @@ static mlan_status wlan_misc_cfg_ioctl(IN pmlan_adapter pmadapter, IN pmlan_ioct
             status = wlan_misc_ioctl_rf_test_cfg(pmadapter, pioctl_req);
             break;
 #endif /* CONFIG_RF_TEST_MODE */
-#if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
         case MLAN_OID_MISC_IND_RST_CFG:
             status = wlan_misc_ioctl_ind_rst_cfg(pmadapter, pioctl_req);
             break;

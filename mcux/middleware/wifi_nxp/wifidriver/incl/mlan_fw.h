@@ -1323,6 +1323,9 @@ typedef MLAN_PACK_START struct _MrvlIEtypes_fw_cap_info_t
 #define HostCmd_CMD_LOW_POWER_MODE 0x0128
 #endif /* WLAN_LOW_POWER_ENABLE */
 
+/** Host Command ID : Target device access */
+#define HostCmd_CMD_TARGET_ACCESS 0x12a
+
 #define HOST_CMD_SMART_MODE_CFG 0x012d
 
 #define HostCmd_CMD_AUTO_RECONNECT 0x0115
@@ -1362,10 +1365,16 @@ typedef MLAN_PACK_START struct _MrvlIEtypes_fw_cap_info_t
 /** Host Command ID : GET TBTT Offset stats */
 #define HostCmd_CMD_TBTT_OFFSET 0x0268
 
+/** Host Command ID: BCA device access */
+#define HostCmd_CMD_BCA_REG_ACCESS 0x272
+
 #if (CONFIG_IPS)
 /** Host Command ID : IPS Config */
 #define HostCmd_CMD_IPS_CONFIG 0x0279
 #endif
+
+/** Host Command ID: register device access */
+#define HostCmd_CMD_REG_ACCESS 0x27c
 
 #if CONFIG_RX_ABORT_CFG
 #define HostCmd_CMD_RX_ABORT_CFG 0x0261
@@ -3501,8 +3510,14 @@ typedef MLAN_PACK_START struct _HostCmd_DS_GET_HW_SPEC
 #else
      t_u32 reserved_2;
 #endif
+    /** Count of small size mgmt IE buffers available in FW */
+    t_u8 mgmt_buf_cnt_sm;
+    /** Count of medium size mgmt IE buffers available in FW */
+    t_u8 mgmt_buf_cnt_md;
+    /** Count of large size mgmt IE buffers available in FW */
+    t_u8 mgmt_buf_cnt_lg;
     /** Reserved field */
-    t_u32 reserved_3;
+    t_u8 reserved_3;
     /** FW/HW Capability */
     t_u32 fw_cap_info;
     /** 802.11n Device Capabilities */
@@ -3596,7 +3611,7 @@ typedef MLAN_PACK_START struct _HostCmd_DS_MAC_CONTROL
     t_u32 action;
 } MLAN_PACK_END HostCmd_DS_MAC_CONTROL;
 
-#if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
 /** HostCmd_DS_IND_RST */
 typedef MLAN_PACK_START struct _HostCmd_DS_IND_RST
 {
@@ -5760,6 +5775,42 @@ typedef MLAN_PACK_START struct _HostCmd_DS_MEM_ACCESS
     /** Value */
     t_u32 value;
 } MLAN_PACK_END HostCmd_DS_MEM_ACCESS;
+
+/** HostCmd_DS_TARGET_ACCESS */
+typedef MLAN_PACK_START struct _HostCmd_DS_TARGET_ACCESS {
+    /** Action */
+    t_u16 action;
+    /** CSU Target Device. 1: CSU, 2: PSU */
+    t_u16 csu_target;
+    /** Target Device Address */
+    t_u16 address;
+    /** Data */
+    t_u8 data;
+} MLAN_PACK_END HostCmd_DS_TARGET_ACCESS;
+
+/** HostCmd_CMD_BCA_REG_ACCESS */
+typedef MLAN_PACK_START struct _HostCmd_DS_BCA_REG_ACCESS {
+    /** Action */
+    t_u16 action;
+    /** BCA register offset */
+    t_u16 offset;
+    /** BCA register value */
+    t_u32 value;
+} MLAN_PACK_END HostCmd_DS_BCA_REG_ACCESS;
+
+/** HostCmd_CMD_REG_ACCESS */
+typedef MLAN_PACK_START struct _HostCmd_DS_REG_ACCESS {
+    /** Action */
+    t_u16 action;
+    /** reg type */
+    t_u16 reg_type;
+    /** reserved */
+    t_u16 reserved;
+    /** register offset */
+    t_u16 offset;
+    /** register value */
+    t_u32 value;
+} MLAN_PACK_END HostCmd_DS_REG_ACCESS;
 
 /** HostCmd_DS_AUTO_RECONNECT */
 typedef MLAN_PACK_START struct _HostCmd_DS_AUTO_RECONNECT
@@ -7974,7 +8025,7 @@ typedef MLAN_PACK_START struct _HostCmd_DS_COMMAND
         HostCmd_DS_802_11_CFG_DATA cfg_data;
         /** MAC control */
         HostCmd_DS_MAC_CONTROL mac_ctrl;
-#if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
         /** Test Independent reset */
         HostCmd_DS_IND_RST ind_rst;
         /** GPIO Independent reset configure */
@@ -8131,6 +8182,12 @@ typedef MLAN_PACK_START struct _HostCmd_DS_COMMAND
         HostCmd_DS_802_11_EEPROM_ACCESS eeprom;
         /** Memory access */
         HostCmd_DS_MEM_ACCESS mem;
+        /** Target device access */
+        HostCmd_DS_TARGET_ACCESS target;
+        /** BCA register access */
+        HostCmd_DS_BCA_REG_ACCESS bca_reg;
+        /** register access */
+        HostCmd_DS_REG_ACCESS reg;
         /** Bridge mode */
         HostCmd_BRIDGE_MODE bridge_mode;
         /** Auto Reconnect */

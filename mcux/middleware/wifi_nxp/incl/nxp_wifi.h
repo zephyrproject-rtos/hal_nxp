@@ -329,10 +329,6 @@ extern "C" {
 #endif /* RW610 */
 #endif /* CONFIG_NXP_OVERRIDE_CALIBRATION_DATA */
 
-#if CONFIG_NXP_WIFI_EU_VALIDATION
-#define CONFIG_EU_VALIDATION 1
-#endif
-
 #if CONFIG_NXP_WIFI_WMM
 #define CONFIG_WMM 1
 #endif

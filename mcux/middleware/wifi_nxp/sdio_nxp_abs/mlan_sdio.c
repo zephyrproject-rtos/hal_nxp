@@ -12,6 +12,7 @@
 #include <mlan_sdio_defs.h>
 #include <osa.h>
 #include <zephyr/sd/sdio.h>
+#include <zephyr/drivers/gpio.h>
 
 #define SDIO_CMD_TIMEOUT 2000
 
@@ -299,3 +300,23 @@ void sdio_drv_deinit(void)
 {
     // SDIO_Deinit(&wm_g_sd);
 }
+
+#if CONFIG_WIFI_IND_RESET && CONFIG_WIFI_IND_OOB_RESET
+#define DT_DRV_COMPAT nxp_wifi
+void sdio_oob_reset(void)
+{
+#if DT_NODE_HAS_PROP(DT_DRV_INST(0), sd_gpios)
+    int err = 0;
+    struct gpio_dt_spec oob_reset = GPIO_DT_SPEC_GET(DT_DRV_INST(0), sd_gpios);
+
+    err = gpio_pin_set_dt(&oob_reset, 0);
+    if (err) {
+        return;
+    }
+
+    OSA_TimeDelay(10);
+
+    (void)gpio_pin_set_dt(&oob_reset, 1);
+#endif
+}
+#endif

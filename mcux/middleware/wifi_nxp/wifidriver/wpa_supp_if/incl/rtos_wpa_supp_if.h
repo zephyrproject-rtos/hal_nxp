@@ -162,7 +162,7 @@ void wifi_nxp_wpa_supp_event_proc_eapol_rx(void *if_priv,
 #endif
 void wifi_nxp_wpa_supp_event_proc_dfs_cac_started(void *if_priv, nxp_wifi_dfs_cac_info *dfs_cac_info);
 void wifi_nxp_wpa_supp_event_proc_dfs_cac_finished(void *if_priv, nxp_wifi_dfs_cac_info *dfs_cac_info);
-void wifi_nxp_wpa_supp_event_signal_change(void *if_priv, t_s16 *curr_rssi);
+void wifi_nxp_wpa_supp_event_signal_change(void *if_priv, t_s16 curr_rssi);
 #if CONFIG_WIFI_SOFTAP_SUPPORT
 int wifi_nxp_wpa_supp_init_ap(void *if_priv, struct wpa_driver_associate_params *params);
 #endif

@@ -762,7 +762,8 @@ static void test_wlan_tx_pert(int argc, char **argv)
 static void dump_wlan_txrx_histogram_usage()
 {
     (void)PRINTF("Usage:\r\n");
-    (void)PRINTF("    wlan_txrx_histogram <action> <enable>\r\n");
+    (void)PRINTF("    wlan_txrx_histogram <sta/uap> <action> <enable>\r\n");
+    (void)PRINTF("        <sta/uap>: STA'  or 'UAP' \r\n");
     (void)PRINTF("        <enable> : 0 - disable TX/RX statistics\r\n");
     (void)PRINTF("                   1 - enable TX/RX statistics\r\n");
     (void)PRINTF("                   2 - get TX/RX statistics\r\n");
@@ -772,7 +773,7 @@ static void dump_wlan_txrx_histogram_usage()
     (void)PRINTF("Note:\r\n");
     (void)PRINTF("    When enable is 0 or 1, the action parameter should not be entered\r\n");
     (void)PRINTF("Example:\r\n");
-    (void)PRINTF("    wlan_txrx_histogram 2 3\r\n");
+    (void)PRINTF("    wlan_txrx_histogram sta 2 3\r\n");
 }
 
 static void test_wlan_txrx_histogram(int argc, char **argv)
@@ -788,13 +789,25 @@ static void test_wlan_txrx_histogram(int argc, char **argv)
     rx_pkt_vht_rate_info *rx_vht_info;
     rx_pkt_he_rate_info *rx_he_info;
     rx_pkt_rate_info *rx_info;
+    int bss_type;
 
     t_u8 *pos             = NULL;
     t_u16 resp_value_size = 0;
     int i                 = 0;
     t_u16 buf_size        = 0;
 
-    if (argc < 2)
+    if (argc < 3)
+    {
+        (void)PRINTF("Error: invalid number of arguments\r\n");
+        dump_wlan_txrx_histogram_usage();
+        return;
+    }
+
+    if (string_equal("sta", argv[1]))
+        bss_type = WLAN_BSS_TYPE_STA;
+    else if (string_equal("uap", argv[1]))
+        bss_type = WLAN_BSS_TYPE_UAP;
+    else
     {
         (void)PRINTF("Error: invalid number of arguments\r\n");
         dump_wlan_txrx_histogram_usage();
@@ -802,14 +815,14 @@ static void test_wlan_txrx_histogram(int argc, char **argv)
     }
 
     (void)memset(&txrx_histogram, 0, sizeof(txrx_histogram));
-    txrx_histogram.enable = atoi(argv[1]);
-    if (argc == 2)
+    txrx_histogram.enable = atoi(argv[2]);
+    if (argc == 3)
     {
         txrx_histogram.action = 0;
     }
     else
     {
-        txrx_histogram.action = atoi(argv[2]);
+        txrx_histogram.action = atoi(argv[3]);
     }
 
     if ((txrx_histogram.enable > 2) || (txrx_histogram.action > 3))
@@ -856,7 +869,7 @@ static void test_wlan_txrx_histogram(int argc, char **argv)
         (void)memcpy(buf, &buf_size, sizeof(buf_size));
     }
 
-    wlan_set_txrx_histogram(&txrx_histogram, buf);
+    wlan_set_txrx_histogram(bss_type, &txrx_histogram, buf);
 
     if (buf == NULL)
     {
@@ -989,46 +1002,67 @@ static void test_wlan_txrx_histogram(int argc, char **argv)
 static void dump_wlan_roaming_usage(void)
 {
     (void)PRINTF("Usage:\r\n");
-    (void)PRINTF(
-        "    wlan-roaming <0/1> <rssi_threshold>"
-        "\r\n");
-    (void)PRINTF("Example:\r\n");
-    (void)PRINTF("    wlan-roaming 1 40\r\n");
+    (void)PRINTF("  nxp_wifi roaming 0\r\n");
+    (void)PRINTF("  nxp_wifi roaming 1 <rssi_threshold>\r\n");
+    (void)PRINTF("  nxp_wifi roaming 2 <snr_threshold>\r\n");
+    (void)PRINTF("  nxp_wifi roaming 3 <rssi_threshold> <snr_threshold>\r\n");
+    (void)PRINTF("\r\n");
+    (void)PRINTF("bitmap: 0=disable, 1=RSSI_LOW, 2=SNR_LOW, 3=both\r\n");
 }
 
 static void test_wlan_roaming(int argc, char **argv)
 {
-    int enable                 = 0;
+    uint8_t bitmap;
     uint8_t rssi_low_threshold = 0;
+    uint8_t snr_low_threshold = 0;
 
-    if ((argc != 2) && (argc != 3))
+    if (argc < 2)
     {
         dump_wlan_roaming_usage();
-        (void)PRINTF("Error: invalid number of arguments\r\n");
         return;
     }
 
-    errno  = 0;
-    enable = (int)strtol(argv[1], NULL, 10);
-    if (errno != 0)
-    {
-        (void)PRINTF("Error during strtol:wlan roaming errno:%d\r\n", errno);
-        return;
-    }
+    bitmap = (uint8_t)atoi(argv[1]);
 
-    if (argc == 3)
+    if (bitmap == 0)
     {
-        errno              = 0;
-        rssi_low_threshold = (uint8_t)strtol(argv[2], NULL, 10);
-        if (errno != 0)
+        /* Disable - no extra args needed */
+    }
+    else if (bitmap == 1)
+    {
+        if (argc < 3)
         {
-            (void)PRINTF("Error during strtol:rssi_threshold errno:%d\r\n", errno);
+            dump_wlan_roaming_usage();
             return;
         }
+        rssi_low_threshold = (uint8_t)atoi(argv[2]);
+    }
+    else if (bitmap == 2)
+    {
+        if (argc < 3)
+        {
+            dump_wlan_roaming_usage();
+            return;
+        }
+        snr_low_threshold = (uint8_t)atoi(argv[2]);
+    }
+    else if (bitmap == 3)
+    {
+        if (argc < 4)
+        {
+            dump_wlan_roaming_usage();
+            return;
+        }
+        rssi_low_threshold = (uint8_t)atoi(argv[2]);
+        snr_low_threshold = (uint8_t)atoi(argv[3]);
+    }
+    else
+    {
+        dump_wlan_roaming_usage();
+        return;
     }
 
-    wlan_set_roaming(enable, rssi_low_threshold);
-    return;
+    wlan_set_roaming(bitmap, rssi_low_threshold, snr_low_threshold);
 }
 #endif
 
@@ -1986,6 +2020,25 @@ static void test_wlan_get_log(int argc, char **argv)
             stats.tx_mpdus_in_ampdu_cnt, stats.tx_octets_in_ampdu_cnt, stats.ampdu_rx_cnt, stats.mpdu_in_rx_ampdu_cnt,
             stats.rx_octets_in_ampdu_cnt, stats.ampdu_delimiter_crc_error_cnt);
     }
+}
+
+static void test_wlan_get_diag(int argc, char **argv)
+{
+    struct wlan_diag diag;
+    int ret;
+
+    (void)memset(&diag, 0, sizeof(struct wlan_diag));
+    ret = wlan_get_diag(&diag);
+    if (ret != WM_SUCCESS)
+    {
+        (void)PRINTF("Failed to get Wi-Fi diagnostic stats\r\n");
+        return;
+    }
+
+    (void)PRINTF("Wi-Fi Diagnostic Stats:\r\n");
+    (void)PRINTF("  hwExceptionCount      : %u\r\n", diag.hw_exception_count);
+    (void)PRINTF("  disconnectionCount    : %u\r\n", diag.disconnection_count);
+    (void)PRINTF("  disconnectionDuration : %u sec\r\n", diag.disconnection_dur_sec);
 }
 #endif
 
@@ -4524,7 +4577,7 @@ static void dump_wlan_reg_access_usage()
     (void)PRINTF("Write the register:\r\n");
     (void)PRINTF("    wlan-reg-access <type> <offset> <value>\r\n");
     (void)PRINTF("Options: \r\n");
-    (void)PRINTF("    <type>  : 1:MAC, 2:BBP, 3:RF, 4:CAU\r\n");
+    (void)PRINTF("    <type>  : 1:MAC, 2:BBP, 3:RF, 4:CAU, 5:PSU, 6:BCA, 8:CIU\r\n");
     (void)PRINTF("    <offset>: offset of register\r\n");
     (void)PRINTF("For example:\r\n");
     (void)PRINTF("    wlan-reg-access 1 0x9b8             : Read the MAC register\r\n");
@@ -4545,11 +4598,11 @@ static void test_wlan_reg_access(int argc, char **argv)
         return;
     }
 
-    if ((a2hex_or_atoi(argv[1]) != 1 && a2hex_or_atoi(argv[1]) != 2 && a2hex_or_atoi(argv[1]) != 3 &&
-         a2hex_or_atoi(argv[1]) != 4))
+    if (a2hex_or_atoi(argv[1]) < 1 || a2hex_or_atoi(argv[1]) > 8
+         || a2hex_or_atoi(argv[1]) == 7)
     {
         dump_wlan_reg_access_usage();
-        (void)PRINTF("Error: Illegal register type %s. Must be either '1','2','3' or '4'.\r\n", argv[1]);
+        (void)PRINTF("Error: Illegal register type %s.\r\n", argv[1]);
         return;
     }
     type   = a2hex_or_atoi(argv[1]);
@@ -5384,32 +5437,6 @@ static void test_wlan_start_stop_ami(int argc, char **argv)
 }
 
 #endif /* CONFIG_CSI_AMI */
-#endif
-
-#if (CONFIG_11K) || (CONFIG_11V) || (CONFIG_11R) || (CONFIG_ROAMING)
-static void test_wlan_rssi_low_threshold(int argc, char **argv)
-{
-    uint8_t rssi_threshold;
-
-    if (argc < 2)
-    {
-        (void)PRINTF("Usage: %s <rssi threshold value>\r\n", argv[0]);
-        (void)PRINTF("Error: Default value is 70. Specify the value you want to set as threshold.\r\n");
-        return;
-    }
-
-    errno          = 0;
-    rssi_threshold = (uint8_t)strtol(argv[1], NULL, 10);
-    if (errno != 0)
-    {
-        (void)PRINTF("Error during strtol:rssi_threshold errno:%d\r\n", errno);
-        return;
-    }
-
-    wlan_set_rssi_low_threshold(rssi_threshold);
-
-    (void)PRINTF("rssi threshold set successfully.\r\n");
-}
 #endif
 
 #if CONFIG_NET_MONITOR
@@ -7875,7 +7902,7 @@ done:
 }
 #endif
 
-#if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
 static void dump_wlan_set_ind_rst_cfg_usage(void)
 {
     (void)PRINTF("Usage :                                                                \r\n");
@@ -7974,34 +8001,6 @@ static void test_get_indrst_cfg(int argc, char **argv)
                (indrst_cfg.ir_mode == 0) ? "disabled" : ((indrst_cfg.ir_mode == 1) ? "Out Band" : "In Band"));
         if (indrst_cfg.ir_mode == 1)
             (void)PRINTF("GPIO Pin = %d\n\n", indrst_cfg.gpio_pin);
-    }
-}
-
-static void dump_wlan_independent_reset_usage(void)
-{
-    (void)PRINTF("Usage :                                     \r\n");
-    (void)PRINTF("         wlan-independent-reset             \r\n");
-}
-
-static void test_wlan_independent_reset(int argc, char **argv)
-{
-    int ret = -WM_FAIL;
-
-    if (argc != 1)
-    {
-        dump_wlan_independent_reset_usage();
-        return;
-    }
-
-    ret = wlan_independent_reset();
-
-    if (ret == WM_SUCCESS)
-    {
-        (void)PRINTF("Independent reset success\r\n");
-    }
-    else
-    {
-        (void)PRINTF("Independent reset failed\r\n");
     }
 }
 #endif
@@ -9149,12 +9148,13 @@ static struct cli_command tests[] = {
 #endif
 #if CONFIG_WIFI_GET_LOG
     {"wlan-get-log", "<sta/uap> <ext>", test_wlan_get_log},
+    {"wlan-get-diag", NULL, test_wlan_get_diag},
 #endif
 #if CONFIG_WIFI_TX_PER_TRACK
     {"wlan-tx-pert", "<0/1> <STA/UAP> <p> <r> <n>", test_wlan_tx_pert},
 #endif
 #if CONFIG_ROAMING
-    {"wlan-roaming", "<0/1> <rssi_threshold>", test_wlan_roaming},
+    {"wlan-roaming", "<bitmap> [<rssi_threshold>] [<snr_threshold>]", test_wlan_roaming},
 #endif
 #if CONFIG_MEF_CFG
     {"wlan-multi-mef", "<ping/arp/multicast/del> [<action>]", test_wlan_set_multiple_mef_config},
@@ -9264,9 +9264,6 @@ static struct cli_command tests[] = {
 #if CONFIG_TX_AMPDU_PROT_MODE
     {"wlan-tx-ampdu-prot-mode", "<mode>", test_wlan_tx_ampdu_prot_mode},
 #endif
-#if (CONFIG_11K) || (CONFIG_11V) || (CONFIG_11R) || (CONFIG_ROAMING)
-    {"wlan-rssi-low-threshold", "<threshold_value>", test_wlan_rssi_low_threshold},
-#endif
 #if CONFIG_RX_ABORT_CFG
     {"wlan-rx-abort-cfg", NULL, test_wlan_rx_abort_cfg},
 #endif
@@ -9360,10 +9357,9 @@ static struct cli_command tests[] = {
 #if CONFIG_AUTO_RECONNECT
     {"wlan-auto-reconnect", "<0/1/2> [<reconnect counter> <reconnect interval> <flags>]", test_wlan_auto_reconnect},
 #endif
-#if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
     {"wlan-set-indrstcfg", "<mode> <gpio_pin>", test_set_indrst_cfg},
     {"wlan-get-indrstcfg", NULL, test_get_indrst_cfg},
-    {"wlan-independent-reset", "<mode>", test_wlan_independent_reset},
 #endif
 #if CONFIG_INACTIVITY_TIMEOUT_EXT
     {"wlan-sta-inactivityto", "<n> <m> <l> [k] [j]", test_wlan_sta_inactivityto},

@@ -71,30 +71,7 @@ bool wlan_sdio_check_fw_status(t_u32 card_poll)
     return false;
 }
 
-#if CONFIG_WIFI_IND_DNLD
-#if 0
-/**  @brief This function disables the host interrupts mask.
- *
- *  @param pmadapter    A pointer to mlan_adapter structure
- *  @param mask         the interrupt mask
- *  @return             MLAN_STATUS_SUCCESS or MLAN_STATUS_FAILURE
- */
-static int32_t wlan_sdio_disable_host_int_mask()
-{
-    uint32_t host_int_mask = 0;
-    uint32_t resp;
-
-    (void)sdio_drv_creg_read(HOST_INT_MASK_REG, 1, &host_int_mask);
-
-    /* Update with the mask and write back to the register */
-    host_int_mask &= ~HIM_DISABLE;
-
-    (void)sdio_drv_creg_write(HOST_INT_MASK_REG, 1, host_int_mask, &resp);
-
-    return FWDNLD_INTF_SUCCESS;
-}
-#endif
-
+#if CONFIG_WIFI_IND_RESET
 /**
  *  @brief This function probes the driver
  *
@@ -223,7 +200,7 @@ static fwdnld_intf_ret_t sdio_post_fwdnld_check_conn_ready(fwdnld_intf_t *intf, 
     }
 }
 
-#if (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
 static fwdnld_intf_ret_t sdio_fwdnld_check_reload(fwdnld_intf_t *intf, uint8_t fw_reload)
 {
     t_u32 poll_num = 10;
@@ -365,7 +342,7 @@ fwdnld_intf_t *sdio_init_interface(void *settings)
     sdio_intf_g.intf_s.fwdnld_intf_send        = sdio_interface_send;
     sdio_intf_g.intf_s.fwdnld_intf_prepare     = sdio_prep_for_fwdnld;
     sdio_intf_g.intf_s.fwdnld_intf_check_ready = sdio_post_fwdnld_check_conn_ready;
-#if (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
     sdio_intf_g.intf_s.fwdnld_intf_check_reload = sdio_fwdnld_check_reload;
 #endif
     sdio_intf_g.intf_s.outbuf        = wifi_get_sdio_outbuf(&sdio_intf_g.intf_s.outbuf_len);

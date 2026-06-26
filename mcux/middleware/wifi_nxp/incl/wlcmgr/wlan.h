@@ -19,7 +19,7 @@
 #include <wifi_events.h>
 #include <wifi.h>
 
-#define WLAN_DRV_VERSION "v1.3.r53.z_up.p9"
+#define WLAN_DRV_VERSION "v1.3.r54.z_up.p2"
 
 #if CONFIG_WPA2_ENTP
 #include <wm_mbedtls_helper_api.h>
@@ -1440,6 +1440,17 @@ struct wifi_scan_params_t
 /** Wi-Fi firmware stat from \ref wifi_pkt_stats_t
  */
 typedef wifi_pkt_stats_t wlan_pkt_stats_t;
+
+/** Wi-Fi diagnostic statistics */
+struct wlan_diag
+{
+    /** Number of hardware exceptions detected by the Wi-Fi driver; reserved, always 0 */
+    uint32_t hw_exception_count;
+    /** Number of disconnection events since driver initialization */
+    uint32_t disconnection_count;
+    /** Duration in seconds that the Wi-Fi interface has been in disconnected state */
+    uint32_t disconnection_dur_sec;
+};
 #endif
 
 /** Configuration for Wi-Fi scan channel list from
@@ -1634,7 +1645,7 @@ typedef wifi_net_monitor_t wlan_net_monitor_t;
 typedef wifi_host_tx_frame_params_t wlan_host_tx_frame_params_t;
 #endif
 
-#if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
 /** Configuration for GPIO independent reset
  * \ref wifi_indrst_cfg_t
  */
@@ -3402,11 +3413,12 @@ void wlan_set_tx_pert(struct wlan_tx_pert_info *tx_pert, mlan_bss_type bss_type)
 /** Set TX RX histogram config.
  * This function can be called to set TX RX histogram config.
  *
+ * \param[in] bss_type: 0: STA, 1: uAP
  * \param[in] txrx_histogram: User configured parameters of TX RX histogram.
  *            including enable and action.
  * \param[out] data: TX RX histogram data from FW.
  */
-void wlan_set_txrx_histogram(struct wlan_txrx_histogram_info *txrx_histogram, t_u8 *data);
+void wlan_set_txrx_histogram(int bss_type, struct wlan_txrx_histogram_info *txrx_histogram, t_u8 *data);
 #endif
 
 #if CONFIG_ROAMING
@@ -3434,13 +3446,16 @@ void wlan_set_txrx_histogram(struct wlan_txrx_histogram_info *txrx_histogram, t_
  * \ref wlan_set_rssi_low_threshold API to set RSSI low
  * threshold again.
  *
- * \param[in] enable: Enable/Disable roaming.
+ * \param[in] bitmap: Roaming event bitmap (0=disable, bit0=RSSI_LOW, bit1=SNR_LOW)
  * \param[in] rssi_low_threshold: RSSI low threshold value
+ * \param[in] snr_low_threshold: SNR low threshold value
  *
  * \return WM_SUCCESS if the call was successful.
  * \return -WM_FAIL if failed.
  */
-int wlan_set_roaming(const int enable, const uint8_t rssi_low_threshold);
+int wlan_set_roaming(const uint8_t bitmap,
+                    const uint8_t rssi_low_threshold,
+                    const uint8_t snr_low_threshold);
 
 /** Get the roaming status.
  *
@@ -3448,10 +3463,6 @@ int wlan_set_roaming(const int enable, const uint8_t rssi_low_threshold);
  * \return 0 if roaming is disbled.
  */
 int wlan_get_roaming_status(void);
-
-/** Subscribe RSSI low event in firmware if roaming is enabled.
- */
-void wlan_subscribe_rssi_low_event(void);
 #endif
 
 #if CONFIG_HOST_SLEEP
@@ -4187,6 +4198,16 @@ int wlan_get_log(wlan_pkt_stats_t *stats);
  * \return -WM_FAIL if command fails.
  */
 int wlan_uap_get_log(wlan_pkt_stats_t *stats);
+
+/**
+ * Get Wi-Fi diagnostic statistics.
+ *
+ * \param[out] diag  Pointer to \ref wlan_diag to store the result.
+ *
+ * \return WM_SUCCESS if successful.
+ * \return -WM_E_INVAL if a NULL pointer is passed.
+ */
+int wlan_get_diag(struct wlan_diag *diag);
 #endif
 
 /** Get station interface power save mode.
@@ -4596,35 +4617,6 @@ int wlan_set_wwsm_txpwrlimit(void);
 const char *wlan_get_wlan_region_code(void);
 #endif
 
-/**
- * Get Management IE for given BSS type (interface) and index.
- *
- * \param[in] bss_type: 0: STA, 1: uAP
- * \param[in] index: IE index.
- *
- * \param[out] buf: Buffer to store requested IE data.
- * \param[out] buf_len: Length of IE data.
- *
- * \return WM_SUCCESS if successful.
- * \return -WM_FAIL if unsuccessful.
- *
- */
-int wlan_get_mgmt_ie(enum wlan_bss_type bss_type, IEEEtypes_ElementId_t index, void *buf, unsigned int *buf_len);
-
-/**
- * Set management IE for given BSS type (interface) and index.
- *
- * \param[in] bss_type: 0: STA, 1: uAP
- * \param[in] id: Type/ID of Management IE.
- * \param[in] buf: Buffer containing IE data.
- * \param[in] buf_len: Length of IE data.
- *
- * \return Management IE index if successful.
- * \return -WM_FAIL if unsuccessful.
- *
- */
-int wlan_set_mgmt_ie(enum wlan_bss_type bss_type, IEEEtypes_ElementId_t id, void *buf, unsigned int buf_len);
-
 #ifdef SD8801
 /**
  * Get external radio coex statistics.
@@ -4648,19 +4640,6 @@ int wlan_get_ext_coex_stats(wlan_ext_coex_stats_t *ext_coex_stats);
  */
 int wlan_set_ext_coex_config(const wlan_ext_coex_config_t ext_coex_config);
 #endif
-
-/**
- * Clear management IE for given BSS type (interface) and index.
- *
- * \param[in] bss_type: 0: STA, 1: uAP
- * \param[in] index: IE index.
- * \param[in] mgmt_bitmap_index: management bitmap index.
- *
- * \return WM_SUCCESS if successful.
- * \return -WM_FAIL if unsuccessful.
- *
- */
-int wlan_clear_mgmt_ie(enum wlan_bss_type bss_type, IEEEtypes_ElementId_t index, int mgmt_bitmap_index);
 
 /**
  * Get current status of 802.11d support.
@@ -6902,19 +6881,6 @@ void wlan_start_stop_ami(uint8_t start);
 #endif
 #endif
 
-#if (CONFIG_11K) || (CONFIG_11V) || (CONFIG_11R) || (CONFIG_ROAMING)
-/**
- * Use this API to set the RSSI threshold value for low RSSI event subscription.
- * When RSSI falls below this threshold firmware can generate the low RSSI event to driver.
- * This low RSSI event is used when either of CONFIG_11R, CONFIG_11K, CONFIG_11V or CONFIG_ROAMING is enabled.
- * \note By default RSSI low threshold is set at -70 dbm.
- *
- * \param[in]     threshold:     Threshold RSSI value to be set
- *
- */
-void wlan_set_rssi_low_threshold(uint8_t threshold);
-#endif
-
 #if CONFIG_WPA_SUPP
 #if CONFIG_WPA_SUPP_WPS
 /**
@@ -7392,7 +7358,7 @@ int wlan_imd3_cfg(t_u8 imd3_value);
 int wlan_host_set_sta_mac_filter(int filter_mode, int mac_count, unsigned char *mac_addr);
 #endif
 
-#if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
 /**
  * Set GPIO independent reset configuration
  *
@@ -7409,17 +7375,6 @@ int wlan_set_indrst_cfg(const wifi_indrst_cfg_t *indrst_cfg);
  * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
  */
 int wlan_get_indrst_cfg(wifi_indrst_cfg_t *indrst_cfg);
-
-/** Test independent firmware reset
- *
- * This function can either send command that can cause timeout in firmware or
- * send GPIO pulse that can cause out of band reset in firmware as per configuration
- * int earlier \ref wlan_set_indrst_cfg API.
- *
- * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
- */
-int wlan_independent_reset(void);
-
 #endif
 
 int wlan_set_network_ip_byname(char *name, struct wlan_ip_config *ip);

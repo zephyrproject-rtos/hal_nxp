@@ -183,7 +183,7 @@ mlan_status wlan_init_priv(pmlan_private priv)
 #endif
 #if CONFIG_11K
     priv->neighbor_rep_token    = (t_u8)1U;
-    priv->rrm_mgmt_bitmap_index = -1;
+    priv->rrm_mgmt_bitmap_index = MLAN_MGMT_IE_INVALID_IDX;
 #endif
 #if CONFIG_11V
     priv->bss_trans_query_token = (t_u8)1U;
@@ -213,19 +213,22 @@ mlan_status wlan_init_priv(pmlan_private priv)
     priv->uap_host_based  = MFALSE;
 #endif
 
-    reset_ie_index();
+#if CONFIG_DRIVER_MBO
+    priv->mbo_index = MLAN_MGMT_IE_INVALID_IDX;
+#endif
+
 #if CONFIG_WPA_SUPP
     priv->default_scan_ies_len = 0;
-    priv->probe_req_index      = -1;
+    priv->probe_req_index      = MLAN_MGMT_IE_INVALID_IDX;
 #if CONFIG_WPA_SUPP_WPS
-    priv->wps.wps_mgmt_bitmap_index = -1;
+    priv->wps.wps_mgmt_bitmap_index = MLAN_MGMT_IE_INVALID_IDX;
 #endif
 #if CONFIG_WPA_SUPP_AP
-    priv->beacon_vendor_index = -1;
-    priv->beacon_index        = 0;
-    priv->proberesp_index     = 1;
-    priv->assocresp_index     = 2;
-    priv->beacon_wps_index    = 3;
+    priv->beacon_index        = MLAN_MGMT_IE_INVALID_IDX;
+    priv->proberesp_index     = MLAN_MGMT_IE_INVALID_IDX;
+    priv->assocresp_index     = MLAN_MGMT_IE_INVALID_IDX;
+    priv->beacon_wps_index    = MLAN_MGMT_IE_INVALID_IDX;
+    priv->beacon_vendor_index = MLAN_MGMT_IE_INVALID_IDX;
 #endif
 #endif
 #if CONFIG_TCP_ACK_ENH
@@ -351,6 +354,9 @@ t_void wlan_init_adapter(pmlan_adapter pmadapter)
 
     wlan_wmm_init(pmadapter);
     wlan_init_wmm_param(pmadapter);
+
+    wlan_init_mgmt_ie_param(pmadapter);
+
 #if CONFIG_WMM_UAPSD
     (void)__memset(pmadapter, &pmadapter->sleep_params, 0, sizeof(pmadapter->sleep_params));
     (void)__memset(pmadapter, &pmadapter->sleep_period, 0, sizeof(pmadapter->sleep_period));

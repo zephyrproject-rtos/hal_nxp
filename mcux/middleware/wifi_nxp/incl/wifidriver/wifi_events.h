@@ -63,6 +63,8 @@ enum wifi_event
     WIFI_EVENT_LINK_LOSS,
     /* WiFi RSSI Low Event */
     WIFI_EVENT_RSSI_LOW,
+    /* WiFi SNR Low Event */
+    WIFI_EVENT_SNR_LOW,
     /** Firmware Hang event */
     WIFI_EVENT_FW_HANG,
     /** Firmware Reset event */
@@ -70,8 +72,6 @@ enum wifi_event
 #if CONFIG_SUBSCRIBE_EVENT_SUPPORT
     /* WiFi RSSI High Event */
     WIFI_EVENT_RSSI_HIGH,
-    /* WiFi SRN Low Event */
-    WIFI_EVENT_SNR_LOW,
     /* WiFi SNR High Event */
     WIFI_EVENT_SNR_HIGH,
     /* WiFi Max Fail Event */
@@ -188,6 +188,8 @@ enum wifi_event
 #if CONFIG_WIFI_CHANNEL_LOAD
     WIFI_EVENT_CHAN_LOAD,
 #endif
+    /** Roaming trigger event */
+    WIFI_EVENT_ROAMING_TRIGGER,
     /** Event to indicate end of Wi-Fi events */
     WIFI_EVENT_LAST,
     /* other events can be added after this, however this must

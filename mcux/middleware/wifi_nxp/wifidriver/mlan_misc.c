@@ -1094,7 +1094,7 @@ done:
 }
 #endif
 
-#if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
 /**
  *  @brief Configure GPIO independent reset
  *

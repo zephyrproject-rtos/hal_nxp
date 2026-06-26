@@ -353,10 +353,10 @@ endif()
 zephyr_code_relocate(FILES
                      ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/drivers/flexspi/fsl_flexspi.c
                      ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/components/flash/mflash/${drv_folder}/mflash_drv.c
-                     LOCATION ${QUICK_ACCESS_CODE_AREA_2} NOKEEP)
+                     LOCATION RAM_TEXT NOKEEP)
 endif()
 
-if(CONFIG_SPEED_OPTIMIZATIONS OR CONFIG_SIZE_OPTIMIZATIONS)
+if(CONFIG_SPEED_OPTIMIZATIONS)
 # critical path code relocated to SRAM
 zephyr_code_relocate(FILES port/osa/osa.c
                      FILTER ".*\\.OSA_RWLockReadLock|.*\\.OSA_RWLockReadUnlock"
@@ -379,7 +379,8 @@ string(JOIN "" NXP_WIFIDRIVER_WIFI_FILTER
        ".*\\.wifi_drv_tx_task|"
        ".*\\.wifi_add_to_bypassq|"
        ".*\\.wifi_low_level_output|"
-       ".*\\.wifi_get_outbuf"
+       ".*\\.wifi_get_outbuf|"
+       ".*\\.wifi_wmm_get_packet_cnt"
 )
 
 zephyr_code_relocate(FILES wifidriver/wifi.c
@@ -476,17 +477,56 @@ string(JOIN "" NXP_WIFIDRIVER_WIFI_SDIO_FILTER
        ".*\\.sg_data_total_len_tx|"
        ".*\\.sg_data_tx_prepare|"
        ".*\\.wifi_send_fw_data_sg|"
-       ".*\\.wlan_xmit_pkt_sg"
+       ".*\\.wlan_xmit_pkt_sg|"
+       ".*\\.wlan_xmit_bypass_pkt|"
+       ".*\\.wifi_send_fw_data"
 )
 
 zephyr_code_relocate(FILES wifidriver/wifi-sdio.c
                      FILTER "${NXP_WIFIDRIVER_WIFI_SDIO_FILTER}"
                      LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
 
-zephyr_code_relocate(FILES
-                     sdio_nxp_abs/mlan_sdio.c
-                     ${MCUX_SDK_DIR}/drivers/usdhc/fsl_usdhc.c
+string(JOIN "" NXP_WIFIDRIVER_SDIO_FILTER
+       ".*\\.calculate_sdio_write_params"
+)
+zephyr_code_relocate(FILES wifidriver/sdio.c
+                     FILTER "${NXP_WIFIDRIVER_SDIO_FILTER}"
                      LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
+
+string(JOIN "" NXP_MLAN_SDIO_FILTER
+       ".*\\.sdio_drv_read|"
+       ".*\\.sdio_drv_write|"
+       ".*\\.sg_to_net_buf|"
+       ".*\\.sdio_drv_request_sg|"
+       ".*\\.sdio_drv_read_sg|"
+       ".*\\.sdio_drv_write_sg|"
+       ".*\\.sdio_irq_handler|"
+       ".*\\.sdio_drv_creg_read|"
+       ".*\\.sdio_drv_creg_write"
+)
+
+zephyr_code_relocate(FILES sdio_nxp_abs/mlan_sdio.c
+                     FILTER "${NXP_MLAN_SDIO_FILTER}"
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
+
+string(JOIN "" NXP_FSL_USDHC_FILTER
+       ".*\\.USDHC_SetDataConfig|"
+       ".*\\.USDHC_TransferNonBlocking|"
+       ".*\\.USDHC_TransferHandleIRQ|"
+       ".*\\.USDHC_TransferHandleCommand|"
+       ".*\\.USDHC_TransferHandleData|"
+       ".*\\.USDHC_SetTransferConfig|"
+       ".*\\.USDHC_SendCommand|"
+       ".*\\.USDHC_ReceiveCommandResponse|"
+       ".*\\.USDHC_SetAdmaTableConfig|"
+       ".*\\.USDHC_SetADMA2Descriptor|"
+       ".*\\.USDHC_SetInternalDmaConfig"
+)
+
+zephyr_code_relocate(FILES ${MCUX_SDK_DIR}/drivers/usdhc/fsl_usdhc.c
+                     FILTER "${NXP_FSL_USDHC_FILTER}"
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
+
 endif()
 
 if(CONFIG_NXP_RW610)

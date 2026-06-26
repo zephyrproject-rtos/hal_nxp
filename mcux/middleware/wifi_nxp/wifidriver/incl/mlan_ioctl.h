@@ -240,7 +240,7 @@ typedef enum _mlan_ioctl_req_id
 #if CONFIG_ECSA
     MLAN_OID_MISC_OPER_CLASS = 0x00200038,
 #endif
-#if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
     MLAN_OID_MISC_IND_RST_CFG = 0x00200040,
 #endif
 #if CONFIG_ECSA
@@ -4269,7 +4269,7 @@ typedef struct _mlan_ds_misc_gtk_rekey_data
 } mlan_ds_misc_gtk_rekey_data;
 #endif
 
-#if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
 typedef struct _mlan_ds_ind_rst_cfg
 {
     /** Set or Get */
@@ -4377,7 +4377,7 @@ typedef struct _mlan_ds_misc_cfg
         /** GTK rekey data */
         mlan_ds_misc_gtk_rekey_data gtk_rekey;
 #endif
-#if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
         mlan_ds_ind_rst_cfg ind_rst_cfg;
 #endif
     } param;

@@ -290,7 +290,10 @@ static void csi_process_task(void *arg)
 #endif
 
     w_csi_d(" Processing task exiting\r\n");
-    OSA_TaskDestroy((osa_task_handle_t)csi_process_task_handle);
+    for (;;)
+    {
+        OSA_TimeDelay(100000);
+    }
 }
 
 
@@ -384,10 +387,11 @@ int csi_destroy_process_task(void)
 
     csi_task_state = CSI_TASK_STATE_DESTROYING;
 
-    /* Send HALT message and wait for task to self-destruct */
+    /* Send HALT message and destroy */
     csi_msg_t halt_msg = {CSI_HALT_SIGNAL, 0};
     OSA_MsgQPut((osa_msgq_handle_t)csi_msg_queue, &halt_msg);
     OSA_TimeDelay(100);
+    OSA_TaskDestroy((osa_task_handle_t)csi_process_task_handle);
 
     /* Drain remaining messages if any (prevents queue access race) */
     t_u32 remaining_msgs = OSA_MsgQAvailableMsgs((osa_msgq_handle_t)csi_msg_queue);

@@ -539,4 +539,10 @@ static INLINE t_u8 util_scalar_conditional_write(t_void *pmoal_handle,
     return (update) ? MTRUE : MFALSE;
 }
 
+#define util_offsetof(struct_type, member_name) \
+    ((t_ptr)&((struct_type *)0)->member_name)
+
+#define util_container_of(ptr, struct_type, member_name) \
+    ((struct_type *)((t_u8 *)(ptr) - util_offsetof(struct_type, member_name)))
+
 #endif /* !_MLAN_UTIL_H_ */

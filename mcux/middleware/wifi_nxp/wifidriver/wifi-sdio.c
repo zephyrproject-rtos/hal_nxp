@@ -41,7 +41,7 @@ SDK_ALIGN(static uint8_t vdll_cmd_buf[WIFI_FW_CMDBUF_SIZE], 32);
 static uint8_t sleep_cfm_cmd_buf[WIFI_FW_CMDBUF_SIZE] = {0};
 static int seqnum;
 // static int pm_handle;
-#ifdef IW610
+#if defined(SD9177) || defined(IW610)
 bool cal_data_valid_fw;
 #endif
 /*
@@ -745,14 +745,6 @@ static mlan_status wifi_send_fw_data_sg(t_u8 *data, t_u32 txlen)
     t_u32 tx_blocks = 0, buflen = 0;
     bool ret;
 
-#if CONFIG_WIFI_IND_RESET
-    /* IR is in progress so any data sent during progress should be ignored */
-    if (wifi_ind_reset_in_progress() == true)
-    {
-        return MLAN_STATUS_SUCCESS;
-    }
-#endif
-
     if (data == NULL || txlen == 0)
         return MLAN_STATUS_FAILURE;
 
@@ -852,14 +844,6 @@ static mlan_status wifi_send_fw_data(t_u8 *data, t_u32 txlen)
     uint32_t resp;
     bool ret;
 
-#if CONFIG_WIFI_IND_RESET
-    /* IR is in progress so any data sent during progress should be ignored */
-    if (wifi_ind_reset_in_progress() == true)
-    {
-        return WM_SUCCESS;
-    }
-#endif
-
     if (data == NULL || txlen == 0)
         return MLAN_STATUS_FAILURE;
 
@@ -940,25 +924,6 @@ void wifi_sdio_unlock(void)
 {
     (void)OSA_MutexUnlock((osa_mutex_handle_t)txrx_mutex);
 }
-
-#if CONFIG_WIFI_IND_RESET
-static bool ind_reset_in_progress = false;
-
-bool wifi_ind_reset_in_progress(void)
-{
-    return ind_reset_in_progress;
-}
-
-void wifi_ind_reset_start(void)
-{
-    ind_reset_in_progress = true;
-}
-
-void wifi_ind_reset_stop(void)
-{
-   ind_reset_in_progress = false;
-}
-#endif
 
 static int wifi_sdio_get_command_resp_sem(unsigned long wait)
 {
@@ -1283,7 +1248,7 @@ static mlan_status wlan_handle_cmd_resp_packet(t_u8 *pmbuf)
 #endif
         case HostCmd_CMD_GET_HW_SPEC:
             (void)wlan_ret_get_hw_spec((mlan_private *)mlan_adap->priv[0], (HostCmd_DS_COMMAND *)(void *)cmdresp, NULL);
-#ifdef IW610
+#if defined(SD9177) || defined(IW610)
 #if !defined(OVERRIDE_CALIBRATION_DATA)
             t_u32 fw_cap_ext;
             fw_cap_ext = mlan_adap->priv[0]->adapter->fw_cap_ext;
@@ -1450,14 +1415,6 @@ static t_u8 *wlan_read_rcv_packet(t_u32 port, t_u32 rxlen, t_u32 rx_blocks, t_u3
     t_u32 blksize = MLAN_SDIO_BLOCK_SIZE;
     int i = 0;
 
-#if CONFIG_WIFI_IND_RESET
-    /* IR is in progress so any data received during progress should be ignored */
-    if (wifi_ind_reset_in_progress() == true)
-    {
-        return NULL;
-    }
-#endif
-
     /* cmd, evt or single port data packet */
     if ((aggr == false) && (port & (CMD_PORT_SLCT | MLAN_SDIO_BYTE_MODE_MASK)))
     {
@@ -1506,14 +1463,6 @@ static t_u8 *wlan_read_rcv_packet(t_u32 port, t_u32 rxlen, t_u32 rx_blocks, t_u3
     t_u32 blksize = MLAN_SDIO_BLOCK_SIZE;
     uint32_t resp;
     int ret;
-
-#if CONFIG_WIFI_IND_RESET
-    /* IR is in progress so any data received during progress should be ignored */
-    if (wifi_ind_reset_in_progress() == true)
-    {
-        return WM_SUCCESS;
-    }
-#endif
 
 #if CONFIG_SDIO_MULTI_PORT_RX_AGGR
     int i = 0;
@@ -2132,7 +2081,7 @@ static void wlan_fw_init_cfg(void)
     wlan_get_hw_spec();
 
     if (cal_data_valid
-#ifdef IW610
+#if defined(SD9177) || defined(IW610)
         && !cal_data_valid_fw
 #endif
     )
@@ -2447,14 +2396,6 @@ mlan_status wlan_flush_wmm_pkt(t_u8 pkt_count)
     t_u32 port_count = 0;
 #endif
 
-#if CONFIG_WIFI_IND_RESET
-    /* IR is in progress so any data sent during progress should be ignored */
-    if (wifi_ind_reset_in_progress() == true)
-    {
-        return MLAN_STATUS_SUCCESS;
-    }
-#endif
-
     if (pkt_count == 0 || ports == 0)
         return MLAN_STATUS_SUCCESS;
 
@@ -2500,14 +2441,6 @@ static mlan_status wifi_tx_data(t_u8 start_port, t_u8 ports, t_u8 pkt_cnt, t_u32
     bool ret;
 #if defined(SD8978) || defined(SD8987) || defined(SD8997) || defined(SD9097) || defined(SD9098) || defined(SD9177) || defined(IW610)
     t_u32 port_count = 0;
-#endif
-
-#if CONFIG_WIFI_IND_RESET
-    /* IR is in progress so any data sent during progress should be ignored */
-    if (wifi_ind_reset_in_progress() == true)
-    {
-        return WM_SUCCESS;
-    }
 #endif
 
 #if CONFIG_HOST_SLEEP
@@ -2611,14 +2544,6 @@ mlan_status wlan_xmit_wmm_pkt(t_u8 interface, t_u32 txlen, t_u8 *tx_buf)
 mlan_status wlan_flush_wmm_pkt(t_u8 pkt_count)
 {
     int ret;
-
-#if CONFIG_WIFI_IND_RESET
-    /* IR is in progress so any data sent during progress should be ignored */
-    if (wifi_ind_reset_in_progress() == true)
-    {
-        return WM_SUCCESS;
-    }
-#endif
 
     if (pkt_count == 0)
         return MLAN_STATUS_SUCCESS;
@@ -3877,47 +3802,47 @@ mlan_status sd_wifi_init(enum wlan_type type, const uint8_t *fw_start_addr, cons
     return ret;
 }
 
-#if (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
 mlan_status sd_wifi_reinit(enum wlan_type type, const uint8_t *fw_start_addr, const size_t size, uint8_t fw_reload)
 {
     mlan_status ret = MLAN_STATUS_SUCCESS;
+    uint32_t resp;
 
-#if (CONFIG_WIFI_IND_RESET)
-    if (wifi_reset_in_progress() == true)
+    /* During wifi reset, need to initializes
+       the wifi driver struct */
+    ret = sd_wifi_preinit();
+    if (ret != MLAN_STATUS_SUCCESS)
     {
-        /* During wifi reset, need to initializes
-           the wifi driver struct */
-        ret = sd_wifi_preinit();
-        if (ret != MLAN_STATUS_SUCCESS)
-        {
-            return MLAN_STATUS_FAILURE;
-        }
-        else
-        { /* Do Nothing */
-        }
-
-        mlan_adap->fw_start_addr = fw_start_addr;
+        return MLAN_STATUS_FAILURE;
     }
-    else
-    { /* Do Nothing */
-    }
-#endif
 
+    mlan_adap->fw_start_addr = fw_start_addr;
+    wifi_wake_up_card(&resp);
+#if CONFIG_WIFI_IND_OOB_RESET
     if (fw_reload == FW_RELOAD_NO_EMULATION)
     {
+        (void)PRINTF("Wi-Fi out-of-band reload\r\n");
+        sdio_oob_reset();
         OSA_SR_ALLOC();
         OSA_ENTER_CRITICAL();
 
-        /* Allow interrupt handler to deliver us a packet */
+        /* Block interrupt handler to deliver us a packet */
         g_txrx_flag = false;
 
         sdio_disable_interrupt();
 
         OSA_EXIT_CRITICAL();
     }
+    else
+#endif
+    {
+        (void)PRINTF("Wi-Fi in-band reload\r\n");
+        fw_reload = FW_RELOAD_SDIO_INBAND_RESET;
+    }
 
     ret = (mlan_status)firmware_download(fw_start_addr, size, intf, fw_reload);
 
+#if CONFIG_WIFI_IND_OOB_RESET
     if (ret != MLAN_STATUS_FAILURE)
     {
         if (fw_reload == FW_RELOAD_NO_EMULATION)
@@ -3932,6 +3857,7 @@ mlan_status sd_wifi_reinit(enum wlan_type type, const uint8_t *fw_start_addr, co
             OSA_EXIT_CRITICAL();
         }
     }
+#endif
 
     if (wifi_shutdown_enable)
     {
@@ -3967,7 +3893,7 @@ void sd_wifi_deinit(void)
     sg_data_list_clear_rx();
     sg_data_list_clear_tx();
 #endif
-#if (CONFIG_WIFI_IND_DNLD) && (CONFIG_WIFI_IND_RESET)
+#if CONFIG_WIFI_IND_RESET
     if (wifi_reset_in_progress() == true)
     { /* wifi_reset is based on inband IR, which does not do SDIO device re-enumerate,
         so could not deinit SD Host and SD Card */

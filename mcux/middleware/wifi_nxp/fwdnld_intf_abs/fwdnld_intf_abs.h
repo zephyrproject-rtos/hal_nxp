@@ -51,7 +51,7 @@ typedef struct intf_elems
                                           uint32_t *transferred_len);
     fwdnld_intf_ret_t (*fwdnld_intf_prepare)(struct fwdnldintf *intf, void *params);
     fwdnld_intf_ret_t (*fwdnld_intf_check_ready)(struct fwdnldintf *intf, void *params);
-#if (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_RESET
     fwdnld_intf_ret_t (*fwdnld_intf_check_reload)(struct fwdnldintf *intf, uint8_t fw_reload);
 #endif
     /* interface values to be stored */
@@ -72,7 +72,7 @@ typedef struct fwdnldintf
 #define GET_INTF_OUTBUF(x)    ((x)->intf_s.outbuf)
 #define GET_INTF_OUTBUFLEN(x) ((x)->intf_s.outbuf_len)
 
-#if CONFIG_WIFI_IND_DNLD
+#if CONFIG_WIFI_IND_RESET
 /** driver initial the fw reset */
 #define FW_RELOAD_SDIO_INBAND_RESET 1
 /** out band reset trigger reset, no interface re-emulation */
