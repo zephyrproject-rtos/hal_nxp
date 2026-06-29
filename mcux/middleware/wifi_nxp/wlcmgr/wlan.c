@@ -11041,6 +11041,12 @@ int wlan_get_scan_result(unsigned int index, struct wlan_scan_result *res)
     return WM_SUCCESS;
 }
 
+int wlan_get_scan_raw_frame(unsigned int index, uint8_t *buf, size_t buf_len,
+                            size_t *frame_len, uint32_t *freq, int8_t *rssi)
+{
+    return wifi_get_scan_raw_frame(index, buf, buf_len, frame_len, freq, rssi);
+}
+
 void wlan_set_cal_data(const uint8_t *cal_data, const unsigned int cal_data_size)
 {
     if (cal_data_size > 1)
@@ -16133,6 +16139,11 @@ int wlan_set_country_code(const char *alpha2)
 #endif
 
     return ret;
+}
+
+int wlan_get_country_code(char *alpha2)
+{
+    return wifi_get_country_code(alpha2);
 }
 
 int wlan_set_country_ie_ignore(uint8_t *ignore)

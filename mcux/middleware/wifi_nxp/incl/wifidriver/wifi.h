@@ -548,6 +548,22 @@ int wifi_unregister_event_queue(osa_msgq_handle_t event_queue);
 int wifi_get_scan_result(unsigned int index, struct wifi_scan_result2 **desc);
 
 /**
+ * Get a reconstructed raw 802.11 beacon frame for a scan result entry.
+ * The frame includes MAC header (24B) + fixed fields (12B) + IEs.
+ *
+ * @param[in] index      Index into scan table
+ * @param[out] buf       Buffer to write frame into
+ * @param[in] buf_len    Size of buffer
+ * @param[out] frame_len Actual total frame length (may exceed buf_len)
+ * @param[out] freq      Frequency in MHz
+ * @param[out] rssi      RSSI in dBm (negative value)
+ *
+ * @return WM_SUCCESS on success or error code.
+ */
+int wifi_get_scan_raw_frame(unsigned int index, uint8_t *buf, size_t buf_len,
+                            size_t *frame_len, uint32_t *freq, int8_t *rssi);
+
+/**
  * Get the count of elements in the scan list
  *
  * @param[in,out] count Pointer to a variable which will hold the count after

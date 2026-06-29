@@ -5115,24 +5115,24 @@ int wifi_get_bgscan_results(mlan_private *pmpriv)
 {
     mlan_adapter *pmadapter = pmpriv->adapter;
     int ret                 = 0;
-#if CONFIG_WPA_SUPP
     BSSDescriptor_t *bss_entry = NULL;
     int i;
-#endif
 
     ENTER();
 
 #if CONFIG_WPA_SUPP
     pmadapter->wpa_supp_scan_triggered = MTRUE;
+#endif
+
     for (i = 0; i < pmadapter->num_in_scan_table; i++)
     {
         bss_entry = &pmadapter->pscan_table[i];
         if (bss_entry && bss_entry->ies != NULL)
         {
             OSA_MemoryFree(bss_entry->ies);
+            bss_entry->ies = NULL;
         }
     }
-#endif
 
     memset(pmadapter->pscan_table, 0x00, sizeof(BSSDescriptor_t) * MRVDRV_MAX_BSSID_LIST);
     pmadapter->num_in_scan_table = 0;

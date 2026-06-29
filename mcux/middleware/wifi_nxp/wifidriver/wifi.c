@@ -984,6 +984,84 @@ int wifi_get_scan_result(unsigned int index, struct wifi_scan_result2 **desc)
     return WM_SUCCESS;
 }
 
+/* 24B MAC header + 12B fixed fields */
+#define RAW_SCAN_FRAME_HDR_LEN 36
+
+int wifi_get_scan_raw_frame(unsigned int index, uint8_t *buf, size_t buf_len,
+                            size_t *frame_len, uint32_t *freq, int8_t *rssi)
+{
+#if CONFIG_WIFI_MGMT_RAW_SCAN_RESULTS
+    BSSDescriptor_t *bss_entry;
+    uint8_t *pos;
+    size_t ies_len;
+    size_t total_len;
+    size_t copy_len;
+
+    if (buf == NULL || frame_len == NULL || freq == NULL || rssi == NULL)
+    {
+        return -WM_E_INVAL;
+    }
+
+    if (index >= mlan_adap->num_in_scan_table)
+    {
+        return -WM_FAIL;
+    }
+
+    bss_entry = &mlan_adap->pscan_table[index];
+
+    if (bss_entry->ies == NULL || bss_entry->ies_len == 0)
+    {
+        return -WM_FAIL;
+    }
+
+    ies_len = (size_t)bss_entry->ies_len;
+    total_len = RAW_SCAN_FRAME_HDR_LEN + ies_len;
+
+    *frame_len = total_len;
+    *freq = bss_entry->freq;
+    *rssi = -(int8_t)bss_entry->rssi;
+
+    copy_len = (total_len > buf_len) ? buf_len : total_len;
+
+    if (buf_len < RAW_SCAN_FRAME_HDR_LEN)
+    {
+        /* Buffer too small for frame header */
+        return -WM_FAIL;
+    }
+
+    pos = buf;
+
+    /* 802.11 MAC header (24 bytes) */
+    *pos++ = 0x80;
+    *pos++ = 0x00;
+    *pos++ = 0x00;
+    *pos++ = 0x00;
+    (void)memset(pos, 0xff, MLAN_MAC_ADDR_LENGTH);
+    pos += MLAN_MAC_ADDR_LENGTH;
+    (void)memcpy(pos, bss_entry->mac_address, MLAN_MAC_ADDR_LENGTH);
+    pos += MLAN_MAC_ADDR_LENGTH;
+    (void)memcpy(pos, bss_entry->mac_address, MLAN_MAC_ADDR_LENGTH);
+    pos += MLAN_MAC_ADDR_LENGTH;
+    *pos++ = 0x00;
+    *pos++ = 0x00;
+
+    /* Fixed fields (12 bytes) */
+    (void)memcpy(pos, bss_entry->time_stamp, 8);
+    pos += 8;
+    *pos++ = (uint8_t)(bss_entry->beacon_period & 0xff);
+    *pos++ = (uint8_t)((bss_entry->beacon_period >> 8) & 0xff);
+    (void)memcpy(pos, &bss_entry->cap_info, 2);
+    pos += 2;
+
+    /* IEs */
+    (void)memcpy(pos, bss_entry->ies, copy_len - RAW_SCAN_FRAME_HDR_LEN);
+
+    return WM_SUCCESS;
+#else
+    return -WM_FAIL;
+#endif /* CONFIG_WIFI_MGMT_RAW_SCAN_RESULTS */
+}
+
 int wifi_register_event_queue(osa_msgq_handle_t event_queue)
 {
     if (event_queue == MNULL)

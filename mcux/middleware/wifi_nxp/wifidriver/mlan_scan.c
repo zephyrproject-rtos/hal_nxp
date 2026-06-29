@@ -963,25 +963,22 @@ static mlan_status wlan_scan_channel_list(IN mlan_private *pmpriv,
 
         if (wlan_get_abort_split_scan())
         {
-#if CONFIG_WPA_SUPP
             BSSDescriptor_t *bss_entry = NULL;
             int i;
-#endif
             wlan_set_abort_split_scan(false);
             wlan_set_split_scan_status(false);
-#if CONFIG_WPA_SUPP
             for (i = 0; i < pmadapter->num_in_scan_table; i++)
             {
                 bss_entry = &pmadapter->pscan_table[i];
                 if (bss_entry && bss_entry->ies != NULL)
                 {
                     OSA_MemoryFree(bss_entry->ies);
+                    bss_entry->ies = NULL;
                 }
             }
 
             pmadapter->num_in_scan_table = 0;
             ret                          = MLAN_STATUS_FAILURE;
-#endif
             break;
         }
     }
@@ -1649,12 +1646,14 @@ static mlan_status wlan_interpret_bss_desc_with_ie(IN pmlan_adapter pmadapter,
 
     HEXDUMP("InterpretIE: IE info", (t_u8 *)pcurrent_ptr, bytes_left_for_current_beacon);
 
-#if CONFIG_WPA_SUPP
-    /* Store IE pointer and len for wpa supplicant scan result, no need to process each IE below*/
+#if CONFIG_WPA_SUPP || CONFIG_WIFI_MGMT_RAW_SCAN_RESULTS
+#if CONFIG_WPA_SUPP && !CONFIG_WIFI_MGMT_RAW_SCAN_RESULTS
     if (pmadapter->wpa_supp_scan_triggered == MTRUE)
+#endif
     {
+        /* Store raw IEs for scan result consumers (wpa_supplicant, raw scan results, etc.) */
         wifi_d("Alloc ies for BSS");
-        pbss_entry->ies = (u8 *)OSA_MemoryAllocate(bytes_left_for_current_beacon);
+        pbss_entry->ies = (t_u8 *)OSA_MemoryAllocate(bytes_left_for_current_beacon);
         if (pbss_entry->ies == MNULL)
         {
             wifi_d("Failed to alloc memory for BSS ies");
@@ -2715,7 +2714,6 @@ mlan_status wlan_scan_networks(IN mlan_private *pmpriv,
 
     if (keep_previous_scan == MFALSE)
     {
-#if CONFIG_WPA_SUPP
         BSSDescriptor_t *bss_entry = NULL;
         int i;
 
@@ -2725,9 +2723,9 @@ mlan_status wlan_scan_networks(IN mlan_private *pmpriv,
             if (bss_entry && bss_entry->ies != NULL)
             {
                 OSA_MemoryFree(bss_entry->ies);
+                bss_entry->ies = NULL;
             }
         }
-#endif
         (void)__memset(pmadapter, pmadapter->pscan_table, 0x00, sizeof(BSSDescriptor_t) * MRVDRV_MAX_BSSID_LIST);
         pmadapter->num_in_scan_table = 0;
     }
@@ -2883,12 +2881,10 @@ static void adjust_pointers_to_internal_buffers(BSSDescriptor_t *pbss_entry, BSS
         pbss_entry->prsnxo_ie = &pbss_entry->rsnxo_ie_saved;
     }
 #endif
-#if CONFIG_WPA_SUPP
     if (pbss_new_entry->ies != NULL)
     {
         pbss_entry->ies = pbss_new_entry->ies;
     }
-#endif
 }
 
 #if !(CONFIG_EXT_SCAN_SUPPORT) || (CONFIG_BG_SCAN)
@@ -3100,7 +3096,6 @@ mlan_status wlan_ret_802_11_scan(IN mlan_private *pmpriv, IN HostCmd_DS_COMMAND 
                     bss_new_entry->mac_address[1], bss_new_entry->mac_address[2], bss_new_entry->mac_address[3],
                     bss_new_entry->mac_address[4], bss_new_entry->mac_address[5]);
 
-#if CONFIG_WPA_SUPP
 #if CONFIG_WPA_SUPP_WPS
             if (pmpriv->wps.session_enable == MTRUE)
             {
@@ -3115,7 +3110,6 @@ mlan_status wlan_ret_802_11_scan(IN mlan_private *pmpriv, IN HostCmd_DS_COMMAND 
                 }
             }
 #endif /* CONFIG_WPA_SUPP_WPS */
-#endif
 
             /*
              * Search the scan table for the same bssid
@@ -3174,13 +3168,11 @@ mlan_status wlan_ret_802_11_scan(IN mlan_private *pmpriv, IN HostCmd_DS_COMMAND 
                     (bss_new_entry->rssi > pmadapter->pscan_table[bss_idx].rssi))
                 {
                     wscan_d("skip update the duplicate entry with low rssi");
-#if CONFIG_WPA_SUPP
                     if (bss_new_entry->ies != NULL)
                     {
                         OSA_MemoryFree(bss_new_entry->ies);
                         bss_new_entry->ies = NULL;
                     }
-#endif
                     continue;
                 }
             }
@@ -3241,7 +3233,6 @@ mlan_status wlan_ret_802_11_scan(IN mlan_private *pmpriv, IN HostCmd_DS_COMMAND 
                                        sizeof(pmadapter->pscan_table[0]));
                         adjust_pointers_to_internal_buffers(&pmadapter->pscan_table[0], bss_new_entry);
                     }
-#if CONFIG_WPA_SUPP
                     /* If the scan table is full, free ies of the new entry with lowest rssi, which won't be added into
                      * table */
                     else
@@ -3252,7 +3243,6 @@ mlan_status wlan_ret_802_11_scan(IN mlan_private *pmpriv, IN HostCmd_DS_COMMAND 
                             bss_new_entry->ies = NULL;
                         }
                     }
-#endif
                     num_in_table--;
                     continue;
                 }
@@ -3275,7 +3265,6 @@ mlan_status wlan_ret_802_11_scan(IN mlan_private *pmpriv, IN HostCmd_DS_COMMAND 
                                    sizeof(pmadapter->pscan_table[lowest_rssi_index]));
                     adjust_pointers_to_internal_buffers(&pmadapter->pscan_table[lowest_rssi_index], bss_new_entry);
                 }
-#if CONFIG_WPA_SUPP
                 /* If the scan table is full, free ies of the new entry with lowest rssi, which won't be added into
                  * table */
                 else
@@ -3286,18 +3275,15 @@ mlan_status wlan_ret_802_11_scan(IN mlan_private *pmpriv, IN HostCmd_DS_COMMAND 
                         bss_new_entry->ies = NULL;
                     }
                 }
-#endif
             }
             else
             {
-#if CONFIG_WPA_SUPP
                 /* Free ies of the old entry if it's duplicate entry */
                 if (pmadapter->pscan_table[bss_idx].ies != NULL)
                 {
                     OSA_MemoryFree(pmadapter->pscan_table[bss_idx].ies);
                     pmadapter->pscan_table[bss_idx].ies = NULL;
                 }
-#endif
 
                 /* Copy the locally created bss_new_entry to the scan table */
                 (void)__memcpy(pmadapter, &pmadapter->pscan_table[bss_idx], bss_new_entry,
@@ -3309,13 +3295,11 @@ mlan_status wlan_ret_802_11_scan(IN mlan_private *pmpriv, IN HostCmd_DS_COMMAND 
         {
             /* Error parsing/interpreting the scan response, skipped */
             PRINTM(MERROR, "SCAN_RESP: wlan_interpret_bss_desc_with_ie returned error\n");
-#if CONFIG_WPA_SUPP
             if (bss_new_entry->ies != NULL)
             {
                 OSA_MemoryFree(bss_new_entry->ies);
                 bss_new_entry->ies = NULL;
             }
-#endif
         }
         idx++;
     }
@@ -3865,11 +3849,13 @@ static t_void wlan_parse_non_trans_bssid_profile(mlan_private *pmpriv,
         (void)__memcpy(pmadapter, &bss_new_entry->cap_info, &pcap->cap,
                        MIN(sizeof(IEEEtypes_CapInfo_t), sizeof(IEEEtypes_CapInfo_t)));
         bss_new_entry->multi_bssid_ap = MULTI_BSSID_SUB_AP;
-#if CONFIG_WPA_SUPP
+#if CONFIG_WPA_SUPP || CONFIG_WIFI_MGMT_RAW_SCAN_RESULTS
+#if CONFIG_WPA_SUPP && !CONFIG_WIFI_MGMT_RAW_SCAN_RESULTS
         if (pmadapter->wpa_supp_scan_triggered == MTRUE)
+#endif
         {
             wifi_d("Alloc ies for Multi BSS. ies_len=%d", bss_new_entry->beacon_buf_size);
-            bss_new_entry->ies = (u8 *)OSA_MemoryAllocate(bss_new_entry->beacon_buf_size - BEACON_FIX_SIZE);
+            bss_new_entry->ies = (t_u8 *)OSA_MemoryAllocate(bss_new_entry->beacon_buf_size - BEACON_FIX_SIZE);
             if (bss_new_entry->ies == MNULL)
             {
                 wifi_d("Failed to alloc memory for Multi BSS ies");
@@ -3877,7 +3863,7 @@ static t_void wlan_parse_non_trans_bssid_profile(mlan_private *pmpriv,
             }
             (void)__memcpy(pmadapter, bss_new_entry->ies, bss_new_entry->pbeacon_buf + BEACON_FIX_SIZE,
                            bss_new_entry->beacon_buf_size - BEACON_FIX_SIZE);
-            bss_new_entry->ies_len = bss_new_entry->beacon_buf_size;
+            bss_new_entry->ies_len = bss_new_entry->beacon_buf_size - BEACON_FIX_SIZE;
         }
 #endif
         /*add to scan table*/
@@ -3931,7 +3917,6 @@ static t_void wlan_parse_non_trans_bssid_profile(mlan_private *pmpriv,
                                sizeof(pmadapter->pscan_table[lowest_rssi_index]));
                 adjust_pointers_to_internal_buffers(&pmadapter->pscan_table[lowest_rssi_index], bss_new_entry);
             }
-#if CONFIG_WPA_SUPP
             /* If the scan table is full, free ies of the new entry with lowest rssi, which won't be added into table */
             else
             {
@@ -3941,18 +3926,15 @@ static t_void wlan_parse_non_trans_bssid_profile(mlan_private *pmpriv,
                     bss_new_entry->ies = NULL;
                 }
             }
-#endif
         }
         else
         {
             /* Copy the locally created bss_new_entry to the scan table */
-#if CONFIG_WPA_SUPP
             if (pmadapter->pscan_table[bss_idx].ies != NULL)
             {
                 OSA_MemoryFree(pmadapter->pscan_table[bss_idx].ies);
                 pmadapter->pscan_table[bss_idx].ies = NULL;
             }
-#endif
             (void)__memcpy(pmadapter, &pmadapter->pscan_table[bss_idx], bss_new_entry,
                            sizeof(pmadapter->pscan_table[bss_idx]));
             adjust_pointers_to_internal_buffers(&pmadapter->pscan_table[bss_idx], bss_new_entry);
@@ -4225,7 +4207,6 @@ static mlan_status wlan_parse_ext_scan_result(IN mlan_private *pmpriv,
                    bss_new_entry->mac_address[1], bss_new_entry->mac_address[2], bss_new_entry->mac_address[3],
                    bss_new_entry->mac_address[4], bss_new_entry->mac_address[5]);
 
-#if CONFIG_WPA_SUPP
 #if CONFIG_WPA_SUPP_WPS
             if (pmpriv->wps.session_enable == MTRUE)
             {
@@ -4240,7 +4221,6 @@ static mlan_status wlan_parse_ext_scan_result(IN mlan_private *pmpriv,
                 }
             }
 #endif /* CONFIG_WPA_SUPP_WPS */
-#endif
 
             band = BAND_G;
             /*
@@ -4295,13 +4275,11 @@ static mlan_status wlan_parse_ext_scan_result(IN mlan_private *pmpriv,
 
                 if (idx2 == NELEMENTS(pmpriv->filter_ssid))
                 {
-#if CONFIG_WPA_SUPP
                     if (bss_new_entry->ies != NULL)
                     {
                         OSA_MemoryFree(bss_new_entry->ies);
                         bss_new_entry->ies = NULL;
                     }
-#endif
                     continue;
                 }
             }
@@ -4363,13 +4341,11 @@ static mlan_status wlan_parse_ext_scan_result(IN mlan_private *pmpriv,
                     (bss_new_entry->rssi > pmadapter->pscan_table[bss_idx].rssi))
                 {
                     PRINTM(MCMND, "skip update the duplicate entry with low rssi\n");
-#if CONFIG_WPA_SUPP
                     if (bss_new_entry->ies != NULL)
                     {
                         OSA_MemoryFree(bss_new_entry->ies);
                         bss_new_entry->ies = NULL;
                     }
-#endif
                     continue;
                 }
             }
@@ -4378,18 +4354,15 @@ static mlan_status wlan_parse_ext_scan_result(IN mlan_private *pmpriv,
             {
                 if (pmadapter->pscan_table[lowest_rssi_index].rssi > bss_new_entry->rssi)
                 {
-#if CONFIG_WPA_SUPP
                     if (pmadapter->pscan_table[lowest_rssi_index].ies != NULL)
                     {
                         OSA_MemoryFree(pmadapter->pscan_table[lowest_rssi_index].ies);
                         pmadapter->pscan_table[lowest_rssi_index].ies = NULL;
                     }
-#endif
                     (void)__memcpy(pmadapter, &pmadapter->pscan_table[lowest_rssi_index], bss_new_entry,
                                    sizeof(pmadapter->pscan_table[lowest_rssi_index]));
                     adjust_pointers_to_internal_buffers(&pmadapter->pscan_table[lowest_rssi_index], bss_new_entry);
                 }
-#if CONFIG_WPA_SUPP
                 /* If the scan table is full, free ies of the new entry with lowest rssi, which won't be added into
                  * table */
                 else
@@ -4400,18 +4373,15 @@ static mlan_status wlan_parse_ext_scan_result(IN mlan_private *pmpriv,
                         bss_new_entry->ies = NULL;
                     }
                 }
-#endif
             }
             else
             {
                 /* Copy the locally created bss_new_entry to the scan table */
-#if CONFIG_WPA_SUPP
                 if (pmadapter->pscan_table[bss_idx].ies != NULL)
                 {
                     OSA_MemoryFree(pmadapter->pscan_table[bss_idx].ies);
                     pmadapter->pscan_table[bss_idx].ies = NULL;
                 }
-#endif
                 (void)__memcpy(pmadapter, &pmadapter->pscan_table[bss_idx], bss_new_entry,
                                sizeof(pmadapter->pscan_table[bss_idx]));
                 adjust_pointers_to_internal_buffers(&pmadapter->pscan_table[bss_idx], bss_new_entry);
@@ -4421,13 +4391,11 @@ static mlan_status wlan_parse_ext_scan_result(IN mlan_private *pmpriv,
         {
             /* Error parsing/interpreting the scan response, skipped */
             PRINTM(MERROR, "EXT_SCAN: wlan_interpret_bss_desc_with_ie returned error\n");
-#if CONFIG_WPA_SUPP
             if (bss_new_entry->ies != NULL)
             {
                 OSA_MemoryFree(bss_new_entry->ies);
                 bss_new_entry->ies = NULL;
             }
-#endif
         }
     }
 

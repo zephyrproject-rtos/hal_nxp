@@ -2540,12 +2540,10 @@ typedef struct _BSSDescriptor_t
     /** Max allocated size for updated scan response */
     t_u32 beacon_buf_size_max;
 
-#if CONFIG_WPA_SUPP
-    /** Pointer to the returned scan response */
+    /** IEs */
     t_u8 *ies;
-    /** Length of the stored scan response */
+    /** IEs length */
     t_u32 ies_len;
-#endif
 
     /* Added for WMSDK */
 

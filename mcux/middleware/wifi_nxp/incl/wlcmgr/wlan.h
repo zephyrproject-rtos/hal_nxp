@@ -3187,6 +3187,22 @@ int wlan_scan_with_opt(wlan_scan_params_v2_t t_wlan_scan_param);
  */
 int wlan_get_scan_result(unsigned int index, struct wlan_scan_result *res);
 
+/**
+ * Get a reconstructed raw 802.11 beacon frame for a scan result entry.
+ * The frame includes MAC header (24B) + fixed fields (12B) + IEs.
+ *
+ * @param[in] index      Index into scan table
+ * @param[out] buf       Buffer to write frame into
+ * @param[in] buf_len    Size of buffer
+ * @param[out] frame_len Actual total frame length (may exceed buf_len)
+ * @param[out] freq      Frequency in MHz
+ * @param[out] rssi      RSSI in dBm (negative value)
+ *
+ * @return WM_SUCCESS on success or error code.
+ */
+int wlan_get_scan_raw_frame(unsigned int index, uint8_t *buf, size_t buf_len,
+                            size_t *frame_len, uint32_t *freq, int8_t *rssi);
+
 #ifdef WLAN_LOW_POWER_ENABLE
 /**
  * Enable low power mode in Wi-Fi Firmware.
@@ -7257,6 +7273,14 @@ int wlan_stop_cloud_keep_alive(wlan_cloud_keep_alive_t *cloud_keep_alive);
  * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
  */
 int wlan_set_country_code(const char *alpha2);
+
+/** Get current country code.
+ *
+ * \param[out] alpha2  Buffer to store the 2-character country code.
+ *
+ * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
+ */
+int wlan_get_country_code(char *alpha2);
 
 /** Set ignore region code.
  *
