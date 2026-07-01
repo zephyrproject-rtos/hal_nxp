@@ -381,6 +381,7 @@ typedef enum IRQn {
 #define __CA55_REV                     0x0004    /**< Core revision r0p4 */
 #define __GIC_PRIO_BITS                4         /**< Number of priority bits implemented in the GIC */
 #define __FPU_PRESENT                  1         /**< Defines if an FPU is present or not */
+#define __FPU_USED                     1         /**< Indicates whether an FPU is used or not */
 #define __MMU_PRESENT                  1         /**< MMU present or not */
 #define __TIM_PRESENT                  1         /**< TIM present or not */
 #define __CACHE_PRESENT                1         /**< CACHE present or not */
