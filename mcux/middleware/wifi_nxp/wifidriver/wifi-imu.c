@@ -138,6 +138,9 @@ void wrapper_wifi_ret_mib(void *resp);
 uint32_t dev_value1 = -1;
 uint8_t dev_mac_addr[MLAN_MAC_ADDR_LENGTH];
 uint8_t dev_mac_addr_uap[MLAN_MAC_ADDR_LENGTH];
+#if CONFIG_WPA_SUPP_P2P
+uint8_t dev_mac_addr_wfd[MLAN_MAC_ADDR_LENGTH];
+#endif
 static uint8_t dev_fw_ver_ext[MLAN_MAX_VER_STR_LEN];
 #if CONFIG_HOST_SLEEP
 extern int is_hs_handshake_done;
@@ -227,6 +230,14 @@ int wifi_get_device_uap_mac_addr(wifi_mac_addr_t *mac_addr_uap)
     (void)memcpy(mac_addr_uap->mac, dev_mac_addr_uap, MLAN_MAC_ADDR_LENGTH);
     return WM_SUCCESS;
 }
+
+#if CONFIG_WPA_SUPP_P2P
+int wifi_get_device_wfd_mac_addr(wifi_mac_addr_t *mac_addr_wfd)
+{
+    (void)memcpy(mac_addr_wfd->mac, dev_mac_addr_wfd, MLAN_MAC_ADDR_LENGTH);
+    return WM_SUCCESS;
+}
+#endif
 
 int wifi_get_device_firmware_version_ext(wifi_fw_version_ext_t *fw_ver_ext)
 {
@@ -726,6 +737,28 @@ static int wlan_get_mac_addr_uap()
 }
 #endif
 
+#if CONFIG_WPA_SUPP_P2P
+static int wlan_get_mac_addr_wfd()
+{
+    int seq_number = 0;
+
+    seq_number = wifi_get_cmd_seq_num((mlan_private *)mlan_adap->priv[MLAN_BSS_TYPE_WIFIDIRECT]);
+    (void)memset(outbuf, 0, IMU_INIT_FW_CMD_SIZE);
+
+    /* imupkt = outbuf */
+    wifi_prepare_get_mac_addr_cmd(&imupkt->hostcmd, seq_number);
+
+    imupkt->pkttype = MLAN_TYPE_CMD;
+    imupkt->size    = imupkt->hostcmd.size + INTF_HEADER_LEN;
+
+    last_cmd_sent = HostCmd_CMD_802_11_MAC_ADDRESS;
+
+    /* send CMD53 to write the command to get mac address */
+    wifi_send_fw_cmd(HostCmd_CMD_802_11_MAC_ADDRESS, (uint8_t *)outbuf, imupkt->size);
+    return true;
+}
+#endif
+
 void wifi_prepare_get_fw_ver_ext_cmd(void *cmd, int seq_number, int version_str_sel);
 static int wlan_get_fw_ver_ext(int version_str_sel)
 {
@@ -1044,6 +1077,17 @@ static int wlan_fw_init_cfg()
     {
         return false;
     }
+
+#if CONFIG_WPA_SUPP_P2P
+    last_resp_rcvd = 0;
+
+    wlan_get_mac_addr_wfd();
+
+    if (wlan_wait_for_last_resp_rcvd(HostCmd_CMD_802_11_MAC_ADDRESS) != true)
+    {
+        return false;
+    }
+#endif
 
     wcmdr_d("CMD : GET_FW_VER_EXT (0x97)");
 

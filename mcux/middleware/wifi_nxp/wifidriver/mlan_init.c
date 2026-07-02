@@ -163,6 +163,8 @@ mlan_status wlan_init_priv(pmlan_private priv)
     priv->wpa_is_gtk_set = MFALSE;
 #endif /* STA_SUPPORT */
 
+    priv->mgmt_subtype_mask = 0;
+
 #if defined(RW610) || defined(IW610)
     priv->tx_bf_cap = DEFAULT_11N_TX_BF_CAP;
 #else
@@ -225,6 +227,7 @@ mlan_status wlan_init_priv(pmlan_private priv)
 #if CONFIG_WPA_SUPP_AP
     priv->beacon_index        = MLAN_MGMT_IE_INVALID_IDX;
     priv->proberesp_index     = MLAN_MGMT_IE_INVALID_IDX;
+    priv->proberesp_p2p_index = MLAN_MGMT_IE_INVALID_IDX;
     priv->assocresp_index     = MLAN_MGMT_IE_INVALID_IDX;
     priv->beacon_wps_index    = MLAN_MGMT_IE_INVALID_IDX;
     priv->beacon_vendor_index = MLAN_MGMT_IE_INVALID_IDX;
@@ -237,7 +240,9 @@ mlan_status wlan_init_priv(pmlan_private priv)
 #if CONFIG_WPA_SUPP_DPP
     priv->is_dpp_connect = MFALSE;
 #endif
-
+#if CONFIG_WPA_SUPP_P2P
+    priv->p2p_mgmt_bitmap_index = MLAN_MGMT_IE_INVALID_IDX;
+#endif
     LEAVE();
     return ret;
 }
