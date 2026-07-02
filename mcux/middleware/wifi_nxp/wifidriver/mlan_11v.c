@@ -297,7 +297,7 @@ void wlan_process_mgmt_wnm_btm_req(t_u8 *pos, t_u8 *end, t_u8 *src_addr, t_u8 *d
             (void)memcpy((void *)pnlist_rep_param->dst_addr, (const void *)dest_addr, (size_t)MLAN_MAC_ADDR_LENGTH);
         }
 
-        if (wifi_event_completion(WIFI_EVENT_NLIST_REPORT, WIFI_EVENT_REASON_SUCCESS, (void *)pnlist_rep_param) !=
+        if (wifi_event_completion(WLAN_BSS_TYPE_STA, WIFI_EVENT_NLIST_REPORT, WIFI_EVENT_REASON_SUCCESS, (void *)pnlist_rep_param) !=
             WM_SUCCESS)
         {
             goto out;
@@ -325,7 +325,7 @@ void wlan_process_mgmt_wnm_btm_req(t_u8 *pos, t_u8 *end, t_u8 *src_addr, t_u8 *d
     }
 
 out:
-    (void)wifi_event_completion(WIFI_EVENT_NLIST_REPORT, WIFI_EVENT_REASON_FAILURE, NULL);
+    (void)wifi_event_completion(WLAN_BSS_TYPE_STA, WIFI_EVENT_NLIST_REPORT, WIFI_EVENT_REASON_FAILURE, (void *)NULL);
 #if !CONFIG_MEM_POOLS
     if (preport)
         OSA_MemoryFree((void *)preport);
