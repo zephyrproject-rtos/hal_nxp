@@ -1588,8 +1588,7 @@ t_u32 wlan_get_supported_rates(mlan_private *pmpriv,
         }
         else if (bands & (BAND_B | BAND_G))
         {
-            /* BG only */
-#ifdef WIFI_DIRECT_SUPPORT
+#if CONFIG_WPA_SUPP_P2P
             if (pmpriv->bss_type == MLAN_BSS_TYPE_WIFIDIRECT)
                 k = wlan_copy_rates(rates, k, SupportedRates_G, sizeof(SupportedRates_G));
             else
