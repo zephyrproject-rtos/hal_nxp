@@ -625,7 +625,7 @@ void wifi_nxp_wpa_supp_event_proc_deauth(void *if_priv, nxp_wifi_event_mlme_t *d
         event.deauth_info.ie_len = (frame + frame_len - mgmt->u.deauth.variable);
     }
 
-    (void)wifi_event_completion(WIFI_EVENT_DEAUTHENTICATION, le_to_host16(mgmt->u.deauth.reason_code), NULL);
+    (void)wifi_event_completion(wifi_if_ctx_rtos->bss_type, WIFI_EVENT_DEAUTHENTICATION, le_to_host16(mgmt->u.deauth.reason_code), NULL);
 
     wifi_if_ctx_rtos->supp_callbk_fns.deauth(wifi_if_ctx_rtos->supp_drv_if_ctx, &event, mgmt);
 }
@@ -669,7 +669,7 @@ void wifi_nxp_wpa_supp_event_proc_disassoc(void *if_priv, nxp_wifi_event_mlme_t 
     wifi_if_ctx_rtos->supp_callbk_fns.disassoc(wifi_if_ctx_rtos->supp_drv_if_ctx, &event);
 }
 
-int wifi_nxp_supp_state(void)
+int wifi_nxp_supp_state(mlan_bss_type bss_type)
 {
     struct wpa_supplicant *wpa_s;
     char if_name[CONFIG_NET_INTERFACE_NAME_LEN + 1];
@@ -680,7 +680,22 @@ int wifi_nxp_supp_state(void)
         return 0;
     }
 
-    ret = nxp_net_if_get_name((void *)net_get_sta_interface(), if_name, sizeof(if_name));
+    if (bss_type == MLAN_BSS_TYPE_STA)
+    {
+        ret = nxp_net_if_get_name((void *)net_get_sta_interface(), if_name, sizeof(if_name));
+    }
+#if CONFIG_WPA_SUPP_P2P
+    else if (bss_type == MLAN_BSS_TYPE_WIFIDIRECT)
+    {
+        ret = nxp_net_if_get_name((void *)net_get_wfd_interface(), if_name, sizeof(if_name));
+    }
+#endif
+    else
+    {
+        supp_e("%s: Invalid bss type", __func__);
+        return 0;
+    }
+
     if (!ret) {
         supp_e("Cannot get interface name (%d)", ret);
         return 0;
@@ -744,6 +759,10 @@ void *wifi_nxp_wpa_supp_dev_init(void *supp_drv_if_ctx,
 
     if (strstr(iface_name, "ml"))
         wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)wm_wifi.if_priv;
+#if CONFIG_WPA_SUPP_P2P
+    else if (strstr(iface_name, "wf"))
+        wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)wm_wifi.if_priv_wfd;
+#endif
     else
         wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)wm_wifi.hapd_if_priv;
 
@@ -762,6 +781,12 @@ void *wifi_nxp_wpa_supp_dev_init(void *supp_drv_if_ctx,
     {
         wifi_if_ctx_rtos->bss_type = BSS_TYPE_STA;
     }
+#if CONFIG_WPA_SUPP_P2P
+    else if (strstr(iface_name, "wf"))
+    {
+        wifi_if_ctx_rtos->bss_type = BSS_TYPE_WFD;
+    }
+#endif
     else
     {
         wifi_if_ctx_rtos->bss_type = BSS_TYPE_UAP;
@@ -774,16 +799,33 @@ void *wifi_nxp_wpa_supp_dev_init(void *supp_drv_if_ctx,
         return NULL;
     }
 
-    g_extended_capa = (uint8_t *)OSA_MemoryAllocate(sizeof(extended_capa));
-    if (g_extended_capa)
+    if (g_extended_capa == NULL)
     {
-        os_memcpy(g_extended_capa, extended_capa, sizeof(extended_capa));
+        g_extended_capa = (uint8_t *)OSA_MemoryAllocate(sizeof(extended_capa));
+        if (g_extended_capa)
+        {
+            os_memcpy(g_extended_capa, extended_capa, sizeof(extended_capa));
+        }
     }
 
-    g_extended_capa_mask = (uint8_t *)OSA_MemoryAllocate(sizeof(extended_capa_mask));
-    if (g_extended_capa_mask)
+    if (g_extended_capa_mask == NULL)
     {
-        os_memcpy(g_extended_capa_mask, extended_capa_mask, sizeof(extended_capa_mask));
+        g_extended_capa_mask = (uint8_t *)OSA_MemoryAllocate(sizeof(extended_capa_mask));
+        if (g_extended_capa_mask)
+        {
+            os_memcpy(g_extended_capa_mask, extended_capa_mask, sizeof(extended_capa_mask));
+        }
+    }
+
+#if CONFIG_WPA_SUPP_P2P
+    if ((wifi_if_ctx_rtos->bss_type == BSS_TYPE_STA)
+       || (wifi_if_ctx_rtos->bss_type == BSS_TYPE_WFD))
+#else
+    if (wifi_if_ctx_rtos->bss_type == BSS_TYPE_STA)
+#endif
+    {
+        t_u32 mgmt_subtype_mask = WLAN_MGMT_ACTION;
+        (void)wifi_set_rx_mgmt_indication(wifi_if_ctx_rtos->bss_type, mgmt_subtype_mask);
     }
 
     memcpy(&wifi_if_ctx_rtos->supp_callbk_fns, supp_callbk_fns, sizeof(wifi_if_ctx_rtos->supp_callbk_fns));
@@ -894,6 +936,20 @@ int wifi_nxp_wpa_supp_scan2(void *if_priv, struct wpa_driver_scan_params *params
     {
         num_chans = 0;
     }
+
+#if CONFIG_WPA_SUPP_P2P
+    if (wifi_if_ctx_rtos->bss_type == BSS_TYPE_WFD)
+    {
+        wm_wifi.wpa_supp_p2p_scan = true;
+
+        if ((params->ssids[0].ssid_len) && (!memcmp(params->ssids[0].ssid, "DIRECT-", 7)))
+        {
+            memcpy(ssid_v, (const char *)params->ssids[0].ssid, params->ssids[0].ssid_len);
+            ssid = (const char *)&ssid_v;
+        }
+    }
+#endif
+
     uint8_t ssid_off = 0;
     for (i = 0;  i < params->num_ssids; i++)
     {
@@ -1001,6 +1057,12 @@ int wifi_nxp_wpa_supp_scan2(void *if_priv, struct wpa_driver_scan_params *params
     if (status != WM_SUCCESS)
     {
         wifi_d("wifi send scan cmd failed");
+#if CONFIG_WPA_SUPP_P2P
+        if (wifi_if_ctx_rtos->bss_type == BSS_TYPE_WFD)
+        {
+            wm_wifi.wpa_supp_p2p_scan = false;
+        }
+#endif
         goto out;
     }
 
@@ -1371,12 +1433,21 @@ int wifi_nxp_wpa_supp_scan_results_get(void *if_priv)
 
     wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
 
-    num = wifi_nxp_scan_res_num();
+    num = wifi_nxp_scan_res_num(wifi_if_ctx_rtos->bss_type);
 
     if (num == 0)
     {
         supp_d("%s: No networks found", __func__);
-        goto out;
+        sr = (struct wpa_scan_res *)OSA_MemoryAllocate(sizeof(*sr));
+        if (!sr)
+        {
+           supp_e("%s: Failed to alloc sr", __func__);
+           goto out;
+        }
+        wifi_if_ctx_rtos->supp_callbk_fns.scan_res(wifi_if_ctx_rtos->supp_drv_if_ctx, sr, false);
+        OSA_MemoryFree((void *)sr);
+        sr = NULL;
+        goto done;
     }
 
     for (i = 0; i < num; i++)
@@ -1394,6 +1465,7 @@ int wifi_nxp_wpa_supp_scan_results_get(void *if_priv)
         }
     }
 
+done:
     ret = 0;
 out:
     return ret;
@@ -1424,7 +1496,7 @@ int wifi_nxp_wpa_supp_survey_results_get(void *if_priv)
 
     wifi_survey_params->hostapd = wifi_if_ctx_rtos->hostapd;
 
-    status = wifi_event_completion(WIFI_EVENT_SURVEY_RESULT_GET, WIFI_EVENT_REASON_SUCCESS, wifi_survey_params);
+    status = wifi_event_completion(wifi_if_ctx_rtos->bss_type, WIFI_EVENT_SURVEY_RESULT_GET, WIFI_EVENT_REASON_SUCCESS, wifi_survey_params);
     if (status != WM_SUCCESS)
     {
         supp_e("%s: wifi_supp_survey_res_get failed", __func__);
@@ -1456,13 +1528,21 @@ int wifi_nxp_wpa_supp_deauthenticate(void *if_priv, const char *addr, unsigned s
         wifi_if_ctx_rtos->ft_roaming = false;
     }
 
-    status = wifi_nxp_deauthenticate(MLAN_BSS_TYPE_STA, (const unsigned char *)addr, reason_code);
+    status = wifi_nxp_deauthenticate(wifi_if_ctx_rtos->bss_type, (const unsigned char *)addr, reason_code);
 
     if (status != WM_SUCCESS)
     {
         supp_e("%s: wifi_nxp_wpa_supp_deauthenticate failed", __func__);
         goto out;
     }
+
+#if CONFIG_WPA_SUPP_P2P
+    if (wifi_if_ctx_rtos->bss_type == MLAN_BSS_TYPE_WIFIDIRECT)
+    {
+        mlan_adap->priv[2]->p2p_gc_network = false;
+    }
+#endif
+
     ret = 0;
 out:
     return ret;
@@ -1640,7 +1720,7 @@ int wifi_nxp_wpa_supp_authenticate(void *if_priv, struct wpa_driver_auth_params 
 
     wifi_d("initiating wifi-auth");
 
-    status = wifi_send_mgmt_auth_request(channel, auth_alg, auth_trans_num, status_code, params->bssid,
+    status = wifi_send_mgmt_auth_request(wifi_if_ctx_rtos->bss_type, channel, auth_alg, auth_trans_num, status_code, params->bssid,
                                          (const unsigned char *)pos, len);
 
     if (status != WM_SUCCESS)
@@ -1754,7 +1834,7 @@ int wifi_nxp_wpa_supp_associate(void *if_priv, struct wpa_driver_associate_param
 
     wifi_d("initiating wifi-assoc");
 
-    status = wifi_nxp_send_assoc(assoc_params);
+    status = wifi_nxp_send_assoc(wifi_if_ctx_rtos->bss_type, assoc_params);
 
     if (status != WM_SUCCESS)
     {
@@ -2012,7 +2092,7 @@ int wifi_nxp_wpa_supp_set_supp_port(void *if_priv, int authorized, char *bssid)
             if (authorized)
             {
 #if !CONFIG_WIFI_NM_WPA_SUPPLICANT
-                (void)wifi_event_completion(WIFI_EVENT_AUTHENTICATION, WIFI_EVENT_REASON_SUCCESS, NULL);
+                (void)wifi_event_completion(wifi_if_ctx_rtos->bss_type, WIFI_EVENT_AUTHENTICATION, WIFI_EVENT_REASON_SUCCESS, NULL);
 #endif
             }
 #if CONFIG_WPA_SUPP_WPS
@@ -2401,7 +2481,6 @@ int wifi_nxp_wpa_supp_send_mlme(void *if_priv,
     }
 
     status = wifi_nxp_send_mlme(wifi_if_ctx_rtos->bss_type, freq_to_chan(freq), wait_time, data, data_len);
-
     if (status == -WM_FAIL)
     {
         wifi_if_ctx_rtos->last_mgmt_tx_data_len = 0;
@@ -2410,7 +2489,12 @@ int wifi_nxp_wpa_supp_send_mlme(void *if_priv,
         goto out;
     }
 
-    if (((wifi_if_ctx_rtos->bss_type == BSS_TYPE_UAP) &&
+    if (((wifi_if_ctx_rtos->bss_type == BSS_TYPE_UAP
+#if CONFIG_WPA_SUPP_P2P
+          || ((wifi_if_ctx_rtos->bss_type == MLAN_BSS_TYPE_WIFIDIRECT) &&
+              (mlan_adap->priv[2]->bss_role == MLAN_BSS_ROLE_UAP))
+#endif
+          ) &&
          ((stype == WLAN_FC_STYPE_ASSOC_RESP) || (stype == WLAN_FC_STYPE_REASSOC_RESP))) ||
         (stype == WLAN_FC_STYPE_ACTION))
     {
@@ -2543,6 +2627,14 @@ void wifi_nxp_wpa_supp_event_get_wiphy(void *if_priv,
                 wifi_if_ctx_rtos->supp_callbk_fns.get_wiphy_res(wifi_if_ctx_rtos->supp_drv_if_ctx, &band);
             }
         }
+#if CONFIG_WPA_SUPP_P2P
+        else if (wifi_if_ctx_rtos->bss_type == BSS_TYPE_WFD)
+        {
+            if (wifi_if_ctx_rtos->supp_drv_if_ctx && wifi_if_ctx_rtos->supp_callbk_fns.get_wiphy_res) {
+                wifi_if_ctx_rtos->supp_callbk_fns.get_wiphy_res(wifi_if_ctx_rtos->supp_drv_if_ctx, &band);
+            }
+        }
+#endif
 #if CONFIG_WPA_SUPP_AP
         else
         {
@@ -2559,6 +2651,14 @@ void wifi_nxp_wpa_supp_event_get_wiphy(void *if_priv,
              wifi_if_ctx_rtos->supp_callbk_fns.get_wiphy_res(wifi_if_ctx_rtos->supp_drv_if_ctx, NULL);
         }
     }
+#if CONFIG_WPA_SUPP_P2P
+    else if (wifi_if_ctx_rtos->bss_type == BSS_TYPE_WFD)
+    {
+        if (wifi_if_ctx_rtos->supp_drv_if_ctx && wifi_if_ctx_rtos->supp_callbk_fns.get_wiphy_res) {
+            wifi_if_ctx_rtos->supp_callbk_fns.get_wiphy_res(wifi_if_ctx_rtos->supp_drv_if_ctx, NULL);
+        }
+    }
+#endif
 #if CONFIG_WPA_SUPP_AP
     else
     {
@@ -2695,11 +2795,17 @@ int wifi_nxp_wpa_supp_get_capa(void *if_priv, struct wpa_driver_capa *capa)
         capa->flags |= WPA_DRIVER_FLAGS_AP_CSA;
         capa->flags2 |= WPA_DRIVER_FLAGS2_AP_SME;
     }
-#if !defined(RW610) && !defined(SD8801)
+#if !defined(RW610) && !defined(SD8801) && !defined(IW610)
     capa->flags |= WPA_DRIVER_FLAGS_HT_2040_COEX;
 #endif
     capa->flags |= WPA_DRIVER_FLAGS_HE_CAPABILITIES;
     capa->flags |= WPA_DRIVER_FLAGS_OFFCHANNEL_TX;
+#if CONFIG_WPA_SUPP_P2P
+    if (wifi_if_ctx_rtos->iface_ctx == net_get_wfd_interface())
+    {
+        capa->flags |= WPA_DRIVER_FLAGS_P2P_CAPABLE;
+    }
+#endif
 
     capa->rrm_flags |= WPA_DRIVER_FLAGS_SUPPORT_RRM;
     capa->rrm_flags |= WPA_DRIVER_FLAGS_SUPPORT_BEACON_REPORT;
@@ -2935,6 +3041,93 @@ void wifi_nxp_wpa_supp_event_proc_ecsa_complete(void *if_priv, nxp_wifi_ch_switc
     }
 }
 
+#if CONFIG_WPA_SUPP_P2P
+int wifi_nxp_wpa_supp_register_frame(void *if_priv, t_u16 type, const u8 *match, size_t match_len,
+		bool multicast)
+{
+    struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
+    int ret                                    = -WM_FAIL;
+    unsigned int mgmt_subtype_mask             = 0;
+    mlan_private *pmpriv                       = NULL;
+    int bss_type                        = 0;
+
+    if (!if_priv)
+    {
+        supp_e("%s: Invalid params", __func__);
+        goto out;
+    }
+
+    wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
+    bss_type         = wifi_if_ctx_rtos->bss_type;
+    pmpriv           = (mlan_private *)mlan_adap->priv[bss_type];
+
+    /* Map 802.11 frame subtype to firmware mgmt_subtype_mask bit.
+     * The type field from wpa_drv_zep_probe_req_report() is
+     * (WLAN_FC_STYPE_PROBE_REQ << 4) = 0x0040.
+     * Firmware bit [4] corresponds to Probe Request frames.
+     */
+    if (type == (WLAN_FC_STYPE_PROBE_REQ << 4))
+    {
+        mgmt_subtype_mask = MBIT(4) | pmpriv->mgmt_subtype_mask;
+    }
+    else
+    {
+        supp_d("%s: Unsupported frame type 0x%x", __func__, type);
+        ret = 0;
+        goto out;
+    }
+
+    ret = wifi_set_rx_mgmt_indication(wifi_if_ctx_rtos->bss_type, mgmt_subtype_mask);
+    if (ret != WM_SUCCESS)
+    {
+        supp_e("%s: Failed to register frame type 0x%x", __func__, type);
+        ret = -WM_FAIL;
+    }
+    else
+    {
+        supp_d("%s: Registered frame type 0x%x successfully", __func__, type);
+        ret = WM_SUCCESS;
+    }
+
+out:
+    return ret;
+}
+
+int wifi_nxp_wpa_supp_deinit_ap(void *if_priv)
+{
+    return wifi_nxp_hostapd_stop_ap(if_priv);
+}
+
+int wifi_nxp_wpa_supp_set_p2p_powersave(void *if_priv, int legacy_ps, int opp_ps, int ctwindow)
+{
+    struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
+    int ret = -WM_FAIL;
+    int bss_type                        = 0;
+
+    if (!if_priv)
+    {
+        supp_e("%s: Invalid params", __func__);
+        goto out;
+    }
+
+    wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
+    bss_type         = wifi_if_ctx_rtos->bss_type;
+    if (bss_type == MLAN_BSS_TYPE_WIFIDIRECT)
+    {
+        supp_e("%s: Skip power save setting for P2P interface", __func__);
+        goto out;
+    }
+    else
+    {
+        supp_e("%s: Invalid interface", __func__);
+        goto out;
+    }
+
+out:
+    return ret;
+}
+#endif
+
 #if !CONFIG_WIFI_NM_WPA_SUPPLICANT
 void wifi_nxp_wpa_supp_event_proc_eapol_rx(void *if_priv, nxp_wifi_event_eapol_mlme_t *eapol_rx, unsigned int event_len)
 {
@@ -3052,9 +3245,6 @@ int wifi_nxp_wpa_supp_init_ap(void *if_priv, struct wpa_driver_associate_params 
     int status                                 = -WM_FAIL;
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
     nxp_wifi_ap_info_t *ap_params = NULL;
-
-    dump_hex(params, sizeof(struct wpa_driver_associate_params));
-
     int ret = -1;
 
     if ((!if_priv) || (!params) || !wifi_supp_is_init_done())
@@ -3326,9 +3516,9 @@ out:
     return status;
 }
 
-static void wifi_nxp_set_acs_params(nxp_wifi_acs_params *acs_params)
+static void wifi_nxp_set_acs_params(unsigned int bss_type, nxp_wifi_acs_params *acs_params)
 {
-    mlan_private *pmpriv = mlan_adap->priv[0];
+    mlan_private *pmpriv = mlan_adap->priv[bss_type];
     unsigned int channel = pmpriv->curr_bss_params.bss_descriptor.channel;
 
     memset(acs_params, 0, sizeof(nxp_wifi_acs_params));
@@ -3378,6 +3568,7 @@ static void wifi_nxp_set_acs_params(nxp_wifi_acs_params *acs_params)
 int wifi_nxp_hostapd_do_acs(void *if_priv, struct drv_acs_params *params)
 {
     int status = -WM_FAIL;
+    struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
 
     if ((!if_priv) || (!params) || !wifi_supp_is_init_done())
     {
@@ -3386,11 +3577,21 @@ int wifi_nxp_hostapd_do_acs(void *if_priv, struct drv_acs_params *params)
     }
 
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
-    if(mlan_adap->priv[0]->media_connected)
+    if (mlan_adap->priv[0]->media_connected
+#if CONFIG_WPA_SUPP_P2P
+       || mlan_adap->priv[2]->media_connected
+#endif
+    )
     {
         nxp_wifi_acs_params acs_params;
-
-        wifi_nxp_set_acs_params(&acs_params);
+        unsigned int bss_type = MLAN_BSS_TYPE_STA;
+#if CONFIG_WPA_SUPP_P2P
+        if (mlan_adap->priv[2]->media_connected)
+        {
+            bss_type = MLAN_BSS_TYPE_WIFIDIRECT;
+        }
+#endif
+        wifi_nxp_set_acs_params(bss_type, &acs_params);
         if (wm_wifi.supp_if_callbk_fns->acs_channel_sel_callbk_fn)
         {
             wm_wifi.supp_if_callbk_fns->acs_channel_sel_callbk_fn(wm_wifi.hapd_if_priv, &acs_params);
@@ -3400,7 +3601,7 @@ int wifi_nxp_hostapd_do_acs(void *if_priv, struct drv_acs_params *params)
     }
 #endif
 
-    status = wifi_uap_do_acs(params->freq_list);
+    status = wifi_uap_do_acs(wifi_if_ctx_rtos->bss_type, params->freq_list);
     if (status != WM_SUCCESS)
     {
         supp_e("%s: wifi uap do acs failed", __func__);
@@ -3516,7 +3717,7 @@ int wifi_nxp_hostapd_set_ap(void *if_priv, int beacon_set, struct wpa_driver_ap_
         ap_params->chan.center_freq2       = params->freq->center_freq2;
     }
 
-    status = wifi_nxp_beacon_config(ap_params);
+    status = wifi_nxp_beacon_config(wifi_if_ctx_rtos->bss_type, ap_params);
     if (status != WM_SUCCESS)
     {
         supp_e("%s: wifi nxp beacon config failed", __func__);
@@ -3541,12 +3742,15 @@ int wifi_nxp_hostapd_sta_add(void *if_priv, struct hostapd_sta_add_params *param
 {
     int status                      = -WM_FAIL;
     nxp_wifi_sta_info_t *sta_params = NULL;
+    struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
 
     if ((!if_priv) || (!params) || !wifi_supp_is_init_done())
     {
         supp_e("%s: Invalid state", __func__);
         goto out;
     }
+
+    wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
 
     sta_params = (nxp_wifi_sta_info_t *)OSA_MemoryAllocate(sizeof(nxp_wifi_sta_info_t));
 
@@ -3616,13 +3820,13 @@ int wifi_nxp_hostapd_sta_add(void *if_priv, struct hostapd_sta_add_params *param
         sta_params->he_capab_len = params->he_capab_len;
     }
 
-    status = wifi_nxp_sta_add(sta_params);
+    status = wifi_nxp_sta_add(wifi_if_ctx_rtos->bss_type, sta_params);
     if (status != WM_SUCCESS)
     {
         supp_e("%s: wifi nxp sta add failed", __func__);
     }
 
-    wifi_uap_client_assoc(sta_params->addr, params->ht_capabilities ? 1 : 0);
+    wifi_uap_client_assoc(wifi_if_ctx_rtos->bss_type, sta_params->addr, params->ht_capabilities ? 1 : 0);
 out:
     if (sta_params != NULL)
     {
@@ -3634,6 +3838,7 @@ out:
 int wifi_nxp_hostapd_sta_remove(void *if_priv, const u8 *addr)
 {
     int status = -WM_FAIL;
+    struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
 
     if ((!if_priv) || (!addr) || !wifi_supp_is_init_done())
     {
@@ -3641,7 +3846,9 @@ int wifi_nxp_hostapd_sta_remove(void *if_priv, const u8 *addr)
         goto out;
     }
 
-    status = wifi_nxp_sta_remove(addr);
+    wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
+
+    status = wifi_nxp_sta_remove(wifi_if_ctx_rtos->bss_type, addr);
     if (status != WM_SUCCESS)
     {
         supp_e("%s: wifi nxp sta remove failed", __func__);
@@ -3751,7 +3958,7 @@ int wifi_nxp_hostapd_stop_ap(void *if_priv)
 
     wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
 
-    ret = wifi_nxp_stop_ap();
+    ret = wifi_nxp_stop_ap(wifi_if_ctx_rtos->bss_type);
     if (ret != 0)
     {
         supp_e("%s: Stop AP failed", __func__);
@@ -3867,7 +4074,11 @@ void wifi_nxp_wpa_supp_cancel_action_wait(void *if_priv)
     }
 
     wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
-    if (wifi_if_ctx_rtos->bss_type == BSS_TYPE_STA)
+    if (wifi_if_ctx_rtos->bss_type == BSS_TYPE_STA
+#if CONFIG_WPA_SUPP_P2P
+        || wifi_if_ctx_rtos->bss_type == BSS_TYPE_WFD
+#endif
+        )
     {
         if (wifi_if_ctx_rtos->remain_on_channel == true)
         {

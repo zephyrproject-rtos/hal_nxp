@@ -43,7 +43,7 @@ void *wifi_malloc_eventbuf(size_t size)
         w_mem_e("[evtbuf] Alloc: S: %zu FAILED", size);
     }
 #else
-    void *ptr = OSA_MemoryPoolAllocate(buf_2048_MemoryPool);
+    void *ptr = OSA_MemoryPoolAllocate(buf_2560_MemoryPool);
 #endif
 
     return ptr;
@@ -55,7 +55,7 @@ void wifi_free_eventbuf(void *buffer)
     w_mem_d("[evtbuf] Free: A: %p\n\r", buffer);
     OSA_MemoryFree(buffer);
 #else
-    OSA_MemoryPoolFree(buf_2048_MemoryPool, buffer);
+    OSA_MemoryPoolFree(buf_2560_MemoryPool, buffer);
 #endif
 }
 

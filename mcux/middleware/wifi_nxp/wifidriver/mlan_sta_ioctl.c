@@ -331,6 +331,11 @@ static mlan_status wlan_bss_ioctl(IN pmlan_adapter pmadapter, IN pmlan_ioctl_req
         case MLAN_OID_BSS_START:
             status = wlan_bss_ioctl_start(pmadapter, pioctl_req);
             break;
+#if CONFIG_WPA_SUPP_P2P
+        case MLAN_OID_WIFI_DIRECT_MODE:
+            status = wlan_bss_ioctl_wifi_direct_mode(pmadapter, pioctl_req);
+            break;
+#endif
         default:
             status = MLAN_STATUS_FAILURE;
             break;

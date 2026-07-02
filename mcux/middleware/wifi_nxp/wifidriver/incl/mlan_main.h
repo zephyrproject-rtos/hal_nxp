@@ -1196,6 +1196,17 @@ typedef struct
     t_u8 session_enable;
 } wps_t;
 
+#if CONFIG_WPA_SUPP_P2P
+/** Data structure for P2P information */
+typedef struct
+{
+    /** WPS IE */
+    IEEEtypes_VendorSpecific_t p2p_ie;
+    /** Session enable flag */
+    t_u8 session_enable;
+} p2p_t;
+#endif
+
 typedef struct _mlan_private mlan_private;
 typedef struct _mlan_private *pmlan_private;
 
@@ -1312,7 +1323,7 @@ struct _mlan_private
     t_u8 frame_type;
     /** MAC address information */
     t_u8 curr_addr[MLAN_MAC_ADDR_LENGTH];
-#if CONFIG_P2P
+#if CONFIG_WPA_SUPP_P2P
     /** P2P MAC address information */
     t_u8 curr_p2p_addr[MLAN_MAC_ADDR_LENGTH];
 #endif
@@ -1547,7 +1558,8 @@ struct _mlan_private
     mlan_list_head rx_reorder_tbl_ptr;
     /** Lock for Rx packets */
     t_void *rx_pkt_lock;
-
+    /** management frame subtypes mask */
+    t_u32 mgmt_subtype_mask;
 #ifdef STA_SUPPORT
     /** Generic IEEE IEs passed from the application to be inserted into the
      *    association request to firmware
@@ -1566,6 +1578,15 @@ struct _mlan_private
 #endif
 
 #if CONFIG_WPA_SUPP
+#if CONFIG_WPA_SUPP_P2P
+    p2p_t p2p;
+    t_u16 p2p_mgmt_bitmap_index;
+    int p2p_gc_network;
+    int p2p_go_network;
+    t_u8 p2p_go_ssid[MLAN_MAX_SSID_LENGTH];
+    t_u8 p2p_go_ssid_len;
+    int p2p_go_chan;
+#endif
 #if CONFIG_WPA_SUPP_WPS
     /** WPS */
     wps_t wps;
@@ -1655,6 +1676,8 @@ struct _mlan_private
     t_u16 beacon_index;
     /** proberesp ie index */
     t_u16 proberesp_index;
+    /** proberesp_p2p_index */
+    t_u16 proberesp_p2p_index;
     /** assocresp ie index */
     t_u16 assocresp_index;
     /** beacon wps index for mgmt ie */
@@ -2180,6 +2203,8 @@ struct _mlan_adapter
     pmlan_private priv[MLAN_MAX_BSS_NUM];
     /** Total number of Priv number */
     t_u8 priv_num;
+    /** Command sequence number */
+    t_u16 seq_num;
     /** Firmware start addr */
     const t_u8 *fw_start_addr;
     mlan_callbacks callbacks;
@@ -2291,6 +2316,10 @@ struct _mlan_adapter
 #if CONFIG_WPA_SUPP
     /** WPA supplicant scan triggered */
     t_u8 wpa_supp_scan_triggered;
+#if CONFIG_WPA_SUPP_P2P
+    /** WPA supplicant p2p scan triggered */
+    t_u8 wpa_supp_p2p_scan_triggered;
+#endif
 #endif
 #if CONFIG_SCAN_CHANNEL_GAP
     /** channel statstics */
@@ -2601,7 +2630,7 @@ mlan_status wlan_cmd_remain_on_channel(IN pmlan_private pmpriv,
                                        IN t_u16 cmd_action,
                                        IN t_void *pdata_buf);
 
-#ifdef WIFI_DIRECT_SUPPORT
+#ifdef CONFIG_WPA_SUPP_P2P
 mlan_status wlan_bss_ioctl_wifi_direct_mode(IN pmlan_adapter pmadapter, IN pmlan_ioctl_req pioctl_req);
 
 mlan_status wlan_cmd_wifi_direct_mode(IN pmlan_private pmpriv,
@@ -2611,11 +2640,6 @@ mlan_status wlan_cmd_wifi_direct_mode(IN pmlan_private pmpriv,
 mlan_status wlan_ret_wifi_direct_mode(IN pmlan_private pmpriv,
                                       IN HostCmd_DS_COMMAND *resp,
                                       IN mlan_ioctl_req *pioctl_buf);
-
-mlan_status wlan_radio_ioctl_remain_chan_cfg(IN pmlan_adapter pmadapter, IN pmlan_ioctl_req pioctl_req);
-mlan_status wlan_ret_remain_on_channel(IN pmlan_private pmpriv,
-                                       IN HostCmd_DS_COMMAND *resp,
-                                       IN mlan_ioctl_req *pioctl_buf);
 #endif
 
 mlan_status wlan_cmd_tx_rate_cfg(IN pmlan_private pmpriv,
@@ -3452,4 +3476,9 @@ mlan_status wlan_ret_boot_sleep(pmlan_private pmpriv, HostCmd_DS_COMMAND *resp, 
 
 t_bool wlan_is_etsi_country(pmlan_adapter pmadapter, t_u8 *country_code);
 
+static inline t_u16 wifi_get_cmd_seq_num(mlan_private *pmpriv)
+{
+    pmpriv->adapter->seq_num++;
+    return HostCmd_SET_SEQ_NO_BSS_INFO(pmpriv->adapter->seq_num, pmpriv->bss_num, pmpriv->bss_type);
+}
 #endif /* !_MLAN_MAIN_H_ */
