@@ -213,14 +213,12 @@ typedef struct {
   __IO uint32_t FRINDEX;                           /**< USB Frame Index, offset: 0x14C */
        uint8_t RESERVED_6[4];
   union {                                          /* offset: 0x154 */
-    struct {                                         /* offset: 0x154 */
-      __IO uint32_t DEVICEADDR;                        /**< Device Address, offset: 0x154 */
-      __IO uint32_t ENDPTLISTADDR;                     /**< Endpoint List Address, offset: 0x158 */
-    } DEVICE;
-    struct {                                         /* offset: 0x154 */
-      __IO uint32_t PERIODICLISTBASE;                  /**< Frame List Base Address, offset: 0x154 */
-      __IO uint32_t ASYNCLISTADDR;                     /**< Next Asynchronous Address, offset: 0x158 */
-    } HOST;
+    __IO uint32_t DEVICEADDR;                        /**< Device Address, offset: 0x154 */
+    __IO uint32_t PERIODICLISTBASE;                  /**< Frame List Base Address, offset: 0x154 */
+  };
+  union {                                          /* offset: 0x158 */
+    __IO uint32_t ASYNCLISTADDR;                     /**< Next Asynch. Address, offset: 0x158 */
+    __IO uint32_t ENDPTLISTADDR;                     /**< Endpoint List Address, offset: 0x158 */
   };
        uint8_t RESERVED_7[4];
   __IO uint32_t BURSTSIZE;                         /**< Programmable Burst Size, offset: 0x160 */
@@ -239,13 +237,7 @@ typedef struct {
   __I  uint32_t ENDPTSTAT;                         /**< Endpoint Status, offset: 0x1B8 */
   __IO uint32_t ENDPTCOMPLETE;                     /**< Endpoint Complete, offset: 0x1BC */
   __IO uint32_t ENDPTCTRL0;                        /**< Endpoint Control 0, offset: 0x1C0 */
-  __IO uint32_t ENDPTCTRL1;                        /**< Endpoint Control 1, offset: 0x1C4 */
-  __IO uint32_t ENDPTCTRL2;                        /**< Endpoint Control 2, offset: 0x1C8 */
-  __IO uint32_t ENDPTCTRL3;                        /**< Endpoint Control 3, offset: 0x1CC */
-  __IO uint32_t ENDPTCTRL4;                        /**< Endpoint Control 4, offset: 0x1D0 */
-  __IO uint32_t ENDPTCTRL5;                        /**< Endpoint Control 5, offset: 0x1D4 */
-  __IO uint32_t ENDPTCTRL6;                        /**< Endpoint Control 6, offset: 0x1D8 */
-  __IO uint32_t ENDPTCTRL7;                        /**< Endpoint Control 7, offset: 0x1DC */
+  __IO uint32_t ENDPTCTRL[7];
 } USB_Type;
 
 /* ----------------------------------------------------------------------------
@@ -1673,696 +1665,119 @@ typedef struct {
 #define USB_ENDPTCTRL0_TXE(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL0_TXE_SHIFT)) & USB_ENDPTCTRL0_TXE_MASK)
 /*! @} */
 
-/*! @name ENDPTCTRL1 - Endpoint Control 1 */
+/*! @name ENDPTCTRL - Endpoint Control 1..Endpoint Control 7 */
 /*! @{ */
 
-#define USB_ENDPTCTRL1_RXS_MASK                  (0x1U)
-#define USB_ENDPTCTRL1_RXS_SHIFT                 (0U)
-/*! RXS - RX Endpoint Stall
- *  0b0..Endpoint OK
- *  0b1..Endpoint stalled
- */
-#define USB_ENDPTCTRL1_RXS(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL1_RXS_SHIFT)) & USB_ENDPTCTRL1_RXS_MASK)
+#define USB_ENDPTCTRL_RXS_MASK                   (0x1U)
+#define USB_ENDPTCTRL_RXS_SHIFT                  (0U)
+/*! RXS - RXS */
+#define USB_ENDPTCTRL_RXS(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_RXS_SHIFT)) & USB_ENDPTCTRL_RXS_MASK)
 
-#define USB_ENDPTCTRL1_RXD_MASK                  (0x2U)
-#define USB_ENDPTCTRL1_RXD_SHIFT                 (1U)
-/*! RXD - RX Endpoint Data Sink */
-#define USB_ENDPTCTRL1_RXD(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL1_RXD_SHIFT)) & USB_ENDPTCTRL1_RXD_MASK)
+#define USB_ENDPTCTRL_RXD_MASK                   (0x2U)
+#define USB_ENDPTCTRL_RXD_SHIFT                  (1U)
+/*! RXD - RXD */
+#define USB_ENDPTCTRL_RXD(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_RXD_SHIFT)) & USB_ENDPTCTRL_RXD_MASK)
 
-#define USB_ENDPTCTRL1_RXT_MASK                  (0xCU)
-#define USB_ENDPTCTRL1_RXT_SHIFT                 (2U)
-/*! RXT - RX Endpoint Type
- *  0b00..Control
- *  0b01..Isochronous
- *  0b10..Bulk
- *  0b11..Interrupt
- */
-#define USB_ENDPTCTRL1_RXT(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL1_RXT_SHIFT)) & USB_ENDPTCTRL1_RXT_MASK)
+#define USB_ENDPTCTRL_RXT_MASK                   (0xCU)
+#define USB_ENDPTCTRL_RXT_SHIFT                  (2U)
+/*! RXT - RXT */
+#define USB_ENDPTCTRL_RXT(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_RXT_SHIFT)) & USB_ENDPTCTRL_RXT_MASK)
 
-#define USB_ENDPTCTRL1_RXI_MASK                  (0x20U)
-#define USB_ENDPTCTRL1_RXI_SHIFT                 (5U)
-/*! RXI - RX Data Toggle Inhibit
- *  0b0..Allow
- *  0b1..Inhibit
- */
-#define USB_ENDPTCTRL1_RXI(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL1_RXI_SHIFT)) & USB_ENDPTCTRL1_RXI_MASK)
+#define USB_ENDPTCTRL_RXI_MASK                   (0x20U)
+#define USB_ENDPTCTRL_RXI_SHIFT                  (5U)
+/*! RXI - RXI */
+#define USB_ENDPTCTRL_RXI(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_RXI_SHIFT)) & USB_ENDPTCTRL_RXI_MASK)
 
-#define USB_ENDPTCTRL1_RXR_MASK                  (0x40U)
-#define USB_ENDPTCTRL1_RXR_SHIFT                 (6U)
-/*! RXR - RX Data Toggle Reset
- *  0b0..Does not reset
- *  0b1..Resets
- */
-#define USB_ENDPTCTRL1_RXR(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL1_RXR_SHIFT)) & USB_ENDPTCTRL1_RXR_MASK)
+#define USB_ENDPTCTRL_RXR_MASK                   (0x40U)
+#define USB_ENDPTCTRL_RXR_SHIFT                  (6U)
+/*! RXR - RXR */
+#define USB_ENDPTCTRL_RXR(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_RXR_SHIFT)) & USB_ENDPTCTRL_RXR_MASK)
 
-#define USB_ENDPTCTRL1_RXE_MASK                  (0x80U)
-#define USB_ENDPTCTRL1_RXE_SHIFT                 (7U)
-/*! RXE - RX Endpoint Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define USB_ENDPTCTRL1_RXE(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL1_RXE_SHIFT)) & USB_ENDPTCTRL1_RXE_MASK)
+#define USB_ENDPTCTRL_RXE_MASK                   (0x80U)
+#define USB_ENDPTCTRL_RXE_SHIFT                  (7U)
+/*! RXE - RXE */
+#define USB_ENDPTCTRL_RXE(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_RXE_SHIFT)) & USB_ENDPTCTRL_RXE_MASK)
 
-#define USB_ENDPTCTRL1_TXS_MASK                  (0x10000U)
-#define USB_ENDPTCTRL1_TXS_SHIFT                 (16U)
-/*! TXS - TX Endpoint Stall
- *  0b0..Endpoint OK
- *  0b1..Endpoint stalled
- */
-#define USB_ENDPTCTRL1_TXS(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL1_TXS_SHIFT)) & USB_ENDPTCTRL1_TXS_MASK)
+#define USB_ENDPTCTRL_TXS_MASK                   (0x10000U)
+#define USB_ENDPTCTRL_TXS_SHIFT                  (16U)
+/*! TXS - TXS */
+#define USB_ENDPTCTRL_TXS(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_TXS_SHIFT)) & USB_ENDPTCTRL_TXS_MASK)
 
-#define USB_ENDPTCTRL1_TXD_MASK                  (0x20000U)
-#define USB_ENDPTCTRL1_TXD_SHIFT                 (17U)
-/*! TXD - TX Endpoint Data Source */
-#define USB_ENDPTCTRL1_TXD(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL1_TXD_SHIFT)) & USB_ENDPTCTRL1_TXD_MASK)
+#define USB_ENDPTCTRL_TXD_MASK                   (0x20000U)
+#define USB_ENDPTCTRL_TXD_SHIFT                  (17U)
+/*! TXD - TXD */
+#define USB_ENDPTCTRL_TXD(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_TXD_SHIFT)) & USB_ENDPTCTRL_TXD_MASK)
 
-#define USB_ENDPTCTRL1_TXT_MASK                  (0xC0000U)
-#define USB_ENDPTCTRL1_TXT_SHIFT                 (18U)
-/*! TXT - TX Endpoint Type
- *  0b00..Control
- *  0b01..Isochronous
- *  0b10..Bulk
- *  0b11..Interrupt
- */
-#define USB_ENDPTCTRL1_TXT(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL1_TXT_SHIFT)) & USB_ENDPTCTRL1_TXT_MASK)
+#define USB_ENDPTCTRL_TXT_MASK                   (0xC0000U)
+#define USB_ENDPTCTRL_TXT_SHIFT                  (18U)
+/*! TXT - TXT */
+#define USB_ENDPTCTRL_TXT(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_TXT_SHIFT)) & USB_ENDPTCTRL_TXT_MASK)
 
-#define USB_ENDPTCTRL1_TXI_MASK                  (0x200000U)
-#define USB_ENDPTCTRL1_TXI_SHIFT                 (21U)
-/*! TXI - TX Data Toggle Inhibit
- *  0b0..Allow
- *  0b1..Inhibit
- */
-#define USB_ENDPTCTRL1_TXI(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL1_TXI_SHIFT)) & USB_ENDPTCTRL1_TXI_MASK)
+#define USB_ENDPTCTRL_TXI_MASK                   (0x200000U)
+#define USB_ENDPTCTRL_TXI_SHIFT                  (21U)
+/*! TXI - TXI */
+#define USB_ENDPTCTRL_TXI(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_TXI_SHIFT)) & USB_ENDPTCTRL_TXI_MASK)
 
-#define USB_ENDPTCTRL1_TXR_MASK                  (0x400000U)
-#define USB_ENDPTCTRL1_TXR_SHIFT                 (22U)
-/*! TXR - TX Data Toggle Reset
- *  0b0..Does not reset
- *  0b1..Resets
- */
-#define USB_ENDPTCTRL1_TXR(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL1_TXR_SHIFT)) & USB_ENDPTCTRL1_TXR_MASK)
+#define USB_ENDPTCTRL_TXR_MASK                   (0x400000U)
+#define USB_ENDPTCTRL_TXR_SHIFT                  (22U)
+/*! TXR - TXR */
+#define USB_ENDPTCTRL_TXR(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_TXR_SHIFT)) & USB_ENDPTCTRL_TXR_MASK)
 
-#define USB_ENDPTCTRL1_TXE_MASK                  (0x800000U)
-#define USB_ENDPTCTRL1_TXE_SHIFT                 (23U)
-/*! TXE - TX Endpoint Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define USB_ENDPTCTRL1_TXE(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL1_TXE_SHIFT)) & USB_ENDPTCTRL1_TXE_MASK)
+#define USB_ENDPTCTRL_TXE_MASK                   (0x800000U)
+#define USB_ENDPTCTRL_TXE_SHIFT                  (23U)
+/*! TXE - TXE */
+#define USB_ENDPTCTRL_TXE(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_TXE_SHIFT)) & USB_ENDPTCTRL_TXE_MASK)
+
 /*! @} */
 
-/*! @name ENDPTCTRL2 - Endpoint Control 2 */
-/*! @{ */
-
-#define USB_ENDPTCTRL2_RXS_MASK                  (0x1U)
-#define USB_ENDPTCTRL2_RXS_SHIFT                 (0U)
-/*! RXS - RX Endpoint Stall
- *  0b0..Endpoint OK
- *  0b1..Endpoint stalled
- */
-#define USB_ENDPTCTRL2_RXS(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL2_RXS_SHIFT)) & USB_ENDPTCTRL2_RXS_MASK)
-
-#define USB_ENDPTCTRL2_RXD_MASK                  (0x2U)
-#define USB_ENDPTCTRL2_RXD_SHIFT                 (1U)
-/*! RXD - RX Endpoint Data Sink */
-#define USB_ENDPTCTRL2_RXD(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL2_RXD_SHIFT)) & USB_ENDPTCTRL2_RXD_MASK)
-
-#define USB_ENDPTCTRL2_RXT_MASK                  (0xCU)
-#define USB_ENDPTCTRL2_RXT_SHIFT                 (2U)
-/*! RXT - RX Endpoint Type
- *  0b00..Control
- *  0b01..Isochronous
- *  0b10..Bulk
- *  0b11..Interrupt
- */
-#define USB_ENDPTCTRL2_RXT(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL2_RXT_SHIFT)) & USB_ENDPTCTRL2_RXT_MASK)
-
-#define USB_ENDPTCTRL2_RXI_MASK                  (0x20U)
-#define USB_ENDPTCTRL2_RXI_SHIFT                 (5U)
-/*! RXI - RX Data Toggle Inhibit
- *  0b0..Allow
- *  0b1..Inhibit
- */
-#define USB_ENDPTCTRL2_RXI(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL2_RXI_SHIFT)) & USB_ENDPTCTRL2_RXI_MASK)
-
-#define USB_ENDPTCTRL2_RXR_MASK                  (0x40U)
-#define USB_ENDPTCTRL2_RXR_SHIFT                 (6U)
-/*! RXR - RX Data Toggle Reset
- *  0b0..Does not reset
- *  0b1..Resets
- */
-#define USB_ENDPTCTRL2_RXR(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL2_RXR_SHIFT)) & USB_ENDPTCTRL2_RXR_MASK)
-
-#define USB_ENDPTCTRL2_RXE_MASK                  (0x80U)
-#define USB_ENDPTCTRL2_RXE_SHIFT                 (7U)
-/*! RXE - RX Endpoint Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define USB_ENDPTCTRL2_RXE(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL2_RXE_SHIFT)) & USB_ENDPTCTRL2_RXE_MASK)
-
-#define USB_ENDPTCTRL2_TXS_MASK                  (0x10000U)
-#define USB_ENDPTCTRL2_TXS_SHIFT                 (16U)
-/*! TXS - TX Endpoint Stall
- *  0b0..Endpoint OK
- *  0b1..Endpoint stalled
- */
-#define USB_ENDPTCTRL2_TXS(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL2_TXS_SHIFT)) & USB_ENDPTCTRL2_TXS_MASK)
-
-#define USB_ENDPTCTRL2_TXD_MASK                  (0x20000U)
-#define USB_ENDPTCTRL2_TXD_SHIFT                 (17U)
-/*! TXD - TX Endpoint Data Source */
-#define USB_ENDPTCTRL2_TXD(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL2_TXD_SHIFT)) & USB_ENDPTCTRL2_TXD_MASK)
-
-#define USB_ENDPTCTRL2_TXT_MASK                  (0xC0000U)
-#define USB_ENDPTCTRL2_TXT_SHIFT                 (18U)
-/*! TXT - TX Endpoint Type
- *  0b00..Control
- *  0b01..Isochronous
- *  0b10..Bulk
- *  0b11..Interrupt
- */
-#define USB_ENDPTCTRL2_TXT(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL2_TXT_SHIFT)) & USB_ENDPTCTRL2_TXT_MASK)
-
-#define USB_ENDPTCTRL2_TXI_MASK                  (0x200000U)
-#define USB_ENDPTCTRL2_TXI_SHIFT                 (21U)
-/*! TXI - TX Data Toggle Inhibit
- *  0b0..Allow
- *  0b1..Inhibit
- */
-#define USB_ENDPTCTRL2_TXI(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL2_TXI_SHIFT)) & USB_ENDPTCTRL2_TXI_MASK)
-
-#define USB_ENDPTCTRL2_TXR_MASK                  (0x400000U)
-#define USB_ENDPTCTRL2_TXR_SHIFT                 (22U)
-/*! TXR - TX Data Toggle Reset
- *  0b0..Does not reset
- *  0b1..Resets
- */
-#define USB_ENDPTCTRL2_TXR(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL2_TXR_SHIFT)) & USB_ENDPTCTRL2_TXR_MASK)
-
-#define USB_ENDPTCTRL2_TXE_MASK                  (0x800000U)
-#define USB_ENDPTCTRL2_TXE_SHIFT                 (23U)
-/*! TXE - TX Endpoint Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define USB_ENDPTCTRL2_TXE(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL2_TXE_SHIFT)) & USB_ENDPTCTRL2_TXE_MASK)
-/*! @} */
-
-/*! @name ENDPTCTRL3 - Endpoint Control 3 */
-/*! @{ */
-
-#define USB_ENDPTCTRL3_RXS_MASK                  (0x1U)
-#define USB_ENDPTCTRL3_RXS_SHIFT                 (0U)
-/*! RXS - RX Endpoint Stall
- *  0b0..Endpoint OK
- *  0b1..Endpoint stalled
- */
-#define USB_ENDPTCTRL3_RXS(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL3_RXS_SHIFT)) & USB_ENDPTCTRL3_RXS_MASK)
-
-#define USB_ENDPTCTRL3_RXD_MASK                  (0x2U)
-#define USB_ENDPTCTRL3_RXD_SHIFT                 (1U)
-/*! RXD - RX Endpoint Data Sink */
-#define USB_ENDPTCTRL3_RXD(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL3_RXD_SHIFT)) & USB_ENDPTCTRL3_RXD_MASK)
-
-#define USB_ENDPTCTRL3_RXT_MASK                  (0xCU)
-#define USB_ENDPTCTRL3_RXT_SHIFT                 (2U)
-/*! RXT - RX Endpoint Type
- *  0b00..Control
- *  0b01..Isochronous
- *  0b10..Bulk
- *  0b11..Interrupt
- */
-#define USB_ENDPTCTRL3_RXT(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL3_RXT_SHIFT)) & USB_ENDPTCTRL3_RXT_MASK)
-
-#define USB_ENDPTCTRL3_RXI_MASK                  (0x20U)
-#define USB_ENDPTCTRL3_RXI_SHIFT                 (5U)
-/*! RXI - RX Data Toggle Inhibit
- *  0b0..Allow
- *  0b1..Inhibit
- */
-#define USB_ENDPTCTRL3_RXI(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL3_RXI_SHIFT)) & USB_ENDPTCTRL3_RXI_MASK)
-
-#define USB_ENDPTCTRL3_RXR_MASK                  (0x40U)
-#define USB_ENDPTCTRL3_RXR_SHIFT                 (6U)
-/*! RXR - RX Data Toggle Reset
- *  0b0..Does not reset
- *  0b1..Resets
- */
-#define USB_ENDPTCTRL3_RXR(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL3_RXR_SHIFT)) & USB_ENDPTCTRL3_RXR_MASK)
-
-#define USB_ENDPTCTRL3_RXE_MASK                  (0x80U)
-#define USB_ENDPTCTRL3_RXE_SHIFT                 (7U)
-/*! RXE - RX Endpoint Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define USB_ENDPTCTRL3_RXE(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL3_RXE_SHIFT)) & USB_ENDPTCTRL3_RXE_MASK)
-
-#define USB_ENDPTCTRL3_TXS_MASK                  (0x10000U)
-#define USB_ENDPTCTRL3_TXS_SHIFT                 (16U)
-/*! TXS - TX Endpoint Stall
- *  0b0..Endpoint OK
- *  0b1..Endpoint stalled
- */
-#define USB_ENDPTCTRL3_TXS(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL3_TXS_SHIFT)) & USB_ENDPTCTRL3_TXS_MASK)
-
-#define USB_ENDPTCTRL3_TXD_MASK                  (0x20000U)
-#define USB_ENDPTCTRL3_TXD_SHIFT                 (17U)
-/*! TXD - TX Endpoint Data Source */
-#define USB_ENDPTCTRL3_TXD(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL3_TXD_SHIFT)) & USB_ENDPTCTRL3_TXD_MASK)
-
-#define USB_ENDPTCTRL3_TXT_MASK                  (0xC0000U)
-#define USB_ENDPTCTRL3_TXT_SHIFT                 (18U)
-/*! TXT - TX Endpoint Type
- *  0b00..Control
- *  0b01..Isochronous
- *  0b10..Bulk
- *  0b11..Interrupt
- */
-#define USB_ENDPTCTRL3_TXT(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL3_TXT_SHIFT)) & USB_ENDPTCTRL3_TXT_MASK)
-
-#define USB_ENDPTCTRL3_TXI_MASK                  (0x200000U)
-#define USB_ENDPTCTRL3_TXI_SHIFT                 (21U)
-/*! TXI - TX Data Toggle Inhibit
- *  0b0..Allow
- *  0b1..Inhibit
- */
-#define USB_ENDPTCTRL3_TXI(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL3_TXI_SHIFT)) & USB_ENDPTCTRL3_TXI_MASK)
-
-#define USB_ENDPTCTRL3_TXR_MASK                  (0x400000U)
-#define USB_ENDPTCTRL3_TXR_SHIFT                 (22U)
-/*! TXR - TX Data Toggle Reset
- *  0b0..Does not reset
- *  0b1..Resets
- */
-#define USB_ENDPTCTRL3_TXR(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL3_TXR_SHIFT)) & USB_ENDPTCTRL3_TXR_MASK)
-
-#define USB_ENDPTCTRL3_TXE_MASK                  (0x800000U)
-#define USB_ENDPTCTRL3_TXE_SHIFT                 (23U)
-/*! TXE - TX Endpoint Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define USB_ENDPTCTRL3_TXE(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL3_TXE_SHIFT)) & USB_ENDPTCTRL3_TXE_MASK)
-/*! @} */
-
-/*! @name ENDPTCTRL4 - Endpoint Control 4 */
-/*! @{ */
-
-#define USB_ENDPTCTRL4_RXS_MASK                  (0x1U)
-#define USB_ENDPTCTRL4_RXS_SHIFT                 (0U)
-/*! RXS - RX Endpoint Stall
- *  0b0..Endpoint OK
- *  0b1..Endpoint stalled
- */
-#define USB_ENDPTCTRL4_RXS(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL4_RXS_SHIFT)) & USB_ENDPTCTRL4_RXS_MASK)
-
-#define USB_ENDPTCTRL4_RXD_MASK                  (0x2U)
-#define USB_ENDPTCTRL4_RXD_SHIFT                 (1U)
-/*! RXD - RX Endpoint Data Sink */
-#define USB_ENDPTCTRL4_RXD(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL4_RXD_SHIFT)) & USB_ENDPTCTRL4_RXD_MASK)
-
-#define USB_ENDPTCTRL4_RXT_MASK                  (0xCU)
-#define USB_ENDPTCTRL4_RXT_SHIFT                 (2U)
-/*! RXT - RX Endpoint Type
- *  0b00..Control
- *  0b01..Isochronous
- *  0b10..Bulk
- *  0b11..Interrupt
- */
-#define USB_ENDPTCTRL4_RXT(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL4_RXT_SHIFT)) & USB_ENDPTCTRL4_RXT_MASK)
-
-#define USB_ENDPTCTRL4_RXI_MASK                  (0x20U)
-#define USB_ENDPTCTRL4_RXI_SHIFT                 (5U)
-/*! RXI - RX Data Toggle Inhibit
- *  0b0..Disable
- *  0b1..Enable
- */
-#define USB_ENDPTCTRL4_RXI(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL4_RXI_SHIFT)) & USB_ENDPTCTRL4_RXI_MASK)
-
-#define USB_ENDPTCTRL4_RXR_MASK                  (0x40U)
-#define USB_ENDPTCTRL4_RXR_SHIFT                 (6U)
-/*! RXR - RX Data Toggle Reset
- *  0b0..Does not reset
- *  0b1..Resets
- */
-#define USB_ENDPTCTRL4_RXR(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL4_RXR_SHIFT)) & USB_ENDPTCTRL4_RXR_MASK)
-
-#define USB_ENDPTCTRL4_RXE_MASK                  (0x80U)
-#define USB_ENDPTCTRL4_RXE_SHIFT                 (7U)
-/*! RXE - RX Endpoint Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define USB_ENDPTCTRL4_RXE(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL4_RXE_SHIFT)) & USB_ENDPTCTRL4_RXE_MASK)
-
-#define USB_ENDPTCTRL4_TXS_MASK                  (0x10000U)
-#define USB_ENDPTCTRL4_TXS_SHIFT                 (16U)
-/*! TXS - TX Endpoint Stall
- *  0b0..Endpoint OK
- *  0b1..Endpoint stalled
- */
-#define USB_ENDPTCTRL4_TXS(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL4_TXS_SHIFT)) & USB_ENDPTCTRL4_TXS_MASK)
-
-#define USB_ENDPTCTRL4_TXD_MASK                  (0x20000U)
-#define USB_ENDPTCTRL4_TXD_SHIFT                 (17U)
-/*! TXD - TX Endpoint Data Source */
-#define USB_ENDPTCTRL4_TXD(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL4_TXD_SHIFT)) & USB_ENDPTCTRL4_TXD_MASK)
-
-#define USB_ENDPTCTRL4_TXT_MASK                  (0xC0000U)
-#define USB_ENDPTCTRL4_TXT_SHIFT                 (18U)
-/*! TXT - TX Endpoint Type
- *  0b00..Control
- *  0b01..Isochronous
- *  0b10..Bulk
- *  0b11..Interrupt
- */
-#define USB_ENDPTCTRL4_TXT(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL4_TXT_SHIFT)) & USB_ENDPTCTRL4_TXT_MASK)
-
-#define USB_ENDPTCTRL4_TXI_MASK                  (0x200000U)
-#define USB_ENDPTCTRL4_TXI_SHIFT                 (21U)
-/*! TXI - TX Data Toggle Inhibit
- *  0b0..Allow
- *  0b1..Inhibit
- */
-#define USB_ENDPTCTRL4_TXI(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL4_TXI_SHIFT)) & USB_ENDPTCTRL4_TXI_MASK)
-
-#define USB_ENDPTCTRL4_TXR_MASK                  (0x400000U)
-#define USB_ENDPTCTRL4_TXR_SHIFT                 (22U)
-/*! TXR - TX Data Toggle Reset
- *  0b0..Does not reset
- *  0b1..Resets
- */
-#define USB_ENDPTCTRL4_TXR(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL4_TXR_SHIFT)) & USB_ENDPTCTRL4_TXR_MASK)
-
-#define USB_ENDPTCTRL4_TXE_MASK                  (0x800000U)
-#define USB_ENDPTCTRL4_TXE_SHIFT                 (23U)
-/*! TXE - TX Endpoint Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define USB_ENDPTCTRL4_TXE(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL4_TXE_SHIFT)) & USB_ENDPTCTRL4_TXE_MASK)
-/*! @} */
-
-/*! @name ENDPTCTRL5 - Endpoint Control 5 */
-/*! @{ */
-
-#define USB_ENDPTCTRL5_RXS_MASK                  (0x1U)
-#define USB_ENDPTCTRL5_RXS_SHIFT                 (0U)
-/*! RXS - RX Endpoint Stall
- *  0b0..Endpoint OK
- *  0b1..Endpoint stalled
- */
-#define USB_ENDPTCTRL5_RXS(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL5_RXS_SHIFT)) & USB_ENDPTCTRL5_RXS_MASK)
-
-#define USB_ENDPTCTRL5_RXD_MASK                  (0x2U)
-#define USB_ENDPTCTRL5_RXD_SHIFT                 (1U)
-/*! RXD - RX Endpoint Data Sink */
-#define USB_ENDPTCTRL5_RXD(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL5_RXD_SHIFT)) & USB_ENDPTCTRL5_RXD_MASK)
-
-#define USB_ENDPTCTRL5_RXT_MASK                  (0xCU)
-#define USB_ENDPTCTRL5_RXT_SHIFT                 (2U)
-/*! RXT - RX Endpoint Type
- *  0b00..Control
- *  0b01..Isochronous
- *  0b10..Bulk
- *  0b11..Interrupt
- */
-#define USB_ENDPTCTRL5_RXT(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL5_RXT_SHIFT)) & USB_ENDPTCTRL5_RXT_MASK)
-
-#define USB_ENDPTCTRL5_RXI_MASK                  (0x20U)
-#define USB_ENDPTCTRL5_RXI_SHIFT                 (5U)
-/*! RXI - RX Data Toggle Inhibit
- *  0b0..Allow
- *  0b1..Inhibit
- */
-#define USB_ENDPTCTRL5_RXI(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL5_RXI_SHIFT)) & USB_ENDPTCTRL5_RXI_MASK)
-
-#define USB_ENDPTCTRL5_RXR_MASK                  (0x40U)
-#define USB_ENDPTCTRL5_RXR_SHIFT                 (6U)
-/*! RXR - RX Data Toggle Reset
- *  0b0..Does not reset
- *  0b1..Resets
- */
-#define USB_ENDPTCTRL5_RXR(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL5_RXR_SHIFT)) & USB_ENDPTCTRL5_RXR_MASK)
-
-#define USB_ENDPTCTRL5_RXE_MASK                  (0x80U)
-#define USB_ENDPTCTRL5_RXE_SHIFT                 (7U)
-/*! RXE - RX Endpoint Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define USB_ENDPTCTRL5_RXE(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL5_RXE_SHIFT)) & USB_ENDPTCTRL5_RXE_MASK)
-
-#define USB_ENDPTCTRL5_TXS_MASK                  (0x10000U)
-#define USB_ENDPTCTRL5_TXS_SHIFT                 (16U)
-/*! TXS - TX Endpoint Stall
- *  0b0..Endpoint OK
- *  0b1..Endpoint stalled
- */
-#define USB_ENDPTCTRL5_TXS(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL5_TXS_SHIFT)) & USB_ENDPTCTRL5_TXS_MASK)
-
-#define USB_ENDPTCTRL5_TXD_MASK                  (0x20000U)
-#define USB_ENDPTCTRL5_TXD_SHIFT                 (17U)
-/*! TXD - TX Endpoint Data Source */
-#define USB_ENDPTCTRL5_TXD(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL5_TXD_SHIFT)) & USB_ENDPTCTRL5_TXD_MASK)
-
-#define USB_ENDPTCTRL5_TXT_MASK                  (0xC0000U)
-#define USB_ENDPTCTRL5_TXT_SHIFT                 (18U)
-/*! TXT - TX Endpoint Type
- *  0b00..Control
- *  0b01..Isochronous
- *  0b10..Bulk
- *  0b11..Interrupt
- */
-#define USB_ENDPTCTRL5_TXT(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL5_TXT_SHIFT)) & USB_ENDPTCTRL5_TXT_MASK)
-
-#define USB_ENDPTCTRL5_TXI_MASK                  (0x200000U)
-#define USB_ENDPTCTRL5_TXI_SHIFT                 (21U)
-/*! TXI - TX Data Toggle Inhibit
- *  0b0..Allow
- *  0b1..Inhibit
- */
-#define USB_ENDPTCTRL5_TXI(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL5_TXI_SHIFT)) & USB_ENDPTCTRL5_TXI_MASK)
-
-#define USB_ENDPTCTRL5_TXR_MASK                  (0x400000U)
-#define USB_ENDPTCTRL5_TXR_SHIFT                 (22U)
-/*! TXR - TX Data Toggle Reset
- *  0b0..Does not reset
- *  0b1..Resets
- */
-#define USB_ENDPTCTRL5_TXR(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL5_TXR_SHIFT)) & USB_ENDPTCTRL5_TXR_MASK)
-
-#define USB_ENDPTCTRL5_TXE_MASK                  (0x800000U)
-#define USB_ENDPTCTRL5_TXE_SHIFT                 (23U)
-/*! TXE - TX Endpoint Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define USB_ENDPTCTRL5_TXE(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL5_TXE_SHIFT)) & USB_ENDPTCTRL5_TXE_MASK)
-/*! @} */
-
-/*! @name ENDPTCTRL6 - Endpoint Control 6 */
-/*! @{ */
-
-#define USB_ENDPTCTRL6_RXS_MASK                  (0x1U)
-#define USB_ENDPTCTRL6_RXS_SHIFT                 (0U)
-/*! RXS - RX Endpoint Stall
- *  0b0..Endpoint OK
- *  0b1..Endpoint stalled
- */
-#define USB_ENDPTCTRL6_RXS(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL6_RXS_SHIFT)) & USB_ENDPTCTRL6_RXS_MASK)
-
-#define USB_ENDPTCTRL6_RXD_MASK                  (0x2U)
-#define USB_ENDPTCTRL6_RXD_SHIFT                 (1U)
-/*! RXD - RX Endpoint Data Sink */
-#define USB_ENDPTCTRL6_RXD(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL6_RXD_SHIFT)) & USB_ENDPTCTRL6_RXD_MASK)
-
-#define USB_ENDPTCTRL6_RXT_MASK                  (0xCU)
-#define USB_ENDPTCTRL6_RXT_SHIFT                 (2U)
-/*! RXT - RX Endpoint Type
- *  0b00..Control
- *  0b01..Isochronous
- *  0b10..Bulk
- *  0b11..Interrupt
- */
-#define USB_ENDPTCTRL6_RXT(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL6_RXT_SHIFT)) & USB_ENDPTCTRL6_RXT_MASK)
-
-#define USB_ENDPTCTRL6_RXI_MASK                  (0x20U)
-#define USB_ENDPTCTRL6_RXI_SHIFT                 (5U)
-/*! RXI - RX Data Toggle Inhibit
- *  0b0..Allow
- *  0b1..Inhibit
- */
-#define USB_ENDPTCTRL6_RXI(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL6_RXI_SHIFT)) & USB_ENDPTCTRL6_RXI_MASK)
-
-#define USB_ENDPTCTRL6_RXR_MASK                  (0x40U)
-#define USB_ENDPTCTRL6_RXR_SHIFT                 (6U)
-/*! RXR - RX Data Toggle Reset
- *  0b0..Does not reset
- *  0b1..Resets
- */
-#define USB_ENDPTCTRL6_RXR(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL6_RXR_SHIFT)) & USB_ENDPTCTRL6_RXR_MASK)
-
-#define USB_ENDPTCTRL6_RXE_MASK                  (0x80U)
-#define USB_ENDPTCTRL6_RXE_SHIFT                 (7U)
-/*! RXE - RX Endpoint Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define USB_ENDPTCTRL6_RXE(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL6_RXE_SHIFT)) & USB_ENDPTCTRL6_RXE_MASK)
-
-#define USB_ENDPTCTRL6_TXS_MASK                  (0x10000U)
-#define USB_ENDPTCTRL6_TXS_SHIFT                 (16U)
-/*! TXS - TX Endpoint Stall
- *  0b0..Endpoint OK
- *  0b1..Endpoint stalled
- */
-#define USB_ENDPTCTRL6_TXS(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL6_TXS_SHIFT)) & USB_ENDPTCTRL6_TXS_MASK)
-
-#define USB_ENDPTCTRL6_TXD_MASK                  (0x20000U)
-#define USB_ENDPTCTRL6_TXD_SHIFT                 (17U)
-/*! TXD - TX Endpoint Data Source */
-#define USB_ENDPTCTRL6_TXD(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL6_TXD_SHIFT)) & USB_ENDPTCTRL6_TXD_MASK)
-
-#define USB_ENDPTCTRL6_TXT_MASK                  (0xC0000U)
-#define USB_ENDPTCTRL6_TXT_SHIFT                 (18U)
-/*! TXT - TX Endpoint Type
- *  0b00..Control
- *  0b01..Isochronous
- *  0b10..Bulk
- *  0b11..Interrupt
- */
-#define USB_ENDPTCTRL6_TXT(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL6_TXT_SHIFT)) & USB_ENDPTCTRL6_TXT_MASK)
-
-#define USB_ENDPTCTRL6_TXI_MASK                  (0x200000U)
-#define USB_ENDPTCTRL6_TXI_SHIFT                 (21U)
-/*! TXI - TX Data Toggle Inhibit
- *  0b0..Allow
- *  0b1..Inhibit
- */
-#define USB_ENDPTCTRL6_TXI(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL6_TXI_SHIFT)) & USB_ENDPTCTRL6_TXI_MASK)
-
-#define USB_ENDPTCTRL6_TXR_MASK                  (0x400000U)
-#define USB_ENDPTCTRL6_TXR_SHIFT                 (22U)
-/*! TXR - TX Data Toggle Reset
- *  0b0..Does not reset
- *  0b1..Resets
- */
-#define USB_ENDPTCTRL6_TXR(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL6_TXR_SHIFT)) & USB_ENDPTCTRL6_TXR_MASK)
-
-#define USB_ENDPTCTRL6_TXE_MASK                  (0x800000U)
-#define USB_ENDPTCTRL6_TXE_SHIFT                 (23U)
-/*! TXE - TX Endpoint Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define USB_ENDPTCTRL6_TXE(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL6_TXE_SHIFT)) & USB_ENDPTCTRL6_TXE_MASK)
-/*! @} */
-
-/*! @name ENDPTCTRL7 - Endpoint Control 7 */
-/*! @{ */
-
-#define USB_ENDPTCTRL7_RXS_MASK                  (0x1U)
-#define USB_ENDPTCTRL7_RXS_SHIFT                 (0U)
-/*! RXS - RX Endpoint Stall
- *  0b0..Endpoint OK
- *  0b1..Endpoint stalled
- */
-#define USB_ENDPTCTRL7_RXS(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL7_RXS_SHIFT)) & USB_ENDPTCTRL7_RXS_MASK)
-
-#define USB_ENDPTCTRL7_RXD_MASK                  (0x2U)
-#define USB_ENDPTCTRL7_RXD_SHIFT                 (1U)
-/*! RXD - RX Endpoint Data Sink */
-#define USB_ENDPTCTRL7_RXD(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL7_RXD_SHIFT)) & USB_ENDPTCTRL7_RXD_MASK)
-
-#define USB_ENDPTCTRL7_RXT_MASK                  (0xCU)
-#define USB_ENDPTCTRL7_RXT_SHIFT                 (2U)
-/*! RXT - RX Endpoint Type
- *  0b00..Control
- *  0b01..Isochronous
- *  0b10..Bulk
- *  0b11..Interrupt
- */
-#define USB_ENDPTCTRL7_RXT(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL7_RXT_SHIFT)) & USB_ENDPTCTRL7_RXT_MASK)
-
-#define USB_ENDPTCTRL7_RXI_MASK                  (0x20U)
-#define USB_ENDPTCTRL7_RXI_SHIFT                 (5U)
-/*! RXI - RX Data Toggle Inhibit
- *  0b0..Allow
- *  0b1..Inhibit
- */
-#define USB_ENDPTCTRL7_RXI(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL7_RXI_SHIFT)) & USB_ENDPTCTRL7_RXI_MASK)
-
-#define USB_ENDPTCTRL7_RXR_MASK                  (0x40U)
-#define USB_ENDPTCTRL7_RXR_SHIFT                 (6U)
-/*! RXR - RX Data Toggle Reset
- *  0b0..Does not reset
- *  0b1..Resets
- */
-#define USB_ENDPTCTRL7_RXR(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL7_RXR_SHIFT)) & USB_ENDPTCTRL7_RXR_MASK)
-
-#define USB_ENDPTCTRL7_RXE_MASK                  (0x80U)
-#define USB_ENDPTCTRL7_RXE_SHIFT                 (7U)
-/*! RXE - RX Endpoint Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define USB_ENDPTCTRL7_RXE(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL7_RXE_SHIFT)) & USB_ENDPTCTRL7_RXE_MASK)
-
-#define USB_ENDPTCTRL7_TXS_MASK                  (0x10000U)
-#define USB_ENDPTCTRL7_TXS_SHIFT                 (16U)
-/*! TXS - TX Endpoint Stall
- *  0b0..Endpoint OK
- *  0b1..Endpoint stalled
- */
-#define USB_ENDPTCTRL7_TXS(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL7_TXS_SHIFT)) & USB_ENDPTCTRL7_TXS_MASK)
-
-#define USB_ENDPTCTRL7_TXD_MASK                  (0x20000U)
-#define USB_ENDPTCTRL7_TXD_SHIFT                 (17U)
-/*! TXD - TX Endpoint Data Source */
-#define USB_ENDPTCTRL7_TXD(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL7_TXD_SHIFT)) & USB_ENDPTCTRL7_TXD_MASK)
-
-#define USB_ENDPTCTRL7_TXT_MASK                  (0xC0000U)
-#define USB_ENDPTCTRL7_TXT_SHIFT                 (18U)
-/*! TXT - TX Endpoint Type
- *  0b00..Control
- *  0b01..Isochronous
- *  0b10..Bulk
- *  0b11..Interrupt
- */
-#define USB_ENDPTCTRL7_TXT(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL7_TXT_SHIFT)) & USB_ENDPTCTRL7_TXT_MASK)
-
-#define USB_ENDPTCTRL7_TXI_MASK                  (0x200000U)
-#define USB_ENDPTCTRL7_TXI_SHIFT                 (21U)
-/*! TXI - TX Data Toggle Inhibit
- *  0b0..Allow
- *  0b1..Inhibit
- */
-#define USB_ENDPTCTRL7_TXI(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL7_TXI_SHIFT)) & USB_ENDPTCTRL7_TXI_MASK)
-
-#define USB_ENDPTCTRL7_TXR_MASK                  (0x400000U)
-#define USB_ENDPTCTRL7_TXR_SHIFT                 (22U)
-/*! TXR - TX Data Toggle Reset
- *  0b0..Does not reset
- *  0b1..Resets
- */
-#define USB_ENDPTCTRL7_TXR(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL7_TXR_SHIFT)) & USB_ENDPTCTRL7_TXR_MASK)
-
-#define USB_ENDPTCTRL7_TXE_MASK                  (0x800000U)
-#define USB_ENDPTCTRL7_TXE_SHIFT                 (23U)
-/*! TXE - TX Endpoint Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define USB_ENDPTCTRL7_TXE(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL7_TXE_SHIFT)) & USB_ENDPTCTRL7_TXE_MASK)
-/*! @} */
-
+/* The count of USB_ENDPTCTRL */
+#define USB_ENDPTCTRL_COUNT                      (7U)
 
 /*!
  * @}
  */ /* end of group USB_Register_Masks */
+
+
+/* USB - Peripheral instance base addresses */
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
+  /** Peripheral USB__USB_OTG1 base address */
+  #define USB__USB_OTG1_BASE                       (0x5C100000u)
+  /** Peripheral USB__USB_OTG1 base address */
+  #define USB__USB_OTG1_BASE_NS                    (0x4C100000u)
+  /** Peripheral USB__USB_OTG1 base pointer */
+  #define USB__USB_OTG1                            ((USB_Type *)USB__USB_OTG1_BASE)
+  /** Peripheral USB__USB_OTG1 base pointer */
+  #define USB__USB_OTG1_NS                         ((USB_Type *)USB__USB_OTG1_BASE_NS)
+  /** Peripheral USB__USB_OTG2 base address */
+  #define USB__USB_OTG2_BASE                       (0x5C200000u)
+  /** Peripheral USB__USB_OTG2 base address */
+  #define USB__USB_OTG2_BASE_NS                    (0x4C200000u)
+  /** Peripheral USB__USB_OTG2 base pointer */
+  #define USB__USB_OTG2                            ((USB_Type *)USB__USB_OTG2_BASE)
+  /** Peripheral USB__USB_OTG2 base pointer */
+  #define USB__USB_OTG2_NS                         ((USB_Type *)USB__USB_OTG2_BASE_NS)
+  /** Array initializer of USB peripheral base addresses */
+  #define USB_BASE_ADDRS                           { USB__USB_OTG1_BASE, USB__USB_OTG2_BASE }
+  /** Array initializer of USB peripheral base pointers */
+  #define USB_BASE_PTRS                            { USB__USB_OTG1, USB__USB_OTG2 }
+  /** Array initializer of USB peripheral base addresses */
+  #define USB_BASE_ADDRS_NS                        { USB__USB_OTG1_BASE_NS, USB__USB_OTG2_BASE_NS }
+  /** Array initializer of USB peripheral base pointers */
+  #define USB_BASE_PTRS_NS                         { USB__USB_OTG1_NS, USB__USB_OTG2_NS }
+#else
+  /** Peripheral USB__USB_OTG1 base address */
+  #define USB__USB_OTG1_BASE                       (0x4C100000u)
+  /** Peripheral USB__USB_OTG1 base pointer */
+  #define USB__USB_OTG1                            ((USB_Type *)USB__USB_OTG1_BASE)
+  /** Peripheral USB__USB_OTG2 base address */
+  #define USB__USB_OTG2_BASE                       (0x4C200000u)
+  /** Peripheral USB__USB_OTG2 base pointer */
+  #define USB__USB_OTG2                            ((USB_Type *)USB__USB_OTG2_BASE)
+  /** Array initializer of USB peripheral base addresses */
+  #define USB_BASE_ADDRS                           { USB__USB_OTG1_BASE, USB__USB_OTG2_BASE }
+  /** Array initializer of USB peripheral base pointers */
+  #define USB_BASE_PTRS                            { USB__USB_OTG1, USB__USB_OTG2 }
+#endif
 
 
 /*!
