@@ -181,7 +181,7 @@ void wlan_add_rm_beacon_report(wlan_rrm_beacon_report_data *rep_data,
                                BSSDescriptor_t *bss_entry,
                                t_u8 **buf_pos,
                                t_s32 remained_len,
-                               t_u32 *pos_last_indication);
+                               uintptr_t *pos_last_indication);
 bool wlan_rrm_matched_ap_found(wlan_rrm_beacon_report_data *rep_data, BSSDescriptor_t *bss_entry);
 
 /** Add RRM Capabilities */

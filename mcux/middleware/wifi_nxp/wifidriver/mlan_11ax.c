@@ -432,7 +432,7 @@ int wlan_cmd_11ax_cfg(mlan_private *pmpriv, t_u16 action, mlan_ds_11ax_he_cfg *h
     HostCmd_DS_COMMAND *cmd = wifi_get_command_buffer();
     cmd->command            = wlan_cpu_to_le16(HostCmd_CMD_11AX_CFG);
     cmd->size               = S_DS_GEN + sizeof(HostCmd_DS_11AX_CFG);
-    axcfg                   = (HostCmd_DS_11AX_CFG *)((t_u32)cmd + S_DS_GEN);
+    axcfg                   = (HostCmd_DS_11AX_CFG *)((uintptr_t)cmd + S_DS_GEN);
     axcfg->action           = action;
     axcfg->band_config      = he_cfg->band & 0xFF;
     pos                     = (t_u8 *)axcfg->val;

@@ -40,7 +40,7 @@ void *wifi_malloc_eventbuf(size_t size)
     }
     else
     {
-        w_mem_e("[evtbuf] Alloc: S: %d FAILED", size);
+        w_mem_e("[evtbuf] Alloc: S: %zu FAILED", size);
     }
 #else
     void *ptr = OSA_MemoryPoolAllocate(buf_2048_MemoryPool);

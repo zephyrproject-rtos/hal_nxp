@@ -318,7 +318,7 @@ retry:
     head = sg_data_new_rx();
     if (head == NULL)
     {
-        wifi_io_d("None RX sg data head pkt 0x%x", (t_u32)pkt);
+        wifi_io_d("None RX sg data head pkt %p", pkt);
         goto fail;
     }
 
@@ -473,7 +473,7 @@ static sg_data_list_t *sg_data_tx_prepare(t_u8 *out_buf)
     }
 
     /* 3. check if address is aligned */
-    trim = ((t_u32)(void *)payload & (SG_DATA_TX_ALIGN_SIZE - 1));
+    trim = ((uintptr_t)(void *)payload & (SG_DATA_TX_ALIGN_SIZE - 1));
     if (trim != 0)
     {
         if (buf->is_hdr_in_payload)
@@ -616,7 +616,7 @@ static sg_data_list_t *sg_data_tx_prepare(t_u8 *out_buf)
          * it with padding. The padding will be ignored by device.
          */
         if ((NAL_BUF_NEXT(p) != NULL && !SG_DATA_IS_ALIGNED(NAL_BUF_LEN(p), SG_DATA_TX_ALIGN_SIZE)) ||
-            (!SG_DATA_IS_ALIGNED((t_u32)payload, SG_DATA_TX_ALIGN_SIZE)))
+            (!SG_DATA_IS_ALIGNED((uintptr_t)payload, SG_DATA_TX_ALIGN_SIZE)))
         {
             goto clone;
         }

@@ -2136,7 +2136,7 @@ static int wifi_assoc_pick_security_ie(mlan_private *priv, BSSDescriptor_t *d,
                 }
                 else
                 {
-                    wifi_e("Failed to copy RSNO2 IE len %d, fall through", d->rsno2_ie_buff_len);
+                    wifi_e("Failed to copy RSNO2 IE len %zu, fall through", d->rsno2_ie_buff_len);
                 }
             }
         }
@@ -2157,7 +2157,7 @@ static int wifi_assoc_pick_security_ie(mlan_private *priv, BSSDescriptor_t *d,
                 }
                 else
                 {
-                    wifi_e("Failed to copy RSNO IE len %d, fall through", d->rsno_ie_buff_len);
+                    wifi_e("Failed to copy RSNO IE len %zu, fall through", d->rsno_ie_buff_len);
                 }
             }
         }
@@ -2186,7 +2186,7 @@ static int wifi_assoc_pick_security_ie(mlan_private *priv, BSSDescriptor_t *d,
             }
             else
             {
-                wifi_e("Failed to copy RSN IE len %d, fall through", d->rsn_ie_buff_len);
+                wifi_e("Failed to copy RSN IE len %zu, fall through", d->rsn_ie_buff_len);
             }
         }
     }
