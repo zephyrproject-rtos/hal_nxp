@@ -31,7 +31,7 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260407
+**     Build:               b260507
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SPC
@@ -323,7 +323,7 @@ typedef struct {
  *  0b00..
  *  0b01..1.0 V
  *  0b10..1.1 V
- *  0b11..
+ *  0b11..SRAM configured for "1.2" V operation
  */
 #define SPC_SRAMCTL_VSM(x)                       (((uint32_t)(((uint32_t)(x)) << SPC_SRAMCTL_VSM_SHIFT)) & SPC_SRAMCTL_VSM_MASK)
 
@@ -458,7 +458,6 @@ typedef struct {
  *  0b01..Mid voltage (1.0 V)
  *  0b10..Normal voltage (1.1 V)
  *  0b11..Overdrive voltage (1.2 V)
- *  0b11..Reserved
  */
 #define SPC_LP_CFG_CORELDO_VDD_LVL(x)            (((uint32_t)(((uint32_t)(x)) << SPC_LP_CFG_CORELDO_VDD_LVL_SHIFT)) & SPC_LP_CFG_CORELDO_VDD_LVL_MASK)
 

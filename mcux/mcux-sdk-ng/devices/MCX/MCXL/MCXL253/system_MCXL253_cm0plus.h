@@ -8,9 +8,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MCXL25x RM Rev.2 DraftA
-**     Version:             rev. 2.0, 2026-04-22
-**     Build:               b260422
+**     Reference manual:    MCXL25x RM Rev.2
+**     Version:             rev. 2.1, 2026-05-02
+**     Build:               b260512
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -31,14 +31,16 @@
 **         Generated based on Rev.1 RC.
 **     - rev. 2.0 (2026-04-22)
 **         Generated based on Rev. 2 DraftA.
+**     - rev. 2.1 (2026-05-02)
+**         Generated based on Rev. 2.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MCXL253_cm0plus
- * @version 2.0
- * @date 2026-04-22
+ * @version 2.1
+ * @date 2026-05-02
  * @brief Device specific configuration file for MCXL253_cm0plus (header file)
  *
  * Provides a system configuration function and a global variable that contains

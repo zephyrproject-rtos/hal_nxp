@@ -7,14 +7,14 @@
 **                          MCXW727DMFTA_cm33_core0
 **                          MCXW727DMFTA_cm33_core1
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BTRTU1
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -26,14 +26,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_BTRTU1.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for BTRTU1
  *
  * CMSIS Peripheral Access Layer for BTRTU1
@@ -107,14 +112,12 @@ typedef struct {
   __I  uint32_t BTRTU1_TIMER2_VAL;                 /**< Timer2 Value, offset: 0x18 */
   __I  uint32_t BTRTU1_TIMER3_VAL;                 /**< Timer3 Value, offset: 0x1C */
   __I  uint32_t BTRTU1_TIMER4_VAL;                 /**< Timer4 Value, offset: 0x20 */
-  __I  uint16_t BTRTU1_ISR;                        /**< Interrupt Soruce Status, offset: 0x24 */
-       uint8_t RESERVED_0[2];
-  __IO uint16_t BTRTU1_IMR;                        /**< Interrupt Mask, offset: 0x28 */
-       uint8_t RESERVED_1[2];
+  __I  uint32_t BTRTU1_ISR;                        /**< Interrupt Soruce Status, offset: 0x24 */
+  __IO uint32_t BTRTU1_IMR;                        /**< Interrupt Mask, offset: 0x28 */
   __IO uint32_t BTRTU1_PRER_1KHZ;                  /**< 1kHz Timer Prescaler, offset: 0x2C */
   __IO uint32_t BTRTU1_PRER_1MHZ;                  /**< 1MHz Timer Prescaler, offset: 0x30 */
   __IO uint32_t BTRTU1_WD_CTRL;                    /**< Watchdog Control, offset: 0x34 */
-       uint8_t RESERVED_2[8];
+       uint8_t RESERVED_0[8];
   __I  uint32_t BTRTU1_PRER1_CNT;                  /**< Prescaler1 Value, offset: 0x40 */
   __I  uint32_t BTRTU1_PRER2_CNT;                  /**< Prescaler2 Value, offset: 0x44 */
   __I  uint32_t BTRTU1_PRER3_CNT;                  /**< Prescaler3 Value, offset: 0x48 */
@@ -297,27 +300,27 @@ typedef struct {
 #define BTRTU1_BTRTU1_ISR_T1_INT_MASK            (0x1U)
 #define BTRTU1_BTRTU1_ISR_T1_INT_SHIFT           (0U)
 /*! t1_int - " */
-#define BTRTU1_BTRTU1_ISR_T1_INT(x)              (((uint16_t)(((uint16_t)(x)) << BTRTU1_BTRTU1_ISR_T1_INT_SHIFT)) & BTRTU1_BTRTU1_ISR_T1_INT_MASK)
+#define BTRTU1_BTRTU1_ISR_T1_INT(x)              (((uint32_t)(((uint32_t)(x)) << BTRTU1_BTRTU1_ISR_T1_INT_SHIFT)) & BTRTU1_BTRTU1_ISR_T1_INT_MASK)
 
 #define BTRTU1_BTRTU1_ISR_T2_INT_MASK            (0x2U)
 #define BTRTU1_BTRTU1_ISR_T2_INT_SHIFT           (1U)
 /*! t2_int - " */
-#define BTRTU1_BTRTU1_ISR_T2_INT(x)              (((uint16_t)(((uint16_t)(x)) << BTRTU1_BTRTU1_ISR_T2_INT_SHIFT)) & BTRTU1_BTRTU1_ISR_T2_INT_MASK)
+#define BTRTU1_BTRTU1_ISR_T2_INT(x)              (((uint32_t)(((uint32_t)(x)) << BTRTU1_BTRTU1_ISR_T2_INT_SHIFT)) & BTRTU1_BTRTU1_ISR_T2_INT_MASK)
 
 #define BTRTU1_BTRTU1_ISR_T3_INT_MASK            (0x4U)
 #define BTRTU1_BTRTU1_ISR_T3_INT_SHIFT           (2U)
 /*! t3_int - " */
-#define BTRTU1_BTRTU1_ISR_T3_INT(x)              (((uint16_t)(((uint16_t)(x)) << BTRTU1_BTRTU1_ISR_T3_INT_SHIFT)) & BTRTU1_BTRTU1_ISR_T3_INT_MASK)
+#define BTRTU1_BTRTU1_ISR_T3_INT(x)              (((uint32_t)(((uint32_t)(x)) << BTRTU1_BTRTU1_ISR_T3_INT_SHIFT)) & BTRTU1_BTRTU1_ISR_T3_INT_MASK)
 
 #define BTRTU1_BTRTU1_ISR_T4_INT_MASK            (0x8U)
 #define BTRTU1_BTRTU1_ISR_T4_INT_SHIFT           (3U)
 /*! t4_int - " */
-#define BTRTU1_BTRTU1_ISR_T4_INT(x)              (((uint16_t)(((uint16_t)(x)) << BTRTU1_BTRTU1_ISR_T4_INT_SHIFT)) & BTRTU1_BTRTU1_ISR_T4_INT_MASK)
+#define BTRTU1_BTRTU1_ISR_T4_INT(x)              (((uint32_t)(((uint32_t)(x)) << BTRTU1_BTRTU1_ISR_T4_INT_SHIFT)) & BTRTU1_BTRTU1_ISR_T4_INT_MASK)
 
 #define BTRTU1_BTRTU1_ISR_WD_INT_MASK            (0x10U)
 #define BTRTU1_BTRTU1_ISR_WD_INT_SHIFT           (4U)
 /*! wd_int - " */
-#define BTRTU1_BTRTU1_ISR_WD_INT(x)              (((uint16_t)(((uint16_t)(x)) << BTRTU1_BTRTU1_ISR_WD_INT_SHIFT)) & BTRTU1_BTRTU1_ISR_WD_INT_MASK)
+#define BTRTU1_BTRTU1_ISR_WD_INT(x)              (((uint32_t)(((uint32_t)(x)) << BTRTU1_BTRTU1_ISR_WD_INT_SHIFT)) & BTRTU1_BTRTU1_ISR_WD_INT_MASK)
 /*! @} */
 
 /*! @name BTRTU1_IMR - Interrupt Mask */
@@ -326,22 +329,22 @@ typedef struct {
 #define BTRTU1_BTRTU1_IMR_T1_INT_MASK            (0x1U)
 #define BTRTU1_BTRTU1_IMR_T1_INT_SHIFT           (0U)
 /*! t1_int - " */
-#define BTRTU1_BTRTU1_IMR_T1_INT(x)              (((uint16_t)(((uint16_t)(x)) << BTRTU1_BTRTU1_IMR_T1_INT_SHIFT)) & BTRTU1_BTRTU1_IMR_T1_INT_MASK)
+#define BTRTU1_BTRTU1_IMR_T1_INT(x)              (((uint32_t)(((uint32_t)(x)) << BTRTU1_BTRTU1_IMR_T1_INT_SHIFT)) & BTRTU1_BTRTU1_IMR_T1_INT_MASK)
 
 #define BTRTU1_BTRTU1_IMR_T2_INT_MASK            (0x2U)
 #define BTRTU1_BTRTU1_IMR_T2_INT_SHIFT           (1U)
 /*! t2_int - " */
-#define BTRTU1_BTRTU1_IMR_T2_INT(x)              (((uint16_t)(((uint16_t)(x)) << BTRTU1_BTRTU1_IMR_T2_INT_SHIFT)) & BTRTU1_BTRTU1_IMR_T2_INT_MASK)
+#define BTRTU1_BTRTU1_IMR_T2_INT(x)              (((uint32_t)(((uint32_t)(x)) << BTRTU1_BTRTU1_IMR_T2_INT_SHIFT)) & BTRTU1_BTRTU1_IMR_T2_INT_MASK)
 
 #define BTRTU1_BTRTU1_IMR_T3_INT_MASK            (0x4U)
 #define BTRTU1_BTRTU1_IMR_T3_INT_SHIFT           (2U)
 /*! t3_int - " */
-#define BTRTU1_BTRTU1_IMR_T3_INT(x)              (((uint16_t)(((uint16_t)(x)) << BTRTU1_BTRTU1_IMR_T3_INT_SHIFT)) & BTRTU1_BTRTU1_IMR_T3_INT_MASK)
+#define BTRTU1_BTRTU1_IMR_T3_INT(x)              (((uint32_t)(((uint32_t)(x)) << BTRTU1_BTRTU1_IMR_T3_INT_SHIFT)) & BTRTU1_BTRTU1_IMR_T3_INT_MASK)
 
 #define BTRTU1_BTRTU1_IMR_T4_INT_MASK            (0x8U)
 #define BTRTU1_BTRTU1_IMR_T4_INT_SHIFT           (3U)
 /*! t4_int - " */
-#define BTRTU1_BTRTU1_IMR_T4_INT(x)              (((uint16_t)(((uint16_t)(x)) << BTRTU1_BTRTU1_IMR_T4_INT_SHIFT)) & BTRTU1_BTRTU1_IMR_T4_INT_MASK)
+#define BTRTU1_BTRTU1_IMR_T4_INT(x)              (((uint32_t)(((uint32_t)(x)) << BTRTU1_BTRTU1_IMR_T4_INT_SHIFT)) & BTRTU1_BTRTU1_IMR_T4_INT_MASK)
 /*! @} */
 
 /*! @name BTRTU1_PRER_1KHZ - 1kHz Timer Prescaler */

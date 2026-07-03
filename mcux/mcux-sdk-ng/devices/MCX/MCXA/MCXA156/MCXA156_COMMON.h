@@ -13,7 +13,7 @@
 **
 **     Reference manual:    MCXA18 User manual
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260209
+**     Build:               b260518
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXA156
@@ -337,6 +337,8 @@ typedef enum IRQn {
 #define DMA_BASE_ADDRS                           { DMA0_BASE }
 /** Array initializer of DMA peripheral base pointers */
 #define DMA_BASE_PTRS                            { DMA0 }
+/** Interrupt vectors for the DMA peripheral type */
+#define DMA_IRQS                                 { { DMA_CH0_IRQn, DMA_CH1_IRQn, DMA_CH2_IRQn, DMA_CH3_IRQn, DMA_CH4_IRQn, DMA_CH5_IRQn, DMA_CH6_IRQn, DMA_CH7_IRQn } }
 
 /* EIM - Peripheral instance base addresses */
 /** Peripheral EIM0 base address */
@@ -409,6 +411,8 @@ typedef enum IRQn {
 #define FMU_BASE_ADDRS                           { FMU0_BASE }
 /** Array initializer of FMU peripheral base pointers */
 #define FMU_BASE_PTRS                            { FMU0 }
+/** Interrupt vectors for the FMU peripheral type */
+#define FMU_IRQS                                 { FMU0_IRQn }
 
 /* FMUTEST - Peripheral instance base addresses */
 /** Peripheral FMU0TEST base address */
@@ -716,6 +720,8 @@ typedef enum IRQn {
 #define TRDC_BASE_ADDRS                          { MBC0_BASE }
 /** Array initializer of TRDC peripheral base pointers */
 #define TRDC_BASE_PTRS                           { MBC0 }
+/** Interrupt vectors for the TRDC peripheral type */
+#define TRDC_IRQS                                { MBC0_IRQn }
 #define MBC0_MEMORY_CFG_WORD_COUNT {1,2,4,1}
 #define MBC1_MEMORY_CFG_WORD_COUNT {1,1,1,1}
 #define MBC2_MEMORY_CFG_WORD_COUNT {9,6,1,1}

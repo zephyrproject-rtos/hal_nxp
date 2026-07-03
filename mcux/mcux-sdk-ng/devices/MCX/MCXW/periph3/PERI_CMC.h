@@ -7,14 +7,14 @@
 **                          MCXW727DMFTA_cm33_core0
 **                          MCXW727DMFTA_cm33_core1
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CMC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -26,14 +26,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_CMC.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for CMC
  *
  * CMSIS Peripheral Access Layer for CMC
@@ -125,9 +130,9 @@ typedef struct {
        uint8_t RESERVED_3[12];
   __IO uint32_t FM[CMC_FM_COUNT];                  /**< Force Mode, array offset: 0xB0, array step: 0x4 */
        uint8_t RESERVED_4[12];
-  __IO uint32_t SRAMDIS[CMC_SRAMDIS_COUNT];        /**< SRAM Shut Down Register, array offset: 0xC0, array step: 0x4 */
+  __IO uint32_t SRAMDIS[CMC_SRAMDIS_COUNT];        /**< SRAM Disable, array offset: 0xC0, array step: 0x4 */
        uint8_t RESERVED_5[12];
-  __IO uint32_t SRAMRET[CMC_SRAMRET_COUNT];        /**< SRAM Deep Sleep Register, array offset: 0xD0, array step: 0x4 */
+  __IO uint32_t SRAMRET[CMC_SRAMRET_COUNT];        /**< SRAM Retention, array offset: 0xD0, array step: 0x4 */
        uint8_t RESERVED_6[12];
   __IO uint32_t FLASHCR;                           /**< Flash Control, offset: 0xE0 */
        uint8_t RESERVED_7[12];
@@ -716,7 +721,7 @@ typedef struct {
 #define CMC_FM_FORCECFG(x)                       (((uint32_t)(((uint32_t)(x)) << CMC_FM_FORCECFG_SHIFT)) & CMC_FM_FORCECFG_MASK)
 /*! @} */
 
-/*! @name SRAMDIS - SRAM Shut Down Register */
+/*! @name SRAMDIS - SRAM Disable */
 /*! @{ */
 
 #define CMC_SRAMDIS_DIS_MASK                     (0x7FFU)
@@ -725,7 +730,7 @@ typedef struct {
 #define CMC_SRAMDIS_DIS(x)                       (((uint32_t)(((uint32_t)(x)) << CMC_SRAMDIS_DIS_SHIFT)) & CMC_SRAMDIS_DIS_MASK)
 /*! @} */
 
-/*! @name SRAMRET - SRAM Deep Sleep Register */
+/*! @name SRAMRET - SRAM Retention */
 /*! @{ */
 
 #define CMC_SRAMRET_RET_MASK                     (0x7FFU)

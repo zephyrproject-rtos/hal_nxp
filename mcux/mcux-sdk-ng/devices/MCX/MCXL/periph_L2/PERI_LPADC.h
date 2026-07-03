@@ -13,8 +13,8 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 2.0, 2026-04-22
-**     Build:               b260422
+**     Version:             rev. 2.1, 2026-05-02
+**     Build:               b260512
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPADC
@@ -33,14 +33,16 @@
 **         Generated based on Rev.1 RC.
 **     - rev. 2.0 (2026-04-22)
 **         Generated based on Rev. 2 DraftA.
+**     - rev. 2.1 (2026-05-02)
+**         Generated based on Rev. 2.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_LPADC.h
- * @version 2.0
- * @date 2026-04-22
+ * @version 2.1
+ * @date 2026-05-02
  * @brief CMSIS Peripheral Access Layer for LPADC
  *
  * CMSIS Peripheral Access Layer for LPADC

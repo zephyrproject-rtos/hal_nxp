@@ -4,13 +4,13 @@
 **                          MCXE31BMPB
 **
 **     Version:             rev. 1.0, 2025-07-18
-**     Build:               b260420
+**     Build:               b260518
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for EMAC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -1758,6 +1758,25 @@ typedef struct {
 /*! @name MAC_RXQ_CTRL - MAC RxQ Control 0..MAC RxQ Control 2 */
 /*! @{ */
 
+#define EMAC_MAC_RXQ_CTRL_AVCPQ_MASK             (0x7U)
+#define EMAC_MAC_RXQ_CTRL_AVCPQ_SHIFT            (0U)
+/*! AVCPQ - AV Untagged Control Packets Queue
+ *  0b000..Receive queue 0
+ *  0b001..Receive queue 1
+ *  0b010..Receive queue 2
+ *  0b011..Receive queue 3
+ *  0b100..Receive queue 4
+ *  0b101..Receive queue 5
+ *  0b110..Receive queue 6
+ *  0b111..Receive queue 7
+ */
+#define EMAC_MAC_RXQ_CTRL_AVCPQ(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_RXQ_CTRL_AVCPQ_SHIFT)) & EMAC_MAC_RXQ_CTRL_AVCPQ_MASK)
+
+#define EMAC_MAC_RXQ_CTRL_PSRQ0_MASK             (0xFFU)
+#define EMAC_MAC_RXQ_CTRL_PSRQ0_SHIFT            (0U)
+/*! PSRQ0 - Priorities Selected In Receive Queue 0 */
+#define EMAC_MAC_RXQ_CTRL_PSRQ0(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_RXQ_CTRL_PSRQ0_SHIFT)) & EMAC_MAC_RXQ_CTRL_PSRQ0_MASK)
+
 #define EMAC_MAC_RXQ_CTRL_RXQ0EN_MASK            (0x3U)
 #define EMAC_MAC_RXQ_CTRL_RXQ0EN_SHIFT           (0U)
 /*! RXQ0EN - Receive Queue 0 Enable
@@ -1778,20 +1797,6 @@ typedef struct {
  */
 #define EMAC_MAC_RXQ_CTRL_RXQ1EN(x)              (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_RXQ_CTRL_RXQ1EN_SHIFT)) & EMAC_MAC_RXQ_CTRL_RXQ1EN_MASK)
 
-#define EMAC_MAC_RXQ_CTRL_AVCPQ_MASK             (0x7U)
-#define EMAC_MAC_RXQ_CTRL_AVCPQ_SHIFT            (0U)
-/*! AVCPQ - AV Untagged Control Packets Queue
- *  0b000..Receive queue 0
- *  0b001..Receive queue 1
- *  0b010..Receive queue 2
- *  0b011..Receive queue 3
- *  0b100..Receive queue 4
- *  0b101..Receive queue 5
- *  0b110..Receive queue 6
- *  0b111..Receive queue 7
- */
-#define EMAC_MAC_RXQ_CTRL_AVCPQ(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_RXQ_CTRL_AVCPQ_SHIFT)) & EMAC_MAC_RXQ_CTRL_AVCPQ_MASK)
-
 #define EMAC_MAC_RXQ_CTRL_PTPQ_MASK              (0x70U)
 #define EMAC_MAC_RXQ_CTRL_PTPQ_SHIFT             (4U)
 /*! PTPQ - PTP Packets Queue
@@ -1805,6 +1810,11 @@ typedef struct {
  *  0b111..Receive queue 7
  */
 #define EMAC_MAC_RXQ_CTRL_PTPQ(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_RXQ_CTRL_PTPQ_SHIFT)) & EMAC_MAC_RXQ_CTRL_PTPQ_MASK)
+
+#define EMAC_MAC_RXQ_CTRL_PSRQ1_MASK             (0xFF00U)
+#define EMAC_MAC_RXQ_CTRL_PSRQ1_SHIFT            (8U)
+/*! PSRQ1 - Priorities Selected In Receive Queue 1 */
+#define EMAC_MAC_RXQ_CTRL_PSRQ1(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_RXQ_CTRL_PSRQ1_SHIFT)) & EMAC_MAC_RXQ_CTRL_PSRQ1_MASK)
 
 #define EMAC_MAC_RXQ_CTRL_UPQ_MASK               (0x7000U)
 #define EMAC_MAC_RXQ_CTRL_UPQ_SHIFT              (12U)
@@ -1859,16 +1869,6 @@ typedef struct {
 #define EMAC_MAC_RXQ_CTRL_FPRQ_SHIFT             (24U)
 /*! FPRQ - Frame Preemption Residue Queue */
 #define EMAC_MAC_RXQ_CTRL_FPRQ(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_RXQ_CTRL_FPRQ_SHIFT)) & EMAC_MAC_RXQ_CTRL_FPRQ_MASK)
-
-#define EMAC_MAC_RXQ_CTRL_PSRQ0_MASK             (0xFFU)
-#define EMAC_MAC_RXQ_CTRL_PSRQ0_SHIFT            (0U)
-/*! PSRQ0 - Priorities Selected In Receive Queue 0 */
-#define EMAC_MAC_RXQ_CTRL_PSRQ0(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_RXQ_CTRL_PSRQ0_SHIFT)) & EMAC_MAC_RXQ_CTRL_PSRQ0_MASK)
-
-#define EMAC_MAC_RXQ_CTRL_PSRQ1_MASK             (0xFF00U)
-#define EMAC_MAC_RXQ_CTRL_PSRQ1_SHIFT            (8U)
-/*! PSRQ1 - Priorities Selected In Receive Queue 1 */
-#define EMAC_MAC_RXQ_CTRL_PSRQ1(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_RXQ_CTRL_PSRQ1_SHIFT)) & EMAC_MAC_RXQ_CTRL_PSRQ1_MASK)
 /*! @} */
 
 /*! @name MAC_INTERRUPT_STATUS - MAC Interrupt Status */
@@ -2138,6 +2138,52 @@ typedef struct {
  */
 #define EMAC_MAC_HW_FEAT_MIISEL(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_MIISEL_SHIFT)) & EMAC_MAC_HW_FEAT_MIISEL_MASK)
 
+#define EMAC_MAC_HW_FEAT_NRVF_MASK               (0x7U)
+#define EMAC_MAC_HW_FEAT_NRVF_SHIFT              (0U)
+/*! NRVF
+ *  0b000..No filters (0)
+ *  0b001..4
+ *  0b010..8
+ *  0b011..16
+ *  0b100..24
+ *  0b101..32
+ *  0b110..Reserved
+ */
+#define EMAC_MAC_HW_FEAT_NRVF(x)                 (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_NRVF_SHIFT)) & EMAC_MAC_HW_FEAT_NRVF_MASK)
+
+#define EMAC_MAC_HW_FEAT_RXFIFOSIZE_MASK         (0x1FU)
+#define EMAC_MAC_HW_FEAT_RXFIFOSIZE_SHIFT        (0U)
+/*! RXFIFOSIZE - MTL Receive FIFO Size Feature
+ *  0b00000..128 bytes
+ *  0b00001..256 bytes
+ *  0b00010..512 bytes
+ *  0b00011..1024 bytes
+ *  0b00100..2048 bytes
+ *  0b00101..4096 bytes
+ *  0b00110..8192 bytes
+ *  0b00111..16384 bytes
+ *  0b01000..32 KB
+ *  0b01001..64 KB
+ *  0b01010..128 KB
+ *  0b01011..256 KB
+ *  0b01100..Reserved
+ */
+#define EMAC_MAC_HW_FEAT_RXFIFOSIZE(x)           (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_RXFIFOSIZE_SHIFT)) & EMAC_MAC_HW_FEAT_RXFIFOSIZE_MASK)
+
+#define EMAC_MAC_HW_FEAT_RXQCNT_MASK             (0xFU)
+#define EMAC_MAC_HW_FEAT_RXQCNT_SHIFT            (0U)
+/*! RXQCNT - Number Of MTL Receive Queues
+ *  0b0000..1
+ *  0b0001..2
+ *  0b0010..3
+ *  0b0011..4
+ *  0b0100..5
+ *  0b0101..6
+ *  0b0110..7
+ *  0b0111..8
+ */
+#define EMAC_MAC_HW_FEAT_RXQCNT(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_RXQCNT_SHIFT)) & EMAC_MAC_HW_FEAT_RXQCNT_MASK)
+
 #define EMAC_MAC_HW_FEAT_GMIISEL_MASK            (0x2U)
 #define EMAC_MAC_HW_FEAT_GMIISEL_SHIFT           (1U)
 /*! GMIISEL - 1000 Mbit/s Support Feature
@@ -2162,6 +2208,14 @@ typedef struct {
  */
 #define EMAC_MAC_HW_FEAT_PCSSEL(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_PCSSEL_SHIFT)) & EMAC_MAC_HW_FEAT_PCSSEL_MASK)
 
+#define EMAC_MAC_HW_FEAT_CBTISEL_MASK            (0x10U)
+#define EMAC_MAC_HW_FEAT_CBTISEL_SHIFT           (4U)
+/*! CBTISEL - Queue/Channel Based VLAN Tag Insertion On Transmit Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_CBTISEL(x)              (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_CBTISEL_SHIFT)) & EMAC_MAC_HW_FEAT_CBTISEL_MASK)
+
 #define EMAC_MAC_HW_FEAT_VLHASH_MASK             (0x10U)
 #define EMAC_MAC_HW_FEAT_VLHASH_SHIFT            (4U)
 /*! VLHASH - VLAN Hash Filter Feature
@@ -2169,6 +2223,14 @@ typedef struct {
  *  0b1..Selected
  */
 #define EMAC_MAC_HW_FEAT_VLHASH(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_VLHASH_SHIFT)) & EMAC_MAC_HW_FEAT_VLHASH_MASK)
+
+#define EMAC_MAC_HW_FEAT_DVLAN_MASK              (0x20U)
+#define EMAC_MAC_HW_FEAT_DVLAN_SHIFT             (5U)
+/*! DVLAN - Double VLAN Tag Processing Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_DVLAN(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_DVLAN_SHIFT)) & EMAC_MAC_HW_FEAT_DVLAN_MASK)
 
 #define EMAC_MAC_HW_FEAT_SMASEL_MASK             (0x20U)
 #define EMAC_MAC_HW_FEAT_SMASEL_SHIFT            (5U)
@@ -2178,6 +2240,14 @@ typedef struct {
  */
 #define EMAC_MAC_HW_FEAT_SMASEL(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_SMASEL_SHIFT)) & EMAC_MAC_HW_FEAT_SMASEL_MASK)
 
+#define EMAC_MAC_HW_FEAT_SPRAM_MASK              (0x20U)
+#define EMAC_MAC_HW_FEAT_SPRAM_SHIFT             (5U)
+/*! SPRAM - Single Port RAM Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_SPRAM(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_SPRAM_SHIFT)) & EMAC_MAC_HW_FEAT_SPRAM_MASK)
+
 #define EMAC_MAC_HW_FEAT_RWKSEL_MASK             (0x40U)
 #define EMAC_MAC_HW_FEAT_RWKSEL_SHIFT            (6U)
 /*! RWKSEL - PMT Remote Wake-Up Packet Feature
@@ -2185,6 +2255,38 @@ typedef struct {
  *  0b1..Selected
  */
 #define EMAC_MAC_HW_FEAT_RWKSEL(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_RWKSEL_SHIFT)) & EMAC_MAC_HW_FEAT_RWKSEL_MASK)
+
+#define EMAC_MAC_HW_FEAT_TXFIFOSIZE_MASK         (0x7C0U)
+#define EMAC_MAC_HW_FEAT_TXFIFOSIZE_SHIFT        (6U)
+/*! TXFIFOSIZE - MTL Transmit FIFO Size Feature
+ *  0b00000..128 bytes
+ *  0b00001..256 bytes
+ *  0b00010..512 bytes
+ *  0b00011..1024 bytes
+ *  0b00100..2048 bytes
+ *  0b00101..4096 bytes
+ *  0b00110..8192 bytes
+ *  0b00111..16384 bytes
+ *  0b01000..32 KB
+ *  0b01001..64 KB
+ *  0b01010..128 KB
+ *  0b01011..Reserved
+ */
+#define EMAC_MAC_HW_FEAT_TXFIFOSIZE(x)           (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_TXFIFOSIZE_SHIFT)) & EMAC_MAC_HW_FEAT_TXFIFOSIZE_MASK)
+
+#define EMAC_MAC_HW_FEAT_TXQCNT_MASK             (0x3C0U)
+#define EMAC_MAC_HW_FEAT_TXQCNT_SHIFT            (6U)
+/*! TXQCNT - Number Of MTL Transmit Queues
+ *  0b0000..1
+ *  0b0001..2
+ *  0b0010..3
+ *  0b0011..4
+ *  0b0100..5
+ *  0b0101..6
+ *  0b0110..7
+ *  0b0111..8
+ */
+#define EMAC_MAC_HW_FEAT_TXQCNT(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_TXQCNT_SHIFT)) & EMAC_MAC_HW_FEAT_TXQCNT_MASK)
 
 #define EMAC_MAC_HW_FEAT_MGKSEL_MASK             (0x80U)
 #define EMAC_MAC_HW_FEAT_MGKSEL_SHIFT            (7U)
@@ -2209,363 +2311,6 @@ typedef struct {
  *  0b1..Selected
  */
 #define EMAC_MAC_HW_FEAT_ARPOFFSEL(x)            (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_ARPOFFSEL_SHIFT)) & EMAC_MAC_HW_FEAT_ARPOFFSEL_MASK)
-
-#define EMAC_MAC_HW_FEAT_TSSEL_MASK              (0x1000U)
-#define EMAC_MAC_HW_FEAT_TSSEL_SHIFT             (12U)
-/*! TSSEL - IEEE 1588-2008 Timestamp Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_TSSEL(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_TSSEL_SHIFT)) & EMAC_MAC_HW_FEAT_TSSEL_MASK)
-
-#define EMAC_MAC_HW_FEAT_EEESEL_MASK             (0x2000U)
-#define EMAC_MAC_HW_FEAT_EEESEL_SHIFT            (13U)
-/*! EEESEL - Energy Efficient Ethernet (EEE) Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_EEESEL(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_EEESEL_SHIFT)) & EMAC_MAC_HW_FEAT_EEESEL_MASK)
-
-#define EMAC_MAC_HW_FEAT_TXCOESEL_MASK           (0x4000U)
-#define EMAC_MAC_HW_FEAT_TXCOESEL_SHIFT          (14U)
-/*! TXCOESEL - Transmit Checksum Offload Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_TXCOESEL(x)             (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_TXCOESEL_SHIFT)) & EMAC_MAC_HW_FEAT_TXCOESEL_MASK)
-
-#define EMAC_MAC_HW_FEAT_RXCOESEL_MASK           (0x10000U)
-#define EMAC_MAC_HW_FEAT_RXCOESEL_SHIFT          (16U)
-/*! RXCOESEL - Receive Checksum Offload Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_RXCOESEL(x)             (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_RXCOESEL_SHIFT)) & EMAC_MAC_HW_FEAT_RXCOESEL_MASK)
-
-#define EMAC_MAC_HW_FEAT_ADDMACADRSEL_MASK       (0x7C0000U)
-#define EMAC_MAC_HW_FEAT_ADDMACADRSEL_SHIFT      (18U)
-/*! ADDMACADRSEL - MAC Addresses 1-31
- *  0b00000..Not selected
- *  0b00001..Selected
- */
-#define EMAC_MAC_HW_FEAT_ADDMACADRSEL(x)         (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_ADDMACADRSEL_SHIFT)) & EMAC_MAC_HW_FEAT_ADDMACADRSEL_MASK)
-
-#define EMAC_MAC_HW_FEAT_MACADR32SEL_MASK        (0x800000U)
-#define EMAC_MAC_HW_FEAT_MACADR32SEL_SHIFT       (23U)
-/*! MACADR32SEL - MAC Addresses 32-63
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_MACADR32SEL(x)          (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_MACADR32SEL_SHIFT)) & EMAC_MAC_HW_FEAT_MACADR32SEL_MASK)
-
-#define EMAC_MAC_HW_FEAT_MACADR64SEL_MASK        (0x1000000U)
-#define EMAC_MAC_HW_FEAT_MACADR64SEL_SHIFT       (24U)
-/*! MACADR64SEL - MAC Addresses 64-127
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_MACADR64SEL(x)          (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_MACADR64SEL_SHIFT)) & EMAC_MAC_HW_FEAT_MACADR64SEL_MASK)
-
-#define EMAC_MAC_HW_FEAT_TSSTSSEL_MASK           (0x6000000U)
-#define EMAC_MAC_HW_FEAT_TSSTSSEL_SHIFT          (25U)
-/*! TSSTSSEL - Timestamp System Time Source Feature
- *  0b00..Internal
- *  0b01..External
- *  0b10..Both internal and external
- *  0b11..Reserved
- */
-#define EMAC_MAC_HW_FEAT_TSSTSSEL(x)             (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_TSSTSSEL_SHIFT)) & EMAC_MAC_HW_FEAT_TSSTSSEL_MASK)
-
-#define EMAC_MAC_HW_FEAT_SAVLANINS_MASK          (0x8000000U)
-#define EMAC_MAC_HW_FEAT_SAVLANINS_SHIFT         (27U)
-/*! SAVLANINS - SA or VLAN Insertion Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_SAVLANINS(x)            (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_SAVLANINS_SHIFT)) & EMAC_MAC_HW_FEAT_SAVLANINS_MASK)
-
-#define EMAC_MAC_HW_FEAT_ACTPHYSEL_MASK          (0x70000000U)
-#define EMAC_MAC_HW_FEAT_ACTPHYSEL_SHIFT         (28U)
-/*! ACTPHYSEL - Active PHY Feature
- *  0b000..GMII or MII
- *  0b001..RGMII
- *  0b010..SGMII
- *  0b011..TBI
- *  0b100..RMII
- *  0b101..RTBI
- *  0b110..SMII
- *  0b111..RevMII
- */
-#define EMAC_MAC_HW_FEAT_ACTPHYSEL(x)            (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_ACTPHYSEL_SHIFT)) & EMAC_MAC_HW_FEAT_ACTPHYSEL_MASK)
-
-#define EMAC_MAC_HW_FEAT_RXFIFOSIZE_MASK         (0x1FU)
-#define EMAC_MAC_HW_FEAT_RXFIFOSIZE_SHIFT        (0U)
-/*! RXFIFOSIZE - MTL Receive FIFO Size Feature
- *  0b00000..128 bytes
- *  0b00001..256 bytes
- *  0b00010..512 bytes
- *  0b00011..1024 bytes
- *  0b00100..2048 bytes
- *  0b00101..4096 bytes
- *  0b00110..8192 bytes
- *  0b00111..16384 bytes
- *  0b01000..32 KB
- *  0b01001..64 KB
- *  0b01010..128 KB
- *  0b01011..256 KB
- *  0b01100..Reserved
- */
-#define EMAC_MAC_HW_FEAT_RXFIFOSIZE(x)           (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_RXFIFOSIZE_SHIFT)) & EMAC_MAC_HW_FEAT_RXFIFOSIZE_MASK)
-
-#define EMAC_MAC_HW_FEAT_SPRAM_MASK              (0x20U)
-#define EMAC_MAC_HW_FEAT_SPRAM_SHIFT             (5U)
-/*! SPRAM - Single Port RAM Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_SPRAM(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_SPRAM_SHIFT)) & EMAC_MAC_HW_FEAT_SPRAM_MASK)
-
-#define EMAC_MAC_HW_FEAT_TXFIFOSIZE_MASK         (0x7C0U)
-#define EMAC_MAC_HW_FEAT_TXFIFOSIZE_SHIFT        (6U)
-/*! TXFIFOSIZE - MTL Transmit FIFO Size Feature
- *  0b00000..128 bytes
- *  0b00001..256 bytes
- *  0b00010..512 bytes
- *  0b00011..1024 bytes
- *  0b00100..2048 bytes
- *  0b00101..4096 bytes
- *  0b00110..8192 bytes
- *  0b00111..16384 bytes
- *  0b01000..32 KB
- *  0b01001..64 KB
- *  0b01010..128 KB
- *  0b01011..Reserved
- */
-#define EMAC_MAC_HW_FEAT_TXFIFOSIZE(x)           (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_TXFIFOSIZE_SHIFT)) & EMAC_MAC_HW_FEAT_TXFIFOSIZE_MASK)
-
-#define EMAC_MAC_HW_FEAT_OSTEN_MASK              (0x800U)
-#define EMAC_MAC_HW_FEAT_OSTEN_SHIFT             (11U)
-/*! OSTEN - One-Step Timestamping Enable Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_OSTEN(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_OSTEN_SHIFT)) & EMAC_MAC_HW_FEAT_OSTEN_MASK)
-
-#define EMAC_MAC_HW_FEAT_PTOEN_MASK              (0x1000U)
-#define EMAC_MAC_HW_FEAT_PTOEN_SHIFT             (12U)
-/*! PTOEN - PTP Offload Enable Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_PTOEN(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_PTOEN_SHIFT)) & EMAC_MAC_HW_FEAT_PTOEN_MASK)
-
-#define EMAC_MAC_HW_FEAT_ADVTHWORD_MASK          (0x2000U)
-#define EMAC_MAC_HW_FEAT_ADVTHWORD_SHIFT         (13U)
-/*! ADVTHWORD - IEEE 1588 High-Word Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_ADVTHWORD(x)            (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_ADVTHWORD_SHIFT)) & EMAC_MAC_HW_FEAT_ADVTHWORD_MASK)
-
-#define EMAC_MAC_HW_FEAT_ADDR64_MASK             (0xC000U)
-#define EMAC_MAC_HW_FEAT_ADDR64_SHIFT            (14U)
-/*! ADDR64 - Address Width Feature
- *  0b00..32
- *  0b01..40
- *  0b10..48
- *  0b11..Reserved
- */
-#define EMAC_MAC_HW_FEAT_ADDR64(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_ADDR64_SHIFT)) & EMAC_MAC_HW_FEAT_ADDR64_MASK)
-
-#define EMAC_MAC_HW_FEAT_DCBEN_MASK              (0x10000U)
-#define EMAC_MAC_HW_FEAT_DCBEN_SHIFT             (16U)
-/*! DCBEN - DCB Enable Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_DCBEN(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_DCBEN_SHIFT)) & EMAC_MAC_HW_FEAT_DCBEN_MASK)
-
-#define EMAC_MAC_HW_FEAT_SPHEN_MASK              (0x20000U)
-#define EMAC_MAC_HW_FEAT_SPHEN_SHIFT             (17U)
-/*! SPHEN - Split Header Enable Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_SPHEN(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_SPHEN_SHIFT)) & EMAC_MAC_HW_FEAT_SPHEN_MASK)
-
-#define EMAC_MAC_HW_FEAT_TSOEN_MASK              (0x40000U)
-#define EMAC_MAC_HW_FEAT_TSOEN_SHIFT             (18U)
-/*! TSOEN - TCP Segmentation Offload Enable Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_TSOEN(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_TSOEN_SHIFT)) & EMAC_MAC_HW_FEAT_TSOEN_MASK)
-
-#define EMAC_MAC_HW_FEAT_DBGMEMA_MASK            (0x80000U)
-#define EMAC_MAC_HW_FEAT_DBGMEMA_SHIFT           (19U)
-/*! DBGMEMA - DMA Debug Registers Enable Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_DBGMEMA(x)              (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_DBGMEMA_SHIFT)) & EMAC_MAC_HW_FEAT_DBGMEMA_MASK)
-
-#define EMAC_MAC_HW_FEAT_AVSEL_MASK              (0x100000U)
-#define EMAC_MAC_HW_FEAT_AVSEL_SHIFT             (20U)
-/*! AVSEL - AV Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_AVSEL(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_AVSEL_SHIFT)) & EMAC_MAC_HW_FEAT_AVSEL_MASK)
-
-#define EMAC_MAC_HW_FEAT_RAVSEL_MASK             (0x200000U)
-#define EMAC_MAC_HW_FEAT_RAVSEL_SHIFT            (21U)
-/*! RAVSEL - Receive Side-Only AV Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_RAVSEL(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_RAVSEL_SHIFT)) & EMAC_MAC_HW_FEAT_RAVSEL_MASK)
-
-#define EMAC_MAC_HW_FEAT_POUOST_MASK             (0x800000U)
-#define EMAC_MAC_HW_FEAT_POUOST_SHIFT            (23U)
-/*! POUOST - One Step For PTP Over UDP/IP Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_POUOST(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_POUOST_SHIFT)) & EMAC_MAC_HW_FEAT_POUOST_MASK)
-
-#define EMAC_MAC_HW_FEAT_HASHTBLSZ_MASK          (0x3000000U)
-#define EMAC_MAC_HW_FEAT_HASHTBLSZ_SHIFT         (24U)
-/*! HASHTBLSZ - Hash Table Size
- *  0b00..No hash table
- *  0b01..64
- *  0b10..128
- *  0b11..256
- */
-#define EMAC_MAC_HW_FEAT_HASHTBLSZ(x)            (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_HASHTBLSZ_SHIFT)) & EMAC_MAC_HW_FEAT_HASHTBLSZ_MASK)
-
-#define EMAC_MAC_HW_FEAT_L3L4FNUM_MASK           (0x78000000U)
-#define EMAC_MAC_HW_FEAT_L3L4FNUM_SHIFT          (27U)
-/*! L3L4FNUM - L3 Or L4 Filter Number
- *  0b0000..No filters (0)
- *  0b0001..1
- *  0b0010..2
- *  0b0011..3
- *  0b0100..4
- *  0b0101..5
- *  0b0110..6
- *  0b0111..7
- *  0b1000..8
- */
-#define EMAC_MAC_HW_FEAT_L3L4FNUM(x)             (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_L3L4FNUM_SHIFT)) & EMAC_MAC_HW_FEAT_L3L4FNUM_MASK)
-
-#define EMAC_MAC_HW_FEAT_RXQCNT_MASK             (0xFU)
-#define EMAC_MAC_HW_FEAT_RXQCNT_SHIFT            (0U)
-/*! RXQCNT - Number Of MTL Receive Queues
- *  0b0000..1
- *  0b0001..2
- *  0b0010..3
- *  0b0011..4
- *  0b0100..5
- *  0b0101..6
- *  0b0110..7
- *  0b0111..8
- */
-#define EMAC_MAC_HW_FEAT_RXQCNT(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_RXQCNT_SHIFT)) & EMAC_MAC_HW_FEAT_RXQCNT_MASK)
-
-#define EMAC_MAC_HW_FEAT_TXQCNT_MASK             (0x3C0U)
-#define EMAC_MAC_HW_FEAT_TXQCNT_SHIFT            (6U)
-/*! TXQCNT - Number Of MTL Transmit Queues
- *  0b0000..1
- *  0b0001..2
- *  0b0010..3
- *  0b0011..4
- *  0b0100..5
- *  0b0101..6
- *  0b0110..7
- *  0b0111..8
- */
-#define EMAC_MAC_HW_FEAT_TXQCNT(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_TXQCNT_SHIFT)) & EMAC_MAC_HW_FEAT_TXQCNT_MASK)
-
-#define EMAC_MAC_HW_FEAT_RXCHCNT_MASK            (0xF000U)
-#define EMAC_MAC_HW_FEAT_RXCHCNT_SHIFT           (12U)
-/*! RXCHCNT - Number Of DMA Receive Channels
- *  0b0000..1
- *  0b0001..2
- *  0b0010..3
- *  0b0011..4
- *  0b0100..5
- *  0b0101..6
- *  0b0110..7
- *  0b0111..8
- */
-#define EMAC_MAC_HW_FEAT_RXCHCNT(x)              (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_RXCHCNT_SHIFT)) & EMAC_MAC_HW_FEAT_RXCHCNT_MASK)
-
-#define EMAC_MAC_HW_FEAT_TXCHCNT_MASK            (0x3C0000U)
-#define EMAC_MAC_HW_FEAT_TXCHCNT_SHIFT           (18U)
-/*! TXCHCNT - Number Of DMA Transmit Channels
- *  0b0000..1
- *  0b0001..2
- *  0b0010..3
- *  0b0011..4
- *  0b0100..5
- *  0b0101..6
- *  0b0110..7
- *  0b0111..8
- */
-#define EMAC_MAC_HW_FEAT_TXCHCNT(x)              (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_TXCHCNT_SHIFT)) & EMAC_MAC_HW_FEAT_TXCHCNT_MASK)
-
-#define EMAC_MAC_HW_FEAT_PPSOUTNUM_MASK          (0x7000000U)
-#define EMAC_MAC_HW_FEAT_PPSOUTNUM_SHIFT         (24U)
-/*! PPSOUTNUM - Number Of PPS Outputs
- *  0b000..No PPS output (0)
- *  0b001..1
- *  0b010..2
- *  0b011..3
- *  0b100..4
- *  0b101..Reserved
- */
-#define EMAC_MAC_HW_FEAT_PPSOUTNUM(x)            (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_PPSOUTNUM_SHIFT)) & EMAC_MAC_HW_FEAT_PPSOUTNUM_MASK)
-
-#define EMAC_MAC_HW_FEAT_AUXSNAPNUM_MASK         (0x70000000U)
-#define EMAC_MAC_HW_FEAT_AUXSNAPNUM_SHIFT        (28U)
-/*! AUXSNAPNUM - Number Of Auxiliary Snapshot Inputs
- *  0b000..No auxiliary input (0)
- *  0b001..1
- *  0b010..2
- *  0b011..3
- *  0b100..4
- *  0b101..Reserved
- */
-#define EMAC_MAC_HW_FEAT_AUXSNAPNUM(x)           (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_AUXSNAPNUM_SHIFT)) & EMAC_MAC_HW_FEAT_AUXSNAPNUM_MASK)
-
-#define EMAC_MAC_HW_FEAT_NRVF_MASK               (0x7U)
-#define EMAC_MAC_HW_FEAT_NRVF_SHIFT              (0U)
-/*! NRVF
- *  0b000..No filters (0)
- *  0b001..4
- *  0b010..8
- *  0b011..16
- *  0b100..24
- *  0b101..32
- *  0b110..Reserved
- */
-#define EMAC_MAC_HW_FEAT_NRVF(x)                 (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_NRVF_SHIFT)) & EMAC_MAC_HW_FEAT_NRVF_MASK)
-
-#define EMAC_MAC_HW_FEAT_CBTISEL_MASK            (0x10U)
-#define EMAC_MAC_HW_FEAT_CBTISEL_SHIFT           (4U)
-/*! CBTISEL - Queue/Channel Based VLAN Tag Insertion On Transmit Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_CBTISEL(x)              (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_CBTISEL_SHIFT)) & EMAC_MAC_HW_FEAT_CBTISEL_MASK)
-
-#define EMAC_MAC_HW_FEAT_DVLAN_MASK              (0x20U)
-#define EMAC_MAC_HW_FEAT_DVLAN_SHIFT             (5U)
-/*! DVLAN - Double VLAN Tag Processing Feature
- *  0b0..Not selected
- *  0b1..Selected
- */
-#define EMAC_MAC_HW_FEAT_DVLAN(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_DVLAN_SHIFT)) & EMAC_MAC_HW_FEAT_DVLAN_MASK)
 
 #define EMAC_MAC_HW_FEAT_PDUPSEL_MASK            (0x200U)
 #define EMAC_MAC_HW_FEAT_PDUPSEL_SHIFT           (9U)
@@ -2593,6 +2338,60 @@ typedef struct {
  */
 #define EMAC_MAC_HW_FEAT_FRPBS(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_FRPBS_SHIFT)) & EMAC_MAC_HW_FEAT_FRPBS_MASK)
 
+#define EMAC_MAC_HW_FEAT_OSTEN_MASK              (0x800U)
+#define EMAC_MAC_HW_FEAT_OSTEN_SHIFT             (11U)
+/*! OSTEN - One-Step Timestamping Enable Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_OSTEN(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_OSTEN_SHIFT)) & EMAC_MAC_HW_FEAT_OSTEN_MASK)
+
+#define EMAC_MAC_HW_FEAT_PTOEN_MASK              (0x1000U)
+#define EMAC_MAC_HW_FEAT_PTOEN_SHIFT             (12U)
+/*! PTOEN - PTP Offload Enable Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_PTOEN(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_PTOEN_SHIFT)) & EMAC_MAC_HW_FEAT_PTOEN_MASK)
+
+#define EMAC_MAC_HW_FEAT_RXCHCNT_MASK            (0xF000U)
+#define EMAC_MAC_HW_FEAT_RXCHCNT_SHIFT           (12U)
+/*! RXCHCNT - Number Of DMA Receive Channels
+ *  0b0000..1
+ *  0b0001..2
+ *  0b0010..3
+ *  0b0011..4
+ *  0b0100..5
+ *  0b0101..6
+ *  0b0110..7
+ *  0b0111..8
+ */
+#define EMAC_MAC_HW_FEAT_RXCHCNT(x)              (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_RXCHCNT_SHIFT)) & EMAC_MAC_HW_FEAT_RXCHCNT_MASK)
+
+#define EMAC_MAC_HW_FEAT_TSSEL_MASK              (0x1000U)
+#define EMAC_MAC_HW_FEAT_TSSEL_SHIFT             (12U)
+/*! TSSEL - IEEE 1588-2008 Timestamp Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_TSSEL(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_TSSEL_SHIFT)) & EMAC_MAC_HW_FEAT_TSSEL_MASK)
+
+#define EMAC_MAC_HW_FEAT_ADVTHWORD_MASK          (0x2000U)
+#define EMAC_MAC_HW_FEAT_ADVTHWORD_SHIFT         (13U)
+/*! ADVTHWORD - IEEE 1588 High-Word Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_ADVTHWORD(x)            (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_ADVTHWORD_SHIFT)) & EMAC_MAC_HW_FEAT_ADVTHWORD_MASK)
+
+#define EMAC_MAC_HW_FEAT_EEESEL_MASK             (0x2000U)
+#define EMAC_MAC_HW_FEAT_EEESEL_SHIFT            (13U)
+/*! EEESEL - Energy Efficient Ethernet (EEE) Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_EEESEL(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_EEESEL_SHIFT)) & EMAC_MAC_HW_FEAT_EEESEL_MASK)
+
 #define EMAC_MAC_HW_FEAT_FRPES_MASK              (0x6000U)
 #define EMAC_MAC_HW_FEAT_FRPES_SHIFT             (13U)
 /*! FRPES - Flexible Receive Parser Table Entry Size
@@ -2603,6 +2402,32 @@ typedef struct {
  */
 #define EMAC_MAC_HW_FEAT_FRPES(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_FRPES_SHIFT)) & EMAC_MAC_HW_FEAT_FRPES_MASK)
 
+#define EMAC_MAC_HW_FEAT_ADDR64_MASK             (0xC000U)
+#define EMAC_MAC_HW_FEAT_ADDR64_SHIFT            (14U)
+/*! ADDR64 - Address Width Feature
+ *  0b00..32
+ *  0b01..40
+ *  0b10..48
+ *  0b11..Reserved
+ */
+#define EMAC_MAC_HW_FEAT_ADDR64(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_ADDR64_SHIFT)) & EMAC_MAC_HW_FEAT_ADDR64_MASK)
+
+#define EMAC_MAC_HW_FEAT_TXCOESEL_MASK           (0x4000U)
+#define EMAC_MAC_HW_FEAT_TXCOESEL_SHIFT          (14U)
+/*! TXCOESEL - Transmit Checksum Offload Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_TXCOESEL(x)             (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_TXCOESEL_SHIFT)) & EMAC_MAC_HW_FEAT_TXCOESEL_MASK)
+
+#define EMAC_MAC_HW_FEAT_DCBEN_MASK              (0x10000U)
+#define EMAC_MAC_HW_FEAT_DCBEN_SHIFT             (16U)
+/*! DCBEN - DCB Enable Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_DCBEN(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_DCBEN_SHIFT)) & EMAC_MAC_HW_FEAT_DCBEN_MASK)
+
 #define EMAC_MAC_HW_FEAT_ESTSEL_MASK             (0x10000U)
 #define EMAC_MAC_HW_FEAT_ESTSEL_SHIFT            (16U)
 /*! ESTSEL - Enhancements To Scheduling Traffic Feature
@@ -2610,6 +2435,14 @@ typedef struct {
  *  0b1..Selected
  */
 #define EMAC_MAC_HW_FEAT_ESTSEL(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_ESTSEL_SHIFT)) & EMAC_MAC_HW_FEAT_ESTSEL_MASK)
+
+#define EMAC_MAC_HW_FEAT_RXCOESEL_MASK           (0x10000U)
+#define EMAC_MAC_HW_FEAT_RXCOESEL_SHIFT          (16U)
+/*! RXCOESEL - Receive Checksum Offload Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_RXCOESEL(x)             (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_RXCOESEL_SHIFT)) & EMAC_MAC_HW_FEAT_RXCOESEL_MASK)
 
 #define EMAC_MAC_HW_FEAT_ESTDEP_MASK             (0xE0000U)
 #define EMAC_MAC_HW_FEAT_ESTDEP_SHIFT            (17U)
@@ -2624,6 +2457,60 @@ typedef struct {
  */
 #define EMAC_MAC_HW_FEAT_ESTDEP(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_ESTDEP_SHIFT)) & EMAC_MAC_HW_FEAT_ESTDEP_MASK)
 
+#define EMAC_MAC_HW_FEAT_SPHEN_MASK              (0x20000U)
+#define EMAC_MAC_HW_FEAT_SPHEN_SHIFT             (17U)
+/*! SPHEN - Split Header Enable Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_SPHEN(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_SPHEN_SHIFT)) & EMAC_MAC_HW_FEAT_SPHEN_MASK)
+
+#define EMAC_MAC_HW_FEAT_ADDMACADRSEL_MASK       (0x7C0000U)
+#define EMAC_MAC_HW_FEAT_ADDMACADRSEL_SHIFT      (18U)
+/*! ADDMACADRSEL - MAC Addresses 1-31
+ *  0b00000..Not selected
+ *  0b00001..Selected
+ */
+#define EMAC_MAC_HW_FEAT_ADDMACADRSEL(x)         (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_ADDMACADRSEL_SHIFT)) & EMAC_MAC_HW_FEAT_ADDMACADRSEL_MASK)
+
+#define EMAC_MAC_HW_FEAT_TSOEN_MASK              (0x40000U)
+#define EMAC_MAC_HW_FEAT_TSOEN_SHIFT             (18U)
+/*! TSOEN - TCP Segmentation Offload Enable Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_TSOEN(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_TSOEN_SHIFT)) & EMAC_MAC_HW_FEAT_TSOEN_MASK)
+
+#define EMAC_MAC_HW_FEAT_TXCHCNT_MASK            (0x3C0000U)
+#define EMAC_MAC_HW_FEAT_TXCHCNT_SHIFT           (18U)
+/*! TXCHCNT - Number Of DMA Transmit Channels
+ *  0b0000..1
+ *  0b0001..2
+ *  0b0010..3
+ *  0b0011..4
+ *  0b0100..5
+ *  0b0101..6
+ *  0b0110..7
+ *  0b0111..8
+ */
+#define EMAC_MAC_HW_FEAT_TXCHCNT(x)              (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_TXCHCNT_SHIFT)) & EMAC_MAC_HW_FEAT_TXCHCNT_MASK)
+
+#define EMAC_MAC_HW_FEAT_DBGMEMA_MASK            (0x80000U)
+#define EMAC_MAC_HW_FEAT_DBGMEMA_SHIFT           (19U)
+/*! DBGMEMA - DMA Debug Registers Enable Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_DBGMEMA(x)              (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_DBGMEMA_SHIFT)) & EMAC_MAC_HW_FEAT_DBGMEMA_MASK)
+
+#define EMAC_MAC_HW_FEAT_AVSEL_MASK              (0x100000U)
+#define EMAC_MAC_HW_FEAT_AVSEL_SHIFT             (20U)
+/*! AVSEL - AV Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_AVSEL(x)                (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_AVSEL_SHIFT)) & EMAC_MAC_HW_FEAT_AVSEL_MASK)
+
 #define EMAC_MAC_HW_FEAT_ESTWID_MASK             (0x300000U)
 #define EMAC_MAC_HW_FEAT_ESTWID_SHIFT            (20U)
 /*! ESTWID - Estimated Time Interval Width
@@ -2634,6 +2521,70 @@ typedef struct {
  */
 #define EMAC_MAC_HW_FEAT_ESTWID(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_ESTWID_SHIFT)) & EMAC_MAC_HW_FEAT_ESTWID_MASK)
 
+#define EMAC_MAC_HW_FEAT_RAVSEL_MASK             (0x200000U)
+#define EMAC_MAC_HW_FEAT_RAVSEL_SHIFT            (21U)
+/*! RAVSEL - Receive Side-Only AV Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_RAVSEL(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_RAVSEL_SHIFT)) & EMAC_MAC_HW_FEAT_RAVSEL_MASK)
+
+#define EMAC_MAC_HW_FEAT_MACADR32SEL_MASK        (0x800000U)
+#define EMAC_MAC_HW_FEAT_MACADR32SEL_SHIFT       (23U)
+/*! MACADR32SEL - MAC Addresses 32-63
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_MACADR32SEL(x)          (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_MACADR32SEL_SHIFT)) & EMAC_MAC_HW_FEAT_MACADR32SEL_MASK)
+
+#define EMAC_MAC_HW_FEAT_POUOST_MASK             (0x800000U)
+#define EMAC_MAC_HW_FEAT_POUOST_SHIFT            (23U)
+/*! POUOST - One Step For PTP Over UDP/IP Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_POUOST(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_POUOST_SHIFT)) & EMAC_MAC_HW_FEAT_POUOST_MASK)
+
+#define EMAC_MAC_HW_FEAT_HASHTBLSZ_MASK          (0x3000000U)
+#define EMAC_MAC_HW_FEAT_HASHTBLSZ_SHIFT         (24U)
+/*! HASHTBLSZ - Hash Table Size
+ *  0b00..No hash table
+ *  0b01..64
+ *  0b10..128
+ *  0b11..256
+ */
+#define EMAC_MAC_HW_FEAT_HASHTBLSZ(x)            (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_HASHTBLSZ_SHIFT)) & EMAC_MAC_HW_FEAT_HASHTBLSZ_MASK)
+
+#define EMAC_MAC_HW_FEAT_MACADR64SEL_MASK        (0x1000000U)
+#define EMAC_MAC_HW_FEAT_MACADR64SEL_SHIFT       (24U)
+/*! MACADR64SEL - MAC Addresses 64-127
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_MACADR64SEL(x)          (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_MACADR64SEL_SHIFT)) & EMAC_MAC_HW_FEAT_MACADR64SEL_MASK)
+
+#define EMAC_MAC_HW_FEAT_PPSOUTNUM_MASK          (0x7000000U)
+#define EMAC_MAC_HW_FEAT_PPSOUTNUM_SHIFT         (24U)
+/*! PPSOUTNUM - Number Of PPS Outputs
+ *  0b000..No PPS output (0)
+ *  0b001..1
+ *  0b010..2
+ *  0b011..3
+ *  0b100..4
+ *  0b101..Reserved
+ */
+#define EMAC_MAC_HW_FEAT_PPSOUTNUM(x)            (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_PPSOUTNUM_SHIFT)) & EMAC_MAC_HW_FEAT_PPSOUTNUM_MASK)
+
+#define EMAC_MAC_HW_FEAT_TSSTSSEL_MASK           (0x6000000U)
+#define EMAC_MAC_HW_FEAT_TSSTSSEL_SHIFT          (25U)
+/*! TSSTSSEL - Timestamp System Time Source Feature
+ *  0b00..Internal
+ *  0b01..External
+ *  0b10..Both internal and external
+ *  0b11..Reserved
+ */
+#define EMAC_MAC_HW_FEAT_TSSTSSEL(x)             (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_TSSTSSEL_SHIFT)) & EMAC_MAC_HW_FEAT_TSSTSSEL_MASK)
+
 #define EMAC_MAC_HW_FEAT_FPESEL_MASK             (0x4000000U)
 #define EMAC_MAC_HW_FEAT_FPESEL_SHIFT            (26U)
 /*! FPESEL - Frame Preemption Feature
@@ -2642,6 +2593,29 @@ typedef struct {
  */
 #define EMAC_MAC_HW_FEAT_FPESEL(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_FPESEL_SHIFT)) & EMAC_MAC_HW_FEAT_FPESEL_MASK)
 
+#define EMAC_MAC_HW_FEAT_L3L4FNUM_MASK           (0x78000000U)
+#define EMAC_MAC_HW_FEAT_L3L4FNUM_SHIFT          (27U)
+/*! L3L4FNUM - L3 Or L4 Filter Number
+ *  0b0000..No filters (0)
+ *  0b0001..1
+ *  0b0010..2
+ *  0b0011..3
+ *  0b0100..4
+ *  0b0101..5
+ *  0b0110..6
+ *  0b0111..7
+ *  0b1000..8
+ */
+#define EMAC_MAC_HW_FEAT_L3L4FNUM(x)             (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_L3L4FNUM_SHIFT)) & EMAC_MAC_HW_FEAT_L3L4FNUM_MASK)
+
+#define EMAC_MAC_HW_FEAT_SAVLANINS_MASK          (0x8000000U)
+#define EMAC_MAC_HW_FEAT_SAVLANINS_SHIFT         (27U)
+/*! SAVLANINS - SA or VLAN Insertion Feature
+ *  0b0..Not selected
+ *  0b1..Selected
+ */
+#define EMAC_MAC_HW_FEAT_SAVLANINS(x)            (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_SAVLANINS_SHIFT)) & EMAC_MAC_HW_FEAT_SAVLANINS_MASK)
+
 #define EMAC_MAC_HW_FEAT_TBSSEL_MASK             (0x8000000U)
 #define EMAC_MAC_HW_FEAT_TBSSEL_SHIFT            (27U)
 /*! TBSSEL - Time-Based Scheduling Feature
@@ -2649,6 +2623,20 @@ typedef struct {
  *  0b1..Selected
  */
 #define EMAC_MAC_HW_FEAT_TBSSEL(x)               (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_TBSSEL_SHIFT)) & EMAC_MAC_HW_FEAT_TBSSEL_MASK)
+
+#define EMAC_MAC_HW_FEAT_ACTPHYSEL_MASK          (0x70000000U)
+#define EMAC_MAC_HW_FEAT_ACTPHYSEL_SHIFT         (28U)
+/*! ACTPHYSEL - Active PHY Feature
+ *  0b000..GMII or MII
+ *  0b001..RGMII
+ *  0b010..SGMII
+ *  0b011..TBI
+ *  0b100..RMII
+ *  0b101..RTBI
+ *  0b110..SMII
+ *  0b111..RevMII
+ */
+#define EMAC_MAC_HW_FEAT_ACTPHYSEL(x)            (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_ACTPHYSEL_SHIFT)) & EMAC_MAC_HW_FEAT_ACTPHYSEL_MASK)
 
 #define EMAC_MAC_HW_FEAT_ASP_MASK                (0x30000000U)
 #define EMAC_MAC_HW_FEAT_ASP_SHIFT               (28U)
@@ -2659,6 +2647,18 @@ typedef struct {
  *  0b11..All the safety features are selected with the "parity port enable for external interface" feature
  */
 #define EMAC_MAC_HW_FEAT_ASP(x)                  (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_ASP_SHIFT)) & EMAC_MAC_HW_FEAT_ASP_MASK)
+
+#define EMAC_MAC_HW_FEAT_AUXSNAPNUM_MASK         (0x70000000U)
+#define EMAC_MAC_HW_FEAT_AUXSNAPNUM_SHIFT        (28U)
+/*! AUXSNAPNUM - Number Of Auxiliary Snapshot Inputs
+ *  0b000..No auxiliary input (0)
+ *  0b001..1
+ *  0b010..2
+ *  0b011..3
+ *  0b100..4
+ *  0b101..Reserved
+ */
+#define EMAC_MAC_HW_FEAT_AUXSNAPNUM(x)           (((uint32_t)(((uint32_t)(x)) << EMAC_MAC_HW_FEAT_AUXSNAPNUM_SHIFT)) & EMAC_MAC_HW_FEAT_AUXSNAPNUM_MASK)
 /*! @} */
 
 /*! @name MAC_DPP_FSM_INTERRUPT_STATUS - MAC DPP FSM Interrupt Status */

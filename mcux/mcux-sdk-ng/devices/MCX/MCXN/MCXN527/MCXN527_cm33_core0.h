@@ -1,6 +1,7 @@
 /*
 ** ###################################################################
-**     Processors:          MCXN527VDF_cm33_core0
+**     Processors:          MCXN527VAB_cm33_core0
+**                          MCXN527VDF_cm33_core0
 **                          MCXN527VKL_cm33_core0
 **
 **     Compilers:           GNU C Compiler
@@ -10,7 +11,7 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260417
+**     Build:               b260512
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN527_cm33_core0

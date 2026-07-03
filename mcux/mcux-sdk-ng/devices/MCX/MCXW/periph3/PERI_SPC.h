@@ -7,14 +7,14 @@
 **                          MCXW727DMFTA_cm33_core0
 **                          MCXW727DMFTA_cm33_core1
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SPC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -26,14 +26,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_SPC.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for SPC
  *
  * CMSIS Peripheral Access Layer for SPC
@@ -367,7 +372,7 @@ typedef struct {
  *  0b00..
  *  0b01..1.0 V
  *  0b10..1.1 V
- *  0b11..SRAM configured for 1.1 V operation
+ *  0b11..SRAM configured for "1.2" V operation
  */
 #define SPC_SRAMCTL_VSM(x)                       (((uint32_t)(((uint32_t)(x)) << SPC_SRAMCTL_VSM_SHIFT)) & SPC_SRAMCTL_VSM_MASK)
 
@@ -439,10 +444,10 @@ typedef struct {
 #define SPC_ACTIVE_CFG_CORELDO_VDD_LVL_MASK      (0xCU)
 #define SPC_ACTIVE_CFG_CORELDO_VDD_LVL_SHIFT     (2U)
 /*! CORELDO_VDD_LVL - LDO_CORE VDD Regulator Voltage Level
- *  0b00..Regulate to boost voltage (0.95 V)
- *  0b01..Regulate to mid voltage (1.0 V)
+ *  0b00..
+ *  0b01..Regulate to mid voltage (1.05 V)
  *  0b10..Regulate to normal voltage (1.1 V)
- *  0b11..Regulate to safe-mode voltage (1.15 V)
+ *  0b11..Reserved
  */
 #define SPC_ACTIVE_CFG_CORELDO_VDD_LVL(x)        (((uint32_t)(((uint32_t)(x)) << SPC_ACTIVE_CFG_CORELDO_VDD_LVL_SHIFT)) & SPC_ACTIVE_CFG_CORELDO_VDD_LVL_MASK)
 
@@ -473,9 +478,9 @@ typedef struct {
 #define SPC_ACTIVE_CFG_DCDC_VDD_LVL_MASK         (0xC00U)
 #define SPC_ACTIVE_CFG_DCDC_VDD_LVL_SHIFT        (10U)
 /*! DCDC_VDD_LVL - DCDC VDD Regulator Voltage Level
- *  0b00..Low undervoltage voltage (0.95 V)
- *  0b01..Mid voltage (1 V)
- *  0b10..Normal voltage (1.1 V)
+ *  0b00..Low undervoltage voltage (1.25 V)
+ *  0b01..Mid voltage (1.35 V)
+ *  0b10..Normal voltage (1.5 V)
  *  0b11..Overdrive voltage (1.8 V)
  */
 #define SPC_ACTIVE_CFG_DCDC_VDD_LVL(x)           (((uint32_t)(((uint32_t)(x)) << SPC_ACTIVE_CFG_DCDC_VDD_LVL_SHIFT)) & SPC_ACTIVE_CFG_DCDC_VDD_LVL_MASK)
@@ -569,10 +574,10 @@ typedef struct {
 #define SPC_LP_CFG_CORELDO_VDD_LVL_MASK          (0xCU)
 #define SPC_LP_CFG_CORELDO_VDD_LVL_SHIFT         (2U)
 /*! CORELDO_VDD_LVL - LDO_CORE VDD Regulator Voltage Level
- *  0b00..Retention voltage
- *  0b01..Mid voltage (1.0 V)
+ *  0b00..Reserved
+ *  0b01..Mid voltage (1.05 V)
  *  0b10..Normal voltage (1.1 V)
- *  0b11..Safe-mode voltage (1.15 V)
+ *  0b11..Reserved
  */
 #define SPC_LP_CFG_CORELDO_VDD_LVL(x)            (((uint32_t)(((uint32_t)(x)) << SPC_LP_CFG_CORELDO_VDD_LVL_SHIFT)) & SPC_LP_CFG_CORELDO_VDD_LVL_MASK)
 
@@ -597,9 +602,9 @@ typedef struct {
 #define SPC_LP_CFG_DCDC_VDD_LVL_MASK             (0xC00U)
 #define SPC_LP_CFG_DCDC_VDD_LVL_SHIFT            (10U)
 /*! DCDC_VDD_LVL - DCDC VDD Regulator Voltage Level
- *  0b00..Low undervoltage (0.95 V)
- *  0b01..Mid voltage (1 V)
- *  0b10..Normal voltage (1.1 V)
+ *  0b00..Low undervoltage (1.25 V)
+ *  0b01..Mid voltage (1.35 V)
+ *  0b10..Normal voltage (1.5 V)
  *  0b11..Overdrive voltage (1.8 V)
  */
 #define SPC_LP_CFG_DCDC_VDD_LVL(x)               (((uint32_t)(((uint32_t)(x)) << SPC_LP_CFG_DCDC_VDD_LVL_SHIFT)) & SPC_LP_CFG_DCDC_VDD_LVL_MASK)
@@ -709,10 +714,10 @@ typedef struct {
 #define SPC_HP_CFG_CORELDO_VDD_LVL_MASK          (0xCU)
 #define SPC_HP_CFG_CORELDO_VDD_LVL_SHIFT         (2U)
 /*! CORELDO_VDD_LVL - LDO_CORE VDD Regulator Voltage Level
- *  0b00..Regulate to under voltage (0.95 V)
- *  0b01..Regulate to mid voltage (1.0 V)
+ *  0b00..
+ *  0b01..Regulate to mid voltage (1.05 V)
  *  0b10..Regulate to normal voltage (1.1 V)
- *  0b11..Regulate to safe-mode voltage (1.15 V)
+ *  0b11..Regulate to overdrive voltage (1.15 V)
  */
 #define SPC_HP_CFG_CORELDO_VDD_LVL(x)            (((uint32_t)(((uint32_t)(x)) << SPC_HP_CFG_CORELDO_VDD_LVL_SHIFT)) & SPC_HP_CFG_CORELDO_VDD_LVL_MASK)
 
@@ -743,9 +748,9 @@ typedef struct {
 #define SPC_HP_CFG_DCDC_VDD_LVL_MASK             (0xC00U)
 #define SPC_HP_CFG_DCDC_VDD_LVL_SHIFT            (10U)
 /*! DCDC_VDD_LVL - DCDC VDD Regulator Voltage Level
- *  0b00..Low undervoltage (0.95 V)
- *  0b01..Mid voltage (1 V)
- *  0b10..Normal voltage (1.1 V)
+ *  0b00..Low undervoltage (1.25 V)
+ *  0b01..Mid voltage (1.35 V)
+ *  0b10..Normal voltage (1.5 V)
  *  0b11..Overdrive voltage (1.8 V)
  */
 #define SPC_HP_CFG_DCDC_VDD_LVL(x)               (((uint32_t)(((uint32_t)(x)) << SPC_HP_CFG_DCDC_VDD_LVL_SHIFT)) & SPC_HP_CFG_DCDC_VDD_LVL_MASK)
@@ -1137,6 +1142,14 @@ typedef struct {
  *  0b1..LDO_CORE pulldown in Deep Power Down disabled
  */
 #define SPC_CORELDO_CFG_DPDOWN_PULLDOWN_DISABLE(x) (((uint32_t)(((uint32_t)(x)) << SPC_CORELDO_CFG_DPDOWN_PULLDOWN_DISABLE_SHIFT)) & SPC_CORELDO_CFG_DPDOWN_PULLDOWN_DISABLE_MASK)
+
+#define SPC_CORELDO_CFG_CORELDO_SPARE_MASK       (0x1E0000U)
+#define SPC_CORELDO_CFG_CORELDO_SPARE_SHIFT      (17U)
+/*! CORELDO_SPARE - CORELDO_SPARE
+ *  0b0000..TBD.
+ *  0b0001..TBD.
+ */
+#define SPC_CORELDO_CFG_CORELDO_SPARE(x)         (((uint32_t)(((uint32_t)(x)) << SPC_CORELDO_CFG_CORELDO_SPARE_SHIFT)) & SPC_CORELDO_CFG_CORELDO_SPARE_MASK)
 /*! @} */
 
 /*! @name SYSLDO_CFG - LDO_SYS Configuration */

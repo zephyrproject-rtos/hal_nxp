@@ -13,8 +13,8 @@
 **                          MCXL144VLL_cm0plus
 **                          MCXL144VLL_cm33
 **
-**     Version:             rev. 2.0, 2026-04-22
-**     Build:               b260422
+**     Version:             rev. 2.1, 2026-05-02
+**     Build:               b260512
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CMC
@@ -33,14 +33,16 @@
 **         Generated based on Rev.1 RC.
 **     - rev. 2.0 (2026-04-22)
 **         Generated based on Rev. 2 DraftA.
+**     - rev. 2.1 (2026-05-02)
+**         Generated based on Rev. 2.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_CMC.h
- * @version 2.0
- * @date 2026-04-22
+ * @version 2.1
+ * @date 2026-05-02
  * @brief CMSIS Peripheral Access Layer for CMC
  *
  * CMSIS Peripheral Access Layer for CMC
@@ -709,8 +711,8 @@ typedef struct {
 #define CMC_SRIF_SCG_MASK                        (0x1000U)
 #define CMC_SRIF_SCG_SHIFT                       (12U)
 /*! SCG - System Clock Generation Reset
- *  0b0..Interrupt disabled
- *  0b1..Interrupt enabled
+ *  0b0..Reset source not pending
+ *  0b1..Reset source pending
  */
 #define CMC_SRIF_SCG(x)                          (((uint32_t)(((uint32_t)(x)) << CMC_SRIF_SCG_SHIFT)) & CMC_SRIF_SCG_MASK)
 

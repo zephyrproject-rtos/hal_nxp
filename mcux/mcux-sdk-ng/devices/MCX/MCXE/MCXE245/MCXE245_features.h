@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2025-02-21
-**     Build:               b260209
+**     Build:               b260518
 **
 **     Abstract:
 **         Chip specific module features.
@@ -1370,10 +1370,6 @@
 #define FSL_FEATURE_SYSTICK_HAS_EXT_REF (0)
 /* @brief Systick external reference clock is core clock divided by this value. */
 #define FSL_FEATURE_SYSTICK_EXT_REF_CORE_DIV (0)
-
-/* TRGMUX module features */
-
-/* No feature definitions */
 
 /* WDOG module features */
 

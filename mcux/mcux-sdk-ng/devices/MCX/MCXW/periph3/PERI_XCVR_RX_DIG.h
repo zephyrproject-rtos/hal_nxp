@@ -7,14 +7,14 @@
 **                          MCXW727DMFTA_cm33_core0
 **                          MCXW727DMFTA_cm33_core1
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for XCVR_RX_DIG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -26,14 +26,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_XCVR_RX_DIG.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for XCVR_RX_DIG
  *
  * CMSIS Peripheral Access Layer for XCVR_RX_DIG
@@ -308,13 +313,13 @@ typedef struct {
  */
 #define XCVR_RX_DIG_CTRL0_RX_IQ_8B_OUT_MODE(x)   (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_CTRL0_RX_IQ_8B_OUT_MODE_SHIFT)) & XCVR_RX_DIG_CTRL0_RX_IQ_8B_OUT_MODE_MASK)
 
-#define XCVR_RX_DIG_CTRL0_RX_FSK_ZB_SEL_MASK     (0x8000000U)
-#define XCVR_RX_DIG_CTRL0_RX_FSK_ZB_SEL_SHIFT    (27U)
-/*! RX_FSK_ZB_SEL
+#define XCVR_RX_DIG_CTRL0_RX_FSK_SEL_MASK        (0x8000000U)
+#define XCVR_RX_DIG_CTRL0_RX_FSK_SEL_SHIFT       (27U)
+/*! RX_FSK_SEL
  *  0b0..2.4GHz PHY is selected
  *  0b1..15.4 PHY is selected
  */
-#define XCVR_RX_DIG_CTRL0_RX_FSK_ZB_SEL(x)       (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_CTRL0_RX_FSK_ZB_SEL_SHIFT)) & XCVR_RX_DIG_CTRL0_RX_FSK_ZB_SEL_MASK)
+#define XCVR_RX_DIG_CTRL0_RX_FSK_SEL(x)          (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_CTRL0_RX_FSK_SEL_SHIFT)) & XCVR_RX_DIG_CTRL0_RX_FSK_SEL_MASK)
 
 #define XCVR_RX_DIG_CTRL0_CIC_CNTR_FREE_RUN_EN_MASK (0x20000000U)
 #define XCVR_RX_DIG_CTRL0_CIC_CNTR_FREE_RUN_EN_SHIFT (29U)
@@ -735,6 +740,7 @@ typedef struct {
 
 #define XCVR_RX_DIG_DCOC_CTRL0_DCOC_PULSE_CAPCODE_MASK (0x8000U)
 #define XCVR_RX_DIG_DCOC_CTRL0_DCOC_PULSE_CAPCODE_SHIFT (15U)
+/*! DCOC_PULSE_CAPCODE - DCOC pulse capcode */
 #define XCVR_RX_DIG_DCOC_CTRL0_DCOC_PULSE_CAPCODE(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DCOC_CTRL0_DCOC_PULSE_CAPCODE_SHIFT)) & XCVR_RX_DIG_DCOC_CTRL0_DCOC_PULSE_CAPCODE_MASK)
 
 #define XCVR_RX_DIG_DCOC_CTRL0_DCOC_CBPF_STL_TIME_MASK (0xF0000U)
@@ -917,6 +923,7 @@ typedef struct {
 
 #define XCVR_RX_DIG_IQMC_CTRL0_IQMC_DC_GAIN_ADJ_MASK (0x7FF0000U)
 #define XCVR_RX_DIG_IQMC_CTRL0_IQMC_DC_GAIN_ADJ_SHIFT (16U)
+/*! IQMC_DC_GAIN_ADJ - IQ Mismatch gain adjust */
 #define XCVR_RX_DIG_IQMC_CTRL0_IQMC_DC_GAIN_ADJ(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_IQMC_CTRL0_IQMC_DC_GAIN_ADJ_SHIFT)) & XCVR_RX_DIG_IQMC_CTRL0_IQMC_DC_GAIN_ADJ_MASK)
 /*! @} */
 
@@ -1289,10 +1296,12 @@ typedef struct {
 
 #define XCVR_RX_DIG_WB_RSSI_CTRL_RSSI_N_WINDOW_WB_DRS_MASK (0x70000U)
 #define XCVR_RX_DIG_WB_RSSI_CTRL_RSSI_N_WINDOW_WB_DRS_SHIFT (16U)
+/*! RSSI_N_WINDOW_WB_DRS - DRS WB RSSI N Window Averager Factor */
 #define XCVR_RX_DIG_WB_RSSI_CTRL_RSSI_N_WINDOW_WB_DRS(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_WB_RSSI_CTRL_RSSI_N_WINDOW_WB_DRS_SHIFT)) & XCVR_RX_DIG_WB_RSSI_CTRL_RSSI_N_WINDOW_WB_DRS_MASK)
 
 #define XCVR_RX_DIG_WB_RSSI_CTRL_RSSI_F_WINDOW_WB_DRS_MASK (0x700000U)
 #define XCVR_RX_DIG_WB_RSSI_CTRL_RSSI_F_WINDOW_WB_DRS_SHIFT (20U)
+/*! RSSI_F_WINDOW_WB_DRS - DRS WB RSSI F Window Averager Factor */
 #define XCVR_RX_DIG_WB_RSSI_CTRL_RSSI_F_WINDOW_WB_DRS(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_WB_RSSI_CTRL_RSSI_F_WINDOW_WB_DRS_SHIFT)) & XCVR_RX_DIG_WB_RSSI_CTRL_RSSI_F_WINDOW_WB_DRS_MASK)
 
 #define XCVR_RX_DIG_WB_RSSI_CTRL_RSSI_ADJ_WB_MASK (0xFF000000U)
@@ -1537,12 +1546,12 @@ typedef struct {
 
 #define XCVR_RX_DIG_AGC_CTRL_AGC_WBD_STEP2_SZ_MASK (0x3800U)
 #define XCVR_RX_DIG_AGC_CTRL_AGC_WBD_STEP2_SZ_SHIFT (11U)
-/*! AGC_WBD_STEP2_SZ - AGC WBD Step2 Gain Decreas Value */
+/*! AGC_WBD_STEP2_SZ - AGC WBD Step2 Gain Decrease Value */
 #define XCVR_RX_DIG_AGC_CTRL_AGC_WBD_STEP2_SZ(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_AGC_CTRL_AGC_WBD_STEP2_SZ_SHIFT)) & XCVR_RX_DIG_AGC_CTRL_AGC_WBD_STEP2_SZ_MASK)
 
 #define XCVR_RX_DIG_AGC_CTRL_AGC_WBD_STEP1_SZ_MASK (0x1C000U)
 #define XCVR_RX_DIG_AGC_CTRL_AGC_WBD_STEP1_SZ_SHIFT (14U)
-/*! AGC_WBD_STEP1_SZ - AGC WBD Step1 Gain Decreas Value */
+/*! AGC_WBD_STEP1_SZ - AGC WBD Step1 Gain Decrease Value */
 #define XCVR_RX_DIG_AGC_CTRL_AGC_WBD_STEP1_SZ(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_AGC_CTRL_AGC_WBD_STEP1_SZ_SHIFT)) & XCVR_RX_DIG_AGC_CTRL_AGC_WBD_STEP1_SZ_MASK)
 
 #define XCVR_RX_DIG_AGC_CTRL_AGC_WBD_THR2_MASK   (0x1E0000U)
@@ -1814,7 +1823,10 @@ typedef struct {
 
 #define XCVR_RX_DIG_AGC_TIMING2_AGC_UNHOLD_MAG_CNT_MASK (0x40000000U)
 #define XCVR_RX_DIG_AGC_TIMING2_AGC_UNHOLD_MAG_CNT_SHIFT (30U)
-/*! AGC_UNHOLD_MAG_CNT - AGC Unhold Magnitude Count Selection */
+/*! AGC_UNHOLD_MAG_CNT - AGC Unhold Magnitude Count Selection
+ *  0b0..Once the selected magnitude exceeds unhold margin, the AGC will exit HOLD mode
+ *  0b1..Need two consecutive selected magnitude values exceeds unhold margin to let AGC exit HOLD mode
+ */
 #define XCVR_RX_DIG_AGC_TIMING2_AGC_UNHOLD_MAG_CNT(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_AGC_TIMING2_AGC_UNHOLD_MAG_CNT_SHIFT)) & XCVR_RX_DIG_AGC_TIMING2_AGC_UNHOLD_MAG_CNT_MASK)
 
 #define XCVR_RX_DIG_AGC_TIMING2_AGC_UNHOLD_MAG_SRC_MASK (0x80000000U)
@@ -1910,7 +1922,7 @@ typedef struct {
 
 #define XCVR_RX_DIG_AGC_IDX11_GAIN_CFG_MAG_THR_HI_11_DRS_OFS_MASK (0xFF0000U)
 #define XCVR_RX_DIG_AGC_IDX11_GAIN_CFG_MAG_THR_HI_11_DRS_OFS_SHIFT (16U)
-/*! MAG_THR_HI_11_DRS_OFS - Mag Thresh High DRS for AGC Gain Index 11 */
+/*! MAG_THR_HI_11_DRS_OFS - Mag Thresh DRS for AGC Gain Index 11 */
 #define XCVR_RX_DIG_AGC_IDX11_GAIN_CFG_MAG_THR_HI_11_DRS_OFS(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_AGC_IDX11_GAIN_CFG_MAG_THR_HI_11_DRS_OFS_SHIFT)) & XCVR_RX_DIG_AGC_IDX11_GAIN_CFG_MAG_THR_HI_11_DRS_OFS_MASK)
 
 #define XCVR_RX_DIG_AGC_IDX11_GAIN_CFG_MAG_THR_11_DRS_OFS_MASK (0xFF000000U)
@@ -2694,12 +2706,12 @@ typedef struct {
 
 #define XCVR_RX_DIG_AGC_THR_FAST_STEP_UP_THR_FAST_MASK (0x1FFU)
 #define XCVR_RX_DIG_AGC_THR_FAST_STEP_UP_THR_FAST_SHIFT (0U)
-/*! STEP_UP_THR_FAST - STEP_UP_THR_FAST */
+/*! STEP_UP_THR_FAST - Fast mode step up thresholds */
 #define XCVR_RX_DIG_AGC_THR_FAST_STEP_UP_THR_FAST(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_AGC_THR_FAST_STEP_UP_THR_FAST_SHIFT)) & XCVR_RX_DIG_AGC_THR_FAST_STEP_UP_THR_FAST_MASK)
 
 #define XCVR_RX_DIG_AGC_THR_FAST_STEP_DOWN_THR_FAST_MASK (0x1FF0000U)
 #define XCVR_RX_DIG_AGC_THR_FAST_STEP_DOWN_THR_FAST_SHIFT (16U)
-/*! STEP_DOWN_THR_FAST - STEP_DOWN_THR_FAST */
+/*! STEP_DOWN_THR_FAST - Fast mode step down thresholds */
 #define XCVR_RX_DIG_AGC_THR_FAST_STEP_DOWN_THR_FAST(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_AGC_THR_FAST_STEP_DOWN_THR_FAST_SHIFT)) & XCVR_RX_DIG_AGC_THR_FAST_STEP_DOWN_THR_FAST_MASK)
 /*! @} */
 
@@ -2708,12 +2720,12 @@ typedef struct {
 
 #define XCVR_RX_DIG_AGC_THR_FAST_DRS_STEP_UP_THR_FAST_MASK (0x1FFU)
 #define XCVR_RX_DIG_AGC_THR_FAST_DRS_STEP_UP_THR_FAST_SHIFT (0U)
-/*! STEP_UP_THR_FAST - STEP_UP_THR_FAST */
+/*! STEP_UP_THR_FAST - Fast mode step up thresholds for datarate_config_sel = 1 */
 #define XCVR_RX_DIG_AGC_THR_FAST_DRS_STEP_UP_THR_FAST(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_AGC_THR_FAST_DRS_STEP_UP_THR_FAST_SHIFT)) & XCVR_RX_DIG_AGC_THR_FAST_DRS_STEP_UP_THR_FAST_MASK)
 
 #define XCVR_RX_DIG_AGC_THR_FAST_DRS_STEP_DOWN_THR_FAST_MASK (0x1FF0000U)
 #define XCVR_RX_DIG_AGC_THR_FAST_DRS_STEP_DOWN_THR_FAST_SHIFT (16U)
-/*! STEP_DOWN_THR_FAST - STEP_DOWN_THR_FAST */
+/*! STEP_DOWN_THR_FAST - Fast mode step down thresholds for datarate_config_sel = 1 */
 #define XCVR_RX_DIG_AGC_THR_FAST_DRS_STEP_DOWN_THR_FAST(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_AGC_THR_FAST_DRS_STEP_DOWN_THR_FAST_SHIFT)) & XCVR_RX_DIG_AGC_THR_FAST_DRS_STEP_DOWN_THR_FAST_MASK)
 /*! @} */
 
@@ -3151,102 +3163,102 @@ typedef struct {
 /*! @name DFT_TONE_ANALYZER0 - DfT tone analyzer */
 /*! @{ */
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_start_offset_q_MASK (0x1FFU)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_start_offset_q_SHIFT (0U)
-/*! ipr_dft_ana_start_offset_q - Q Initial Phase */
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_start_offset_q(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_start_offset_q_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_start_offset_q_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_START_OFFSET_Q_MASK (0x1FFU)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_START_OFFSET_Q_SHIFT (0U)
+/*! IPR_DFT_ANA_START_OFFSET_Q - Q Initial Phase */
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_START_OFFSET_Q(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_START_OFFSET_Q_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_START_OFFSET_Q_MASK)
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_start_offset_i_MASK (0x3FE00U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_start_offset_i_SHIFT (9U)
-/*! ipr_dft_ana_start_offset_i - I Initial Phase */
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_start_offset_i(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_start_offset_i_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_start_offset_i_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_START_OFFSET_I_MASK (0x3FE00U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_START_OFFSET_I_SHIFT (9U)
+/*! IPR_DFT_ANA_START_OFFSET_I - I Initial Phase */
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_START_OFFSET_I(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_START_OFFSET_I_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_START_OFFSET_I_MASK)
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_attenuation_q_MASK (0x1C0000U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_attenuation_q_SHIFT (18U)
-/*! ipr_dft_ana_attenuation_q - Tone Attenuation For Q Path */
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_attenuation_q(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_attenuation_q_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_attenuation_q_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_ATTENUATION_Q_MASK (0x1C0000U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_ATTENUATION_Q_SHIFT (18U)
+/*! IPR_DFT_ANA_ATTENUATION_Q - Tone Attenuation For Q Path */
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_ATTENUATION_Q(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_ATTENUATION_Q_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_ATTENUATION_Q_MASK)
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_attenuation_i_MASK (0xE00000U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_attenuation_i_SHIFT (21U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_attenuation_i(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_attenuation_i_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_attenuation_i_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_ATTENUATION_I_MASK (0xE00000U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_ATTENUATION_I_SHIFT (21U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_ATTENUATION_I(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_ATTENUATION_I_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_ATTENUATION_I_MASK)
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_en_MASK (0x1000000U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_en_SHIFT (24U)
-/*! ipr_dft_ana_en - Enable for DfT tone analyzer */
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_en(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_en_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER0_ipr_dft_ana_en_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_EN_MASK (0x1000000U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_EN_SHIFT (24U)
+/*! IPR_DFT_ANA_EN - Enable for DfT tone analyzer */
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_EN(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_EN_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER0_IPR_DFT_ANA_EN_MASK)
 /*! @} */
 
 /*! @name DFT_TONE_ANALYZER1 - DfT tone analyzer */
 /*! @{ */
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_rx_tone_ana_accu_ovf_MASK (0x1U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_rx_tone_ana_accu_ovf_SHIFT (0U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_rx_tone_ana_accu_ovf(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_rx_tone_ana_accu_ovf_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_rx_tone_ana_accu_ovf_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_RX_TONE_ANA_ACCU_OVF_MASK (0x1U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_RX_TONE_ANA_ACCU_OVF_SHIFT (0U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_RX_TONE_ANA_ACCU_OVF(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_RX_TONE_ANA_ACCU_OVF_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_RX_TONE_ANA_ACCU_OVF_MASK)
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_rx_tone_ana_bitshift_ovf_MASK (0x2U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_rx_tone_ana_bitshift_ovf_SHIFT (1U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_rx_tone_ana_bitshift_ovf(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_rx_tone_ana_bitshift_ovf_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_rx_tone_ana_bitshift_ovf_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_RX_TONE_ANA_BITSHIFT_OVF_MASK (0x2U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_RX_TONE_ANA_BITSHIFT_OVF_SHIFT (1U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_RX_TONE_ANA_BITSHIFT_OVF(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_RX_TONE_ANA_BITSHIFT_OVF_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_RX_TONE_ANA_BITSHIFT_OVF_MASK)
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_bitshift_MASK (0x3CU)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_bitshift_SHIFT (2U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_bitshift(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_bitshift_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_bitshift_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_BITSHIFT_MASK (0x3CU)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_BITSHIFT_SHIFT (2U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_BITSHIFT(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_BITSHIFT_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_BITSHIFT_MASK)
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_rx_tone_ana_done_MASK (0x40U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_rx_tone_ana_done_SHIFT (6U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_rx_tone_ana_done(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_rx_tone_ana_done_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_rx_tone_ana_done_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_RX_TONE_ANA_DONE_MASK (0x40U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_RX_TONE_ANA_DONE_SHIFT (6U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_RX_TONE_ANA_DONE(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_RX_TONE_ANA_DONE_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_RX_TONE_ANA_DONE_MASK)
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_start_MASK (0x80U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_start_SHIFT (7U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_start(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_start_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_start_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_START_MASK (0x80U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_START_SHIFT (7U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_START(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_START_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_START_MASK)
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_input_sel_2_MASK (0x300U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_input_sel_2_SHIFT (8U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_input_sel_2(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_input_sel_2_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_input_sel_2_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_INPUT_SEL_2_MASK (0x300U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_INPUT_SEL_2_SHIFT (8U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_INPUT_SEL_2(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_INPUT_SEL_2_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_INPUT_SEL_2_MASK)
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_input_sel_1_MASK (0xC00U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_input_sel_1_SHIFT (10U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_input_sel_1(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_input_sel_1_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_input_sel_1_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_INPUT_SEL_1_MASK (0xC00U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_INPUT_SEL_1_SHIFT (10U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_INPUT_SEL_1(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_INPUT_SEL_1_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_INPUT_SEL_1_MASK)
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_increment_MASK (0x7F000U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_increment_SHIFT (12U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_increment(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_increment_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_increment_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_INCREMENT_MASK (0x7F000U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_INCREMENT_SHIFT (12U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_INCREMENT(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_INCREMENT_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_INCREMENT_MASK)
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_clk_div_MASK (0x380000U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_clk_div_SHIFT (19U)
-/*! ipr_dft_ana_clk_div
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_CLK_DIV_MASK (0x380000U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_CLK_DIV_SHIFT (19U)
+/*! IPR_DFT_ANA_CLK_DIV
  *  0b000..ref_clk
  *  0b001..ref_clk div 2
  *  0b010..ref_clk div 4
  *  0b011..ref_clk div 8
  *  0b100..ref_clk div 16
  */
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_clk_div(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_clk_div_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_ipr_dft_ana_clk_div_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_CLK_DIV(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_CLK_DIV_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER1_IPR_DFT_ANA_CLK_DIV_MASK)
 /*! @} */
 
 /*! @name DFT_TONE_ANALYZER2 - DfT tone analyzer */
 /*! @{ */
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_q_MASK (0xFFFFU)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_q_SHIFT (0U)
-/*! rx_tone_ana_out_q - Accumulator Q path result. */
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_q(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_q_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_q_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER2_RX_TONE_ANA_OUT_Q_MASK (0xFFFFU)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER2_RX_TONE_ANA_OUT_Q_SHIFT (0U)
+/*! RX_TONE_ANA_OUT_Q - Accumulator Q path result. */
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER2_RX_TONE_ANA_OUT_Q(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER2_RX_TONE_ANA_OUT_Q_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER2_RX_TONE_ANA_OUT_Q_MASK)
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_i_MASK (0xFFFF0000U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_i_SHIFT (16U)
-/*! rx_tone_ana_out_i - Accumulator I path result */
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_i(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_i_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_i_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER2_RX_TONE_ANA_OUT_I_MASK (0xFFFF0000U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER2_RX_TONE_ANA_OUT_I_SHIFT (16U)
+/*! RX_TONE_ANA_OUT_I - Accumulator I path result */
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER2_RX_TONE_ANA_OUT_I(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER2_RX_TONE_ANA_OUT_I_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER2_RX_TONE_ANA_OUT_I_MASK)
 /*! @} */
 
 /*! @name DFT_TONE_ANALYZER3 - DfT tone analyzer */
 /*! @{ */
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER3_ipr_dft_ana_accumulation_length_MASK (0x7FFFU)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER3_ipr_dft_ana_accumulation_length_SHIFT (0U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER3_ipr_dft_ana_accumulation_length(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER3_ipr_dft_ana_accumulation_length_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER3_ipr_dft_ana_accumulation_length_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER3_IPR_DFT_ANA_ACCUMULATION_LENGTH_MASK (0x7FFFU)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER3_IPR_DFT_ANA_ACCUMULATION_LENGTH_SHIFT (0U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER3_IPR_DFT_ANA_ACCUMULATION_LENGTH(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER3_IPR_DFT_ANA_ACCUMULATION_LENGTH_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER3_IPR_DFT_ANA_ACCUMULATION_LENGTH_MASK)
 
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER3_rx_tone_ana_out_abs_MASK (0x7FFF8000U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER3_rx_tone_ana_out_abs_SHIFT (15U)
-#define XCVR_RX_DIG_DFT_TONE_ANALYZER3_rx_tone_ana_out_abs(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER3_rx_tone_ana_out_abs_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER3_rx_tone_ana_out_abs_MASK)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER3_RX_TONE_ANA_OUT_ABS_MASK (0x7FFF8000U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER3_RX_TONE_ANA_OUT_ABS_SHIFT (15U)
+#define XCVR_RX_DIG_DFT_TONE_ANALYZER3_RX_TONE_ANA_OUT_ABS(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER3_RX_TONE_ANA_OUT_ABS_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER3_RX_TONE_ANA_OUT_ABS_MASK)
 /*! @} */
 
 /*! @name DCOC_DIG_CORR_RESULT - DCOC Digital Correction Result */

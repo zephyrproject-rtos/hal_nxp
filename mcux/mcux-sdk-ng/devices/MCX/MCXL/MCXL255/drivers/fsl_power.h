@@ -434,11 +434,19 @@ typedef struct _power_dpd2_config
     uint32_t disableBandgap : 1U;    /*!< Flag to indicate whether to disable the bandgap during DPD2 mode */
     uint32_t switchToX32K : 1U;      /*!< Flag to indicate whether to switch to X32K clock source during DPD2 mode */
     uint32_t disableFRO10M : 1U;     /*!< Flag to indicate whether to disable the FRO10M clock during DPD2 mode.
-                                        Please note, if switchToX32K is disable, FRO10M can not be disable if it is using as clock source. */
+                                        Please note, if switchToX32K is disable, FRO10M can not be disable if it is using as clock source.
+                                        @note Before calling Power_EnterDeepPowerDown2() with this flag set, the caller
+                                        must ensure all FRO-derived CGU peripheral clocks (configured via PER_CLK_CONFIG
+                                        and PER_CLK_EN) are switched to a non-FRO source (e.g. 32 kHz) or disabled.
+                                        When the FRO selected by SEL_MODE is disabled, the FRO block output becomes
+                                        undefined, causing any remaining FROdiv-sourced clock to carry an undefined
+                                        signal. ADVC may misinterpret this as a high frequency and raise VDD_CORE
+                                        voltage. See ADVC document sections 1.3.2 and 3.2.4 step iii for details. */
     uint32_t wakeToDpd1 : 1U;        /*!< Flag to indicate whether to wake up to DPD1 mode after DPD2 mode */
     uint32_t saveContext : 1U;       /*!< True to save basic register context into stack, false to do not save. */
     uint32_t disableFRO3M : 1U;      /*!< True to disable FRO3M, false to do not disable.
-                                        Please note, if switchToX32K is disable, FRO3M can not be disable if it is using as clock source. */
+                                        Please note, if switchToX32K is disable, FRO3M can not be disable if it is using as clock source.
+                                        See disableFRO10M note for CGU peripheral clock requirements. */
     pmu_fro16k_output_freq_t fro16KOutputFreq : 1U; /*!< Specify the output frequency of FRO16K */
     power_vdd_core_output_voltage_t
         dpd2VddCoreAonVoltage : 8U; /*!< @deprecated Voltage is now automatically selected based on frequency. Specify
@@ -848,6 +856,11 @@ power_dpd1_transition_t Power_GetDeepPowerDown1NextTransition(void);
  * @note If attempting to enable context saving feature, please ensure RAM blocks used by stack are retained.
  * @note The dpd2VddCoreAonVoltage field in config is deprecated and ignored. Voltage is now automatically
  *       selected based on the target clock frequency.
+ * @note When disableFRO10M or disableFRO3M is set, the caller must switch all FRO-derived CGU peripheral
+ *       clocks to a non-FRO source (e.g. 32 kHz) or disable them before calling this function. The power
+ *       driver handles the AON CPU clock switch and FRO disable, but does not modify peripheral clock
+ *       configuration (PER_CLK_CONFIG / PER_CLK_EN). Failure to do so may cause ADVC to raise VDD_CORE
+ *       voltage due to undefined FRO block output after the selected FRO is disabled.
  *
  * @param[in] config Pointer to the Deep Power Down 2 mode configuration.
  *

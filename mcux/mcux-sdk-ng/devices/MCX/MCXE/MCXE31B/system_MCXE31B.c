@@ -3,14 +3,15 @@
 **     Processors:          MCXE31BMLL
 **                          MCXE31BMPB
 **
-**     Compilers:           GNU C Compiler
+**     Compilers:
+**                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MCXE31 RM Rev2
 **     Version:             rev. 1.0, 2025-07-18
-**     Build:               b260420
+**     Build:               b260519
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -18,7 +19,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -36,7 +37,7 @@
 /*!
  * @file MCXE31B
  * @version 1.0
- * @date 2026-04-20
+ * @date 2026-05-19
  * @brief Device specific configuration file for MCXE31B (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -78,6 +79,9 @@ void SystemInit(void)
         PFLASH_PFCR_P0_CBFEN_MASK | PFLASH_PFCR_P0_CPFEN_MASK | PFLASH_PFCR_P0_DBFEN_MASK | PFLASH_PFCR_P0_DPFEN_MASK;
     PFLASH->PFCR[1] =
         PFLASH_PFCR_P1_CBFEN_MASK | PFLASH_PFCR_P1_CPFEN_MASK | PFLASH_PFCR_P1_DBFEN_MASK | PFLASH_PFCR_P1_DPFEN_MASK;
+
+    __DSB();
+    __ISB();
 
     /* Enable instruction cache */
     if (SCB_CCR_IC_Msk != (SCB_CCR_IC_Msk & SCB->CCR))

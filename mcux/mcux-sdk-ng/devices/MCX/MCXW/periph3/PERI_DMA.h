@@ -7,14 +7,14 @@
 **                          MCXW727DMFTA_cm33_core0
 **                          MCXW727DMFTA_cm33_core1
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -26,14 +26,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_DMA.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for DMA
  *
  * CMSIS Peripheral Access Layer for DMA
@@ -89,7 +94,7 @@ typedef enum _dma_request_source
 {
     kDmaRequestDisabled             = 0U,          /**< Disabled */
     kDmaRequestWUU0                 = 1U,          /**< WUU0 Wake up event */
-    kDmaRequestELE                  = 2U,          /**< EdgeLocK enclave Data request */
+    kDmaRequestELE                  = 2U,          /**< Sentinel core request */
     kDmaRequestLPTMR0               = 3U,          /**< LPTMR0 Counter match event */
     kDmaRequestLPTMR1               = 4U,          /**< LPTMR1 Counter match event */
     kDmaRequestTPM0Channel0         = 5U,          /**< TPM0 Channel 0 request */
@@ -429,7 +434,7 @@ typedef struct {
 /*! @name MP_HRS - Management Page Hardware Request Status */
 /*! @{ */
 
-#define DMA_MP_HRS_HRS_MASK                      (0xFFFFFFFFU)
+#define DMA_MP_HRS_HRS_MASK                      (0xFFFFU)
 #define DMA_MP_HRS_HRS_SHIFT                     (0U)
 /*! HRS - Hardware Request Status */
 #define DMA_MP_HRS_HRS(x)                        (((uint32_t)(((uint32_t)(x)) << DMA_MP_HRS_HRS_SHIFT)) & DMA_MP_HRS_HRS_MASK)

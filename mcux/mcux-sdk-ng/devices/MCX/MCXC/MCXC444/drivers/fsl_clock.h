@@ -725,7 +725,7 @@ static inline void OSC_SetExtRefClkConfig(OSC_Type *base, oscer_config_t const *
 {
     uint8_t reg = base->CR;
 
-    reg &= (uint8_t)(~(OSC_CR_ERCLKEN_MASK | OSC_CR_EREFSTEN_MASK));
+    reg &= (uint8_t)((~(OSC_CR_ERCLKEN_MASK | OSC_CR_EREFSTEN_MASK)) & 0xFFU);
     reg |= config->enableMode;
 
     base->CR = reg;
@@ -751,7 +751,7 @@ static inline void OSC_SetCapLoad(OSC_Type *base, uint8_t capLoad)
 {
     uint8_t reg = base->CR;
 
-    reg &= (uint8_t)(~(OSC_CR_SC2P_MASK | OSC_CR_SC4P_MASK | OSC_CR_SC8P_MASK | OSC_CR_SC16P_MASK));
+    reg &= (uint8_t)((~(OSC_CR_SC2P_MASK | OSC_CR_SC4P_MASK | OSC_CR_SC8P_MASK | OSC_CR_SC16P_MASK)) & 0xFFU);
     reg |= capLoad;
 
     base->CR = reg;

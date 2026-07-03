@@ -4,13 +4,13 @@
 **                          MCXE31BMPB
 **
 **     Version:             rev. 1.0, 2025-07-18
-**     Build:               b260420
+**     Build:               b260518
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DCM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -459,6 +459,81 @@ typedef struct {
 /*! DCMDCFE1 - Flash Memory Address */
 #define DCM_DCMSRR_DCMDCFE1(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE1_SHIFT)) & DCM_DCMSRR_DCMDCFE1_MASK)
 
+#define DCM_DCMSRR_DCMDCFE2_MASK                 (0x1FFFFFU)
+#define DCM_DCMSRR_DCMDCFE2_SHIFT                (0U)
+/*! DCMDCFE2 - Flash Memory Address */
+#define DCM_DCMSRR_DCMDCFE2(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE2_SHIFT)) & DCM_DCMSRR_DCMDCFE2_MASK)
+
+#define DCM_DCMSRR_DCMDCFE3_MASK                 (0x1FFFFFU)
+#define DCM_DCMSRR_DCMDCFE3_SHIFT                (0U)
+/*! DCMDCFE3 - Flash Memory Address */
+#define DCM_DCMSRR_DCMDCFE3(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE3_SHIFT)) & DCM_DCMSRR_DCMDCFE3_MASK)
+
+#define DCM_DCMSRR_DCMDCFE4_MASK                 (0x1FFFFFU)
+#define DCM_DCMSRR_DCMDCFE4_SHIFT                (0U)
+/*! DCMDCFE4 - Flash Memory Address */
+#define DCM_DCMSRR_DCMDCFE4(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE4_SHIFT)) & DCM_DCMSRR_DCMDCFE4_MASK)
+
+#define DCM_DCMSRR_DCMDCFE5_MASK                 (0x1FFFFFU)
+#define DCM_DCMSRR_DCMDCFE5_SHIFT                (0U)
+/*! DCMDCFE5 - Flash Memory Address */
+#define DCM_DCMSRR_DCMDCFE5(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE5_SHIFT)) & DCM_DCMSRR_DCMDCFE5_MASK)
+
+#define DCM_DCMSRR_DCMDCFE6_MASK                 (0x1FFFFFU)
+#define DCM_DCMSRR_DCMDCFE6_SHIFT                (0U)
+/*! DCMDCFE6 - Flash Memory Address */
+#define DCM_DCMSRR_DCMDCFE6(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE6_SHIFT)) & DCM_DCMSRR_DCMDCFE6_MASK)
+
+#define DCM_DCMSRR_DCMDCFE7_MASK                 (0x1FFFFFU)
+#define DCM_DCMSRR_DCMDCFE7_SHIFT                (0U)
+/*! DCMDCFE7 - Flash Memory Address */
+#define DCM_DCMSRR_DCMDCFE7(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE7_SHIFT)) & DCM_DCMSRR_DCMDCFE7_MASK)
+
+#define DCM_DCMSRR_DCMDCFE8_MASK                 (0x1FFFFFU)
+#define DCM_DCMSRR_DCMDCFE8_SHIFT                (0U)
+/*! DCMDCFE8 - Flash Memory Address */
+#define DCM_DCMSRR_DCMDCFE8(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE8_SHIFT)) & DCM_DCMSRR_DCMDCFE8_MASK)
+
+#define DCM_DCMSRR_DCMDCFE9_MASK                 (0x1FFFFFU)
+#define DCM_DCMSRR_DCMDCFE9_SHIFT                (0U)
+/*! DCMDCFE9 - Flash Memory Address */
+#define DCM_DCMSRR_DCMDCFE9(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE9_SHIFT)) & DCM_DCMSRR_DCMDCFE9_MASK)
+
+#define DCM_DCMSRR_DCMDCFE10_MASK                (0x1FFFFFU)
+#define DCM_DCMSRR_DCMDCFE10_SHIFT               (0U)
+/*! DCMDCFE10 - Flash Memory Address */
+#define DCM_DCMSRR_DCMDCFE10(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE10_SHIFT)) & DCM_DCMSRR_DCMDCFE10_MASK)
+
+#define DCM_DCMSRR_DCMDCFE11_MASK                (0x1FFFFFU)
+#define DCM_DCMSRR_DCMDCFE11_SHIFT               (0U)
+/*! DCMDCFE11 - Flash Memory Address */
+#define DCM_DCMSRR_DCMDCFE11(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE11_SHIFT)) & DCM_DCMSRR_DCMDCFE11_MASK)
+
+#define DCM_DCMSRR_DCMDCFE12_MASK                (0x1FFFFFU)
+#define DCM_DCMSRR_DCMDCFE12_SHIFT               (0U)
+/*! DCMDCFE12 - Flash Memory Address */
+#define DCM_DCMSRR_DCMDCFE12(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE12_SHIFT)) & DCM_DCMSRR_DCMDCFE12_MASK)
+
+#define DCM_DCMSRR_DCMDCFE13_MASK                (0x1FFFFFU)
+#define DCM_DCMSRR_DCMDCFE13_SHIFT               (0U)
+/*! DCMDCFE13 - Flash Memory Address */
+#define DCM_DCMSRR_DCMDCFE13(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE13_SHIFT)) & DCM_DCMSRR_DCMDCFE13_MASK)
+
+#define DCM_DCMSRR_DCMDCFE14_MASK                (0x1FFFFFU)
+#define DCM_DCMSRR_DCMDCFE14_SHIFT               (0U)
+/*! DCMDCFE14 - Flash Memory Address */
+#define DCM_DCMSRR_DCMDCFE14(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE14_SHIFT)) & DCM_DCMSRR_DCMDCFE14_MASK)
+
+#define DCM_DCMSRR_DCMDCFE15_MASK                (0x1FFFFFU)
+#define DCM_DCMSRR_DCMDCFE15_SHIFT               (0U)
+/*! DCMDCFE15 - Flash Memory Address */
+#define DCM_DCMSRR_DCMDCFE15(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE15_SHIFT)) & DCM_DCMSRR_DCMDCFE15_MASK)
+
+#define DCM_DCMSRR_DCMDCFE16_MASK                (0x1FFFFFU)
+#define DCM_DCMSRR_DCMDCFE16_SHIFT               (0U)
+/*! DCMDCFE16 - Flash Memory Address */
+#define DCM_DCMSRR_DCMDCFE16(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE16_SHIFT)) & DCM_DCMSRR_DCMDCFE16_MASK)
+
 #define DCM_DCMSRR_DCMDCFF1_MASK                 (0x7000000U)
 #define DCM_DCMSRR_DCMDCFF1_SHIFT                (24U)
 /*! DCMDCFF1 - DCF Record Location
@@ -466,35 +541,6 @@ typedef struct {
  *  0b101..Others: Reserved
  */
 #define DCM_DCMSRR_DCMDCFF1(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFF1_SHIFT)) & DCM_DCMSRR_DCMDCFF1_MASK)
-
-#define DCM_DCMSRR_DCMESF1_MASK                  (0x8000000U)
-#define DCM_DCMSRR_DCMESF1_SHIFT                 (27U)
-/*! DCMESF1 - Flash Memory Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESF1(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF1_SHIFT)) & DCM_DCMSRR_DCMESF1_MASK)
-
-#define DCM_DCMSRR_DCMESD1_MASK                  (0x10000000U)
-#define DCM_DCMSRR_DCMESD1_SHIFT                 (28U)
-/*! DCMESD1 - Chip Side Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESD1(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD1_SHIFT)) & DCM_DCMSRR_DCMESD1_MASK)
-
-#define DCM_DCMSRR_DCMDCFT1_MASK                 (0x20000000U)
-#define DCM_DCMSRR_DCMDCFT1_SHIFT                (29U)
-/*! DCMDCFT1 - Scanning Timeout On Flash Memory
- *  0b0..Does not exist
- *  0b1..Exists
- */
-#define DCM_DCMSRR_DCMDCFT1(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT1_SHIFT)) & DCM_DCMSRR_DCMDCFT1_MASK)
-
-#define DCM_DCMSRR_DCMDCFE2_MASK                 (0x1FFFFFU)
-#define DCM_DCMSRR_DCMDCFE2_SHIFT                (0U)
-/*! DCMDCFE2 - Flash Memory Address */
-#define DCM_DCMSRR_DCMDCFE2(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE2_SHIFT)) & DCM_DCMSRR_DCMDCFE2_MASK)
 
 #define DCM_DCMSRR_DCMDCFF2_MASK                 (0x7000000U)
 #define DCM_DCMSRR_DCMDCFF2_SHIFT                (24U)
@@ -504,35 +550,6 @@ typedef struct {
  */
 #define DCM_DCMSRR_DCMDCFF2(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFF2_SHIFT)) & DCM_DCMSRR_DCMDCFF2_MASK)
 
-#define DCM_DCMSRR_DCMESF2_MASK                  (0x8000000U)
-#define DCM_DCMSRR_DCMESF2_SHIFT                 (27U)
-/*! DCMESF2 - Flash Memory Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESF2(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF2_SHIFT)) & DCM_DCMSRR_DCMESF2_MASK)
-
-#define DCM_DCMSRR_DCMESD2_MASK                  (0x10000000U)
-#define DCM_DCMSRR_DCMESD2_SHIFT                 (28U)
-/*! DCMESD2 - Chip Side Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESD2(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD2_SHIFT)) & DCM_DCMSRR_DCMESD2_MASK)
-
-#define DCM_DCMSRR_DCMDCFT2_MASK                 (0x20000000U)
-#define DCM_DCMSRR_DCMDCFT2_SHIFT                (29U)
-/*! DCMDCFT2 - Scanning Timeout On Flash Memory
- *  0b0..Does not exist
- *  0b1..Exists
- */
-#define DCM_DCMSRR_DCMDCFT2(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT2_SHIFT)) & DCM_DCMSRR_DCMDCFT2_MASK)
-
-#define DCM_DCMSRR_DCMDCFE3_MASK                 (0x1FFFFFU)
-#define DCM_DCMSRR_DCMDCFE3_SHIFT                (0U)
-/*! DCMDCFE3 - Flash Memory Address */
-#define DCM_DCMSRR_DCMDCFE3(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE3_SHIFT)) & DCM_DCMSRR_DCMDCFE3_MASK)
-
 #define DCM_DCMSRR_DCMDCFF3_MASK                 (0x7000000U)
 #define DCM_DCMSRR_DCMDCFF3_SHIFT                (24U)
 /*! DCMDCFF3 - DCF Record Location
@@ -540,35 +557,6 @@ typedef struct {
  *  0b101..Others: Reserved
  */
 #define DCM_DCMSRR_DCMDCFF3(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFF3_SHIFT)) & DCM_DCMSRR_DCMDCFF3_MASK)
-
-#define DCM_DCMSRR_DCMESF3_MASK                  (0x8000000U)
-#define DCM_DCMSRR_DCMESF3_SHIFT                 (27U)
-/*! DCMESF3 - Flash Memory Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESF3(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF3_SHIFT)) & DCM_DCMSRR_DCMESF3_MASK)
-
-#define DCM_DCMSRR_DCMESD3_MASK                  (0x10000000U)
-#define DCM_DCMSRR_DCMESD3_SHIFT                 (28U)
-/*! DCMESD3 - Chip Side Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESD3(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD3_SHIFT)) & DCM_DCMSRR_DCMESD3_MASK)
-
-#define DCM_DCMSRR_DCMDCFT3_MASK                 (0x20000000U)
-#define DCM_DCMSRR_DCMDCFT3_SHIFT                (29U)
-/*! DCMDCFT3 - Scanning Timeout On Flash Memory
- *  0b0..Does not exist
- *  0b1..Exists
- */
-#define DCM_DCMSRR_DCMDCFT3(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT3_SHIFT)) & DCM_DCMSRR_DCMDCFT3_MASK)
-
-#define DCM_DCMSRR_DCMDCFE4_MASK                 (0x1FFFFFU)
-#define DCM_DCMSRR_DCMDCFE4_SHIFT                (0U)
-/*! DCMDCFE4 - Flash Memory Address */
-#define DCM_DCMSRR_DCMDCFE4(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE4_SHIFT)) & DCM_DCMSRR_DCMDCFE4_MASK)
 
 #define DCM_DCMSRR_DCMDCFF4_MASK                 (0x7000000U)
 #define DCM_DCMSRR_DCMDCFF4_SHIFT                (24U)
@@ -578,35 +566,6 @@ typedef struct {
  */
 #define DCM_DCMSRR_DCMDCFF4(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFF4_SHIFT)) & DCM_DCMSRR_DCMDCFF4_MASK)
 
-#define DCM_DCMSRR_DCMESF4_MASK                  (0x8000000U)
-#define DCM_DCMSRR_DCMESF4_SHIFT                 (27U)
-/*! DCMESF4 - Flash Memory Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESF4(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF4_SHIFT)) & DCM_DCMSRR_DCMESF4_MASK)
-
-#define DCM_DCMSRR_DCMESD4_MASK                  (0x10000000U)
-#define DCM_DCMSRR_DCMESD4_SHIFT                 (28U)
-/*! DCMESD4 - Chip Side Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESD4(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD4_SHIFT)) & DCM_DCMSRR_DCMESD4_MASK)
-
-#define DCM_DCMSRR_DCMDCFT4_MASK                 (0x20000000U)
-#define DCM_DCMSRR_DCMDCFT4_SHIFT                (29U)
-/*! DCMDCFT4 - Scanning Timeout On Flash Memory
- *  0b0..Does not exist
- *  0b1..Exists
- */
-#define DCM_DCMSRR_DCMDCFT4(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT4_SHIFT)) & DCM_DCMSRR_DCMDCFT4_MASK)
-
-#define DCM_DCMSRR_DCMDCFE5_MASK                 (0x1FFFFFU)
-#define DCM_DCMSRR_DCMDCFE5_SHIFT                (0U)
-/*! DCMDCFE5 - Flash Memory Address */
-#define DCM_DCMSRR_DCMDCFE5(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE5_SHIFT)) & DCM_DCMSRR_DCMDCFE5_MASK)
-
 #define DCM_DCMSRR_DCMDCFF5_MASK                 (0x7000000U)
 #define DCM_DCMSRR_DCMDCFF5_SHIFT                (24U)
 /*! DCMDCFF5 - DCF Record Location
@@ -614,35 +573,6 @@ typedef struct {
  *  0b101..Others: Reserved
  */
 #define DCM_DCMSRR_DCMDCFF5(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFF5_SHIFT)) & DCM_DCMSRR_DCMDCFF5_MASK)
-
-#define DCM_DCMSRR_DCMESF5_MASK                  (0x8000000U)
-#define DCM_DCMSRR_DCMESF5_SHIFT                 (27U)
-/*! DCMESF5 - Flash Memory Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESF5(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF5_SHIFT)) & DCM_DCMSRR_DCMESF5_MASK)
-
-#define DCM_DCMSRR_DCMESD5_MASK                  (0x10000000U)
-#define DCM_DCMSRR_DCMESD5_SHIFT                 (28U)
-/*! DCMESD5 - Chip Side Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESD5(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD5_SHIFT)) & DCM_DCMSRR_DCMESD5_MASK)
-
-#define DCM_DCMSRR_DCMDCFT5_MASK                 (0x20000000U)
-#define DCM_DCMSRR_DCMDCFT5_SHIFT                (29U)
-/*! DCMDCFT5 - Scanning Timeout On Flash Memory
- *  0b0..Does not exist
- *  0b1..Exists
- */
-#define DCM_DCMSRR_DCMDCFT5(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT5_SHIFT)) & DCM_DCMSRR_DCMDCFT5_MASK)
-
-#define DCM_DCMSRR_DCMDCFE6_MASK                 (0x1FFFFFU)
-#define DCM_DCMSRR_DCMDCFE6_SHIFT                (0U)
-/*! DCMDCFE6 - Flash Memory Address */
-#define DCM_DCMSRR_DCMDCFE6(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE6_SHIFT)) & DCM_DCMSRR_DCMDCFE6_MASK)
 
 #define DCM_DCMSRR_DCMDCFF6_MASK                 (0x7000000U)
 #define DCM_DCMSRR_DCMDCFF6_SHIFT                (24U)
@@ -652,35 +582,6 @@ typedef struct {
  */
 #define DCM_DCMSRR_DCMDCFF6(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFF6_SHIFT)) & DCM_DCMSRR_DCMDCFF6_MASK)
 
-#define DCM_DCMSRR_DCMESF6_MASK                  (0x8000000U)
-#define DCM_DCMSRR_DCMESF6_SHIFT                 (27U)
-/*! DCMESF6 - Flash Memory Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESF6(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF6_SHIFT)) & DCM_DCMSRR_DCMESF6_MASK)
-
-#define DCM_DCMSRR_DCMESD6_MASK                  (0x10000000U)
-#define DCM_DCMSRR_DCMESD6_SHIFT                 (28U)
-/*! DCMESD6 - Chip Side Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESD6(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD6_SHIFT)) & DCM_DCMSRR_DCMESD6_MASK)
-
-#define DCM_DCMSRR_DCMDCFT6_MASK                 (0x20000000U)
-#define DCM_DCMSRR_DCMDCFT6_SHIFT                (29U)
-/*! DCMDCFT6 - Scanning Timeout On Flash Memory
- *  0b0..Does not exist
- *  0b1..Exists
- */
-#define DCM_DCMSRR_DCMDCFT6(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT6_SHIFT)) & DCM_DCMSRR_DCMDCFT6_MASK)
-
-#define DCM_DCMSRR_DCMDCFE7_MASK                 (0x1FFFFFU)
-#define DCM_DCMSRR_DCMDCFE7_SHIFT                (0U)
-/*! DCMDCFE7 - Flash Memory Address */
-#define DCM_DCMSRR_DCMDCFE7(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE7_SHIFT)) & DCM_DCMSRR_DCMDCFE7_MASK)
-
 #define DCM_DCMSRR_DCMDCFF7_MASK                 (0x7000000U)
 #define DCM_DCMSRR_DCMDCFF7_SHIFT                (24U)
 /*! DCMDCFF7 - DCF Record Location
@@ -688,35 +589,6 @@ typedef struct {
  *  0b101..Others: Reserved
  */
 #define DCM_DCMSRR_DCMDCFF7(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFF7_SHIFT)) & DCM_DCMSRR_DCMDCFF7_MASK)
-
-#define DCM_DCMSRR_DCMESF7_MASK                  (0x8000000U)
-#define DCM_DCMSRR_DCMESF7_SHIFT                 (27U)
-/*! DCMESF7 - Flash Memory Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESF7(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF7_SHIFT)) & DCM_DCMSRR_DCMESF7_MASK)
-
-#define DCM_DCMSRR_DCMESD7_MASK                  (0x10000000U)
-#define DCM_DCMSRR_DCMESD7_SHIFT                 (28U)
-/*! DCMESD7 - Chip Side Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESD7(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD7_SHIFT)) & DCM_DCMSRR_DCMESD7_MASK)
-
-#define DCM_DCMSRR_DCMDCFT7_MASK                 (0x20000000U)
-#define DCM_DCMSRR_DCMDCFT7_SHIFT                (29U)
-/*! DCMDCFT7 - Scanning Timeout On Flash Memory
- *  0b0..Does not exist
- *  0b1..Exists
- */
-#define DCM_DCMSRR_DCMDCFT7(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT7_SHIFT)) & DCM_DCMSRR_DCMDCFT7_MASK)
-
-#define DCM_DCMSRR_DCMDCFE8_MASK                 (0x1FFFFFU)
-#define DCM_DCMSRR_DCMDCFE8_SHIFT                (0U)
-/*! DCMDCFE8 - Flash Memory Address */
-#define DCM_DCMSRR_DCMDCFE8(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE8_SHIFT)) & DCM_DCMSRR_DCMDCFE8_MASK)
 
 #define DCM_DCMSRR_DCMDCFF8_MASK                 (0x7000000U)
 #define DCM_DCMSRR_DCMDCFF8_SHIFT                (24U)
@@ -726,35 +598,6 @@ typedef struct {
  */
 #define DCM_DCMSRR_DCMDCFF8(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFF8_SHIFT)) & DCM_DCMSRR_DCMDCFF8_MASK)
 
-#define DCM_DCMSRR_DCMESF8_MASK                  (0x8000000U)
-#define DCM_DCMSRR_DCMESF8_SHIFT                 (27U)
-/*! DCMESF8 - Flash Memory Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESF8(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF8_SHIFT)) & DCM_DCMSRR_DCMESF8_MASK)
-
-#define DCM_DCMSRR_DCMESD8_MASK                  (0x10000000U)
-#define DCM_DCMSRR_DCMESD8_SHIFT                 (28U)
-/*! DCMESD8 - Chip Side Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESD8(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD8_SHIFT)) & DCM_DCMSRR_DCMESD8_MASK)
-
-#define DCM_DCMSRR_DCMDCFT8_MASK                 (0x20000000U)
-#define DCM_DCMSRR_DCMDCFT8_SHIFT                (29U)
-/*! DCMDCFT8 - Scanning Timeout On Flash Memory
- *  0b0..Does not exist
- *  0b1..Exists
- */
-#define DCM_DCMSRR_DCMDCFT8(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT8_SHIFT)) & DCM_DCMSRR_DCMDCFT8_MASK)
-
-#define DCM_DCMSRR_DCMDCFE9_MASK                 (0x1FFFFFU)
-#define DCM_DCMSRR_DCMDCFE9_SHIFT                (0U)
-/*! DCMDCFE9 - Flash Memory Address */
-#define DCM_DCMSRR_DCMDCFE9(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE9_SHIFT)) & DCM_DCMSRR_DCMDCFE9_MASK)
-
 #define DCM_DCMSRR_DCMDCFF9_MASK                 (0x7000000U)
 #define DCM_DCMSRR_DCMDCFF9_SHIFT                (24U)
 /*! DCMDCFF9 - DCF Record Location
@@ -762,35 +605,6 @@ typedef struct {
  *  0b101..Others: Reserved
  */
 #define DCM_DCMSRR_DCMDCFF9(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFF9_SHIFT)) & DCM_DCMSRR_DCMDCFF9_MASK)
-
-#define DCM_DCMSRR_DCMESF9_MASK                  (0x8000000U)
-#define DCM_DCMSRR_DCMESF9_SHIFT                 (27U)
-/*! DCMESF9 - Flash Memory Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESF9(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF9_SHIFT)) & DCM_DCMSRR_DCMESF9_MASK)
-
-#define DCM_DCMSRR_DCMESD9_MASK                  (0x10000000U)
-#define DCM_DCMSRR_DCMESD9_SHIFT                 (28U)
-/*! DCMESD9 - Chip Side Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESD9(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD9_SHIFT)) & DCM_DCMSRR_DCMESD9_MASK)
-
-#define DCM_DCMSRR_DCMDCFT9_MASK                 (0x20000000U)
-#define DCM_DCMSRR_DCMDCFT9_SHIFT                (29U)
-/*! DCMDCFT9 - Scanning Timeout On Flash Memory
- *  0b0..Does not exist
- *  0b1..Exists
- */
-#define DCM_DCMSRR_DCMDCFT9(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT9_SHIFT)) & DCM_DCMSRR_DCMDCFT9_MASK)
-
-#define DCM_DCMSRR_DCMDCFE10_MASK                (0x1FFFFFU)
-#define DCM_DCMSRR_DCMDCFE10_SHIFT               (0U)
-/*! DCMDCFE10 - Flash Memory Address */
-#define DCM_DCMSRR_DCMDCFE10(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE10_SHIFT)) & DCM_DCMSRR_DCMDCFE10_MASK)
 
 #define DCM_DCMSRR_DCMDCFF10_MASK                (0x7000000U)
 #define DCM_DCMSRR_DCMDCFF10_SHIFT               (24U)
@@ -800,35 +614,6 @@ typedef struct {
  */
 #define DCM_DCMSRR_DCMDCFF10(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFF10_SHIFT)) & DCM_DCMSRR_DCMDCFF10_MASK)
 
-#define DCM_DCMSRR_DCMESF10_MASK                 (0x8000000U)
-#define DCM_DCMSRR_DCMESF10_SHIFT                (27U)
-/*! DCMESF10 - Flash Memory Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESF10(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF10_SHIFT)) & DCM_DCMSRR_DCMESF10_MASK)
-
-#define DCM_DCMSRR_DCMESD10_MASK                 (0x10000000U)
-#define DCM_DCMSRR_DCMESD10_SHIFT                (28U)
-/*! DCMESD10 - Chip Side Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESD10(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD10_SHIFT)) & DCM_DCMSRR_DCMESD10_MASK)
-
-#define DCM_DCMSRR_DCMDCFT10_MASK                (0x20000000U)
-#define DCM_DCMSRR_DCMDCFT10_SHIFT               (29U)
-/*! DCMDCFT10 - Scanning Timeout On Flash Memory
- *  0b0..Does not exist
- *  0b1..Exists
- */
-#define DCM_DCMSRR_DCMDCFT10(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT10_SHIFT)) & DCM_DCMSRR_DCMDCFT10_MASK)
-
-#define DCM_DCMSRR_DCMDCFE11_MASK                (0x1FFFFFU)
-#define DCM_DCMSRR_DCMDCFE11_SHIFT               (0U)
-/*! DCMDCFE11 - Flash Memory Address */
-#define DCM_DCMSRR_DCMDCFE11(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE11_SHIFT)) & DCM_DCMSRR_DCMDCFE11_MASK)
-
 #define DCM_DCMSRR_DCMDCFF11_MASK                (0x7000000U)
 #define DCM_DCMSRR_DCMDCFF11_SHIFT               (24U)
 /*! DCMDCFF11 - DCF Record Location
@@ -836,35 +621,6 @@ typedef struct {
  *  0b101..Others: Reserved
  */
 #define DCM_DCMSRR_DCMDCFF11(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFF11_SHIFT)) & DCM_DCMSRR_DCMDCFF11_MASK)
-
-#define DCM_DCMSRR_DCMESF11_MASK                 (0x8000000U)
-#define DCM_DCMSRR_DCMESF11_SHIFT                (27U)
-/*! DCMESF11 - Flash Memory Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESF11(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF11_SHIFT)) & DCM_DCMSRR_DCMESF11_MASK)
-
-#define DCM_DCMSRR_DCMESD11_MASK                 (0x10000000U)
-#define DCM_DCMSRR_DCMESD11_SHIFT                (28U)
-/*! DCMESD11 - Chip Side Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESD11(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD11_SHIFT)) & DCM_DCMSRR_DCMESD11_MASK)
-
-#define DCM_DCMSRR_DCMDCFT11_MASK                (0x20000000U)
-#define DCM_DCMSRR_DCMDCFT11_SHIFT               (29U)
-/*! DCMDCFT11 - Scanning Timeout On Flash Memory
- *  0b0..Does not exist
- *  0b1..Exists
- */
-#define DCM_DCMSRR_DCMDCFT11(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT11_SHIFT)) & DCM_DCMSRR_DCMDCFT11_MASK)
-
-#define DCM_DCMSRR_DCMDCFE12_MASK                (0x1FFFFFU)
-#define DCM_DCMSRR_DCMDCFE12_SHIFT               (0U)
-/*! DCMDCFE12 - Flash Memory Address */
-#define DCM_DCMSRR_DCMDCFE12(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE12_SHIFT)) & DCM_DCMSRR_DCMDCFE12_MASK)
 
 #define DCM_DCMSRR_DCMDCFF12_MASK                (0x7000000U)
 #define DCM_DCMSRR_DCMDCFF12_SHIFT               (24U)
@@ -874,35 +630,6 @@ typedef struct {
  */
 #define DCM_DCMSRR_DCMDCFF12(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFF12_SHIFT)) & DCM_DCMSRR_DCMDCFF12_MASK)
 
-#define DCM_DCMSRR_DCMESF12_MASK                 (0x8000000U)
-#define DCM_DCMSRR_DCMESF12_SHIFT                (27U)
-/*! DCMESF12 - Flash Memory Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESF12(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF12_SHIFT)) & DCM_DCMSRR_DCMESF12_MASK)
-
-#define DCM_DCMSRR_DCMESD12_MASK                 (0x10000000U)
-#define DCM_DCMSRR_DCMESD12_SHIFT                (28U)
-/*! DCMESD12 - Chip Side Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESD12(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD12_SHIFT)) & DCM_DCMSRR_DCMESD12_MASK)
-
-#define DCM_DCMSRR_DCMDCFT12_MASK                (0x20000000U)
-#define DCM_DCMSRR_DCMDCFT12_SHIFT               (29U)
-/*! DCMDCFT12 - Scanning Timeout On Flash Memory
- *  0b0..Does not exist
- *  0b1..Exists
- */
-#define DCM_DCMSRR_DCMDCFT12(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT12_SHIFT)) & DCM_DCMSRR_DCMDCFT12_MASK)
-
-#define DCM_DCMSRR_DCMDCFE13_MASK                (0x1FFFFFU)
-#define DCM_DCMSRR_DCMDCFE13_SHIFT               (0U)
-/*! DCMDCFE13 - Flash Memory Address */
-#define DCM_DCMSRR_DCMDCFE13(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE13_SHIFT)) & DCM_DCMSRR_DCMDCFE13_MASK)
-
 #define DCM_DCMSRR_DCMDCFF13_MASK                (0x7000000U)
 #define DCM_DCMSRR_DCMDCFF13_SHIFT               (24U)
 /*! DCMDCFF13 - DCF Record Location
@@ -910,35 +637,6 @@ typedef struct {
  *  0b101..Others: Reserved
  */
 #define DCM_DCMSRR_DCMDCFF13(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFF13_SHIFT)) & DCM_DCMSRR_DCMDCFF13_MASK)
-
-#define DCM_DCMSRR_DCMESF13_MASK                 (0x8000000U)
-#define DCM_DCMSRR_DCMESF13_SHIFT                (27U)
-/*! DCMESF13 - Flash Memory Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESF13(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF13_SHIFT)) & DCM_DCMSRR_DCMESF13_MASK)
-
-#define DCM_DCMSRR_DCMESD13_MASK                 (0x10000000U)
-#define DCM_DCMSRR_DCMESD13_SHIFT                (28U)
-/*! DCMESD13 - Chip Side Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESD13(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD13_SHIFT)) & DCM_DCMSRR_DCMESD13_MASK)
-
-#define DCM_DCMSRR_DCMDCFT13_MASK                (0x20000000U)
-#define DCM_DCMSRR_DCMDCFT13_SHIFT               (29U)
-/*! DCMDCFT13 - Scanning Timeout On Flash Memory
- *  0b0..Does not exist
- *  0b1..Exists
- */
-#define DCM_DCMSRR_DCMDCFT13(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT13_SHIFT)) & DCM_DCMSRR_DCMDCFT13_MASK)
-
-#define DCM_DCMSRR_DCMDCFE14_MASK                (0x1FFFFFU)
-#define DCM_DCMSRR_DCMDCFE14_SHIFT               (0U)
-/*! DCMDCFE14 - Flash Memory Address */
-#define DCM_DCMSRR_DCMDCFE14(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE14_SHIFT)) & DCM_DCMSRR_DCMDCFE14_MASK)
 
 #define DCM_DCMSRR_DCMDCFF14_MASK                (0x7000000U)
 #define DCM_DCMSRR_DCMDCFF14_SHIFT               (24U)
@@ -948,35 +646,6 @@ typedef struct {
  */
 #define DCM_DCMSRR_DCMDCFF14(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFF14_SHIFT)) & DCM_DCMSRR_DCMDCFF14_MASK)
 
-#define DCM_DCMSRR_DCMESF14_MASK                 (0x8000000U)
-#define DCM_DCMSRR_DCMESF14_SHIFT                (27U)
-/*! DCMESF14 - Flash Memory Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESF14(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF14_SHIFT)) & DCM_DCMSRR_DCMESF14_MASK)
-
-#define DCM_DCMSRR_DCMESD14_MASK                 (0x10000000U)
-#define DCM_DCMSRR_DCMESD14_SHIFT                (28U)
-/*! DCMESD14 - Chip Side Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESD14(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD14_SHIFT)) & DCM_DCMSRR_DCMESD14_MASK)
-
-#define DCM_DCMSRR_DCMDCFT14_MASK                (0x20000000U)
-#define DCM_DCMSRR_DCMDCFT14_SHIFT               (29U)
-/*! DCMDCFT14 - Scanning Timeout On Flash Memory
- *  0b0..Does not exist
- *  0b1..Exists
- */
-#define DCM_DCMSRR_DCMDCFT14(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT14_SHIFT)) & DCM_DCMSRR_DCMDCFT14_MASK)
-
-#define DCM_DCMSRR_DCMDCFE15_MASK                (0x1FFFFFU)
-#define DCM_DCMSRR_DCMDCFE15_SHIFT               (0U)
-/*! DCMDCFE15 - Flash Memory Address */
-#define DCM_DCMSRR_DCMDCFE15(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE15_SHIFT)) & DCM_DCMSRR_DCMDCFE15_MASK)
-
 #define DCM_DCMSRR_DCMDCFF15_MASK                (0x7000000U)
 #define DCM_DCMSRR_DCMDCFF15_SHIFT               (24U)
 /*! DCMDCFF15 - DCF Record Location
@@ -984,35 +653,6 @@ typedef struct {
  *  0b101..Others: Reserved
  */
 #define DCM_DCMSRR_DCMDCFF15(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFF15_SHIFT)) & DCM_DCMSRR_DCMDCFF15_MASK)
-
-#define DCM_DCMSRR_DCMESF15_MASK                 (0x8000000U)
-#define DCM_DCMSRR_DCMESF15_SHIFT                (27U)
-/*! DCMESF15 - Flash Memory Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESF15(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF15_SHIFT)) & DCM_DCMSRR_DCMESF15_MASK)
-
-#define DCM_DCMSRR_DCMESD15_MASK                 (0x10000000U)
-#define DCM_DCMSRR_DCMESD15_SHIFT                (28U)
-/*! DCMESD15 - Chip Side Error
- *  0b0..No errors
- *  0b1..Errors exist
- */
-#define DCM_DCMSRR_DCMESD15(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD15_SHIFT)) & DCM_DCMSRR_DCMESD15_MASK)
-
-#define DCM_DCMSRR_DCMDCFT15_MASK                (0x20000000U)
-#define DCM_DCMSRR_DCMDCFT15_SHIFT               (29U)
-/*! DCMDCFT15 - Scanning Timeout On Flash Memory
- *  0b0..Does not exist
- *  0b1..Exists
- */
-#define DCM_DCMSRR_DCMDCFT15(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT15_SHIFT)) & DCM_DCMSRR_DCMDCFT15_MASK)
-
-#define DCM_DCMSRR_DCMDCFE16_MASK                (0x1FFFFFU)
-#define DCM_DCMSRR_DCMDCFE16_SHIFT               (0U)
-/*! DCMDCFE16 - Flash Memory Address */
-#define DCM_DCMSRR_DCMDCFE16(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFE16_SHIFT)) & DCM_DCMSRR_DCMDCFE16_MASK)
 
 #define DCM_DCMSRR_DCMDCFF16_MASK                (0x7000000U)
 #define DCM_DCMSRR_DCMDCFF16_SHIFT               (24U)
@@ -1022,6 +662,126 @@ typedef struct {
  */
 #define DCM_DCMSRR_DCMDCFF16(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFF16_SHIFT)) & DCM_DCMSRR_DCMDCFF16_MASK)
 
+#define DCM_DCMSRR_DCMESF1_MASK                  (0x8000000U)
+#define DCM_DCMSRR_DCMESF1_SHIFT                 (27U)
+/*! DCMESF1 - Flash Memory Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESF1(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF1_SHIFT)) & DCM_DCMSRR_DCMESF1_MASK)
+
+#define DCM_DCMSRR_DCMESF2_MASK                  (0x8000000U)
+#define DCM_DCMSRR_DCMESF2_SHIFT                 (27U)
+/*! DCMESF2 - Flash Memory Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESF2(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF2_SHIFT)) & DCM_DCMSRR_DCMESF2_MASK)
+
+#define DCM_DCMSRR_DCMESF3_MASK                  (0x8000000U)
+#define DCM_DCMSRR_DCMESF3_SHIFT                 (27U)
+/*! DCMESF3 - Flash Memory Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESF3(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF3_SHIFT)) & DCM_DCMSRR_DCMESF3_MASK)
+
+#define DCM_DCMSRR_DCMESF4_MASK                  (0x8000000U)
+#define DCM_DCMSRR_DCMESF4_SHIFT                 (27U)
+/*! DCMESF4 - Flash Memory Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESF4(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF4_SHIFT)) & DCM_DCMSRR_DCMESF4_MASK)
+
+#define DCM_DCMSRR_DCMESF5_MASK                  (0x8000000U)
+#define DCM_DCMSRR_DCMESF5_SHIFT                 (27U)
+/*! DCMESF5 - Flash Memory Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESF5(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF5_SHIFT)) & DCM_DCMSRR_DCMESF5_MASK)
+
+#define DCM_DCMSRR_DCMESF6_MASK                  (0x8000000U)
+#define DCM_DCMSRR_DCMESF6_SHIFT                 (27U)
+/*! DCMESF6 - Flash Memory Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESF6(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF6_SHIFT)) & DCM_DCMSRR_DCMESF6_MASK)
+
+#define DCM_DCMSRR_DCMESF7_MASK                  (0x8000000U)
+#define DCM_DCMSRR_DCMESF7_SHIFT                 (27U)
+/*! DCMESF7 - Flash Memory Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESF7(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF7_SHIFT)) & DCM_DCMSRR_DCMESF7_MASK)
+
+#define DCM_DCMSRR_DCMESF8_MASK                  (0x8000000U)
+#define DCM_DCMSRR_DCMESF8_SHIFT                 (27U)
+/*! DCMESF8 - Flash Memory Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESF8(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF8_SHIFT)) & DCM_DCMSRR_DCMESF8_MASK)
+
+#define DCM_DCMSRR_DCMESF9_MASK                  (0x8000000U)
+#define DCM_DCMSRR_DCMESF9_SHIFT                 (27U)
+/*! DCMESF9 - Flash Memory Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESF9(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF9_SHIFT)) & DCM_DCMSRR_DCMESF9_MASK)
+
+#define DCM_DCMSRR_DCMESF10_MASK                 (0x8000000U)
+#define DCM_DCMSRR_DCMESF10_SHIFT                (27U)
+/*! DCMESF10 - Flash Memory Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESF10(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF10_SHIFT)) & DCM_DCMSRR_DCMESF10_MASK)
+
+#define DCM_DCMSRR_DCMESF11_MASK                 (0x8000000U)
+#define DCM_DCMSRR_DCMESF11_SHIFT                (27U)
+/*! DCMESF11 - Flash Memory Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESF11(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF11_SHIFT)) & DCM_DCMSRR_DCMESF11_MASK)
+
+#define DCM_DCMSRR_DCMESF12_MASK                 (0x8000000U)
+#define DCM_DCMSRR_DCMESF12_SHIFT                (27U)
+/*! DCMESF12 - Flash Memory Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESF12(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF12_SHIFT)) & DCM_DCMSRR_DCMESF12_MASK)
+
+#define DCM_DCMSRR_DCMESF13_MASK                 (0x8000000U)
+#define DCM_DCMSRR_DCMESF13_SHIFT                (27U)
+/*! DCMESF13 - Flash Memory Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESF13(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF13_SHIFT)) & DCM_DCMSRR_DCMESF13_MASK)
+
+#define DCM_DCMSRR_DCMESF14_MASK                 (0x8000000U)
+#define DCM_DCMSRR_DCMESF14_SHIFT                (27U)
+/*! DCMESF14 - Flash Memory Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESF14(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF14_SHIFT)) & DCM_DCMSRR_DCMESF14_MASK)
+
+#define DCM_DCMSRR_DCMESF15_MASK                 (0x8000000U)
+#define DCM_DCMSRR_DCMESF15_SHIFT                (27U)
+/*! DCMESF15 - Flash Memory Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESF15(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF15_SHIFT)) & DCM_DCMSRR_DCMESF15_MASK)
+
 #define DCM_DCMSRR_DCMESF16_MASK                 (0x8000000U)
 #define DCM_DCMSRR_DCMESF16_SHIFT                (27U)
 /*! DCMESF16 - Flash Memory Error
@@ -1030,6 +790,126 @@ typedef struct {
  */
 #define DCM_DCMSRR_DCMESF16(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESF16_SHIFT)) & DCM_DCMSRR_DCMESF16_MASK)
 
+#define DCM_DCMSRR_DCMESD1_MASK                  (0x10000000U)
+#define DCM_DCMSRR_DCMESD1_SHIFT                 (28U)
+/*! DCMESD1 - Chip Side Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESD1(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD1_SHIFT)) & DCM_DCMSRR_DCMESD1_MASK)
+
+#define DCM_DCMSRR_DCMESD2_MASK                  (0x10000000U)
+#define DCM_DCMSRR_DCMESD2_SHIFT                 (28U)
+/*! DCMESD2 - Chip Side Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESD2(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD2_SHIFT)) & DCM_DCMSRR_DCMESD2_MASK)
+
+#define DCM_DCMSRR_DCMESD3_MASK                  (0x10000000U)
+#define DCM_DCMSRR_DCMESD3_SHIFT                 (28U)
+/*! DCMESD3 - Chip Side Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESD3(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD3_SHIFT)) & DCM_DCMSRR_DCMESD3_MASK)
+
+#define DCM_DCMSRR_DCMESD4_MASK                  (0x10000000U)
+#define DCM_DCMSRR_DCMESD4_SHIFT                 (28U)
+/*! DCMESD4 - Chip Side Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESD4(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD4_SHIFT)) & DCM_DCMSRR_DCMESD4_MASK)
+
+#define DCM_DCMSRR_DCMESD5_MASK                  (0x10000000U)
+#define DCM_DCMSRR_DCMESD5_SHIFT                 (28U)
+/*! DCMESD5 - Chip Side Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESD5(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD5_SHIFT)) & DCM_DCMSRR_DCMESD5_MASK)
+
+#define DCM_DCMSRR_DCMESD6_MASK                  (0x10000000U)
+#define DCM_DCMSRR_DCMESD6_SHIFT                 (28U)
+/*! DCMESD6 - Chip Side Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESD6(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD6_SHIFT)) & DCM_DCMSRR_DCMESD6_MASK)
+
+#define DCM_DCMSRR_DCMESD7_MASK                  (0x10000000U)
+#define DCM_DCMSRR_DCMESD7_SHIFT                 (28U)
+/*! DCMESD7 - Chip Side Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESD7(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD7_SHIFT)) & DCM_DCMSRR_DCMESD7_MASK)
+
+#define DCM_DCMSRR_DCMESD8_MASK                  (0x10000000U)
+#define DCM_DCMSRR_DCMESD8_SHIFT                 (28U)
+/*! DCMESD8 - Chip Side Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESD8(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD8_SHIFT)) & DCM_DCMSRR_DCMESD8_MASK)
+
+#define DCM_DCMSRR_DCMESD9_MASK                  (0x10000000U)
+#define DCM_DCMSRR_DCMESD9_SHIFT                 (28U)
+/*! DCMESD9 - Chip Side Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESD9(x)                    (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD9_SHIFT)) & DCM_DCMSRR_DCMESD9_MASK)
+
+#define DCM_DCMSRR_DCMESD10_MASK                 (0x10000000U)
+#define DCM_DCMSRR_DCMESD10_SHIFT                (28U)
+/*! DCMESD10 - Chip Side Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESD10(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD10_SHIFT)) & DCM_DCMSRR_DCMESD10_MASK)
+
+#define DCM_DCMSRR_DCMESD11_MASK                 (0x10000000U)
+#define DCM_DCMSRR_DCMESD11_SHIFT                (28U)
+/*! DCMESD11 - Chip Side Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESD11(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD11_SHIFT)) & DCM_DCMSRR_DCMESD11_MASK)
+
+#define DCM_DCMSRR_DCMESD12_MASK                 (0x10000000U)
+#define DCM_DCMSRR_DCMESD12_SHIFT                (28U)
+/*! DCMESD12 - Chip Side Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESD12(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD12_SHIFT)) & DCM_DCMSRR_DCMESD12_MASK)
+
+#define DCM_DCMSRR_DCMESD13_MASK                 (0x10000000U)
+#define DCM_DCMSRR_DCMESD13_SHIFT                (28U)
+/*! DCMESD13 - Chip Side Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESD13(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD13_SHIFT)) & DCM_DCMSRR_DCMESD13_MASK)
+
+#define DCM_DCMSRR_DCMESD14_MASK                 (0x10000000U)
+#define DCM_DCMSRR_DCMESD14_SHIFT                (28U)
+/*! DCMESD14 - Chip Side Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESD14(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD14_SHIFT)) & DCM_DCMSRR_DCMESD14_MASK)
+
+#define DCM_DCMSRR_DCMESD15_MASK                 (0x10000000U)
+#define DCM_DCMSRR_DCMESD15_SHIFT                (28U)
+/*! DCMESD15 - Chip Side Error
+ *  0b0..No errors
+ *  0b1..Errors exist
+ */
+#define DCM_DCMSRR_DCMESD15(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD15_SHIFT)) & DCM_DCMSRR_DCMESD15_MASK)
+
 #define DCM_DCMSRR_DCMESD16_MASK                 (0x10000000U)
 #define DCM_DCMSRR_DCMESD16_SHIFT                (28U)
 /*! DCMESD16 - Chip Side Error
@@ -1037,6 +917,126 @@ typedef struct {
  *  0b1..Errors exist
  */
 #define DCM_DCMSRR_DCMESD16(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMESD16_SHIFT)) & DCM_DCMSRR_DCMESD16_MASK)
+
+#define DCM_DCMSRR_DCMDCFT1_MASK                 (0x20000000U)
+#define DCM_DCMSRR_DCMDCFT1_SHIFT                (29U)
+/*! DCMDCFT1 - Scanning Timeout On Flash Memory
+ *  0b0..Does not exist
+ *  0b1..Exists
+ */
+#define DCM_DCMSRR_DCMDCFT1(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT1_SHIFT)) & DCM_DCMSRR_DCMDCFT1_MASK)
+
+#define DCM_DCMSRR_DCMDCFT2_MASK                 (0x20000000U)
+#define DCM_DCMSRR_DCMDCFT2_SHIFT                (29U)
+/*! DCMDCFT2 - Scanning Timeout On Flash Memory
+ *  0b0..Does not exist
+ *  0b1..Exists
+ */
+#define DCM_DCMSRR_DCMDCFT2(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT2_SHIFT)) & DCM_DCMSRR_DCMDCFT2_MASK)
+
+#define DCM_DCMSRR_DCMDCFT3_MASK                 (0x20000000U)
+#define DCM_DCMSRR_DCMDCFT3_SHIFT                (29U)
+/*! DCMDCFT3 - Scanning Timeout On Flash Memory
+ *  0b0..Does not exist
+ *  0b1..Exists
+ */
+#define DCM_DCMSRR_DCMDCFT3(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT3_SHIFT)) & DCM_DCMSRR_DCMDCFT3_MASK)
+
+#define DCM_DCMSRR_DCMDCFT4_MASK                 (0x20000000U)
+#define DCM_DCMSRR_DCMDCFT4_SHIFT                (29U)
+/*! DCMDCFT4 - Scanning Timeout On Flash Memory
+ *  0b0..Does not exist
+ *  0b1..Exists
+ */
+#define DCM_DCMSRR_DCMDCFT4(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT4_SHIFT)) & DCM_DCMSRR_DCMDCFT4_MASK)
+
+#define DCM_DCMSRR_DCMDCFT5_MASK                 (0x20000000U)
+#define DCM_DCMSRR_DCMDCFT5_SHIFT                (29U)
+/*! DCMDCFT5 - Scanning Timeout On Flash Memory
+ *  0b0..Does not exist
+ *  0b1..Exists
+ */
+#define DCM_DCMSRR_DCMDCFT5(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT5_SHIFT)) & DCM_DCMSRR_DCMDCFT5_MASK)
+
+#define DCM_DCMSRR_DCMDCFT6_MASK                 (0x20000000U)
+#define DCM_DCMSRR_DCMDCFT6_SHIFT                (29U)
+/*! DCMDCFT6 - Scanning Timeout On Flash Memory
+ *  0b0..Does not exist
+ *  0b1..Exists
+ */
+#define DCM_DCMSRR_DCMDCFT6(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT6_SHIFT)) & DCM_DCMSRR_DCMDCFT6_MASK)
+
+#define DCM_DCMSRR_DCMDCFT7_MASK                 (0x20000000U)
+#define DCM_DCMSRR_DCMDCFT7_SHIFT                (29U)
+/*! DCMDCFT7 - Scanning Timeout On Flash Memory
+ *  0b0..Does not exist
+ *  0b1..Exists
+ */
+#define DCM_DCMSRR_DCMDCFT7(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT7_SHIFT)) & DCM_DCMSRR_DCMDCFT7_MASK)
+
+#define DCM_DCMSRR_DCMDCFT8_MASK                 (0x20000000U)
+#define DCM_DCMSRR_DCMDCFT8_SHIFT                (29U)
+/*! DCMDCFT8 - Scanning Timeout On Flash Memory
+ *  0b0..Does not exist
+ *  0b1..Exists
+ */
+#define DCM_DCMSRR_DCMDCFT8(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT8_SHIFT)) & DCM_DCMSRR_DCMDCFT8_MASK)
+
+#define DCM_DCMSRR_DCMDCFT9_MASK                 (0x20000000U)
+#define DCM_DCMSRR_DCMDCFT9_SHIFT                (29U)
+/*! DCMDCFT9 - Scanning Timeout On Flash Memory
+ *  0b0..Does not exist
+ *  0b1..Exists
+ */
+#define DCM_DCMSRR_DCMDCFT9(x)                   (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT9_SHIFT)) & DCM_DCMSRR_DCMDCFT9_MASK)
+
+#define DCM_DCMSRR_DCMDCFT10_MASK                (0x20000000U)
+#define DCM_DCMSRR_DCMDCFT10_SHIFT               (29U)
+/*! DCMDCFT10 - Scanning Timeout On Flash Memory
+ *  0b0..Does not exist
+ *  0b1..Exists
+ */
+#define DCM_DCMSRR_DCMDCFT10(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT10_SHIFT)) & DCM_DCMSRR_DCMDCFT10_MASK)
+
+#define DCM_DCMSRR_DCMDCFT11_MASK                (0x20000000U)
+#define DCM_DCMSRR_DCMDCFT11_SHIFT               (29U)
+/*! DCMDCFT11 - Scanning Timeout On Flash Memory
+ *  0b0..Does not exist
+ *  0b1..Exists
+ */
+#define DCM_DCMSRR_DCMDCFT11(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT11_SHIFT)) & DCM_DCMSRR_DCMDCFT11_MASK)
+
+#define DCM_DCMSRR_DCMDCFT12_MASK                (0x20000000U)
+#define DCM_DCMSRR_DCMDCFT12_SHIFT               (29U)
+/*! DCMDCFT12 - Scanning Timeout On Flash Memory
+ *  0b0..Does not exist
+ *  0b1..Exists
+ */
+#define DCM_DCMSRR_DCMDCFT12(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT12_SHIFT)) & DCM_DCMSRR_DCMDCFT12_MASK)
+
+#define DCM_DCMSRR_DCMDCFT13_MASK                (0x20000000U)
+#define DCM_DCMSRR_DCMDCFT13_SHIFT               (29U)
+/*! DCMDCFT13 - Scanning Timeout On Flash Memory
+ *  0b0..Does not exist
+ *  0b1..Exists
+ */
+#define DCM_DCMSRR_DCMDCFT13(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT13_SHIFT)) & DCM_DCMSRR_DCMDCFT13_MASK)
+
+#define DCM_DCMSRR_DCMDCFT14_MASK                (0x20000000U)
+#define DCM_DCMSRR_DCMDCFT14_SHIFT               (29U)
+/*! DCMDCFT14 - Scanning Timeout On Flash Memory
+ *  0b0..Does not exist
+ *  0b1..Exists
+ */
+#define DCM_DCMSRR_DCMDCFT14(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT14_SHIFT)) & DCM_DCMSRR_DCMDCFT14_MASK)
+
+#define DCM_DCMSRR_DCMDCFT15_MASK                (0x20000000U)
+#define DCM_DCMSRR_DCMDCFT15_SHIFT               (29U)
+/*! DCMDCFT15 - Scanning Timeout On Flash Memory
+ *  0b0..Does not exist
+ *  0b1..Exists
+ */
+#define DCM_DCMSRR_DCMDCFT15(x)                  (((uint32_t)(((uint32_t)(x)) << DCM_DCMSRR_DCMDCFT15_SHIFT)) & DCM_DCMSRR_DCMDCFT15_MASK)
 
 #define DCM_DCMSRR_DCMDCFT16_MASK                (0x20000000U)
 #define DCM_DCMSRR_DCMDCFT16_SHIFT               (29U)

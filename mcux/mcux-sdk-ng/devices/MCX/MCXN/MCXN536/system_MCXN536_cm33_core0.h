@@ -1,6 +1,7 @@
 /*
 ** ###################################################################
-**     Processors:          MCXN536VDF_cm33_core0
+**     Processors:          MCXN536VAB_cm33_core0
+**                          MCXN536VDF_cm33_core0
 **                          MCXN536VKL_cm33_core0
 **                          MCXN536VPB_cm33_core0
 **
@@ -11,7 +12,7 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260417
+**     Build:               b260512
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

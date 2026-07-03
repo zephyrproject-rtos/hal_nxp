@@ -618,7 +618,7 @@ typedef enum _clock_attach_id
     kFRO12M_to_CLKOUT     = CLK_ATTACH_MUX(kCLOCK_SelCLKOUT, 0U),           /*!< Attach FRO12M to CLKOUT.     */
     kSLOW_CLK_to_CLKOUT   = CLK_ATTACH_MUX(kCLOCK_SelCLKOUT, 1U),           /*!< Attach SLOW_CLK to CLKOUT.   */
     kCLK_16K_LS_to_CLKOUT = CLK_ATTACH_MUX(kCLOCK_SelCLKOUT, 3U),           /*!< Attach CLK_16K to CLKOUT.    */
-    kFRO10M_to_CLKOUT     = CLK_ATTACH_MUX(kCLOCK_SelCLKOUT, 5U),           /*!< Attach FRO10M to CLKOUT.     */
+    kLPIRC_to_CLKOUT     = CLK_ATTACH_MUX(kCLOCK_SelCLKOUT, 5U),           /*!< Attach FRO10M to CLKOUT.     */
     kFRO_HF_DIV_to_CLKOUT = CLK_ATTACH_MUX(kCLOCK_SelCLKOUT, 7U),           /*!< Attach FRO_HF_DIV to CLKOUT. */
 
     kFRO12M_to_PERIPH_GROUP0 = CLK_ATTACH_MUX(kCLOCK_SelPERIPH_GROUP0, 0U), /*!< Attach FRO12M to PERIPH_GROUP_0.    */

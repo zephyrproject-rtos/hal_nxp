@@ -52,7 +52,9 @@
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
 #if defined(MCXN556S_cm33_core0_SERIES) || defined(MCXN556S_cm33_core1_SERIES) || \
-    defined(MCXN557S_cm33_core0_SERIES) || defined(MCXN557S_cm33_core1_SERIES)
+    defined(MCXN557S_cm33_core0_SERIES) || defined(MCXN557S_cm33_core1_SERIES) || \
+    defined(CPU_MCXN556TCDF_cm33_core0) || defined(CPU_MCXN556TCDF_cm33_core1) || \
+    defined(CPU_MCXN557TCDF_cm33_core0) || defined(CPU_MCXN557TCDF_cm33_core1)
 #define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (170000000UL)
 #else
 #define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (150000000UL)
@@ -543,7 +545,7 @@ typedef enum _clock_name
 
 #define GET_ID_ITEM(connection)      ((connection)&0xFFFFU)
 #define GET_ID_NEXT_ITEM(connection) ((connection) >> 16U)
-#define GET_ID_ITEM_MUX(connection)  (((uint16_t)connection) & 0xFFFU)
+#define GET_ID_ITEM_MUX(connection)  ((uint32_t)(connection) & 0xFFFU)
 #define GET_ID_ITEM_SEL(connection)  ((uint8_t)(((((uint32_t)(connection)&0xF000U) >> 12U) - 1U) & 0xFFU))
 #define GET_ID_SELECTOR(connection)  ((connection)&0xF000000U)
 
@@ -1513,8 +1515,10 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
     }
     else
     {
-        assert(index < SYSCON_AHBCLKCTRLSET_COUNT);
-        SYSCON->AHBCLKCTRLSET[index] = (1UL << bit);
+        if (index < SYSCON_AHBCLKCTRLSET_COUNT)
+        {
+            SYSCON->AHBCLKCTRLSET[index] = (1UL << bit);
+        }
     }
 }
 
@@ -1551,8 +1555,10 @@ static inline void CLOCK_DisableClock(clock_ip_name_t clk)
     }
     else
     {
-        assert(index < SYSCON_AHBCLKCTRLSET_COUNT);
-        SYSCON->AHBCLKCTRLCLR[index] = (1UL << bit);
+        if (index < SYSCON_AHBCLKCTRLSET_COUNT)
+        {
+            SYSCON->AHBCLKCTRLCLR[index] = (1UL << bit);
+        }
     }
 }
 

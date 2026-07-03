@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2024-03-26
-**     Build:               b260323
+**     Build:               b260518
 **
 **     Abstract:
 **         Chip specific module features.
@@ -71,6 +71,8 @@
 #define FSL_FEATURE_SOC_SYSCON_COUNT (1)
 /* @brief TRNG availability on the SoC. */
 #define FSL_FEATURE_SOC_TRNG_COUNT (1)
+/* @brief VBAT availability on the SoC. */
+#define FSL_FEATURE_SOC_VBAT_COUNT (1)
 /* @brief WWDT availability on the SoC. */
 #define FSL_FEATURE_SOC_WWDT_COUNT (2)
 /* @brief WUU availability on the SoC. */
@@ -384,6 +386,8 @@
 
 /* @brief Has GPIO attribute checker register (GACR). */
 #define FSL_FEATURE_GPIO_HAS_ATTRIBUTE_CHECKER (0)
+/* @brief GPIO registers width */
+#define FSL_FEATURE_GPIO_REGISTERS_WIDTH (32)
 /* @brief Has GPIO version ID register (VERID). */
 #define FSL_FEATURE_GPIO_HAS_VERSION_INFO_REGISTER (1)
 /* @brief Has secure/non-secure access protection registers (LOCK, PCNS, PCNP, ICNS, ICNP). */

@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MCXC444RM, Rev.1, Mar 2024
 **     Version:             rev. 3.0, 2025-11-17
-**     Build:               b251117
+**     Build:               b260514
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -19,7 +19,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -86,14 +86,14 @@ void SystemInit (void) {
 void SystemCoreClockUpdate (void) {
 
   uint32_t MCGOUTClock;                /* Variable to store output clock frequency of the MCG module */
-  uint16_t Divider;
+  uint32_t Divider;
 
   if ((MCG->S & MCG_S_CLKST_MASK) == 0x00U) {
     /* High internal reference clock is selected */
     MCGOUTClock = CPU_INT_FAST_CLK_HZ;                                  /* Fast internal reference clock selected */
   } else if ((MCG->S & MCG_S_CLKST_MASK) == 0x04U) {
     /* Internal reference clock is selected */
-    Divider = (uint16_t)(0x01LU << ((MCG->SC & MCG_SC_FCRDIV_MASK) >> MCG_SC_FCRDIV_SHIFT));
+    Divider = (uint32_t)(0x01LU << ((MCG->SC & MCG_SC_FCRDIV_MASK) >> MCG_SC_FCRDIV_SHIFT));
     MCGOUTClock = (uint32_t) (CPU_INT_SLOW_CLK_HZ / Divider);           /* Slow internal reference clock 8MHz selected */
   } else if ((MCG->S & MCG_S_CLKST_MASK) == 0x08U) {
     /* External reference clock is selected */
@@ -112,4 +112,3 @@ void SystemCoreClockUpdate (void) {
 __attribute__ ((weak)) void SystemInitHook (void) {
   /* Void implementation of the weak function. */
 }
-

@@ -7,14 +7,14 @@
 **                          MCXW727DMFTA_cm33_core0
 **                          MCXW727DMFTA_cm33_core1
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MRCC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -26,14 +26,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_MRCC.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for MRCC
  *
  * CMSIS Peripheral Access Layer for MRCC
@@ -112,7 +117,7 @@ typedef struct {
   __IO uint32_t MRCC_SECSUBSYS;                    /**< SECSUBSYS reset and clock control, offset: 0x90 */
        uint8_t RESERVED_5[40];
   __IO uint32_t MRCC_LPIT0;                        /**< LPIT0 reset and clock control, offset: 0xBC */
-  __IO uint32_t MRCC_TSTMR0;                       /**< TSTMR0 reset and clock control, offset: 0xC0 */
+       uint8_t RESERVED_6[4];
   __IO uint32_t MRCC_TPM0;                         /**< TPM0 reset and clock control, offset: 0xC4 */
   __IO uint32_t MRCC_TPM1;                         /**< TPM1 reset and clock control, offset: 0xC8 */
   __IO uint32_t MRCC_LPI2C0;                       /**< LPI2C0 reset and clock control, offset: 0xCC */
@@ -124,29 +129,29 @@ typedef struct {
   __IO uint32_t MRCC_LPUART1;                      /**< LPUART1 reset and clock control, offset: 0xE4 */
   __IO uint32_t MRCC_FLEXIO0;                      /**< FLEXIO0 reset and clock control, offset: 0xE8 */
   __IO uint32_t MRCC_CAN0;                         /**< CAN0 reset and clock control, offset: 0xEC */
-       uint8_t RESERVED_6[12];
+       uint8_t RESERVED_7[12];
   __IO uint32_t MRCC_SEMA0;                        /**< SEMA0 reset and clock control, offset: 0xFC */
-       uint8_t RESERVED_7[4];
+       uint8_t RESERVED_8[4];
   __IO uint32_t MRCC_DATA_STREAM_2P4;              /**< DATA_STREAM_2P4 reset and clock control, offset: 0x104 */
   __IO uint32_t MRCC_PORTA;                        /**< PORTA reset and clock control, offset: 0x108 */
   __IO uint32_t MRCC_PORTB;                        /**< PORTB reset and clock control, offset: 0x10C */
   __IO uint32_t MRCC_PORTC;                        /**< PORTC reset and clock control, offset: 0x110 */
-       uint8_t RESERVED_8[8];
+       uint8_t RESERVED_9[8];
   __IO uint32_t MRCC_LPADC0;                       /**< LPADC0 reset and clock control, offset: 0x11C */
   __IO uint32_t MRCC_LPCMP0;                       /**< LPCMP0 reset and clock control, offset: 0x120 */
   __IO uint32_t MRCC_LPCMP1;                       /**< LPCMP1 reset and clock control, offset: 0x124 */
   __IO uint32_t MRCC_VREF0;                        /**< VREF0 reset and clock control, offset: 0x128 */
-       uint8_t RESERVED_9[8];
+       uint8_t RESERVED_10[8];
   __IO uint32_t MRCC_MTR_MASTER;                   /**< MTR_MASTER reset and clock control, offset: 0x134 */
-       uint8_t RESERVED_10[4];
+       uint8_t RESERVED_11[4];
   __IO uint32_t MRCC_CAN1;                         /**< CAN1, offset: 0x13C */
-       uint8_t RESERVED_11[708];
+       uint8_t RESERVED_12[708];
   __IO uint32_t MRCC_GPIOA;                        /**< GPIOA reset and clock control, offset: 0x404 */
   __IO uint32_t MRCC_GPIOB;                        /**< GPIOB reset and clock control, offset: 0x408 */
   __IO uint32_t MRCC_GPIOC;                        /**< GPIOC reset and clock control, offset: 0x40C */
   __IO uint32_t MRCC_DMA0;                         /**< DMA0 reset and clock control, offset: 0x410 */
   __IO uint32_t MRCC_PFLEXNVM;                     /**< PFLEXNVM reset and clock control, offset: 0x414 */
-       uint8_t RESERVED_12[4];
+       uint8_t RESERVED_13[4];
   __IO uint32_t MRCC_SRAM0;                        /**< SRAM0 ecc reset and clock control, offset: 0x41C */
   __IO uint32_t MRCC_SRAM1_ECC;                    /**< SRAM1 ecc reset and clock control, offset: 0x420 */
   __IO uint32_t MRCC_SRAM2;                        /**< SRAM2 reset and clock control, offset: 0x424 */
@@ -159,7 +164,6 @@ typedef struct {
   __IO uint32_t MRCC_LPTMR0_IPG_CLK_ERCLK_WAKE2VSYS; /**< LPTMR0_IPG_CLK_ERCLK_WAKE2VSYS reset and clock control, offset: 0x440 */
   __IO uint32_t MRCC_LPTMR1_IPG_CLK_ERCLK_WAKE2VSYS; /**< LPTMR1_IPG_CLK_ERCLK_WAKE2VSYS reset and clock control, offset: 0x444 */
   __IO uint32_t MRCC_LPTMR2_IPG_CLK_ERCLK_WAKE2VSYS; /**< LPTMR2_IPG_CLK_ERCLK_WAKE2VSYS reset and clock control, offset: 0x448 */
-  __IO uint32_t MRCC_CLKROOT_SIRC_VSYS_GATING;     /**< CLKROOT_SIRC_VSYS_GATING clock control, offset: 0x44C */
 } MRCC_Type;
 
 /* ----------------------------------------------------------------------------
@@ -365,8 +369,7 @@ typedef struct {
 #define MRCC_MRCC_LPIT0_MUX_MASK                 (0x70U)
 #define MRCC_MRCC_LPIT0_MUX_SHIFT                (4U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..The clock is off
- *  0b010..FRO-6M
+ *  0b000..THE CLOCK IS OFF
  *  0b011..FRO-192M
  *  0b100..SOSC-CLK
  */
@@ -394,22 +397,6 @@ typedef struct {
 #define MRCC_MRCC_LPIT0_PR(x)                    (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_LPIT0_PR_SHIFT)) & MRCC_MRCC_LPIT0_PR_MASK)
 /*! @} */
 
-/*! @name MRCC_TSTMR0 - TSTMR0 reset and clock control */
-/*! @{ */
-
-#define MRCC_MRCC_TSTMR0_CC_MASK                 (0x3U)
-#define MRCC_MRCC_TSTMR0_CC_SHIFT                (0U)
-/*! CC - Clock Config
- *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
- *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
- *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
- *  0b11..Peripheral clocks are enabled unless in SLEEP (or lower) mode; low power mode entry stalls until module
- *        is idle. Peripheral functional clocks that remain enabled in SLEEP mode are enabled and do not stall low
- *        power mode entry unless entering DEEPSLEEP (or lower) mode
- */
-#define MRCC_MRCC_TSTMR0_CC(x)                   (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_TSTMR0_CC_SHIFT)) & MRCC_MRCC_TSTMR0_CC_MASK)
-/*! @} */
-
 /*! @name MRCC_TPM0 - TPM0 reset and clock control */
 /*! @{ */
 
@@ -428,8 +415,7 @@ typedef struct {
 #define MRCC_MRCC_TPM0_MUX_MASK                  (0x70U)
 #define MRCC_MRCC_TPM0_MUX_SHIFT                 (4U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..The clock is off
- *  0b010..FRO-6M
+ *  0b000..THE CLOCK IS OFF
  *  0b011..FRO-192M
  *  0b100..SOSC-CLK
  *  0b101..32K-CLK
@@ -476,8 +462,7 @@ typedef struct {
 #define MRCC_MRCC_TPM1_MUX_MASK                  (0x70U)
 #define MRCC_MRCC_TPM1_MUX_SHIFT                 (4U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..The clock is off
- *  0b010..FRO-6M
+ *  0b000..THE CLOCK IS OFF
  *  0b011..FRO-192M
  *  0b100..SOSC-CLK
  *  0b101..32K-CLK
@@ -524,8 +509,7 @@ typedef struct {
 #define MRCC_MRCC_LPI2C0_MUX_MASK                (0x70U)
 #define MRCC_MRCC_LPI2C0_MUX_SHIFT               (4U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..The clock is off
- *  0b010..FRO-6M
+ *  0b000..THE CLOCK IS OFF
  *  0b011..FRO-192M
  *  0b100..SOSC-CLK
  */
@@ -571,8 +555,7 @@ typedef struct {
 #define MRCC_MRCC_LPI2C1_MUX_MASK                (0x70U)
 #define MRCC_MRCC_LPI2C1_MUX_SHIFT               (4U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..The clock is off
- *  0b010..FRO-6M
+ *  0b000..THE CLOCK IS OFF
  *  0b011..FRO-192M
  *  0b100..SOSC-CLK
  */
@@ -618,8 +601,7 @@ typedef struct {
 #define MRCC_MRCC_I3C0_MUX_MASK                  (0x70U)
 #define MRCC_MRCC_I3C0_MUX_SHIFT                 (4U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..The clock is off
- *  0b010..FRO-6M
+ *  0b000..THE CLOCK IS OFF
  *  0b011..FRO-192M
  *  0b100..SOSC-CLK
  */
@@ -665,8 +647,7 @@ typedef struct {
 #define MRCC_MRCC_LPSPI0_MUX_MASK                (0x70U)
 #define MRCC_MRCC_LPSPI0_MUX_SHIFT               (4U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..The clock is off
- *  0b010..FRO-6M
+ *  0b000..THE CLOCK IS OFF
  *  0b011..FRO-192M
  *  0b100..SOSC-CLK
  */
@@ -712,8 +693,7 @@ typedef struct {
 #define MRCC_MRCC_LPSPI1_MUX_MASK                (0x70U)
 #define MRCC_MRCC_LPSPI1_MUX_SHIFT               (4U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..The clock is off
- *  0b010..FRO-6M
+ *  0b000..THE CLOCK IS OFF
  *  0b011..FRO-192M
  *  0b100..SOSC-CLK
  */
@@ -759,8 +739,7 @@ typedef struct {
 #define MRCC_MRCC_LPUART0_MUX_MASK               (0x70U)
 #define MRCC_MRCC_LPUART0_MUX_SHIFT              (4U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..The clock is off
- *  0b010..FRO-6M
+ *  0b000..THE CLOCK IS OFF
  *  0b011..FRO-192M
  *  0b100..SOSC-CLK
  *  0b101..32K-CLK
@@ -807,8 +786,7 @@ typedef struct {
 #define MRCC_MRCC_LPUART1_MUX_MASK               (0x70U)
 #define MRCC_MRCC_LPUART1_MUX_SHIFT              (4U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..The clock is off
- *  0b010..FRO-6M
+ *  0b000..THE CLOCK IS OFF
  *  0b011..FRO-192M
  *  0b100..SOSC-CLK
  *  0b101..32K-CLK
@@ -855,8 +833,7 @@ typedef struct {
 #define MRCC_MRCC_FLEXIO0_MUX_MASK               (0x70U)
 #define MRCC_MRCC_FLEXIO0_MUX_SHIFT              (4U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..The clock is off
- *  0b010..FRO-6M
+ *  0b000..THE CLOCK IS OFF
  *  0b011..FRO-192M
  *  0b100..SOSC-CLK
  */
@@ -902,7 +879,7 @@ typedef struct {
 #define MRCC_MRCC_CAN0_MUX_MASK                  (0x70U)
 #define MRCC_MRCC_CAN0_MUX_SHIFT                 (4U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..The clock is off
+ *  0b000..THE CLOCK IS OFF
  *  0b011..FRO-192M
  *  0b100..SOSC-CLK
  */
@@ -1108,8 +1085,7 @@ typedef struct {
 #define MRCC_MRCC_LPADC0_MUX_MASK                (0x70U)
 #define MRCC_MRCC_LPADC0_MUX_SHIFT               (4U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..The clock is off
- *  0b010..FRO-6M
+ *  0b000..THE CLOCK IS OFF
  *  0b011..FRO-192M
  *  0b100..SOSC-CLK
  */
@@ -1267,7 +1243,7 @@ typedef struct {
 #define MRCC_MRCC_CAN1_MUX_MASK                  (0x70U)
 #define MRCC_MRCC_CAN1_MUX_SHIFT                 (4U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..The clock is off
+ *  0b000..THE CLOCK IS OFF
  *  0b011..FRO-192M
  *  0b100..SOSC-CLK
  */
@@ -1661,20 +1637,6 @@ typedef struct {
  *        stall low power mode entry unless entering DEEPSLEEP mode (or lower)
  */
 #define MRCC_MRCC_LPTMR2_IPG_CLK_ERCLK_WAKE2VSYS_CC(x) (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_LPTMR2_IPG_CLK_ERCLK_WAKE2VSYS_CC_SHIFT)) & MRCC_MRCC_LPTMR2_IPG_CLK_ERCLK_WAKE2VSYS_CC_MASK)
-/*! @} */
-
-/*! @name MRCC_CLKROOT_SIRC_VSYS_GATING - CLKROOT_SIRC_VSYS_GATING clock control */
-/*! @{ */
-
-#define MRCC_MRCC_CLKROOT_SIRC_VSYS_GATING_CC_MASK (0x3U)
-#define MRCC_MRCC_CLKROOT_SIRC_VSYS_GATING_CC_SHIFT (0U)
-/*! CC - Clock Config
- *  0b00..Peripheral clocks are disabled, module does not stall low power mode entry
- *  0b01..Peripheral clocks are enabled, module does not stall low power mode entry
- *  0b10..Reserved
- *  0b11..Reserved
- */
-#define MRCC_MRCC_CLKROOT_SIRC_VSYS_GATING_CC(x) (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_CLKROOT_SIRC_VSYS_GATING_CC_SHIFT)) & MRCC_MRCC_CLKROOT_SIRC_VSYS_GATING_CC_MASK)
 /*! @} */
 
 

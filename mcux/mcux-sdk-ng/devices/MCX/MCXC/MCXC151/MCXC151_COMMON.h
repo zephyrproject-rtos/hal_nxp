@@ -13,7 +13,7 @@
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260304
+**     Build:               b260518
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXC151
@@ -226,6 +226,8 @@ typedef enum IRQn {
 #define DMA_BASE_ADDRS                           { DMA0_BASE }
 /** Array initializer of DMA peripheral base pointers */
 #define DMA_BASE_PTRS                            { DMA0 }
+/** Interrupt vectors for the DMA peripheral type */
+#define DMA_IRQS                                 { { DMA_CH0_IRQn, DMA_CH1_IRQn, DMA_CH2_IRQn, DMA_CH3_IRQn } }
 
 /* EIM - Peripheral instance base addresses */
 /** Peripheral EIM0 base address */
@@ -256,6 +258,8 @@ typedef enum IRQn {
 #define FMU_BASE_ADDRS                           { FMU0_BASE }
 /** Array initializer of FMU peripheral base pointers */
 #define FMU_BASE_PTRS                            { FMU0 }
+/** Interrupt vectors for the FMU peripheral type */
+#define FMU_IRQS                                 { FMU0_IRQn }
 
 /* FMUTEST - Peripheral instance base addresses */
 /** Peripheral FMU0TEST base address */
@@ -276,6 +280,8 @@ typedef enum IRQn {
 #define FREQME_BASE_ADDRS                        { FREQME0_BASE }
 /** Array initializer of FREQME peripheral base pointers */
 #define FREQME_BASE_PTRS                         { FREQME0 }
+/** Interrupt vectors for the FREQME peripheral type */
+#define FREQME_IRQS                              { FREQME0_IRQn }
 
 /* GPIO - Peripheral instance base addresses */
 /** Peripheral GPIO0 base address */

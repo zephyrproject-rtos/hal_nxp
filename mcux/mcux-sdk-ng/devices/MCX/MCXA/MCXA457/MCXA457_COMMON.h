@@ -12,7 +12,7 @@
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1_DraftC
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260407
+**     Build:               b260518
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXA457
@@ -897,6 +897,8 @@ typedef enum IRQn {
   /** Array initializer of FMU peripheral base pointers */
   #define FMU_BASE_PTRS                            { FMU0 }
 #endif
+/** Interrupt vectors for the FMU peripheral type */
+#define FMU_IRQS                                 { FMU0_IRQn }
 
 /* FREQME - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -2331,6 +2333,8 @@ typedef enum IRQn {
   /** Array initializer of WUU peripheral base pointers */
   #define WUU_BASE_PTRS                            { WUU0 }
 #endif
+/** Interrupt vectors for the WUU peripheral type */
+#define WUU_IRQS                                 { WUU0_IRQn }
 
 /* WWDT - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

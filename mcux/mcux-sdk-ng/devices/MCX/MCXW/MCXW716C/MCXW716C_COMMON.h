@@ -11,7 +11,7 @@
 **
 **     Reference manual:    Rev. 1, April 2024
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260209
+**     Build:               b260519
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXW716C
@@ -626,6 +626,8 @@ typedef enum IRQn {
   /** Array initializer of FMU peripheral base pointers */
   #define FMU_BASE_PTRS                            { FMU0, RF_FMU }
 #endif
+/** Interrupt vectors for the FMU peripheral type */
+#define FMU_IRQS                                 { FMU0_IRQn, RF_FMU_IRQn }
 
 /* FRO192M - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

@@ -31,7 +31,7 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260407
+**     Build:               b260507
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AHBSC
@@ -3052,60 +3052,60 @@ typedef struct {
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_SMARTDMA_MASK (0x30U)
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_SMARTDMA_SHIFT (4U)
 /*! SMARTDMA
- *  0b00..Non-secure and non-privileged Master
- *  0b01..Non-secure and privileged Master
- *  0b10..Secure and non-privileged Master
- *  0b11..Secure and privileged Master
+ *  0b00..Secure and privileged Master
+ *  0b01..Secure and non-privileged Master
+ *  0b10..Non-secure and privileged Master
+ *  0b11..Non-secure and non-privileged Master
  */
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_SMARTDMA(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_MASTER_SEC_ANTI_POL_REG_SMARTDMA_SHIFT)) & AHBSC_MASTER_SEC_ANTI_POL_REG_SMARTDMA_MASK)
 
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_DMA0_MASK  (0xC0U)
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_DMA0_SHIFT (6U)
 /*! DMA0 - eDMA0
- *  0b00..Non-secure and non-privileged Master
- *  0b01..Non-secure and privileged Master
- *  0b10..Secure and non-privileged Master
- *  0b11..Secure and privileged Master
+ *  0b00..Secure and privileged Master
+ *  0b01..Secure and non-privileged Master
+ *  0b10..Non-secure and privileged Master
+ *  0b11..Non-secure and non-privileged Master
  */
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_DMA0(x)    (((uint32_t)(((uint32_t)(x)) << AHBSC_MASTER_SEC_ANTI_POL_REG_DMA0_SHIFT)) & AHBSC_MASTER_SEC_ANTI_POL_REG_DMA0_MASK)
 
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_DMA1_MASK  (0x300U)
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_DMA1_SHIFT (8U)
 /*! DMA1 - eDMA1
- *  0b00..Non-secure and non-privileged Master
- *  0b01..Non-secure and privileged Master
- *  0b10..Secure and non-privileged Master
- *  0b11..Secure and privileged Master
+ *  0b00..Secure and privileged Master
+ *  0b01..Secure and non-privileged Master
+ *  0b10..Non-secure and privileged Master
+ *  0b11..Non-secure and non-privileged Master
  */
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_DMA1(x)    (((uint32_t)(((uint32_t)(x)) << AHBSC_MASTER_SEC_ANTI_POL_REG_DMA1_SHIFT)) & AHBSC_MASTER_SEC_ANTI_POL_REG_DMA1_MASK)
 
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_PKC_MASK   (0xC00U)
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_PKC_SHIFT  (10U)
 /*! PKC - PKC
- *  0b00..Non-secure and non-privileged Master
- *  0b01..Non-secure and privileged Master
- *  0b10..Secure and non-privileged Master
- *  0b11..Secure and privileged Master
+ *  0b00..Secure and privileged Master
+ *  0b01..Secure and non-privileged Master
+ *  0b10..Non-secure and privileged Master
+ *  0b11..Non-secure and non-privileged Master
  */
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_PKC(x)     (((uint32_t)(((uint32_t)(x)) << AHBSC_MASTER_SEC_ANTI_POL_REG_PKC_SHIFT)) & AHBSC_MASTER_SEC_ANTI_POL_REG_PKC_MASK)
 
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_ENET0_MASK (0x3000000U)
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_ENET0_SHIFT (24U)
 /*! ENET0 - ENET0
- *  0b00..Non-secure and non-privileged Master
- *  0b01..Non-secure and privileged Master
- *  0b10..Secure and non-privileged Master
- *  0b11..Secure and privileged Master
+ *  0b00..Secure and privileged Master
+ *  0b01..Secure and non-privileged Master
+ *  0b10..Non-secure and privileged Master
+ *  0b11..Non-secure and non-privileged Master
  */
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_ENET0(x)   (((uint32_t)(((uint32_t)(x)) << AHBSC_MASTER_SEC_ANTI_POL_REG_ENET0_SHIFT)) & AHBSC_MASTER_SEC_ANTI_POL_REG_ENET0_MASK)
 
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_USB1_MASK  (0xC000000U)
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_USB1_SHIFT (26U)
 /*! USB1 - USB1
- *  0b00..Non-secure and non-privileged Master
- *  0b01..Non-secure and privileged Master
- *  0b10..Secure and non-privileged Master
- *  0b11..Secure and privileged Master
+ *  0b00..Secure and privileged Master
+ *  0b01..Secure and non-privileged Master
+ *  0b10..Non-secure and privileged Master
+ *  0b11..Non-secure and non-privileged Master
  */
 #define AHBSC_MASTER_SEC_ANTI_POL_REG_USB1(x)    (((uint32_t)(((uint32_t)(x)) << AHBSC_MASTER_SEC_ANTI_POL_REG_USB1_SHIFT)) & AHBSC_MASTER_SEC_ANTI_POL_REG_USB1_MASK)
 /*! @} */

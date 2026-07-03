@@ -8,9 +8,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MCXL25x RM Rev.2 DraftA
-**     Version:             rev. 2.0, 2026-04-22
-**     Build:               b260422
+**     Reference manual:    MCXL25x RM Rev.2
+**     Version:             rev. 2.1, 2026-05-02
+**     Build:               b260512
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXL253_cm33
@@ -29,14 +29,16 @@
 **         Generated based on Rev.1 RC.
 **     - rev. 2.0 (2026-04-22)
 **         Generated based on Rev. 2 DraftA.
+**     - rev. 2.1 (2026-05-02)
+**         Generated based on Rev. 2.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MCXL253_cm33_COMMON.h
- * @version 2.0
- * @date 2026-04-22
+ * @version 2.1
+ * @date 2026-05-02
  * @brief CMSIS Peripheral Access Layer for MCXL253_cm33
  *
  * CMSIS Peripheral Access Layer for MCXL253_cm33
@@ -49,7 +51,7 @@
  * compatible) */
 #define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0001U
 
 
 /* ----------------------------------------------------------------------------
@@ -649,6 +651,8 @@ typedef enum IRQn {
   /** Array initializer of FMU peripheral base pointers */
   #define FMU_BASE_PTRS                            { FMU0 }
 #endif
+/** Interrupt vectors for the FMU peripheral type */
+#define FMU_IRQS                                 { FMU0_IRQn }
 
 /* FMUTEST - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MCXC444RM, Rev.1, Mar 2024
 **     Version:             rev. 3.0, 2025-11-17
-**     Build:               b251117
+**     Build:               b260514
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -62,19 +62,20 @@ extern "C" {
   #define DISABLE_WDOG  1
 #endif
 
-#define ACK_ISOLATION                  1
+#define ACK_ISOLATION   1
 
 /* Define clock source values */
+
 #define CPU_XTAL_CLK_HZ                32768U              /* Value of the external crystal or oscillator clock frequency in Hz */
-#define CPU_INT_FAST_CLK_HZ            48000000U           /* Value of the fast internal oscillator clock frequency in Hz */
-#define CPU_INT_IRC_CLK_HZ             48000000U           /* Value of the 48M internal oscillator clock frequency in Hz */
+#define CPU_INT_FAST_CLK_HZ            48000000U           /* Value of the fast internal oscillator clock frequency in Hz  */
+#define CPU_INT_IRC_CLK_HZ             48000000U           /* Value of the 48M internal oscillator clock frequency in Hz  */
 
 /* Low power mode enable */
 /* SMC_PMPROT: AVLP=1,AVLLS=1 */
 #define SYSTEM_SMC_PMPROT_VALUE        0x2AU               /* SMC_PMPROT */
 
 #define DEFAULT_SYSTEM_CLOCK           8000000U            /* Default System clock value */
-#define CPU_INT_SLOW_CLK_HZ            8000000U            /* Value of the slow internal oscillator clock frequency in Hz */
+#define CPU_INT_SLOW_CLK_HZ            8000000U            /* Value of the slow internal oscillator clock frequency in Hz  */
 
 
 /**

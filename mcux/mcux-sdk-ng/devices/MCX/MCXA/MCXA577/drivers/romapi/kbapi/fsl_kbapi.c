@@ -8,7 +8,7 @@
 
 /*! @brief Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
-#define FSL_COMPONENT_ID "platform.drivers.kbapi"
+#define FSL_COMPONENT_ID "platform.drivers.romapi_kbapi"
 #endif
 
 /*! @brief Interface for bootloader API functions. */

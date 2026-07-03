@@ -7,14 +7,14 @@
 **                          MCXW727DMFTA_cm33_core0
 **                          MCXW727DMFTA_cm33_core1
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GEN4PHY
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -26,14 +26,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_GEN4PHY.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for GEN4PHY
  *
  * CMSIS Peripheral Access Layer for GEN4PHY
@@ -113,7 +118,7 @@ typedef struct {
   __IO uint32_t FSK_CFG0;                          /**< PHY Uncoded Config 0, offset: 0x24 */
   __IO uint32_t FSK_CFG1;                          /**< PHY Uncoded Config 1, offset: 0x28 */
   __IO uint32_t FSK_CFG2;                          /**< PHY Uncoded Config 2, offset: 0x2C */
-       uint32_t FSK_CFG3;                          /**< PHY Uncoded Config 3, offset: 0x30 */
+       uint8_t RESERVED_0[4];
   __IO uint32_t FSK_PT;                            /**< PHY Uncoded Power Threshold Config, offset: 0x34 */
   __IO uint32_t FSK_FAD_CTRL;                      /**< PHY Uncoded FAD Control, offset: 0x38 */
   __IO uint32_t FSK_FAD_CFG;                       /**< PHY Uncoded FAD Config, offset: 0x3C */
@@ -137,7 +142,7 @@ typedef struct {
     __IO uint32_t DMD_WAVE_REG1;                     /**< PHY Demodulator Wave0 Register 1..PHY Demodulator Wave7 Register 1, array offset: 0xBC, array step: 0xC */
     __IO uint32_t DMD_WAVE_REG2;                     /**< PHY Demodulator Wave0 Register 2..PHY Demodulator Wave7 Register 2, array offset: 0xC0, array step: 0xC */
   } DEMOD_WAVE[GEN4PHY_DEMOD_WAVE_COUNT];
-       uint8_t RESERVED_0[76];
+       uint8_t RESERVED_1[76];
   __IO uint32_t DMDAA_CTRL;                        /**< PHY Demodulator Based SFD Confirmation control register., offset: 0x164 */
   __I  uint32_t RTT_STAT;                          /**< High resolution Time-Of-Flight calculation Status., offset: 0x168 */
   __IO uint32_t RTT_CTRL;                          /**< PHY RTT control register., offset: 0x16C */
@@ -287,9 +292,7 @@ typedef struct {
 
 #define GEN4PHY_FSK_CFG0_BLE_NTW_ADR_THR_MASK    (0x700000U)
 #define GEN4PHY_FSK_CFG0_BLE_NTW_ADR_THR_SHIFT   (20U)
-/*! BLE_NTW_ADR_THR - Maximum hamming distance from the given AA pattern that may still be accepted
- *    as a match; valid range [0,7]. This threshold value are performed on lower power case.
- */
+/*! BLE_NTW_ADR_THR - Maximum hamming distance from the given AA pattern that may still be accepted as a match; valid range [0,7]. */
 #define GEN4PHY_FSK_CFG0_BLE_NTW_ADR_THR(x)      (((uint32_t)(((uint32_t)(x)) << GEN4PHY_FSK_CFG0_BLE_NTW_ADR_THR_SHIFT)) & GEN4PHY_FSK_CFG0_BLE_NTW_ADR_THR_MASK)
 
 #define GEN4PHY_FSK_CFG0_AA_ACQ_1_2_3_THRESH_2M_MASK (0x1F000000U)
@@ -379,29 +382,29 @@ typedef struct {
 #define GEN4PHY_FSK_FAD_CFG_WIN_FAD_WAIT_SYNCH_MASK (0x7FU)
 #define GEN4PHY_FSK_FAD_CFG_WIN_FAD_WAIT_SYNCH_SHIFT (0U)
 /*! WIN_FAD_WAIT_SYNCH - Time-window to wait for clean samples, before transitioning to AA search
- *    PHY state, if PD was found after antenna switch (referred to as T3 in the PHY state-machine
- *    section).
+ *    PHY state, if PD was found after antenna switch , in sample clock cycles(referred to as T3 in
+ *    the PHY state-machine section).
  */
 #define GEN4PHY_FSK_FAD_CFG_WIN_FAD_WAIT_SYNCH(x) (((uint32_t)(((uint32_t)(x)) << GEN4PHY_FSK_FAD_CFG_WIN_FAD_WAIT_SYNCH_SHIFT)) & GEN4PHY_FSK_FAD_CFG_WIN_FAD_WAIT_SYNCH_MASK)
 
 #define GEN4PHY_FSK_FAD_CFG_WIN_FAD_WAIT_PD_MASK (0x7F00U)
 #define GEN4PHY_FSK_FAD_CFG_WIN_FAD_WAIT_PD_SHIFT (8U)
 /*! WIN_FAD_WAIT_PD - Time-window to wait for clean samples if PD was not found after antenna switch
- *    (referred to as T2 in the PHY state-machine section).
+ *    , in sample clock cycles(referred to as T2 in the PHY state-machine section).
  */
 #define GEN4PHY_FSK_FAD_CFG_WIN_FAD_WAIT_PD(x)   (((uint32_t)(((uint32_t)(x)) << GEN4PHY_FSK_FAD_CFG_WIN_FAD_WAIT_PD_SHIFT)) & GEN4PHY_FSK_FAD_CFG_WIN_FAD_WAIT_PD_MASK)
 
 #define GEN4PHY_FSK_FAD_CFG_WIN_FAD_SEARCH_PD_MASK (0x7F0000U)
 #define GEN4PHY_FSK_FAD_CFG_WIN_FAD_SEARCH_PD_SHIFT (16U)
 /*! WIN_FAD_SEARCH_PD - Time-window to match preamble pattern on samples coming from the previously
- *    selected antenna (referred to as T1 in the PHY state-machine section).
+ *    selected antenna , in sample clock cycles(referred to as T1 in the PHY state-machine section).
  */
 #define GEN4PHY_FSK_FAD_CFG_WIN_FAD_SEARCH_PD(x) (((uint32_t)(((uint32_t)(x)) << GEN4PHY_FSK_FAD_CFG_WIN_FAD_SEARCH_PD_SHIFT)) & GEN4PHY_FSK_FAD_CFG_WIN_FAD_SEARCH_PD_MASK)
 
 #define GEN4PHY_FSK_FAD_CFG_WIN_SEARCH_PD_MASK   (0x7F000000U)
 #define GEN4PHY_FSK_FAD_CFG_WIN_SEARCH_PD_SHIFT  (24U)
 /*! WIN_SEARCH_PD - Time-window to match preamble pattern on samples coming from the currently
- *    selected antenna (referred to as T0 in the PHY state-machine section).
+ *    selected antenna, in sample clock cycles (referred to as T0 in the PHY state-machine section).
  */
 #define GEN4PHY_FSK_FAD_CFG_WIN_SEARCH_PD(x)     (((uint32_t)(((uint32_t)(x)) << GEN4PHY_FSK_FAD_CFG_WIN_SEARCH_PD_SHIFT)) & GEN4PHY_FSK_FAD_CFG_WIN_SEARCH_PD_MASK)
 /*! @} */
@@ -411,7 +414,7 @@ typedef struct {
 
 #define GEN4PHY_FSK_STAT_EXT_TO_MODES_13_MASK    (0x2U)
 #define GEN4PHY_FSK_STAT_EXT_TO_MODES_13_SHIFT   (1U)
-/*! EXT_TO_MODES_13 - Reserved */
+/*! EXT_TO_MODES_13 - Indicates Timeout extension for modes 1 et 3 */
 #define GEN4PHY_FSK_STAT_EXT_TO_MODES_13(x)      (((uint32_t)(((uint32_t)(x)) << GEN4PHY_FSK_STAT_EXT_TO_MODES_13_SHIFT)) & GEN4PHY_FSK_STAT_EXT_TO_MODES_13_MASK)
 
 #define GEN4PHY_FSK_STAT_AA_FOUND_MASK           (0x4U)
@@ -626,13 +629,14 @@ typedef struct {
 #define GEN4PHY_SM_CFG_EARLY_PD_TIMEOUT_MASK     (0x3F00U)
 #define GEN4PHY_SM_CFG_EARLY_PD_TIMEOUT_SHIFT    (8U)
 /*! EARLY_PD_TIMEOUT - Time-out used to reset the AGC state-machine for the eventuality that an "PD
- *    found early" event occurs but it is not followed by an "PD found" event
+ *    found early" , expressed in number of sample clock cycles. Event occurs but it is not followed
+ *    by an "PD found" event
  */
 #define GEN4PHY_SM_CFG_EARLY_PD_TIMEOUT(x)       (((uint32_t)(((uint32_t)(x)) << GEN4PHY_SM_CFG_EARLY_PD_TIMEOUT_SHIFT)) & GEN4PHY_SM_CFG_EARLY_PD_TIMEOUT_MASK)
 
 #define GEN4PHY_SM_CFG_AA_TIMEOUT_UNCODED_MASK   (0x3FF0000U)
 #define GEN4PHY_SM_CFG_AA_TIMEOUT_UNCODED_SHIFT  (16U)
-/*! AA_TIMEOUT_UNCODED - Time-out value for access address search for uncoded packets */
+/*! AA_TIMEOUT_UNCODED - Time-out value for access address search for uncoded packets, expressed in number of sample clock cycles */
 #define GEN4PHY_SM_CFG_AA_TIMEOUT_UNCODED(x)     (((uint32_t)(((uint32_t)(x)) << GEN4PHY_SM_CFG_AA_TIMEOUT_UNCODED_SHIFT)) & GEN4PHY_SM_CFG_AA_TIMEOUT_UNCODED_MASK)
 /*! @} */
 
@@ -732,7 +736,7 @@ typedef struct {
 
 #define GEN4PHY_STAT0_CFO_EST_MASK               (0x3FF0000U)
 #define GEN4PHY_STAT0_CFO_EST_SHIFT              (16U)
-/*! CFO_EST - Indicates the currently estimated CFO. Format is sfix10_en9(sign extend form sfix8_en9) */
+/*! CFO_EST - Indicates the currently estimated CFO. Format is sfix10_en9(sign extend from sfix8_en9) */
 #define GEN4PHY_STAT0_CFO_EST(x)                 (((uint32_t)(((uint32_t)(x)) << GEN4PHY_STAT0_CFO_EST_SHIFT)) & GEN4PHY_STAT0_CFO_EST_MASK)
 /*! @} */
 
@@ -1063,7 +1067,7 @@ typedef struct {
 
 #define GEN4PHY_RTT_CTRL_FIRST_PDU_BIT_MASK      (0x1000U)
 #define GEN4PHY_RTT_CTRL_FIRST_PDU_BIT_SHIFT     (12U)
-/*! FIRST_PDU_BIT - is programmed by software - used for regular packets high accuracy RTT; */
+/*! FIRST_PDU_BIT - Programmed by software - used for regular packets high accuracy RTT; First PDU bit gets programmed into this field */
 #define GEN4PHY_RTT_CTRL_FIRST_PDU_BIT(x)        (((uint32_t)(((uint32_t)(x)) << GEN4PHY_RTT_CTRL_FIRST_PDU_BIT_SHIFT)) & GEN4PHY_RTT_CTRL_FIRST_PDU_BIT_MASK)
 
 #define GEN4PHY_RTT_CTRL_RTT_SEQ_LEN_MASK        (0x2000U)

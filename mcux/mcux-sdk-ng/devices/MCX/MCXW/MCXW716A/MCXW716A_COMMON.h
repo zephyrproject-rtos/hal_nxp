@@ -11,7 +11,7 @@
 **
 **     Reference manual:    Rev. 1, April 2024
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260209
+**     Build:               b260519
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXW716A
@@ -128,7 +128,6 @@ typedef enum IRQn {
   LPUART0_IRQn                 = 44,               /**< Low-Power Universal Asynchronous Receiver/Transmitter 0 interrupt */
   LPUART1_IRQn                 = 45,               /**< Low-Power Universal Asynchronous Receiver/Transmitter 1 interrupt */
   FLEXIO0_IRQn                 = 46,               /**< Flexible Input/Output 0 interrupt */
-  Reserved63_IRQn              = 47,               /**< Reserved interrupt */
   RF_IMU0_IRQn                 = 48,               /**< Radio IMU interrupt 0 (msg_rdy_imu) */
   RF_IMU1_IRQn                 = 49,               /**< Radio IMU interrupt 1(msg_space_avail_imu) */
   RF_NBU_IRQn                  = 50,               /**< Radio NBU timeout interrupt */
@@ -590,6 +589,8 @@ typedef enum IRQn {
   /** Array initializer of FMU peripheral base pointers */
   #define FMU_BASE_PTRS                            { FMU0, RF_FMU }
 #endif
+/** Interrupt vectors for the FMU peripheral type */
+#define FMU_IRQS                                 { FMU0_IRQn, RF_FMU_IRQn }
 
 /* FRO192M - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

@@ -10,13 +10,13 @@
 **                          MCXW236BIUKAR
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250819
+**     Build:               b260519
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for HASHCRYPT
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -107,7 +107,7 @@ typedef struct {
        uint8_t RESERVED_0[8];
   __O  uint32_t INDATA;                            /**< Input of 16 words at a time to load up buffer., offset: 0x20 */
   __O  uint32_t ALIAS[HASHCRYPT_ALIAS_COUNT];      /**< Aliases to allow writing words in a burst., array offset: 0x24, array step: 0x4 */
-  __I  uint32_t DIGEST0[HASHCRYPT_DIGEST0_COUNT];  /**< Result digest (when status says so): • Is 1st 5 words if SHA1 used • Is all 8 words if SHA2 used • Is all 8 words if crypto or SHA512, array offset: 0x40, array step: 0x4 */
+  __I  uint32_t DIGEST0[HASHCRYPT_DIGEST0_COUNT];  /**< Result digest (when status says so): * Is 1st 5 words if SHA1 used * Is all 8 words if SHA2 used * Is all 8 words if crypto or SHA512, array offset: 0x40, array step: 0x4 */
        uint8_t RESERVED_1[32];
   __IO uint32_t CRYPTCFG;                          /**< Crypto settings for AES and Salsa and ChaCha, offset: 0x80 */
   __I  uint32_t CONFIG;                            /**< Returns the configuration of this block in this chip - indicates what services are available., offset: 0x84 */
@@ -396,7 +396,7 @@ typedef struct {
 #define HASHCRYPT_ALIAS_DATA(x)                  (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_ALIAS_DATA_SHIFT)) & HASHCRYPT_ALIAS_DATA_MASK)
 /*! @} */
 
-/*! @name DIGEST0 - Result digest (when status says so): • Is 1st 5 words if SHA1 used • Is all 8 words if SHA2 used • Is all 8 words if crypto or SHA512 */
+/*! @name DIGEST0 - Result digest (when status says so): * Is 1st 5 words if SHA1 used * Is all 8 words if SHA2 used * Is all 8 words if crypto or SHA512 */
 /*! @{ */
 
 #define HASHCRYPT_DIGEST0_DIGEST_MASK            (0xFFFFFFFFU)

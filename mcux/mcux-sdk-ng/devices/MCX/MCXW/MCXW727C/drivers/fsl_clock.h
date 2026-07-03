@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022,2025 NXP
+ * Copyright 2021-2022,2025-2026 NXP
  *  
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -39,8 +39,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief CLOCK driver version 2.2.7. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 7))
+/*! @brief CLOCK driver version 2.3.1. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*! @} */
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -232,7 +232,6 @@ typedef enum _clock_name
 
     /* For SCG CLK intput */
     kCLOCK_ScgSysOscClk, /*!< SCG system OSC clock.                               */
-    kCLOCK_ScgSircClk,   /*!< SCG SIRC clock.                                     */
     kCLOCK_ScgFircClk,   /*!< SCG FIRC clock.                                     */
     kCLOCK_RtcOscClk,    /*!< RTC OSC clock.                                      */
 } clock_name_t;
@@ -261,7 +260,13 @@ typedef enum _clock_ip_control
  */
 typedef enum _clock_ip_src
 {
-    kCLOCK_IpSrcFro6M   = 2U, /*!< FRO 6M clock. */
+    kCLOCK_IpSrcFro6M   = 2U, /*!< FRO 6M clock.
+                               *
+                               * @note The SIRC has been removed, but in some
+                               * low-power wakeup use cases, the SIRC is still
+                               * required. This option provides the ability to
+                               * configure the clock source to SIRC.
+                               */
     kCLOCK_IpSrcFro192M = 3U, /*!< FRO 192M clock. */
     kCLOCK_IpSrcSoscClk = 4U, /*!< OSC RF clock. */
     kCLOCK_IpSrc32kClk  = 5U, /*!< 32k Clk clock. */
@@ -304,7 +309,6 @@ typedef enum _clock_ip_name
     kCLOCK_Crc0             = MAKE_MRCC_REGADDR(MRCC_BASE, 0x8C),  /*!< Clock crc0 */
     kCLOCK_Secsubsys        = MAKE_MRCC_REGADDR(MRCC_BASE, 0x90),  /*!< Clock secsubsys */
     kCLOCK_Lpit0            = MAKE_MRCC_REGADDR(MRCC_BASE, 0xBC),  /*!< Clock lpit0 */
-    kCLOCK_Tstmr0           = MAKE_MRCC_REGADDR(MRCC_BASE, 0xC0),  /*!< Clock tstmr0 */
     kCLOCK_Tpm0             = MAKE_MRCC_REGADDR(MRCC_BASE, 0xC4),  /*!< Clock tpm0 */
     kCLOCK_Tpm1             = MAKE_MRCC_REGADDR(MRCC_BASE, 0xC8),  /*!< Clock tpm1 */
     kCLOCK_Lpi2c0           = MAKE_MRCC_REGADDR(MRCC_BASE, 0xCC),  /*!< Clock lpi2c0 */
@@ -344,7 +348,6 @@ typedef enum _clock_ip_name
     kCLOCK_Lptmr0_wake2vsys = MAKE_MRCC_REGADDR(MRCC_BASE, 0x440), /*!< Clock LPTMR0 IPG clk erclk wake2vsys */
     kCLOCK_Lptmr1_wake2vsys = MAKE_MRCC_REGADDR(MRCC_BASE, 0x444), /*!< Clock LPTMR1 IPG clk erclk wake2vsys */
     kCLOCK_Lptmr2_wake2vsys = MAKE_MRCC_REGADDR(MRCC_BASE, 0x448), /*!< Clock LPTMR2 IPG clk erclk wake2vsys */
-    kCLOCK_Sirc_vsys_gating = MAKE_MRCC_REGADDR(MRCC_BASE, 0x44C), /*!< Clock SIRC vsys gating */
 } clock_ip_name_t;
 
 /*!
@@ -369,13 +372,6 @@ typedef enum _scg_sys_clk
 
 /*!
  * @brief SCG system clock source.
- *
- * ERR052742: FRO6M clock(kSCG_SysClkSrcSirc) is not stable.
- * The FRO6M clock is not stable on some parts. FRO6M outputs lower frequency
- * signal instead of 6MHz when device is reset or wakes up from low power.
- * It can impact peripherals using it as a clock source. Please use clock source
- * other than the FRO6M. For example, use FRO192M instead of FRO6M as clock
- * source for peripherals.
  */
 typedef enum _scg_sys_clk_src
 {
@@ -429,7 +425,6 @@ typedef enum _clock_clkout_src
 {
     kClockClkoutSelScgSlow   = 0U, /*!< SCG Slow clock. */
     kClockClkoutSelSosc      = 1U, /*!< System OSC.     */
-    kClockClkoutSelSirc      = 2U, /*!< Slow IRC.       */
     kClockClkoutSelFirc      = 3U, /*!< Fast IRC.       */
     kClockClkoutSelScgRtcOsc = 4U, /*!< SCG RTC OSC clock. */
 } clock_clkout_src_t;
@@ -481,21 +476,6 @@ typedef struct _scg_rosc_config
 {
     scg_rosc_monitor_mode_t monitorMode; /*!< Clock monitor mode selected.     */
 } scg_rosc_config_t;
-
-/*! @brief SIRC enable mode. */
-typedef enum _scg_sirc_enable_mode
-{
-    kSCG_SircDisableInSleep = 0,                         /*!< Disable SIRC clock.             */
-    kSCG_SircEnableInSleep  = SCG_SIRCCSR_SIRCSTEN_MASK, /*!< Enable SIRC in sleep mode.      */
-} scg_sirc_enable_mode_t;
-
-/*!
- * @brief SCG slow IRC clock configuration.
- */
-typedef struct _scg_sirc_config
-{
-    scg_sirc_enable_mode_t enableMode; /*!< Enable mode, OR'ed value of _scg_sirc_enable_mode. */
-} scg_sirc_config_t;
 
 /*!
  * @brief SCG fast IRC trim mode.
@@ -708,12 +688,6 @@ static inline void CLOCK_DisableTPM2(void)
  * Set the clock source for specific IP, not all modules need to set the
  * clock source, should only use this function for the modules need source
  * setting.
- * ERR052742: FRO6M clock is not stable.
- * The FRO6M clock is not stable on some parts. FRO6M outputs lower frequency
- * signal instead of 6MHz when device is reset or wakes up from low power.
- * It can impact peripherals using it as a clock source. Please use clock source
- * other than the FRO6M. For example, use FRO192M instead of FRO6M as clock
- * source for peripherals.
  *
  * @param name Which peripheral to check, see \ref clock_ip_name_t.
  * @param src Clock source to set.
@@ -725,6 +699,11 @@ static inline void CLOCK_SetIpSrc(clock_ip_name_t name, clock_ip_src_t src)
         return;
     }
 
+    /*
+     * The SIRC has been removed, but in some low-power wakeup use cases,
+     * the SIRC is still required. Add the ability to configure the clock source
+     * to use SIRC.
+     */
     if (src < kCLOCK_IpSrcFro6M || src > kCLOCK_IpSrc32kClk)
     {
         return;
@@ -1022,75 +1001,6 @@ static inline void CLOCK_LockSysOscControlStatusReg(void)
 /*! @} */
 
 /*!
- * @name SCG Slow IRC Clock.
- * @{
- */
-
-/*!
- * @brief Initializes the SCG slow IRC clock.
- *
- * This function enables the SCG slow IRC clock according to the
- * configuration.
- *
- * @param config   Pointer to the configuration structure.
- * @retval kStatus_Success SIRC is initialized.
- * @retval kStatus_SCG_Busy SIRC has been enabled and is used by system clock.
- * @retval kStatus_ReadOnly SIRC control register is locked.
- *
- * @note This function can't detect whether the system OSC has been enabled and
- * used by an IP.
- */
-status_t CLOCK_InitSirc(const scg_sirc_config_t *config);
-
-/*!
- * @brief De-initializes the SCG slow IRC.
- *
- * This function disables the SCG slow IRC.
- *
- * @retval kStatus_Success SIRC is deinitialized.
- * @retval kStatus_SCG_Busy SIRC is used by system clock.
- * @retval kStatus_ReadOnly SIRC control register is locked.
- *
- * @note This function can't detect whether the SIRC is used by an IP.
- */
-status_t CLOCK_DeinitSirc(void);
-
-/*!
- * @brief Gets the SCG SIRC clock frequency.
- *
- * @return  Clock frequency; If the clock is invalid, returns 0.
- */
-uint32_t CLOCK_GetSircFreq(void);
-
-/*!
- * @brief Checks whether the SIRC clock is valid.
- *
- * @return  True if clock is valid, false if not.
- */
-static inline bool CLOCK_IsSircValid(void)
-{
-    return (bool)(CLOCK_REG(&SCG0->SIRCCSR) & SCG_SIRCCSR_SIRCVLD_MASK);
-}
-
-/*!
- * @brief Unlock the SIRCCSR control status register.
- */
-static inline void CLOCK_UnlockSircControlStatusReg(void)
-{
-    CLOCK_REG(&SCG0->SIRCCSR) &= ~(SCG_SIRCCSR_LK_MASK);
-}
-
-/*!
- * @brief Lock the SIRCCSR control status register.
- */
-static inline void CLOCK_LockSircControlStatusReg(void)
-{
-    CLOCK_REG(&SCG0->SIRCCSR) |= SCG_SIRCCSR_LK_MASK;
-}
-
-/*! @} */
-
-/*!
  * @name SCG Fast IRC Clock.
  * @{
  */
@@ -1305,6 +1215,7 @@ static inline void CLOCK_LockRoscControlStatusReg(void)
 }
 
 /*! @} */
+
 
 /*!
  * @name External clock frequency

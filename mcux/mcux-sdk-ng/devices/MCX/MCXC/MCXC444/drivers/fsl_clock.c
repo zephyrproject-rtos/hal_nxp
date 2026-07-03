@@ -439,7 +439,7 @@ status_t CLOCK_SetMcgliteConfig(mcglite_config_t const *targetConfig)
     if (((uint8_t)kMCGLITE_ClkSrcLirc == MCG_S_CLKST_VAL) && (kMCGLITE_ClkSrcLirc == targetConfig->outSrc) &&
         (MCG_C2_IRCS_VAL != (uint8_t)(targetConfig->ircs)))
     {
-        MCG->C1 = (uint8_t)((MCG->C1 & ~MCG_C1_CLKS_MASK) | MCG_C1_CLKS(kMCGLITE_ClkSrcHirc));
+        MCG->C1 = (uint8_t)((MCG->C1 & (uint8_t)((~MCG_C1_CLKS_MASK) & 0xFFU)) | MCG_C1_CLKS(kMCGLITE_ClkSrcHirc));
         while ((uint8_t)kMCGLITE_ClkSrcHirc != MCG_S_CLKST_VAL)
         {
         }
@@ -447,8 +447,8 @@ status_t CLOCK_SetMcgliteConfig(mcglite_config_t const *targetConfig)
 
     /* Set configuration now. */
     MCG->SC = MCG_SC_FCRDIV(targetConfig->fcrdiv);
-    MCG->MC = MCG_MC_HIRCEN(targetConfig->hircEnableInNotHircMode) | MCG_MC_LIRC_DIV2(targetConfig->lircDiv2);
-    MCG->C2 = (uint8_t)((MCG->C2 & ~MCG_C2_IRCS_MASK) | MCG_C2_IRCS(targetConfig->ircs));
+    MCG->MC = MCG_MC_HIRCEN(targetConfig->hircEnableInNotHircMode ? 1U : 0U) | MCG_MC_LIRC_DIV2(targetConfig->lircDiv2);
+    MCG->C2 = (uint8_t)((MCG->C2 & (uint8_t)((~MCG_C2_IRCS_MASK) & 0xFFU)) | MCG_C2_IRCS(targetConfig->ircs));
     MCG->C1 = MCG_C1_CLKS(targetConfig->outSrc) | targetConfig->irclkEnableMode;
 
     /*

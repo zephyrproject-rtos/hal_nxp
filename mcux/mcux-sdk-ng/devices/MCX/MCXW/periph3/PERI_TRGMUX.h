@@ -7,14 +7,14 @@
 **                          MCXW727DMFTA_cm33_core0
 **                          MCXW727DMFTA_cm33_core1
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TRGMUX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -26,14 +26,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_TRGMUX.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for TRGMUX
  *
  * CMSIS Peripheral Access Layer for TRGMUX
@@ -153,14 +158,6 @@ typedef enum _trgmux_source
     kTRGMUX_SourceSpc0DcdcBurst     = 65U,         /**< SPC0 DCDC Burst Trig is selected */
     kTRGMUX_SourceRf2p4gTofTimestamp = 66U,        /**< RF-2.4G TOF TIMESTAMP TRIG is selected */
     kTRGMUX_SourceRf2p4gLantSw      = 67U,         /**< RF-2.4G LANT_SW is selected */
-    kTRGMUX_SourceEzhIntChannel8    = 68U,         /**< EZH Interrupt channel 8 is selected */
-    kTRGMUX_SourceEzhIntChannel9    = 69U,         /**< EZH Interrupt channel 9 is selected */
-    kTRGMUX_SourceEzhIntChannel10   = 70U,         /**< EZH Interrupt channel 10 is selected */
-    kTRGMUX_SourceEzhIntChannel11   = 71U,         /**< EZH Interrupt channel 11 is selected */
-    kTRGMUX_SourceEzhIntChannel12   = 72U,         /**< EZH Interrupt channel 12 is selected */
-    kTRGMUX_SourceEzhIntChannel13   = 73U,         /**< EZH Interrupt channel 13 is selected */
-    kTRGMUX_SourceEzhIntChannel14   = 74U,         /**< EZH Interrupt channel 14 is selected */
-    kTRGMUX_SourceEzhIntChannel15   = 75U,         /**< EZH Interrupt channel 15 is selected */
     kTRGMUX_SourceCpu0TxEv          = 76U,         /**< CM33 (Main) */
     kTRGMUX_SourceCpu1TxEv          = 77U,         /**< CM33 (Radio) */
 } trgmux_source_t;
@@ -245,11 +242,11 @@ typedef enum _trgmux_device
  */
 
 /** TRGMUX - Size of Registers Arrays */
-#define TRGMUX_TRGCFG_COUNT                       18u
+#define TRGMUX_TRGCFG_COUNT                       16u
 
 /** TRGMUX - Register Layout Typedef */
 typedef struct {
-  __IO uint32_t TRGCFG[TRGMUX_TRGCFG_COUNT];       /**< TRGMUX TRGMUX_OUT0..TRGMUX EZH_BLCIN_7_4, array offset: 0x0, array step: 0x4 */
+  __IO uint32_t TRGCFG[TRGMUX_TRGCFG_COUNT];       /**< TRGMUX TRGMUX_OUT0..TRGMUX CAN1, array offset: 0x0, array step: 0x4 */
 } TRGMUX_Type;
 
 /* ----------------------------------------------------------------------------
@@ -261,7 +258,7 @@ typedef struct {
  * @{
  */
 
-/*! @name TRGCFG - TRGMUX TRGMUX_OUT0..TRGMUX EZH_BLCIN_7_4 */
+/*! @name TRGCFG - TRGMUX TRGMUX_OUT0..TRGMUX CAN1 */
 /*! @{ */
 
 #define TRGMUX_TRGCFG_SEL0_MASK                  (0x7FU)

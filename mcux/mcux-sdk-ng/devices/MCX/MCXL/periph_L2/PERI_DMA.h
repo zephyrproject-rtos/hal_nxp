@@ -13,8 +13,8 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 2.0, 2026-04-22
-**     Build:               b260422
+**     Version:             rev. 2.1, 2026-05-02
+**     Build:               b260512
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA
@@ -33,14 +33,16 @@
 **         Generated based on Rev.1 RC.
 **     - rev. 2.0 (2026-04-22)
 **         Generated based on Rev. 2 DraftA.
+**     - rev. 2.1 (2026-05-02)
+**         Generated based on Rev. 2.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_DMA.h
- * @version 2.0
- * @date 2026-04-22
+ * @version 2.1
+ * @date 2026-05-02
  * @brief CMSIS Peripheral Access Layer for DMA
  *
  * CMSIS Peripheral Access Layer for DMA
@@ -96,44 +98,81 @@
 typedef enum _dma_request_source
 {
     kDma0RequestDisabled            = 0U,          /**< Disabled */
+    kDma1RequestDisabled            = 0U,          /**< Disabled */
     kDma0RequestWUU0                = 1U,          /**< WUU Wake up event */
+    kDma1RequestWUU0                = 1U,          /**< WUU Wake up event */
     kDma0RequestLPI2C0Rx            = 11U,         /**< LPI2C0 Receive request */
+    kDma1RequestLPI2C0Rx            = 11U,         /**< LPI2C0 Receive request */
     kDma0RequestLPI2C0Tx            = 12U,         /**< LPI2C0 Transmit request */
+    kDma1RequestLPI2C0Tx            = 12U,         /**< LPI2C0 Transmit request */
     kDma0RequestLPI2C1Rx            = 13U,         /**< LPI2C1 Receive request */
+    kDma1RequestLPI2C1Rx            = 13U,         /**< LPI2C1 Receive request */
     kDma0RequestLPI2C1Tx            = 14U,         /**< LPI2C1 Transmit request */
+    kDma1RequestLPI2C1Tx            = 14U,         /**< LPI2C1 Transmit request */
     kDma0RequestLPSPI0Rx            = 15U,         /**< LPSPI0 Receive request */
+    kDma1RequestLPSPI0Rx            = 15U,         /**< LPSPI0 Receive request */
     kDma0RequestLPSPI0Tx            = 16U,         /**< LPSPI0 Transmit request */
+    kDma1RequestLPSPI0Tx            = 16U,         /**< LPSPI0 Transmit request */
     kDma0RequestLPSPI1Rx            = 17U,         /**< LPSPI1 Receive request */
+    kDma1RequestLPSPI1Rx            = 17U,         /**< LPSPI1 Receive request */
     kDma0RequestLPSPI1Tx            = 18U,         /**< LPSPI1 Transmit request */
+    kDma1RequestLPSPI1Tx            = 18U,         /**< LPSPI1 Transmit request */
     kDma0RequestLPUART0Rx           = 21U,         /**< LPUART0 Receive request */
+    kDma1RequestLPUART0Rx           = 21U,         /**< LPUART0 Receive request */
     kDma0RequestLPUART0Tx           = 22U,         /**< LPUART0 Transmit request */
+    kDma1RequestLPUART0Tx           = 22U,         /**< LPUART0 Transmit request */
     kDma0RequestLPUART1Rx           = 23U,         /**< LPUART1 Receive request */
+    kDma1RequestLPUART1Rx           = 23U,         /**< LPUART1 Receive request */
     kDma0RequestLPUART1Tx           = 24U,         /**< LPUART1 Transmit request */
+    kDma1RequestLPUART1Tx           = 24U,         /**< LPUART1 Transmit request */
     kDma0RequestMuxCtimer0M0        = 31U,         /**< CTIMER0 Match channel 0 request */
+    kDma1RequestMuxCtimer0M0        = 31U,         /**< CTIMER0 Match channel 0 request */
     kDma0RequestMuxCtimer0M1        = 32U,         /**< CTIMER0 Match channel 1 request */
+    kDma1RequestMuxCtimer0M1        = 32U,         /**< CTIMER0 Match channel 1 request */
     kDma0RequestMuxCtimer1M0        = 33U,         /**< CTIMER1 Match channel 0 request */
+    kDma1RequestMuxCtimer1M0        = 33U,         /**< CTIMER1 Match channel 0 request */
     kDma0RequestMuxCtimer1M1        = 34U,         /**< CTIMER1 Match channel 1 request */
+    kDma1RequestMuxCtimer1M1        = 34U,         /**< CTIMER1 Match channel 1 request */
     kDma0RequestMuxCtimer2M0        = 35U,         /**< CTIMER2 Match channel 0 request */
+    kDma1RequestMuxCtimer2M0        = 35U,         /**< CTIMER2 Match channel 0 request */
     kDma0RequestMuxCtimer2M1        = 36U,         /**< CTIMER2 Match channel 1 request */
+    kDma1RequestMuxCtimer2M1        = 36U,         /**< CTIMER2 Match channel 1 request */
     kDma0RequestMuxAdc0FifoRequest  = 51U,         /**< ADC0 FIFO request */
-    kDma0RequestMuxHsCmp0DmaRequest = 53U,         /**< CMP0 DMA_request */
-    kDma0RequestMuxHsCmp1DmaRequest = 54U,         /**< CMP1 DMA_request */
+    kDma1RequestMuxAdc0FifoRequest  = 51U,         /**< ADC0 FIFO request */
+    kDma0RequestMuxAcmp0DmaRequest  = 53U,         /**< ACMP0 DMA_request */
+    kDma1RequestMuxAcmp0DmaRequest  = 53U,         /**< ACMP0 DMA_request */
     kDma0RequestMuxGpio1PinEventRequest0 = 60U,    /**< GPIO1 Pin event request 0 */
+    kDma1RequestMuxGpio1PinEventRequest0 = 60U,    /**< GPIO1 Pin event request 0 */
     kDma0RequestMuxGpio1PinEventRequest1 = 61U,    /**< GPIO1 Pin event request 1 */
+    kDma1RequestMuxGpio1PinEventRequest1 = 61U,    /**< GPIO1 Pin event request 1 */
     kDma0RequestMuxGpio2PinEventRequest0 = 62U,    /**< GPIO2 Pin event request 0 */
+    kDma1RequestMuxGpio2PinEventRequest0 = 62U,    /**< GPIO2 Pin event request 0 */
     kDma0RequestMuxGpio2PinEventRequest1 = 63U,    /**< GPIO2 Pin event request 1 */
+    kDma1RequestMuxGpio2PinEventRequest1 = 63U,    /**< GPIO2 Pin event request 1 */
     kDma0RequestMuxGpio3PinEventRequest0 = 64U,    /**< GPIO3 Pin event request 0 */
-    kDma0RequestMuxGpio3PinEventRequest1 = 64U,    /**< GPIO3 Pin event request 1 */
+    kDma1RequestMuxGpio3PinEventRequest0 = 64U,    /**< GPIO3 Pin event request 0 */
+    kDma0RequestMuxGpio3PinEventRequest1 = 65U,    /**< GPIO3 Pin event request 1 */
+    kDma1RequestMuxGpio3PinEventRequest1 = 65U,    /**< GPIO3 Pin event request 1 */
     kDma0RequestSGI0Datain          = 96U,         /**< SGI0 DATAIN request */
+    kDma1RequestSGI0DataIn          = 96U,         /**< SGI0 DATAIN request */
     kDma0RequestSGI0Dataout         = 97U,         /**< SGI0 DATOUT request */
-    kDma0RequestMuxGpio0PinEventRequest0 = 109U,   /**< GPIO0 Pin event request 0 */
-    kDma0RequestMuxGpio0PinEventRequest1 = 110U,   /**< GPIO0 Pin event request 1 */
-    kDma0RequestMuxLptmr0           = 111U,        /**< LPTMR0 Counter match event */
-    kDma0RequestLPUART3Rx           = 113U,        /**< LPUART3 (AON) Receive request */
-    kDma0RequestLPUART3Tx           = 114U,        /**< LPUART3 (AON) Transmit request */
-    kDma0RequestLPI2C2Rx            = 117U,        /**< LPI2C2 (AON) Receive request */
-    kDma0RequestLPI2C2Tx            = 118U,        /**< LPI2C0 (AON) Transmit request */
-    kDma0RequestMuxLPAdc0FifoRequest = 121U,       /**< LPADC FIFO request */
+    kDma1RequestSGI0DataOut         = 97U,         /**< SGI0 DATOUT request */
+    kDma0RequestMuxAonGpio0PinEventRequest0 = 109U, /**< GPIO0 (AON) Pin event request 0 */
+    kDma1RequestMuxAonGpio0PinEventRequest0 = 109U, /**< GPIO0 (AON) Pin event request 0 */
+    kDma0RequestMuxAonGpio0PinEventRequest1 = 110U, /**< GPIO0 (AON) Pin event request 1 */
+    kDma1RequestMuxAonGpio0PinEventRequest1 = 110U, /**< GPIO0 (AON) Pin event request 1 */
+    kDma0RequestMuxAonLptmr0        = 111U,        /**< LPTMR0 (AON) Counter match event */
+    kDma1RequestMuxAonLptmr0        = 111U,        /**< LPTMR0 (AON) Counter match event */
+    kDma0RequestAonLPUART0Rx        = 113U,        /**< LPUART0 (AON) Receive request */
+    kDma1RequestAonLPUART0Rx        = 113U,        /**< LPUART0 (AON) Receive request */
+    kDma0RequestAonLPUART0Tx        = 114U,        /**< LPUART0 (AON) Transmit request */
+    kDma1RequestAonLPUART0Tx        = 114U,        /**< LPUART0 (AON) Transmit request */
+    kDma0RequestAonLPI2C0Rx         = 117U,        /**< LPI2C0 (AON) Receive request */
+    kDma1RequestAonLPI2C0Rx         = 117U,        /**< LPI2C0 (AON) Receive request */
+    kDma0RequestAonLPI2C0Tx         = 118U,        /**< LPI2C0 (AON) Transmit request */
+    kDma1RequestAonLPI2C0Tx         = 118U,        /**< LPI2C0 (AON) Transmit request */
+    kDma0RequestMuxAonLpadc0FifoRequest = 121U,    /**< LPADC (AON) FIFO request */
+    kDma1RequestMuxAonLpadc0FifoRequest = 121U,    /**< LPADC (AON) FIFO request */
 } dma_request_source_t;
 
 /* @} */

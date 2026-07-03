@@ -1,6 +1,7 @@
 /*
 ** ###################################################################
-**     Processors:          MCXN547VDF_cm33_core0
+**     Processors:          MCXN547VAB_cm33_core0
+**                          MCXN547VDF_cm33_core0
 **                          MCXN547VKL_cm33_core0
 **                          MCXN547VNL_cm33_core0
 **                          MCXN547VPB_cm33_core0
@@ -12,7 +13,7 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260417
+**     Build:               b260512
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN547_cm33_core0
@@ -1108,6 +1109,8 @@ typedef enum IRQn {
   /** Array initializer of FMU peripheral base pointers */
   #define FMU_BASE_PTRS                            { FMU0 }
 #endif
+/** Interrupt vectors for the FMU peripheral type */
+#define FMU_IRQS                                 { FMU0_IRQn }
 
 /* FMUTEST - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

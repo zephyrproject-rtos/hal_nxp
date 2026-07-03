@@ -1767,7 +1767,7 @@ status_t Power_EnterDeepPowerDown2(power_dpd2_config_t *config)
             Power_EnableDualDomainWakeupSources(config->mainWakeupSource, config->aonWakeupSource);
 
             /*2. Configuration for SMM and PMU. */
-            Power_ConfigSleepModeManager(config->aonRamArraysToRetain, config->mainRamArraysToRetain,
+            Power_ConfigSleepModeManager((uint8_t)(config->aonRamArraysToRetain & 0xFFUL), config->mainRamArraysToRetain,
                                          config->disableBandgap, config->enableIVSMode);
 
             if (ADVC_IsEnabled() == false)

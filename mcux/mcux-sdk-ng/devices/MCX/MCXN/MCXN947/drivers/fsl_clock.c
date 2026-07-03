@@ -744,7 +744,9 @@ status_t CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz, run_mode_t m
         case (uint32_t)kOD_Mode:
         {
 #if defined(MCXN556S_cm33_core0_SERIES) || defined(MCXN556S_cm33_core1_SERIES) || \
-    defined(MCXN557S_cm33_core0_SERIES) || defined(MCXN557S_cm33_core1_SERIES)
+    defined(MCXN557S_cm33_core0_SERIES) || defined(MCXN557S_cm33_core1_SERIES) || \
+    defined(CPU_MCXN556TCDF_cm33_core0) || defined(CPU_MCXN556TCDF_cm33_core1) || \
+    defined(CPU_MCXN557TCDF_cm33_core0) || defined(CPU_MCXN557TCDF_cm33_core1)
             if (system_freq_hz > 170000000U)
 #else
             if (system_freq_hz > 150000000U)
@@ -836,9 +838,9 @@ void CLOCK_AttachClk(clock_attach_id_t connection)
 {
     assert(connection < kNONE_to_NONE);
 
-    uint16_t mux;
+    uint32_t mux;
     uint8_t sel;
-    uint16_t item;
+    uint32_t item;
     uint32_t tmp32 = (uint32_t)connection;
     uint32_t i;
     volatile uint32_t *pClkSel;
@@ -853,10 +855,10 @@ void CLOCK_AttachClk(clock_attach_id_t connection)
             {
                 break;
             }
-            item = (uint16_t)GET_ID_ITEM(tmp32);
+            item = (uint32_t)GET_ID_ITEM(tmp32);
             if (item != 0U)
             {
-                mux = (uint16_t)GET_ID_ITEM_MUX(item);
+                mux = (uint32_t)GET_ID_ITEM_MUX(item);
                 sel = (uint8_t)GET_ID_ITEM_SEL(item);
                 if (mux == CM_SCGRCCRSCSCLKSEL)
                 {
@@ -867,8 +869,10 @@ void CLOCK_AttachClk(clock_attach_id_t connection)
                 }
                 else
                 {
-                    assert(mux <= CM_I3C1FCLKSSEL);
-                    ((volatile uint32_t *)pClkSel)[mux] = sel;
+                    if (mux <= CM_I3C1FCLKSSEL)
+                    {
+                        pClkSel[mux] = sel;
+                    }
                 }
             }
             tmp32 = GET_ID_NEXT_ITEM(tmp32); /* pick up next descriptor */
@@ -888,7 +892,7 @@ clock_attach_id_t CLOCK_GetClockAttachId(clock_attach_id_t attachId)
 {
     assert(attachId < kNONE_to_NONE);
 
-    uint16_t mux;
+    uint32_t mux;
     uint32_t actualSel;
     uint32_t tmp32 = (uint32_t)attachId;
     uint32_t i;
@@ -905,7 +909,7 @@ clock_attach_id_t CLOCK_GetClockAttachId(clock_attach_id_t attachId)
 
     for (i = 0U; i < 2U; i++)
     {
-        mux = (uint16_t)GET_ID_ITEM_MUX(tmp32);
+        mux = (uint32_t)GET_ID_ITEM_MUX(tmp32);
         if (tmp32 != 0UL)
         {
             if (mux == CM_SCGRCCRSCSCLKSEL)
@@ -914,21 +918,29 @@ clock_attach_id_t CLOCK_GetClockAttachId(clock_attach_id_t attachId)
             }
             else
             {
-                assert(mux <= CM_I3C1FCLKSSEL);
-                actualSel = (uint32_t)((volatile uint32_t *)pClkSel)[mux];
+                if (mux <= CM_I3C1FCLKSSEL)
+                {
+                    actualSel = pClkSel[mux];
+                }
+                else
+                {
+                    actualSel = 0U;
+                }
             }
 
             /* Consider the combination of two registers */
-            assert(actualSel < UINT32_MAX);
-            actualAttachId |= CLK_ATTACH_ID(mux, actualSel, i);
+            if (actualSel < UINT32_MAX)
+            {
+                actualAttachId |= CLK_ATTACH_ID(mux, actualSel, i);
+            }
         }
         tmp32 = GET_ID_NEXT_ITEM(tmp32); /*!<  pick up next descriptor */
     }
 
     actualAttachId |= selector;
-    assert(actualAttachId < kNONE_to_NONE);
+    assert(actualAttachId < (uint32_t)kNONE_to_NONE);
 
-    return (clock_attach_id_t)actualAttachId;
+    return (actualAttachId < (uint32_t)kNONE_to_NONE) ? (clock_attach_id_t)actualAttachId : kNONE_to_NONE;
 }
 
 /* Set IP Clock Divider */
@@ -943,17 +955,40 @@ void CLOCK_SetClkDiv(clock_div_name_t div_name, uint32_t divided_by_value)
     volatile uint32_t *pClkDiv;
 
     pClkDiv = &(SYSCON->SYSTICKCLKDIV[0]);
-    /* halt and reset clock dividers */
-    ((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] = 0x3UL << 29U;
 
-    if (divided_by_value == 0U) /*!<  halt */
+    /* Early exit: current DIV value already matches the requested value,
+     * and the divider is not in halt state */
+    if ((divided_by_value != 0U) &&
+        ((((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] & (1UL << 30U)) == 0U) &&
+        ((((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] & 0xFFU) == (divided_by_value - 1U)))
     {
-        ((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] = 1UL << 30U;
+        return;
+    }
+
+    /* AHBCLKDIV does not support HALT(bit30) or RESET(bit29);
+     * writing those bits would corrupt reserved fields. Write the DIV value directly. */
+    if (div_name == kCLOCK_DivAhbClk)
+    {
+        ((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] = (divided_by_value == 0U) ? 0U : (divided_by_value - 1U);
     }
     else
     {
-        ((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] = (divided_by_value - 1U);
+        /* halt and reset clock dividers */
+        ((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] = 0x3UL << 29U;
+
+        if (divided_by_value == 0U) /*!<  halt */
+        {
+            ((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] = 1UL << 30U;
+        }
+        else
+        {
+            /* Write new DIV value while keeping HALT bit set */
+            ((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] = (divided_by_value - 1U) | (1UL << 30U);
+            /* Clear HALT bit to start the divider with the new value */
+            ((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] &= ~(1UL << 30U);
+        }
     }
+
 }
 
 /* Get IP clock dividers */
@@ -2902,8 +2937,14 @@ static pll_error_t CLOCK_GetPllConfig(uint32_t finHz, uint32_t foutHz, pll_setup
     s_PllSetupCacheStruct[s_PllSetupCacheIdx].pllsscg[0] = pSetup->pllsscg[0];
     s_PllSetupCacheStruct[s_PllSetupCacheIdx].pllsscg[1] = pSetup->pllsscg[1];
     /* Update the index for next available buffer. */
-    assert(s_PllSetupCacheIdx < UINT32_MAX);
-    s_PllSetupCacheIdx = (s_PllSetupCacheIdx + 1U) % CLOCK_USR_CFG_PLL_CONFIG_CACHE_COUNT;
+    if (s_PllSetupCacheIdx < ((uint32_t)CLOCK_USR_CFG_PLL_CONFIG_CACHE_COUNT - 1U))
+    {
+        s_PllSetupCacheIdx++;
+    }
+    else
+    {
+        s_PllSetupCacheIdx = 0U;
+    }
 #endif /* CLOCK_USR_CFG_PLL_CONFIG_CACHE_COUNT */
 
     return retErr;

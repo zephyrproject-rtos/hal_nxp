@@ -785,14 +785,14 @@ extern "C" {
  */
 static inline void CLOCK_EnableClock(clock_ip_name_t clk)
 {
-    uint32_t reg_offset         = CLK_GATE_REG_OFFSET(clk);
-    uint32_t bit_shift          = CLK_GATE_BIT_SHIFT(clk);
-    volatile uint32_t *pClkCtrl = (volatile uint32_t *)((uint32_t)(&(MRCC0->MRCC_GLB_CC0_SET)) + reg_offset);
-
     if (clk == kCLOCK_GateNotAvail)
     {
         return;
     }
+
+    uint32_t reg_offset         = CLK_GATE_REG_OFFSET(clk);
+    uint32_t bit_shift          = CLK_GATE_BIT_SHIFT(clk);
+    volatile uint32_t *pClkCtrl = (volatile uint32_t *)((uint32_t)(&(MRCC0->MRCC_GLB_CC0_SET)) + reg_offset);
 
     /* Unlock clock configuration */
     SYSCON->CLKUNLOCK &= ~SYSCON_CLKUNLOCK_UNLOCK_MASK;
@@ -823,14 +823,14 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
  */
 static inline void CLOCK_DisableClock(clock_ip_name_t clk)
 {
-    uint32_t reg_offset         = CLK_GATE_REG_OFFSET(clk);
-    uint32_t bit_shift          = CLK_GATE_BIT_SHIFT(clk);
-    volatile uint32_t *pClkCtrl = (volatile uint32_t *)((uint32_t)(&(MRCC0->MRCC_GLB_CC0_CLR)) + reg_offset);
-
     if (clk == kCLOCK_GateNotAvail)
     {
         return;
     }
+
+    uint32_t reg_offset         = CLK_GATE_REG_OFFSET(clk);
+    uint32_t bit_shift          = CLK_GATE_BIT_SHIFT(clk);
+    volatile uint32_t *pClkCtrl = (volatile uint32_t *)((uint32_t)(&(MRCC0->MRCC_GLB_CC0_CLR)) + reg_offset);
 
     /* Unlock clock configuration */
     SYSCON->CLKUNLOCK &= ~SYSCON_CLKUNLOCK_UNLOCK_MASK;

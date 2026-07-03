@@ -8,7 +8,7 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260417
+**     Build:               b260512
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN546T_cm33_core1

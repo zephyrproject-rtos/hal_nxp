@@ -97,7 +97,7 @@
  */
 
 /** TRNG - Size of Registers Arrays */
-#define TRNG_ENTA_COUNT                           1u
+#define TRNG_ENTA_COUNT                           8u
 
 /** TRNG - Register Layout Typedef */
 typedef struct {
@@ -151,7 +151,7 @@ typedef struct {
   };
   __I  uint32_t STATUS;                            /**< Status Register, offset: 0x3C */
   __I  uint32_t ENT[TRNG_ENTA_COUNT];              /**< Entropy Read Register, array offset: 0x40, array step: 0x4 */
-       uint8_t RESERVED_0[60];
+       uint8_t RESERVED_0[32];
   __I  uint32_t PKRCNT10;                          /**< Statistical Check Poker Count 1 and 0 Register, offset: 0x80 */
   __I  uint32_t PKRCNT32;                          /**< Statistical Check Poker Count 3 and 2 Register, offset: 0x84 */
   __I  uint32_t PKRCNT54;                          /**< Statistical Check Poker Count 5 and 4 Register, offset: 0x88 */
@@ -693,7 +693,7 @@ typedef struct {
 /*! @} */
 
 /* The count of TRNG_ENTA_ENT */
-#define TRNG_ENTA_ENT_COUNT                      (1U)
+#define TRNG_ENTA_ENT_COUNT                      (8U)
 
 /*! @name PKRCNT10 - Statistical Check Poker Count 1 and 0 Register */
 /*! @{ */

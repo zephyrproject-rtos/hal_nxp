@@ -6,9 +6,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    Rev. 2, 2025-05-01
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260209
+**     Reference manual:    Rev. 5, 2026-03-24
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260506
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXW727A_cm33_core0
@@ -26,14 +26,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MCXW727A_cm33_core0_COMMON.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for MCXW727A_cm33_core0
  *
  * CMSIS Peripheral Access Layer for MCXW727A_cm33_core0
@@ -44,7 +49,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0200U
+#define MCU_MEM_MAP_VERSION 0x0300U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -618,6 +623,8 @@ typedef enum IRQn {
   /** Array initializer of FMU peripheral base pointers */
   #define FMU_BASE_PTRS                            { FMU0, RF_FMU }
 #endif
+/** Interrupt vectors for the FMU peripheral type */
+#define FMU_IRQS                                 { FMU0_IRQn, RF_FMU_IRQn }
 
 /* FRO192M - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1824,38 +1831,6 @@ typedef enum IRQn {
   /** Array initializer of TRGMUX peripheral base pointers */
   #define TRGMUX_BASE_PTRS                         { TRGMUX0 }
 #endif
-
-/* TSTMR - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral TSTMR0 base address */
-  #define TSTMR0_BASE                              (0x50030000u)
-  /** Peripheral TSTMR0 base address */
-  #define TSTMR0_BASE_NS                           (0x40030000u)
-  /** Peripheral TSTMR0 base pointer */
-  #define TSTMR0                                   ((TSTMR_Type *)TSTMR0_BASE)
-  /** Peripheral TSTMR0 base pointer */
-  #define TSTMR0_NS                                ((TSTMR_Type *)TSTMR0_BASE_NS)
-  /** Array initializer of TSTMR peripheral base addresses */
-  #define TSTMR_BASE_ADDRS                         { TSTMR0_BASE }
-  /** Array initializer of TSTMR peripheral base pointers */
-  #define TSTMR_BASE_PTRS                          { TSTMR0 }
-  /** Array initializer of TSTMR peripheral base addresses */
-  #define TSTMR_BASE_ADDRS_NS                      { TSTMR0_BASE_NS }
-  /** Array initializer of TSTMR peripheral base pointers */
-  #define TSTMR_BASE_PTRS_NS                       { TSTMR0_NS }
-#else
-  /** Peripheral TSTMR0 base address */
-  #define TSTMR0_BASE                              (0x40030000u)
-  /** Peripheral TSTMR0 base pointer */
-  #define TSTMR0                                   ((TSTMR_Type *)TSTMR0_BASE)
-  /** Array initializer of TSTMR peripheral base addresses */
-  #define TSTMR_BASE_ADDRS                         { TSTMR0_BASE }
-  /** Array initializer of TSTMR peripheral base pointers */
-  #define TSTMR_BASE_PTRS                          { TSTMR0 }
-#endif
-/* Extra definition */
-#define TSTMR_CLOCK_FREQUENCY_MHZ                (1U)
-
 
 /* TX_PACKET_RAM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

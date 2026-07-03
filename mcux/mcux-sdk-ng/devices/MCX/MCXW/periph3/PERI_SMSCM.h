@@ -7,14 +7,14 @@
 **                          MCXW727DMFTA_cm33_core0
 **                          MCXW727DMFTA_cm33_core1
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SMSCM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -26,14 +26,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_SMSCM.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for SMSCM
  *
  * CMSIS Peripheral Access Layer for SMSCM
@@ -372,13 +377,13 @@ typedef struct {
  */
 #define SMSCM_LIFECYCLE_TZM_EN(x)                (((uint32_t)(((uint32_t)(x)) << SMSCM_LIFECYCLE_TZM_EN_SHIFT)) & SMSCM_LIFECYCLE_TZM_EN_MASK)
 
-#define SMSCM_LIFECYCLE_DICE_EN_MASK             (0x800U)
-#define SMSCM_LIFECYCLE_DICE_EN_SHIFT            (11U)
-/*! DICE_EN - DICE Enable
- *  0b0..DICE is disabled by default.
- *  0b1..DICE is enabled.
+#define SMSCM_LIFECYCLE_NBU_SEC_BOOT_EN_MASK     (0x1000U)
+#define SMSCM_LIFECYCLE_NBU_SEC_BOOT_EN_SHIFT    (12U)
+/*! NBU_SEC_BOOT_EN - NBU Secure Boot Enable
+ *  0b0..Disabled, NBU image doesn't need to be authenticated (default).
+ *  0b1..Enabled, NBU image must be authenticated to boot.
  */
-#define SMSCM_LIFECYCLE_DICE_EN(x)               (((uint32_t)(((uint32_t)(x)) << SMSCM_LIFECYCLE_DICE_EN_SHIFT)) & SMSCM_LIFECYCLE_DICE_EN_MASK)
+#define SMSCM_LIFECYCLE_NBU_SEC_BOOT_EN(x)       (((uint32_t)(((uint32_t)(x)) << SMSCM_LIFECYCLE_NBU_SEC_BOOT_EN_SHIFT)) & SMSCM_LIFECYCLE_NBU_SEC_BOOT_EN_MASK)
 
 #define SMSCM_LIFECYCLE_SERIAL_DIS_MASK          (0x4000U)
 #define SMSCM_LIFECYCLE_SERIAL_DIS_SHIFT         (14U)
@@ -400,6 +405,15 @@ typedef struct {
 #define SMSCM_LIFECYCLE_CTRK_REVOKE_SHIFT        (16U)
 /*! CTRK_REVOKE - Revocation indicator from OEM Firmware Authentication Public Key */
 #define SMSCM_LIFECYCLE_CTRK_REVOKE(x)           (((uint32_t)(((uint32_t)(x)) << SMSCM_LIFECYCLE_CTRK_REVOKE_SHIFT)) & SMSCM_LIFECYCLE_CTRK_REVOKE_MASK)
+
+#define SMSCM_LIFECYCLE_OEM_SEC_BOOT_EN_MASK     (0xF000000U)
+#define SMSCM_LIFECYCLE_OEM_SEC_BOOT_EN_SHIFT    (24U)
+/*! OEM_SEC_BOOT_EN - Main Core Secure Boot Enable
+ *  0b0000..Disabled, Boot image doesn't need to be authenticated to boot (default).
+ *  0b1010..Enabled, Boot image must be authenticated to boot.
+ *  *..Reserved
+ */
+#define SMSCM_LIFECYCLE_OEM_SEC_BOOT_EN(x)       (((uint32_t)(((uint32_t)(x)) << SMSCM_LIFECYCLE_OEM_SEC_BOOT_EN_SHIFT)) & SMSCM_LIFECYCLE_OEM_SEC_BOOT_EN_MASK)
 
 #define SMSCM_LIFECYCLE_SWD_ID_MASK              (0xF0000000U)
 #define SMSCM_LIFECYCLE_SWD_ID_SHIFT             (28U)
@@ -450,13 +464,13 @@ typedef struct {
  */
 #define SMSCM_LIFECYCLE_B_TZM_EN_B(x)            (((uint32_t)(((uint32_t)(x)) << SMSCM_LIFECYCLE_B_TZM_EN_B_SHIFT)) & SMSCM_LIFECYCLE_B_TZM_EN_B_MASK)
 
-#define SMSCM_LIFECYCLE_B_DICE_EN_B_MASK         (0x800U)
-#define SMSCM_LIFECYCLE_B_DICE_EN_B_SHIFT        (11U)
-/*! DICE_EN_B - DICE Enable Complement
- *  0b0..DICE is enabled.
- *  0b1..DICE is disabled by default.
+#define SMSCM_LIFECYCLE_B_NBU_SEC_BOOT_EN_B_MASK (0x1000U)
+#define SMSCM_LIFECYCLE_B_NBU_SEC_BOOT_EN_B_SHIFT (12U)
+/*! NBU_SEC_BOOT_EN_B - NBU Secure Boot Enable Complement
+ *  0b0..Enabled, NBU image must be authenticated to boot.
+ *  0b1..Disabled, NBU image doesn't need to be authenticated (default).
  */
-#define SMSCM_LIFECYCLE_B_DICE_EN_B(x)           (((uint32_t)(((uint32_t)(x)) << SMSCM_LIFECYCLE_B_DICE_EN_B_SHIFT)) & SMSCM_LIFECYCLE_B_DICE_EN_B_MASK)
+#define SMSCM_LIFECYCLE_B_NBU_SEC_BOOT_EN_B(x)   (((uint32_t)(((uint32_t)(x)) << SMSCM_LIFECYCLE_B_NBU_SEC_BOOT_EN_B_SHIFT)) & SMSCM_LIFECYCLE_B_NBU_SEC_BOOT_EN_B_MASK)
 
 #define SMSCM_LIFECYCLE_B_SERIAL_DIS_B_MASK      (0x4000U)
 #define SMSCM_LIFECYCLE_B_SERIAL_DIS_B_SHIFT     (14U)
@@ -478,6 +492,15 @@ typedef struct {
 #define SMSCM_LIFECYCLE_B_CTRK_REVOKE_B_SHIFT    (16U)
 /*! CTRK_REVOKE_B - Revocation indicator from OEM Firmware Authentication Public Key Complement */
 #define SMSCM_LIFECYCLE_B_CTRK_REVOKE_B(x)       (((uint32_t)(((uint32_t)(x)) << SMSCM_LIFECYCLE_B_CTRK_REVOKE_B_SHIFT)) & SMSCM_LIFECYCLE_B_CTRK_REVOKE_B_MASK)
+
+#define SMSCM_LIFECYCLE_B_OEM_SEC_BOOT_EN_B_MASK (0xF000000U)
+#define SMSCM_LIFECYCLE_B_OEM_SEC_BOOT_EN_B_SHIFT (24U)
+/*! OEM_SEC_BOOT_EN_B - Main Core Secure Boot Enable Complement
+ *  0b0101..Enabled, Boot image must be authenticated to boot.
+ *  0b1111..Disabled, Boot image doesn't need to be authenticated to boot (default).
+ *  *..Reserved
+ */
+#define SMSCM_LIFECYCLE_B_OEM_SEC_BOOT_EN_B(x)   (((uint32_t)(((uint32_t)(x)) << SMSCM_LIFECYCLE_B_OEM_SEC_BOOT_EN_B_SHIFT)) & SMSCM_LIFECYCLE_B_OEM_SEC_BOOT_EN_B_MASK)
 
 #define SMSCM_LIFECYCLE_B_SWD_ID_B_MASK          (0xF0000000U)
 #define SMSCM_LIFECYCLE_B_SWD_ID_B_SHIFT         (28U)

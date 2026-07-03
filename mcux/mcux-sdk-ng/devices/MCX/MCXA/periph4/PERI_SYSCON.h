@@ -31,7 +31,7 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260407
+**     Build:               b260507
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSCON
@@ -1287,6 +1287,26 @@ typedef struct {
 /*!
  * @}
  */ /* end of group SYSCON_Register_Masks */
+
+/*!
+ * @brief Get the chip revision.
+ *
+ * Reads SYSCON offset 0x7FC. Bits[7:4] hold the major revision and bits[3:0]
+ * hold the minor revision, forming a combined revision byte (e.g. 0xA0, 0xB0).
+ *
+ * @return Chip revision byte: 0xA0 for A0 silicon, 0xB0 for B0 silicon.
+ */
+static inline uint32_t Chip_GetVersion(void)
+{
+    /* bits[7:4] = MAJOR_REVISION, bits[3:0] = MINOR_REVISION */
+    return (*((volatile uint32_t *)(SYSCON_BASE + 0x7FCU))) & 0xFFU;
+}
+
+#define CHIP_REVISION_A0 (0xA0U)
+#define CHIP_REVISION_B0 (0xB0U)
+
+#define Chip_IsA0Revision() (CHIP_REVISION_A0 == Chip_GetVersion())
+#define Chip_IsB0Revision() (CHIP_REVISION_B0 == Chip_GetVersion())
 
 
 /*!

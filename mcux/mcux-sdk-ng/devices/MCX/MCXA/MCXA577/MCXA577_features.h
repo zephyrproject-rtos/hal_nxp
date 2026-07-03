@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2024-03-26
-**     Build:               b260407
+**     Build:               b260518
 **
 **     Abstract:
 **         Chip specific module features.
@@ -61,8 +61,6 @@
 #define FSL_FEATURE_SOC_INPUTMUX_COUNT (1)
 /* @brief ITRC availability on the SoC. */
 #define FSL_FEATURE_SOC_ITRC_COUNT (1)
-/* @brief LLWU availability on the SoC. */
-#define FSL_FEATURE_SOC_LLWU_COUNT (1)
 /* @brief LPADC availability on the SoC. */
 #define FSL_FEATURE_SOC_LPADC_COUNT (2)
 /* @brief LPCMP availability on the SoC. */
@@ -111,12 +109,16 @@
 #define FSL_FEATURE_SOC_USBPHY_COUNT (1)
 /* @brief UTICK availability on the SoC. */
 #define FSL_FEATURE_SOC_UTICK_COUNT (1)
+/* @brief VBAT availability on the SoC. */
+#define FSL_FEATURE_SOC_VBAT_COUNT (1)
 /* @brief VREF availability on the SoC. */
 #define FSL_FEATURE_SOC_VREF_COUNT (1)
 /* @brief WAKETIMER availability on the SoC. */
 #define FSL_FEATURE_SOC_WAKETIMER_COUNT (1)
 /* @brief WWDT availability on the SoC. */
 #define FSL_FEATURE_SOC_WWDT_COUNT (2)
+/* @brief WUU availability on the SoC. */
+#define FSL_FEATURE_SOC_WUU_COUNT (1)
 
 /* LPADC module features */
 
@@ -602,6 +604,8 @@
 
 /* @brief Has GPIO attribute checker register (GACR). */
 #define FSL_FEATURE_GPIO_HAS_ATTRIBUTE_CHECKER (0)
+/* @brief GPIO registers width */
+#define FSL_FEATURE_GPIO_REGISTERS_WIDTH (32)
 /* @brief Has GPIO version ID register (VERID). */
 #define FSL_FEATURE_GPIO_HAS_VERSION_INFO_REGISTER (1)
 /* @brief Has secure/non-secure access protection registers (LOCK, PCNS, PCNP, ICNS, ICNP). */
@@ -996,6 +1000,15 @@
 /* @brief TSI Channel Count */
 #define FSL_FEATURE_TSI_CHANNEL_COUNT (70)
 
+/* USBHS module features */
+
+/* @brief EHCI module instance count */
+#define FSL_FEATURE_USBHS_EHCI_COUNT (1)
+/* @brief Number of endpoints supported */
+#define FSL_FEATURE_USBHS_ENDPT_COUNT (8)
+/* @brief If the USB controller support eUSB PHY */
+#define FSL_FEATURE_USBHS_SUPPORT_EUSBn(x) (0)
+
 /* USBPHY module features */
 
 /* @brief USBPHY contain DCD analog module */
@@ -1055,6 +1068,11 @@
 #define FSL_FEATURE_VREF_HAS_REFCHSELP_EN (1)
 /* @brief Support max voltage of 2.5V. */
 #define FSL_FEATURE_VREF_SUPPORT_2V5 (1)
+
+/* WUU module features */
+
+/* @brief Has MF register. */
+#define FSL_FEATURE_WUU_HAS_MF (0)
 
 /* WWDT module features */
 

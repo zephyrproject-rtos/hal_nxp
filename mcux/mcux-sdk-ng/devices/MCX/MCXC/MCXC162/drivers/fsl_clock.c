@@ -177,19 +177,38 @@ void CLOCK_SetClockDiv(clock_div_name_t div_name, uint32_t value)
     volatile uint32_t *pDivCtrl = (volatile uint32_t *)(SYSCON_BASE + (uint32_t)div_name);
     assert(div_name <= kCLOCK_DivMax);
 
+    /* Early exit: current DIV value already matches the requested value,
+     * and the divider is not in halt state */
+    if ((value != 0U) && ((*pDivCtrl & (1UL << 30U)) == 0U) && ((*pDivCtrl & 0xFFU) == (value - 1U)))
+    {
+        return;
+    }
+
     /* Unlock clock configuration */
     SYSCON->CLKUNLOCK &= ~SYSCON_CLKUNLOCK_UNLOCK_MASK;
 
-    /* halt and reset clock dividers */
-    *pDivCtrl = 0x3UL << 29U;
-
-    if (value == 0U) /*!<  halt */
+    /* AHBCLKDIV does not support HALT(bit30) or RESET(bit29);
+     * writing those bits would corrupt reserved fields. Write the DIV value directly. */
+    if (div_name == kCLOCK_DivAHBCLK)
     {
-        *pDivCtrl |= (1UL << 30U);
+        *pDivCtrl = (value == 0U) ? 0U : (value - 1U);
     }
     else
     {
-        *pDivCtrl = (value - 1U);
+        /* halt and reset clock dividers */
+        *pDivCtrl = 0x3UL << 29U;
+
+        if (value == 0U) /*!<  halt */
+        {
+            *pDivCtrl |= (1UL << 30U);
+        }
+        else
+        {
+            /* Write new DIV value while keeping HALT bit set */
+            *pDivCtrl = (value - 1U) | (1UL << 30U);
+            /* Clear HALT bit to start the divider with the new value */
+            *pDivCtrl &= ~(1UL << 30U);
+        }
     }
 
     /* Freeze clock configuration */

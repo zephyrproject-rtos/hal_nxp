@@ -12,7 +12,7 @@
 **
 **     Reference manual:    MCXN23XRM
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260209
+**     Build:               b260518
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN236
@@ -903,6 +903,8 @@ typedef enum IRQn {
   /** Array initializer of FMU peripheral base pointers */
   #define FMU_BASE_PTRS                            { FMU0 }
 #endif
+/** Interrupt vectors for the FMU peripheral type */
+#define FMU_IRQS                                 { FMU0_IRQn }
 
 /* FMUTEST - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -2188,6 +2190,8 @@ typedef enum IRQn {
   /** Array initializer of PORT peripheral base pointers */
   #define PORT_BASE_PTRS                           { PORT0, PORT1, PORT2, PORT3, PORT4, PORT5 }
 #endif
+/** Interrupt vectors for the PORT peripheral type */
+#define PORT_IRQS                                { PORT_EFT_IRQn, PORT_EFT_IRQn, PORT_EFT_IRQn, PORT_EFT_IRQn, PORT_EFT_IRQn, PORT_EFT_IRQn }
 
 /* PUF - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

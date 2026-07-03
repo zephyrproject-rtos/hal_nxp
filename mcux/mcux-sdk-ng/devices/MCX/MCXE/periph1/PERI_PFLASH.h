@@ -4,13 +4,13 @@
 **                          MCXE31BMPB
 **
 **     Version:             rev. 1.0, 2025-07-18
-**     Build:               b260420
+**     Build:               b260518
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PFLASH
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -146,30 +146,6 @@ typedef struct {
  */
 #define PFLASH_PFCR_P0_CBFEN(x)                  (((uint32_t)(((uint32_t)(x)) << PFLASH_PFCR_P0_CBFEN_SHIFT)) & PFLASH_PFCR_P0_CBFEN_MASK)
 
-#define PFLASH_PFCR_P0_DBFEN_MASK                (0x2U)
-#define PFLASH_PFCR_P0_DBFEN_SHIFT               (1U)
-/*! P0_DBFEN - Port0 PFLASH Line Read Data Buffers Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define PFLASH_PFCR_P0_DBFEN(x)                  (((uint32_t)(((uint32_t)(x)) << PFLASH_PFCR_P0_DBFEN_SHIFT)) & PFLASH_PFCR_P0_DBFEN_MASK)
-
-#define PFLASH_PFCR_P0_CPFEN_MASK                (0x10U)
-#define PFLASH_PFCR_P0_CPFEN_SHIFT               (4U)
-/*! P0_CPFEN - Port0 Code Prefetch Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define PFLASH_PFCR_P0_CPFEN(x)                  (((uint32_t)(((uint32_t)(x)) << PFLASH_PFCR_P0_CPFEN_SHIFT)) & PFLASH_PFCR_P0_CPFEN_MASK)
-
-#define PFLASH_PFCR_P0_DPFEN_MASK                (0x20U)
-#define PFLASH_PFCR_P0_DPFEN_SHIFT               (5U)
-/*! P0_DPFEN - Port0 Data Prefetch Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define PFLASH_PFCR_P0_DPFEN(x)                  (((uint32_t)(((uint32_t)(x)) << PFLASH_PFCR_P0_DPFEN_SHIFT)) & PFLASH_PFCR_P0_DPFEN_MASK)
-
 #define PFLASH_PFCR_P1_CBFEN_MASK                (0x1U)
 #define PFLASH_PFCR_P1_CBFEN_SHIFT               (0U)
 /*! P1_CBFEN - Port1 PFLASH Line Read Code Buffers Enable
@@ -177,6 +153,14 @@ typedef struct {
  *  0b1..Enable
  */
 #define PFLASH_PFCR_P1_CBFEN(x)                  (((uint32_t)(((uint32_t)(x)) << PFLASH_PFCR_P1_CBFEN_SHIFT)) & PFLASH_PFCR_P1_CBFEN_MASK)
+
+#define PFLASH_PFCR_P0_DBFEN_MASK                (0x2U)
+#define PFLASH_PFCR_P0_DBFEN_SHIFT               (1U)
+/*! P0_DBFEN - Port0 PFLASH Line Read Data Buffers Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define PFLASH_PFCR_P0_DBFEN(x)                  (((uint32_t)(((uint32_t)(x)) << PFLASH_PFCR_P0_DBFEN_SHIFT)) & PFLASH_PFCR_P0_DBFEN_MASK)
 
 #define PFLASH_PFCR_P1_DBFEN_MASK                (0x2U)
 #define PFLASH_PFCR_P1_DBFEN_SHIFT               (1U)
@@ -186,6 +170,14 @@ typedef struct {
  */
 #define PFLASH_PFCR_P1_DBFEN(x)                  (((uint32_t)(((uint32_t)(x)) << PFLASH_PFCR_P1_DBFEN_SHIFT)) & PFLASH_PFCR_P1_DBFEN_MASK)
 
+#define PFLASH_PFCR_P0_CPFEN_MASK                (0x10U)
+#define PFLASH_PFCR_P0_CPFEN_SHIFT               (4U)
+/*! P0_CPFEN - Port0 Code Prefetch Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define PFLASH_PFCR_P0_CPFEN(x)                  (((uint32_t)(((uint32_t)(x)) << PFLASH_PFCR_P0_CPFEN_SHIFT)) & PFLASH_PFCR_P0_CPFEN_MASK)
+
 #define PFLASH_PFCR_P1_CPFEN_MASK                (0x10U)
 #define PFLASH_PFCR_P1_CPFEN_SHIFT               (4U)
 /*! P1_CPFEN - Port1 Code Prefetch Enable
@@ -193,6 +185,14 @@ typedef struct {
  *  0b1..Enable
  */
 #define PFLASH_PFCR_P1_CPFEN(x)                  (((uint32_t)(((uint32_t)(x)) << PFLASH_PFCR_P1_CPFEN_SHIFT)) & PFLASH_PFCR_P1_CPFEN_MASK)
+
+#define PFLASH_PFCR_P0_DPFEN_MASK                (0x20U)
+#define PFLASH_PFCR_P0_DPFEN_SHIFT               (5U)
+/*! P0_DPFEN - Port0 Data Prefetch Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define PFLASH_PFCR_P0_DPFEN(x)                  (((uint32_t)(((uint32_t)(x)) << PFLASH_PFCR_P0_DPFEN_SHIFT)) & PFLASH_PFCR_P0_DPFEN_MASK)
 
 #define PFLASH_PFCR_P1_DPFEN_MASK                (0x20U)
 #define PFLASH_PFCR_P1_DPFEN_SHIFT               (5U)

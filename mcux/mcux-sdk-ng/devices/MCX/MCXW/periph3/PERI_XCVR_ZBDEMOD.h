@@ -7,14 +7,14 @@
 **                          MCXW727DMFTA_cm33_core0
 **                          MCXW727DMFTA_cm33_core1
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for XCVR_ZBDEMOD
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -26,14 +26,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_XCVR_ZBDEMOD.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for XCVR_ZBDEMOD
  *
  * CMSIS Peripheral Access Layer for XCVR_ZBDEMOD
@@ -200,6 +205,11 @@ typedef struct {
  *  0b1..symbol timing synchronization tracking enabled in Rx frontend (default)
  */
 #define XCVR_ZBDEMOD_SYNC_CTRL_TRACK_ENABLE(x)   (((uint32_t)(((uint32_t)(x)) << XCVR_ZBDEMOD_SYNC_CTRL_TRACK_ENABLE_SHIFT)) & XCVR_ZBDEMOD_SYNC_CTRL_TRACK_ENABLE_MASK)
+
+#define XCVR_ZBDEMOD_SYNC_CTRL_ZBPHYREG_CKEN_FW_OV_MASK (0x100U)
+#define XCVR_ZBDEMOD_SYNC_CTRL_ZBPHYREG_CKEN_FW_OV_SHIFT (8U)
+/*! ZBPHYREG_CKEN_FW_OV - Register clock SW override */
+#define XCVR_ZBDEMOD_SYNC_CTRL_ZBPHYREG_CKEN_FW_OV(x) (((uint32_t)(((uint32_t)(x)) << XCVR_ZBDEMOD_SYNC_CTRL_ZBPHYREG_CKEN_FW_OV_SHIFT)) & XCVR_ZBDEMOD_SYNC_CTRL_ZBPHYREG_CKEN_FW_OV_MASK)
 /*! @} */
 
 /*! @name CCA_LQI_SRC - 802.15.4 CCA/LQI SOURCE */

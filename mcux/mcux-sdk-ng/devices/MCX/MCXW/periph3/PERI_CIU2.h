@@ -7,14 +7,14 @@
 **                          MCXW727DMFTA_cm33_core0
 **                          MCXW727DMFTA_cm33_core1
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CIU2
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -26,14 +26,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_CIU2.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for CIU2
  *
  * CMSIS Peripheral Access Layer for CIU2
@@ -513,14 +518,21 @@ typedef struct {
 
 #define CIU2_CIU2_CLK_ENABLE5_CPU2_GATEHCLK_EN_MASK (0x10000000U)
 #define CIU2_CIU2_CLK_ENABLE5_CPU2_GATEHCLK_EN_SHIFT (28U)
+/*! cpu2_gatehclk_en - 1 = Give hclk control to cpu2 generated HW signal to gate the clock automatically in sleep 0 = No hclk gating */
 #define CIU2_CIU2_CLK_ENABLE5_CPU2_GATEHCLK_EN(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CLK_ENABLE5_CPU2_GATEHCLK_EN_SHIFT)) & CIU2_CIU2_CLK_ENABLE5_CPU2_GATEHCLK_EN_MASK)
 
 #define CIU2_CIU2_CLK_ENABLE5_CPU2_FABRIC_CLK_EN_MASK (0x20000000U)
 #define CIU2_CIU2_CLK_ENABLE5_CPU2_FABRIC_CLK_EN_SHIFT (29U)
+/*! cpu2_fabric_clk_en - 1= Give cpu2 fabric clock control to cpu2 generated HW signal to gate the
+ *    clock automatically in sleep 0 = No cpu2 fabric gating
+ */
 #define CIU2_CIU2_CLK_ENABLE5_CPU2_FABRIC_CLK_EN(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CLK_ENABLE5_CPU2_FABRIC_CLK_EN_SHIFT)) & CIU2_CIU2_CLK_ENABLE5_CPU2_FABRIC_CLK_EN_MASK)
 
 #define CIU2_CIU2_CLK_ENABLE5_CPU2_MEM_SLV_CLK_EN_MASK (0x40000000U)
 #define CIU2_CIU2_CLK_ENABLE5_CPU2_MEM_SLV_CLK_EN_SHIFT (30U)
+/*! cpu2_mem_slv_clk_en - 1= Give cpu2 mem slave clock control to cpu2 generated HW signal to gate
+ *    the clock automatically in sleep 0 = No cpu2 mem slave clock gating
+ */
 #define CIU2_CIU2_CLK_ENABLE5_CPU2_MEM_SLV_CLK_EN(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CLK_ENABLE5_CPU2_MEM_SLV_CLK_EN_SHIFT)) & CIU2_CIU2_CLK_ENABLE5_CPU2_MEM_SLV_CLK_EN_MASK)
 
 #define CIU2_CIU2_CLK_ENABLE5_SIF_AHB2_CLK_EN_MASK (0x80000000U)
@@ -579,6 +591,7 @@ typedef struct {
 
 #define CIU2_CIU2_CLK_LBU2_BTRTU1_CTRL_BTRTU1_DBG_CLK_CTRL_MASK (0x8000U)
 #define CIU2_CIU2_CLK_LBU2_BTRTU1_CTRL_BTRTU1_DBG_CLK_CTRL_SHIFT (15U)
+/*! btrtu1_dbg_clk_ctrl - 1= Enable BT_RTU1 timers turn off during debugger mode 0= This feature is disabled */
 #define CIU2_CIU2_CLK_LBU2_BTRTU1_CTRL_BTRTU1_DBG_CLK_CTRL(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CLK_LBU2_BTRTU1_CTRL_BTRTU1_DBG_CLK_CTRL_SHIFT)) & CIU2_CIU2_CLK_LBU2_BTRTU1_CTRL_BTRTU1_DBG_CLK_CTRL_MASK)
 /*! @} */
 
@@ -706,10 +719,12 @@ typedef struct {
 
 #define CIU2_CIU2_RST_SW3_WD2_CHIP_RST_DISABLE_MASK (0x10000000U)
 #define CIU2_CIU2_RST_SW3_WD2_CHIP_RST_DISABLE_SHIFT (28U)
+/*! wd2_chip_rst_disable - 1: Disable the rtu2 watchdog reset to reset the chip 0: Enable */
 #define CIU2_CIU2_RST_SW3_WD2_CHIP_RST_DISABLE(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_RST_SW3_WD2_CHIP_RST_DISABLE_SHIFT)) & CIU2_CIU2_RST_SW3_WD2_CHIP_RST_DISABLE_MASK)
 
 #define CIU2_CIU2_RST_SW3_WD2_CPU2_RST_DISABLE_MASK (0x20000000U)
 #define CIU2_CIU2_RST_SW3_WD2_CPU2_RST_DISABLE_SHIFT (29U)
+/*! wd2_cpu2_rst_disable - 1: Disable the rtu2 watchdog reset to reset the CPU2 0: Enable */
 #define CIU2_CIU2_RST_SW3_WD2_CPU2_RST_DISABLE(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_RST_SW3_WD2_CPU2_RST_DISABLE_SHIFT)) & CIU2_CIU2_RST_SW3_WD2_CPU2_RST_DISABLE_MASK)
 
 #define CIU2_CIU2_RST_SW3_BT_16M_CLK__MASK       (0x40000000U)
@@ -969,34 +984,54 @@ typedef struct {
 
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_BRST_TERM_CNT_MASK (0x3U)
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_BRST_TERM_CNT_SHIFT (0U)
+/*! dmem_brst_term_cnt - 00= terminate dmem immediate after current transactio finish 01= termiante
+ *    dmem transaction after 4 burst 10= termiante dmem transaction after 8 burst 11 = terminate
+ *    dmem transaction after 16 burst
+ */
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_BRST_TERM_CNT(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_BRST_TERM_CNT_SHIFT)) & CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_BRST_TERM_CNT_MASK)
 
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_BRST_TERM_CNT_MASK (0xCU)
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_BRST_TERM_CNT_SHIFT (2U)
+/*! imem_brst_term_cnt - 00= terminate imem immediate after current transactio finish 01= termiante
+ *    imem transaction after 4 burst 10= termiante imem transaction after 8 burst 11 = terminate
+ *    imem transaction after 16 burst
+ */
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_BRST_TERM_CNT(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_BRST_TERM_CNT_SHIFT)) & CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_BRST_TERM_CNT_MASK)
 
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_NOBURSTTERM_MASK (0x10U)
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_NOBURSTTERM_SHIFT (4U)
+/*! dmem_noburstterm - 0= burst of dmem will be terminated as per [1:0] setting 1= burst of dmem will not be terminated */
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_NOBURSTTERM(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_NOBURSTTERM_SHIFT)) & CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_NOBURSTTERM_MASK)
 
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_PRIORITY_MASK (0x60U)
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_PRIORITY_SHIFT (5U)
+/*! dmem_priority - 00= Dcode has higher prioirty compared to Icode for DMEM acccess 01= Dcode has
+ *    higher prioirty compared to Icode for DMEM acccess 10= Icode has higher prioirty compared to
+ *    Dcode for DMEM acccess 11= Dcode has higher prioirty compared to Icode for DMEM acccess
+ */
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_PRIORITY(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_PRIORITY_SHIFT)) & CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_PRIORITY_MASK)
 
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_ROUND_ROBIN_EN_MASK (0x80U)
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_ROUND_ROBIN_EN_SHIFT (7U)
+/*! dmem_round_robin_en - 0= fixed priority for DMEM acess from Icode and Dcode 1= round robin priority for DMEM acess from Icode and Dcode */
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_ROUND_ROBIN_EN(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_ROUND_ROBIN_EN_SHIFT)) & CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_DMEM_ROUND_ROBIN_EN_MASK)
 
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_NOBURSTTERM_MASK (0x100U)
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_NOBURSTTERM_SHIFT (8U)
+/*! imem_noburstterm - 0= burst of imem will be terminated as per [1:0] setting 1= burst of imem will not be terminated */
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_NOBURSTTERM(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_NOBURSTTERM_SHIFT)) & CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_NOBURSTTERM_MASK)
 
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_PRIORITY_MASK (0x600U)
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_PRIORITY_SHIFT (9U)
+/*! imem_priority - 00 = Icode has higher prioirty compared to Icode for IMEM acccess 01= Dcode has
+ *    higher prioirty compared to Icode for IMEM acccess 10= Icode has higher prioirty compared to
+ *    Dcode for IMEM acccess 11= Dcode has higher prioirty compared to Icode for IMEM acccess
+ */
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_PRIORITY(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_PRIORITY_SHIFT)) & CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_PRIORITY_MASK)
 
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_ROUND_ROBIN_EN_MASK (0x800U)
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_ROUND_ROBIN_EN_SHIFT (11U)
+/*! imem_round_robin_en - 0= fixed priority for IMEM acess from Icode and Dcode 1= round robin priority for IMEM acess from Icode and Dcode */
 #define CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_ROUND_ROBIN_EN(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_ROUND_ROBIN_EN_SHIFT)) & CIU2_CIU2_CPU2_FABRIC_ARB_CTRL_IMEM_ROUND_ROBIN_EN_MASK)
 /*! @} */
 
@@ -1086,18 +1121,29 @@ typedef struct {
 
 #define CIU2_CIU2_CPU_CPU2_CTRL_VINITHI_MASK     (0x1U)
 #define CIU2_CIU2_CPU_CPU2_CTRL_VINITHI_SHIFT    (0U)
+/*! vinithi - 1= Boot form high address 0x0030_0000 (ROM) 0 = Boot from low address 0x0000_0000
+ *    (ITCM) By default CPU2 is out of reset and boot from ROM.
+ */
 #define CIU2_CIU2_CPU_CPU2_CTRL_VINITHI(x)       (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CPU_CPU2_CTRL_VINITHI_SHIFT)) & CIU2_CIU2_CPU_CPU2_CTRL_VINITHI_MASK)
 
 #define CIU2_CIU2_CPU_CPU2_CTRL_CPU2_JTAG_CHAIN_BYPASS_MASK (0x4U)
 #define CIU2_CIU2_CPU_CPU2_CTRL_CPU2_JTAG_CHAIN_BYPASS_SHIFT (2U)
+/*! cpu2_jtag_chain_bypass - 1 = Bypass the JTAG chain of CPU2 0 = The CPU2 remains in JTAG chain
+ *    This bit is backup in case the CPU2 doesn't work on silicon.
+ */
 #define CIU2_CIU2_CPU_CPU2_CTRL_CPU2_JTAG_CHAIN_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CPU_CPU2_CTRL_CPU2_JTAG_CHAIN_BYPASS_SHIFT)) & CIU2_CIU2_CPU_CPU2_CTRL_CPU2_JTAG_CHAIN_BYPASS_MASK)
 
 #define CIU2_CIU2_CPU_CPU2_CTRL_CPU2_BOOT_IMEM_MUX_EN_MASK (0x10U)
 #define CIU2_CIU2_CPU_CPU2_CTRL_CPU2_BOOT_IMEM_MUX_EN_SHIFT (4U)
+/*! cpu2_boot_imem_mux_en - 1 = IMEM mux control is on CPU2 side to download the code during boot 0 = The IMEM mux is on CPU2 side */
 #define CIU2_CIU2_CPU_CPU2_CTRL_CPU2_BOOT_IMEM_MUX_EN(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CPU_CPU2_CTRL_CPU2_BOOT_IMEM_MUX_EN_SHIFT)) & CIU2_CIU2_CPU_CPU2_CTRL_CPU2_BOOT_IMEM_MUX_EN_MASK)
 
 #define CIU2_CIU2_CPU_CPU2_CTRL_CPU2_BOOT_DMEM_MUX_EN_MASK (0x20U)
 #define CIU2_CIU2_CPU_CPU2_CTRL_CPU2_BOOT_DMEM_MUX_EN_SHIFT (5U)
+/*! cpu2_boot_dmem_mux_en - 1 = DMEM mux control is on CPU2 side to download the code during boot 0
+ *    = The DMEM mux is on CPU2 side This bit is disconnected in NBU level, DMEM MUX will always on
+ *    CPU2 side.
+ */
 #define CIU2_CIU2_CPU_CPU2_CTRL_CPU2_BOOT_DMEM_MUX_EN(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CPU_CPU2_CTRL_CPU2_BOOT_DMEM_MUX_EN_SHIFT)) & CIU2_CIU2_CPU_CPU2_CTRL_CPU2_BOOT_DMEM_MUX_EN_MASK)
 
 #define CIU2_CIU2_CPU_CPU2_CTRL_CPU2_DBG_CTRL_MASK (0xFFF0000U)
@@ -1136,6 +1182,7 @@ typedef struct {
 
 #define CIU2_CIU2_BRF_CTRL_CIU_BRF_REF1X_CLK_CTRL_BYPASS_EN_MASK (0x100U)
 #define CIU2_CIU2_BRF_CTRL_CIU_BRF_REF1X_CLK_CTRL_BYPASS_EN_SHIFT (8U)
+/*! ciu_brf_ref1x_clk_ctrl_bypass_en - 0: brf ref 1x clock is controlled brf_clk_req 1. */
 #define CIU2_CIU2_BRF_CTRL_CIU_BRF_REF1X_CLK_CTRL_BYPASS_EN(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_BRF_CTRL_CIU_BRF_REF1X_CLK_CTRL_BYPASS_EN_SHIFT)) & CIU2_CIU2_BRF_CTRL_CIU_BRF_REF1X_CLK_CTRL_BYPASS_EN_MASK)
 
 #define CIU2_CIU2_BRF_CTRL_CIU_BRF_REF1X_CLK_CTRL_BYPASS_VAL_MASK (0x200U)
@@ -1517,6 +1564,9 @@ typedef struct {
 
 #define CIU2_CIU2_IMU_CPU1_CPU2_MSG_FIFO_CNTL_CPU1_WAIT_FOR_ACK_MASK (0x20000U)
 #define CIU2_CIU2_IMU_CPU1_CPU2_MSG_FIFO_CNTL_CPU1_WAIT_FOR_ACK_SHIFT (17U)
+/*! cpu1_wait_for_ack - 1: CPU1 will wait for an ack for the next message to be written to CPU2 0:
+ *    CPU1 will not wat for an ack for next message to be written to CPU2
+ */
 #define CIU2_CIU2_IMU_CPU1_CPU2_MSG_FIFO_CNTL_CPU1_WAIT_FOR_ACK(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_IMU_CPU1_CPU2_MSG_FIFO_CNTL_CPU1_WAIT_FOR_ACK_SHIFT)) & CIU2_CIU2_IMU_CPU1_CPU2_MSG_FIFO_CNTL_CPU1_WAIT_FOR_ACK_MASK)
 
 #define CIU2_CIU2_IMU_CPU1_CPU2_MSG_FIFO_CNTL_CPU1_CPU2_MSG_FIFO_FULL_WATERMARK_MASK (0xF00000U)
@@ -1611,6 +1661,9 @@ typedef struct {
 
 #define CIU2_CIU2_IMU_CPU2_CPU1_MSG_FIFO_CNTL_CPU2_WAIT_FOR_ACK_MASK (0x20000U)
 #define CIU2_CIU2_IMU_CPU2_CPU1_MSG_FIFO_CNTL_CPU2_WAIT_FOR_ACK_SHIFT (17U)
+/*! cpu2_wait_for_ack - 1: CPU2 will wait for an ack for the next message to be written to CPU1 0:
+ *    CPU2 will not wat for an ack for next message to be written to CPU1
+ */
 #define CIU2_CIU2_IMU_CPU2_CPU1_MSG_FIFO_CNTL_CPU2_WAIT_FOR_ACK(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_IMU_CPU2_CPU1_MSG_FIFO_CNTL_CPU2_WAIT_FOR_ACK_SHIFT)) & CIU2_CIU2_IMU_CPU2_CPU1_MSG_FIFO_CNTL_CPU2_WAIT_FOR_ACK_MASK)
 
 #define CIU2_CIU2_IMU_CPU2_CPU1_MSG_FIFO_CNTL_CPU2_CPU1_MSG_FIFO_FULL_WATERMARK_MASK (0xF00000U)
@@ -1901,10 +1954,14 @@ typedef struct {
 
 #define CIU2_CIU2_CPU_CPU1_CTRL_CPU1_JTAG_CHAIN_BYPASS_MASK (0x20000U)
 #define CIU2_CIU2_CPU_CPU1_CTRL_CPU1_JTAG_CHAIN_BYPASS_SHIFT (17U)
+/*! cpu1_jtag_chain_bypass - 1 = Bypass the JTAG chain of CPU1 0 = The CPU1 remains in JTAG chain
+ *    This bit is backup in case the CPU1 doesn't work on silicon.
+ */
 #define CIU2_CIU2_CPU_CPU1_CTRL_CPU1_JTAG_CHAIN_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CPU_CPU1_CTRL_CPU1_JTAG_CHAIN_BYPASS_SHIFT)) & CIU2_CIU2_CPU_CPU1_CTRL_CPU1_JTAG_CHAIN_BYPASS_MASK)
 
 #define CIU2_CIU2_CPU_CPU1_CTRL_CPU1_CPU2_MSG_SCHEME_MASK (0x40000U)
 #define CIU2_CIU2_CPU_CPU1_CTRL_CPU1_CPU2_MSG_SCHEME_SHIFT (18U)
+/*! cpu1_cpu2_msg_scheme - 1 = new IMU based scheme (default) 0 = old ciu reg based scheme */
 #define CIU2_CIU2_CPU_CPU1_CTRL_CPU1_CPU2_MSG_SCHEME(x) (((uint32_t)(((uint32_t)(x)) << CIU2_CIU2_CPU_CPU1_CTRL_CPU1_CPU2_MSG_SCHEME_SHIFT)) & CIU2_CIU2_CPU_CPU1_CTRL_CPU1_CPU2_MSG_SCHEME_MASK)
 
 #define CIU2_CIU2_CPU_CPU1_CTRL_CPU2_RESET_INT_MASK (0x80000000U)

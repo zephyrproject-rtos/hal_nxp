@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260420
+**     Build:               b260518
 **
 **     Abstract:
 **         Chip specific module features.
@@ -279,16 +279,14 @@
 
 /* @brief Number of DMA channels (related to number of registers TCD, DCHPRI, bit fields ERQ[ERQn], EEI[EEIn], INT[INTn], ERR[ERRn], HRS[HRSn] and bit field widths ES[ERRCHN], CEEI[CEEI], SEEI[SEEI], CERQ[CERQ], SERQ[SERQ], CDNE[CDNE], SSRT[SSRT], CERR[CERR], CINT[CINT], TCDn_CITER_ELINKYES[LINKCH], TCDn_CSR[MAJORLINKCH], TCDn_BITER_ELINKYES[LINKCH]). (Valid only for eDMA modules.) */
 #define FSL_FEATURE_EDMA_MODULE_CHANNEL (16)
-/* @brief Soc requires secure master transfer. */
-#define FSL_FEATURE_EDMA_SOC_REQUIRES_SECURE_MASTER (1)
-/* @brief Number of DMA channel groups (register bit fields CR[ERGA], CR[GRPnPRI], ES[GPE], DCHPRIn[GRPPRI]). (Valid only for eDMA modules.) */
-#define FSL_FEATURE_EDMA_CHANNEL_GROUP_COUNT (1)
 /* @brief Has register bit fields CH_SBR[SEC]. */
 #define FSL_FEATURE_EDMA_HAS_CH_SBR_SEC (1)
-/* @brief Has DMA_Error interrupt vector. */
-#define FSL_FEATURE_EDMA_HAS_ERROR_IRQ (0)
+/* @brief Number of DMA channel groups (register bit fields CR[ERGA], CR[GRPnPRI], ES[GPE], DCHPRIn[GRPPRI]). (Valid only for eDMA modules.) */
+#define FSL_FEATURE_EDMA_CHANNEL_GROUP_COUNT (1)
 /* @brief Has register bit fields CH_SBR[EMI]. */
 #define FSL_FEATURE_EDMA_HAS_CH_SBR_EMI (1)
+/* @brief Has DMA_Error interrupt vector. */
+#define FSL_FEATURE_EDMA_HAS_ERROR_IRQ (0)
 /* @brief Has register access permission. */
 #define FSL_FEATURE_HAVE_DMA_CONTROL_REGISTER_ACCESS_PERMISSION (1)
 /* @brief If dma has common clock gate */
@@ -303,6 +301,8 @@
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_MUX (1)
 /* @brief Has EDMA arbitration group (CHn_GRPRI). */
 #define FSL_FEATURE_EDMA_HAS_ARBITRATION_GROUP (1)
+/* @brief Has Secure Master. */
+#define FSL_FEATURE_EDMA_SOC_REQUIRES_SECURE_MASTER (1)
 
 /* EWM module features */
 
@@ -342,7 +342,7 @@
 /* @brief Is affected by errata with ID 51989. */
 #define FSL_FEATURE_PWM_HAS_ERRATA_51989 (0)
 
-/* MSF1 module features */
+/* FMU module features */
 
 /* @brief Is the flash module msf1? */
 #define FSL_FEATURE_FLASH_IS_MSF1 (1u)
@@ -805,6 +805,10 @@
 #define FSL_FEATURE_SPC_HAS_LPBUFF (0)
 /* @brief Has VD_SYS_CFG register. */
 #define FSL_FEATURE_SPC_HAS_VDD_SYS (0)
+/* @brief Has VDD1P8 low-voltage detect feature. */
+#define FSL_FEATURE_SPC_HAS_VDD1P8_LVD (1)
+/* @brief Has no DCDC frequency control (register bits DCDC_CFG[FREQ_CNTRL_ON/FREQ_CNTRL]). */
+#define FSL_FEATURE_SPC_HAS_NO_DCDC_FREQ_CNTRL (1)
 
 /* RTC module features */
 
@@ -949,10 +953,6 @@
 #define FSL_FEATURE_TRDC_HAS_DOMAIN_ERROR (1)
 /* @brief TRDC instance has TRDC_FLW_CTL. */
 #define FSL_FEATURE_TRDC_HAS_FLW (1)
-
-/* TRGMUX module features */
-
-/* No feature definitions */
 
 /* TRNG module features */
 
