@@ -4,7 +4,7 @@
 
 
 # project segment: common configuration
-include(${SdkRootDirPath}/arch/arm/configuration/kinetis.cmake)
+include(${SdkRootDirPath}/arch/arm/configuration/imx.cmake)
 
 # middlewares and components
 include(${SdkRootDirPath}/devices/arm/shared.cmake)

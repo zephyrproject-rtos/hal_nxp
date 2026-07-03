@@ -38,10 +38,10 @@
 **                          MIMX9529xxVZx_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260324
+**     Build:               b260416
 **
 **     Abstract:
-**         CMSIS Peripheral Access Layer for irq
+**         CMSIS Peripheral Access Layer for IRQ
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
 **     Copyright 2016-2026 NXP
@@ -61,12 +61,12 @@
 */
 
 /*!
- * @file PERI_irq.h
+ * @file PERI_IRQ.h
  * @version 2.0
  * @date 2024-10-29
- * @brief CMSIS Peripheral Access Layer for irq
+ * @brief CMSIS Peripheral Access Layer for IRQ
  *
- * CMSIS Peripheral Access Layer for irq
+ * CMSIS Peripheral Access Layer for IRQ
  */
 
 #if !defined(PERI_IRQ_H_)
@@ -142,15 +142,15 @@
 #endif
 
 /* ----------------------------------------------------------------------------
-   -- irq Peripheral Access Layer
+   -- IRQ Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
 /*!
- * @addtogroup irq_Peripheral_Access_Layer irq Peripheral Access Layer
+ * @addtogroup IRQ_Peripheral_Access_Layer IRQ Peripheral Access Layer
  * @{
  */
 
-/** irq - Register Layout Typedef */
+/** IRQ - Register Layout Typedef */
 typedef struct {
   __O  uint32_t LU;                                /**< LockUnlock, offset: 0x0 */
   __I  uint32_t LOCKS;                             /**< LockStatus, offset: 0x4 */
@@ -166,22 +166,22 @@ typedef struct {
   __I  uint32_t INTERS0;                           /**< InterruptStatus0, offset: 0x2C */
   __I  uint32_t INTERS1;                           /**< InterruptStatus1, offset: 0x30 */
   __I  uint32_t INTERS2;                           /**< InterruptStatus2, offset: 0x34 */
-} irq_Type;
+} IRQ_Type;
 
 /* ----------------------------------------------------------------------------
-   -- irq Register Masks
+   -- IRQ Register Masks
    ---------------------------------------------------------------------------- */
 
 /*!
- * @addtogroup irq_Register_Masks irq Register Masks
+ * @addtogroup IRQ_Register_Masks IRQ Register Masks
  * @{
  */
 
 /*! @name LU - LockUnlock */
 /*! @{ */
 
-#define irq_LU_LkUn_MASK                         (0xFFFFFFFFU)
-#define irq_LU_LkUn_SHIFT                        (0U)
+#define IRQ_LU_LkUn_MASK                         (0xFFFFFFFFU)
+#define IRQ_LU_LkUn_SHIFT                        (0U)
 /*! LkUn - LockUnlock
  *  0b01010110010100011111011101100011..Decrements the unlock counter. When the counter value is null, lock protection is active. Reset counter value is 1.
  *  0b01101001000111011011100100110110..Increments the unlock counter. Max allowed value is 15.
@@ -189,145 +189,145 @@ typedef struct {
  *  0b10110101111000100100011001101110..Disables privilege protection.
  *  0b11111011111010001011000111100110..Freezes current protection status. Writing keys to this register has no more effect until reset.
  */
-#define irq_LU_LkUn(x)                           (((uint32_t)(((uint32_t)(x)) << irq_LU_LkUn_SHIFT)) & irq_LU_LkUn_MASK)
+#define IRQ_LU_LkUn(x)                           (((uint32_t)(((uint32_t)(x)) << IRQ_LU_LkUn_SHIFT)) & IRQ_LU_LkUn_MASK)
 /*! @} */
 
 /*! @name LOCKS - LockStatus */
 /*! @{ */
 
-#define irq_LOCKS_LkSus_MASK                     (0x1U)
-#define irq_LOCKS_LkSus_SHIFT                    (0U)
+#define IRQ_LOCKS_LkSus_MASK                     (0x1U)
+#define IRQ_LOCKS_LkSus_SHIFT                    (0U)
 /*! LkSus - LockStatus */
-#define irq_LOCKS_LkSus(x)                       (((uint32_t)(((uint32_t)(x)) << irq_LOCKS_LkSus_SHIFT)) & irq_LOCKS_LkSus_MASK)
+#define IRQ_LOCKS_LkSus(x)                       (((uint32_t)(((uint32_t)(x)) << IRQ_LOCKS_LkSus_SHIFT)) & IRQ_LOCKS_LkSus_MASK)
 
-#define irq_LOCKS_PriSt_MASK                     (0x10U)
-#define irq_LOCKS_PriSt_SHIFT                    (4U)
+#define IRQ_LOCKS_PriSt_MASK                     (0x10U)
+#define IRQ_LOCKS_PriSt_SHIFT                    (4U)
 /*! PriSt - PrivilegeStatus */
-#define irq_LOCKS_PriSt(x)                       (((uint32_t)(((uint32_t)(x)) << irq_LOCKS_PriSt_SHIFT)) & irq_LOCKS_PriSt_MASK)
+#define IRQ_LOCKS_PriSt(x)                       (((uint32_t)(((uint32_t)(x)) << IRQ_LOCKS_PriSt_SHIFT)) & IRQ_LOCKS_PriSt_MASK)
 
-#define irq_LOCKS_FreezeS_MASK                   (0x100U)
-#define irq_LOCKS_FreezeS_SHIFT                  (8U)
+#define IRQ_LOCKS_FreezeS_MASK                   (0x100U)
+#define IRQ_LOCKS_FreezeS_SHIFT                  (8U)
 /*! FreezeS - FreezeStatus */
-#define irq_LOCKS_FreezeS(x)                     (((uint32_t)(((uint32_t)(x)) << irq_LOCKS_FreezeS_SHIFT)) & irq_LOCKS_FreezeS_MASK)
+#define IRQ_LOCKS_FreezeS(x)                     (((uint32_t)(((uint32_t)(x)) << IRQ_LOCKS_FreezeS_SHIFT)) & IRQ_LOCKS_FreezeS_MASK)
 /*! @} */
 
 /*! @name INTERE0 - InterruptEnable0 */
 /*! @{ */
 
-#define irq_INTERE0_IntE0_MASK                   (0xFFFFFFFFU)
-#define irq_INTERE0_IntE0_SHIFT                  (0U)
+#define IRQ_INTERE0_IntE0_MASK                   (0xFFFFFFFFU)
+#define IRQ_INTERE0_IntE0_SHIFT                  (0U)
 /*! IntE0 - InterruptEnable0 */
-#define irq_INTERE0_IntE0(x)                     (((uint32_t)(((uint32_t)(x)) << irq_INTERE0_IntE0_SHIFT)) & irq_INTERE0_IntE0_MASK)
+#define IRQ_INTERE0_IntE0(x)                     (((uint32_t)(((uint32_t)(x)) << IRQ_INTERE0_IntE0_SHIFT)) & IRQ_INTERE0_IntE0_MASK)
 /*! @} */
 
 /*! @name INTERE1 - InterruptEnable1 */
 /*! @{ */
 
-#define irq_INTERE1_IntE1_MASK                   (0xFFFFFFFFU)
-#define irq_INTERE1_IntE1_SHIFT                  (0U)
+#define IRQ_INTERE1_IntE1_MASK                   (0xFFFFFFFFU)
+#define IRQ_INTERE1_IntE1_SHIFT                  (0U)
 /*! IntE1 - InterruptEnable1 */
-#define irq_INTERE1_IntE1(x)                     (((uint32_t)(((uint32_t)(x)) << irq_INTERE1_IntE1_SHIFT)) & irq_INTERE1_IntE1_MASK)
+#define IRQ_INTERE1_IntE1(x)                     (((uint32_t)(((uint32_t)(x)) << IRQ_INTERE1_IntE1_SHIFT)) & IRQ_INTERE1_IntE1_MASK)
 /*! @} */
 
 /*! @name INTERE2 - InterruptEnable2 */
 /*! @{ */
 
-#define irq_INTERE2_IntE2_MASK                   (0x1FFFFFU)
-#define irq_INTERE2_IntE2_SHIFT                  (0U)
+#define IRQ_INTERE2_IntE2_MASK                   (0x1FFFFFU)
+#define IRQ_INTERE2_IntE2_SHIFT                  (0U)
 /*! IntE2 - InterruptEnable2 */
-#define irq_INTERE2_IntE2(x)                     (((uint32_t)(((uint32_t)(x)) << irq_INTERE2_IntE2_SHIFT)) & irq_INTERE2_IntE2_MASK)
+#define IRQ_INTERE2_IntE2(x)                     (((uint32_t)(((uint32_t)(x)) << IRQ_INTERE2_IntE2_SHIFT)) & IRQ_INTERE2_IntE2_MASK)
 /*! @} */
 
 /*! @name INTERP0 - InterruptPreset0 */
 /*! @{ */
 
-#define irq_INTERP0_IntP0_MASK                   (0xFFFFFFFFU)
-#define irq_INTERP0_IntP0_SHIFT                  (0U)
+#define IRQ_INTERP0_IntP0_MASK                   (0xFFFFFFFFU)
+#define IRQ_INTERP0_IntP0_SHIFT                  (0U)
 /*! IntP0 - InterruptPreset0 */
-#define irq_INTERP0_IntP0(x)                     (((uint32_t)(((uint32_t)(x)) << irq_INTERP0_IntP0_SHIFT)) & irq_INTERP0_IntP0_MASK)
+#define IRQ_INTERP0_IntP0(x)                     (((uint32_t)(((uint32_t)(x)) << IRQ_INTERP0_IntP0_SHIFT)) & IRQ_INTERP0_IntP0_MASK)
 /*! @} */
 
 /*! @name INTERP1 - InterruptPreset1 */
 /*! @{ */
 
-#define irq_INTERP1_IntP1_MASK                   (0xFFFFFFFFU)
-#define irq_INTERP1_IntP1_SHIFT                  (0U)
+#define IRQ_INTERP1_IntP1_MASK                   (0xFFFFFFFFU)
+#define IRQ_INTERP1_IntP1_SHIFT                  (0U)
 /*! IntP1 - InterruptPreset1 */
-#define irq_INTERP1_IntP1(x)                     (((uint32_t)(((uint32_t)(x)) << irq_INTERP1_IntP1_SHIFT)) & irq_INTERP1_IntP1_MASK)
+#define IRQ_INTERP1_IntP1(x)                     (((uint32_t)(((uint32_t)(x)) << IRQ_INTERP1_IntP1_SHIFT)) & IRQ_INTERP1_IntP1_MASK)
 /*! @} */
 
 /*! @name INTERP2 - InterruptPreset2 */
 /*! @{ */
 
-#define irq_INTERP2_IntP2_MASK                   (0x1FFFFFU)
-#define irq_INTERP2_IntP2_SHIFT                  (0U)
+#define IRQ_INTERP2_IntP2_MASK                   (0x1FFFFFU)
+#define IRQ_INTERP2_IntP2_SHIFT                  (0U)
 /*! IntP2 - InterruptPreset2 */
-#define irq_INTERP2_IntP2(x)                     (((uint32_t)(((uint32_t)(x)) << irq_INTERP2_IntP2_SHIFT)) & irq_INTERP2_IntP2_MASK)
+#define IRQ_INTERP2_IntP2(x)                     (((uint32_t)(((uint32_t)(x)) << IRQ_INTERP2_IntP2_SHIFT)) & IRQ_INTERP2_IntP2_MASK)
 /*! @} */
 
 /*! @name INTERC0 - InterruptClear0 */
 /*! @{ */
 
-#define irq_INTERC0_IntC0_MASK                   (0xFFFFFFFFU)
-#define irq_INTERC0_IntC0_SHIFT                  (0U)
+#define IRQ_INTERC0_IntC0_MASK                   (0xFFFFFFFFU)
+#define IRQ_INTERC0_IntC0_SHIFT                  (0U)
 /*! IntC0 - InterruptClear0 */
-#define irq_INTERC0_IntC0(x)                     (((uint32_t)(((uint32_t)(x)) << irq_INTERC0_IntC0_SHIFT)) & irq_INTERC0_IntC0_MASK)
+#define IRQ_INTERC0_IntC0(x)                     (((uint32_t)(((uint32_t)(x)) << IRQ_INTERC0_IntC0_SHIFT)) & IRQ_INTERC0_IntC0_MASK)
 /*! @} */
 
 /*! @name INTERC1 - InterruptClear1 */
 /*! @{ */
 
-#define irq_INTERC1_IntC1_MASK                   (0xFFFFFFFFU)
-#define irq_INTERC1_IntC1_SHIFT                  (0U)
+#define IRQ_INTERC1_IntC1_MASK                   (0xFFFFFFFFU)
+#define IRQ_INTERC1_IntC1_SHIFT                  (0U)
 /*! IntC1 - InterruptClear1 */
-#define irq_INTERC1_IntC1(x)                     (((uint32_t)(((uint32_t)(x)) << irq_INTERC1_IntC1_SHIFT)) & irq_INTERC1_IntC1_MASK)
+#define IRQ_INTERC1_IntC1(x)                     (((uint32_t)(((uint32_t)(x)) << IRQ_INTERC1_IntC1_SHIFT)) & IRQ_INTERC1_IntC1_MASK)
 /*! @} */
 
 /*! @name INTERC2 - InterruptClear2 */
 /*! @{ */
 
-#define irq_INTERC2_IntC2_MASK                   (0x1FFFFFU)
-#define irq_INTERC2_IntC2_SHIFT                  (0U)
+#define IRQ_INTERC2_IntC2_MASK                   (0x1FFFFFU)
+#define IRQ_INTERC2_IntC2_SHIFT                  (0U)
 /*! IntC2 - InterruptClear2 */
-#define irq_INTERC2_IntC2(x)                     (((uint32_t)(((uint32_t)(x)) << irq_INTERC2_IntC2_SHIFT)) & irq_INTERC2_IntC2_MASK)
+#define IRQ_INTERC2_IntC2(x)                     (((uint32_t)(((uint32_t)(x)) << IRQ_INTERC2_IntC2_SHIFT)) & IRQ_INTERC2_IntC2_MASK)
 /*! @} */
 
 /*! @name INTERS0 - InterruptStatus0 */
 /*! @{ */
 
-#define irq_INTERS0_IntS0_MASK                   (0xFFFFFFFFU)
-#define irq_INTERS0_IntS0_SHIFT                  (0U)
+#define IRQ_INTERS0_IntS0_MASK                   (0xFFFFFFFFU)
+#define IRQ_INTERS0_IntS0_SHIFT                  (0U)
 /*! IntS0 - InterruptStatus0 */
-#define irq_INTERS0_IntS0(x)                     (((uint32_t)(((uint32_t)(x)) << irq_INTERS0_IntS0_SHIFT)) & irq_INTERS0_IntS0_MASK)
+#define IRQ_INTERS0_IntS0(x)                     (((uint32_t)(((uint32_t)(x)) << IRQ_INTERS0_IntS0_SHIFT)) & IRQ_INTERS0_IntS0_MASK)
 /*! @} */
 
 /*! @name INTERS1 - InterruptStatus1 */
 /*! @{ */
 
-#define irq_INTERS1_IntS1_MASK                   (0xFFFFFFFFU)
-#define irq_INTERS1_IntS1_SHIFT                  (0U)
+#define IRQ_INTERS1_IntS1_MASK                   (0xFFFFFFFFU)
+#define IRQ_INTERS1_IntS1_SHIFT                  (0U)
 /*! IntS1 - InterruptStatus1 */
-#define irq_INTERS1_IntS1(x)                     (((uint32_t)(((uint32_t)(x)) << irq_INTERS1_IntS1_SHIFT)) & irq_INTERS1_IntS1_MASK)
+#define IRQ_INTERS1_IntS1(x)                     (((uint32_t)(((uint32_t)(x)) << IRQ_INTERS1_IntS1_SHIFT)) & IRQ_INTERS1_IntS1_MASK)
 /*! @} */
 
 /*! @name INTERS2 - InterruptStatus2 */
 /*! @{ */
 
-#define irq_INTERS2_IntS2_MASK                   (0x1FFFFFU)
-#define irq_INTERS2_IntS2_SHIFT                  (0U)
+#define IRQ_INTERS2_IntS2_MASK                   (0x1FFFFFU)
+#define IRQ_INTERS2_IntS2_SHIFT                  (0U)
 /*! IntS2 - InterruptStatus2 */
-#define irq_INTERS2_IntS2(x)                     (((uint32_t)(((uint32_t)(x)) << irq_INTERS2_IntS2_SHIFT)) & irq_INTERS2_IntS2_MASK)
+#define IRQ_INTERS2_IntS2(x)                     (((uint32_t)(((uint32_t)(x)) << IRQ_INTERS2_IntS2_SHIFT)) & IRQ_INTERS2_IntS2_MASK)
 /*! @} */
 
 
 /*!
  * @}
- */ /* end of group irq_Register_Masks */
+ */ /* end of group IRQ_Register_Masks */
 
 
 /*!
  * @}
- */ /* end of group irq_Peripheral_Access_Layer */
+ */ /* end of group IRQ_Peripheral_Access_Layer */
 
 
 /*

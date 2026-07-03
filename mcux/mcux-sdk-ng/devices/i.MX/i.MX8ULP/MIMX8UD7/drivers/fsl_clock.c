@@ -1490,6 +1490,7 @@ static uint32_t CLOCK_GetPccFreq(uint32_t pccInst, clock_ip_name_t name, uint32_
             break;
     }
 
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
     return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
@@ -2100,10 +2101,12 @@ void CLOCK_EnableFroTuning(bool enable)
 
     if (enable)
     {
-        expected = (uint32_t)((targetFreq * (2047U * 2U + 1U) / xtalFreq + 6U) / 2U);
-        up       = (uint32_t)(targetFreq * 2047U * 100085U / xtalFreq / 100000U + 2U);
-        low      = (uint32_t)((targetFreq * 2048U * 99915U + (uint64_t)xtalFreq * 100000U) / xtalFreq / 100000U + 3U);
+        expected = (uint32_t)(((targetFreq * (2047U * 2U + 1U) / xtalFreq + 6U) / 2U) & 0xFFFFFFFFU);
+        up       = (uint32_t)((targetFreq * 2047U * 100085U / xtalFreq / 100000U + 2U) & 0xFFFFFFFFU);
+        low      = (uint32_t)(((targetFreq * 2048U * 99915U + (uint64_t)xtalFreq * 100000U) / xtalFreq / 100000U + 3U) & 0xFFFFFFFFU);
 
+        assert(expected >= low);
+        assert(up >= expected);
         /* Start tuning */
         CGC_RTD->FROCTRL = CGC_FROCTRL_EXP_COUNT(expected) | CGC_FROCTRL_THRESH_RANGE_UP(up - expected) |
                            CGC_FROCTRL_THRESH_RANGE_LOW(expected - low) | CGC_FROCTRL_ENA_TUNE_MASK;
@@ -2509,6 +2512,7 @@ static uint32_t CLOCK_GetPll0CommonFreq(void)
 
     if (freq != 0UL) /* If source is valid. */
     {
+        assert(freq <= UINT32_MAX / s_pll0Multi[CGC_PLL0CFG_MULT_VAL]);
         freq *= s_pll0Multi[CGC_PLL0CFG_MULT_VAL]; /* Multiplier. */
     }
 
@@ -2600,8 +2604,8 @@ uint32_t CLOCK_GetPll0PfdFreq(cgc_pll_pfd_clkout_t pfdClkout)
             if (fracValue != 0UL)
             {
                 freq = CLOCK_GetPll0CommonFreq();
-                freq = (uint32_t)((uint64_t)freq * PFD_FREQ_CALCUL_CONSTANT /
-                                  fracValue); /* PFD Clock Frequency = PLL output frequency * 18 / frac value. */
+                freq = (uint32_t)(((uint64_t)freq * PFD_FREQ_CALCUL_CONSTANT /
+                                  fracValue) & 0xFFFFFFFFU); /* PFD Clock Frequency = PLL output frequency * 18 / frac value. */
             }
             else
             {
@@ -2830,7 +2834,8 @@ static uint32_t CLOCK_GetPll1CommonFreq(void)
     {
         pllnumTmp = (uint64_t)CGC_PLL1NUM_NUM_VAL;
         freqTmp   = (uint64_t)freq * pllnumTmp / CGC_PLL1DENOM_DENOM_VAL;
-        freq      = freq * CGC_PLL1CFG_MULT_VAL + (uint32_t)freqTmp;
+        assert(freq * CGC_PLL1CFG_MULT_VAL <= UINT32_MAX - (uint32_t)(freqTmp & 0xFFFFFFFFU));
+        freq      = freq * CGC_PLL1CFG_MULT_VAL + (uint32_t)(freqTmp & 0xFFFFFFFFU);
     }
 
     return freq;
@@ -2921,8 +2926,8 @@ uint32_t CLOCK_GetPll1PfdFreq(cgc_pll_pfd_clkout_t pfdClkout)
             if (fracValue != 0UL)
             {
                 freq = CLOCK_GetPll1CommonFreq();
-                freq = (uint32_t)((uint64_t)freq * PFD_FREQ_CALCUL_CONSTANT /
-                                  fracValue); /* PFD Clock Frequency = PLL output frequency * 18 / frac value. */
+                freq = (uint32_t)(((uint64_t)freq * PFD_FREQ_CALCUL_CONSTANT /
+                                  fracValue) & 0xFFFFFFFFU); /* PFD Clock Frequency = PLL output frequency * 18 / frac value. */
             }
             else
             {
@@ -3006,7 +3011,8 @@ static uint32_t CLOCK_GetPll3CommonFreq(void)
     {
         pllnumTmp = (uint64_t)CGC_AD_PLL3NUM_NUM_VAL;
         freqTmp   = (uint64_t)freq * pllnumTmp / CGC_AD_PLL3DENOM_DENOM_VAL;
-        freq      = freq * CGC_AD_PLL3CFG_MULT_VAL + (uint32_t)freqTmp;
+        assert(freq * CGC_AD_PLL3CFG_MULT_VAL <= UINT32_MAX - (uint32_t)(freqTmp & 0xFFFFFFFFU));
+        freq      = freq * CGC_AD_PLL3CFG_MULT_VAL + (uint32_t)(freqTmp & 0xFFFFFFFFU);
     }
 
     return freq;
@@ -3121,8 +3127,8 @@ uint32_t CLOCK_GetPll3PfdFreq(cgc_pll_pfd_clkout_t pfdClkout)
             if (fracValue != 0UL)
             {
                 freq = CLOCK_GetPll3CommonFreq();
-                freq = (uint32_t)((uint64_t)freq * PFD_FREQ_CALCUL_CONSTANT /
-                                  fracValue); /* PFD Clock Frequency = PLL output frequency * 18 / frac value. */
+                freq = (uint32_t)(((uint64_t)freq * PFD_FREQ_CALCUL_CONSTANT /
+                                  fracValue) & 0xFFFFFFFFU); /* PFD Clock Frequency = PLL output frequency * 18 / frac value. */
             }
             else
             {
@@ -3365,7 +3371,8 @@ static uint32_t CLOCK_GetPll4CommonFreq(void)
     {
         pllnumTmp = (uint64_t)CGC_LPAV_PLL4NUM_NUM_VAL;
         freqTmp   = (uint64_t)freq * pllnumTmp / CGC_LPAV_PLL4DENOM_DENOM_VAL;
-        freq      = freq * CGC_LPAV_PLL4CFG_MULT_VAL + (uint32_t)freqTmp;
+        assert(freq * CGC_LPAV_PLL4CFG_MULT_VAL <= UINT32_MAX - (uint32_t)(freqTmp & 0xFFFFFFFFU));
+        freq      = freq * CGC_LPAV_PLL4CFG_MULT_VAL + (uint32_t)(freqTmp & 0xFFFFFFFFU);
     }
 
     return freq;
@@ -3480,8 +3487,8 @@ uint32_t CLOCK_GetPll4PfdFreq(cgc_pll_pfd_clkout_t pfdClkout)
             if (fracValue != 0UL)
             {
                 freq = CLOCK_GetPll4CommonFreq();
-                freq = (uint32_t)((uint64_t)freq * PFD_FREQ_CALCUL_CONSTANT /
-                                  fracValue); /* PFD Clock Frequency = PLL output frequency * 18 / frac value. */
+                freq = (uint32_t)(((uint64_t)freq * PFD_FREQ_CALCUL_CONSTANT /
+                                  fracValue) & 0xFFFFFFFFU); /* PFD Clock Frequency = PLL output frequency * 18 / frac value. */
             }
             else
             {
@@ -3587,6 +3594,7 @@ uint32_t CLOCK_GetWdogClkFreq(uint32_t instance)
             break;
     }
 
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
     return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
@@ -3617,6 +3625,7 @@ uint32_t CLOCK_GetFlexspiClkFreq(uint32_t instance)
             break;
     }
 
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
     return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
@@ -3633,6 +3642,7 @@ uint32_t CLOCK_GetLpitClkFreq(void)
     reg  = PCC_REG(kCLOCK_Lpit0);
     freq = CLOCK_GetPcc0BusFreq(PCC_PCS_VAL(reg));
 
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
     return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
@@ -3649,6 +3659,7 @@ uint32_t CLOCK_GetFlexioClkFreq(void)
     reg  = PCC_REG(kCLOCK_Flexio0);
     freq = CLOCK_GetPcc0BusFreq(PCC_PCS_VAL(reg));
 
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
     return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
@@ -3679,6 +3690,7 @@ uint32_t CLOCK_GetI3cClkFreq(uint32_t instance)
             break;
     }
 
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
     return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
@@ -3717,6 +3729,7 @@ uint32_t CLOCK_GetLpspiClkFreq(uint32_t instance)
             break;
     }
 
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
     return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
@@ -3747,6 +3760,7 @@ uint32_t CLOCK_GetAdcClkFreq(uint32_t instance)
             break;
     }
 
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
     return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
@@ -3777,6 +3791,7 @@ uint32_t CLOCK_GetDacClkFreq(uint32_t instance)
             break;
     }
 
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
     return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
@@ -3791,7 +3806,7 @@ uint32_t CLOCK_GetTpiuClkFreq(void)
     uint32_t reg = PCC_REG(kCLOCK_Tpiu);
 
     freq = CLOCK_GetPcc0PlatFreq(PCC_PCS_VAL(reg));
-
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
     return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
@@ -3806,7 +3821,7 @@ uint32_t CLOCK_GetSwoClkFreq(void)
     uint32_t reg = PCC_REG(kCLOCK_Swo);
 
     freq = CLOCK_GetPcc1PlatFreq(PCC_PCS_VAL(reg));
-
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
     return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
@@ -3826,7 +3841,9 @@ static uint32_t CLOCK_GetTpm2ClkFreq(uint32_t pcs)
         default:
             reg = PCC_REG(kCLOCK_Tpm2);
             assert(pcs == 2U); /* Must be TPM2_PCC_ASYNC_CLK */
-            freq = CLOCK_GetPcc2BusFreq(PCC_PCS_VAL(reg)) * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+            freq = CLOCK_GetPcc2BusFreq(PCC_PCS_VAL(reg));
+            assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
+            freq = freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
             break;
     }
 
@@ -3852,7 +3869,9 @@ static uint32_t CLOCK_GetTpm3ClkFreq(uint32_t pcs)
         default:
             reg = PCC_REG(kCLOCK_Tpm3);
             assert(pcs == 3U); /* Must be TPM3_PCC_ASYNC_CLK */
-            freq = CLOCK_GetPcc2BusFreq(PCC_PCS_VAL(reg)) * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+            freq = CLOCK_GetPcc2BusFreq(PCC_PCS_VAL(reg));
+            assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
+            freq = freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
             break;
     }
 
@@ -3878,7 +3897,9 @@ static uint32_t CLOCK_GetTpm67ClkFreq(clock_ip_name_t name, uint32_t pcs)
         default:
             reg = PCC_REG(name);
             assert(pcs == 3U); /* Must be TPM67_PCC_ASYNC_CLK */
-            freq = CLOCK_GetPcc4BusFreq(PCC_PCS_VAL(reg)) * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+            freq = CLOCK_GetPcc4BusFreq(PCC_PCS_VAL(reg));
+            assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
+            freq = freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
             break;
     }
 
@@ -3910,7 +3931,9 @@ static uint32_t CLOCK_GetTpm8ClkFreq(uint32_t pcs)
         default:
             reg = PCC_REG(kCLOCK_Tpm8);
             assert(pcs == 5U); /* Must be TPM8_PCC_ASYNC_CLK */
-            freq = CLOCK_GetPcc5BusFreq(PCC_PCS_VAL(reg)) * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+            freq = CLOCK_GetPcc5BusFreq(PCC_PCS_VAL(reg));
+            assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
+            freq = freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
             break;
     }
 
@@ -3933,11 +3956,15 @@ uint32_t CLOCK_GetTpmClkFreq(uint32_t instance)
     {
         case 0:
             reg  = PCC_REG(kCLOCK_Tpm0);
-            freq = CLOCK_GetPcc1BusFreq(PCC_PCS_VAL(reg)) * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+            freq = CLOCK_GetPcc1BusFreq(PCC_PCS_VAL(reg));
+            assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
+            freq = freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
             break;
         case 1:
             reg  = PCC_REG(kCLOCK_Tpm1);
-            freq = CLOCK_GetPcc1BusFreq(PCC_PCS_VAL(reg)) * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+            freq = CLOCK_GetPcc1BusFreq(PCC_PCS_VAL(reg));
+            assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
+            freq = freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
             break;
         case 2:
             pcs  = (CGC_RTD->TPM3_2CLK & CGC_TPM3_2CLK_TPM2CLK_MASK) >> CGC_TPM3_2CLK_TPM2CLK_SHIFT;
@@ -3949,11 +3976,15 @@ uint32_t CLOCK_GetTpmClkFreq(uint32_t instance)
             break;
         case 4:
             reg  = PCC_REG(kCLOCK_Tpm4);
-            freq = CLOCK_GetPcc3BusFreq(PCC_PCS_VAL(reg)) * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+            freq = CLOCK_GetPcc3BusFreq(PCC_PCS_VAL(reg));
+            assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
+            freq = freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
             break;
         case 5:
             reg  = PCC_REG(kCLOCK_Tpm5);
-            freq = CLOCK_GetPcc3BusFreq(PCC_PCS_VAL(reg)) * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+            freq = CLOCK_GetPcc3BusFreq(PCC_PCS_VAL(reg));
+            assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
+            freq = freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
             break;
         case 6:
             pcs  = (CGC_AD->TPM6_7CLK & CGC_AD_TPM6_7CLK_TPM6CLK_MASK) >> CGC_AD_TPM6_7CLK_TPM6CLK_SHIFT;
@@ -4011,6 +4042,7 @@ uint32_t CLOCK_GetLpi2cClkFreq(uint32_t instance)
             break;
     }
 
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
     return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
@@ -4049,6 +4081,7 @@ uint32_t CLOCK_GetLpuartClkFreq(uint32_t instance)
             break;
     }
 
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
     return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
@@ -4060,7 +4093,10 @@ uint32_t CLOCK_GetLpuartClkFreq(uint32_t instance)
 uint32_t CLOCK_GetFlexcanClkFreq(void)
 {
     uint32_t reg = PCC_REG(kCLOCK_Flexcan);
-    return CLOCK_GetPcc1BusFreq(PCC_PCS_VAL(reg)) * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+    uint32_t freq = CLOCK_GetPcc1BusFreq(PCC_PCS_VAL(reg));
+
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
+    return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
 /*!
@@ -4071,7 +4107,10 @@ uint32_t CLOCK_GetFlexcanClkFreq(void)
 uint32_t CLOCK_GetCsiClkFreq(void)
 {
     uint32_t reg = PCC_REG(kCLOCK_Csi);
-    return CLOCK_GetPcc5PlatFreq(PCC_PCS_VAL(reg)) * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+    uint32_t freq = CLOCK_GetPcc5PlatFreq(PCC_PCS_VAL(reg));
+
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
+    return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
 /*!
@@ -4082,7 +4121,10 @@ uint32_t CLOCK_GetCsiClkFreq(void)
 uint32_t CLOCK_GetDsiClkFreq(void)
 {
     uint32_t reg = PCC_REG(kCLOCK_Dsi);
-    return CLOCK_GetPcc5PlatFreq(PCC_PCS_VAL(reg)) * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+    uint32_t freq = CLOCK_GetPcc5PlatFreq(PCC_PCS_VAL(reg));
+
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
+    return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
 /*!
@@ -4093,7 +4135,10 @@ uint32_t CLOCK_GetDsiClkFreq(void)
 uint32_t CLOCK_GetEpdcClkFreq(void)
 {
     uint32_t reg = PCC_REG(kCLOCK_Epdc);
-    return CLOCK_GetPcc5PlatFreq(PCC_PCS_VAL(reg)) * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+    uint32_t freq = CLOCK_GetPcc5PlatFreq(PCC_PCS_VAL(reg));
+
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
+    return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
 /*!
@@ -4104,7 +4149,10 @@ uint32_t CLOCK_GetEpdcClkFreq(void)
 uint32_t CLOCK_GetGpu2dClkFreq(void)
 {
     uint32_t reg = PCC_REG(kCLOCK_Gpu2d);
-    return CLOCK_GetPcc5PlatFreq(PCC_PCS_VAL(reg)) * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+    uint32_t freq = CLOCK_GetPcc5PlatFreq(PCC_PCS_VAL(reg));
+
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
+    return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
 /*!
@@ -4115,7 +4163,10 @@ uint32_t CLOCK_GetGpu2dClkFreq(void)
 uint32_t CLOCK_GetGpu3dClkFreq(void)
 {
     uint32_t reg = PCC_REG(kCLOCK_Gpu3d);
-    return CLOCK_GetPcc5PlatFreq(PCC_PCS_VAL(reg)) * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+    uint32_t freq = CLOCK_GetPcc5PlatFreq(PCC_PCS_VAL(reg));
+
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
+    return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
 /*!
@@ -4126,7 +4177,10 @@ uint32_t CLOCK_GetGpu3dClkFreq(void)
 uint32_t CLOCK_GetDcnanoClkFreq(void)
 {
     uint32_t reg = PCC_REG(kCLOCK_Dcnano);
-    return CLOCK_GetPcc5PlatFreq(PCC_PCS_VAL(reg)) * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+    uint32_t freq = CLOCK_GetPcc5PlatFreq(PCC_PCS_VAL(reg));
+
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
+    return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
 /*!
@@ -4137,7 +4191,10 @@ uint32_t CLOCK_GetDcnanoClkFreq(void)
 uint32_t CLOCK_GetCsiUiClkFreq(void)
 {
     uint32_t reg = PCC_REG(kCLOCK_CsiClkUi);
-    return CLOCK_GetPcc5PlatFreq(PCC_PCS_VAL(reg)) * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+    uint32_t freq = CLOCK_GetPcc5PlatFreq(PCC_PCS_VAL(reg));
+
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
+    return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
 /*!
@@ -4148,7 +4205,10 @@ uint32_t CLOCK_GetCsiUiClkFreq(void)
 uint32_t CLOCK_GetCsiEscClkFreq(void)
 {
     uint32_t reg = PCC_REG(kCLOCK_CsiClkEsc);
-    return CLOCK_GetPcc5PlatFreq(PCC_PCS_VAL(reg)) * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+    uint32_t freq = CLOCK_GetPcc5PlatFreq(PCC_PCS_VAL(reg));
+
+    assert(freq <= UINT32_MAX / (PCC_FRAC_VAL(reg) + 1U));
+    return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
 }
 
 /* Get selected audio clock frequency for SAI0-1, MQS0. */

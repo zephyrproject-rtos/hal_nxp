@@ -146,5 +146,9 @@ uint32_t CLOCK_GetIpFreq(clock_root_t name)
     clock = CLOCK_GetRootClockSource(name, mux);
     assert(clock <= kCLOCK_Ext);
 
-    return g_clockSourceFreq[clock] / div;
+    if (clock < (uint32_t)(sizeof(g_clockSourceFreq) / sizeof(g_clockSourceFreq[0U])))
+    {
+        return g_clockSourceFreq[clock] / div;
+    }
+    return 0U;
 }

@@ -10,7 +10,7 @@
 **
 **     Reference manual:    IMX7ULPRM, Rev. 0, Nov. 2018
 **     Version:             rev. 8.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b260513
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -18,7 +18,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -160,6 +160,11 @@ void SystemInit (void) {
    -- SystemCoreClockUpdate()
    ---------------------------------------------------------------------------- */
 
+static inline uint32_t CLOCK_U64ToU32Sat(uint64_t value)
+{
+    return (value > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)value;
+}
+
 void SystemCoreClockUpdate (void) {
 
 
@@ -187,11 +192,17 @@ void SystemCoreClockUpdate (void) {
       break;
     /* System PLL */
     case SCG_CSR_SCS(6):
+    {
       /* System clock from SPLL. */
       SCGOUTClock = (0u == (SCG0->SPLLCFG & SCG_SPLLCFG_SOURCE_MASK)) ? CPU_XTAL_SOSC_CLK_HZ :
                     (48000000u + ((SCG0->FIRCCFG & SCG_FIRCCFG_RANGE_MASK) >> SCG_FIRCCFG_RANGE_SHIFT) * 4000000u);
       SCGOUTClock /= ((SCG0->SPLLCFG & SCG_SPLLCFG_PREDIV_MASK) >> SCG_SPLLCFG_PREDIV_SHIFT) + 1u;
-      SCGOUTClock *= spllMulti[((SCG0->SPLLCFG & SCG_SPLLCFG_MULT_MASK) >> SCG_SPLLCFG_MULT_SHIFT)];
+      uint32_t spllMultIdx = (SCG0->SPLLCFG & SCG_SPLLCFG_MULT_MASK) >> SCG_SPLLCFG_MULT_SHIFT;
+      if (spllMultIdx < (uint32_t)(sizeof(spllMulti) / sizeof(spllMulti[0])))
+      {
+          uint64_t clkU64 = (uint64_t)SCGOUTClock * spllMulti[spllMultIdx];
+          SCGOUTClock = CLOCK_U64ToU32Sat(clkU64);
+      }
       /* Is Core clock from PLL PFD? */
       if (0u != (SCG0->SPLLCFG & SCG_SPLLCFG_PLLS_MASK))
       {
@@ -199,19 +210,19 @@ void SystemCoreClockUpdate (void) {
         switch (SCG0->SPLLCFG & SCG_SPLLCFG_PFDSEL_MASK)
         {
           case SCG_SPLLCFG_PFDSEL(0):
-            SCGOUTClock = (uint32_t)(((uint64_t)SCGOUTClock * 18u) /
+            SCGOUTClock = CLOCK_U64ToU32Sat(((uint64_t)SCGOUTClock * 18u) /
                                      ((SCG0->SPLLPFD & SCG_SPLLPFD_PFD0_MASK) >> SCG_SPLLPFD_PFD0_SHIFT));
             break;
           case SCG_SPLLCFG_PFDSEL(1):
-            SCGOUTClock = (uint32_t)(((uint64_t)SCGOUTClock * 18u) /
+            SCGOUTClock = CLOCK_U64ToU32Sat(((uint64_t)SCGOUTClock * 18u) /
                                      ((SCG0->SPLLPFD & SCG_SPLLPFD_PFD1_MASK) >> SCG_SPLLPFD_PFD1_SHIFT));
             break;
           case SCG_SPLLCFG_PFDSEL(2):
-            SCGOUTClock = (uint32_t)(((uint64_t)SCGOUTClock * 18u) /
+            SCGOUTClock = CLOCK_U64ToU32Sat(((uint64_t)SCGOUTClock * 18u) /
                                      ((SCG0->SPLLPFD & SCG_SPLLPFD_PFD2_MASK) >> SCG_SPLLPFD_PFD2_SHIFT));
             break;
           case SCG_SPLLCFG_PFDSEL(3):
-            SCGOUTClock = (uint32_t)(((uint64_t)SCGOUTClock * 18u) /
+            SCGOUTClock = CLOCK_U64ToU32Sat(((uint64_t)SCGOUTClock * 18u) /
                                      ((SCG0->SPLLPFD & SCG_SPLLPFD_PFD3_MASK) >> SCG_SPLLPFD_PFD3_SHIFT));
             break;
           default:
@@ -220,6 +231,7 @@ void SystemCoreClockUpdate (void) {
         }
       }
       break;
+    }
     /* Auxiliary PLL */
     case SCG_CSR_SCS(5):
       /* System clock from APLL. */
@@ -228,8 +240,15 @@ void SystemCoreClockUpdate (void) {
       SCGOUTClock /= ((SCG0->APLLCFG & SCG_APLLCFG_PREDIV_MASK) >> SCG_APLLCFG_PREDIV_SHIFT) + 1u;
       apllNum = SCG0->APLLNUM;
       apllDenom = SCG0->APLLDENOM;
-      apllTmp = (uint32_t)((uint64_t)SCGOUTClock * ((uint64_t)apllNum) / ((uint64_t)apllDenom));
-      SCGOUTClock = SCGOUTClock * ((SCG0->APLLCFG & SCG_APLLCFG_MULT_MASK) >> SCG_APLLCFG_MULT_SHIFT) + apllTmp;
+      {
+          uint64_t apllTmpU64 = ((uint64_t)SCGOUTClock * (uint64_t)apllNum) / (uint64_t)apllDenom;
+          apllTmp = (apllTmpU64 > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)apllTmpU64;
+      }
+      {
+          uint32_t apllMult = (SCG0->APLLCFG & SCG_APLLCFG_MULT_MASK) >> SCG_APLLCFG_MULT_SHIFT;
+          uint64_t apllClkU64 = (uint64_t)SCGOUTClock * apllMult + apllTmp;
+          SCGOUTClock = (apllClkU64 > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)apllClkU64;
+      }
       /* Is Core clock from PLL directly? */
       if (0u == (SCG0->APLLCFG & SCG_APLLCFG_PLLS_MASK))
       {
@@ -243,19 +262,19 @@ void SystemCoreClockUpdate (void) {
         switch (SCG0->APLLCFG & SCG_APLLCFG_PFDSEL_MASK)
         {
           case SCG_APLLCFG_PFDSEL(0):
-            SCGOUTClock = (uint32_t)(((uint64_t)SCGOUTClock * 18u) /
+            SCGOUTClock = CLOCK_U64ToU32Sat(((uint64_t)SCGOUTClock * 18u) /
                                      ((SCG0->APLLPFD & SCG_APLLPFD_PFD0_MASK) >> SCG_APLLPFD_PFD0_SHIFT));
             break;
           case SCG_APLLCFG_PFDSEL(1):
-            SCGOUTClock = (uint32_t)(((uint64_t)SCGOUTClock * 18u) /
+            SCGOUTClock = CLOCK_U64ToU32Sat(((uint64_t)SCGOUTClock * 18u) /
                                      ((SCG0->APLLPFD & SCG_APLLPFD_PFD1_MASK) >> SCG_APLLPFD_PFD1_SHIFT));
             break;
           case SCG_APLLCFG_PFDSEL(2):
-            SCGOUTClock = (uint32_t)(((uint64_t)SCGOUTClock * 18u) /
+            SCGOUTClock = CLOCK_U64ToU32Sat(((uint64_t)SCGOUTClock * 18u) /
                                      ((SCG0->APLLPFD & SCG_APLLPFD_PFD2_MASK) >> SCG_APLLPFD_PFD2_SHIFT));
             break;
           case SCG_APLLCFG_PFDSEL(3):
-            SCGOUTClock = (uint32_t)(((uint64_t)SCGOUTClock * 18u) /
+            SCGOUTClock = CLOCK_U64ToU32Sat(((uint64_t)SCGOUTClock * 18u) /
                                      ((SCG0->APLLPFD & SCG_APLLPFD_PFD3_MASK) >> SCG_APLLPFD_PFD3_SHIFT));
             break;
           default:

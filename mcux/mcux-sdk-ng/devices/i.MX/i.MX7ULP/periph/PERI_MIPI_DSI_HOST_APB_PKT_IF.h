@@ -7,13 +7,13 @@
 **                          MCIMX7U5DVP07
 **
 **     Version:             rev. 8.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b260513
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIPI_DSI_HOST_APB_PKT_IF
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

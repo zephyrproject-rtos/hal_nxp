@@ -1,7 +1,6 @@
 /*
 ** ###################################################################
 **     Processors:          MIMX9529xxVTx_cm7
-**                          MIMX9529xxVYx_cm7
 **                          MIMX9529xxVZx_cm7
 **
 **     Compilers:           GNU C Compiler
@@ -10,7 +9,7 @@
 **
 **     Reference manual:    iMX952RM rev1 draftM
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260310
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX9529_cm7
@@ -1132,99 +1131,15 @@ typedef enum _asrc_clock_source
 /** Array initializer of ADC peripheral base pointers */
 #define ADC_BASE_PTRS                            { ADC }
 
-/* ANALOG_TRGMUX - Peripheral instance base addresses */
-/** Peripheral ANALOG__TRGMUX base address */
-#define ANALOG__TRGMUX_BASE                      (0x44531000u)
-/** Peripheral ANALOG__TRGMUX base pointer */
-#define ANALOG__TRGMUX                           ((ANALOG_TRGMUX_Type *)ANALOG__TRGMUX_BASE)
-/** Array initializer of ANALOG_TRGMUX peripheral base addresses */
-#define ANALOG_TRGMUX_BASE_ADDRS                 { ANALOG__TRGMUX_BASE }
-/** Array initializer of ANALOG_TRGMUX peripheral base pointers */
-#define ANALOG_TRGMUX_BASE_PTRS                  { ANALOG__TRGMUX }
-
-/* ANALOG_VDET - Peripheral instance base addresses */
-/** Peripheral ANALOG__VDET base address */
-#define ANALOG__VDET_BASE                        (0x44486000u)
-/** Peripheral ANALOG__VDET base pointer */
-#define ANALOG__VDET                             ((ANALOG_VDET_Type *)ANALOG__VDET_BASE)
-/** Array initializer of ANALOG_VDET peripheral base addresses */
-#define ANALOG_VDET_BASE_ADDRS                   { ANALOG__VDET_BASE }
-/** Array initializer of ANALOG_VDET peripheral base pointers */
-#define ANALOG_VDET_BASE_PTRS                    { ANALOG__VDET }
-
-/* AON_CRC - Peripheral instance base addresses */
-/** Peripheral AON__CRCA base address */
-#define AON__CRCA_BASE                           (0x44660000u)
-/** Peripheral AON__CRCA base pointer */
-#define AON__CRCA                                ((AON_CRC_Type *)AON__CRCA_BASE)
-/** Array initializer of AON_CRC peripheral base addresses */
-#define AON_CRC_BASE_ADDRS                       { AON__CRCA_BASE }
-/** Array initializer of AON_CRC peripheral base pointers */
-#define AON_CRC_BASE_PTRS                        { AON__CRCA }
-
-/* AON_CSTCU - Peripheral instance base addresses */
-/** Peripheral AON__CSTCU base address */
-#define AON__CSTCU_BASE                          (0x44590000u)
-/** Peripheral AON__CSTCU base pointer */
-#define AON__CSTCU                               ((AON_CSTCU_Type *)AON__CSTCU_BASE)
-/** Array initializer of AON_CSTCU peripheral base addresses */
-#define AON_CSTCU_BASE_ADDRS                     { AON__CSTCU_BASE }
-/** Array initializer of AON_CSTCU peripheral base pointers */
-#define AON_CSTCU_BASE_PTRS                      { AON__CSTCU }
-
-/* AON_FCCU - Peripheral instance base addresses */
-/** Peripheral AON__FCCU base address */
-#define AON__FCCU_BASE                           (0x44570000u)
-/** Peripheral AON__FCCU base pointer */
-#define AON__FCCU                                ((AON_FCCU_Type *)AON__FCCU_BASE)
-/** Array initializer of AON_FCCU peripheral base addresses */
-#define AON_FCCU_BASE_ADDRS                      { AON__FCCU_BASE }
-/** Array initializer of AON_FCCU peripheral base pointers */
-#define AON_FCCU_BASE_PTRS                       { AON__FCCU }
-
-/* AON_INTM - Peripheral instance base addresses */
-/** Peripheral AON__INTM base address */
-#define AON__INTM_BASE                           (0x44580000u)
-/** Peripheral AON__INTM base pointer */
-#define AON__INTM                                ((AON_INTM_Type *)AON__INTM_BASE)
-/** Array initializer of AON_INTM peripheral base addresses */
-#define AON_INTM_BASE_ADDRS                      { AON__INTM_BASE }
-/** Array initializer of AON_INTM peripheral base pointers */
-#define AON_INTM_BASE_PTRS                       { AON__INTM }
-
-/* AON_LSTCU - Peripheral instance base addresses */
-/** Peripheral AON__LSTCUA base address */
-#define AON__LSTCUA_BASE                         (0x445A0000u)
-/** Peripheral AON__LSTCUA base pointer */
-#define AON__LSTCUA                              ((AON_LSTCU_Type *)AON__LSTCUA_BASE)
-/** Array initializer of AON_LSTCU peripheral base addresses */
-#define AON_LSTCU_BASE_ADDRS                     { AON__LSTCUA_BASE }
-/** Array initializer of AON_LSTCU peripheral base pointers */
-#define AON_LSTCU_BASE_PTRS                      { AON__LSTCUA }
-
-/* AON_MCM - Peripheral instance base addresses */
-/** Peripheral AON__MCM base address */
-#define AON__MCM_BASE                            (0xE0080000u)
-/** Peripheral AON__MCM base pointer */
-#define AON__MCM                                 ((AON_MCM_Type *)AON__MCM_BASE)
-/** Array initializer of AON_MCM peripheral base addresses */
-#define AON_MCM_BASE_ADDRS                       { AON__MCM_BASE }
-/** Array initializer of AON_MCM peripheral base pointers */
-#define AON_MCM_BASE_PTRS                        { AON__MCM }
-
-/* AON_SYSPM - Peripheral instance base addresses */
-/** Peripheral AON__M33_PCF1 base address */
-#define AON__M33_PCF1_BASE                       (0x443E0000u)
-/** Peripheral AON__M33_PCF1 base pointer */
-#define AON__M33_PCF1                            ((AON_SYSPM_Type *)AON__M33_PCF1_BASE)
-/** Peripheral AON__M33_PSF2 base address */
-#define AON__M33_PSF2_BASE                       (0x443F0000u)
-/** Peripheral AON__M33_PSF2 base pointer */
-#define AON__M33_PSF2                            ((AON_SYSPM_Type *)AON__M33_PSF2_BASE)
-/** Array initializer of AON_SYSPM peripheral base addresses */
-#define AON_SYSPM_BASE_ADDRS                     { AON__M33_PCF1_BASE, AON__M33_PSF2_BASE }
-/** Array initializer of AON_SYSPM peripheral base pointers */
-#define AON_SYSPM_BASE_PTRS                      { AON__M33_PCF1, AON__M33_PSF2 }
+/* AHBRM - Peripheral instance base addresses */
+/** Peripheral WAKEUP__AHBRM1 base address */
+#define WAKEUP__AHBRM1_BASE                      (0x42400800u)
+/** Peripheral WAKEUP__AHBRM1 base pointer */
+#define WAKEUP__AHBRM1                           ((AHBRM_Type *)WAKEUP__AHBRM1_BASE)
+/** Array initializer of AHBRM peripheral base addresses */
+#define AHBRM_BASE_ADDRS                         { WAKEUP__AHBRM1_BASE }
+/** Array initializer of AHBRM peripheral base pointers */
+#define AHBRM_BASE_PTRS                          { WAKEUP__AHBRM1 }
 
 /* ARDB - Peripheral instance base addresses */
 /** Peripheral WAKEUP__XSPI1__ARDB base address */
@@ -1318,6 +1233,16 @@ typedef enum _asrc_clock_source
 /** Array initializer of ATU peripheral base pointers */
 #define ATU_BASE_PTRS                            { HSIO__ATU, NOC__ATU0, NOC__ATU1, VPU__ATU_CODA_PRIM, VPU__ATU_CODA_SEC, VPU__ATU_JPEG_DEC, VPU__ATU_JPEG_ENC, WAKEUP__ATUA, WAKEUP__ATUAHBAP, WAKEUP__ATUA_LOCK, WAKEUP__ATUSDHC1, WAKEUP__ATUSDHC2, WAKEUP__ATUSDHC3, WAKEUP__ATUV2X, WAKEUP__ATUXSPI }
 
+/* AUDMIX - Peripheral instance base addresses */
+/** Peripheral WAKEUP__AUDMIX1 base address */
+#define WAKEUP__AUDMIX1_BASE                     (0x431F0000u)
+/** Peripheral WAKEUP__AUDMIX1 base pointer */
+#define WAKEUP__AUDMIX1                          ((AUDMIX_Type *)WAKEUP__AUDMIX1_BASE)
+/** Array initializer of AUDMIX peripheral base addresses */
+#define AUDMIX_BASE_ADDRS                        { WAKEUP__AUDMIX1_BASE }
+/** Array initializer of AUDMIX peripheral base pointers */
+#define AUDMIX_BASE_PTRS                         { WAKEUP__AUDMIX1 }
+
 /* BBNSM - Peripheral instance base addresses */
 /** Peripheral BBNSM base address */
 #define BBNSM_BASE                               (0x44440000u)
@@ -1407,16 +1332,6 @@ typedef enum _asrc_clock_source
 #define CAMERA_DSI_CAMID_CSR_BASE_ADDRS          { CAMERA__DSI_CAMID_CSR_BASE }
 /** Array initializer of CAMERA_DSI_CAMID_CSR peripheral base pointers */
 #define CAMERA_DSI_CAMID_CSR_BASE_PTRS           { CAMERA__DSI_CAMID_CSR }
-
-/* CAMERA_LSTCU - Peripheral instance base addresses */
-/** Peripheral CAMERA__LSTCU base address */
-#define CAMERA__LSTCU_BASE                       (0x4AF20000u)
-/** Peripheral CAMERA__LSTCU base pointer */
-#define CAMERA__LSTCU                            ((CAMERA_LSTCU_Type *)CAMERA__LSTCU_BASE)
-/** Array initializer of CAMERA_LSTCU peripheral base addresses */
-#define CAMERA_LSTCU_BASE_ADDRS                  { CAMERA__LSTCU_BASE }
-/** Array initializer of CAMERA_LSTCU peripheral base pointers */
-#define CAMERA_LSTCU_BASE_PTRS                   { CAMERA__LSTCU }
 
 /* CAMERA_PHY_CSR - Peripheral instance base addresses */
 /** Peripheral CAMERA__PHY_CSR base address */
@@ -1521,6 +1436,28 @@ typedef enum _asrc_clock_source
 /** Array initializer of CMU peripheral base pointers */
 #define CMU_BASE_PTRS                            { ANALOG__CMU0, AON__CMUA1, AON__CMUA2, DDRC__CMU_1, DDRC__CMU_2, DISPLAY__CMU0, DISPLAY__CMU1, M7__CMU_M0, M7__CMU_M1, NOC__CMU_N0, NOC__CMU_N1, WAKEUP__CMU1, WAKEUP__CMU2 }
 
+/* CONSTFR - Peripheral instance base addresses */
+/** Peripheral DISPLAY__SEERIS__CONSTFR base address */
+#define DISPLAY__SEERIS__CONSTFR_BASE            (0x4B4F0000u)
+/** Peripheral DISPLAY__SEERIS__CONSTFR base pointer */
+#define DISPLAY__SEERIS__CONSTFR                 ((CONSTFR_Type *)DISPLAY__SEERIS__CONSTFR_BASE)
+/** Peripheral DISPLAY__SEERIS__CONSTFR1 base address */
+#define DISPLAY__SEERIS__CONSTFR1_BASE           (0x4B500000u)
+/** Peripheral DISPLAY__SEERIS__CONSTFR1 base pointer */
+#define DISPLAY__SEERIS__CONSTFR1                ((CONSTFR_Type *)DISPLAY__SEERIS__CONSTFR1_BASE)
+/** Peripheral DISPLAY__SEERIS__CONSTFR2 base address */
+#define DISPLAY__SEERIS__CONSTFR2_BASE           (0x4B530000u)
+/** Peripheral DISPLAY__SEERIS__CONSTFR2 base pointer */
+#define DISPLAY__SEERIS__CONSTFR2                ((CONSTFR_Type *)DISPLAY__SEERIS__CONSTFR2_BASE)
+/** Peripheral DISPLAY__SEERIS__CONSTFR3 base address */
+#define DISPLAY__SEERIS__CONSTFR3_BASE           (0x4B540000u)
+/** Peripheral DISPLAY__SEERIS__CONSTFR3 base pointer */
+#define DISPLAY__SEERIS__CONSTFR3                ((CONSTFR_Type *)DISPLAY__SEERIS__CONSTFR3_BASE)
+/** Array initializer of CONSTFR peripheral base addresses */
+#define CONSTFR_BASE_ADDRS                       { DISPLAY__SEERIS__CONSTFR_BASE, DISPLAY__SEERIS__CONSTFR1_BASE, DISPLAY__SEERIS__CONSTFR2_BASE, DISPLAY__SEERIS__CONSTFR3_BASE }
+/** Array initializer of CONSTFR peripheral base pointers */
+#define CONSTFR_BASE_PTRS                        { DISPLAY__SEERIS__CONSTFR, DISPLAY__SEERIS__CONSTFR1, DISPLAY__SEERIS__CONSTFR2, DISPLAY__SEERIS__CONSTFR3 }
+
 /* CORTEXA_BLK_CTRL - Peripheral instance base addresses */
 /** Peripheral CORTEXA__BLK_CTRL_CORTEXAMIX base address */
 #define CORTEXA__BLK_CTRL_CORTEXAMIX_BASE        (0x4A410000u)
@@ -1530,6 +1467,16 @@ typedef enum _asrc_clock_source
 #define CORTEXA_BLK_CTRL_BASE_ADDRS              { CORTEXA__BLK_CTRL_CORTEXAMIX_BASE }
 /** Array initializer of CORTEXA_BLK_CTRL peripheral base pointers */
 #define CORTEXA_BLK_CTRL_BASE_PTRS               { CORTEXA__BLK_CTRL_CORTEXAMIX }
+
+/* CRC - Peripheral instance base addresses */
+/** Peripheral AON__CRCA base address */
+#define AON__CRCA_BASE                           (0x44660000u)
+/** Peripheral AON__CRCA base pointer */
+#define CRC                                      ((CRC_Type *)AON__CRCA_BASE)
+/** Array initializer of CRC peripheral base addresses */
+#define CRC_BASE_ADDRS                           { AON__CRCA_BASE }
+/** Array initializer of CRC peripheral base pointers */
+#define CRC_BASE_PTRS                            { CRC }
 
 /* CSI2_CONTROLLER - Peripheral instance base addresses */
 /** Peripheral CAMERA__CSI_COMPLEX__PRIMARY_CSI2_CONTROLLER base address */
@@ -1544,6 +1491,16 @@ typedef enum _asrc_clock_source
 #define CSI2_CONTROLLER_BASE_ADDRS               { CAMERA__CSI_COMPLEX__PRIMARY_CSI2_CONTROLLER_BASE, CAMERA__CSI_COMPLEX__SECONDARY_CSI2_CONTROLLER_BASE }
 /** Array initializer of CSI2_CONTROLLER peripheral base pointers */
 #define CSI2_CONTROLLER_BASE_PTRS                { CAMERA__CSI_COMPLEX__PRIMARY_CSI2_CONTROLLER, CAMERA__CSI_COMPLEX__SECONDARY_CSI2_CONTROLLER }
+
+/* CSTCU - Peripheral instance base addresses */
+/** Peripheral AON__CSTCU base address */
+#define AON__CSTCU_BASE                          (0x44590000u)
+/** Peripheral AON__CSTCU base pointer */
+#define AON__CSTCU                               ((CSTCU_Type *)AON__CSTCU_BASE)
+/** Array initializer of CSTCU peripheral base addresses */
+#define CSTCU_BASE_ADDRS                         { AON__CSTCU_BASE }
+/** Array initializer of CSTCU peripheral base pointers */
+#define CSTCU_BASE_PTRS                          { AON__CSTCU }
 
 /* DDRC - Peripheral instance base addresses */
 /** Peripheral DDRC base address */
@@ -1564,16 +1521,6 @@ typedef enum _asrc_clock_source
 #define DDR_BLK_CTRL_DDRMIX_BASE_ADDRS           { DDRC__BLK_CTRL_DDRMIX_BASE }
 /** Array initializer of DDR_BLK_CTRL_DDRMIX peripheral base pointers */
 #define DDR_BLK_CTRL_DDRMIX_BASE_PTRS            { DDRC__BLK_CTRL_DDRMIX }
-
-/* DDR_LSTCU - Peripheral instance base addresses */
-/** Peripheral DDRC__LSTCU base address */
-#define DDRC__LSTCU_BASE                         (0x4E050000u)
-/** Peripheral DDRC__LSTCU base pointer */
-#define DDRC__LSTCU                              ((DDR_LSTCU_Type *)DDRC__LSTCU_BASE)
-/** Array initializer of DDR_LSTCU peripheral base addresses */
-#define DDR_LSTCU_BASE_ADDRS                     { DDRC__LSTCU_BASE }
-/** Array initializer of DDR_LSTCU peripheral base pointers */
-#define DDR_LSTCU_BASE_PTRS                      { DDRC__LSTCU }
 
 /* DISPLAY_BLK_CTRL_DISPLAYMIX - Peripheral instance base addresses */
 /** Peripheral DISPLAY__BLK_CTRL_DISPLAYMIX base address */
@@ -1604,16 +1551,6 @@ typedef enum _asrc_clock_source
 #define DISPLAY_DSI_CSR_BASE_ADDRS               { DISPLAY__DSI_CSR_BASE }
 /** Array initializer of DISPLAY_DSI_CSR peripheral base pointers */
 #define DISPLAY_DSI_CSR_BASE_PTRS                { DISPLAY__DSI_CSR }
-
-/* DISPLAY_LSTCU - Peripheral instance base addresses */
-/** Peripheral DISPLAY__LSTCU base address */
-#define DISPLAY__LSTCU_BASE                      (0x4B2D0000u)
-/** Peripheral DISPLAY__LSTCU base pointer */
-#define DISPLAY__LSTCU                           ((DISPLAY_LSTCU_Type *)DISPLAY__LSTCU_BASE)
-/** Array initializer of DISPLAY_LSTCU peripheral base addresses */
-#define DISPLAY_LSTCU_BASE_ADDRS                 { DISPLAY__LSTCU_BASE }
-/** Array initializer of DISPLAY_LSTCU peripheral base pointers */
-#define DISPLAY_LSTCU_BASE_PTRS                  { DISPLAY__LSTCU }
 
 /* DISPLAY_MIPI_DSI_PHY - Peripheral instance base addresses */
 /** Peripheral DISPLAY__MIPI_DSI_PHY base address */
@@ -1655,6 +1592,20 @@ typedef enum _asrc_clock_source
 /** Array initializer of DISPLAY_SEERIS_LD peripheral base pointers */
 #define DISPLAY_SEERIS_LD_BASE_PTRS              { DISPLAY_SEERIS_LD }
 
+/* DITHER - Peripheral instance base addresses */
+/** Peripheral DISPLAY__SEERIS__DITHER base address */
+#define DISPLAY__SEERIS__DITHER_BASE             (0x4B6F0000u)
+/** Peripheral DISPLAY__SEERIS__DITHER base pointer */
+#define DISPLAY__SEERIS__DITHER                  ((DITHER_Type *)DISPLAY__SEERIS__DITHER_BASE)
+/** Peripheral DISPLAY__SEERIS__DITHER1 base address */
+#define DISPLAY__SEERIS__DITHER1_BASE            (0x4B780000u)
+/** Peripheral DISPLAY__SEERIS__DITHER1 base pointer */
+#define DISPLAY__SEERIS__DITHER1                 ((DITHER_Type *)DISPLAY__SEERIS__DITHER1_BASE)
+/** Array initializer of DITHER peripheral base addresses */
+#define DITHER_BASE_ADDRS                        { DISPLAY__SEERIS__DITHER_BASE, DISPLAY__SEERIS__DITHER1_BASE }
+/** Array initializer of DITHER peripheral base pointers */
+#define DITHER_BASE_PTRS                         { DISPLAY__SEERIS__DITHER, DISPLAY__SEERIS__DITHER1 }
+
 /* DMA - Peripheral instance base addresses */
 /** Peripheral DMA3 base address */
 #define DMA3_BASE                                (0x44000000u)
@@ -1685,6 +1636,34 @@ typedef enum _asrc_clock_source
 #define DMA5_BASE_ADDRS                          { 0u, 0u, EDMA5_2_BASE, EDMA5_3_BASE, EDMA5_4_BASE }
 /** Array initializer of DMA5 peripheral base pointers */
 #define DMA5_BASE_PTRS                           { (DMA5_Type *)0u, (DMA5_Type *)0u, EDMA5_2, EDMA5_3, EDMA5_4 }
+
+/* DMA_CRC - Peripheral instance base addresses */
+/** Peripheral WAKEUP__DMA_CRC2 base address */
+#define WAKEUP__DMA_CRC2_BASE                    (0x423D0000u)
+/** Peripheral WAKEUP__DMA_CRC2 base pointer */
+#define WAKEUP__DMA_CRC2                         ((DMA_CRC_Type *)WAKEUP__DMA_CRC2_BASE)
+/** Peripheral WAKEUP__DMA_CRC3 base address */
+#define WAKEUP__DMA_CRC3_BASE                    (0x424F0000u)
+/** Peripheral WAKEUP__DMA_CRC3 base pointer */
+#define WAKEUP__DMA_CRC3                         ((DMA_CRC_Type *)WAKEUP__DMA_CRC3_BASE)
+/** Array initializer of DMA_CRC peripheral base addresses */
+#define DMA_CRC_BASE_ADDRS                       { WAKEUP__DMA_CRC2_BASE, WAKEUP__DMA_CRC3_BASE }
+/** Array initializer of DMA_CRC peripheral base pointers */
+#define DMA_CRC_BASE_PTRS                        { WAKEUP__DMA_CRC2, WAKEUP__DMA_CRC3 }
+
+/* DOMAINB - Peripheral instance base addresses */
+/** Peripheral DISPLAY__SEERIS__DOMAINB1 base address */
+#define DISPLAY__SEERIS__DOMAINB1_BASE           (0x4B730000u)
+/** Peripheral DISPLAY__SEERIS__DOMAINB1 base pointer */
+#define DISPLAY__SEERIS__DOMAINB1                ((DOMAINB_Type *)DISPLAY__SEERIS__DOMAINB1_BASE)
+/** Peripheral DISPLAY__SEERIS__DOMAINBL base address */
+#define DISPLAY__SEERIS__DOMAINBL_BASE           (0x4B6A0000u)
+/** Peripheral DISPLAY__SEERIS__DOMAINBL base pointer */
+#define DISPLAY__SEERIS__DOMAINBL                ((DOMAINB_Type *)DISPLAY__SEERIS__DOMAINBL_BASE)
+/** Array initializer of DOMAINB peripheral base addresses */
+#define DOMAINB_BASE_ADDRS                       { DISPLAY__SEERIS__DOMAINB1_BASE, DISPLAY__SEERIS__DOMAINBL_BASE }
+/** Array initializer of DOMAINB peripheral base pointers */
+#define DOMAINB_BASE_PTRS                        { DISPLAY__SEERIS__DOMAINB1, DISPLAY__SEERIS__DOMAINBL }
 
 /* DOORBELLS - Peripheral instance base addresses */
 /** Peripheral GPU__REG__DOORBELLS base address */
@@ -1904,6 +1883,28 @@ typedef enum _asrc_clock_source
 /** Array initializer of ERM peripheral base pointers */
 #define ERM_BASE_PTRS                            { AON__ERMA, DISPLAY__ERM, M7__ERM }
 
+/* EXTDST - Peripheral instance base addresses */
+/** Peripheral DISPLAY__SEERIS__EXTDST base address */
+#define DISPLAY__SEERIS__EXTDST_BASE             (0x4B510000u)
+/** Peripheral DISPLAY__SEERIS__EXTDST base pointer */
+#define DISPLAY__SEERIS__EXTDST                  ((EXTDST_Type *)DISPLAY__SEERIS__EXTDST_BASE)
+/** Peripheral DISPLAY__SEERIS__EXTDST1 base address */
+#define DISPLAY__SEERIS__EXTDST1_BASE            (0x4B520000u)
+/** Peripheral DISPLAY__SEERIS__EXTDST1 base pointer */
+#define DISPLAY__SEERIS__EXTDST1                 ((EXTDST_Type *)DISPLAY__SEERIS__EXTDST1_BASE)
+/** Peripheral DISPLAY__SEERIS__EXTDST2 base address */
+#define DISPLAY__SEERIS__EXTDST2_BASE            (0x4B550000u)
+/** Peripheral DISPLAY__SEERIS__EXTDST2 base pointer */
+#define DISPLAY__SEERIS__EXTDST2                 ((EXTDST_Type *)DISPLAY__SEERIS__EXTDST2_BASE)
+/** Peripheral DISPLAY__SEERIS__EXTDST3 base address */
+#define DISPLAY__SEERIS__EXTDST3_BASE            (0x4B560000u)
+/** Peripheral DISPLAY__SEERIS__EXTDST3 base pointer */
+#define DISPLAY__SEERIS__EXTDST3                 ((EXTDST_Type *)DISPLAY__SEERIS__EXTDST3_BASE)
+/** Array initializer of EXTDST peripheral base addresses */
+#define EXTDST_BASE_ADDRS                        { DISPLAY__SEERIS__EXTDST_BASE, DISPLAY__SEERIS__EXTDST1_BASE, DISPLAY__SEERIS__EXTDST2_BASE, DISPLAY__SEERIS__EXTDST3_BASE }
+/** Array initializer of EXTDST peripheral base pointers */
+#define EXTDST_BASE_PTRS                         { DISPLAY__SEERIS__EXTDST, DISPLAY__SEERIS__EXTDST1, DISPLAY__SEERIS__EXTDST2, DISPLAY__SEERIS__EXTDST3 }
+
 /* FLEXIO - Peripheral instance base addresses */
 /** Peripheral FLEXIO1 base address */
 #define FLEXIO1_BASE                             (0x421E0000u)
@@ -1919,6 +1920,30 @@ typedef enum _asrc_clock_source
 #define FLEXIO_BASE_PTRS                         { (FLEXIO_Type *)0u, FLEXIO1, FLEXIO2 }
 /** Interrupt vectors for the FLEXIO peripheral type */
 #define FLEXIO_IRQS                              { NotAvail_IRQn, FLEXIO1_IRQn, FLEXIO2_IRQn }
+
+/* FLEXSPI_SLV - Peripheral instance base addresses */
+/** Peripheral WAKEUP__XSPI_RESPONDER base address */
+#define WAKEUP__XSPI_RESPONDER_BASE              (0x42C50000u)
+/** Peripheral WAKEUP__XSPI_RESPONDER base pointer */
+#define WAKEUP__XSPI_RESPONDER                   ((FLEXSPI_SLV_Type *)WAKEUP__XSPI_RESPONDER_BASE)
+/** Array initializer of FLEXSPI_SLV peripheral base addresses */
+#define FLEXSPI_SLV_BASE_ADDRS                   { WAKEUP__XSPI_RESPONDER_BASE }
+/** Array initializer of FLEXSPI_SLV peripheral base pointers */
+#define FLEXSPI_SLV_BASE_PTRS                    { WAKEUP__XSPI_RESPONDER }
+
+/* FRAMEGEN - Peripheral instance base addresses */
+/** Peripheral DISPLAY__SEERIS__FRAMEGE1 base address */
+#define DISPLAY__SEERIS__FRAMEGE1_BASE           (0x4B740000u)
+/** Peripheral DISPLAY__SEERIS__FRAMEGE1 base pointer */
+#define DISPLAY__SEERIS__FRAMEGE1                ((FRAMEGEN_Type *)DISPLAY__SEERIS__FRAMEGE1_BASE)
+/** Peripheral DISPLAY__SEERIS__FRAMEGEN base address */
+#define DISPLAY__SEERIS__FRAMEGEN_BASE           (0x4B6B0000u)
+/** Peripheral DISPLAY__SEERIS__FRAMEGEN base pointer */
+#define DISPLAY__SEERIS__FRAMEGEN                ((FRAMEGEN_Type *)DISPLAY__SEERIS__FRAMEGEN_BASE)
+/** Array initializer of FRAMEGEN peripheral base addresses */
+#define FRAMEGEN_BASE_ADDRS                      { DISPLAY__SEERIS__FRAMEGE1_BASE, DISPLAY__SEERIS__FRAMEGEN_BASE }
+/** Array initializer of FRAMEGEN peripheral base pointers */
+#define FRAMEGEN_BASE_PTRS                       { DISPLAY__SEERIS__FRAMEGE1, DISPLAY__SEERIS__FRAMEGEN }
 
 /* FRO - Peripheral instance base addresses */
 /** Peripheral FRO base address */
@@ -1973,6 +1998,28 @@ typedef enum _asrc_clock_source
 #define GPC_GLOBAL_BASE_ADDRS                    { GPC_GLOBAL_BASE }
 /** Array initializer of GPC_GLOBAL peripheral base pointers */
 #define GPC_GLOBAL_BASE_PTRS                     { GPC_GLOBAL }
+
+/* GPT - Peripheral instance base addresses */
+/** Peripheral WAKEUP__GPT2 base address */
+#define WAKEUP__GPT2_BASE                        (0x435D0000u)
+/** Peripheral WAKEUP__GPT2 base pointer */
+#define WAKEUP__GPT2                             ((GPT_Type *)WAKEUP__GPT2_BASE)
+/** Peripheral WAKEUP__GPT3 base address */
+#define WAKEUP__GPT3_BASE                        (0x435E0000u)
+/** Peripheral WAKEUP__GPT3 base pointer */
+#define WAKEUP__GPT3                             ((GPT_Type *)WAKEUP__GPT3_BASE)
+/** Peripheral WAKEUP__GPT4 base address */
+#define WAKEUP__GPT4_BASE                        (0x435F0000u)
+/** Peripheral WAKEUP__GPT4 base pointer */
+#define WAKEUP__GPT4                             ((GPT_Type *)WAKEUP__GPT4_BASE)
+/** Peripheral WAKEUP__GPT5 base address */
+#define WAKEUP__GPT5_BASE                        (0x43600000u)
+/** Peripheral WAKEUP__GPT5 base pointer */
+#define WAKEUP__GPT5                             ((GPT_Type *)WAKEUP__GPT5_BASE)
+/** Array initializer of GPT peripheral base addresses */
+#define GPT_BASE_ADDRS                           { 0u, 0u, WAKEUP__GPT2_BASE, WAKEUP__GPT3_BASE, WAKEUP__GPT4_BASE, WAKEUP__GPT5_BASE }
+/** Array initializer of GPT peripheral base pointers */
+#define GPT_BASE_PTRS                            { (GPT_Type *)0u, (GPT_Type *)0u, WAKEUP__GPT2, WAKEUP__GPT3, WAKEUP__GPT4, WAKEUP__GPT5 }
 
 /* GPU_BLK_CTRL_GPUMIX - Peripheral instance base addresses */
 /** Peripheral GPU__BLK_CTRL_GPUMIX base address */
@@ -2063,6 +2110,16 @@ typedef enum _asrc_clock_source
 /** Interrupt vectors for the I3C peripheral type */
 #define I3C_IRQS                                 { NotAvail_IRQn, I3C1_IRQn, I3C2_IRQn }
 
+/* INTM - Peripheral instance base addresses */
+/** Peripheral AON__INTM base address */
+#define AON__INTM_BASE                           (0x44580000u)
+/** Peripheral AON__INTM base pointer */
+#define AON__INTM                                ((INTM_Type *)AON__INTM_BASE)
+/** Array initializer of INTM peripheral base addresses */
+#define INTM_BASE_ADDRS                          { AON__INTM_BASE }
+/** Array initializer of INTM peripheral base pointers */
+#define INTM_BASE_PTRS                           { AON__INTM }
+
 /* IOMUXC - Peripheral instance base addresses */
 /** Peripheral IOMUXC base address */
 #define IOMUXC_BASE                              (0x443C0000u)
@@ -2092,6 +2149,36 @@ typedef enum _asrc_clock_source
 #define IPA_CONTROL_BASE_ADDRS                   { GPU__REG__IPA_CONTROL_BASE }
 /** Array initializer of IPA_CONTROL peripheral base pointers */
 #define IPA_CONTROL_BASE_PTRS                    { GPU__REG__IPA_CONTROL }
+
+/* IRQ - Peripheral instance base addresses */
+/** Peripheral DISPLAY__SEERIS__IRQ base address */
+#define DISPLAY__SEERIS__IRQ_BASE                (0x4B401000u)
+/** Peripheral DISPLAY__SEERIS__IRQ base pointer */
+#define DISPLAY__SEERIS__IRQ                     ((IRQ_Type *)DISPLAY__SEERIS__IRQ_BASE)
+/** Peripheral DISPLAY__SEERIS__IRQ1 base address */
+#define DISPLAY__SEERIS__IRQ1_BASE               (0x4B431000u)
+/** Peripheral DISPLAY__SEERIS__IRQ1 base pointer */
+#define DISPLAY__SEERIS__IRQ1                    ((IRQ_Type *)DISPLAY__SEERIS__IRQ1_BASE)
+/** Peripheral DISPLAY__SEERIS__IRQ2 base address */
+#define DISPLAY__SEERIS__IRQ2_BASE               (0x4B7C1000u)
+/** Peripheral DISPLAY__SEERIS__IRQ2 base pointer */
+#define DISPLAY__SEERIS__IRQ2                    ((IRQ_Type *)DISPLAY__SEERIS__IRQ2_BASE)
+/** Peripheral DISPLAY__SEERIS__IRQ3 base address */
+#define DISPLAY__SEERIS__IRQ3_BASE               (0x4B7D1000u)
+/** Peripheral DISPLAY__SEERIS__IRQ3 base pointer */
+#define DISPLAY__SEERIS__IRQ3                    ((IRQ_Type *)DISPLAY__SEERIS__IRQ3_BASE)
+/** Peripheral DISPLAY__SEERIS__IRQ4 base address */
+#define DISPLAY__SEERIS__IRQ4_BASE               (0x4B7E1000u)
+/** Peripheral DISPLAY__SEERIS__IRQ4 base pointer */
+#define DISPLAY__SEERIS__IRQ4                    ((IRQ_Type *)DISPLAY__SEERIS__IRQ4_BASE)
+/** Peripheral DISPLAY__SEERIS__IRQ5 base address */
+#define DISPLAY__SEERIS__IRQ5_BASE               (0x4B7F1000u)
+/** Peripheral DISPLAY__SEERIS__IRQ5 base pointer */
+#define DISPLAY__SEERIS__IRQ5                    ((IRQ_Type *)DISPLAY__SEERIS__IRQ5_BASE)
+/** Array initializer of IRQ peripheral base addresses */
+#define IRQ_BASE_ADDRS                           { DISPLAY__SEERIS__IRQ_BASE, DISPLAY__SEERIS__IRQ1_BASE, DISPLAY__SEERIS__IRQ2_BASE, DISPLAY__SEERIS__IRQ3_BASE, DISPLAY__SEERIS__IRQ4_BASE, DISPLAY__SEERIS__IRQ5_BASE }
+/** Array initializer of IRQ peripheral base pointers */
+#define IRQ_BASE_PTRS                            { DISPLAY__SEERIS__IRQ, DISPLAY__SEERIS__IRQ1, DISPLAY__SEERIS__IRQ2, DISPLAY__SEERIS__IRQ3, DISPLAY__SEERIS__IRQ4, DISPLAY__SEERIS__IRQ5 }
 
 /* IRQSTEER - Peripheral instance base addresses */
 /** Peripheral IRQSTEER base address */
@@ -2132,6 +2219,32 @@ typedef enum _asrc_clock_source
 #define JPEG_DEC_WRAP_BASE_ADDRS                 { VPU__JPEG_DEC_WRAP0_BASE }
 /** Array initializer of JPEG_DEC_WRAP peripheral base pointers */
 #define JPEG_DEC_WRAP_BASE_PTRS                  { VPU__JPEG_DEC_WRAP0 }
+
+/* LAYERBL - Peripheral instance base addresses */
+/** Peripheral DISPLAY__SEERIS__LAYERBL1 base address */
+#define DISPLAY__SEERIS__LAYERBL1_BASE           (0x4B580000u)
+/** Peripheral DISPLAY__SEERIS__LAYERBL1 base pointer */
+#define DISPLAY__SEERIS__LAYERBL1                ((LAYERBL_Type *)DISPLAY__SEERIS__LAYERBL1_BASE)
+/** Peripheral DISPLAY__SEERIS__LAYERBL2 base address */
+#define DISPLAY__SEERIS__LAYERBL2_BASE           (0x4B590000u)
+/** Peripheral DISPLAY__SEERIS__LAYERBL2 base pointer */
+#define DISPLAY__SEERIS__LAYERBL2                ((LAYERBL_Type *)DISPLAY__SEERIS__LAYERBL2_BASE)
+/** Peripheral DISPLAY__SEERIS__LAYERBL3 base address */
+#define DISPLAY__SEERIS__LAYERBL3_BASE           (0x4B5A0000u)
+/** Peripheral DISPLAY__SEERIS__LAYERBL3 base pointer */
+#define DISPLAY__SEERIS__LAYERBL3                ((LAYERBL_Type *)DISPLAY__SEERIS__LAYERBL3_BASE)
+/** Peripheral DISPLAY__SEERIS__LAYERBL4 base address */
+#define DISPLAY__SEERIS__LAYERBL4_BASE           (0x4B5B0000u)
+/** Peripheral DISPLAY__SEERIS__LAYERBL4 base pointer */
+#define DISPLAY__SEERIS__LAYERBL4                ((LAYERBL_Type *)DISPLAY__SEERIS__LAYERBL4_BASE)
+/** Peripheral DISPLAY__SEERIS__LAYERBLE base address */
+#define DISPLAY__SEERIS__LAYERBLE_BASE           (0x4B570000u)
+/** Peripheral DISPLAY__SEERIS__LAYERBLE base pointer */
+#define DISPLAY__SEERIS__LAYERBLE                ((LAYERBL_Type *)DISPLAY__SEERIS__LAYERBLE_BASE)
+/** Array initializer of LAYERBL peripheral base addresses */
+#define LAYERBL_BASE_ADDRS                       { DISPLAY__SEERIS__LAYERBL1_BASE, DISPLAY__SEERIS__LAYERBL2_BASE, DISPLAY__SEERIS__LAYERBL3_BASE, DISPLAY__SEERIS__LAYERBL4_BASE, DISPLAY__SEERIS__LAYERBLE_BASE }
+/** Array initializer of LAYERBL peripheral base pointers */
+#define LAYERBL_BASE_PTRS                        { DISPLAY__SEERIS__LAYERBL1, DISPLAY__SEERIS__LAYERBL2, DISPLAY__SEERIS__LAYERBL3, DISPLAY__SEERIS__LAYERBL4, DISPLAY__SEERIS__LAYERBLE }
 
 /* LDB - Peripheral instance base addresses */
 /** Peripheral LVDS base address */
@@ -2297,6 +2410,40 @@ typedef enum _asrc_clock_source
 /** Interrupt vectors for the LPUART peripheral type */
 #define LPUART_RX_TX_IRQS                        { NotAvail_IRQn, LPUART1_IRQn, LPUART2_IRQn, LPUART3_IRQn, LPUART4_IRQn, LPUART5_IRQn, LPUART6_IRQn, LPUART7_IRQn, LPUART8_IRQn }
 
+/* LSTCU - Peripheral instance base addresses */
+/** Peripheral AON__LSTCUA base address */
+#define AON__LSTCUA_BASE                         (0x445A0000u)
+/** Peripheral AON__LSTCUA base pointer */
+#define AON__LSTCUA                              ((LSTCU_Type *)AON__LSTCUA_BASE)
+/** Peripheral CAMERA__LSTCU base address */
+#define CAMERA__LSTCU_BASE                       (0x4AF20000u)
+/** Peripheral CAMERA__LSTCU base pointer */
+#define CAMERA__LSTCU                            ((LSTCU_Type *)CAMERA__LSTCU_BASE)
+/** Peripheral DDRC__LSTCU base address */
+#define DDRC__LSTCU_BASE                         (0x4E050000u)
+/** Peripheral DDRC__LSTCU base pointer */
+#define DDRC__LSTCU                              ((LSTCU_Type *)DDRC__LSTCU_BASE)
+/** Peripheral DISPLAY__LSTCU base address */
+#define DISPLAY__LSTCU_BASE                      (0x4B2D0000u)
+/** Peripheral DISPLAY__LSTCU base pointer */
+#define DISPLAY__LSTCU                           ((LSTCU_Type *)DISPLAY__LSTCU_BASE)
+/** Peripheral M7__LSTCU_M7MIX base address */
+#define M7__LSTCU_M7MIX_BASE                     (0x4A050000u)
+/** Peripheral M7__LSTCU_M7MIX base pointer */
+#define M7__LSTCU_M7MIX                          ((LSTCU_Type *)M7__LSTCU_M7MIX_BASE)
+/** Peripheral NOC__LSTCUN base address */
+#define NOC__LSTCUN_BASE                         (0x490B0000u)
+/** Peripheral NOC__LSTCUN base pointer */
+#define NOC__LSTCUN                              ((LSTCU_Type *)NOC__LSTCUN_BASE)
+/** Peripheral NPU__LSTCU_NPUMIX base address */
+#define NPU__LSTCU_NPUMIX_BASE                   (0x4A850000u)
+/** Peripheral NPU__LSTCU_NPUMIX base pointer */
+#define NPU__LSTCU_NPUMIX                        ((LSTCU_Type *)NPU__LSTCU_NPUMIX_BASE)
+/** Array initializer of LSTCU peripheral base addresses */
+#define LSTCU_BASE_ADDRS                         { AON__LSTCUA_BASE, CAMERA__LSTCU_BASE, DDRC__LSTCU_BASE, DISPLAY__LSTCU_BASE, M7__LSTCU_M7MIX_BASE, NOC__LSTCUN_BASE, NPU__LSTCU_NPUMIX_BASE }
+/** Array initializer of LSTCU peripheral base pointers */
+#define LSTCU_BASE_PTRS                          { AON__LSTCUA, CAMERA__LSTCU, DDRC__LSTCU, DISPLAY__LSTCU, M7__LSTCU_M7MIX, NOC__LSTCUN, NPU__LSTCU_NPUMIX }
+
 /* M7_A7_APB_MCM - Peripheral instance base addresses */
 /** Peripheral M7__A7_APB_MCM1 base address */
 #define M7__A7_APB_MCM1_BASE                     (0x4A0A0000u)
@@ -2307,16 +2454,6 @@ typedef enum _asrc_clock_source
 /** Array initializer of M7_A7_APB_MCM peripheral base pointers */
 #define M7_A7_APB_MCM_BASE_PTRS                  { M7__A7_APB_MCM1 }
 
-/* M7_LSTCU - Peripheral instance base addresses */
-/** Peripheral M7__LSTCU_M7MIX base address */
-#define M7__LSTCU_M7MIX_BASE                     (0x4A050000u)
-/** Peripheral M7__LSTCU_M7MIX base pointer */
-#define M7__LSTCU_M7MIX                          ((M7_LSTCU_Type *)M7__LSTCU_M7MIX_BASE)
-/** Array initializer of M7_LSTCU peripheral base addresses */
-#define M7_LSTCU_BASE_ADDRS                      { M7__LSTCU_M7MIX_BASE }
-/** Array initializer of M7_LSTCU peripheral base pointers */
-#define M7_LSTCU_BASE_PTRS                       { M7__LSTCU_M7MIX }
-
 /* M7_TCU - Peripheral instance base addresses */
 /** Peripheral M7__TCU base address */
 #define M7__TCU_BASE                             (0x4A000000u)
@@ -2326,6 +2463,16 @@ typedef enum _asrc_clock_source
 #define M7_TCU_BASE_ADDRS                        { M7__TCU_BASE }
 /** Array initializer of M7_TCU peripheral base pointers */
 #define M7_TCU_BASE_PTRS                         { M7__TCU }
+
+/* MCM - Peripheral instance base addresses */
+/** Peripheral AON__MCM base address */
+#define AON__MCM_BASE                            (0xE0080000u)
+/** Peripheral AON__MCM base pointer */
+#define AON__MCM                                 ((MCM_Type *)AON__MCM_BASE)
+/** Array initializer of MCM peripheral base addresses */
+#define MCM_BASE_ADDRS                           { AON__MCM_BASE }
+/** Array initializer of MCM peripheral base pointers */
+#define MCM_BASE_PTRS                            { AON__MCM }
 
 /* MECC - Peripheral instance base addresses */
 /** Peripheral CAMERA__OCRAM_MECC base address */
@@ -2569,16 +2716,6 @@ typedef enum _mu_core_boot_mode
 /** Array initializer of NOC_BLK_CTRL_NOCMIX peripheral base pointers */
 #define NOC_BLK_CTRL_NOCMIX_BASE_PTRS            { NOC__BLK_CTRL_NOCMIX }
 
-/* NOC_LSTCU - Peripheral instance base addresses */
-/** Peripheral NOC__LSTCUN base address */
-#define NOC__LSTCUN_BASE                         (0x490B0000u)
-/** Peripheral NOC__LSTCUN base pointer */
-#define NOC__LSTCUN                              ((NOC_LSTCU_Type *)NOC__LSTCUN_BASE)
-/** Array initializer of NOC_LSTCU peripheral base addresses */
-#define NOC_LSTCU_BASE_ADDRS                     { NOC__LSTCUN_BASE }
-/** Array initializer of NOC_LSTCU peripheral base pointers */
-#define NOC_LSTCU_BASE_PTRS                      { NOC__LSTCUN }
-
 /* NOC_SRAMCTL - Peripheral instance base addresses */
 /** Peripheral NOC__SRAMCTL base address */
 #define NOC__SRAMCTL_BASE                        (0x490A0000u)
@@ -2598,16 +2735,6 @@ typedef enum _mu_core_boot_mode
 #define NPU_BLK_CTRL_BASE_ADDRS                  { NPU__BLK_CTRL_NPUMIX_BASE }
 /** Array initializer of NPU_BLK_CTRL peripheral base pointers */
 #define NPU_BLK_CTRL_BASE_PTRS                   { NPU__BLK_CTRL_NPUMIX }
-
-/* NPU_LSTCU - Peripheral instance base addresses */
-/** Peripheral NPU__LSTCU_NPUMIX base address */
-#define NPU__LSTCU_NPUMIX_BASE                   (0x4A850000u)
-/** Peripheral NPU__LSTCU_NPUMIX base pointer */
-#define NPU__LSTCU_NPUMIX                        ((NPU_LSTCU_Type *)NPU__LSTCU_NPUMIX_BASE)
-/** Array initializer of NPU_LSTCU peripheral base addresses */
-#define NPU_LSTCU_BASE_ADDRS                     { NPU__LSTCU_NPUMIX_BASE }
-/** Array initializer of NPU_LSTCU peripheral base pointers */
-#define NPU_LSTCU_BASE_PTRS                      { NPU__LSTCU_NPUMIX }
 
 /* OSC24M - Peripheral instance base addresses */
 /** Peripheral OSC24M base address */
@@ -2785,6 +2912,28 @@ typedef enum _mu_core_boot_mode
 #define S3MU_BASE_ADDRS                          { ELE_MU0_MUA_BASE, ELE_MU1_MUA_BASE, ELE_MU2_MUA_BASE, ELE_MU3_MUA_BASE, ELE_MU4_MUA_BASE, ELE_MU5_MUA_BASE }
 /** Array initializer of S3MU peripheral base pointers */
 #define S3MU_BASE_PTRS                           { ELE_MU0_MUA, ELE_MU1_MUA, ELE_MU2_MUA, ELE_MU3_MUA, ELE_MU4_MUA, ELE_MU5_MUA }
+
+/* SCALER - Peripheral instance base addresses */
+/** Peripheral DISPLAY__SEERIS__HSCALER base address */
+#define DISPLAY__SEERIS__HSCALER_BASE            (0x4B4B0000u)
+/** Peripheral DISPLAY__SEERIS__HSCALER base pointer */
+#define DISPLAY__SEERIS__HSCALER                 ((SCALER_Type *)DISPLAY__SEERIS__HSCALER_BASE)
+/** Peripheral DISPLAY__SEERIS__HSCALER1 base address */
+#define DISPLAY__SEERIS__HSCALER1_BASE           (0x4B640000u)
+/** Peripheral DISPLAY__SEERIS__HSCALER1 base pointer */
+#define DISPLAY__SEERIS__HSCALER1                ((SCALER_Type *)DISPLAY__SEERIS__HSCALER1_BASE)
+/** Peripheral DISPLAY__SEERIS__VSCALER base address */
+#define DISPLAY__SEERIS__VSCALER_BASE            (0x4B4C0000u)
+/** Peripheral DISPLAY__SEERIS__VSCALER base pointer */
+#define DISPLAY__SEERIS__VSCALER                 ((SCALER_Type *)DISPLAY__SEERIS__VSCALER_BASE)
+/** Peripheral DISPLAY__SEERIS__VSCALER1 base address */
+#define DISPLAY__SEERIS__VSCALER1_BASE           (0x4B650000u)
+/** Peripheral DISPLAY__SEERIS__VSCALER1 base pointer */
+#define DISPLAY__SEERIS__VSCALER1                ((SCALER_Type *)DISPLAY__SEERIS__VSCALER1_BASE)
+/** Array initializer of SCALER peripheral base addresses */
+#define SCALER_BASE_ADDRS                        { DISPLAY__SEERIS__HSCALER_BASE, DISPLAY__SEERIS__HSCALER1_BASE, DISPLAY__SEERIS__VSCALER_BASE, DISPLAY__SEERIS__VSCALER1_BASE }
+/** Array initializer of SCALER peripheral base pointers */
+#define SCALER_BASE_PTRS                         { DISPLAY__SEERIS__HSCALER, DISPLAY__SEERIS__HSCALER1, DISPLAY__SEERIS__VSCALER, DISPLAY__SEERIS__VSCALER1 }
 
 /* SEMA42 - Peripheral instance base addresses */
 /** Peripheral SEMA42_1 base address */
@@ -2982,6 +3131,20 @@ typedef enum _mu_core_boot_mode
 /** Array initializer of SRC_XSPR peripheral base pointers */
 #define SRC_XSPR_BASE_PTRS                       { CCMSRCGPC__SRC__XSPR_AONMIX, CCMSRCGPC__SRC__XSPR_BBSMMIX, CCMSRCGPC__SRC__XSPR_CAMERAMIX, CCMSRCGPC__SRC__XSPR_CCMSRCGPCMIX, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE0, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE1, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE2, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE3, CCMSRCGPC__SRC__XSPR_CORTEXMIX_PLATFORM, CCMSRCGPC__SRC__XSPR_DDRMIX, CCMSRCGPC__SRC__XSPR_DISPLAYMIX, CCMSRCGPC__SRC__XSPR_GPUMIX, CCMSRCGPC__SRC__XSPR_HSIOMIX_TOP, CCMSRCGPC__SRC__XSPR_HSIOMIX_WAON, CCMSRCGPC__SRC__XSPR_M7MIX, CCMSRCGPC__SRC__XSPR_NETCMIX, CCMSRCGPC__SRC__XSPR_NOCMIX, CCMSRCGPC__SRC__XSPR_NPUMIX, CCMSRCGPC__SRC__XSPR_VPUMIX, CCMSRCGPC__SRC__XSPR_WAKEUPMIX, SRC_XSPR_ANAMIX }
 
+/* SYSPM - Peripheral instance base addresses */
+/** Peripheral AON__M33_PCF1 base address */
+#define AON__M33_PCF1_BASE                       (0x443E0000u)
+/** Peripheral AON__M33_PCF1 base pointer */
+#define AON__M33_PCF1                            ((SYSPM_Type *)AON__M33_PCF1_BASE)
+/** Peripheral AON__M33_PSF2 base address */
+#define AON__M33_PSF2_BASE                       (0x443F0000u)
+/** Peripheral AON__M33_PSF2 base pointer */
+#define AON__M33_PSF2                            ((SYSPM_Type *)AON__M33_PSF2_BASE)
+/** Array initializer of SYSPM peripheral base addresses */
+#define SYSPM_BASE_ADDRS                         { AON__M33_PCF1_BASE, AON__M33_PSF2_BASE }
+/** Array initializer of SYSPM peripheral base pointers */
+#define SYSPM_BASE_PTRS                          { AON__M33_PCF1, AON__M33_PSF2 }
+
 /* SYS_CTR_COMPARE - Peripheral instance base addresses */
 /** Peripheral AON__SYS_CTR1__SYS_CTR_COMPARE base address */
 #define AON__SYS_CTR1__SYS_CTR_COMPARE_BASE      (0x442A0000u)
@@ -3078,6 +3241,16 @@ typedef enum _mu_core_boot_mode
 /** Interrupt vectors for the TPM peripheral type */
 #define TPM_IRQS                                 { NotAvail_IRQn, TPM1_IRQn, TPM2_IRQn, TPM3_IRQn, TPM4_IRQn, TPM5_IRQn, TPM6_IRQn }
 
+/* TRDC - Peripheral instance base addresses */
+/** Peripheral WAKEUP__TRDC_MGR1 base address */
+#define WAKEUP__TRDC_MGR1_BASE                   (0x42080000u)
+/** Peripheral WAKEUP__TRDC_MGR1 base pointer */
+#define WAKEUP__TRDC_MGR1                        ((TRDC_Type *)WAKEUP__TRDC_MGR1_BASE)
+/** Array initializer of TRDC peripheral base addresses */
+#define TRDC_BASE_ADDRS                          { WAKEUP__TRDC_MGR1_BASE }
+/** Array initializer of TRDC peripheral base pointers */
+#define TRDC_BASE_PTRS                           { WAKEUP__TRDC_MGR1 }
+
 /* TRDC_MGR_MEGA - Peripheral instance base addresses */
 /** Peripheral WAKEUP__TRDC_MGR2 base address */
 #define WAKEUP__TRDC_MGR2_BASE                   (0x424C0000u)
@@ -3087,6 +3260,16 @@ typedef enum _mu_core_boot_mode
 #define TRDC_MGR_MEGA_BASE_ADDRS                 { WAKEUP__TRDC_MGR2_BASE }
 /** Array initializer of TRDC_MGR_MEGA peripheral base pointers */
 #define TRDC_MGR_MEGA_BASE_PTRS                  { WAKEUP__TRDC_MGR2 }
+
+/* TRGMUX - Peripheral instance base addresses */
+/** Peripheral ANALOG__TRGMUX base address */
+#define ANALOG__TRGMUX_BASE                      (0x44531000u)
+/** Peripheral ANALOG__TRGMUX base pointer */
+#define ANALOG__TRGMUX                           ((TRGMUX_Type *)ANALOG__TRGMUX_BASE)
+/** Array initializer of TRGMUX peripheral base addresses */
+#define TRGMUX_BASE_ADDRS                        { ANALOG__TRGMUX_BASE }
+/** Array initializer of TRGMUX peripheral base pointers */
+#define TRGMUX_BASE_PTRS                         { ANALOG__TRGMUX }
 
 /* TSTMR - Peripheral instance base addresses */
 /** Peripheral TSTMR1 base address */
@@ -3134,22 +3317,22 @@ typedef enum _mu_core_boot_mode
 #define USBNC_BASE_PTRS                          { USBNC_OTG1, USBNC_OTG2 }
 
 /* USDHC - Peripheral instance base addresses */
-/** Peripheral WAKEUP__USDHC1 base address */
-#define WAKEUP__USDHC1_BASE                      (0x42C20000u)
-/** Peripheral WAKEUP__USDHC1 base pointer */
-#define WAKEUP__USDHC1                           ((USDHC_Type *)WAKEUP__USDHC1_BASE)
-/** Peripheral WAKEUP__USDHC2 base address */
-#define WAKEUP__USDHC2_BASE                      (0x42C30000u)
-/** Peripheral WAKEUP__USDHC2 base pointer */
-#define WAKEUP__USDHC2                           ((USDHC_Type *)WAKEUP__USDHC2_BASE)
-/** Peripheral WAKEUP__USDHC3 base address */
-#define WAKEUP__USDHC3_BASE                      (0x42C40000u)
-/** Peripheral WAKEUP__USDHC3 base pointer */
-#define WAKEUP__USDHC3                           ((USDHC_Type *)WAKEUP__USDHC3_BASE)
+/** Peripheral uSDHC1 base address */
+#define uSDHC1_BASE                              (0x42C20000u)
+/** Peripheral uSDHC1 base pointer */
+#define uSDHC1                                   ((USDHC_Type *)uSDHC1_BASE)
+/** Peripheral uSDHC2 base address */
+#define uSDHC2_BASE                              (0x42C30000u)
+/** Peripheral uSDHC2 base pointer */
+#define uSDHC2                                   ((USDHC_Type *)uSDHC2_BASE)
+/** Peripheral uSDHC3 base address */
+#define uSDHC3_BASE                              (0x42C40000u)
+/** Peripheral uSDHC3 base pointer */
+#define uSDHC3                                   ((USDHC_Type *)uSDHC3_BASE)
 /** Array initializer of USDHC peripheral base addresses */
-#define USDHC_BASE_ADDRS                         { 0u, WAKEUP__USDHC1_BASE, WAKEUP__USDHC2_BASE, WAKEUP__USDHC3_BASE }
+#define USDHC_BASE_ADDRS                         { 0u, uSDHC1_BASE, uSDHC2_BASE, uSDHC3_BASE }
 /** Array initializer of USDHC peripheral base pointers */
-#define USDHC_BASE_PTRS                          { (USDHC_Type *)0u, WAKEUP__USDHC1, WAKEUP__USDHC2, WAKEUP__USDHC3 }
+#define USDHC_BASE_PTRS                          { (USDHC_Type *)0u, uSDHC1, uSDHC2, uSDHC3 }
 
 /* USER - Peripheral instance base addresses */
 /** Peripheral GPU__REG__USER base address */
@@ -3160,6 +3343,26 @@ typedef enum _mu_core_boot_mode
 #define USER_BASE_ADDRS                          { GPU__REG__USER_BASE }
 /** Array initializer of USER peripheral base pointers */
 #define USER_BASE_PTRS                           { GPU__REG__USER }
+
+/* VDET - Peripheral instance base addresses */
+/** Peripheral ANALOG__VDET base address */
+#define ANALOG__VDET_BASE                        (0x44486000u)
+/** Peripheral ANALOG__VDET base pointer */
+#define ANALOG__VDET                             ((VDET_Type *)ANALOG__VDET_BASE)
+/** Array initializer of VDET peripheral base addresses */
+#define VDET_BASE_ADDRS                          { ANALOG__VDET_BASE }
+/** Array initializer of VDET peripheral base pointers */
+#define VDET_BASE_PTRS                           { ANALOG__VDET }
+
+/* VFCCU - Peripheral instance base addresses */
+/** Peripheral AON__FCCU base address */
+#define AON__FCCU_BASE                           (0x44570000u)
+/** Peripheral AON__FCCU base pointer */
+#define AON__FCCU                                ((VFCCU_Type *)AON__FCCU_BASE)
+/** Array initializer of VFCCU peripheral base addresses */
+#define VFCCU_BASE_ADDRS                         { AON__FCCU_BASE }
+/** Array initializer of VFCCU peripheral base pointers */
+#define VFCCU_BASE_PTRS                          { AON__FCCU }
 
 /* VPU_BLK_CTRL_VPUMIX - Peripheral instance base addresses */
 /** Peripheral VPU__BLK_CTRL_VPUMIX base address */
@@ -3231,113 +3434,37 @@ typedef enum _mu_core_boot_mode
 /** Array initializer of VS_MMD1 peripheral base pointers */
 #define VS_MMD1_BASE_PTRS                        { HSIO__PCIE_ENET1__PCIE_ENET_SERDES__VS_MMD1 }
 
-/* WAKEUP_AHBRM - Peripheral instance base addresses */
-/** Peripheral WAKEUP__AHBRM1 base address */
-#define WAKEUP__AHBRM1_BASE                      (0x42400800u)
-/** Peripheral WAKEUP__AHBRM1 base pointer */
-#define WAKEUP__AHBRM1                           ((WAKEUP_AHBRM_Type *)WAKEUP__AHBRM1_BASE)
-/** Array initializer of WAKEUP_AHBRM peripheral base addresses */
-#define WAKEUP_AHBRM_BASE_ADDRS                  { WAKEUP__AHBRM1_BASE }
-/** Array initializer of WAKEUP_AHBRM peripheral base pointers */
-#define WAKEUP_AHBRM_BASE_PTRS                   { WAKEUP__AHBRM1 }
-
-/* WAKEUP_AUDMIX - Peripheral instance base addresses */
-/** Peripheral WAKEUP__AUDMIX1 base address */
-#define WAKEUP__AUDMIX1_BASE                     (0x431F0000u)
-/** Peripheral WAKEUP__AUDMIX1 base pointer */
-#define WAKEUP__AUDMIX1                          ((WAKEUP_AUDMIX_Type *)WAKEUP__AUDMIX1_BASE)
-/** Array initializer of WAKEUP_AUDMIX peripheral base addresses */
-#define WAKEUP_AUDMIX_BASE_ADDRS                 { WAKEUP__AUDMIX1_BASE }
-/** Array initializer of WAKEUP_AUDMIX peripheral base pointers */
-#define WAKEUP_AUDMIX_BASE_PTRS                  { WAKEUP__AUDMIX1 }
-
-/* WAKEUP_DMA_CRC - Peripheral instance base addresses */
-/** Peripheral WAKEUP__DMA_CRC2 base address */
-#define WAKEUP__DMA_CRC2_BASE                    (0x423D0000u)
-/** Peripheral WAKEUP__DMA_CRC2 base pointer */
-#define WAKEUP__DMA_CRC2                         ((WAKEUP_DMA_CRC_Type *)WAKEUP__DMA_CRC2_BASE)
-/** Peripheral WAKEUP__DMA_CRC3 base address */
-#define WAKEUP__DMA_CRC3_BASE                    (0x424F0000u)
-/** Peripheral WAKEUP__DMA_CRC3 base pointer */
-#define WAKEUP__DMA_CRC3                         ((WAKEUP_DMA_CRC_Type *)WAKEUP__DMA_CRC3_BASE)
-/** Array initializer of WAKEUP_DMA_CRC peripheral base addresses */
-#define WAKEUP_DMA_CRC_BASE_ADDRS                { WAKEUP__DMA_CRC2_BASE, WAKEUP__DMA_CRC3_BASE }
-/** Array initializer of WAKEUP_DMA_CRC peripheral base pointers */
-#define WAKEUP_DMA_CRC_BASE_PTRS                 { WAKEUP__DMA_CRC2, WAKEUP__DMA_CRC3 }
-
-/* WAKEUP_GPT - Peripheral instance base addresses */
-/** Peripheral WAKEUP__GPT2 base address */
-#define WAKEUP__GPT2_BASE                        (0x435D0000u)
-/** Peripheral WAKEUP__GPT2 base pointer */
-#define WAKEUP__GPT2                             ((WAKEUP_GPT_Type *)WAKEUP__GPT2_BASE)
-/** Peripheral WAKEUP__GPT3 base address */
-#define WAKEUP__GPT3_BASE                        (0x435E0000u)
-/** Peripheral WAKEUP__GPT3 base pointer */
-#define WAKEUP__GPT3                             ((WAKEUP_GPT_Type *)WAKEUP__GPT3_BASE)
-/** Peripheral WAKEUP__GPT4 base address */
-#define WAKEUP__GPT4_BASE                        (0x435F0000u)
-/** Peripheral WAKEUP__GPT4 base pointer */
-#define WAKEUP__GPT4                             ((WAKEUP_GPT_Type *)WAKEUP__GPT4_BASE)
-/** Peripheral WAKEUP__GPT5 base address */
-#define WAKEUP__GPT5_BASE                        (0x43600000u)
-/** Peripheral WAKEUP__GPT5 base pointer */
-#define WAKEUP__GPT5                             ((WAKEUP_GPT_Type *)WAKEUP__GPT5_BASE)
-/** Array initializer of WAKEUP_GPT peripheral base addresses */
-#define WAKEUP_GPT_BASE_ADDRS                    { WAKEUP__GPT2_BASE, WAKEUP__GPT3_BASE, WAKEUP__GPT4_BASE, WAKEUP__GPT5_BASE }
-/** Array initializer of WAKEUP_GPT peripheral base pointers */
-#define WAKEUP_GPT_BASE_PTRS                     { WAKEUP__GPT2, WAKEUP__GPT3, WAKEUP__GPT4, WAKEUP__GPT5 }
-
-/* WAKEUP_TRDC_MGR - Peripheral instance base addresses */
-/** Peripheral WAKEUP__TRDC_MGR1 base address */
-#define WAKEUP__TRDC_MGR1_BASE                   (0x42080000u)
-/** Peripheral WAKEUP__TRDC_MGR1 base pointer */
-#define WAKEUP__TRDC_MGR1                        ((WAKEUP_TRDC_MGR_Type *)WAKEUP__TRDC_MGR1_BASE)
-/** Array initializer of WAKEUP_TRDC_MGR peripheral base addresses */
-#define WAKEUP_TRDC_MGR_BASE_ADDRS               { WAKEUP__TRDC_MGR1_BASE }
-/** Array initializer of WAKEUP_TRDC_MGR peripheral base pointers */
-#define WAKEUP_TRDC_MGR_BASE_PTRS                { WAKEUP__TRDC_MGR1 }
-
-/* WAKEUP_XSPI_RESPONDER - Peripheral instance base addresses */
-/** Peripheral WAKEUP__XSPI_RESPONDER base address */
-#define WAKEUP__XSPI_RESPONDER_BASE              (0x42C50000u)
-/** Peripheral WAKEUP__XSPI_RESPONDER base pointer */
-#define WAKEUP__XSPI_RESPONDER                   ((WAKEUP_XSPI_RESPONDER_Type *)WAKEUP__XSPI_RESPONDER_BASE)
-/** Array initializer of WAKEUP_XSPI_RESPONDER peripheral base addresses */
-#define WAKEUP_XSPI_RESPONDER_BASE_ADDRS         { WAKEUP__XSPI_RESPONDER_BASE }
-/** Array initializer of WAKEUP_XSPI_RESPONDER peripheral base pointers */
-#define WAKEUP_XSPI_RESPONDER_BASE_PTRS          { WAKEUP__XSPI_RESPONDER }
-
 /* WDOG - Peripheral instance base addresses */
-/** Peripheral AON__LPWDOG1 base address */
-#define AON__LPWDOG1_BASE                        (0x442D0000u)
-/** Peripheral AON__LPWDOG1 base pointer */
-#define AON__LPWDOG1                             ((WDOG_Type *)AON__LPWDOG1_BASE)
-/** Peripheral AON__LPWDOG2 base address */
-#define AON__LPWDOG2_BASE                        (0x442E0000u)
-/** Peripheral AON__LPWDOG2 base pointer */
-#define AON__LPWDOG2                             ((WDOG_Type *)AON__LPWDOG2_BASE)
-/** Peripheral DISPLAY__LPWDOG6 base address */
-#define DISPLAY__LPWDOG6_BASE                    (0x4B2A0000u)
-/** Peripheral DISPLAY__LPWDOG6 base pointer */
-#define DISPLAY__LPWDOG6                         ((WDOG_Type *)DISPLAY__LPWDOG6_BASE)
-/** Peripheral WAKEUP__LPWDOG3 base address */
-#define WAKEUP__LPWDOG3_BASE                     (0x420B0000u)
-/** Peripheral WAKEUP__LPWDOG3 base pointer */
-#define WAKEUP__LPWDOG3                          ((WDOG_Type *)WAKEUP__LPWDOG3_BASE)
-/** Peripheral WAKEUP__LPWDOG4 base address */
-#define WAKEUP__LPWDOG4_BASE                     (0x420C0000u)
-/** Peripheral WAKEUP__LPWDOG4 base pointer */
-#define WAKEUP__LPWDOG4                          ((WDOG_Type *)WAKEUP__LPWDOG4_BASE)
-/** Peripheral WAKEUP__LPWDOG5 base address */
-#define WAKEUP__LPWDOG5_BASE                     (0x420D0000u)
-/** Peripheral WAKEUP__LPWDOG5 base pointer */
-#define WAKEUP__LPWDOG5                          ((WDOG_Type *)WAKEUP__LPWDOG5_BASE)
+/** Peripheral WDOG1 base address */
+#define WDOG1_BASE                               (0x442D0000u)
+/** Peripheral WDOG1 base pointer */
+#define WDOG1                                    ((WDOG_Type *)WDOG1_BASE)
+/** Peripheral WDOG2 base address */
+#define WDOG2_BASE                               (0x442E0000u)
+/** Peripheral WDOG2 base pointer */
+#define WDOG2                                    ((WDOG_Type *)WDOG2_BASE)
+/** Peripheral WDOG3 base address */
+#define WDOG3_BASE                               (0x420B0000u)
+/** Peripheral WDOG3 base pointer */
+#define WDOG3                                    ((WDOG_Type *)WDOG3_BASE)
+/** Peripheral WDOG4 base address */
+#define WDOG4_BASE                               (0x420C0000u)
+/** Peripheral WDOG4 base pointer */
+#define WDOG4                                    ((WDOG_Type *)WDOG4_BASE)
+/** Peripheral WDOG5 base address */
+#define WDOG5_BASE                               (0x420D0000u)
+/** Peripheral WDOG5 base pointer */
+#define WDOG5                                    ((WDOG_Type *)WDOG5_BASE)
+/** Peripheral WDOG6 base address */
+#define WDOG6_BASE                               (0x4B2A0000u)
+/** Peripheral WDOG6 base pointer */
+#define WDOG6                                    ((WDOG_Type *)WDOG6_BASE)
 /** Array initializer of WDOG peripheral base addresses */
-#define WDOG_BASE_ADDRS                          { AON__LPWDOG1_BASE, AON__LPWDOG2_BASE, DISPLAY__LPWDOG6_BASE, WAKEUP__LPWDOG3_BASE, WAKEUP__LPWDOG4_BASE, WAKEUP__LPWDOG5_BASE }
+#define WDOG_BASE_ADDRS                          { WDOG1_BASE, WDOG2_BASE, WDOG3_BASE, WDOG4_BASE, WDOG5_BASE, WDOG6_BASE }
 /** Array initializer of WDOG peripheral base pointers */
-#define WDOG_BASE_PTRS                           { AON__LPWDOG1, AON__LPWDOG2, DISPLAY__LPWDOG6, WAKEUP__LPWDOG3, WAKEUP__LPWDOG4, WAKEUP__LPWDOG5 }
+#define WDOG_BASE_PTRS                           { WDOG1, WDOG2, WDOG3, WDOG4, WDOG5, WDOG6 }
 /** Interrupt vectors for the WDOG peripheral type */
-#define WDOG_IRQS                                { WDOG1_IRQn, WDOG2_IRQn, NotAvail_IRQn, WDOG3_IRQn, WDOG4_IRQn, WDOG5_IRQn }
+#define WDOG_IRQS                                { WDOG1_IRQn, WDOG2_IRQn, WDOG3_IRQn, WDOG4_IRQn, WDOG5_IRQn, NotAvail_IRQn }
 /* Extra definition */
 #define WDOG_UPDATE_KEY                          (0xD928C520U)
 #define WDOG_REFRESH_KEY                         (0xB480A602U)
@@ -3521,46 +3648,6 @@ typedef enum _mu_core_boot_mode
 /** Array initializer of constf5c peripheral base pointers */
 #define constf5c_BASE_PTRS                       { DISPLAY__SEERIS__CONSTF5C }
 
-/* constfr - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__CONSTFR base address */
-#define DISPLAY__SEERIS__CONSTFR_BASE            (0x4B4F0000u)
-/** Peripheral DISPLAY__SEERIS__CONSTFR base pointer */
-#define DISPLAY__SEERIS__CONSTFR                 ((constfr_Type *)DISPLAY__SEERIS__CONSTFR_BASE)
-/** Array initializer of constfr peripheral base addresses */
-#define constfr_BASE_ADDRS                       { DISPLAY__SEERIS__CONSTFR_BASE }
-/** Array initializer of constfr peripheral base pointers */
-#define constfr_BASE_PTRS                        { DISPLAY__SEERIS__CONSTFR }
-
-/* constfr1 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__CONSTFR1 base address */
-#define DISPLAY__SEERIS__CONSTFR1_BASE           (0x4B500000u)
-/** Peripheral DISPLAY__SEERIS__CONSTFR1 base pointer */
-#define DISPLAY__SEERIS__CONSTFR1                ((constfr1_Type *)DISPLAY__SEERIS__CONSTFR1_BASE)
-/** Array initializer of constfr1 peripheral base addresses */
-#define constfr1_BASE_ADDRS                      { DISPLAY__SEERIS__CONSTFR1_BASE }
-/** Array initializer of constfr1 peripheral base pointers */
-#define constfr1_BASE_PTRS                       { DISPLAY__SEERIS__CONSTFR1 }
-
-/* constfr2 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__CONSTFR2 base address */
-#define DISPLAY__SEERIS__CONSTFR2_BASE           (0x4B530000u)
-/** Peripheral DISPLAY__SEERIS__CONSTFR2 base pointer */
-#define DISPLAY__SEERIS__CONSTFR2                ((constfr2_Type *)DISPLAY__SEERIS__CONSTFR2_BASE)
-/** Array initializer of constfr2 peripheral base addresses */
-#define constfr2_BASE_ADDRS                      { DISPLAY__SEERIS__CONSTFR2_BASE }
-/** Array initializer of constfr2 peripheral base pointers */
-#define constfr2_BASE_PTRS                       { DISPLAY__SEERIS__CONSTFR2 }
-
-/* constfr3 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__CONSTFR3 base address */
-#define DISPLAY__SEERIS__CONSTFR3_BASE           (0x4B540000u)
-/** Peripheral DISPLAY__SEERIS__CONSTFR3 base pointer */
-#define DISPLAY__SEERIS__CONSTFR3                ((constfr3_Type *)DISPLAY__SEERIS__CONSTFR3_BASE)
-/** Array initializer of constfr3 peripheral base addresses */
-#define constfr3_BASE_ADDRS                      { DISPLAY__SEERIS__CONSTFR3_BASE }
-/** Array initializer of constfr3 peripheral base pointers */
-#define constfr3_BASE_PTRS                       { DISPLAY__SEERIS__CONSTFR3 }
-
 /* displa0c - Peripheral instance base addresses */
 /** Peripheral DISPLAY__SEERIS__DISPLA0C base address */
 #define DISPLAY__SEERIS__DISPLA0C_BASE           (0x4B6F1000u)
@@ -3581,46 +3668,6 @@ typedef enum _mu_core_boot_mode
 /** Array initializer of displa1c peripheral base pointers */
 #define displa1c_BASE_PTRS                       { DISPLAY__SEERIS__DISPLA1C }
 
-/* dither - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__DITHER base address */
-#define DISPLAY__SEERIS__DITHER_BASE             (0x4B6F0000u)
-/** Peripheral DISPLAY__SEERIS__DITHER base pointer */
-#define DISPLAY__SEERIS__DITHER                  ((dither_Type *)DISPLAY__SEERIS__DITHER_BASE)
-/** Array initializer of dither peripheral base addresses */
-#define dither_BASE_ADDRS                        { DISPLAY__SEERIS__DITHER_BASE }
-/** Array initializer of dither peripheral base pointers */
-#define dither_BASE_PTRS                         { DISPLAY__SEERIS__DITHER }
-
-/* dither1 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__DITHER1 base address */
-#define DISPLAY__SEERIS__DITHER1_BASE            (0x4B780000u)
-/** Peripheral DISPLAY__SEERIS__DITHER1 base pointer */
-#define DISPLAY__SEERIS__DITHER1                 ((dither1_Type *)DISPLAY__SEERIS__DITHER1_BASE)
-/** Array initializer of dither1 peripheral base addresses */
-#define dither1_BASE_ADDRS                       { DISPLAY__SEERIS__DITHER1_BASE }
-/** Array initializer of dither1 peripheral base pointers */
-#define dither1_BASE_PTRS                        { DISPLAY__SEERIS__DITHER1 }
-
-/* domainb1 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__DOMAINB1 base address */
-#define DISPLAY__SEERIS__DOMAINB1_BASE           (0x4B730000u)
-/** Peripheral DISPLAY__SEERIS__DOMAINB1 base pointer */
-#define DISPLAY__SEERIS__DOMAINB1                ((domainb1_Type *)DISPLAY__SEERIS__DOMAINB1_BASE)
-/** Array initializer of domainb1 peripheral base addresses */
-#define domainb1_BASE_ADDRS                      { DISPLAY__SEERIS__DOMAINB1_BASE }
-/** Array initializer of domainb1 peripheral base pointers */
-#define domainb1_BASE_PTRS                       { DISPLAY__SEERIS__DOMAINB1 }
-
-/* domainbl - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__DOMAINBL base address */
-#define DISPLAY__SEERIS__DOMAINBL_BASE           (0x4B6A0000u)
-/** Peripheral DISPLAY__SEERIS__DOMAINBL base pointer */
-#define DISPLAY__SEERIS__DOMAINBL                ((domainbl_Type *)DISPLAY__SEERIS__DOMAINBL_BASE)
-/** Array initializer of domainbl peripheral base addresses */
-#define domainbl_BASE_ADDRS                      { DISPLAY__SEERIS__DOMAINBL_BASE }
-/** Array initializer of domainbl peripheral base pointers */
-#define domainbl_BASE_PTRS                       { DISPLAY__SEERIS__DOMAINBL }
-
 /* domainma - Peripheral instance base addresses */
 /** Peripheral DISPLAY__SEERIS__DOMAINMA base address */
 #define DISPLAY__SEERIS__DOMAINMA_BASE           (0x4B402000u)
@@ -3630,16 +3677,6 @@ typedef enum _mu_core_boot_mode
 #define domainma_BASE_ADDRS                      { DISPLAY__SEERIS__DOMAINMA_BASE }
 /** Array initializer of domainma peripheral base pointers */
 #define domainma_BASE_PTRS                       { DISPLAY__SEERIS__DOMAINMA }
-
-/* extdst - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__EXTDST base address */
-#define DISPLAY__SEERIS__EXTDST_BASE             (0x4B510000u)
-/** Peripheral DISPLAY__SEERIS__EXTDST base pointer */
-#define DISPLAY__SEERIS__EXTDST                  ((extdst_Type *)DISPLAY__SEERIS__EXTDST_BASE)
-/** Array initializer of extdst peripheral base addresses */
-#define extdst_BASE_ADDRS                        { DISPLAY__SEERIS__EXTDST_BASE }
-/** Array initializer of extdst peripheral base pointers */
-#define extdst_BASE_PTRS                         { DISPLAY__SEERIS__EXTDST }
 
 /* extdst0c - Peripheral instance base addresses */
 /** Peripheral DISPLAY__SEERIS__EXTDST0C base address */
@@ -3651,16 +3688,6 @@ typedef enum _mu_core_boot_mode
 /** Array initializer of extdst0c peripheral base pointers */
 #define extdst0c_BASE_PTRS                       { DISPLAY__SEERIS__EXTDST0C }
 
-/* extdst1 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__EXTDST1 base address */
-#define DISPLAY__SEERIS__EXTDST1_BASE            (0x4B520000u)
-/** Peripheral DISPLAY__SEERIS__EXTDST1 base pointer */
-#define DISPLAY__SEERIS__EXTDST1                 ((extdst1_Type *)DISPLAY__SEERIS__EXTDST1_BASE)
-/** Array initializer of extdst1 peripheral base addresses */
-#define extdst1_BASE_ADDRS                       { DISPLAY__SEERIS__EXTDST1_BASE }
-/** Array initializer of extdst1 peripheral base pointers */
-#define extdst1_BASE_PTRS                        { DISPLAY__SEERIS__EXTDST1 }
-
 /* extdst1c - Peripheral instance base addresses */
 /** Peripheral DISPLAY__SEERIS__EXTDST1C base address */
 #define DISPLAY__SEERIS__EXTDST1C_BASE           (0x4B551000u)
@@ -3670,26 +3697,6 @@ typedef enum _mu_core_boot_mode
 #define extdst1c_BASE_ADDRS                      { DISPLAY__SEERIS__EXTDST1C_BASE }
 /** Array initializer of extdst1c peripheral base pointers */
 #define extdst1c_BASE_PTRS                       { DISPLAY__SEERIS__EXTDST1C }
-
-/* extdst2 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__EXTDST2 base address */
-#define DISPLAY__SEERIS__EXTDST2_BASE            (0x4B550000u)
-/** Peripheral DISPLAY__SEERIS__EXTDST2 base pointer */
-#define DISPLAY__SEERIS__EXTDST2                 ((extdst2_Type *)DISPLAY__SEERIS__EXTDST2_BASE)
-/** Array initializer of extdst2 peripheral base addresses */
-#define extdst2_BASE_ADDRS                       { DISPLAY__SEERIS__EXTDST2_BASE }
-/** Array initializer of extdst2 peripheral base pointers */
-#define extdst2_BASE_PTRS                        { DISPLAY__SEERIS__EXTDST2 }
-
-/* extdst3 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__EXTDST3 base address */
-#define DISPLAY__SEERIS__EXTDST3_BASE            (0x4B560000u)
-/** Peripheral DISPLAY__SEERIS__EXTDST3 base pointer */
-#define DISPLAY__SEERIS__EXTDST3                 ((extdst3_Type *)DISPLAY__SEERIS__EXTDST3_BASE)
-/** Array initializer of extdst3 peripheral base addresses */
-#define extdst3_BASE_ADDRS                       { DISPLAY__SEERIS__EXTDST3_BASE }
-/** Array initializer of extdst3 peripheral base pointers */
-#define extdst3_BASE_PTRS                        { DISPLAY__SEERIS__EXTDST3 }
 
 /* extdst4c - Peripheral instance base addresses */
 /** Peripheral DISPLAY__SEERIS__EXTDST4C base address */
@@ -4561,26 +4568,6 @@ typedef enum _mu_core_boot_mode
 /** Array initializer of filter9c peripheral base pointers */
 #define filter9c_BASE_PTRS                       { DISPLAY__SEERIS__FILTER9C }
 
-/* framege1 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__FRAMEGE1 base address */
-#define DISPLAY__SEERIS__FRAMEGE1_BASE           (0x4B740000u)
-/** Peripheral DISPLAY__SEERIS__FRAMEGE1 base pointer */
-#define DISPLAY__SEERIS__FRAMEGE1                ((framege1_Type *)DISPLAY__SEERIS__FRAMEGE1_BASE)
-/** Array initializer of framege1 peripheral base addresses */
-#define framege1_BASE_ADDRS                      { DISPLAY__SEERIS__FRAMEGE1_BASE }
-/** Array initializer of framege1 peripheral base pointers */
-#define framege1_BASE_PTRS                       { DISPLAY__SEERIS__FRAMEGE1 }
-
-/* framegen - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__FRAMEGEN base address */
-#define DISPLAY__SEERIS__FRAMEGEN_BASE           (0x4B6B0000u)
-/** Peripheral DISPLAY__SEERIS__FRAMEGEN base pointer */
-#define DISPLAY__SEERIS__FRAMEGEN                ((framegen_Type *)DISPLAY__SEERIS__FRAMEGEN_BASE)
-/** Array initializer of framegen peripheral base addresses */
-#define framegen_BASE_ADDRS                      { DISPLAY__SEERIS__FRAMEGEN_BASE }
-/** Array initializer of framegen peripheral base pointers */
-#define framegen_BASE_PTRS                       { DISPLAY__SEERIS__FRAMEGEN }
-
 /* gammaco1 - Peripheral instance base addresses */
 /** Peripheral DISPLAY__SEERIS__GAMMACO1 base address */
 #define DISPLAY__SEERIS__GAMMACO1_BASE           (0x4B6E0800u)
@@ -4650,26 +4637,6 @@ typedef enum _mu_core_boot_mode
 #define hscale9c_BASE_ADDRS                      { DISPLAY__SEERIS__HSCALE9C_BASE }
 /** Array initializer of hscale9c peripheral base pointers */
 #define hscale9c_BASE_PTRS                       { DISPLAY__SEERIS__HSCALE9C }
-
-/* hscaler - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__HSCALER base address */
-#define DISPLAY__SEERIS__HSCALER_BASE            (0x4B4B0000u)
-/** Peripheral DISPLAY__SEERIS__HSCALER base pointer */
-#define DISPLAY__SEERIS__HSCALER                 ((hscaler_Type *)DISPLAY__SEERIS__HSCALER_BASE)
-/** Array initializer of hscaler peripheral base addresses */
-#define hscaler_BASE_ADDRS                       { DISPLAY__SEERIS__HSCALER_BASE }
-/** Array initializer of hscaler peripheral base pointers */
-#define hscaler_BASE_PTRS                        { DISPLAY__SEERIS__HSCALER }
-
-/* hscaler1 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__HSCALER1 base address */
-#define DISPLAY__SEERIS__HSCALER1_BASE           (0x4B640000u)
-/** Peripheral DISPLAY__SEERIS__HSCALER1 base pointer */
-#define DISPLAY__SEERIS__HSCALER1                ((hscaler1_Type *)DISPLAY__SEERIS__HSCALER1_BASE)
-/** Array initializer of hscaler1 peripheral base addresses */
-#define hscaler1_BASE_ADDRS                      { DISPLAY__SEERIS__HSCALER1_BASE }
-/** Array initializer of hscaler1 peripheral base pointers */
-#define hscaler1_BASE_PTRS                       { DISPLAY__SEERIS__HSCALER1 }
 
 /* idhash - Peripheral instance base addresses */
 /** Peripheral DISPLAY__SEERIS__IDHASH base address */
@@ -4765,66 +4732,6 @@ typedef enum _mu_core_boot_mode
 /** Array initializer of ieprc_prb peripheral base pointers */
 #define ieprc_prb_BASE_PTRS                      { NETC__IEPRC_1__IEPRC_PRB }
 
-/* irq - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__IRQ base address */
-#define DISPLAY__SEERIS__IRQ_BASE                (0x4B401000u)
-/** Peripheral DISPLAY__SEERIS__IRQ base pointer */
-#define DISPLAY__SEERIS__IRQ                     ((irq_Type *)DISPLAY__SEERIS__IRQ_BASE)
-/** Array initializer of irq peripheral base addresses */
-#define irq_BASE_ADDRS                           { DISPLAY__SEERIS__IRQ_BASE }
-/** Array initializer of irq peripheral base pointers */
-#define irq_BASE_PTRS                            { DISPLAY__SEERIS__IRQ }
-
-/* irq1 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__IRQ1 base address */
-#define DISPLAY__SEERIS__IRQ1_BASE               (0x4B431000u)
-/** Peripheral DISPLAY__SEERIS__IRQ1 base pointer */
-#define DISPLAY__SEERIS__IRQ1                    ((irq1_Type *)DISPLAY__SEERIS__IRQ1_BASE)
-/** Array initializer of irq1 peripheral base addresses */
-#define irq1_BASE_ADDRS                          { DISPLAY__SEERIS__IRQ1_BASE }
-/** Array initializer of irq1 peripheral base pointers */
-#define irq1_BASE_PTRS                           { DISPLAY__SEERIS__IRQ1 }
-
-/* irq2 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__IRQ2 base address */
-#define DISPLAY__SEERIS__IRQ2_BASE               (0x4B7C1000u)
-/** Peripheral DISPLAY__SEERIS__IRQ2 base pointer */
-#define DISPLAY__SEERIS__IRQ2                    ((irq2_Type *)DISPLAY__SEERIS__IRQ2_BASE)
-/** Array initializer of irq2 peripheral base addresses */
-#define irq2_BASE_ADDRS                          { DISPLAY__SEERIS__IRQ2_BASE }
-/** Array initializer of irq2 peripheral base pointers */
-#define irq2_BASE_PTRS                           { DISPLAY__SEERIS__IRQ2 }
-
-/* irq3 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__IRQ3 base address */
-#define DISPLAY__SEERIS__IRQ3_BASE               (0x4B7D1000u)
-/** Peripheral DISPLAY__SEERIS__IRQ3 base pointer */
-#define DISPLAY__SEERIS__IRQ3                    ((irq3_Type *)DISPLAY__SEERIS__IRQ3_BASE)
-/** Array initializer of irq3 peripheral base addresses */
-#define irq3_BASE_ADDRS                          { DISPLAY__SEERIS__IRQ3_BASE }
-/** Array initializer of irq3 peripheral base pointers */
-#define irq3_BASE_PTRS                           { DISPLAY__SEERIS__IRQ3 }
-
-/* irq4 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__IRQ4 base address */
-#define DISPLAY__SEERIS__IRQ4_BASE               (0x4B7E1000u)
-/** Peripheral DISPLAY__SEERIS__IRQ4 base pointer */
-#define DISPLAY__SEERIS__IRQ4                    ((irq4_Type *)DISPLAY__SEERIS__IRQ4_BASE)
-/** Array initializer of irq4 peripheral base addresses */
-#define irq4_BASE_ADDRS                          { DISPLAY__SEERIS__IRQ4_BASE }
-/** Array initializer of irq4 peripheral base pointers */
-#define irq4_BASE_PTRS                           { DISPLAY__SEERIS__IRQ4 }
-
-/* irq5 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__IRQ5 base address */
-#define DISPLAY__SEERIS__IRQ5_BASE               (0x4B7F1000u)
-/** Peripheral DISPLAY__SEERIS__IRQ5 base pointer */
-#define DISPLAY__SEERIS__IRQ5                    ((irq5_Type *)DISPLAY__SEERIS__IRQ5_BASE)
-/** Array initializer of irq5 peripheral base addresses */
-#define irq5_BASE_ADDRS                          { DISPLAY__SEERIS__IRQ5_BASE }
-/** Array initializer of irq5 peripheral base pointers */
-#define irq5_BASE_PTRS                           { DISPLAY__SEERIS__IRQ5 }
-
 /* layerb1c - Peripheral instance base addresses */
 /** Peripheral DISPLAY__SEERIS__LAYERB1C base address */
 #define DISPLAY__SEERIS__LAYERB1C_BASE           (0x4B571000u)
@@ -4874,56 +4781,6 @@ typedef enum _mu_core_boot_mode
 #define layerb5c_BASE_ADDRS                      { DISPLAY__SEERIS__LAYERB5C_BASE }
 /** Array initializer of layerb5c peripheral base pointers */
 #define layerb5c_BASE_PTRS                       { DISPLAY__SEERIS__LAYERB5C }
-
-/* layerbl1 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__LAYERBL1 base address */
-#define DISPLAY__SEERIS__LAYERBL1_BASE           (0x4B580000u)
-/** Peripheral DISPLAY__SEERIS__LAYERBL1 base pointer */
-#define DISPLAY__SEERIS__LAYERBL1                ((layerbl1_Type *)DISPLAY__SEERIS__LAYERBL1_BASE)
-/** Array initializer of layerbl1 peripheral base addresses */
-#define layerbl1_BASE_ADDRS                      { DISPLAY__SEERIS__LAYERBL1_BASE }
-/** Array initializer of layerbl1 peripheral base pointers */
-#define layerbl1_BASE_PTRS                       { DISPLAY__SEERIS__LAYERBL1 }
-
-/* layerbl2 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__LAYERBL2 base address */
-#define DISPLAY__SEERIS__LAYERBL2_BASE           (0x4B590000u)
-/** Peripheral DISPLAY__SEERIS__LAYERBL2 base pointer */
-#define DISPLAY__SEERIS__LAYERBL2                ((layerbl2_Type *)DISPLAY__SEERIS__LAYERBL2_BASE)
-/** Array initializer of layerbl2 peripheral base addresses */
-#define layerbl2_BASE_ADDRS                      { DISPLAY__SEERIS__LAYERBL2_BASE }
-/** Array initializer of layerbl2 peripheral base pointers */
-#define layerbl2_BASE_PTRS                       { DISPLAY__SEERIS__LAYERBL2 }
-
-/* layerbl3 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__LAYERBL3 base address */
-#define DISPLAY__SEERIS__LAYERBL3_BASE           (0x4B5A0000u)
-/** Peripheral DISPLAY__SEERIS__LAYERBL3 base pointer */
-#define DISPLAY__SEERIS__LAYERBL3                ((layerbl3_Type *)DISPLAY__SEERIS__LAYERBL3_BASE)
-/** Array initializer of layerbl3 peripheral base addresses */
-#define layerbl3_BASE_ADDRS                      { DISPLAY__SEERIS__LAYERBL3_BASE }
-/** Array initializer of layerbl3 peripheral base pointers */
-#define layerbl3_BASE_PTRS                       { DISPLAY__SEERIS__LAYERBL3 }
-
-/* layerbl4 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__LAYERBL4 base address */
-#define DISPLAY__SEERIS__LAYERBL4_BASE           (0x4B5B0000u)
-/** Peripheral DISPLAY__SEERIS__LAYERBL4 base pointer */
-#define DISPLAY__SEERIS__LAYERBL4                ((layerbl4_Type *)DISPLAY__SEERIS__LAYERBL4_BASE)
-/** Array initializer of layerbl4 peripheral base addresses */
-#define layerbl4_BASE_ADDRS                      { DISPLAY__SEERIS__LAYERBL4_BASE }
-/** Array initializer of layerbl4 peripheral base pointers */
-#define layerbl4_BASE_PTRS                       { DISPLAY__SEERIS__LAYERBL4 }
-
-/* layerble - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__LAYERBLE base address */
-#define DISPLAY__SEERIS__LAYERBLE_BASE           (0x4B570000u)
-/** Peripheral DISPLAY__SEERIS__LAYERBLE base pointer */
-#define DISPLAY__SEERIS__LAYERBLE                ((layerble_Type *)DISPLAY__SEERIS__LAYERBLE_BASE)
-/** Array initializer of layerble peripheral base addresses */
-#define layerble_BASE_ADDRS                      { DISPLAY__SEERIS__LAYERBLE_BASE }
-/** Array initializer of layerble peripheral base pointers */
-#define layerble_BASE_PTRS                       { DISPLAY__SEERIS__LAYERBLE }
 
 /* lut3d - Peripheral instance base addresses */
 /** Peripheral DISPLAY__SEERIS__LUT3D base address */
@@ -5194,26 +5051,6 @@ typedef enum _mu_core_boot_mode
 #define store9c_BASE_ADDRS                       { DISPLAY__SEERIS__STORE9C_BASE }
 /** Array initializer of store9c peripheral base pointers */
 #define store9c_BASE_PTRS                        { DISPLAY__SEERIS__STORE9C }
-
-/* vscaler - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__VSCALER base address */
-#define DISPLAY__SEERIS__VSCALER_BASE            (0x4B4C0000u)
-/** Peripheral DISPLAY__SEERIS__VSCALER base pointer */
-#define DISPLAY__SEERIS__VSCALER                 ((vscaler_Type *)DISPLAY__SEERIS__VSCALER_BASE)
-/** Array initializer of vscaler peripheral base addresses */
-#define vscaler_BASE_ADDRS                       { DISPLAY__SEERIS__VSCALER_BASE }
-/** Array initializer of vscaler peripheral base pointers */
-#define vscaler_BASE_PTRS                        { DISPLAY__SEERIS__VSCALER }
-
-/* vscaler1 - Peripheral instance base addresses */
-/** Peripheral DISPLAY__SEERIS__VSCALER1 base address */
-#define DISPLAY__SEERIS__VSCALER1_BASE           (0x4B650000u)
-/** Peripheral DISPLAY__SEERIS__VSCALER1 base pointer */
-#define DISPLAY__SEERIS__VSCALER1                ((vscaler1_Type *)DISPLAY__SEERIS__VSCALER1_BASE)
-/** Array initializer of vscaler1 peripheral base addresses */
-#define vscaler1_BASE_ADDRS                      { DISPLAY__SEERIS__VSCALER1_BASE }
-/** Array initializer of vscaler1 peripheral base pointers */
-#define vscaler1_BASE_PTRS                       { DISPLAY__SEERIS__VSCALER1 }
 
 /* vsclr4c - Peripheral instance base addresses */
 /** Peripheral DISPLAY__SEERIS__VSCLR4C base address */

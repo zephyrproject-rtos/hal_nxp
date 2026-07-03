@@ -38,10 +38,10 @@
 **                          MIMX9529xxVZx_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260324
+**     Build:               b260416
 **
 **     Abstract:
-**         CMSIS Peripheral Access Layer for extdst
+**         CMSIS Peripheral Access Layer for EXTDST
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
 **     Copyright 2016-2026 NXP
@@ -61,12 +61,12 @@
 */
 
 /*!
- * @file PERI_extdst.h
+ * @file PERI_EXTDST.h
  * @version 2.0
  * @date 2024-10-29
- * @brief CMSIS Peripheral Access Layer for extdst
+ * @brief CMSIS Peripheral Access Layer for EXTDST
  *
- * CMSIS Peripheral Access Layer for extdst
+ * CMSIS Peripheral Access Layer for EXTDST
  */
 
 #if !defined(PERI_EXTDST_H_)
@@ -142,15 +142,15 @@
 #endif
 
 /* ----------------------------------------------------------------------------
-   -- extdst Peripheral Access Layer
+   -- EXTDST Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
 /*!
- * @addtogroup extdst_Peripheral_Access_Layer extdst Peripheral Access Layer
+ * @addtogroup EXTDST_Peripheral_Access_Layer EXTDST Peripheral Access Layer
  * @{
  */
 
-/** extdst - Register Layout Typedef */
+/** EXTDST - Register Layout Typedef */
 typedef struct {
   __O  uint32_t LU;                                /**< LockUnlock, offset: 0x0 */
   __I  uint32_t LOCKS;                             /**< LockStatus, offset: 0x4 */
@@ -162,22 +162,22 @@ typedef struct {
   __I  uint32_t CURPXCNT;                          /**< CurPixelCnt, offset: 0x1C */
   __I  uint32_t LASTPXCN;                          /**< LastPixelCnt, offset: 0x20 */
   __I  uint32_t PERCOUNT;                          /**< PerfCounter, offset: 0x24 */
-} extdst_Type;
+} EXTDST_Type;
 
 /* ----------------------------------------------------------------------------
-   -- extdst Register Masks
+   -- EXTDST Register Masks
    ---------------------------------------------------------------------------- */
 
 /*!
- * @addtogroup extdst_Register_Masks extdst Register Masks
+ * @addtogroup EXTDST_Register_Masks EXTDST Register Masks
  * @{
  */
 
 /*! @name LU - LockUnlock */
 /*! @{ */
 
-#define extdst_LU_LkUn_MASK                      (0xFFFFFFFFU)
-#define extdst_LU_LkUn_SHIFT                     (0U)
+#define EXTDST_LU_LkUn_MASK                      (0xFFFFFFFFU)
+#define EXTDST_LU_LkUn_SHIFT                     (0U)
 /*! LkUn - LockUnlock
  *  0b01010110010100011111011101100011..Decrements the unlock counter. When the counter value is null, lock protection is active. Reset counter value is 1.
  *  0b01101001000111011011100100110110..Increments the unlock counter. Max allowed value is 15.
@@ -185,132 +185,132 @@ typedef struct {
  *  0b10110101111000100100011001101110..Disables privilege protection.
  *  0b11111011111010001011000111100110..Freezes current protection status. Writing keys to this register has no more effect until reset.
  */
-#define extdst_LU_LkUn(x)                        (((uint32_t)(((uint32_t)(x)) << extdst_LU_LkUn_SHIFT)) & extdst_LU_LkUn_MASK)
+#define EXTDST_LU_LkUn(x)                        (((uint32_t)(((uint32_t)(x)) << EXTDST_LU_LkUn_SHIFT)) & EXTDST_LU_LkUn_MASK)
 /*! @} */
 
 /*! @name LOCKS - LockStatus */
 /*! @{ */
 
-#define extdst_LOCKS_LkSus_MASK                  (0x1U)
-#define extdst_LOCKS_LkSus_SHIFT                 (0U)
+#define EXTDST_LOCKS_LkSus_MASK                  (0x1U)
+#define EXTDST_LOCKS_LkSus_SHIFT                 (0U)
 /*! LkSus - LockStatus */
-#define extdst_LOCKS_LkSus(x)                    (((uint32_t)(((uint32_t)(x)) << extdst_LOCKS_LkSus_SHIFT)) & extdst_LOCKS_LkSus_MASK)
+#define EXTDST_LOCKS_LkSus(x)                    (((uint32_t)(((uint32_t)(x)) << EXTDST_LOCKS_LkSus_SHIFT)) & EXTDST_LOCKS_LkSus_MASK)
 
-#define extdst_LOCKS_PriSt_MASK                  (0x10U)
-#define extdst_LOCKS_PriSt_SHIFT                 (4U)
+#define EXTDST_LOCKS_PriSt_MASK                  (0x10U)
+#define EXTDST_LOCKS_PriSt_SHIFT                 (4U)
 /*! PriSt - PrivilegeStatus */
-#define extdst_LOCKS_PriSt(x)                    (((uint32_t)(((uint32_t)(x)) << extdst_LOCKS_PriSt_SHIFT)) & extdst_LOCKS_PriSt_MASK)
+#define EXTDST_LOCKS_PriSt(x)                    (((uint32_t)(((uint32_t)(x)) << EXTDST_LOCKS_PriSt_SHIFT)) & EXTDST_LOCKS_PriSt_MASK)
 
-#define extdst_LOCKS_FreezeS_MASK                (0x100U)
-#define extdst_LOCKS_FreezeS_SHIFT               (8U)
+#define EXTDST_LOCKS_FreezeS_MASK                (0x100U)
+#define EXTDST_LOCKS_FreezeS_SHIFT               (8U)
 /*! FreezeS - FreezeStatus */
-#define extdst_LOCKS_FreezeS(x)                  (((uint32_t)(((uint32_t)(x)) << extdst_LOCKS_FreezeS_SHIFT)) & extdst_LOCKS_FreezeS_MASK)
+#define EXTDST_LOCKS_FreezeS(x)                  (((uint32_t)(((uint32_t)(x)) << EXTDST_LOCKS_FreezeS_SHIFT)) & EXTDST_LOCKS_FreezeS_MASK)
 /*! @} */
 
 /*! @name STATCON - StaticControl */
 /*! @{ */
 
-#define extdst_STATCON_ShdEn_MASK                (0x1U)
-#define extdst_STATCON_ShdEn_SHIFT               (0U)
+#define EXTDST_STATCON_ShdEn_MASK                (0x1U)
+#define EXTDST_STATCON_ShdEn_SHIFT               (0U)
 /*! ShdEn - ShdEn */
-#define extdst_STATCON_ShdEn(x)                  (((uint32_t)(((uint32_t)(x)) << extdst_STATCON_ShdEn_SHIFT)) & extdst_STATCON_ShdEn_MASK)
+#define EXTDST_STATCON_ShdEn(x)                  (((uint32_t)(((uint32_t)(x)) << EXTDST_STATCON_ShdEn_SHIFT)) & EXTDST_STATCON_ShdEn_MASK)
 
-#define extdst_STATCON_KICKMODE_MASK             (0x100U)
-#define extdst_STATCON_KICKMODE_SHIFT            (8U)
+#define EXTDST_STATCON_KICKMODE_MASK             (0x100U)
+#define EXTDST_STATCON_KICKMODE_SHIFT            (8U)
 /*! KICKMODE - KICK_MODE
  *  0b0..kick generation by KICK field only
  *  0b1..kick signal from external allowed
  */
-#define extdst_STATCON_KICKMODE(x)               (((uint32_t)(((uint32_t)(x)) << extdst_STATCON_KICKMODE_SHIFT)) & extdst_STATCON_KICKMODE_MASK)
+#define EXTDST_STATCON_KICKMODE(x)               (((uint32_t)(((uint32_t)(x)) << EXTDST_STATCON_KICKMODE_SHIFT)) & EXTDST_STATCON_KICKMODE_MASK)
 
-#define extdst_STATCON_PerfCntM_MASK             (0x1000U)
-#define extdst_STATCON_PerfCntM_SHIFT            (12U)
+#define EXTDST_STATCON_PerfCntM_MASK             (0x1000U)
+#define EXTDST_STATCON_PerfCntM_SHIFT            (12U)
 /*! PerfCntM - PerfCountMode */
-#define extdst_STATCON_PerfCntM(x)               (((uint32_t)(((uint32_t)(x)) << extdst_STATCON_PerfCntM_SHIFT)) & extdst_STATCON_PerfCntM_MASK)
+#define EXTDST_STATCON_PerfCntM(x)               (((uint32_t)(((uint32_t)(x)) << EXTDST_STATCON_PerfCntM_SHIFT)) & EXTDST_STATCON_PerfCntM_MASK)
 /*! @} */
 
 /*! @name CONTR - Control */
 /*! @{ */
 
-#define extdst_CONTR_GamAplEn_MASK               (0x1U)
-#define extdst_CONTR_GamAplEn_SHIFT              (0U)
+#define EXTDST_CONTR_GamAplEn_MASK               (0x1U)
+#define EXTDST_CONTR_GamAplEn_SHIFT              (0U)
 /*! GamAplEn - GammaApplyEnable */
-#define extdst_CONTR_GamAplEn(x)                 (((uint32_t)(((uint32_t)(x)) << extdst_CONTR_GamAplEn_SHIFT)) & extdst_CONTR_GamAplEn_MASK)
+#define EXTDST_CONTR_GamAplEn(x)                 (((uint32_t)(((uint32_t)(x)) << EXTDST_CONTR_GamAplEn_SHIFT)) & EXTDST_CONTR_GamAplEn_MASK)
 /*! @} */
 
 /*! @name SOFTKICK - SoftwareKick */
 /*! @{ */
 
-#define extdst_SOFTKICK_KICK0_MASK               (0x1U)
-#define extdst_SOFTKICK_KICK0_SHIFT              (0U)
+#define EXTDST_SOFTKICK_KICK0_MASK               (0x1U)
+#define EXTDST_SOFTKICK_KICK0_SHIFT              (0U)
 /*! KICK0 - KICK */
-#define extdst_SOFTKICK_KICK0(x)                 (((uint32_t)(((uint32_t)(x)) << extdst_SOFTKICK_KICK0_SHIFT)) & extdst_SOFTKICK_KICK0_MASK)
+#define EXTDST_SOFTKICK_KICK0(x)                 (((uint32_t)(((uint32_t)(x)) << EXTDST_SOFTKICK_KICK0_SHIFT)) & EXTDST_SOFTKICK_KICK0_MASK)
 /*! @} */
 
 /*! @name STATUS - Status */
 /*! @{ */
 
-#define extdst_STATUS_CNTERRST_MASK              (0x1U)
-#define extdst_STATUS_CNTERRST_SHIFT             (0U)
+#define EXTDST_STATUS_CNTERRST_MASK              (0x1U)
+#define EXTDST_STATUS_CNTERRST_SHIFT             (0U)
 /*! CNTERRST - CNT_ERR_STS */
-#define extdst_STATUS_CNTERRST(x)                (((uint32_t)(((uint32_t)(x)) << extdst_STATUS_CNTERRST_SHIFT)) & extdst_STATUS_CNTERRST_MASK)
+#define EXTDST_STATUS_CNTERRST(x)                (((uint32_t)(((uint32_t)(x)) << EXTDST_STATUS_CNTERRST_SHIFT)) & EXTDST_STATUS_CNTERRST_MASK)
 /*! @} */
 
 /*! @name CONTWO - ControlWord */
 /*! @{ */
 
-#define extdst_CONTWO_CWVAL_MASK                 (0xFFFFFFFFU)
-#define extdst_CONTWO_CWVAL_SHIFT                (0U)
+#define EXTDST_CONTWO_CWVAL_MASK                 (0xFFFFFFFFU)
+#define EXTDST_CONTWO_CWVAL_SHIFT                (0U)
 /*! CWVAL - CW_VAL */
-#define extdst_CONTWO_CWVAL(x)                   (((uint32_t)(((uint32_t)(x)) << extdst_CONTWO_CWVAL_SHIFT)) & extdst_CONTWO_CWVAL_MASK)
+#define EXTDST_CONTWO_CWVAL(x)                   (((uint32_t)(((uint32_t)(x)) << EXTDST_CONTWO_CWVAL_SHIFT)) & EXTDST_CONTWO_CWVAL_MASK)
 /*! @} */
 
 /*! @name CURPXCNT - CurPixelCnt */
 /*! @{ */
 
-#define extdst_CURPXCNT_CXVAL_MASK               (0xFFFFU)
-#define extdst_CURPXCNT_CXVAL_SHIFT              (0U)
+#define EXTDST_CURPXCNT_CXVAL_MASK               (0xFFFFU)
+#define EXTDST_CURPXCNT_CXVAL_SHIFT              (0U)
 /*! CXVAL - C_XVAL */
-#define extdst_CURPXCNT_CXVAL(x)                 (((uint32_t)(((uint32_t)(x)) << extdst_CURPXCNT_CXVAL_SHIFT)) & extdst_CURPXCNT_CXVAL_MASK)
+#define EXTDST_CURPXCNT_CXVAL(x)                 (((uint32_t)(((uint32_t)(x)) << EXTDST_CURPXCNT_CXVAL_SHIFT)) & EXTDST_CURPXCNT_CXVAL_MASK)
 
-#define extdst_CURPXCNT_CYVAL_MASK               (0xFFFF0000U)
-#define extdst_CURPXCNT_CYVAL_SHIFT              (16U)
+#define EXTDST_CURPXCNT_CYVAL_MASK               (0xFFFF0000U)
+#define EXTDST_CURPXCNT_CYVAL_SHIFT              (16U)
 /*! CYVAL - C_YVAL */
-#define extdst_CURPXCNT_CYVAL(x)                 (((uint32_t)(((uint32_t)(x)) << extdst_CURPXCNT_CYVAL_SHIFT)) & extdst_CURPXCNT_CYVAL_MASK)
+#define EXTDST_CURPXCNT_CYVAL(x)                 (((uint32_t)(((uint32_t)(x)) << EXTDST_CURPXCNT_CYVAL_SHIFT)) & EXTDST_CURPXCNT_CYVAL_MASK)
 /*! @} */
 
 /*! @name LASTPXCN - LastPixelCnt */
 /*! @{ */
 
-#define extdst_LASTPXCN_LXVAL_MASK               (0xFFFFU)
-#define extdst_LASTPXCN_LXVAL_SHIFT              (0U)
+#define EXTDST_LASTPXCN_LXVAL_MASK               (0xFFFFU)
+#define EXTDST_LASTPXCN_LXVAL_SHIFT              (0U)
 /*! LXVAL - L_XVAL */
-#define extdst_LASTPXCN_LXVAL(x)                 (((uint32_t)(((uint32_t)(x)) << extdst_LASTPXCN_LXVAL_SHIFT)) & extdst_LASTPXCN_LXVAL_MASK)
+#define EXTDST_LASTPXCN_LXVAL(x)                 (((uint32_t)(((uint32_t)(x)) << EXTDST_LASTPXCN_LXVAL_SHIFT)) & EXTDST_LASTPXCN_LXVAL_MASK)
 
-#define extdst_LASTPXCN_LYVAL_MASK               (0xFFFF0000U)
-#define extdst_LASTPXCN_LYVAL_SHIFT              (16U)
+#define EXTDST_LASTPXCN_LYVAL_MASK               (0xFFFF0000U)
+#define EXTDST_LASTPXCN_LYVAL_SHIFT              (16U)
 /*! LYVAL - L_YVAL */
-#define extdst_LASTPXCN_LYVAL(x)                 (((uint32_t)(((uint32_t)(x)) << extdst_LASTPXCN_LYVAL_SHIFT)) & extdst_LASTPXCN_LYVAL_MASK)
+#define EXTDST_LASTPXCN_LYVAL(x)                 (((uint32_t)(((uint32_t)(x)) << EXTDST_LASTPXCN_LYVAL_SHIFT)) & EXTDST_LASTPXCN_LYVAL_MASK)
 /*! @} */
 
 /*! @name PERCOUNT - PerfCounter */
 /*! @{ */
 
-#define extdst_PERCOUNT_PerfRes_MASK             (0xFFFFFFFFU)
-#define extdst_PERCOUNT_PerfRes_SHIFT            (0U)
+#define EXTDST_PERCOUNT_PerfRes_MASK             (0xFFFFFFFFU)
+#define EXTDST_PERCOUNT_PerfRes_SHIFT            (0U)
 /*! PerfRes - PerfResult */
-#define extdst_PERCOUNT_PerfRes(x)               (((uint32_t)(((uint32_t)(x)) << extdst_PERCOUNT_PerfRes_SHIFT)) & extdst_PERCOUNT_PerfRes_MASK)
+#define EXTDST_PERCOUNT_PerfRes(x)               (((uint32_t)(((uint32_t)(x)) << EXTDST_PERCOUNT_PerfRes_SHIFT)) & EXTDST_PERCOUNT_PerfRes_MASK)
 /*! @} */
 
 
 /*!
  * @}
- */ /* end of group extdst_Register_Masks */
+ */ /* end of group EXTDST_Register_Masks */
 
 
 /*!
  * @}
- */ /* end of group extdst_Peripheral_Access_Layer */
+ */ /* end of group EXTDST_Peripheral_Access_Layer */
 
 
 /*

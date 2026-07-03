@@ -9,13 +9,13 @@
 **
 **     Reference manual:    IMX8MDQLQRM, Rev. 0, Jan. 2018
 **     Version:             rev. 5.0, 2024-10-29
-**     Build:               b251111
+**     Build:               b260513
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX8MD7_cm4
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

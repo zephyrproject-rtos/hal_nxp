@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 3.0, 2025-11-12
-**     Build:               b260205
+**     Build:               b260513
 **
 **     Abstract:
 **         Chip specific module features.
@@ -41,6 +41,8 @@
 #define FSL_FEATURE_SOC_CCM_COUNT (1)
 /* @brief CCM_ANALOG availability on the SoC. */
 #define FSL_FEATURE_SOC_CCM_ANALOG_COUNT (1)
+/* @brief DDRC availability on the SoC. */
+#define FSL_FEATURE_SOC_DDRC_COUNT (1)
 /* @brief ECSPI availability on the SoC. */
 #define FSL_FEATURE_SOC_ECSPI_COUNT (3)
 /* @brief ENET availability on the SoC. */
@@ -214,10 +216,6 @@
 #define FSL_FEATURE_SAI_HAS_BIT_CLOCK_SWAP (1)
 /* @brief SAI5 and SAI6 share one irq number. */
 #define FSL_FEATURE_SAI_SAI5_SAI6_SHARE_IRQ (1)
-
-/* ISI module features */
-
-/* No feature definitions */
 
 /* MEMORY module features */
 

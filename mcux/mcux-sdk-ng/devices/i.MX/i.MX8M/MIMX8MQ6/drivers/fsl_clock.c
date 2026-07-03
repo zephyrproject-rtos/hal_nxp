@@ -842,9 +842,10 @@ uint32_t CLOCK_GetFracPllFreq(CCM_ANALOG_Type *base, clock_pll_ctrl_t type, uint
                                                        CCM_ANALOG_AUDIO_PLL1_CFG1_PLL_INT_DIV_CTL_SHIFT);
 
     refClkFreq /= (uint32_t)refDiv + 1UL;
+    assert((uint64_t)refClkFreq * 8U * (1U + intDiv) <= UINT64_MAX - (((uint64_t)refClkFreq * 8U * fracDiv) >> 24U));
     fracClk = (uint64_t)refClkFreq * 8U * (1U + intDiv) + (((uint64_t)refClkFreq * 8U * fracDiv) >> 24U);
 
-    return (uint32_t)(fracClk / (((uint64_t)outDiv + 1U) * 2U));
+    return (uint32_t)((fracClk / (((uint64_t)outDiv + 1U) * 2U)) & 0xFFFFFFFFU);
 }
 
 /*!
@@ -947,7 +948,8 @@ uint32_t CLOCK_GetSSCGPllFreq(CCM_ANALOG_Type *base, clock_pll_ctrl_t type, uint
         pll2InputClock = (uint64_t)refClkFreq * 2U * divf1 / refDiv2;
     }
 
-    return (uint32_t)(pll2InputClock * divf2 / outDiv);
+    assert(pll2InputClock <= UINT64_MAX / divf2);
+    return (uint32_t)((pll2InputClock * divf2 / outDiv) & 0xFFFFFFFFU);
 }
 
 /*!
@@ -1052,8 +1054,18 @@ void CLOCK_DeinitOSC27M(void)
  */
 void CLOCK_EnableClock(clock_ip_name_t ccmGate)
 {
-    uint32_t ccgr    = CCM_TUPLE_CCGR(ccmGate);
-    uint32_t rootClk = CCM_TUPLE_ROOT(ccmGate);
+    assert(ccmGate >= 0);
+
+    uint32_t ccgrIdx = (uint32_t)ccmGate >> 16U;
+    uint32_t rootIdx = (uint32_t)ccmGate & 0xFFFFU;
+    uint32_t ccgr;
+    uint32_t rootClk;
+
+    assert(ccgrIdx < CCM_CCGR_COUNT);
+    assert(rootIdx < CCM_ROOT_COUNT);
+
+    ccgr = (uint32_t)(&(CCM)->CCGR[ccgrIdx].CCGR);
+    rootClk = (uint32_t)(&(CCM)->ROOT[rootIdx].TARGET_ROOT);
 
     CCM_REG_SET(ccgr) = (uint32_t)kCLOCK_ClockNeededAll;
     /* if root clock is 0xFFFFU, then skip enable root clock */
@@ -1074,8 +1086,18 @@ void CLOCK_EnableClock(clock_ip_name_t ccmGate)
  */
 void CLOCK_DisableClock(clock_ip_name_t ccmGate)
 {
-    uint32_t ccgr    = CCM_TUPLE_CCGR(ccmGate);
-    uint32_t rootClk = CCM_TUPLE_ROOT(ccmGate);
+    assert(ccmGate >= 0);
+
+    uint32_t ccgrIdx = (uint32_t)ccmGate >> 16U;
+    uint32_t rootIdx = (uint32_t)ccmGate & 0xFFFFU;
+    uint32_t ccgr;
+    uint32_t rootClk;
+
+    assert(ccgrIdx < CCM_CCGR_COUNT);
+    assert(rootIdx < CCM_ROOT_COUNT);
+
+    ccgr = (uint32_t)(&(CCM)->CCGR[ccgrIdx].CCGR);
+    rootClk = (uint32_t)(&(CCM)->ROOT[rootIdx].TARGET_ROOT);
 
     CCM_REG(ccgr) = (uint32_t)kCLOCK_ClockNotNeeded;
 

@@ -8,7 +8,11 @@
 #ifndef _FSL_CLOCK_H_
 #define _FSL_CLOCK_H_
 
-#include "fsl_common.h"
+#include "fsl_device_registers.h"
+#ifndef FSL_COMMON_H_
+#include <stdint.h>
+typedef int32_t status_t;
+#endif
 
 /*! @addtogroup clock */
 /*! @{ */

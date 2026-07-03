@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 6.0, 2025-11-12
-**     Build:               b260409
+**     Build:               b260513
 **
 **     Abstract:
 **         Chip specific module features.
@@ -159,18 +159,20 @@
 #define FSL_FEATURE_EDMA_HAS_COMMON_CLOCK_GATE (0)
 /* @brief If dma channel IRQ support parameter */
 #define FSL_FEATURE_EDMA_MODULE_CHANNEL_IRQ_ENTRY_SUPPORT_PARAMETER (0)
-/* @brief If 8 bytes transfer supported. */
-#define FSL_FEATURE_EDMA_SUPPORT_8_BYTES_TRANSFER (1)
-/* @brief If 16 bytes transfer supported. */
-#define FSL_FEATURE_EDMA_SUPPORT_16_BYTES_TRANSFER (1)
-/* @brief If 64 bytes transfer supported. */
-#define FSL_FEATURE_EDMA_SUPPORT_64_BYTES_TRANSFER (1)
 /* @brief NBYTES must be multiple of 8 when using scatter gather. */
 #define FSL_FEATURE_EDMA_HAS_ERRATA_51327 (0)
 /* @brief NBYTES must be multiple of 8 when using scatter gather. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_ERRATA_51327n(x) (0)
 /* @brief Has register bit fields MP_CSR[GMRC]. */
 #define FSL_FEATURE_EDMA_HAS_GLOBAL_MASTER_ID_REPLICATION (1)
+/* @brief Has Secure Master. */
+#define FSL_FEATURE_EDMA_SOC_REQUIRES_SECURE_MASTER (0)
+/* @brief If 8 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_SUPPORT_8_BYTES_TRANSFER (1)
+/* @brief If 16 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_SUPPORT_16_BYTES_TRANSFER (1)
+/* @brief If 64 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_SUPPORT_64_BYTES_TRANSFER (1)
 /* @brief If 128 bytes transfer supported. */
 #define FSL_FEATURE_EDMA_SUPPORT_128_BYTES_TRANSFER (0)
 /* @brief If 128 bytes transfer supported. */
@@ -209,6 +211,12 @@
 #define FSL_FEATURE_EDMA_HAS_TRANSFER_MODE (0)
 /* @brief Instance has register bit fields TCD_CSR[TMC]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_TRANSFER_MODEn(x) (0)
+/* @brief edma5 has different tcd type. */
+#define FSL_FEATURE_EDMA_TCD_TYPEn(x) (0)
+/* @brief Has no register bit fields CH_SBR[EMI]. */
+#define FSL_FEATURE_EDMA_HAS_CH_SBR_EMI (0)
+/* @brief Has no register bit fields CH_SBR[SEC]. */
+#define FSL_FEATURE_EDMA_HAS_CH_SBR_SEC (0)
 
 /* ENET module features */
 

@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 4.0, 2026-02-28
-**     Build:               b260305
+**     Build:               b260507
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for INTM
@@ -451,84 +451,61 @@ typedef struct {
 #define INTM_INTM_IACK_IRQ(x)                    (((uint32_t)(((uint32_t)(x)) << INTM_INTM_IACK_IRQ_SHIFT)) & INTM_INTM_IACK_IRQ_MASK)
 /*! @} */
 
-/*! @name INTM_IRQSEL - Interrupt Request Select for Monitor 0..Interrupt Request Select for Monitor 3 */
+/*! @name MON_INTM_IRQSEL - Interrupt Request Select for Monitor 0..Interrupt Request Select for Monitor 3 */
 /*! @{ */
 
-#define INTM_INTM_IRQSEL_IRQ_MASK                (0x3FFU)
-#define INTM_INTM_IRQSEL_IRQ_SHIFT               (0U)
+#define INTM_MON_INTM_IRQSEL_IRQ_MASK            (0x3FFU)
+#define INTM_MON_INTM_IRQSEL_IRQ_SHIFT           (0U)
 /*! IRQ - Interrupt Request */
-#define INTM_INTM_IRQSEL_IRQ(x)                  (((uint32_t)(((uint32_t)(x)) << INTM_INTM_IRQSEL_IRQ_SHIFT)) & INTM_INTM_IRQSEL_IRQ_MASK)
+#define INTM_MON_INTM_IRQSEL_IRQ(x)              (((uint32_t)(((uint32_t)(x)) << INTM_MON_INTM_IRQSEL_IRQ_SHIFT)) & INTM_MON_INTM_IRQSEL_IRQ_MASK)
 /*! @} */
 
-/* The count of INTM_INTM_IRQSEL */
-#define INTM_INTM_IRQSEL_COUNT                   (4U)
+/* The count of INTM_MON_INTM_IRQSEL */
+#define INTM_MON_INTM_IRQSEL_COUNT               (4U)
 
-/*! @name INTM_LATENCY - Interrupt Latency for Monitor 0..Interrupt Latency for Monitor 3 */
+/*! @name MON_INTM_LATENCY - Interrupt Latency for Monitor 0..Interrupt Latency for Monitor 3 */
 /*! @{ */
 
-#define INTM_INTM_LATENCY_LAT_MASK               (0xFFFFFFU)
-#define INTM_INTM_LATENCY_LAT_SHIFT              (0U)
+#define INTM_MON_INTM_LATENCY_LAT_MASK           (0xFFFFFFU)
+#define INTM_MON_INTM_LATENCY_LAT_SHIFT          (0U)
 /*! LAT - Latency */
-#define INTM_INTM_LATENCY_LAT(x)                 (((uint32_t)(((uint32_t)(x)) << INTM_INTM_LATENCY_LAT_SHIFT)) & INTM_INTM_LATENCY_LAT_MASK)
+#define INTM_MON_INTM_LATENCY_LAT(x)             (((uint32_t)(((uint32_t)(x)) << INTM_MON_INTM_LATENCY_LAT_SHIFT)) & INTM_MON_INTM_LATENCY_LAT_MASK)
 /*! @} */
 
-/* The count of INTM_INTM_LATENCY */
-#define INTM_INTM_LATENCY_COUNT                  (4U)
+/* The count of INTM_MON_INTM_LATENCY */
+#define INTM_MON_INTM_LATENCY_COUNT              (4U)
 
-/*! @name INTM_TIMER - Timer for Monitor 0..Timer for Monitor 3 */
+/*! @name MON_INTM_TIMER - Timer for Monitor 0..Timer for Monitor 3 */
 /*! @{ */
 
-#define INTM_INTM_TIMER_TIMER_MASK               (0xFFFFFFU)
-#define INTM_INTM_TIMER_TIMER_SHIFT              (0U)
+#define INTM_MON_INTM_TIMER_TIMER_MASK           (0xFFFFFFU)
+#define INTM_MON_INTM_TIMER_TIMER_SHIFT          (0U)
 /*! TIMER - Timer */
-#define INTM_INTM_TIMER_TIMER(x)                 (((uint32_t)(((uint32_t)(x)) << INTM_INTM_TIMER_TIMER_SHIFT)) & INTM_INTM_TIMER_TIMER_MASK)
+#define INTM_MON_INTM_TIMER_TIMER(x)             (((uint32_t)(((uint32_t)(x)) << INTM_MON_INTM_TIMER_TIMER_SHIFT)) & INTM_MON_INTM_TIMER_TIMER_MASK)
 /*! @} */
 
-/* The count of INTM_INTM_TIMER */
-#define INTM_INTM_TIMER_COUNT                    (4U)
+/* The count of INTM_MON_INTM_TIMER */
+#define INTM_MON_INTM_TIMER_COUNT                (4U)
 
-/*! @name INTM_STATUS - Status for Monitor 0..Status for Monitor 3 */
+/*! @name MON_INTM_STATUS - Status for Monitor 0..Status for Monitor 3 */
 /*! @{ */
 
-#define INTM_INTM_STATUS_STATUS_MASK             (0x1U)
-#define INTM_INTM_STATUS_STATUS_SHIFT            (0U)
+#define INTM_MON_INTM_STATUS_STATUS_MASK         (0x1U)
+#define INTM_MON_INTM_STATUS_STATUS_SHIFT        (0U)
 /*! STATUS - Monitor status
  *  0b0..Did not exceed
  *  0b1..Exceeded
  */
-#define INTM_INTM_STATUS_STATUS(x)               (((uint32_t)(((uint32_t)(x)) << INTM_INTM_STATUS_STATUS_SHIFT)) & INTM_INTM_STATUS_STATUS_MASK)
+#define INTM_MON_INTM_STATUS_STATUS(x)           (((uint32_t)(((uint32_t)(x)) << INTM_MON_INTM_STATUS_STATUS_SHIFT)) & INTM_MON_INTM_STATUS_STATUS_MASK)
 /*! @} */
 
-/* The count of INTM_INTM_STATUS */
-#define INTM_INTM_STATUS_COUNT                   (4U)
+/* The count of INTM_MON_INTM_STATUS */
+#define INTM_MON_INTM_STATUS_COUNT               (4U)
 
 
 /*!
  * @}
  */ /* end of group INTM_Register_Masks */
-
-#define INTM_MON_INTM_MM_MM_MASK                     INTM_INTM_MM_MM_MASK
-#define INTM_MON_INTM_MM_MM_SHIFT                    INTM_INTM_MM_MM_SHIFT
-#define INTM_MON_INTM_MM_MM(x)                       INTM_INTM_MM_MM(x)
-#define INTM_MON_INTM_IACK_IRQ_MASK                  INTM_INTM_IACK_IRQ_MASK
-#define INTM_MON_INTM_IACK_IRQ_SHIFT                 INTM_INTM_IACK_IRQ_SHIFT
-#define INTM_MON_INTM_IACK_IRQ(x)                    INTM_INTM_IACK_IRQ(x)
-#define INTM_MON_INTM_IRQSEL_IRQ_MASK                INTM_INTM_IRQSEL_IRQ_MASK
-#define INTM_MON_INTM_IRQSEL_IRQ_SHIFT               INTM_INTM_IRQSEL_IRQ_SHIFT
-#define INTM_MON_INTM_IRQSEL_IRQ(x)                  INTM_INTM_IRQSEL_IRQ(x)
-#define INTM_MON_INTM_IRQSEL_COUNT                   INTM_INTM_IRQSEL_COUNT
-#define INTM_MON_INTM_LATENCY_LAT_MASK               INTM_INTM_LATENCY_LAT_MASK
-#define INTM_MON_INTM_LATENCY_LAT_SHIFT              INTM_INTM_LATENCY_LAT_SHIFT
-#define INTM_MON_INTM_LATENCY_LAT(x)                 INTM_INTM_LATENCY_LAT(x)
-#define INTM_MON_INTM_LATENCY_COUNT                  INTM_INTM_LATENCY_COUNT
-#define INTM_MON_INTM_TIMER_TIMER_MASK               INTM_INTM_TIMER_TIMER_MASK
-#define INTM_MON_INTM_TIMER_TIMER_SHIFT              INTM_INTM_TIMER_TIMER_SHIFT
-#define INTM_MON_INTM_TIMER_TIMER(x)                 INTM_INTM_TIMER_TIMER(x)
-#define INTM_MON_INTM_TIMER_COUNT                    INTM_INTM_TIMER_COUNT
-#define INTM_MON_INTM_STATUS_STATUS_MASK             INTM_INTM_STATUS_STATUS_MASK
-#define INTM_MON_INTM_STATUS_STATUS_SHIFT            INTM_INTM_STATUS_STATUS_SHIFT
-#define INTM_MON_INTM_STATUS_STATUS(x)               INTM_INTM_STATUS_STATUS(x)
-#define INTM_MON_INTM_STATUS_COUNT                   INTM_INTM_STATUS_COUNT
 
 
 /*!

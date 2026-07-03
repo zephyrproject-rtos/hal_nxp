@@ -38,13 +38,13 @@
 **                          MIMX8MN6DVTJZ_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260513
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ISI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -140,6 +140,9 @@
  * @{
  */
 
+/** ISI - Size of Registers Arrays */
+#define ISI_ROI_COUNT                             4u
+
 /** ISI - Register Layout Typedef */
 typedef struct {
   __IO uint32_t CHNL_CTRL;                         /**< Channel Control Register, offset: 0x0 */
@@ -158,18 +161,11 @@ typedef struct {
   __IO uint32_t CHNL_CSC_COEFF3;                   /**< Channel Color Space Conversion Coefficient Register 3, offset: 0x34 */
   __IO uint32_t CHNL_CSC_COEFF4;                   /**< Channel Color Space Conversion Coefficient Register 4, offset: 0x38 */
   __IO uint32_t CHNL_CSC_COEFF5;                   /**< Channel Color Space Conversion Coefficient Register 5, offset: 0x3C */
-  __IO uint32_t CHNL_ROI_0_ALPHA;                  /**< Channel Alpha Value Register for Region of Interest 0, offset: 0x40 */
-  __IO uint32_t CHNL_ROI_0_ULC;                    /**< Channel Upper Left Coordinate Register for Region of Interest 0, offset: 0x44 */
-  __IO uint32_t CHNL_ROI_0_LRC;                    /**< Channel Lower Right Coordinate Register for Region of Interest 0, offset: 0x48 */
-  __IO uint32_t CHNL_ROI_1_ALPHA;                  /**< Channel Alpha Value Register for Region of Interest 1, offset: 0x4C */
-  __IO uint32_t CHNL_ROI_1_ULC;                    /**< Channel Upper Left Coordinate Register for Region of Interest 1, offset: 0x50 */
-  __IO uint32_t CHNL_ROI_1_LRC;                    /**< Channel Lower Right Coordinate Register for Region of Interest 1, offset: 0x54 */
-  __IO uint32_t CHNL_ROI_2_ALPHA;                  /**< Channel Alpha Value Register for Region of Interest 2, offset: 0x58 */
-  __IO uint32_t CHNL_ROI_2_ULC;                    /**< Channel Upper Left Coordinate Register for Region of Interest 2, offset: 0x5C */
-  __IO uint32_t CHNL_ROI_2_LRC;                    /**< Channel Lower Right Coordinate Register for Region of Interest 2, offset: 0x60 */
-  __IO uint32_t CHNL_ROI_3_ALPHA;                  /**< Channel Alpha Value Register for Region of Interest 3, offset: 0x64 */
-  __IO uint32_t CHNL_ROI_3_ULC;                    /**< Channel Upper Left Coordinate Register for Region of Interest 3, offset: 0x68 */
-  __IO uint32_t CHNL_ROI_3_LRC;                    /**< Channel Lower Right Coordinate Register for Region of Interest 3, offset: 0x6C */
+  struct {                                         /* offset: 0x40, array step: 0xC */
+    __IO uint32_t CHNL_ROI_ALPHA;                    /**< Channel Alpha Value Register for Region of Interest 0..Channel Alpha Value Register for Region of Interest 3, array offset: 0x40, array step: 0xC */
+    __IO uint32_t CHNL_ROI_ULC;                      /**< Channel Upper Left Coordinate Register for Region of Interest 0..Channel Upper Left Coordinate Register for Region of Interest 3, array offset: 0x44, array step: 0xC */
+    __IO uint32_t CHNL_ROI_LRC;                      /**< Channel Lower Right Coordinate Register for Region of Interest 0..Channel Lower Right Coordinate Register for Region of Interest 3, array offset: 0x48, array step: 0xC */
+  } ROI[ISI_ROI_COUNT];
   __IO uint32_t CHNL_OUT_BUF1_ADDR_Y;              /**< Channel RGB or Luma (Y) Output Buffer 1 Address, offset: 0x70 */
   __IO uint32_t CHNL_OUT_BUF1_ADDR_U;              /**< Channel Chroma (U/Cb/UV/CbCr) Output Buffer 1 Address, offset: 0x74 */
   __IO uint32_t CHNL_OUT_BUF1_ADDR_V;              /**< Channel Chroma (V/Cr) Output Buffer 1 Address, offset: 0x78 */
@@ -1038,305 +1034,89 @@ typedef struct {
 #define ISI_CHNL_CSC_COEFF5_RSVD0(x)             (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_CSC_COEFF5_RSVD0_SHIFT)) & ISI_CHNL_CSC_COEFF5_RSVD0_MASK)
 /*! @} */
 
-/*! @name CHNL_ROI_0_ALPHA - Channel Alpha Value Register for Region of Interest 0 */
+/*! @name CHNL_ROI_ALPHA - Channel Alpha Value Register for Region of Interest 0..Channel Alpha Value Register for Region of Interest 3 */
 /*! @{ */
 
-#define ISI_CHNL_ROI_0_ALPHA_RSVD1_MASK          (0xFFFFU)
-#define ISI_CHNL_ROI_0_ALPHA_RSVD1_SHIFT         (0U)
+#define ISI_CHNL_ROI_ALPHA_RSVD1_MASK            (0xFFFFU)
+#define ISI_CHNL_ROI_ALPHA_RSVD1_SHIFT           (0U)
 /*! RSVD1 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_0_ALPHA_RSVD1(x)            (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_ALPHA_RSVD1_SHIFT)) & ISI_CHNL_ROI_0_ALPHA_RSVD1_MASK)
+#define ISI_CHNL_ROI_ALPHA_RSVD1(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_ALPHA_RSVD1_SHIFT)) & ISI_CHNL_ROI_ALPHA_RSVD1_MASK)
 
-#define ISI_CHNL_ROI_0_ALPHA_ALPHA_EN_MASK       (0x10000U)
-#define ISI_CHNL_ROI_0_ALPHA_ALPHA_EN_SHIFT      (16U)
+#define ISI_CHNL_ROI_ALPHA_ALPHA_EN_MASK         (0x10000U)
+#define ISI_CHNL_ROI_ALPHA_ALPHA_EN_SHIFT        (16U)
 /*! ALPHA_EN - Alpha value insertion enable
  *  0b0..Alpha value insertion is disabled
  *  0b1..Alpha value insertion is enabled
  */
-#define ISI_CHNL_ROI_0_ALPHA_ALPHA_EN(x)         (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_ALPHA_ALPHA_EN_SHIFT)) & ISI_CHNL_ROI_0_ALPHA_ALPHA_EN_MASK)
+#define ISI_CHNL_ROI_ALPHA_ALPHA_EN(x)           (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_ALPHA_ALPHA_EN_SHIFT)) & ISI_CHNL_ROI_ALPHA_ALPHA_EN_MASK)
 
-#define ISI_CHNL_ROI_0_ALPHA_RSVD0_MASK          (0xFE0000U)
-#define ISI_CHNL_ROI_0_ALPHA_RSVD0_SHIFT         (17U)
+#define ISI_CHNL_ROI_ALPHA_RSVD0_MASK            (0xFE0000U)
+#define ISI_CHNL_ROI_ALPHA_RSVD0_SHIFT           (17U)
 /*! RSVD0 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_0_ALPHA_RSVD0(x)            (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_ALPHA_RSVD0_SHIFT)) & ISI_CHNL_ROI_0_ALPHA_RSVD0_MASK)
+#define ISI_CHNL_ROI_ALPHA_RSVD0(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_ALPHA_RSVD0_SHIFT)) & ISI_CHNL_ROI_ALPHA_RSVD0_MASK)
 
-#define ISI_CHNL_ROI_0_ALPHA_ALPHA_MASK          (0xFF000000U)
-#define ISI_CHNL_ROI_0_ALPHA_ALPHA_SHIFT         (24U)
+#define ISI_CHNL_ROI_ALPHA_ALPHA_MASK            (0xFF000000U)
+#define ISI_CHNL_ROI_ALPHA_ALPHA_SHIFT           (24U)
 /*! ALPHA - Alpha Value to be inserted with image */
-#define ISI_CHNL_ROI_0_ALPHA_ALPHA(x)            (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_ALPHA_ALPHA_SHIFT)) & ISI_CHNL_ROI_0_ALPHA_ALPHA_MASK)
+#define ISI_CHNL_ROI_ALPHA_ALPHA(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_ALPHA_ALPHA_SHIFT)) & ISI_CHNL_ROI_ALPHA_ALPHA_MASK)
 /*! @} */
 
-/*! @name CHNL_ROI_0_ULC - Channel Upper Left Coordinate Register for Region of Interest 0 */
+/* The count of ISI_CHNL_ROI_ALPHA */
+#define ISI_CHNL_ROI_ALPHA_COUNT                 (4U)
+
+/*! @name CHNL_ROI_ULC - Channel Upper Left Coordinate Register for Region of Interest 0..Channel Upper Left Coordinate Register for Region of Interest 3 */
 /*! @{ */
 
-#define ISI_CHNL_ROI_0_ULC_Y_MASK                (0xFFFU)
-#define ISI_CHNL_ROI_0_ULC_Y_SHIFT               (0U)
+#define ISI_CHNL_ROI_ULC_Y_MASK                  (0xFFFU)
+#define ISI_CHNL_ROI_ULC_Y_SHIFT                 (0U)
 /*! Y - Upper Left Y-coordinate */
-#define ISI_CHNL_ROI_0_ULC_Y(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_ULC_Y_SHIFT)) & ISI_CHNL_ROI_0_ULC_Y_MASK)
+#define ISI_CHNL_ROI_ULC_Y(x)                    (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_ULC_Y_SHIFT)) & ISI_CHNL_ROI_ULC_Y_MASK)
 
-#define ISI_CHNL_ROI_0_ULC_RSVD1_MASK            (0xF000U)
-#define ISI_CHNL_ROI_0_ULC_RSVD1_SHIFT           (12U)
+#define ISI_CHNL_ROI_ULC_RSVD1_MASK              (0xF000U)
+#define ISI_CHNL_ROI_ULC_RSVD1_SHIFT             (12U)
 /*! RSVD1 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_0_ULC_RSVD1(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_ULC_RSVD1_SHIFT)) & ISI_CHNL_ROI_0_ULC_RSVD1_MASK)
+#define ISI_CHNL_ROI_ULC_RSVD1(x)                (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_ULC_RSVD1_SHIFT)) & ISI_CHNL_ROI_ULC_RSVD1_MASK)
 
-#define ISI_CHNL_ROI_0_ULC_X_MASK                (0xFFF0000U)
-#define ISI_CHNL_ROI_0_ULC_X_SHIFT               (16U)
+#define ISI_CHNL_ROI_ULC_X_MASK                  (0xFFF0000U)
+#define ISI_CHNL_ROI_ULC_X_SHIFT                 (16U)
 /*! X - Upper Left X-coordinate */
-#define ISI_CHNL_ROI_0_ULC_X(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_ULC_X_SHIFT)) & ISI_CHNL_ROI_0_ULC_X_MASK)
+#define ISI_CHNL_ROI_ULC_X(x)                    (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_ULC_X_SHIFT)) & ISI_CHNL_ROI_ULC_X_MASK)
 
-#define ISI_CHNL_ROI_0_ULC_RSVD0_MASK            (0xF0000000U)
-#define ISI_CHNL_ROI_0_ULC_RSVD0_SHIFT           (28U)
+#define ISI_CHNL_ROI_ULC_RSVD0_MASK              (0xF0000000U)
+#define ISI_CHNL_ROI_ULC_RSVD0_SHIFT             (28U)
 /*! RSVD0 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_0_ULC_RSVD0(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_ULC_RSVD0_SHIFT)) & ISI_CHNL_ROI_0_ULC_RSVD0_MASK)
+#define ISI_CHNL_ROI_ULC_RSVD0(x)                (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_ULC_RSVD0_SHIFT)) & ISI_CHNL_ROI_ULC_RSVD0_MASK)
 /*! @} */
 
-/*! @name CHNL_ROI_0_LRC - Channel Lower Right Coordinate Register for Region of Interest 0 */
+/* The count of ISI_CHNL_ROI_ULC */
+#define ISI_CHNL_ROI_ULC_COUNT                   (4U)
+
+/*! @name CHNL_ROI_LRC - Channel Lower Right Coordinate Register for Region of Interest 0..Channel Lower Right Coordinate Register for Region of Interest 3 */
 /*! @{ */
 
-#define ISI_CHNL_ROI_0_LRC_Y_MASK                (0xFFFU)
-#define ISI_CHNL_ROI_0_LRC_Y_SHIFT               (0U)
+#define ISI_CHNL_ROI_LRC_Y_MASK                  (0xFFFU)
+#define ISI_CHNL_ROI_LRC_Y_SHIFT                 (0U)
 /*! Y - Lower Right Y-coordinate */
-#define ISI_CHNL_ROI_0_LRC_Y(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_LRC_Y_SHIFT)) & ISI_CHNL_ROI_0_LRC_Y_MASK)
+#define ISI_CHNL_ROI_LRC_Y(x)                    (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_LRC_Y_SHIFT)) & ISI_CHNL_ROI_LRC_Y_MASK)
 
-#define ISI_CHNL_ROI_0_LRC_RSVD1_MASK            (0xF000U)
-#define ISI_CHNL_ROI_0_LRC_RSVD1_SHIFT           (12U)
+#define ISI_CHNL_ROI_LRC_RSVD1_MASK              (0xF000U)
+#define ISI_CHNL_ROI_LRC_RSVD1_SHIFT             (12U)
 /*! RSVD1 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_0_LRC_RSVD1(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_LRC_RSVD1_SHIFT)) & ISI_CHNL_ROI_0_LRC_RSVD1_MASK)
+#define ISI_CHNL_ROI_LRC_RSVD1(x)                (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_LRC_RSVD1_SHIFT)) & ISI_CHNL_ROI_LRC_RSVD1_MASK)
 
-#define ISI_CHNL_ROI_0_LRC_X_MASK                (0xFFF0000U)
-#define ISI_CHNL_ROI_0_LRC_X_SHIFT               (16U)
+#define ISI_CHNL_ROI_LRC_X_MASK                  (0xFFF0000U)
+#define ISI_CHNL_ROI_LRC_X_SHIFT                 (16U)
 /*! X - Lower Right X-coordinate */
-#define ISI_CHNL_ROI_0_LRC_X(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_LRC_X_SHIFT)) & ISI_CHNL_ROI_0_LRC_X_MASK)
+#define ISI_CHNL_ROI_LRC_X(x)                    (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_LRC_X_SHIFT)) & ISI_CHNL_ROI_LRC_X_MASK)
 
-#define ISI_CHNL_ROI_0_LRC_RSVD0_MASK            (0xF0000000U)
-#define ISI_CHNL_ROI_0_LRC_RSVD0_SHIFT           (28U)
+#define ISI_CHNL_ROI_LRC_RSVD0_MASK              (0xF0000000U)
+#define ISI_CHNL_ROI_LRC_RSVD0_SHIFT             (28U)
 /*! RSVD0 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_0_LRC_RSVD0(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_LRC_RSVD0_SHIFT)) & ISI_CHNL_ROI_0_LRC_RSVD0_MASK)
+#define ISI_CHNL_ROI_LRC_RSVD0(x)                (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_LRC_RSVD0_SHIFT)) & ISI_CHNL_ROI_LRC_RSVD0_MASK)
 /*! @} */
 
-/*! @name CHNL_ROI_1_ALPHA - Channel Alpha Value Register for Region of Interest 1 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_1_ALPHA_RSVD1_MASK          (0xFFFFU)
-#define ISI_CHNL_ROI_1_ALPHA_RSVD1_SHIFT         (0U)
-/*! RSVD1 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_1_ALPHA_RSVD1(x)            (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_ALPHA_RSVD1_SHIFT)) & ISI_CHNL_ROI_1_ALPHA_RSVD1_MASK)
-
-#define ISI_CHNL_ROI_1_ALPHA_ALPHA_EN_MASK       (0x10000U)
-#define ISI_CHNL_ROI_1_ALPHA_ALPHA_EN_SHIFT      (16U)
-/*! ALPHA_EN - Alpha value insertion enable
- *  0b0..Alpha value insertion is disabled
- *  0b1..Alpha value insertion is enabled
- */
-#define ISI_CHNL_ROI_1_ALPHA_ALPHA_EN(x)         (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_ALPHA_ALPHA_EN_SHIFT)) & ISI_CHNL_ROI_1_ALPHA_ALPHA_EN_MASK)
-
-#define ISI_CHNL_ROI_1_ALPHA_RSVD0_MASK          (0xFE0000U)
-#define ISI_CHNL_ROI_1_ALPHA_RSVD0_SHIFT         (17U)
-/*! RSVD0 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_1_ALPHA_RSVD0(x)            (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_ALPHA_RSVD0_SHIFT)) & ISI_CHNL_ROI_1_ALPHA_RSVD0_MASK)
-
-#define ISI_CHNL_ROI_1_ALPHA_ALPHA_MASK          (0xFF000000U)
-#define ISI_CHNL_ROI_1_ALPHA_ALPHA_SHIFT         (24U)
-/*! ALPHA - Alpha Value to be inserted with image */
-#define ISI_CHNL_ROI_1_ALPHA_ALPHA(x)            (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_ALPHA_ALPHA_SHIFT)) & ISI_CHNL_ROI_1_ALPHA_ALPHA_MASK)
-/*! @} */
-
-/*! @name CHNL_ROI_1_ULC - Channel Upper Left Coordinate Register for Region of Interest 1 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_1_ULC_Y_MASK                (0xFFFU)
-#define ISI_CHNL_ROI_1_ULC_Y_SHIFT               (0U)
-/*! Y - Upper Left Y-coordinate */
-#define ISI_CHNL_ROI_1_ULC_Y(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_ULC_Y_SHIFT)) & ISI_CHNL_ROI_1_ULC_Y_MASK)
-
-#define ISI_CHNL_ROI_1_ULC_RSVD1_MASK            (0xF000U)
-#define ISI_CHNL_ROI_1_ULC_RSVD1_SHIFT           (12U)
-/*! RSVD1 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_1_ULC_RSVD1(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_ULC_RSVD1_SHIFT)) & ISI_CHNL_ROI_1_ULC_RSVD1_MASK)
-
-#define ISI_CHNL_ROI_1_ULC_X_MASK                (0xFFF0000U)
-#define ISI_CHNL_ROI_1_ULC_X_SHIFT               (16U)
-/*! X - Upper Left X-coordinate */
-#define ISI_CHNL_ROI_1_ULC_X(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_ULC_X_SHIFT)) & ISI_CHNL_ROI_1_ULC_X_MASK)
-
-#define ISI_CHNL_ROI_1_ULC_RSVD0_MASK            (0xF0000000U)
-#define ISI_CHNL_ROI_1_ULC_RSVD0_SHIFT           (28U)
-/*! RSVD0 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_1_ULC_RSVD0(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_ULC_RSVD0_SHIFT)) & ISI_CHNL_ROI_1_ULC_RSVD0_MASK)
-/*! @} */
-
-/*! @name CHNL_ROI_1_LRC - Channel Lower Right Coordinate Register for Region of Interest 1 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_1_LRC_Y_MASK                (0xFFFU)
-#define ISI_CHNL_ROI_1_LRC_Y_SHIFT               (0U)
-/*! Y - Lower Right Y-coordinate */
-#define ISI_CHNL_ROI_1_LRC_Y(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_LRC_Y_SHIFT)) & ISI_CHNL_ROI_1_LRC_Y_MASK)
-
-#define ISI_CHNL_ROI_1_LRC_RSVD1_MASK            (0xF000U)
-#define ISI_CHNL_ROI_1_LRC_RSVD1_SHIFT           (12U)
-/*! RSVD1 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_1_LRC_RSVD1(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_LRC_RSVD1_SHIFT)) & ISI_CHNL_ROI_1_LRC_RSVD1_MASK)
-
-#define ISI_CHNL_ROI_1_LRC_X_MASK                (0xFFF0000U)
-#define ISI_CHNL_ROI_1_LRC_X_SHIFT               (16U)
-/*! X - Lower Right X-coordinate */
-#define ISI_CHNL_ROI_1_LRC_X(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_LRC_X_SHIFT)) & ISI_CHNL_ROI_1_LRC_X_MASK)
-
-#define ISI_CHNL_ROI_1_LRC_RSVD0_MASK            (0xF0000000U)
-#define ISI_CHNL_ROI_1_LRC_RSVD0_SHIFT           (28U)
-/*! RSVD0 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_1_LRC_RSVD0(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_LRC_RSVD0_SHIFT)) & ISI_CHNL_ROI_1_LRC_RSVD0_MASK)
-/*! @} */
-
-/*! @name CHNL_ROI_2_ALPHA - Channel Alpha Value Register for Region of Interest 2 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_2_ALPHA_RSVD1_MASK          (0xFFFFU)
-#define ISI_CHNL_ROI_2_ALPHA_RSVD1_SHIFT         (0U)
-/*! RSVD1 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_2_ALPHA_RSVD1(x)            (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_ALPHA_RSVD1_SHIFT)) & ISI_CHNL_ROI_2_ALPHA_RSVD1_MASK)
-
-#define ISI_CHNL_ROI_2_ALPHA_ALPHA_EN_MASK       (0x10000U)
-#define ISI_CHNL_ROI_2_ALPHA_ALPHA_EN_SHIFT      (16U)
-/*! ALPHA_EN - Alpha value insertion enable
- *  0b0..Alpha value insertion is disabled
- *  0b1..Alpha value insertion is enabled
- */
-#define ISI_CHNL_ROI_2_ALPHA_ALPHA_EN(x)         (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_ALPHA_ALPHA_EN_SHIFT)) & ISI_CHNL_ROI_2_ALPHA_ALPHA_EN_MASK)
-
-#define ISI_CHNL_ROI_2_ALPHA_RSVD0_MASK          (0xFE0000U)
-#define ISI_CHNL_ROI_2_ALPHA_RSVD0_SHIFT         (17U)
-/*! RSVD0 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_2_ALPHA_RSVD0(x)            (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_ALPHA_RSVD0_SHIFT)) & ISI_CHNL_ROI_2_ALPHA_RSVD0_MASK)
-
-#define ISI_CHNL_ROI_2_ALPHA_ALPHA_MASK          (0xFF000000U)
-#define ISI_CHNL_ROI_2_ALPHA_ALPHA_SHIFT         (24U)
-/*! ALPHA - Alpha Value to be inserted with image */
-#define ISI_CHNL_ROI_2_ALPHA_ALPHA(x)            (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_ALPHA_ALPHA_SHIFT)) & ISI_CHNL_ROI_2_ALPHA_ALPHA_MASK)
-/*! @} */
-
-/*! @name CHNL_ROI_2_ULC - Channel Upper Left Coordinate Register for Region of Interest 2 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_2_ULC_Y_MASK                (0xFFFU)
-#define ISI_CHNL_ROI_2_ULC_Y_SHIFT               (0U)
-/*! Y - Upper Left Y-coordinate */
-#define ISI_CHNL_ROI_2_ULC_Y(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_ULC_Y_SHIFT)) & ISI_CHNL_ROI_2_ULC_Y_MASK)
-
-#define ISI_CHNL_ROI_2_ULC_RSVD1_MASK            (0xF000U)
-#define ISI_CHNL_ROI_2_ULC_RSVD1_SHIFT           (12U)
-/*! RSVD1 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_2_ULC_RSVD1(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_ULC_RSVD1_SHIFT)) & ISI_CHNL_ROI_2_ULC_RSVD1_MASK)
-
-#define ISI_CHNL_ROI_2_ULC_X_MASK                (0xFFF0000U)
-#define ISI_CHNL_ROI_2_ULC_X_SHIFT               (16U)
-/*! X - Upper Left X-coordinate */
-#define ISI_CHNL_ROI_2_ULC_X(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_ULC_X_SHIFT)) & ISI_CHNL_ROI_2_ULC_X_MASK)
-
-#define ISI_CHNL_ROI_2_ULC_RSVD0_MASK            (0xF0000000U)
-#define ISI_CHNL_ROI_2_ULC_RSVD0_SHIFT           (28U)
-/*! RSVD0 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_2_ULC_RSVD0(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_ULC_RSVD0_SHIFT)) & ISI_CHNL_ROI_2_ULC_RSVD0_MASK)
-/*! @} */
-
-/*! @name CHNL_ROI_2_LRC - Channel Lower Right Coordinate Register for Region of Interest 2 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_2_LRC_Y_MASK                (0xFFFU)
-#define ISI_CHNL_ROI_2_LRC_Y_SHIFT               (0U)
-/*! Y - Lower Right Y-coordinate */
-#define ISI_CHNL_ROI_2_LRC_Y(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_LRC_Y_SHIFT)) & ISI_CHNL_ROI_2_LRC_Y_MASK)
-
-#define ISI_CHNL_ROI_2_LRC_RSVD1_MASK            (0xF000U)
-#define ISI_CHNL_ROI_2_LRC_RSVD1_SHIFT           (12U)
-/*! RSVD1 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_2_LRC_RSVD1(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_LRC_RSVD1_SHIFT)) & ISI_CHNL_ROI_2_LRC_RSVD1_MASK)
-
-#define ISI_CHNL_ROI_2_LRC_X_MASK                (0xFFF0000U)
-#define ISI_CHNL_ROI_2_LRC_X_SHIFT               (16U)
-/*! X - Lower Right X-coordinate */
-#define ISI_CHNL_ROI_2_LRC_X(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_LRC_X_SHIFT)) & ISI_CHNL_ROI_2_LRC_X_MASK)
-
-#define ISI_CHNL_ROI_2_LRC_RSVD0_MASK            (0xF0000000U)
-#define ISI_CHNL_ROI_2_LRC_RSVD0_SHIFT           (28U)
-/*! RSVD0 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_2_LRC_RSVD0(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_LRC_RSVD0_SHIFT)) & ISI_CHNL_ROI_2_LRC_RSVD0_MASK)
-/*! @} */
-
-/*! @name CHNL_ROI_3_ALPHA - Channel Alpha Value Register for Region of Interest 3 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_3_ALPHA_RSVD1_MASK          (0xFFFFU)
-#define ISI_CHNL_ROI_3_ALPHA_RSVD1_SHIFT         (0U)
-/*! RSVD1 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_3_ALPHA_RSVD1(x)            (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_ALPHA_RSVD1_SHIFT)) & ISI_CHNL_ROI_3_ALPHA_RSVD1_MASK)
-
-#define ISI_CHNL_ROI_3_ALPHA_ALPHA_EN_MASK       (0x10000U)
-#define ISI_CHNL_ROI_3_ALPHA_ALPHA_EN_SHIFT      (16U)
-/*! ALPHA_EN - Alpha value insertion enable
- *  0b0..Alpha value insertion is disabled
- *  0b1..Alpha value insertion is enabled
- */
-#define ISI_CHNL_ROI_3_ALPHA_ALPHA_EN(x)         (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_ALPHA_ALPHA_EN_SHIFT)) & ISI_CHNL_ROI_3_ALPHA_ALPHA_EN_MASK)
-
-#define ISI_CHNL_ROI_3_ALPHA_RSVD0_MASK          (0xFE0000U)
-#define ISI_CHNL_ROI_3_ALPHA_RSVD0_SHIFT         (17U)
-/*! RSVD0 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_3_ALPHA_RSVD0(x)            (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_ALPHA_RSVD0_SHIFT)) & ISI_CHNL_ROI_3_ALPHA_RSVD0_MASK)
-
-#define ISI_CHNL_ROI_3_ALPHA_ALPHA_MASK          (0xFF000000U)
-#define ISI_CHNL_ROI_3_ALPHA_ALPHA_SHIFT         (24U)
-/*! ALPHA - Alpha Value to be inserted with image */
-#define ISI_CHNL_ROI_3_ALPHA_ALPHA(x)            (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_ALPHA_ALPHA_SHIFT)) & ISI_CHNL_ROI_3_ALPHA_ALPHA_MASK)
-/*! @} */
-
-/*! @name CHNL_ROI_3_ULC - Channel Upper Left Coordinate Register for Region of Interest 3 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_3_ULC_Y_MASK                (0xFFFU)
-#define ISI_CHNL_ROI_3_ULC_Y_SHIFT               (0U)
-/*! Y - Upper Left Y-coordinate */
-#define ISI_CHNL_ROI_3_ULC_Y(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_ULC_Y_SHIFT)) & ISI_CHNL_ROI_3_ULC_Y_MASK)
-
-#define ISI_CHNL_ROI_3_ULC_RSVD1_MASK            (0xF000U)
-#define ISI_CHNL_ROI_3_ULC_RSVD1_SHIFT           (12U)
-/*! RSVD1 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_3_ULC_RSVD1(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_ULC_RSVD1_SHIFT)) & ISI_CHNL_ROI_3_ULC_RSVD1_MASK)
-
-#define ISI_CHNL_ROI_3_ULC_X_MASK                (0xFFF0000U)
-#define ISI_CHNL_ROI_3_ULC_X_SHIFT               (16U)
-/*! X - Upper Left X-coordinate */
-#define ISI_CHNL_ROI_3_ULC_X(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_ULC_X_SHIFT)) & ISI_CHNL_ROI_3_ULC_X_MASK)
-
-#define ISI_CHNL_ROI_3_ULC_RSVD0_MASK            (0xF0000000U)
-#define ISI_CHNL_ROI_3_ULC_RSVD0_SHIFT           (28U)
-/*! RSVD0 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_3_ULC_RSVD0(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_ULC_RSVD0_SHIFT)) & ISI_CHNL_ROI_3_ULC_RSVD0_MASK)
-/*! @} */
-
-/*! @name CHNL_ROI_3_LRC - Channel Lower Right Coordinate Register for Region of Interest 3 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_3_LRC_Y_MASK                (0xFFFU)
-#define ISI_CHNL_ROI_3_LRC_Y_SHIFT               (0U)
-/*! Y - Lower Right Y-coordinate */
-#define ISI_CHNL_ROI_3_LRC_Y(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_LRC_Y_SHIFT)) & ISI_CHNL_ROI_3_LRC_Y_MASK)
-
-#define ISI_CHNL_ROI_3_LRC_RSVD1_MASK            (0xF000U)
-#define ISI_CHNL_ROI_3_LRC_RSVD1_SHIFT           (12U)
-/*! RSVD1 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_3_LRC_RSVD1(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_LRC_RSVD1_SHIFT)) & ISI_CHNL_ROI_3_LRC_RSVD1_MASK)
-
-#define ISI_CHNL_ROI_3_LRC_X_MASK                (0xFFF0000U)
-#define ISI_CHNL_ROI_3_LRC_X_SHIFT               (16U)
-/*! X - Lower Right X-coordinate */
-#define ISI_CHNL_ROI_3_LRC_X(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_LRC_X_SHIFT)) & ISI_CHNL_ROI_3_LRC_X_MASK)
-
-#define ISI_CHNL_ROI_3_LRC_RSVD0_MASK            (0xF0000000U)
-#define ISI_CHNL_ROI_3_LRC_RSVD0_SHIFT           (28U)
-/*! RSVD0 - Reserved field. Reads only zeros */
-#define ISI_CHNL_ROI_3_LRC_RSVD0(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_LRC_RSVD0_SHIFT)) & ISI_CHNL_ROI_3_LRC_RSVD0_MASK)
-/*! @} */
+/* The count of ISI_CHNL_ROI_LRC */
+#define ISI_CHNL_ROI_LRC_COUNT                   (4U)
 
 /*! @name CHNL_OUT_BUF1_ADDR_Y - Channel RGB or Luma (Y) Output Buffer 1 Address */
 /*! @{ */

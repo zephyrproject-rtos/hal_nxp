@@ -122,7 +122,7 @@ uint32_t GetFracPllFreq(const volatile uint32_t *base)
     fracClk = (uint64_t)refClkFreq * ((uint64_t)mainDiv * 65536UL + (uint64_t)dsm) /
               ((uint64_t)65536UL * preDiv * (1UL << postDiv));
 
-    return (uint32_t)fracClk;
+    return (uint32_t)(fracClk & 0xFFFFFFFFU);
 }
 
 uint32_t GetIntegerPllFreq(const volatile uint32_t *base)
@@ -159,10 +159,14 @@ uint32_t GetIntegerPllFreq(const volatile uint32_t *base)
 
     else
     {
+        if (((uint64_t)(1U) << postDiv) > UINT64_MAX / preDiv)
+        {
+            return 0U;
+        }
         pllOutClock = (uint64_t)refClkFreq * mainDiv / (((uint64_t)(1U) << postDiv) * preDiv);
     }
 
-    return (uint32_t)pllOutClock;
+    return (uint32_t)(pllOutClock & 0xFFFFFFFFU);
 }
 
 

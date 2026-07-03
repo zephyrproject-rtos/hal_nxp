@@ -124,8 +124,8 @@ void SystemInitMemoryRegions(void)
     extern void __RscTblShareWithMpuStart;
     extern void __RscTblShareWithMpuEnd;
 #elif defined(__GNUC__)
-    extern const void __RscTblShareWithMpuStart;
-    extern const void __RscTblShareWithMpuEnd;
+    extern char __RscTblShareWithMpuStart;
+    extern char __RscTblShareWithMpuEnd;
 #else
 #error Not support the compiler.
 #endif
@@ -135,7 +135,10 @@ void SystemInitMemoryRegions(void)
 
     for (i = 0; i < ARRAY_SIZE(start_addr); i++)
     {
-        memset((void *)start_addr[i], 0, end_addr[i] - start_addr[i] + 1);
+        if ((end_addr[i] >= start_addr[i]) && ((end_addr[i] - start_addr[i]) < UINT32_MAX))
+        {
+            memset((void *)start_addr[i], 0, end_addr[i] - start_addr[i] + 1U);
+        }
     }
 #endif
 }

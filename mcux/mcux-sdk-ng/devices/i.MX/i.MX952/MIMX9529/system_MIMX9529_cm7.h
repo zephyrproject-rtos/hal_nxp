@@ -59,6 +59,7 @@ extern "C" {
 #include "smt.h"
 #endif
 
+
 #define DEFAULT_SYSTEM_CLOCK 800000000u
 
 /* MU5_MUA */

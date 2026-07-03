@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 9.0, 2026-02-05
-**     Build:               b260205
+**     Build:               b260513
 **
 **     Abstract:
 **         Chip specific module features.
@@ -310,6 +310,10 @@
 #define FSL_FEATURE_EWM_HAS_CLOCK_SELECT (1)
 /* @brief Has clock prescaler (register CLKPRESCALER). */
 #define FSL_FEATURE_EWM_HAS_PRESCALER (1)
+
+/* FGPIO module features */
+
+/* No feature definitions */
 
 /* FLEXIO module features */
 
@@ -830,6 +834,8 @@
 #define FSL_FEATURE_MCM_HAS_LMEM_FAULT (0)
 /* @brief  MCM has LMEM control, register LMPECR, LMPEIR. */
 #define FSL_FEATURE_MCM_HAS_LMEM_PARITY (0)
+/* @brief  MCM has CPCR register (core platform control). */
+#define FSL_FEATURE_MCM_HAS_CPCR (0)
 
 /* SMC module features */
 
@@ -943,7 +949,7 @@
 #define FSL_FEATURE_PORT_HAS_OPEN_DRAIN (0)
 /* @brief Has digital filter (registers DFER, DFCR and DFWR). */
 #define FSL_FEATURE_PORT_HAS_DIGITAL_FILTER (0)
-/* @brief Has DMA request (register bit field PCR[IRQC] values). */
+/* @brief Has DMA request (register bit field PCR[IRQC] or ICR[IRQC] values). */
 #define FSL_FEATURE_PORT_HAS_DMA_REQUEST (1)
 /* @brief Has pull resistor selection available. */
 #define FSL_FEATURE_PORT_HAS_PULL_SELECTION (0)
@@ -963,6 +969,8 @@
 #define FSL_FEATURE_PORT_PCR_MUX_WIDTH (0)
 /* @brief Has dedicated interrupt vector. */
 #define FSL_FEATURE_PORT_HAS_INTERRUPT_VECTOR (1)
+/* @brief Has independent interrupt control(register ICR). */
+#define FSL_FEATURE_PORT_HAS_INDEPENDENT_INTERRUPT_CONTROL (0)
 /* @brief Has multiple pin IRQ configuration (register GICLR and GICHR). */
 #define FSL_FEATURE_PORT_HAS_MULTIPLE_IRQ_CONFIG (1)
 /* @brief Defines whether PCR[IRQC] bit-field has flag states. */

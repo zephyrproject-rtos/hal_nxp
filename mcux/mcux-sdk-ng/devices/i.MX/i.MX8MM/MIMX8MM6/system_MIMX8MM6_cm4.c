@@ -9,7 +9,7 @@
 **
 **     Reference manual:    MX8MMRM, Rev. 0, 02/2019
 **     Version:             rev. 5.0, 2024-10-29
-**     Build:               b251111
+**     Build:               b260513
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -17,7 +17,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -118,10 +118,13 @@ uint32_t GetFracPllFreq(const volatile uint32_t *base)
         refClkFreq = CLK_PAD_CLK; /* CLK_PAD_CLK Clock, please note that the value is 0hz by default, it could be set at
                                      system_MIMX8MMx_cm4.h :96 */
     }
-    fracClk = (uint64_t)refClkFreq * ((uint64_t)mainDiv * 65536UL + (uint64_t)dsm) /
-              ((uint64_t)65536UL * preDiv * (1UL << postDiv));
+    uint32_t postShift = (uint32_t)1U << (postDiv & 0x07U);
+    uint32_t denomStep = (uint32_t)65536U * (uint32_t)(preDiv & 0x3FU);
+    uint64_t denom = (uint64_t)denomStep * (uint64_t)postShift;
+    uint64_t numer = (uint64_t)refClkFreq * ((uint64_t)mainDiv * 65536UL + (uint64_t)dsm);
+    fracClk = numer / denom;
 
-    return (uint32_t)fracClk;
+    return (uint32_t)(fracClk & 0xFFFFFFFFULL);
 }
 
 uint32_t GetIntegerPllFreq(const volatile uint32_t *base)
@@ -159,10 +162,12 @@ uint32_t GetIntegerPllFreq(const volatile uint32_t *base)
 
     else
     {
-        pllOutClock = (uint64_t)refClkFreq * mainDiv / (((uint64_t)(1U) << postDiv) * preDiv);
+        uint32_t postShift = (uint32_t)1U << (postDiv & 0x07U);
+        uint64_t denom = (uint64_t)postShift * (uint64_t)(preDiv & 0x3FU);
+        pllOutClock = (uint64_t)refClkFreq * (uint64_t)mainDiv / denom;
     }
 
-    return (uint32_t)pllOutClock;
+    return (uint32_t)(pllOutClock & 0xFFFFFFFFULL);
 }
 
 

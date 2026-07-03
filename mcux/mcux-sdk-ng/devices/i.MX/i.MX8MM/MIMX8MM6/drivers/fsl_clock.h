@@ -189,7 +189,8 @@
  * @brief CCM ANALOG tuple macros to map corresponding registers and bit fields.
  */
 #define CCM_ANALOG_TUPLE(reg, shift)  ((((reg)&0xFFFFU) << 16U) | ((shift)))
-#define CCM_ANALOG_TUPLE_SHIFT(tuple) (((uint32_t)(tuple)) & 0x1FU)
+#define CCM_ANALOG_TUPLE_SHIFT(tuple)          (((uint32_t)(tuple)) & 0x1FU)
+#define CCM_ANALOG_TUPLE_OVERRIDE_SHIFT(tuple) ((((uint32_t)(tuple)) - 1U) & 0x1FU)
 #define CCM_ANALOG_TUPLE_REG_OFF(base, tuple, off) \
     (*((volatile uint32_t *)((uintptr_t)(base) + (((uint32_t)(tuple) >> 16U) & 0xFFFFU) + (off))))
 #define CCM_ANALOG_TUPLE_REG(base, tuple) CCM_ANALOG_TUPLE_REG_OFF(base, tuple, 0U)
@@ -1335,11 +1336,11 @@ static inline void CLOCK_OverridePllClke(CCM_ANALOG_Type *base, clock_pll_clke_t
 {
     if (override)
     {
-        CCM_ANALOG_TUPLE_REG(base, ovClock) |= 1UL << (CCM_ANALOG_TUPLE_SHIFT(ovClock) - 1UL);
+        CCM_ANALOG_TUPLE_REG(base, ovClock) |= 1UL << CCM_ANALOG_TUPLE_OVERRIDE_SHIFT(ovClock);
     }
     else
     {
-        CCM_ANALOG_TUPLE_REG(base, ovClock) &= ~(1UL << (CCM_ANALOG_TUPLE_SHIFT(ovClock) - 1UL));
+        CCM_ANALOG_TUPLE_REG(base, ovClock) &= ~(1UL << CCM_ANALOG_TUPLE_OVERRIDE_SHIFT(ovClock));
     }
 }
 
@@ -1356,11 +1357,11 @@ static inline void CLOCK_OverridePllPd(CCM_ANALOG_Type *base, clock_pll_ctrl_t p
 {
     if (override)
     {
-        CCM_ANALOG_TUPLE_REG(base, pdClock) |= 1UL << (CCM_ANALOG_TUPLE_SHIFT(pdClock) - 1UL);
+        CCM_ANALOG_TUPLE_REG(base, pdClock) |= 1UL << CCM_ANALOG_TUPLE_OVERRIDE_SHIFT(pdClock);
     }
     else
     {
-        CCM_ANALOG_TUPLE_REG(base, pdClock) &= ~(1UL << (CCM_ANALOG_TUPLE_SHIFT(pdClock) - 1UL));
+        CCM_ANALOG_TUPLE_REG(base, pdClock) &= ~(1UL << CCM_ANALOG_TUPLE_OVERRIDE_SHIFT(pdClock));
     }
 }
 

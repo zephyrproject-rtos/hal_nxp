@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2021-11-16
-**     Build:               b260324
+**     Build:               b260507
 **
 **     Abstract:
 **         Chip specific module features.
@@ -33,6 +33,8 @@
 #define FSL_FEATURE_SOC_BBNSM_COUNT (1)
 /* @brief CCM availability on the SoC. */
 #define FSL_FEATURE_SOC_CCM_COUNT (1)
+/* @brief CRC availability on the SoC. */
+#define FSL_FEATURE_SOC_CRC_COUNT (1)
 /* @brief DDRC availability on the SoC. */
 #define FSL_FEATURE_SOC_DDRC_COUNT (1)
 /* @brief EDMA availability on the SoC. */
@@ -45,6 +47,8 @@
 #define FSL_FEATURE_SOC_FLEXIO_COUNT (2)
 /* @brief GPC availability on the SoC. */
 #define FSL_FEATURE_SOC_GPC_COUNT (7)
+/* @brief GPT availability on the SoC. */
+#define FSL_FEATURE_SOC_GPT_COUNT (4)
 /* @brief I3C availability on the SoC. */
 #define FSL_FEATURE_SOC_I3C_COUNT (2)
 /* @brief I2S availability on the SoC. */
@@ -53,6 +57,8 @@
 #define FSL_FEATURE_SOC_IOMUXC_COUNT (1)
 /* @brief IOMUXC_GPR availability on the SoC. */
 #define FSL_FEATURE_SOC_IOMUXC_GPR_COUNT (1)
+/* @brief IRQ availability on the SoC. */
+#define FSL_FEATURE_SOC_IRQ_COUNT (6)
 /* @brief IRQSTEER availability on the SoC. */
 #define FSL_FEATURE_SOC_IRQSTEER_COUNT (2)
 /* @brief ISI availability on the SoC. */
@@ -77,6 +83,8 @@
 #define FSL_FEATURE_SOC_RGPIO_COUNT (5)
 /* @brief SEMA42 availability on the SoC. */
 #define FSL_FEATURE_SOC_SEMA42_COUNT (2)
+/* @brief SYSPM availability on the SoC. */
+#define FSL_FEATURE_SOC_SYSPM_COUNT (2)
 /* @brief TPM availability on the SoC. */
 #define FSL_FEATURE_SOC_TPM_COUNT (6)
 /* @brief TRGMUX availability on the SoC. */
@@ -102,6 +110,48 @@
 #define FSL_FEATURE_ADC_THRESHOLDS_COUNT (8)
 /* @brief Self-test threshold counts of ADC. */
 #define FSL_FEATURE_ADC_SELF_TEST_THRESHOLDS_COUNT (6)
+
+/* CRC module features */
+
+/* @brief Has data register with name CRC */
+#define FSL_FEATURE_CRC_HAS_CRC_REG (0)
+
+/* INTM module features */
+
+/* @brief Up to 4 programmable interrupt monitors */
+#define FSL_FEATURE_INTM_MONITOR_COUNT (4)
+
+/* SYSPM module features */
+
+/* @brief SYSPM support disable counters if stopped or halted. */
+#define FSL_FEATURE_SYSPM_HAS_PMCR_DCIFSH (1)
+/* @brief SYSPM has reset instruction counter. */
+#define FSL_FEATURE_SYSPM_HAS_PMCR_RICTR (1)
+/* @brief Number of PMCR registers signals number of performance monitors available in single SYSPM instance. */
+#define FSL_FEATURE_SYSPM_PMCR_COUNT (1)
+/* @brief SYSPM has instruction counter. */
+#define FSL_FEATURE_SYSPM_HAS_PMICTR (1)
+
+/* MCM module features */
+
+/* @brief Has cache parity error ISCR[CPEE]. */
+#define FSL_FEATURE_MCM_HAS_CACHE_PARITY_ERROR (0)
+/* @brief Has cache write buffer error ISCR[CWBEE]. */
+#define FSL_FEATURE_MCM_HAS_CACHE_WRITE_BUFFER_ERROR (1)
+/* @brief LMD lock. LMDR2[RO]. */
+#define FSL_FEATURE_MCM_HAS_LMD_RO (0)
+/* @brief MCM has PC Parity. LMDR2[PCPME] or LMDR2[PCPFE]. */
+#define FSL_FEATURE_MCM_HAS_PC_PARITY (0)
+/* @brief Has buffer fault, register FATR, FDR, FADR. */
+#define FSL_FEATURE_MCM_HAS_BUFFER_FAULT (1)
+/* @brief Has register CPCR2. */
+#define FSL_FEATURE_MCM_HAS_CPCR2 (0)
+/* @brief Has LMEM fault, register LMFAR, LMFDLR, LMFDHR, LMFATR. */
+#define FSL_FEATURE_MCM_HAS_LMEM_FAULT (0)
+/* @brief  MCM has LMEM control, register LMPECR, LMPEIR. */
+#define FSL_FEATURE_MCM_HAS_LMEM_PARITY (0)
+/* @brief  MCM has CPCR register (core platform control). */
+#define FSL_FEATURE_MCM_HAS_CPCR (0)
 
 /* ASRC module features */
 
@@ -924,6 +974,32 @@
 #define FSL_FEATURE_USDHC_HAS_NO_VOLTAGE_SELECT (0)
 /* @brief Has no VS18 bit in HOST_CTRL_CAP register */
 #define FSL_FEATURE_USDHC_HAS_NO_VS18 (0)
+
+/* GPT module features */
+
+/* @brief Is affected by errata with ID 3777. */
+#define FSL_FEATURE_GPT_HAS_ERRATA_3777 (0)
+
+/* TRDC module features */
+
+/* @brief Process master count. */
+#define FSL_FEATURE_TRDC_PROCESSOR_MASTER_COUNT (2)
+/* @brief TRDC instance has PID configuration or not. */
+#define FSL_FEATURE_TRDC_INSTANCE_HAS_PID_CONFIGURATIONn(x) (0)
+/* @brief TRDC domain number (reset value of HWCFG0[NDID]). */
+#define FSL_FEATURE_TRDC_DOMAIN_COUNT (16)
+/* @brief TRDC instance has MBC. */
+#define FSL_FEATURE_TRDC_HAS_MBC (1)
+/* @brief TRDC instance has MRC. */
+#define FSL_FEATURE_TRDC_HAS_MRC (1)
+/* @brief TRDC instance has TRDC_CR. */
+#define FSL_FEATURE_TRDC_HAS_GENERAL_CONFIG (1)
+/* @brief TRDC instance has MDA_Wx_y_DFMT. */
+#define FSL_FEATURE_TRDC_HAS_DOMAIN_ASSIGNMENT (1)
+/* @brief TRDC instance has TRDC_FDID. */
+#define FSL_FEATURE_TRDC_HAS_DOMAIN_ERROR (1)
+/* @brief TRDC instance has TRDC_FLW_CTL. */
+#define FSL_FEATURE_TRDC_HAS_FLW (1)
 
 /* WDOG module features */
 

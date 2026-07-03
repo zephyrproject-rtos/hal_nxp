@@ -1,6 +1,6 @@
 /*
  * Copyright 2014-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2025 NXP
+ * Copyright 2016-2026 NXP
  * SPDX-License-Identifier: BSD-3-Clause
  *
  */
@@ -21,9 +21,8 @@
 #endif
 /* CMSIS-style register definitions */
 #include "MIMX8MQ6_cm4.h"
-
 #else
-    #error "No valid CPU defined!"
+  #error "No valid CPU defined!"
 #endif
 
 #endif /* __FSL_DEVICE_REGISTERS_H__ */

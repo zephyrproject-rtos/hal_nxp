@@ -444,7 +444,7 @@ int UPOWER_SetRtdUseDdr(bool use_ddr)
     upwr_resp_t err = UPWR_RESP_COUNT; /* the error code */
     int ret = -1; /* the value returned by the last request completed */
 
-    status = upwr_xcp_set_rtd_use_ddr(RTD_DOMAIN, (uint32_t)use_ddr, UPOWER_Callback);
+    status = upwr_xcp_set_rtd_use_ddr(RTD_DOMAIN, (use_ddr ? 1U : 0U), UPOWER_Callback);
     if (status == 0)
     {
         UPOWER_CheckReqWithArgs(UPWR_SG_EXCEPT, &sgf, &err, &ret, 0);
@@ -618,7 +618,7 @@ int UPOWER_SetDDRRetention(soc_domain_t domain, bool enable)
     upwr_resp_t err = UPWR_RESP_COUNT; /* the error code */
     int ret = -1; /* the value returned by the last request completed */
 
-    status = upwr_xcp_set_ddr_retention(domain, (uint32_t)enable, UPOWER_Callback);
+    status = upwr_xcp_set_ddr_retention(domain, (enable ? 1U : 0U), UPOWER_Callback);
     if (status == 0)
     {
         UPOWER_CheckReqWithArgs(UPWR_SG_EXCEPT, &sgf, &err, &ret, 0);
@@ -640,6 +640,7 @@ int UPOWER_ChngPmicVoltage(uint32_t rail, int voltage)
     upwr_resp_t err = UPWR_RESP_COUNT; /* the error code */
     int ret = -1; /* the value returned by the last request completed */
 
+    assert(voltage >= 0);
     status = upwr_vtm_chng_pmic_voltage(rail, (uint32_t)voltage, UPOWER_Callback);
     if (status == 0)
     {
@@ -787,6 +788,7 @@ int UPOWER_ReadPmicReg(uint32_t reg_addr, uint8_t *reg_val)
         assert(err == UPWR_RESP_OK);
     }
 
+    assert(ret >= 0 && ret <= 0xFF);
     *reg_val = (uint8_t)ret;
 
     return status;
@@ -894,6 +896,7 @@ int UPOWER_ChngRTDDomBias(drive_mode_e drive_mode)
         default:
 		break;
     }
+    assert(bias != NULL);
     status = upwr_pwm_chng_dom_bias(bias, UPOWER_Callback);
     if (status == 0)
     {

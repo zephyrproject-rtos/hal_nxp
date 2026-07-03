@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 6.0, 2025-11-12
-**     Build:               b260205
+**     Build:               b260513
 **
 **     Abstract:
 **         Chip specific module features.
@@ -364,8 +364,6 @@
 #define FSL_FEATURE_EDMA_CHANNEL_GROUP_COUNT (1)
 /* @brief If 16 bytes transfer supported. */
 #define FSL_FEATURE_EDMA_SUPPORT_16_BYTES_TRANSFER (1)
-/* @brief Total number of DMA channels on all modules. */
-#define FSL_FEATURE_EDMA_DMAMUX_CHANNELS (32)
 /* @brief Has DMA_Error interrupt vector. */
 #define FSL_FEATURE_EDMA_HAS_ERROR_IRQ (1)
 /* @brief If 64 bytes transfer supported. */
@@ -382,8 +380,6 @@
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_MP_CHANNEL_MUXn(x) (0)
 /* @brief Has register CH_CSR. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_CONFIG (1)
-/* @brief Number of DMA channels with asynchronous request capability (register EARS). (Valid only for eDMA modules.) */
-#define FSL_FEATURE_EDMA_ASYNCHRO_REQUEST_CHANNEL_COUNT (32)
 /* @brief If channel clock controlled independently */
 #define FSL_FEATURE_EDMA_CHANNEL_HAS_OWN_CLOCK_GATE (1)
 /* @brief Has channel mux */
@@ -416,12 +412,18 @@
 #define FSL_FEATURE_EDMA_HAS_GLOBAL_MASTER_ID_REPLICATION (1)
 /* @brief Instance has register bit field CH_SBR[INSTR]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_ACCESS_TYPEn(x) (0)
+/* @brief Has Secure Master. */
+#define FSL_FEATURE_EDMA_SOC_REQUIRES_SECURE_MASTER (0)
 /* @brief Has register bit fields CH_MATTR[WCACHE], CH_MATTR[RCACHE]. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_MEMORY_ATTRIBUTE  (0)
 /* @brief Instance has register CH_MATTR. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_MEMORY_ATTRIBUTEn(x) (0)
+/* @brief Total number of DMA channels on all modules. */
+#define FSL_FEATURE_EDMA_DMAMUX_CHANNELS (32)
 /* @brief Has register bit field CH_CSR[SIGNEXT]. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_SIGN_EXTENSION (0)
+/* @brief Number of DMA channels with asynchronous request capability (register EARS). (Valid only for eDMA modules.) */
+#define FSL_FEATURE_EDMA_ASYNCHRO_REQUEST_CHANNEL_COUNT (32)
 /* @brief Instance Has register bit field CH_CSR[SIGNEXT]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_SIGN_EXTENSIONn(x) (0)
 /* @brief Has register bit field TCD_CSR[BWC]. */
@@ -432,10 +434,12 @@
 #define FSL_FEATURE_EDMA_HAS_TRANSFER_MODE (0)
 /* @brief Instance has register bit fields TCD_CSR[TMC]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_TRANSFER_MODEn(x) (0)
-/* @brief Has no register bit fields CH_SBR[SEC]. */
-#define FSL_FEATURE_EDMA_HAS_NO_CH_SBR_SEC (0)
 /* @brief edma5 has different tcd type. */
 #define FSL_FEATURE_EDMA_TCD_TYPEn(x) (0)
+/* @brief Has no register bit fields CH_SBR[EMI]. */
+#define FSL_FEATURE_EDMA_HAS_CH_SBR_EMI (1)
+/* @brief Has no register bit fields CH_SBR[SEC]. */
+#define FSL_FEATURE_EDMA_HAS_CH_SBR_SEC (1)
 
 /* EDGELOCK module features */
 
@@ -582,8 +586,10 @@
 
 /* RGPIO module features */
 
-/* @brief Has GPIO attribute checker register  (GACR). */
+/* @brief Has GPIO attribute checker register (GACR). */
 #define FSL_FEATURE_RGPIO_HAS_ATTRIBUTE_CHECKER (0)
+/* @brief GPIO registers width */
+#define FSL_FEATURE_RGPIO_REGISTERS_WIDTH (32)
 /* @brief There is ICR registers */
 #define FSL_FEATURE_RGPIO_HAS_IRQ_CONFIG (1)
 /* @brief There is PIDR register */
@@ -767,8 +773,8 @@
 
 /* MIPI_DSI_HOST module features */
 
-/* @brief Does not have DPHY PLL(DPHY_CM) */
-#define FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL (0)
+/* @brief Does not have DPHY PLL */
+#define FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL (1)
 /* @brief Support TX ULPS */
 #define FSL_FEATURE_MIPI_DSI_HOST_HAS_ULPS (1)
 /* @brief Has control register to enable or disable TX ULPS */
@@ -951,6 +957,17 @@
 
 /* @brief SPDIF has no register SIC. */
 #define FSL_FEATURE_SPDIF_HAS_NO_SIC_REGISTER (1)
+
+/* SYSPM module features */
+
+/* @brief SYSPM support disable counters if stopped or halted. */
+#define FSL_FEATURE_SYSPM_HAS_PMCR_DCIFSH (0)
+/* @brief SYSPM has reset instruction counter. */
+#define FSL_FEATURE_SYSPM_HAS_PMCR_RICTR (1)
+/* @brief Number of PMCR registers signals number of performance monitors available in single SYSPM instance. */
+#define FSL_FEATURE_SYSPM_PMCR_COUNT (2)
+/* @brief SYSPM has instruction counter. */
+#define FSL_FEATURE_SYSPM_HAS_PMICTR (0)
 
 /* TPM module features */
 

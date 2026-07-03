@@ -38,7 +38,7 @@
 **                          MIMX9529xxVZx_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260324
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA5

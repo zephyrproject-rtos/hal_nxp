@@ -123,9 +123,13 @@ uint32_t GetFracPllFreq(const volatile uint32_t *base)
                                       system_MIMX8MQx_cm4.h :88 */
     }
     refClkFreq /= (uint32_t)refDiv + 1U;
+    if ((uint64_t)refClkFreq * 8U * (1U + intDiv) > UINT64_MAX - (((uint64_t)refClkFreq * 8U * fracDiv) >> 24U))
+    {
+        return 0U;
+    }
     fracClk = (uint64_t)refClkFreq * 8U * (1U + intDiv) + (((uint64_t)refClkFreq * 8U * fracDiv) >> 24U);
 
-    return (uint32_t)(fracClk / (((uint64_t)outDiv + 1U) * 2U));
+    return (uint32_t)((fracClk / (((uint64_t)outDiv + 1U) * 2U)) & 0xFFFFFFFFU);
 }
 
 uint32_t GetSSCGPllFreq(const volatile uint32_t *base)
@@ -186,7 +190,11 @@ uint32_t GetSSCGPllFreq(const volatile uint32_t *base)
         pll2InputClock = (uint64_t)refClkFreq * 2U * divf1 / refDiv2;
     }
 
-    return (uint32_t)(pll2InputClock * divf2 / outDiv);
+    if (pll2InputClock > UINT64_MAX / divf2)
+    {
+        return 0U;
+    }
+    return (uint32_t)((pll2InputClock * divf2 / outDiv) & 0xFFFFFFFFU);
 }
 
 

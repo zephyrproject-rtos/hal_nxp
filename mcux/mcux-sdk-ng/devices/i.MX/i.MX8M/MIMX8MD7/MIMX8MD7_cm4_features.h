@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 4.0, 2018-01-26
-**     Build:               b260205
+**     Build:               b260513
 **
 **     Abstract:
 **         Chip specific module features.
@@ -246,6 +246,10 @@
 
 /* @brief Memory map has offset between subsystems. */
 #define FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET (1)
+
+/* MIPI_CSI2RX module features */
+
+/* No feature definitions */
 
 /* MU module features */
 

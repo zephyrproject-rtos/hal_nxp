@@ -7,6 +7,8 @@
 
 #ifndef _FSL_CLOCK_H_
 #define _FSL_CLOCK_H_
+
+/* coverity[include_recursion] */
 #include "fsl_common.h"
 #ifndef CONFIG_ARM_SCMI
 #include "scmi.h"

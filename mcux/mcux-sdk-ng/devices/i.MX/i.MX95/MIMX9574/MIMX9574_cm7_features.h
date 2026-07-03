@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2021-11-16
-**     Build:               b260228
+**     Build:               b260318
 **
 **     Abstract:
 **         Chip specific module features.
@@ -301,12 +301,8 @@
 #define FSL_FEATURE_EDMA_HAS_CONTINUOUS_LINK_MODE (0)
 /* @brief If 128 bytes transfer supported. */
 #define FSL_FEATURE_EDMA_SUPPORT_128_BYTES_TRANSFER (1)
-/* @brief whether has prot register */
-#define FSL_FEATURE_EDMA_INSTANCE_HAS_PROT_REGISTERn(x) \
-    (((x) == DMA3) ? (0) : \
-    (((x) == EDMA5_2) ? (1) : \
-    (((x) == EDMA5_3) ? (1) : \
-    (((x) == EDMA5_4) ? (1) : (-1)))))
+/* @brief If channel clock controlled independently */
+#define FSL_FEATURE_EDMA_CHANNEL_HAS_OWN_CLOCK_GATE (1)
 /* @brief Instance has register bit field CH_SBR[INSTR]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_ACCESS_TYPEn(x) \
     (((x) == DMA3) ? (0) : \
@@ -315,12 +311,6 @@
     (((x) == EDMA5_2) ? (1) : (-1)))))
 /* @brief NBYTES must be multiple of 8 when using scatter gather. */
 #define FSL_FEATURE_EDMA_HAS_ERRATA_51327 (0)
-/* @brief whether has MP channel mux */
-#define FSL_FEATURE_EDMA_INSTANCE_HAS_MP_CHANNEL_MUXn(x) \
-    (((x) == DMA3) ? (0) : \
-    (((x) == EDMA5_2) ? (1) : \
-    (((x) == EDMA5_3) ? (1) : \
-    (((x) == EDMA5_4) ? (0) : (-1)))))
 /* @brief Instance has register CH_MATTR. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_MEMORY_ATTRIBUTEn(x) \
     (((x) == DMA3) ? (0) : \
@@ -331,8 +321,8 @@
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_ERRATA_51327n(x) (0)
 /* @brief Has register CH_CSR. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_CONFIG (1)
-/* @brief If channel clock controlled independently */
-#define FSL_FEATURE_EDMA_CHANNEL_HAS_OWN_CLOCK_GATE (1)
+/* @brief Has no register bit fields MP_CSR[EBW]. */
+#define FSL_FEATURE_EDMA_HAS_NO_MP_CSR_EBW (1)
 /* @brief Instance Has register bit field CH_CSR[SIGNEXT]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_SIGN_EXTENSIONn(x) \
     (((x) == DMA3) ? (0) : \
@@ -343,32 +333,42 @@
 #define FSL_FEATURE_EDMA_HAS_PROT_REGISTER (1)
 /* @brief Has register CH_SBR. */
 #define FSL_FEATURE_EDMA_HAS_SBR (1)
+/* @brief If dma has common clock gate */
+#define FSL_FEATURE_EDMA_HAS_COMMON_CLOCK_GATE (0)
 /* @brief Instance has register bit field TCD_CSR[BWC]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_BANDWIDTHn(x) \
     (((x) == DMA3) ? (1) : \
     (((x) == EDMA5_3) ? (0) : \
     (((x) == EDMA5_4) ? (0) : \
     (((x) == EDMA5_2) ? (0) : (-1)))))
+/* @brief Whether instance has prot register. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_PROT_REGISTERn(x) \
+    (((x) == EDMA5_2) ? (1) : \
+    (((x) == EDMA5_3) ? (1) : \
+    (((x) == EDMA5_4) ? (1) : \
+    (((x) == DMA3) ? (0) : (-1)))))
 /* @brief Has no register bit fields CH_SBR[ATTR]. */
 #define FSL_FEATURE_EDMA_HAS_NO_CH_SBR_ATTR (0)
-/* @brief Has no register bit fields MP_CSR[EBW]. */
-#define FSL_FEATURE_EDMA_HAS_NO_MP_CSR_EBW (1)
+/* @brief If dma channel IRQ support parameter */
+#define FSL_FEATURE_EDMA_MODULE_CHANNEL_IRQ_ENTRY_SUPPORT_PARAMETER (0)
 /* @brief Instance has register bit fields TCD_CSR[TMC]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_TRANSFER_MODEn(x) \
     (((x) == DMA3) ? (0) : \
     (((x) == EDMA5_3) ? (1) : \
     (((x) == EDMA5_4) ? (1) : \
     (((x) == EDMA5_2) ? (1) : (-1)))))
-/* @brief whether has MP channel mux */
+/* @brief Whether has MP channel mux */
 #define FSL_FEATURE_EDMA_HAS_MP_CHANNEL_MUX (1)
 /* @brief Has register bit field CH_CSR[SWAP]. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_SWAP_SIZE (1)
-/* @brief If dma has common clock gate */
-#define FSL_FEATURE_EDMA_HAS_COMMON_CLOCK_GATE (0)
 /* @brief Has no register bit fields CH_SBR[SEC]. */
 #define FSL_FEATURE_EDMA_HAS_NO_CH_SBR_SEC (0)
-/* @brief If dma channel IRQ support parameter */
-#define FSL_FEATURE_EDMA_MODULE_CHANNEL_IRQ_ENTRY_SUPPORT_PARAMETER (0)
+/* @brief Whether instance has MP channel mux. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_MP_CHANNEL_MUXn(x) \
+    (((x) == EDMA5_2) ? (1) : \
+    (((x) == EDMA5_3) ? (1) : \
+    (((x) == EDMA5_4) ? (0) : \
+    (((x) == DMA3) ? (0) : (-1)))))
 /* @brief Has register bit field TCD_CSR[BWC]. */
 #define FSL_FEATURE_EDMA_HAS_BANDWIDTH (1)
 /* @brief Has channel mux */
@@ -382,7 +382,7 @@
     (((x) == EDMA5_4) ? (1) : \
     (((x) == EDMA5_2) ? (1) : (-1)))))
 /* @brief Has register bit fields CH_MATTR[WCACHE], CH_MATTR[RCACHE]. */
-#define FSL_FEATURE_EDMA_HAS_CHANNEL_MEMORY_ATTRIBUTE  (1)
+#define FSL_FEATURE_EDMA_HAS_CHANNEL_MEMORY_ATTRIBUTE (1)
 /* @brief Has register bit field CH_CSR[SIGNEXT]. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_SIGN_EXTENSION (1)
 /* @brief Has register bit fields TCD_CSR[TMC]. */

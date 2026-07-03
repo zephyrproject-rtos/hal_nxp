@@ -121,6 +121,7 @@ void SENTINEL_ReceiveMessage(uint32_t *pParam, uint32_t *pParamCount)
     if (pParamCount != NULL)
     {
         /* Save received param count. */
+        assert(*pParamCount >= paramCount);
         *pParamCount -= paramCount;
     }
     else

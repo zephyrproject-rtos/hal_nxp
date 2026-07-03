@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+#include "fsl_common.h"
 #include "fsl_clock.h"
 
 /*******************************************************************************
@@ -97,6 +98,21 @@
  * PFD Clock Frequency = PLL output frequency * 18/frac value
  */
 #define PFD_FREQ_CALCUL_CONSTANT 18U
+
+static inline uint32_t CLOCK_U64ToU32Sat(uint64_t value)
+{
+    return (value > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)value;
+}
+
+static inline uint64_t CLOCK_U64MulAddSat(uint64_t a, uint64_t b, uint64_t c)
+{
+    if ((a != 0ULL) && (b > ((UINT64_MAX - c) / a)))
+    {
+        return UINT64_MAX;
+    }
+    return (a * b) + c;
+}
+
 
 /*! @brief Bitfield values for general PCC registers. */
 #define PCC_PCS_VAL(reg) (((reg)&PCC_CLKCFG_PCS_MASK) >> PCC_CLKCFG_PCS_SHIFT)
@@ -492,7 +508,7 @@ uint32_t CLOCK_GetIpFreq(clock_ip_name_t name)
     {
         if ((reg & (PCC_CLKCFG_PCD_MASK | PCC_CLKCFG_FRAC_MASK)) != 0UL)
         {
-            return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
+            return CLOCK_U64ToU32Sat(((uint64_t)freq * (PCC_FRAC_VAL(reg) + 1U)) / (PCC_PCD_VAL(reg) + 1U));
         }
         else
         {
@@ -1120,7 +1136,7 @@ status_t CLOCK_InitAuxPll(const scg_apll_config_t *config)
 
     /* Step 2. Set PLL configuration. */
     SCG->APLLCFG = SCG_APLLCFG_SOURCE(config->src) | SCG_APLLCFG_PREDIV(config->prediv) |
-                   SCG_APLLCFG_MULT(config->mult) | SCG_APLLCFG_PLLS(config->isPfdSelected) |
+                   SCG_APLLCFG_MULT(config->mult) | SCG_APLLCFG_PLLS(config->isPfdSelected ? 1UL : 0UL) |
                    SCG_APLLCFG_PFDSEL(((uint32_t)config->pfdClkout) >> 3U) |
                    SCG_APLLCFG_PLLPOSTDIV1(config->pllPostdiv1) | SCG_APLLCFG_PLLPOSTDIV2(config->pllPostdiv2);
 
@@ -1195,7 +1211,10 @@ static uint32_t CLOCK_GetAuxPllCommonFreq(void)
         freq /= (SCG_APLLCFG_PREDIV_VAL + SCG_APLL_PREDIV_BASE_VALUE); /* Pre-divider. */
         apllnumTmp = SCG_APLLNUM_NUM_VAL;
         freqTmp    = (uint64_t)freq * (apllnumTmp) / (SCG_APLLDENOM_DENOM_VAL);
-        freq       = freq * (SCG_APLLCFG_MULT_VAL + SCG_APLL_MULT_BASE_VALUE) + (uint32_t)freqTmp;
+        {
+            uint64_t freqU64 = CLOCK_U64MulAddSat((uint64_t)freq, (uint64_t)(SCG_APLLCFG_MULT_VAL + SCG_APLL_MULT_BASE_VALUE), freqTmp);
+            freq = CLOCK_U64ToU32Sat(freqU64);
+        }
     }
 
     return freq;
@@ -1307,7 +1326,7 @@ uint32_t CLOCK_GetAuxPllPfdFreq(scg_apll_pfd_clkout_t pfdClkout)
 
                 if (freq != 0UL) /* If source is valid. */
                 {
-                    freq = (uint32_t)((uint64_t)freq * PFD_FREQ_CALCUL_CONSTANT /
+                    freq = CLOCK_U64ToU32Sat((uint64_t)freq * PFD_FREQ_CALCUL_CONSTANT /
                                       fracValue); /* PFD Clock Frequency = PLL output frequency * 18 / frac value. */
                 }
             }
@@ -1426,7 +1445,7 @@ status_t CLOCK_InitSysPll(const scg_spll_config_t *config)
 
     /* Step 2. Set PLL configuration. */
     SCG->SPLLCFG = SCG_SPLLCFG_SOURCE(config->src) | SCG_SPLLCFG_PREDIV(config->prediv) |
-                   SCG_SPLLCFG_MULT(config->mult) | SCG_SPLLCFG_PLLS(config->isPfdSelected) |
+                   SCG_SPLLCFG_MULT(config->mult) | SCG_SPLLCFG_PLLS(config->isPfdSelected ? 1UL : 0UL) |
                    SCG_SPLLCFG_PFDSEL(((uint32_t)config->pfdClkout >> 3U));
 
     /* Step 3. Enable clock. */
@@ -1492,7 +1511,11 @@ static uint32_t CLOCK_GetSysPllCommonFreq(void)
     if (freq != 0UL) /* If source is valid. */
     {
         freq /= (SCG_SPLLCFG_PREDIV_VAL + SCG_SPLL_PREDIV_BASE_VALUE); /* Pre-divider. */
-        freq *= s_spllMulti[SCG_SPLLCFG_MULT_VAL];                     /* Multiplier. */
+        uint32_t spllMultIdx = SCG_SPLLCFG_MULT_VAL;
+        if (spllMultIdx < (uint32_t)(sizeof(s_spllMulti) / sizeof(s_spllMulti[0])))
+        {
+            freq *= s_spllMulti[spllMultIdx];
+        }
     }
 
     return freq;
@@ -1598,7 +1621,7 @@ uint32_t CLOCK_GetSysPllPfdFreq(scg_spll_pfd_clkout_t pfdClkout)
 
                 if (freq != 0UL) /* If source is valid. */
                 {
-                    freq = (uint32_t)((uint64_t)freq * PFD_FREQ_CALCUL_CONSTANT /
+                    freq = CLOCK_U64ToU32Sat((uint64_t)freq * PFD_FREQ_CALCUL_CONSTANT /
                                       fracValue); /* PFD Clock Frequency = PLL output frequency * 18 / frac value. */
                 }
             }

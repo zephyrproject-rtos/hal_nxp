@@ -76,7 +76,6 @@
 #define _SYSTEM_MIMX94398_cm7_core0_H_                    /**< Symbol preventing repeated inclusion */
 
 #include <stdint.h>
-#include "fsl_device_registers.h"
 
 #define DEFAULT_SYSTEM_CLOCK 800000000u
 

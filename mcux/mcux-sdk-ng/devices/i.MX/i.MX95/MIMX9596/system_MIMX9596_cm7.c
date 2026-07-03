@@ -13,9 +13,9 @@
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **
-**     Reference manual:    iMX95RM rev1 draftM
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Reference manual:    iMX95RM rev4
+**     Version:             rev. 4.0, 2026-02-28
+**     Build:               b260305
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -23,7 +23,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -35,14 +35,18 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-24)
+**         Header RFP.
+**     - rev. 4.0 (2026-02-28)
+**         Update Interrupts mapping.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMX9596_cm7
- * @version 2.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-02-28
  * @brief Device specific configuration file for MIMX9596_cm7 (implementation
  *        file)
  *
