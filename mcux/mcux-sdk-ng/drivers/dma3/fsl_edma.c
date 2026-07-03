@@ -391,8 +391,8 @@ void EDMA_SetBandWidth(DMA_Type *base, uint32_t channel, edma_bandwidth_t bandWi
 {
     assert(channel < (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL);
 
-    base->CH[channel].TCD_CSR =
-        (uint16_t)((base->CH[channel].TCD_CSR & (~DMA_TCD_CSR_BWC_MASK)) | DMA_TCD_CSR_BWC(bandWidth));
+    base->CH[channel].TCD_CSR = (uint16_t)(
+        ((base->CH[channel].TCD_CSR & MCUX_MASK_INVERT_16(DMA_TCD_CSR_BWC_MASK)) | DMA_TCD_CSR_BWC(bandWidth)));
 }
 
 /*!
@@ -533,6 +533,7 @@ void EDMA_TcdSetTransferConfig(edma_tcd_t *tcd, const edma_transfer_config_t *co
     assert(((uint32_t)nextTcd & 0x1FU) == 0U);
     assert((config->srcAddr % (1UL << (uint32_t)config->srcTransferSize)) == 0U);
     assert((config->destAddr % (1UL << (uint32_t)config->destTransferSize)) == 0U);
+    assert(config->majorLoopCounts <= 0xFFFFU);
 
 /* source address */
 #if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
@@ -573,7 +574,7 @@ void EDMA_TcdSetTransferConfig(edma_tcd_t *tcd, const edma_transfer_config_t *co
             previous transfer is not the last transfer, and channel request should
             be enabled at the next transfer(the next TCD).
         */
-        tcd->CSR = (tcd->CSR | (uint16_t)DMA_TCD_CSR_ESG_MASK) & ~(uint16_t)DMA_TCD_CSR_DREQ_MASK;
+        tcd->CSR = (tcd->CSR | (uint16_t)DMA_TCD_CSR_ESG_MASK) & MCUX_MASK_INVERT_16(DMA_TCD_CSR_DREQ_MASK);
     }
 }
 
@@ -654,9 +655,9 @@ void EDMA_TcdSetChannelLink(edma_tcd_t *tcd, edma_channel_link_type_t type, uint
     }
     else /* Link none */
     {
-        tcd->CITER &= ~(uint16_t)DMA_TCD_CITER_ELINKYES_ELINK_MASK;
-        tcd->BITER &= ~(uint16_t)DMA_TCD_BITER_ELINKYES_ELINK_MASK;
-        tcd->CSR &= ~(uint16_t)DMA_TCD_CSR_MAJORELINK_MASK;
+        tcd->CITER &= MCUX_MASK_INVERT_16(DMA_TCD_CITER_ELINKYES_ELINK_MASK);
+        tcd->BITER &= MCUX_MASK_INVERT_16(DMA_TCD_BITER_ELINKYES_ELINK_MASK);
+        tcd->CSR &= MCUX_MASK_INVERT_16(DMA_TCD_CSR_MAJORELINK_MASK);
     }
 }
 
@@ -722,13 +723,13 @@ void EDMA_TcdDisableInterrupts(edma_tcd_t *tcd, uint32_t mask)
     /* Disable Major interrupt */
     if ((mask & (uint32_t)kEDMA_MajorInterruptEnable) != 0U)
     {
-        tcd->CSR &= ~(uint16_t)DMA_TCD_CSR_INTMAJOR_MASK;
+        tcd->CSR &= MCUX_MASK_INVERT_16(DMA_TCD_CSR_INTMAJOR_MASK);
     }
 
     /* Disable Half major interrupt */
     if ((mask & (uint32_t)kEDMA_HalfInterruptEnable) != 0U)
     {
-        tcd->CSR &= ~(uint16_t)DMA_TCD_CSR_INTHALF_MASK;
+        tcd->CSR &= MCUX_MASK_INVERT_16(DMA_TCD_CSR_INTHALF_MASK);
     }
 }
 
@@ -917,7 +918,8 @@ void EDMA_InstallTCDMemory(edma_handle_t *handle, edma_tcd_t *tcdPool, uint32_t 
     handle->header  = 0;
     handle->tail    = 0;
     handle->tcdUsed = 0;
-    handle->tcdSize = (int8_t)tcdSize;
+    assert(tcdSize <= 127U);
+    handle->tcdSize = (int8_t)(uint8_t)tcdSize;
     handle->flags   = 0;
     handle->tcdPool = tcdPool;
 }
@@ -1035,6 +1037,11 @@ void EDMA_PrepareTransfer(edma_transfer_config_t *config,
 
     int16_t srcOffset = 0, destOffset = 0;
 
+    /* Bound check needed by static analysis for the (int16_t) casts below;
+     * EDMA_PrepareTransferConfig validates srcWidth/destWidth tighter per feature flag. */
+    assert(srcWidth <= (uint32_t)INT16_MAX);
+    assert(destWidth <= (uint32_t)INT16_MAX);
+
     switch (transferType)
     {
         case kEDMA_MemoryToMemory:
@@ -1127,7 +1134,8 @@ status_t EDMA_SubmitTransfer(edma_handle_t *handle, const edma_transfer_config_t
         currentTcd = handle->tail;
         handle->tcdUsed++;
         /* Calculate index of next TCD */
-        nextTcd = currentTcd + 1;
+        assert(currentTcd < INT8_MAX);
+        nextTcd = (int8_t)(currentTcd + 1);
         if (nextTcd == handle->tcdSize)
         {
             nextTcd = 0;
@@ -1136,7 +1144,7 @@ status_t EDMA_SubmitTransfer(edma_handle_t *handle, const edma_transfer_config_t
         handle->tail = nextTcd;
         EnableGlobalIRQ(primask);
         /* Calculate index of previous TCD */
-        previousTcd = currentTcd != 0 ? currentTcd - 1 : handle->tcdSize - 1;
+        previousTcd = currentTcd != 0 ? (int8_t)(currentTcd - 1) : (int8_t)(handle->tcdSize - 1);
         /* Configure current TCD block. */
         EDMA_TcdReset(&handle->tcdPool[currentTcd]);
 
@@ -1156,8 +1164,8 @@ status_t EDMA_SubmitTransfer(edma_handle_t *handle, const edma_transfer_config_t
         if (currentTcd != previousTcd)
         {
             /* Enable scatter/gather feature in the previous TCD block. */
-            csr =
-                (handle->tcdPool[previousTcd].CSR | (uint16_t)DMA_TCD_CSR_ESG_MASK) & ~(uint16_t)DMA_TCD_CSR_DREQ_MASK;
+            csr = (handle->tcdPool[previousTcd].CSR | (uint16_t)DMA_TCD_CSR_ESG_MASK) &
+                  MCUX_MASK_INVERT_16(DMA_TCD_CSR_DREQ_MASK);
             handle->tcdPool[previousTcd].CSR = csr;
 /*
     Check if the TCD block in the registers is the previous one (points to
@@ -1176,7 +1184,7 @@ status_t EDMA_SubmitTransfer(edma_handle_t *handle, const edma_transfer_config_t
             if (tcdRegs->DLAST_SGA == temp)
             {
                 /* Enable scatter/gather also in the TCD registers. */
-                csr = (tcdRegs->CSR | (uint16_t)DMA_TCD_CSR_ESG_MASK) & ~(uint16_t)DMA_TCD_CSR_DREQ_MASK;
+                csr = (tcdRegs->CSR | (uint16_t)DMA_TCD_CSR_ESG_MASK) & MCUX_MASK_INVERT_16(DMA_TCD_CSR_DREQ_MASK);
                 /* Must write the CSR register one-time, because the transfer maybe
                  * finished anytime. */
                 tcdRegs->CSR = csr;
@@ -1329,7 +1337,7 @@ void EDMA_StopTransfer(edma_handle_t *handle)
 {
     assert(handle != NULL);
 
-    handle->flags &= (uint8_t)(~EDMA_TRANSFER_ENABLED_MASK);
+    handle->flags &= MCUX_MASK_INVERT_8(EDMA_TRANSFER_ENABLED_MASK);
     handle->base->CH[handle->channel].CH_CSR =
         (handle->base->CH[handle->channel].CH_CSR & (~DMA_CH_CSR_DONE_MASK)) & ~DMA_CH_CSR_ERQ_MASK;
 }
@@ -1404,7 +1412,7 @@ void EDMA_HandleIRQ(edma_handle_t *handle)
         edma_tcd_t *tcdRegs = (edma_tcd_t *)((uint32_t)&handle->base->CH[handle->channel] + 0x00000020U);
         uint32_t sga_index;
         int32_t tcds_done;
-        uint8_t new_header;
+        int8_t new_header;
         uint32_t temp = 0;
         bool esg = ((tcdRegs->CSR & DMA_TCD_CSR_ESG_MASK) != 0U);
 
@@ -1417,11 +1425,23 @@ void EDMA_HandleIRQ(edma_handle_t *handle)
         sga -= temp;
         /* Get the index of the next transfer TCD blocks. */
         sga_index = sga / sizeof(edma_tcd_t);
-        /* Adjust header positions. new_header should be the index of the current transfer TCD blocks. */
-        new_header = sga_index != 0U ? (uint8_t)sga_index - 1U : (uint8_t)handle->tcdSize - 1U;
+        /* Adjust header positions. new_header should be the index of the current transfer TCD blocks.
+         * sga_index is bounded by tcdSize (<= 127, asserted in EDMA_InstallTCDMemory), fits in int8_t.
+         * Separate composite expression into temp before narrowing cast to satisfy MISRA Rule 10.8. */
+        if (sga_index != 0U)
+        {
+            temp = sga_index - 1U;
+        }
+        else
+        {
+            temp = (uint32_t)handle->tcdSize - 1U;
+        }
+        new_header = (int8_t)temp;
 
         /* Calculate the number of finished TCDs */
-        if (new_header == (uint8_t)handle->header)
+        assert(handle->header >= 0);
+        assert(new_header >= 0);
+        if (new_header == handle->header)
         {
             /* check esg here for the case that application submit only one request, once the request complete:
              * new_header(1) = handle->header(1)
@@ -1462,7 +1482,7 @@ void EDMA_HandleIRQ(edma_handle_t *handle)
             }
         }
         /* Advance header to the point beyond the last finished TCD block. */
-        handle->header = (int8_t)new_header;
+        handle->header = new_header;
         /* Release TCD blocks. */
         handle->tcdUsed -= (int8_t)tcds_done;
         /* Invoke callback function. */

@@ -154,9 +154,16 @@ static uint32_t CSI_BufferQueueCount(buf_queue_t *bq)
 {
     if (CSI_IsBufferQueueEmpty(bq))
     {
-        return 0;
+        return 0U;
     }
-    return (uint32_t)(bq->tail - bq->head) + 1U;
+
+    /* Defensive check, the queue indices must be valid in non-empty state. */
+    if ((bq->head < 0) || (bq->tail < bq->head))
+    {
+        return 0U;
+    }
+
+    return ((uint32_t)bq->tail - (uint32_t)bq->head) + 1U;
 }
 
 static status_t CSI_EnqueueBuffer(buf_queue_t *bq, uint32_t addr)
@@ -171,6 +178,12 @@ static status_t CSI_EnqueueBuffer(buf_queue_t *bq, uint32_t addr)
         bq->head = 0;
     }
 
+    /* Defensive check, the queue indices must be valid in non-empty state. */
+    if ((bq->tail < -1) || (bq->tail < (bq->head - 1)) || (bq->tail >= ((int)CSI_DRIVER_QUEUE_SIZE - 1)))
+    {
+        return kStatus_CSI_QueueFull;
+    }
+
     bq->tail++;
     bq->addr[bq->tail] = addr;
 
@@ -181,7 +194,13 @@ static uint32_t CSI_DequeueBuffer(buf_queue_t *bq)
 {
     if (CSI_IsBufferQueueEmpty(bq))
     {
-        return 0;
+        return 0U;
+    }
+
+    /* Defensive check, the queue indices must be valid in non-empty state. */
+    if ((bq->head < 0) || (bq->tail < bq->head))
+    {
+        return 0U;
     }
 
     uint32_t addr = bq->addr[bq->head];
@@ -609,7 +628,7 @@ status_t CSI_TransferCreateHandle(CSI_Type *base,
     /* Save the handle in global variables to support the double weak mechanism. */
     s_csiHandle[instance] = handle;
 
-    s_csiIsr = CSI_TransferHandleIRQ;
+    s_csiIsr = &CSI_TransferHandleIRQ;
 
     /* Enable interrupt. */
     (void)EnableIRQ(s_csiIRQ[instance]);
@@ -702,7 +721,7 @@ status_t CSI_TransferStop(CSI_Type *base, csi_handle_t *handle)
      */
     for (bufIdx = 0; bufIdx < activeBufferNum; bufIdx++)
     {
-        CSI_EnqueueBuffer(&handle->emptyBufferQueue, CSI_GetRxBufferAddr(base, bufIdx));
+        (void)CSI_EnqueueBuffer(&handle->emptyBufferQueue, CSI_GetRxBufferAddr(base, bufIdx));
     }
 
     return kStatus_Success;
@@ -831,9 +850,9 @@ void CSI_TransferHandleIRQ(CSI_Type *base, csi_handle_t *handle)
             if (CSI_IsBufferQueueFull(&handle->fullBufferQueue))
             {
                 /* Drop the oldest buffer */
-                CSI_DequeueBuffer(&handle->fullBufferQueue);//sw buffer que overflow?
+                (void)CSI_DequeueBuffer(&handle->fullBufferQueue);
             }
-            CSI_EnqueueBuffer(&handle->fullBufferQueue, full_fb);
+            (void)CSI_EnqueueBuffer(&handle->fullBufferQueue, full_fb);
 
             /*
              * Get an empty buffer from the queue to use as an active
@@ -847,9 +866,9 @@ void CSI_TransferHandleIRQ(CSI_Type *base, csi_handle_t *handle)
             if (CSI_IsBufferQueueFull(&handle->fullBufferQueue))
             {
                 /* Drop the oldest buffer */
-                CSI_DequeueBuffer(&handle->fullBufferQueue);
+                (void)CSI_DequeueBuffer(&handle->fullBufferQueue);
             }
-            CSI_EnqueueBuffer(&handle->fullBufferQueue, full_fb);
+            (void)CSI_EnqueueBuffer(&handle->fullBufferQueue, full_fb);
 
             handle->activeBufferNum--;
 
@@ -867,6 +886,7 @@ void CSI_TransferHandleIRQ(CSI_Type *base, csi_handle_t *handle)
         }
         else
         {
+            /* No action required. */
         }
 
         if (NULL != handle->callback && isFullBufferEnqueued)
@@ -876,6 +896,7 @@ void CSI_TransferHandleIRQ(CSI_Type *base, csi_handle_t *handle)
     }
     else
     {
+        /* No DMA transfer done. */
     }
 }
 
@@ -1344,6 +1365,7 @@ void CSI_FragModeTransferHandleIRQ(CSI_Type *base, csi_frag_handle_t *handle)
     }
     else
     {
+        /* No DMA transfer done. */
     }
 }
 #endif /* CSI_DRIVER_FRAG_MODE */

@@ -50,7 +50,7 @@
  */
 
 /*! @brief Driver Version */
-#define FSL_NETC_DRIVER_VERSION (MAKE_VERSION(2, 10, 5))
+#define FSL_NETC_DRIVER_VERSION (MAKE_VERSION(2, 10, 6))
 
 /*! @brief Macro to divides an address into a low 32 bits and a possible high 32 bits */
 #define NETC_ADDR_LOW_32BIT(x)  ((uint32_t)((x) & 0xFFFFFFFFU))
@@ -3510,21 +3510,21 @@ typedef enum _netc_hw_enetc_si_rxr_group
  */
 typedef struct _netc_hw_enetc_si_config
 {
-    uint32_t bandWeight : 4;        /*!< Station interface traffic class bandwidth weight */
-    uint32_t vlanCtrl : 4;          /*!< VLAN Ethertypes can be inserted by the SI driver, set with OR of @ref
+    uint8_t bandWeight;              /*!< Station interface traffic class bandwidth weight */
+    uint8_t vlanCtrl;                /*!< VLAN Ethertypes can be inserted by the SI driver, set with OR of @ref
                                        netc_hw_enetc_si_vlan_type. */
-    uint32_t antiSpoofEnable : 1;   /*!< Anti-spoofing enable */
-    uint32_t vlanInsertEnable : 1;  /*!< Software SI-based VLAN Insertion enable, avtive when enSIBaseVlan is true */
-    uint32_t vlanExtractEnable : 1; /*!< SI-based VLAN removed from frame enable, avtive when enSIBaseVlan is true */
-    uint32_t sourcePruneEnable : 1; /*!< Source pruning enable */
-    uint32_t rxRingUse : 7; /*!< Number of Rx Rings to be used, when enable Rx ring group, this equal to the sum of all
+    bool antiSpoofEnable;            /*!< Anti-spoofing enable */
+    bool vlanInsertEnable;           /*!< Software SI-based VLAN Insertion enable, avtive when enSIBaseVlan is true */
+    bool vlanExtractEnable;          /*!< SI-based VLAN removed from frame enable, avtive when enSIBaseVlan is true */
+    bool sourcePruneEnable;          /*!< Source pruning enable */
+    uint8_t rxRingUse;       /*!< Number of Rx Rings to be used, when enable Rx ring group, this equal to the sum of all
                           Rx group rings. */
-    uint32_t txRingUse : 7; /*!< Number of Tx Rings to be used, note that when SI is Switch management ENETC SI, the
+    uint8_t txRingUse;       /*!< Number of Tx Rings to be used, note that when SI is Switch management ENETC SI, the
                           number not include Tx ring 0. */
-    uint32_t valnToIpvEnable : 1; /*!< Enable the VLAN PCP/DEI value (use NETC_VLAN_PCP_DEI_VALUE marco) to internal
+    bool valnToIpvEnable;            /*!< Enable the VLAN PCP/DEI value (use NETC_VLAN_PCP_DEI_VALUE marco) to internal
                                      priority value mapping. */
-    uint32_t rxBdrGroupNum : 2;   /*!< Rx BD ring group number, range in 0 ~ 2. */
-    uint32_t ringPerBdrGroup : 3; /*!< The ring number in every Rx BD ring group, range in 1 ~ 8, active when
+    uint8_t rxBdrGroupNum;           /*!< Rx BD ring group number, range in 0 ~ 2. */
+    uint8_t ringPerBdrGroup;         /*!< The ring number in every Rx BD ring group, range in 1 ~ 8, active when
                                     rxBdrGroupNum not equal zero. */
     netc_hw_enetc_si_rxr_group
         defaultRxBdrGroup;        /*!< The selected Rx BD ring group, active when rxBdrGroupNum not equal zero. */

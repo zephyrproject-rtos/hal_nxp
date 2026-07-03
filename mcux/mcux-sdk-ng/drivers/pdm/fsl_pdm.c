@@ -1,7 +1,6 @@
 /*
  * Copyright 2018-2020,2025-2026 NXP
  * All rights reserved.
- *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -684,17 +683,8 @@ void PDM_TransferAbortReceive(PDM_Type *base, pdm_handle_t *handle)
     handle->queueUser   = 0;
 }
 
-/*!
- * brief Tx interrupt handler.
- *
- * param base PDM base pointer.
- * param handle Pointer to the pdm_handle_t structure.
- */
-void PDM_TransferHandleIRQ(PDM_Type *base, pdm_handle_t *handle)
+static void PDM_TransferHandleErrorIRQ(PDM_Type *base, pdm_handle_t *handle)
 {
-    assert(handle != NULL);
-
-#if (defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
     uint32_t status = 0U;
 
 #if (defined(FSL_FEATURE_PDM_HAS_STATUS_LOW_FREQ) && (FSL_FEATURE_PDM_HAS_STATUS_LOW_FREQ == 1U))
@@ -707,6 +697,7 @@ void PDM_TransferHandleIRQ(PDM_Type *base, pdm_handle_t *handle)
         }
     }
 #endif
+
     status = PDM_GetFifoStatus(base);
     if (status != 0U)
     {
@@ -728,6 +719,20 @@ void PDM_TransferHandleIRQ(PDM_Type *base, pdm_handle_t *handle)
         }
     }
 #endif
+}
+
+/*!
+ * brief Tx interrupt handler.
+ *
+ * param base PDM base pointer.
+ * param handle Pointer to the pdm_handle_t structure.
+ */
+void PDM_TransferHandleIRQ(PDM_Type *base, pdm_handle_t *handle)
+{
+    assert(handle != NULL);
+
+#if (defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
+    PDM_TransferHandleErrorIRQ(base, handle);
 #endif
 
     /* Handle transfer */
@@ -1015,28 +1020,75 @@ void PDM_EnableHwvadInterruptCallback(PDM_Type *base, pdm_hwvad_callback_t vadCa
 }
 #endif
 
-#if (defined PDM)
-void PDM_HWVAD_EVENT_DriverIRQHandler(void);
-void PDM_HWVAD_EVENT_DriverIRQHandler(void)
+#endif
+
+static void PDM_EventHandleIRQ(uint32_t instance)
 {
-    if ((PDM_GetHwvadInterruptStatusFlags(PDM) & (uint32_t)kPDM_HwvadStatusVoiceDetectFlag) != 0U)
+    assert(instance < ARRAY_SIZE(s_pdmBases));
+    assert(s_pdmHandle[instance] != NULL);
+    assert(s_pdmIsr != NULL);
+
+    s_pdmIsr(s_pdmBases[instance], s_pdmHandle[instance]);
+}
+
+#if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
+static void PDM_ErrorHandleIRQ(uint32_t instance)
+{
+    assert(instance < ARRAY_SIZE(s_pdmBases));
+    assert(s_pdmHandle[instance] != NULL);
+
+    PDM_TransferHandleErrorIRQ(s_pdmBases[instance], s_pdmHandle[instance]);
+}
+#endif
+
+#if !(defined(FSL_FEATURE_PDM_HAS_NO_HWVAD) && FSL_FEATURE_PDM_HAS_NO_HWVAD)
+static void PDM_HwvadEventHandleIRQ(uint32_t instance)
+{
+    assert(instance < ARRAY_SIZE(s_pdmBases));
+
+    if ((PDM_GetHwvadInterruptStatusFlags(s_pdmBases[instance]) & (uint32_t)kPDM_HwvadStatusVoiceDetectFlag) != 0U)
     {
-        PDM_ClearHwvadInterruptStatusFlags(PDM, (uint32_t)kPDM_HwvadStatusVoiceDetectFlag);
-        if (s_pdm_hwvad_notification[0].callback != NULL)
+        PDM_ClearHwvadInterruptStatusFlags(s_pdmBases[instance], (uint32_t)kPDM_HwvadStatusVoiceDetectFlag);
+        if (s_pdm_hwvad_notification[instance].callback != NULL)
         {
-            s_pdm_hwvad_notification[0].callback(kStatus_PDM_HWVAD_VoiceDetected, s_pdm_hwvad_notification[0].userData);
+            s_pdm_hwvad_notification[instance].callback(kStatus_PDM_HWVAD_VoiceDetected,
+                                                        s_pdm_hwvad_notification[instance].userData);
         }
     }
 #if (defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
     else
     {
-        PDM_ClearHwvadInterruptStatusFlags(PDM, (uint32_t)kPDM_HwvadStatusInputSaturation);
-        if (s_pdm_hwvad_notification[0].callback != NULL)
+        PDM_ClearHwvadInterruptStatusFlags(s_pdmBases[instance], (uint32_t)kPDM_HwvadStatusInputSaturation);
+        if (s_pdm_hwvad_notification[instance].callback != NULL)
         {
-            s_pdm_hwvad_notification[0].callback(kStatus_PDM_HWVAD_Error, s_pdm_hwvad_notification[0].userData);
+            s_pdm_hwvad_notification[instance].callback(kStatus_PDM_HWVAD_Error,
+                                                        s_pdm_hwvad_notification[instance].userData);
         }
     }
 #endif
+}
+
+#if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
+static void PDM_HwvadErrorHandleIRQ(uint32_t instance)
+{
+    assert(instance < ARRAY_SIZE(s_pdmBases));
+
+    PDM_ClearHwvadInterruptStatusFlags(s_pdmBases[instance], (uint32_t)kPDM_HwvadStatusInputSaturation);
+    if (s_pdm_hwvad_notification[instance].callback != NULL)
+    {
+        s_pdm_hwvad_notification[instance].callback(kStatus_PDM_HWVAD_Error,
+                                                    s_pdm_hwvad_notification[instance].userData);
+    }
+}
+#endif
+#endif
+
+#if !(defined(FSL_FEATURE_PDM_HAS_NO_HWVAD) && FSL_FEATURE_PDM_HAS_NO_HWVAD)
+#if defined(PDM)
+void PDM_HWVAD_EVENT_DriverIRQHandler(void);
+void PDM_HWVAD_EVENT_DriverIRQHandler(void)
+{
+    PDM_HwvadEventHandleIRQ(0U);
     SDK_ISR_EXIT_BARRIER;
 }
 
@@ -1044,11 +1096,7 @@ void PDM_HWVAD_EVENT_DriverIRQHandler(void)
 void PDM_HWVAD_ERROR_DriverIRQHandler(void);
 void PDM_HWVAD_ERROR_DriverIRQHandler(void)
 {
-    PDM_ClearHwvadInterruptStatusFlags(PDM, (uint32_t)kPDM_HwvadStatusInputSaturation);
-    if (s_pdm_hwvad_notification[0].callback != NULL)
-    {
-        s_pdm_hwvad_notification[0].callback(kStatus_PDM_HWVAD_Error, s_pdm_hwvad_notification[0].userData);
-    }
+    PDM_HwvadErrorHandleIRQ(0U);
     SDK_ISR_EXIT_BARRIER;
 }
 #endif
@@ -1059,8 +1107,70 @@ void PDM_HWVAD_ERROR_DriverIRQHandler(void)
 void PDM_EVENT_DriverIRQHandler(void);
 void PDM_EVENT_DriverIRQHandler(void)
 {
-    assert(s_pdmHandle[0] != NULL);
-    s_pdmIsr(PDM, s_pdmHandle[0]);
+    PDM_EventHandleIRQ(0U);
     SDK_ISR_EXIT_BARRIER;
 }
+
+#if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
+void PDM_ERROR_DriverIRQHandler(void);
+void PDM_ERROR_DriverIRQHandler(void)
+{
+    PDM_ErrorHandleIRQ(0U);
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
+#endif
+
+#if defined(AUDIO__MICFIL) || defined(AUDIO_MICFIL)
+void AUDIO_PDM_EVENT_DriverIRQHandler(void);
+void AUDIO_PDM_EVENT_DriverIRQHandler(void)
+{
+    PDM_EventHandleIRQ(0U);
+    SDK_ISR_EXIT_BARRIER;
+}
+
+#if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
+void AUDIO_PDM_ERROR_DriverIRQHandler(void);
+void AUDIO_PDM_ERROR_DriverIRQHandler(void)
+{
+    PDM_ErrorHandleIRQ(0U);
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
+#endif
+
+#if defined(WAKE__MICFIL) || defined(WAKE_MICFIL)
+void WAKE_PDM_EVENT_DriverIRQHandler(void);
+void WAKE_PDM_EVENT_DriverIRQHandler(void)
+{
+    PDM_EventHandleIRQ(1U);
+    SDK_ISR_EXIT_BARRIER;
+}
+
+#if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
+void WAKE_PDM_ERROR_DriverIRQHandler(void);
+void WAKE_PDM_ERROR_DriverIRQHandler(void)
+{
+    PDM_ErrorHandleIRQ(1U);
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
+
+#if !(defined(FSL_FEATURE_PDM_HAS_NO_HWVAD) && FSL_FEATURE_PDM_HAS_NO_HWVAD)
+void WAKE_PDM_HWVAD_EVENT_DriverIRQHandler(void);
+void WAKE_PDM_HWVAD_EVENT_DriverIRQHandler(void)
+{
+    PDM_HwvadEventHandleIRQ(1U);
+    SDK_ISR_EXIT_BARRIER;
+}
+
+#if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
+void WAKE_PDM_HWVAD_ERROR_DriverIRQHandler(void);
+void WAKE_PDM_HWVAD_ERROR_DriverIRQHandler(void)
+{
+    PDM_HwvadErrorHandleIRQ(1U);
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
+#endif
 #endif

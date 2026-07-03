@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 NXP
+ * Copyright 2020-2023, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief PWM driver version. */
-#define FSL_PWM_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_PWM_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*! @} */
 
 /*******************************************************************************
@@ -32,7 +32,18 @@
  * @defgroup pwm_driver_log The Driver Change Log
  * @ingroup pwm
  * @{
- * The current PWM driver version is 2.2.0.
+ * The current PWM driver version is 2.2.1.
+ *
+ * - 2.2.1
+ *   - Bug Fixes
+ *     - Fixed PWM_SetupFaultProtectionConfig() using wrong macro PWM_FCTRL_FSAFE for FIE field.
+ *     - Fixed PWM_SetupFaultProtectionConfig() using PWM_FFILT_GSTR for FILT_CNT/FILT_PER fields.
+ *     - Fixed PWM_SetupOutputConfig() not programming TCTRL[OUT_TRIG_EN] from bVal0TriggerEnable ~
+ *       bVal5TriggerEnable.
+ *     - Fixed PWM_SetupOutputConfig() not updating MASK on devices without MASK[UPDATE_MASK].
+ *     - Fixed PWM_SetupSMConfig() passing the address of eStrBusClock (&psConfig->eStrBusClock) instead of its value
+ *       to PWM_MCTRL2_STRETCH_CNT_PRSC(); and using |= which preserved stale prescaler bits, corrected to RMW.
+ *     - Fixed PWM_SetupDeadtimeConfig() leaving CTRL[SPLIT] set when switching away from split mode.
  *
  * - 2.2.0
  *   - New Features

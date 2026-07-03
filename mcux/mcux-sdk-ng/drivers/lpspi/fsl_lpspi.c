@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2024-2025 NXP
+ * Copyright 2016-2022, 2024-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -191,9 +191,6 @@ static bool LPSPI_MasterTransferReadDataInFifoNoBuf(LPSPI_Type *base, lpspi_tran
  * Variables
  ******************************************************************************/
 
-/* Defines constant value arrays for the baud rate pre-scalar and scalar divider values.*/
-static const uint8_t s_baudratePrescaler[] = {1, 2, 4, 8, 16, 32, 64, 128};
-
 /*! @brief Pointers to lpspi bases for each instance. */
 static LPSPI_Type *const s_lpspiBases[] = LPSPI_BASE_PTRS;
 
@@ -378,7 +375,7 @@ void LPSPI_MasterGetDefaultConfig(lpspi_master_config_t *masterConfig)
     masterConfig->cpha         = kLPSPI_ClockPhaseFirstEdge;
     masterConfig->direction    = kLPSPI_MsbFirst;
 #if !(defined(FSL_FEATURE_LPSPI_HAS_NO_PCSCFG) && FSL_FEATURE_LPSPI_HAS_NO_PCSCFG)
-    masterConfig->pcsFunc            = kLPSPI_PcsAsCs; 
+    masterConfig->pcsFunc            = kLPSPI_PcsAsCs;
 #endif
 
     masterConfig->pcsToSckDelayInNanoSec        = (1000000000U / masterConfig->baudRate) / 2U;
@@ -598,7 +595,8 @@ uint32_t LPSPI_MasterSetBaudRate(LPSPI_Type *base,
             {
                 break;
             }
-            realBaudrate = (srcClock_Hz / (s_baudratePrescaler[prescaler] * (scaler + 2U)));
+
+            realBaudrate = (srcClock_Hz / ((1U << prescaler) * (scaler + 2U)));
 
             /* calculate the baud rate difference based on the conditional statement
              * that states that the calculated baud rate must not exceed the desired baud rate
@@ -708,142 +706,63 @@ void LPSPI_MasterSetDelayScaler(LPSPI_Type *base, uint32_t scaler, lpspi_delay_t
 }
 
 /*!
- * brief Calculates the delay based on the desired delay input in nanoseconds (module must be
+ * @brief Calculates the delay based on the desired delay input in nanoseconds (module must be
  *        disabled to change the delay values).
  *
- * This function calculates the values for the following:
- * SCK to PCS delay, or
- * PCS to SCK delay, or
- * The configurations must occur between the transfer delay.
- *
+ * This function configures the SCK to PCS delay, PCS to SCK delay, or the delay between transfers.
  * The delay names are available in type lpspi_delay_type_t.
  *
- * The user passes the desired delay and the desired delay value in
- * nano-seconds.  The function calculates the value needed for the desired delay parameter
- * and returns the actual calculated delay because an exact delay match may not be possible. In this
- * case, the closest match is calculated without going below the desired delay value input.
- * It is possible to input a very large delay value that exceeds the capability of the part, in
- * which case the maximum supported delay is returned. It is up to the higher level
- * peripheral driver to alert the user of an out of range delay input.
+ * The function calculates the value needed for the desired delay parameter and returns the actual
+ * calculated delay. An exact delay match may not be possible, in which case the closest match is
+ * calculated without going below the desired delay value. If the input exceeds the maximum capability,
+ * the maximum supported delay is returned.
  *
- * Note that the LPSPI module must be configured for master mode before configuring this. And note that
- * the delayTime = LPSPI_clockSource / (PRESCALE * Delay_scaler).
+ * Note that the LPSPI module must first be disabled before configuring this.
+ * Note that the LPSPI module must be configured for master mode before configuring this.
  *
- * param base LPSPI peripheral address.
- * param delayTimeInNanoSec The desired delay value in nano-seconds.
- * param whichDelay The desired delay to configuration, which must be of type lpspi_delay_type_t.
- * param srcClock_Hz  Module source input clock in Hertz.
- * return actual Calculated delay value in nano-seconds.
+ * @param base LPSPI peripheral address.
+ * @param delayTimeInNanoSec The desired delay value in nanoseconds.
+ * @param whichDelay The desired delay to configure, must be of type lpspi_delay_type_t.
+ * @param srcClock_Hz Module source input clock in Hertz.
+ * @return Actual calculated delay value in nanoseconds.
  */
 uint32_t LPSPI_MasterSetDelayTimes(LPSPI_Type *base,
                                    uint32_t delayTimeInNanoSec,
                                    lpspi_delay_type_t whichDelay,
                                    uint32_t srcClock_Hz)
 {
-    uint64_t realDelay, bestDelay;
-    uint32_t scaler, bestScaler;
-    uint32_t diff, min_diff;
-    uint64_t initialDelayNanoSec;
-    uint32_t clockDividedPrescaler;
+    uint32_t tcrPrescale = (LPSPI_GetTcr(base) & LPSPI_TCR_PRESCALE_MASK) >> LPSPI_TCR_PRESCALE_SHIFT;
+    uint32_t clockDividedPrescaler = srcClock_Hz >> tcrPrescale;
 
-    /* For delay between transfer, an additional scaler value is needed */
-    uint32_t additionalScaler = 0;
+    uint64_t scaler = (uint64_t)delayTimeInNanoSec * (uint64_t)clockDividedPrescaler;
 
-    /*As the RM note, the LPSPI baud rate clock is itself divided by the PRESCALE setting, which can vary between
-     * transfers.*/
-    clockDividedPrescaler =
-        srcClock_Hz / s_baudratePrescaler[(LPSPI_GetTcr(base) & LPSPI_TCR_PRESCALE_MASK) >> LPSPI_TCR_PRESCALE_SHIFT];
+    assert(scaler <= (UINT64_MAX - (1000000000U - 1U)));
+    /* Ensure the scaler value will be round up */
+    scaler += (1000000000U - 1U);
+    scaler /= 1000000000U;
 
-    /* Find combination of prescaler and scaler resulting in the delay closest to the requested value.*/
-    min_diff = 0xFFFFFFFFU;
-
-    /* Initialize scaler to max value to generate the max delay */
-    bestScaler = 0xFFU;
-
-    /* Calculate the initial (min) delay and maximum possible delay based on the specific delay as
-     * the delay divisors are slightly different based on which delay we are configuring.
-     */
-    if (whichDelay == kLPSPI_BetweenTransfer)
+    if (scaler > 1U)
     {
-        /* First calculate the initial, default delay, note min delay is 2 clock cycles. Due to large size of
-         calculated values (uint64_t), we need to break up the calculation into several steps to ensure
-         accurate calculated results
-         */
-        initialDelayNanoSec = 1000000000U;
-        initialDelayNanoSec *= 2U;
-        initialDelayNanoSec /= clockDividedPrescaler;
+        scaler -= 1U;
 
-        /* Calculate the maximum delay */
-        bestDelay = 1000000000U;
-        bestDelay *= 257U; /* based on DBT+2, or 255 + 2 */
-        bestDelay /= clockDividedPrescaler;
-
-        additionalScaler = 1U;
+        if (scaler > (uint64_t)UINT8_MAX)
+        {
+            scaler = (uint64_t)UINT8_MAX;
+        }
     }
     else
     {
-        /* First calculate the initial, default delay, min delay is 1 clock cycle. Due to large size of calculated
-        values (uint64_t), we need to break up the calculation into several steps to ensure accurate calculated
-        results.
-        */
-        initialDelayNanoSec = 1000000000U;
-        initialDelayNanoSec /= clockDividedPrescaler;
-
-        /* Calculate the maximum delay */
-        bestDelay = 1000000000U;
-        bestDelay *= 256U; /* based on SCKPCS+1 or PCSSCK+1, or 255 + 1 */
-        bestDelay /= clockDividedPrescaler;
-
-        additionalScaler = 0U;
+        scaler = 0U;
     }
 
-    /* If the initial, default delay is already greater than the desired delay, then
-     * set the delay to their initial value (0) and return the delay. In other words,
-     * there is no way to decrease the delay value further.
-     */
-    if (initialDelayNanoSec >= delayTimeInNanoSec)
-    {
-        LPSPI_MasterSetDelayScaler(base, 0, whichDelay);
-        return (uint32_t)initialDelayNanoSec;
-    }
+    uint64_t realDelay = 1000000000U;
+    realDelay *= (scaler + 1U);
+    realDelay /= clockDividedPrescaler;
 
-    /* If min_diff = 0, the exit for loop */
-    for (scaler = 0U; scaler < 256U; scaler++)
-    {
-        if (min_diff == 0U)
-        {
-            break;
-        }
-        /* Calculate the real delay value as we cycle through the scaler values.
-        Due to large size of calculated values (uint64_t), we need to break up the
-        calculation into several steps to ensure accurate calculated results
-        */
-        realDelay = 1000000000U;
-        realDelay *= ((uint64_t)scaler + 1UL + (uint64_t)additionalScaler);
-        realDelay /= clockDividedPrescaler;
+    LPSPI_MasterSetDelayScaler(base, (uint32_t)scaler, whichDelay);
 
-        /* calculate the delay difference based on the conditional statement
-         * that states that the calculated delay must not be less then the desired delay
-         */
-        if (realDelay >= delayTimeInNanoSec)
-        {
-            diff = (uint32_t)(realDelay - (uint64_t)delayTimeInNanoSec);
-            if (min_diff > diff)
-            {
-                /* a better match found */
-                min_diff   = diff;
-                bestScaler = scaler;
-                bestDelay  = realDelay;
-            }
-        }
-    }
-
-    /* write the best scaler value for the delay */
-    LPSPI_MasterSetDelayScaler(base, bestScaler, whichDelay);
-
-    assert(bestDelay <= UINT32_MAX);
-    /* return the actual calculated delay value (in ns) */
-    return (uint32_t)bestDelay;
+    assert(realDelay <= UINT32_MAX);
+    return (uint32_t)realDelay;
 }
 
 /*Transactional APIs -- Master*/
@@ -1422,7 +1341,7 @@ status_t LPSPI_MasterTransferNonBlocking(LPSPI_Type *base, lpspi_master_handle_t
     handle->writeTcrInIsr        = false;
 
     /* Backup frame size */
-    handle->frameSize     = (LPSPI_GetTcr(base) & LPSPI_TCR_FRAMESZ_MASK) >> LPSPI_TCR_FRAMESZ_SHIFT;
+    handle->frameSize     = (uint16_t)((LPSPI_GetTcr(base) & LPSPI_TCR_FRAMESZ_MASK) >> LPSPI_TCR_FRAMESZ_SHIFT);
     uint32_t frameSizeNew = handle->frameSize;
     handle->bytesPerFrame = (uint16_t)(handle->frameSize / 8U) + 1U;
 

@@ -81,7 +81,8 @@ void TSI_InitSelfCapMode(TSI_Type *base, const tsi_selfCap_config_t *config)
     /* common settings */
     temp = (base->CONFIG) & ~(TSI_CONFIG_MUTUAL_MODE_MASK | TSI_CONFIG_S_SEN_MASK);
     base->CONFIG =
-        temp | (TSI_CONFIG_MUTUAL_MODE(config->commonConfig.mode) | TSI_CONFIG_S_SEN(config->enableSensitivity));
+        temp | (TSI_CONFIG_MUTUAL_MODE(config->commonConfig.mode) |
+                TSI_CONFIG_S_SEN(config->enableSensitivity ? 1U : 0U));
 
 #if !(defined(FSL_FEATURE_TSI_HAS_NO_SETCLK) && FSL_FEATURE_TSI_HAS_NO_SETCLK)
     TSI_SetMainClock(base, config->commonConfig.mainClock);
@@ -260,9 +261,13 @@ void TSI_Deinit(TSI_Type *base)
     userConfig->commonConfig.ssc_prescaler = kTSI_ssc_div_by_1;
     userConfig->enableSensitivity          = false;
 #if defined(FSL_FEATURE_TSI_HAS_SHIELD_SEL) && FSL_FEATURE_TSI_HAS_SHIELD_SEL
-    userConfig->selfChannelMask.channel_31_0  = 0U;
-    userConfig->selfChannelMask.channel_63_32 = 0U;
-    userConfig->selfChannelMask.channel_69_64 = 0U;
+    userConfig->shieldChannelMask.channel_31_0  = 0U;
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
+    userConfig->shieldChannelMask.channel_63_32 = 0U;
+#endif
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
+    userConfig->shieldChannelMask.channel_69_64 = 0U;
+#endif
 #else
     userConfig->enableShield               = kTSI_shieldAllOff;
 #endif
@@ -297,8 +302,12 @@ void TSI_GetSelfCapModeDefaultConfig(tsi_selfCap_config_t *userConfig)
     userConfig->enableSensitivity          = false;
 #if defined(FSL_FEATURE_TSI_HAS_SHIELD_SEL) && FSL_FEATURE_TSI_HAS_SHIELD_SEL
     userConfig->shieldChannelMask.channel_31_0  = 0U;
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     userConfig->shieldChannelMask.channel_63_32 = 0U;
+#endif
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     userConfig->shieldChannelMask.channel_69_64 = 0U;
+#endif
 #else
     userConfig->enableShield               = kTSI_shieldAllOff;
 #endif

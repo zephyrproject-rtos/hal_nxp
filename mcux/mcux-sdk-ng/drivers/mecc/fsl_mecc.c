@@ -57,11 +57,11 @@ void MECC_Init(MECC_Type *base, mecc_config_t *config)
     /* disable all the interrpt */
     base->ERR_SIG_EN = 0U;
     /* enable ECC function */
-    base->PIPE_ECC_EN = MECC_PIPE_ECC_EN_ECC_EN(config->enableMecc) | \
-                        MECC_PENDING_STAT_READ_DATA_WAIT_PENDING(config->enableReadDataWait) | \
-                        MECC_PENDING_STAT_READ_ADDR_PIPE_PENDING(config->enableReadAddrPipeline) | \
-                        MECC_PENDING_STAT_WRITE_DATA_PIPE_PENDING(config->enableWriteDataPipeline) | \
-                        MECC_PENDING_STAT_WRITE_ADDR_PIPE_PENDING(config->enableWriteAddrPipeline);
+    base->PIPE_ECC_EN = MECC_PIPE_ECC_EN_ECC_EN(config->enableMecc ? 1U : 0U) | \
+                        MECC_PENDING_STAT_READ_DATA_WAIT_PENDING(config->enableReadDataWait ? 1U : 0U) | \
+                        MECC_PENDING_STAT_READ_ADDR_PIPE_PENDING(config->enableReadAddrPipeline ? 1U : 0U) | \
+                        MECC_PENDING_STAT_WRITE_DATA_PIPE_PENDING(config->enableWriteDataPipeline ? 1U : 0U) | \
+                        MECC_PENDING_STAT_WRITE_ADDR_PIPE_PENDING(config->enableWriteAddrPipeline ? 1U : 0U);
 
     __DSB();
 
@@ -175,8 +175,8 @@ status_t MECC_GetSingleErrorInfo(MECC_Type *base, mecc_single_error_info_t *info
                                        MECC_SINGLE_ERR_ADDR_ECC0_SINGLE_ERR_ADDR_SHIFT;
             info->singleErrorDataLow  = base->SINGLE_ERR_DATA_LOW0;
             info->singleErrorDataHigh = base->SINGLE_ERR_DATA_HIGH0;
-            tempPosLow                = (uint8_t)base->SINGLE_ERR_POS_LOW0;
-            tempPosHigh               = (uint8_t)base->SINGLE_ERR_POS_HIGH0;
+            tempPosLow                = (uint8_t)(base->SINGLE_ERR_POS_LOW0 & 0xFFU);
+            tempPosHigh               = (uint8_t)(base->SINGLE_ERR_POS_HIGH0 & 0xFFU);
             break;
 
         case kMECC_OcramBank1:
@@ -187,8 +187,8 @@ status_t MECC_GetSingleErrorInfo(MECC_Type *base, mecc_single_error_info_t *info
                                        MECC_SINGLE_ERR_ADDR_ECC1_SINGLE_ERR_ADDR_SHIFT;
             info->singleErrorDataLow  = base->SINGLE_ERR_DATA_LOW1;
             info->singleErrorDataHigh = base->SINGLE_ERR_DATA_HIGH1;
-            tempPosLow                = (uint8_t)base->SINGLE_ERR_POS_LOW1;
-            tempPosHigh               = (uint8_t)base->SINGLE_ERR_POS_HIGH1;
+            tempPosLow                = (uint8_t)(base->SINGLE_ERR_POS_LOW1 & 0xFFU);
+            tempPosHigh               = (uint8_t)(base->SINGLE_ERR_POS_HIGH1 & 0xFFU);
             break;
 
         case kMECC_OcramBank2:
@@ -199,8 +199,8 @@ status_t MECC_GetSingleErrorInfo(MECC_Type *base, mecc_single_error_info_t *info
                                        MECC_SINGLE_ERR_ADDR_ECC2_SINGLE_ERR_ADDR_SHIFT;
             info->singleErrorDataLow  = base->SINGLE_ERR_DATA_LOW2;
             info->singleErrorDataHigh = base->SINGLE_ERR_DATA_HIGH2;
-            tempPosLow                = (uint8_t)base->SINGLE_ERR_POS_LOW2;
-            tempPosHigh               = (uint8_t)base->SINGLE_ERR_POS_HIGH2;
+            tempPosLow                = (uint8_t)(base->SINGLE_ERR_POS_LOW2 & 0xFFU);
+            tempPosHigh               = (uint8_t)(base->SINGLE_ERR_POS_HIGH2 & 0xFFU);
             break;
 
         case kMECC_OcramBank3:
@@ -211,8 +211,8 @@ status_t MECC_GetSingleErrorInfo(MECC_Type *base, mecc_single_error_info_t *info
                                        MECC_SINGLE_ERR_ADDR_ECC3_SINGLE_ERR_ADDR_SHIFT;
             info->singleErrorDataLow  = base->SINGLE_ERR_DATA_LOW3;
             info->singleErrorDataHigh = base->SINGLE_ERR_DATA_HIGH3;
-            tempPosLow                = (uint8_t)base->SINGLE_ERR_POS_LOW3;
-            tempPosHigh               = (uint8_t)base->SINGLE_ERR_POS_HIGH3;
+            tempPosLow                = (uint8_t)(base->SINGLE_ERR_POS_LOW3 & 0xFFU);
+            tempPosHigh               = (uint8_t)(base->SINGLE_ERR_POS_HIGH3 & 0xFFU);
             break;
 
         default:
@@ -223,7 +223,7 @@ status_t MECC_GetSingleErrorInfo(MECC_Type *base, mecc_single_error_info_t *info
     while (tempPosLow > 0U)
     {
         tempPosLow = tempPosLow >> 1;
-        counter++;
+        counter = counter + 1U;
     }
 
     if (counter == 0U)
@@ -239,7 +239,7 @@ status_t MECC_GetSingleErrorInfo(MECC_Type *base, mecc_single_error_info_t *info
     while (tempPosHigh > 0U)
     {
         tempPosHigh = tempPosHigh >> 1;
-        counter++;
+        counter = counter + 1U;
     }
 
     if (counter == 0U)

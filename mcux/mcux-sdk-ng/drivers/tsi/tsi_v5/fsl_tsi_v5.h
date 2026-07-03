@@ -28,7 +28,7 @@ extern TSI_Type *const s_tsiBases[];
  ******************************************************************************/
 
 /*! @brief TSI driver version */
-#define FSL_TSI_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
+#define FSL_TSI_DRIVER_VERSION (MAKE_VERSION(2, 6, 2))
 
 /*! @brief TSI status flags macro collection */
 #define ALL_FLAGS_MASK (TSI_GENCS_EOSF_MASK | TSI_GENCS_OUTRGF_MASK)
@@ -814,7 +814,7 @@ void TSI_ShieldChannelConfig(TSI_Type *base, uint32_t channelsMask);
  */
 static inline uint32_t TSI_GetStatusFlags(TSI_Type *base)
 {
-    return (base->GENCS & (uint32_t)((uint32_t)kTSI_EndOfScanFlag | (uint32_t)kTSI_OutOfRangeFlag));
+    return (base->GENCS & (TSI_GENCS_EOSF_MASK | TSI_GENCS_OUTRGF_MASK));
 }
 
 /*!
@@ -1094,7 +1094,7 @@ static inline void TSI_SetDvolt(TSI_Type *base, tsi_dvolt_option_t dvolt)
  */
 static inline void TSI_EnableNoiseCancellation(TSI_Type *base, bool enableCancellation)
 {
-    base->MODE = ((base->MODE) & ~TSI_MODE_S_NOISE_MASK) | (TSI_MODE_S_NOISE(enableCancellation));
+    base->MODE = ((base->MODE) & ~TSI_MODE_S_NOISE_MASK) | (TSI_MODE_S_NOISE(enableCancellation ? 1U : 0U));
 }
 
 /*!

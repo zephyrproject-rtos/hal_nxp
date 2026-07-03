@@ -1,5 +1,9 @@
 # GPIO
 
+## [2.8.6]
+- Bug Fixes
+  - Fixed CERT INT31-C violations in `GPIO_FIT_REG` macro for platforms with 8-bit register width.
+
 ## [2.8.5]
 - Improvements
   - Add AND logic in GPIO_GpioClearInterruptFlags to support clearing multiple interrupt flags simultaneously.

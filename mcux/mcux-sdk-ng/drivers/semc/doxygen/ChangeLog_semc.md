@@ -1,5 +1,12 @@
 # SEMC
 
+## [2.8.1]
+
+- Bug Fixes
+  - Fixed CERT-C INT30-C violation in `SEMC_ConvertTiming`: replaced `(time_ps + tClk_ps - 1)`
+    ceiling-division formula (which could overflow uint64_t) with an overflow-safe equivalent
+    using quotient plus remainder check.
+
 ## [2.8.0]
 
 - Bug Fixes

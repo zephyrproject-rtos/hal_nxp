@@ -222,7 +222,7 @@ typedef struct _Endat3_bg_req
 
 typedef struct {
 	uint32_t memBase;
-	uint32_t memSize;
+	uint16_t memSize;
 	uint16_t *cacheMem;
 	uint32_t cacheMemSize;
 	uint32_t dirtyWordMap[MAX_MEMORY_AREA_SIZE/32];
@@ -685,21 +685,21 @@ static inline void ENDAT3_BG_Handler_Disable(ENDAT3_Type *base)
 	base->CONFIG_0 &= ~ENDAT3_CONFIG_0_BG_HANDLER_EN_MASK;
 }
 
-static inline void ENDAT3_Set_Bus_Participants_Num(ENDAT3_Type *base, uint8_t num)
+static inline void ENDAT3_Set_Bus_Participants_Num(ENDAT3_Type *base, uint32_t num)
 {
 	base->CONFIG_0 &= ~ENDAT3_CONFIG_0_NUM_BUS_SLAVES_MASK;
 	base->CONFIG_0 |= ENDAT3_CONFIG_0_NUM_BUS_SLAVES(num);
 }
 
 /* API interface for FG commnunication*/
-static inline void ENDAT3_FG_IRQ_Enable_With_FIxM_Frame_Count(ENDAT3_Type *base, uint32_t irq_index, uint8_t counter)
+static inline void ENDAT3_FG_IRQ_Enable_With_FIxM_Frame_Count(ENDAT3_Type *base, uint32_t irq_index, uint32_t counter)
 {
 	base->FG_IRQ_MASK[irq_index] &= ~ENDAT3_FG_IRQ_MASK_FIxM_FRAME_CNT_MASK;
 	base->FG_IRQ_MASK[irq_index] |= ENDAT3_FG_IRQ_MASK_FIxM_FRAME_CNT(counter);
 	base->FG_IRQ_MASK[irq_index] |= ENDAT3_FG_IRQ_MASK_FIxM_FRAME_CNT_EN_MASK;
 }
 
-static inline void ENDAT3_FG_IRQ_Enable_With_FIxM_Bus_Address_Count(ENDAT3_Type *base, uint32_t irq_index, uint8_t counter)
+static inline void ENDAT3_FG_IRQ_Enable_With_FIxM_Bus_Address_Count(ENDAT3_Type *base, uint32_t irq_index, uint32_t counter)
 {
 	base->FG_IRQ_MASK[irq_index] &= ~ENDAT3_FG_IRQ_MASK_FIxM_BUS_ADDR_CNT_MASK;
 	base->FG_IRQ_MASK[irq_index] |= ENDAT3_FG_IRQ_MASK_FIxM_BUS_ADDR_CNT(counter);

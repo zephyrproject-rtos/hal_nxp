@@ -1241,8 +1241,8 @@ void ENET_EnterPowerDown(ENET_Type *base, uint32_t *wakeFilter)
  */
 status_t ENET_SetVlanCtrl(ENET_Type *base, enet_vlan_ctrl_t *control)
 {
-    uint32_t vl = (((uint32_t)control->rxVlanTag.pcp) << 13U) | (((uint32_t)control->rxVlanTag.dei) << 12U) |
-                  (uint32_t)control->rxVlanTag.vid;
+    uint32_t vl = (((uint32_t)control->rxVlanTag.tci.pcp) << 13U) | (((uint32_t)control->rxVlanTag.tci.dei) << 12U) |
+                  (uint32_t)control->rxVlanTag.tci.vid;
     uint32_t vlanCtrl;
 
     if ((control->innerVlanFilterMatch) && (!control->doubleVlanEnable))
@@ -1279,8 +1279,8 @@ status_t ENET_SetVlanCtrl(ENET_Type *base, enet_vlan_ctrl_t *control)
  */
 status_t ENET_SetTxOuterVlan(ENET_Type *base, enet_vlan_tx_config_t *config, enet_vlan_tx_channel_t channel)
 {
-    uint32_t vlt =
-        (((uint32_t)config->tag.pcp) << 13U) | (((uint32_t)config->tag.dei) << 12U) | (uint32_t)config->tag.vid;
+    uint32_t vlt = (((uint32_t)config->tag.tci.pcp) << 13U) | (((uint32_t)config->tag.tci.dei) << 12U) |
+                   (uint32_t)config->tag.tci.vid;
     uint32_t vlanConfig = ENET_MAC_VLAN_INCL_VLTI(config->txDescVlan) | ENET_MAC_VLAN_INCL_CSVL(config->tag.tpid) |
                           ENET_MAC_VLAN_INCL_VLC(config->ops) | ENET_MAC_VLAN_INCL_VLT(vlt);
 
@@ -1329,8 +1329,8 @@ status_t ENET_SetTxOuterVlan(ENET_Type *base, enet_vlan_tx_config_t *config, ene
  */
 status_t ENET_SetTxInnerVlan(ENET_Type *base, enet_vlan_tx_config_t *config)
 {
-    uint32_t vlt =
-        (((uint32_t)config->tag.pcp) << 13U) | (((uint32_t)config->tag.dei) << 12U) | (uint32_t)config->tag.vid;
+    uint32_t vlt = (((uint32_t)config->tag.tci.pcp) << 13U) | (((uint32_t)config->tag.tci.dei) << 12U) |
+                   (uint32_t)config->tag.tci.vid;
     uint32_t vlanConfig = ENET_MAC_INNER_VLAN_INCL_VLTI(config->txDescVlan) |
                           ENET_MAC_INNER_VLAN_INCL_CSVL(config->tag.tpid) | ENET_MAC_INNER_VLAN_INCL_VLC(config->ops) |
                           ENET_MAC_INNER_VLAN_INCL_VLT(vlt);

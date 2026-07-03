@@ -192,13 +192,13 @@ typedef struct _swt_config_const
 {
     uint8_t cmdRingUse;               /*!< Number of command BD rings to be used */
     uint8_t entryNum;                 /*!< MSIX entry number. */
-    bool rxCacheMaintain : 1;         /*!< Enable/Disable Rx buffer cache maintain in driver. */
-    bool txCacheMaintain : 1;         /*!< Enable/Disable Tx buffer cache maintain in driver. */
-    bool enUseMgmtRxBdRing : 1;       /*!< Enable/Disable use Switch management Rx BD ring. */
+    bool rxCacheMaintain;             /*!< Enable/Disable Rx buffer cache maintain in driver. */
+    bool txCacheMaintain;             /*!< Enable/Disable Tx buffer cache maintain in driver. */
+    bool enUseMgmtRxBdRing;           /*!< Enable/Disable use Switch management Rx BD ring. */
 #if !(defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG)
-    bool enUseMgmtTxBdRing : 1;       /*!< Enable/Disable use Switch management Tx BD ring. */
+    bool enUseMgmtTxBdRing;           /*!< Enable/Disable use Switch management Tx BD ring. */
 #endif
-    bool rxZeroCopy : 1;              /*!< Enable zero-copy receive mode. */
+    bool rxZeroCopy;                  /*!< Enable zero-copy receive mode. */
     swt_rx_alloc_cb_t rxBuffAlloc;    /*!< Callback function to alloc memory, must be provided for zero-copy Rx. */
     swt_rx_free_cb_t rxBuffFree;      /*!< Callback function to free memory, must be provided for zero-copy Rx. */
     swt_reclaim_cb_t reclaimCallback; /*!< Callback for reclaimed Tx Switch management frames. */

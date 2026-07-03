@@ -1,5 +1,14 @@
 # TPM
 
+## [2.5.0]
+- Improvements
+  - Added `TPM_GetChannelControlBits` API to replace the misspelled
+    `TPM_GetChannelContorlBits`, which is now marked as deprecated.
+
+## [2.4.6]
+- Improvements
+  - Added feature macro `FSL_FEATURE_TPM_HAS_NO_SC_CPWMS` to support SoCs whose TPM SC register does not have the CPWMS field.
+
 ## [2.4.5]
 - Improvements
   - Added branch coverage justification comments and GCOVR_EXCL_BR_LINE markers for structurally unreachable branches in `TPM_UpdatePwmDutycycle`.

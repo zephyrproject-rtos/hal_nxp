@@ -126,16 +126,25 @@ void WUU_SetExternalWakeUpPinsConfig(WUU_Type *base, uint8_t pinIndex, const wuu
  */
 void WUU_ClearExternalWakeupPinsConfig(WUU_Type *base, uint8_t pinIndex)
 {
+    volatile uint32_t *edgeRegBase;
+    volatile uint32_t *eventRegBase;
+    uint32_t offset = 2UL * ((uint32_t)pinIndex & 0xFU);
+
+    base->PMC &= ~(WUU_PMC_REG_BIT_FIELD_MASK << (uint32_t)pinIndex);
+
     if (pinIndex <= 15U)
     {
-        base->PE1 &= ~(WUU_PE_REG_BIT_FIELD_MASK << (2UL * (uint32_t)pinIndex));
-        base->PDC1 &= ~(WUU_PDC_REG_BIT_FIELD_MASK << (2UL * (uint32_t)pinIndex));
+        edgeRegBase  = &base->PE1;
+        eventRegBase = &base->PDC1;
     }
     else
     {
-        base->PE1 &= ~(WUU_PE_REG_BIT_FIELD_MASK << (2UL * (uint32_t)((uint32_t)pinIndex % 16UL)));
-        base->PDC1 &= ~(WUU_PDC_REG_BIT_FIELD_MASK << (2UL * (uint32_t)((uint32_t)pinIndex % 16UL)));
+        edgeRegBase  = &base->PE2;
+        eventRegBase = &base->PDC2;
     }
+
+    *edgeRegBase &= ~(WUU_PE_REG_BIT_FIELD_MASK << offset);
+    *eventRegBase &= ~(WUU_PDC_REG_BIT_FIELD_MASK << offset);
 }
 
 /*!

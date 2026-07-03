@@ -3,7 +3,6 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-
 #include "fsl_spdif.h"
 
 /* Component ID definition, used by tools. */
@@ -23,20 +22,17 @@ enum _spdif_transfer_state
 };
 
 /*! @brief Typedef for spdif interrupt handler. */
-typedef void (*spdif_isr_t)(SPDIF_Type *base, spdif_handle_t *handle);
+typedef void (*spdif_isr_t)(AUDIO_XCVR_Type *base, spdif_handle_t *handle);
 
 /*! @brief FIFO addresses */
-#define SPDIF_TX_FIFO_ADDR_OFFSET (0xE00U)
-#define SPDIF_RX_FIFO_ADDR_OFFSET (0xC00U)
+#define AUDIO_XCVR_TX_FIFO_ADDR_OFFSET (0xE00U)
+#define AUDIO_XCVR_RX_FIFO_ADDR_OFFSET (0xC00U)
 
 /*! @brief Maximum timeout for reset operations */
-#define SPDIF_RESET_TIMEOUT_US (1000U)
+#define AUDIO_XCVR_RESET_TIMEOUT_US (1000U)
 
 /*! @brief Minimum clock frequency for calculations */
-#define SPDIF_MIN_CLOCK_FREQ (1000000U) /* 1MHz */
-
-/*! @brief Maximum safe multiplication factor to prevent overflow */
-#define SPDIF_MAX_MULT_FACTOR (0x1000000U) /* 16M */
+#define AUDIO_XCVR_MIN_CLOCK_FREQ (1000000U) /* 1MHz */
 
 /*******************************************************************************
  * Prototypes
@@ -47,7 +43,7 @@ typedef void (*spdif_isr_t)(SPDIF_Type *base, spdif_handle_t *handle);
  * @param base SPDIF peripheral base address.
  * @return SPDIF instance.
  */
-static uint32_t SPDIF_GetInstance(SPDIF_Type *base);
+static uint32_t SPDIF_GetInstance(AUDIO_XCVR_Type *base);
 
 /*!
  * @brief Validate configuration parameters.
@@ -64,7 +60,7 @@ static bool SPDIF_ValidateConfig(const spdif_config_t *config);
  * @param resetMask Reset mask to check.
  * @return kStatus_Success if reset completed, kStatus_Timeout otherwise.
  */
-static status_t SPDIF_WaitForReset(SPDIF_Type *base, uint32_t resetMask);
+static status_t SPDIF_WaitForReset(AUDIO_XCVR_Type *base, uint32_t resetMask);
 
 /*!
  * @brief Safely calculate clock divider to prevent overflow.
@@ -80,7 +76,7 @@ static status_t SPDIF_CalculateClockDivider(uint32_t sourceFreq, uint32_t target
  * Variables
  ******************************************************************************/
 /* Base pointer array */
-static SPDIF_Type *const s_spdifXcvrBases[] = SPDIF_BASE_PTRS;
+static AUDIO_XCVR_Type *const s_spdifXcvrBases[] = AUDIO_XCVR_BASE_PTRS;
 
 /*! @brief SPDIF handle pointer */
 static spdif_handle_t *s_spdifXcvrHandle[ARRAY_SIZE(s_spdifXcvrBases)][2];
@@ -101,7 +97,7 @@ static spdif_isr_t s_spdifXcvrRxIsr;
 /*******************************************************************************
  * Code
  ******************************************************************************/
-static uint32_t SPDIF_GetInstance(SPDIF_Type *base)
+static uint32_t SPDIF_GetInstance(AUDIO_XCVR_Type *base)
 {
     uint32_t instance;
 
@@ -132,14 +128,14 @@ static bool SPDIF_ValidateConfig(const spdif_config_t *config)
     else
     {
         /* Validate FIFO watermarks */
-        if ((config->rxFifoWatermark > SPDIF_MAX_FIFO_WATERMARK) ||
-            (config->txFifoWatermark > SPDIF_MAX_FIFO_WATERMARK))
+        if ((config->rxFifoWatermark > AUDIO_XCVR_MAX_FIFO_WATERMARK) ||
+            (config->txFifoWatermark > AUDIO_XCVR_MAX_FIFO_WATERMARK))
         {
             isValid = false;
         }
 
         /* Validate clock divider */
-        if (config->clockDivider > SPDIF_MAX_CLOCK_DIVIDER)
+        if (config->clockDivider > AUDIO_XCVR_MAX_CLOCK_DIVIDER)
         {
             isValid = false;
         }
@@ -155,9 +151,9 @@ static bool SPDIF_ValidateConfig(const spdif_config_t *config)
     return isValid;
 }
 
-static status_t SPDIF_WaitForReset(SPDIF_Type *base, uint32_t resetMask)
+static status_t SPDIF_WaitForReset(AUDIO_XCVR_Type *base, uint32_t resetMask)
 {
-    uint32_t timeout = SPDIF_RESET_TIMEOUT_US;
+    uint32_t timeout = AUDIO_XCVR_RESET_TIMEOUT_US;
     status_t status  = kStatus_Success;
 
     assert(base != NULL);
@@ -187,7 +183,7 @@ static status_t SPDIF_CalculateClockDivider(uint32_t sourceFreq, uint32_t target
     assert(divider != NULL);
 
     /* Validate input parameters */
-    if ((sourceFreq < SPDIF_MIN_CLOCK_FREQ) || (targetFreq == 0U) || (targetFreq > sourceFreq))
+    if ((sourceFreq < AUDIO_XCVR_MIN_CLOCK_FREQ) || (targetFreq == 0U) || (targetFreq > sourceFreq))
     {
         status = kStatus_InvalidArgument;
     }
@@ -201,7 +197,7 @@ static status_t SPDIF_CalculateClockDivider(uint32_t sourceFreq, uint32_t target
         if (tempMod > (((uint64_t)targetFreq * 64U) / 2U))
         {
             /* Check for overflow against our maximum allowed divider */
-            if (tempDiv < (uint64_t)SPDIF_MAX_CLOCK_DIVIDER)
+            if (tempDiv < (uint64_t)AUDIO_XCVR_MAX_CLOCK_DIVIDER)
             {
                 tempDiv += 1U;
             }
@@ -214,7 +210,7 @@ static status_t SPDIF_CalculateClockDivider(uint32_t sourceFreq, uint32_t target
         }
 
         /* Check for overflow */
-        if (tempDiv > SPDIF_MAX_CLOCK_DIVIDER)
+        if (tempDiv > AUDIO_XCVR_MAX_CLOCK_DIVIDER)
         {
             status = kStatus_InvalidArgument;
         }
@@ -249,26 +245,29 @@ status_t SPDIF_Init(SPDIF_Type *base, const spdif_config_t *config)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
         /* Reset the datapaths */
-        base->EXT_CTRL.SET = SPDIF_EXT_CTRL_TX_DPATH_RESET_MASK | SPDIF_EXT_CTRL_RX_DPATH_RESET_MASK;
+        base->EXT_CTRL.SET = AUDIO_XCVR_EXT_CTRL_TX_DPATH_RESET_MASK | AUDIO_XCVR_EXT_CTRL_RX_DPATH_RESET_MASK;
 
         /* Wait for reset to complete */
-        status = SPDIF_WaitForReset(base, SPDIF_EXT_CTRL_TX_DPATH_RESET_MASK | SPDIF_EXT_CTRL_RX_DPATH_RESET_MASK);
+        status = SPDIF_WaitForReset(base,
+                                    AUDIO_XCVR_EXT_CTRL_TX_DPATH_RESET_MASK |
+                                        AUDIO_XCVR_EXT_CTRL_RX_DPATH_RESET_MASK);
 
         if (status == kStatus_Success)
         {
             /* Configure clock divider */
-            base->CLK_CTRL = SPDIF_CLK_CTRL_CLKDIV(config->clockDivider);
+            base->CLK_CTRL = AUDIO_XCVR_CLK_CTRL_CLKDIV(config->clockDivider);
 
             /* Configure FIFO watermarks */
-            base->EXT_CTRL.RW = SPDIF_EXT_CTRL_TX_FIFO_WMARK(config->txFifoWatermark) |
-                                SPDIF_EXT_CTRL_RX_FIFO_WMARK(config->rxFifoWatermark);
+            base->EXT_CTRL.RW = AUDIO_XCVR_EXT_CTRL_TX_FIFO_WMARK(config->txFifoWatermark) |
+                                AUDIO_XCVR_EXT_CTRL_RX_FIFO_WMARK(config->rxFifoWatermark);
 
             /* Configure wakeup functionality */
             if (config->enableWakeup)
             {
-                base->EXT_CTRL.SET        = SPDIF_EXT_CTRL_EN_SPDIF_WAKEUP_MASK;
-                base->RX_DATAPATH_CTRL.RW = (base->RX_DATAPATH_CTRL.RW & ~SPDIF_RX_DATAPATH_CTRL_SPDIF_TGL_CNT_MASK) |
-                                            SPDIF_RX_DATAPATH_CTRL_SPDIF_TGL_CNT((uint32_t)config->wakeupToggleCount);
+                base->EXT_CTRL.SET = AUDIO_XCVR_EXT_CTRL_EN_SPDIF_WAKEUP_MASK;
+                base->RX_DATAPATH_CTRL.RW =
+                    (base->RX_DATAPATH_CTRL.RW & ~AUDIO_XCVR_RX_DATAPATH_CTRL_SPDIF_TGL_CNT_MASK) |
+                    AUDIO_XCVR_RX_DATAPATH_CTRL_SPDIF_TGL_CNT((uint32_t)config->wakeupToggleCount);
             }
 
             /* Configure receiver if enabled */
@@ -276,28 +275,28 @@ status_t SPDIF_Init(SPDIF_Type *base, const spdif_config_t *config)
             {
                 uint32_t rxCtrl = 0;
 
-                rxCtrl |= SPDIF_RX_DATAPATH_CTRL_RX_DATA_FMT((uint32_t)config->rxDataFormat);
-                rxCtrl |= SPDIF_RX_DATAPATH_CTRL_FSM((uint32_t)config->rxFsmMode);
+                rxCtrl |= AUDIO_XCVR_RX_DATAPATH_CTRL_RX_DATA_FMT((uint32_t)config->rxDataFormat);
+                rxCtrl |= AUDIO_XCVR_RX_DATAPATH_CTRL_FSM((uint32_t)config->rxFsmMode);
 
                 if (config->rxStoreFormatReverse)
                 {
-                    rxCtrl |= SPDIF_RX_DATAPATH_CTRL_STORE_FMT_MASK;
+                    rxCtrl |= AUDIO_XCVR_RX_DATAPATH_CTRL_STORE_FMT_MASK;
                 }
 
                 if (config->enableRxParityCheck)
                 {
-                    rxCtrl |= SPDIF_RX_DATAPATH_CTRL_EN_PARITY_CALC_MASK;
+                    rxCtrl |= AUDIO_XCVR_RX_DATAPATH_CTRL_EN_PARITY_CALC_MASK;
                 }
 
                 if (!config->rxMuteHwControl)
                 {
-                    rxCtrl |= SPDIF_RX_DATAPATH_CTRL_MUTE_MODE_MASK;
+                    rxCtrl |= AUDIO_XCVR_RX_DATAPATH_CTRL_MUTE_MODE_MASK;
                 }
 
                 base->RX_DATAPATH_CTRL.RW = rxCtrl;
 
                 /* Release RX datapath from reset */
-                base->EXT_CTRL.CLR = SPDIF_EXT_CTRL_RX_DPATH_RESET_MASK;
+                base->EXT_CTRL.CLR = AUDIO_XCVR_EXT_CTRL_RX_DPATH_RESET_MASK;
             }
 
             /* Configure transmitter if enabled */
@@ -305,46 +304,46 @@ status_t SPDIF_Init(SPDIF_Type *base, const spdif_config_t *config)
             {
                 uint32_t txCtrl = 0;
 
-                txCtrl |= SPDIF_TX_DATAPATH_CTRL_TX_FORMAT((uint32_t)config->txFormat);
+                txCtrl |= AUDIO_XCVR_TX_DATAPATH_CTRL_TX_FORMAT((uint32_t)config->txFormat);
 
                 if (config->txFrameFormatReverse)
                 {
-                    txCtrl |= SPDIF_TX_DATAPATH_CTRL_FRM_FMT_MASK;
+                    txCtrl |= AUDIO_XCVR_TX_DATAPATH_CTRL_FRM_FMT_MASK;
                 }
 
                 if (config->enableTxPreamble)
                 {
-                    txCtrl |= SPDIF_TX_DATAPATH_CTRL_EN_PREAMBLE_MASK;
+                    txCtrl |= AUDIO_XCVR_TX_DATAPATH_CTRL_EN_PREAMBLE_MASK;
                 }
 
                 if (config->enableTxParity)
                 {
-                    txCtrl |= SPDIF_TX_DATAPATH_CTRL_EN_PARITY_MASK;
+                    txCtrl |= AUDIO_XCVR_TX_DATAPATH_CTRL_EN_PARITY_MASK;
                 }
 
                 if (config->enableTxChannelStatus)
                 {
-                    txCtrl |= SPDIF_TX_DATAPATH_CTRL_CS_MOD_MASK;
+                    txCtrl |= AUDIO_XCVR_TX_DATAPATH_CTRL_CS_MOD_MASK;
                 }
 
                 if (config->enableTxUserData)
                 {
-                    txCtrl |= SPDIF_TX_DATAPATH_CTRL_UD_MOD_MASK;
+                    txCtrl |= AUDIO_XCVR_TX_DATAPATH_CTRL_UD_MOD_MASK;
                 }
 
                 if (config->enableTxValidBit)
                 {
-                    txCtrl |= SPDIF_TX_DATAPATH_CTRL_VLD_MOD_MASK;
+                    txCtrl |= AUDIO_XCVR_TX_DATAPATH_CTRL_VLD_MOD_MASK;
                     if (config->txValidBitValue)
                     {
-                        txCtrl |= SPDIF_TX_DATAPATH_CTRL_FRM_VLD_MASK;
+                        txCtrl |= AUDIO_XCVR_TX_DATAPATH_CTRL_FRM_VLD_MASK;
                     }
                 }
 
                 base->TX_DATAPATH_CTRL.RW = txCtrl;
 
                 /* Release TX datapath from reset */
-                base->EXT_CTRL.CLR = SPDIF_EXT_CTRL_TX_DPATH_RESET_MASK;
+                base->EXT_CTRL.CLR = AUDIO_XCVR_EXT_CTRL_TX_DPATH_RESET_MASK;
             }
 
             /* Clear and disable all interrupts */
@@ -368,7 +367,8 @@ void SPDIF_Deinit(SPDIF_Type *base)
     SPDIF_RxEnable(base, false);
 
     /* Reset the datapaths */
-    base->EXT_CTRL.SET = SPDIF_EXT_CTRL_TX_DPATH_RESET_MASK | SPDIF_EXT_CTRL_RX_DPATH_RESET_MASK;
+    base->EXT_CTRL.SET =
+        AUDIO_XCVR_EXT_CTRL_TX_DPATH_RESET_MASK | AUDIO_XCVR_EXT_CTRL_RX_DPATH_RESET_MASK;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     CLOCK_DisableClock(s_spdifXcvrClock[SPDIF_GetInstance(base)]);
@@ -400,7 +400,7 @@ void SPDIF_GetDefaultConfig(spdif_config_t *config)
     config->txFrameFormatReverse  = false;
     config->enableTxPreamble      = true;
     config->enableTxParity        = true;
-    config->enableTxChannelStatus = false;
+    config->enableTxChannelStatus = true;
     config->enableTxUserData      = false;
     config->enableTxValidBit      = false;
     config->txValidBitValue       = false;
@@ -414,6 +414,18 @@ void SPDIF_GetDefaultConfig(spdif_config_t *config)
     config->wakeupToggleCount = kSPDIF_WakeupToggle_4;
 }
 
+void SPDIF_CopyRxChannelStatusToTx(SPDIF_Type *base)
+{
+    uint32_t index;
+
+    assert(base != NULL);
+
+    for (index = 0U; index < AUDIO_XCVR_RX_CS_DATA_BITS_COUNT; index++)
+    {
+        base->TX_CS_DATA_BITS[index] = base->RX_CS_DATA_BITS[index];
+    }
+}
+
 /*!
  * brief Enables/disables the SPDIF Tx.
  */
@@ -424,12 +436,12 @@ void SPDIF_TxEnable(SPDIF_Type *base, bool enable)
     if (enable)
     {
         /* Start data transmission */
-        base->TX_DATAPATH_CTRL.SET = SPDIF_TX_DATAPATH_CTRL_STRT_DATA_TX_MASK;
+        base->TX_DATAPATH_CTRL.SET = AUDIO_XCVR_TX_DATAPATH_CTRL_STRT_DATA_TX_MASK;
     }
     else
     {
         /* Stop data transmission */
-        base->TX_DATAPATH_CTRL.CLR = SPDIF_TX_DATAPATH_CTRL_STRT_DATA_TX_MASK;
+        base->TX_DATAPATH_CTRL.CLR = AUDIO_XCVR_TX_DATAPATH_CTRL_STRT_DATA_TX_MASK;
     }
 }
 
@@ -443,13 +455,13 @@ void SPDIF_RxEnable(SPDIF_Type *base, bool enable)
     if (enable)
     {
         /* Clear RX FIFO */
-        base->RX_DATAPATH_CTRL.SET = SPDIF_RX_DATAPATH_CTRL_CLR_RX_FIFO_MASK;
-        base->RX_DATAPATH_CTRL.CLR = SPDIF_RX_DATAPATH_CTRL_CLR_RX_FIFO_MASK;
+        base->RX_DATAPATH_CTRL.SET = AUDIO_XCVR_RX_DATAPATH_CTRL_CLR_RX_FIFO_MASK;
+        base->RX_DATAPATH_CTRL.CLR = AUDIO_XCVR_RX_DATAPATH_CTRL_CLR_RX_FIFO_MASK;
     }
     else
     {
         /* Clear RX FIFO */
-        base->RX_DATAPATH_CTRL.SET = SPDIF_RX_DATAPATH_CTRL_CLR_RX_FIFO_MASK;
+        base->RX_DATAPATH_CTRL.SET = AUDIO_XCVR_RX_DATAPATH_CTRL_CLR_RX_FIFO_MASK;
     }
 }
 
@@ -464,7 +476,7 @@ status_t SPDIF_TxSetSampleRate(SPDIF_Type *base, uint32_t sampleRate_Hz, uint32_
     assert(base != NULL);
 
     /* Validate sample rate range */
-    if ((sampleRate_Hz < SPDIF_MIN_SAMPLE_RATE) || (sampleRate_Hz > SPDIF_MAX_SAMPLE_RATE))
+    if ((sampleRate_Hz < AUDIO_XCVR_MIN_SAMPLE_RATE) || (sampleRate_Hz > AUDIO_XCVR_MAX_SAMPLE_RATE))
     {
         status = kStatus_InvalidArgument;
     }
@@ -478,7 +490,8 @@ status_t SPDIF_TxSetSampleRate(SPDIF_Type *base, uint32_t sampleRate_Hz, uint32_
             /* Set clock divider (subtract 1 as hardware expects N-1) */
             if (clkDiv > 0U)
             {
-                base->CLK_CTRL = SPDIF_CLK_CTRL_CLKDIV(clkDiv - 1U);
+                base->CLK_CTRL =
+                    AUDIO_XCVR_CLK_CTRL_CLKDIV(clkDiv - 1U);
             }
             else
             {
@@ -500,12 +513,12 @@ uint32_t SPDIF_GetRxSampleRate(SPDIF_Type *base, uint32_t clockSourceFreq_Hz)
 
     assert(base != NULL);
 
-    if (clockSourceFreq_Hz >= SPDIF_MIN_CLOCK_FREQ)
+    if (clockSourceFreq_Hz >= AUDIO_XCVR_MIN_CLOCK_FREQ)
     {
-        clkDiv = (base->CLK_CTRL & SPDIF_CLK_CTRL_CLKDIV_MASK) >> SPDIF_CLK_CTRL_CLKDIV_SHIFT;
+        clkDiv = (base->CLK_CTRL & AUDIO_XCVR_CLK_CTRL_CLKDIV_MASK) >> AUDIO_XCVR_CLK_CTRL_CLKDIV_SHIFT;
 
         /* Avoid division by zero */
-        if (clkDiv < SPDIF_MAX_CLOCK_DIVIDER)
+        if (clkDiv < AUDIO_XCVR_MAX_CLOCK_DIVIDER)
         {
             /* Check for potential overflow */
             if (clockSourceFreq_Hz <= (UINT32_MAX / 64U))
@@ -524,7 +537,7 @@ uint32_t SPDIF_GetRxSampleRate(SPDIF_Type *base, uint32_t clockSourceFreq_Hz)
 uint32_t SPDIF_GetTxFifoAddress(SPDIF_Type *base)
 {
     assert(base != NULL);
-    return (uint32_t)base + SPDIF_TX_FIFO_ADDR_OFFSET;
+    return (uint32_t)base + AUDIO_XCVR_TX_FIFO_ADDR_OFFSET;
 }
 
 /*!
@@ -533,7 +546,7 @@ uint32_t SPDIF_GetTxFifoAddress(SPDIF_Type *base)
 uint32_t SPDIF_GetRxFifoAddress(SPDIF_Type *base)
 {
     assert(base != NULL);
-    return (uint32_t)base + SPDIF_RX_FIFO_ADDR_OFFSET;
+    return (uint32_t)base + AUDIO_XCVR_RX_FIFO_ADDR_OFFSET;
 }
 
 /*!
@@ -559,12 +572,13 @@ status_t SPDIF_WriteBlocking(SPDIF_Type *base, const uint8_t *buffer, uint32_t s
         data  = (const uint32_t *)(const void *)buffer;
         words = size / 4U;
         /* MISRA C-2012 Rule 11.4: Cast base address to access FIFO */
-        txFifo = (volatile uint32_t *)((uintptr_t)base + SPDIF_TX_FIFO_ADDR_OFFSET);
+        txFifo = (volatile uint32_t *)((uintptr_t)base + AUDIO_XCVR_TX_FIFO_ADDR_OFFSET);
 
         for (i = 0U; i < words; i++)
         {
             /* Wait until TX FIFO has space */
-            while ((base->EXT_STATUS.RW & SPDIF_EXT_STATUS_NO_TX_FIFO_ENTRIES_MASK) >= (SPDIF_FIFO_SIZE - 1U))
+            while ((base->EXT_STATUS.RW & AUDIO_XCVR_EXT_STATUS_NO_TX_FIFO_ENTRIES_MASK) >=
+                   (AUDIO_XCVR_FIFO_SIZE - 1U))
             {
                 /* Polling loop - could add timeout here */
             }
@@ -600,12 +614,12 @@ status_t SPDIF_ReadBlocking(SPDIF_Type *base, uint8_t *buffer, uint32_t size)
         data  = (uint32_t *)(void *)buffer;
         words = size / 4U;
         /* MISRA C-2012 Rule 11.4: Cast base address to access FIFO */
-        rxFifo = (volatile uint32_t *)((uintptr_t)base + SPDIF_RX_FIFO_ADDR_OFFSET);
+        rxFifo = (volatile uint32_t *)((uintptr_t)base + AUDIO_XCVR_RX_FIFO_ADDR_OFFSET);
 
         for (i = 0U; i < words; i++)
         {
             /* Wait until RX FIFO has data */
-            while ((base->EXT_STATUS.RW & SPDIF_EXT_STATUS_NO_RX_FIFO_ENTRIES_MASK) == 0U)
+            while ((base->EXT_STATUS.RW & AUDIO_XCVR_EXT_STATUS_NO_RX_FIFO_ENTRIES_MASK) == 0U)
             {
                 /* Polling loop - could add timeout here */
             }
@@ -639,8 +653,8 @@ void SPDIF_TransferTxCreateHandle(SPDIF_Type *base,
 
     handle->callback = callback;
     handle->userData = userData;
-    handle->watermark =
-        (uint8_t)((base->EXT_CTRL.RW & SPDIF_EXT_CTRL_TX_FIFO_WMARK_MASK) >> SPDIF_EXT_CTRL_TX_FIFO_WMARK_SHIFT);
+    handle->watermark = (uint8_t)((base->EXT_CTRL.RW & AUDIO_XCVR_EXT_CTRL_TX_FIFO_WMARK_MASK) >>
+                                  AUDIO_XCVR_EXT_CTRL_TX_FIFO_WMARK_SHIFT);
 
     /* Set the isr pointer */
     s_spdifXcvrTxIsr = SPDIF_TransferTxHandleIRQ;
@@ -670,8 +684,8 @@ void SPDIF_TransferRxCreateHandle(SPDIF_Type *base,
 
     handle->callback = callback;
     handle->userData = userData;
-    handle->watermark =
-        (uint8_t)((base->EXT_CTRL.RW & SPDIF_EXT_CTRL_RX_FIFO_WMARK_MASK) >> SPDIF_EXT_CTRL_RX_FIFO_WMARK_SHIFT);
+    handle->watermark = (uint8_t)((base->EXT_CTRL.RW & AUDIO_XCVR_EXT_CTRL_RX_FIFO_WMARK_MASK) >>
+                                  AUDIO_XCVR_EXT_CTRL_RX_FIFO_WMARK_SHIFT);
 
     /* Set the isr pointer */
     s_spdifXcvrRxIsr = SPDIF_TransferRxHandleIRQ;
@@ -713,7 +727,7 @@ status_t SPDIF_TransferSendNonBlocking(SPDIF_Type *base,
             handle->spdifQueue[handle->queueUser].dataSize      = xfer->dataSize;
             handle->spdifQueue[handle->queueUser].channelStatus = xfer->channelStatus;
             handle->spdifQueue[handle->queueUser].userData      = xfer->userData;
-            handle->queueUser = (uint8_t)((handle->queueUser + 1U) % SPDIF_XFER_QUEUE_SIZE);
+            handle->queueUser = (uint8_t)((handle->queueUser + 1U) % AUDIO_XCVR_XFER_QUEUE_SIZE);
 
             /* Set the state to busy */
             handle->state = kSPDIF_Busy;
@@ -765,7 +779,7 @@ status_t SPDIF_TransferReceiveNonBlocking(SPDIF_Type *base,
             handle->spdifQueue[handle->queueUser].dataSize      = xfer->dataSize;
             handle->spdifQueue[handle->queueUser].channelStatus = xfer->channelStatus;
             handle->spdifQueue[handle->queueUser].userData      = xfer->userData;
-            handle->queueUser = (uint8_t)((handle->queueUser + 1U) % SPDIF_XFER_QUEUE_SIZE);
+            handle->queueUser = (uint8_t)((handle->queueUser + 1U) % AUDIO_XCVR_XFER_QUEUE_SIZE);
 
             /* Set state to busy */
             handle->state = kSPDIF_Busy;
@@ -812,7 +826,7 @@ status_t SPDIF_TransferGetSendCount(SPDIF_Type *base, spdif_handle_t *handle, si
         queueDriver = handle->queueDriver;
 
         /* Check for valid queue index to prevent buffer overflow */
-        if (queueDriver < SPDIF_XFER_QUEUE_SIZE)
+        if (queueDriver < AUDIO_XCVR_XFER_QUEUE_SIZE)
         {
             *count = (handle->transferSize[queueDriver] - handle->spdifQueue[queueDriver].dataSize);
         }
@@ -847,7 +861,7 @@ status_t SPDIF_TransferGetReceiveCount(SPDIF_Type *base, spdif_handle_t *handle,
         queueDriver = handle->queueDriver;
 
         /* Check for valid queue index to prevent buffer overflow */
-        if (queueDriver < SPDIF_XFER_QUEUE_SIZE)
+        if (queueDriver < AUDIO_XCVR_XFER_QUEUE_SIZE)
         {
             *count = (handle->transferSize[queueDriver] - handle->spdifQueue[queueDriver].dataSize);
         }
@@ -875,7 +889,7 @@ void SPDIF_TransferAbortSend(SPDIF_Type *base, spdif_handle_t *handle)
     handle->state = kSPDIF_Idle;
 
     /* Clear the queue */
-    (void)memset(handle->spdifQueue, 0, sizeof(spdif_transfer_t) * SPDIF_XFER_QUEUE_SIZE);
+    (void)memset(handle->spdifQueue, 0, sizeof(spdif_transfer_t) * AUDIO_XCVR_XFER_QUEUE_SIZE);
     handle->queueDriver = 0U;
     handle->queueUser   = 0U;
 }
@@ -895,7 +909,7 @@ void SPDIF_TransferAbortReceive(SPDIF_Type *base, spdif_handle_t *handle)
     handle->state = kSPDIF_Idle;
 
     /* Clear the queue */
-    (void)memset(handle->spdifQueue, 0, sizeof(spdif_transfer_t) * SPDIF_XFER_QUEUE_SIZE);
+    (void)memset(handle->spdifQueue, 0, sizeof(spdif_transfer_t) * AUDIO_XCVR_XFER_QUEUE_SIZE);
     handle->queueDriver = 0U;
     handle->queueUser   = 0U;
 }
@@ -920,7 +934,7 @@ void SPDIF_TransferTxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
     queueDriver = handle->queueDriver;
 
     /* Validate queue index */
-    if (queueDriver >= SPDIF_XFER_QUEUE_SIZE)
+    if (queueDriver >= AUDIO_XCVR_XFER_QUEUE_SIZE)
     {
         return;
     }
@@ -948,7 +962,7 @@ void SPDIF_TransferTxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
             wordsToTransfer = (remainingBytes < (dataSize * 4U)) ? (remainingBytes / 4U) : dataSize;
 
             /* MISRA C-2012 Rule 11.4: Cast base address to access FIFO */
-            txFifo = (volatile uint32_t *)((uintptr_t)base + SPDIF_TX_FIFO_ADDR_OFFSET);
+            txFifo = (volatile uint32_t *)((uintptr_t)base + AUDIO_XCVR_TX_FIFO_ADDR_OFFSET);
 
             /* MISRA C-2012 Rule 11.3: Cast to uint32_t pointer for word access */
             data = (const uint32_t *)(const void *)buffer;
@@ -968,7 +982,7 @@ void SPDIF_TransferTxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
             if (handle->spdifQueue[queueDriver].dataSize == 0U)
             {
                 (void)memset(&handle->spdifQueue[queueDriver], 0, sizeof(spdif_transfer_t));
-                handle->queueDriver = (uint8_t)((handle->queueDriver + 1U) % SPDIF_XFER_QUEUE_SIZE);
+                handle->queueDriver = (uint8_t)((handle->queueDriver + 1U) % AUDIO_XCVR_XFER_QUEUE_SIZE);
 
                 if (handle->callback != NULL)
                 {
@@ -988,7 +1002,7 @@ void SPDIF_TransferTxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
 /*!
  * brief Handle new channel status interrupt.
  */
-static void SPDIF_HandleRxChannelStatus(SPDIF_Type *base, spdif_handle_t *handle)
+static void SPDIF_HandleRxChannelStatus(AUDIO_XCVR_Type *base, spdif_handle_t *handle)
 {
     uint8_t *buffer;
     uint32_t i;
@@ -998,7 +1012,7 @@ static void SPDIF_HandleRxChannelStatus(SPDIF_Type *base, spdif_handle_t *handle
     assert(handle != NULL);
 
     /* Validate queue index */
-    if (queueDriver >= SPDIF_XFER_QUEUE_SIZE)
+    if (queueDriver >= AUDIO_XCVR_XFER_QUEUE_SIZE)
     {
         return;
     }
@@ -1010,13 +1024,13 @@ static void SPDIF_HandleRxChannelStatus(SPDIF_Type *base, spdif_handle_t *handle
     buffer = handle->spdifQueue[queueDriver].channelStatus;
     if (buffer != NULL)
     {
-        for (i = 0U; i < SPDIF_RX_CS_DATA_BITS_COUNT; i++)
+        for (i = 0U; i < AUDIO_XCVR_RX_CS_DATA_BITS_COUNT; i++)
         {
             uint32_t csData  = base->RX_CS_DATA_BITS[i];
             size_t baseIndex = (size_t)i * 4U;
 
             /* Bounds check to prevent buffer overflow */
-            if ((baseIndex + 3U) < (SPDIF_RX_CS_DATA_BITS_COUNT * 4U))
+            if ((baseIndex + 3U) < (AUDIO_XCVR_RX_CS_DATA_BITS_COUNT * 4U))
             {
                 buffer[baseIndex]      = (uint8_t)(csData & 0xFFU);
                 buffer[baseIndex + 1U] = (uint8_t)((csData >> 8U) & 0xFFU);
@@ -1025,7 +1039,7 @@ static void SPDIF_HandleRxChannelStatus(SPDIF_Type *base, spdif_handle_t *handle
             }
         }
         /* Acknowledge channel status */
-        base->RX_DATAPATH_CTRL.SET = SPDIF_RX_DATAPATH_CTRL_CSA_MASK;
+        base->RX_DATAPATH_CTRL.SET = AUDIO_XCVR_RX_DATAPATH_CTRL_CSA_MASK;
     }
 
     if (handle->callback != NULL)
@@ -1037,7 +1051,7 @@ static void SPDIF_HandleRxChannelStatus(SPDIF_Type *base, spdif_handle_t *handle
 /*!
  * brief Handle user data interrupt.
  */
-static void SPDIF_HandleRxUserData(SPDIF_Type *base, spdif_handle_t *handle)
+static void SPDIF_HandleRxUserData(AUDIO_XCVR_Type *base, spdif_handle_t *handle)
 {
     uint8_t *buffer;
     uint32_t i;
@@ -1047,7 +1061,7 @@ static void SPDIF_HandleRxUserData(SPDIF_Type *base, spdif_handle_t *handle)
     assert(handle != NULL);
 
     /* Validate queue index */
-    if (queueDriver >= SPDIF_XFER_QUEUE_SIZE)
+    if (queueDriver >= AUDIO_XCVR_XFER_QUEUE_SIZE)
     {
         return;
     }
@@ -1059,13 +1073,13 @@ static void SPDIF_HandleRxUserData(SPDIF_Type *base, spdif_handle_t *handle)
     buffer = handle->spdifQueue[queueDriver].userData;
     if (buffer != NULL)
     {
-        for (i = 0U; i < SPDIF_RX_USER_DATA_BITS_COUNT; i++)
+        for (i = 0U; i < AUDIO_XCVR_RX_USER_DATA_BITS_COUNT; i++)
         {
             uint32_t userData = base->RX_USER_DATA_BITS[i];
             size_t baseIndex  = (size_t)i * 4U;
 
             /* Bounds check to prevent buffer overflow */
-            if ((baseIndex + 3U) < (SPDIF_RX_USER_DATA_BITS_COUNT * 4U))
+            if ((baseIndex + 3U) < (AUDIO_XCVR_RX_USER_DATA_BITS_COUNT * 4U))
             {
                 buffer[baseIndex]      = (uint8_t)(userData & 0xFFU);
                 buffer[baseIndex + 1U] = (uint8_t)((userData >> 8U) & 0xFFU);
@@ -1074,7 +1088,7 @@ static void SPDIF_HandleRxUserData(SPDIF_Type *base, spdif_handle_t *handle)
             }
         }
         /* Acknowledge user data */
-        base->RX_DATAPATH_CTRL.SET = SPDIF_RX_DATAPATH_CTRL_UDA_MASK;
+        base->RX_DATAPATH_CTRL.SET = AUDIO_XCVR_RX_DATAPATH_CTRL_UDA_MASK;
     }
 
     if (handle->callback != NULL)
@@ -1086,7 +1100,7 @@ static void SPDIF_HandleRxUserData(SPDIF_Type *base, spdif_handle_t *handle)
 /*!
  * brief Handle FIFO error interrupt.
  */
-static void SPDIF_HandleRxFifoError(SPDIF_Type *base, spdif_handle_t *handle)
+static void SPDIF_HandleRxFifoError(AUDIO_XCVR_Type *base, spdif_handle_t *handle)
 {
     assert(base != NULL);
     assert(handle != NULL);
@@ -1102,7 +1116,7 @@ static void SPDIF_HandleRxFifoError(SPDIF_Type *base, spdif_handle_t *handle)
 /*!
  * brief Handle audio data transfer from RX FIFO.
  */
-static void SPDIF_HandleRxDataTransfer(SPDIF_Type *base, spdif_handle_t *handle)
+static void SPDIF_HandleRxDataTransfer(AUDIO_XCVR_Type *base, spdif_handle_t *handle)
 {
     uint8_t *buffer;
     uint32_t dataSize;
@@ -1117,7 +1131,7 @@ static void SPDIF_HandleRxDataTransfer(SPDIF_Type *base, spdif_handle_t *handle)
     assert(handle != NULL);
 
     /* Validate queue index */
-    if (queueDriver >= SPDIF_XFER_QUEUE_SIZE)
+    if (queueDriver >= AUDIO_XCVR_XFER_QUEUE_SIZE)
     {
         return;
     }
@@ -1143,7 +1157,7 @@ static void SPDIF_HandleRxDataTransfer(SPDIF_Type *base, spdif_handle_t *handle)
     wordsToTransfer = (remainingBytes < (dataSize * 4U)) ? (remainingBytes / 4U) : dataSize;
 
     /* MISRA C-2012 Rule 11.4: Cast base address to access FIFO */
-    rxFifo = (volatile uint32_t *)((uintptr_t)base + SPDIF_RX_FIFO_ADDR_OFFSET);
+    rxFifo = (volatile uint32_t *)((uintptr_t)base + AUDIO_XCVR_RX_FIFO_ADDR_OFFSET);
 
     /* MISRA C-2012 Rule 11.3: Cast to uint32_t pointer for word access */
     data = (uint32_t *)(void *)buffer;
@@ -1163,7 +1177,7 @@ static void SPDIF_HandleRxDataTransfer(SPDIF_Type *base, spdif_handle_t *handle)
     if (handle->spdifQueue[queueDriver].dataSize == 0U)
     {
         (void)memset(&handle->spdifQueue[queueDriver], 0, sizeof(spdif_transfer_t));
-        handle->queueDriver = (uint8_t)((handle->queueDriver + 1U) % SPDIF_XFER_QUEUE_SIZE);
+        handle->queueDriver = (uint8_t)((handle->queueDriver + 1U) % AUDIO_XCVR_XFER_QUEUE_SIZE);
 
         if (handle->callback != NULL)
         {
@@ -1223,7 +1237,7 @@ void SPDIF_DriverIRQHandler(uint32_t instance)
     {
         return;
     }
-    SPDIF_Type *base = s_spdifXcvrBases[instance];
+    AUDIO_XCVR_Type *base = s_spdifXcvrBases[instance];
     if ((s_spdifXcvrHandle[instance][0] != NULL) && (s_spdifXcvrTxIsr != NULL))
     {
         s_spdifXcvrTxIsr(base, s_spdifXcvrHandle[instance][0]);

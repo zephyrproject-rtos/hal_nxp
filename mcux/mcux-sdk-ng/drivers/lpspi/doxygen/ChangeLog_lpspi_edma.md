@@ -1,5 +1,10 @@
 # LPSPI_EDMA
 
+## [2.4.10]
+
+- Bug Fixes
+  - Fixed MISRA 10.6 issues.
+
 ## [2.4.9]
 
 - Improvements

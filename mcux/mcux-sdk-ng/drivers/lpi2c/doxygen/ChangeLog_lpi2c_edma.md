@@ -1,5 +1,10 @@
 # LPI2C_EDMA
 
+## [2.4.8]
+
+- Bug Fixes
+  - Fixed MISRA 10.6 and 14.3 issues.
+
 ## [2.4.7]
 
 - Bug Fixes

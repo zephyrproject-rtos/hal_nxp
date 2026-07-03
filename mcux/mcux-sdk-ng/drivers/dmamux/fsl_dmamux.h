@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief DMAMUX driver version 2.1.1. */
-#define FSL_DMAMUX_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
+/*! @brief DMAMUX driver version 2.1.4. */
+#define FSL_DMAMUX_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
 /*! @} */
 
 #if (defined(FSL_FEATURE_DMAMUX_CHANNEL_NEEDS_ENDIAN_CONVERT) && FSL_FEATURE_DMAMUX_CHANNEL_NEEDS_ENDIAN_CONVERT)
@@ -145,15 +145,17 @@ static inline void DMAMUX_SetSource(DMAMUX_Type *base, uint32_t channel, int32_t
 #endif
 
 assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(source >= 0);
 
 #if (defined(FSL_FEATURE_DMAMUX_CHANNEL_NEEDS_ENDIAN_CONVERT) && FSL_FEATURE_DMAMUX_CHANNEL_NEEDS_ENDIAN_CONVERT)
     channel = DMAMUX_CHANNEL_ENDIAN_CONVERTn(channel);
 #endif
 
 #if defined FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH && (FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH == 32U)
-    base->CHCFG[channel] = ((base->CHCFG[channel] & ~DMAMUX_CHCFG_SOURCE_MASK) | DMAMUX_CHCFG_SOURCE(source));
+    base->CHCFG[channel] = ((base->CHCFG[channel] & ~DMAMUX_CHCFG_SOURCE_MASK) | DMAMUX_CHCFG_SOURCE((uint32_t)source));
 #else
-    base->CHCFG[channel] = (uint8_t)((base->CHCFG[channel] & ~DMAMUX_CHCFG_SOURCE_MASK) | DMAMUX_CHCFG_SOURCE(source));
+    base->CHCFG[channel] =
+        (uint8_t)((base->CHCFG[channel] & ~DMAMUX_CHCFG_SOURCE_MASK) | DMAMUX_CHCFG_SOURCE((uint32_t)source));
 #endif
 }
 

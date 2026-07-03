@@ -89,12 +89,13 @@ void TSI_InitSelfCapMode(TSI_Type *base, const tsi_selfCap_config_t *config)
     /* common settings */
 #if !(defined(FSL_FEATURE_TSI_HAS_SHIELD_REGISTER) && FSL_FEATURE_TSI_HAS_SHIELD_REGISTER)
     temp = (base->MODE) & ~(TSI_MODE_SETCLK_MASK | TSI_MODE_MODE_MASK | TSI_MODE_S_SEN_MASK | TSI_MODE_S_W_SHIELD_MASK);
-    base->MODE = temp | (TSI_MODE_S_W_SHIELD(config->enableShield) | TSI_MODE_S_SEN(config->enableSensitivity) |
+    base->MODE = temp | (TSI_MODE_S_W_SHIELD(config->enableShield) |
+                         TSI_MODE_S_SEN(config->enableSensitivity ? 1U : 0U) |
                          TSI_MODE_SETCLK(config->commonConfig.mainClock) | TSI_MODE_MODE(config->commonConfig.mode));
 #else
     temp       = (base->MODE) & ~(TSI_MODE_SETCLK_MASK | TSI_MODE_MODE_MASK | TSI_MODE_S_SEN_MASK);
-    base->MODE = temp | (TSI_MODE_S_SEN(config->enableSensitivity) | TSI_MODE_SETCLK(config->commonConfig.mainClock) |
-                         TSI_MODE_MODE(config->commonConfig.mode));
+    base->MODE = temp | (TSI_MODE_S_SEN(config->enableSensitivity ? 1U : 0U) |
+                         TSI_MODE_SETCLK(config->commonConfig.mainClock) | TSI_MODE_MODE(config->commonConfig.mode));
     base->SHIELD = (uint32_t)config->enableShield;
 #endif
 
@@ -452,7 +453,7 @@ void TSI_ClearStatusFlags(TSI_Type *base, uint32_t mask)
     {
         regValue |= TSI_GENCS_EOSF_MASK;
     }
-    if ((bool)(mask & (uint32_t)kTSI_OutOfRangeFlag))
+    if (0U != (mask & TSI_GENCS_OUTRGF_MASK))
     {
         regValue |= TSI_GENCS_OUTRGF_MASK;
     }

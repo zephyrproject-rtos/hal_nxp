@@ -1,5 +1,14 @@
 # FLEXSPI
 
+## [2.9.3]
+
+- Bug Fixes
+  - Fixed CERT INT30-C violations in FLEXSPI_TransferBlocking: added assert guards before unsigned
+    arithmetic on flashAddress to prevent wrap-around.
+  - Fixed CERT INT31-C violations in FLEXSPI_Init and FLEXSPI_UpdateAhbBuffersSettings: added
+    assert to verify FSL_FEATURE_FLEXSPI_AHB_RX_BUFFER_SIZEn returns a non-negative value before
+    casting to uint32_t.
+
 ## [2.9.2]
 
 - New Features

@@ -22,9 +22,12 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Defines GDET driver version 2.1.3.
+/*! @brief Defines GDET driver version 2.1.4.
  *
  * Change log:
+ *
+ * - Version 2.1.4
+ *   - Add wait into GDET_ReconfigureVoltageMode to allow update conf properly finish
  *
  * - Version 2.1.3
  *   - Update to KW43 GDET offering
@@ -34,7 +37,7 @@
  *
  * - Version 2.1.1
  *   - Update to RT700 GDET offering
- * 
+ *
  * - Version 2.1.0
  *   - Update for multiple instances
  *   - Fix bug in isolation off API
@@ -46,7 +49,7 @@
  * - Version 2.0.0
  *   - initial version
  */
-#define FSL_GDET_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
+#define FSL_GDET_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
 /*! @} */
 
 /*!

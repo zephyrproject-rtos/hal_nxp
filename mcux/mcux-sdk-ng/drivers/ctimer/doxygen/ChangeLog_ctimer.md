@@ -1,5 +1,10 @@
 # CTIMER
 
+## [2.3.6]
+
+- Bug Fixes
+  - Fix CERT INT30-C issue.
+
 ## [2.3.5]
 
 - Bug Fixes

@@ -149,7 +149,7 @@ static inline void ACMP_Enable(ACMP_Type *base, bool enable)
     }
     else
     {
-        base->CS &= ~(uint8_t)ACMP_CS_ACE_MASK;
+        base->CS &= MCUX_MASK_INVERT_8(ACMP_CS_ACE_MASK);
     }
 }
 
@@ -169,7 +169,7 @@ void ACMP_EnableInterrupt(ACMP_Type *base, acmp_interrupt_mode_t mode);
  */
 static inline void ACMP_DisableInterrupt(ACMP_Type *base)
 {
-    base->CS &= ~(uint8_t)ACMP_CS_ACIE_MASK;
+    base->CS &= MCUX_MASK_INVERT_8(ACMP_CS_ACIE_MASK);
 }
 
 /*!
@@ -220,7 +220,7 @@ static inline uint8_t ACMP_GetStatusFlags(ACMP_Type *base)
  */
 static inline void ACMP_ClearInterruptFlags(ACMP_Type *base)
 {
-    base->CS &= ~(uint8_t)ACMP_CS_ACF_MASK;
+    base->CS &= MCUX_MASK_INVERT_8(ACMP_CS_ACF_MASK);
 }
 
 /*! @} */

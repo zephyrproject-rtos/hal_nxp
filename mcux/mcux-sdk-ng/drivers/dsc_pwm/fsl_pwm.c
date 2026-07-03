@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 NXP
+ * Copyright 2020-2023, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -403,7 +403,8 @@ void PWM_SetupSMConfig(PWM_Type *base, pwm_sm_number_t eSubModule, const pwm_sm_
 #if ((defined(FSL_FEATURE_PWM_MCTRL2_HAS_STRETCH_CNT_PRSC_BITFIELD) && \
       FSL_FEATURE_PWM_MCTRL2_HAS_STRETCH_CNT_PRSC_BITFIELD))
     /* Set the PWM stretch IPBus clock count prescaler. */
-    base->MCTRL2 |= PWM_MCTRL2_STRETCH_CNT_PRSC(&psConfig->eStrBusClock);
+    base->MCTRL2 = (base->MCTRL2 & ~(uint16_t)PWM_MCTRL2_STRETCH_CNT_PRSC_MASK) |
+                   PWM_MCTRL2_STRETCH_CNT_PRSC(psConfig->eStrBusClock);
 #endif
 
     /* Execute a software force initial when choose local software force signal */
@@ -518,11 +519,19 @@ void PWM_GetValueConfig(pwm_sm_value_register_config_t *psConfig,
  */
 void PWM_SetupDeadtimeConfig(PWM_Type *base, pwm_sm_number_t eSubModule, const pwm_sm_deadtime_logic_config_t *psConfig)
 {
+    /* Clear all mode-related bits first so each case only needs to set what it requires. */
+    base->SM[eSubModule].CTRL2 &= ~(uint16_t)PWM_CTRL2_INDEP_MASK;
+    base->SM[eSubModule].CTRL &= ~(uint16_t)(PWM_CTRL_DBLEN_MASK
+#if (defined(FSL_FEATURE_PWM_CTRL_HAS_SPLIT_BITFIELD) && FSL_FEATURE_PWM_CTRL_HAS_SPLIT_BITFIELD)
+                                             | PWM_CTRL_SPLIT_MASK
+#endif
+    );
+    base->MCTRL &= ~(((uint16_t)1U << (uint16_t)eSubModule) << PWM_MCTRL_IPOL_SHIFT);
+
     switch (psConfig->eMode)
     {
         case kPWM_Independent:
             base->SM[eSubModule].CTRL2 |= PWM_CTRL2_INDEP_MASK;
-            base->SM[eSubModule].CTRL &= ~(uint16_t)PWM_CTRL_DBLEN_MASK;
             break;
         case kPWM_IndependentWithDoubleSwitchPwm:
             base->SM[eSubModule].CTRL2 |= PWM_CTRL2_INDEP_MASK;
@@ -535,17 +544,12 @@ void PWM_SetupDeadtimeConfig(PWM_Type *base, pwm_sm_number_t eSubModule, const p
             break;
 #endif
         case kPWM_ComplementaryWithPwmA:
-            base->SM[eSubModule].CTRL2 &= ~(uint16_t)PWM_CTRL2_INDEP_MASK;
-            base->SM[eSubModule].CTRL &= ~(uint16_t)PWM_CTRL_DBLEN_MASK;
-            base->MCTRL &= ~(((uint16_t)1U << (uint16_t)eSubModule) << PWM_MCTRL_IPOL_SHIFT);
+            /* INDEP, DBLEN, IPOL already cleared above. */
             break;
         case kPWM_ComplementaryWithPwmB:
-            base->SM[eSubModule].CTRL2 &= ~(uint16_t)PWM_CTRL2_INDEP_MASK;
-            base->SM[eSubModule].CTRL &= ~(uint16_t)PWM_CTRL_DBLEN_MASK;
             base->MCTRL |= (((uint16_t)1U << (uint16_t)eSubModule) << PWM_MCTRL_IPOL_SHIFT);
             break;
         case kPWM_ComplementaryWithDoubleSwitchPwm:
-            base->SM[eSubModule].CTRL2 &= ~(uint16_t)PWM_CTRL2_INDEP_MASK;
             base->SM[eSubModule].CTRL |= PWM_CTRL_DBLEN_MASK;
             break;
         default:
@@ -638,6 +642,12 @@ void PWM_SetupOutputConfig(PWM_Type *base, pwm_sm_number_t eSubModule, const pwm
 {
     uint16_t u16RegOuten = base->OUTEN;
     uint16_t u16RegMask  = base->MASK;
+    uint16_t u16RegTctrl = PWM_TCTRL_OUT_TRIG_EN(((psConfig->bVal0TriggerEnable ? 1U : 0U) << 0U) |
+                                                 ((psConfig->bVal1TriggerEnable ? 1U : 0U) << 1U) |
+                                                 ((psConfig->bVal2TriggerEnable ? 1U : 0U) << 2U) |
+                                                 ((psConfig->bVal3TriggerEnable ? 1U : 0U) << 3U) |
+                                                 ((psConfig->bVal4TriggerEnable ? 1U : 0U) << 4U) |
+                                                 ((psConfig->bVal5TriggerEnable ? 1U : 0U) << 5U));
 
     u16RegOuten &= ~(PWM_OUTEN_PWMX_EN((uint16_t)1U << (uint16_t)eSubModule) |
                      PWM_OUTEN_PWMB_EN((uint16_t)1U << (uint16_t)eSubModule) |
@@ -658,11 +668,12 @@ void PWM_SetupOutputConfig(PWM_Type *base, pwm_sm_number_t eSubModule, const pwm
         PWM_OCTRL_POLX(psConfig->bInvertPwmxOutput) | PWM_OCTRL_PWMAFS(psConfig->ePwmaFaultState) |
         PWM_OCTRL_PWMBFS(psConfig->ePwmbFaultState) | PWM_OCTRL_PWMXFS(psConfig->ePwmxFaultState);
 #if (defined(FSL_FEATURE_PWM_TCTRL_HAS_TRGFRQ_BITFIELD) && FSL_FEATURE_PWM_TCTRL_HAS_TRGFRQ_BITFIELD)
-    base->SM[eSubModule].TCTRL = PWM_TCTRL_TRGFRQ(psConfig->bEnableTriggerPostScaler);
+    u16RegTctrl |= PWM_TCTRL_TRGFRQ(psConfig->bEnableTriggerPostScaler);
 #endif
 #if (defined(FSL_FEATURE_PWM_HAS_MUX_TRIGGER_SOURCE_SEL) && FSL_FEATURE_PWM_HAS_MUX_TRIGGER_SOURCE_SEL)
-    base->SM[eSubModule].TCTRL |= PWM_TCTRL_PWBOT1(psConfig->eMuxTrigger1) | PWM_TCTRL_PWAOT0(psConfig->eMuxTrigger0);
+    u16RegTctrl |= PWM_TCTRL_PWBOT1(psConfig->eMuxTrigger1) | PWM_TCTRL_PWAOT0(psConfig->eMuxTrigger0);
 #endif
+    base->SM[eSubModule].TCTRL = u16RegTctrl;
     base->SM[eSubModule].CTRL =
         (base->SM[eSubModule].CTRL & ~(uint16_t)(PWM_CTRL_DBLX_MASK)) | PWM_CTRL_DBLX(psConfig->ePwmXSignalSelect);
 
@@ -670,6 +681,8 @@ void PWM_SetupOutputConfig(PWM_Type *base, pwm_sm_number_t eSubModule, const pwm
 #if (defined(FSL_FEATURE_PWM_MASK_HAS_UPDATE_MASK_BITFIELD) && FSL_FEATURE_PWM_MASK_HAS_UPDATE_MASK_BITFIELD)
     /* Update output mask bits with force command */
     base->MASK = u16RegMask | PWM_MASK_UPDATE_MASK((uint16_t)1U << (uint16_t)eSubModule);
+#else
+    base->MASK = u16RegMask;
 #endif
 }
 
@@ -790,7 +803,7 @@ void PWM_SetupFaultProtectionConfig(PWM_Type *base,
         u16RegsFctrl |= PWM_FCTRL_FLVL((uint16_t)psConfig->sFaultInput[i].eFaultActiveLevel << i) |
                         PWM_FCTRL_FAUTO((uint16_t)psConfig->sFaultInput[i].bEnableAutoFaultClear << i) |
                         PWM_FCTRL_FSAFE((uint16_t)psConfig->sFaultInput[i].bEnableManualFaultClearSafeMode << i) |
-                        PWM_FCTRL_FSAFE((uint16_t)psConfig->sFaultInput[i].bEnableFaultInterrupt << i);
+                        PWM_FCTRL_FIE((uint16_t)psConfig->sFaultInput[i].bEnableFaultInterrupt << i);
 
         u16RegsFSTS |= PWM_FSTS_FHALF((uint16_t)psConfig->sFaultInput[i].bEnableFaultHalfCycleRecovery << i) |
                        PWM_FSTS_FFULL((uint16_t)psConfig->sFaultInput[i].bEnableFaultFullCycleRecovery << i);
@@ -807,8 +820,8 @@ void PWM_SetupFaultProtectionConfig(PWM_Type *base,
 #endif
 
     base->FAULT[eFaultProtection].FFILT = PWM_FFILT_GSTR(psConfig->bEnableFaultGlitchStretch) |
-                                          PWM_FFILT_GSTR(psConfig->bitsFaultFilterCount) |
-                                          PWM_FFILT_GSTR(psConfig->u8FaultFilterPeriod);
+                                          PWM_FFILT_FILT_CNT(psConfig->bitsFaultFilterCount) |
+                                          PWM_FFILT_FILT_PER(psConfig->u8FaultFilterPeriod);
 }
 
 /*!

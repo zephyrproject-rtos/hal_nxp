@@ -1,5 +1,10 @@
 # TSI_V5
 
+## [2.6.2]
+
+- Bug Fixes
+  - Fixed the violations of CERT INT31-C rule.
+
 ## [2.6.1]
 
 - Improvements

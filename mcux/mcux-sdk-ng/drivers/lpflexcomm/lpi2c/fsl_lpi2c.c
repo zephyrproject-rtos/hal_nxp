@@ -711,7 +711,7 @@ status_t LPI2C_MasterStop(LPI2C_Type *base)
     /* Wait until there is room in the fifo. */
     status_t result = LPI2C_MasterWaitForTxReady(base);
 
-    /* Send the STOP signal */
+    /* Write I2C STOP CMD to TX FIFO */
     base->MTDR = (uint32_t)kStopCmd;
 
     /* Wait for the stop detected flag to set, indicating the transfer has completed on the bus. */
@@ -732,6 +732,11 @@ status_t LPI2C_MasterStop(LPI2C_Type *base)
 
         /* Check for error flags. */
         result = LPI2C_MasterCheckAndClearError(base, status);
+        if (result != kStatus_Success)
+        {
+            /* Write I2C STOP CMD to the TX FIFO again because the FIFOs were reset */
+            base->MTDR = (uint32_t)kStopCmd;
+        }
 
         /* Check if the stop was sent successfully. */
         if ((0U != (status & (uint32_t)kLPI2C_MasterStopDetectFlag)) &&

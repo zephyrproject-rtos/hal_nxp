@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020,2021,2025 NXP
+ * Copyright 2016-2020,2021,2025, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief LPSPI driver version. */
-#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 10))
+#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 11))
 /*! @} */
 
 #ifndef LPSPI_DUMMY_DATA
@@ -957,29 +957,22 @@ void LPSPI_MasterSetDelayScaler(LPSPI_Type *base, uint32_t scaler, lpspi_delay_t
  * @brief Calculates the delay based on the desired delay input in nanoseconds (module must be
  *        disabled to change the delay values).
  *
- * This function calculates the values for the following:
- * SCK to PCS delay, or
- * PCS to SCK delay, or
- * The configurations must occur between the transfer delay.
- *
+ * This function configures the SCK to PCS delay, PCS to SCK delay, or the delay between transfers.
  * The delay names are available in type lpspi_delay_type_t.
  *
- * The user passes the desired delay and the desired delay value in
- * nano-seconds.  The function calculates the value needed for the desired delay parameter
- * and returns the actual calculated delay because an exact delay match may not be possible. In this
- * case, the closest match is calculated without going below the desired delay value input.
- * It is possible to input a very large delay value that exceeds the capability of the part, in
- * which case the maximum supported delay is returned. It is up to the higher level
- * peripheral driver to alert the user of an out of range delay input.
+ * The function calculates the value needed for the desired delay parameter and returns the actual
+ * calculated delay. An exact delay match may not be possible, in which case the closest match is
+ * calculated without going below the desired delay value. If the input exceeds the maximum capability,
+ * the maximum supported delay is returned.
  *
- * Note that the LPSPI module must be configured for master mode before configuring this. And note that
- * the delayTime = LPSPI_clockSource / (PRESCALE * Delay_scaler).
+ * Note that the LPSPI module must first be disabled before configuring this.
+ * Note that the LPSPI module must be configured for master mode before configuring this.
  *
  * @param base LPSPI peripheral address.
- * @param delayTimeInNanoSec The desired delay value in nano-seconds.
- * @param whichDelay The desired delay to configuration, which must be of type lpspi_delay_type_t.
- * @param srcClock_Hz  Module source input clock in Hertz.
- * @return actual Calculated delay value in nano-seconds.
+ * @param delayTimeInNanoSec The desired delay value in nanoseconds.
+ * @param whichDelay The desired delay to configure, must be of type lpspi_delay_type_t.
+ * @param srcClock_Hz Module source input clock in Hertz.
+ * @return Actual calculated delay value in nanoseconds.
  */
 uint32_t LPSPI_MasterSetDelayTimes(LPSPI_Type *base,
                                    uint32_t delayTimeInNanoSec,

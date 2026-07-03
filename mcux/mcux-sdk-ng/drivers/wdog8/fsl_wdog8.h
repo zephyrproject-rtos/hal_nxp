@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2019, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,8 +20,8 @@
 /*! @} */
 /*! @name Driver version */
 /*! @{ */
-/*! @brief WDOG8 driver version 2.0.1. */
-#define FSL_WDOG8_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief WDOG8 driver version 2.0.2. */
+#define FSL_WDOG8_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*! @} */
 
 /*! @brief Describes WDOG8 clock source. */
@@ -201,7 +201,7 @@ static inline void WDOG8_Enable(WDOG_Type *base)
  */
 static inline void WDOG8_Disable(WDOG_Type *base)
 {
-    base->CS1 &= (uint8_t)~WDOG_CS1_EN_MASK;
+    base->CS1 &= (uint8_t)(~(uint32_t)WDOG_CS1_EN_MASK & 0xFFU);
 }
 
 /*!
@@ -287,7 +287,7 @@ void WDOG8_ClearStatusFlags(WDOG_Type *base, uint8_t mask);
 static inline void WDOG8_SetTimeoutValue(WDOG_Type *base, uint16_t timeoutCount)
 {
     base->TOVAL8B.TOVALH = (uint8_t)((timeoutCount >> 8U) & 0xFFU);
-    base->TOVAL8B.TOVALL = (uint8_t)((timeoutCount)&0xFFU);
+    base->TOVAL8B.TOVALL = (uint8_t)((timeoutCount) & 0xFFU);
 }
 
 /*!
@@ -303,7 +303,7 @@ static inline void WDOG8_SetTimeoutValue(WDOG_Type *base, uint16_t timeoutCount)
 static inline void WDOG8_SetWindowValue(WDOG_Type *base, uint16_t windowValue)
 {
     base->WIN8B.WINH = (uint8_t)((windowValue >> 8U) & 0xFFU);
-    base->WIN8B.WINL = (uint8_t)((windowValue)&0xFFU);
+    base->WIN8B.WINL = (uint8_t)((windowValue) & 0xFFU);
 }
 
 /*!

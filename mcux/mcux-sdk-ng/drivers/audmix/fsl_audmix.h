@@ -115,7 +115,7 @@ extern "C" {
  *
  * @param base AUDMIX base pointer.
  */
-void AUDMIX_Init(WAKEUP_AUDMIX_Type *base);
+void AUDMIX_Init(AUDMIX_Type *base);
 
 /*!
  * @brief De-initializes the AUDMIX peripheral.
@@ -125,7 +125,7 @@ void AUDMIX_Init(WAKEUP_AUDMIX_Type *base);
  *
  * @param base AUDMIX base pointer.
  */
-void AUDMIX_Deinit(WAKEUP_AUDMIX_Type *base);
+void AUDMIX_Deinit(AUDMIX_Type *base);
 
 /*!
  * @brief Gets the default configuration structure.
@@ -144,7 +144,7 @@ status_t AUDMIX_GetDefaultConfig(audmix_config_t *config);
  * @param config Pointer to the configuration structure.
  * @return Returns status code. kStatus_Success on success, kStatus_AUDMIX_Error on failure.
  */
-status_t AUDMIX_SetConfig(WAKEUP_AUDMIX_Type *base, const audmix_config_t *config);
+status_t AUDMIX_SetConfig(AUDMIX_Type *base, const audmix_config_t *config);
 
 /*! @} */
 
@@ -160,7 +160,7 @@ status_t AUDMIX_SetConfig(WAKEUP_AUDMIX_Type *base, const audmix_config_t *confi
  * @return Status flags. Use the defined AUDMIX_STR_* masks to get the status value.
  *         Returns 0 if base is NULL.
  */
-uint32_t AUDMIX_GetStatusFlags(WAKEUP_AUDMIX_Type *base);
+uint32_t AUDMIX_GetStatusFlags(AUDMIX_Type *base);
 
 /*!
  * @brief Checks if frame rates between TDM1 and TDM2 are matched.
@@ -168,7 +168,7 @@ uint32_t AUDMIX_GetStatusFlags(WAKEUP_AUDMIX_Type *base);
  * @param base AUDMIX base pointer.
  * @return true if frame rates match, false if mismatch or if base is NULL.
  */
-bool AUDMIX_IsFrameRateMatched(WAKEUP_AUDMIX_Type *base);
+bool AUDMIX_IsFrameRateMatched(AUDMIX_Type *base);
 
 /*!
  * @brief Checks if bit clock frequencies between TDM1 and TDM2 are matched.
@@ -176,7 +176,7 @@ bool AUDMIX_IsFrameRateMatched(WAKEUP_AUDMIX_Type *base);
  * @param base AUDMIX base pointer.
  * @return true if bit clock frequencies match, false if mismatch or if base is NULL.
  */
-bool AUDMIX_IsClockFrequencyMatched(WAKEUP_AUDMIX_Type *base);
+bool AUDMIX_IsClockFrequencyMatched(AUDMIX_Type *base);
 
 /*!
  * @brief Gets the current mixer state.
@@ -185,7 +185,7 @@ bool AUDMIX_IsClockFrequencyMatched(WAKEUP_AUDMIX_Type *base);
  * @return Current mixer state (disabled, TDM1, TDM2, or mixed).
  *         Returns kAUDMIX_OutputDisabled if base is NULL.
  */
-audmix_output_source_t AUDMIX_GetMixerState(WAKEUP_AUDMIX_Type *base);
+audmix_output_source_t AUDMIX_GetMixerState(AUDMIX_Type *base);
 
 /*! @} */
 
@@ -213,7 +213,7 @@ status_t AUDMIX_GetDefaultAttenuationConfig(audmix_attenuation_config_t *config)
  * @return Returns status code. kStatus_Success on success, kStatus_AUDMIX_Error on failure.
  *         Failure occurs if base or config is NULL, or if tdmChannel is not 0 or 1.
  */
-status_t AUDMIX_SetAttenuationConfig(WAKEUP_AUDMIX_Type *base, uint8_t tdmChannel, const audmix_attenuation_config_t *config);
+status_t AUDMIX_SetAttenuationConfig(AUDMIX_Type *base, uint8_t tdmChannel, const audmix_attenuation_config_t *config);
 
 /*!
  * @brief Enables or disables attenuation for a specific TDM channel.
@@ -223,7 +223,7 @@ status_t AUDMIX_SetAttenuationConfig(WAKEUP_AUDMIX_Type *base, uint8_t tdmChanne
  * @param enable true to enable, false to disable.
  * @return Returns status code. kStatus_Success on success, kStatus_AUDMIX_Error on failure.
  */
-status_t AUDMIX_EnableAttenuation(WAKEUP_AUDMIX_Type *base, uint8_t tdmChannel, bool enable);
+status_t AUDMIX_EnableAttenuation(AUDMIX_Type *base, uint8_t tdmChannel, bool enable);
 
 /*!
  * @brief Sets the attenuation direction for a specific TDM channel.
@@ -233,7 +233,7 @@ status_t AUDMIX_EnableAttenuation(WAKEUP_AUDMIX_Type *base, uint8_t tdmChannel, 
  * @param direction Attenuation direction (up or down).
  * @return Returns status code. kStatus_Success on success, kStatus_AUDMIX_Error on failure.
  */
-status_t AUDMIX_SetAttenuationDirection(WAKEUP_AUDMIX_Type *base, uint8_t tdmChannel, audmix_attenuation_direction_t direction);
+status_t AUDMIX_SetAttenuationDirection(AUDMIX_Type *base, uint8_t tdmChannel, audmix_attenuation_direction_t direction);
 
 /*!
  * @brief Gets the current attenuation value for a specific TDM channel.
@@ -243,7 +243,7 @@ status_t AUDMIX_SetAttenuationDirection(WAKEUP_AUDMIX_Type *base, uint8_t tdmCha
  * @param value Pointer to store the attenuation value.
  * @return Returns status code. kStatus_Success on success, kStatus_AUDMIX_Error on failure.
  */
-status_t AUDMIX_GetAttenuationValue(WAKEUP_AUDMIX_Type *base, uint8_t tdmChannel, uint32_t *value);
+status_t AUDMIX_GetAttenuationValue(AUDMIX_Type *base, uint8_t tdmChannel, uint32_t *value);
 
 /*!
  * @brief Gets the current attenuation step counter for a specific TDM channel.
@@ -253,7 +253,7 @@ status_t AUDMIX_GetAttenuationValue(WAKEUP_AUDMIX_Type *base, uint8_t tdmChannel
  * @param counter Pointer to store the step counter value.
  * @return Returns status code. kStatus_Success on success, kStatus_AUDMIX_Error on failure.
  */
-status_t AUDMIX_GetAttenuationStepCounter(WAKEUP_AUDMIX_Type *base, uint8_t tdmChannel, uint32_t *counter);
+status_t AUDMIX_GetAttenuationStepCounter(AUDMIX_Type *base, uint8_t tdmChannel, uint32_t *counter);
 
 /*! @} */
 
@@ -269,7 +269,7 @@ status_t AUDMIX_GetAttenuationStepCounter(WAKEUP_AUDMIX_Type *base, uint8_t tdmC
  * @param source Output source selection.
  * @return Returns status code. kStatus_Success on success, kStatus_AUDMIX_Error on failure.
  */
-status_t AUDMIX_SetOutputSource(WAKEUP_AUDMIX_Type *base, audmix_output_source_t source);
+status_t AUDMIX_SetOutputSource(AUDMIX_Type *base, audmix_output_source_t source);
 
 /*!
  * @brief Sets the mixing clock source.
@@ -278,7 +278,7 @@ status_t AUDMIX_SetOutputSource(WAKEUP_AUDMIX_Type *base, audmix_output_source_t
  * @param source Mix clock source selection.
  * @return Returns status code. kStatus_Success on success, kStatus_AUDMIX_Error on failure.
  */
-status_t AUDMIX_SetMixClockSource(WAKEUP_AUDMIX_Type *base, audmix_mix_clock_source_t source);
+status_t AUDMIX_SetMixClockSource(AUDMIX_Type *base, audmix_mix_clock_source_t source);
 
 /*!
  * @brief Sets the output audio sample width.
@@ -287,7 +287,7 @@ status_t AUDMIX_SetMixClockSource(WAKEUP_AUDMIX_Type *base, audmix_mix_clock_sou
  * @param width Output audio sample width.
  * @return Returns status code. kStatus_Success on success, kStatus_AUDMIX_Error on failure.
  */
-status_t AUDMIX_SetOutputWidth(WAKEUP_AUDMIX_Type *base, audmix_output_width_t width);
+status_t AUDMIX_SetOutputWidth(AUDMIX_Type *base, audmix_output_width_t width);
 
 /*!
  * @brief Sets the output bit clock polarity.
@@ -296,7 +296,7 @@ status_t AUDMIX_SetOutputWidth(WAKEUP_AUDMIX_Type *base, audmix_output_width_t w
  * @param polarity Output bit clock polarity.
  * @return Returns status code. kStatus_Success on success, kStatus_AUDMIX_Error on failure.
  */
-status_t AUDMIX_SetOutputClockPolarity(WAKEUP_AUDMIX_Type *base, audmix_output_clock_polarity_t polarity);
+status_t AUDMIX_SetOutputClockPolarity(AUDMIX_Type *base, audmix_output_clock_polarity_t polarity);
 
 /*!
  * @brief Enables or disables the frame rate difference error masking.
@@ -305,7 +305,7 @@ status_t AUDMIX_SetOutputClockPolarity(WAKEUP_AUDMIX_Type *base, audmix_output_c
  * @param enable true to enable masking, false to disable masking.
  * @return Returns status code. kStatus_Success on success, kStatus_AUDMIX_Error on failure.
  */
-status_t AUDMIX_EnableFrameRateDiffErrorMasking(WAKEUP_AUDMIX_Type *base, bool enable);
+status_t AUDMIX_EnableFrameRateDiffErrorMasking(AUDMIX_Type *base, bool enable);
 
 /*!
  * @brief Enables or disables the clock frequency difference error masking.
@@ -315,7 +315,7 @@ status_t AUDMIX_EnableFrameRateDiffErrorMasking(WAKEUP_AUDMIX_Type *base, bool e
  *
  * @return Returns status code. kStatus_Success on success, kStatus_AUDMIX_Error on failure.
  */
-status_t AUDMIX_EnableClockFrequencyDiffErrorMasking(WAKEUP_AUDMIX_Type *base, bool enable);
+status_t AUDMIX_EnableClockFrequencyDiffErrorMasking(AUDMIX_Type *base, bool enable);
 
 /*!
  * @brief Enables or disables the sync mode.
@@ -324,7 +324,7 @@ status_t AUDMIX_EnableClockFrequencyDiffErrorMasking(WAKEUP_AUDMIX_Type *base, b
  * @param enable true to enable sync mode, false to disable sync mode.
  * @return Returns status code. kStatus_Success on success, kStatus_AUDMIX_Error on failure.
  */
-status_t AUDMIX_EnableSyncMode(WAKEUP_AUDMIX_Type *base, bool enable);
+status_t AUDMIX_EnableSyncMode(AUDMIX_Type *base, bool enable);
 
 /*!
  * @brief Sets the sync mode clock source.
@@ -333,7 +333,7 @@ status_t AUDMIX_EnableSyncMode(WAKEUP_AUDMIX_Type *base, bool enable);
  * @param source Sync mode clock source (TDM1 or TDM2).
  * @return Returns status code. kStatus_Success on success, kStatus_AUDMIX_Error on failure.
  */
-status_t AUDMIX_SetSyncModeClockSource(WAKEUP_AUDMIX_Type *base, audmix_mix_clock_source_t source);
+status_t AUDMIX_SetSyncModeClockSource(AUDMIX_Type *base, audmix_mix_clock_source_t source);
 
 /*! @} */
 

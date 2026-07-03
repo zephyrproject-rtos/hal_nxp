@@ -380,6 +380,7 @@ void FLEXSPI_Init(FLEXSPI_Type *base, const flexspi_config_t *config)
     base->AHBCR = configValue;
 
     /* Configure AHB rx buffers. */
+    assert(FSL_FEATURE_FLEXSPI_AHB_RX_BUFFER_SIZEn(base) >= 0);
     for (i = 0; i < (uint32_t)FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT; i++)
     {
         /* INT30-C: Prevent unsigned integer overflow */
@@ -701,6 +702,7 @@ void FLEXSPI_SetAddressMapping(FLEXSPI_Type *base, const flexspi_addr_map_config
 void FLEXSPI_UpdateAhbBuffersSettings(FLEXSPI_Type *base, flexspi_ahbBuffers_ctrl_t *ptrAhbBufferCtrl)
 {
     assert(ptrAhbBufferCtrl != NULL);
+    assert(FSL_FEATURE_FLEXSPI_AHB_RX_BUFFER_SIZEn(base) >= 0);
 
     uint32_t configValue = 0UL;
     uint32_t totalAhbBufferSize = 0UL;
@@ -1078,6 +1080,8 @@ status_t FLEXSPI_TransferBlocking(FLEXSPI_Type *base, flexspi_transfer_t *xfer)
 #if defined(FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT) && (FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT)
         currentFlashSize &= ~FLEXSPI_FLSHCR0_ADDRSHIFT_MASK;
 #endif
+        assert(currentFlashSize <= (UINT32_MAX / 1024U));
+        assert(flashAddress <= (UINT32_MAX - currentFlashSize * 1024U));
         flashAddress += currentFlashSize * 1024U;
     }
     base->IPCR0 = flashAddress;

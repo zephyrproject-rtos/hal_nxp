@@ -87,10 +87,12 @@ void WDOG_Init(WDOG_Type *base, const wdog_config_t *config)
     uint16_t value        = 0U;
     uint32_t primaskValue = 0U;
 
-    value = WDOG_STCTRLH_WDOGEN(config->enableWdog) | WDOG_STCTRLH_CLKSRC(config->clockSource) |
-            WDOG_STCTRLH_IRQRSTEN(config->enableInterrupt) | WDOG_STCTRLH_WINEN(config->enableWindowMode) |
-            WDOG_STCTRLH_ALLOWUPDATE(config->enableUpdate) | WDOG_STCTRLH_DBGEN(config->workMode.enableDebug) |
-            WDOG_STCTRLH_STOPEN(config->workMode.enableStop) |
+    value = WDOG_STCTRLH_WDOGEN(config->enableWdog ? 1U : 0U) | WDOG_STCTRLH_CLKSRC(config->clockSource) |
+            WDOG_STCTRLH_IRQRSTEN(config->enableInterrupt ? 1U : 0U) |
+            WDOG_STCTRLH_WINEN(config->enableWindowMode ? 1U : 0U) |
+            WDOG_STCTRLH_ALLOWUPDATE(config->enableUpdate ? 1U : 0U) |
+            WDOG_STCTRLH_DBGEN(config->workMode.enableDebug ? 1U : 0U) |
+            WDOG_STCTRLH_STOPEN(config->workMode.enableStop ? 1U : 0U) |
 #if defined(FSL_FEATURE_WDOG_HAS_WAITEN) && FSL_FEATURE_WDOG_HAS_WAITEN
             WDOG_STCTRLH_WAITEN(config->workMode.enableWait) |
 #endif /* FSL_FEATURE_WDOG_HAS_WAITEN */

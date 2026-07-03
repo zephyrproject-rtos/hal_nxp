@@ -145,8 +145,7 @@ static uint32_t LPADC_GetGainConvResult(float gainAdjustment)
     /* Get GCALR value calculated. */
     for (i = 0x11U; i > 0U; i--)
     {
-        uint32_t product = GCRa[i - 1U] * ((uint32_t)(1UL << ((uint32_t)i - 1UL)));
-        GCALR += product;
+        GCALR += GCRa[i - 1U] * ((uint32_t)(1UL << ((uint32_t)i - 1UL)));
     }
 
     /* to return GCALR value calculated */

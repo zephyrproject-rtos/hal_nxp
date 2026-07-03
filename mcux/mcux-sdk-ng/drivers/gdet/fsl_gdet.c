@@ -117,7 +117,7 @@ void GDET_Deinit(GDET_Type *base)
  */
 status_t GDET_Enable(GDET_Type *base)
 {
-#if  defined(GDET_GDET_ENABLE1_EN1_MASK) || defined(GDET_GDET_ENABLE1_EN1_MASK)
+#if defined(GDET_GDET_ENABLE1_EN1_MASK) || defined(GDET_GDET_ENABLE1_EN1_MASK)
     base->GDET_ENABLE1 = GDET_GDET_ENABLE1_EN1(1u);
 #elif defined(GDET_GDET_RENABLE1_REN1_MASK) || defined(GDET_GDET_RENABLE1_REN1_MASK)
     base->GDET_RENABLE1 = GDET_GDET_RENABLE1_REN1(1u);
@@ -139,7 +139,7 @@ status_t GDET_Enable(GDET_Type *base)
  */
 status_t GDET_Disable(GDET_Type *base)
 {
-#if  defined(GDET_GDET_ENABLE1_EN1_MASK) || defined(GDET_GDET_ENABLE1_EN1_MASK)
+#if defined(GDET_GDET_ENABLE1_EN1_MASK) || defined(GDET_GDET_ENABLE1_EN1_MASK)
     base->GDET_ENABLE1 = GDET_GDET_ENABLE1_EN1(0u);
 #elif defined(GDET_GDET_RENABLE1_REN1_MASK) || defined(GDET_GDET_RENABLE1_REN1_MASK)
     base->GDET_RENABLE1 = GDET_GDET_RENABLE1_REN1(0u);
@@ -165,7 +165,7 @@ status_t GDET_IsolateOn(GDET_Type *base)
     uint32_t syscon_tmp = 0u;
 
     instance = GDET_GetInstance(base);
-#if  defined(SYSCON_GDET_CTRL_GDET_ISO_SW_MASK) || defined(SYSCON0_GDET_CTRL_GDET_ISO_SW_MASK)
+#if defined(SYSCON_GDET_CTRL_GDET_ISO_SW_MASK) || defined(SYSCON0_GDET_CTRL_GDET_ISO_SW_MASK)
     /* GDET0 */
     if (instance == 0u)
     {
@@ -241,7 +241,7 @@ status_t GDET_IsolateOff(GDET_Type *base)
     uint32_t syscon_tmp = 0u;
 
     instance = GDET_GetInstance(base);
-#if  defined(SYSCON_GDET_CTRL_GDET_ISO_SW_MASK) || defined(SYSCON0_GDET_CTRL_GDET_ISO_SW_MASK)
+#if defined(SYSCON_GDET_CTRL_GDET_ISO_SW_MASK) || defined(SYSCON0_GDET_CTRL_GDET_ISO_SW_MASK)
     if (instance == 0u)
     {
         syscon_tmp = SYSCON0->GDET_CTRL[0u] & ~(SYSCON_GDET_ISOLATION_SW_MASK);
@@ -332,6 +332,13 @@ status_t GDET_ReconfigureVoltageMode(GDET_Type *base, gdet_core_voltage_t voltag
 #elif defined(GDET_GDET_CTRL_CLR_SFT_RST)
     /* Write high the GDET_RESET[SFT_RST] to issue a fast update of the detector to the new voltage level.*/
     base->GDET_CTRL_CLR = GDET_GDET_CTRL_CLR_SFT_RST(1u);
+
+    /* according to the GDET module documentation, we should wait atleast 70 reference clock cycles for update to finish
+     */
+    for (uint8_t i = 0U; i < 70U; i++)
+    {
+        __NOP();
+    }
 
     /* according to the GDET module documentation, the GDET_CTRL_CLR[SFT_RST] reads as 0 */
     if (0u == (GDET_GDET_CTRL_CLR_SFT_RST_MASK & base->GDET_CTRL_CLR))

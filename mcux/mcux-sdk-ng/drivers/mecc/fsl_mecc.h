@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021, 2023 NXP
+ * Copyright 2019-2021, 2023, 2026 NXP
  * All rights reserved.
  *
  *
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Driver version 2.1.0. */
-#define FSL_MECC_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 0U))
+/*! @brief Driver version 2.1.2. */
+#define FSL_MECC_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 2U))
 /*! @} */
 /*! @brief Error codes for the MECC driver. */
 enum

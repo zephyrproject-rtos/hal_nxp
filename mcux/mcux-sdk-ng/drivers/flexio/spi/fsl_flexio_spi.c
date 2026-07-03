@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2022, 2025 NXP
+ * Copyright 2016-2020, 2022, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -343,7 +343,7 @@ void FLEXIO_SPI_MasterInit(FLEXIO_SPI_Type *base, flexio_spi_master_config_t *ma
     ctrlReg |= (FLEXIO_CTRL_DBGE(masterConfig->enableInDebug ? 1U : 0U) | FLEXIO_CTRL_FASTACC(masterConfig->enableFastAccess ? 1U : 0U) |
                 FLEXIO_CTRL_FLEXEN(masterConfig->enableMaster ? 1U : 0U));
 #if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
-    if (!masterConfig->enableInDoze ? 1U : 0U)
+    if (!masterConfig->enableInDoze)
     {
         ctrlReg |= FLEXIO_CTRL_DOZEN_MASK;
     }
@@ -412,7 +412,7 @@ void FLEXIO_SPI_MasterInit(FLEXIO_SPI_Type *base, flexio_spi_master_config_t *ma
     /* Low 8-bits are used to configure baudrate. */
     timerDiv = (srcClock_Hz / masterConfig->baudRate_Bps);
     timerDiv = timerDiv / 2U - 1U;
-    assert(timerDiv <= UINT8_MAX);
+    assert(timerDiv <= (uint32_t)UINT8_MAX);
     /* High 8-bits are used to configure shift clock edges(transfer width). */
     timerCmp = ((uint16_t)masterConfig->dataMode * 2U - 1U) << 8U;
     timerCmp |= (uint16_t)timerDiv;
@@ -556,7 +556,7 @@ void FLEXIO_SPI_SlaveInit(FLEXIO_SPI_Type *base, flexio_spi_slave_config_t *slav
     ctrlReg |= (FLEXIO_CTRL_DBGE(slaveConfig->enableInDebug ? 1U : 0U) | FLEXIO_CTRL_FASTACC(slaveConfig->enableFastAccess ? 1U : 0U) |
                 FLEXIO_CTRL_FLEXEN(slaveConfig->enableSlave ? 1U : 0U));
 #if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
-    if (!slaveConfig->enableInDoze ? 1U : 0U)
+    if (!slaveConfig->enableInDoze)
     {
         ctrlReg |= FLEXIO_CTRL_DOZEN_MASK;
     }
@@ -798,7 +798,7 @@ void FLEXIO_SPI_MasterSetBaudRate(FLEXIO_SPI_Type *base, uint32_t baudRate_Bps, 
     timerDiv = (srcClockHz / baudRate_Bps);
     timerDiv = timerDiv / 2U - 1U;
 
-    assert(timerDiv <= UINT8_MAX);
+    assert(timerDiv <= (uint32_t)UINT8_MAX);
     timerCmp = (uint16_t)(flexioBase->TIMCMP[base->timerIndex[0]]);
     timerCmp &= 0xFF00U;
     timerCmp |= (uint16_t)timerDiv;

@@ -1,5 +1,11 @@
 # WDOG8
 
+## [2.0.2]
+
+- Bug Fixes
+  - Fixed CERT INT31-C violations on bool-to-uint8_t casts in WDOG8_Init and
+    on the bitwise complement in WDOG8_Disable.
+
 ## [2.0.1]
 
 - Bug Fixes

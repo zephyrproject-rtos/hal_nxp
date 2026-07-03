@@ -27,7 +27,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FLEXSPI EDMA driver version. */
-#define FSL_FLEXSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
+#define FSL_FLEXSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 4))
 /*! @} */
 
 typedef struct _flexspi_edma_handle flexspi_edma_handle_t;

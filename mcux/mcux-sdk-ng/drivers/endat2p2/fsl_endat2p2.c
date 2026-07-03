@@ -871,7 +871,7 @@ void ENDAT2P2_SetDataWordLength(endat2p2_dev_t *dev, int length)
 
     data = dev->base->CONFIGREGISTER1;
     data = (data & (~ ENDAT2P2_CONFIGREGISTER1_DATA_WORD_LENGTH_MASK)) |
-           ENDAT2P2_CONFIGREGISTER1_DATA_WORD_LENGTH(length);
+           ENDAT2P2_CONFIGREGISTER1_DATA_WORD_LENGTH((uint32_t)length);
     dev->base->CONFIGREGISTER1 = data;
 }
 

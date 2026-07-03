@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.semc)
-    mcux_component_version(2.8.0)
+    mcux_component_version(2.8.1)
 
     mcux_add_source(SOURCES fsl_semc.h fsl_semc.c)
 

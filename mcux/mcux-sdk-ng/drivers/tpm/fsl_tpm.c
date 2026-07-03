@@ -566,7 +566,9 @@ status_t TPM_SetupPwm(TPM_Type *base,
         case kTPM_CombinedPwm:
 #endif
         case kTPM_EdgeAlignedPwm:
+#if !(defined(FSL_FEATURE_TPM_HAS_NO_SC_CPWMS) && FSL_FEATURE_TPM_HAS_NO_SC_CPWMS)
             base->SC &= ~TPM_SC_CPWMS_MASK;
+#endif
             mod = (tpmClock / pwmFreq_Hz) - 1U;
 
             /*
@@ -580,6 +582,7 @@ status_t TPM_SetupPwm(TPM_Type *base,
                 status = kStatus_OutOfRange;
             }
             break;
+#if !(defined(FSL_FEATURE_TPM_HAS_NO_SC_CPWMS) && FSL_FEATURE_TPM_HAS_NO_SC_CPWMS)
         case kTPM_CenterAlignedPwm:
             base->SC |= TPM_SC_CPWMS_MASK;
             mod = tpmClock / (pwmFreq_Hz * 2u);
@@ -594,6 +597,7 @@ status_t TPM_SetupPwm(TPM_Type *base,
                 status = kStatus_OutOfRange;
             }
             break;
+#endif
         default:
             /* All the cease have been listed above, the default case should not be reached. */
             status = kStatus_InvalidArgument;
@@ -838,7 +842,7 @@ void TPM_UpdateChnlEdgeLevelSelect(TPM_Type *base, tpm_chnl_t chnlNumber, uint8_
     assert(((-1 != (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) &&
            (uint8_t)chnlNumber < (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)));
 
-    uint8_t control = TPM_GetChannelContorlBits(base, chnlNumber);
+    uint8_t control = TPM_GetChannelControlBits(base, chnlNumber);
 
     /* When switching mode, disable channel first */
     (void)TPM_DisableChannel(base, chnlNumber);
@@ -886,8 +890,10 @@ void TPM_SetupInputCapture(TPM_Type *base, tpm_chnl_t chnlNumber, tpm_input_capt
         base->COMBINE &= ~((uint32_t)1U << (((uint32_t)chnlNumber / 2U) * TPM_COMBINE_SHIFT));
     }
 #endif
+#if !(defined(FSL_FEATURE_TPM_HAS_NO_SC_CPWMS) && FSL_FEATURE_TPM_HAS_NO_SC_CPWMS)
     /*Clear CPWMS bit when the input capture mode is selected */
     base->SC &= ~TPM_SC_CPWMS_MASK;
+#endif
     /* When switching mode, disable channel first */
     (void)TPM_DisableChannel(base, chnlNumber);
     /* Enable channel with new requested input capture mode */
@@ -930,8 +936,10 @@ status_t TPM_SetupOutputCompare(TPM_Type *base,
     }
 #endif
 
+#if !(defined(FSL_FEATURE_TPM_HAS_NO_SC_CPWMS) && FSL_FEATURE_TPM_HAS_NO_SC_CPWMS)
     /*Clear CPWMS bit when the output compare mode is selected */
     base->SC &= ~TPM_SC_CPWMS_MASK;
+#endif
     /* When switching mode, disable channel first  */
     (void)TPM_DisableChannel(base, chnlNumber);
     /* Enable channel with new requested compare mode */

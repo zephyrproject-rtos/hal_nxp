@@ -1,5 +1,10 @@
 # MECC
 
+## [2.1.2]
+
+- Bug Fixes.
+  - Fixed CERT INT31-C and CERT INT30-C issues.
+
 ## [2.1.1]
 
 - Bug fixes:

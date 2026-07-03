@@ -1,5 +1,10 @@
 # SPDIF
 
+## [2.0.10]
+
+- Improvements
+  - Added `SPDIF_CopyRxChannelStatusToTx()` to share the interrupt transfer channel-status copy flow with the SPDIF_XCVR driver.
+
 ## [2.0.9]
 
 - New Features

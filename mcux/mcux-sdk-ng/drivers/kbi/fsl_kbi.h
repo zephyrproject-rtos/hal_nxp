@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief KBI driver version. */
-#define FSL_KBI_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+#define FSL_KBI_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*! @} */
 
 #if (defined(FSL_FEATURE_KBI_REG_WIDTH) && (FSL_FEATURE_KBI_REG_WIDTH == 8))
@@ -101,7 +101,7 @@ static inline void KBI_EnableInterrupts(KBI_Type *base)
  */
 static inline void KBI_DisableInterrupts(KBI_Type *base)
 {
-    base->SC &= ~(kbi_reg_t)KBI_SC_KBIE_MASK;
+    base->SC &= (kbi_reg_t)(~KBI_SC_KBIE_MASK & 0xFFU);
 }
 
 /*!

@@ -81,7 +81,7 @@ void ACMP_Init(ACMP_Type *base, const acmp_config_t *config)
     ACMP_Enable(base, false);
 
     /* ACMP_CS register. */
-    tmp8 = base->CS & (uint8_t)(~(ACMP_CS_HYST_MASK | ACMP_CS_ACOPE_MASK));
+    tmp8 = base->CS & MCUX_MASK_INVERT_8(ACMP_CS_HYST_MASK | ACMP_CS_ACOPE_MASK);
 
     tmp8 |= ACMP_CS_HYST(config->hysteresisMode);
     if (config->enablePinOut)
@@ -141,7 +141,7 @@ void ACMP_EnableInterrupt(ACMP_Type *base, acmp_interrupt_mode_t mode)
     uint8_t tmp8;
 
     /* ACMP_CS register. */
-    tmp8 = base->CS & (uint8_t)(~ACMP_CS_ACMOD_MASK);
+    tmp8 = base->CS & MCUX_MASK_INVERT_8(ACMP_CS_ACMOD_MASK);
 
     tmp8 |= ACMP_CS_ACIE_MASK | ACMP_CS_ACMOD(mode);
     base->CS = tmp8;

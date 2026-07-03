@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2020, 2026 NXP
  * All rights reserved.
  *
  *
@@ -51,10 +51,10 @@ void XECC_Init(XECC_Type *base, const xecc_config_t *config)
     base->ECC_END_ADDR3  = config->Region3EndAddress >> 12U;
 
     /* Enable ECC function */
-    base->ECC_CTRL = XECC_ECC_CTRL_ECC_EN(config->enableXECC);
-    base->ECC_CTRL |= XECC_ECC_CTRL_WECC_EN(config->enableWriteECC);
-    base->ECC_CTRL |= XECC_ECC_CTRL_RECC_EN(config->enableReadECC);
-    base->ECC_CTRL |= XECC_ECC_CTRL_SWAP_EN(config->enableSwap);
+    base->ECC_CTRL = XECC_ECC_CTRL_ECC_EN(config->enableXECC ? 1U : 0U);
+    base->ECC_CTRL |= XECC_ECC_CTRL_WECC_EN(config->enableWriteECC ? 1U : 0U);
+    base->ECC_CTRL |= XECC_ECC_CTRL_RECC_EN(config->enableReadECC ? 1U : 0U);
+    base->ECC_CTRL |= XECC_ECC_CTRL_SWAP_EN(config->enableSwap ? 1U : 0U);
 
     /* Make sure XECC register configuration operation has been done. */
     __DSB();

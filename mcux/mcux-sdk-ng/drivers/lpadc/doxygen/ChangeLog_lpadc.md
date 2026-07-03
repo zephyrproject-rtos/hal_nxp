@@ -1,5 +1,11 @@
 # LPADC
 
+## [2.10.0]
+
+- Improvements
+  - Use `#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > nU)` to wrap some
+    configurations because these configurations are invalid/illegal on some SoCs.
+
 ## [2.9.5]
 
 - Improvements

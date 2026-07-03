@@ -1,5 +1,10 @@
 # EDMA
 
+## [2.4.9]
+
+- Bug Fixes
+  - Fixed CERT INT31-C and INT30-C violations in edma driver.
+
 ## [2.4.8]
 
 - New Features

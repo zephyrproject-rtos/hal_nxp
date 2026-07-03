@@ -2044,6 +2044,11 @@ static inline uint8_t SPC_GetExternalDomainsStatus(SPC_Type *base)
  */
 static inline void SPC_EnableCoreLDORegulator(SPC_Type *base, bool enable)
 {
+    /*
+     * $Branch Coverage Justification$
+     * Disabling CORE LDO powers off retained RAM contents, so the excluded branch
+     * is documented here and branch coverage on this condition is suppressed.
+     */
     if (enable) /* GCOVR_EXCL_BR_LINE */
     {
         base->CNTRL |= SPC_CNTRL_CORELDO_EN_MASK;
@@ -2236,6 +2241,11 @@ status_t SPC_SetLowPowerModeSystemLDORegulatorConfig(SPC_Type *base, const spc_l
  */
 static inline void SPC_EnableDCDCRegulator(SPC_Type *base, bool enable)
 {
+    /*
+     * $Branch Coverage Justification$
+     * Disabling DCDC powers off retained RAM contents, so the excluded branch
+     * is documented here and branch coverage on this condition is suppressed.
+     */
     if (enable) /* GCOVR_EXCL_BR_LINE */
     {
         base->CNTRL |= SPC_CNTRL_DCDC_EN_MASK;

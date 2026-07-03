@@ -1,5 +1,10 @@
 # FLEXIO
 
+## [2.3.2]
+
+- Bug Fixes
+  - Fixed MISRA 10.4 issues.
+
 ## [2.3.1]
 
 - New Features

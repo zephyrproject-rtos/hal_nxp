@@ -12,6 +12,11 @@
  * Definitions
  ******************************************************************************/
 
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.tenbaset_phy"
+#endif
+
 #ifndef CONFIG_TENBASET_PHY_MODE_TIMEOUT
 /*! @brief TENBASET_PHY timeout for mode transitions (in microseconds). */
 #define CONFIG_TENBASET_PHY_MODE_TIMEOUT (1000000U)

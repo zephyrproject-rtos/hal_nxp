@@ -94,9 +94,9 @@ status_t NETC_EnetcConfigureSI(NETC_ENETC_Type *base, uint8_t si, const netc_hw_
          */
         base->NUM_SI[si].PSICFGR0 =
             NETC_ENETC_PSICFGR0_SIBW(psConfig->bandWeight) | NETC_ENETC_PSICFGR0_SIVC(psConfig->vlanCtrl) |
-            NETC_ENETC_PSICFGR0_ASE(psConfig->antiSpoofEnable) | NETC_ENETC_PSICFGR0_SIVIE(psConfig->vlanInsertEnable) |
-            NETC_ENETC_PSICFGR0_VTE(psConfig->vlanExtractEnable) |
-            NETC_ENETC_PSICFGR0_SPE(psConfig->sourcePruneEnable) |
+            NETC_ENETC_PSICFGR0_ASE(psConfig->antiSpoofEnable ? 1U : 0U) | NETC_ENETC_PSICFGR0_SIVIE(psConfig->vlanInsertEnable ? 1U : 0U) |
+            NETC_ENETC_PSICFGR0_VTE(psConfig->vlanExtractEnable ? 1U : 0U) |
+            NETC_ENETC_PSICFGR0_SPE(psConfig->sourcePruneEnable ? 1U : 0U) |
             NETC_ENETC_PSICFGR0_NUM_TX_BDR(psConfig->txRingUse + 1U) |
             NETC_ENETC_PSICFGR0_NUM_RX_BDR(psConfig->rxRingUse + 1U);
     }
@@ -104,9 +104,9 @@ status_t NETC_EnetcConfigureSI(NETC_ENETC_Type *base, uint8_t si, const netc_hw_
     {
         base->NUM_SI[si].PSICFGR0 =
             NETC_ENETC_PSICFGR0_SIBW(psConfig->bandWeight) | NETC_ENETC_PSICFGR0_SIVC(psConfig->vlanCtrl) |
-            NETC_ENETC_PSICFGR0_ASE(psConfig->antiSpoofEnable) | NETC_ENETC_PSICFGR0_SIVIE(psConfig->vlanInsertEnable) |
-            NETC_ENETC_PSICFGR0_VTE(psConfig->vlanExtractEnable) |
-            NETC_ENETC_PSICFGR0_SPE(psConfig->sourcePruneEnable) | NETC_ENETC_PSICFGR0_NUM_TX_BDR(psConfig->txRingUse) |
+            NETC_ENETC_PSICFGR0_ASE(psConfig->antiSpoofEnable ? 1U : 0U) | NETC_ENETC_PSICFGR0_SIVIE(psConfig->vlanInsertEnable ? 1U : 0U) |
+            NETC_ENETC_PSICFGR0_VTE(psConfig->vlanExtractEnable ? 1U : 0U) |
+            NETC_ENETC_PSICFGR0_SPE(psConfig->sourcePruneEnable ? 1U : 0U) | NETC_ENETC_PSICFGR0_NUM_TX_BDR(psConfig->txRingUse) |
             NETC_ENETC_PSICFGR0_NUM_RX_BDR(psConfig->rxRingUse);
     }
 

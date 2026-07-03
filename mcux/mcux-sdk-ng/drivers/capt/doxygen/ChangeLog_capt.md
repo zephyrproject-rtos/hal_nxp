@@ -1,5 +1,10 @@
 # CAPT
 
+## [2.1.1]
+
+- Bug Fixes
+  - Fixed CERT INT31-C violations in CAPT_GetTouchData.
+
 ## [2.1.0]
 
 - New Features

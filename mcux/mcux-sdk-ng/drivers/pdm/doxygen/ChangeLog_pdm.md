@@ -1,5 +1,9 @@
 # PDM
 
+## [2.9.6]
+- Improvements
+  - Added instance-aware dispatch for PDM EVENT, PDM ERROR, HWVAD EVENT, and HWVAD ERROR IRQ handlers while preserving existing wrapper compatibility.
+
 ## [2.9.5]
 - Improvements
   - Updated PDM_ReadFifo shifting logic for variable dataWidth (4/3/2/1 -> shift 0/8/16/24).

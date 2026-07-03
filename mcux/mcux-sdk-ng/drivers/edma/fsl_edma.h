@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief eDMA driver version */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 8)) /*!< Version 2.4.8. */
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 9)) /*!< Version 2.4.9. */
 /*! @} */
 
 /*! @brief Compute the offset unit from DCHPRI3 */
@@ -507,8 +507,9 @@ static inline void EDMA_EnableAutoStopRequest(DMA_Type *base, uint32_t channel, 
 {
     assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 
-    base->TCD[channel].CSR =
-        (uint16_t)((base->TCD[channel].CSR & (~DMA_CSR_DREQ_MASK)) | DMA_CSR_DREQ((true == enable ? 1U : 0U)));
+    base->TCD[channel].CSR = (uint16_t)(((uint32_t)base->TCD[channel].CSR & (~DMA_CSR_DREQ_MASK)) |
+                                        DMA_CSR_DREQ((true == enable) ? 1U : 0U)) &
+                             0xFFFFU;
 }
 
 /*!
@@ -633,7 +634,7 @@ static inline void EDMA_TcdSetBandWidth(edma_tcd_t *tcd, edma_bandwidth_t bandWi
     assert(tcd != NULL);
     assert(((uint32_t)tcd & 0x1FU) == 0U);
 
-    tcd->CSR = (uint16_t)((tcd->CSR & (~DMA_CSR_BWC_MASK)) | DMA_CSR_BWC(bandWidth));
+    tcd->CSR = (uint16_t)((((uint32_t)tcd->CSR & (~DMA_CSR_BWC_MASK)) | DMA_CSR_BWC(bandWidth)) & 0xFFFFU);
 }
 
 /*!
@@ -662,7 +663,8 @@ static inline void EDMA_TcdEnableAutoStopRequest(edma_tcd_t *tcd, bool enable)
     assert(tcd != NULL);
     assert(((uint32_t)tcd & 0x1FU) == 0U);
 
-    tcd->CSR = (uint16_t)((tcd->CSR & (~DMA_CSR_DREQ_MASK)) | DMA_CSR_DREQ((true == enable ? 1U : 0U)));
+    tcd->CSR = (uint16_t)(((uint32_t)tcd->CSR & (~DMA_CSR_DREQ_MASK)) | DMA_CSR_DREQ((true == enable) ? 1U : 0U)) &
+               0xFFFFU;
 }
 
 /*!
@@ -961,7 +963,9 @@ static inline uint32_t EDMA_GetUnusedTCDNumber(edma_handle_t *handle)
 {
     int8_t tmpTcdSize = handle->tcdSize;
     int8_t tmpTcdUsed = handle->tcdUsed;
-    return ((uint32_t)tmpTcdSize - (uint32_t)tmpTcdUsed);
+    assert(tmpTcdUsed >= 0);
+    assert(tmpTcdSize >= tmpTcdUsed);
+    return ((uint32_t)(uint8_t)tmpTcdSize - (uint32_t)(uint8_t)tmpTcdUsed);
 }
 
 /*!
@@ -974,7 +978,7 @@ static inline uint32_t EDMA_GetUnusedTCDNumber(edma_handle_t *handle)
  */
 static inline uint32_t EDMA_GetNextTCDAddress(edma_handle_t *handle)
 {
-    return (uint32_t)(handle->base->TCD[handle->channel].DLAST_SGA);
+    return (uint32_t)handle->base->TCD[handle->channel].DLAST_SGA;
 }
 
 /*!

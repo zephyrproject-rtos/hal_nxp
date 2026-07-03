@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - 2021 NXP
+ * Copyright 2020-2021, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -40,6 +40,7 @@ void MCM_GetCoreFaultAttribute(MCM_Type *base, mcm_core_fault_attribute_t *psAtt
     psAttribute->eDirection  = (mcm_last_fault_access_dir_t)(base->CFATR & MCM_CFATR_DIR_MASK);
 }
 
+#if !(defined(FSL_FEATURE_MCM_HAS_RESOURCE_PROTECTION) && (FSL_FEATURE_MCM_HAS_RESOURCE_PROTECTION == 0))
 /*!
  * brief Sets the configuration of resource protection, including flash base address, ram base address, etc.
  *
@@ -72,3 +73,4 @@ status_t MCM_SetResourceProtectionConfig(MCM_Type *base, const mcm_resource_prot
 
     return eStatus;
 }
+#endif /* FSL_FEATURE_MCM_HAS_RESOURCE_PROTECTION */

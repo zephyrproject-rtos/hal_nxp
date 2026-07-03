@@ -1,5 +1,9 @@
 # LPI2C
 
+## [2.2.10]
+
+- Bug Fixes
+  - Fixed LPI2C_MasterStop() to send I2C STOP in case of error.
 
 ## [2.2.9]
 

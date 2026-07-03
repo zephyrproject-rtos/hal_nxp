@@ -18,6 +18,12 @@
   - Extended VD_STAT valid-flags mask to include VDD1P8 and composed it from
     per-domain sub-masks for cleaner compile-time selection.
 
+- Bug Fixes
+  - Fixed MISRA C-2012 Rule 14.3 violation in `SPC_SetHighPowerModeRegulatorsConfig`:
+    moved `if (status == kStatus_Success)` guard for bandgap config inside the
+    `FSL_FEATURE_SPC_HAS_SYS_LDO` conditional block so the condition is only present
+    when `status` can actually change (i.e. when SYS LDO is configured).
+
 ## [2.8.3]
 
 - Bug Fixes

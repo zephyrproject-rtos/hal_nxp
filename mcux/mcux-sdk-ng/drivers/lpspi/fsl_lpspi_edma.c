@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2024-2025 NXP
+ * Copyright 2016-2022, 2024-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -238,7 +238,7 @@ status_t LPSPI_MasterTransferPrepareEDMALite(LPSPI_Type *base, lpspi_master_edma
      */
     if (handle->fifoSize >= 1U) /* GCOVR_EXCL_BR_LINE */
     {
-        LPSPI_SetFifoWatermarks(base, handle->fifoSize - 1U, 0U);
+        LPSPI_SetFifoWatermarks(base, (uint32_t)handle->fifoSize - 1U, 0U);
     }
     else
     {
@@ -992,7 +992,7 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
      */
     if (handle->fifoSize >= 1U) /* GCOVR_EXCL_BR_LINE */
     {
-        LPSPI_SetFifoWatermarks(base, handle->fifoSize - 1U, 0U);
+        LPSPI_SetFifoWatermarks(base, (uint32_t)handle->fifoSize - 1U, 0U);
     }
     else
     {

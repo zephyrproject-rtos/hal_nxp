@@ -312,9 +312,18 @@ void DMA_SetupDescriptor(
             dstInc = kDMA_AddressInterleave4xWidth;
         }
 
-        desc->xfercfg    = xfercfg;
-        desc->srcEndAddr = DMA_DESCRIPTOR_END_ADDRESS((uint32_t *)srcStartAddr, srcInc, transferCount * width, width);
-        desc->dstEndAddr = DMA_DESCRIPTOR_END_ADDRESS((uint32_t *)dstStartAddr, dstInc, transferCount * width, width);
+        /* transferCount is at least 1 (register value + 1), so (transferCount - 1U) will not wrap */
+        uint32_t endBytes  = (transferCount - 1U) * width;
+        uint32_t srcEndOff = srcInc * endBytes;
+        uint32_t dstEndOff = dstInc * endBytes;
+
+        assert(endBytes >= (transferCount - 1U));
+        assert((srcInc == 0UL) || (srcEndOff / srcInc == endBytes));
+        assert((dstInc == 0UL) || (dstEndOff / dstInc == endBytes));
+
+        desc->xfercfg        = xfercfg;
+        desc->srcEndAddr     = (uint32_t *)((uint32_t)(uint32_t *)srcStartAddr + srcEndOff);
+        desc->dstEndAddr     = (uint32_t *)((uint32_t)(uint32_t *)dstStartAddr + dstEndOff);
         desc->linkToNextDesc = nextDesc;
     }
     else
@@ -388,36 +397,56 @@ void DMA_SetupChannelDescriptor(dma_descriptor_t *desc,
             dstInc = kDMA_AddressInterleave4xWidth;
         }
 
+        /* transferCount is at least 1 (register value + 1), so (transferCount - 1U) will not wrap */
+        uint32_t endBytes  = (transferCount - 1U) * width;
+        uint32_t srcEndOff = srcInc * endBytes;
+        uint32_t dstEndOff = dstInc * endBytes;
+
+        assert(endBytes >= (transferCount - 1U));
+        assert((srcInc == 0UL) || (srcEndOff / srcInc == endBytes));
+        assert((dstInc == 0UL) || (dstEndOff / dstInc == endBytes));
+
         desc->xfercfg = xfercfg;
 
         if (wrapType == kDMA_NoWrap)
         {
             desc->srcEndAddr =
-                DMA_DESCRIPTOR_END_ADDRESS((uint32_t *)srcStartAddr, srcInc, transferCount * width, width);
+                (uint32_t *)((uint32_t)(uint32_t *)srcStartAddr + srcEndOff);
             desc->dstEndAddr =
-                DMA_DESCRIPTOR_END_ADDRESS((uint32_t *)dstStartAddr, dstInc, transferCount * width, width);
+                (uint32_t *)((uint32_t)(uint32_t *)dstStartAddr + dstEndOff);
         }
         /* for the wrap transfer, the destination address should be determined by the burstSize/width/interleave size */
-        if (wrapType == kDMA_SrcWrap)
+        if ((wrapType == kDMA_SrcWrap) || (wrapType == kDMA_DstWrap) || (wrapType == kDMA_SrcAndDstWrap))
         {
-            desc->srcEndAddr =
-                (uint32_t *)((uint32_t)(uint32_t *)srcStartAddr + ((1UL << burstSize) - 1UL) * width * srcInc);
-            desc->dstEndAddr =
-                DMA_DESCRIPTOR_END_ADDRESS((uint32_t *)dstStartAddr, dstInc, transferCount * width, width);
-        }
-        if (wrapType == kDMA_DstWrap)
-        {
-            desc->srcEndAddr =
-                DMA_DESCRIPTOR_END_ADDRESS((uint32_t *)srcStartAddr, srcInc, transferCount * width, width);
-            desc->dstEndAddr =
-                (uint32_t *)((uint32_t)(uint32_t *)dstStartAddr + ((1UL << burstSize) - 1UL) * width * dstInc);
-        }
-        if (wrapType == kDMA_SrcAndDstWrap)
-        {
-            desc->srcEndAddr =
-                (uint32_t *)(((uint32_t)(uint32_t *)srcStartAddr) + ((1UL << burstSize) - 1UL) * width * srcInc);
-            desc->dstEndAddr =
-                (uint32_t *)(((uint32_t)(uint32_t *)dstStartAddr) + ((1UL << burstSize) - 1UL) * width * dstInc);
+            uint32_t burstCount = (1UL << burstSize) - 1UL;
+            uint32_t burstWidth = burstCount * width;
+
+            assert(burstCount <= (1UL << burstSize));
+            assert(burstWidth >= burstCount);
+
+            if (wrapType == kDMA_SrcWrap)
+            {
+                uint32_t srcWrapOff = burstWidth * srcInc;
+                assert((srcInc == 0UL) || (srcWrapOff / srcInc == burstWidth));
+                desc->srcEndAddr = (uint32_t *)((uint32_t)(uint32_t *)srcStartAddr + srcWrapOff);
+                desc->dstEndAddr = (uint32_t *)((uint32_t)(uint32_t *)dstStartAddr + dstEndOff);
+            }
+            else if (wrapType == kDMA_DstWrap)
+            {
+                uint32_t dstWrapOff = burstWidth * dstInc;
+                assert((dstInc == 0UL) || (dstWrapOff / dstInc == burstWidth));
+                desc->srcEndAddr = (uint32_t *)((uint32_t)(uint32_t *)srcStartAddr + srcEndOff);
+                desc->dstEndAddr = (uint32_t *)((uint32_t)(uint32_t *)dstStartAddr + dstWrapOff);
+            }
+            else /* kDMA_SrcAndDstWrap */
+            {
+                uint32_t srcWrapOff = burstWidth * srcInc;
+                uint32_t dstWrapOff = burstWidth * dstInc;
+                assert((srcInc == 0UL) || (srcWrapOff / srcInc == burstWidth));
+                assert((dstInc == 0UL) || (dstWrapOff / dstInc == burstWidth));
+                desc->srcEndAddr = (uint32_t *)((uint32_t)(uint32_t *)srcStartAddr + srcWrapOff);
+                desc->dstEndAddr = (uint32_t *)((uint32_t)(uint32_t *)dstStartAddr + dstWrapOff);
+            }
         }
 
         desc->linkToNextDesc = nextDesc;

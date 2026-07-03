@@ -174,6 +174,14 @@ void SPDIF_GetDefaultConfig(spdif_config_t *config)
     config->gain           = kSPDIF_GAIN_8;
 }
 
+void SPDIF_CopyRxChannelStatusToTx(SPDIF_Type *base)
+{
+    assert(base != NULL);
+
+    base->STCSCH = base->SRCSH;
+    base->STCSCL = base->SRCSL;
+}
+
 /*!
  * brief Enables/disables the SPDIF Tx.
  *

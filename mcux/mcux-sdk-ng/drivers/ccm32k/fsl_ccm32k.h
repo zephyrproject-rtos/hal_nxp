@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief CCM32K driver version 2.2.1. */
-#define FSL_CCM32K_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+/*! @brief CCM32K driver version 2.2.2. */
+#define FSL_CCM32K_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*! @} */
 
 #define CCM32K_OSC32K_CTRL_OSC_MODE_MASK  (0x3U)

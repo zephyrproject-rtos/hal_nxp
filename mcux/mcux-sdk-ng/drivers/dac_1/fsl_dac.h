@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2022, 2025 NXP
+ * Copyright 2016-2020, 2022, 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief DAC driver version 2.1.3. */
-#define FSL_DAC_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
+/*! @brief DAC driver version 2.2.0. */
+#define FSL_DAC_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*! @} */
 
 /*!
@@ -152,10 +152,29 @@ typedef enum _dac_reference_voltage_source
  */
 typedef enum _dac_reference_current_source
 {
+#if !(defined(FSL_FEATURE_LPDAC_HAS_GCR_IREF_PTAT_EXT_SEL) && (FSL_FEATURE_LPDAC_HAS_GCR_IREF_PTAT_EXT_SEL==0U))
     kDAC_ReferenceCurrentSourcePtat = LPDAC_GCR_IREF_PTAT_EXT_SEL_MASK, /* Internal PTAT Current Reference selected */
+#endif /* FSL_FEATURE_LPDAC_HAS_GCR_IREF_PTAT_EXT_SEL */
+#if defined(FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_SEL) && FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_SEL
+    kDAC_ReferenceCurrentSourceInternal = LPDAC_GCR_IREF_INT_SEL_MASK, /* Internal Current Reference selected */
+#endif /* FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_SEL */
     kDAC_ReferenceCurrentSourceZtc  = LPDAC_GCR_IREF_ZTC_EXT_SEL_MASK,  /* Internal ZTC Current Reference selected */
 } dac_reference_current_source_t;
 #endif /* FSL_FEATURE_LPDAC_HAS_INTERNAL_REFERENCE_CURRENT */
+
+#if defined(FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_TRIM) && FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_TRIM
+/*
+ * @brief DAC internal reference current trim
+ */
+typedef enum _dac_reference_current_trim
+{
+    kDAC_ReferenceCurrentTrimMinus25Percent  = 2U, /*!< Internal current value -25%. */
+    kDAC_ReferenceCurrentTrimMinus125Percent = 3U, /*!< Internal current value -12.5%. */
+    kDAC_ReferenceCurrentTrimTypical         = 4U, /*!< Typical internal current value. */
+    kDAC_ReferenceCurrentTrimPlus125Percent  = 5U, /*!< Internal current value +12.5%. */
+    kDAC_ReferenceCurrentTrimPlus25Percent   = 6U, /*!< Internal current value +25%. */
+} dac_reference_current_trim_t;
+#endif /* FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_TRIM */
 
 /*!
  * @brief DAC configuration structure.
@@ -168,6 +187,9 @@ typedef struct _dac_config
 #if defined(FSL_FEATURE_LPDAC_HAS_GCR_BUF_EN) && FSL_FEATURE_LPDAC_HAS_GCR_BUF_EN
     bool enableOpampBuffer; /*!< Opamp is used as buffer. */
 #endif                      /* FSL_FEATURE_LPDAC_HAS_GCR_BUF_EN */
+#if defined(FSL_FEATURE_LPDAC_HAS_GCR_DAC_OPTION_EN) && FSL_FEATURE_LPDAC_HAS_GCR_DAC_OPTION_EN
+    bool enableAnalogOutputBufferBypass; /*!< Bypass the DAC analog output buffer. */
+#endif                                  /* FSL_FEATURE_LPDAC_HAS_GCR_DAC_OPTION_EN */
 #if defined(FSL_FEATURE_LPDAC_HAS_GCR_RCV_TRG) && FSL_FEATURE_LPDAC_HAS_GCR_RCV_TRG
     bool enableExternalTriggerSource; /* DAC uses another DAC's hardware/software trigger as its trigger source. */
 #endif                                /* FSL_FEATURE_LPDAC_HAS_GCR_RCV_TRG */
@@ -194,6 +216,9 @@ typedef struct _dac_config
 #if defined(FSL_FEATURE_LPDAC_HAS_INTERNAL_REFERENCE_CURRENT) && FSL_FEATURE_LPDAC_HAS_INTERNAL_REFERENCE_CURRENT
     dac_reference_current_source_t referenceCurrentSource; /*!< Select the internal reference current source. */
 #endif                                                     /* FSL_FEATURE_LPDAC_HAS_INTERNAL_REFERENCE_CURRENT */
+#if defined(FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_TRIM) && FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_TRIM
+    dac_reference_current_trim_t referenceCurrentTrim; /*!< Select the internal reference current trim. */
+#endif                                               /* FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_TRIM */
     dac_reference_voltage_source_t referenceVoltageSource; /*!< Select the reference voltage source. */
 } dac_config_t;
 

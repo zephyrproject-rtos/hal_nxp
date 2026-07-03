@@ -22,9 +22,11 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Defines ITRC driver version 2.4.1.
+/*! @brief Defines ITRC driver version 2.4.2.
  *
  * Change log:
+ * - Version 2.4.2
+ *   - Update to KW43 ITRC offering
  * - Version 2.4.1
  *   - Update to MCXA577 ITRC offering
  * - Version 2.4.0
@@ -38,9 +40,10 @@
  * - Version 2.0.0
  *   - initial version
  */
-#define FSL_ITRC_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
+#define FSL_ITRC_DRIVER_VERSION (MAKE_VERSION(2, 4, 2))
 /*! @} */
 
+/* Mapping to input signals can be found in reference manual */
 typedef enum _itrc_input_signals
 {
 #ifdef ITRC_OUT_SEL_IN0_SELn_MASK
@@ -201,18 +204,27 @@ typedef enum _itrc_enable
     kITRC_Disable = 1U,
 } itrc_enable_t;
 
+/* Mapping to output signals can be found in reference manual */
 typedef enum _itrc_out_signals
 {
-    kITRC_Irq        = 0U,
-    kITRC_ElsReset   = 1U,
-    kITRC_PufZeroize = 2U,
-    kITRC_RamZeroize = 3u,
-    kITRC_ChipReset  = 4u,
-    kITRC_TamperOut  = 5u,
-    kITRC_TamperOut1 = 6u,
+    kITRC_Out_0 = 0U,
+    kITRC_Out_1 = 1U,
+    kITRC_Out_2 = 2U,
+    kITRC_Out_3 = 3u,
+    kITRC_Out_4 = 4u,
+    kITRC_Out_5 = 5u,
+    kITRC_Out_6 = 6u,
 } itrc_out_signals_t;
 
 /* Macros to avoid build failures because some platforms don't implement some IN signals */
+#ifndef ITRC_STATUS_IN0_STATUS_MASK
+#define ITRC_STATUS_IN0_STATUS_MASK (0u)
+#endif
+
+#ifndef ITRC_STATUS_IN1_STATUS_MASK
+#define ITRC_STATUS_IN1_STATUS_MASK (0u)
+#endif
+
 #ifndef ITRC_STATUS_IN2_STATUS_MASK
 #define ITRC_STATUS_IN2_STATUS_MASK (0u)
 #endif
@@ -221,12 +233,24 @@ typedef enum _itrc_out_signals
 #define ITRC_STATUS_IN3_STATUS_MASK (0u)
 #endif
 
+#ifndef ITRC_STATUS_IN6_STATUS_MASK
+#define ITRC_STATUS_IN6_STATUS_MASK (0u)
+#endif
+
+#ifndef ITRC_STATUS_IN7_STATUS_MASK
+#define ITRC_STATUS_IN7_STATUS_MASK (0u)
+#endif
+
 #ifndef ITRC_STATUS_IN8_STATUS_MASK
 #define ITRC_STATUS_IN8_STATUS_MASK (0u)
 #endif
 
 #ifndef ITRC_STATUS_IN9_STATUS_MASK
 #define ITRC_STATUS_IN9_STATUS_MASK (0u)
+#endif
+
+#ifndef ITRC_STATUS_IN14_STATUS_MASK
+#define ITRC_STATUS_IN14_STATUS_MASK (0u)
 #endif
 
 #ifndef ITRC_STATUS1_IN17_STATUS_MASK
@@ -269,6 +293,14 @@ typedef enum _itrc_out_signals
      ITRC_STATUS1_IN32_25_STATUS_MASK | ITRC_STATUS1_IN33_STATUS_MASK | ITRC_STATUS1_IN34_STATUS_MASK | \
      ITRC_STATUS1_IN35_STATUS_MASK | ITRC_STATUS1_IN36_STATUS_MASK | ITRC_STATUS1_IN37_STATUS_MASK |    \
      ITRC_STATUS1_IN46_STATUS_MASK | ITRC_STATUS1_IN47_STATUS_MASK)
+/* Inputs 15 to 36 events mask */
+#elif defined(ITRC_STATUS1_IN16_STATUS_MASK) && defined(ITRC_STATUS1_IN36_STATUS)
+#define IN_16_47_EVENTS_MASK                                                                         \
+    (ITRC_STATUS1_IN16_STATUS_MASK | ITRC_STATUS1_IN17_STATUS_MASK | ITRC_STATUS1_IN18_STATUS_MASK | \
+     ITRC_STATUS1_IN19_STATUS_MASK | ITRC_STATUS1_IN20_STATUS_MASK | ITRC_STATUS1_IN21_STATUS_MASK | \
+     ITRC_STATUS1_IN24_STATUS_MASK | ITRC_STATUS1_IN25_STATUS_MASK | ITRC_STATUS1_IN26_STATUS_MASK | \
+     ITRC_STATUS1_IN31_STATUS_MASK | ITRC_STATUS1_IN32_STATUS_MASK | ITRC_STATUS1_IN33_STATUS_MASK | \
+     ITRC_STATUS1_IN34_STATUS_MASK | ITRC_STATUS1_IN35_STATUS_MASK | ITRC_STATUS1_IN36_STATUS_MASK)
 #endif /* ITRC_STATUS1_IN16_STATUS_MASK && ITRC_STATUS1_IN47_STATUS */
 
 /* Output actions mask */
@@ -277,15 +309,28 @@ typedef enum _itrc_out_signals
     (ITRC_STATUS_OUT0_STATUS_MASK | ITRC_STATUS_OUT1_STATUS_MASK | ITRC_STATUS_OUT2_STATUS_MASK | \
      ITRC_STATUS_OUT3_STATUS_MASK | ITRC_STATUS_OUT4_STATUS_MASK | ITRC_STATUS_OUT5_STATUS_MASK | \
      ITRC_STATUS_OUT6_STATUS_MASK)
-#else
+#elif defined(ITRC_STATUS_OUT5_STATUS)
 #define OUT_ACTIONS_MASK                                                                          \
     (ITRC_STATUS_OUT0_STATUS_MASK | ITRC_STATUS_OUT1_STATUS_MASK | ITRC_STATUS_OUT2_STATUS_MASK | \
      ITRC_STATUS_OUT3_STATUS_MASK | ITRC_STATUS_OUT4_STATUS_MASK | ITRC_STATUS_OUT5_STATUS_MASK)
+#else
+#define OUT_ACTIONS_MASK (ITRC_STATUS_OUT0_STATUS_MASK | ITRC_STATUS_OUT1_STATUS_MASK | ITRC_STATUS_OUT2_STATUS_MASK)
 #endif /* ITRC_STATUS_OUT6_STATUS */
 
+#if defined(ITRC_STATUS_OUT6_STATUS)
 #define ITRC_OUT_COUNT (7u)
+#elif defined(ITRC_STATUS_OUT5_STATUS)
+#define ITRC_OUT_COUNT (6u)
+#else
+#define ITRC_OUT_COUNT (3u)
+#endif /* ITRC_STATUS_OUT6_STATUS */
+
 #ifndef ITRC
 #define ITRC ITRC0
+#endif
+
+#ifdef ITRC_0
+#define ITRC0_IRQn ITRC_IRQn
 #endif
 
 /*******************************************************************************
@@ -321,7 +366,7 @@ status_t ITRC_SetActionToEvent(
 /*!
  * @brief Trigger ITRC SW Event 0
  *
- * This funciton set SW_EVENT0 register with value !=0 which triggers ITRC SW Event 0.
+ * This function set SW_EVENT0 register with value !=0 which triggers ITRC SW Event 0.
  *
  * @param base ITRC peripheral base address
  */
@@ -330,7 +375,7 @@ void ITRC_SetSWEvent0(ITRC_Type *base);
 /*!
  * @brief Trigger ITRC SW Event 1
  *
- * This funciton set SW_EVENT1 register with value !=0 which triggers ITRC SW Event 1.
+ * This function set SW_EVENT1 register with value !=0 which triggers ITRC SW Event 1.
  *
  * @param base ITRC peripheral base address
  */
@@ -358,14 +403,13 @@ uint32_t ITRC_GetStatus(ITRC_Type *base);
  */
 status_t ITRC_ClearStatus(ITRC_Type *base, uint32_t word);
 
-#if defined(ITRC_STATUS1_IN16_STATUS_MASK)
 /*!
  * @brief Get ITRC Status 1
  *
  * This function returns ITRC STATUS1 register value.
  *
  * @param base ITRC peripheral base address
- * @return Value of ITRC STATUS1 register
+ * @return Value of ITRC STATUS1 register, if register STATUS1 doesn't exist it return 0
  */
 uint32_t ITRC_GetStatus1(ITRC_Type *base);
 
@@ -380,7 +424,6 @@ uint32_t ITRC_GetStatus1(ITRC_Type *base);
  * return kStatus_Success if success, kStatus_InvalidArgument otherwise
  */
 status_t ITRC_ClearStatus1(ITRC_Type *base, uint32_t word);
-#endif /* defined(ITRC_STATUS1_IN16_STATUS_MASK) */
 
 /*!
  * @brief Clear All ITRC status

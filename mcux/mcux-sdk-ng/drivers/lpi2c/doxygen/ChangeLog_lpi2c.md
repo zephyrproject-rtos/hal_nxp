@@ -1,5 +1,11 @@
 # LPI2C
 
+## [2.6.7]
+
+- Bug Fixes
+  - Fixed MISRA 10.3 and 10.8 issues.
+  - Fixed LPI2C_MasterStop() to send I2C STOP in case of error.
+
 ## [2.6.6]
 
 - Bug Fixes

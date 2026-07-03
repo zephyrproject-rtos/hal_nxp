@@ -25,7 +25,7 @@ extern TSI_Type *const s_tsiBases[];
  ******************************************************************************/
 
 /*! @brief TSI driver version */
-#define FSL_TSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_TSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 
 /*! @brief TSI status flags macro collection */
 #define ALL_FLAGS_MASK (TSI_DATA_EOSF_MASK | TSI_DATA_OUTRGF_MASK)
@@ -596,8 +596,12 @@ typedef enum _tsi_ssc_prescaler
 typedef struct _tsi_channel_mask
 {
     uint32_t channel_31_0;   /*!< channels 0-31 mask */
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     uint32_t channel_63_32;  /*!< channels 32-63 mask */
+#endif
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     uint32_t channel_69_64;  /*!< channels 64-69 mask */
+#endif
 } tsi_channel_mask_t;
 #endif
 
@@ -970,8 +974,12 @@ static inline void TSI_StartSoftwareTrigger(TSI_Type *base)
 static inline void TSI_SetSelfCapMeasuredChannels(TSI_Type *base, const tsi_channel_mask_t *selfChannelMask)
 {
     base->SELF_SEL_31_0 = TSI_SELF_SEL_31_0_AS_SELF_31_0(selfChannelMask->channel_31_0);
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     base->SELF_SEL_63_32 = TSI_SELF_SEL_63_32_AS_SELF_63_32(selfChannelMask->channel_63_32);
+#endif
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     base->SELF_SEL_69_64 = TSI_SELF_SEL_69_64_AS_SELF_69_64(selfChannelMask->channel_69_64);
+#endif
 }
 
 /*!
@@ -984,8 +992,12 @@ static inline void TSI_SetSelfCapMeasuredChannels(TSI_Type *base, const tsi_chan
 static inline void TSI_GetSelfCapEnabledChannels(TSI_Type *base, tsi_channel_mask_t *mask)
 {
     mask->channel_31_0  = base->SELF_SEL_31_0;
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     mask->channel_63_32 = base->SELF_SEL_63_32;
+#endif
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     mask->channel_69_64 = base->SELF_SEL_69_64;
+#endif
 }
 #endif
 
@@ -1003,21 +1015,29 @@ static inline void TSI_SetSelfCapMeasuredChannel(TSI_Type *base, uint8_t channel
 
 #if defined(FSL_FEATURE_TSI_HAS_SELF_SEL) && FSL_FEATURE_TSI_HAS_SELF_SEL
     base->SELF_SEL_31_0 &= (~TSI_SELF_SEL_31_0_AS_SELF_31_0_MASK);
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     base->SELF_SEL_63_32 &= (~TSI_SELF_SEL_63_32_AS_SELF_63_32_MASK);
+#endif
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     base->SELF_SEL_69_64 &= (~TSI_SELF_SEL_69_64_AS_SELF_69_64_MASK);
+#endif
 
     if (channel < 32U)
     {
         base->SELF_SEL_31_0 |= TSI_SELF_SEL_31_0_AS_SELF_31_0(1U << channel);
     }
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     else if (channel < 64U)
     {
         base->SELF_SEL_63_32 |= TSI_SELF_SEL_63_32_AS_SELF_63_32(1U << (channel - 32U));
     }
+#endif
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     else
     {
         base->SELF_SEL_69_64 |= TSI_SELF_SEL_69_64_AS_SELF_69_64(1U << (channel - 64U));
     }
+#endif
 #else
     base->CONFIG = ((base->CONFIG) & ~TSI_CONFIG_TSICH_MASK) | (TSI_CONFIG_TSICH(channel));
 #endif
@@ -1035,23 +1055,27 @@ static inline uint8_t TSI_GetSelfCapMeasuredChannel(TSI_Type *base)
 {
 #if defined(FSL_FEATURE_TSI_HAS_SELF_SEL) && FSL_FEATURE_TSI_HAS_SELF_SEL
     uint32_t mask = base->SELF_SEL_31_0;
-    
+
     if (mask != 0U)
     {
         return (uint8_t)FSL_TSI_CTZ(mask);
     }
 
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     mask = base->SELF_SEL_63_32;
     if (mask != 0U)
     {
         return (uint8_t)(32U + FSL_TSI_CTZ(mask));
     }
+#endif
 
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     mask = base->SELF_SEL_69_64;
     if (mask != 0U)
     {
         return (uint8_t)(64U + FSL_TSI_CTZ(mask));
     }
+#endif
 
     return 0xFFU;
 #else
@@ -1071,8 +1095,12 @@ static inline uint8_t TSI_GetSelfCapMeasuredChannel(TSI_Type *base)
 static inline void TSI_SetShieldChannel(TSI_Type *base, tsi_channel_mask_t selfChannelMask )
 {
     base->SHIELD_SEL_31_0 = TSI_SHIELD_SEL_31_0_AS_SHIELD_31_0(selfChannelMask.channel_31_0);
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     base->SHIELD_SEL_63_32 = TSI_SHIELD_SEL_63_32_AS_SHIELD_63_32(selfChannelMask.channel_63_32);
+#endif
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     base->SHIELD_SEL_69_64 = TSI_SHIELD_SEL_69_64_AS_SHIELD_69_64(selfChannelMask.channel_69_64);
+#endif
 }
 #else /* FSL_FEATURE_TSI_HAS_SHIELD_SEL == 0 */
 
@@ -1250,7 +1278,7 @@ static inline void TSI_SetDvolt(TSI_Type *base, tsi_dvolt_option_t dvolt)
  */
 static inline void TSI_EnableNoiseCancellation(TSI_Type *base, bool enableCancellation)
 {
-    base->CONFIG = ((base->CONFIG) & ~TSI_CONFIG_S_NOISE_MASK) | (TSI_CONFIG_S_NOISE(enableCancellation));
+    base->CONFIG = ((base->CONFIG) & ~TSI_CONFIG_S_NOISE_MASK) | (TSI_CONFIG_S_NOISE(enableCancellation ? 1U : 0U));
 }
 
 #if defined(FSL_FEATURE_TSI_HAS_MUTUAL_TX_SEL) && FSL_FEATURE_TSI_HAS_MUTUAL_TX_SEL
@@ -1264,8 +1292,12 @@ static inline void TSI_EnableNoiseCancellation(TSI_Type *base, bool enableCancel
 static inline void TSI_SetMutualCapTxChannels(TSI_Type *base, const tsi_channel_mask_t *txChannelMask)
 {
     base->MUTUAL_TX_SEL_31_0 = TSI_MUTUAL_TX_SEL_31_0_AS_MUTUAL_TX_31_0(txChannelMask->channel_31_0);
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     base->MUTUAL_TX_SEL_63_32 = TSI_MUTUAL_TX_SEL_63_32_AS_MUTUAL_TX_63_32(txChannelMask->channel_63_32);
+#endif
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     base->MUTUAL_TX_SEL_69_64 = TSI_MUTUAL_TX_SEL_69_64_AS_MUTUAL_TX_69_64(txChannelMask->channel_69_64);
+#endif
 }
 
 /*!
@@ -1278,8 +1310,12 @@ static inline void TSI_SetMutualCapTxChannels(TSI_Type *base, const tsi_channel_
 static inline void TSI_GetTxMutualCapMeasuredChannels(TSI_Type *base, tsi_channel_mask_t *mask)
 {
     mask->channel_31_0  = base->MUTUAL_TX_SEL_31_0;
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     mask->channel_63_32 = base->MUTUAL_TX_SEL_63_32;
+#endif
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     mask->channel_69_64 = base->MUTUAL_TX_SEL_69_64;
+#endif
 }
 #endif
 /*!
@@ -1296,21 +1332,29 @@ static inline void TSI_SetMutualCapTxChannel(TSI_Type *base, uint8_t txChannel)
     assert(txChannel < (uint8_t)FSL_FEATURE_TSI_CHANNEL_COUNT);
 #if defined(FSL_FEATURE_TSI_HAS_MUTUAL_TX_SEL) && FSL_FEATURE_TSI_HAS_MUTUAL_TX_SEL
     base->MUTUAL_TX_SEL_31_0 &= (~TSI_MUTUAL_TX_SEL_31_0_AS_MUTUAL_TX_31_0_MASK);
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     base->MUTUAL_TX_SEL_63_32 &= (~TSI_MUTUAL_TX_SEL_63_32_AS_MUTUAL_TX_63_32_MASK);
+#endif
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     base->MUTUAL_TX_SEL_69_64 &= (~TSI_MUTUAL_TX_SEL_69_64_AS_MUTUAL_TX_69_64_MASK);
+#endif
 
     if (txChannel < 32U)
     {
         base->MUTUAL_TX_SEL_31_0 |= TSI_MUTUAL_TX_SEL_31_0_AS_MUTUAL_TX_31_0(1U << txChannel);
     }
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     else if (txChannel < 64U)
     {
         base->MUTUAL_TX_SEL_63_32 |= TSI_MUTUAL_TX_SEL_63_32_AS_MUTUAL_TX_63_32(1U << (txChannel - 32U));
     }
+#endif
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     else
     {
         base->MUTUAL_TX_SEL_69_64 |= TSI_MUTUAL_TX_SEL_69_64_AS_MUTUAL_TX_69_64(1U << (txChannel - 64U));
     }
+#endif
 #else
     base->CONFIG_MUTUAL =
         ((base->CONFIG_MUTUAL) & ~TSI_CONFIG_MUTUAL_M_SEL_TX_MASK) | (TSI_CONFIG_MUTUAL_M_SEL_TX(txChannel));
@@ -1329,23 +1373,27 @@ static inline uint8_t TSI_GetTxMutualCapMeasuredChannel(TSI_Type *base)
 {
 #if defined(FSL_FEATURE_TSI_HAS_MUTUAL_TX_SEL) && FSL_FEATURE_TSI_HAS_MUTUAL_TX_SEL
     uint32_t mask = base->MUTUAL_TX_SEL_31_0;
-    
+
     if (mask != 0U)
     {
         return (uint8_t)FSL_TSI_CTZ(mask);
     }
 
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     mask = base->MUTUAL_TX_SEL_63_32;
     if (mask != 0U)
     {
         return (uint8_t)(32U + FSL_TSI_CTZ(mask));
     }
+#endif
 
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     mask = base->MUTUAL_TX_SEL_69_64;
     if (mask != 0U)
     {
         return (uint8_t)(64U + FSL_TSI_CTZ(mask));
     }
+#endif
 
     return 0xFFU;
 #else
@@ -1365,8 +1413,12 @@ static inline uint8_t TSI_GetTxMutualCapMeasuredChannel(TSI_Type *base)
 static inline void TSI_SetMutualCapRxChannels(TSI_Type *base, const tsi_channel_mask_t *rxChannelMask)
 {
     base->MUTUAL_RX_SEL_31_0 = TSI_MUTUAL_RX_SEL_31_0_AS_MUTUAL_RX_31_0(rxChannelMask->channel_31_0);
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     base->MUTUAL_RX_SEL_63_32 = TSI_MUTUAL_RX_SEL_63_32_AS_MUTUAL_RX_63_32(rxChannelMask->channel_63_32);
+#endif
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     base->MUTUAL_RX_SEL_69_64 = TSI_MUTUAL_RX_SEL_69_64_AS_MUTUAL_RX_69_64(rxChannelMask->channel_69_64);
+#endif
 }
 /*!
  * @brief Get all enabled RX channel mask in mutual-cap mode.
@@ -1378,8 +1430,12 @@ static inline void TSI_SetMutualCapRxChannels(TSI_Type *base, const tsi_channel_
 static inline void TSI_GetRxMutualCapMeasuredChannels(TSI_Type *base, tsi_channel_mask_t *mask)
 {
     mask->channel_31_0  = base->MUTUAL_RX_SEL_31_0;
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     mask->channel_63_32 = base->MUTUAL_RX_SEL_63_32;
+#endif
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     mask->channel_69_64 = base->MUTUAL_RX_SEL_69_64;
+#endif
 }
 #endif
 /*!
@@ -1396,21 +1452,29 @@ static inline void TSI_SetMutualCapRxChannel(TSI_Type *base, uint8_t rxChannel)
     assert(rxChannel < (uint8_t)FSL_FEATURE_TSI_CHANNEL_COUNT);
 #if defined(FSL_FEATURE_TSI_HAS_MUTUAL_RX_SEL) && FSL_FEATURE_TSI_HAS_MUTUAL_RX_SEL
     base->MUTUAL_RX_SEL_31_0 &= (~TSI_MUTUAL_RX_SEL_31_0_AS_MUTUAL_RX_31_0_MASK);
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     base->MUTUAL_RX_SEL_63_32 &= (~TSI_MUTUAL_RX_SEL_63_32_AS_MUTUAL_RX_63_32_MASK);
+#endif
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     base->MUTUAL_RX_SEL_69_64 &= (~TSI_MUTUAL_RX_SEL_69_64_AS_MUTUAL_RX_69_64_MASK);
+#endif
 
     if (rxChannel < 32U)
     {
         base->MUTUAL_RX_SEL_31_0 |= TSI_MUTUAL_RX_SEL_31_0_AS_MUTUAL_RX_31_0(1U << rxChannel);
     }
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     else if (rxChannel < 64U)
     {
         base->MUTUAL_RX_SEL_63_32 |= TSI_MUTUAL_RX_SEL_63_32_AS_MUTUAL_RX_63_32(1U << (rxChannel - 32U));
     }
+#endif
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     else
     {
         base->MUTUAL_RX_SEL_69_64 |= TSI_MUTUAL_RX_SEL_69_64_AS_MUTUAL_RX_69_64(1U << (rxChannel - 64U));
     }
+#endif
 #else
     base->CONFIG_MUTUAL =
         ((base->CONFIG_MUTUAL) & ~TSI_CONFIG_MUTUAL_M_SEL_RX_MASK) | (TSI_CONFIG_MUTUAL_M_SEL_RX(rxChannel));
@@ -1429,23 +1493,27 @@ static inline uint8_t TSI_GetRxMutualCapMeasuredChannel(TSI_Type *base)
 {
 #if defined(FSL_FEATURE_TSI_HAS_MUTUAL_RX_SEL) && FSL_FEATURE_TSI_HAS_MUTUAL_RX_SEL
     uint32_t mask = base->MUTUAL_RX_SEL_31_0;
-    
+
     if (mask != 0U)
     {
         return (uint8_t)FSL_TSI_CTZ(mask);
     }
 
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 32U)
     mask = base->MUTUAL_RX_SEL_63_32;
     if (mask != 0U)
     {
         return (uint8_t)(32U + FSL_TSI_CTZ(mask));
     }
+#endif
 
+#if (FSL_FEATURE_TSI_CHANNEL_COUNT > 64U)
     mask = base->MUTUAL_RX_SEL_69_64;
     if (mask != 0U)
     {
         return (uint8_t)(64U + FSL_TSI_CTZ(mask));
     }
+#endif
 
     return 0xFFU;
 #else

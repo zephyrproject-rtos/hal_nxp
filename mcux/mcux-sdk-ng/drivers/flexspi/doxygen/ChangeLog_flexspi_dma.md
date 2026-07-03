@@ -1,5 +1,13 @@
 # FLEXSPI DMA Driver
 
+## [2.2.3]
+
+- Bug Fixes
+  - Fixed CERT INT31-C violations in FLEXSPI_WriteDataDMA and FLEXSPI_ReadDataDMA: moved uint8_t
+    cast outside multiplication and added masks before narrowing conversions.
+  - Fixed CERT INT30-C violations: added assert guards before power-of-2 checks to prevent
+    unsigned wrap on handle->count - 1U.
+
 ## [2.2.2]
 
 - Bug Fixes

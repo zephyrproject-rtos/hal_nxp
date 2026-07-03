@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_CSI_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+#define FSL_CSI_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*! @} */
 
 #define CSI_REG_CR1(base)       (base)->CR1

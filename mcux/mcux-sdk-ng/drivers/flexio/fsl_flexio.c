@@ -562,7 +562,7 @@ void FLEXIO_CommonDriverIRQHandler(uint32_t instance)
 
     if (instance < ARRAY_SIZE(s_flexioBases))
     {
-        for (index = 0U; index < FLEXIO_HANDLE_COUNT; index++)
+        for (index = 0U; index < (uint8_t)FLEXIO_HANDLE_COUNT; index++)
         {
             if ((s_flexioHandle[index] != NULL) &&
                 (MSDK_REG_SECURE_ADDR(((flexio_simulated_type_t *)s_flexioType[index])->flexioBase) ==

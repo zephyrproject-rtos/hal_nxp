@@ -1,5 +1,10 @@
 # DMAMUX
 
+## [2.1.4]
+
+- Bug Fixes
+  - Fixed CERT INT31-C violation in DMAMUX_SetSource by adding non-negative assertion and explicit cast.
+
 ## [2.1.3]
 
 - Improvements

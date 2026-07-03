@@ -1,5 +1,10 @@
 # KBI
 
+## [2.0.4]
+
+- Bug Fixes
+  - Fixed CERT INT31-C violations.
+
 ## [2.0.3]
 
 - Bug Fixes

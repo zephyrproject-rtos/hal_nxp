@@ -1,5 +1,10 @@
 # FLEXIO_UART
 
+## [2.6.5]
+
+- Bug Fixes
+  - Fixed MISRA 10.4 issues.
+
 ## [2.6.4]
 
 - Improvements

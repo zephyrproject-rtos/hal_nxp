@@ -1,5 +1,10 @@
 # LPSPI
 
+## [2.2.11]
+
+- Bug Fixes
+  - Fixed calculation of SCK-to-SCK delay.
+
 ## [2.2.10]
 
 - Bug Fixes

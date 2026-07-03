@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_LCDIC_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_LCDIC_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*! @} */
 
 /*! @brief Delay used in LCDIC_ResetState
@@ -187,9 +187,15 @@ typedef struct _lcdic_config
     uint8_t spiCtrlFlags; /*!< SPI control flags, it is OR'ed value of @ref _lcdic_spi_ctrl_flags. */
 
     /* TE. */
-    uint8_t teTimeoutTime_Timer1;  /*!< Tearing effect timeout time. T(te_to)=T(timer1)*teTimeoutTime_Timer1. */
+    uint8_t teTimeoutTime_Timer1;  /*!< Tearing effect timeout time. T(te_to)=T(timer1)*teTimeoutTime_Timer1.
+                                      Note: teTimeoutTime_Timer1 (TE_TO) and teSyncWaitTime_Timer1 (TTEW) share the
+                                      same hardware timer and cannot both be non-zero simultaneously. Set this to 0
+                                      when teSyncWaitTime_Timer1 is non-zero. */
     uint8_t teSyncWaitTime_Timer1; /*!< Tearing effect signal synchronization wait time.
-                                      T(tew)=T(timer1)*teSyncWaitTime_Timer1. */
+                                      T(tew)=T(timer1)*teSyncWaitTime_Timer1.
+                                      Note: teTimeoutTime_Timer1 (TE_TO) and teSyncWaitTime_Timer1 (TTEW) share the
+                                      same hardware timer and cannot both be non-zero simultaneously. Set this to 0
+                                      when teTimeoutTime_Timer1 is non-zero. */
 
     /* Command. */
     uint8_t cmdShortTimeout_Timer0; /*!< Command short timeout. T(cmd_short_to)=T(timer0)*cmdShortTimeout_Timer0. */

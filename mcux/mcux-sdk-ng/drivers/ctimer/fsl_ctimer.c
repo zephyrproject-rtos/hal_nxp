@@ -203,7 +203,6 @@ status_t CTIMER_SetupPwm(CTIMER_Type *base,
                          bool enableInt)
 {
     assert(pwmFreq_Hz > 0U);
-    assert(dutyCyclePercent <= 100U);
 
     uint32_t reg;
     uint32_t period;
@@ -211,6 +210,11 @@ status_t CTIMER_SetupPwm(CTIMER_Type *base,
     uint64_t prescaleValue;
     uint64_t timerClock;
     uint32_t index = CTIMER_GetInstance(base);
+
+    if (dutyCyclePercent > 100U)
+    {
+        return kStatus_Fail;
+    }
 
     prescaleValue = (uint64_t)base->PR + 1U;
     timerClock    = (uint64_t)srcClock_Hz / prescaleValue;
@@ -379,7 +383,11 @@ status_t CTIMER_UpdatePwmDutycycle(CTIMER_Type *base,
 {
     uint32_t period;
     uint64_t pulsePeriod;
-    assert(dutyCyclePercent <= 100U);
+
+    if (dutyCyclePercent > 100U)
+    {
+        return kStatus_Fail;
+    }
 
     /* Specified channel pwmPeriodChannel  defines the PWM period */
     period = base->MR[pwmPeriodChannel];

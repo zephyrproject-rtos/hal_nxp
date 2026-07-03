@@ -1,5 +1,12 @@
 # XSPI
 
+## [2.7.5]
+
+- Bug Fixes
+  - Fixed CERT-C INT30-C violations in `XSPI_WriteBlockingTG` and `XSPI_CommonIRQHandler`.
+  - Fixed `XSPI1_0`–`XSPI1_4` IRQ handlers to route through `XSPI_DriverIRQHandler` with proper
+    instance and envId bounds validation.
+
 ## [2.7.4]
 
 - New Features

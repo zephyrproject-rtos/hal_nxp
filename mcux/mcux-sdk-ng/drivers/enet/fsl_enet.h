@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Defines the driver version. */
-#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 11, 2))
+#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 11, 3))
 /*! @} */
 
 /*! @name ENET DESCRIPTOR QUEUE */
@@ -170,9 +170,9 @@ enum
 /*! @brief Defines the MII/RMII/RGMII mode for data interface between the MAC and the PHY. */
 typedef enum _enet_mii_mode
 {
-    kENET_MiiMode  = 0U, /*!< MII mode for data interface. */
-    kENET_RmiiMode = 1U, /*!< RMII mode for data interface. */
-    kENET_RgmiiMode = 2U /*!< RGMII mode for data interface.  */
+    kENET_MiiMode   = 0U, /*!< MII mode for data interface. */
+    kENET_RmiiMode  = 1U, /*!< RMII mode for data interface. */
+    kENET_RgmiiMode = 2U  /*!< RGMII mode for data interface.  */
 } enet_mii_mode_t;
 
 /*! @brief Defines the 10/100/1000 Mbps speed for the MII data interface.
@@ -181,9 +181,9 @@ typedef enum _enet_mii_mode
  */
 typedef enum _enet_mii_speed
 {
-    kENET_MiiSpeed10M  = 0U, /*!< Speed 10 Mbps. */
-    kENET_MiiSpeed100M = 1U, /*!< Speed 100 Mbps. */
-    kENET_MiiSpeed1000M = 2U /*!< Speed 1000M bps. */
+    kENET_MiiSpeed10M   = 0U, /*!< Speed 10 Mbps. */
+    kENET_MiiSpeed100M  = 1U, /*!< Speed 100 Mbps. */
+    kENET_MiiSpeed1000M = 2U  /*!< Speed 1000M bps. */
 } enet_mii_speed_t;
 
 /*! @brief Defines the half or full duplex for the MII data interface. */

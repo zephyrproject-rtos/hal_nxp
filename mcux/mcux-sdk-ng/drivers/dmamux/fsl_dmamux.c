@@ -76,7 +76,12 @@ static uint32_t DMAMUX_GetInstance(DMAMUX_Type *base)
 void DMAMUX_Init(DMAMUX_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    CLOCK_EnableClock(s_dmamuxClockName[DMAMUX_GetInstance(base)]);
+    uint32_t instance = DMAMUX_GetInstance(base);
+    /* Guard against out-of-bounds index when assert is disabled (CERT ARR30-C / STR31-C). */
+    if (instance < ARRAY_SIZE(s_dmamuxClockName))
+    {
+        CLOCK_EnableClock(s_dmamuxClockName[instance]);
+    }
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
@@ -90,6 +95,11 @@ void DMAMUX_Init(DMAMUX_Type *base)
 void DMAMUX_Deinit(DMAMUX_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    CLOCK_DisableClock(s_dmamuxClockName[DMAMUX_GetInstance(base)]);
+    uint32_t instance = DMAMUX_GetInstance(base);
+    /* Guard against out-of-bounds index when assert is disabled (CERT ARR30-C / STR31-C). */
+    if (instance < ARRAY_SIZE(s_dmamuxClockName))
+    {
+        CLOCK_DisableClock(s_dmamuxClockName[instance]);
+    }
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }

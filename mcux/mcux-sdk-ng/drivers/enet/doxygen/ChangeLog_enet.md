@@ -1,5 +1,11 @@
 # ENET
 
+## [2.11.3]
+
+- Bug Fixes
+  - Fixed a condition in the receive path where software could read receive buffer
+    descriptor fields directly while hardware/DMA could still be updating them.
+
 ## [2.11.2]
 
 - Improvements

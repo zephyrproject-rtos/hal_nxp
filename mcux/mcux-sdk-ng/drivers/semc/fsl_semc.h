@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SEMC driver version. */
-#define FSL_SEMC_DRIVER_VERSION (MAKE_VERSION(2, 8, 0))
+#define FSL_SEMC_DRIVER_VERSION (MAKE_VERSION(2, 8, 1))
 /*! @} */
 
 /*! @brief SEMC status, _semc_status. */

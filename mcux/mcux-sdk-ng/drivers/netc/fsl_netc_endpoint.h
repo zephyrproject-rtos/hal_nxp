@@ -319,16 +319,16 @@ typedef struct _ep_config
 typedef struct _ep_config_const
 {
     netc_hw_si_idx_t si;    /*!< Station interface index. */
-    uint32_t rxRingUse : 7; /*!< Number of Rx Rings to be used, when enable Rx ring group, this equal to the sum of all
+    uint8_t rxRingUse;      /*!< Number of Rx Rings to be used, when enable Rx ring group, this equal to the sum of all
                           Rx group rings. */
-    uint32_t txRingUse : 7; /*!< Number of Tx Rings to be used, note that when SI is Switch management ENETC SI, the
+    uint8_t txRingUse;      /*!< Number of Tx Rings to be used, note that when SI is Switch management ENETC SI, the
                           number not include Tx ring 0. */
-    uint32_t rxBdrGroupNum : 2;      /*!< Rx BD ring group number, range in 0 ~ 2. */
-    uint32_t ringPerBdrGroup : 3;    /*!< The ring number in every Rx BD ring group, range in 1 ~ 8, active when
+    uint8_t rxBdrGroupNum;           /*!< Rx BD ring group number, range in 0 ~ 2. */
+    uint8_t ringPerBdrGroup;         /*!< The ring number in every Rx BD ring group, range in 1 ~ 8, active when
                                        rxBdrGroupNum not equal zero. */
-    bool rxCacheMaintain : 1;        /*!< Enable/Disable Rx buffer cache maintain in driver. */
-    bool txCacheMaintain : 1;        /*!< Enable/Disable Tx buffer cache maintain in driver. */
-    bool rxZeroCopy : 1;             /*!< Enable/Disable zero-copy receive mode. */
+    bool rxCacheMaintain;            /*!< Enable/Disable Rx buffer cache maintain in driver. */
+    bool txCacheMaintain;            /*!< Enable/Disable Tx buffer cache maintain in driver. */
+    bool rxZeroCopy;                 /*!< Enable/Disable zero-copy receive mode. */
     uint8_t entryNum;                /*!< MSIX entry number. */
     ep_reclaim_cb_t reclaimCallback; /*!< Callback for reclaimed Tx frames. */
     void *userData;                  /*!< User data, return in callback. */

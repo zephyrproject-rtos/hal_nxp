@@ -218,8 +218,8 @@ static uint8_t SEMC_ConvertTiming(uint32_t time_ns, uint32_t clkSrc_Hz)
         return 0x00U;
     }
 
-    /* Ceiling(time_ps / tClk_ps). */
-    uint64_t requiredCycles = (time_ps + tClk_ps - 1ULL) / tClk_ps;
+    /* Ceiling(time_ps / tClk_ps) without overflow: quotient + (remainder != 0 ? 1 : 0). */
+    uint64_t requiredCycles = (time_ps / tClk_ps) + ((time_ps % tClk_ps != 0ULL) ? 1ULL : 0ULL);
     if (requiredCycles == 0ULL)
     {
         return 0x00U;

@@ -1,5 +1,11 @@
 # FLEXSPI EDMA Driver
 
+## [2.3.4]
+
+- Bug Fixes
+  - Fixed CERT INT31-C violations in FLEXSPI_TransferEDMA: added explicit uint32_t casts and
+    masks before narrowing to uint8_t for handle->nbytes and FLEXSPI_CalculatePower arguments.
+
 ## [2.3.3]
 
 - Bug Fixes

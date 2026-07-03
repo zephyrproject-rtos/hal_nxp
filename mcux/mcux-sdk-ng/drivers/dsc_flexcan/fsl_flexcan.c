@@ -393,13 +393,10 @@ void FLEXCAN_Init(CAN_Type *base, const flexcan_config_t *psConfig)
     /* Set the maximum number of Message Buffers */
     mcrTemp = (mcrTemp & ~CAN_MCR_MAXMB_MASK) | CAN_MCR_MAXMB((uint32_t)psConfig->u8MaxMsgBufNum - 1U);
 
-    if (1 == FSL_FEATURE_FLEXCAN_INSTANCE_HAS_SELF_WAKEn(base))
-    {
-        /* Enable Self Wake Up Mode and configure the wake up source. */
-        mcrTemp = (psConfig->bEnableSelfWakeup) ? (mcrTemp | CAN_MCR_SLFWAK_MASK) : (mcrTemp & ~CAN_MCR_SLFWAK_MASK);
-        mcrTemp = (kFLEXCAN_WakeupSrcFiltered == psConfig->eWakeupSrc) ? (mcrTemp | CAN_MCR_WAKSRC_MASK) :
-                                                                         (mcrTemp & ~CAN_MCR_WAKSRC_MASK);
-    }
+    /* Enable Self Wake Up Mode and configure the wake up source. */
+    mcrTemp = (psConfig->bEnableSelfWakeup) ? (mcrTemp | CAN_MCR_SLFWAK_MASK) : (mcrTemp & ~CAN_MCR_SLFWAK_MASK);
+    mcrTemp = (kFLEXCAN_WakeupSrcFiltered == psConfig->eWakeupSrc) ? (mcrTemp | CAN_MCR_WAKSRC_MASK) :
+                                                                     (mcrTemp & ~CAN_MCR_WAKSRC_MASK);
 
     /* Enable Individual Rx Masking? */
     mcrTemp = (psConfig->bEnableIndividMask) ? (mcrTemp | CAN_MCR_IRMQ_MASK) : (mcrTemp & ~CAN_MCR_IRMQ_MASK);
@@ -1786,12 +1783,8 @@ static void FLEXCAN_Reset(CAN_Type *base)
 
     /* Reset MCR register. */
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_GLITCH_FILTER) && FSL_FEATURE_FLEXCAN_HAS_GLITCH_FILTER)
-    base->MCR |=
-        CAN_MCR_WRNEN_MASK | CAN_MCR_MAXMB((uint32_t)FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(base) - 1U);
-    if (1 == FSL_FEATURE_FLEXCAN_INSTANCE_HAS_SELF_WAKEn(base))
-    {
-        base->MCR |= CAN_MCR_WAKSRC_MASK;
-    }
+    base->MCR |= CAN_MCR_WRNEN_MASK | CAN_MCR_WAKSRC_MASK |
+                 CAN_MCR_MAXMB((uint32_t)FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(base) - 1U);
 #else
     base->MCR |=
         CAN_MCR_WRNEN_MASK | CAN_MCR_MAXMB((uint32_t)FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(base) - 1U);

@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief eDMA driver version */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 0)) /*!< Version 2.6.0. */
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 1)) /*!< Version 2.6.1. */
 /*! @} */
 
 /*! @brief eDMA transfer configuration */
@@ -616,8 +616,9 @@ static inline void EDMA_EnableAutoStopRequest(DMA_Type *base, uint32_t channel, 
 {
     assert(channel < (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL);
 
-    base->CH[channel].TCD_CSR =
-        (base->CH[channel].TCD_CSR & (~(uint16_t)DMA_TCD_CSR_DREQ_MASK)) | DMA_TCD_CSR_DREQ((enable ? 1U : 0U));
+    base->CH[channel].TCD_CSR = (uint16_t)(
+        ((base->CH[channel].TCD_CSR & MCUX_MASK_INVERT_16(DMA_TCD_CSR_DREQ_MASK)) |
+         DMA_TCD_CSR_DREQ((enable ? 1U : 0U))));
 }
 
 /*!
@@ -752,7 +753,7 @@ static inline void EDMA_TcdSetBandWidth(edma_tcd_t *tcd, edma_bandwidth_t bandWi
     assert(tcd != NULL);
     assert(((uint32_t)tcd & 0x1FU) == 0U);
 
-    tcd->CSR = (tcd->CSR & (~(uint16_t)DMA_TCD_CSR_BWC_MASK)) | DMA_TCD_CSR_BWC(bandWidth);
+    tcd->CSR = (uint16_t)(((tcd->CSR & MCUX_MASK_INVERT_16(DMA_TCD_CSR_BWC_MASK)) | DMA_TCD_CSR_BWC(bandWidth)));
 }
 
 /*!
@@ -781,7 +782,8 @@ static inline void EDMA_TcdEnableAutoStopRequest(edma_tcd_t *tcd, bool enable)
     assert(tcd != NULL);
     assert(((uint32_t)tcd & 0x1FU) == 0U);
 
-    tcd->CSR = (tcd->CSR & (~(uint16_t)DMA_TCD_CSR_DREQ_MASK)) | DMA_TCD_CSR_DREQ((enable ? 1U : 0U));
+    tcd->CSR = (uint16_t)(
+        ((tcd->CSR & MCUX_MASK_INVERT_16(DMA_TCD_CSR_DREQ_MASK)) | DMA_TCD_CSR_DREQ((enable ? 1U : 0U))));
 }
 
 /*!
@@ -1069,7 +1071,9 @@ static inline uint32_t EDMA_GetUnusedTCDNumber(edma_handle_t *handle)
 {
     int8_t tmpTcdSize = handle->tcdSize;
     int8_t tmpTcdUsed = handle->tcdUsed;
-    return ((uint32_t)tmpTcdSize - (uint32_t)tmpTcdUsed);
+    assert(tmpTcdUsed >= 0);
+    assert(tmpTcdSize >= tmpTcdUsed);
+    return ((uint32_t)(uint8_t)tmpTcdSize - (uint32_t)(uint8_t)tmpTcdUsed);
 }
 
 /*!

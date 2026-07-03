@@ -32,9 +32,13 @@ void CE_Init(ce_copy_image_t *ceCopyImage)
     CE_InstallFirmware(ceCopyImage);
 #elif (defined(KW43_core0_SERIES) || defined(MCXW70_core0_SERIES))
     assert(NULL != ceCopyImage);
-    assert(0U != ceCopyImage->destAddr);
+    assert(0U != ceCopyImage->srcAddr);
 
-    CE_InstallFirmware(ceCopyImage);
+    if (0U != ceCopyImage->destAddr)
+    {
+        /* Copy firmware from Flash to SRAM */
+        CE_InstallFirmware(ceCopyImage);
+    }
 #endif
 
     CE_InitWithoutFirmware();
@@ -67,11 +71,22 @@ void CE_Init(ce_copy_image_t *ceCopyImage)
      * configured SRAM access permissions, but these permissions are mapped to a
      * specific DID. Therefore, it's necessary to configure the DSP's DID in TRDC
      * to match the DID that has SRAM access permissions. */
-    TRDC_0_MGR->MDA_DFMT0[6].MDA_W_DFMT0[0] = 0x80000011;
+    TRDC_0_MGR->MDA_DFMT0[6].MDA_W_DFMT0[0] = 0x80000011U;
+    /* Configure MBC3 GLBAC1: read and execute allowed for all security/privilege levels on Flash. */
+    TRDC_0_MGR->MBC_INDEX[3].MBC_MEMN_GLBAC[1] = 0x5555U;
     /* Unlock SYSCON */
     SYSCON->AUTHENTICATE = SYSCON_UNLOCK_CODE;
     /* Set ZENV vector start address */
-    SYSCON->ZENV_CTRL = ceCopyImage->destAddr;
+    if (0U != ceCopyImage->destAddr)
+    {
+        /* DSPV-lite load firmware from SRAM */
+        SYSCON->ZENV_CTRL = ceCopyImage->destAddr;
+    }
+    else
+    {
+        /* DSPV-lite load firmware from Flash */
+        SYSCON->ZENV_CTRL = ceCopyImage->srcAddr;
+    }
     /* Release reset of ZENV CORE */
     SYSCON->ZENV_RESET_CTRL = 0UL;
     /* Lock SYSCON again */

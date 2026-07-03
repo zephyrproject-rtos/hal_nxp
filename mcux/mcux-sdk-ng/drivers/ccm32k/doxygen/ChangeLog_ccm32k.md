@@ -1,5 +1,11 @@
 # CCM32K
 
+## [2.2.2]
+
+- Bug Fixes
+  - Fixed MISRA C-2012 Rule 10.1 violation in `CCM32K_SetClockMonitorConfig`:
+    changed `assert(config)` to `assert(config != NULL)`.
+
 ## [2.2.1]
 
 - Bug Fixes

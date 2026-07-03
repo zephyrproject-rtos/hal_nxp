@@ -1239,6 +1239,7 @@ void ESAI_CommonDriverIRQHandler(uint32_t instance)
     }
     SDK_ISR_EXIT_BARRIER;
 }
+#endif
 
 #ifdef AUDIO__ESAI0
 #define ESAI AUDIO__ESAI0

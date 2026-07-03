@@ -1,5 +1,10 @@
 # WDOG
 
+## [2.0.3]
+
+- Bug Fixes
+  - Fixed CERT INT31-C violations in WDOG_Init, WDOG_Disable, WDOG_EnableInterrupts and WDOG_DisableInterrupts (MCUX-87729).
+
 ## [2.0.2]
 
 - Improvements

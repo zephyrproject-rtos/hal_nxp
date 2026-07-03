@@ -23,12 +23,13 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief GPIO driver version. */
-#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 8, 5))
+#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 8, 6))
 /*! @} */
 
 #if defined(FSL_FEATURE_GPIO_REGISTERS_WIDTH) && (FSL_FEATURE_GPIO_REGISTERS_WIDTH == 8U)
-#define GPIO_FIT_REG(value) \
-    ((uint8_t)(value)) /*!< For some platforms with 8-bit register width, cast the type to uint8_t */
+/*!< For some platforms with 8-bit register width, cast the type to uint8_t. Mask with 0xFFU to make
+     truncation from wider integer types explicit (CERT INT31-C). */
+#define GPIO_FIT_REG(value) ((uint8_t)((value) & 0xFFU))
 #else
 #define GPIO_FIT_REG(value) ((uint32_t)(value))
 #endif /*FSL_FEATURE_GPIO_REGISTERS_WIDTH*/

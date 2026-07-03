@@ -231,6 +231,10 @@ RAMFUNC static status_t XSPI_StartIpReadNonBlocking(XSPI_Type *base, xspi_handle
     uint32_t transferSize      = 0UL;
     status_t status            = kStatus_Success;
     uint32_t instance          = XSPI_GetInstance(base);
+    if (instance >= ARRAY_SIZE(s_xspiTransfer))
+    {
+        return kStatus_Fail;
+    }
 
 #if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
     XSPI_ClearRxBufferTG(base, handle->tgId);
@@ -309,6 +313,10 @@ RAMFUNC static status_t XSPI_StartIpWriteNonBlocking(XSPI_Type *base, xspi_handl
     status_t status       = kStatus_Success;
     uint32_t transferSize = 0UL;
     uint32_t instance     = XSPI_GetInstance(base);
+    if (instance >= ARRAY_SIZE(s_xspiTransfer))
+    {
+        return kStatus_Fail;
+    }
 
 #if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
     XSPI_ClearTxBufferTG(base, handle->tgId);
@@ -1866,6 +1874,7 @@ RAMFUNC status_t XSPI_WriteBlockingTG(XSPI_Type *base, xspi_target_group_t tgId,
     {
     }
 
+    assert((size / 4UL) <= 257UL);
     *tbct = (256UL + 1UL) - (uint32_t)size / 4UL;
     /* Send data buffer */
     while (0U != size)
@@ -2120,6 +2129,8 @@ RAMFUNC void XSPI_TransferCreateHandle(XSPI_Type *base,
 
 #if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
     handle->tgId = targetGroup;
+    assert(instance < ARRAY_SIZE(s_xspiIrqs));
+    assert((uint32_t)targetGroup < (uint32_t)FSL_FEATURE_XSPI_MULTI_IRQ_COUNT);
     (void)EnableIRQ(s_xspiIrqs[instance][targetGroup]);
 
 #if defined(FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ) && FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ
@@ -3209,8 +3220,9 @@ RAMFUNC static void XSPI_CommonIRQHandler(XSPI_Type *base, xspi_handle_t *handle
 
                 XSPI_TriggerRxBufferPopEventTG(base, handle->tgId);
 
-                while ((XSPI_GetRxBufferRemovedBytesCountTG(base, handle->tgId) - removedCount) !=
-                       (rxBufferWaterMark * 4UL))
+                assert(removedCount <= (UINT32_MAX - rxBufferWaterMark * 4UL));
+                uint32_t targetCount = removedCount + rxBufferWaterMark * 4UL;
+                while (XSPI_GetRxBufferRemovedBytesCountTG(base, handle->tgId) != targetCount)
                 {
                 }
 #else
@@ -3274,7 +3286,7 @@ RAMFUNC static void XSPI_CommonIRQHandler(XSPI_Type *base, xspi_handle_t *handle
 void XSPI_DriverIRQHandler(uint32_t instance, uint32_t envId);
 void XSPI_DriverIRQHandler(uint32_t instance, uint32_t envId)
 {
-    if (instance < ARRAY_SIZE(s_xspiBases))
+    if ((instance < ARRAY_SIZE(s_xspiBases)) && ((uint32_t)envId < (uint32_t)FSL_FEATURE_XSPI_MULTI_IRQ_COUNT))
     {
         XSPI_CommonIRQHandler(s_xspiBases[instance], s_xspiHandle[instance][envId]);
     }
@@ -3297,36 +3309,31 @@ void XSPI_DriverIRQHandler(uint32_t instance)
 void XSPI1_0_IRQHandler(void);
 void XSPI1_0_IRQHandler(void)
 {
-    XSPI_CommonIRQHandler(XSPI1, s_xspiHandle[1][0]);
-    SDK_ISR_EXIT_BARRIER;
+    XSPI_DriverIRQHandler(1U, 0U);
 }
 
 void XSPI1_1_IRQHandler(void);
 void XSPI1_1_IRQHandler(void)
 {
-    XSPI_CommonIRQHandler(XSPI1, s_xspiHandle[1][1]);
-    SDK_ISR_EXIT_BARRIER;
+    XSPI_DriverIRQHandler(1U, 1U);
 }
 
 void XSPI1_2_IRQHandler(void);
 void XSPI1_2_IRQHandler(void)
 {
-    XSPI_CommonIRQHandler(XSPI1, s_xspiHandle[1][2]);
-    SDK_ISR_EXIT_BARRIER;
+    XSPI_DriverIRQHandler(1U, 2U);
 }
 
 void XSPI1_3_IRQHandler(void);
 void XSPI1_3_IRQHandler(void)
 {
-    XSPI_CommonIRQHandler(XSPI1, s_xspiHandle[1][3]);
-    SDK_ISR_EXIT_BARRIER;
+    XSPI_DriverIRQHandler(1U, 3U);
 }
 
 void XSPI1_4_IRQHandler(void);
 void XSPI1_4_IRQHandler(void)
 {
-    XSPI_CommonIRQHandler(XSPI1, s_xspiHandle[1][4]);
-    SDK_ISR_EXIT_BARRIER;
+    XSPI_DriverIRQHandler(1U, 4U);
 }
 #endif /* defined(XSPI1) */
 

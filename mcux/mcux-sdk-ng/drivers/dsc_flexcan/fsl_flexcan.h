@@ -1395,13 +1395,10 @@ static inline void FLEXCAN_ClearMbStatusFlags(CAN_Type *base, uint32_t mask)
  */
 static inline void FLEXCAN_EnableInterrupts(CAN_Type *base, uint32_t u32InterruptFlags)
 {
-    if (1 == FSL_FEATURE_FLEXCAN_INSTANCE_HAS_SELF_WAKEn(base))
+    /* Solve Wake Up Interrupt (MCR register). */
+    if ((uint32_t)kFLEXCAN_WakeUpInterruptEnable == (u32InterruptFlags & (uint32_t)kFLEXCAN_WakeUpInterruptEnable))
     {
-        /* Solve Wake Up Interrupt (MCR register). */
-        if ((uint32_t)kFLEXCAN_WakeUpInterruptEnable == (u32InterruptFlags & (uint32_t)kFLEXCAN_WakeUpInterruptEnable))
-        {
-            base->MCR |= CAN_MCR_WAKMSK_MASK;
-        }
+        base->MCR |= CAN_MCR_WAKMSK_MASK;
     }
 
     /* Solve CTRL1 register interrupts. */
@@ -1428,13 +1425,10 @@ static inline void FLEXCAN_EnableInterrupts(CAN_Type *base, uint32_t u32Interrup
  */
 static inline void FLEXCAN_DisableInterrupts(CAN_Type *base, uint32_t u32InterruptFlags)
 {
-    if (1 == FSL_FEATURE_FLEXCAN_INSTANCE_HAS_SELF_WAKEn(base))
+    /* Solve Wake Up Interrupt (MCR register). */
+    if ((uint32_t)kFLEXCAN_WakeUpInterruptEnable == (u32InterruptFlags & (uint32_t)kFLEXCAN_WakeUpInterruptEnable))
     {
-        /* Solve Wake Up Interrupt (MCR register). */
-        if ((uint32_t)kFLEXCAN_WakeUpInterruptEnable == (u32InterruptFlags & (uint32_t)kFLEXCAN_WakeUpInterruptEnable))
-        {
-            base->MCR &= ~CAN_MCR_WAKMSK_MASK;
-        }
+        base->MCR &= ~CAN_MCR_WAKMSK_MASK;
     }
 
     /* Solve CTRL1 register interrupts. */

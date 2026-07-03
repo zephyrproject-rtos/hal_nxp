@@ -194,7 +194,7 @@ void CCM32K_EnableClockMonitor(CCM32K_Type *base, bool enable)
  */
 void CCM32K_SetClockMonitorConfig(CCM32K_Type *base, const ccm32k_clock_monitor_config_t *config)
 {
-    assert(config);
+    assert(config != NULL);
 
     if (config->enableClockMonitor)
     {

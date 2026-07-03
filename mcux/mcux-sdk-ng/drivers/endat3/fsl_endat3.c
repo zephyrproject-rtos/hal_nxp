@@ -35,6 +35,24 @@ __WEAK uint32_t getTimestampMS()
 	return timerstamp++;
 }
 
+static uint32_t addTimeout(uint32_t timeout)
+{
+	return getTimestampMS() + timeout;
+}
+
+static int checkTimeout(uint32_t nextValue)
+{
+	uint32_t curr = getTimestampMS();
+	if (nextValue >= curr) {
+		return 0;
+	} else {
+		if (curr - nextValue > 0x80000000) {
+			return 0;
+		}
+	}
+	return 1;
+}
+
 status_t ENDAT3_RxTxClkConfig(ENDAT3_Type *base, uint32_t clk_sys, uint8_t rate, uint16_t watchdag_us)
 {
 	uint16_t clkdiv, dec[4];
@@ -151,7 +169,7 @@ status_t ENDAT3_FG_Req_Rsp(ENDAT3_Type *base, uint8_t req, uint16_t data, endat3
 status_t ENDAT3_FG_Hello(ENDAT3_Type *base)
 {
 	status_t status;
-	uint32_t timeOutMS = getTimestampMS() + ENDAT3_HELLO_TIMEOUT;
+	uint32_t timeOutMS = addTimeout(ENDAT3_HELLO_TIMEOUT);
 
 	do {
 		status = ENDAT3_FG_Req_Rsp(base, ENDAT3_FG_REQ_HELLO, ENDAT3_FG_DATA_HELLO, NULL);
@@ -159,7 +177,7 @@ status_t ENDAT3_FG_Hello(ENDAT3_Type *base)
 		if (status == kStatus_Success) {
 			return kStatus_Success;
 		}
-	} while (getTimestampMS() < timeOutMS);
+	} while (!checkTimeout(timeOutMS));
 
 	return kStatus_Endat3_FG_Hello_Failed;
 }
@@ -212,7 +230,7 @@ status_t ENDAT3_FG_Bus_Req_Rsp(ENDAT3_Type *base, uint8_t bus_addr, uint8_t req,
 status_t ENDAT3_FG_Bus_P2P_Hello(ENDAT3_Type *base, uint8_t addr)
 {
 	status_t status;
-	uint32_t timeOutMS = getTimestampMS() + 200;
+	uint32_t timeOutMS = addTimeout(200);
 
 	do {
 		status = ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, ENDAT3_FG_REQ_HELLO, ENDAT3_FG_DATA_HELLO, NULL);
@@ -220,7 +238,7 @@ status_t ENDAT3_FG_Bus_P2P_Hello(ENDAT3_Type *base, uint8_t addr)
 		if (status == kStatus_Success) {
 			return kStatus_Success;
 		}
-	} while (getTimestampMS() < timeOutMS);
+	} while (!checkTimeout(timeOutMS));
 
 	return kStatus_Endat3_FG_Hello_Failed;
 }
@@ -288,7 +306,7 @@ void ENDAT3_BG_Req(ENDAT3_Type *base, uint8_t bus_addr, struct BGREQ *req, uint8
 status_t ENDAT3_BG_WaitReqFinished(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fg_strobes, uint32_t timeout_ms,
 									enum op_mode op)
 {
-	uint32_t timeout = getTimestampMS() + timeout_ms;
+	uint32_t timeout = addTimeout(timeout_ms);
 	while (!(base->BG_RSP_1 & (ENDAT3_BG_RSP_1_BG_HANDLER_IDLE_MASK | ENDAT3_BG_RSP_1_BG_HANDLER_ERROR_MASK))) {
 		if (fg_strobes) {
 			if (op == Point2Point) {
@@ -302,7 +320,7 @@ status_t ENDAT3_BG_WaitReqFinished(ENDAT3_Type *base, uint8_t bus_addr, uint8_t 
 			return kStatus_Endat3_BG_Handler_Error;
 		}
 
-		if (timeout_ms && getTimestampMS() > timeout) {
+		if (timeout_ms && checkTimeout(timeout)) {
 			base->BG_REQ_2 |= ENDAT3_BG_REQ_2_BG_ABORT_MASK;
 			return kStatus_Timeout;
 		}
@@ -312,10 +330,10 @@ status_t ENDAT3_BG_WaitReqFinished(ENDAT3_Type *base, uint8_t bus_addr, uint8_t 
 
 status_t ENDAT3_BG_GetRsp(ENDAT3_Type *base, uint64_t *rsp, uint32_t timeout_ms)
 {
-	uint32_t timeout = getTimestampMS() + timeout_ms;
+	uint32_t timeout = addTimeout(timeout_ms);
 	uint64_t temp;
 	while (!(base->BG_RSP_1 & (ENDAT3_BG_RSP_1_BG_RSP_DATA_UPDATED_MASK))) {
-		if (timeout_ms && getTimestampMS() > timeout) {
+		if (timeout_ms && checkTimeout(timeout)) {
 			return kStatus_Timeout;
 		}
 	}
@@ -591,7 +609,7 @@ uint16_t ENDAT3_memGetRangeSize_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t
 	uint32_t addr;
 	uint16_t size;
 
-	mem_base &= ~0xFFFF;
+	mem_base &= (uint32_t)(~0xFFFFU);
 	switch (mem_base) {
 		case ENDAT3_MEM_BASE_EL:
 			addr = ENDAT3_MEM_EL_ELSIZE_OFFSET; break;
@@ -771,7 +789,7 @@ uint8_t ENDAT3_lpfCacheListGetFid(endat3_mem_cache_t *lpf_cache, uint8_t xdim, u
 status_t ENDAT3_lpfCacheUpdateFromEnconder_OP(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *lpf_cache, uint16_t *pdat,
 											uint32_t pdat_size, uint8_t from_set, uint8_t fg_strobes, enum op_mode op)
 {
-	uint32_t mem_actual_size;
+	uint16_t mem_actual_size;
 	status_t status;
 	if (from_set) {
 		mem_actual_size = ENDAT3_memGetRangeSize_OP(base, bus_addr, ENDAT3_MEM_BASE_LPFSET, fg_strobes, op);
@@ -875,7 +893,7 @@ status_t ENDAT3_Bus_Hello_ForAllParticipants(ENDAT3_Type *base, int nodes_num)
 	status_t status = kStatus_Success;
 	for (int i = nodes_num; i > 0;  i--) {
 		ENDAT3_FG_Hello(base);
-		if (ENDAT3_FG_Bus_P2P_Hello(base, i) != kStatus_Success) {
+		if (ENDAT3_FG_Bus_P2P_Hello(base, (uint8_t)i) != kStatus_Success) {
 			status = kStatus_Endat3_FG_ECHO_Failed;
 		}
 	}
@@ -884,12 +902,12 @@ status_t ENDAT3_Bus_Hello_ForAllParticipants(ENDAT3_Type *base, int nodes_num)
 
 void ENDAT3_Bus_Init_ForAllParticipants(ENDAT3_Type *base, int nodes_num)
 {
-	uint32_t address[8] = {0};
+	uint8_t address[8] = {0};
 	uint32_t index = 0;
 		for (int i = nodes_num; i >= 0;  i--) {
 			ENDAT3_FG_Hello(base);
-			if (ENDAT3_FG_Bus_P2P_Hello(base, i) == kStatus_Success) {
-				address[index++] = i;
+			if (ENDAT3_FG_Bus_P2P_Hello(base, (uint8_t)i) == kStatus_Success) {
+				address[index++] = (uint8_t)i;
 			}
 		}
 
@@ -900,87 +918,91 @@ void ENDAT3_Bus_Init_ForAllParticipants(ENDAT3_Type *base, int nodes_num)
 
 char* ENDAT3_FID2str(const uint8_t fid)
 {
+	char *ret;
 	switch (fid) {
-		case 0x00: return "NOP"            ; break;
-		case 0x01: return "POS1"           ; break;
-		case 0x02: return "POS2"           ; break;
-		case 0x03: return "TOUCHPROBE"     ; break;
-		case 0x04: return "POS_ABS"        ; break;
-		case 0x05: return "ZERODATA"       ; break;
-		case 0x0A: return "ERRMSG"         ; break;
-		case 0x11: return "EVALNUM"        ; break;
-		case 0x12: return "MOUNT0"         ; break;
-		case 0x13: return "MOUNT1"         ; break;
-		case 0x1A: return "COMMU"          ; break;
-		case 0x20: return "SENSOR_TEMP_MAX"; break;
-		case 0x21: return "SENSOR_TEMP_INT"; break;
-		case 0x22: return "SENSOR_TEMP_M1" ; break;
-		case 0x23: return "SENSOR_TEMP_M2" ; break;
-		case 0x24: return "SENSOR_TEMP_M3" ; break;
-		case 0x50: return "SF_POS1"        ; break;
-		case 0x60: return "BGRSP"          ; break;
-		case 0x68: return "BGREQ"          ; break;
-		case 0x70: return "BUS_ADDR"       ; break;
+		case 0x00: ret =  "NOP"            ; break;
+		case 0x01: ret =  "POS1"           ; break;
+		case 0x02: ret =  "POS2"           ; break;
+		case 0x03: ret =  "TOUCHPROBE"     ; break;
+		case 0x04: ret =  "POS_ABS"        ; break;
+		case 0x05: ret =  "ZERODATA"       ; break;
+		case 0x0A: ret =  "ERRMSG"         ; break;
+		case 0x11: ret =  "EVALNUM"        ; break;
+		case 0x12: ret =  "MOUNT0"         ; break;
+		case 0x13: ret =  "MOUNT1"         ; break;
+		case 0x1A: ret =  "COMMU"          ; break;
+		case 0x20: ret =  "SENSOR_TEMP_MAX"; break;
+		case 0x21: ret =  "SENSOR_TEMP_INT"; break;
+		case 0x22: ret =  "SENSOR_TEMP_M1" ; break;
+		case 0x23: ret =  "SENSOR_TEMP_M2" ; break;
+		case 0x24: ret =  "SENSOR_TEMP_M3" ; break;
+		case 0x50: ret =  "SF_POS1"        ; break;
+		case 0x60: ret =  "BGRSP"          ; break;
+		case 0x68: ret =  "BGREQ"          ; break;
+		case 0x70: ret =  "BUS_ADDR"       ; break;
+		default: ret = "UNKNOWN FID";
 	}
-	return "UNKNOWN FID";
+	return ret;
 }
 
 char *ENDAT3_Err2str(uint16_t errCode)
 {
+	char *ret;
 	switch (errCode)
 	{
 		// Foreground error codes
-		case 0x0001: return "FGERR_RECONFIGURE"                     ; break;
-		case 0x0002: return "FGERR_ECHO"                            ; break;
-		case 0x0100: return "FGERR_INVALID_FID"                     ; break;
-		case 0x0101: return "FGERR_DUPLICATE_FID"                   ; break;
-		case 0x0200: return "FGERR_INVALID_DATA"                    ; break;
-		case 0x0201: return "FGERR_INT_TRM"                         ; break;
-		case 0x0300: return "FGERR_NO_SENSOR_DATA"                  ; break;
+		case 0x0001: ret = "FGERR_RECONFIGURE"                     ; break;
+		case 0x0002: ret = "FGERR_ECHO"                            ; break;
+		case 0x0100: ret = "FGERR_INVALID_FID"                     ; break;
+		case 0x0101: ret = "FGERR_DUPLICATE_FID"                   ; break;
+		case 0x0200: ret = "FGERR_INVALID_DATA"                    ; break;
+		case 0x0201: ret = "FGERR_INT_TRM"                         ; break;
+		case 0x0300: ret = "FGERR_NO_SENSOR_DATA"                  ; break;
 
 		// Background error codes
-		case 0x1100: return "BGERR_USAGE"                           ; break;
-		case 0x1101: return "BGERR_USAGE_OPCODE"                    ; break;
-		case 0x1102: return "BGERR_USAGE_ARGUMENTS"                 ; break;
-		case 0x1103: return "BGERR_USAGE_SEQUENCE"                  ; break;
-		case 0x1104: return "BGERR_USAGE_ACCESS_DENIED"             ; break;
-		case 0x1105: return "BGERR_USAGE_MEM_ADDRESS"               ; break;
-		case 0x1106: return "BGERR_USAGE_NO_BG"                     ; break;
-		case 0x1200: return "BGERR_BGERR_INTERNAL"                  ; break;
-		case 0x1201: return "BGERR_BGERR_INTERNAL_MEMORY"           ; break;
+		case 0x1100: ret = "BGERR_USAGE"                           ; break;
+		case 0x1101: ret = "BGERR_USAGE_OPCODE"                    ; break;
+		case 0x1102: ret = "BGERR_USAGE_ARGUMENTS"                 ; break;
+		case 0x1103: ret = "BGERR_USAGE_SEQUENCE"                  ; break;
+		case 0x1104: ret = "BGERR_USAGE_ACCESS_DENIED"             ; break;
+		case 0x1105: ret = "BGERR_USAGE_MEM_ADDRESS"               ; break;
+		case 0x1106: ret = "BGERR_USAGE_NO_BG"                     ; break;
+		case 0x1200: ret = "BGERR_BGERR_INTERNAL"                  ; break;
+		case 0x1201: ret = "BGERR_BGERR_INTERNAL_MEMORY"           ; break;
 
 		// C-API error codes
-		case 0x8100: return "APIERR_ACTIVATION_HELLO_FAILED"        ; break;
-		case 0x8101: return "APIERR_INIT_WRONG_CLK_FREQ"            ; break;
-		case 0x8200: return "APIERR_FG_TRM_ERROR"                   ; break;
-		case 0x8201: return "APIERR_FG_WATCHDOG_ERROR"              ; break;
-		case 0x8300: return "APIERR_BG_PROC_ERROR"                  ; break;
-		case 0x8301: return "APIERR_BG_ERR_EXEC"                    ; break;
-		case 0x8400: return "APIERR_MEM_NOT_A_BASE_ADDRESS"         ; break;
-		case 0x8401: return "APIERR_MEM_CACHE_SIZE_EXCEEDED"        ; break;
-		case 0x8402: return "APIERR_MEM_CACHE_NOT_INITIALIZED"      ; break;
-		case 0x8403: return "APIERR_MEM_CACHE_WRONG_BASE"           ; break;
-		case 0x8404: return "APIERR_MEM_CACHE_OUT_OF_SIZE"          ; break;
-		case 0x8405: return "APIERR_MEM_CACHE_WRONG_CS"             ; break;
-		case 0x8500: return "APIERR_LPF_DATA_SIZE_EXCEEDED"         ; break;
-		case 0x8501: return "APIERR_LPF_LIST_NOT_CONFIGURABLE"      ; break;
-		case 0x8502: return "APIERR_LPF_LIST_ALREADY_CONFIGURED"    ; break;
-		case 0x8503: return "APIERR_LPF_INVALID_FID_LOCATION"       ; break;
-		case 0x8504: return "APIERR_LPF_INVALID_XY"                 ; break;
-		case 0x8505: return "APIERR_LPF_LIST_SIZE_EXCEEDED"         ; break;
+		case 0x8100: ret = "APIERR_ACTIVATION_HELLO_FAILED"        ; break;
+		case 0x8101: ret = "APIERR_INIT_WRONG_CLK_FREQ"            ; break;
+		case 0x8200: ret = "APIERR_FG_TRM_ERROR"                   ; break;
+		case 0x8201: ret = "APIERR_FG_WATCHDOG_ERROR"              ; break;
+		case 0x8300: ret = "APIERR_BG_PROC_ERROR"                  ; break;
+		case 0x8301: ret = "APIERR_BG_ERR_EXEC"                    ; break;
+		case 0x8400: ret = "APIERR_MEM_NOT_A_BASE_ADDRESS"         ; break;
+		case 0x8401: ret = "APIERR_MEM_CACHE_SIZE_EXCEEDED"        ; break;
+		case 0x8402: ret = "APIERR_MEM_CACHE_NOT_INITIALIZED"      ; break;
+		case 0x8403: ret = "APIERR_MEM_CACHE_WRONG_BASE"           ; break;
+		case 0x8404: ret = "APIERR_MEM_CACHE_OUT_OF_SIZE"          ; break;
+		case 0x8405: ret = "APIERR_MEM_CACHE_WRONG_CS"             ; break;
+		case 0x8500: ret = "APIERR_LPF_DATA_SIZE_EXCEEDED"         ; break;
+		case 0x8501: ret = "APIERR_LPF_LIST_NOT_CONFIGURABLE"      ; break;
+		case 0x8502: ret = "APIERR_LPF_LIST_ALREADY_CONFIGURED"    ; break;
+		case 0x8503: ret = "APIERR_LPF_INVALID_FID_LOCATION"       ; break;
+		case 0x8504: ret = "APIERR_LPF_INVALID_XY"                 ; break;
+		case 0x8505: ret = "APIERR_LPF_LIST_SIZE_EXCEEDED"         ; break;
 
 		// DLL error codes
-		case 0x9000: return "DLLERR_OPEN_CONNECTION_FIRST"          ; break;
-		case 0x9001: return "DLLERR_OPEN_ARGUMENT_NOT_OK"           ; break;
-		case 0x9002: return "DLLERR_FTDI_DLL_NOT_FOUND"             ; break;
-		case 0x9003: return "DLLERR_DLL_USB_CONNECTION_ALREADY_OPEN"; break;
-		case 0x9004: return "DLLERR_EVALBOARD_NOT_FOUND_ON_USB"     ; break;
-		case 0x9005: return "DLLERR_EVALBOARD_NOT_CONNECTED"        ; break;
-		case 0x9006: return "DLLERR_GUI_USB_CONNECTION_NOT_OPEN"    ; break;
-		case 0x9007: return "DLLERR_GUI_NOT_OPEN_ANY_MORE"          ; break;
-		case 0x9008: return "DLLERR_WRONG_ADDRESS"                  ; break;
-		case 0x9009: return "DLLERR_WRONG_API_VERSION"              ; break;
+		case 0x9000: ret = "DLLERR_OPEN_CONNECTION_FIRST"          ; break;
+		case 0x9001: ret = "DLLERR_OPEN_ARGUMENT_NOT_OK"           ; break;
+		case 0x9002: ret = "DLLERR_FTDI_DLL_NOT_FOUND"             ; break;
+		case 0x9003: ret = "DLLERR_DLL_USB_CONNECTION_ALREADY_OPEN"; break;
+		case 0x9004: ret = "DLLERR_EVALBOARD_NOT_FOUND_ON_USB"     ; break;
+		case 0x9005: ret = "DLLERR_EVALBOARD_NOT_CONNECTED"        ; break;
+		case 0x9006: ret = "DLLERR_GUI_USB_CONNECTION_NOT_OPEN"    ; break;
+		case 0x9007: ret = "DLLERR_GUI_NOT_OPEN_ANY_MORE"          ; break;
+		case 0x9008: ret = "DLLERR_WRONG_ADDRESS"                  ; break;
+		case 0x9009: ret = "DLLERR_WRONG_API_VERSION"              ; break;
+		default: ret = "ERR_UNKNOWN";
 	}
 
-	return "ERR_UNKNOWN";
+	return ret;
 }

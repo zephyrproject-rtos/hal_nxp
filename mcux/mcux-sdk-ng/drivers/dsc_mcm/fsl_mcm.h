@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - 2021 NXP
+ * Copyright 2020-2021, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief MCM driver version. */
-#define FSL_MCM_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_MCM_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*! @} */
 
 /*******************************************************************************
@@ -33,7 +33,11 @@
  * @defgroup mcm_driver_log The Driver Change Log
  * @ingroup mcm
  * @{
- * The current MCM driver version is 2.0.1.
+ * The current MCM driver version is 2.1.0.
+ *
+ * - 2.1.0
+ *   - Improvements
+ *      - Supported MC56F85xxx.
  *
  * - 2.0.1
  *   - Improvements
@@ -156,6 +160,7 @@ typedef struct _mcm_core_fault_attribute
     mcm_last_fault_access_dir_t eDirection : 1U; /*!< Indicates the last faulted core access direction. */
 } mcm_core_fault_attribute_t;
 
+#if !(defined(FSL_FEATURE_MCM_HAS_RESOURCE_PROTECTION) && (FSL_FEATURE_MCM_HAS_RESOURCE_PROTECTION == 0))
 /*!
  * @brief The structure of the resource protection config, the set value can be used only when the resource protection
  * is enabled, and this value can be changed only when the resource protection is disabled.
@@ -170,6 +175,7 @@ typedef struct _mcm_resource_protection_config
     uint32_t u32BootRomBaseAddress; /*!< Boot ROM base address for user region */
     uint32_t u32ResourceProtectionOtherSP; /*!< Resource protection other stack pointer. */
 } mcm_resource_protection_config_t;
+#endif /* FSL_FEATURE_MCM_HAS_RESOURCE_PROTECTION */
 
 /*******************************************************************************
  * API
@@ -372,6 +378,7 @@ static inline void MCM_DisableDSP56800EXCoreInstructions(MCM_Type *base, bool bD
     }
 }
 
+#if !(defined(FSL_FEATURE_MCM_HAS_REVERSE_CARRY) && (FSL_FEATURE_MCM_HAS_REVERSE_CARRY == 0))
 /*!
  * @brief Disables/Enables core reverse carry.
  *
@@ -391,6 +398,7 @@ static inline void MCM_DisableCoreReverseCarry(MCM_Type *base, bool bDisable)
         base->CPCR &= ~MCM_CPCR_RCDIS_MASK;
     }
 }
+#endif /* FSL_FEATURE_MCM_HAS_REVERSE_CARRY */
 
 /*!
  * @brief Disables/Enables the additional AGU shadow registers on the DSP56800EX core.
@@ -412,6 +420,7 @@ static inline void MCM_DisableDSP56800EXNewShadowRegion(MCM_Type *base, bool bDi
     }
 }
 
+#if !(defined(FSL_FEATURE_MCM_HAS_INSTRUCTION_BUFFER) && (FSL_FEATURE_MCM_HAS_INSTRUCTION_BUFFER == 0))
 /*!
  * @brief Disables/Enables core instruction buffer.
  *
@@ -431,6 +440,7 @@ static inline void MCM_DisableCoreInstructionBuffer(MCM_Type *base, bool bDisabl
         base->CPCR &= ~MCM_CPCR_IBDIS_MASK;
     }
 }
+#endif /* FSL_FEATURE_MCM_HAS_INSTRUCTION_BUFFER */
 
 #if (defined(FSL_FEATURE_MCM_CPCR_HAS_FCSDIS_BIT_FIELD) && FSL_FEATURE_MCM_CPCR_HAS_FCSDIS_BIT_FIELD)
 /*!
@@ -572,6 +582,7 @@ static inline void MCM_ClearCoreFaultStatusFlags(MCM_Type *base, uint8_t u8Statu
 
 /*! @} */
 
+#if !(defined(FSL_FEATURE_MCM_HAS_RESOURCE_PROTECTION) && (FSL_FEATURE_MCM_HAS_RESOURCE_PROTECTION == 0))
 /*!
  * @name Resource Protection Related Inferfaces
  * @{
@@ -685,6 +696,8 @@ static inline void MCM_ClearResourceProtectionMisalignedFaultValid(MCM_Type *bas
 }
 
 /*! @} */
+
+#endif /* FSL_FEATURE_MCM_HAS_RESOURCE_PROTECTION */
 
 #if defined(__cplusplus)
 }

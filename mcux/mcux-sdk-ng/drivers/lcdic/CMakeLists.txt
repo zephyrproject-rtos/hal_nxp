@@ -12,7 +12,7 @@ if(CONFIG_MCUX_COMPONENT_driver.lcdic_dma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.lcdic)
-    mcux_component_version(2.2.0)
+    mcux_component_version(2.2.1)
 
     mcux_add_source(SOURCES fsl_lcdic.h fsl_lcdic.c)
 

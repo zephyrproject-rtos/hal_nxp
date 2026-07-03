@@ -12,6 +12,18 @@
 #define FSL_COMPONENT_ID "platform.drivers.tmu"
 #endif
 
+#if ((TMU_TISCR_ISITE_MASK >> TMU_TISCR_ISITE_SHIFT) > 0xFFFFU)
+#error "TMU_TISCR_ISITE field exceeds 16 bits"
+#endif
+
+#if ((TMU_TISCR_ASITE_MASK >> TMU_TISCR_ASITE_SHIFT) > 0xFFFFU)
+#error "TMU_TISCR_ASITE field exceeds 16 bits"
+#endif
+
+#if ((TMU_TICSCR_CASITE_MASK >> TMU_TICSCR_CASITE_SHIFT) > 0xFFFFU)
+#error "TMU_TICSCR_CASITE field exceeds 16 bits"
+#endif
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/

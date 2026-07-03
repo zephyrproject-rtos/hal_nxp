@@ -81,7 +81,6 @@ uint32_t ITRC_GetStatus(ITRC_Type *base)
     return base->STATUS;
 }
 
-#if defined(ITRC_STATUS1_IN16_STATUS_MASK)
 /*!
  * brief Clear ITRC status 1
  *
@@ -94,6 +93,7 @@ uint32_t ITRC_GetStatus(ITRC_Type *base)
  */
 status_t ITRC_ClearStatus1(ITRC_Type *base, uint32_t word)
 {
+#if defined(ITRC_STATUS1_IN16_STATUS_MASK)
     /* If reserved/unused bits in STATUS register are set in 'word' parameter, return kStatus_InvalidArgument */
     if ((word & ~(IN_16_47_EVENTS_MASK)) != 0u)
     {
@@ -103,6 +103,10 @@ status_t ITRC_ClearStatus1(ITRC_Type *base, uint32_t word)
     base->STATUS1 |= word;
 
     return kStatus_Success;
+#else
+    /* STATUS1 register is not present on device */
+    return kStatus_InvalidArgument;
+#endif /* defined(ITRC_STATUS1_IN16_STATUS_MASK) */
 }
 
 /*!
@@ -111,14 +115,17 @@ status_t ITRC_ClearStatus1(ITRC_Type *base, uint32_t word)
  * This function returns ITRC STATUS1 register value.
  *
  * param base ITRC peripheral base address
- * return Value of ITRC STATUS1 register
+ * return Value of ITRC STATUS1 register, if register STATUS1 doesn't exist it return 0
  */
 uint32_t ITRC_GetStatus1(ITRC_Type *base)
 {
+#if defined(ITRC_STATUS1_IN16_STATUS_MASK)
     return base->STATUS1;
-}
-
+#else
+    /* If register STATUS1 doesn't exist it return 0*/
+    return 0u;
 #endif /* defined(ITRC_STATUS1_IN16_STATUS_MASK) */
+}
 
 /*!
  * brief Clear all ITRC status
@@ -141,7 +148,7 @@ status_t ITRC_ClearAllStatus(ITRC_Type *base)
 /*!
  * brief Trigger ITRC SW Event 0
  *
- * This funciton set SW_EVENT0 register with value !=0 which triggers ITRC SW Event 0.
+ * This function set SW_EVENT0 register with value !=0 which triggers ITRC SW Event 0.
  *
  * param base ITRC peripheral base address
  */
@@ -153,7 +160,7 @@ void ITRC_SetSWEvent0(ITRC_Type *base)
 /*!
  * brief Trigger ITRC SW Event 1
  *
- * This funciton set SW_EVENT1 register with value !=0 which triggers ITRC SW Event 1.
+ * This function set SW_EVENT1 register with value !=0 which triggers ITRC SW Event 1.
  *
  * param base ITRC peripheral base address
  */
@@ -227,7 +234,7 @@ status_t ITRC_SetActionToEvent(
     select_AND_mask = ~(uint32_t)(b11 << index);
 
     /* Configure OUT action for IN event */
-    for (uint8_t i = (uint8_t)kITRC_Irq; i < ITRC_OUT_COUNT; i++)
+    for (uint8_t i = (uint8_t)kITRC_Out_0; i < ITRC_OUT_COUNT; i++)
     {
         /* Loop over all OUT actions, set only requested one */
         if (i == (uint8_t)out)

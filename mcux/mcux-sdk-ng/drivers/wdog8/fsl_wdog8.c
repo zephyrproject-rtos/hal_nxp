@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2019, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -109,12 +109,14 @@ void WDOG8_Init(WDOG_Type *base, const wdog8_config_t *config)
     uint8_t value2        = 0U;
     uint32_t primaskValue = 0U;
 
-    value1 = WDOG_CS1_EN(config->enableWdog8) | WDOG_CS1_INT(config->enableInterrupt) |
-             WDOG_CS1_UPDATE(config->enableUpdate) | WDOG_CS1_DBG(config->workMode.enableDebug) |
-             WDOG_CS1_STOP(config->workMode.enableStop) | WDOG_CS1_WAIT(config->workMode.enableWait) |
-             WDOG_CS1_TST(config->testMode);
-    value2 =
-        WDOG_CS2_CLK(config->clockSource) | WDOG_CS2_WIN(config->enableWindowMode) | WDOG_CS2_PRES(config->prescaler);
+    value1 = WDOG_CS1_EN((uint8_t)(config->enableWdog8 ? 1U : 0U)) |
+             WDOG_CS1_INT((uint8_t)(config->enableInterrupt ? 1U : 0U)) |
+             WDOG_CS1_UPDATE((uint8_t)(config->enableUpdate ? 1U : 0U)) |
+             WDOG_CS1_DBG((uint8_t)(config->workMode.enableDebug ? 1U : 0U)) |
+             WDOG_CS1_STOP((uint8_t)(config->workMode.enableStop ? 1U : 0U)) |
+             WDOG_CS1_WAIT((uint8_t)(config->workMode.enableWait ? 1U : 0U)) | WDOG_CS1_TST(config->testMode);
+    value2 = WDOG_CS2_CLK(config->clockSource) | WDOG_CS2_WIN((uint8_t)(config->enableWindowMode ? 1U : 0U)) |
+             WDOG_CS2_PRES(config->prescaler);
 
     /* Disable the global interrupts. Otherwise, an interrupt could effectively invalidate the unlock sequence
      * and the WCT may expire. After the configuration finishes, re-enable the global interrupts. */

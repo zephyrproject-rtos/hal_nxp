@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2022, 2025 NXP
+ * Copyright 2016-2020, 2022, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FlexIO SPI driver version. */
-#define FSL_FLEXIO_SPI_DRIVER_VERSION (MAKE_VERSION(2, 4, 3))
+#define FSL_FLEXIO_SPI_DRIVER_VERSION (MAKE_VERSION(2, 4, 4))
 /*! @} */
 
 #ifndef FLEXIO_SPI_DUMMYDATA

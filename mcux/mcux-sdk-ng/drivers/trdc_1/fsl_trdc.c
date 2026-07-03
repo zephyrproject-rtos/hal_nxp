@@ -713,7 +713,7 @@ void TRDC_MrcSetRegionDescriptorConfig(TRDC_Type *base, const trdc_mrc_region_de
 
     /* Set configuration for word 1 */
     regAddr += 4U;
-    data = TRDC_MRC_DOM0_RGD_W_VLD(config->valid) | TRDC_MRC_DOM0_RGD_W_NSE(config->nseEnable) |
+    data = TRDC_MRC_DOM0_RGD_W_VLD(config->valid ? 1U : 0U) | TRDC_MRC_DOM0_RGD_W_NSE(config->nseEnable ? 1U : 0U) |
            (config->endAddr & TRDC_MRC_DOM0_RGD_W_END_ADDR_MASK);
     *(uint32_t *)regAddr = data;
 

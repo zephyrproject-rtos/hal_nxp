@@ -30,6 +30,15 @@
  */
 /* Irq channel address offset */
 #define IRQSTEER_CHANNEL_OFFSET 0x10000
+
+/* One interrupt map to one bit for a 32 bit width register */
+#define IRQSTEER_INT_SRC_REG_WIDTH (32U)
+
+/* IRQSTEER AGGREGATED(fixed) interrupt number per group is 64 */
+#define IRQSTEER_AGGREGATED_INT_NUM_PER_GRP (64U)
+
+/* Two slices(two registers of 32 bit = 64 bits) */
+#define IRQSTEER_SLICE (2U)
 /**
  * Use irq channel 1, CHAN_MASK29 register as an example:
  * irq channel 1, CHAN_MASK29 register offset:
@@ -39,24 +48,15 @@
  *   = 0x10000 + 0 + 0x74 + 0x4
  *   = 0x10078
  */
-#define IRQSTEER_CTRL_STRIDE_OFF(regNum, stepIdx)	(regNum * 4 * stepIdx)
-#define IRQSTEER_CHAN_MASK(irqChanIdx, regIdx, regNum)		((irqChanIdx * IRQSTEER_CHANNEL_OFFSET) + IRQSTEER_CTRL_STRIDE_OFF(regNum, 0) + 0x4 * (regIdx) + 0x4)
-#define IRQSTEER_CHAN_SET(irqChanIdx, regIdx, regNum)		((irqChanIdx * IRQSTEER_CHANNEL_OFFSET) + IRQSTEER_CTRL_STRIDE_OFF(regNum, 1) + 0x4 * (regIdx) + 0x4)
-#define IRQSTEER_CHAN_STATUS(irqChanIdx, regIdx, regNum)	((irqChanIdx * IRQSTEER_CHANNEL_OFFSET) + IRQSTEER_CTRL_STRIDE_OFF(regNum, 2) + 0x4 * (regIdx) + 0x4)
-#define IRQSTEER_CHAN_MINTDIS(irqChanIdx, regNum)		((irqChanIdx * IRQSTEER_CHANNEL_OFFSET) + IRQSTEER_CTRL_STRIDE_OFF(regNum, 3) + 0x4)
-#define IRQSTEER_CHAN_MSTRSTAT(irqChanIdx, regNum)	((irqChanIdx * IRQSTEER_CHANNEL_OFFSET) + IRQSTEER_CTRL_STRIDE_OFF(regNum, 3) + 0x8)
+#define IRQSTEER_CTRL_STRIDE_OFF(regNum, stepIdx)              ((uint32_t)(regNum) * 4U * (uint32_t)(stepIdx))
+#define IRQSTEER_CHAN_MASK(irqChanIdx, regIdx, regNum)         ((uint32_t)(irqChanIdx) * (uint32_t)IRQSTEER_CHANNEL_OFFSET + IRQSTEER_CTRL_STRIDE_OFF(regNum, 0U) + 0x4U * (uint32_t)(regIdx) + 0x4U)
+#define IRQSTEER_CHAN_SET(irqChanIdx, regIdx, regNum)          ((uint32_t)(irqChanIdx) * (uint32_t)IRQSTEER_CHANNEL_OFFSET + IRQSTEER_CTRL_STRIDE_OFF(regNum, 1U) + 0x4U * (uint32_t)(regIdx) + 0x4U)
+#define IRQSTEER_CHAN_STATUS(irqChanIdx, regIdx, regNum)       ((uint32_t)(irqChanIdx) * (uint32_t)IRQSTEER_CHANNEL_OFFSET + IRQSTEER_CTRL_STRIDE_OFF(regNum, 2U) + 0x4U * (uint32_t)(regIdx) + 0x4U)
+#define IRQSTEER_CHAN_MINTDIS(irqChanIdx, regNum)              ((uint32_t)(irqChanIdx) * (uint32_t)IRQSTEER_CHANNEL_OFFSET + IRQSTEER_CTRL_STRIDE_OFF(regNum, 3U) + 0x4U)
+#define IRQSTEER_CHAN_MSTRSTAT(irqChanIdx, regNum)             ((uint32_t)(irqChanIdx) * (uint32_t)IRQSTEER_CHANNEL_OFFSET + IRQSTEER_CTRL_STRIDE_OFF(regNum, 3U) + 0x8U)
 
 /* Generate register index */
-#define IRQSTEER_GEN_REG_IDX(regNum, inputIdx) ((regNum - 1) - (inputIdx / IRQSTEER_INT_SRC_REG_WIDTH))
-
-/* One interrupt map to one bit for a 32 bit width register */
-#define IRQSTEER_INT_SRC_REG_WIDTH 32
-
-/* IRQSTEER AGGREGATED(fixed) interrupt number per group is 64 */
-#define IRQSTEER_AGGREGATED_INT_NUM_PER_GRP 64
-
-/* Two slices(two registers of 32 bit = 64 bits) */
-#define IRQSTEER_SLICE 2
+#define IRQSTEER_GEN_REG_IDX(regNum, inputIdx) ((uint32_t)(((regNum) - 1U) - ((inputIdx) / IRQSTEER_INT_SRC_REG_WIDTH)))
 
 /* 16 is arm interrupt, e.g stacktop, reset exception, hardfault exception... */
 #define IRQSTEER_IRQ_OFFSET 16
@@ -93,16 +93,16 @@
 typedef struct
 {
     void *reg; /* Base address of peripheral's registers. */
-    int32_t  intNum; /* Number of input interrupts that supported by irqsteer(..., 512, 640, 960,...) */
-    int32_t  irqChanNum; /* Number of irqsteer instance irq channel(1,2,...) */
-    int32_t  irqChanIdx; /* Index of irqsteer instance irq channel */
+    uint32_t intNum; /* Number of input interrupts that supported by irqsteer(..., 512, 640, 960,...) */
+    uint32_t irqChanNum; /* Number of irqsteer instance irq channel(1,2,...) */
+    uint32_t irqChanIdx; /* Index of irqsteer instance irq channel */
 } irqsteer_info_t;
 
 typedef struct
 {
     const irqsteer_info_t* infoPtr;
-    int32_t  regNum; /* Register numbers = intNum / 32, 32 is bit width of one register(..., 512/32=16, 640/32=20, 960/32=30,...) */
-    int32_t  intGrpNum; /* Number of irqsteer output channel/interrupt group(8 defined grouping of 64 interrupts, it can support 8 * 64 = 512 interrupt input sourIRQn_Type So the irqsteer output channel/interrupt group number is 8) = intNum / 64,(..., 512/64=8,640/64=10,960/64=15) */
+    uint32_t regNum; /* Register numbers = intNum / 32, 32 is bit width of one register(..., 512/32=16, 640/32=20, 960/32=30,...) */
+    uint32_t intGrpNum; /* Number of irqsteer output channel/interrupt group(8 defined grouping of 64 interrupts, it can support 8 * 64 = 512 interrupt input sourIRQn_Type So the irqsteer output channel/interrupt group number is 8) = intNum / 64,(..., 512/64=8,640/64=10,960/64=15) */
     const IRQn_Type  *irq; /* irqsteer irq number for output channels; e.g output channel 0 - 224(irq[0] = 224), output channel 1 - 225(irq[1] = 225),... */
 } irqsteer_data_t;
 
@@ -175,16 +175,15 @@ void IRQSTEER_DisableInterrupt(int32_t instIdx, IRQn_Type irq);
 static inline bool IRQSTEER_InterruptIsEnabled(int32_t instIdx, IRQn_Type irq)
 {
     irqsteer_data_t *data = IRQSTEER_GetIrqsteerData(instIdx);
-    int32_t inputIdx = -1, bitOffset = 0;
-    int32_t regIdx = 0;
+    uint32_t inputIdx, bitOffset, regIdx;
 
-    inputIdx = irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX;
-    assert(inputIdx >= 0);
+    assert((irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) >= 0);
+    inputIdx = (uint32_t)(irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX);
 
     regIdx = IRQSTEER_GEN_REG_IDX(data->regNum, inputIdx);
-    bitOffset = inputIdx % IRQSTEER_INT_SRC_REG_WIDTH;
+    bitOffset = inputIdx % (uint32_t)IRQSTEER_INT_SRC_REG_WIDTH;
 
-    return ((*(volatile uint32_t *)((uint32_t)data->infoPtr->reg + IRQSTEER_CHAN_MASK(data->infoPtr->irqChanIdx, regIdx, data->regNum)) &= (1U << bitOffset)) != 0U);
+    return ((*(volatile uint32_t *)((uintptr_t)data->infoPtr->reg + IRQSTEER_CHAN_MASK(data->infoPtr->irqChanIdx, regIdx, data->regNum)) & (1U << bitOffset)) != 0U);
 }
 
 /*!
@@ -199,22 +198,21 @@ static inline bool IRQSTEER_InterruptIsEnabled(int32_t instIdx, IRQn_Type irq)
 static inline void IRQSTEER_SetInterrupt(int32_t instIdx, IRQn_Type irq, bool set)
 {
     irqsteer_data_t *data = IRQSTEER_GetIrqsteerData(instIdx);
-    int32_t inputIdx = -1, bitOffset = 0;
-    int32_t regIdx = 0;
+    uint32_t inputIdx, bitOffset, regIdx;
 
-    inputIdx = irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX;
-    assert(inputIdx >= 0);
+    assert((irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) >= 0);
+    inputIdx = (uint32_t)(irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX);
 
     regIdx = IRQSTEER_GEN_REG_IDX(data->regNum, inputIdx);
-    bitOffset = inputIdx % IRQSTEER_INT_SRC_REG_WIDTH;
+    bitOffset = inputIdx % (uint32_t)IRQSTEER_INT_SRC_REG_WIDTH;
 
     if (set)
     {
-        *(volatile uint32_t *)((uint32_t)data->infoPtr->reg + IRQSTEER_CHAN_SET(data->infoPtr->irqChanIdx, regIdx, data->regNum)) |= (1U << bitOffset);
+        *(volatile uint32_t *)((uintptr_t)data->infoPtr->reg + IRQSTEER_CHAN_SET(data->infoPtr->irqChanIdx, regIdx, data->regNum)) |= (1U << bitOffset);
     }
     else
     {
-        *(volatile uint32_t *)((uint32_t)data->infoPtr->reg + IRQSTEER_CHAN_SET(data->infoPtr->irqChanIdx, regIdx, data->regNum)) &= ~(1U << bitOffset);
+        *(volatile uint32_t *)((uintptr_t)data->infoPtr->reg + IRQSTEER_CHAN_SET(data->infoPtr->irqChanIdx, regIdx, data->regNum)) &= ~(1U << bitOffset);
     }
 }
 
@@ -230,10 +228,10 @@ static inline void IRQSTEER_SetInterrupt(int32_t instIdx, IRQn_Type irq, bool se
  *     IRQSTEER_EnableMasterInterrupt(IRQSTEERM33_INST, 1);
  * @endcode
  */
-static inline void IRQSTEER_EnableMasterInterrupt(int32_t instIdx, int32_t outputChanIdx)
+static inline void IRQSTEER_EnableMasterInterrupt(int32_t instIdx, uint32_t outputChanIdx)
 {
     irqsteer_data_t *data = IRQSTEER_GetIrqsteerData(instIdx);
-    *(volatile uint32_t *)((uint32_t)data->infoPtr->reg + IRQSTEER_CHAN_MINTDIS(data->infoPtr->irqChanIdx, data->regNum)) &= ~(1U << outputChanIdx);
+    *(volatile uint32_t *)((uintptr_t)data->infoPtr->reg + IRQSTEER_CHAN_MINTDIS(data->infoPtr->irqChanIdx, data->regNum)) &= ~(1U << outputChanIdx);
 }
 
 /*!
@@ -248,10 +246,10 @@ static inline void IRQSTEER_EnableMasterInterrupt(int32_t instIdx, int32_t outpu
  *     IRQSTEER_DisableMasterInterrupt(IRQSTEER_M4_0, kIRQSTEER_InterruptMaster1);
  * @endcode
  */
-static inline void IRQSTEER_DisableMasterInterrupt(int32_t instIdx, int32_t outputChanIdx)
+static inline void IRQSTEER_DisableMasterInterrupt(int32_t instIdx, uint32_t outputChanIdx)
 {
     irqsteer_data_t *data = IRQSTEER_GetIrqsteerData(instIdx);
-    *(volatile uint32_t *)((uint32_t)data->infoPtr->reg + IRQSTEER_CHAN_MINTDIS(data->infoPtr->irqChanIdx, data->regNum)) |= (1U << outputChanIdx);
+    *(volatile uint32_t *)((uintptr_t)data->infoPtr->reg + IRQSTEER_CHAN_MINTDIS(data->infoPtr->irqChanIdx, data->regNum)) |= (1U << outputChanIdx);
 }
 
 /*! @} */
@@ -277,16 +275,15 @@ static inline void IRQSTEER_DisableMasterInterrupt(int32_t instIdx, int32_t outp
 static inline bool IRQSTEER_IsInterruptSet(int32_t instIdx, IRQn_Type irq)
 {
     irqsteer_data_t *data = IRQSTEER_GetIrqsteerData(instIdx);
-    int32_t inputIdx = -1, bitOffset = 0;
-    int32_t regIdx = 0;
+    uint32_t inputIdx, bitOffset, regIdx;
 
-    inputIdx = irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX;
-    assert(inputIdx >= 0);
+    assert((irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) >= 0);
+    inputIdx = (uint32_t)(irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX);
 
     regIdx = IRQSTEER_GEN_REG_IDX(data->regNum, inputIdx);
-    bitOffset = inputIdx % IRQSTEER_INT_SRC_REG_WIDTH;
+    bitOffset = inputIdx % (uint32_t)IRQSTEER_INT_SRC_REG_WIDTH;
 
-    return *(volatile uint32_t *)((uint32_t)data->infoPtr->reg + IRQSTEER_CHAN_STATUS(data->infoPtr->irqChanIdx, regIdx, data->regNum)) & (1U << bitOffset);
+    return (*(volatile uint32_t *)((uintptr_t)data->infoPtr->reg + IRQSTEER_CHAN_STATUS(data->infoPtr->irqChanIdx, regIdx, data->regNum)) & (1U << bitOffset)) != 0U;
 }
 
 /*!
@@ -301,7 +298,7 @@ static inline bool IRQSTEER_IsMasterInterruptSet(int32_t instIdx)
 {
     irqsteer_data_t *data = IRQSTEER_GetIrqsteerData(instIdx);
 
-    return *(volatile uint32_t *)((uint32_t)data->infoPtr->reg + IRQSTEER_CHAN_MSTRSTAT(data->infoPtr->irqChanIdx, data->regNum));
+    return (*(volatile uint32_t *)((uintptr_t)data->infoPtr->reg + IRQSTEER_CHAN_MSTRSTAT(data->infoPtr->irqChanIdx, data->regNum))) != 0U;
 }
 
 /*!
@@ -312,7 +309,7 @@ static inline bool IRQSTEER_IsMasterInterruptSet(int32_t instIdx)
  * @return The current set next interrupt source number of one specific master(output channel).
  *         Return IRQSTEER_INT_Invalid if no interrupt set.
  */
-IRQn_Type IRQSTEER_GetMasterNextInterrupt(int32_t instIdx, int32_t outputChanIdx);
+IRQn_Type IRQSTEER_GetMasterNextInterrupt(int32_t instIdx, uint32_t outputChanIdx);
 
 /*!
  * @brief Get the number of interrupt for a given master.
@@ -322,7 +319,7 @@ IRQn_Type IRQSTEER_GetMasterNextInterrupt(int32_t instIdx, int32_t outputChanIdx
  * enumeration ::irqsteer_int_master_t.
  * @return Number of interrupts for a given master.
  */
-int32_t IRQSTEER_GetMasterIrqCount(int32_t instIdx, int32_t outputChanIdx);
+uint32_t IRQSTEER_GetMasterIrqCount(int32_t instIdx, uint32_t outputChanIdx);
 
 /*!
  * @brief Get the status of the interrupts a master is in charge of.
@@ -340,7 +337,7 @@ int32_t IRQSTEER_GetMasterIrqCount(int32_t instIdx, int32_t outputChanIdx);
  * @param outputChanIdx Index of IRQSTEER output channel.
  * @return 64-bit variable containing the status of the interrupts a master is in charge of.
  */
-uint64_t IRQSTEER_GetMasterInterruptsStatus(int32_t instIdx, int32_t outputChanIdx);
+uint64_t IRQSTEER_GetMasterInterruptsStatus(int32_t instIdx, uint32_t outputChanIdx);
 
 /*!
  * @brief Gets the status of IRQSTEER group interrupt.
@@ -352,7 +349,7 @@ uint64_t IRQSTEER_GetMasterInterruptsStatus(int32_t instIdx, int32_t outputChanI
  * @return The mask of the group interrupt status.
  *         Bit[n] set means the source with bit offset n in group intGroupIndex of IRQSTEER is asserted.
  */
-static inline uint64_t IRQSTEER_GetGroupInterruptStatus(int32_t instIdx, int32_t outputChanIdx)
+static inline uint64_t IRQSTEER_GetGroupInterruptStatus(int32_t instIdx, uint32_t outputChanIdx)
 {
     return IRQSTEER_GetMasterInterruptsStatus(instIdx, outputChanIdx);
 }
@@ -363,7 +360,7 @@ static inline uint64_t IRQSTEER_GetGroupInterruptStatus(int32_t instIdx, int32_t
  * @param instIdx base address index in IRQSTEER peripheral base array.
  * @param outputChanIdx Master index of interrupt sources. ref "int".
  */
-void IRQSTEER_CommonIRQHandler(int32_t instIdx, int32_t outputChanIdx);
+void IRQSTEER_CommonIRQHandler(int32_t instIdx, uint32_t outputChanIdx);
 
 /*! @} */
 

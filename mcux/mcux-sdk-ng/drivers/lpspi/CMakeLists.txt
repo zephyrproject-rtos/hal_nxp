@@ -1,9 +1,9 @@
-# Copyright 2024-2025 NXP
+# Copyright 2024-2026 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.lpspi_edma)
-    mcux_component_version(2.4.9)
+    mcux_component_version(2.4.10)
 
     mcux_add_source(SOURCES fsl_lpspi_edma.h fsl_lpspi_edma.c)
 
@@ -12,7 +12,7 @@ if(CONFIG_MCUX_COMPONENT_driver.lpspi_edma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.lpspi)
-    mcux_component_version(2.7.4)
+    mcux_component_version(2.7.6)
 
     mcux_add_source(SOURCES fsl_lpspi.c fsl_lpspi.h)
 

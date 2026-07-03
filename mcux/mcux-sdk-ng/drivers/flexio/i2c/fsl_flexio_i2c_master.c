@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2025 NXP
+ * Copyright 2016-2022, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -177,7 +177,7 @@ static status_t FLEXIO_I2C_MasterTransferInitStateMachine(FLEXIO_I2C_Type *base,
     /* Calculate total byte count in a frame. */
     byteCount = 1U;
 
-    assert(handle->transfer.dataSize <= (UINT16_MAX - 1U - handle->transfer.subaddressSize));
+    assert(handle->transfer.dataSize <= ((size_t)UINT16_MAX - (size_t)1U - (size_t)handle->transfer.subaddressSize));
     if (!needRestart)
     {
         byteCount += handle->transfer.dataSize;
@@ -700,7 +700,7 @@ status_t FLEXIO_I2C_MasterInit(FLEXIO_I2C_Type *base, flexio_i2c_master_config_t
     /* Calculate and assign the actual baudrate. */
     base->baudrate = srcClock_Hz / (2U * (timerDiv + 1U));
 
-    assert(timerDiv <= UINT16_MAX);
+    assert(timerDiv <= (uint32_t)UINT16_MAX);
     timerConfig.timerCompare = (uint16_t)timerDiv;
 
     FLEXIO_SetTimerConfig(base->flexioBase, base->timerIndex[1], &timerConfig);
@@ -757,7 +757,7 @@ status_t FLEXIO_I2C_MasterInit(FLEXIO_I2C_Type *base, flexio_i2c_master_config_t
     controlVal |= (FLEXIO_CTRL_DBGE(masterConfig->enableInDebug ? 1U : 0U) | FLEXIO_CTRL_FASTACC(masterConfig->enableFastAccess ? 1U : 0U) |
                    FLEXIO_CTRL_FLEXEN(masterConfig->enableMaster ? 1U : 0U));
 #if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
-    if (!masterConfig->enableInDoze ? 1U : 0U)
+    if (!masterConfig->enableInDoze)
     {
         controlVal |= FLEXIO_CTRL_DOZEN_MASK;
     }
@@ -933,7 +933,7 @@ void FLEXIO_I2C_MasterSetBaudRate(FLEXIO_I2C_Type *base, uint32_t baudRate_Bps, 
     /* Set TIMCMP = (baud rate divider / 2) - 1.*/
     timerDiv = ((srcClock_Hz / baudRate_Bps) / 2U - 1U);
 
-    assert(timerDiv <= UINT16_MAX);
+    assert(timerDiv <= (uint32_t)UINT16_MAX);
     flexioBase->TIMCMP[base->timerIndex[1]] = (uint16_t)timerDiv;
 
     /* Calculate and assign the actual baudrate. */

@@ -1,5 +1,12 @@
 # DAC
 
+## [2.2.0]
+
+- New Features
+  - Added support for configuring the analog output buffer bypass.
+  - Added support for selecting the internal reference current source.
+  - Added support for configuring the internal reference current trim.
+
 ## [2.1.3]
 
 - Improvements

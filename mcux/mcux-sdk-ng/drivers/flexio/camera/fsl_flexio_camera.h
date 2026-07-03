@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2025 NXP
+ * Copyright 2016-2020, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FlexIO Camera driver version. */
-#define FSL_FLEXIO_CAMERA_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_FLEXIO_CAMERA_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*! @} */
 
 /*! @brief Define the Camera CPI interface is constantly 8-bit width. */
@@ -55,7 +55,7 @@ typedef struct _flexio_camera_type
     uint32_t pclkPinIdx;     /*!< Pixel clock pin (PCLK) index for flexio_camera. */
     uint32_t hrefPinIdx;     /*!< Horizontal sync pin (HREF) index for flexio_camera. */
 
-    uint32_t shifterStartIdx; /*!< First shifter index used for flexio_camera data FIFO. */
+    uint8_t shifterStartIdx;  /*!< First shifter index used for flexio_camera data FIFO. */
     uint32_t shifterCount;    /*!< The count of shifters that are used as flexio_camera data FIFO. */
     uint32_t timerIdx;        /*!< Timer index used for flexio_camera in FlexIO. */
 } FLEXIO_CAMERA_Type;
@@ -218,7 +218,7 @@ static inline void FLEXIO_CAMERA_EnableRxDMA(FLEXIO_CAMERA_Type *base, bool enab
  */
 static inline uint32_t FLEXIO_CAMERA_GetRxBufferAddress(FLEXIO_CAMERA_Type *base)
 {
-    return FLEXIO_GetShifterBufferAddress(base->flexioBase, kFLEXIO_ShifterBuffer, (uint8_t)base->shifterStartIdx);
+    return FLEXIO_GetShifterBufferAddress(base->flexioBase, kFLEXIO_ShifterBuffer, base->shifterStartIdx);
 }
 
 /*! @} */

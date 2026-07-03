@@ -109,7 +109,7 @@ status_t VREF_Init(VREF_Type *base, const vref_config_t *config)
     reg      = base->SC;
 #endif /* FSL_FEATURE_VREF_HAS_LOW_REFERENCE */
     /* Clear old buffer mode selection bits */
-    reg &= (uint8_t)(~(uint32_t)VREF_SC_MODE_LV_MASK & 0xFFU);
+    reg &= MCUX_MASK_INVERT_8(VREF_SC_MODE_LV_MASK);
     /* Set buffer Mode selection and Regulator enable bit */
     reg |= VREF_SC_MODE_LV(config->bufferMode) | VREF_SC_REGEN(1U);
 #if defined(FSL_FEATURE_VREF_HAS_COMPENSATION) && FSL_FEATURE_VREF_HAS_COMPENSATION
@@ -127,18 +127,19 @@ status_t VREF_Init(VREF_Type *base, const vref_config_t *config)
 #if defined(FSL_FEATURE_VREF_HAS_LOW_REFERENCE) && FSL_FEATURE_VREF_HAS_LOW_REFERENCE
     reg = base->VREFL_TRM;
     /* Clear old select external voltage reference and VREFL (0.4 V) reference buffer enable bits */
-    reg &= (uint8_t)(~(VREF_VREFL_TRM_VREFL_EN_MASK | VREF_VREFL_TRM_VREFL_SEL_MASK));
+    reg &= MCUX_MASK_INVERT_8(VREF_VREFL_TRM_VREFL_EN_MASK | VREF_VREFL_TRM_VREFL_SEL_MASK);
     /* Select external voltage reference and set VREFL (0.4 V) reference buffer enable */
-    reg |= VREF_VREFL_TRM_VREFL_SEL(config->enableExternalVoltRef) | VREF_VREFL_TRM_VREFL_EN(config->enableLowRef);
+    reg |= VREF_VREFL_TRM_VREFL_SEL(config->enableExternalVoltRef ? 1U : 0U) |
+           VREF_VREFL_TRM_VREFL_EN(config->enableLowRef ? 1U : 0U);
     base->VREFL_TRM = reg;
 #endif /* FSL_FEATURE_VREF_HAS_LOW_REFERENCE */
 
 #if defined(FSL_FEATURE_VREF_HAS_TRM4) && FSL_FEATURE_VREF_HAS_TRM4
     reg = base->TRM4;
     /* Clear old select internal voltage reference bit (2.1V) */
-    reg &= ~(uint8_t)VREF_TRM4_VREF2V1_EN_MASK;
+    reg &= MCUX_MASK_INVERT_8(VREF_TRM4_VREF2V1_EN_MASK);
     /* Select internal voltage reference (2.1V) */
-    reg |= VREF_TRM4_VREF2V1_EN(config->enable2V1VoltRef);
+    reg |= VREF_TRM4_VREF2V1_EN(config->enable2V1VoltRef ? 1U : 0U);
     base->TRM4 = reg;
 #endif /* FSL_FEATURE_VREF_HAS_TRM4 */
 
@@ -340,7 +341,8 @@ status_t VREF_SetLowReferenceTrimVal(VREF_Type *base, uint8_t trimValue)
 
     /* Set TRIM bits value in low voltage reference */
     reg             = base->VREFL_TRM;
-    reg             = ((reg & (uint8_t)(~VREF_VREFL_TRM_VREFL_TRIM_MASK)) | VREF_VREFL_TRM_VREFL_TRIM(trimValue));
+    reg             = ((reg & MCUX_MASK_INVERT_8(VREF_VREFL_TRM_VREFL_TRIM_MASK)) |
+                       VREF_VREFL_TRM_VREFL_TRIM(trimValue));
     base->VREFL_TRM = reg;
 
     /* Wait until internal voltage stable */

@@ -4,6 +4,8 @@
 
 - New Features
   - Added common IRQ handler entry DMA_DriverIRQHandler.
+- Bug Fixes
+  - Fixed CERT INT30-C violations.
 
 ## [2.5.4]
 

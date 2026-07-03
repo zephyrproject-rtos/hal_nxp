@@ -154,6 +154,12 @@ void DAC_Init(LPDAC_Type *base, const dac_config_t *config)
         tmp32 |= LPDAC_GCR_BUF_EN_MASK; /* Opamp is used as buffer. */
     }
 #endif                              /* FSL_FEATURE_LPDAC_HAS_GCR_BUF_EN */
+#if defined(FSL_FEATURE_LPDAC_HAS_GCR_DAC_OPTION_EN) && FSL_FEATURE_LPDAC_HAS_GCR_DAC_OPTION_EN
+    if (config->enableAnalogOutputBufferBypass)
+    {
+        tmp32 |= LPDAC_GCR_DAC_OPTION_EN_MASK; /* Bypass DAC analog output buffer. */
+    }
+#endif /* FSL_FEATURE_LPDAC_HAS_GCR_DAC_OPTION_EN */
 #if defined(FSL_FEATURE_LPDAC_HAS_GCR_LATCH_CYC) && FSL_FEATURE_LPDAC_HAS_GCR_LATCH_CYC
     /* Configure DAC sync cycles. */
     tmp32 |= LPDAC_GCR_LATCH_CYC(config->syncTime);
@@ -161,6 +167,9 @@ void DAC_Init(LPDAC_Type *base, const dac_config_t *config)
 #if defined(FSL_FEATURE_LPDAC_HAS_INTERNAL_REFERENCE_CURRENT) && FSL_FEATURE_LPDAC_HAS_INTERNAL_REFERENCE_CURRENT
     tmp32 |= (uint32_t)config->referenceCurrentSource;
 #endif /* FSL_FEATURE_LPDAC_HAS_INTERNAL_REFERENCE_CURRENT */
+#if defined(FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_TRIM) && FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_TRIM
+    tmp32 |= LPDAC_GCR_IREF_INT_TRIM(config->referenceCurrentTrim);
+#endif /* FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_TRIM */
     /* Set reference voltage source. */
     tmp32 |= LPDAC_GCR_DACRFS(config->referenceVoltageSource);
 
@@ -200,6 +209,9 @@ void DAC_GetDefaultConfig(dac_config_t *config)
     config->enableOpampBuffer = true; /* Set to true, keep the peripheral configuration
     					consistent before adding the control switch */
 #endif /* FSL_FEATURE_LPDAC_HAS_GCR_BUF_EN */
+#if defined(FSL_FEATURE_LPDAC_HAS_GCR_DAC_OPTION_EN) && FSL_FEATURE_LPDAC_HAS_GCR_DAC_OPTION_EN
+    config->enableAnalogOutputBufferBypass = false;
+#endif /* FSL_FEATURE_LPDAC_HAS_GCR_DAC_OPTION_EN */
 #if defined(FSL_FEATURE_LPDAC_HAS_GCR_RCV_TRG) && FSL_FEATURE_LPDAC_HAS_GCR_RCV_TRG
     config->enableExternalTriggerSource = false;
 #endif /* FSL_FEATURE_LPDAC_HAS_GCR_RCV_TRG */
@@ -217,8 +229,17 @@ void DAC_GetDefaultConfig(dac_config_t *config)
     config->syncTime = 1U;
 #endif /* FSL_FEATURE_LPDAC_HAS_GCR_LATCH_CYC */
 #if defined(FSL_FEATURE_LPDAC_HAS_INTERNAL_REFERENCE_CURRENT) && FSL_FEATURE_LPDAC_HAS_INTERNAL_REFERENCE_CURRENT
+#if !(defined(FSL_FEATURE_LPDAC_HAS_GCR_IREF_PTAT_EXT_SEL) && (FSL_FEATURE_LPDAC_HAS_GCR_IREF_PTAT_EXT_SEL==0U))
     config->referenceCurrentSource = kDAC_ReferenceCurrentSourcePtat;
+#elif defined(FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_SEL) && FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_SEL
+    config->referenceCurrentSource = kDAC_ReferenceCurrentSourceInternal;
+#else
+    config->referenceCurrentSource = kDAC_ReferenceCurrentSourceZtc;
+#endif /* FSL_FEATURE_LPDAC_HAS_GCR_IREF_PTAT_EXT_SEL */
 #endif /* FSL_FEATURE_LPDAC_HAS_INTERNAL_REFERENCE_CURRENT */
+#if defined(FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_TRIM) && FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_TRIM
+    config->referenceCurrentTrim = kDAC_ReferenceCurrentTrimTypical;
+#endif /* FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_TRIM */
     config->referenceVoltageSource = kDAC_ReferenceVoltageSourceAlt1;
 }
 

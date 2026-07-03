@@ -176,6 +176,15 @@ status_t LCDIC_Init(LCDIC_Type *base, const lcdic_config_t *config)
     CLOCK_EnableClock(s_lcdicClocks[instance]);
 #endif
 
+    /*
+     * TE_TO and TTEW share the same hardware timer and cannot both be set to non-zero simultaneously.
+     * They can't be set both to non-zero.
+     */
+    if ((config->teSyncWaitTime_Timer1 != 0U) && (config->teTimeoutTime_Timer1 != 0U))
+    {
+        return kStatus_InvalidArgument;
+    }
+
     base->CTRL = (uint32_t)config->mode | LCDIC_CTRL_DAT_ENDIAN(config->endian);
 
     base->FIFO_CTRL =

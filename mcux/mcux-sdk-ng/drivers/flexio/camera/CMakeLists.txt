@@ -1,9 +1,9 @@
-# Copyright 2024 NXP
+# Copyright 2024,2026 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.flexio_camera_edma)
-    mcux_component_version(2.1.3)
+    mcux_component_version(2.2.1)
 
     mcux_add_source(SOURCES fsl_flexio_camera_edma.c fsl_flexio_camera_edma.h)
 
@@ -12,7 +12,7 @@ if(CONFIG_MCUX_COMPONENT_driver.flexio_camera_edma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.flexio_camera)
-    mcux_component_version(2.1.3)
+    mcux_component_version(2.2.1)
 
     mcux_add_source(SOURCES fsl_flexio_camera.c fsl_flexio_camera.h)
 

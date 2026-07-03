@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Defines WDOG driver version 2.0.2. */
-#define FSL_WDOG_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief Defines WDOG driver version 2.0.3. */
+#define FSL_WDOG_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*! @} */
 
 /*! @name Unlock sequence */
@@ -246,7 +246,7 @@ static inline void WDOG_Enable(WDOG_Type *base)
  */
 static inline void WDOG_Disable(WDOG_Type *base)
 {
-    base->STCTRLH &= ~(uint16_t)WDOG_STCTRLH_WDOGEN_MASK;
+    base->STCTRLH = (uint16_t)(base->STCTRLH & ~(uint32_t)WDOG_STCTRLH_WDOGEN_MASK);
 }
 
 /*!
@@ -264,7 +264,7 @@ static inline void WDOG_Disable(WDOG_Type *base)
  */
 static inline void WDOG_EnableInterrupts(WDOG_Type *base, uint32_t mask)
 {
-    base->STCTRLH |= (uint16_t)mask;
+    base->STCTRLH = (uint16_t)((uint32_t)base->STCTRLH | (mask & 0xFFFFU));
 }
 
 /*!
@@ -282,7 +282,7 @@ static inline void WDOG_EnableInterrupts(WDOG_Type *base, uint32_t mask)
  */
 static inline void WDOG_DisableInterrupts(WDOG_Type *base, uint32_t mask)
 {
-    base->STCTRLH &= (uint16_t)~mask;
+    base->STCTRLH = (uint16_t)((uint32_t)base->STCTRLH & ~mask);
 }
 
 /*!

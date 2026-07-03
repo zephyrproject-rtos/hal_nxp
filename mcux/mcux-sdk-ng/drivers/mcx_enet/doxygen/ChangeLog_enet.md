@@ -1,5 +1,10 @@
 # MCX_ENET
 
+## [2.2.4]
+
+- Bug Fixes
+  - Reworked the VLAN tag bit-field layout to avoid IAR Pa217 build errors.
+
 ## [2.2.3]
 
 - New Features

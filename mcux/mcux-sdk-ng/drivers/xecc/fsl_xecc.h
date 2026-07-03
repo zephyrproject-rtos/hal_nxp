@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2020, 2026 NXP
  * All rights reserved.
  *
  *
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Driver version 2.0.0. */
-#define FSL_XECC_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 0U))
+#define FSL_XECC_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 1U))
 /*! @} */
 
 /*!

@@ -500,10 +500,6 @@ void DSI_InitDphy(MIPI_DSI_Type *base, const dsi_dphy_config_t *config)
     base->PHY_TMR_CFG = MIPI_DSI_PHY_TMR_CFG_phy_lp2hs_time(config->tDataLp2Hs_ByteClk) |
                         MIPI_DSI_PHY_TMR_CFG_phy_hs2lp_time(config->tDataHs2Lp_ByteClk);
     base->PHY_TMR_RD_CFG = MIPI_DSI_PHY_TMR_RD_CFG_max_rd_time(config->maxRead_ByteClk);
-
-    /* Enable the PHY */
-    base->PHY_RSTZ = MIPI_DSI_PHY_RSTZ_phy_shutdownz_MASK | MIPI_DSI_PHY_RSTZ_phy_rstz_MASK |
-                     MIPI_DSI_PHY_RSTZ_phy_enableclk_MASK | MIPI_DSI_PHY_RSTZ_phy_forcepll_MASK;
 }
 
 /*!

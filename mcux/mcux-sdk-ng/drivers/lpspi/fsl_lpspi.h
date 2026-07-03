@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2023, 2024-2025 NXP
+ * Copyright 2016-2023, 2024-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief LPSPI driver version. */
-#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 7, 4))
+#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 7, 6))
 /*! @} */
 
 #ifndef LPSPI_DUMMY_DATA
@@ -300,7 +300,7 @@ typedef struct _lpspi_master_config
 
     lpspi_pin_config_t pinCfg; /*!< Configures which pins are used for input and output data
                                 *during single bit transfers.*/
-    
+
 #if !(defined(FSL_FEATURE_LPSPI_HAS_NO_PCSCFG) && FSL_FEATURE_LPSPI_HAS_NO_PCSCFG)
     lpspi_pcs_function_config_t pcsFunc; /*!< Configures cs pins function.*/
 #endif
@@ -541,7 +541,7 @@ static inline void LPSPI_Enable(LPSPI_Type *base, bool enable)
         base->CR &= ~LPSPI_CR_MEN_MASK;
     }
 #if defined(FSL_FEATURE_LPSPI_HAS_ERRATA_051472) && FSL_FEATURE_LPSPI_HAS_ERRATA_051472
-    /* ERRATA051472: The SR[REF] would assert if software disables the LPSPI module 
+    /* ERRATA051472: The SR[REF] would assert if software disables the LPSPI module
        after receiving some data and then enabled the LPSPI again without performing a software reset.
        Clear SR[REF] flag after LPSPI module enabled*/
     if ((base->SR & (uint32_t)kLPSPI_ReceiveErrorFlag) != 0U)
@@ -888,7 +888,7 @@ static inline void LPSPI_FlushFifo(LPSPI_Type *base, bool flushTxFifo, bool flus
 
     LPSPI_Enable(base, enabled);
 #else
-    base->CR |= ((flushTxFifo ? 1U : 0U) << LPSPI_CR_RTF_SHIFT) | ((flushRxFifo ? 1U : 0U) << LPSPI_CR_RRF_SHIFT);
+    base->CR |= ((uint32_t)(flushTxFifo ? 1U : 0U) << LPSPI_CR_RTF_SHIFT) | ((uint32_t)(flushRxFifo ? 1U : 0U) << LPSPI_CR_RRF_SHIFT);
 #endif
 }
 
@@ -1007,29 +1007,22 @@ void LPSPI_MasterSetDelayScaler(LPSPI_Type *base, uint32_t scaler, lpspi_delay_t
  * @brief Calculates the delay based on the desired delay input in nanoseconds (module must be
  *        disabled to change the delay values).
  *
- * This function calculates the values for the following:
- * SCK to PCS delay, or
- * PCS to SCK delay, or
- * The configurations must occur between the transfer delay.
- *
+ * This function configures the SCK to PCS delay, PCS to SCK delay, or the delay between transfers.
  * The delay names are available in type lpspi_delay_type_t.
  *
- * The user passes the desired delay and the desired delay value in
- * nano-seconds.  The function calculates the value needed for the desired delay parameter
- * and returns the actual calculated delay because an exact delay match may not be possible. In this
- * case, the closest match is calculated without going below the desired delay value input.
- * It is possible to input a very large delay value that exceeds the capability of the part, in
- * which case the maximum supported delay is returned. It is up to the higher level
- * peripheral driver to alert the user of an out of range delay input.
+ * The function calculates the value needed for the desired delay parameter and returns the actual
+ * calculated delay. An exact delay match may not be possible, in which case the closest match is
+ * calculated without going below the desired delay value. If the input exceeds the maximum capability,
+ * the maximum supported delay is returned.
  *
- * Note that the LPSPI module must be configured for master mode before configuring this. And note that
- * the delayTime = LPSPI_clockSource / (PRESCALE * Delay_scaler).
+ * Note that the LPSPI module must first be disabled before configuring this.
+ * Note that the LPSPI module must be configured for master mode before configuring this.
  *
  * @param base LPSPI peripheral address.
- * @param delayTimeInNanoSec The desired delay value in nano-seconds.
- * @param whichDelay The desired delay to configuration, which must be of type lpspi_delay_type_t.
- * @param srcClock_Hz  Module source input clock in Hertz.
- * @return actual Calculated delay value in nano-seconds.
+ * @param delayTimeInNanoSec The desired delay value in nanoseconds.
+ * @param whichDelay The desired delay to configure, must be of type lpspi_delay_type_t.
+ * @param srcClock_Hz Module source input clock in Hertz.
+ * @return Actual calculated delay value in nanoseconds.
  */
 uint32_t LPSPI_MasterSetDelayTimes(LPSPI_Type *base,
                                    uint32_t delayTimeInNanoSec,

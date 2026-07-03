@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021, 2025 NXP
+ * Copyright 2016-2021, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -450,7 +450,7 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
         }
         else
         {
-            uint32_t maxTxFifo = 1U << ((handle->base->PARAM & LPI2C_PARAM_MTXFIFO_MASK) >> LPI2C_PARAM_MTXFIFO_SHIFT);
+            uint32_t maxTxFifo = (uint32_t)1U << ((handle->base->PARAM & LPI2C_PARAM_MTXFIFO_MASK) >> LPI2C_PARAM_MTXFIFO_SHIFT);
             uint32_t minCommandCount = MIN(commandCount, maxTxFifo);
             transferConfig.majorLoopCounts = minCommandCount;
             handle->remainingCommand = commandCount - minCommandCount;
@@ -652,7 +652,7 @@ static void LPI2C_MasterTransferEdmaHandleIRQ(LPI2C_Type *base, void *lpi2cMaste
         if(handle->remainingCommand > 0U)
         {
             uint32_t i;
-            uint32_t maxTxFifo = 1U << ((handle->base->PARAM & LPI2C_PARAM_MTXFIFO_MASK) >> LPI2C_PARAM_MTXFIFO_SHIFT);
+            uint32_t maxTxFifo = (uint32_t)1U << ((handle->base->PARAM & LPI2C_PARAM_MTXFIFO_MASK) >> LPI2C_PARAM_MTXFIFO_SHIFT);
             uint32_t txCount = maxTxFifo - ((base->MFSR & LPI2C_MFSR_TXCOUNT_MASK) >> LPI2C_MFSR_TXCOUNT_SHIFT);
             for(i = 0; i < MIN(txCount, handle->remainingCommand); i++)
             {

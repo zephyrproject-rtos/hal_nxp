@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 NXP
+ * Copyright 2024-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -111,13 +111,17 @@ int32_t CE_CmdAdd(ce_cmd_t cmd, ce_cmdstruct_t *cmdargs)
 
         *cmdbase = (uint32_t)cmd;
 
-        nargsbase  = (volatile uint16_t *)(cmdbase + 1U);
+        nargsbase  = (volatile uint16_t *)(volatile void *)(cmdbase + 1U);
         *nargsbase = cmdargs->n_ptr_args;
         nargsbase += 1;
         *nargsbase = cmdargs->n_param_args;
         nargsbase += 1;
 
-        ptrargbase = (void **)nargsbase;
+        /* MISRA C-2012 Rule 11.8 deviation: cast removes volatile qualifier
+         * from nargsbase when reinterpreting the command buffer region as void **.
+         * The buffer is accessed exclusively through this driver and the volatile
+         * qualifier is not required for the pointer-argument write region. */
+        ptrargbase = (void **)(volatile void *)nargsbase;
         for (i = 0; i < cmdargs->n_ptr_args; i++)
         {
             *ptrargbase = cmdargs->arg_ptr_array[i];

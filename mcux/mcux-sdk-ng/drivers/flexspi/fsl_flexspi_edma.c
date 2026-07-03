@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2023 NXP
+ * Copyright 2016-2020, 2023, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -220,10 +220,10 @@ status_t FLEXSPI_TransferEDMA(FLEXSPI_Type *base, flexspi_edma_handle_t *handle,
                 return kStatus_InvalidArgument;
             }
             /* Store the initially configured eDMA minor byte transfer count into the FLEXSPI handle */
-            handle->nbytes = (8U * handle->count);
+            handle->nbytes = (uint8_t)((8U * (uint32_t)handle->count) & 0xFFU);
         }
 
-        power = FLEXSPI_CalculatePower(8U * handle->count);
+        power = FLEXSPI_CalculatePower((uint8_t)((8U * (uint32_t)handle->count) & 0xFFU));
 
         /* Prepare transfer. */
         EDMA_PrepareTransfer(&xferConfig, xfer->data, (uint32_t)handle->nsize,
@@ -260,10 +260,10 @@ status_t FLEXSPI_TransferEDMA(FLEXSPI_Type *base, flexspi_edma_handle_t *handle,
                 return kStatus_InvalidArgument;
             }
             /* Store the initially configured eDMA minor byte transfer count into the FLEXSPI handle */
-            handle->nbytes = (8U * handle->count);
+            handle->nbytes = (uint8_t)((8U * (uint32_t)handle->count) & 0xFFU);
         }
 
-        power = FLEXSPI_CalculatePower(8U * handle->count);
+        power = FLEXSPI_CalculatePower((uint8_t)((8U * (uint32_t)handle->count) & 0xFFU));
 
         /* Prepare transfer. */
         EDMA_PrepareTransfer(&xferConfig, (void *)(uint32_t *)FLEXSPI_GetRxFifoAddress(base), (uint32_t)handle->nsize,

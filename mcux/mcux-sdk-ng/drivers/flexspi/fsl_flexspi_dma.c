@@ -172,9 +172,10 @@ static status_t FLEXSPI_WriteDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *h
     }
 
     handle->count =
-        8U * (uint8_t)((((base->IPTXFCR & FLEXSPI_IPTXFCR_TXWMRK_MASK) >> FLEXSPI_IPTXFCR_TXWMRK_SHIFT) + 1U) & 0xFFU);
+        (uint8_t)(8U * (((base->IPTXFCR & FLEXSPI_IPTXFCR_TXWMRK_MASK) >> FLEXSPI_IPTXFCR_TXWMRK_SHIFT) + 1U) & 0xFFU);
 
     /* Check the handle->count is power of 2 */
+    assert(handle->count > 0U);
     if (((handle->count) & (handle->count - 1U)) != 0U)
     {
         return kStatus_InvalidArgument;
@@ -202,7 +203,7 @@ static status_t FLEXSPI_WriteDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *h
     single DMA descriptor cannot be performed. */
     desCount    = (uint8_t)(dataSize / (uint32_t)handle->nbytes);
     bytesPerDes = handle->nbytes;
-    remains     = (uint8_t)(dataSize - (uint32_t)desCount * (uint32_t)handle->nbytes);
+    remains     = (uint8_t)((dataSize - (uint32_t)desCount * (uint32_t)handle->nbytes) & 0xFFU);
     if (remains > 0U)
     {
         uint8_t width = (uint8_t)kFLEXPSI_DMAnSize1Bytes;
@@ -278,7 +279,7 @@ static status_t FLEXSPI_WriteDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *h
     handle->transferSize     = dataSize;
 #endif
 
-    for (uint8_t i = desCount - 1U; i > 0U; i--)
+    for (uint8_t i = (uint8_t)((desCount - 1U) & 0xFFU); i > 0U; i--)
     {
         DMA_SetupDescriptor(&s_flexspiDes[i - 1U],
                             DMA_CHANNEL_XFER((nextDesc == NULL) ? false : true, true, (nextDesc == NULL) ? true : false,
@@ -325,9 +326,10 @@ static status_t FLEXSPI_ReadDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *ha
     dstInc = kDMA_AddressInterleave1xWidth;
 
     handle->count =
-        8U * (uint8_t)((((base->IPRXFCR & FLEXSPI_IPRXFCR_RXWMRK_MASK) >> FLEXSPI_IPRXFCR_RXWMRK_SHIFT) + 1U) & 0xFFU);
+        (uint8_t)(8U * (((base->IPRXFCR & FLEXSPI_IPRXFCR_RXWMRK_MASK) >> FLEXSPI_IPRXFCR_RXWMRK_SHIFT) + 1U) & 0xFFU);
 
     /* Check the watermark is power of 2U */
+    assert(handle->count > 0U);
     if ((handle->count & (handle->count - 1U)) != 0U)
     {
         return kStatus_InvalidArgument;
@@ -354,7 +356,7 @@ static status_t FLEXSPI_ReadDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *ha
     single DMA descriptor cannot be performed. */
     desCount    = (uint8_t)(dataSize / (uint32_t)handle->nbytes);
     bytesPerDes = handle->nbytes;
-    remains     = (uint8_t)(dataSize - (uint32_t)desCount * (uint32_t)handle->nbytes);
+    remains     = (uint8_t)((dataSize - (uint32_t)desCount * (uint32_t)handle->nbytes) & 0xFFU);
 
     if (remains > 0U)
     {
@@ -423,7 +425,7 @@ static status_t FLEXSPI_ReadDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *ha
     dmaRxTriggerConfig.burst = (dma_trigger_burst_t)(dmaTriggerBurst);
 #endif
 
-    for (uint8_t i = desCount - 1U; i > 0U; i--)
+    for (uint8_t i = (uint8_t)((desCount - 1U) & 0xFFU); i > 0U; i--)
     {
         DMA_SetupDescriptor(&s_flexspiDes[i - 1U],
                             DMA_CHANNEL_XFER((nextDesc == NULL) ? false : true, true, (nextDesc == NULL) ? true : false,

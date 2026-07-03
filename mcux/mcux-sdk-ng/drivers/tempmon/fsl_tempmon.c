@@ -19,6 +19,10 @@
 /*! @brief the room temperature. */
 #define TEMPMON_ROOMTEMP 25.0f
 
+/*! @brief Maximum temperature count value. */
+#define TEMPMON_TEMPCODE_MAX \
+    ((int32_t)(TEMPMON_TEMPSENSE0_TEMP_CNT_MASK >> TEMPMON_TEMPSENSE0_TEMP_CNT_SHIFT))
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -152,10 +156,6 @@ void TEMPMON_SetTempAlarm(TEMPMON_Type *base, int16_t tempVal, tempmon_alarm_mod
 {
     /* Check arguments */
     assert(NULL != base);
-    /* Different SOC has different qualified temperature level based on AEC-Q100 standard by default, such as Consumer(0
-       to +95 degrees celsius)/Industrial(-40 to +105 degrees celsius)/Automotive(-40 to +125 degrees celsius). */
-    assert(s_hotTemp >= tempVal);
-
     int32_t tempCodeVal;
     uint32_t tempRegVal;
 
@@ -171,7 +171,18 @@ void TEMPMON_SetTempAlarm(TEMPMON_Type *base, int16_t tempVal, tempmon_alarm_mod
     {
         tempResult = (int64_t)s_hotCount;
     }
-    tempCodeVal = (int32_t)(tempResult & (int64_t)0xFFFFFFFF);
+    if (tempResult < 0)
+    {
+        tempCodeVal = 0;
+    }
+    else if (tempResult > (int64_t)TEMPMON_TEMPCODE_MAX)
+    {
+        tempCodeVal = TEMPMON_TEMPCODE_MAX;
+    }
+    else
+    {
+        tempCodeVal = (int32_t)tempResult;
+    }
 
     switch (alarmMode)
     {

@@ -1,5 +1,12 @@
 # LCDIC
 
+## [2.2.1]
+
+- Bug Fixes
+  - Fixed LCDIC synchronization issue with TE signal. TE_TO and TTEW share the
+    same hardware timer and cannot both be set to non-zero simultaneously. Return
+    kStatus_InvalidArgument from LCDIC_Init if both are configured non-zero.
+
 ## [2.2.0]
 
 - New Features

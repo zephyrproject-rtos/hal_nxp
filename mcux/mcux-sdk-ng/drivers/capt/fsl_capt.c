@@ -259,9 +259,9 @@ bool CAPT_GetTouchData(CAPT_Type *base, capt_touch_data_t *data)
         {
             data->yesTimeOut = false;
         }
-        data->XpinsIndex     = (uint8_t)((CAPT_TOUCH_XVAL_MASK & tmp32) >> CAPT_TOUCH_XVAL_SHIFT);
-        data->sequenceNumber = (uint8_t)((CAPT_TOUCH_SEQ_MASK & tmp32) >> CAPT_TOUCH_SEQ_SHIFT);
-        data->count          = (uint16_t)((CAPT_TOUCH_COUNT_MASK & tmp32) >> CAPT_TOUCH_COUNT_SHIFT);
+        data->XpinsIndex     = (uint8_t)(((CAPT_TOUCH_XVAL_MASK & tmp32) >> CAPT_TOUCH_XVAL_SHIFT) & 0xFFU);
+        data->sequenceNumber = (uint8_t)(((CAPT_TOUCH_SEQ_MASK & tmp32) >> CAPT_TOUCH_SEQ_SHIFT) & 0xFFU);
+        data->count          = (uint16_t)(((CAPT_TOUCH_COUNT_MASK & tmp32) >> CAPT_TOUCH_COUNT_SHIFT) & 0xFFFFU);
 
         ret = true;
     }

@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief CAPT driver version. */
-#define FSL_CAPT_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_CAPT_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*! @} */
 
 #define CAPT_GET_XMAX_NUMBER(mask) (((CAPT_STATUS_XMAX_MASK & (mask)) >> CAPT_STATUS_XMAX_SHIFT) + 1)

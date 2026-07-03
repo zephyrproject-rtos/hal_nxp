@@ -58,7 +58,7 @@ status_t NETC_SocPreInitVsi(netc_enetc_hw_t *hw, netc_hw_si_idx_t si)
     return kStatus_Success;
 }
 
-static status_t NETC_PHYSelectMPLL(netc_mdio_handle_t *handle, bool is_2p5g)
+static status_t NETC_PHYSelectMPLL(netc_mdio_handle_t *handle)
 {
     uint16_t val;
     status_t ret;
@@ -69,7 +69,7 @@ static status_t NETC_PHYSelectMPLL(netc_mdio_handle_t *handle, bool is_2p5g)
                       REG_GLOBAL_CTRL_EX_4_PHY_PMA_PWR_STABLE);
 
     NETC_PHYRead(handle, false, PHY_DEV_GLOBAL, REG_GLOBAL_CTRL_EX_0, &val);
-    val = (uint16_t)((is_2p5g ? (val | REG_GLOBAL_CTRL_EX_0_MPLLB_SEL) : (val & ~REG_GLOBAL_CTRL_EX_0_MPLLB_SEL)) & 0xFFFFU);
+    val = (uint16_t)((val & ~REG_GLOBAL_CTRL_EX_0_MPLLB_SEL) & 0xFFFFU);
     NETC_PHYWrite(handle, false, PHY_DEV_GLOBAL, REG_GLOBAL_CTRL_EX_0, val);
 
     SDK_DelayAtLeastUs(1000, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
@@ -88,53 +88,72 @@ static status_t NETC_PHYSelectMPLL(netc_mdio_handle_t *handle, bool is_2p5g)
     return NETC_PHYPollBit(handle, true, PHY_PCS_DEV_VEND2, REG_PCS_CTRL1, REG_PCS_CTRL1_RESET, 0);
 }
 
-static status_t NETC_PHYInit2P5G(netc_mdio_handle_t *handle)
+static status_t NETC_PHYInit1G(netc_mdio_handle_t *handle)
 {
     status_t ret;
 
+    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_MII_CTRL, REG_MII_CTRL_AN_ENABLE,
+                      REG_MII_CTRL_AN_ENABLE);
+    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_25G_TX_GENCTRL0,
+                      REG_PMA_TX_GENCTRL0_TX_RST_0, REG_PMA_TX_GENCTRL0_TX_RST_0);
+    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_25G_RX_GENCTRL1,
+                      REG_PMA_RX_GENCTRL1_RX_RST_0, REG_PMA_RX_GENCTRL1_RX_RST_0);
+
+    SDK_DelayAtLeastUs(1000, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+
+    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_25G_TX_GENCTRL0,
+                      REG_PMA_TX_GENCTRL0_TX_RST_0, 0);
+    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_25G_RX_GENCTRL1,
+                      REG_PMA_RX_GENCTRL1_RX_RST_0, 0);
+
+    ret = NETC_PHYPollBit(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_25G_TX_STS, REG_PMA_TX_STS_TX_ACK_0, 0);
+    if (ret != kStatus_Success)
+    {
+        return ret;
+    }
+
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_MII_DIG_CTRL1, REG_MII_DIG_CTRL1_EN_2_5G_MODE,
-                      REG_MII_DIG_CTRL1_EN_2_5G_MODE);
+                      0);
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_MII_CTRL, REG_MII_CTRL_SS13, 0);
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_MII_CTRL, REG_MII_CTRL_SS6, REG_MII_CTRL_SS6);
-    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_MII_CTRL, REG_MII_CTRL_AN_ENABLE, 0);
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_25G_MPLL_CMN_CTRL,
-                      REG_PMA_MPLL_CMN_CTRL_MPLLB_SEL_0, REG_PMA_MPLL_CMN_CTRL_MPLLB_SEL_0);
+                      REG_PMA_MPLL_CMN_CTRL_MPLLB_SEL_0, 0);
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_25G_REF_CLK_CTRL,
                       REG_PMA_REF_CLK_CTRL_REF_RANGE_MASK, REG_PMA_REF_CLK_CTRL_REF_RANGE(2));
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_25G_REF_CLK_CTRL,
                       REG_PMA_REF_CLK_CTRL_REF_CLK_DIV2, REG_PMA_REF_CLK_CTRL_REF_CLK_DIV2);
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_25G_REF_CLK_CTRL,
-                      REG_PMA_REF_CLK_CTRL_REF_MPLLB_DIV2, REG_PMA_REF_CLK_CTRL_REF_MPLLB_DIV2);
-    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_MPLLB_CTRL0,
-                      REG_PMA_MPLLB_CTRL0_MPLLB_MULTIPLIER_MASK,
-                      REG_PMA_MPLLB_CTRL0_MPLLB_MULTIPLIER(0x7D)); // DEC 125
-    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_MPLLB_CTRL0,
-                      REG_PMA_MPLLB_CTRL0_MPLLB_CAL_DISABLE, 0);
-    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_MPLLB_CTRL1,
-                      REG_PMA_MPLLB_CTRL1_MPLLB_FRACN_CTRL_MASK, REG_PMA_MPLLB_CTRL1_MPLLB_FRACN_CTRL(0x0));
-    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_MPLLB_CTRL2,
-                      REG_PMA_MPLLB_CTRL2_V2_MPLLB_TX_CLK_DIV_MASK, REG_PMA_MPLLB_CTRL2_V2_MPLLB_TX_CLK_DIV(0x5));
-    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_MPLLB_CTRL2,
-                      REG_PMA_MPLLB_CTRL2_V2_MPLLB_DIV10_CLK_EN, REG_PMA_MPLLB_CTRL2_V2_MPLLB_DIV10_CLK_EN);
-    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_MPLLB_CTRL2,
-                      REG_PMA_MPLLB_CTRL2_V2_MPLLB_DIV8_CLK_EN, 0);
-    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_MPLLB_CTRL2,
-                      REG_PMA_MPLLB_CTRL2_V2_MPLLB_WRD_DIV2_EN, 0);
-    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_16G_MPLLB_CTRL3,
-                      REG_PMA_MPLL_CTRL3_MPLLB_BANDWIDTH_MASK,
-                      REG_PMA_MPLL_CTRL3_MPLLB_BANDWIDTH(0x3f)); // DEC 63
+                      REG_PMA_REF_CLK_CTRL_REF_MPLLA_DIV2, REG_PMA_REF_CLK_CTRL_REF_MPLLA_DIV2);
+    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_MPLLA_CTRL0,
+                      REG_PMA_MPLLA_CTRL0_MPLLA_MULTIPLIER_MASK,
+                      REG_PMA_MPLLA_CTRL0_MPLLA_MULTIPLIER(0x50)); // DEC 80
+    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_16G_MPLLA_CTRL1,
+                      REG_PMA_MPLLA_CTRL1_MPLLA_FRACN_CTRL_MASK, REG_PMA_MPLLA_CTRL1_MPLLA_FRACN_CTRL(0));
+    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_MPLLA_CTRL2,
+                      REG_PMA_MPLLA_CTRL2_V2_MPLLA_DIV16P5_CLK_EN, 0);
+    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_MPLLA_CTRL2,
+                      REG_PMA_MPLLA_CTRL2_V2_MPLLA_TX_CLK_DIV_MASK, REG_PMA_MPLLA_CTRL2_V2_MPLLA_TX_CLK_DIV(0x2));
+    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_MPLLA_CTRL2,
+                      REG_PMA_MPLLA_CTRL2_V2_MPLLA_DIV10_CLK_EN, REG_PMA_MPLLA_CTRL2_V2_MPLLA_DIV10_CLK_EN);
+    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_MPLLA_CTRL2,
+                      REG_PMA_MPLLA_CTRL2_V2_MPLLA_DIV8_CLK_EN, 0);
+    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_MPLLA_CTRL2,
+                      REG_PMA_MPLLA_CTRL2_V2_MPLLA_WRD_DIV2_EN, 0);
+    NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_16G_MPLLA_CTRL3,
+                      REG_PMA_MPLLA_CTRL3_MPLLA_BANDWIDTH_MASK,
+                      REG_PMA_MPLLA_CTRL3_MPLLA_BANDWIDTH(0x3f)); // DEC 63
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_25G_VCO_CAL_LD0,
                       REG_PMA_VCO_CAL_LD0_VCO_LD_VAL_0_MASK,
-                      REG_PMA_VCO_CAL_LD0_VCO_LD_VAL_0(0x546)); // DEC 1350
+                      REG_PMA_VCO_CAL_LD0_VCO_LD_VAL_0(0x550)); // DEC 1360
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_16G_25G_VCO_CAL_REF0,
                       REG_PMA_VCO_CAL_REF0_V2_VCO_REF_LD_0_MASK,
-                      REG_PMA_VCO_CAL_REF0_V2_VCO_REF_LD_0(0x1b)); // DEC 27
+                      REG_PMA_VCO_CAL_REF0_V2_VCO_REF_LD_0(0x11)); // DEC 17
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_25G_RX_GENCTRL1,
                       REG_PMA_RX_GENCTRL1_RX_DIV16P5_CLK_EN_0, 0);
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_25G_TX_RATE_CTRL,
-                      REG_PMA_TX_RATE_CTRL_TX0_RATE_MASK, REG_PMA_TX_RATE_CTRL_TX0_RATE(0x0));
+                      REG_PMA_TX_RATE_CTRL_TX0_RATE_MASK, REG_PMA_TX_RATE_CTRL_TX0_RATE(0x1));
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_25G_RX_RATE_CTRL,
-                      REG_PMA_RX_RATE_CTRL_RX0_RATE_MASK, REG_PMA_RX_RATE_CTRL_RX0_RATE(0x1));
+                      REG_PMA_RX_RATE_CTRL_RX0_RATE_MASK, REG_PMA_RX_RATE_CTRL_RX0_RATE(0x3));
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_TX_GENCTRL2,
                       REG_PMA_TX_GENCTRL2_TX0_WIDTH_MASK, REG_PMA_TX_GENCTRL2_TX0_WIDTH(0x1));
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_RX_GENCTRL2,
@@ -148,7 +167,7 @@ static status_t NETC_PHYInit2P5G(netc_mdio_handle_t *handle)
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_25G_DFE_TAP_CTRL0,
                       REG_PMA_DFE_TAP_CTRL0_DFE_TAP1_0_MASK, REG_PMA_DFE_TAP_CTRL0_DFE_TAP1_0(0x0));
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_25G_RX_CDR_CTRL,
-                      REG_PMA_RX_CDR_CTRL_VCO_LOW_FREQ_0, REG_PMA_RX_CDR_CTRL_VCO_LOW_FREQ_0);
+                      REG_PMA_RX_CDR_CTRL_VCO_LOW_FREQ_0, 0);
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_MII_DIG_CTRL1, REG_MII_DIG_CTRL1_VR_RST,
                       REG_MII_DIG_CTRL1_VR_RST);
 
@@ -173,7 +192,7 @@ static status_t NETC_PHYInit2P5G(netc_mdio_handle_t *handle)
                       REG_PMA_TX_EQ_CTRL0_TX_EQ_PRE_MASK, REG_PMA_TX_EQ_CTRL0_TX_EQ_PRE(0x0));
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_25G_TX_EQ_CTRL0,
                       REG_PMA_TX_EQ_CTRL0_TX_EQ_MAIN_MASK,
-                      REG_PMA_TX_EQ_CTRL0_TX_EQ_MAIN(0x18)); // DEC 24
+                      REG_PMA_TX_EQ_CTRL0_TX_EQ_MAIN(0x20)); // DEC 32
     NETC_PHYWriteBits(handle, true, PHY_PCS_DEV_VEND2, REG_PMA_MP_12G_16G_25G_TX_EQ_CTRL1,
                       REG_PMA_TX_EQ_CTRL1_TX_EQ_POST_MASK, REG_PMA_TX_EQ_CTRL1_TX_EQ_POST(0x0));
     return kStatus_Success;
@@ -183,18 +202,18 @@ status_t NETC_PHYInit(netc_mdio_handle_t *handle, phy_mode_t mode)
 {
     status_t ret;
 
-    if (mode != kNETC_SGMII2G5)
+    if (mode != kNETC_SGMII1G)
     {
         return kStatus_InvalidArgument;
     }
 
-    ret = NETC_PHYSelectMPLL(handle, true);
+    ret = NETC_PHYSelectMPLL(handle);
     if (ret != kStatus_Success)
     {
         return ret;
     }
 
-    ret = NETC_PHYInit2P5G(handle);
+    ret = NETC_PHYInit1G(handle);
     if (ret != kStatus_Success)
     {
         return ret;

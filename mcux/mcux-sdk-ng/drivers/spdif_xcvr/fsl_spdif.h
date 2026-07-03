@@ -9,6 +9,10 @@
 
 #include "fsl_common.h"
 
+#if !defined(SPDIF_Type) && defined(AUDIO_XCVR_Type)
+#define SPDIF_Type AUDIO_XCVR_Type
+#endif
+
 /*!
  * @addtogroup spdif
  * @{
@@ -21,26 +25,26 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SPDIF driver version. */
-#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(1, 0, 0))
+#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(1, 0, 1))
 /*! @} */
 
 /*! @brief SPDIF transfer queue size, user can refine it according to use case. */
-#define SPDIF_XFER_QUEUE_SIZE (4U)
+#define AUDIO_XCVR_XFER_QUEUE_SIZE (4U)
 
 /*! @brief SPDIF FIFO depth */
-#define SPDIF_FIFO_SIZE (128U)
+#define AUDIO_XCVR_FIFO_SIZE (128U)
 
 /*! @brief SPDIF maximum sample rate */
-#define SPDIF_MAX_SAMPLE_RATE (192000U)
+#define AUDIO_XCVR_MAX_SAMPLE_RATE (192000U)
 
 /*! @brief SPDIF minimum sample rate */
-#define SPDIF_MIN_SAMPLE_RATE (32000U)
+#define AUDIO_XCVR_MIN_SAMPLE_RATE (32000U)
 
 /*! @brief SPDIF maximum clock divider */
-#define SPDIF_MAX_CLOCK_DIVIDER (1023U)
+#define AUDIO_XCVR_MAX_CLOCK_DIVIDER (1023U)
 
 /*! @brief SPDIF maximum FIFO watermark */
-#define SPDIF_MAX_FIFO_WATERMARK (127U)
+#define AUDIO_XCVR_MAX_FIFO_WATERMARK (127U)
 
 /*! @brief SPDIF interrupt enable flags
  *
@@ -49,31 +53,22 @@
  */
 enum _spdif_interrupt_enable
 {
-    kSPDIF_NewChannelStatusInterrupt =
-        SPDIF_EXT_IER0_NEW_CS_IE_0_MASK,                             /*!< New channel status received interrupt */
-    kSPDIF_UserDataInterrupt   = SPDIF_EXT_IER0_UD_IE_0_MASK,   /*!< User data received interrupt */
-    kSPDIF_MuteDetectInterrupt = SPDIF_EXT_IER0_MUTE_IE_0_MASK, /*!< Mute condition detected interrupt */
-    kSPDIF_PreambleMismatchInterrupt =
-        SPDIF_EXT_IER0_PREAMBLE_MISMATCH_IE_0_MASK,                  /*!< Preamble mismatch detected interrupt */
-    kSPDIF_FifoOverflowUnderflowInterrupt =
-        SPDIF_EXT_IER0_FIFO_OFLOW_UFLOW_ERR_IE_0_MASK,               /*!< FIFO overflow or underflow error interrupt */
-    kSPDIF_RxNoDataInterrupt = SPDIF_EXT_IER0_RX_NO_DATA_REC_IE_0_MASK,    /*!< No data received on RX interrupt */
-    kSPDIF_DmaReadRequestInterrupt  = SPDIF_EXT_IER0_DMA_RD_REQ_IE_0_MASK, /*!< DMA read request interrupt */
-    kSPDIF_DmaWriteRequestInterrupt = SPDIF_EXT_IER0_DMA_WR_REQ_IE_0_MASK, /*!< DMA write request interrupt */
-    kSPDIF_RxBmeErrorInterrupt =
-        SPDIF_EXT_IER0_RX_DATA_BME_ERR_IE_0_MASK,  /*!< RX data BME (Bi-phase Mark Encoding) error interrupt */
-    kSPDIF_PreambleMatchInterrupt =
-        SPDIF_EXT_IER0_PREAMBLE_MATCH_IE_0_MASK,   /*!< Preamble match detected interrupt */
-    kSPDIF_MWPreambleMismatchInterrupt =
-        SPDIF_EXT_IER0_M_W_PRE_MISMATCH_IE_0_MASK, /*!< M/W preamble mismatch interrupt */
-    kSPDIF_BPreambleMismatchInterrupt =
-        SPDIF_EXT_IER0_B_PRE_MISMATCH_IE_0_MASK,   /*!< B preamble mismatch interrupt */
-    kSPDIF_UnexpectedPreambleInterrupt =
-        SPDIF_EXT_IER0_UNEXP_PRE_REC_IE_0_MASK,    /*!< Unexpected preamble received interrupt */
-    kSPDIF_ChannelStatusOverflowInterrupt =
-        SPDIF_EXT_IER0_CS_UD_OFLOW_IE_0_MASK,      /*!< Channel status or user data overflow interrupt */
-    kSPDIF_NewBlockReceivedInterrupt = SPDIF_EXT_IER0_NEW_BLK_RCVD_IE_0_MASK, /*!< New block received interrupt */
-    kSPDIF_WakeupInterrupt           = SPDIF_EXT_IER0_SPDIF_WAKEUP_IE_0_MASK, /*!< SPDIF wakeup interrupt */
+    kSPDIF_NewChannelStatusInterrupt = AUDIO_XCVR_EXT_IER0_NEW_CS_IE_0_MASK, /*!< New channel status received interrupt */
+    kSPDIF_UserDataInterrupt         = AUDIO_XCVR_EXT_IER0_UD_IE_0_MASK,     /*!< User data received interrupt */
+    kSPDIF_MuteDetectInterrupt       = AUDIO_XCVR_EXT_IER0_MUTE_IE_0_MASK,   /*!< Mute condition detected interrupt */
+    kSPDIF_PreambleMismatchInterrupt = AUDIO_XCVR_EXT_IER0_PREAMBLE_MISMATCH_IE_0_MASK, /*!< Preamble mismatch detected interrupt */
+    kSPDIF_FifoOverflowUnderflowInterrupt = AUDIO_XCVR_EXT_IER0_FIFO_OFLOW_UFLOW_ERR_IE_0_MASK, /*!< FIFO overflow or underflow error interrupt */
+    kSPDIF_RxNoDataInterrupt             = AUDIO_XCVR_EXT_IER0_RX_NO_DATA_REC_IE_0_MASK, /*!< No data received on RX interrupt */
+    kSPDIF_DmaReadRequestInterrupt       = AUDIO_XCVR_EXT_IER0_DMA_RD_REQ_IE_0_MASK, /*!< DMA read request interrupt */
+    kSPDIF_DmaWriteRequestInterrupt      = AUDIO_XCVR_EXT_IER0_DMA_WR_REQ_IE_0_MASK, /*!< DMA write request interrupt */
+    kSPDIF_RxBmeErrorInterrupt           = AUDIO_XCVR_EXT_IER0_RX_DATA_BME_ERR_IE_0_MASK, /*!< RX data BME (Bi-phase Mark Encoding) error interrupt */
+    kSPDIF_PreambleMatchInterrupt        = AUDIO_XCVR_EXT_IER0_PREAMBLE_MATCH_IE_0_MASK, /*!< Preamble match detected interrupt */
+    kSPDIF_MWPreambleMismatchInterrupt   = AUDIO_XCVR_EXT_IER0_M_W_PRE_MISMATCH_IE_0_MASK, /*!< M/W preamble mismatch interrupt */
+    kSPDIF_BPreambleMismatchInterrupt    = AUDIO_XCVR_EXT_IER0_B_PRE_MISMATCH_IE_0_MASK, /*!< B preamble mismatch interrupt */
+    kSPDIF_UnexpectedPreambleInterrupt   = AUDIO_XCVR_EXT_IER0_UNEXP_PRE_REC_IE_0_MASK, /*!< Unexpected preamble received interrupt */
+    kSPDIF_ChannelStatusOverflowInterrupt = AUDIO_XCVR_EXT_IER0_CS_UD_OFLOW_IE_0_MASK, /*!< Channel status or user data overflow interrupt */
+    kSPDIF_NewBlockReceivedInterrupt      = AUDIO_XCVR_EXT_IER0_NEW_BLK_RCVD_IE_0_MASK, /*!< New block received interrupt */
+    kSPDIF_WakeupInterrupt                = AUDIO_XCVR_EXT_IER0_SPDIF_WAKEUP_IE_0_MASK, /*!< SPDIF wakeup interrupt */
     kSPDIF_AllInterrupt              = 0x1DEFFE7U,                            /*!< All interrupts combined mask */
 };
 
@@ -85,24 +80,22 @@ enum _spdif_interrupt_enable
  */
 enum _spdif_status_flag
 {
-    kSPDIF_RxNewChannelStatus = SPDIF_EXT_ISR_RX_NEW_CH_STAT_MASK,    /*!< New channel status received flag */
-    kSPDIF_RxUserData         = SPDIF_EXT_ISR_RX_USR_DATA_MASK,       /*!< User data received flag */
-    kSPDIF_MuteDetected       = SPDIF_EXT_ISR_MUTE_DET_MASK,          /*!< Mute condition detected flag */
-    kSPDIF_PreambleMismatch   = SPDIF_EXT_ISR_PREAMBLE_MISMATCH_MASK, /*!< Preamble mismatch detected flag */
-    kSPDIF_FifoOverflowUnderflow =
-        SPDIF_EXT_ISR_FIFO_OFLOW_UFLOW_ERR_MASK,                           /*!< FIFO overflow or underflow error flag */
-    kSPDIF_RxNoDataReceived = SPDIF_EXT_ISR_RX_NO_DATA_REC_MASK,      /*!< No data received on RX flag */
-    kSPDIF_DmaReadRequest   = SPDIF_EXT_ISR_DMA_RD_REQ_MASK,          /*!< DMA read request flag */
-    kSPDIF_DmaWriteRequest  = SPDIF_EXT_ISR_DMA_WR_REQ_MASK,          /*!< DMA write request flag */
-    kSPDIF_RxBmeError = SPDIF_EXT_ISR_RX_BME_BIT_ERR_MASK, /*!< RX BME (Bi-phase Mark Encoding) bit error flag */
-    kSPDIF_PreambleMatch      = SPDIF_EXT_ISR_PREAMBLE_MATCH_INT_MASK, /*!< Preamble match detected flag */
-    kSPDIF_MWPreambleMismatch = SPDIF_EXT_ISR_M_W_PRE_MISMATCH_MASK,   /*!< M/W preamble mismatch flag */
-    kSPDIF_BPreambleMismatch  = SPDIF_EXT_ISR_B_PRE_MISMATCH_MASK,     /*!< B preamble mismatch flag */
-    kSPDIF_UnexpectedPreamble = SPDIF_EXT_ISR_UNEXP_PRE_REC_MASK,      /*!< Unexpected preamble received flag */
-    kSPDIF_ChannelStatusOverflow =
-        SPDIF_EXT_ISR_CS_OR_UD_OFLOW_MASK,                          /*!< Channel status or user data overflow flag */
-    kSPDIF_NewBlockReceived = SPDIF_EXT_ISR_NEW_BLK_RCVD_MASK, /*!< New block received flag */
-    kSPDIF_WakeupReceived   = SPDIF_EXT_ISR_SPDIF_WAKEUP_REC_MASK, /*!< SPDIF wakeup received flag */
+    kSPDIF_RxNewChannelStatus     = AUDIO_XCVR_EXT_ISR_RX_NEW_CH_STAT_MASK,      /*!< New channel status received flag */
+    kSPDIF_RxUserData             = AUDIO_XCVR_EXT_ISR_RX_USR_DATA_MASK,         /*!< User data received flag */
+    kSPDIF_MuteDetected           = AUDIO_XCVR_EXT_ISR_MUTE_DET_MASK,            /*!< Mute condition detected flag */
+    kSPDIF_PreambleMismatch       = AUDIO_XCVR_EXT_ISR_PREAMBLE_MISMATCH_MASK,   /*!< Preamble mismatch detected flag */
+    kSPDIF_FifoOverflowUnderflow  = AUDIO_XCVR_EXT_ISR_FIFO_OFLOW_UFLOW_ERR_MASK, /*!< FIFO overflow or underflow error flag */
+    kSPDIF_RxNoDataReceived       = AUDIO_XCVR_EXT_ISR_RX_NO_DATA_REC_MASK,      /*!< No data received on RX flag */
+    kSPDIF_DmaReadRequest         = AUDIO_XCVR_EXT_ISR_DMA_RD_REQ_MASK,          /*!< DMA read request flag */
+    kSPDIF_DmaWriteRequest        = AUDIO_XCVR_EXT_ISR_DMA_WR_REQ_MASK,          /*!< DMA write request flag */
+    kSPDIF_RxBmeError             = AUDIO_XCVR_EXT_ISR_RX_BME_BIT_ERR_MASK,      /*!< RX BME (Bi-phase Mark Encoding) bit error flag */
+    kSPDIF_PreambleMatch          = AUDIO_XCVR_EXT_ISR_PREAMBLE_MATCH_INT_MASK,  /*!< Preamble match detected flag */
+    kSPDIF_MWPreambleMismatch     = AUDIO_XCVR_EXT_ISR_M_W_PRE_MISMATCH_MASK,    /*!< M/W preamble mismatch flag */
+    kSPDIF_BPreambleMismatch      = AUDIO_XCVR_EXT_ISR_B_PRE_MISMATCH_MASK,      /*!< B preamble mismatch flag */
+    kSPDIF_UnexpectedPreamble     = AUDIO_XCVR_EXT_ISR_UNEXP_PRE_REC_MASK,       /*!< Unexpected preamble received flag */
+    kSPDIF_ChannelStatusOverflow  = AUDIO_XCVR_EXT_ISR_CS_OR_UD_OFLOW_MASK,      /*!< Channel status or user data overflow flag */
+    kSPDIF_NewBlockReceived       = AUDIO_XCVR_EXT_ISR_NEW_BLK_RCVD_MASK,        /*!< New block received flag */
+    kSPDIF_WakeupReceived         = AUDIO_XCVR_EXT_ISR_SPDIF_WAKEUP_REC_MASK,    /*!< SPDIF wakeup received flag */
 };
 
 /*! @brief SPDIF status return codes. */
@@ -215,8 +208,8 @@ typedef void (*spdif_transfer_callback_t)(SPDIF_Type *base,
 /*! @brief SPDIF handle structure */
 struct _spdif_handle
 {
-    spdif_transfer_t spdifQueue[SPDIF_XFER_QUEUE_SIZE]; /*!< Transfer queue */
-    size_t transferSize[SPDIF_XFER_QUEUE_SIZE];              /*!< Transfer size */
+    spdif_transfer_t spdifQueue[AUDIO_XCVR_XFER_QUEUE_SIZE]; /*!< Transfer queue */
+    size_t transferSize[AUDIO_XCVR_XFER_QUEUE_SIZE];              /*!< Transfer size */
     volatile uint8_t queueUser;                                   /*!< Queue user index */
     volatile uint8_t queueDriver;                                 /*!< Queue driver index */
     spdif_transfer_callback_t callback;                      /*!< Callback function */
@@ -413,6 +406,13 @@ status_t SPDIF_WriteBlocking(SPDIF_Type *base, const uint8_t *buffer, uint32_t s
  * @retval kStatus_InvalidArgument Invalid buffer or size
  */
 status_t SPDIF_ReadBlocking(SPDIF_Type *base, uint8_t *buffer, uint32_t size);
+
+/*!
+ * @brief Copies received channel-status words into the transmit channel-status registers.
+ *
+ * @param base SPDIF base pointer.
+ */
+void SPDIF_CopyRxChannelStatusToTx(SPDIF_Type *base);
 
 /*! @} */
 

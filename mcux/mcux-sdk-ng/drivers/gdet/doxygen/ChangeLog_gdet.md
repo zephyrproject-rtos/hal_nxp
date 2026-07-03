@@ -1,5 +1,9 @@
 # GDET
 
+## [2.1.4]
+
+- Add wait into GDET_ReconfigureVoltageMode to allow update conf properly finish
+
 ## [2.1.3]
 
 - Update to KW43 GDET offering

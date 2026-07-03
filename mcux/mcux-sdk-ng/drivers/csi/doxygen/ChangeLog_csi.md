@@ -1,5 +1,11 @@
 # CSI
 
+## [2.2.2]
+
+- Bug Fixes
+  - Fixed CERT-C violations.
+  - Fixed MISRA issues.
+
 ## [2.2.1]
 
 - New Features

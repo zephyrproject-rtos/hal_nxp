@@ -1,5 +1,10 @@
 # FLEXIO_I2C
 
+## [2.6.3]
+
+- Bug Fixes
+  - Fixed MISRA 10.4, 10.7 and 14.4 issues.
+
 ## [2.6.2]
 
 - Improvements

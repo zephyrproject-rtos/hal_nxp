@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 9)) /*!< Version 2.0.9 */
+#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 10)) /*!< Version 2.0.10 */
 /*! @} */
 
 /*! @brief SPDIF return status*/
@@ -612,6 +612,13 @@ static inline uint32_t SPDIF_ReadUChannel(SPDIF_Type *base)
 {
     return base->SRU;
 }
+
+/*!
+ * @brief Copies received channel-status words into the transmit channel-status registers.
+ *
+ * @param base SPDIF base pointer.
+ */
+void SPDIF_CopyRxChannelStatusToTx(SPDIF_Type *base);
 
 /*! @} */
 

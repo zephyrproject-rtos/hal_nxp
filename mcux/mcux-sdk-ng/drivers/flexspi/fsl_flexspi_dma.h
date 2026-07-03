@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief FLEXSPI DMA driver version 2.2.2. */
-#define FSL_FLEXSPI_DMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+/*! @brief FLEXSPI DMA driver version 2.2.3. */
+#define FSL_FLEXSPI_DMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
 /*! @} */
 
 typedef struct _flexspi_dma_handle flexspi_dma_handle_t;

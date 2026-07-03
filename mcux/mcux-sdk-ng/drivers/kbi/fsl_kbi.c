@@ -79,9 +79,9 @@ void KBI_Init(KBI_Type *base, kbi_config_t *configure)
     /* Mask keyboard interrupts first to prevent false interrupt request during initialization */
     base->SC = 0;
     /* Setting KBI polarity. */
-    base->ES = KBI_ES_KBEDG(configure->pinsEdge);
+    base->ES = KBI_ES_KBEDG((uint8_t)(configure->pinsEdge & KBI_ES_KBEDG_MASK));
     /* Enable KBI pins. */
-    base->PE = KBI_PE_KBIPE(configure->pinsEnabled);
+    base->PE = KBI_PE_KBIPE((uint8_t)(configure->pinsEnabled & KBI_PE_KBIPE_MASK));
     /* Clear any false interrupts. */
     scReg = KBI_SC_KBACK_MASK;
 #if defined(FSL_FEATURE_KBI_HAS_SOURCE_PIN) && FSL_FEATURE_KBI_HAS_SOURCE_PIN

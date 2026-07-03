@@ -1,5 +1,10 @@
 # MIPI_DSI
 
+## [2.1.2]
+
+- Bug Fixes.
+  - Removed redundant PHY_RSTZ setting in DSI_InitDphy.
+
 ## [2.1.1]
 
 - Bug Fixes.

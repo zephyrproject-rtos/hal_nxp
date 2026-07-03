@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2024-2025 NXP
+ * Copyright 2016-2022, 2024-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief LPSPI EDMA driver version. */
-#define FSL_LPSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 9))
+#define FSL_LPSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 10))
 
 /*! @brief DMA max transfer size */
 #define DMA_MAX_TRANSFER_COUNT 0x7FFFU

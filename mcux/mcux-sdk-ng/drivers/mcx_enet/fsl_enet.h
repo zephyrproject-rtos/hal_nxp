@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Defines the driver version. */
-#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
+#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
 /*@}*/
 
 /*! @name Control and status region bit masks of the receive buffer descriptor. */
@@ -590,13 +590,34 @@ typedef struct _enet_tx_frame_struct
     void *context;                     /*!< Driver reclaims and gives it in Tx over callback. */
 } enet_tx_frame_struct_t;
 
-/*! @brief Ethernet VLAN Tag. */
+/*! @brief IEEE 802.1Q VLAN Tag Control Information (TCI).
+ *
+ * This structure describes the 16-bit VLAN tag value packed into the ENET
+ * VLAN match/insert register fields (VL/VLT):
+ * - bits[15:13]: PCP
+ * - bit[12]:    DEI/CFI
+ * - bits[11:0]: VID
+ */
+typedef struct _enet_vlan_tci
+{
+    uint16_t pcp : 3;  /*!< IEEE 802.1Q Priority Code Point (bits[15:13]). */
+    uint16_t dei : 1;  /*!< IEEE 802.1Q Drop Eligible Indicator / CFI (bit[12]). */
+    uint16_t vid : 12; /*!< IEEE 802.1Q VLAN Identifier (bits[11:0]). */
+} enet_vlan_tci_t;
+
+/*! @brief IEEE 802.1Q VLAN tag description.
+ *
+ * This structure separates the VLAN TPID selector from the VLAN Tag Control
+ * Information (TCI). The TCI fields are packed by the driver into the ENET
+ * VLAN match/insert register fields.
+ *
+ * @note This is a configuration structure, not a raw packed Ethernet header
+ * representation.
+ */
 typedef struct _enet_vlan_tag
 {
-    enet_vlan_tpid_t tpid; /*!< VLAN TPID. */
-    uint16_t pcp : 3;      /*!< VLAN Priority. */
-    uint16_t dei : 1;      /*!< Drop Eligible indicator. */
-    uint16_t vid : 12;     /*!< VLAN Identifier. */
+    enet_vlan_tpid_t tpid; /*!< VLAN TPID selector (C-VLAN or S-VLAN). */
+    enet_vlan_tci_t tci;   /*!< VLAN TCI value used for ENET VLAN match/insert fields. */
 } enet_vlan_tag_t;
 
 /*! @brief Ethernet VLAN configuration for Tx. */

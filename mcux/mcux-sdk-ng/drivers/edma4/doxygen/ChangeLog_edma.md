@@ -1,5 +1,10 @@
 # EDMA
 
+## [2.10.11]
+
+- Bug Fixes
+  - Fixed CERT INT31-C and CERT INT30-C violations in edma4 driver.
+
 ## [2.10.10]
 
 - Bug Fixes

@@ -1,5 +1,10 @@
 # FLEXIO_SPI
 
+## [2.4.4]
+
+- Bug Fixes
+  - Fixed MISRA 10.4 issues.
+
 ## [2.4.3]
 
 - Improvements
