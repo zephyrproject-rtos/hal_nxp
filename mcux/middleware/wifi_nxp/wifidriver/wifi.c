@@ -2506,7 +2506,7 @@ static mlan_status wlan_process_802dot11_mgmt_pkt2(mlan_private *priv, t_u8 *pay
     payload_len -= MLAN_MAC_ADDR_LENGTH;
     if (payload_len > sizeof(wm_wifi.mgmt_resp.frame.frame))
     {
-        wifi_w("The payload length (%d) overs the max length(%d), dropping mgmt frame: type=%d", payload_len,
+        wifi_w("The payload length (%d) overs the max length(%zu), dropping mgmt frame: type=%d", payload_len,
                sizeof(wm_wifi.mgmt_resp.frame.frame), sub_type);
         dump_hex(payload, 64);
         return MLAN_STATUS_FAILURE;

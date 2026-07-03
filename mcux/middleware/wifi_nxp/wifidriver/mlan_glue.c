@@ -3820,7 +3820,7 @@ int wifi_process_cmd_response(HostCmd_DS_COMMAND *resp)
                 assoc_resp->frame.frame_len = resp->size - S_DS_GEN;
                 if (assoc_resp->frame.frame_len > (int)sizeof(assoc_resp->frame.frame))
                 {
-                    wifi_e("Assocate response payload length (%d) overs the max length(%d), dropping it",
+                    wifi_e("Assocate response payload length (%d) overs the max length(%zu), dropping it",
                            assoc_resp->frame.frame_len, sizeof(assoc_resp->frame.frame));
                     assoc_resp->frame.frame_len = 0;
                     result                      = WIFI_EVENT_REASON_FAILURE;
@@ -5867,11 +5867,11 @@ static void wifi_handle_event_tx_status_report(Event_Ext_t *evt)
     {
         if (tx_status->status == 0U)
         {
-            (void)wifi_event_completion(WIFI_EVENT_MGMT_TX_STATUS, WIFI_EVENT_REASON_SUCCESS, (void *)bss_type);
+            (void)wifi_event_completion(WIFI_EVENT_MGMT_TX_STATUS, WIFI_EVENT_REASON_SUCCESS, (void *)(uintptr_t)bss_type);
         }
         else
         {
-            (void)wifi_event_completion(WIFI_EVENT_MGMT_TX_STATUS, WIFI_EVENT_REASON_FAILURE, (void *)bss_type);
+            (void)wifi_event_completion(WIFI_EVENT_MGMT_TX_STATUS, WIFI_EVENT_REASON_FAILURE, (void *)(uintptr_t)bss_type);
         }
         return;
     }

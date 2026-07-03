@@ -155,7 +155,7 @@ void wifi_process_mgmt_tx_status(struct wifi_message *msg)
 
     if (wm_wifi.supp_if_callbk_fns->mgmt_tx_status_callbk_fn)
     {
-        if ((t_u32)(msg->data) == MLAN_BSS_TYPE_UAP)
+        if ((uintptr_t)(msg->data) == MLAN_BSS_TYPE_UAP)
         {
             wm_wifi.supp_if_callbk_fns->mgmt_tx_status_callbk_fn(wm_wifi.hapd_if_priv, resp, resp->frame.frame_len, msg->reason);
         }
