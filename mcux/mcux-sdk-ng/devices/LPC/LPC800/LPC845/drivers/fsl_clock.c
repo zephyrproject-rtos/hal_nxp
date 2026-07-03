@@ -88,7 +88,9 @@ static bool CLOCK_SetFRGClkFreq(uint32_t *base, uint32_t freq)
         return false;
     }
 
-    mul = (uint32_t)(((uint64_t)((uint64_t)input - freq) << 8U) / ((uint64_t)freq));
+    uint64_t mulU64 = ((uint64_t)((uint64_t)input - freq) << 8U) / (uint64_t)freq;
+    assert(mulU64 <= (uint64_t)UINT32_MAX);
+    mul = (uint32_t)(mulU64 & (uint64_t)UINT32_MAX);
 
     CLK_FRG_DIV_REG_MAP(base) = SYSCON_FRG_FRGDIV_DIV_MASK;
     CLK_FRG_MUL_REG_MAP(base) = SYSCON_FRG_FRGMULT_MULT(mul);
@@ -134,8 +136,11 @@ uint32_t CLOCK_GetFRG0ClkFreq(void)
 {
     uint32_t temp;
 
+    uint64_t resultFRG0;
     temp = CLOCK_GetFRGInputClkFreq((uint32_t *)(uint32_t)(&SYSCON->FRG[0U])) << 8U;
-    return (uint32_t)((uint64_t)(temp) / (((uint64_t)SYSCON->FRG[0U].FRGMULT & SYSCON_FRG_FRGMULT_MULT_MASK) + 256ULL));
+    resultFRG0 = (uint64_t)(temp) / (((uint64_t)SYSCON->FRG[0U].FRGMULT & SYSCON_FRG_FRGMULT_MULT_MASK) + 256ULL);
+    assert(resultFRG0 <= (uint64_t)UINT32_MAX);
+    return (uint32_t)(resultFRG0 & (uint64_t)UINT32_MAX);
 }
 
 /*! brief  Return Frequency of FRG1 Clock.
@@ -145,8 +150,11 @@ uint32_t CLOCK_GetFRG1ClkFreq(void)
 {
     uint32_t temp;
 
+    uint64_t resultFRG1;
     temp = (CLOCK_GetFRGInputClkFreq((uint32_t *)(uint32_t)(&SYSCON->FRG[1U])) << 8U);
-    return (uint32_t)(((uint64_t)temp) / (((uint64_t)SYSCON->FRG[1U].FRGMULT & SYSCON_FRG_FRGMULT_MULT_MASK) + 256ULL));
+    resultFRG1 = ((uint64_t)temp) / (((uint64_t)SYSCON->FRG[1U].FRGMULT & SYSCON_FRG_FRGMULT_MULT_MASK) + 256ULL);
+    assert(resultFRG1 <= (uint64_t)UINT32_MAX);
+    return (uint32_t)(resultFRG1 & (uint64_t)UINT32_MAX);
 }
 
 /*! brief  Return Frequency of Main Clock.

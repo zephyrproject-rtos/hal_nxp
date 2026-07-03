@@ -7,13 +7,13 @@
 **                          LPC802UK
 **
 **     Version:             rev. 3.0, 2025-11-18
-**     Build:               b251118
+**     Build:               b260515
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SWM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

@@ -10,7 +10,7 @@
 **
 **     Reference manual:    LPC540xx/LPC54S0xx User manual Rev.0.8 5 June 2018
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260509
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -18,7 +18,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -346,8 +346,8 @@ void SystemCoreClockUpdate (void) {
 
                 /* MDEC used for rate */
                 workRate = (uint64_t)(clkRate) * (uint64_t)findPllMMult(SYSCON->SYSPLLCTRL, SYSCON->SYSPLLMDEC);
-                clkRate = (uint32_t)(workRate / ((uint64_t)postdiv));
-                clkRate = clkRate * 2UL; /* PLL CCO output is divided by 2 before to M-Divider */
+                clkRate = (uint32_t)((workRate / ((uint64_t)postdiv)) & 0xFFFFFFFFU);
+                clkRate = (uint32_t)(((uint64_t)clkRate * 2UL) & 0xFFFFFFFFU); /* PLL CCO output is divided by 2 before to M-Divider */
             }
             break;
         case 0x03: /* RTC oscillator 32 kHz output (32k_clk) */

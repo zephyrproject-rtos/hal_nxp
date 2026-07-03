@@ -6,13 +6,13 @@
 **                          LPC54S018J4MET180
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260515
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for I2S
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -789,20 +789,20 @@ typedef struct {
 /*! @name ID - I2S Module identification */
 /*! @{ */
 
-#define I2S_ID_Aperture_MASK                     (0xFFU)
-#define I2S_ID_Aperture_SHIFT                    (0U)
+#define I2S_ID_APERTURE_MASK                     (0xFFU)
+#define I2S_ID_APERTURE_SHIFT                    (0U)
 /*! Aperture - Aperture: encoded as (aperture size/4K) -1, so 0x00 means a 4K aperture. */
-#define I2S_ID_Aperture(x)                       (((uint32_t)(((uint32_t)(x)) << I2S_ID_Aperture_SHIFT)) & I2S_ID_Aperture_MASK)
+#define I2S_ID_APERTURE(x)                       (((uint32_t)(((uint32_t)(x)) << I2S_ID_APERTURE_SHIFT)) & I2S_ID_APERTURE_MASK)
 
-#define I2S_ID_Minor_Rev_MASK                    (0xF00U)
-#define I2S_ID_Minor_Rev_SHIFT                   (8U)
+#define I2S_ID_MINOR_REV_MASK                    (0xF00U)
+#define I2S_ID_MINOR_REV_SHIFT                   (8U)
 /*! Minor_Rev - Minor revision of module implementation, starting at 0. */
-#define I2S_ID_Minor_Rev(x)                      (((uint32_t)(((uint32_t)(x)) << I2S_ID_Minor_Rev_SHIFT)) & I2S_ID_Minor_Rev_MASK)
+#define I2S_ID_MINOR_REV(x)                      (((uint32_t)(((uint32_t)(x)) << I2S_ID_MINOR_REV_SHIFT)) & I2S_ID_MINOR_REV_MASK)
 
-#define I2S_ID_Major_Rev_MASK                    (0xF000U)
-#define I2S_ID_Major_Rev_SHIFT                   (12U)
+#define I2S_ID_MAJOR_REV_MASK                    (0xF000U)
+#define I2S_ID_MAJOR_REV_SHIFT                   (12U)
 /*! Major_Rev - Major revision of module implementation, starting at 0. */
-#define I2S_ID_Major_Rev(x)                      (((uint32_t)(((uint32_t)(x)) << I2S_ID_Major_Rev_SHIFT)) & I2S_ID_Major_Rev_MASK)
+#define I2S_ID_MAJOR_REV(x)                      (((uint32_t)(((uint32_t)(x)) << I2S_ID_MAJOR_REV_SHIFT)) & I2S_ID_MAJOR_REV_MASK)
 
 #define I2S_ID_ID_MASK                           (0xFFFF0000U)
 #define I2S_ID_ID_SHIFT                          (16U)

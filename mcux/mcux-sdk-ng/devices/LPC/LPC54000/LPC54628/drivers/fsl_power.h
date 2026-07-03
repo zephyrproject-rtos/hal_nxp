@@ -143,8 +143,12 @@ extern "C" {
  */
 static inline void POWER_EnablePD(pd_bit_t en)
 {
-    /* PDRUNCFGSET */
-    SYSCON->PDRUNCFGSET[((uint32_t)en >> 8UL)] = (1UL << ((uint32_t)en & 0xffU));
+    assert((int32_t)en >= 0);
+    if ((int32_t)en >= 0)
+    {
+        /* PDRUNCFGSET */
+        SYSCON->PDRUNCFGSET[((uint32_t)en >> 8UL)] = (1UL << ((uint32_t)en & 0xffU));
+    }
 }
 
 /*!
@@ -155,8 +159,12 @@ static inline void POWER_EnablePD(pd_bit_t en)
  */
 static inline void POWER_DisablePD(pd_bit_t en)
 {
-    /* PDRUNCFGCLR */
-    SYSCON->PDRUNCFGCLR[((uint32_t)en >> 8UL)] = (1UL << ((uint32_t)en & 0xffU));
+    assert((int32_t)en >= 0);
+    if ((int32_t)en >= 0)
+    {
+        /* PDRUNCFGCLR */
+        SYSCON->PDRUNCFGCLR[((uint32_t)en >> 8UL)] = (1UL << ((uint32_t)en & 0xffU));
+    }
 }
 
 /*!

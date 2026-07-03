@@ -548,6 +548,7 @@ typedef enum _async_clock_src
  */
 
 #define CLK_ATTACH_ID(mux, sel, pos) ((((uint32_t)(mux) << 0U) | (((uint32_t)(sel) + 1U) & 0xFU) << 8U) << ((pos)*12U))
+#define MUX_A_OFFSET(mux)            ((mux) << 0U)
 #define MUX_A(mux, sel)              CLK_ATTACH_ID((mux), (sel), 0U)
 #define MUX_B(mux, sel, selector)    (CLK_ATTACH_ID((mux), (sel), 1U) | ((selector) << 24U))
 
@@ -556,6 +557,7 @@ typedef enum _async_clock_src
 #define GET_ID_ITEM_MUX(connection)  ((uint8_t)((connection)&0xFFU))
 #define GET_ID_ITEM_SEL(connection)  ((uint8_t)((((connection)&0xF00U) >> 8U) - 1U))
 #define GET_ID_SELECTOR(connection)  ((connection)&0xF000000U)
+#define CLR_ID_ITEM_SEL(connection)  ((connection) &= 0xFFFFF0FFU)
 
 #define CM_STICKCLKSEL    0
 #define CM_MAINCLKSELA    1

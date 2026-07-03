@@ -30,13 +30,13 @@
 **                          LPC55S69JEV98_cm33_core1
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250529
+**     Build:               b260515
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOCON
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -156,6 +156,14 @@ typedef struct {
  *  0b0101..Alternative connection 5.
  *  0b0110..Alternative connection 6.
  *  0b0111..Alternative connection 7.
+ *  0b1000..Alternative connection 8.
+ *  0b1001..Alternative connection 9.
+ *  0b1010..Alternative connection 10.
+ *  0b1011..Alternative connection 11.
+ *  0b1100..Alternative connection 12.
+ *  0b1101..Alternative connection 13.
+ *  0b1110..Alternative connection 14.
+ *  0b1111..Alternative connection 15.
  */
 #define IOCON_PIO_FUNC(x)                        (((uint32_t)(((uint32_t)(x)) << IOCON_PIO_FUNC_SHIFT)) & IOCON_PIO_FUNC_MASK)
 

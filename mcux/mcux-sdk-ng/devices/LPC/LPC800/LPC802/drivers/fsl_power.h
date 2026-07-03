@@ -138,7 +138,11 @@ extern "C" {
  */
 static inline void POWER_EnablePD(pd_bit_t en)
 {
-    SYSCON->PDRUNCFG |= (uint32_t)en;
+    assert((int32_t)en >= 0);
+    if ((int32_t)en >= 0)
+    {
+        SYSCON->PDRUNCFG |= (uint32_t)en;
+    }
 }
 
 /*!
@@ -149,7 +153,11 @@ static inline void POWER_EnablePD(pd_bit_t en)
  */
 static inline void POWER_DisablePD(pd_bit_t en)
 {
-    SYSCON->PDRUNCFG &= ~(uint32_t)en;
+    assert((int32_t)en >= 0);
+    if ((int32_t)en >= 0)
+    {
+        SYSCON->PDRUNCFG &= ~(uint32_t)en;
+    }
 }
 
 /*!
@@ -378,7 +386,7 @@ static inline void POWER_SetBodLevel(power_bod_reset_level_t resetLevel,
                                      bool enable)
 {
     SYSCON->BODCTRL = SYSCON_BODCTRL_BODRSTLEV(resetLevel) | SYSCON_BODCTRL_BODINTVAL(interruptLevel) |
-                      SYSCON_BODCTRL_BODRSTENA(enable);
+                      SYSCON_BODCTRL_BODRSTENA(enable ? 1U : 0U);
 }
 
 /* @} */

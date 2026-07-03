@@ -12,7 +12,7 @@
 **
 **     Reference manual:    LPC84x User manual Rev.1.6  8 Dec 2017
 **     Version:             rev. 3.0, 2025-11-18
-**     Build:               b251118
+**     Build:               b260509
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -20,7 +20,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -93,6 +93,7 @@ void SystemInit (void) {
 void SystemCoreClockUpdate (void) {
   uint32_t wdt_osc = 0U;
   uint32_t fro_osc = 0U;
+  uint32_t msel    = 0U;
 
   /* Determine clock frequency according to clock register values */
   switch ((SYSCON->FROOSCCTRL     ) & 0x03U) {
@@ -148,18 +149,19 @@ void SystemCoreClockUpdate (void) {
       }
       break;
     case 1U:                                           /* System PLL Clock Out  */
+      msel = (SYSCON->SYSPLLCTRL & SYSCON_SYSPLLCTRL_MSEL_MASK) + 1U;
       switch (SYSCON->SYSPLLCLKSEL & SYSCON_SYSPLLCLKSEL_SEL_MASK) {
         case 0U:                                       /* Free running oscillator (FRO) */
-          SystemCoreClock = fro_osc        * ((SYSCON->SYSPLLCTRL & SYSCON_SYSPLLCTRL_MSEL_MASK) + 1U);
+          SystemCoreClock = (uint32_t)(((uint64_t)fro_osc * msel) & 0xFFFFFFFFU);
           break;
         case 1U:                                       /* System oscillator */
-          SystemCoreClock = CLK_OSC_IN * ((SYSCON->SYSPLLCTRL & SYSCON_SYSPLLCTRL_MSEL_MASK) + 1U);
+          SystemCoreClock = (uint32_t)(((uint64_t)CLK_OSC_IN * msel) & 0xFFFFFFFFU);
           break;
         case 2U:                                       /* watchdog oscillator */
-          SystemCoreClock = wdt_osc        * ((SYSCON->SYSPLLCTRL & SYSCON_SYSPLLCTRL_MSEL_MASK) + 1U);
+          SystemCoreClock = (uint32_t)(((uint64_t)wdt_osc * msel) & 0xFFFFFFFFU);
           break;
         case 3U:                                       /* Free running oscillator (FRO) / 2 */
-          SystemCoreClock = (fro_osc >> 1U) * ((SYSCON->SYSPLLCTRL & SYSCON_SYSPLLCTRL_MSEL_MASK) + 1U);
+          SystemCoreClock = (uint32_t)(((uint64_t)(fro_osc >> 1U) * msel) & 0xFFFFFFFFU);
           break;
         default:
           SystemCoreClock = 0U;

@@ -380,7 +380,7 @@ static inline void POWER_SetBodLevel(power_bod_reset_level_t resetLevel,
                                      bool enable)
 {
     SYSCON->BODCTRL = SYSCON_BODCTRL_BODRSTLEV(resetLevel) | SYSCON_BODCTRL_BODINTVAL(interruptLevel) |
-                      SYSCON_BODCTRL_BODRSTENA(enable);
+                      SYSCON_BODCTRL_BODRSTENA(enable ? 1U : 0U);
 }
 
 /* @} */

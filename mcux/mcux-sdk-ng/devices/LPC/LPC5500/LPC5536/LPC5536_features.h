@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 3.0, 2025-11-18
-**     Build:               b260209
+**     Build:               b260515
 **
 **     Abstract:
 **         Chip specific module features.
@@ -81,6 +81,8 @@
     #define FSL_FEATURE_SOC_LPCMP_COUNT (3)
     /* @brief LPDAC availability on the SoC. */
     #define FSL_FEATURE_SOC_LPDAC_COUNT (3)
+    /* @brief MPU availability on the SoC. */
+    #define FSL_FEATURE_SOC_MPU_COUNT (1)
     /* @brief MRT availability on the SoC. */
     #define FSL_FEATURE_SOC_MRT_COUNT (1)
     /* @brief OPAMP availability on the SoC. */
@@ -164,6 +166,8 @@
     #define FSL_FEATURE_SOC_LPCMP_COUNT (3)
     /* @brief LPDAC availability on the SoC. */
     #define FSL_FEATURE_SOC_LPDAC_COUNT (3)
+    /* @brief MPU availability on the SoC. */
+    #define FSL_FEATURE_SOC_MPU_COUNT (1)
     /* @brief MRT availability on the SoC. */
     #define FSL_FEATURE_SOC_MRT_COUNT (1)
     /* @brief OPAMP availability on the SoC. */

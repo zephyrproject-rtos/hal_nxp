@@ -346,8 +346,8 @@ void SystemCoreClockUpdate (void) {
 
                 /* MDEC used for rate */
                 workRate = (uint64_t)(clkRate) * (uint64_t)findPllMMult(SYSCON->SYSPLLCTRL, SYSCON->SYSPLLMDEC);
-                clkRate = (uint32_t)(workRate / ((uint64_t)postdiv));
-                clkRate = clkRate * 2UL; /* PLL CCO output is divided by 2 before to M-Divider */
+                clkRate = (uint32_t)((workRate / ((uint64_t)postdiv)) & 0xFFFFFFFFU);
+                clkRate = (uint32_t)(((uint64_t)clkRate * 2UL) & 0xFFFFFFFFU); /* PLL CCO output is divided by 2 before to M-Divider */
             }
             break;
         case 0x03: /* RTC oscillator 32 kHz output (32k_clk) */

@@ -8,13 +8,13 @@
 **                          LPC834M101FHI33
 **
 **     Version:             rev. 3.0, 2025-11-18
-**     Build:               b251118
+**     Build:               b260515
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOCON
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -190,16 +190,16 @@ typedef struct {
  */ /* end of group IOCON_Register_Masks */
 
 
-#define    IOCON_INDEX_PIO0_17       (0 )
-#define    IOCON_INDEX_PIO0_13       (1 )
-#define    IOCON_INDEX_PIO0_12       (2 )
-#define    IOCON_INDEX_PIO0_5        (3 )
-#define    IOCON_INDEX_PIO0_4        (4 )
-#define    IOCON_INDEX_PIO0_3        (5 )
-#define    IOCON_INDEX_PIO0_2        (6 )
-#define    IOCON_INDEX_PIO0_11       (7 )
-#define    IOCON_INDEX_PIO0_10       (8 )
-#define    IOCON_INDEX_PIO0_16       (9 )
+#define    IOCON_INDEX_PIO0_17       ( 0)
+#define    IOCON_INDEX_PIO0_13       ( 1)
+#define    IOCON_INDEX_PIO0_12       ( 2)
+#define    IOCON_INDEX_PIO0_5        ( 3)
+#define    IOCON_INDEX_PIO0_4        ( 4)
+#define    IOCON_INDEX_PIO0_3        ( 5)
+#define    IOCON_INDEX_PIO0_2        ( 6)
+#define    IOCON_INDEX_PIO0_11       ( 7)
+#define    IOCON_INDEX_PIO0_10       ( 8)
+#define    IOCON_INDEX_PIO0_16       ( 9)
 #define    IOCON_INDEX_PIO0_15       (10)
 #define    IOCON_INDEX_PIO0_1        (11)
 #define    IOCON_INDEX_PIO0_9        (13)

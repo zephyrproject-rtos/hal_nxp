@@ -10,7 +10,7 @@
 **
 **     Reference manual:    LPC546xx User manual Rev.1.9  5 June 2017
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260518
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -18,7 +18,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -342,9 +342,11 @@ uint32_t clkRate = 0U;
                 clkRate = clkRate / prediv;
 
                 /* MDEC used for rate */
-                workRate = (uint64_t)(clkRate) * (uint64_t)findPllMMult(SYSCON->SYSPLLCTRL, SYSCON->SYSPLLMDEC);
-                clkRate = (uint32_t)(workRate / ((uint64_t)postdiv));
-                clkRate = clkRate * 2UL; /* PLL CCO output is divided by 2 before to M-Divider */
+                workRate         = (uint64_t)(clkRate) * (uint64_t)findPllMMult(SYSCON->SYSPLLCTRL, SYSCON->SYSPLLMDEC);
+                uint64_t pllFreq = workRate / ((uint64_t)postdiv);
+                clkRate          = (pllFreq > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)pllFreq;
+                /* PLL CCO output is divided by 2 before to M-Divider */
+                clkRate = (clkRate > (UINT32_MAX / 2UL)) ? UINT32_MAX : (clkRate * 2UL);
             }
             break;
         case 0x03U: /* RTC oscillator 32 kHz output (32k_clk) */

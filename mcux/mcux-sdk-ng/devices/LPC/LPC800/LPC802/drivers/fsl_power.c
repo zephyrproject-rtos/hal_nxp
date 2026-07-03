@@ -134,38 +134,46 @@ void POWER_EnterDeepPowerDownMode(void)
 
 void EnableDeepSleepIRQ(IRQn_Type interrupt)
 {
-    uint32_t intNumber = (uint32_t)interrupt;
-	
-    if(intNumber >= 24u) 
+    assert((int32_t)interrupt >= 0);
+    if ((int32_t)interrupt >= 0)
     {
-        /* enable pin interrupt wake up in the STARTERP0 register */
-        SYSCON->STARTERP0 |= 1UL << (intNumber - 24u); 
-    }        
-    else
-    {
-        /* enable interrupt wake up in the STARTERP1 register */	 
-        SYSCON->STARTERP1 |= 1UL << intNumber;          
+        uint32_t intNumber = (uint32_t)interrupt;
+
+        if (intNumber >= 24u)
+        {
+            /* enable pin interrupt wake up in the STARTERP0 register */
+            SYSCON->STARTERP0 |= 1UL << (intNumber - 24u);
+        }
+        else
+        {
+            /* enable interrupt wake up in the STARTERP1 register */
+            SYSCON->STARTERP1 |= 1UL << intNumber;
+        }
+        /* also enable interrupt at NVIC */
+        (void)EnableIRQ(interrupt);
     }
-    /* also enable interrupt at NVIC */
-    (void)EnableIRQ(interrupt); 
 }
 
 void DisableDeepSleepIRQ(IRQn_Type interrupt)
 {
-    uint32_t intNumber = (uint32_t)interrupt;
-	
-    /* also disable interrupt at NVIC */
-    (void)DisableIRQ(interrupt); 
-	
-    if(intNumber >= 24u) 
+    assert((int32_t)interrupt >= 0);
+    if ((int32_t)interrupt >= 0)
     {
-        /* disable pin interrupt wake up in the STARTERP0 register */
-        SYSCON->STARTERP0 &= ~(1UL << (intNumber - 24u)); 
-    }  
-    else
-    {
-        /* disable interrupt wake up in the STARTERP1 register */	
-        SYSCON->STARTERP1 &= ~(1UL << intNumber);         
+        uint32_t intNumber = (uint32_t)interrupt;
+
+        /* also disable interrupt at NVIC */
+        (void)DisableIRQ(interrupt);
+
+        if (intNumber >= 24u)
+        {
+            /* disable pin interrupt wake up in the STARTERP0 register */
+            SYSCON->STARTERP0 &= ~(1UL << (intNumber - 24u));
+        }
+        else
+        {
+            /* disable interrupt wake up in the STARTERP1 register */
+            SYSCON->STARTERP1 &= ~(1UL << intNumber);
+        }
     }
 }
 

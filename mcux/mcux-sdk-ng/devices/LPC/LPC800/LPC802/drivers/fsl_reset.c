@@ -33,45 +33,53 @@
 
 void RESET_SetPeripheralReset(reset_ip_name_t peripheral)
 {
-    const uint32_t regIndex = ((uint32_t)peripheral & 0xFFFF0000u) >> 16;
-    const uint32_t bitPos = ((uint32_t)peripheral & 0x0000FFFFu);
-    const uint32_t bitMask = 1UL << bitPos;
-
-    assert(bitPos < 32UL);
-
-    /* reset register is in SYSCON */
-
-    if (0u == regIndex)
+    assert((int32_t)peripheral >= 0);
+    if ((int32_t)peripheral >= 0)
     {
-        /* set bit */
-        SYSCON->PRESETCTRL0 &= ~bitMask;
-    }
-    if (1u == regIndex)
-    {
-        /* set bit */
-        SYSCON->PRESETCTRL1 &= ~bitMask;
+        const uint32_t regIndex = ((uint32_t)peripheral & 0xFFFF0000u) >> 16;
+        const uint32_t bitPos = ((uint32_t)peripheral & 0x0000FFFFu);
+        const uint32_t bitMask = 1UL << bitPos;
+
+        assert(bitPos < 32UL);
+
+        /* reset register is in SYSCON */
+
+        if (0u == regIndex)
+        {
+            /* set bit */
+            SYSCON->PRESETCTRL0 &= ~bitMask;
+        }
+        if (1u == regIndex)
+        {
+            /* set bit */
+            SYSCON->PRESETCTRL1 &= ~bitMask;
+        }
     }
 }
 
 void RESET_ClearPeripheralReset(reset_ip_name_t peripheral)
 {
-    const uint32_t regIndex = ((uint32_t)peripheral & 0xFFFF0000u) >> 16;
-    const uint32_t bitPos = ((uint32_t)peripheral & 0x0000FFFFu);
-    const uint32_t bitMask = 1UL << bitPos;
-
-    assert(bitPos < 32UL);
-
-    /* reset register is in SYSCON */
-
-    if (0u == regIndex)
+    assert((int32_t)peripheral >= 0);
+    if ((int32_t)peripheral >= 0)
     {
-        /* clear bit */
-        SYSCON->PRESETCTRL0 |= bitMask;
-    }
-    if (1u == regIndex)
-    {
-        /* clear bit */
-        SYSCON->PRESETCTRL1 |= bitMask;
+        const uint32_t regIndex = ((uint32_t)peripheral & 0xFFFF0000u) >> 16;
+        const uint32_t bitPos = ((uint32_t)peripheral & 0x0000FFFFu);
+        const uint32_t bitMask = 1UL << bitPos;
+
+        assert(bitPos < 32UL);
+
+        /* reset register is in SYSCON */
+
+        if (0u == regIndex)
+        {
+            /* clear bit */
+            SYSCON->PRESETCTRL0 |= bitMask;
+        }
+        if (1u == regIndex)
+        {
+            /* clear bit */
+            SYSCON->PRESETCTRL1 |= bitMask;
+        }
     }
 }
 

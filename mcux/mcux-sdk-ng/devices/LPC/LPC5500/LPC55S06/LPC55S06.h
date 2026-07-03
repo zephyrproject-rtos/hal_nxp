@@ -10,13 +10,13 @@
 **
 **     Reference manual:    LPC55S0x/LPC550x User manual Rev.0.3  14 August 2020
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b260515
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC55S06
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

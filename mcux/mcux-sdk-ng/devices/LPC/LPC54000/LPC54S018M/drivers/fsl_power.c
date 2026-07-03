@@ -358,8 +358,10 @@ void POWER_InitBod(const power_bod_config_t *bodConfig)
     tmp32 = SYSCON->BODCTRL;
     tmp32 &= ~(SYSCON_BODCTRL_BODRSTLEV_MASK | SYSCON_BODCTRL_BODRSTENA_MASK | SYSCON_BODCTRL_BODINTLEV_MASK |
                SYSCON_BODCTRL_BODINTENA_MASK | SYSCON_BODCTRL_BODRSTSTAT_MASK | SYSCON_BODCTRL_BODINTSTAT_MASK);
-    tmp32 |= SYSCON_BODCTRL_BODRSTLEV(bodConfig->resetLevel) | SYSCON_BODCTRL_BODRSTENA(bodConfig->enableReset) |
-             SYSCON_BODCTRL_BODINTLEV(bodConfig->interruptLevel) | SYSCON_BODCTRL_BODINTENA(bodConfig->enableInterrupt);
+    tmp32 |= SYSCON_BODCTRL_BODRSTLEV(bodConfig->resetLevel) |
+             SYSCON_BODCTRL_BODRSTENA(bodConfig->enableReset ? 1U : 0U) |
+             SYSCON_BODCTRL_BODINTLEV(bodConfig->interruptLevel) |
+             SYSCON_BODCTRL_BODINTENA(bodConfig->enableInterrupt ? 1U : 0U);
     SYSCON->BODCTRL = tmp32;
 }
 
@@ -387,7 +389,7 @@ void POWER_OtpReload(void)
     {
         LPC_OTP->LOCKS[i].RD_Lock |= 0x80;
         LPC_OTP->LOCKS[i].RD_Lock |= 0x0F;
-        LPC_OTP->OTP_Latch_Update = 1 << i;
+        LPC_OTP->OTP_Latch_Update = 1UL << i;
         /* wait for completion */
         while (!(LPC_OTP->OTP_Status & OTP_STATUS_COMPLETE))
         {
@@ -427,9 +429,9 @@ static void DeepSleepReloc(uint64_t peripheral_ctrl)
         peripheral_ctrl = (uint64_t)(peripheral_ctrl | PDRUNCFG_PD_VD5);
     }
 
-    SYSCON->PDSLEEPCFG[0] = (PCFG0_DEEP_SLEEP & ~(uint32_t)(peripheral_ctrl)) | pdruncfg0_val;
+    SYSCON->PDSLEEPCFG[0] = (PCFG0_DEEP_SLEEP & ~(uint32_t)(peripheral_ctrl & 0xFFFFFFFFULL)) | pdruncfg0_val;
 
-    SYSCON->PDSLEEPCFG[1] = (PCFG1_DEEP_SLEEP & ~(uint32_t)(peripheral_ctrl >> 32U)) | pdruncfg1_val;
+    SYSCON->PDSLEEPCFG[1] = (PCFG1_DEEP_SLEEP & ~(uint32_t)((peripheral_ctrl >> 32U) & 0xFFFFFFFFULL)) | pdruncfg1_val;
     /*Set low power voltage for entering deep sleep mode*/
     POWER->LPCTRL = 0x136;
 
@@ -444,7 +446,7 @@ static void DeepSleepReloc(uint64_t peripheral_ctrl)
     mem_banks_to_power = (~peripheral_ctrl & ~pdruncfg0_val & PDRUNCFG0_MEMORY_MASK);
     /* Check if more than one memory bank RAM/ROM was powered off, if so turn them on one by one at VD1, VD4 at 1.25V */
     /* Basically here we are checking if the bit pattern is not a power of 2 */
-    if (mem_banks_to_power & (mem_banks_to_power - 1))
+    if ((mem_banks_to_power > 0U) && ((mem_banks_to_power & (mem_banks_to_power - 1U)) != 0U))
     {
         /* Save current VD1, VD4*/
         vd1_saved = POWER->VDCTRL[VD1];
@@ -459,7 +461,7 @@ static void DeepSleepReloc(uint64_t peripheral_ctrl)
             __NOP();
         }
         /* Reduce the total wait time if FRO was left enabled */
-        total_delay -= i;
+        total_delay = (total_delay >= i) ? (total_delay - i) : 0U;
 
         /* Enable ROM and USB RAM */
         for (i = 17; i > 15; i--)
@@ -516,7 +518,7 @@ static void DeepSleepReloc(uint64_t peripheral_ctrl)
         {
             LPC_OTP->LOCKS[i].RD_Lock |= 0x80;
             LPC_OTP->LOCKS[i].RD_Lock |= 0x0F;
-            LPC_OTP->OTP_Latch_Update = 1 << i;
+            LPC_OTP->OTP_Latch_Update = 1UL << i;
             /* wait for completion */
             while (!(LPC_OTP->OTP_Status & OTP_STATUS_COMPLETE))
             {
@@ -548,8 +550,8 @@ void POWER_EnterDeepPowerDown(uint64_t exclude_from_pd)
     POWER_EnableDeepSleep();
 
     /* Turn off everything except the excluded blocks */
-    SYSCON->PDRUNCFG[1] = PCFG1_DEEP_POWERDOWN & ~(uint32_t)(exclude_from_pd >> 32U);
-    SYSCON->PDRUNCFG[0] = PCFG0_DEEP_POWERDOWN & ~(uint32_t)exclude_from_pd;
+    SYSCON->PDRUNCFG[1] = PCFG1_DEEP_POWERDOWN & ~(uint32_t)((exclude_from_pd >> 32U) & 0xFFFFFFFFULL);
+    SYSCON->PDRUNCFG[0] = PCFG0_DEEP_POWERDOWN & ~(uint32_t)(exclude_from_pd & 0xFFFFFFFFULL);
 
     /* Enter powerdown mode */
     __WFI();

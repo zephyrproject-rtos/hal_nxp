@@ -10,6 +10,7 @@
 #ifndef _FSL_CLOCK_H_
 #define _FSL_CLOCK_H_
 
+/* PRQA S 0883 */ /* PW.INCLUDE_RECURSION: circular include is guarded by _FSL_CLOCK_H_ -- reviewed and accepted */
 #include "fsl_common.h"
 
 /*! @addtogroup clock */

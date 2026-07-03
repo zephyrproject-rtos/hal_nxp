@@ -81,7 +81,7 @@ static bool CLOCK_SetFRGClkFreq(volatile uint32_t *base, uint32_t freq)
         return false;
     }
 
-    mul = (uint32_t)((((uint64_t)input - freq) << 8U) / ((uint64_t)freq));
+    mul = (uint32_t)((((uint64_t)input - freq) << 8U) / ((uint64_t)freq) & 0xFFFFFFFFU);
 
     CLK_FRG_DIV_REG_MAP(base) = SYSCON_FRG_FRGDIV_DIV_MASK;
     CLK_FRG_MUL_REG_MAP(base) = SYSCON_FRG_FRGMULT_MULT(mul);
@@ -116,7 +116,7 @@ bool CLOCK_SetFRG0ClkFreq(uint32_t freq)
 uint32_t CLOCK_GetFRG0ClkFreq(void)
 {
     return (uint32_t)((((uint64_t)CLOCK_GetFRGInputClkFreq((volatile uint32_t *)(&SYSCON->FRG[0].FRGDIV)) << 8U)) /
-                      ((SYSCON->FRG[0].FRGMULT & SYSCON_FRG_FRGMULT_MULT_MASK) + 256UL));
+                      ((SYSCON->FRG[0].FRGMULT & SYSCON_FRG_FRGMULT_MULT_MASK) + 256UL) & 0xFFFFFFFFU);
 }
 
 /*! brief  Return Frequency of Main Clock.

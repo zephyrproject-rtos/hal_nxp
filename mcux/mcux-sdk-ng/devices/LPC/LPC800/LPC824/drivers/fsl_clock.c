@@ -158,8 +158,8 @@ uint32_t CLOCK_GetUartClkFreq(void)
     uint32_t uartDiv = SYSCON->UARTCLKDIV & 0xffU;
 
     return uartDiv == 0U ? 0U :
-                           (uint32_t)((uint64_t)((uint64_t)freq << 8U) /
-                                      (uartDiv * (256U + ((SYSCON->UARTFRGMULT) & SYSCON_UARTFRGMULT_MULT_MASK))));
+                           (uint32_t)(((uint64_t)((uint64_t)freq << 8U) /
+                                       (uartDiv * (256U + ((SYSCON->UARTFRGMULT) & SYSCON_UARTFRGMULT_MULT_MASK)))) & 0xFFFFFFFFUL);
 }
 
 /*! brief  Return Frequency of UART0
@@ -432,7 +432,7 @@ bool CLOCK_SetUARTFRGClkFreq(uint32_t freq)
     uint32_t input = CLOCK_GetMainClkFreq();
     uint32_t mul;
 
-    freq *= SYSCON->UARTCLKDIV;
+    freq = (uint32_t)(((uint64_t)freq * (uint64_t)SYSCON->UARTCLKDIV) & 0xFFFFFFFFUL);
 
     /* The given frequency should not be 0. */
     if (0UL == freq)
@@ -445,7 +445,7 @@ bool CLOCK_SetUARTFRGClkFreq(uint32_t freq)
         return false;
     }
 
-    mul = (uint32_t)(((uint64_t)((uint64_t)input - freq) << 8U) / ((uint64_t)freq));
+    mul = (uint32_t)((((uint64_t)((uint64_t)input - freq) << 8U) / (uint64_t)freq) & 0xFFFFFFFFUL);
 
     SYSCON->UARTFRGDIV  = SYSCON_UARTFRGDIV_DIV_MASK;
     SYSCON->UARTFRGMULT = SYSCON_UARTFRGMULT_MULT(mul);

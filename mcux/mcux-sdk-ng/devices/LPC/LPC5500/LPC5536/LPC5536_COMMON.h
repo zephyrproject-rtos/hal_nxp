@@ -11,13 +11,13 @@
 **
 **     Reference manual:    LPC55S3x Reference Manual Rev. DraftG, 07/2021
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250619
+**     Build:               b260515
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC5536
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

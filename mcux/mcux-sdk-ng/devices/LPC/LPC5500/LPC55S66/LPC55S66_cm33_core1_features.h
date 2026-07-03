@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.1, 2025-12-01
-**     Build:               b260209
+**     Build:               b260515
 **
 **     Abstract:
 **         Chip specific module features.
@@ -346,7 +346,7 @@
 
 /* @brief I2S support dual channel transfer. */
 #define FSL_FEATURE_I2S_SUPPORT_SECONDARY_CHANNEL (0)
-/* @brief I2S has DMIC interconnection */
+/* @brief I2S has DMIC interconnection. */
 #define FSL_FEATURE_FLEXCOMM_I2S_HAS_DMIC_INTERCONNECTION (0)
 
 /* INPUTMUX module features */
