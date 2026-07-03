@@ -121,7 +121,7 @@ void *OSA_TimerGetContext(osa_timer_handle_t timerHandle)
 {
     assert(timerHandle != NULL);
 
-    struct timer_data *ptimer = (struct timer_data *)(void *)(uint32_t *)(*(uint32_t *)timerHandle);
+    struct timer_data *ptimer = (struct timer_data *)(void *)(uintptr_t *)(*(uintptr_t *)timerHandle);
 
     return ptimer->user_arg;
 }

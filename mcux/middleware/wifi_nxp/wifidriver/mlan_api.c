@@ -835,7 +835,7 @@ int wifi_set_packet_filters(wifi_flt_cfg_t *flt_cfg)
             }
         }
         if (filter_buf != NULL)
-            entry_hdr->len = (t_u32)filter_buf - (t_u32)entry_hdr - sizeof(mef_entry_header);
+            entry_hdr->len = (uintptr_t)filter_buf - (uintptr_t)entry_hdr - sizeof(mef_entry_header);
     }
 
     cmd->size = wlan_cpu_to_le16(buf_len);
@@ -3615,7 +3615,7 @@ int wifi_get_cal_data(wifi_cal_data_t *cal_data)
 
     cmd->command = wlan_cpu_to_le16(HostCmd_CMD_CFG_DATA);
 
-    HostCmd_DS_802_11_CFG_DATA *cfg_data_cmd = (HostCmd_DS_802_11_CFG_DATA *)((uint32_t)cmd + S_DS_GEN);
+    HostCmd_DS_802_11_CFG_DATA *cfg_data_cmd = (HostCmd_DS_802_11_CFG_DATA *)((uintptr_t)cmd + S_DS_GEN);
 
     cfg_data_cmd->action   = HostCmd_ACT_GEN_GET;
     cfg_data_cmd->type     = 0x02;
@@ -5054,7 +5054,7 @@ int wifi_set_smart_mode_cfg(char *ssid,
     HostCmd_DS_COMMAND *cmd = wifi_get_command_buffer();
 
     cmd->command                          = wlan_cpu_to_le16(HOST_CMD_SMART_MODE_CFG);
-    HostCmd_DS_SYS_CONFIG *sys_config_cmd = (HostCmd_DS_SYS_CONFIG *)((uint32_t)cmd + S_DS_GEN);
+    HostCmd_DS_SYS_CONFIG *sys_config_cmd = (HostCmd_DS_SYS_CONFIG *)((uintptr_t)cmd + S_DS_GEN);
     sys_config_cmd->action                = HostCmd_ACT_GEN_SET;
     uint8_t *tlv                          = (uint8_t *)sys_config_cmd->tlv_buffer;
 
@@ -5143,7 +5143,7 @@ int wifi_get_smart_mode_cfg(void)
     HostCmd_DS_COMMAND *cmd = wifi_get_command_buffer();
 
     cmd->command                          = wlan_cpu_to_le16(HOST_CMD_SMART_MODE_CFG);
-    HostCmd_DS_SYS_CONFIG *sys_config_cmd = (HostCmd_DS_SYS_CONFIG *)((uint32_t)cmd + S_DS_GEN);
+    HostCmd_DS_SYS_CONFIG *sys_config_cmd = (HostCmd_DS_SYS_CONFIG *)((uintptr_t)cmd + S_DS_GEN);
     sys_config_cmd->action                = HostCmd_ACT_GEN_GET;
 
     cmd->size    = size;
@@ -5162,7 +5162,7 @@ int wifi_start_smart_mode(void)
     HostCmd_DS_COMMAND *cmd = wifi_get_command_buffer();
 
     cmd->command                          = wlan_cpu_to_le16(HOST_CMD_SMART_MODE_CFG);
-    HostCmd_DS_SYS_CONFIG *sys_config_cmd = (HostCmd_DS_SYS_CONFIG *)((uint32_t)cmd + S_DS_GEN);
+    HostCmd_DS_SYS_CONFIG *sys_config_cmd = (HostCmd_DS_SYS_CONFIG *)((uintptr_t)cmd + S_DS_GEN);
     sys_config_cmd->action                = HostCmd_ACT_GEN_START;
 
     cmd->size    = size;
@@ -5181,7 +5181,7 @@ int wifi_stop_smart_mode(void)
     HostCmd_DS_COMMAND *cmd = wifi_get_command_buffer();
 
     cmd->command                          = wlan_cpu_to_le16(HOST_CMD_SMART_MODE_CFG);
-    HostCmd_DS_SYS_CONFIG *sys_config_cmd = (HostCmd_DS_SYS_CONFIG *)((uint32_t)cmd + S_DS_GEN);
+    HostCmd_DS_SYS_CONFIG *sys_config_cmd = (HostCmd_DS_SYS_CONFIG *)((uintptr_t)cmd + S_DS_GEN);
     sys_config_cmd->action                = HostCmd_ACT_GEN_STOP;
 
     cmd->size    = size;
@@ -6555,7 +6555,7 @@ int wifi_get_channel_load(wlan_802_11_chan_load_t *cfg)
     chan_load->ch_load = mlan_adap->ch_load_param;
     chan_load->rx_quality = mlan_adap->rx_quality;
 
-    PRINTF("SIZEOF MLANADAPT %d\r\n", sizeof(mlan_adap));
+    PRINTF("SIZEOF MLANADAPT %zu\r\n", sizeof(mlan_adap));
 
     return WM_SUCCESS;
 }

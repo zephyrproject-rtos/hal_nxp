@@ -217,7 +217,7 @@ static void wlan_process_rm_beacon_report_table(
     t_u8 *buf_pos = NULL;
     /* The sufficient size is the length including reporting frame body */
     t_u16 suffi_len           = 250;
-    t_u32 pos_last_indication = 0;
+    uintptr_t pos_last_indication = 0;
     bool match_ap_found       = false;
     int meas_rep_len          = 0;
 
@@ -446,7 +446,7 @@ void wlan_add_rm_beacon_report(wlan_rrm_beacon_report_data *rep_data,
                                BSSDescriptor_t *bss_entry,
                                t_u8 **buf_pos,
                                t_s32 remained_len,
-                               t_u32 *pos_last_indication)
+                               uintptr_t *pos_last_indication)
 {
     mgmt_rrm_meas_beacon_report report;
     t_u8 *pos         = *buf_pos;
@@ -666,7 +666,7 @@ void wlan_add_rm_beacon_report(wlan_rrm_beacon_report_data *rep_data,
         pos[0]               = WLAN_RRM_BEACON_REP_SUBELEM_LAST_INDICATION;
         pos[1]               = 1; /* Length */
         pos[2]               = 0; /* Temporarily, not the last packet */
-        *pos_last_indication = (t_u32)&pos[2];
+        *pos_last_indication = (uintptr_t)&pos[2];
         pos += WLAN_RRM_BEACON_REP_LAST_INDICATION_SUB_LEN;
     }
     /* Fill the length */
@@ -943,7 +943,7 @@ void wlan_process_neighbor_report_response(t_u8 *frame, t_u32 len, t_u8 *dest_ad
 #endif
     if (pnlist_rep_param == MNULL)
     {
-        wifi_e("11k nlist report param buffer alloc failed %d", sizeof(wlan_nlist_report_param));
+        wifi_e("11k nlist report param buffer alloc failed %zu", sizeof(wlan_nlist_report_param));
         return;
     }
 

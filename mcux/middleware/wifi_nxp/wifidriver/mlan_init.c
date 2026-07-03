@@ -473,14 +473,14 @@ done:
 #if CONFIG_WMM
             for (j = 0; j < MAX_AC_QUEUES; ++j)
             {
-                if ((uint32_t *)(*(uint32_t *)priv->wmm.tid_tbl_ptr[j].ra_list.plock) != NULL)
+                if (OSA_HandleIsValid(priv->wmm.tid_tbl_ptr[j].ra_list.plock))
                     priv->adapter->callbacks.moal_free_semaphore(
                         pmadapter->pmoal_handle, &priv->wmm.tid_tbl_ptr[j].ra_list.plock);
             }
 #endif
-            if ((uint32_t *)(*(uint32_t *)priv->tx_ba_stream_tbl_lock) != NULL)
+            if (OSA_HandleIsValid(priv->tx_ba_stream_tbl_lock))
                 OSA_MutexDestroy((osa_mutex_handle_t)priv->tx_ba_stream_tbl_lock);
-            if ((uint32_t *)(*(uint32_t *)priv->rx_reorder_tbl_lock) != NULL)
+            if (OSA_HandleIsValid(priv->rx_reorder_tbl_lock))
                 OSA_SemaphoreDestroy((osa_semaphore_handle_t)priv->rx_reorder_tbl_lock);
         }
     }

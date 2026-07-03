@@ -238,6 +238,10 @@ zephyr_library_compile_definitions(
     CONFIG_OSA_DEBUG_ASSERT_ENABLED=1
 )
 
+zephyr_library_compile_definitions_ifdef(CONFIG_ARM64
+    MLAN_64BIT
+)
+
 # mcux-sdk and mcux-sdk-ng share the wifi_nxp, the lists and osa is
 # included in another way. Need add condition here.
 if (CONFIG_HAS_MCUX OR CONFIG_HAS_IMX_HAL OR CONFIG_HAS_NXP_S32_HAL)

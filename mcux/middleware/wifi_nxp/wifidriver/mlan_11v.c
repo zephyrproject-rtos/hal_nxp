@@ -197,7 +197,7 @@ void wlan_process_mgmt_wnm_btm_req(t_u8 *pos, t_u8 *end, t_u8 *src_addr, t_u8 *d
 
     if (pnlist_rep_param == MNULL)
     {
-        wifi_e("11v nlist report param buffer alloc failed %d", sizeof(wlan_nlist_report_param));
+        wifi_e("11v nlist report param buffer alloc failed %zu", sizeof(wlan_nlist_report_param));
         goto out;
     }
 
