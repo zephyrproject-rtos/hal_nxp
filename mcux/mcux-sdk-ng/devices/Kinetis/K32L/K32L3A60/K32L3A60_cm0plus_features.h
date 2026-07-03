@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.0, 2025-11-10
-**     Build:               b260130
+**     Build:               b260520
 **
 **     Abstract:
 **         Chip specific module features.
@@ -449,6 +449,14 @@
 
 /* @brief Has GPIO attribute checker register (GACR). */
 #define FSL_FEATURE_GPIO_HAS_ATTRIBUTE_CHECKER (0)
+/* @brief Has GPIO version ID register (VERID). */
+#define FSL_FEATURE_GPIO_HAS_VERSION_INFO_REGISTER (0)
+/* @brief Has secure/non-secure access protection registers (LOCK, PCNS, PCNP, ICNS, ICNP). */
+#define FSL_FEATURE_GPIO_HAS_SECURE_PRIVILEGE_CONTROL (0)
+/* @brief Has GPIO port input disable register (PIDR). */
+#define FSL_FEATURE_GPIO_HAS_PORT_INPUT_CONTROL (0)
+/* @brief Has GPIO interrupt/DMA request/trigger output selection. */
+#define FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT (0)
 
 /* SAI module features */
 
@@ -1063,6 +1071,10 @@
 #define FSL_FEATURE_PORT_HAS_PASSIVE_FILTER (1)
 /* @brief Has drive strength control (register bit PCR[DSE]). */
 #define FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH (1)
+/* @brief Has separate drive strength register (HDRVE). */
+#define FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH_REGISTER (0)
+/* @brief Has glitch filter (register IOFLT). */
+#define FSL_FEATURE_PORT_HAS_GLITCH_FILTER (0)
 /* @brief Defines width of PCR[MUX] field. */
 #define FSL_FEATURE_PORT_PCR_MUX_WIDTH (3)
 /* @brief Has dedicated interrupt vector. */
@@ -1634,10 +1646,6 @@
 #define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
 /* @brief Is affected by errata with ID 050050 (Incorrect duty output when EPWM mode is set to PS=0 during write 1 to CnV register). */
 #define FSL_FEATURE_TPM_HAS_ERRATA_050050 (0)
-
-/* TRGMUX module features */
-
-/* No feature definitions */
 
 /* USB module features */
 

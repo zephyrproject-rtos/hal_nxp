@@ -1,10 +1,10 @@
-# Copyright 2024 NXP
+# Copyright 2024, 2026 NXP
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
 if (CONFIG_MCUX_COMPONENT_driver.clock)
-    mcux_component_version(2.0.1)
+    mcux_component_version(2.0.2)
     mcux_add_source( SOURCES fsl_clock.c fsl_clock.h )
     mcux_add_include( INCLUDES . )
 endif()

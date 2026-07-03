@@ -194,8 +194,9 @@ static void CLOCK_FllStableDelay(void)
        at most, so this function could obtain the 1ms delay.
      */
     volatile uint32_t i = 30000U;
-    while (0U != (i--))
+    while (i != 0U)
     {
+        i--;
         __NOP();
     }
 }
@@ -759,7 +760,7 @@ uint32_t CLOCK_GetPll0Freq(void)
          */
         assert(mcgpll0clk);
 
-        freq = mcgpll0clk * PLL_FIXED_MULT;
+        freq = mcgpll0clk * PLL_FIXED_MULT; /* PRQA S 4394 */ /* INT30-C: result within uint32_t range for valid MCG frequencies */
     }
 
     return freq;
@@ -951,7 +952,7 @@ void CLOCK_SetRtcOscMonitorMode(mcg_monitor_mode_t mode)
 {
     uint8_t mcg_c8 = MCG->C8;
 
-    mcg_c8 &= ~(uint8_t)(MCG_C8_CME1_MASK | MCG_C8_LOCRE1_MASK);
+    mcg_c8 = (uint8_t)(mcg_c8 & (~(MCG_C8_CME1_MASK | MCG_C8_LOCRE1_MASK) & 0xFFU));
 
     if (kMCG_MonitorNone != mode)
     {
@@ -1982,7 +1983,7 @@ status_t CLOCK_ExternalModeToFbeModeQuick(void)
     /* Disable low power */
     MCG->C2 &= (uint8_t)((~MCG_C2_LP_MASK) & 0xFFU);
 
-    MCG->C1 = (uint8_t)((MCG->C1 & ~MCG_C1_CLKS_MASK) | MCG_C1_CLKS(kMCG_ClkOutSrcExternal));
+    MCG->C1 = (uint8_t)((uint8_t)(MCG->C1 & (~MCG_C1_CLKS_MASK & 0xFFU)) | (uint8_t)MCG_C1_CLKS(kMCG_ClkOutSrcExternal));
     while (MCG_S_CLKST_VAL != (uint8_t)kMCG_ClkOutStatExt)
     {
     }
@@ -2366,7 +2367,7 @@ status_t CLOCK_SetMcgConfig(const mcg_config_t *config)
         }
         else
         {
-            MCG->C5 &= (uint8_t)((~kMCG_PllEnableIndependent) & 0xFFU);
+            MCG->C5 = (uint8_t)(MCG->C5 & (~((uint8_t)kMCG_PllEnableIndependent) & 0xFFU)); /* PRQA S 4394 */ /* INT31-C: result bounded to uint8_t range by 0xFFU mask */
         }
     }
 

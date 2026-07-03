@@ -58,8 +58,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.0.1. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief CLOCK driver version 2.0.2. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*! @brief External XTAL0 (OSC0) clock frequency.
@@ -968,7 +968,7 @@ static inline void CLOCK_SetLowPowerEnable(bool enable)
     }
     else
     {
-        MCG->C2 &= ~(uint8_t)MCG_C2_LP_MASK;
+        MCG->C2 = (uint8_t)(MCG->C2 & (~MCG_C2_LP_MASK & 0xFFU));
     }
 }
 
@@ -1013,7 +1013,7 @@ status_t CLOCK_SetExternalRefClkConfig(mcg_oscsel_t oscsel);
  */
 static inline void CLOCK_SetFllExtRefDiv(uint8_t frdiv)
 {
-    MCG->C1 = (uint8_t)((MCG->C1 & ~MCG_C1_FRDIV_MASK) | MCG_C1_FRDIV(frdiv));
+    MCG->C1 = (uint8_t)((uint8_t)(MCG->C1 & (~MCG_C1_FRDIV_MASK & 0xFFU)) | (uint8_t)MCG_C1_FRDIV(frdiv));
 }
 
 #if (defined(FSL_FEATURE_MCG_HAS_PLL) && FSL_FEATURE_MCG_HAS_PLL)
@@ -1038,7 +1038,7 @@ void CLOCK_EnablePll0(mcg_pll_config_t const *config);
  */
 static inline void CLOCK_DisablePll0(void)
 {
-    MCG->C5 &= (uint8_t)(~(MCG_C5_PLLCLKEN0_MASK | MCG_C5_PLLSTEN0_MASK));
+    MCG->C5 = (uint8_t)(MCG->C5 & (~(MCG_C5_PLLCLKEN0_MASK | MCG_C5_PLLSTEN0_MASK) & 0xFFU));
 }
 
 #if ((defined(FSL_FEATURE_MCG_HAS_PLL_PRDIV) && FSL_FEATURE_MCG_HAS_PLL_PRDIV) && \
@@ -1252,7 +1252,7 @@ static inline void OSC_SetExtRefClkConfig(OSC_Type *base, oscer_config_t const *
 {
     uint8_t reg = base->CR;
 
-    reg &= (uint8_t)(~(OSC_CR_ERCLKEN_MASK | OSC_CR_EREFSTEN_MASK));
+    reg = (uint8_t)(reg & (~(OSC_CR_ERCLKEN_MASK | OSC_CR_EREFSTEN_MASK) & 0xFFU));
     reg |= config->enableMode;
 
     base->CR = reg;
@@ -1282,7 +1282,7 @@ static inline void OSC_SetCapLoad(OSC_Type *base, uint8_t capLoad)
 {
     uint8_t reg = base->CR;
 
-    reg &= (uint8_t)(~(OSC_CR_SC2P_MASK | OSC_CR_SC4P_MASK | OSC_CR_SC8P_MASK | OSC_CR_SC16P_MASK));
+    reg = (uint8_t)(reg & (~(OSC_CR_SC2P_MASK | OSC_CR_SC4P_MASK | OSC_CR_SC8P_MASK | OSC_CR_SC16P_MASK) & 0xFFU));
     reg |= capLoad;
 
     base->CR = reg;

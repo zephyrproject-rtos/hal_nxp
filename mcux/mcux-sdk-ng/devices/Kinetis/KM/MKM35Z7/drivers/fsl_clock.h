@@ -58,8 +58,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.2.3. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
+/*! @brief CLOCK driver version 2.2.4. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
 /*@}*/
 
 /*! @brief External XTAL0 (OSC0) clock frequency.

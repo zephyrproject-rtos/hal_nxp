@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2021, 2023 NXP
+ * Copyright 2016 - 2021, 2023, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -58,8 +58,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.5.1. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
+/*! @brief CLOCK driver version 2.5.2. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 2))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -899,7 +899,7 @@ static inline void CLOCK_SetLowPowerEnable(bool enable)
     }
     else
     {
-        MCG->C2 &= ~(uint8_t)MCG_C2_LP_MASK;
+        MCG->C2 = (uint8_t)(MCG->C2 & (~MCG_C2_LP_MASK & 0xFFU));
     }
 }
 
@@ -944,7 +944,7 @@ status_t CLOCK_SetExternalRefClkConfig(mcg_oscsel_t oscsel);
  */
 static inline void CLOCK_SetFllExtRefDiv(uint8_t frdiv)
 {
-    MCG->C1 = (uint8_t)((MCG->C1 & ~MCG_C1_FRDIV_MASK) | MCG_C1_FRDIV(frdiv));
+    MCG->C1 = (uint8_t)(((MCG->C1 & ~MCG_C1_FRDIV_MASK) | MCG_C1_FRDIV(frdiv)) & 0xFFU);
 }
 
 /*!
@@ -968,7 +968,7 @@ void CLOCK_EnablePll0(mcg_pll_config_t const *config);
  */
 static inline void CLOCK_DisablePll0(void)
 {
-    MCG->C5 &= ~(MCG_C5_PLLCLKEN0_MASK | MCG_C5_PLLSTEN0_MASK);
+    MCG->C5 = (uint8_t)(MCG->C5 & (~(MCG_C5_PLLCLKEN0_MASK | MCG_C5_PLLSTEN0_MASK) & 0xFFU));
 }
 
 /*@}*/
@@ -1080,7 +1080,7 @@ static inline void OSC_SetExtRefClkConfig(OSC_Type *base, oscer_config_t const *
 {
     uint8_t reg = base->CR;
 
-    reg &= ~(OSC_CR_ERCLKEN_MASK | OSC_CR_EREFSTEN_MASK);
+    reg = (uint8_t)(reg & (~(OSC_CR_ERCLKEN_MASK | OSC_CR_EREFSTEN_MASK) & 0xFFU));
     reg |= config->enableMode;
 
     base->CR = reg;
@@ -1106,7 +1106,7 @@ static inline void OSC_SetCapLoad(OSC_Type *base, uint8_t capLoad)
 {
     uint8_t reg = base->CR;
 
-    reg &= ~(OSC_CR_SC2P_MASK | OSC_CR_SC4P_MASK | OSC_CR_SC8P_MASK | OSC_CR_SC16P_MASK);
+    reg = (uint8_t)(reg & (~(OSC_CR_SC2P_MASK | OSC_CR_SC4P_MASK | OSC_CR_SC8P_MASK | OSC_CR_SC16P_MASK) & 0xFFU));
     reg |= capLoad;
 
     base->CR = reg;
