@@ -12,8 +12,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    IMXRT1050RM Rev.5, 07/2021 | IMXRT1050SRM Rev.2
-**     Version:             rev. 3.0, 2025-11-13
-**     Build:               b251113
+**     Version:             rev. 3.1, 2026-05-20
+**     Build:               b260520
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -21,7 +21,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -47,6 +47,11 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-11-13)
 **         Move enet compatibility macros to common header.
+**     - rev. 3.1 (2026-05-20)
+**         Fixed CERT-C INT31-C MSG violations on the ~(uint16_t)WDOG_*_MASK operator-precedence
+**         pattern in the watchdog-disable sequence (SystemInit) and CERT-C INT30-C/INT31-C
+**         violations in SystemCoreClockUpdate by widening PLL2MainClock accumulation and PFD
+**         freq computations to uint64_t with explicit clamp-to-UINT32_MAX before narrowing.
 **
 ** ###################################################################
 */
@@ -88,19 +93,19 @@ void SystemInit (void) {
 #endif
 
 /* Disable Watchdog Power Down Counter */
-    WDOG1->WMCR &= ~(uint16_t) WDOG_WMCR_PDE_MASK;
-    WDOG2->WMCR &= ~(uint16_t) WDOG_WMCR_PDE_MASK;
+    WDOG1->WMCR &= (uint16_t)((~WDOG_WMCR_PDE_MASK) & 0xFFFFU);
+    WDOG2->WMCR &= (uint16_t)((~WDOG_WMCR_PDE_MASK) & 0xFFFFU);
 
 /* Watchdog disable */
 
 #if (DISABLE_WDOG)
     if ((WDOG1->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
-        WDOG1->WCR &= ~(uint16_t) WDOG_WCR_WDE_MASK;
+        WDOG1->WCR &= (uint16_t)((~WDOG_WCR_WDE_MASK) & 0xFFFFU);
     }
     if ((WDOG2->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
-        WDOG2->WCR &= ~(uint16_t) WDOG_WCR_WDE_MASK;
+        WDOG2->WCR &= (uint16_t)((~WDOG_WCR_WDE_MASK) & 0xFFFFU);
     }
     if ((RTWDOG->CS & RTWDOG_CS_CMD32EN_MASK) != 0U)
     {
@@ -202,7 +207,11 @@ void SystemCoreClockUpdate (void) {
         {
             PLL2MainClock = (CPU_XTAL_CLK_HZ * (((CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_DIV_SELECT_MASK) != 0U) ? 22U : 20U));
         }
-        PLL2MainClock += (uint32_t)(((uint64_t)CPU_XTAL_CLK_HZ * ((uint64_t)(CCM_ANALOG->PLL_SYS_NUM))) / ((uint64_t)(CCM_ANALOG->PLL_SYS_DENOM)));
+        {
+            uint64_t tmpSum = (uint64_t)PLL2MainClock +
+                ((uint64_t)CPU_XTAL_CLK_HZ * ((uint64_t)(CCM_ANALOG->PLL_SYS_NUM))) / ((uint64_t)(CCM_ANALOG->PLL_SYS_DENOM));
+            PLL2MainClock = (tmpSum > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)tmpSum;
+        }
 
         switch (CCM->CBCMR & CCM_CBCMR_PRE_PERIPH_CLK_SEL_MASK)
         {
@@ -213,13 +222,21 @@ void SystemCoreClockUpdate (void) {
 
             /* PLL2 PFD2 ---> Pre_Periph_clk ---> Periph_clk */
             case CCM_CBCMR_PRE_PERIPH_CLK_SEL(1U):
-                freq = PLL2MainClock / ((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD2_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD2_FRAC_SHIFT) * 18U;
+            {
+                uint64_t tmpFreq = (uint64_t)PLL2MainClock /
+                    (uint64_t)((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD2_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD2_FRAC_SHIFT) * 18UL;
+                freq = (tmpFreq > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)tmpFreq;
                 break;
+            }
 
             /* PLL2 PFD0 ---> Pre_Periph_clk ---> Periph_clk */
             case CCM_CBCMR_PRE_PERIPH_CLK_SEL(2U):
-                freq = PLL2MainClock / ((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD0_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD0_FRAC_SHIFT) * 18U;
+            {
+                uint64_t tmpFreq = (uint64_t)PLL2MainClock /
+                    (uint64_t)((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD0_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD0_FRAC_SHIFT) * 18UL;
+                freq = (tmpFreq > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)tmpFreq;
                 break;
+            }
 
             /* PLL1 divided(/2) ---> Pre_Periph_clk ---> Periph_clk */
             case CCM_CBCMR_PRE_PERIPH_CLK_SEL(3U):

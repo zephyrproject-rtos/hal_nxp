@@ -42,7 +42,7 @@
 **                          MIMXRT118CXVJ8C_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260206
+**     Build:               b260509
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DCDC
@@ -489,9 +489,13 @@ typedef struct {
  */
 #define DCDC_CTRL0_IN_BROWNOUT_WARN_EN(x)        (((uint32_t)(((uint32_t)(x)) << DCDC_CTRL0_IN_BROWNOUT_WARN_EN_SHIFT)) & DCDC_CTRL0_IN_BROWNOUT_WARN_EN_MASK)
 
-#define DCDC_CTRL0_DEBUG_BITS_MASK               (0x7FF80000U)
-#define DCDC_CTRL0_DEBUG_BITS_SHIFT              (19U)
-#define DCDC_CTRL0_DEBUG_BITS(x)                 (((uint32_t)(((uint32_t)(x)) << DCDC_CTRL0_DEBUG_BITS_SHIFT)) & DCDC_CTRL0_DEBUG_BITS_MASK)
+#define DCDC_CTRL0_DCDC_1P8_STABILITY_MASK       (0x400000U)
+#define DCDC_CTRL0_DCDC_1P8_STABILITY_SHIFT      (22U)
+/*! DCDC_1P8_STABILITY - Internal Resistor Load on 1P8 output enable.
+ *  0b0..Resistor load disconnected.
+ *  0b1..Resistor load connected.
+ */
+#define DCDC_CTRL0_DCDC_1P8_STABILITY(x)         (((uint32_t)(((uint32_t)(x)) << DCDC_CTRL0_DCDC_1P8_STABILITY_SHIFT)) & DCDC_CTRL0_DCDC_1P8_STABILITY_MASK)
 
 #define DCDC_CTRL0_TRG_GPC_EN_MASK               (0x80000000U)
 #define DCDC_CTRL0_TRG_GPC_EN_SHIFT              (31U)

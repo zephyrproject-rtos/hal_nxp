@@ -42,7 +42,7 @@
 **                          MIMXRT118CXVJ8C_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260206
+**     Build:               b260509
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENETC_SI
@@ -1140,10 +1140,6 @@ typedef struct {
 #define ENETC_SI_SICAPR0_NUM_RX_BDR_MASK         (0xFF0000U)
 #define ENETC_SI_SICAPR0_NUM_RX_BDR_SHIFT        (16U)
 #define ENETC_SI_SICAPR0_NUM_RX_BDR(x)           (((uint32_t)(((uint32_t)(x)) << ENETC_SI_SICAPR0_NUM_RX_BDR_SHIFT)) & ENETC_SI_SICAPR0_NUM_RX_BDR_MASK)
-
-#define ENETC_SI_SICAPR0_NUM_MAC_ADDR_MASK       (0xF0000000U)
-#define ENETC_SI_SICAPR0_NUM_MAC_ADDR_SHIFT      (28U)
-#define ENETC_SI_SICAPR0_NUM_MAC_ADDR(x)         (((uint32_t)(((uint32_t)(x)) << ENETC_SI_SICAPR0_NUM_MAC_ADDR_SHIFT)) & ENETC_SI_SICAPR0_NUM_MAC_ADDR_MASK)
 /*! @} */
 
 /*! @name SICAPR1 - Station interface capability register 1 */

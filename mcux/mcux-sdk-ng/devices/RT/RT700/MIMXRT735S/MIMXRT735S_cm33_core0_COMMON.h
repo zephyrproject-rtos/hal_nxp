@@ -12,7 +12,7 @@
 **
 **     Reference manual:    iMXRT700RM Rev.5, 10/2025
 **     Version:             rev. 6.0, 2025-12-29
-**     Build:               b260330
+**     Build:               b260429
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT735S_cm33_core0
@@ -3284,35 +3284,6 @@ typedef enum _dma_request_source
   #define PVTS_BASE_ADDRS                          { PVTS0_BASE }
   /** Array initializer of PVTS peripheral base pointers */
   #define PVTS_BASE_PTRS                           { PVTS0 }
-#endif
-
-/* ROMCP - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral ROMCP base address */
-  #define ROMCP_BASE                               (0x50182000u)
-  /** Peripheral ROMCP base address */
-  #define ROMCP_BASE_NS                            (0x40182000u)
-  /** Peripheral ROMCP base pointer */
-  #define ROMCP                                    ((ROMCP_Type *)ROMCP_BASE)
-  /** Peripheral ROMCP base pointer */
-  #define ROMCP_NS                                 ((ROMCP_Type *)ROMCP_BASE_NS)
-  /** Array initializer of ROMCP peripheral base addresses */
-  #define ROMCP_BASE_ADDRS                         { ROMCP_BASE }
-  /** Array initializer of ROMCP peripheral base pointers */
-  #define ROMCP_BASE_PTRS                          { ROMCP }
-  /** Array initializer of ROMCP peripheral base addresses */
-  #define ROMCP_BASE_ADDRS_NS                      { ROMCP_BASE_NS }
-  /** Array initializer of ROMCP peripheral base pointers */
-  #define ROMCP_BASE_PTRS_NS                       { ROMCP_NS }
-#else
-  /** Peripheral ROMCP base address */
-  #define ROMCP_BASE                               (0x40182000u)
-  /** Peripheral ROMCP base pointer */
-  #define ROMCP                                    ((ROMCP_Type *)ROMCP_BASE)
-  /** Array initializer of ROMCP peripheral base addresses */
-  #define ROMCP_BASE_ADDRS                         { ROMCP_BASE }
-  /** Array initializer of ROMCP peripheral base pointers */
-  #define ROMCP_BASE_PTRS                          { ROMCP }
 #endif
 
 /* RSTCTL0 - Peripheral instance base addresses */

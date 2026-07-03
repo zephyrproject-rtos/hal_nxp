@@ -11,8 +11,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    IMXRT1160RM, Rev 0, 03/2021
-**     Version:             rev. 2.0, 2025-11-13
-**     Build:               b251114
+**     Version:             rev. 2.1, 2026-05-20
+**     Build:               b260520
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -20,7 +20,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -34,6 +34,9 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 2.0 (2025-11-13)
 **         Consolidate asrc/xbar and enet macros into common header.
+**     - rev. 2.1 (2026-05-20)
+**         Fixed CERT-C INT31-C MSG violations on the ~(uint16_t)WDOG_*_MASK operator-precedence
+**         pattern in the watchdog-disable sequence (SystemInit).
 **
 ** ###################################################################
 */
@@ -41,7 +44,7 @@
 /*!
  * @file MIMXRT1166_cm4
  * @version 1.0
- * @date 2025-11-14
+ * @date 2026-05-12
  * @brief Device specific configuration file for MIMXRT1166_cm4 (implementation
  *        file)
  *
@@ -80,11 +83,11 @@ void SystemInit (void) {
 #if (DISABLE_WDOG)
     if ((WDOG1->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
-        WDOG1->WCR &= ~(uint16_t) WDOG_WCR_WDE_MASK;
+        WDOG1->WCR &= (uint16_t)((~WDOG_WCR_WDE_MASK) & 0xFFFFU);
     }
     if ((WDOG2->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
-        WDOG2->WCR &= ~(uint16_t) WDOG_WCR_WDE_MASK;
+        WDOG2->WCR &= (uint16_t)((~WDOG_WCR_WDE_MASK) & 0xFFFFU);
     }
     if ((RTWDOG3->CS & RTWDOG_CS_CMD32EN_MASK) != 0U)
     {

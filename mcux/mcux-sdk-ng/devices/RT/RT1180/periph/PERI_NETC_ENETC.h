@@ -42,7 +42,7 @@
 **                          MIMXRT118CXVJ8C_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260206
+**     Build:               b260509
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NETC_ENETC
@@ -147,7 +147,7 @@
 /** NETC_ENETC - Size of Registers Arrays */
 #define NETC_ENETC_PARCEACR_COUNT                 4u
 #define NETC_ENETC_PICDRADCR_COUNT                4u
-#define NETC_ENETC_TC_TBS_NUM_COUNT               8u
+#define NETC_ENETC_PTCTSDR_COUNT                  8u
 #define NETC_ENETC_NUM_SMHRBDRMR_COUNT            15u
 #define NETC_ENETC_NUM_SI_COUNT                   2u
 
@@ -205,7 +205,7 @@ typedef struct {
        uint8_t RESERVED_12[12];
   __IO uint32_t PRIO2TCMR0;                        /**< Transmit priority to traffic class mapping register 0, offset: 0x380 */
        uint8_t RESERVED_13[12];
-  __IO uint32_t PTCTSDR[NETC_ENETC_TC_TBS_NUM_COUNT]; /**< Port traffic class 0 time specific departure register..Port traffic class 7 time specific departure register, array offset: 0x390, array step: 0x4 */
+  __IO uint32_t PTCTSDR[NETC_ENETC_PTCTSDR_COUNT]; /**< Port traffic class 4 time specific departure register..Port traffic class 3 time specific departure register, array offset: 0x390, array step: 0x4 */
        uint8_t RESERVED_14[1104];
   __I  uint32_t SMCAPR;                            /**< Switch management capability register, offset: 0x800 */
        uint8_t RESERVED_15[124];
@@ -835,7 +835,7 @@ typedef struct {
 #define NETC_ENETC_PRIO2TCMR0_PRIO7TC(x)         (((uint32_t)(((uint32_t)(x)) << NETC_ENETC_PRIO2TCMR0_PRIO7TC_SHIFT)) & NETC_ENETC_PRIO2TCMR0_PRIO7TC_MASK)
 /*! @} */
 
-/*! @name PTCTSDR - Port traffic class 0 time specific departure register..Port traffic class 7 time specific departure register */
+/*! @name PTCTSDR - Port traffic class 4 time specific departure register..Port traffic class 3 time specific departure register */
 /*! @{ */
 
 #define NETC_ENETC_PTCTSDR_TSDE_MASK             (0x80000000U)
@@ -846,9 +846,6 @@ typedef struct {
  */
 #define NETC_ENETC_PTCTSDR_TSDE(x)               (((uint32_t)(((uint32_t)(x)) << NETC_ENETC_PTCTSDR_TSDE_SHIFT)) & NETC_ENETC_PTCTSDR_TSDE_MASK)
 /*! @} */
-
-/* The count of NETC_ENETC_PTCTSDR */
-#define NETC_ENETC_PTCTSDR_COUNT                 (8U)
 
 /*! @name SMCAPR - Switch management capability register */
 /*! @{ */

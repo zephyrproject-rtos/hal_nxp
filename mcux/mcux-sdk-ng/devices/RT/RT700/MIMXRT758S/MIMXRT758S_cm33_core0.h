@@ -12,7 +12,7 @@
 **
 **     Reference manual:    iMXRT700RM Rev.5, 10/2025
 **     Version:             rev. 6.0, 2025-12-29
-**     Build:               b260330
+**     Build:               b260429
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT758S_cm33_core0
@@ -110,7 +110,6 @@
 #include "PERI_PNGDEC.h"
 #include "PERI_PUF.h"
 #include "PERI_PVTS.h"
-#include "PERI_ROMCP.h"
 #include "PERI_RSTCTL0.h"
 #include "PERI_RSTCTL2.h"
 #include "PERI_RSTCTL3.h"

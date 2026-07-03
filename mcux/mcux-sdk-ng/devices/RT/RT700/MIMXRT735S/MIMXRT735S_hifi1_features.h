@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 5.0, 2025-12-03
-**     Build:               b260330
+**     Build:               b260429
 **
 **     Abstract:
 **         Chip specific module features.
@@ -507,7 +507,7 @@
 
 /* MIPI_DSI_HOST module features */
 
-/* @brief Does not have DPHY PLL(DPHY_CM) */
+/* @brief Does not have DPHY PLL */
 #define FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL (1)
 /* @brief Support TX ULPS */
 #define FSL_FEATURE_MIPI_DSI_HOST_HAS_ULPS (1)

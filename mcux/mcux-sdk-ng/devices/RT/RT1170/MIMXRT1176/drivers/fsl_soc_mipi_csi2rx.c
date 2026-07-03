@@ -50,7 +50,8 @@ void MIPI_CSI2RX_InitInterface(MIPI_CSI2RX_Type *base, uint8_t tHsSettle_EscClk)
                         IOMUXC_GPR_GPR59_MIPI_CSI_SOFT_RST_N_MASK | IOMUXC_GPR_GPR59_MIPI_CSI_PD_RX_MASK |
                         IOMUXC_GPR_GPR59_MIPI_CSI_DDRCLK_EN_MASK |      /* Enable the DDR clock. */
                         IOMUXC_GPR_GPR59_MIPI_CSI_CONT_CLK_MODE_MASK | /* Continue clock. */
-                        IOMUXC_GPR_GPR59_MIPI_CSI_S_PRG_RXHS_SETTLE(tHsSettle_EscClk - 1UL); /* T(HS-SETTLE) */
+                        IOMUXC_GPR_GPR59_MIPI_CSI_S_PRG_RXHS_SETTLE(
+                            (tHsSettle_EscClk > 0U) ? ((uint32_t)tHsSettle_EscClk - 1UL) : 0UL); /* T(HS-SETTLE) */
 
     /* Don't mask any data type */
     VIDEO_MUX->CFG_DT_DISABLE.RW = 0U;

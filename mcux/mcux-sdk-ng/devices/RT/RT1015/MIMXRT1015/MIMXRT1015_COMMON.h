@@ -13,13 +13,13 @@
 **
 **     Reference manual:    IMXRT1015RM Rev.1, 02/2021 | IMXRT102XSRM Rev.0
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251112
+**     Build:               b260509
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1015
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

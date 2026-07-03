@@ -15,7 +15,7 @@
 **
 **     Reference manual:    IMXRT1170RM, Rev 5, 12/2025
 **     Version:             rev. 4.0, 2026-01-06
-**     Build:               b260106
+**     Build:               b260513
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -48,7 +48,7 @@
 /*!
  * @file MIMXRT1175_cm7
  * @version 1.0
- * @date 2026-01-06
+ * @date 2026-05-13
  * @brief Device specific configuration file for MIMXRT1175_cm7 (header file)
  *
  * Provides a system configuration function and a global variable that contains

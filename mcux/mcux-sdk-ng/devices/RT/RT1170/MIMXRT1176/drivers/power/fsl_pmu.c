@@ -335,10 +335,10 @@ void PMU_StaticLpsrAnaLdoInit(ANADIG_LDO_SNVS_Type *base, const pmu_static_lpsr_
     {
         regValue |= ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_REG_LP_EN_MASK;
     }
-    regValue |= ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_PULL_DOWN_2MA_EN(config->enable2mALoad);
-    regValue |= ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_ALWAYS_4MA_PULLDOWN_EN(config->enable4mALoad);
-    regValue |= ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_PULL_DOWN_20UA_EN(config->enable20uALoad);
-    regValue |= ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_STANDBY_EN(config->enableStandbyMode);
+    regValue |= ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_PULL_DOWN_2MA_EN((uint32_t)(config->enable2mALoad ? 1U : 0U));
+    regValue |= ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_ALWAYS_4MA_PULLDOWN_EN((uint32_t)(config->enable4mALoad ? 1U : 0U));
+    regValue |= ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_PULL_DOWN_20UA_EN((uint32_t)(config->enable20uALoad ? 1U : 0U));
+    regValue |= ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_STANDBY_EN((uint32_t)(config->enableStandbyMode ? 1U : 0U));
 
     base->PMU_LDO_LPSR_ANA = regValue;
 
@@ -486,13 +486,13 @@ void PMU_GPCSetLpsrDigLdoTargetVoltage(uint32_t setpointMap, pmu_lpsr_dig_target
 
     for (regIndex = 0U; regIndex < ARRAY_SIZE(lpsrDigTrgRegArray); regIndex++)
     {
-        temp8 = (((uint8_t)(setpointMap >> (PMU_LDO_LPSR_DIG_TRG_SPX_REG_SETPOINT_COUNTS * regIndex))) & 0xFU);
+        temp8 = (uint8_t)(((setpointMap >> (PMU_LDO_LPSR_DIG_TRG_SPX_REG_SETPOINT_COUNTS * regIndex)) & 0xFU));
         if (temp8 != 0UL)
         {
             regValue = (*(volatile uint32_t *)lpsrDigTrgRegArray[regIndex]);
             for (i = 0U; i < PMU_LDO_LPSR_DIG_TRG_SPX_REG_SETPOINT_COUNTS; i++)
             {
-                if (((temp8 >> (1U * i)) & 0x1U) != 0U)
+                if ((((uint32_t)temp8 >> (1U * i)) & 0x1U) != 0U)
                 {
                     regValue &= ~(0xFFUL << (PMU_LDO_LPSR_DIG_TRG_SPX_VOLTAGE_SETPOINTX_BIT_WIDTH * i));
                     regValue |= (uint32_t)voltageValue << (PMU_LDO_LPSR_DIG_TRG_SPX_VOLTAGE_SETPOINTX_BIT_WIDTH * i);
@@ -734,7 +734,7 @@ void PMU_StaticBandgapInit(const pmu_static_bandgap_config_t *config)
     temp32 |= ((uint32_t)(config->powerDownOption) &
                (AI_BANDGAP_CTRL0_REFTOP_PWD_MASK | AI_BANDGAP_CTRL0_REFTOP_LINREGREF_PWD_MASK |
                 AI_BANDGAP_CTRL0_REFTOP_PWDVBGUP_MASK));
-    temp32 |= AI_BANDGAP_CTRL0_REFTOP_LOWPOWER(config->enableLowPowerMode);
+    temp32 |= AI_BANDGAP_CTRL0_REFTOP_LOWPOWER((uint32_t)(config->enableLowPowerMode ? 1U : 0U));
     temp32 |= AI_BANDGAP_CTRL0_REFTOP_VBGADJ(config->outputVoltage);
     temp32 |= AI_BANDGAP_CTRL0_REFTOP_IBZTCADJ(config->outputCurrent);
 

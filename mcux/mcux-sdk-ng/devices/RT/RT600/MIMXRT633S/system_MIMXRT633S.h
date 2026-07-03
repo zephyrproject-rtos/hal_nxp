@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MIMXRT685 User manual Rev. 1.8 21 November 2024
 **     Version:             rev. 4.0, 2025-11-13
-**     Build:               b251113
+**     Build:               b260513
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 5.0, 2025-12-03
-**     Build:               b260330
+**     Build:               b260429
 **
 **     Abstract:
 **         Chip specific module features.
@@ -95,8 +95,6 @@
 #define FSL_FEATURE_SOC_PMC_COUNT (1)
 /* @brief PUF availability on the SoC. */
 #define FSL_FEATURE_SOC_PUF_COUNT (4)
-/* @brief ROMC availability on the SoC. */
-#define FSL_FEATURE_SOC_ROMC_COUNT (1)
 /* @brief RSTCTL0 availability on the SoC. */
 #define FSL_FEATURE_SOC_RSTCTL0_COUNT (1)
 /* @brief RTC availability on the SoC. */
@@ -567,7 +565,7 @@
 
 /* MIPI_DSI_HOST module features */
 
-/* @brief Does not have DPHY PLL(DPHY_CM) */
+/* @brief Does not have DPHY PLL */
 #define FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL (1)
 /* @brief Support TX ULPS */
 #define FSL_FEATURE_MIPI_DSI_HOST_HAS_ULPS (1)

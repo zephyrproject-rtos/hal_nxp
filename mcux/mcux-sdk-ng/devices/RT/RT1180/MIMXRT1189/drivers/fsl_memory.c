@@ -307,23 +307,23 @@ uint32_t MEMORY_ConvertMemoryMapAddress(uint32_t addr,
     m33_ctcm_end = get_memory_address(kCore_CM33_CTCM_END);
     m33_ctcm_start_alias = get_memory_address(kCore_CM33_CTCM_START_ALIAS);
     m33_ctcm_end_alias = get_memory_address(kCore_CM33_CTCM_END_ALIAS);
-    m33_ctcm_offset = m33_ctcm_start_alias - m33_ctcm_start;
+    m33_ctcm_offset = (uint32_t)(((uint64_t)m33_ctcm_start_alias - m33_ctcm_start) & 0xFFFFFFFFUL);
     m33_stcm_start = get_memory_address(kCore_CM33_STCM_START);
     m33_stcm_end = get_memory_address(kCore_CM33_STCM_END);
     m33_stcm_start_alias = get_memory_address(kCore_CM33_STCM_START_ALIAS);
     m33_stcm_end_alias = get_memory_address(kCore_CM33_STCM_END_ALIAS);
-    m33_stcm_offset = m33_stcm_start_alias - m33_stcm_start;
+    m33_stcm_offset = (uint32_t)(((uint64_t)m33_stcm_start_alias - m33_stcm_start) & 0xFFFFFFFFUL);
 #elif (__CORTEX_M == 7U)
     m7_itcm_end = get_memory_address(kCore_CM7_ITCM_END);
     m7_itcm_start_alias = get_memory_address(kCore_CM7_ITCM_START_ALIAS);
     m7_itcm_end_alias = get_memory_address(kCore_CM7_ITCM_END_ALIAS);
-    m7_itcm_offset =
-        m7_itcm_start_alias - get_memory_address(kCore_CM7_ITCM_START);
+    m7_itcm_offset = (uint32_t)(((uint64_t)m7_itcm_start_alias -
+                                  get_memory_address(kCore_CM7_ITCM_START)) & 0xFFFFFFFFUL);
     m7_dtcm_start = get_memory_address(kCore_CM7_DTCM_START);
     m7_dtcm_end = get_memory_address(kCore_CM7_DTCM_END);
     m7_dtcm_start_alias = get_memory_address(kCore_CM7_DTCM_START_ALIAS);
     m7_dtcm_end_alias = get_memory_address(kCore_CM7_DTCM_END_ALIAS);
-    m7_dtcm_offset = m7_dtcm_start_alias - m7_dtcm_start;
+    m7_dtcm_offset = (uint32_t)(((uint64_t)m7_dtcm_start_alias - m7_dtcm_start) & 0xFFFFFFFFUL);
 #endif
     initialized = true;
   }
@@ -332,14 +332,18 @@ uint32_t MEMORY_ConvertMemoryMapAddress(uint32_t addr,
   case kMEMORY_Local2DMA: {
 #if (__CORTEX_M == 33U)
     if (((addr >= m33_ctcm_start) && (addr <= m33_ctcm_end)) ||
-        ((addr >= (m33_ctcm_start + FSL_MEM_M33_SECURE_ADDRESS_OFFSET)) &&
-         (addr <= (m33_ctcm_end + FSL_MEM_M33_SECURE_ADDRESS_OFFSET)))) {
-      dest = addr + m33_ctcm_offset;
+        ((addr >= (uint32_t)(((uint64_t)m33_ctcm_start +
+                              FSL_MEM_M33_SECURE_ADDRESS_OFFSET) & 0xFFFFFFFFUL)) &&
+         (addr <= (uint32_t)(((uint64_t)m33_ctcm_end +
+                              FSL_MEM_M33_SECURE_ADDRESS_OFFSET) & 0xFFFFFFFFUL)))) {
+      dest = (uint32_t)(((uint64_t)addr + m33_ctcm_offset) & 0xFFFFFFFFUL);
     } else if (((addr >= m33_stcm_start) && (addr <= m33_stcm_end)) ||
                ((addr >=
-                 (m33_stcm_start + FSL_MEM_M33_SECURE_ADDRESS_OFFSET)) &&
-                (addr <= (m33_stcm_end + FSL_MEM_M33_SECURE_ADDRESS_OFFSET)))) {
-      dest = addr + m33_stcm_offset;
+                 (uint32_t)(((uint64_t)m33_stcm_start +
+                             FSL_MEM_M33_SECURE_ADDRESS_OFFSET) & 0xFFFFFFFFUL)) &&
+                (addr <= (uint32_t)(((uint64_t)m33_stcm_end +
+                                     FSL_MEM_M33_SECURE_ADDRESS_OFFSET) & 0xFFFFFFFFUL)))) {
+      dest = (uint32_t)(((uint64_t)addr + m33_stcm_offset) & 0xFFFFFFFFUL);
     }
 #elif (__CORTEX_M == 7U)
 /* clang-format off */
@@ -351,9 +355,9 @@ uint32_t MEMORY_ConvertMemoryMapAddress(uint32_t addr,
 
 /* clang-format on */
     if ((addr > 0U) && (addr <= m7_itcm_end)) {
-      dest = addr + m7_itcm_offset;
+      dest = (uint32_t)(((uint64_t)addr + m7_itcm_offset) & 0xFFFFFFFFUL);
     } else if ((addr >= m7_dtcm_start) && (addr <= m7_dtcm_end)) {
-      dest = addr + m7_dtcm_offset;
+      dest = (uint32_t)(((uint64_t)addr + m7_dtcm_offset) & 0xFFFFFFFFUL);
     }
 #endif
     else {
@@ -364,22 +368,26 @@ uint32_t MEMORY_ConvertMemoryMapAddress(uint32_t addr,
   case kMEMORY_DMA2Local: {
 #if (__CORTEX_M == 33U)
     if (((addr >= m33_ctcm_start_alias) && (addr <= m33_ctcm_end_alias)) ||
-        ((addr >= (m33_ctcm_start_alias + FSL_MEM_M33_SECURE_ADDRESS_OFFSET)) &&
-         (addr <= (m33_ctcm_end_alias + FSL_MEM_M33_SECURE_ADDRESS_OFFSET)))) {
-      dest = addr - m33_ctcm_offset;
+        ((addr >= (uint32_t)(((uint64_t)m33_ctcm_start_alias +
+                              FSL_MEM_M33_SECURE_ADDRESS_OFFSET) & 0xFFFFFFFFUL)) &&
+         (addr <= (uint32_t)(((uint64_t)m33_ctcm_end_alias +
+                              FSL_MEM_M33_SECURE_ADDRESS_OFFSET) & 0xFFFFFFFFUL)))) {
+      dest = (uint32_t)(((uint64_t)addr - m33_ctcm_offset) & 0xFFFFFFFFUL);
     } else if (((addr >= m33_stcm_start_alias) &&
                 (addr <= m33_stcm_end_alias)) ||
                ((addr >=
-                 (m33_stcm_start_alias + FSL_MEM_M33_SECURE_ADDRESS_OFFSET)) &&
+                 (uint32_t)(((uint64_t)m33_stcm_start_alias +
+                             FSL_MEM_M33_SECURE_ADDRESS_OFFSET) & 0xFFFFFFFFUL)) &&
                 (addr <=
-                 (m33_stcm_end_alias + FSL_MEM_M33_SECURE_ADDRESS_OFFSET)))) {
-      dest = addr - m33_stcm_offset;
+                 (uint32_t)(((uint64_t)m33_stcm_end_alias +
+                             FSL_MEM_M33_SECURE_ADDRESS_OFFSET) & 0xFFFFFFFFUL)))) {
+      dest = (uint32_t)(((uint64_t)addr - m33_stcm_offset) & 0xFFFFFFFFUL);
     }
 #elif (__CORTEX_M == 7U)
     if ((addr >= m7_itcm_start_alias) && (addr <= m7_itcm_end_alias)) {
-      dest = addr - m7_itcm_offset;
+      dest = (uint32_t)(((uint64_t)addr - m7_itcm_offset) & 0xFFFFFFFFUL);
     } else if ((addr >= m7_dtcm_start_alias) && (addr <= m7_dtcm_end_alias)) {
-      dest = addr - m7_dtcm_offset;
+      dest = (uint32_t)(((uint64_t)addr - m7_dtcm_offset) & 0xFFFFFFFFUL);
     }
 #endif
     else {

@@ -6,7 +6,7 @@
 **
 **     Reference manual:    iMXRT700RM Rev.5, 10/2025
 **     Version:             rev. 6.0, 2025-12-29
-**     Build:               b260330
+**     Build:               b260429
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMXRT798S_ezhv
@@ -1278,16 +1278,6 @@ typedef enum IRQn {
 #define PVTS_BASE_ADDRS                          { PVTS0_BASE, PVTS1_BASE }
 /** Array initializer of PVTS peripheral base pointers */
 #define PVTS_BASE_PTRS                           { PVTS0, PVTS1 }
-
-/* ROMCP - Peripheral instance base addresses */
-/** Peripheral ROMCP base address */
-#define ROMCP_BASE                               (0x40182000u)
-/** Peripheral ROMCP base pointer */
-#define ROMCP                                    ((ROMCP_Type *)ROMCP_BASE)
-/** Array initializer of ROMCP peripheral base addresses */
-#define ROMCP_BASE_ADDRS                         { ROMCP_BASE }
-/** Array initializer of ROMCP peripheral base pointers */
-#define ROMCP_BASE_PTRS                          { ROMCP }
 
 /* RSTCTL0 - Peripheral instance base addresses */
 /** Peripheral RSTCTL0 base address */

@@ -41,7 +41,7 @@
 **                          MIMXRT798SGVKB_hifi4
 **
 **     Version:             rev. 6.0, 2025-12-29
-**     Build:               b260330
+**     Build:               b260429
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PINT
@@ -159,11 +159,11 @@
 typedef struct {
   __IO uint32_t ISEL;                              /**< Pin Interrupt Mode, offset: 0x0 */
   __IO uint32_t IENR;                              /**< Pin Interrupt Level or Rising-Edge Interrupt Enable, offset: 0x4 */
-  __IO uint32_t SIENR;                             /**< Pin Interrupt Level or Rising-Edge Interrupt Set, offset: 0x8 */
+  __O  uint32_t SIENR;                             /**< Pin Interrupt Level or Rising-Edge Interrupt Set, offset: 0x8 */
   __IO uint32_t CIENR;                             /**< Pin Interrupt Level (Rising-Edge Interrupt) Clear, offset: 0xC */
   __IO uint32_t IENF;                              /**< Pin Interrupt Active Level or Falling-Edge Interrupt Enable, offset: 0x10 */
-  __IO uint32_t SIENF;                             /**< Pin Interrupt Active Level or Falling-Edge Interrupt Set, offset: 0x14 */
-  __IO uint32_t CIENF;                             /**< Pin Interrupt Active Level or Falling-Edge Interrupt Clear, offset: 0x18 */
+  __O  uint32_t SIENF;                             /**< Pin Interrupt Active Level or Falling-Edge Interrupt Set, offset: 0x14 */
+  __O  uint32_t CIENF;                             /**< Pin Interrupt Active Level or Falling-Edge Interrupt Clear, offset: 0x18 */
   __IO uint32_t RISE;                              /**< Pin Interrupt Rising Edge, offset: 0x1C */
   __IO uint32_t FALL;                              /**< Pin Interrupt Falling Edge, offset: 0x20 */
   __IO uint32_t IST;                               /**< Pin Interrupt Status, offset: 0x24 */

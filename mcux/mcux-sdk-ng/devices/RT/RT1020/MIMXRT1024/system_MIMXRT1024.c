@@ -12,8 +12,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    IMXRT1024RM Rev.1, 02/2021 | IMXRT102XSRM Rev.0
-**     Version:             rev. 3.0, 2025-11-13
-**     Build:               b251113
+**     Version:             rev. 3.1, 2026-05-13
+**     Build:               b260513
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -21,7 +21,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -41,6 +41,10 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 3.0 (2025-11-13)
 **         Move enet compatibility macros to common header.
+**     - rev. 3.1 (2026-05-13)
+**         Fixed CERT-C INT31-C MSG violations on the ~(uint16_t)WDOG_*_MASK operator-precedence
+**         pattern in the watchdog-disable sequence (SystemInit) and INT30-C unsigned-wrap
+**         violations on PLL2MainClock += compute and on PLL2/PLL3 PFD3 freq computations.
 **
 ** ###################################################################
 */
@@ -48,7 +52,7 @@
 /*!
  * @file MIMXRT1024
  * @version 1.0
- * @date 131125
+ * @date 090526
  * @brief Device specific configuration file for MIMXRT1024 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -120,19 +124,19 @@ void SystemInit (void) {
 #endif /* #if defined(XIP_BOOT_HEADER_ENABLE) && (XIP_BOOT_HEADER_ENABLE == 1) */
 
 /* Disable Watchdog Power Down Counter */
-    WDOG1->WMCR &= ~(uint16_t) WDOG_WMCR_PDE_MASK;
-    WDOG2->WMCR &= ~(uint16_t) WDOG_WMCR_PDE_MASK;
+    WDOG1->WMCR &= (uint16_t)((~WDOG_WMCR_PDE_MASK) & 0xFFFFU);
+    WDOG2->WMCR &= (uint16_t)((~WDOG_WMCR_PDE_MASK) & 0xFFFFU);
 
 /* Watchdog disable */
 
 #if (DISABLE_WDOG)
     if ((WDOG1->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
-        WDOG1->WCR &= ~(uint16_t) WDOG_WCR_WDE_MASK;
+        WDOG1->WCR &= (uint16_t)((~WDOG_WCR_WDE_MASK) & 0xFFFFU);
     }
     if ((WDOG2->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
-        WDOG2->WCR &= ~(uint16_t) WDOG_WCR_WDE_MASK;
+        WDOG2->WCR &= (uint16_t)((~WDOG_WCR_WDE_MASK) & 0xFFFFU);
     }
     if ((RTWDOG->CS & RTWDOG_CS_CMD32EN_MASK) != 0U)
     {
@@ -182,7 +186,12 @@ void SystemCoreClockUpdate (void) {
     {
         PLL2MainClock = (CPU_XTAL_CLK_HZ * (((CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_DIV_SELECT_MASK) != 0U) ? 22U : 20U));
     }
-    PLL2MainClock += (uint32_t)(((uint64_t)CPU_XTAL_CLK_HZ * ((uint64_t)(CCM_ANALOG->PLL_SYS_NUM))) / ((uint64_t)(CCM_ANALOG->PLL_SYS_DENOM)));
+    {
+        uint32_t pllSysAdj = (uint32_t)((((uint64_t)CPU_XTAL_CLK_HZ * ((uint64_t)(CCM_ANALOG->PLL_SYS_NUM))) /
+                                         ((uint64_t)(CCM_ANALOG->PLL_SYS_DENOM))) &
+                                        0xFFFFFFFFUL);
+        PLL2MainClock = (uint32_t)(((uint64_t)PLL2MainClock + (uint64_t)pllSysAdj) & 0xFFFFFFFFUL);
+    }
 
     /* Check if usb1 pll is bypassed */
     if((CCM_ANALOG->PLL_USB1 & CCM_ANALOG_PLL_USB1_BYPASS_MASK) != 0U)
@@ -234,12 +243,18 @@ void SystemCoreClockUpdate (void) {
 
             /* PLL3 PFD3 ---> Pre_Periph_clk ---> Periph_clk ---> Core_clock */
             case CCM_CBCMR_PRE_PERIPH_CLK_SEL(1U):
-                freq = PLL3MainClock / ((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD3_FRAC_MASK) >> CCM_ANALOG_PFD_480_PFD3_FRAC_SHIFT) * 18U;
+                freq = (uint32_t)(((uint64_t)(PLL3MainClock / ((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD3_FRAC_MASK) >>
+                                                               CCM_ANALOG_PFD_480_PFD3_FRAC_SHIFT)) *
+                                   18ULL) &
+                                  0xFFFFFFFFUL);
                 break;
 
             /* PLL2 PFD3 ---> Pre_Periph_clk ---> Periph_clk ---> Core_clock */
             case CCM_CBCMR_PRE_PERIPH_CLK_SEL(2U):
-                freq = PLL2MainClock / ((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD3_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD3_FRAC_SHIFT) * 18U;
+                freq = (uint32_t)(((uint64_t)(PLL2MainClock / ((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD3_FRAC_MASK) >>
+                                                               CCM_ANALOG_PFD_528_PFD3_FRAC_SHIFT)) *
+                                   18ULL) &
+                                  0xFFFFFFFFUL);
                 break;
 
             /* PLL6 ---> Pre_Periph_clk ---> Periph_clk ---> Core_clock */

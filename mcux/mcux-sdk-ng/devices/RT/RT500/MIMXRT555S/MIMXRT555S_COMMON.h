@@ -10,13 +10,13 @@
 **
 **     Reference manual:    iMXRT500RM Rev.1, 07/2022
 **     Version:             rev. 7.0, 2025-11-13
-**     Build:               b251113
+**     Build:               b260509
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT555S
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -1690,7 +1690,7 @@ typedef enum IRQn {
   #define LCDIF_BASE_PTRS                          { LCDIF }
 #endif
 /** Interrupt vectors for the LCDIF peripheral type */
-#define LCDIF_IRQ0_IRQS                          { LCDIF_IRQn }
+#define LCDIF_IRQS                               { LCDIF_IRQn }
 
 /* MIPI_DSI_HOST - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1933,6 +1933,8 @@ typedef enum IRQn {
   /** Array initializer of PMC peripheral base pointers */
   #define PMC_BASE_PTRS                            { PMC }
 #endif
+/** Interrupt vectors for the PMC peripheral type */
+#define PMC_IRQS                                 { PMU_PMIC_IRQn }
 
 /* POWERQUAD - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

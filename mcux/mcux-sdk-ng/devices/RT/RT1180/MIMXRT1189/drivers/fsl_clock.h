@@ -40,7 +40,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief CLOCK driver version. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -1580,9 +1580,11 @@ static inline void CLOCK_SetRootClock(clock_root_t root, const clock_root_config
  */
 static inline void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t value)
 {
-    if (((uint32_t)value & CCM_LPCG_DIRECT_ON_MASK) != (CCM->LPCG[name].DIRECT & CCM_LPCG_DIRECT_ON_MASK))
+    uint32_t lpcgVal = (value == kCLOCK_On) ? (uint32_t)CCM_LPCG_DIRECT_ON_MASK : 0UL;
+
+    if (lpcgVal != (CCM->LPCG[name].DIRECT & CCM_LPCG_DIRECT_ON_MASK))
     {
-        CCM->LPCG[name].DIRECT = ((uint32_t)value & CCM_LPCG_DIRECT_ON_MASK);
+        CCM->LPCG[name].DIRECT = lpcgVal;
         __DSB();
         __ISB();
 #if __CORTEX_M == 33
@@ -2316,7 +2318,7 @@ static inline void CLOCK_SetClockOutput1(clock_output1_selection_t selection, ui
     clock_root_config_t rootCfg = {0};
 
     rootCfg.mux = selection;
-    rootCfg.div = divider;
+    rootCfg.div = (uint8_t)(divider & 0xFFU);
     CLOCK_SetRootClock(kCLOCK_Root_Cko1, &rootCfg);
 }
 
@@ -2331,7 +2333,7 @@ static inline void CLOCK_SetClockOutput2(clock_output2_selection_t selection, ui
     clock_root_config_t rootCfg = {0};
 
     rootCfg.mux = selection;
-    rootCfg.div = divider;
+    rootCfg.div = (uint8_t)(divider & 0xFFU);
     CLOCK_SetRootClock(kCLOCK_Root_Cko2, &rootCfg);
 }
 

@@ -451,6 +451,7 @@ uint32_t CLOCK_GetClockRootFreq(clock_root_t clockRoot)
     clock_mux_t clockRootMuxTuple                        = clockRootMuxTupleArray[(uint8_t)clockRoot];
     clock_div_t clockRootPreDivTuple                     = clockRootDivTupleArray[(uint8_t)clockRoot][0];
     clock_div_t clockRootPostDivTuple                    = clockRootDivTupleArray[(uint8_t)clockRoot][1];
+    /* coverity[cert_int31_c_violation] -- clock_mux_t values are SoC-defined non-negative bit patterns. */
     uint32_t clockRootMuxValue = (CCM_TUPLE_REG(CCM, clockRootMuxTuple) & CCM_TUPLE_MASK(clockRootMuxTuple)) >>
                                  CCM_TUPLE_SHIFT(clockRootMuxTuple);
     clock_name_t clockSourceName;
@@ -463,11 +464,13 @@ uint32_t CLOCK_GetClockRootFreq(clock_root_t clockRoot)
 
     if (clockRootPreDivTuple != kCLOCK_NonePreDiv)
     {
+        /* coverity[cert_int31_c_violation] -- clock_div_t values are SoC-defined non-negative bit patterns. */
         freq /= ((CCM_TUPLE_REG(CCM, clockRootPreDivTuple) & CCM_TUPLE_MASK(clockRootPreDivTuple)) >>
                  CCM_TUPLE_SHIFT(clockRootPreDivTuple)) +
                 1UL;
     }
 
+    /* coverity[cert_int31_c_violation] -- clock_div_t values are SoC-defined non-negative bit patterns. */
     freq /= ((CCM_TUPLE_REG(CCM, clockRootPostDivTuple) & CCM_TUPLE_MASK(clockRootPostDivTuple)) >>
              CCM_TUPLE_SHIFT(clockRootPostDivTuple)) +
             1UL;
@@ -915,30 +918,39 @@ uint32_t CLOCK_GetPllFreq(clock_pll_t pll)
     switch (pll)
     {
         case kCLOCK_PllArm:
-            freq = ((freq * ((CCM_ANALOG->PLL_ARM & CCM_ANALOG_PLL_ARM_DIV_SELECT_MASK) >>
-                             CCM_ANALOG_PLL_ARM_DIV_SELECT_SHIFT)) >>
-                    1U);
+        {
+            uint64_t tmpFreq = ((uint64_t)freq * ((CCM_ANALOG->PLL_ARM & CCM_ANALOG_PLL_ARM_DIV_SELECT_MASK) >>
+                                                  CCM_ANALOG_PLL_ARM_DIV_SELECT_SHIFT)) >> 1U;
+            freq = (tmpFreq > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)tmpFreq;
             break;
+        }
         case kCLOCK_PllSys:
             /* PLL output frequency = Fref * (DIV_SELECT + NUM/DENOM). */
             freqTmp = ((clock_64b_t)freq * ((clock_64b_t)(CCM_ANALOG->PLL_SYS_NUM)));
             freqTmp /= ((clock_64b_t)(CCM_ANALOG->PLL_SYS_DENOM));
 
-            if ((CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_DIV_SELECT_MASK) != 0U)
             {
-                freq *= 22U;
+                uint64_t tmpFreq;
+                if ((CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_DIV_SELECT_MASK) != 0U)
+                {
+                    tmpFreq = (uint64_t)freq * 22UL;
+                }
+                else
+                {
+                    tmpFreq = (uint64_t)freq * 20UL;
+                }
+                tmpFreq += (uint64_t)freqTmp;
+                freq = (tmpFreq > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)tmpFreq;
             }
-            else
-            {
-                freq *= 20U;
-            }
-
-            freq += (uint32_t)freqTmp;
             break;
 
         case kCLOCK_PllUsb1:
-            freq = (freq * (((CCM_ANALOG->PLL_USB1 & CCM_ANALOG_PLL_USB1_DIV_SELECT_MASK) != 0UL) ? 22U : 20U));
+        {
+            uint64_t tmpFreq = (uint64_t)freq *
+                (((CCM_ANALOG->PLL_USB1 & CCM_ANALOG_PLL_USB1_DIV_SELECT_MASK) != 0UL) ? 22UL : 20UL);
+            freq = (tmpFreq > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)tmpFreq;
             break;
+        }
 
         case kCLOCK_PllAudio:
             /* PLL output frequency = Fref * (DIV_SELECT + NUM/DENOM). */
@@ -948,7 +960,10 @@ uint32_t CLOCK_GetPllFreq(clock_pll_t pll)
             freqTmp = ((clock_64b_t)freq * ((clock_64b_t)(CCM_ANALOG->PLL_AUDIO_NUM)));
             freqTmp /= ((clock_64b_t)(CCM_ANALOG->PLL_AUDIO_DENOM));
 
-            freq = freq * divSelect + (uint32_t)freqTmp;
+            {
+                uint64_t tmpSum = (uint64_t)freq * (uint64_t)divSelect + (uint64_t)freqTmp;
+                freq = (tmpSum > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)tmpSum;
+            }
 
             /* AUDIO PLL output = PLL output frequency / POSTDIV. */
 
@@ -1013,7 +1028,10 @@ uint32_t CLOCK_GetPllFreq(clock_pll_t pll)
 
             freqTmp = ((clock_64b_t)freq * ((clock_64b_t)(CCM_ANALOG->PLL_VIDEO_NUM)));
             freqTmp /= ((clock_64b_t)(CCM_ANALOG->PLL_VIDEO_DENOM));
-            freq = freq * divSelect + (uint32_t)freqTmp;
+            {
+                uint64_t tmpSum = (uint64_t)freq * (uint64_t)divSelect + (uint64_t)freqTmp;
+                freq = (tmpSum > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)tmpSum;
+            }
 
             /* VIDEO PLL output = PLL output frequency / POSTDIV. */
 
@@ -1111,6 +1129,12 @@ void CLOCK_InitSysPfd(clock_pfd_t pfd, uint8_t pfdFrac)
     uint32_t pfdIndex = (uint32_t)pfd;
     uint32_t pfd528;
 
+    /* Bound pfdIndex so the 8-bit shift cannot overflow. PFD field has 4 PFDs (0..3). */
+    if (pfdIndex > 3UL)
+    {
+        return;
+    }
+
     pfd528 = CCM_ANALOG->PFD_528 &
              ~(((uint32_t)((uint32_t)CCM_ANALOG_PFD_528_PFD0_CLKGATE_MASK | CCM_ANALOG_PFD_528_PFD0_FRAC_MASK)
                 << (8UL * pfdIndex)));
@@ -1162,6 +1186,12 @@ void CLOCK_InitUsb1Pfd(clock_pfd_t pfd, uint8_t pfdFrac)
     uint32_t pfdIndex = (uint32_t)pfd;
     uint32_t pfd480;
 
+    /* Bound pfdIndex so the 8-bit shift cannot overflow. PFD field has 4 PFDs (0..3). */
+    if (pfdIndex > 3UL)
+    {
+        return;
+    }
+
     pfd480 = CCM_ANALOG->PFD_480 &
              ~(((uint32_t)((uint32_t)CCM_ANALOG_PFD_480_PFD0_CLKGATE_MASK | CCM_ANALOG_PFD_480_PFD0_FRAC_MASK)
                 << (8UL * pfdIndex)));
@@ -1210,23 +1240,28 @@ uint32_t CLOCK_GetSysPfdFreq(clock_pfd_t pfd)
 {
     uint32_t freq = CLOCK_GetPllFreq(kCLOCK_PllSys);
     uint64_t tmp64 = (uint64_t)freq * 18UL;
+    uint64_t tmpFreq;
 
     switch (pfd)
     {
         case kCLOCK_Pfd0:
-            freq = (uint32_t)(tmp64 / (uint64_t)((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD0_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD0_FRAC_SHIFT));
+            tmpFreq = tmp64 / (uint64_t)((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD0_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD0_FRAC_SHIFT);
+            freq    = (tmpFreq > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)tmpFreq;
             break;
 
         case kCLOCK_Pfd1:
-            freq = (uint32_t)(tmp64 / (uint64_t)((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD1_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD1_FRAC_SHIFT));
+            tmpFreq = tmp64 / (uint64_t)((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD1_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD1_FRAC_SHIFT);
+            freq    = (tmpFreq > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)tmpFreq;
             break;
 
         case kCLOCK_Pfd2:
-            freq = (uint32_t)(tmp64 / (uint64_t)((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD2_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD2_FRAC_SHIFT));
+            tmpFreq = tmp64 / (uint64_t)((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD2_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD2_FRAC_SHIFT);
+            freq    = (tmpFreq > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)tmpFreq;
             break;
 
         case kCLOCK_Pfd3:
-            freq = (uint32_t)(tmp64 / (uint64_t)((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD3_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD3_FRAC_SHIFT));
+            tmpFreq = tmp64 / (uint64_t)((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD3_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD3_FRAC_SHIFT);
+            freq    = (tmpFreq > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)tmpFreq;
             break;
 
         default:
@@ -1249,23 +1284,28 @@ uint32_t CLOCK_GetUsb1PfdFreq(clock_pfd_t pfd)
 {
     uint32_t freq = CLOCK_GetPllFreq(kCLOCK_PllUsb1);
     uint64_t tmp64 = (uint64_t)freq * 18UL;
+    uint64_t tmpFreq;
 
     switch (pfd)
     {
         case kCLOCK_Pfd0:
-            freq = (uint32_t)(tmp64 / (uint64_t)((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD0_FRAC_MASK) >> CCM_ANALOG_PFD_480_PFD0_FRAC_SHIFT));
+            tmpFreq = tmp64 / (uint64_t)((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD0_FRAC_MASK) >> CCM_ANALOG_PFD_480_PFD0_FRAC_SHIFT);
+            freq    = (tmpFreq > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)tmpFreq;
             break;
 
         case kCLOCK_Pfd1:
-            freq = (uint32_t)(tmp64 / (uint64_t)((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD1_FRAC_MASK) >> CCM_ANALOG_PFD_480_PFD1_FRAC_SHIFT));
+            tmpFreq = tmp64 / (uint64_t)((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD1_FRAC_MASK) >> CCM_ANALOG_PFD_480_PFD1_FRAC_SHIFT);
+            freq    = (tmpFreq > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)tmpFreq;
             break;
 
         case kCLOCK_Pfd2:
-            freq = (uint32_t)(tmp64 / (uint64_t)((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD2_FRAC_MASK) >> CCM_ANALOG_PFD_480_PFD2_FRAC_SHIFT));
+            tmpFreq = tmp64 / (uint64_t)((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD2_FRAC_MASK) >> CCM_ANALOG_PFD_480_PFD2_FRAC_SHIFT);
+            freq    = (tmpFreq > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)tmpFreq;
             break;
 
         case kCLOCK_Pfd3:
-            freq = (uint32_t)(tmp64 / (uint64_t)((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD3_FRAC_MASK) >> CCM_ANALOG_PFD_480_PFD3_FRAC_SHIFT));
+            tmpFreq = tmp64 / (uint64_t)((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD3_FRAC_MASK) >> CCM_ANALOG_PFD_480_PFD3_FRAC_SHIFT);
+            freq    = (tmpFreq > (uint64_t)UINT32_MAX) ? UINT32_MAX : (uint32_t)tmpFreq;
             break;
 
         default:

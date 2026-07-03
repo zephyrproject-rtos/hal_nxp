@@ -39,8 +39,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.5.3. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 3))
+/*! @brief CLOCK driver version 2.5.4. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 4))
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -1211,7 +1211,9 @@ static inline void CLOCK_SetMux(clock_mux_t mux, uint32_t value)
 {
     uint32_t busyShift;
 
+    /* coverity[cert_int31_c_violation] -- clock_mux_t values are SoC-defined non-negative bit patterns. */
     busyShift               = CCM_TUPLE_BUSY_SHIFT(mux);
+    /* coverity[cert_int31_c_violation] -- clock_mux_t values are SoC-defined non-negative bit patterns. */
     CCM_TUPLE_REG(CCM, mux) = (CCM_TUPLE_REG(CCM, mux) & (~CCM_TUPLE_MASK(mux))) |
                               (((uint32_t)((value) << CCM_TUPLE_SHIFT(mux))) & CCM_TUPLE_MASK(mux));
 
@@ -1235,6 +1237,7 @@ static inline void CLOCK_SetMux(clock_mux_t mux, uint32_t value)
  */
 static inline uint32_t CLOCK_GetMux(clock_mux_t mux)
 {
+    /* coverity[cert_int31_c_violation] -- clock_mux_t values are SoC-defined non-negative bit patterns. */
     return (CCM_TUPLE_REG(CCM, mux) & CCM_TUPLE_MASK(mux)) >> CCM_TUPLE_SHIFT(mux);
 }
 
@@ -1263,7 +1266,9 @@ static inline void CLOCK_SetDiv(clock_div_t divider, uint32_t value)
 {
     uint32_t busyShift;
 
+    /* coverity[cert_int31_c_violation] -- clock_div_t values are SoC-defined non-negative bit patterns. */
     busyShift                   = CCM_TUPLE_BUSY_SHIFT((uint32_t)divider);
+    /* coverity[cert_int31_c_violation] -- clock_div_t values are SoC-defined non-negative bit patterns. */
     CCM_TUPLE_REG(CCM, divider) = (CCM_TUPLE_REG(CCM, divider) & (~CCM_TUPLE_MASK(divider))) |
                                   (((uint32_t)((value) << CCM_TUPLE_SHIFT(divider))) & CCM_TUPLE_MASK(divider));
 
@@ -1286,6 +1291,7 @@ static inline void CLOCK_SetDiv(clock_div_t divider, uint32_t value)
  */
 static inline uint32_t CLOCK_GetDiv(clock_div_t divider)
 {
+    /* coverity[cert_int31_c_violation] -- clock_div_t values are SoC-defined non-negative bit patterns. */
     return ((CCM_TUPLE_REG(CCM, divider) & CCM_TUPLE_MASK(divider)) >> CCM_TUPLE_SHIFT(divider));
 }
 
@@ -1297,7 +1303,9 @@ static inline uint32_t CLOCK_GetDiv(clock_div_t divider)
  */
 static inline void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t value)
 {
+    /* coverity[cert_int31_c_violation] -- clock_ip_name_t values are SoC-defined non-negative bit patterns. */
     uint32_t index = ((uint32_t)name) >> 8U;
+    /* coverity[cert_int31_c_violation] -- clock_ip_name_t values are SoC-defined non-negative bit patterns. */
     uint32_t shift = ((uint32_t)name) & 0x1FU;
     volatile uint32_t *reg;
 

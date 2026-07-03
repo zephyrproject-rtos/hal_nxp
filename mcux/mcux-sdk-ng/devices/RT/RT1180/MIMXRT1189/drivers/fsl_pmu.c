@@ -157,10 +157,10 @@ void PMU_StaticAonAnaLdoInit(ANADIG_LDO_BBSM_Type *base, const pmu_static_aon_an
     {
         regValue |= ANADIG_LDO_BBSM_PMU_LDO_AON_ANA_REG_LP_EN_MASK;
     }
-    regValue |= ANADIG_LDO_BBSM_PMU_LDO_AON_ANA_PULL_DOWN_2MA_EN(config->enable2mALoad);
-    regValue |= ANADIG_LDO_BBSM_PMU_LDO_AON_ANA_ALWAYS_4MA_PULLDOWN_EN(config->enable4mALoad);
-    regValue |= ANADIG_LDO_BBSM_PMU_LDO_AON_ANA_PULL_DOWN_20UA_EN(config->enable20uALoad);
-    regValue |= ANADIG_LDO_BBSM_PMU_LDO_AON_ANA_STANDBY_EN(config->enableStandbyMode);
+    regValue |= ANADIG_LDO_BBSM_PMU_LDO_AON_ANA_PULL_DOWN_2MA_EN((uint32_t)(config->enable2mALoad ? 1U : 0U));
+    regValue |= ANADIG_LDO_BBSM_PMU_LDO_AON_ANA_ALWAYS_4MA_PULLDOWN_EN((uint32_t)(config->enable4mALoad ? 1U : 0U));
+    regValue |= ANADIG_LDO_BBSM_PMU_LDO_AON_ANA_PULL_DOWN_20UA_EN((uint32_t)(config->enable20uALoad ? 1U : 0U));
+    regValue |= ANADIG_LDO_BBSM_PMU_LDO_AON_ANA_STANDBY_EN((uint32_t)(config->enableStandbyMode ? 1U : 0U));
 
     base->PMU_LDO_AON_ANA = regValue;
 
@@ -353,7 +353,7 @@ void PMU_StaticBandgapInit(const pmu_static_bandgap_config_t *config)
     temp32 |= ((uint32_t)(config->powerDownOption) &
                (VMBANDGAP_CTRL0_REFTOP_PWD_MASK | VMBANDGAP_CTRL0_REFTOP_LINREGREF_PWD_MASK |
                 VMBANDGAP_CTRL0_REFTOP_PWDVBGUP_MASK));
-    temp32 |= VMBANDGAP_CTRL0_REFTOP_LOWPOWER(config->enableLowPowerMode);
+    temp32 |= VMBANDGAP_CTRL0_REFTOP_LOWPOWER((uint32_t)(config->enableLowPowerMode ? 1U : 0U));
 
     VMBANDGAP->CTRL0.RW = temp32;
 }

@@ -20,7 +20,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief DCDC driver version. */
-#define FSL_DCDC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1. */
+#define FSL_DCDC_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2. */
 
 /*! @brief The array of VDD1P0 target voltage. */
 #define VDD1P0_TARGET_VOLTAGE                                                                                         \
@@ -384,11 +384,13 @@ static inline void DCDC_EnableVDD1P0LowPowerMode(DCDC_Type *base, dcdc_core_slic
 {
     if (core == kDCDC_CORE0)
     {
-        base->TRG_SW_0 = ((base->TRG_SW_0) & (~DCDC_TRG_SW_0_LP_EN_1P0_MASK)) | DCDC_TRG_SW_0_LP_EN_1P0(enable);
+        base->TRG_SW_0 = ((base->TRG_SW_0) & (~DCDC_TRG_SW_0_LP_EN_1P0_MASK)) |
+                         DCDC_TRG_SW_0_LP_EN_1P0((uint32_t)(enable ? 1U : 0U));
     }
     else if (core == kDCDC_CORE1)
     {
-        base->TRG_SW_1 = ((base->TRG_SW_1) & (~DCDC_TRG_SW_1_LP_EN_1P0_MASK)) | DCDC_TRG_SW_1_LP_EN_1P0(enable);
+        base->TRG_SW_1 = ((base->TRG_SW_1) & (~DCDC_TRG_SW_1_LP_EN_1P0_MASK)) |
+                         DCDC_TRG_SW_1_LP_EN_1P0((uint32_t)(enable ? 1U : 0U));
     }
     else
     {
@@ -513,11 +515,13 @@ static inline void DCDC_GPC_EnableVDD1P0LowPowerMode(DCDC_Type *base, dcdc_core_
 {
     if (core == kDCDC_CORE0)
     {
-        base->TRG_GPC_0 = ((base->TRG_GPC_0) & (~DCDC_TRG_GPC_0_LP_EN_1P0_MASK)) | DCDC_TRG_GPC_0_LP_EN_1P0(enable);
+        base->TRG_GPC_0 = ((base->TRG_GPC_0) & (~DCDC_TRG_GPC_0_LP_EN_1P0_MASK)) |
+                          DCDC_TRG_GPC_0_LP_EN_1P0((uint32_t)(enable ? 1U : 0U));
     }
     else if (core == kDCDC_CORE1)
     {
-        base->TRG_GPC_1 = ((base->TRG_GPC_1) & (~DCDC_TRG_GPC_1_LP_EN_1P0_MASK)) | DCDC_TRG_GPC_1_LP_EN_1P0(enable);
+        base->TRG_GPC_1 = ((base->TRG_GPC_1) & (~DCDC_TRG_GPC_1_LP_EN_1P0_MASK)) |
+                          DCDC_TRG_GPC_1_LP_EN_1P0((uint32_t)(enable ? 1U : 0U));
     }
     else
     {

@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2025-12-01
-**     Build:               b260205
+**     Build:               b260512
 **
 **     Abstract:
 **         Chip specific module features.
@@ -288,6 +288,8 @@
 #define FSL_FEATURE_MCM_HAS_LMEM_FAULT (0)
 /* @brief  MCM has LMEM control, register LMPECR, LMPEIR. */
 #define FSL_FEATURE_MCM_HAS_LMEM_PARITY (0)
+/* @brief  MCM has CPCR register (core platform control). */
+#define FSL_FEATURE_MCM_HAS_CPCR (0)
 
 /* interrupt module features */
 

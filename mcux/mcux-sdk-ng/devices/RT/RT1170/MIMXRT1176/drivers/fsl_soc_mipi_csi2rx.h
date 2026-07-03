@@ -19,7 +19,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief Driver version. */
-#define FSL_SOC_MIPI_CSI2RX_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+#define FSL_SOC_MIPI_CSI2RX_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 
 /*******************************************************************************
  * API

@@ -12,13 +12,13 @@
 **
 **     Reference manual:    IMXRT1160RM, Rev 0, 03/2021
 **     Version:             rev. 2.0, 2025-11-13
-**     Build:               b251114
+**     Build:               b260512
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1166_cm7
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

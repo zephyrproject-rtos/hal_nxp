@@ -42,7 +42,7 @@
 **                          MIMXRT118CXVJ8C_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260206
+**     Build:               b260509
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ANADIG_OSC
@@ -238,9 +238,9 @@ typedef struct {
 
 #define ANADIG_OSC_OSC_24M_CTRL_OSC_24M_STABLE_MASK (0x40000000U)
 #define ANADIG_OSC_OSC_24M_CTRL_OSC_24M_STABLE_SHIFT (30U)
-/*! OSC_24M_STABLE - 24MHz OSC Stable
- *  0b0..Not Stable
- *  0b1..Stable
+/*! OSC_24M_STABLE - 24 MHz OSC Stable time reached
+ *  0b0..Stable time not reached
+ *  0b1..Stable time reached
  */
 #define ANADIG_OSC_OSC_24M_CTRL_OSC_24M_STABLE(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_OSC_OSC_24M_CTRL_OSC_24M_STABLE_SHIFT)) & ANADIG_OSC_OSC_24M_CTRL_OSC_24M_STABLE_MASK)
 

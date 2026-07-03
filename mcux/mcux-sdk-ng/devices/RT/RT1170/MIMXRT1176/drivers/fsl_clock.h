@@ -39,7 +39,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief CLOCK driver version. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 6, 1))
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 6, 2))
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -2123,13 +2123,15 @@ static inline void CLOCK_SetRootClock(clock_root_t root, const clock_root_config
  */
 static inline void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t value)
 {
-    if (((uint32_t)value & CCM_LPCG_DIRECT_ON_MASK) != (CCM->LPCG[name].DIRECT & CCM_LPCG_DIRECT_ON_MASK))
+    uint32_t lpcgVal = (value == kCLOCK_On) ? (uint32_t)CCM_LPCG_DIRECT_ON_MASK : 0UL;
+
+    if (lpcgVal != (CCM->LPCG[name].DIRECT & CCM_LPCG_DIRECT_ON_MASK))
     {
-        CCM->LPCG[name].DIRECT = ((uint32_t)value & CCM_LPCG_DIRECT_ON_MASK);
+        CCM->LPCG[name].DIRECT = lpcgVal;
         __DSB();
         __ISB();
 
-        while ((CCM->LPCG[name].STATUS0 & CCM_LPCG_STATUS0_ON_MASK) != ((uint32_t)value & CCM_LPCG_STATUS0_ON_MASK))
+        while ((CCM->LPCG[name].STATUS0 & CCM_LPCG_STATUS0_ON_MASK) != (lpcgVal & CCM_LPCG_STATUS0_ON_MASK))
         {
         }
     }
@@ -2428,25 +2430,6 @@ static inline void CLOCK_OSC_SetOscRc400MControlMode(clock_control_mode_t contro
  * This function enables OSC RC 400Mhz.
  */
 void CLOCK_OSC_EnableOscRc400M(void);
-
-/*!
- * @brief Gate/ungate 400MHz RC oscillator.
- *
- * @param enableGate Used to gate/ungate 400MHz RC oscillator.
- *          - \b true Gate the 400MHz RC oscillator.
- *          - \b false Ungate the 400MHz RC oscillator.
- */
-static inline void CLOCK_OSC_GateOscRc400M(bool enableGate)
-{
-    if (enableGate)
-    {
-        ANADIG_OSC->OSC_400M_CTRL1 |= ANADIG_OSC_OSC_400M_CTRL1_CLKGATE_400MEG_MASK;
-    }
-    else
-    {
-        ANADIG_OSC->OSC_400M_CTRL1 &= ~ANADIG_OSC_OSC_400M_CTRL1_CLKGATE_400MEG_MASK;
-    }
-}
 
 /*!
  * @brief Trims OSC RC 400MHz.
@@ -3113,7 +3096,7 @@ static inline void CLOCK_ROOT_ConfigSetPoint(clock_root_t name,
         CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_GRADE(config->grade) |
         CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_MUX(config->mux) |
         CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_DIV((uint32_t)config->div - 1UL) |
-        CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_OFF(config->clockOff);
+        CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_OFF((uint32_t)(config->clockOff ? 1U : 0U));
 }
 
 /*!
@@ -3294,7 +3277,7 @@ static inline void CLOCK_SetClockOutput1(clock_output1_selection_t selection, ui
     clock_root_config_t rootCfg = {0};
 
     rootCfg.mux = selection;
-    rootCfg.div = divider;
+    rootCfg.div = (uint8_t)(divider & 0xFFU);
     CLOCK_SetRootClock(kCLOCK_Root_Cko1, &rootCfg);
 }
 
@@ -3309,7 +3292,7 @@ static inline void CLOCK_SetClockOutput2(clock_output2_selection_t selection, ui
     clock_root_config_t rootCfg = {0};
 
     rootCfg.mux = selection;
-    rootCfg.div = divider;
+    rootCfg.div = (uint8_t)(divider & 0xFFU);
     CLOCK_SetRootClock(kCLOCK_Root_Cko2, &rootCfg);
 }
 

@@ -42,7 +42,7 @@
 **                          MIMXRT118CXVJ8C_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260206
+**     Build:               b260509
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NETC_ETH_LINK
@@ -167,9 +167,7 @@ typedef struct {
   __IO uint32_t PM0_PAUSE_THRESH;                  /**< Port MAC 0 Pause Quanta Threshold Register, offset: 0x64 */
        uint8_t RESERVED_6[12];
   __I  uint32_t PM0_RX_PAUSE_STATUS;               /**< Port MAC 0 Receive Pause Status Register, offset: 0x74 */
-       uint8_t RESERVED_7[64];
-  __IO uint32_t PM0_LPWAKE_TIMER;                  /**< Port MAC 0 EEE Low Power Wakeup Timer Register, offset: 0xB8 */
-  __IO uint32_t PM0_SLEEP_TIMER;                   /**< Port MAC 0 Transmit EEE Low Power Timer Register, offset: 0xBC */
+       uint8_t RESERVED_7[72];
   __IO uint32_t PM0_SINGLE_STEP;                   /**< Port MAC 0 IEEE1588 Single-Step Control Register, offset: 0xC0 */
        uint8_t RESERVED_8[12];
   __IO uint32_t PM0_HD_BACKOFF_ENTROPY;            /**< Port MAC 0 half-duplex backoff entropy register, offset: 0xD0 */
@@ -253,9 +251,7 @@ typedef struct {
   __IO uint32_t PM1_PAUSE_THRESH;                  /**< Port MAC 1 Pause Quanta Threshold Register, offset: 0x464 */
        uint8_t RESERVED_23[12];
   __I  uint32_t PM1_RX_PAUSE_STATUS;               /**< Port MAC 1 Receive Pause Status Register, offset: 0x474 */
-       uint8_t RESERVED_24[64];
-  __IO uint32_t PM1_LPWAKE_TIMER;                  /**< Port MAC 1 EEE Low Power Wakeup Timer Register, offset: 0x4B8 */
-  __IO uint32_t PM1_SLEEP_TIMER;                   /**< Port MAC 1 Transmit EEE Low Power Timer Register, offset: 0x4BC */
+       uint8_t RESERVED_24[72];
   __IO uint32_t PM1_SINGLE_STEP;                   /**< Port MAC 1 IEEE1588 Single-Step Control Register, offset: 0x4C0 */
        uint8_t RESERVED_25[12];
   __IO uint32_t PM1_HD_BACKOFF_ENTROPY;            /**< Port MAC 1 half-duplex backoff entropy register, offset: 0x4D0 */
@@ -408,24 +404,10 @@ typedef struct {
 /*! TXP - Enable padding of frames in transmit direction (1, default). */
 #define NETC_ETH_LINK_PM0_COMMAND_CONFIG_TXP(x)  (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_COMMAND_CONFIG_TXP_SHIFT)) & NETC_ETH_LINK_PM0_COMMAND_CONFIG_TXP_MASK)
 
-#define NETC_ETH_LINK_PM0_COMMAND_CONFIG_HD_FCEN_MASK (0x40000U)
-#define NETC_ETH_LINK_PM0_COMMAND_CONFIG_HD_FCEN_SHIFT (18U)
-/*! HD_FCEN - Half Duplex Flow Control Enable */
-#define NETC_ETH_LINK_PM0_COMMAND_CONFIG_HD_FCEN(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_COMMAND_CONFIG_HD_FCEN_SHIFT)) & NETC_ETH_LINK_PM0_COMMAND_CONFIG_HD_FCEN_MASK)
-
 #define NETC_ETH_LINK_PM0_COMMAND_CONFIG_TX_FLUSH_MASK (0x400000U)
 #define NETC_ETH_LINK_PM0_COMMAND_CONFIG_TX_FLUSH_SHIFT (22U)
 /*! TX_FLUSH - Tx flush */
 #define NETC_ETH_LINK_PM0_COMMAND_CONFIG_TX_FLUSH(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_COMMAND_CONFIG_TX_FLUSH_SHIFT)) & NETC_ETH_LINK_PM0_COMMAND_CONFIG_TX_FLUSH_MASK)
-
-#define NETC_ETH_LINK_PM0_COMMAND_CONFIG_TX_LOWP_ENA_MASK (0x800000U)
-#define NETC_ETH_LINK_PM0_COMMAND_CONFIG_TX_LOWP_ENA_SHIFT (23U)
-/*! TX_LOWP_ENA - Transmit Low Power Idle Enable.
- *  0b0..(default), the MAC operates in normal mode.
- *  0b1..The MAC completes the transmission of the current Frame and generates Low Power Idle Sequences to the
- *       line. It is advised to inspect IEVENT[TX_EMPTY] is set before enabling the LPI.
- */
-#define NETC_ETH_LINK_PM0_COMMAND_CONFIG_TX_LOWP_ENA(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_COMMAND_CONFIG_TX_LOWP_ENA_SHIFT)) & NETC_ETH_LINK_PM0_COMMAND_CONFIG_TX_LOWP_ENA_MASK)
 
 #define NETC_ETH_LINK_PM0_COMMAND_CONFIG_SWR_MASK (0x4000000U)
 #define NETC_ETH_LINK_PM0_COMMAND_CONFIG_SWR_SHIFT (26U)
@@ -710,23 +692,6 @@ typedef struct {
 #define NETC_ETH_LINK_PM0_RX_PAUSE_STATUS_PSTAT(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_RX_PAUSE_STATUS_PSTAT_SHIFT)) & NETC_ETH_LINK_PM0_RX_PAUSE_STATUS_PSTAT_MASK)
 /*! @} */
 
-/*! @name PM0_LPWAKE_TIMER - Port MAC 0 EEE Low Power Wakeup Timer Register */
-/*! @{ */
-
-#define NETC_ETH_LINK_PM0_LPWAKE_TIMER_TW_SYS_TX_MASK (0xFFFFFFU)
-#define NETC_ETH_LINK_PM0_LPWAKE_TIMER_TW_SYS_TX_SHIFT (0U)
-/*! TW_SYS_TX - EEE System transmit wait time */
-#define NETC_ETH_LINK_PM0_LPWAKE_TIMER_TW_SYS_TX(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_LPWAKE_TIMER_TW_SYS_TX_SHIFT)) & NETC_ETH_LINK_PM0_LPWAKE_TIMER_TW_SYS_TX_MASK)
-/*! @} */
-
-/*! @name PM0_SLEEP_TIMER - Port MAC 0 Transmit EEE Low Power Timer Register */
-/*! @{ */
-
-#define NETC_ETH_LINK_PM0_SLEEP_TIMER_SLEEPT_MASK (0xFFFFFFU)
-#define NETC_ETH_LINK_PM0_SLEEP_TIMER_SLEEPT_SHIFT (0U)
-#define NETC_ETH_LINK_PM0_SLEEP_TIMER_SLEEPT(x)  (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_SLEEP_TIMER_SLEEPT_SHIFT)) & NETC_ETH_LINK_PM0_SLEEP_TIMER_SLEEPT_MASK)
-/*! @} */
-
 /*! @name PM0_SINGLE_STEP - Port MAC 0 IEEE1588 Single-Step Control Register */
 /*! @{ */
 
@@ -735,7 +700,7 @@ typedef struct {
 /*! CH - Checksum update */
 #define NETC_ETH_LINK_PM0_SINGLE_STEP_CH(x)      (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_SINGLE_STEP_CH_SHIFT)) & NETC_ETH_LINK_PM0_SINGLE_STEP_CH_MASK)
 
-#define NETC_ETH_LINK_PM0_SINGLE_STEP_OFFSET_MASK (0xFF80U)
+#define NETC_ETH_LINK_PM0_SINGLE_STEP_OFFSET_MASK (0x7F80U)
 #define NETC_ETH_LINK_PM0_SINGLE_STEP_OFFSET_SHIFT (7U)
 #define NETC_ETH_LINK_PM0_SINGLE_STEP_OFFSET(x)  (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_SINGLE_STEP_OFFSET_SHIFT)) & NETC_ETH_LINK_PM0_SINGLE_STEP_OFFSET_MASK)
 
@@ -1364,24 +1329,10 @@ typedef struct {
 /*! TXP - Enable padding of frames in transmit direction (1, default). */
 #define NETC_ETH_LINK_PM1_COMMAND_CONFIG_TXP(x)  (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_COMMAND_CONFIG_TXP_SHIFT)) & NETC_ETH_LINK_PM1_COMMAND_CONFIG_TXP_MASK)
 
-#define NETC_ETH_LINK_PM1_COMMAND_CONFIG_HD_FCEN_MASK (0x40000U)
-#define NETC_ETH_LINK_PM1_COMMAND_CONFIG_HD_FCEN_SHIFT (18U)
-/*! HD_FCEN - Half Duplex Flow Control Enable */
-#define NETC_ETH_LINK_PM1_COMMAND_CONFIG_HD_FCEN(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_COMMAND_CONFIG_HD_FCEN_SHIFT)) & NETC_ETH_LINK_PM1_COMMAND_CONFIG_HD_FCEN_MASK)
-
 #define NETC_ETH_LINK_PM1_COMMAND_CONFIG_TX_FLUSH_MASK (0x400000U)
 #define NETC_ETH_LINK_PM1_COMMAND_CONFIG_TX_FLUSH_SHIFT (22U)
 /*! TX_FLUSH - Tx flush */
 #define NETC_ETH_LINK_PM1_COMMAND_CONFIG_TX_FLUSH(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_COMMAND_CONFIG_TX_FLUSH_SHIFT)) & NETC_ETH_LINK_PM1_COMMAND_CONFIG_TX_FLUSH_MASK)
-
-#define NETC_ETH_LINK_PM1_COMMAND_CONFIG_TX_LOWP_ENA_MASK (0x800000U)
-#define NETC_ETH_LINK_PM1_COMMAND_CONFIG_TX_LOWP_ENA_SHIFT (23U)
-/*! TX_LOWP_ENA - Transmit Low Power Idle Enable.
- *  0b0..(default), the MAC operates in normal mode.
- *  0b1..The MAC completes the transmission of the current Frame and generates Low Power Idle Sequences to the
- *       line. It is advised to inspect IEVENT[TX_EMPTY] is set before enabling the LPI.
- */
-#define NETC_ETH_LINK_PM1_COMMAND_CONFIG_TX_LOWP_ENA(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_COMMAND_CONFIG_TX_LOWP_ENA_SHIFT)) & NETC_ETH_LINK_PM1_COMMAND_CONFIG_TX_LOWP_ENA_MASK)
 
 #define NETC_ETH_LINK_PM1_COMMAND_CONFIG_SWR_MASK (0x4000000U)
 #define NETC_ETH_LINK_PM1_COMMAND_CONFIG_SWR_SHIFT (26U)
@@ -1584,23 +1535,6 @@ typedef struct {
 #define NETC_ETH_LINK_PM1_RX_PAUSE_STATUS_PSTAT(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_RX_PAUSE_STATUS_PSTAT_SHIFT)) & NETC_ETH_LINK_PM1_RX_PAUSE_STATUS_PSTAT_MASK)
 /*! @} */
 
-/*! @name PM1_LPWAKE_TIMER - Port MAC 1 EEE Low Power Wakeup Timer Register */
-/*! @{ */
-
-#define NETC_ETH_LINK_PM1_LPWAKE_TIMER_TW_SYS_TX_MASK (0xFFFFFFU)
-#define NETC_ETH_LINK_PM1_LPWAKE_TIMER_TW_SYS_TX_SHIFT (0U)
-/*! TW_SYS_TX - EEE System transmit wait time */
-#define NETC_ETH_LINK_PM1_LPWAKE_TIMER_TW_SYS_TX(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_LPWAKE_TIMER_TW_SYS_TX_SHIFT)) & NETC_ETH_LINK_PM1_LPWAKE_TIMER_TW_SYS_TX_MASK)
-/*! @} */
-
-/*! @name PM1_SLEEP_TIMER - Port MAC 1 Transmit EEE Low Power Timer Register */
-/*! @{ */
-
-#define NETC_ETH_LINK_PM1_SLEEP_TIMER_SLEEPT_MASK (0xFFFFFFU)
-#define NETC_ETH_LINK_PM1_SLEEP_TIMER_SLEEPT_SHIFT (0U)
-#define NETC_ETH_LINK_PM1_SLEEP_TIMER_SLEEPT(x)  (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_SLEEP_TIMER_SLEEPT_SHIFT)) & NETC_ETH_LINK_PM1_SLEEP_TIMER_SLEEPT_MASK)
-/*! @} */
-
 /*! @name PM1_SINGLE_STEP - Port MAC 1 IEEE1588 Single-Step Control Register */
 /*! @{ */
 
@@ -1609,7 +1543,7 @@ typedef struct {
 /*! CH - Checksum update */
 #define NETC_ETH_LINK_PM1_SINGLE_STEP_CH(x)      (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_SINGLE_STEP_CH_SHIFT)) & NETC_ETH_LINK_PM1_SINGLE_STEP_CH_MASK)
 
-#define NETC_ETH_LINK_PM1_SINGLE_STEP_OFFSET_MASK (0xFF80U)
+#define NETC_ETH_LINK_PM1_SINGLE_STEP_OFFSET_MASK (0x7F80U)
 #define NETC_ETH_LINK_PM1_SINGLE_STEP_OFFSET_SHIFT (7U)
 #define NETC_ETH_LINK_PM1_SINGLE_STEP_OFFSET(x)  (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_SINGLE_STEP_OFFSET_SHIFT)) & NETC_ETH_LINK_PM1_SINGLE_STEP_OFFSET_MASK)
 

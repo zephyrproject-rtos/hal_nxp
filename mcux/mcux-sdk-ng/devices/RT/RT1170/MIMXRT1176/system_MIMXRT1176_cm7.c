@@ -14,8 +14,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    IMXRT1170RM, Rev 5, 12/2025
-**     Version:             rev. 4.0, 2026-01-06
-**     Build:               b260106
+**     Version:             rev. 4.1, 2026-05-13
+**     Build:               b260513
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -41,6 +41,10 @@
 **         Consolidate asrc/xbar and enet macros into common header.
 **     - rev. 4.0 (2026-01-06)
 **         Update header files to align with IMXRT1170RM Rev.5.
+**     - rev. 4.1 (2026-05-13)
+**         Fixed CERT-C INT31-C MSG violations on the ~(uint16_t)WDOG_*_MASK operator-precedence
+**         pattern in the watchdog-disable sequence (SystemInit) by reordering NOT before the
+**         narrowing cast and masking with 0xFFFFU.
 **
 ** ###################################################################
 */
@@ -87,11 +91,11 @@ void SystemInit (void) {
 #if (DISABLE_WDOG)
     if ((WDOG1->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
-        WDOG1->WCR &= ~(uint16_t) WDOG_WCR_WDE_MASK;
+        WDOG1->WCR &= (uint16_t)((~WDOG_WCR_WDE_MASK) & 0xFFFFU);
     }
     if ((WDOG2->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
-        WDOG2->WCR &= ~(uint16_t) WDOG_WCR_WDE_MASK;
+        WDOG2->WCR &= (uint16_t)((~WDOG_WCR_WDE_MASK) & 0xFFFFU);
     }
     if ((RTWDOG3->CS & RTWDOG_CS_CMD32EN_MASK) != 0U)
     {

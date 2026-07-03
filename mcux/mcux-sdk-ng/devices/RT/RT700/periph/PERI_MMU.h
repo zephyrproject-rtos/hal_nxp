@@ -41,7 +41,7 @@
 **                          MIMXRT798SGVKB_hifi4
 **
 **     Version:             rev. 6.0, 2025-12-29
-**     Build:               b260330
+**     Build:               b260429
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MMU
@@ -163,7 +163,7 @@ typedef struct {
   __IO uint32_t ADDR_RANGE;                        /**< Address Range, offset: 0xC */
   __I  uint32_t FAIL_INFO;                         /**< Fail Information, offset: 0x10 */
   __I  uint32_t FAIL_ADDR;                         /**< Fail Address, offset: 0x14 */
-  __IO uint32_t LUT_WDATA;                         /**< LUT Write Data, offset: 0x18 */
+  __O  uint32_t LUT_WDATA;                         /**< LUT Write Data, offset: 0x18 */
   __I  uint32_t LUT_RDATA;                         /**< LUT Read Data, offset: 0x1C */
   __IO uint32_t WRITE_PTR;                         /**< Write Pointer, offset: 0x20 */
   __IO uint32_t READ_PTR;                          /**< Read Pointer, offset: 0x24 */

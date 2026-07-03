@@ -14,13 +14,13 @@
 **                          MIMXRT1166XVM5A_cm7
 **
 **     Version:             rev. 2.0, 2025-11-13
-**     Build:               b251114
+**     Build:               b260512
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -670,8 +670,8 @@ typedef struct {
 #define IOMUXC_SW_PAD_CTL_PAD_SRE_MASK           (0x1U)
 #define IOMUXC_SW_PAD_CTL_PAD_SRE_SHIFT          (0U)
 /*! SRE - Slew Rate Field
- *  0b0..Slow Slew Rate
- *  0b1..Fast Slew Rate
+ *  0b0..Fast Slew Rate
+ *  0b1..Slow Slew Rate
  */
 #define IOMUXC_SW_PAD_CTL_PAD_SRE(x)             (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_PAD_CTL_PAD_SRE_SHIFT)) & IOMUXC_SW_PAD_CTL_PAD_SRE_MASK)
 

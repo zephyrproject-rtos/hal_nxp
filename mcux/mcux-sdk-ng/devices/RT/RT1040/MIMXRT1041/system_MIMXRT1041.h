@@ -13,7 +13,7 @@
 **
 **     Reference manual:    IMXRT1040RM Rev.1, 09/2022
 **     Version:             rev. 2.0, 2025-11-13
-**     Build:               b251113
+**     Build:               b260513
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

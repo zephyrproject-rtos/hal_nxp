@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.1, 2025-12-01
-**     Build:               b260205
+**     Build:               b260512
 **
 **     Abstract:
 **         Chip specific module features.
@@ -585,14 +585,18 @@
 
 /* @brief Has process identifier support. */
 #define FSL_FEATURE_LMEM_HAS_SYSTEMBUS_CACHE (1)
-/* @brief Has L1 cache. */
+/* @brief Has L1 CACHE. */
 #define FSL_FEATURE_HAS_L1CACHE (1)
+/* @brief Support instruction cache demote. */
+#define FSL_FEATURE_LMEM_SUPPORT_ICACHE_DEMOTE_REMOVE (1)
+/* @brief Has no NONCACHEABLE section. */
+#define FSL_FEATURE_HAS_NO_NONCACHEABLE_SECTION (0)
+/* @brief Has Enable Write Buffer bit (register bit PCCCR[ENWRBUF]). */
+#define FSL_FEATURE_LMEM_HAS_ENWRBUF_BIT_CONFIG_SUPPORT (1)
 /* @brief L1 ICACHE line size in byte. */
 #define FSL_FEATURE_L1ICACHE_LINESIZE_BYTE (32)
 /* @brief L1 DCACHE line size in byte. */
 #define FSL_FEATURE_L1DCACHE_LINESIZE_BYTE (32)
-/* @brief Has Enable Write Buffer bit (register bit PCCCR[ENWRBUF]). */
-#define FSL_FEATURE_LMEM_HAS_ENWRBUF_BIT_CONFIG_SUPPORT (1)
 
 /* LPADC module features */
 

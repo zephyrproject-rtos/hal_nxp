@@ -41,7 +41,7 @@
 **                          MIMXRT798SGVKB_hifi4
 **
 **     Version:             rev. 6.0, 2025-12-29
-**     Build:               b260330
+**     Build:               b260429
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for I3C
@@ -168,17 +168,17 @@ typedef struct {
   __IO uint32_t SDMACTRL;                          /**< Target DMA Control, offset: 0x20 */
        uint8_t RESERVED_0[8];
   __IO uint32_t SDATACTRL;                         /**< Target Data Control, offset: 0x2C */
-  __IO uint32_t SWDATAB;                           /**< Target Write Data Byte, offset: 0x30 */
-  __IO uint32_t SWDATABE;                          /**< Target Write Data Byte End, offset: 0x34 */
-  __IO uint32_t SWDATAH;                           /**< Target Write Data Halfword, offset: 0x38 */
-  __IO uint32_t SWDATAHE;                          /**< Target Write Data Halfword End, offset: 0x3C */
+  __O  uint32_t SWDATAB;                           /**< Target Write Data Byte, offset: 0x30 */
+  __O  uint32_t SWDATABE;                          /**< Target Write Data Byte End, offset: 0x34 */
+  __O  uint32_t SWDATAH;                           /**< Target Write Data Halfword, offset: 0x38 */
+  __O  uint32_t SWDATAHE;                          /**< Target Write Data Halfword End, offset: 0x3C */
   __I  uint32_t SRDATAB;                           /**< Target Read Data Byte, offset: 0x40 */
        uint8_t RESERVED_1[4];
   __I  uint32_t SRDATAH;                           /**< Target Read Data Halfword, offset: 0x48 */
        uint8_t RESERVED_2[8];
   union {                                          /* offset: 0x54 */
-    __IO uint32_t SWDATAB1;                          /**< Target Write Data Byte, offset: 0x54 */
-    __IO uint32_t SWDATAH1;                          /**< Target Write Data Halfword, offset: 0x54 */
+    __O  uint32_t SWDATAB1;                          /**< Target Write Data Byte, offset: 0x54 */
+    __O  uint32_t SWDATAH1;                          /**< Target Write Data Halfword, offset: 0x54 */
   };
        uint8_t RESERVED_3[4];
   __I  uint32_t SCAPABILITIES2;                    /**< Target Capabilities 2, offset: 0x5C */
@@ -201,26 +201,26 @@ typedef struct {
   __IO uint32_t MDMACTRL;                          /**< Controller DMA Control, offset: 0xA0 */
        uint8_t RESERVED_4[8];
   __IO uint32_t MDATACTRL;                         /**< Controller Data Control, offset: 0xAC */
-  __IO uint32_t MWDATAB;                           /**< Controller Write Data Byte, offset: 0xB0 */
-  __IO uint32_t MWDATABE;                          /**< Controller Write Data Byte End, offset: 0xB4 */
-  __IO uint32_t MWDATAH;                           /**< Controller Write Data Halfword, offset: 0xB8 */
-  __IO uint32_t MWDATAHE;                          /**< Controller Write Data Halfword End, offset: 0xBC */
+  __O  uint32_t MWDATAB;                           /**< Controller Write Data Byte, offset: 0xB0 */
+  __O  uint32_t MWDATABE;                          /**< Controller Write Data Byte End, offset: 0xB4 */
+  __O  uint32_t MWDATAH;                           /**< Controller Write Data Halfword, offset: 0xB8 */
+  __O  uint32_t MWDATAHE;                          /**< Controller Write Data Halfword End, offset: 0xBC */
   __I  uint32_t MRDATAB;                           /**< Controller Read Data Byte, offset: 0xC0 */
        uint8_t RESERVED_5[4];
   __I  uint32_t MRDATAH;                           /**< Controller Read Data Halfword, offset: 0xC8 */
   union {                                          /* offset: 0xCC */
-    __IO uint32_t MWDATAB1;                          /**< Controller Write Byte Data 1 (to Bus), offset: 0xCC */
-    __IO uint32_t MWDATAH1;                          /**< Controller Write Halfword Data (to Bus), offset: 0xCC */
+    __O  uint32_t MWDATAB1;                          /**< Controller Write Byte Data 1 (to Bus), offset: 0xCC */
+    __O  uint32_t MWDATAH1;                          /**< Controller Write Halfword Data (to Bus), offset: 0xCC */
   };
   union {                                          /* offset: 0xD0 */
-    __IO uint32_t MWMSG_SDR_CONTROL;                 /**< Controller Write Message Control in SDR mode, offset: 0xD0 */
-    __IO uint32_t MWMSG_SDR_DATA;                    /**< Controller Write Message Data in SDR mode, offset: 0xD0 */
+    __O  uint32_t MWMSG_SDR_CONTROL;                 /**< Controller Write Message Control in SDR mode, offset: 0xD0 */
+    __O  uint32_t MWMSG_SDR_DATA;                    /**< Controller Write Message Data in SDR mode, offset: 0xD0 */
   };
   __I  uint32_t MRMSG_SDR;                         /**< Controller Read Message in SDR mode, offset: 0xD4 */
   union {                                          /* offset: 0xD8 */
-    __IO uint32_t MWMSG_DDR_CONTROL;                 /**< Controller Write Message in DDR mode: First Control Word, offset: 0xD8 */
-    __IO uint32_t MWMSG_DDR_CONTROL2;                /**< Controller Write Message in DDR Mode Control 2, offset: 0xD8 */
-    __IO uint32_t MWMSG_DDR_DATA;                    /**< Controller Write Message Data in DDR mode, offset: 0xD8 */
+    __O  uint32_t MWMSG_DDR_CONTROL;                 /**< Controller Write Message in DDR mode: First Control Word, offset: 0xD8 */
+    __O  uint32_t MWMSG_DDR_CONTROL2;                /**< Controller Write Message in DDR Mode Control 2, offset: 0xD8 */
+    __O  uint32_t MWMSG_DDR_DATA;                    /**< Controller Write Message Data in DDR mode, offset: 0xD8 */
   };
   __I  uint32_t MRMSG_DDR;                         /**< Controller Read Message in DDR mode, offset: 0xDC */
        uint8_t RESERVED_6[4];
