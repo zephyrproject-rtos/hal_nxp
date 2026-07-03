@@ -4,7 +4,7 @@ MCUXpresso SDK
 Origin:
    NXP MCUXpresso SDK
    https://github.com/nxp-mcuxpresso/mcuxsdk-manifests
-   SHA: 9a24b036e90bc84884a36779bc11f5ff657b9d8d
+   SHA: 02c9635cb200291d1664aefdd6a48aee5f4901d6
 
    NXP Kinetis Connectivity Software
    https://www.nxp.com/webapp/Download?colCode=KW40Z-CONNECTIVITY-SOFTWARE&appType=license&Parent_nodeId=1432854896956716810497&Parent_pageType=product
@@ -40,7 +40,7 @@ Origin:
 
    NXP MCUXpresso SDK Core
    https://github.com/nxp-mcuxpresso/mcuxsdk-core
-   SHA: 551fb112e280cbff4812c69982836cf2c8cb823e
+   SHA: a910e7645d2d809a3431e1d5f42fca1cdeee69c9
    Source folder: cmake/extension
    Destination folder: mcux-sdk-ng/cmake/extension
 
@@ -58,37 +58,37 @@ Origin:
 
    NXP MCUXpresso SDK Device i.MX
    https://github.com/nxp-mcuxpresso/mcux-devices-imx
-   SHA: e9f0d90a565bf83b0b6d471adc17fa29c66dfa3d
+   SHA: e8e41cc8dca0f2616e34c5c8a7990b1567a0242f
    Source folder: Root folder of the NXP MCUXpresso SDK Device i.MX Repository
    Destination folder: mcux-sdk-ng/devices/i.MX
 
    NXP MCUXpresso SDK Device RT
    https://github.com/nxp-mcuxpresso/mcux-devices-rt
-   SHA: df5ff4c08de0f55c704321521fdeb83f47ed2ab3
+   SHA: 3248d6d5f6bcb7b89fc43abd81700c7572c61bf0
    Source folder: Root folder of the NXP MCUXpresso SDK Device RT Repository
    Destination folder: mcux-sdk-ng/devices/RT
 
    NXP MCUXpresso SDK Device Kinetis
    https://github.com/nxp-mcuxpresso/mcux-devices-kinetis
-   SHA: b51c1c02835c1338080d2183dc43ddc27f5c228a
+   SHA: 33d05a1a78a15c64fa317f1efd8bb3c27bbc3b0e
    Source folder: Root folder of the NXP MCUXpresso SDK Device Kinetis Repository
    Destination folder: mcux-sdk-ng/devices/Kinetis
 
    NXP MCUXpresso SDK Device LPC
    https://github.com/nxp-mcuxpresso/mcux-devices-lpc
-   SHA: fd30421ef6f83e3870836414c49c1a1d0122cc35
+   SHA: a38f1d6b6daa9014b3486d8e106af9c35e623e09
    Source folder: Root folder of the NXP MCUXpresso SDK Device LPC Repository
    Destination folder: mcux-sdk-ng/devices/LPC
 
    NXP MCUXpresso SDK Device MCX
    https://github.com/nxp-mcuxpresso/mcux-devices-mcx
-   SHA: 5b93587ceb3e5f30163312dd7e39d42e98f91127
+   SHA: f560437f1a3b629869fb38e268fea91f553e3094
    Source folder: Root folder of the NXP MCUXpresso SDK Device MCX Repository
    Destination folder: mcux-sdk-ng/devices/MCX
 
    NXP MCUXpresso SDK Device Wireless
    https://github.com/nxp-mcuxpresso/mcux-devices-wireless
-   SHA: 441f36d15a29e952439df53f920367def039035b
+   SHA: c2d2f26b6a626b7b7f59471b28d90155b9ee8bef
    Source folder: Root folder of the NXP MCUXpresso SDK Device Wireless Repository
    Destination folder: mcux-sdk-ng/devices/Wireless
 
@@ -209,8 +209,8 @@ Patch List:
       - The MKV56F24 device doesn't contain CAN2 peripheral. Remove it from the device header.
 
   - hal_nxp: undefine PAGESIZE macro before naming fields.
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/9fd51149146d87f689b8be8d204c244b83ac9440
-   - This patch is in hal_nxp but is not in latest SDK.
+   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/6ef86202a220da2a02c1ba9a6e148d4d896aa26f
+   - This patch is in hal_nxp but is not in 26.06.00 release.
 
   - hal/nxp: s32K344: flash_c40: add C40 features, IP aliases
    - Commit: https://github.com/zephyrproject-rtos/hal_nxp/pull/618/commits/64395f565184964bbf21e247df6ca88dc4d7cf83
@@ -220,10 +220,20 @@ Patch List:
      S32K344_glue_mcux.h, are for S32K344 SoC so they are not present in the mcusdk-core repo.
 
   - mcux-sdk-ng: MCXW70: Added the missing FMU_NS definition
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/91bd9377e18d002822f6d920804bad7d00e0c38c
+   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/56a9107d359e483c3d12603bfa00389f4b1d8cee
+   - This patch is in hal_nxp but is not in 26.06.00 release.
 
-  - mcux: mimx8ml8: clock: Add missing media display clock root definitions
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/8c43cb9d24036c3f9e41aae3da5984dd60e035bf
+  - hal_nxp: imx8mp: add clock_root_t entries for media MIPI PHY1 REF and DISP1 PIX
+   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/229842509954fa28ce8820211ece30c6ac4ebae9
+   - This patch is in hal_nxp but is not in 26.06.00 release.
+
+  - hal_nxp: fsl_esai: Remove stray #endif
+   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/870437e97db5831f938b2e9efca9db547cab3a50
+   - This patch is in hal_nxp but is not in 26.06.00 release.
+
+  - device: RW: power: fix GDET disableCount corruption on PM3 entry failure
+   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/1b298128359649cf257130a2a47abfcce874cf2f
+   - This patch is in hal_nxp but is not in 26.06.00 release.
 
 Note:
    - The CAAM driver should not be updated during hal_nxp updates, since the latest CAAM driver will cause runtime issues
