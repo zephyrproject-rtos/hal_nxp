@@ -6616,7 +6616,7 @@ static void wlcm_request_connect(struct wifi_message *msg, enum cm_sta_state *ne
     ret = do_connect((int)(uintptr_t)msg->data);
 #else
     wlan.scan_count      = 0;
-    wlan.cur_network_idx = (int)msg->data;
+    wlan.cur_network_idx = (int)(uintptr_t)msg->data;
 #if !CONFIG_WIFI_NM_WPA_SUPPLICANT
     if (wlan.roam_reassoc == true)
     {
