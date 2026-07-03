@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 3.0, 2026-02-09
-**     Build:               b260420
+**     Version:             rev. 3.1, 2026-02-11
+**     Build:               b260519
 **
 **     Abstract:
 **         Chip specific module features.
@@ -20,6 +20,8 @@
 **         Update lpcmp feature align to shared definition changes
 **     - rev. 3.0 (2026-02-09)
 **         Add MSCM features and add missing VREF features.
+**     - rev. 3.1 (2026-02-11)
+**         Update LPTMR features.
 **
 ** ###################################################################
 */
@@ -99,8 +101,6 @@
 #define FSL_FEATURE_SOC_TPM_COUNT (3)
 /* @brief TRGMUX availability on the SoC. */
 #define FSL_FEATURE_SOC_TRGMUX_COUNT (1)
-/* @brief TSTMR availability on the SoC. */
-#define FSL_FEATURE_SOC_TSTMR_COUNT (1)
 /* @brief UART availability on the SoC. */
 #define FSL_FEATURE_SOC_UART_COUNT (1)
 /* @brief UART_PFU availability on the SoC. */
@@ -273,6 +273,8 @@
 #define FSL_FEATURE_FLEXCAN_ENTER_FREEZE_MODE (0)
 /* @brief Is affected by errata with ID 8341 (FlexCAN: Entering Freeze Mode or Low Power Mode from Normal Mode can cause the FlexCAN module to stop operating). */
 #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_8341 (0)
+/* @brief Is affected by errata with ID 052403. */
+#define FSL_FEATURE_FLEXCAN_HAS_ERRATA_052403 (1)
 /* @brief Is affected by errata with ID 050443 (FlexCAN: : Receive Message Buffers may have its CODE Field corrupted if the Receive FIFO function is used in Classical CAN mode). */
 #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_050443 (0)
 /* @brief Support memory error interrupt (bitfield MECR[CEI_MSK]). */
@@ -313,8 +315,12 @@
 
 /* @brief Number of DMA channels (related to number of registers TCD, DCHPRI, bit fields ERQ[ERQn], EEI[EEIn], INT[INTn], ERR[ERRn], HRS[HRSn] and bit field widths ES[ERRCHN], CEEI[CEEI], SEEI[SEEI], CERQ[CERQ], SERQ[SERQ], CDNE[CDNE], SSRT[SSRT], CERR[CERR], CINT[CINT], TCDn_CITER_ELINKYES[LINKCH], TCDn_CSR[MAJORLINKCH], TCDn_BITER_ELINKYES[LINKCH]). (Valid only for eDMA modules.) */
 #define FSL_FEATURE_EDMA_MODULE_CHANNEL (16)
+/* @brief Has no register bit fields CH_SBR[EMI]. */
+#define FSL_FEATURE_EDMA_HAS_CH_SBR_EMI (1)
 /* @brief Number of DMA channel groups (register bit fields CR[ERGA], CR[GRPnPRI], ES[GPE], DCHPRIn[GRPPRI]). (Valid only for eDMA modules.) */
 #define FSL_FEATURE_EDMA_CHANNEL_GROUP_COUNT (1)
+/* @brief Has no register bit fields CH_SBR[SEC]. */
+#define FSL_FEATURE_EDMA_HAS_CH_SBR_SEC (1)
 /* @brief Has DMA_Error interrupt vector. */
 #define FSL_FEATURE_EDMA_HAS_ERROR_IRQ (0)
 /* @brief Has register access permission. */
@@ -331,6 +337,8 @@
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_MUX (1)
 /* @brief Has EDMA arbitration group (CHn_GRPRI). */
 #define FSL_FEATURE_EDMA_HAS_ARBITRATION_GROUP (1)
+/* @brief Has Secure Master. */
+#define FSL_FEATURE_EDMA_SOC_REQUIRES_SECURE_MASTER (0)
 
 /* ELE_MUA module features */
 
@@ -379,7 +387,7 @@
 /* @brief Has DOZEN bit(CTRL[DOZEN]) */
 #define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (1)
 
-/* MSF1 module features */
+/* FMU module features */
 
 /* @brief Is the flash module msf1? */
 #define FSL_FEATURE_FLASH_IS_MSF1 (1u)
@@ -537,7 +545,7 @@
 /* @brief Has timer DMA request enable (register bit CSR[TDRE]). */
 #define FSL_FEATURE_LPTMR_HAS_CSR_TDRE (1)
 /* @brief Do not has prescaler clock source 0. */
-#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_0_SUPPORT (0)
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_0_SUPPORT (1)
 /* @brief Do not has prescaler clock source 1. */
 #define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_1_SUPPORT (1)
 /* @brief Do not has prescaler clock source 2. */
@@ -849,6 +857,10 @@
 #define FSL_FEATURE_SPC_HAS_LPBUFF (1)
 /* @brief Has VD_SYS_CFG register. */
 #define FSL_FEATURE_SPC_HAS_VDD_SYS (1)
+/* @brief Has VDD1P8 low-voltage detect feature. */
+#define FSL_FEATURE_SPC_HAS_VDD1P8_LVD (0)
+/* @brief Has no DCDC frequency control (register bits DCDC_CFG[FREQ_CNTRL_ON/FREQ_CNTRL]). */
+#define FSL_FEATURE_SPC_HAS_NO_DCDC_FREQ_CNTRL (0)
 
 /* SYSPM module features */
 
@@ -913,10 +925,6 @@
 #define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
 /* @brief Is affected by errata with ID 050050 (Incorrect duty output when EPWM mode is set to PS=0 during write 1 to CnV register). */
 #define FSL_FEATURE_TPM_HAS_ERRATA_050050 (0)
-
-/* TRGMUX module features */
-
-/* No feature definitions */
 
 /* VREF module features */
 

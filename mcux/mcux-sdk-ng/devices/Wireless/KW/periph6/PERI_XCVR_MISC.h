@@ -19,14 +19,14 @@
 **                          KW47Z420B2AFTA
 **                          KW47Z420B3AFTA
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for XCVR_MISC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -38,14 +38,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_XCVR_MISC.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for XCVR_MISC
  *
  * CMSIS Peripheral Access Layer for XCVR_MISC
@@ -239,7 +244,7 @@ typedef struct {
 /*! DEMOD_SEL - Demodulator Selector
  *  0b00..No demodulator selected
  *  0b01..Use NXP Multi-standard PHY demodulator
- *  0b10..Use Legacy 802.15.4 demodulator
+ *  0b10..Reserved
  *  0b11..Reserved
  */
 #define XCVR_MISC_XCVR_CTRL_DEMOD_SEL(x)         (((uint32_t)(((uint32_t)(x)) << XCVR_MISC_XCVR_CTRL_DEMOD_SEL_SHIFT)) & XCVR_MISC_XCVR_CTRL_DEMOD_SEL_MASK)
@@ -417,8 +422,8 @@ typedef struct {
 /*! DMA_PAGE - Transceiver DMA Page Selector
  *  0b0000..DMA idle
  *  0b0001..RXDIG-IQ: Select from (mixer, decimator, pd channel filter, src, cfo-mixer, demod chan filter) in RXDIG. 11bit signed data, MSB aligned
- *  0b0010..RXDIG-IQ-ALT: Same as above + signals on unused LSBs : {antenna switch, GenLL or 802.15.4LL CRC_FAIL}
- *          on "Q" LSBs, {preamble_found, aa_sfd_matched} on "I" LSBs.
+ *  0b0010..RXDIG-IQ-ALT: Same as above + signals on unused LSBs : {antenna switch, GenLL CRC_FAIL} on "Q" LSBs,
+ *          {preamble_found, aa_sfd_matched} on "I" LSBs.
  *  0b0011..ADC-IQ: 11bit samples are MSB aligned in each 16bit half-word
  *  0b0100..PHASE: Select from (sync phase, demod phase) within RXDIG. MSB aligned
  *  0b0101..RSSI-PHASE: select from 8bit Narrowband (rssi, rssi raw, lqi, snr, noise) and Wideband(rssi, rssi raw) + 8bit high-resolution PHASE
@@ -502,8 +507,8 @@ typedef struct {
 /*! DBG_PAGE - Packet RAM Debug Page Selector
  *  0b000..DMA idle
  *  0b001..RXDIG-IQ: Select from (mixer, decimator, pd channel filter, src, cfo-mixer, demod chan filter) in RXDIG. 11bit signed data, MSB aligned
- *  0b010..RXDIG-IQ-ALT: Same as above + signals on unused LSBs : {antenna switch, GenLL or 802.15.4LL CRC_FAIL}
- *         on "Q" LSBs, {preamble_found, aa_sfd_matched} on "I" LSBs.
+ *  0b010..RXDIG-IQ-ALT: Same as above + signals on unused LSBs : {antenna switch, GenLL CRC_FAIL} on "Q" LSBs,
+ *         {preamble_found, aa_sfd_matched} on "I" LSBs.
  *  0b011..ADC-IQ: 11bit samples are MSB aligned in each 16bit half-word
  *  0b100..PHASE: Select from (sync phase, demod phase) within RXDIG. MSB aligned
  *  0b101..RSSI-PHASE: select from 8bit Narrowband (rssi, rssi raw, lqi, snr, noise) and Wideband(rssi, rssi raw) + 8bit high-resolution PHASE

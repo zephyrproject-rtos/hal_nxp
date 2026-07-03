@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.0, 2025-11-17
-**     Build:               b251204
+**     Build:               b260520
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -147,8 +147,8 @@
 #define FSL_FEATURE_SOC_TRNG_COUNT (1)
 /* @brief USART availability on the SoC. */
 #define FSL_FEATURE_SOC_USART_COUNT (5)
-/* @brief USB availability on the SoC. */
-#define FSL_FEATURE_SOC_USB_COUNT (1)
+/* @brief USBHS availability on the SoC. */
+#define FSL_FEATURE_SOC_USBHS_COUNT (1)
 /* @brief USIM availability on the SoC. */
 #define FSL_FEATURE_SOC_USIM_COUNT (1)
 /* @brief UTICK availability on the SoC. */
@@ -364,7 +364,7 @@
 #define FSL_FEATURE_FLEXSPI_HAS_ERRATA_051426 (0)
 /* @brief FlexSPI has AHBCR RESUMEDISABLE bit */
 #define FSL_FEATURE_FLEXSPI_HAS_RESUMEDISABLE_BIT_CONFIG_SUPPORT (1)
-/* @brief FlexSPI has address remapping support */
+/* @brief FlexSPI has address remapping support. */
 #define FSL_FEATURE_FLEXSPI_HAS_ADDR_REMAP (1)
 
 /* ADC module features */
@@ -488,8 +488,14 @@
 /* @brief Has FIFO Receive Timeout Configuration (register FIFORXTIMEOUTCFG). */
 #define FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG (1)
 
-/* USB module features */
+/* USBHS module features */
 
+/* @brief EHCI module instance count */
+#define FSL_FEATURE_USBHS_EHCI_COUNT (1)
+/* @brief Number of endpoints supported */
+#define FSL_FEATURE_USBHS_ENDPT_COUNT (8)
+/* @brief If the USB controller support eUSB PHY */
+#define FSL_FEATURE_USBHS_SUPPORT_EUSBn(x) (0)
 /* @brief USBC Atlantic Controller support on the SoC. */
 #define FSL_FEATURE_USB_ATLANTIC_EHCI_SUPPORT (1)
 

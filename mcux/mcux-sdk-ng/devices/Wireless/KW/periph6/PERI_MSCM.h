@@ -19,8 +19,8 @@
 **                          KW47Z420B2AFTA
 **                          KW47Z420B3AFTA
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260205
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MSCM
@@ -38,14 +38,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_MSCM.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for MSCM
  *
  * CMSIS Peripheral Access Layer for MSCM

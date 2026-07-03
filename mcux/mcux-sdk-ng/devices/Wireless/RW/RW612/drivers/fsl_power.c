@@ -868,7 +868,7 @@ AT_QUICKACCESS_SECTION_CODE(static bool POWER_PostPowerMode(uint32_t mode))
         initXip();
         SystemInit();
         POWER_RestoreNvicState();
-        BUCK18->BUCK_CTRL_ELEVEN_REG &= ~(BUCK18_BUCK_CTRL_ELEVEN_REG_USE_EXT_SUP(1));
+        BUCK18->BUCK_CTRL_ELEVEN_REG &= (uint8_t)(~(BUCK18_BUCK_CTRL_ELEVEN_REG_USE_EXT_SUP(1)));
     }
     else
     {
@@ -880,6 +880,13 @@ AT_QUICKACCESS_SECTION_CODE(static bool POWER_PostPowerMode(uint32_t mode))
         /* Successfully resumed from PM3, GDET is enabled by ROM. */
         assert(s_gdetSensorContext.disableCount > 0);
         s_gdetSensorContext.disableCount--;
+    }
+
+    if ((mode == 3U) && (PMU->PWR_MODE_STATUS != 2U))
+    {
+        /* Failed resumed from PM3, GDET is not enabled by ROM. */
+        assert(s_gdetSensorContext.disableCount > 0);
+        s_gdetSensorContext.disableCount = 0;
     }
 
     SysTick->CTRL = s_systickContext.CTRL;

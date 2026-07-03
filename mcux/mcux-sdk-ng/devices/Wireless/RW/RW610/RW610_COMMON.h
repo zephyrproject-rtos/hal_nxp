@@ -11,7 +11,7 @@
 **
 **     Reference manual:    RW61X reference manual Rev. 10.0 - 12 January 2026
 **     Version:             rev. 4.0, 2026-01-12
-**     Build:               b260114
+**     Build:               b260519
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RW610
@@ -2633,6 +2633,8 @@ typedef enum IRQn {
   /** Array initializer of USBC peripheral base pointers */
   #define USBC_BASE_PTRS                           { USBOTG }
 #endif
+/** Interrupt vectors for the USBC peripheral type */
+#define USBC_IRQS                                { USB_IRQn }
 
 /* USIM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

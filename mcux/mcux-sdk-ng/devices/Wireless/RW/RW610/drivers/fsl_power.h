@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief POWER driver version 2.6.3. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 6, 3))
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 6, 4))
 /*@}*/
 
 /*!

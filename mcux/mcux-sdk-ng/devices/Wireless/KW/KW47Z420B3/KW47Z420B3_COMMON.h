@@ -6,15 +6,15 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    Rev. 2, 2025-05-01
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Reference manual:    Rev. 5, 2026-03-24
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260506
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for KW47Z420B3
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -26,14 +26,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file KW47Z420B3_COMMON.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for KW47Z420B3
  *
  * CMSIS Peripheral Access Layer for KW47Z420B3
@@ -44,7 +49,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0200U
+#define MCU_MEM_MAP_VERSION 0x0300U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -596,6 +601,8 @@ typedef enum IRQn {
   /** Array initializer of FMU peripheral base pointers */
   #define FMU_BASE_PTRS                            { FMU0 }
 #endif
+/** Interrupt vectors for the FMU peripheral type */
+#define FMU_IRQS                                 { FMU0_IRQn }
 
 /* GPIO - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1530,35 +1537,6 @@ typedef enum IRQn {
   #define TRGMUX_BASE_PTRS                         { TRGMUX0 }
 #endif
 
-/* TSTMR - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral TSTMR0 base address */
-  #define TSTMR0_BASE                              (0x50030000u)
-  /** Peripheral TSTMR0 base address */
-  #define TSTMR0_BASE_NS                           (0x40030000u)
-  /** Peripheral TSTMR0 base pointer */
-  #define TSTMR0                                   ((TSTMR_Type *)TSTMR0_BASE)
-  /** Peripheral TSTMR0 base pointer */
-  #define TSTMR0_NS                                ((TSTMR_Type *)TSTMR0_BASE_NS)
-  /** Array initializer of TSTMR peripheral base addresses */
-  #define TSTMR_BASE_ADDRS                         { TSTMR0_BASE }
-  /** Array initializer of TSTMR peripheral base pointers */
-  #define TSTMR_BASE_PTRS                          { TSTMR0 }
-  /** Array initializer of TSTMR peripheral base addresses */
-  #define TSTMR_BASE_ADDRS_NS                      { TSTMR0_BASE_NS }
-  /** Array initializer of TSTMR peripheral base pointers */
-  #define TSTMR_BASE_PTRS_NS                       { TSTMR0_NS }
-#else
-  /** Peripheral TSTMR0 base address */
-  #define TSTMR0_BASE                              (0x40030000u)
-  /** Peripheral TSTMR0 base pointer */
-  #define TSTMR0                                   ((TSTMR_Type *)TSTMR0_BASE)
-  /** Array initializer of TSTMR peripheral base addresses */
-  #define TSTMR_BASE_ADDRS                         { TSTMR0_BASE }
-  /** Array initializer of TSTMR peripheral base pointers */
-  #define TSTMR_BASE_PTRS                          { TSTMR0 }
-#endif
-
 /* VBAT - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
   /** Peripheral VBAT0 base address */
@@ -1657,6 +1635,10 @@ typedef enum IRQn {
   /** Array initializer of WDOG peripheral base pointers */
   #define WDOG_BASE_PTRS                           { WDOG0, WDOG1 }
 #endif
+/* Extra definition */
+#define WDOG_UPDATE_KEY                          (0xD928C520U)
+#define WDOG_REFRESH_KEY                         (0xB480A602U)
+
 
 /* WUU - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

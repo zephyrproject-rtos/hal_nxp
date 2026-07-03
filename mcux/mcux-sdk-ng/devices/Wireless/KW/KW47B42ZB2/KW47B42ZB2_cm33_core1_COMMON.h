@@ -6,15 +6,15 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    Rev. 2, 2025-05-01
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Reference manual:    Rev. 5, 2026-03-24
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260506
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for KW47B42ZB2_cm33_core1
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -26,14 +26,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file KW47B42ZB2_cm33_core1_COMMON.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for KW47B42ZB2_cm33_core1
  *
  * CMSIS Peripheral Access Layer for KW47B42ZB2_cm33_core1
@@ -44,7 +49,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0200U
+#define MCU_MEM_MAP_VERSION 0x0300U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -719,16 +724,6 @@ typedef enum IRQn {
 /** Array initializer of TRGMUX peripheral base pointers */
 #define TRGMUX_BASE_PTRS                         { TRGMUX0 }
 
-/* TSTMR - Peripheral instance base addresses */
-/** Peripheral TSTMR0 base address */
-#define TSTMR0_BASE                              (0xA91B0000u)
-/** Peripheral TSTMR0 base pointer */
-#define TSTMR0                                   ((TSTMR_Type *)TSTMR0_BASE)
-/** Array initializer of TSTMR peripheral base addresses */
-#define TSTMR_BASE_ADDRS                         { TSTMR0_BASE }
-/** Array initializer of TSTMR peripheral base pointers */
-#define TSTMR_BASE_PTRS                          { TSTMR0 }
-
 /* TX_PACKET_RAM - Peripheral instance base addresses */
 /** Peripheral TX_PACKET_RAM base address */
 #define TX_PACKET_RAM_BASE                       (0xA9108000u)
@@ -788,6 +783,10 @@ typedef enum IRQn {
 #define WDOG_BASE_ADDRS                          { WDOG0_BASE }
 /** Array initializer of WDOG peripheral base pointers */
 #define WDOG_BASE_PTRS                           { WDOG0 }
+/* Extra definition */
+#define WDOG_UPDATE_KEY                          (0xD928C520U)
+#define WDOG_REFRESH_KEY                         (0xB480A602U)
+
 
 /* WOR - Peripheral instance base addresses */
 /** Peripheral WOR_REGS base address */
@@ -1018,13 +1017,13 @@ static inline uint8_t Chip_GetVersion(void)
 #else
 #define PLATFORM_BANK_START_ADDR                                                                                \
     PLATFORM_CTCM0_START_ADDR, PLATFORM_CTCM1_START_ADDR, PLATFORM_STCM0_START_ADDR, PLATFORM_STCM1_START_ADDR, \
-        PLATFORM_STCM2_START_ADDR, PLATFORM_STCM3_START_ADDR, 0xFFFFFFFF, 0xFFFFFFFF,                           \
-        0xFFFFFFFF, 0xFFFFFFFF, PLATFORM_STCM8_START_ADDR
+        PLATFORM_STCM2_START_ADDR, PLATFORM_STCM3_START_ADDR, 0xFFFFFFFFU, 0xFFFFFFFFU,                         \
+        0xFFFFFFFFU, 0xFFFFFFFFU, PLATFORM_STCM8_START_ADDR
 
 #define PLATFORM_BANK_END_ADDR                                                                          \
     PLATFORM_CTCM0_END_ADDR, PLATFORM_CTCM1_END_ADDR, PLATFORM_STCM0_END_ADDR, PLATFORM_STCM1_END_ADDR, \
-        PLATFORM_STCM2_END_ADDR, PLATFORM_STCM3_END_ADDR, 0xFFFFFFFF, 0xFFFFFFFF,                       \
-        0xFFFFFFFF, 0xFFFFFFFF, PLATFORM_STCM8_END_ADDR
+        PLATFORM_STCM2_END_ADDR, PLATFORM_STCM3_END_ADDR, 0xFFFFFFFFU, 0xFFFFFFFFU,                     \
+        0xFFFFFFFFU, 0xFFFFFFFFU, PLATFORM_STCM8_END_ADDR
 #endif
 
 #define PLATFORM_BANK_IS_ECC TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE

@@ -19,14 +19,14 @@
 **                          KW47Z420B2AFTA
 **                          KW47Z420B3AFTA
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RADIO_CTRL
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -38,14 +38,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_RADIO_CTRL.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for RADIO_CTRL
  *
  * CMSIS Peripheral Access Layer for RADIO_CTRL
@@ -251,13 +256,10 @@ typedef struct {
  */
 #define RADIO_CTRL_RF_CTRL_GENERIC_WAKEUP_EN(x)  (((uint32_t)(((uint32_t)(x)) << RADIO_CTRL_RF_CTRL_GENERIC_WAKEUP_EN_SHIFT)) & RADIO_CTRL_RF_CTRL_GENERIC_WAKEUP_EN_MASK)
 
-#define RADIO_CTRL_RF_CTRL_ZIGBEE_WAKEUP_EN_MASK (0x80000000U)
-#define RADIO_CTRL_RF_CTRL_ZIGBEE_WAKEUP_EN_SHIFT (31U)
-/*! ZIGBEE_WAKEUP_EN - Zigbee LL Wakeup Enable
- *  0b0..The Zigbee LL interrupt doesn't assert rfmc_wakeup.
- *  0b1..The Zigbee LL interrupt asserts rfmc_wakeup.
- */
-#define RADIO_CTRL_RF_CTRL_ZIGBEE_WAKEUP_EN(x)   (((uint32_t)(((uint32_t)(x)) << RADIO_CTRL_RF_CTRL_ZIGBEE_WAKEUP_EN_SHIFT)) & RADIO_CTRL_RF_CTRL_ZIGBEE_WAKEUP_EN_MASK)
+#define RADIO_CTRL_RF_CTRL_MISC_WAKEUP_EN_MASK   (0x80000000U)
+#define RADIO_CTRL_RF_CTRL_MISC_WAKEUP_EN_SHIFT  (31U)
+/*! MISC_WAKEUP_EN - For future use, mandatory to be set to zero */
+#define RADIO_CTRL_RF_CTRL_MISC_WAKEUP_EN(x)     (((uint32_t)(((uint32_t)(x)) << RADIO_CTRL_RF_CTRL_MISC_WAKEUP_EN_SHIFT)) & RADIO_CTRL_RF_CTRL_MISC_WAKEUP_EN_MASK)
 /*! @} */
 
 /*! @name RF_CLK_CTRL - Radio Clock Control Register */

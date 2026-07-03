@@ -1,5 +1,5 @@
 /*
- * Copyright 2021,2024-2025 NXP
+ * Copyright 2021,2024-2026 NXP
  *  
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -32,7 +32,7 @@ typedef union StandardVersion
         uint32_t minor : 8;  /*!< minor version [15:8] */
         uint32_t major : 8;  /*!< major version [23:16] */
         uint32_t name : 8;   /*!< name [31:24] */
-    };
+    } bitfield;
     uint32_t version; /*!< combined version numbers. */
 } standard_version_t;
 

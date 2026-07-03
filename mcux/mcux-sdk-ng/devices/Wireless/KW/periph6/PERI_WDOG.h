@@ -19,14 +19,14 @@
 **                          KW47Z420B2AFTA
 **                          KW47Z420B3AFTA
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for WDOG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -38,14 +38,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_WDOG.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for WDOG
  *
  * CMSIS Peripheral Access Layer for WDOG
@@ -211,12 +216,7 @@ typedef struct {
 
 #define WDOG_CS_CLK_MASK                         (0x300U)
 #define WDOG_CS_CLK_SHIFT                        (8U)
-/*! CLK - WDOG Clock
- *  0b00..IPG
- *  0b01..LPO
- *  0b10..INT
- *  0b11..EXT
- */
+/*! CLK - WDOG Clock */
 #define WDOG_CS_CLK(x)                           (((uint32_t)(((uint32_t)(x)) << WDOG_CS_CLK_SHIFT)) & WDOG_CS_CLK_MASK)
 
 #define WDOG_CS_RCS_MASK                         (0x400U)
@@ -314,10 +314,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group WDOG_Register_Masks */
-
-/* Extra definition */
-#define WDOG_UPDATE_KEY                          (0xD928C520U)
-#define WDOG_REFRESH_KEY                         (0xB480A602U)
 
 
 /*!

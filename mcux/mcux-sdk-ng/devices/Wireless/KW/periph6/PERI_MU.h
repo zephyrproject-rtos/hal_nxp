@@ -19,14 +19,14 @@
 **                          KW47Z420B2AFTA
 **                          KW47Z420B3AFTA
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250730
+**     Version:             rev. 3.0, 2026-02-11
+**     Build:               b260416
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MU
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -38,14 +38,19 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2026-02-11)
+**         Based on CRR Rev 1.58.
+**         Removed TSTMR.
+**         Removed SIRC from SCG.
+**         Removed EZH_BLCIN_3_0 and EZH_BLCIN_7_4 registers from TRGMUX.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_MU.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2026-02-11
  * @brief CMSIS Peripheral Access Layer for MU
  *
  * CMSIS Peripheral Access Layer for MU
@@ -122,16 +127,6 @@
 #else
   #error Not supported compiler type
 #endif
-/*!
- * @brief Core boot mode.
- */
-typedef enum _mu_core_boot_mode
-{
-    kMU_CoreBootFromSTCM5 = 0x00U, /*!< Boot from STCM5 0x20020000 (DSP-V SRAM). */
-    kMU_CoreBootFromSTCM6 = 0x01U, /*!< Boot from STCM6 0x20028000 (DSP-V SRAM). */
-    kMU_CoreBootFromSTCM7 = 0x10U, /*!< Boot from STCM7 0x20030000 (DSP-V SRAM). */
-} mu_core_boot_mode_t;
-
 
 /* ----------------------------------------------------------------------------
    -- MU Peripheral Access Layer

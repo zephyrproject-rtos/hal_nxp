@@ -20,13 +20,13 @@
 **                          KW45Z41083AFTA
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b260519
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TSTMR
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -151,9 +151,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group TSTMR_Register_Masks */
-
-/* Extra definition */
-#define TSTMR_CLOCK_FREQUENCY_MHZ                (1U)
 
 
 /*!
