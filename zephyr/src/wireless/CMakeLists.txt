@@ -83,7 +83,11 @@ if(CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_BT_H4_NXP_CTLR)
       list(APPEND wifi_bt_binary_blobs_list ${hal_blobs_dir}/IW416/${bt_binary_blob_name})
     elseif(CONFIG_BT_NXP_IW610)
       list(APPEND output_includes_list ${ZEPHYR_BINARY_DIR}/include/generated/iw610_bt_fw.bin.inc)
-      set(bt_binary_blob_name uart_iw610_bt${fw_suffix}.bin.se)
+      if(CONFIG_OPENTHREAD)
+        set(bt_binary_blob_name uartspi_iw610${fw_suffix}.bin.se)
+      else()
+        set(bt_binary_blob_name uart_iw610_bt${fw_suffix}.bin.se)
+      endif()
       zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/IW610/IW610_cpu2.c)
       set_source_files_properties(
 		${CMAKE_CURRENT_LIST_DIR}/IW610/IW610_cpu2.c
