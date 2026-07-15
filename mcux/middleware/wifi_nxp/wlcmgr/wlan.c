@@ -8558,8 +8558,8 @@ int wlan_stop(void)
 
     if (wlan.status != WLCMGR_THREAD_STOPPED && !num_iterations)
     {
-        wlcm_w("Timed out waiting for wlcmgr to stop");
-        wlcm_w("Forcing halt for wlcmgr thread");
+        wlcm_d("Timed out waiting for wlcmgr to stop");
+        wlcm_d("Forcing halt for wlcmgr thread");
         /* Reinitiailize variable states */
         wlan.status = WLCMGR_THREAD_STOPPED;
     }
@@ -10739,16 +10739,30 @@ void wlan_reset(cli_reset_option ResetOption)
             }
 
             /* update the netif hwaddr after reset */
-#if CONFIG_WIFI_NM_WPA_SUPPLICANT
-            wlan_set_mac_addr(&wlan.sta_mac[0]);
-#else
 #if UAP_SUPPORT
             net_wlan_set_mac_address(&wlan.sta_mac[0], &wlan.uap_mac[0]);
 #else
             net_wlan_set_mac_address(&wlan.sta_mac[0], NULL);
 #endif
-#endif
+            /* Bring netif up.
+             * Triggers NET_EVENT_IF_ADMIN_UP -> add_interface()
+             * -> wpa_drv_zep_init() -> wifi_nxp_wpa_supp_dev_init()
+             * -> supp_drv_if_ctx is now valid.
+             */
             nxp_net_enable_all_networks();
+
+#if CONFIG_WIFI_NM_WPA_SUPPLICANT
+            /* Wait supp_drv_if_ctx ready
+             * and Notify FW and wpa_supplicant of MAC address.
+             * wlan_set_mac_addr() calls _wifi_set_mac_addr() -> FW cmd ->
+             * mac_changed callback -> wpa_supplicant updates its MAC.
+             * supp_drv_if_ctx is valid now
+             */
+            while (!get_supp_ready_state()) {
+                OSA_TaskYield();
+            }
+            wlan_set_mac_addr(&wlan.sta_mac[0]);
+#endif
 
             /* Unblock TX data */
             wifi_set_tx_status(WIFI_DATA_RUNNING);

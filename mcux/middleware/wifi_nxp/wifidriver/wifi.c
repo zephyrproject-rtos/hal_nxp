@@ -2709,6 +2709,12 @@ static int wifi_low_level_input(const uint8_t interface, const uint8_t *buffer, 
         OSA_RWLockWriteUnlock(&sleep_rwlock);
         mlan_adap->ps_state = PS_STATE_AWAKE;
     }
+
+    if (wifi_rx_status == WIFI_DATA_BLOCK)
+    {
+        wifi_rx_block_cnt++;
+        goto consumed;
+    }
 #if CONFIG_WPA_SUPP
 #if CONFIG_TX_RX_ZERO_COPY && !defined(RW610)
     prx_pd = (RxPD *)(void *)net_stack_buffer_skip((void *)buffer, INTF_HEADER_LEN);
@@ -2722,11 +2728,6 @@ static int wifi_low_level_input(const uint8_t interface, const uint8_t *buffer, 
         goto consumed;
     }
 #endif
-    if (wifi_rx_status == WIFI_DATA_BLOCK)
-    {
-        wifi_rx_block_cnt++;
-        goto consumed;
-    }
 
     if (wm_wifi.data_input_callback != NULL)
     {

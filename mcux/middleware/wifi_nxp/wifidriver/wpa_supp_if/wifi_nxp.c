@@ -109,6 +109,12 @@ static void wifi_nxp_event_proc_scan_done(void *if_priv, int aborted, int extern
         wifi_e("%s: wifi_if_ctx_rtos is NULL", __func__);
         return;
     }
+    if (!wifi_if_ctx_rtos->supp_drv_if_ctx)
+    {
+        supp_e("%s: Missing interface context", __func__);
+        return;
+    }
+
     wifi_nxp_wpa_supp_event_proc_scan_done(if_priv, aborted, external_scan);
 }
 
@@ -121,6 +127,11 @@ static int wifi_nxp_wpa_is_supp_scan_in_progress(void *if_priv)
     if (wifi_if_ctx_rtos == NULL)
     {
         wifi_e("%s: wifi_if_ctx_rtos is NULL", __func__);
+        return -WM_FAIL;
+    }
+    if (!wifi_if_ctx_rtos->supp_drv_if_ctx)
+    {
+        supp_e("%s: Missing interface context", __func__);
         return -WM_FAIL;
     }
 
