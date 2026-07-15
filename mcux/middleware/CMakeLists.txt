@@ -21,6 +21,7 @@ if((CONFIG_NET_L2_OPENTHREAD OR CONFIG_NXP_NBU) AND (CONFIG_IEEE802154 OR CONFIG
             zephyr_library_sources(
                 ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-ieee_802.15.4/ieee_802_15_4/mac/source/App/mac_intf_rpmsg.c
                 ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-ieee_802.15.4/ieee_802_15_4/phy/source/SerialDevice/Phy.c
+                ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-ieee_802.15.4/ieee_802_15_4/phy/source/PhyTime.c
                 ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-ieee_802.15.4/ieee_802_15_4/phy/source/SerialDevice/ASP.c
             )
             zephyr_compile_definitions(USE_NBU=1)
