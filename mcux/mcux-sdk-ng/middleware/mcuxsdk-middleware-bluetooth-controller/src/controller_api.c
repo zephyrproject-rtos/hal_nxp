@@ -18,6 +18,7 @@
 ************************************************************************************/
 #include "fwk_platform_ics.h"
 #include "fwk_platform.h"
+#include "fwk_platform_definitions.h"
 #include "controller_api.h"
 #if !defined(__ZEPHYR__)
 #include "RNG_Interface.h"

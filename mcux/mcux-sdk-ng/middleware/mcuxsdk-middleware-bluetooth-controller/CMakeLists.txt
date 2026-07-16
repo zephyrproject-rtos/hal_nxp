@@ -6,7 +6,7 @@ mcux_set_list(MCXW71_NBU_FAMILY "MCXW716CxxxA_NBU MCXW716AxxxA_NBU")
 mcux_set_list(KW45_FAMILY_WITHOUT_K32W1 "KW45B41Z52xxxA KW45B41Z53xxxA  KW45B41Z82xxxA  KW45B41Z83xxxA")
 mcux_set_list(KW47_FAMILY "KW47B42Z83xxxA KW47B42Z96xxxA KW47B42Z97xxxA KW47B42ZB2xxxA KW47B42ZB3xxxA KW47B42ZB6xxxA KW47B42ZB7xxxA KW47Z42082xxxA KW47Z42092xxxA KW47Z420B2xxxA KW47Z420B3xxxA")
 mcux_set_list(MCXW72_FAMILY "MCXW727CxxxA")
-mcux_set_list(KW43_FAMILY "KW43B43ZC7xxx_NBU")
+mcux_set_list(KW43_NBU_FAMILY "KW43B43ZC7xxx_NBU")
 mcux_set_list(MCXW23_FAMILY "MCXW236 MCXW235")
 
 if(CONFIG_MCUX_COMPONENT_middleware.wireless.ble_controller_threadx)
@@ -23,7 +23,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.ble_controller_threadx)
     mcux_add_source(
         SOURCES lib/threadx_inc/cortex_m33/tx_port.h
         TOOLCHAINS iar armgcc
-        DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY} ${KW43_FAMILY} ${MCXW23_FAMILY}
+        DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY} ${KW43_NBU_FAMILY} ${MCXW23_FAMILY}
     )
     mcux_add_include(
         INCLUDES lib/threadx_inc
@@ -36,7 +36,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.ble_controller_threadx)
     mcux_add_include(
         INCLUDES lib/threadx_inc/cortex_m33
         TOOLCHAINS iar armgcc
-        DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY} ${KW43_FAMILY} ${MCXW23_FAMILY}
+        DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY} ${KW43_NBU_FAMILY} ${MCXW23_FAMILY}
     )
     mcux_add_library(
         LIBS lib/cm3_libthreadx.a
@@ -46,7 +46,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.ble_controller_threadx)
     mcux_add_library(
         LIBS lib/cm33_libthreadx.a
         TOOLCHAINS iar armgcc
-        DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY} ${KW43_FAMILY} ${MCXW23_FAMILY}
+        DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY} ${KW43_NBU_FAMILY} ${MCXW23_FAMILY}
     )
 endif()
 
@@ -246,14 +246,14 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.ble_controller_hadm)
         SOURCES src/hadm/kw47_mcxw72x_nbu/lcl_hadm_measurement.h
                 src/hadm/kw47_mcxw72x_nbu/lcl_hadm_utils.h
                 src/hadm/kw47_mcxw72x_nbu/lcl_xcvr_hal.h
-        DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY} ${KW43_FAMILY}
+        DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY} ${KW43_NBU_FAMILY}
         CORE_IDS "cm33" "cm33_core1"
     )
     mcux_add_include(
         INCLUDES interface
                  src/hadm
                  src/hadm/kw47_mcxw72x_nbu
-        DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY} ${KW43_FAMILY}
+        DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY} ${KW43_NBU_FAMILY}
     )
     mcux_add_library(
         LIBS lib/ble_hadm_kw47_mcxw72x_nbu.a
@@ -265,7 +265,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.ble_controller_hadm)
     mcux_add_library(
         LIBS lib/ble_hadm_kw43_mcxw70_nbu.a
         TOOLCHAINS kds armgcc mcux iar
-        DEVICE_IDS ${KW43_FAMILY}
+        DEVICE_IDS ${KW43_NBU_FAMILY}
     )
 
     # kw45/mcxw71 - compiling from sources
@@ -298,60 +298,6 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.ble_controller_interface)
     )
 endif()
 
-if(CONFIG_MCUX_COMPONENT_middleware.wireless.nbu_hosted_lib)
-    mcux_add_library(
-        LIBS ../fw_v19_nb/src/build/kw4x/lib/kw45_nbu_hosted_libbtu.a
-        TOOLCHAINS kds armgcc mcux iar
-        DEVICE_IDS ${KW45_NBU_FAMILY}
-    )
-    mcux_add_library(
-        LIBS ../fw_v19_nb/src/build/kw4x/lib/kw45_nbu_hosted_libcommon.a
-        TOOLCHAINS kds armgcc mcux iar
-        DEVICE_IDS ${KW45_NBU_FAMILY} ${MCXW71_NBU_FAMILY}
-    )
-endif()
-
-# if(CONFIG_MCUX_COMPONENT_middleware.wireless.nbu_hadm_hosted_lib)
-#     mcux_add_library(
-#         LIBS ../fw_v19_nb/src/build/kw4x/lib/kw45b41_nbu_hadm_hosted_libbtu2_5x.a
-#         TOOLCHAINS kds armgcc mcux iar
-#         DEVICE_IDS ${KW45_NBU_FAMILY} ${MCXW71_NBU_FAMILY}
-#     )
-#     mcux_add_library(
-#         LIBS ../fw_v19_nb/src/build/kw4x/lib/kw45b41_nbu_hosted_hadm_libcommon.a
-#         TOOLCHAINS kds armgcc mcux iar
-#         DEVICE_IDS ${KW45_NBU_FAMILY} ${MCXW71_NBU_FAMILY}
-#     )
-# endif()
-
-# if(CONFIG_MCUX_COMPONENT_middleware.wireless.nbu_xp_hosted_lib)
-#     mcux_add_library(
-#         LIBS ../fw_v19_nb/src/build/kw4x/lib/kw45b41_nbu_xp_hosted_libbtu2_5x.a
-#         TOOLCHAINS kds armgcc mcux iar
-#         DEVICE_IDS ${KW45_NBU_FAMILY} ${MCXW71_NBU_FAMILY}
-#     )
-#     mcux_add_library(
-#         LIBS ../fw_v19_nb/src/build/kw4x/lib/kw45b41_nbu_xp_hosted_libcommon.a
-#         TOOLCHAINS kds armgcc mcux iar
-#         DEVICE_IDS ${KW45_NBU_FAMILY} ${MCXW71_NBU_FAMILY}
-#     )
-# 	mcux_add_library(
-#         LIBS lib/kw47_nbu_xp_hosted_libbtu2_5x.a
-#         TOOLCHAINS kds armgcc mcux iar
-#         DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY}
-#     )
-#     mcux_add_library(
-#         LIBS lib/kw47_nbu_xp_hosted_libcommon.a
-#         TOOLCHAINS kds armgcc mcux iar
-#         DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY}
-#     )
-# 	mcux_add_library(
-#         LIBS lib/ble_hadm_kw47_mcxw72x_nbu.a
-#         TOOLCHAINS kds armgcc mcux iar
-#         DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY}
-#     )
-# endif()
-
 if(CONFIG_MCUX_COMPONENT_middleware.wireless.nbu_all_hosted_lib)
     mcux_add_library(
         LIBS lib/kw47_nbu_hosted_libbtu.a
@@ -366,17 +312,17 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.nbu_all_hosted_lib)
     mcux_add_library(
         LIBS ../fw_v19_nb/src/build/kw4x/lib/kw43_nbu_hosted_libbtu.a
         TOOLCHAINS armgcc iar
-        DEVICE_IDS ${KW43_FAMILY}
+        DEVICE_IDS ${KW43_NBU_FAMILY}
     )
     mcux_add_library(
         LIBS ../fw_v19_nb/src/build/kw4x/lib/kw43_nbu_hosted_libcommon.a
         TOOLCHAINS armgcc iar
-        DEVICE_IDS ${KW43_FAMILY}
+        DEVICE_IDS ${KW43_NBU_FAMILY}
     )
     mcux_add_library(
         LIBS ../fw_v19_nb/src/build/kw4x/lib/kw45_nbu_hosted_libbtu.a
         TOOLCHAINS kds armgcc mcux iar
-        DEVICE_IDS ${KW45_NBU_FAMILY}
+        DEVICE_IDS ${KW45_NBU_FAMILY} ${MCXW71_NBU_FAMILY}
     )
     mcux_add_library(
         LIBS ../fw_v19_nb/src/build/kw4x/lib/kw45_nbu_hosted_libcommon.a
@@ -395,6 +341,16 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.nbu_matter_hosted_lib)
         LIBS lib/kw47_nbu_matter_hosted_libcommon.a
         TOOLCHAINS kds armgcc mcux iar
         DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY}
+    )
+    mcux_add_library(
+        LIBS ../fw_v19_nb/src/build/kw4x/lib/kw43_nbu_matter_hosted_libbtu.a
+        TOOLCHAINS kds armgcc mcux iar
+        DEVICE_IDS ${KW43_NBU_FAMILY}
+    )
+    mcux_add_library(
+        LIBS ../fw_v19_nb/src/build/kw4x/lib/kw43_nbu_matter_hosted_libcommon.a
+        TOOLCHAINS kds armgcc mcux iar
+        DEVICE_IDS ${KW43_NBU_FAMILY}
     )
     mcux_add_library(
         LIBS ../fw_v19_nb/src/build/kw4x/lib/kw45_nbu_matter_hosted_libbtu.a

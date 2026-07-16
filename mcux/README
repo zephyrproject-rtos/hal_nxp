@@ -16,7 +16,7 @@ Origin:
 
    NXP MCUXpresso SDK Bluetooth Controller
    https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller
-   BRANCH: release/26.03.00-pvw2
+   BRANCH: release/26.06.00-lts
 
    NXP MCUXpresso SDK Multicore middleware
    https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-multicore
