@@ -19,6 +19,8 @@
 #define PLATFORM_EXTFLASH_PAGE_SIZE   256U
 #define PLATFORM_EXTFLASH_TOTAL_SIZE  MB(8U)
 
+#define PLATFORM_INTFLASH_TOTAL_SIZE (0xFE000U)
+
 /*********************************************************************
  *        Service definitions
  *********************************************************************/

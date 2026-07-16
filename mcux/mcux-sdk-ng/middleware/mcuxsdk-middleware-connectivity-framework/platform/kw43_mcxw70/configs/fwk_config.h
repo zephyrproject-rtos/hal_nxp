@@ -13,6 +13,9 @@
  *        General
  *********************************************************************/
 
+/* This platform has an NBU domain */
+#define gPlatformHasNbu_d 1
+
 /* Defines the calibration duration of the ADC, it will block the task during this time in milisec before trigger the
  * ADC on a channel*/
 #define gSensorsAdcCalibrationDurationInMs_c 4U
@@ -34,7 +37,7 @@
  *********************************************************************/
 
 #if !defined(gPlatformUseHwParameter_d)
-#define gPlatformUseHwParameter_d 0
+#define gPlatformUseHwParameter_d 1
 #endif
 /*
  * gHwParamsProdDataMainFlashMode_c HWParameters PROD_DATA remain at top of main flash,

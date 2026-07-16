@@ -341,18 +341,25 @@ int PLATFORM_SendChipRevision(void)
     uint8_t chip_rev     = 0xFF;
     int     ret          = -3;
 
+#if defined(DEVICE_REVISION_A0)
     if (chip_rev_reg == DEVICE_REVISION_A0)
     {
         chip_rev = 0u;
     }
+#if (defined(DEVICE_REVISION_A1) && (DEVICE_REVISION_A1 != DEVICE_REVISION_A0))
     else if (chip_rev_reg == DEVICE_REVISION_A1)
     {
         chip_rev = 1u;
     }
+#if (defined(DEVICE_REVISION_A2) && \
+     ((DEVICE_REVISION_A2 != DEVICE_REVISION_A0) && (DEVICE_REVISION_A2 != DEVICE_REVISION_A1)))
     else if (chip_rev_reg == DEVICE_REVISION_A2)
     {
         chip_rev = 2u;
     }
+#endif
+#endif
+#endif
 #if defined(DEVICE_REVISION_A2_1)
     else if (chip_rev_reg == DEVICE_REVISION_A2_1)
     {
@@ -411,7 +418,7 @@ bool_t PLATFORM_NbuApiReq(uint8_t *api_return, uint16_t api_id, const uint8_t *f
 
         for (uint32_t i = 0U; fmt[i] != 0U; i++)
         {
-            if ((data_len + (uint16_t)fmt[i]) > NBU_API_MAX_PARAM_LENGTH)
+            if ((data_len + (uint16_t)fmt[i]) > (uint16_t)sizeof(data))
             {
                 /* too many arguments */
                 rpmsg_status = false;
@@ -731,14 +738,20 @@ static void PLATFORM_RxNbuMemFullIndicationService(uint8_t *data, uint32_t len)
 static void PLATFORM_RxNbuApiIndicationService(uint8_t *data, uint32_t len)
 {
     /* NBU API response received, most of the case 6 bytes */
-    assert(len >= 6U && len <= (uint32_t)(2U + NBU_API_MAX_RETURN_PARAM_LENGTH));
-    m_nbu_api_rpmsg_status = (data[1] == 0U) ? false : true;
+    if (len >= 6UL && len <= (2UL + (uint32_t)NBU_API_MAX_RETURN_PARAM_LENGTH))
+    {
+        m_nbu_api_rpmsg_status = (data[1] == 0U) ? false : true;
 
-    m_nbu_api_return_param_len = len - 2U;
-    FLib_MemCpy((void *)&m_nbu_api_return_param[0U], &data[2U], m_nbu_api_return_param_len);
+        m_nbu_api_return_param_len = len - 2UL;
+        FLib_MemCpy((void *)&m_nbu_api_return_param[0U], &data[2U], m_nbu_api_return_param_len);
 
-    /* Notify waiting task that NBU API indication has been received */
-    (void)OSA_EventSet(icsEvent, ICS_EVT_NBU_API_IND);
+        /* Notify waiting task that NBU API indication has been received */
+        (void)OSA_EventSet(icsEvent, ICS_EVT_NBU_API_IND);
+    }
+    else
+    {
+        assert(false);
+    }
 }
 
 static void PLATFORM_RxHostSetLowPowerConstraintService(uint8_t *data, uint32_t len)

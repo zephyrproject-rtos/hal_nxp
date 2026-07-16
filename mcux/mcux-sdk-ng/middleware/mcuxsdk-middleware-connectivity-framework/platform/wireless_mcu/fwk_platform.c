@@ -135,6 +135,20 @@
 #define PLATFORM_MU_IRQn RF_IMU0_IRQn
 #endif
 
+/* PLATFORM_GET_IPSR must return current ISR number (0 for thread mode) */
+#ifndef PLATFORM_GET_IPSR
+#define PLATFORM_GET_IPSR __get_IPSR
+#endif
+
+/* PLATFORM_SET_INTERRUPT_MASK must return previous mask state for restoration */
+#ifndef PLATFORM_SET_INTERRUPT_MASK
+#define PLATFORM_SET_INTERRUPT_MASK PLATFORM_SetInterruptMask
+#endif
+/* PLATFORM_CLEAR_INTERRUPT_MASK must restore mask state from parameter */
+#ifndef PLATFORM_CLEAR_INTERRUPT_MASK
+#define PLATFORM_CLEAR_INTERRUPT_MASK PLATFORM_ClearInterruptMask
+#endif
+
 /* -------------------------------------------------------------------------- */
 /*                         Private type definitions                           */
 /* -------------------------------------------------------------------------- */
@@ -1042,7 +1056,7 @@ void PLATFORM_RemoteActiveRel(void)
     BOARD_DBGLPIOSET(0, 1);
 
     /* Determine the context we are being called */
-    uint32_t isrNumber = __get_IPSR();
+    uint32_t isrNumber = PLATFORM_GET_IPSR();
 
     /* Security check: This function can only be safely called from:
      * 1. Normal thread context (isrNumber == 0)
@@ -1066,7 +1080,7 @@ void PLATFORM_RemoteActiveRel(void)
      * This blocks lower priority interrupts (including MU) to protect our critical section,
      * while still allowing high-priority system interrupts (priority < 4) to execute.
      * This maintains system responsiveness during the handshake protocol */
-    uint32_t intMask = PLATFORM_SetInterruptMask();
+    uint32_t intMask = PLATFORM_SET_INTERRUPT_MASK();
 
     if (active_request_nb > 0)
     {
@@ -1143,7 +1157,7 @@ void PLATFORM_RemoteActiveRel(void)
     }
 
     /* Restore original interrupt masking state */
-    PLATFORM_ClearInterruptMask(intMask);
+    PLATFORM_CLEAR_INTERRUPT_MASK(intMask);
 
     BOARD_DBGLPIOSET(0, 0);
 #endif

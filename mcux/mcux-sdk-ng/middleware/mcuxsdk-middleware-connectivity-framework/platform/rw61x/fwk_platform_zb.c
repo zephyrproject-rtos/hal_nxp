@@ -317,7 +317,7 @@ static int PLATFORM_SendZbMessage(hal_imumc_handle_t imumcHandle, uint8_t *msg, 
         {
             /* An error here means the IMU link is not ready yet, we can assert here as it shouldn't happen
              * because we wait for the IMU link to be ready in PLATFORM_InitZbImumc() */
-            assert(0);
+            assert(false);
             ret = -2;
             break;
         }
@@ -364,7 +364,6 @@ static void PLATFORM_GenerateEui64Addr(uint8_t *eui64_address)
 {
 #ifndef __ZEPHYR__
     uint8_t macAddr[EUI_64_SZ - MAC_ADDR_OUI_PART_SIZE] = {0U};
-
     int16_t num;
 
     num = RNG_GetPseudoRandomData(macAddr, EUI_64_SZ - MAC_ADDR_OUI_PART_SIZE, NULL);

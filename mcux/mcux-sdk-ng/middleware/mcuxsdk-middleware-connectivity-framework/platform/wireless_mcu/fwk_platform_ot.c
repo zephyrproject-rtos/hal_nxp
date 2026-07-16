@@ -32,14 +32,15 @@ static const uint8_t gIeee802_15_4_ADDR_OUI_c[MAC_ADDR_OUI_PART_SIZE] = {IEEE802
 /* Check if __st is negative,  if true, apply 4 bits shit and add new __error_code,
     assert in debug and break
    Shall be called in a do while(0) bracket */
-#define CHECK_AND_RAISE_ERROR(__st, __error_code)                                                  \
-    {                                                                                              \
-        if ((__st) < 0)                                                                            \
-        {                                                                                          \
-            assert(false);                                                                         \
-            (__st) = -(int)((uint32_t)(((uint32_t)(-(__st)) << 4) | (uint32_t)(-(__error_code)))); \
-            break;                                                                                 \
-        }                                                                                          \
+#define CHECK_AND_RAISE_ERROR(__st, __error_code)                                                                 \
+    {                                                                                                             \
+        if ((__st) < 0)                                                                                           \
+        {                                                                                                         \
+            assert(false);                                                                                        \
+            uint32_t _encoded = (((uint32_t)(-(__st)) << 4) | (uint32_t)(-(__error_code))) & (uint32_t)INT32_MAX; \
+            (__st)            = -(int)_encoded;                                                                   \
+            break;                                                                                                \
+        }                                                                                                         \
     }
 
 /* Raise error with status update , shift previous status by 4 bits and OR with new error code.

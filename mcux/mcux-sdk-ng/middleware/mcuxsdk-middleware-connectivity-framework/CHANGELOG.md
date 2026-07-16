@@ -1,5 +1,20 @@
 ## Connectivity framework CHANGELOG
 
+### 7.3.3 mcux SDK 26.06.00
+
+New supported platform : kw43, mcxw70 (EAR: Engineering drop only) 
+
+#### Minor Changes
+
+- [kw43_mcxw70][NVM] Added flash ECC option support for KW43 platforms.
+- [kw45_k32w1_mcxw71][kw47_mcxw72] Removed use of SIRCCSR SDK definitions for wakeup by UART0.
+- [platform] Added platform abstraction macros `PLATFORM_GET_IPSR`, `PLATFORM_SET_INT_MASK`, and `PLATFORM_CLEAR_INT_MASK` to allow platform-specific customization of IPSR read and interrupt mask functions while maintaining backward compatibility.
+
+#### Bug Fixes
+
+- [kw43_mcxw70] Enabled `gPlatformUseHwParameter_d` to prevent generation of a new Bluetooth device address at each reset.
+- [kw43_mcxw70] Added `gPlatformHasNbu_d` compile flag to KW43 platform configuration to declare NBU domain presence.
+
 ### 7.3.2 mcux SDK 26.06.00 pvw2
 
 #### Major Changes
