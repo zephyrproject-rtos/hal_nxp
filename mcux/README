@@ -20,15 +20,15 @@ Origin:
 
    NXP MCUXpresso SDK Multicore middleware
    https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-multicore
-   SHA: f96c4640fa7d1149ab6e38401bfd08b35dfdb4ca
+   SHA: 220db1c5c30bfdfe5ea1a48b934c206412365b9c
 
    NXP MCUXpresso SDK Multicore Manager middleware
    https://github.com/nxp-mcuxpresso/mcux-mcmgr
-   SHA: 9c3222610f8187c2e03ddf999b3491fa5a32eaa5
+   SHA: c993aa9a423e0cb72ecc84994da448a07ba5d2a2
 
    RPMsg Component
    https://github.com/nxp-mcuxpresso/rpmsg-lite
-   SHA: 96a9418f35a62fbdd40b4262f4af03fb2fd56023
+   SHA: c397e24f1494ead381afeb5cff8deff32d890437
 
    NXP MCUXpresso SDK secure subsystem
    https://github.com/nxp-mcuxpresso/mcux-secure-subsystem
