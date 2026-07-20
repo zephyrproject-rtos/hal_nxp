@@ -8,6 +8,7 @@ processors
 | -------------------------- | ------------------------------------------- |
 | `gen_board_pinctrl.py`     | Generates pin control dtsi files for boards |
 | `gen_soc_headers.py`       | Generates pin control dtsi files defining SOC pinmux settings |
+| `dedup_pinctrl.py`         | Replaces part number pinctrl files with identical content by one-line wrappers |
 
 ## Requirements
 
@@ -122,3 +123,79 @@ the `--controller` option in order to attempt to generate pin control data:
 python gen_board_pinctrl.py LPCXpresso54114.mex LPC54114J256_ConfigTools_data.zip \
         --controller IOCON
 ```
+
+## Pin Control Deduplication
+
+Many orderable part numbers of the same die and package have byte-identical
+pin mux data (they typically differ only in temperature/speed grade or
+silicon revision). `dedup_pinctrl.py` clusters the SOC pinctrl files under
+`dts/nxp` by content — ignoring only the generated comment header and the
+include guard, which embed the part number — keeps one canonical file per
+cluster, and rewrites the other members as one-line wrappers that `#include`
+the canonical file. The canonical file of a cluster is the flagship — the
+member with the highest part number — so smaller parts wrap the flagship
+and never the other way around. Board devicetree includes keep working
+unchanged, since every part number file still exists under its original
+name.
+
+```
+python dedup_pinctrl.py                 # dry-run report over dts/nxp
+python dedup_pinctrl.py --apply         # rewrite duplicates as wrappers
+python dedup_pinctrl.py --json plan.json  # export the cluster plan
+```
+
+Rules and guarantees:
+
+- A file is only replaced when its normalized content is byte-identical to
+  the canonical file. Files with any real content difference (different
+  package, silicon revision deltas, part-specific signals) are left intact.
+- Wrappers are marked with a `Content deduplicated by dedup_pinctrl.py`
+  comment and are skipped on re-runs, so the tool is idempotent.
+- Wrapper include guards are derived from the wrapper's own file name (some
+  generated files ship with another part's guard, which must not be reused).
+- Every `--apply` run verifies each rewritten file against its original
+  content on the spot: `gcc -E -dM` effective-macro equality for `.h`,
+  dtlib devicetree equality for `.dtsi` (falling back to normalized
+  content equality when the original is not gcc-parsable). A file that
+  fails verification is reverted to its original form and the run exits
+  non-zero. The same verification runs when `gen_soc_headers.py`
+  deduplicates freshly generated files.
+
+Parts whose pin mux data differs only partially from a higher-numbered
+part become *delta wrappers*. For `.h` files the wrapper includes the
+base part, `#undef`s the signals this part does not have, then defines
+the signals that differ or are additional — the resulting macro set is
+exactly the original file's, which keeps the transformation provable
+with `gcc -E -dM`. For `.dtsi` files the wrapper includes the base,
+`/delete-node/`s the nodes this part lacks or that differ, and re-adds
+this part's own definitions inside the pin controller node — the
+resulting device tree is exactly the original file's (verifiable with
+dtlib/dtc). A delta wrapper is only emitted when it stays below half of
+the original size, only for regular generated content (headers made of `#define` lines,
+comments and matching `#include` preambles, without repeated macro
+names; or dtsi files made up exclusively of labelled
+`/omit-if-no-ref/` nodes), and never based on a file that
+is itself a wrapper. A file rewritten by the run (e.g. a canonical that
+became a delta of a bigger part) triggers a re-stamp of its referrers'
+recorded hashes; include chains compose, so their content is unchanged.
+
+Every wrapper records a `target-hash` of the content it was generated
+against; the tool verifies all recorded hashes on every run and flags
+stale wrappers, so regenerating only a base part's data pack cannot
+silently change the meaning of the parts that reference it.
+
+`gen_soc_headers.py` applies the same deduplication to freshly generated
+files by default, so new SOC data packs produce deduplicated output
+directly; pass `--no-dedup` to keep the full per-part files. The
+generated files are also clustered against the pinctrl files already
+present in the output directory, so a single-NPI data pack reuses an
+existing part's identical data automatically. If the new part is the
+higher-numbered flagship it takes over as the canonical file: the old
+canonical becomes a wrapper and all existing wrappers are re-pointed to
+the new canonical. Exact wrappers are flattened through exact wrappers
+only, so they always point at a full file or at a delta wrapper: a part
+whose data is identical to a delta part keeps that one extra hop, since
+re-pointing it past the delta would change its content (the alternative
+— duplicating the delta body — would cost the bytes the dedup saves).
+
+Do not edit wrapper files; edit the canonical file of the cluster instead.

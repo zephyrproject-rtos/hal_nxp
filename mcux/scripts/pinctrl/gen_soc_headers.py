@@ -24,6 +24,8 @@ from imx import imx_fixup_pinmux
 from kinetis import kinetis_cfg_utils
 from lpc import lpc_cfg_utils
 
+import dedup_pinctrl
+
 
 HELPSTR = """
 Processes NXP signal configuration files
@@ -54,6 +56,11 @@ def parse_args():
     parser.add_argument('--iomuxc-file', metavar = 'IOMUXC', type=str,
                         help=('Path to fsl_iomuxc.h file for daisy register fixup. '
                         'Required for IOMUX controller (i.MX RT 4-digit parts only)'))
+    parser.add_argument('--no-dedup', action='store_true',
+                        help=('Do not deduplicate the generated files. By default, '
+                        'part number files with identical pin mux data are replaced '
+                        'by one-line wrappers that include a single canonical file '
+                        '(see dedup_pinctrl.py)'))
 
     return parser.parse_args()
 
@@ -154,6 +161,7 @@ def main():
         f" * SPDX-License-Identifier: Apache-2.0")
     else:
         nxp_copyright = ""
+    written_files = []
     for signal_xml in proc_root.glob(search_pattern):
         package_root = signal_xml.parent
         package_name = package_root.name
@@ -191,6 +199,7 @@ def main():
             sys.exit(255)
 
         cfg_util.write_pinctrl_defs(out_path)
+        written_files.append(out_path)
         print(f"Wrote pinctrl headers to {out_path}")
 
         if args.controller == 'IOMUX':
@@ -201,6 +210,34 @@ def main():
                 print(f"Fixed {error_count} daisy register error(s) in {out_path}")
             else:
                 print("No daisy register errors found")
+
+    if not args.no_dedup and written_files:
+        # Deduplicate the generated files against each other AND against
+        # the pinctrl files already present in the output directories, so
+        # a single-NPI data pack can reuse an existing part's data (or
+        # become the new canonical if it is the higher-numbered flagship).
+        dedup_set = set()
+        for out_file in written_files:
+            dedup_set.add(pathlib.Path(out_file))
+            dedup_set.update(pathlib.Path(out_file).parent.glob("*-pinctrl.*"))
+        clusters, deltas, stale, failures = dedup_pinctrl.dedup_files(
+            sorted(dedup_set), apply=True)
+        wrapper_count = sum(len(c["wrappers"]) for c in clusters)
+        saved = sum(c["bytes_saved"] for c in clusters) + \
+            sum(d["saved"] for d in deltas)
+        print(f"Dedup: {wrapper_count} files became wrappers and "
+              f"{len(deltas)} became delta wrappers "
+              f"({saved / 1024:.0f}KB saved)")
+        if failures:
+            print(f"Error: {len(failures)} deduplicated file(s) failed "
+                  f"content verification and were reverted to their full "
+                  f"form (see VERIFY FAILED above)")
+            sys.exit(1)
+        if stale:
+            print(f"Error: {len(stale)} existing wrapper(s) reference "
+                  f"regenerated content that changed; regenerate those "
+                  f"parts' data packs as well (see STALE WRAPPER above)")
+            sys.exit(1)
 
 
 if __name__ == "__main__":
