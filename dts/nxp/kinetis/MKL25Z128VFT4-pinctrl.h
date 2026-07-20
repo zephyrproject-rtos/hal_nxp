@@ -6,184 +6,100 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#ifndef _ZEPHYR_DTS_BINDING_MKL25Z128VFT4_
-#define _ZEPHYR_DTS_BINDING_MKL25Z128VFT4_
+/*
+ * Delta-deduplicated by dedup_pinctrl.py:
+ * based on MKL25Z128VLK4-pinctrl.h with this part's differences applied
+ * below (80 removed, 0 changed,
+ * 0 added). Regenerate with dedup_pinctrl.py;
+ * do not edit by hand.
+ * target-hash: 691c1d44b0485dac
+ */
 
-#define KINETIS_MUX(port, pin, mux)		\
-	(((((port) - 'A') & 0xF) << 28) |	\
-	(((pin) & 0x3F) << 22) |		\
-	(((mux) & 0x7) << 8))
+#ifndef _ZEPHYR_DTS_BINDING_MKL25Z128VFT4_WRAPPER_
+#define _ZEPHYR_DTS_BINDING_MKL25Z128VFT4_WRAPPER_
 
-#define TSI0_CH1_PTA0 KINETIS_MUX('A',0,0) /* PTA0 */
-#define PTA0 KINETIS_MUX('A',0,1) /* PTA0 */
-#define TPM0_CH5_PTA0 KINETIS_MUX('A',0,3) /* PTA0 */
-#define SWD_CLK_PTA0 KINETIS_MUX('A',0,7) /* PTA0 */
-#define TSI0_CH2_PTA1 KINETIS_MUX('A',1,0) /* PTA1 */
-#define PTA1 KINETIS_MUX('A',1,1) /* PTA1 */
-#define UART0_RX_PTA1 KINETIS_MUX('A',1,2) /* PTA1 */
-#define TPM2_CH0_PTA1 KINETIS_MUX('A',1,3) /* PTA1 */
-#define TSI0_CH3_PTA2 KINETIS_MUX('A',2,0) /* PTA2 */
-#define PTA2 KINETIS_MUX('A',2,1) /* PTA2 */
-#define UART0_TX_PTA2 KINETIS_MUX('A',2,2) /* PTA2 */
-#define TPM2_CH1_PTA2 KINETIS_MUX('A',2,3) /* PTA2 */
-#define TSI0_CH4_PTA3 KINETIS_MUX('A',3,0) /* PTA3 */
-#define PTA3 KINETIS_MUX('A',3,1) /* PTA3 */
-#define I2C1_SCL_PTA3 KINETIS_MUX('A',3,2) /* PTA3 */
-#define TPM0_CH0_PTA3 KINETIS_MUX('A',3,3) /* PTA3 */
-#define SWD_DIO_PTA3 KINETIS_MUX('A',3,7) /* PTA3 */
-#define TSI0_CH5_PTA4 KINETIS_MUX('A',4,0) /* PTA4 */
-#define PTA4 KINETIS_MUX('A',4,1) /* PTA4 */
-#define I2C1_SDA_PTA4 KINETIS_MUX('A',4,2) /* PTA4 */
-#define TPM0_CH1_PTA4 KINETIS_MUX('A',4,3) /* PTA4 */
-#define NMI_b_PTA4 KINETIS_MUX('A',4,7) /* PTA4 */
-#define EXTAL0_PTA18 KINETIS_MUX('A',18,0) /* PTA18 */
-#define PTA18 KINETIS_MUX('A',18,1) /* PTA18 */
-#define UART1_RX_PTA18 KINETIS_MUX('A',18,3) /* PTA18 */
-#define TPM_CLKIN0_PTA18 KINETIS_MUX('A',18,4) /* PTA18 */
-#define XTAL0_PTA19 KINETIS_MUX('A',19,0) /* PTA19 */
-#define PTA19 KINETIS_MUX('A',19,1) /* PTA19 */
-#define UART1_TX_PTA19 KINETIS_MUX('A',19,3) /* PTA19 */
-#define TPM_CLKIN1_PTA19 KINETIS_MUX('A',19,4) /* PTA19 */
-#define LPTMR0_ALT1_PTA19 KINETIS_MUX('A',19,6) /* PTA19 */
-#define PTA20 KINETIS_MUX('A',20,1) /* PTA20 */
-#define RESET_b_PTA20 KINETIS_MUX('A',20,7) /* PTA20 */
-#define TSI0_CH0_PTB0 KINETIS_MUX('B',0,0) /* PTB0 */
-#define ADC0_SE8_PTB0 KINETIS_MUX('B',0,0) /* PTB0 */
-#define LLWU_P5_PTB0 KINETIS_MUX('B',0,1) /* PTB0 */
-#define PTB0 KINETIS_MUX('B',0,1) /* PTB0 */
-#define I2C0_SCL_PTB0 KINETIS_MUX('B',0,2) /* PTB0 */
-#define TPM1_CH0_PTB0 KINETIS_MUX('B',0,3) /* PTB0 */
-#define ADC0_SE9_PTB1 KINETIS_MUX('B',1,0) /* PTB1 */
-#define TSI0_CH6_PTB1 KINETIS_MUX('B',1,0) /* PTB1 */
-#define PTB1 KINETIS_MUX('B',1,1) /* PTB1 */
-#define I2C0_SDA_PTB1 KINETIS_MUX('B',1,2) /* PTB1 */
-#define TPM1_CH1_PTB1 KINETIS_MUX('B',1,3) /* PTB1 */
-#define ADC0_SE12_PTB2 KINETIS_MUX('B',2,0) /* PTB2 */
-#define TSI0_CH7_PTB2 KINETIS_MUX('B',2,0) /* PTB2 */
-#define PTB2 KINETIS_MUX('B',2,1) /* PTB2 */
-#define I2C0_SCL_PTB2 KINETIS_MUX('B',2,2) /* PTB2 */
-#define TPM2_CH0_PTB2 KINETIS_MUX('B',2,3) /* PTB2 */
-#define ADC0_SE13_PTB3 KINETIS_MUX('B',3,0) /* PTB3 */
-#define TSI0_CH8_PTB3 KINETIS_MUX('B',3,0) /* PTB3 */
-#define PTB3 KINETIS_MUX('B',3,1) /* PTB3 */
-#define I2C0_SDA_PTB3 KINETIS_MUX('B',3,2) /* PTB3 */
-#define TPM2_CH1_PTB3 KINETIS_MUX('B',3,3) /* PTB3 */
-#define TSI0_CH9_PTB16 KINETIS_MUX('B',16,0) /* PTB16 */
-#define PTB16 KINETIS_MUX('B',16,1) /* PTB16 */
-#define SPI1_MOSI_PTB16 KINETIS_MUX('B',16,2) /* PTB16 */
-#define UART0_RX_PTB16 KINETIS_MUX('B',16,3) /* PTB16 */
-#define TPM_CLKIN0_PTB16 KINETIS_MUX('B',16,4) /* PTB16 */
-#define SPI1_MISO_PTB16 KINETIS_MUX('B',16,5) /* PTB16 */
-#define TSI0_CH10_PTB17 KINETIS_MUX('B',17,0) /* PTB17 */
-#define PTB17 KINETIS_MUX('B',17,1) /* PTB17 */
-#define SPI1_MISO_PTB17 KINETIS_MUX('B',17,2) /* PTB17 */
-#define UART0_TX_PTB17 KINETIS_MUX('B',17,3) /* PTB17 */
-#define TPM_CLKIN1_PTB17 KINETIS_MUX('B',17,4) /* PTB17 */
-#define SPI1_MOSI_PTB17 KINETIS_MUX('B',17,5) /* PTB17 */
-#define ADC0_SE14_PTC0 KINETIS_MUX('C',0,0) /* PTC0 */
-#define TSI0_CH13_PTC0 KINETIS_MUX('C',0,0) /* PTC0 */
-#define PTC0 KINETIS_MUX('C',0,1) /* PTC0 */
-#define EXTRG_IN_PTC0 KINETIS_MUX('C',0,3) /* PTC0 */
-#define CMP0_OUT_PTC0 KINETIS_MUX('C',0,5) /* PTC0 */
-#define TSI0_CH14_PTC1 KINETIS_MUX('C',1,0) /* PTC1 */
-#define ADC0_SE15_PTC1 KINETIS_MUX('C',1,0) /* PTC1 */
-#define LLWU_P6_PTC1 KINETIS_MUX('C',1,1) /* PTC1 */
-#define PTC1 KINETIS_MUX('C',1,1) /* PTC1 */
-#define RTC_CLKIN_PTC1 KINETIS_MUX('C',1,1) /* PTC1 */
-#define I2C1_SCL_PTC1 KINETIS_MUX('C',1,2) /* PTC1 */
-#define TPM0_CH0_PTC1 KINETIS_MUX('C',1,4) /* PTC1 */
-#define ADC0_SE11_PTC2 KINETIS_MUX('C',2,0) /* PTC2 */
-#define TSI0_CH15_PTC2 KINETIS_MUX('C',2,0) /* PTC2 */
-#define PTC2 KINETIS_MUX('C',2,1) /* PTC2 */
-#define I2C1_SDA_PTC2 KINETIS_MUX('C',2,2) /* PTC2 */
-#define TPM0_CH1_PTC2 KINETIS_MUX('C',2,4) /* PTC2 */
-#define PTC3 KINETIS_MUX('C',3,1) /* PTC3 */
-#define LLWU_P7_PTC3 KINETIS_MUX('C',3,1) /* PTC3 */
-#define UART1_RX_PTC3 KINETIS_MUX('C',3,3) /* PTC3 */
-#define TPM0_CH2_PTC3 KINETIS_MUX('C',3,4) /* PTC3 */
-#define CLKOUTa_PTC3 KINETIS_MUX('C',3,5) /* PTC3 */
-#define PTC4 KINETIS_MUX('C',4,1) /* PTC4 */
-#define LLWU_P8_PTC4 KINETIS_MUX('C',4,1) /* PTC4 */
-#define SPI0_PCS0_PTC4 KINETIS_MUX('C',4,2) /* PTC4 */
-#define UART1_TX_PTC4 KINETIS_MUX('C',4,3) /* PTC4 */
-#define TPM0_CH3_PTC4 KINETIS_MUX('C',4,4) /* PTC4 */
-#define LLWU_P9_PTC5 KINETIS_MUX('C',5,1) /* PTC5 */
-#define PTC5 KINETIS_MUX('C',5,1) /* PTC5 */
-#define SPI0_SCK_PTC5 KINETIS_MUX('C',5,2) /* PTC5 */
-#define LPTMR0_ALT2_PTC5 KINETIS_MUX('C',5,3) /* PTC5 */
-#define CMP0_OUT_PTC5 KINETIS_MUX('C',5,6) /* PTC5 */
-#define CMP0_IN0_PTC6 KINETIS_MUX('C',6,0) /* PTC6 */
-#define PTC6 KINETIS_MUX('C',6,1) /* PTC6 */
-#define LLWU_P10_PTC6 KINETIS_MUX('C',6,1) /* PTC6 */
-#define SPI0_MOSI_PTC6 KINETIS_MUX('C',6,2) /* PTC6 */
-#define EXTRG_IN_PTC6 KINETIS_MUX('C',6,3) /* PTC6 */
-#define SPI0_MISO_PTC6 KINETIS_MUX('C',6,5) /* PTC6 */
-#define CMP0_IN1_PTC7 KINETIS_MUX('C',7,0) /* PTC7 */
-#define PTC7 KINETIS_MUX('C',7,1) /* PTC7 */
-#define SPI0_MISO_PTC7 KINETIS_MUX('C',7,2) /* PTC7 */
-#define SPI0_MOSI_PTC7 KINETIS_MUX('C',7,5) /* PTC7 */
-#define PTD0 KINETIS_MUX('D',0,1) /* PTD0 */
-#define SPI0_PCS0_PTD0 KINETIS_MUX('D',0,2) /* PTD0 */
-#define TPM0_CH0_PTD0 KINETIS_MUX('D',0,4) /* PTD0 */
-#define ADC0_SE5b_PTD1 KINETIS_MUX('D',1,0) /* PTD1 */
-#define PTD1 KINETIS_MUX('D',1,1) /* PTD1 */
-#define SPI0_SCK_PTD1 KINETIS_MUX('D',1,2) /* PTD1 */
-#define TPM0_CH1_PTD1 KINETIS_MUX('D',1,4) /* PTD1 */
-#define PTD2 KINETIS_MUX('D',2,1) /* PTD2 */
-#define SPI0_MOSI_PTD2 KINETIS_MUX('D',2,2) /* PTD2 */
-#define UART2_RX_PTD2 KINETIS_MUX('D',2,3) /* PTD2 */
-#define TPM0_CH2_PTD2 KINETIS_MUX('D',2,4) /* PTD2 */
-#define SPI0_MISO_PTD2 KINETIS_MUX('D',2,5) /* PTD2 */
-#define PTD3 KINETIS_MUX('D',3,1) /* PTD3 */
-#define SPI0_MISO_PTD3 KINETIS_MUX('D',3,2) /* PTD3 */
-#define UART2_TX_PTD3 KINETIS_MUX('D',3,3) /* PTD3 */
-#define TPM0_CH3_PTD3 KINETIS_MUX('D',3,4) /* PTD3 */
-#define SPI0_MOSI_PTD3 KINETIS_MUX('D',3,5) /* PTD3 */
-#define PTD4 KINETIS_MUX('D',4,1) /* PTD4 */
-#define LLWU_P14_PTD4 KINETIS_MUX('D',4,1) /* PTD4 */
-#define SPI1_PCS0_PTD4 KINETIS_MUX('D',4,2) /* PTD4 */
-#define UART2_RX_PTD4 KINETIS_MUX('D',4,3) /* PTD4 */
-#define TPM0_CH4_PTD4 KINETIS_MUX('D',4,4) /* PTD4 */
-#define ADC0_SE6b_PTD5 KINETIS_MUX('D',5,0) /* PTD5 */
-#define PTD5 KINETIS_MUX('D',5,1) /* PTD5 */
-#define SPI1_SCK_PTD5 KINETIS_MUX('D',5,2) /* PTD5 */
-#define UART2_TX_PTD5 KINETIS_MUX('D',5,3) /* PTD5 */
-#define TPM0_CH5_PTD5 KINETIS_MUX('D',5,4) /* PTD5 */
-#define ADC0_SE7b_PTD6 KINETIS_MUX('D',6,0) /* PTD6 */
-#define PTD6 KINETIS_MUX('D',6,1) /* PTD6 */
-#define LLWU_P15_PTD6 KINETIS_MUX('D',6,1) /* PTD6 */
-#define SPI1_MOSI_PTD6 KINETIS_MUX('D',6,2) /* PTD6 */
-#define UART0_RX_PTD6 KINETIS_MUX('D',6,3) /* PTD6 */
-#define SPI1_MISO_PTD6 KINETIS_MUX('D',6,5) /* PTD6 */
-#define PTD7 KINETIS_MUX('D',7,1) /* PTD7 */
-#define SPI1_MISO_PTD7 KINETIS_MUX('D',7,2) /* PTD7 */
-#define UART0_TX_PTD7 KINETIS_MUX('D',7,3) /* PTD7 */
-#define SPI1_MOSI_PTD7 KINETIS_MUX('D',7,5) /* PTD7 */
-#define ADC0_DP0_PTE20 KINETIS_MUX('E',20,0) /* PTE20 */
-#define ADC0_SE0_PTE20 KINETIS_MUX('E',20,0) /* PTE20 */
-#define PTE20 KINETIS_MUX('E',20,1) /* PTE20 */
-#define TPM1_CH0_PTE20 KINETIS_MUX('E',20,3) /* PTE20 */
-#define UART0_TX_PTE20 KINETIS_MUX('E',20,4) /* PTE20 */
-#define ADC0_SE4a_PTE21 KINETIS_MUX('E',21,0) /* PTE21 */
-#define ADC0_DM0_PTE21 KINETIS_MUX('E',21,0) /* PTE21 */
-#define PTE21 KINETIS_MUX('E',21,1) /* PTE21 */
-#define TPM1_CH1_PTE21 KINETIS_MUX('E',21,3) /* PTE21 */
-#define UART0_RX_PTE21 KINETIS_MUX('E',21,4) /* PTE21 */
-#define PTE24 KINETIS_MUX('E',24,1) /* PTE24 */
-#define TPM0_CH0_PTE24 KINETIS_MUX('E',24,3) /* PTE24 */
-#define I2C0_SCL_PTE24 KINETIS_MUX('E',24,5) /* PTE24 */
-#define PTE25 KINETIS_MUX('E',25,1) /* PTE25 */
-#define TPM0_CH1_PTE25 KINETIS_MUX('E',25,3) /* PTE25 */
-#define I2C0_SDA_PTE25 KINETIS_MUX('E',25,5) /* PTE25 */
-#define ADC0_SE4b_PTE29 KINETIS_MUX('E',29,0) /* PTE29 */
-#define CMP0_IN5_PTE29 KINETIS_MUX('E',29,0) /* PTE29 */
-#define PTE29 KINETIS_MUX('E',29,1) /* PTE29 */
-#define TPM0_CH2_PTE29 KINETIS_MUX('E',29,3) /* PTE29 */
-#define TPM_CLKIN0_PTE29 KINETIS_MUX('E',29,4) /* PTE29 */
-#define DAC0_OUT_PTE30 KINETIS_MUX('E',30,0) /* PTE30 */
-#define CMP0_IN4_PTE30 KINETIS_MUX('E',30,0) /* PTE30 */
-#define ADC0_SE23_PTE30 KINETIS_MUX('E',30,0) /* PTE30 */
-#define PTE30 KINETIS_MUX('E',30,1) /* PTE30 */
-#define TPM0_CH3_PTE30 KINETIS_MUX('E',30,3) /* PTE30 */
-#define TPM_CLKIN1_PTE30 KINETIS_MUX('E',30,4) /* PTE30 */
-#endif
+#include "MKL25Z128VLK4-pinctrl.h"
+
+/* Signals not present on this part */
+#undef ADC0_DM3_PTE23
+#undef ADC0_DP3_PTE22
+#undef ADC0_SE3_PTE22
+#undef ADC0_SE7a_PTE23
+#undef CMP0_IN2_PTC8
+#undef CMP0_IN3_PTC9
+#undef CMP0_OUT_PTE0
+#undef EXTRG_IN_PTB8
+#undef I2C0_SCL_PTC8
+#undef I2C0_SDA_PTC9
+#undef I2C1_SCL_PTC10
+#undef I2C1_SCL_PTE1
+#undef I2C1_SDA_PTC11
+#undef I2C1_SDA_PTE0
+#undef PTA12
+#undef PTA13
+#undef PTA14
+#undef PTA15
+#undef PTA16
+#undef PTA17
+#undef PTA5
+#undef PTB10
+#undef PTB11
+#undef PTB18
+#undef PTB19
+#undef PTB8
+#undef PTB9
+#undef PTC10
+#undef PTC11
+#undef PTC12
+#undef PTC13
+#undef PTC16
+#undef PTC17
+#undef PTC8
+#undef PTC9
+#undef PTE0
+#undef PTE1
+#undef PTE2
+#undef PTE22
+#undef PTE23
+#undef PTE3
+#undef PTE31
+#undef PTE4
+#undef PTE5
+#undef RTC_CLKOUT_PTE0
+#undef SPI0_MISO_PTA16
+#undef SPI0_MISO_PTA17
+#undef SPI0_MOSI_PTA16
+#undef SPI0_MOSI_PTA17
+#undef SPI0_PCS0_PTA14
+#undef SPI0_SCK_PTA15
+#undef SPI1_MISO_PTE1
+#undef SPI1_MISO_PTE3
+#undef SPI1_MOSI_PTE1
+#undef SPI1_MOSI_PTE3
+#undef SPI1_PCS0_PTB10
+#undef SPI1_PCS0_PTE4
+#undef SPI1_SCK_PTB11
+#undef SPI1_SCK_PTE2
+#undef TPM0_CH2_PTA5
+#undef TPM0_CH4_PTC8
+#undef TPM0_CH4_PTE31
+#undef TPM0_CH5_PTC9
+#undef TPM1_CH0_PTA12
+#undef TPM1_CH1_PTA13
+#undef TPM2_CH0_PTB18
+#undef TPM2_CH0_PTE22
+#undef TPM2_CH1_PTB19
+#undef TPM2_CH1_PTE23
+#undef TPM_CLKIN0_PTC12
+#undef TPM_CLKIN1_PTC13
+#undef TSI0_CH11_PTB18
+#undef TSI0_CH12_PTB19
+#undef UART0_RX_PTA15
+#undef UART0_TX_PTA14
+#undef UART1_RX_PTE1
+#undef UART1_TX_PTE0
+#undef UART2_RX_PTE23
+#undef UART2_TX_PTE22
+#undef USB_CLKIN_PTA5
+
+#endif /* _ZEPHYR_DTS_BINDING_MKL25Z128VFT4_WRAPPER_ */

@@ -6,267 +6,238 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#ifndef _ZEPHYR_DTS_BINDING_MCXA153VFT_
-#define _ZEPHYR_DTS_BINDING_MCXA153VFT_
+/*
+ * Delta-deduplicated by dedup_pinctrl.py:
+ * based on MCXA344VLH-pinctrl.h with this part's differences applied
+ * below (193 removed, 0 changed,
+ * 23 added). Regenerate with dedup_pinctrl.py;
+ * do not edit by hand.
+ * target-hash: 796e143b40c94355
+ */
 
-#define A15X_MUX(port, pin, mux)		\
-	(((((port) - '0') & 0xF) << 28) |	\
-	(((pin) & 0x3F) << 22) |		\
-	(((mux) & 0xF) << 8))
+#ifndef _ZEPHYR_DTS_BINDING_MCXA153VFT_WRAPPER_
+#define _ZEPHYR_DTS_BINDING_MCXA153VFT_WRAPPER_
 
-#define P0_0 A15X_MUX('0',0,0) /* PT0_0 */
-#define TMS_P0_0 A15X_MUX('0',0,1) /* PT0_0 */
-#define SWDIO_P0_0 A15X_MUX('0',0,1) /* PT0_0 */
-#define LPUART0_RTS_B_P0_0 A15X_MUX('0',0,2) /* PT0_0 */
-#define LPSPI0_PCS0_P0_0 A15X_MUX('0',0,3) /* PT0_0 */
-#define CT_INP0_P0_0 A15X_MUX('0',0,4) /* PT0_0 */
-#define P0_1 A15X_MUX('0',1,0) /* PT0_1 */
-#define SWCLK_P0_1 A15X_MUX('0',1,1) /* PT0_1 */
-#define TCLK_P0_1 A15X_MUX('0',1,1) /* PT0_1 */
-#define LPUART0_CTS_B_P0_1 A15X_MUX('0',1,2) /* PT0_1 */
-#define LPSPI0_SDI_P0_1 A15X_MUX('0',1,3) /* PT0_1 */
-#define CT_INP1_P0_1 A15X_MUX('0',1,4) /* PT0_1 */
-#define P0_2 A15X_MUX('0',2,0) /* PT0_2 */
-#define TDO_P0_2 A15X_MUX('0',2,1) /* PT0_2 */
-#define SWO_P0_2 A15X_MUX('0',2,1) /* PT0_2 */
-#define LPUART0_RXD_P0_2 A15X_MUX('0',2,2) /* PT0_2 */
-#define LPSPI0_SCK_P0_2 A15X_MUX('0',2,3) /* PT0_2 */
-#define CT0_MAT0_P0_2 A15X_MUX('0',2,4) /* PT0_2 */
-#define UTICK_CAP0_P0_2 A15X_MUX('0',2,5) /* PT0_2 */
-#define I3C0_PUR_P0_2 A15X_MUX('0',2,10) /* PT0_2 */
-#define CMP1_IN1_P0_3 A15X_MUX('0',3,0) /* PT0_3 */
-#define P0_3 A15X_MUX('0',3,0) /* PT0_3 */
-#define TDI_P0_3 A15X_MUX('0',3,1) /* PT0_3 */
-#define LPUART0_TXD_P0_3 A15X_MUX('0',3,2) /* PT0_3 */
-#define LPSPI0_SDO_P0_3 A15X_MUX('0',3,3) /* PT0_3 */
-#define CT0_MAT1_P0_3 A15X_MUX('0',3,4) /* PT0_3 */
-#define UTICK_CAP1_P0_3 A15X_MUX('0',3,5) /* PT0_3 */
-#define CMP0_OUT_P0_3 A15X_MUX('0',3,8) /* PT0_3 */
-#define P0_6 A15X_MUX('0',6,0) /* PT0_6 */
-#define ADC0_A15_P0_6 A15X_MUX('0',6,0) /* PT0_6 */
-#define LPI2C0_HREQ_P0_6 A15X_MUX('0',6,2) /* PT0_6 */
-#define LPSPI0_PCS1_P0_6 A15X_MUX('0',6,3) /* PT0_6 */
-#define CT_INP2_P0_6 A15X_MUX('0',6,4) /* PT0_6 */
-#define CMP1_OUT_P0_6 A15X_MUX('0',6,8) /* PT0_6 */
-#define CLKOUT_P0_6 A15X_MUX('0',6,12) /* PT0_6 */
-#define P0_16 A15X_MUX('0',16,0) /* PT0_16 */
-#define WUU0_IN2_P0_16 A15X_MUX('0',16,0) /* PT0_16 */
-#define LPI2C0_SDA_P0_16 A15X_MUX('0',16,2) /* PT0_16 */
-#define LPSPI0_PCS2_P0_16 A15X_MUX('0',16,3) /* PT0_16 */
-#define CT0_MAT0_P0_16 A15X_MUX('0',16,4) /* PT0_16 */
-#define UTICK_CAP2_P0_16 A15X_MUX('0',16,5) /* PT0_16 */
-#define I3C0_SDA_P0_16 A15X_MUX('0',16,10) /* PT0_16 */
-#define P0_17 A15X_MUX('0',17,0) /* PT0_17 */
-#define LPI2C0_SCL_P0_17 A15X_MUX('0',17,2) /* PT0_17 */
-#define LPSPI0_PCS3_P0_17 A15X_MUX('0',17,3) /* PT0_17 */
-#define CT0_MAT1_P0_17 A15X_MUX('0',17,4) /* PT0_17 */
-#define UTICK_CAP3_P0_17 A15X_MUX('0',17,5) /* PT0_17 */
-#define I3C0_SCL_P0_17 A15X_MUX('0',17,10) /* PT0_17 */
-#define WUU0_IN6_P1_0 A15X_MUX('1',0,0) /* PT1_0 */
-#define P1_0 A15X_MUX('1',0,0) /* PT1_0 */
-#define LPTMR0_ALT3_P1_0 A15X_MUX('1',0,0) /* PT1_0 */
-#define CMP0_IN3_P1_0 A15X_MUX('1',0,0) /* PT1_0 */
-#define ADC0_A16_P1_0 A15X_MUX('1',0,0) /* PT1_0 */
-#define TRIG_IN0_P1_0 A15X_MUX('1',0,1) /* PT1_0 */
-#define LPSPI0_SDO_P1_0 A15X_MUX('1',0,2) /* PT1_0 */
-#define LPI2C0_SDA_P1_0 A15X_MUX('1',0,3) /* PT1_0 */
-#define CT_INP4_P1_0 A15X_MUX('1',0,4) /* PT1_0 */
-#define CT0_MAT2_P1_0 A15X_MUX('1',0,5) /* PT1_0 */
-#define ADC0_A17_P1_1 A15X_MUX('1',1,0) /* PT1_1 */
-#define P1_1 A15X_MUX('1',1,0) /* PT1_1 */
-#define CMP1_IN3_P1_1 A15X_MUX('1',1,0) /* PT1_1 */
-#define TRIG_IN1_P1_1 A15X_MUX('1',1,1) /* PT1_1 */
-#define LPSPI0_SCK_P1_1 A15X_MUX('1',1,2) /* PT1_1 */
-#define LPI2C0_SCL_P1_1 A15X_MUX('1',1,3) /* PT1_1 */
-#define CT_INP5_P1_1 A15X_MUX('1',1,4) /* PT1_1 */
-#define CT0_MAT3_P1_1 A15X_MUX('1',1,5) /* PT1_1 */
-#define ADC0_A18_P1_2 A15X_MUX('1',2,0) /* PT1_2 */
-#define P1_2 A15X_MUX('1',2,0) /* PT1_2 */
-#define TRIG_OUT0_P1_2 A15X_MUX('1',2,1) /* PT1_2 */
-#define LPSPI0_SDI_P1_2 A15X_MUX('1',2,2) /* PT1_2 */
-#define LPI2C0_SDAS_P1_2 A15X_MUX('1',2,3) /* PT1_2 */
-#define CT1_MAT0_P1_2 A15X_MUX('1',2,4) /* PT1_2 */
-#define CT_INP0_P1_2 A15X_MUX('1',2,5) /* PT1_2 */
-#define P1_3 A15X_MUX('1',3,0) /* PT1_3 */
-#define CMP0_IN1_P1_3 A15X_MUX('1',3,0) /* PT1_3 */
-#define ADC0_A19_P1_3 A15X_MUX('1',3,0) /* PT1_3 */
-#define WUU0_IN7_P1_3 A15X_MUX('1',3,0) /* PT1_3 */
-#define TRIG_OUT1_P1_3 A15X_MUX('1',3,1) /* PT1_3 */
-#define LPSPI0_PCS0_P1_3 A15X_MUX('1',3,2) /* PT1_3 */
-#define LPI2C0_SCLS_P1_3 A15X_MUX('1',3,3) /* PT1_3 */
-#define CT1_MAT1_P1_3 A15X_MUX('1',3,4) /* PT1_3 */
-#define CT_INP1_P1_3 A15X_MUX('1',3,5) /* PT1_3 */
-#define WUU0_IN10_P1_8 A15X_MUX('1',8,0) /* PT1_8 */
-#define P1_8 A15X_MUX('1',8,0) /* PT1_8 */
-#define LPUART1_RXD_P1_8 A15X_MUX('1',8,2) /* PT1_8 */
-#define LPI2C0_SDA_P1_8 A15X_MUX('1',8,3) /* PT1_8 */
-#define CT_INP8_P1_8 A15X_MUX('1',8,4) /* PT1_8 */
-#define CT0_MAT2_P1_8 A15X_MUX('1',8,5) /* PT1_8 */
-#define I3C0_SDA_P1_8 A15X_MUX('1',8,10) /* PT1_8 */
-#define P1_9 A15X_MUX('1',9,0) /* PT1_9 */
-#define LPUART1_TXD_P1_9 A15X_MUX('1',9,2) /* PT1_9 */
-#define LPI2C0_SCL_P1_9 A15X_MUX('1',9,3) /* PT1_9 */
-#define CT_INP9_P1_9 A15X_MUX('1',9,4) /* PT1_9 */
-#define CT0_MAT3_P1_9 A15X_MUX('1',9,5) /* PT1_9 */
-#define I3C0_SCL_P1_9 A15X_MUX('1',9,10) /* PT1_9 */
-#define ADC0_A8_P1_10 A15X_MUX('1',10,0) /* PT1_10 */
-#define P1_10 A15X_MUX('1',10,0) /* PT1_10 */
-#define LPUART1_RTS_B_P1_10 A15X_MUX('1',10,2) /* PT1_10 */
-#define LPI2C0_SDAS_P1_10 A15X_MUX('1',10,3) /* PT1_10 */
-#define CT2_MAT0_P1_10 A15X_MUX('1',10,4) /* PT1_10 */
-#define ADC0_A9_P1_11 A15X_MUX('1',11,0) /* PT1_11 */
-#define P1_11 A15X_MUX('1',11,0) /* PT1_11 */
-#define WUU0_IN11_P1_11 A15X_MUX('1',11,0) /* PT1_11 */
-#define TRIG_OUT2_P1_11 A15X_MUX('1',11,1) /* PT1_11 */
-#define LPUART1_CTS_B_P1_11 A15X_MUX('1',11,2) /* PT1_11 */
-#define LPI2C0_SCLS_P1_11 A15X_MUX('1',11,3) /* PT1_11 */
-#define CT2_MAT1_P1_11 A15X_MUX('1',11,4) /* PT1_11 */
-#define I3C0_PUR_P1_11 A15X_MUX('1',11,10) /* PT1_11 */
-#define P1_29 A15X_MUX('1',29,0) /* PT1_29 */
-#define RESET_B_P1_29 A15X_MUX('1',29,1) /* PT1_29 */
-#define SPC_LPREQ_P1_29 A15X_MUX('1',29,2) /* PT1_29 */
-#define XTAL48M_P1_30 A15X_MUX('1',30,0) /* PT1_30 */
-#define P1_30 A15X_MUX('1',30,0) /* PT1_30 */
-#define TRIG_OUT3_P1_30 A15X_MUX('1',30,1) /* PT1_30 */
-#define LPI2C0_SDA_P1_30 A15X_MUX('1',30,3) /* PT1_30 */
-#define CT_INP16_P1_30 A15X_MUX('1',30,4) /* PT1_30 */
-#define I3C0_SDA_P1_30 A15X_MUX('1',30,10) /* PT1_30 */
-#define EXTAL48M_P1_31 A15X_MUX('1',31,0) /* PT1_31 */
-#define P1_31 A15X_MUX('1',31,0) /* PT1_31 */
-#define TRIG_IN4_P1_31 A15X_MUX('1',31,1) /* PT1_31 */
-#define LPI2C0_SCL_P1_31 A15X_MUX('1',31,3) /* PT1_31 */
-#define CT_INP17_P1_31 A15X_MUX('1',31,4) /* PT1_31 */
-#define I3C0_SCL_P1_31 A15X_MUX('1',31,10) /* PT1_31 */
-#define P2_0 A15X_MUX('2',0,0) /* PT2_0 */
-#define WUU0_IN18_P2_0 A15X_MUX('2',0,0) /* PT2_0 */
-#define ADC0_A0_P2_0 A15X_MUX('2',0,0) /* PT2_0 */
-#define TRIG_IN6_P2_0 A15X_MUX('2',0,1) /* PT2_0 */
-#define LPUART0_RXD_P2_0 A15X_MUX('2',0,2) /* PT2_0 */
-#define CT_INP16_P2_0 A15X_MUX('2',0,4) /* PT2_0 */
-#define CT2_MAT0_P2_0 A15X_MUX('2',0,5) /* PT2_0 */
-#define ADC0_A1_P2_1 A15X_MUX('2',1,0) /* PT2_1 */
-#define P2_1 A15X_MUX('2',1,0) /* PT2_1 */
-#define TRIG_IN7_P2_1 A15X_MUX('2',1,1) /* PT2_1 */
-#define LPUART0_TXD_P2_1 A15X_MUX('2',1,2) /* PT2_1 */
-#define CT_INP17_P2_1 A15X_MUX('2',1,4) /* PT2_1 */
-#define CT2_MAT1_P2_1 A15X_MUX('2',1,5) /* PT2_1 */
-#define CMP0_IN0_P2_2 A15X_MUX('2',2,0) /* PT2_2 */
-#define P2_2 A15X_MUX('2',2,0) /* PT2_2 */
-#define ADC0_A4_P2_2 A15X_MUX('2',2,0) /* PT2_2 */
-#define TRIG_IN6_P2_2 A15X_MUX('2',2,1) /* PT2_2 */
-#define LPUART0_RTS_B_P2_2 A15X_MUX('2',2,2) /* PT2_2 */
-#define LPUART2_TXD_P2_2 A15X_MUX('2',2,3) /* PT2_2 */
-#define CT_INP12_P2_2 A15X_MUX('2',2,4) /* PT2_2 */
-#define CT2_MAT2_P2_2 A15X_MUX('2',2,5) /* PT2_2 */
-#define CMP1_IN0_P2_3 A15X_MUX('2',3,0) /* PT2_3 */
-#define ADC0_A2_P2_3 A15X_MUX('2',3,0) /* PT2_3 */
-#define WUU0_IN19_P2_3 A15X_MUX('2',3,0) /* PT2_3 */
-#define P2_3 A15X_MUX('2',3,0) /* PT2_3 */
-#define TRIG_IN7_P2_3 A15X_MUX('2',3,1) /* PT2_3 */
-#define LPUART0_CTS_B_P2_3 A15X_MUX('2',3,2) /* PT2_3 */
-#define LPUART2_RXD_P2_3 A15X_MUX('2',3,3) /* PT2_3 */
-#define CT_INP13_P2_3 A15X_MUX('2',3,4) /* PT2_3 */
-#define CT2_MAT3_P2_3 A15X_MUX('2',3,5) /* PT2_3 */
-#define P2_6 A15X_MUX('2',6,0) /* PT2_6 */
-#define ADC0_A3_P2_6 A15X_MUX('2',6,0) /* PT2_6 */
-#define TRIG_OUT4_P2_6 A15X_MUX('2',6,1) /* PT2_6 */
-#define LPSPI1_PCS1_P2_6 A15X_MUX('2',6,2) /* PT2_6 */
-#define CT_INP18_P2_6 A15X_MUX('2',6,4) /* PT2_6 */
-#define CT1_MAT2_P2_6 A15X_MUX('2',6,5) /* PT2_6 */
-#define VREFI_P2_7 A15X_MUX('2',7,0) /* PT2_7 */
-#define P2_7 A15X_MUX('2',7,0) /* PT2_7 */
-#define ADC0_A7_P2_7 A15X_MUX('2',7,0) /* PT2_7 */
-#define TRIG_IN5_P2_7 A15X_MUX('2',7,1) /* PT2_7 */
-#define CT_INP19_P2_7 A15X_MUX('2',7,4) /* PT2_7 */
-#define CT1_MAT3_P2_7 A15X_MUX('2',7,5) /* PT2_7 */
-#define P2_12 A15X_MUX('2',12,0) /* PT2_12 */
-#define WUU0_IN20_P2_12 A15X_MUX('2',12,0) /* PT2_12 */
-#define ADC0_A5_P2_12 A15X_MUX('2',12,0) /* PT2_12 */
-#define USB0_VBUS_DET_P2_12 A15X_MUX('2',12,1) /* PT2_12 */
-#define LPSPI1_SCK_P2_12 A15X_MUX('2',12,2) /* PT2_12 */
-#define LPUART1_RXD_P2_12 A15X_MUX('2',12,3) /* PT2_12 */
-#define CT0_MAT0_P2_12 A15X_MUX('2',12,5) /* PT2_12 */
-#define P2_13 A15X_MUX('2',13,0) /* PT2_13 */
-#define TRIG_IN8_P2_13 A15X_MUX('2',13,1) /* PT2_13 */
-#define LPSPI1_SDO_P2_13 A15X_MUX('2',13,2) /* PT2_13 */
-#define LPUART1_TXD_P2_13 A15X_MUX('2',13,3) /* PT2_13 */
-#define CT0_MAT1_P2_13 A15X_MUX('2',13,5) /* PT2_13 */
-#define P2_16 A15X_MUX('2',16,0) /* PT2_16 */
-#define ADC0_A6_P2_16 A15X_MUX('2',16,0) /* PT2_16 */
-#define LPSPI1_SDI_P2_16 A15X_MUX('2',16,2) /* PT2_16 */
-#define LPUART1_RTS_B_P2_16 A15X_MUX('2',16,3) /* PT2_16 */
-#define CT0_MAT2_P2_16 A15X_MUX('2',16,5) /* PT2_16 */
-#define P3_0 A15X_MUX('3',0,0) /* PT3_0 */
-#define WUU0_IN22_P3_0 A15X_MUX('3',0,0) /* PT3_0 */
-#define TRIG_IN0_P3_0 A15X_MUX('3',0,1) /* PT3_0 */
-#define CT_INP16_P3_0 A15X_MUX('3',0,4) /* PT3_0 */
-#define PWM0_A0_P3_0 A15X_MUX('3',0,5) /* PT3_0 */
-#define P3_1 A15X_MUX('3',1,0) /* PT3_1 */
-#define TRIG_IN1_P3_1 A15X_MUX('3',1,1) /* PT3_1 */
-#define CT_INP17_P3_1 A15X_MUX('3',1,4) /* PT3_1 */
-#define PWM0_B0_P3_1 A15X_MUX('3',1,5) /* PT3_1 */
-#define FREQME_CLK_OUT0_P3_1 A15X_MUX('3',1,12) /* PT3_1 */
-#define P3_8 A15X_MUX('3',8,0) /* PT3_8 */
-#define WUU0_IN23_P3_8 A15X_MUX('3',8,0) /* PT3_8 */
-#define TRIG_IN3_P3_8 A15X_MUX('3',8,1) /* PT3_8 */
-#define LPSPI1_SDO_P3_8 A15X_MUX('3',8,2) /* PT3_8 */
-#define LPUART1_RXD_P3_8 A15X_MUX('3',8,3) /* PT3_8 */
-#define CT_INP4_P3_8 A15X_MUX('3',8,4) /* PT3_8 */
-#define PWM0_A1_P3_8 A15X_MUX('3',8,5) /* PT3_8 */
-#define CLKOUT_P3_8 A15X_MUX('3',8,12) /* PT3_8 */
-#define P3_9 A15X_MUX('3',9,0) /* PT3_9 */
-#define TRIG_IN4_P3_9 A15X_MUX('3',9,1) /* PT3_9 */
-#define LPSPI1_SDI_P3_9 A15X_MUX('3',9,2) /* PT3_9 */
-#define LPUART1_TXD_P3_9 A15X_MUX('3',9,3) /* PT3_9 */
-#define CT_INP5_P3_9 A15X_MUX('3',9,4) /* PT3_9 */
-#define PWM0_B1_P3_9 A15X_MUX('3',9,5) /* PT3_9 */
-#define P3_10 A15X_MUX('3',10,0) /* PT3_10 */
-#define TRIG_IN5_P3_10 A15X_MUX('3',10,1) /* PT3_10 */
-#define LPSPI1_SCK_P3_10 A15X_MUX('3',10,2) /* PT3_10 */
-#define LPUART1_RTS_B_P3_10 A15X_MUX('3',10,3) /* PT3_10 */
-#define CT1_MAT0_P3_10 A15X_MUX('3',10,4) /* PT3_10 */
-#define PWM0_A2_P3_10 A15X_MUX('3',10,5) /* PT3_10 */
-#define WUU0_IN24_P3_11 A15X_MUX('3',11,0) /* PT3_11 */
-#define P3_11 A15X_MUX('3',11,0) /* PT3_11 */
-#define TRIG_IN6_P3_11 A15X_MUX('3',11,1) /* PT3_11 */
-#define LPSPI1_PCS0_P3_11 A15X_MUX('3',11,2) /* PT3_11 */
-#define LPUART1_CTS_B_P3_11 A15X_MUX('3',11,3) /* PT3_11 */
-#define CT1_MAT1_P3_11 A15X_MUX('3',11,4) /* PT3_11 */
-#define PWM0_B2_P3_11 A15X_MUX('3',11,5) /* PT3_11 */
-#define P3_12 A15X_MUX('3',12,0) /* PT3_12 */
-#define LPUART2_RTS_B_P3_12 A15X_MUX('3',12,2) /* PT3_12 */
-#define CT1_MAT2_P3_12 A15X_MUX('3',12,4) /* PT3_12 */
-#define PWM0_X0_P3_12 A15X_MUX('3',12,5) /* PT3_12 */
-#define P3_13 A15X_MUX('3',13,0) /* PT3_13 */
-#define LPUART2_CTS_B_P3_13 A15X_MUX('3',13,2) /* PT3_13 */
-#define CT1_MAT3_P3_13 A15X_MUX('3',13,4) /* PT3_13 */
-#define PWM0_X1_P3_13 A15X_MUX('3',13,5) /* PT3_13 */
-#define P3_14 A15X_MUX('3',14,0) /* PT3_14 */
-#define WUU0_IN25_P3_14 A15X_MUX('3',14,0) /* PT3_14 */
-#define LPUART2_RXD_P3_14 A15X_MUX('3',14,2) /* PT3_14 */
-#define CT_INP6_P3_14 A15X_MUX('3',14,4) /* PT3_14 */
-#define PWM0_X2_P3_14 A15X_MUX('3',14,5) /* PT3_14 */
-#define P3_27 A15X_MUX('3',27,0) /* PT3_27 */
-#define TRIG_OUT7_P3_27 A15X_MUX('3',27,1) /* PT3_27 */
-#define LPI2C0_SCL_P3_27 A15X_MUX('3',27,2) /* PT3_27 */
-#define CT_INP13_P3_27 A15X_MUX('3',27,4) /* PT3_27 */
-#define WUU0_IN26_P3_28 A15X_MUX('3',28,0) /* PT3_28 */
-#define P3_28 A15X_MUX('3',28,0) /* PT3_28 */
-#define TRIG_IN11_P3_28 A15X_MUX('3',28,1) /* PT3_28 */
-#define LPI2C0_SDA_P3_28 A15X_MUX('3',28,2) /* PT3_28 */
-#define CT_INP12_P3_28 A15X_MUX('3',28,4) /* PT3_28 */
-#define ADC0_A14_P3_29 A15X_MUX('3',29,0) /* PT3_29 */
-#define WUU0_IN27_P3_29 A15X_MUX('3',29,0) /* PT3_29 */
-#define P3_29 A15X_MUX('3',29,0) /* PT3_29 */
-#define ISPMODE_N_P3_29 A15X_MUX('3',29,1) /* PT3_29 */
-#define CT_INP3_P3_29 A15X_MUX('3',29,4) /* PT3_29 */
-#define ADC0_A13_P3_30 A15X_MUX('3',30,0) /* PT3_30 */
-#define P3_30 A15X_MUX('3',30,0) /* PT3_30 */
-#define TRIG_OUT6_P3_30 A15X_MUX('3',30,1) /* PT3_30 */
-#define CT0_MAT2_P3_30 A15X_MUX('3',30,4) /* PT3_30 */
-#define P3_31 A15X_MUX('3',31,0) /* PT3_31 */
-#define LPTMR0_ALT2_P3_31 A15X_MUX('3',31,0) /* PT3_31 */
-#define ADC0_A12_P3_31 A15X_MUX('3',31,0) /* PT3_31 */
-#define TRIG_IN10_P3_31 A15X_MUX('3',31,1) /* PT3_31 */
-#define CT0_MAT3_P3_31 A15X_MUX('3',31,4) /* PT3_31 */
-#endif
+#include "MCXA344VLH-pinctrl.h"
+
+/* Signals not present on this part */
+#undef ADC0_A14_P0_3
+#undef ADC0_A1_P2_4
+#undef ADC0_A20_P1_4
+#undef ADC0_A21_P1_5
+#undef ADC0_A22_P1_6
+#undef ADC0_A23_P1_7
+#undef ADC0_A2_P2_15
+#undef ADC0_A3_P2_3
+#undef ADC1_A0_P2_1
+#undef ADC1_A10_P1_12
+#undef ADC1_A11_P1_13
+#undef ADC1_A1_P2_5
+#undef ADC1_A20_P3_31
+#undef ADC1_A21_P3_30
+#undef ADC1_A22_P3_29
+#undef ADC1_A2_P2_19
+#undef ADC1_A3_P2_6
+#undef ADC1_A4_P2_3
+#undef ADC1_A5_P2_13
+#undef ADC1_A6_P2_17
+#undef ADC1_A7_P2_7
+#undef ADC1_A8_P1_10
+#undef ADC1_A9_P1_11
+#undef CAN0_RXD_P1_11
+#undef CAN0_RXD_P1_12
+#undef CAN0_RXD_P1_3
+#undef CAN0_RXD_P1_7
+#undef CAN0_RXD_P2_12
+#undef CAN0_TXD_P1_10
+#undef CAN0_TXD_P1_13
+#undef CAN0_TXD_P1_2
+#undef CAN0_TXD_P1_6
+#undef CAN0_TXD_P2_13
+#undef CLKOUT_P3_6
+#undef CMP0_IN2_P1_4
+#undef CMP0_INP4_P2_15
+#undef CMP1_IN2_P1_5
+#undef CMP1_INN4_P2_2
+#undef CMP1_INP4_P2_19
+#undef CMP2_IN0_P2_4
+#undef CMP2_IN3_P1_2
+#undef CMP2_INN4_P2_2
+#undef CMP2_INP4_P2_6
+#undef CT0_MAT2_P2_15
+#undef CT0_MAT3_P2_17
+#undef CT1_MAT0_P2_4
+#undef CT1_MAT1_P2_5
+#undef CT1_MAT2_P1_4
+#undef CT1_MAT3_P1_5
+#undef CT2_MAT2_P1_12
+#undef CT2_MAT3_P1_13
+#undef CT_INP14_P2_4
+#undef CT_INP15_P2_5
+#undef CT_INP6_P1_6
+#undef CT_INP7_P1_7
+#undef CT_INP7_P3_15
+#undef FREQME_CLK_IN0_P1_4
+#undef FREQME_CLK_IN0_P1_8
+#undef FREQME_CLK_IN1_P1_5
+#undef FREQME_CLK_IN1_P1_9
+#undef FREQME_CLK_OUT1_P3_6
+#undef ISPMODE_N_P0_6
+#undef LPI2C1_HREQ_P3_29
+#undef LPI2C1_SCLS_P1_3
+#undef LPI2C1_SCLS_P3_30
+#undef LPI2C1_SCL_P1_1
+#undef LPI2C1_SCL_P1_13
+#undef LPI2C1_SCL_P3_27
+#undef LPI2C1_SDAS_P1_2
+#undef LPI2C1_SDAS_P3_31
+#undef LPI2C1_SDA_P1_0
+#undef LPI2C1_SDA_P1_12
+#undef LPI2C1_SDA_P3_28
+#undef LPSPI0_PCS1_P1_6
+#undef LPSPI0_PCS2_P1_5
+#undef LPSPI0_PCS3_P1_4
+#undef LPSPI1_PCS0_P2_17
+#undef LPSPI1_PCS2_P3_7
+#undef LPSPI1_PCS3_P3_6
+#undef LPSPI1_SDI_P2_15
+#undef LPUART1_CTS_B_P2_17
+#undef LPUART1_RTS_B_P2_15
+#undef LPUART2_CTS_B_P1_7
+#undef LPUART2_CTS_B_P2_4
+#undef LPUART2_RTS_B_P1_6
+#undef LPUART2_RTS_B_P2_5
+#undef LPUART2_RXD_P1_12
+#undef LPUART2_RXD_P1_4
+#undef LPUART2_TXD_P1_13
+#undef LPUART2_TXD_P1_5
+#undef LPUART2_TXD_P3_15
+#undef LPUART3_CTS_B_P3_14
+#undef LPUART3_CTS_B_P3_7
+#undef LPUART3_RTS_B_P3_15
+#undef LPUART3_RTS_B_P3_6
+#undef LPUART3_RXD_P3_0
+#undef LPUART3_RXD_P3_13
+#undef LPUART3_TXD_P3_1
+#undef LPUART3_TXD_P3_12
+#undef OPAMP0_INN_P2_13
+#undef OPAMP0_INP_P2_12
+#undef OPAMP0_OUT_P2_15
+#undef OPAMP1_INN_P2_17
+#undef OPAMP1_INP_P2_16
+#undef OPAMP1_OUT_P2_19
+#undef OPAMP2_INN_P2_1
+#undef OPAMP2_INP_P2_0
+#undef OPAMP2_OUT_P2_6
+#undef P1_12
+#undef P1_13
+#undef P1_4
+#undef P1_5
+#undef P1_6
+#undef P1_7
+#undef P2_15
+#undef P2_17
+#undef P2_19
+#undef P2_4
+#undef P2_5
+#undef P3_15
+#undef P3_6
+#undef P3_7
+#undef PWM0_A3_P3_6
+#undef PWM0_B3_P3_7
+#undef PWM0_X3_P3_15
+#undef PWM1_A0_P3_30
+#undef PWM1_A0_P3_6
+#undef PWM1_A1_P3_14
+#undef PWM1_A2_P3_12
+#undef PWM1_A3_P3_27
+#undef PWM1_B0_P3_31
+#undef PWM1_B0_P3_7
+#undef PWM1_B1_P3_15
+#undef PWM1_B2_P3_13
+#undef PWM1_B3_P3_28
+#undef PWM1_X0_P3_0
+#undef PWM1_X1_P3_1
+#undef SMARTDMA_PIO0_P1_4
+#undef SMARTDMA_PIO0_P3_0
+#undef SMARTDMA_PIO10_P3_10
+#undef SMARTDMA_PIO11_P3_11
+#undef SMARTDMA_PIO12_P3_12
+#undef SMARTDMA_PIO13_P3_13
+#undef SMARTDMA_PIO14_P3_14
+#undef SMARTDMA_PIO15_P3_15
+#undef SMARTDMA_PIO16_P2_12
+#undef SMARTDMA_PIO17_P2_13
+#undef SMARTDMA_PIO18_P2_15
+#undef SMARTDMA_PIO19_P2_16
+#undef SMARTDMA_PIO1_P1_5
+#undef SMARTDMA_PIO1_P3_1
+#undef SMARTDMA_PIO20_P2_17
+#undef SMARTDMA_PIO21_P2_19
+#undef SMARTDMA_PIO24_P2_0
+#undef SMARTDMA_PIO25_P2_1
+#undef SMARTDMA_PIO26_P2_2
+#undef SMARTDMA_PIO27_P2_3
+#undef SMARTDMA_PIO27_P3_27
+#undef SMARTDMA_PIO28_P2_4
+#undef SMARTDMA_PIO28_P3_28
+#undef SMARTDMA_PIO29_P2_5
+#undef SMARTDMA_PIO29_P3_29
+#undef SMARTDMA_PIO2_P0_6
+#undef SMARTDMA_PIO2_P1_6
+#undef SMARTDMA_PIO30_P2_6
+#undef SMARTDMA_PIO30_P3_30
+#undef SMARTDMA_PIO31_P2_7
+#undef SMARTDMA_PIO31_P3_31
+#undef SMARTDMA_PIO3_P1_7
+#undef SMARTDMA_PIO4_P1_8
+#undef SMARTDMA_PIO5_P1_9
+#undef SMARTDMA_PIO6_P0_16
+#undef SMARTDMA_PIO6_P1_10
+#undef SMARTDMA_PIO6_P3_6
+#undef SMARTDMA_PIO7_P0_17
+#undef SMARTDMA_PIO7_P1_11
+#undef SMARTDMA_PIO7_P3_7
+#undef SMARTDMA_PIO8_P1_12
+#undef SMARTDMA_PIO8_P3_8
+#undef SMARTDMA_PIO9_P1_13
+#undef SMARTDMA_PIO9_P3_9
+#undef TRIG_IN2_P1_6
+#undef TRIG_IN2_P3_7
+#undef TRIG_IN3_P1_13
+#undef TRIG_IN9_P2_17
+#undef TRIG_OUT2_P1_7
+#undef TRIG_OUT4_P2_15
+#undef TRIG_OUT5_P2_19
+#undef WUU0_IN12_P1_12
+#undef WUU0_IN21_P2_15
+#undef WUU0_IN30_P3_27
+#undef WUU0_IN8_P1_4
+#undef WUU0_IN9_P1_7
+
+/* Signals specific to this part */
+#define ADC0_A12_P3_31 A15X_MUX('3',31,0)
+#define ADC0_A13_P3_30 A15X_MUX('3',30,0)
+#define ADC0_A14_P3_29 A15X_MUX('3',29,0)
+#define ADC0_A1_P2_1 A15X_MUX('2',1,0)
+#define ADC0_A2_P2_3 A15X_MUX('2',3,0)
+#define ADC0_A3_P2_6 A15X_MUX('2',6,0)
+#define ADC0_A8_P1_10 A15X_MUX('1',10,0)
+#define ADC0_A9_P1_11 A15X_MUX('1',11,0)
+#define I3C0_PUR_P0_2 A15X_MUX('0',2,10)
+#define I3C0_PUR_P1_11 A15X_MUX('1',11,10)
+#define I3C0_SCL_P0_17 A15X_MUX('0',17,10)
+#define I3C0_SCL_P1_31 A15X_MUX('1',31,10)
+#define I3C0_SCL_P1_9 A15X_MUX('1',9,10)
+#define I3C0_SDA_P0_16 A15X_MUX('0',16,10)
+#define I3C0_SDA_P1_30 A15X_MUX('1',30,10)
+#define I3C0_SDA_P1_8 A15X_MUX('1',8,10)
+#define LPI2C0_SCLS_P1_3 A15X_MUX('1',3,3)
+#define LPI2C0_SCL_P1_1 A15X_MUX('1',1,3)
+#define LPI2C0_SCL_P3_27 A15X_MUX('3',27,2)
+#define LPI2C0_SDAS_P1_2 A15X_MUX('1',2,3)
+#define LPI2C0_SDA_P1_0 A15X_MUX('1',0,3)
+#define LPI2C0_SDA_P3_28 A15X_MUX('3',28,2)
+#define USB0_VBUS_DET_P2_12 A15X_MUX('2',12,1)
+
+#endif /* _ZEPHYR_DTS_BINDING_MCXA153VFT_WRAPPER_ */

@@ -4,1311 +4,735 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#ifndef HAL_NXP_DTS_NXP_S32_S32K342_K341_K322_172HDQFP_PINCTRL_H_
-#define HAL_NXP_DTS_NXP_S32_S32K342_K341_K322_172HDQFP_PINCTRL_H_
+/*
+ * Delta-deduplicated by dedup_pinctrl.py:
+ * based on S32K344_K324_K314_257BGA-pinctrl.h with this part's differences applied
+ * below (671 removed, 7 changed,
+ * 26 added). Regenerate with dedup_pinctrl.py;
+ * do not edit by hand.
+ * target-hash: 12f8105ca85c6145
+ */
 
-#include <zephyr/dt-bindings/pinctrl/nxp-siul2-pinctrl.h>
+#ifndef _ZEPHYR_DTS_BINDING_S32K342_K341_K322_172HDQFP_WRAPPER_
+#define _ZEPHYR_DTS_BINDING_S32K342_K341_K322_172HDQFP_WRAPPER_
 
-/* SIUL */
-#define PTA0_EIRQ0                      NXP_SIUL2_PINMUX(0, 0, 0, 0, 16, 1)
-#define PTA1_EIRQ1                      NXP_SIUL2_PINMUX(0, 0, 1, 0, 17, 1)
-#define PTA2_EIRQ2                      NXP_SIUL2_PINMUX(0, 0, 2, 0, 18, 1)
-#define PTA3_EIRQ3                      NXP_SIUL2_PINMUX(0, 0, 3, 0, 19, 1)
-#define PTA4_EIRQ4                      NXP_SIUL2_PINMUX(0, 0, 4, 0, 20, 1)
-#define PTA5_EIRQ5                      NXP_SIUL2_PINMUX(0, 0, 5, 0, 21, 1)
-#define PTA6_EIRQ6                      NXP_SIUL2_PINMUX(0, 0, 6, 0, 22, 1)
-#define PTA7_EIRQ7                      NXP_SIUL2_PINMUX(0, 0, 7, 0, 23, 1)
-#define PTA8_EIRQ16                     NXP_SIUL2_PINMUX(0, 0, 8, 0, 32, 1)
-#define PTA9_EIRQ17                     NXP_SIUL2_PINMUX(0, 0, 9, 0, 33, 1)
-#define PTA10_EIRQ18                    NXP_SIUL2_PINMUX(0, 0, 10, 0, 34, 1)
-#define PTA11_EIRQ19                    NXP_SIUL2_PINMUX(0, 0, 11, 0, 35, 1)
-#define PTA12_EIRQ20                    NXP_SIUL2_PINMUX(0, 0, 12, 0, 36, 1)
-#define PTA13_EIRQ21                    NXP_SIUL2_PINMUX(0, 0, 13, 0, 37, 1)
-#define PTA14_EIRQ22                    NXP_SIUL2_PINMUX(0, 0, 14, 0, 38, 1)
-#define PTA15_EIRQ23                    NXP_SIUL2_PINMUX(0, 0, 15, 0, 39, 1)
-#define PTA16_EIRQ4                     NXP_SIUL2_PINMUX(0, 0, 16, 0, 20, 2)
-#define PTA18_EIRQ0                     NXP_SIUL2_PINMUX(0, 0, 18, 0, 16, 2)
-#define PTA19_EIRQ1                     NXP_SIUL2_PINMUX(0, 0, 19, 0, 17, 2)
-#define PTA20_EIRQ2                     NXP_SIUL2_PINMUX(0, 0, 20, 0, 18, 2)
-#define PTA21_EIRQ3                     NXP_SIUL2_PINMUX(0, 0, 21, 0, 19, 2)
-#define PTA24_GPI24                     NXP_SIUL2_PINMUX(0, 0, 21, 0, 24, 0)
-#define PTA25_GPI25                     NXP_SIUL2_PINMUX(0, 0, 21, 0, 25, 0)
-#define PTA25_EIRQ5                     NXP_SIUL2_PINMUX(0, 0, 21, 0, 21, 2)
-#define PTA28_EIRQ6                     NXP_SIUL2_PINMUX(0, 0, 28, 0, 22, 2)
-#define PTA30_EIRQ7                     NXP_SIUL2_PINMUX(0, 0, 30, 0, 23, 2)
-#define PTB0_EIRQ8                      NXP_SIUL2_PINMUX(0, 0, 32, 0, 24, 1)
-#define PTB1_EIRQ9                      NXP_SIUL2_PINMUX(0, 0, 33, 0, 25, 1)
-#define PTB2_EIRQ10                     NXP_SIUL2_PINMUX(0, 0, 34, 0, 26, 1)
-#define PTB3_EIRQ11                     NXP_SIUL2_PINMUX(0, 0, 35, 0, 27, 1)
-#define PTB4_EIRQ12                     NXP_SIUL2_PINMUX(0, 0, 36, 0, 28, 1)
-#define PTB5_EIRQ13                     NXP_SIUL2_PINMUX(0, 0, 37, 0, 29, 1)
-#define PTB8_EIRQ14                     NXP_SIUL2_PINMUX(0, 0, 40, 0, 30, 1)
-#define PTB9_EIRQ15                     NXP_SIUL2_PINMUX(0, 0, 41, 0, 31, 1)
-#define PTB10_EIRQ24                    NXP_SIUL2_PINMUX(0, 0, 42, 0, 40, 1)
-#define PTB11_EIRQ25                    NXP_SIUL2_PINMUX(0, 0, 43, 0, 41, 1)
-#define PTB12_EIRQ26                    NXP_SIUL2_PINMUX(0, 0, 44, 0, 42, 1)
-#define PTB13_EIRQ27                    NXP_SIUL2_PINMUX(0, 0, 45, 0, 43, 1)
-#define PTB14_EIRQ28                    NXP_SIUL2_PINMUX(0, 0, 46, 0, 44, 1)
-#define PTB15_EIRQ29                    NXP_SIUL2_PINMUX(0, 0, 47, 0, 45, 1)
-#define PTB16_EIRQ30                    NXP_SIUL2_PINMUX(0, 0, 48, 0, 46, 1)
-#define PTB17_EIRQ31                    NXP_SIUL2_PINMUX(0, 0, 49, 0, 47, 1)
-#define PTB21_EIRQ8                     NXP_SIUL2_PINMUX(0, 0, 53, 0, 24, 2)
-#define PTB22_EIRQ9                     NXP_SIUL2_PINMUX(0, 0, 54, 0, 25, 2)
-#define PTB23_EIRQ10                    NXP_SIUL2_PINMUX(0, 0, 55, 0, 26, 2)
-#define PTB24_EIRQ11                    NXP_SIUL2_PINMUX(0, 0, 56, 0, 27, 2)
-#define PTB25_EIRQ12                    NXP_SIUL2_PINMUX(0, 0, 57, 0, 28, 2)
-#define PTB26_EIRQ13                    NXP_SIUL2_PINMUX(0, 0, 58, 0, 29, 2)
-#define PTB28_EIRQ14                    NXP_SIUL2_PINMUX(0, 0, 60, 0, 30, 2)
-#define PTC0_EIRQ0                      NXP_SIUL2_PINMUX(0, 0, 64, 0, 16, 3)
-#define PTC1_EIRQ1                      NXP_SIUL2_PINMUX(0, 0, 65, 0, 17, 3)
-#define PTC2_EIRQ2                      NXP_SIUL2_PINMUX(0, 0, 66, 0, 18, 3)
-#define PTC3_EIRQ3                      NXP_SIUL2_PINMUX(0, 0, 67, 0, 19, 3)
-#define PTC4_EIRQ4                      NXP_SIUL2_PINMUX(0, 0, 68, 0, 20, 3)
-#define PTC5_EIRQ5                      NXP_SIUL2_PINMUX(0, 0, 69, 0, 21, 3)
-#define PTC6_EIRQ6                      NXP_SIUL2_PINMUX(0, 0, 70, 0, 22, 3)
-#define PTC7_EIRQ7                      NXP_SIUL2_PINMUX(0, 0, 71, 0, 23, 3)
-#define PTC8_EIRQ16                     NXP_SIUL2_PINMUX(0, 0, 72, 0, 32, 2)
-#define PTC9_EIRQ17                     NXP_SIUL2_PINMUX(0, 0, 73, 0, 33, 2)
-#define PTC10_EIRQ18                    NXP_SIUL2_PINMUX(0, 0, 74, 0, 34, 2)
-#define PTC11_EIRQ19                    NXP_SIUL2_PINMUX(0, 0, 75, 0, 35, 2)
-#define PTC12_EIRQ20                    NXP_SIUL2_PINMUX(0, 0, 76, 0, 36, 2)
-#define PTC13_EIRQ21                    NXP_SIUL2_PINMUX(0, 0, 77, 0, 37, 2)
-#define PTC14_EIRQ22                    NXP_SIUL2_PINMUX(0, 0, 78, 0, 38, 2)
-#define PTC15_EIRQ23                    NXP_SIUL2_PINMUX(0, 0, 79, 0, 39, 2)
-#define PTC20_EIRQ16                    NXP_SIUL2_PINMUX(0, 0, 84, 0, 32, 3)
-#define PTC21_EIRQ17                    NXP_SIUL2_PINMUX(0, 0, 85, 0, 33, 3)
-#define PTC23_EIRQ18                    NXP_SIUL2_PINMUX(0, 0, 87, 0, 34, 3)
-#define PTC24_EIRQ19                    NXP_SIUL2_PINMUX(0, 0, 88, 0, 35, 3)
-#define PTC25_EIRQ20                    NXP_SIUL2_PINMUX(0, 0, 89, 0, 36, 3)
-#define PTC26_EIRQ21                    NXP_SIUL2_PINMUX(0, 0, 90, 0, 37, 3)
-#define PTC27_EIRQ22                    NXP_SIUL2_PINMUX(0, 0, 91, 0, 38, 3)
-#define PTC29_EIRQ23                    NXP_SIUL2_PINMUX(0, 0, 93, 0, 39, 3)
-#define PTD0_EIRQ8                      NXP_SIUL2_PINMUX(0, 0, 96, 0, 24, 3)
-#define PTD1_EIRQ9                      NXP_SIUL2_PINMUX(0, 0, 97, 0, 25, 3)
-#define PTD2_EIRQ10                     NXP_SIUL2_PINMUX(0, 0, 98, 0, 26, 3)
-#define PTD3_EIRQ11                     NXP_SIUL2_PINMUX(0, 0, 99, 0, 27, 3)
-#define PTD4_EIRQ12                     NXP_SIUL2_PINMUX(0, 0, 100, 0, 28, 3)
-#define PTD5_EIRQ13                     NXP_SIUL2_PINMUX(0, 0, 101, 0, 29, 3)
-#define PTD6_EIRQ14                     NXP_SIUL2_PINMUX(0, 0, 102, 0, 30, 3)
-#define PTD7_EIRQ15                     NXP_SIUL2_PINMUX(0, 0, 103, 0, 31, 3)
-#define PTD8_EIRQ24                     NXP_SIUL2_PINMUX(0, 0, 104, 0, 40, 2)
-#define PTD9_EIRQ25                     NXP_SIUL2_PINMUX(0, 0, 105, 0, 41, 2)
-#define PTD10_EIRQ26                    NXP_SIUL2_PINMUX(0, 0, 106, 0, 42, 2)
-#define PTD11_EIRQ27                    NXP_SIUL2_PINMUX(0, 0, 107, 0, 43, 2)
-#define PTD12_EIRQ28                    NXP_SIUL2_PINMUX(0, 0, 108, 0, 44, 2)
-#define PTD13_EIRQ29                    NXP_SIUL2_PINMUX(0, 0, 109, 0, 45, 2)
-#define PTD14_EIRQ30                    NXP_SIUL2_PINMUX(0, 0, 110, 0, 46, 3)
-#define PTD15_EIRQ31                    NXP_SIUL2_PINMUX(0, 0, 111, 0, 47, 2)
-#define PTD17_EIRQ24                    NXP_SIUL2_PINMUX(0, 0, 113, 0, 40, 3)
-#define PTD20_EIRQ25                    NXP_SIUL2_PINMUX(0, 0, 116, 0, 41, 3)
-#define PTD21_EIRQ26                    NXP_SIUL2_PINMUX(0, 0, 117, 0, 42, 3)
-#define PTD22_EIRQ27                    NXP_SIUL2_PINMUX(0, 0, 118, 0, 43, 3)
-#define PTD23_EIRQ28                    NXP_SIUL2_PINMUX(0, 0, 119, 0, 44, 3)
-#define PTD24_EIRQ29                    NXP_SIUL2_PINMUX(0, 0, 120, 0, 45, 3)
-#define PTD27_EIRQ30                    NXP_SIUL2_PINMUX(0, 0, 123, 0, 46, 2)
-#define PTD28_EIRQ31                    NXP_SIUL2_PINMUX(0, 0, 124, 0, 47, 3)
-#define PTE0_EIRQ0                      NXP_SIUL2_PINMUX(0, 0, 128, 0, 16, 4)
-#define PTE1_EIRQ1                      NXP_SIUL2_PINMUX(0, 0, 129, 0, 17, 4)
-#define PTE2_EIRQ2                      NXP_SIUL2_PINMUX(0, 0, 130, 0, 18, 4)
-#define PTE3_EIRQ3                      NXP_SIUL2_PINMUX(0, 0, 131, 0, 19, 4)
-#define PTE4_EIRQ4                      NXP_SIUL2_PINMUX(0, 0, 132, 0, 20, 4)
-#define PTE5_EIRQ5                      NXP_SIUL2_PINMUX(0, 0, 133, 0, 21, 4)
-#define PTE6_EIRQ6                      NXP_SIUL2_PINMUX(0, 0, 134, 0, 22, 4)
-#define PTE8_EIRQ7                      NXP_SIUL2_PINMUX(0, 0, 136, 0, 23, 4)
-#define PTE9_EIRQ8                      NXP_SIUL2_PINMUX(0, 0, 137, 0, 24, 4)
-#define PTE10_EIRQ9                     NXP_SIUL2_PINMUX(0, 0, 138, 0, 25, 4)
-#define PTE11_EIRQ10                    NXP_SIUL2_PINMUX(0, 0, 139, 0, 26, 4)
-#define PTE12_EIRQ11                    NXP_SIUL2_PINMUX(0, 0, 140, 0, 27, 4)
-#define PTE13_EIRQ12                    NXP_SIUL2_PINMUX(0, 0, 141, 0, 28, 4)
-#define PTE14_EIRQ13                    NXP_SIUL2_PINMUX(0, 0, 142, 0, 29, 4)
-#define PTE15_EIRQ14                    NXP_SIUL2_PINMUX(0, 0, 143, 0, 30, 4)
-#define PTE16_EIRQ15                    NXP_SIUL2_PINMUX(0, 0, 144, 0, 31, 4)
+#include "S32K344_K324_K314_257BGA-pinctrl.h"
 
-/* EMIOS_0 */
-#define PTA0_EMIOS_0_CH17_Y_O           NXP_SIUL2_PINMUX(0, 0, 0, 2, 0, 0)
-#define PTA0_EMIOS_0_CH17_Y_I           NXP_SIUL2_PINMUX(0, 0, 0, 0, 65, 2)
-#define PTA1_EMIOS_0_CH9_H_O            NXP_SIUL2_PINMUX(0, 0, 1, 2, 0, 0)
-#define PTA1_EMIOS_0_CH9_H_I            NXP_SIUL2_PINMUX(0, 0, 1, 0, 57, 1)
-#define PTA10_EMIOS_0_CH12_H_O          NXP_SIUL2_PINMUX(0, 0, 10, 2, 0, 0)
-#define PTA10_EMIOS_0_CH12_H_I          NXP_SIUL2_PINMUX(0, 0, 10, 0, 60, 2)
-#define PTA11_EMIOS_0_CH13_H_O          NXP_SIUL2_PINMUX(0, 0, 11, 2, 0, 0)
-#define PTA11_EMIOS_0_CH13_H_I          NXP_SIUL2_PINMUX(0, 0, 11, 0, 61, 1)
-#define PTA12_EMIOS_0_CH14_H_O          NXP_SIUL2_PINMUX(0, 0, 12, 2, 0, 0)
-#define PTA12_EMIOS_0_CH14_H_I          NXP_SIUL2_PINMUX(0, 0, 12, 0, 62, 1)
-#define PTA13_EMIOS_0_CH15_H_O          NXP_SIUL2_PINMUX(0, 0, 13, 2, 0, 0)
-#define PTA13_EMIOS_0_CH15_H_I          NXP_SIUL2_PINMUX(0, 0, 13, 0, 63, 2)
-#define PTA15_EMIOS_0_CH10_H_O          NXP_SIUL2_PINMUX(0, 0, 15, 2, 0, 0)
-#define PTA15_EMIOS_0_CH10_H_I          NXP_SIUL2_PINMUX(0, 0, 15, 0, 58, 2)
-#define PTA16_EMIOS_0_CH11_H_O          NXP_SIUL2_PINMUX(0, 0, 16, 2, 0, 0)
-#define PTA16_EMIOS_0_CH11_H_I          NXP_SIUL2_PINMUX(0, 0, 16, 0, 59, 2)
-#define PTA17_EMIOS_0_CH6_G_O           NXP_SIUL2_PINMUX(0, 0, 17, 2, 0, 0)
-#define PTA17_EMIOS_0_CH6_G_I           NXP_SIUL2_PINMUX(0, 0, 17, 0, 54, 2)
-#define PTB0_EMIOS_0_CH3_G_O            NXP_SIUL2_PINMUX(0, 0, 32, 4, 0, 0)
-#define PTB0_EMIOS_0_CH3_G_I            NXP_SIUL2_PINMUX(0, 0, 32, 0, 51, 4)
-#define PTB1_EMIOS_0_CH7_G_O            NXP_SIUL2_PINMUX(0, 0, 33, 4, 0, 0)
-#define PTB1_EMIOS_0_CH7_G_I            NXP_SIUL2_PINMUX(0, 0, 33, 0, 55, 3)
-#define PTB2_EMIOS_0_CH8_X_O            NXP_SIUL2_PINMUX(0, 0, 34, 2, 0, 0)
-#define PTB2_EMIOS_0_CH8_X_I            NXP_SIUL2_PINMUX(0, 0, 34, 0, 56, 1)
-#define PTB3_EMIOS_0_CH9_H_O            NXP_SIUL2_PINMUX(0, 0, 35, 2, 0, 0)
-#define PTB3_EMIOS_0_CH9_H_I            NXP_SIUL2_PINMUX(0, 0, 35, 0, 57, 2)
-#define PTB4_EMIOS_0_CH4_G_O            NXP_SIUL2_PINMUX(0, 0, 36, 2, 0, 0)
-#define PTB4_EMIOS_0_CH4_G_I            NXP_SIUL2_PINMUX(0, 0, 36, 0, 52, 1)
-#define PTB5_EMIOS_0_CH5_G_O            NXP_SIUL2_PINMUX(0, 0, 37, 2, 0, 0)
-#define PTB5_EMIOS_0_CH5_G_I            NXP_SIUL2_PINMUX(0, 0, 37, 0, 53, 1)
-#define PTB12_EMIOS_0_CH0_X_O           NXP_SIUL2_PINMUX(0, 0, 44, 2, 0, 0)
-#define PTB12_EMIOS_0_CH0_X_I           NXP_SIUL2_PINMUX(0, 0, 44, 0, 48, 1)
-#define PTB13_EMIOS_0_CH1_G_O           NXP_SIUL2_PINMUX(0, 0, 45, 2, 0, 0)
-#define PTB13_EMIOS_0_CH1_G_I           NXP_SIUL2_PINMUX(0, 0, 45, 0, 49, 2)
-#define PTB14_EMIOS_0_CH2_G_O           NXP_SIUL2_PINMUX(0, 0, 46, 2, 0, 0)
-#define PTB14_EMIOS_0_CH2_G_I           NXP_SIUL2_PINMUX(0, 0, 46, 0, 50, 3)
-#define PTB15_EMIOS_0_CH3_G_O           NXP_SIUL2_PINMUX(0, 0, 47, 2, 0, 0)
-#define PTB15_EMIOS_0_CH3_G_I           NXP_SIUL2_PINMUX(0, 0, 47, 0, 51, 1)
-#define PTB16_EMIOS_0_CH4_G_O           NXP_SIUL2_PINMUX(0, 0, 48, 2, 0, 0)
-#define PTB16_EMIOS_0_CH4_G_I           NXP_SIUL2_PINMUX(0, 0, 48, 0, 52, 2)
-#define PTB17_EMIOS_0_CH5_G_O           NXP_SIUL2_PINMUX(0, 0, 49, 2, 0, 0)
-#define PTB17_EMIOS_0_CH5_G_I           NXP_SIUL2_PINMUX(0, 0, 49, 0, 53, 2)
-#define PTC0_EMIOS_0_CH0_X_O            NXP_SIUL2_PINMUX(0, 0, 64, 2, 0, 0)
-#define PTC0_EMIOS_0_CH14_H_O           NXP_SIUL2_PINMUX(0, 0, 64, 6, 0, 0)
-#define PTC0_EMIOS_0_CH0_X_I            NXP_SIUL2_PINMUX(0, 0, 64, 0, 48, 3)
-#define PTC0_EMIOS_0_CH14_H_I           NXP_SIUL2_PINMUX(0, 0, 64, 0, 62, 2)
-#define PTC1_EMIOS_0_CH1_G_O            NXP_SIUL2_PINMUX(0, 0, 65, 2, 0, 0)
-#define PTC1_EMIOS_0_CH15_H_O           NXP_SIUL2_PINMUX(0, 0, 65, 6, 0, 0)
-#define PTC1_EMIOS_0_CH1_G_I            NXP_SIUL2_PINMUX(0, 0, 65, 0, 49, 1)
-#define PTC1_EMIOS_0_CH15_H_I           NXP_SIUL2_PINMUX(0, 0, 65, 0, 63, 1)
-#define PTC2_EMIOS_0_CH2_G_O            NXP_SIUL2_PINMUX(0, 0, 66, 2, 0, 0)
-#define PTC2_EMIOS_0_CH2_G_I            NXP_SIUL2_PINMUX(0, 0, 66, 0, 50, 2)
-#define PTC3_EMIOS_0_CH3_G_O            NXP_SIUL2_PINMUX(0, 0, 67, 2, 0, 0)
-#define PTC3_EMIOS_0_CH3_G_I            NXP_SIUL2_PINMUX(0, 0, 67, 0, 51, 3)
-#define PTC4_EMIOS_0_CH8_X_O            NXP_SIUL2_PINMUX(0, 0, 68, 2, 0, 0)
-#define PTC4_EMIOS_0_CH8_X_I            NXP_SIUL2_PINMUX(0, 0, 68, 0, 56, 2)
-#define PTC5_EMIOS_0_CH16_X_O           NXP_SIUL2_PINMUX(0, 0, 69, 2, 0, 0)
-#define PTC5_EMIOS_0_CH16_X_I           NXP_SIUL2_PINMUX(0, 0, 69, 0, 64, 2)
-#define PTC10_EMIOS_0_CH6_G_O           NXP_SIUL2_PINMUX(0, 0, 74, 1, 0, 0)
-#define PTC10_EMIOS_0_CH6_G_I           NXP_SIUL2_PINMUX(0, 0, 74, 0, 54, 4)
-#define PTC12_EMIOS_0_CH22_X_O          NXP_SIUL2_PINMUX(0, 0, 76, 3, 0, 0)
-#define PTC12_EMIOS_0_CH22_X_I          NXP_SIUL2_PINMUX(0, 0, 76, 0, 70, 2)
-#define PTC13_EMIOS_0_CH23_X_O          NXP_SIUL2_PINMUX(0, 0, 77, 3, 0, 0)
-#define PTC13_EMIOS_0_CH23_X_I          NXP_SIUL2_PINMUX(0, 0, 77, 0, 71, 1)
-#define PTC14_EMIOS_0_CH10_H_O          NXP_SIUL2_PINMUX(0, 0, 78, 2, 0, 0)
-#define PTC14_EMIOS_0_CH10_H_I          NXP_SIUL2_PINMUX(0, 0, 78, 0, 58, 1)
-#define PTC15_EMIOS_0_CH11_H_O          NXP_SIUL2_PINMUX(0, 0, 79, 2, 0, 0)
-#define PTC15_EMIOS_0_CH11_H_I          NXP_SIUL2_PINMUX(0, 0, 79, 0, 59, 1)
-#define PTD0_EMIOS_0_CH2_G_O            NXP_SIUL2_PINMUX(0, 0, 96, 2, 0, 0)
-#define PTD0_EMIOS_0_CH16_X_O           NXP_SIUL2_PINMUX(0, 0, 96, 4, 0, 0)
-#define PTD0_EMIOS_0_CH2_G_I            NXP_SIUL2_PINMUX(0, 0, 96, 0, 50, 1)
-#define PTD0_EMIOS_0_CH16_X_I           NXP_SIUL2_PINMUX(0, 0, 96, 0, 64, 1)
-#define PTD1_EMIOS_0_CH3_G_O            NXP_SIUL2_PINMUX(0, 0, 97, 2, 0, 0)
-#define PTD1_EMIOS_0_CH17_Y_O           NXP_SIUL2_PINMUX(0, 0, 97, 4, 0, 0)
-#define PTD1_EMIOS_0_CH3_G_I            NXP_SIUL2_PINMUX(0, 0, 97, 0, 51, 2)
-#define PTD1_EMIOS_0_CH17_Y_I           NXP_SIUL2_PINMUX(0, 0, 97, 0, 65, 1)
-#define PTD5_EMIOS_0_CH19_Y_O           NXP_SIUL2_PINMUX(0, 0, 101, 2, 0, 0)
-#define PTD5_EMIOS_0_CH2_G_O            NXP_SIUL2_PINMUX(0, 0, 101, 3, 0, 0)
-#define PTD5_EMIOS_0_CH2_G_I            NXP_SIUL2_PINMUX(0, 0, 101, 0, 50, 4)
-#define PTD5_EMIOS_0_CH19_Y_I           NXP_SIUL2_PINMUX(0, 0, 101, 0, 67, 2)
-#define PTD8_EMIOS_0_CH12_H_O           NXP_SIUL2_PINMUX(0, 0, 104, 6, 0, 0)
-#define PTD8_EMIOS_0_CH12_H_I           NXP_SIUL2_PINMUX(0, 0, 104, 0, 60, 1)
-#define PTD9_EMIOS_0_CH13_H_O           NXP_SIUL2_PINMUX(0, 0, 105, 6, 0, 0)
-#define PTD9_EMIOS_0_CH13_H_I           NXP_SIUL2_PINMUX(0, 0, 105, 0, 61, 2)
-#define PTD10_EMIOS_0_CH16_X_O          NXP_SIUL2_PINMUX(0, 0, 106, 2, 0, 0)
-#define PTD10_EMIOS_0_CH16_X_I          NXP_SIUL2_PINMUX(0, 0, 106, 0, 64, 3)
-#define PTD11_EMIOS_0_CH17_Y_O          NXP_SIUL2_PINMUX(0, 0, 107, 2, 0, 0)
-#define PTD11_EMIOS_0_CH17_Y_I          NXP_SIUL2_PINMUX(0, 0, 107, 0, 65, 3)
-#define PTD12_EMIOS_0_CH18_Y_O          NXP_SIUL2_PINMUX(0, 0, 108, 2, 0, 0)
-#define PTD12_EMIOS_0_CH18_Y_I          NXP_SIUL2_PINMUX(0, 0, 108, 0, 66, 1)
-#define PTD13_EMIOS_0_CH20_Y_O          NXP_SIUL2_PINMUX(0, 0, 109, 2, 0, 0)
-#define PTD13_EMIOS_0_CH20_Y_I          NXP_SIUL2_PINMUX(0, 0, 109, 0, 68, 1)
-#define PTD14_EMIOS_0_CH21_Y_O          NXP_SIUL2_PINMUX(0, 0, 110, 2, 0, 0)
-#define PTD14_EMIOS_0_CH21_Y_I          NXP_SIUL2_PINMUX(0, 0, 110, 0, 69, 1)
-#define PTD15_EMIOS_0_CH0_X_O           NXP_SIUL2_PINMUX(0, 0, 111, 2, 0, 0)
-#define PTD15_EMIOS_0_CH0_X_I           NXP_SIUL2_PINMUX(0, 0, 111, 0, 48, 2)
-#define PTD16_EMIOS_0_CH1_G_O           NXP_SIUL2_PINMUX(0, 0, 112, 2, 0, 0)
-#define PTD16_EMIOS_0_CH1_G_I           NXP_SIUL2_PINMUX(0, 0, 112, 0, 49, 3)
-#define PTD17_EMIOS_0_CH18_Y_O          NXP_SIUL2_PINMUX(0, 0, 113, 2, 0, 0)
-#define PTD17_EMIOS_0_CH18_Y_I          NXP_SIUL2_PINMUX(0, 0, 113, 0, 66, 3)
-#define PTE2_EMIOS_0_CH3_G_O            NXP_SIUL2_PINMUX(0, 0, 130, 3, 0, 0)
-#define PTE2_EMIOS_0_CH3_G_I            NXP_SIUL2_PINMUX(0, 0, 130, 0, 51, 5)
-#define PTE3_EMIOS_0_CH19_Y_O           NXP_SIUL2_PINMUX(0, 0, 131, 3, 0, 0)
-#define PTE3_EMIOS_0_CH19_Y_I           NXP_SIUL2_PINMUX(0, 0, 131, 0, 67, 4)
-#define PTE4_EMIOS_0_CH18_Y_O           NXP_SIUL2_PINMUX(0, 0, 132, 4, 0, 0)
-#define PTE4_EMIOS_0_CH18_Y_I           NXP_SIUL2_PINMUX(0, 0, 132, 0, 66, 2)
-#define PTE5_EMIOS_0_CH19_Y_O           NXP_SIUL2_PINMUX(0, 0, 133, 4, 0, 0)
-#define PTE5_EMIOS_0_CH19_Y_I           NXP_SIUL2_PINMUX(0, 0, 133, 0, 67, 1)
-#define PTE7_EMIOS_0_CH7_G_O            NXP_SIUL2_PINMUX(0, 0, 135, 2, 0, 0)
-#define PTE7_EMIOS_0_CH7_G_I            NXP_SIUL2_PINMUX(0, 0, 135, 0, 55, 2)
-#define PTE8_EMIOS_0_CH6_G_O            NXP_SIUL2_PINMUX(0, 0, 136, 2, 0, 0)
-#define PTE8_EMIOS_0_CH6_G_I            NXP_SIUL2_PINMUX(0, 0, 136, 0, 54, 1)
-#define PTE9_EMIOS_0_CH7_G_O            NXP_SIUL2_PINMUX(0, 0, 137, 2, 0, 0)
-#define PTE9_EMIOS_0_CH7_G_I            NXP_SIUL2_PINMUX(0, 0, 137, 0, 55, 1)
-#define PTE10_EMIOS_0_CH20_Y_O          NXP_SIUL2_PINMUX(0, 0, 138, 4, 0, 0)
-#define PTE10_EMIOS_0_CH20_Y_I          NXP_SIUL2_PINMUX(0, 0, 138, 0, 68, 2)
-#define PTE11_EMIOS_0_CH1_G_O           NXP_SIUL2_PINMUX(0, 0, 139, 3, 0, 0)
-#define PTE11_EMIOS_0_CH21_Y_O          NXP_SIUL2_PINMUX(0, 0, 139, 4, 0, 0)
-#define PTE11_EMIOS_0_CH1_G_I           NXP_SIUL2_PINMUX(0, 0, 139, 0, 49, 4)
-#define PTE11_EMIOS_0_CH21_Y_I          NXP_SIUL2_PINMUX(0, 0, 139, 0, 69, 2)
-#define PTE14_EMIOS_0_CH19_Y_O          NXP_SIUL2_PINMUX(0, 0, 142, 1, 0, 0)
-#define PTE14_EMIOS_0_CH19_Y_I          NXP_SIUL2_PINMUX(0, 0, 142, 0, 67, 3)
-#define PTE15_EMIOS_0_CH22_X_O          NXP_SIUL2_PINMUX(0, 0, 143, 4, 0, 0)
-#define PTE15_EMIOS_0_CH22_X_I          NXP_SIUL2_PINMUX(0, 0, 143, 0, 70, 1)
-#define PTE16_EMIOS_0_CH23_X_O          NXP_SIUL2_PINMUX(0, 0, 144, 4, 0, 0)
-#define PTE16_EMIOS_0_CH23_X_I          NXP_SIUL2_PINMUX(0, 0, 144, 0, 71, 2)
+/* Signals not present on this part */
+#undef PTA0_LPSPI4_PCS2_I
+#undef PTA0_LPSPI4_PCS2_O
+#undef PTA12_LPUART11_RX
+#undef PTA13_LPUART11_TX_I
+#undef PTA13_LPUART11_TX_O
+#undef PTA14_EMIOS_2_CH18_Y_I
+#undef PTA14_EMIOS_2_CH18_Y_O
+#undef PTA14_LPSPI5_PCS1_I
+#undef PTA14_LPSPI5_PCS1_O
+#undef PTA15_LPSPI5_PCS0_I
+#undef PTA15_LPSPI5_PCS0_O
+#undef PTA15_LPUART6_RX
+#undef PTA16_LPSPI4_PCS3_I
+#undef PTA16_LPSPI4_PCS3_O
+#undef PTA16_LPUART6_TX_I
+#undef PTA16_LPUART6_TX_O
+#undef PTA17_LPUART4_TX_I
+#undef PTA17_LPUART4_TX_O
+#undef PTA18_EMIOS_2_CH0_X_I
+#undef PTA18_EMIOS_2_CH0_X_O
+#undef PTA19_EMIOS_2_CH1_H_I
+#undef PTA19_EMIOS_2_CH1_H_O
+#undef PTA1_LPSPI4_PCS1_I
+#undef PTA1_LPSPI4_PCS1_O
+#undef PTA20_EMIOS_2_CH2_H_I
+#undef PTA20_EMIOS_2_CH2_H_O
+#undef PTA21_EMIOS_2_CH3_H_I
+#undef PTA21_EMIOS_2_CH3_H_O
+#undef PTA22_CAN1_RX
+#undef PTA22_EMIOS_1_CH4_H_I
+#undef PTA22_EMIOS_1_CH4_H_O
+#undef PTA22_FXIO_D1_I
+#undef PTA22_FXIO_D1_O
+#undef PTA22_LPSPI1_PCS1_I
+#undef PTA22_LPSPI1_PCS1_O
+#undef PTA23_CAN1_TX
+#undef PTA23_EMIOS_1_CH6_H_I
+#undef PTA23_EMIOS_1_CH6_H_O
+#undef PTA23_FXIO_D2_I
+#undef PTA23_FXIO_D2_O
+#undef PTA25_EMIOS_2_CH8_X
+#undef PTA26_EMAC_PPS0_I
+#undef PTA26_EMAC_PPS0_O
+#undef PTA26_EMIOS_1_CH9_H_I
+#undef PTA26_EMIOS_1_CH9_H_O
+#undef PTA26_EMIOS_2_CH9_H_I
+#undef PTA26_EMIOS_2_CH9_H_O
+#undef PTA26_FXIO_D1_I
+#undef PTA26_FXIO_D1_O
+#undef PTA26_LPSPI0_PCS0_I
+#undef PTA26_LPSPI0_PCS0_O
+#undef PTA26_LPSPI1_PCS0_I
+#undef PTA26_LPSPI1_PCS0_O
+#undef PTA27_EMIOS_2_CH10_H_I
+#undef PTA27_EMIOS_2_CH10_H_O
+#undef PTA28_EMIOS_2_CH11_H_I
+#undef PTA28_EMIOS_2_CH11_H_O
+#undef PTA29_EMIOS_2_CH12_H_I
+#undef PTA29_EMIOS_2_CH12_H_O
+#undef PTA2_LPSPI5_SIN_I
+#undef PTA2_LPSPI5_SIN_O
+#undef PTA30_EMIOS_2_CH13_H_I
+#undef PTA30_EMIOS_2_CH13_H_O
+#undef PTA3_LPSPI5_SCK_I
+#undef PTA3_LPSPI5_SCK_O
+#undef PTA8_EMIOS_2_CH7_H_I
+#undef PTA8_EMIOS_2_CH7_H_O
+#undef PTA9_CMP2_OUT
+#undef PTB10_LPSPI4_SCK_I
+#undef PTB10_LPSPI4_SCK_O
+#undef PTB10_LPUART9_TX_I
+#undef PTB10_LPUART9_TX_O
+#undef PTB11_LPSPI4_SIN_I
+#undef PTB11_LPSPI4_SIN_O
+#undef PTB12_LPUART8_RX
+#undef PTB13_LPUART8_TX_I
+#undef PTB13_LPUART8_TX_O
+#undef PTB14_LPUART7_RX
+#undef PTB15_LPUART7_TX_I
+#undef PTB15_LPUART7_TX_O
+#undef PTB16_LPUART4_TX_I
+#undef PTB16_LPUART4_TX_O
+#undef PTB17_LPUART4_RX
+#undef PTB18_EMIOS_2_CH14_H_I
+#undef PTB18_EMIOS_2_CH14_H_O
+#undef PTB18_LPUART13_TX_I
+#undef PTB18_LPUART13_TX_O
+#undef PTB19_EMIOS_2_CH15_H_I
+#undef PTB19_EMIOS_2_CH15_H_O
+#undef PTB19_LPUART13_RX
+#undef PTB20_EMIOS_2_CH16_X_I
+#undef PTB20_EMIOS_2_CH16_X_O
+#undef PTB20_LPUART14_TX_I
+#undef PTB20_LPUART14_TX_O
+#undef PTB21_EMIOS_2_CH17_Y_I
+#undef PTB21_EMIOS_2_CH17_Y_O
+#undef PTB21_LPUART14_RX
+#undef PTB22_EMIOS_2_CH18_Y_I
+#undef PTB22_EMIOS_2_CH18_Y_O
+#undef PTB23_EMIOS_2_CH19_Y_I
+#undef PTB23_EMIOS_2_CH19_Y_O
+#undef PTB24_EMIOS_2_CH20_Y_I
+#undef PTB24_EMIOS_2_CH20_Y_O
+#undef PTB25_EMIOS_2_CH21_Y_I
+#undef PTB25_EMIOS_2_CH21_Y_O
+#undef PTB25_LPUART15_TX_I
+#undef PTB25_LPUART15_TX_O
+#undef PTB26_EMIOS_2_CH22_X_I
+#undef PTB26_EMIOS_2_CH22_X_O
+#undef PTB26_LPUART15_RX
+#undef PTB27_EMIOS_2_CH23_X_I
+#undef PTB27_EMIOS_2_CH23_X_O
+#undef PTB27_LPUART5_TX_I
+#undef PTB27_LPUART5_TX_O
+#undef PTB28_EMIOS_2_CH10_H_I
+#undef PTB28_EMIOS_2_CH10_H_O
+#undef PTB28_LPUART5_RX
+#undef PTB29_EMIOS_2_CH11_H_I
+#undef PTB29_EMIOS_2_CH11_H_O
+#undef PTB29_LPUART6_TX_I
+#undef PTB29_LPUART6_TX_O
+#undef PTB2_CAN4_RX
+#undef PTB2_LPUART9_RX
+#undef PTB30_FXIO_D11_I
+#undef PTB30_FXIO_D11_O
+#undef PTB30_HSE_TAMPER_LOOP_OUT0
+#undef PTB31_EIRQ15
+#undef PTB31_HSE_TAMPER_EXTIN0
+#undef PTB3_CAN4_TX
+#undef PTB3_LPUART9_TX_I
+#undef PTB3_LPUART9_TX_O
+#undef PTB8_LPSPI4_PCS0_I
+#undef PTB8_LPSPI4_PCS0_O
+#undef PTB9_LPSPI4_SOUT_I
+#undef PTB9_LPSPI4_SOUT_O
+#undef PTB9_LPUART9_RX
+#undef PTC10_CAN5_TX
+#undef PTC10_LPSPI4_PCS0_I
+#undef PTC10_LPSPI4_PCS0_O
+#undef PTC10_LPUART11_TX_I
+#undef PTC10_LPUART11_TX_O
+#undef PTC11_CAN5_RX
+#undef PTC11_LPSPI4_SOUT_I
+#undef PTC11_LPSPI4_SOUT_O
+#undef PTC11_LPUART11_RX
+#undef PTC12_LPUART10_RX
+#undef PTC13_LPUART10_TX_I
+#undef PTC13_LPUART10_TX_O
+#undef PTC16_EMIOS_2_CH9_H_I
+#undef PTC16_EMIOS_2_CH9_H_O
+#undef PTC18_EMIOS_2_CH12_H_I
+#undef PTC18_EMIOS_2_CH12_H_O
+#undef PTC18_LPUART6_RX
+#undef PTC19_EMIOS_2_CH13_H_I
+#undef PTC19_EMIOS_2_CH13_H_O
+#undef PTC19_LPUART7_TX_I
+#undef PTC19_LPUART7_TX_O
+#undef PTC20_EMIOS_2_CH14_H_I
+#undef PTC20_EMIOS_2_CH14_H_O
+#undef PTC20_LPUART7_RX
+#undef PTC21_EMIOS_2_CH15_H_I
+#undef PTC21_EMIOS_2_CH15_H_O
+#undef PTC22_EMIOS_0_CH8_X_I
+#undef PTC22_EMIOS_0_CH8_X_O
+#undef PTC24_EMIOS_2_CH0_X_I
+#undef PTC24_EMIOS_2_CH0_X_O
+#undef PTC24_LPUART12_TX_I
+#undef PTC24_LPUART12_TX_O
+#undef PTC25_EMIOS_2_CH1_H_I
+#undef PTC25_EMIOS_2_CH1_H_O
+#undef PTC25_LPSPI4_PCS1_I
+#undef PTC25_LPSPI4_PCS1_O
+#undef PTC25_LPUART12_RX
+#undef PTC26_CAN5_RX
+#undef PTC26_EMIOS_2_CH2_H_I
+#undef PTC26_EMIOS_2_CH2_H_O
+#undef PTC26_LPSPI4_SIN_I
+#undef PTC26_LPSPI4_SIN_O
+#undef PTC26_LPUART13_TX_I
+#undef PTC26_LPUART13_TX_O
+#undef PTC27_CAN5_TX
+#undef PTC27_EMIOS_2_CH3_H_I
+#undef PTC27_EMIOS_2_CH3_H_O
+#undef PTC27_LPSPI4_SCK_I
+#undef PTC27_LPSPI4_SCK_O
+#undef PTC27_LPUART13_RX
+#undef PTC29_EMIOS_2_CH4_H_I
+#undef PTC29_EMIOS_2_CH4_H_O
+#undef PTC2_TRACE_ETM_CLKOUT
+#undef PTC30_CAN4_TX
+#undef PTC30_EMIOS_2_CH5_H_I
+#undef PTC30_EMIOS_2_CH5_H_O
+#undef PTC31_CAN4_RX
+#undef PTC31_EMIOS_2_CH6_H_I
+#undef PTC31_EMIOS_2_CH6_H_O
+#undef PTC5_CMP2_RR_ACTIVE
+#undef PTD0_LPUART5_RX
+#undef PTD10_TRACE_ETM_D3
+#undef PTD11_TRACE_ETM_D2
+#undef PTD12_TRACE_ETM_D1
+#undef PTD13_LPSPI5_SIN_I
+#undef PTD13_LPSPI5_SIN_O
+#undef PTD14_LPSPI5_SCK_I
+#undef PTD14_LPSPI5_SCK_O
+#undef PTD15_LPUART8_RX
+#undef PTD16_LPUART8_TX_I
+#undef PTD16_LPUART8_TX_O
+#undef PTD17_CAN5_RX
+#undef PTD17_LPSPI5_PCS0_I
+#undef PTD17_LPSPI5_PCS0_O
+#undef PTD18_CAN2_TX
+#undef PTD18_EMIOS_1_CH15_H_I
+#undef PTD18_EMIOS_1_CH15_H_O
+#undef PTD18_FXIO_D2_I
+#undef PTD18_FXIO_D2_O
+#undef PTD19_CAN2_RX
+#undef PTD19_EMIOS_1_CH16_X_I
+#undef PTD19_EMIOS_1_CH16_X_O
+#undef PTD19_FXIO_D3_I
+#undef PTD19_FXIO_D3_O
+#undef PTD1_LPUART5_TX_I
+#undef PTD1_LPUART5_TX_O
+#undef PTD20_EMIOS_2_CH0_X_I
+#undef PTD20_EMIOS_2_CH0_X_O
+#undef PTD21_EMIOS_2_CH8_X_I
+#undef PTD21_EMIOS_2_CH8_X_O
+#undef PTD22_EMIOS_2_CH22_X_I
+#undef PTD22_EMIOS_2_CH22_X_O
+#undef PTD23_EMIOS_2_CH23_X_I
+#undef PTD23_EMIOS_2_CH23_X_O
+#undef PTD25_EMIOS_1_CH22_X_I
+#undef PTD25_EMIOS_1_CH22_X_O
+#undef PTD26_EMIOS_2_CH7_H_I
+#undef PTD26_EMIOS_2_CH7_H_O
+#undef PTD26_LPSPI5_SCK_I
+#undef PTD26_LPSPI5_SCK_O
+#undef PTD26_LPUART14_TX_I
+#undef PTD26_LPUART14_TX_O
+#undef PTD27_EMIOS_2_CH9_H_I
+#undef PTD27_EMIOS_2_CH9_H_O
+#undef PTD27_LPSPI5_SOUT_I
+#undef PTD27_LPSPI5_SOUT_O
+#undef PTD27_LPUART14_RX
+#undef PTD28_EMIOS_2_CH0_X_I
+#undef PTD28_EMIOS_2_CH0_X_O
+#undef PTD28_LPSPI5_SIN_I
+#undef PTD28_LPSPI5_SIN_O
+#undef PTD28_LPUART15_TX_I
+#undef PTD28_LPUART15_TX_O
+#undef PTD29_EMIOS_2_CH8_X_I
+#undef PTD29_EMIOS_2_CH8_X_O
+#undef PTD29_LPSPI5_PCS2_I
+#undef PTD29_LPSPI5_PCS2_O
+#undef PTD29_LPUART15_RX
+#undef PTD2_LPSPI5_SOUT_I
+#undef PTD2_LPSPI5_SOUT_O
+#undef PTD30_EMIOS_2_CH16_X_I
+#undef PTD30_EMIOS_2_CH16_X_O
+#undef PTD30_LPSPI5_PCS3_I
+#undef PTD30_LPSPI5_PCS3_O
+#undef PTD31_EMIOS_2_CH22_X_I
+#undef PTD31_EMIOS_2_CH22_X_O
+#undef PTD4_LPSPI5_PCS0_I
+#undef PTD4_LPSPI5_PCS0_O
+#undef PTD7_TRACE_ETM_D0
+#undef PTD8_LPUART6_RX
+#undef PTD9_LPUART6_TX_I
+#undef PTD9_LPUART6_TX_O
+#undef PTE0_LPUART7_RX
+#undef PTE10_LPUART4_RX
+#undef PTE11_LPUART4_TX_I
+#undef PTE11_LPUART4_TX_O
+#undef PTE12_CAN5_TX
+#undef PTE14_CAN4_RX
+#undef PTE14_LPUART5_TX_I
+#undef PTE14_LPUART5_TX_O
+#undef PTE17_EMIOS_2_CH23_X_I
+#undef PTE17_EMIOS_2_CH23_X_O
+#undef PTE18_EMIOS_2_CH17_Y_I
+#undef PTE18_EMIOS_2_CH17_Y_O
+#undef PTE19_EMIOS_0_CH22_X_I
+#undef PTE19_EMIOS_0_CH22_X_O
+#undef PTE1_LPUART7_TX_I
+#undef PTE1_LPUART7_TX_O
+#undef PTE20_EMIOS_1_CH0_X_I
+#undef PTE20_EMIOS_1_CH0_X_O
+#undef PTE21_EMIOS_2_CH19_Y_I
+#undef PTE21_EMIOS_2_CH19_Y_O
+#undef PTE21_LPSPI4_SIN_I
+#undef PTE21_LPSPI4_SIN_O
+#undef PTE22_EMIOS_2_CH20_Y_I
+#undef PTE22_EMIOS_2_CH20_Y_O
+#undef PTE22_LPSPI4_SCK_I
+#undef PTE22_LPSPI4_SCK_O
+#undef PTE23_EMIOS_2_CH21_Y_I
+#undef PTE23_EMIOS_2_CH21_Y_O
+#undef PTE23_LPSPI4_PCS0_I
+#undef PTE23_LPSPI4_PCS0_O
+#undef PTE24_EMIOS_2_CH4_H_I
+#undef PTE24_EMIOS_2_CH4_H_O
+#undef PTE24_LPSPI4_PCS1_I
+#undef PTE24_LPSPI4_PCS1_O
+#undef PTE25_EMIOS_2_CH5_H_I
+#undef PTE25_EMIOS_2_CH5_H_O
+#undef PTE25_LPSPI4_SOUT_I
+#undef PTE25_LPSPI4_SOUT_O
+#undef PTE26_EMIOS_2_CH6_H_I
+#undef PTE26_EMIOS_2_CH6_H_O
+#undef PTE27_EMIOS_1_CH7_H_I
+#undef PTE27_EMIOS_1_CH7_H_O
+#undef PTE28_CAN3_TX
+#undef PTE29_CAN3_RX
+#undef PTE2_LPUART10_RX
+#undef PTE30_CAN4_TX
+#undef PTE30_CMP1_OUT
+#undef PTE31_CAN4_RX
+#undef PTE31_CMP1_RR_ACTIVES
+#undef PTE3_CAN4_TX
+#undef PTE3_LPUART5_RX
+#undef PTE4_LPUART12_TX_I
+#undef PTE4_LPUART12_TX_O
+#undef PTE5_LPUART12_RX
+#undef PTE6_LPUART10_TX_I
+#undef PTE6_LPUART10_TX_O
+#undef PTE7_LPUART4_RX
+#undef PTE8_LPSPI5_PCS1_I
+#undef PTE8_LPSPI5_PCS1_O
+#undef PTE9_LPSPI5_SOUT_I
+#undef PTE9_LPSPI5_SOUT_O
+#undef PTF0_EIRQ0
+#undef PTF0_EMIOS_2_CH0_X_I
+#undef PTF0_EMIOS_2_CH0_X_O
+#undef PTF0_LPSPI2_SCK_I
+#undef PTF0_LPSPI2_SCK_O
+#undef PTF0_LPUART5_TX_I
+#undef PTF0_LPUART5_TX_O
+#undef PTF10_ADC0_MA1
+#undef PTF10_EIRQ18
+#undef PTF10_EMIOS_2_CH10_H_I
+#undef PTF10_EMIOS_2_CH10_H_O
+#undef PTF11_ADC0_MA2
+#undef PTF11_EIRQ19
+#undef PTF11_EMIOS_2_CH11_H_I
+#undef PTF11_EMIOS_2_CH11_H_O
+#undef PTF11_HSE_TAMPER_EXTIN0
+#undef PTF12_ADC0_MA0
+#undef PTF12_EIRQ20
+#undef PTF12_EMIOS_2_CH12_H_I
+#undef PTF12_EMIOS_2_CH12_H_O
+#undef PTF12_LPSPI3_SIN_I
+#undef PTF12_LPSPI3_SIN_O
+#undef PTF12_LPUART10_TX_I
+#undef PTF12_LPUART10_TX_O
+#undef PTF13_ADC0_MA1
+#undef PTF13_EIRQ21
+#undef PTF13_EMIOS_2_CH13_H_I
+#undef PTF13_EMIOS_2_CH13_H_O
+#undef PTF13_LPSPI3_SCK_I
+#undef PTF13_LPSPI3_SCK_O
+#undef PTF13_LPUART10_RX
+#undef PTF14_CAN1_TX
+#undef PTF14_CMP0_OUT
+#undef PTF14_EIRQ22
+#undef PTF14_EMIOS_2_CH14_H_I
+#undef PTF14_EMIOS_2_CH14_H_O
+#undef PTF14_FCCU_ERR0
+#undef PTF14_FCCU_ERR_IN0
+#undef PTF14_FXIO_D3_I
+#undef PTF14_FXIO_D3_O
+#undef PTF15_CAN1_RX
+#undef PTF15_CMP0_RR_ACTIVE
+#undef PTF15_EIRQ23
+#undef PTF15_EMIOS_2_CH15_H_I
+#undef PTF15_EMIOS_2_CH15_H_O
+#undef PTF15_FCCU_ERR1
+#undef PTF15_FCCU_ERR_IN1
+#undef PTF15_LPSPI3_SOUT_I
+#undef PTF15_LPSPI3_SOUT_O
+#undef PTF16_ADC1_MA0
+#undef PTF16_EMIOS_1_CH0_X_I
+#undef PTF16_EMIOS_1_CH0_X_O
+#undef PTF16_EMIOS_2_CH16_X_I
+#undef PTF16_EMIOS_2_CH16_X_O
+#undef PTF16_LPSPI3_PCS0_I
+#undef PTF16_LPSPI3_PCS0_O
+#undef PTF16_LPUART12_TX_I
+#undef PTF16_LPUART12_TX_O
+#undef PTF17_ADC1_MA1
+#undef PTF17_EMIOS_1_CH1_H_I
+#undef PTF17_EMIOS_1_CH1_H_O
+#undef PTF17_EMIOS_2_CH17_Y_I
+#undef PTF17_EMIOS_2_CH17_Y_O
+#undef PTF17_LPUART12_RX
+#undef PTF18_ADC1_MA2
+#undef PTF18_EMIOS_1_CH2_H_I
+#undef PTF18_EMIOS_1_CH2_H_O
+#undef PTF18_EMIOS_2_CH18_Y_I
+#undef PTF18_EMIOS_2_CH18_Y_O
+#undef PTF18_LPSPI3_PCS1_I
+#undef PTF18_LPSPI3_PCS1_O
+#undef PTF18_LPUART7_TX_I
+#undef PTF18_LPUART7_TX_O
+#undef PTF19_ADC0_MA2
+#undef PTF19_EMIOS_1_CH3_H_I
+#undef PTF19_EMIOS_1_CH3_H_O
+#undef PTF19_EMIOS_2_CH19_Y_I
+#undef PTF19_EMIOS_2_CH19_Y_O
+#undef PTF19_HSE_TAMPER_LOOP_OUT0
+#undef PTF19_LPSPI3_PCS2_I
+#undef PTF19_LPSPI3_PCS2_O
+#undef PTF19_LPUART7_RX
+#undef PTF1_EIRQ1
+#undef PTF1_EMIOS_2_CH1_H_I
+#undef PTF1_EMIOS_2_CH1_H_O
+#undef PTF1_LPSPI2_SIN_I
+#undef PTF1_LPSPI2_SIN_O
+#undef PTF1_LPUART5_RX
+#undef PTF20_CAN0_TX
+#undef PTF20_EMIOS_1_CH4_H_I
+#undef PTF20_EMIOS_1_CH4_H_O
+#undef PTF20_EMIOS_2_CH20_Y_I
+#undef PTF20_EMIOS_2_CH20_Y_O
+#undef PTF20_FXIO_D4_I
+#undef PTF20_FXIO_D4_O
+#undef PTF20_LPI2C0_SCL_I
+#undef PTF20_LPI2C0_SCL_O
+#undef PTF20_LPSPI3_PCS3_I
+#undef PTF20_LPSPI3_PCS3_O
+#undef PTF20_LPUART8_TX_I
+#undef PTF20_LPUART8_TX_O
+#undef PTF21_CAN0_RX
+#undef PTF21_EMIOS_1_CH5_H_I
+#undef PTF21_EMIOS_1_CH5_H_O
+#undef PTF21_EMIOS_2_CH21_Y_I
+#undef PTF21_EMIOS_2_CH21_Y_O
+#undef PTF21_FXIO_D5_I
+#undef PTF21_FXIO_D5_O
+#undef PTF21_LPI2C0_SDA_I
+#undef PTF21_LPI2C0_SDA_O
+#undef PTF21_LPSPI1_PCS0_I
+#undef PTF21_LPSPI1_PCS0_O
+#undef PTF21_LPUART8_RX
+#undef PTF22_EMIOS_1_CH6_H_I
+#undef PTF22_EMIOS_1_CH6_H_O
+#undef PTF22_EMIOS_2_CH22_X_I
+#undef PTF22_EMIOS_2_CH22_X_O
+#undef PTF22_LPSPI4_PCS2_I
+#undef PTF22_LPSPI4_PCS2_O
+#undef PTF23_EMIOS_1_CH7_H_I
+#undef PTF23_EMIOS_1_CH7_H_O
+#undef PTF23_EMIOS_2_CH23_X_I
+#undef PTF23_EMIOS_2_CH23_X_O
+#undef PTF23_LPSPI3_PCS3_I
+#undef PTF23_LPSPI3_PCS3_O
+#undef PTF23_LPUART9_TX_I
+#undef PTF23_LPUART9_TX_O
+#undef PTF24_EMIOS_1_CH8_X_I
+#undef PTF24_EMIOS_1_CH8_X_O
+#undef PTF24_LPUART9_RX
+#undef PTF25_CAN2_TX
+#undef PTF25_EMIOS_1_CH9_H_I
+#undef PTF25_EMIOS_1_CH9_H_O
+#undef PTF25_FXIO_D6_I
+#undef PTF25_FXIO_D6_O
+#undef PTF25_LPSPI2_PCS2_I
+#undef PTF25_LPSPI2_PCS2_O
+#undef PTF25_LPSPI4_PCS0_I
+#undef PTF25_LPSPI4_PCS0_O
+#undef PTF26_CAN2_RX
+#undef PTF26_EMIOS_1_CH10_H_I
+#undef PTF26_EMIOS_1_CH10_H_O
+#undef PTF26_LPSPI2_PCS3_I
+#undef PTF26_LPSPI2_PCS3_O
+#undef PTF26_LPSPI4_PCS1_I
+#undef PTF26_LPSPI4_PCS1_O
+#undef PTF27_EMIOS_1_CH11_H_I
+#undef PTF27_EMIOS_1_CH11_H_O
+#undef PTF27_LPSPI4_PCS2_I
+#undef PTF27_LPSPI4_PCS2_O
+#undef PTF27_LPUART11_TX_I
+#undef PTF27_LPUART11_TX_O
+#undef PTF28_EMIOS_1_CH12_H_I
+#undef PTF28_EMIOS_1_CH12_H_O
+#undef PTF28_FXIO_D7_I
+#undef PTF28_FXIO_D7_O
+#undef PTF28_LPSPI0_PCS0_I
+#undef PTF28_LPSPI0_PCS0_O
+#undef PTF28_LPSPI4_PCS3_I
+#undef PTF28_LPSPI4_PCS3_O
+#undef PTF28_LPUART11_RX
+#undef PTF28_TRACE_ETM_D5
+#undef PTF29_ADC1_MA0
+#undef PTF29_CAN3_TX
+#undef PTF29_EMIOS_1_CH13_H_I
+#undef PTF29_EMIOS_1_CH13_H_O
+#undef PTF29_FXIO_D8_I
+#undef PTF29_FXIO_D8_O
+#undef PTF29_LPSPI3_PCS1_I
+#undef PTF29_LPSPI3_PCS1_O
+#undef PTF2_EIRQ2
+#undef PTF2_EMIOS_2_CH2_H_I
+#undef PTF2_EMIOS_2_CH2_H_O
+#undef PTF2_LPSPI2_SOUT_I
+#undef PTF2_LPSPI2_SOUT_O
+#undef PTF2_LPUART6_TX_I
+#undef PTF2_LPUART6_TX_O
+#undef PTF30_ADC1_MA1
+#undef PTF30_CAN3_RX
+#undef PTF30_EMIOS_1_CH14_H_I
+#undef PTF30_EMIOS_1_CH14_H_O
+#undef PTF31_ADC1_MA2
+#undef PTF31_EMIOS_1_CH15_H_I
+#undef PTF31_EMIOS_1_CH15_H_O
+#undef PTF31_FXIO_D9_I
+#undef PTF31_FXIO_D9_O
+#undef PTF31_TRACE_ETM_D3
+#undef PTF3_EIRQ3
+#undef PTF3_EMIOS_2_CH3_H_I
+#undef PTF3_EMIOS_2_CH3_H_O
+#undef PTF3_LPSPI2_PCS0_I
+#undef PTF3_LPSPI2_PCS0_O
+#undef PTF3_LPUART6_RX
+#undef PTF4_CAN5_TX
+#undef PTF4_EIRQ4
+#undef PTF4_EMIOS_2_CH4_H_I
+#undef PTF4_EMIOS_2_CH4_H_O
+#undef PTF4_FXIO_D0_I
+#undef PTF4_FXIO_D0_O
+#undef PTF5_CAN5_RX
+#undef PTF5_EIRQ5
+#undef PTF5_EMIOS_2_CH5_H_I
+#undef PTF5_EMIOS_2_CH5_H_O
+#undef PTF6_EIRQ6
+#undef PTF6_EMIOS_2_CH6_H_I
+#undef PTF6_EMIOS_2_CH6_H_O
+#undef PTF7_EIRQ7
+#undef PTF7_EMIOS_2_CH7_H_I
+#undef PTF7_EMIOS_2_CH7_H_O
+#undef PTF7_FXIO_D1_I
+#undef PTF7_FXIO_D1_O
+#undef PTF7_LPI2C1_SCL_I
+#undef PTF7_LPI2C1_SCL_O
+#undef PTF8_EIRQ16
+#undef PTF8_EMIOS_2_CH8_X_I
+#undef PTF8_EMIOS_2_CH8_X_O
+#undef PTF8_FXIO_D2_I
+#undef PTF8_FXIO_D2_O
+#undef PTF8_LPI2C1_SDA_I
+#undef PTF8_LPI2C1_SDA_O
+#undef PTF9_ADC0_MA0
+#undef PTF9_EIRQ17
+#undef PTF9_EMIOS_2_CH9_H_I
+#undef PTF9_EMIOS_2_CH9_H_O
+#undef PTG0_EIRQ8
+#undef PTG0_EMIOS_1_CH16_X_I
+#undef PTG0_EMIOS_1_CH16_X_O
+#undef PTG0_LPUART13_TX_I
+#undef PTG0_LPUART13_TX_O
+#undef PTG10_EIRQ26
+#undef PTG11_EIRQ27
+#undef PTG12_EIRQ28
+#undef PTG12_LPSPI4_PCS3_I
+#undef PTG12_LPSPI4_PCS3_O
+#undef PTG13_CAN5_TX
+#undef PTG13_EIRQ29
+#undef PTG13_FXIO_D13_I
+#undef PTG13_FXIO_D13_O
+#undef PTG14_CAN5_RX
+#undef PTG14_EIRQ30
+#undef PTG15_EIRQ31
+#undef PTG15_EMIOS_2_CH15_H_I
+#undef PTG15_EMIOS_2_CH15_H_O
+#undef PTG15_FXIO_D14_I
+#undef PTG15_FXIO_D14_O
+#undef PTG15_TRACE_ETM_D1
+#undef PTG16_EMIOS_2_CH16_X_I
+#undef PTG16_EMIOS_2_CH16_X_O
+#undef PTG16_FXIO_D15_I
+#undef PTG16_FXIO_D15_O
+#undef PTG16_TRACE_ETM_D2
+#undef PTG17_EMIOS_2_CH17_Y_I
+#undef PTG17_EMIOS_2_CH17_Y_O
+#undef PTG17_FXIO_D16_I
+#undef PTG17_FXIO_D16_O
+#undef PTG17_TRACE_ETM_D4
+#undef PTG18_EMIOS_2_CH18_Y_I
+#undef PTG18_EMIOS_2_CH18_Y_O
+#undef PTG18_FXIO_D17_I
+#undef PTG18_FXIO_D17_O
+#undef PTG18_TRACE_ETM_D6
+#undef PTG19_EMIOS_2_CH19_Y_I
+#undef PTG19_EMIOS_2_CH19_Y_O
+#undef PTG19_FXIO_D18_I
+#undef PTG19_FXIO_D18_O
+#undef PTG19_TRACE_ETM_D7
+#undef PTG1_EIRQ9
+#undef PTG1_EMIOS_1_CH17_Y_I
+#undef PTG1_EMIOS_1_CH17_Y_O
+#undef PTG1_LPUART13_RX
+#undef PTG20_EMIOS_2_CH20_Y_I
+#undef PTG20_EMIOS_2_CH20_Y_O
+#undef PTG20_FXIO_D19_I
+#undef PTG20_FXIO_D19_O
+#undef PTG20_TRACE_ETM_D8
+#undef PTG21_EMIOS_2_CH21_Y_I
+#undef PTG21_EMIOS_2_CH21_Y_O
+#undef PTG21_FXIO_D20_I
+#undef PTG21_FXIO_D20_O
+#undef PTG21_TRACE_ETM_D9
+#undef PTG22_EMIOS_2_CH22_X_I
+#undef PTG22_EMIOS_2_CH22_X_O
+#undef PTG22_FXIO_D21_I
+#undef PTG22_FXIO_D21_O
+#undef PTG22_TRACE_ETM_D10
+#undef PTG23_EMIOS_2_CH23_X_I
+#undef PTG23_EMIOS_2_CH23_X_O
+#undef PTG23_FXIO_D22_I
+#undef PTG23_FXIO_D22_O
+#undef PTG23_TRACE_ETM_D11
+#undef PTG24_FXIO_D23_I
+#undef PTG24_FXIO_D23_O
+#undef PTG24_TRACE_ETM_D12
+#undef PTG25_FXIO_D24_I
+#undef PTG25_FXIO_D24_O
+#undef PTG25_TRACE_ETM_D13
+#undef PTG26_FXIO_D25_I
+#undef PTG26_FXIO_D25_O
+#undef PTG26_TRACE_ETM_D14
+#undef PTG27_FXIO_D26_I
+#undef PTG27_FXIO_D26_O
+#undef PTG27_TRACE_ETM_D15
+#undef PTG2_EIRQ10
+#undef PTG2_EMIOS_1_CH18_Y_I
+#undef PTG2_EMIOS_1_CH18_Y_O
+#undef PTG2_LPUART14_TX_I
+#undef PTG2_LPUART14_TX_O
+#undef PTG3_EIRQ11
+#undef PTG3_EMIOS_1_CH19_Y_I
+#undef PTG3_EMIOS_1_CH19_Y_O
+#undef PTG3_LPUART14_RX
+#undef PTG4_CMP2_OUT
+#undef PTG4_EIRQ12
+#undef PTG4_EMIOS_1_CH20_Y_I
+#undef PTG4_EMIOS_1_CH20_Y_O
+#undef PTG4_LPUART15_TX_I
+#undef PTG4_LPUART15_TX_O
+#undef PTG5_CMP2_RR_ACTIVE
+#undef PTG5_EIRQ13
+#undef PTG5_EMIOS_1_CH21_Y_I
+#undef PTG5_EMIOS_1_CH21_Y_O
+#undef PTG5_LPUART15_RX
+#undef PTG6_EIRQ14
+#undef PTG6_EMIOS_1_CH22_X_I
+#undef PTG6_EMIOS_1_CH22_X_O
+#undef PTG6_FXIO_D10_I
+#undef PTG6_FXIO_D10_O
+#undef PTG6_TRACE_ETM_CLKOUT
+#undef PTG7_EIRQ15
+#undef PTG7_EMIOS_1_CH23_X_I
+#undef PTG7_EMIOS_1_CH23_X_O
+#undef PTG7_FXIO_D11_I
+#undef PTG7_FXIO_D11_O
+#undef PTG7_TRACE_ETM_D0
+#undef PTG8_CAN4_TX
+#undef PTG8_EIRQ24
+#undef PTG8_FXIO_D12_I
+#undef PTG8_FXIO_D12_O
+#undef PTG9_CAN4_RX
+#undef PTG9_EIRQ25
+#undef TRGMUX_INT_OUT37_EMIOS_0_CH6_G
+#undef TRGMUX_INT_OUT38_EMIOS_0_CH7_G
 
-/* LCU0 */
-#define PTA0_LCU0_OUT4                  NXP_SIUL2_PINMUX(0, 0, 0, 3, 0, 0)
-#define PTA1_LCU0_OUT5                  NXP_SIUL2_PINMUX(0, 0, 1, 5, 0, 0)
-#define PTA2_LCU0_OUT3                  NXP_SIUL2_PINMUX(0, 0, 2, 6, 0, 0)
-#define PTA3_LCU0_OUT2                  NXP_SIUL2_PINMUX(0, 0, 3, 4, 0, 0)
-#define PTB8_LCU0_OUT11                 NXP_SIUL2_PINMUX(0, 0, 40, 5, 0, 0)
-#define PTB9_LCU0_OUT10                 NXP_SIUL2_PINMUX(0, 0, 41, 6, 0, 0)
-#define PTB10_LCU0_OUT9                 NXP_SIUL2_PINMUX(0, 0, 42, 6, 0, 0)
-#define PTB11_LCU0_OUT8                 NXP_SIUL2_PINMUX(0, 0, 43, 5, 0, 0)
-#define PTB12_LCU0_OUT2                 NXP_SIUL2_PINMUX(0, 0, 44, 6, 0, 0)
-#define PTB13_LCU0_OUT3                 NXP_SIUL2_PINMUX(0, 0, 45, 5, 0, 0)
-#define PTB14_LCU0_OUT7                 NXP_SIUL2_PINMUX(0, 0, 46, 4, 0, 0)
-#define PTC6_LCU0_OUT7                  NXP_SIUL2_PINMUX(0, 0, 70, 4, 0, 0)
-#define PTC7_LCU0_OUT6                  NXP_SIUL2_PINMUX(0, 0, 71, 4, 0, 0)
-#define PTD2_LCU0_OUT1                  NXP_SIUL2_PINMUX(0, 0, 98, 1, 0, 0)
-#define PTD3_LCU0_OUT0                  NXP_SIUL2_PINMUX(0, 0, 99, 6, 0, 0)
-#define PTD4_LCU0_OUT6                  NXP_SIUL2_PINMUX(0, 0, 100, 5, 0, 0)
-#define PTD21_LCU0_OUT4                 NXP_SIUL2_PINMUX(0, 0, 117, 5, 0, 0)
-#define PTD22_LCU0_OUT5                 NXP_SIUL2_PINMUX(0, 0, 118, 6, 0, 0)
-#define PTD23_LCU0_OUT10                NXP_SIUL2_PINMUX(0, 0, 119, 6, 0, 0)
-#define PTD24_LCU0_OUT11                NXP_SIUL2_PINMUX(0, 0, 120, 6, 0, 0)
-#define PTD26_LCU0_OUT0                 NXP_SIUL2_PINMUX(0, 0, 122, 7, 0, 0)
-#define PTD27_LCU0_OUT1                 NXP_SIUL2_PINMUX(0, 0, 123, 7, 0, 0)
-#define PTD28_LCU0_OUT2                 NXP_SIUL2_PINMUX(0, 0, 124, 5, 0, 0)
-#define PTD29_LCU0_OUT3                 NXP_SIUL2_PINMUX(0, 0, 125, 5, 0, 0)
-#define PTD30_LCU0_OUT8                 NXP_SIUL2_PINMUX(0, 0, 126, 5, 0, 0)
-#define PTD31_LCU0_OUT9                 NXP_SIUL2_PINMUX(0, 0, 127, 5, 0, 0)
-
-/* FXIO */
-#define PTA0_FXIO_D2_O                  NXP_SIUL2_PINMUX(0, 0, 0, 4, 0, 0)
-#define PTA0_FXIO_D2_I                  NXP_SIUL2_PINMUX(0, 0, 0, 0, 154, 2)
-#define PTA1_FXIO_D3_O                  NXP_SIUL2_PINMUX(0, 0, 1, 4, 0, 0)
-#define PTA1_FXIO_D3_I                  NXP_SIUL2_PINMUX(0, 0, 1, 0, 155, 1)
-#define PTA2_FXIO_D4_O                  NXP_SIUL2_PINMUX(0, 0, 2, 5, 0, 0)
-#define PTA2_FXIO_D4_I                  NXP_SIUL2_PINMUX(0, 0, 2, 0, 156, 3)
-#define PTA3_FXIO_D5_O                  NXP_SIUL2_PINMUX(0, 0, 3, 5, 0, 0)
-#define PTA3_FXIO_D5_I                  NXP_SIUL2_PINMUX(0, 0, 3, 0, 157, 3)
-#define PTA4_FXIO_D6_O                  NXP_SIUL2_PINMUX(0, 0, 4, 3, 0, 0)
-#define PTA4_FXIO_D6_I                  NXP_SIUL2_PINMUX(0, 0, 4, 0, 158, 8)
-#define PTA6_FXIO_D19_O                 NXP_SIUL2_PINMUX(0, 0, 6, 5, 0, 0)
-#define PTA6_FXIO_D19_I                 NXP_SIUL2_PINMUX(0, 0, 6, 0, 171, 4)
-#define PTA7_FXIO_D9_O                  NXP_SIUL2_PINMUX(0, 0, 7, 6, 0, 0)
-#define PTA7_FXIO_D9_I                  NXP_SIUL2_PINMUX(0, 0, 7, 0, 161, 3)
-#define PTA8_FXIO_D6_O                  NXP_SIUL2_PINMUX(0, 0, 8, 4, 0, 0)
-#define PTA8_FXIO_D6_I                  NXP_SIUL2_PINMUX(0, 0, 8, 0, 158, 2)
-#define PTA9_FXIO_D7_O                  NXP_SIUL2_PINMUX(0, 0, 9, 4, 0, 0)
-#define PTA9_FXIO_D7_I                  NXP_SIUL2_PINMUX(0, 0, 9, 0, 159, 2)
-#define PTA10_FXIO_D0_O                 NXP_SIUL2_PINMUX(0, 0, 10, 4, 0, 0)
-#define PTA10_FXIO_D0_I                 NXP_SIUL2_PINMUX(0, 0, 10, 0, 152, 2)
-#define PTA11_FXIO_D1_O                 NXP_SIUL2_PINMUX(0, 0, 11, 4, 0, 0)
-#define PTA11_FXIO_D1_I                 NXP_SIUL2_PINMUX(0, 0, 11, 0, 153, 2)
-#define PTA12_FXIO_D9_O                 NXP_SIUL2_PINMUX(0, 0, 12, 5, 0, 0)
-#define PTA12_FXIO_D9_I                 NXP_SIUL2_PINMUX(0, 0, 12, 0, 161, 4)
-#define PTA13_FXIO_D8_O                 NXP_SIUL2_PINMUX(0, 0, 13, 5, 0, 0)
-#define PTA13_FXIO_D8_I                 NXP_SIUL2_PINMUX(0, 0, 13, 0, 160, 4)
-#define PTA14_FXIO_D14_O                NXP_SIUL2_PINMUX(0, 0, 14, 6, 0, 0)
-#define PTA14_FXIO_D14_I                NXP_SIUL2_PINMUX(0, 0, 14, 0, 166, 4)
-#define PTA15_FXIO_D31_O                NXP_SIUL2_PINMUX(0, 0, 15, 7, 0, 0)
-#define PTA15_FXIO_D31_I                NXP_SIUL2_PINMUX(0, 0, 15, 0, 183, 1)
-#define PTA16_FXIO_D30_O                NXP_SIUL2_PINMUX(0, 0, 16, 7, 0, 0)
-#define PTA16_FXIO_D30_I                NXP_SIUL2_PINMUX(0, 0, 16, 0, 182, 1)
-#define PTA17_FXIO_D19_O                NXP_SIUL2_PINMUX(0, 0, 17, 7, 0, 0)
-#define PTA17_FXIO_D19_I                NXP_SIUL2_PINMUX(0, 0, 17, 0, 171, 1)
-#define PTA21_FXIO_D0_O                 NXP_SIUL2_PINMUX(0, 0, 21, 3, 0, 0)
-#define PTA21_FXIO_D0_I                 NXP_SIUL2_PINMUX(0, 0, 21, 0, 152, 3)
-#define PTA24_FXIO_D3                   NXP_SIUL2_PINMUX(0, 0, 21, 0, 155, 3)
-#define PTA25_FXIO_D2                   NXP_SIUL2_PINMUX(0, 0, 21, 0, 154, 6)
-#define PTA27_FXIO_D5_O                 NXP_SIUL2_PINMUX(0, 0, 27, 1, 0, 0)
-#define PTA27_FXIO_D5_I                 NXP_SIUL2_PINMUX(0, 0, 27, 0, 157, 9)
-#define PTA31_FXIO_D0_O                 NXP_SIUL2_PINMUX(0, 0, 31, 3, 0, 0)
-#define PTA31_FXIO_D0_I                 NXP_SIUL2_PINMUX(0, 0, 31, 0, 152, 6)
-#define PTB0_FXIO_D14_O                 NXP_SIUL2_PINMUX(0, 0, 32, 2, 0, 0)
-#define PTB0_FXIO_D14_I                 NXP_SIUL2_PINMUX(0, 0, 32, 0, 166, 3)
-#define PTB2_FXIO_D18_O                 NXP_SIUL2_PINMUX(0, 0, 34, 7, 0, 0)
-#define PTB2_FXIO_D18_I                 NXP_SIUL2_PINMUX(0, 0, 34, 0, 170, 1)
-#define PTB3_FXIO_D17_O                 NXP_SIUL2_PINMUX(0, 0, 35, 7, 0, 0)
-#define PTB3_FXIO_D17_I                 NXP_SIUL2_PINMUX(0, 0, 35, 0, 169, 1)
-#define PTB8_FXIO_D29_O                 NXP_SIUL2_PINMUX(0, 0, 40, 7, 0, 0)
-#define PTB8_FXIO_D29_I                 NXP_SIUL2_PINMUX(0, 0, 40, 0, 181, 1)
-#define PTB9_FXIO_D28_O                 NXP_SIUL2_PINMUX(0, 0, 41, 7, 0, 0)
-#define PTB9_FXIO_D28_I                 NXP_SIUL2_PINMUX(0, 0, 41, 0, 180, 1)
-#define PTB10_FXIO_D27_O                NXP_SIUL2_PINMUX(0, 0, 42, 7, 0, 0)
-#define PTB10_FXIO_D27_I                NXP_SIUL2_PINMUX(0, 0, 42, 0, 179, 1)
-#define PTB11_FXIO_D26_O                NXP_SIUL2_PINMUX(0, 0, 43, 7, 0, 0)
-#define PTB11_FXIO_D26_I                NXP_SIUL2_PINMUX(0, 0, 43, 0, 178, 1)
-#define PTB12_FXIO_D25_O                NXP_SIUL2_PINMUX(0, 0, 44, 7, 0, 0)
-#define PTB12_FXIO_D25_I                NXP_SIUL2_PINMUX(0, 0, 44, 0, 177, 1)
-#define PTB13_FXIO_D8_O                 NXP_SIUL2_PINMUX(0, 0, 45, 3, 0, 0)
-#define PTB13_FXIO_D24_O                NXP_SIUL2_PINMUX(0, 0, 45, 7, 0, 0)
-#define PTB13_FXIO_D8_I                 NXP_SIUL2_PINMUX(0, 0, 45, 0, 160, 3)
-#define PTB13_FXIO_D24_I                NXP_SIUL2_PINMUX(0, 0, 45, 0, 176, 1)
-#define PTB14_FXIO_D23_O                NXP_SIUL2_PINMUX(0, 0, 46, 7, 0, 0)
-#define PTB14_FXIO_D23_I                NXP_SIUL2_PINMUX(0, 0, 46, 0, 175, 1)
-#define PTB15_FXIO_D22_O                NXP_SIUL2_PINMUX(0, 0, 47, 7, 0, 0)
-#define PTB15_FXIO_D22_I                NXP_SIUL2_PINMUX(0, 0, 47, 0, 174, 1)
-#define PTB16_FXIO_D21_O                NXP_SIUL2_PINMUX(0, 0, 48, 7, 0, 0)
-#define PTB16_FXIO_D21_I                NXP_SIUL2_PINMUX(0, 0, 48, 0, 173, 1)
-#define PTB17_FXIO_D20_O                NXP_SIUL2_PINMUX(0, 0, 49, 7, 0, 0)
-#define PTB17_FXIO_D20_I                NXP_SIUL2_PINMUX(0, 0, 49, 0, 172, 1)
-#define PTB18_FXIO_D1_O                 NXP_SIUL2_PINMUX(0, 0, 50, 3, 0, 0)
-#define PTB18_FXIO_D1_I                 NXP_SIUL2_PINMUX(0, 0, 50, 0, 153, 6)
-#define PTB19_FXIO_D2_O                 NXP_SIUL2_PINMUX(0, 0, 51, 3, 0, 0)
-#define PTB19_FXIO_D2_I                 NXP_SIUL2_PINMUX(0, 0, 51, 0, 154, 5)
-#define PTB20_FXIO_D3_O                 NXP_SIUL2_PINMUX(0, 0, 52, 3, 0, 0)
-#define PTB20_FXIO_D3_I                 NXP_SIUL2_PINMUX(0, 0, 52, 0, 155, 5)
-#define PTB21_FXIO_D4_O                 NXP_SIUL2_PINMUX(0, 0, 53, 3, 0, 0)
-#define PTB21_FXIO_D4_I                 NXP_SIUL2_PINMUX(0, 0, 53, 0, 156, 5)
-#define PTB22_FXIO_D15_O                NXP_SIUL2_PINMUX(0, 0, 54, 6, 0, 0)
-#define PTB22_FXIO_D15_I                NXP_SIUL2_PINMUX(0, 0, 54, 0, 167, 5)
-#define PTB23_FXIO_D4_O                 NXP_SIUL2_PINMUX(0, 0, 55, 3, 0, 0)
-#define PTB23_FXIO_D4_I                 NXP_SIUL2_PINMUX(0, 0, 55, 0, 156, 6)
-#define PTB24_FXIO_D5_O                 NXP_SIUL2_PINMUX(0, 0, 56, 3, 0, 0)
-#define PTB24_FXIO_D5_I                 NXP_SIUL2_PINMUX(0, 0, 56, 0, 157, 6)
-#define PTB25_FXIO_D6_O                 NXP_SIUL2_PINMUX(0, 0, 57, 3, 0, 0)
-#define PTB25_FXIO_D6_I                 NXP_SIUL2_PINMUX(0, 0, 57, 0, 158, 5)
-#define PTB26_FXIO_D7_O                 NXP_SIUL2_PINMUX(0, 0, 58, 3, 0, 0)
-#define PTB26_FXIO_D7_I                 NXP_SIUL2_PINMUX(0, 0, 58, 0, 159, 6)
-#define PTB27_FXIO_D8_O                 NXP_SIUL2_PINMUX(0, 0, 59, 3, 0, 0)
-#define PTB27_FXIO_D8_I                 NXP_SIUL2_PINMUX(0, 0, 59, 0, 160, 2)
-#define PTB28_FXIO_D9_O                 NXP_SIUL2_PINMUX(0, 0, 60, 3, 0, 0)
-#define PTB28_FXIO_D9_I                 NXP_SIUL2_PINMUX(0, 0, 60, 0, 161, 2)
-#define PTB29_FXIO_D10_O                NXP_SIUL2_PINMUX(0, 0, 61, 3, 0, 0)
-#define PTB29_FXIO_D10_I                NXP_SIUL2_PINMUX(0, 0, 61, 0, 162, 2)
-#define PTC1_FXIO_D5_O                  NXP_SIUL2_PINMUX(0, 0, 65, 4, 0, 0)
-#define PTC1_FXIO_D5_I                  NXP_SIUL2_PINMUX(0, 0, 65, 0, 157, 7)
-#define PTC4_FXIO_D5_O                  NXP_SIUL2_PINMUX(0, 0, 68, 4, 0, 0)
-#define PTC4_FXIO_D5_I                  NXP_SIUL2_PINMUX(0, 0, 68, 0, 157, 8)
-#define PTC5_FXIO_D4_O                  NXP_SIUL2_PINMUX(0, 0, 69, 4, 0, 0)
-#define PTC5_FXIO_D4_I                  NXP_SIUL2_PINMUX(0, 0, 69, 0, 156, 7)
-#define PTC6_FXIO_D11_O                 NXP_SIUL2_PINMUX(0, 0, 70, 2, 0, 0)
-#define PTC6_FXIO_D11_I                 NXP_SIUL2_PINMUX(0, 0, 70, 0, 163, 3)
-#define PTC7_FXIO_D10_O                 NXP_SIUL2_PINMUX(0, 0, 71, 1, 0, 0)
-#define PTC7_FXIO_D10_I                 NXP_SIUL2_PINMUX(0, 0, 71, 0, 162, 3)
-#define PTC8_FXIO_D12_O                 NXP_SIUL2_PINMUX(0, 0, 72, 7, 0, 0)
-#define PTC8_FXIO_D12_I                 NXP_SIUL2_PINMUX(0, 0, 72, 0, 164, 3)
-#define PTC9_FXIO_D13_O                 NXP_SIUL2_PINMUX(0, 0, 73, 7, 0, 0)
-#define PTC9_FXIO_D13_I                 NXP_SIUL2_PINMUX(0, 0, 73, 0, 165, 3)
-#define PTC11_FXIO_D15_O                NXP_SIUL2_PINMUX(0, 0, 75, 4, 0, 0)
-#define PTC11_FXIO_D19_O                NXP_SIUL2_PINMUX(0, 0, 75, 6, 0, 0)
-#define PTC11_FXIO_D15_I                NXP_SIUL2_PINMUX(0, 0, 75, 0, 167, 3)
-#define PTC11_FXIO_D19_I                NXP_SIUL2_PINMUX(0, 0, 75, 0, 171, 3)
-#define PTC12_FXIO_D19_O                NXP_SIUL2_PINMUX(0, 0, 76, 5, 0, 0)
-#define PTC12_FXIO_D19_I                NXP_SIUL2_PINMUX(0, 0, 76, 0, 171, 5)
-#define PTC13_FXIO_D16_O                NXP_SIUL2_PINMUX(0, 0, 77, 5, 0, 0)
-#define PTC13_FXIO_D16_I                NXP_SIUL2_PINMUX(0, 0, 77, 0, 168, 3)
-#define PTC14_FXIO_D16_O                NXP_SIUL2_PINMUX(0, 0, 78, 7, 0, 0)
-#define PTC14_FXIO_D16_I                NXP_SIUL2_PINMUX(0, 0, 78, 0, 168, 1)
-#define PTC16_FXIO_D15_O                NXP_SIUL2_PINMUX(0, 0, 80, 6, 0, 0)
-#define PTC16_FXIO_D15_I                NXP_SIUL2_PINMUX(0, 0, 80, 0, 167, 1)
-#define PTC17_FXIO_D14_O                NXP_SIUL2_PINMUX(0, 0, 81, 6, 0, 0)
-#define PTC17_FXIO_D2_O                 NXP_SIUL2_PINMUX(0, 0, 81, 7, 0, 0)
-#define PTC17_FXIO_D2_I                 NXP_SIUL2_PINMUX(0, 0, 81, 0, 154, 10)
-#define PTC17_FXIO_D14_I                NXP_SIUL2_PINMUX(0, 0, 81, 0, 166, 1)
-#define PTC18_FXIO_D6_O                 NXP_SIUL2_PINMUX(0, 0, 82, 2, 0, 0)
-#define PTC18_FXIO_D12_O                NXP_SIUL2_PINMUX(0, 0, 82, 3, 0, 0)
-#define PTC18_FXIO_D6_I                 NXP_SIUL2_PINMUX(0, 0, 82, 0, 158, 9)
-#define PTC18_FXIO_D12_I                NXP_SIUL2_PINMUX(0, 0, 82, 0, 164, 2)
-#define PTC19_FXIO_D13_O                NXP_SIUL2_PINMUX(0, 0, 83, 3, 0, 0)
-#define PTC19_FXIO_D13_I                NXP_SIUL2_PINMUX(0, 0, 83, 0, 165, 2)
-#define PTC20_FXIO_D14_O                NXP_SIUL2_PINMUX(0, 0, 84, 3, 0, 0)
-#define PTC20_FXIO_D14_I                NXP_SIUL2_PINMUX(0, 0, 84, 0, 166, 2)
-#define PTC21_FXIO_D15_O                NXP_SIUL2_PINMUX(0, 0, 85, 3, 0, 0)
-#define PTC21_FXIO_D15_I                NXP_SIUL2_PINMUX(0, 0, 85, 0, 167, 2)
-#define PTC23_FXIO_D16_O                NXP_SIUL2_PINMUX(0, 0, 87, 3, 0, 0)
-#define PTC23_FXIO_D16_I                NXP_SIUL2_PINMUX(0, 0, 87, 0, 168, 2)
-#define PTC24_FXIO_D17_O                NXP_SIUL2_PINMUX(0, 0, 88, 3, 0, 0)
-#define PTC24_FXIO_D17_I                NXP_SIUL2_PINMUX(0, 0, 88, 0, 169, 2)
-#define PTC25_FXIO_D18_O                NXP_SIUL2_PINMUX(0, 0, 89, 3, 0, 0)
-#define PTC25_FXIO_D18_I                NXP_SIUL2_PINMUX(0, 0, 89, 0, 170, 2)
-#define PTC26_FXIO_D19_O                NXP_SIUL2_PINMUX(0, 0, 90, 3, 0, 0)
-#define PTC26_FXIO_D19_I                NXP_SIUL2_PINMUX(0, 0, 90, 0, 171, 2)
-#define PTC27_FXIO_D20_O                NXP_SIUL2_PINMUX(0, 0, 91, 3, 0, 0)
-#define PTC27_FXIO_D20_I                NXP_SIUL2_PINMUX(0, 0, 91, 0, 172, 2)
-#define PTC28_FXIO_D21_O                NXP_SIUL2_PINMUX(0, 0, 92, 3, 0, 0)
-#define PTC28_FXIO_D2_O                 NXP_SIUL2_PINMUX(0, 0, 92, 4, 0, 0)
-#define PTC28_FXIO_D2_I                 NXP_SIUL2_PINMUX(0, 0, 92, 0, 154, 7)
-#define PTC28_FXIO_D21_I                NXP_SIUL2_PINMUX(0, 0, 92, 0, 173, 2)
-#define PTC29_FXIO_D22_O                NXP_SIUL2_PINMUX(0, 0, 93, 3, 0, 0)
-#define PTC29_FXIO_D3_O                 NXP_SIUL2_PINMUX(0, 0, 93, 7, 0, 0)
-#define PTC29_FXIO_D3_I                 NXP_SIUL2_PINMUX(0, 0, 93, 0, 155, 6)
-#define PTC29_FXIO_D22_I                NXP_SIUL2_PINMUX(0, 0, 93, 0, 174, 2)
-#define PTC30_FXIO_D0_O                 NXP_SIUL2_PINMUX(0, 0, 94, 3, 0, 0)
-#define PTC30_FXIO_D23_O                NXP_SIUL2_PINMUX(0, 0, 94, 7, 0, 0)
-#define PTC30_FXIO_D0_I                 NXP_SIUL2_PINMUX(0, 0, 94, 0, 152, 4)
-#define PTC30_FXIO_D23_I                NXP_SIUL2_PINMUX(0, 0, 94, 0, 175, 2)
-#define PTC31_FXIO_D1_O                 NXP_SIUL2_PINMUX(0, 0, 95, 3, 0, 0)
-#define PTC31_FXIO_D24_O                NXP_SIUL2_PINMUX(0, 0, 95, 7, 0, 0)
-#define PTC31_FXIO_D1_I                 NXP_SIUL2_PINMUX(0, 0, 95, 0, 153, 4)
-#define PTC31_FXIO_D24_I                NXP_SIUL2_PINMUX(0, 0, 95, 0, 176, 2)
-#define PTD0_FXIO_D0_O                  NXP_SIUL2_PINMUX(0, 0, 96, 6, 0, 0)
-#define PTD0_FXIO_D0_I                  NXP_SIUL2_PINMUX(0, 0, 96, 0, 152, 1)
-#define PTD1_FXIO_D1_O                  NXP_SIUL2_PINMUX(0, 0, 97, 6, 0, 0)
-#define PTD1_FXIO_D1_I                  NXP_SIUL2_PINMUX(0, 0, 97, 0, 153, 1)
-#define PTD2_FXIO_D4_O                  NXP_SIUL2_PINMUX(0, 0, 98, 4, 0, 0)
-#define PTD2_FXIO_D6_O                  NXP_SIUL2_PINMUX(0, 0, 98, 5, 0, 0)
-#define PTD2_FXIO_D4_I                  NXP_SIUL2_PINMUX(0, 0, 98, 0, 156, 1)
-#define PTD2_FXIO_D6_I                  NXP_SIUL2_PINMUX(0, 0, 98, 0, 158, 3)
-#define PTD3_FXIO_D5_O                  NXP_SIUL2_PINMUX(0, 0, 99, 4, 0, 0)
-#define PTD3_FXIO_D7_O                  NXP_SIUL2_PINMUX(0, 0, 99, 5, 0, 0)
-#define PTD3_FXIO_D5_I                  NXP_SIUL2_PINMUX(0, 0, 99, 0, 157, 2)
-#define PTD3_FXIO_D7_I                  NXP_SIUL2_PINMUX(0, 0, 99, 0, 159, 3)
-#define PTD5_FXIO_D15_O                 NXP_SIUL2_PINMUX(0, 0, 101, 6, 0, 0)
-#define PTD5_FXIO_D15_I                 NXP_SIUL2_PINMUX(0, 0, 101, 0, 167, 4)
-#define PTD6_FXIO_D3_O                  NXP_SIUL2_PINMUX(0, 0, 102, 2, 0, 0)
-#define PTD6_FXIO_D13_O                 NXP_SIUL2_PINMUX(0, 0, 102, 6, 0, 0)
-#define PTD6_FXIO_D3_I                  NXP_SIUL2_PINMUX(0, 0, 102, 0, 155, 9)
-#define PTD6_FXIO_D13_I                 NXP_SIUL2_PINMUX(0, 0, 102, 0, 165, 1)
-#define PTD8_FXIO_D1_O                  NXP_SIUL2_PINMUX(0, 0, 104, 5, 0, 0)
-#define PTD8_FXIO_D11_O                 NXP_SIUL2_PINMUX(0, 0, 104, 7, 0, 0)
-#define PTD8_FXIO_D1_I                  NXP_SIUL2_PINMUX(0, 0, 104, 0, 153, 5)
-#define PTD8_FXIO_D11_I                 NXP_SIUL2_PINMUX(0, 0, 104, 0, 163, 5)
-#define PTD9_FXIO_D0_O                  NXP_SIUL2_PINMUX(0, 0, 105, 3, 0, 0)
-#define PTD9_FXIO_D10_O                 NXP_SIUL2_PINMUX(0, 0, 105, 7, 0, 0)
-#define PTD9_FXIO_D0_I                  NXP_SIUL2_PINMUX(0, 0, 105, 0, 152, 5)
-#define PTD9_FXIO_D10_I                 NXP_SIUL2_PINMUX(0, 0, 105, 0, 162, 4)
-#define PTD13_FXIO_D7_O                 NXP_SIUL2_PINMUX(0, 0, 109, 3, 0, 0)
-#define PTD13_FXIO_D7_I                 NXP_SIUL2_PINMUX(0, 0, 109, 0, 159, 7)
-#define PTD15_FXIO_D6_O                 NXP_SIUL2_PINMUX(0, 0, 111, 1, 0, 0)
-#define PTD15_FXIO_D10_O                NXP_SIUL2_PINMUX(0, 0, 111, 7, 0, 0)
-#define PTD15_FXIO_D6_I                 NXP_SIUL2_PINMUX(0, 0, 111, 0, 158, 7)
-#define PTD15_FXIO_D10_I                NXP_SIUL2_PINMUX(0, 0, 111, 0, 162, 1)
-#define PTD17_FXIO_D9_O                 NXP_SIUL2_PINMUX(0, 0, 113, 6, 0, 0)
-#define PTD17_FXIO_D9_I                 NXP_SIUL2_PINMUX(0, 0, 113, 0, 161, 1)
-#define PTD20_FXIO_D25_O                NXP_SIUL2_PINMUX(0, 0, 116, 3, 0, 0)
-#define PTD20_FXIO_D25_I                NXP_SIUL2_PINMUX(0, 0, 116, 0, 177, 2)
-#define PTD21_FXIO_D26_O                NXP_SIUL2_PINMUX(0, 0, 117, 3, 0, 0)
-#define PTD21_FXIO_D26_I                NXP_SIUL2_PINMUX(0, 0, 117, 0, 178, 2)
-#define PTD22_FXIO_D27_O                NXP_SIUL2_PINMUX(0, 0, 118, 3, 0, 0)
-#define PTD22_FXIO_D27_I                NXP_SIUL2_PINMUX(0, 0, 118, 0, 179, 2)
-#define PTD23_FXIO_D28_O                NXP_SIUL2_PINMUX(0, 0, 119, 3, 0, 0)
-#define PTD23_FXIO_D28_I                NXP_SIUL2_PINMUX(0, 0, 119, 0, 180, 2)
-#define PTD24_FXIO_D29_O                NXP_SIUL2_PINMUX(0, 0, 120, 3, 0, 0)
-#define PTD24_FXIO_D29_I                NXP_SIUL2_PINMUX(0, 0, 120, 0, 181, 2)
-#define PTD26_FXIO_D7_O                 NXP_SIUL2_PINMUX(0, 0, 122, 3, 0, 0)
-#define PTD26_FXIO_D30_O                NXP_SIUL2_PINMUX(0, 0, 122, 5, 0, 0)
-#define PTD26_FXIO_D7_I                 NXP_SIUL2_PINMUX(0, 0, 122, 0, 159, 4)
-#define PTD26_FXIO_D30_I                NXP_SIUL2_PINMUX(0, 0, 122, 0, 182, 2)
-#define PTD27_FXIO_D31_O                NXP_SIUL2_PINMUX(0, 0, 123, 5, 0, 0)
-#define PTD27_FXIO_D31_I                NXP_SIUL2_PINMUX(0, 0, 123, 0, 183, 2)
-#define PTD31_FXIO_D6_O                 NXP_SIUL2_PINMUX(0, 0, 127, 3, 0, 0)
-#define PTD31_FXIO_D6_I                 NXP_SIUL2_PINMUX(0, 0, 127, 0, 158, 4)
-#define PTE0_FXIO_D3_O                  NXP_SIUL2_PINMUX(0, 0, 128, 3, 0, 0)
-#define PTE0_FXIO_D3_I                  NXP_SIUL2_PINMUX(0, 0, 128, 0, 155, 7)
-#define PTE1_FXIO_D2_O                  NXP_SIUL2_PINMUX(0, 0, 129, 3, 0, 0)
-#define PTE1_FXIO_D2_I                  NXP_SIUL2_PINMUX(0, 0, 129, 0, 154, 8)
-#define PTE2_FXIO_D13_O                 NXP_SIUL2_PINMUX(0, 0, 130, 6, 0, 0)
-#define PTE2_FXIO_D13_I                 NXP_SIUL2_PINMUX(0, 0, 130, 0, 165, 4)
-#define PTE3_FXIO_D6_O                  NXP_SIUL2_PINMUX(0, 0, 131, 4, 0, 0)
-#define PTE3_FXIO_D6_I                  NXP_SIUL2_PINMUX(0, 0, 131, 0, 158, 6)
-#define PTE4_FXIO_D6_O                  NXP_SIUL2_PINMUX(0, 0, 132, 6, 0, 0)
-#define PTE4_FXIO_D6_I                  NXP_SIUL2_PINMUX(0, 0, 132, 0, 158, 1)
-#define PTE5_FXIO_D7_O                  NXP_SIUL2_PINMUX(0, 0, 133, 6, 0, 0)
-#define PTE5_FXIO_D7_I                  NXP_SIUL2_PINMUX(0, 0, 133, 0, 159, 1)
-#define PTE6_FXIO_D12_O                 NXP_SIUL2_PINMUX(0, 0, 134, 6, 0, 0)
-#define PTE6_FXIO_D12_I                 NXP_SIUL2_PINMUX(0, 0, 134, 0, 164, 4)
-#define PTE7_FXIO_D11_O                 NXP_SIUL2_PINMUX(0, 0, 135, 7, 0, 0)
-#define PTE7_FXIO_D11_I                 NXP_SIUL2_PINMUX(0, 0, 135, 0, 163, 4)
-#define PTE8_FXIO_D12_O                 NXP_SIUL2_PINMUX(0, 0, 136, 4, 0, 0)
-#define PTE8_FXIO_D8_O                  NXP_SIUL2_PINMUX(0, 0, 136, 7, 0, 0)
-#define PTE8_FXIO_D8_I                  NXP_SIUL2_PINMUX(0, 0, 136, 0, 160, 5)
-#define PTE8_FXIO_D12_I                 NXP_SIUL2_PINMUX(0, 0, 136, 0, 164, 1)
-#define PTE9_FXIO_D11_O                 NXP_SIUL2_PINMUX(0, 0, 137, 7, 0, 0)
-#define PTE9_FXIO_D11_I                 NXP_SIUL2_PINMUX(0, 0, 137, 0, 163, 1)
-#define PTE10_FXIO_D4_O                 NXP_SIUL2_PINMUX(0, 0, 138, 6, 0, 0)
-#define PTE10_FXIO_D4_I                 NXP_SIUL2_PINMUX(0, 0, 138, 0, 156, 2)
-#define PTE11_FXIO_D5_O                 NXP_SIUL2_PINMUX(0, 0, 139, 6, 0, 0)
-#define PTE11_FXIO_D5_I                 NXP_SIUL2_PINMUX(0, 0, 139, 0, 157, 1)
-#define PTE12_FXIO_D8_O                 NXP_SIUL2_PINMUX(0, 0, 140, 6, 0, 0)
-#define PTE12_FXIO_D7_O                 NXP_SIUL2_PINMUX(0, 0, 140, 7, 0, 0)
-#define PTE12_FXIO_D7_I                 NXP_SIUL2_PINMUX(0, 0, 140, 0, 159, 9)
-#define PTE12_FXIO_D8_I                 NXP_SIUL2_PINMUX(0, 0, 140, 0, 160, 1)
-#define PTE13_FXIO_D5_O                 NXP_SIUL2_PINMUX(0, 0, 141, 6, 0, 0)
-#define PTE13_FXIO_D5_I                 NXP_SIUL2_PINMUX(0, 0, 141, 0, 157, 5)
-#define PTE14_FXIO_D7_O                 NXP_SIUL2_PINMUX(0, 0, 142, 6, 0, 0)
-#define PTE14_FXIO_D7_I                 NXP_SIUL2_PINMUX(0, 0, 142, 0, 159, 5)
-#define PTE15_FXIO_D2_O                 NXP_SIUL2_PINMUX(0, 0, 143, 6, 0, 0)
-#define PTE15_FXIO_D2_I                 NXP_SIUL2_PINMUX(0, 0, 143, 0, 154, 1)
-#define PTE16_FXIO_D3_O                 NXP_SIUL2_PINMUX(0, 0, 144, 6, 0, 0)
-#define PTE16_FXIO_D3_I                 NXP_SIUL2_PINMUX(0, 0, 144, 0, 155, 2)
-#define PTE17_FXIO_D5_O                 NXP_SIUL2_PINMUX(0, 0, 145, 3, 0, 0)
-#define PTE17_FXIO_D5_I                 NXP_SIUL2_PINMUX(0, 0, 145, 0, 157, 4)
-#define PTE18_FXIO_D4_O                 NXP_SIUL2_PINMUX(0, 0, 146, 3, 0, 0)
-#define PTE18_FXIO_D4_I                 NXP_SIUL2_PINMUX(0, 0, 146, 0, 156, 4)
-#define PTE24_FXIO_D5_O                 NXP_SIUL2_PINMUX(0, 0, 152, 5, 0, 0)
-#define PTE24_FXIO_D11_O                NXP_SIUL2_PINMUX(0, 0, 152, 7, 0, 0)
-#define PTE24_FXIO_D5_I                 NXP_SIUL2_PINMUX(0, 0, 152, 0, 157, 10)
-#define PTE24_FXIO_D11_I                NXP_SIUL2_PINMUX(0, 0, 152, 0, 163, 6)
-
-/* EMIOS_1 */
-#define PTA0_EMIOS_1_CH0_X_O            NXP_SIUL2_PINMUX(0, 0, 0, 5, 0, 0)
-#define PTA0_EMIOS_1_CH0_X_I            NXP_SIUL2_PINMUX(0, 0, 0, 0, 80, 3)
-#define PTA2_EMIOS_1_CH19_Y_O           NXP_SIUL2_PINMUX(0, 0, 2, 2, 0, 0)
-#define PTA2_EMIOS_1_CH19_Y_I           NXP_SIUL2_PINMUX(0, 0, 2, 0, 99, 4)
-#define PTA3_EMIOS_1_CH20_Y_O           NXP_SIUL2_PINMUX(0, 0, 3, 2, 0, 0)
-#define PTA3_EMIOS_1_CH20_Y_I           NXP_SIUL2_PINMUX(0, 0, 3, 0, 100, 4)
-#define PTA6_EMIOS_1_CH13_H_O           NXP_SIUL2_PINMUX(0, 0, 6, 4, 0, 0)
-#define PTA6_EMIOS_1_CH13_H_I           NXP_SIUL2_PINMUX(0, 0, 6, 0, 93, 1)
-#define PTA7_EMIOS_1_CH11_H_O           NXP_SIUL2_PINMUX(0, 0, 7, 3, 0, 0)
-#define PTA7_EMIOS_1_CH11_H_I           NXP_SIUL2_PINMUX(0, 0, 7, 0, 91, 1)
-#define PTA8_EMIOS_1_CH12_H_O           NXP_SIUL2_PINMUX(0, 0, 8, 2, 0, 0)
-#define PTA8_EMIOS_1_CH12_H_I           NXP_SIUL2_PINMUX(0, 0, 8, 0, 92, 2)
-#define PTA11_EMIOS_1_CH1_H_O           NXP_SIUL2_PINMUX(0, 0, 11, 3, 0, 0)
-#define PTA11_EMIOS_1_CH1_H_I           NXP_SIUL2_PINMUX(0, 0, 11, 0, 81, 3)
-#define PTA12_EMIOS_1_CH2_H_O           NXP_SIUL2_PINMUX(0, 0, 12, 6, 0, 0)
-#define PTA12_EMIOS_1_CH2_H_I           NXP_SIUL2_PINMUX(0, 0, 12, 0, 82, 4)
-#define PTA13_EMIOS_1_CH3_H_O           NXP_SIUL2_PINMUX(0, 0, 13, 6, 0, 0)
-#define PTA13_EMIOS_1_CH3_H_I           NXP_SIUL2_PINMUX(0, 0, 13, 0, 83, 4)
-#define PTA14_EMIOS_1_CH4_H_O           NXP_SIUL2_PINMUX(0, 0, 14, 2, 0, 0)
-#define PTA14_EMIOS_1_CH4_H_I           NXP_SIUL2_PINMUX(0, 0, 14, 0, 84, 7)
-#define PTA18_EMIOS_1_CH0_X_O           NXP_SIUL2_PINMUX(0, 0, 18, 2, 0, 0)
-#define PTA18_EMIOS_1_CH16_X_O          NXP_SIUL2_PINMUX(0, 0, 18, 5, 0, 0)
-#define PTA18_EMIOS_1_CH0_X_I           NXP_SIUL2_PINMUX(0, 0, 18, 0, 80, 1)
-#define PTA18_EMIOS_1_CH16_X_I          NXP_SIUL2_PINMUX(0, 0, 18, 0, 96, 1)
-#define PTA19_EMIOS_1_CH1_H_O           NXP_SIUL2_PINMUX(0, 0, 19, 2, 0, 0)
-#define PTA19_EMIOS_1_CH1_H_I           NXP_SIUL2_PINMUX(0, 0, 19, 0, 81, 1)
-#define PTA20_EMIOS_1_CH2_H_O           NXP_SIUL2_PINMUX(0, 0, 20, 2, 0, 0)
-#define PTA20_EMIOS_1_CH2_H_I           NXP_SIUL2_PINMUX(0, 0, 20, 0, 82, 2)
-#define PTA21_EMIOS_1_CH3_H_O           NXP_SIUL2_PINMUX(0, 0, 21, 2, 0, 0)
-#define PTA21_EMIOS_1_CH3_H_I           NXP_SIUL2_PINMUX(0, 0, 21, 0, 83, 1)
+/* Signals with different mux data on this part */
+#undef PTA24_EMIOS_1_CH7_H
 #define PTA24_EMIOS_1_CH7_H             NXP_SIUL2_PINMUX(0, 0, 21, 0, 87, 2)
+#undef PTA24_FXIO_D3
+#define PTA24_FXIO_D3                   NXP_SIUL2_PINMUX(0, 0, 21, 0, 155, 3)
+#undef PTA24_GPI24
+#define PTA24_GPI24                     NXP_SIUL2_PINMUX(0, 0, 21, 0, 24, 0)
+#undef PTA25_EIRQ5
+#define PTA25_EIRQ5                     NXP_SIUL2_PINMUX(0, 0, 21, 0, 21, 2)
+#undef PTA25_EMIOS_1_CH8_X
 #define PTA25_EMIOS_1_CH8_X             NXP_SIUL2_PINMUX(0, 0, 21, 0, 88, 2)
-#define PTA27_EMIOS_1_CH10_H_O          NXP_SIUL2_PINMUX(0, 0, 27, 2, 0, 0)
-#define PTA27_EMIOS_1_CH10_H_I          NXP_SIUL2_PINMUX(0, 0, 27, 0, 90, 3)
-#define PTA28_EMIOS_1_CH11_H_O          NXP_SIUL2_PINMUX(0, 0, 28, 2, 0, 0)
-#define PTA28_EMIOS_1_CH11_H_I          NXP_SIUL2_PINMUX(0, 0, 28, 0, 91, 2)
-#define PTA29_EMIOS_1_CH12_H_O          NXP_SIUL2_PINMUX(0, 0, 29, 2, 0, 0)
-#define PTA29_EMIOS_1_CH12_H_I          NXP_SIUL2_PINMUX(0, 0, 29, 0, 92, 3)
-#define PTA30_EMIOS_1_CH13_H_O          NXP_SIUL2_PINMUX(0, 0, 30, 2, 0, 0)
-#define PTA30_EMIOS_1_CH13_H_I          NXP_SIUL2_PINMUX(0, 0, 30, 0, 93, 2)
-#define PTA31_EMIOS_1_CH14_H_O          NXP_SIUL2_PINMUX(0, 0, 31, 2, 0, 0)
-#define PTA31_EMIOS_1_CH14_H_I          NXP_SIUL2_PINMUX(0, 0, 31, 0, 94, 2)
-#define PTB0_EMIOS_1_CH6_H_O            NXP_SIUL2_PINMUX(0, 0, 32, 6, 0, 0)
-#define PTB0_EMIOS_1_CH6_H_I            NXP_SIUL2_PINMUX(0, 0, 32, 0, 86, 1)
-#define PTB1_EMIOS_1_CH5_H_O            NXP_SIUL2_PINMUX(0, 0, 33, 6, 0, 0)
-#define PTB1_EMIOS_1_CH5_H_I            NXP_SIUL2_PINMUX(0, 0, 33, 0, 85, 1)
-#define PTB4_EMIOS_1_CH10_H_O           NXP_SIUL2_PINMUX(0, 0, 36, 6, 0, 0)
-#define PTB4_EMIOS_1_CH10_H_I           NXP_SIUL2_PINMUX(0, 0, 36, 0, 90, 6)
-#define PTB5_EMIOS_1_CH11_H_O           NXP_SIUL2_PINMUX(0, 0, 37, 6, 0, 0)
-#define PTB5_EMIOS_1_CH11_H_I           NXP_SIUL2_PINMUX(0, 0, 37, 0, 91, 5)
-#define PTB8_EMIOS_1_CH15_H_O           NXP_SIUL2_PINMUX(0, 0, 40, 2, 0, 0)
-#define PTB8_EMIOS_1_CH15_H_I           NXP_SIUL2_PINMUX(0, 0, 40, 0, 95, 6)
-#define PTB9_EMIOS_1_CH16_X_O           NXP_SIUL2_PINMUX(0, 0, 41, 2, 0, 0)
-#define PTB9_EMIOS_1_CH16_X_I           NXP_SIUL2_PINMUX(0, 0, 41, 0, 96, 5)
-#define PTB10_EMIOS_1_CH17_Y_O          NXP_SIUL2_PINMUX(0, 0, 42, 2, 0, 0)
-#define PTB10_EMIOS_1_CH17_Y_I          NXP_SIUL2_PINMUX(0, 0, 42, 0, 97, 4)
-#define PTB11_EMIOS_1_CH18_Y_O          NXP_SIUL2_PINMUX(0, 0, 43, 2, 0, 0)
-#define PTB11_EMIOS_1_CH18_Y_I          NXP_SIUL2_PINMUX(0, 0, 43, 0, 98, 4)
-#define PTB17_EMIOS_1_CH7_H_O           NXP_SIUL2_PINMUX(0, 0, 49, 4, 0, 0)
-#define PTB17_EMIOS_1_CH7_H_I           NXP_SIUL2_PINMUX(0, 0, 49, 0, 87, 7)
-#define PTB18_EMIOS_1_CH15_H_O          NXP_SIUL2_PINMUX(0, 0, 50, 2, 0, 0)
-#define PTB18_EMIOS_1_CH15_H_I          NXP_SIUL2_PINMUX(0, 0, 50, 0, 95, 2)
-#define PTB19_EMIOS_1_CH15_H_O          NXP_SIUL2_PINMUX(0, 0, 51, 2, 0, 0)
-#define PTB19_EMIOS_1_CH15_H_I          NXP_SIUL2_PINMUX(0, 0, 51, 0, 95, 3)
-#define PTB20_EMIOS_1_CH16_X_O          NXP_SIUL2_PINMUX(0, 0, 52, 2, 0, 0)
-#define PTB20_EMIOS_1_CH16_X_I          NXP_SIUL2_PINMUX(0, 0, 52, 0, 96, 3)
-#define PTB21_EMIOS_1_CH17_Y_O          NXP_SIUL2_PINMUX(0, 0, 53, 2, 0, 0)
-#define PTB21_EMIOS_1_CH17_Y_I          NXP_SIUL2_PINMUX(0, 0, 53, 0, 97, 2)
-#define PTB22_EMIOS_1_CH18_Y_O          NXP_SIUL2_PINMUX(0, 0, 54, 2, 0, 0)
-#define PTB22_EMIOS_1_CH18_Y_I          NXP_SIUL2_PINMUX(0, 0, 54, 0, 98, 2)
-#define PTB23_EMIOS_1_CH19_Y_O          NXP_SIUL2_PINMUX(0, 0, 55, 2, 0, 0)
-#define PTB23_EMIOS_1_CH19_Y_I          NXP_SIUL2_PINMUX(0, 0, 55, 0, 99, 2)
-#define PTB24_EMIOS_1_CH20_Y_O          NXP_SIUL2_PINMUX(0, 0, 56, 2, 0, 0)
-#define PTB24_EMIOS_1_CH20_Y_I          NXP_SIUL2_PINMUX(0, 0, 56, 0, 100, 2)
-#define PTB25_EMIOS_1_CH21_Y_O          NXP_SIUL2_PINMUX(0, 0, 57, 2, 0, 0)
-#define PTB25_EMIOS_1_CH21_Y_I          NXP_SIUL2_PINMUX(0, 0, 57, 0, 101, 2)
-#define PTB26_EMIOS_1_CH22_X_O          NXP_SIUL2_PINMUX(0, 0, 58, 2, 0, 0)
-#define PTB26_EMIOS_1_CH22_X_I          NXP_SIUL2_PINMUX(0, 0, 58, 0, 102, 2)
-#define PTB27_EMIOS_1_CH23_X_O          NXP_SIUL2_PINMUX(0, 0, 59, 2, 0, 0)
-#define PTB27_EMIOS_1_CH23_X_I          NXP_SIUL2_PINMUX(0, 0, 59, 0, 103, 2)
-#define PTC6_EMIOS_1_CH6_H_O            NXP_SIUL2_PINMUX(0, 0, 70, 5, 0, 0)
-#define PTC6_EMIOS_1_CH6_H_I            NXP_SIUL2_PINMUX(0, 0, 70, 0, 86, 4)
-#define PTC7_EMIOS_1_CH7_H_O            NXP_SIUL2_PINMUX(0, 0, 71, 5, 0, 0)
-#define PTC7_EMIOS_1_CH7_H_I            NXP_SIUL2_PINMUX(0, 0, 71, 0, 87, 4)
-#define PTC8_EMIOS_1_CH9_H_O            NXP_SIUL2_PINMUX(0, 0, 72, 4, 0, 0)
-#define PTC8_EMIOS_1_CH9_H_I            NXP_SIUL2_PINMUX(0, 0, 72, 0, 89, 1)
-#define PTC9_EMIOS_1_CH8_X_O            NXP_SIUL2_PINMUX(0, 0, 73, 4, 0, 0)
-#define PTC9_EMIOS_1_CH8_X_I            NXP_SIUL2_PINMUX(0, 0, 73, 0, 88, 1)
-#define PTC10_EMIOS_1_CH0_X_O           NXP_SIUL2_PINMUX(0, 0, 74, 7, 0, 0)
-#define PTC10_EMIOS_1_CH0_X_I           NXP_SIUL2_PINMUX(0, 0, 74, 0, 80, 6)
-#define PTC11_EMIOS_1_CH1_H_O           NXP_SIUL2_PINMUX(0, 0, 75, 3, 0, 0)
-#define PTC11_EMIOS_1_CH1_H_I           NXP_SIUL2_PINMUX(0, 0, 75, 0, 81, 7)
-#define PTC12_EMIOS_1_CH2_H_O           NXP_SIUL2_PINMUX(0, 0, 76, 2, 0, 0)
-#define PTC12_EMIOS_1_CH2_H_I           NXP_SIUL2_PINMUX(0, 0, 76, 0, 82, 1)
-#define PTC13_EMIOS_1_CH3_H_O           NXP_SIUL2_PINMUX(0, 0, 77, 2, 0, 0)
-#define PTC13_EMIOS_1_CH3_H_I           NXP_SIUL2_PINMUX(0, 0, 77, 0, 83, 7)
-#define PTC14_EMIOS_1_CH4_H_O           NXP_SIUL2_PINMUX(0, 0, 78, 5, 0, 0)
-#define PTC14_EMIOS_1_CH4_H_I           NXP_SIUL2_PINMUX(0, 0, 78, 0, 84, 8)
-#define PTC16_EMIOS_1_CH9_H_O           NXP_SIUL2_PINMUX(0, 0, 80, 2, 0, 0)
-#define PTC16_EMIOS_1_CH9_H_I           NXP_SIUL2_PINMUX(0, 0, 80, 0, 89, 5)
-#define PTC24_EMIOS_1_CH0_X_O           NXP_SIUL2_PINMUX(0, 0, 88, 2, 0, 0)
-#define PTC24_EMIOS_1_CH0_X_I           NXP_SIUL2_PINMUX(0, 0, 88, 0, 80, 4)
-#define PTC25_EMIOS_1_CH1_H_O           NXP_SIUL2_PINMUX(0, 0, 89, 2, 0, 0)
-#define PTC25_EMIOS_1_CH1_H_I           NXP_SIUL2_PINMUX(0, 0, 89, 0, 81, 4)
-#define PTC26_EMIOS_1_CH3_H_O           NXP_SIUL2_PINMUX(0, 0, 90, 2, 0, 0)
-#define PTC26_EMIOS_1_CH3_H_I           NXP_SIUL2_PINMUX(0, 0, 90, 0, 83, 3)
-#define PTC27_EMIOS_1_CH4_H_O           NXP_SIUL2_PINMUX(0, 0, 91, 2, 0, 0)
-#define PTC27_EMIOS_1_CH4_H_I           NXP_SIUL2_PINMUX(0, 0, 91, 0, 84, 2)
-#define PTC28_EMIOS_1_CH7_H_O           NXP_SIUL2_PINMUX(0, 0, 92, 2, 0, 0)
-#define PTC28_EMIOS_1_CH7_H_I           NXP_SIUL2_PINMUX(0, 0, 92, 0, 87, 3)
-#define PTC29_EMIOS_1_CH10_H_O          NXP_SIUL2_PINMUX(0, 0, 93, 2, 0, 0)
-#define PTC29_EMIOS_1_CH10_H_I          NXP_SIUL2_PINMUX(0, 0, 93, 0, 90, 1)
-#define PTC30_EMIOS_1_CH12_H_O          NXP_SIUL2_PINMUX(0, 0, 94, 2, 0, 0)
-#define PTC30_EMIOS_1_CH12_H_I          NXP_SIUL2_PINMUX(0, 0, 94, 0, 92, 1)
-#define PTC31_EMIOS_1_CH14_H_O          NXP_SIUL2_PINMUX(0, 0, 95, 2, 0, 0)
-#define PTC31_EMIOS_1_CH14_H_I          NXP_SIUL2_PINMUX(0, 0, 95, 0, 94, 1)
-#define PTD2_EMIOS_1_CH21_Y_O           NXP_SIUL2_PINMUX(0, 0, 98, 2, 0, 0)
-#define PTD2_EMIOS_1_CH21_Y_I           NXP_SIUL2_PINMUX(0, 0, 98, 0, 101, 4)
-#define PTD3_EMIOS_1_CH22_X_O           NXP_SIUL2_PINMUX(0, 0, 99, 2, 0, 0)
-#define PTD3_EMIOS_1_CH22_X_I           NXP_SIUL2_PINMUX(0, 0, 99, 0, 102, 4)
-#define PTD4_EMIOS_1_CH23_X_O           NXP_SIUL2_PINMUX(0, 0, 100, 2, 0, 0)
-#define PTD4_EMIOS_1_CH23_X_I           NXP_SIUL2_PINMUX(0, 0, 100, 0, 103, 4)
-#define PTD6_EMIOS_1_CH12_H_O           NXP_SIUL2_PINMUX(0, 0, 102, 3, 0, 0)
-#define PTD6_EMIOS_1_CH12_H_I           NXP_SIUL2_PINMUX(0, 0, 102, 0, 92, 5)
-#define PTD10_EMIOS_1_CH10_H_O          NXP_SIUL2_PINMUX(0, 0, 106, 3, 0, 0)
-#define PTD10_EMIOS_1_CH10_H_I          NXP_SIUL2_PINMUX(0, 0, 106, 0, 90, 2)
-#define PTD15_EMIOS_1_CH14_H_O          NXP_SIUL2_PINMUX(0, 0, 111, 3, 0, 0)
-#define PTD15_EMIOS_1_CH14_H_I          NXP_SIUL2_PINMUX(0, 0, 111, 0, 94, 6)
-#define PTD16_EMIOS_1_CH15_H_O          NXP_SIUL2_PINMUX(0, 0, 112, 5, 0, 0)
-#define PTD16_EMIOS_1_CH15_H_I          NXP_SIUL2_PINMUX(0, 0, 112, 0, 95, 7)
-#define PTD20_EMIOS_1_CH17_Y_O          NXP_SIUL2_PINMUX(0, 0, 116, 2, 0, 0)
-#define PTD20_EMIOS_1_CH17_Y_I          NXP_SIUL2_PINMUX(0, 0, 116, 0, 97, 1)
-#define PTD21_EMIOS_1_CH18_Y_O          NXP_SIUL2_PINMUX(0, 0, 117, 2, 0, 0)
-#define PTD21_EMIOS_1_CH18_Y_I          NXP_SIUL2_PINMUX(0, 0, 117, 0, 98, 1)
-#define PTD22_EMIOS_1_CH19_Y_O          NXP_SIUL2_PINMUX(0, 0, 118, 2, 0, 0)
-#define PTD22_EMIOS_1_CH19_Y_I          NXP_SIUL2_PINMUX(0, 0, 118, 0, 99, 1)
-#define PTD23_EMIOS_1_CH20_Y_O          NXP_SIUL2_PINMUX(0, 0, 119, 2, 0, 0)
-#define PTD23_EMIOS_1_CH20_Y_I          NXP_SIUL2_PINMUX(0, 0, 119, 0, 100, 1)
-#define PTD24_EMIOS_1_CH21_Y_O          NXP_SIUL2_PINMUX(0, 0, 120, 2, 0, 0)
-#define PTD24_EMIOS_1_CH21_Y_I          NXP_SIUL2_PINMUX(0, 0, 120, 0, 101, 1)
-#define PTD26_EMIOS_1_CH23_X_O          NXP_SIUL2_PINMUX(0, 0, 122, 2, 0, 0)
-#define PTD26_EMIOS_1_CH23_X_I          NXP_SIUL2_PINMUX(0, 0, 122, 0, 103, 1)
-#define PTE2_EMIOS_1_CH8_X_O            NXP_SIUL2_PINMUX(0, 0, 130, 4, 0, 0)
-#define PTE2_EMIOS_1_CH8_X_I            NXP_SIUL2_PINMUX(0, 0, 130, 0, 88, 4)
-#define PTE4_EMIOS_1_CH4_H_O            NXP_SIUL2_PINMUX(0, 0, 132, 3, 0, 0)
-#define PTE4_EMIOS_1_CH4_H_I            NXP_SIUL2_PINMUX(0, 0, 132, 0, 84, 4)
-#define PTE5_EMIOS_1_CH5_H_O            NXP_SIUL2_PINMUX(0, 0, 133, 3, 0, 0)
-#define PTE5_EMIOS_1_CH5_H_I            NXP_SIUL2_PINMUX(0, 0, 133, 0, 85, 4)
-#define PTE6_EMIOS_1_CH14_H_O           NXP_SIUL2_PINMUX(0, 0, 134, 4, 0, 0)
-#define PTE6_EMIOS_1_CH14_H_I           NXP_SIUL2_PINMUX(0, 0, 134, 0, 94, 5)
-#define PTE9_EMIOS_1_CH13_H_O           NXP_SIUL2_PINMUX(0, 0, 137, 3, 0, 0)
-#define PTE9_EMIOS_1_CH13_H_I           NXP_SIUL2_PINMUX(0, 0, 137, 0, 93, 5)
-#define PTE12_EMIOS_1_CH5_H_O           NXP_SIUL2_PINMUX(0, 0, 140, 4, 0, 0)
-#define PTE12_EMIOS_1_CH5_H_I           NXP_SIUL2_PINMUX(0, 0, 140, 0, 85, 5)
-#define PTE13_EMIOS_1_CH5_H_O           NXP_SIUL2_PINMUX(0, 0, 141, 2, 0, 0)
-#define PTE13_EMIOS_1_CH5_H_I           NXP_SIUL2_PINMUX(0, 0, 141, 0, 85, 3)
-#define PTE21_EMIOS_1_CH1_H_O           NXP_SIUL2_PINMUX(0, 0, 149, 2, 0, 0)
-#define PTE21_EMIOS_1_CH1_H_I           NXP_SIUL2_PINMUX(0, 0, 149, 0, 81, 2)
-#define PTE22_EMIOS_1_CH2_H_O           NXP_SIUL2_PINMUX(0, 0, 150, 2, 0, 0)
-#define PTE22_EMIOS_1_CH2_H_I           NXP_SIUL2_PINMUX(0, 0, 150, 0, 82, 3)
-#define PTE23_EMIOS_1_CH3_H_O           NXP_SIUL2_PINMUX(0, 0, 151, 2, 0, 0)
-#define PTE23_EMIOS_1_CH3_H_I           NXP_SIUL2_PINMUX(0, 0, 151, 0, 83, 2)
-#define PTE24_EMIOS_1_CH4_H_O           NXP_SIUL2_PINMUX(0, 0, 152, 2, 0, 0)
-#define PTE24_EMIOS_1_CH4_H_I           NXP_SIUL2_PINMUX(0, 0, 152, 0, 84, 3)
-#define PTE25_EMIOS_1_CH5_H_O           NXP_SIUL2_PINMUX(0, 0, 153, 2, 0, 0)
-#define PTE25_EMIOS_1_CH5_H_I           NXP_SIUL2_PINMUX(0, 0, 153, 0, 85, 2)
-#define PTE26_EMIOS_1_CH6_H_O           NXP_SIUL2_PINMUX(0, 0, 154, 2, 0, 0)
-#define PTE26_EMIOS_1_CH6_H_I           NXP_SIUL2_PINMUX(0, 0, 154, 0, 86, 3)
+#undef PTA25_FXIO_D2
+#define PTA25_FXIO_D2                   NXP_SIUL2_PINMUX(0, 0, 21, 0, 154, 6)
+#undef PTA25_GPI25
+#define PTA25_GPI25                     NXP_SIUL2_PINMUX(0, 0, 21, 0, 25, 0)
 
-/* LPSPI0 */
-#define PTA0_LPSPI0_PCS7_O              NXP_SIUL2_PINMUX(0, 0, 0, 6, 0, 0)
-#define PTA0_LPSPI0_PCS7_I              NXP_SIUL2_PINMUX(0, 0, 0, 0, 228, 1)
-#define PTA1_LPSPI0_PCS6_O              NXP_SIUL2_PINMUX(0, 0, 1, 6, 0, 0)
-#define PTA1_LPSPI0_PCS6_I              NXP_SIUL2_PINMUX(0, 0, 1, 0, 227, 1)
-#define PTA7_LPSPI0_PCS1_O              NXP_SIUL2_PINMUX(0, 0, 7, 2, 0, 0)
-#define PTA7_LPSPI0_PCS1_I              NXP_SIUL2_PINMUX(0, 0, 7, 0, 222, 3)
-#define PTA15_LPSPI0_PCS3_O             NXP_SIUL2_PINMUX(0, 0, 15, 3, 0, 0)
-#define PTA15_LPSPI0_PCS3_I             NXP_SIUL2_PINMUX(0, 0, 15, 0, 224, 1)
-#define PTA16_LPSPI0_PCS4_O             NXP_SIUL2_PINMUX(0, 0, 16, 4, 0, 0)
-#define PTA16_LPSPI0_PCS4_I             NXP_SIUL2_PINMUX(0, 0, 16, 0, 225, 1)
-#define PTA30_LPSPI0_SOUT_O             NXP_SIUL2_PINMUX(0, 0, 30, 4, 0, 0)
-#define PTA30_LPSPI0_SOUT_I             NXP_SIUL2_PINMUX(0, 0, 30, 0, 231, 4)
-#define PTA31_LPSPI0_PCS1_O             NXP_SIUL2_PINMUX(0, 0, 31, 4, 0, 0)
-#define PTA31_LPSPI0_PCS1_I             NXP_SIUL2_PINMUX(0, 0, 31, 0, 222, 2)
-#define PTB0_LPSPI0_PCS0_O              NXP_SIUL2_PINMUX(0, 0, 32, 3, 0, 0)
-#define PTB0_LPSPI0_PCS0_I              NXP_SIUL2_PINMUX(0, 0, 32, 0, 221, 1)
-#define PTB1_LPSPI0_SOUT_O              NXP_SIUL2_PINMUX(0, 0, 33, 3, 0, 0)
-#define PTB1_LPSPI0_SOUT_I              NXP_SIUL2_PINMUX(0, 0, 33, 0, 231, 3)
-#define PTB4_LPSPI0_SOUT_O              NXP_SIUL2_PINMUX(0, 0, 36, 3, 0, 0)
-#define PTB4_LPSPI0_SOUT_I              NXP_SIUL2_PINMUX(0, 0, 36, 0, 231, 2)
-#define PTB5_LPSPI0_PCS1_O              NXP_SIUL2_PINMUX(0, 0, 37, 3, 0, 0)
-#define PTB5_LPSPI0_PCS0_O              NXP_SIUL2_PINMUX(0, 0, 37, 4, 0, 0)
-#define PTB5_LPSPI0_PCS0_I              NXP_SIUL2_PINMUX(0, 0, 37, 0, 221, 2)
-#define PTB5_LPSPI0_PCS1_I              NXP_SIUL2_PINMUX(0, 0, 37, 0, 222, 1)
-#define PTB8_LPSPI0_PCS5_O              NXP_SIUL2_PINMUX(0, 0, 40, 6, 0, 0)
-#define PTB8_LPSPI0_PCS5_I              NXP_SIUL2_PINMUX(0, 0, 40, 0, 226, 1)
-#define PTC2_LPSPI0_PCS2_O              NXP_SIUL2_PINMUX(0, 0, 66, 4, 0, 0)
-#define PTC2_LPSPI0_PCS2_I              NXP_SIUL2_PINMUX(0, 0, 66, 0, 223, 2)
-#define PTC6_LPSPI0_PCS1_O              NXP_SIUL2_PINMUX(0, 0, 70, 6, 0, 0)
-#define PTC6_LPSPI0_PCS1_I              NXP_SIUL2_PINMUX(0, 0, 70, 0, 222, 4)
-#define PTC7_LPSPI0_PCS0_O              NXP_SIUL2_PINMUX(0, 0, 71, 6, 0, 0)
-#define PTC7_LPSPI0_PCS0_I              NXP_SIUL2_PINMUX(0, 0, 71, 0, 221, 6)
-#define PTC8_LPSPI0_SCK_O               NXP_SIUL2_PINMUX(0, 0, 72, 6, 0, 0)
-#define PTC8_LPSPI0_SCK_I               NXP_SIUL2_PINMUX(0, 0, 72, 0, 229, 1)
-#define PTC9_LPSPI0_SIN_O               NXP_SIUL2_PINMUX(0, 0, 73, 6, 0, 0)
-#define PTC9_LPSPI0_SIN_I               NXP_SIUL2_PINMUX(0, 0, 73, 0, 230, 2)
-#define PTD5_LPSPI0_PCS1_O              NXP_SIUL2_PINMUX(0, 0, 101, 7, 0, 0)
-#define PTD5_LPSPI0_PCS1_I              NXP_SIUL2_PINMUX(0, 0, 101, 0, 222, 5)
-#define PTD6_LPSPI0_PCS0_O              NXP_SIUL2_PINMUX(0, 0, 102, 7, 0, 0)
-#define PTD6_LPSPI0_PCS0_I              NXP_SIUL2_PINMUX(0, 0, 102, 0, 221, 7)
-#define PTD7_LPSPI0_PCS3_O              NXP_SIUL2_PINMUX(0, 0, 103, 4, 0, 0)
-#define PTD7_LPSPI0_PCS3_I              NXP_SIUL2_PINMUX(0, 0, 103, 0, 224, 2)
-#define PTD10_LPSPI0_SIN_O              NXP_SIUL2_PINMUX(0, 0, 106, 5, 0, 0)
-#define PTD10_LPSPI0_SIN_I              NXP_SIUL2_PINMUX(0, 0, 106, 0, 230, 4)
-#define PTD11_LPSPI0_SCK_O              NXP_SIUL2_PINMUX(0, 0, 107, 6, 0, 0)
-#define PTD11_LPSPI0_SCK_I              NXP_SIUL2_PINMUX(0, 0, 107, 0, 229, 5)
-#define PTD12_LPSPI0_SOUT_O             NXP_SIUL2_PINMUX(0, 0, 108, 6, 0, 0)
-#define PTD12_LPSPI0_SOUT_I             NXP_SIUL2_PINMUX(0, 0, 108, 0, 231, 5)
-#define PTD15_LPSPI0_SCK_O              NXP_SIUL2_PINMUX(0, 0, 111, 4, 0, 0)
-#define PTD15_LPSPI0_SCK_I              NXP_SIUL2_PINMUX(0, 0, 111, 0, 229, 3)
-#define PTD16_LPSPI0_SIN_O              NXP_SIUL2_PINMUX(0, 0, 112, 4, 0, 0)
-#define PTD16_LPSPI0_SIN_I              NXP_SIUL2_PINMUX(0, 0, 112, 0, 230, 3)
-#define PTE0_LPSPI0_SIN_O               NXP_SIUL2_PINMUX(0, 0, 128, 2, 0, 0)
-#define PTE0_LPSPI0_SIN_I               NXP_SIUL2_PINMUX(0, 0, 128, 0, 230, 1)
-#define PTE1_LPSPI0_SCK_O               NXP_SIUL2_PINMUX(0, 0, 129, 2, 0, 0)
-#define PTE1_LPSPI0_SCK_I               NXP_SIUL2_PINMUX(0, 0, 129, 0, 229, 2)
-#define PTE2_LPSPI0_SOUT_O              NXP_SIUL2_PINMUX(0, 0, 130, 2, 0, 0)
-#define PTE2_LPSPI0_SOUT_I              NXP_SIUL2_PINMUX(0, 0, 130, 0, 231, 1)
-#define PTE4_LPSPI0_PCS0_O              NXP_SIUL2_PINMUX(0, 0, 132, 1, 0, 0)
-#define PTE4_LPSPI0_PCS0_I              NXP_SIUL2_PINMUX(0, 0, 132, 0, 221, 5)
-#define PTE6_LPSPI0_PCS2_O              NXP_SIUL2_PINMUX(0, 0, 134, 2, 0, 0)
-#define PTE6_LPSPI0_PCS2_I              NXP_SIUL2_PINMUX(0, 0, 134, 0, 223, 1)
-
-/* TRGMUX */
-#define PTA0_TRGMUX_OUT3                NXP_SIUL2_PINMUX(0, 0, 0, 7, 0, 0)
-#define PTA1_TRGMUX_OUT0                NXP_SIUL2_PINMUX(0, 0, 1, 7, 0, 0)
-#define PTA18_TRGMUX_IN12               NXP_SIUL2_PINMUX(0, 0, 18, 0, 356, 1)
-#define PTA19_TRGMUX_IN13               NXP_SIUL2_PINMUX(0, 0, 19, 0, 357, 1)
-#define PTA20_TRGMUX_IN14               NXP_SIUL2_PINMUX(0, 0, 20, 0, 358, 1)
-#define PTA21_TRGMUX_IN15               NXP_SIUL2_PINMUX(0, 0, 21, 0, 359, 1)
-#define PTA31_TRGMUX_OUT8               NXP_SIUL2_PINMUX(0, 0, 31, 7, 0, 0)
-#define PTB2_TRGMUX_IN3                 NXP_SIUL2_PINMUX(0, 0, 34, 0, 347, 1)
-#define PTB3_TRGMUX_IN2                 NXP_SIUL2_PINMUX(0, 0, 35, 0, 346, 1)
-#define PTB4_TRGMUX_IN1                 NXP_SIUL2_PINMUX(0, 0, 36, 0, 345, 1)
-#define PTB5_TRGMUX_IN0                 NXP_SIUL2_PINMUX(0, 0, 37, 0, 344, 1)
-#define PTB18_TRGMUX_OUT9               NXP_SIUL2_PINMUX(0, 0, 50, 7, 0, 0)
-#define PTB19_TRGMUX_OUT10              NXP_SIUL2_PINMUX(0, 0, 51, 7, 0, 0)
-#define PTB20_TRGMUX_OUT11              NXP_SIUL2_PINMUX(0, 0, 52, 7, 0, 0)
-#define PTB21_TRGMUX_OUT12              NXP_SIUL2_PINMUX(0, 0, 53, 7, 0, 0)
-#define PTB22_TRGMUX_OUT13              NXP_SIUL2_PINMUX(0, 0, 54, 7, 0, 0)
-#define PTB23_TRGMUX_OUT14              NXP_SIUL2_PINMUX(0, 0, 55, 7, 0, 0)
-#define PTC10_TRGMUX_IN11               NXP_SIUL2_PINMUX(0, 0, 74, 0, 355, 1)
-#define PTC11_TRGMUX_IN10               NXP_SIUL2_PINMUX(0, 0, 75, 0, 354, 1)
-#define PTC14_TRGMUX_IN9                NXP_SIUL2_PINMUX(0, 0, 78, 0, 353, 1)
-#define PTC15_TRGMUX_IN8                NXP_SIUL2_PINMUX(0, 0, 79, 0, 352, 1)
-#define PTC24_TRGMUX_OUT15              NXP_SIUL2_PINMUX(0, 0, 88, 7, 0, 0)
-#define PTD0_TRGMUX_OUT1                NXP_SIUL2_PINMUX(0, 0, 96, 7, 0, 0)
-#define PTD1_TRGMUX_OUT2                NXP_SIUL2_PINMUX(0, 0, 97, 7, 0, 0)
-#define PTD2_TRGMUX_IN5                 NXP_SIUL2_PINMUX(0, 0, 98, 0, 349, 1)
-#define PTD3_TRGMUX_IN4                 NXP_SIUL2_PINMUX(0, 0, 99, 0, 348, 1)
-#define PTD5_TRGMUX_IN7                 NXP_SIUL2_PINMUX(0, 0, 101, 0, 351, 1)
-#define PTE3_TRGMUX_IN6                 NXP_SIUL2_PINMUX(0, 0, 131, 0, 350, 1)
-#define PTE10_TRGMUX_OUT4               NXP_SIUL2_PINMUX(0, 0, 138, 7, 0, 0)
-#define PTE11_TRGMUX_OUT5               NXP_SIUL2_PINMUX(0, 0, 139, 7, 0, 0)
-#define PTE15_TRGMUX_OUT6               NXP_SIUL2_PINMUX(0, 0, 143, 7, 0, 0)
-#define PTE16_TRGMUX_OUT7               NXP_SIUL2_PINMUX(0, 0, 144, 7, 0, 0)
-
-/* LPUART0 */
-#define PTA0_LPUART0_CTS                NXP_SIUL2_PINMUX(0, 0, 0, 0, 360, 1)
-#define PTA1_LPUART0_RTS                NXP_SIUL2_PINMUX(0, 0, 1, 3, 0, 0)
-#define PTA2_LPUART0_RX                 NXP_SIUL2_PINMUX(0, 0, 2, 0, 187, 1)
-#define PTA3_LPUART0_TX_O               NXP_SIUL2_PINMUX(0, 0, 3, 6, 0, 0)
-#define PTA3_LPUART0_TX_I               NXP_SIUL2_PINMUX(0, 0, 3, 0, 363, 1)
+/* Signals specific to this part */
+#define PTA15_LPUART1_DTR_B             NXP_SIUL2_PINMUX(0, 0, 15, 5, 0, 0)
+#define PTA16_LPUART1_DSR_B             NXP_SIUL2_PINMUX(0, 0, 16, 0, 378, 1)
 #define PTA6_LPUART0_RIN_B              NXP_SIUL2_PINMUX(0, 0, 6, 0, 375, 1)
 #define PTA7_LPUART0_DCD_B              NXP_SIUL2_PINMUX(0, 0, 7, 0, 374, 1)
-#define PTA27_LPUART0_TX_O              NXP_SIUL2_PINMUX(0, 0, 27, 4, 0, 0)
-#define PTA27_LPUART0_TX_I              NXP_SIUL2_PINMUX(0, 0, 27, 0, 363, 4)
-#define PTA28_LPUART0_RX                NXP_SIUL2_PINMUX(0, 0, 28, 0, 187, 4)
-#define PTB0_LPUART0_RX                 NXP_SIUL2_PINMUX(0, 0, 32, 0, 187, 2)
-#define PTB1_LPUART0_TX_O               NXP_SIUL2_PINMUX(0, 0, 33, 2, 0, 0)
-#define PTB1_LPUART0_TX_I               NXP_SIUL2_PINMUX(0, 0, 33, 0, 363, 2)
 #define PTB10_LPUART0_DTR_B             NXP_SIUL2_PINMUX(0, 0, 42, 3, 0, 0)
 #define PTB11_LPUART0_DSR_B             NXP_SIUL2_PINMUX(0, 0, 43, 0, 373, 2)
 #define PTB12_LPUART0_DCD_B             NXP_SIUL2_PINMUX(0, 0, 44, 0, 374, 2)
 #define PTB13_LPUART0_RIN_B             NXP_SIUL2_PINMUX(0, 0, 45, 0, 375, 2)
-#define PTC2_LPUART0_RX                 NXP_SIUL2_PINMUX(0, 0, 66, 0, 187, 3)
-#define PTC3_LPUART0_TX_O               NXP_SIUL2_PINMUX(0, 0, 67, 4, 0, 0)
-#define PTC3_LPUART0_TX_I               NXP_SIUL2_PINMUX(0, 0, 67, 0, 363, 3)
-#define PTC8_LPUART0_CTS                NXP_SIUL2_PINMUX(0, 0, 72, 0, 360, 2)
-#define PTC9_LPUART0_RTS                NXP_SIUL2_PINMUX(0, 0, 73, 3, 0, 0)
-#define PTC10_LPUART0_DSR_B             NXP_SIUL2_PINMUX(0, 0, 74, 0, 373, 1)
-#define PTC11_LPUART0_DTR_B             NXP_SIUL2_PINMUX(0, 0, 75, 2, 0, 0)
-
-/* FCCU */
-#define PTA2_FCCU_ERR0                  NXP_SIUL2_PINMUX(0, 0, 2, 1, 0, 0)
-#define PTA2_FCCU_ERR_IN0               NXP_SIUL2_PINMUX(0, 0, 2, 0, 148, 1)
-#define PTA3_FCCU_ERR1                  NXP_SIUL2_PINMUX(0, 0, 3, 1, 0, 0)
-#define PTA3_FCCU_ERR_IN1               NXP_SIUL2_PINMUX(0, 0, 3, 0, 149, 1)
-#define PTE15_FCCU_ERR0                 NXP_SIUL2_PINMUX(0, 0, 143, 1, 0, 0)
-#define PTE15_FCCU_ERR_IN0              NXP_SIUL2_PINMUX(0, 0, 143, 0, 148, 2)
-#define PTE16_FCCU_ERR1                 NXP_SIUL2_PINMUX(0, 0, 144, 1, 0, 0)
-#define PTE16_FCCU_ERR_IN1              NXP_SIUL2_PINMUX(0, 0, 144, 0, 149, 2)
-
-/* LPSPI1 */
-#define PTA2_LPSPI1_SIN                 NXP_SIUL2_PINMUX(0, 0, 2, 0, 239, 2)
-#define PTA3_LPSPI1_SCK_O               NXP_SIUL2_PINMUX(0, 0, 3, 3, 0, 0)
-#define PTA3_LPSPI1_SCK_I               NXP_SIUL2_PINMUX(0, 0, 3, 0, 238, 1)
-#define PTA6_LPSPI1_PCS1_O              NXP_SIUL2_PINMUX(0, 0, 6, 3, 0, 0)
-#define PTA6_LPSPI1_PCS1_I              NXP_SIUL2_PINMUX(0, 0, 6, 0, 233, 1)
-#define PTA11_LPSPI1_PCS0_O             NXP_SIUL2_PINMUX(0, 0, 11, 6, 0, 0)
-#define PTA11_LPSPI1_PCS0_I             NXP_SIUL2_PINMUX(0, 0, 11, 0, 232, 2)
-#define PTA12_LPSPI1_PCS5_O             NXP_SIUL2_PINMUX(0, 0, 12, 1, 0, 0)
-#define PTA12_LPSPI1_PCS5_I             NXP_SIUL2_PINMUX(0, 0, 12, 0, 237, 1)
-#define PTA13_LPSPI1_PCS4_O             NXP_SIUL2_PINMUX(0, 0, 13, 1, 0, 0)
-#define PTA13_LPSPI1_PCS4_I             NXP_SIUL2_PINMUX(0, 0, 13, 0, 236, 1)
-#define PTA14_LPSPI1_PCS3_O             NXP_SIUL2_PINMUX(0, 0, 14, 3, 0, 0)
-#define PTA14_LPSPI1_PCS3_I             NXP_SIUL2_PINMUX(0, 0, 14, 0, 235, 2)
-#define PTA16_LPSPI1_PCS2_O             NXP_SIUL2_PINMUX(0, 0, 16, 3, 0, 0)
-#define PTA16_LPSPI1_PCS2_I             NXP_SIUL2_PINMUX(0, 0, 16, 0, 234, 2)
-#define PTA18_LPSPI1_SOUT_O             NXP_SIUL2_PINMUX(0, 0, 18, 4, 0, 0)
-#define PTA18_LPSPI1_SOUT_I             NXP_SIUL2_PINMUX(0, 0, 18, 0, 240, 4)
-#define PTA19_LPSPI1_SCK_O              NXP_SIUL2_PINMUX(0, 0, 19, 4, 0, 0)
-#define PTA19_LPSPI1_SCK_I              NXP_SIUL2_PINMUX(0, 0, 19, 0, 238, 3)
-#define PTA20_LPSPI1_SIN_O              NXP_SIUL2_PINMUX(0, 0, 20, 4, 0, 0)
-#define PTA20_LPSPI1_SIN_I              NXP_SIUL2_PINMUX(0, 0, 20, 0, 239, 3)
-#define PTA21_LPSPI1_PCS0_O             NXP_SIUL2_PINMUX(0, 0, 21, 4, 0, 0)
-#define PTA21_LPSPI1_PCS0_I             NXP_SIUL2_PINMUX(0, 0, 21, 0, 232, 3)
-#define PTA28_LPSPI1_SCK_O              NXP_SIUL2_PINMUX(0, 0, 28, 3, 0, 0)
-#define PTA28_LPSPI1_SCK_I              NXP_SIUL2_PINMUX(0, 0, 28, 0, 238, 4)
-#define PTA29_LPSPI1_SIN_O              NXP_SIUL2_PINMUX(0, 0, 29, 5, 0, 0)
-#define PTA29_LPSPI1_SIN_I              NXP_SIUL2_PINMUX(0, 0, 29, 0, 239, 4)
-#define PTA30_LPSPI1_SOUT_O             NXP_SIUL2_PINMUX(0, 0, 30, 3, 0, 0)
-#define PTA30_LPSPI1_SOUT_I             NXP_SIUL2_PINMUX(0, 0, 30, 0, 240, 5)
-#define PTB14_LPSPI1_SCK_O              NXP_SIUL2_PINMUX(0, 0, 46, 3, 0, 0)
-#define PTB14_LPSPI1_SCK_I              NXP_SIUL2_PINMUX(0, 0, 46, 0, 238, 2)
-#define PTB15_LPSPI1_SIN_O              NXP_SIUL2_PINMUX(0, 0, 47, 3, 0, 0)
-#define PTB15_LPSPI1_SIN_I              NXP_SIUL2_PINMUX(0, 0, 47, 0, 239, 1)
-#define PTB16_LPSPI1_SOUT_O             NXP_SIUL2_PINMUX(0, 0, 48, 3, 0, 0)
-#define PTB16_LPSPI1_SOUT_I             NXP_SIUL2_PINMUX(0, 0, 48, 0, 240, 2)
-#define PTB17_LPSPI1_PCS3_O             NXP_SIUL2_PINMUX(0, 0, 49, 3, 0, 0)
-#define PTB17_LPSPI1_PCS3_I             NXP_SIUL2_PINMUX(0, 0, 49, 0, 235, 1)
-#define PTB18_LPSPI1_PCS1_O             NXP_SIUL2_PINMUX(0, 0, 50, 4, 0, 0)
-#define PTB18_LPSPI1_PCS1_I             NXP_SIUL2_PINMUX(0, 0, 50, 0, 233, 2)
-#define PTC6_LPSPI1_PCS1_O              NXP_SIUL2_PINMUX(0, 0, 70, 3, 0, 0)
-#define PTC6_LPSPI1_PCS1_I              NXP_SIUL2_PINMUX(0, 0, 70, 0, 233, 4)
-#define PTD2_LPSPI1_SOUT_O              NXP_SIUL2_PINMUX(0, 0, 98, 3, 0, 0)
-#define PTD2_LPSPI1_SOUT_I              NXP_SIUL2_PINMUX(0, 0, 98, 0, 240, 1)
-#define PTD3_LPSPI1_PCS0_O              NXP_SIUL2_PINMUX(0, 0, 99, 3, 0, 0)
-#define PTD3_LPSPI1_PCS0_I              NXP_SIUL2_PINMUX(0, 0, 99, 0, 232, 1)
-#define PTD4_LPSPI1_PCS1_O              NXP_SIUL2_PINMUX(0, 0, 100, 3, 0, 0)
-#define PTD4_LPSPI1_PCS1_I              NXP_SIUL2_PINMUX(0, 0, 100, 0, 233, 6)
-#define PTD20_LPSPI1_PCS2_O             NXP_SIUL2_PINMUX(0, 0, 116, 5, 0, 0)
-#define PTD20_LPSPI1_PCS2_I             NXP_SIUL2_PINMUX(0, 0, 116, 0, 234, 1)
-#define PTE4_LPSPI1_PCS1_O              NXP_SIUL2_PINMUX(0, 0, 132, 2, 0, 0)
-#define PTE4_LPSPI1_PCS1_I              NXP_SIUL2_PINMUX(0, 0, 132, 0, 233, 5)
-
-/* CMP0 */
-#define PTA4_CMP0_OUT                   NXP_SIUL2_PINMUX(0, 0, 4, 4, 0, 0)
-#define PTA11_CMP0_RR_ACTIVE            NXP_SIUL2_PINMUX(0, 0, 11, 5, 0, 0)
-#define PTD14_CMP0_RR_ACTIVE            NXP_SIUL2_PINMUX(0, 0, 110, 6, 0, 0)
-#define PTE3_CMP0_OUT                   NXP_SIUL2_PINMUX(0, 0, 131, 7, 0, 0)
-#define PTE12_CMP0_RR_ACTIVE            NXP_SIUL2_PINMUX(0, 0, 140, 1, 0, 0)
-
-/* JTAG */
-#define PTA4_JTAG_TMSSWD_DIO_O          NXP_SIUL2_PINMUX(0, 0, 4, 7, 0, 0)
-#define PTA4_JTAG_TMSSWD_DIO_I          NXP_SIUL2_PINMUX(0, 0, 4, 0, 186, 0)
-#define PTC4_JTAG_TCKSWD_CLK            NXP_SIUL2_PINMUX(0, 0, 68, 0, 184, 0)
-#define PTC5_JTAG_TDI                   NXP_SIUL2_PINMUX(0, 0, 69, 0, 185, 0)
-
-/* SYSTEM */
-#define PTA12_CLKOUT_STANDBY            NXP_SIUL2_PINMUX(0, 0, 12, 3, 0, 0)
-#define PTB5_CLKOUT_RUN                 NXP_SIUL2_PINMUX(0, 0, 37, 5, 0, 0)
-#define PTD10_CLKOUT_RUN                NXP_SIUL2_PINMUX(0, 0, 106, 6, 0, 0)
-#define PTD14_CLKOUT_RUN                NXP_SIUL2_PINMUX(0, 0, 110, 7, 0, 0)
-#define PTE10_CLKOUT_STANDBY            NXP_SIUL2_PINMUX(0, 0, 138, 5, 0, 0)
-
-/* LPSPI3 */
-#define PTA6_LPSPI3_PCS1_O              NXP_SIUL2_PINMUX(0, 0, 6, 6, 0, 0)
-#define PTA6_LPSPI3_PCS1_I              NXP_SIUL2_PINMUX(0, 0, 6, 0, 249, 5)
-#define PTA9_LPSPI3_PCS0_O              NXP_SIUL2_PINMUX(0, 0, 9, 6, 0, 0)
-#define PTA9_LPSPI3_PCS0_I              NXP_SIUL2_PINMUX(0, 0, 9, 0, 248, 3)
-#define PTA17_LPSPI3_SOUT_O             NXP_SIUL2_PINMUX(0, 0, 17, 6, 0, 0)
-#define PTA17_LPSPI3_SOUT_I             NXP_SIUL2_PINMUX(0, 0, 17, 0, 254, 2)
-#define PTB12_LPSPI3_PCS3_O             NXP_SIUL2_PINMUX(0, 0, 44, 1, 0, 0)
-#define PTB12_LPSPI3_PCS3_I             NXP_SIUL2_PINMUX(0, 0, 44, 0, 251, 1)
-#define PTB13_LPSPI3_PCS2_O             NXP_SIUL2_PINMUX(0, 0, 45, 1, 0, 0)
-#define PTB13_LPSPI3_PCS2_I             NXP_SIUL2_PINMUX(0, 0, 45, 0, 250, 1)
-#define PTB17_LPSPI3_PCS0_O             NXP_SIUL2_PINMUX(0, 0, 49, 6, 0, 0)
-#define PTB17_LPSPI3_PCS0_I             NXP_SIUL2_PINMUX(0, 0, 49, 0, 248, 2)
-#define PTB22_LPSPI3_PCS1_O             NXP_SIUL2_PINMUX(0, 0, 54, 3, 0, 0)
-#define PTB22_LPSPI3_PCS1_I             NXP_SIUL2_PINMUX(0, 0, 54, 0, 249, 4)
-#define PTC2_LPSPI3_PCS2_O              NXP_SIUL2_PINMUX(0, 0, 66, 3, 0, 0)
-#define PTC2_LPSPI3_PCS2_I              NXP_SIUL2_PINMUX(0, 0, 66, 0, 250, 4)
-#define PTC16_LPSPI3_SIN_O              NXP_SIUL2_PINMUX(0, 0, 80, 1, 0, 0)
-#define PTC16_LPSPI3_SIN_I              NXP_SIUL2_PINMUX(0, 0, 80, 0, 253, 3)
-#define PTC17_LPSPI3_SCK_O              NXP_SIUL2_PINMUX(0, 0, 81, 1, 0, 0)
-#define PTC17_LPSPI3_SCK_I              NXP_SIUL2_PINMUX(0, 0, 81, 0, 252, 3)
-#define PTD0_LPSPI3_SOUT_O              NXP_SIUL2_PINMUX(0, 0, 96, 3, 0, 0)
-#define PTD0_LPSPI3_SOUT_I              NXP_SIUL2_PINMUX(0, 0, 96, 0, 254, 1)
-#define PTD1_LPSPI3_SCK_O               NXP_SIUL2_PINMUX(0, 0, 97, 3, 0, 0)
-#define PTD1_LPSPI3_SCK_I               NXP_SIUL2_PINMUX(0, 0, 97, 0, 252, 1)
-#define PTD7_LPSPI3_PCS3_O              NXP_SIUL2_PINMUX(0, 0, 103, 3, 0, 0)
-#define PTD7_LPSPI3_PCS3_I              NXP_SIUL2_PINMUX(0, 0, 103, 0, 251, 5)
-#define PTD8_LPSPI3_SOUT_O              NXP_SIUL2_PINMUX(0, 0, 104, 1, 0, 0)
-#define PTD8_LPSPI3_SOUT_I              NXP_SIUL2_PINMUX(0, 0, 104, 0, 254, 3)
-#define PTD17_LPSPI3_PCS0_O             NXP_SIUL2_PINMUX(0, 0, 113, 5, 0, 0)
-#define PTD17_LPSPI3_PCS0_I             NXP_SIUL2_PINMUX(0, 0, 113, 0, 248, 1)
-#define PTD20_LPSPI3_SIN_O              NXP_SIUL2_PINMUX(0, 0, 116, 6, 0, 0)
-#define PTD20_LPSPI3_SIN_I              NXP_SIUL2_PINMUX(0, 0, 116, 0, 253, 2)
-#define PTE7_LPSPI3_SCK_O               NXP_SIUL2_PINMUX(0, 0, 135, 6, 0, 0)
-#define PTE7_LPSPI3_SCK_I               NXP_SIUL2_PINMUX(0, 0, 135, 0, 252, 2)
-#define PTE8_LPSPI3_PCS1_O              NXP_SIUL2_PINMUX(0, 0, 136, 1, 0, 0)
-#define PTE8_LPSPI3_PCS1_I              NXP_SIUL2_PINMUX(0, 0, 136, 0, 249, 1)
-#define PTE10_LPSPI3_SIN_O              NXP_SIUL2_PINMUX(0, 0, 138, 2, 0, 0)
-#define PTE10_LPSPI3_SIN_I              NXP_SIUL2_PINMUX(0, 0, 138, 0, 253, 1)
-
-/* CAN0 */
-#define PTA6_CAN0_RX                    NXP_SIUL2_PINMUX(0, 0, 6, 0, 0, 2)
-#define PTA7_CAN0_TX                    NXP_SIUL2_PINMUX(0, 0, 7, 4, 0, 0)
-#define PTA27_CAN0_TX                   NXP_SIUL2_PINMUX(0, 0, 27, 5, 0, 0)
-#define PTA28_CAN0_RX                   NXP_SIUL2_PINMUX(0, 0, 28, 0, 0, 4)
-#define PTB0_CAN0_RX                    NXP_SIUL2_PINMUX(0, 0, 32, 0, 0, 3)
-#define PTB1_CAN0_TX                    NXP_SIUL2_PINMUX(0, 0, 33, 5, 0, 0)
-#define PTC2_CAN0_RX                    NXP_SIUL2_PINMUX(0, 0, 66, 0, 0, 1)
-#define PTC3_CAN0_TX                    NXP_SIUL2_PINMUX(0, 0, 67, 3, 0, 0)
-
-/* LPUART3 */
-#define PTA6_LPUART3_RX                 NXP_SIUL2_PINMUX(0, 0, 6, 0, 190, 2)
-#define PTA7_LPUART3_TX_O               NXP_SIUL2_PINMUX(0, 0, 7, 1, 0, 0)
-#define PTA7_LPUART3_TX_I               NXP_SIUL2_PINMUX(0, 0, 7, 0, 366, 1)
-#define PTD2_LPUART3_TX_O               NXP_SIUL2_PINMUX(0, 0, 98, 6, 0, 0)
-#define PTD2_LPUART3_TX_I               NXP_SIUL2_PINMUX(0, 0, 98, 0, 366, 2)
-#define PTD3_LPUART3_RX                 NXP_SIUL2_PINMUX(0, 0, 99, 0, 190, 3)
-#define PTE15_LPUART3_RX                NXP_SIUL2_PINMUX(0, 0, 143, 0, 190, 1)
-#define PTE16_LPUART3_TX_O              NXP_SIUL2_PINMUX(0, 0, 144, 2, 0, 0)
-#define PTE16_LPUART3_TX_I              NXP_SIUL2_PINMUX(0, 0, 144, 0, 366, 3)
-
-/* LPUART1 */
-#define PTA6_LPUART1_CTS                NXP_SIUL2_PINMUX(0, 0, 6, 0, 361, 2)
-#define PTA7_LPUART1_RTS                NXP_SIUL2_PINMUX(0, 0, 7, 5, 0, 0)
-#define PTA15_LPUART1_DTR_B             NXP_SIUL2_PINMUX(0, 0, 15, 5, 0, 0)
-#define PTA16_LPUART1_DSR_B             NXP_SIUL2_PINMUX(0, 0, 16, 0, 378, 1)
-#define PTA18_LPUART1_TX_O              NXP_SIUL2_PINMUX(0, 0, 18, 3, 0, 0)
-#define PTA18_LPUART1_TX_I              NXP_SIUL2_PINMUX(0, 0, 18, 0, 364, 4)
-#define PTA19_LPUART1_RX                NXP_SIUL2_PINMUX(0, 0, 19, 0, 188, 5)
 #define PTB8_LPUART1_DCD_B              NXP_SIUL2_PINMUX(0, 0, 40, 0, 377, 1)
 #define PTB9_LPUART1_RIN_B              NXP_SIUL2_PINMUX(0, 0, 41, 0, 376, 1)
-#define PTB22_LPUART1_TX_O              NXP_SIUL2_PINMUX(0, 0, 54, 5, 0, 0)
-#define PTB22_LPUART1_TX_I              NXP_SIUL2_PINMUX(0, 0, 54, 0, 364, 5)
-#define PTB23_LPUART1_RX                NXP_SIUL2_PINMUX(0, 0, 55, 0, 188, 4)
-#define PTC6_LPUART1_RX                 NXP_SIUL2_PINMUX(0, 0, 70, 0, 188, 1)
-#define PTC7_LPUART1_TX_O               NXP_SIUL2_PINMUX(0, 0, 71, 2, 0, 0)
-#define PTC7_LPUART1_TX_I               NXP_SIUL2_PINMUX(0, 0, 71, 0, 364, 1)
-#define PTC8_LPUART1_RX                 NXP_SIUL2_PINMUX(0, 0, 72, 0, 188, 2)
-#define PTC9_LPUART1_TX_O               NXP_SIUL2_PINMUX(0, 0, 73, 2, 0, 0)
-#define PTC9_LPUART1_TX_I               NXP_SIUL2_PINMUX(0, 0, 73, 0, 364, 2)
+#define PTC10_LPUART0_DSR_B             NXP_SIUL2_PINMUX(0, 0, 74, 0, 373, 1)
+#define PTC11_LPUART0_DTR_B             NXP_SIUL2_PINMUX(0, 0, 75, 2, 0, 0)
+#define PTC17_FXIO_D2_I                 NXP_SIUL2_PINMUX(0, 0, 81, 0, 154, 10)
+#define PTC17_FXIO_D2_O                 NXP_SIUL2_PINMUX(0, 0, 81, 7, 0, 0)
 #define PTC28_LPUART1_RIN_B             NXP_SIUL2_PINMUX(0, 0, 92, 0, 376, 2)
 #define PTC29_LPUART1_DCD_B             NXP_SIUL2_PINMUX(0, 0, 93, 0, 377, 2)
 #define PTC30_LPUART1_DSR_B             NXP_SIUL2_PINMUX(0, 0, 94, 0, 378, 2)
 #define PTC31_LPUART1_DTR_B             NXP_SIUL2_PINMUX(0, 0, 95, 6, 0, 0)
-#define PTD13_LPUART1_RX                NXP_SIUL2_PINMUX(0, 0, 109, 0, 188, 3)
-#define PTD14_LPUART1_TX_O              NXP_SIUL2_PINMUX(0, 0, 110, 3, 0, 0)
-#define PTD14_LPUART1_TX_I              NXP_SIUL2_PINMUX(0, 0, 110, 0, 364, 3)
-#define PTE2_LPUART1_CTS                NXP_SIUL2_PINMUX(0, 0, 130, 0, 361, 1)
-#define PTE6_LPUART1_RTS                NXP_SIUL2_PINMUX(0, 0, 134, 3, 0, 0)
-#define PTE15_LPUART1_CTS               NXP_SIUL2_PINMUX(0, 0, 143, 0, 361, 3)
-#define PTE16_LPUART1_RTS               NXP_SIUL2_PINMUX(0, 0, 144, 5, 0, 0)
-
-/* LPSPI2 */
-#define PTA8_LPSPI2_SOUT_O              NXP_SIUL2_PINMUX(0, 0, 8, 3, 0, 0)
-#define PTA8_LPSPI2_SOUT_I              NXP_SIUL2_PINMUX(0, 0, 8, 0, 247, 1)
-#define PTA9_LPSPI2_PCS0_O              NXP_SIUL2_PINMUX(0, 0, 9, 3, 0, 0)
-#define PTA9_LPSPI2_PCS0_I              NXP_SIUL2_PINMUX(0, 0, 9, 0, 241, 1)
-#define PTA15_LPSPI2_PCS3_O             NXP_SIUL2_PINMUX(0, 0, 15, 4, 0, 0)
-#define PTA15_LPSPI2_PCS3_I             NXP_SIUL2_PINMUX(0, 0, 15, 0, 244, 1)
-#define PTA21_LPSPI2_PCS2_O             NXP_SIUL2_PINMUX(0, 0, 21, 1, 0, 0)
-#define PTA21_LPSPI2_PCS2_I             NXP_SIUL2_PINMUX(0, 0, 21, 0, 243, 1)
-#define PTB2_LPSPI2_SIN_O               NXP_SIUL2_PINMUX(0, 0, 34, 3, 0, 0)
-#define PTB2_LPSPI2_SIN_I               NXP_SIUL2_PINMUX(0, 0, 34, 0, 246, 2)
-#define PTB3_LPSPI2_SOUT_O              NXP_SIUL2_PINMUX(0, 0, 35, 3, 0, 0)
-#define PTB3_LPSPI2_SOUT_I              NXP_SIUL2_PINMUX(0, 0, 35, 0, 247, 2)
-#define PTB25_LPSPI2_PCS0_O             NXP_SIUL2_PINMUX(0, 0, 57, 5, 0, 0)
-#define PTB25_LPSPI2_PCS0_I             NXP_SIUL2_PINMUX(0, 0, 57, 0, 241, 4)
-#define PTB27_LPSPI2_SOUT_O             NXP_SIUL2_PINMUX(0, 0, 59, 5, 0, 0)
-#define PTB27_LPSPI2_SOUT_I             NXP_SIUL2_PINMUX(0, 0, 59, 0, 247, 3)
-#define PTB28_LPSPI2_SIN_O              NXP_SIUL2_PINMUX(0, 0, 60, 5, 0, 0)
-#define PTB28_LPSPI2_SIN_I              NXP_SIUL2_PINMUX(0, 0, 60, 0, 246, 3)
-#define PTB29_LPSPI2_SCK_O              NXP_SIUL2_PINMUX(0, 0, 61, 5, 0, 0)
-#define PTB29_LPSPI2_SCK_I              NXP_SIUL2_PINMUX(0, 0, 61, 0, 245, 3)
-#define PTC10_LPSPI2_PCS1_O             NXP_SIUL2_PINMUX(0, 0, 74, 4, 0, 0)
-#define PTC10_LPSPI2_PCS1_I             NXP_SIUL2_PINMUX(0, 0, 74, 0, 242, 3)
-#define PTC12_LPSPI2_PCS1_O             NXP_SIUL2_PINMUX(0, 0, 76, 4, 0, 0)
-#define PTC12_LPSPI2_PCS1_I             NXP_SIUL2_PINMUX(0, 0, 76, 0, 242, 4)
-#define PTC14_LPSPI2_PCS0_O             NXP_SIUL2_PINMUX(0, 0, 78, 3, 0, 0)
-#define PTC14_LPSPI2_PCS0_I             NXP_SIUL2_PINMUX(0, 0, 78, 0, 241, 2)
-#define PTC15_LPSPI2_SCK_O              NXP_SIUL2_PINMUX(0, 0, 79, 3, 0, 0)
-#define PTC15_LPSPI2_SCK_I              NXP_SIUL2_PINMUX(0, 0, 79, 0, 245, 2)
-#define PTC19_LPSPI2_PCS1_O             NXP_SIUL2_PINMUX(0, 0, 83, 5, 0, 0)
-#define PTC19_LPSPI2_PCS1_I             NXP_SIUL2_PINMUX(0, 0, 83, 0, 242, 2)
-#define PTE10_LPSPI2_PCS1_O             NXP_SIUL2_PINMUX(0, 0, 138, 3, 0, 0)
-#define PTE10_LPSPI2_PCS1_I             NXP_SIUL2_PINMUX(0, 0, 138, 0, 242, 1)
-#define PTE11_LPSPI2_PCS0_O             NXP_SIUL2_PINMUX(0, 0, 139, 2, 0, 0)
-#define PTE11_LPSPI2_PCS0_I             NXP_SIUL2_PINMUX(0, 0, 139, 0, 241, 3)
-#define PTE13_LPSPI2_PCS2_O             NXP_SIUL2_PINMUX(0, 0, 141, 3, 0, 0)
-#define PTE13_LPSPI2_PCS0_O             NXP_SIUL2_PINMUX(0, 0, 141, 5, 0, 0)
-#define PTE13_LPSPI2_PCS0_I             NXP_SIUL2_PINMUX(0, 0, 141, 0, 241, 5)
-#define PTE13_LPSPI2_PCS2_I             NXP_SIUL2_PINMUX(0, 0, 141, 0, 243, 2)
-#define PTE15_LPSPI2_SCK_O              NXP_SIUL2_PINMUX(0, 0, 143, 3, 0, 0)
-#define PTE15_LPSPI2_SCK_I              NXP_SIUL2_PINMUX(0, 0, 143, 0, 245, 1)
-#define PTE16_LPSPI2_SIN_O              NXP_SIUL2_PINMUX(0, 0, 144, 3, 0, 0)
-#define PTE16_LPSPI2_SIN_I              NXP_SIUL2_PINMUX(0, 0, 144, 0, 246, 1)
-
-/* LPUART2 */
-#define PTA8_LPUART2_RX                 NXP_SIUL2_PINMUX(0, 0, 8, 0, 189, 3)
-#define PTA9_LPUART2_TX_O               NXP_SIUL2_PINMUX(0, 0, 9, 2, 0, 0)
-#define PTA9_LPUART2_TX_I               NXP_SIUL2_PINMUX(0, 0, 9, 0, 365, 1)
-#define PTA29_LPUART2_TX_O              NXP_SIUL2_PINMUX(0, 0, 29, 4, 0, 0)
-#define PTA29_LPUART2_TX_I              NXP_SIUL2_PINMUX(0, 0, 29, 0, 365, 5)
-#define PTA30_LPUART2_RX                NXP_SIUL2_PINMUX(0, 0, 30, 0, 189, 4)
-#define PTC15_LPUART2_TX_O              NXP_SIUL2_PINMUX(0, 0, 79, 5, 0, 0)
-#define PTC15_LPUART2_TX_I              NXP_SIUL2_PINMUX(0, 0, 79, 0, 365, 2)
-#define PTC16_LPUART2_RX                NXP_SIUL2_PINMUX(0, 0, 80, 0, 189, 5)
-#define PTD6_LPUART2_RX                 NXP_SIUL2_PINMUX(0, 0, 102, 0, 189, 1)
-#define PTD7_LPUART2_TX_O               NXP_SIUL2_PINMUX(0, 0, 103, 2, 0, 0)
-#define PTD7_LPUART2_TX_I               NXP_SIUL2_PINMUX(0, 0, 103, 0, 365, 3)
-#define PTD11_LPUART2_CTS               NXP_SIUL2_PINMUX(0, 0, 107, 0, 362, 1)
-#define PTD12_LPUART2_RTS               NXP_SIUL2_PINMUX(0, 0, 108, 3, 0, 0)
-#define PTD15_LPUART2_CTS               NXP_SIUL2_PINMUX(0, 0, 111, 0, 362, 2)
-#define PTD16_LPUART2_RTS               NXP_SIUL2_PINMUX(0, 0, 112, 6, 0, 0)
-#define PTD17_LPUART2_RX                NXP_SIUL2_PINMUX(0, 0, 113, 0, 189, 2)
-#define PTE3_LPUART2_RTS                NXP_SIUL2_PINMUX(0, 0, 131, 5, 0, 0)
-#define PTE9_LPUART2_CTS                NXP_SIUL2_PINMUX(0, 0, 137, 0, 362, 3)
-#define PTE12_LPUART2_TX_O              NXP_SIUL2_PINMUX(0, 0, 140, 3, 0, 0)
-#define PTE12_LPUART2_TX_I              NXP_SIUL2_PINMUX(0, 0, 140, 0, 365, 4)
-
-/* JTAGTRACENOETM */
-#define PTA10_JTAG_TDOTRACENOETM_SWO    NXP_SIUL2_PINMUX(0, 0, 10, 7, 0, 0)
-
-/* CAN1 */
-#define PTA11_CAN1_TX                   NXP_SIUL2_PINMUX(0, 0, 11, 1, 0, 0)
-#define PTA12_CAN1_RX                   NXP_SIUL2_PINMUX(0, 0, 12, 0, 1, 2)
-#define PTB22_CAN1_TX                   NXP_SIUL2_PINMUX(0, 0, 54, 1, 0, 0)
-#define PTB23_CAN1_RX                   NXP_SIUL2_PINMUX(0, 0, 55, 0, 1, 4)
-#define PTC8_CAN1_TX                    NXP_SIUL2_PINMUX(0, 0, 72, 3, 0, 0)
-#define PTC9_CAN1_RX                    NXP_SIUL2_PINMUX(0, 0, 73, 0, 1, 1)
-
-/* CMP1 */
-#define PTA12_CMP1_OUT                  NXP_SIUL2_PINMUX(0, 0, 12, 7, 0, 0)
-#define PTE15_CMP1_RR_ACTIVE            NXP_SIUL2_PINMUX(0, 0, 143, 5, 0, 0)
-
-/* EMAC */
-#define PTA27_EMAC_PPS1_O               NXP_SIUL2_PINMUX(0, 0, 27, 3, 0, 0)
-#define PTA27_EMAC_PPS1_I               NXP_SIUL2_PINMUX(0, 0, 27, 0, 145, 3)
-#define PTA29_EMAC_PPS2_O               NXP_SIUL2_PINMUX(0, 0, 29, 3, 0, 0)
-#define PTA29_EMAC_PPS2_I               NXP_SIUL2_PINMUX(0, 0, 29, 0, 146, 3)
-#define PTB4_EMAC_MII_RMII_TXD1         NXP_SIUL2_PINMUX(0, 0, 36, 1, 0, 0)
-#define PTB4_EMAC_MII_RMII_MDIO_O       NXP_SIUL2_PINMUX(0, 0, 36, 5, 0, 0)
-#define PTB4_EMAC_MII_RMII_MDIO_I       NXP_SIUL2_PINMUX(0, 0, 36, 0, 291, 1)
-#define PTB5_EMAC_MII_RMII_TXD0         NXP_SIUL2_PINMUX(0, 0, 37, 1, 0, 0)
-#define PTB5_EMAC_MII_RMII_MDC          NXP_SIUL2_PINMUX(0, 0, 37, 7, 0, 0)
-#define PTB22_EMAC_MII_CRS              NXP_SIUL2_PINMUX(0, 0, 54, 0, 290, 1)
-#define PTB23_EMAC_MII_COL              NXP_SIUL2_PINMUX(0, 0, 55, 0, 289, 1)
-#define PTB28_EMAC_PPS3_O               NXP_SIUL2_PINMUX(0, 0, 60, 7, 0, 0)
-#define PTB28_EMAC_PPS3_I               NXP_SIUL2_PINMUX(0, 0, 60, 0, 147, 2)
-#define PTC0_EMAC_MII_RMII_RXD0         NXP_SIUL2_PINMUX(0, 0, 64, 0, 294, 2)
-#define PTC0_EMAC_MII_RMII_RXD1         NXP_SIUL2_PINMUX(0, 0, 64, 0, 295, 1)
-#define PTC0_EMAC_MII_RMII_TX_CLK       NXP_SIUL2_PINMUX(0, 0, 64, 0, 296, 4)
-#define PTC1_EMAC_MII_RMII_RXD0         NXP_SIUL2_PINMUX(0, 0, 65, 0, 294, 1)
-#define PTC1_EMAC_MII_RMII_RXD1         NXP_SIUL2_PINMUX(0, 0, 65, 0, 295, 2)
-#define PTC1_EMAC_MII_RX_CLK            NXP_SIUL2_PINMUX(0, 0, 65, 0, 300, 3)
-#define PTC2_EMAC_MII_RMII_TXD1         NXP_SIUL2_PINMUX(0, 0, 66, 1, 0, 0)
-#define PTC2_EMAC_MII_RMII_TXD0         NXP_SIUL2_PINMUX(0, 0, 66, 5, 0, 0)
-#define PTC14_EMAC_MII_COL              NXP_SIUL2_PINMUX(0, 0, 78, 0, 289, 2)
-#define PTC14_EMAC_MII_RMII_RX_ER       NXP_SIUL2_PINMUX(0, 0, 78, 0, 293, 2)
-#define PTC14_EMAC_MII_RXD3             NXP_SIUL2_PINMUX(0, 0, 78, 0, 302, 2)
-#define PTC15_EMAC_MII_CRS              NXP_SIUL2_PINMUX(0, 0, 79, 0, 290, 2)
-#define PTC15_EMAC_MII_RMII_RX_DV       NXP_SIUL2_PINMUX(0, 0, 79, 0, 292, 2)
-#define PTC15_EMAC_MII_RXD2             NXP_SIUL2_PINMUX(0, 0, 79, 0, 301, 2)
-#define PTC16_EMAC_MII_RMII_RX_ER       NXP_SIUL2_PINMUX(0, 0, 80, 0, 293, 1)
-#define PTC17_EMAC_MII_RMII_RX_DV       NXP_SIUL2_PINMUX(0, 0, 81, 0, 292, 1)
-#define PTD5_EMAC_MII_TXD2              NXP_SIUL2_PINMUX(0, 0, 101, 1, 0, 0)
-#define PTD5_EMAC_MII_TXD3              NXP_SIUL2_PINMUX(0, 0, 101, 5, 0, 0)
-#define PTD5_EMAC_MII_RX_CLK            NXP_SIUL2_PINMUX(0, 0, 101, 0, 300, 2)
-#define PTD6_EMAC_MII_TXD3              NXP_SIUL2_PINMUX(0, 0, 102, 1, 0, 0)
-#define PTD6_EMAC_MII_TXD2              NXP_SIUL2_PINMUX(0, 0, 102, 5, 0, 0)
-#define PTD6_EMAC_MII_RMII_TX_CLK       NXP_SIUL2_PINMUX(0, 0, 102, 0, 296, 2)
-#define PTD7_EMAC_MII_RMII_TXD0         NXP_SIUL2_PINMUX(0, 0, 103, 1, 0, 0)
-#define PTD7_EMAC_MII_RMII_TXD1         NXP_SIUL2_PINMUX(0, 0, 103, 5, 0, 0)
-#define PTD8_EMAC_MII_RMII_RXD1         NXP_SIUL2_PINMUX(0, 0, 104, 0, 295, 3)
-#define PTD8_EMAC_MII_RXD3              NXP_SIUL2_PINMUX(0, 0, 104, 0, 302, 1)
-#define PTD9_EMAC_MII_RMII_RXD0         NXP_SIUL2_PINMUX(0, 0, 105, 0, 294, 3)
-#define PTD9_EMAC_MII_RXD2              NXP_SIUL2_PINMUX(0, 0, 105, 0, 301, 1)
-#define PTD10_EMAC_MII_TXD3             NXP_SIUL2_PINMUX(0, 0, 106, 1, 0, 0)
-#define PTD10_EMAC_MII_RX_CLK           NXP_SIUL2_PINMUX(0, 0, 106, 0, 300, 1)
-#define PTD11_EMAC_MII_TXD2             NXP_SIUL2_PINMUX(0, 0, 107, 1, 0, 0)
-#define PTD11_EMAC_MII_RMII_TX_EN       NXP_SIUL2_PINMUX(0, 0, 107, 3, 0, 0)
-#define PTD11_EMAC_MII_RMII_TX_CLK      NXP_SIUL2_PINMUX(0, 0, 107, 0, 296, 1)
-#define PTD12_EMAC_MII_RMII_TX_EN       NXP_SIUL2_PINMUX(0, 0, 108, 5, 0, 0)
-#define PTD12_EMAC_MII_RMII_TX_CLK      NXP_SIUL2_PINMUX(0, 0, 108, 0, 296, 3)
-#define PTD13_EMAC_PPS1_O               NXP_SIUL2_PINMUX(0, 0, 109, 5, 0, 0)
-#define PTD13_EMAC_PPS1_I               NXP_SIUL2_PINMUX(0, 0, 109, 0, 145, 2)
-#define PTD14_EMAC_PPS0_O               NXP_SIUL2_PINMUX(0, 0, 110, 5, 0, 0)
-#define PTD14_EMAC_PPS0_I               NXP_SIUL2_PINMUX(0, 0, 110, 0, 144, 2)
-#define PTD15_EMAC_PPS2_O               NXP_SIUL2_PINMUX(0, 0, 111, 5, 0, 0)
-#define PTD15_EMAC_PPS2_I               NXP_SIUL2_PINMUX(0, 0, 111, 0, 146, 2)
-#define PTD16_EMAC_MII_RMII_MDIO_O      NXP_SIUL2_PINMUX(0, 0, 112, 3, 0, 0)
-#define PTD16_EMAC_MII_RMII_MDIO_I      NXP_SIUL2_PINMUX(0, 0, 112, 0, 291, 2)
-#define PTD17_EMAC_MII_RMII_MDC         NXP_SIUL2_PINMUX(0, 0, 113, 3, 0, 0)
-#define PTD17_EMAC_PPS2_O               NXP_SIUL2_PINMUX(0, 0, 113, 7, 0, 0)
-#define PTD17_EMAC_PPS2_I               NXP_SIUL2_PINMUX(0, 0, 113, 0, 146, 1)
-#define PTE3_EMAC_PPS0_O                NXP_SIUL2_PINMUX(0, 0, 131, 6, 0, 0)
-#define PTE3_EMAC_PPS0_I                NXP_SIUL2_PINMUX(0, 0, 131, 0, 144, 1)
-#define PTE8_EMAC_MII_RMII_MDC          NXP_SIUL2_PINMUX(0, 0, 136, 5, 0, 0)
-#define PTE9_EMAC_PPS3_O                NXP_SIUL2_PINMUX(0, 0, 137, 5, 0, 0)
-#define PTE9_EMAC_MII_RMII_TX_EN        NXP_SIUL2_PINMUX(0, 0, 137, 6, 0, 0)
-#define PTE9_EMAC_PPS3_I                NXP_SIUL2_PINMUX(0, 0, 137, 0, 147, 1)
-#define PTE12_EMAC_PPS3_O               NXP_SIUL2_PINMUX(0, 0, 140, 5, 0, 0)
-#define PTE12_EMAC_PPS3_I               NXP_SIUL2_PINMUX(0, 0, 140, 0, 147, 3)
-#define PTE14_EMAC_PPS1_O               NXP_SIUL2_PINMUX(0, 0, 142, 7, 0, 0)
-#define PTE14_EMAC_PPS1_I               NXP_SIUL2_PINMUX(0, 0, 142, 0, 145, 1)
-
-/* LPI2C0 */
-#define PTB0_LPI2C0_SDAS_O              NXP_SIUL2_PINMUX(0, 0, 32, 1, 0, 0)
-#define PTB0_LPI2C0_SDAS_I              NXP_SIUL2_PINMUX(0, 0, 32, 0, 215, 1)
-#define PTB1_LPI2C0_SCLS_O              NXP_SIUL2_PINMUX(0, 0, 33, 1, 0, 0)
-#define PTB1_LPI2C0_SCLS_I              NXP_SIUL2_PINMUX(0, 0, 33, 0, 213, 1)
-#define PTB11_LPI2C0_HREQ               NXP_SIUL2_PINMUX(0, 0, 43, 0, 211, 1)
-#define PTC7_LPI2C0_HREQ                NXP_SIUL2_PINMUX(0, 0, 71, 0, 211, 2)
-#define PTC8_LPI2C0_SCL_O               NXP_SIUL2_PINMUX(0, 0, 72, 1, 0, 0)
-#define PTC8_LPI2C0_SCL_I               NXP_SIUL2_PINMUX(0, 0, 72, 0, 212, 1)
-#define PTC9_LPI2C0_SDA_O               NXP_SIUL2_PINMUX(0, 0, 73, 1, 0, 0)
-#define PTC9_LPI2C0_SDA_I               NXP_SIUL2_PINMUX(0, 0, 73, 0, 214, 1)
-#define PTD13_LPI2C0_SDA_O              NXP_SIUL2_PINMUX(0, 0, 109, 4, 0, 0)
-#define PTD13_LPI2C0_SDA_I              NXP_SIUL2_PINMUX(0, 0, 109, 0, 214, 2)
-#define PTD14_LPI2C0_SCL_O              NXP_SIUL2_PINMUX(0, 0, 110, 4, 0, 0)
-#define PTD14_LPI2C0_SCL_I              NXP_SIUL2_PINMUX(0, 0, 110, 0, 212, 2)
-
-/* LCU1 */
-#define PTB0_LCU1_OUT5                  NXP_SIUL2_PINMUX(0, 0, 32, 5, 0, 0)
-#define PTB1_LCU1_OUT4                  NXP_SIUL2_PINMUX(0, 0, 33, 7, 0, 0)
-#define PTB2_LCU1_OUT3                  NXP_SIUL2_PINMUX(0, 0, 34, 5, 0, 0)
-#define PTB3_LCU1_OUT2                  NXP_SIUL2_PINMUX(0, 0, 35, 6, 0, 0)
-#define PTB28_LCU1_OUT11                NXP_SIUL2_PINMUX(0, 0, 60, 6, 0, 0)
-#define PTB29_LCU1_OUT10                NXP_SIUL2_PINMUX(0, 0, 61, 6, 0, 0)
-#define PTC8_LCU1_OUT7                  NXP_SIUL2_PINMUX(0, 0, 72, 5, 0, 0)
-#define PTC9_LCU1_OUT6                  NXP_SIUL2_PINMUX(0, 0, 73, 5, 0, 0)
-#define PTC10_LCU1_OUT11                NXP_SIUL2_PINMUX(0, 0, 74, 6, 0, 0)
-#define PTC11_LCU1_OUT10                NXP_SIUL2_PINMUX(0, 0, 75, 7, 0, 0)
-#define PTC12_LCU1_OUT9                 NXP_SIUL2_PINMUX(0, 0, 76, 6, 0, 0)
-#define PTC13_LCU1_OUT8                 NXP_SIUL2_PINMUX(0, 0, 77, 6, 0, 0)
-#define PTC14_LCU1_OUT1                 NXP_SIUL2_PINMUX(0, 0, 78, 6, 0, 0)
-#define PTC15_LCU1_OUT0                 NXP_SIUL2_PINMUX(0, 0, 79, 6, 0, 0)
-#define PTC18_LCU1_OUT7                 NXP_SIUL2_PINMUX(0, 0, 82, 6, 0, 0)
-#define PTC19_LCU1_OUT6                 NXP_SIUL2_PINMUX(0, 0, 83, 6, 0, 0)
-#define PTC20_LCU1_OUT5                 NXP_SIUL2_PINMUX(0, 0, 84, 6, 0, 0)
-#define PTC21_LCU1_OUT4                 NXP_SIUL2_PINMUX(0, 0, 85, 6, 0, 0)
-#define PTC23_LCU1_OUT0                 NXP_SIUL2_PINMUX(0, 0, 87, 6, 0, 0)
-#define PTC24_LCU1_OUT1                 NXP_SIUL2_PINMUX(0, 0, 88, 6, 0, 0)
-#define PTC25_LCU1_OUT2                 NXP_SIUL2_PINMUX(0, 0, 89, 6, 0, 0)
-#define PTC26_LCU1_OUT9                 NXP_SIUL2_PINMUX(0, 0, 90, 6, 0, 0)
-#define PTC27_LCU1_OUT3                 NXP_SIUL2_PINMUX(0, 0, 91, 6, 0, 0)
-#define PTC28_LCU1_OUT8                 NXP_SIUL2_PINMUX(0, 0, 92, 6, 0, 0)
-
-/* HSE */
-#define PTB0_HSE_TAMPER_LOOP_OUT0       NXP_SIUL2_PINMUX(0, 0, 32, 7, 0, 0)
-#define PTB1_HSE_TAMPER_EXTIN0          NXP_SIUL2_PINMUX(0, 0, 33, 0, 343, 1)
-#define PTD23_HSE_TAMPER_LOOP_OUT0      NXP_SIUL2_PINMUX(0, 0, 119, 5, 0, 0)
-#define PTD24_HSE_TAMPER_EXTIN0         NXP_SIUL2_PINMUX(0, 0, 120, 0, 343, 2)
-
-/* ADC1 */
-#define PTB2_ADC1_MA0                   NXP_SIUL2_PINMUX(0, 0, 34, 1, 0, 0)
-#define PTB23_ADC1_MA0                  NXP_SIUL2_PINMUX(0, 0, 55, 1, 0, 0)
-#define PTB24_ADC1_MA1                  NXP_SIUL2_PINMUX(0, 0, 56, 1, 0, 0)
-#define PTB28_ADC1_MA2                  NXP_SIUL2_PINMUX(0, 0, 60, 1, 0, 0)
-#define PTC12_ADC1_MA2                  NXP_SIUL2_PINMUX(0, 0, 76, 1, 0, 0)
-#define PTC13_ADC1_MA1                  NXP_SIUL2_PINMUX(0, 0, 77, 4, 0, 0)
-#define PTC20_ADC1_MA2                  NXP_SIUL2_PINMUX(0, 0, 84, 5, 0, 0)
-#define PTC21_ADC1_MA1                  NXP_SIUL2_PINMUX(0, 0, 85, 5, 0, 0)
-#define PTC27_ADC1_MA0                  NXP_SIUL2_PINMUX(0, 0, 91, 5, 0, 0)
-
-/* SAI0 */
-#define PTB2_SAI0_D0_O                  NXP_SIUL2_PINMUX(0, 0, 34, 6, 0, 0)
-#define PTB2_SAI0_D0_I                  NXP_SIUL2_PINMUX(0, 0, 34, 0, 316, 1)
-#define PTB3_SAI0_MCLK                  NXP_SIUL2_PINMUX(0, 0, 35, 0, 320, 1)
-#define PTB29_SAI0_D1_O                 NXP_SIUL2_PINMUX(0, 0, 61, 7, 0, 0)
-#define PTB29_SAI0_D1_I                 NXP_SIUL2_PINMUX(0, 0, 61, 0, 317, 1)
-#define PTC12_SAI0_BCLK_O               NXP_SIUL2_PINMUX(0, 0, 76, 7, 0, 0)
-#define PTC12_SAI0_BCLK_I               NXP_SIUL2_PINMUX(0, 0, 76, 0, 315, 1)
-#define PTC13_SAI0_SYNC_O               NXP_SIUL2_PINMUX(0, 0, 77, 7, 0, 0)
-#define PTC13_SAI0_SYNC_I               NXP_SIUL2_PINMUX(0, 0, 77, 0, 321, 1)
-#define PTC18_SAI0_D2_O                 NXP_SIUL2_PINMUX(0, 0, 82, 7, 0, 0)
-#define PTC18_SAI0_D2_I                 NXP_SIUL2_PINMUX(0, 0, 82, 0, 318, 1)
-#define PTC19_SAI0_D3_O                 NXP_SIUL2_PINMUX(0, 0, 83, 7, 0, 0)
-#define PTC19_SAI0_D3_I                 NXP_SIUL2_PINMUX(0, 0, 83, 0, 319, 1)
-
-/* ADC0 */
-#define PTB3_ADC0_MA0                   NXP_SIUL2_PINMUX(0, 0, 35, 4, 0, 0)
-#define PTC6_ADC0_MA2                   NXP_SIUL2_PINMUX(0, 0, 70, 7, 0, 0)
-#define PTC14_ADC0_MA1                  NXP_SIUL2_PINMUX(0, 0, 78, 4, 0, 0)
-#define PTC15_ADC0_MA2                  NXP_SIUL2_PINMUX(0, 0, 79, 4, 0, 0)
-#define PTE2_ADC0_MA0                   NXP_SIUL2_PINMUX(0, 0, 130, 7, 0, 0)
-#define PTE6_ADC0_MA1                   NXP_SIUL2_PINMUX(0, 0, 134, 7, 0, 0)
-
-/* CAN3 */
-#define PTC0_CAN3_TX                    NXP_SIUL2_PINMUX(0, 0, 64, 1, 0, 0)
-#define PTC1_CAN3_RX                    NXP_SIUL2_PINMUX(0, 0, 65, 0, 3, 2)
-#define PTC28_CAN3_TX                   NXP_SIUL2_PINMUX(0, 0, 92, 1, 0, 0)
-#define PTC29_CAN3_RX                   NXP_SIUL2_PINMUX(0, 0, 93, 0, 3, 3)
-#define PTD15_CAN3_RX                   NXP_SIUL2_PINMUX(0, 0, 111, 0, 3, 1)
-#define PTE9_CAN3_TX                    NXP_SIUL2_PINMUX(0, 0, 137, 4, 0, 0)
-
-/* QUADSPI */
-#define PTC2_QUADSPI_IOFA3_O            NXP_SIUL2_PINMUX(0, 0, 66, 7, 0, 0)
-#define PTC2_QUADSPI_IOFA3_I            NXP_SIUL2_PINMUX(0, 0, 66, 0, 308, 1)
-#define PTC3_QUADSPI_PCSFA              NXP_SIUL2_PINMUX(0, 0, 67, 6, 0, 0)
-#define PTD7_QUADSPI_IOFA1_O            NXP_SIUL2_PINMUX(0, 0, 103, 7, 0, 0)
-#define PTD7_QUADSPI_IOFA1_I            NXP_SIUL2_PINMUX(0, 0, 103, 0, 306, 1)
-#define PTD10_QUADSPI_SCKFA_O           NXP_SIUL2_PINMUX(0, 0, 106, 7, 0, 0)
-#define PTD10_QUADSPI_SCKFA_I           NXP_SIUL2_PINMUX(0, 0, 106, 0, 309, 1)
-#define PTD11_QUADSPI_IOFA0_O           NXP_SIUL2_PINMUX(0, 0, 107, 7, 0, 0)
-#define PTD11_QUADSPI_IOFA0_I           NXP_SIUL2_PINMUX(0, 0, 107, 0, 305, 1)
-#define PTD12_QUADSPI_IOFA2_O           NXP_SIUL2_PINMUX(0, 0, 108, 7, 0, 0)
-#define PTD12_QUADSPI_IOFA2_I           NXP_SIUL2_PINMUX(0, 0, 108, 0, 307, 1)
-
-/* LPI2C1 */
-#define PTC5_LPI2C1_HREQ                NXP_SIUL2_PINMUX(0, 0, 69, 0, 216, 2)
-#define PTC6_LPI2C1_SDA_O               NXP_SIUL2_PINMUX(0, 0, 70, 1, 0, 0)
-#define PTC6_LPI2C1_SDA_I               NXP_SIUL2_PINMUX(0, 0, 70, 0, 219, 2)
-#define PTC7_LPI2C1_SCL_O               NXP_SIUL2_PINMUX(0, 0, 71, 3, 0, 0)
-#define PTC7_LPI2C1_SCL_I               NXP_SIUL2_PINMUX(0, 0, 71, 0, 217, 1)
-#define PTC15_LPI2C1_SCL_O              NXP_SIUL2_PINMUX(0, 0, 79, 7, 0, 0)
-#define PTC15_LPI2C1_SCL_I              NXP_SIUL2_PINMUX(0, 0, 79, 0, 217, 6)
-#define PTC16_LPI2C1_SDAS_O             NXP_SIUL2_PINMUX(0, 0, 80, 4, 0, 0)
-#define PTC16_LPI2C1_SDA_O              NXP_SIUL2_PINMUX(0, 0, 80, 7, 0, 0)
-#define PTC16_LPI2C1_SDA_I              NXP_SIUL2_PINMUX(0, 0, 80, 0, 219, 5)
-#define PTC16_LPI2C1_SDAS_I             NXP_SIUL2_PINMUX(0, 0, 80, 0, 220, 1)
-#define PTC17_LPI2C1_SCLS_O             NXP_SIUL2_PINMUX(0, 0, 81, 4, 0, 0)
-#define PTC17_LPI2C1_SCLS_I             NXP_SIUL2_PINMUX(0, 0, 81, 0, 218, 2)
-#define PTC28_LPI2C1_SCL_O              NXP_SIUL2_PINMUX(0, 0, 92, 5, 0, 0)
-#define PTC28_LPI2C1_SCL_I              NXP_SIUL2_PINMUX(0, 0, 92, 0, 217, 4)
-#define PTC29_LPI2C1_SDA_O              NXP_SIUL2_PINMUX(0, 0, 93, 5, 0, 0)
-#define PTC29_LPI2C1_SDA_I              NXP_SIUL2_PINMUX(0, 0, 93, 0, 219, 3)
-#define PTD8_LPI2C1_SDA_O               NXP_SIUL2_PINMUX(0, 0, 104, 2, 0, 0)
-#define PTD8_LPI2C1_SDA_I               NXP_SIUL2_PINMUX(0, 0, 104, 0, 219, 1)
-#define PTD9_LPI2C1_SCL_O               NXP_SIUL2_PINMUX(0, 0, 105, 2, 0, 0)
-#define PTD9_LPI2C1_SCL_I               NXP_SIUL2_PINMUX(0, 0, 105, 0, 217, 2)
-#define PTD12_LPI2C1_HREQ               NXP_SIUL2_PINMUX(0, 0, 108, 0, 216, 1)
-
-/* CAN2 */
-#define PTC6_CAN2_RX                    NXP_SIUL2_PINMUX(0, 0, 70, 0, 2, 6)
-#define PTC7_CAN2_TX                    NXP_SIUL2_PINMUX(0, 0, 71, 7, 0, 0)
-#define PTC14_CAN2_RX                   NXP_SIUL2_PINMUX(0, 0, 78, 0, 2, 2)
-#define PTC15_CAN2_TX                   NXP_SIUL2_PINMUX(0, 0, 79, 1, 0, 0)
-#define PTC16_CAN2_RX                   NXP_SIUL2_PINMUX(0, 0, 80, 0, 2, 1)
-#define PTC17_CAN2_TX                   NXP_SIUL2_PINMUX(0, 0, 81, 3, 0, 0)
-#define PTE24_CAN2_TX                   NXP_SIUL2_PINMUX(0, 0, 152, 3, 0, 0)
-#define PTE25_CAN2_RX                   NXP_SIUL2_PINMUX(0, 0, 153, 0, 2, 3)
-
-/* SAI1 */
-#define PTD13_SAI1_D0_O                 NXP_SIUL2_PINMUX(0, 0, 109, 6, 0, 0)
-#define PTD13_SAI1_D0_I                 NXP_SIUL2_PINMUX(0, 0, 109, 0, 323, 1)
-#define PTD14_SAI1_MCLK                 NXP_SIUL2_PINMUX(0, 0, 110, 0, 324, 1)
-#define PTD15_SAI1_SYNC_O               NXP_SIUL2_PINMUX(0, 0, 111, 6, 0, 0)
-#define PTD15_SAI1_SYNC_I               NXP_SIUL2_PINMUX(0, 0, 111, 0, 325, 1)
-#define PTE3_SAI1_D0_O                  NXP_SIUL2_PINMUX(0, 0, 131, 2, 0, 0)
-#define PTE3_SAI1_D0_I                  NXP_SIUL2_PINMUX(0, 0, 131, 0, 323, 2)
-#define PTE8_SAI1_BCLK_O                NXP_SIUL2_PINMUX(0, 0, 136, 6, 0, 0)
-#define PTE8_SAI1_BCLK_I                NXP_SIUL2_PINMUX(0, 0, 136, 0, 322, 1)
+#define PTD6_FXIO_D3_I                  NXP_SIUL2_PINMUX(0, 0, 102, 0, 155, 9)
+#define PTD6_FXIO_D3_O                  NXP_SIUL2_PINMUX(0, 0, 102, 2, 0, 0)
+#define PTE12_CMP0_RR_ACTIVE            NXP_SIUL2_PINMUX(0, 0, 140, 1, 0, 0)
+#define PTE12_FXIO_D7_I                 NXP_SIUL2_PINMUX(0, 0, 140, 0, 159, 9)
+#define PTE12_FXIO_D7_O                 NXP_SIUL2_PINMUX(0, 0, 140, 7, 0, 0)
 #define PTE12_SAI1_MCLK                 NXP_SIUL2_PINMUX(0, 0, 140, 0, 324, 2)
+#define PTE3_SAI1_D0_I                  NXP_SIUL2_PINMUX(0, 0, 131, 0, 323, 2)
+#define PTE3_SAI1_D0_O                  NXP_SIUL2_PINMUX(0, 0, 131, 2, 0, 0)
 
-#endif /* HAL_NXP_DTS_NXP_S32_S32K342_K341_K322_172HDQFP_PINCTRL_H_ */
+#endif /* _ZEPHYR_DTS_BINDING_S32K342_K341_K322_172HDQFP_WRAPPER_ */
