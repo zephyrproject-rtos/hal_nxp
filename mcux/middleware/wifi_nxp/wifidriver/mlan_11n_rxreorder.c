@@ -541,7 +541,7 @@ static t_void wlan_11n_create_rxreorder_tbl(mlan_private *priv, t_u8 *ta, int ti
         new_node->bitmap          = 0;
 
 #if !CONFIG_MEM_POOLS
-        if ((pmadapter->callbacks.moal_malloc(pmadapter->pmoal_handle, 4U * win_size, MLAN_MEM_DEF,
+        if ((pmadapter->callbacks.moal_malloc(pmadapter->pmoal_handle, sizeof(t_void *) * win_size, MLAN_MEM_DEF,
                                               (t_u8 **)&new_node->rx_reorder_ptr)) != MLAN_STATUS_SUCCESS)
 #else
         new_node->rx_reorder_ptr = OSA_MemoryPoolAllocate(buf_256_MemoryPool);
