@@ -36,7 +36,7 @@ void *wifi_malloc_eventbuf(size_t size)
 
     if (ptr != NULL)
     {
-        w_mem_d("[evtbuf] Alloc: A: %p S: %d", ptr, size);
+        w_mem_d("[evtbuf] Alloc: A: %p S: %zu", ptr, size);
     }
     else
     {
@@ -69,12 +69,12 @@ mlan_status wrapper_moal_malloc(IN t_void *pmoal_handle, IN t_u32 size, IN t_u32
 
     if (*ppbuf != NULL)
     {
-        w_mem_d("[mlan]: Alloc: A: %p S: %d", *ppbuf, size);
+        w_mem_d("[mlan]: Alloc: A: %p S: %u", *ppbuf, size);
         return MLAN_STATUS_SUCCESS;
     }
     else
     {
-        w_mem_e("[mlan] Alloc: S: %d FAILED", size);
+        w_mem_e("[mlan] Alloc: S: %u FAILED", size);
         /*
          * fixme: check if MLAN_STATUS_SUCCESS is to be returned in
          * spite of the status failure.
