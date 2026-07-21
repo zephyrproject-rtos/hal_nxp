@@ -1340,10 +1340,17 @@ static mlan_status wlan_decode_rx_packet(t_u8 *pmbuf, t_u32 upld_type)
     osa_status_t status;
     struct bus_message msg;
 
+    /* Cache sdiopkt->size once: it lives in the live SDIO rx buffer, and
+     * reading it separately to size the allocation vs. as the memcpy length
+     * would let the two reads disagree if the buffer is refilled in between,
+     * overrunning the allocation into the next heap chunk's header.
+     */
+    t_u32 pkt_size = sdiopkt->size;
+
 #if CONFIG_P2P
     if (bus.special_queue != NULL && upld_type == MLAN_TYPE_CMD)
     {
-        msg.data = OSA_MemoryAllocate(sdiopkt->size);
+        msg.data = OSA_MemoryAllocate(pkt_size);
         if (!msg.data)
         {
             wifi_io_e("Buffer allocation failed");
@@ -1353,7 +1360,7 @@ static mlan_status wlan_decode_rx_packet(t_u8 *pmbuf, t_u32 upld_type)
         msg.event = upld_type;
         cmdBuf    = pmbuf;
         cmdBuf    = cmdBuf + INTF_HEADER_LEN;
-        (void)memcpy((void *)msg.data, (const void *)cmdBuf, sdiopkt->size);
+        (void)memcpy((void *)msg.data, (const void *)cmdBuf, pkt_size);
 
         status = OSA_MsgQPut(bus.special_queue, &msg);
 
@@ -1375,17 +1382,17 @@ static mlan_status wlan_decode_rx_packet(t_u8 *pmbuf, t_u32 upld_type)
         }
         else
         {
-            msg.data = wifi_malloc_eventbuf((size_t)sdiopkt->size);
+            msg.data = wifi_malloc_eventbuf((size_t)pkt_size);
         }
 
         if (msg.data == MNULL)
         {
-            wifi_io_e("[fail] Buffer alloc: T: %d S: %d", upld_type, sdiopkt->size);
+            wifi_io_e("[fail] Buffer alloc: T: %u S: %u", upld_type, pkt_size);
             return MLAN_STATUS_FAILURE;
         }
 
         msg.event = (uint16_t)upld_type;
-        (void)memcpy((void *)msg.data, (const void *)pmbuf, sdiopkt->size);
+        (void)memcpy((void *)msg.data, (const void *)pmbuf, pkt_size);
 
         status = OSA_MsgQPut(bus.event_queue, &msg);
 
