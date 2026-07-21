@@ -244,9 +244,10 @@ zephyr_library_compile_definitions_ifdef(CONFIG_ARM64
 
 # mcux-sdk and mcux-sdk-ng share the wifi_nxp, the lists and osa is
 # included in another way. Need add condition here.
-if (CONFIG_HAS_MCUX OR CONFIG_HAS_IMX_HAL OR CONFIG_HAS_NXP_S32_HAL)
-  zephyr_library_sources(${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/components/misc_utilities/fsl_memcpy.S)
-  zephyr_library_sources(${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/components/misc_utilities/fsl_memset.S)
+if ((CONFIG_HAS_MCUX OR CONFIG_HAS_IMX_HAL OR CONFIG_HAS_NXP_S32_HAL) AND
+    NOT CONFIG_ARM64)
+    zephyr_library_sources(${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/components/misc_utilities/fsl_memcpy.S)
+    zephyr_library_sources(${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/components/misc_utilities/fsl_memset.S)
 endif()
 
 if(DEFINED CONFIG_SOC_SDKNG_UNSUPPORTED)
@@ -589,10 +590,12 @@ zephyr_code_relocate(FILES ${MCUX_SDK_DIR}/components/osa/fsl_os_abstraction_zep
                      FILTER "${NXP_OSA_ABS_ZEPHYR_FILTER}"
                      LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
 
+if(NOT CONFIG_ARM64)
 zephyr_code_relocate(FILES
                      ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/components/misc_utilities/fsl_memcpy.S
                      ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/components/misc_utilities/fsl_memset.S
                      LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
+endif()
 
 endif()
 endif()
