@@ -1,6 +1,5 @@
 __pycache__/
 *.swp
-zephyr/blobs/rw61x
-zephyr/blobs/iw612
-zephyr/blobs/mcxw71
-zephyr/blobs/mcxw72
+zephyr/blobs/*
+!zephyr/blobs/license/
+!zephyr/blobs/license/**
