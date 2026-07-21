@@ -217,7 +217,7 @@ int32_t firmware_download(const uint8_t *fw_start_addr, const size_t size, void 
 
     conn_fw = fw_start_addr;
 
-    fwdnld_io_d("Start copying connectivity firmware from 0x%x", (t_u32)conn_fw);
+    fwdnld_io_d("Start copying connectivity firmware from %p", (const void *)conn_fw);
 
     firmwarelen = size;
     /*Making this section as #if 00 for now, as the decopress and

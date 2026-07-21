@@ -5361,7 +5361,7 @@ static void wrapper_wlan_check_sta_capability(pmlan_private priv, Event_Ext_t *p
                 ie_len       = (t_u8)tlv_len - (t_u8)sizeof(IEEEtypes_FrameCtl_t) - assoc_ie_len;
                 assoc_req_ie = (t_u8 *)tlv + sizeof(MrvlIETypes_MgmtFrameSet_t) + assoc_ie_len;
 
-                support_rates = 
+                support_rates =
                     (IEEEtypes_SupportRates_t *)(void *)wlan_get_specific_ie(priv, assoc_req_ie, ie_len, SUPPORTED_RATES, 0);
 
                 if(support_rates != NULL)
@@ -8531,7 +8531,7 @@ int wifi_set_btwt_cfg(const wifi_btwt_config_t *btwt_cfg)
         return -WM_FAIL;
     }
 
-    wlan_ops_sta_prepare_cmd((mlan_private *)mlan_adap->priv[0],  HostCmd_CMD_TWT_CFG, 
+    wlan_ops_sta_prepare_cmd((mlan_private *)mlan_adap->priv[0],  HostCmd_CMD_TWT_CFG,
                                 HostCmd_ACT_GEN_SET, 0, NULL, &twt_cfg, cmd);
     ret = wifi_wait_for_cmdresp(NULL);
     if (ret == WM_SUCCESS)
@@ -8557,8 +8557,8 @@ int wifi_get_btwt_cfg(wifi_btwt_config_t *btwt_cfg)
     cmd->result  = 0x0;
 
     twt_cfg.sub_id = MLAN_11AX_TWT_BTWT_SUBID;
-    
-    wlan_ops_sta_prepare_cmd((mlan_private *)mlan_adap->priv[0],  HostCmd_CMD_TWT_CFG, 
+
+    wlan_ops_sta_prepare_cmd((mlan_private *)mlan_adap->priv[0],  HostCmd_CMD_TWT_CFG,
                                 HostCmd_ACT_GEN_GET, 0, NULL, &twt_cfg, cmd);
     ret = wifi_wait_for_cmdresp(btwt_cfg);
     if (ret != WM_SUCCESS || wm_wifi.cmd_resp_status != WM_SUCCESS)
@@ -8676,7 +8676,7 @@ int wifi_twt_information(wifi_twt_information_t *twt_information)
         return -WM_FAIL;
     }
 
-    wlan_ops_sta_prepare_cmd((mlan_private *)mlan_adap->priv[0], HostCmd_CMD_TWT_CFG, 
+    wlan_ops_sta_prepare_cmd((mlan_private *)mlan_adap->priv[0], HostCmd_CMD_TWT_CFG,
                        HostCmd_ACT_GEN_SET, 0, NULL, &twt_cfg, cmd);
     ret = wifi_wait_for_cmdresp(NULL);
     if (ret == WM_SUCCESS)
