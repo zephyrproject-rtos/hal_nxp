@@ -300,6 +300,7 @@ typedef struct Phy_PhyLocalStruct_tag
     uint32_t rx_time_poll;      /* symbols. rx duration after data req with ACK with FP=1 */
     uint32_t rx_poll_to;        /* symbols. timeout for POLL reception */
     uint8_t ps;                 /* POLL state machine */
+    bool_t ps_rx_started;
 
 #if defined(FFU_DEVICE_LIMIT_VISIBILITY)
     visible_filter_t sFilter;
