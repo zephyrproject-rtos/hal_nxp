@@ -106,8 +106,6 @@
 #include "PERI_TMU.h"
 #include "PERI_TPM.h"
 #include "PERI_TRDC_MBC0.h"
-#include "PERI_TRDC_MBC2.h"
-#include "PERI_TRDC_MBC4.h"
 #include "PERI_TRGMUX.h"
 #include "PERI_TSTMR.h"
 #include "PERI_USB.h"
