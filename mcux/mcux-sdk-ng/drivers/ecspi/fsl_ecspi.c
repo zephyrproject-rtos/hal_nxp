@@ -445,8 +445,15 @@ void ECSPI_SetBaudRate(ECSPI_Type *base, uint32_t baudRate_Bps, uint32_t srcCloc
         }
     }
 
+    base->CONREG &= ~(ECSPI_CONREG_PRE_DIVIDER_MASK | ECSPI_CONREG_POST_DIVIDER_MASK);
     base->CONREG |= ECSPI_CONREG_PRE_DIVIDER(bestPreDividerValue) | ECSPI_CONREG_POST_DIVIDER(bestPostDividerValue);
 }
+
+/* Per-channel mask of the CONFIGREG bit-fields this function writes (channel 0
+ * position); shift by the channel index to target channels 1-3. */
+#define ECSPI_CONFIGREG_CHANNEL0_MASK                                                                 \
+    (ECSPI_CONFIGREG_SCLK_CTL(1U) | ECSPI_CONFIGREG_DATA_CTL(1U) | ECSPI_CONFIGREG_SS_POL(1U) |       \
+     ECSPI_CONFIGREG_SCLK_POL(1U) | ECSPI_CONFIGREG_SCLK_PHA(1U))
 
 /*!
  * brief Set channel select configuration for transfer.
@@ -465,7 +472,9 @@ void ECSPI_SetChannelConfig(ECSPI_Type *base, ecspi_channel_source_t channel, co
     switch (channel)
     {
         case kECSPI_Channel0:
+            base->CONREG &= ~ECSPI_CONREG_CHANNEL_MODE_MASK;
             base->CONREG |= ECSPI_CONREG_CHANNEL_MODE(config->channelMode);
+            base->CONFIGREG &= ~ECSPI_CONFIGREG_CHANNEL0_MASK;
             base->CONFIGREG |= (ECSPI_CONFIGREG_SCLK_CTL(config->clockInactiveState) |
                                 ECSPI_CONFIGREG_DATA_CTL(config->dataLineInactiveState) |
                                 ECSPI_CONFIGREG_SS_POL(config->chipSlectActiveState) |
@@ -473,7 +482,9 @@ void ECSPI_SetChannelConfig(ECSPI_Type *base, ecspi_channel_source_t channel, co
             break;
 
         case kECSPI_Channel1:
+            base->CONREG &= ~(ECSPI_CONREG_CHANNEL_MODE_MASK << 1U);
             base->CONREG |= ECSPI_CONREG_CHANNEL_MODE(config->channelMode) << 1U;
+            base->CONFIGREG &= ~(ECSPI_CONFIGREG_CHANNEL0_MASK << 1U);
             base->CONFIGREG |=
                 ((ECSPI_CONFIGREG_SCLK_CTL(config->clockInactiveState) << 1U) |
                  (ECSPI_CONFIGREG_DATA_CTL(config->dataLineInactiveState) << 1U) |
@@ -482,7 +493,9 @@ void ECSPI_SetChannelConfig(ECSPI_Type *base, ecspi_channel_source_t channel, co
             break;
 
         case kECSPI_Channel2:
+            base->CONREG &= ~(ECSPI_CONREG_CHANNEL_MODE_MASK << 2);
             base->CONREG |= ECSPI_CONREG_CHANNEL_MODE(config->channelMode) << 2;
+            base->CONFIGREG &= ~(ECSPI_CONFIGREG_CHANNEL0_MASK << 2);
             base->CONFIGREG |=
                 ((ECSPI_CONFIGREG_SCLK_CTL(config->clockInactiveState) << 2) |
                  (ECSPI_CONFIGREG_DATA_CTL(config->dataLineInactiveState) << 2) |
@@ -491,7 +504,9 @@ void ECSPI_SetChannelConfig(ECSPI_Type *base, ecspi_channel_source_t channel, co
             break;
 
         case kECSPI_Channel3:
+            base->CONREG &= ~(ECSPI_CONREG_CHANNEL_MODE_MASK << 3);
             base->CONREG |= ECSPI_CONREG_CHANNEL_MODE(config->channelMode) << 3;
+            base->CONFIGREG &= ~(ECSPI_CONFIGREG_CHANNEL0_MASK << 3);
             base->CONFIGREG |=
                 ((ECSPI_CONFIGREG_SCLK_CTL(config->clockInactiveState) << 3) |
                  (ECSPI_CONFIGREG_DATA_CTL(config->dataLineInactiveState) << 3) |
