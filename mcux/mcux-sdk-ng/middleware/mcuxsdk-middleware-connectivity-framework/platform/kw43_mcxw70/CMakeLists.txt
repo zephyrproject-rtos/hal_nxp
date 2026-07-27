@@ -6,7 +6,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.platform.kw43_mcxw70)
     mcux_add_source(SOURCES
         configs/fwk_config.h
         configs/rpmsg_config.h
-        configs/SecLib_psa_config.h
+        # configs/SecLib_psa_config.h
         fwk_platform_definitions.h
         fwk_platform_kw43_mcxw70.c
         DEVICE_IDS ${KW43_FAMILY} ${MCXW70_FAMILY}
