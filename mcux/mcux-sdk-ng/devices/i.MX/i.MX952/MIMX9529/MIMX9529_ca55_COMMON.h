@@ -2554,15 +2554,6 @@ typedef enum _mu_core_boot_mode
 /** Interrupt vectors for the TPM peripheral type */
 #define TPM_IRQS                                 { NotAvail_IRQn, TPM1_IRQn, TPM2_IRQn, TPM3_IRQn, TPM4_IRQn, TPM5_IRQn, TPM6_IRQn }
 
-/* TRDC_MGR_MEGA - Peripheral instance base addresses */
-/** Peripheral WAKEUP__TRDC_MGR2 base address */
-#define WAKEUP__TRDC_MGR2_BASE                   (0x424C0000u)
-/** Peripheral WAKEUP__TRDC_MGR2 base pointer */
-#define WAKEUP__TRDC_MGR2                        ((TRDC_MGR_MEGA_Type *)WAKEUP__TRDC_MGR2_BASE)
-/** Array initializer of TRDC_MGR_MEGA peripheral base addresses */
-#define TRDC_MGR_MEGA_BASE_ADDRS                 { WAKEUP__TRDC_MGR2_BASE }
-/** Array initializer of TRDC_MGR_MEGA peripheral base pointers */
-#define TRDC_MGR_MEGA_BASE_PTRS                  { WAKEUP__TRDC_MGR2 }
 
 /* TSTMR - Peripheral instance base addresses */
 /** Peripheral TSTMR1 base address */
@@ -2763,15 +2754,6 @@ typedef enum _mu_core_boot_mode
 /** Array initializer of WAKEUP_GPT peripheral base pointers */
 #define WAKEUP_GPT_BASE_PTRS                     { WAKEUP__GPT2, WAKEUP__GPT3, WAKEUP__GPT4, WAKEUP__GPT5 }
 
-/* WAKEUP_TRDC_MGR - Peripheral instance base addresses */
-/** Peripheral WAKEUP__TRDC_MGR1 base address */
-#define WAKEUP__TRDC_MGR1_BASE                   (0x42080000u)
-/** Peripheral WAKEUP__TRDC_MGR1 base pointer */
-#define WAKEUP__TRDC_MGR1                        ((WAKEUP_TRDC_MGR_Type *)WAKEUP__TRDC_MGR1_BASE)
-/** Array initializer of WAKEUP_TRDC_MGR peripheral base addresses */
-#define WAKEUP_TRDC_MGR_BASE_ADDRS               { WAKEUP__TRDC_MGR1_BASE }
-/** Array initializer of WAKEUP_TRDC_MGR peripheral base pointers */
-#define WAKEUP_TRDC_MGR_BASE_PTRS                { WAKEUP__TRDC_MGR1 }
 
 /* WAKEUP_XSPI_RESPONDER - Peripheral instance base addresses */
 /** Peripheral WAKEUP__XSPI_RESPONDER base address */

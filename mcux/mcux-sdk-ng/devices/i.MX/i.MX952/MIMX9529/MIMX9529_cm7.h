@@ -321,8 +321,6 @@
 #include "PERI_TCM_ECC_MCM.h"
 #include "PERI_TMPSNS.h"
 #include "PERI_TPM.h"
-#include "PERI_TRDC.h"
-#include "PERI_TRDC_MGR_MEGA.h"
 #include "PERI_TRGMUX.h"
 #include "PERI_TSTMR.h"
 #include "PERI_USB.h"

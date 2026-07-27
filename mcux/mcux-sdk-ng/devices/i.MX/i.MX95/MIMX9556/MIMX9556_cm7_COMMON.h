@@ -2812,25 +2812,7 @@ typedef enum IRQn {
 /** Array initializer of NOC_GICA peripheral base pointers */
 #define NOC_GICA_BASE_PTRS                       { NOC__GIC__GICA }
 
-/* NOC_GICD - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICD base address */
-#define NOC__GIC__GICD_BASE                      (0x48000000u)
-/** Peripheral NOC__GIC__GICD base pointer */
-#define NOC__GIC__GICD                           ((NOC_GICD_Type *)NOC__GIC__GICD_BASE)
-/** Array initializer of NOC_GICD peripheral base addresses */
-#define NOC_GICD_BASE_ADDRS                      { NOC__GIC__GICD_BASE }
-/** Array initializer of NOC_GICD peripheral base pointers */
-#define NOC_GICD_BASE_PTRS                       { NOC__GIC__GICD }
 
-/* NOC_GICDA - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICDA base address */
-#define NOC__GIC__GICDA_BASE                     (0x48120000u)
-/** Peripheral NOC__GIC__GICDA base pointer */
-#define NOC__GIC__GICDA                          ((NOC_GICDA_Type *)NOC__GIC__GICDA_BASE)
-/** Array initializer of NOC_GICDA peripheral base addresses */
-#define NOC_GICDA_BASE_ADDRS                     { NOC__GIC__GICDA_BASE }
-/** Array initializer of NOC_GICDA peripheral base pointers */
-#define NOC_GICDA_BASE_PTRS                      { NOC__GIC__GICDA }
 
 /* NOC_GICP - Peripheral instance base addresses */
 /** Peripheral NOC__GIC__GICP base address */
@@ -3583,15 +3565,6 @@ typedef enum IRQn {
 /** Interrupt vectors for the TPM peripheral type */
 #define TPM_IRQS                                 { NotAvail_IRQn, TPM1_IRQn, TPM2_IRQn, TPM3_IRQn, TPM4_IRQn, TPM5_IRQn, TPM6_IRQn }
 
-/* TRDC_MBC2 - Peripheral instance base addresses */
-/** Peripheral TRDC1 base address */
-#define TRDC1_BASE                               (0x44270000u)
-/** Peripheral TRDC1 base pointer */
-#define TRDC1                                    ((TRDC_MBC2_Type *)TRDC1_BASE)
-/** Array initializer of TRDC_MBC2 peripheral base addresses */
-#define TRDC_MBC2_BASE_ADDRS                     { TRDC1_BASE }
-/** Array initializer of TRDC_MBC2 peripheral base pointers */
-#define TRDC_MBC2_BASE_PTRS                      { TRDC1 }
 
 /* TSTMR - Peripheral instance base addresses */
 /** Peripheral TSTMR1 base address */
