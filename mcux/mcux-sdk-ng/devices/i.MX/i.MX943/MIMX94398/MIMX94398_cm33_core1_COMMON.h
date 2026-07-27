@@ -2620,35 +2620,6 @@ typedef enum _xbar_output_signal
   #define AON_TCU_BASE_PTRS                        { AON__TCU }
 #endif
 
-/* AON_TRDC_MGR - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral AON__TRDC_MGR base address */
-  #define AON__TRDC_MGR_BASE                       (0x54270000u)
-  /** Peripheral AON__TRDC_MGR base address */
-  #define AON__TRDC_MGR_BASE_NS                    (0x44270000u)
-  /** Peripheral AON__TRDC_MGR base pointer */
-  #define AON__TRDC_MGR                            ((AON_TRDC_MGR_Type *)AON__TRDC_MGR_BASE)
-  /** Peripheral AON__TRDC_MGR base pointer */
-  #define AON__TRDC_MGR_NS                         ((AON_TRDC_MGR_Type *)AON__TRDC_MGR_BASE_NS)
-  /** Array initializer of AON_TRDC_MGR peripheral base addresses */
-  #define AON_TRDC_MGR_BASE_ADDRS                  { AON__TRDC_MGR_BASE }
-  /** Array initializer of AON_TRDC_MGR peripheral base pointers */
-  #define AON_TRDC_MGR_BASE_PTRS                   { AON__TRDC_MGR }
-  /** Array initializer of AON_TRDC_MGR peripheral base addresses */
-  #define AON_TRDC_MGR_BASE_ADDRS_NS               { AON__TRDC_MGR_BASE_NS }
-  /** Array initializer of AON_TRDC_MGR peripheral base pointers */
-  #define AON_TRDC_MGR_BASE_PTRS_NS                { AON__TRDC_MGR_NS }
-#else
-  /** Peripheral AON__TRDC_MGR base address */
-  #define AON__TRDC_MGR_BASE                       (0x44270000u)
-  /** Peripheral AON__TRDC_MGR base pointer */
-  #define AON__TRDC_MGR                            ((AON_TRDC_MGR_Type *)AON__TRDC_MGR_BASE)
-  /** Array initializer of AON_TRDC_MGR peripheral base addresses */
-  #define AON_TRDC_MGR_BASE_ADDRS                  { AON__TRDC_MGR_BASE }
-  /** Array initializer of AON_TRDC_MGR peripheral base pointers */
-  #define AON_TRDC_MGR_BASE_PTRS                   { AON__TRDC_MGR }
-#endif
-
 /* ARDB - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
   /** Peripheral WAKEUP__XSPI1__ARDB base address */
@@ -3521,35 +3492,6 @@ typedef enum _xbar_output_signal
   #define DISPLAY_TCU_BASE_ADDRS                   { DISPLAY__TCU_BASE }
   /** Array initializer of DISPLAY_TCU peripheral base pointers */
   #define DISPLAY_TCU_BASE_PTRS                    { DISPLAY__TCU }
-#endif
-
-/* DISPLAY_TRDC_MGR - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral DISPLAY__TRDC_MGR_D base address */
-  #define DISPLAY__TRDC_MGR_D_BASE                 (0x5B040000u)
-  /** Peripheral DISPLAY__TRDC_MGR_D base address */
-  #define DISPLAY__TRDC_MGR_D_BASE_NS              (0x4B040000u)
-  /** Peripheral DISPLAY__TRDC_MGR_D base pointer */
-  #define DISPLAY__TRDC_MGR_D                      ((DISPLAY_TRDC_MGR_Type *)DISPLAY__TRDC_MGR_D_BASE)
-  /** Peripheral DISPLAY__TRDC_MGR_D base pointer */
-  #define DISPLAY__TRDC_MGR_D_NS                   ((DISPLAY_TRDC_MGR_Type *)DISPLAY__TRDC_MGR_D_BASE_NS)
-  /** Array initializer of DISPLAY_TRDC_MGR peripheral base addresses */
-  #define DISPLAY_TRDC_MGR_BASE_ADDRS              { DISPLAY__TRDC_MGR_D_BASE }
-  /** Array initializer of DISPLAY_TRDC_MGR peripheral base pointers */
-  #define DISPLAY_TRDC_MGR_BASE_PTRS               { DISPLAY__TRDC_MGR_D }
-  /** Array initializer of DISPLAY_TRDC_MGR peripheral base addresses */
-  #define DISPLAY_TRDC_MGR_BASE_ADDRS_NS           { DISPLAY__TRDC_MGR_D_BASE_NS }
-  /** Array initializer of DISPLAY_TRDC_MGR peripheral base pointers */
-  #define DISPLAY_TRDC_MGR_BASE_PTRS_NS            { DISPLAY__TRDC_MGR_D_NS }
-#else
-  /** Peripheral DISPLAY__TRDC_MGR_D base address */
-  #define DISPLAY__TRDC_MGR_D_BASE                 (0x4B040000u)
-  /** Peripheral DISPLAY__TRDC_MGR_D base pointer */
-  #define DISPLAY__TRDC_MGR_D                      ((DISPLAY_TRDC_MGR_Type *)DISPLAY__TRDC_MGR_D_BASE)
-  /** Array initializer of DISPLAY_TRDC_MGR peripheral base addresses */
-  #define DISPLAY_TRDC_MGR_BASE_ADDRS              { DISPLAY__TRDC_MGR_D_BASE }
-  /** Array initializer of DISPLAY_TRDC_MGR peripheral base pointers */
-  #define DISPLAY_TRDC_MGR_BASE_PTRS               { DISPLAY__TRDC_MGR_D }
 #endif
 
 /* DMA - Peripheral instance base addresses */
@@ -4788,34 +4730,6 @@ typedef enum _xbar_output_signal
   #define HSIO_TCU_BASE_PTRS                       { HSIO__TCU }
 #endif
 
-/* HSIO_TRDC_MGR - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral HSIO__TRDC_MGR_HSIOMIX base address */
-  #define HSIO__TRDC_MGR_HSIOMIX_BASE              (0x5C040000u)
-  /** Peripheral HSIO__TRDC_MGR_HSIOMIX base address */
-  #define HSIO__TRDC_MGR_HSIOMIX_BASE_NS           (0x4C040000u)
-  /** Peripheral HSIO__TRDC_MGR_HSIOMIX base pointer */
-  #define HSIO__TRDC_MGR_HSIOMIX                   ((HSIO_TRDC_MGR_Type *)HSIO__TRDC_MGR_HSIOMIX_BASE)
-  /** Peripheral HSIO__TRDC_MGR_HSIOMIX base pointer */
-  #define HSIO__TRDC_MGR_HSIOMIX_NS                ((HSIO_TRDC_MGR_Type *)HSIO__TRDC_MGR_HSIOMIX_BASE_NS)
-  /** Array initializer of HSIO_TRDC_MGR peripheral base addresses */
-  #define HSIO_TRDC_MGR_BASE_ADDRS                 { HSIO__TRDC_MGR_HSIOMIX_BASE }
-  /** Array initializer of HSIO_TRDC_MGR peripheral base pointers */
-  #define HSIO_TRDC_MGR_BASE_PTRS                  { HSIO__TRDC_MGR_HSIOMIX }
-  /** Array initializer of HSIO_TRDC_MGR peripheral base addresses */
-  #define HSIO_TRDC_MGR_BASE_ADDRS_NS              { HSIO__TRDC_MGR_HSIOMIX_BASE_NS }
-  /** Array initializer of HSIO_TRDC_MGR peripheral base pointers */
-  #define HSIO_TRDC_MGR_BASE_PTRS_NS               { HSIO__TRDC_MGR_HSIOMIX_NS }
-#else
-  /** Peripheral HSIO__TRDC_MGR_HSIOMIX base address */
-  #define HSIO__TRDC_MGR_HSIOMIX_BASE              (0x4C040000u)
-  /** Peripheral HSIO__TRDC_MGR_HSIOMIX base pointer */
-  #define HSIO__TRDC_MGR_HSIOMIX                   ((HSIO_TRDC_MGR_Type *)HSIO__TRDC_MGR_HSIOMIX_BASE)
-  /** Array initializer of HSIO_TRDC_MGR peripheral base addresses */
-  #define HSIO_TRDC_MGR_BASE_ADDRS                 { HSIO__TRDC_MGR_HSIOMIX_BASE }
-  /** Array initializer of HSIO_TRDC_MGR peripheral base pointers */
-  #define HSIO_TRDC_MGR_BASE_PTRS                  { HSIO__TRDC_MGR_HSIOMIX }
-#endif
 
 /* I2S - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -7277,63 +7191,7 @@ typedef enum _xbar_output_signal
   #define NETC_TMR_BASE_BASE_PTRS                  { NETC__ECAM_PCI_EMDIO0_BAR_0__TMR1_BASE, NETC__ECAM_PCI_EMDIO0_BAR_0__TMR2_BASE }
 #endif
 
-/* NETC_TRDC_MGR - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral NETC__TRDC_MGRE base address */
-  #define NETC__TRDC_MGRE_BASE                     (0x5C840000u)
-  /** Peripheral NETC__TRDC_MGRE base address */
-  #define NETC__TRDC_MGRE_BASE_NS                  (0x4C840000u)
-  /** Peripheral NETC__TRDC_MGRE base pointer */
-  #define NETC__TRDC_MGRE                          ((NETC_TRDC_MGR_Type *)NETC__TRDC_MGRE_BASE)
-  /** Peripheral NETC__TRDC_MGRE base pointer */
-  #define NETC__TRDC_MGRE_NS                       ((NETC_TRDC_MGR_Type *)NETC__TRDC_MGRE_BASE_NS)
-  /** Array initializer of NETC_TRDC_MGR peripheral base addresses */
-  #define NETC_TRDC_MGR_BASE_ADDRS                 { NETC__TRDC_MGRE_BASE }
-  /** Array initializer of NETC_TRDC_MGR peripheral base pointers */
-  #define NETC_TRDC_MGR_BASE_PTRS                  { NETC__TRDC_MGRE }
-  /** Array initializer of NETC_TRDC_MGR peripheral base addresses */
-  #define NETC_TRDC_MGR_BASE_ADDRS_NS              { NETC__TRDC_MGRE_BASE_NS }
-  /** Array initializer of NETC_TRDC_MGR peripheral base pointers */
-  #define NETC_TRDC_MGR_BASE_PTRS_NS               { NETC__TRDC_MGRE_NS }
-#else
-  /** Peripheral NETC__TRDC_MGRE base address */
-  #define NETC__TRDC_MGRE_BASE                     (0x4C840000u)
-  /** Peripheral NETC__TRDC_MGRE base pointer */
-  #define NETC__TRDC_MGRE                          ((NETC_TRDC_MGR_Type *)NETC__TRDC_MGRE_BASE)
-  /** Array initializer of NETC_TRDC_MGR peripheral base addresses */
-  #define NETC_TRDC_MGR_BASE_ADDRS                 { NETC__TRDC_MGRE_BASE }
-  /** Array initializer of NETC_TRDC_MGR peripheral base pointers */
-  #define NETC_TRDC_MGR_BASE_PTRS                  { NETC__TRDC_MGRE }
-#endif
 
-/* NETC_TRDC_MGR_CM33 - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral NETC__TRDC_MGRE_CM33 base address */
-  #define NETC__TRDC_MGRE_CM33_BASE                (0x5D040000u)
-  /** Peripheral NETC__TRDC_MGRE_CM33 base address */
-  #define NETC__TRDC_MGRE_CM33_BASE_NS             (0x4D040000u)
-  /** Peripheral NETC__TRDC_MGRE_CM33 base pointer */
-  #define NETC__TRDC_MGRE_CM33                     ((NETC_TRDC_MGR_CM33_Type *)NETC__TRDC_MGRE_CM33_BASE)
-  /** Peripheral NETC__TRDC_MGRE_CM33 base pointer */
-  #define NETC__TRDC_MGRE_CM33_NS                  ((NETC_TRDC_MGR_CM33_Type *)NETC__TRDC_MGRE_CM33_BASE_NS)
-  /** Array initializer of NETC_TRDC_MGR_CM33 peripheral base addresses */
-  #define NETC_TRDC_MGR_CM33_BASE_ADDRS            { NETC__TRDC_MGRE_CM33_BASE }
-  /** Array initializer of NETC_TRDC_MGR_CM33 peripheral base pointers */
-  #define NETC_TRDC_MGR_CM33_BASE_PTRS             { NETC__TRDC_MGRE_CM33 }
-  /** Array initializer of NETC_TRDC_MGR_CM33 peripheral base addresses */
-  #define NETC_TRDC_MGR_CM33_BASE_ADDRS_NS         { NETC__TRDC_MGRE_CM33_BASE_NS }
-  /** Array initializer of NETC_TRDC_MGR_CM33 peripheral base pointers */
-  #define NETC_TRDC_MGR_CM33_BASE_PTRS_NS          { NETC__TRDC_MGRE_CM33_NS }
-#else
-  /** Peripheral NETC__TRDC_MGRE_CM33 base address */
-  #define NETC__TRDC_MGRE_CM33_BASE                (0x4D040000u)
-  /** Peripheral NETC__TRDC_MGRE_CM33 base pointer */
-  #define NETC__TRDC_MGRE_CM33                     ((NETC_TRDC_MGR_CM33_Type *)NETC__TRDC_MGRE_CM33_BASE)
-  /** Array initializer of NETC_TRDC_MGR_CM33 peripheral base addresses */
-  #define NETC_TRDC_MGR_CM33_BASE_ADDRS            { NETC__TRDC_MGRE_CM33_BASE }
-  /** Array initializer of NETC_TRDC_MGR_CM33 peripheral base pointers */
-  #define NETC_TRDC_MGR_CM33_BASE_PTRS             { NETC__TRDC_MGRE_CM33 }
-#endif
 
 /* NEUTRON - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -7504,63 +7362,7 @@ typedef enum _xbar_output_signal
   #define NOC_GICA_BASE_PTRS                       { NOC__GIC__GICA }
 #endif
 
-/* NOC_GICD - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral NOC__GIC__GICD base address */
-  #define NOC__GIC__GICD_BASE                      (0x58000000u)
-  /** Peripheral NOC__GIC__GICD base address */
-  #define NOC__GIC__GICD_BASE_NS                   (0x48000000u)
-  /** Peripheral NOC__GIC__GICD base pointer */
-  #define NOC__GIC__GICD                           ((NOC_GICD_Type *)NOC__GIC__GICD_BASE)
-  /** Peripheral NOC__GIC__GICD base pointer */
-  #define NOC__GIC__GICD_NS                        ((NOC_GICD_Type *)NOC__GIC__GICD_BASE_NS)
-  /** Array initializer of NOC_GICD peripheral base addresses */
-  #define NOC_GICD_BASE_ADDRS                      { NOC__GIC__GICD_BASE }
-  /** Array initializer of NOC_GICD peripheral base pointers */
-  #define NOC_GICD_BASE_PTRS                       { NOC__GIC__GICD }
-  /** Array initializer of NOC_GICD peripheral base addresses */
-  #define NOC_GICD_BASE_ADDRS_NS                   { NOC__GIC__GICD_BASE_NS }
-  /** Array initializer of NOC_GICD peripheral base pointers */
-  #define NOC_GICD_BASE_PTRS_NS                    { NOC__GIC__GICD_NS }
-#else
-  /** Peripheral NOC__GIC__GICD base address */
-  #define NOC__GIC__GICD_BASE                      (0x48000000u)
-  /** Peripheral NOC__GIC__GICD base pointer */
-  #define NOC__GIC__GICD                           ((NOC_GICD_Type *)NOC__GIC__GICD_BASE)
-  /** Array initializer of NOC_GICD peripheral base addresses */
-  #define NOC_GICD_BASE_ADDRS                      { NOC__GIC__GICD_BASE }
-  /** Array initializer of NOC_GICD peripheral base pointers */
-  #define NOC_GICD_BASE_PTRS                       { NOC__GIC__GICD }
-#endif
 
-/* NOC_GICDA - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral NOC__GIC__GICDA base address */
-  #define NOC__GIC__GICDA_BASE                     (0x580E0000u)
-  /** Peripheral NOC__GIC__GICDA base address */
-  #define NOC__GIC__GICDA_BASE_NS                  (0x480E0000u)
-  /** Peripheral NOC__GIC__GICDA base pointer */
-  #define NOC__GIC__GICDA                          ((NOC_GICDA_Type *)NOC__GIC__GICDA_BASE)
-  /** Peripheral NOC__GIC__GICDA base pointer */
-  #define NOC__GIC__GICDA_NS                       ((NOC_GICDA_Type *)NOC__GIC__GICDA_BASE_NS)
-  /** Array initializer of NOC_GICDA peripheral base addresses */
-  #define NOC_GICDA_BASE_ADDRS                     { NOC__GIC__GICDA_BASE }
-  /** Array initializer of NOC_GICDA peripheral base pointers */
-  #define NOC_GICDA_BASE_PTRS                      { NOC__GIC__GICDA }
-  /** Array initializer of NOC_GICDA peripheral base addresses */
-  #define NOC_GICDA_BASE_ADDRS_NS                  { NOC__GIC__GICDA_BASE_NS }
-  /** Array initializer of NOC_GICDA peripheral base pointers */
-  #define NOC_GICDA_BASE_PTRS_NS                   { NOC__GIC__GICDA_NS }
-#else
-  /** Peripheral NOC__GIC__GICDA base address */
-  #define NOC__GIC__GICDA_BASE                     (0x480E0000u)
-  /** Peripheral NOC__GIC__GICDA base pointer */
-  #define NOC__GIC__GICDA                          ((NOC_GICDA_Type *)NOC__GIC__GICDA_BASE)
-  /** Array initializer of NOC_GICDA peripheral base addresses */
-  #define NOC_GICDA_BASE_ADDRS                     { NOC__GIC__GICDA_BASE }
-  /** Array initializer of NOC_GICDA peripheral base pointers */
-  #define NOC_GICDA_BASE_PTRS                      { NOC__GIC__GICDA }
-#endif
 
 /* NOC_GICP - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -8714,34 +8516,6 @@ typedef enum _xbar_output_signal
   #define NOC_TCU_BASE_PTRS                        { NOC__TCU }
 #endif
 
-/* NOC_TRDC_MGR - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral NOC__TRDC_MGRN base address */
-  #define NOC__TRDC_MGRN_BASE                      (0x59010000u)
-  /** Peripheral NOC__TRDC_MGRN base address */
-  #define NOC__TRDC_MGRN_BASE_NS                   (0x49010000u)
-  /** Peripheral NOC__TRDC_MGRN base pointer */
-  #define NOC__TRDC_MGRN                           ((NOC_TRDC_MGR_Type *)NOC__TRDC_MGRN_BASE)
-  /** Peripheral NOC__TRDC_MGRN base pointer */
-  #define NOC__TRDC_MGRN_NS                        ((NOC_TRDC_MGR_Type *)NOC__TRDC_MGRN_BASE_NS)
-  /** Array initializer of NOC_TRDC_MGR peripheral base addresses */
-  #define NOC_TRDC_MGR_BASE_ADDRS                  { NOC__TRDC_MGRN_BASE }
-  /** Array initializer of NOC_TRDC_MGR peripheral base pointers */
-  #define NOC_TRDC_MGR_BASE_PTRS                   { NOC__TRDC_MGRN }
-  /** Array initializer of NOC_TRDC_MGR peripheral base addresses */
-  #define NOC_TRDC_MGR_BASE_ADDRS_NS               { NOC__TRDC_MGRN_BASE_NS }
-  /** Array initializer of NOC_TRDC_MGR peripheral base pointers */
-  #define NOC_TRDC_MGR_BASE_PTRS_NS                { NOC__TRDC_MGRN_NS }
-#else
-  /** Peripheral NOC__TRDC_MGRN base address */
-  #define NOC__TRDC_MGRN_BASE                      (0x49010000u)
-  /** Peripheral NOC__TRDC_MGRN base pointer */
-  #define NOC__TRDC_MGRN                           ((NOC_TRDC_MGR_Type *)NOC__TRDC_MGRN_BASE)
-  /** Array initializer of NOC_TRDC_MGR peripheral base addresses */
-  #define NOC_TRDC_MGR_BASE_ADDRS                  { NOC__TRDC_MGRN_BASE }
-  /** Array initializer of NOC_TRDC_MGR peripheral base pointers */
-  #define NOC_TRDC_MGR_BASE_PTRS                   { NOC__TRDC_MGRN }
-#endif
 
 /* NOC_always_on_main_ResFaultCntr - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -11426,63 +11200,7 @@ typedef enum _xbar_output_signal
 /** Interrupt vectors for the TPM peripheral type */
 #define TPM_IRQS                                 { NotAvail_IRQn, TPM1_IRQn, TPM2_IRQn, TPM3_IRQn, TPM4_IRQn, TPM5_IRQn, TPM6_IRQn }
 
-/* TRDC_MGR_WKUP1 - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral WAKEUP__TRDC_MGR_WKUP1 base address */
-  #define WAKEUP__TRDC_MGR_WKUP1_BASE              (0x52460000u)
-  /** Peripheral WAKEUP__TRDC_MGR_WKUP1 base address */
-  #define WAKEUP__TRDC_MGR_WKUP1_BASE_NS           (0x42460000u)
-  /** Peripheral WAKEUP__TRDC_MGR_WKUP1 base pointer */
-  #define WAKEUP__TRDC_MGR_WKUP1                   ((TRDC_MGR_WKUP1_Type *)WAKEUP__TRDC_MGR_WKUP1_BASE)
-  /** Peripheral WAKEUP__TRDC_MGR_WKUP1 base pointer */
-  #define WAKEUP__TRDC_MGR_WKUP1_NS                ((TRDC_MGR_WKUP1_Type *)WAKEUP__TRDC_MGR_WKUP1_BASE_NS)
-  /** Array initializer of TRDC_MGR_WKUP1 peripheral base addresses */
-  #define TRDC_MGR_WKUP1_BASE_ADDRS                { WAKEUP__TRDC_MGR_WKUP1_BASE }
-  /** Array initializer of TRDC_MGR_WKUP1 peripheral base pointers */
-  #define TRDC_MGR_WKUP1_BASE_PTRS                 { WAKEUP__TRDC_MGR_WKUP1 }
-  /** Array initializer of TRDC_MGR_WKUP1 peripheral base addresses */
-  #define TRDC_MGR_WKUP1_BASE_ADDRS_NS             { WAKEUP__TRDC_MGR_WKUP1_BASE_NS }
-  /** Array initializer of TRDC_MGR_WKUP1 peripheral base pointers */
-  #define TRDC_MGR_WKUP1_BASE_PTRS_NS              { WAKEUP__TRDC_MGR_WKUP1_NS }
-#else
-  /** Peripheral WAKEUP__TRDC_MGR_WKUP1 base address */
-  #define WAKEUP__TRDC_MGR_WKUP1_BASE              (0x42460000u)
-  /** Peripheral WAKEUP__TRDC_MGR_WKUP1 base pointer */
-  #define WAKEUP__TRDC_MGR_WKUP1                   ((TRDC_MGR_WKUP1_Type *)WAKEUP__TRDC_MGR_WKUP1_BASE)
-  /** Array initializer of TRDC_MGR_WKUP1 peripheral base addresses */
-  #define TRDC_MGR_WKUP1_BASE_ADDRS                { WAKEUP__TRDC_MGR_WKUP1_BASE }
-  /** Array initializer of TRDC_MGR_WKUP1 peripheral base pointers */
-  #define TRDC_MGR_WKUP1_BASE_PTRS                 { WAKEUP__TRDC_MGR_WKUP1 }
-#endif
 
-/* TRDC_MGR_WKUP2 - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral WAKEUP__TRDC_MGR_WKUP2 base address */
-  #define WAKEUP__TRDC_MGR_WKUP2_BASE              (0x52800000u)
-  /** Peripheral WAKEUP__TRDC_MGR_WKUP2 base address */
-  #define WAKEUP__TRDC_MGR_WKUP2_BASE_NS           (0x42800000u)
-  /** Peripheral WAKEUP__TRDC_MGR_WKUP2 base pointer */
-  #define WAKEUP__TRDC_MGR_WKUP2                   ((TRDC_MGR_WKUP2_Type *)WAKEUP__TRDC_MGR_WKUP2_BASE)
-  /** Peripheral WAKEUP__TRDC_MGR_WKUP2 base pointer */
-  #define WAKEUP__TRDC_MGR_WKUP2_NS                ((TRDC_MGR_WKUP2_Type *)WAKEUP__TRDC_MGR_WKUP2_BASE_NS)
-  /** Array initializer of TRDC_MGR_WKUP2 peripheral base addresses */
-  #define TRDC_MGR_WKUP2_BASE_ADDRS                { WAKEUP__TRDC_MGR_WKUP2_BASE }
-  /** Array initializer of TRDC_MGR_WKUP2 peripheral base pointers */
-  #define TRDC_MGR_WKUP2_BASE_PTRS                 { WAKEUP__TRDC_MGR_WKUP2 }
-  /** Array initializer of TRDC_MGR_WKUP2 peripheral base addresses */
-  #define TRDC_MGR_WKUP2_BASE_ADDRS_NS             { WAKEUP__TRDC_MGR_WKUP2_BASE_NS }
-  /** Array initializer of TRDC_MGR_WKUP2 peripheral base pointers */
-  #define TRDC_MGR_WKUP2_BASE_PTRS_NS              { WAKEUP__TRDC_MGR_WKUP2_NS }
-#else
-  /** Peripheral WAKEUP__TRDC_MGR_WKUP2 base address */
-  #define WAKEUP__TRDC_MGR_WKUP2_BASE              (0x42800000u)
-  /** Peripheral WAKEUP__TRDC_MGR_WKUP2 base pointer */
-  #define WAKEUP__TRDC_MGR_WKUP2                   ((TRDC_MGR_WKUP2_Type *)WAKEUP__TRDC_MGR_WKUP2_BASE)
-  /** Array initializer of TRDC_MGR_WKUP2 peripheral base addresses */
-  #define TRDC_MGR_WKUP2_BASE_ADDRS                { WAKEUP__TRDC_MGR_WKUP2_BASE }
-  /** Array initializer of TRDC_MGR_WKUP2 peripheral base pointers */
-  #define TRDC_MGR_WKUP2_BASE_PTRS                 { WAKEUP__TRDC_MGR_WKUP2 }
-#endif
 
 /* TSTMR - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -11899,34 +11617,6 @@ typedef enum _xbar_output_signal
   #define WAKEUP_TCW_BASE_PTRS                     { WAKEUP__TCW }
 #endif
 
-/* WAKEUP_TRDC_MGR_MEGA - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral WAKEUP__TRDC_MGR_MEGA base address */
-  #define WAKEUP__TRDC_MGR_MEGA_BASE               (0x52810000u)
-  /** Peripheral WAKEUP__TRDC_MGR_MEGA base address */
-  #define WAKEUP__TRDC_MGR_MEGA_BASE_NS            (0x42810000u)
-  /** Peripheral WAKEUP__TRDC_MGR_MEGA base pointer */
-  #define WAKEUP__TRDC_MGR_MEGA                    ((WAKEUP_TRDC_MGR_MEGA_Type *)WAKEUP__TRDC_MGR_MEGA_BASE)
-  /** Peripheral WAKEUP__TRDC_MGR_MEGA base pointer */
-  #define WAKEUP__TRDC_MGR_MEGA_NS                 ((WAKEUP_TRDC_MGR_MEGA_Type *)WAKEUP__TRDC_MGR_MEGA_BASE_NS)
-  /** Array initializer of WAKEUP_TRDC_MGR_MEGA peripheral base addresses */
-  #define WAKEUP_TRDC_MGR_MEGA_BASE_ADDRS          { WAKEUP__TRDC_MGR_MEGA_BASE }
-  /** Array initializer of WAKEUP_TRDC_MGR_MEGA peripheral base pointers */
-  #define WAKEUP_TRDC_MGR_MEGA_BASE_PTRS           { WAKEUP__TRDC_MGR_MEGA }
-  /** Array initializer of WAKEUP_TRDC_MGR_MEGA peripheral base addresses */
-  #define WAKEUP_TRDC_MGR_MEGA_BASE_ADDRS_NS       { WAKEUP__TRDC_MGR_MEGA_BASE_NS }
-  /** Array initializer of WAKEUP_TRDC_MGR_MEGA peripheral base pointers */
-  #define WAKEUP_TRDC_MGR_MEGA_BASE_PTRS_NS        { WAKEUP__TRDC_MGR_MEGA_NS }
-#else
-  /** Peripheral WAKEUP__TRDC_MGR_MEGA base address */
-  #define WAKEUP__TRDC_MGR_MEGA_BASE               (0x42810000u)
-  /** Peripheral WAKEUP__TRDC_MGR_MEGA base pointer */
-  #define WAKEUP__TRDC_MGR_MEGA                    ((WAKEUP_TRDC_MGR_MEGA_Type *)WAKEUP__TRDC_MGR_MEGA_BASE)
-  /** Array initializer of WAKEUP_TRDC_MGR_MEGA peripheral base addresses */
-  #define WAKEUP_TRDC_MGR_MEGA_BASE_ADDRS          { WAKEUP__TRDC_MGR_MEGA_BASE }
-  /** Array initializer of WAKEUP_TRDC_MGR_MEGA peripheral base pointers */
-  #define WAKEUP_TRDC_MGR_MEGA_BASE_PTRS           { WAKEUP__TRDC_MGR_MEGA }
-#endif
 
 /* WAKEUP_USDHC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
