@@ -9,7 +9,7 @@
  * Content deduplicated by dedup_pinctrl.py:
  * the pin mux data of this part is identical to MCXA287VPN-pinctrl.h.
  * Do not edit; edit the canonical file instead.
- * target-hash: 9588bc9c2271fd1e
+ * target-hash: 75c41bdc1da03ea0
  */
 
 #ifndef _ZEPHYR_DTS_BINDING_MCXA286VPN_WRAPPER_
