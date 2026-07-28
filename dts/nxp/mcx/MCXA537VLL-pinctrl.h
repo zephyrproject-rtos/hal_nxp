@@ -8,10 +8,10 @@
 /*
  * Delta-deduplicated by dedup_pinctrl.py:
  * based on MCXA577VPN-pinctrl.h with this part's differences applied
- * below (563 removed, 0 changed,
+ * below (572 removed, 0 changed,
  * 0 added). Regenerate with dedup_pinctrl.py;
  * do not edit by hand.
- * target-hash: 9b2c405468751680
+ * target-hash: 032d9fd64d5a6002
  */
 
 #ifndef _ZEPHYR_DTS_BINDING_MCXA537VLL_WRAPPER_
@@ -33,6 +33,7 @@
 #undef ADC1_A17_P1_19
 #undef ADC1_A1_P2_5
 #undef ADC1_A20_P5_0
+#undef ADC1_A21_P5_1
 #undef ADC1_A22_P5_2
 #undef ADC1_A2_P2_19
 #undef ADC1_A3_P2_6
@@ -61,6 +62,7 @@
 #undef CAN1_TXD_P1_6
 #undef CAN1_TXD_P2_1
 #undef CAN1_TXD_P2_16
+#undef CMP0_INP5_P2_23
 #undef CT0_MAT0_P0_10
 #undef CT0_MAT0_P0_24
 #undef CT0_MAT1_P0_11
@@ -435,6 +437,10 @@
 #undef P2_24
 #undef P2_25
 #undef P2_26
+#undef P2_28
+#undef P2_29
+#undef P2_30
+#undef P2_31
 #undef P2_8
 #undef P2_9
 #undef P3_18
@@ -493,6 +499,9 @@
 #undef SMARTDMA_PIO4_P3_4
 #undef SMARTDMA_PIO5_P0_15
 #undef SMARTDMA_PIO5_P3_5
+#undef TAMPER5_P5_7
+#undef TAMPER6_P5_8
+#undef TAMPER7_P5_9
 #undef TRIG_IN11_P5_7
 #undef TRIG_IN4_P2_11
 #undef TRIG_IN4_P2_9

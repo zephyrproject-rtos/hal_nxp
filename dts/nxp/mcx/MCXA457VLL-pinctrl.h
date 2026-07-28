@@ -8,10 +8,10 @@
 /*
  * Delta-deduplicated by dedup_pinctrl.py:
  * based on MCXA577VPN-pinctrl.h with this part's differences applied
- * below (352 removed, 0 changed,
+ * below (355 removed, 0 changed,
  * 0 added). Regenerate with dedup_pinctrl.py;
  * do not edit by hand.
- * target-hash: 9b2c405468751680
+ * target-hash: 032d9fd64d5a6002
  */
 
 #ifndef _ZEPHYR_DTS_BINDING_MCXA457VLL_WRAPPER_
@@ -30,6 +30,7 @@
 #undef CAN0_TXD_P1_18
 #undef CAN1_RXD_P1_16
 #undef CAN1_TXD_P1_17
+#undef CMP0_INP5_P2_23
 #undef CT0_MAT0_P0_10
 #undef CT0_MAT0_P0_24
 #undef CT0_MAT1_P0_11
@@ -261,6 +262,10 @@
 #undef P2_24
 #undef P2_25
 #undef P2_26
+#undef P2_28
+#undef P2_29
+#undef P2_30
+#undef P2_31
 #undef P2_8
 #undef P2_9
 #undef P3_18
@@ -319,11 +324,9 @@
 #undef SMARTDMA_PIO4_P3_4
 #undef SMARTDMA_PIO5_P0_15
 #undef SMARTDMA_PIO5_P3_5
-#undef TENBASET1S_DEBUG0_P0_18
-#undef TENBASET1S_DEBUG1_P0_19
-#undef TENBASET1S_DEBUG2_P0_20
-#undef TENBASET1S_DEBUG3_P0_21
-#undef TENBASET1S_DEBUG4_P0_22
+#undef TAMPER5_P5_7
+#undef TAMPER6_P5_8
+#undef TAMPER7_P5_9
 #undef TENBASET1S_ED_P1_1
 #undef TENBASET1S_ED_P1_12
 #undef TENBASET1S_RX_P1_0
