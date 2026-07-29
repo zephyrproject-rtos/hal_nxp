@@ -267,20 +267,20 @@ typedef void EDMA_Type;
 
 /*!@brief EDMA base address convert macro */
 #define EDMA_CORE_BASE(base)
-#define EDMA_MP_BASE(base) ((edma_core_mp_t *)((uint32_t)(uint32_t *)(base)))
+#define EDMA_MP_BASE(base) ((edma_core_mp_t *)(uintptr_t)(base))
 #if defined EDMA_CHANNEL_ARRAY_STEPn 
-#define EDMA_CHANNEL_BASE(base, channel)                                          \
-    ((edma_core_channel_t *)((uint32_t)(uint32_t *)(base) + EDMA_CHANNEL_OFFSET + \
+#define EDMA_CHANNEL_BASE(base, channel)                                  \
+    ((edma_core_channel_t *)((uintptr_t)(base) + EDMA_CHANNEL_OFFSET +    \
                              EDMA_CHANNEL_ARRAY_STEPn(base, channel)))
-#define EDMA_TCD_BASE(base, channel)                                          \
-    ((edma_core_tcd_t *)((uint32_t)(uint32_t *)(base) + EDMA_CHANNEL_OFFSET + \
+#define EDMA_TCD_BASE(base, channel)                                  \
+    ((edma_core_tcd_t *)((uintptr_t)(base) + EDMA_CHANNEL_OFFSET +    \
                          EDMA_CHANNEL_ARRAY_STEPn(base, channel) + 0x20U))
 #else
-#define EDMA_CHANNEL_BASE(base, channel)                                          \
-    ((edma_core_channel_t *)((uint32_t)(uint32_t *)(base) + EDMA_CHANNEL_OFFSET + \
+#define EDMA_CHANNEL_BASE(base, channel)                                  \
+    ((edma_core_channel_t *)((uintptr_t)(base) + EDMA_CHANNEL_OFFSET +    \
                              (channel)*EDMA_CHANNEL_ARRAY_STEP(base)))
-#define EDMA_TCD_BASE(base, channel)                                          \
-    ((edma_core_tcd_t *)((uint32_t)(uint32_t *)(base) + EDMA_CHANNEL_OFFSET + \
+#define EDMA_TCD_BASE(base, channel)                                  \
+    ((edma_core_tcd_t *)((uintptr_t)(base) + EDMA_CHANNEL_OFFSET +    \
                          (channel)*EDMA_CHANNEL_ARRAY_STEP(base) + 0x20U))
 #endif
 
