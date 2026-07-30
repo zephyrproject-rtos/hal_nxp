@@ -32,7 +32,7 @@ enum
 /*! @{ */
 /*! @brief CAAM driver version.
  *
- * Current version: 2.4.0
+ * Current version: 2.4.1
  *
  * Change log:
  * - Version 2.0.0
@@ -80,8 +80,10 @@ enum
  * - Version 2.4.0
  *   - Add new APIs for native asymmetric operations (RSA, ECC) instead of only accelerating mathematical primitives
  *     and support for black keys and blobs for both symmetric and asymmetric operations.
+ * - Version 2.4.1
+ *   - Fix MSG and MISRA-2012 issues.
  */
-#define FSL_CAAM_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+#define FSL_CAAM_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
 /*! @} */
 
 /*! @brief CAAM callback function. */
@@ -306,10 +308,10 @@ typedef enum _caam_ecc_ecdsel
 #define CAAM_DES_IV_SIZE 8
 
 /*! @brief CAAM blacken key size for ECB encryption */
-#define CAAM_BLACKEN_ECB_SIZE(x) ((uint32_t)((x) + 15u) & ~15ul)
+#define CAAM_BLACKEN_ECB_SIZE(x) ((uint32_t)((x) + 15u) & ~15UL)
 
 /*! @brief CAAM blacken key size for CCM encryption */
-#define CAAM_BLACKEN_CCM_SIZE(x) (((uint32_t)((x) + 7u) & ~7ul) + 12u)
+#define CAAM_BLACKEN_CCM_SIZE(x) (((uint32_t)((x) + 7u) & ~7UL) + 12u)
 
 /*! @brief CAAM DSA public key length for EC domain */
 #define CAAM_DSA_PUBLIC_KEY_LENGTH(domain)         \
@@ -579,14 +581,14 @@ trusted descriptor key encryption key. */
 /*! @brief CAAM key types. */
 typedef enum _caam_key_type
 {
-    kCAAM_Key_Type_None     = 0x0ul,
-    kCAAM_Key_Type_Ecb_Jkek = 0x80ul << 15, /*!< Key Register, encrypted using AES-ECB with the job
+    kCAAM_Key_Type_None     = 0x0UL,
+    kCAAM_Key_Type_Ecb_Jkek = 0x80UL << 15, /*!< Key Register, encrypted using AES-ECB with the job
   descriptor key encryption key. */
-    kCAAM_Key_Type_Ecb_Tkek = 0x81ul << 15, /*!< Key Register, encrypted using AES-ECB with the
+    kCAAM_Key_Type_Ecb_Tkek = 0x81UL << 15, /*!< Key Register, encrypted using AES-ECB with the
   trusted descriptor key encryption key. */
-    kCAAM_Key_Type_Ccm_Jkek = 0xA0ul << 15, /*!< Key Register, encrypted using AES-CCM with the
+    kCAAM_Key_Type_Ccm_Jkek = 0xA0UL << 15, /*!< Key Register, encrypted using AES-CCM with the
 job descriptor key encryption key. */
-    kCAAM_Key_Type_Ccm_Tkek = 0xA1ul << 15, /*!< Key register, encrypted using AES-CCM with the
+    kCAAM_Key_Type_Ccm_Tkek = 0xA1UL << 15, /*!< Key register, encrypted using AES-CCM with the
 trusted descriptor key encryption key. */
 } caam_key_type_t;
 

@@ -1,5 +1,9 @@
 # CAAM
 
+## [2.4.1]
+
+- Fix MSG and MISRA-2012 issues.
+
 ## [2.4.0]
 
 - Add new APIs for native asymmetric operations (RSA, ECC) instead of only accelerating mathematical primitives
