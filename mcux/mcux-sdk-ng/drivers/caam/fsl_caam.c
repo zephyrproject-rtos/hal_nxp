@@ -503,7 +503,7 @@ static status_t hmac_prehash_key(CAAM_Type *base,
         /* Key size is within limits */
         (void)caam_memcpy(outputKey, inputKey, inputKeySize);
         *outputKeySize = inputKeySize;
-    }
+    } 
 
     return status;
 }
@@ -514,55 +514,48 @@ static status_t caam_in_job_ring_add(CAAM_Type *base, caam_job_ring_t jobRing, u
      * as this is global variable
      */
     uint32_t currPriMask = DisableGlobalIRQ();
+    status_t status = kStatus_Success;
 
-    if (kCAAM_JobRing0 == jobRing)
+    switch (jobRing)
     {
-        s_jr0->inputJobRing[s_jrIndex0] = (ADD_OFFSET((uint32_t)descaddr));
-        s_jrIndex0++;
-        if (s_jrIndex0 >= ARRAY_SIZE(s_jr0->inputJobRing))
-        {
-            s_jrIndex0 = 0;
-        }
-    }
-    else if (kCAAM_JobRing1 == jobRing)
-    {
-        s_jr1->inputJobRing[s_jrIndex1] = ADD_OFFSET((uint32_t)descaddr);
-        s_jrIndex1++;
-        if (s_jrIndex1 >= ARRAY_SIZE(s_jr1->inputJobRing))
-        {
-            s_jrIndex1 = 0;
-        }
-    }
-    else if (kCAAM_JobRing2 == jobRing)
-    {
-        s_jr2->inputJobRing[s_jrIndex2] = ADD_OFFSET((uint32_t)descaddr);
-        s_jrIndex2++;
-        if (s_jrIndex2 >= ARRAY_SIZE(s_jr2->inputJobRing))
-        {
-            s_jrIndex2 = 0;
-        }
-    }
-    else if (kCAAM_JobRing3 == jobRing)
-    {
-        s_jr3->inputJobRing[s_jrIndex3] = ADD_OFFSET((uint32_t)descaddr);
-        s_jrIndex3++;
-        if (s_jrIndex3 >= ARRAY_SIZE(s_jr3->inputJobRing))
-        {
-            s_jrIndex3 = 0;
-        }
-    }
-    else
-    {
-        EnableGlobalIRQ(currPriMask);
-        return kStatus_InvalidArgument;
+        case kCAAM_JobRing0:
+            assert(s_jrIndex0 < ARRAY_SIZE(s_jr0->inputJobRing));
+            s_jr0->inputJobRing[s_jrIndex0] = ADD_OFFSET((uint32_t)descaddr);
+            s_jrIndex0 = (s_jrIndex0 + 1U) % ARRAY_SIZE(s_jr0->inputJobRing);
+            break;
+
+        case kCAAM_JobRing1:
+            assert(s_jrIndex1 < ARRAY_SIZE(s_jr1->inputJobRing));
+            s_jr1->inputJobRing[s_jrIndex1] = ADD_OFFSET((uint32_t)descaddr);
+            s_jrIndex1 = (s_jrIndex1 + 1U) % ARRAY_SIZE(s_jr1->inputJobRing);
+            break;
+
+        case kCAAM_JobRing2:
+            assert(s_jrIndex2 < ARRAY_SIZE(s_jr2->inputJobRing));
+            s_jr2->inputJobRing[s_jrIndex2] = ADD_OFFSET((uint32_t)descaddr);
+            s_jrIndex2 = (s_jrIndex2 + 1U) % ARRAY_SIZE(s_jr2->inputJobRing);
+            break;
+
+        case kCAAM_JobRing3:
+            assert(s_jrIndex3 < ARRAY_SIZE(s_jr3->inputJobRing));
+            s_jr3->inputJobRing[s_jrIndex3] = ADD_OFFSET((uint32_t)descaddr);
+            s_jrIndex3 = (s_jrIndex3 + 1U) % ARRAY_SIZE(s_jr3->inputJobRing);
+            break;
+
+        default:
+            status =  kStatus_InvalidArgument;
+            break;
     }
 
-    caam_input_ring_set_jobs_added(base, jobRing, 1);
+    if (status == kStatus_Success)
+    {
+        caam_input_ring_set_jobs_added(base, jobRing, 1);
+    }
 
     /* Enable IRQ */
     EnableGlobalIRQ(currPriMask);
 
-    return kStatus_Success;
+    return status;
 }
 
 static status_t caam_in_job_ring_add_and_wait(CAAM_Type *base,
@@ -588,31 +581,37 @@ static status_t caam_in_job_ring_add_and_wait(CAAM_Type *base,
 /* this function shall be only called inside CAAM driver critical section
  * because it accesses global variables.
  */
-static status_t caam_out_job_ring_remove(CAAM_Type *base, caam_job_ring_t jobRing, int outIndex)
+static status_t caam_out_job_ring_remove(CAAM_Type *base, caam_job_ring_t jobRing, uint32_t outIndex)
 {
-    if (kCAAM_JobRing0 == jobRing)
+    switch (jobRing)
     {
-        s_jr0->outputJobRing[outIndex++] = 0; /* clear descriptor address */
-        s_jr0->outputJobRing[outIndex]   = 0; /* clear status */
-    }
-    else if (kCAAM_JobRing1 == jobRing)
-    {
-        s_jr1->outputJobRing[outIndex++] = 0; /* clear descriptor address */
-        s_jr1->outputJobRing[outIndex]   = 0; /* clear status */
-    }
-    else if (kCAAM_JobRing2 == jobRing)
-    {
-        s_jr2->outputJobRing[outIndex++] = 0; /* clear descriptor address */
-        s_jr2->outputJobRing[outIndex]   = 0; /* clear status */
-    }
-    else if (kCAAM_JobRing3 == jobRing)
-    {
-        s_jr3->outputJobRing[outIndex++] = 0; /* clear descriptor address */
-        s_jr3->outputJobRing[outIndex]   = 0; /* clear status */
-    }
-    else
-    {
-        /* Intentional empty */
+        case kCAAM_JobRing0:
+            assert(outIndex < ARRAY_SIZE(s_jr0->outputJobRing) - 1U);
+            s_jr0->outputJobRing[outIndex]      = 0U; /* clear descriptor address */
+            s_jr0->outputJobRing[outIndex + 1U] = 0U; /* clear status */
+            break;
+
+        case kCAAM_JobRing1:
+            assert(outIndex < ARRAY_SIZE(s_jr1->outputJobRing) - 1U);
+            s_jr1->outputJobRing[outIndex]      = 0U; /* clear descriptor address */
+            s_jr1->outputJobRing[outIndex + 1U] = 0U; /* clear status */
+            break;
+
+        case kCAAM_JobRing2:
+            assert(outIndex < ARRAY_SIZE(s_jr2->outputJobRing) - 1U);
+            s_jr2->outputJobRing[outIndex]      = 0U; /* clear descriptor address */
+            s_jr2->outputJobRing[outIndex + 1U] = 0U; /* clear status */
+            break;
+
+        case kCAAM_JobRing3:
+            assert(outIndex < ARRAY_SIZE(s_jr3->outputJobRing) - 1U);
+            s_jr3->outputJobRing[outIndex]      = 0U; /* clear descriptor address */
+            s_jr3->outputJobRing[outIndex + 1U] = 0U; /* clear status */
+            break;
+
+        default:
+            /* Intentional empty */
+            break;
     }
 
     caam_output_ring_set_jobs_removed(base, jobRing, 1);
@@ -681,14 +680,14 @@ static status_t caam_out_job_ring_test_and_remove(
                     /* This is used by PKHA PrimalityTest to report a candidate is believed not being prime */
                     if (0x30000000u == (jr[i + 1U] & 0xff000000u))
                     {
-                        status = (int32_t)jr[i + 1U];
+                        (void)caam_memcpy((void *)&status, (void *)&jr[i + 1U], sizeof(status_t));
                     }
                     else
                     {
                         status = kStatus_Fail;
                     }
                 }
-                (void)caam_out_job_ring_remove(base, jobRing, (int)i);
+                (void)caam_out_job_ring_remove(base, jobRing, i);
             }
             else
             {
@@ -1078,16 +1077,22 @@ static void caam_aes_ccm_context_init(
 {
     caam_xcm_block_t blk;
     caam_xcm_block_t blkZero = {{0x0u, 0x0u, 0x0u, 0x0u}};
-
-    uint8_t q; /* octet length of binary representation of the octet length of the payload. computed as (15 - n), where
-              n is length of nonce(=ivSize) */
+    uint8_t q;           /* octet length of binary representation of the octet length of the payload.
+                          * computed as (15 - n), where n is length of nonce(=ivSize) */
     uint8_t flags_field; /* flags field in B0 and CTR0 */
+    uint8_t M_prime, L_prime;
 
-    /* compute B0 */
-    (void)caam_memcpy(&blk, &blkZero, sizeof(blk));
-    /* tagSize - size of output MAC */
+    /* Nonce must be in range of 7 to 13 */ 
+    assert(7U <= ivSize && ivSize <= 13U);
+    /* Tag must be either 0 or 4,6,8,10,12,14,16 */
+    assert(tagSize == 0U || (4U <= tagSize && tagSize <= 16U && (tagSize & 1U) == 0U));
+
     q           = 15U - (uint8_t)ivSize;
-    flags_field = (uint8_t)(8U * ((tagSize - 2U) / 2U) + q - 1U); /* 8*M' + L' */
+    M_prime = (tagSize >= 4U)? (uint8_t)((tagSize - 2U) / 2U) : 0xFFU;
+    L_prime = q - 1U;
+    flags_field = (uint8_t)(M_prime << 3U) + L_prime; /* 8 * M' + L' */
+
+    (void)caam_memcpy(&blk, &blkZero, sizeof(blk));
     if (aadSize != 0U)
     {
         flags_field |= 0x40U;                 /* Adata */
@@ -1096,17 +1101,16 @@ static void caam_aes_ccm_context_init(
     blk.w[3] = swap_bytes(inputSize);         /* message size, most significant byte first */
     (void)caam_memcpy(&blk.b[1], iv, ivSize); /* nonce field */
 
-    /* Write B0 data to the context register.
-     */
+    /* Write B0 data to the context register. */
     (void)caam_memcpy(b0, (void *)&blk.b[0], 16);
 
-    /* Write CTR0 to the context register.
-     */
+    /* Write CTR0 to the context register. */
     (void)caam_memcpy(&blk, &blkZero, sizeof(blk)); /* ctr(0) field = zero */
     blk.b[0] = q - 1U;                              /* flags field */
     (void)caam_memcpy(&blk.b[1], iv, ivSize);       /* nonce field */
     (void)caam_memcpy(ctr0, (void *)&blk.b[0], 16);
 }
+
 
 static const uint32_t templateAesCcm[] = {
     /* 00 */ 0xB0800000u, /* HEADER */
@@ -2690,7 +2694,8 @@ status_t CAAM_Init(CAAM_Type *base, const caam_config_t *config)
 #if defined(FSL_FEATURE_CAAM_HAS_RDB) && (FSL_FEATURE_CAAM_HAS_RDB > 0)
         CAAM_SCFGR_RDB(config->scfgrEnableRandomDataBuffer) |
 #endif /* FSL_FEATURE_CAAM_HAS_RDB */
-        CAAM_SCFGR_LCK_TRNG(config->scfgrLockTrngProgramMode) | CAAM_SCFGR_RNGSH0(config->scfgrRandomRngStateHandle0) |
+        CAAM_SCFGR_LCK_TRNG(((config->scfgrLockTrngProgramMode)? 1u : 0u)) | 
+        CAAM_SCFGR_RNGSH0(((config->scfgrRandomRngStateHandle0)? 1u : 0u)) |
         CAAM_SCFGR_PRIBLOB(config->scfgrPriblob);
 
     return status;
@@ -3272,7 +3277,7 @@ status_t CAAM_AES_CryptCtr(CAAM_Type *base,
     /* Invalidate unaligned data can cause memory corruption in write-back mode   */
     DCACHE_InvalidateByRange((uint32_t)output, size);
     DCACHE_InvalidateByRange((uint32_t)counter, 16u);
-    DCACHE_InvalidateByRange((uint32_t)szLeft, sizeof(szLeft));
+    DCACHE_InvalidateByRange((uint32_t)szLeft, sizeof(size_t));
     if (counterlast != NULL)
     {
         DCACHE_InvalidateByRange((uint32_t)counterlast, 16u);
@@ -3337,7 +3342,7 @@ status_t CAAM_AES_CryptCtrExtended(CAAM_Type *base,
     /* Invalidate unaligned data can cause memory corruption in write-back mode   */
     DCACHE_InvalidateByRange((uint32_t)output, size);
     DCACHE_InvalidateByRange((uint32_t)counter, 16u);
-    DCACHE_InvalidateByRange((uint32_t)szLeft, sizeof(szLeft));
+    DCACHE_InvalidateByRange((uint32_t)szLeft, sizeof(size_t));
     if (counterlast != NULL)
     {
         DCACHE_InvalidateByRange((uint32_t)counterlast, 16u);
@@ -4136,6 +4141,8 @@ static uint32_t caam_hash_sgt_insert(caam_hash_ctx_internal_t *ctxInternal,
     uint32_t ctxBlksz   = (ctxInternal != NULL) ? ctxInternal->blksz : 0U;
     uint32_t ctxBlkAddr = (ctxInternal != NULL) ? (uint32_t)&ctxInternal->blk.b[0] : 0U;
 
+    assert(inputSize <= UINT32_MAX - ctxBlksz);
+
     currSgtEntry = 0;
     numBlocks    = (inputSize + ctxBlksz) / CAAM_HASH_BLOCK_SIZE;
     remain       = (inputSize + ctxBlksz) % CAAM_HASH_BLOCK_SIZE;
@@ -4203,16 +4210,15 @@ static status_t caam_hash_schedule_input_data(CAAM_Type *base,
                                               uint32_t keySize)
 {
     BUILD_ASSURE(sizeof(templateHash) <= sizeof(caam_desc_hash_t), caam_desc_hash_t_size);
+    
     uint32_t descriptorSize = ARRAY_SIZE(templateHash);
     uint32_t algOutSize     = 0;
-
     bool isSha = caam_hash_alg_is_sha(algo); /* MDHA engine */
                                              /* how many bytes to read from context register
                                               * we need caam_hash_algo2ctx_size() to return
                                               * full context size (to be used for context restore in descriptor[3])
                                               */
     bool isHmac = caam_hash_alg_is_hmac(algo);
-
     uint32_t caamCtxSz = caam_hash_algo2ctx_size(algo, 0 /* full context */);
 
     (void)caam_memcpy(descriptor, templateHash, sizeof(templateHash));
@@ -4367,6 +4373,8 @@ static status_t caam_hash_append_data(caam_hash_ctx_internal_t *ctxInternal,
                                       size_t *outputSize)
 {
     caam_hash_internal_sgt_t sgt;
+    assert(ctxInternal->base != NULL);
+
     (void)memset(&sgt, 0, sizeof(sgt));
     size_t num = caam_hash_sgt_insert(ctxInternal, input, inputSize, numRemain, algState, sgt, kCAAM_HashSgtEntryLast);
     return caam_hash_schedule_input_data(ctxInternal->base, ctxInternal->handle, ctxInternal->algo, sgt, num,
@@ -4496,6 +4504,7 @@ status_t CAAM_HASH_Update(caam_hash_ctx_t *ctx, const uint8_t *input, size_t inp
     {
         return status;
     }
+    assert(ctxInternal->base != NULL);
 
     /* if we are still less than 64 bytes, keep only in context */
     if ((ctxInternal->blksz + inputSize) <= CAAM_HASH_BLOCK_SIZE)
@@ -4596,6 +4605,7 @@ status_t CAAM_HASH_UpdateNonBlocking(caam_hash_ctx_t *ctx, const uint8_t *input,
     {
         return status;
     }
+    assert(ctxInternal->base != NULL);
 
     /* Add input data chunk to SGT */
     uint32_t currSgtEntry = ctxInternal->blksz;
@@ -4640,6 +4650,7 @@ status_t CAAM_HASH_Finish(caam_hash_ctx_t *ctx, uint8_t *output, size_t *outputS
     {
         return status;
     }
+    assert(ctxInternal->base != NULL);
 
     /* determine algorithm state to configure
      * based on prior processing.
@@ -4714,6 +4725,7 @@ status_t CAAM_HASH_FinishNonBlocking(caam_hash_ctx_t *ctx,
     {
         return status;
     }
+    assert(ctxInternal->base != NULL);
 
     uint32_t currSgtEntry = ctxInternal->blksz;
     if (currSgtEntry > (uint32_t)kCAAM_HashSgtMaxCtxEntries)
@@ -4728,6 +4740,10 @@ status_t CAAM_HASH_FinishNonBlocking(caam_hash_ctx_t *ctx,
     uint32_t totalLength = 0;
     for (i = 0; i < currSgtEntry; i++)
     {
+        if (sgt[i].length > UINT32_MAX - totalLength)
+        {
+            return kStatus_CAAM_DataOverflow;
+        }
         totalLength += sgt[i].length;
     }
     sgt[currSgtEntry].length |= 0x40000000u; /* Final SG entry */
@@ -5130,6 +5146,8 @@ static uint32_t caam_crc_sgt_insert(caam_crc_ctx_internal_t *ctxInternal,
 
     uint32_t ctxBlksz   = (ctxInternal != NULL) ? ctxInternal->blksz : 0U;
     uint32_t ctxBlkAddr = (ctxInternal != NULL) ? (uint32_t)&ctxInternal->blk.b[0] : 0U;
+    
+    assert(inputSize <= UINT32_MAX - ctxBlksz);
 
     currSgtEntry = 0;
     numBlocks    = (inputSize + ctxBlksz) / CAAM_HASH_BLOCK_SIZE;
@@ -5336,6 +5354,8 @@ static status_t caam_crc_append_data(caam_crc_ctx_internal_t *ctxInternal,
                                      size_t *outputSize)
 {
     caam_hash_internal_sgt_t sgt;
+    assert(ctxInternal->base != NULL);
+
     (void)memset(&sgt, 0, sizeof(sgt));
     size_t num = caam_crc_sgt_insert(ctxInternal, input, inputSize, numRemain, algState, sgt, kCAAM_HashSgtEntryLast);
     return caam_crc_schedule_input_data(ctxInternal->base, ctxInternal->handle, ctxInternal->algo, ctxInternal->crcmode,
@@ -5543,6 +5563,7 @@ status_t CAAM_CRC_Finish(caam_crc_ctx_t *ctx, uint8_t *output, size_t *outputSiz
     {
         return status;
     }
+    assert(ctxInternal->base != NULL);
 
     /* determine algorithm state to configure
      * based on prior processing.
@@ -6051,20 +6072,23 @@ status_t CAAM_RNG_GetRandomDataNonBlocking(CAAM_Type *base,
 
 size_t CAAM_BLACK_KeyBlackenSize(caam_fifost_type_t fifostType, size_t dataSize)
 {
-    size_t output;
+    size_t output = dataSize;
+
+    /* Align to 8 or 16 bytes should not wrap */ 
+    assert(output < UINT32_MAX - 19u);
 
     switch (fifostType)
     {
         case kCAAM_FIFOST_Type_Ecb_Jkek:
         case kCAAM_FIFOST_Type_Ecb_Tkek:
         {
-            output = CAAM_BLACKEN_ECB_SIZE(dataSize);
+            output = CAAM_BLACKEN_ECB_SIZE(output);
             break;
         }
         case kCAAM_FIFOST_Type_Ccm_Jkek:
         case kCAAM_FIFOST_Type_Ccm_Tkek:
         {
-            output = CAAM_BLACKEN_CCM_SIZE(dataSize);
+            output = CAAM_BLACKEN_CCM_SIZE(output);
             break;
         }
         default:
@@ -6176,6 +6200,10 @@ status_t CAAM_RedBlob_Encapsule(CAAM_Type *base,
     caam_desc_gen_enc_blob_t descriptor;
     size_t blob_size;
 
+    if (dataSize > SIZE_MAX - 32u - 16u) 
+    {
+        return kStatus_InvalidArgument;
+    }
     /* output blob will have 32 bytes key blob in beginning and 16 bytes MAC identifier at end of data blob */
     blob_size = 32u + dataSize + 16u;
 
@@ -6244,6 +6272,10 @@ status_t CAAM_RedBlob_Decapsule(CAAM_Type *base,
     size_t blob_size;
     caam_desc_gen_dep_blob_t descriptor;
 
+    if (dataSize > SIZE_MAX - 32u - 16u) 
+    {
+        return kStatus_InvalidArgument;
+    }
     /* blob have 32 bytes key blob in beginning and 16 bytes MAC identifier at end of data blob */
     blob_size = 32u + dataSize + 16u;
 
@@ -6314,6 +6346,10 @@ status_t CAAM_BlackBlob_Encapsule(CAAM_Type *base,
     caam_desc_gen_enc_blob_t descriptor;
     size_t blob_size;
 
+    if (dataSize > SIZE_MAX - 32u - 16u) 
+    {
+        return kStatus_InvalidArgument;
+    }
     /* output blob will have 32 bytes key blob in beginning and 16 bytes MAC identifier at end of data blob */
     blob_size = 32u + dataSize + 16u;
 
@@ -6386,6 +6422,10 @@ status_t CAAM_BlackBlob_Decapsule(CAAM_Type *base,
     caam_desc_gen_dep_blob_t descriptor;
     size_t blob_size;
 
+    if (dataSize > SIZE_MAX - 32u - 16u) 
+    {
+        return kStatus_InvalidArgument;
+    }
     /* blob have 32 bytes key blob in beginning and 16 bytes MAC identifier at end of data blob */
     blob_size = 32u + dataSize + 16u;
 
@@ -8832,7 +8872,7 @@ static void caam_pkha_mode_set_src_reg_copy(uint32_t *outMode, caam_pkha_reg_are
     {
         reg = (caam_pkha_reg_area_t)(uint32_t)(((uint32_t)reg) >> 1u);
         i++;
-    } while (0U != (uint32_t)reg);
+    } while (i < 4 && (uint32_t)reg != 0U);
 
     i = 4 - i;
     /* Source register must not be E. */
@@ -8850,7 +8890,7 @@ static void caam_pkha_mode_set_dst_reg_copy(uint32_t *outMode, caam_pkha_reg_are
     {
         reg = (caam_pkha_reg_area_t)(uint32_t)(((uint32_t)reg) >> 1u);
         i++;
-    } while (0U != (uint32_t)reg);
+    } while (i < 4 && (uint32_t)reg != 0U);
 
     i = 4 - i;
     *outMode |= ((uint32_t)i << 10u);
@@ -10596,19 +10636,13 @@ size_t CAAM_ECC_PrivateKeySize(caam_ecc_encryption_type_t encryptKeyType, caam_e
     switch (encryptKeyType)
     {
         case kCAAM_Ecc_Encryption_Type_Ecb_Jkek:
-        {
             output = CAAM_BLACKEN_ECB_SIZE(output);
             break;
-        }
         case kCAAM_Ecc_Encryption_Type_Ccm_Jkek:
-        {
             output = CAAM_BLACKEN_CCM_SIZE(output);
             break;
-        }
         default:
-        {
             break;
-        }
     }
 
     return output;
@@ -10849,23 +10883,20 @@ status_t CAAM_ECC_VerifyPrivateKey(CAAM_Type *base,
 size_t CAAM_RSA_PrivateExponentSize(caam_rsa_key_type_t prvKeyType, uint32_t privExponentSize)
 {
     size_t output = privExponentSize;
+    
+    /* Maximum private exponent key size is 4096 bits */ 
+    assert(output <= 4096u / 8u);
 
     switch (prvKeyType)
     {
         case kCAAM_Rsa_Key_Type_Ecb_Jkek:
-        {
             output = CAAM_BLACKEN_ECB_SIZE(output);
             break;
-        }
         case kCAAM_Rsa_Key_Type_Ccm_Jkek:
-        {
             output = CAAM_BLACKEN_CCM_SIZE(output);
             break;
-        }
         default:
-        {
             break;
-        }
     }
 
     return output;
