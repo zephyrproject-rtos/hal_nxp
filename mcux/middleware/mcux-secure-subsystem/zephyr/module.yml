@@ -1,0 +1,4 @@
+name: secure-subsystem
+build:
+  cmake: zephyr/.
+  kconfig: zephyr/Kconfig

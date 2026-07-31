@@ -216,6 +216,11 @@
 #define SSCP_MAX_CONTEXT_SIZE (sizeof(void *))
 #endif
 
+/*! @brief The default upper bound for how many aggregates can a single SSCP command have. */
+#ifndef SSCP_MAX_AGGREGATE_COUNT
+#define SSCP_MAX_AGGREGATE_COUNT (2u)
+#endif
+
 /*! @brief Set parameter types for the SSCP operation. Each param type is encoded into 4-bits bit field. */
 #define SSCP_OP_SET_PARAM(p0, p1, p2, p3, p4, p5, p6)                                                   \
     (((uint32_t)(p0)&0xFu) << 0) | (((uint32_t)(p1)&0xFu) << 4) | (((uint32_t)(p2)&0xFu) << 8) |        \

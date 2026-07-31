@@ -20,7 +20,7 @@
 #include <stddef.h>
 
 /** Version of the SSS API */
-#define SSS_API_VERSION (MAKE_VERSION(2, 10, 0))
+#define SSS_API_VERSION (MAKE_VERSION(2, 1, 2))
 
 /** Size of an AES Block, in bytes */
 #define SSS_AES_BLOCK_SIZE (16u)

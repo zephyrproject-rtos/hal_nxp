@@ -138,13 +138,15 @@ void CRYPTO_ELEMU_reset(void);
 
 status_t SSS_aes_cmac_starts(cmac_aes_context_t *ctx, const unsigned char *key, size_t key_bytelen);
 
-#ifdef SSS_CMAC_UPDATE_SUPPORTED
+#if defined(ELE_FEATURE_MAC_MULTIPART) && (ELE_FEATURE_MAC_MULTIPART != 0)
+
+status_t SSS_aes_cmac_init(cmac_aes_context_t *ctx);
 
 status_t SSS_aes_cmac_update(cmac_aes_context_t *ctx, const unsigned char *input, size_t ilen);
 
 status_t SSS_aes_cmac_finish(cmac_aes_context_t *ctx, unsigned char *output);
 
-#endif /* SSS_CMAC_UPDATE_SUPPORTED */
+#endif /* ELE_FEATURE_MAC_MULTIPART */
 
 status_t SSS_aes_cmac(cmac_aes_context_t *pCtx,
                       const unsigned char *key,
@@ -184,9 +186,7 @@ status_t SSS_aes128_CTR_operation(aes_context_t *ctx,
                                   unsigned char *initialCounter,
                                   const unsigned char *key,
                                   unsigned char *output,
-                                  bool encrypt_nDecrypt,
-                                  unsigned char *stream_block,
-                                  size_t *offset_sz_left);
+                                  bool encrypt_nDecrypt);
 
 /* CMAC related section */
 
