@@ -2,7 +2,7 @@
 
 Change Log SSS APIs:
 
-  The current SSS APIs version is 2.1.3.
+  The current SSS APIs version is 2.1.4.
 
   - 2.0.0
     - Initial version.
@@ -31,5 +31,8 @@ Change Log SSS APIs:
     - Add data offset feature to provide support for NBU core.
     - Add missing definitions for kSSS_KeyProp_NoEncrypt and kSSS_KeyProp_NoDecrypt
     - Remove unsupported APIs
+
+  - 2.1.4
+    - Move ELEMU_loadFw() to SSSAPI middleware. Keep name for backward compatibility.
 
 */

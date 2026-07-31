@@ -633,6 +633,21 @@ sss_status_t sss_sscp_rng_get_random(sss_sscp_rng_t *context, uint8_t *random_da
 
 sss_status_t sss_sscp_rng_free(sss_sscp_rng_t *context);
 
+/*********************************MISC*****************************************/
+#if (defined(ELEMU_HAS_LOADABLE_FW) && ELEMU_HAS_LOADABLE_FW)
+/*!
+ * @brief Load firmware into ELE.
+ *
+ * This function uploads firmware to ELEMU using secure tunnel.
+ *
+ * @param mu ELEMU peripheral base address
+ * @param image Pointer to firmware image data
+ *
+ * @return kStatus_Success if successful, kStatus_Fail otherwise
+ */
+status_t ELEMU_loadFw(ELEMU_Type *mu, uint32_t image[]);
+#endif /* ELEMU_HAS_LOADABLE_FW */
+
 #if defined(__cplusplus)
 }
 #endif

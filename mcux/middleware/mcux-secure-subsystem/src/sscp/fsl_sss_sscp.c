@@ -10,6 +10,10 @@
 #include "fsl_sscp.h"
 #include "fsl_sscp_commands.h"
 
+#if (defined(ELEMU_HAS_LOADABLE_FW) && ELEMU_HAS_LOADABLE_FW)
+#include "fsl_sscp_mu.h"
+#endif
+
 #define NUMBER_OF_BITS_IN_BYTE                  (8u)
 #define MAX_SUPPORTED_COORDINATE_LENGTH_IN_BITS (1024u)
 #define NUMBER_OF_COORDINATES_PER_EC_KEY_SLOT   (3u)
@@ -2559,3 +2563,73 @@ sss_status_t sss_sscp_key_object_free(sss_sscp_object_t *keyObject, uint32_t opt
     }
     return (sss_status_t)ret;
 }
+
+#if (defined(ELEMU_HAS_LOADABLE_FW) && ELEMU_HAS_LOADABLE_FW)
+
+/* Tunnel type is EdgeLock Firmware upload */
+#define TUNNEL_TYPE_SB3_ELE_FW   0x22u
+#define SB3_BLOCK0_SIZE_IN_BYTES 0x60u
+
+/*!
+ * brief Load firmware into ELE.
+ *
+ * This function uploads firmware to ELEMU using secure tunnel.
+ *
+ * param mu ELEMU peripheral base address
+ * param image Pointer to firmware image data
+ *
+ * return kStatus_Success if successful, kStatus_Fail otherwise
+ */
+status_t ELEMU_loadFw(ELEMU_Type *mu, uint32_t image[])
+{
+    uint32_t resultState          = 0u;
+    sss_sscp_tunnel_t tunnelCtx   = {0};
+    sss_sscp_session_t sssSession = {0};
+    sscp_context_t sscpContext    = {0};
+    status_t status               = kStatus_Fail;
+    do
+    {
+        if (sscp_mu_init(&(sscpContext), (ELEMU_Type *)mu) != kStatus_SSCP_Success)
+        {
+            break;
+        }
+        /* OPEN SESSION */
+        if (sss_sscp_open_session(&sssSession, CONFIG_MCUX_SECURE_SUBSYSTEM_SESSION_ID, kType_SSS_Ele200, &sscpContext) != kStatus_SSS_Success)
+        {
+            break;
+        }
+
+        /* OPEN TUNNEL */
+        if (sss_sscp_tunnel_context_init(&tunnelCtx, &sssSession, TUNNEL_TYPE_SB3_ELE_FW) != kStatus_SSS_Success)
+        {
+            break;
+        }
+
+        /* Pass loadable ELE FW */
+        if (sss_sscp_tunnel(&tunnelCtx, (uint8_t *)image, SB3_BLOCK0_SIZE_IN_BYTES, &resultState) !=
+            kStatus_SSS_Success)
+        {
+            break;
+        }
+
+        /* FREE TUNNEL CONTEXT */
+        if (sss_sscp_tunnel_context_free(&tunnelCtx) != kStatus_SSS_Success)
+        {
+            break;
+        }
+
+        /* CLOSE SESSION */
+        if (sss_sscp_close_session(&sssSession) != kStatus_SSS_Success)
+        {
+            break;
+        }
+
+        /* If all steps before passes without break, then consider it as success*/
+        status = kStatus_Success;
+
+    } while (false);
+
+    return status;
+}
+
+#endif /* ELEMU_HAS_LOADABLE_FW */
