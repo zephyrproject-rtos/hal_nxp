@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 NXP
+ * Copyright 2018-2021, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,7 +20,7 @@
 #include <stddef.h>
 
 /** Version of the SSS API */
-#define SSS_API_VERSION (MAKE_VERSION(2, 1, 2))
+#define SSS_API_VERSION (MAKE_VERSION(2, 1, 4))
 
 /** Size of an AES Block, in bytes */
 #define SSS_AES_BLOCK_SIZE (16u)
