@@ -62,7 +62,7 @@ typedef enum
     kSSCP_CMD_SSS_Tunnel,
     kSSCP_CMD_SSS_DeriveKeyContextInit,
     kSSCP_CMD_SSS_DeriveKey,
-    kSSCP_CMD_SSS_AsymmetricDeriveKey,
+    kSSCP_CMD_SSS_AsymmetricDhDeriveKey,
     kSSCP_CMD_SSS_KeyObjectContextInit,
     kSSCP_CMD_SSS_KeyObjectAllocateHandle,
     kSSCP_CMD_SSS_KeyObjectGetHandle,

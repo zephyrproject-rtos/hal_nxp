@@ -1,0 +1,71 @@
+
+config MCUX_DEVICE_HAS_ELE_S200
+	bool
+	depends on SOC_MCXW716C || SOC_MCXW727C # Can't use SOC_SERIES_MCXW7XX due to W70
+	default y
+
+config MCUX_SECURE_SUBSYSTEM
+	bool "Enable the Secure Subsystem"
+	depends on MCUX_DEVICE_HAS_ELE_S200
+	default y if ENTROPY_NXP_ELE_TRNG # ELE S200 needed for TRNG
+	default n
+	help
+	  Include the Secure Subsystem component for ELE S200.
+	  This component is an abstraction on top of the ELE S200 hardware
+	  that provides APIs for cryptographic services, key management,
+	  and device management.
+
+config MCUX_SECURE_SUBSYSTEM_LEGACY_CONN_PORT
+	bool "Enable the legacy SSS connectivity port"
+	depends on MCUX_SECURE_SUBSYSTEM
+	default n
+	help
+	  This port is a wrapper layer for ease of use in connectivity
+	  security stacks originally developed for KW45/MCXW71.
+	  This is a legacy wrapper layer and is included as an option
+	  for backward compatibility only.
+
+config MCUX_SECURE_SUBSYSTEM_FIRMWARE_EL2GO
+	bool "Include the EdgeLock2Go Firmware"
+	depends on MCUX_SECURE_SUBSYSTEM
+	default n
+	help
+	  Include the EdgeLock2Go Runtime Firmware in the build.
+	  This firmware provides support for the EdgeLock2Go services.
+	  The firmware is provided in the form of a global C array
+	  and it is to be loaded during runtime.
+
+config ELE_TRACK_SESSION_STATE
+	bool "Track Session State in Software"
+	depends on MCUX_SECURE_SUBSYSTEM
+	default y if SOC_MCXW716C
+	default n
+	help
+	  For KW45/MCXW71 devices, provides a way to retrieve
+	  an already-opened session by repeatedly calling
+	  the OPEN SESSION API. This is handled by keeping track
+	  of the session state in-software.
+	  On other devices has no effect.
+
+config MCUX_SECURE_SUBSYSTEM_SESSION_ID
+	int
+	depends on MCUX_SECURE_SUBSYSTEM
+	default 1
+	help
+	  A helper symbol for drivers and components that
+	  wish to use the same session ID.
+	  Defined to a session ID that is reusable on KW47/W72.
+	  On KW45/W71 we don't care, but we use the same ID.
+
+if MCUX_SECURE_SUBSYSTEM_FIRMWARE_EL2GO
+
+	# Automatically select the correct FW based on SOC
+	config FIRMWARE_S200_EL2GO_KW45
+		bool
+		default y if SOC_MCXW716C
+
+	config FIRMWARE_S200_EL2GO_KW47
+		bool
+		default y if SOC_MCXW727C
+
+endif # MCUX_SECURE_SUBSYSTEM_FIRMWARE_EL2GO

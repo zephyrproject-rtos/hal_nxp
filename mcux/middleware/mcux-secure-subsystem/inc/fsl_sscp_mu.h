@@ -277,7 +277,7 @@ TX  <th class="markdownTableHeadNone" width="60%"> MU TXn register value
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone" width="30%"> Asymmetric Derive Key <th class="markdownTableHeadNone" width="10%"> TX
 <th class="markdownTableHeadNone" width="60%"> MU TXn register value
-<tr><td> Command     <td> 0  <td> kSSCP_CMD_SSS_AsymmetricDeriveKey
+<tr><td> Command     <td> 0  <td> kSSCP_CMD_SSS_AsymmetricDhDeriveKey
 <tr><td> paramTypes  <td> 1  <td> Context, Context, Context
 <tr><td> word        <td> 2  <td> Pointer to ::_sss_sscp_derive_key
 <tr><td> word        <td> 3  <td> Pointer to ::_sss_sscp_object
@@ -413,11 +413,11 @@ sscp_status_t sscp_mu_invoke_command(sscp_context_t *context,
                                      sscp_operation_t *op,
                                      uint32_t *ret);
 
-void MU_Init(void);
+void SSCP_MU_Init(void);
 
-sscp_status_t MU_ReceiveMsg(ELEMU_Type *base, uint32_t msg[ELEMU_RR_COUNT], size_t wordNum);
+sscp_status_t SSCP_MU_ReceiveMsg(ELEMU_Type *base, uint32_t msg[ELEMU_RR_COUNT], size_t wordNum);
 
-sscp_status_t MU_SendMsg(ELEMU_Type *base, uint32_t msg[ELEMU_TR_COUNT], size_t wordNum);
+sscp_status_t SSCP_MU_SendMsg(ELEMU_Type *base, uint32_t msg[ELEMU_TR_COUNT], size_t wordNum);
 
 #if defined(__cplusplus)
 }

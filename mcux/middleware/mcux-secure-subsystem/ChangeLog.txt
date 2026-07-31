@@ -1,0 +1,35 @@
+/*
+
+Change Log SSS APIs:
+
+  The current SSS APIs version is 2.1.3.
+
+  - 2.0.0
+    - Initial version.
+
+  - 2.1.0
+    - Remove unsupported chip version.
+
+  - 2.1.1
+    - Add EdDSA_Ed25519 to sss_algorithm_t.
+    - Add SHA3 definitions, expand HMAC definitions.
+    - Add block size alignment check to sss_sscp_cipher_one_go()
+    - Add asymmetric key types (RSA CRT, OSCCA, Dilithium, Brainpool, Koblitz)
+    - Add support for SPAKE2+
+
+  - 2.1.2
+    - Change sss_sscp_derive_key() API to support HKDF and CKDF
+    - Fix AEAD tag length validation for CCM and GCM
+    - Align MAC length validation for CMAC between all SSSAPI devices
+    - Reimplement sss_sscp_key_store_open_key() to support format 2 of command KEY_STORE_OPEN_KEY
+    - Add support for digest cloning
+    - Add support for digest and MAC context import/export
+    - Fix sss_sscp_tunnel() to correctly support kSSS_tunnel_type_EL2GO_Data
+    - Fix sss_mgmt_get_lifecycle() command having an erroneous extra parameter
+
+  - 2.1.3
+    - Add data offset feature to provide support for NBU core.
+    - Add missing definitions for kSSS_KeyProp_NoEncrypt and kSSS_KeyProp_NoDecrypt
+    - Remove unsupported APIs
+
+*/

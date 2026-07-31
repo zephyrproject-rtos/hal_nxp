@@ -34,24 +34,10 @@ if((CONFIG_NET_L2_OPENTHREAD OR CONFIG_NXP_NBU) AND (CONFIG_IEEE802154 OR CONFIG
     endif()
 endif()
 
-if(CONFIG_ENTROPY_NXP_ELE_TRNG)
-    zephyr_include_directories(
-        ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/inc
-        ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/inc/elemu
-        ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/port/kw45_k4w1
-    )
-    zephyr_compile_definitions(SSS_CONFIG_FILE=\"fsl_sss_config_elemu.h\")
-    zephyr_compile_definitions(SSCP_CONFIG_FILE=\"fsl_sscp_config_elemu.h\")
-
-    zephyr_library_sources(
-        ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/port/kw45_k4w1/sss_init.c
-        ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/src/sscp/fsl_sss_sscp.c
-        ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/src/sscp/fsl_sscp_mu.c
-    )
-endif()
-
 if(CONFIG_NXP_NEUTRON)
   add_subdirectory(
     ${CMAKE_CURRENT_LIST_DIR}/neutron
   )
 endif()
+
+include(${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/zephyr/CMakeLists.txt)

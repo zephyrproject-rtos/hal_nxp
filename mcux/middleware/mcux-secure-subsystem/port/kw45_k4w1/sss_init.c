@@ -13,7 +13,7 @@ sss_sscp_key_store_t g_keyStore;
 sss_sscp_session_t g_sssSession;
 sscp_context_t g_sscpContext;
 
-static uint32_t g_isCryptoHWInitialized = SSS_CRYPTOHW_NONINITIALIZED;
+static uint32_t s_isCryptoHWInitialized = SSS_CRYPTOHW_NONINITIALIZED;
 
 /******************************************************************************/
 /*************************** Mutex ********************************************/
@@ -61,7 +61,7 @@ status_t CRYPTO_InitHardware(void)
     status_t ret;
     do
     {
-        if (g_isCryptoHWInitialized == SSS_CRYPTOHW_INITIALIZED)
+        if (s_isCryptoHWInitialized == SSS_CRYPTOHW_INITIALIZED)
         {
             ret = kStatus_Success;
             break;
@@ -83,7 +83,7 @@ status_t CRYPTO_InitHardware(void)
         {
             break;
         }
-        if (sss_sscp_open_session(&g_sssSession, 0u, SSS_SUBSYSTEM, &g_sscpContext) != kStatus_SSS_Success)
+        if (sss_sscp_open_session(&g_sssSession, CONFIG_MCUX_SECURE_SUBSYSTEM_SESSION_ID, SSS_SUBSYSTEM, &g_sscpContext) != kStatus_SSS_Success)
         {
             break;
         }
@@ -108,7 +108,7 @@ status_t CRYPTO_InitHardware(void)
         {
             break;
         }
-        g_isCryptoHWInitialized = SSS_CRYPTOHW_INITIALIZED;
+        s_isCryptoHWInitialized = SSS_CRYPTOHW_INITIALIZED;
         ret                     = kStatus_Success;
 
     } while (false);
@@ -124,7 +124,7 @@ status_t CRYPTO_InitHardware(void)
 status_t CRYPTO_ReinitHardware(void)
 {
     /* Reset the init state so the hardware will be reinitialized at the next cryptographic HW acceleration operation */
-    g_isCryptoHWInitialized = SSS_CRYPTOHW_NONINITIALIZED;
+    s_isCryptoHWInitialized = SSS_CRYPTOHW_NONINITIALIZED;
 
     return kStatus_Success;
 }
@@ -135,7 +135,7 @@ status_t CRYPTO_ReinitHardware(void)
  */
 void CRYPTO_DeinitHardware(void)
 {
-    g_isCryptoHWInitialized = SSS_CRYPTOHW_NONINITIALIZED;
+    s_isCryptoHWInitialized = SSS_CRYPTOHW_NONINITIALIZED;
 }
 
 void CRYPTO_ELEMU_reset(void)

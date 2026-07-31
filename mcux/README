@@ -32,7 +32,7 @@ Origin:
 
    NXP MCUXpresso SDK secure subsystem
    https://github.com/nxp-mcuxpresso/mcux-secure-subsystem
-   TAG: MCUX_2.16.000
+   SHA: bdc4f1873125dd224c3a585154d2065c7af3df39
 
    NXP MCUXpresso SDK ieee_802.15.4 middleware
    https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4
