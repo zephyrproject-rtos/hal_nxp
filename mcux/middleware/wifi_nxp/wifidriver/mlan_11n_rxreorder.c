@@ -695,7 +695,19 @@ mlan_status wlan_cmd_11n_addba_rspgen(mlan_private *priv, HostCmd_DS_COMMAND *cm
     padd_ba_rsp->add_rsp_result = 0;
 
     padd_ba_rsp->block_ack_param_set = pevt_addba_req->block_ack_param_set;
-    tid = (padd_ba_rsp->block_ack_param_set & BLOCKACKPARAM_TID_MASK) >> BLOCKACKPARAM_TID_POS;
+    tid = (t_u8)((padd_ba_rsp->block_ack_param_set & BLOCKACKPARAM_TID_MASK) >> BLOCKACKPARAM_TID_POS);
+    /* Validate tid is within bounds of addba_reject[] (size MAX_NUM_TID = 8).
+     * TID field is 4-bit (0-15) but only 0-7 are valid per IEEE 802.11 spec.
+     * Decline the ADDBA request if tid is out of range to prevent out-of-bounds access.
+     */
+    if (tid >= MAX_NUM_TID)
+    {
+        padd_ba_rsp->status_code    = wlan_cpu_to_le16(ADDBA_RSP_STATUS_DECLINED);
+        padd_ba_rsp->add_rsp_result = BA_RESULT_FAILURE;
+        padd_ba_rsp->block_ack_param_set = wlan_cpu_to_le16(padd_ba_rsp->block_ack_param_set);
+        LEAVE();
+        return MLAN_STATUS_SUCCESS;
+    }
     if ((priv->addba_reject[tid] != ADDBA_RSP_STATUS_ACCEPT))
     {
         padd_ba_rsp->status_code = wlan_cpu_to_le16(ADDBA_RSP_STATUS_DECLINED);
@@ -734,7 +746,7 @@ mlan_status wlan_cmd_11n_addba_rspgen(mlan_private *priv, HostCmd_DS_COMMAND *cm
     padd_ba_rsp->add_rsp_result = BA_RESULT_FAILURE;
 #endif
 
-    if (padd_ba_rsp->status_code == wlan_cpu_to_le16(ADDBA_RSP_STATUS_ACCEPT))
+    if ((padd_ba_rsp->status_code == wlan_cpu_to_le16(ADDBA_RSP_STATUS_ACCEPT)) && (tid < MAX_NUM_TID))
     {
         wlan_11n_create_rxreorder_tbl(priv, pevt_addba_req->peer_mac_addr, tid, win_size, pevt_addba_req->ssn);
     }
@@ -765,7 +777,19 @@ mlan_status wlan_cmd_11n_uap_addba_rspgen(mlan_private *priv, HostCmd_DS_COMMAND
 
     padd_ba_rsp->block_ack_param_set = pevt_addba_req->block_ack_param_set;
     padd_ba_rsp->add_rsp_result      = 0;
-    tid = (padd_ba_rsp->block_ack_param_set & BLOCKACKPARAM_TID_MASK) >> BLOCKACKPARAM_TID_POS;
+    tid = (t_u8)((padd_ba_rsp->block_ack_param_set & BLOCKACKPARAM_TID_MASK) >> BLOCKACKPARAM_TID_POS);
+    /* Validate tid is within bounds of addba_reject[] (size MAX_NUM_TID = 8).
+     * TID field is 4-bit (0-15) but only 0-7 are valid per IEEE 802.11 spec.
+     * Decline the ADDBA request if tid is out of range to prevent out-of-bounds access.
+     */
+    if (tid >= MAX_NUM_TID)
+    {
+        padd_ba_rsp->status_code    = wlan_cpu_to_le16(ADDBA_RSP_STATUS_DECLINED);
+        padd_ba_rsp->add_rsp_result = BA_RESULT_FAILURE;
+        padd_ba_rsp->block_ack_param_set = wlan_cpu_to_le16(padd_ba_rsp->block_ack_param_set);
+        LEAVE();
+        return MLAN_STATUS_SUCCESS;
+    }
     if (priv->addba_reject[tid])
         padd_ba_rsp->status_code = wlan_cpu_to_le16(ADDBA_RSP_STATUS_DECLINED);
     else
@@ -1266,7 +1290,17 @@ mlan_status wlan_ret_11n_addba_resp(mlan_private *priv, HostCmd_DS_COMMAND *resp
     padd_ba_rsp->block_ack_tmo       = wlan_le16_to_cpu(padd_ba_rsp->block_ack_tmo);
     padd_ba_rsp->ssn                 = wlan_le16_to_cpu(padd_ba_rsp->ssn);
 
-    tid = (padd_ba_rsp->block_ack_param_set & BLOCKACKPARAM_TID_MASK) >> BLOCKACKPARAM_TID_POS;
+    tid = (t_u8)((padd_ba_rsp->block_ack_param_set & BLOCKACKPARAM_TID_MASK) >> BLOCKACKPARAM_TID_POS);
+    /* Validate tid is within bounds of aggr_prio_tbl[] (size MAX_NUM_TID = 8).
+     * TID field is 4-bit (0-15) but only 0-7 are valid per IEEE 802.11 spec.
+     * Return early if tid is out of range to prevent out-of-bounds access.
+     */
+    if (tid >= MAX_NUM_TID)
+    {
+        PRINTM(MERROR, "ADDBA RSP: invalid tid=%d, ignoring\n", tid);
+        LEAVE();
+        return MLAN_STATUS_SUCCESS;
+    }
     /* Check if we had rejected the ADDBA, if yes then do not create the stream */
     if (padd_ba_rsp->status_code == BA_RESULT_SUCCESS)
     {

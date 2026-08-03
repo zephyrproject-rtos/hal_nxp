@@ -781,6 +781,33 @@ mlan_status wlan_cmd_802_11_rf_antenna(IN pmlan_private pmpriv,
     return MLAN_STATUS_SUCCESS;
 }
 
+#if CONFIG_EXT_ANT_GAIN
+mlan_status wlan_cmd_ext_ant_gain_cfg(IN HostCmd_DS_COMMAND *cmd,
+                                      IN t_u16 cmd_action,
+                                      IN t_void *pdata_buf)
+{
+    HostCmd_DS_EXT_ANT_GAIN_CFG *ant_gain = &cmd->params.ext_ant_gain_cfg;
+    HostCmd_DS_EXT_ANT_GAIN_CFG *cfg      = (HostCmd_DS_EXT_ANT_GAIN_CFG *)pdata_buf;
+
+    ENTER();
+
+    cmd->command = wlan_cpu_to_le16(HostCmd_CMD_EXT_ANT_GAIN_CONFIG);
+    cmd->size    = wlan_cpu_to_le16(sizeof(HostCmd_DS_EXT_ANT_GAIN_CFG) + S_DS_GEN);
+
+    ant_gain->action  = cfg->action;
+    ant_gain->band    = cfg->band;
+    ant_gain->channel = cfg->channel;
+
+    if (cmd_action == HostCmd_ACT_GEN_SET)
+    {
+        (void)memcpy(ant_gain->ext_ant_gain, cfg->ext_ant_gain, sizeof(ant_gain->ext_ant_gain));
+    }
+
+    LEAVE();
+    return MLAN_STATUS_SUCCESS;
+}
+#endif
+
 #if CONFIG_NET_MONITOR
 mlan_status wlan_cmd_802_11_net_monitor(IN pmlan_private pmpriv,
                                         IN HostCmd_DS_COMMAND *cmd,

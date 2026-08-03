@@ -601,6 +601,10 @@ static struct
     wlan_nlist_report_param nlist_rep_param;
     wlan_rrm_neighbor_report_t nbr_rpt;
 #endif
+#if CONFIG_ROAMING
+    int roaming_cnt_11k;
+    int roaming_cnt_11v;
+#endif
     bool internal : 1;
 #if CONFIG_WIFI_GET_LOG
     /* Wi-Fi diagnostic statistics */
@@ -4234,8 +4238,10 @@ static void wlcm_process_rssi_low_event(void)
 #endif
 
 #if CONFIG_11K
-    if (network->neighbor_report_supported == true)
+    if (network->neighbor_report_supported == true &&
+        wlan.roaming_cnt_11k < CONFIG_WIFI_ROAMING_RETRY_CNT)
     {
+        wlan.roaming_cnt_11k++;
         ret = wlan_host_11k_neighbor_req((const char *)network->ssid);
         if (ret == WM_SUCCESS)
         {
@@ -4246,8 +4252,10 @@ static void wlcm_process_rssi_low_event(void)
 #endif /* CONFIG_11K */
 
 #if CONFIG_11V
-    if (network->bss_transition_supported == true)
+    if (network->bss_transition_supported == true &&
+        wlan.roaming_cnt_11v < CONFIG_WIFI_ROAMING_RETRY_CNT)
     {
+        wlan.roaming_cnt_11v++;
         ret = wlan_host_11v_bss_trans_query(0x10);
         if (ret == WM_SUCCESS)
         {
@@ -5244,7 +5252,7 @@ static void wlan_parse_neighbor_report_response(const char *nbr_response, wlan_r
 // Sample Response Pattern
 //<3>RRM-NEIGHBOR-REP-RECEIVED bssid=ec:aa:a0:81:7f:20 info=0x1801 op_class=0 chan=153 phy_type=1 lci=0100080010000000000000000000000000000000000406000000000000060101 civic=02000b0000ed000000
 
-    if (sscanf(nbr_response,"%s bssid=%s info=%s op_class=%d chan=%d phy_type=%d", event, bssid, info, &op_class, &channel, &phy_type) == 6)
+    if (sscanf(nbr_response,"%31s bssid=%31s info=%31s op_class=%d chan=%d phy_type=%d", event, bssid, info, &op_class, &channel, &phy_type) == 6)
     {
         int i;
         int match  = 0;
@@ -7141,6 +7149,10 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
         case WIFI_EVENT_AUTHENTICATION:
             wlcm_d("got event: authentication result: %s",
                     msg->reason == WIFI_EVENT_REASON_SUCCESS ? "success" : "failure");
+#if CONFIG_ROAMING
+            wlan.roaming_cnt_11k = 0;
+            wlan.roaming_cnt_11v = 0;
+#endif
             if(msg->reason == WIFI_EVENT_REASON_FAILURE)
             {
 #if CONFIG_ECSA
@@ -10770,16 +10782,17 @@ void wlan_reset(cli_reset_option ResetOption)
             wifi_set_rx_status(WIFI_DATA_RUNNING);
             wifi_tx_block_cnt = 0;
             wifi_rx_block_cnt = 0;
+
+            wlan_uap_bandcfg_recfg();
         }
+
+        wifi_reset_set_state(false);
+#if CONFIG_WIFI_IND_RESET
+        wifi_reset_mode_set(0);
+#endif
     }
 
-    wifi_reset_set_state(false);
-#if CONFIG_WIFI_IND_RESET
-    wifi_reset_mode_set(0);
-#endif
-    wlan_uap_bandcfg_recfg();
     OSA_MutexUnlock((osa_mutex_handle_t)reset_lock);
-
     wlcm_w("--- Done ---");
 }
 
@@ -10790,6 +10803,7 @@ static void wlcmgr_mon_task(void * data)
 #endif
     osa_status_t status;
     struct wlan_message msg;
+    (void)memset(&msg, 0, sizeof(struct wlan_message));
 
 #if CONFIG_POWER_MANAGER
 #if CONFIG_WAKE_TIMER_ENABLE
@@ -11869,6 +11883,19 @@ int wlan_get_antcfg(uint32_t *ant, uint16_t *evaluate_time, uint8_t *evaluate_mo
 }
 #endif /*RW610*/
 
+#endif
+
+
+#if CONFIG_EXT_ANT_GAIN
+int wlan_set_ext_ant_gain(const int8_t *ext_ant_gain, const uint8_t num_subbands)
+{
+    return wifi_set_ext_ant_gain(ext_ant_gain, num_subbands);
+}
+
+int wlan_get_ext_ant_gain(const uint8_t band, const uint8_t channel, int8_t *net_ant_gain)
+{
+    return wifi_get_ext_ant_gain(band, channel, net_ant_gain);
+}
 #endif
 
 int wlan_wlcmgr_send_msg(enum wifi_event event, enum wifi_event_reason reason, void *data)

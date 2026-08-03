@@ -222,6 +222,7 @@ static void csi_user_process(void *buffer, size_t data_len)
 static void csi_process_task(void *arg)
 {
     csi_msg_t msg;
+    (void)memset(&msg, 0, sizeof(csi_msg_t));
 
     w_csi_d("CSI task started (pri=%d, stack=%d)\r\n",
             CONFIG_CSI_PROCESS_PRI, CONFIG_WIFI_CSI_PROCESS_STACK_SIZE);

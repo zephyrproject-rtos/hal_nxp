@@ -110,9 +110,9 @@ void wifi_nxp_wpa_supp_event_proc_mac_changed(void *if_priv)
 {
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Missing interface context", __func__);
+        supp_e("%s: Invalid state", __func__);
         return;
     }
 
@@ -195,9 +195,9 @@ void wifi_nxp_wpa_supp_event_proc_chan_list_changed(void *if_priv, const char *a
 
     wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Missing interface context", __func__);
+        supp_e("%s: Invalid state", __func__);
         return;
     }
 
@@ -235,9 +235,9 @@ void wifi_nxp_wpa_supp_event_proc_scan_start(void *if_priv)
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
     struct os_time t;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Missing interface context", __func__);
+        supp_e("%s: Invalid state", __func__);
         return;
     }
 
@@ -261,9 +261,9 @@ void wifi_nxp_wpa_supp_event_proc_scan_done(void *if_priv, int aborted, int exte
     union wpa_event_data event;
     struct scan_info *info = NULL;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Missing interface context", __func__);
+        supp_e("%s: Invalid state", __func__);
         return;
     }
 
@@ -300,7 +300,7 @@ void wifi_nxp_wpa_supp_event_bg_scan_report(void *if_priv)
 {
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
 
-    if (!wifi_if_ctx_rtos)
+    if (!wifi_if_ctx_rtos || !wifi_supp_is_init_done())
     {
         return;
     }
@@ -321,7 +321,7 @@ void wifi_nxp_wpa_supp_event_bg_scan_stopped(void *if_priv)
 {
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
 
-    if (!wifi_if_ctx_rtos)
+    if (!wifi_if_ctx_rtos || !wifi_supp_is_init_done())
     {
         return;
     }
@@ -343,9 +343,9 @@ void wifi_nxp_wpa_supp_event_proc_survey_res(void *if_priv,
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
     struct freq_survey *survey                 = NULL;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Missing interface context", __func__);
+        supp_e("%s: Invalid state", __func__);
         return;
     }
 
@@ -456,9 +456,9 @@ void wifi_nxp_wpa_supp_event_proc_auth_resp(void *if_priv, nxp_wifi_event_mlme_t
     const unsigned char *frame        = NULL;
     unsigned int frame_len            = 0;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Missing interface context", __func__);
+        supp_e("%s: Invalid state", __func__);
         return;
     }
 
@@ -513,9 +513,9 @@ void wifi_nxp_wpa_supp_event_proc_assoc_resp(void *if_priv,
     unsigned short status                          = WLAN_STATUS_UNSPECIFIED_FAILURE;
     enum sta_connect_fail_reason_codes reason_code = STA_CONNECT_FAIL_REASON_UNSPECIFIED;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Missing interface context", __func__);
+        supp_e("%s: Invalid state", __func__);
         return;
     }
 
@@ -597,9 +597,9 @@ void wifi_nxp_wpa_supp_event_proc_deauth(void *if_priv, nxp_wifi_event_mlme_t *d
     const unsigned char *frame        = NULL;
     unsigned int frame_len            = 0;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Missing interface context", __func__);
+        supp_e("%s: Invalid state", __func__);
         return;
     }
 
@@ -638,9 +638,9 @@ void wifi_nxp_wpa_supp_event_proc_disassoc(void *if_priv, nxp_wifi_event_mlme_t 
     const unsigned char *frame        = NULL;
     unsigned int frame_len            = 0;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Missing interface context", __func__);
+        supp_e("%s: Invalid state", __func__);
         return;
     }
 
@@ -851,9 +851,9 @@ int wifi_nxp_wpa_supp_scan2(void *if_priv, struct wpa_driver_scan_params *params
     t_u16 scan_chan_gap = 0;
 #endif
 
-    if (!if_priv || !params)
+    if (!if_priv || !params || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -1019,9 +1019,9 @@ int wifi_nxp_wpa_supp_set_default_scan_ies(void *priv, const u8 *ies, size_t ies
 {
     int ret = -1;
 
-    if ((!priv) || (!ies))
+    if ((!priv) || (!ies) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -1048,9 +1048,9 @@ int wifi_nxp_wpa_supp_sched_scan(void *if_priv, struct wpa_driver_scan_params *p
     nxp_wifi_trigger_sched_scan_t *wifi_sched_scan_params = NULL;
 
     /* Input validation */
-    if (!if_priv || !params)
+    if (!if_priv || !params || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -1222,9 +1222,9 @@ int wifi_nxp_wpa_supp_stop_sched_scan(void *if_priv)
     int status = WM_SUCCESS;
     int ret    = -1;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -1256,7 +1256,7 @@ int wifi_nxp_wpa_supp_scan_abort(void *if_priv)
 
     wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
 
-    if (!wifi_if_ctx_rtos || (!wifi_if_ctx_rtos->scan_in_progress))
+    if (!wifi_if_ctx_rtos || (!wifi_if_ctx_rtos->scan_in_progress) || !wifi_supp_is_init_done())
     {
         supp_e("%s:Ignore scan abort, no scan in progress", __func__);
         goto out;
@@ -1363,9 +1363,9 @@ int wifi_nxp_wpa_supp_scan_results_get(void *if_priv)
     nxp_wifi_event_new_scan_result_t scan_res;
     struct wpa_scan_res *sr = NULL;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -1406,9 +1406,9 @@ int wifi_nxp_wpa_supp_survey_results_get(void *if_priv)
     int ret                                    = -1;
     nxp_wifi_trigger_op_t *wifi_survey_params;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -1442,9 +1442,9 @@ int wifi_nxp_wpa_supp_deauthenticate(void *if_priv, const char *addr, unsigned s
     int ret    = -1;
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
 
-    if ((!if_priv) || (!addr))
+    if ((!if_priv) || (!addr) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -1601,9 +1601,9 @@ int wifi_nxp_wpa_supp_authenticate(void *if_priv, struct wpa_driver_auth_params 
     unsigned short len              = 0;
     int channel;
 
-    if ((!if_priv) || (!params))
+    if ((!if_priv) || (!params) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -1671,9 +1671,9 @@ int wifi_nxp_wpa_supp_associate(void *if_priv, struct wpa_driver_associate_param
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
     t_u8 mfpc, mfpr;
 #endif
-    if ((!if_priv) || (!params))
+    if ((!if_priv) || (!params) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -1897,9 +1897,9 @@ int wifi_nxp_wpa_supp_set_key(void *if_priv,
 {
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
 
-    if ((!if_priv) || (!ifname))
+    if ((!if_priv) || (!ifname) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         return -1;
     }
 
@@ -1934,9 +1934,9 @@ int wifi_nxp_wpa_supp_del_key(void *if_priv, const unsigned char *addr, int key_
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
     int ret                                    = -1;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -1964,9 +1964,9 @@ int wifi_nxp_wpa_supp_set_rekey_info(
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
     int ret                                    = -1;
 
-    if ((!if_priv) || (!kek) || (!kck) || (!replay_ctr))
+    if ((!if_priv) || (!kek) || (!kck) || (!replay_ctr) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -1993,9 +1993,9 @@ int wifi_nxp_wpa_supp_set_supp_port(void *if_priv, int authorized, char *bssid)
     int ret                                    = -1;
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
 
-    if ((!if_priv) || (!bssid))
+    if ((!if_priv) || (!bssid) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -2038,9 +2038,9 @@ int wifi_nxp_wpa_supp_set_country(void *if_priv, const char *alpha2)
     t_u8 region_code                           = 0;
     unsigned char country3                     = 0x20;
 
-    if ((!if_priv) || (!alpha2))
+    if ((!if_priv) || (!alpha2) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -2104,9 +2104,9 @@ int wifi_nxp_wpa_supp_get_country(void *if_priv, char *alpha2)
 {
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
 
-    if ((!if_priv) || (!alpha2))
+    if ((!if_priv) || (!alpha2) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -2145,9 +2145,9 @@ int wifi_nxp_wpa_supp_signal_poll(void *if_priv, struct wpa_signal_info *si, uns
     nxp_wifi_signal_info_t signal_params;
     wlan_ds_rate ds_rate = {0};
 
-    if (!if_priv || !si || !bssid)
+    if (!if_priv || !si || !bssid || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params\r\n", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -2194,9 +2194,9 @@ void wifi_nxp_wpa_supp_event_acs_channel_selected(void *if_priv, nxp_wifi_acs_pa
 
     wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Missing interface context", __func__);
+        supp_e("%s: Invalid state", __func__);
         return;
     }
 
@@ -2234,9 +2234,9 @@ void wifi_nxp_wpa_supp_event_mgmt_tx_status(void *if_priv, nxp_wifi_event_mlme_t
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
     bool ack                                   = 0;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Missing interface context", __func__);
+        supp_e("%s: Invalid state", __func__);
         return;
     }
 
@@ -2297,9 +2297,9 @@ void wifi_nxp_wpa_supp_event_proc_unprot_mgmt(void *if_priv, nxp_wifi_event_mlme
     const unsigned char *frame        = NULL;
     unsigned int frame_len            = 0;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Missing interface context", __func__);
+        supp_e("%s: Invalid state", __func__);
         return;
     }
 
@@ -2350,9 +2350,9 @@ int wifi_nxp_wpa_supp_send_mlme(void *if_priv,
     fc    = le_to_host16(hdr->frame_control);
     stype = WLAN_FC_GET_STYPE(fc);
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Missing interface context", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -2383,7 +2383,7 @@ int wifi_nxp_wpa_supp_send_mlme(void *if_priv,
             status = wifi_remain_on_channel(bss_type, false, 0, 0);
             if (status != WM_SUCCESS)
             {
-                supp_e("%s: Failed to cancel remain on channel", __func__);
+                supp_d("%s: Failed to cancel remain on channel", __func__);
             }
             wifi_if_ctx_rtos->remain_on_channel = false;
         }
@@ -2524,7 +2524,7 @@ void wifi_nxp_wpa_supp_event_get_wiphy(void *if_priv,
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
     struct wpa_supp_event_supported_band band;
 
-    if (!if_priv || !wiphy_info || !event_len) {
+    if (!if_priv || !wiphy_info || !event_len || !wifi_supp_is_init_done()) {
         supp_e("%s: Invalid parameters", __func__);
         return;
     }
@@ -2574,8 +2574,8 @@ int wifi_nxp_wpa_supp_get_wiphy(void *if_priv)
     int status                                 = -WM_FAIL;
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
 
-    if (!if_priv) {
-        supp_e("%s: Missing interface context", __func__);
+    if (!if_priv || !wifi_supp_is_init_done()) {
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -2658,7 +2658,7 @@ int wifi_nxp_wpa_supp_get_capa(void *if_priv, struct wpa_driver_capa *capa)
 {
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
 
-    if (!if_priv || !capa) {
+    if (!if_priv || !capa || !wifi_supp_is_init_done()) {
         supp_e("%s: Invalid parameters", __func__);
         goto out;
     }
@@ -2726,8 +2726,8 @@ int wifi_nxp_wpa_supp_get_conn_info(void *if_priv, struct wpa_conn_info *info)
 {
     int ret = -WM_FAIL;
 
-    if (!if_priv || !info) {
-        supp_e("%s: Invalid params", __func__);
+    if (!if_priv || !info || !wifi_supp_is_init_done()) {
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -2749,9 +2749,9 @@ int wifi_nxp_wpa_supp_remain_on_channel(void *if_priv, unsigned int freq, unsign
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
     int channel;
 
-    if (!if_priv || !freq)
+    if (!if_priv || !freq || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
     wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
@@ -2797,9 +2797,9 @@ int wifi_nxp_wpa_supp_cancel_remain_on_channel(void *if_priv, u64 rpu_cookie)
     int status                                 = -WM_FAIL;
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
     wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
@@ -3026,9 +3026,9 @@ void wifi_nxp_wpa_supp_event_signal_change(void *if_priv)
 
     wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
 
-    if (wifi_if_ctx_rtos == NULL)
+    if (!wifi_if_ctx_rtos || !wifi_supp_is_init_done())
     {
-        wifi_e("%s: wifi_if_ctx_rtos is NULL", __func__);
+        supp_e("%s: Invalid state", __func__);
         return;
     }
 
@@ -3057,9 +3057,9 @@ int wifi_nxp_wpa_supp_init_ap(void *if_priv, struct wpa_driver_associate_params 
 
     int ret = -1;
 
-    if ((!if_priv) || (!params))
+    if ((!if_priv) || (!params) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -3193,9 +3193,9 @@ int wifi_nxp_hostapd_set_modes(void *if_priv, struct hostapd_hw_modes *modes)
     t_u8 bandwidth = wifi_uap_get_bandwidth();
 #endif
 
-    if ((!if_priv) || (!modes))
+    if ((!if_priv) || (!modes) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -3379,9 +3379,9 @@ int wifi_nxp_hostapd_do_acs(void *if_priv, struct drv_acs_params *params)
 {
     int status = -WM_FAIL;
 
-    if ((!if_priv) || (!params))
+    if ((!if_priv) || (!params) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -3422,9 +3422,9 @@ int wifi_nxp_hostapd_set_ap(void *if_priv, int beacon_set, struct wpa_driver_ap_
     nxp_wifi_ap_info_t *ap_params              = NULL;
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
 
-    if ((!if_priv) || (!params))
+    if ((!if_priv) || (!params) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -3542,9 +3542,9 @@ int wifi_nxp_hostapd_sta_add(void *if_priv, struct hostapd_sta_add_params *param
     int status                      = -WM_FAIL;
     nxp_wifi_sta_info_t *sta_params = NULL;
 
-    if ((!if_priv) || (!params))
+    if ((!if_priv) || (!params) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -3635,9 +3635,9 @@ int wifi_nxp_hostapd_sta_remove(void *if_priv, const u8 *addr)
 {
     int status = -WM_FAIL;
 
-    if ((!if_priv) || (!addr))
+    if ((!if_priv) || (!addr) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -3655,9 +3655,9 @@ out:
 int wifi_nxp_hostapd_send_eapol(void *if_priv, const u8 *data, size_t data_len)
 {
     int ret = -1;
-    if ((!if_priv) || (!data))
+    if ((!if_priv) || (!data) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params\n", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -3672,9 +3672,9 @@ int wifi_nxp_hostapd_set_freq(void *if_priv, struct hostapd_freq_params *freq)
     int ret = -1;
     nxp_wifi_chan_info_t chan;
 
-    if ((!if_priv) || (!freq))
+    if ((!if_priv) || (!freq) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params\n", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -3711,9 +3711,9 @@ out:
 int wifi_nxp_hostapd_set_rts(void *if_priv, int rts_threshold)
 {
     int ret = -1;
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params\n", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -3727,9 +3727,9 @@ out:
 int wifi_nxp_hostapd_set_frag(void *if_priv, int frag_threshold)
 {
     int ret = -1;
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params\n", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -3743,9 +3743,9 @@ int wifi_nxp_hostapd_stop_ap(void *if_priv)
 {
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
     int ret                                    = -1;
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -3770,9 +3770,9 @@ int wifi_nxp_hostapd_set_acl(void *if_priv, struct hostapd_acl_params *params)
     size_t acl_sz                   = 0;
     unsigned int i;
 
-    if ((!if_priv) || (!params))
+    if ((!if_priv) || (!params) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -3811,9 +3811,9 @@ int wifi_nxp_wpa_supp_sta_get_inact_sec(void *if_priv, const u8 *addr)
 {
     int ret = -1;
 
-    if ((!if_priv) || (!addr))
+    if ((!if_priv) || (!addr) || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -3831,9 +3831,9 @@ int wifi_nxp_wpa_dpp_listen(void *if_priv, bool enable)
 {
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 
@@ -3860,9 +3860,9 @@ void wifi_nxp_wpa_supp_cancel_action_wait(void *if_priv)
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
     int ret = -1;
 
-    if (!if_priv)
+    if (!if_priv || !wifi_supp_is_init_done())
     {
-        supp_e("%s: Invalid params", __func__);
+        supp_e("%s: Invalid state", __func__);
         goto out;
     }
 

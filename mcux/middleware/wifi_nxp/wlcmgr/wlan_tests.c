@@ -3974,6 +3974,97 @@ static void wlan_antcfg_get(int argc, char *argv[])
 }
 #endif
 
+#if CONFIG_EXT_ANT_GAIN
+static void wlan_ext_ant_gain_set(int argc, char *argv[])
+{
+    int ret;
+    int8_t gains[WIFI_EXT_ANT_GAIN_MAX_SUBBAND];
+    uint8_t num;
+    int i;
+
+    if (argc < 2 || (argc - 1) > WIFI_EXT_ANT_GAIN_MAX_SUBBAND)
+    {
+        (void)PRINTF("Usage:\r\n");
+        (void)PRINTF("wlan-set-ant-gain <gain0> [gain1 ... gainN]\r\n");
+        (void)PRINTF("  gains: per-sub-band net antenna gain in dB (int8)\r\n");
+        (void)PRINTF("  max sub-bands: %d\r\n", WIFI_EXT_ANT_GAIN_MAX_SUBBAND);
+        return;
+    }
+
+    num = (uint8_t)(argc - 1);
+    for (i = 0; i < (int)num; i++)
+    {
+        char *endptr = NULL;
+        errno = 0;
+        long v = strtol(argv[i + 1], &endptr, 10);
+        if (errno != 0 || endptr == argv[i + 1] || *endptr != '\0' || v < -10 || v > 10)
+        {
+            (void)PRINTF("Error: gain[%d] invalid or out of range [-10, 10]\r\n", i);
+            return;
+        }
+        gains[i] = (int8_t)v;
+    }
+
+    ret = wlan_set_ext_ant_gain(gains, num);
+    if (ret == WM_SUCCESS)
+    {
+        (void)PRINTF("Antenna gain set successful\r\n");
+    }
+    else
+    {
+        (void)PRINTF("Antenna gain set failed\r\n");
+    }
+}
+
+static void wlan_ext_ant_gain_get(int argc, char *argv[])
+{
+    int ret;
+    uint8_t band;
+    uint8_t channel;
+    int8_t net_ant_gain = 0;
+
+    if (argc != 3)
+    {
+        (void)PRINTF("Usage:\r\n");
+        (void)PRINTF("wlan-get-ant-gain <band> <channel>\r\n");
+        (void)PRINTF("  band: 0=2.4GHz, 1=5GHz\r\n");
+        (void)PRINTF("  channel: channel number (e.g. 6 for 2.4GHz, 36 for 5GHz)\r\n");
+        return;
+    }
+
+    char *endptr = NULL;
+    errno = 0;
+    long bval = strtol(argv[1], &endptr, 10);
+    if (errno != 0 || endptr == argv[1] || *endptr != '\0' || bval < 0 || bval > 1)
+    {
+        (void)PRINTF("Error: band must be 0 (2.4GHz), 1 (5GHz)\r\n");
+        return;
+    }
+    band = (uint8_t)bval;
+
+    endptr = NULL;
+    errno = 0;
+    long cval = strtol(argv[2], &endptr, 10);
+    if (errno != 0 || endptr == argv[2] || *endptr != '\0' || cval < 0 || cval > 255)
+    {
+        (void)PRINTF("Error: invalid channel\r\n");
+        return;
+    }
+    channel = (uint8_t)cval;
+
+    ret = wlan_get_ext_ant_gain(band, channel, &net_ant_gain);
+    if (ret == WM_SUCCESS)
+    {
+        (void)PRINTF("Band %d, channel %d: net antenna gain = %d dB\r\n",
+                     band, channel, net_ant_gain);
+    }
+    else
+    {
+        (void)PRINTF("Antenna gain get failed\r\n");
+    }
+}
+#endif
+
 #if CONFIG_SCAN_CHANNEL_GAP
 static void test_wlan_set_scan_channel_gap(int argc, char **argv)
 {
@@ -6859,7 +6950,7 @@ static void test_wlan_start_wps_pbc(int argc, char **argv)
 
 static void test_wlan_start_wps_pin(int argc, char **argv)
 {
-    int ret = -WM_FAIL;
+    int ret;
 
     if (argc != 2)
     {
@@ -9235,6 +9326,10 @@ static struct cli_command tests[] = {
     {"wlan-set-antcfg", "<ant_mode> <evaluate_time> <evaluate_mode>", wlan_antcfg_set},
 #endif
     {"wlan-get-antcfg", NULL, wlan_antcfg_get},
+#endif
+#if CONFIG_EXT_ANT_GAIN
+    {"wlan-set-ant-gain", "<gain0> [gain1 ... gainN]", wlan_ext_ant_gain_set},
+    {"wlan-get-ant-gain", "<band> <channel>", wlan_ext_ant_gain_get},
 #endif
 #if CONFIG_SCAN_CHANNEL_GAP
     {"wlan-scan-channel-gap", "<channel_gap_value>", test_wlan_set_scan_channel_gap},
