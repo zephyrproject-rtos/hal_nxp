@@ -2159,6 +2159,11 @@ mlan_status wlan_ops_sta_prepare_cmd(IN t_void *priv,
         case HostCmd_CMD_802_11_RF_ANTENNA:
             ret = wlan_cmd_802_11_rf_antenna(pmpriv, cmd_ptr, cmd_action, pdata_buf);
             break;
+#if CONFIG_EXT_ANT_GAIN
+        case HostCmd_CMD_EXT_ANT_GAIN_CONFIG:
+            ret = wlan_cmd_ext_ant_gain_cfg(cmd_ptr, cmd_action, pdata_buf);
+            break;
+#endif
 #if CONFIG_NET_MONITOR
         case HostCmd_CMD_802_11_NET_MONITOR:
             ret = wlan_cmd_802_11_net_monitor(pmpriv, cmd_ptr, cmd_action, pdata_buf);

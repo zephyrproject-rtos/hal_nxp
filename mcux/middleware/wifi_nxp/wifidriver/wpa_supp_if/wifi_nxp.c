@@ -23,7 +23,7 @@
 
 #include "supp_main.h"
 
-static t_u8 wifi_supp_init_done;
+static bool wifi_supp_init_done;
 static struct wifi_nxp_ctx_rtos *g_wifi_if_ctx_rtos = NULL;
 #if CONFIG_WIFI_NM_HOSTAPD_AP
 static struct wifi_nxp_ctx_rtos *g_wifi_hapd_if_ctx_rtos = NULL;
@@ -164,14 +164,13 @@ static const wifi_nxp_callbk_fns_t supp_callbk_fns = {
 
 int wifi_supp_init(void)
 {
-    int ret = -WM_FAIL;
     char sta_iface_name[NETIF_NAMESIZE];
 #ifdef CONFIG_WIFI_SOFTAP_SUPPORT
     char uap_iface_name[NETIF_NAMESIZE];
 #endif
     struct netif *iface = NULL;
 
-    if (wifi_supp_init_done != 0U)
+    if (wifi_supp_init_done)
     {
         return WM_SUCCESS;
     }
@@ -195,7 +194,7 @@ int wifi_supp_init(void)
 
     if (iface == NULL)
     {
-        wifi_e("net_get_sta_interface failed. status code %d", ret);
+        wifi_e("net_get_sta_interface failed");
         goto out;
     }
 
@@ -215,71 +214,31 @@ int wifi_supp_init(void)
     wm_wifi.hapd_if_priv = (void *)g_wifi_hapd_if_ctx_rtos;
 
     iface = net_get_uap_interface();
-
     if (iface == NULL)
     {
-        wifi_e("net_get_uap_interface failed. status code %d", ret);
+        wifi_e("net_get_uap_interface failed");
         goto out;
     }
 
     (void)net_get_if_name_netif(uap_iface_name, iface);
 #endif
-#if !CONFIG_WIFI_NM_WPA_SUPPLICANT
-    ret = start_wpa_supplicant(sta_iface_name);
-
-    if (ret != WM_SUCCESS)
-    {
-        wifi_e("start wpa supplicant failed. status code %d", ret);
-        goto out;
-    }
-#endif
-
-    if (ret == WM_SUCCESS)
-    {
-        wifi_supp_init_done = 1U;
-    }
+    wifi_supp_init_done = true;
 
     return WM_SUCCESS;
 
 out:
     wifi_supp_deinit();
-    return ret;
+    return -WM_FAIL;
 }
 
 void wifi_supp_deinit(void)
 {
-#if !CONFIG_WIFI_NM_WPA_SUPPLICANT
-    int ret;
-#endif
-    if (wifi_supp_init_done != 1U)
-    {
-        return;
-    }
+    wifi_supp_init_done = false;
+}
 
-#if !CONFIG_WIFI_NM_WPA_SUPPLICANT
-    ret = stop_wpa_supplicant();
-    if (ret != WM_SUCCESS)
-    {
-        wifi_e("stop wpa supplicant failed. status code %d", ret);
-    }
-#endif
-
-#if !CONFIG_WIFI_NM_WPA_SUPPLICANT
-    if (wm_wifi.if_priv)
-    {
-        OSA_MemoryFree(wm_wifi.if_priv);
-        wm_wifi.if_priv = NULL;
-        g_wifi_if_ctx_rtos = NULL;
-    }
-
-    if (wm_wifi.hapd_if_priv)
-    {
-        OSA_MemoryFree(wm_wifi.hapd_if_priv);
-        wm_wifi.hapd_if_priv = NULL;
-        g_wifi_hapd_if_ctx_rtos = NULL;
-    }
-#endif
-    wifi_supp_init_done = 0U;
+bool wifi_supp_is_init_done(void)
+{
+    return wifi_supp_init_done;
 }
 
 int wifi_nxp_set_mac_addr(const t_u8 *mac)

@@ -2953,6 +2953,11 @@ mlan_status wlan_cmd_802_11_rf_antenna(IN pmlan_private pmpriv,
                                        IN HostCmd_DS_COMMAND *cmd,
                                        IN t_u16 cmd_action,
                                        IN t_void *pdata_buf);
+#if CONFIG_EXT_ANT_GAIN
+mlan_status wlan_cmd_ext_ant_gain_cfg(IN HostCmd_DS_COMMAND *cmd,
+                                      IN t_u16 cmd_action,
+                                      IN t_void *pdata_buf);
+#endif
 #if CONFIG_NET_MONITOR
 mlan_status wlan_cmd_802_11_net_monitor(IN pmlan_private pmpriv,
                                         IN HostCmd_DS_COMMAND *cmd,

@@ -60,6 +60,7 @@ struct wifi_nxp_ctx_rtos
 
 int wifi_supp_init(void);
 void wifi_supp_deinit(void);
+bool wifi_supp_is_init_done(void);
 int monitor_start(void);
 void monitor_stop(void);
 void wifi_scan_start(struct wifi_message *msg);

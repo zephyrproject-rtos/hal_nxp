@@ -792,6 +792,11 @@ int wifi_get_antenna(t_u32 *ant_mode, t_u16 *evaluate_time, t_u8 *evaluate_mode,
 #endif
 #endif
 
+#if CONFIG_EXT_ANT_GAIN
+int wifi_set_ext_ant_gain(const int8_t *ext_ant_gain, const uint8_t num_subbands);
+int wifi_get_ext_ant_gain(const uint8_t band, const uint8_t channel, int8_t *net_ant_gain);
+#endif
+
 void wifi_process_hs_cfg_resp(t_u8 *cmd_res_buffer);
 enum wifi_event_reason wifi_process_ps_enh_response(t_u8 *cmd_res_buffer, t_u16 *ps_event, t_u16 *action);
 
