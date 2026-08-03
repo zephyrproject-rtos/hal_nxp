@@ -144,6 +144,13 @@ blobs:
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/26.09.00-pvw2/ieee_802_15_4/lib/libieee-802.15.4_MAC_intf.a
     description: "IEEE 802.15.4 MAC & PHY library for MCXW71 boards"
+  - path: mcxw71/KW45_K32W1xx_MCXW71_SDKFW3.0_RFP1.sb3
+    sha256: 0be724c9dae0f7a9b7dd7604244ac8dac470863490f865c7a30c28b3c2919f6e
+    type: img
+    version: '26.06.00'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Online_Code_Hosting.txt
+    url: https://github.com/nxp-mcuxpresso/mcux-edgelock/raw/refs/heads/release/26.06.00/S200/KW45_K32W1xx_MCXW71_SDKFW3.0_RFP1.sb3
+    description: "S200 SecureSubSystem EdgeLock2Go-enabled firmware for MCXW71 boards"
   - path: mcxw72/mcxw72_nbu_dyn_reduced.bin
     sha256: 6d9e1b4dd1d362e19370b40f04e2712d3e7cb31611fc577933be99818be5a5e3
     type: img
@@ -165,6 +172,13 @@ blobs:
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/26.09.00-pvw2/ieee_802_15_4/lib/libieee-802.15.4_MAC_intf_MCXW72.a
     description: "IEEE 802.15.4 MAC & PHY library for MCXW72 boards"
+  - path: mcxw72/KW47_A2_1_SDKFW4_0.sb3
+    sha256: ba5183299ce699d3a40b9befaea9a82d1bbd4401cf7c957f5ee1b5cdda21c6c5
+    type: img
+    version: '26.06.00'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Online_Code_Hosting.txt
+    url: https://github.com/nxp-mcuxpresso/mcux-edgelock/raw/refs/heads/release/26.06.00/S200/KW47_A2_1_SDKFW4_0.sb3
+    description: "S200 SecureSubSystem EdgeLock2Go-enabled firmware for MCXW72 boards"
 
 #For IW612
   - path: nw61x/sd_w61x.bin.se
