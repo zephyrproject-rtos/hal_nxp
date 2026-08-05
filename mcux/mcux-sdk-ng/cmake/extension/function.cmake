@@ -2143,6 +2143,13 @@ function(mcux_append_single_compiler_flags_variable type flag)
      mcux_set_property(MCUX_${type}_MACRO_${CMAKE_MATCH_1} ${MACRO_VALUE})
    endif()
  endif()
+
+  # Check if the flag already exists to avoid accumulation across cmake runs
+  string(FIND " ${CMAKE_${lang_type}_FLAGS} " " ${flag} " _flag_pos)
+  if(NOT _flag_pos EQUAL -1)
+    return()
+  endif()
+
   set(CMAKE_${lang_type}_FLAGS  "${CMAKE_${lang_type}_FLAGS} ${flag}" CACHE STRING "" FORCE)
 endfunction()
 
