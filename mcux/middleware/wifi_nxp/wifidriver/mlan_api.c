@@ -3190,7 +3190,7 @@ int wifi_get_ext_ant_gain(const uint8_t band, const uint8_t channel, int8_t *net
     {
         if (wlan_find_cfp_by_band_and_channel(mlan_adap, BAND_G, channel) == NULL)
         {
-            wlcm_e("Channel %d is not valid for band 2.4GHz", channel);
+            wifi_e("Channel %d is not valid for band 2.4GHz", channel);
             return -WM_E_INVAL;
         }
     }
@@ -3199,14 +3199,14 @@ int wifi_get_ext_ant_gain(const uint8_t band, const uint8_t channel, int8_t *net
     {
         if (wlan_find_cfp_by_band_and_channel(mlan_adap, BAND_A, channel) == NULL)
         {
-            wlcm_e("Channel %d is not valid for band 5GHz", channel);
+            wifi_e("Channel %d is not valid for band 5GHz", channel);
             return -WM_E_INVAL;
         }
     }
 #endif
     else
     {
-        wlcm_e("Invalid band");
+        wifi_e("Invalid band");
         return -WM_E_INVAL;
     }
 

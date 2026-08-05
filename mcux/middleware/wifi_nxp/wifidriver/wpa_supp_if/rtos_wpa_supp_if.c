@@ -2066,7 +2066,7 @@ int wifi_nxp_wpa_supp_set_country(void *if_priv, const char *alpha2)
     ret = wlan_11d_region_2_code(mlan_adap, (t_u8 *)country, &region_code);
     if(ret != WM_SUCCESS)
     {
-        wlcm_e("%s: Invalid country code.", country);
+        supp_e("%s: Invalid country code.", country);
         goto out;
     }
 
