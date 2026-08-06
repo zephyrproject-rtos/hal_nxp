@@ -9,6 +9,14 @@
 
 #include "fwk_platform_definitions.h"
 
+/* On Zephyr, include the Zephyr-specific configuration overrides first so that
+ * they take precedence over the default values defined below (each flag is
+ * #ifndef-protected). This avoids duplicating the overrides in the Zephyr
+ * repository. */
+#ifdef __ZEPHYR__
+#include "fwk_config_zephyr.h"
+#endif
+
 /*********************************************************************
  *        General
  *********************************************************************/
@@ -181,6 +189,7 @@
  *********************************************************************/
 /* Enable NBU access to GPIO PORT D - This allows easier debugging when an issue is reported with a specific main core
  * binary.
+ * On kw45/mcxw71, kw47/mcxw72 use TRDC to authorize access. On kw43/mcxw70 enable pin control non secure.
  * \warning: Disabling this compile macro can impair the debug capability of the NBU for a specific main core binary.
  * \warning: This part of code can generate bus fault when trustzone is enabled (code executed in non secure mode).
  *      Reason is that TRDC_IDAU_CR can not be read. In this case, user shall disable this compile macro when running

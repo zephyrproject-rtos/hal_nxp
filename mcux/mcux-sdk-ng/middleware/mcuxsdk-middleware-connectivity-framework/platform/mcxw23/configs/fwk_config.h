@@ -9,6 +9,14 @@
 
 #include "fwk_platform_definitions.h"
 
+/* On Zephyr, include the Zephyr-specific configuration overrides first so that
+ * they take precedence over the default values defined below (each flag is
+ * #ifndef-protected). This avoids duplicating the overrides in the Zephyr
+ * repository. */
+#ifdef __ZEPHYR__
+#include "fwk_config_zephyr.h"
+#endif
+
 #define gPlatformRamStartAddress_c   (0x20004000U)
 #define gPlatformRamEndAddress_c     (0x2001FFFF)
 #define gPlatformFlashStartAddress_c (0)

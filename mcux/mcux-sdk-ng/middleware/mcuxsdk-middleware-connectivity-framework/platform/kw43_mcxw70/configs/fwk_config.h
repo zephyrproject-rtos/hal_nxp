@@ -9,12 +9,30 @@
 
 #include "fwk_platform_definitions.h"
 
+/* On Zephyr, include the Zephyr-specific configuration overrides first so that
+ * they take precedence over the default values defined below (each flag is
+ * #ifndef-protected). This avoids duplicating the overrides in the Zephyr
+ * repository. */
+#ifdef __ZEPHYR__
+#include "fwk_config_zephyr.h"
+#endif
+
 /*********************************************************************
  *        General
  *********************************************************************/
 
 /* This platform has an NBU domain */
 #define gPlatformHasNbu_d 1
+
+/* Defer the ECDH P256 public key generation and DH key computation from the NBU (controller) to the host (MCU) core.
+ * When enabled, the host handles the P256 public key generation and DH key computation on behalf of the NBU, and the
+ * corresponding ICS messages and handlers are compiled in.
+ * When disabled, the related APIs remain available but are empty so callers can keep the calls unconditionally.
+ * This feature is disabled by default and should be enabled only for applications that require it (e.g. hci_bb for
+ * controller qualification). Enable it by adding -DgPlatformIcsDeferDHKeyToHost_d=1 to the application build. */
+#ifndef gPlatformIcsDeferDHKeyToHost_d
+#define gPlatformIcsDeferDHKeyToHost_d 0
+#endif
 
 /* Defines the calibration duration of the ADC, it will block the task during this time in milisec before trigger the
  * ADC on a channel*/
@@ -177,13 +195,11 @@
 /*********************************************************************
  *        NBU debuggability
  *********************************************************************/
-/* Enable NBU access to GPIO PORT D - This allows easier debugging when an issue is reported with a specific main core
+/* Allocate the GPIOD to the NBU - This allows easier debugging when an issue is reported with a specific main core
  * binary.
+ * On kw45/mcxw71, kw47/mcxw72 use TRDC to authorize access. On kw43/mcxw70 enable pin control non secure.
  * \warning: Disabling this compile macro can impair the debug capability of the NBU for a specific main core binary.
- * \warning: This part of code can generate bus fault when trustzone is enabled (code executed in non secure mode).
- *      Reason is that TRDC_IDAU_CR can not be read. In this case, user shall disable this compile macro when running
- *      in non secure mode.
- * */
+ */
 #if !defined(gPlatformNbuDebugGpioDAccessEnabled_d)
 #define gPlatformNbuDebugGpioDAccessEnabled_d 0
 #endif
@@ -266,6 +282,10 @@
 #ifndef gPlatformUseTimerManager_d
 #define gPlatformUseTimerManager_d 1
 #endif
+
+/* On KW43 better to perform the cleaning of the OTA storage at initialization in order to introduce
+ * less perturbation to the NBU Link Layer during OTA transfer */
+#define gOtaEraseWholePartitionOnInit_d 0 /* to be set to 1 if OTA storage cleaning is required */
 
 /*********************************************************************
  *        Configuration check
