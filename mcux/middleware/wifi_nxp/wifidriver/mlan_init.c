@@ -470,6 +470,9 @@ done:
         for (i = 0; i < pmadapter->priv_num; i++)
         {
             priv = pmadapter->priv[i];
+            /* not all priv slots are populated; skip unallocated ones on the error path */
+            if (priv == MNULL)
+                continue;
 #if CONFIG_WMM
             for (j = 0; j < MAX_AC_QUEUES; ++j)
             {
