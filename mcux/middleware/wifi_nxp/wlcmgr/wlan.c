@@ -6593,7 +6593,7 @@ static void wlcm_request_connect(struct wifi_message *msg, enum cm_sta_state *ne
 #endif
 #if CONFIG_WLAN_FAST_PATH
     /* Mark the fast path cache invalid. */
-    if ((int)msg->data != wlan.cur_network_idx)
+    if ((int)(uintptr_t)msg->data != wlan.cur_network_idx)
         wlan.auth_cache_valid = false;
 #endif /* CONFIG_WLAN_FAST_PATH */
 
@@ -6610,7 +6610,7 @@ static void wlcm_request_connect(struct wifi_message *msg, enum cm_sta_state *ne
         }
     }
 
-    wlcm_d("starting %s to network: %d", wlan.roam_reassoc == false ? "connection" : "reassociation", (int)msg->data);
+    wlcm_d("starting %s to network: %d", wlan.roam_reassoc == false ? "connection" : "reassociation", (int)(uintptr_t)msg->data);
 
 #if !CONFIG_WPA_SUPP
     ret = do_connect((int)(uintptr_t)msg->data);
@@ -6825,7 +6825,7 @@ static void wlcm_process_region_power_cfg(struct wifi_message *msg)
 static void wlcm_process_chan_load(void *ch_load)
 {
     HostCmd_DS_802_11_GET_CH_LOAD *ch_load_info = (HostCmd_DS_802_11_GET_CH_LOAD *)ch_load;
-    
+
     mlan_adap->noise = ch_load_info->noise;
     mlan_adap->ch_load_param = ch_load_info->ch_load;
     mlan_adap->rx_quality = ch_load_info->rx_quality;
@@ -7166,7 +7166,7 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
             wlcm_process_authentication_event(msg, &next, network);
             break;
         case WIFI_EVENT_LINK_LOSS:
-            wlcm_d("got event: link loss, code=%d", (int)msg->data);
+            wlcm_d("got event: link loss, code=%d", (int)(uintptr_t)msg->data);
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
             if (is_sta_connected())
             {
@@ -7277,7 +7277,7 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
             break;
 #endif
         case WIFI_EVENT_DISASSOCIATION:
-            wlcm_d("got event: disassociation, code=%d", (int)(msg->data));
+            wlcm_d("got event: disassociation, code=%d", (int)(uintptr_t)msg->data);
 #if CONFIG_ECSA
             wrapper_clear_media_connected_event();
             wlan_switch_to_nondfs_channel();
@@ -7502,7 +7502,7 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
         case WIFI_EVENT_REGION_POWER_CFG:
             wlcm_process_region_power_cfg(msg);
             break;
-#if CONFIG_WIFI_CHANNEL_LOAD        
+#if CONFIG_WIFI_CHANNEL_LOAD
         case WIFI_EVENT_CHAN_LOAD:
             wlcm_process_chan_load(msg->data);
 #if !CONFIG_MEM_POOLS
@@ -14058,8 +14058,8 @@ int wlan_set_twt_setup_cfg(const wlan_twt_setup_config_t *twt_setup)
     uint32_t twt_interval = (uint32_t)twt_setup->twt_mantissa << (uint32_t)twt_setup->twt_exponent;
     uint32_t wakeup_us = (uint32_t)twt_setup->twt_wakeup_duration * 256;
     uint32_t sleep_time = twt_interval - wakeup_us;
-    
-    if (sleep_time < TWT_SLEEP_MIN)    
+
+    if (sleep_time < TWT_SLEEP_MIN)
     {
         wlcm_e("TWT interval is : %u us", twt_setup->twt_mantissa << twt_setup->twt_exponent);
         wlcm_e("Wakeup duration (WD) value is : %u us", twt_setup->twt_wakeup_duration * 256);
