@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2025-11-13
-**     Build:               b260509
+**     Build:               b260527
 **
 **     Abstract:
 **         Chip specific module features.
@@ -904,6 +904,12 @@
 #define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELX (1)
 /* @brief Is affected by errata with ID 51989. */
 #define FSL_FEATURE_PWM_HAS_ERRATA_51989 (1)
+/* @brief If (e)FlexPWM MASK register has UPDATE_MASK bit field. */
+#define FSL_FEATURE_PWM_MASK_HAS_UPDATE_MASK_BITFIELD (0)
+/* @brief If (e)FlexPWM MCTRL2 register has STRETCH_CNT_PRSC bit field. */
+#define FSL_FEATURE_PWM_MCTRL2_HAS_STRETCH_CNT_PRSC_BITFIELD (0)
+/* @brief If (e)FlexPWM MCTRL2 register has WRPROT bit field. */
+#define FSL_FEATURE_PWM_MCTRL2_HAS_WRPROT_BITFIELD (1)
 
 /* RGPIO module features */
 

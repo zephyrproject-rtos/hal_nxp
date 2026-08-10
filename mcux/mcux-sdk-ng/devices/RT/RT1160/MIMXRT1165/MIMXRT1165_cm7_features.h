@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2025-12-01
-**     Build:               b260512
+**     Build:               b260527
 **
 **     Abstract:
 **         Chip specific module features.
@@ -791,7 +791,7 @@
 
 /* CSI2RX module features */
 
-/* @brief If MIPI_CSI2RX registers don't have prefix. */
+/* @brief If MIPI_CSI2RX registers don not have prefix. */
 #define FSL_FEATURE_CSI2RX_HAS_NO_REG_PREFIX (1)
 
 /* MU module features */
@@ -927,6 +927,12 @@
 #define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELX (1)
 /* @brief Is affected by errata with ID 51989. */
 #define FSL_FEATURE_PWM_HAS_ERRATA_51989 (0)
+/* @brief If (e)FlexPWM MASK register has UPDATE_MASK bit field. */
+#define FSL_FEATURE_PWM_MASK_HAS_UPDATE_MASK_BITFIELD (0)
+/* @brief If (e)FlexPWM MCTRL2 register has STRETCH_CNT_PRSC bit field. */
+#define FSL_FEATURE_PWM_MCTRL2_HAS_STRETCH_CNT_PRSC_BITFIELD (0)
+/* @brief If (e)FlexPWM MCTRL2 register has WRPROT bit field. */
+#define FSL_FEATURE_PWM_MCTRL2_HAS_WRPROT_BITFIELD (0)
 
 /* RTWDOG module features */
 

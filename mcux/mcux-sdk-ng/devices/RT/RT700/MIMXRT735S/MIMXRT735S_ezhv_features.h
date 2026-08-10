@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 5.0, 2025-12-03
-**     Build:               b260429
+**     Build:               b260623
 **
 **     Abstract:
 **         Chip specific module features.
@@ -156,6 +156,8 @@
 #define FSL_FEATURE_ACMP_HAS_C3_RDIVE_BIT (0)
 /* @brief If has acmp sample signal */
 #define FSL_FEATURE_ACMP_HAS_NO_SAMPLE_SIGNAL (1)
+/* @brief Has C3 PCHCTEN Bit */
+#define FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE (1)
 
 /* LPADC module features */
 
@@ -409,6 +411,13 @@
 /* @brief Has DOZEN bit(CTRL[DOZEN]) */
 #define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (1)
 
+/* FREQME module features */
+
+/* @brief FREQME instance support REF and TAR register. */
+#define FSL_FEATURE_FREQME_HAS_CLOCK_SOURCE_SELECT (0)
+/* @brief FREQME frequency calculation formula. 0: CTRL_R[RESULT] - 2; 1: CTRL_R[RESULT] + 1. */
+#define FSL_FEATURE_FREQME_RESULT_CALCULATION_MODE (0)
+
 /* GPIO module features */
 
 /* @brief Has GPIO attribute checker register (GACR). */
@@ -637,6 +646,11 @@
 #define FSL_FEATURE_OCOTP_HAS_TIMING_CTRL (0)
 /* @brief Support lock eFuse word write lock, (CTRL[WORDLOCK]). */
 #define FSL_FEATURE_OCOTP_HAS_WORDLOCK (1)
+
+/* OSTIMER module features */
+
+/* @brief Has binary encoded value in counter register. */
+#define FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER (0)
 
 /* PDM module features */
 

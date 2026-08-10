@@ -40,7 +40,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief CLOCK driver version. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -1498,7 +1498,7 @@ static inline void CLOCK_SetRootClockDiv(clock_root_t root, uint32_t div)
 {
     assert(div);
     CCM->CLOCK_ROOT[root].CONTROL = (CCM->CLOCK_ROOT[root].CONTROL & ~CCM_CLOCK_ROOT_CONTROL_DIV_MASK) |
-                                    CCM_CLOCK_ROOT_CONTROL_DIV((uint32_t)div - 1UL);
+                                    CCM_CLOCK_ROOT_CONTROL_DIV((div > 0U) ? ((uint32_t)div - 1UL) : 0UL);
     __DSB();
     __ISB();
 #if __CORTEX_M == 33
@@ -1561,7 +1561,7 @@ static inline void CLOCK_SetRootClock(clock_root_t root, const clock_root_config
 {
     assert(config);
     CCM->CLOCK_ROOT[root].CONTROL = CCM_CLOCK_ROOT_CONTROL_MUX(config->mux) |
-                                    CCM_CLOCK_ROOT_CONTROL_DIV((uint32_t)config->div - 1UL) |
+                                    CCM_CLOCK_ROOT_CONTROL_DIV((config->div > 0U) ? ((uint32_t)config->div - 1UL) : 0UL) |
                                     (config->clockOff ? CCM_CLOCK_ROOT_CONTROL_OFF(config->clockOff) : 0UL);
     __DSB();
     __ISB();
