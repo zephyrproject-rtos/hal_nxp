@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.1, 2025-12-01
-**     Build:               b260512
+**     Build:               b260717
 **
 **     Abstract:
 **         Chip specific module features.
@@ -309,6 +309,8 @@
 #define FSL_FEATURE_ACMP_HAS_NO_C0_SE_BIT (0)
 /* @brief Has C3 RDIVE Bit */
 #define FSL_FEATURE_ACMP_HAS_C3_RDIVE_BIT (1)
+/* @brief Has C3 PCHCTEN Bit */
+#define FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE (1)
 
 /* DAC12 module features */
 
@@ -585,8 +587,6 @@
 
 /* @brief Has process identifier support. */
 #define FSL_FEATURE_LMEM_HAS_SYSTEMBUS_CACHE (1)
-/* @brief Has L1 CACHE. */
-#define FSL_FEATURE_HAS_L1CACHE (1)
 /* @brief Support instruction cache demote. */
 #define FSL_FEATURE_LMEM_SUPPORT_ICACHE_DEMOTE_REMOVE (1)
 /* @brief Has no NONCACHEABLE section. */
@@ -597,6 +597,8 @@
 #define FSL_FEATURE_L1ICACHE_LINESIZE_BYTE (32)
 /* @brief L1 DCACHE line size in byte. */
 #define FSL_FEATURE_L1DCACHE_LINESIZE_BYTE (32)
+/* @brief Has L1 CACHE. */
+#define FSL_FEATURE_HAS_L1CACHE (1)
 
 /* LPADC module features */
 
@@ -676,6 +678,8 @@
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (0)
 /* @brief Has Justified Left Enable (bitfield CFG2[JLEFT]). */
 #define FSL_FEATURE_LPADC_HAS_CFG2_JLEFT (0)
+/* @brief Trigger Control Count. */
+#define FSL_FEATURE_LPADC_TCTRL_COUNT (8)
 
 /* LPI2C module features */
 
@@ -791,7 +795,7 @@
 
 /* CSI2RX module features */
 
-/* @brief If MIPI_CSI2RX registers don't have prefix. */
+/* @brief If MIPI_CSI2RX registers don not have prefix. */
 #define FSL_FEATURE_CSI2RX_HAS_NO_REG_PREFIX (1)
 
 /* MU module features */
@@ -927,6 +931,12 @@
 #define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELX (1)
 /* @brief Is affected by errata with ID 51989. */
 #define FSL_FEATURE_PWM_HAS_ERRATA_51989 (0)
+/* @brief If (e)FlexPWM MASK register has UPDATE_MASK bit field. */
+#define FSL_FEATURE_PWM_MASK_HAS_UPDATE_MASK_BITFIELD (1)
+/* @brief If (e)FlexPWM MCTRL2 register has STRETCH_CNT_PRSC bit field. */
+#define FSL_FEATURE_PWM_MCTRL2_HAS_STRETCH_CNT_PRSC_BITFIELD (0)
+/* @brief If (e)FlexPWM MCTRL2 register has WRPROT bit field. */
+#define FSL_FEATURE_PWM_MCTRL2_HAS_WRPROT_BITFIELD (0)
 
 /* RTWDOG module features */
 

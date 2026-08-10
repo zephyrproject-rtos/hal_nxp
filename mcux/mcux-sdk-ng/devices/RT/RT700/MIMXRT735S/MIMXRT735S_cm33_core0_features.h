@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 5.0, 2025-12-03
-**     Build:               b260429
+**     Build:               b260717
 **
 **     Abstract:
 **         Chip specific module features.
@@ -158,6 +158,8 @@
 #define FSL_FEATURE_ACMP_HAS_C3_RDIVE_BIT (0)
 /* @brief If has acmp sample signal */
 #define FSL_FEATURE_ACMP_HAS_NO_SAMPLE_SIGNAL (1)
+/* @brief Has C3 PCHCTEN Bit */
+#define FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE (1)
 
 /* LPADC module features */
 
@@ -237,6 +239,8 @@
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (0)
 /* @brief Has Justified Left Enable (bitfield CFG2[JLEFT]). */
 #define FSL_FEATURE_LPADC_HAS_CFG2_JLEFT (1)
+/* @brief Trigger Control Count. */
+#define FSL_FEATURE_LPADC_TCTRL_COUNT (2)
 /* @brief Buffer size of temperature sensor (CMDHa[LOOP] value to be set in process of calculate the temperature). */
 #define FSL_FEATURE_LPADC_TEMP_SENS_BUFFER_SIZE (2U)
 /* @brief Temperature sensor parameter A (slope). */
@@ -290,6 +294,8 @@
 #define FSL_FEATURE_CTIMER_HAS_CCR_CAP3 (1)
 /* @brief CTIMER Has register MSR */
 #define FSL_FEATURE_CTIMER_HAS_MSR (1)
+/* @brief Is affected by errata with ID 53024 (CTIMER will enter interrupt twice when function clock much slower than bus clock). */
+#define FSL_FEATURE_CTIMER_HAS_ERRATA_53024 (1)
 
 /* EDMA module features */
 
@@ -406,6 +412,13 @@
 #define FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER (1)
 /* @brief Has DOZEN bit(CTRL[DOZEN]) */
 #define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (1)
+
+/* FREQME module features */
+
+/* @brief FREQME instance support REF and TAR register. */
+#define FSL_FEATURE_FREQME_HAS_CLOCK_SOURCE_SELECT (0)
+/* @brief FREQME frequency calculation formula. 0: CTRL_R[RESULT] - 2; 1: CTRL_R[RESULT] + 1. */
+#define FSL_FEATURE_FREQME_RESULT_CALCULATION_MODE (0)
 
 /* GPIO module features */
 
@@ -633,6 +646,11 @@
 #define FSL_FEATURE_OCOTP_HAS_TIMING_CTRL (0)
 /* @brief Support lock eFuse word write lock, (CTRL[WORDLOCK]). */
 #define FSL_FEATURE_OCOTP_HAS_WORDLOCK (1)
+
+/* OSTIMER module features */
+
+/* @brief Has binary encoded value in counter register. */
+#define FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER (0)
 
 /* PDM module features */
 
