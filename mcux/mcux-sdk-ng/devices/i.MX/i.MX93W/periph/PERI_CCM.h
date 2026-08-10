@@ -6,7 +6,7 @@
 **                          MIMX93W52610GCM_cm33
 **
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CCM
@@ -109,10 +109,10 @@ typedef struct {
   } CLOCK_ROOT[CCM_CLOCK_ROOT_COUNT];
        uint8_t RESERVED_0[6272];
   struct {                                         /* offset: 0x4800 */
-         uint32_t RW;                                /**< General Purpose Register, offset: 0x4800 */
-         uint32_t SET;                               /**< General Purpose Register, offset: 0x4804 */
-         uint32_t CLR;                               /**< General Purpose Register, offset: 0x4808 */
-         uint32_t TOG;                               /**< General Purpose Register, offset: 0x480C */
+    __I  uint32_t RW;                                /**< General Purpose Register, offset: 0x4800 */
+    __I  uint32_t SET;                               /**< General Purpose Register, offset: 0x4804 */
+    __I  uint32_t CLR;                               /**< General Purpose Register, offset: 0x4808 */
+    __I  uint32_t TOG;                               /**< General Purpose Register, offset: 0x480C */
   } GPR_SHARED0;
   struct {                                         /* offset: 0x4810 */
     __IO uint32_t RW;                                /**< GPR access control, offset: 0x4810 */
@@ -146,10 +146,10 @@ typedef struct {
   } GPR_SHARED2_AUTHEN;
   struct {                                         /* offset: 0x4860, array step: 0x20 */
     struct {                                         /* offset: 0x4860 */
-           uint32_t RW;                                /**< General Purpose Register, offset: 0x4860 */
-           uint32_t SET;                               /**< General Purpose Register, offset: 0x4864 */
-           uint32_t CLR;                               /**< General Purpose Register, offset: 0x4868 */
-           uint32_t TOG;                               /**< General Purpose Register, offset: 0x486C */
+      __I  uint32_t RW;                                /**< General Purpose Register, offset: 0x4860 */
+      __I  uint32_t SET;                               /**< General Purpose Register, offset: 0x4864 */
+      __I  uint32_t CLR;                               /**< General Purpose Register, offset: 0x4868 */
+      __I  uint32_t TOG;                               /**< General Purpose Register, offset: 0x486C */
     } GPR_SHARED;
     struct {                                         /* offset: 0x4870 */
       __IO uint32_t RW;                                /**< GPR access control, offset: 0x4870 */

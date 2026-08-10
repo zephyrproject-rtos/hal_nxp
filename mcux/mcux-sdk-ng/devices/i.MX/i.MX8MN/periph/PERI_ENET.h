@@ -38,7 +38,7 @@
 **                          MIMX8MN6DVTJZ_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260513
+**     Build:               b260624
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENET
@@ -213,7 +213,7 @@ typedef struct {
   __IO uint32_t TDAR2;                             /**< Transmit Descriptor Active Register - Ring 2, offset: 0x1EC */
   __IO uint32_t QOS;                               /**< QOS Scheme, offset: 0x1F0 */
        uint8_t RESERVED_16[12];
-       uint32_t RMON_T_DROP;                       /**< Reserved Statistic Register, offset: 0x200 */
+  __I  uint32_t RMON_T_DROP;                       /**< Reserved Statistic Register, offset: 0x200 */
   __I  uint32_t RMON_T_PACKETS;                    /**< Tx Packet Count Statistic Register, offset: 0x204 */
   __I  uint32_t RMON_T_BC_PKT;                     /**< Tx Broadcast Packets Statistic Register, offset: 0x208 */
   __I  uint32_t RMON_T_MC_PKT;                     /**< Tx Multicast Packets Statistic Register, offset: 0x20C */
@@ -231,7 +231,7 @@ typedef struct {
   __I  uint32_t RMON_T_P1024TO2047;                /**< Tx 1024- to 2047-byte Packets Statistic Register, offset: 0x23C */
   __I  uint32_t RMON_T_P_GTE2048;                  /**< Tx Packets Greater Than 2048 Bytes Statistic Register, offset: 0x240 */
   __I  uint32_t RMON_T_OCTETS;                     /**< Tx Octets Statistic Register, offset: 0x244 */
-       uint32_t IEEE_T_DROP;                       /**< Reserved Statistic Register, offset: 0x248 */
+  __I  uint32_t IEEE_T_DROP;                       /**< Reserved Statistic Register, offset: 0x248 */
   __I  uint32_t IEEE_T_FRAME_OK;                   /**< Frames Transmitted OK Statistic Register, offset: 0x24C */
   __I  uint32_t IEEE_T_1COL;                       /**< Frames Transmitted with Single Collision Statistic Register, offset: 0x250 */
   __I  uint32_t IEEE_T_MCOL;                       /**< Frames Transmitted with Multiple Collisions Statistic Register, offset: 0x254 */
@@ -252,7 +252,7 @@ typedef struct {
   __I  uint32_t RMON_R_OVERSIZE;                   /**< Rx Packets Greater Than MAX_FL and Good CRC Statistic Register, offset: 0x298 */
   __I  uint32_t RMON_R_FRAG;                       /**< Rx Packets Less Than 64 Bytes and Bad CRC Statistic Register, offset: 0x29C */
   __I  uint32_t RMON_R_JAB;                        /**< Rx Packets Greater Than MAX_FL Bytes and Bad CRC Statistic Register, offset: 0x2A0 */
-       uint32_t RMON_R_RESVD_0;                    /**< Reserved Statistic Register, offset: 0x2A4 */
+  __I  uint32_t RMON_R_RESVD_0;                    /**< Reserved Statistic Register, offset: 0x2A4 */
   __I  uint32_t RMON_R_P64;                        /**< Rx 64-Byte Packets Statistic Register, offset: 0x2A8 */
   __I  uint32_t RMON_R_P65TO127;                   /**< Rx 65- to 127-Byte Packets Statistic Register, offset: 0x2AC */
   __I  uint32_t RMON_R_P128TO255;                  /**< Rx 128- to 255-Byte Packets Statistic Register, offset: 0x2B0 */

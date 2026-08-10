@@ -6,7 +6,7 @@
 **                          MIMX93W52610GCM_cm33
 **
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BLK_CTRL_S_AONMIX
@@ -336,14 +336,6 @@ typedef struct {
 /*! WAKEUP_TRDC_CLK_OFF_HS_EN - WAKEUP TRDC clock off handshake enable */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_WAKEUP_TRDC_CLK_OFF_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_WAKEUP_TRDC_CLK_OFF_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_WAKEUP_TRDC_CLK_OFF_HS_EN_MASK)
 
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_FLEXSPI_CLK_OFF_HS_EN_MASK (0x20000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_FLEXSPI_CLK_OFF_HS_EN_SHIFT (17U)
-/*! FLEXSPI_CLK_OFF_HS_EN - FLEXSPI clock off handshake enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_FLEXSPI_CLK_OFF_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_FLEXSPI_CLK_OFF_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_FLEXSPI_CLK_OFF_HS_EN_MASK)
-
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_NIC_APB_CLK_OFF_HS_EN_MASK (0x40000U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_NIC_APB_CLK_OFF_HS_EN_SHIFT (18U)
 /*! NIC_APB_CLK_OFF_HS_EN - NIC_APB clock off handshake enable */
@@ -421,14 +413,6 @@ typedef struct {
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_NIC_APB_CLK_ON_HS_EN_SHIFT (29U)
 /*! NIC_APB_CLK_ON_HS_EN - NIC_APB clock on handshake enable */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_NIC_APB_CLK_ON_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_NIC_APB_CLK_ON_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_NIC_APB_CLK_ON_HS_EN_MASK)
-
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_FLEXSPI_CLK_ON_HS_EN_MASK (0x40000000U)
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_FLEXSPI_CLK_ON_HS_EN_SHIFT (30U)
-/*! FLEXSPI_CLK_ON_HS_EN - FLEXSPI clock on handshake enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_FLEXSPI_CLK_ON_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_FLEXSPI_CLK_ON_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_FLEXSPI_CLK_ON_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_WAKEUPMIX_TRDC_CLK_ON_HS_EN_MASK (0x80000000U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_WAKEUPMIX_TRDC_CLK_ON_HS_EN_SHIFT (31U)
@@ -510,16 +494,16 @@ typedef struct {
 #define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_REF2_MASK (0x1U)
 #define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_REF2_SHIFT (0U)
 /*! NOCLK_REF2 - No Clock Reference 2
- *  0b0..Mask interrupt
- *  0b1..Unmask interrupt
+ *  0b0..Unmask interrupt
+ *  0b1..Mask interrupt
  */
 #define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_REF2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_REF2_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_REF2_MASK)
 
 #define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_REF1_MASK (0x2U)
 #define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_REF1_SHIFT (1U)
 /*! NOCLK_REF1 - No Clock Reference 1
- *  0b0..Mask interrupt
- *  0b1..Unmask interrupt
+ *  0b0..Unmask interrupt
+ *  0b1..Mask interrupt
  */
 #define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_REF1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_REF1_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_NOCLK_REF1_MASK)
 
@@ -531,8 +515,8 @@ typedef struct {
 #define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_LMDA_RESET_REQ_MASK (0x8U)
 #define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_LMDA_RESET_REQ_SHIFT (3U)
 /*! LMDA_RESET_REQ - Request Edgelock reset, active low, interrupt request
- *  0b0..Mask interrupt
- *  0b1..Unmask interrupt
+ *  0b0..Unmask interrupt
+ *  0b1..Mask interrupt
  */
 #define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_LMDA_RESET_REQ(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_LMDA_RESET_REQ_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_LMDA_RESET_REQ_MASK)
 
@@ -544,8 +528,8 @@ typedef struct {
 #define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_LMDA_SYS_FAIL_MASK (0x20U)
 #define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_LMDA_SYS_FAIL_SHIFT (5U)
 /*! LMDA_SYS_FAIL - System failure, reset chip or Edgelock
- *  0b0..Mask interrupt
- *  0b1..Unmask interrupt
+ *  0b0..Unmask interrupt
+ *  0b1..Mask interrupt
  */
 #define BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_LMDA_SYS_FAIL(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_LMDA_SYS_FAIL_SHIFT)) & BLK_CTRL_S_AONMIX_ELE_IRQ_MASK_LMDA_SYS_FAIL_MASK)
 

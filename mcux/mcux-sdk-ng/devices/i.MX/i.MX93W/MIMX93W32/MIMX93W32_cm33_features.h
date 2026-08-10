@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         Chip specific module features.
@@ -40,15 +40,13 @@
 /* @brief ENET_QOS availability on the SoC. */
 #define FSL_FEATURE_SOC_ENET_QOS_COUNT (1)
 /* @brief FLEXCAN availability on the SoC. */
-#define FSL_FEATURE_SOC_FLEXCAN_COUNT (2)
+#define FSL_FEATURE_SOC_FLEXCAN_COUNT (1)
 /* @brief FLEXIO availability on the SoC. */
 #define FSL_FEATURE_SOC_FLEXIO_COUNT (2)
-/* @brief FLEXSPI availability on the SoC. */
-#define FSL_FEATURE_SOC_FLEXSPI_COUNT (1)
 /* @brief I3C availability on the SoC. */
 #define FSL_FEATURE_SOC_I3C_COUNT (2)
 /* @brief I2S availability on the SoC. */
-#define FSL_FEATURE_SOC_I2S_COUNT (3)
+#define FSL_FEATURE_SOC_I2S_COUNT (2)
 /* @brief IOMUXC_GPR availability on the SoC. */
 #define FSL_FEATURE_SOC_IOMUXC_GPR_COUNT (1)
 /* @brief ISI availability on the SoC. */
@@ -60,7 +58,7 @@
 /* @brief LPIT availability on the SoC. */
 #define FSL_FEATURE_SOC_LPIT_COUNT (2)
 /* @brief LPSPI availability on the SoC. */
-#define FSL_FEATURE_SOC_LPSPI_COUNT (8)
+#define FSL_FEATURE_SOC_LPSPI_COUNT (7)
 /* @brief LPTMR availability on the SoC. */
 #define FSL_FEATURE_SOC_LPTMR_COUNT (2)
 /* @brief LPUART availability on the SoC. */
@@ -69,12 +67,12 @@
 #define FSL_FEATURE_SOC_MCM_COUNT (1)
 /* @brief MIPI_DSI availability on the SoC. */
 #define FSL_FEATURE_SOC_MIPI_DSI_COUNT (1)
+/* @brief MPU availability on the SoC. */
+#define FSL_FEATURE_SOC_MPU_COUNT (1)
 /* @brief MU availability on the SoC. */
 #define FSL_FEATURE_SOC_MU_COUNT (2)
 /* @brief NPU availability on the SoC. */
 #define FSL_FEATURE_SOC_NPU_COUNT (1)
-/* @brief OTFAD availability on the SoC. */
-#define FSL_FEATURE_SOC_OTFAD_COUNT (1)
 /* @brief PDM availability on the SoC. */
 #define FSL_FEATURE_SOC_PDM_COUNT (1)
 /* @brief PXP availability on the SoC. */
@@ -98,7 +96,7 @@
 /* @brief USBNC availability on the SoC. */
 #define FSL_FEATURE_SOC_USBNC_COUNT (2)
 /* @brief USDHC availability on the SoC. */
-#define FSL_FEATURE_SOC_USDHC_COUNT (3)
+#define FSL_FEATURE_SOC_USDHC_COUNT (2)
 /* @brief WDOG availability on the SoC. */
 #define FSL_FEATURE_SOC_WDOG_COUNT (5)
 /* @brief XCACHE availability on the SoC. */
@@ -198,7 +196,7 @@
 
 /* EDMA module features */
 
-/* @brief Number of DMA channels (related to number of registers TCD, DCHPRI, bit fields ERQ[ERQn], EEI[EEIn], INT[INTn], ERR[ERRn], HRS[HRSn] and bit field widths ES[ERRCHN], CEEI[CEEI], SEEI[SEEI], CERQ[CERQ], SERQ[SERQ], CDNE[CDNE], SSRT[SSRT], CERR[CERR], CINT[CINT], TCDn_CITER_ELINKYES[LINKCH], TCDn_CSR[MAJORLINKCH], TCDn_BITER_ELINKYES[LINKCH]). (Valid only for eDMA modules.) */
+/* @brief Number of DMA channels (related to number of registers TCD, DCHPRI, bit fields ERQ[ERQn], EEI[EEIn], INT[INTn], ERR[ERRn], HRS[HRSn] and bit field widths ES[ERRCHN], CEEI[CEEI], SEEI[SEEI], CERQ[CERQ], SERQ[SERQ], CDNE[CDNE], SSRT[SSRT], CERR[CERR], CINT[CINT], TCDn_CITER_ELINKYES[LINKCH], TCDn_CSR[MAJORLINKCH], TCDn_BITER_ELINKYES[LINKCH]). (Valid only for eDMA modules.) Note: This feature value is not the same on all EDMA instances. */
 #define FSL_FEATURE_EDMA_MODULE_CHANNEL (64)
 /* @brief If 8 bytes transfer supported. */
 #define FSL_FEATURE_EDMA_SUPPORT_8_BYTES_TRANSFER (1)
@@ -220,72 +218,78 @@
 #define FSL_FEATURE_EDMA_HAS_CONTINUOUS_LINK_MODE (0)
 /* @brief If 128 bytes transfer supported. */
 #define FSL_FEATURE_EDMA_SUPPORT_128_BYTES_TRANSFER (1)
-/* @brief whether has prot register */
-#define FSL_FEATURE_EDMA_INSTANCE_HAS_PROT_REGISTERn(x) (0)
+/* @brief If channel clock controlled independently */
+#define FSL_FEATURE_EDMA_CHANNEL_HAS_OWN_CLOCK_GATE (1)
 /* @brief NBYTES must be multiple of 8 when using scatter gather. */
 #define FSL_FEATURE_EDMA_HAS_ERRATA_51327 (0)
 /* @brief If 128 bytes transfer supported. */
 #define FSL_FEATURE_EDMA_INSTANCE_SUPPORT_128_BYTES_TRANSFERn(x) (1)
-/* @brief whether has MP channel mux */
-#define FSL_FEATURE_EDMA_INSTANCE_HAS_MP_CHANNEL_MUXn(x) (0)
 /* @brief NBYTES must be multiple of 8 when using scatter gather. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_ERRATA_51327n(x) (0)
 /* @brief Has register CH_CSR. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_CONFIG (1)
-/* @brief If channel clock controlled independently */
-#define FSL_FEATURE_EDMA_CHANNEL_HAS_OWN_CLOCK_GATE (1)
+/* @brief Has no register bit fields MP_CSR[EBW]. */
+#define FSL_FEATURE_EDMA_HAS_NO_MP_CSR_EBW (1)
+/* @brief Has channel mux Note: This feature value is not the same on all EDMA instances. */
+#define FSL_FEATURE_EDMA_HAS_CHANNEL_MUX (1)
+/* @brief If dma has common clock gate */
+#define FSL_FEATURE_EDMA_HAS_COMMON_CLOCK_GATE (0)
 /* @brief Instance has channel mux */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_MUXn(x) \
     (((x) == DMA4) ? (1) : \
     (((x) == DMA3) ? (0) : (-1)))
-/* @brief eDMA3 has channel mux */
-#define FSL_FEATURE_EDMA_HAS_CHANNEL_MUX (0)
-/* @brief Has register CH_SBR. */
-#define FSL_FEATURE_EDMA_HAS_SBR (1)
-/* @brief Has no register bit fields MP_CSR[EBW]. */
-#define FSL_FEATURE_EDMA_HAS_NO_MP_CSR_EBW (1)
-/* @brief Has no register bit fields CH_SBR[ATTR]. */
-#define FSL_FEATURE_EDMA_HAS_NO_CH_SBR_ATTR (0)
-/* @brief If dma has common clock gate */
-#define FSL_FEATURE_EDMA_HAS_COMMON_CLOCK_GATE (0)
-/* @brief Has register bit field CH_CSR[SWAP]. */
-#define FSL_FEATURE_EDMA_HAS_CHANNEL_SWAP_SIZE (1)
 /* @brief If dma channel IRQ support parameter */
 #define FSL_FEATURE_EDMA_MODULE_CHANNEL_IRQ_ENTRY_SUPPORT_PARAMETER (0)
+/* @brief Has register CH_SBR. */
+#define FSL_FEATURE_EDMA_HAS_SBR (1)
+/* @brief Has no register bit fields CH_SBR[ATTR]. */
+#define FSL_FEATURE_EDMA_HAS_NO_CH_SBR_ATTR (0)
+/* @brief Has register bit field CH_CSR[SWAP]. Note: This feature value is not the same on all EDMA instances. */
+#define FSL_FEATURE_EDMA_HAS_CHANNEL_SWAP_SIZE (1)
 /* @brief Instance has register bit field CH_CSR[SWAP]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_SWAP_SIZEn(x) \
     (((x) == DMA4) ? (1) : \
     (((x) == DMA3) ? (0) : (-1)))
-/* @brief Has register bit field CH_SBR[INSTR]. */
+/* @brief Whether instance has prot register. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_PROT_REGISTERn(x) (0)
+/* @brief Has register bit field CH_SBR[INSTR]. Note: This feature value is not the same on all EDMA instances. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_ACCESS_TYPE (1)
+/* @brief Whether instance has MP channel mux. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_MP_CHANNEL_MUXn(x) (0)
 /* @brief Instance has register bit field CH_SBR[INSTR]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_ACCESS_TYPEn(x) \
     (((x) == DMA4) ? (1) : \
     (((x) == DMA3) ? (0) : (-1)))
-/* @brief Has register bit fields CH_MATTR[WCACHE], CH_MATTR[RCACHE]. */
-#define FSL_FEATURE_EDMA_HAS_CHANNEL_MEMORY_ATTRIBUTE  (1)
+/* @brief Has register bit fields CH_MATTR[WCACHE], CH_MATTR[RCACHE]. Note: This feature value is not the same on all EDMA instances. */
+#define FSL_FEATURE_EDMA_HAS_CHANNEL_MEMORY_ATTRIBUTE (1)
 /* @brief Instance has register CH_MATTR. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_MEMORY_ATTRIBUTEn(x) \
     (((x) == DMA4) ? (1) : \
     (((x) == DMA3) ? (0) : (-1)))
-/* @brief Has register bit field CH_CSR[SIGNEXT]. */
+/* @brief Has register bit field CH_CSR[SIGNEXT]. Note: This feature value is not the same on all EDMA instances. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_SIGN_EXTENSION (1)
 /* @brief Instance Has register bit field CH_CSR[SIGNEXT]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_SIGN_EXTENSIONn(x) \
     (((x) == DMA4) ? (1) : \
     (((x) == DMA3) ? (0) : (-1)))
-/* @brief Has register bit field TCD_CSR[BWC]. */
+/* @brief Has register bit field TCD_CSR[BWC]. Note: This feature value is not the same on all EDMA instances. */
 #define FSL_FEATURE_EDMA_HAS_BANDWIDTH (1)
 /* @brief Instance has register bit field TCD_CSR[BWC]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_BANDWIDTHn(x) \
     (((x) == DMA4) ? (0) : \
     (((x) == DMA3) ? (1) : (-1)))
-/* @brief Has register bit fields TCD_CSR[TMC]. */
+/* @brief Has register bit fields TCD_CSR[TMC]. Note: This feature value is not the same on all EDMA instances. */
 #define FSL_FEATURE_EDMA_HAS_TRANSFER_MODE (1)
 /* @brief Instance has register bit fields TCD_CSR[TMC]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_TRANSFER_MODEn(x) \
     (((x) == DMA4) ? (1) : \
     (((x) == DMA3) ? (0) : (-1)))
+/* @brief edma5 has different tcd type. */
+#define FSL_FEATURE_EDMA_TCD_TYPEn(x) (0)
+/* @brief Has no register bit fields CH_SBR[SEC]. */
+#define FSL_FEATURE_EDMA_HAS_NO_CH_SBR_SEC (0)
+/* @brief Number of DMA channels with asynchronous request capability. Note: This feature value is not the same on all EDMA instances. */
+#define FSL_FEATURE_EDMA_ASYNCHRO_REQUEST_CHANNEL_COUNT (64)
 
 /* ENET module features */
 
@@ -362,69 +366,12 @@
 /* @brief Has DOZEN bit(CTRL[DOZEN]) */
 #define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (1)
 
-/* FLEXSPI module features */
-
-/* @brief FlexSPI AHB buffer count */
-#define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(x) (8)
-/* @brief FlexSPI has no data learn. */
-#define FSL_FEATURE_FLEXSPI_HAS_NO_DATA_LEARN (0)
-/* @brief There is AHBBUSERROREN bit in INTEN register. */
-#define FSL_FEATURE_FLEXSPI_HAS_INTEN_AHBBUSERROREN (1)
-/* @brief There is CLRAHBTX_RXBUF bit in AHBCR register. */
-#define FSL_FEATURE_FLEXSPI_HAS_AHBCR_CLRAHBTX_RXBUF (1)
-/* @brief FLEXSPI has no IP parallel mode. */
-#define FSL_FEATURE_FLEXSPI_HAS_NO_IP_PARALLEL_MODE (1)
-/* @brief FLEXSPI has no AHB parallel mode. */
-#define FSL_FEATURE_FLEXSPI_HAS_NO_AHB_PARALLEL_MODE (1)
-/* @brief FLEXSPI support address shift. */
-#define FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT (1)
-/* @brief FlexSPI has no MCR0 ARDFEN bit */
-#define FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ARDFEN (0)
-/* @brief FlexSPI has no MCR0 ATDFEN bit */
-#define FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ATDFEN (0)
-/* @brief FlexSPI has no MCR0 COMBINATIONEN bit */
-#define FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN (1)
-/* @brief FlexSPI has no FLSHCR4 WMENB bit */
-#define FSL_FEATURE_FLEXSPI_HAS_NO_FLSHCR4_WMENB (1)
-/* @brief FlexSPI has no STS0 DATALEARNPHASEB bit */
-#define FSL_FEATURE_FLEXSPI_HAS_NO_STS0_DATALEARNPHASEB (1)
-/* @brief FlexSPI has no MCR2 SCKBDIFFOPT bit */
-#define FSL_FEATURE_FLEXSPI_HAS_NO_MCR2_SCKBDIFFOPT (1)
-/* @brief FlexSPI AHB RX buffer size (byte) */
-#define FSL_FEATURE_FLEXSPI_AHB_RX_BUFFER_SIZEn(x) (2048)
-/* @brief FlexSPI Array Length */
-#define FSL_FEATURE_FLEXSPI_ARRAY_LEN (1)
-/* @brief FlexSPI has no STS2 BSLVLOCK bit */
-#define FSL_FEATURE_FLEXSPI_HAS_NO_STS2_BSLVLOCK (0)
-/* @brief FlexSPI has no STS2 BREFLOCK bit */
-#define FSL_FEATURE_FLEXSPI_HAS_NO_STS2_BREFLOCK (0)
-/* @brief FlexSPI supports Port A only, do not support Port B. */
-#define FSL_FEATURE_FLEXSPI_NO_SUPPORT_PORTB (0)
-/* @brief FlexSPI LUTKEY is read only. */
-#define FSL_FEATURE_FLEXSPI_LUTKEY_IS_RO (0)
-/* @brief FlexSPI0 and FlexSPI1 have shared IRQ */
-#define FSL_FEATURE_FLEXSPI_HAS_SHARED_IRQ0_IRQ1 (0)
-/* @brief FlexSPI DMA needs multiple DES to transfer */
-#define FSL_FEATURE_FLEXSPI_DMA_MULTIPLE_DES (0)
-/* @brief FlexSPI uses min DQS delay */
-#define FSL_FEATURE_FLEXSPI_DQS_DELAY_MIN (0)
-/* @brief FlexSPI support sample clock source selection */
-#define FSL_FEATURE_FLEXSPI_SUPPORT_SEPERATE_RXCLKSRC_PORTB (0)
-/* @brief FlexSPI support sample clock source or source_b selection */
-#define FSL_FEATURE_FLEXSPI_SUPPORT_RXCLKSRC_DIFF (0)
-/* @brief FlexSPI IPED REGION COUNT */
-#define FSL_FEATURE_FLEXSPI_IPED_REGION_COUNT (0)
-/* @brief FlexSPI Has ERRATA052733 */
-#define FSL_FEATURE_FLEXSPI_HAS_ERRATA_052733 (0)
-/* @brief FlexSPI Has ERRATA051426 */
-#define FSL_FEATURE_FLEXSPI_HAS_ERRATA_051426 (0)
-/* @brief FlexSPI has AHBCR RESUMEDISABLE bit */
-#define FSL_FEATURE_FLEXSPI_HAS_RESUMEDISABLE_BIT_CONFIG_SUPPORT (1)
-
 /* RGPIO module features */
 
-/* @brief Has GPIO attribute checker register  (GACR). */
+/* @brief Has GPIO attribute checker register (GACR). */
 #define FSL_FEATURE_RGPIO_HAS_ATTRIBUTE_CHECKER (0)
+/* @brief GPIO registers width */
+#define FSL_FEATURE_RGPIO_REGISTERS_WIDTH (32)
 /* @brief There is ICR registers */
 #define FSL_FEATURE_RGPIO_HAS_IRQ_CONFIG (1)
 /* @brief There is PIDR register */
@@ -687,18 +634,14 @@
 /* SAI module features */
 
 /* @brief Receive/transmit FIFO size in item count (register bit fields TCSR[FRDE], TCSR[FRIE], TCSR[FRF], TCR1[TFW], RCSR[FRDE], RCSR[FRIE], RCSR[FRF], RCR1[RFW], registers TFRn, RFRn). */
-#define FSL_FEATURE_SAI_FIFO_COUNTn(x) \
-    (((x) == SAI1) ? (32) : \
-    (((x) == SAI2) ? (128) : \
-    (((x) == SAI3) ? (128) : (-1))))
+#define FSL_FEATURE_SAI_FIFO_COUNTn(x) (128)
 /* @brief Receive/transmit channel number (register bit fields TCR3[TCE], RCR3[RCE], registers TDRn and RDRn). */
 #define FSL_FEATURE_SAI_CHANNEL_COUNTn(x) \
-    (((x) == SAI1) ? (2) : \
     (((x) == SAI2) ? (4) : \
-    (((x) == SAI3) ? (1) : (-1))))
+    (((x) == SAI3) ? (1) : (-1)))
 /* @brief Maximum words per frame (register bit fields TCR3[WDFL], TCR4[FRSZ], TMR[TWM], RCR3[WDFL], RCR4[FRSZ], RMR[RWM]). */
 #define FSL_FEATURE_SAI_MAX_WORDS_PER_FRAME (32)
-/* @brief Has support of combining multiple data channel FIFOs into single channel FIFO (register bit fields TCR3[CFR], TCR4[FCOMB], TFR0[WCP], TFR1[WCP], RCR3[CFR], RCR4[FCOMB], RFR0[RCP], RFR1[RCP]). */
+/* @brief Has support of combining multiple data channel FIFOs into single channel FIFO (register bit fields TCR3[CFR], TCR4[FCOMB], TFR0[WCP], TFR1[WCP], RCR3[CFR], RCR4[FCOMB], RFR0[RCP], RFR1[RCP]). Note: This feature value is not the same on all SAI instances. */
 #define FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE (1)
 /* @brief Has packing of 8-bit and 16-bit data into each 32-bit FIFO word (register bit fields TCR4[FPACK], RCR4[FPACK]). */
 #define FSL_FEATURE_SAI_HAS_FIFO_PACKING (1)
@@ -748,7 +691,7 @@
 /* TPM module features */
 
 /* @brief Number of channels. */
-#define FSL_FEATURE_TPM_CHANNEL_COUNTn(x) (4)
+#define FSL_FEATURE_TPM_CHANNEL_COUNTn(x) (6)
 /* @brief Has counter reset by the selected input capture event (register bits C0SC[ICRST], C1SC[ICRST], ...). */
 #define FSL_FEATURE_TPM_HAS_COUNTER_RESET_BY_CAPTURE_EVENT (0)
 /* @brief Has TPM_PARAM. */
@@ -760,11 +703,7 @@
 /* @brief Has TPM_TRIG. */
 #define FSL_FEATURE_TPM_HAS_TRIG (1)
 /* @brief Whether TRIG register has effect. */
-#define FSL_FEATURE_TPM_TRIG_HAS_EFFECTn(x) (0)
-/* @brief Has global time base enable. */
-#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (0)
-/* @brief Has global time base sync. */
-#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
+#define FSL_FEATURE_TPM_TRIG_HAS_EFFECTn(x) (1)
 /* @brief Has counter pause on trigger. */
 #define FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER (1)
 /* @brief Has external trigger selection. */
@@ -776,7 +715,7 @@
 /* @brief Has TPM_POL. */
 #define FSL_FEATURE_TPM_HAS_POL (1)
 /* @brief Whether POL register has effect. */
-#define FSL_FEATURE_TPM_POL_HAS_EFFECTn(x) (0)
+#define FSL_FEATURE_TPM_POL_HAS_EFFECTn(x) (1)
 /* @brief Has TPM_FILTER register. */
 #define FSL_FEATURE_TPM_HAS_FILTER (1)
 /* @brief Whether FILTER register has effect. */
@@ -789,6 +728,14 @@
 #define FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT (1)
 /* @brief Whether 32 bits counter has effect. */
 #define FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x) (1)
+/* @brief Has global time base enable. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (0)
+/* @brief Has global time base sync. Note: This feature value is not the same on all TPM instances. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
+/* @brief Is affected by errata with ID 050050 (Incorrect duty output when EPWM mode is set to PS=0 during write 1 to CnV register). */
+#define FSL_FEATURE_TPM_HAS_ERRATA_050050 (0)
+/* @brief Has no CPWMS field in SC register (bitfield SC[CPWMS]). */
+#define FSL_FEATURE_TPM_HAS_NO_SC_CPWMS (0)
 
 /* TRDC module features */
 
@@ -804,13 +751,13 @@
     (((x) == TRDC6) ? (0) : (-1)))))))
 /* @brief TRDC domain number (reset value of HWCFG0[NDID]). */
 #define FSL_FEATURE_TRDC_DOMAIN_COUNT (16)
-/* @brief TRDC instance has MBC. */
+/* @brief TRDC instance has MBC. Note: This feature value is not the same on all TRDC instances. */
 #define FSL_FEATURE_TRDC_HAS_MBC (1)
-/* @brief TRDC instance has MRC. */
+/* @brief TRDC instance has MRC. Note: This feature value is not the same on all TRDC instances. */
 #define FSL_FEATURE_TRDC_HAS_MRC (1)
 /* @brief TRDC instance has TRDC_CR. */
 #define FSL_FEATURE_TRDC_HAS_GENERAL_CONFIG (1)
-/* @brief TRDC instance has MDA_Wx_y_DFMT. */
+/* @brief TRDC instance has MDA_Wx_y_DFMT. Note: This feature value is not the same on all TRDC instances. */
 #define FSL_FEATURE_TRDC_HAS_DOMAIN_ASSIGNMENT (1)
 /* @brief TRDC instance has TRDC_FDID. */
 #define FSL_FEATURE_TRDC_HAS_DOMAIN_ERROR (1)

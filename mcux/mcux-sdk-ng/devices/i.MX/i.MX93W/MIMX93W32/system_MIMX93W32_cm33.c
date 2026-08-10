@@ -6,7 +6,7 @@
 **
 **     Reference manual:    IMX93WRM, Internal, December 2025
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -29,6 +29,7 @@
 
 
 #include "system_MIMX93W32_cm33.h"
+#include "fsl_device_registers.h"
 
 /* ----------------------------------------------------------------------------
    -- Core clock

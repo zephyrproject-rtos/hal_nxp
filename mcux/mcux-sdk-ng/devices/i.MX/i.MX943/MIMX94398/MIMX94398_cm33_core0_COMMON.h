@@ -11619,6 +11619,7 @@ typedef enum _xbar_output_signal
   #define WAKEUP_TCW_BASE_PTRS                     { WAKEUP__TCW }
 #endif
 
+
 /* WAKEUP_USDHC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
   /** Peripheral WAKEUP__USDHC1 base address */

@@ -6,7 +6,7 @@
 **                          MIMX93W52610GCM_cm33
 **
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BLK_CTRL_NS_AONMIX
@@ -86,11 +86,9 @@ typedef struct {
   __IO uint32_t IPG_DEBUG_CA55C0;                  /**< IPG DEBUG MASK BIT CA55 CORE0, offset: 0xC */
        uint8_t RESERVED_1[4];
   __IO uint32_t QCH_DIS;                           /**< QCHANNEL DISABLE, offset: 0x14 */
-       uint8_t RESERVED_2[8];
-  __IO uint32_t MQS_SETTINGS;                      /**< MQS settings., offset: 0x20 */
-       uint8_t RESERVED_3[4];
+       uint8_t RESERVED_2[16];
   __I  uint32_t FUSE_ACC_DIS;                      /**< Read-only version of the OCOTP fuse-access-disable bit, offset: 0x28 */
-       uint8_t RESERVED_4[4];
+       uint8_t RESERVED_3[4];
   __I  uint32_t OCOTP_FUSE_DATA0;                  /**< Read-only version of OCOTP fusedata_mtr_cfg_0, offset: 0x30 */
   __I  uint32_t OCOTP_FUSE_DATA1;                  /**< Read-only version of OCOTP fusedata_mtr_cfg_1, offset: 0x34 */
   __I  uint32_t OCOTP_FUSE_DATA2;                  /**< Read-only version of OCOTP fusedata_mtr_cfg_2, offset: 0x38 */
@@ -127,14 +125,6 @@ typedef struct {
 /*! @name IPG_DEBUG_CA55C0 - IPG DEBUG MASK BIT CA55 CORE0 */
 /*! @{ */
 
-#define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_CAN1_MASK (0x1U)
-#define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_CAN1_SHIFT (0U)
-/*! CAN1 - Mask bit for debug halted mode
- *  0b0..Block does not enter debug halted mode with CA55
- *  0b1..Block enters debug halted mode when CA55 is debug halted
- */
-#define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_CAN1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_CAN1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_CAN1_MASK)
-
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_EDMA3_1_MASK (0x2U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_EDMA3_1_SHIFT (1U)
 /*! EDMA3_1 - Mask bit for debug halted mode
@@ -167,14 +157,6 @@ typedef struct {
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPIT1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPIT1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPIT1_MASK)
 
-#define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPSPI1_MASK (0x20U)
-#define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPSPI1_SHIFT (5U)
-/*! LPSPI1 - Mask bit for debug halted mode
- *  0b0..Block does not enter debug halted mode with CA55
- *  0b1..Block enters debug halted mode when CA55 is debug halted
- */
-#define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPSPI1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPSPI1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPSPI1_MASK)
-
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPSPI2_MASK (0x40U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPSPI2_SHIFT (6U)
 /*! LPSPI2 - Mask bit for debug halted mode
@@ -190,14 +172,6 @@ typedef struct {
  *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPTMR1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPTMR1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPTMR1_MASK)
-
-#define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_SAI1_MASK (0x100U)
-#define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_SAI1_SHIFT (8U)
-/*! SAI1 - Mask bit for debug halted mode
- *  0b0..Block does not enter debug halted mode with CA55
- *  0b1..Block enters debug halted mode when CA55 is debug halted
- */
-#define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_SAI1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_SAI1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_SAI1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_TPM1_MASK (0x200U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_TPM1_SHIFT (9U)
@@ -275,14 +249,6 @@ typedef struct {
  */
 #define BLK_CTRL_NS_AONMIX_QCH_DIS_LPUART2(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_QCH_DIS_LPUART2_SHIFT)) & BLK_CTRL_NS_AONMIX_QCH_DIS_LPUART2_MASK)
 
-#define BLK_CTRL_NS_AONMIX_QCH_DIS_LPSPI1_MASK   (0x8U)
-#define BLK_CTRL_NS_AONMIX_QCH_DIS_LPSPI1_SHIFT  (3U)
-/*! LPSPI1 - Module QCHANNEL disable
- *  0b0..QCHANNEL is enabled
- *  0b1..QCHANNEL is disabled
- */
-#define BLK_CTRL_NS_AONMIX_QCH_DIS_LPSPI1(x)     (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_QCH_DIS_LPSPI1_SHIFT)) & BLK_CTRL_NS_AONMIX_QCH_DIS_LPSPI1_MASK)
-
 #define BLK_CTRL_NS_AONMIX_QCH_DIS_LPSPI2_MASK   (0x10U)
 #define BLK_CTRL_NS_AONMIX_QCH_DIS_LPSPI2_SHIFT  (4U)
 /*! LPSPI2 - Module QCHANNEL disable
@@ -290,38 +256,6 @@ typedef struct {
  *  0b1..QCHANNEL is disabled
  */
 #define BLK_CTRL_NS_AONMIX_QCH_DIS_LPSPI2(x)     (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_QCH_DIS_LPSPI2_SHIFT)) & BLK_CTRL_NS_AONMIX_QCH_DIS_LPSPI2_MASK)
-
-#define BLK_CTRL_NS_AONMIX_QCH_DIS_SAI1_MASK     (0x20U)
-#define BLK_CTRL_NS_AONMIX_QCH_DIS_SAI1_SHIFT    (5U)
-/*! SAI1 - Module QCHANNEL disable
- *  0b0..QCHANNEL is enabled
- *  0b1..QCHANNEL is disabled
- */
-#define BLK_CTRL_NS_AONMIX_QCH_DIS_SAI1(x)       (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_QCH_DIS_SAI1_SHIFT)) & BLK_CTRL_NS_AONMIX_QCH_DIS_SAI1_MASK)
-/*! @} */
-
-/*! @name MQS_SETTINGS - MQS settings. */
-/*! @{ */
-
-#define BLK_CTRL_NS_AONMIX_MQS_SETTINGS_MQS_EN_MASK (0x2U)
-#define BLK_CTRL_NS_AONMIX_MQS_SETTINGS_MQS_EN_SHIFT (1U)
-/*! MQS_EN - MQS Enable */
-#define BLK_CTRL_NS_AONMIX_MQS_SETTINGS_MQS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_MQS_SETTINGS_MQS_EN_SHIFT)) & BLK_CTRL_NS_AONMIX_MQS_SETTINGS_MQS_EN_MASK)
-
-#define BLK_CTRL_NS_AONMIX_MQS_SETTINGS_SOFT_RESET_MASK (0x4U)
-#define BLK_CTRL_NS_AONMIX_MQS_SETTINGS_SOFT_RESET_SHIFT (2U)
-/*! SOFT_RESET - Software Reset */
-#define BLK_CTRL_NS_AONMIX_MQS_SETTINGS_SOFT_RESET(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_MQS_SETTINGS_SOFT_RESET_SHIFT)) & BLK_CTRL_NS_AONMIX_MQS_SETTINGS_SOFT_RESET_MASK)
-
-#define BLK_CTRL_NS_AONMIX_MQS_SETTINGS_OVERSAMPLE_MASK (0x8U)
-#define BLK_CTRL_NS_AONMIX_MQS_SETTINGS_OVERSAMPLE_SHIFT (3U)
-/*! OVERSAMPLE - Oversample enable */
-#define BLK_CTRL_NS_AONMIX_MQS_SETTINGS_OVERSAMPLE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_MQS_SETTINGS_OVERSAMPLE_SHIFT)) & BLK_CTRL_NS_AONMIX_MQS_SETTINGS_OVERSAMPLE_MASK)
-
-#define BLK_CTRL_NS_AONMIX_MQS_SETTINGS_CLK_DIVIDE_MASK (0xFF00U)
-#define BLK_CTRL_NS_AONMIX_MQS_SETTINGS_CLK_DIVIDE_SHIFT (8U)
-/*! CLK_DIVIDE - Clock divide factor configuration */
-#define BLK_CTRL_NS_AONMIX_MQS_SETTINGS_CLK_DIVIDE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_MQS_SETTINGS_CLK_DIVIDE_SHIFT)) & BLK_CTRL_NS_AONMIX_MQS_SETTINGS_CLK_DIVIDE_MASK)
 /*! @} */
 
 /*! @name FUSE_ACC_DIS - Read-only version of the OCOTP fuse-access-disable bit */
@@ -508,7 +442,6 @@ typedef struct {
 #define BLK_CTRL_NS_AONMIX_PDM_CLK_SEL_SEL_SHIFT (0U)
 /*! SEL - Select source for PDM clock
  *  0b0..PDM root clock
- *  0b1..SAI1_MCLK
  */
 #define BLK_CTRL_NS_AONMIX_PDM_CLK_SEL_SEL(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_PDM_CLK_SEL_SEL_SHIFT)) & BLK_CTRL_NS_AONMIX_PDM_CLK_SEL_SEL_MASK)
 /*! @} */

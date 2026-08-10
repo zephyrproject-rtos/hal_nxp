@@ -6,7 +6,7 @@
 **                          MIMX93W52610GCM_cm33
 **
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BBNSM
@@ -194,15 +194,15 @@ typedef struct {
  */
 #define BBNSM_BBNSM_CTRL_BTN_TIMEOUT(x)          (((uint32_t)(((uint32_t)(x)) << BBNSM_BBNSM_CTRL_BTN_TIMEOUT_SHIFT)) & BBNSM_BBNSM_CTRL_BTN_TIMEOUT_MASK)
 
-#define BBNSM_BBNSM_CTRL_DEBOUNCE_MASK           (0xC0000U)
-#define BBNSM_BBNSM_CTRL_DEBOUNCE_SHIFT          (18U)
-/*! DEBOUNCE - Debounce Time
+#define BBNSM_BBNSM_CTRL_BTN_DEBOUNCE_MASK       (0xC0000U)
+#define BBNSM_BBNSM_CTRL_BTN_DEBOUNCE_SHIFT      (18U)
+/*! BTN_DEBOUNCE - Button Debounce Time
  *  0b00..50 milliseconds.
  *  0b01..100 milliseconds.
  *  0b10..500 milliseconds.
  *  0b11..0 milliseconds.
  */
-#define BBNSM_BBNSM_CTRL_DEBOUNCE(x)             (((uint32_t)(((uint32_t)(x)) << BBNSM_BBNSM_CTRL_DEBOUNCE_SHIFT)) & BBNSM_BBNSM_CTRL_DEBOUNCE_MASK)
+#define BBNSM_BBNSM_CTRL_BTN_DEBOUNCE(x)         (((uint32_t)(((uint32_t)(x)) << BBNSM_BBNSM_CTRL_BTN_DEBOUNCE_SHIFT)) & BBNSM_BBNSM_CTRL_BTN_DEBOUNCE_MASK)
 
 #define BBNSM_BBNSM_CTRL_TURN_ON_TIME_MASK       (0x300000U)
 #define BBNSM_BBNSM_CTRL_TURN_ON_TIME_SHIFT      (20U)
@@ -265,6 +265,14 @@ typedef struct {
  *  0b10..Issue an interrupt when RTC has reached alarm time.
  */
 #define BBNSM_BBNSM_INT_EN_TA_INT_EN(x)          (((uint32_t)(((uint32_t)(x)) << BBNSM_BBNSM_INT_EN_TA_INT_EN_SHIFT)) & BBNSM_BBNSM_INT_EN_TA_INT_EN_MASK)
+
+#define BBNSM_BBNSM_INT_EN_BTN_INT_EN_MASK       (0x10U)
+#define BBNSM_BBNSM_INT_EN_BTN_INT_EN_SHIFT      (4U)
+/*! BTN_INT_EN - Button Interrupt Enable
+ *  0b0..Interrupt Disabled
+ *  0b1..Interrupt Enabled
+ */
+#define BBNSM_BBNSM_INT_EN_BTN_INT_EN(x)         (((uint32_t)(((uint32_t)(x)) << BBNSM_BBNSM_INT_EN_BTN_INT_EN_SHIFT)) & BBNSM_BBNSM_INT_EN_BTN_INT_EN_MASK)
 /*! @} */
 
 /*! @name BBNSM_EVENTS - BBNSM Events Register */

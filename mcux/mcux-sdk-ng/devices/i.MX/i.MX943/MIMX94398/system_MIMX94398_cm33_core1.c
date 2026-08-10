@@ -146,7 +146,12 @@ void SystemInitMemoryRegions(void)
 /* ----------------------------------------------------------------------------
    -- SystemInit()
    ---------------------------------------------------------------------------- */
+#if defined(__ICCARM__)
+#pragma weak SystemInit
+void SystemInit(void)
+#else
 __attribute__((weak)) void SystemInit(void)
+#endif
 {
 #if ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
     SCB->CPACR |= ((3UL << 10*2) | (3UL << 11*2));    /* set CP10, CP11 Full Access in Secure mode */
@@ -168,7 +173,12 @@ __attribute__((weak)) void SystemInit(void)
    -- SystemInitHook()
    ---------------------------------------------------------------------------- */
 
+#if defined(__ICCARM__)
+#pragma weak SystemInitHook
+void SystemInitHook(void)
+#else
 __attribute__((weak)) void SystemInitHook(void)
+#endif
 {
     /* Void implementation of the weak function. */
 }
@@ -213,8 +223,8 @@ void SystemPlatformInit(void)
     /* Enable system notifications */
     SCMI_SystemPowerStateNotify(SCMI_A2P, SCMI_SYS_NOTIFY_ENABLE(1U));
 
-    /* Enable LMM notifications from AP(cortex-A55) */
-    SCMI_LmmNotify(SCMI_A2P, SYSTEM_PLATFORM_LMID_A55,
+    /* Enable LMM notifications from All allowed LM */
+    SCMI_LmmNotify(SCMI_A2P, SYSTEM_PLATFORM_LMID_ALL,
                    SCMI_LMM_NOTIFY_BOOT(1U) | SCMI_LMM_NOTIFY_SHUTDOWN(1U) | SCMI_LMM_NOTIFY_SUSPEND(1U) |
                        SCMI_LMM_NOTIFY_WAKE(1U));
 #if defined(SYSTEM_PLATFORM_RTC_NOTIFY) && SYSTEM_PLATFORM_RTC_NOTIFY
@@ -225,9 +235,11 @@ void SystemPlatformInit(void)
 #endif
     SCMI_BbmButtonNotify(SCMI_A2P, SCMI_BBM_NOTIFY_BUTTON_DETECT(1U));
 
+#if defined(SYSTEM_PLATFORM_FUSA_NOTIFY) && SYSTEM_PLATFORM_FUSA_NOTIFY
     /* Enable FuSa notifications */
     SCMI_FusaFaultGroupNotify(SCMI_A2P, SYSTEM_PLATFORM_FAULT_ID_FIRST, SYSTEM_PLATFORM_FAULT_MASK,
                               SYSTEM_PLATFORM_NOTIFY_ENABLE, NULL, NULL);
+#endif
 
     SCMI_PowerStateSet(SCMI_A2P, SYSTEM_POWER_PLATFORM_MIX_SLICE_IDX_NETC, 0U, SCMI_POWER_DOMAIN_STATE_ON);
 }

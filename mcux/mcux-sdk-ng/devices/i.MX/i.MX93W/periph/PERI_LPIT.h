@@ -6,7 +6,7 @@
 **                          MIMX93W52610GCM_cm33
 **
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPIT
@@ -266,7 +266,7 @@ typedef struct {
 #define LPIT_SETTEN_SET_T_EN_0_SHIFT             (0U)
 /*! SET_T_EN_0 - Set Timer 0 Enable
  *  0b0..No effect
- *  0b1..Enables timer channel 0
+ *  0b1..Enables timer channel 0 by turning TCTRL0[T_EN] to 1.
  */
 #define LPIT_SETTEN_SET_T_EN_0(x)                (((uint32_t)(((uint32_t)(x)) << LPIT_SETTEN_SET_T_EN_0_SHIFT)) & LPIT_SETTEN_SET_T_EN_0_MASK)
 
@@ -274,7 +274,7 @@ typedef struct {
 #define LPIT_SETTEN_SET_T_EN_1_SHIFT             (1U)
 /*! SET_T_EN_1 - Set Timer 1 Enable
  *  0b0..No Effect
- *  0b1..Enables timer channel 1
+ *  0b1..Enables timer channel 1 by turning TCTRL1[T_EN] to 1.
  */
 #define LPIT_SETTEN_SET_T_EN_1(x)                (((uint32_t)(((uint32_t)(x)) << LPIT_SETTEN_SET_T_EN_1_SHIFT)) & LPIT_SETTEN_SET_T_EN_1_MASK)
 
@@ -282,7 +282,7 @@ typedef struct {
 #define LPIT_SETTEN_SET_T_EN_2_SHIFT             (2U)
 /*! SET_T_EN_2 - Set Timer 2 Enable
  *  0b0..No Effect
- *  0b1..Enables timer channel 2
+ *  0b1..Enables timer channel 2 by turning TCTRL2[T_EN] to 1.
  */
 #define LPIT_SETTEN_SET_T_EN_2(x)                (((uint32_t)(((uint32_t)(x)) << LPIT_SETTEN_SET_T_EN_2_SHIFT)) & LPIT_SETTEN_SET_T_EN_2_MASK)
 
@@ -290,7 +290,7 @@ typedef struct {
 #define LPIT_SETTEN_SET_T_EN_3_SHIFT             (3U)
 /*! SET_T_EN_3 - Set Timer 3 Enable
  *  0b0..No effect
- *  0b1..Enables timer channel 3
+ *  0b1..Enables timer channel 3 by turning TCTRL3[T_EN] to 1.
  */
 #define LPIT_SETTEN_SET_T_EN_3(x)                (((uint32_t)(((uint32_t)(x)) << LPIT_SETTEN_SET_T_EN_3_SHIFT)) & LPIT_SETTEN_SET_T_EN_3_MASK)
 /*! @} */

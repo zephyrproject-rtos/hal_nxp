@@ -120,8 +120,8 @@ void SystemPlatformInit(void)
     /* Enable system notifications */
     SCMI_SystemPowerStateNotify(SCMI_A2P, SCMI_SYS_NOTIFY_ENABLE(1U));
 
-    /* Enable LMM notifications from AP(cortex-A55) */
-    SCMI_LmmNotify(SCMI_A2P, SYSTEM_PLATFORM_LMID_A55,
+    /* Enable LMM notifications from All allowed LM */
+    SCMI_LmmNotify(SCMI_A2P, SYSTEM_PLATFORM_LMID_ALL,
                    SCMI_LMM_NOTIFY_BOOT(1U) | SCMI_LMM_NOTIFY_SHUTDOWN(1U) | SCMI_LMM_NOTIFY_SUSPEND(1U) |
                        SCMI_LMM_NOTIFY_WAKE(1U));
 

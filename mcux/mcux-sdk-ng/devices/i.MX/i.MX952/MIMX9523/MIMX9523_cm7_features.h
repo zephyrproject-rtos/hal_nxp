@@ -356,6 +356,7 @@
 
 /* @brief Display SEERIS MDR version */
 #define FSL_FEATURE_DISPLAY_SEERIS_MDR7 (1)
+#define FSL_FEATURE_DISPLAY_SEERIS_HAS_LD (1)
 
 /* EDMA module features */
 

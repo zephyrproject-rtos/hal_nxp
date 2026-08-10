@@ -2620,6 +2620,7 @@ typedef enum _xbar_output_signal
   #define AON_TCU_BASE_PTRS                        { AON__TCU }
 #endif
 
+
 /* ARDB - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
   /** Peripheral WAKEUP__XSPI1__ARDB base address */
@@ -3493,6 +3494,7 @@ typedef enum _xbar_output_signal
   /** Array initializer of DISPLAY_TCU peripheral base pointers */
   #define DISPLAY_TCU_BASE_PTRS                    { DISPLAY__TCU }
 #endif
+
 
 /* DMA - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

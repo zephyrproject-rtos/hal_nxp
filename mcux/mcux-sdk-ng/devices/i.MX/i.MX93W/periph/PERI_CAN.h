@@ -6,7 +6,7 @@
 **                          MIMX93W52610GCM_cm33
 **
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CAN
@@ -172,8 +172,7 @@ typedef struct {
   __IO uint32_t ERFCR;                             /**< Enhanced RX FIFO Control, offset: 0xC0C */
   __IO uint32_t ERFIER;                            /**< Enhanced RX FIFO Interrupt Enable, offset: 0xC10 */
   __IO uint32_t ERFSR;                             /**< Enhanced RX FIFO Status, offset: 0xC14 */
-  __IO uint32_t FDLCR;                             /**< CANFD Light Module Control, offset: 0xC18 */
-       uint8_t RESERVED_7[20];
+       uint8_t RESERVED_7[24];
   __IO uint32_t HR_TIME_STAMP[CAN_HR_TIME_STAMP_COUNT]; /**< High-Resolution Timestamp, array offset: 0xC30, array step: 0x4 */
        uint8_t RESERVED_8[8784];
   __IO uint32_t ERFFEL[CAN_ERFFEL_COUNT];          /**< Enhanced RX FIFO Filter Element, array offset: 0x3000, array step: 0x4 */
@@ -878,13 +877,13 @@ typedef struct {
 #define CAN_CTRL2_RETRY_SHIFT                    (2U)
 /*! RETRY - Number of Retransmission Requests
  *  0b000..No retransmission
- *  0b001..Count of re-transmission attempts
- *  0b010..Count of re-transmission attempts
- *  0b011..Count of re-transmission attempts
- *  0b100..Count of re-transmission attempts
- *  0b101..Count of re-transmission attempts
- *  0b110..Count of re-transmission attempts
- *  0b111..Unlimited number of retransmission
+ *  0b001..Count of retransmission attempts
+ *  0b010..Count of retransmission attempts
+ *  0b011..Count of retransmission attempts
+ *  0b100..Count of retransmission attempts
+ *  0b101..Count of retransmission attempts
+ *  0b110..Count of retransmission attempts
+ *  0b111..Unlimited number of retransmissions
  */
 #define CAN_CTRL2_RETRY(x)                       (((uint32_t)(((uint32_t)(x)) << CAN_CTRL2_RETRY_SHIFT)) & CAN_CTRL2_RETRY_MASK)
 
@@ -2293,50 +2292,6 @@ typedef struct {
  *  0b1..Underflow
  */
 #define CAN_ERFSR_ERFUFW(x)                      (((uint32_t)(((uint32_t)(x)) << CAN_ERFSR_ERFUFW_SHIFT)) & CAN_ERFSR_ERFUFW_MASK)
-/*! @} */
-
-/*! @name FDLCR - CANFD Light Module Control */
-/*! @{ */
-
-#define CAN_FDLCR_CMDR_HS_MASK                   (0x1U)
-#define CAN_FDLCR_CMDR_HS_SHIFT                  (0U)
-/*! CMDR_HS - Commander High-Speed Mode
- *  0b0..CAN FD Light commander disabled
- *  0b1..CAN FD Light commander enabled
- */
-#define CAN_FDLCR_CMDR_HS(x)                     (((uint32_t)(((uint32_t)(x)) << CAN_FDLCR_CMDR_HS_SHIFT)) & CAN_FDLCR_CMDR_HS_MASK)
-
-#define CAN_FDLCR_RSDR_HS_MASK                   (0x2U)
-#define CAN_FDLCR_RSDR_HS_SHIFT                  (1U)
-/*! RSDR_HS - Responder High-Speed Mode
- *  0b0..CAN FD Light responder disabled
- *  0b1..CAN FD Light responder enabled
- */
-#define CAN_FDLCR_RSDR_HS(x)                     (((uint32_t)(((uint32_t)(x)) << CAN_FDLCR_RSDR_HS_SHIFT)) & CAN_FDLCR_RSDR_HS_MASK)
-
-#define CAN_FDLCR_ACK_RESP_MASK                  (0x10U)
-#define CAN_FDLCR_ACK_RESP_SHIFT                 (4U)
-/*! ACK_RESP - ACK Response Configuration
- *  0b0..Disabled ACK response
- *  0b1..Enabled ACK response
- */
-#define CAN_FDLCR_ACK_RESP(x)                    (((uint32_t)(((uint32_t)(x)) << CAN_FDLCR_ACK_RESP_SHIFT)) & CAN_FDLCR_ACK_RESP_MASK)
-
-#define CAN_FDLCR_ACK_TOL_MASK                   (0x20U)
-#define CAN_FDLCR_ACK_TOL_SHIFT                  (5U)
-/*! ACK_TOL - ACK Tolerance Configuration
- *  0b0..Disabled ACK tolerance
- *  0b1..Enabled ACK tolerance
- */
-#define CAN_FDLCR_ACK_TOL(x)                     (((uint32_t)(((uint32_t)(x)) << CAN_FDLCR_ACK_TOL_SHIFT)) & CAN_FDLCR_ACK_TOL_MASK)
-
-#define CAN_FDLCR_TX_SYNC_MASK                   (0x40U)
-#define CAN_FDLCR_TX_SYNC_SHIFT                  (6U)
-/*! TX_SYNC - TX Synchronization Configuration
- *  0b0..Disable Tx Synchronization
- *  0b1..Enable Tx Synchronization
- */
-#define CAN_FDLCR_TX_SYNC(x)                     (((uint32_t)(((uint32_t)(x)) << CAN_FDLCR_TX_SYNC_SHIFT)) & CAN_FDLCR_TX_SYNC_MASK)
 /*! @} */
 
 /*! @name HR_TIME_STAMP - High-Resolution Timestamp */

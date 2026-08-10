@@ -1,0 +1,236 @@
+/*
+** ###################################################################
+**     Processors:          MIMX9371xxVTx_ca55
+**                          MIMX9371xxVTx_cm33
+**                          MIMX9371xxVTx_cm7
+**                          MIMX9373xxVTx_ca55
+**                          MIMX9373xxVTx_cm33
+**                          MIMX9373xxVTx_cm7
+**                          MIMX9373xxVZx_ca55
+**                          MIMX9373xxVZx_cm33
+**                          MIMX9373xxVZx_cm7
+**                          MIMX9375xxVTx_ca55
+**                          MIMX9375xxVTx_cm33
+**                          MIMX9375xxVTx_cm7
+**                          MIMX9375xxVZx_ca55
+**                          MIMX9375xxVZx_cm33
+**                          MIMX9375xxVZx_cm7
+**
+**     Version:             rev. 1.0, 2026-04-09
+**     Build:               b260624
+**
+**     Abstract:
+**         CMSIS Peripheral Access Layer for splanar1
+**
+**     Copyright 1997-2016 Freescale Semiconductor, Inc.
+**     Copyright 2016-2026 NXP
+**     SPDX-License-Identifier: BSD-3-Clause
+**
+**     http:                 www.nxp.com
+**     mail:                 support@nxp.com
+**
+**     Revisions:
+**     - rev. 1.0 (2026-04-09)
+**         Initial version.
+**
+** ###################################################################
+*/
+
+/*!
+ * @file PERI_splanar1.h
+ * @version 1.0
+ * @date 2026-04-09
+ * @brief CMSIS Peripheral Access Layer for splanar1
+ *
+ * CMSIS Peripheral Access Layer for splanar1
+ */
+
+#if !defined(PERI_SPLANAR1_H_)
+#define PERI_SPLANAR1_H_                         /**< Symbol preventing repeated inclusion */
+
+#if (defined(CPU_MIMX9371xxVTx_ca55))
+#include "MIMX9371_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9371xxVTx_cm33))
+#include "MIMX9371_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9371xxVTx_cm7))
+#include "MIMX9371_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9373xxVTx_ca55) || defined(CPU_MIMX9373xxVZx_ca55))
+#include "MIMX9373_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9373xxVTx_cm33) || defined(CPU_MIMX9373xxVZx_cm33))
+#include "MIMX9373_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9373xxVTx_cm7) || defined(CPU_MIMX9373xxVZx_cm7))
+#include "MIMX9373_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9375xxVTx_ca55) || defined(CPU_MIMX9375xxVZx_ca55))
+#include "MIMX9375_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9375xxVTx_cm33) || defined(CPU_MIMX9375xxVZx_cm33))
+#include "MIMX9375_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9375xxVTx_cm7) || defined(CPU_MIMX9375xxVZx_cm7))
+#include "MIMX9375_cm7_COMMON.h"
+#else
+  #error "No valid CPU defined!"
+#endif
+
+/* ----------------------------------------------------------------------------
+   -- Device Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup Peripheral_access_layer Device Peripheral Access Layer
+ * @{
+ */
+
+
+/*
+** Start of section using anonymous unions
+*/
+
+#if defined(__ARMCC_VERSION)
+  #if (__ARMCC_VERSION >= 6010050)
+    #pragma clang diagnostic push
+  #else
+    #pragma push
+    #pragma anon_unions
+  #endif
+#elif defined(__GNUC__)
+  /* anonymous unions are enabled by default */
+#elif defined(__IAR_SYSTEMS_ICC__)
+  #pragma language=extended
+#else
+  #error Not supported compiler type
+#endif
+
+/* ----------------------------------------------------------------------------
+   -- splanar1 Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup splanar1_Peripheral_Access_Layer splanar1 Peripheral Access Layer
+ * @{
+ */
+
+/** splanar1 - Register Layout Typedef */
+typedef struct {
+  __IO uint32_t BASEA1;                            /**< BaseAddress1, offset: 0x0 */
+  __IO uint32_t BASAMSB1;                          /**< BaseAddressMSB1, offset: 0x4 */
+  __IO uint32_t DESBUFA1;                          /**< DestinationBufferAttributes1, offset: 0x8 */
+} splanar1_Type;
+
+/* ----------------------------------------------------------------------------
+   -- splanar1 Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup splanar1_Register_Masks splanar1 Register Masks
+ * @{
+ */
+
+/*! @name BASEA1 - BaseAddress1 */
+/*! @{ */
+
+#define splanar1_BASEA1_BaseAdd1_MASK            (0xFFFFFFFFU)
+#define splanar1_BASEA1_BaseAdd1_SHIFT           (0U)
+/*! BaseAdd1 - BaseAddress1 */
+#define splanar1_BASEA1_BaseAdd1(x)              (((uint32_t)(((uint32_t)(x)) << splanar1_BASEA1_BaseAdd1_SHIFT)) & splanar1_BASEA1_BaseAdd1_MASK)
+/*! @} */
+
+/*! @name BASAMSB1 - BaseAddressMSB1 */
+/*! @{ */
+
+#define splanar1_BASAMSB1_BaAdMB1_MASK           (0xFFU)
+#define splanar1_BASAMSB1_BaAdMB1_SHIFT          (0U)
+/*! BaAdMB1 - BaseAddressMSB1 */
+#define splanar1_BASAMSB1_BaAdMB1(x)             (((uint32_t)(((uint32_t)(x)) << splanar1_BASAMSB1_BaAdMB1_SHIFT)) & splanar1_BASAMSB1_BaAdMB1_MASK)
+/*! @} */
+
+/*! @name DESBUFA1 - DestinationBufferAttributes1 */
+/*! @{ */
+
+#define splanar1_DESBUFA1_Stride1_MASK           (0x1FFFFU)
+#define splanar1_DESBUFA1_Stride1_SHIFT          (0U)
+/*! Stride1 - Stride1 */
+#define splanar1_DESBUFA1_Stride1(x)             (((uint32_t)(((uint32_t)(x)) << splanar1_DESBUFA1_Stride1_SHIFT)) & splanar1_DESBUFA1_Stride1_MASK)
+
+#define splanar1_DESBUFA1_XDownsc1_MASK          (0x20000U)
+#define splanar1_DESBUFA1_XDownsc1_SHIFT         (17U)
+/*! XDownsc1 - XDownscale1
+ *  0b0..write every pixel to buffer.
+ *  0b1..write every second pixel to buffer. Enables YUV422Downsampling. Only for Rastermode = NORMAL. All
+ *       correlated widths and horizontal offsets must be even.
+ */
+#define splanar1_DESBUFA1_XDownsc1(x)            (((uint32_t)(((uint32_t)(x)) << splanar1_DESBUFA1_XDownsc1_SHIFT)) & splanar1_DESBUFA1_XDownsc1_MASK)
+
+#define splanar1_DESBUFA1_YDownsc1_MASK          (0x40000U)
+#define splanar1_DESBUFA1_YDownsc1_SHIFT         (18U)
+/*! YDownsc1 - YDownscale1
+ *  0b0..write every line to buffer.
+ *  0b1..write every second line to buffer. Enables YUV420Downsampling. All correlated heights and vertical offsets must be even.
+ */
+#define splanar1_DESBUFA1_YDownsc1(x)            (((uint32_t)(((uint32_t)(x)) << splanar1_DESBUFA1_YDownsc1_SHIFT)) & splanar1_DESBUFA1_YDownsc1_MASK)
+
+#define splanar1_DESBUFA1_AlphaE1_MASK           (0x100000U)
+#define splanar1_DESBUFA1_AlphaE1_SHIFT          (20U)
+/*! AlphaE1 - AlphaEnable1 */
+#define splanar1_DESBUFA1_AlphaE1(x)             (((uint32_t)(((uint32_t)(x)) << splanar1_DESBUFA1_AlphaE1_SHIFT)) & splanar1_DESBUFA1_AlphaE1_MASK)
+
+#define splanar1_DESBUFA1_RedEn1_MASK            (0x200000U)
+#define splanar1_DESBUFA1_RedEn1_SHIFT           (21U)
+/*! RedEn1 - RedEnable1 */
+#define splanar1_DESBUFA1_RedEn1(x)              (((uint32_t)(((uint32_t)(x)) << splanar1_DESBUFA1_RedEn1_SHIFT)) & splanar1_DESBUFA1_RedEn1_MASK)
+
+#define splanar1_DESBUFA1_GreenEn1_MASK          (0x400000U)
+#define splanar1_DESBUFA1_GreenEn1_SHIFT         (22U)
+/*! GreenEn1 - GreenEnable1 */
+#define splanar1_DESBUFA1_GreenEn1(x)            (((uint32_t)(((uint32_t)(x)) << splanar1_DESBUFA1_GreenEn1_SHIFT)) & splanar1_DESBUFA1_GreenEn1_MASK)
+
+#define splanar1_DESBUFA1_BlueE1_MASK            (0x800000U)
+#define splanar1_DESBUFA1_BlueE1_SHIFT           (23U)
+/*! BlueE1 - BlueEnable1 */
+#define splanar1_DESBUFA1_BlueE1(x)              (((uint32_t)(((uint32_t)(x)) << splanar1_DESBUFA1_BlueE1_SHIFT)) & splanar1_DESBUFA1_BlueE1_MASK)
+
+#define splanar1_DESBUFA1_BitsPP1_MASK           (0x3F000000U)
+#define splanar1_DESBUFA1_BitsPP1_SHIFT          (24U)
+/*! BitsPP1 - BitsPerPixel1 */
+#define splanar1_DESBUFA1_BitsPP1(x)             (((uint32_t)(((uint32_t)(x)) << splanar1_DESBUFA1_BitsPP1_SHIFT)) & splanar1_DESBUFA1_BitsPP1_MASK)
+
+#define splanar1_DESBUFA1_DWBS1_MASK             (0x80000000U)
+#define splanar1_DESBUFA1_DWBS1_SHIFT            (31U)
+/*! DWBS1 - DWordByteSwap1 */
+#define splanar1_DESBUFA1_DWBS1(x)               (((uint32_t)(((uint32_t)(x)) << splanar1_DESBUFA1_DWBS1_SHIFT)) & splanar1_DESBUFA1_DWBS1_MASK)
+/*! @} */
+
+
+/*!
+ * @}
+ */ /* end of group splanar1_Register_Masks */
+
+
+/*!
+ * @}
+ */ /* end of group splanar1_Peripheral_Access_Layer */
+
+
+/*
+** End of section using anonymous unions
+*/
+
+#if defined(__ARMCC_VERSION)
+  #if (__ARMCC_VERSION >= 6010050)
+    #pragma clang diagnostic pop
+  #else
+    #pragma pop
+  #endif
+#elif defined(__GNUC__)
+  /* leave anonymous unions enabled */
+#elif defined(__IAR_SYSTEMS_ICC__)
+  #pragma language=default
+#else
+  #error Not supported compiler type
+#endif
+
+/*!
+ * @}
+ */ /* end of group Peripheral_access_layer */
+
+
+#endif  /* PERI_SPLANAR1_H_ */
+

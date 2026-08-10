@@ -106,6 +106,7 @@ extern "C" {
 #define SYSTEM_PLATFORM_MU_IRQ MU7_A_IRQn
 
 /* Logical Machine */
+#define SYSTEM_PLATFORM_LMID_ALL (0U)
 #define SYSTEM_PLATFORM_LMID_A55 (4U)
 
 /* Doorbell*/
@@ -119,7 +120,7 @@ extern "C" {
 #define SYSTEM_PLATFORM_RTC_ID 0
 
 /* FUSA */
-#define SYSTEM_PLATFORM_FAULT_ID_FIRST 6U
+#define SYSTEM_PLATFORM_FAULT_ID_FIRST 24U
 #define SYSTEM_PLATFORM_FAULT_MASK     0x1
 #define SYSTEM_PLATFORM_NOTIFY_ENABLE  0x1
 

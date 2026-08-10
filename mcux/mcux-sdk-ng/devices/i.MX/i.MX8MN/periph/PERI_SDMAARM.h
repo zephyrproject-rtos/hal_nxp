@@ -38,7 +38,7 @@
 **                          MIMX8MN6DVTJZ_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260513
+**     Build:               b260624
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SDMAARM
@@ -449,8 +449,6 @@ typedef struct {
  *  0b0000..Program
  *  0b0001..Data
  *  0b0010..Change of Flow
- *  0b0010..Change of Flow in Sleep
- *  0b0011..Change Flow in Loop in Sleep
  *  0b0011..Change of Flow in Loop
  *  0b0100..Debug
  *  0b0101..Functional Unit
@@ -458,6 +456,8 @@ typedef struct {
  *  0b0111..Save
  *  0b1000..Program in Sleep
  *  0b1001..Data in Sleep
+ *  0b1010..Change of Flow in Sleep
+ *  0b1011..Change Flow in Loop in Sleep
  *  0b1100..Debug in Sleep
  *  0b1101..Functional Unit in Sleep
  *  0b1110..Sleep after Reset

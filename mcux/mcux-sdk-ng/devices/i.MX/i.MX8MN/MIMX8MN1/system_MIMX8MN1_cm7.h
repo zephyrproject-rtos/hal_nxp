@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MX8MNRM, Rev.B, 07/2019
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260205
+**     Build:               b260624
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

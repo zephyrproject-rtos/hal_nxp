@@ -6,7 +6,7 @@
 **                          MIMX93W52610GCM_cm33
 **
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for WDOG
@@ -257,10 +257,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group WDOG_Register_Masks */
-
-/* Extra definition */
-#define WDOG_UPDATE_KEY                          (0xD928C520U)
-#define WDOG_REFRESH_KEY                         (0xB480A602U)
 
 
 /*!

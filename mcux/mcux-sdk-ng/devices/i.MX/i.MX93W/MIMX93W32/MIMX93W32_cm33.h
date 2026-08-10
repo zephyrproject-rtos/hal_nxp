@@ -6,7 +6,7 @@
 **
 **     Reference manual:    IMX93WRM, Internal, December 2025
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX93W32_cm33
@@ -57,7 +57,6 @@
 #include "PERI_ENET.h"
 #include "PERI_ENET_QOS.h"
 #include "PERI_FLEXIO.h"
-#include "PERI_FLEXSPI.h"
 #include "PERI_FSB.h"
 #include "PERI_GPC_CPU_CTRL.h"
 #include "PERI_GPC_GLOBAL.h"
@@ -79,7 +78,6 @@
 #include "PERI_MU.h"
 #include "PERI_NPU.h"
 #include "PERI_OCRAM_MECC.h"
-#include "PERI_OTFAD.h"
 #include "PERI_PDM.h"
 #include "PERI_PLL.h"
 #include "PERI_PXP.h"
