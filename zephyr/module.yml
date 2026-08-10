@@ -333,3 +333,13 @@ blobs:
     license-path: zephyr/blobs/license/BSD_3.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/4a3cb9ad/neutron/rt700/cm33/libNeutronFirmware.a
     description: "Neutron firmware library for RT700 CM33"
+
+# For UWB SR250
+  - path: sr250/SR200A1V2_IOT_01.41.04_Prod.h
+    sha256: cd121a0b44be9b38d26332e47e6c1a73ae95ffe78a4b734946f6521b839204be
+    type: img
+    version: '01.41.04'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    click-through: True
+    url: https://github.com/nxp-uwb/sr250-uwbiot-zephyr/raw/main/uwbiot-top/firmware_images/SR2XX/Prod_ROW/SR200A1V2_IOT_01.41.04_Prod.h
+    description: "SR250 UWB Firmware"
