@@ -4,7 +4,7 @@ MCUXpresso SDK
 Origin:
    NXP MCUXpresso SDK
    https://github.com/nxp-mcuxpresso/mcuxsdk-manifests
-   SHA: 02c9635cb200291d1664aefdd6a48aee5f4901d6
+   SHA: a27bae57d2072fa7d8b11352cb38c0e76cd3154c
 
    NXP Kinetis Connectivity Software
    https://www.nxp.com/webapp/Download?colCode=KW40Z-CONNECTIVITY-SOFTWARE&appType=license&Parent_nodeId=1432854896956716810497&Parent_pageType=product
@@ -40,7 +40,7 @@ Origin:
 
    NXP MCUXpresso SDK Core
    https://github.com/nxp-mcuxpresso/mcuxsdk-core
-   SHA: a910e7645d2d809a3431e1d5f42fca1cdeee69c9
+   SHA: 88e69085dfaab35652ca79fdf3f05c7551eed601
    Source folder: cmake/extension
    Destination folder: mcux-sdk-ng/cmake/extension
 
@@ -58,37 +58,37 @@ Origin:
 
    NXP MCUXpresso SDK Device i.MX
    https://github.com/nxp-mcuxpresso/mcux-devices-imx
-   SHA: e8e41cc8dca0f2616e34c5c8a7990b1567a0242f
+   SHA: c44c70545f236cf75b9f3a5a72c6694816593ca6
    Source folder: Root folder of the NXP MCUXpresso SDK Device i.MX Repository
    Destination folder: mcux-sdk-ng/devices/i.MX
 
    NXP MCUXpresso SDK Device RT
    https://github.com/nxp-mcuxpresso/mcux-devices-rt
-   SHA: 3248d6d5f6bcb7b89fc43abd81700c7572c61bf0
+   SHA: 5aca9adfa3dd9be25fb31144dc52a5a845fd95aa
    Source folder: Root folder of the NXP MCUXpresso SDK Device RT Repository
    Destination folder: mcux-sdk-ng/devices/RT
 
    NXP MCUXpresso SDK Device Kinetis
    https://github.com/nxp-mcuxpresso/mcux-devices-kinetis
-   SHA: 33d05a1a78a15c64fa317f1efd8bb3c27bbc3b0e
+   SHA: b8c9e31246223da57b9e85bfe638da9a853bf125
    Source folder: Root folder of the NXP MCUXpresso SDK Device Kinetis Repository
    Destination folder: mcux-sdk-ng/devices/Kinetis
 
    NXP MCUXpresso SDK Device LPC
    https://github.com/nxp-mcuxpresso/mcux-devices-lpc
-   SHA: a38f1d6b6daa9014b3486d8e106af9c35e623e09
+   SHA: fdf4429f3dda7f427bf4ef438a0e85fca083e178
    Source folder: Root folder of the NXP MCUXpresso SDK Device LPC Repository
    Destination folder: mcux-sdk-ng/devices/LPC
 
    NXP MCUXpresso SDK Device MCX
    https://github.com/nxp-mcuxpresso/mcux-devices-mcx
-   SHA: f560437f1a3b629869fb38e268fea91f553e3094
+   SHA: fcdafec0dec36f939375b3c67a40967c98dde0f8
    Source folder: Root folder of the NXP MCUXpresso SDK Device MCX Repository
    Destination folder: mcux-sdk-ng/devices/MCX
 
    NXP MCUXpresso SDK Device Wireless
    https://github.com/nxp-mcuxpresso/mcux-devices-wireless
-   SHA: c2d2f26b6a626b7b7f59471b28d90155b9ee8bef
+   SHA: e565121a5b815d43e85144ee6f34d53f758822eb
    Source folder: Root folder of the NXP MCUXpresso SDK Device Wireless Repository
    Destination folder: mcux-sdk-ng/devices/Wireless
 
@@ -235,6 +235,10 @@ Patch List:
    - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/1b298128359649cf257130a2a47abfcce874cf2f
    - This patch is in hal_nxp but is not in 26.06.00 release.
 
-Note:
-   - The CAAM driver should not be updated during hal_nxp updates, since the latest CAAM driver will cause runtime issues
-     on RT1160/RT1170 for Zephyr NET-related test cases.
+   - MCUX SDK 26.09.00-pvw2 sync special patches:
+    - hal_nxp: undefine PAGESIZE macro before naming fields
+      - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/2199f173d1b3cd31f3d97677479270314154fd55
+    - mcux: sdk_ng: drivers: ecspi: fix stale conreg and configreg bits
+      - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/6dfad8efcea1369210896f561e2d73ad45c7489a
+    - mcux-sdk-ng: MIMX94398: remove exception source file for a55
+      - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/1fad84dd567809ba69cc519c7bc58bc6458d1654
