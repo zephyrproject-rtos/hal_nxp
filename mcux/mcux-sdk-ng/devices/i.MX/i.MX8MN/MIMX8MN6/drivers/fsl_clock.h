@@ -147,10 +147,16 @@
         kCLOCK_Mu \
     }
 
-/*! @brief Clock ip name array for QSPI. */
-#define QSPI_CLOCKS \
+/*! @brief Clock ip name array for FLEXSPI. */
+#define FLEXSPI_CLOCKS \
     {               \
-        kCLOCK_Qspi \
+        kCLOCK_Flexspi \
+    }
+
+/*! @brief Clock ip name array for FLEXSPI. */
+#define FLEXSPI_CLOCKS \
+    {              \
+        kCLOCK_Flexspi \
     }
 
 /*! @brief Clock ip name array for PDM. */
@@ -248,7 +254,7 @@
              kCLOCK_SysPll1Div6Clk, kCLOCK_NoneName,     kCLOCK_ExtClk3,      kCLOCK_ExtClk4}, /* SAI7 Clock Root */   \
             {kCLOCK_Osc24MClk,      kCLOCK_SysPll1Div2Clk, kCLOCK_SysPll2Div3Clk,                                      \
              kCLOCK_SysPll2Div2Clk, kCLOCK_AudioPll2Clk,   kCLOCK_SysPll1Div3Clk,                                      \
-             kCLOCK_SysPll3Clk,     kCLOCK_SysPll1Div8Clk}, /* QSPI Clock Root */                                      \
+             kCLOCK_SysPll3Clk,     kCLOCK_SysPll1Div8Clk}, /* FLEXSPI Clock Root */                                      \
             {                                                                                                          \
                 kCLOCK_Osc24MClk,    kCLOCK_SysPll1Div5Clk, kCLOCK_SysPll2Div20Clk,                                    \
                 kCLOCK_SysPll3Clk,   kCLOCK_AudioPll1Clk,   kCLOCK_VideoPll1Clk,                                       \
@@ -344,7 +350,7 @@
     {                                                                                                             \
         kCLOCK_RootM7, kCLOCK_RootAxi, kCLOCK_RootNoc, kCLOCK_RootAhb, kCLOCK_RootAhb, kCLOCK_RootAudioAhb,       \
             kCLOCK_RootAudioAhb, kCLOCK_RootDramAlt, kCLOCK_RootSai2, kCLOCK_RootSai3, kCLOCK_RootSai5,           \
-            kCLOCK_RootSai6, kCLOCK_RootSai7, kCLOCK_RootQspi, kCLOCK_RootI2c1, kCLOCK_RootI2c2, kCLOCK_RootI2c3, \
+            kCLOCK_RootSai6, kCLOCK_RootSai7, kCLOCK_RootFlexspi, kCLOCK_RootI2c1, kCLOCK_RootI2c2, kCLOCK_RootI2c3, \
             kCLOCK_RootI2c4, kCLOCK_RootUart1, kCLOCK_RootUart2, kCLOCK_RootUart3, kCLOCK_RootUart4,              \
             kCLOCK_RootEcspi1, kCLOCK_RootEcspi2, kCLOCK_RootEcspi3, kCLOCK_RootPwm1, kCLOCK_RootPwm2,            \
             kCLOCK_RootPwm3, kCLOCK_RootPwm4, kCLOCK_RootGpt1, kCLOCK_RootGpt2, kCLOCK_RootGpt3, kCLOCK_RootGpt4, \
@@ -446,7 +452,7 @@ typedef enum _clock_ip_name
     kCLOCK_Pwm3 = CCM_TUPLE(42U, 105U), /*!< PWM3 Clock Gate.*/
     kCLOCK_Pwm4 = CCM_TUPLE(43U, 106U), /*!< PWM4 Clock Gate.*/
 
-    kCLOCK_Qspi = CCM_TUPLE(47U, 87U), /*!< QSPI Clock Gate.*/
+    kCLOCK_Flexspi = CCM_TUPLE(47U, 87U), /*!< FLEXSPI Clock Gate.*/
 
     kCLOCK_Rdc = CCM_TUPLE(49U, 33U), /*!< RDC Clock Gate.*/
 
@@ -517,7 +523,7 @@ typedef enum _clock_root_control
     kCLOCK_RootEnetTimer = (uintptr_t)CCM_BASE + offsetof(CCM_Type, ROOT[84].TARGET_ROOT), /*!< ENET TIMER Clock control name.*/
     kCLOCK_RootEnetPhy   = (uintptr_t)CCM_BASE + offsetof(CCM_Type, ROOT[85].TARGET_ROOT), /*!< ENET PHY Clock control name.*/
 
-    kCLOCK_RootQspi = (uintptr_t)CCM_BASE + offsetof(CCM_Type, ROOT[87].TARGET_ROOT), /*!< QSPI Clock control name.*/
+    kCLOCK_RootFlexspi = (uintptr_t)CCM_BASE + offsetof(CCM_Type, ROOT[87].TARGET_ROOT), /*!< FLEXSPI Clock control name.*/
 
     kCLOCK_RootI2c1 = (uintptr_t)CCM_BASE + offsetof(CCM_Type, ROOT[90].TARGET_ROOT), /*!< I2C1 Clock control name.*/
     kCLOCK_RootI2c2 = (uintptr_t)CCM_BASE + offsetof(CCM_Type, ROOT[91].TARGET_ROOT), /*!< I2C2 Clock control name.*/
@@ -572,7 +578,7 @@ typedef enum _clock_root
     kCLOCK_Sai6ClkRoot, /*!< SAI6 Clock control name.*/
     kCLOCK_Sai7ClkRoot, /*!< SAI7 Clock control name.*/
 
-    kCLOCK_QspiClkRoot, /*!< QSPI Clock control name.*/
+    kCLOCK_FlexspiClkRoot, /*!< FLEXSPI Clock control name.*/
 
     kCLOCK_I2c1ClkRoot, /*!< I2C1 Clock control name.*/
     kCLOCK_I2c2ClkRoot, /*!< I2C2 Clock control name.*/
@@ -657,18 +663,18 @@ typedef enum _clock_rootmux_audio_ahb_clk_sel
     kCLOCK_AudioAhbRootmuxAudioPll1   = 6U, /*!< ARM Audio AHB Clock from AUDIO PLL1.*/
     kCLOCK_AudioAhbRootmuxVideoPll1   = 7U, /*!< ARM Audio AHB Clock from VIDEO PLL1.*/
 } clock_rootmux_audio_ahb_clk_sel_t;
-/*! @brief Root clock select enumeration for QSPI peripheral. */
-typedef enum _clock_rootmux_qspi_clk_sel
+/*! @brief Root clock select enumeration for FLEXSPI peripheral. */
+typedef enum _clock_rootmux_flexspi_clk_sel
 {
-    kCLOCK_QspiRootmuxOsc24M      = 0U, /*!< ARM QSPI Clock from OSC 24M.*/
-    kCLOCK_QspiRootmuxSysPll1Div2 = 1U, /*!< ARM QSPI Clock from SYSTEM PLL1 divided by 2.*/
-    kCLOCK_QspiRootmuxSysPll2Div3 = 2U, /*!< ARM QSPI Clock from SYSTEM PLL2 divided by 3.*/
-    kCLOCK_QspiRootmuxSysPll2Div2 = 3U, /*!< ARM QSPI Clock from SYSTEM PLL2 divided by 2.*/
-    kCLOCK_QspiRootmuxAudioPll2   = 4U, /*!< ARM QSPI Clock from AUDIO PLL2.*/
-    kCLOCK_QspiRootmuxSysPll1Div3 = 5U, /*!< ARM QSPI Clock from SYSTEM PLL1 divided by 3 */
-    kCLOCK_QspiRootmuxSysPll3     = 6,  /*!< ARM QSPI Clock from SYSTEM PLL3.*/
-    kCLOCK_QspiRootmuxSysPll1Div8 = 7U, /*!< ARM QSPI Clock from SYSTEM PLL1 divided by 8.*/
-} clock_rootmux_qspi_clk_sel_t;
+    kCLOCK_FlexspiRootmuxOsc24M      = 0U, /*!< ARM FLEXSPI Clock from OSC 24M.*/
+    kCLOCK_FlexspiRootmuxSysPll1Div2 = 1U, /*!< ARM FLEXSPI Clock from SYSTEM PLL1 divided by 2.*/
+    kCLOCK_FlexspiRootmuxSysPll2Div3 = 2U, /*!< ARM FLEXSPI Clock from SYSTEM PLL2 divided by 3.*/
+    kCLOCK_FlexspiRootmuxSysPll2Div2 = 3U, /*!< ARM FLEXSPI Clock from SYSTEM PLL2 divided by 2.*/
+    kCLOCK_FlexspiRootmuxAudioPll2   = 4U, /*!< ARM FLEXSPI Clock from AUDIO PLL2.*/
+    kCLOCK_FlexspiRootmuxSysPll1Div3 = 5U, /*!< ARM FLEXSPI Clock from SYSTEM PLL1 divided by 3 */
+    kCLOCK_FlexspiRootmuxSysPll3     = 6,  /*!< ARM FLEXSPI Clock from SYSTEM PLL3.*/
+    kCLOCK_FlexspiRootmuxSysPll1Div8 = 7U, /*!< ARM FLEXSPI Clock from SYSTEM PLL1 divided by 8.*/
+} clock_rootmux_flexspi_clk_sel_t;
 
 /*! @brief Root clock select enumeration for ECSPI peripheral. */
 typedef enum _clock_rootmux_ecspi_clk_sel

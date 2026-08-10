@@ -1,0 +1,367 @@
+/*
+** ###################################################################
+**     Processors:          MIMX9371xxVTx_ca55
+**                          MIMX9371xxVTx_cm33
+**                          MIMX9371xxVTx_cm7
+**                          MIMX9373xxVTx_ca55
+**                          MIMX9373xxVTx_cm33
+**                          MIMX9373xxVTx_cm7
+**                          MIMX9373xxVZx_ca55
+**                          MIMX9373xxVZx_cm33
+**                          MIMX9373xxVZx_cm7
+**                          MIMX9375xxVTx_ca55
+**                          MIMX9375xxVTx_cm33
+**                          MIMX9375xxVTx_cm7
+**                          MIMX9375xxVZx_ca55
+**                          MIMX9375xxVZx_cm33
+**                          MIMX9375xxVZx_cm7
+**
+**     Version:             rev. 1.0, 2026-04-09
+**     Build:               b260624
+**
+**     Abstract:
+**         CMSIS Peripheral Access Layer for DITHER
+**
+**     Copyright 1997-2016 Freescale Semiconductor, Inc.
+**     Copyright 2016-2026 NXP
+**     SPDX-License-Identifier: BSD-3-Clause
+**
+**     http:                 www.nxp.com
+**     mail:                 support@nxp.com
+**
+**     Revisions:
+**     - rev. 1.0 (2026-04-09)
+**         Initial version.
+**
+** ###################################################################
+*/
+
+/*!
+ * @file PERI_DITHER.h
+ * @version 1.0
+ * @date 2026-04-09
+ * @brief CMSIS Peripheral Access Layer for DITHER
+ *
+ * CMSIS Peripheral Access Layer for DITHER
+ */
+
+#if !defined(PERI_DITHER_H_)
+#define PERI_DITHER_H_                           /**< Symbol preventing repeated inclusion */
+
+#if (defined(CPU_MIMX9371xxVTx_ca55))
+#include "MIMX9371_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9371xxVTx_cm33))
+#include "MIMX9371_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9371xxVTx_cm7))
+#include "MIMX9371_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9373xxVTx_ca55) || defined(CPU_MIMX9373xxVZx_ca55))
+#include "MIMX9373_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9373xxVTx_cm33) || defined(CPU_MIMX9373xxVZx_cm33))
+#include "MIMX9373_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9373xxVTx_cm7) || defined(CPU_MIMX9373xxVZx_cm7))
+#include "MIMX9373_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9375xxVTx_ca55) || defined(CPU_MIMX9375xxVZx_ca55))
+#include "MIMX9375_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9375xxVTx_cm33) || defined(CPU_MIMX9375xxVZx_cm33))
+#include "MIMX9375_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9375xxVTx_cm7) || defined(CPU_MIMX9375xxVZx_cm7))
+#include "MIMX9375_cm7_COMMON.h"
+#else
+  #error "No valid CPU defined!"
+#endif
+
+/* ----------------------------------------------------------------------------
+   -- Device Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup Peripheral_access_layer Device Peripheral Access Layer
+ * @{
+ */
+
+
+/*
+** Start of section using anonymous unions
+*/
+
+#if defined(__ARMCC_VERSION)
+  #if (__ARMCC_VERSION >= 6010050)
+    #pragma clang diagnostic push
+  #else
+    #pragma push
+    #pragma anon_unions
+  #endif
+#elif defined(__GNUC__)
+  /* anonymous unions are enabled by default */
+#elif defined(__IAR_SYSTEMS_ICC__)
+  #pragma language=extended
+#else
+  #error Not supported compiler type
+#endif
+
+/* ----------------------------------------------------------------------------
+   -- DITHER Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup DITHER_Peripheral_Access_Layer DITHER Peripheral Access Layer
+ * @{
+ */
+
+/** DITHER - Register Layout Typedef */
+typedef struct {
+  __O  uint32_t LU;                                /**< LockUnlock, offset: 0x0 */
+  __I  uint32_t LOCKS;                             /**< LockStatus, offset: 0x4 */
+  __IO uint32_t CONTR;                             /**< Control, offset: 0x8 */
+  __IO uint32_t MASKSTAR;                          /**< MaskStart, offset: 0xC */
+  __IO uint32_t MASKSIZE;                          /**< MaskSize, offset: 0x10 */
+  __IO uint32_t DITCON10;                          /**< DitherControl10bits, offset: 0x14 */
+  __IO uint32_t DITCON12;                          /**< DitherControl12bits, offset: 0x18 */
+} DITHER_Type;
+
+/* ----------------------------------------------------------------------------
+   -- DITHER Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup DITHER_Register_Masks DITHER Register Masks
+ * @{
+ */
+
+/*! @name LU - LockUnlock */
+/*! @{ */
+
+#define DITHER_LU_LkUn_MASK                      (0xFFFFFFFFU)
+#define DITHER_LU_LkUn_SHIFT                     (0U)
+/*! LkUn - LockUnlock
+ *  0b01010110010100011111011101100011..Decrements the unlock counter. When the counter value is null, lock protection is active. Reset counter value is 1.
+ *  0b01101001000111011011100100110110..Increments the unlock counter. Max allowed value is 15.
+ *  0b10101110111010010101110011011100..Enables privilege protection. Disabled after reset.
+ *  0b10110101111000100100011001101110..Disables privilege protection.
+ *  0b11111011111010001011000111100110..Freezes current protection status. Writing keys to this register has no more effect until reset.
+ */
+#define DITHER_LU_LkUn(x)                        (((uint32_t)(((uint32_t)(x)) << DITHER_LU_LkUn_SHIFT)) & DITHER_LU_LkUn_MASK)
+/*! @} */
+
+/*! @name LOCKS - LockStatus */
+/*! @{ */
+
+#define DITHER_LOCKS_LkSus_MASK                  (0x1U)
+#define DITHER_LOCKS_LkSus_SHIFT                 (0U)
+/*! LkSus - LockStatus */
+#define DITHER_LOCKS_LkSus(x)                    (((uint32_t)(((uint32_t)(x)) << DITHER_LOCKS_LkSus_SHIFT)) & DITHER_LOCKS_LkSus_MASK)
+
+#define DITHER_LOCKS_PriSt_MASK                  (0x10U)
+#define DITHER_LOCKS_PriSt_SHIFT                 (4U)
+/*! PriSt - PrivilegeStatus */
+#define DITHER_LOCKS_PriSt(x)                    (((uint32_t)(((uint32_t)(x)) << DITHER_LOCKS_PriSt_SHIFT)) & DITHER_LOCKS_PriSt_MASK)
+
+#define DITHER_LOCKS_FreezeS_MASK                (0x100U)
+#define DITHER_LOCKS_FreezeS_SHIFT               (8U)
+/*! FreezeS - FreezeStatus */
+#define DITHER_LOCKS_FreezeS(x)                  (((uint32_t)(((uint32_t)(x)) << DITHER_LOCKS_FreezeS_SHIFT)) & DITHER_LOCKS_FreezeS_MASK)
+/*! @} */
+
+/*! @name CONTR - Control */
+/*! @{ */
+
+#define DITHER_CONTR_mode_MASK                   (0x3U)
+#define DITHER_CONTR_mode_SHIFT                  (0U)
+/*! mode - mode
+ *  0b00..Neutral mode. Pixels by-pass the Dither Unit, all other settings are ignored.
+ *  0b01..Dither Unit is active (uses 10bit input).
+ *  0b10..Dither Unit is active (uses 12bit input).
+ */
+#define DITHER_CONTR_mode(x)                     (((uint32_t)(((uint32_t)(x)) << DITHER_CONTR_mode_SHIFT)) & DITHER_CONTR_mode_MASK)
+
+#define DITHER_CONTR_offstsel_MASK               (0x10000U)
+#define DITHER_CONTR_offstsel_SHIFT              (16U)
+/*! offstsel - offset_select
+ *  0b0..Offset is a bayer matrix value, which is selected according to pixel frame position.
+ *  0b1..Offset is the sum from a bayer matrix value, which is selected according to pixel frame position, and a
+ *       value from a regular sequence, which changes each frame.
+ */
+#define DITHER_CONTR_offstsel(x)                 (((uint32_t)(((uint32_t)(x)) << DITHER_CONTR_offstsel_SHIFT)) & DITHER_CONTR_offstsel_MASK)
+
+#define DITHER_CONTR_algosel_MASK                (0x300000U)
+#define DITHER_CONTR_algosel_SHIFT               (20U)
+/*! algosel - algo_select
+ *  0b01..Best possible resolution for most dark colors. Adds a diminutive offset to overall image brightness.
+ *  0b10..Preserves overall image brightness. Cannot resolve most dark and most bright colors. All codes in-between are distributed perfectly smooth.
+ *  0b11..Preserves overall image brightness. Best possible distribution of color codes over complete range.
+ */
+#define DITHER_CONTR_algosel(x)                  (((uint32_t)(((uint32_t)(x)) << DITHER_CONTR_algosel_SHIFT)) & DITHER_CONTR_algosel_MASK)
+
+#define DITHER_CONTR_makinen_MASK                (0x1000000U)
+#define DITHER_CONTR_makinen_SHIFT               (24U)
+/*! makinen - maskin_en
+ *  0b0..disable external masking.
+ *  0b1..enable external masking.
+ */
+#define DITHER_CONTR_makinen(x)                  (((uint32_t)(((uint32_t)(x)) << DITHER_CONTR_makinen_SHIFT)) & DITHER_CONTR_makinen_MASK)
+
+#define DITHER_CONTR_makinsel_MASK               (0x2000000U)
+#define DITHER_CONTR_makinsel_SHIFT              (25U)
+/*! makinsel - maskin_sel
+ *  0b0..mask signal 0 is used.
+ *  0b1..mask signal 1 is used.
+ */
+#define DITHER_CONTR_makinsel(x)                 (((uint32_t)(((uint32_t)(x)) << DITHER_CONTR_makinsel_SHIFT)) & DITHER_CONTR_makinsel_MASK)
+
+#define DITHER_CONTR_makininv_MASK               (0x4000000U)
+#define DITHER_CONTR_makininv_SHIFT              (26U)
+/*! makininv - maskin_inv
+ *  0b0..bypassed when the related mask input signal is high.
+ *  0b1..bypassed when the related mask input signal is low.
+ */
+#define DITHER_CONTR_makininv(x)                 (((uint32_t)(((uint32_t)(x)) << DITHER_CONTR_makininv_SHIFT)) & DITHER_CONTR_makininv_MASK)
+
+#define DITHER_CONTR_pxwinon0_MASK               (0x10000000U)
+#define DITHER_CONTR_pxwinon0_SHIFT              (28U)
+/*! pxwinon0 - pixwinon
+ *  0b0..disable internal masking.
+ *  0b1..enable internal masking.
+ */
+#define DITHER_CONTR_pxwinon0(x)                 (((uint32_t)(((uint32_t)(x)) << DITHER_CONTR_pxwinon0_SHIFT)) & DITHER_CONTR_pxwinon0_MASK)
+
+#define DITHER_CONTR_pxwininv_MASK               (0x20000000U)
+#define DITHER_CONTR_pxwininv_SHIFT              (29U)
+/*! pxwininv - pixwin_inv
+ *  0b0..input pixels inside the defined window will be bypassed.
+ *  0b1..input pixels outside the defined window will be bypassed.
+ */
+#define DITHER_CONTR_pxwininv(x)                 (((uint32_t)(((uint32_t)(x)) << DITHER_CONTR_pxwininv_SHIFT)) & DITHER_CONTR_pxwininv_MASK)
+/*! @} */
+
+/*! @name MASKSTAR - MaskStart */
+/*! @{ */
+
+#define DITHER_MASKSTAR_passvst_MASK             (0x3FFFU)
+#define DITHER_MASKSTAR_passvst_SHIFT            (0U)
+/*! passvst - pass_vstart */
+#define DITHER_MASKSTAR_passvst(x)               (((uint32_t)(((uint32_t)(x)) << DITHER_MASKSTAR_passvst_SHIFT)) & DITHER_MASKSTAR_passvst_MASK)
+
+#define DITHER_MASKSTAR_passhst_MASK             (0x3FFF0000U)
+#define DITHER_MASKSTAR_passhst_SHIFT            (16U)
+/*! passhst - pass_hstart */
+#define DITHER_MASKSTAR_passhst(x)               (((uint32_t)(((uint32_t)(x)) << DITHER_MASKSTAR_passhst_SHIFT)) & DITHER_MASKSTAR_passhst_MASK)
+/*! @} */
+
+/*! @name MASKSIZE - MaskSize */
+/*! @{ */
+
+#define DITHER_MASKSIZE_passvsi_MASK             (0x3FFFU)
+#define DITHER_MASKSIZE_passvsi_SHIFT            (0U)
+/*! passvsi - pass_vsize */
+#define DITHER_MASKSIZE_passvsi(x)               (((uint32_t)(((uint32_t)(x)) << DITHER_MASKSIZE_passvsi_SHIFT)) & DITHER_MASKSIZE_passvsi_MASK)
+
+#define DITHER_MASKSIZE_passhsi_MASK             (0x3FFF0000U)
+#define DITHER_MASKSIZE_passhsi_SHIFT            (16U)
+/*! passhsi - pass_hsize */
+#define DITHER_MASKSIZE_passhsi(x)               (((uint32_t)(((uint32_t)(x)) << DITHER_MASKSIZE_passhsi_SHIFT)) & DITHER_MASKSIZE_passhsi_MASK)
+/*! @} */
+
+/*! @name DITCON10 - DitherControl10bits */
+/*! @{ */
+
+#define DITHER_DITCON10_bluers10_MASK            (0x7U)
+#define DITHER_DITCON10_bluers10_SHIFT           (0U)
+/*! bluers10 - blue_range_select_10bit
+ *  0b010..Reduces blue component width from 10 bit to 8bit.
+ *  0b011..Reduces blue component width from 10 bit to 7bit.
+ *  0b100..Reduces blue component width from 10 bit to 6bit.
+ *  0b101..Reduces blue component width from 10 bit to 5bit.
+ */
+#define DITHER_DITCON10_bluers10(x)              (((uint32_t)(((uint32_t)(x)) << DITHER_DITCON10_bluers10_SHIFT)) & DITHER_DITCON10_bluers10_MASK)
+
+#define DITHER_DITCON10_greers10_MASK            (0x70U)
+#define DITHER_DITCON10_greers10_SHIFT           (4U)
+/*! greers10 - green_range_select_10bit
+ *  0b010..Reduces green component width from 10 bit to 8bit.
+ *  0b011..Reduces green component width from 10 bit to 7bit.
+ *  0b100..Reduces green component width from 10 bit to 6bit.
+ *  0b101..Reduces green component width from 10 bit to 5bit.
+ */
+#define DITHER_DITCON10_greers10(x)              (((uint32_t)(((uint32_t)(x)) << DITHER_DITCON10_greers10_SHIFT)) & DITHER_DITCON10_greers10_MASK)
+
+#define DITHER_DITCON10_rranse10_MASK            (0x700U)
+#define DITHER_DITCON10_rranse10_SHIFT           (8U)
+/*! rranse10 - red_range_select_10bit
+ *  0b010..Reduces red component width from 10 bit to 8bit.
+ *  0b011..Reduces red component width from 10 bit to 7bit.
+ *  0b100..Reduces red component width from 10 bit to 6bit.
+ *  0b101..Reduces red component width from 10 bit to 5bit.
+ */
+#define DITHER_DITCON10_rranse10(x)              (((uint32_t)(((uint32_t)(x)) << DITHER_DITCON10_rranse10_SHIFT)) & DITHER_DITCON10_rranse10_MASK)
+/*! @} */
+
+/*! @name DITCON12 - DitherControl12bits */
+/*! @{ */
+
+#define DITHER_DITCON12_bluers12_MASK            (0x7U)
+#define DITHER_DITCON12_bluers12_SHIFT           (0U)
+/*! bluers12 - blue_range_select_12bit
+ *  0b010..Reduces blue component width from 12 bit to 10bit.
+ *  0b011..Reduces blue component width from 12 bit to 9bit.
+ *  0b100..Reduces blue component width from 12 bit to 8bit.
+ *  0b110..Reduces blue component width from 12 bit to 6bit.
+ */
+#define DITHER_DITCON12_bluers12(x)              (((uint32_t)(((uint32_t)(x)) << DITHER_DITCON12_bluers12_SHIFT)) & DITHER_DITCON12_bluers12_MASK)
+
+#define DITHER_DITCON12_greers12_MASK            (0x70U)
+#define DITHER_DITCON12_greers12_SHIFT           (4U)
+/*! greers12 - green_range_select_12bit
+ *  0b010..Reduces green component width from 12 bit to 10bit.
+ *  0b011..Reduces green component width from 12 bit to 9bit.
+ *  0b100..Reduces green component width from 12 bit to 8bit.
+ *  0b110..Reduces green component width from 12 bit to 6bit.
+ */
+#define DITHER_DITCON12_greers12(x)              (((uint32_t)(((uint32_t)(x)) << DITHER_DITCON12_greers12_SHIFT)) & DITHER_DITCON12_greers12_MASK)
+
+#define DITHER_DITCON12_rranse12_MASK            (0x700U)
+#define DITHER_DITCON12_rranse12_SHIFT           (8U)
+/*! rranse12 - red_range_select_12bit
+ *  0b010..Reduces red component width from 12 bit to 10bit.
+ *  0b011..Reduces red component width from 12 bit to 9bit.
+ *  0b100..Reduces red component width from 12 bit to 8bit.
+ *  0b110..Reduces red component width from 12 bit to 6bit.
+ */
+#define DITHER_DITCON12_rranse12(x)              (((uint32_t)(((uint32_t)(x)) << DITHER_DITCON12_rranse12_SHIFT)) & DITHER_DITCON12_rranse12_MASK)
+/*! @} */
+
+
+/*!
+ * @}
+ */ /* end of group DITHER_Register_Masks */
+
+
+/*!
+ * @}
+ */ /* end of group DITHER_Peripheral_Access_Layer */
+
+
+/*
+** End of section using anonymous unions
+*/
+
+#if defined(__ARMCC_VERSION)
+  #if (__ARMCC_VERSION >= 6010050)
+    #pragma clang diagnostic pop
+  #else
+    #pragma pop
+  #endif
+#elif defined(__GNUC__)
+  /* leave anonymous unions enabled */
+#elif defined(__IAR_SYSTEMS_ICC__)
+  #pragma language=default
+#else
+  #error Not supported compiler type
+#endif
+
+/*!
+ * @}
+ */ /* end of group Peripheral_access_layer */
+
+
+#endif  /* PERI_DITHER_H_ */
+

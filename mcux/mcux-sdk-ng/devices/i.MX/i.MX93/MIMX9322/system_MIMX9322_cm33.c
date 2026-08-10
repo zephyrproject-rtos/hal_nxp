@@ -36,6 +36,7 @@
 
 
 #include "system_MIMX9322_cm33.h"
+#include "fsl_device_registers.h"
 
 /* ----------------------------------------------------------------------------
    -- Core clock

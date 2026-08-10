@@ -38,7 +38,7 @@
 **                          MIMX8MN6DVTJZ_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260513
+**     Build:               b260624
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC_GPR
@@ -145,7 +145,7 @@
 
 /** IOMUXC_GPR - Register Layout Typedef */
 typedef struct {
-       uint32_t GPR0;                              /**< General Purpose Register 0, offset: 0x0 */
+  __I  uint32_t GPR0;                              /**< General Purpose Register 0, offset: 0x0 */
   __IO uint32_t GPR1;                              /**< General Purpose Register 1, offset: 0x4 */
   __IO uint32_t GPR2;                              /**< General Purpose Register 2, offset: 0x8 */
   __IO uint32_t GPR3;                              /**< General Purpose Register 3, offset: 0xC */
@@ -154,21 +154,21 @@ typedef struct {
   __IO uint32_t GPR6;                              /**< General Purpose Register 6, offset: 0x18 */
   __IO uint32_t GPR7;                              /**< General Purpose Register 7, offset: 0x1C */
   __IO uint32_t GPR8;                              /**< General Purpose Register 8, offset: 0x20 */
-       uint32_t GPR9;                              /**< General Purpose Register 9, offset: 0x24 */
+  __I  uint32_t GPR9;                              /**< General Purpose Register 9, offset: 0x24 */
   __IO uint32_t GPR10;                             /**< General Purpose Register 10, offset: 0x28 */
   __IO uint32_t GPR11;                             /**< General Purpose Register 11, offset: 0x2C */
-       uint32_t GPR12;                             /**< General Purpose Register 12, offset: 0x30 */
+  __I  uint32_t GPR12;                             /**< General Purpose Register 12, offset: 0x30 */
   __IO uint32_t GPR13;                             /**< General Purpose Register 13, offset: 0x34 */
-       uint32_t GPR14;                             /**< General Purpose Register 14, offset: 0x38 */
-       uint32_t GPR15;                             /**< General Purpose Register 15, offset: 0x3C */
-       uint32_t GPR16;                             /**< General Purpose Register 16, offset: 0x40 */
-       uint32_t GPR17;                             /**< General Purpose Register 17, offset: 0x44 */
-       uint32_t GPR18;                             /**< General Purpose Register 18, offset: 0x48 */
-       uint32_t GPR19;                             /**< General Purpose Register 19, offset: 0x4C */
+  __I  uint32_t GPR14;                             /**< General Purpose Register 14, offset: 0x38 */
+  __I  uint32_t GPR15;                             /**< General Purpose Register 15, offset: 0x3C */
+  __I  uint32_t GPR16;                             /**< General Purpose Register 16, offset: 0x40 */
+  __I  uint32_t GPR17;                             /**< General Purpose Register 17, offset: 0x44 */
+  __I  uint32_t GPR18;                             /**< General Purpose Register 18, offset: 0x48 */
+  __I  uint32_t GPR19;                             /**< General Purpose Register 19, offset: 0x4C */
   __IO uint32_t GPR20;                             /**< General Purpose Register 20, offset: 0x50 */
   __IO uint32_t GPR21;                             /**< General Purpose Register 21, offset: 0x54 */
   __IO uint32_t GPR22;                             /**< General Purpose Register 22, offset: 0x58 */
-       uint32_t GPR[IOMUXC_GPR_GPR_COUNT];         /**< General Purpose Register, array offset: 0x5C, array step: 0x4 */
+  __I  uint32_t GPR[IOMUXC_GPR_GPR_COUNT];         /**< General Purpose Register, array offset: 0x5C, array step: 0x4 */
 } IOMUXC_GPR_Type;
 
 /* ----------------------------------------------------------------------------

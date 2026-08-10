@@ -431,11 +431,11 @@
                 kCLOCK_Osc24MClk,       kCLOCK_SysPll1Div6Clk, kCLOCK_SysPll1Div5Clk,                                 \
                 kCLOCK_VpuPllClk,       kCLOCK_SysPll2Div8Clk, kCLOCK_SysPll3Clk,                                     \
                 kCLOCK_SysPll1Div10Clk, kCLOCK_SysPll2Div6Clk}, /* WDOG Clock ROOT */                                 \
-           {                                                                                                          \
+            {                                                                                                         \
                 kCLOCK_Osc24MClk,       kCLOCK_SysPll2Div3Clk, kCLOCK_SysPll2Div10Clk,                                \
                 kCLOCK_SysPll1Clk,      kCLOCK_SysPll2Clk,     kCLOCK_ExtClk2,                                        \
                 kCLOCK_AudioPll2Clk,    kCLOCK_VideoPll1Clk}, /* MEDIA MIPI PHY1 REF Clock ROOT */                    \
-           {                                                                                                          \
+            {                                                                                                         \
                 kCLOCK_Osc24MClk,       kCLOCK_VideoPll1Clk,   kCLOCK_AudioPll2Clk,                                   \
                 kCLOCK_AudioPll1Clk,    kCLOCK_SysPll1Clk,     kCLOCK_SysPll2Clk,                                     \
                 kCLOCK_SysPll3Clk,      kCLOCK_ExtClk4}, /* MEDIA DISP1 PIX Clock ROOT */                             \

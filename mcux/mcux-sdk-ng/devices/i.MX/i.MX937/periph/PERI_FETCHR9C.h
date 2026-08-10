@@ -1,0 +1,226 @@
+/*
+** ###################################################################
+**     Processors:          MIMX9371xxVTx_ca55
+**                          MIMX9371xxVTx_cm33
+**                          MIMX9371xxVTx_cm7
+**                          MIMX9373xxVTx_ca55
+**                          MIMX9373xxVTx_cm33
+**                          MIMX9373xxVTx_cm7
+**                          MIMX9373xxVZx_ca55
+**                          MIMX9373xxVZx_cm33
+**                          MIMX9373xxVZx_cm7
+**                          MIMX9375xxVTx_ca55
+**                          MIMX9375xxVTx_cm33
+**                          MIMX9375xxVTx_cm7
+**                          MIMX9375xxVZx_ca55
+**                          MIMX9375xxVZx_cm33
+**                          MIMX9375xxVZx_cm7
+**
+**     Version:             rev. 1.0, 2026-04-09
+**     Build:               b260624
+**
+**     Abstract:
+**         CMSIS Peripheral Access Layer for fetchr9c
+**
+**     Copyright 1997-2016 Freescale Semiconductor, Inc.
+**     Copyright 2016-2026 NXP
+**     SPDX-License-Identifier: BSD-3-Clause
+**
+**     http:                 www.nxp.com
+**     mail:                 support@nxp.com
+**
+**     Revisions:
+**     - rev. 1.0 (2026-04-09)
+**         Initial version.
+**
+** ###################################################################
+*/
+
+/*!
+ * @file PERI_fetchr9c.h
+ * @version 1.0
+ * @date 2026-04-09
+ * @brief CMSIS Peripheral Access Layer for fetchr9c
+ *
+ * CMSIS Peripheral Access Layer for fetchr9c
+ */
+
+#if !defined(PERI_FETCHR9C_H_)
+#define PERI_FETCHR9C_H_                         /**< Symbol preventing repeated inclusion */
+
+#if (defined(CPU_MIMX9371xxVTx_ca55))
+#include "MIMX9371_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9371xxVTx_cm33))
+#include "MIMX9371_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9371xxVTx_cm7))
+#include "MIMX9371_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9373xxVTx_ca55) || defined(CPU_MIMX9373xxVZx_ca55))
+#include "MIMX9373_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9373xxVTx_cm33) || defined(CPU_MIMX9373xxVZx_cm33))
+#include "MIMX9373_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9373xxVTx_cm7) || defined(CPU_MIMX9373xxVZx_cm7))
+#include "MIMX9373_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9375xxVTx_ca55) || defined(CPU_MIMX9375xxVZx_ca55))
+#include "MIMX9375_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9375xxVTx_cm33) || defined(CPU_MIMX9375xxVZx_cm33))
+#include "MIMX9375_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9375xxVTx_cm7) || defined(CPU_MIMX9375xxVZx_cm7))
+#include "MIMX9375_cm7_COMMON.h"
+#else
+  #error "No valid CPU defined!"
+#endif
+
+/* ----------------------------------------------------------------------------
+   -- Device Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup Peripheral_access_layer Device Peripheral Access Layer
+ * @{
+ */
+
+
+/*
+** Start of section using anonymous unions
+*/
+
+#if defined(__ARMCC_VERSION)
+  #if (__ARMCC_VERSION >= 6010050)
+    #pragma clang diagnostic push
+  #else
+    #pragma push
+    #pragma anon_unions
+  #endif
+#elif defined(__GNUC__)
+  /* anonymous unions are enabled by default */
+#elif defined(__IAR_SYSTEMS_ICC__)
+  #pragma language=extended
+#else
+  #error Not supported compiler type
+#endif
+
+/* ----------------------------------------------------------------------------
+   -- fetchr9c Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup fetchr9c_Peripheral_Access_Layer fetchr9c Peripheral Access Layer
+ * @{
+ */
+
+/** fetchr9c - Register Layout Typedef */
+typedef struct {
+  __O  uint32_t FETR9LU;                           /**< fetchrot9_LockUnlock, offset: 0x0 */
+  __I  uint32_t FETR9LS;                           /**< fetchrot9_LockStatus, offset: 0x4 */
+  __IO uint32_t FETR9D;                            /**< fetchrot9_Dynamic, offset: 0x8 */
+  __I  uint32_t FETR9S;                            /**< fetchrot9_Status, offset: 0xC */
+} fetchr9c_Type;
+
+/* ----------------------------------------------------------------------------
+   -- fetchr9c Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup fetchr9c_Register_Masks fetchr9c Register Masks
+ * @{
+ */
+
+/*! @name FETR9LU - fetchrot9_LockUnlock */
+/*! @{ */
+
+#define fetchr9c_FETR9LU_fetr9LU_MASK            (0xFFFFFFFFU)
+#define fetchr9c_FETR9LU_fetr9LU_SHIFT           (0U)
+/*! fetr9LU - fetchrot9_LockUnlock
+ *  0b01010110010100011111011101100011..Decrements the unlock counter. When the counter value is null, lock protection is active. Reset counter value is 1.
+ *  0b01101001000111011011100100110110..Increments the unlock counter. Max allowed value is 15.
+ *  0b10101110111010010101110011011100..Enables privilege protection. Disabled after reset.
+ *  0b10110101111000100100011001101110..Disables privilege protection.
+ *  0b11111011111010001011000111100110..Freezes current protection status. Writing keys to this register has no more effect until reset.
+ */
+#define fetchr9c_FETR9LU_fetr9LU(x)              (((uint32_t)(((uint32_t)(x)) << fetchr9c_FETR9LU_fetr9LU_SHIFT)) & fetchr9c_FETR9LU_fetr9LU_MASK)
+/*! @} */
+
+/*! @name FETR9LS - fetchrot9_LockStatus */
+/*! @{ */
+
+#define fetchr9c_FETR9LS_fetr9LS_MASK            (0x1U)
+#define fetchr9c_FETR9LS_fetr9LS_SHIFT           (0U)
+/*! fetr9LS - fetchrot9_LockStatus */
+#define fetchr9c_FETR9LS_fetr9LS(x)              (((uint32_t)(((uint32_t)(x)) << fetchr9c_FETR9LS_fetr9LS_SHIFT)) & fetchr9c_FETR9LS_fetr9LS_MASK)
+
+#define fetchr9c_FETR9LS_fetr9PS_MASK            (0x10U)
+#define fetchr9c_FETR9LS_fetr9PS_SHIFT           (4U)
+/*! fetr9PS - fetchrot9_PrivilegeStatus */
+#define fetchr9c_FETR9LS_fetr9PS(x)              (((uint32_t)(((uint32_t)(x)) << fetchr9c_FETR9LS_fetr9PS_SHIFT)) & fetchr9c_FETR9LS_fetr9PS_MASK)
+
+#define fetchr9c_FETR9LS_fetr9FS_MASK            (0x100U)
+#define fetchr9c_FETR9LS_fetr9FS_SHIFT           (8U)
+/*! fetr9FS - fetchrot9_FreezeStatus */
+#define fetchr9c_FETR9LS_fetr9FS(x)              (((uint32_t)(((uint32_t)(x)) << fetchr9c_FETR9LS_fetr9FS_SHIFT)) & fetchr9c_FETR9LS_fetr9FS_MASK)
+/*! @} */
+
+/*! @name FETR9D - fetchrot9_Dynamic */
+/*! @{ */
+
+#define fetchr9c_FETR9D_fetr9ssl_MASK            (0x3FU)
+#define fetchr9c_FETR9D_fetr9ssl_SHIFT           (0U)
+/*! fetr9ssl - fetchrot9_src_sel
+ *  0b000000..Unit fetchrot9 input port src is disabled
+ *  0b000110..Unit fetchrot9 input port src is connected to output of unit fetchdecode9
+ *  0b000111..Unit fetchrot9 input port src is connected to output of unit fetcheco9
+ */
+#define fetchr9c_FETR9D_fetr9ssl(x)              (((uint32_t)(((uint32_t)(x)) << fetchr9c_FETR9D_fetr9ssl_SHIFT)) & fetchr9c_FETR9D_fetr9ssl_MASK)
+/*! @} */
+
+/*! @name FETR9S - fetchrot9_Status */
+/*! @{ */
+
+#define fetchr9c_FETR9S_fetr9sel_MASK            (0x70000U)
+#define fetchr9c_FETR9S_fetr9sel_SHIFT           (16U)
+/*! fetr9sel - fetchrot9_sel
+ *  0b000..fetchrot9 module is not used
+ *  0b001..fetchrot9 module is used from store9 processing path
+ *  0b010..fetchrot9 module is used from extdst0 processing path
+ *  0b011..fetchrot9 module is used from extdst4 processing path
+ *  0b100..fetchrot9 module is used from extdst1 processing path
+ *  0b101..fetchrot9 module is used from extdst5 processing path
+ */
+#define fetchr9c_FETR9S_fetr9sel(x)              (((uint32_t)(((uint32_t)(x)) << fetchr9c_FETR9S_fetr9sel_SHIFT)) & fetchr9c_FETR9S_fetr9sel_MASK)
+/*! @} */
+
+
+/*!
+ * @}
+ */ /* end of group fetchr9c_Register_Masks */
+
+
+/*!
+ * @}
+ */ /* end of group fetchr9c_Peripheral_Access_Layer */
+
+
+/*
+** End of section using anonymous unions
+*/
+
+#if defined(__ARMCC_VERSION)
+  #if (__ARMCC_VERSION >= 6010050)
+    #pragma clang diagnostic pop
+  #else
+    #pragma pop
+  #endif
+#elif defined(__GNUC__)
+  /* leave anonymous unions enabled */
+#elif defined(__IAR_SYSTEMS_ICC__)
+  #pragma language=default
+#else
+  #error Not supported compiler type
+#endif
+
+/*!
+ * @}
+ */ /* end of group Peripheral_access_layer */
+
+
+#endif  /* PERI_FETCHR9C_H_ */
+

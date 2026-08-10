@@ -776,7 +776,7 @@
 /* MIPI_DSI_HOST module features */
 
 /* @brief Does not have DPHY PLL */
-#define FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL (1)
+#define FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL (0)
 /* @brief Support TX ULPS */
 #define FSL_FEATURE_MIPI_DSI_HOST_HAS_ULPS (1)
 /* @brief Has control register to enable or disable TX ULPS */
