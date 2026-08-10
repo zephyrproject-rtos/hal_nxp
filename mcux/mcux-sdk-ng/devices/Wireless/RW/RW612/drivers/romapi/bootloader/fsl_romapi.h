@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022, 2026 NXP
  *  
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -12,7 +12,6 @@
  ******************************************************************************/
 #include <stdint.h>
 #include <fsl_device_registers.h>
-
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -26,13 +25,9 @@
 #define ROM_API_TREE_ADDR_A0           0x13024100U
 #define ROM_API_TREE_ADDR_A1           0x13030000U
 
-static inline uint32_t get_romapi_addr(void) {
-    uint32_t chip_rev_nr = SOCCTRL->CHIP_INFO & 0x0fu;
-    return (chip_rev_nr == 0u) ? ROM_API_TREE_ADDR_A0 : ROM_API_TREE_ADDR_A1;
-}
+uint32_t get_romapi_addr(void);
 
 #define ROM_API_TREE_ADDR  (get_romapi_addr())
-
 
 // FOR A0. This needs to be adjusted for A1
 //! @brief Boot parameters of the user application

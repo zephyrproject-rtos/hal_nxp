@@ -8,7 +8,7 @@
 **                          RW612UKA2I
 **
 **     Version:             rev. 4.0, 2026-01-12
-**     Build:               b260114
+**     Build:               b260605
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for INPUTMUX
@@ -245,8 +245,8 @@ typedef struct {
  *  0b010111..USIM_DMA_TX_SINGLE
  *  0b011000..GAU_GPADC0_DMA_SINGLE
  *  0b011001..GAU_GPADC1_DMA_SINGLE
- *  0b011010..GAU_GPADCA_DMA_REQ
- *  0b011011..GAU_GPADCB_DMA_REQ
+ *  0b011010..GAU_GPDACA_DMA_REQ
+ *  0b011011..GAU_GPDACB_DMA_REQ
  *  0b011100..FLEXSPI_RX
  *  0b011101..FLEXSPI_TX
  *  0b011110..RESERVED

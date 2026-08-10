@@ -718,6 +718,8 @@
 #define FSL_FEATURE_SPC_HAS_SC_SPC_LP_REQ_BIT (1)
 /* @brief Has DCDC_BURST_CFG register. */
 #define FSL_FEATURE_SPC_HAS_DCDC_BURST_CFG (1)
+/* @brief Has DCDC 2.5V output select (register bit DCDC_CFG[VOUT2P5_SEL]). */
+#define FSL_FEATURE_SPC_HAS_DCDC_VOUT2P5_SEL (1)
 /* @brief Has SYSLDO_CFG register. */
 #define FSL_FEATURE_SPC_HAS_SYS_LDO (1)
 /* @brief Has cmp bandgap buffer enable. */
