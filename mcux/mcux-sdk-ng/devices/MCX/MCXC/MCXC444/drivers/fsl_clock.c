@@ -121,8 +121,8 @@ uint32_t CLOCK_GetOsc0ErClkFreq(void)
     if ((OSC0->CR & OSC_CR_ERCLKEN_MASK) != 0U)
     {
         /* Please call CLOCK_SetXtal0Freq base on board setting before using OSC0 clock. */
-        assert(g_xtal0Freq);
         freq = g_xtal0Freq;
+        assert(freq);
     }
     else
     {
@@ -148,8 +148,8 @@ uint32_t CLOCK_GetEr32kClkFreq(void)
             break;
         case 2U: /* RTC 32k clock  */
             /* Please call CLOCK_SetXtal32Freq base on board setting before using XTAL32K/RTC_CLKIN clock. */
-            assert(g_xtal32Freq);
             freq = g_xtal32Freq;
+            assert(freq);
             break;
         case 3U: /* LPO clock      */
             freq = LPO_CLK_FREQ;
@@ -371,8 +371,8 @@ uint32_t CLOCK_GetOutClkFreq(void)
             break;
         case (uint8_t)kMCGLITE_ClkSrcExt:
             /* Please call CLOCK_SetXtal0Freq base on board setting before using OSC0 clock. */
-            assert(g_xtal0Freq);
             freq = g_xtal0Freq;
+            assert(freq);
             break;
         default:
             freq = 0U;

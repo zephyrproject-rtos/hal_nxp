@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief advc driver version 2.0.3. */
-#define FSL_ADVC_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+/*! @brief advc driver version 2.1.0. */
+#define FSL_ADVC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*!
@@ -138,13 +138,23 @@ bool ADVC_IsDisabled(void);
 advc_result_t ADVC_PreVoltageChangeRequest(uint32_t aonCpuFreq);
 
 /*!
- * @brief Move back to optimal after changing any ADVC related clock frequency.
+ * @brief Post voltage change request with \b Non-blocking.
  * @note This function checks if SysTick is enabled. If not, it temporarily
  * enables SysTick and disables it before exiting.
  *
  * @return The observed result following the post-frequency change.
  */
 advc_result_t ADVC_PostVoltageChangeRequest(void);
+
+/*!
+ * @brief Post voltage change request with \b blocking until the change is done.
+ *
+ * @note This function checks if SysTick is enabled. If not, it temporarily
+ * enables SysTick and disables it before exiting.
+ *
+ * @return The result outcome with requesting to change frequency and waiting for completion.
+ */
+advc_result_t ADVC_PostVoltageChangeRequestBlocking(void);
 
 #if defined(__cplusplus)
 }

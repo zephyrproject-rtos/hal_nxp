@@ -1,6 +1,10 @@
 /*
 ** ###################################################################
-**     Processor:           MCXN247TVAB
+**     Processors:          MCXN247TVAB
+**                          MCXN247TVDF
+**                          MCXN247TVKL
+**                          MCXN247TVPB
+**
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
@@ -8,7 +12,7 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260512
+**     Build:               b260716
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

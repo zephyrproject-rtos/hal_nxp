@@ -7,13 +7,14 @@
 **                          MCXC151VLF
 **
 **     Compilers:
+**                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260518
+**     Build:               b260714
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXC151
@@ -156,6 +157,89 @@ typedef enum IRQn {
 #endif
 /* CPU specific feature definitions */
 #include "MCXC151_features.h"
+
+/* ----------------------------------------------------------------------------
+   -- Mapping Information
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup Mapping_Information Mapping Information
+ * @{
+ */
+
+/** Mapping Information */
+/*!
+ * @addtogroup eim_memory_channel_mapping
+ * @{
+ */
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+
+/*!
+ * @brief Structure for the eim_memory_channel
+ *
+ *
+ * Defines the structure for the EIM resource collections.
+ */
+typedef enum _eim_memory_channel
+{
+    kEIM_MemoryChannelRAMA0         = 0U,          /**< Memory RAMA0 */
+} eim_memory_channel_t;
+
+/* @} */
+
+/*!
+ * @addtogroup eim_error_injection_channel_enab_mapping
+ * @{
+ */
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+
+/*!
+ * @brief Structure for the eim_error_injection_channel_enable
+ *
+ *
+ * Defines the structure for the EIM error injection resource collections.
+ */
+typedef enum _eim_error_injection_channel_enab
+{
+    kEIM_MemoryChannelRAMAEnable    = 0x80000000U, /**< Memory channel 0(RAMA0) error injection enable */
+} eim_error_injection_channel_enab_t;
+
+/* @} */
+
+/*!
+ * @addtogroup erm_memory_channel_mapping
+ * @{
+ */
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+
+/*!
+ * @brief Structure for the erm_memory_channel
+ *
+ *
+ * Defines the structure for the ERM resource collections.
+ */
+typedef enum _erm_memory_channel
+{
+    kERM_MemoryChannelRAMA0         = 0U,          /**< Memory RAMA0 */
+    kERM_MemoryChannelFLASH         = 1U,          /**< Memory FLASH */
+} erm_memory_channel_t;
+
+/* @} */
+
+
+/*!
+ * @}
+ */ /* end of group Mapping_Information */
+
 
 /* ADC - Peripheral instance base addresses */
 /** Peripheral ADC0 base address */

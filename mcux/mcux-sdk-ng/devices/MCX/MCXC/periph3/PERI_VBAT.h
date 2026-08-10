@@ -17,7 +17,7 @@
 **                          MCXC162VLF
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260121
+**     Build:               b260714
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for VBAT
@@ -102,26 +102,30 @@
 /** VBAT - Register Layout Typedef */
 typedef struct {
   __I  uint32_t VERID;                             /**< Version ID, offset: 0x0 */
-       uint8_t RESERVED_0[252];
-  __IO uint32_t OSCCTLA;                           /**< Oscillator Control A, offset: 0x100 */
+       uint8_t RESERVED_0[12];
+  __IO uint32_t STATUSA;                           /**< Status A, offset: 0x10 */
        uint8_t RESERVED_1[4];
-  __IO uint32_t OSCCFGA;                           /**< Oscillator Configuration A, offset: 0x108 */
-       uint8_t RESERVED_2[12];
-  __IO uint32_t OSCLCKA;                           /**< Oscillator Lock A, offset: 0x118 */
+  __IO uint32_t IRQENA;                            /**< Interrupt Enable A, offset: 0x18 */
+       uint8_t RESERVED_2[228];
+  __IO uint32_t OSCCTLA;                           /**< Oscillator Control A, offset: 0x100 */
        uint8_t RESERVED_3[4];
+  __IO uint32_t OSCCFGA;                           /**< Oscillator Configuration A, offset: 0x108 */
+       uint8_t RESERVED_4[12];
+  __IO uint32_t OSCLCKA;                           /**< Oscillator Lock A, offset: 0x118 */
+       uint8_t RESERVED_5[4];
   __IO uint32_t OSCCLKE;                           /**< Oscillator Clock Enable, offset: 0x120 */
-       uint8_t RESERVED_4[220];
+       uint8_t RESERVED_6[220];
   __IO uint32_t FROCTLA;                           /**< FRO16K Control A, offset: 0x200 */
-       uint8_t RESERVED_5[20];
+       uint8_t RESERVED_7[20];
   __IO uint32_t FROLCKA;                           /**< FRO16K Lock A, offset: 0x218 */
-       uint8_t RESERVED_6[4];
+       uint8_t RESERVED_8[4];
   __IO uint32_t FROCLKE;                           /**< FRO16K Clock Enable, offset: 0x220 */
-       uint8_t RESERVED_7[1244];
+       uint8_t RESERVED_9[1244];
   struct {                                         /* offset: 0x700, array step: 0x8 */
-    __IO uint32_t WAKEUPA;                           /**< Wakeup 0 Register A, array offset: 0x700, array step: 0x8 */
+    __IO uint32_t WAKEUPA;                           /**< Wakeup 0 Register A..Wakeup 1 Register A, array offset: 0x700, array step: 0x8 */
          uint8_t RESERVED_0[4];
   } WAKEUP[VBAT_WAKEUP_COUNT];
-       uint8_t RESERVED_8[232];
+       uint8_t RESERVED_10[232];
   __IO uint32_t WAKLCKA;                           /**< Wakeup Lock A, offset: 0x7F8 */
 } VBAT_Type;
 
@@ -151,6 +155,48 @@ typedef struct {
 #define VBAT_VERID_MAJOR_SHIFT                   (24U)
 /*! MAJOR - Major Version Number */
 #define VBAT_VERID_MAJOR(x)                      (((uint32_t)(((uint32_t)(x)) << VBAT_VERID_MAJOR_SHIFT)) & VBAT_VERID_MAJOR_MASK)
+/*! @} */
+
+/*! @name STATUSA - Status A */
+/*! @{ */
+
+#define VBAT_STATUSA_POR_DET_MASK                (0x1U)
+#define VBAT_STATUSA_POR_DET_SHIFT               (0U)
+/*! POR_DET - POR Detect Flag
+ *  0b0..No effect
+ *  0b0..Not reset
+ *  0b1..Clear the flag
+ *  0b1..Reset
+ */
+#define VBAT_STATUSA_POR_DET(x)                  (((uint32_t)(((uint32_t)(x)) << VBAT_STATUSA_POR_DET_SHIFT)) & VBAT_STATUSA_POR_DET_MASK)
+
+#define VBAT_STATUSA_OSC_RDY_MASK                (0x20U)
+#define VBAT_STATUSA_OSC_RDY_SHIFT               (5U)
+/*! OSC_RDY - OSC32k Ready
+ *  0b0..Disabled (clock not ready)
+ *  0b1..Enabled (clock ready)
+ */
+#define VBAT_STATUSA_OSC_RDY(x)                  (((uint32_t)(((uint32_t)(x)) << VBAT_STATUSA_OSC_RDY_SHIFT)) & VBAT_STATUSA_OSC_RDY_MASK)
+/*! @} */
+
+/*! @name IRQENA - Interrupt Enable A */
+/*! @{ */
+
+#define VBAT_IRQENA_POR_DET_MASK                 (0x1U)
+#define VBAT_IRQENA_POR_DET_SHIFT                (0U)
+/*! POR_DET - POR Detect
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define VBAT_IRQENA_POR_DET(x)                   (((uint32_t)(((uint32_t)(x)) << VBAT_IRQENA_POR_DET_SHIFT)) & VBAT_IRQENA_POR_DET_MASK)
+
+#define VBAT_IRQENA_OSC_RDY_MASK                 (0x20U)
+#define VBAT_IRQENA_OSC_RDY_SHIFT                (5U)
+/*! OSC_RDY - OSC32k Ready
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define VBAT_IRQENA_OSC_RDY(x)                   (((uint32_t)(((uint32_t)(x)) << VBAT_IRQENA_OSC_RDY_SHIFT)) & VBAT_IRQENA_OSC_RDY_MASK)
 /*! @} */
 
 /*! @name OSCCTLA - Oscillator Control A */
@@ -233,66 +279,10 @@ typedef struct {
  *  0b1111..30 pF
  */
 #define VBAT_OSCCTLA_XTAL_CAP_SEL(x)             (((uint32_t)(((uint32_t)(x)) << VBAT_OSCCTLA_XTAL_CAP_SEL_SHIFT)) & VBAT_OSCCTLA_XTAL_CAP_SEL_MASK)
-
-#define VBAT_OSCCTLA_MODE_EN_MASK                (0x30000U)
-#define VBAT_OSCCTLA_MODE_EN_SHIFT               (16U)
-/*! MODE_EN - Mode Enable
- *  0b00..Normal mode
- *  0b01..Startup mode
- *  0b11..Low power mode
- */
-#define VBAT_OSCCTLA_MODE_EN(x)                  (((uint32_t)(((uint32_t)(x)) << VBAT_OSCCTLA_MODE_EN_SHIFT)) & VBAT_OSCCTLA_MODE_EN_MASK)
-
-#define VBAT_OSCCTLA_SUPPLY_DET_MASK             (0xC0000U)
-#define VBAT_OSCCTLA_SUPPLY_DET_SHIFT            (18U)
-/*! SUPPLY_DET - Supply Detector Trim
- *  0b00..VBAT supply is less than 3V
- *  0b01..VBAT supply is greater than 3V
- */
-#define VBAT_OSCCTLA_SUPPLY_DET(x)               (((uint32_t)(((uint32_t)(x)) << VBAT_OSCCTLA_SUPPLY_DET_SHIFT)) & VBAT_OSCCTLA_SUPPLY_DET_MASK)
 /*! @} */
 
 /*! @name OSCCFGA - Oscillator Configuration A */
 /*! @{ */
-
-#define VBAT_OSCCFGA_CMP_TRIM_MASK               (0x3U)
-#define VBAT_OSCCFGA_CMP_TRIM_SHIFT              (0U)
-/*! CMP_TRIM - Comparator Trim
- *  0b00..760 mV
- *  0b01..770 mV
- *  0b11..740 mV
- */
-#define VBAT_OSCCFGA_CMP_TRIM(x)                 (((uint32_t)(((uint32_t)(x)) << VBAT_OSCCFGA_CMP_TRIM_SHIFT)) & VBAT_OSCCFGA_CMP_TRIM_MASK)
-
-#define VBAT_OSCCFGA_CAP2_TRIM_MASK              (0x4U)
-#define VBAT_OSCCFGA_CAP2_TRIM_SHIFT             (2U)
-/*! CAP2_TRIM - CAP2_TRIM */
-#define VBAT_OSCCFGA_CAP2_TRIM(x)                (((uint32_t)(((uint32_t)(x)) << VBAT_OSCCFGA_CAP2_TRIM_SHIFT)) & VBAT_OSCCFGA_CAP2_TRIM_MASK)
-
-#define VBAT_OSCCFGA_DLY_TRIM_MASK               (0x78U)
-#define VBAT_OSCCFGA_DLY_TRIM_SHIFT              (3U)
-/*! DLY_TRIM - Delay Trim
- *  0b0000..P current 9(nA) and N Current 6(nA)
- *  0b0001..P current 13(nA) and N Current 6(nA)
- *  0b0011..P current 4(nA) and N Current 6(nA)
- *  0b0100..P current 9(nA) and N Current 4(nA)
- *  0b0101..P current 13(nA) and N Current 4(nA)
- *  0b0111..P current 4(nA) and N Current 4(nA)
- *  0b1000..P current 9(nA) and N Current 2(nA)
- *  0b1001..P current 13(nA) and N Current 2(nA)
- *  0b1011..P current 4(nA) and N Current 2(nA)
- */
-#define VBAT_OSCCFGA_DLY_TRIM(x)                 (((uint32_t)(((uint32_t)(x)) << VBAT_OSCCFGA_DLY_TRIM_SHIFT)) & VBAT_OSCCFGA_DLY_TRIM_MASK)
-
-#define VBAT_OSCCFGA_CAP_TRIM_MASK               (0x180U)
-#define VBAT_OSCCFGA_CAP_TRIM_SHIFT              (7U)
-/*! CAP_TRIM - Capacitor Trim
- *  0b00..Default (when CAP2_TRIM = 0 and CAP_TRIM[1:0] = 00 )
- *  0b01..-1us (when CAP2_TRIM = 0 and CAP_TRIM[1:0] = 01)
- *  0b10..-2us (when CAP2_TRIM = 0 and CAP_TRIM[1:0] = 10) or or +3.5us (when CAP2_TRIM = 1 and CAP_TRIM[1:0] = 10)
- *  0b11..-2.5us (when CAP2_TRIM = 0 and CAP_TRIM[1:0] = 11) or +1us (when CAP2_TRIM = 1 and CAP_TRIM[1:0] = 11)
- */
-#define VBAT_OSCCFGA_CAP_TRIM(x)                 (((uint32_t)(((uint32_t)(x)) << VBAT_OSCCFGA_CAP_TRIM_SHIFT)) & VBAT_OSCCFGA_CAP_TRIM_MASK)
 
 #define VBAT_OSCCFGA_INIT_TRIM_MASK              (0xE00U)
 #define VBAT_OSCCFGA_INIT_TRIM_SHIFT             (9U)
@@ -363,7 +353,7 @@ typedef struct {
 #define VBAT_FROCLKE_CLKE(x)                     (((uint32_t)(((uint32_t)(x)) << VBAT_FROCLKE_CLKE_SHIFT)) & VBAT_FROCLKE_CLKE_MASK)
 /*! @} */
 
-/*! @name WAKEUP_WAKEUPA - Wakeup 0 Register A */
+/*! @name WAKEUP_WAKEUPA - Wakeup 0 Register A..Wakeup 1 Register A */
 /*! @{ */
 
 #define VBAT_WAKEUP_WAKEUPA_REG_MASK             (0xFFFFFFFFU)

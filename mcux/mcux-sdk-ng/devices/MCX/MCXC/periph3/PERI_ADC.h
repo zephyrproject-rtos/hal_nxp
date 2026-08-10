@@ -17,7 +17,7 @@
 **                          MCXC162VLF
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260121
+**     Build:               b260714
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ADC
@@ -678,11 +678,6 @@ typedef struct {
 #define ADC_TCTRL_TDLY_SHIFT                     (16U)
 /*! TDLY - Trigger Delay Select */
 #define ADC_TCTRL_TDLY(x)                        (((uint32_t)(((uint32_t)(x)) << ADC_TCTRL_TDLY_SHIFT)) & ADC_TCTRL_TDLY_MASK)
-
-#define ADC_TCTRL_TSYNC_MASK                     (0x800000U)
-#define ADC_TCTRL_TSYNC_SHIFT                    (23U)
-/*! TSYNC - Trigger Synchronous Select */
-#define ADC_TCTRL_TSYNC(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_TCTRL_TSYNC_SHIFT)) & ADC_TCTRL_TSYNC_MASK)
 
 #define ADC_TCTRL_TCMD_MASK                      (0x7000000U)
 #define ADC_TCTRL_TCMD_SHIFT                     (24U)

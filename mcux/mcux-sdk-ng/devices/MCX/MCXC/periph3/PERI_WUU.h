@@ -17,7 +17,7 @@
 **                          MCXC162VLF
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260121
+**     Build:               b260714
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for WUU
@@ -180,27 +180,17 @@ typedef struct {
 
 #define WUU_PE1_Reserved0_MASK                   (0x3U)
 #define WUU_PE1_Reserved0_SHIFT                  (0U)
-/*! Reserved0 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved0 - Reserved */
 #define WUU_PE1_Reserved0(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PE1_Reserved0_SHIFT)) & WUU_PE1_Reserved0_MASK)
 
 #define WUU_PE1_Reserved1_MASK                   (0xCU)
 #define WUU_PE1_Reserved1_SHIFT                  (2U)
-/*! Reserved1 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved1 - Reserved */
 #define WUU_PE1_Reserved1(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PE1_Reserved1_SHIFT)) & WUU_PE1_Reserved1_MASK)
 
 #define WUU_PE1_WUPE2_MASK                       (0x30U)
 #define WUU_PE1_WUPE2_SHIFT                      (4U)
-/*! WUPE2 - Wake-up Pin Enable for WUU_Pn
+/*! WUPE2 - Wake-up Pin Enable for WUU_P2
  *  0b00..Disable
  *  0b01..Enable (detect on rising edge or high level)
  *  0b10..Enable (detect on falling edge or low level)
@@ -210,37 +200,22 @@ typedef struct {
 
 #define WUU_PE1_Reserved3_MASK                   (0xC0U)
 #define WUU_PE1_Reserved3_SHIFT                  (6U)
-/*! Reserved3 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved3 - Reserved */
 #define WUU_PE1_Reserved3(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PE1_Reserved3_SHIFT)) & WUU_PE1_Reserved3_MASK)
 
 #define WUU_PE1_Reserved4_MASK                   (0x300U)
 #define WUU_PE1_Reserved4_SHIFT                  (8U)
-/*! Reserved4 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved4 - Reserved */
 #define WUU_PE1_Reserved4(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PE1_Reserved4_SHIFT)) & WUU_PE1_Reserved4_MASK)
 
 #define WUU_PE1_Reserved5_MASK                   (0xC00U)
 #define WUU_PE1_Reserved5_SHIFT                  (10U)
-/*! Reserved5 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved5 - Reserved */
 #define WUU_PE1_Reserved5(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PE1_Reserved5_SHIFT)) & WUU_PE1_Reserved5_MASK)
 
 #define WUU_PE1_WUPE6_MASK                       (0x3000U)
 #define WUU_PE1_WUPE6_SHIFT                      (12U)
-/*! WUPE6 - Wake-up Pin Enable for WUU_Pn
+/*! WUPE6 - Wake-up Pin Enable for WUU_P6
  *  0b00..Disable
  *  0b01..Enable (detect on rising edge or high level)
  *  0b10..Enable (detect on falling edge or low level)
@@ -250,7 +225,7 @@ typedef struct {
 
 #define WUU_PE1_WUPE7_MASK                       (0xC000U)
 #define WUU_PE1_WUPE7_SHIFT                      (14U)
-/*! WUPE7 - Wake-up Pin Enable for WUU_Pn
+/*! WUPE7 - Wake-up Pin Enable for WUU_P7
  *  0b00..Disable
  *  0b01..Enable (detect on rising edge or high level)
  *  0b10..Enable (detect on falling edge or low level)
@@ -260,27 +235,17 @@ typedef struct {
 
 #define WUU_PE1_Reserved8_MASK                   (0x30000U)
 #define WUU_PE1_Reserved8_SHIFT                  (16U)
-/*! Reserved8 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved8 - Reserved */
 #define WUU_PE1_Reserved8(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PE1_Reserved8_SHIFT)) & WUU_PE1_Reserved8_MASK)
 
 #define WUU_PE1_Reserved9_MASK                   (0xC0000U)
 #define WUU_PE1_Reserved9_SHIFT                  (18U)
-/*! Reserved9 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved9 - Reserved */
 #define WUU_PE1_Reserved9(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PE1_Reserved9_SHIFT)) & WUU_PE1_Reserved9_MASK)
 
 #define WUU_PE1_WUPE10_MASK                      (0x300000U)
 #define WUU_PE1_WUPE10_SHIFT                     (20U)
-/*! WUPE10 - Wake-up Pin Enable for WUU_Pn
+/*! WUPE10 - Wake-up Pin Enable for WUU_P10
  *  0b00..Disable
  *  0b01..Enable (detect on rising edge or high level)
  *  0b10..Enable (detect on falling edge or low level)
@@ -290,7 +255,7 @@ typedef struct {
 
 #define WUU_PE1_WUPE11_MASK                      (0xC00000U)
 #define WUU_PE1_WUPE11_SHIFT                     (22U)
-/*! WUPE11 - Wake-up Pin Enable for WUU_Pn
+/*! WUPE11 - Wake-up Pin Enable for WUU_P11
  *  0b00..Disable
  *  0b01..Enable (detect on rising edge or high level)
  *  0b10..Enable (detect on falling edge or low level)
@@ -300,42 +265,22 @@ typedef struct {
 
 #define WUU_PE1_Reserved12_MASK                  (0x3000000U)
 #define WUU_PE1_Reserved12_SHIFT                 (24U)
-/*! Reserved12 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved12 - Reserved */
 #define WUU_PE1_Reserved12(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PE1_Reserved12_SHIFT)) & WUU_PE1_Reserved12_MASK)
 
 #define WUU_PE1_Reserved13_MASK                  (0xC000000U)
 #define WUU_PE1_Reserved13_SHIFT                 (26U)
-/*! Reserved13 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved13 - Reserved */
 #define WUU_PE1_Reserved13(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PE1_Reserved13_SHIFT)) & WUU_PE1_Reserved13_MASK)
 
 #define WUU_PE1_Reserved14_MASK                  (0x30000000U)
 #define WUU_PE1_Reserved14_SHIFT                 (28U)
-/*! Reserved14 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved14 - Reserved */
 #define WUU_PE1_Reserved14(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PE1_Reserved14_SHIFT)) & WUU_PE1_Reserved14_MASK)
 
 #define WUU_PE1_Reserved15_MASK                  (0xC0000000U)
 #define WUU_PE1_Reserved15_SHIFT                 (30U)
-/*! Reserved15 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved15 - Reserved */
 #define WUU_PE1_Reserved15(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PE1_Reserved15_SHIFT)) & WUU_PE1_Reserved15_MASK)
 /*! @} */
 
@@ -344,27 +289,17 @@ typedef struct {
 
 #define WUU_PE2_Reserved16_MASK                  (0x3U)
 #define WUU_PE2_Reserved16_SHIFT                 (0U)
-/*! Reserved16 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved16 - Reserved */
 #define WUU_PE2_Reserved16(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PE2_Reserved16_SHIFT)) & WUU_PE2_Reserved16_MASK)
 
 #define WUU_PE2_Reserved17_MASK                  (0xCU)
 #define WUU_PE2_Reserved17_SHIFT                 (2U)
-/*! Reserved17 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved17 - Reserved */
 #define WUU_PE2_Reserved17(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PE2_Reserved17_SHIFT)) & WUU_PE2_Reserved17_MASK)
 
 #define WUU_PE2_WUPE18_MASK                      (0x30U)
 #define WUU_PE2_WUPE18_SHIFT                     (4U)
-/*! WUPE18 - Wake-up Pin Enable for WUU_Pn
+/*! WUPE18 - Wake-up Pin Enable for WUU_P18
  *  0b00..Disable
  *  0b01..Enable (detect on rising edge or high level)
  *  0b10..Enable (detect on falling edge or low level)
@@ -374,7 +309,7 @@ typedef struct {
 
 #define WUU_PE2_WUPE19_MASK                      (0xC0U)
 #define WUU_PE2_WUPE19_SHIFT                     (6U)
-/*! WUPE19 - Wake-up Pin Enable for WUU_Pn
+/*! WUPE19 - Wake-up Pin Enable for WUU_P19
  *  0b00..Disable
  *  0b01..Enable (detect on rising edge or high level)
  *  0b10..Enable (detect on falling edge or low level)
@@ -384,7 +319,7 @@ typedef struct {
 
 #define WUU_PE2_WUPE20_MASK                      (0x300U)
 #define WUU_PE2_WUPE20_SHIFT                     (8U)
-/*! WUPE20 - Wake-up Pin Enable for WUU_Pn
+/*! WUPE20 - Wake-up Pin Enable for WUU_P20
  *  0b00..Disable
  *  0b01..Enable (detect on rising edge or high level)
  *  0b10..Enable (detect on falling edge or low level)
@@ -394,17 +329,12 @@ typedef struct {
 
 #define WUU_PE2_Reserved21_MASK                  (0xC00U)
 #define WUU_PE2_Reserved21_SHIFT                 (10U)
-/*! Reserved21 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved21 - Reserved */
 #define WUU_PE2_Reserved21(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PE2_Reserved21_SHIFT)) & WUU_PE2_Reserved21_MASK)
 
 #define WUU_PE2_WUPE22_MASK                      (0x3000U)
 #define WUU_PE2_WUPE22_SHIFT                     (12U)
-/*! WUPE22 - Wake-up Pin Enable for WUU_Pn
+/*! WUPE22 - Wake-up Pin Enable for WUU_P22
  *  0b00..Disable
  *  0b01..Enable (detect on rising edge or high level)
  *  0b10..Enable (detect on falling edge or low level)
@@ -414,7 +344,7 @@ typedef struct {
 
 #define WUU_PE2_WUPE23_MASK                      (0xC000U)
 #define WUU_PE2_WUPE23_SHIFT                     (14U)
-/*! WUPE23 - Wake-up Pin Enable for WUU_Pn
+/*! WUPE23 - Wake-up Pin Enable for WUU_P23
  *  0b00..Disable
  *  0b01..Enable (detect on rising edge or high level)
  *  0b10..Enable (detect on falling edge or low level)
@@ -424,7 +354,7 @@ typedef struct {
 
 #define WUU_PE2_WUPE24_MASK                      (0x30000U)
 #define WUU_PE2_WUPE24_SHIFT                     (16U)
-/*! WUPE24 - Wake-up Pin Enable for WUU_Pn
+/*! WUPE24 - Wake-up Pin Enable for WUU_P24
  *  0b00..Disable
  *  0b01..Enable (detect on rising edge or high level)
  *  0b10..Enable (detect on falling edge or low level)
@@ -434,7 +364,7 @@ typedef struct {
 
 #define WUU_PE2_WUPE25_MASK                      (0xC0000U)
 #define WUU_PE2_WUPE25_SHIFT                     (18U)
-/*! WUPE25 - Wake-up Pin Enable for WUU_Pn
+/*! WUPE25 - Wake-up Pin Enable for WUU_P25
  *  0b00..Disable
  *  0b01..Enable (detect on rising edge or high level)
  *  0b10..Enable (detect on falling edge or low level)
@@ -444,7 +374,7 @@ typedef struct {
 
 #define WUU_PE2_WUPE26_MASK                      (0x300000U)
 #define WUU_PE2_WUPE26_SHIFT                     (20U)
-/*! WUPE26 - Wake-up Pin Enable for WUU_Pn
+/*! WUPE26 - Wake-up Pin Enable for WUU_P26
  *  0b00..Disable
  *  0b01..Enable (detect on rising edge or high level)
  *  0b10..Enable (detect on falling edge or low level)
@@ -454,7 +384,7 @@ typedef struct {
 
 #define WUU_PE2_WUPE27_MASK                      (0xC00000U)
 #define WUU_PE2_WUPE27_SHIFT                     (22U)
-/*! WUPE27 - Wake-up Pin Enable for WUU_Pn
+/*! WUPE27 - Wake-up Pin Enable for WUU_P27
  *  0b00..Disable
  *  0b01..Enable (detect on rising edge or high level)
  *  0b10..Enable (detect on falling edge or low level)
@@ -464,37 +394,22 @@ typedef struct {
 
 #define WUU_PE2_Reserved28_MASK                  (0x3000000U)
 #define WUU_PE2_Reserved28_SHIFT                 (24U)
-/*! Reserved28 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved28 - Reserved */
 #define WUU_PE2_Reserved28(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PE2_Reserved28_SHIFT)) & WUU_PE2_Reserved28_MASK)
 
 #define WUU_PE2_Reserved29_MASK                  (0xC000000U)
 #define WUU_PE2_Reserved29_SHIFT                 (26U)
-/*! Reserved29 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved29 - Reserved */
 #define WUU_PE2_Reserved29(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PE2_Reserved29_SHIFT)) & WUU_PE2_Reserved29_MASK)
 
 #define WUU_PE2_Reserved30_MASK                  (0x30000000U)
 #define WUU_PE2_Reserved30_SHIFT                 (28U)
-/*! Reserved30 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved30 - Reserved */
 #define WUU_PE2_Reserved30(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PE2_Reserved30_SHIFT)) & WUU_PE2_Reserved30_MASK)
 
 #define WUU_PE2_WUPE31_MASK                      (0xC0000000U)
 #define WUU_PE2_WUPE31_SHIFT                     (30U)
-/*! WUPE31 - Wake-up Pin Enable for WUU_Pn
+/*! WUPE31 - Wake-up Pin Enable for WUU_P31
  *  0b00..Disable
  *  0b01..Enable (detect on rising edge or high level)
  *  0b10..Enable (detect on falling edge or low level)
@@ -556,23 +471,17 @@ typedef struct {
 
 #define WUU_PF_Reserved0_MASK                    (0x1U)
 #define WUU_PF_Reserved0_SHIFT                   (0U)
-/*! Reserved0 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved0 - Reserved */
 #define WUU_PF_Reserved0(x)                      (((uint32_t)(((uint32_t)(x)) << WUU_PF_Reserved0_SHIFT)) & WUU_PF_Reserved0_MASK)
 
 #define WUU_PF_Reserved1_MASK                    (0x2U)
 #define WUU_PF_Reserved1_SHIFT                   (1U)
-/*! Reserved1 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved1 - Reserved */
 #define WUU_PF_Reserved1(x)                      (((uint32_t)(((uint32_t)(x)) << WUU_PF_Reserved1_SHIFT)) & WUU_PF_Reserved1_MASK)
 
 #define WUU_PF_WUF2_MASK                         (0x4U)
 #define WUU_PF_WUF2_SHIFT                        (2U)
-/*! WUF2 - Wake-up Flag for WUU_Pn
+/*! WUF2 - Wake-up Flag for WUU_P2
  *  0b0..No
  *  0b1..Yes
  */
@@ -580,31 +489,22 @@ typedef struct {
 
 #define WUU_PF_Reserved3_MASK                    (0x8U)
 #define WUU_PF_Reserved3_SHIFT                   (3U)
-/*! Reserved3 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved3 - Reserved */
 #define WUU_PF_Reserved3(x)                      (((uint32_t)(((uint32_t)(x)) << WUU_PF_Reserved3_SHIFT)) & WUU_PF_Reserved3_MASK)
 
 #define WUU_PF_Reserved4_MASK                    (0x10U)
 #define WUU_PF_Reserved4_SHIFT                   (4U)
-/*! Reserved4 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved4 - Reserved */
 #define WUU_PF_Reserved4(x)                      (((uint32_t)(((uint32_t)(x)) << WUU_PF_Reserved4_SHIFT)) & WUU_PF_Reserved4_MASK)
 
 #define WUU_PF_Reserved5_MASK                    (0x20U)
 #define WUU_PF_Reserved5_SHIFT                   (5U)
-/*! Reserved5 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved5 - Reserved */
 #define WUU_PF_Reserved5(x)                      (((uint32_t)(((uint32_t)(x)) << WUU_PF_Reserved5_SHIFT)) & WUU_PF_Reserved5_MASK)
 
 #define WUU_PF_WUF6_MASK                         (0x40U)
 #define WUU_PF_WUF6_SHIFT                        (6U)
-/*! WUF6 - Wake-up Flag for WUU_Pn
+/*! WUF6 - Wake-up Flag for WUU_P6
  *  0b0..No
  *  0b1..Yes
  */
@@ -612,7 +512,7 @@ typedef struct {
 
 #define WUU_PF_WUF7_MASK                         (0x80U)
 #define WUU_PF_WUF7_SHIFT                        (7U)
-/*! WUF7 - Wake-up Flag for WUU_Pn
+/*! WUF7 - Wake-up Flag for WUU_P7
  *  0b0..No
  *  0b1..Yes
  */
@@ -620,23 +520,17 @@ typedef struct {
 
 #define WUU_PF_Reserved8_MASK                    (0x100U)
 #define WUU_PF_Reserved8_SHIFT                   (8U)
-/*! Reserved8 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved8 - Reserved */
 #define WUU_PF_Reserved8(x)                      (((uint32_t)(((uint32_t)(x)) << WUU_PF_Reserved8_SHIFT)) & WUU_PF_Reserved8_MASK)
 
 #define WUU_PF_Reserved9_MASK                    (0x200U)
 #define WUU_PF_Reserved9_SHIFT                   (9U)
-/*! Reserved9 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved9 - Reserved */
 #define WUU_PF_Reserved9(x)                      (((uint32_t)(((uint32_t)(x)) << WUU_PF_Reserved9_SHIFT)) & WUU_PF_Reserved9_MASK)
 
 #define WUU_PF_WUF10_MASK                        (0x400U)
 #define WUU_PF_WUF10_SHIFT                       (10U)
-/*! WUF10 - Wake-up Flag for WUU_Pn
+/*! WUF10 - Wake-up Flag for WUU_P10
  *  0b0..No
  *  0b1..Yes
  */
@@ -644,7 +538,7 @@ typedef struct {
 
 #define WUU_PF_WUF11_MASK                        (0x800U)
 #define WUU_PF_WUF11_SHIFT                       (11U)
-/*! WUF11 - Wake-up Flag for WUU_Pn
+/*! WUF11 - Wake-up Flag for WUU_P11
  *  0b0..No
  *  0b1..Yes
  */
@@ -652,55 +546,37 @@ typedef struct {
 
 #define WUU_PF_Reserved12_MASK                   (0x1000U)
 #define WUU_PF_Reserved12_SHIFT                  (12U)
-/*! Reserved12 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved12 - Reserved */
 #define WUU_PF_Reserved12(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PF_Reserved12_SHIFT)) & WUU_PF_Reserved12_MASK)
 
 #define WUU_PF_Reserved13_MASK                   (0x2000U)
 #define WUU_PF_Reserved13_SHIFT                  (13U)
-/*! Reserved13 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved13 - Reserved */
 #define WUU_PF_Reserved13(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PF_Reserved13_SHIFT)) & WUU_PF_Reserved13_MASK)
 
 #define WUU_PF_Reserved14_MASK                   (0x4000U)
 #define WUU_PF_Reserved14_SHIFT                  (14U)
-/*! Reserved14 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved14 - Reserved */
 #define WUU_PF_Reserved14(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PF_Reserved14_SHIFT)) & WUU_PF_Reserved14_MASK)
 
 #define WUU_PF_Reserved15_MASK                   (0x8000U)
 #define WUU_PF_Reserved15_SHIFT                  (15U)
-/*! Reserved15 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved15 - Reserved */
 #define WUU_PF_Reserved15(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PF_Reserved15_SHIFT)) & WUU_PF_Reserved15_MASK)
 
 #define WUU_PF_Reserved16_MASK                   (0x10000U)
 #define WUU_PF_Reserved16_SHIFT                  (16U)
-/*! Reserved16 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved16 - Reserved */
 #define WUU_PF_Reserved16(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PF_Reserved16_SHIFT)) & WUU_PF_Reserved16_MASK)
 
 #define WUU_PF_Reserved17_MASK                   (0x20000U)
 #define WUU_PF_Reserved17_SHIFT                  (17U)
-/*! Reserved17 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved17 - Reserved */
 #define WUU_PF_Reserved17(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PF_Reserved17_SHIFT)) & WUU_PF_Reserved17_MASK)
 
 #define WUU_PF_WUF18_MASK                        (0x40000U)
 #define WUU_PF_WUF18_SHIFT                       (18U)
-/*! WUF18 - Wake-up Flag for WUU_Pn
+/*! WUF18 - Wake-up Flag for WUU_P18
  *  0b0..No
  *  0b1..Yes
  */
@@ -708,7 +584,7 @@ typedef struct {
 
 #define WUU_PF_WUF19_MASK                        (0x80000U)
 #define WUU_PF_WUF19_SHIFT                       (19U)
-/*! WUF19 - Wake-up Flag for WUU_Pn
+/*! WUF19 - Wake-up Flag for WUU_P19
  *  0b0..No
  *  0b1..Yes
  */
@@ -716,7 +592,7 @@ typedef struct {
 
 #define WUU_PF_WUF20_MASK                        (0x100000U)
 #define WUU_PF_WUF20_SHIFT                       (20U)
-/*! WUF20 - Wake-up Flag for WUU_Pn
+/*! WUF20 - Wake-up Flag for WUU_P20
  *  0b0..No
  *  0b1..Yes
  */
@@ -724,15 +600,12 @@ typedef struct {
 
 #define WUU_PF_Reserved21_MASK                   (0x200000U)
 #define WUU_PF_Reserved21_SHIFT                  (21U)
-/*! Reserved21 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved21 - Reserved */
 #define WUU_PF_Reserved21(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PF_Reserved21_SHIFT)) & WUU_PF_Reserved21_MASK)
 
 #define WUU_PF_WUF22_MASK                        (0x400000U)
 #define WUU_PF_WUF22_SHIFT                       (22U)
-/*! WUF22 - Wake-up Flag for WUU_Pn
+/*! WUF22 - Wake-up Flag for WUU_P22
  *  0b0..No
  *  0b1..Yes
  */
@@ -740,7 +613,7 @@ typedef struct {
 
 #define WUU_PF_WUF23_MASK                        (0x800000U)
 #define WUU_PF_WUF23_SHIFT                       (23U)
-/*! WUF23 - Wake-up Flag for WUU_Pn
+/*! WUF23 - Wake-up Flag for WUU_P23
  *  0b0..No
  *  0b1..Yes
  */
@@ -748,7 +621,7 @@ typedef struct {
 
 #define WUU_PF_WUF24_MASK                        (0x1000000U)
 #define WUU_PF_WUF24_SHIFT                       (24U)
-/*! WUF24 - Wake-up Flag for WUU_Pn
+/*! WUF24 - Wake-up Flag for WUU_P24
  *  0b0..No
  *  0b1..Yes
  */
@@ -756,7 +629,7 @@ typedef struct {
 
 #define WUU_PF_WUF25_MASK                        (0x2000000U)
 #define WUU_PF_WUF25_SHIFT                       (25U)
-/*! WUF25 - Wake-up Flag for WUU_Pn
+/*! WUF25 - Wake-up Flag for WUU_P25
  *  0b0..No
  *  0b1..Yes
  */
@@ -764,7 +637,7 @@ typedef struct {
 
 #define WUU_PF_WUF26_MASK                        (0x4000000U)
 #define WUU_PF_WUF26_SHIFT                       (26U)
-/*! WUF26 - Wake-up Flag for WUU_Pn
+/*! WUF26 - Wake-up Flag for WUU_P26
  *  0b0..No
  *  0b1..Yes
  */
@@ -772,7 +645,7 @@ typedef struct {
 
 #define WUU_PF_WUF27_MASK                        (0x8000000U)
 #define WUU_PF_WUF27_SHIFT                       (27U)
-/*! WUF27 - Wake-up Flag for WUU_Pn
+/*! WUF27 - Wake-up Flag for WUU_P27
  *  0b0..No
  *  0b1..Yes
  */
@@ -780,31 +653,22 @@ typedef struct {
 
 #define WUU_PF_Reserved28_MASK                   (0x10000000U)
 #define WUU_PF_Reserved28_SHIFT                  (28U)
-/*! Reserved28 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved28 - Reserved */
 #define WUU_PF_Reserved28(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PF_Reserved28_SHIFT)) & WUU_PF_Reserved28_MASK)
 
 #define WUU_PF_Reserved29_MASK                   (0x20000000U)
 #define WUU_PF_Reserved29_SHIFT                  (29U)
-/*! Reserved29 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved29 - Reserved */
 #define WUU_PF_Reserved29(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PF_Reserved29_SHIFT)) & WUU_PF_Reserved29_MASK)
 
 #define WUU_PF_Reserved30_MASK                   (0x40000000U)
 #define WUU_PF_Reserved30_SHIFT                  (30U)
-/*! Reserved30 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved30 - Reserved */
 #define WUU_PF_Reserved30(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PF_Reserved30_SHIFT)) & WUU_PF_Reserved30_MASK)
 
 #define WUU_PF_WUF31_MASK                        (0x80000000U)
 #define WUU_PF_WUF31_SHIFT                       (31U)
-/*! WUF31 - Wake-up Flag for WUU_Pn
+/*! WUF31 - Wake-up Flag for WUU_P31
  *  0b0..No
  *  0b1..Yes
  */
@@ -866,27 +730,17 @@ typedef struct {
 
 #define WUU_PDC1_Reserved0_MASK                  (0x3U)
 #define WUU_PDC1_Reserved0_SHIFT                 (0U)
-/*! Reserved0 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved0 - Reserved */
 #define WUU_PDC1_Reserved0(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PDC1_Reserved0_SHIFT)) & WUU_PDC1_Reserved0_MASK)
 
 #define WUU_PDC1_Reserved1_MASK                  (0xCU)
 #define WUU_PDC1_Reserved1_SHIFT                 (2U)
-/*! Reserved1 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved1 - Reserved */
 #define WUU_PDC1_Reserved1(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PDC1_Reserved1_SHIFT)) & WUU_PDC1_Reserved1_MASK)
 
 #define WUU_PDC1_WUPDC2_MASK                     (0x30U)
 #define WUU_PDC1_WUPDC2_SHIFT                    (4U)
-/*! WUPDC2 - Wake-up Pin Configuration for WUU_Pn
+/*! WUPDC2 - Wake-up Pin Configuration for WUU_P2
  *  0b00..Interrupt
  *  0b01..DMA request
  *  0b10..Trigger event
@@ -896,37 +750,22 @@ typedef struct {
 
 #define WUU_PDC1_Reserved3_MASK                  (0xC0U)
 #define WUU_PDC1_Reserved3_SHIFT                 (6U)
-/*! Reserved3 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved3 - Reserved */
 #define WUU_PDC1_Reserved3(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PDC1_Reserved3_SHIFT)) & WUU_PDC1_Reserved3_MASK)
 
 #define WUU_PDC1_Reserved4_MASK                  (0x300U)
 #define WUU_PDC1_Reserved4_SHIFT                 (8U)
-/*! Reserved4 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved4 - Reserved */
 #define WUU_PDC1_Reserved4(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PDC1_Reserved4_SHIFT)) & WUU_PDC1_Reserved4_MASK)
 
 #define WUU_PDC1_Reserved5_MASK                  (0xC00U)
 #define WUU_PDC1_Reserved5_SHIFT                 (10U)
-/*! Reserved5 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved5 - Reserved */
 #define WUU_PDC1_Reserved5(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PDC1_Reserved5_SHIFT)) & WUU_PDC1_Reserved5_MASK)
 
 #define WUU_PDC1_WUPDC6_MASK                     (0x3000U)
 #define WUU_PDC1_WUPDC6_SHIFT                    (12U)
-/*! WUPDC6 - Wake-up Pin Configuration for WUU_Pn
+/*! WUPDC6 - Wake-up Pin Configuration for WUU_P6
  *  0b00..Interrupt
  *  0b01..DMA request
  *  0b10..Trigger event
@@ -936,7 +775,7 @@ typedef struct {
 
 #define WUU_PDC1_WUPDC7_MASK                     (0xC000U)
 #define WUU_PDC1_WUPDC7_SHIFT                    (14U)
-/*! WUPDC7 - Wake-up Pin Configuration for WUU_Pn
+/*! WUPDC7 - Wake-up Pin Configuration for WUU_P7
  *  0b00..Interrupt
  *  0b01..DMA request
  *  0b10..Trigger event
@@ -946,27 +785,17 @@ typedef struct {
 
 #define WUU_PDC1_Reserved8_MASK                  (0x30000U)
 #define WUU_PDC1_Reserved8_SHIFT                 (16U)
-/*! Reserved8 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved8 - Reserved */
 #define WUU_PDC1_Reserved8(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PDC1_Reserved8_SHIFT)) & WUU_PDC1_Reserved8_MASK)
 
 #define WUU_PDC1_Reserved9_MASK                  (0xC0000U)
 #define WUU_PDC1_Reserved9_SHIFT                 (18U)
-/*! Reserved9 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved9 - Reserved */
 #define WUU_PDC1_Reserved9(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PDC1_Reserved9_SHIFT)) & WUU_PDC1_Reserved9_MASK)
 
 #define WUU_PDC1_WUPDC10_MASK                    (0x300000U)
 #define WUU_PDC1_WUPDC10_SHIFT                   (20U)
-/*! WUPDC10 - Wake-up Pin Configuration for WUU_Pn
+/*! WUPDC10 - Wake-up Pin Configuration for WUU_P10
  *  0b00..Interrupt
  *  0b01..DMA request
  *  0b10..Trigger event
@@ -976,7 +805,7 @@ typedef struct {
 
 #define WUU_PDC1_WUPDC11_MASK                    (0xC00000U)
 #define WUU_PDC1_WUPDC11_SHIFT                   (22U)
-/*! WUPDC11 - Wake-up Pin Configuration for WUU_Pn
+/*! WUPDC11 - Wake-up Pin Configuration for WUU_P11
  *  0b00..Interrupt
  *  0b01..DMA request
  *  0b10..Trigger event
@@ -986,42 +815,22 @@ typedef struct {
 
 #define WUU_PDC1_Reserved12_MASK                 (0x3000000U)
 #define WUU_PDC1_Reserved12_SHIFT                (24U)
-/*! Reserved12 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved12 - Reserved */
 #define WUU_PDC1_Reserved12(x)                   (((uint32_t)(((uint32_t)(x)) << WUU_PDC1_Reserved12_SHIFT)) & WUU_PDC1_Reserved12_MASK)
 
 #define WUU_PDC1_Reserved13_MASK                 (0xC000000U)
 #define WUU_PDC1_Reserved13_SHIFT                (26U)
-/*! Reserved13 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved13 - Reserved */
 #define WUU_PDC1_Reserved13(x)                   (((uint32_t)(((uint32_t)(x)) << WUU_PDC1_Reserved13_SHIFT)) & WUU_PDC1_Reserved13_MASK)
 
 #define WUU_PDC1_Reserved14_MASK                 (0x30000000U)
 #define WUU_PDC1_Reserved14_SHIFT                (28U)
-/*! Reserved14 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved14 - Reserved */
 #define WUU_PDC1_Reserved14(x)                   (((uint32_t)(((uint32_t)(x)) << WUU_PDC1_Reserved14_SHIFT)) & WUU_PDC1_Reserved14_MASK)
 
 #define WUU_PDC1_Reserved15_MASK                 (0xC0000000U)
 #define WUU_PDC1_Reserved15_SHIFT                (30U)
-/*! Reserved15 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved15 - Reserved */
 #define WUU_PDC1_Reserved15(x)                   (((uint32_t)(((uint32_t)(x)) << WUU_PDC1_Reserved15_SHIFT)) & WUU_PDC1_Reserved15_MASK)
 /*! @} */
 
@@ -1030,27 +839,17 @@ typedef struct {
 
 #define WUU_PDC2_Reserved16_MASK                 (0x3U)
 #define WUU_PDC2_Reserved16_SHIFT                (0U)
-/*! Reserved16 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved16 - Reserved */
 #define WUU_PDC2_Reserved16(x)                   (((uint32_t)(((uint32_t)(x)) << WUU_PDC2_Reserved16_SHIFT)) & WUU_PDC2_Reserved16_MASK)
 
 #define WUU_PDC2_Reserved17_MASK                 (0xCU)
 #define WUU_PDC2_Reserved17_SHIFT                (2U)
-/*! Reserved17 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved17 - Reserved */
 #define WUU_PDC2_Reserved17(x)                   (((uint32_t)(((uint32_t)(x)) << WUU_PDC2_Reserved17_SHIFT)) & WUU_PDC2_Reserved17_MASK)
 
 #define WUU_PDC2_WUPDC18_MASK                    (0x30U)
 #define WUU_PDC2_WUPDC18_SHIFT                   (4U)
-/*! WUPDC18 - Wake-up Pin Configuration for WUU_Pn
+/*! WUPDC18 - Wake-up Pin Configuration for WUU_P18
  *  0b00..Interrupt
  *  0b01..DMA request
  *  0b10..Trigger event
@@ -1060,7 +859,7 @@ typedef struct {
 
 #define WUU_PDC2_WUPDC19_MASK                    (0xC0U)
 #define WUU_PDC2_WUPDC19_SHIFT                   (6U)
-/*! WUPDC19 - Wake-up Pin Configuration for WUU_Pn
+/*! WUPDC19 - Wake-up Pin Configuration for WUU_P19
  *  0b00..Interrupt
  *  0b01..DMA request
  *  0b10..Trigger event
@@ -1070,7 +869,7 @@ typedef struct {
 
 #define WUU_PDC2_WUPDC20_MASK                    (0x300U)
 #define WUU_PDC2_WUPDC20_SHIFT                   (8U)
-/*! WUPDC20 - Wake-up Pin Configuration for WUU_Pn
+/*! WUPDC20 - Wake-up Pin Configuration for WUU_P20
  *  0b00..Interrupt
  *  0b01..DMA request
  *  0b10..Trigger event
@@ -1080,17 +879,12 @@ typedef struct {
 
 #define WUU_PDC2_Reserved21_MASK                 (0xC00U)
 #define WUU_PDC2_Reserved21_SHIFT                (10U)
-/*! Reserved21 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved21 - Reserved */
 #define WUU_PDC2_Reserved21(x)                   (((uint32_t)(((uint32_t)(x)) << WUU_PDC2_Reserved21_SHIFT)) & WUU_PDC2_Reserved21_MASK)
 
 #define WUU_PDC2_WUPDC22_MASK                    (0x3000U)
 #define WUU_PDC2_WUPDC22_SHIFT                   (12U)
-/*! WUPDC22 - Wake-up Pin Configuration for WUU_Pn
+/*! WUPDC22 - Wake-up Pin Configuration for WUU_P22
  *  0b00..Interrupt
  *  0b01..DMA request
  *  0b10..Trigger event
@@ -1100,7 +894,7 @@ typedef struct {
 
 #define WUU_PDC2_WUPDC23_MASK                    (0xC000U)
 #define WUU_PDC2_WUPDC23_SHIFT                   (14U)
-/*! WUPDC23 - Wake-up Pin Configuration for WUU_Pn
+/*! WUPDC23 - Wake-up Pin Configuration for WUU_P23
  *  0b00..Interrupt
  *  0b01..DMA request
  *  0b10..Trigger event
@@ -1110,7 +904,7 @@ typedef struct {
 
 #define WUU_PDC2_WUPDC24_MASK                    (0x30000U)
 #define WUU_PDC2_WUPDC24_SHIFT                   (16U)
-/*! WUPDC24 - Wake-up Pin Configuration for WUU_Pn
+/*! WUPDC24 - Wake-up Pin Configuration for WUU_P24
  *  0b00..Interrupt
  *  0b01..DMA request
  *  0b10..Trigger event
@@ -1120,7 +914,7 @@ typedef struct {
 
 #define WUU_PDC2_WUPDC25_MASK                    (0xC0000U)
 #define WUU_PDC2_WUPDC25_SHIFT                   (18U)
-/*! WUPDC25 - Wake-up Pin Configuration for WUU_Pn
+/*! WUPDC25 - Wake-up Pin Configuration for WUU_P25
  *  0b00..Interrupt
  *  0b01..DMA request
  *  0b10..Trigger event
@@ -1130,7 +924,7 @@ typedef struct {
 
 #define WUU_PDC2_WUPDC26_MASK                    (0x300000U)
 #define WUU_PDC2_WUPDC26_SHIFT                   (20U)
-/*! WUPDC26 - Wake-up Pin Configuration for WUU_Pn
+/*! WUPDC26 - Wake-up Pin Configuration for WUU_P26
  *  0b00..Interrupt
  *  0b01..DMA request
  *  0b10..Trigger event
@@ -1140,7 +934,7 @@ typedef struct {
 
 #define WUU_PDC2_WUPDC27_MASK                    (0xC00000U)
 #define WUU_PDC2_WUPDC27_SHIFT                   (22U)
-/*! WUPDC27 - Wake-up Pin Configuration for WUU_Pn
+/*! WUPDC27 - Wake-up Pin Configuration for WUU_P27
  *  0b00..Interrupt
  *  0b01..DMA request
  *  0b10..Trigger event
@@ -1150,37 +944,22 @@ typedef struct {
 
 #define WUU_PDC2_Reserved28_MASK                 (0x3000000U)
 #define WUU_PDC2_Reserved28_SHIFT                (24U)
-/*! Reserved28 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved28 - Reserved */
 #define WUU_PDC2_Reserved28(x)                   (((uint32_t)(((uint32_t)(x)) << WUU_PDC2_Reserved28_SHIFT)) & WUU_PDC2_Reserved28_MASK)
 
 #define WUU_PDC2_Reserved29_MASK                 (0xC000000U)
 #define WUU_PDC2_Reserved29_SHIFT                (26U)
-/*! Reserved29 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved29 - Reserved */
 #define WUU_PDC2_Reserved29(x)                   (((uint32_t)(((uint32_t)(x)) << WUU_PDC2_Reserved29_SHIFT)) & WUU_PDC2_Reserved29_MASK)
 
 #define WUU_PDC2_Reserved30_MASK                 (0x30000000U)
 #define WUU_PDC2_Reserved30_SHIFT                (28U)
-/*! Reserved30 - Reserved
- *  0b00..Not supported
- *  0b01..Not supported
- *  0b10..Not supported
- *  0b11..Not supported
- */
+/*! Reserved30 - Reserved */
 #define WUU_PDC2_Reserved30(x)                   (((uint32_t)(((uint32_t)(x)) << WUU_PDC2_Reserved30_SHIFT)) & WUU_PDC2_Reserved30_MASK)
 
 #define WUU_PDC2_WUPDC31_MASK                    (0xC0000000U)
 #define WUU_PDC2_WUPDC31_SHIFT                   (30U)
-/*! WUPDC31 - Wake-up Pin Configuration for WUU_Pn
+/*! WUPDC31 - Wake-up Pin Configuration for WUU_P31
  *  0b00..Interrupt
  *  0b01..DMA request
  *  0b10..Trigger event
@@ -1218,23 +997,17 @@ typedef struct {
 
 #define WUU_PMC_Reserved0_MASK                   (0x1U)
 #define WUU_PMC_Reserved0_SHIFT                  (0U)
-/*! Reserved0 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved0 - Reserved */
 #define WUU_PMC_Reserved0(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PMC_Reserved0_SHIFT)) & WUU_PMC_Reserved0_MASK)
 
 #define WUU_PMC_Reserved1_MASK                   (0x2U)
 #define WUU_PMC_Reserved1_SHIFT                  (1U)
-/*! Reserved1 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved1 - Reserved */
 #define WUU_PMC_Reserved1(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PMC_Reserved1_SHIFT)) & WUU_PMC_Reserved1_MASK)
 
 #define WUU_PMC_WUPMC2_MASK                      (0x4U)
 #define WUU_PMC_WUPMC2_SHIFT                     (2U)
-/*! WUPMC2 - Wake-up Pin Mode Configuration for WUU_Pn
+/*! WUPMC2 - Wake-up Pin Mode Configuration for WUU_P2
  *  0b0..Active only during a low-leakage mode. You can modify the corresponding fields within Pin Enable (PEn) or
  *       Pin DMA/Trigger Configuration (PDCn).
  *  0b1..Active during all power modes. Do not modify the corresponding fields within Pin Enable (PEn) or Pin DMA/Trigger Configuration (PDCn).
@@ -1243,31 +1016,22 @@ typedef struct {
 
 #define WUU_PMC_Reserved3_MASK                   (0x8U)
 #define WUU_PMC_Reserved3_SHIFT                  (3U)
-/*! Reserved3 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved3 - Reserved */
 #define WUU_PMC_Reserved3(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PMC_Reserved3_SHIFT)) & WUU_PMC_Reserved3_MASK)
 
 #define WUU_PMC_Reserved4_MASK                   (0x10U)
 #define WUU_PMC_Reserved4_SHIFT                  (4U)
-/*! Reserved4 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved4 - Reserved */
 #define WUU_PMC_Reserved4(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PMC_Reserved4_SHIFT)) & WUU_PMC_Reserved4_MASK)
 
 #define WUU_PMC_Reserved5_MASK                   (0x20U)
 #define WUU_PMC_Reserved5_SHIFT                  (5U)
-/*! Reserved5 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved5 - Reserved */
 #define WUU_PMC_Reserved5(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PMC_Reserved5_SHIFT)) & WUU_PMC_Reserved5_MASK)
 
 #define WUU_PMC_WUPMC6_MASK                      (0x40U)
 #define WUU_PMC_WUPMC6_SHIFT                     (6U)
-/*! WUPMC6 - Wake-up Pin Mode Configuration for WUU_Pn
+/*! WUPMC6 - Wake-up Pin Mode Configuration for WUU_P6
  *  0b0..Active only during a low-leakage mode. You can modify the corresponding fields within Pin Enable (PEn) or
  *       Pin DMA/Trigger Configuration (PDCn).
  *  0b1..Active during all power modes. Do not modify the corresponding fields within Pin Enable (PEn) or Pin DMA/Trigger Configuration (PDCn).
@@ -1276,7 +1040,7 @@ typedef struct {
 
 #define WUU_PMC_WUPMC7_MASK                      (0x80U)
 #define WUU_PMC_WUPMC7_SHIFT                     (7U)
-/*! WUPMC7 - Wake-up Pin Mode Configuration for WUU_Pn
+/*! WUPMC7 - Wake-up Pin Mode Configuration for WUU_P7
  *  0b0..Active only during a low-leakage mode. You can modify the corresponding fields within Pin Enable (PEn) or
  *       Pin DMA/Trigger Configuration (PDCn).
  *  0b1..Active during all power modes. Do not modify the corresponding fields within Pin Enable (PEn) or Pin DMA/Trigger Configuration (PDCn).
@@ -1285,23 +1049,17 @@ typedef struct {
 
 #define WUU_PMC_Reserved8_MASK                   (0x100U)
 #define WUU_PMC_Reserved8_SHIFT                  (8U)
-/*! Reserved8 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved8 - Reserved */
 #define WUU_PMC_Reserved8(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PMC_Reserved8_SHIFT)) & WUU_PMC_Reserved8_MASK)
 
 #define WUU_PMC_Reserved9_MASK                   (0x200U)
 #define WUU_PMC_Reserved9_SHIFT                  (9U)
-/*! Reserved9 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved9 - Reserved */
 #define WUU_PMC_Reserved9(x)                     (((uint32_t)(((uint32_t)(x)) << WUU_PMC_Reserved9_SHIFT)) & WUU_PMC_Reserved9_MASK)
 
 #define WUU_PMC_WUPMC10_MASK                     (0x400U)
 #define WUU_PMC_WUPMC10_SHIFT                    (10U)
-/*! WUPMC10 - Wake-up Pin Mode Configuration for WUU_Pn
+/*! WUPMC10 - Wake-up Pin Mode Configuration for WUU_P10
  *  0b0..Active only during a low-leakage mode. You can modify the corresponding fields within Pin Enable (PEn) or
  *       Pin DMA/Trigger Configuration (PDCn).
  *  0b1..Active during all power modes. Do not modify the corresponding fields within Pin Enable (PEn) or Pin DMA/Trigger Configuration (PDCn).
@@ -1310,7 +1068,7 @@ typedef struct {
 
 #define WUU_PMC_WUPMC11_MASK                     (0x800U)
 #define WUU_PMC_WUPMC11_SHIFT                    (11U)
-/*! WUPMC11 - Wake-up Pin Mode Configuration for WUU_Pn
+/*! WUPMC11 - Wake-up Pin Mode Configuration for WUU_P11
  *  0b0..Active only during a low-leakage mode. You can modify the corresponding fields within Pin Enable (PEn) or
  *       Pin DMA/Trigger Configuration (PDCn).
  *  0b1..Active during all power modes. Do not modify the corresponding fields within Pin Enable (PEn) or Pin DMA/Trigger Configuration (PDCn).
@@ -1319,55 +1077,37 @@ typedef struct {
 
 #define WUU_PMC_Reserved12_MASK                  (0x1000U)
 #define WUU_PMC_Reserved12_SHIFT                 (12U)
-/*! Reserved12 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved12 - Reserved */
 #define WUU_PMC_Reserved12(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PMC_Reserved12_SHIFT)) & WUU_PMC_Reserved12_MASK)
 
 #define WUU_PMC_Reserved13_MASK                  (0x2000U)
 #define WUU_PMC_Reserved13_SHIFT                 (13U)
-/*! Reserved13 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved13 - Reserved */
 #define WUU_PMC_Reserved13(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PMC_Reserved13_SHIFT)) & WUU_PMC_Reserved13_MASK)
 
 #define WUU_PMC_Reserved14_MASK                  (0x4000U)
 #define WUU_PMC_Reserved14_SHIFT                 (14U)
-/*! Reserved14 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved14 - Reserved */
 #define WUU_PMC_Reserved14(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PMC_Reserved14_SHIFT)) & WUU_PMC_Reserved14_MASK)
 
 #define WUU_PMC_Reserved15_MASK                  (0x8000U)
 #define WUU_PMC_Reserved15_SHIFT                 (15U)
-/*! Reserved15 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved15 - Reserved */
 #define WUU_PMC_Reserved15(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PMC_Reserved15_SHIFT)) & WUU_PMC_Reserved15_MASK)
 
 #define WUU_PMC_Reserved16_MASK                  (0x10000U)
 #define WUU_PMC_Reserved16_SHIFT                 (16U)
-/*! Reserved16 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved16 - Reserved */
 #define WUU_PMC_Reserved16(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PMC_Reserved16_SHIFT)) & WUU_PMC_Reserved16_MASK)
 
 #define WUU_PMC_Reserved17_MASK                  (0x20000U)
 #define WUU_PMC_Reserved17_SHIFT                 (17U)
-/*! Reserved17 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved17 - Reserved */
 #define WUU_PMC_Reserved17(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PMC_Reserved17_SHIFT)) & WUU_PMC_Reserved17_MASK)
 
 #define WUU_PMC_WUPMC18_MASK                     (0x40000U)
 #define WUU_PMC_WUPMC18_SHIFT                    (18U)
-/*! WUPMC18 - Wake-up Pin Mode Configuration for WUU_Pn
+/*! WUPMC18 - Wake-up Pin Mode Configuration for WUU_P18
  *  0b0..Active only during a low-leakage mode. You can modify the corresponding fields within Pin Enable (PEn) or
  *       Pin DMA/Trigger Configuration (PDCn).
  *  0b1..Active during all power modes. Do not modify the corresponding fields within Pin Enable (PEn) or Pin DMA/Trigger Configuration (PDCn).
@@ -1376,7 +1116,7 @@ typedef struct {
 
 #define WUU_PMC_WUPMC19_MASK                     (0x80000U)
 #define WUU_PMC_WUPMC19_SHIFT                    (19U)
-/*! WUPMC19 - Wake-up Pin Mode Configuration for WUU_Pn
+/*! WUPMC19 - Wake-up Pin Mode Configuration for WUU_P19
  *  0b0..Active only during a low-leakage mode. You can modify the corresponding fields within Pin Enable (PEn) or
  *       Pin DMA/Trigger Configuration (PDCn).
  *  0b1..Active during all power modes. Do not modify the corresponding fields within Pin Enable (PEn) or Pin DMA/Trigger Configuration (PDCn).
@@ -1385,7 +1125,7 @@ typedef struct {
 
 #define WUU_PMC_WUPMC20_MASK                     (0x100000U)
 #define WUU_PMC_WUPMC20_SHIFT                    (20U)
-/*! WUPMC20 - Wake-up Pin Mode Configuration for WUU_Pn
+/*! WUPMC20 - Wake-up Pin Mode Configuration for WUU_P20
  *  0b0..Active only during a low-leakage mode. You can modify the corresponding fields within Pin Enable (PEn) or
  *       Pin DMA/Trigger Configuration (PDCn).
  *  0b1..Active during all power modes. Do not modify the corresponding fields within Pin Enable (PEn) or Pin DMA/Trigger Configuration (PDCn).
@@ -1394,15 +1134,12 @@ typedef struct {
 
 #define WUU_PMC_Reserved21_MASK                  (0x200000U)
 #define WUU_PMC_Reserved21_SHIFT                 (21U)
-/*! Reserved21 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved21 - Reserved */
 #define WUU_PMC_Reserved21(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PMC_Reserved21_SHIFT)) & WUU_PMC_Reserved21_MASK)
 
 #define WUU_PMC_WUPMC22_MASK                     (0x400000U)
 #define WUU_PMC_WUPMC22_SHIFT                    (22U)
-/*! WUPMC22 - Wake-up Pin Mode Configuration for WUU_Pn
+/*! WUPMC22 - Wake-up Pin Mode Configuration for WUU_P22
  *  0b0..Active only during a low-leakage mode. You can modify the corresponding fields within Pin Enable (PEn) or
  *       Pin DMA/Trigger Configuration (PDCn).
  *  0b1..Active during all power modes. Do not modify the corresponding fields within Pin Enable (PEn) or Pin DMA/Trigger Configuration (PDCn).
@@ -1411,7 +1148,7 @@ typedef struct {
 
 #define WUU_PMC_WUPMC23_MASK                     (0x800000U)
 #define WUU_PMC_WUPMC23_SHIFT                    (23U)
-/*! WUPMC23 - Wake-up Pin Mode Configuration for WUU_Pn
+/*! WUPMC23 - Wake-up Pin Mode Configuration for WUU_P23
  *  0b0..Active only during a low-leakage mode. You can modify the corresponding fields within Pin Enable (PEn) or
  *       Pin DMA/Trigger Configuration (PDCn).
  *  0b1..Active during all power modes. Do not modify the corresponding fields within Pin Enable (PEn) or Pin DMA/Trigger Configuration (PDCn).
@@ -1420,7 +1157,7 @@ typedef struct {
 
 #define WUU_PMC_WUPMC24_MASK                     (0x1000000U)
 #define WUU_PMC_WUPMC24_SHIFT                    (24U)
-/*! WUPMC24 - Wake-up Pin Mode Configuration for WUU_Pn
+/*! WUPMC24 - Wake-up Pin Mode Configuration for WUU_P24
  *  0b0..Active only during a low-leakage mode. You can modify the corresponding fields within Pin Enable (PEn) or
  *       Pin DMA/Trigger Configuration (PDCn).
  *  0b1..Active during all power modes. Do not modify the corresponding fields within Pin Enable (PEn) or Pin DMA/Trigger Configuration (PDCn).
@@ -1429,7 +1166,7 @@ typedef struct {
 
 #define WUU_PMC_WUPMC25_MASK                     (0x2000000U)
 #define WUU_PMC_WUPMC25_SHIFT                    (25U)
-/*! WUPMC25 - Wake-up Pin Mode Configuration for WUU_Pn
+/*! WUPMC25 - Wake-up Pin Mode Configuration for WUU_P25
  *  0b0..Active only during a low-leakage mode. You can modify the corresponding fields within Pin Enable (PEn) or
  *       Pin DMA/Trigger Configuration (PDCn).
  *  0b1..Active during all power modes. Do not modify the corresponding fields within Pin Enable (PEn) or Pin DMA/Trigger Configuration (PDCn).
@@ -1438,7 +1175,7 @@ typedef struct {
 
 #define WUU_PMC_WUPMC26_MASK                     (0x4000000U)
 #define WUU_PMC_WUPMC26_SHIFT                    (26U)
-/*! WUPMC26 - Wake-up Pin Mode Configuration for WUU_Pn
+/*! WUPMC26 - Wake-up Pin Mode Configuration for WUU_P26
  *  0b0..Active only during a low-leakage mode. You can modify the corresponding fields within Pin Enable (PEn) or
  *       Pin DMA/Trigger Configuration (PDCn).
  *  0b1..Active during all power modes. Do not modify the corresponding fields within Pin Enable (PEn) or Pin DMA/Trigger Configuration (PDCn).
@@ -1447,7 +1184,7 @@ typedef struct {
 
 #define WUU_PMC_WUPMC27_MASK                     (0x8000000U)
 #define WUU_PMC_WUPMC27_SHIFT                    (27U)
-/*! WUPMC27 - Wake-up Pin Mode Configuration for WUU_Pn
+/*! WUPMC27 - Wake-up Pin Mode Configuration for WUU_P27
  *  0b0..Active only during a low-leakage mode. You can modify the corresponding fields within Pin Enable (PEn) or
  *       Pin DMA/Trigger Configuration (PDCn).
  *  0b1..Active during all power modes. Do not modify the corresponding fields within Pin Enable (PEn) or Pin DMA/Trigger Configuration (PDCn).
@@ -1456,31 +1193,22 @@ typedef struct {
 
 #define WUU_PMC_Reserved28_MASK                  (0x10000000U)
 #define WUU_PMC_Reserved28_SHIFT                 (28U)
-/*! Reserved28 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved28 - Reserved */
 #define WUU_PMC_Reserved28(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PMC_Reserved28_SHIFT)) & WUU_PMC_Reserved28_MASK)
 
 #define WUU_PMC_Reserved29_MASK                  (0x20000000U)
 #define WUU_PMC_Reserved29_SHIFT                 (29U)
-/*! Reserved29 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved29 - Reserved */
 #define WUU_PMC_Reserved29(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PMC_Reserved29_SHIFT)) & WUU_PMC_Reserved29_MASK)
 
 #define WUU_PMC_Reserved30_MASK                  (0x40000000U)
 #define WUU_PMC_Reserved30_SHIFT                 (30U)
-/*! Reserved30 - Reserved
- *  0b0..Not supported
- *  0b1..Not supported
- */
+/*! Reserved30 - Reserved */
 #define WUU_PMC_Reserved30(x)                    (((uint32_t)(((uint32_t)(x)) << WUU_PMC_Reserved30_SHIFT)) & WUU_PMC_Reserved30_MASK)
 
 #define WUU_PMC_WUPMC31_MASK                     (0x80000000U)
 #define WUU_PMC_WUPMC31_SHIFT                    (31U)
-/*! WUPMC31 - Wake-up Pin Mode Configuration for WUU_Pn
+/*! WUPMC31 - Wake-up Pin Mode Configuration for WUU_P31
  *  0b0..Active only during a low-leakage mode. You can modify the corresponding fields within Pin Enable (PEn) or
  *       Pin DMA/Trigger Configuration (PDCn).
  *  0b1..Active during all power modes. Do not modify the corresponding fields within Pin Enable (PEn) or Pin DMA/Trigger Configuration (PDCn).

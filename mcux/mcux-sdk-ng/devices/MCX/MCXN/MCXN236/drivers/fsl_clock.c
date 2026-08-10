@@ -822,7 +822,7 @@ void CLOCK_AttachClk(clock_attach_id_t connection)
     uint32_t i;
     volatile uint32_t *pClkSel;
 
-    pClkSel = &(SYSCON->SYSTICKCLKSEL0);
+    pClkSel = (volatile uint32_t *)(void *)&(SYSCON->SYSTICKCLKSEL0);
 
     if (kNONE_to_NONE != connection)
     {
@@ -877,7 +877,7 @@ clock_attach_id_t CLOCK_GetClockAttachId(clock_attach_id_t attachId)
     uint32_t selector       = GET_ID_SELECTOR(tmp32);
     volatile uint32_t *pClkSel;
 
-    pClkSel = &(SYSCON->SYSTICKCLKSEL0);
+    pClkSel = (volatile uint32_t *)(void *)&(SYSCON->SYSTICKCLKSEL0);
 
     if (kNONE_to_NONE == attachId)
     {
@@ -930,14 +930,16 @@ clock_attach_id_t CLOCK_GetClockAttachId(clock_attach_id_t attachId)
 void CLOCK_SetClkDiv(clock_div_name_t div_name, uint32_t divided_by_value)
 {
     volatile uint32_t *pClkDiv;
+    volatile uint32_t *pDivReg;
 
-    pClkDiv = &(SYSCON->SYSTICKCLKDIV[0]);
+    pClkDiv  = &(SYSCON->SYSTICKCLKDIV[0]);
+    pDivReg  = (volatile uint32_t *)((uint8_t *)pClkDiv + ((uint32_t)div_name << 2U));
 
     /* Early exit: current DIV value already matches the requested value,
      * and the divider is not in halt state */
     if ((divided_by_value != 0U) &&
-        ((((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] & (1UL << 30U)) == 0U) &&
-        ((((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] & 0xFFU) == (divided_by_value - 1U)))
+        ((*pDivReg & (1UL << 30U)) == 0U) &&
+        ((*pDivReg & 0xFFU) == (divided_by_value - 1U)))
     {
         return;
     }
@@ -946,23 +948,23 @@ void CLOCK_SetClkDiv(clock_div_name_t div_name, uint32_t divided_by_value)
      * writing those bits would corrupt reserved fields. Write the DIV value directly. */
     if (div_name == kCLOCK_DivAhbClk)
     {
-        ((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] = (divided_by_value == 0U) ? 0U : (divided_by_value - 1U);
+        *pDivReg = (divided_by_value == 0U) ? 0U : (divided_by_value - 1U);
     }
     else
     {
         /* halt and reset clock dividers */
-        ((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] = 0x3UL << 29U;
+        *pDivReg = 0x3UL << 29U;
 
         if (divided_by_value == 0U) /*!<  halt */
         {
-            ((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] = 1UL << 30U;
+            *pDivReg = 1UL << 30U;
         }
         else
         {
             /* Write new DIV value while keeping HALT bit set */
-            ((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] = (divided_by_value - 1U) | (1UL << 30U);
+            *pDivReg = (divided_by_value - 1U) | (1UL << 30U);
             /* Clear HALT bit to start the divider with the new value */
-            ((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] &= ~(1UL << 30U);
+            *pDivReg &= ~(1UL << 30U);
         }
     }
 
@@ -978,16 +980,18 @@ uint32_t CLOCK_GetClkDiv(clock_div_name_t div_name)
 {
     uint32_t div;
     volatile uint32_t *pClkDiv;
+    volatile uint32_t *pDivReg;
 
     pClkDiv = &(SYSCON->SYSTICKCLKDIV[0]);
+    pDivReg = (volatile uint32_t *)((uint8_t *)pClkDiv + ((uint32_t)div_name << 2U));
 
-    if ((uint32_t)(((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] & (0x3UL << 29U)) != 0UL)
+    if ((uint32_t)(*pDivReg & (0x3UL << 29U)) != 0UL)
     {
         div = 0U;
     }
     else
     {
-        div = (uint32_t)((((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] & 0xFFU) + 1U);
+        div = (uint32_t)((*pDivReg & 0xFFU) + 1U);
     }
 
     return div;
@@ -1002,11 +1006,13 @@ uint32_t CLOCK_GetClkDiv(clock_div_name_t div_name)
 void CLOCK_HaltClkDiv(clock_div_name_t div_name)
 {
     volatile uint32_t *pClkDiv;
+    volatile uint32_t *pDivReg;
 
     pClkDiv = &(SYSCON->SYSTICKCLKDIV[0]);
+    pDivReg = (volatile uint32_t *)((uint8_t *)pClkDiv + ((uint32_t)div_name << 2U));
 
     /* halt clock dividers */
-    ((volatile uint32_t *)pClkDiv)[(uint32_t)div_name] = 1UL << 30U;
+    *pDivReg = 1UL << 30U;
 
     return;
 }
@@ -2783,6 +2789,7 @@ bool CLOCK_EnableUsbhsPhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
     uint32_t phyPllDiv  = 0U;
     uint16_t multiplier = 0U;
     bool err            = false;
+    bool usePreDiv      = false;
 
     USBPHY->CTRL_CLR    = USBPHY_CTRL_SFTRST_MASK;
     USBPHY->ANACTRL_SET = USBPHY_ANACTRL_LVI_EN_MASK;
@@ -2790,11 +2797,24 @@ bool CLOCK_EnableUsbhsPhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
     SDK_DelayAtLeastUs(15U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
     USBPHY->PLL_SIC_SET = USBPHY_PLL_SIC_PLL_POWER(1);
 
-    if ((480000000UL % freq) != 0UL)
+    if ((480000000UL % freq) == 0UL)
     {
-        return false;
+        multiplier = (uint16_t)((480000000UL / freq) & 0xFFFFU);
     }
-    multiplier = (uint16_t)((480000000UL / freq) & 0xFFFFU);
+
+    if ((multiplier != 15U) && (multiplier != 16U) && (multiplier != 20U) && (multiplier != 22U) &&
+        (multiplier != 24U) && (multiplier != 25U) && (multiplier != 30U) && (multiplier != 40U))
+    {
+        if (((freq % 2UL) == 0UL) && ((480000000UL % (freq / 2UL)) == 0UL))
+        {
+            usePreDiv  = true;
+            multiplier = (uint16_t)((480000000UL / (freq / 2UL)) & 0xFFFFU);
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     switch (multiplier)
     {
@@ -2850,7 +2870,12 @@ bool CLOCK_EnableUsbhsPhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
         return false;
     }
 
-    USBPHY->PLL_SIC = (USBPHY->PLL_SIC & ~(USBPHY_PLL_SIC_PLL_DIV_SEL_MASK)) | phyPllDiv;
+    if (usePreDiv)
+    {
+        phyPllDiv |= USBPHY_PLL_SIC_PLL_PREDIV(1U);
+    }
+
+    USBPHY->PLL_SIC = (USBPHY->PLL_SIC & ~(USBPHY_PLL_SIC_PLL_DIV_SEL_MASK | USBPHY_PLL_SIC_PLL_PREDIV_MASK)) | phyPllDiv;
 
     USBPHY->PLL_SIC_CLR = USBPHY_PLL_SIC_PLL_BYPASS_MASK;
     USBPHY->PLL_SIC_SET = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);

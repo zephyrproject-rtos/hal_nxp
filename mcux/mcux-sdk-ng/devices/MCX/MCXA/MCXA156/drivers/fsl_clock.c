@@ -493,40 +493,30 @@ static uint32_t CLOCK_GetFroHfFreq(void)
     uint32_t freq;
 
     if (((SCG0->FIRCCSR & SCG_FIRCCSR_FIRCEN_MASK) == 0U) ||
-        ((SCG0->FIRCCSR & SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_SHIFT) == 0U))
+        ((SCG0->FIRCCSR & SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_MASK) == 0U))
     {
         freq = 0U;
     }
-
-    switch ((SCG0->FIRCCFG & SCG_FIRCCFG_FREQ_SEL_MASK) >> SCG_FIRCCFG_FREQ_SEL_SHIFT)
+    else
     {
-        case 0U:
-            freq = 36000000U;
-            break;
-        case 1U:
-            freq = 48000000U;
-            break;
-        case 2U:
-            freq = 48000000U;
-            break;
-        case 3U:
-            freq = 64000000U;
-            break;
-        case 4U:
-            freq = 72000000U;
-            break;
-        case 5U:
-            freq = 96000000U;
-            break;
-        case 6U:
-            freq = 144000000U;
-            break;
-        case 7U:
-            freq = 192000000U;
-            break;
-        default:
-            freq = 0U;
-            break;
+        switch ((SCG0->FIRCCFG & SCG_FIRCCFG_FREQ_SEL_MASK) >> SCG_FIRCCFG_FREQ_SEL_SHIFT)
+        {
+            case 1U:
+                freq = 48000000U;
+                break;
+            case 3U:
+                freq = 64000000U;
+                break;
+            case 5U:
+                freq = 96000000U;
+                break;
+            case 7U:
+                freq = 192000000U;
+                break;
+            default:
+                freq = 0U;
+                break;
+        }
     }
 
     return freq;
@@ -538,8 +528,7 @@ static uint32_t CLOCK_GetFroHfFreq(void)
  */
 static uint32_t CLOCK_GetClk48MFreq(void)
 {
-    return (((SCG0->FIRCCSR & SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_MASK) != 0U) ||
-            ((SCG0->FIRCCSR & SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_SHIFT) == 0U)) ?
+    return ((SCG0->FIRCCSR & SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_MASK) != 0U) ?
                48000000U :
                0U;
 }

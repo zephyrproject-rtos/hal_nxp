@@ -1,6 +1,7 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA286VLL
+**     Processors:          MCXA286VASR
+**                          MCXA286VLL
 **                          MCXA286VLQ
 **                          MCXA286VPN
 **
@@ -12,7 +13,7 @@
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1_DraftC
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260407
+**     Build:               b260626
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXA286

@@ -17,7 +17,7 @@
 **                          MCXC162VLF
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260121
+**     Build:               b260714
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for OPAMP
@@ -166,9 +166,9 @@ typedef struct {
 #define OPAMP_OPAMP_CTR_BIASC_SHIFT              (2U)
 /*! BIASC - Bias Current Trim Selection
  *  0b00..Default
- *  0b01..Increase current
- *  0b10..Decrease current
- *  0b11..Further decrease current
+ *  0b01..Increase the current by 10%, total 110% of default value
+ *  0b10..Decrease the current by 10%, total 90% of default value
+ *  0b11..Decrease the current by 20%, total 80% of default value
  */
 #define OPAMP_OPAMP_CTR_BIASC(x)                 (((uint32_t)(((uint32_t)(x)) << OPAMP_OPAMP_CTR_BIASC_SHIFT)) & OPAMP_OPAMP_CTR_BIASC_MASK)
 
@@ -182,19 +182,11 @@ typedef struct {
  */
 #define OPAMP_OPAMP_CTR_INTREF(x)                (((uint32_t)(((uint32_t)(x)) << OPAMP_OPAMP_CTR_INTREF_SHIFT)) & OPAMP_OPAMP_CTR_INTREF_MASK)
 
-#define OPAMP_OPAMP_CTR_TRIGMD_MASK              (0x100U)
-#define OPAMP_OPAMP_CTR_TRIGMD_SHIFT             (8U)
-/*! TRIGMD - Trigger Mode
- *  0b0..Disable
- *  0b1..Enable
- */
-#define OPAMP_OPAMP_CTR_TRIGMD(x)                (((uint32_t)(((uint32_t)(x)) << OPAMP_OPAMP_CTR_TRIGMD_SHIFT)) & OPAMP_OPAMP_CTR_TRIGMD_MASK)
-
 #define OPAMP_OPAMP_CTR_INPSEL_MASK              (0x200U)
 #define OPAMP_OPAMP_CTR_INPSEL_SHIFT             (9U)
 /*! INPSEL - Positive Input Channel Selection
- *  0b0..When OPAMP is not in trigger mode, select positive input 0 (INP0)
- *  0b1..When OPAMP is not in trigger mode, select positive input 1 (INP1)
+ *  0b0..Selects positive input 0 (INP0)
+ *  0b1..Selects positive input 1 (INP1)
  */
 #define OPAMP_OPAMP_CTR_INPSEL(x)                (((uint32_t)(((uint32_t)(x)) << OPAMP_OPAMP_CTR_INPSEL_SHIFT)) & OPAMP_OPAMP_CTR_INPSEL_MASK)
 
@@ -218,9 +210,9 @@ typedef struct {
 #define OPAMP_OPAMP_CTR_PREF_SHIFT               (17U)
 /*! PREF - Positive Reference Voltage Selection
  *  0b00..Input 0
- *  0b01..Input 1
+ *  0b01..VDDA/2
  *  0b10..Input 2
- *  0b11..Input 3
+ *  0b11..625 mV
  */
 #define OPAMP_OPAMP_CTR_PREF(x)                  (((uint32_t)(((uint32_t)(x)) << OPAMP_OPAMP_CTR_PREF_SHIFT)) & OPAMP_OPAMP_CTR_PREF_MASK)
 
@@ -252,13 +244,13 @@ typedef struct {
 #define OPAMP_OPAMP_CTR_PGAIN_SHIFT              (24U)
 /*! PGAIN - Positive PGA Selection
  *  0b000..Positive input 1 (INP1)
- *  0b001..Pgain=1
- *  0b010..Pgain=2
- *  0b011..Pgain=4
- *  0b100..Pgain=8
- *  0b101..Pgain=16
- *  0b110..Pgain=33
- *  0b111..Pgain=64
+ *  0b001..0.95
+ *  0b010..1.85
+ *  0b011..3.55
+ *  0b100..6.55
+ *  0b101..11.3
+ *  0b110..17.9
+ *  0b111..24.6
  */
 #define OPAMP_OPAMP_CTR_PGAIN(x)                 (((uint32_t)(((uint32_t)(x)) << OPAMP_OPAMP_CTR_PGAIN_SHIFT)) & OPAMP_OPAMP_CTR_PGAIN_MASK)
 
@@ -266,13 +258,13 @@ typedef struct {
 #define OPAMP_OPAMP_CTR_NGAIN_SHIFT              (28U)
 /*! NGAIN - Negative PGA Selection
  *  0b000..Buffer
- *  0b001..Ngain=1
- *  0b010..Ngain=2
- *  0b011..Ngain=4
- *  0b100..Ngain=8
- *  0b101..Ngain=16
- *  0b110..Ngain=33
- *  0b111..Ngain=64
+ *  0b001..0.95
+ *  0b010..1.85
+ *  0b011..3.55
+ *  0b100..6.55
+ *  0b101..11.3
+ *  0b110..17.9
+ *  0b111..24.6
  */
 #define OPAMP_OPAMP_CTR_NGAIN(x)                 (((uint32_t)(((uint32_t)(x)) << OPAMP_OPAMP_CTR_NGAIN_SHIFT)) & OPAMP_OPAMP_CTR_NGAIN_MASK)
 /*! @} */

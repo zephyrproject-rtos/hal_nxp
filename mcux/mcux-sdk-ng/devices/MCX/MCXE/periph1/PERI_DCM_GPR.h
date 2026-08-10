@@ -4,13 +4,13 @@
 **                          MCXE31BMPB
 **
 **     Version:             rev. 1.0, 2025-07-18
-**     Build:               b260420
+**     Build:               b260716
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DCM_GPR
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -121,9 +121,9 @@ typedef struct {
   __IO uint32_t DCMRWD4;                           /**< Read Write GPR On Destructive Reset Register, offset: 0x50C */
   __IO uint32_t DCMRWD5;                           /**< Read Write GPR On Destructive Reset Register, offset: 0x510 */
   __IO uint32_t DCMRWD6;                           /**< Read Write GPR On Destructive Reset Register, offset: 0x514 */
-       uint32_t DCMRWD7;                           /**< Read Write GPR On Destructive Reset Register, offset: 0x518 */
-       uint32_t DCMRWD8;                           /**< Read Write GPR On Destructive Reset Register, offset: 0x51C */
-       uint32_t DCMRWD9;                           /**< Read Write GPR On Destructive Reset Register, offset: 0x520 */
+  __I  uint32_t DCMRWD7;                           /**< Read Write GPR On Destructive Reset Register, offset: 0x518 */
+  __I  uint32_t DCMRWD8;                           /**< Read Write GPR On Destructive Reset Register, offset: 0x51C */
+  __I  uint32_t DCMRWD9;                           /**< Read Write GPR On Destructive Reset Register, offset: 0x520 */
        uint8_t RESERVED_7[220];
   __IO uint32_t DCMRWF1;                           /**< Read Write GPR On Functional Reset Register, offset: 0x600 */
   __IO uint32_t DCMRWF2;                           /**< Read Write GPR On Functional Reset Register, offset: 0x604 */

@@ -17,7 +17,7 @@
 **                          MCXC162VLF
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260121
+**     Build:               b260714
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MRCC
@@ -125,16 +125,12 @@ typedef struct {
   __IO uint32_t MRCC_GLB_ACC0;                     /**< Control Automatic Clock Gating 0, offset: 0xC0 */
   __IO uint32_t MRCC_GLB_ACC1;                     /**< Control Automatic Clock Gating 1, offset: 0xC4 */
   __IO uint32_t MRCC_GLB_ACC2;                     /**< Control Automatic Clock Gating 2, offset: 0xC8 */
-       uint8_t RESERVED_6[12];
-  __IO uint32_t MRCC_GLB_PR0;                      /**< Peripheral Enable Configuration 0. Reset on POR only., offset: 0xD8 */
-  __IO uint32_t MRCC_GLB_PR1;                      /**< Peripheral Enable Configuration 1. Reset on POR only., offset: 0xDC */
-  __IO uint32_t MRCC_GLB_PR2;                      /**< Peripheral Enable Configuration 2. Reset on POR only., offset: 0xE0 */
-       uint8_t RESERVED_7[28];
+       uint8_t RESERVED_6[52];
   __IO uint32_t MRCC_CTIMER0_CLKSEL;               /**< CTIMER0 clock selection control, offset: 0x100 */
   __IO uint32_t MRCC_CTIMER0_CLKDIV;               /**< CTIMER0 clock divider control, offset: 0x104 */
   __IO uint32_t MRCC_CTIMER1_CLKSEL;               /**< CTIMER1 clock selection control, offset: 0x108 */
   __IO uint32_t MRCC_CTIMER1_CLKDIV;               /**< CTIMER1 clock divider control, offset: 0x10C */
-       uint8_t RESERVED_8[4];
+       uint8_t RESERVED_7[4];
   __IO uint32_t MRCC_WWDT0_CLKDIV;                 /**< WWDT0 clock divider control, offset: 0x114 */
   __IO uint32_t MRCC_WWDT1_CLKSEL;                 /**< WWDT1 clock selection control, offset: 0x118 */
   __IO uint32_t MRCC_WWDT1_CLKDIV;                 /**< WWDT1 clock divider control, offset: 0x11C */
@@ -154,7 +150,7 @@ typedef struct {
   __IO uint32_t MRCC_LPTMR0_CLKDIV;                /**< LPTMR0 clock divider control, offset: 0x154 */
   __IO uint32_t MRCC_ADC_CLKSEL;                   /**< ADC clock selection control, offset: 0x158 */
   __IO uint32_t MRCC_ADC_CLKDIV;                   /**< ADC clock divider control, offset: 0x15C */
-       uint8_t RESERVED_9[4];
+       uint8_t RESERVED_8[4];
   __IO uint32_t MRCC_CMP0_FUNC_CLKDIV;             /**< CMP0_FUNC clock divider control, offset: 0x164 */
   __IO uint32_t MRCC_CMP0_RR_CLKSEL;               /**< CMP0_RR clock selection control, offset: 0x168 */
   __IO uint32_t MRCC_CMP0_RR_CLKDIV;               /**< CMP0_RR clock divider control, offset: 0x16C */
@@ -1031,250 +1027,6 @@ typedef struct {
 #define MRCC_MRCC_GLB_ACC2_SECCON(x)             (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_ACC2_SECCON_SHIFT)) & MRCC_MRCC_GLB_ACC2_SECCON_MASK)
 /*! @} */
 
-/*! @name MRCC_GLB_PR0 - Peripheral Enable Configuration 0. Reset on POR only. */
-/*! @{ */
-
-#define MRCC_MRCC_GLB_PR0_FREQME_MASK            (0x2U)
-#define MRCC_MRCC_GLB_PR0_FREQME_SHIFT           (1U)
-/*! FREQME - FREQME
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR0_FREQME(x)              (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR0_FREQME_SHIFT)) & MRCC_MRCC_GLB_PR0_FREQME_MASK)
-
-#define MRCC_MRCC_GLB_PR0_CTIMER0_MASK           (0x4U)
-#define MRCC_MRCC_GLB_PR0_CTIMER0_SHIFT          (2U)
-/*! CTIMER0 - CTIMER0
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR0_CTIMER0(x)             (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR0_CTIMER0_SHIFT)) & MRCC_MRCC_GLB_PR0_CTIMER0_MASK)
-
-#define MRCC_MRCC_GLB_PR0_CTIMER1_MASK           (0x8U)
-#define MRCC_MRCC_GLB_PR0_CTIMER1_SHIFT          (3U)
-/*! CTIMER1 - CTIMER1
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR0_CTIMER1(x)             (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR0_CTIMER1_SHIFT)) & MRCC_MRCC_GLB_PR0_CTIMER1_MASK)
-
-#define MRCC_MRCC_GLB_PR0_WWDT0_MASK             (0x100U)
-#define MRCC_MRCC_GLB_PR0_WWDT0_SHIFT            (8U)
-/*! WWDT0 - WWDT0
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR0_WWDT0(x)               (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR0_WWDT0_SHIFT)) & MRCC_MRCC_GLB_PR0_WWDT0_MASK)
-
-#define MRCC_MRCC_GLB_PR0_WWDT1_MASK             (0x200U)
-#define MRCC_MRCC_GLB_PR0_WWDT1_SHIFT            (9U)
-/*! WWDT1 - WWDT1
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR0_WWDT1(x)               (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR0_WWDT1_SHIFT)) & MRCC_MRCC_GLB_PR0_WWDT1_MASK)
-
-#define MRCC_MRCC_GLB_PR0_DMA0_MASK              (0x400U)
-#define MRCC_MRCC_GLB_PR0_DMA0_SHIFT             (10U)
-/*! DMA0 - DMA0
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR0_DMA0(x)                (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR0_DMA0_SHIFT)) & MRCC_MRCC_GLB_PR0_DMA0_MASK)
-
-#define MRCC_MRCC_GLB_PR0_CRC0_MASK              (0x1000U)
-#define MRCC_MRCC_GLB_PR0_CRC0_SHIFT             (12U)
-/*! CRC0 - CRC0
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR0_CRC0(x)                (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR0_CRC0_SHIFT)) & MRCC_MRCC_GLB_PR0_CRC0_MASK)
-
-#define MRCC_MRCC_GLB_PR0_EIM0_MASK              (0x2000U)
-#define MRCC_MRCC_GLB_PR0_EIM0_SHIFT             (13U)
-/*! EIM0 - EIM0
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR0_EIM0(x)                (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR0_EIM0_SHIFT)) & MRCC_MRCC_GLB_PR0_EIM0_MASK)
-
-#define MRCC_MRCC_GLB_PR0_ERM0_MASK              (0x4000U)
-#define MRCC_MRCC_GLB_PR0_ERM0_SHIFT             (14U)
-/*! ERM0 - ERM0
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR0_ERM0(x)                (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR0_ERM0_SHIFT)) & MRCC_MRCC_GLB_PR0_ERM0_MASK)
-
-#define MRCC_MRCC_GLB_PR0_FLEXPWM0_MASK          (0x40000000U)
-#define MRCC_MRCC_GLB_PR0_FLEXPWM0_SHIFT         (30U)
-/*! FLEXPWM0 - FLEXPWM0
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR0_FLEXPWM0(x)            (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR0_FLEXPWM0_SHIFT)) & MRCC_MRCC_GLB_PR0_FLEXPWM0_MASK)
-/*! @} */
-
-/*! @name MRCC_GLB_PR1 - Peripheral Enable Configuration 1. Reset on POR only. */
-/*! @{ */
-
-#define MRCC_MRCC_GLB_PR1_LPI2C0_MASK            (0x1U)
-#define MRCC_MRCC_GLB_PR1_LPI2C0_SHIFT           (0U)
-/*! LPI2C0 - LPI2C0
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR1_LPI2C0(x)              (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR1_LPI2C0_SHIFT)) & MRCC_MRCC_GLB_PR1_LPI2C0_MASK)
-
-#define MRCC_MRCC_GLB_PR1_LPSPI0_MASK            (0x10U)
-#define MRCC_MRCC_GLB_PR1_LPSPI0_SHIFT           (4U)
-/*! LPSPI0 - LPSPI0
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR1_LPSPI0(x)              (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR1_LPSPI0_SHIFT)) & MRCC_MRCC_GLB_PR1_LPSPI0_MASK)
-
-#define MRCC_MRCC_GLB_PR1_LPUART0_MASK           (0x100U)
-#define MRCC_MRCC_GLB_PR1_LPUART0_SHIFT          (8U)
-/*! LPUART0 - LPUART0
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR1_LPUART0(x)             (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR1_LPUART0_SHIFT)) & MRCC_MRCC_GLB_PR1_LPUART0_MASK)
-
-#define MRCC_MRCC_GLB_PR1_LPUART1_MASK           (0x200U)
-#define MRCC_MRCC_GLB_PR1_LPUART1_SHIFT          (9U)
-/*! LPUART1 - LPUART1
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR1_LPUART1(x)             (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR1_LPUART1_SHIFT)) & MRCC_MRCC_GLB_PR1_LPUART1_MASK)
-
-#define MRCC_MRCC_GLB_PR1_LPUART2_MASK           (0x400U)
-#define MRCC_MRCC_GLB_PR1_LPUART2_SHIFT          (10U)
-/*! LPUART2 - LPUART2
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR1_LPUART2(x)             (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR1_LPUART2_SHIFT)) & MRCC_MRCC_GLB_PR1_LPUART2_MASK)
-
-#define MRCC_MRCC_GLB_PR1_LPUART3_MASK           (0x800U)
-#define MRCC_MRCC_GLB_PR1_LPUART3_SHIFT          (11U)
-/*! LPUART3 - LPUART3
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR1_LPUART3(x)             (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR1_LPUART3_SHIFT)) & MRCC_MRCC_GLB_PR1_LPUART3_MASK)
-
-#define MRCC_MRCC_GLB_PR1_ADC0_MASK              (0x10000U)
-#define MRCC_MRCC_GLB_PR1_ADC0_SHIFT             (16U)
-/*! ADC0 - ADC0
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR1_ADC0(x)                (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR1_ADC0_SHIFT)) & MRCC_MRCC_GLB_PR1_ADC0_MASK)
-
-#define MRCC_MRCC_GLB_PR1_CMP0_MASK              (0x100000U)
-#define MRCC_MRCC_GLB_PR1_CMP0_SHIFT             (20U)
-/*! CMP0 - CMP0
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR1_CMP0(x)                (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR1_CMP0_SHIFT)) & MRCC_MRCC_GLB_PR1_CMP0_MASK)
-
-#define MRCC_MRCC_GLB_PR1_OPAMP0_MASK            (0x2000000U)
-#define MRCC_MRCC_GLB_PR1_OPAMP0_SHIFT           (25U)
-/*! OPAMP0 - OPAMP0
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR1_OPAMP0(x)              (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR1_OPAMP0_SHIFT)) & MRCC_MRCC_GLB_PR1_OPAMP0_MASK)
-/*! @} */
-
-/*! @name MRCC_GLB_PR2 - Peripheral Enable Configuration 2. Reset on POR only. */
-/*! @{ */
-
-#define MRCC_MRCC_GLB_PR2_PORT0_MASK             (0x1U)
-#define MRCC_MRCC_GLB_PR2_PORT0_SHIFT            (0U)
-/*! PORT0 - PORT0
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR2_PORT0(x)               (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR2_PORT0_SHIFT)) & MRCC_MRCC_GLB_PR2_PORT0_MASK)
-
-#define MRCC_MRCC_GLB_PR2_PORT1_MASK             (0x2U)
-#define MRCC_MRCC_GLB_PR2_PORT1_SHIFT            (1U)
-/*! PORT1 - PORT1
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR2_PORT1(x)               (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR2_PORT1_SHIFT)) & MRCC_MRCC_GLB_PR2_PORT1_MASK)
-
-#define MRCC_MRCC_GLB_PR2_PORT2_MASK             (0x4U)
-#define MRCC_MRCC_GLB_PR2_PORT2_SHIFT            (2U)
-/*! PORT2 - PORT2
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR2_PORT2(x)               (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR2_PORT2_SHIFT)) & MRCC_MRCC_GLB_PR2_PORT2_MASK)
-
-#define MRCC_MRCC_GLB_PR2_PORT3_MASK             (0x8U)
-#define MRCC_MRCC_GLB_PR2_PORT3_SHIFT            (3U)
-/*! PORT3 - PORT3
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR2_PORT3(x)               (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR2_PORT3_SHIFT)) & MRCC_MRCC_GLB_PR2_PORT3_MASK)
-
-#define MRCC_MRCC_GLB_PR2_GPIO0_MASK             (0x40U)
-#define MRCC_MRCC_GLB_PR2_GPIO0_SHIFT            (6U)
-/*! GPIO0 - GPIO0
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR2_GPIO0(x)               (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR2_GPIO0_SHIFT)) & MRCC_MRCC_GLB_PR2_GPIO0_MASK)
-
-#define MRCC_MRCC_GLB_PR2_GPIO1_MASK             (0x80U)
-#define MRCC_MRCC_GLB_PR2_GPIO1_SHIFT            (7U)
-/*! GPIO1 - GPIO1
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR2_GPIO1(x)               (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR2_GPIO1_SHIFT)) & MRCC_MRCC_GLB_PR2_GPIO1_MASK)
-
-#define MRCC_MRCC_GLB_PR2_GPIO2_MASK             (0x100U)
-#define MRCC_MRCC_GLB_PR2_GPIO2_SHIFT            (8U)
-/*! GPIO2 - GPIO2
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR2_GPIO2(x)               (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR2_GPIO2_SHIFT)) & MRCC_MRCC_GLB_PR2_GPIO2_MASK)
-
-#define MRCC_MRCC_GLB_PR2_GPIO3_MASK             (0x200U)
-#define MRCC_MRCC_GLB_PR2_GPIO3_SHIFT            (9U)
-/*! GPIO3 - GPIO3
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR2_GPIO3(x)               (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR2_GPIO3_SHIFT)) & MRCC_MRCC_GLB_PR2_GPIO3_MASK)
-
-#define MRCC_MRCC_GLB_PR2_TRNG0_MASK             (0x2000000U)
-#define MRCC_MRCC_GLB_PR2_TRNG0_SHIFT            (25U)
-/*! TRNG0 - TRNG0
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR2_TRNG0(x)               (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR2_TRNG0_SHIFT)) & MRCC_MRCC_GLB_PR2_TRNG0_MASK)
-
-#define MRCC_MRCC_GLB_PR2_SECCON_MASK            (0x4000000U)
-#define MRCC_MRCC_GLB_PR2_SECCON_SHIFT           (26U)
-/*! SECCON - SECCON
- *  0b0..Peripheral is disabled
- *  0b1..Peripheral is enabled
- */
-#define MRCC_MRCC_GLB_PR2_SECCON(x)              (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_GLB_PR2_SECCON_SHIFT)) & MRCC_MRCC_GLB_PR2_SECCON_MASK)
-/*! @} */
-
 /*! @name MRCC_CTIMER0_CLKSEL - CTIMER0 clock selection control */
 /*! @{ */
 
@@ -1802,7 +1554,7 @@ typedef struct {
  *  0b000..FRO_LF_DIV
  *  0b001..FRO_HF_GATED
  *  0b011..CLK_IN
- *  0b101..CLK_1M
+ *  0b101..Reserved
  *  0b111..Reserved(NO Clock)
  */
 #define MRCC_MRCC_ADC_CLKSEL_MUX(x)              (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_ADC_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_ADC_CLKSEL_MUX_MASK)

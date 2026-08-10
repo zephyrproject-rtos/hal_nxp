@@ -13,7 +13,7 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_MCXN247TVAB))
+#if (defined(CPU_MCXN247TVAB) || defined(CPU_MCXN247TVDF) || defined(CPU_MCXN247TVKL) || defined(CPU_MCXN247TVPB))
 #include "MCXN247T.h"
 #else
   #error "No valid CPU defined!"

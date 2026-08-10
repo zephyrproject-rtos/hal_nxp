@@ -701,28 +701,30 @@ static uint32_t CLOCK_GetFroHfFreq(void)
     uint8_t div;
 
     if (((SCG0->FIRCCSR & SCG_FIRCCSR_FIRCEN_MASK) == 0U) ||
-        ((SCG0->FIRCCSR & SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_SHIFT) == 0U))
+        ((SCG0->FIRCCSR & SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_MASK) == 0U))
     {
         div = 0U;
     }
-
-    switch ((SCG0->FIRCCFG & SCG_FIRCCFG_FREQ_SEL_MASK) >> SCG_FIRCCFG_FREQ_SEL_SHIFT)
+    else
     {
-        case 1U:
-            div = 4U;
-            break;
-        case 3U:
-            div = 3U;
-            break;
-        case 5U:
-            div = 2U;
-            break;
-        case 7U:
-            div = 1U;
-            break;
-        default:
-            div = 0U;
-            break;
+        switch ((SCG0->FIRCCFG & SCG_FIRCCFG_FREQ_SEL_MASK) >> SCG_FIRCCFG_FREQ_SEL_SHIFT)
+        {
+            case 1U:
+                div = 4U;
+                break;
+            case 3U:
+                div = 3U;
+                break;
+            case 5U:
+                div = 2U;
+                break;
+            case 7U:
+                div = 1U;
+                break;
+            default:
+                div = 0U;
+                break;
+        }
     }
 
 #if FSL_FEATURE_FIRC_SUPPORT_240M
@@ -1653,7 +1655,7 @@ bool CLOCK_EnableUsbfsClock(void)
  */
 status_t CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz, run_mode_t mode)
 {
-    uint32_t num_wait_states_added = 3UL; /* Default 3 additional wait states */
+    uint32_t num_wait_states_added;
     switch ((uint32_t)mode)
     {
         case (uint32_t)kMD_Mode:

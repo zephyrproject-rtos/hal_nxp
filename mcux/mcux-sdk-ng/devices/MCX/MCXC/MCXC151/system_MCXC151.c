@@ -7,13 +7,14 @@
 **                          MCXC151VLF
 **
 **     Compilers:
+**                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260304
+**     Build:               b260714
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -64,9 +65,6 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
    ---------------------------------------------------------------------------- */
 
 __attribute__ ((weak)) void SystemInit (void) {
-#if ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
-  SCB->CPACR |= ((3UL << 10*2) | (3UL << 11*2));    /* set CP10, CP11 Full Access */
-#endif /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
 
     /* Enables flash speculation */
     SYSCON->NVM_CTRL &= ~(SYSCON_NVM_CTRL_DIS_MBECC_ERR_DATA_MASK | SYSCON_NVM_CTRL_DIS_MBECC_ERR_INST_MASK);

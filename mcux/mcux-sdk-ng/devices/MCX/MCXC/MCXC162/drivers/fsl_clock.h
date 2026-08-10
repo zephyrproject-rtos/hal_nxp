@@ -533,73 +533,12 @@ typedef enum _vbat_osc_init_trim
 } vbat_osc_init_trim_t;
 
 /*!
- * @brief The enumerator of Capacitor Trim.
- */
-typedef enum _vbat_osc_cap_trim
-{
-    kVBAT_OscCapTrimDefault    = 0x0U,
-    kVBAT_OscCapTrim1us        = 0x1U,
-    kVBAT_OscCapTrim2us        = 0x2U,
-    kVBAT_OscCapTrim2andhalfus = 0x3U,
-} vbat_osc_cap_trim_t;
-
-/*!
- * @brief The enumerator of Delay Trim.
- */
-typedef enum _vbat_osc_dly_trim
-{
-    kVBAT_OscDlyTrim0 = 0x0U, /*!< P current 9(nA) and N Current 6(nA). */
-    kVBAT_OscDlyTrim1 = 0x1U, /*!< P current 13(nA) and N Current 6(nA). */
-    kVBAT_OscDlyTrim3 = 0x3U, /*!< P current 4(nA) and N Current 6(nA). */
-    kVBAT_OscDlyTrim4 = 0x4U, /*!< P current 9(nA) and N Current 4(nA). */
-    kVBAT_OscDlyTrim5 = 0x5U, /*!< P current 13(nA) and N Current 4(nA). */
-    kVBAT_OscDlyTrim6 = 0x6U, /*!< P current 4(nA) and N Current 4(nA). */
-    kVBAT_OscDlyTrim7 = 0x7U, /*!< P current 9(nA) and N Current 2(nA). */
-    kVBAT_OscDlyTrim8 = 0x8U, /*!< P current 13(nA) and N Current 2(nA). */
-    kVBAT_OscDlyTrim9 = 0x9U, /*!< P current 4(nA) and N Current 2(nA). */
-} vbat_osc_dly_trim_t;
-
-/*!
- * @brief The enumerator of CAP2_TRIM.
- */
-typedef enum _vbat_osc_cap2_trim
-{
-    kVBAT_OscCap2Trim0 = 0x0U,
-    kVBAT_OscCap2Trim1 = 0x1U,
-} vbat_osc_cap2_trim_t;
-
-/*!
- * @brief The enumerator of Comparator Trim.
- */
-typedef enum _vbat_osc_cmp_trim
-{
-    kVBAT_OscCmpTrim760mv = 0x0U,
-    kVBAT_OscCmpTrim770mv = 0x1U,
-    kVBAT_OscCmpTrim740mv = 0x3U,
-} vbat_osc_cmp_trim_t;
-
-/*!
- * @brief The enumerator of configures Crystal Oscillator mode..
- */
-typedef enum _vbat_osc_mode_en
-{
-    kVBAT_OscNormalModeEnable   = 0x0U,
-    kVBAT_OscStartupModeEnable  = 0x1U,
-    kVBAT_OscLowpowerModeEnable = 0x3U,
-} vbat_osc_mode_en_t;
-
-/*!
  * @brief The structure of oscillator configuration.
  */
 typedef struct _osc_32k_config
 {
     vbat_osc_init_trim_t initTrim;
-    vbat_osc_cap_trim_t capTrim;
-    vbat_osc_dly_trim_t dlyTrim;
-    vbat_osc_cap2_trim_t cap2Trim;
-    vbat_osc_cmp_trim_t cmpTrim;
 
-    vbat_osc_mode_en_t mode;
     vbat_osc_xtal_cap_t xtalCap;
     vbat_osc_extal_cap_t extalCap;
     vbat_osc_coarse_adjustment_value_t ampGain;
@@ -632,7 +571,7 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
     }
 
     /* Unlock clock configuration */
-    SYSCON->CLKUNLOCK &= ~SYSCON_CLKUNLOCK_UNLOCK_MASK;
+    SYSCON->CLKUNLOCK &= ~SYSCON_CLKUNLOCK_LOCK_MASK;
 
     if (reg_offset == REG_PWM0SUBCTL)
     {
@@ -645,7 +584,7 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
     }
 
     /* Freeze clock configuration */
-    SYSCON->CLKUNLOCK |= SYSCON_CLKUNLOCK_UNLOCK_MASK;
+    SYSCON->CLKUNLOCK |= SYSCON_CLKUNLOCK_LOCK_MASK;
 }
 
 /**
@@ -665,7 +604,7 @@ static inline void CLOCK_DisableClock(clock_ip_name_t clk)
     }
 
     /* Unlock clock configuration */
-    SYSCON->CLKUNLOCK &= ~SYSCON_CLKUNLOCK_UNLOCK_MASK;
+    SYSCON->CLKUNLOCK &= ~SYSCON_CLKUNLOCK_LOCK_MASK;
 
     if (reg_offset == REG_PWM0SUBCTL)
     {
@@ -682,7 +621,7 @@ static inline void CLOCK_DisableClock(clock_ip_name_t clk)
     }
 
     /* Freeze clock configuration */
-    SYSCON->CLKUNLOCK |= SYSCON_CLKUNLOCK_UNLOCK_MASK;
+    SYSCON->CLKUNLOCK |= SYSCON_CLKUNLOCK_LOCK_MASK;
 }
 
 /**
@@ -782,15 +721,10 @@ status_t CLOCK_SetupOsc32KClocking(uint32_t id);
  * This function initializes the osc 32k configuration structure to a default value. The default
  * values are:
  *   config->initTrim = kVBAT_OscInitTrim500ms;
- *   config->capTrim  = kVBAT_OscCapTrimDefault;
- *   config->dlyTrim  = kVBAT_OscDlyTrim5;
- *   config->cap2Trim = kVBAT_OscCap2Trim0;
- *   config->cmpTrim  = kVBAT_OscCmpTrim760mv;
- *   config->mode     = kVBAT_OscNormalModeEnable;
  *   config->xtalCap  = kVBAT_OscXtal24pFCap;
  *   config->extalCap = kVBAT_OscExtal22pFCap;
  *   config->ampGain  = kVBAT_OscCoarseAdjustment05;
- *   config->id       = kCLOCK_Osc32kToVbat;
+ *   config->id       = kCLOCK_Osc32kToSysAndCore;
  * @param   config: Pointer to a configuration structure
  */
 void CLOCK_GetDefaultOsc32KConfig(osc_32k_config_t *config);

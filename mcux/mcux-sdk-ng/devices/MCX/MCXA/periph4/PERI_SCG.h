@@ -1,14 +1,18 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA286VLL
+**     Processors:          MCXA286VASR
+**                          MCXA286VLL
 **                          MCXA286VLQ
 **                          MCXA286VPN
+**                          MCXA287VASR
 **                          MCXA287VLL
 **                          MCXA287VLQ
 **                          MCXA287VPN
+**                          MCXA456VASR
 **                          MCXA456VLL
 **                          MCXA456VLQ
 **                          MCXA456VPN
+**                          MCXA457VASR
 **                          MCXA457VLL
 **                          MCXA457VLQ
 **                          MCXA457VPN
@@ -18,7 +22,9 @@
 **                          MCXA537VLL
 **                          MCXA537VLQ
 **                          MCXA537VPN
+**                          MCXA556BVPN
 **                          MCXA556VPN
+**                          MCXA557BVPN
 **                          MCXA557VPN
 **                          MCXA566VLL
 **                          MCXA566VLQ
@@ -31,7 +37,7 @@
 **                          MCXA577VPN
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260507
+**     Build:               b260708
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SCG
@@ -65,21 +71,21 @@
 #if !defined(PERI_SCG_H_)
 #define PERI_SCG_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXA286VLL) || defined(CPU_MCXA286VLQ) || defined(CPU_MCXA286VPN))
+#if (defined(CPU_MCXA286VASR) || defined(CPU_MCXA286VLL) || defined(CPU_MCXA286VLQ) || defined(CPU_MCXA286VPN))
 #include "MCXA286_COMMON.h"
-#elif (defined(CPU_MCXA287VLL) || defined(CPU_MCXA287VLQ) || defined(CPU_MCXA287VPN))
+#elif (defined(CPU_MCXA287VASR) || defined(CPU_MCXA287VLL) || defined(CPU_MCXA287VLQ) || defined(CPU_MCXA287VPN))
 #include "MCXA287_COMMON.h"
-#elif (defined(CPU_MCXA456VLL) || defined(CPU_MCXA456VLQ) || defined(CPU_MCXA456VPN))
+#elif (defined(CPU_MCXA456VASR) || defined(CPU_MCXA456VLL) || defined(CPU_MCXA456VLQ) || defined(CPU_MCXA456VPN))
 #include "MCXA456_COMMON.h"
-#elif (defined(CPU_MCXA457VLL) || defined(CPU_MCXA457VLQ) || defined(CPU_MCXA457VPN))
+#elif (defined(CPU_MCXA457VASR) || defined(CPU_MCXA457VLL) || defined(CPU_MCXA457VLQ) || defined(CPU_MCXA457VPN))
 #include "MCXA457_COMMON.h"
 #elif (defined(CPU_MCXA536VLL) || defined(CPU_MCXA536VLQ) || defined(CPU_MCXA536VPN))
 #include "MCXA536_COMMON.h"
 #elif (defined(CPU_MCXA537VLL) || defined(CPU_MCXA537VLQ) || defined(CPU_MCXA537VPN))
 #include "MCXA537_COMMON.h"
-#elif (defined(CPU_MCXA556VPN))
+#elif (defined(CPU_MCXA556BVPN) || defined(CPU_MCXA556VPN))
 #include "MCXA556_COMMON.h"
-#elif (defined(CPU_MCXA557VPN))
+#elif (defined(CPU_MCXA557BVPN) || defined(CPU_MCXA557VPN))
 #include "MCXA557_COMMON.h"
 #elif (defined(CPU_MCXA566VLL) || defined(CPU_MCXA566VLQ) || defined(CPU_MCXA566VPN))
 #include "MCXA566_COMMON.h"

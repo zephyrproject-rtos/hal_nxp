@@ -8,8 +8,6 @@
 #ifndef FSL_NBOOT_HAL_H_
 #define FSL_NBOOT_HAL_H_
 
-#include "fsl_nboot.h"
-
 /*! @addtogroup nboot_driver */
 /*! @{ */
 

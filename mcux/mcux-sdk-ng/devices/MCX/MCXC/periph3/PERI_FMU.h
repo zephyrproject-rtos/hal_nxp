@@ -17,7 +17,7 @@
 **                          MCXC162VLF
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260121
+**     Build:               b260714
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FMU
@@ -277,14 +277,6 @@ typedef struct {
 #define FMU_FCTRL_RWSC_SHIFT                     (0U)
 /*! RWSC - Read Wait-State Control */
 #define FMU_FCTRL_RWSC(x)                        (((uint32_t)(((uint32_t)(x)) << FMU_FCTRL_RWSC_SHIFT)) & FMU_FCTRL_RWSC_MASK)
-
-#define FMU_FCTRL_LSACTIVE_MASK                  (0x100U)
-#define FMU_FCTRL_LSACTIVE_SHIFT                 (8U)
-/*! LSACTIVE - Low speed active mode
- *  0b0..Full speed active mode requested
- *  0b1..Low speed active mode requested
- */
-#define FMU_FCTRL_LSACTIVE(x)                    (((uint32_t)(((uint32_t)(x)) << FMU_FCTRL_LSACTIVE_SHIFT)) & FMU_FCTRL_LSACTIVE_MASK)
 
 #define FMU_FCTRL_FDFD_MASK                      (0x10000U)
 #define FMU_FCTRL_FDFD_SHIFT                     (16U)

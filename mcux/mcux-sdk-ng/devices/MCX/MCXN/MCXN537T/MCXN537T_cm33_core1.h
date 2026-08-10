@@ -1,6 +1,10 @@
 /*
 ** ###################################################################
-**     Processor:           MCXN537TVAB_cm33_core1
+**     Processors:          MCXN537TVAB_cm33_core1
+**                          MCXN537TVDF_cm33_core1
+**                          MCXN537TVKL_cm33_core1
+**                          MCXN537TVPB_cm33_core1
+**
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
@@ -8,7 +12,7 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260512
+**     Build:               b260716
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN537T_cm33_core1

@@ -20,8 +20,8 @@
 
 typedef enum _advc_state
 {
-    kADVC_NotInitalized = 0U,
-    kADVC_Initalized    = 1U,
+    kADVC_NotInitialized = 0U,
+    kADVC_Initialized    = 1U,
 } advc_state_t;
 
 typedef enum
@@ -103,10 +103,15 @@ extern ADVC_STATUS_t ADVC_DRIVER_convert_frequency_to_code(uint32_t frequency_in
 extern ADVC_STATUS_t ADVC_DRIVER_pre_voltage_change_request(ADVC_FREQUENCY_CODE_t frequency);
 extern ADVC_STATUS_t ADVC_DRIVER_post_voltage_change_request();
 extern bool ADVC_DRIVER_is_ADVC_enabled();
+extern bool ADVC_DRIVER_flags_register_poll_with_timeout(uint32_t timeout_in_ms,
+                                                  uint32_t start_bit,
+                                                  uint32_t mask,
+                                                  uint32_t expected_value);
+extern ADVC_STATUS_t ADVC_DRIVER_post_change_sync(void);
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-volatile advc_state_t g_advcState = kADVC_NotInitalized;
+volatile advc_state_t g_advcState = kADVC_NotInitialized;
 
 /*******************************************************************************
  * Code
@@ -169,7 +174,7 @@ void ADVC_Init(void)
         AON__CGU->PER_CLK_EN |= CGU_PER_CLK_EN_APB_CLK_MASK;
     }
     ADVC_RestoreSystickConfig(isSystickEnabled);
-    g_advcState = kADVC_Initalized;
+    g_advcState = kADVC_Initialized;
 }
 #endif /* __CORTEX_M == 33U */
 
@@ -179,9 +184,9 @@ void ADVC_Init(void)
  * retval false ADVC is not initialized.
  * retval true ADVC is initialized.
  */
-bool ADVC_IsInitalized(void)
+bool ADVC_IsInitialized(void)
 {
-    return (bool)(g_advcState == kADVC_Initalized);
+    return (bool)(g_advcState == kADVC_Initialized);
 }
 
 /*!
@@ -353,5 +358,25 @@ advc_result_t ADVC_PostVoltageChangeRequest(void)
         AON__CGU->PER_CLK_EN |= CGU_PER_CLK_EN_APB_CLK_MASK;
     }
 
+    return (advc_result_t)status;
+}
+
+advc_result_t ADVC_PostVoltageChangeRequestBlocking(void)
+{
+    ADVC_STATUS_t status;
+    bool isAhbClockEnabled = ADVC_CheckAONApbClockEnabled();
+    bool isSystickEnabled  = ADVC_CheckSystickEnabled();
+
+    status = ADVC_DRIVER_post_voltage_change_request();
+    if (status == ADVC_STATUS_OK)
+    {
+        status = ADVC_DRIVER_post_change_sync();
+    }
+
+    ADVC_RestoreSystickConfig(isSystickEnabled);
+    if (isAhbClockEnabled)
+    {
+        AON__CGU->PER_CLK_EN |= CGU_PER_CLK_EN_APB_CLK_MASK;
+    }
     return (advc_result_t)status;
 }

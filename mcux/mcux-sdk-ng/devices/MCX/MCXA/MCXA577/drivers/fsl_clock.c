@@ -1285,13 +1285,9 @@ static uint32_t CLOCK_GetUsbPfdClkFreq(void)
     {
         freq = (pfdOutClk >> 1U);
     }
-    else if (pfdClkSel == 3U)
-    {
-        freq = pfdOutClk;
-    }
     else
     {
-        freq = 0U;
+        freq = pfdOutClk;
     }
 
     return freq;

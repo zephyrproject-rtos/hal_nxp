@@ -17,7 +17,7 @@
 **                          MCXC162VLF
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260121
+**     Build:               b260714
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SCG
@@ -210,10 +210,10 @@ typedef struct {
 #define SCG_CSR_SCS_MASK                         (0x7000000U)
 #define SCG_CSR_SCS_SHIFT                        (24U)
 /*! SCS - System Clock Source
- *  0b001..SOSC
- *  0b010..SIRC
- *  0b011..FIRC
- *  0b100..ROSC
+ *  0b001..SOSC (CLK_IN)
+ *  0b010..SIRC (FRO12M)
+ *  0b011..FIRC (FRO_HF)
+ *  0b100..ROSC (FRO_16K)
  */
 #define SCG_CSR_SCS(x)                           (((uint32_t)(((uint32_t)(x)) << SCG_CSR_SCS_SHIFT)) & SCG_CSR_SCS_MASK)
 /*! @} */
@@ -224,10 +224,10 @@ typedef struct {
 #define SCG_RCCR_SCS_MASK                        (0x7000000U)
 #define SCG_RCCR_SCS_SHIFT                       (24U)
 /*! SCS - System Clock Source
- *  0b001..SOSC
- *  0b010..SIRC
- *  0b011..FIRC
- *  0b100..ROSC
+ *  0b001..SOSC (CLK_IN)
+ *  0b010..SIRC (FRO12M)
+ *  0b011..FIRC (FRO_HF)
+ *  0b100..ROSC (FRO_16K)
  */
 #define SCG_RCCR_SCS(x)                          (((uint32_t)(((uint32_t)(x)) << SCG_RCCR_SCS_SHIFT)) & SCG_RCCR_SCS_MASK)
 /*! @} */
@@ -405,7 +405,7 @@ typedef struct {
  *  0b00..Reserved
  *  0b01..Reserved
  *  0b10..SOSC. This option requires that SOSC be divided using the TRIMDIV field to get a frequency of 1 MHz.
- *  0b11..ROSC (32.768 KHz)
+ *  0b11..ROSC (16.384 KHz)
  */
 #define SCG_SIRCTCFG_TRIMSRC(x)                  (((uint32_t)(((uint32_t)(x)) << SCG_SIRCTCFG_TRIMSRC_SHIFT)) & SCG_SIRCTCFG_TRIMSRC_MASK)
 
@@ -473,9 +473,9 @@ typedef struct {
 
 #define SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_MASK     (0x10U)
 #define SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_SHIFT    (4U)
-/*! FIRC_SCLK_PERIPH_EN - FIRC_45MHz Clock to Peripherals Enable
- *  0b0..FIRC_45MHz disabled
- *  0b1..FIRC_45MHz enabled
+/*! FIRC_SCLK_PERIPH_EN - FIRC_36MHz Clock to Peripherals Enable
+ *  0b0..FIRC_36MHz disabled
+ *  0b1..FIRC_36MHz enabled
  */
 #define SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN(x)       (((uint32_t)(((uint32_t)(x)) << SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_SHIFT)) & SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_MASK)
 
@@ -551,7 +551,7 @@ typedef struct {
 #define SCG_FIRCCFG_FREQ_SEL_SHIFT               (1U)
 /*! FREQ_SEL - Frequency select
  *  0b000..36 MHz FIRC clock selected
- *  0b010..60 MHz FIRC clock selected, divided from 144 MHz
+ *  0b010..48 MHz FIRC clock selected, divided from 144 MHz
  *  0b100..72 MHz FIRC clock selected
  *  0b110..144 MHz FIRC clock selected
  */
@@ -629,7 +629,7 @@ typedef struct {
 #define SCG_ROSCCSR_ROSCERR_SHIFT                (26U)
 /*! ROSCERR - ROSC Clock Error
  *  0b0..ROSC Clock Monitor is disabled or has not detected an error
- *  0b1..ROSC Clock Monitor is enabled and detected an RTC loss of clock error has detected an error
+ *  0b1..ROSC Clock Monitor is enabled and has detected an error
  */
 #define SCG_ROSCCSR_ROSCERR(x)                   (((uint32_t)(((uint32_t)(x)) << SCG_ROSCCSR_ROSCERR_SHIFT)) & SCG_ROSCCSR_ROSCERR_MASK)
 /*! @} */

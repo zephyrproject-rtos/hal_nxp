@@ -7,13 +7,14 @@
 **                          MCXC151VLF
 **
 **     Compilers:
+**                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260304
+**     Build:               b260714
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

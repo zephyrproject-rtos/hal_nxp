@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 2.3.0. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @brief power driver version 2.3.3. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
 /*@}*/
 
 #if __CORTEX_M == 33U
@@ -66,6 +66,7 @@ enum
         MAKE_STATUS(kStatusGroup_POWER, 10), /*!< ADVC pre-voltage change request failed. */
     kStatus_Power_AdvcPostVoltageChangeFailed =
         MAKE_STATUS(kStatusGroup_POWER, 11), /*!< ADVC post-voltage change request failed. */
+    kStatus_Power_AdvcPostSyncFailed = MAKE_STATUS(kStatusGroup_POWER, 12), /*!< ADVC post-change sync failed. */
 };
 
 /*!
@@ -248,31 +249,11 @@ enum _power_main_domain_sram_array
  */
 typedef enum _power_vdd_core_aon_output_voltage
 {
-    kPower_VddCoreAon_820mV       = 0x14U, /*!< The output voltage of VDD_CORE_AON is about 820mV. */
-    kPower_VddCoreAon_810_5mV     = 0x15U, /*!< The output voltage of VDD_CORE_AON is about 810.5mV. */
-    kPower_VddCoreAon_801mV       = 0x16U, /*!< The output voltage of VDD_CORE_AON is about 801mV. */
-    kPower_VddCoreAon_791_5mV     = 0x17U, /*!< The output voltage of VDD_CORE_AON is about 791.5mV. */
-    kPower_VddCoreAon_782mV       = 0x18U, /*!< The output voltage of VDD_CORE_AON is about 782mV. */
-    kPower_VddCoreAon_772_5mV     = 0x19U, /*!< The output voltage of VDD_CORE_AON is about 772.5mV. */
-    kPower_VddCoreAon_763mV       = 0x1AU, /*!< The output voltage of VDD_CORE_AON is about 763mV. */
-    kPower_VddCoreAon_753_5mV     = 0x1BU, /*!< The output voltage of VDD_CORE_AON is about 753.5mV. */
-    kPower_VddCoreAon_744mV       = 0x1CU, /*!< The output voltage of VDD_CORE_AON is about 744mV. */
-    kPower_VddCoreAon_734_5mV     = 0x1DU, /*!< The output voltage of VDD_CORE_AON is about 734.5mV. */
-    kPower_VddCoreAon_725mV       = 0x1EU, /*!< The output voltage of VDD_CORE_AON is about 725mV. */
-    kPower_VddCoreAon_715_5mV     = 0x1FU, /*!< The output voltage of VDD_CORE_AON is about 715.5mV. */
-    kPower_VddCoreAon_706mV       = 0x20U, /*!< The output voltage of VDD_CORE_AON is about 706mV. */
-    kPower_VddCoreAon_696_5mV     = 0x21U, /*!< The output voltage of VDD_CORE_AON is about 696.5mV. */
-    kPower_VddCoreAon_687mV       = 0x22U, /*!< The output voltage of VDD_CORE_AON is about 687mV. */
-    kPower_VddCoreAon_677_5mV     = 0x23U, /*!< The output voltage of VDD_CORE_AON is about 677.5mV. */
-    kPower_VddCoreAon_668mV       = 0x24U, /*!< The output voltage of VDD_CORE_AON is about 668mV. */
-    kPower_VddCoreAon_658_5mV     = 0x25U, /*!< The output voltage of VDD_CORE_AON is about 658.5mV. */
-    kPower_VddCoreAon_649mV       = 0x26U, /*!< The output voltage of VDD_CORE_AON is about 649mV. */
-    kPower_VddCoreAon_639_5mV     = 0x27U, /*!< The output voltage of VDD_CORE_AON is about 639.5mV. */
-    kPower_VddCoreAon_630mV       = 0x28U, /*!< The output voltage of VDD_CORE_AON is about 630mV. */
-    kPower_VddCoreAon_620_5mV     = 0x29U, /*!< The output voltage of VDD_CORE_AON is about 620.5mV. */
-    kPower_VddCoreAon_611mV       = 0x2AU, /*!< The output voltage of VDD_CORE_AON is about 611mV. */
-    kPower_VddCoreAon_601_5mV     = 0x2BU, /*!< The output voltage of VDD_CORE_AON is about 601.5mV. */
-    kPower_VddCoreAon_592mV       = 0x2CU, /*!< The output voltage of VDD_CORE_AON is about 592mV. */
+    kPower_VddCoreAon_785mV       = 0x15U, /*!< The output voltage of VDD_CORE_AON is about 785mV. */
+    kPower_VddCoreAon_760mV       = 0x18U, /*!< The output voltage of VDD_CORE_AON is about 760mV. */
+    kPower_VddCoreAon_750mV       = 0x19U, /*!< The output voltage of VDD_CORE_AON is about 750mV. */
+    kPower_VddCoreAon_700mV       = 0x1EU, /*!< The output voltage of VDD_CORE_AON is about 700mV. */
+    kPower_VddCoreAon_630mV       = 0x25U, /*!< The output voltage of VDD_CORE_AON is about 630mV. */
     kPower_VddCoreAon_AdvcControl = 0xFFU, /*!< The output voltage of VDD_CORE_AON is controlled by ADVC. */
 } power_vdd_core_output_voltage_t;
 

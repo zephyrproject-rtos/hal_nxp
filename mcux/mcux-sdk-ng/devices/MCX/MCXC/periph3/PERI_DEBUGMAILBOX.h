@@ -17,7 +17,7 @@
 **                          MCXC162VLF
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260121
+**     Build:               b260714
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DEBUGMAILBOX
@@ -96,12 +96,17 @@
  * @{
  */
 
+/** DEBUGMAILBOX - Size of Registers Arrays */
+#define DEBUGMAILBOX_PASSWORD_COUNT               4u
+
 /** DEBUGMAILBOX - Register Layout Typedef */
 typedef struct {
   __IO uint32_t CSW;                               /**< Command and Status Word, offset: 0x0 */
   __IO uint32_t REQUEST;                           /**< Request Value, offset: 0x4 */
   __IO uint32_t RETURN;                            /**< Return Value, offset: 0x8 */
-       uint8_t RESERVED_0[240];
+       uint8_t RESERVED_0[116];
+  __O  uint32_t PW[DEBUGMAILBOX_PASSWORD_COUNT];   /**< Password 0..Password 3, array offset: 0x80, array step: 0x4 */
+       uint8_t RESERVED_1[108];
   __I  uint32_t ID;                                /**< Identification, offset: 0xFC */
 } DEBUGMAILBOX_Type;
 
@@ -129,7 +134,7 @@ typedef struct {
 #define DEBUGMAILBOX_CSW_REQ_PENDING_SHIFT       (1U)
 /*! REQ_PENDING - Request Pending
  *  0b0..No request pending
- *  0b1..Request for resynchronization pending
+ *  0b1..The debugger has written a value into the REQUEST register and it's pending the chip reading REQUEST
  */
 #define DEBUGMAILBOX_CSW_REQ_PENDING(x)          (((uint32_t)(((uint32_t)(x)) << DEBUGMAILBOX_CSW_REQ_PENDING_SHIFT)) & DEBUGMAILBOX_CSW_REQ_PENDING_MASK)
 
@@ -183,6 +188,18 @@ typedef struct {
 /*! RET - Return Value */
 #define DEBUGMAILBOX_RETURN_RET(x)               (((uint32_t)(((uint32_t)(x)) << DEBUGMAILBOX_RETURN_RET_SHIFT)) & DEBUGMAILBOX_RETURN_RET_MASK)
 /*! @} */
+
+/*! @name PASSWORD_PW - Password 0..Password 3 */
+/*! @{ */
+
+#define DEBUGMAILBOX_PASSWORD_PW_PASSWORD_MASK   (0xFFFFFFFFU)
+#define DEBUGMAILBOX_PASSWORD_PW_PASSWORD_SHIFT  (0U)
+/*! PASSWORD - Password */
+#define DEBUGMAILBOX_PASSWORD_PW_PASSWORD(x)     (((uint32_t)(((uint32_t)(x)) << DEBUGMAILBOX_PASSWORD_PW_PASSWORD_SHIFT)) & DEBUGMAILBOX_PASSWORD_PW_PASSWORD_MASK)
+/*! @} */
+
+/* The count of DEBUGMAILBOX_PASSWORD_PW */
+#define DEBUGMAILBOX_PASSWORD_PW_COUNT           (4U)
 
 /*! @name ID - Identification */
 /*! @{ */
