@@ -6,7 +6,7 @@
 **                          MIMX93W52610GCM_cm33
 **
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PDM
@@ -535,8 +535,8 @@ typedef struct {
 #define PDM_DC_CTRL_DCCONFIG0_MASK               (0x3U)
 #define PDM_DC_CTRL_DCCONFIG0_SHIFT              (0U)
 /*! DCCONFIG0 - Channel 0 DC Remover Configuration
- *  0b00..20 Hz (PDM_CLK = 3.072 MHz)
- *  0b01..13.3 Hz (PDM_CLK = 3.072 MHz)
+ *  0b00..13.3 Hz (PDM_CLK = 3.072 MHz)
+ *  0b01..20 Hz (PDM_CLK = 3.072 MHz)
  *  0b10..40 Hz (PDM_CLK = 3.072 MHz)
  *  0b11..DC remover is bypassed
  */
@@ -545,8 +545,8 @@ typedef struct {
 #define PDM_DC_CTRL_DCCONFIG1_MASK               (0xCU)
 #define PDM_DC_CTRL_DCCONFIG1_SHIFT              (2U)
 /*! DCCONFIG1 - Channel 1 DC Remover Configuration
- *  0b00..20 Hz (PDM_CLK = 3.072 MHz)
- *  0b01..13.3 Hz (PDM_CLK = 3.072 MHz)
+ *  0b00..13.3 Hz (PDM_CLK = 3.072 MHz)
+ *  0b01..20 Hz (PDM_CLK = 3.072 MHz)
  *  0b10..40 Hz (PDM_CLK = 3.072 MHz)
  *  0b11..DC remover is bypassed
  */
@@ -555,8 +555,8 @@ typedef struct {
 #define PDM_DC_CTRL_DCCONFIG2_MASK               (0x30U)
 #define PDM_DC_CTRL_DCCONFIG2_SHIFT              (4U)
 /*! DCCONFIG2 - Channel 2 DC Remover Configuration
- *  0b00..20 Hz (PDM_CLK = 3.072 MHz)
- *  0b01..13.3 Hz (PDM_CLK = 3.072 MHz)
+ *  0b00..13.3 Hz (PDM_CLK = 3.072 MHz)
+ *  0b01..20 Hz (PDM_CLK = 3.072 MHz)
  *  0b10..40 Hz (PDM_CLK = 3.072 MHz)
  *  0b11..DC remover is bypassed
  */
@@ -565,8 +565,8 @@ typedef struct {
 #define PDM_DC_CTRL_DCCONFIG3_MASK               (0xC0U)
 #define PDM_DC_CTRL_DCCONFIG3_SHIFT              (6U)
 /*! DCCONFIG3 - Channel 3 DC Remover Configuration
- *  0b00..20 Hz (PDM_CLK = 3.072 MHz)
- *  0b01..13.3 Hz (PDM_CLK = 3.072 MHz)
+ *  0b00..13.3 Hz (PDM_CLK = 3.072 MHz)
+ *  0b01..20 Hz (PDM_CLK = 3.072 MHz)
  *  0b10..40 Hz (PDM_CLK = 3.072 MHz)
  *  0b11..DC remover is bypassed
  */
@@ -575,8 +575,8 @@ typedef struct {
 #define PDM_DC_CTRL_DCCONFIG4_MASK               (0x300U)
 #define PDM_DC_CTRL_DCCONFIG4_SHIFT              (8U)
 /*! DCCONFIG4 - Channel 4 DC Remover Configuration
- *  0b00..20 Hz (PDM_CLK = 3.072 MHz)
- *  0b01..13.3 Hz (PDM_CLK = 3.072 MHz)
+ *  0b00..13.3 Hz (PDM_CLK = 3.072 MHz)
+ *  0b01..20 Hz (PDM_CLK = 3.072 MHz)
  *  0b10..40 Hz (PDM_CLK = 3.072 MHz)
  *  0b11..DC remover is bypassed
  */
@@ -585,8 +585,8 @@ typedef struct {
 #define PDM_DC_CTRL_DCCONFIG5_MASK               (0xC00U)
 #define PDM_DC_CTRL_DCCONFIG5_SHIFT              (10U)
 /*! DCCONFIG5 - Channel 5 DC Remover Configuration
- *  0b00..20 Hz (PDM_CLK = 3.072 MHz)
- *  0b01..13.3 Hz (PDM_CLK = 3.072 MHz)
+ *  0b00..13.3 Hz (PDM_CLK = 3.072 MHz)
+ *  0b01..20 Hz (PDM_CLK = 3.072 MHz)
  *  0b10..40 Hz (PDM_CLK = 3.072 MHz)
  *  0b11..DC remover is bypassed
  */
@@ -595,8 +595,8 @@ typedef struct {
 #define PDM_DC_CTRL_DCCONFIG6_MASK               (0x3000U)
 #define PDM_DC_CTRL_DCCONFIG6_SHIFT              (12U)
 /*! DCCONFIG6 - Channel 6 DC Remover Configuration
- *  0b00..20 Hz (PDM_CLK = 3.072 MHz)
- *  0b01..13.3 Hz (PDM_CLK = 3.072 MHz)
+ *  0b00..13.3 Hz (PDM_CLK = 3.072 MHz)
+ *  0b01..20 Hz (PDM_CLK = 3.072 MHz)
  *  0b10..40 Hz (PDM_CLK = 3.072 MHz)
  *  0b11..DC remover is bypassed
  */
@@ -605,8 +605,8 @@ typedef struct {
 #define PDM_DC_CTRL_DCCONFIG7_MASK               (0xC000U)
 #define PDM_DC_CTRL_DCCONFIG7_SHIFT              (14U)
 /*! DCCONFIG7 - Channel 7 DC Remover Configuration
- *  0b00..20 Hz (PDM_CLK = 3.072 MHz)
- *  0b01..13.3 Hz (PDM_CLK = 3.072 MHz)
+ *  0b00..13.3 Hz (PDM_CLK = 3.072 MHz)
+ *  0b01..20 Hz (PDM_CLK = 3.072 MHz)
  *  0b10..40 Hz (PDM_CLK = 3.072 MHz)
  *  0b11..DC remover is bypassed
  */
@@ -619,9 +619,9 @@ typedef struct {
 #define PDM_DC_OUT_CTRL_DCCONFIG0_MASK           (0x3U)
 #define PDM_DC_OUT_CTRL_DCCONFIG0_SHIFT          (0U)
 /*! DCCONFIG0 - Channel 0 DC Remover Configuration
- *  0b00..20 Hz (FS = 48 kHz)
- *  0b01..13.3 Hz (FS = 48 kHz)
- *  0b10..40 Hz (FS = 48 kHz)
+ *  0b00..Cut-off frequency: 13.3 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 0.571 mFS
+ *  0b01..Cut-off frequency: 20 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 0.858 mFS
+ *  0b10..Cut-off frequency: 40 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 1.718 mFS
  *  0b11..DC remover is bypassed
  */
 #define PDM_DC_OUT_CTRL_DCCONFIG0(x)             (((uint32_t)(((uint32_t)(x)) << PDM_DC_OUT_CTRL_DCCONFIG0_SHIFT)) & PDM_DC_OUT_CTRL_DCCONFIG0_MASK)
@@ -629,9 +629,9 @@ typedef struct {
 #define PDM_DC_OUT_CTRL_DCCONFIG1_MASK           (0xCU)
 #define PDM_DC_OUT_CTRL_DCCONFIG1_SHIFT          (2U)
 /*! DCCONFIG1 - Channel 1 DC Remover Configuration
- *  0b00..20 Hz (FS = 48 kHz)
- *  0b01..13.3 Hz (FS = 48 kHz)
- *  0b10..40 Hz (FS = 48 kHz)
+ *  0b00..Cut-off frequency: 13.3 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 0.571 mFS
+ *  0b01..Cut-off frequency: 20 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 0.858 mFS
+ *  0b10..Cut-off frequency: 40 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 1.718 mFS
  *  0b11..DC remover is bypassed
  */
 #define PDM_DC_OUT_CTRL_DCCONFIG1(x)             (((uint32_t)(((uint32_t)(x)) << PDM_DC_OUT_CTRL_DCCONFIG1_SHIFT)) & PDM_DC_OUT_CTRL_DCCONFIG1_MASK)
@@ -639,9 +639,9 @@ typedef struct {
 #define PDM_DC_OUT_CTRL_DCCONFIG2_MASK           (0x30U)
 #define PDM_DC_OUT_CTRL_DCCONFIG2_SHIFT          (4U)
 /*! DCCONFIG2 - Channel 2 DC Remover Configuration
- *  0b00..20 Hz (FS = 48 kHz)
- *  0b01..13.3 Hz (FS = 48 kHz)
- *  0b10..40 Hz (FS = 48 kHz)
+ *  0b00..Cut-off frequency: 13.3 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 0.571 mFS
+ *  0b01..Cut-off frequency: 20 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 0.858 mFS
+ *  0b10..Cut-off frequency: 40 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 1.718 mFS
  *  0b11..DC remover is bypassed
  */
 #define PDM_DC_OUT_CTRL_DCCONFIG2(x)             (((uint32_t)(((uint32_t)(x)) << PDM_DC_OUT_CTRL_DCCONFIG2_SHIFT)) & PDM_DC_OUT_CTRL_DCCONFIG2_MASK)
@@ -649,9 +649,9 @@ typedef struct {
 #define PDM_DC_OUT_CTRL_DCCONFIG3_MASK           (0xC0U)
 #define PDM_DC_OUT_CTRL_DCCONFIG3_SHIFT          (6U)
 /*! DCCONFIG3 - Channel 3 DC Remover Configuration
- *  0b00..20 Hz (FS = 48 kHz)
- *  0b01..13.3 Hz (FS = 48 kHz)
- *  0b10..40 Hz (FS = 48 kHz)
+ *  0b00..Cut-off frequency: 13.3 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 0.571 mFS
+ *  0b01..Cut-off frequency: 20 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 0.858 mFS
+ *  0b10..Cut-off frequency: 40 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 1.718 mFS
  *  0b11..DC remover is bypassed
  */
 #define PDM_DC_OUT_CTRL_DCCONFIG3(x)             (((uint32_t)(((uint32_t)(x)) << PDM_DC_OUT_CTRL_DCCONFIG3_SHIFT)) & PDM_DC_OUT_CTRL_DCCONFIG3_MASK)
@@ -659,9 +659,9 @@ typedef struct {
 #define PDM_DC_OUT_CTRL_DCCONFIG4_MASK           (0x300U)
 #define PDM_DC_OUT_CTRL_DCCONFIG4_SHIFT          (8U)
 /*! DCCONFIG4 - Channel 4 DC Remover Configuration
- *  0b00..20 Hz (FS = 48 kHz)
- *  0b01..13.3 Hz (FS = 48 kHz)
- *  0b10..40 Hz (FS = 48 kHz)
+ *  0b00..Cut-off frequency: 13.3 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 0.571 mFS
+ *  0b01..Cut-off frequency: 20 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 0.858 mFS
+ *  0b10..Cut-off frequency: 40 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 1.718 mFS
  *  0b11..DC remover is bypassed
  */
 #define PDM_DC_OUT_CTRL_DCCONFIG4(x)             (((uint32_t)(((uint32_t)(x)) << PDM_DC_OUT_CTRL_DCCONFIG4_SHIFT)) & PDM_DC_OUT_CTRL_DCCONFIG4_MASK)
@@ -669,9 +669,9 @@ typedef struct {
 #define PDM_DC_OUT_CTRL_DCCONFIG5_MASK           (0xC00U)
 #define PDM_DC_OUT_CTRL_DCCONFIG5_SHIFT          (10U)
 /*! DCCONFIG5 - Channel 5 DC Remover Configuration
- *  0b00..20 Hz (FS = 48 kHz)
- *  0b01..13.3 Hz (FS = 48 kHz)
- *  0b10..40 Hz (FS = 48 kHz)
+ *  0b00..Cut-off frequency: 13.3 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 0.571 mFS
+ *  0b01..Cut-off frequency: 20 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 0.858 mFS
+ *  0b10..Cut-off frequency: 40 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 1.718 mFS
  *  0b11..DC remover is bypassed
  */
 #define PDM_DC_OUT_CTRL_DCCONFIG5(x)             (((uint32_t)(((uint32_t)(x)) << PDM_DC_OUT_CTRL_DCCONFIG5_SHIFT)) & PDM_DC_OUT_CTRL_DCCONFIG5_MASK)
@@ -679,9 +679,9 @@ typedef struct {
 #define PDM_DC_OUT_CTRL_DCCONFIG6_MASK           (0x3000U)
 #define PDM_DC_OUT_CTRL_DCCONFIG6_SHIFT          (12U)
 /*! DCCONFIG6 - Channel 6 DC Remover Configuration
- *  0b00..20 Hz (FS = 48 kHz)
- *  0b01..13.3 Hz (FS = 48 kHz)
- *  0b10..40 Hz (FS = 48 kHz)
+ *  0b00..Cut-off frequency: 13.3 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 0.571 mFS
+ *  0b01..Cut-off frequency: 20 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 0.858 mFS
+ *  0b10..Cut-off frequency: 40 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 1.718 mFS
  *  0b11..DC remover is bypassed
  */
 #define PDM_DC_OUT_CTRL_DCCONFIG6(x)             (((uint32_t)(((uint32_t)(x)) << PDM_DC_OUT_CTRL_DCCONFIG6_SHIFT)) & PDM_DC_OUT_CTRL_DCCONFIG6_MASK)
@@ -689,9 +689,9 @@ typedef struct {
 #define PDM_DC_OUT_CTRL_DCCONFIG7_MASK           (0xC000U)
 #define PDM_DC_OUT_CTRL_DCCONFIG7_SHIFT          (14U)
 /*! DCCONFIG7 - Channel 7 DC Remover Configuration
- *  0b00..20 Hz (FS = 48 kHz)
- *  0b01..13.3 Hz (FS = 48 kHz)
- *  0b10..40 Hz (FS = 48 kHz)
+ *  0b00..Cut-off frequency: 13.3 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 0.571 mFS
+ *  0b01..Cut-off frequency: 20 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 0.858 mFS
+ *  0b10..Cut-off frequency: 40 Hz (PDM_CLK = 3.072 MHz), DC offset threshold: 1.718 mFS
  *  0b11..DC remover is bypassed
  */
 #define PDM_DC_OUT_CTRL_DCCONFIG7(x)             (((uint32_t)(((uint32_t)(x)) << PDM_DC_OUT_CTRL_DCCONFIG7_SHIFT)) & PDM_DC_OUT_CTRL_DCCONFIG7_MASK)

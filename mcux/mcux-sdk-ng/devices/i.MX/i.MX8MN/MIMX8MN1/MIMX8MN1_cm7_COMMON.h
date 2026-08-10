@@ -11,13 +11,13 @@
 **
 **     Reference manual:    MX8MNRM, Rev.B, 07/2019
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b251201
+**     Build:               b260624
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX8MN1_cm7
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -189,7 +189,7 @@ typedef enum IRQn {
   SJC_IRQn                     = 104,              /**< Interrupt triggered by SJC register */
   CAAM_IRQ0_IRQn               = 105,              /**< CAAM interrupt queue for JQ */
   CAAM_IRQ1_IRQn               = 106,              /**< CAAM interrupt queue for JQ */
-  QSPI_IRQn                    = 107,              /**< QSPI Interrupt */
+  FLEXSPI_IRQn                 = 107,              /**< FlexSPI Interrupt */
   TZASC_IRQn                   = 108,              /**< TZASC (PL380) interrupt */
   PDM_EVENT_IRQn               = 109,              /**< Digital Microphone interface interrupt */
   PDM_ERROR_IRQn               = 110,              /**< Digital Microphone interface error interrupt */
@@ -480,6 +480,23 @@ typedef enum IRQn {
 #define FLEXSPI_BASE_ADDRS                       { FLEXSPI_BASE }
 /** Array initializer of FLEXSPI peripheral base pointers */
 #define FLEXSPI_BASE_PTRS                        { FLEXSPI }
+/** Interrupt vectors for the FLEXSPI peripheral type */
+#define FLEXSPI_IRQS                             { FLEXSPI_IRQn }
+/** FlexSPI AMBA memory base alias count */
+#define FLEXSPI_AMBA_BASE_ALIAS_COUNT     (1)
+/* FlexSPI AMBA base address array. */
+#define FlexSPI_AMBA_BASE_ARRAY                  { {0x08000000u} }
+/* FlexSPI AMBA end address array. */
+#define FlexSPI_AMBA_END_ARRAY                   { {0x0FFFFFFFu} }
+/* FlexSPI AMBA address. */
+#define FlexSPI_AMBA_BASE                        (0x08000000u)
+/* FlexSPI ASFM address. */
+#define FlexSPI_ASFM_BASE                        (0x08000000u)
+/* Base Address of AHB address space mapped to IP RX FIFO. */
+#define FlexSPI_ARDF_BASE                        (0x34000000u)
+/* Base Address of AHB address space mapped to IP TX FIFO. */
+#define FlexSPI_ATDF_BASE                        (0x33008000u)
+
 
 /* GPC - Peripheral instance base addresses */
 /** Peripheral GPC base address */
@@ -789,11 +806,11 @@ typedef enum IRQn {
 /** Peripheral SDMAARM3 base pointer */
 #define SDMAARM3                                 ((SDMAARM_Type *)SDMAARM3_BASE)
 /** Array initializer of SDMAARM peripheral base addresses */
-#define SDMAARM_BASE_ADDRS                       { SDMAARM1_BASE, SDMAARM2_BASE, SDMAARM3_BASE }
+#define SDMAARM_BASE_ADDRS                       { 0u, SDMAARM1_BASE, SDMAARM2_BASE, SDMAARM3_BASE }
 /** Array initializer of SDMAARM peripheral base pointers */
-#define SDMAARM_BASE_PTRS                        { SDMAARM1, SDMAARM2, SDMAARM3 }
+#define SDMAARM_BASE_PTRS                        { (SDMAARM_Type *)0u, SDMAARM1, SDMAARM2, SDMAARM3 }
 /** Interrupt vectors for the SDMAARM peripheral type */
-#define SDMAARM_IRQS                             { SDMA1_IRQn, SDMA2_IRQn, SDMA3_IRQn }
+#define SDMAARM_IRQS                             { NotAvail_IRQn, SDMA1_IRQn, SDMA2_IRQn, SDMA3_IRQn }
 
 /* SEMA4 - Peripheral instance base addresses */
 /** Peripheral SEMA4 base address */
@@ -825,9 +842,9 @@ typedef enum IRQn {
 /** Peripheral SPBA2 base pointer */
 #define SPBA2                                    ((SPBA_Type *)SPBA2_BASE)
 /** Array initializer of SPBA peripheral base addresses */
-#define SPBA_BASE_ADDRS                          { SPBA1_BASE, SPBA2_BASE }
+#define SPBA_BASE_ADDRS                          { 0u, SPBA1_BASE, SPBA2_BASE }
 /** Array initializer of SPBA peripheral base pointers */
-#define SPBA_BASE_PTRS                           { SPBA1, SPBA2 }
+#define SPBA_BASE_PTRS                           { (SPBA_Type *)0u, SPBA1, SPBA2 }
 
 /* SPDIF - Peripheral instance base addresses */
 /** Peripheral SPDIF1 base address */

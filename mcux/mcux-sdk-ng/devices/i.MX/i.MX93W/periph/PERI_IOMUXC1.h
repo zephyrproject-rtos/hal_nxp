@@ -6,7 +6,7 @@
 **                          MIMX93W52610GCM_cm33
 **
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC1
@@ -83,13 +83,14 @@
 /** IOMUXC1 - Size of Registers Arrays */
 #define IOMUXC1_SW_MUX_CTL_PAD_COUNT              108u
 #define IOMUXC1_SW_PAD_CTL_PAD_COUNT              108u
-#define IOMUXC1_SELECT_INPUT_COUNT                68u
+#define IOMUXC1_SELECT_INPUT_COUNT                61u
 
 /** IOMUXC1 - Register Layout Typedef */
 typedef struct {
-  __IO uint32_t SW_MUX_CTL_PAD[IOMUXC1_SW_MUX_CTL_PAD_COUNT]; /**< SW_MUX_CTL_PAD_DAP_TDI SW MUX Control Register..SW_MUX_CTL_PAD_WDOG_ANY SW MUX Control Register, array offset: 0x0, array step: 0x4 */
-  __IO uint32_t SW_PAD_CTL_PAD[IOMUXC1_SW_PAD_CTL_PAD_COUNT]; /**< SW_PAD_CTL_PAD_DAP_TDI SW PAD Control Register..SW_PAD_CTL_PAD_WDOG_ANY SW PAD Control Register, array offset: 0x1B0, array step: 0x4 */
-  __IO uint32_t SELECT_INPUT[IOMUXC1_SELECT_INPUT_COUNT]; /**< CAN1_IPP_IND_CANRX_SELECT_INPUT DAISY Register..USDHC3_IPP_DAT3_IN_SELECT_INPUT DAISY Register, array offset: 0x360, array step: 0x4 */
+  __IO uint32_t SW_MUX_CTL_PAD[IOMUXC1_SW_MUX_CTL_PAD_COUNT]; /**< SW_MUX_CTL_PAD_DAP_TDI SW MUX Control Register..SW_MUX_CTL_PAD_WDOG_ANY SW MUX Control Register, array offset: 0x0, array step: 0x4, valid indices: [0-31, 35-77, 84-102, 107] */
+  __IO uint32_t SW_PAD_CTL_PAD[IOMUXC1_SW_PAD_CTL_PAD_COUNT]; /**< SW_PAD_CTL_PAD_DAP_TDI SW PAD Control Register..SW_PAD_CTL_PAD_WDOG_ANY SW PAD Control Register, array offset: 0x1B0, array step: 0x4, valid indices: [0-31, 35-77, 84-102, 107] */
+       uint8_t RESERVED_0[4];
+  __IO uint32_t SELECT_INPUT[IOMUXC1_SELECT_INPUT_COUNT]; /**< CAN2_IPP_IND_CANRX_SELECT_INPUT DAISY Register..SPDIF_SPDIF_I_SELECT_INPUT DAISY Register, array offset: 0x364, array step: 0x4, valid indices: [0, 2-56, 58-60] */
 } IOMUXC1_Type;
 
 /* ----------------------------------------------------------------------------
@@ -134,21 +135,21 @@ typedef struct {
 #define IOMUXC1_SW_PAD_CTL_PAD_DSE_SHIFT         (1U)
 /*! DSE - Drive Strength Field
  *  0b000000..No drive
- *  0b000001..X1
- *  0b000011..X2
- *  0b000111..X3
- *  0b001111..X4
- *  0b011111..X5
- *  0b111111..X6
+ *  0b000001..X1 (1.8V and 3.3V I/O supply for NVCC_XXX)
+ *  0b000011..X2 (1.8V and 3.3V I/O supply for NVCC_XXX)
+ *  0b000111..X3 (1.8V and 3.3V I/O supply for NVCC_XXX)
+ *  0b001111..X4 (1.8V and 3.3V I/O supply for NVCC_XXX)
+ *  0b011111..X5 (1.8V I/O supply for NVCC_XXX)
+ *  0b111111..X6 (1.8V I/O supply for NVCC_XXX)
  */
 #define IOMUXC1_SW_PAD_CTL_PAD_DSE(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC1_SW_PAD_CTL_PAD_DSE_SHIFT)) & IOMUXC1_SW_PAD_CTL_PAD_DSE_MASK)
 
 #define IOMUXC1_SW_PAD_CTL_PAD_FSEL1_MASK        (0x180U)
 #define IOMUXC1_SW_PAD_CTL_PAD_FSEL1_SHIFT       (7U)
 /*! FSEL1 - Slew Rate Field
- *  0b00..Slow Slew Rate
- *  0b01..Slightly Slow Slew Rate
- *  0b10..Slightly Fast Slew Rate
+ *  0b00..Reserved
+ *  0b01..Reserved
+ *  0b10..Fast Slew Rate
  *  0b11..Fast Slew Rate
  */
 #define IOMUXC1_SW_PAD_CTL_PAD_FSEL1(x)          (((uint32_t)(((uint32_t)(x)) << IOMUXC1_SW_PAD_CTL_PAD_FSEL1_SHIFT)) & IOMUXC1_SW_PAD_CTL_PAD_FSEL1_MASK)
@@ -191,7 +192,7 @@ typedef struct {
 #define IOMUXC1_SW_PAD_CTL_PAD_APC(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC1_SW_PAD_CTL_PAD_APC_SHIFT)) & IOMUXC1_SW_PAD_CTL_PAD_APC_MASK)
 /*! @} */
 
-/*! @name SELECT_INPUT - CAN1_IPP_IND_CANRX_SELECT_INPUT DAISY Register..USDHC3_IPP_DAT3_IN_SELECT_INPUT DAISY Register */
+/*! @name SELECT_INPUT - CAN2_IPP_IND_CANRX_SELECT_INPUT DAISY Register..SPDIF_SPDIF_I_SELECT_INPUT DAISY Register */
 /*! @{ */
 
 #define IOMUXC1_SELECT_INPUT_DAISY_MASK          (0x3U)  /* Merged from fields with different position or width, of widths (1, 2), largest definition used */

@@ -6,7 +6,7 @@
 **                          MIMX93W52610GCM_cm33
 **
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for S3MU
@@ -88,7 +88,7 @@
 typedef struct {
   __I  uint32_t VER;                               /**< Version ID Register, offset: 0x0 */
   __I  uint32_t PAR;                               /**< Parameter Register, offset: 0x4 */
-       uint32_t UNUSED0;                           /**< Unused Register 0, offset: 0x8 */
+  __I  uint32_t UNUSED0;                           /**< Unused Register 0, offset: 0x8 */
   __I  uint32_t SR;                                /**< Status Register, offset: 0xC */
        uint8_t RESERVED_0[272];
   __IO uint32_t TCR;                               /**< Transmit Control Register, offset: 0x120 */

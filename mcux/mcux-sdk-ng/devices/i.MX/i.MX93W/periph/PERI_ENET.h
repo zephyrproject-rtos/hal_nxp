@@ -6,7 +6,7 @@
 **                          MIMX93W52610GCM_cm33
 **
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENET
@@ -843,8 +843,7 @@ typedef struct {
 #define ENET_RCR_RGMII_EN_SHIFT                  (6U)
 /*! RGMII_EN - RGMII Mode Enable
  *  0b0..MAC configured for non-RGMII operation
- *  0b1..MAC configured for RGMII operation. If ECR[SPEED] is set, the MAC is in RGMII 1000-Mbit/s mode. If
- *       ECR[SPEED] is cleared, the MAC is in RGMII 10/100-Mbit/s mode.
+ *  0b1..MAC configured for RGMII operation.
  */
 #define ENET_RCR_RGMII_EN(x)                     (((uint32_t)(((uint32_t)(x)) << ENET_RCR_RGMII_EN_SHIFT)) & ENET_RCR_RGMII_EN_MASK)
 

@@ -6,7 +6,7 @@
 **                          MIMX93W52610GCM_cm33
 **
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SRC_GENERAL_REG
@@ -87,7 +87,7 @@ typedef struct {
        uint8_t RESERVED_1[8];
   __IO uint32_t SCR;                               /**< SRC Control Register, offset: 0x10 */
   __IO uint32_t SRTMR;                             /**< SRC RESET TRIGGER MODE REGISTER, offset: 0x14 */
-  __IO uint32_t SRMASK;                            /**< SRC RESET TRIGGER MODE REGISTER, offset: 0x18 */
+  __IO uint32_t SRMASK;                            /**< SRC RESET TRIGGER MASK REGISTER, offset: 0x18 */
        uint8_t RESERVED_2[4];
   __IO uint32_t SRMR1;                             /**< SRC RESET MODE REGISTER 1, offset: 0x20 */
   __IO uint32_t SRMR2;                             /**< SRC RESET MODE REGISTER 2, offset: 0x24 */
@@ -351,7 +351,7 @@ typedef struct {
 #define SRC_GENERAL_REG_SRTMR_CM33_LOCKUP_TRIG_MODE(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRTMR_CM33_LOCKUP_TRIG_MODE_SHIFT)) & SRC_GENERAL_REG_SRTMR_CM33_LOCKUP_TRIG_MODE_MASK)
 /*! @} */
 
-/*! @name SRMASK - SRC RESET TRIGGER MODE REGISTER */
+/*! @name SRMASK - SRC RESET TRIGGER MASK REGISTER */
 /*! @{ */
 
 #define SRC_GENERAL_REG_SRMASK_WDOG1_MASK_MASK   (0x1U)

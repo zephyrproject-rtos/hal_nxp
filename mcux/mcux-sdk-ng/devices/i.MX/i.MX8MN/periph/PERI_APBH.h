@@ -38,7 +38,7 @@
 **                          MIMX8MN6DVTJZ_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260513
+**     Build:               b260624
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for APBH
@@ -161,7 +161,7 @@ typedef struct {
   __IO uint32_t CHANNEL_CTRL_SET;                  /**< AHB to APBH Bridge Channel Register, offset: 0x34 */
   __IO uint32_t CHANNEL_CTRL_CLR;                  /**< AHB to APBH Bridge Channel Register, offset: 0x38 */
   __IO uint32_t CHANNEL_CTRL_TOG;                  /**< AHB to APBH Bridge Channel Register, offset: 0x3C */
-       uint32_t DEVSEL;                            /**< AHB to APBH DMA Device Assignment Register, offset: 0x40 */
+  __I  uint32_t DEVSEL;                            /**< AHB to APBH DMA Device Assignment Register, offset: 0x40 */
        uint8_t RESERVED_0[12];
   __IO uint32_t DMA_BURST_SIZE;                    /**< AHB to APBH DMA burst size, offset: 0x50 */
        uint8_t RESERVED_1[12];

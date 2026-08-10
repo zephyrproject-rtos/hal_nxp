@@ -38,7 +38,7 @@
 **                          MIMX8MN6DVTJZ_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260513
+**     Build:               b260624
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USDHC
@@ -207,9 +207,9 @@ typedef struct {
  *  0b0000000000010..2 Bytes
  *  0b0000000000011..3 Bytes
  *  0b0000000000100..4 Bytes
- *  0b0000000001000..4096 Bytes
  *  0b0000011001000..512 Bytes
  *  0b0001100100000..2048 Bytes
+ *  0b0001111101000..4096 Bytes
  */
 #define USDHC_BLK_ATT_BLKSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_BLK_ATT_BLKSIZE_SHIFT)) & USDHC_BLK_ATT_BLKSIZE_MASK)
 

@@ -38,7 +38,7 @@
 **                          MIMX8MN6DVTJZ_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260513
+**     Build:               b260624
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SRC
@@ -169,8 +169,8 @@ typedef struct {
   __IO uint32_t GPR6;                              /**< SRC General Purpose Register 6, offset: 0x88 */
   __IO uint32_t GPR7;                              /**< SRC General Purpose Register 7, offset: 0x8C */
   __IO uint32_t GPR8;                              /**< SRC General Purpose Register 8, offset: 0x90 */
-       uint32_t GPR9;                              /**< SRC General Purpose Register 9, offset: 0x94 */
-       uint32_t GPR10;                             /**< SRC General Purpose Register 10, offset: 0x98 */
+  __IO uint32_t GPR9;                              /**< SRC General Purpose Register 9, offset: 0x94 */
+  __I  uint32_t GPR10;                             /**< SRC General Purpose Register 10, offset: 0x98 */
        uint8_t RESERVED_6[3940];
   __IO uint32_t DDRC_RCR;                          /**< SRC DDR Controller Reset Control Register, offset: 0x1000 */
 } SRC_Type;

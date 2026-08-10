@@ -6,7 +6,7 @@
 **                          MIMX93W52610GCM_cm33
 **
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for I2S
@@ -333,7 +333,7 @@ typedef struct {
 /*! @name TCR1 - Transmit Configuration 1 */
 /*! @{ */
 
-#define I2S_TCR1_TFW_MASK                        (0x7FU)  /* Merged from fields with different position or width, of widths (5, 7), largest definition used */
+#define I2S_TCR1_TFW_MASK                        (0x7FU)
 #define I2S_TCR1_TFW_SHIFT                       (0U)
 /*! TFW - Transmit FIFO Watermark
  *  0b0000000..0
@@ -341,7 +341,7 @@ typedef struct {
  *  0b0000010-0b1111110..(TFW value)
  *  0b1111111..127
  */
-#define I2S_TCR1_TFW(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_TCR1_TFW_SHIFT)) & I2S_TCR1_TFW_MASK)  /* Merged from fields with different position or width, of widths (5, 7), largest definition used */
+#define I2S_TCR1_TFW(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_TCR1_TFW_SHIFT)) & I2S_TCR1_TFW_MASK)
 /*! @} */
 
 /*! @name TCR2 - Transmit Configuration 2 */
@@ -419,15 +419,15 @@ typedef struct {
 /*! WDFL - Word Flag Configuration */
 #define I2S_TCR3_WDFL(x)                         (((uint32_t)(((uint32_t)(x)) << I2S_TCR3_WDFL_SHIFT)) & I2S_TCR3_WDFL_MASK)
 
-#define I2S_TCR3_TCE_MASK                        (0xF0000U)  /* Merged from fields with different position or width, of widths (1, 2, 4), largest definition used */
+#define I2S_TCR3_TCE_MASK                        (0xF0000U)  /* Merged from fields with different position or width, of widths (1, 4), largest definition used */
 #define I2S_TCR3_TCE_SHIFT                       (16U)
 /*! TCE - Transmit Channel Enable */
-#define I2S_TCR3_TCE(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_TCR3_TCE_SHIFT)) & I2S_TCR3_TCE_MASK)  /* Merged from fields with different position or width, of widths (1, 2, 4), largest definition used */
+#define I2S_TCR3_TCE(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_TCR3_TCE_SHIFT)) & I2S_TCR3_TCE_MASK)  /* Merged from fields with different position or width, of widths (1, 4), largest definition used */
 
-#define I2S_TCR3_CFR_MASK                        (0xF000000U)  /* Merged from fields with different position or width, of widths (2, 4), largest definition used */
+#define I2S_TCR3_CFR_MASK                        (0xF000000U)
 #define I2S_TCR3_CFR_SHIFT                       (24U)
 /*! CFR - Channel FIFO Reset */
-#define I2S_TCR3_CFR(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_TCR3_CFR_SHIFT)) & I2S_TCR3_CFR_MASK)  /* Merged from fields with different position or width, of widths (2, 4), largest definition used */
+#define I2S_TCR3_CFR(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_TCR3_CFR_SHIFT)) & I2S_TCR3_CFR_MASK)
 /*! @} */
 
 /*! @name TCR4 - Transmit Configuration 4 */
@@ -565,15 +565,15 @@ typedef struct {
 /*! @name TFR - Transmit FIFO */
 /*! @{ */
 
-#define I2S_TFR_RFP_MASK                         (0xFFU)  /* Merged from fields with different position or width, of widths (6, 8), largest definition used */
+#define I2S_TFR_RFP_MASK                         (0xFFU)
 #define I2S_TFR_RFP_SHIFT                        (0U)
 /*! RFP - Read FIFO Pointer */
-#define I2S_TFR_RFP(x)                           (((uint32_t)(((uint32_t)(x)) << I2S_TFR_RFP_SHIFT)) & I2S_TFR_RFP_MASK)  /* Merged from fields with different position or width, of widths (6, 8), largest definition used */
+#define I2S_TFR_RFP(x)                           (((uint32_t)(((uint32_t)(x)) << I2S_TFR_RFP_SHIFT)) & I2S_TFR_RFP_MASK)
 
-#define I2S_TFR_WFP_MASK                         (0xFF0000U)  /* Merged from fields with different position or width, of widths (6, 8), largest definition used */
+#define I2S_TFR_WFP_MASK                         (0xFF0000U)
 #define I2S_TFR_WFP_SHIFT                        (16U)
 /*! WFP - Write FIFO Pointer */
-#define I2S_TFR_WFP(x)                           (((uint32_t)(((uint32_t)(x)) << I2S_TFR_WFP_SHIFT)) & I2S_TFR_WFP_MASK)  /* Merged from fields with different position or width, of widths (6, 8), largest definition used */
+#define I2S_TFR_WFP(x)                           (((uint32_t)(((uint32_t)(x)) << I2S_TFR_WFP_SHIFT)) & I2S_TFR_WFP_MASK)
 
 #define I2S_TFR_WCP_MASK                         (0x80000000U)
 #define I2S_TFR_WCP_SHIFT                        (31U)
@@ -826,7 +826,7 @@ typedef struct {
 /*! @name RCR1 - Receive Configuration 1 */
 /*! @{ */
 
-#define I2S_RCR1_RFW_MASK                        (0x7FU)  /* Merged from fields with different position or width, of widths (5, 7), largest definition used */
+#define I2S_RCR1_RFW_MASK                        (0x7FU)
 #define I2S_RCR1_RFW_SHIFT                       (0U)
 /*! RFW - Receive FIFO Watermark
  *  0b0000000..1
@@ -834,7 +834,7 @@ typedef struct {
  *  0b0000010-0b1111110..(RFW value + 1)
  *  0b1111111..128
  */
-#define I2S_RCR1_RFW(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_RCR1_RFW_SHIFT)) & I2S_RCR1_RFW_MASK)  /* Merged from fields with different position or width, of widths (5, 7), largest definition used */
+#define I2S_RCR1_RFW(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_RCR1_RFW_SHIFT)) & I2S_RCR1_RFW_MASK)
 /*! @} */
 
 /*! @name RCR2 - Receive Configuration 2 */
@@ -917,15 +917,15 @@ typedef struct {
  */
 #define I2S_RCR3_WDFL(x)                         (((uint32_t)(((uint32_t)(x)) << I2S_RCR3_WDFL_SHIFT)) & I2S_RCR3_WDFL_MASK)
 
-#define I2S_RCR3_RCE_MASK                        (0xF0000U)  /* Merged from fields with different position or width, of widths (1, 2, 4), largest definition used */
+#define I2S_RCR3_RCE_MASK                        (0xF0000U)  /* Merged from fields with different position or width, of widths (1, 4), largest definition used */
 #define I2S_RCR3_RCE_SHIFT                       (16U)
 /*! RCE - Receive Channel Enable */
-#define I2S_RCR3_RCE(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_RCR3_RCE_SHIFT)) & I2S_RCR3_RCE_MASK)  /* Merged from fields with different position or width, of widths (1, 2, 4), largest definition used */
+#define I2S_RCR3_RCE(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_RCR3_RCE_SHIFT)) & I2S_RCR3_RCE_MASK)  /* Merged from fields with different position or width, of widths (1, 4), largest definition used */
 
-#define I2S_RCR3_CFR_MASK                        (0xF000000U)  /* Merged from fields with different position or width, of widths (2, 4), largest definition used */
+#define I2S_RCR3_CFR_MASK                        (0xF000000U)
 #define I2S_RCR3_CFR_SHIFT                       (24U)
 /*! CFR - Channel FIFO Reset */
-#define I2S_RCR3_CFR(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_RCR3_CFR_SHIFT)) & I2S_RCR3_CFR_MASK)  /* Merged from fields with different position or width, of widths (2, 4), largest definition used */
+#define I2S_RCR3_CFR(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_RCR3_CFR_SHIFT)) & I2S_RCR3_CFR_MASK)
 /*! @} */
 
 /*! @name RCR4 - Receive Configuration 4 */
@@ -1065,10 +1065,10 @@ typedef struct {
 /*! @name RFR - Receive FIFO */
 /*! @{ */
 
-#define I2S_RFR_RFP_MASK                         (0xFFU)  /* Merged from fields with different position or width, of widths (6, 8), largest definition used */
+#define I2S_RFR_RFP_MASK                         (0xFFU)
 #define I2S_RFR_RFP_SHIFT                        (0U)
 /*! RFP - Read FIFO Pointer */
-#define I2S_RFR_RFP(x)                           (((uint32_t)(((uint32_t)(x)) << I2S_RFR_RFP_SHIFT)) & I2S_RFR_RFP_MASK)  /* Merged from fields with different position or width, of widths (6, 8), largest definition used */
+#define I2S_RFR_RFP(x)                           (((uint32_t)(((uint32_t)(x)) << I2S_RFR_RFP_SHIFT)) & I2S_RFR_RFP_MASK)
 
 #define I2S_RFR_RCP_MASK                         (0x8000U)
 #define I2S_RFR_RCP_SHIFT                        (15U)
@@ -1078,10 +1078,10 @@ typedef struct {
  */
 #define I2S_RFR_RCP(x)                           (((uint32_t)(((uint32_t)(x)) << I2S_RFR_RCP_SHIFT)) & I2S_RFR_RCP_MASK)
 
-#define I2S_RFR_WFP_MASK                         (0xFF0000U)  /* Merged from fields with different position or width, of widths (6, 8), largest definition used */
+#define I2S_RFR_WFP_MASK                         (0xFF0000U)
 #define I2S_RFR_WFP_SHIFT                        (16U)
 /*! WFP - Write FIFO Pointer */
-#define I2S_RFR_WFP(x)                           (((uint32_t)(((uint32_t)(x)) << I2S_RFR_WFP_SHIFT)) & I2S_RFR_WFP_MASK)  /* Merged from fields with different position or width, of widths (6, 8), largest definition used */
+#define I2S_RFR_WFP(x)                           (((uint32_t)(((uint32_t)(x)) << I2S_RFR_WFP_SHIFT)) & I2S_RFR_WFP_MASK)
 /*! @} */
 
 /*! @name RMR - Receive Mask */

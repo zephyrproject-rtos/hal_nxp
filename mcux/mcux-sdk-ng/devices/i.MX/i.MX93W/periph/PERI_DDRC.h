@@ -6,7 +6,7 @@
 **                          MIMX93W52610GCM_cm33
 **
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DDRC
@@ -1393,10 +1393,25 @@ typedef struct {
 /*! @name DDR_SDRAM_CFG_4 - DDR SDRAM Control Configuration 4 */
 /*! @{ */
 
-#define DDRC_DDR_SDRAM_CFG_4_FRQCH_RET_MASK      (0x1F000U)
-#define DDRC_DDR_SDRAM_CFG_4_FRQCH_RET_SHIFT     (12U)
-/*! FRQCH_RET - Frequency Change and Retention Setup */
-#define DDRC_DDR_SDRAM_CFG_4_FRQCH_RET(x)        (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_4_FRQCH_RET_SHIFT)) & DDRC_DDR_SDRAM_CFG_4_FRQCH_RET_MASK)
+#define DDRC_DDR_SDRAM_CFG_4_PHY_FREQ_MASK       (0x1F000U)
+#define DDRC_DDR_SDRAM_CFG_4_PHY_FREQ_SHIFT      (12U)
+/*! PHY_FREQ - Frequency Change and Retention Setup */
+#define DDRC_DDR_SDRAM_CFG_4_PHY_FREQ(x)         (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_4_PHY_FREQ_SHIFT)) & DDRC_DDR_SDRAM_CFG_4_PHY_FREQ_MASK)
+
+#define DDRC_DDR_SDRAM_CFG_4_PHY_FREQ_HS_MASK    (0x3E0000U)
+#define DDRC_DDR_SDRAM_CFG_4_PHY_FREQ_HS_SHIFT   (17U)
+/*! PHY_FREQ_HS - PHY Frequency */
+#define DDRC_DDR_SDRAM_CFG_4_PHY_FREQ_HS(x)      (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_4_PHY_FREQ_HS_SHIFT)) & DDRC_DDR_SDRAM_CFG_4_PHY_FREQ_HS_MASK)
+
+#define DDRC_DDR_SDRAM_CFG_4_PHY_FREQ_FSP_MASK   (0x3000000U)
+#define DDRC_DDR_SDRAM_CFG_4_PHY_FREQ_FSP_SHIFT  (24U)
+/*! PHY_FREQ_FSP - PHY Frequency FSP. */
+#define DDRC_DDR_SDRAM_CFG_4_PHY_FREQ_FSP(x)     (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_4_PHY_FREQ_FSP_SHIFT)) & DDRC_DDR_SDRAM_CFG_4_PHY_FREQ_FSP_MASK)
+
+#define DDRC_DDR_SDRAM_CFG_4_PHY_WAKEUP_MASK     (0xF0000000U)
+#define DDRC_DDR_SDRAM_CFG_4_PHY_WAKEUP_SHIFT    (28U)
+/*! PHY_WAKEUP - PHY Wakeup. */
+#define DDRC_DDR_SDRAM_CFG_4_PHY_WAKEUP(x)       (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_4_PHY_WAKEUP_SHIFT)) & DDRC_DDR_SDRAM_CFG_4_PHY_WAKEUP_MASK)
 /*! @} */
 
 /*! @name DDR_SDRAM_REF_RATE - DDR Refresh Rate */

@@ -6,7 +6,7 @@
 **
 **     Reference manual:    IMX93WRM, Internal, December 2025
 **     Version:             rev. 1.0, 2025-12-13
-**     Build:               b260114
+**     Build:               b260708
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX93W52_cm33
@@ -670,14 +670,6 @@ typedef enum IRQn {
 
 /* CAN - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral CAN1 base address */
-  #define CAN1_BASE                                (0x543A0000u)
-  /** Peripheral CAN1 base address */
-  #define CAN1_BASE_NS                             (0x443A0000u)
-  /** Peripheral CAN1 base pointer */
-  #define CAN1                                     ((CAN_Type *)CAN1_BASE)
-  /** Peripheral CAN1 base pointer */
-  #define CAN1_NS                                  ((CAN_Type *)CAN1_BASE_NS)
   /** Peripheral CAN2 base address */
   #define CAN2_BASE                                (0x525B0000u)
   /** Peripheral CAN2 base address */
@@ -687,34 +679,30 @@ typedef enum IRQn {
   /** Peripheral CAN2 base pointer */
   #define CAN2_NS                                  ((CAN_Type *)CAN2_BASE_NS)
   /** Array initializer of CAN peripheral base addresses */
-  #define CAN_BASE_ADDRS                           { 0u, CAN1_BASE, CAN2_BASE }
+  #define CAN_BASE_ADDRS                           { 0u, 0u, CAN2_BASE }
   /** Array initializer of CAN peripheral base pointers */
-  #define CAN_BASE_PTRS                            { (CAN_Type *)0u, CAN1, CAN2 }
+  #define CAN_BASE_PTRS                            { (CAN_Type *)0u, (CAN_Type *)0u, CAN2 }
   /** Array initializer of CAN peripheral base addresses */
-  #define CAN_BASE_ADDRS_NS                        { 0u, CAN1_BASE_NS, CAN2_BASE_NS }
+  #define CAN_BASE_ADDRS_NS                        { 0u, 0u, CAN2_BASE_NS }
   /** Array initializer of CAN peripheral base pointers */
-  #define CAN_BASE_PTRS_NS                         { (CAN_Type *)0u, CAN1_NS, CAN2_NS }
+  #define CAN_BASE_PTRS_NS                         { (CAN_Type *)0u, (CAN_Type *)0u, CAN2_NS }
 #else
-  /** Peripheral CAN1 base address */
-  #define CAN1_BASE                                (0x443A0000u)
-  /** Peripheral CAN1 base pointer */
-  #define CAN1                                     ((CAN_Type *)CAN1_BASE)
   /** Peripheral CAN2 base address */
   #define CAN2_BASE                                (0x425B0000u)
   /** Peripheral CAN2 base pointer */
   #define CAN2                                     ((CAN_Type *)CAN2_BASE)
   /** Array initializer of CAN peripheral base addresses */
-  #define CAN_BASE_ADDRS                           { 0u, CAN1_BASE, CAN2_BASE }
+  #define CAN_BASE_ADDRS                           { 0u, 0u, CAN2_BASE }
   /** Array initializer of CAN peripheral base pointers */
-  #define CAN_BASE_PTRS                            { (CAN_Type *)0u, CAN1, CAN2 }
+  #define CAN_BASE_PTRS                            { (CAN_Type *)0u, (CAN_Type *)0u, CAN2 }
 #endif
 /** Interrupt vectors for the CAN peripheral type */
-#define CAN_Rx_Warning_IRQS                      { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
-#define CAN_Tx_Warning_IRQS                      { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
-#define CAN_Wake_Up_IRQS                         { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
-#define CAN_Error_IRQS                           { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
-#define CAN_Bus_Off_IRQS                         { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
-#define CAN_ORed_Message_buffer_IRQS             { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
+#define CAN_Rx_Warning_IRQS                      { NotAvail_IRQn, NotAvail_IRQn, CAN2_IRQn }
+#define CAN_Tx_Warning_IRQS                      { NotAvail_IRQn, NotAvail_IRQn, CAN2_IRQn }
+#define CAN_Wake_Up_IRQS                         { NotAvail_IRQn, NotAvail_IRQn, CAN2_IRQn }
+#define CAN_Error_IRQS                           { NotAvail_IRQn, NotAvail_IRQn, CAN2_IRQn }
+#define CAN_Bus_Off_IRQS                         { NotAvail_IRQn, NotAvail_IRQn, CAN2_IRQn }
+#define CAN_ORed_Message_buffer_IRQS             { NotAvail_IRQn, NotAvail_IRQn, CAN2_IRQn }
 
 /* CCM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -977,73 +965,6 @@ typedef enum IRQn {
 /** Interrupt vectors for the FLEXIO peripheral type */
 #define FLEXIO_IRQS                              { NotAvail_IRQn, FLEXIO1_IRQn, FLEXIO2_IRQn }
 
-/* FLEXSPI - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral FLEXSPI base address */
-  #define FLEXSPI_BASE                             (0x525E0000u)
-  /** Peripheral FLEXSPI base address */
-  #define FLEXSPI_BASE_NS                          (0x425E0000u)
-  /** Peripheral FLEXSPI base pointer */
-  #define FLEXSPI                                  ((FLEXSPI_Type *)FLEXSPI_BASE)
-  /** Peripheral FLEXSPI base pointer */
-  #define FLEXSPI_NS                               ((FLEXSPI_Type *)FLEXSPI_BASE_NS)
-  /** Array initializer of FLEXSPI peripheral base addresses */
-  #define FLEXSPI_BASE_ADDRS                       { FLEXSPI_BASE }
-  /** Array initializer of FLEXSPI peripheral base pointers */
-  #define FLEXSPI_BASE_PTRS                        { FLEXSPI }
-  /** Array initializer of FLEXSPI peripheral base addresses */
-  #define FLEXSPI_BASE_ADDRS_NS                    { FLEXSPI_BASE_NS }
-  /** Array initializer of FLEXSPI peripheral base pointers */
-  #define FLEXSPI_BASE_PTRS_NS                     { FLEXSPI_NS }
-#else
-  /** Peripheral FLEXSPI base address */
-  #define FLEXSPI_BASE                             (0x425E0000u)
-  /** Peripheral FLEXSPI base pointer */
-  #define FLEXSPI                                  ((FLEXSPI_Type *)FLEXSPI_BASE)
-  /** Array initializer of FLEXSPI peripheral base addresses */
-  #define FLEXSPI_BASE_ADDRS                       { FLEXSPI_BASE }
-  /** Array initializer of FLEXSPI peripheral base pointers */
-  #define FLEXSPI_BASE_PTRS                        { FLEXSPI }
-#endif
-/** Interrupt vectors for the FLEXSPI peripheral type */
-#define FLEXSPI_IRQS                             { FlexSPI1_IRQn }
-/** FlexSPI AMBA memory base alias count */
-#define FLEXSPI_AMBA_BASE_ALIAS_COUNT     (1)
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** FlexSPI AMBA base address array */
-  #define FlexSPI_AMBA_BASE_ARRAY                  { {0x38000000u} }
-  #define FlexSPI_AMBA_BASE_ARRAY_NS               { {0x28000000u} }
-  /** FlexSPI AMBA end address array */
-  #define FlexSPI_AMBA_END_ARRAY                   { {0x3FFFFFFFu} }
-  #define FlexSPI_AMBA_END_ARRAY_NS                { {0x2FFFFFFFu} }
-  /* FlexSPI AMBA address. */
-  #define FlexSPI_AMBA_BASE                        (0x38000000u)
-  #define FlexSPI_AMBA_BASE_NS                     (0x28000000u)
-  /* FlexSPI ASFM address. */
-  #define FlexSPI_ASFM_BASE                        (0x38000000u)
-  #define FlexSPI_ASFM_BASE_NS                     (0x28000000u)
-  /* Base Address of AHB address space mapped to IP RX FIFO. */
-  #define FlexSPI_ARDF_BASE                        (0x57420000u)
-  #define FlexSPI_ARDF_BASE_NS                     (0x47420000u)
-  /* Base Address of AHB address space mapped to IP TX FIFO. */
-  #define FlexSPI_ATDF_BASE                        (0x57430000u)
-  #define FlexSPI_ATDF_BASE_NS                     (0x47430000u)
-#else
-  /** FlexSPI AMBA base address array */
-  #define FlexSPI_AMBA_BASE_ARRAY                  { {0x28000000u} }
-  /** FlexSPI AMBA end address array */
-  #define FlexSPI_AMBA_END_ARRAY                   { {0x2FFFFFFFu} }
-  /* FlexSPI AMBA address. */
-  #define FlexSPI_AMBA_BASE                        (0x28000000u)
-  /* FlexSPI ASFM address. */
-  #define FlexSPI_ASFM_BASE                        (0x28000000u)
-  /* Base Address of AHB address space mapped to IP RX FIFO. */
-  #define FlexSPI_ARDF_BASE                        (0x47420000u)
-  /* Base Address of AHB address space mapped to IP TX FIFO. */
-  #define FlexSPI_ATDF_BASE                        (0x47430000u)
-#endif
-
-
 /* FSB - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
   /** Peripheral FSB1 base address */
@@ -1169,14 +1090,6 @@ typedef enum IRQn {
 
 /* I2S - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral SAI1 base address */
-  #define SAI1_BASE                                (0x543B0000u)
-  /** Peripheral SAI1 base address */
-  #define SAI1_BASE_NS                             (0x443B0000u)
-  /** Peripheral SAI1 base pointer */
-  #define SAI1                                     ((I2S_Type *)SAI1_BASE)
-  /** Peripheral SAI1 base pointer */
-  #define SAI1_NS                                  ((I2S_Type *)SAI1_BASE_NS)
   /** Peripheral SAI2 base address */
   #define SAI2_BASE                                (0x52650000u)
   /** Peripheral SAI2 base address */
@@ -1194,18 +1107,14 @@ typedef enum IRQn {
   /** Peripheral SAI3 base pointer */
   #define SAI3_NS                                  ((I2S_Type *)SAI3_BASE_NS)
   /** Array initializer of I2S peripheral base addresses */
-  #define I2S_BASE_ADDRS                           { 0u, SAI1_BASE, SAI2_BASE, SAI3_BASE }
+  #define I2S_BASE_ADDRS                           { 0u, 0u, SAI2_BASE, SAI3_BASE }
   /** Array initializer of I2S peripheral base pointers */
-  #define I2S_BASE_PTRS                            { (I2S_Type *)0u, SAI1, SAI2, SAI3 }
+  #define I2S_BASE_PTRS                            { (I2S_Type *)0u, (I2S_Type *)0u, SAI2, SAI3 }
   /** Array initializer of I2S peripheral base addresses */
-  #define I2S_BASE_ADDRS_NS                        { 0u, SAI1_BASE_NS, SAI2_BASE_NS, SAI3_BASE_NS }
+  #define I2S_BASE_ADDRS_NS                        { 0u, 0u, SAI2_BASE_NS, SAI3_BASE_NS }
   /** Array initializer of I2S peripheral base pointers */
-  #define I2S_BASE_PTRS_NS                         { (I2S_Type *)0u, SAI1_NS, SAI2_NS, SAI3_NS }
+  #define I2S_BASE_PTRS_NS                         { (I2S_Type *)0u, (I2S_Type *)0u, SAI2_NS, SAI3_NS }
 #else
-  /** Peripheral SAI1 base address */
-  #define SAI1_BASE                                (0x443B0000u)
-  /** Peripheral SAI1 base pointer */
-  #define SAI1                                     ((I2S_Type *)SAI1_BASE)
   /** Peripheral SAI2 base address */
   #define SAI2_BASE                                (0x42650000u)
   /** Peripheral SAI2 base pointer */
@@ -1215,13 +1124,13 @@ typedef enum IRQn {
   /** Peripheral SAI3 base pointer */
   #define SAI3                                     ((I2S_Type *)SAI3_BASE)
   /** Array initializer of I2S peripheral base addresses */
-  #define I2S_BASE_ADDRS                           { 0u, SAI1_BASE, SAI2_BASE, SAI3_BASE }
+  #define I2S_BASE_ADDRS                           { 0u, 0u, SAI2_BASE, SAI3_BASE }
   /** Array initializer of I2S peripheral base pointers */
-  #define I2S_BASE_PTRS                            { (I2S_Type *)0u, SAI1, SAI2, SAI3 }
+  #define I2S_BASE_PTRS                            { (I2S_Type *)0u, (I2S_Type *)0u, SAI2, SAI3 }
 #endif
 /** Interrupt vectors for the I2S peripheral type */
-#define I2S_RX_IRQS                              { NotAvail_IRQn, SAI1_IRQn, SAI2_IRQn, SAI3_IRQn }
-#define I2S_TX_IRQS                              { NotAvail_IRQn, SAI1_IRQn, SAI2_IRQn, SAI3_IRQn }
+#define I2S_RX_IRQS                              { NotAvail_IRQn, NotAvail_IRQn, SAI2_IRQn, SAI3_IRQn }
+#define I2S_TX_IRQS                              { NotAvail_IRQn, NotAvail_IRQn, SAI2_IRQn, SAI3_IRQn }
 
 /* I3C - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1540,14 +1449,6 @@ typedef enum IRQn {
 
 /* LPSPI - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral LPSPI1 base address */
-  #define LPSPI1_BASE                              (0x54360000u)
-  /** Peripheral LPSPI1 base address */
-  #define LPSPI1_BASE_NS                           (0x44360000u)
-  /** Peripheral LPSPI1 base pointer */
-  #define LPSPI1                                   ((LPSPI_Type *)LPSPI1_BASE)
-  /** Peripheral LPSPI1 base pointer */
-  #define LPSPI1_NS                                ((LPSPI_Type *)LPSPI1_BASE_NS)
   /** Peripheral LPSPI2 base address */
   #define LPSPI2_BASE                              (0x54370000u)
   /** Peripheral LPSPI2 base address */
@@ -1605,18 +1506,14 @@ typedef enum IRQn {
   /** Peripheral LPSPI8 base pointer */
   #define LPSPI8_NS                                ((LPSPI_Type *)LPSPI8_BASE_NS)
   /** Array initializer of LPSPI peripheral base addresses */
-  #define LPSPI_BASE_ADDRS                         { 0u, LPSPI1_BASE, LPSPI2_BASE, LPSPI3_BASE, LPSPI4_BASE, LPSPI5_BASE, LPSPI6_BASE, LPSPI7_BASE, LPSPI8_BASE }
+  #define LPSPI_BASE_ADDRS                         { 0u, 0u, LPSPI2_BASE, LPSPI3_BASE, LPSPI4_BASE, LPSPI5_BASE, LPSPI6_BASE, LPSPI7_BASE, LPSPI8_BASE }
   /** Array initializer of LPSPI peripheral base pointers */
-  #define LPSPI_BASE_PTRS                          { (LPSPI_Type *)0u, LPSPI1, LPSPI2, LPSPI3, LPSPI4, LPSPI5, LPSPI6, LPSPI7, LPSPI8 }
+  #define LPSPI_BASE_PTRS                          { (LPSPI_Type *)0u, (LPSPI_Type *)0u, LPSPI2, LPSPI3, LPSPI4, LPSPI5, LPSPI6, LPSPI7, LPSPI8 }
   /** Array initializer of LPSPI peripheral base addresses */
-  #define LPSPI_BASE_ADDRS_NS                      { 0u, LPSPI1_BASE_NS, LPSPI2_BASE_NS, LPSPI3_BASE_NS, LPSPI4_BASE_NS, LPSPI5_BASE_NS, LPSPI6_BASE_NS, LPSPI7_BASE_NS, LPSPI8_BASE_NS }
+  #define LPSPI_BASE_ADDRS_NS                      { 0u, 0u, LPSPI2_BASE_NS, LPSPI3_BASE_NS, LPSPI4_BASE_NS, LPSPI5_BASE_NS, LPSPI6_BASE_NS, LPSPI7_BASE_NS, LPSPI8_BASE_NS }
   /** Array initializer of LPSPI peripheral base pointers */
-  #define LPSPI_BASE_PTRS_NS                       { (LPSPI_Type *)0u, LPSPI1_NS, LPSPI2_NS, LPSPI3_NS, LPSPI4_NS, LPSPI5_NS, LPSPI6_NS, LPSPI7_NS, LPSPI8_NS }
+  #define LPSPI_BASE_PTRS_NS                       { (LPSPI_Type *)0u, (LPSPI_Type *)0u, LPSPI2_NS, LPSPI3_NS, LPSPI4_NS, LPSPI5_NS, LPSPI6_NS, LPSPI7_NS, LPSPI8_NS }
 #else
-  /** Peripheral LPSPI1 base address */
-  #define LPSPI1_BASE                              (0x44360000u)
-  /** Peripheral LPSPI1 base pointer */
-  #define LPSPI1                                   ((LPSPI_Type *)LPSPI1_BASE)
   /** Peripheral LPSPI2 base address */
   #define LPSPI2_BASE                              (0x44370000u)
   /** Peripheral LPSPI2 base pointer */
@@ -1646,12 +1543,12 @@ typedef enum IRQn {
   /** Peripheral LPSPI8 base pointer */
   #define LPSPI8                                   ((LPSPI_Type *)LPSPI8_BASE)
   /** Array initializer of LPSPI peripheral base addresses */
-  #define LPSPI_BASE_ADDRS                         { 0u, LPSPI1_BASE, LPSPI2_BASE, LPSPI3_BASE, LPSPI4_BASE, LPSPI5_BASE, LPSPI6_BASE, LPSPI7_BASE, LPSPI8_BASE }
+  #define LPSPI_BASE_ADDRS                         { 0u, 0u, LPSPI2_BASE, LPSPI3_BASE, LPSPI4_BASE, LPSPI5_BASE, LPSPI6_BASE, LPSPI7_BASE, LPSPI8_BASE }
   /** Array initializer of LPSPI peripheral base pointers */
-  #define LPSPI_BASE_PTRS                          { (LPSPI_Type *)0u, LPSPI1, LPSPI2, LPSPI3, LPSPI4, LPSPI5, LPSPI6, LPSPI7, LPSPI8 }
+  #define LPSPI_BASE_PTRS                          { (LPSPI_Type *)0u, (LPSPI_Type *)0u, LPSPI2, LPSPI3, LPSPI4, LPSPI5, LPSPI6, LPSPI7, LPSPI8 }
 #endif
 /** Interrupt vectors for the LPSPI peripheral type */
-#define LPSPI_IRQS                               { NotAvail_IRQn, LPSPI1_IRQn, LPSPI2_IRQn, LPSPI3_IRQn, LPSPI4_IRQn, LPSPI5_IRQn, LPSPI6_IRQn, LPSPI7_IRQn, LPSPI8_IRQn }
+#define LPSPI_IRQS                               { NotAvail_IRQn, NotAvail_IRQn, LPSPI2_IRQn, LPSPI3_IRQn, LPSPI4_IRQn, LPSPI5_IRQn, LPSPI6_IRQn, LPSPI7_IRQn, LPSPI8_IRQn }
 
 /* LPTMR - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -2036,35 +1933,6 @@ typedef enum _mu_core_boot_mode
   #define OCRAM_MECC_BASE_ADDRS                    { OCRAM_MECC1_BASE }
   /** Array initializer of OCRAM_MECC peripheral base pointers */
   #define OCRAM_MECC_BASE_PTRS                     { OCRAM_MECC1 }
-#endif
-
-/* OTFAD - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral FLEXSPI_OTFAD1 base address */
-  #define FLEXSPI_OTFAD1_BASE                      (0x525E0000u)
-  /** Peripheral FLEXSPI_OTFAD1 base address */
-  #define FLEXSPI_OTFAD1_BASE_NS                   (0x425E0000u)
-  /** Peripheral FLEXSPI_OTFAD1 base pointer */
-  #define FLEXSPI_OTFAD1                           ((OTFAD_Type *)FLEXSPI_OTFAD1_BASE)
-  /** Peripheral FLEXSPI_OTFAD1 base pointer */
-  #define FLEXSPI_OTFAD1_NS                        ((OTFAD_Type *)FLEXSPI_OTFAD1_BASE_NS)
-  /** Array initializer of OTFAD peripheral base addresses */
-  #define OTFAD_BASE_ADDRS                         { FLEXSPI_OTFAD1_BASE }
-  /** Array initializer of OTFAD peripheral base pointers */
-  #define OTFAD_BASE_PTRS                          { FLEXSPI_OTFAD1 }
-  /** Array initializer of OTFAD peripheral base addresses */
-  #define OTFAD_BASE_ADDRS_NS                      { FLEXSPI_OTFAD1_BASE_NS }
-  /** Array initializer of OTFAD peripheral base pointers */
-  #define OTFAD_BASE_PTRS_NS                       { FLEXSPI_OTFAD1_NS }
-#else
-  /** Peripheral FLEXSPI_OTFAD1 base address */
-  #define FLEXSPI_OTFAD1_BASE                      (0x425E0000u)
-  /** Peripheral FLEXSPI_OTFAD1 base pointer */
-  #define FLEXSPI_OTFAD1                           ((OTFAD_Type *)FLEXSPI_OTFAD1_BASE)
-  /** Array initializer of OTFAD peripheral base addresses */
-  #define OTFAD_BASE_ADDRS                         { FLEXSPI_OTFAD1_BASE }
-  /** Array initializer of OTFAD peripheral base pointers */
-  #define OTFAD_BASE_PTRS                          { FLEXSPI_OTFAD1 }
 #endif
 
 /* PDM - Peripheral instance base addresses */
@@ -3366,22 +3234,14 @@ typedef enum _mu_core_boot_mode
   #define USDHC2                                   ((USDHC_Type *)USDHC2_BASE)
   /** Peripheral USDHC2 base pointer */
   #define USDHC2_NS                                ((USDHC_Type *)USDHC2_BASE_NS)
-  /** Peripheral USDHC3 base address */
-  #define USDHC3_BASE                              (0x528B0000u)
-  /** Peripheral USDHC3 base address */
-  #define USDHC3_BASE_NS                           (0x428B0000u)
-  /** Peripheral USDHC3 base pointer */
-  #define USDHC3                                   ((USDHC_Type *)USDHC3_BASE)
-  /** Peripheral USDHC3 base pointer */
-  #define USDHC3_NS                                ((USDHC_Type *)USDHC3_BASE_NS)
   /** Array initializer of USDHC peripheral base addresses */
-  #define USDHC_BASE_ADDRS                         { 0u, USDHC1_BASE, USDHC2_BASE, USDHC3_BASE }
+  #define USDHC_BASE_ADDRS                         { 0u, USDHC1_BASE, USDHC2_BASE }
   /** Array initializer of USDHC peripheral base pointers */
-  #define USDHC_BASE_PTRS                          { (USDHC_Type *)0u, USDHC1, USDHC2, USDHC3 }
+  #define USDHC_BASE_PTRS                          { (USDHC_Type *)0u, USDHC1, USDHC2 }
   /** Array initializer of USDHC peripheral base addresses */
-  #define USDHC_BASE_ADDRS_NS                      { 0u, USDHC1_BASE_NS, USDHC2_BASE_NS, USDHC3_BASE_NS }
+  #define USDHC_BASE_ADDRS_NS                      { 0u, USDHC1_BASE_NS, USDHC2_BASE_NS }
   /** Array initializer of USDHC peripheral base pointers */
-  #define USDHC_BASE_PTRS_NS                       { (USDHC_Type *)0u, USDHC1_NS, USDHC2_NS, USDHC3_NS }
+  #define USDHC_BASE_PTRS_NS                       { (USDHC_Type *)0u, USDHC1_NS, USDHC2_NS }
 #else
   /** Peripheral USDHC1 base address */
   #define USDHC1_BASE                              (0x42850000u)
@@ -3391,17 +3251,13 @@ typedef enum _mu_core_boot_mode
   #define USDHC2_BASE                              (0x42860000u)
   /** Peripheral USDHC2 base pointer */
   #define USDHC2                                   ((USDHC_Type *)USDHC2_BASE)
-  /** Peripheral USDHC3 base address */
-  #define USDHC3_BASE                              (0x428B0000u)
-  /** Peripheral USDHC3 base pointer */
-  #define USDHC3                                   ((USDHC_Type *)USDHC3_BASE)
   /** Array initializer of USDHC peripheral base addresses */
-  #define USDHC_BASE_ADDRS                         { 0u, USDHC1_BASE, USDHC2_BASE, USDHC3_BASE }
+  #define USDHC_BASE_ADDRS                         { 0u, USDHC1_BASE, USDHC2_BASE }
   /** Array initializer of USDHC peripheral base pointers */
-  #define USDHC_BASE_PTRS                          { (USDHC_Type *)0u, USDHC1, USDHC2, USDHC3 }
+  #define USDHC_BASE_PTRS                          { (USDHC_Type *)0u, USDHC1, USDHC2 }
 #endif
 /** Interrupt vectors for the USDHC peripheral type */
-#define USDHC_IRQS                               { NotAvail_IRQn, uSDHC1_IRQn, uSDHC2_IRQn, uSDHC3_IRQn }
+#define USDHC_IRQS                               { NotAvail_IRQn, uSDHC1_IRQn, uSDHC2_IRQn }
 
 /* WAKEUP_AHBRM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -3510,6 +3366,10 @@ typedef enum _mu_core_boot_mode
 #endif
 /** Interrupt vectors for the WDOG peripheral type */
 #define WDOG_IRQS                                { WDOG1_IRQn, WDOG2_IRQn, WDOG3_IRQn, WDOG4_IRQn, WDOG5_IRQn }
+/* Extra definition */
+#define WDOG_UPDATE_KEY                          (0xD928C520U)
+#define WDOG_REFRESH_KEY                         (0xB480A602U)
+
 
 /* XCACHE - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
