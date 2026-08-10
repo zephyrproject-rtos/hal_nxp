@@ -20,7 +20,7 @@
 /*! @{ */
 /*! @brief POWER driver version */
 #define FSL_POWER_DRIVER_VERSION                \
-    (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0. \
+    (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0. \
                              */
 /*! @} */
 
@@ -439,7 +439,11 @@ static inline bool POWER_ExitFromStandbyMode(void)
 /*!
  * @brief Request to enter standby mode.
  */
+#if defined(FSL_FEATURE_MC_ME_HAS_CORE_SELECTION) && (FSL_FEATURE_MC_ME_HAS_CORE_SELECTION != 0U)
+void POWER_EnterStandbyMode(uint8_t coreId);
+#else
 void POWER_EnterStandbyMode(void);
+#endif /* FSL_FEATURE_MC_ME_HAS_CORE_SELECTION */
 
 /*!
  * @brief Request destructive or functional reset mode transition.

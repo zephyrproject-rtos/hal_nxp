@@ -12,7 +12,7 @@
 **
 **     Reference manual:    MCXN23XRM
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260710
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

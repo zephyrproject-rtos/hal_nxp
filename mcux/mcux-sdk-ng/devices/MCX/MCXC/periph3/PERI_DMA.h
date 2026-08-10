@@ -17,7 +17,7 @@
 **                          MCXC162VLF
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260121
+**     Build:               b260714
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA
@@ -100,10 +100,6 @@ typedef enum _dma_request_source
     kDma0RequestLPUART1Tx           = 24U,         /**< LPUART1 Transmit request */
     kDma0RequestLPUART2Rx           = 25U,         /**< LPUART2 Receive request */
     kDma0RequestLPUART2Tx           = 26U,         /**< LPUART2 Transmit request */
-    kDma0RequestLPUART3Rx           = 27U,         /**< LPUART3 Receive request */
-    kDma0RequestLPUART3Tx           = 28U,         /**< LPUART3 Transmit request */
-    kDma0RequestLPUART4Rx           = 29U,         /**< LPUART4 Receive request */
-    kDma0RequestLPUART4Tx           = 30U,         /**< LPUART4 Transmit request */
     kDma0RequestMuxCtimer0M0        = 31U,         /**< CTIMER0 Match channel 0 request */
     kDma0RequestMuxCtimer0M1        = 32U,         /**< CTIMER0 Match channel 1 request */
     kDma0RequestMuxCtimer1M0        = 33U,         /**< CTIMER1 Match channel 0 request */
@@ -121,7 +117,8 @@ typedef enum _dma_request_source
     kDma0RequestMuxGpio1PinEventRequest0 = 61U,    /**< GPIO1 Pin event request 0 */
     kDma0RequestMuxGpio2PinEventRequest0 = 62U,    /**< GPIO2 Pin event request 0 */
     kDma0RequestMuxGpio3PinEventRequest0 = 63U,    /**< GPIO3 Pin event request 0 */
-    kDma0RequestMuxEqdc0            = 65U,         /**< EQDC0 DMA request for new buffered value  */
+    kDma0RequestLPUART3Rx           = 27U,         /**< LPUART3 Receive request */
+    kDma0RequestLPUART3Tx           = 28U,         /**< LPUART3 Transmit request */
 } dma_request_source_t;
 
 /* @} */

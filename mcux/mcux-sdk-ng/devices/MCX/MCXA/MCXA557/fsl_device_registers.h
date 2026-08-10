@@ -13,7 +13,7 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_MCXA557VPN))
+#if (defined(CPU_MCXA557BVPN) || defined(CPU_MCXA557VPN))
 #include "MCXA557.h"
 #else
   #error "No valid CPU defined!"

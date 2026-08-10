@@ -10,7 +10,7 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260512
+**     Build:               b260716
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN557T_cm33_core0
@@ -274,6 +274,113 @@ typedef enum IRQn {
 #endif
 /* CPU specific feature definitions */
 #include "MCXN557T_cm33_core0_features.h"
+
+/* ----------------------------------------------------------------------------
+   -- Mapping Information
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup Mapping_Information Mapping Information
+ * @{
+ */
+
+/** Mapping Information */
+/*!
+ * @addtogroup eim_memory_channel_mapping
+ * @{
+ */
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+
+/*!
+ * @brief Structure for the eim_memory_channel
+ *
+ *
+ * Defines the structure for the EIM resource collections.
+ */
+typedef enum _eim_memory_channel
+{
+    kEIM_MemoryChannelRAMX          = 0U,          /**< Memory RAMX */
+    kEIM_MemoryChannelRAMA          = 1U,          /**< Memory RAMA  */
+    kEIM_MemoryChannelRAMB          = 2U,          /**< Memory RAMB */
+    kEIM_MemoryChannelRAMC          = 3U,          /**< Memory RAMC */
+    kEIM_MemoryChannelRAMD          = 4U,          /**< Memory RAMD */
+    kEIM_MemoryChannelRAME          = 5U,          /**< Memory RAME */
+    kEIM_MemoryChannelRAMF          = 6U,          /**< Memory RAMF */
+    kEIM_MemoryChannelLPCACRAM      = 7U,          /**< Memory LPCACRAM */
+    kEIM_MemoryChannelPKCRAM        = 8U,          /**< Memory PKCRAM */
+} eim_memory_channel_t;
+
+/* @} */
+
+/*!
+ * @addtogroup eim_error_injection_channel_enab_mapping
+ * @{
+ */
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+
+/*!
+ * @brief Structure for the eim_error_injection_channel_enable
+ *
+ *
+ * Defines the structure for the EIM error injection resource collections.
+ */
+typedef enum _eim_error_injection_channel_enab
+{
+    kEIM_MemoryChannelRAMXEnable    = 0x80000000U, /**< Memory channel 0(RAMX) error injection enable */
+    kEIM_MemoryChannelRAMAEnable    = 0x40000000U, /**< Memory channel 1(RAMA) error injection enable  */
+    kEIM_MemoryChannelRAMBEnable    = 0x20000000U, /**< Memory channel 2(RAMB) error injection enable */
+    kEIM_MemoryChannelRAMCEnable    = 0x10000000U, /**< Memory channel 3(RAMC) error injection enable */
+    kEIM_MemoryChannelRAMDEnable    = 0x8000000U,  /**< Memory channel 4(RAMD) error injection enable */
+    kEIM_MemoryChannelRAMEEnable    = 0x4000000U,  /**< Memory channel 5(RAME) error injection enable */
+    kEIM_MemoryChannelRAMFEnable    = 0x2000000U,  /**< Memory channel 6(RAMF) error injection enable */
+    kEIM_MemoryChannelLPCACRAMEnable = 0x1000000U, /**< Memory channel 7(LPCACRAM) error injection enable */
+    kEIM_MemoryChannelPKCRAMEnable  = 0x800000U,   /**< Memory channel 8(PKCRAM) error injection enable */
+} eim_error_injection_channel_enab_t;
+
+/* @} */
+
+/*!
+ * @addtogroup erm_memory_channel_mapping
+ * @{
+ */
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+
+/*!
+ * @brief Structure for the erm_memory_channel
+ *
+ *
+ * Defines the structure for the ERM resource collections.
+ */
+typedef enum _erm_memory_channel
+{
+    kERM_MemoryChannelRAMX          = 0U,          /**< Memory RAMX */
+    kERM_MemoryChannelRAMA          = 1U,          /**< Memory RAMA  */
+    kERM_MemoryChannelRAMB          = 2U,          /**< Memory RAMB */
+    kERM_MemoryChannelRAMC          = 3U,          /**< Memory RAMC */
+    kERM_MemoryChannelRAMD          = 4U,          /**< Memory RAMD */
+    kERM_MemoryChannelRAME          = 5U,          /**< Memory RAME */
+    kERM_MemoryChannelRAMF          = 6U,          /**< Memory RAMF */
+    kERM_MemoryChannelLPCACRAM      = 7U,          /**< Memory LPCACRAM */
+    kERM_MemoryChannelPKCRAM        = 8U,          /**< Memory PKCRAM */
+    kERM_MemoryChannelFLASH         = 9U,          /**< Memory FLASH */
+} erm_memory_channel_t;
+
+/* @} */
+
+
+/*!
+ * @}
+ */ /* end of group Mapping_Information */
+
 
 /* ADC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -2414,7 +2521,7 @@ typedef enum IRQn {
   #define PDM_BASE_PTRS                            { PDM }
 #endif
 /** Interrupt vectors for the PDM peripheral type */
-#define PDM_Event_IRQS                           { PDM_EVENT_IRQn }
+#define PDM_Event_IRQS                                 { PDM_EVENT_IRQn }
 
 /* PINT - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

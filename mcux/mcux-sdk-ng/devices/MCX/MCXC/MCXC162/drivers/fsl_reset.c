@@ -63,7 +63,7 @@ status_t RESET_SetPeripheralReset(reset_ip_name_t peripheral)
     assert(regIndex < 3u);
 
     /* Unlock clock configuration */
-    SYSCON->CLKUNLOCK &= ~SYSCON_CLKUNLOCK_UNLOCK_MASK;
+    SYSCON->CLKUNLOCK &= ~SYSCON_CLKUNLOCK_LOCK_MASK;
 
     /* reset register is in MRCC */
     /* set bit */
@@ -103,7 +103,7 @@ status_t RESET_SetPeripheralReset(reset_ip_name_t peripheral)
     }
 
     /* Freeze clock configuration */
-    SYSCON->CLKUNLOCK |= SYSCON_CLKUNLOCK_UNLOCK_MASK;
+    SYSCON->CLKUNLOCK |= SYSCON_CLKUNLOCK_LOCK_MASK;
 
     return kStatus_Success;
 }
@@ -127,7 +127,7 @@ status_t RESET_ClearPeripheralReset(reset_ip_name_t peripheral)
     assert(regIndex < 3u);
 
     /* Unlock clock configuration */
-    SYSCON->CLKUNLOCK &= ~SYSCON_CLKUNLOCK_UNLOCK_MASK;
+    SYSCON->CLKUNLOCK &= ~SYSCON_CLKUNLOCK_LOCK_MASK;
 
     /* reset register is in MRCC */
     /* clear bit */
@@ -167,7 +167,7 @@ status_t RESET_ClearPeripheralReset(reset_ip_name_t peripheral)
     }
 
     /* Freeze clock configuration */
-    SYSCON->CLKUNLOCK |= SYSCON_CLKUNLOCK_UNLOCK_MASK;
+    SYSCON->CLKUNLOCK |= SYSCON_CLKUNLOCK_LOCK_MASK;
 
     return kStatus_Success;
 }

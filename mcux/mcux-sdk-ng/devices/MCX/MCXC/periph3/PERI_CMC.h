@@ -17,7 +17,7 @@
 **                          MCXC162VLF
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260121
+**     Build:               b260714
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CMC
@@ -628,6 +628,14 @@ typedef struct {
  *  0b1..Reset source pending
  */
 #define CMC_SRIF_LPACK(x)                        (((uint32_t)(((uint32_t)(x)) << CMC_SRIF_LPACK_SHIFT)) & CMC_SRIF_LPACK_MASK)
+
+#define CMC_SRIF_SCG_MASK                        (0x1000U)
+#define CMC_SRIF_SCG_SHIFT                       (12U)
+/*! SCG - System Clock Generation Reset
+ *  0b0..Reset source not pending
+ *  0b1..Reset source pending
+ */
+#define CMC_SRIF_SCG(x)                          (((uint32_t)(((uint32_t)(x)) << CMC_SRIF_SCG_SHIFT)) & CMC_SRIF_SCG_MASK)
 
 #define CMC_SRIF_WWDT0_MASK                      (0x2000U)
 #define CMC_SRIF_WWDT0_SHIFT                     (13U)

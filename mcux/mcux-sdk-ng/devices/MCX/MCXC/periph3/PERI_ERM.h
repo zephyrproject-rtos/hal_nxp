@@ -17,7 +17,7 @@
 **                          MCXC162VLF
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260121
+**     Build:               b260714
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ERM
@@ -57,48 +57,6 @@
 #else
   #error "No valid CPU defined!"
 #endif
-
-/* ----------------------------------------------------------------------------
-   -- Mapping Information
-   ---------------------------------------------------------------------------- */
-
-/*!
- * @addtogroup Mapping_Information Mapping Information
- * @{
- */
-
-/** Mapping Information */
-#if !defined(ERM_MEMORY_CHANNEL_T_)
-#define ERM_MEMORY_CHANNEL_T_
-/*!
- * @addtogroup erm_memory_channel
- * @{
- */
-
-/*******************************************************************************
- * Definitions
- ******************************************************************************/
-
-/*!
- * @brief Structure for the erm_memory_channel
- *
- * Defines the structure for the ERM resource collections.
- */
-
-typedef enum _erm_memory_channel
-{
-    kERM_MemoryChannelRAMA0         = 0U,          /**< Memory RAMA0 */
-    kERM_MemoryChannelFLASH         = 1U,          /**< Memory FLASH */
-} erm_memory_channel_t;
-
-/* @} */
-#endif /* ERM_MEMORY_CHANNEL_T_ */
-
-
-/*!
- * @}
- */ /* end of group Mapping_Information */
-
 
 /* ----------------------------------------------------------------------------
    -- Device Peripheral Access Layer

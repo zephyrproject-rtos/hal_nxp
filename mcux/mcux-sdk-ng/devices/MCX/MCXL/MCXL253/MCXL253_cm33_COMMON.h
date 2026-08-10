@@ -811,6 +811,7 @@ typedef enum IRQn {
 #endif
 /** Interrupt vectors for the GPIO peripheral type */
 #define GPIO_IRQS                                { GPIO00_AON_IRQn, GPIO10_IRQn, GPIO20_IRQn, GPIO30_IRQn }
+#define GPIO_S_IRQS                              { GPIO01_AON_IRQn, GPIO11_IRQn, GPIO21_IRQn, GPIO31_IRQn }
 
 /* INPUTMUX_AON - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

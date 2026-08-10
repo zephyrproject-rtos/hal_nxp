@@ -43,10 +43,17 @@ void POWER_GetPMCVersionID(pmc_version_id_t *versionId)
 /*!
  * brief Request to enter standby mode.
  */
+#if defined(FSL_FEATURE_MC_ME_HAS_CORE_SELECTION) && (FSL_FEATURE_MC_ME_HAS_CORE_SELECTION != 0U)
+void POWER_EnterStandbyMode(uint8_t coreId)
+#else
 void POWER_EnterStandbyMode(void)
+#endif /* FSL_FEATURE_MC_ME_HAS_CORE_SELECTION */
 {
+#if defined(FSL_FEATURE_MC_ME_HAS_CORE_SELECTION) && (FSL_FEATURE_MC_ME_HAS_CORE_SELECTION != 0U)
+    MC_ME->MAIN_COREID = MC_ME_MAIN_COREID_CIDX(coreId) | MC_ME_MAIN_COREID_PIDX(0U);
+#else
     MC_ME->MAIN_COREID = MC_ME_MAIN_COREID_CIDX(0U) | MC_ME_MAIN_COREID_PIDX(0U);
-
+#endif /* FSL_FEATURE_MC_ME_HAS_CORE_SELECTION */
     MC_ME->MODE_CONF = MC_ME_MODE_CONF_STANDBY_MASK;
     MC_ME->MODE_UPD  = MC_ME_MODE_UPD_MODE_UPD_MASK;
 

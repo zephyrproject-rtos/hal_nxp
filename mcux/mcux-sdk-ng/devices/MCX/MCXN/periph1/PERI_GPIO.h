@@ -10,13 +10,13 @@
 **                          MCXN236VPB
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260710
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GPIO
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -3246,10 +3246,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group GPIO_Register_Masks */
-
-/* Interrupt vectors for the GPIO peripheral type */
-#define GPIO_IRQS   {GPIO00_IRQn, GPIO10_IRQn, GPIO20_IRQn, GPIO30_IRQn,GPIO40_IRQn,GPIO50_IRQn}
-#define GPIO_IRQS_1 {GPIO01_IRQn, GPIO11_IRQn, GPIO21_IRQn, GPIO31_IRQn,GPIO41_IRQn,GPIO51_IRQn}
 
 
 /*!

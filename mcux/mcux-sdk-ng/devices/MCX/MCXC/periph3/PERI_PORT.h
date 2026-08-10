@@ -17,7 +17,7 @@
 **                          MCXC162VLF
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260121
+**     Build:               b260714
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PORT
@@ -108,8 +108,8 @@ typedef struct {
        uint8_t RESERVED_1[8];
   __IO uint32_t CONFIG;                            /**< Configuration, offset: 0x20 */
        uint8_t RESERVED_2[60];
-  __IO uint32_t CALIB0;                            /**< Calibration 0, offset: 0x60, available only on: PORT0, PORT1, PORT3 (missing on PORT2) */
-  __IO uint32_t CALIB1;                            /**< Calibration 1, offset: 0x64, available only on: PORT0, PORT1, PORT3 (missing on PORT2) */
+  __IO uint32_t CALIB0;                            /**< Calibration 0, offset: 0x60, available only on: PORT0 (missing on PORT1, PORT2, PORT3) */
+  __IO uint32_t CALIB1;                            /**< Calibration 1, offset: 0x64, available only on: PORT0 (missing on PORT1, PORT2, PORT3) */
        uint8_t RESERVED_3[24];
   __IO uint32_t PCR[PORT_PCR_COUNT];               /**< Pin Control 0..Pin Control 31, array offset: 0x80, array step: 0x4, irregular array, not all indices are valid */
 } PORT_Type;

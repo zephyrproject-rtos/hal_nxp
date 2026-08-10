@@ -214,11 +214,11 @@ extern volatile uint32_t g_xtal32Freq;
     }
 
 /*! @brief Clock ip name array for PWM. */
-#define PWM_CLOCKS          \
-    {                       \
-        {                   \
-            kCLOCK_Flexpwm0 \
-        }                   \
+#define PWM_CLOCKS                                            \
+    {                                                         \
+        {                                                     \
+            kCLOCK_Flexpwm0, kCLOCK_Flexpwm0, kCLOCK_Flexpwm0 \
+        }                                                     \
     }
 
 /*! @brief Clock ip name array for GDET. */
@@ -1199,6 +1199,20 @@ static inline void CLOCK_UnlockFircControlStatusReg(void)
 static inline void CLOCK_LockFircControlStatusReg(void)
 {
     CLOCK_REG(&SCG_0->FIRCCSR) |= SCG_FIRCCSR_LK_MASK;
+}
+
+/*!
+ * @brief Check whether FIRC auto trim locked to target frequency range.
+ *
+ * When FIRCTREN and FIRCTRUP are enabled, TRIM_LOCK will indicate when auto
+ * trimming is complete and output FIRC frequency has locked to target FIRC range.
+ * TRIM_LOCK will automatically get cleared if FIRCTREN and FIRCTRUP are not set.
+ *
+ * @return True if FIRC trim locked to target frequency range, false if not.
+ */
+static inline bool CLOCK_IsFIRCAutoTrimLocked(void)
+{
+    return ((bool)(CLOCK_REG(&SCG_0->FIRCCSR) & SCG_FIRCCSR_TRIM_LOCK_MASK));
 }
 
 /*!

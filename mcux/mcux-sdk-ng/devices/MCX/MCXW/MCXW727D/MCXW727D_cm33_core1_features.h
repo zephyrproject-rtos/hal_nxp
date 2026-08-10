@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 3.1, 2026-02-11
-**     Build:               b260518
+**     Build:               b260717
 **
 **     Abstract:
 **         Chip specific module features.
@@ -192,6 +192,8 @@
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (0)
 /* @brief Has Justified Left Enable (bitfield CFG2[JLEFT]). */
 #define FSL_FEATURE_LPADC_HAS_CFG2_JLEFT (0)
+/* @brief Trigger Control Count. */
+#define FSL_FEATURE_LPADC_TCTRL_COUNT (4)
 /* @brief Has internal temperature sensor. */
 #define FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR (1)
 /* @brief Temperature sensor parameter A (slope). */
@@ -774,6 +776,8 @@
 #define FSL_FEATURE_SPC_HAS_SC_SPC_LP_REQ_BIT (1)
 /* @brief Has DCDC_BURST_CFG register. */
 #define FSL_FEATURE_SPC_HAS_DCDC_BURST_CFG (1)
+/* @brief Has DCDC 2.5V output select (register bit DCDC_CFG[VOUT2P5_SEL]). */
+#define FSL_FEATURE_SPC_HAS_DCDC_VOUT2P5_SEL (1)
 /* @brief Has SYSLDO_CFG register. */
 #define FSL_FEATURE_SPC_HAS_SYS_LDO (1)
 /* @brief Has cmp bandgap buffer enable. */

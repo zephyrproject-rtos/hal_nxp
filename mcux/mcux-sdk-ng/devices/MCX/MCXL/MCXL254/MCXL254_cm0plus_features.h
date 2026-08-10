@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.1, 2026-05-02
-**     Build:               b260512
+**     Build:               b260603
 **
 **     Abstract:
 **         Chip specific module features.
@@ -111,10 +111,6 @@
 #define FSL_FEATURE_GPIO_HAS_PORT_INPUT_CONTROL (1)
 /* @brief Has GPIO interrupt/DMA request/trigger output selection. */
 #define FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT (1)
-
-/* AON__LPADC module features */
-
-/* No feature definitions */
 
 /* LPI2C module features */
 

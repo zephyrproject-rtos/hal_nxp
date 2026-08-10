@@ -10,13 +10,13 @@
 **                          MCXN236VPB
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260710
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for EIM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -51,88 +51,6 @@
 #else
   #error "No valid CPU defined!"
 #endif
-
-/* ----------------------------------------------------------------------------
-   -- Mapping Information
-   ---------------------------------------------------------------------------- */
-
-/*!
- * @addtogroup Mapping_Information Mapping Information
- * @{
- */
-
-/** Mapping Information */
-#if !defined(EIM_MEMORY_CHANNEL_T_)
-#define EIM_MEMORY_CHANNEL_T_
-/*!
- * @addtogroup eim_memory_channel
- * @{
- */
-
-/*******************************************************************************
- * Definitions
- ******************************************************************************/
-
-/*!
- * @brief Structure for the eim_memory_channel
- *
- * Defines the structure for the EIM resource collections.
- */
-
-typedef enum _eim_memory_channel
-{
-    kEIM_MemoryChannelRAMX          = 0U,          /**< Memory RAMX */
-    kEIM_MemoryChannelRAMA          = 1U,          /**< Memory RAMA  */
-    kEIM_MemoryChannelRAMB          = 2U,          /**< Memory RAMB */
-    kEIM_MemoryChannelRAMC          = 3U,          /**< Memory RAMC */
-    kEIM_MemoryChannelRAMD          = 4U,          /**< Memory RAMD */
-    kEIM_MemoryChannelRAME          = 5U,          /**< Memory RAME */
-    kEIM_MemoryChannelRAMF          = 6U,          /**< Memory RAMF */
-    kEIM_MemoryChannelLPCACRAM      = 7U,          /**< Memory LPCACRAM */
-    kEIM_MemoryChannelPKCRAM        = 8U,          /**< Memory PKCRAM */
-} eim_memory_channel_t;
-
-/* @} */
-#endif /* EIM_MEMORY_CHANNEL_T_ */
-
-#if !defined(EIM_ERROR_INJECTION_CHANNEL_ENABLE_T_)
-#define EIM_ERROR_INJECTION_CHANNEL_ENABLE_T_
-/*!
- * @addtogroup eim_error_injection_channel_enable
- * @{
- */
-
-/*******************************************************************************
- * Definitions
- ******************************************************************************/
-
-/*!
- * @brief Structure for the eim_error_injection_channel_enable
- *
- * Defines the structure for the EIM error injection resource collections.
- */
-
-typedef enum _eim_error_injection_channel_enable
-{
-    kEIM_MemoryChannelRAMXEnable    = 0x80000000U, /**< Memory channel 0(RAMX) error injection enable */
-    kEIM_MemoryChannelRAMAEnable    = 0x40000000U, /**< Memory channel 1(RAMA) error injection enable  */
-    kEIM_MemoryChannelRAMBEnable    = 0x20000000U, /**< Memory channel 2(RAMB) error injection enable */
-    kEIM_MemoryChannelRAMCEnable    = 0x10000000U, /**< Memory channel 3(RAMC) error injection enable */
-    kEIM_MemoryChannelRAMDEnable    = 0x8000000U,  /**< Memory channel 4(RAMD) error injection enable */
-    kEIM_MemoryChannelRAMEEnable    = 0x4000000U,  /**< Memory channel 5(RAME) error injection enable */
-    kEIM_MemoryChannelRAMFEnable    = 0x2000000U,  /**< Memory channel 6(RAMF) error injection enable */
-    kEIM_MemoryChannelLPCACRAMEnable = 0x1000000U, /**< Memory channel 7(LPCACRAM) error injection enable */
-    kEIM_MemoryChannelPKCRAMEnable  = 0x800000U,   /**< Memory channel 8(PKCRAM) error injection enable */
-} eim_error_injection_channel_enable_t;
-
-/* @} */
-#endif /* EIM_ERROR_INJECTION_CHANNEL_ENABLE_T_ */
-
-
-/*!
- * @}
- */ /* end of group Mapping_Information */
-
 
 /* ----------------------------------------------------------------------------
    -- Device Peripheral Access Layer

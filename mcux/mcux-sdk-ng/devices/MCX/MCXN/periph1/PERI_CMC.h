@@ -10,7 +10,7 @@
 **                          MCXN236VPB
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260209
+**     Build:               b260710
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CMC

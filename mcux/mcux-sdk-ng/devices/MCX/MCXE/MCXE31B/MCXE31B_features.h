@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.1, 2025-11-17
-**     Build:               b260518
+**     Build:               b260716
 **
 **     Abstract:
 **         Chip specific module features.
@@ -116,7 +116,7 @@
 #define FSL_FEATURE_ADC_HAS_STDR2 (0)
 /* @brief Has register CALBISTREG. */
 #define FSL_FEATURE_ADC_HAS_CALBISTREG (1)
-/* @brief Has register DSDR. */
+/* @brief Has register DSDR. Note: This feature value is not the same on all ADC instances. */
 #define FSL_FEATURE_ADC_HAS_DSDR (1)
 /* @brief Has register OFSGNUSR. */
 #define FSL_FEATURE_ADC_HAS_OFSGNUSR (1)
@@ -311,7 +311,7 @@
 #define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_DOZE_MODE_SUPPORTn(x) (0)
 /* @brief Has a glitch filter on the receive pin (register bit field MCR[WAKSRC]). */
 #define FSL_FEATURE_FLEXCAN_HAS_GLITCH_FILTER (0)
-/* @brief Has extended interrupt mask and flag register (register IMASK2, IFLAG2). */
+/* @brief Has extended interrupt mask and flag register (register IMASK2, IFLAG2). Note: This feature value is not the same on all FLEXCAN instances. */
 #define FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER (1)
 /* @brief Instance has extended bit timing register (register CBT). */
 #define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_EXTENDED_TIMING_REGISTERn(x) (1)
@@ -363,7 +363,7 @@
 #define FSL_FEATURE_FLEXCAN_HAS_NO_SUPV_SUPPORT (0)
 /* @brief Enhanced Rx FIFO size (Indicates how many CAN FD messages can be stored). */
 #define FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO_SIZE (20)
-/* @brief Has more than 64 MBs. */
+/* @brief Has more than 64 MBs. Note: This feature value is not the same on all FLEXCAN instances. */
 #define FSL_FEATURE_FLEXCAN_HAS_MORE_THAN_64_MB (1)
 /* @brief The number of enhanced Rx FIFO filter element registers. */
 #define FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO_FILTER_MAX_NUMBER (128)
@@ -628,6 +628,8 @@
 
 /* @brief Has Partition 2 process configuration Registers */
 #define FSL_FEATURE_MC_ME_HAS_PRTN2 (1)
+/* @brief Has core selection to support multicore MCU */
+#define FSL_FEATURE_MC_ME_HAS_CORE_SELECTION (0)
 
 /* MC_RGM module features */
 
@@ -653,9 +655,9 @@
 #define FSL_FEATURE_MU_HAS_RESET_ASSERT_INT (0)
 /* @brief MU supports reset de-assert interrupt. CR[RDIE] or BCR[RDIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT (0)
-/* @brief MU does not support core status. Register CSSR0 or CSR0. */
+/* @brief MU does not support core status. Register CSSR0 or CSR0. Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_NO_CORE_STATUS (1)
-/* @brief MU does not support NMI. Register bit CCR0[NMI]. */
+/* @brief MU does not support NMI. Register bit CCR0[NMI]. Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_NO_NMI (1)
 /* @brief MU does not support core event pending. Register bit SR[CEP]. */
 #define FSL_FEATURE_MU_NO_CEP (1)
@@ -691,6 +693,8 @@
 #define FSL_FEATURE_MU_HAS_HR_BY_INSTANCEn(x) (0)
 /* @brief The number of general purpose interrupts supported by MU. */
 #define FSL_FEATURE_MU_GPI_COUNT (4)
+/* @brief MU does not support CIER0 (Core Interrupt Enable 0) register. */
+#define FSL_FEATURE_MU_NO_CIER0_REG (1)
 
 /* NVIC module features */
 
@@ -703,7 +707,7 @@
 
 /* @brief Number of channels (related to number of registers LDVALn, CVALn, TCTRLn, TFLGn). */
 #define FSL_FEATURE_PIT_TIMER_COUNT (4)
-/* @brief Has lifetime timer (related to existence of registers LTMR64L and LTMR64H). */
+/* @brief Has lifetime timer (related to existence of registers LTMR64L and LTMR64H). Note: This feature value is not the same on all PIT instances. */
 #define FSL_FEATURE_PIT_HAS_LIFETIME_TIMER (1)
 /* @brief Has chain mode (related to existence of register bit field TCTRLn[CHN]). */
 #define FSL_FEATURE_PIT_HAS_CHAIN_MODE (1)
@@ -798,7 +802,7 @@
     (((x) == SAI_1) ? (1) : (-1)))
 /* @brief Maximum words per frame (register bit fields TCR3[WDFL], TCR4[FRSZ], TMR[TWM], RCR3[WDFL], RCR4[FRSZ], RMR[RWM]). */
 #define FSL_FEATURE_SAI_MAX_WORDS_PER_FRAME (16)
-/* @brief Has support of combining multiple data channel FIFOs into single channel FIFO (register bit fields TCR3[CFR], TCR4[FCOMB], TFR0[WCP], TFR1[WCP], RCR3[CFR], RCR4[FCOMB], RFR0[RCP], RFR1[RCP]). */
+/* @brief Has support of combining multiple data channel FIFOs into single channel FIFO (register bit fields TCR3[CFR], TCR4[FCOMB], TFR0[WCP], TFR1[WCP], RCR3[CFR], RCR4[FCOMB], RFR0[RCP], RFR1[RCP]). Note: This feature value is not the same on all SAI instances. */
 #define FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE (1)
 /* @brief Has packing of 8-bit and 16-bit data into each 32-bit FIFO word (register bit fields TCR4[FPACK], RCR4[FPACK]). */
 #define FSL_FEATURE_SAI_HAS_FIFO_PACKING (1)

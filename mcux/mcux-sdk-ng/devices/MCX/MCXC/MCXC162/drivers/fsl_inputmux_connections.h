@@ -42,7 +42,7 @@
 #define FREQMEAS_TAR_REG         (0x184U)
 #define CMP0_TRIG_REG            (0x260U)
 #define ADC0_TRIG_REG            (0x280U)
-#define FlexPWM0_SM0_EXTA0_REG   (0x3A0U)
+#define FlexPWM0_SM0_EXTA_REG    (0x3A0U)
 #define FlexPWM0_SM0_EXTSYNC_REG (0x3A4U)
 #define FlexPWM0_SM1_EXTA_REG    (0x3A8U)
 #define FlexPWM0_SM1_EXTSYNC_REG (0x3ACU)
@@ -388,31 +388,31 @@ typedef enum _inputmux_connection_t
     kINPUTMUX_Gpio3Pineventtrig0ToAdc0Trig = 29U + (ADC0_TRIG_REG << PMUX_SHIFT),
     kINPUTMUX_WuuToAdc0Trig                = 31U + (ADC0_TRIG_REG << PMUX_SHIFT),
 
-    /* Connections for FlexPWM0_SM0_EXTA0 */
-    kINPUTMUX_ArmtxevToFlexpwm0Sm0Exta0            = 1U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Cmp0OutToFlexpwm0Sm0Exta0            = 6U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Ctimer0Mat2ToFlexpwm0Sm0Exta0        = 9U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Ctimer0Mat3ToFlexpwm0Sm0Exta0        = 10U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Ctimer1Mat2ToFlexpwm0Sm0Exta0        = 11U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Ctimer1Mat3ToFlexpwm0Sm0Exta0        = 12U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Trigin0ToFlexpwm0Sm0Exta0            = 20U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Trigin1ToFlexpwm0Sm0Exta0            = 21U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Trigin2ToFlexpwm0Sm0Exta0            = 22U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Trigin3ToFlexpwm0Sm0Exta0            = 23U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Trigin4ToFlexpwm0Sm0Exta0            = 24U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Trigin5ToFlexpwm0Sm0Exta0            = 25U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Trigin6ToFlexpwm0Sm0Exta0            = 26U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Trigin7ToFlexpwm0Sm0Exta0            = 27U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Trigin8ToFlexpwm0Sm0Exta0            = 28U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Trigin9ToFlexpwm0Sm0Exta0            = 29U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Trigin10ToFlexpwm0Sm0Exta0           = 30U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Trigin11ToFlexpwm0Sm0Exta0           = 31U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Gpio0Pineventtrig0ToFlexpwm0Sm0Exta0 = 32U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Gpio1Pineventtrig0ToFlexpwm0Sm0Exta0 = 33U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Gpio2Pineventtrig0ToFlexpwm0Sm0Exta0 = 34U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_Gpio3Pineventtrig0ToFlexpwm0Sm0Exta0 = 35U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_EccerrorinterruptToFlexpwm0Sm0Exta0  = 37U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
-    kINPUTMUX_WwdtinterruptToFlexpwm0Sm0Exta0      = 38U + (FlexPWM0_SM0_EXTA0_REG << PMUX_SHIFT),
+    /* Connections for FlexPWM0_SM0_EXTA */
+    kINPUTMUX_ArmtxevToFlexpwm0Sm0Exta            = 1U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Cmp0OutToFlexpwm0Sm0Exta            = 6U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Ctimer0Mat2ToFlexpwm0Sm0Exta        = 9U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Ctimer0Mat3ToFlexpwm0Sm0Exta        = 10U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Ctimer1Mat2ToFlexpwm0Sm0Exta        = 11U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Ctimer1Mat3ToFlexpwm0Sm0Exta        = 12U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Trigin0ToFlexpwm0Sm0Exta            = 20U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Trigin1ToFlexpwm0Sm0Exta            = 21U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Trigin2ToFlexpwm0Sm0Exta            = 22U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Trigin3ToFlexpwm0Sm0Exta            = 23U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Trigin4ToFlexpwm0Sm0Exta            = 24U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Trigin5ToFlexpwm0Sm0Exta            = 25U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Trigin6ToFlexpwm0Sm0Exta            = 26U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Trigin7ToFlexpwm0Sm0Exta            = 27U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Trigin8ToFlexpwm0Sm0Exta            = 28U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Trigin9ToFlexpwm0Sm0Exta            = 29U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Trigin10ToFlexpwm0Sm0Exta           = 30U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Trigin11ToFlexpwm0Sm0Exta           = 31U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Gpio0Pineventtrig0ToFlexpwm0Sm0Exta = 32U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Gpio1Pineventtrig0ToFlexpwm0Sm0Exta = 33U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Gpio2Pineventtrig0ToFlexpwm0Sm0Exta = 34U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_Gpio3Pineventtrig0ToFlexpwm0Sm0Exta = 35U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_EccerrorinterruptToFlexpwm0Sm0Exta  = 37U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
+    kINPUTMUX_WwdtinterruptToFlexpwm0Sm0Exta      = 38U + (FlexPWM0_SM0_EXTA_REG << PMUX_SHIFT),
 
     /* Connections for FlexPWM0_SM1_EXTA */
     kINPUTMUX_ArmtxevToFlexpwm0Sm1Exta            = 1U + (FlexPWM0_SM1_EXTA_REG << PMUX_SHIFT),

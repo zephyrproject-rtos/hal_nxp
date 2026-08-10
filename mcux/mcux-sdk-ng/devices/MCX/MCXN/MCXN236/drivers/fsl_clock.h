@@ -20,8 +20,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.0.2. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief CLOCK driver version 2.0.3. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -1821,6 +1821,8 @@ void CLOCK_EnableOstimer32kClock(void);
 /*! brief Enable USB HS PHY PLL clock.
  *
  * This function enables the internal 480MHz USB PHY PLL clock.
+ * If the input frequency does not directly match a supported PLL divider,
+ * the PLL pre-divider (/2) will be enabled automatically.
  *
  * param src  USB HS PHY PLL clock source.
  * param freq The frequency specified by src.

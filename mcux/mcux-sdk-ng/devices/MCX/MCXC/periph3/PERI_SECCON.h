@@ -17,7 +17,7 @@
 **                          MCXC162VLF
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260121
+**     Build:               b260714
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SECCON
@@ -220,7 +220,7 @@ typedef struct {
 
 #define SECCON_RAM_XEN_RAMA1_XEN_MASK            (0x8U)
 #define SECCON_RAM_XEN_RAMA1_XEN_SHIFT           (3U)
-/*! RAMA1_XEN - RAMAx (excepts RAMA0) Execute permission control.
+/*! RAMA1_XEN - RAMA1 Execute permission control.
  *  0b0..Execute permission is disabled, R/W are enabled.
  *  0b1..Execute permission is enabled, R/W/X are enabled.
  */
@@ -290,14 +290,6 @@ typedef struct {
  *  0b10..Enables debug
  */
 #define SECCON_DEBUG_FEATURES_CPU0_DBGEN(x)      (((uint32_t)(((uint32_t)(x)) << SECCON_DEBUG_FEATURES_CPU0_DBGEN_SHIFT)) & SECCON_DEBUG_FEATURES_CPU0_DBGEN_MASK)
-
-#define SECCON_DEBUG_FEATURES_CPU0_NIDEN_MASK    (0xCU)
-#define SECCON_DEBUG_FEATURES_CPU0_NIDEN_SHIFT   (2U)
-/*! CPU0_NIDEN - CPU0 non-invasive debug control
- *  0b01..Disables debug
- *  0b10..Enables debug
- */
-#define SECCON_DEBUG_FEATURES_CPU0_NIDEN(x)      (((uint32_t)(((uint32_t)(x)) << SECCON_DEBUG_FEATURES_CPU0_NIDEN_SHIFT)) & SECCON_DEBUG_FEATURES_CPU0_NIDEN_MASK)
 /*! @} */
 
 /*! @name DEBUG_FEATURES_DP - Cortex Debug Features Control (Duplicate) */
@@ -310,14 +302,6 @@ typedef struct {
  *  0b10..Enables debug
  */
 #define SECCON_DEBUG_FEATURES_DP_CPU0_DBGEN(x)   (((uint32_t)(((uint32_t)(x)) << SECCON_DEBUG_FEATURES_DP_CPU0_DBGEN_SHIFT)) & SECCON_DEBUG_FEATURES_DP_CPU0_DBGEN_MASK)
-
-#define SECCON_DEBUG_FEATURES_DP_CPU0_NIDEN_MASK (0xCU)
-#define SECCON_DEBUG_FEATURES_DP_CPU0_NIDEN_SHIFT (2U)
-/*! CPU0_NIDEN - CPU0 non-invasive debug control
- *  0b01..Disables debug
- *  0b10..Enables debug
- */
-#define SECCON_DEBUG_FEATURES_DP_CPU0_NIDEN(x)   (((uint32_t)(((uint32_t)(x)) << SECCON_DEBUG_FEATURES_DP_CPU0_NIDEN_SHIFT)) & SECCON_DEBUG_FEATURES_DP_CPU0_NIDEN_MASK)
 /*! @} */
 
 /*! @name SWD_ACCESS_CPU0 - CPU0 Software Debug Access */

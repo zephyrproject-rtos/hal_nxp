@@ -1,6 +1,10 @@
 /*
 ** ###################################################################
-**     Processor:           MCXN537TVAB_cm33_core0
+**     Processors:          MCXN537TVAB_cm33_core0
+**                          MCXN537TVDF_cm33_core0
+**                          MCXN537TVKL_cm33_core0
+**                          MCXN537TVPB_cm33_core0
+**
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
@@ -8,7 +12,7 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260512
+**     Build:               b260716
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

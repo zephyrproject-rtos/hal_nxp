@@ -13,9 +13,9 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_MCXN536TVAB_cm33_core0))
+#if (defined(CPU_MCXN536TVAB_cm33_core0) || defined(CPU_MCXN536TVDF_cm33_core0) || defined(CPU_MCXN536TVKL_cm33_core0) || defined(CPU_MCXN536TVPB_cm33_core0))
 #include "MCXN536T_cm33_core0.h"
-#elif (defined(CPU_MCXN536TVAB_cm33_core1))
+#elif (defined(CPU_MCXN536TVAB_cm33_core1) || defined(CPU_MCXN536TVDF_cm33_core1) || defined(CPU_MCXN536TVKL_cm33_core1) || defined(CPU_MCXN536TVPB_cm33_core1))
 #include "MCXN536T_cm33_core1.h"
 #else
   #error "No valid CPU defined!"

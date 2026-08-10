@@ -17,7 +17,7 @@
 **                          MCXC162VLF
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b260202
+**     Build:               b260714
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSCON
@@ -114,16 +114,14 @@ typedef struct {
   __IO uint32_t CLKUNLOCK;                         /**< Clock Configuration Unlock, offset: 0xFC */
        uint8_t RESERVED_6[256];
   __IO uint32_t NVM_CTRL;                          /**< NVM Control, offset: 0x200 */
-       uint8_t RESERVED_7[56];
-       uint32_t BOOTROM;                           /**< Immediate cessation of execution following the completion of ROM execution, offset: 0x23C */
-       uint8_t RESERVED_8[204];
+       uint8_t RESERVED_7[264];
   __I  uint32_t CPUSTAT;                           /**< CPU Status, offset: 0x30C */
-       uint8_t RESERVED_9[296];
+       uint8_t RESERVED_8[296];
   __IO uint32_t PWM0SUBCTL;                        /**< PWM0 Submodule Control, offset: 0x438 */
-       uint8_t RESERVED_10[4];
+       uint8_t RESERVED_9[4];
   __IO uint32_t CTIMERGLOBALSTARTEN;               /**< CTIMER Global Start Enable, offset: 0x440 */
   __IO uint32_t RAM_CTRL;                          /**< RAM Control, offset: 0x444 */
-       uint8_t RESERVED_11[936];
+       uint8_t RESERVED_10[936];
   __I  uint32_t JTAG_ID;                           /**< JTAG Chip ID, offset: 0x7F0 */
   __I  uint32_t DEVICE_TYPE;                       /**< Device Type, offset: 0x7F4 */
   __I  uint32_t DEVICE_ID0;                        /**< Device ID, offset: 0x7F8 */
@@ -141,19 +139,19 @@ typedef struct {
 /*! @name AHBMATPRIO - AHB Matrix Priority Control */
 /*! @{ */
 
-#define SYSCON_AHBMATPRIO_CPU0_SBUS_MASK         (0xCU)
-#define SYSCON_AHBMATPRIO_CPU0_SBUS_SHIFT        (2U)
-/*! CPU0_SBUS - CPU0 S-AHB bus master priority level
+#define SYSCON_AHBMATPRIO_CPU0_BUS_MASK          (0x3U)
+#define SYSCON_AHBMATPRIO_CPU0_BUS_SHIFT         (0U)
+/*! CPU0_BUS - CPU0 AHB bus initiator priority level
  *  0b00..level 0
  *  0b01..level 1
  *  0b10..level 2
  *  0b11..level 3
  */
-#define SYSCON_AHBMATPRIO_CPU0_SBUS(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_CPU0_SBUS_SHIFT)) & SYSCON_AHBMATPRIO_CPU0_SBUS_MASK)
+#define SYSCON_AHBMATPRIO_CPU0_BUS(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_CPU0_BUS_SHIFT)) & SYSCON_AHBMATPRIO_CPU0_BUS_MASK)
 
-#define SYSCON_AHBMATPRIO_DMA0_MASK              (0x300U)
-#define SYSCON_AHBMATPRIO_DMA0_SHIFT             (8U)
-/*! DMA0 - DMA0 controller bus master priority level
+#define SYSCON_AHBMATPRIO_DMA0_MASK              (0xCU)
+#define SYSCON_AHBMATPRIO_DMA0_SHIFT             (2U)
+/*! DMA0 - DMA0 controller bus initiator priority level
  *  0b00..level 0
  *  0b01..level 1
  *  0b10..level 2
@@ -328,14 +326,14 @@ typedef struct {
 /*! @name CLKUNLOCK - Clock Configuration Unlock */
 /*! @{ */
 
-#define SYSCON_CLKUNLOCK_UNLOCK_MASK             (0x1U)
-#define SYSCON_CLKUNLOCK_UNLOCK_SHIFT            (0U)
-/*! UNLOCK - Controls clock configuration registers access (for example, SLOWCLKDIV, BUSCLKDIV,
+#define SYSCON_CLKUNLOCK_LOCK_MASK               (0x1U)
+#define SYSCON_CLKUNLOCK_LOCK_SHIFT              (0U)
+/*! LOCK - Controls clock configuration registers access (for example, SLOWCLKDIV, BUSCLKDIV,
  *    AHBCLKDIV, FROHFDIV, FROLFDIV, PLLxCLKDIV, MRCC_xxx_CLKDIV, MRCC_xxx_CLKSEL, MRCC_GLB_xxx)
- *  0b0..Updates are allowed to all clock configuration registers
+ *  0b0..Updates are allowed to all clock configuration registers.
  *  0b1..Freezes all clock configuration registers update.
  */
-#define SYSCON_CLKUNLOCK_UNLOCK(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_CLKUNLOCK_UNLOCK_SHIFT)) & SYSCON_CLKUNLOCK_UNLOCK_MASK)
+#define SYSCON_CLKUNLOCK_LOCK(x)                 (((uint32_t)(((uint32_t)(x)) << SYSCON_CLKUNLOCK_LOCK_SHIFT)) & SYSCON_CLKUNLOCK_LOCK_MASK)
 /*! @} */
 
 /*! @name NVM_CTRL - NVM Control */
