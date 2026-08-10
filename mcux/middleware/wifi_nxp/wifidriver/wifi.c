@@ -56,9 +56,6 @@ t_u64 csi_event_data_len = 0;
 extern wifi_ecsa_status_control ecsa_status_control;
 #endif
 
-#if !CONFIG_WIFI_CORE_STACK_SIZE
-#define CONFIG_WIFI_CORE_STACK_SIZE (2048)
-#endif
 
 #define MAX_MCAST_LEN (MLAN_MAX_MULTICAST_LIST_SIZE * MLAN_MAC_ADDR_LENGTH)
 #if CONFIG_WiFi_878x
@@ -146,7 +143,7 @@ typedef enum __mlan_status
 static void wifi_core_task(osa_task_param_t arg);
 
 /* OSA_TASKS: name, priority, instances, stackSz, useFloat */
-static OSA_TASK_DEFINE(wifi_core_task, OSA_PRIORITY_NORMAL, 1, CONFIG_WIFI_CORE_STACK_SIZE, 0);
+static OSA_TASK_DEFINE(wifi_core_task, OSA_PRIORITY_NORMAL, 1, CONFIG_NXP_WIFI_CORE_TASK_STACK_SIZE, 0);
 #endif
 
 static void wifi_scan_task(osa_task_param_t arg);

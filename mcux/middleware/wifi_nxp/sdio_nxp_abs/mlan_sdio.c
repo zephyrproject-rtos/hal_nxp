@@ -235,7 +235,7 @@ static void sdio_controller_init(void)
 static int sdio_card_init(void)
 {
     int ret = WM_SUCCESS;
-    uint32_t resp;
+    uint32_t resp = 0;
 
     if (!device_is_ready(sdhc_dev))
     {
