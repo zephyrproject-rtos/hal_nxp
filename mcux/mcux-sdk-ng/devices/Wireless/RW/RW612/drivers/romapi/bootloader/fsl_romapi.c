@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022, 2026 NXP
  *  
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -9,6 +9,7 @@
 #include "fsl_romapi_flexspi.h"
 #include "fsl_romapi_iap.h"
 #include "fsl_romapi.h"
+#include "fsl_common_arm.h"
 
 /*******************************************************************************
  * Definitions
@@ -77,4 +78,12 @@ const char *bootloader_copyright(void)
 {
     assert(ROM_API_TREE);
     return (ROM_API_TREE->copyright);
+}
+
+/* Placing the function in RAM, so that while using iap_mem_write_blocked, 
+  the entire call remains within RAM.*/
+AT_QUICKACCESS_SECTION_CODE(uint32_t get_romapi_addr(void))
+{
+    uint32_t chip_rev_nr = SOCCTRL->CHIP_INFO & 0x0fu;
+    return (chip_rev_nr == 0u) ? ROM_API_TREE_ADDR_A0 : ROM_API_TREE_ADDR_A1;
 }

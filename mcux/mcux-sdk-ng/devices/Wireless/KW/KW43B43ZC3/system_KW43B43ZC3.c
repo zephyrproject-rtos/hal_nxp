@@ -107,7 +107,7 @@ __attribute__ ((weak)) void SystemInit (void) {
 
   /* Set AHB timeout to prevent Core#1 HardFaults during concurrent AHB peripheral access */
   SYSCON->CPU1_AHB_TIMEOUT &= ~SYSCON_CPU1_AHB_TIMEOUT_ahb_timeout_cycle_MASK;
-  SYSCON->CPU1_AHB_TIMEOUT |= SYSCON_CPU1_AHB_TIMEOUT_ahb_timeout_cycle(2U);
+  SYSCON->CPU1_AHB_TIMEOUT |= SYSCON_CPU1_AHB_TIMEOUT_ahb_timeout_cycle(3U);
 
   /* Lock again */
   __DMB();

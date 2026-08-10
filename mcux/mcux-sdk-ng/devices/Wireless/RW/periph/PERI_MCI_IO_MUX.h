@@ -8,7 +8,7 @@
 **                          RW612UKA2I
 **
 **     Version:             rev. 4.0, 2026-01-12
-**     Build:               b260114
+**     Build:               b260605
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCI_IO_MUX
@@ -152,6 +152,16 @@ typedef struct {
 /*! SEL_FC0_SPI - flexcomm0:select GPIO-0/2/3/4 as spi function */
 #define MCI_IO_MUX_FC0_SEL_FC0_SPI(x)            (((uint32_t)(((uint32_t)(x)) << MCI_IO_MUX_FC0_SEL_FC0_SPI_SHIFT)) & MCI_IO_MUX_FC0_SEL_FC0_SPI_MASK)
 
+#define MCI_IO_MUX_FC0_SEL_FC0_I2C_COPY_PIN_MASK (0x10U)
+#define MCI_IO_MUX_FC0_SEL_FC0_I2C_COPY_PIN_SHIFT (4U)
+/*! SEL_FC0_I2C_COPY_PIN - flexcomm0:select GPIO-0/5 as i2c function */
+#define MCI_IO_MUX_FC0_SEL_FC0_I2C_COPY_PIN(x)   (((uint32_t)(((uint32_t)(x)) << MCI_IO_MUX_FC0_SEL_FC0_I2C_COPY_PIN_SHIFT)) & MCI_IO_MUX_FC0_SEL_FC0_I2C_COPY_PIN_MASK)
+
+#define MCI_IO_MUX_FC0_SEL_FC0_SPI_COPY1_MASK    (0x20U)
+#define MCI_IO_MUX_FC0_SEL_FC0_SPI_COPY1_SHIFT   (5U)
+/*! SEL_FC0_SPI_COPY1 - flexcomm0:select GPIO-2/3/4/5 as spi function, different slave sel pin compare with field-3 */
+#define MCI_IO_MUX_FC0_SEL_FC0_SPI_COPY1(x)      (((uint32_t)(((uint32_t)(x)) << MCI_IO_MUX_FC0_SEL_FC0_SPI_COPY1_SHIFT)) & MCI_IO_MUX_FC0_SEL_FC0_SPI_COPY1_MASK)
+
 #define MCI_IO_MUX_FC0_SEL_FC0_I2S_DATA_ONLY_MASK (0x100U)
 #define MCI_IO_MUX_FC0_SEL_FC0_I2S_DATA_ONLY_SHIFT (8U)
 /*! SEL_FC0_I2S_DATA_ONLY - flexcomm0:select GPIO-2 as i2s data */
@@ -190,6 +200,16 @@ typedef struct {
 #define MCI_IO_MUX_FC1_SEL_FC1_SPI_SHIFT         (3U)
 /*! SEL_FC1_SPI - flexcomm1:select GPIO-6/7/8/9 as spi function */
 #define MCI_IO_MUX_FC1_SEL_FC1_SPI(x)            (((uint32_t)(((uint32_t)(x)) << MCI_IO_MUX_FC1_SEL_FC1_SPI_SHIFT)) & MCI_IO_MUX_FC1_SEL_FC1_SPI_MASK)
+
+#define MCI_IO_MUX_FC1_SEL_FC1_I2C_COPY_PIN_MASK (0x10U)
+#define MCI_IO_MUX_FC1_SEL_FC1_I2C_COPY_PIN_SHIFT (4U)
+/*! SEL_FC1_I2C_COPY_PIN - flexcomm1:select GPIO-6/10 as i2c function */
+#define MCI_IO_MUX_FC1_SEL_FC1_I2C_COPY_PIN(x)   (((uint32_t)(((uint32_t)(x)) << MCI_IO_MUX_FC1_SEL_FC1_I2C_COPY_PIN_SHIFT)) & MCI_IO_MUX_FC1_SEL_FC1_I2C_COPY_PIN_MASK)
+
+#define MCI_IO_MUX_FC1_SEL_FC1_SPI_COPY1_MASK    (0x20U)
+#define MCI_IO_MUX_FC1_SEL_FC1_SPI_COPY1_SHIFT   (5U)
+/*! SEL_FC1_SPI_COPY1 - flexcomm1:select GPIO-7/8/9/10 as spi function,use different slave sel pin compare with field-3 */
+#define MCI_IO_MUX_FC1_SEL_FC1_SPI_COPY1(x)      (((uint32_t)(((uint32_t)(x)) << MCI_IO_MUX_FC1_SEL_FC1_SPI_COPY1_SHIFT)) & MCI_IO_MUX_FC1_SEL_FC1_SPI_COPY1_MASK)
 
 #define MCI_IO_MUX_FC1_SEL_FC1_I2S_DATA_ONLY_MASK (0x100U)
 #define MCI_IO_MUX_FC1_SEL_FC1_I2S_DATA_ONLY_SHIFT (8U)
@@ -235,6 +255,11 @@ typedef struct {
 /*! SEL_FC2_I2C_COPY_PIN - flexcomm2:select GPIO-16/17 as backup-i2c function */
 #define MCI_IO_MUX_FC2_SEL_FC2_I2C_COPY_PIN(x)   (((uint32_t)(((uint32_t)(x)) << MCI_IO_MUX_FC2_SEL_FC2_I2C_COPY_PIN_SHIFT)) & MCI_IO_MUX_FC2_SEL_FC2_I2C_COPY_PIN_MASK)
 
+#define MCI_IO_MUX_FC2_SEL_FC2_SPI_COPY1_MASK    (0x20U)
+#define MCI_IO_MUX_FC2_SEL_FC2_SPI_COPY1_SHIFT   (5U)
+/*! SEL_FC2_SPI_COPY1 - flexcomm2:select GPIO-13/14/15/17 as spi function,use different slave sel pin compare with field-3 */
+#define MCI_IO_MUX_FC2_SEL_FC2_SPI_COPY1(x)      (((uint32_t)(((uint32_t)(x)) << MCI_IO_MUX_FC2_SEL_FC2_SPI_COPY1_SHIFT)) & MCI_IO_MUX_FC2_SEL_FC2_SPI_COPY1_MASK)
+
 #define MCI_IO_MUX_FC2_SEL_FC2_I2S_DATA_ONLY_MASK (0x100U)
 #define MCI_IO_MUX_FC2_SEL_FC2_I2S_DATA_ONLY_SHIFT (8U)
 /*! SEL_FC2_I2S_DATA_ONLY - flexcomm2:select GPIO-13 as i2s data function */
@@ -279,6 +304,11 @@ typedef struct {
 /*! SEL_FC3_I2C_COPY_PIN - flexcomm3:select GPIO-19/20 as backup-i2c function */
 #define MCI_IO_MUX_FC3_SEL_FC3_I2C_COPY_PIN(x)   (((uint32_t)(((uint32_t)(x)) << MCI_IO_MUX_FC3_SEL_FC3_I2C_COPY_PIN_SHIFT)) & MCI_IO_MUX_FC3_SEL_FC3_I2C_COPY_PIN_MASK)
 
+#define MCI_IO_MUX_FC3_SEL_FC3_SPI_COPY1_MASK    (0x20U)
+#define MCI_IO_MUX_FC3_SEL_FC3_SPI_COPY1_SHIFT   (5U)
+/*! SEL_FC3_SPI_COPY1 - flexcomm3:select GPIO-19/24/25/26 as spi function,use different slave sel pin compare with field-3 */
+#define MCI_IO_MUX_FC3_SEL_FC3_SPI_COPY1(x)      (((uint32_t)(((uint32_t)(x)) << MCI_IO_MUX_FC3_SEL_FC3_SPI_COPY1_SHIFT)) & MCI_IO_MUX_FC3_SEL_FC3_SPI_COPY1_MASK)
+
 #define MCI_IO_MUX_FC3_SEL_FC3_I2S_DATA_ONLY_MASK (0x100U)
 #define MCI_IO_MUX_FC3_SEL_FC3_I2S_DATA_ONLY_SHIFT (8U)
 /*! SEL_FC3_I2S_DATA_ONLY - flexcomm3:select GPIO-24 as i2s data */
@@ -317,6 +347,16 @@ typedef struct {
 #define MCI_IO_MUX_FC14_SEL_FC14_SPI_SHIFT       (3U)
 /*! SEL_FC14_SPI - flexcomm14:select GPIO-53/54/56/57 as spi function */
 #define MCI_IO_MUX_FC14_SEL_FC14_SPI(x)          (((uint32_t)(((uint32_t)(x)) << MCI_IO_MUX_FC14_SEL_FC14_SPI_SHIFT)) & MCI_IO_MUX_FC14_SEL_FC14_SPI_MASK)
+
+#define MCI_IO_MUX_FC14_SEL_FC14_I2C_COPY_PIN_MASK (0x10U)
+#define MCI_IO_MUX_FC14_SEL_FC14_I2C_COPY_PIN_SHIFT (4U)
+/*! SEL_FC14_I2C_COPY_PIN - flexcomm14:select GPIO-53/55 as i2c function */
+#define MCI_IO_MUX_FC14_SEL_FC14_I2C_COPY_PIN(x) (((uint32_t)(((uint32_t)(x)) << MCI_IO_MUX_FC14_SEL_FC14_I2C_COPY_PIN_SHIFT)) & MCI_IO_MUX_FC14_SEL_FC14_I2C_COPY_PIN_MASK)
+
+#define MCI_IO_MUX_FC14_SEL_FC14_SPI_COPY1_MASK  (0x20U)
+#define MCI_IO_MUX_FC14_SEL_FC14_SPI_COPY1_SHIFT (5U)
+/*! SEL_FC14_SPI_COPY1 - flexcomm14:select GPIO-54/55/56/57 as spi function,use different slave sel pin compare with field-3 */
+#define MCI_IO_MUX_FC14_SEL_FC14_SPI_COPY1(x)    (((uint32_t)(((uint32_t)(x)) << MCI_IO_MUX_FC14_SEL_FC14_SPI_COPY1_SHIFT)) & MCI_IO_MUX_FC14_SEL_FC14_SPI_COPY1_MASK)
 
 #define MCI_IO_MUX_FC14_SEL_FC14_I2S_DATA_ONLY_MASK (0x100U)
 #define MCI_IO_MUX_FC14_SEL_FC14_I2S_DATA_ONLY_SHIFT (8U)

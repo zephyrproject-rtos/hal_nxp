@@ -8,7 +8,7 @@
 **                          RW612UKA2I
 **
 **     Version:             rev. 4.0, 2026-01-12
-**     Build:               b260114
+**     Build:               b260605
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LCDIC
@@ -335,7 +335,9 @@ typedef struct {
 
 #define LCDIC_TE_CTRL_TTEW_MASK                  (0x3FU)
 #define LCDIC_TE_CTRL_TTEW_SHIFT                 (0U)
-/*! TTEW - Tearing effect signal synchronization wait time. Unit is T(timer_base1). T(tew)=T(timer_base1)*ttew. */
+/*! TTEW - Tearing effect signal synchronization wait time. Unit is T(timer_base1).
+ *    T(tew)=T(timer_base1)*ttew. Pls noted that when TTEW is set, TE_TO needs to be cleared to 0.
+ */
 #define LCDIC_TE_CTRL_TTEW(x)                    (((uint32_t)(((uint32_t)(x)) << LCDIC_TE_CTRL_TTEW_SHIFT)) & LCDIC_TE_CTRL_TTEW_MASK)
 
 #define LCDIC_TE_CTRL_TE_TO_MASK                 (0xFC0U)
