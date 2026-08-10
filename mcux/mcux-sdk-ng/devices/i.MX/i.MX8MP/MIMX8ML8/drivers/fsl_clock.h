@@ -183,6 +183,9 @@
         kCLOCK_Asrc \
     }
 
+/*! @brief Clock ip name array for LCDIF. */
+#define LCDIFV3_CLOCKS { kCLOCK_Media, kCLOCK_Media, kCLOCK_Hdmi }
+
 /*!
  * @brief CCM reg macros to extract corresponding registers bit field.
  */
