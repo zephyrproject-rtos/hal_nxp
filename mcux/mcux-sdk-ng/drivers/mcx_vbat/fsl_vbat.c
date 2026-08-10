@@ -97,10 +97,17 @@ status_t VBAT_SetCrystalOsc32kModeAndLoadCapacitance(VBAT_Type *base,
 #endif
     }
 
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_OSCCTLA_MODE_EN_BIT) && (FSL_FEATURE_MCX_VBAT_HAS_OSCCTLA_MODE_EN_BIT==0U))
     base->OSCCTLA = (((base->OSCCTLA & ~VBAT_OSCCTLA_MODE_EN_MASK)) | VBAT_OSCCTLA_MODE_EN(operateMode));
 #if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
     base->OSCCTLB = ((base->OSCCTLB & ~VBAT_OSCCTLA_MODE_EN_MASK) | VBAT_OSCCTLA_MODE_EN(~(uint32_t)operateMode));
 #endif
+#else
+    /* No selectable oscillator operate mode on this device; the requested mode is validated
+     * above but there is no OSCCTLA[MODE_EN] field to write.
+     */
+    (void)operateMode;
+#endif /* FSL_FEATURE_MCX_VBAT_HAS_OSCCTLA_MODE_EN_BIT */
 
     return kStatus_Success;
 }

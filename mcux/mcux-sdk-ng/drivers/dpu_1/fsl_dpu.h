@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Driver version. */
-#define FSL_DPU_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
+#define FSL_DPU_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
 /*@}*/
 
 /*! @brief DPU palette entery number. */
@@ -1682,7 +1682,8 @@ void DPU_CorrdinatesGetDefaultConfig(dpu_coordinates_config_t *config);
  */
 status_t DPU_InitWarpCoordinates(DISPLAY_SEERIS_Type *base, dpu_unit_t unit, const dpu_coordinates_config_t *config);
 
-#if defined(FSL_FEATURE_DISPLAY_SEERIS_MDR7) && FSL_FEATURE_DISPLAY_SEERIS_MDR7
+#if defined(FSL_FEATURE_DISPLAY_SEERIS_MDR7) && FSL_FEATURE_DISPLAY_SEERIS_MDR7 && \
+    defined(FSL_FEATURE_DISPLAY_SEERIS_HAS_LD) && FSL_FEATURE_DISPLAY_SEERIS_HAS_LD
 /*!
  * @brief Initializes the localdimming setting.
  *

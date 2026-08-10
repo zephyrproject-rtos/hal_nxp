@@ -53,7 +53,7 @@ uint32_t CSI2RX_GetInstance(CAMERA_MIPI_CSI2_Type *base)
 
     for (i = 0U; i < ARRAY_SIZE(s_csi2rxBaseAddrs); i++)
     {
-        if (MSDK_REG_SECURE_ADDR((uint32_t)base) == MSDK_REG_SECURE_ADDR(s_csi2rxBaseAddrs[i]))
+        if (MSDK_REG_NONSECURE_ADDR((uint32_t)base) == MSDK_REG_NONSECURE_ADDR(s_csi2rxBaseAddrs[i]))
         {
             instance = i;
             break;

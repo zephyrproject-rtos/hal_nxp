@@ -1,5 +1,12 @@
 # NETC
 
+## [2.10.7]
+
+- Bug Fixes
+  - Fixed i.MX943 PCIE VF config register addresses.
+- Improvements
+  - Updated VSI-PSI message driver for link status/speed per protocol v0.7.
+
 ## [2.10.6]
 
 - Bug Fixes

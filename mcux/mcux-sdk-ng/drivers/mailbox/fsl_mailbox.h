@@ -60,6 +60,7 @@ typedef enum _mailbox_cpu_id
        defined(MCXN536_cm33_core0_SERIES) || defined(MCXN536_cm33_core1_SERIES) || \
        defined(MCXN527_cm33_core0_SERIES) || defined(MCXN527_cm33_core1_SERIES) || \
        defined(MCXN526_cm33_core0_SERIES) || defined(MCXN526_cm33_core1_SERIES) || \
+       defined(MCXN526T_cm33_core0_SERIES) || defined(MCXN526T_cm33_core1_SERIES) || \
        defined(MCXN527T_cm33_core0_SERIES) || defined(MCXN527T_cm33_core1_SERIES) || \
        defined(MCXN536T_cm33_core0_SERIES) || defined(MCXN536T_cm33_core1_SERIES) || \
        defined(MCXN537T_cm33_core0_SERIES) || defined(MCXN537T_cm33_core1_SERIES) || \
@@ -135,6 +136,7 @@ static inline void MAILBOX_Deinit(MAILBOX_Type *base)
      defined(MCXN536_cm33_core0_SERIES) || defined(MCXN536_cm33_core1_SERIES) || \
      defined(MCXN527_cm33_core0_SERIES) || defined(MCXN527_cm33_core1_SERIES) || \
      defined(MCXN526_cm33_core0_SERIES) || defined(MCXN526_cm33_core1_SERIES) || \
+     defined(MCXN526T_cm33_core0_SERIES) || defined(MCXN526T_cm33_core1_SERIES) || \
      defined(MCXN527T_cm33_core0_SERIES) || defined(MCXN527T_cm33_core1_SERIES) || \
      defined(MCXN536T_cm33_core0_SERIES) || defined(MCXN536T_cm33_core1_SERIES) || \
      defined(MCXN537T_cm33_core0_SERIES) || defined(MCXN537T_cm33_core1_SERIES) || \
@@ -169,6 +171,7 @@ static inline void MAILBOX_SetValue(MAILBOX_Type *base, mailbox_cpu_id_t cpu_id,
      defined(MCXN536_cm33_core0_SERIES) || defined(MCXN536_cm33_core1_SERIES) || \
      defined(MCXN527_cm33_core0_SERIES) || defined(MCXN527_cm33_core1_SERIES) || \
      defined(MCXN526_cm33_core0_SERIES) || defined(MCXN526_cm33_core1_SERIES) || \
+     defined(MCXN526T_cm33_core0_SERIES) || defined(MCXN526T_cm33_core1_SERIES) || \
      defined(MCXN527T_cm33_core0_SERIES) || defined(MCXN527T_cm33_core1_SERIES) || \
      defined(MCXN536T_cm33_core0_SERIES) || defined(MCXN536T_cm33_core1_SERIES) || \
      defined(MCXN537T_cm33_core0_SERIES) || defined(MCXN537T_cm33_core1_SERIES) || \
@@ -208,6 +211,7 @@ static inline uint32_t MAILBOX_GetValue(MAILBOX_Type *base, mailbox_cpu_id_t cpu
      defined(MCXN536_cm33_core0_SERIES) || defined(MCXN536_cm33_core1_SERIES) || \
      defined(MCXN527_cm33_core0_SERIES) || defined(MCXN527_cm33_core1_SERIES) || \
      defined(MCXN526_cm33_core0_SERIES) || defined(MCXN526_cm33_core1_SERIES) || \
+     defined(MCXN526T_cm33_core0_SERIES) || defined(MCXN526T_cm33_core1_SERIES) || \
      defined(MCXN527T_cm33_core0_SERIES) || defined(MCXN527T_cm33_core1_SERIES) || \
      defined(MCXN536T_cm33_core0_SERIES) || defined(MCXN536T_cm33_core1_SERIES) || \
      defined(MCXN537T_cm33_core0_SERIES) || defined(MCXN537T_cm33_core1_SERIES) || \
@@ -249,6 +253,7 @@ static inline void MAILBOX_SetValueBits(MAILBOX_Type *base, mailbox_cpu_id_t cpu
      defined(MCXN536_cm33_core0_SERIES) || defined(MCXN536_cm33_core1_SERIES) || \
      defined(MCXN527_cm33_core0_SERIES) || defined(MCXN527_cm33_core1_SERIES) || \
      defined(MCXN526_cm33_core0_SERIES) || defined(MCXN526_cm33_core1_SERIES) || \
+     defined(MCXN526T_cm33_core0_SERIES) || defined(MCXN526T_cm33_core1_SERIES) || \
      defined(MCXN527T_cm33_core0_SERIES) || defined(MCXN527T_cm33_core1_SERIES) || \
      defined(MCXN536T_cm33_core0_SERIES) || defined(MCXN536T_cm33_core1_SERIES) || \
      defined(MCXN537T_cm33_core0_SERIES) || defined(MCXN537T_cm33_core1_SERIES) || \
@@ -290,6 +295,7 @@ static inline void MAILBOX_ClearValueBits(MAILBOX_Type *base, mailbox_cpu_id_t c
      defined(MCXN536_cm33_core0_SERIES) || defined(MCXN536_cm33_core1_SERIES) || \
      defined(MCXN527_cm33_core0_SERIES) || defined(MCXN527_cm33_core1_SERIES) || \
      defined(MCXN526_cm33_core0_SERIES) || defined(MCXN526_cm33_core1_SERIES) || \
+     defined(MCXN526T_cm33_core0_SERIES) || defined(MCXN526T_cm33_core1_SERIES) || \
      defined(MCXN527T_cm33_core0_SERIES) || defined(MCXN527T_cm33_core1_SERIES) || \
      defined(MCXN536T_cm33_core0_SERIES) || defined(MCXN536T_cm33_core1_SERIES) || \
      defined(MCXN537T_cm33_core0_SERIES) || defined(MCXN537T_cm33_core1_SERIES) || \

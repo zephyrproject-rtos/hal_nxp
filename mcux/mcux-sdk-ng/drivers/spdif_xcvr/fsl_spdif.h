@@ -9,7 +9,7 @@
 
 #include "fsl_common.h"
 
-#if !defined(SPDIF_Type) && defined(AUDIO_XCVR_Type)
+#if !defined(SPDIF_Type) && defined(AUDIO_XCVR_BASE_PTRS)
 #define SPDIF_Type AUDIO_XCVR_Type
 #endif
 

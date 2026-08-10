@@ -232,7 +232,7 @@ uint32_t ENET_GetInstance(ENET_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_enetBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_enetBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_enetBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -3444,10 +3444,11 @@ void ENET_TimeStampIRQHandler(ENET_Type *base, enet_handle_t *handle)
  *
  * param base  ENET peripheral base address.
  */
-void ENET_CommonFrame0IRQHandler(ENET_Type *base)
+/* Internal worker taking the instance directly so the parameterized IRQ handler avoids the
+ * ENET_GetInstance() lookup in the ISR path; the public base-taking handler wraps it. */
+static void ENET_Frame0IRQHandler(ENET_Type *base, uint32_t instance)
 {
-    uint32_t event    = base->EIR;
-    uint32_t instance = ENET_GetInstance(base);
+    uint32_t event = base->EIR;
 
     event &= base->EIMR;
     if (0U != (event & ((uint32_t)kENET_TxBufferInterrupt | (uint32_t)kENET_TxFrameInterrupt)))
@@ -3482,6 +3483,11 @@ void ENET_CommonFrame0IRQHandler(ENET_Type *base)
     {
         s_enetErrIsr[instance](base, s_ENETHandle[instance]);
     }
+}
+
+void ENET_CommonFrame0IRQHandler(ENET_Type *base)
+{
+    ENET_Frame0IRQHandler(base, ENET_GetInstance(base));
 }
 
 #if FSL_FEATURE_ENET_QUEUE > 1
@@ -3546,10 +3552,9 @@ void ENET_CommonFrame2IRQHandler(ENET_Type *base)
 }
 #endif /* FSL_FEATURE_ENET_QUEUE > 1 */
 
-void ENET_Ptp1588IRQHandler(ENET_Type *base)
+/* Internal worker taking the instance directly; the public base-taking handler wraps it. */
+static void ENET_Ptp1588Handler(ENET_Type *base, uint32_t instance)
 {
-    uint32_t instance = ENET_GetInstance(base);
-
 #if defined(ENET_ENHANCEDBUFFERDESCRIPTOR_MODE) && ENET_ENHANCEDBUFFERDESCRIPTOR_MODE
     /* In some platforms, the 1588 event uses same irq with timestamp event. */
     if ((s_enetTsIrqId[instance] == s_enet1588TimerIrqId[instance]) && (s_enetTsIrqId[instance] != NotAvail_IRQn))
@@ -3570,6 +3575,33 @@ void ENET_Ptp1588IRQHandler(ENET_Type *base)
     {
         s_enet1588TimerIsr[instance](base, s_ENETHandle[instance]);
     }
+}
+
+void ENET_Ptp1588IRQHandler(ENET_Type *base)
+{
+    ENET_Ptp1588Handler(base, ENET_GetInstance(base));
+}
+
+/* Parameterized common IRQ handlers taking the instance directly (no ENET_GetInstance() in the ISR
+ * path). Each SoC binds only the ones its actual interrupt lines use. */
+void ENET_CommonFrame0DriverIRQHandler(uint32_t instance);
+void ENET_CommonFrame0DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_enetBases))
+    {
+        ENET_Frame0IRQHandler(s_enetBases[instance], instance);
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
+
+void ENET_Ptp1588DriverIRQHandler(uint32_t instance);
+void ENET_Ptp1588DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_enetBases))
+    {
+        ENET_Ptp1588Handler(s_enetBases[instance], instance);
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if defined(ENET)

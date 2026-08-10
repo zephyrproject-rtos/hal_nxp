@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2025 NXP
+ * Copyright 2016-2017, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -46,7 +46,7 @@ static uint32_t PWT_GetInstance(PWT_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_pwtBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_pwtBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_pwtBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -81,10 +81,16 @@ void PWT_Init(PWT_Type *base, const pwt_config_t *config)
      * Clear all interrupt, disable the counter, config the first counter load enable bit,
      * enable module interrupt bit.
      */
+#if defined(FSL_FEATURE_PWT_REG_WIDTH) && (FSL_FEATURE_PWT_REG_WIDTH == 32)
+    base->R1 = PWT_R1_FCTLE(config->enableFirstCounterLoad ? 1U : 0U) | PWT_R1_PWTIE_MASK |
+               PWT_R1_PCLKS(config->clockSource) | PWT_R1_PRE(config->prescale) |
+               PWT_R1_PINSEL(config->inputSelect);
+#else
     base->CS = PWT_CS_FCTLE(config->enableFirstCounterLoad ? 1U : 0U) | PWT_CS_PWTIE_MASK;
 
     /* Set clock source, prescale and input source */
     base->CR = PWT_CR_PCLKS(config->clockSource) | PWT_CR_PRE(config->prescale) | PWT_CR_PINSEL(config->inputSelect);
+#endif
 }
 
 /*!
@@ -95,7 +101,11 @@ void PWT_Init(PWT_Type *base, const pwt_config_t *config)
 void PWT_Deinit(PWT_Type *base)
 {
     /* Disable the counter */
+#if defined(FSL_FEATURE_PWT_REG_WIDTH) && (FSL_FEATURE_PWT_REG_WIDTH == 32)
+    base->R1 &= ~PWT_R1_PWTEN_MASK;
+#else
     base->CS &= (uint8_t)(~PWT_CS_PWTEN_MASK & 0xFFU);
+#endif
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Gate the PWT clock */

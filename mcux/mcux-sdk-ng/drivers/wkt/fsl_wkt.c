@@ -51,7 +51,7 @@ static uint32_t WKT_GetInstance(WKT_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < wktArrayCount; instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_wktBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_wktBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

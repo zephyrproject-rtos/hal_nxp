@@ -65,7 +65,7 @@ uint32_t HOSTIF_GetInstance(HOSTIF_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0U; instance < ARRAY_SIZE(s_hostifBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_hostifBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_hostifBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

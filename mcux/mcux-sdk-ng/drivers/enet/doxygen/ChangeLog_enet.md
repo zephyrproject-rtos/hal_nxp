@@ -1,5 +1,10 @@
 # ENET
 
+## [2.11.4]
+
+- New Features
+  - Added the parameterized common IRQ handlers ENET_CommonFrame0DriverIRQHandler and ENET_Ptp1588DriverIRQHandler, and bound the COMM__ENET vectors to them on i.MX RT2660.
+
 ## [2.11.3]
 
 - Bug Fixes

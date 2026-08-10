@@ -1,5 +1,5 @@
 /*
- * Copyright 2025-2026 NXP
+ * Copyright 2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -54,11 +54,6 @@
 /* Convert ns+UI to byte clock. */
 #define DSI_NS_UI_TO_BYTE_CLK(ns, UI, byte_clk_khz) ((((ns) * (byte_clk_khz)) + ((UI)*125000U)) / 1000000U)
 
-/* Packet overhead for HSA, HFP, HBP TODO */
-#define DSI_HSA_OVERHEAD_BYTE 10UL /* HSS + HSA header + HSA CRC. */
-#define DSI_HFP_OVERHEAD_BYTE 12UL /* RGB data packet CRC + HFP header + HFP CRC. */
-#define DSI_HBP_OVERHEAD_BYTE 10UL /* HSE + HBP header + HBP CRC + RGB data packet header */
-
 #define DSI_INT_STATUS_TRIGGER_MASK \
     ((uint32_t)(kDSI_HostResetTriggerReceived | kDSI_HostTearTriggerReceived | \
      kDSI_HostAckTriggerReceived | kDSI_HostTearFailTriggerReceived))
@@ -75,7 +70,6 @@ typedef void (*dsi_isr_t)(const MIPI_DSI_Type *base, dsi_handle_t *handle);
 typedef union
 {
     dsi_config_t _host_config; /* 5 words long */
-    dsi_dpi_config_t _dpi_config; /* 6 words long */
     uint32_t _u32;
 } dsi_reg32_convert_t;
 
@@ -212,7 +206,7 @@ static uint32_t DSI_GetInstance(const MIPI_DSI_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_dsiBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_dsiBases[instance]) == MSDK_REG_SECURE_ADDR(base->host))
+        if (MSDK_REG_NONSECURE_ADDR(s_dsiBases[instance]) == MSDK_REG_NONSECURE_ADDR(base->host))
         {
             break;
         }
@@ -345,15 +339,33 @@ static uint32_t DSI_DphyGetPllDivider(
 
 static void DSI_ApbClearRxFifo(const MIPI_DSI_Type *base)
 {
-    volatile uint32_t dummy = 0U;
-    uint32_t level          = base->apb->CFG_PKT_FIFO_RD_LEVEL;
-
-    while (0U != (level--))
+    /* Drain any residual RX packet queued from a previous transfer. */
+    if (0U != (base->apb->CFG_APB_IRQ_STATUS & (uint32_t)kDSI_ApbRxPacketReceived))
     {
-        dummy = base->apb->CFG_PKT_RX_PAYLOAD;
+        uint32_t           hdr = DSI_GetRxPacketHeader(base);
+        dsi_rx_data_type_t typ = DSI_GetRxPacketType(hdr);
+
+        if ((kDSI_RxDataGenLongRdResponse == typ) || (kDSI_RxDataDcsLongRdResponse == typ))
+        {
+            volatile uint32_t dummy;
+            uint32_t          bytes = (uint32_t)DSI_GetRxPacketWordCount(hdr);
+            if (bytes > FSL_DSI_RX_MAX_PAYLOAD_BYTE)
+            {
+                bytes = FSL_DSI_RX_MAX_PAYLOAD_BYTE;
+            }
+            uint32_t words = (bytes + 3U) / 4U;
+            while (words-- != 0U)
+            {
+                dummy = base->apb->CFG_PKT_RX_PAYLOAD;
+            }
+            (void)dummy;
+        }
     }
 
-    (void)dummy;
+    /* Clear residual RX status/error bits so the next transfer starts fresh. */
+    DSI_ClearApbInterruptStatus(base,
+        (uint32_t)(kDSI_ApbRxPacketReceived | kDSI_ApbRxHeaderReceived |
+                   kDSI_ApbRxOverflow       | kDSI_ApbRxUnderflow));
 }
 
 /*!
@@ -368,6 +380,8 @@ static void DSI_ApbClearRxFifo(const MIPI_DSI_Type *base)
 void DSI_Init(const MIPI_DSI_Type *base, const dsi_config_t *config)
 {
     assert(NULL != config);
+    assert(config->numLanes != 0U);
+    assert(config->numLanes <= 2U);
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && (0 != FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL))
     (void)CLOCK_EnableClock(s_dsiClocks[DSI_GetInstance(base)]);
@@ -386,12 +400,6 @@ void DSI_Init(const MIPI_DSI_Type *base, const dsi_config_t *config)
      */
     host->CFG_MODE = *(uint32_t *)configAddr;
 
-    // /* Next word is to configure the CFG_HOST_WATCHDOG register, containing watchdogCount
-    //    and enableWatchdog.
-    //  */
-    // configAddr += 4U;
-    // host->CFG_HOST_WATCHDOG = *(uint32_t *)configAddr;
-
     /* Next word is to configure CFG_HTX_TO_COUNT register, containing htxTo_ByteClk. */
     configAddr += 4U;
     host->CFG_HTX_TO_COUNT = *(uint32_t *)configAddr;
@@ -409,7 +417,7 @@ void DSI_Init(const MIPI_DSI_Type *base, const dsi_config_t *config)
     /* Disable all interrupts by default, user could enable
      * the desired interrupts later.
      */
-    base->host->PERIPH_IRQ_MASK = 0;
+    host->PERIPH_IRQ_MASK = 0U;
     base->apb->CFG_APB_IRQ_MASK = 0U;
 }
 
@@ -434,13 +442,11 @@ void DSI_Deinit(const MIPI_DSI_Type *base)
  * code
     config->enable                = true;
     config->numLanes              = 2;
-    config->ppiWidth              = kDSI_Ppi8Bit;
     config->enableContinuousHsClk = true;
     config->autoInsertEoTp        = true;
     config->disableBurst          = false;
     config->disableCrcCheck       = false;
     config->enableScramble        = false;
-    config->enableWatchdog        = false;
     config->htxTo_ByteClk         = 0;
     config->lrxHostTo_ByteClk     = 0;
     config->btaTo_ByteClk         = 0;
@@ -457,16 +463,14 @@ void DSI_GetDefaultConfig(dsi_config_t *config)
 
     config->enable                = true;
     config->numLanes              = 2;
-    config->ppiWidth              = kDSI_Ppi8Bit;
-    config->enableContinuousHsClk = true;
+    config->enableContinuousHsClk = false;
     config->autoInsertEoTp        = true;
     config->disableBurst          = false;
     config->disableCrcCheck       = false;
     config->enableScramble        = false;
-//    config->enableWatchdog        = false;
-    config->htxTo_ByteClk         = 0;
-    config->lrxHostTo_ByteClk     = 0;
-    config->btaTo_ByteClk         = 0;
+    config->htxTo_ByteClk         = 0x100000U;
+    config->lrxHostTo_ByteClk     = 0x100000U;
+    config->btaTo_ByteClk         = 0x100000U;
 }
 
 /*!
@@ -477,53 +481,55 @@ void DSI_GetDefaultConfig(dsi_config_t *config)
  *
  * param base MIPI DSI peripheral base address.
  * param config Pointer to the DPI interface configuration.
- * param numLanes Lane number, should be same with the setting in ref dsi_dpi_config_t.
- * param dpiPixelClkFreq_Hz The DPI pixel clock frequency in Hz.
- * param dsiHsBitClkFreq_Hz The DSI high speed bit clock frequency in Hz. It is
- * the same with DPHY PLL output.
  */
-void DSI_SetDpiConfig(const MIPI_DSI_Type *base,
-                      const dsi_dpi_config_t *config,
-                      uint8_t numLanes,
-                      uint32_t dpiPixelClkFreq_Hz,
-                      uint32_t dsiHsBitClkFreq_Hz)
+void DSI_SetDpiConfig(const MIPI_DSI_Type *base, const dsi_dpi_config_t *config)
 {
     assert(NULL != config);
 
-    /* coefficient DPI event size to number of DSI bytes. */
-    float coff = ((float)numLanes * (float)dsiHsBitClkFreq_Hz) / ((float)dpiPixelClkFreq_Hz * 8.0f);
-
     DSI2_HOST_VID_IF_Type *dpi = base->dpi;
 
-    dsi_reg32_convert_t pid;
-    pid._dpi_config = *config;
-
-    /* Configure the CFG_VID_MODE register, containing pixelPacket,
-       virtualChannel, externalPacket, packetPerLine, videoMode, polarityFlags, bllpMode
-       overrideTimingParam, alignment and enable.
-     */
-    dpi->CFG_VID_MODE = pid._u32;
-
-    /* Configure the CFG_VID_PIXELS_PER_PACKET register with pixelPerPacket */
-    dpi->CFG_VID_PIXELS_PER_PACKET = config->pixelPerPacket;
-    dpi->CFG_VID_PIXEL_PAYLOAD_SIZE = 0;
-
-    /* Configure the CFG_VID_PAYLOAD_PER_PACKET register with payloadPerPacket */
-    dpi->CFG_VID_PAYLOAD_PER_PACKET = config->payloadPerPacket;
-
-    /* Configure the CFG_VID_START_DELAY register with startDelay */
-    dpi->CFG_VID_START_DELAY = config->startDelay;
-
-    /* Configure the CFG_VID_VSS_PAYLOAD register with vssPayload */
-    dpi->CFG_VID_VSS_PAYLOAD = config->vssPayload;
-
     /* Configure the timing parameters. */
-    dpi->CFG_VID_HSA     = (uint32_t)((float)config->hsw * coff - (float)DSI_HSA_OVERHEAD_BYTE);
-    dpi->CFG_VID_HFP     = (uint32_t)((float)config->hfp * coff - (float)DSI_HFP_OVERHEAD_BYTE);
-    dpi->CFG_VID_HBP     = (uint32_t)((float)config->hbp * coff - (float)DSI_HBP_OVERHEAD_BYTE);
+    dpi->CFG_VID_HFP     = config->hfp;
+    dpi->CFG_VID_HBP     = config->hbp;
+    dpi->CFG_VID_HSA     = config->hsw;
     dpi->CFG_VID_VBP     = config->vbp;
     dpi->CFG_VID_VFP     = config->vfp;
     dpi->CFG_VID_VACTIVE = config->panelHeight;
+
+    dpi->CFG_VID_PIXELS_PER_PACKET = config->pixelPerPacket;
+    dpi->CFG_VID_PIXEL_PAYLOAD_SIZE = 0U; /* Not use when using one packet per line. */
+    dpi->CFG_VID_PAYLOAD_PER_PACKET = 0U; /* Not use when using one packet per line. */
+    dpi->CFG_VID_VSS_PAYLOAD = config->vssPayload;
+
+    /* Disable safe mode by default. Otherwise any error of the first frame will cause the output being gated. */
+    dpi->CFG_VID_SAFE_MODE = 0U;
+
+    /* Buffer 20% pixels for each line before sending the packet to avoid underflow. */
+    dpi->CFG_VID_START_DELAY = config->pixelPerPacket / 5U;
+
+    /* Configure the CFG_VID_MODE register, containing pixelPacket,
+     * virtualChannel, externalPacket, packetPerLine, videoMode, polarityFlags, bllpMode
+     * overrideTimingParam, alignment and enable.
+     */
+    dpi->CFG_VID_MODE =
+        DSI2_HOST_VID_IF_CFG_VID_MODE_CFG_VID_PIXEL_FORMAT(config->pixelPacketFormat) |
+        DSI2_HOST_VID_IF_CFG_VID_MODE_CFG_VID_VC(config->virtualChannel) |
+        DSI2_HOST_VID_IF_CFG_VID_MODE_CFG_VID_EXT_PKT_EN(config->externalPacket) |
+        DSI2_HOST_VID_IF_CFG_VID_MODE_CFG_VID_PACKETS_PER_LINE(1U) | /* One packet per line */
+        DSI2_HOST_VID_IF_CFG_VID_MODE_CFG_VID_VIDEO_MODE(config->videoMode) |
+        DSI2_HOST_VID_IF_CFG_VID_MODE_CFG_VID_HSYNC_POLARITY(
+            (0U != ((uint32_t)config->polarityFlags & (uint32_t)kDSI_DpiHsyncActiveHigh)) ? 1U : 0U) |
+        DSI2_HOST_VID_IF_CFG_VID_MODE_CFG_VID_VSYNC_POLARITY(
+            (0U != ((uint32_t)config->polarityFlags & (uint32_t)kDSI_DpiVsyncActiveHigh)) ? 1U : 0U) |
+        DSI2_HOST_VID_IF_CFG_VID_MODE_CFG_VID_USE_NULL_PKT_BLLP(
+            (0U != ((uint32_t)config->bllpMode & (uint32_t)kDSI_DpiBllpNull)) ? 1U : 0U) |
+        DSI2_HOST_VID_IF_CFG_VID_MODE_CFG_VID_V_BLLP_MODE(
+            (0U != ((uint32_t)config->bllpMode & (uint32_t)kDSI_DpiBllpVerticalLowPower)) ? 1U : 0U) |
+        DSI2_HOST_VID_IF_CFG_VID_MODE_CFG_VID_H_BLLP_MODE(
+            (0U != ((uint32_t)config->bllpMode & (uint32_t)kDSI_DpiBllpHorizontalLowPower)) ? 1U : 0U) |
+        DSI2_HOST_VID_IF_CFG_VID_MODE_CFG_VID_OVERRIDE(config->overrideTiming ? 1U : 0U) |
+        DSI2_HOST_VID_IF_CFG_VID_MODE_CFG_VID_PIXEL_ALIGNMENT(0U) | /* Not used. */
+        DSI2_HOST_VID_IF_CFG_VID_MODE_CFG_VID_ENABLE(config->enable ? 1U : 0U);
 }
 
 /*!
@@ -562,8 +568,8 @@ uint32_t DSI_InitDphy(const MIPI_DSI_Type *base, const dsi_dphy_config_t *config
 {
     assert(NULL != config);
 
-    DSI2_TX_PHY_Type *dphy    = base->dphy;
-    DSI2_HOST_Type *host = base->host;
+    DSI2_TX_PHY_Type *dphy = base->dphy;
+    DSI2_HOST_Type *host   = base->host;
 
     uint32_t cn = 0x0U;
     uint32_t cm = 0x0U;
@@ -578,20 +584,35 @@ uint32_t DSI_InitDphy(const MIPI_DSI_Type *base, const dsi_dphy_config_t *config
         return 0U;
     }
 
+    /* Configure host controller timing. */
+    host->CFG_TIMING  = DSI2_HOST_CFG_TIMING_CFG_T_CLK_GAP(config->tClkGap_ByteClk) |
+                        DSI2_HOST_CFG_TIMING_CFG_TX_GAP(config->tHsExit_ByteClk) |
+                        DSI2_HOST_CFG_TIMING_CFG_T_POST(config->tClkPost_ByteClk) |
+                        DSI2_HOST_CFG_TIMING_CFG_T_PRE(config->tClkPre_ByteClk);
+    host->CFG_TWAKEUP = config->tWakeup_EscClk;
+
+    /* Enable clock and data lanes. */
+    host->CLOCK_LANE |= DSI2_HOST_CLOCK_LANE_CFG_CLK_LANE_EN_MASK;
+    host->LANE_0     |= DSI2_HOST_LANE_0_CFG_DATA_LANE_EN_LN0_MASK;
+    host->LANE_1     |= DSI2_HOST_LANE_1_CFG_DATA_LANE_EN_LN1_MASK | DSI2_HOST_LANE_1_CFG_LANE1_SEL(1U);
+
     /* Set the DPHY parameters. */
     dphy->CFG_MIXEL_PLL = DSI2_TX_PHY_CFG_MIXEL_PLL_CFG_MIXEL_CO(co) |
                           DSI2_TX_PHY_CFG_MIXEL_PLL_CFG_MIXEL_CM(cm) |
                           DSI2_TX_PHY_CFG_MIXEL_PLL_CFG_MIXEL_CN((uint32_t)DSI_EncodeDphyPllCn((uint8_t)cn)) |
                           /* Donot bypass PLL, use the cm/cn/co value for the clock generation. */
                           DSI2_TX_PHY_CFG_MIXEL_PLL_CFG_MIXEL_BYPASS_PLL(0) |
-                          /* LOCK_LATCH is limited to testing and characterization purposes. */
-                          DSI2_TX_PHY_CFG_MIXEL_PLL_CFG_MIXEL_LOCK_LATCH(0) |
+                          /* Assert LOCK_LATCH, de-asserting it is for test/characterization only).
+                           * Latching keeps the MIXEL_LOCK status level stable so the lock poll
+                           * below is reliable. */
+                          DSI2_TX_PHY_CFG_MIXEL_PLL_CFG_MIXEL_LOCK_LATCH(1) |
                           /* Donot bypass lock, PLL LOCK signal will gate TxWordClkHS clock */
                           DSI2_TX_PHY_CFG_MIXEL_PLL_CFG_MIXEL_LOCK_BYP(0) |
-                          DSI2_TX_PHY_CFG_MIXEL_PLL_CFG_MIXEL_PD_PLL(0); /* Exit PLL power down. */
+                          /* Keep the PLL powered down while configuring it. */
+                          DSI2_TX_PHY_CFG_MIXEL_PLL_CFG_MIXEL_PD_PLL(1);
 
-    /* Select PPI Lane0 as Lane 0 */
-    dphy->CFG_MIXEL_LANE_SEL = 0U;
+    /* Select lane 0 for physical lane 0, lane 1 for physical lane 1. */
+    dphy->CFG_MIXEL_LANE_SEL = 0x2U;
 
     /* Powered down PLL when PHY enters ULPS. */
     dphy->CFG_MIXEL_ULPS_PLL_CTRL = 1U;
@@ -603,11 +624,6 @@ uint32_t DSI_InitDphy(const MIPI_DSI_Type *base, const dsi_dphy_config_t *config
     dphy->CFG_MIXEL_AUTO_PD_EN = 1U;
 
     /* Set the timing parameters. */
-    host->CFG_TIMING = DSI2_HOST_CFG_TIMING_CFG_T_CLK_GAP(config->tClkGap_ByteClk) |
-                       DSI2_HOST_CFG_TIMING_CFG_TX_GAP(config->tHsExit_ByteClk) |
-                       DSI2_HOST_CFG_TIMING_CFG_T_POST(config->tClkPost_ByteClk) |
-                       DSI2_HOST_CFG_TIMING_CFG_T_PRE(config->tClkPre_ByteClk);
-    host->CFG_TWAKEUP                  = config->tWakeup_EscClk;
     dphy->CFG_MIXEL_U_PRG_HS_PREPARE   = (uint32_t)config->tHsPrepare_HalfTxEscClk - DSI_THS_PREPARE_HALF_ESC_CLK_BASE;
     dphy->CFG_MIXEL_UC_PRG_HS_PREPARE  = (uint32_t)config->tClkPrepare_HalfTxEscClk - DSI_TCLK_PREPARE_HALF_ESC_CLK_BASE;
     dphy->CFG_MIXEL_U_PRG_HS_ZERO      = (uint32_t)config->tHsZero_ByteClk - DSI_THS_ZERO_BYTE_CLK_BASE;
@@ -616,6 +632,17 @@ uint32_t DSI_InitDphy(const MIPI_DSI_Type *base, const dsi_dphy_config_t *config
     dphy->CFG_MIXEL_UC_PRG_HS_TRAIL    = config->tClkTrail_ByteClk;
     dphy->CFG_MIXEL_U_PRG_RXHS_SETTLE  = config->tHsSettle_RxEscClk - DSI_THS_SETTLE_RX_ESC_CLK_BASE;
     dphy->CFG_MIXEL_UC_PRG_RXHS_SETTLE = config->tClkSettle_RxEscClk - DSI_TCLK_SETTLE_RX_ESC_CLK_BASE;
+
+    /* Program the number of active data lanes on the D-PHY. */
+    dphy->CFG_MIXEL_NUM_LANES = DSI2_TX_PHY_CFG_MIXEL_NUM_LANES_CFG_MIXEL_NUM_LANES(1U);
+
+    /* Power up the PLL now that it is fully configured, then wait for it to lock
+     * before bringing up the PHY. */
+    dphy->CFG_MIXEL_PLL &= ~DSI2_TX_PHY_CFG_MIXEL_PLL_CFG_MIXEL_PD_PLL_MASK;
+
+    while (0U == (dphy->CFG_MIXEL_PLL & DSI2_TX_PHY_CFG_MIXEL_PLL_MIXEL_LOCK_MASK))
+    {
+    }
 
     /* Disable PHY Power down. */
     dphy->CFG_MIXEL_PD_PHY = 0U;
@@ -756,7 +783,7 @@ void DSI_GetDphyDefaultConfig(dsi_dphy_config_t *config, uint32_t txHsBitClk_Hz,
     config->tHsExit_ByteClk = (uint8_t)(DSI_NsToByteClk(100U, byteClkFreq_kHz) + 1U);
 
     /* The number of byte clock the controller waits when changing from continous clock to non-continuous clock. */
-    config->tClkGap_ByteClk = 0U;//TODO
+    config->tClkGap_ByteClk = 10U;
 
     /* T-WAKEUP. At least 1ms. */
     config->tWakeup_EscClk = (txEscClk_Hz / 1000U) + 1U;
@@ -917,7 +944,9 @@ static status_t DSI_PrepareApbTransfer(const MIPI_DSI_Type *base, dsi_transfer_t
             txDataSize = (uint32_t)xfer->txDataSize;
         }
 
-        /* Short packet. */
+        /* Compute the wordCount value first. For short packets it carries
+         * (data1 << 8) | data0; for long packets it is the payload byte
+         * count. */
         if (txDataSize <= 2U)
         {
             if (0U == txDataSize)
@@ -943,10 +972,15 @@ static status_t DSI_PrepareApbTransfer(const MIPI_DSI_Type *base, dsi_transfer_t
                 }
             }
         }
-        /* Long packet. */
         else
         {
             wordCount = (uint16_t)txDataSize;
+        }
+
+        /* Fill the payload FIFO BEFORE writing CFG_PKT_CONTROL, then trigger
+         * CFG_SEND_PACKET. */
+        if (txDataSize > 2U)
+        {
             DSI_WriteApbTxPayloadExt(base, xfer->txData, xfer->txDataSize, xfer->sendDcsCmd, xfer->dcsCmd);
         }
 
@@ -1027,8 +1061,8 @@ status_t DSI_TransferBlocking(const MIPI_DSI_Type *base, dsi_transfer_t *xfer)
 
     DSI2_HOST_APB_PKT_IF_Type *apb = base->apb;
 
-    /* Wait for the APB state idle. */
-    while (0U != (apb->CFG_APB_IRQ_STATUS & (uint32_t)kDSI_ApbNotIdle))
+    /* Wait for the packet state machine to be idle. */
+    while (0U != (apb->CFG_PKT_STATUS & (uint32_t)kDSI_ApbNotIdle))
     {
     }
 
@@ -1038,35 +1072,12 @@ status_t DSI_TransferBlocking(const MIPI_DSI_Type *base, dsi_transfer_t *xfer)
     {
         DSI_SendApbPacket(base);
 
-        /* Make sure the transfer is started. */
-        while (true)
+        /* Wait until the live CFG_PKT_STATUS reaches TxDone(bit1)=1 AND idle (bit0)=0. */
+        while ((apb->CFG_PKT_STATUS & (uint32_t)(kDSI_ApbNotIdle | kDSI_ApbTxDone)) != (uint32_t)kDSI_ApbTxDone)
         {
-            intFlags = DSI_GetApbInterruptStatus(base);
-
-            if (0U != (intFlags & (uint32_t)kDSI_ApbNotIdle))
-            {
-                DSI_ClearApbInterruptStatus(base, (uint32_t)kDSI_ApbNotIdle);
-                break;
-            }
         }
 
-        /* Wait for tx transfer finished. */
-        while (true)
-        {
-            intFlags = DSI_GetApbInterruptStatus(base);
-
-            if (0U != (intFlags & (uint32_t)kDSI_ApbTxDone))
-            {
-                break;
-            }
-
-            /* Check for transmit timeout. */
-            if (0U != (intFlags & (uint32_t)kDSI_ApbHtxTo))
-            {
-                DSI_ClearApbInterruptStatus(base, intFlags);
-                return kStatus_Timeout;
-            }
-        }
+        intFlags = DSI_GetApbInterruptStatus(base);
 
         /* If this transfer performs receive, check for rx status. */
         if ((xfer->flags & (uint8_t)kDSI_TransferPerformBTA) != 0U)

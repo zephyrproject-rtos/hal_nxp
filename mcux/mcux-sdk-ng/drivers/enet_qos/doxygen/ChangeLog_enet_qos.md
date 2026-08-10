@@ -1,5 +1,15 @@
 # ENET_QOS
 
+## [2.7.6]
+
+- New features
+  - Added the parameterized common IRQ handler ENET_QOS_CommonDriverIRQHandler.
+
+## [2.7.5]
+
+- New features
+  - Added IRQ handler for the COMM__ENET_QOS peripheral on i.MX RT2660.
+
 ## [2.7.4]
 
 - Bug Fixes

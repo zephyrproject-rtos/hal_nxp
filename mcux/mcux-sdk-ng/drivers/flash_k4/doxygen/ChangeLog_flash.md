@@ -1,5 +1,9 @@
 # FLASH
 
+## [2.4.2]
+- Improvements
+  - add non-blocking try-lock in async flash process
+
 ## [2.4.1]
 
 - Improvement

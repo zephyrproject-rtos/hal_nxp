@@ -319,7 +319,7 @@ uint32_t I3C_GetInstance(I3C_Type *base)
     uint32_t instance;
     for (instance = 0; instance < ARRAY_SIZE(kI3cBases); ++instance)
     {
-        if (MSDK_REG_SECURE_ADDR(kI3cBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(kI3cBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -1095,6 +1095,11 @@ static uint32_t I3C_CalcErrorRatio(uint32_t curFreq, uint32_t desiredFreq)
  *
  * The I3C master is automatically disabled and re-enabled as necessary to configure the baud
  * rate. Do not call this function during a transfer, or the transfer is aborted.
+ *
+ * note On devices affected by I3C errata ERR053429, an SDR read with PPBAUD < 2 can lose the
+ *       last received byte when the RxFIFO fills before the CPU/DMA services it. For safe SDR
+ *       reads, request a push-pull baud that yields PPBAUD > 1, or guarantee the CPU/DMA drains
+ *       the RxFIFO fast enough to avoid a Full event.
  *
  * param base The I3C peripheral base address.
  * param baudRate_Hz Pointer to structure of requested bus frequency in Hertz.
@@ -2118,10 +2123,10 @@ static void I3C_TransferStateMachineIBIWonState(I3C_Type *base,
     }
     else if (0UL != (stateParams->status & (uint32_t)kI3C_MasterCompleteFlag))
     {
-        handle->ibiType             = I3C_GetIBIType(base);
-        handle->ibiAddress          = I3C_GetIBIAddress(base);
-        stateParams->state_complete = true;
-        stateParams->result         = kStatus_I3C_IBIWon;
+        handle->ibiType     = I3C_GetIBIType(base);
+        handle->ibiAddress  = I3C_GetIBIAddress(base);
+        stateParams->result = kStatus_I3C_IBIWon;
+        handle->state       = (uint8_t)kStopState;
     }
     else
     {
@@ -2294,10 +2299,11 @@ static void I3C_TransferStateMachineStopState(I3C_Type *base,
                                               i3c_master_handle_t *handle,
                                               i3c_master_state_machine_param_t *stateParams)
 {
-    /* Only issue a stop transition if the caller requested it. */
-    if (0UL == (handle->transfer.flags & (uint32_t)kI3C_TransferNoStopFlag))
+    /* Stop if the caller requested one, or always on error. */
+    if ((0UL == (handle->transfer.flags & (uint32_t)kI3C_TransferNoStopFlag)) ||
+        (kStatus_Success != stateParams->result))
     {
-        if (handle->transfer.busType == kI3C_TypeI3CDdr)
+        if (stateParams->masterState == kI3C_MasterStateDdr)
         {
             I3C_MasterEmitRequest(base, kI3C_RequestForceExit);
         }
@@ -2333,37 +2339,40 @@ static status_t I3C_RunTransferStateMachine(I3C_Type *base, i3c_master_handle_t 
     stateParams.result      = I3C_MasterCheckAndClearError(base, errStatus);
     if (kStatus_Success != stateParams.result)
     {
-        return stateParams.result;
+        /* On error, finish through the stop state. */
+        handle->state = (uint8_t)kStopState;
     }
-
-    if (0UL != (stateParams.status & (uint32_t)kI3C_MasterSlave2MasterFlag))
+    else
     {
-        if (handle->callback.slave2Master != NULL)
+        if (0UL != (stateParams.status & (uint32_t)kI3C_MasterSlave2MasterFlag))
         {
-            handle->callback.slave2Master(base, handle->userData);
+            if (handle->callback.slave2Master != NULL)
+            {
+                handle->callback.slave2Master(base, handle->userData);
+            }
         }
-    }
 
-    if ((0UL != (stateParams.status & (uint32_t)kI3C_MasterSlaveStartFlag)) &&
-        (handle->transfer.busType != kI3C_TypeI2C))
-    {
-        handle->state = (uint8_t)kSlaveStartState;
-    }
+        if ((0UL != (stateParams.status & (uint32_t)kI3C_MasterSlaveStartFlag)) &&
+            (handle->transfer.busType != kI3C_TypeI2C))
+        {
+            handle->state = (uint8_t)kSlaveStartState;
+        }
 
-    if ((stateParams.masterState == kI3C_MasterStateIbiRcv) || (stateParams.masterState == kI3C_MasterStateIbiAck))
-    {
-        handle->state = (uint8_t)kIBIWonState;
-    }
+        if ((stateParams.masterState == kI3C_MasterStateIbiRcv) || (stateParams.masterState == kI3C_MasterStateIbiAck))
+        {
+            handle->state = (uint8_t)kIBIWonState;
+        }
 
-    if (handle->state == (uint8_t)kIdleState)
-    {
-        return stateParams.result;
-    }
+        if (handle->state == (uint8_t)kIdleState)
+        {
+            return stateParams.result;
+        }
 
-    /* Get fifo counts and compute room in tx fifo. */
-    I3C_MasterGetFifoCounts(base, &stateParams.rxCount, &stateParams.txCount);
-    assert(txFifoSize >= stateParams.txCount);
-    stateParams.txCount = txFifoSize - stateParams.txCount;
+        /* Get fifo counts and compute room in tx fifo. */
+        I3C_MasterGetFifoCounts(base, &stateParams.rxCount, &stateParams.txCount);
+        assert(txFifoSize >= stateParams.txCount);
+        stateParams.txCount = txFifoSize - stateParams.txCount;
+    }
 
     while (!stateParams.state_complete)
     {
@@ -2703,13 +2712,8 @@ void I3C_MasterTransferHandleIRQ(I3C_Type *base, void *intHandle)
 
     if (isDone || (result != kStatus_Success))
     {
-        /* XXX need to handle data that may be in rx fifo below watermark level? */
-
-        /* XXX handle error, terminate xfer */
-        if ((result == kStatus_I3C_Nak) || (result == kStatus_I3C_IBIWon))
-        {
-            (void)I3C_MasterEmitStop(base, false);
-        }
+        /* Flush the FIFOs. */
+        base->MDATACTRL |= I3C_MDATACTRL_FLUSHTB_MASK | I3C_MDATACTRL_FLUSHFB_MASK;
 
         /* Disable internal IRQ enables. */
         I3C_MasterDisableInterrupts(base, (uint32_t)kI3C_MasterTxReadyFlag);

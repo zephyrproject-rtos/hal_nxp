@@ -1,5 +1,15 @@
 # FREQME
 
+## [2.2.0]
+
+- Improvements
+  - Add following API to support FREQME which exposes dedicated REF and TAR registers
+    for clock source selection.
+    - `FREQME_SetReferenceClk`
+    - `FREQME_SetTargetClk`
+  - Support some devices which apply a different frequency measurement formula
+    (result + 1 instead of result - 2).
+
 ## [2.1.4]
 
 - Improvements

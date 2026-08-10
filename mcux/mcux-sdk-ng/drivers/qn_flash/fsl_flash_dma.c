@@ -156,7 +156,7 @@ status_t FLASH_CreateHandleDMA(flash_dma_handle_t *handle,
 status_t FLASH_StartWriteDMA(
     flash_dma_handle_t *handle, flash_config_t *config, uint32_t addr, const uint32_t *pBuf, uint32_t lengthInWords)
 {
-    dma_transfer_config_t dma_config = {0};
+    dma_channel_config_t dma_config = {0};
 
     if ((NULL == handle) || (NULL == config) || (NULL == pBuf) || (0 == lengthInWords))
     {
@@ -189,10 +189,13 @@ status_t FLASH_StartWriteDMA(
             FLASH->SMART_CTRL = ((config->smartWriteEnable ? (FLASH_SMART_CTRL_SMART_WRITEH_EN_MASK) : 0U) |
                                  FLASH_SMART_CTRL_PRGMH_EN_MASK);
         }
-        DMA_PrepareTransfer(&dma_config, (void *)pBuf, (void *)addr, sizeof(uint32_t), lengthInWords * sizeof(uint32_t),
-                            kDMA_MemoryToMemory, NULL);
+        DMA_PrepareChannelTransfer(&dma_config, (void *)pBuf, (void *)addr,
+                                   DMA_CHANNEL_XFER(false, false, true, false, sizeof(uint32_t),
+                                                    kDMA_AddressInterleave1xWidth, kDMA_AddressInterleave1xWidth,
+                                                    lengthInWords * sizeof(uint32_t)),
+                                   kDMA_MemoryToMemory, NULL, NULL);
         /* Submit transfer. */
-        DMA_SubmitTransfer(handle->writeHandle, &dma_config);
+        DMA_SubmitChannelTransfer(handle->writeHandle, &dma_config);
 
         handle->writeInProgress = true;
         DMA_StartTransfer(handle->writeHandle);
@@ -217,7 +220,7 @@ status_t FLASH_StartWriteDMA(
 status_t FLASH_StartReadDMA(
     flash_dma_handle_t *handle, flash_config_t *config, uint32_t addr, const uint32_t *pBuf, uint32_t lengthInWords)
 {
-    dma_transfer_config_t dma_config = {0};
+    dma_channel_config_t dma_config = {0};
 
     if ((NULL == handle) || (NULL == config) || (NULL == pBuf) || (0 == lengthInWords))
     {
@@ -239,10 +242,13 @@ status_t FLASH_StartReadDMA(
     {
         handle->state = kFLASH_Busy;
 
-        DMA_PrepareTransfer(&dma_config, (void *)addr, (void *)pBuf, sizeof(uint32_t), lengthInWords * sizeof(uint32_t),
-                            kDMA_MemoryToMemory, NULL);
+        DMA_PrepareChannelTransfer(&dma_config, (void *)addr, (void *)pBuf,
+                                   DMA_CHANNEL_XFER(false, false, true, false, sizeof(uint32_t),
+                                                    kDMA_AddressInterleave1xWidth, kDMA_AddressInterleave1xWidth,
+                                                    lengthInWords * sizeof(uint32_t)),
+                                   kDMA_MemoryToMemory, NULL, NULL);
         /* Submit transfer. */
-        DMA_SubmitTransfer(handle->readHandle, &dma_config);
+        DMA_SubmitChannelTransfer(handle->readHandle, &dma_config);
         handle->readInProgress = true;
         DMA_StartTransfer(handle->readHandle);
     }

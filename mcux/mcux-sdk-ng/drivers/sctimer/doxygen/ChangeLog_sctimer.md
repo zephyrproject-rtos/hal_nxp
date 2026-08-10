@@ -1,6 +1,23 @@
 # SCTIMER
 
 
+## [2.6.0]
+
+- New Features
+  - Added SCTIMER_SetupSharedPeriodPwm() and SCTIMER_UpdatePwmDutycycleByEvent()
+    for shared-period multi-channel PWM: same-frequency channels reuse one
+    period/limit event (K channels cost K + 1 events instead of 2 * K), and
+    duty updates take explicit period/pulse events with immediate or glitchless
+    next-period modes.
+  - Added SCTIMER_SetupComplementaryPwm() and
+    SCTIMER_UpdateComplementaryPwmDutycycle() for complementary PWM output pairs
+    with programmable dead time (edge- and center-aligned), including a
+    shoot-through guard and shared-period reuse across pairs.
+- Other Changes
+  - Deprecated SCTIMER_SetupPwm() and SCTIMER_UpdatePwmDutycycle() in favor of
+    SCTIMER_SetupSharedPeriodPwm() and SCTIMER_UpdatePwmDutycycleByEvent(); both
+    remain functional with unchanged behavior.
+
 ## [2.5.6]
 
 - Bug Fixes

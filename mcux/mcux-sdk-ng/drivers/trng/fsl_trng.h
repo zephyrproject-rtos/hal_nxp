@@ -23,12 +23,14 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief TRNG driver version 2.0.22.
+/*! @brief TRNG driver version 2.0.23.
  *
- * Current version: 2.0.22
+ * Current version: 2.0.23
  *
  *
  * Change log:
+ * - version 2.0.23
+ *   - Updated TRNG default values for MCXA577 devices based on silicon characterization.
  * - version 2.0.22
  *   - Added support for KW43 and MCXW70 devices.
  * - version 2.0.21
@@ -77,7 +79,7 @@
  *   - add support for KL8x and KL28Z
  *   - update default OSCDIV for K81 to divide by 2
  */
-#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 22))
+#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 23))
 /*! @} */
 
 /*! @brief TRNG sample mode. Used by trng_config_t. */

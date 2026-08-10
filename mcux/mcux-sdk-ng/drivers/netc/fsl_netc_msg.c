@@ -900,7 +900,7 @@ static uint16_t EP_GetLinkStatus(ep_handle_t *handle)
         return NETC_MSG_RETURN_CODE(kNETC_MsgClassNotSupport, 0U, 0U);
     }
 
-    return NETC_MSG_RETURN_CODE(kNETC_MsgClassLinkStatus, (link == 0U ? 0x1U : 0x0U), 0U);
+    return NETC_MSG_RETURN_CODE_NOCOOKIE(kNETC_MsgClassLinkStatus, (link == 0U ? 0x1U : 0x0U));
 }
 
 static uint16_t EP_PsiHandleLinkStatus(ep_handle_t *handle, uint8_t vsi, netc_psi_rx_msg_t *msgInfo)
@@ -971,11 +971,11 @@ static uint16_t EP_GetLinkSpeed(ep_handle_t *handle)
             code = kNETC_MsgLinkSpeed10G;
             break;
         default:
-            code = kNETC_MsgLinkSpeedNotSupport;
+            code = kNETC_MsgLinkSpeedUnKnown;
             break;
     }
 
-    return NETC_MSG_RETURN_CODE(kNETC_MsgClassLinkSpeed, code, 0U);
+    return NETC_MSG_RETURN_CODE_NOCOOKIE(kNETC_MsgClassLinkSpeed, code);
 }
 
 static uint16_t EP_PsiHandleLinkSpeed(ep_handle_t *handle, uint8_t vsi, netc_psi_rx_msg_t *msgInfo)

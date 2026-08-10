@@ -46,7 +46,7 @@ static uint32_t EIM_GetInstance(EIM_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < eim_cnt; instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_eimBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_eimBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

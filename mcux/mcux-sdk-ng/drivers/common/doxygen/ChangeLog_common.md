@@ -1,5 +1,17 @@
 # COMMON
 
+## [2.6.7]
+
+- Improvements
+  - EnableIRQ/DisableIRQ: Use IRQSTEER_GetInstIdxByIRQ() to determine IRQSTEER
+    instance index instead of simple division. Supports multiple IRQSTEER instances
+    with different interrupt counts.
+
+## [2.6.6]
+
+- Improvements
+  - Support Cortex M55.
+
 ## [2.6.5]
 - Bug Fixes
   - Fixed the issue that the function SDK_DelayAtLeastUs may underflow and 

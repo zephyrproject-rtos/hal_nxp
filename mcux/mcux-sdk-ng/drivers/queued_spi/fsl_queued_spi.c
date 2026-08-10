@@ -106,7 +106,7 @@ uint32_t QSPI_GetInstance(QSPI_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0U; instance < ARRAY_SIZE(s_psQspiBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_psQspiBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_psQspiBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -593,7 +593,8 @@ void DCIF_Reset(DCIF_Type *base);
  * @param width The width of the layer.
  * @param height The height of the layer.
  */
-void DCIF_SetLayerPosition(DCIF_Type *base, uint8_t layer, uint16_t topLeftX, uint16_t topLeftY, uint16_t width, uint16_t height);
+void DCIF_SetLayerPosition(DCIF_Type *base, uint8_t layer, int32_t topLeftX,
+                            int32_t topLeftY, uint16_t width, uint16_t height);
 
 /*!
  * @brief Set the DCIF layer configuration.
@@ -1054,6 +1055,13 @@ static inline void DCIF_DbiWritePixel(DCIF_Type *base)
     base->DBI_CTRL = (base->DBI_CTRL & ~DCIF_DBI_CTRL_DBI_CMD_TYPE_MASK) |
         DCIF_DBI_CTRL_DBI_CMD_TYPE(kDCIF_DbiCmdWritePixel) |
         DCIF_DBI_CTRL_DBI_CMD_TRIG_MASK;
+
+    /* Wait for the command to finish before returning. A trigger raised while a
+     * command is still in flight is ignored by hardware, so a parameter or command
+     * issued right after this one would otherwise be dropped. */
+    while ((base->DBI_CTRL & DCIF_DBI_CTRL_DBI_CMD_TRIG_MASK) != 0U)
+    {
+    }
 }
 
 /*!

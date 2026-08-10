@@ -23,7 +23,7 @@
 
 #define LLC_WAY_NUMBER (8U)
 
-#define LLC_SET_NUMBER (8192U)
+#define LLC_SET_NUMBER (256U)
 
 #define LLC_WAY_PARTITION_COUNT (8U)
 
@@ -160,8 +160,8 @@ uint32_t LLC_GetInstanceByAddr(uint32_t address)
         g_llcMemPhyAliasId = 0U;
         while (g_llcMemPhyAliasId < LLC_PHYMEM_COLUMN_COUNT)
         {
-            if ((MSDK_REG_SECURE_ADDR(address) >= MSDK_REG_SECURE_ADDR(phyMemBase[i][g_llcMemPhyAliasId])) &&
-                ((MSDK_REG_SECURE_ADDR(address) - MSDK_REG_SECURE_ADDR(phyMemBase[i][g_llcMemPhyAliasId])) <
+            if ((MSDK_REG_NONSECURE_ADDR(address) >= MSDK_REG_NONSECURE_ADDR(phyMemBase[i][g_llcMemPhyAliasId])) &&
+                ((MSDK_REG_NONSECURE_ADDR(address) - MSDK_REG_NONSECURE_ADDR(phyMemBase[i][g_llcMemPhyAliasId])) <
                  phyMemSize[i][g_llcMemPhyAliasId]))
             {
                 return i;
@@ -523,7 +523,7 @@ status_t LLC_CleanInvalidateCacheByRange(uint32_t address, uint32_t sizeByte)
     /* Get the LLC base for this instance */
     LLC_Type *base = s_llcBases[instance];
     /* Align the start address down to the nearest cache line boundary */
-    uint32_t startAddress = MSDK_REG_SECURE_ADDR(LLC_AlignAddressToCacheLine(base, address));
+    uint32_t startAddress = MSDK_REG_NONSECURE_ADDR(LLC_AlignAddressToCacheLine(base, address));
     /* Compute inclusive end address of requested range */
     uint32_t endAddress = address + sizeByte - 1U;
     uint32_t endAddressLimitation;
@@ -536,7 +536,7 @@ status_t LLC_CleanInvalidateCacheByRange(uint32_t address, uint32_t sizeByte)
 
     endAddressLimitation = phyMemBase[instance][g_llcMemPhyAliasId] + phyMemSize[instance][g_llcMemPhyAliasId] - 1U;
     endAddress           = (endAddress > endAddressLimitation) ? endAddressLimitation : endAddress;
-    endAddress           = MSDK_REG_SECURE_ADDR(LLC_AlignAddressToCacheLine(base, endAddress));
+    endAddress           = MSDK_REG_NONSECURE_ADDR(LLC_AlignAddressToCacheLine(base, endAddress));
 
     /* Compute the number of cache lines to invalidate */
     cacheLineNumber = (uint16_t)(((endAddress - startAddress) >> LLC_GetCacheLineOffsetBits(base)) + 1U);

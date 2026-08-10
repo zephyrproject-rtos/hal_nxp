@@ -17,6 +17,11 @@
  *
  * $Justification tpm_h_ref_2$
  * Hardware limitations make this code impossible to implement.
+ *
+ * $Justification tpm_h_ref_3$
+ * Deprecated API kept only for backward compatibility and superseded by a replacement
+ * function; it is not called by the driver or tests, so it is intentionally excluded
+ * from coverage.
  */
 
 /*!
@@ -540,11 +545,17 @@ void TPM_UpdateChnlEdgeLevelSelect(TPM_Type *base, tpm_chnl_t chnlNumber, uint8_
  * @return The contorl bits value. This is the logical OR of members of the
  *         enumeration @ref tpm_chnl_control_bit_mask_t.
  */
-static inline uint8_t TPM_GetChannelContorlBits(TPM_Type *base, tpm_chnl_t chnlNumber)
+/*
+ * $Function Coverage Justification$
+ * $ref tpm_h_ref_3$.
+ */
+/* GCOVR_EXCL_START */
+static inline uint8_t TPM_GetChannelContorlBits(TPM_Type *base, tpm_chnl_t chnlNumber) /* GCOVR_EXCL_FUNCTION */
 {
     return (uint8_t)(base->CONTROLS[chnlNumber].CnSC &
                      (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK));
 }
+/* GCOVR_EXCL_STOP */
 
 /*!
  * @brief Get the channel control bits value (mode, edge and level bit fields).

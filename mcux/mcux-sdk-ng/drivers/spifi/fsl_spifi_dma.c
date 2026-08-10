@@ -190,7 +190,7 @@ status_t SPIFI_TransferSendDMA(SPIFI_Type *base, spifi_dma_handle_t *handle, spi
     assert(handle != NULL);
     assert(handle->dmaHandle != NULL);
 
-    dma_transfer_config_t xferConfig;
+    dma_channel_config_t xferConfig;
     status_t status;
 
     /* If previous TX not finished. */
@@ -203,11 +203,14 @@ status_t SPIFI_TransferSendDMA(SPIFI_Type *base, spifi_dma_handle_t *handle, spi
         handle->state = kSPIFI_BusBusy;
 
         /* Prepare transfer. */
-        DMA_PrepareTransfer(&xferConfig, xfer->data, (uint32_t *)SPIFI_GetDataRegisterAddress(base), sizeof(uint32_t),
-                            xfer->dataSize, kDMA_MemoryToPeripheral, NULL);
+        DMA_PrepareChannelTransfer(&xferConfig, xfer->data, (uint32_t *)SPIFI_GetDataRegisterAddress(base),
+                                   DMA_CHANNEL_XFER(false, false, true, false, sizeof(uint32_t),
+                                                    kDMA_AddressInterleave1xWidth, kDMA_AddressInterleave0xWidth,
+                                                    xfer->dataSize),
+                                   kDMA_MemoryToPeripheral, NULL, NULL);
 
         /* Submit transfer. */
-        (void)DMA_SubmitTransfer(handle->dmaHandle, &xferConfig);
+        (void)DMA_SubmitChannelTransfer(handle->dmaHandle, &xferConfig);
         DMA_StartTransfer(handle->dmaHandle);
 
         /* Enable SPIFI TX DMA. */
@@ -232,7 +235,7 @@ status_t SPIFI_TransferReceiveDMA(SPIFI_Type *base, spifi_dma_handle_t *handle, 
     assert(handle != NULL);
     assert(handle->dmaHandle != NULL);
 
-    dma_transfer_config_t xferConfig;
+    dma_channel_config_t xferConfig;
     status_t status;
 
     /* If previous TX not finished. */
@@ -245,11 +248,14 @@ status_t SPIFI_TransferReceiveDMA(SPIFI_Type *base, spifi_dma_handle_t *handle, 
         handle->state = kSPIFI_BusBusy;
 
         /* Prepare transfer. */
-        DMA_PrepareTransfer(&xferConfig, (uint32_t *)SPIFI_GetDataRegisterAddress(base), xfer->data, sizeof(uint32_t),
-                            xfer->dataSize, kDMA_PeripheralToMemory, NULL);
+        DMA_PrepareChannelTransfer(&xferConfig, (uint32_t *)SPIFI_GetDataRegisterAddress(base), xfer->data,
+                                   DMA_CHANNEL_XFER(false, false, true, false, sizeof(uint32_t),
+                                                    kDMA_AddressInterleave0xWidth, kDMA_AddressInterleave1xWidth,
+                                                    xfer->dataSize),
+                                   kDMA_PeripheralToMemory, NULL, NULL);
 
         /* Submit transfer. */
-        (void)DMA_SubmitTransfer(handle->dmaHandle, &xferConfig);
+        (void)DMA_SubmitChannelTransfer(handle->dmaHandle, &xferConfig);
         DMA_StartTransfer(handle->dmaHandle);
 
         /* Enable SPIFI TX DMA. */

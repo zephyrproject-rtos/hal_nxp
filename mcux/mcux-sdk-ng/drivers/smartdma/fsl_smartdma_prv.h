@@ -1982,1225 +1982,1225 @@ typedef struct {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                         opcode      Dest            Src1              src2        SFlag              Cond         Imm                    Extra Operation    Left/Right   Shift/Rotate    Invert
 // Logical Shift
-#define E_RLSL(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (0<<19)    + (0<<18)))
-#define E_RLSR(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (1<<19)    + (0<<18)))
+#define E_RLSL(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (0<<19)    + (0<<18)))
+#define E_RLSR(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and Set Flag
-#define E_RLSLS(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (0<<19)    + (0<<18)))
-#define E_RLSRS(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (1<<19)    + (0<<18)))
+#define E_RLSLS(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (0<<19)    + (0<<18)))
+#define E_RLSRS(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and then AND
-#define E_RLSL_AND(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (0<<18)))
-#define E_RLSR_AND(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (0<<18)))
+#define E_RLSL_AND(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (0<<18)))
+#define E_RLSR_AND(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and Set Flag then AND
-#define E_RLSL_ANDS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (0<<18)))
-#define E_RLSR_ANDS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (0<<18)))
+#define E_RLSL_ANDS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (0<<18)))
+#define E_RLSR_ANDS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and then OR
-#define E_RLSL_OR(dest,roperand,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (0<<18)))
-#define E_RLSR_OR(dest,roperand,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (0<<18)))
+#define E_RLSL_OR(dest,roperand,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (0<<18)))
+#define E_RLSR_OR(dest,roperand,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and Set Flag then OR
-#define E_RLSL_ORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (0<<18)))
-#define E_RLSR_ORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (0<<18)))
+#define E_RLSL_ORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (0<<18)))
+#define E_RLSR_ORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and then XOR
-#define E_RLSL_XOR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (0<<18)))
-#define E_RLSR_XOR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (0<<18)))
+#define E_RLSL_XOR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (0<<18)))
+#define E_RLSR_XOR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and Set Flag then XOR
-#define E_RLSL_XORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (0<<18)))
-#define E_RLSR_XORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (0<<18)))
+#define E_RLSL_XORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (0<<18)))
+#define E_RLSR_XORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and then ADD
-#define E_RLSL_ADD(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (0<<18)))
-#define E_RLSR_ADD(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (0<<18)))
+#define E_RLSL_ADD(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (0<<18)))
+#define E_RLSR_ADD(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and Set Flag then ADD
-#define E_RLSL_ADDS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (0<<18)))
-#define E_RLSR_ADDS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (0<<18)))
+#define E_RLSL_ADDS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (0<<18)))
+#define E_RLSR_ADDS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and then SUB
-#define E_RLSL_SUB(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (0<<18)))
-#define E_RLSR_SUB(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (0<<18)))
+#define E_RLSL_SUB(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (0<<18)))
+#define E_RLSR_SUB(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and Set Flag then SUB
-#define E_RLSL_SUBS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (0<<18)))
-#define E_RLSR_SUBS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (0<<18)))
+#define E_RLSL_SUBS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (0<<18)))
+#define E_RLSR_SUBS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and then ADC
-#define E_RLSL_ADC(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (0<<18)))
-#define E_RLSR_ADC(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (0<<18)))
+#define E_RLSL_ADC(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (0<<18)))
+#define E_RLSR_ADC(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and Set Flag then ADC
-#define E_RLSL_ADCS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (0<<18)))
-#define E_RLSR_ADCS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (0<<18)))
+#define E_RLSL_ADCS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (0<<18)))
+#define E_RLSR_ADCS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and then SBC
-#define E_RLSL_SBC(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (0<<18)))
-#define E_RLSR_SBC(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (0<<18)))
+#define E_RLSL_SBC(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (0<<18)))
+#define E_RLSR_SBC(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and Set Flag then SBC
-#define E_RLSL_SBCS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (0<<18)))
-#define E_RLSR_SBCS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (0<<18)))
+#define E_RLSL_SBCS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (0<<18)))
+#define E_RLSR_SBCS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift
-#define E_COND_RLSL(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (0<<19)    + (0<<18)))
-#define E_COND_RLSR(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (1<<19)    + (0<<18)))
+#define E_COND_RLSL(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (0<<19)    + (0<<18)))
+#define E_COND_RLSR(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and Set Flag
-#define E_COND_RLSLS(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (0<<19)    + (0<<18)))
-#define E_COND_RLSRS(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (1<<19)    + (0<<18)))
+#define E_COND_RLSLS(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (0<<19)    + (0<<18)))
+#define E_COND_RLSRS(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and then AND
-#define E_COND_RLSL_AND(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (0<<18)))
-#define E_COND_RLSR_AND(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (0<<18)))
+#define E_COND_RLSL_AND(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (0<<18)))
+#define E_COND_RLSR_AND(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and Set Flag then AND
-#define E_COND_RLSL_ANDS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (0<<18)))
-#define E_COND_RLSR_ANDS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (0<<18)))
+#define E_COND_RLSL_ANDS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (0<<18)))
+#define E_COND_RLSR_ANDS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and then OR
-#define E_COND_RLSL_OR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (0<<18)))
-#define E_COND_RLSR_OR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (0<<18)))
+#define E_COND_RLSL_OR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (0<<18)))
+#define E_COND_RLSR_OR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and Set Flag then OR
-#define E_COND_RLSL_ORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (0<<18)))
-#define E_COND_RLSR_ORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (0<<18)))
+#define E_COND_RLSL_ORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (0<<18)))
+#define E_COND_RLSR_ORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and then XOR
-#define E_COND_RLSL_XOR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (0<<18)))
-#define E_COND_RLSR_XOR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (0<<18)))
+#define E_COND_RLSL_XOR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (0<<18)))
+#define E_COND_RLSR_XOR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and Set Flag then XOR
-#define E_COND_RLSL_XORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (0<<18)))
-#define E_COND_RLSR_XORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (0<<18)))
+#define E_COND_RLSL_XORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (0<<18)))
+#define E_COND_RLSR_XORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and then ADD
-#define E_COND_RLSL_ADD(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (0<<18)))
-#define E_COND_RLSR_ADD(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (0<<18)))
+#define E_COND_RLSL_ADD(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (0<<18)))
+#define E_COND_RLSR_ADD(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and Set Flag then ADD
-#define E_COND_RLSL_ADDS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (0<<18)))
-#define E_COND_RLSR_ADDS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (0<<18)))
+#define E_COND_RLSL_ADDS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (0<<18)))
+#define E_COND_RLSR_ADDS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and then SUB
-#define E_COND_RLSL_SUB(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (0<<18)))
-#define E_COND_RLSR_SUB(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (0<<18)))
+#define E_COND_RLSL_SUB(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (0<<18)))
+#define E_COND_RLSR_SUB(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and Set Flag then SUB
-#define E_COND_RLSL_SUBS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (0<<18)))
-#define E_COND_RLSR_SUBS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (0<<18)))
+#define E_COND_RLSL_SUBS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (0<<18)))
+#define E_COND_RLSR_SUBS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and then ADC
-#define E_COND_RLSL_ADC(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (0<<18)))
-#define E_COND_RLSR_ADC(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (0<<18)))
+#define E_COND_RLSL_ADC(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (0<<18)))
+#define E_COND_RLSR_ADC(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and Set Flag then ADC
-#define E_COND_RLSL_ADCS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (0<<18)))
-#define E_COND_RLSR_ADCS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (0<<18)))
+#define E_COND_RLSL_ADCS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (0<<18)))
+#define E_COND_RLSR_ADCS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and then SBC
-#define E_COND_RLSL_SBC(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (0<<18)))
-#define E_COND_RLSR_SBC(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (0<<18)))
+#define E_COND_RLSL_SBC(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (0<<18)))
+#define E_COND_RLSR_SBC(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (0<<18)))
 
 // Logical Shift and Set Flag then SBC
-#define E_COND_RLSL_SBCS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (0<<18)))
-#define E_COND_RLSR_SBCS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (0<<18)))
+#define E_COND_RLSL_SBCS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (0<<18)))
+#define E_COND_RLSR_SBCS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (0<<18)))
 
 //                                                         opcode      Dest            Src1              r2shift        SFlag              Cond         Imm                    Extra Operation    Left/Right   Shift/Rotate  POSTshift
 // Logical Shift and then AND
-#define E_AND_RLSL(dest,roperand,r2shift,rshift)                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (0<<18)  + (1<<28)))
-#define E_AND_RLSR(dest,roperand,r2shift,rshift)                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_AND_RLSL(dest,roperand,r2shift,rshift)                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (0<<18)  + (1<<28)))
+#define E_AND_RLSR(dest,roperand,r2shift,rshift)                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and Set Flag then AND
-#define E_AND_RLSLS(dest,roperand,r2shift,rshift)                  __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_AND_RLSRS(dest,roperand,r2shift,rshift)                  __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_AND_RLSLS(dest,roperand,r2shift,rshift)                  __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_AND_RLSRS(dest,roperand,r2shift,rshift)                  __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and then OR
-#define E_OR_RLSL(dest,roperand,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_OR_RLSR(dest,roperand,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_OR_RLSL(dest,roperand,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_OR_RLSR(dest,roperand,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and Set Flag then OR
-#define E_OR_RLSLS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_OR_RLSRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_OR_RLSLS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_OR_RLSRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and then XOR
-#define E_XOR_RLSL(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_XOR_RLSR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_XOR_RLSL(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_XOR_RLSR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and Set Flag then XOR
-#define E_XOR_RLSLS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_XOR_RLSRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_XOR_RLSLS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_XOR_RLSRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and then ADD
-#define E_ADD_RLSL(dest,roperand,r2shift,rshift)                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_ADD_RLSR(dest,roperand,r2shift,rshift)                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_ADD_RLSL(dest,roperand,r2shift,rshift)                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_ADD_RLSR(dest,roperand,r2shift,rshift)                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and Set Flag then ADD
-#define E_ADD_RLSLS(dest,roperand,r2shift,rshift)                  __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_ADD_RLSRS(dest,roperand,r2shift,rshift)                  __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_ADD_RLSLS(dest,roperand,r2shift,rshift)                  __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_ADD_RLSRS(dest,roperand,r2shift,rshift)                  __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and then SUB
-#define E_SUB_RLSL(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_SUB_RLSR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_SUB_RLSL(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_SUB_RLSR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and Set Flag then SUB
-#define E_SUB_RLSLS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_SUB_RLSRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_SUB_RLSLS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_SUB_RLSRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and then ADC
-#define E_ADC_RLSL(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_ADC_RLSR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_ADC_RLSL(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_ADC_RLSR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and Set Flag then ADC
-#define E_ADC_RLSLS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_ADC_RLSRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_ADC_RLSLS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_ADC_RLSRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and then SBC
-#define E_SBC_RLSL(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_SBC_RLSR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_SBC_RLSL(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_SBC_RLSR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and Set Flag then SBC
-#define E_SBC_RLSLS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_SBC_RLSRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_SBC_RLSLS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_SBC_RLSRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and then AND
-#define E_COND_AND_RLSL(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_COND_AND_RLSR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_COND_AND_RLSL(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_COND_AND_RLSR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and Set Flag then AND
-#define E_COND_AND_RLSLS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_COND_AND_RLSRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_COND_AND_RLSLS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_COND_AND_RLSRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and then OR
-#define E_COND_OR_RLSL(cond,dest,roperand,r2shift,rshift)          __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_COND_OR_RLSR(cond,dest,roperand,r2shift,rshift)          __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_COND_OR_RLSL(cond,dest,roperand,r2shift,rshift)          __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_COND_OR_RLSR(cond,dest,roperand,r2shift,rshift)          __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and Set Flag then OR
-#define E_COND_OR_RLSLS(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_COND_OR_RLSRS(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_COND_OR_RLSLS(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_COND_OR_RLSRS(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and then XOR
-#define E_COND_XOR_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_COND_XOR_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_COND_XOR_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_COND_XOR_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and Set Flag then XOR
-#define E_COND_XOR_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_COND_XOR_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_COND_XOR_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_COND_XOR_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and then ADD
-#define E_COND_ADD_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_COND_ADD_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_COND_ADD_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_COND_ADD_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and Set Flag then ADD
-#define E_COND_ADD_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_COND_ADD_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_COND_ADD_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_COND_ADD_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and then SUB
-#define E_COND_SUB_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_COND_SUB_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_COND_SUB_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_COND_SUB_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and Set Flag then SUB
-#define E_COND_SUB_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_COND_SUB_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_COND_SUB_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_COND_SUB_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and then ADC
-#define E_COND_ADC_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_COND_ADC_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_COND_ADC_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_COND_ADC_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and Set Flag then ADC
-#define E_COND_ADC_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_COND_ADC_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_COND_ADC_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_COND_ADC_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and then SBC
-#define E_COND_SBC_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_COND_SBC_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_COND_SBC_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_COND_SBC_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 // Logical Shift and Set Flag then SBC
-#define E_COND_SBC_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<28)))
-#define E_COND_SBC_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<28)))
+#define E_COND_SBC_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<28)))
+#define E_COND_SBC_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<28)))
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                       E_Shift byte reg with inversion
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Logical Shift
-#define E_RLSLN(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_RLSRN(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_RLSLN(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_RLSRN(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and Set Flag
-#define E_RLSLNS(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_RLSRNS(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_RLSLNS(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_RLSRNS(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and then AND
-#define E_RLSL_ANDN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_RLSR_ANDN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_RLSL_ANDN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_RLSR_ANDN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and Set Flag then AND
-#define E_RLSL_ANDNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_RLSR_ANDNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_RLSL_ANDNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_RLSR_ANDNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and then OR
-#define E_RLSL_ORN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_RLSR_ORN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_RLSL_ORN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_RLSR_ORN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and Set Flag then OR
-#define E_RLSL_ORNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_RLSR_ORNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_RLSL_ORNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_RLSR_ORNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and then XOR
-#define E_RLSL_XORN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_RLSR_XORN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_RLSL_XORN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_RLSR_XORN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and Set Flag then XOR
-#define E_RLSL_XORNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_RLSR_XORNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_RLSL_XORNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_RLSR_XORNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and then ADD
-#define E_RLSL_ADDN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_RLSR_ADDN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_RLSL_ADDN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_RLSR_ADDN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and Set Flag then ADD
-#define E_RLSL_ADDNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_RLSR_ADDNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_RLSL_ADDNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_RLSR_ADDNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and then SUB
-#define E_RLSL_SUBN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_RLSR_SUBN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_RLSL_SUBN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_RLSR_SUBN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and Set Flag then SUB
-#define E_RLSL_SUBNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_RLSR_SUBNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_RLSL_SUBNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_RLSR_SUBNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and then ADC
-#define E_RLSL_ADCN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_RLSR_ADCN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_RLSL_ADCN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_RLSR_ADCN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and Set Flag then ADC
-#define E_RLSL_ADCNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_RLSR_ADCNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_RLSL_ADCNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_RLSR_ADCNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and then SBC
-#define E_RLSL_SBCN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_RLSR_SBCN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_RLSL_SBCN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_RLSR_SBCN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and Set Flag then SBC
-#define E_RLSL_SBCNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_RLSR_SBCNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_RLSL_SBCNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_RLSR_SBCNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift
-#define E_COND_RLSLN(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_COND_RLSRN(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSLN(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSRN(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and Set Flag
-#define E_COND_RLSLNS(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_COND_RLSRNS(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSLNS(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSRNS(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and then AND
-#define E_COND_RLSL_ANDN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_COND_RLSR_ANDN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSL_ANDN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSR_ANDN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and Set Flag then AND
-#define E_COND_RLSL_ANDNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_COND_RLSR_ANDNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSL_ANDNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSR_ANDNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and then OR
-#define E_COND_RLSL_ORN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_COND_RLSR_ORN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSL_ORN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSR_ORN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and Set Flag then OR
-#define E_COND_RLSL_ORNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_COND_RLSR_ORNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSL_ORNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSR_ORNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and then XOR
-#define E_COND_RLSL_XORN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_COND_RLSR_XORN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSL_XORN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSR_XORN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and Set Flag then XOR
-#define E_COND_RLSL_XORNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_COND_RLSR_XORNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSL_XORNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSR_XORNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and then ADD
-#define E_COND_RLSL_ADDN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_COND_RLSR_ADDN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSL_ADDN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSR_ADDN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and Set Flag then ADD
-#define E_COND_RLSL_ADDNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_COND_RLSR_ADDNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSL_ADDNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSR_ADDNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and then SUB
-#define E_COND_RLSL_SUBN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_COND_RLSR_SUBN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSL_SUBN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSR_SUBN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and Set Flag then SUB
-#define E_COND_RLSL_SUBNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_COND_RLSR_SUBNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSL_SUBNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSR_SUBNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and then ADC
-#define E_COND_RLSL_ADCN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_COND_RLSR_ADCN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSL_ADCN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSR_ADCN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and Set Flag then ADC
-#define E_COND_RLSL_ADCNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_COND_RLSR_ADCNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSL_ADCNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSR_ADCNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and then SBC
-#define E_COND_RLSL_SBCN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_COND_RLSR_SBCN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSL_SBCN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSR_SBCN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 // Logical Shift and Set Flag then SBC
-#define E_COND_RLSL_SBCNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<27)))
-#define E_COND_RLSR_SBCNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSL_SBCNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<27)))
+#define E_COND_RLSR_SBCNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<27)))
 
 //                                                         opcode      Dest            Src1              r2shift        SFlag              Cond         Imm                    Extra Operation    Left/Right   Shift/Rotate   Inv  POSTshift
 // Logical Shift and then AND
-#define E_ANDN_RLSL(dest,roperand,r2shift,rshift)                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<27)  + (1<<28)))
-#define E_ANDN_RLSR(dest,roperand,r2shift,rshift)                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_ANDN_RLSL(dest,roperand,r2shift,rshift)                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<27)  + (1<<28)))
+#define E_ANDN_RLSR(dest,roperand,r2shift,rshift)                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and Set Flag then AND
-#define E_ANDN_RLSLS(dest,roperand,r2shift,rshift)                  __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_ANDN_RLSRS(dest,roperand,r2shift,rshift)                  __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_ANDN_RLSLS(dest,roperand,r2shift,rshift)                  __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_ANDN_RLSRS(dest,roperand,r2shift,rshift)                  __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and then OR
-#define E_ORN_RLSL(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_ORN_RLSR(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_ORN_RLSL(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_ORN_RLSR(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and Set Flag then OR
-#define E_ORN_RLSLS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_ORN_RLSRS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_ORN_RLSLS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_ORN_RLSRS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and then XOR
-#define E_XORN_RLSL(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_XORN_RLSR(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_XORN_RLSL(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_XORN_RLSR(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and Set Flag then XOR
-#define E_XORN_RLSLS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_XORN_RLSRS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_XORN_RLSLS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_XORN_RLSRS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and then ADD
-#define E_ADDN_RLSL(dest,roperand,r2shift,rshift)                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_ADDN_RLSR(dest,roperand,r2shift,rshift)                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_ADDN_RLSL(dest,roperand,r2shift,rshift)                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_ADDN_RLSR(dest,roperand,r2shift,rshift)                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and Set Flag then ADD
-#define E_ADDN_RLSLS(dest,roperand,r2shift,rshift)                  __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_ADDN_RLSRS(dest,roperand,r2shift,rshift)                  __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_ADDN_RLSLS(dest,roperand,r2shift,rshift)                  __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_ADDN_RLSRS(dest,roperand,r2shift,rshift)                  __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and then SUB
-#define E_SUBN_RLSL(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_SUBN_RLSR(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_SUBN_RLSL(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_SUBN_RLSR(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and Set Flag then SUB
-#define E_SUBN_RLSLS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_SUBN_RLSRS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_SUBN_RLSLS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_SUBN_RLSRS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and then ADC
-#define E_ADCN_RLSL(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_ADCN_RLSR(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_ADCN_RLSL(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_ADCN_RLSR(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and Set Flag then ADC
-#define E_ADCN_RLSLS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_ADCN_RLSRS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_ADCN_RLSLS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_ADCN_RLSRS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and then SBC
-#define E_SBCN_RLSL(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_SBCN_RLSR(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_SBCN_RLSL(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_SBCN_RLSR(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and Set Flag then SBC
-#define E_SBCN_RLSLS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_SBCN_RLSRS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_SBCN_RLSLS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_SBCN_RLSRS(dest,roperand,r2shift,rshift)	            __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and then AND
-#define E_COND_ANDN_RLSL(cond,dest,roperand,r2shift,rshift)	    __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_COND_ANDN_RLSR(cond,dest,roperand,r2shift,rshift)	    __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_ANDN_RLSL(cond,dest,roperand,r2shift,rshift)	    __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_ANDN_RLSR(cond,dest,roperand,r2shift,rshift)	    __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and Set Flag then AND
-#define E_COND_ANDN_RLSLS(cond,dest,roperand,r2shift,rshift)	    __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_COND_ANDN_RLSRS(cond,dest,roperand,r2shift,rshift)	    __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_ANDN_RLSLS(cond,dest,roperand,r2shift,rshift)	    __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_ANDN_RLSRS(cond,dest,roperand,r2shift,rshift)	    __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and then OR
-#define E_COND_ORN_RLSL(cond,dest,roperand,r2shift,rshift)          __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_COND_ORN_RLSR(cond,dest,roperand,r2shift,rshift)          __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_ORN_RLSL(cond,dest,roperand,r2shift,rshift)          __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_ORN_RLSR(cond,dest,roperand,r2shift,rshift)          __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and Set Flag then OR
-#define E_COND_ORN_RLSLS(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_COND_ORN_RLSRS(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_ORN_RLSLS(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_ORN_RLSRS(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and then XOR
-#define E_COND_XORN_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_COND_XORN_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_XORN_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_XORN_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and Set Flag then XOR
-#define E_COND_XORN_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_COND_XORN_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_XORN_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_XORN_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and then ADD
-#define E_COND_ADDN_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_COND_ADDN_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_ADDN_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_ADDN_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and Set Flag then ADD
-#define E_COND_ADDN_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_COND_ADDN_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_ADDN_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_ADDN_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and then SUB
-#define E_COND_SUBN_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_COND_SUBN_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_SUBN_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_SUBN_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and Set Flag then SUB
-#define E_COND_SUBN_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_COND_SUBN_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_SUBN_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_SUBN_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and then ADC
-#define E_COND_ADCN_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_COND_ADCN_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_ADCN_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_ADCN_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and Set Flag then ADC
-#define E_COND_ADCN_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_COND_ADCN_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_ADCN_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_ADCN_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and then SBC
-#define E_COND_SBCN_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_COND_SBCN_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_SBCN_RLSL(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_SBCN_RLSR(cond,dest,roperand,r2shift,rshift)         __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 // Logical Shift and Set Flag then SBC
-#define E_COND_SBCN_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
-#define E_COND_SBCN_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_SBCN_RLSLS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (0<<18) + (1<<27) + (1<<28)))
+#define E_COND_SBCN_RLSRS(cond,dest,roperand,r2shift,rshift)        __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (0<<18) + (1<<27) + (1<<28)))
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                       E_ROTATE by Reg Codes
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                         opcode      Dest            Src1              r2shift        SFlag              Cond         Imm                   Extra Operation    Left/Right   Shift/Rotate
 // Rotate
-#define E_RROR(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (1<<19)    + (1<<18)))
+#define E_RROR(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and Set Flag
-#define E_RRORS(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (1<<19)    + (1<<18)))
+#define E_RRORS(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and then AND
-#define E_RROR_AND(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (1<<18)))
+#define E_RROR_AND(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and Set Flag then AND
-#define E_RROR_ANDS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (1<<18)))
+#define E_RROR_ANDS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and then OR
-#define E_RROR_OR(dest,roperand,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (1<<18)))
+#define E_RROR_OR(dest,roperand,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and Set Flag then OR
-#define E_RROR_ORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (1<<18)))
+#define E_RROR_ORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and then XOR
-#define E_RROR_XOR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (1<<18)))
+#define E_RROR_XOR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and Set Flag then XOR
-#define E_RROR_XORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (1<<18)))
+#define E_RROR_XORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and then ADD
-#define E_RROR_ADD(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (1<<18)))
+#define E_RROR_ADD(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and Set Flag then ADD
-#define E_RROR_ADDS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (1<<18)))
+#define E_RROR_ADDS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and then SUB
-#define E_RROR_SUB(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (1<<18)))
+#define E_RROR_SUB(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and Set Flag then SUB
-#define E_RROR_SUBS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (1<<18)))
+#define E_RROR_SUBS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and then ADC
-#define E_RROR_ADC(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (1<<18)))
+#define E_RROR_ADC(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and Set Flag then ADC
-#define E_RROR_ADCS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (1<<18)))
+#define E_RROR_ADCS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and then SBC
-#define E_RROR_SBC(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (1<<18)))
+#define E_RROR_SBC(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and Set Flag then SBC
-#define E_RROR_SBCS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (1<<18)))
+#define E_RROR_SBCS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate
-#define E_COND_RROR(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (1<<19)    + (1<<18)))
+#define E_COND_RROR(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and Set Flag
-#define E_COND_RRORS(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (1<<19)    + (1<<18)))
+#define E_COND_RRORS(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and then AND
-#define E_COND_RROR_AND(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (1<<18)))
+#define E_COND_RROR_AND(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and Set Flag then AND
-#define E_COND_RROR_ANDS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (1<<18)))
+#define E_COND_RROR_ANDS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and then OR
-#define E_COND_RROR_OR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (1<<18)))
+#define E_COND_RROR_OR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and Set Flag then OR
-#define E_COND_RROR_ORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (1<<18)))
+#define E_COND_RROR_ORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and then XOR
-#define E_COND_RROR_XOR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (1<<18)))
+#define E_COND_RROR_XOR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and Set Flag then XOR
-#define E_COND_RROR_XORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (1<<18)))
+#define E_COND_RROR_XORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and then ADD
-#define E_COND_RROR_ADD(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (1<<18)))
+#define E_COND_RROR_ADD(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and Set Flag then ADD
-#define E_COND_RROR_ADDS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (1<<18)))
+#define E_COND_RROR_ADDS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and then SUB
-#define E_COND_RROR_SUB(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (1<<18)))
+#define E_COND_RROR_SUB(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and Set Flag then SUB
-#define E_COND_RROR_SUBS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (1<<18)))
+#define E_COND_RROR_SUBS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and then ADC
-#define E_COND_RROR_ADC(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (1<<18)))
+#define E_COND_RROR_ADC(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and Set Flag then ADC
-#define E_COND_RROR_ADCS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (1<<18)))
+#define E_COND_RROR_ADCS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and then SBC
-#define E_COND_RROR_SBC(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (1<<18)))
+#define E_COND_RROR_SBC(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and Set Flag then SBC
-#define E_COND_RROR_SBCS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (1<<18)))
+#define E_COND_RROR_SBCS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (1<<18)))
 
 // Rotate and then AND
-#define E_AND_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_AND_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and Set Flag then AND
-#define E_AND_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_AND_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and then OR
-#define E_OR_RROR(dest,roperand,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_OR_RROR(dest,roperand,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and Set Flag then OR
-#define E_OR_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_OR_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and then XOR
-#define E_XOR_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_XOR_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and Set Flag then XOR
-#define E_XOR_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_XOR_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and then ADD
-#define E_ADD_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_ADD_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and Set Flag then ADD
-#define E_ADD_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_ADD_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and then SUB
-#define E_SUB_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_SUB_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and Set Flag then SUB
-#define E_SUB_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_SUB_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and then ADC
-#define E_ADC_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_ADC_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and Set Flag then ADC
-#define E_ADC_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_ADC_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and then SBC
-#define E_SBC_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_SBC_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and Set Flag then SBC
-#define E_SBC_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_SBC_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and then AND
-#define E_COND_AND_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_COND_AND_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and Set Flag then AND
-#define E_COND_AND_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_COND_AND_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and then OR
-#define E_COND_OR_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_COND_OR_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and Set Flag then OR
-#define E_COND_OR_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_COND_OR_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and then XOR
-#define E_COND_XOR_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_COND_XOR_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and Set Flag then XOR
-#define E_COND_XOR_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_COND_XOR_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and then ADD
-#define E_COND_ADD_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_COND_ADD_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and Set Flag then ADD
-#define E_COND_ADD_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_COND_ADD_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and then SUB
-#define E_COND_SUB_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_COND_SUB_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and Set Flag then SUB
-#define E_COND_SUB_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_COND_SUB_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and then ADC
-#define E_COND_ADC_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_COND_ADC_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and Set Flag then ADC
-#define E_COND_ADC_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_COND_ADC_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and then SBC
-#define E_COND_SBC_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_COND_SBC_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 // Rotate and Set Flag then SBC
-#define E_COND_SBC_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<28)))
+#define E_COND_SBC_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<28)))
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                       E_ROTATE by Reg Codes and invert ALU result
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                         opcode      Dest            Src1              r2shift        SFlag              Cond         Imm                   Extra Operation    Left/Right   Shift/Rotate
 // Rotate
-#define E_RRORN(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_RRORN(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and Set Flag
-#define E_RRORNS(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_RRORNS(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and then AND
-#define E_RROR_ANDN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_RROR_ANDN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and Set Flag then AND
-#define E_RROR_ANDNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_RROR_ANDNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and then OR
-#define E_RROR_ORN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_RROR_ORN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and Set Flag then OR
-#define E_RROR_ORNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_RROR_ORNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and then XOR
-#define E_RROR_XORN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_RROR_XORN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and Set Flag then XOR
-#define E_RROR_XORNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_RROR_XORNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and then ADD
-#define E_RROR_ADDN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_RROR_ADDN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and Set Flag then ADD
-#define E_RROR_ADDNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_RROR_ADDNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and then SUB
-#define E_RROR_SUBN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_RROR_SUBN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and Set Flag then SUB
-#define E_RROR_SUBNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_RROR_SUBNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and then ADC
-#define E_RROR_ADCN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_RROR_ADCN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and Set Flag then ADC
-#define E_RROR_ADCNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_RROR_ADCNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and then SBC
-#define E_RROR_SBCN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_RROR_SBCN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and Set Flag then SBC
-#define E_RROR_SBCNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_RROR_SBCNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate
-#define E_COND_RRORN(cond,dest,r2shift,rshift)    	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RRORN(cond,dest,r2shift,rshift)    	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and Set Flag
-#define E_COND_RRORNS(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RRORNS(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and then AND
-#define E_COND_RROR_ANDN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RROR_ANDN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and Set Flag then AND
-#define E_COND_RROR_ANDNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RROR_ANDNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and then OR
-#define E_COND_RROR_ORN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RROR_ORN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and Set Flag then OR
-#define E_COND_RROR_ORNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RROR_ORNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and then XOR
-#define E_COND_RROR_XORN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RROR_XORN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and Set Flag then XOR
-#define E_COND_RROR_XORNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RROR_XORNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and then ADD
-#define E_COND_RROR_ADDN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RROR_ADDN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and Set Flag then ADD
-#define E_COND_RROR_ADDNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RROR_ADDNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and then SUB
-#define E_COND_RROR_SUBN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RROR_SUBN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and Set Flag then SUB
-#define E_COND_RROR_SUBNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RROR_SUBNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and then ADC
-#define E_COND_RROR_ADCN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RROR_ADCN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and Set Flag then ADC
-#define E_COND_RROR_ADCNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RROR_ADCNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and then SBC
-#define E_COND_RROR_SBCN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RROR_SBCN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and Set Flag then SBC
-#define E_COND_RROR_SBCNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RROR_SBCNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<27)))
 
 // Rotate and then AND
-#define E_ANDN_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_ANDN_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and Set Flag then AND
-#define E_ANDN_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_ANDN_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and then OR
-#define E_ORN_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_ORN_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and Set Flag then OR
-#define E_ORN_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_ORN_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and then XOR
-#define E_XORN_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_XORN_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and Set Flag then XOR
-#define E_XORN_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_XORN_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and then ADD
-#define E_ADDN_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_ADDN_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and Set Flag then ADD
-#define E_ADDN_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_ADDN_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and then SUB
-#define E_SUBN_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_SUBN_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and Set Flag then SUB
-#define E_SUBN_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_SUBN_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and then ADC
-#define E_ADCN_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_ADCN_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and Set Flag then ADC
-#define E_ADCN_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_ADCN_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and then SBC
-#define E_SBCN_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_SBCN_RROR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and Set Flag then SBC
-#define E_SBCN_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_SBCN_RRORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and then AND
-#define E_COND_ANDN_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_ANDN_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and Set Flag then AND
-#define E_COND_ANDN_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_ANDN_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and then OR
-#define E_COND_ORN_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_ORN_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and Set Flag then OR
-#define E_COND_ORN_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_ORN_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and then XOR
-#define E_COND_XORN_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_XORN_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and Set Flag then XOR
-#define E_COND_XORN_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_XORN_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and then ADD
-#define E_COND_ADDN_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_ADDN_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and Set Flag then ADD
-#define E_COND_ADDN_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_ADDN_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and then SUB
-#define E_COND_SUBN_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_SUBN_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and Set Flag then SUB
-#define E_COND_SUBN_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_SUBN_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and then ADC
-#define E_COND_ADCN_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_ADCN_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and Set Flag then ADC
-#define E_COND_ADCN_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_ADCN_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and then SBC
-#define E_COND_SBCN_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_SBCN_RROR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Rotate and Set Flag then SBC
-#define E_COND_SBCN_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_SBCN_RRORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (1<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                       Arithmetical Shift Codes
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                         opcode      Dest            Src1              r2shift        SFlag              Cond         Imm                   Extra Operation    Left/Right   Shift/Rotate  Arith/Shift
 // Arith Shift Right
-#define E_RASR(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (0<<19)    + (1<<18)))
+#define E_RASR(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (0<<19)    + (1<<18)))
 
 // Arith Shift Right and Set Flag
-#define E_RASRS(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (0<<19)    + (1<<18)))
+#define E_RASRS(dest,r2shift,rshift)	                           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (0<<19)    + (1<<18)))
 
 // Arith Shift Right and then AND
-#define E_RASR_AND(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (1<<18)))
+#define E_RASR_AND(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (1<<18)))
 
 // Arith Shift Right and Set Flag then AND
-#define E_RASR_ANDS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (1<<18)))
+#define E_RASR_ANDS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (1<<18)))
 
 // Arith Shift Right and then OR
-#define E_RASR_OR(dest,roperand,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (1<<18)))
+#define E_RASR_OR(dest,roperand,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (1<<18)))
 
 // Arith Shift Right and Set Flag then OR
-#define E_RASR_ORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (1<<18)))
+#define E_RASR_ORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (1<<18)))
 
 // Arith Shift Right and then XOR
-#define E_RASR_XOR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (1<<18)))
+#define E_RASR_XOR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (1<<18)))
 
 // Arith Shift Right and Set Flag then XOR
-#define E_RASR_XORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (1<<18)))
+#define E_RASR_XORS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (1<<18)))
 
 // Arith Shift Right and then ADD
-#define E_RASR_ADD(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (1<<18)))
+#define E_RASR_ADD(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (1<<18)))
 
 // Arith Shift Right and Set Flag then ADD
-#define E_RASR_ADDS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (1<<18)))
+#define E_RASR_ADDS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (1<<18)))
 
 // Arith Shift Right and then SUB
-#define E_RASR_SUB(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (1<<18)))
+#define E_RASR_SUB(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (1<<18)))
 
 // Arith Shift Right and Set Flag then SUB
-#define E_RASR_SUBS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (1<<18)))
+#define E_RASR_SUBS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (1<<18)))
 
 // Arith Shift Right and then ADC
-#define E_RASR_ADC(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (1<<18)))
+#define E_RASR_ADC(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (1<<18)))
 
 // Arith Shift Right and Set Flag then ADC
-#define E_RASR_ADCS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (1<<18)))
+#define E_RASR_ADCS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (1<<18)))
 
 // Arith Shift Right and then SBC
-#define E_RASR_SBC(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (1<<18)))
+#define E_RASR_SBC(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (1<<18)))
 
 // Arith Shift Right and Set Flag then SBC
-#define E_RASR_SBCS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (1<<18)))
+#define E_RASR_SBCS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (1<<18)))
 
 // Conditional Arith Shift
-#define E_COND_RASR(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (0<<19)    + (1<<18)))
+#define E_COND_RASR(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (0<<19)    + (1<<18)))
 
 // Conditional Arith Shift and Set Flag
-#define E_COND_RASRS(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (0<<19)    + (1<<18)))
+#define E_COND_RASRS(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (0<<19)    + (1<<18)))
 
 // Conditional Arith Shift and then AND
-#define E_COND_RASR_AND(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (1<<18)))
+#define E_COND_RASR_AND(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (1<<18)))
 
 // Conditional Arith Shift and Set Flag then AND
-#define E_COND_RASR_ANDS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (1<<18)))
+#define E_COND_RASR_ANDS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (1<<18)))
 
 // Conditional Arith Shift and then OR
-#define E_COND_RASR_OR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (1<<18)))
+#define E_COND_RASR_OR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (1<<18)))
 
 // Conditional Arith Shift and Set Flag then OR
-#define E_COND_RASR_ORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (1<<18)))
+#define E_COND_RASR_ORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (1<<18)))
 
 // Conditional Arith Shift and then XOR
-#define E_COND_RASR_XOR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (1<<18)))
+#define E_COND_RASR_XOR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (1<<18)))
 
 // Conditional Arith Shift and Set Flag then XOR
-#define E_COND_RASR_XORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (1<<18)))
+#define E_COND_RASR_XORS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (1<<18)))
 
 // Conditional Arith Shift and then ADD
-#define E_COND_RASR_ADD(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (1<<18)))
+#define E_COND_RASR_ADD(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (1<<18)))
 
 // Conditional Arith Shift and Set Flag then ADD
-#define E_COND_RASR_ADDS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (1<<18)))
+#define E_COND_RASR_ADDS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (1<<18)))
 
 // Conditional Arith Shift and then SUB
-#define E_COND_RASR_SUB(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (1<<18)))
+#define E_COND_RASR_SUB(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (1<<18)))
 
 // Conditional Arith Shift and Set Flag then SUB
-#define E_COND_RASR_SUBS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (1<<18)))
+#define E_COND_RASR_SUBS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (1<<18)))
 
 // Conditional Arith Shift and then ADC
-#define E_COND_RASR_ADC(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (1<<18)))
+#define E_COND_RASR_ADC(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (1<<18)))
 
 // Conditional Arith Shift and Set Flag then ADC
-#define E_COND_RASR_ADCS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (1<<18)))
+#define E_COND_RASR_ADCS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (1<<18)))
 
 // Conditional Arith Shift and then SBC
-#define E_COND_RASR_SBC(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (1<<18)))
+#define E_COND_RASR_SBC(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (1<<18)))
 
 // Conditional Arith Shift and Set Flag then SBC
-#define E_COND_RASR_SBCS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (1<<18)))
+#define E_COND_RASR_SBCS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (1<<18)))
 
 // Arith Shift Right and then AND
-#define E_AND_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_AND_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Arith Shift Right and Set Flag then AND
-#define E_AND_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_AND_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Arith Shift Right and then OR
-#define E_OR_RASR(dest,roperand,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_OR_RASR(dest,roperand,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Arith Shift Right and Set Flag then OR
-#define E_OR_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_OR_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Arith Shift Right and then XOR
-#define E_XOR_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_XOR_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Arith Shift Right and Set Flag then XOR
-#define E_XOR_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_XOR_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Arith Shift Right and then ADD
-#define E_ADD_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_ADD_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Arith Shift Right and Set Flag then ADD
-#define E_ADD_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_ADD_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Arith Shift Right and then SUB
-#define E_SUB_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_SUB_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Arith Shift Right and Set Flag then SUB
-#define E_SUB_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_SUB_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Arith Shift Right and then ADC
-#define E_ADC_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (1<<18)+ (1<<28)))
+#define E_ADC_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (1<<18)+ (1<<28)))
 
 // Arith Shift Right and Set Flag then ADC
-#define E_ADC_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (1<<18)+ (1<<28)))
+#define E_ADC_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (1<<18)+ (1<<28)))
 
 // Arith Shift Right and then SBC
-#define E_SBC_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_SBC_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Arith Shift Right and Set Flag then SBC
-#define E_SBC_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (1<<18)  + (1<<28)))
+#define E_SBC_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (1<<18)  + (1<<28)))
 
 // Conditional Arith Shift and then AND
-#define E_COND_AND_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_COND_AND_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Conditional Arith Shift and Set Flag then AND
-#define E_COND_AND_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_COND_AND_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Conditional Arith Shift and then OR
-#define E_COND_OR_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_COND_OR_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Conditional Arith Shift and Set Flag then OR
-#define E_COND_OR_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_COND_OR_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Conditional Arith Shift and then XOR
-#define E_COND_XOR_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_COND_XOR_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Conditional Arith Shift and Set Flag then XOR
-#define E_COND_XOR_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_COND_XOR_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Conditional Arith Shift and then ADD
-#define E_COND_ADD_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_COND_ADD_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Conditional Arith Shift and Set Flag then ADD
-#define E_COND_ADD_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_COND_ADD_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Conditional Arith Shift and then SUB
-#define E_COND_SUB_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (1<<18)+ (1<<28)))
+#define E_COND_SUB_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (1<<18)+ (1<<28)))
 
 // Conditional Arith Shift and Set Flag then SUB
-#define E_COND_SUB_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (1<<18)+ (1<<28)))
+#define E_COND_SUB_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (1<<18)+ (1<<28)))
 
 // Conditional Arith Shift and then ADC
-#define E_COND_ADC_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<28)))
+#define E_COND_ADC_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<28)))
 
 // Conditional Arith Shift and Set Flag then ADC
-#define E_COND_ADC_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (1<<18)  + (1<<28)))
+#define E_COND_ADC_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (1<<18)  + (1<<28)))
 
 // Conditional Arith Shift and then SBC
-#define E_COND_SBC_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (1<<18)  + (1<<28)))
+#define E_COND_SBC_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (1<<18)  + (1<<28)))
 
 // Conditional Arith Shift and Set Flag then SBC
-#define E_COND_SBC_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (1<<18)  + (1<<28)))
+#define E_COND_SBC_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (1<<18)  + (1<<28)))
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                       Arithmetical Shift Codes with invert ALU
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                         opcode      Dest            Src1              r2shift        SFlag              Cond         Imm                   Extra Operation    Left/Right   Shift/Rotate  pOSTShift
 // Arith Shift Right
-#define E_RASRN(dest,r2shift,rshift)        	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_RASRN(dest,r2shift,rshift)        	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Arith Shift Right and Set Flag
-#define E_RASRNS(dest,r2shift,rshift)    	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_RASRNS(dest,r2shift,rshift)    	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Arith Shift Right and then AND
-#define E_RASR_ANDN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_RASR_ANDN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Arith Shift Right and Set Flag then AND
-#define E_RASR_ANDNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_RASR_ANDNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Arith Shift Right and then OR
-#define E_RASR_ORN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_RASR_ORN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Arith Shift Right and Set Flag then OR
-#define E_RASR_ORNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_RASR_ORNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Arith Shift Right and then XOR
-#define E_RASR_XORN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_RASR_XORN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Arith Shift Right and Set Flag then XOR
-#define E_RASR_XORNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_RASR_XORNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Arith Shift Right and then ADD
-#define E_RASR_ADDN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_RASR_ADDN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Arith Shift Right and Set Flag then ADD
-#define E_RASR_ADDNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_RASR_ADDNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Arith Shift Right and then SUB
-#define E_RASR_SUBN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_RASR_SUBN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Arith Shift Right and Set Flag then SUB
-#define E_RASR_SUBNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_RASR_SUBNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Arith Shift Right and then ADC
-#define E_RASR_ADCN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_RASR_ADCN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Arith Shift Right and Set Flag then ADC
-#define E_RASR_ADCNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_RASR_ADCNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Arith Shift Right and then SBC
-#define E_RASR_SBCN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_RASR_SBCN(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Arith Shift Right and Set Flag then SBC
-#define E_RASR_SBCNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_RASR_SBCNS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Conditional Arith Shift
-#define E_COND_RASRN(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RASRN(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Conditional Arith Shift and Set Flag
-#define E_COND_RASRNS(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (0<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RASRNS(cond,dest,r2shift,rshift)	                   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    +               (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (0<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Conditional Arith Shift and then AND
-#define E_COND_RASR_ANDN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RASR_ANDN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Conditional Arith Shift and Set Flag then AND
-#define E_COND_RASR_ANDNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RASR_ANDNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Conditional Arith Shift and then OR
-#define E_COND_RASR_ORN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RASR_ORN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Conditional Arith Shift and Set Flag then OR
-#define E_COND_RASR_ORNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RASR_ORNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Conditional Arith Shift and then XOR
-#define E_COND_RASR_XORN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RASR_XORN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Conditional Arith Shift and Set Flag then XOR
-#define E_COND_RASR_XORNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RASR_XORNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Conditional Arith Shift and then ADD
-#define E_COND_RASR_ADDN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RASR_ADDN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Conditional Arith Shift and Set Flag then ADD
-#define E_COND_RASR_ADDNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RASR_ADDNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Conditional Arith Shift and then SUB
-#define E_COND_RASR_SUBN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RASR_SUBN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Conditional Arith Shift and Set Flag then SUB
-#define E_COND_RASR_SUBNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RASR_SUBNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Conditional Arith Shift and then ADC
-#define E_COND_RASR_ADCN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RASR_ADCN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Conditional Arith Shift and Set Flag then ADC
-#define E_COND_RASR_ADCNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RASR_ADCNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Conditional Arith Shift and then SBC
-#define E_COND_RASR_SBCN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RASR_SBCN(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Conditional Arith Shift and Set Flag then SBC
-#define E_COND_RASR_SBCNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<27)))
+#define E_COND_RASR_SBCNS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<27)))
 
 // Arith Shift Right and then AND
-#define E_ANDN_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_ANDN_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Arith Shift Right and Set Flag then AND
-#define E_ANDN_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_ANDN_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Arith Shift Right and then OR
-#define E_ORN_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_ORN_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Arith Shift Right and Set Flag then OR
-#define E_ORN_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_ORN_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Arith Shift Right and then XOR
-#define E_XORN_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_XORN_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Arith Shift Right and Set Flag then XOR
-#define E_XORN_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_XORN_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Arith Shift Right and then ADD
-#define E_ADDN_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_ADDN_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Arith Shift Right and Set Flag then ADD
-#define E_ADDN_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_ADDN_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Arith Shift Right and then SUB
-#define E_SUBN_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_SUBN_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Arith Shift Right and Set Flag then SUB
-#define E_SUBN_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_SUBN_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Arith Shift Right and then ADC
-#define E_ADCN_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<27)+ (1<<28)))
+#define E_ADCN_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<27)+ (1<<28)))
 
 // Arith Shift Right and Set Flag then ADC
-#define E_ADCN_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<27)+ (1<<28)))
+#define E_ADCN_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<27)+ (1<<28)))
 
 // Arith Shift Right and then SBC
-#define E_SBCN_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_SBCN_RASR(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Arith Shift Right and Set Flag then SBC
-#define E_SBCN_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<27)  + (1<<28)))
+#define E_SBCN_RASRS(dest,roperand,r2shift,rshift)	           __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)        + (EU<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<27)  + (1<<28)))
 
 // Conditional Arith Shift and then AND
-#define E_COND_ANDN_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_ANDN_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Conditional Arith Shift and Set Flag then AND
-#define E_COND_ANDN_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_ANDN_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (1<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Conditional Arith Shift and then OR
-#define E_COND_ORN_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_ORN_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Conditional Arith Shift and Set Flag then OR
-#define E_COND_ORN_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_ORN_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (2<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Conditional Arith Shift and then XOR
-#define E_COND_XORN_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_XORN_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Conditional Arith Shift and Set Flag then XOR
-#define E_COND_XORN_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_XORN_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (3<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Conditional Arith Shift and then ADD
-#define E_COND_ADDN_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_ADDN_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Conditional Arith Shift and Set Flag then ADD
-#define E_COND_ADDN_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_ADDN_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (4<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Conditional Arith Shift and then SUB
-#define E_COND_SUBN_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<27)+ (1<<28)))
+#define E_COND_SUBN_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<27)+ (1<<28)))
 
 // Conditional Arith Shift and Set Flag then SUB
-#define E_COND_SUBN_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<27)+ (1<<28)))
+#define E_COND_SUBN_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (5<<29)         + (0<<19)    + (1<<18) + (1<<27)+ (1<<28)))
 
 // Conditional Arith Shift and then ADC
-#define E_COND_ADCN_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
+#define E_COND_ADCN_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<27) + (1<<28)))
 
 // Conditional Arith Shift and Set Flag then ADC
-#define E_COND_ADCN_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<27)  + (1<<28)))
+#define E_COND_ADCN_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (6<<29)         + (0<<19)    + (1<<18) + (1<<27)  + (1<<28)))
 
 // Conditional Arith Shift and then SBC
-#define E_COND_SBCN_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<27)  + (1<<28)))
+#define E_COND_SBCN_RASR(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (0<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<27)  + (1<<28)))
 
 // Conditional Arith Shift and Set Flag then SBC
-#define E_COND_SBCN_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x1f)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<27)  + (1<<28)))
+#define E_COND_SBCN_RASRS(cond,dest,roperand,r2shift,rshift)	   __asm(".word %c0" : : "i" (0x19   + (dest<<10)    + (roperand<<14)  + (r2shift<<20)    + (1<<9)      + (cond<<5)      + ((rshift & 0x7)<<24)     + (7<<29)         + (0<<19)    + (1<<18) + (1<<27)  + (1<<28)))
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                       Bit Manipulate

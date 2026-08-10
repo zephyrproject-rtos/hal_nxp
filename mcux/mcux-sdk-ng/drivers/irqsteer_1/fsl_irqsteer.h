@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! Version 2.0.1. */
-#define FSL_IRQSTEER_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_IRQSTEER_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*! @} */
 
 /*
@@ -96,6 +96,9 @@ typedef struct
     uint32_t intNum; /* Number of input interrupts that supported by irqsteer(..., 512, 640, 960,...) */
     uint32_t irqChanNum; /* Number of irqsteer instance irq channel(1,2,...) */
     uint32_t irqChanIdx; /* Index of irqsteer instance irq channel */
+    uint32_t irqStartOff; /* IRQ start offset relative to FSL_FEATURE_IRQSTEER_IRQ_START_INDEX for this instance.
+                          * For single-instance: 0. For multi-instance: sum of intNum of all preceding instances.
+                          * E.g., inst0(intNum=960)->irqStartOff=0, inst1(intNum=512)->irqStartOff=960. */
 } irqsteer_info_t;
 
 typedef struct
@@ -125,6 +128,17 @@ extern "C" {
  * @param instIdx base address index in IRQSTEER peripheral base array.
  */
 irqsteer_data_t *IRQSTEER_GetIrqsteerData(int32_t instIdx);
+
+/**
+ * @brief Find the IRQSTEER instance index by IRQ number.
+ *
+ * This function iterates through all IRQSTEER instances to find which instance
+ * owns the given IRQ number. Supports instances with different interrupt counts.
+ *
+ * @param irq System interrupt number.
+ * @return Instance index if found, -1 if not found.
+ */
+int32_t IRQSTEER_GetInstIdxByIRQ(IRQn_Type irq);
 
 /*!
  * @brief Initializes the IRQSTEER module.
@@ -178,7 +192,8 @@ static inline bool IRQSTEER_InterruptIsEnabled(int32_t instIdx, IRQn_Type irq)
     uint32_t inputIdx, bitOffset, regIdx;
 
     assert((irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) >= 0);
-    inputIdx = (uint32_t)(irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX);
+    assert(((uint32_t)(irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX)) >= data->infoPtr->irqStartOff);
+    inputIdx = (uint32_t)(irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) - data->infoPtr->irqStartOff;
 
     regIdx = IRQSTEER_GEN_REG_IDX(data->regNum, inputIdx);
     bitOffset = inputIdx % (uint32_t)IRQSTEER_INT_SRC_REG_WIDTH;
@@ -201,7 +216,8 @@ static inline void IRQSTEER_SetInterrupt(int32_t instIdx, IRQn_Type irq, bool se
     uint32_t inputIdx, bitOffset, regIdx;
 
     assert((irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) >= 0);
-    inputIdx = (uint32_t)(irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX);
+    assert(((uint32_t)(irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX)) >= data->infoPtr->irqStartOff);
+    inputIdx = (uint32_t)(irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) - data->infoPtr->irqStartOff;
 
     regIdx = IRQSTEER_GEN_REG_IDX(data->regNum, inputIdx);
     bitOffset = inputIdx % (uint32_t)IRQSTEER_INT_SRC_REG_WIDTH;
@@ -278,7 +294,8 @@ static inline bool IRQSTEER_IsInterruptSet(int32_t instIdx, IRQn_Type irq)
     uint32_t inputIdx, bitOffset, regIdx;
 
     assert((irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) >= 0);
-    inputIdx = (uint32_t)(irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX);
+    assert(((uint32_t)(irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX)) >= data->infoPtr->irqStartOff);
+    inputIdx = (uint32_t)(irq - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) - data->infoPtr->irqStartOff;
 
     regIdx = IRQSTEER_GEN_REG_IDX(data->regNum, inputIdx);
     bitOffset = inputIdx % (uint32_t)IRQSTEER_INT_SRC_REG_WIDTH;

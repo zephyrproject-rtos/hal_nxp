@@ -189,11 +189,11 @@ status_t SPC_SetActiveModeBandgapModeConfig(SPC_Type *base, spc_bandgap_mode_t m
          * $ref spc_c_ref_1$.
          */
         /* The bandgap mode must be enabled if any regulators' drive strength set as Normal. */
-        if ((base->ACTIVE_CFG & SPC_ACTIVE_CFG_DCDC_VDD_DS_MASK) == /* GCOVR_EXCL_START */
+        if ((base->ACTIVE_CFG & SPC_ACTIVE_CFG_DCDC_VDD_DS_MASK) ==
             SPC_ACTIVE_CFG_DCDC_VDD_DS(kSPC_DCDC_NormalDriveStrength))
         {
             return kStatus_SPC_BandgapModeWrong;
-        } /* GCOVR_EXCL_STOP */
+        }
 
 #if (defined(FSL_FEATURE_SPC_HAS_SYS_LDO) && FSL_FEATURE_SPC_HAS_SYS_LDO)
         /*
@@ -1084,7 +1084,7 @@ status_t SPC_SetLowPowerModeCoreLDORegulatorConfig(SPC_Type *base, const spc_low
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY
     if ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL) /* GCOVR_EXCL_BR_LINE */
 #else
-    if ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
+    if ((base->SC & SPC_SC_BUSY_MASK) != 0UL) /* GCOVR_EXCL_BR_LINE */
 #endif
     {
         /*
@@ -1142,7 +1142,7 @@ status_t SPC_SetLowPowerModeCoreLDORegulatorConfig(SPC_Type *base, const spc_low
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY
     while ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL) /* GCOVR_EXCL_BR_LINE */
 #else
-    while ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
+    while ((base->SC & SPC_SC_BUSY_MASK) != 0UL) /* GCOVR_EXCL_BR_LINE */
 #endif
     {
 #if SPC_BUSY_TIMEOUT
@@ -1194,7 +1194,7 @@ status_t SPC_SetActiveModeSystemLDORegulatorConfig(SPC_Type *base, const spc_act
 #if (defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY)
     if ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL) /* GCOVR_EXCL_BR_LINE */
 #else
-    if ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
+    if ((base->SC & SPC_SC_BUSY_MASK) != 0UL) /* GCOVR_EXCL_BR_LINE */
 #endif
     {
         /*
@@ -1236,9 +1236,9 @@ status_t SPC_SetActiveModeSystemLDORegulatorConfig(SPC_Type *base, const spc_act
          * $ref spc_c_ref_3$.
          */
         /* If select voltage level as Over Drive Voltage, Drive Strength can not be set to low. */
-        if (option->SysLDOVoltage == kSPC_SysLDO_OverDriveVoltage) /* GCOVR_EXCL_LINE */
+        if (option->SysLDOVoltage == kSPC_SysLDO_OverDriveVoltage)
         {
-            return kStatus_SPC_SYSLDOLowDriveStrengthIgnore; /* GCOVR_EXCL_LINE */
+            return kStatus_SPC_SYSLDOLowDriveStrengthIgnore;
         }
     }
 
@@ -1299,7 +1299,7 @@ status_t SPC_SetLowPowerModeSystemLDORegulatorConfig(SPC_Type *base, const spc_l
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY
     if ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL) /* GCOVR_EXCL_BR_LINE */
 #else
-    if ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
+    if ((base->SC & SPC_SC_BUSY_MASK) != 0UL) /* GCOVR_EXCL_BR_LINE */
 #endif
     {
         /*
@@ -1336,7 +1336,7 @@ status_t SPC_SetLowPowerModeSystemLDORegulatorConfig(SPC_Type *base, const spc_l
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY
     while ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL) /* GCOVR_EXCL_LINE */
 #else
-    while ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
+    while ((base->SC & SPC_SC_BUSY_MASK) != 0UL) /* GCOVR_EXCL_BR_LINE */
 #endif
     {
 #if SPC_BUSY_TIMEOUT
@@ -1384,7 +1384,7 @@ status_t SPC_SetActiveModeDCDCRegulatorConfig(SPC_Type *base, const spc_active_m
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY
     if ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL) /* GCOVR_EXCL_BR_LINE */
 #else
-    if ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
+    if ((base->SC & SPC_SC_BUSY_MASK) != 0UL) /* GCOVR_EXCL_BR_LINE */
 #endif
     {
         /*
@@ -1435,6 +1435,224 @@ status_t SPC_SetActiveModeDCDCRegulatorConfig(SPC_Type *base, const spc_active_m
     return kStatus_Success;
 }
 
+#if defined(FSL_FEATURE_SPC_HAS_DCDC_VOUT2P5_SEL) && FSL_FEATURE_SPC_HAS_DCDC_VOUT2P5_SEL
+/*!
+ * brief Enable/disable the DCDC 2.5V output in Active mode.
+ *
+ * note Depending on the SoC the 2.5V output select resides either in the per-mode ACTIVE_CFG
+ * register or in the global DCDC_CFG register; this function writes whichever applies.
+ *
+ * param base SPC peripheral base address.
+ * param enable Select the DCDC 2.5V output in Active mode.
+ *
+ * retval kStatus_Success The 2.5V output selection was applied successfully.
+ * retval kStatus_SPC_Busy The SPC instance is busy to execute any type of power mode transition.
+ * retval kStatus_Timeout Timeout occurs while waiting completion.
+ */
+status_t SPC_EnableActiveModeDCDC2P5VOutput(SPC_Type *base, bool enable)
+{
+#if SPC_BUSY_TIMEOUT
+    uint32_t timeout = SPC_BUSY_TIMEOUT;
+#endif
+
+#if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY
+    if ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
+#else
+    if ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
+#endif
+    {
+        return kStatus_SPC_Busy;
+    }
+
+    /* The DCDC 2.5V output select bit lives in a different register depending on the SoC: in the
+     * per-mode ACTIVE_CFG register on some instances (KW43/MCXW70), and in the global DCDC_CFG
+     * register on others (KW45/KW47/MCXW71/MCXW72). */
+#if defined(FSL_FEATURE_SPC_DCDC_VOUT2P5_SEL_IN_ACTIVE_CFG) && FSL_FEATURE_SPC_DCDC_VOUT2P5_SEL_IN_ACTIVE_CFG
+    if (enable)
+    {
+        base->ACTIVE_CFG |= SPC_ACTIVE_CFG_DCDC_VOUT2P5_SEL_MASK;
+    }
+    else
+    {
+        base->ACTIVE_CFG &= ~SPC_ACTIVE_CFG_DCDC_VOUT2P5_SEL_MASK;
+    }
+#else
+    if (enable)
+    {
+        base->DCDC_CFG |= SPC_DCDC_CFG_VOUT2P5_SEL_MASK;
+    }
+    else
+    {
+        base->DCDC_CFG &= ~SPC_DCDC_CFG_VOUT2P5_SEL_MASK;
+    }
+#endif /* FSL_FEATURE_SPC_DCDC_VOUT2P5_SEL_IN_ACTIVE_CFG */
+
+#if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY
+    while ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
+#else
+    while ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
+#endif
+    {
+#if SPC_BUSY_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
+    }
+
+    return kStatus_Success;
+}
+
+#if (defined(FSL_FEATURE_SPC_DCDC_VOUT2P5_SEL_IN_ACTIVE_CFG) && FSL_FEATURE_SPC_DCDC_VOUT2P5_SEL_IN_ACTIVE_CFG) && \
+    (defined(FSL_FEATURE_SPC_HAS_HP_CFG_REG) && FSL_FEATURE_SPC_HAS_HP_CFG_REG)
+/*!
+ * brief Enable/disable the DCDC 2.5V output in High Power mode.
+ *
+ * param base SPC peripheral base address.
+ * param enable Select the DCDC 2.5V output in High Power mode.
+ *
+ * retval kStatus_Success The 2.5V output selection was applied successfully.
+ * retval kStatus_SPC_Busy The SPC instance is busy to execute any type of power mode transition.
+ * retval kStatus_Timeout Timeout occurs while waiting completion.
+ */
+status_t SPC_EnableHighPowerModeDCDC2P5VOutput(SPC_Type *base, bool enable)
+{
+#if SPC_BUSY_TIMEOUT
+    uint32_t timeout = SPC_BUSY_TIMEOUT;
+#endif
+
+#if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY
+    if ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
+#else
+    if ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
+#endif
+    {
+        return kStatus_SPC_Busy;
+    }
+
+    if (enable)
+    {
+        base->HP_CFG |= SPC_HP_CFG_DCDC_VOUT2P5_SEL_MASK;
+    }
+    else
+    {
+        base->HP_CFG &= ~SPC_HP_CFG_DCDC_VOUT2P5_SEL_MASK;
+    }
+
+#if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY
+    while ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
+#else
+    while ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
+#endif
+    {
+#if SPC_BUSY_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
+    }
+
+    return kStatus_Success;
+}
+#endif /* ..._IN_ACTIVE_CFG && FSL_FEATURE_SPC_HAS_HP_CFG_REG */
+#endif /* FSL_FEATURE_SPC_HAS_DCDC_VOUT2P5_SEL */
+
+#if defined(FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL) && FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL
+/*!
+ * brief Configure DCDC output voltage ramp control.
+ *
+ * param base SPC peripheral base address.
+ * param config Pointer to the ramp control configuration.
+ *
+ * retval kStatus_Success Ramp control configuration applied successfully.
+ * retval kStatus_SPC_Busy The SPC instance is busy to execute any type of power mode transition.
+ * retval kStatus_Timeout Timeout occurs while waiting completion.
+ */
+status_t SPC_SetDCDCRampControlConfig(SPC_Type *base, const spc_dcdc_ramp_config_t *config)
+{
+    assert(config != NULL);
+    assert(config->rampControl <= (uint8_t)(SPC_DCDC_CFG_RAMP_CNTRL_MASK >> SPC_DCDC_CFG_RAMP_CNTRL_SHIFT));
+#if defined(FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL_LP) && FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL_LP
+    assert(config->rampControlLowPower <=
+           (uint8_t)(SPC_DCDC_CFG_RAMP_CNTRL_LP_MASK >> SPC_DCDC_CFG_RAMP_CNTRL_LP_SHIFT));
+#endif
+
+#if SPC_BUSY_TIMEOUT
+    uint32_t timeout = SPC_BUSY_TIMEOUT;
+#endif
+    uint32_t reg;
+
+#if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY
+    if ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
+#else
+    if ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
+#endif
+    {
+        return kStatus_SPC_Busy;
+    }
+
+    /* Program the ramp enable bit first and let it settle before applying the ramp trims,
+     * matching the recommended hardware programming sequence. */
+    reg = base->DCDC_CFG;
+    if (config->enableRampControl)
+    {
+        reg |= SPC_DCDC_CFG_RAMP_CNTRL_EN_MASK;
+    }
+    else
+    {
+        reg &= ~SPC_DCDC_CFG_RAMP_CNTRL_EN_MASK;
+    }
+    base->DCDC_CFG = reg;
+
+#if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY
+    while ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
+#else
+    while ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
+#endif
+    {
+#if SPC_BUSY_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
+    }
+
+    if (config->enableRampControl)
+    {
+        reg = base->DCDC_CFG;
+        reg &= ~(SPC_DCDC_CFG_RAMP_CNTRL_MASK
+#if defined(FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL_LP) && FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL_LP
+                 | SPC_DCDC_CFG_RAMP_CNTRL_LP_MASK
+#endif
+        );
+        reg |= SPC_DCDC_CFG_RAMP_CNTRL(config->rampControl);
+#if defined(FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL_LP) && FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL_LP
+        reg |= SPC_DCDC_CFG_RAMP_CNTRL_LP(config->rampControlLowPower);
+#endif
+        base->DCDC_CFG = reg;
+
+#if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY
+        while ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
+#else
+        while ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
+#endif
+        {
+#if SPC_BUSY_TIMEOUT
+            if ((--timeout) == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
+        }
+    }
+
+    return kStatus_Success;
+}
+#endif /* FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL */
+
 /*!
  * brief Configs DCDC VDD Regulator in Low power modes.
  *
@@ -1466,7 +1684,7 @@ status_t SPC_SetLowPowerModeDCDCRegulatorConfig(SPC_Type *base, const spc_lowpow
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY
     if ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL) /* GCOVR_EXCL_BR_LINE */
 #else
-    if ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
+    if ((base->SC & SPC_SC_BUSY_MASK) != 0UL) /* GCOVR_EXCL_BR_LINE */
 #endif
     {
         /*
@@ -1519,7 +1737,7 @@ status_t SPC_SetLowPowerModeDCDCRegulatorConfig(SPC_Type *base, const spc_lowpow
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY
     while ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL) /* GCOVR_EXCL_BR_LINE */
 #else
-    while ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
+    while ((base->SC & SPC_SC_BUSY_MASK) != 0UL) /* GCOVR_EXCL_BR_LINE */
 #endif
     {
 #if SPC_BUSY_TIMEOUT

@@ -278,7 +278,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Defines the driver version. */
-#define FSL_ENET_QOS_DRIVER_VERSION (MAKE_VERSION(2, 7, 4))
+#define FSL_ENET_QOS_DRIVER_VERSION (MAKE_VERSION(2, 7, 6))
 /*! @} */
 
 /*! @name Control and status region bit masks of the receive buffer descriptor. */
@@ -1911,6 +1911,16 @@ void ENET_QOS_ReclaimTxDescriptor(ENET_QOS_Type *base, enet_qos_handle_t *handle
  * @param handle The ENET handler pointer.
  */
 void ENET_QOS_CommonIRQHandler(ENET_QOS_Type *base, enet_qos_handle_t *handle);
+
+/*!
+ * @brief Parameterized common IRQ handler.
+ *
+ * Services the given ENET_QOS instance, so a single entry can back that instance's interrupt vector.
+ * Named ENET_QOS_CommonDriverIRQHandler because ENET_QOS_DriverIRQHandler is already used.
+ *
+ * @param instance  ENET_QOS peripheral instance number.
+ */
+void ENET_QOS_CommonDriverIRQHandler(uint32_t instance);
 
 /*!
  * @brief Set the second level IRQ handler, allow user to overwrite the default

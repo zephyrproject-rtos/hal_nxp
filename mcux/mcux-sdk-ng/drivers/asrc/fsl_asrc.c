@@ -12,6 +12,12 @@
 #define FSL_COMPONENT_ID "platform.drivers.asrc"
 #endif
 
+#if defined(ASRC_RSTS)
+#define ASRC_RESETS_ARRAY ASRC_RSTS
+#elif defined(ASRC_RSTS_N)
+#define ASRC_RESETS_ARRAY ASRC_RSTS_N
+#endif
+
 /*******************************************************************************
  * Definitations
  ******************************************************************************/
@@ -86,6 +92,12 @@ static const IRQn_Type s_asrcIRQ[] = ASRC_IRQS;
 /* Clock name array */
 static const clock_ip_name_t s_asrcClock[] = ASRC_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(ASRC_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_asrcResets[] = ASRC_RESETS_ARRAY;
+#endif
+
 /*! @brief Pointer to IRQ handler for each instance. */
 static asrc_isr_t s_asrcIsr;
 /*******************************************************************************
@@ -98,7 +110,7 @@ uint32_t ASRC_GetInstance(ASRC_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_asrcBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_asrcBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_asrcBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -365,10 +377,19 @@ status_t ASRC_SetIdealRatioConfig(ASRC_Type *base,
  */
 void ASRC_Init(ASRC_Type *base, uint32_t asrcPeripheralClock_Hz)
 {
+#if (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)) \
+    || defined(ASRC_RESETS_ARRAY)
+    uint32_t instance = ASRC_GetInstance(base);
+#endif
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the asrc clock */
-    CLOCK_EnableClock(s_asrcClock[ASRC_GetInstance(base)]);
+    CLOCK_EnableClock(s_asrcClock[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(ASRC_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_asrcResets[instance]);
+#endif
 
     /* disable ASRC channel pair, enable ASRC */
     base->ASRCTR = 1U;

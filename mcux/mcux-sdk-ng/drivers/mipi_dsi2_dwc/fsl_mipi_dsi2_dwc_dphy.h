@@ -118,6 +118,19 @@ void DSI_DphyTxDynamicSetting(DISPLAY_MIPI_DSI_PHY_Type *base,
                               uint32_t hs_clk_freq,
                               uint32_t lp_clk_freq);
 
+/*!
+ * @brief Dynamic setting of Dphy transfer.
+ *
+ * @param base MIPI DSI dphy peripheral base address
+ * @param hs_clk_freq high speed clock frequency
+ * @param lp_clk_freq low power clock frequency
+ * @param mult timing multiplier factor
+ */
+void DSI_DphyTxDynamicSettingWithMult(DISPLAY_MIPI_DSI_PHY_Type *base,
+                                      uint32_t hs_clk_freq,
+                                      uint32_t lp_clk_freq,
+                                      double mult);
+
 #if defined(__cplusplus)
 }
 #endif

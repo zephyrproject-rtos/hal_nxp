@@ -522,8 +522,16 @@ status_t TRDC_GetAndClearFirstSpecificDomainError(TRDC_Type *base, trdc_domain_e
         else
         {
             /* Error in Memory Block Controller (MBC) */
+#if defined(FSL_FEATURE_TRDC_DERRLOC_MBCINST_FLAT_ENCODING) && FSL_FEATURE_TRDC_DERRLOC_MBCINST_FLAT_ENCODING
+            /* Devices with flat MBCINST encoding (e.g. KW43 and MCXW70) uses a flat one-bit-per-MBC-instance encoding:
+             * bit N simply indicates that MBC[N] captured a violation. There is no per-slave information encoded
+             * in DERRLOC at all on these devices. */
+            error->slaveMemoryIdx = 0U;
+#else
+            /* Standard encoding: 4 bits per MBC instance, one bit per slave memory. */
             error->slaveMemoryIdx = errorIndex % 4U;
             errorIndex /= 4U;
+#endif
             error->controller = (trdc_controller_t)errorIndex;
 
             /* Check if the MBC error index exceeds the module's max MBC index to avoid overrun access. */

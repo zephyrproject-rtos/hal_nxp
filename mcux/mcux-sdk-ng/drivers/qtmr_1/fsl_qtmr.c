@@ -12,6 +12,12 @@
 #define FSL_COMPONENT_ID "platform.drivers.qtmr"
 #endif
 
+#if defined(QTMR_RSTS)
+#define QTMR_RESETS_ARRAY QTMR_RSTS
+#elif defined(QTMR_RSTS_N)
+#define QTMR_RESETS_ARRAY QTMR_RSTS_N
+#endif
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -35,6 +41,11 @@ static TMR_Type *const s_qtmrBases[] = TMR_BASE_PTRS;
 static const clock_ip_name_t s_qtmrClocks[] = TMR_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+#if defined(QTMR_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_qtmrResets[] = QTMR_RESETS_ARRAY;
+#endif
+
 static uint8_t s_qtmrGetPwmDutyCycle[FSL_FEATURE_SOC_TMR_COUNT] = {0U};
 
 /*******************************************************************************
@@ -47,7 +58,7 @@ static uint32_t QTMR_GetInstance(TMR_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_qtmrBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_qtmrBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_qtmrBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -71,10 +82,19 @@ void QTMR_Init(TMR_Type *base, qtmr_channel_selection_t channel, const qtmr_conf
 {
     assert(NULL != config);
 
+#if (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)) \
+    || defined(QTMR_RESETS_ARRAY)
+    uint32_t instance = QTMR_GetInstance(base);
+#endif
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the module clock */
-    CLOCK_EnableClock(s_qtmrClocks[QTMR_GetInstance(base)]);
+    CLOCK_EnableClock(s_qtmrClocks[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(QTMR_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_qtmrResets[instance]);
+#endif
 
     /* Setup the counter sources */
     base->CHANNEL[channel].CTRL = (TMR_CTRL_PCS(config->primarySource) | TMR_CTRL_SCS(config->secondarySource));

@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Defines the driver version. */
-#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 11, 3))
+#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 11, 4))
 /*! @} */
 
 /*! @name ENET DESCRIPTOR QUEUE */
@@ -1757,6 +1757,26 @@ void ENET_Ptp1588IRQHandler(ENET_Type *base);
  * @param base  ENET peripheral base address.
  */
 void ENET_CommonFrame0IRQHandler(ENET_Type *base);
+
+/*!
+ * @brief Parameterized frame-0 (tx/rx/error) common IRQ handler.
+ *
+ * Takes the instance directly to avoid the ENET_GetInstance() lookup in the ISR path. Each SoC binds
+ * this from the interrupt lines that carry its frame-0 tx/rx/error events.
+ *
+ * @param instance  ENET peripheral instance number.
+ */
+void ENET_CommonFrame0DriverIRQHandler(uint32_t instance);
+
+/*!
+ * @brief Parameterized 1588 timer common IRQ handler.
+ *
+ * Takes the instance directly to avoid the ENET_GetInstance() lookup in the ISR path. Each SoC binds
+ * this from the interrupt line that carries its 1588 timer event.
+ *
+ * @param instance  ENET peripheral instance number.
+ */
+void ENET_Ptp1588DriverIRQHandler(uint32_t instance);
 /*! @} */
 
 #ifdef ENET_ENHANCEDBUFFERDESCRIPTOR_MODE

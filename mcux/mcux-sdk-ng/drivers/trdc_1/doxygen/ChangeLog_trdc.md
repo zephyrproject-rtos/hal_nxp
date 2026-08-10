@@ -1,5 +1,10 @@
 # TRDC
 
+## [2.2.3]
+
+- Improvements
+  - Fix DERRLOC MBCINST decode for flat-encoding devices
+
 ## [2.2.2]
 
 - Improvements

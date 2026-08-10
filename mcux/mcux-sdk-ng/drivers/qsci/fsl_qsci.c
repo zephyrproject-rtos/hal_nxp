@@ -1110,7 +1110,7 @@ uint16_t QSCI_GetInstance(QSCI_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < qsciArrayCount; instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_pfQsciBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_pfQsciBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

@@ -36,6 +36,13 @@
  * (flags & (uint32_t)kSFA_RefStoppedFlag) == 0U) not covered. Test unfeasible,
  * the reference counter stopped flag state is too short not to catch.
  *
+ * $Justification sfa_c_ref_8$
+ * ((flags & (uint32_t)kSFA_ReferenceCounterTimeOutFlag) != 0U) in period/trigger mode not
+ * covered. Test unfeasible: with the CUT clock sources routed on the board the period/trigger
+ * measurement always completes within the reference target (reference-stopped path), and a
+ * configuration that forces the reference counter to expire does not deliver a latched
+ * reference-counter-timeout status to the interrupt handler. Same rationale as $ref sfa_c_ref_7$.
+ *
  */
 
 /* Component ID definition, used by tools. */
@@ -179,7 +186,7 @@ static uint8_t SFA_GetInstance(SFA_Type *base)
          * (s_sfaBases[instance] != base) not covered.
          * $ref sfa_c_ref_1$.
          */
-        if (MSDK_REG_SECURE_ADDR(s_sfaBases[instance]) == MSDK_REG_SECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
+        if (MSDK_REG_NONSECURE_ADDR(s_sfaBases[instance]) == MSDK_REG_NONSECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
         {
             break;
         }
@@ -204,13 +211,13 @@ static status_t SFA_StartMeasureFrequency(SFA_Type *base)
      * (1U != FSL_FEATURE_SFA_INSTANCE_HAS_TRIGGERn(base) not covered.
      * $ref sfa_c_ref_2$.
      */
-    if (1 == FSL_FEATURE_SFA_INSTANCE_HAS_TRIGGERn(base))
+    if (1 == FSL_FEATURE_SFA_INSTANCE_HAS_TRIGGERn(base)) /* GCOVR_EXCL_BR_LINE */
     {
         /*
          * $Line Coverage Justification$
          * $ref sfa_c_ref_2$.
          */
-        triggerable = ((base->CTRL & SFA_CTRL_SFA_TRIG_MEAS_EN_MASK) != 0U);
+        triggerable = ((base->CTRL & SFA_CTRL_SFA_TRIG_MEAS_EN_MASK) != 0U); /* GCOVR_EXCL_LINE */
     }
 #endif
 
@@ -624,7 +631,7 @@ void SFA_SetMeasureConfig(SFA_Type *base, const sfa_config_t *config)
          * (1 != FSL_FEATURE_SFA_CTRL_HAS_CUT_PIN_ENn(base)) not covered.
          * $ref sfa_c_ref_3$.
          */
-        if (1 == FSL_FEATURE_SFA_CTRL_HAS_CUT_PIN_ENn(base))
+        if (1 == FSL_FEATURE_SFA_CTRL_HAS_CUT_PIN_ENn(base)) /* GCOVR_EXCL_BR_LINE */
         {
             base->CTRL |= SFA_CTRL_CUT_PIN_EN_MASK;
         }
@@ -639,7 +646,7 @@ void SFA_SetMeasureConfig(SFA_Type *base, const sfa_config_t *config)
          * (1 != FSL_FEATURE_SFA_CTRL_HAS_CUT_PIN_ENn(base)) not covered.
          * $ref sfa_c_ref_3$.
          */
-        if (1 == FSL_FEATURE_SFA_CTRL_HAS_CUT_PIN_ENn(base))
+        if (1 == FSL_FEATURE_SFA_CTRL_HAS_CUT_PIN_ENn(base)) /* GCOVR_EXCL_BR_LINE */
         {
             base->CTRL &= ~SFA_CTRL_CUT_PIN_EN_MASK;
         }
@@ -661,13 +668,13 @@ void SFA_SetMeasureConfig(SFA_Type *base, const sfa_config_t *config)
              * (1U != FSL_FEATURE_SFA_INSTANCE_HAS_TRIGGERn(base) not covered.
              * $ref sfa_c_ref_2$.
              */
-            if (1 == FSL_FEATURE_SFA_INSTANCE_HAS_TRIGGERn(base))
+            if (1 == FSL_FEATURE_SFA_INSTANCE_HAS_TRIGGERn(base)) /* GCOVR_EXCL_BR_LINE */
             {
                 /*
                  * $Line Coverage Justification$
                  * $ref sfa_c_ref_2$.
                  */
-                if (config->enableTrigMeasurement) /* GCOVR_EXCL_BR_LINE */
+                if (config->enableTrigMeasurement) /* GCOVR_EXCL_START */
                 {
                     base->CTRL |= SFA_CTRL_SFA_TRIG_MEAS_EN_MASK; /* GCOVR_EXCL_START */
                     base->CTRL |=
@@ -676,7 +683,7 @@ void SFA_SetMeasureConfig(SFA_Type *base, const sfa_config_t *config)
                 else
                 {
                     base->CTRL &= ~SFA_CTRL_SFA_TRIG_MEAS_EN_MASK;
-                }
+                } /* GCOVR_EXCL_STOP */
             }
 #endif
             base->CTRL |= SFA_CTRL_SFA_EN_MASK;
@@ -960,9 +967,17 @@ static void SFA_CommonIRQHandler(SFA_Type *base)
                 {
                     status = kStatus_SFA_MeasurementCompleted;
                 }
-                if ((flags & (uint32_t)kSFA_ReferenceCounterTimeOutFlag) != 0U)
+                /*
+                 * $Branch Coverage Justification$
+                 * $ref sfa_c_ref_8$.
+                 */
+                if ((flags & (uint32_t)kSFA_ReferenceCounterTimeOutFlag) != 0U) /* GCOVR_EXCL_BR_LINE */
                 {
-                    status = kStatus_SFA_ReferenceCounterTimeout;
+                    /*
+                     * $Line Coverage Justification$
+                     * $ref sfa_c_ref_8$.
+                     */
+                    status = kStatus_SFA_ReferenceCounterTimeout; /* GCOVR_EXCL_LINE */
                 }
                 break;
             }

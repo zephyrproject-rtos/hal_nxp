@@ -16,6 +16,12 @@
 #define FSL_COMPONENT_ID "platform.drivers.sinc"
 #endif
 
+#if defined(SINC_RSTS)
+#define SINC_RESETS_ARRAY SINC_RSTS
+#elif defined(SINC_RSTS_N)
+#define SINC_RESETS_ARRAY SINC_RSTS_N
+#endif
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -35,6 +41,11 @@ static SINC_Type *const s_sincBases[] = SINC_BASE_PTRS;
 
 #endif /*FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL*/
 
+#if defined(SINC_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_sincResets[] = SINC_RESETS_ARRAY;
+#endif
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -47,7 +58,7 @@ static uint8_t SINC_GetInstance(SINC_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0U; instance < ARRAY_SIZE(s_sincBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_sincBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_sincBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -71,9 +82,18 @@ void SINC_Init(SINC_Type *base, const sinc_config_t *config)
     uint8_t i = 0U;
 
     /* Enable SINC clock root. */
+#if (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)) \
+    || defined(SINC_RESETS_ARRAY)
+    uint8_t instance = SINC_GetInstance(base);
+#endif
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    CLOCK_EnableClock(s_sincClocks[SINC_GetInstance(base)]);
+    CLOCK_EnableClock(s_sincClocks[instance]);
 #endif /*FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL*/
+
+#if defined(SINC_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_sincResets[instance]);
+#endif
 
     SINC_EnableMaster(base, false);
     /* Reset all function blocks except for the clock. */

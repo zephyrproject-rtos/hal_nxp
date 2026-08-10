@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -74,7 +74,7 @@ static uint32_t DCIF_GetInstance(DCIF_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_dcifBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_dcifBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_dcifBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -166,6 +166,9 @@ void DCIF_Reset(DCIF_Type *base)
 
     /* Clear sw reset. */
     base->DISP_CTRL &= ~DCIF_DISP_CTRL_SW_RST_MASK;
+
+    /* Release the AXI read hold. */
+    base->DISP_CTRL &= ~DCIF_DISP_CTRL_AXI_RD_HOLD_MASK;
 }
 
 /*!
@@ -178,17 +181,18 @@ void DCIF_Reset(DCIF_Type *base)
  * param width The width of the layer.
  * param height The height of the layer.
  */
-void DCIF_SetLayerPosition(DCIF_Type *base, uint8_t layer, uint16_t topLeftX, uint16_t topLeftY, uint16_t width, uint16_t height)
+void DCIF_SetLayerPosition(DCIF_Type *base, uint8_t layer, int32_t topLeftX, int32_t topLeftY,
+                            uint16_t width, uint16_t height)
 {
     assert(layer < DCIF_L_COUNT);
     assert(width <= 0xFFFU);
     assert(height <= 0xFFFU);
 
-    /* Set the layer position. */
-    base->L[layer].CTRLDESC_L[1] = DCIF_CTRLDESC_L_POSY_SIGN((topLeftY > 0) ? 0U : 1U) |
-                                DCIF_CTRLDESC_L_POSY((topLeftY > 0) ? (uint16_t)topLeftY : (uint16_t)(-topLeftY)) |
-                                DCIF_CTRLDESC_L_POSX_SIGN((topLeftX > 0) ? 0U : 1U) |
-                                DCIF_CTRLDESC_L_POSX((topLeftX > 0) ? (uint16_t)topLeftX : (uint16_t)(-topLeftX));
+    /* Set the layer position. Negative coordinates are encoded via the POSX/POSY sign bits. */
+    base->L[layer].CTRLDESC_L[1] = DCIF_CTRLDESC_L_POSY_SIGN((topLeftY < 0) ? 1U : 0U) |
+                DCIF_CTRLDESC_L_POSY((topLeftY < 0) ? (uint16_t)(-topLeftY) : (uint16_t)topLeftY) |
+                DCIF_CTRLDESC_L_POSX_SIGN((topLeftX < 0) ? 1U : 0U) |
+                DCIF_CTRLDESC_L_POSX((topLeftX < 0) ? (uint16_t)(-topLeftX) : (uint16_t)topLeftX);
 
     base->L[layer].CTRLDESC_L[2] = DCIF_CTRLDESC_L_WIDTH(width) |
                                     DCIF_CTRLDESC_L_HEIGHT(height);
@@ -362,10 +366,14 @@ void DCIF_SetGammaData(DCIF_Type *base, uint32_t mask, uint8_t startIndex, const
 {
     assert((startIndex + gammaLen) <= FSL_FEATURE_DCIF_GAMMA_INDEX_MAX);
 
-    base->GC_CTRL = (base->GC_CTRL & ~0xE0000000) | mask;
-    for (uint8_t i = startIndex; i < (startIndex + gammaLen - 1U); i++)
+    /* GC_CTRL[GC_R/G/B_MASK] use inverted polarity: 1 blocks APB writes to that
+     * color table, 0 allows them. The caller passes the tables it wants to
+     * access, so mask all three first, then unmask (clear) the requested ones
+     * before writing, otherwise the gamma RAM writes are silently dropped. */
+    base->GC_CTRL = (base->GC_CTRL | 0xE0000000U) & ~mask;
+    for (uint16_t i = 0U; i < gammaLen; i++)
     {
-        (DCIF_GAMMA_MEM(base))[i] = gamma[i];
+        (DCIF_GAMMA_MEM(base))[startIndex + i] = gamma[i];
     }
 }
 
@@ -422,9 +430,9 @@ void DCIF_ClutSetData(DCIF_Type *base, uint8_t startIndex, const uint32_t *clut,
 {
     assert((startIndex + clutLen) <= FSL_FEATURE_DCIF_CLUT_INDEX_MAX);
 
-    for (uint8_t i = startIndex; i < (startIndex + clutLen - 1U); i++)
+    for (uint8_t i = 0U; i < clutLen; i++)
     {
-        (DCIF_LUT_MEM(base))[i] = clut[i];
+        (DCIF_LUT_MEM(base))[startIndex + i] = clut[i];
     }
 }
 
@@ -835,10 +843,13 @@ void DCIF_DbiSetConfig(DCIF_Type *base, const dcif_dbi_config_t *config)
     assert(config->csSetup <= (DCIF_DBI_PAR1_CES_MASK >> DCIF_DBI_PAR1_CES_SHIFT));
     assert(config->csHold <= (DCIF_DBI_PAR1_CEH_MASK >> DCIF_DBI_PAR1_CEH_SHIFT));
 
-    /* Get the bus width from the output format, used for later read/write. */
-    if (((uint8_t)config->format <= (uint8_t)kDCIF_DbiOutD8RGB888) &&
-        (((uint8_t)config->format % 2U) == 0U) &&
-        (config->format != kDCIF_DbiOutD16RGB666Option1))
+    /* Get the bus width from the output format, used for later read/write.
+     * The format enum holds the pre-shifted DBI_DATA_PATTERN field, so extract the
+     * raw pattern index first. Patterns 0/2/4/6/10 are 8-bit interfaces, pattern 7
+     * is 9-bit and pattern 8 is 16-bit. */
+    uint32_t pattern = ((uint32_t)config->format & DCIF_DBI_CTRL_DBI_DATA_PATTERN_MASK) >>
+                       DCIF_DBI_CTRL_DBI_DATA_PATTERN_SHIFT;
+    if ((pattern <= 10U) && ((pattern % 2U) == 0U) && (pattern != 8U))
     {
         s_dbiWidth8bit[DCIF_GetInstance(base)] = true;
     }
@@ -848,10 +859,10 @@ void DCIF_DbiSetConfig(DCIF_Type *base, const dcif_dbi_config_t *config)
     }
 
     base->DBI_CTRL = DCIF_DBI_CTRL_DBI_TYPE((uint32_t)config->type) |
-        DCIF_DBI_CTRL_DBI_DATA_PATTERN((uint32_t)config->format) | (uint32_t)config->signalFlags;
-    base->DBI_PAR0 = DCIF_DBI_PAR0_WEL(config->wrLow) | DCIF_DBI_PAR0_WEH(config->wrHigh) |
-        DCIF_DBI_PAR0_REL(config->rdLow) | DCIF_DBI_PAR0_REH(config->rdHigh);
-    base->DBI_PAR1 = DCIF_DBI_PAR1_CES(config->csSetup) | DCIF_DBI_PAR1_CEH(config->csHold);
+        (uint32_t)config->format | (uint32_t)config->signalFlags;
+    base->DBI_PAR0 = DCIF_DBI_PAR0_WEL(config->wrLow - 1U) | DCIF_DBI_PAR0_WEH(config->wrHigh - 1U) |
+        DCIF_DBI_PAR0_REL(config->rdLow - 1U) | DCIF_DBI_PAR0_REH(config->rdHigh - 1U);
+    base->DBI_PAR1 = DCIF_DBI_PAR1_CES(config->csSetup - 1U) | DCIF_DBI_PAR1_CEH(config->csHold - 1U);
 }
 
 /*!
@@ -867,6 +878,11 @@ void DCIF_DbiWriteCommand(DCIF_Type *base, uint8_t cmd)
     base->DBI_CTRL = regVal | DCIF_DBI_CTRL_DBI_CMD_TYPE(kDCIF_DbiCmdWriteCommand) | DCIF_DBI_CTRL_DBI_WDATA(cmd);
 
     base->DBI_CTRL |= DCIF_DBI_CTRL_DBI_CMD_TRIG_MASK;
+
+    /* Wait for the command to finish before returning. */
+    while ((base->DBI_CTRL & DCIF_DBI_CTRL_DBI_CMD_TRIG_MASK) != 0U)
+    {
+    }
 }
 
 /*!
@@ -882,37 +898,46 @@ void DCIF_DbiWriteParam(DCIF_Type *base, const uint8_t *data, uint32_t dataLen_B
     assert(data != NULL);
     assert(dataLen_Byte > 0);
 
-    uint16_t lastWord;
+    uint16_t word;
     uint32_t regVal = (base->DBI_CTRL & ~(DCIF_DBI_CTRL_DBI_CMD_TYPE_MASK | DCIF_DBI_CTRL_DBI_WDATA_MASK |
         DCIF_DBI_CTRL_DBI_CMD_TRIG_MASK)) | DCIF_DBI_CTRL_DBI_CMD_TYPE(kDCIF_DbiCmdWriteParam);
 
+    /* Each parameter is a distinct DBI command: load DBI_WDATA, set DBI_CMD_TRIG,
+     * then wait for the hardware to clear DBI_CMD_TRIG before issuing the next.
+     * Loading DBI_WDATA without a trigger sends nothing, and a trigger raised
+     * while a command is still in flight is ignored. One transfer carries one
+     * bus-width unit: a byte on an 8-bit interface, a 16-bit word on a 16-bit interface.
+     */
     if (s_dbiWidth8bit[DCIF_GetInstance(base)])
     {
-        while (dataLen_Byte > 1U)
+        while (dataLen_Byte > 0U)
         {
-            /* Send data. Save the last data to write with command type and trigger. */
-            base->DBI_CTRL = regVal | DCIF_DBI_CTRL_DBI_WDATA(*data);
+            word = (uint16_t)(*data);
             data++;
             dataLen_Byte--;
+
+            base->DBI_CTRL = regVal | DCIF_DBI_CTRL_DBI_WDATA(word) | DCIF_DBI_CTRL_DBI_CMD_TRIG_MASK;
+            while ((base->DBI_CTRL & DCIF_DBI_CTRL_DBI_CMD_TRIG_MASK) != 0U)
+            {
+            }
         }
-        lastWord = *data;
     }
     else
     {
         assert((dataLen_Byte % 2U) == 0U);
-        dataLen_Byte /= 2U;
 
-        /* Send data. Save the last data to write with command type and trigger. */
         while (dataLen_Byte > 1U)
         {
-            base->DBI_CTRL = regVal | DCIF_DBI_CTRL_DBI_WDATA((uint16_t)data[0] | (uint16_t)data[1] << 8U);
+            word = (uint16_t)data[0] | (uint16_t)data[1] << 8U;
             data = &data[2];
-        }
-        lastWord = (uint16_t)data[0] | (uint16_t)data[1] << 8U;
-    }
+            dataLen_Byte -= 2U;
 
-    /* TODO Need to check whether the triger needs to be writen seperately. */
-    base->DBI_CTRL = regVal | DCIF_DBI_CTRL_DBI_WDATA(lastWord) | DCIF_DBI_CTRL_DBI_CMD_TRIG_MASK;
+            base->DBI_CTRL = regVal | DCIF_DBI_CTRL_DBI_WDATA(word) | DCIF_DBI_CTRL_DBI_CMD_TRIG_MASK;
+            while ((base->DBI_CTRL & DCIF_DBI_CTRL_DBI_CMD_TRIG_MASK) != 0U)
+            {
+            }
+        }
+    }
 }
 
 /*!

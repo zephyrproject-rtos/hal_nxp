@@ -1,5 +1,10 @@
 # I3C
 
+## [2.14.7]
+
+- Bug Fixes
+  - Fixed I3C master interrupt transfer not stopping the bus on errors other than Nak/IBIWon.
+
 ## [2.14.6]
 
 - New Features

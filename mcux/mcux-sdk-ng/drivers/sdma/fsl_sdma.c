@@ -73,7 +73,7 @@ static uint32_t SDMA_GetInstance(SDMAARM_Type *base);
 static void SDMA_RunChannel0(SDMAARM_Type *base);
 
 /*!
- * @brief Load the SDMA contex from ARM memory into SDMA RAM region.
+ * @brief Load the SDMA context from ARM memory into SDMA RAM region.
  *
  * @param base SDMA peripheral base address.
  * @param channel SDMA channel number.
@@ -93,18 +93,30 @@ static const clock_ip_name_t s_sdmaClockName[] = SDMA_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*! @brief Array to map SDMA instance number to IRQ number. */
-static const IRQn_Type s_sdmaIRQNumber[FSL_FEATURE_SOC_SDMA_COUNT] = SDMAARM_IRQS;
+static const IRQn_Type s_sdmaIRQNumber[] = SDMAARM_IRQS;
+
+/*
+ * The instance number returned by SDMA_GetInstance() is an index into
+ * s_sdmaBases (i.e. SDMAARM_BASE_PTRS). On some SoCs the device header
+ * declares those base-pointer / clock / IRQ arrays as 1-indexed, inserting
+ * a reserved dummy entry at index 0 so that SDMAARMn maps to index n. The
+ * per-instance state arrays below must therefore be sized to match the base
+ * array (ARRAY_SIZE(s_sdmaBases)) rather than FSL_FEATURE_SOC_SDMA_COUNT;
+ * otherwise the highest instance index would overflow these arrays and
+ * corrupt the channel control blocks / buffer descriptors.
+ */
+#define SDMA_INSTANCE_COUNT (ARRAY_SIZE(s_sdmaBases))
 
 /*! @brief Pointers to transfer handle for each SDMA channel. */
-static sdma_handle_t *s_SDMAHandle[FSL_FEATURE_SOC_SDMA_COUNT][FSL_FEATURE_SDMA_MODULE_CHANNEL];
+static sdma_handle_t *s_SDMAHandle[SDMA_INSTANCE_COUNT][FSL_FEATURE_SDMA_MODULE_CHANNEL];
 
-/*! @brief channel 0 Channel control blcok */
+/*! @brief channel 0 Channel control block */
 AT_NONCACHEABLE_SECTION_ALIGN(
-    static sdma_channel_control_t s_SDMACCB[FSL_FEATURE_SOC_SDMA_COUNT][FSL_FEATURE_SDMA_MODULE_CHANNEL], 4);
+    static sdma_channel_control_t s_SDMACCB[SDMA_INSTANCE_COUNT][FSL_FEATURE_SDMA_MODULE_CHANNEL], 4);
 
 /*! @brief channel 0 buffer descriptor */
 AT_NONCACHEABLE_SECTION_ALIGN(
-    static sdma_buffer_descriptor_t s_SDMABD[FSL_FEATURE_SOC_SDMA_COUNT][FSL_FEATURE_SDMA_MODULE_CHANNEL], 4);
+    static sdma_buffer_descriptor_t s_SDMABD[SDMA_INSTANCE_COUNT][FSL_FEATURE_SDMA_MODULE_CHANNEL], 4);
 
 #if SDMA_DRIVER_LOAD_RAM_SCRIPT
 /*! @sdma driver ram script*/
@@ -123,7 +135,7 @@ static uint32_t SDMA_GetInstance(SDMAARM_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_sdmaBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_sdmaBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_sdmaBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -339,7 +351,7 @@ bool SDMA_IsPeripheralInSPBA(uint32_t addr)
     uint32_t spbaNum = FSL_FEATURE_SOC_SPBA_COUNT;
     uint32_t i       = 0;
     SPBA_Type *spbaBase;
-    SPBA_Type *spbaArray[FSL_FEATURE_SOC_SPBA_COUNT] = SPBA_BASE_PTRS;
+    SPBA_Type *spbaArray[] = SPBA_BASE_PTRS;
 
     for (i = 0; i < spbaNum; i++)
     {
@@ -566,8 +578,9 @@ void SDMA_CreateHandle(sdma_handle_t *handle, SDMAARM_Type *base, uint32_t chann
     handle->channel = (uint8_t)channel;
     handle->bdCount = 1U;
     handle->context = context;
-    /* Get the DMA instance number */
+    /* Get the DMA instance number and cache it in the handle for later use */
     sdmaInstance                        = SDMA_GetInstance(base);
+    handle->instance                    = (uint8_t)sdmaInstance;
     s_SDMAHandle[sdmaInstance][channel] = handle;
 
 /* Set channel CCB, default is the static buffer descriptor if not use EDMA_InstallBDMemory */
@@ -1028,16 +1041,20 @@ void SDMA_HandleIRQ(sdma_handle_t *handle)
 {
     assert(handle != NULL);
 
+    /* Use the instance index cached during SDMA_CreateHandle() to avoid a
+     * redundant linear search in ISR context. */
+    uint32_t instance = handle->instance;
+
     /* Set the current BD address to the CCB */
     if (handle->BDPool != NULL)
     {
         /* Set the DONE bits */
-        handle->bdIndex                             = (handle->bdIndex + 1U) % handle->bdCount;
-        s_SDMACCB[0][handle->channel].currentBDAddr = (uint32_t)(&handle->BDPool[handle->bdIndex]);
+        handle->bdIndex                                    = (handle->bdIndex + 1U) % handle->bdCount;
+        s_SDMACCB[instance][handle->channel].currentBDAddr = (uint32_t)(&handle->BDPool[handle->bdIndex]);
     }
     else
     {
-        s_SDMACCB[0][handle->channel].currentBDAddr = s_SDMACCB[0][handle->channel].baseBDAddr;
+        s_SDMACCB[instance][handle->channel].currentBDAddr = s_SDMACCB[instance][handle->channel].baseBDAddr;
     }
 
     if (handle->callback != NULL)
@@ -1050,6 +1067,9 @@ void SDMA_DriverIRQHandler(void);
 void SDMA_DriverIRQHandler(void)
 {
     uint32_t i = 1U, val;
+    /* Derive the instance index from the base pointer so the handler stays
+     * correct whether SDMAARM_BASE_PTRS is 0-indexed or 1-indexed. */
+    uint32_t instance = SDMA_GetInstance(SDMAARM);
 
     /* Clear channel 0 */
     SDMA_ClearChannelInterruptStatus(SDMAARM, 1U);
@@ -1057,10 +1077,10 @@ void SDMA_DriverIRQHandler(void)
     val = (SDMAARM->INTR) >> 1U;
     while ((val != 0UL) && (i < FSL_FEATURE_SDMA_MODULE_CHANNEL))
     {
-        if ((val & 0x1UL) != 0UL)
+        if (((val & 0x1UL) != 0UL) && (s_SDMAHandle[instance][i] != NULL))
         {
-            SDMA_ClearChannelInterruptStatus(s_SDMAHandle[0][i]->base, 1UL << i);
-            SDMA_HandleIRQ(s_SDMAHandle[0][i]);
+            SDMA_ClearChannelInterruptStatus(s_SDMAHandle[instance][i]->base, 1UL << i);
+            SDMA_HandleIRQ(s_SDMAHandle[instance][i]);
         }
         i++;
         val >>= 1U;
@@ -1072,6 +1092,9 @@ void SDMA1_DriverIRQHandler(void);
 void SDMA1_DriverIRQHandler(void)
 {
     uint32_t i = 1U, val;
+    /* Derive the instance index from the base pointer so the handler stays
+     * correct whether SDMAARM_BASE_PTRS is 0-indexed or 1-indexed. */
+    uint32_t instance = SDMA_GetInstance(SDMAARM1);
 
     /* Clear channel 0 */
     SDMA_ClearChannelInterruptStatus(SDMAARM1, 1U);
@@ -1079,10 +1102,10 @@ void SDMA1_DriverIRQHandler(void)
     val = (SDMAARM1->INTR) >> 1U;
     while ((val != 0UL) && (i < FSL_FEATURE_SDMA_MODULE_CHANNEL))
     {
-        if ((val & 0x1UL) != 0UL)
+        if (((val & 0x1UL) != 0UL) && (s_SDMAHandle[instance][i] != NULL))
         {
-            SDMA_ClearChannelInterruptStatus(s_SDMAHandle[0][i]->base, 1UL << i);
-            SDMA_HandleIRQ(s_SDMAHandle[0][i]);
+            SDMA_ClearChannelInterruptStatus(s_SDMAHandle[instance][i]->base, 1UL << i);
+            SDMA_HandleIRQ(s_SDMAHandle[instance][i]);
         }
         i++;
         val >>= 1U;
@@ -1094,6 +1117,9 @@ void SDMA2_DriverIRQHandler(void);
 void SDMA2_DriverIRQHandler(void)
 {
     uint32_t i = 1U, val;
+    /* Derive the instance index from the base pointer so the handler stays
+     * correct whether SDMAARM_BASE_PTRS is 0-indexed or 1-indexed. */
+    uint32_t instance = SDMA_GetInstance(SDMAARM2);
 
     /* Clear channel 0 */
     SDMA_ClearChannelInterruptStatus(SDMAARM2, 1U);
@@ -1101,10 +1127,10 @@ void SDMA2_DriverIRQHandler(void)
     val = (SDMAARM2->INTR) >> 1U;
     while ((val != 0UL) && (i < FSL_FEATURE_SDMA_MODULE_CHANNEL))
     {
-        if ((val & 0x1UL) != 0UL)
+        if (((val & 0x1UL) != 0UL) && (s_SDMAHandle[instance][i] != NULL))
         {
-            SDMA_ClearChannelInterruptStatus(s_SDMAHandle[1][i]->base, 1UL << i);
-            SDMA_HandleIRQ(s_SDMAHandle[1][i]);
+            SDMA_ClearChannelInterruptStatus(s_SDMAHandle[instance][i]->base, 1UL << i);
+            SDMA_HandleIRQ(s_SDMAHandle[instance][i]);
         }
         i++;
         val >>= 1U;
@@ -1117,6 +1143,9 @@ void SDMA3_DriverIRQHandler(void);
 void SDMA3_DriverIRQHandler(void)
 {
     uint32_t i = 1U, val;
+    /* Derive the instance index from the base pointer so the handler stays
+     * correct whether SDMAARM_BASE_PTRS is 0-indexed or 1-indexed. */
+    uint32_t instance = SDMA_GetInstance(SDMAARM3);
 
     /* Clear channel 0 */
     SDMA_ClearChannelInterruptStatus(SDMAARM3, 1U);
@@ -1124,10 +1153,10 @@ void SDMA3_DriverIRQHandler(void)
     val = (SDMAARM3->INTR) >> 1U;
     while ((val != 0UL) && (i < FSL_FEATURE_SDMA_MODULE_CHANNEL))
     {
-        if ((val & 0x1UL) != 0UL)
+        if (((val & 0x1UL) != 0UL) && (s_SDMAHandle[instance][i] != NULL))
         {
-            SDMA_ClearChannelInterruptStatus(s_SDMAHandle[2][i]->base, 1UL << i);
-            SDMA_HandleIRQ(s_SDMAHandle[2][i]);
+            SDMA_ClearChannelInterruptStatus(s_SDMAHandle[instance][i]->base, 1UL << i);
+            SDMA_HandleIRQ(s_SDMAHandle[instance][i]);
         }
         i++;
         val >>= 1U;

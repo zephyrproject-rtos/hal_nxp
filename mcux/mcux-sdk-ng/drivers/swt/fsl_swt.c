@@ -11,6 +11,12 @@
 #define FSL_COMPONENT_ID "platform.drivers.swt"
 #endif
 
+#if defined(SWT_RSTS)
+#define SWT_RESETS_ARRAY SWT_RSTS
+#elif defined(SWT_RSTS_N)
+#define SWT_RESETS_ARRAY SWT_RSTS_N
+#endif
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -36,6 +42,11 @@ static SWT_Type *const s_swtBases[] = SWT_BASE_PTRS;
 static const clock_ip_name_t s_swtClocks[] = SWT_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+#if defined(SWT_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_swtResets[] = SWT_RESETS_ARRAY;
+#endif
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -47,7 +58,7 @@ static uint32_t SWT_GetInstance(SWT_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_swtBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_swtBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_swtBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -79,10 +90,19 @@ void SWT_Init(SWT_Type *base, const swt_config_t *config)
     assert(NULL != config);
     uint32_t controlValue;
 
+#if (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)) \
+    || defined(SWT_RESETS_ARRAY)
+    uint32_t instance = SWT_GetInstance(base);
+#endif
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Ungate the SWT clock*/
-    CLOCK_EnableClock(s_swtClocks[SWT_GetInstance(base)]);
+    CLOCK_EnableClock(s_swtClocks[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(SWT_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_swtResets[instance]);
+#endif
 
     controlValue = SWT_CR_SMD(config->serviceMode) | SWT_CR_RIA(config->resetOnInvalidAccess ? 1U : 0U) |
                 SWT_CR_WND(config->enableWindowMode ? 1U : 0U) | SWT_CR_STP(config->enableRunInStop ? 0U : 1U) |

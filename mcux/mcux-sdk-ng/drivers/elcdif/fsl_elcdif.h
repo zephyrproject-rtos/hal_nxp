@@ -403,7 +403,8 @@ void ELCDIF_RgbModeStop(LCDIF_Type *base);
  */
 static inline void ELCDIF_SetNextBufferAddr(LCDIF_Type *base, uint32_t bufferAddr)
 {
-    assert(0U == (bufferAddr & 0x7U));
+    /* NEXT_BUF must be double-word aligned; bit 0 is the LUT bank selector so is ignored. */
+    assert(0U == (bufferAddr & 0x6U));
     base->NEXT_BUF = ELCDIF_ADDR_CPU_2_IP(bufferAddr);
 }
 

@@ -291,49 +291,37 @@ status_t CDOG_Init(CDOG_Type *base, cdog_config_t *conf)
     RESET_PeripheralReset(kCDOG_RST_SHIFT_RSTn);
 #endif /* !FSL_FEATURE_CDOG_HAS_NO_RESET */
 
+    /* Init assumes CDOG is unlocked otherwise the CONTROL register would be 0 */
     if (base->CONTROL == 0x0U)
     {
         /* CDOG is not in IDLE mode, which may be cause after SW reset. */
         /* Writing to CONTROL register will trigger fault. */
         return kStatus_Fail;
     }
-
-    /* Clear pending errors, otherwise the device will reset */
-    /* itself immediately after enable Code Watchdog */
-    if ((uint32_t)kCDOG_LockCtrl_Lock ==
-        ((base->CONTROL & CDOG_CONTROL_LOCK_CTRL_MASK) >> CDOG_CONTROL_LOCK_CTRL_SHIFT))
-
-    {
-        base->FLAGS = CDOG_FLAGS_TO_FLAG(1U) | CDOG_FLAGS_MISCOM_FLAG(1U) | CDOG_FLAGS_SEQ_FLAG(1U) |
-                      CDOG_FLAGS_CNT_FLAG(1U) | CDOG_FLAGS_STATE_FLAG(1U) | CDOG_FLAGS_ADDR_FLAG(1U) |
-                      CDOG_FLAGS_POR_FLAG(1U);
-    }
-    else
-    {
+    
 /* load default values for CDOG->CONTROL before flags clear */
 #if defined(FSL_FEATURE_CDOG_NEED_LOAD_DEFAULT_CONF) && (FSL_FEATURE_CDOG_NEED_LOAD_DEFAULT_CONF > 0)
-        cdog_config_t default_conf;
+    cdog_config_t default_conf;
 
-        /* Initialize CDOG */
-        CDOG_GetDefaultConfig(&default_conf);
+    /* Initialize CDOG */
+    CDOG_GetDefaultConfig(&default_conf);
 
-        /* Write default value to CDOG->CONTROL*/
-        base->CONTROL = 
-            CDOG_CONTROL_TIMEOUT_CTRL(default_conf.timeout) |       /* Action if the timeout event is triggered  */
-            CDOG_CONTROL_MISCOMPARE_CTRL(default_conf.miscompare) | /* Action if the miscompare error event is triggered  */
-            CDOG_CONTROL_SEQUENCE_CTRL(default_conf.sequence) |     /* Action if the sequence error event is triggered  */
-            CDOG_CONTROL_STATE_CTRL(default_conf.state) |           /* Action if the state error event is triggered  */
-            CDOG_CONTROL_ADDRESS_CTRL(default_conf.address) |       /* Action if the address error event is triggered */
-            CDOG_CONTROL_IRQ_PAUSE(default_conf.irq_pause) |        /* Pause running during interrupts setup */
-            CDOG_CONTROL_DEBUG_HALT_CTRL(default_conf.debug_halt) | /* Halt CDOG timer during debug */
-            CDOG_CONTROL_LOCK_CTRL(default_conf.lock) | RESERVED_CTRL_MASK; /* Lock control register, RESERVED */
+    /* Write default value to CDOG->CONTROL*/
+    base->CONTROL = 
+        CDOG_CONTROL_TIMEOUT_CTRL(default_conf.timeout) |       /* Action if the timeout event is triggered  */
+        CDOG_CONTROL_MISCOMPARE_CTRL(default_conf.miscompare) | /* Action if the miscompare error event is triggered  */
+        CDOG_CONTROL_SEQUENCE_CTRL(default_conf.sequence) |     /* Action if the sequence error event is triggered  */
+        CDOG_CONTROL_STATE_CTRL(default_conf.state) |           /* Action if the state error event is triggered  */
+        CDOG_CONTROL_ADDRESS_CTRL(default_conf.address) |       /* Action if the address error event is triggered */
+        CDOG_CONTROL_IRQ_PAUSE(default_conf.irq_pause) |        /* Pause running during interrupts setup */
+        CDOG_CONTROL_DEBUG_HALT_CTRL(default_conf.debug_halt) | /* Halt CDOG timer during debug */
+        CDOG_CONTROL_LOCK_CTRL(default_conf.lock) | RESERVED_CTRL_MASK; /* Lock control register, RESERVED */
 #endif /* FSL_FEATURE_CDOG_NEED_LOAD_DEFAULT_CONF */
 
-        base->FLAGS = CDOG_FLAGS_TO_FLAG(0U) | CDOG_FLAGS_MISCOM_FLAG(0U) | CDOG_FLAGS_SEQ_FLAG(0U) |
-                      CDOG_FLAGS_CNT_FLAG(0U) | CDOG_FLAGS_STATE_FLAG(0U) | CDOG_FLAGS_ADDR_FLAG(0U) |
-                      CDOG_FLAGS_POR_FLAG(0U);
-    }
-
+    base->FLAGS = CDOG_FLAGS_TO_FLAG(0U) | CDOG_FLAGS_MISCOM_FLAG(0U) | CDOG_FLAGS_SEQ_FLAG(0U) |
+                  CDOG_FLAGS_CNT_FLAG(0U) | CDOG_FLAGS_STATE_FLAG(0U) | CDOG_FLAGS_ADDR_FLAG(0U) |
+                  CDOG_FLAGS_POR_FLAG(0U);
+    
     base->CONTROL =
         CDOG_CONTROL_TIMEOUT_CTRL(conf->timeout) |       /* Action if the timeout event is triggered  */
         CDOG_CONTROL_MISCOMPARE_CTRL(conf->miscompare) | /* Action if the miscompare error event is triggered  */

@@ -15,6 +15,12 @@
 #define FSL_COMPONENT_ID "platform.drivers.reformatter"
 #endif
 
+#if defined(REFORMATTER_RSTS)
+#define REFORMATTER_RESETS_ARRAY REFORMATTER_RSTS
+#elif defined(REFORMATTER_RSTS_N)
+#define REFORMATTER_RESETS_ARRAY REFORMATTER_RSTS_N
+#endif
+
 typedef union
 {
     reformatter_signal_config_t _signal_config;
@@ -32,6 +38,11 @@ typedef union
 /*! @brief Pointers to MIPI DSI clocks for each instance. */
 static const clock_ip_name_t s_reformatterClocks[] = REFORMATTER_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(REFORMATTER_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_reformatterResets[] = REFORMATTER_RESETS_ARRAY;
+#endif
 
 /*******************************************************************************
  * Codes
@@ -52,6 +63,10 @@ void REFORMATTER_Init(REFORMATTER_Type *base, const reformatter_config_t *config
     /* Open clock gate. */
     CLOCK_EnableClock(s_reformatterClocks[0]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(REFORMATTER_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_reformatterResets[0]);
+#endif
 
     reformat_reg32_convert_t pid;
 

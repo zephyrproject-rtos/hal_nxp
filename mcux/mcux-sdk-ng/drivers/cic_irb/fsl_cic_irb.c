@@ -398,7 +398,7 @@ uint8_t CIC_IRB_GetInstance(CIC_IRB_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < FSL_FEATURE_SOC_CIC_IRB_COUNT; instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_cic_irb_Bases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_cic_irb_Bases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

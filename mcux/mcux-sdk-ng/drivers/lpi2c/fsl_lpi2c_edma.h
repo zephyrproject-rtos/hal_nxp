@@ -20,8 +20,11 @@
  * @{
  */
 /*! @brief LPI2C EDMA driver version. */
-#define FSL_LPI2C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 8))
+#define FSL_LPI2C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 9))
 /*! @} */
+
+/*! @brief Size of commandBuffer array in _lpi2c_master_edma_handle */
+#define LPI2C_COMMAND_BUFFER_SIZE 20U
 
 /*!
  * @addtogroup lpi2c_master_edma_driver
@@ -57,7 +60,7 @@ struct _lpi2c_master_edma_handle
     LPI2C_Type *base;                 /*!< LPI2C base pointer. */
     bool isBusy;                      /*!< Transfer state machine current state. */
     uint8_t nbytes;                   /*!< eDMA minor byte transfer count initially configured. */
-    uint16_t commandBuffer[20];       /*!< LPI2C command sequence. When all 10 command words are used:
+    uint16_t commandBuffer[LPI2C_COMMAND_BUFFER_SIZE]; /*!< LPI2C command sequence. When all 10 command words are used:
          Start&addr&write[1 word] + subaddr[4 words] + restart&addr&read[1 word] + receive&Size[4 words] */
     lpi2c_master_transfer_t transfer; /*!< Copy of the current transfer info. */
     lpi2c_master_edma_transfer_callback_t completionCallback; /*!< Callback function pointer. */

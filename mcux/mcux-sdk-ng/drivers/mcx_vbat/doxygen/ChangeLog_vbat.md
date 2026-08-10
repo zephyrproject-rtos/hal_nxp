@@ -1,5 +1,17 @@
 # MCX_VBAT
 
+## [2.6.0]
+
+- New features
+  - Support new SoC. On the new SoC the following VBAT features are removed:
+    - OSCCTLA[MODE_EN] oscillator operate-mode select
+    - OSCCFGA switch-mode comparator/delay/capacitor trim (CMP_TRIM/DLY_TRIM/CAP_TRIM)
+    - Extended STATUSA/IRQENA flags (wakeup-pin, bandgap timer0/1, LDO ready, interrupt 0-3)
+    - WAKENA, WAKECFG and LOCKA registers
+
+    and the following VBAT features are added:
+    - STATUSA/IRQENA POR-detect and OSC32K-ready status flags and interrupts
+
 ## [2.5.0]
 
 - New features

@@ -20,8 +20,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief pdcon driver version 2.0.0. */
-#define FSL_PDCON_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief pdcon driver version 2.1.0. */
+#define FSL_PDCON_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*!
@@ -36,21 +36,6 @@
 #define PDCON_BUSY_TIMEOUT 0U
 #endif
 #endif
-
-/*!
- * @brief List of PDCON power domains.
- *
- * Generic domain IDs 0..5.
- */
-typedef enum _pdcon_domain
-{
-    kPDCON_Domain0 = 0U, /*!< Power domain 0. */
-    kPDCON_Domain1 = 1U, /*!< Power domain 1. */
-    kPDCON_Domain2 = 2U, /*!< Power domain 2. */
-    kPDCON_Domain3 = 3U, /*!< Power domain 3. */
-    kPDCON_Domain4 = 4U, /*!< Power domain 4. */
-    kPDCON_Domain5 = 5U, /*!< Power domain 5. */
-} pdcon_domain_t;
 
 /*!
  * @brief PDCON power domain event/state encoding.
@@ -106,7 +91,7 @@ typedef struct _pdcon_trigger_config
  */
 typedef struct _pdcon_domain_cfg
 {
-    pdcon_domain_t domain;       /*!< Power domain. */
+    uint8_t       domainId;      /*!< Power domain index (0–5). */
     pdcon_event_t activeEvent;   /*!< Event in active mode. */
     pdcon_event_t lowPowerEvent; /*!< Event in low power modes. */
 } pdcon_domain_cfg_t;
@@ -205,6 +190,51 @@ static inline void PDCON_UnlockTriggerConfig(PDCON_Type *base)
     base->MDCTRL &= ~PDCON_MDCTRL_LOCK_MASK;
 }
 
+/*!
+ * @brief Enables or disables hardware trigger for a single power domain.
+ *
+ * Read-modify-write on MDCTRL[5:0] (HW enable mask).
+ *
+ * @param base   PDCON peripheral base address.
+ * @param domain Power domain index (0–5).
+ * @param enable true = enable HW trigger; false = disable.
+ */
+static inline void PDCON_EnableDomainHwTrigger(PDCON_Type *base, uint8_t domain, bool enable)
+{
+    uint32_t bit = (1UL << (uint32_t)domain) << PDCON_MDCTRL_HW_SHIFT;
+    if (enable)
+    {
+        base->MDCTRL |= bit;
+    }
+    else
+    {
+        base->MDCTRL &= ~bit;
+    }
+}
+
+/*!
+ * @brief Enables or disables software trigger for a single power domain.
+ *
+ * Read-modify-write on MDCTRL[21:16] (SW enable mask).
+ * Must be enabled before calling PDCON_SoftwareTrigger() for a domain.
+ *
+ * @param base   PDCON peripheral base address.
+ * @param domain Power domain index (0–5).
+ * @param enable true = enable SW trigger; false = disable.
+ */
+static inline void PDCON_EnableDomainSwTrigger(PDCON_Type *base, uint8_t domain, bool enable)
+{
+    uint32_t bit = (1UL << (uint32_t)domain) << PDCON_MDCTRL_SW_SHIFT;
+    if (enable)
+    {
+        base->MDCTRL |= bit;
+    }
+    else
+    {
+        base->MDCTRL &= ~bit;
+    }
+}
+
 /*! @} */
 
 /*!
@@ -215,20 +245,20 @@ static inline void PDCON_UnlockTriggerConfig(PDCON_Type *base)
 /*!
  * @brief Sets the handshake configuration for a power domain.
  *
- * @param base PDCON peripheral base address.
- * @param domain Power domain, see @ref pdcon_domain_t.
- * @param mask Handshake mask, see @ref pdcon_handshake_mask_t.
+ * @param base     PDCON peripheral base address.
+ * @param domainId Power domain index (0–5).
+ * @param mask     Handshake mask, see @ref pdcon_handshake_mask_t.
  */
-void PDCON_SetHandshake(PDCON_Type *base, pdcon_domain_t domain, pdcon_handshake_mask_t mask);
+void PDCON_SetHandshake(PDCON_Type *base, uint8_t domainId, pdcon_handshake_mask_t mask);
 
 /*!
  * @brief Sets the warm reset postpone cycles for a power domain.
  *
- * @param base PDCON peripheral base address.
- * @param domain Power domain, see @ref pdcon_domain_t.
+ * @param base           PDCON peripheral base address.
+ * @param domainId       Power domain index (0–5).
  * @param postponeCycles Number of cycles to postpone warm reset.
  */
-void PDCON_SetWarmResetPostpone(PDCON_Type *base, pdcon_domain_t domain, uint8_t postponeCycles);
+void PDCON_SetWarmResetPostpone(PDCON_Type *base, uint8_t domainId, uint32_t postponeCycles);
 
 /*! @} */
 
@@ -242,28 +272,28 @@ void PDCON_SetWarmResetPostpone(PDCON_Type *base, pdcon_domain_t domain, uint8_t
  *
  * This function configures the power domain behavior in active mode.
  *
- * @param base PDCON peripheral base address.
- * @param domain Power domain. See @ref pdcon_domain_t.
- * @param event Power event. See @ref pdcon_event_t.
+ * @param base     PDCON peripheral base address.
+ * @param domainId Power domain index. Only 3–5 are valid (domains 0–2 have no PDRUNCFG field).
+ * @param event    Power event. See @ref pdcon_event_t.
  *
  * @retval kStatus_Success Power domain event set successfully.
  * @retval kStatus_InvalidArgument Invalid domain (only domains 3-5 are supported).
  */
-status_t PDCON_SetEventInActiveMode(PDCON_Type *base, pdcon_domain_t domain, pdcon_event_t event);
+status_t PDCON_SetEventInActiveMode(PDCON_Type *base, uint8_t domainId, pdcon_event_t event);
 
 /*!
  * @brief Sets the power domain event in low power modes.
  *
  * This function configures the power domain behavior in low power modes.
  *
- * @param base PDCON peripheral base address.
- * @param domain Power domain. See @ref pdcon_domain_t.
- * @param event Power event. See @ref pdcon_event_t.
+ * @param base     PDCON peripheral base address.
+ * @param domainId Power domain index. Only 1–5 are valid (domain 0 has no PDSLPCFG field).
+ * @param event    Power event. See @ref pdcon_event_t.
  *
  * @retval kStatus_Success Power domain event set successfully.
  * @retval kStatus_InvalidArgument Invalid domain (only domains 1-5 are supported).
  */
-status_t PDCON_SetEventInLowPowerModes(PDCON_Type *base, pdcon_domain_t domain, pdcon_event_t event);
+status_t PDCON_SetEventInLowPowerModes(PDCON_Type *base, uint8_t domainId, pdcon_event_t event);
 
 /*!
  * @brief Sets the power domain event configuration for both active and low power modes.
@@ -271,7 +301,7 @@ status_t PDCON_SetEventInLowPowerModes(PDCON_Type *base, pdcon_domain_t domain, 
  * This function configures the power domain behavior for both active/run mode and
  * low power/sleep mode in a single call.
  *
- * @param base PDCON peripheral base address.
+ * @param base     PDCON peripheral base address.
  * @param eventCfg Pointer to the domain event configuration. See @ref pdcon_domain_cfg_t.
  * @retval kStatus_Success Power domain events set successfully for both modes.
  * @retval kStatus_InvalidArgument Invalid domain (see limitations for each mode).
@@ -296,42 +326,85 @@ status_t PDCON_SetPowerDomainEventCfg(PDCON_Type *base, const pdcon_domain_cfg_t
  *
  * @note If CONFIG_PDCON_BUSY_TIMEOUT is defined, the function will timeout after the specified cycles.
  *
- * @param base PDCON peripheral base address.
- * @param domain Power domain, see @ref pdcon_domain_t.
+ * @param base     PDCON peripheral base address.
+ * @param domainId Power domain index (0–5).
  *
  * @retval kStatus_Success Software trigger completed successfully.
  * @retval kStatus_Timeout Timeout occurred while waiting for domain to be idle or transition to complete (only if
  * PDCON_BUSY_TIMEOUT is defined).
  */
-status_t PDCON_SoftwareTrigger(PDCON_Type *base, pdcon_domain_t domain);
+status_t PDCON_SoftwareTrigger(PDCON_Type *base, uint8_t domainId);
 
 /*!
  * @brief Checks if a power domain is busy.
  *
- * @param base PDCON peripheral base address.
- * @param domain Power domain, see @ref pdcon_domain_t.
+ * @param base     PDCON peripheral base address.
+ * @param domainId Power domain index (0–5).
  * @return true if the domain is busy, false otherwise.
  */
-bool PDCON_IsDomainBusy(PDCON_Type *base, pdcon_domain_t domain);
+bool PDCON_IsDomainBusy(PDCON_Type *base, uint8_t domainId);
 
 /*!
  * @brief Gets the current state of a power domain.
  *
- * @param base PDCON peripheral base address.
- * @param domain Power domain, see @ref pdcon_domain_t.
+ * @param base     PDCON peripheral base address.
+ * @param domainId Power domain index (0–5).
  * @return Current state of the power domain. See @ref pdcon_event_t.
  */
-pdcon_event_t PDCON_GetDomainState(PDCON_Type *base, pdcon_domain_t domain);
+pdcon_event_t PDCON_GetDomainState(PDCON_Type *base, uint8_t domainId);
 
 /*!
  * @brief Gets and optionally clears the event flag for a power domain.
  *
- * @param base PDCON peripheral base address.
- * @param domain Power domain, see @ref pdcon_domain_t.
- * @param clear true to clear the event flag after reading, false to only read.
- * @return Event flag for the power domain, see @ref pdcon_event_t.
+ * @param base     PDCON peripheral base address.
+ * @param domainId Power domain index (0–5).
+ * @param clear    true to clear the event flag after reading, false to only read.
+ * @return true if the event flag was pending; false if no event was pending.
  */
-pdcon_event_t PDCON_GetAndClearEvent(PDCON_Type *base, pdcon_domain_t domain, bool clear);
+bool PDCON_GetAndClearEvent(PDCON_Type *base, uint8_t domainId, bool clear);
+
+/*! @} */
+
+/*!
+ * @name Miscellaneous Control
+ * @{
+ */
+
+/*!
+ * @brief Enable or disable the PDCON functional clock (MISCCTRL.FCEN).
+ *
+ * MUST be called (enable=true) before any PDCON register access. May be
+ * disabled to save power when PDCON is fully quiescent.
+ *
+ * @param base   PDCON peripheral base address.
+ * @param enable true = enable functional clock; false = gate it.
+ */
+static inline void PDCON_EnableFunctionClock(PDCON_Type *base, bool enable)
+{
+    if (enable)
+    {
+        base->MISCCTRL |= PDCON_MISCCTRL_FCEN_MASK;
+    }
+    else
+    {
+        base->MISCCTRL &= ~PDCON_MISCCTRL_FCEN_MASK;
+    }
+}
+
+/*!
+ * @brief Select the observe/debug mux output (MISCCTRL.SEL).
+ *
+ * Routes internal PDCON signals from the specified domain to the observe bus.
+ * For debug and characterization use only — has no effect on normal operation.
+ *
+ * @param base     PDCON peripheral base address.
+ * @param domainId Domain index to observe (0–5).
+ */
+static inline void PDCON_SetObserveDomain(PDCON_Type *base, uint8_t domainId)
+{
+    base->MISCCTRL = (base->MISCCTRL & ~PDCON_MISCCTRL_SEL_MASK) |
+                     PDCON_MISCCTRL_SEL(domainId);
+}
 
 /*! @} */
 

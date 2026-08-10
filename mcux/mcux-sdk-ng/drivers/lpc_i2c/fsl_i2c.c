@@ -105,7 +105,7 @@ uint32_t I2C_GetInstance(I2C_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0U; instance < ARRAY_SIZE(s_i2cBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_i2cBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_i2cBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

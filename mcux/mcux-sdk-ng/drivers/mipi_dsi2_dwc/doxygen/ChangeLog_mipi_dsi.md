@@ -1,5 +1,10 @@
 # MIPI_DSI
 
+## [2.2.0]
+
+- Improvements.
+  - Make D-PHY timing multiplier configurable
+
 ## [2.1.1]
 
 - Bug Fixes.

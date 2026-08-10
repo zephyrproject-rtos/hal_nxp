@@ -246,7 +246,7 @@ uint32_t LPSPI_GetInstance(LPSPI_Type *base)
      */
     for (instance = 0; instance < ARRAY_SIZE(s_lpspiBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_lpspiBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_lpspiBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -339,12 +339,12 @@ void LPSPI_MasterInit(LPSPI_Type *base, const lpspi_master_config_t *masterConfi
                 LPSPI_TCR_LSBF(masterConfig->direction) | LPSPI_TCR_FRAMESZ(masterConfig->bitsPerFrame - 1U) |
                 LPSPI_TCR_PRESCALE(tcrPrescaleValue) | LPSPI_TCR_PCS(masterConfig->whichPcs);
 
-    LPSPI_Enable(base, true);
-
     (void)LPSPI_MasterSetDelayTimes(base, masterConfig->pcsToSckDelayInNanoSec, kLPSPI_PcsToSck, srcClock_Hz);
     (void)LPSPI_MasterSetDelayTimes(base, masterConfig->lastSckToPcsDelayInNanoSec, kLPSPI_LastSckToPcs, srcClock_Hz);
     (void)LPSPI_MasterSetDelayTimes(base, masterConfig->betweenTransferDelayInNanoSec, kLPSPI_BetweenTransfer,
                                     srcClock_Hz);
+
+    LPSPI_Enable(base, true);
 
     LPSPI_SetDummyData(base, LPSPI_DUMMY_DATA);
 }
@@ -881,83 +881,79 @@ static bool LPSPI_MasterTransferWriteAllTxData(LPSPI_Type *base,
     bool isByteSwap               = ((transfer->configFlags & (uint32_t)kLPSPI_MasterByteSwap) != 0U);
     uint32_t wordToSend =
         ((uint32_t)dummyData) | ((uint32_t)dummyData << 8) | ((uint32_t)dummyData << 16) | ((uint32_t)dummyData << 24);
-    uint32_t rxFifoMaxBytes = MIN(bytesPerFrame, 4U) * LPSPI_GetRxFifoSize(base);
     uint32_t readData;
-    uint8_t fifo_size      = LPSPI_GetRxFifoSize(base);
+    uint8_t fifoSize      = LPSPI_GetRxFifoSize(base);
+
     /* Write the TX data until txRemainingByteCount is equal to 0 */
     while (txRemainingByteCount > 0U)
     {
-        if (txRemainingByteCount < (stateParams->bytesEachWrite))
+        if (txRemainingByteCount < stateParams->bytesEachWrite)
         {
-            (stateParams->bytesEachWrite) = (uint8_t)txRemainingByteCount;
+            stateParams->bytesEachWrite = (uint8_t)txRemainingByteCount;
         }
 
-        /* Wait until TX FIFO is not full */
-#if SPI_RETRY_TIMES
-        uint32_t waitTimes = SPI_RETRY_TIMES;
-        while ((LPSPI_GetTxFifoCount(base) == fifo_size) && ((--waitTimes) != 0U))
-#else
-        while (LPSPI_GetTxFifoCount(base) == fifo_size)
-#endif
+        uint32_t wordsToWrite = txRemainingByteCount / stateParams->bytesEachWrite;
+        uint32_t txFifoSpace = fifoSize - LPSPI_GetTxFifoCount(base);
+        if (wordsToWrite > txFifoSpace)
         {
+            wordsToWrite = txFifoSpace;
         }
-#if SPI_RETRY_TIMES
-        if (waitTimes == 0U)
-        {
-            return false;
-        }
-#endif
 
-        /* To prevent rxfifo overflow, ensure transmitting and receiving are executed in parallel */
-        if (((NULL == stateParams->rxData) ||
-             (stateParams->rxRemainingByteCount - txRemainingByteCount) < rxFifoMaxBytes))
+        if (stateParams->isTxMask)
         {
-            if (stateParams->isTxMask)
+            /* When TCR[TXMSK]=1, transfer is initiate by writting a new command word to TCR. TCR[TXMSK] is cleared
+               by hardware every time when TCR[FRAMESZ] bit of data is transfered.
+               In this case TCR[TXMSK] should be set to initiate each transfer. */
+            base->TCR = LPSPI_GetTcr(base) | LPSPI_TCR_TXMSK_MASK;
+            if (stateParams->isPcsContinuous && (txRemainingByteCount == bytesPerFrame))
             {
-                /* When TCR[TXMSK]=1, transfer is initiate by writting a new command word to TCR. TCR[TXMSK] is cleared
-                   by hardware every time when TCR[FRAMESZ] bit of data is transfered.
-                   In this case TCR[TXMSK] should be set to initiate each transfer. */
-                base->TCR = LPSPI_GetTcr(base) | LPSPI_TCR_TXMSK_MASK;
-                if (stateParams->isPcsContinuous && (txRemainingByteCount == bytesPerFrame))
-                {
-                    /* For the last piece of frame size of data, if is PCS continous mode(TCR[CONT]), TCR[CONTC] should
-                     * be cleared to de-assert the PCS. Be sure to clear the TXMSK as well otherwise another FRAMESZ
-                     * of data will be received. */
-                    base->TCR =
-                        LPSPI_GetTcr(base) & ~(LPSPI_TCR_CONTC_MASK | LPSPI_TCR_CONT_MASK | LPSPI_TCR_TXMSK_MASK);
-                }
-                else
-                {
-                    /*
-                     * $Branch Coverage Justification$
-                     * $ref fsl_lpspi_c_ref_2$
-                     */
-                    if (!LPSPI_WaitTxFifoEmpty(base)) /* GCOVR_EXCL_BR_LINE */
-                    {
-                        return false; /* GCOVR_EXCL_LINE */
-                    }
-                }
-                txRemainingByteCount -= bytesPerFrame;
+                /* For the last piece of frame size of data, if is PCS continous mode(TCR[CONT]), TCR[CONTC] should
+                 * be cleared to de-assert the PCS. Be sure to clear the TXMSK as well otherwise another FRAMESZ
+                 * of data will be received. */
+                base->TCR = LPSPI_GetTcr(base) & ~(LPSPI_TCR_CONTC_MASK | LPSPI_TCR_CONT_MASK | LPSPI_TCR_TXMSK_MASK);
             }
             else
             {
-                if ((stateParams->txData) != NULL)
+                /*
+                 * $Branch Coverage Justification$
+                 * $ref fsl_lpspi_c_ref_2$
+                 */
+                if (!LPSPI_WaitTxFifoEmpty(base)) /* GCOVR_EXCL_BR_LINE */
                 {
-                    if (stateParams->bytesEachWrite != 1U)
+                    return false; /* GCOVR_EXCL_LINE */
+                }
+            }
+            txRemainingByteCount -= bytesPerFrame;
+        }
+        else
+        {
+            txRemainingByteCount -= (stateParams->bytesEachWrite * wordsToWrite);
+
+            while (wordsToWrite > 0U)
+            {
+                if (stateParams->bytesEachWrite == 1U)
+                {
+                    if (stateParams->txData != NULL)
                     {
-                        wordToSend =
-                            LPSPI_CombineWriteData((stateParams->txData), (stateParams->bytesEachWrite), isByteSwap);
-                        (stateParams->txData) += (stateParams->bytesEachWrite);
+                        base->TDR = *stateParams->txData;
+                        stateParams->txData++;
                     }
                     else
                     {
-                        wordToSend = *(stateParams->txData);
-                        (stateParams->txData) += 1U;
+                        base->TDR = wordToSend;
                     }
                 }
-                /* Otherwise push data to tx FIFO to initiate transfer */
-                LPSPI_WriteData(base, wordToSend);
-                txRemainingByteCount -= (stateParams->bytesEachWrite);
+                else
+                {
+                    if (stateParams->txData != NULL)
+                    {
+                        wordToSend = LPSPI_CombineWriteData(stateParams->txData, stateParams->bytesEachWrite, isByteSwap);
+                        stateParams->txData += stateParams->bytesEachWrite;
+                    }
+
+                    base->TDR = wordToSend;
+                }
+                wordsToWrite--;
             }
         }
 
@@ -966,14 +962,14 @@ static bool LPSPI_MasterTransferWriteAllTxData(LPSPI_Type *base,
          * $Branch Coverage Justification$
          * Data will be transferred in the inner loop until complete, after which the interrupt will end.(will improve)
          */
-        if (((stateParams->rxData) != NULL) && ((stateParams->rxRemainingByteCount) != 0U)) /* GCOVR_EXCL_BR_LINE */
+        if ((stateParams->rxData != NULL) && (stateParams->rxRemainingByteCount != 0U)) /* GCOVR_EXCL_BR_LINE */
         {
 #if SPI_RETRY_TIMES
             uint32_t waitTimes = SPI_RETRY_TIMES;
 #endif
             /* To ensure parallel execution in 3-wire mode, after writting 1 to TXMSK to generate clock of
                bytesPerFrame's data wait until bytesPerFrame's data is received. */
-            while ((stateParams->isTxMask) && (LPSPI_GetRxFifoCount(base) == 0U))
+            while (stateParams->isTxMask && (LPSPI_GetRxFifoCount(base) == 0U))
             {
 #if SPI_RETRY_TIMES
                 if (--waitTimes == 0U)
@@ -983,37 +979,46 @@ static bool LPSPI_MasterTransferWriteAllTxData(LPSPI_Type *base,
 #endif
             }
 
-#if SPI_RETRY_TIMES
-            waitTimes = SPI_RETRY_TIMES;
-            while ((LPSPI_GetRxFifoCount(base) != 0U) && (--waitTimes != 0U))
-#else
-            while (LPSPI_GetRxFifoCount(base) != 0U)
-#endif
+            uint8_t *rxDataPtr = stateParams->rxData;
+
+            if (stateParams->rxRemainingByteCount < stateParams->bytesEachRead)
             {
-                readData = LPSPI_ReadData(base);
-                /*
-                 * $Branch Coverage Justification$
-                 * rxRemainingByteCount must be an integer multiple of bytesEachRead, otherwise it cannot pass the check
-                 * of #LPSPI_CheckTransferArgument,so it doesn't happen here.(will improve)
-                 */
-                if ((stateParams->rxRemainingByteCount) < (stateParams->bytesEachRead)) /* GCOVR_EXCL_BR_LINE */
+                stateParams->bytesEachRead = (uint8_t)stateParams->rxRemainingByteCount;
+            }
+
+            uint32_t wordsToRead = stateParams->rxRemainingByteCount / stateParams->bytesEachRead;
+            uint32_t rxFifoCount = LPSPI_GetRxFifoCount(base);
+            if (wordsToRead > rxFifoCount)
+            {
+                wordsToRead = rxFifoCount;
+            }
+
+            stateParams->rxRemainingByteCount -= (wordsToRead * stateParams->bytesEachRead);
+
+            if (stateParams->bytesEachRead == 1U)
+            {
+                while (wordsToRead > 0U)
                 {
-                    (stateParams->bytesEachRead) = (uint8_t)(stateParams->rxRemainingByteCount); /* GCOVR_EXCL_LINE */
+                    *rxDataPtr = (uint8_t)(base->RDR & 0xFFU);
+                    rxDataPtr++;
+                    wordsToRead--;
                 }
-
-                LPSPI_SeparateReadData((stateParams->rxData), readData, (stateParams->bytesEachRead), isByteSwap);
-                (stateParams->rxData) += (stateParams->bytesEachRead);
-
-                (stateParams->rxRemainingByteCount) -= (stateParams->bytesEachRead);
             }
-#if SPI_RETRY_TIMES
-            if (waitTimes == 0U)
+            else
             {
-                return false;
+                while (wordsToRead > 0U)
+                {
+                    readData = base->RDR;
+                    LPSPI_SeparateReadData(rxDataPtr, readData, stateParams->bytesEachRead, isByteSwap);
+                    rxDataPtr += stateParams->bytesEachRead;
+                    wordsToRead--;
+                }
             }
-#endif
+
+            stateParams->rxData = rxDataPtr;
         }
     }
+
     return true;
 }
 
@@ -1249,7 +1254,7 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
         }
     }
 
-    /*Read out the RX data in FIFO*/
+    /* Read out the RX data in FIFO */
     if (stateParams.rxData != NULL)
     {
         /*

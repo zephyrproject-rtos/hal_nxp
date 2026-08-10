@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2025 NXP
+ * Copyright 2016-2017, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,7 +18,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define FSL_PWT_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2 */
+#define FSL_PWT_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3 */
 
 /*! @brief PWT clock source selection */
 typedef enum _pwt_clock_source
@@ -54,8 +54,13 @@ typedef enum _pwt_input_select
  */
 enum _pwt_interrupt_enable
 {
+#if defined(FSL_FEATURE_PWT_REG_WIDTH) && (FSL_FEATURE_PWT_REG_WIDTH == 32)
+    kPWT_PulseWidthReadyInterruptEnable = PWT_R1_PRDYIE_MASK, /*!< Pulse width data ready interrupt */
+    kPWT_CounterOverflowInterruptEnable = PWT_R1_POVIE_MASK    /*!< Counter overflow interrupt */
+#else
     kPWT_PulseWidthReadyInterruptEnable = PWT_CS_PRDYIE_MASK, /*!< Pulse width data ready interrupt */
     kPWT_CounterOverflowInterruptEnable = PWT_CS_POVIE_MASK   /*!< Counter overflow interrupt */
+#endif
 };
 
 /*!
@@ -63,8 +68,15 @@ enum _pwt_interrupt_enable
  */
 enum _pwt_status_flags
 {
+#if defined(FSL_FEATURE_PWT_REG_WIDTH) && (FSL_FEATURE_PWT_REG_WIDTH == 32)
+    kPWT_CounterOverflowFlag = PWT_R1_PWTOV_MASK,  /*!< Counter overflow flag */
+    kPWT_PulseWidthValidFlag = PWT_R1_PWTRDY_MASK, /*!< Pulse width valid flag */
+    kPWT_InputToggleFlag     = PWT_R1_TGL_MASK,     /*!< PWTIN toggle flag (write-1-to-clear) */
+#else
     kPWT_CounterOverflowFlag = PWT_CS_PWTOV_MASK,  /*!< Counter overflow flag */
     kPWT_PulseWidthValidFlag = PWT_CS_PWTRDY_MASK, /*!< Pulse width valid flag */
+    kPWT_InputToggleFlag     = (PWT_CR_TGL_MASK << 8),  /*!< PWTIN toggle flag (write-1-to-clear) */
+#endif
 };
 
 /*!
@@ -145,7 +157,17 @@ void PWT_GetDefaultConfig(pwt_config_t *config);
  */
 static inline void PWT_EnableInterrupts(PWT_Type *base, uint32_t mask)
 {
+#if defined(FSL_FEATURE_PWT_REG_WIDTH) && (FSL_FEATURE_PWT_REG_WIDTH == 32)
+    uint32_t reg = base->R1;
+    reg |= mask;
+    /* These bits are cleared by writing 0, set in case clear by mistake */
+    reg |= (PWT_R1_PWTOV_MASK | PWT_R1_PWTRDY_MASK);
+    /* Preserve TGL (w1c) by writing 0 */
+    reg &= ~PWT_R1_TGL_MASK;
+    base->R1 = reg;
+#else
     base->CS |= (uint8_t)(mask & 0xFFU);
+#endif
 }
 
 /*!
@@ -157,7 +179,17 @@ static inline void PWT_EnableInterrupts(PWT_Type *base, uint32_t mask)
  */
 static inline void PWT_DisableInterrupts(PWT_Type *base, uint32_t mask)
 {
+#if defined(FSL_FEATURE_PWT_REG_WIDTH) && (FSL_FEATURE_PWT_REG_WIDTH == 32)
+    uint32_t reg = base->R1;
+    reg &= ~mask;
+    /* These bits are cleared by writing 0, set in case clear by mistake */
+    reg |= (PWT_R1_PWTOV_MASK | PWT_R1_PWTRDY_MASK);
+    /* Preserve TGL (w1c) by writing 0 */
+    reg &= ~PWT_R1_TGL_MASK;
+    base->R1 = reg;
+#else
     base->CS &= (uint8_t)(~mask & 0xFFU);
+#endif
 }
 
 /*!
@@ -170,7 +202,11 @@ static inline void PWT_DisableInterrupts(PWT_Type *base, uint32_t mask)
  */
 static inline uint32_t PWT_GetEnabledInterrupts(PWT_Type *base)
 {
+#if defined(FSL_FEATURE_PWT_REG_WIDTH) && (FSL_FEATURE_PWT_REG_WIDTH == 32)
+    return (base->R1 & (PWT_R1_PRDYIE_MASK | PWT_R1_POVIE_MASK));
+#else
     return ((uint32_t)base->CS & (PWT_CS_PRDYIE_MASK | PWT_CS_POVIE_MASK));
+#endif
 }
 
 /*! @}*/
@@ -190,7 +226,16 @@ static inline uint32_t PWT_GetEnabledInterrupts(PWT_Type *base)
  */
 static inline uint32_t PWT_GetStatusFlags(PWT_Type *base)
 {
-    return ((uint32_t)base->CS & (PWT_CS_PWTRDY_MASK | PWT_CS_PWTOV_MASK));
+#if defined(FSL_FEATURE_PWT_REG_WIDTH) && (FSL_FEATURE_PWT_REG_WIDTH == 32)
+    return (base->R1 & (PWT_R1_PWTRDY_MASK | PWT_R1_PWTOV_MASK | PWT_R1_TGL_MASK));
+#else
+    uint32_t flags = (uint32_t)base->CS & (PWT_CS_PWTRDY_MASK | PWT_CS_PWTOV_MASK);
+    if ((base->CR & PWT_CR_TGL_MASK) != 0U)
+    {
+        flags |= (uint32_t)kPWT_InputToggleFlag;
+    }
+    return flags;
+#endif
 }
 
 /*!
@@ -202,7 +247,38 @@ static inline uint32_t PWT_GetStatusFlags(PWT_Type *base)
  */
 static inline void PWT_ClearStatusFlags(PWT_Type *base, uint32_t mask)
 {
-    base->CS &= (uint8_t)(~mask & 0xFFU);
+#if defined(FSL_FEATURE_PWT_REG_WIDTH) && (FSL_FEATURE_PWT_REG_WIDTH == 32)
+    uint32_t reg = base->R1;
+
+    /* These bits are cleared by writing 0, set in case clear by mistake */
+    reg |= (PWT_R1_PWTOV_MASK | PWT_R1_PWTRDY_MASK);
+    /* Preserve TGL (w1c) by writing 0 unless clearing it */
+    reg &= ~PWT_R1_TGL_MASK;
+
+    /* Clear requested w0c flags (PWTOV, PWTRDY) by writing 0 */
+    reg &= ~(mask & (PWT_R1_PWTOV_MASK | PWT_R1_PWTRDY_MASK));
+    /* Clear TGL (w1c) by writing 1 if requested */
+    reg |= (mask & PWT_R1_TGL_MASK);
+
+    base->R1 = reg;
+#else
+    /* Clear w0c flags (PWTOV, PWTRDY) in CS register */
+    uint8_t csClearMask = (uint8_t)(mask & (PWT_CS_PWTOV_MASK | PWT_CS_PWTRDY_MASK));
+    uint8_t reg;
+    if (csClearMask != 0U)
+    {
+        reg = base->CS;
+        /* These bits are cleared by writing 0, set in case clear by mistake */
+        reg |= (PWT_CS_PWTOV_MASK | PWT_CS_PWTRDY_MASK);
+        reg &= (uint8_t)(~csClearMask);
+        base->CS = reg;
+    }
+    /* Clear TGL (w1c) in CR register by writing 1 */
+    if ((mask & (uint32_t)kPWT_InputToggleFlag) != 0U)
+    {
+        base->CR |= PWT_CR_TGL_MASK;
+    }
+#endif
 }
 
 /*! @}*/
@@ -219,7 +295,13 @@ static inline void PWT_ClearStatusFlags(PWT_Type *base, uint32_t mask)
  */
 static inline void PWT_StartTimer(PWT_Type *base)
 {
+#if defined(FSL_FEATURE_PWT_REG_WIDTH) && (FSL_FEATURE_PWT_REG_WIDTH == 32)
+    uint32_t reg = base->R1;
+    reg |= PWT_R1_PWTEN_MASK;
+    base->R1 = reg;
+#else
     base->CS |= PWT_CS_PWTEN_MASK;
+#endif
 }
 
 /*!
@@ -229,7 +311,13 @@ static inline void PWT_StartTimer(PWT_Type *base)
  */
 static inline void PWT_StopTimer(PWT_Type *base)
 {
+#if defined(FSL_FEATURE_PWT_REG_WIDTH) && (FSL_FEATURE_PWT_REG_WIDTH == 32)
+    uint32_t reg = base->R1;
+    reg &= ~PWT_R1_PWTEN_MASK;
+    base->R1 = reg;
+#else
     base->CS &= (uint8_t)(~PWT_CS_PWTEN_MASK & 0xFFU);
+#endif
 }
 
 /*! @}*/
@@ -245,7 +333,11 @@ static inline void PWT_StopTimer(PWT_Type *base)
  */
 static inline uint16_t PWT_GetCurrentTimerCount(PWT_Type *base)
 {
+#if defined(FSL_FEATURE_PWT_REG_WIDTH) && (FSL_FEATURE_PWT_REG_WIDTH == 32)
+    return (uint16_t)((base->R2 & (PWT_R2_PWTCH_MASK | PWT_R2_PWTCL_MASK)) >> PWT_R2_PWTCH_SHIFT);
+#else
     return ((uint16_t)(((uint16_t)base->CNTH << 8))) | base->CNTL;
+#endif
 }
 /*!
  * @brief Reads the positive pulse width.
@@ -258,7 +350,11 @@ static inline uint16_t PWT_GetCurrentTimerCount(PWT_Type *base)
  */
 static inline uint16_t PWT_ReadPositivePulseWidth(PWT_Type *base)
 {
+#if defined(FSL_FEATURE_PWT_REG_WIDTH) && (FSL_FEATURE_PWT_REG_WIDTH == 32)
+    return (uint16_t)((base->R1 & (PWT_R1_PPWH_MASK | PWT_R1_PPWL_MASK)) >> PWT_R1_PPWH_SHIFT);
+#else
     return ((uint16_t)(((uint16_t)base->PPH) << 8)) | base->PPL;
+#endif
 }
 
 /*!
@@ -272,7 +368,11 @@ static inline uint16_t PWT_ReadPositivePulseWidth(PWT_Type *base)
  */
 static inline uint16_t PWT_ReadNegativePulseWidth(PWT_Type *base)
 {
+#if defined(FSL_FEATURE_PWT_REG_WIDTH) && (FSL_FEATURE_PWT_REG_WIDTH == 32)
+    return (uint16_t)((base->R2 & (PWT_R2_NPWH_MASK | PWT_R2_NPWL_MASK)) >> PWT_R2_NPWH_SHIFT);
+#else
     return ((uint16_t)(((uint16_t)base->NPH) << 8)) | base->NPL;
+#endif
 }
 
 /*!
@@ -282,7 +382,32 @@ static inline uint16_t PWT_ReadNegativePulseWidth(PWT_Type *base)
  */
 static inline void PWT_Reset(PWT_Type *base)
 {
+    /* Ignore the status bits protection, they will be cleared by reset. */
+#if defined(FSL_FEATURE_PWT_REG_WIDTH) && (FSL_FEATURE_PWT_REG_WIDTH == 32)
+    uint32_t reg = base->R1;
+    reg |= PWT_R1_PWTSR_MASK;
+    base->R1 = reg;
+#else
     base->CS |= PWT_CS_PWTSR_MASK;
+#endif
+}
+
+/*!
+ * @brief Gets the current PWTIN input level.
+ *
+ * This function returns the level of the selected PWTIN input at the point when counter overflow occurs.
+ *
+ * @param base PWT peripheral base address.
+ *
+ * @return The PWTIN input level: 0 for low, 1 for high.
+ */
+static inline uint8_t PWT_GetInputLevel(PWT_Type *base)
+{
+#if defined(FSL_FEATURE_PWT_REG_WIDTH) && (FSL_FEATURE_PWT_REG_WIDTH == 32)
+    return (uint8_t)((base->R1 & PWT_R1_LVL_MASK) >> PWT_R1_LVL_SHIFT);
+#else
+    return (uint8_t)((base->CR & PWT_CR_LVL_MASK) >> PWT_CR_LVL_SHIFT);
+#endif
 }
 
 #if defined(__cplusplus)

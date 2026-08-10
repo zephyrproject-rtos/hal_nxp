@@ -101,7 +101,7 @@ static uint32_t LPADC_GetInstance(ADC_Type *base)
          * (s_lpadcBases[instance] != base) not covered. The peripheral base
          * address is always valid and checked by assert.
          */
-        if (MSDK_REG_SECURE_ADDR(s_lpadcBases[instance]) == MSDK_REG_SECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
+        if (MSDK_REG_NONSECURE_ADDR(s_lpadcBases[instance]) == MSDK_REG_NONSECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
         {
             break;
         }
@@ -460,7 +460,9 @@ void LPADC_GetConvResultBlocking(ADC_Type *base, lpadc_conv_result_t *result)
  */
 void LPADC_SetConvTriggerConfig(ADC_Type *base, uint32_t triggerId, const lpadc_conv_trigger_config_t *config)
 {
-    assert(triggerId < ADC_TCTRL_COUNT); /* Check if the triggerId is available in this device. */
+#if defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT)
+    assert(triggerId < FSL_FEATURE_LPADC_ADC_TCTRL_COUNT); /* Check if the triggerId is available in this device. */
+#endif
     assert(config != NULL);              /* Check if the input pointer is available. */
 
     uint32_t tmp32;
@@ -887,16 +889,16 @@ status_t LPADC_FinishAutoCalibration(ADC_Type *base)
     if (0U != ((base->GCC[0]) & 0x8000U))
     {
         GCCa         = GCCa - 0x10000;
-        GCRa         = (float)((131072.0) /
-                       (131072.0 - (double)GCCa)); /* Gain_CalA = (131072.0 / (131072-(ADC_GCC_GAIN_CAL(ADC->GCC[0])) */
+        GCRa         = 131072.0f /
+                       (131072.0f - (float)GCCa); /* Gain_CalA = (131072.0 / (131072-(ADC_GCC_GAIN_CAL(ADC->GCC[0])) */
         base->GCR[0] = LPADC_GetGainConvResult(GCRa); /* write A side GCALR. */
     }
 
     if (0U != ((base->GCC[1]) & 0x8000U))
     {
         GCCb         = GCCb - 0x10000;
-        GCRb         = (float)((131072.0) /
-                       (131072.0 - (double)GCCb)); /* Gain_CalB = (131072.0 / (131072-(ADC_GCC_GAIN_CAL(ADC->GCC[1])) */
+        GCRb         = 131072.0f /
+                       (131072.0f - (float)GCCb); /* Gain_CalB = (131072.0 / (131072-(ADC_GCC_GAIN_CAL(ADC->GCC[1])) */
         base->GCR[1] = LPADC_GetGainConvResult(GCRb); /* write B side GCALR. */
     }
 
@@ -944,6 +946,7 @@ status_t LPADC_FinishAutoCalibration(ADC_Type *base)
     float GCRb;
 #else
     int32_t GCCa;
+    uint32_t gccField;
 #endif /* FSL_FEATURE_LPADC_FIFO_COUNT */
     float GCRa;
 
@@ -962,20 +965,23 @@ status_t LPADC_FinishAutoCalibration(ADC_Type *base)
     }
 
     /* Calculate gain offset. */
-    GCCa         = ((base->GCC[0] & ADC_GCC_GAIN_CAL_MASK) >> ADC_GCC_GAIN_CAL_SHIFT);
 #if (defined(FSL_FEATURE_LPADC_FIFO_COUNT) && (FSL_FEATURE_LPADC_FIFO_COUNT == 2U))
+    GCCa         = ((base->GCC[0] & ADC_GCC_GAIN_CAL_MASK) >> ADC_GCC_GAIN_CAL_SHIFT);
     GCCb         = ((base->GCC[1] & ADC_GCC_GAIN_CAL_MASK) >> ADC_GCC_GAIN_CAL_SHIFT);
-    GCRb         = (float)((131072.0) /
-                   (131072.0 - (double)GCCb)); /* Gain_CalB = (131072.0 / (131072-(ADC_GCC_GAIN_CAL(ADC->GCC[1])) */
+    GCRb         = 131072.0f /
+                   (131072.0f - (float)GCCb); /* Gain_CalB = (131072.0 / (131072-(ADC_GCC_GAIN_CAL(ADC->GCC[1])) */
     base->GCR[1] = LPADC_GetGainConvResult(GCRb);      /* write B side GCALR. */
 #else
-    if ((GCCa & (((ADC_GCC_GAIN_CAL_MASK >> ADC_GCC_GAIN_CAL_SHIFT) + 1U) >> 1U)) != 0U)
+    gccField = ((base->GCC[0] & ADC_GCC_GAIN_CAL_MASK) >> ADC_GCC_GAIN_CAL_SHIFT);
+    /* Sign-extend the two's-complement gain-cal field when its sign bit is set (width-generic). */
+    if ((gccField & (((ADC_GCC_GAIN_CAL_MASK >> ADC_GCC_GAIN_CAL_SHIFT) + 1U) >> 1U)) != 0U)
     {
-        GCCa |= (~(uint32_t)(ADC_GCC_GAIN_CAL_MASK >> ADC_GCC_GAIN_CAL_SHIFT));
+        gccField |= ~((uint32_t)ADC_GCC_GAIN_CAL_MASK >> ADC_GCC_GAIN_CAL_SHIFT);
     }
+    GCCa = (int32_t)gccField;
 #endif /* FSL_FEATURE_LPADC_FIFO_COUNT */
-    GCRa         = (float)((131072.0) /
-                   (131072.0 - (double)GCCa)); /* Gain_CalA = (131072.0 / (131072-(ADC_GCC_GAIN_CAL(ADC->GCC[0])) */
+    GCRa         = 131072.0f /
+                   (131072.0f - (float)GCCa); /* Gain_CalA = (131072.0 / (131072-(ADC_GCC_GAIN_CAL(ADC->GCC[0])) */
     base->GCR[0] = LPADC_GetGainConvResult(GCRa);      /* write A side GCALR. */
 
     /* Indicate the values are valid. */
