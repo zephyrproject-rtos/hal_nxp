@@ -810,7 +810,8 @@ phyStatus_t MAC_PLME_SapHandler(macToPlmeMessage_t *pMsg, instanceId_t phyInstan
     {
         if (mac[cnt].phy_id == phyInstance)
         {
-            return MAC_Proxy_PLME_SapHandler(pMsg, cnt);
+            // convert the return value to phyStatus_t
+            return (MAC_Proxy_PLME_SapHandler(pMsg, cnt) == gSuccess_c ? gPhySuccess_c : gPhyInvalidParameter_c);
         }
     }
     return gPhyInvalidParameter_c;
