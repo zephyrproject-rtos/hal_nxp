@@ -67,7 +67,7 @@ uint32_t RDC_SEMA42_GetInstance(RDC_SEMAPHORE_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_sema42Bases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_sema42Bases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_sema42Bases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

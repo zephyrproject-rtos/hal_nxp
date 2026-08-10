@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.mcx_vbat)
-    mcux_component_version(2.5.0)
+    mcux_component_version(2.6.0)
 
     mcux_add_source(SOURCES fsl_vbat.h fsl_vbat.c)
 

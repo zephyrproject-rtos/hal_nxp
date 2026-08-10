@@ -13,6 +13,9 @@
 #define NETC_MSG_RETURN_CODE(class, code, cookie) \
     (((uint16_t)(class) << 8U) | ((uint16_t)(code) << 4U) | (uint16_t)(cookie))
 
+#define NETC_MSG_RETURN_CODE_NOCOOKIE(class, code) \
+    (((uint16_t)(class) << 8U) | (uint16_t)(code))
+
 /*!
  * @brief VSI-PSI message class id
  */
@@ -127,12 +130,8 @@ typedef enum _netc_msg_link_speed_code
     kNETC_MsgLinkSpeed100FD      = 0x04U,
     kNETC_MsgLinkSpeed1000       = 0x05U,
     kNETC_MsgLinkSpeed2500       = 0x06U,
-    kNETC_MsgLinkSpeed5000       = 0x07U,
-    kNETC_MsgLinkSpeed10G        = 0x08U,
-    kNETC_MsgLinkSpeed25G        = 0x09U,
-    kNETC_MsgLinkSpeed50G        = 0x0aU,
-    kNETC_MsgLinkSpeed100G       = 0x0bU,
-    kNETC_MsgLinkSpeedNotSupport = 0x0fU,
+    kNETC_MsgLinkSpeed5000       = 0x07U, /* Based on 5G, value increases 1 when speed increases 1G */
+    kNETC_MsgLinkSpeed10G        = 0x0CU,
 } netc_msg_link_speed_code_t;
 
 /*!

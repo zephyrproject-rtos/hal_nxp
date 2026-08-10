@@ -1,5 +1,11 @@
 # SWT
 
+## [2.1.2]
+
+- Bug Fixes
+  - Wait until the timeout interrupt flag is cleared after writing W1C to avoid duplicate timeout
+    IRQ entries.
+
 ## [2.1.1]
 
 - Improvements

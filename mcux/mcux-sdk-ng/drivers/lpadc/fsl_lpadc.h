@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief LPADC driver version 2.10.0. */
-#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 10, 0))
+/*! @brief LPADC driver version 2.10.3. */
+#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 10, 3))
 /*! @} */
 
 /*! @name Configuration */
@@ -214,50 +214,62 @@ enum _lpadc_interrupt_enable
                                                                                 when trigger 0 completion. */
     kLPADC_Trigger1CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 1UL),   /*!< Configures ADC to generate interrupt
                                                                                 when trigger 1 completion. */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 2U)
     kLPADC_Trigger2CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 2UL),   /*!< Configures ADC to generate interrupt
                                                                                 when trigger 2 completion. */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 2U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 3U)
     kLPADC_Trigger3CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 3UL),   /*!< Configures ADC to generate interrupt
                                                                                 when trigger 3 completion. */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 3U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 4U)
     kLPADC_Trigger4CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 4UL),   /*!< Configures ADC to generate interrupt
                                                                                 when trigger 4 completion. */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 4U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 5U)
     kLPADC_Trigger5CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 5UL),   /*!< Configures ADC to generate interrupt
                                                                                 when trigger 5 completion. */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 5U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 6U)
     kLPADC_Trigger6CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 6UL),   /*!< Configures ADC to generate interrupt
                                                                                 when trigger 6 completion. */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 6U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 7U)
     kLPADC_Trigger7CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 7UL),   /*!< Configures ADC to generate interrupt
                                                                                 when trigger 7 completion. */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 8U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 7U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 8U)
     kLPADC_Trigger8CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 8UL),   /*!< Configures ADC to generate interrupt
                                                                                 when trigger 8 completion. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 8U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 9U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 8U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 9U)
     kLPADC_Trigger9CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 9UL),   /*!< Configures ADC to generate interrupt
                                                                                 when trigger 9 completion. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 9U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 10U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 9U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 10U)
     kLPADC_Trigger10CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 10UL), /*!< Configures ADC to generate interrupt
                                                                               when trigger 10 completion. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 10U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 11U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 10U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 11U)
     kLPADC_Trigger11CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 11UL), /*!< Configures ADC to generate interrupt
                                                                               when trigger 11 completion. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 11U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 12U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 11U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 12U)
     kLPADC_Trigger12CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 12UL), /*!< Configures ADC to generate interrupt
                                                                               when trigger 12 completion. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 12U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 13U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 12U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 13U)
     kLPADC_Trigger13CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 13UL), /*!< Configures ADC to generate interrupt
                                                                               when trigger 13 completion. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 13U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 14U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 13U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 14U)
     kLPADC_Trigger14CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 14UL), /*!< Configures ADC to generate interrupt
                                                                               when trigger 14 completion. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 14U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 15U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 14U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 15U)
     kLPADC_Trigger15CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 15UL), /*!< Configures ADC to generate interrupt
                                                                               when trigger 15 completion. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 15U) */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 15U) */
 #endif /* #if (defined(FSL_FEATURE_LPADC_HAS_IE_TCOMP_IE) && (FSL_FEATURE_LPADC_HAS_IE_TCOMP_IE == 1U)) */
 };
 
@@ -272,85 +284,109 @@ enum _lpadc_trigger_status_flags
 {
     kLPADC_Trigger0InterruptedFlag  = 1UL << 0UL,  /*!< Trigger 0 is interrupted by a high priority exception. */
     kLPADC_Trigger1InterruptedFlag  = 1UL << 1UL,  /*!< Trigger 1 is interrupted by a high priority exception. */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 2U)
     kLPADC_Trigger2InterruptedFlag  = 1UL << 2UL,  /*!< Trigger 2 is interrupted by a high priority exception. */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 2U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 3U)
     kLPADC_Trigger3InterruptedFlag  = 1UL << 3UL,  /*!< Trigger 3 is interrupted by a high priority exception. */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 3U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 4U)
     kLPADC_Trigger4InterruptedFlag  = 1UL << 4UL,  /*!< Trigger 4 is interrupted by a high priority exception. */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 4U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 5U)
     kLPADC_Trigger5InterruptedFlag  = 1UL << 5UL,  /*!< Trigger 5 is interrupted by a high priority exception. */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 5U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 6U)
     kLPADC_Trigger6InterruptedFlag  = 1UL << 6UL,  /*!< Trigger 6 is interrupted by a high priority exception. */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 6U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 7U)
     kLPADC_Trigger7InterruptedFlag  = 1UL << 7UL,  /*!< Trigger 7 is interrupted by a high priority exception. */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 8U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 7U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 8U)
     kLPADC_Trigger8InterruptedFlag  = 1UL << 8UL,  /*!< Trigger 8 is interrupted by a high priority exception. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 8U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 9U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 8U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 9U)
     kLPADC_Trigger9InterruptedFlag  = 1UL << 9UL,  /*!< Trigger 9 is interrupted by a high priority exception. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 9U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 10U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 9U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 10U)
     kLPADC_Trigger10InterruptedFlag = 1UL << 10UL, /*!< Trigger 10 is interrupted by a high priority exception. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 10U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 11U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 10U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 11U)
     kLPADC_Trigger11InterruptedFlag = 1UL << 11UL, /*!< Trigger 11 is interrupted by a high priority exception. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 11U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 12U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 11U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 12U)
     kLPADC_Trigger12InterruptedFlag = 1UL << 12UL, /*!< Trigger 12 is interrupted by a high priority exception. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 12U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 13U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 12U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 13U)
     kLPADC_Trigger13InterruptedFlag = 1UL << 13UL, /*!< Trigger 13 is interrupted by a high priority exception. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 13U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 14U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 13U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 14U)
     kLPADC_Trigger14InterruptedFlag = 1UL << 14UL, /*!< Trigger 14 is interrupted by a high priority exception. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 14U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 15U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 14U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 15U)
     kLPADC_Trigger15InterruptedFlag = 1UL << 15UL, /*!< Trigger 15 is interrupted by a high priority exception. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 15U) */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 15U) */
 
     kLPADC_Trigger0CompletedFlag = 1UL << 16UL,    /*!< Trigger 0 is completed and
                                                        trigger 0 has enabled completion interrupts. */
     kLPADC_Trigger1CompletedFlag = 1UL << 17UL,    /*!< Trigger 1 is completed and
                                                        trigger 1 has enabled completion interrupts. */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 2U)
     kLPADC_Trigger2CompletedFlag = 1UL << 18UL,    /*!< Trigger 2 is completed and
                                                        trigger 2 has enabled completion interrupts. */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 2U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 3U)
     kLPADC_Trigger3CompletedFlag = 1UL << 19UL,    /*!< Trigger 3 is completed and
                                                        trigger 3 has enabled completion interrupts. */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 3U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 4U)
     kLPADC_Trigger4CompletedFlag = 1UL << 20UL,    /*!< Trigger 4 is completed and
                                                        trigger 4 has enabled completion interrupts. */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 4U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 5U)
     kLPADC_Trigger5CompletedFlag = 1UL << 21UL,    /*!< Trigger 5 is completed and
                                                        trigger 5 has enabled completion interrupts. */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 5U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 6U)
     kLPADC_Trigger6CompletedFlag = 1UL << 22UL,    /*!< Trigger 6 is completed and
                                                        trigger 6 has enabled completion interrupts. */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 6U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 7U)
     kLPADC_Trigger7CompletedFlag = 1UL << 23UL,    /*!< Trigger 7 is completed and
                                                        trigger 7 has enabled completion interrupts. */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 8U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 7U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 8U)
     kLPADC_Trigger8CompletedFlag = 1UL << 24UL,    /*!< Trigger 8 is completed and
                                                        trigger 8 has enabled completion interrupts. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 8U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 9U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 8U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 9U)
     kLPADC_Trigger9CompletedFlag = 1UL << 25UL,    /*!< Trigger 9 is completed and
                                                        trigger 9 has enabled completion interrupts. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 9U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 10U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 9U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 10U)
     kLPADC_Trigger10CompletedFlag = 1UL << 26UL,   /*!< Trigger 10 is completed and
                                                       trigger 10 has enabled completion interrupts. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 10U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 11U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 10U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 11U)
     kLPADC_Trigger11CompletedFlag = 1UL << 27UL,   /*!< Trigger 11 is completed and
                                                       trigger 11 has enabled completion interrupts. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 11U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 12U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 11U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 12U)
     kLPADC_Trigger12CompletedFlag = 1UL << 28UL,   /*!< Trigger 12 is completed and
                                                       trigger 12 has enabled completion interrupts. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 12U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 13U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 12U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 13U)
     kLPADC_Trigger13CompletedFlag = 1UL << 29UL,   /*!< Trigger 13 is completed and
                                                       trigger 13 has enabled completion interrupts. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 13U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 14U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 13U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 14U)
     kLPADC_Trigger14CompletedFlag = 1UL << 30UL,   /*!< Trigger 14 is completed and
                                                       trigger 14 has enabled completion interrupts. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 14U) */
-#if !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 15U)
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 14U) */
+#if !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 15U)
     kLPADC_Trigger15CompletedFlag = 1UL << 31UL,   /*!< Trigger 15 is completed and
                                                       trigger 15 has enabled completion interrupts. */
-#endif /* !defined(ADC_TCTRL_COUNT) || (ADC_TCTRL_COUNT > 15U) */
+#endif /* !defined(FSL_FEATURE_LPADC_ADC_TCTRL_COUNT) || (FSL_FEATURE_LPADC_ADC_TCTRL_COUNT > 15U) */
 };
 #endif /* (defined(FSL_FEATURE_LPADC_HAS_TSTAT) && (FSL_FEATURE_LPADC_HAS_TSTAT)) */
 
@@ -1337,7 +1373,7 @@ static inline void LPADC_GetOffsetValue(ADC_Type *base, int16_t *pValue)
     if ((ofstrim & ADC_OFSTRIM_OFSTRIM_SIGN) != 0U)
     {
         /* If the sign bit is set, then set the other MSB. */
-        ofstrim |= (uint16_t)(~(uint32_t)ADC_OFSTRIM_OFSTRIM_MAX & 0xFFFFU);
+        ofstrim |= (uint16_t)(~(uint16_t)ADC_OFSTRIM_OFSTRIM_MAX & 0xFFFFU);
     }
 
     *pValue = (int16_t)ofstrim;

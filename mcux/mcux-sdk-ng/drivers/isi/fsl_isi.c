@@ -17,6 +17,12 @@
 #define FSL_COMPONENT_ID "platform.drivers.isi"
 #endif
 
+#if defined(ISI_RSTS)
+#define ISI_RESETS_ARRAY ISI_RSTS
+#elif defined(ISI_RSTS_N)
+#define ISI_RESETS_ARRAY ISI_RSTS_N
+#endif
+
 /* The macros for color space convertion. */
 #define ISI_CSC_COEFF_FRAC_BITS  8U
 #define ISI_CSC_COEFF_SIGN_SHIFT 10U
@@ -79,6 +85,11 @@ static ISI_Type *const s_isiBases[] = ISI_BASE_PTRS;
 static const clock_ip_name_t s_isiClocks[] = ISI_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+#if defined(ISI_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_isiResets[] = ISI_RESETS_ARRAY;
+#endif
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -128,7 +139,7 @@ static uint32_t ISI_GetInstance(ISI_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_isiBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_isiBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_isiBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -191,10 +202,19 @@ static uint32_t ISI_ConvertFloat(float floatValue, uint8_t intBits, uint8_t frac
  */
 void ISI_Init(ISI_Type *base)
 {
+#if (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)) \
+    || defined(ISI_RESETS_ARRAY)
+    uint32_t instance = ISI_GetInstance(base);
+#endif
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the clock. */
-    (void)CLOCK_EnableClock(s_isiClocks[ISI_GetInstance(base)]);
+    (void)CLOCK_EnableClock(s_isiClocks[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(ISI_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_isiResets[instance]);
+#endif
 
     /* Enable channel clock. */
     ISI_Reset(base);

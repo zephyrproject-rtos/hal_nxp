@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021,2023,2024 NXP
+ * Copyright 2016-2021,2023,2024, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -260,6 +260,7 @@ void SDK_DelayAtLeastUs(uint32_t delayTime_us, uint32_t coreClock_Hz)
          * not matter because other instructions outside while loop is enough to fill the time.
          */
         count = count / 3U * 2U;
+#elif (__CORTEX_M == 85)
 #else
         count = count / 4U;
 #endif
@@ -394,5 +395,11 @@ __attribute__((weak)) void IRQSTEER_DisableInterrupt(int32_t irqsteerInstIdx, IR
 {
     (void)irqsteerInstIdx;
     (void)interrupt;
+}
+
+__attribute__((weak)) int32_t IRQSTEER_GetInstIdxByIRQ(IRQn_Type irq)
+{
+    (void)irq;
+    return -1;
 }
 #endif

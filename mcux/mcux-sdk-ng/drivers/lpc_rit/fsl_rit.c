@@ -51,7 +51,7 @@ static uint32_t RIT_GetInstance(RIT_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_ritBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_ritBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_ritBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

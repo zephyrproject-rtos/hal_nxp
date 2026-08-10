@@ -40,8 +40,8 @@ void NETC_SocGetBaseResource(netc_enetc_hw_t *hw, netc_hw_si_idx_t si)
     }
     else
     {
-        assert(siIdx >= 3U);
-        hw->func.vf   = s_netcVfBases[siIdx - 3];
+        assert(siIdx >= 4U);
+        hw->func.vf   = s_netcVfBases[siIdx - 4U];
         hw->msixTable = (netc_msix_entry_t *)((uintptr_t)hw->si + 0x60000U);
     }
 }

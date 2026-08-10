@@ -132,7 +132,7 @@ uint32_t LPI2C_GetInstance(LPI2C_Type *base)
     uint32_t instance;
     for (instance = 0U; instance < ARRAY_SIZE(kLpi2cBases); ++instance)
     {
-        if (MSDK_REG_SECURE_ADDR(kLpi2cBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(kLpi2cBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -781,6 +781,11 @@ status_t LPI2C_MasterReceive(LPI2C_Type *base, void *rxBuff, size_t rxSize)
     uint32_t waitTimes = I2C_RETRY_TIMES;
 #endif
 
+    if (rxSize == 0U)
+    {
+        return kStatus_InvalidArgument;
+    }
+
     /* Receive data */
     while (rxSize > 0U)
     {
@@ -901,8 +906,20 @@ status_t LPI2C_MasterTransferBlocking(LPI2C_Type *base, lpi2c_master_transfer_t 
     uint16_t commandBuffer[7];
     uint32_t cmdCount = 0U;
 
+    if ((transfer->direction == kLPI2C_Read) && (transfer->dataSize == 0U))
+    {
+        return kStatus_InvalidArgument;
+    }
+
     /* Return an error if the bus is already in use not by us. */
     result = LPI2C_CheckForBusyBus(base);
+
+    if (kStatus_Success == result)
+    {
+        /* Check for an error from the previous transfer (kLPI2C_TransferNoStopFlag was used) */
+        result = LPI2C_MasterCheckAndClearError(base, LPI2C_MasterGetStatusFlags(base));
+    }
+
     if (kStatus_Success == result)
     {
         /* Clear all flags. */
@@ -968,7 +985,7 @@ status_t LPI2C_MasterTransferBlocking(LPI2C_Type *base, lpi2c_master_transfer_t 
             }
 
             /* Receive Data. */
-            if ((transfer->direction == kLPI2C_Read) && (transfer->dataSize > 0U))
+            if (transfer->direction == kLPI2C_Read)
             {
                 result = LPI2C_MasterReceive(base, transfer->data, transfer->dataSize);
             }
@@ -982,6 +999,22 @@ status_t LPI2C_MasterTransferBlocking(LPI2C_Type *base, lpi2c_master_transfer_t 
             if (kStatus_Success == result)
             {
                 result = stopResult;
+            }
+        }
+        else
+        {
+            if ((kStatus_Success == result) && (transfer->direction == kLPI2C_Write))
+            {
+                /* Wait while TX FIFO is not empty */
+                while ((base->MFSR & LPI2C_MFSR_TXCOUNT_MASK) != 0U)
+                {
+                    /* Check for error flags. */
+                    result = LPI2C_MasterCheckAndClearError(base, LPI2C_MasterGetStatusFlags(base));
+                    if (result != kStatus_Success)
+                    {
+                        break;
+                    }
+                }
             }
         }
     }
@@ -1254,7 +1287,8 @@ static status_t LPI2C_RunTransferStateMachine(LPI2C_Type *base, lpi2c_master_han
                     if ((xfer->flags & (uint32_t)kLPI2C_TransferNoStopFlag) == 0U)
                     {
                         /* We stay in this state until the stop state is detected. */
-                        if (0U != (status & (uint32_t)kLPI2C_MasterStopDetectFlag))
+                        if ((0U != (status & (uint32_t)kLPI2C_MasterStopDetectFlag)) &&
+                            ((base->MFSR & LPI2C_MFSR_TXCOUNT_MASK) == 0U))
                         {
                             *isDone = true;
                         }
@@ -1368,6 +1402,11 @@ status_t LPI2C_MasterTransferNonBlocking(LPI2C_Type *base,
 
     status_t result;
 
+    if ((transfer->direction == kLPI2C_Read) && (transfer->dataSize == 0U))
+    {
+        return kStatus_InvalidArgument;
+    }
+
     /* Return busy if another transaction is in progress. */
     if (handle->state != (uint8_t)kIdleState)
     {
@@ -1378,13 +1417,19 @@ status_t LPI2C_MasterTransferNonBlocking(LPI2C_Type *base,
         result = LPI2C_CheckForBusyBus(base);
     }
 
+    if (kStatus_Success == result)
+    {
+        /* Check for an error from the previous transfer (kLPI2C_TransferNoStopFlag was used) */
+        result = LPI2C_MasterCheckAndClearError(base, LPI2C_MasterGetStatusFlags(base));
+    }
+
     if ((status_t)kStatus_Success == result)
     {
+        /* Clear all flags. */
+        LPI2C_MasterClearStatusFlags(base, (uint32_t)kLPI2C_MasterClearFlags);
+
         /* Disable LPI2C IRQ sources while we configure stuff. */
         LPI2C_MasterDisableInterrupts(base, (uint32_t)kLPI2C_MasterIrqFlags);
-
-        /* Reset FIFO in case there are data. */
-        base->MCR |= LPI2C_MCR_RRF_MASK | LPI2C_MCR_RTF_MASK;
 
         /* Save transfer into handle. */
         handle->transfer = *transfer;
@@ -1393,9 +1438,6 @@ status_t LPI2C_MasterTransferNonBlocking(LPI2C_Type *base,
 
         /* Generate commands to send. */
         LPI2C_InitTransferStateMachine(handle);
-
-        /* Clear all flags. */
-        LPI2C_MasterClearStatusFlags(base, (uint32_t)kLPI2C_MasterClearFlags);
 
         /* Turn off auto-stop option. */
         base->MCFGR1 &= ~LPI2C_MCFGR1_AUTOSTOP_MASK;

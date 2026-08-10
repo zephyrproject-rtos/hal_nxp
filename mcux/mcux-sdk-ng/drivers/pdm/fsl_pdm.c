@@ -10,6 +10,12 @@
 #define FSL_COMPONENT_ID "platform.drivers.pdm"
 #endif
 
+#if defined(PDM_RSTS)
+#define PDM_RESETS_ARRAY PDM_RSTS
+#elif defined(PDM_RSTS_N)
+#define PDM_RESETS_ARRAY PDM_RSTS_N
+#endif
+
 /*******************************************************************************
  * Definitations
  ******************************************************************************/
@@ -63,6 +69,11 @@ static const clock_ip_name_t s_pdmFilterClock[] = PDM_FILTER_CLOCKS;
 #endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+#if defined(PDM_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_pdmResets[] = PDM_RESETS_ARRAY;
+#endif
+
 /*! @brief Pointer to tx IRQ handler for each instance. */
 static pdm_isr_t s_pdmIsr;
 #if !(defined(FSL_FEATURE_PDM_HAS_NO_HWVAD) && FSL_FEATURE_PDM_HAS_NO_HWVAD)
@@ -79,7 +90,7 @@ uint32_t PDM_GetInstance(PDM_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_pdmBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_pdmBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_pdmBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -398,13 +409,22 @@ void PDM_Init(PDM_Type *base, const pdm_config_t *config)
     assert(config != NULL);
     assert(config->fifoWatermark <= PDM_FIFO_CTRL_FIFOWMK_MASK);
 
+#if (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)) \
+    || defined(PDM_RESETS_ARRAY)
+    uint32_t instance = PDM_GetInstance(base);
+#endif
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the PDM clock */
-    CLOCK_EnableClock(s_pdmClock[PDM_GetInstance(base)]);
+    CLOCK_EnableClock(s_pdmClock[instance]);
 #if defined(FSL_PDM_HAS_FILTER_CLOCK_GATE) && FSL_PDM_HAS_FILTER_CLOCK_GATE
-    CLOCK_EnableClock(s_pdmFilterClock[PDM_GetInstance(base)]);
+    CLOCK_EnableClock(s_pdmFilterClock[instance]);
 #endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(PDM_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_pdmResets[instance]);
+#endif
 
     /* Enable the module and disable the interface/all channel */
     base->CTRL_1 &=

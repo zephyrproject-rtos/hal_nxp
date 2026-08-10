@@ -94,7 +94,7 @@ static uint32_t LDB_GetInstance(LDB_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0U; instance < ARRAY_SIZE(s_ldbBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_ldbBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_ldbBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

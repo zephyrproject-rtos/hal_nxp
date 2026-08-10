@@ -20,8 +20,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief FREQME driver version 2.1.4. */
-#define FSL_FREQME_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
+/*! @brief FREQME driver version 2.2.0. */
+#define FSL_FREQME_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*! @} */
 
 /*!
@@ -32,7 +32,7 @@ enum _freqme_interrupt_status_flags
 {
     kFREQME_UnderflowInterruptStatusFlag = FREQME_CTRLSTAT_LT_MIN_STAT_MASK,   /*!< Indicate the measurement is
                                                                                      just done and the result is less
-                                                                                     than minimun value. */
+                                                                                     than minimum value. */
     kFREQME_OverflowInterruptStatusFlag = FREQME_CTRLSTAT_GT_MAX_STAT_MASK,    /*!< Indicate the measurement is
                                                                                      just done and the result is greater
                                                                                      than maximum value. */
@@ -277,6 +277,30 @@ static inline void FREQME_SetMaxExpectedValue(FREQME_Type *base, uint32_t maxVal
     base->MAX = maxValue;
 }
 
+#if (defined(FSL_FEATURE_FREQME_HAS_CLOCK_SOURCE_SELECT) && FSL_FEATURE_FREQME_HAS_CLOCK_SOURCE_SELECT)
+/*!
+ * @brief Set the reference clock source.
+ *
+ * @param base FREQME peripheral base address.
+ * @param referenceClk The reference clock source, see freqme_reference_clock_t in <device>_COMMON.h.
+ */
+static inline void FREQME_SetReferenceClk(FREQME_Type *base, uint32_t referenceClk)
+{
+    base->REF = FREQME_REF_INP(referenceClk);
+}
+
+/*!
+ * @brief Set the target clock source.
+ *
+ * @param base FREQME peripheral base address.
+ * @param targetClk The target clock source, see freqme_target_clock_t in <device>_COMMON.h.
+ */
+static inline void FREQME_SetTargetClk(FREQME_Type *base, uint32_t targetClk)
+{
+    base->TAR = FREQME_TAR_INP(targetClk);
+}
+#endif
+
 /*! @} */
 
 /*!
@@ -285,16 +309,16 @@ static inline void FREQME_SetMaxExpectedValue(FREQME_Type *base, uint32_t maxVal
  */
 
 /*!
- * @brief Calculate the frequency of selected target clock。
+ * @brief Calculate the frequency of selected target clock.
  *
- * @note The formula: Ftarget = (RESULT - 2) * Freference / 2 ^ REF_SCALE.
+ * @note The formula: Ftarget = (RESULT - 2) * Freference / 2 ^ REF_SCALE or
+ *       Ftarget = (RESULT + 1) * Freference / 2 ^ REF_SCALE
  *
  * @note This function only useful when the operate mode is selected as frequency measurement mode.
  *
  * @param base FREQME peripheral base address.
  * @param refClkFrequency The frequency of reference clock.
- * @return The frequency of target clock the unit is Hz, if the output result is 0, please check the module's
- *         operate mode.
+ * @return The frequency of target clock, if the output result is 0, please check the module's operate mode.
  */
 uint32_t FREQME_CalculateTargetClkFreq(FREQME_Type *base, uint32_t refClkFrequency);
 

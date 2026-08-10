@@ -55,7 +55,7 @@ static uint32_t MU_GetInstance(MU_Type *base)
      */
     for (instance = 0U; instance < (sizeof(s_muBases) / sizeof(s_muBases[0])); instance++) /* GCOVR_EXCL_BR_LINE */
     {
-        if (MSDK_REG_SECURE_ADDR(s_muBases[instance]) == MSDK_REG_SECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
+        if (MSDK_REG_NONSECURE_ADDR(s_muBases[instance]) == MSDK_REG_NONSECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
         {
             break;
         }

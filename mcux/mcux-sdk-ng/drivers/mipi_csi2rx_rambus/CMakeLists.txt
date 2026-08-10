@@ -1,0 +1,15 @@
+# Copyright 2026 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+if(CONFIG_MCUX_COMPONENT_driver.mipi_csi2rx_rambus)
+    mcux_component_version(1.0.0)
+
+    mcux_add_source(
+        SOURCES
+        fsl_mipi_csi2rx.c
+        fsl_mipi_csi2rx.h
+    )
+
+    mcux_add_include(INCLUDES .)
+
+endif()

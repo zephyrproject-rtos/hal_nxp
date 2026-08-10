@@ -87,7 +87,7 @@ uint32_t QSPI_GetInstance(QuadSPI_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_qspiBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_qspiBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_qspiBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -139,6 +139,7 @@ void QSPI_Init(QuadSPI_Type *base, qspi_config_t *config, uint32_t srcClock_Hz)
     /* To avoid the configured baudrate exceeds the expected baudrate value, which may possibly put the
     QSPI work under unsupported frequency, set the divider higher when there is reminder, use ceiling
     operation, ceiling(a/b) = (a-1)/b + 1. */
+    assert(srcClock_Hz != 0U);
     val |= QuadSPI_MCR_SCLKCFG((srcClock_Hz - 1U) / config->baudRate);
     base->MCR = val;
 #endif /* FSL_FEATURE_QSPI_CLOCK_CONTROL_EXTERNAL */
@@ -348,7 +349,7 @@ void QSPI_SetDqsConfig(QuadSPI_Type *base, qspi_dqs_config_t *config)
             break;
     }
 
-    soccrVal |= (QuadSPI_SOCCR_DQS_INV_EN(config->enableDQSClkInverse) |
+    soccrVal |= (QuadSPI_SOCCR_DQS_INV_EN(config->enableDQSClkInverse ? 1U : 0U) |
                  QuadSPI_SOCCR_DQS_IFA_DELAY_CHAIN_SEL(config->portADelayTapNum)
 #if defined(QuadSPI_SOCCR_DQS_IFB_DELAY_CHAIN_SEL_MASK)
                  | QuadSPI_SOCCR_DQS_IFB_DELAY_CHAIN_SEL(config->portBDelayTapNum)

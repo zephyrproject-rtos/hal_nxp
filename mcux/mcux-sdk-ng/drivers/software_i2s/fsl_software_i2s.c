@@ -49,7 +49,7 @@ static uint32_t SOFTWARE_I2S_GetInstance(SOFTWARE_I2S_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < software_i2sArrayCount; instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_software_i2sBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_software_i2sBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

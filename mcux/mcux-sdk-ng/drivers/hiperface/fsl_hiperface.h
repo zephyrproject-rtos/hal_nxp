@@ -197,7 +197,7 @@ enum
 #define DSL_GetLmsgBuf(base, des, num)        memcpy(des, (void *)((base)->PRIM), num)
 
 #define DSL_SetLmsgAddr(base, var, addr)     do { \
-                                                var |=  (addr >> 8) & HIPERFACE_PC_ADD_H_LADD_MASK; \
+                                                var |=  (uint8_t)((addr >> 8) & HIPERFACE_PC_ADD_H_LADD_MASK); \
                                                 (base)->PC_ADD_H = var; \
                                                 (base)->PC_ADD_L = HIPERFACE_PC_ADD_L_LADD(addr);} while(0)
 
@@ -570,8 +570,8 @@ status_t DSL_RDB_GetReadCounter(HIPERFACE_Type *base, uint32_t *counter);
 status_t DSL_RDB_SetIncrementCounter(HIPERFACE_Type *base);
 status_t DSL_RDB_SetResetcounter(HIPERFACE_Type *base);
 status_t DSL_RDB_LoadFile(HIPERFACE_Type *base, char *fileName, uint8_t isVerified);
-status_t DSL_RDB_ReadFile(HIPERFACE_Type *base, uint8_t *buf, int16_t len, uint16_t offset);
-status_t DSL_RDB_WriteFile(HIPERFACE_Type *base, uint8_t *buf, int16_t len, uint16_t offset);
+status_t DSL_RDB_ReadFile(HIPERFACE_Type *base, uint8_t *buf, uint16_t len, uint16_t offset);
+status_t DSL_RDB_WriteFile(HIPERFACE_Type *base, uint8_t *buf, uint16_t len, uint16_t offset);
 status_t DSL_RDB_GetFileStatus(HIPERFACE_Type *base, uint8_t *ReadAccessRight, uint8_t *writeAccessRight, uint16_t *fileSize);
 status_t DSL_RDB_CreateFile(HIPERFACE_Type *base, char *fileName, uint8_t ReadAccessRight, uint8_t writeAccessRight);
 status_t DSL_RDB_ChangeFile(HIPERFACE_Type *base, char *fileName, uint8_t ReadAccessRight, uint8_t writeAccessRight);

@@ -111,7 +111,7 @@ uint64_t DSL_GetFastPosition(HIPERFACE_Type *base, dsl_encoder_t *enc)
 	volatile uint32_t pos_h = *(uint32_t *)&base->POS_PRIM[0];
 	volatile uint32_t pos_l = *(uint32_t *)&base->POS_PRIM[4];
 	pos_h = BSWAP32(pos_h);
-	uint64_t pos_u64 = (((uint64_t)pos_h) << 8) + (pos_l & 0xFF);
+	uint64_t pos_u64 = (((uint64_t)pos_h) << 8U) + (pos_l & 0xFF);
 	if (enc->sign && (pos_u64 | enc->signMask)) {
 		return pos_u64 | enc->signExtend;
 	}
@@ -120,7 +120,7 @@ uint64_t DSL_GetFastPosition(HIPERFACE_Type *base, dsl_encoder_t *enc)
 
 uint32_t DSL_GetSpeed(HIPERFACE_Type *base)
 {
-	return (base->VEL_PRIM[0] << 16) + (base->VEL_PRIM[1] << 8) + base->VEL_PRIM[0];
+	return (base->VEL_PRIM[0] << 16U) | (base->VEL_PRIM[1] << 8U) | base->VEL_PRIM[0];
 }
 
 char *DSL_RDB_AccessErr2str(uint16_t errno)
@@ -307,7 +307,7 @@ status_t DSL_RDB_GetDataSize(HIPERFACE_Type *base, dsl_rdb_node_t *node, uint16_
 			return status;
 		}
 	}
-	node->resourceDataLen = BSWAP16(node->resourceDataLen);
+	node->resourceDataLen = (uint16_t)BSWAP16(node->resourceDataLen);
 	return kStatus_Success;
 }
 
@@ -320,7 +320,7 @@ status_t DSL_RDB_GetReadAccessLevel(HIPERFACE_Type *base, dsl_rdb_node_t *node, 
 			return status;
 		}
 	}
-	node->readAccessLevel = BSWAP16(node->readAccessLevel);
+	node->readAccessLevel = (uint16_t)BSWAP16(node->readAccessLevel);
 	return kStatus_Success;
 }
 
@@ -333,7 +333,7 @@ status_t DSL_RDB_GetWriteAccessLevel(HIPERFACE_Type *base, dsl_rdb_node_t *node,
 			return status;
 		}
 	}
-	node->writeAccessLevel = BSWAP16(node->writeAccessLevel);
+	node->writeAccessLevel = (uint16_t)BSWAP16(node->writeAccessLevel);
 	return kStatus_Success;
 }
 
@@ -346,7 +346,7 @@ status_t DSL_RDB_GetTimeOverrun(HIPERFACE_Type *base, dsl_rdb_node_t *node, uint
 			return status;
 		}
 	}
-	node->timeOverrun = BSWAP16(node->timeOverrun);
+	node->timeOverrun = (uint16_t)BSWAP16(node->timeOverrun);
 	/* The resource needs more than 254 ms for processing or the time overrun is not deterministic */
 	if (node->timeOverrun == 255) {
 		/* Assume that 3s is enough for slave processing*/
@@ -364,7 +364,7 @@ status_t DSL_RDB_GetDataType(HIPERFACE_Type *base, dsl_rdb_node_t *node, uint16_
 			return status;
 		}
 	}
-	node->dataType = BSWAP16(node->dataType);
+	node->dataType = (uint16_t)BSWAP16(node->dataType);
 	return kStatus_Success;
 }
 
@@ -446,7 +446,6 @@ status_t DSL_RDB_WriteIndirect(HIPERFACE_Type *base, dsl_rdb_node_t *node, void 
 	return kStatus_Success;
 }
 
-
 void DSL_GetFastPositionAndSpeed(HIPERFACE_Type *base, uint64_t *position, int32_t *speed)
 {
 	uint32_t pos0, pos1;
@@ -454,9 +453,9 @@ void DSL_GetFastPositionAndSpeed(HIPERFACE_Type *base, uint64_t *position, int32
 	pos1 = *(uint32_t*)(&base->POS_PRIM[4]);
 	*position = (((uint64_t)pos0) << 8) + (pos1 >> 24);
 	if (pos1 & 0x800000) {
-		*speed = pos1 | 0xFF000000;
+		*speed = (int32_t)(pos1 | 0xFF000000);
 	} else {
-			*speed = pos1 & 0xFFFFFF;
+			*speed = (int32_t)(pos1 & 0xFFFFFF);
 	}
 }
 
@@ -524,7 +523,7 @@ status_t DSL_RDB_GetNodeLinkedNum(HIPERFACE_Type *base, dsl_rdb_node_t *node)
 		}
 
 	}
-	node->childrenNum = BSWAP16(node->childrenNum);
+	node->childrenNum = (uint16_t)BSWAP16(node->childrenNum);
 	return kStatus_Success;
 }
 
@@ -537,7 +536,7 @@ status_t DSL_RDB_GetNodeLinkedRID(HIPERFACE_Type *base, dsl_rdb_node_t *node, ui
 			return status;
 		}
 	}
-	*rid = BSWAP16(*rid);
+	*rid = (uint16_t)BSWAP16(*rid);
 	return kStatus_Success;
 }
 
@@ -709,7 +708,7 @@ status_t DSL_RDB_GetTypeOfEncoder(HIPERFACE_Type *base, uint16_t *type)
 		return status;
 	}
 
-	*type = BSWAP16(*type);
+	*type = (uint16_t)BSWAP16(*type);
 	return kStatus_Success;
 }
 
@@ -843,7 +842,7 @@ status_t DSL_RDB_GetEEPROMSize(HIPERFACE_Type *base, uint16_t *size)
 		return status;
 	}
 
-	*size = BSWAP16(*size);
+	*size = (uint16_t)BSWAP16(*size);
 	return kStatus_Success;
 }
 
@@ -866,7 +865,7 @@ status_t DSL_RDB_GetSafeChannel2Resolution(HIPERFACE_Type *base, uint32_t *resol
 
 status_t DSL_RDB_GetSensorPeriods(HIPERFACE_Type *base, uint16_t *sysPeriods, uint32_t *sysResolution)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -878,14 +877,14 @@ status_t DSL_RDB_GetSensorPeriods(HIPERFACE_Type *base, uint16_t *sysPeriods, ui
 		return status;
 	}
 
-	*sysPeriods = (buf[0] << 8) + buf[1];
-	*sysResolution = (buf[2] << 24) + (buf[3] << 16) + (buf[4] << 8) + buf[5];
+	*sysPeriods = (buf[0] << 8U) | buf[1];
+	*sysResolution = (buf[2] << 24U) | (buf[3] << 16U) | (buf[4] << 8U) | buf[5];
 	return kStatus_Success;
 }
 
 status_t DSL_RDB_GetTemperatureRange(HIPERFACE_Type *base, float *maximum, float *minimum)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	int16_t temp;
 	status_t status;
 	dsl_rdb_node_t node = {0};
@@ -907,7 +906,7 @@ status_t DSL_RDB_GetTemperatureRange(HIPERFACE_Type *base, float *maximum, float
 
 status_t DSL_RDB_GetTemperature(HIPERFACE_Type *base, float *temperature)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	int16_t temp;
 	status_t status;
 	dsl_rdb_node_t node = {0};
@@ -927,7 +926,7 @@ status_t DSL_RDB_GetTemperature(HIPERFACE_Type *base, float *temperature)
 
 status_t DSL_RDB_GetSupplyVoltageRange(HIPERFACE_Type *base, uint16_t *maximum, uint16_t *minimum)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -939,14 +938,14 @@ status_t DSL_RDB_GetSupplyVoltageRange(HIPERFACE_Type *base, uint16_t *maximum, 
 		return status;
 	}
 
-	*minimum = (buf[0] << 8) + buf[1];
-	*maximum = (buf[2] << 8) + buf[3];
+	*minimum = (buf[0] << 8U) | buf[1];
+	*maximum = (buf[2] << 8U) | buf[3];
 	return kStatus_Success;
 }
 
 status_t DSL_RDB_GetSupplyVoltage(HIPERFACE_Type *base, uint16_t *voltage)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -958,13 +957,13 @@ status_t DSL_RDB_GetSupplyVoltage(HIPERFACE_Type *base, uint16_t *voltage)
 		return status;
 	}
 
-	*voltage = (buf[0] << 8) + buf[1];
+	*voltage = (buf[0] << 8U) | buf[1];
 	return kStatus_Success;
 }
 
 status_t DSL_RDB_GetRotationSpeedRange(HIPERFACE_Type *base, uint16_t *range)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -976,13 +975,13 @@ status_t DSL_RDB_GetRotationSpeedRange(HIPERFACE_Type *base, uint16_t *range)
 		return status;
 	}
 
-	*range = (buf[0] << 8) + buf[1];
+	*range = (buf[0] << 8U) | buf[1];
 	return kStatus_Success;
 }
 
 status_t DSL_RDB_GetRotationSpeed(HIPERFACE_Type *base, uint16_t *speed)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -994,13 +993,13 @@ status_t DSL_RDB_GetRotationSpeed(HIPERFACE_Type *base, uint16_t *speed)
 		return status;
 	}
 
-	*speed = (buf[0] << 8) + buf[1];
+	*speed = (buf[0] << 8U) | buf[1];
 	return kStatus_Success;
 }
 
 status_t DSL_RDB_GetAccelerationRange(HIPERFACE_Type *base, uint16_t *range)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1012,13 +1011,13 @@ status_t DSL_RDB_GetAccelerationRange(HIPERFACE_Type *base, uint16_t *range)
 		return status;
 	}
 
-	*range = (buf[0] << 8) + buf[1];
+	*range = (buf[0] << 8U) | buf[1];
 	return kStatus_Success;
 }
 
 status_t DSL_RDB_GetLifetime(HIPERFACE_Type *base, uint32_t *operatingTime, uint32_t *shaftRotationsNum)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1030,14 +1029,14 @@ status_t DSL_RDB_GetLifetime(HIPERFACE_Type *base, uint32_t *operatingTime, uint
 		return status;
 	}
 
-	*operatingTime = (buf[0] << 24) + (buf[1] << 16) + (buf[2] << 8) + buf[3];
-	*shaftRotationsNum = (buf[4] << 24) + (buf[5] << 16) + (buf[6] << 8) + buf[7];
+	*operatingTime = (buf[0] << 24U) | (buf[1] << 16U) | (buf[2] << 8U) | buf[3];
+	*shaftRotationsNum = (buf[4] << 24U) | (buf[5] << 16U) | (buf[6] << 8U) | buf[7];
 	return kStatus_Success;
 }
 
 status_t DSL_RDB_GetLifetimeRemaining(HIPERFACE_Type *base, uint32_t *RemainingTaskLifetime)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1053,13 +1052,13 @@ status_t DSL_RDB_GetLifetimeRemaining(HIPERFACE_Type *base, uint32_t *RemainingT
 		return status;
 	}
 
-	*RemainingTaskLifetime = (buf[0] << 24) + (buf[1] << 16) + (buf[2] << 8) + buf[3];
+	*RemainingTaskLifetime = (buf[0] << 24U) | (buf[1] << 16U) | (buf[2] << 8U) | buf[3];
 	return kStatus_Success;
 }
 
 status_t DSL_RDB_GetErrorLogNumber(HIPERFACE_Type *base, uint32_t *num)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1071,13 +1070,13 @@ status_t DSL_RDB_GetErrorLogNumber(HIPERFACE_Type *base, uint32_t *num)
 		return status;
 	}
 
-	*num = (buf[0] << 24) + (buf[1] << 16) + (buf[2] << 8) + buf[3];
+	*num = (buf[0] << 24U) | (buf[1] << 16U) | (buf[2] << 8U) | buf[3];
 	return kStatus_Success;
 }
 
 status_t DSL_RDB_GetErrorLog(HIPERFACE_Type *base, uint32_t index, dsl_rdb_error_protocol_t *errlog)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1089,17 +1088,17 @@ status_t DSL_RDB_GetErrorLog(HIPERFACE_Type *base, uint32_t index, dsl_rdb_error
 		return status;
 	}
 
-	errlog->timeStamp = (buf[0] << 24) + (buf[1] << 16) + (buf[2] << 8) + buf[3];
-	errlog->temperature = (buf[4] << 8) + buf[5];
-	errlog->technologySpecific = (buf[6] << 8) + buf[7];
+	errlog->timeStamp = (buf[0] << 24U) | (buf[1] << 16U) | (buf[2] << 8U) | buf[3];
+	errlog->temperature = (buf[4] << 8U) | buf[5];
+	errlog->technologySpecific = (buf[6] << 8U) | buf[7];
 
 	if ((status = DSL_RDB_ReadIndirectWithOffset(base, &node, buf, 8, index + 0x0101)) != kStatus_Success) {
 		return status;
 	}
 
-	errlog->internalSupplyVoltage = (buf[0] << 8) + buf[1];
-	errlog->rotationSpeed = (buf[2] << 8) + buf[3];
-	errlog->reserved = (buf[4] << 8) + buf[5];
+	errlog->internalSupplyVoltage = (buf[0] << 8U) | buf[1];
+	errlog->rotationSpeed = (buf[2] << 8U) | buf[3];
+	errlog->reserved = (buf[4] << 8U) | buf[5];
 	errlog->additionalErrorConde = buf[6];
 	errlog->errorConde = buf[7];
 
@@ -1108,7 +1107,7 @@ status_t DSL_RDB_GetErrorLog(HIPERFACE_Type *base, uint32_t index, dsl_rdb_error
 
 status_t DSL_RDB_GetUsageHistogram(HIPERFACE_Type *base, uint8_t encoder_parameter, uint8_t histogram_class, uint32_t *value)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1124,13 +1123,13 @@ status_t DSL_RDB_GetUsageHistogram(HIPERFACE_Type *base, uint8_t encoder_paramet
 		return status;
 	}
 
-	*value = (buf[1] << 16) + (buf[2] << 8) + buf[3];
+	*value = (buf[1] << 16U) | (buf[2] << 8U) | buf[3];
 	return kStatus_Success;
 }
 
 status_t DSL_RDB_GetErrorLogFilter(HIPERFACE_Type *base, uint8_t *st)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1153,7 +1152,7 @@ status_t DSL_RDB_GetErrorLogFilter(HIPERFACE_Type *base, uint8_t *st)
 
 status_t DSL_RDB_SetErrorLogFilter(HIPERFACE_Type *base, uint8_t st)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1178,7 +1177,7 @@ status_t DSL_RDB_SetErrorLogFilter(HIPERFACE_Type *base, uint8_t st)
 
 status_t DSL_RDB_SetReset(HIPERFACE_Type *base)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1195,7 +1194,7 @@ status_t DSL_RDB_SetReset(HIPERFACE_Type *base)
 
 status_t DSL_RDB_SetShutDown(HIPERFACE_Type *base)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1212,7 +1211,7 @@ status_t DSL_RDB_SetShutDown(HIPERFACE_Type *base)
 
 status_t DSL_RDB_GetSetPosition(HIPERFACE_Type *base, uint64_t *pos)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1224,13 +1223,13 @@ status_t DSL_RDB_GetSetPosition(HIPERFACE_Type *base, uint64_t *pos)
 		return status;
 	}
 
-	*pos = ((uint64_t) buf[4] << 32) | (buf[3] << 24) | (buf[2] << 16) | (buf[1] << 8) | buf[0];
+	*pos = ((uint64_t) buf[4] << 32U) | (buf[3] << 24U) | (buf[2] << 16U) | (buf[1] << 8U) | buf[0];
 	return kStatus_Success;
 }
 
 status_t DSL_RDB_SetSetPosition(HIPERFACE_Type *base, uint64_t pos)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1256,7 +1255,7 @@ status_t DSL_RDB_SetSetPosition(HIPERFACE_Type *base, uint64_t pos)
 
 status_t DSL_RDB_GetCurrentAccessLevel(HIPERFACE_Type *base, uint8_t *accessLevel)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1274,7 +1273,7 @@ status_t DSL_RDB_GetCurrentAccessLevel(HIPERFACE_Type *base, uint8_t *accessLeve
 
 status_t DSL_RDB_SetAccessLevel(HIPERFACE_Type *base, uint8_t accessLevel, uint32_t password)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1300,7 +1299,7 @@ status_t DSL_RDB_SetAccessLevel(HIPERFACE_Type *base, uint8_t accessLevel, uint3
 
 status_t DSL_RDB_ChangeAccessKey(HIPERFACE_Type *base, uint8_t accessLevel, uint32_t newPassword, uint32_t oldPassword)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1325,7 +1324,7 @@ status_t DSL_RDB_ChangeAccessKey(HIPERFACE_Type *base, uint8_t accessLevel, uint
 
 status_t DSL_RDB_GetUserDefinedWarnings(HIPERFACE_Type *base, uint8_t warningIndex, user_defined_warning_t *warning)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1338,10 +1337,10 @@ status_t DSL_RDB_GetUserDefinedWarnings(HIPERFACE_Type *base, uint8_t warningInd
 	}
 
 	warning->warningIndex = warningIndex;
-	warning->monitiedRID = ((buf[0] & 0x3) << 8) | buf[1];
-	warning->monitiedOffset = (buf[3] << 8) + buf[2];
-	warning->warningType = ((buf[0] >> 5) & 0x7);
-	warning->format = ((buf[0] >> 2) & 0x7);
+	warning->monitiedRID = ((buf[0] & 0x3) << 8U) | buf[1];
+	warning->monitiedOffset = (buf[3] << 8U) | buf[2];
+	warning->warningType = ((buf[0] >> 5U) & 0x7);
+	warning->format = ((buf[0] >> 2U) & 0x7);
 
 	if ((status = DSL_RDB_ReadIndirectWithOffset(base, &node, buf, 8, warningIndex + 0x10)) != kStatus_Success) {
 		return status;
@@ -1353,14 +1352,14 @@ status_t DSL_RDB_GetUserDefinedWarnings(HIPERFACE_Type *base, uint8_t warningInd
 
 status_t DSL_RDB_SetUserDefinedWarnings(HIPERFACE_Type *base, user_defined_warning_t *warning)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
-	buf[0] = ((warning->warningType & 0x7) << 5) | ((warning->format & 0x7) << 2) | ((warning->monitiedRID >> 8) & 0x3);
+	buf[0] = ((warning->warningType & 0x7) << 5U) | ((warning->format & 0x7) << 2U) | ((warning->monitiedRID >> 8U) & 0x3);
 	buf[1] = warning->monitiedRID & 0xFF;
 	buf[2] = warning->monitiedOffset & 0xFF;
-	buf[3] = (warning->monitiedOffset >> 8) & 0xFF;
+	buf[3] = (warning->monitiedOffset >> 8U) & 0xFF;
 	buf[4] = 0;
 	buf[5] = 0;
 	buf[6] = 0;
@@ -1384,7 +1383,7 @@ status_t DSL_RDB_SetUserDefinedWarnings(HIPERFACE_Type *base, user_defined_warni
 
 status_t DSL_RDB_SetFactorySettings(HIPERFACE_Type *base, uint8_t reset_mode)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1407,7 +1406,7 @@ status_t DSL_RDB_SetFactorySettings(HIPERFACE_Type *base, uint8_t reset_mode)
 
 status_t DSL_RDB_GetUserDefinedEncoderIndexRID109(HIPERFACE_Type *base, uint8_t *index)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1425,7 +1424,7 @@ status_t DSL_RDB_GetUserDefinedEncoderIndexRID109(HIPERFACE_Type *base, uint8_t 
 }
 status_t DSL_RDB_SetUserDefinedEncoderIndexRID109(HIPERFACE_Type *base, uint8_t index)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1446,7 +1445,7 @@ status_t DSL_RDB_SetUserDefinedEncoderIndexRID109(HIPERFACE_Type *base, uint8_t 
 
 status_t DSL_RDB_SetPositionFilterSetting(HIPERFACE_Type *base, uint32_t positionFilter)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1468,7 +1467,7 @@ status_t DSL_RDB_SetPositionFilterSetting(HIPERFACE_Type *base, uint32_t positio
 
 status_t DSL_RDB_GetPositionFilterSetting(HIPERFACE_Type *base, uint32_t *positionFilter)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1480,14 +1479,14 @@ status_t DSL_RDB_GetPositionFilterSetting(HIPERFACE_Type *base, uint32_t *positi
 		return status;
 	}
 
-	*positionFilter = (buf[0] << 24) + (buf[1] << 16) + (buf[2] << 8) + buf[3];
+	*positionFilter = (buf[0] << 24U) | (buf[1] << 16U) | (buf[2] << 8U) | buf[3];
 	return kStatus_Success;
 
 }
 
 status_t DSL_RDB_GetUserDefinedEncoderIndexRID111(HIPERFACE_Type *base, uint8_t *index)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1506,7 +1505,7 @@ status_t DSL_RDB_GetUserDefinedEncoderIndexRID111(HIPERFACE_Type *base, uint8_t 
 
 status_t DSL_RDB_SetUserDefinedEncoderIndexRID111(HIPERFACE_Type *base, uint8_t index)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1527,7 +1526,7 @@ status_t DSL_RDB_SetUserDefinedEncoderIndexRID111(HIPERFACE_Type *base, uint8_t 
 
 status_t DSL_RDB_GetEncoderIndexIncorporationfunction(HIPERFACE_Type *base, uint8_t *isEnabled)
 {
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	status_t status;
 	dsl_rdb_node_t node = {0};
 
@@ -1587,7 +1586,7 @@ status_t DSL_RDB_GetReadCounter(HIPERFACE_Type *base, uint32_t *counter)
 		return status;
 	}
 
-	*counter = (buf[0] << 24) + (buf[1] << 16) + (buf[2] << 8) + buf[3];
+	*counter = (buf[0] << 24U) | (buf[1] << 16U) | (buf[2] << 8U) | buf[3];
 	return kStatus_Success;
 }
 
@@ -1659,7 +1658,7 @@ status_t DSL_RDB_LoadFile(HIPERFACE_Type *base, char *fileName, uint8_t isVerifi
 
 }
 
-status_t DSL_RDB_ReadFile(HIPERFACE_Type *base, uint8_t *buf, int16_t len, uint16_t offset)
+status_t DSL_RDB_ReadFile(HIPERFACE_Type *base, uint8_t *buf, uint16_t len, uint16_t offset)
 {
 	status_t status;
 	dsl_rdb_node_t node = {0};
@@ -1691,7 +1690,7 @@ status_t DSL_RDB_ReadFile(HIPERFACE_Type *base, uint8_t *buf, int16_t len, uint1
 	return kStatus_Success;
 }
 
-status_t DSL_RDB_WriteFile(HIPERFACE_Type *base, uint8_t *buf, int16_t len, uint16_t offset)
+status_t DSL_RDB_WriteFile(HIPERFACE_Type *base, uint8_t *buf, uint16_t len, uint16_t offset)
 {
 	status_t status;
 	dsl_rdb_node_t node = {0};
@@ -1728,7 +1727,7 @@ status_t DSL_RDB_WriteFile(HIPERFACE_Type *base, uint8_t *buf, int16_t len, uint
 status_t DSL_RDB_GetFileStatus(HIPERFACE_Type *base, uint8_t *ReadAccessRight, uint8_t *writeAccessRight, uint16_t *fileSize)
 {
 	status_t status;
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	dsl_rdb_node_t node = {0};
 
 	if ((status = DSL_RDB_GetNodeDefiningValue(base, &node, DSL_RID_FileStatus)) != kStatus_Success) {
@@ -1740,8 +1739,8 @@ status_t DSL_RDB_GetFileStatus(HIPERFACE_Type *base, uint8_t *ReadAccessRight, u
 	}
 
 	*ReadAccessRight = buf[0] & 0xF;
-	*writeAccessRight = (buf[0] & 0xF0) >> 4;
-	*fileSize = (buf[2] << 8) + buf[3];
+	*writeAccessRight = (buf[0] & 0xF0) >> 4U;
+	*fileSize = (buf[2] << 8U) | buf[3];
 	return kStatus_Success;
 }
 
@@ -1751,7 +1750,7 @@ status_t DSL_RDB_CreateFile(HIPERFACE_Type *base, char *fileName, uint8_t ReadAc
 	char buf[8];
 	uint16_t offset;
 	dsl_rdb_node_t node = {0};
-	int len, i;
+	int32_t len, i;
 
 	len = strlen(fileName);
 	if (len > 8) {
@@ -1763,7 +1762,7 @@ status_t DSL_RDB_CreateFile(HIPERFACE_Type *base, char *fileName, uint8_t ReadAc
 		buf[i] = '\0';
 	}
 
-	offset = (0x3 << 8) | ((writeAccessRight & 0xF) << 4) | (ReadAccessRight & 0xF);
+	offset = (0x3 << 8U) | ((writeAccessRight & 0xF) << 4U) | (ReadAccessRight & 0xF);
 
 	if ((status = DSL_RDB_GetNodeDefiningValue(base, &node, DSL_RID_CreateDeleteChangeFile)) != kStatus_Success) {
 		return status;
@@ -1779,10 +1778,10 @@ status_t DSL_RDB_CreateFile(HIPERFACE_Type *base, char *fileName, uint8_t ReadAc
 status_t DSL_RDB_ChangeFile(HIPERFACE_Type *base, char *fileName, uint8_t ReadAccessRight, uint8_t writeAccessRight)
 {
 	status_t status;
-	char buf[8];
+	char buf[8] = {0};
 	uint16_t offset;
 	dsl_rdb_node_t node = {0};
-	int len, i;
+	int32_t len, i;
 
 	len = strlen(fileName);
 	if (len > 8) {
@@ -1794,7 +1793,7 @@ status_t DSL_RDB_ChangeFile(HIPERFACE_Type *base, char *fileName, uint8_t ReadAc
 		buf[i] = '\0';
 	}
 
-	offset = (0x1 << 8) | ((writeAccessRight & 0xF) << 4) | (ReadAccessRight & 0xF);
+	offset = (0x1 << 8U) | ((writeAccessRight & 0xF) << 4U) | (ReadAccessRight & 0xF);
 
 	if ((status = DSL_RDB_GetNodeDefiningValue(base, &node, DSL_RID_CreateDeleteChangeFile)) != kStatus_Success) {
 		return status;
@@ -1827,7 +1826,7 @@ status_t DSL_RDB_DeleteFile(HIPERFACE_Type *base)
 status_t DSL_RDB_GetDirectoryBasicData(HIPERFACE_Type *base, uint8_t *userFilesNumber, uint16_t *filledBytesNumber, uint16_t *emptyBytesNumber)
 {
 	status_t status;
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	dsl_rdb_node_t node = {0};
 
 	if ((status = DSL_RDB_GetNodeDefiningValue(base, &node, DSL_RID_Directory)) != kStatus_Success) {
@@ -1839,15 +1838,15 @@ status_t DSL_RDB_GetDirectoryBasicData(HIPERFACE_Type *base, uint8_t *userFilesN
 	}
 
 	*userFilesNumber = buf[0];
-	*filledBytesNumber = (buf[3] << 8) + buf[2];
-	*emptyBytesNumber = (buf[5] << 8) + buf[4];
+	*filledBytesNumber = (buf[3] << 8U) | buf[2];
+	*emptyBytesNumber = (buf[5] << 8U) | buf[4];
 	return kStatus_Success;
 }
 
 status_t DSL_RDB_GetDirectoryFileNmae(HIPERFACE_Type *base, char *fileName, uint32_t len, uint8_t index)
 {
 	status_t status;
-	char buf[9];
+	char buf[9] = {0};
 	dsl_rdb_node_t node = {0};
 	uint32_t l;
 
@@ -1873,7 +1872,7 @@ status_t DSL_RDB_GetDirectoryFileNmae(HIPERFACE_Type *base, char *fileName, uint
 status_t DSL_RDB_DigitalOutputWithNumber(HIPERFACE_Type *base, uint8_t IO_index, uint8_t value)
 {
 	status_t status;
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	dsl_rdb_node_t node = {0};
 
 	if ((status = DSL_RDB_GetNodeDefiningValue(base, &node, DSL_RID_AccessSimpleIOs)) != kStatus_Success) {
@@ -1893,7 +1892,7 @@ status_t DSL_RDB_DigitalOutputWithNumber(HIPERFACE_Type *base, uint8_t IO_index,
 status_t DSL_RDB_DigitalInputWithNumber(HIPERFACE_Type *base, uint8_t IO_index, uint8_t *value)
 {
 	status_t status;
-	uint8_t buf[8];
+	uint8_t buf[8] = {0};
 	dsl_rdb_node_t node = {0};
 
 	if ((status = DSL_RDB_GetNodeDefiningValue(base, &node, DSL_RID_AccessSimpleIOs)) != kStatus_Success) {

@@ -44,7 +44,9 @@
 #endif
 
 #define XBAR_CTRL_CTRL_MASK  ((xbar_reg_t)0x0FU) /* All control bits in CTRL register */
+#ifndef XBAR_CTRL_WP_MASK
 #define XBAR_CTRL_WP_MASK ((uint32_t)(1UL << 31U))
+#endif
 
 /* Array of XBAR clock name. */
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)

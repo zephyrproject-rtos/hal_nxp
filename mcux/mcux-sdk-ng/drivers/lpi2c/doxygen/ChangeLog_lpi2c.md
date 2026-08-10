@@ -1,5 +1,17 @@
 # LPI2C
 
+## [2.6.8]
+
+- Bug Fixes
+  - LPI2C_MasterTransferBlocking - added waiting while TX FIFO is not empty.
+  - Added a check for an error from the previous transfer in the transfer API (when kLPI2C_TransferNoStopFlag was used).
+  - Updated LPI2C_MasterReceive() to return kStatus_InvalidArgument when rxSize is 0.
+  - Updated transfer API functions to return kStatus_InvalidArgument when transfer->dataSize is 0 and transfer->direction is kLPI2C_Read.
+  - Fixed assert issue in LPI2C_MasterSetBaudRate().
+  - Fixed CERT-C issues.
+  - Fixed MISRA issues.
+  - Improved HIS CCM for LPI2C_MasterTransferBlocking() and LPI2C_SlaveTransferHandleIRQ().
+
 ## [2.6.7]
 
 - Bug Fixes

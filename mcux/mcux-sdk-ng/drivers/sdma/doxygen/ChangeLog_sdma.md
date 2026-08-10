@@ -1,5 +1,14 @@
 # SDMA
 
+## [2.4.4]
+
+- Bug Fixes
+  - Fixed SDMA instance handling to support device headers that declare
+    SDMAARM_BASE_PTRS / SDMAARM_IRQS / SDMA_CLOCKS as 1-indexed arrays (with a
+    reserved dummy entry at index 0). Sized the per-instance state arrays to
+    match the base array and derived the instance number dynamically in the
+    IRQ handlers to avoid out-of-bounds access and control-block corruption.
+
 ## [2.4.3]
 
 - Bug Fixes

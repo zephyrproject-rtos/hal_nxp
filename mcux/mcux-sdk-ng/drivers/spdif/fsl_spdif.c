@@ -13,6 +13,12 @@
 #define FSL_COMPONENT_ID "platform.drivers.spdif"
 #endif
 
+#if defined(SPDIF_RSTS)
+#define SPDIF_RESETS_ARRAY SPDIF_RSTS
+#elif defined(SPDIF_RSTS_N)
+#define SPDIF_RESETS_ARRAY SPDIF_RSTS_N
+#endif
+
 /*******************************************************************************
  * Definitations
  ******************************************************************************/
@@ -43,6 +49,12 @@ static const IRQn_Type s_spdifIRQ[] = SPDIF_IRQS;
 /* Clock name array */
 static const clock_ip_name_t s_spdifClock[] = SPDIF_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(SPDIF_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_spdifResets[] = SPDIF_RESETS_ARRAY;
+#endif
+
 /*! @brief Pointer to IRQ handler for each instance. */
 static spdif_isr_t s_spdifTxIsr;
 /*! @brief Pointer to IRQ handler for each instance. */
@@ -62,7 +74,7 @@ uint32_t SPDIF_GetInstance(SPDIF_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_spdifBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_spdifBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_spdifBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -91,10 +103,19 @@ void SPDIF_Init(SPDIF_Type *base, const spdif_config_t *config)
 {
     uint32_t val = 0;
 
+#if (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)) \
+    || defined(SPDIF_RESETS_ARRAY)
+    uint32_t instance = SPDIF_GetInstance(base);
+#endif
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the SPDIF clock */
-    CLOCK_EnableClock(s_spdifClock[SPDIF_GetInstance(base)]);
+    CLOCK_EnableClock(s_spdifClock[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(SPDIF_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_spdifResets[instance]);
+#endif
 
     /* Reset the internal logic */
     base->SCR |= SPDIF_SCR_SOFT_RESET_MASK;

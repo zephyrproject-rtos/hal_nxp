@@ -307,7 +307,7 @@ status_t ENDAT3_BG_WaitReqFinished(ENDAT3_Type *base, uint8_t bus_addr, uint8_t 
 									enum op_mode op)
 {
 	uint32_t timeout = addTimeout(timeout_ms);
-	while (!(base->BG_RSP_1 & (ENDAT3_BG_RSP_1_BG_HANDLER_IDLE_MASK | ENDAT3_BG_RSP_1_BG_HANDLER_ERROR_MASK))) {
+	while (!(base->BG_RSP_1 & ENDAT3_BG_RSP_1_BG_HANDLER_IDLE_MASK)) {
 		if (fg_strobes) {
 			if (op == Point2Point) {
 				ENDAT3_FG_Data(base, ENDAT3_FG_REQ_DATA0, NULL);
@@ -358,7 +358,7 @@ status_t ENDAT3_BG_Req_Rsp(ENDAT3_Type *base, uint8_t bus_addr, struct BGREQ *re
 	}
 
 	if (rsp != NULL) {
-		if ((status = ENDAT3_BG_GetRsp(base, rsp, timeout_ms) != kStatus_Success)) {
+		if ((status = ENDAT3_BG_GetRsp(base, rsp, timeout_ms)) != kStatus_Success) {
 			return status;
 		}
 	}
@@ -558,21 +558,21 @@ status_t ENDAT3_memCacheInit_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t me
 void ENDAT3_memCacheSetDirty(endat3_mem_cache_t *cache, int word_index, int isDirty)
 {
 	uint32_t mod_index, mod_bit;
-	mod_index = (word_index / 32);
-	mod_bit = word_index % 32;
+	mod_index = (word_index / 32U);
+	mod_bit = word_index % 32U;
 	if (isDirty)
-		cache->dirtyWordMap[mod_index] |= (1 << mod_bit);
+		cache->dirtyWordMap[mod_index] |= (1U << mod_bit);
 	else
-		cache->dirtyWordMap[mod_index] &= ~(1 << mod_bit);
+		cache->dirtyWordMap[mod_index] &= ~(1U << mod_bit);
 }
 
 int ENDAT3_memCacheDirty(endat3_mem_cache_t *cache, int word_index)
 {
 	uint32_t mod_index, mod_bit;
-	mod_index = (word_index / 32);
-	mod_bit = word_index % 32;
+	mod_index = (word_index / 32U);
+	mod_bit = word_index % 32U;
 
-	return cache->dirtyWordMap[mod_index] & (1 << mod_bit);
+	return cache->dirtyWordMap[mod_index] & (1U << mod_bit);
 }
 
 status_t ENDAT3_memCacheFlush_OP(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *cache, uint8_t fg_strobes,
@@ -653,7 +653,7 @@ static uint32_t ENDAT3_memCalcCSReflect(uint32_t data, uint32_t bitnum)
 	uint32_t j = 1;
 	uint32_t data_out = 0;
 
-	for (i = (uint32_t)1 << (bitnum-1); i > 0; i = i >> 1) {
+	for (i = 1U << (bitnum-1U); i > 0; i = i >> 1U) {
 		if (data & i) {
 			data_out = data_out | j;
 		}
@@ -703,8 +703,8 @@ static uint32_t ENDAT3_memCalcCS(uint16_t *p, const uint16_t len)
 
 status_t ENDAT3_memCacheCheckCS(endat3_mem_cache_t *cache)
 {
-	uint32_t cs_calc= ENDAT3_memCalcCS(&cache->cacheMem[2], cache->memSize - 2);
-	uint32_t cs_stored = (cache->cacheMem[1] << 16) + cache->cacheMem[0];
+	uint32_t cs_calc= ENDAT3_memCalcCS(&cache->cacheMem[2], cache->memSize - 2U);
+	uint32_t cs_stored = (cache->cacheMem[1] << 16U) | cache->cacheMem[0];
 	if (cs_stored != cs_calc) {
 		return kStatus_Endat3_MEM_Cache_Wrong_CS;
 	}
@@ -713,10 +713,10 @@ status_t ENDAT3_memCacheCheckCS(endat3_mem_cache_t *cache)
 
 status_t ENDAT3_memCacheUpdataCS(endat3_mem_cache_t *cache)
 {
-	uint32_t cs_calc= ENDAT3_memCalcCS(&cache->cacheMem[2], cache->memSize - 2);
+	uint32_t cs_calc= ENDAT3_memCalcCS(&cache->cacheMem[2], cache->memSize - 2U);
 
 	cache->cacheMem[0] = cs_calc & 0xFFFF;
-	cache->cacheMem[1] = (cs_calc >> 16) & 0xFFFF;
+	cache->cacheMem[1] = (cs_calc >> 16U) & 0xFFFF;
 	ENDAT3_memCacheSetDirty(cache, 0, 1);
 	ENDAT3_memCacheSetDirty(cache, 1, 1);
 	return kStatus_Success;
@@ -724,33 +724,33 @@ status_t ENDAT3_memCacheUpdataCS(endat3_mem_cache_t *cache)
 
 uint16_t  ENDAT3_lpfCacheGetPointer(uint8_t z, endat3_mem_cache_t *lpf_cache)
 {
-	return *(lpf_cache->cacheMem + ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_OFFSET + z - 1);
+	return *(lpf_cache->cacheMem + ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_OFFSET + z - 1U);
 }
 
 void ENDAT3_lpfCacheGetXdimYdim(uint8_t z, endat3_mem_cache_t *lpf_cache, uint8_t *xdim, uint8_t *y_dim)
 {
-	uint8_t z_list = z - 1;
+	uint8_t z_list = z - 1U;
 	uint16_t temp;
-	temp = *(lpf_cache->cacheMem + ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_OFFSET + z_list / 2);
-	temp = temp >> ((z_list % 2) * 8);
+	temp = *(lpf_cache->cacheMem + ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_OFFSET + z_list / 2U);
+	temp = temp >> ((z_list % 2U) * 8);
 	*y_dim = (temp & 0xF) + 1;
-	*xdim = (temp >> 4) & 0xF;
+	*xdim = (temp >> 4U) & 0xF;
 }
 
 void ENDAT3_lpfCacheSetPointer(uint8_t z, endat3_mem_cache_t *lpf_cache, uint16_t pointer)
 {
-	ENDAT3_memCacheSetDirty(lpf_cache, ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_OFFSET  + z - 1, 1);
-	*(lpf_cache->cacheMem + ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_OFFSET  + z - 1) = pointer;
+	ENDAT3_memCacheSetDirty(lpf_cache, ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_OFFSET  + z - 1U, 1U);
+	*(lpf_cache->cacheMem + ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_OFFSET  + z - 1U) = pointer;
 }
 
 void ENDAT3_lpfCacheSetXdimYdim(uint8_t z, endat3_mem_cache_t *lpf_cache, uint8_t xdim, uint8_t y_dim)
 {
 	uint8_t z_list, xy_dim, *addr;
-	z_list = z - 1;
+	z_list = z - 1U;
 	if (y_dim == 0) {
-		xy_dim = (xdim << 4) | ((y_dim) & 0xF);
+		xy_dim = (xdim << 4U) | ((y_dim) & 0xF);
 	} else {
-		xy_dim = (xdim << 4) | ((y_dim - 1) & 0xF);
+		xy_dim = (xdim << 4U) | ((y_dim - 1U) & 0xF);
 	}
 	addr = (uint8_t *)(lpf_cache->cacheMem + ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_OFFSET + z_list / 2);
 	ENDAT3_memCacheSetDirty(lpf_cache, ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_OFFSET  + z_list / 2, 1);
@@ -829,7 +829,7 @@ void ENDAT3_lpfCacheListUpdate(endat3_mem_cache_t *global_cache, endat3_mem_cach
 	ENDAT3_lpfCacheSetXdimYdim(z, global_cache, xdim, ydim);
 	for (i = 0; i < ydim; i++) {
 		for (j = 0; j < xdim; j++) {
-			ENDAT3_lpfCacheListSetFid(lpf_cache, xdim, j, i, pointer, fid[i*ydim + j]);
+			ENDAT3_lpfCacheListSetFid(lpf_cache, xdim, j, i, pointer, fid[i*xdim + j]);
 		}
 	}
 }
@@ -907,7 +907,9 @@ void ENDAT3_Bus_Init_ForAllParticipants(ENDAT3_Type *base, int nodes_num)
 		for (int i = nodes_num; i >= 0;  i--) {
 			ENDAT3_FG_Hello(base);
 			if (ENDAT3_FG_Bus_P2P_Hello(base, (uint8_t)i) == kStatus_Success) {
-				address[index++] = (uint8_t)i;
+				if (index < 8) {
+					address[index++] = (uint8_t)i;
+				}
 			}
 		}
 

@@ -525,7 +525,7 @@ uint32_t FLEXCAN_GetInstance(CAN_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_flexcanBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_flexcanBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_flexcanBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -1151,7 +1151,7 @@ void FLEXCAN_Init(CAN_Type *base, const flexcan_config_t *pConfig, uint32_t sour
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if defined(FLEXCAN_RESETS_ARRAY)
-    RESET_ReleasePeripheralReset(s_flexcanResets[FLEXCAN_GetInstance(base)]);
+    RESET_ReleasePeripheralReset(s_flexcanResets[instance]);
 #endif
 
 #if defined(CAN_CTRL1_CLKSRC_MASK)

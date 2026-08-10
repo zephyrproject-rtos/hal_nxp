@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022,2024-2025 NXP
- * All rights reserved.
+ * Copyright 2016-2022,2024-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -59,7 +58,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief common driver version. */
-#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 6, 4))
+#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 6, 6))
 /*! @} */
 
 /*! @name Debug console type definition. */

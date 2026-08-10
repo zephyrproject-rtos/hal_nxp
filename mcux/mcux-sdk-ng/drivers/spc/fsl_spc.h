@@ -1005,6 +1005,84 @@ status_t SPC_SetHighPowerModeSystemLDORegulatorConfig(SPC_Type *base, const spc_
  */
 status_t SPC_SetHighPowerModeDCDCRegulatorConfig(SPC_Type *base, const spc_hp_mode_dcdc_option_t *option);
 
+#if defined(FSL_FEATURE_SPC_HAS_DCDC_VOUT2P5_SEL) && FSL_FEATURE_SPC_HAS_DCDC_VOUT2P5_SEL
+/*!
+ * @brief Enable/disable the DCDC 2.5V output in Active mode.
+ *
+ * The DCDC 2.5V output select bit resides in different registers depending on the SPC instance:
+ * in the per-mode configuration registers (ACTIVE_CFG/HP_CFG) on some SoCs (e.g. KW43/MCXW70),
+ * and in the global DCDC_CFG register on others (e.g. KW45/KW47/MCXW71/MCXW72). This function
+ * selects the 2.5V DCDC output, writing whichever register applies. The 2.5V output is intended
+ * to be used together with DCDC Normal drive strength and Normal voltage level
+ * (see @ref SPC_SetActiveModeDCDCRegulatorConfig).
+ *
+ * @param base SPC peripheral base address.
+ * @param enable Select the DCDC 2.5V output in Active mode.
+ *          - true  : Select the 2.5V DCDC output.
+ *          - false : Use the level selected by DCDC_VDD_LVL.
+ *
+ * @retval #kStatus_Success The 2.5V output selection was applied successfully.
+ * @retval #kStatus_SPC_Busy The SPC instance is busy to execute any type of power mode transition.
+ * @retval #kStatus_Timeout Timeout occurs while waiting completion.
+ */
+status_t SPC_EnableActiveModeDCDC2P5VOutput(SPC_Type *base, bool enable);
+
+#if (defined(FSL_FEATURE_SPC_DCDC_VOUT2P5_SEL_IN_ACTIVE_CFG) && FSL_FEATURE_SPC_DCDC_VOUT2P5_SEL_IN_ACTIVE_CFG) && \
+    (defined(FSL_FEATURE_SPC_HAS_HP_CFG_REG) && FSL_FEATURE_SPC_HAS_HP_CFG_REG)
+/*!
+ * @brief Enable/disable the DCDC 2.5V output in High Power mode.
+ *
+ * Same as @ref SPC_EnableActiveModeDCDC2P5VOutput but applies to the High Power mode
+ * configuration register (HP_CFG). Only available on SoCs whose 2.5V output select is in
+ * the per-mode configuration registers and that have a High Power mode (HP_CFG).
+ *
+ * @param base SPC peripheral base address.
+ * @param enable Select the DCDC 2.5V output in High Power mode.
+ *          - true  : Select the 2.5V DCDC output.
+ *          - false : Use the level selected by DCDC_VDD_LVL.
+ *
+ * @retval #kStatus_Success The 2.5V output selection was applied successfully.
+ * @retval #kStatus_SPC_Busy The SPC instance is busy to execute any type of power mode transition.
+ * @retval #kStatus_Timeout Timeout occurs while waiting completion.
+ */
+status_t SPC_EnableHighPowerModeDCDC2P5VOutput(SPC_Type *base, bool enable);
+#endif /* ..._IN_ACTIVE_CFG && FSL_FEATURE_SPC_HAS_HP_CFG_REG */
+#endif /* FSL_FEATURE_SPC_HAS_DCDC_VOUT2P5_SEL */
+
+#if defined(FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL) && FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL
+/*!
+ * @brief DCDC output voltage ramp control configuration.
+ *
+ * Used by @ref SPC_SetDCDCRampControlConfig. The ramp trim fields select the DCDC output
+ * voltage ramp slope; valid values are 0..7.
+ */
+typedef struct _spc_dcdc_ramp_config
+{
+    bool enableRampControl; /*!< Enable/disable DCDC output voltage ramp control. */
+    uint8_t rampControl;    /*!< Active/High Power mode ramp control trim, range 0..7. */
+#if defined(FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL_LP) && FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL_LP
+    uint8_t rampControlLowPower; /*!< Low Power mode ramp control trim, range 0..7. */
+#endif
+} spc_dcdc_ramp_config_t;
+
+/*!
+ * @brief Configure DCDC output voltage ramp control.
+ *
+ * Enabling ramp control smooths DCDC output voltage transitions, for example when changing
+ * the DCDC voltage level or drive strength. When ramp control is enabled the ramp enable bit
+ * is programmed first and allowed to settle before the ramp trim values are applied, matching
+ * the recommended hardware programming sequence.
+ *
+ * @param base SPC peripheral base address.
+ * @param config Pointer to the ramp control configuration, see @ref spc_dcdc_ramp_config_t.
+ *
+ * @retval #kStatus_Success Ramp control configuration applied successfully.
+ * @retval #kStatus_SPC_Busy The SPC instance is busy to execute any type of power mode transition.
+ * @retval #kStatus_Timeout Timeout occurs while waiting completion.
+ */
+status_t SPC_SetDCDCRampControlConfig(SPC_Type *base, const spc_dcdc_ramp_config_t *config);
+#endif /* FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL */
+
 /*!
  * @brief Set configuration of regulators in high power mode.
  *

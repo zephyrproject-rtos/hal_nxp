@@ -171,7 +171,7 @@ static void SPI_TransferSetupRxContextDMA(spi_dma_handle_t *handle, spi_transfer
 static void SPI_TransferSubmitNextRxDMA(SPI_Type *base, spi_dma_handle_t *handle)
 {
     size_t nextRxSize;
-    dma_transfer_config_t dmaXferConfig;
+    dma_channel_config_t dmaXferConfig;
     dma_transfer_type_t dmaXferType;
     uint8_t *nextRxData;
 
@@ -191,8 +191,15 @@ static void SPI_TransferSubmitNextRxDMA(SPI_Type *base, spi_dma_handle_t *handle
         nextRxData  = (uint8_t*)&s_rxDummy;
     }
 
-    DMA_PrepareTransfer(&dmaXferConfig, address, nextRxData, handle->bytesPerFrame, nextRxSize, dmaXferType, NULL);
-    (void)DMA_SubmitTransfer(handle->rxHandle, &dmaXferConfig);
+    DMA_PrepareChannelTransfer(&dmaXferConfig, address, nextRxData,
+                               DMA_CHANNEL_XFER(false, false, true, false, handle->bytesPerFrame,
+                                                kDMA_AddressInterleave0xWidth,
+                                                (dmaXferType == kDMA_PeripheralToMemory) ?
+                                                    (uint8_t)kDMA_AddressInterleave1xWidth :
+                                                    (uint8_t)kDMA_AddressInterleave0xWidth,
+                                                nextRxSize),
+                               dmaXferType, NULL, NULL);
+    (void)DMA_SubmitChannelTransfer(handle->rxHandle, &dmaXferConfig);
 
     handle->rxRemainingBytes -= nextRxSize;
 }
@@ -279,7 +286,7 @@ static status_t SPI_TransferSubmitNextTxDMA(SPI_Type *base, spi_dma_handle_t *ha
     uint8_t * address;
     void *nextDesc;
     bool txIntFlag;
-    dma_transfer_config_t xferConfig;
+    dma_channel_config_t xferConfig;
     dma_transfer_type_t dmaXferType;
     const uint8_t *txNextData;
 
@@ -314,10 +321,15 @@ static status_t SPI_TransferSubmitNextTxDMA(SPI_Type *base, spi_dma_handle_t *ha
     }
 
     address = (uint8_t*)(uintptr_t)&base->FIFOWR;
-    DMA_PrepareTransfer(&xferConfig, (uint8_t *)(uintptr_t)txNextData, address, handle->bytesPerFrame, nextTxSize, dmaXferType, nextDesc);
+    DMA_PrepareChannelTransfer(&xferConfig, (uint8_t *)(uintptr_t)txNextData, address,
+                               DMA_CHANNEL_XFER((nextDesc != NULL), false, txIntFlag, false, handle->bytesPerFrame,
+                                                (dmaXferType == kDMA_MemoryToPeripheral) ?
+                                                    (uint8_t)kDMA_AddressInterleave1xWidth :
+                                                    (uint8_t)kDMA_AddressInterleave0xWidth,
+                                                kDMA_AddressInterleave0xWidth, nextTxSize),
+                               dmaXferType, NULL, nextDesc);
 
-    xferConfig.xfercfg.intA = txIntFlag;
-    return DMA_SubmitTransfer(handle->txHandle, &xferConfig);
+    return DMA_SubmitChannelTransfer(handle->txHandle, &xferConfig);
 }
 
 /*!

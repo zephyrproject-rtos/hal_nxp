@@ -24,7 +24,8 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SDMA driver version */
-#define FSL_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 3)) /*!< Version 2.4.3. */
+#define FSL_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 4)) /*!< Version 2.4.4. */
+
 /*! @} */
 
 #ifndef SDMA_DRIVER_LOAD_RAM_SCRIPT
@@ -339,6 +340,7 @@ typedef struct _sdma_handle
     uint8_t channel;                  /*!< SDMA channel number. */
     uint8_t priority;                 /*!< SDMA channel priority */
     uint8_t flags;                    /*!< The status of the current channel. */
+    uint8_t instance;                 /*!< SDMA instance index, cached in SDMA_CreateHandle. */
 } sdma_handle_t;
 
 /*******************************************************************************

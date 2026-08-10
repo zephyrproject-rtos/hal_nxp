@@ -15,7 +15,9 @@
 #define FSL_COMPONENT_ID "platform.drivers.lpc_freqme"
 #endif
 
-#if defined(FREQME_RSTS_N)
+#if defined(FREQME_RSTS)
+#define FREQME_RESETS_ARRAY FREQME_RSTS
+#elif defined(FREQME_RSTS_N)
 #define FREQME_RESETS_ARRAY FREQME_RSTS_N
 #endif
 
@@ -49,7 +51,7 @@ static uint32_t FREQME_GetInstance(FREQME_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0U; instance < ARRAY_SIZE(s_freqmeBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_freqmeBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_freqmeBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -61,10 +63,10 @@ static uint32_t FREQME_GetInstance(FREQME_Type *base)
 }
 
 /*!
- * brief Initialize freqme module, set operate mode, operate mode attribute and initialize measurement cycle.
+ * @brief Initialize freqme module, set operate mode, operate mode attribute and initialize measurement cycle.
  *
- * param base FREQME peripheral base address.
- * param config The pointer to module basic configuration, please refer to freq_measure_config_t.
+ * @param base FREQME peripheral base address.
+ * @param config The pointer to module basic configuration, please refer to freq_measure_config_t.
  */
 void FREQME_Init(FREQME_Type *base, const freq_measure_config_t *config)
 {
@@ -102,16 +104,16 @@ void FREQME_Init(FREQME_Type *base, const freq_measure_config_t *config)
 }
 
 /*!
- * brief Get default configuration.
+ * @brief Get default configuration.
  *
- * code
+ * @code
  *      config->operateMode = kFREQME_FreqMeasurementMode;
  *      config->operateModeAttribute.refClkScaleFactor = 0U;
  *      config->enableContinuousMode                   = false;
  *      config->startMeasurement                       = false;
- * endcode
+ * @endcode
  *
- * param config The pointer to module basic configuration, please refer to freq_measure_config_t.
+ * @param config The pointer to module basic configuration, please refer to freq_measure_config_t.
  */
 void FREQME_GetDefaultConfig(freq_measure_config_t *config)
 {
@@ -126,15 +128,16 @@ void FREQME_GetDefaultConfig(freq_measure_config_t *config)
 }
 
 /*!
- * brief Calculate the frequency of selected target clock.
+ * @brief Calculate the frequency of selected target clock.
  *
- * note The formula: Ftarget = (RESULT - 2) * Freference / 2 ^ REF_SCALE.
+ * @note The formula: Ftarget = (RESULT - 2) * Freference / 2 ^ REF_SCALE or
+ *       Ftarget = (RESULT + 1) * Freference / 2 ^ REF_SCALE
  *
- * note This function only useful when the operate mode is selected as frequency measurement mode.
+ * @note This function only useful when the operate mode is selected as frequency measurement mode.
  *
- * param base FREQME peripheral base address.
- * param refClkFrequency The frequency of reference clock.
- * return The frequency of target clock, if the output result is 0, please check the module's operate mode.
+ * @param base FREQME peripheral base address.
+ * @param refClkFrequency The frequency of reference clock.
+ * @return The frequency of target clock, if the output result is 0, please check the module's operate mode.
  */
 uint32_t FREQME_CalculateTargetClkFreq(FREQME_Type *base, uint32_t refClkFrequency)
 {
@@ -151,8 +154,13 @@ uint32_t FREQME_CalculateTargetClkFreq(FREQME_Type *base, uint32_t refClkFrequen
     {
         measureResult = base->CTRL_R & FREQME_CTRL_R_RESULT_MASK;
 
+#if defined(FSL_FEATURE_FREQME_RESULT_CALCULATION_MODE) && (FSL_FEATURE_FREQME_RESULT_CALCULATION_MODE == 1)
+        measureResult += 1UL;
+#else
         assert(measureResult >= 2UL);
-        tmp64         = ((uint64_t)measureResult - 2ULL) * (uint64_t)refClkFrequency;
+        measureResult -= 2UL;
+#endif
+        tmp64         = (uint64_t)measureResult * (uint64_t)refClkFrequency;
         refCountCycle = 1ULL << (uint64_t)FREQME_GetReferenceClkScaleValue(base);
 
         targetFreq    = (uint32_t)((tmp64 / refCountCycle) & 0xFFFFFFFFU);

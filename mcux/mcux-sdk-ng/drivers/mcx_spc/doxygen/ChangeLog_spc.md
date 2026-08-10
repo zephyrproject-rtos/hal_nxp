@@ -1,5 +1,14 @@
 # MCX_SPC
 
+## [2.12.1]
+
+- Bug Fixes
+  - Fixed the bandgap disable sequence in SPC_SetActiveModeRegulatorsConfig()
+    and SPC_SetLowPowerModeRegulatorsConfig(). When disabling bandgap, the
+    regulator drive strength is now configured before writing BGMODE, preventing
+    hardware from forcing BGMODE back to enabled if the previous drive strength
+    was normal.
+
 ## [2.12.0]
 
 - New Features

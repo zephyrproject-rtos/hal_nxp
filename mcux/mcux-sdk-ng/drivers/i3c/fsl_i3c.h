@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I3C driver version */
-#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 14, 6))
+#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 14, 7))
 /*! @} */
 
 /*!
@@ -1101,6 +1101,11 @@ static inline void I3C_MasterGetFifoCounts(I3C_Type *base, size_t *rxCount, size
  *
  * The I3C master is automatically disabled and re-enabled as necessary to configure the baud
  * rate. Do not call this function during a transfer, or the transfer is aborted.
+ *
+ * @note On devices affected by I3C errata ERR053429, an SDR read with PPBAUD < 2 can lose the
+ *       last received byte when the RxFIFO fills before the CPU/DMA services it. For safe SDR
+ *       reads, request a push-pull baud that yields PPBAUD > 1, or guarantee the CPU/DMA drains
+ *       the RxFIFO fast enough to avoid a Full event.
  *
  * @param base The I3C peripheral base address.
  * @param baudRate_Hz Pointer to structure of requested bus frequency in Hertz.

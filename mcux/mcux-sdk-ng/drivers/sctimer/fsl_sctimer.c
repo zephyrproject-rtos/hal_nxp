@@ -87,7 +87,7 @@ static uint32_t SCTIMER_GetInstance(SCT_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < sctArrayCount; instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_sctBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_sctBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -160,7 +160,7 @@ status_t SCTIMER_Init(SCT_Type *base, const sctimer_config_t *config)
     }
 
     /* Save interrupt handler */
-    s_sctimerIsr = SCTIMER_EventHandleIRQ;
+    s_sctimerIsr = &SCTIMER_EventHandleIRQ;
 
     return kStatus_Success;
 }
@@ -462,6 +462,757 @@ void SCTIMER_UpdatePwmDutycycle(SCT_Type *base, sctimer_out_t output, uint8_t du
 }
 
 /*!
+ * brief Reverse one output's set/clear actions while the counter is counting down.
+ *
+ * Used by the center-aligned PWM paths so that a match drives opposite output transitions on the up-count
+ * and down-count, producing a single centered pulse.
+ */
+static void SCTIMER_ReverseOutputOnDownCount(SCT_Type *base, uint32_t output)
+{
+    assert(output < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS);
+
+    uint32_t reg = base->OUTPUTDIRCTRL;
+    reg &= ~((uint32_t)SCT_OUTPUTDIRCTRL_SETCLR0_MASK << (2U * output));
+    reg |= (1UL << (2U * output));
+    base->OUTPUTDIRCTRL = reg;
+}
+
+/*!
+ * brief Apply the output set/clear/direction actions for one PWM channel.
+ *
+ * Shared by SCTIMER_SetupSharedPeriodPwm() for each channel; mirrors the per-channel output handling of
+ * SCTIMER_SetupPwm(). The period event drives the edge-aligned period-boundary action; the pulse event
+ * drives the duty action.
+ */
+static void SCTIMER_ConfigurePwmChannelOutput(SCT_Type *base,
+                                               const sctimer_pwm_signal_param_t *param,
+                                               sctimer_pwm_mode_t mode,
+                                               uint32_t periodEvent,
+                                               uint32_t pulseEvent)
+{
+    uint32_t output = (uint32_t)param->output;
+
+    if ((uint32_t)param->level == (uint32_t)kSCTIMER_HighTrue)
+    {
+        if (mode == kSCTIMER_EdgeAlignedPwm)
+        {
+            /* Inactive (low) at start; set at period boundary, clear at pulse. */
+            base->OUTPUT &= ~(1UL << output);
+            SCTIMER_SetupOutputSetAction(base, output, periodEvent);
+            SCTIMER_SetupOutputClearAction(base, output, pulseEvent);
+        }
+        else
+        {
+            /* Active (high) at start; clear at pulse, reverse on down-count. */
+            base->OUTPUT |= (1UL << output);
+            SCTIMER_SetupOutputClearAction(base, output, pulseEvent);
+            SCTIMER_ReverseOutputOnDownCount(base, output);
+        }
+    }
+    else
+    {
+        if (mode == kSCTIMER_EdgeAlignedPwm)
+        {
+            /* Inactive (high) at start; clear at period boundary, set at pulse. */
+            base->OUTPUT |= (1UL << output);
+            SCTIMER_SetupOutputClearAction(base, output, periodEvent);
+            SCTIMER_SetupOutputSetAction(base, output, pulseEvent);
+        }
+        else
+        {
+            base->OUTPUT &= ~(1UL << output);
+            SCTIMER_SetupOutputSetAction(base, output, pulseEvent);
+            SCTIMER_ReverseOutputOnDownCount(base, output);
+        }
+    }
+}
+
+/*!
+ * brief Find an existing unified-counter period/limit event that a same-frequency channel can share.
+ *
+ * Scans the unified-counter limit mask (LIMIT[LIMMSK_L]) for the lowest-numbered limit event (the only
+ * limits created by SCTIMER_SetupSharedPeriodPwm() / SCTIMER_SetupComplementaryPwm() / SCTIMER_SetupPwm()).
+ *
+ * @return kStatus_Success with *found = true and *periodEvent set when a reusable event exists (same
+ *         period MATCH value and same alignment); kStatus_Success with *found = false when none exists
+ *         (the caller should create one); kStatus_InvalidArgument when one exists but with a different
+ *         period or alignment (a unified counter has a single limit, so the two cannot coexist).
+ *
+ * Note: a second independent limit event at the same period value is not harmless — multiple limit events
+ * perturb the counter turn-around (observed as asymmetric edge timing near the counter peak), so callers
+ * reuse the one shared event instead of adding their own.
+ */
+static status_t SCTIMER_FindSharedPeriodEvent(SCT_Type *base, uint32_t period, bool requestCenter,
+                                              uint32_t *periodEvent, bool *found)
+{
+    uint32_t limitMask = base->LIMIT & SCT_LIMIT_LIMMSK_L_MASK;
+
+    *found = false;
+    if (0U != limitMask)
+    {
+        uint32_t ev = 0U;
+        uint32_t matchReg;
+        bool existingCenter;
+
+        while ((0U == (limitMask & 0x1U)) && (ev < ((uint32_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS - 1U)))
+        {
+            limitMask >>= 1U;
+            ev++;
+        }
+        matchReg       = base->EV[ev].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
+        existingCenter = (0U != (base->CTRL & SCT_CTRL_BIDIR_L_MASK));
+
+        if ((base->MATCH[matchReg] == period) && (existingCenter == requestCenter))
+        {
+            *periodEvent = ev;
+            *found       = true;
+            return kStatus_Success;
+        }
+        /* A unified counter has a single limit; a different period/alignment cannot share it. */
+        return kStatus_InvalidArgument;
+    }
+
+    return kStatus_Success;
+}
+
+/*!
+ * brief Configures one PWM channel that shares an auto-detected period event across calls.
+ *
+ * Unlike SCTIMER_SetupPwm() (which spends two events per channel and recreates a period event each
+ * call), this function configures a single channel and reuses **one** shared period/limit event for all
+ * same-frequency channels. On each call it inspects the unified-counter limit mask
+ * (LIMIT[LIMMSK_L]) for an existing period/limit event:
+ *  - none present  -> it creates the shared period/limit event (1 period + 1 pulse event), or
+ *  - one present whose period (its MATCH value) and alignment (CTRL[BIDIR_L] set <=> center-aligned)
+ *    match the requested pwmFreq_Hz/mode -> it reuses that event and only creates this channel's pulse
+ *    event (1 pulse event), or
+ *  - one present whose period or alignment differs -> it returns kStatus_InvalidArgument without
+ *    creating or modifying anything (two periods cannot share one unified counter).
+ *
+ * So K same-frequency channels built by K calls consume K + 1 events / K + 1 match registers instead of
+ * 2 * K. A period/limit event left by a prior SCTIMER_SetupPwm() at the same period/alignment is also
+ * reusable. The counter must already be configured as one unified 32-bit counter (CONFIG[UNIFY] = 1).
+ *
+ * note Period detection assumes the shared PWM period/limit is the lowest-numbered unified-counter
+ * limit event (the only limit events created by this function and SCTIMER_SetupPwm()). If the application
+ * created other unified-counter limit events before calling this function, detection may match the wrong
+ * event; in that case create the PWM channels before any unrelated limit events.
+ *
+ * note Each call configures exactly one channel and is atomic for that channel only (on failure it
+ * creates nothing). Building a multi-channel group is a sequence of independent calls; this API does NOT
+ * roll the whole group back if a later call fails.
+ *
+ * note The channel is enabled in the current state only. In a multi-state design the caller must
+ * re-enable the returned periodEvent and each channel's pulseEvent in every state that should run the
+ * group (via SCTIMER_ScheduleEvent()). Because the period event is shared, failing to re-schedule it in a
+ * state disrupts ALL channels in that state, not just one.
+ *
+ * param base         SCTimer peripheral base address
+ * param pwmParam     Pointer to this channel's PWM parameters (output, level, duty)
+ * param mode         PWM operation mode (all sharing channels must use the same mode), see ::sctimer_pwm_mode_t
+ * param pwmFreq_Hz   Common PWM signal frequency in Hz (all sharing channels must use the same frequency)
+ * param srcClock_Hz  SCTimer counter clock in Hz
+ * param periodEvent  Pointer to a variable where the shared period event number (new or reused) is stored
+ * param pulseEvent   Pointer to a variable where this channel's pulse event number is stored
+ *
+ * return kStatus_Success on success
+ *         kStatus_InvalidArgument if arguments are invalid, the counter is not in unified mode, or an
+ *                                 existing shared period event has a different frequency/alignment
+ *         kStatus_OutOfRange if the event or match-register budget would be exceeded
+ */
+status_t SCTIMER_SetupSharedPeriodPwm(SCT_Type *base,
+                                      const sctimer_pwm_signal_param_t *pwmParam,
+                                      sctimer_pwm_mode_t mode,
+                                      uint32_t pwmFreq_Hz,
+                                      uint32_t srcClock_Hz,
+                                      uint32_t *periodEvent,
+                                      uint32_t *pulseEvent)
+{
+    status_t status;
+    uint32_t period, pulsePeriod;
+    uint32_t sctClock = srcClock_Hz / (((base->CTRL & SCT_CTRL_PRE_L_MASK) >> SCT_CTRL_PRE_L_SHIFT) + 1U);
+    uint32_t periodEv = 0U, pulseEv = 0U;
+    bool reusePeriod = false;
+    bool requestCenter;
+
+    /* Validate arguments; the counter must operate as one unified 32-bit counter. */
+    if ((NULL == pwmParam) || (NULL == periodEvent) || (NULL == pulseEvent) || (0U == srcClock_Hz) ||
+        (0U == pwmFreq_Hz) || ((uint32_t)pwmParam->output >= (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS) ||
+        (pwmParam->dutyCyclePercent > 100U) ||
+        (1U != ((base->CONFIG & SCT_CONFIG_UNIFY_MASK) >> SCT_CONFIG_UNIFY_SHIFT)))
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    requestCenter = (mode == kSCTIMER_CenterAlignedPwm);
+
+    /* Compute the requested period as a pure calculation (no register mutation yet). */
+    if (requestCenter)
+    {
+        period = sctClock / (pwmFreq_Hz * 2U);
+    }
+    else
+    {
+        if (sctClock <= pwmFreq_Hz)
+        {
+            return kStatus_InvalidArgument;
+        }
+        period = (sctClock / pwmFreq_Hz) - 1U;
+    }
+
+    /* Reject a frequency too high for the clock to represent (period would be 0). */
+    if (0U == period)
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    /* Reuse an existing same-frequency period/limit event across calls, or create a new one below. */
+    status = SCTIMER_FindSharedPeriodEvent(base, period, requestCenter, &periodEv, &reusePeriod);
+    if (kStatus_Success != status)
+    {
+        return status;
+    }
+
+    /* Pre-flight the budget so a failure leaves no half-configured channel: a new shared period costs
+     * 2 slots (period + pulse); reusing an existing period costs only the 1 pulse slot. */
+    {
+        uint32_t needed = reusePeriod ? 1U : 2U;
+        if ((((uint64_t)s_currentEvent + needed) > (uint64_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS) ||
+            (((uint64_t)s_currentMatch + needed) > (uint64_t)FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE))
+        {
+            return kStatus_OutOfRange;
+        }
+    }
+
+    if (!reusePeriod)
+    {
+        /* Center-aligned PWM uses bi-directional mode; set it only on the new-period path. */
+        if (requestCenter)
+        {
+            base->CTRL |= SCT_CTRL_BIDIR_L_MASK;
+        }
+
+        /* Create the shared period/limit event for this counter. */
+        status =
+            SCTIMER_CreateAndScheduleEvent(base, kSCTIMER_MatchEventOnly, period, 0U, kSCTIMER_Counter_U, &periodEv);
+        if (kStatus_Success != status)
+        {
+            return status;
+        }
+        SCTIMER_SetupCounterLimitAction(base, kSCTIMER_Counter_U, periodEv);
+    }
+    *periodEvent = periodEv;
+
+    /* Create this channel's pulse (duty) event. */
+    if (pwmParam->dutyCyclePercent >= 100U)
+    {
+        assert(period <= (0xFFFFFFFFU - 2U));
+        /* Make the pulse match unreachable so the duty event never fires (100%). */
+        pulsePeriod = period + 2U;
+    }
+    else
+    {
+        pulsePeriod = (uint32_t)((((uint64_t)period * pwmParam->dutyCyclePercent) / 100U) & 0xFFFFFFFFU);
+    }
+
+    status = SCTIMER_CreateAndScheduleEvent(base, kSCTIMER_MatchEventOnly, pulsePeriod, 0U, kSCTIMER_Counter_U,
+                                            &pulseEv);
+    if (kStatus_Success != status)
+    {
+        return status; /* should not happen: pre-flight reserved the budget */
+    }
+    *pulseEvent = pulseEv;
+
+    SCTIMER_ConfigurePwmChannelOutput(base, pwmParam, mode, periodEv, pulseEv);
+
+    return kStatus_Success;
+}
+
+/*!
+ * brief Updates the duty cycle of a PWM signal using explicit period and pulse events.
+ *
+ * Unlike SCTIMER_UpdatePwmDutycycle(), this function does not assume the pulse event is periodEvent + 1,
+ * so it works for channels created by SCTIMER_SetupSharedPeriodPwm() where the pulse events are not
+ * adjacent to the shared period event. The counter must be in unified 32-bit mode.
+ *
+ * param base              SCTimer peripheral base address
+ * param output            The output to configure
+ * param dutyCyclePercent  New PWM pulse width; the value should be between 0 and 100
+ * param periodEvent       The shared period event (as returned by SCTIMER_SetupSharedPeriodPwm())
+ * param pulseEvent        The channel's pulse event (as returned by SCTIMER_SetupSharedPeriodPwm())
+ * param updateMode        When the new duty cycle takes effect, see ::sctimer_pwm_update_mode_t
+ */
+void SCTIMER_UpdatePwmDutycycleByEvent(SCT_Type *base,
+                                       sctimer_out_t output,
+                                       uint8_t dutyCyclePercent,
+                                       uint32_t periodEvent,
+                                       uint32_t pulseEvent,
+                                       sctimer_pwm_update_mode_t updateMode)
+{
+    assert(dutyCyclePercent <= 100U);
+    assert((uint32_t)output < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS);
+    assert(1U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
+    assert(periodEvent < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS);
+    assert(pulseEvent < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS);
+
+    uint32_t periodMatchReg, pulseMatchReg;
+    uint32_t pulsePeriod, period;
+    /* High-true channels clear the output on the pulse event (see SCTIMER_ConfigurePwmChannelOutput). */
+    bool isHighTrue = (0U != (base->OUT[output].CLR & (1UL << pulseEvent)));
+
+    periodMatchReg = base->EV[periodEvent].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
+    pulseMatchReg  = base->EV[pulseEvent].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
+    assert((periodMatchReg < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE) &&
+           (pulseMatchReg < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE));
+
+    period = base->MATCH[periodMatchReg];
+
+    if (dutyCyclePercent >= 100U)
+    {
+        assert(period <= (0xFFFFFFFFU - 2U));
+        pulsePeriod = period + 2U;
+    }
+    else
+    {
+        pulsePeriod = (uint32_t)((((uint64_t)period * dutyCyclePercent) / 100U) & 0xFFFFFFFFU);
+    }
+
+    if (updateMode == kSCTIMER_UpdateImmediately)
+    {
+        /* Writing the active MATCH register requires the counter halted. */
+        SCTIMER_StopTimer(base, (uint32_t)kSCTIMER_Counter_U);
+
+        if (dutyCyclePercent >= 100U)
+        {
+            /* Drive the output to its active level for a constant 100% signal. */
+            if (isHighTrue)
+            {
+                base->OUTPUT |= (1UL << (uint32_t)output);
+            }
+            else
+            {
+                base->OUTPUT &= ~(1UL << (uint32_t)output);
+            }
+        }
+
+        base->MATCH[pulseMatchReg]    = pulsePeriod;
+        base->MATCHREL[pulseMatchReg] = pulsePeriod;
+
+        SCTIMER_StartTimer(base, (uint32_t)kSCTIMER_Counter_U);
+    }
+    else
+    {
+        /* Glitchless: write only the reload register; the new duty loads at the next counter cycle. */
+        base->MATCHREL[pulseMatchReg] = pulsePeriod;
+    }
+}
+
+/*!
+ * brief Configures a complementary PWM output pair with programmable dead time.
+ *
+ * Builds a high-side/low-side complementary pair on the unified 32-bit counter from one duty value plus a
+ * dead time expressed in SCT counter clock ticks. Dead time is inserted by delaying each output's turn-on
+ * by deadTimeTicks while keeping turn-off immediate, which guarantees a non-overlap (dead-time) gap at
+ * both switching edges so the two outputs are never simultaneously active (no shoot-through).
+ *
+ * The shared period event also limits (resets) the counter. The returned handle is used to update the
+ * pair's duty cycle later with SCTIMER_UpdateComplementaryPwmDutycycle().
+ *
+ * note Dead time is inserted by delaying the relevant turn-on edge - the high side in edge-aligned mode,
+ * the low side in center-aligned mode - so that output's active width shrinks by deadTimeTicks (the usual
+ * cost of dead time).
+ *
+ * note For a switching duty the valid range is 0 < duty < 100 (needs deadTimeTicks < duty and
+ * duty + deadTimeTicks < period); deadTimeTicks = 0 is allowed (strict complementary). 0 % and 100 % are
+ * accepted as constant complementary levels (high-side fully off / fully on): the pair is driven to static
+ * opposite levels with no switching and no dead-time window. A both-off fault state is not expressible as a
+ * duty - use a separate output force/disable path for that.
+ *
+ * note Call this function once per complementary pair. To drive several pairs on the same SCTimer (for
+ * example the three half-bridges of a 3-phase inverter), call it once for each pair — but all pairs MUST
+ * use the same pwmFreq_Hz and the same mode, because they share one unified counter (a single count
+ * direction and period). Mixing frequencies or alignments across pairs creates conflicting limit events
+ * on the counter and produces an incorrect waveform.
+ *
+ * param base             SCTimer peripheral base address
+ * param outHigh          High-side output pin
+ * param outLow           Low-side output pin (complement of outHigh)
+ * param dutyCyclePercent High-side duty cycle, value should be between 0 and 100
+ * param deadTimeTicks    Dead time in SCT counter clock ticks, inserted at both edges; 0 = no dead time
+ *                         (strict complementary)
+ * param mode             PWM operation mode, see ::sctimer_pwm_mode_t
+ * param pwmFreq_Hz       PWM signal frequency in Hz
+ * param srcClock_Hz      SCTimer counter clock in Hz
+ * param handle           Pointer to a handle that receives the pair's event numbers and parameters
+ *
+ * return kStatus_Success on success
+ *         kStatus_InvalidArgument if arguments are invalid, the counter is not unified, or the dead time
+ *                                 does not fit the requested duty/period without causing overlap
+ *         kStatus_OutOfRange if the event or match-register budget would be exceeded
+ */
+status_t SCTIMER_SetupComplementaryPwm(SCT_Type *base,
+                                       sctimer_out_t outHigh,
+                                       sctimer_out_t outLow,
+                                       uint8_t dutyCyclePercent,
+                                       uint32_t deadTimeTicks,
+                                       sctimer_pwm_mode_t mode,
+                                       uint32_t pwmFreq_Hz,
+                                       uint32_t srcClock_Hz,
+                                       sctimer_complementary_pwm_handle_t *handle)
+{
+    status_t status;
+    uint32_t sctClock = srcClock_Hz / (((base->CTRL & SCT_CTRL_PRE_L_MASK) >> SCT_CTRL_PRE_L_SHIFT) + 1U);
+    uint32_t period, duty;
+    uint32_t evPeriod = 0U, evHighRise = 0U, evHighFall = 0U, evLowRise = 0U;
+    bool requestCenter = (mode == kSCTIMER_CenterAlignedPwm);
+    bool reusePeriod   = false;
+    /* 0% / 100% are constant complementary levels, not a switching duty. */
+    bool constLevel    = ((0U == dutyCyclePercent) || (100U == dutyCyclePercent));
+
+    if ((NULL == handle) || (0U == srcClock_Hz) || (0U == pwmFreq_Hz) || (dutyCyclePercent > 100U) ||
+        ((uint32_t)outHigh >= (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS) ||
+        ((uint32_t)outLow >= (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS) ||
+        (1U != ((base->CONFIG & SCT_CONFIG_UNIFY_MASK) >> SCT_CONFIG_UNIFY_SHIFT)))
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    /* Compute the period match as a pure calculation; do not mutate any register until all checks pass. */
+    if (requestCenter)
+    {
+        period = sctClock / (pwmFreq_Hz * 2U);
+    }
+    else
+    {
+        if (sctClock <= pwmFreq_Hz) 
+        { 
+            return kStatus_InvalidArgument; 
+        }
+        period = (sctClock / pwmFreq_Hz) - 1U;
+    }
+
+    duty = (uint32_t)((((uint64_t)period * dutyCyclePercent) / 100U) & 0xFFFFFFFFU);
+
+    if (deadTimeTicks > (UINT32_MAX - duty))
+    {
+        return kStatus_InvalidArgument;
+    }
+    uint32_t lowRiseMatch = duty + deadTimeTicks;
+
+    /* Guard the dead-time window so the two outputs cannot overlap (REQ-005 shoot-through protection).
+     * Only a real switching duty must satisfy it; 0%/100% are constant levels with no switching edge. */
+    if ((0U == period) || (!constLevel && ((deadTimeTicks >= duty) || (lowRiseMatch >= period))))
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    /* Reuse the shared period/limit event when one already exists at the same frequency/alignment (e.g. a
+     * 3-phase inverter calls this once per pair). A second independent limit event on the unified counter
+     * perturbs the turn-around (asymmetric dead time near the counter peak), so sharing the one period
+     * event is required for correctness, not merely an optimization. */
+    status = SCTIMER_FindSharedPeriodEvent(base, period, requestCenter, &evPeriod, &reusePeriod);
+    if (kStatus_Success != status)
+    {
+        return status;
+    }
+
+    /* Center needs one event per output; edge needs high rise/fall + low rise. A new shared period adds
+     * one more event/match; reusing an existing one adds none. */
+    {
+        uint32_t needed = requestCenter ? 2U : 3U;
+        needed += reusePeriod ? 0U : 1U;
+
+        if ((((uint64_t)s_currentEvent + needed) > (uint64_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS) ||
+            (((uint64_t)s_currentMatch + needed) > (uint64_t)FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE))
+        {
+            return kStatus_OutOfRange;
+        }
+    }
+
+    if (!reusePeriod)
+    {
+        /* Center-aligned PWM counts up/down (bi-directional); set BIDIR only when creating the period. */
+        if (requestCenter)
+        {
+            base->CTRL |= SCT_CTRL_BIDIR_L_MASK;
+        }
+
+        /* Shared period/limit event: flips the count direction (center) or clears the counter (edge). */
+        status =
+            SCTIMER_CreateAndScheduleEvent(base, kSCTIMER_MatchEventOnly, period, 0U, kSCTIMER_Counter_U, &evPeriod);
+        if (kStatus_Success != status)
+        {
+            return status;
+        }
+        SCTIMER_SetupCounterLimitAction(base, kSCTIMER_Counter_U, evPeriod);
+    }
+
+    if (requestCenter)
+    {
+        /* Center-aligned: one match per output plus counting-direction reversal makes a single
+         * trough-centered pulse on each output. The high side is active while COUNT < duty; the low-side
+         * output is active while COUNT > duty + deadTimeTicks. Because each match is crossed once per
+         * count direction, a deadTimeTicks gap appears at both switching edges (symmetric dead time, no
+         * overlap), and each output produces exactly one pulse per PWM period. */
+        status = SCTIMER_CreateAndScheduleEvent(base, kSCTIMER_MatchEventOnly, duty, 0U, kSCTIMER_Counter_U,
+                                                &evHighFall);
+        if (kStatus_Success != status)
+        {
+            return status;
+        }
+        status = SCTIMER_CreateAndScheduleEvent(base, kSCTIMER_MatchEventOnly, lowRiseMatch, 0U,
+                                                kSCTIMER_Counter_U, &evLowRise);
+        if (kStatus_Success != status)
+        {
+            return status;
+        }
+
+        /* High side starts active (high), low side starts inactive (low). Single write so the two legs
+         * settle together, with no both-on/both-off transient. */
+        {
+            uint32_t out = base->OUTPUT;
+            out |= (1UL << (uint32_t)outHigh);
+            out &= ~(1UL << (uint32_t)outLow);
+            base->OUTPUT = out;
+        }
+        SCTIMER_SetupOutputClearAction(base, (uint32_t)outHigh, evHighFall); /* high off above duty        */
+        SCTIMER_SetupOutputSetAction(base, (uint32_t)outLow, evLowRise);     /* low-side on above duty + td */
+
+        /* Reverse the set/clear actions on the down-count so each output produces one centered pulse. */
+        SCTIMER_ReverseOutputOnDownCount(base, (uint32_t)outHigh);
+        SCTIMER_ReverseOutputOnDownCount(base, (uint32_t)outLow);
+
+        evHighRise = evPeriod; /* not used to drive an output in center mode */
+    }
+    else
+    {
+        /* Edge-aligned: dead time by delaying each turn-on. High side ON [td, duty]; low side ON
+         * [duty + td, period] — a deadTimeTicks gap at both switching edges. */
+        status = SCTIMER_CreateAndScheduleEvent(base, kSCTIMER_MatchEventOnly, deadTimeTicks, 0U,
+                                                kSCTIMER_Counter_U, &evHighRise);
+        if (kStatus_Success != status)
+        {
+            return status;
+        }
+        status =
+            SCTIMER_CreateAndScheduleEvent(base, kSCTIMER_MatchEventOnly, duty, 0U, kSCTIMER_Counter_U, &evHighFall);
+        if (kStatus_Success != status)
+        {
+            return status;
+        }
+        status = SCTIMER_CreateAndScheduleEvent(base, kSCTIMER_MatchEventOnly, lowRiseMatch, 0U,
+                                                kSCTIMER_Counter_U, &evLowRise);
+        if (kStatus_Success != status)
+        {
+            return status;
+        }
+
+        /* Both outputs inactive (low) at start. */
+        base->OUTPUT &= ~((1UL << (uint32_t)outHigh) | (1UL << (uint32_t)outLow));
+        SCTIMER_SetupOutputSetAction(base, (uint32_t)outHigh, evHighRise);
+        SCTIMER_SetupOutputClearAction(base, (uint32_t)outHigh, evHighFall);
+        SCTIMER_SetupOutputSetAction(base, (uint32_t)outLow, evLowRise);
+        SCTIMER_SetupOutputClearAction(base, (uint32_t)outLow, evPeriod);
+    }
+
+    handle->periodEvent   = evPeriod;
+    handle->highRiseEvent = evHighRise;
+    handle->highFallEvent = evHighFall;
+    handle->lowRiseEvent  = evLowRise;
+    handle->deadTimeTicks = deadTimeTicks;
+    handle->outHigh       = outHigh;
+    handle->outLow        = outLow;
+
+    if (constLevel)
+    {
+        /* The events above keep the handle valid for a later switching-duty update, but at 0%/100% the
+         * pair must sit at constant opposite levels. Detach both pins from every event so nothing toggles
+         * them, then force the levels: 100% => high active / low inactive, 0% => high inactive / low active. */
+        base->OUT[(uint32_t)outHigh].SET = 0U;
+        base->OUT[(uint32_t)outHigh].CLR = 0U;
+        base->OUT[(uint32_t)outLow].SET  = 0U;
+        base->OUT[(uint32_t)outLow].CLR  = 0U;
+
+        {
+            uint32_t out = base->OUTPUT;
+            if (100U == dutyCyclePercent)
+            {
+                out |= (1UL << (uint32_t)outHigh);
+                out &= ~(1UL << (uint32_t)outLow);
+            }
+            else
+            {
+                out &= ~(1UL << (uint32_t)outHigh);
+                out |= (1UL << (uint32_t)outLow);
+            }
+            /* Single write: both legs change together, with no both-on/both-off transient. */
+            base->OUTPUT = out;
+        }
+    }
+
+    return kStatus_Success;
+}
+
+/*!
+ * brief Re-bind a complementary pair's output set/clear actions for normal (switching) operation.
+ *
+ * Used by SCTIMER_UpdateComplementaryPwmDutycycle() when a pair returns from a 0%/100% constant-level state,
+ * where both outputs were detached from their events. The alignment is inferred from the handle:
+ * highRiseEvent == periodEvent means center-aligned. The down-count direction control (OUTPUTDIRCTRL) set at
+ * setup is left intact, so it does not need to be re-issued here.
+ */
+static void SCTIMER_RebindComplementaryOutputs(SCT_Type *base, const sctimer_complementary_pwm_handle_t *handle)
+{
+    uint32_t outHigh = (uint32_t)handle->outHigh;
+    uint32_t outLow  = (uint32_t)handle->outLow;
+
+    /* Resume both legs from the inactive (off) level; the match events re-establish the complementary
+     * state on the next period. Starting both-off (rather than high-on for center) means the brief counter
+     * run after the rebind restart can never leave a leg frozen on and overlap the other. */
+    base->OUTPUT &= ~((1UL << outHigh) | (1UL << outLow));
+
+    if (handle->highRiseEvent == handle->periodEvent)
+    {
+        /* Center-aligned: one moving edge per output. */
+        SCTIMER_SetupOutputClearAction(base, outHigh, handle->highFallEvent);
+        SCTIMER_SetupOutputSetAction(base, outLow, handle->lowRiseEvent);
+    }
+    else
+    {
+        /* Edge-aligned: delayed turn-on plus period-boundary turn-off. */
+        SCTIMER_SetupOutputSetAction(base, outHigh, handle->highRiseEvent);
+        SCTIMER_SetupOutputClearAction(base, outHigh, handle->highFallEvent);
+        SCTIMER_SetupOutputSetAction(base, outLow, handle->lowRiseEvent);
+        SCTIMER_SetupOutputClearAction(base, outLow, handle->periodEvent);
+    }
+}
+
+/*!
+ * brief Updates the duty cycle of a complementary PWM pair, preserving dead time.
+ *
+ * Recomputes both moving switching edges (high-side turn-off and low-side turn-on) from the new duty
+ * cycle while keeping the dead-time offset, and writes them so the no-overlap guarantee holds across the
+ * update. In kSCTIMER_UpdateOnNextPeriod mode both edges reload together at the next counter cycle, so
+ * the dead-time relationship is updated atomically and glitchlessly.
+ *
+ * note A switching duty must keep the dead time inside the period (deadTimeTicks < duty and
+ * duty + deadTimeTicks < period). 0 % and 100 % are accepted as constant complementary levels: the pair is
+ * driven to static opposite levels (no switching, no dead time). Switching between a constant level and a
+ * switching duty briefly halts the counter to re-bind the outputs. A both-off fault state is not a duty -
+ * use a separate output force/disable path.
+ *
+ * note updateMode is honored only for a switching duty (0 < duty < 100). A 0 % or 100 % update is always
+ * applied immediately (counter briefly halted), regardless of updateMode, because a constant level cannot
+ * be loaded through the glitchless reload-register (MATCHREL) path: it requires detaching the events and
+ * forcing the output levels, which needs a halt. kSCTIMER_UpdateOnNextPeriod therefore does not defer a
+ * 0 %/100 % change to the next period boundary.
+ *
+ * param base             SCTimer peripheral base address
+ * param handle           Handle returned by SCTIMER_SetupComplementaryPwm()
+ * param dutyCyclePercent New high-side duty cycle, value should be between 0 and 100
+ * param updateMode       When the new duty cycle takes effect, see ::sctimer_pwm_update_mode_t. Ignored for
+ *                        a 0 %/100 % update, which is always immediate; see the note above.
+ *
+ * return kStatus_Success on success
+ *         kStatus_InvalidArgument if the dead time does not fit the requested duty/period
+ */
+status_t SCTIMER_UpdateComplementaryPwmDutycycle(SCT_Type *base,
+                                                 const sctimer_complementary_pwm_handle_t *handle,
+                                                 uint8_t dutyCyclePercent,
+                                                 sctimer_pwm_update_mode_t updateMode)
+{
+    assert(NULL != handle);
+    assert(dutyCyclePercent <= 100U);
+
+    uint32_t periodMatchReg, highFallMatchReg, lowRiseMatchReg;
+    uint32_t period, duty, lowRise;
+
+    periodMatchReg   = base->EV[handle->periodEvent].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
+    highFallMatchReg = base->EV[handle->highFallEvent].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
+    lowRiseMatchReg  = base->EV[handle->lowRiseEvent].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
+
+    period  = base->MATCH[periodMatchReg];
+    duty    = (uint32_t)((((uint64_t)period * dutyCyclePercent) / 100U) & 0xFFFFFFFFU);
+
+    if (handle->deadTimeTicks > (UINT32_MAX - duty))
+    {
+        return kStatus_InvalidArgument;
+    }
+    lowRise = duty + handle->deadTimeTicks;
+
+    if ((0U == dutyCyclePercent) || (100U == dutyCyclePercent))
+    {
+        /* Constant complementary levels: detach both pins from their events and force the levels.
+         * 100% => high active / low inactive, 0% => high inactive / low active. Applied immediately. */
+        SCTIMER_StopTimer(base, (uint32_t)kSCTIMER_Counter_U);
+
+        base->OUT[(uint32_t)handle->outHigh].SET = 0U;
+        base->OUT[(uint32_t)handle->outHigh].CLR = 0U;
+        base->OUT[(uint32_t)handle->outLow].SET  = 0U;
+        base->OUT[(uint32_t)handle->outLow].CLR  = 0U;
+
+        {
+            uint32_t out = base->OUTPUT;
+            if (100U == dutyCyclePercent)
+            {
+                out |= (1UL << (uint32_t)handle->outHigh);
+                out &= ~(1UL << (uint32_t)handle->outLow);
+            }
+            else
+            {
+                out &= ~(1UL << (uint32_t)handle->outHigh);
+                out |= (1UL << (uint32_t)handle->outLow);
+            }
+            /* Single write: both legs change together, with no both-on/both-off transient. */
+            base->OUTPUT = out;
+        }
+
+        SCTIMER_StartTimer(base, (uint32_t)kSCTIMER_Counter_U);
+        return kStatus_Success;
+    }
+
+    /* Returning from a 0%/100% constant state: the outputs were detached, so re-bind them before
+     * recomputing the switching edges. A normal switching handle always has at least one action bit set. */
+    if (0U == (base->OUT[(uint32_t)handle->outHigh].SET | base->OUT[(uint32_t)handle->outHigh].CLR |
+               base->OUT[(uint32_t)handle->outLow].SET | base->OUT[(uint32_t)handle->outLow].CLR))
+    {
+        SCTIMER_StopTimer(base, (uint32_t)kSCTIMER_Counter_U);
+        SCTIMER_RebindComplementaryOutputs(base, handle);
+        SCTIMER_StartTimer(base, (uint32_t)kSCTIMER_Counter_U);
+    }
+
+    /* Re-apply the dead-time / shoot-through guard for the new duty (REQ-005). */
+    if ((handle->deadTimeTicks >= duty) || (lowRise >= period))
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    if (updateMode == kSCTIMER_UpdateImmediately)
+    {
+        SCTIMER_StopTimer(base, (uint32_t)kSCTIMER_Counter_U);
+        /* Immediate mode halts the counter mid-period; on restart the frozen output levels can be wrong
+         * for the resumed count and, in center-aligned mode, leave both legs high for up to half a period.
+         * Drive both legs to the inactive level while halted so the restart can never show a both-high
+         * overlap; the match events re-establish the correct complementary state. 
+         */
+        base->OUTPUT &= ~((1UL << (uint32_t)handle->outHigh) | (1UL << (uint32_t)handle->outLow));
+        base->MATCH[highFallMatchReg]    = duty;
+        base->MATCHREL[highFallMatchReg] = duty;
+        base->MATCH[lowRiseMatchReg]     = lowRise;
+        base->MATCHREL[lowRiseMatchReg]  = lowRise;
+        SCTIMER_StartTimer(base, (uint32_t)kSCTIMER_Counter_U);
+    }
+    else
+    {
+        /* Both edges reload together at the next cycle boundary: dead time stays consistent. */
+        base->MATCHREL[highFallMatchReg] = duty;
+        base->MATCHREL[lowRiseMatchReg]  = lowRise;
+    }
+
+    return kStatus_Success;
+}
+
+/*!
  * brief Create an event that is triggered on a match or IO and schedule in current state.
  *
  * This function will configure an event using the options provided by the user. If the event type uses
@@ -496,7 +1247,7 @@ status_t SCTIMER_CreateAndScheduleEvent(SCT_Type *base,
     status_t status         = kStatus_Success;
     uint32_t temp           = 0;
 
-    if (((kSCTIMER_Counter_H == whichCounter) || (kSCTIMER_Counter_L == whichCounter)) && (matchValue > 0xFFFF))
+    if (((kSCTIMER_Counter_H == whichCounter) || (kSCTIMER_Counter_L == whichCounter)) && (matchValue > 0xFFFFU))
     {
         return kStatus_InvalidArgument;
     }

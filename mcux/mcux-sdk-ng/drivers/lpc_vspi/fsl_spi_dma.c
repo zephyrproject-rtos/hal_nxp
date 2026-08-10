@@ -231,7 +231,7 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
     else
     {
         uint32_t tmp;
-        dma_transfer_config_t xferConfig = {0};
+        dma_channel_config_t xferConfig = {0};
         spi_config_p                     = (spi_config_t *)SPI_GetConfig(base);
 
         handle->state        = (uint32_t)kStatus_SPI_Busy;
@@ -248,17 +248,25 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
         }
         if (xfer->rxData != NULL)
         {
-            DMA_PrepareTransfer(&xferConfig, (uint32_t *)address, xfer->rxData,
-                                (((uint32_t)spi_config_p->dataWidth > 7U) ? (sizeof(uint16_t)) : (sizeof(uint8_t))),
-                                xfer->dataSize, kDMA_PeripheralToMemory, NULL);
+            DMA_PrepareChannelTransfer(&xferConfig, (uint32_t *)address, xfer->rxData,
+                                       DMA_CHANNEL_XFER(false, false, true, false,
+                                                        (((uint32_t)spi_config_p->dataWidth > 7U) ? (sizeof(uint16_t)) :
+                                                                                                    (sizeof(uint8_t))),
+                                                        kDMA_AddressInterleave0xWidth, kDMA_AddressInterleave1xWidth,
+                                                        xfer->dataSize),
+                                       kDMA_PeripheralToMemory, NULL, NULL);
         }
         else
         {
-            DMA_PrepareTransfer(&xferConfig, (uint32_t *)address, &s_rxDummy,
-                                (((uint32_t)spi_config_p->dataWidth > 7U) ? (sizeof(uint16_t)) : (sizeof(uint8_t))),
-                                xfer->dataSize, kDMA_StaticToStatic, NULL);
+            DMA_PrepareChannelTransfer(&xferConfig, (uint32_t *)address, &s_rxDummy,
+                                       DMA_CHANNEL_XFER(false, false, true, false,
+                                                        (((uint32_t)spi_config_p->dataWidth > 7U) ? (sizeof(uint16_t)) :
+                                                                                                    (sizeof(uint8_t))),
+                                                        kDMA_AddressInterleave0xWidth, kDMA_AddressInterleave0xWidth,
+                                                        xfer->dataSize),
+                                       kDMA_StaticToStatic, NULL, NULL);
         }
-        (void)DMA_SubmitTransfer(handle->rxHandle, &xferConfig);
+        (void)DMA_SubmitChannelTransfer(handle->rxHandle, &xferConfig);
         handle->rxInProgress = true;
         DMA_StartTransfer(handle->rxHandle);
 
@@ -305,32 +313,42 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
                                          (uint32_t *)address, NULL);
                     if ((uint32_t)spi_config_p->dataWidth > 7U)
                     {
-                        DMA_PrepareTransfer(&xferConfig, xfer->txData, (uint32_t *)address, sizeof(uint16_t),
-                                            (xfer->dataSize - 2U), kDMA_MemoryToPeripheral,
-                                            &s_spi_descriptor_table[instance]);
+                        DMA_PrepareChannelTransfer(&xferConfig, xfer->txData, (uint32_t *)address,
+                                                   DMA_CHANNEL_XFER(true, false, false, false, sizeof(uint16_t),
+                                                                    kDMA_AddressInterleave1xWidth,
+                                                                    kDMA_AddressInterleave0xWidth,
+                                                                    (xfer->dataSize - 2U)),
+                                                   kDMA_MemoryToPeripheral, NULL,
+                                                   &s_spi_descriptor_table[instance]);
                     }
                     else
                     {
-                        DMA_PrepareTransfer(&xferConfig, xfer->txData, (uint32_t *)address, sizeof(uint8_t),
-                                            (xfer->dataSize - 1U), kDMA_MemoryToPeripheral,
-                                            &s_spi_descriptor_table[instance]);
+                        DMA_PrepareChannelTransfer(&xferConfig, xfer->txData, (uint32_t *)address,
+                                                   DMA_CHANNEL_XFER(true, false, false, false, sizeof(uint8_t),
+                                                                    kDMA_AddressInterleave1xWidth,
+                                                                    kDMA_AddressInterleave0xWidth,
+                                                                    (xfer->dataSize - 1U)),
+                                                   kDMA_MemoryToPeripheral, NULL,
+                                                   &s_spi_descriptor_table[instance]);
                     }
-
-                    /* Disable interrupts for first descriptor to avoid calling callback twice */
-                    xferConfig.xfercfg.intA = false;
-                    xferConfig.xfercfg.intB = false;
                 }
                 else
                 {
                     if ((uint32_t)spi_config_p->dataWidth > 7U)
                     {
-                        DMA_PrepareTransfer(&xferConfig, xfer->txData, (uint32_t *)address, sizeof(uint16_t),
-                                            (xfer->dataSize), kDMA_MemoryToPeripheral, NULL);
+                        DMA_PrepareChannelTransfer(&xferConfig, xfer->txData, (uint32_t *)address,
+                                                   DMA_CHANNEL_XFER(false, false, true, false, sizeof(uint16_t),
+                                                                    kDMA_AddressInterleave1xWidth,
+                                                                    kDMA_AddressInterleave0xWidth, (xfer->dataSize)),
+                                                   kDMA_MemoryToPeripheral, NULL, NULL);
                     }
                     else
                     {
-                        DMA_PrepareTransfer(&xferConfig, xfer->txData, (uint32_t *)address, sizeof(uint8_t),
-                                            (xfer->dataSize), kDMA_MemoryToPeripheral, NULL);
+                        DMA_PrepareChannelTransfer(&xferConfig, xfer->txData, (uint32_t *)address,
+                                                   DMA_CHANNEL_XFER(false, false, true, false, sizeof(uint8_t),
+                                                                    kDMA_AddressInterleave1xWidth,
+                                                                    kDMA_AddressInterleave0xWidth, (xfer->dataSize)),
+                                                   kDMA_MemoryToPeripheral, NULL, NULL);
                     }
                 }
             }
@@ -353,36 +371,47 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
                                          (uint32_t *)address, NULL);
                     if ((uint32_t)spi_config_p->dataWidth > 7U)
                     {
-                        DMA_PrepareTransfer(&xferConfig, xfer->txData, (uint32_t *)address, sizeof(uint16_t),
-                                            (xfer->dataSize - 2U), kDMA_MemoryToPeripheral,
-                                            &s_spi_descriptor_table[instance]);
+                        DMA_PrepareChannelTransfer(&xferConfig, xfer->txData, (uint32_t *)address,
+                                                   DMA_CHANNEL_XFER(true, false, false, false, sizeof(uint16_t),
+                                                                    kDMA_AddressInterleave1xWidth,
+                                                                    kDMA_AddressInterleave0xWidth,
+                                                                    (xfer->dataSize - 2U)),
+                                                   kDMA_MemoryToPeripheral, NULL,
+                                                   &s_spi_descriptor_table[instance]);
                     }
                     else
                     {
-                        DMA_PrepareTransfer(&xferConfig, xfer->txData, (uint32_t *)address, sizeof(uint8_t),
-                                            (xfer->dataSize - 1U), kDMA_MemoryToPeripheral,
-                                            &s_spi_descriptor_table[instance]);
+                        DMA_PrepareChannelTransfer(&xferConfig, xfer->txData, (uint32_t *)address,
+                                                   DMA_CHANNEL_XFER(true, false, false, false, sizeof(uint8_t),
+                                                                    kDMA_AddressInterleave1xWidth,
+                                                                    kDMA_AddressInterleave0xWidth,
+                                                                    (xfer->dataSize - 1U)),
+                                                   kDMA_MemoryToPeripheral, NULL,
+                                                   &s_spi_descriptor_table[instance]);
                     }
-                    /* disable interrupts for first descriptor to avoid calling callback twice */
-                    xferConfig.xfercfg.intA = false;
-                    xferConfig.xfercfg.intB = false;
                 }
                 else
                 {
                     address = (uint32_t)&base->TXDAT;
                     if ((uint32_t)spi_config_p->dataWidth > 7U)
                     {
-                        DMA_PrepareTransfer(&xferConfig, xfer->txData, (uint32_t *)address, sizeof(uint16_t),
-                                            (xfer->dataSize), kDMA_MemoryToPeripheral, NULL);
+                        DMA_PrepareChannelTransfer(&xferConfig, xfer->txData, (uint32_t *)address,
+                                                   DMA_CHANNEL_XFER(false, false, true, false, sizeof(uint16_t),
+                                                                    kDMA_AddressInterleave1xWidth,
+                                                                    kDMA_AddressInterleave0xWidth, (xfer->dataSize)),
+                                                   kDMA_MemoryToPeripheral, NULL, NULL);
                     }
                     else
                     {
-                        DMA_PrepareTransfer(&xferConfig, xfer->txData, (uint32_t *)address, sizeof(uint8_t),
-                                            (xfer->dataSize), kDMA_MemoryToPeripheral, NULL);
+                        DMA_PrepareChannelTransfer(&xferConfig, xfer->txData, (uint32_t *)address,
+                                                   DMA_CHANNEL_XFER(false, false, true, false, sizeof(uint8_t),
+                                                                    kDMA_AddressInterleave1xWidth,
+                                                                    kDMA_AddressInterleave0xWidth, (xfer->dataSize)),
+                                                   kDMA_MemoryToPeripheral, NULL, NULL);
                     }
                 }
             }
-            result = DMA_SubmitTransfer(handle->txHandle, &xferConfig);
+            result = DMA_SubmitChannelTransfer(handle->txHandle, &xferConfig);
             if (result != kStatus_Success)
             {
                 return result;
@@ -415,15 +444,15 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
                 }
                 DMA_CreateDescriptor(&s_spi_descriptor_table[instance], &tmp_xfercfg, &s_txDummy[instance].lastWord,
                                      (uint32_t *)address, NULL);
-                DMA_PrepareTransfer(
+                DMA_PrepareChannelTransfer(
                     &xferConfig, &s_txDummy[instance].word, (uint32_t *)address,
-                    (((uint32_t)spi_config_p->dataWidth > 7U) ? (sizeof(uint16_t)) : (sizeof(uint8_t))),
-                    (((uint32_t)spi_config_p->dataWidth > 7U) ? (xfer->dataSize - 2U) : (xfer->dataSize - 1U)),
-                    kDMA_StaticToStatic, &s_spi_descriptor_table[instance]);
-                /* Disable interrupts for first descriptor to avoid calling callback twice */
-                xferConfig.xfercfg.intA = false;
-                xferConfig.xfercfg.intB = false;
-                result                  = DMA_SubmitTransfer(handle->txHandle, &xferConfig);
+                    DMA_CHANNEL_XFER(true, false, false, false,
+                                     (((uint32_t)spi_config_p->dataWidth > 7U) ? (sizeof(uint16_t)) : (sizeof(uint8_t))),
+                                     kDMA_AddressInterleave0xWidth, kDMA_AddressInterleave0xWidth,
+                                     (((uint32_t)spi_config_p->dataWidth > 7U) ? (xfer->dataSize - 2U) :
+                                                                                (xfer->dataSize - 1U))),
+                    kDMA_StaticToStatic, NULL, &s_spi_descriptor_table[instance]);
+                result                  = DMA_SubmitChannelTransfer(handle->txHandle, &xferConfig);
                 if (result != kStatus_Success)
                 {
                     return result;
@@ -439,10 +468,14 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
                 {
                     address = (uint32_t)&base->TXDAT;
                 }
-                DMA_PrepareTransfer(&xferConfig, &s_txDummy[instance].word, (uint32_t *)address,
-                                    (((uint32_t)spi_config_p->dataWidth > 7U) ? (sizeof(uint16_t)) : (sizeof(uint8_t))),
-                                    (xfer->dataSize), kDMA_StaticToStatic, NULL);
-                result = DMA_SubmitTransfer(handle->txHandle, &xferConfig);
+                DMA_PrepareChannelTransfer(&xferConfig, &s_txDummy[instance].word, (uint32_t *)address,
+                                           DMA_CHANNEL_XFER(false, false, true, false,
+                                                            (((uint32_t)spi_config_p->dataWidth > 7U) ?
+                                                                 (sizeof(uint16_t)) : (sizeof(uint8_t))),
+                                                            kDMA_AddressInterleave0xWidth,
+                                                            kDMA_AddressInterleave0xWidth, (xfer->dataSize)),
+                                           kDMA_StaticToStatic, NULL, NULL);
+                result = DMA_SubmitChannelTransfer(handle->txHandle, &xferConfig);
                 if (result != kStatus_Success)
                 {
                     return result;

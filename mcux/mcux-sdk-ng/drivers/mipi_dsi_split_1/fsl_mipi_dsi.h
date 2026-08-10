@@ -1,5 +1,5 @@
 /*
- * Copyright 2025-2026 NXP
+ * Copyright 2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*! @} */
 
 /* The max APB transfer size. */
@@ -98,10 +98,8 @@ typedef enum _dsi_ppi_width
 /*! @brief MIPI DSI controller configuration. */
 typedef struct _dsi_config
 {
-    uint32_t numLanes : 4U;        /*!< Number of lanes. *///TODO 4? 2?
-    uint32_t : 1U;                 /*!< Reserved. */
-    uint32_t ppiWidth : 2U;        /*!< PPI width, see @ref dsi_ppi_width_t. */
-    uint32_t : 1U;                 /*!< Reserved. */
+    uint32_t numLanes : 4U;        /*!< Number of lanes. */
+    uint32_t : 4U;                 /*!< Reserved. */
     uint32_t enableContinuousHsClk : 1U; /*!< Set to true, the high speed clock will not enter
                                        low power mode between transmissions. */
     uint32_t autoInsertEoTp : 1U;  /*!< Insert an EoTp short package when switching from HS to LP. */
@@ -113,8 +111,6 @@ typedef struct _dsi_config
     uint32_t enableScramble : 1U;  /*!< Set to true to scramble long packet data and data CRC. */
     uint32_t : 17U;                /*!< Reserved. */
     uint32_t enable: 1U;           /*!< Enable DSI controller. */
-    // uint32_t watchdogCount: 31U;           /*!< Watchdog count. *///TODO
-    // uint32_t enableWatchdog: 1U;           /*!< Enable watchdog timer. */
     uint32_t htxTo_ByteClk : 24U;        /*!< HS TX timeout count (HTX_TO) in byte clock. */
     uint32_t : 8U;                /*!< Reserved. */
     uint32_t lrxHostTo_ByteClk : 24U;    /*!< LP RX host timeout count (LRX-H_TO) in byte clock. */
@@ -122,6 +118,8 @@ typedef struct _dsi_config
     uint32_t btaTo_ByteClk : 24U;        /*!< Bus turn around timeout count (TA_TO) in byte clock. */
     uint32_t : 8U;                /*!< Reserved. */
 } dsi_config_t;
+
+/* DPI interface definitions. */
 
 /*! @brief DPI interrupt status. */
 enum _dsi_dpi_interrupt
@@ -157,19 +155,6 @@ enum _dsi_dpi_extrenal_packet
     kDSI_DpiExternalVfp     = (1U << 3U), /*!< External packets are allowed during vertical front porch. */
 };
 
-/*! @brief Enable Multiple packets per video line in DPI mode. */
-typedef enum _dsi_dpi_packet_per_line
-{
-    kDSI_Dpi1PacketPerLine = 1U, /*!< 1 packet sent per line. */
-    kDSI_Dpi2PacketPerLine = 2U, /*!< 2 packets sent per line. */
-    kDSI_Dpi3PacketPerLine = 3U, /*!< 3 packets sent per line. */
-    kDSI_Dpi4PacketPerLine = 4U, /*!< 4 packets sent per line. */
-    kDSI_Dpi5PacketPerLine = 5U, /*!< 5 packets sent per line. */
-    kDSI_Dpi6PacketPerLine = 6U, /*!< 6 packets sent per line. */
-    kDSI_Dpi7PacketPerLine = 7U, /*!< 7 packets sent per line. */
-    kDSI_Dpi8PacketPerLine = 8U, /*!< 8 packets sent per line. */
-} dsi_dpi_packet_per_line_t;
-
 /*! @brief DPI video mode. */
 typedef enum _dsi_dpi_video_mode
 {
@@ -196,46 +181,30 @@ enum _dsi_dpi_bllp_mode
     kDSI_DpiBllpHorizontalLowPower = (1U << 2U), /*!< LP mode is used in horizontal BLLP periods. */
 };
 
-/*! @brief DPI video mode pixel alignment when pixel number is smaller than the maximum pixel size. */
-typedef enum _dsi_dpi_alignment_mode
-{
-    kDSI_DpiLsb = 0U, /*!< Lower pixels are valid: 00000PPP. */
-    kDSI_DpiMsb = 1U, /*!< Higher pixel are valid: PPP00000. */
-} dsi_dpi_alignment_mode_t;
-
 /*! @brief MIPI DSI controller DPI interface configuration. */
 typedef struct _dsi_dpi_config
 {
-    uint32_t pixelPacket : 6U;     /*!< Pixel packet format. See @ref dsi_dpi_pixel_packet_t. */
-    uint32_t virtualChannel : 2U;  /*!< Virtual channel. */
-    uint32_t externalPacket : 4U;  /*!< OR'ed value of @ref _dsi_dpi_extrenal_packet to configure when external packets are allowed. */
-    uint32_t packetPerLine : 4U;   /*!< Enable multiple packets per video line. See @ref dsi_dpi_packet_per_line_t. */
-    uint32_t videoMode : 2U;       /*!< Video mode. See @ref dsi_dpi_video_mode_t. */
-    uint32_t polarityFlags : 2U;   /*!< OR'ed value of @ref _dsi_dpi_polarity_flag controls signal polarity. */
-    uint32_t bllpMode : 3U;        /*!< OR'ed value of @ref _dsi_dpi_bllp_mode to control behavior in BLLP. */
-    uint32_t overrideTiming : 1;   /*!< Set to true to use hfp/hbp/hsw/vfp/vbp/panelHeight configurations directly,
-                                        otherwise the host uses the first video frame to calibrate automatically. */
-    uint32_t alignment : 1U;       /*!< The alignment for pixel when the number is smaller than the maximum pixel
-                                        size. See @ref dsi_dpi_alignment_mode_t. */
-    uint32_t : 6U;                 /*!< Reserved. */
-    uint32_t enable: 1U;           /*!< Enable DPI mode. */
-    uint32_t pixelPerPacket : 16U; /*!< Number of pixels to be sent per packet. pixelPerPacket x packetPerLine shall be the pixel number each line. */
-    // uint32_t pixelPayloadSize : 16U; /*!< Maximum number of pixels that should be sent
-    //                                  as one DSI packet. Recommended that the pixelPerPacket is
-    //                                  evenly divisible by this parameter. todo */
-    uint32_t payloadPerPacket : 16U; /*!< Number of bytes in each packet, alongside with pixelPerPacket
-                                          indicate which video ports contain valid data on the last cycle
-                                          of the slice/chunk. */
-    uint32_t startDelay : 16U;       /*!< The delay cycle before start of line. Used to buffer enough pixel in FIFO to prevent underflow. */
-    uint32_t vssPayload : 16U;       /*!< The payload value for Vertical Sync Start.
-                                          Normally the 16 bit payload is 16’h0000 for all sync events,
-                                          but the MIPI spec allows the VSS to send a non-zero payload. */
-    uint32_t hfp : 16U;         /*!< Horizontal front porch, in dpi pixel clock. */
-    uint32_t hbp : 16U;         /*!< Horizontal back porch, in dpi pixel clock. */
-    uint32_t hsw : 16U;         /*!< Horizontal sync width, in dpi pixel clock. */
-    uint32_t vbp : 16U;         /*!< Number of lines in vertical back porch. */
-    uint32_t vfp : 16U;         /*!< Number of lines in vertical front porch. */
-    uint32_t panelHeight : 16U; /*!< Line number in vertical active area. */
+    bool enable;                              /*!< Enable DPI mode. */
+    uint8_t virtualChannel;                   /*!< Virtual channel. */
+    dsi_dpi_pixel_packet_t pixelPacketFormat; /*!< Pixel packet format. See @ref dsi_dpi_pixel_packet_t. */
+    dsi_dpi_video_mode_t videoMode;           /*!< Video mode. See @ref dsi_dpi_video_mode_t. */
+    uint8_t polarityFlags;                    /*!< OR'ed value of @ref _dsi_dpi_polarity_flag controls signal polarity. */
+    uint8_t bllpMode;                         /*!< OR'ed value of @ref _dsi_dpi_bllp_mode to control behavior in BLLP. */
+    bool overrideTiming;     /*!< Set to true to use hfp/hbp/hsw/vfp/vbp/panelHeight configurations directly,
+                                  otherwise the host uses the first video frame to calibrate automatically by default. */
+    uint16_t pixelPerPacket; /*!< Number of pixels to be sent per packet.
+                                  Suggest setting to the panel line size. */
+    uint16_t hfp;            /*!< Horizontal front porch, in bytes. */
+    uint16_t hbp;            /*!< Horizontal back porch, in bytes. */
+    uint16_t hsw;            /*!< Horizontal sync width, in bytes. */
+    uint16_t vbp;            /*!< Number of lines in vertical back porch. */
+    uint16_t vfp;            /*!< Number of lines in vertical front porch. */
+    uint16_t panelHeight;    /*!< Line number in vertical active area. */
+    uint16_t vssPayload;     /*!< The payload value for Vertical Sync Start.
+                                  Normally the 16 bit payload is 16’h0000 for all sync events,
+                                  but the MIPI spec allows the VSS to send a non-zero payload. */
+    uint8_t externalPacket;  /*!< OR'ed value of @ref _dsi_dpi_extrenal_packet to configure when
+                                  external packets are allowed. */
 } dsi_dpi_config_t;
 
 /*! @brief DBI status. */
@@ -462,7 +431,7 @@ extern "C" {
  */
 static inline void DSI_EnableHostInterrupts(const MIPI_DSI_Type *base, uint32_t interrupt)
 {
-    base->host->PERIPH_IRQ_STATUS |= interrupt;
+    base->host->PERIPH_IRQ_MASK |= interrupt;
 }
 
 /*!
@@ -475,7 +444,7 @@ static inline void DSI_EnableHostInterrupts(const MIPI_DSI_Type *base, uint32_t 
  */
 static inline void DSI_DisableHostInterrupts(const MIPI_DSI_Type *base, uint32_t interrupt)
 {
-    base->host->PERIPH_IRQ_STATUS &= ~interrupt;
+    base->host->PERIPH_IRQ_MASK &= ~interrupt;
 }
 
 /*!
@@ -672,16 +641,8 @@ void DSI_GetDefaultConfig(dsi_config_t *config);
  *
  * @param base MIPI DSI peripheral base address.
  * @param config Pointer to the DPI interface configuration.
- * @param numLanes Lane number, should be same with the setting in @ref dsi_dpi_config_t.
- * @param dpiPixelClkFreq_Hz The DPI pixel clock frequency in Hz.
- * @param dsiHsBitClkFreq_Hz The DSI high speed bit clock frequency in Hz. It is
- * the same with DPHY PLL output.
  */
-void DSI_SetDpiConfig(const MIPI_DSI_Type *base,
-    const dsi_dpi_config_t *config,
-    uint8_t numLanes,
-    uint32_t dpiPixelClkFreq_Hz,
-    uint32_t dsiHsBitClkFreq_Hz);
+void DSI_SetDpiConfig(const MIPI_DSI_Type *base, const dsi_dpi_config_t *config);
 
 /*! @} */
 

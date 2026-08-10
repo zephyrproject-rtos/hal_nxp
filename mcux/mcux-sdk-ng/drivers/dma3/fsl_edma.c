@@ -110,7 +110,7 @@ static uint32_t EDMA_GetInstance(DMA_Type *base)
          * (s_edmaBases[instance] != base) not covered.
          * $ref edma_c_ref_1$.
          */
-        if (MSDK_REG_SECURE_ADDR(s_edmaBases[instance]) == MSDK_REG_SECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
+        if (MSDK_REG_NONSECURE_ADDR(s_edmaBases[instance]) == MSDK_REG_NONSECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
         {
             break;
         }
@@ -1307,7 +1307,7 @@ void EDMA_StartTransfer(edma_handle_t *handle)
                  * $ref edma_c_ref_3$.
                  */
                 if ((!((handle->base->CH[handle->channel].CH_CSR & DMA_CH_CSR_DONE_MASK) != 0U)) || /* GCOVR_EXCL_BR_LINE */
-                    ((tcdRegs->CSR & DMA_TCD_CSR_ESG_MASK) != 0u)) /* GCOVR_EXCL_LINE */
+                    ((tcdRegs->CSR & DMA_TCD_CSR_ESG_MASK) != 0u)) /* GCOVR_EXCL_BR_LINE */
                 {
                     /*
                         Re-enable channel request must be as soon as possible, so must put
@@ -1476,7 +1476,7 @@ void EDMA_HandleIRQ(edma_handle_t *handle)
              * (transfer_done) not covered. Test unfeasible,
              * The transfer_done will be false when (new_header == (uint8_t)handle->header) is false.
              */
-            if (transfer_done) /* GCOVR_EXCL_BR_LINE */
+            if (transfer_done)
             {
                 handle->base->CH[handle->channel].CH_CSR |= DMA_CH_CSR_DONE_MASK;
             }

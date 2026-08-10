@@ -22,7 +22,7 @@
  * @{
  */
 /*! @brief MU driver version. */
-#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 8, 4))
+#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 8, 5))
 /*! @} */
 
 #define MU_CORE_INTR(intr) ((uint32_t)(intr) << 0U)
@@ -683,7 +683,7 @@ static inline uint32_t MU_GetInterruptsPending(MU_Type *base)
  *
  * @param base MU peripheral base address.
  * @param flags Bit mask of the MU status flags. See _mu_status_flags. Only the
- * following flags can be cleared by software (if applicable for particular device), 
+ * following flags can be cleared by software (if applicable for particular device),
  * other flags are cleared by hardware:
  * - kMU_GenInt0Flag
  * - kMU_GenInt1Flag
@@ -769,11 +769,13 @@ static inline void MU_EnableInterrupts(MU_Type *base, uint32_t interrupts)
     }
 
     /* Core interrupts. */
+#if !(defined(FSL_FEATURE_MU_NO_CIER0_REG) && (FSL_FEATURE_MU_NO_CIER0_REG == 1))
     tmp = MU_GET_CORE_INTR(interrupts);
     if (0U != tmp)
     {
         base->CIER0 |= tmp;
     }
+#endif
 
 #if !(defined(FSL_FEATURE_MU_HAS_SR_MURIP) && (FSL_FEATURE_MU_HAS_SR_MURIP == 0))
     if (0U != ((uint32_t)kMU_MuResetInterruptEnable & interrupts))
@@ -824,12 +826,14 @@ static inline void MU_DisableInterrupts(MU_Type *base, uint32_t interrupts)
         base->GIER &= ~tmp;
     }
 
+#if !(defined(FSL_FEATURE_MU_NO_CIER0_REG) && (FSL_FEATURE_MU_NO_CIER0_REG == 1))
     /* Core interrupts. */
     tmp = MU_GET_CORE_INTR(interrupts);
     if (0U != tmp)
     {
         base->CIER0 &= ~tmp;
     }
+#endif
 
 #if !(defined(FSL_FEATURE_MU_HAS_SR_MURIP) && (FSL_FEATURE_MU_HAS_SR_MURIP == 0))
     if (0U != ((uint32_t)kMU_MuResetInterruptEnable & interrupts))

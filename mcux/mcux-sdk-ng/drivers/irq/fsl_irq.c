@@ -46,7 +46,7 @@ uint32_t IRQ_GetInstance(IRQ_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_irqBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_irqBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_irqBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

@@ -16,6 +16,12 @@
 #define FSL_COMPONENT_ID "platform.drivers.acmp"
 #endif
 
+#if defined(ACMP_RSTS)
+#define ACMP_RESETS_ARRAY ACMP_RSTS
+#elif defined(ACMP_RSTS_N)
+#define ACMP_RESETS_ARRAY ACMP_RSTS_N
+#endif
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -37,6 +43,11 @@ static CMP_Type *const s_acmpBases[] = CMP_BASE_PTRS;
 static const clock_ip_name_t s_acmpClock[] = CMP_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+#if defined(ACMP_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_acmpResets[] = ACMP_RESETS_ARRAY;
+#endif
+
 /*******************************************************************************
  * Codes
  ******************************************************************************/
@@ -47,7 +58,7 @@ static uint32_t ACMP_GetInstance(CMP_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_acmpBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_acmpBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_acmpBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -72,10 +83,19 @@ void ACMP_Init(CMP_Type *base, const acmp_config_t *config)
 
     uint32_t tmp32;
 
+#if (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)) \
+    || defined(ACMP_RESETS_ARRAY)
+    uint32_t instance = ACMP_GetInstance(base);
+#endif
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Open clock gate. */
-    CLOCK_EnableClock(s_acmpClock[ACMP_GetInstance(base)]);
+    CLOCK_EnableClock(s_acmpClock[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(ACMP_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_acmpResets[instance]);
+#endif
 
     /* Disable the module before configuring it. */
     ACMP_Enable(base, false);

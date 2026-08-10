@@ -20,8 +20,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief SWT Driver Version 2.1.0 */
-#define FSL_SWT_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief SWT Driver Version 2.1.2 */
+#define FSL_SWT_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*! @} */
 
 /*! @name Soft unlock sequence */
@@ -309,14 +309,16 @@ static inline bool SWT_GetTimeoutInterruptFlag(SWT_Type *base)
 /*!
  * @brief Clear the timeout interrupt flag
  *
- * This function will clear the timeout interrupt flag and then SWT will send interrupt request due to an initial
- * timeout.
+ * This function clears the timeout interrupt flag and waits until the W1C operation takes effect.
  * 
  * @param base SWT peripheral base address
  */
 static inline void SWT_ClearTimeoutInterruptFlag(SWT_Type *base)
 {
     base->IR = SWT_IR_TIF(1U);
+    while (SWT_GetTimeoutInterruptFlag(base))
+    {
+    }
 }
 
 /*!

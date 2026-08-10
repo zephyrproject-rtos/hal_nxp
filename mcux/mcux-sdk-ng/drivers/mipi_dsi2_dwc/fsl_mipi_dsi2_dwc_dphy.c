@@ -291,6 +291,26 @@ void DSI_DphyTxDynamicSetting(DISPLAY_MIPI_DSI_PHY_Type *base,
                               uint32_t hs_clk_freq,
                               uint32_t lp_clk_freq)
 {
+
+    DSI_DphyTxDynamicSettingWithMult(base,
+                                     hs_clk_freq,
+                                     lp_clk_freq,
+                                     5.0);
+}
+
+/*!
+ * @brief Dynamic setting of Dphy transfer.
+ *
+ * @param base MIPI DSI dphy peripheral base address
+ * @param hs_clk_freq high speed clock frequency
+ * @param lp_clk_freq low power clock frequency
+ * @param mult timing multiplier factor
+ */
+void DSI_DphyTxDynamicSettingWithMult(DISPLAY_MIPI_DSI_PHY_Type *base,
+                                      uint32_t hs_clk_freq,
+                                      uint32_t lp_clk_freq,
+                                      double mult)
+{
     uint32_t clk_post, clk_post_reg;
     uint32_t clk_prepare, clk_zero, clk_zero_reg, hs_zero_reg, hs_zero;
     uint32_t hs_exit_reg, hs_prepare_dco, hs_prepare_dco_reg;
@@ -301,10 +321,10 @@ void DSI_DphyTxDynamicSetting(DISPLAY_MIPI_DSI_PHY_Type *base,
 
     assert(hs_clk_freq != 0U);
     assert(lp_clk_freq != 0U);
+    assert(mult > 0.0);
 
     double ui = 1000000000.0 / (double)hs_clk_freq;
     double tdco_max = 4.77;
-    double mult = 5.0;
     double tlpx = 50.0 * mult;
     double wordclk_period = ui * 8.0;
 

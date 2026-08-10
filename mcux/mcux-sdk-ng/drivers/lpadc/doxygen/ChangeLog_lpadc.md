@@ -1,5 +1,27 @@
 # LPADC
 
+## [2.10.3]
+
+- Bug Fixes
+  - Fixed MISRA C-2012 essential-type-model violations (Rules 10.1, 10.3, 10.4 and 10.8)
+    in `LPADC_FinishAutoCalibration` and `LPADC_GetOffsetValue`.
+
+## [2.10.2]
+
+- Improvements
+  - Gate the trigger (TCTRL) enums and the trigger-id assert on
+    `FSL_FEATURE_ADC_TCTRL_COUNT` for every trigger index, so devices with fewer
+    triggers no longer expose unavailable trigger registers.
+
+## [2.10.1]
+
+- Improvements
+  - Reworked the gain-calibration ratio in `LPADC_FinishAutoCalibration` to use
+    single-precision (`float`) arithmetic instead of double-precision, removing the
+    dependency on the libgcc double soft-float routines (`__floatsidf`, `__aeabi_dsub`,
+    `__aeabi_ddiv`, `__aeabi_d2f`) that were linked into every application using the
+    LPADC driver, reducing ROM footprint.
+
 ## [2.10.0]
 
 - Improvements

@@ -1,5 +1,18 @@
 # PIT
 
+## [2.3.3]
+
+- Bug Fixes
+- Fixed CERT INT31-C violations in the CTRL register accesses: complements of 16-bit register masks are now explicitly
+  cast to uint16_t before the read-modify-write, and the bool bEnableNegativeEdge field is normalized to 1U/0U before
+  the PIT_CTRL_PRESET_POLARITY() write.
+
+## [2.3.2]
+
+- Improvements
+- Guarded slave mode support (pit_config_t.bEnableSlaveMode, PIT_EnableSlaveMode(), and the CTRL SLAVE bitfield write)
+  behind FSL_FEATURE_PIT_CTRL_HAS_SLAVE so devices whose PIT CTRL has no SLAVE bit build correctly.
+
 ## [2.3.1]
 
 - Bug Fixes

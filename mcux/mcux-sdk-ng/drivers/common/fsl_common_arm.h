@@ -686,7 +686,7 @@ _Pragma("diag_suppress=Pm120")
 #define MSDK_REG_NONSECURE_ADDR(x) ((uintptr_t)(x) & ~(0x1UL << 28))
 #else
 #define MSDK_REG_SECURE_ADDR(x) (x)
-#define MSDK_REG_NONSECURE_ADDR(x) (x)
+#define MSDK_REG_NONSECURE_ADDR(x) ((uintptr_t)(x) & ~(0x1UL << 28))
 #endif
 
 /*!
@@ -724,6 +724,7 @@ _Pragma("diag_suppress=Pm120")
 #if defined(FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM) && (FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM > 0) && defined(FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) && (FSL_FEATURE_IRQSTEER_IRQ_START_INDEX > 0)
 void IRQSTEER_EnableInterrupt(int32_t irqsteerInstIdx, IRQn_Type interrupt);
 void IRQSTEER_DisableInterrupt(int32_t irqsteerInstIdx, IRQn_Type interrupt);
+int32_t IRQSTEER_GetInstIdxByIRQ(IRQn_Type irq);
 #endif
 
 /*******************************************************************************
@@ -763,9 +764,16 @@ static inline status_t EnableIRQ(IRQn_Type interrupt)
     else if ((int32_t)interrupt >= (int32_t)FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS)
     {
 #if defined(FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM) && (FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM > 0) && defined(FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) && (FSL_FEATURE_IRQSTEER_IRQ_START_INDEX > 0)
-        int32_t irqsteerInstIdx = (int32_t)((interrupt + 1 - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) / FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM);
+        int32_t irqsteerInstIdx = IRQSTEER_GetInstIdxByIRQ(interrupt);
 
-        IRQSTEER_EnableInterrupt(irqsteerInstIdx, interrupt);
+        if (irqsteerInstIdx >= 0)
+        {
+            IRQSTEER_EnableInterrupt(irqsteerInstIdx, interrupt);
+        }
+        else
+        {
+            status = kStatus_Fail;
+        }
 #else
         status = kStatus_Fail;
 #endif
@@ -813,9 +821,16 @@ static inline status_t DisableIRQ(IRQn_Type interrupt)
     else if ((int32_t)interrupt >= (int32_t)FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS)
     {
 #if defined(FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM) && (FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM > 0) && defined(FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) && (FSL_FEATURE_IRQSTEER_IRQ_START_INDEX > 0)
-        int32_t irqsteerInstIdx = (int32_t)((interrupt - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) / FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM);
+        int32_t irqsteerInstIdx = IRQSTEER_GetInstIdxByIRQ(interrupt);
 
-        IRQSTEER_DisableInterrupt(irqsteerInstIdx, interrupt);
+        if (irqsteerInstIdx >= 0)
+        {
+            IRQSTEER_DisableInterrupt(irqsteerInstIdx, interrupt);
+        }
+        else
+        {
+            status = kStatus_Fail;
+        }
 #else
         status = kStatus_Fail;
 #endif

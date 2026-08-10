@@ -17,6 +17,12 @@
 #define FSL_COMPONENT_ID "platform.drivers.tenbaset_phy"
 #endif
 
+#if defined(TENBASET_PHY_RSTS)
+#define TENBASET_PHY_RESETS_ARRAY TENBASET_PHY_RSTS
+#elif defined(TENBASET_PHY_RSTS_N)
+#define TENBASET_PHY_RESETS_ARRAY TENBASET_PHY_RSTS_N
+#endif
+
 #ifndef CONFIG_TENBASET_PHY_MODE_TIMEOUT
 /*! @brief TENBASET_PHY timeout for mode transitions (in microseconds). */
 #define CONFIG_TENBASET_PHY_MODE_TIMEOUT (1000000U)
@@ -105,6 +111,11 @@ static TENBASET_PHY_Type *const s_tenbaset_phyBases[] = TENBASET_PHY_BASE_PTRS;
 /*! @brief Pointers to handles for each instance. */
 static tenbaset_phy_handle_t *s_tenbaset_phyHandles[ARRAY_SIZE(s_tenbaset_phyBases)];
 
+#if defined(TENBASET_PHY_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_tenbaset_phyResets[] = TENBASET_PHY_RESETS_ARRAY;
+#endif
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -160,8 +171,14 @@ status_t TENBASET_PHY_Init(TENBASET_PHY_Type *base, const tenbaset_phy_config_t 
     /* Mark as not initialized */
     handle->initialized = false;
 
+    uint32_t index = TENBASET_PHY_GetIndex(base);
+
+#if defined(TENBASET_PHY_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_tenbaset_phyResets[index]);
+#endif
+
     /* Store the handle */
-    s_tenbaset_phyHandles[TENBASET_PHY_GetIndex(base)] = handle;
+    s_tenbaset_phyHandles[index] = handle;
 
     if (TENBASET_PHY_GetModeStatus(base) != kTENBASET_PHY_StatusLinkDown)
     {
@@ -822,7 +839,7 @@ static uint32_t TENBASET_PHY_GetIndex(TENBASET_PHY_Type *base)
     /* Find the instance index from base address mappings. */
     for (index = 0; index < ARRAY_SIZE(s_tenbaset_phyBases); index++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_tenbaset_phyBases[index]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_tenbaset_phyBases[index]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

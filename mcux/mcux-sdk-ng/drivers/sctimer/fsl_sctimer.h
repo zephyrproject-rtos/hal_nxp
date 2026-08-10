@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 5, 6)) /*!< Version */
+#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 6, 0)) /*!< Version */
 /*! @} */
 
 #ifndef SCT_EV_STATE_STATEMSKn
@@ -89,6 +89,43 @@ typedef struct _sctimer_pwm_signal_param
                                            0 = always inactive signal (0% duty cycle)
                                            100 = always active signal (100% duty cycle).*/
 } sctimer_pwm_signal_param_t;
+
+/*!
+ * @brief Handle for a complementary PWM output pair created by SCTIMER_SetupComplementaryPwm().
+ *
+ * The handle stores the event numbers and parameters needed to update the pair's duty cycle later
+ * with SCTIMER_UpdateComplementaryPwmDutycycle(). Dead time is inserted by delaying the relevant turn-on
+ * edge (the high side in edge-aligned mode, the low side in center-aligned mode) by deadTimeTicks, which
+ * guarantees a non-overlap gap at both switching edges.
+ */
+typedef struct _sctimer_complementary_pwm_handle
+{
+    uint32_t periodEvent;   /*!< Shared period/limit event; match = period. Set by frequency, constant
+                                 across duty updates. */
+    uint32_t highRiseEvent; /*!< Edge-aligned mode: the high-side turn-on event, match = deadTimeTicks
+                                 (constant across duty updates). Center-aligned mode: there is no separate
+                                 rise event, so this field is set equal to periodEvent and drives no
+                                 output - do not treat it as a distinct event in that mode. */
+    uint32_t highFallEvent; /*!< High-side turn-off event; match = pulse (= period * duty / 100).
+                                 Rewritten on each duty update. */
+    uint32_t lowRiseEvent;  /*!< Low-side turn-on event; match = pulse + deadTimeTicks. Rewritten on each
+                                 duty update. */
+    uint32_t deadTimeTicks; /*!< Dead time in SCT counter clock ticks. */
+    sctimer_out_t outHigh;  /*!< High-side output pin. */
+    sctimer_out_t outLow;   /*!< Low-side output pin. */
+} sctimer_complementary_pwm_handle_t;
+
+/*! @brief When an updated PWM duty cycle takes effect. */
+typedef enum _sctimer_pwm_update_mode
+{
+    kSCTIMER_UpdateImmediately = 0U, /*!< Halt the counter, write the active MATCH register (and its
+                                          reload), then restart: the new duty cycle takes effect at once.
+                                          Writing the active MATCH register requires the counter halted. */
+    kSCTIMER_UpdateOnNextPeriod      /*!< Write only the MATCH reload register while the counter keeps
+                                          running: the new duty cycle takes effect at the next counter
+                                          cycle (glitchless, no counter stall). Requires CONFIG[NORELOAD]
+                                          clear for the affected counter. */
+} sctimer_pwm_update_mode_t;
 
 /*! @brief SCTimer clock mode options */
 typedef enum _sctimer_clock_mode
@@ -354,6 +391,11 @@ void SCTIMER_GetDefaultConfig(sctimer_config_t *config);
 /*!
  * @brief Configures the PWM signal parameters.
  *
+ * @deprecated Use SCTIMER_SetupSharedPeriodPwm() instead. That function configures one channel per call
+ * and reuses a single shared period/limit event across same-frequency channels (N + 1 events for N
+ * channels instead of 2 * N), and returns the pulse event explicitly so the duty cycle can be updated
+ * with SCTIMER_UpdatePwmDutycycleByEvent(). This function remains functional for backward compatibility.
+ *
  * Call this function to configure the PWM signal period, mode, duty cycle, and edge. This
  * function will create 2 events; one of the events will trigger on match with the pulse value
  * and the other will trigger when the counter matches the PWM period. The PWM period event is
@@ -390,6 +432,11 @@ status_t SCTIMER_SetupPwm(SCT_Type *base,
 /*!
  * @brief Updates the duty cycle of an active PWM signal.
  *
+ * @deprecated Use SCTIMER_UpdatePwmDutycycleByEvent() instead. That function takes the period and pulse
+ * events explicitly (it does not assume the pulse event is event + 1), so it works with channels created
+ * by SCTIMER_SetupSharedPeriodPwm(), and it can update immediately or glitchlessly at the next period.
+ * This function remains functional for backward compatibility.
+ *
  * Before calling  this function, the counter is set to operate as one 32-bit counter (unify bit is set to 1).
  *
  * @param base              SCTimer peripheral base address
@@ -399,6 +446,167 @@ status_t SCTIMER_SetupPwm(SCT_Type *base,
  *                          function SCTIMER_SetupPwm().
  */
 void SCTIMER_UpdatePwmDutycycle(SCT_Type *base, sctimer_out_t output, uint8_t dutyCyclePercent, uint32_t event);
+
+/*!
+ * @brief Configures one PWM channel that shares an auto-detected period event across calls.
+ *
+ * Unlike SCTIMER_SetupPwm() (which spends two events per channel and recreates a period event each
+ * call), this function configures a single channel and reuses **one** shared period/limit event for all
+ * same-frequency channels. On each call it inspects the unified-counter limit mask
+ * (LIMIT[LIMMSK_L]) for an existing period/limit event:
+ *  - none present  -> it creates the shared period/limit event (1 period + 1 pulse event), or
+ *  - one present whose period (its MATCH value) and alignment (CTRL[BIDIR_L] set <=> center-aligned)
+ *    match the requested pwmFreq_Hz/mode -> it reuses that event and only creates this channel's pulse
+ *    event (1 pulse event), or
+ *  - one present whose period or alignment differs -> it returns kStatus_InvalidArgument without
+ *    creating or modifying anything (two periods cannot share one unified counter).
+ *
+ * So K same-frequency channels built by K calls consume K + 1 events / K + 1 match registers instead of
+ * 2 * K. A period/limit event left by a prior SCTIMER_SetupPwm() at the same period/alignment is also
+ * reusable. The counter must already be configured as one unified 32-bit counter (CONFIG[UNIFY] = 1).
+ *
+ * @note Period detection assumes the shared PWM period/limit is the lowest-numbered unified-counter
+ * limit event (the only limit events created by this function and SCTIMER_SetupPwm()). If the application
+ * created other unified-counter limit events before calling this function, detection may match the wrong
+ * event; in that case create the PWM channels before any unrelated limit events.
+ *
+ * @note Each call configures exactly one channel and is atomic for that channel only (on failure it
+ * creates nothing). Building a multi-channel group is a sequence of independent calls; this API does NOT
+ * roll the whole group back if a later call fails.
+ *
+ * @note The channel is enabled in the current state only. In a multi-state design the caller must
+ * re-enable the returned periodEvent and each channel's pulseEvent in every state that should run the
+ * group (via SCTIMER_ScheduleEvent()). Because the period event is shared, failing to re-schedule it in a
+ * state disrupts ALL channels in that state, not just one.
+ *
+ * @param base         SCTimer peripheral base address
+ * @param pwmParam     Pointer to this channel's PWM parameters (output, level, duty)
+ * @param mode         PWM operation mode (all sharing channels must use the same mode), see ::sctimer_pwm_mode_t
+ * @param pwmFreq_Hz   Common PWM signal frequency in Hz (all sharing channels must use the same frequency)
+ * @param srcClock_Hz  SCTimer counter clock in Hz
+ * @param periodEvent  Pointer to a variable where the shared period event number (new or reused) is stored
+ * @param pulseEvent   Pointer to a variable where this channel's pulse event number is stored
+ *
+ * @return kStatus_Success on success
+ *         kStatus_InvalidArgument if arguments are invalid, the counter is not in unified mode, or an
+ *                                 existing shared period event has a different frequency/alignment
+ *         kStatus_OutOfRange if the event or match-register budget would be exceeded
+ */
+status_t SCTIMER_SetupSharedPeriodPwm(SCT_Type *base,
+                                      const sctimer_pwm_signal_param_t *pwmParam,
+                                      sctimer_pwm_mode_t mode,
+                                      uint32_t pwmFreq_Hz,
+                                      uint32_t srcClock_Hz,
+                                      uint32_t *periodEvent,
+                                      uint32_t *pulseEvent);
+
+/*!
+ * @brief Updates the duty cycle of a PWM signal using explicit period and pulse events.
+ *
+ * Unlike SCTIMER_UpdatePwmDutycycle(), this function does not assume the pulse event is periodEvent + 1,
+ * so it works for channels created by SCTIMER_SetupSharedPeriodPwm() where the pulse events are not
+ * adjacent to the shared period event. The counter must be in unified 32-bit mode.
+ *
+ * @param base              SCTimer peripheral base address
+ * @param output            The output to configure
+ * @param dutyCyclePercent  New PWM pulse width; the value should be between 0 and 100
+ * @param periodEvent       The shared period event (as returned by SCTIMER_SetupSharedPeriodPwm())
+ * @param pulseEvent        The channel's pulse event (as returned by SCTIMER_SetupSharedPeriodPwm())
+ * @param updateMode        When the new duty cycle takes effect, see ::sctimer_pwm_update_mode_t
+ */
+void SCTIMER_UpdatePwmDutycycleByEvent(SCT_Type *base,
+                                       sctimer_out_t output,
+                                       uint8_t dutyCyclePercent,
+                                       uint32_t periodEvent,
+                                       uint32_t pulseEvent,
+                                       sctimer_pwm_update_mode_t updateMode);
+
+/*!
+ * @brief Configures a complementary PWM output pair with programmable dead time.
+ *
+ * Builds a high-side/low-side complementary pair on the unified 32-bit counter from one duty value plus a
+ * dead time expressed in SCT counter clock ticks. Dead time is inserted by delaying each output's turn-on
+ * by deadTimeTicks while keeping turn-off immediate, which guarantees a non-overlap (dead-time) gap at
+ * both switching edges so the two outputs are never simultaneously active (no shoot-through).
+ *
+ * The shared period event also limits (resets) the counter. The returned handle is used to update the
+ * pair's duty cycle later with SCTIMER_UpdateComplementaryPwmDutycycle().
+ *
+ * @note Dead time is inserted by delaying the relevant turn-on edge - the high side in edge-aligned mode,
+ * the low side in center-aligned mode - so that output's active width shrinks by deadTimeTicks (the usual
+ * cost of dead time).
+ *
+ * @note For a switching duty the valid range is 0 < duty < 100 (needs deadTimeTicks < duty and
+ * duty + deadTimeTicks < period); deadTimeTicks = 0 is allowed (strict complementary). 0 % and 100 % are
+ * accepted as constant complementary levels (high-side fully off / fully on): the pair is driven to static
+ * opposite levels with no switching and no dead-time window. A both-off fault state is not expressible as a
+ * duty - use a separate output force/disable path for that.
+ *
+ * @note Call this function once per complementary pair. To drive several pairs on the same SCTimer (for
+ * example the three half-bridges of a 3-phase inverter), call it once for each pair — but all pairs MUST
+ * use the same pwmFreq_Hz and the same mode, because they share one unified counter (a single count
+ * direction and period). Mixing frequencies or alignments across pairs creates conflicting limit events
+ * on the counter and produces an incorrect waveform.
+ *
+ * @param base             SCTimer peripheral base address
+ * @param outHigh          High-side output pin
+ * @param outLow           Low-side output pin (complement of outHigh)
+ * @param dutyCyclePercent High-side duty cycle, value should be between 0 and 100
+ * @param deadTimeTicks    Dead time in SCT counter clock ticks, inserted at both edges; 0 = no dead time
+ *                         (strict complementary)
+ * @param mode             PWM operation mode, see ::sctimer_pwm_mode_t
+ * @param pwmFreq_Hz       PWM signal frequency in Hz
+ * @param srcClock_Hz      SCTimer counter clock in Hz
+ * @param handle           Pointer to a handle that receives the pair's event numbers and parameters
+ *
+ * @return kStatus_Success on success
+ *         kStatus_InvalidArgument if arguments are invalid, the counter is not unified, or the dead time
+ *                                 does not fit the requested duty/period without causing overlap
+ *         kStatus_OutOfRange if the event or match-register budget would be exceeded
+ */
+status_t SCTIMER_SetupComplementaryPwm(SCT_Type *base,
+                                       sctimer_out_t outHigh,
+                                       sctimer_out_t outLow,
+                                       uint8_t dutyCyclePercent,
+                                       uint32_t deadTimeTicks,
+                                       sctimer_pwm_mode_t mode,
+                                       uint32_t pwmFreq_Hz,
+                                       uint32_t srcClock_Hz,
+                                       sctimer_complementary_pwm_handle_t *handle);
+
+/*!
+ * @brief Updates the duty cycle of a complementary PWM pair, preserving dead time.
+ *
+ * Recomputes both moving switching edges (high-side turn-off and low-side turn-on) from the new duty
+ * cycle while keeping the dead-time offset, and writes them so the no-overlap guarantee holds across the
+ * update. In kSCTIMER_UpdateOnNextPeriod mode both edges reload together at the next counter cycle, so
+ * the dead-time relationship is updated atomically and glitchlessly.
+ *
+ * @note A switching duty must keep the dead time inside the period (deadTimeTicks < duty and
+ * duty + deadTimeTicks < period). 0 % and 100 % are accepted as constant complementary levels: the pair is
+ * driven to static opposite levels (no switching, no dead time). Switching between a constant level and a
+ * switching duty briefly halts the counter to re-bind the outputs. A both-off fault state is not a duty -
+ * use a separate output force/disable path.
+ *
+ * @note updateMode is honored only for a switching duty (0 < duty < 100). A 0 % or 100 % update is always
+ * applied immediately (counter briefly halted), regardless of updateMode, because a constant level cannot
+ * be loaded through the glitchless reload-register (MATCHREL) path: it requires detaching the events and
+ * forcing the output levels, which needs a halt. kSCTIMER_UpdateOnNextPeriod therefore does not defer a
+ * 0 %/100 % change to the next period boundary.
+ *
+ * @param base             SCTimer peripheral base address
+ * @param handle           Handle returned by SCTIMER_SetupComplementaryPwm()
+ * @param dutyCyclePercent New high-side duty cycle, value should be between 0 and 100
+ * @param updateMode       When the new duty cycle takes effect, see ::sctimer_pwm_update_mode_t. Ignored for
+ *                         a 0 %/100 % update, which is always immediate; see the note above.
+ *
+ * @return kStatus_Success on success
+ *         kStatus_InvalidArgument if the dead time does not fit the requested duty/period
+ */
+status_t SCTIMER_UpdateComplementaryPwmDutycycle(SCT_Type *base,
+                                                 const sctimer_complementary_pwm_handle_t *handle,
+                                                 uint8_t dutyCyclePercent,
+                                                 sctimer_pwm_update_mode_t updateMode);
 
 /*!
  * @name Interrupt Interface

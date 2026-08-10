@@ -36,24 +36,31 @@
 /*******************************************************************************
  * Code
  ******************************************************************************/
+/*!
+ * Weak implementation of TDET IRQ, should be re-defined by user when using TDET IRQ
+ */
 
-void TDET_DriverIRQHandler(uint32_t instance);
-void TDET_DriverIRQHandler(uint32_t instance)
+__WEAK void TDET_DriverIRQHandler(uint32_t instance);
+__WEAK void TDET_DriverIRQHandler(uint32_t instance)
 {
     (void)instance;
     VBAT0_DriverIRQHandler();
     SDK_ISR_EXIT_BARRIER;
 }
 
-/*!
- * Weak implementation of TDET IRQ, should be re-defined by user when using TDET IRQ
- */
+
+
 __WEAK void VBAT0_DriverIRQHandler(void)
 {
-    /* TDET generates IRQ until corresponding bit in STATUS is cleared by calling
-     * TDET_ClearStatusFlags(TDET0,kTDET_StatusAll);
-     * which clear all bits or kTDET_StatusXXX to clear only one bit
+     /* TDET generates IRQ until corresponding bit in STATUS is cleared by calling
+     TDET_ClearStatusFlags(TDET0,kTDET_StatusAll);
+     which clear all bits or kTDET_StatusXXX to clear only one bit 
      */
+    DIGTMP_Type *tdetBases[] = DIGTMP_BASE_PTRS;
+    DIGTMP_Type *base = tdetBases[0];
+    
+    (void)TDET_ClearStatusFlags(base, (uint32_t)kTDET_StatusTamperFlag);
+    SDK_ISR_EXIT_BARRIER;
 }
 
 static bool tdet_IsRegisterWriteAllowed(DIGTMP_Type *base, uint32_t mask)
@@ -116,7 +123,8 @@ static status_t tdet_PinConfigure(DIGTMP_Type *base, const tdet_pin_config_t *pi
 #if defined(TDET_HAS_ACTIVE_TAMPER)
         temp |= DIGTMP_PGFR_TPEX(pinConfig->tamperPinExpected);
 #endif /* defined(TDET_HAS_ACTIVE_TAMPER) */
-        temp |= DIGTMP_PGFR_TPE(pinConfig->tamperPullEnable);
+        /* INT31-C: Boolean to uint32_t conversion is safe (0 or 1) */
+        temp |= DIGTMP_PGFR_TPE((uint32_t)(pinConfig->tamperPullEnable ? 1U : 0U));
         temp |= DIGTMP_PGFR_TPS(pinConfig->tamperPullSelect);
         /* make sure the glitch filter is disabled when we configure glitch filter width */
         base->PGFR[pin] = temp;
@@ -281,13 +289,15 @@ status_t TDET_SetConfig(DIGTMP_Type *base, const tdet_config_t *config)
     {
         /* compute CR value */
         tmpCR = 0;
-        tmpCR |= DIGTMP_CR_TFSR(config->tamperForceSystemResetEnable);
+        /* INT31-C: Boolean to uint32_t conversion is safe (0 or 1) */
+        tmpCR |= DIGTMP_CR_TFSR((uint32_t)(config->tamperForceSystemResetEnable ? 1U : 0U));
         tmpCR |= DIGTMP_CR_UM(config->updateMode);
 #if defined(TDET_HAS_ACTIVE_TAMPER)
         tmpCR |= DIGTMP_CR_ATCS0(config->clockSourceActiveTamper0);
         tmpCR |= DIGTMP_CR_ATCS1(config->clockSourceActiveTamper1);
 #endif /* defined(TDET_HAS_ACTIVE_TAMPER) */
-        tmpCR |= DIGTMP_CR_DISTAM(config->disablePrescalerAfterTamper);
+        /* INT31-C: Boolean to uint32_t conversion is safe (0 or 1) */
+        tmpCR |= DIGTMP_CR_DISTAM((uint32_t)(config->disablePrescalerAfterTamper ? 1U : 0U));
         tmpCR |= DIGTMP_CR_DPR(config->prescaler);
         /* write the computed value to the CR register */
         base->CR = tmpCR;

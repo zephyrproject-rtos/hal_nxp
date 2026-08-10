@@ -542,10 +542,13 @@ static void I3C_MasterRunDMATransfer(I3C_Type *base, i3c_master_dma_handle_t *ha
         handle->transDataSize = 0;
         I3C_MasterSetDMARxLoop(handle);
 #else
-        dma_transfer_config_t xferConfig;
-        DMA_PrepareTransfer(&xferConfig, (uint32_t *)(uint32_t)&base->MRDATAB, data, sizeof(uint8_t), dataSize,
-                            kDMA_PeripheralToMemory, NULL);
-        (void)DMA_SubmitTransfer(handle->rxDmaHandle, &xferConfig);
+        dma_channel_config_t xferConfig;
+        DMA_PrepareChannelTransfer(&xferConfig, (uint32_t *)(uint32_t)&base->MRDATAB, data,
+                                   DMA_CHANNEL_XFER(false, false, true, false, sizeof(uint8_t),
+                                                    kDMA_AddressInterleave0xWidth, kDMA_AddressInterleave1xWidth,
+                                                    dataSize),
+                                   kDMA_PeripheralToMemory, NULL, NULL);
+        (void)DMA_SubmitChannelTransfer(handle->rxDmaHandle, &xferConfig);
         DMA_StartTransfer(handle->rxDmaHandle);
 #endif
         isEnableRxDMA = true;

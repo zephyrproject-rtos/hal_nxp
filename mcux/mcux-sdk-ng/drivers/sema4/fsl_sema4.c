@@ -70,7 +70,7 @@ uint32_t SEMA4_GetInstance(SEMA4_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_sema4Bases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_sema4Bases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_sema4Bases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

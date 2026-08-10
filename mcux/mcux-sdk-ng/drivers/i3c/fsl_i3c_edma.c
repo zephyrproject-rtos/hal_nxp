@@ -681,6 +681,11 @@ void I3C_MasterTransferCreateHandleEDMA(I3C_Type *base,
 /*!
  * brief Performs a non-blocking DMA transaction on the I2C/I3C bus.
  *
+ * note On parts affected by ERR053412, the I3C controller stalls SCL when the RxFIFO
+ * becomes full and does not recover after CPU read FIFO, bus will be stalling indefinitely.
+ * This DMA-based API services the RxFIFO with EDMA so it never fills, and is the
+ * recommended workaround on affected parts.
+ *
  * param base The I3C peripheral base address.
  * param handle Pointer to the I3C master driver handle.
  * param transfer The pointer to the transfer descriptor.

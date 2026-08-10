@@ -1,5 +1,13 @@
 # LPSPI
 
+## [2.2.12]
+
+- Bug Fixes
+  - Fixed timing parameter setting sequence issue in `LPSPI_MasterInit`, the
+    timing parameter should only be configured when LPSPI master is disabled.
+- Improvements
+  - Improved performance of LPSPI_MasterTransferBlocking().
+
 ## [2.2.11]
 
 - Bug Fixes

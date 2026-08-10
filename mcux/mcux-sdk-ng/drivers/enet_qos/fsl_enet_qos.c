@@ -14,6 +14,12 @@
 #define FSL_COMPONENT_ID "platform.drivers.enet_qos"
 #endif
 
+#if defined(ENET_QOS_RSTS)
+#define ENET_QOS_RESETS_ARRAY ENET_QOS_RSTS
+#elif defined(ENET_QOS_RSTS_N)
+#define ENET_QOS_RESETS_ARRAY ENET_QOS_RSTS_N
+#endif
+
 /*! @brief Defines 10^9 nanosecond. */
 #define ENET_QOS_NANOSECS_ONESECOND (1000000000U)
 /*! @brief Defines 10^6 microsecond.*/
@@ -203,6 +209,11 @@ static enet_qos_state_t s_enetStates[ARRAY_SIZE(s_enetqosBases)] = {{}};
 /*! @brief Pointers to enet clocks for each instance. */
 const clock_ip_name_t s_enetqosClock[ARRAY_SIZE(s_enetqosBases)] = ENETQOS_CLOCKS;
 #endif /*  FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(ENET_QOS_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_enetqosResets[] = ENET_QOS_RESETS_ARRAY;
+#endif
 
 /*******************************************************************************
  * Code
@@ -874,12 +885,13 @@ static inline bool ENET_QOS_IsMIIConfigValid(enet_qos_mii_mode_t mode, enet_qos_
     /* Errata ERR050539: ENET_QOS does not support RMII 10Mbps mode */
 #if defined(MIMXRT1171_SERIES) || defined(MIMXRT1172_SERIES) || defined(MIMXRT1173_cm7_SERIES) ||         \
     defined(MIMXRT1173_cm4_SERIES) || defined(MIMXRT1175_cm7_SERIES) || defined(MIMXRT1175_cm4_SERIES) || \
-    defined(MIMXRT1176_cm7_SERIES) || defined(MIMXRT1176_cm4_SERIES)
+    defined(MIMXRT1176_cm7_SERIES) || defined(MIMXRT1176_cm4_SERIES) || \
+    defined(MIMXRT1151_SERIES) || defined(MIMXRT1152_SERIES)
     if ((kENET_QOS_RmiiMode == mode) && (kENET_QOS_MiiSpeed10M == speed))
     {
         return false;
     }
-#endif /* MIMXRT117x_SERIES */
+#endif /* MIMXRT117x_SERIES and MIMXRT115x_SERIES */
 
     return true;
 }
@@ -891,7 +903,7 @@ uint32_t ENET_QOS_GetInstance(ENET_QOS_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_enetqosBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_enetqosBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_enetqosBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -988,12 +1000,19 @@ status_t ENET_QOS_Init(
     assert(config != NULL);
 
     status_t result = kStatus_Success;
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)) \
+    || defined(ENET_QOS_RESETS_ARRAY)
     uint32_t instance = ENET_QOS_GetInstance(base);
+#endif
 
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Ungate ENET clock. */
     (void)CLOCK_EnableClock(s_enetqosClock[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(ENET_QOS_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_enetqosResets[instance]);
+#endif
 
     /* Initializes the ENET DMA with basic function. */
     result = ENET_QOS_SetDMAControl(base, config);
@@ -4074,6 +4093,18 @@ void ENET_QOS_CommonIRQHandler(ENET_QOS_Type *base, enet_qos_handle_t *handle)
     SDK_ISR_EXIT_BARRIER;
 }
 
+/* Parameterized common IRQ handler: services the given ENET_QOS instance so a single entry can back
+ * that instance's vector (ENET_QOS_DriverIRQHandler is already taken). */
+void ENET_QOS_CommonDriverIRQHandler(uint32_t instance);
+void ENET_QOS_CommonDriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_enetqosBases))
+    {
+        s_enetqosIsr(s_enetqosBases[instance], s_ENETHandle[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
+
 #if defined(ENET_QOS)
 void ENET_QOS_DriverIRQHandler(void);
 void ENET_QOS_DriverIRQHandler(void)
@@ -4095,5 +4126,15 @@ void EMAC_0_DriverIRQHandler(void);
 void EMAC_0_DriverIRQHandler(void)
 {
     s_enetqosIsr(EMAC, s_ENETHandle[0]);
+}
+#endif
+
+#if defined(COMM__ENET_QOS)
+/* Route RT2660's ENET_QOS vector through the parameterized common handler. This thin wrapper can be
+ * dropped once the startup is generated to call ENET_QOS_CommonDriverIRQHandler directly. */
+void COMM_ENET_QOS_DriverIRQHandler(void);
+void COMM_ENET_QOS_DriverIRQHandler(void)
+{
+    ENET_QOS_CommonDriverIRQHandler(ENET_QOS_GetInstance(COMM__ENET_QOS));
 }
 #endif

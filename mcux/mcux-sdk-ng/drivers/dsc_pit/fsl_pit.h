@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 NXP
+ * Copyright 2020-2022, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief PIT driver version. */
-#define FSL_PIT_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+#define FSL_PIT_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
 /*! @} */
 
 /*******************************************************************************
@@ -231,8 +231,10 @@ typedef struct _pit_config
 {
     pit_prescaler_value_t ePrescaler : 5;  /*!< Clock prescaler value */
     bool bEnableInterrupt : 1;             /*!< Enable PIT Roll-Over Interrupt */
+#if defined(FSL_FEATURE_PIT_CTRL_HAS_SLAVE) && FSL_FEATURE_PIT_CTRL_HAS_SLAVE
     bool bEnableSlaveMode : 1;             /*!< Enable the PIT module in slave mode, in which mode the timer
                                       will be triggered by master PIT enable.*/
+#endif
     bool bEnableTimer : 1;                 /*!< PIT timer enable flag, which is false by default */
     pit_count_clock_source_t eClockSource; /*!< Specify the PIT count clock source */
 #if defined(FSL_FEATURE_PIT_32BIT_COUNTER) && FSL_FEATURE_PIT_32BIT_COUNTER
@@ -324,6 +326,7 @@ void PIT_GetDefaultConfig(pit_config_t *psConfig);
  * @{
  */
 
+#if defined(FSL_FEATURE_PIT_CTRL_HAS_SLAVE) && FSL_FEATURE_PIT_CTRL_HAS_SLAVE
 /*!
  * @brief Enable/Disable PIT slave mode.
  *
@@ -334,13 +337,14 @@ static inline void PIT_EnableSlaveMode(PIT_Type *base, bool bEnable)
 {
     if (bEnable)
     {
-        base->CTRL = base->CTRL & (~(uint16_t)PIT_CTRL_SLAVE_MASK);
+        base->CTRL = (uint16_t)(base->CTRL & (~(uint16_t)PIT_CTRL_SLAVE_MASK));
     }
     else
     {
         base->CTRL = base->CTRL | PIT_CTRL_SLAVE_MASK;
     }
 }
+#endif
 
 /*!
  * @brief Sets the PIT clock prescaler.
@@ -350,7 +354,8 @@ static inline void PIT_EnableSlaveMode(PIT_Type *base, bool bEnable)
  */
 static inline void PIT_SetTimerPrescaler(PIT_Type *base, pit_prescaler_value_t ePrescaler)
 {
-    base->CTRL = (base->CTRL & (~(uint16_t)PIT_CTRL_PRESCALER_MASK)) | PIT_CTRL_PRESCALER(ePrescaler);
+    base->CTRL = (uint16_t)(((base->CTRL & (~(uint16_t)PIT_CTRL_PRESCALER_MASK)) | PIT_CTRL_PRESCALER(ePrescaler)) &
+                            0xFFFFU);
 }
 
 #if defined(FSL_FEATURE_PIT_32BIT_COUNTER) && FSL_FEATURE_PIT_32BIT_COUNTER
@@ -441,7 +446,7 @@ static inline void PIT_StartTimer(PIT_Type *base)
  */
 static inline void PIT_StopTimer(PIT_Type *base)
 {
-    base->CTRL &= ~(uint16_t)PIT_CTRL_CNT_EN_MASK;
+    base->CTRL = (uint16_t)(base->CTRL & (~(uint16_t)PIT_CTRL_CNT_EN_MASK));
 }
 
 /*! @}*/
@@ -468,7 +473,7 @@ static inline void PIT_EnableInterrupt(PIT_Type *base)
  */
 static inline void PIT_DisableInterrupt(PIT_Type *base)
 {
-    base->CTRL &= ~(uint16_t)PIT_CTRL_PRIE_MASK;
+    base->CTRL = (uint16_t)(base->CTRL & (~(uint16_t)PIT_CTRL_PRIE_MASK));
 }
 
 /*! @}*/
@@ -498,7 +503,7 @@ static inline uint16_t PIT_GetStatusFlags(PIT_Type *base)
  */
 static inline void PIT_ClearStatusFlags(PIT_Type *base)
 {
-    base->CTRL &= ~(uint16_t)PIT_CTRL_PRF_MASK;
+    base->CTRL = (uint16_t)(base->CTRL & (~(uint16_t)PIT_CTRL_PRF_MASK));
 }
 
 /*! @}*/
@@ -518,7 +523,7 @@ static inline void PIT_ClearStatusFlags(PIT_Type *base)
 static inline void PIT_SetPresetFiltConfig(PIT_Type *base, const pit_config_filt_t psConfig)
 {
     base->FILT = PIT_FILT_PER(psConfig.u16FilterSamplePeriod) | PIT_FILT_CNT(psConfig.u16FilterSampleCount) |
-                 PIT_FILT_CS(psConfig.bFilterClock) | PIT_FILT_PRSC(psConfig.eFilterPrescalerPeripheral);
+                 PIT_FILT_CS(psConfig.bFilterClock ? 1U : 0U) | PIT_FILT_PRSC(psConfig.eFilterPrescalerPeripheral);
 }
 #endif
 

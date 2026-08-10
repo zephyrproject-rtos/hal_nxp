@@ -20,7 +20,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_ESPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_ESPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 #define ESPI_INVALID_PORT (0xFFU)
@@ -66,7 +66,7 @@ typedef enum _espi_enable_mode
     kESPI_EnableLPC  = 2U,
 } espi_enable_mode_t;
 
-/* Encoded target read request sizes for ESPICAP.TRGT_REQ_SIZE_SUPP. */
+/*! @brief Encoded target read request sizes for ESPICAP.TRGT_REQ_SIZE_SUPP. */
 typedef enum _espi_read_req_size
 {
     kESPI_ReadReq64B   = 1U,
@@ -78,7 +78,7 @@ typedef enum _espi_read_req_size
     kESPI_ReadReq4096B = 7U,
 } espi_read_req_size_t;
 
-/* Encoded maximum payload sizes for memory channel (ESPICAP.MEMMX). */
+/*! @brief Encoded maximum payload sizes for memory channel (ESPICAP.MEMMX). */
 typedef enum _espi_mem_max_payload
 {
     kESPI_MemMax64B  = 1U,
@@ -86,7 +86,7 @@ typedef enum _espi_mem_max_payload
     kESPI_MemMax256B = 3U,
 } espi_mem_max_payload_t;
 
-/* Encoded maximum payload sizes for flash channel (ESPICAP.FLASHMX). */
+/*! @brief Encoded maximum payload sizes for flash channel (ESPICAP.FLASHMX). */
 typedef enum _espi_flash_max_payload
 {
     kESPI_FlashMax64B  = 0U,
@@ -95,7 +95,7 @@ typedef enum _espi_flash_max_payload
     kESPI_FlashMax512B = 3U,
 } espi_flash_max_payload_t;
 
-/* Encoded maximum payload sizes for OOB channel (ESPICAP.OOBMX). */
+/*! @brief Encoded maximum payload sizes for OOB channel (ESPICAP.OOBMX). */
 typedef enum _espi_oob_max_payload
 {
     kESPI_OOBMax64B  = 1U,
@@ -186,8 +186,8 @@ enum _espi_port_interrupt_flags
     kESPI_PortSpec2Interrupt = ESPI_STAT_INTSPC2_MASK,  /*!< Special 2 interrupt. */
     kESPI_PortSpec3Interrupt = ESPI_STAT_INSTSPC3_MASK, /*!< Special 3 interrupt. */
     kESPI_PortAllInterrupts  = kESPI_PortErrorInterrupt | kESPI_PortReadInterrupt | kESPI_PortWriteInterrupt |
-                              kESPI_PortSpec0Interrupt | kESPI_PortSpec1Interrupt | kESPI_PortSpec2Interrupt |
-                              kESPI_PortSpec3Interrupt,
+                               kESPI_PortSpec0Interrupt | kESPI_PortSpec1Interrupt | kESPI_PortSpec2Interrupt |
+                               kESPI_PortSpec3Interrupt,
 };
 
 /*! @brief eSPI SAF erase size enumeration */
@@ -403,14 +403,17 @@ typedef struct _espi_config
     bool enableOOB;                       /*!< Enable Out-Of-Band channel. */
     bool enableP80;                       /*!< Enable Port 80 capture/logic. */
     bool enableAlertPin;                  /*!< Alert pin enable. */
-    uint8_t spiMode;                      /*!< SPI mode. */
-    uint8_t busSpeed;                     /*!< Maximum SPI speed. */
-    uint8_t enableMode;                   /*!< See espi_enable_mode_t. */
-    uint8_t SAFEraseSize;                 /*!< SAF minimum erase sector size, see espi_saf_erase_size_t. */
-    uint8_t maxSAFRxReqSize;              /*!< Maximum read request size. */
-    uint8_t maxPayloadSize;               /*!< Maximum payload size. */
-    uint8_t maxFlashPayloadSize;          /*!< Maximum flash payload size. */
-    uint8_t maxOOBPayloadSize;            /*!< Maximum OOB payload size. */
+    bool enableEarlySample;               /*!< Improve high-frequency timing. */
+    bool disableClkDiv;                   /*!< Disable internal espi_fast_clk auto-division. */
+    bool enableStatusBlock;               /*!< Enable status block mapped at STATADDR. */
+    uint8_t spiMode;                      /*!< SPI capability mode, see @ref espi_spi_mode_t. */
+    uint8_t busSpeed;                     /*!< Maximum SPI clock speed, see @ref espi_max_speed_t. */
+    uint8_t enableMode;                   /*!< eSPI/LPC enable mode, see @ref espi_enable_mode_t. */
+    uint8_t SAFEraseSize;                 /*!< SAF minimum erase sector size, see @ref espi_saf_erase_size_t. */
+    uint8_t maxSAFRxReqSize;              /*!< Maximum read request size, see @ref espi_read_req_size_t. */
+    uint8_t maxPayloadSize;               /*!< Maximum memory payload size, see @ref espi_mem_max_payload_t. */
+    uint8_t maxFlashPayloadSize;          /*!< Maximum flash payload size, see @ref espi_flash_max_payload_t. */
+    uint8_t maxOOBPayloadSize;            /*!< Maximum OOB payload size, see @ref espi_oob_max_payload_t. */
     const espi_port_config_t *portConfig; /*!< Port configurations(array). */
     uint32_t portCount;                   /*!< Number of entries in portConfig. */
 } espi_config_t;
@@ -424,6 +427,16 @@ typedef struct _espi_port80_status
     uint8_t previousCode; /*!< Previous POST code. */
     uint8_t counter;      /*!< POST code counter (0-15, wraps). */
 } espi_p80_status_t;
+
+/*!
+ * @brief eSPI GPIO VWire GPIO fields.
+ */
+typedef struct _espi_gpio_wire
+{
+    uint8_t index; /*!< VW index (128-255 for the GPIO expander group). */
+    uint8_t valid; /*!< Valid mask, one bit per GPIO (bits 3:0): 1 = update, 0 = retain. */
+    uint8_t level; /*!< GPIO levels, one bit per GPIO (bits 3:0): 0 = Low, 1 = High. */
+} espi_gpio_wire_t;
 
 /*! @brief eSPI Virtual Wire receive flags.
  *
@@ -814,8 +827,8 @@ static inline void ESPI_ResetPort80Counter(ESPI_Type *base)
  *
  * @param base eSPI peripheral base address.
  * @param port eSPI port index.
- * @param idx Pointer to store the extracted IDX field.
- * @param data Pointer to store the extracted DATA_LEN field.
+ * @param idx Pointer to store the extracted IDX field (byte offset within port).
+ * @param data Pointer to store the extracted data value (endpoint) or message length (mailbox).
  */
 void ESPI_GetEndpointData(ESPI_Type *base, uint32_t port, uint32_t *idx, uint32_t *data);
 
@@ -885,6 +898,22 @@ static inline uint32_t ESPI_GetVWire(ESPI_Type *base)
  * @retval kStatus_Busy Previous write still pending.
  */
 status_t ESPI_SendVWire(ESPI_Type *base, espi_vw_wr_flags_t flag, uint32_t value);
+
+/*!
+ * @brief Reads and decodes the GPIO virtual wire message.
+ *
+ * @param base eSPI peripheral base address.
+ * @param wire Pointer to structure to receive the decoded fields.
+ */
+void ESPI_GetVWireGpio(ESPI_Type *base, espi_gpio_wire_t *wire);
+
+/*!
+ * @brief Sends the GPIO virtual wire message.
+ *
+ * @param base eSPI peripheral base address.
+ * @param wire Pointer to the fields to drive.
+ */
+void ESPI_SendVWireGpio(ESPI_Type *base, const espi_gpio_wire_t *wire);
 
 /*! @} */
 
@@ -993,8 +1022,7 @@ void ESPI_CreateHandle(ESPI_Type *base,
  * @param flashOps Pointer to flash backend operations.
  * @param flashSize Flash address space size.
  */
-void ESPI_FlashCreateHandle(
-    ESPI_Type *base, espi_handle_t *handle, espi_flash_ops_t flashOps, uint32_t flashSize);
+void ESPI_FlashCreateHandle(ESPI_Type *base, espi_handle_t *handle, espi_flash_ops_t flashOps, uint32_t flashSize);
 
 /*!
  * @brief eSPI IRQ handle function.

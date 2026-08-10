@@ -54,7 +54,7 @@ static uint32_t DCDC_GetInstance(DCDC_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_dcdcBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_dcdcBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_dcdcBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
