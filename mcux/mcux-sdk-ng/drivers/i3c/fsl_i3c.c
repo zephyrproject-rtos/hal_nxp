@@ -319,7 +319,7 @@ uint32_t I3C_GetInstance(I3C_Type *base)
     uint32_t instance;
     for (instance = 0; instance < ARRAY_SIZE(kI3cBases); ++instance)
     {
-        if (MSDK_REG_SECURE_ADDR(kI3cBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(kI3cBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

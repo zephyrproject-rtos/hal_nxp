@@ -1,5 +1,10 @@
 # TRNG
 
+## [2.0.23]
+
+- New features:
+  - Updated TRNG default values for MCXA577 devices based on silicon characterization.
+
 ## [2.0.22]
 
 - New features:

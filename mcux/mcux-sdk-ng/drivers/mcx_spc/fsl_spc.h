@@ -19,8 +19,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief SPC driver version 2.12.0. */
-#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 12, 0))
+/*! @brief SPC driver version 2.12.1. */
+#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 12, 1))
 /*! @} */
 
 #define SPC_EVD_CFG_REG_EVDISO_SHIFT   0UL

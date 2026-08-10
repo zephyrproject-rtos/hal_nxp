@@ -62,7 +62,7 @@ static uint32_t MMU_GetInstance(MMU_Type *base)
 
     for (instance = 0UL; instance < ARRAY_SIZE(s_mmuBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_mmuBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_mmuBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

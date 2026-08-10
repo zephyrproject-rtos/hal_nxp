@@ -1,5 +1,10 @@
 # COMMON
 
+## [2.6.6]
+
+- Improvements
+  - Support Cortex M55.
+
 ## [2.6.5]
 - Bug Fixes
   - Fixed the issue that the function SDK_DelayAtLeastUs may underflow and 

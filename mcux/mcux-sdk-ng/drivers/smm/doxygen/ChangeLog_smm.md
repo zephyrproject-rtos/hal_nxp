@@ -1,5 +1,15 @@
 # SMM
 
+## [2.2.1]
+- New Features
+    - Added Kconfig options `SMM_CM33_CORE_FREQUENCY` and `SMM_CM0P_CORE_FREQUENCY` to allow
+      compile-time configuration of core frequency for delay calculation.
+    - Added `SMM_CPU_CORE_FREQ` macro to select core frequency based on core type and Kconfig settings,
+      with fallback to runtime clock query APIs.
+
+- Improvements
+    - Refactored `SMM_DisableMainCpuIso()` and `SMM_DisableAonCpuIso()` to use unified `SMM_CPU_CORE_FREQ` macro, removing duplicated preprocessor blocks.
+
 ## [2.2.0]
 - New Features
     - Added APIs to clear wakeup source status.

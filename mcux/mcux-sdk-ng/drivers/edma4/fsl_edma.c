@@ -82,7 +82,7 @@ static uint32_t EDMA_GetInstance(EDMA_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_edmaBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_edmaBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_edmaBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -1909,6 +1909,120 @@ void EDMA_PrepareTransferTCD(edma_handle_t *handle,
         (uint16_t)kEDMA_MajorInterruptEnable);
 }
 
+/* Deadlock backstop for the ACTIVE drain spin (worst case one in-flight minor loop); SoC-overridable. */
+#ifndef EDMA_DYNAMIC_LINK_FENCE_LIMIT
+#define EDMA_DYNAMIC_LINK_FENCE_LIMIT (0x10000U)
+#endif
+
+/*!
+ * brief Re-enables the channel request without clearing the W1C DONE bit. On eDMA4/eDMA5 ERQ and
+ * DONE share CH_CSR, so a plain |= ERQ would write back the read-as-1 DONE and clear it - mask it off.
+ */
+static inline void EDMA_DynamicLinkResumeRequest(edma_handle_t *handle)
+{
+#if defined FSL_EDMA_SOC_IP_EDMA && FSL_EDMA_SOC_IP_EDMA
+    EDMA_EnableChannelRequest(handle->base, handle->channel);
+#else
+    handle->channelBase->CH_CSR =
+        (handle->channelBase->CH_CSR & ~DMA_CH_CSR_DONE_MASK) | DMA_CH_CSR_ERQ_MASK;
+#endif
+}
+
+/*!
+ * brief Resolves a dynamic scatter/gather link while the engine runs the previous TCD.
+ *
+ * eDMA4/eDMA5 removed the RM "Dynamic scatter/gather" coherency model, so the link is resolved in
+ * software under a quiescent fence: disable the request (DONE-preserving, as DONE is W1C), wait for
+ * ACTIVE to drop, then decide on frozen state (live DLAST_SGA and DONE) and arm ESG with one store.
+ * On a wait timeout the live TCD is left untouched. The decide/mutate region runs in a critical
+ * section (matching EDMA_StartTransfer); the bounded wait is kept outside it. Caller-level
+ * serialization of concurrent submissions on the same channel remains the caller's responsibility.
+ *
+ * param handle      eDMA handle; its channel is running the previous TCD.
+ * param nextTcdAddr Address of the TCD after the appended one (detects an already-loaded append).
+ * retval true  Chain underran or the fence timed out - caller must install the appended TCD.
+ * retval false Link is live and the request is resumed; no install needed.
+ */
+static bool EDMA_ResolveDynamicSubmitLink(edma_handle_t *handle, uint32_t nextTcdAddr)
+{
+    edma_tcd_t *tcdRegs = handle->tcdBase;
+    uint32_t fence      = 0U;
+    uint32_t primask;
+    bool transferDone;
+    bool quiesced;
+    bool wasEnabled;
+    uint16_t csr;
+#if !(defined FSL_EDMA_SOC_IP_EDMA && FSL_EDMA_SOC_IP_EDMA)
+    uint32_t chCsr;
+#endif
+
+    /* 1. Stop new requests. eDMA3 uses SERQ/CERQ (DONE untouched); eDMA4/5 drop ERQ via a
+          DONE-preserving CH_CSR write. */
+#if defined FSL_EDMA_SOC_IP_EDMA && FSL_EDMA_SOC_IP_EDMA
+    wasEnabled = true;
+    EDMA_DisableChannelRequest(handle->base, handle->channel);
+#else
+    chCsr                       = handle->channelBase->CH_CSR;
+    wasEnabled                  = ((chCsr & DMA_CH_CSR_ERQ_MASK) != 0U);
+    handle->channelBase->CH_CSR = chCsr & ~(DMA_CH_CSR_ERQ_MASK | DMA_CH_CSR_DONE_MASK);
+#endif
+
+    /* 2. Wait (bounded, outside the critical section) for any in-flight minor loop to drain. */
+#if defined FSL_EDMA_SOC_IP_EDMA && FSL_EDMA_SOC_IP_EDMA
+    while (((tcdRegs->CSR & DMA_CSR_ACTIVE_MASK) != 0U) && (fence < EDMA_DYNAMIC_LINK_FENCE_LIMIT))
+#else
+    while (((handle->channelBase->CH_CSR & DMA_CH_CSR_ACTIVE_MASK) != 0U) &&
+           (fence < EDMA_DYNAMIC_LINK_FENCE_LIMIT))
+#endif
+    {
+        fence++;
+    }
+
+    /* 3. Decide and mutate atomically against this channel's own ISR. */
+    primask = DisableGlobalIRQ();
+
+    /* Re-sample under the lock: quiesced separates a real drain from a timeout; DONE is intact (W1C-masked above). */
+#if defined FSL_EDMA_SOC_IP_EDMA && FSL_EDMA_SOC_IP_EDMA
+    quiesced     = ((tcdRegs->CSR & DMA_CSR_ACTIVE_MASK) == 0U);
+    transferDone = ((tcdRegs->CSR & DMA_CSR_DONE_MASK) != 0U);
+#else
+    chCsr        = handle->channelBase->CH_CSR;
+    quiesced     = ((chCsr & DMA_CH_CSR_ACTIVE_MASK) == 0U);
+    transferDone = ((chCsr & DMA_CH_CSR_DONE_MASK) != 0U);
+#endif
+
+    if (EDMA_TCD_DLAST_SGA(tcdRegs, EDMA_TCD_TYPE(handle->base)) == CONVERT_TO_DMA_ADDRESS(nextTcdAddr))
+    {
+        /* The engine already loaded the appended TCD - the link is live. */
+        if (wasEnabled)
+        {
+            EDMA_DynamicLinkResumeRequest(handle);
+        }
+        EnableGlobalIRQ(primask);
+        return false;
+    }
+
+    if (transferDone || !quiesced)
+    {
+        /* Underran (DONE) or wait timed out (still active): unsafe to mutate the live TCD - leave the
+           request disabled and let the caller install the appended TCD and restart. */
+        EnableGlobalIRQ(primask);
+        return true;
+    }
+
+    /* Still on the previous TCD: arm scatter/gather with one coherent store, keep DREQ clear, resume. */
+    csr = EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base));
+    csr = (uint16_t)((csr | (uint16_t)DMA_CSR_ESG_MASK) & MCUX_MASK_INVERT_16(DMA_CSR_DREQ_MASK));
+    EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) = csr;
+    if (wasEnabled)
+    {
+        EDMA_DynamicLinkResumeRequest(handle);
+    }
+    EnableGlobalIRQ(primask);
+
+    return false;
+}
+
 /*!
  * brief Submits the eDMA transfer content descriptor.
  *
@@ -2082,41 +2196,16 @@ status_t EDMA_SubmitTransferTCD(edma_handle_t *handle, edma_tcd_t *tcd)
             if (EDMA_TCD_DLAST_SGA(tcdRegs, EDMA_TCD_TYPE(handle->base)) ==
                 CONVERT_TO_DMA_ADDRESS((uint32_t)&handle->tcdPool[currentTcd]))
             {
-                /* Clear the DREQ bits for the dynamic scatter gather */
-                EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) |= DMA_CSR_DREQ_MASK;
-                /* Enable scatter/gather also in the TCD registers. */
-                csr = EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) | DMA_CSR_ESG_MASK;
-                /* Must write the CSR register one-time, because the transfer maybe finished anytime. */
-                EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) = csr;
                 /*
-                    It is very important to check the ESG bit!
-                    Because this hardware design: if DONE bit is set, the ESG bit can not be set. So it can
-                    be used to check if the dynamic TCD link operation is successful. If ESG bit is not set
-                    and the DLAST_SGA is not the next TCD address(it means the dynamic TCD link succeed and
-                    the current TCD block has been loaded into TCD registers), it means transfer finished
-                    and TCD link operation fail, so must install TCD content into TCD registers and enable
-                    transfer again. And if ESG is set, it means transfer has not finished, so TCD dynamic
-                    link succeed.
+                    Engine is running the previous TCD. Resolve the link in software (eDMA4/eDMA5
+                    removed the ESG read-back oracle): false = link live, true = underran so install
+                    currentTcd.
                 */
-                if (0U != (EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) & DMA_CSR_ESG_MASK))
-                {
-                    EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) &= MCUX_MASK_INVERT_16(DMA_CSR_DREQ_MASK);
-                    return kStatus_Success;
-                }
-                /*
-                    Check whether the current TCD block is already loaded in the TCD registers. It is another
-                    condition when ESG bit is not set: it means the dynamic TCD link succeed and the current
-                    TCD block has been loaded into TCD registers.
-                */
-                if (EDMA_TCD_DLAST_SGA(tcdRegs, EDMA_TCD_TYPE(handle->base)) ==
-                    CONVERT_TO_DMA_ADDRESS((uint32_t)&handle->tcdPool[nextTcd]))
+                if (!EDMA_ResolveDynamicSubmitLink(handle, (uint32_t)&handle->tcdPool[nextTcd]))
                 {
                     return kStatus_Success;
                 }
-                /*
-                    If go to this, means the previous transfer finished, and the DONE bit is set.
-                    So shall configure TCD registers.
-                */
+                /* Chain underran before the link took: fall through to install currentTcd. */
             }
             else if (EDMA_TCD_DLAST_SGA(tcdRegs, EDMA_TCD_TYPE(handle->base)) != 0UL)
             {
@@ -2264,41 +2353,16 @@ status_t EDMA_SubmitTransfer(edma_handle_t *handle, const edma_transfer_config_t
             if (EDMA_TCD_DLAST_SGA(handle->tcdBase, EDMA_TCD_TYPE(handle->base)) ==
                 CONVERT_TO_DMA_ADDRESS((uint32_t)&handle->tcdPool[currentTcd]))
             {
-                /* Clear the DREQ bits for the dynamic scatter gather */
-                EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) |= DMA_CSR_DREQ_MASK;
-                /* Enable scatter/gather also in the TCD registers. */
-                csr = EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) | DMA_CSR_ESG_MASK;
-                /* Must write the CSR register one-time, because the transfer maybe finished anytime. */
-                EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) = csr;
                 /*
-                    It is very important to check the ESG bit!
-                    Because this hardware design: if DONE bit is set, the ESG bit can not be set. So it can
-                    be used to check if the dynamic TCD link operation is successful. If ESG bit is not set
-                    and the DLAST_SGA is not the next TCD address(it means the dynamic TCD link succeed and
-                    the current TCD block has been loaded into TCD registers), it means transfer finished
-                    and TCD link operation fail, so must install TCD content into TCD registers and enable
-                    transfer again. And if ESG is set, it means transfer has not finished, so TCD dynamic
-                    link succeed.
+                    Engine is running the previous TCD. Resolve the link in software (eDMA4/eDMA5
+                    removed the ESG read-back oracle): false = link live, true = underran so install
+                    currentTcd.
                 */
-                if (0U != (EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) & DMA_CSR_ESG_MASK))
-                {
-                    EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) &= MCUX_MASK_INVERT_16(DMA_CSR_DREQ_MASK);
-                    return kStatus_Success;
-                }
-                /*
-                    Check whether the current TCD block is already loaded in the TCD registers. It is another
-                    condition when ESG bit is not set: it means the dynamic TCD link succeed and the current
-                    TCD block has been loaded into TCD registers.
-                */
-                if (EDMA_TCD_DLAST_SGA(handle->tcdBase, EDMA_TCD_TYPE(handle->base)) ==
-                    CONVERT_TO_DMA_ADDRESS((uint32_t)&handle->tcdPool[nextTcd]))
+                if (!EDMA_ResolveDynamicSubmitLink(handle, (uint32_t)&handle->tcdPool[nextTcd]))
                 {
                     return kStatus_Success;
                 }
-                /*
-                    If go to this, means the previous transfer finished, and the DONE bit is set.
-                    So shall configure TCD registers.
-                */
+                /* Chain underran before the link took: fall through to install currentTcd. */
             }
             else if (EDMA_TCD_DLAST_SGA(handle->tcdBase, EDMA_TCD_TYPE(handle->base)) != 0UL)
             {

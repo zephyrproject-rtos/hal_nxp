@@ -49,7 +49,7 @@ static uint32_t LPACMP_GetInstance(LPACMP_Type *base)
          * (s_LpacmpBases[instance] != base) not covered. The peripheral base
          * address is always valid and checked by assert.
          */
-        if (MSDK_REG_SECURE_ADDR(s_LpacmpBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_LpacmpBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

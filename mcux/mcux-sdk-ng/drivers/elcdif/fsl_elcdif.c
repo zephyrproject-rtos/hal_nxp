@@ -78,7 +78,7 @@ static uint32_t ELCDIF_GetInstance(const LCDIF_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_elcdifBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_elcdifBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_elcdifBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -102,7 +102,8 @@ void ELCDIF_RgbModeInit(LCDIF_Type *base, const elcdif_rgb_mode_config_t *config
 {
     assert(NULL != config);
     assert((uint32_t)config->pixelFormat < ARRAY_SIZE(s_pixelFormatReg));
-    assert(0U == (config->bufferAddr & 0x7U));
+    /* CUR_BUF/NEXT_BUF must be double-word aligned; bit 0 is the LUT bank selector so is ignored. */
+    assert(0U == (config->bufferAddr & 0x6U));
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && (0 != FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL))
     uint32_t instance = ELCDIF_GetInstance(base);

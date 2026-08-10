@@ -1,5 +1,11 @@
 # EDMA
 
+## [2.10.12]
+
+- Bug Fixes
+  - Fixed dynamic scatter/gather mid-flight submit on eDMA4/eDMA5: resolve the TCD link in software
+    under a quiescent fence, since these IPs removed the CSR[ESG] read-back coherency model.
+
 ## [2.10.11]
 
 - Bug Fixes

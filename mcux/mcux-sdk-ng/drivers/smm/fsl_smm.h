@@ -25,9 +25,26 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief smm driver version 2.2.0. */
-#define FSL_SMM_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief smm driver version 2.2.1. */
+#define FSL_SMM_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
+
+#ifndef SMM_CPU_CORE_FREQ
+#if __CORTEX_M == 33U
+#ifdef CONFIG_SMM_CM33_CORE_FREQUENCY
+#define SMM_CPU_CORE_FREQ CONFIG_SMM_CM33_CORE_FREQUENCY
+#else
+#define SMM_CPU_CORE_FREQ CLOCK_GetCoreSysClkFreq()
+#endif /* CONFIG_SMM_CM33_CORE_FREQUENCY */
+#else
+#ifdef CONFIG_SMM_CM0P_CORE_FREQUENCY
+#define SMM_CPU_CORE_FREQ CONFIG_SMM_CM0P_CORE_FREQUENCY
+#else
+#define SMM_CPU_CORE_FREQ CLOCK_GetAonCoreSysClkFreq()
+#endif /* CONFIG_SMM_CM0P_CORE_FREQUENCY */
+#endif /* __CORTEX_M */
+#endif /* SMM_CPU_CORE_FREQ */
+
 
 /*!
  * @brief The enumeration of interrupt to enable.
@@ -450,11 +467,7 @@ static inline void SMM_ClearExternalIntFlag(SMM_Type *base)
 static inline void SMM_DisableMainCpuIso(SMM_Type *base)
 {
    base->CNFG |= SMM_CNFG_MAIN_ISO_DSBL_MASK;
-#if __CORTEX_M == 33U
-   SDK_DelayAtLeastUs(10, CLOCK_GetCoreSysClkFreq());
-#else
-   SDK_DelayAtLeastUs(10, CLOCK_GetAonCoreSysClkFreq());
-#endif /* __CORTEX_M */
+   SDK_DelayAtLeastUs(10, SMM_CPU_CORE_FREQ);
    base->CNFG &= ~SMM_CNFG_MAIN_ISO_DSBL_MASK;
 }
 
@@ -466,11 +479,7 @@ static inline void SMM_DisableMainCpuIso(SMM_Type *base)
 static inline void SMM_DisableAonCpuIso(SMM_Type *base)
 {
     base->CNFG |= (SMM_CNFG_AON_ISO_DSBL_MASK);
-    #if __CORTEX_M == (33U)
-    SDK_DelayAtLeastUs(10, CLOCK_GetCoreSysClkFreq());
-    #else
-    SDK_DelayAtLeastUs(10, CLOCK_GetAonCoreSysClkFreq());
-    #endif /* __CORTEX_M */
+    SDK_DelayAtLeastUs(10, SMM_CPU_CORE_FREQ);
     base->CNFG &= ~(SMM_CNFG_AON_ISO_DSBL_MASK);
 }
 

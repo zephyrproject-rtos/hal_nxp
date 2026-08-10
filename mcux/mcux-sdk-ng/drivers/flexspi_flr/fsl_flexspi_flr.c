@@ -74,7 +74,7 @@ uint32_t FLEXSPI_SLV_GetInstance(FLEXSPI_SLV_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_flexspiSlvBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_flexspiSlvBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_flexspiSlvBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

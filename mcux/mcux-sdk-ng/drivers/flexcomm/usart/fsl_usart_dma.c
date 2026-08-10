@@ -196,7 +196,7 @@ status_t USART_TransferSendDMA(USART_Type *base, usart_dma_handle_t *handle, usa
     assert(xfer->data != NULL);
     assert(xfer->dataSize != 0U);
 
-    dma_transfer_config_t xferConfig;
+    dma_channel_config_t xferConfig;
     status_t status;
     uint32_t address = (uint32_t)&base->FIFOWR;
 
@@ -214,11 +214,14 @@ status_t USART_TransferSendDMA(USART_Type *base, usart_dma_handle_t *handle, usa
         USART_EnableTxDMA(base, true);
 
         /* Prepare transfer. */
-        DMA_PrepareTransfer(&xferConfig, xfer->data, (uint32_t *)address, sizeof(uint8_t), xfer->dataSize,
-                            kDMA_MemoryToPeripheral, NULL);
+        DMA_PrepareChannelTransfer(&xferConfig, xfer->data, (uint32_t *)address,
+                                   DMA_CHANNEL_XFER(false, false, true, false, sizeof(uint8_t),
+                                                    kDMA_AddressInterleave1xWidth, kDMA_AddressInterleave0xWidth,
+                                                    xfer->dataSize),
+                                   kDMA_MemoryToPeripheral, NULL, NULL);
 
         /* Submit transfer. */
-        (void)DMA_SubmitTransfer(handle->txDmaHandle, &xferConfig);
+        (void)DMA_SubmitChannelTransfer(handle->txDmaHandle, &xferConfig);
         DMA_StartTransfer(handle->txDmaHandle);
 
         status = kStatus_Success;
@@ -248,7 +251,7 @@ status_t USART_TransferReceiveDMA(USART_Type *base, usart_dma_handle_t *handle, 
     assert(xfer->data != NULL);
     assert(xfer->dataSize != 0U);
 
-    dma_transfer_config_t xferConfig;
+    dma_channel_config_t xferConfig;
     status_t status;
     uint32_t address = (uint32_t)&base->FIFORD;
 
@@ -266,11 +269,14 @@ status_t USART_TransferReceiveDMA(USART_Type *base, usart_dma_handle_t *handle, 
         USART_EnableRxDMA(base, true);
 
         /* Prepare transfer. */
-        DMA_PrepareTransfer(&xferConfig, (uint32_t *)address, xfer->data, sizeof(uint8_t), xfer->dataSize,
-                            kDMA_PeripheralToMemory, NULL);
+        DMA_PrepareChannelTransfer(&xferConfig, (uint32_t *)address, xfer->data,
+                                   DMA_CHANNEL_XFER(false, false, true, false, sizeof(uint8_t),
+                                                    kDMA_AddressInterleave0xWidth, kDMA_AddressInterleave1xWidth,
+                                                    xfer->dataSize),
+                                   kDMA_PeripheralToMemory, NULL, NULL);
 
         /* Submit transfer. */
-        (void)DMA_SubmitTransfer(handle->rxDmaHandle, &xferConfig);
+        (void)DMA_SubmitChannelTransfer(handle->rxDmaHandle, &xferConfig);
         DMA_StartTransfer(handle->rxDmaHandle);
 
         status = kStatus_Success;

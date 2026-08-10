@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.tdet)
-    mcux_component_version(2.3.2)
+    mcux_component_version(2.3.3)
 
     mcux_add_source(SOURCES fsl_tdet.h fsl_tdet.c)
 

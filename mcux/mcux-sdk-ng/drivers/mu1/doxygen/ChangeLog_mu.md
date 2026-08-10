@@ -1,5 +1,11 @@
 # MU
 
+## [2.8.5]
+
+- Improvements
+  - Guard CIER0 core-interrupt register access with FSL_FEATURE_MU_NO_CIER0_REG
+    for devices whose MU instance has no CIER0 register (e.g. MCXE32B MU2).
+
 ## [2.8.4]
 
 - Improvements

@@ -97,7 +97,7 @@ uint32_t TPM_GetInstance(TPM_Type *base)
      */
     for (instance = 0; instance < tpmArrayCount; instance++) /* GCOVR_EXCL_BR_LINE */
     {
-        if (MSDK_REG_SECURE_ADDR(s_tpmBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_tpmBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -1078,7 +1078,7 @@ void TPM_SetupQuadDecode(TPM_Type *base,
      * $Branch Coverage Justification$
      * (1U != FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(base)) not covered. $ref tpm_c_ref_4$.
      */
-    if (1U == (uint8_t)FSL_FEATURE_TPM_POL_HAS_EFFECTn(base))
+    if (1U == (uint8_t)FSL_FEATURE_TPM_POL_HAS_EFFECTn(base)) /* GCOVR_EXCL_BR_LINE */
     {
         /* Set Phase A polarity */
         if (kTPM_QuadPhaseInvert == phaseAParams->phasePolarity)
@@ -1105,7 +1105,7 @@ void TPM_SetupQuadDecode(TPM_Type *base,
      * $Branch Coverage Justification$
      * (1U != FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(base)) not covered. $ref tpm_c_ref_4$.
      */
-    if (1U == (uint8_t)FSL_FEATURE_TPM_POL_HAS_EFFECTn(base))
+    if (1U == (uint8_t)FSL_FEATURE_TPM_POL_HAS_EFFECTn(base)) /* GCOVR_EXCL_BR_LINE */
     {
         /* Set Phase B polarity */
         if (kTPM_QuadPhaseInvert == phaseBParams->phasePolarity)

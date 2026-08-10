@@ -495,7 +495,7 @@ void L2CACHE_LockdownByWayEnable(uint32_t masterId, uint32_t mask, bool enable)
  */
 void L1CACHE_InvalidateICacheByRange(uint32_t address, uint32_t size_byte)
 {
-#if (__DCACHE_PRESENT == 1U)
+#if defined(__ICACHE_PRESENT) && (__ICACHE_PRESENT == 1U)
     uint32_t addr       = address & ~((uint32_t)FSL_FEATURE_L1ICACHE_LINESIZE_BYTE - 1U);
     uint32_t align_len  = address - addr;
     uint32_t line_size  = (uint32_t)FSL_FEATURE_L1ICACHE_LINESIZE_BYTE;

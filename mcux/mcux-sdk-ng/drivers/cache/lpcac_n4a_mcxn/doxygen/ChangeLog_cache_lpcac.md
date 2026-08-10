@@ -1,5 +1,13 @@
 # CACHE LPCAC
 
+## [2.2.2]
+
+- Bug Fixes
+  - Fixed L1CACHE_InvalidateCodeCache() leaving the cache held cleared. LPCAC_CTRL[CLR_LPCAC]
+    is sticky, so setting it kept the cache invalidated/disabled until written back to 0. The
+    function now sets and then clears the bit (with a memory barrier in between) so the cache
+    is invalidated and left in a valid, operational state.
+
 ## [2.2.1]
 
 - Improvements

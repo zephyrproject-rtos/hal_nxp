@@ -50,7 +50,7 @@ static uint32_t SYSPM_GetInstance(SYSPM_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_syspmBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_syspmBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_syspmBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,6 +26,14 @@
  * Prototypes
  ******************************************************************************/
 
+static audmix_mix_clock_source_t AUDMIX_GetConfiguredMixClockSource(AUDMIX_Type *base);
+static bool AUDMIX_IsAttenuationEnabled(AUDMIX_Type *base, uint8_t tdmChannel);
+static bool AUDMIX_IsValidOutputSource(audmix_output_source_t source);
+static bool AUDMIX_IsValidMixClockSource(audmix_mix_clock_source_t source);
+static bool AUDMIX_IsValidOutputWidth(audmix_output_width_t width);
+static bool AUDMIX_IsValidOutputClockPolarity(audmix_output_clock_polarity_t polarity);
+static bool AUDMIX_IsValidAttenuationDirection(audmix_attenuation_direction_t direction);
+
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -33,6 +41,51 @@
 /*******************************************************************************
  * Code
  ******************************************************************************/
+
+static audmix_mix_clock_source_t AUDMIX_GetConfiguredMixClockSource(AUDMIX_Type *base)
+{
+    assert(base != NULL);
+
+    return (audmix_mix_clock_source_t)((base->CTR & AUDMIX_CTR_MIXCLK_MASK) >> AUDMIX_CTR_MIXCLK_SHIFT);
+}
+
+static bool AUDMIX_IsAttenuationEnabled(AUDMIX_Type *base, uint8_t tdmChannel)
+{
+    assert(base != NULL);
+    assert(tdmChannel <= 1U);
+
+    return (tdmChannel == 0U) ? ((base->ATCR0 & AUDMIX_ATCR0_AT_EN_MASK) != 0U) :
+                                ((base->ATCR1 & AUDMIX_ATCR1_AT_EN_MASK) != 0U);
+}
+
+static bool AUDMIX_IsValidOutputSource(audmix_output_source_t source)
+{
+    return ((source == kAUDMIX_OutputDisabled) || (source == kAUDMIX_OutputFromTDM1) ||
+            (source == kAUDMIX_OutputFromTDM2) || (source == kAUDMIX_OutputMixed));
+}
+
+static bool AUDMIX_IsValidMixClockSource(audmix_mix_clock_source_t source)
+{
+    return ((source == kAUDMIX_MixClockFromTDM1) || (source == kAUDMIX_MixClockFromTDM2));
+}
+
+static bool AUDMIX_IsValidOutputWidth(audmix_output_width_t width)
+{
+    return ((width == kAUDMIX_OutputWidth16Bit) || (width == kAUDMIX_OutputWidth18Bit) ||
+            (width == kAUDMIX_OutputWidth20Bit) || (width == kAUDMIX_OutputWidth24Bit) ||
+            (width == kAUDMIX_OutputWidth32Bit));
+}
+
+static bool AUDMIX_IsValidOutputClockPolarity(audmix_output_clock_polarity_t polarity)
+{
+    return ((polarity == kAUDMIX_OutputClockPolarityPositiveEdge) ||
+            (polarity == kAUDMIX_OutputClockPolarityNegativeEdge));
+}
+
+static bool AUDMIX_IsValidAttenuationDirection(audmix_attenuation_direction_t direction)
+{
+    return ((direction == kAUDMIX_AttenuationDirectionDown) || (direction == kAUDMIX_AttenuationDirectionUp));
+}
 
 /*!
  * @brief Initializes the AUDMIX peripheral.
@@ -108,17 +161,31 @@ status_t AUDMIX_GetDefaultConfig(audmix_config_t *config)
  */
 status_t AUDMIX_SetConfig(AUDMIX_Type *base, const audmix_config_t *config)
 {
+    uint32_t reg = 0U;
+    uint32_t mixClockSource;
+    uint32_t outputSource;
+    uint32_t outputWidth;
+    uint32_t outputClockPolarity;
+    uint32_t syncModeClockSource;
+
     if (base == NULL || config == NULL)
     {
         return kStatus_AUDMIX_Error;
     }
 
-    uint32_t reg = 0U;
-    uint32_t mixClockSource = (uint32_t)config->mixClockSource & 0x1U;
-    uint32_t outputSource = (uint32_t)config->outputSource & 0x3U;
-    uint32_t outputWidth = (uint32_t)config->outputWidth & 0x7U;
-    uint32_t outputClockPolarity = (uint32_t)config->outputClockPolarity & 0x1U;
-    uint32_t syncModeClockSource = (uint32_t)config->syncModeClockSource & 0x1U;
+    if (!AUDMIX_IsValidMixClockSource(config->mixClockSource) || !AUDMIX_IsValidOutputSource(config->outputSource) ||
+        !AUDMIX_IsValidOutputWidth(config->outputWidth) ||
+        !AUDMIX_IsValidOutputClockPolarity(config->outputClockPolarity) ||
+        !AUDMIX_IsValidMixClockSource(config->syncModeClockSource))
+    {
+        return kStatus_AUDMIX_Error;
+    }
+
+    mixClockSource = (uint32_t)config->mixClockSource;
+    outputSource = (uint32_t)config->outputSource;
+    outputWidth = (uint32_t)config->outputWidth;
+    outputClockPolarity = (uint32_t)config->outputClockPolarity;
+    syncModeClockSource = (uint32_t)config->syncModeClockSource;
 
     /* Configure CTR register */
     reg = AUDMIX_CTR_MIXCLK(mixClockSource) |
@@ -169,7 +236,7 @@ status_t AUDMIX_GetDefaultAttenuationConfig(audmix_attenuation_config_t *config)
     config->stepDivider = 0U;
     config->initialValue = 0x3FFFFU;    /* Default initial value (0.999996185) */
     config->stepUpFactor = 0x2AAAAU;    /* Default step up factor (0.666664124) */
-    config->stepDownFactor = 0x30000U;   /* Default step down factor (0.75) */
+    config->stepDownFactor = 0x30000U;  /* Default step down factor (0.75) */
     config->stepTarget = 16U;           /* Default step target */
 
     return kStatus_Success;
@@ -183,9 +250,16 @@ status_t AUDMIX_GetDefaultAttenuationConfig(audmix_attenuation_config_t *config)
  * @param config Pointer to the attenuation configuration structure.
  * @return Status of the operation
  */
-/* Improve integer handling in AUDMIX_SetAttenuationConfig */
 status_t AUDMIX_SetAttenuationConfig(AUDMIX_Type *base, uint8_t tdmChannel, const audmix_attenuation_config_t *config)
 {
+    uint32_t atcr;
+    uint32_t attenuationDirection;
+    uint32_t stepDivider;
+    uint32_t initialValue;
+    uint32_t stepUpFactor;
+    uint32_t stepDownFactor;
+    uint32_t stepTarget;
+
     if (base == NULL || config == NULL)
     {
         return kStatus_AUDMIX_Error;
@@ -197,25 +271,25 @@ status_t AUDMIX_SetAttenuationConfig(AUDMIX_Type *base, uint8_t tdmChannel, cons
         return kStatus_AUDMIX_Error;
     }
 
-    uint32_t atcr = 0U;
-    /* Safe type conversion with explicit masking */
-    uint32_t attenuationDirection = ((uint32_t)config->attenuationDirection) & 0x1U;
+    if (!AUDMIX_IsValidAttenuationDirection(config->attenuationDirection))
+    {
+        return kStatus_AUDMIX_Error;
+    }
 
-    /* Safe integer handling with explicit bounds checking */
-    uint32_t stepDivider = (config->stepDivider <= AUDMIX_MAX_STEP_DIVIDER) ?
-                           (uint32_t)config->stepDivider : AUDMIX_MAX_STEP_DIVIDER;
+    /* Profile parameters must not be changed while attenuation is enabled. */
+    if (AUDMIX_IsAttenuationEnabled(base, tdmChannel))
+    {
+        return kStatus_AUDMIX_Busy;
+    }
 
-    uint32_t initialValue = (config->initialValue <= AUDMIX_MAX_INITIAL_VALUE) ?
-                           config->initialValue : AUDMIX_MAX_INITIAL_VALUE;
-
-    uint32_t stepUpFactor = (config->stepUpFactor <= AUDMIX_MAX_STEP_FACTOR) ?
-                           config->stepUpFactor : AUDMIX_MAX_STEP_FACTOR;
-
-    uint32_t stepDownFactor = (config->stepDownFactor <= AUDMIX_MAX_STEP_FACTOR) ?
-                             config->stepDownFactor : AUDMIX_MAX_STEP_FACTOR;
-
-    uint32_t stepTarget = (config->stepTarget <= AUDMIX_MAX_STEP_TARGET) ?
-                         config->stepTarget : AUDMIX_MAX_STEP_TARGET;
+    atcr = 0U;
+    attenuationDirection = ((uint32_t)config->attenuationDirection) & 0x1U;
+    stepDivider = (config->stepDivider <= AUDMIX_MAX_STEP_DIVIDER) ? (uint32_t)config->stepDivider :
+                                                                      AUDMIX_MAX_STEP_DIVIDER;
+    initialValue = (config->initialValue <= AUDMIX_MAX_INITIAL_VALUE) ? config->initialValue : AUDMIX_MAX_INITIAL_VALUE;
+    stepUpFactor = (config->stepUpFactor <= AUDMIX_MAX_STEP_FACTOR) ? config->stepUpFactor : AUDMIX_MAX_STEP_FACTOR;
+    stepDownFactor = (config->stepDownFactor <= AUDMIX_MAX_STEP_FACTOR) ? config->stepDownFactor : AUDMIX_MAX_STEP_FACTOR;
+    stepTarget = (config->stepTarget <= AUDMIX_MAX_STEP_TARGET) ? config->stepTarget : AUDMIX_MAX_STEP_TARGET;
 
     /* Configure attenuation control register with safe operations */
     atcr = AUDMIX_ATCR0_AT_EN(config->attenuationEnable ? 1U : 0U) |
@@ -242,8 +316,6 @@ status_t AUDMIX_SetAttenuationConfig(AUDMIX_Type *base, uint8_t tdmChannel, cons
 
     return kStatus_Success;
 }
-
-
 /*!
  * @brief Enables or disables attenuation for a specific TDM channel.
  *
@@ -295,23 +367,31 @@ status_t AUDMIX_EnableAttenuation(AUDMIX_Type *base, uint8_t tdmChannel, bool en
  */
 status_t AUDMIX_SetAttenuationDirection(AUDMIX_Type *base, uint8_t tdmChannel, audmix_attenuation_direction_t direction)
 {
+    uint32_t directionValue;
+    uint32_t reg;
+
     if (base == NULL || tdmChannel > 1U)
     {
         return kStatus_AUDMIX_Error;
     }
 
-    uint32_t directionValue = (uint32_t)direction & 0x1U;
+    if (!AUDMIX_IsValidAttenuationDirection(direction))
+    {
+        return kStatus_AUDMIX_Error;
+    }
+
+    directionValue = (uint32_t)direction;
 
     if (tdmChannel == 0U)
     {
-        uint32_t reg = base->ATCR0;
+        reg = base->ATCR0;
         reg &= ~AUDMIX_ATCR0_AT_UPDN_MASK;
         reg |= AUDMIX_ATCR0_AT_UPDN(directionValue);
         base->ATCR0 = reg;
     }
     else
     {
-        uint32_t reg = base->ATCR1;
+        reg = base->ATCR1;
         reg &= ~AUDMIX_ATCR1_AT_UPDN_MASK;
         reg |= AUDMIX_ATCR1_AT_UPDN(directionValue);
         base->ATCR1 = reg;
@@ -333,7 +413,7 @@ bool AUDMIX_IsFrameRateMatched(AUDMIX_Type *base)
         return false;
     }
 
-    return ((base->STR & AUDMIX_STR_RATEDIFF_MASK) == 0U);
+    return ((AUDMIX_GetStatusFlags(base) & AUDMIX_STR_RATEDIFF_MASK) == 0U);
 }
 
 /*!
@@ -349,7 +429,7 @@ bool AUDMIX_IsClockFrequencyMatched(AUDMIX_Type *base)
         return false;
     }
 
-    return ((base->STR & AUDMIX_STR_CLKDIFF_MASK) == 0U);
+    return ((AUDMIX_GetStatusFlags(base) & AUDMIX_STR_CLKDIFF_MASK) == 0U);
 }
 
 /*!
@@ -360,12 +440,14 @@ bool AUDMIX_IsClockFrequencyMatched(AUDMIX_Type *base)
  */
 audmix_output_source_t AUDMIX_GetMixerState(AUDMIX_Type *base)
 {
+    uint32_t status;
+
     if (base == NULL)
     {
         return kAUDMIX_OutputDisabled;
     }
 
-    uint32_t status = (base->STR & AUDMIX_STR_MIXSTAT_MASK) >> AUDMIX_STR_MIXSTAT_SHIFT;
+    status = (base->STR & AUDMIX_STR_MIXSTAT_MASK) >> AUDMIX_STR_MIXSTAT_SHIFT;
     return (audmix_output_source_t)status;
 }
 
@@ -378,15 +460,38 @@ audmix_output_source_t AUDMIX_GetMixerState(AUDMIX_Type *base)
  */
 status_t AUDMIX_SetOutputSource(AUDMIX_Type *base, audmix_output_source_t source)
 {
+    uint32_t regValue;
+    audmix_mix_clock_source_t requiredMixClockSource;
+
     if (base == NULL)
     {
         return kStatus_AUDMIX_Error;
     }
 
-    uint32_t reg = base->CTR;
-    reg &= ~AUDMIX_CTR_OUTSRC_MASK;
-    reg |= AUDMIX_CTR_OUTSRC((uint32_t)source & 0x3U);
-    base->CTR = reg;
+    if (!AUDMIX_IsValidOutputSource(source))
+    {
+        return kStatus_AUDMIX_Error;
+    }
+
+    if ((source == kAUDMIX_OutputFromTDM1) || (source == kAUDMIX_OutputFromTDM2))
+    {
+        requiredMixClockSource = (source == kAUDMIX_OutputFromTDM1) ? kAUDMIX_MixClockFromTDM1 : kAUDMIX_MixClockFromTDM2;
+        if (AUDMIX_GetConfiguredMixClockSource(base) != requiredMixClockSource)
+        {
+            return kStatus_AUDMIX_Error;
+        }
+    }
+
+    regValue = base->CTR;
+    regValue &= ~AUDMIX_CTR_OUTSRC_MASK;
+    regValue |= AUDMIX_CTR_OUTSRC((uint32_t)source);
+
+    if (regValue == base->CTR)
+    {
+        return kStatus_Success;
+    }
+
+    base->CTR = regValue;
 
     return kStatus_Success;
 }
@@ -400,16 +505,32 @@ status_t AUDMIX_SetOutputSource(AUDMIX_Type *base, audmix_output_source_t source
  */
 status_t AUDMIX_SetMixClockSource(AUDMIX_Type *base, audmix_mix_clock_source_t source)
 {
+    uint32_t regValue;
+
     if (base == NULL)
     {
         return kStatus_AUDMIX_Error;
     }
 
-    uint32_t reg = base->CTR;
-    reg &= ~AUDMIX_CTR_MIXCLK_MASK;
-    reg |= AUDMIX_CTR_MIXCLK((uint32_t)source & 0x1U);
-    base->CTR = reg;
+    if (!AUDMIX_IsValidMixClockSource(source))
+    {
+        return kStatus_AUDMIX_Error;
+    }
 
+    /* RM forbids runtime switching of MIXCLK while entering/staying in mixed mode. */
+    if (AUDMIX_GetMixerState(base) == kAUDMIX_OutputMixed)
+    {
+        return kStatus_AUDMIX_Busy;
+    }
+
+    regValue = (base->CTR & ~AUDMIX_CTR_MIXCLK_MASK) | AUDMIX_CTR_MIXCLK((uint32_t)source);
+
+    if (regValue == base->CTR)
+    {
+        return kStatus_Success;
+    }
+
+    base->CTR = regValue;
     return kStatus_Success;
 }
 
@@ -471,21 +592,31 @@ status_t AUDMIX_GetAttenuationStepCounter(AUDMIX_Type *base, uint8_t tdmChannel,
  * @brief Sets the output width for the AUDMIX.
  *
  * @param base AUDMIX base pointer.
- * @param width Output width (16-bit, 18-bit, 20-bit, or 24-bit).
+ * @param width Output width (16-bit, 18-bit, 20-bit, 24-bit, or 32-bit).
  * @return Status of the operation
  */
 status_t AUDMIX_SetOutputWidth(AUDMIX_Type *base, audmix_output_width_t width)
 {
+    uint32_t regValue;
+
     if (base == NULL)
     {
         return kStatus_AUDMIX_Error;
     }
 
-    uint32_t reg = base->CTR;
-    reg &= ~AUDMIX_CTR_OUTWIDTH_MASK;
-    reg |= AUDMIX_CTR_OUTWIDTH((uint32_t)width & 0x7U);
-    base->CTR = reg;
+    if (!AUDMIX_IsValidOutputWidth(width))
+    {
+        return kStatus_AUDMIX_Error;
+    }
 
+    regValue = (base->CTR & ~AUDMIX_CTR_OUTWIDTH_MASK) | AUDMIX_CTR_OUTWIDTH((uint32_t)width);
+
+    if (regValue == base->CTR)
+    {
+        return kStatus_Success;
+    }
+
+    base->CTR = regValue;
     return kStatus_Success;
 }
 
@@ -498,16 +629,26 @@ status_t AUDMIX_SetOutputWidth(AUDMIX_Type *base, audmix_output_width_t width)
  */
 status_t AUDMIX_SetOutputClockPolarity(AUDMIX_Type *base, audmix_output_clock_polarity_t polarity)
 {
+    uint32_t regValue;
+
     if (base == NULL)
     {
         return kStatus_AUDMIX_Error;
     }
 
-    uint32_t reg = base->CTR;
-    reg &= ~AUDMIX_CTR_OUTCKPOL_MASK;
-    reg |= AUDMIX_CTR_OUTCKPOL((uint32_t)polarity & 0x1U);
-    base->CTR = reg;
+    if (!AUDMIX_IsValidOutputClockPolarity(polarity))
+    {
+        return kStatus_AUDMIX_Error;
+    }
 
+    regValue = (base->CTR & ~AUDMIX_CTR_OUTCKPOL_MASK) | AUDMIX_CTR_OUTCKPOL((uint32_t)polarity);
+
+    if (regValue == base->CTR)
+    {
+        return kStatus_Success;
+    }
+
+    base->CTR = regValue;
     return kStatus_Success;
 }
 
@@ -520,24 +661,21 @@ status_t AUDMIX_SetOutputClockPolarity(AUDMIX_Type *base, audmix_output_clock_po
  */
 status_t AUDMIX_EnableFrameRateDiffErrorMasking(AUDMIX_Type *base, bool enable)
 {
+    uint32_t regValue;
+
     if (base == NULL)
     {
         return kStatus_AUDMIX_Error;
     }
 
-    uint32_t reg = base->CTR;
+    regValue = enable ? (base->CTR | AUDMIX_CTR_MASKRTDF_MASK) : (base->CTR & ~AUDMIX_CTR_MASKRTDF_MASK);
 
-    if (enable)
+    if (regValue == base->CTR)
     {
-        reg |= AUDMIX_CTR_MASKRTDF_MASK;
-    }
-    else
-    {
-        reg &= ~AUDMIX_CTR_MASKRTDF_MASK;
+        return kStatus_Success;
     }
 
-    base->CTR = reg;
-
+    base->CTR = regValue;
     return kStatus_Success;
 }
 
@@ -550,24 +688,21 @@ status_t AUDMIX_EnableFrameRateDiffErrorMasking(AUDMIX_Type *base, bool enable)
  */
 status_t AUDMIX_EnableClockFrequencyDiffErrorMasking(AUDMIX_Type *base, bool enable)
 {
+    uint32_t regValue;
+
     if (base == NULL)
     {
         return kStatus_AUDMIX_Error;
     }
 
-    uint32_t reg = base->CTR;
+    regValue = enable ? (base->CTR | AUDMIX_CTR_MASKCKDF_MASK) : (base->CTR & ~AUDMIX_CTR_MASKCKDF_MASK);
 
-    if (enable)
+    if (regValue == base->CTR)
     {
-        reg |= AUDMIX_CTR_MASKCKDF_MASK;
-    }
-    else
-    {
-        reg &= ~AUDMIX_CTR_MASKCKDF_MASK;
+        return kStatus_Success;
     }
 
-    base->CTR = reg;
-
+    base->CTR = regValue;
     return kStatus_Success;
 }
 
@@ -580,24 +715,21 @@ status_t AUDMIX_EnableClockFrequencyDiffErrorMasking(AUDMIX_Type *base, bool ena
  */
 status_t AUDMIX_EnableSyncMode(AUDMIX_Type *base, bool enable)
 {
+    uint32_t regValue;
+
     if (base == NULL)
     {
         return kStatus_AUDMIX_Error;
     }
 
-    uint32_t reg = base->CTR;
+    regValue = enable ? (base->CTR | AUDMIX_CTR_SYNCMODE_MASK) : (base->CTR & ~AUDMIX_CTR_SYNCMODE_MASK);
 
-    if (enable)
+    if (regValue == base->CTR)
     {
-        reg |= AUDMIX_CTR_SYNCMODE_MASK;
-    }
-    else
-    {
-        reg &= ~AUDMIX_CTR_SYNCMODE_MASK;
+        return kStatus_Success;
     }
 
-    base->CTR = reg;
-
+    base->CTR = regValue;
     return kStatus_Success;
 }
 
@@ -610,16 +742,26 @@ status_t AUDMIX_EnableSyncMode(AUDMIX_Type *base, bool enable)
  */
 status_t AUDMIX_SetSyncModeClockSource(AUDMIX_Type *base, audmix_mix_clock_source_t source)
 {
+    uint32_t regValue;
+
     if (base == NULL)
     {
         return kStatus_AUDMIX_Error;
     }
 
-    uint32_t reg = base->CTR;
-    reg &= ~AUDMIX_CTR_SYNCSRC_MASK;
-    reg |= AUDMIX_CTR_SYNCSRC((uint32_t)source & 0x1U);
-    base->CTR = reg;
+    if (!AUDMIX_IsValidMixClockSource(source))
+    {
+        return kStatus_AUDMIX_Error;
+    }
 
+    regValue = (base->CTR & ~AUDMIX_CTR_SYNCSRC_MASK) | AUDMIX_CTR_SYNCSRC((uint32_t)source);
+
+    if (regValue == base->CTR)
+    {
+        return kStatus_Success;
+    }
+
+    base->CTR = regValue;
     return kStatus_Success;
 }
 

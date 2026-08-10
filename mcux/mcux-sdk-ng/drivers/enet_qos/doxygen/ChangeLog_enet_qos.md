@@ -1,5 +1,10 @@
 # ENET_QOS
 
+## [2.7.5]
+
+- New features
+  - Added IRQ handler for the COMM__ENET_QOS peripheral on i.MX RT2660.
+
 ## [2.7.4]
 
 - Bug Fixes

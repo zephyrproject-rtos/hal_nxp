@@ -1,5 +1,12 @@
 # CSI
 
+## [2.2.3]
+
+- Bug Fixes
+  - Added a DSB after the CSI CR1 interrupt-enable mask in
+    CSI_TransferSubmitEmptyBuffer / CSI_TransferGetFullBuffer so the peripheral
+    observes the masked state before the buffer queue is touched.
+
 ## [2.2.2]
 
 - Bug Fixes

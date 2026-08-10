@@ -44,7 +44,7 @@ static uint32_t CMU_FM_GetInstance(CMU_FM_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < cmufmArrayCount; instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_cmufmBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_cmufmBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

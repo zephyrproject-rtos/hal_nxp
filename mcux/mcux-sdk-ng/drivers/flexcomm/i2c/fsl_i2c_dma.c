@@ -149,7 +149,7 @@ static status_t I2C_InitTransferStateMachineDMA(I2C_Type *base,
 static void I2C_RunDMATransfer(I2C_Type *base, i2c_master_dma_handle_t *handle)
 {
     uint32_t transfer_size;
-    dma_transfer_config_t xferConfig;
+    dma_channel_config_t xferConfig;
     uint32_t address;
     address = (uint32_t)&base->MSTDAT;
 
@@ -176,13 +176,19 @@ static void I2C_RunDMATransfer(I2C_Type *base, i2c_master_dma_handle_t *handle)
     switch (handle->transfer.direction)
     {
         case kI2C_Write:
-            DMA_PrepareTransfer(&xferConfig, handle->buf, (uint32_t *)address, sizeof(uint8_t), transfer_size,
-                                kDMA_MemoryToPeripheral, NULL);
+            DMA_PrepareChannelTransfer(&xferConfig, handle->buf, (uint32_t *)address,
+                                       DMA_CHANNEL_XFER(false, false, true, false, sizeof(uint8_t),
+                                                        kDMA_AddressInterleave1xWidth, kDMA_AddressInterleave0xWidth,
+                                                        transfer_size),
+                                       kDMA_MemoryToPeripheral, NULL, NULL);
             break;
 
         case kI2C_Read:
-            DMA_PrepareTransfer(&xferConfig, (uint32_t *)address, handle->buf, sizeof(uint8_t), transfer_size,
-                                kDMA_PeripheralToMemory, NULL);
+            DMA_PrepareChannelTransfer(&xferConfig, (uint32_t *)address, handle->buf,
+                                       DMA_CHANNEL_XFER(false, false, true, false, sizeof(uint8_t),
+                                                        kDMA_AddressInterleave0xWidth, kDMA_AddressInterleave1xWidth,
+                                                        transfer_size),
+                                       kDMA_PeripheralToMemory, NULL, NULL);
             break;
 
         default:
@@ -191,7 +197,7 @@ static void I2C_RunDMATransfer(I2C_Type *base, i2c_master_dma_handle_t *handle)
             break;
     }
 
-    (void)DMA_SubmitTransfer(handle->dmaHandle, &xferConfig);
+    (void)DMA_SubmitChannelTransfer(handle->dmaHandle, &xferConfig);
     DMA_StartTransfer(handle->dmaHandle);
 
     handle->remainingBytesDMA -= transfer_size;
@@ -204,7 +210,7 @@ static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_ha
     uint32_t status;
     uint32_t master_state;
     struct _i2c_master_transfer *transfer;
-    dma_transfer_config_t xferConfig;
+    dma_channel_config_t xferConfig;
     status_t err;
     uint32_t start_flag = 0U;
     uint32_t address;
@@ -332,9 +338,12 @@ static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_ha
             base->MSTCTL = start_flag | I2C_MSTCTL_MSTDMA_MASK;
 
             /* Prepare and submit DMA transfer. */
-            DMA_PrepareTransfer(&xferConfig, handle->subaddrBuf, (uint32_t *)address, sizeof(uint8_t),
-                                handle->remainingSubaddr, kDMA_MemoryToPeripheral, NULL);
-            (void)DMA_SubmitTransfer(handle->dmaHandle, &xferConfig);
+            DMA_PrepareChannelTransfer(&xferConfig, handle->subaddrBuf, (uint32_t *)address,
+                                       DMA_CHANNEL_XFER(false, false, true, false, sizeof(uint8_t),
+                                                        kDMA_AddressInterleave1xWidth, kDMA_AddressInterleave0xWidth,
+                                                        handle->remainingSubaddr),
+                                       kDMA_MemoryToPeripheral, NULL, NULL);
+            (void)DMA_SubmitChannelTransfer(handle->dmaHandle, &xferConfig);
             DMA_StartTransfer(handle->dmaHandle);
             handle->remainingSubaddr = 0;
             if (transfer->dataSize != 0U)

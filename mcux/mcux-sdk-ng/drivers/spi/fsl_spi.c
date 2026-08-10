@@ -123,7 +123,7 @@ uint32_t SPI_GetInstance(SPI_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_spiBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_spiBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_spiBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

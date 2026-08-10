@@ -91,7 +91,7 @@ uint32_t FLEXIO_GetInstance(FLEXIO_Type *base)
          * $Branch Coverage Justification$
          * false branch not covered - depends on count of peripheral instances
          */
-        if (MSDK_REG_SECURE_ADDR(s_flexioBases[instance]) == MSDK_REG_SECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
+        if (MSDK_REG_NONSECURE_ADDR(s_flexioBases[instance]) == MSDK_REG_NONSECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
         {
             break;
         }
@@ -556,7 +556,7 @@ void FLEXIO3_DriverIRQHandler(void) /* GCOVR_EXCL_FUNCTION */
 }
 
 void FLEXIO_CommonDriverIRQHandler(uint32_t instance);
-void FLEXIO_CommonDriverIRQHandler(uint32_t instance)
+void FLEXIO_CommonDriverIRQHandler(uint32_t instance)  /* GCOVR_EXCL_FUNCTION */
 {
     uint32_t index;
 
@@ -565,8 +565,8 @@ void FLEXIO_CommonDriverIRQHandler(uint32_t instance)
         for (index = 0U; index < (uint8_t)FLEXIO_HANDLE_COUNT; index++)
         {
             if ((s_flexioHandle[index] != NULL) &&
-                (MSDK_REG_SECURE_ADDR(((flexio_simulated_type_t *)s_flexioType[index])->flexioBase) ==
-                 MSDK_REG_SECURE_ADDR(s_flexioBases[instance])))
+                (MSDK_REG_NONSECURE_ADDR(((flexio_simulated_type_t *)s_flexioType[index])->flexioBase) ==
+                 MSDK_REG_NONSECURE_ADDR(s_flexioBases[instance])))
             {
                 s_flexioIsr[index](s_flexioType[index], s_flexioHandle[index]);
             }

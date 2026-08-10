@@ -246,7 +246,7 @@ uint32_t LPSPI_GetInstance(LPSPI_Type *base)
      */
     for (instance = 0; instance < ARRAY_SIZE(s_lpspiBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_lpspiBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_lpspiBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

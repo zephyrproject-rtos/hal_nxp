@@ -59,7 +59,7 @@ static uint32_t SLCD_GetInstance(SLCD_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_slcdBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_slcdBases[instance]) == MSDK_REG_SECURE_ADDR(base->control))
+        if (MSDK_REG_NONSECURE_ADDR(s_slcdBases[instance]) == MSDK_REG_NONSECURE_ADDR(base->control))
         {
             break;
         }

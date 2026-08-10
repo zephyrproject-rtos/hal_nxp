@@ -22,9 +22,11 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Defines TDET driver version 2.3.2.
+/*! @brief Defines TDET driver version 2.3.3.
  *
  * Change log:
+ * - Version 2.3.3
+ *   - Fix MISRA and CERT-C findings.
  * - Version 2.3.2
  *   - Added common IRQ handler entry TDET_DriverIRQHandler.
  * - Version 2.3.1
@@ -41,7 +43,7 @@
  * - Version 2.0.0
  *   - Initial version
  */
-#define FSL_TDET_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+#define FSL_TDET_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
 /*! @} */
 
 /*!
@@ -543,6 +545,7 @@ status_t TDET_SetConfig(DIGTMP_Type *base, const tdet_config_t *config);
  */
 status_t TDET_SoftwareReset(DIGTMP_Type *base);
 
+#if defined(TDET_HAS_ACTIVE_TAMPER)
 /*!
  * @brief Writes to the active tamper register(s).
  *
@@ -558,6 +561,7 @@ status_t TDET_SoftwareReset(DIGTMP_Type *base);
 status_t TDET_ActiveTamperSetConfig(DIGTMP_Type *base,
                                     const tdet_active_tamper_config_t *activeTamperConfig,
                                     uint32_t activeTamperRegisterSelect);
+#endif /* defined(TDET_HAS_ACTIVE_TAMPER) */
 
 /*!
  * @brief Gets default values for tamper pin configuration.

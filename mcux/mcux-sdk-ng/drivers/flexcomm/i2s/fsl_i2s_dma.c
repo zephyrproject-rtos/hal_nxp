@@ -149,7 +149,7 @@ static uint32_t I2S_GetInstance(I2S_Type *base)
 
     for (i = 0U; i < ARRAY_SIZE(s_I2sBaseAddrs); i++)
     {
-        if (MSDK_REG_SECURE_ADDR((uint32_t)base) == MSDK_REG_SECURE_ADDR(s_I2sBaseAddrs[i]))
+        if (MSDK_REG_NONSECURE_ADDR((uint32_t)base) == MSDK_REG_NONSECURE_ADDR(s_I2sBaseAddrs[i]))
         {
             return i;
         }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1472,7 +1472,7 @@ static uint32_t LTC_GetInstance(LTC_Type *base)
 
     for (i = 0; i < (uint32_t)FSL_FEATURE_SOC_LTC_COUNT; i++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_ltcBase[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_ltcBase[i]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             instance = i;
             break;

@@ -74,7 +74,7 @@ static uint32_t INPUTMUX_GetInstance(void *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_inputmuxBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_inputmuxBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_inputmuxBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

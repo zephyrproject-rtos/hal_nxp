@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_CSI_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+#define FSL_CSI_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
 /*! @} */
 
 #define CSI_REG_CR1(base)       (base)->CR1
@@ -590,6 +590,13 @@ status_t CSI_TransferStop(CSI_Type *base, csi_handle_t *handle);
  * This function could be called before @ref CSI_TransferStart or after @ref
  * CSI_TransferStart. If there is no room in queue to store the empty frame
  * buffer, this function returns error.
+ *
+ * @note This function and @ref CSI_TransferGetFullBuffer are safe to call
+ * from main-loop code, an RTOS task or a non-CSI ISR (for example, a
+ * display callback). Both APIs mask the CSI FB1/FB2 DMA-done sources in
+ * CR1 for the duration of the queue update and issue a Data Synchronization
+ * Barrier so the peripheral observes the masked state before the queue is
+ * touched.
  *
  * @param base CSI peripheral base address.
  * @param handle Pointer to the handle structure.

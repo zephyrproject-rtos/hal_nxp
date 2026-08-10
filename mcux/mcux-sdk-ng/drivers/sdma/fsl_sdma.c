@@ -93,7 +93,7 @@ static const clock_ip_name_t s_sdmaClockName[] = SDMA_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*! @brief Array to map SDMA instance number to IRQ number. */
-static const IRQn_Type s_sdmaIRQNumber[FSL_FEATURE_SOC_SDMA_COUNT] = SDMAARM_IRQS;
+static const IRQn_Type s_sdmaIRQNumber[] = SDMAARM_IRQS;
 
 /*! @brief Pointers to transfer handle for each SDMA channel. */
 static sdma_handle_t *s_SDMAHandle[FSL_FEATURE_SOC_SDMA_COUNT][FSL_FEATURE_SDMA_MODULE_CHANNEL];
@@ -123,7 +123,7 @@ static uint32_t SDMA_GetInstance(SDMAARM_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_sdmaBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_sdmaBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_sdmaBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -339,7 +339,7 @@ bool SDMA_IsPeripheralInSPBA(uint32_t addr)
     uint32_t spbaNum = FSL_FEATURE_SOC_SPBA_COUNT;
     uint32_t i       = 0;
     SPBA_Type *spbaBase;
-    SPBA_Type *spbaArray[FSL_FEATURE_SOC_SPBA_COUNT] = SPBA_BASE_PTRS;
+    SPBA_Type *spbaArray[] = SPBA_BASE_PTRS;
 
     for (i = 0; i < spbaNum; i++)
     {

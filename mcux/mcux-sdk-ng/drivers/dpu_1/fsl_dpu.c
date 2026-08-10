@@ -1223,7 +1223,7 @@ uint32_t DPU_GetInstance(DISPLAY_SEERIS_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < dpuArrayCount; instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_dpuBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_dpuBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

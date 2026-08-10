@@ -1604,8 +1604,11 @@ status_t SPC_SetActiveModeRegulatorsConfig(SPC_Type *base, const spc_active_mode
         return kStatus_SPC_Busy;
     }
 
-    base->ACTIVE_CFG =
-        ((base->ACTIVE_CFG) & ~(SPC_ACTIVE_CFG_BGMODE_MASK)) | SPC_ACTIVE_CFG_BGMODE(config->bandgapMode);
+    if (config->bandgapMode != kSPC_BandgapDisabled)
+    {
+        base->ACTIVE_CFG =
+            ((base->ACTIVE_CFG) & ~(SPC_ACTIVE_CFG_BGMODE_MASK)) | SPC_ACTIVE_CFG_BGMODE(config->bandgapMode);
+    }
 #if (defined(FSL_FEATURE_MCX_SPC_HAS_LPBUFF_EN_BIT) && FSL_FEATURE_MCX_SPC_HAS_LPBUFF_EN_BIT)
     SPC_EnableActiveModeCMPBandgapBuffer(base, config->lpBuff);
 #endif /* FSL_FEATURE_MCX_SPC_HAS_LPBUFF_EN_BIT */
@@ -1619,6 +1622,12 @@ status_t SPC_SetActiveModeRegulatorsConfig(SPC_Type *base, const spc_active_mode
 #endif /* FSL_FEATURE_MCX_SPC_HAS_DCDC */
 
     (void)SPC_SetActiveModeCoreLDORegulatorConfig(base, &config->CoreLDOOption);
+
+    if (config->bandgapMode == kSPC_BandgapDisabled)
+    {
+        base->ACTIVE_CFG =
+            ((base->ACTIVE_CFG) & ~(SPC_ACTIVE_CFG_BGMODE_MASK)) | SPC_ACTIVE_CFG_BGMODE(config->bandgapMode);
+    }
 
     return kStatus_Success;
 }
@@ -1699,7 +1708,10 @@ status_t SPC_SetLowPowerModeRegulatorsConfig(SPC_Type *base, const spc_lowpower_
         }
     }
 #endif /* FSL_FEATURE_MCX_SPC_HAS_DCDC */
-    base->LP_CFG = ((base->LP_CFG) & ~(SPC_LP_CFG_BGMODE_MASK)) | SPC_LP_CFG_BGMODE(config->bandgapMode);
+    if (config->bandgapMode != kSPC_BandgapDisabled)
+    {
+        base->LP_CFG = ((base->LP_CFG) & ~(SPC_LP_CFG_BGMODE_MASK)) | SPC_LP_CFG_BGMODE(config->bandgapMode);
+    }
 #if (defined(FSL_FEATURE_MCX_SPC_HAS_LPBUFF_EN_BIT) && FSL_FEATURE_MCX_SPC_HAS_LPBUFF_EN_BIT)
     SPC_EnableLowPowerModeCMPBandgapBuffer(base, config->lpBuff);
 #endif /* FSL_FEATURE_MCX_SPC_HAS_LPBUFF_EN_BIT */
@@ -1717,6 +1729,11 @@ status_t SPC_SetLowPowerModeRegulatorsConfig(SPC_Type *base, const spc_lowpower_
 #endif /* FSL_FEATURE_MCX_SPC_HAS_DCDC */
 
     (void)SPC_SetLowPowerModeCoreLDORegulatorConfig(base, &config->CoreLDOOption);
+
+    if (config->bandgapMode == kSPC_BandgapDisabled)
+    {
+        base->LP_CFG = ((base->LP_CFG) & ~(SPC_LP_CFG_BGMODE_MASK)) | SPC_LP_CFG_BGMODE(config->bandgapMode);
+    }
 
     return kStatus_Success;
 }

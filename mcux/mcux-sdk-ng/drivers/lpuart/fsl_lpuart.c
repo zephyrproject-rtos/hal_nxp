@@ -222,7 +222,7 @@ uint32_t LPUART_GetInstance(LPUART_Type *base)
      */
     for (instance = 0U; instance < ARRAY_SIZE(s_lpuartBases); instance++) /* GCOVR_EXCL_BR_LINE */
     {
-        if (MSDK_REG_SECURE_ADDR(s_lpuartBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_lpuartBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

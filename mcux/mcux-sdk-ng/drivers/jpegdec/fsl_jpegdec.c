@@ -58,7 +58,7 @@ static uint32_t JPEGDEC_GetInstance(JPEG_DECODER_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_jpegdecBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_jpegdecBases[instance]) == MSDK_REG_SECURE_ADDR(base->core))
+        if (MSDK_REG_NONSECURE_ADDR(s_jpegdecBases[instance]) == MSDK_REG_NONSECURE_ADDR(base->core))
         {
             break;
         }

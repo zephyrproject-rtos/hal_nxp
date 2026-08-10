@@ -891,7 +891,7 @@ uint32_t ENET_QOS_GetInstance(ENET_QOS_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_enetqosBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_enetqosBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_enetqosBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
@@ -4095,5 +4095,13 @@ void EMAC_0_DriverIRQHandler(void);
 void EMAC_0_DriverIRQHandler(void)
 {
     s_enetqosIsr(EMAC, s_ENETHandle[0]);
+}
+#endif
+
+#if defined(COMM__ENET_QOS)
+void COMM_ENET_QOS_DriverIRQHandler(void);
+void COMM_ENET_QOS_DriverIRQHandler(void)
+{
+    s_enetqosIsr(COMM__ENET_QOS, s_ENETHandle[0]);
 }
 #endif

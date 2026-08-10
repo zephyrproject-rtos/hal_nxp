@@ -75,7 +75,7 @@ static uint32_t CTIMER_GetInstance(CTIMER_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ctimerArrayCount; instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_ctimerBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_ctimerBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

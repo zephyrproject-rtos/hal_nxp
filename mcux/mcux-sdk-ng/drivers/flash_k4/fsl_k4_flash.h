@@ -132,7 +132,24 @@ typedef struct _flash_config
  */
 #if defined(CONFIG_FLASH_K4_ASYNC_MODE) && (CONFIG_FLASH_K4_ASYNC_MODE == 1)
 
-#include "fsl_os_abstraction.h"
+/*!
+ * @brief Lock callback type for async flash operations.
+ *
+ * Called by the driver to acquire a lock before accessing shared async resources.
+ * The implementation is provided by the application (e.g. OSA_MutexLock, DisableGlobalIRQ).
+ *
+ * @param userData Opaque pointer registered via FLASH_RegisterLockCallbacks().
+ */
+typedef void (*flash_lock_cb_t)(void *userData);
+
+/*!
+ * @brief Unlock callback type for async flash operations.
+ *
+ * Called by the driver to release the lock after accessing shared async resources.
+ *
+ * @param userData Opaque pointer registered via FLASH_RegisterLockCallbacks().
+ */
+typedef void (*flash_unlock_cb_t)(void *userData);
 
 /*! @brief Alignment for buffer allocations (must be power of 2). */
 #ifndef FLASH_BUFFER_ALIGNMENT
@@ -156,16 +173,6 @@ typedef enum _flash_async_op_type
     kFlashAsyncOp_Erase = 0U,                /*!< Erase operation */
     kFlashAsyncOp_Program = 1U,              /*!< Program phrase operation */
     kFlashAsyncOp_ProgramPage = 2U,          /*!< Program page operation */
-    kFlashAsyncOp_VerifyErasePhrase = 3U,    /*!< Verify erase phrase operation */
-    kFlashAsyncOp_VerifyErasePage = 4U,      /*!< Verify erase page operation */
-    kFlashAsyncOp_VerifyEraseSector = 5U,    /*!< Verify erase sector operation */
-    kFlashAsyncOp_VerifyEraseIFRPhrase = 6U, /*!< Verify erase IFR phrase operation */
-    kFlashAsyncOp_VerifyEraseIFRPage = 7U,   /*!< Verify erase IFR page operation */
-    kFlashAsyncOp_VerifyEraseIFRSector = 8U, /*!< Verify erase IFR sector operation */
-    kFlashAsyncOp_VerifyEraseAll = 9U,       /*!< Verify erase all operation */
-    kFlashAsyncOp_VerifyEraseBlock = 10U,     /*!< Verify erase block operation */
-    kFlashAsyncOp_ReadIntoMISR = 11U,         /*!< Read into MISR operation */
-    kFlashAsyncOp_ReadIFRIntoMISR = 12U,      /*!< Read IFR into MISR operation */
 } flash_async_op_type_t;
 
 /*!
@@ -190,7 +197,7 @@ typedef struct _flash_async_op
 #define FLASH_ASYNC_INVALID_BUFFER_OFFSET    (0xFFFFFFFFU)
 
 /*!
- * @brief Callback function type for getting LL idle duration.
+ * @brief Callback function type for getting idle duration.
  *
  * This callback is invoked by FLASH_Process() to determine if there is
  * sufficient idle time to execute a pending flash operation.
@@ -198,6 +205,14 @@ typedef struct _flash_async_op
  * @return Available idle duration in microseconds.
  */
 typedef uint32_t (*flash_idle_duration_cb_t)(void);
+
+/*!
+ * @brief Callback type for suspending/resuming before flash operations.
+ *
+ * @param suspend 1 to suspend, 0 to resume
+ * @return 0 on success, error code otherwise
+ */
+typedef uint32_t (*notify_imminent_flash_stall_cb_t)(uint32_t suspend);
 
 /*!
  * @brief Flash async operation status enumeration.
@@ -247,15 +262,17 @@ typedef struct _flash_async_context
     /* Custom circular queue */
     flash_op_queue_t opQueue;                                             /*!< Operation queue */
 
-    /* Mutex handle and storage */
-    osa_mutex_handle_t mutexHandle;                                       /*!< Mutex handle */
-    uint32_t           mutexBuffer[OSA_MUTEX_HANDLE_SIZE / sizeof(uint32_t)]; /*!< Mutex handle buffer */
+    /* Lock/unlock callbacks for thread-safe access (optional, NULL = no protection) */
+    flash_lock_cb_t   lockCb;       /*!< Callback to acquire the lock */
+    flash_unlock_cb_t unlockCb;     /*!< Callback to release the lock */
+    void             *lockUserData; /*!< Opaque pointer passed to lock/unlock callbacks */
 
     /* Circular buffer pool (replaces fixed buffer array) */
     flash_circular_buffer_pool_t bufferPool;
 
-    /* LL idle callback */
     flash_idle_duration_cb_t idleDurationCb;                           /*!< Callback for idle duration */
+
+    notify_imminent_flash_stall_cb_t notifyImminentFlashStallCb;                    /*!< Callback for suspend/resume */
 
     /* Flash configuration reference */
     flash_config_t *flashConfig;                                          /*!< Pointer to flash config */
@@ -322,7 +339,7 @@ status_t FLASH_Init(flash_config_t *config);
  * In synchronous mode, this function blocks until the erase completes.
  * In asynchronous mode, this function queues the erase operation and returns
  * immediately. The operation will be executed later by FLASH_Process() when
- * sufficient LL idle time is available.
+ * sufficient idle time is available.
  *
  * @param config Pointer to the flash driver configuration.
  * @param base FMU peripheral base address.
@@ -361,7 +378,7 @@ status_t FLASH_EraseAll(FMU_Type *base, uint32_t key);
  * In synchronous mode, this function blocks until programming completes.
  * In asynchronous mode, this function copies the source data to an internal
  * buffer, queues the operation, and returns immediately. The operation will
- * be executed later by FLASH_Process() when sufficient LL idle time is available.
+ * be executed later by FLASH_Process() when sufficient idle time is available.
  *
  * @param config Pointer to the flash driver configuration.
  * @param base FMU peripheral base address.
@@ -529,7 +546,7 @@ void flash_cache_speculation_control(bool isPreProcess, FMU_Type *base);
  *
  * This function should be called from the application's idle task or a low-priority
  * background task. It checks if there are pending operations in the queue and
- * executes them if sufficient LL idle time is available.
+ * executes them if sufficient idle time is available.
  *
  * The function processes at most one operation per call to avoid blocking the
  * idle task for too long.
@@ -542,7 +559,7 @@ void flash_cache_speculation_control(bool isPreProcess, FMU_Type *base);
 status_t FLASH_Process(void);
 
 /*!
- * @brief Register the LL idle duration callback.
+ * @brief Register the idle duration callback.
  *
  * This callback is invoked by FLASH_Process() to determine available idle time.
  * Must be registered before any async flash operations can be processed.
@@ -554,6 +571,41 @@ status_t FLASH_Process(void);
  * @retval #kStatus_FLASH_Async_NotInit Async context not initialized.
  */
 status_t FLASH_RegisterIdleDurationCB(flash_idle_duration_cb_t callback);
+
+/*!
+ * @brief Register a callback to notify of an imminent flash stall.
+ *
+ * This callback will be invoked before and after flash erase/program operations
+ * to notify and allow suspension of other activities before flash erase/program operations
+ *
+ * @param callback Function pointer to notify_imminent_flash_stall callback (NULL to unregister).
+ *
+ * @retval kStatus_FLASH_Success Callback registered successfully.
+ * @retval kStatus_FLASH_CommandFailure Async context not initialized.
+ */
+status_t FLASH_RegisterNotifyImminentFlashStall(notify_imminent_flash_stall_cb_t callback);
+
+/*!
+ * @brief Register lock/unlock callbacks for thread-safe async operations.
+ *
+ * This function is optional. If not called, no locking is performed and the
+ * driver assumes single-context usage. The application is responsible for
+ * creating and managing the underlying synchronization primitive.
+ *
+ * Example with OSA mutex:
+ * @code
+ *   static void MyLock(void *ud)   { OSA_MutexLock((osa_mutex_handle_t)ud, osaWaitForever_c); }
+ *   static void MyUnlock(void *ud) { OSA_MutexUnlock((osa_mutex_handle_t)ud); }
+ *   FLASH_RegisterLockCallbacks(MyLock, MyUnlock, myMutexHandle);
+ * @endcode
+ *
+ * @param lockCb   Function called to acquire the lock. May be NULL to disable locking.
+ * @param unlockCb Function called to release the lock. May be NULL to disable locking.
+ * @param userData Opaque pointer passed to both callbacks (e.g. mutex handle).
+ *
+ * @retval #kStatus_FLASH_Success Callbacks registered successfully.
+ */
+status_t FLASH_RegisterLockCallbacks(flash_lock_cb_t lockCb, flash_unlock_cb_t unlockCb, void *userData);
 
 /*!
  * @brief Flush pending operations to make room for a new operation.

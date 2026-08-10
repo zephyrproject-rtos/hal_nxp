@@ -49,7 +49,7 @@ static uint32_t OPAMP_GetInstance(OPAMP_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0UL; instance < ARRAY_SIZE(s_opampBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_opampBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(s_opampBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }

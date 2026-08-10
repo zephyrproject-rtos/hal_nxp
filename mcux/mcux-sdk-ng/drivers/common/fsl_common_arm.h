@@ -686,7 +686,7 @@ _Pragma("diag_suppress=Pm120")
 #define MSDK_REG_NONSECURE_ADDR(x) ((uintptr_t)(x) & ~(0x1UL << 28))
 #else
 #define MSDK_REG_SECURE_ADDR(x) (x)
-#define MSDK_REG_NONSECURE_ADDR(x) (x)
+#define MSDK_REG_NONSECURE_ADDR(x) ((uintptr_t)(x) & ~(0x1UL << 28))
 #endif
 
 /*!

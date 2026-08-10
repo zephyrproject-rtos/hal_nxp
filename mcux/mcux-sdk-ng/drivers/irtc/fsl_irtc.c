@@ -105,7 +105,7 @@ static int32_t IRTC_GetInstance(RTC_Type *base)
 
     for (instance = 0; instance < (int32_t)ARRAY_SIZE(kIrtcBases); ++instance)
     {
-        if (MSDK_REG_SECURE_ADDR(kIrtcBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_NONSECURE_ADDR(kIrtcBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
             break;
         }
