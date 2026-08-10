@@ -116,16 +116,17 @@ void SystemCoreClockUpdate(void);
 void SystemInitHook(void);
 
 /**
- * @brief Board function hook.
+ * @brief BOARD_EarlyInit function.
  *
- * This weak function allows to call specific initialization code during the
- * SystemInit() execution.This can be used when an application specific code needs
- * to be called as close to the reset entry as possible (for example PSRAM/Hyperram
- * init function call).
- * NOTE: No global r/w variables can be used in this hook function because the
- * initialization of these variables happens after this function.
+ * This weak function allows board to initialize MPU or memory at early stage before .data,
+ * .bss initialization.
+ * It minimizes the risk of speculative access to uninitialized memory allowed by default
+ * MPU attributes. Meanwhile it also make it possible to enable I/D caches to boost boot up
+ * speed.
+ * NOTE: No global/static data access is allowed in this function since they have not been
+ * initialized yet.
  */
-void BOARD_InitHook(void);
+void BOARD_EarlyInit(void);
 
 /**
  * @brief Override NVIC_SystemReset

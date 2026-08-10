@@ -1,5 +1,5 @@
 if (CONFIG_MCUX_COMPONENT_driver.clock)
-    mcux_component_version(2.6.1)
+    mcux_component_version(2.6.4)
 
     mcux_add_source(
         SOURCES fsl_clock.h

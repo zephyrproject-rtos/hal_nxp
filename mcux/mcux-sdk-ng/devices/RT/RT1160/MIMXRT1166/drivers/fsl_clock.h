@@ -40,7 +40,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief CLOCK driver version. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -2009,7 +2009,7 @@ static inline void CLOCK_SetRootClockDiv(clock_root_t root, uint32_t div)
 {
     assert(div);
     CCM->CLOCK_ROOT[root].CONTROL = (CCM->CLOCK_ROOT[root].CONTROL & ~CCM_CLOCK_ROOT_CONTROL_DIV_MASK) |
-                                    CCM_CLOCK_ROOT_CONTROL_DIV((uint32_t)div - 1UL);
+                                    CCM_CLOCK_ROOT_CONTROL_DIV((div > 0U) ? ((uint32_t)div - 1UL) : 0UL);
     __DSB();
     __ISB();
 #if __CORTEX_M == 4
@@ -2072,7 +2072,7 @@ static inline void CLOCK_SetRootClock(clock_root_t root, const clock_root_config
 {
     assert(config);
     CCM->CLOCK_ROOT[root].CONTROL = CCM_CLOCK_ROOT_CONTROL_MUX(config->mux) |
-                                    CCM_CLOCK_ROOT_CONTROL_DIV((uint32_t)config->div - 1UL) |
+                                    CCM_CLOCK_ROOT_CONTROL_DIV((config->div > 0U) ? ((uint32_t)config->div - 1UL) : 0UL) |
                                     (config->clockOff ? CCM_CLOCK_ROOT_CONTROL_OFF(config->clockOff) : 0UL);
     __DSB();
     __ISB();
@@ -3063,7 +3063,7 @@ static inline void CLOCK_ROOT_ConfigSetPoint(clock_root_t name,
     CCM->CLOCK_ROOT[name].SETPOINT[spIndex] =
         CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_GRADE(config->grade) |
         CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_MUX(config->mux) |
-        CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_DIV((uint32_t)config->div - 1UL) |
+        CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_DIV((config->div > 0U) ? ((uint32_t)config->div - 1UL) : 0UL) |
         CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_OFF((uint32_t)(config->clockOff ? 1U : 0U));
 }
 
@@ -3242,11 +3242,18 @@ static inline void CLOCK_LPCG_ControlByDomainMode(clock_lpcg_t name, uint8_t dom
  */
 static inline void CLOCK_SetClockOutput1(clock_output1_selection_t selection, uint32_t divider)
 {
-    clock_root_config_t rootCfg = {0};
+    /* divider is the actual clock divider (1..256); the CCM DIV field holds
+     * divider-1. Program MUX+DIV in one write. Using the 32-bit divider avoids
+     * the old truncation of 256 in the uint8_t clock_root_config_t.div field. */
+    assert((divider >= 1U) && (divider <= 256U));
 
-    rootCfg.mux = selection;
-    rootCfg.div = (uint8_t)(divider & 0xFFU);
-    CLOCK_SetRootClock(kCLOCK_Root_Cko1, &rootCfg);
+    CCM->CLOCK_ROOT[kCLOCK_Root_Cko1].CONTROL = CCM_CLOCK_ROOT_CONTROL_MUX((uint32_t)selection) |
+                                                CCM_CLOCK_ROOT_CONTROL_DIV(divider - 1UL);
+    __DSB();
+    __ISB();
+#if __CORTEX_M == 4
+    (void)CCM->CLOCK_ROOT[kCLOCK_Root_Cko1].CONTROL;
+#endif
 }
 
 /*!
@@ -3257,11 +3264,18 @@ static inline void CLOCK_SetClockOutput1(clock_output1_selection_t selection, ui
  */
 static inline void CLOCK_SetClockOutput2(clock_output2_selection_t selection, uint32_t divider)
 {
-    clock_root_config_t rootCfg = {0};
+    /* divider is the actual clock divider (1..256); the CCM DIV field holds
+     * divider-1. Program MUX+DIV in one write. Using the 32-bit divider avoids
+     * the old truncation of 256 in the uint8_t clock_root_config_t.div field. */
+    assert((divider >= 1U) && (divider <= 256U));
 
-    rootCfg.mux = selection;
-    rootCfg.div = (uint8_t)(divider & 0xFFU);
-    CLOCK_SetRootClock(kCLOCK_Root_Cko2, &rootCfg);
+    CCM->CLOCK_ROOT[kCLOCK_Root_Cko2].CONTROL = CCM_CLOCK_ROOT_CONTROL_MUX((uint32_t)selection) |
+                                                CCM_CLOCK_ROOT_CONTROL_DIV(divider - 1UL);
+    __DSB();
+    __ISB();
+#if __CORTEX_M == 4
+    (void)CCM->CLOCK_ROOT[kCLOCK_Root_Cko2].CONTROL;
+#endif
 }
 
 /*!
