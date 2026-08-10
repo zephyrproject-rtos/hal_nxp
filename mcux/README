@@ -235,6 +235,13 @@ Patch List:
    - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/1b298128359649cf257130a2a47abfcce874cf2f
    - This patch is in hal_nxp but is not in 26.06.00 release.
 
-Note:
-   - The CAAM driver should not be updated during hal_nxp updates, since the latest CAAM driver will cause runtime issues
-     on RT1160/RT1170 for Zephyr NET-related test cases.
+   - MCUX SDK 26.09.00-pvw1 sync special patches:
+      - hal_nxp: undefine PAGESIZE macro before naming fields
+         - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/2199f173d1b3cd31f3d97677479270314154fd55
+      - hal_nxp: fsl_sai: Remove stray #endif
+         - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/feb6948096a9b5680b2d1f10de3d7bdd872d0829
+      - mcux: sdk_ng: drivers: ecspi: fix stale conreg and configreg bits
+         - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/6dfad8efcea1369210896f561e2d73ad45c7489a
+      - mcux-sdk-ng: MIMX94398: remove exception source file for a55
+         - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/1fad84dd567809ba69cc519c7bc58bc6458d1654
+
