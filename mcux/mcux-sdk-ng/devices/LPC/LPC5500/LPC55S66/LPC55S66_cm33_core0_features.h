@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.1, 2025-12-01
-**     Build:               b260515
+**     Build:               b260717
 **
 **     Abstract:
 **         Chip specific module features.
@@ -188,6 +188,8 @@
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (0)
 /* @brief Has Justified Left Enable (bitfield CFG2[JLEFT]). */
 #define FSL_FEATURE_LPADC_HAS_CFG2_JLEFT (0)
+/* @brief Trigger Control Count. */
+#define FSL_FEATURE_LPADC_TCTRL_COUNT (16)
 /* @brief Has internal temperature sensor. */
 #define FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR (1)
 /* @brief Chip Rev 0A Temperature sensor parameter A (slope). */
@@ -370,6 +372,11 @@
 
 /* @brief number of channels. */
 #define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS (4)
+
+/* OSTIMER module features */
+
+/* @brief Has binary encoded value in counter register. */
+#define FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER (0)
 
 /* PINT module features */
 
