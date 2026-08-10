@@ -564,7 +564,7 @@ typedef enum _inputmux_connection_t
     kINPUTMUX_Clk16k0ToFreqmeasRef                 = 5U + (FREQMEAS_REF_REG << PMUX_SHIFT),  /*!< clk_16k[0] input is selected */
     kINPUTMUX_SlowClkToFreqmeasRef                 = 6U + (FREQMEAS_REF_REG << PMUX_SHIFT),  /*!< slow_clk input is selected */
     kINPUTMUX_FreqmeClkIn0ToFreqmeasRef            = 7U + (FREQMEAS_REF_REG << PMUX_SHIFT),  /*!< freqme_clk_in0 input is selected */
-    kINPUTMUX_FreqmeClkIn1IToFreqmeasRef           = 8U + (FREQMEAS_REF_REG << PMUX_SHIFT),  /*!< freqme_clk_in1 input is selected input is selected */
+    kINPUTMUX_FreqmeClkIn1ToFreqmeasRef            = 8U + (FREQMEAS_REF_REG << PMUX_SHIFT),  /*!< freqme_clk_in1 input is selected input is selected */
     kINPUTMUX_Aoi0Out0ToFreqmeasRef                = 9U + (FREQMEAS_REF_REG << PMUX_SHIFT),  /*!< aoi0_out0 input is selected */
     kINPUTMUX_Aoi0Out1ToFreqmeasRef                = 10U + (FREQMEAS_REF_REG << PMUX_SHIFT),  /*!< aoi0_out1 */
     kINPUTMUX_ScgFircClkTestToFreqmeasRef          = 17U + (FREQMEAS_REF_REG << PMUX_SHIFT),  /*!< scg_firc_clk_test */
@@ -588,7 +588,7 @@ typedef enum _inputmux_connection_t
     kINPUTMUX_Clk16k0ToFreqmeasTar                 = 5U + (FREQMEAS_TAR_REG << PMUX_SHIFT),  /*!< clk_16k[0] input is selected */
     kINPUTMUX_SlowClkToFreqmeasTar                 = 6U + (FREQMEAS_TAR_REG << PMUX_SHIFT),  /*!< slow_clk input is selected */
     kINPUTMUX_FreqmeClkIn0ToFreqmeasTar            = 7U + (FREQMEAS_TAR_REG << PMUX_SHIFT),  /*!< freqme_clk_in0 input is selected */
-    kINPUTMUX_FreqmeClkIn1IToFreqmeasTar           = 8U + (FREQMEAS_TAR_REG << PMUX_SHIFT),  /*!< freqme_clk_in1 input is selected input is selected */
+    kINPUTMUX_FreqmeClkIn1ToFreqmeasTar            = 8U + (FREQMEAS_TAR_REG << PMUX_SHIFT),  /*!< freqme_clk_in1 input is selected input is selected */
     kINPUTMUX_Aoi0Out0ToFreqmeasTar                = 9U + (FREQMEAS_TAR_REG << PMUX_SHIFT),  /*!< aoi0_out0 input is selected */
     kINPUTMUX_Aoi0Out1ToFreqmeasTar                = 10U + (FREQMEAS_TAR_REG << PMUX_SHIFT),  /*!< aoi0_out1 */
     kINPUTMUX_FirstFailClkInToFreqmeasTar          = 18U + (FREQMEAS_TAR_REG << PMUX_SHIFT),  /*!< first_fail_clk_in */

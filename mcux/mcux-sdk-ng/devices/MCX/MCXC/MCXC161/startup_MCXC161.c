@@ -1,7 +1,7 @@
 //*****************************************************************************
 // MCXC161 startup code
 //
-// Version : 040326
+// Version : 220526
 //*****************************************************************************
 //
 // Copyright 2016-2026 NXP
@@ -616,6 +616,29 @@ void Reset_Handler(void)
                     :
                     : "r"(__vector_table)
                     : "r0");
+
+    // Initialize SRAM ECC — bypassed when running from RAM (debugger pre-initializes ECC).
+#if !defined(BYPASS_ECC_RAM_INIT)
+    __asm volatile(
+        "MOV     R1, PC                 \n" /* R1 = current execution address */
+        "LDR     R2, =0x01000000        \n" /* threshold: flash is 0x00000000-0x00FFFFFF */
+        "CMP     R1, R2                 \n" /* PC vs 0x01000000 */
+        "BCS     ecc_sram_skip          \n" /* PC >= 0x01000000 -> RAM target -> skip ECC init */
+        "LDR     R0, =0x20000000        \n"
+        "LDR     R1, =0x20002000        \n"
+        "LDR     R2, =0x0               \n"
+        "MOV     R3, R2                 \n"
+        "MOV     R4, R2                 \n"
+        "MOV     R5, R2                 \n"
+        "ecc_sram_loop:                 \n"
+        "STMIA   R0!, {R2-R5}           \n"
+        "CMP     R0, R1                 \n"
+        "BCC     ecc_sram_loop          \n"
+        "ecc_sram_skip:                 \n"
+        :
+        :
+        : "r0", "r1", "r2", "r3", "r4", "r5");
+#endif
 
     // Call Reset_Handler_C
     __asm volatile ("LDR R0, =Reset_Handler_C \n"

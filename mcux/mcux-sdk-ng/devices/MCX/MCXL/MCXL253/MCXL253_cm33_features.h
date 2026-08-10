@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.1, 2026-05-02
-**     Build:               b260512
+**     Build:               b260623
 **
 **     Abstract:
 **         Chip specific module features.
@@ -233,10 +233,6 @@
 #define FSL_FEATURE_GPIO_HAS_PORT_INPUT_CONTROL (1)
 /* @brief Has GPIO interrupt/DMA request/trigger output selection. */
 #define FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT (1)
-
-/* AON__LPADC module features */
-
-/* No feature definitions */
 
 /* LPI2C module features */
 
@@ -587,6 +583,13 @@
 #define FSL_FEATURE_FLASH_PFLASH_PAGE_SIZE (128u)
 /* @brief Flash phrase size. */
 #define FSL_FEATURE_FLASH_PFLASH_PHRASE_SIZE (16u)
+
+/* FREQME module features */
+
+/* @brief FREQME instance support REF and TAR register. */
+#define FSL_FEATURE_FREQME_HAS_CLOCK_SOURCE_SELECT (0)
+/* @brief FREQME frequency calculation formula. 0: CTRL_R[RESULT] - 2; 1: CTRL_R[RESULT] + 1. */
+#define FSL_FEATURE_FREQME_RESULT_CALCULATION_MODE (0)
 
 /* LPSPI module features */
 

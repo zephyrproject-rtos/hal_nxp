@@ -112,35 +112,25 @@ static power_vdd_core_output_voltage_t Power_GetVddCoreForFreq(uint32_t targetFr
 {
     power_vdd_core_output_voltage_t voltage;
 
-    if (targetFreqHz == 10000000U)
+    if (targetFreqHz >= 10000000U)
     {
-        /* 10MHz requires 791.5mV */
-        voltage = kPower_VddCoreAon_791_5mV;
+        /* 10MHz requires 785mV */
+        voltage = kPower_VddCoreAon_785mV;
     }
-    else if (targetFreqHz == 5000000U)
+    else if (targetFreqHz >= 5000000U)
     {
-        /* 5MHz requires 763mV */
-        voltage = kPower_VddCoreAon_763mV;
+        /* 5MHz requires 760mV */
+        voltage = kPower_VddCoreAon_760mV;
     }
-    else if (targetFreqHz == 3000000U)
+    else if (targetFreqHz >= 1500000U)
     {
-        /* 3MHz requires 753.5mV */
-        voltage = kPower_VddCoreAon_753_5mV;
-    }
-    else if (targetFreqHz == 2500000U)
-    {
-        /* 2.5MHz requires 744mV */
-        voltage = kPower_VddCoreAon_744mV;
-    }
-    else if (targetFreqHz >= 750000U)
-    {
-        /* 0.75MHz requires 706mV */
-        voltage = kPower_VddCoreAon_706mV;
+        /* 3MHz, 2.5MHz, and 1.5MHz require 750mV */
+        voltage = kPower_VddCoreAon_750mV;
     }
     else
     {
-        /* 32kHz and below require 630mV */
-        voltage = kPower_VddCoreAon_630mV;
+        /* 0.75MHz/32kHz requires 700mV */
+        voltage = kPower_VddCoreAon_700mV;
     }
 
     return voltage;
@@ -226,20 +216,42 @@ static void Power_ConfigureStallForMode(power_low_power_mode_t mode, uint32_t fr
     }
     else if (mode == kPower_DeepPowerDown2)
     {
-        /* DPD2 mode: stall values depend on frequency */
-        if (freqHz == 2500000U)
+        if (ADVC_IsEnabled() == false)
         {
-            /* 2.5MHz with ADVC WA: short=1, mid=50, long=125 */
-            POWER_UPDATE_SMM_STALL(125U, 50U, 1U);
+            /* DPD2 mode: stall values depend on frequency */
+            if (freqHz == 2500000U)
+            {
+                /* 2.5MHz with ADVC WA: short=8, mid=200, long=500 */
+                POWER_UPDATE_SMM_STALL(500U, 200U, 8U);
+            }
+            else if ((freqHz == 750000U) || (freqHz == 32768U))
+            {
+                /* 0.75MHz without ADVC: short=2, mid=60, long=150 */
+                POWER_UPDATE_SMM_STALL(150U, 60U, 2U);
+            }
+            else
+            {
+                /* Avoid violation of MISRA C-2012 rule. */
+            }
         }
-        else if (freqHz == 750000U)
+        else
         {
-            /* 0.75MHz without ADVC: short=2, mid=60, long=150 */
-            POWER_UPDATE_SMM_STALL(150U, 60U, 2U);
-        }
-        else if (freqHz == 32768)
-        {
-            POWER_UPDATE_SMM_STALL(150U, 60U, 2U);
+            /* DPD2 mode: stall values depend on frequency */
+            if (freqHz == 2500000U)
+            {
+                /* 2.5MHz with ADVC WA: short=2, mid=50, long=125 */
+                POWER_UPDATE_SMM_STALL(125U, 50U, 2U);
+            }
+            else if (freqHz == 750000U)
+            {
+                /* 0.75MHz without ADVC: short=1, mid=15, long=38 */
+                POWER_UPDATE_SMM_STALL(38U, 15U, 1U);
+            }
+            else if (freqHz == 32768)
+            {
+                /* 32kHz without ADVC: short=2, mid=2, long=2. */
+                POWER_UPDATE_SMM_STALL(2U, 2U, 2U);
+            }
         }
     }
 }
@@ -481,14 +493,21 @@ static void Power_EnableDualDomainWakeupSources(power_wakeup_source_t mainWs, po
 static status_t Power_SetDpd2AdvcWorkaround(power_dpd2_config_t *config)
 {
     advc_result_t advcRet;
+    status_t status = kStatus_Success;
+    uint32_t targetFreq = Power_GetDpd2TargetFreq(config);
+
+
+    if (targetFreq == CLOCK_GetAonCoreSysClkFreq()){
+        /* Target frequency is same as current frequency, no need to switch clock or implement workaround. */
+        return status;
+    }
+
     bool clockAdvcControlEnabled = CLOCK_GetADVCControlState();
     /* Per platform requirement, DPD2+ADVC workaround must be executed on CM0P (AON core). */
     if (clockAdvcControlEnabled)
     {
         CLOCK_DisableADVCControl();
     }
-
-    uint32_t targetFreq = Power_GetDpd2TargetFreq(config);
 
     advcRet = ADVC_PreVoltageChangeRequest(targetFreq);
 
@@ -518,17 +537,17 @@ static status_t Power_SetDpd2AdvcWorkaround(power_dpd2_config_t *config)
     /* Disable Auto Calibration. */
     AON__CGU->CAL_CONFIG &= ~CGU_CAL_CONFIG_CAL_CLK_EN_MASK;
 
-    advcRet = ADVC_PostVoltageChangeRequest();
+    advcRet = ADVC_PostVoltageChangeRequestBlocking();
     if (advcRet != kADVC_Stat_Ok)
     {
-        return kStatus_Power_AdvcPostVoltageChangeFailed;
+        status = kStatus_Power_AdvcPostVoltageChangeFailed;
     }
 
     if (clockAdvcControlEnabled)
     {
         CLOCK_EnableADVCControl();
     }
-    return kStatus_Success;
+    return status;
 }
 #endif /* __CORTEX_M */
 
@@ -1096,7 +1115,7 @@ void Power_ClearTargetPowerMode(void)
 void Power_ClearLpPowerSettings(void)
 {
 #if __CORTEX_M == 33U
-    SMM_DisableMainCpuIso(AON__SMM);
+    AON__SMM->CNFG |= (SMM_CNFG_MAIN_ISO_DSBL_MASK);
     SMM_ClearAllLowPowerSequence(AON__SMM);
     SMM_ClearMainCpuWakeupSources(AON__SMM);
     CMC_SetClockMode(CMC, kCMC_GateNoneClock);
@@ -1104,10 +1123,11 @@ void Power_ClearLpPowerSettings(void)
     AON__SMM->STAT = SMM_STAT_DPD_SEQ_END_MASK | SMM_STAT_DPD_END_MASK;
     AON__SMM->PWDN_CONFIG &= ~(SMM_PWDN_CONFIG_BGR_PULSE_MODE_EN_MASK | SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK |
                                SMM_PWDN_CONFIG_SRAM_ISO_CTRL_MASK);
+    AON__SMM->CNFG &= ~(SMM_CNFG_MAIN_ISO_DSBL_MASK);
 #elif __CORTEX_M == 0U
     assert(g_Handle_Offset != POWER_HANDLE_OFFSET_NOT_INIT_VALUE);
+    AON__SMM->CNFG |= (SMM_CNFG_AON_ISO_DSBL_MASK);
     power_handle_t *sharedHandle = (power_handle_t *)(POWER_SHARED_RAM_BASE_ADDR + g_Handle_Offset);
-    SMM_DisableAonCpuIso(AON__SMM);
     SMM_ClearAllLowPowerSequence(AON__SMM);
     SMM_ClearAonCpuWakeupSources(AON__SMM);
     /* Guard: skip STAT write when CM33 ROM is running (state 01).
@@ -1127,6 +1147,7 @@ void Power_ClearLpPowerSettings(void)
         /* If current mode is deep power down1 mode, keep bandgap setting and VDD_CORE_MAIN SRC no changed. */
         AON__SMM->PWDN_CONFIG &= ~(SMM_PWDN_CONFIG_BGR_PULSE_MODE_EN_MASK | SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK);
     }
+    AON__SMM->CNFG &= ~(SMM_CNFG_AON_ISO_DSBL_MASK);
 #endif /* __CORTEX_M */
 }
 
@@ -1920,7 +1941,7 @@ status_t Power_EnterDeepPowerDown3(power_dpd3_config_t *config)
     SMM_EnableWakeupSourceToAonCpu(AON__SMM, sharedHandle->enabledWsInfo.aonWakeupSourceMask);
     PMU_UpdateFRO16KFreq(AON__PMU, config->fro16KOutputFreq);
     PMU_KeepFRO16KActiveInDpd3AndSD(AON__PMU, false);
-    Power_ConfigureStallForMode(kPower_ShutDown, (config->fro16KOutputFreq == kPMU_FRO16KOutput16KHz) ? 16000 : 8000);
+    Power_ConfigureStallForMode(kPower_DeepPowerDown3, (config->fro16KOutputFreq == kPMU_FRO16KOutput16KHz) ? 16000 : 8000);
 
     /*3. Configuration of SMM. */
     SMM_StartAonShutDownSequence(AON__SMM);

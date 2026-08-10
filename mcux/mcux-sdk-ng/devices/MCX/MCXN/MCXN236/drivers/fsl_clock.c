@@ -822,7 +822,7 @@ void CLOCK_AttachClk(clock_attach_id_t connection)
     uint32_t i;
     volatile uint32_t *pClkSel;
 
-    pClkSel = &(SYSCON->SYSTICKCLKSEL0);
+    pClkSel = (volatile uint32_t *)(void *)&(SYSCON->SYSTICKCLKSEL0);
 
     if (kNONE_to_NONE != connection)
     {
@@ -877,7 +877,7 @@ clock_attach_id_t CLOCK_GetClockAttachId(clock_attach_id_t attachId)
     uint32_t selector       = GET_ID_SELECTOR(tmp32);
     volatile uint32_t *pClkSel;
 
-    pClkSel = &(SYSCON->SYSTICKCLKSEL0);
+    pClkSel = (volatile uint32_t *)(void *)&(SYSCON->SYSTICKCLKSEL0);
 
     if (kNONE_to_NONE == attachId)
     {

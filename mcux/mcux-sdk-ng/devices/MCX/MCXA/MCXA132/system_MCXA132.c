@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MCXA1 User manual
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260603
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -19,7 +19,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -66,6 +66,31 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
 
 __attribute__ ((weak)) void SystemInit (void) {
 
+    // Initialize SRAM ECC - bypassed when running from RAM (debugger pre-initializes ECC).
+    // Detection: (PC & 0x24000000) == 0 means flash address space.
+    //   Flash:  0x00/0x08/0x10/0x18/0x80/0x90xxxxxx  -> bit29=0, bit26=0
+    //   SRAM X: 0x04/0x14xxxxxx                       -> bit26 (0x04000000) set
+    //   SRAM AB: 0x20/0x30xxxxxx                      -> bit29 (0x20000000) set
+#if !defined(BYPASS_ECC_RAM_INIT)
+    __asm volatile(
+        "MOV     R1, PC                 \n"
+        "TST     R1, #0x24000000        \n"
+        "BNE     ecc_sram_skip         \n"
+        "LDR     R0, =0x20000000        \n"
+        "LDR     R1, =0x20002000        \n"
+        "MOV     R2, #0                 \n"
+        "MOV     R3, #0                 \n"
+        "MOV     R4, #0                 \n"
+        "MOV     R5, #0                 \n"
+        "ecc_sram_loop:                \n"
+        "STMIA   R0!, {R2-R5}           \n"
+        "CMP     R0, R1                 \n"
+        "BCC     ecc_sram_loop         \n"
+        "ecc_sram_skip:                \n"
+        :
+        :
+        : "r0", "r1", "r2", "r3", "r4", "r5");
+#endif
   SCB->CPACR |= ((3UL << 0*2) | (3UL << 1*2));    /* set CP0, CP1 Full Access in Secure mode (enable PowerQuad) */
 #if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
   SCB_NS->CPACR |= ((3UL << 0*2) | (3UL << 1*2));    /* set CP0, CP1 Full Access in Normal mode (enable PowerQuad) */

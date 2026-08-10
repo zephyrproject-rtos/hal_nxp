@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260518
+**     Build:               b260527
 **
 **     Abstract:
 **         Chip specific module features.
@@ -264,6 +264,12 @@
 #define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELX (1)
 /* @brief Is affected by errata with ID 51989. */
 #define FSL_FEATURE_PWM_HAS_ERRATA_51989 (0)
+/* @brief If (e)FlexPWM MASK register has UPDATE_MASK bit field. */
+#define FSL_FEATURE_PWM_MASK_HAS_UPDATE_MASK_BITFIELD (1)
+/* @brief If (e)FlexPWM MCTRL2 register has STRETCH_CNT_PRSC bit field. */
+#define FSL_FEATURE_PWM_MCTRL2_HAS_STRETCH_CNT_PRSC_BITFIELD (1)
+/* @brief If (e)FlexPWM MCTRL2 register has WRPROT bit field. */
+#define FSL_FEATURE_PWM_MCTRL2_HAS_WRPROT_BITFIELD (1)
 
 /* FMU module features */
 
@@ -732,6 +738,14 @@
 #define FSL_FEATURE_SPC_HAS_VDD1P8_LVD (1)
 /* @brief Has no DCDC frequency control (register bits DCDC_CFG[FREQ_CNTRL_ON/FREQ_CNTRL]). */
 #define FSL_FEATURE_SPC_HAS_NO_DCDC_FREQ_CNTRL (1)
+/* @brief Has DCDC 2.5V output select (register bits ACTIVE_CFG/HP_CFG[DCDC_VOUT2P5_SEL]). */
+#define FSL_FEATURE_SPC_HAS_DCDC_VOUT2P5_SEL (1)
+/* @brief DCDC 2.5V output select is in the per-mode ACTIVE_CFG/HP_CFG registers (vs DCDC_CFG). */
+#define FSL_FEATURE_SPC_DCDC_VOUT2P5_SEL_IN_ACTIVE_CFG (1)
+/* @brief Has DCDC output voltage ramp control (register bits DCDC_CFG[RAMP_CNTRL_EN/RAMP_CNTRL]). */
+#define FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL (1)
+/* @brief Has DCDC low-power ramp control (register bit DCDC_CFG[RAMP_CNTRL_LP]). */
+#define FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL_LP (1)
 
 /* RTC module features */
 
@@ -876,6 +890,9 @@
 #define FSL_FEATURE_TRDC_HAS_DOMAIN_ERROR (1)
 /* @brief TRDC instance has TRDC_FLW_CTL. */
 #define FSL_FEATURE_TRDC_HAS_FLW (1)
+/* @brief TRDC DERRLOC.MBCINST uses flat one-bit-per-MBC-instance encoding (bit N = MBC[N]).
+ *        Other devices use 4-bits-per-MBC encoding (bit 4i+j = MBC[i] SLV[j]). */
+#define FSL_FEATURE_TRDC_DERRLOC_MBCINST_FLAT_ENCODING (1)
 
 /* TRNG module features */
 
