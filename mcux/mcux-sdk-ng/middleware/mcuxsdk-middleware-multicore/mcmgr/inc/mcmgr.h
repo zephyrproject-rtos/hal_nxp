@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2014-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2025 NXP
+ * Copyright 2016-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -180,16 +180,20 @@ extern "C" {
 /*!
  * @brief Initialize the multicore manager, early init.
  *
- * After calling this function, MCMGR_TriggerEvent() and/or MCMGR_Init() can be called.
+ * Compatibility stub — kept to avoid breaking existing call sites.
+ * The early-init logic is now performed inside MCMGR_Init().
  *
- * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_Error on failure.
+ * @return kStatus_MCMGR_Success always.
  */
 mcmgr_status_t MCMGR_EarlyInit(void);
 
 /*!
- * @brief Initialize the multicore manager
+ * @brief Initialize the multicore manager.
  *
- * After calling this function, all API can be used.
+ * Must be called before any other MCMGR API (except MCMGR_EarlyInit(),
+ * MCMGR_GetVersion(), MCMGR_GetCoreCount(), and MCMGR_GetCurrentCore()).
+ * Sets the internal initialized flag on success; other API functions return
+ * kStatus_MCMGR_NotReady until this call succeeds.
  *
  * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_Error on failure.
  */
@@ -208,7 +212,8 @@ mcmgr_status_t MCMGR_Init(void);
  * @param[in] mode Start mode, use kMCMGR_Start_Synchronous for synchronous mode (wait until the
  *            core is started), kMCMGR_Start_Asynchronous for asynchronous mode (do not wait).
  *
- * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_Error on failure.
+ * @return kStatus_MCMGR_Success on success, kStatus_MCMGR_Error on failure,
+ *         or kStatus_MCMGR_NotReady if MCMGR_Init() has not been called successfully.
  */
 mcmgr_status_t MCMGR_StartCore(mcmgr_core_t coreNum, void *bootAddress, uint32_t startupData, mcmgr_start_mode_t mode);
 
@@ -221,7 +226,8 @@ mcmgr_status_t MCMGR_StartCore(mcmgr_core_t coreNum, void *bootAddress, uint32_t
  * @param[in] coreNum Enum of the core from which to get statup data.
  * @param[out] startupData Data to read by this function.
  *
- * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_Error on failure.
+ * @return kStatus_MCMGR_Success on success, kStatus_MCMGR_Error on failure,
+ *         or kStatus_MCMGR_NotReady if MCMGR_Init() has not been called successfully.
  */
 mcmgr_status_t MCMGR_GetStartupData(mcmgr_core_t coreNum, uint32_t *startupData);
 
@@ -232,7 +238,8 @@ mcmgr_status_t MCMGR_GetStartupData(mcmgr_core_t coreNum, uint32_t *startupData)
  *
  * @param[in] coreNum Enum of core to be stopped.
  *
- * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_Error on failure.
+ * @return kStatus_MCMGR_Success on success, kStatus_MCMGR_Error on failure,
+ *         or kStatus_MCMGR_NotReady if MCMGR_Init() has not been called successfully.
  */
 mcmgr_status_t MCMGR_StopCore(mcmgr_core_t coreNum);
 
@@ -255,7 +262,8 @@ int32_t MCMGR_GetVersion(void);
  * @param[in,out] value Parameter for value of property.
  * @param[in,out] length Parameter for size of property value in bytes.
  *
- * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_Error on failure.
+ * @return kStatus_MCMGR_Success on success, kStatus_MCMGR_Error on failure,
+ *         or kStatus_MCMGR_NotReady if MCMGR_Init() has not been called successfully.
  */
 mcmgr_status_t MCMGR_GetCoreProperty(mcmgr_core_t coreNum,
                                      mcmgr_core_property_t property,
@@ -290,7 +298,8 @@ mcmgr_core_t MCMGR_GetCurrentCore(void);
  * @param[in] callback User callback.
  * @param[in] callbackData Data/context for user callback.
  *
- * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_Error on failure.
+ * @return kStatus_MCMGR_Success on success, kStatus_MCMGR_Error on failure,
+ *         or kStatus_MCMGR_NotReady if MCMGR_Init() has not been called successfully.
  */
 mcmgr_status_t MCMGR_RegisterEvent(mcmgr_event_type_t type, mcmgr_event_callback_t callback, void *callbackData);
 
@@ -304,7 +313,8 @@ mcmgr_status_t MCMGR_RegisterEvent(mcmgr_event_type_t type, mcmgr_event_callback
  * @param[in] type Type of the event.
  * @param[in] eventData Data to send to remote core.
  *
- * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_Error on failure.
+ * @return kStatus_MCMGR_Success on success, kStatus_MCMGR_Error on failure,
+ *         or kStatus_MCMGR_NotReady if MCMGR_Init() has not been called successfully.
  */
 mcmgr_status_t MCMGR_TriggerEvent(mcmgr_core_t coreNum, mcmgr_event_type_t type, uint16_t eventData);
 
@@ -318,7 +328,8 @@ mcmgr_status_t MCMGR_TriggerEvent(mcmgr_core_t coreNum, mcmgr_event_type_t type,
  * @param[in] type Type of the event.
  * @param[in] eventData Data to send to remote core.
  *
- * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_Error on failure.
+ * @return kStatus_MCMGR_Success on success, kStatus_MCMGR_Error on failure,
+ *         or kStatus_MCMGR_NotReady if MCMGR_Init() has not been called successfully.
  */
 mcmgr_status_t MCMGR_TriggerEventForce(mcmgr_core_t coreNum, mcmgr_event_type_t type, uint16_t eventData);
 
@@ -329,7 +340,8 @@ mcmgr_status_t MCMGR_TriggerEventForce(mcmgr_core_t coreNum, mcmgr_event_type_t 
  * The purpose is to make the interrupt service routine as short as possible, performing only really necessary steps
  * in the interrupt context and defer the processing outside the interrupt context.
  *
- * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_NotImplemented when not supported.
+ * @return kStatus_MCMGR_Success on success, kStatus_MCMGR_NotImplemented when not supported,
+ *         or kStatus_MCMGR_NotReady if MCMGR_Init() has not been called successfully.
  */
 mcmgr_status_t MCMGR_ProcessDeferredRxIsr(void);
 

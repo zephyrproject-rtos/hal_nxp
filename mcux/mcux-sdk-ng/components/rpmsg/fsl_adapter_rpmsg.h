@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, 2022-2023 NXP
+ * Copyright 2020, 2022-2023, 2026 NXP
  *
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -275,6 +275,17 @@ hal_rpmsg_status_t HAL_RpmsgEnterLowpower(hal_rpmsg_handle_t handle);
  */
 hal_rpmsg_status_t HAL_RpmsgExitLowpower(hal_rpmsg_handle_t handle);
 
+/*!
+ * @brief Function to check whether all outstanding TX buffers were consumed
+ * by the peer and returned to the local free buffer pool.
+ *
+ * This API can be called by both the master and remote side.
+ *
+ * @return 1 when all TX buffers are back in the local free pool,
+ *         0 otherwise.
+ *
+ */
+uint32_t HAL_RpmsgAllBufferConsumed(void);
 /*! @}*/
 
 #if defined(__cplusplus)

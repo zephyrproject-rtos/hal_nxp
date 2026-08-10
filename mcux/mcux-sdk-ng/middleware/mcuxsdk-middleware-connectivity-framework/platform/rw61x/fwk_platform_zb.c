@@ -1,5 +1,5 @@
 /*!
- * Copyright 2024 NXP
+ * Copyright 2024-2026 NXP
  * SPDX-License-Identifier: BSD-3-Clause
  *
  * \file fwk_platform_zb.c
@@ -24,7 +24,7 @@
 #include "RNG_Interface.h"
 #include "PDM.h"
 #include "FunctionLib.h"
-#endif // __ZEPHYR__
+#endif /* __ZEPHYR__ */
 
 /* -------------------------------------------------------------------------- */
 /*                               Private macros                               */
@@ -246,7 +246,6 @@ void PLATFORM_GetIeee802_15_4Addr(uint8_t *eui64_address)
 
     if (FLib_MemCmpToVal((const void *)eui64_address, 0xFFU, EUI_64_SZ) == TRUE)
     {
-
         if (PDM_bDoesDataExist(PDM_ID_ZPSMAC_EXTADDR, &len) == true)
         {
             assert(len == EUI_64_SZ);
@@ -255,11 +254,10 @@ void PLATFORM_GetIeee802_15_4Addr(uint8_t *eui64_address)
         else
         {
             PLATFORM_GenerateEui64Addr(eui64_address);
-
             (void)PDM_eSaveRecordData(PDM_ID_ZPSMAC_EXTADDR, eui64_address, EUI_64_SZ);
         }
     }
-#endif // __ZEPHYR__
+#endif /* __ZEPHYR__ */
 }
 
 /* -------------------------------------------------------------------------- */
@@ -376,5 +374,5 @@ static void PLATFORM_GenerateEui64Addr(uint8_t *eui64_address)
     /* Set 3 MSB from OUI */
     memcpy((void *)&eui64_address[EUI_64_SZ - MAC_ADDR_OUI_PART_SIZE], (const void *)gIeee802_15_4_ADDR_OUI_c,
            MAC_ADDR_OUI_PART_SIZE);
-#endif // __ZEPHYR__
+#endif /* __ZEPHYR__ */
 }

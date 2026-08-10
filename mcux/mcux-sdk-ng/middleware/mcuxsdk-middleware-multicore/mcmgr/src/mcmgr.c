@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2014-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2025 NXP
+ * Copyright 2016-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -10,6 +10,26 @@
 #include "mcmgr_internal_core_api.h"
 
 mcmgr_event_t MCMGR_eventTable[kMCMGR_EventTableLength] = {0};
+
+/* Flag indicating that MCMGR_Init() has completed (or is in progress).
+ * Set to true inside MCMGR_Init() BEFORE mcmgr_platform_init_internal()
+ * enables the MU RX IRQ, so re-entrant ISR dispatches during init see
+ * the flag set.  Rolled back to false on platform-init failure. */
+static volatile bool s_mcmgrInitialized = false;
+
+/* Guard macro: return kStatus_MCMGR_NotReady when called before MCMGR_Init()
+ * completes.  The flag s_mcmgrInitialized is set to true inside MCMGR_Init()
+ * BEFORE mcmgr_platform_init_internal() is called so that any re-entrant MU ISR
+ * dispatch that occurs while the MU RX IRQ is being enabled (e.g. on KW43 where
+ * the NBU peer is already alive) sees the flag set and is not silently dropped. */
+#define MCMGR_CHECK_INIT()                 \
+    do                                     \
+    {                                      \
+        if (!s_mcmgrInitialized)           \
+        {                                  \
+            return kStatus_MCMGR_NotReady; \
+        }                                  \
+    } while (false)
 
 mcmgr_status_t MCMGR_RegisterEvent(mcmgr_event_type_t type, mcmgr_event_callback_t callback, void *callbackData)
 {
@@ -29,11 +49,11 @@ mcmgr_status_t MCMGR_RegisterEvent(mcmgr_event_type_t type, mcmgr_event_callback
 
 static mcmgr_status_t MCMGR_TriggerEventCommon(mcmgr_core_t coreNum, mcmgr_event_type_t type, uint16_t eventData, bool forcedWrite)
 {
-    uint32_t remoteData;
     if (type >= kMCMGR_EventTableLength)
     {
         return kStatus_MCMGR_Error;
     }
+    MCMGR_CHECK_INIT();
 
     mcmgr_core_t currentCore = MCMGR_GetCurrentCore();
     /*
@@ -43,8 +63,7 @@ static mcmgr_status_t MCMGR_TriggerEventCommon(mcmgr_core_t coreNum, mcmgr_event
      */
     if ((uint32_t)currentCore < g_mcmgrSystem.coreCount) /* GCOVR_EXCL_BR_LINE */
     {
-        remoteData = (((uint32_t)type) << 16) | eventData;
-        return mcmgr_trigger_event_internal(coreNum, remoteData, forcedWrite);
+        return mcmgr_trigger_event_internal(coreNum, type, eventData, forcedWrite);
     }
     /*
      * $Line Coverage Justification$
@@ -149,38 +168,36 @@ mcmgr_status_t MCMGR_Init(void)
      */
     if ((uint32_t)currentCore < g_mcmgrSystem.coreCount) /* GCOVR_EXCL_BR_LINE */
     {
-        /* Register critical and generic event handlers */
-        /*
-         * $Branch Coverage Justification$
-         * MCMGR_RegisterEvent() params are always correct here.
-         */
-        if (kStatus_MCMGR_Success != MCMGR_RegisterEvent(kMCMGR_StartupDataEvent, MCMGR_StartupDataEventHandler,
-                                                         (void *)&s_mcmgrCoresContext[currentCore])) /* GCOVR_EXCL_BR_LINE */
+        /* Register the internal startup-data event handlers directly into the event
+         * table before the IRQ is enabled.  MCMGR_RegisterEvent() is intentionally
+         * unguarded and could be used here too, but direct table writes are used to
+         * make the ordering dependency on s_mcmgrInitialized explicit. */
+        MCMGR_eventTable[kMCMGR_StartupDataEvent].callback     = MCMGR_StartupDataEventHandler;
+        MCMGR_eventTable[kMCMGR_StartupDataEvent].callbackData = (void *)&s_mcmgrCoresContext[currentCore];
+
+        /* In this handler we need access to the whole s_mcmgrCoresContext structure
+         * so we can service requests from any core number `mcmgr_core_t`. */
+        MCMGR_eventTable[kMCMGR_FeedStartupDataEvent].callback     = MCMGR_FeedStartupDataEventHandler;
+        MCMGR_eventTable[kMCMGR_FeedStartupDataEvent].callbackData = (void *)s_mcmgrCoresContext;
+
+        /* Set the initialized flag BEFORE mcmgr_platform_init_internal() enables the
+         * MU RX IRQ.  On platforms such as KW43 the peer core is already alive and
+         * fires a re-entrant MU ISR the instant the IRQ is unmasked.  Any guarded
+         * public API function reached from that ISR dispatch (e.g. MCMGR_TriggerEvent
+         * in the internal startup-data reply handlers) must see the flag set, otherwise
+         * MCMGR_CHECK_INIT() returns NotReady and silently drops the event.
+         * Roll the flag back if platform init fails so external callers still see
+         * NotReady until a successful MCMGR_Init(). */
+        s_mcmgrInitialized = true;
+
+        mcmgr_status_t status = mcmgr_platform_init_internal(currentCore);
+
+        if (status != kStatus_MCMGR_Success)
         {
-            /*
-             * $Line Coverage Justification$
-             * Line never reached, MCMGR_RegisterEvent() params are always correct here.
-             */
-            return kStatus_MCMGR_Error; /* GCOVR_EXCL_LINE */
+            s_mcmgrInitialized = false;
         }
-        /*
-         * $Branch Coverage Justification$
-         * MCMGR_RegisterEvent() params are always correct here.
-         */
-        if (kStatus_MCMGR_Success !=
-            MCMGR_RegisterEvent(kMCMGR_FeedStartupDataEvent, MCMGR_FeedStartupDataEventHandler,
-                                (void *)s_mcmgrCoresContext)) /* GCOVR_EXCL_BR_LINE */
-                                /* In this handler we need access to whole s_mcmgrCoresContext structure
-                                 * so we can service requests from any core number `mcmgr_core_t`.
-                                 */
-        {
-            /*
-             * $Line Coverage Justification$
-             * Line never reached, MCMGR_RegisterEvent() params are always correct here.
-             */
-            return kStatus_MCMGR_Error; /* GCOVR_EXCL_LINE */
-        }
-        return mcmgr_platform_init_internal(currentCore);
+
+        return status;
     }
     /*
      * $Line Coverage Justification$
@@ -193,6 +210,8 @@ mcmgr_status_t MCMGR_Init(void)
 mcmgr_status_t MCMGR_StartCore(mcmgr_core_t coreNum, void *bootAddress, uint32_t startupData, mcmgr_start_mode_t mode)
 {
     mcmgr_status_t ret;
+
+    MCMGR_CHECK_INIT();
 
     if ((uint32_t)coreNum < g_mcmgrSystem.coreCount)
     {
@@ -227,7 +246,11 @@ mcmgr_status_t MCMGR_StartCore(mcmgr_core_t coreNum, void *bootAddress, uint32_t
 
 mcmgr_status_t MCMGR_GetStartupData(mcmgr_core_t coreNum, uint32_t *startupData)
 {
-    mcmgr_core_t currentCore = MCMGR_GetCurrentCore();
+    mcmgr_core_t currentCore;
+
+    MCMGR_CHECK_INIT();
+
+    currentCore = MCMGR_GetCurrentCore();
 
     /*
      * $Branch Coverage Justification$
@@ -265,6 +288,8 @@ mcmgr_status_t MCMGR_GetStartupData(mcmgr_core_t coreNum, uint32_t *startupData)
 
 mcmgr_status_t MCMGR_StopCore(mcmgr_core_t coreNum)
 {
+    MCMGR_CHECK_INIT();
+
     if ((uint32_t)coreNum < g_mcmgrSystem.coreCount)
     {
         return mcmgr_stop_core_internal(coreNum);
@@ -282,6 +307,8 @@ mcmgr_status_t MCMGR_GetCoreProperty(mcmgr_core_t coreNum,
                                      void *value,
                                      uint32_t *length)
 {
+    MCMGR_CHECK_INIT();
+
     if ((uint32_t)coreNum < g_mcmgrSystem.coreCount)
     {
         return mcmgr_get_core_property_internal(coreNum, property, value, length);
@@ -301,6 +328,8 @@ mcmgr_core_t MCMGR_GetCurrentCore(void)
 
 mcmgr_status_t MCMGR_ProcessDeferredRxIsr(void)
 {
+    MCMGR_CHECK_INIT();
+
 #if (defined(MCMGR_DEFERRED_CALLBACK_ALLOWED) && (MCMGR_DEFERRED_CALLBACK_ALLOWED == 1U))
     return mcmgr_process_deferred_rx_isr_internal();
 #else

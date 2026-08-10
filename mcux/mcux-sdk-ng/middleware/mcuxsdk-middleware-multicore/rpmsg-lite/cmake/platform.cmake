@@ -284,6 +284,20 @@ if (CONFIG_MCUX_COMPONENT_middleware.multicore.rpmsg-lite.imx952_m7)
     )
 endif()
 
+if (CONFIG_MCUX_COMPONENT_middleware.multicore.rpmsg-lite.imx937_m7)
+    mcux_add_include(
+        INCLUDES ../lib/include/platform/imx937_m7/
+    )
+
+    mcux_add_source(
+        SOURCES ../lib/include/platform/imx937_m7/rpmsg_platform.h
+    )
+
+    mcux_add_source(
+        SOURCES ../lib/rpmsg_lite/porting/platform/imx937_m7/rpmsg_platform.c
+    )
+endif()
+
 if (CONFIG_MCUX_COMPONENT_middleware.multicore.rpmsg-lite.imx95_m33)
     mcux_add_include(
         INCLUDES ../lib/include/platform/imx95_m33/
@@ -393,21 +407,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.multicore.rpmsg-lite.k32l3a6)
 
     mcux_add_source(
         SOURCES ../lib/rpmsg_lite/porting/platform/k32l3a6/rpmsg_platform.c
-    )
-endif()
-
-if (CONFIG_MCUX_COMPONENT_middleware.multicore.rpmsg-lite.k32w1)
-    mcux_add_include(
-        INCLUDES ../lib/include/platform/k32w1/
-    )
-
-    mcux_add_source(
-        SOURCES ../lib/include/platform/k32w1/rpmsg_platform.h
-    )
-
-    mcux_add_source(
-        SOURCES ../lib/rpmsg_lite/porting/platform/k32w1/rpmsg_platform.c
-            ../lib/rpmsg_lite/porting/platform/k32w1/rpmsg_platform_ext.c
     )
 endif()
 
@@ -552,5 +551,19 @@ if (CONFIG_MCUX_COMPONENT_middleware.multicore.rpmsg-lite.mcxl20)
 
     mcux_add_source(
         SOURCES ../lib/rpmsg_lite/porting/platform/mcxl20/rpmsg_platform.c
+    )
+endif()
+
+if (CONFIG_MCUX_COMPONENT_middleware.multicore.rpmsg-lite.mcxe32b)
+    mcux_add_include(
+        INCLUDES ../lib/include/platform/mcxe32b/
+    )
+
+    mcux_add_source(
+        SOURCES ../lib/include/platform/mcxe32b/rpmsg_platform.h
+    )
+
+    mcux_add_source(
+        SOURCES ../lib/rpmsg_lite/porting/platform/mcxe32b/rpmsg_platform.c
     )
 endif()

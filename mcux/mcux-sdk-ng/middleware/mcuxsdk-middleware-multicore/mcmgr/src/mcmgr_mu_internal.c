@@ -58,7 +58,8 @@ __attribute__((weak)) void MU_GenInt0FlagISR(MU_Type *base, mcmgr_core_t coreNum
      defined(MCXL144_cm0plus_SERIES) || defined(MCXL144_cm33_SERIES) ||                                     \
      defined(MCXL143_cm0plus_SERIES) || defined(MCXL143_cm33_SERIES) ||                                     \
      defined(MCXL142_cm0plus_SERIES) || defined(MCXL142_cm33_SERIES) ||                                     \
-     defined(MCXW70AC_SERIES))
+     defined(MCXW70AC_SERIES) ||                                                                    \
+     defined(MCXE32B_cm7_core0_SERIES) || defined(MCXE32B_cm7_core1_SERIES))
 
 /* MU ISR table */
 static void (*const MU_interrupts[MU_ISR_COUNT])(MU_Type *base, mcmgr_core_t coreNum) = {
@@ -117,7 +118,8 @@ static void mu_isr(MU_Type *base, mcmgr_core_t coreNum)
      defined(MCXL144_cm0plus_SERIES) || defined(MCXL144_cm33_SERIES) ||                                     \
      defined(MCXL143_cm0plus_SERIES) || defined(MCXL143_cm33_SERIES) ||                                     \
      defined(MCXL142_cm0plus_SERIES) || defined(MCXL142_cm33_SERIES) ||                                     \
-     defined(MCXW70AC_SERIES))
+     defined(MCXW70AC_SERIES) ||                                                                    \
+     defined(MCXE32B_cm7_core0_SERIES) || defined(MCXE32B_cm7_core1_SERIES))
 
     uint32_t tcr_tie_idx = 0;
     for (i = MU_ISR_FLAG_BASE; i < (MU_ISR_FLAG_BASE + MU_TR_COUNT); i++)
@@ -284,7 +286,53 @@ int MU_B_INT_IRQHandler(void)
     mu_isr(MUB, kMCMGR_Core0);
     return 0;
 }
+#elif (defined(MCXE32B_cm7_core0_SERIES))
+/* Primary core (M7_0, kMCMGR_Core0), MU2_A side; receives from the secondary
+ * core (kMCMGR_Core1). MU2_A has dedicated NVIC lines on MCXE32B (TX, RX and
+ * general purpose); all three vectors dispatch into the shared MU ISR router. */
+int MU2_A_TX_IRQHandler(void)
+{
+    mu_isr(MU2_A, kMCMGR_Core1);
+    /* Cortex-M7: DSB prevents stale interrupt flag re-entry after ISR exit */
+    __DSB();
+    return 0;
+}
+int MU2_A_RX_IRQHandler(void)
+{
+    mu_isr(MU2_A, kMCMGR_Core1);
+    __DSB();
+    return 0;
+}
+int MU2_A_IRQHandler(void)
+{
+    mu_isr(MU2_A, kMCMGR_Core1);
+    __DSB();
+    return 0;
+}
+#elif (defined(MCXE32B_cm7_core1_SERIES))
+/* Secondary core (M7_1, kMCMGR_Core1), MU2_B side; receives from the primary
+ * core (kMCMGR_Core0). MU2_B has dedicated NVIC lines on MCXE32B (TX, RX and
+ * general purpose); all three vectors dispatch into the shared MU ISR router. */
+int MU2_B_TX_IRQHandler(void)
+{
+    mu_isr(MU2_B, kMCMGR_Core0);
+    __DSB();
+    return 0;
+}
+int MU2_B_RX_IRQHandler(void)
+{
+    mu_isr(MU2_B, kMCMGR_Core0);
+    __DSB();
+    return 0;
+}
+int MU2_B_IRQHandler(void)
+{
+    mu_isr(MU2_B, kMCMGR_Core0);
+    __DSB();
+    return 0;
+}
 #elif defined(FSL_FEATURE_MU_SIDE_A)
+
 int MUA_IRQHandler(void)
 {
     mu_isr(MUA, kMCMGR_Core1);

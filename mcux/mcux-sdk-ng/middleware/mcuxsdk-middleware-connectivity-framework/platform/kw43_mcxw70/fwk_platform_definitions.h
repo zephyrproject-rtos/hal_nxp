@@ -147,11 +147,6 @@ extern uint32_t PROD_DATA_BASE_ADDR[];
 #define FWK_TSRMR1_BASE   (0x4019A000U)
 #define FWK_TSTMR_NB_INST 2U
 
-typedef enum _fwk_tstmr_clk_sel
-{
-    FwkTSTMR0_ClkSel_1MHz = 5U, /*!< TSTMR 1MHz configuration for gPlatformTstmr0HasClkControl_d */
-} fwk_tstmr_clk_sel_t;
-
 /*Lptmr timer use (kLPTMR_PrescalerClock_0) 32k clock*/
 #ifndef PLATFORM_TM_CLK_SELECT
 #define PLATFORM_TM_CLK_SELECT 0U

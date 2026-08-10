@@ -17,8 +17,8 @@
 #endif
 
 /* The highest interrupt priority that can be used by any interrupt service
- * routine that makes calls to interrupt safe FreeRTOS API functions 
- * (higher priorities are lower numeric values) */ 
+ * routine that makes calls to interrupt safe FreeRTOS API functions
+ * (higher priorities are lower numeric values) */
 #if defined(configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY)
 #if MU_ISR_PRIORITY < configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY
 #error "MU_ISR_PRIORITY value must be greater than or equal to configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY"
@@ -43,7 +43,7 @@
 #define mcmgr_mu_channel_flag    MU_RX_ISR_FLAG_Mask(MCMGR_MU_CHANNEL)
 
 /* SYSCON authorize write */
-#define SYSCON_AUTH_PATTERN 0xaaaaaaaa
+#define SYSCON_AUTH_PATTERN 0xAAAAAAAAUL
 
 /* SECCON unlock code */
 #define SECCON_UNLOCK_PATTERN 0xA
@@ -61,12 +61,9 @@ const mcmgr_system_info_t g_mcmgrSystem = {
 
 static mcmgr_status_t mcmgr_platform_init_internal_early(mcmgr_core_t coreNum)
 {
-    /* This function is intended to be called as close to the reset entry as possible,
-       (within the startup sequence in SystemInitHook) to allow CoreUp event triggering.
-       Avoid using uninitialized data here. */
 
     uint32_t flags;
-    mcmgr_core_t target_core;
+    mcmgr_core_t target_core = kMCMGR_Core0;
     __attribute__((unused)) uint32_t data;
 
 /* MUA clk enable */
@@ -80,10 +77,9 @@ static mcmgr_status_t mcmgr_platform_init_internal_early(mcmgr_core_t coreNum)
     }
     flags = MU_GetStatusFlags(MU0_MUA);
     MU_ClearStatusFlags(MU0_MUA, flags);
-    /* Do not perform MU reset to avoid issues when debugging both CM33 and CM7 */
-#endif
+    /* Do not perform MU reset to avoid issues when debugging both cores */
 /* MUB clk enable */
-#if defined(MCMGR_BUILD_FOR_CORE_1)
+#elif defined(MCMGR_BUILD_FOR_CORE_1)
     target_core = kMCMGR_Core0;
     MU_Init(MU0_MUB);
     for (uint32_t idx = 0U; idx < MU_RR_COUNT; idx++)
@@ -92,45 +88,44 @@ static mcmgr_status_t mcmgr_platform_init_internal_early(mcmgr_core_t coreNum)
     }
     flags = MU_GetStatusFlags(MU0_MUB);
     MU_ClearStatusFlags(MU0_MUB, flags);
+#else
+    return kStatus_MCMGR_Error;
+#endif
+
+    /* Enable the MU RX interrupt and NVIC BEFORE triggering the (blocking) CoreUp
+       event below. On KW43 the CoreUp event uses the blocking MU_SendMsg, which spins
+       until the peer reads MU_RR. Both cores run MCMGR_Init() at roughly the same time
+       during multicore bring-up, so if RX interrupts were enabled only after this
+       blocking send (as before), each core would spin forever waiting on a peer that
+       cannot service the receive - an inter-core deadlock that manifests as a test
+       TIMEOUT. Enabling RX here lets the ISR drain the peer's CoreUp message while we
+       block, so both sends complete and neither core hangs. */
+#if defined(MCMGR_BUILD_FOR_CORE_0)
+    MU_EnableInterrupts(MU0_MUA, (uint32_t)mcmgr_mu_channel_flag);
+#if (defined(FSL_FEATURE_MU_HAS_RESET_ASSERT_INT) && FSL_FEATURE_MU_HAS_RESET_ASSERT_INT)
+    MU_EnableInterrupts(MU0_MUA, (uint32_t)kMU_ResetAssertInterruptEnable);
+#endif
+    NVIC_SetPriority(MU0_IRQn, MU_ISR_PRIORITY);
+    NVIC_EnableIRQ(MU0_IRQn);
+#elif defined(MCMGR_BUILD_FOR_CORE_1)
+    MU_EnableInterrupts(MU0_MUB, (uint32_t)mcmgr_mu_channel_flag);
+#if (defined(FSL_FEATURE_MU_HAS_RESET_ASSERT_INT) && FSL_FEATURE_MU_HAS_RESET_ASSERT_INT)
+    MU_EnableInterrupts(MU0_MUB, (uint32_t)kMU_ResetAssertInterruptEnable);
+#endif
+    NVIC_SetPriority(MU0_IRQn, MU_ISR_PRIORITY);
+    NVIC_EnableIRQ(MU0_IRQn);
 #endif
 
     /* Trigger core up event here, core is starting! */
-    return MCMGR_TriggerEvent(target_core, kMCMGR_RemoteCoreUpEvent, 0);
+    return mcmgr_trigger_event_internal(target_core, kMCMGR_RemoteCoreUpEvent, 0U, false);
 }
 
 mcmgr_status_t mcmgr_platform_init_internal(mcmgr_core_t coreNum)
 {
-    mcmgr_status_t status = mcmgr_platform_init_internal_early(coreNum);
-    if (status != kStatus_MCMGR_Success)
-    {
-        return status;
-    }
-
-#if defined(MCMGR_BUILD_FOR_CORE_0)
-    MU_EnableInterrupts(MU0_MUA, (uint32_t)mcmgr_mu_channel_flag);
-
-#if (defined(FSL_FEATURE_MU_HAS_RESET_ASSERT_INT) && FSL_FEATURE_MU_HAS_RESET_ASSERT_INT)
-    MU_EnableInterrupts(MU0_MUA, (uint32_t)kMU_ResetAssertInterruptEnable);
-#endif
-
-    NVIC_SetPriority(MU0_IRQn, MU_ISR_PRIORITY);
-
-    NVIC_EnableIRQ(MU0_IRQn);
-
-#elif defined(MCMGR_BUILD_FOR_CORE_1)
-    MU_EnableInterrupts(MU0_MUB, (uint32_t)mcmgr_mu_channel_flag);
-
-#if (defined(FSL_FEATURE_MU_HAS_RESET_ASSERT_INT) && FSL_FEATURE_MU_HAS_RESET_ASSERT_INT)
-    MU_EnableInterrupts(MU0_MUB, (uint32_t)kMU_ResetAssertInterruptEnable);
-#endif
-
-    NVIC_SetPriority(MU0_IRQn, MU_ISR_PRIORITY);
-
-    NVIC_EnableIRQ(MU0_IRQn);
-
-#endif
-
-    return kStatus_MCMGR_Success;
+    /* All MU init, RX interrupt/NVIC enable, and the CoreUp trigger are performed in
+       mcmgr_platform_init_internal_early(). The RX path is brought up before the blocking
+       CoreUp send to avoid an inter-core MU deadlock during simultaneous bring-up. */
+    return mcmgr_platform_init_internal_early(coreNum);
 }
 
 mcmgr_status_t mcmgr_start_core_internal(mcmgr_core_t coreNum, void *bootAddress)
@@ -187,10 +182,12 @@ mcmgr_core_t mcmgr_get_current_core_internal(void)
 #endif
 }
 
-mcmgr_status_t mcmgr_trigger_event_internal(mcmgr_core_t coreNum, uint32_t remoteData, bool forcedWrite)
+mcmgr_status_t mcmgr_trigger_event_internal(mcmgr_core_t coreNum, mcmgr_event_type_t type, uint16_t eventData, bool forcedWrite)
 {
     /* Can be unused for two core platform. ifdefs are selecting core to trigger. */
     (void)coreNum;
+
+    uint32_t remoteData = (((uint32_t)type) << 16U) | (uint32_t)eventData;
 
     /* When forcedWrite is false, execute the blocking call, i.e. wait until previously
        sent data is processed. Otherwise, run the non-blocking version of the MU send function. */
@@ -198,9 +195,9 @@ mcmgr_status_t mcmgr_trigger_event_internal(mcmgr_core_t coreNum, uint32_t remot
     {
         /* This is a blocking call */
 #if defined(MCMGR_BUILD_FOR_CORE_0)
-        MU_SendMsg(MU0_MUA, MCMGR_MU_CHANNEL, remoteData);
+        (void)MU_SendMsg(MU0_MUA, MCMGR_MU_CHANNEL, remoteData);
 #elif defined(MCMGR_BUILD_FOR_CORE_1)
-        MU_SendMsg(MU0_MUB, MCMGR_MU_CHANNEL, remoteData);
+        (void)MU_SendMsg(MU0_MUB, MCMGR_MU_CHANNEL, remoteData);
 #endif
     }
     else
@@ -253,7 +250,7 @@ void mcmgr_mu_channel_handler(MU_Type *base, mcmgr_core_t coreNum)
 /* This overrides the weak DefaultISR implementation from startup file */
 void DefaultISR(void)
 {
-    mcmgr_core_t target_core;
+    mcmgr_core_t target_core = kMCMGR_Core0;
     uint32_t exceptionNumber = __get_IPSR();
 
     /* Select what core to trigger in case of exception */

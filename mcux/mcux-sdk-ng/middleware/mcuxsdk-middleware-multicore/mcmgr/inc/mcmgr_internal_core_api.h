@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2014-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2025 NXP
+ * Copyright 2016-2019, 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -143,15 +143,18 @@ mcmgr_status_t mcmgr_get_core_property_internal(mcmgr_core_t coreNum,
 /*!
  * @brief Internal platform-specific function for remote core notification.
  *
- * This function notifies other core about occured event.
+ * This function packs type and eventData into the platform wire format and
+ * notifies the specified remote core.
  *
- * @param[in] remoteData 32-bit data with event code and event data encoded.
- * @param[in] forcedWrite Set to TRUE when the check for previous sent data consuption is required,
- *            set to FALSE othervise.
+ * @param[in] coreNum    Target core to notify.
+ * @param[in] type       Event type.
+ * @param[in] eventData  16-bit event payload.
+ * @param[in] forcedWrite Set to true to use non-blocking send (no wait for TX slot),
+ *            set to false to block until the previous message has been consumed.
  *
  * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_Error on failure.
  */
-mcmgr_status_t mcmgr_trigger_event_internal(mcmgr_core_t coreNum, uint32_t remoteData, bool forcedWrite);
+mcmgr_status_t mcmgr_trigger_event_internal(mcmgr_core_t coreNum, mcmgr_event_type_t type, uint16_t eventData, bool forcedWrite);
 
 /*!
  * @brief Internal platform-specific function to get current CPU core.
