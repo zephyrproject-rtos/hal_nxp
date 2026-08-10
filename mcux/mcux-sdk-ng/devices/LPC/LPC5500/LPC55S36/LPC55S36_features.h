@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 3.0, 2025-11-18
-**     Build:               b260515
+**     Build:               b260717
 **
 **     Abstract:
 **         Chip specific module features.
@@ -67,6 +67,8 @@
     #define FSL_FEATURE_SOC_GINT_COUNT (2)
     /* @brief GPIO availability on the SoC. */
     #define FSL_FEATURE_SOC_GPIO_COUNT (2)
+    /* @brief HSCMP availability on the SoC. */
+    #define FSL_FEATURE_SOC_HSCMP_COUNT (3)
     /* @brief I2C availability on the SoC. */
     #define FSL_FEATURE_SOC_I2C_COUNT (8)
     /* @brief I3C availability on the SoC. */
@@ -81,8 +83,6 @@
     #define FSL_FEATURE_SOC_ITRC_COUNT (1)
     /* @brief LPADC availability on the SoC. */
     #define FSL_FEATURE_SOC_LPADC_COUNT (2)
-    /* @brief LPCMP availability on the SoC. */
-    #define FSL_FEATURE_SOC_LPCMP_COUNT (3)
     /* @brief LPDAC availability on the SoC. */
     #define FSL_FEATURE_SOC_LPDAC_COUNT (3)
     /* @brief MAILBOX availability on the SoC. */
@@ -162,6 +162,8 @@
     #define FSL_FEATURE_SOC_GINT_COUNT (2)
     /* @brief GPIO availability on the SoC. */
     #define FSL_FEATURE_SOC_GPIO_COUNT (2)
+    /* @brief HSCMP availability on the SoC. */
+    #define FSL_FEATURE_SOC_HSCMP_COUNT (3)
     /* @brief I2C availability on the SoC. */
     #define FSL_FEATURE_SOC_I2C_COUNT (8)
     /* @brief I3C availability on the SoC. */
@@ -176,8 +178,6 @@
     #define FSL_FEATURE_SOC_ITRC_COUNT (1)
     /* @brief LPADC availability on the SoC. */
     #define FSL_FEATURE_SOC_LPADC_COUNT (2)
-    /* @brief LPCMP availability on the SoC. */
-    #define FSL_FEATURE_SOC_LPCMP_COUNT (3)
     /* @brief LPDAC availability on the SoC. */
     #define FSL_FEATURE_SOC_LPDAC_COUNT (3)
     /* @brief MAILBOX availability on the SoC. */
@@ -298,6 +298,8 @@
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (0)
 /* @brief Has Justified Left Enable (bitfield CFG2[JLEFT]). */
 #define FSL_FEATURE_LPADC_HAS_CFG2_JLEFT (0)
+/* @brief Trigger Control Count. */
+#define FSL_FEATURE_LPADC_TCTRL_COUNT (4)
 /* @brief Has internal temperature sensor. */
 #define FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR (1)
 /* @brief Temperature sensor parameter A (slope). */
@@ -398,6 +400,14 @@
 #define FSL_FEATURE_LPDAC_HAS_INTERNAL_REFERENCE_CURRENT (1)
 /* @brief Support Period trigger mode DAC (bitfield IER[PTGCOCO_IE]). */
 #define FSL_FEATURE_LPDAC_HAS_PERIODIC_TRIGGER_MODE (1)
+/* @brief Optional Enable(bitfield GCR[DAC_OPTION_EN]). */
+#define FSL_FEATURE_LPDAC_HAS_GCR_DAC_OPTION_EN (0)
+/* @brief Has no Internal PTAT Current Reference Select (bitfield GCR[IREF_PTAT_EXT_SEL]). */
+#define FSL_FEATURE_LPDAC_HAS_GCR_IREF_PTAT_EXT_SEL (1)
+/* @brief Internal Current Select (bitfield GCR[IREF_INT_SEL]). */
+#define FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_SEL (0)
+/* @brief Internal Current Trim Register (bitfield GCR[IREF_INT_TRIM]). */
+#define FSL_FEATURE_LPDAC_HAS_GCR_IREF_INT_TRIM (0)
 
 /* DMA module features */
 
@@ -600,10 +610,46 @@
 /* @brief FlexSPI has AHBCR RESUMEDISABLE bit */
 #define FSL_FEATURE_FLEXSPI_HAS_RESUMEDISABLE_BIT_CONFIG_SUPPORT (1)
 
+/* FREQME module features */
+
+/* @brief FREQME instance support REF and TAR register. */
+#define FSL_FEATURE_FREQME_HAS_CLOCK_SOURCE_SELECT (0)
+/* @brief FREQME frequency calculation formula. 0: CTRL_R[RESULT] - 2; 1: CTRL_R[RESULT] + 1. */
+#define FSL_FEATURE_FREQME_RESULT_CALCULATION_MODE (0)
+
 /* GINT module features */
 
 /* @brief The count of th port which are supported in GINT. */
 #define FSL_FEATURE_GINT_PORT_COUNT (2)
+
+/* HSCMP module features */
+
+/* @brief Has CMP-to-DAC Link Enable CCR0[LINKEN]. */
+#define FSL_FEATURE_HSCMP_HAS_LINKEN (1)
+/* @brief Has CMP Power Mode Select CCR2[CMP_HPMD] and CCR2[CMP_NPMD]. */
+#define FSL_FEATURE_HSCMP_HAS_PWR_MODE_SELECT (1)
+/* @brief Has Comparator Offset Control CCR2[OFFSET]. */
+#define FSL_FEATURE_HSCMP_HAS_OFFSET (1)
+/* @brief Has Input Plus and Minus Select CCR2[INPSEL] and CCR2[INMSEL]. */
+#define FSL_FEATURE_HSCMP_HAS_INPUT_SELECT (1)
+/* @brief Has DAC High Power Mode Select DCR[DAC_HPMD]. */
+#define FSL_FEATURE_HSCMP_HAS_DAC_PWR_MODE_SELECT (1)
+/* @brief Has DAC Reference High Voltage Source Select DCR[VRSEL]. */
+#define FSL_FEATURE_HSCMP_HAS_DAC_REF_VOL_SELECT (1)
+/* @brief Has 8 level Comparator Hysteresis Control CCR2[HYSTCTR]. */
+#define FSL_FEATURE_HSCMP_HAS_HYSTERESIS_LEVEL (4)
+/* @brief Has functional clock source select CCR1[FUNC_CLK_SEL]. */
+#define FSL_FEATURE_HSCMP_HAS_FUNC_CLK_SEL (0)
+/* @brief Has DAC Stop Mode Enable DCR[DAC_STOP_EN]. */
+#define FSL_FEATURE_HSCMP_HAS_DAC_STOP_EN (0)
+/* @brief Has Round-Robin Trigger Select RRCR0[RR_TRG_SEL]. */
+#define FSL_FEATURE_HSCMP_HAS_RR_TRG_SEL (0)
+/* @brief Has Round Robin Clock Source Select RRCR0[RR_CLK_SEL]. */
+#define FSL_FEATURE_HSCMP_HAS_RR_CLK_SEL (0)
+/* @brief Has Number of Sample for One Channel RRCR0[RR_SAMPLE_CNT]. */
+#define FSL_FEATURE_HSCMP_HAS_RR_SAMPLE_CNT (0)
+/* @brief Has Sample Time Threshold RRCR0[RR_SAMPLE_THRESHOLD]. */
+#define FSL_FEATURE_HSCMP_HAS_RR_SAMPLE_THRESHOLD (0)
 
 /* I2C module features */
 
@@ -659,6 +705,11 @@
 
 /* @brief number of channels. */
 #define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS (4)
+
+/* OSTIMER module features */
+
+/* @brief Has binary encoded value in counter register. */
+#define FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER (0)
 
 /* PINT module features */
 
@@ -716,6 +767,12 @@
 #define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELX (1)
 /* @brief Is affected by errata with ID 51989. */
 #define FSL_FEATURE_PWM_HAS_ERRATA_51989 (0)
+/* @brief If (e)FlexPWM MASK register has UPDATE_MASK bit field. */
+#define FSL_FEATURE_PWM_MASK_HAS_UPDATE_MASK_BITFIELD (1)
+/* @brief If (e)FlexPWM MCTRL2 register has STRETCH_CNT_PRSC bit field. */
+#define FSL_FEATURE_PWM_MCTRL2_HAS_STRETCH_CNT_PRSC_BITFIELD (0)
+/* @brief If (e)FlexPWM MCTRL2 register has WRPROT bit field. */
+#define FSL_FEATURE_PWM_MCTRL2_HAS_WRPROT_BITFIELD (0)
 
 /* RTC module features */
 
