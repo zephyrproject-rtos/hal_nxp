@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 NXP
+ * Copyright 2024-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,16 +9,6 @@
 #include "fsl_device_registers.h"
 #include "fsl_imu.h"
 #include "mcmgr_imu_internal.h"
-
-#if defined(IMU_CPU_INDEX) && (IMU_CPU_INDEX == 1U)
-#define IMU_LINK kIMU_LinkCpu1Cpu2
-#define MCMGR_BUILD_FOR_CORE_0
-#elif defined(IMU_CPU_INDEX) && (IMU_CPU_INDEX == 2U)
-#define IMU_LINK kIMU_LinkCpu2Cpu1
-#define MCMGR_BUILD_FOR_CORE_1
-#else
-#error "Building for not supported platform!"
-#endif
 
 #define IMU_RX_ISR_Handler(x)    IMU_RX_ISR(x)
 #define IMU_RX_ISR(number)       MU_RxFullFlagISR
@@ -37,43 +27,6 @@ static const mcmgr_core_info_t s_mcmgrCores[MCMGR_CORECOUNT] = {
 
 const mcmgr_system_info_t g_mcmgrSystem = {
     .coreCount = MCMGR_CORECOUNT, .memRegCount = MCMGR_MEMREGCOUNT, .cores = s_mcmgrCores};
-
-mcmgr_status_t mcmgr_platform_init_internal_early(mcmgr_core_t coreNum)
-{
-    /* This function is intended to be called as close to the reset entry as possible,
-       (within the startup sequence in SystemInitHook) to allow CoreUp event triggering.
-       Avoid using uninitialized data here. */
-    mcmgr_status_t status = kStatus_MCMGR_Error;
-
-    mcmgr_imu_remote_active_req();
-
-    /*
-     * $Branch Coverage Justification$
-     * (kStatus_Success != IMU_Init(IMU_LINK)) not covered, IMU_Init function link parameter is
-     * macro/enum and can't be changed during the runtime.
-     */
-    if (kStatus_Success != IMU_Init(IMU_LINK)) /* GCOVR_EXCL_BR_LINE */
-    {
-        /*
-         * $Line Coverage Justification$
-         * Line never reached, IMU_Init function link parameter is
-         * macro/enum and can't be changed during the runtime.
-         */
-        return kStatus_MCMGR_Error; /* GCOVR_EXCL_LINE */
-    }
-
-    /* Trigger core up event here, core is starting! */
-#if (defined(MCMGR_BUILD_FOR_CORE_0))
-    status = MCMGR_TriggerEvent(kMCMGR_Core1, kMCMGR_RemoteCoreUpEvent, 0);
-#else
-    status = MCMGR_TriggerEvent(kMCMGR_Core0, kMCMGR_RemoteCoreUpEvent, 0);
-#endif
-
-    mcmgr_imu_remote_active_rel();
-
-    /* Trigger core up event here, core is starting! */
-    return status;
-}
 
 mcmgr_status_t mcmgr_start_core_internal(mcmgr_core_t coreNum, void *bootAddress)
 {
@@ -157,10 +110,12 @@ mcmgr_status_t mcmgr_get_core_property_internal(mcmgr_core_t coreNum,
     return kStatus_MCMGR_NotImplemented;
 }
 
-mcmgr_status_t mcmgr_trigger_event_internal(mcmgr_core_t coreNum, uint32_t remoteData, bool forcedWrite)
+mcmgr_status_t mcmgr_trigger_event_internal(mcmgr_core_t coreNum, mcmgr_event_type_t type, uint16_t eventData, bool forcedWrite)
 {
     (void)coreNum; /* Unused. IMU_LINK is making selections what core to trigger */
     (void)forcedWrite;
+
+    uint32_t remoteData = (((uint32_t)type) << 16U) | (uint32_t)eventData;
 
     int32_t ret;
     mcmgr_status_t status = kStatus_MCMGR_Error;
@@ -257,7 +212,7 @@ mcmgr_status_t mcmgr_process_deferred_rx_isr_internal(void)
 /* This overrides the weak DefaultISR implementation from startup file */
 void DefaultISR(void)
 {
-    mcmgr_core_t target_core;
+    mcmgr_core_t target_core = kMCMGR_Core0;
     uint32_t exceptionNumber = __get_IPSR();
 
     /* Select what core to trigger in case of exception */

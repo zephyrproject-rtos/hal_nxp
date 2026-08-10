@@ -76,30 +76,32 @@ static void CLOCK_EnableTstmr0Clock(void)
 {
 #if defined gPlatformTstmr0HasClkControl_d && (gPlatformTstmr0HasClkControl_d > 0)
     uint32_t reg;
-    reg = *FWK_MRCC_TSTMR0_REG;
-    *FWK_MRCC_TSTMR0_REG |= FWK_MRCC_TSTMR0_RSTB_MASK;
 
-    reg &= ~(FWK_MRCC_TSTMR0_MUX_MASK | FWK_MRCC_TSTMR0_CC_MASK);
-    reg |= (FWK_MRCC_TSTMR0_MUX(FwkTSTMR0_ClkSel_1MHz) | FWK_MRCC_TSTMR0_CC(FWK_MRCC_TSTMR0_CLK_EN_NO_LP_STALL));
+    reg = *FWK_MRCC_TSTMR0_REG;
+
+    reg &= ~(MRCC_MUX_MASK | MRCC_CC_MASK);
+    reg |= MRCC_MUX(kCLOCK_IpSrc1M) | MRCC_RSTB_MASK |
+           (uint32_t)kCLOCK_IpClkControl_fun1; /* kCLOCK_IpClkControl_fun1 is MRCC_CC(CLK_EN_NO_LP_STALL) */
 
     /*
      * If clock is already enabled, first disable it, then set the clock
      * source and re-enable it.
      */
-    *FWK_MRCC_TSTMR0_REG = reg & (~FWK_MRCC_TSTMR0_CC_MASK);
+    *FWK_MRCC_TSTMR0_REG = reg & (~MRCC_CC_MASK);
     *FWK_MRCC_TSTMR0_REG = reg;
     /* Make sure disable clock finished */
     __ISB();
     __DSB();
 
 #else
-    if (0x0u == (*FWK_MRCC_TSTMR0_REG & FWK_MRCC_TSTMR0_CC_MASK))
+    if (0x0u == (*FWK_MRCC_TSTMR0_REG & MRCC_CC_MASK))
     {
         /* Not started yet */
-        *FWK_MRCC_TSTMR0_REG &= (~FWK_MRCC_TSTMR0_CC_MASK);
-        *FWK_MRCC_TSTMR0_REG |= FWK_MRCC_TSTMR0_CC(FWK_MRCC_TSTMR0_CLK_EN_NO_LP_STALL);
+        *FWK_MRCC_TSTMR0_REG &= (~MRCC_CC_MASK);
+        *FWK_MRCC_TSTMR0_REG |=
+            (uint32_t)kCLOCK_IpClkControl_fun1; /* kCLOCK_IpClkControl_fun1 is MRCC_CC(CLK_EN_NO_LP_STALL) */
 
-        *FWK_MRCC_TSTMR0_REG |= FWK_MRCC_TSTMR0_RSTB_MASK;
+        *FWK_MRCC_TSTMR0_REG |= MRCC_RSTB_MASK;
         /* Make sure disable clock finished */
         __ISB();
         __DSB();
@@ -113,11 +115,11 @@ static void CLOCK_EnableTstmr0Clock(void)
  */
 static void CLOCK_DisableTstmr0Clock(void)
 {
-    if (0x0u != (*FWK_MRCC_TSTMR0_REG & FWK_MRCC_TSTMR0_CC_MASK))
+    if (0x0u != (*FWK_MRCC_TSTMR0_REG & MRCC_CC_MASK))
     {
         /* Check if clock is currently enabled */
-        *FWK_MRCC_TSTMR0_REG &= (~FWK_MRCC_TSTMR0_CC_MASK);
-        *FWK_MRCC_TSTMR0_REG &= ~FWK_MRCC_TSTMR0_RSTB_MASK;
+        *FWK_MRCC_TSTMR0_REG &= (~MRCC_CC_MASK);
+        *FWK_MRCC_TSTMR0_REG &= ~MRCC_RSTB_MASK;
         /* Make sure disable clock finished */
         __ISB();
         __DSB();

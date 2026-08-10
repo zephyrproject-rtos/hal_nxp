@@ -96,23 +96,6 @@ if(CONFIG_MCUX_COMPONENT_middleware.multicore.mcmgr.k32l3a6)
     )
 endif()
 
-if(CONFIG_MCUX_COMPONENT_middleware.multicore.mcmgr.k32w1)
-    mcux_add_source(
-            SOURCES src/mcmgr_internal_core_api_k32w1.c
-                    src/mcmgr_internal_core_api_k32w1_ext.c
-                    src/mcmgr_imu_internal.c
-                    inc/mcmgr_imu_internal.h
-    )
-
-    mcux_add_include(
-        INCLUDES inc/platform/k32w1/
-    )
-
-    mcux_add_source(
-        SOURCES inc/platform/k32w1/mcmgr_platform.h
-    )
-endif()
-
 if(CONFIG_MCUX_COMPONENT_middleware.multicore.mcmgr.kw45b41)
     mcux_add_source(
             SOURCES src/mcmgr_internal_core_api_kw45b41.c
@@ -228,10 +211,25 @@ if(CONFIG_MCUX_COMPONENT_middleware.multicore.mcmgr.mcxl20)
             mcux_add_include(
                 INCLUDES inc/platform/mcxl20/
             )
-        
+
             mcux_add_source(
                 SOURCES inc/platform/mcxl20/mcmgr_platform.h
             )
+endif()
+
+if(CONFIG_MCUX_COMPONENT_middleware.multicore.mcmgr.mcxe32b)
+    mcux_add_source(
+            SOURCES src/mcmgr_internal_core_api_mcxe32b.c
+                    src/mcmgr_mu_internal.c
+    )
+
+    mcux_add_include(
+        INCLUDES inc/platform/mcxe32b/
+    )
+
+    mcux_add_source(
+        SOURCES inc/platform/mcxe32b/mcmgr_platform.h
+    )
 endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.multicore.mcmgr.mcxw716)

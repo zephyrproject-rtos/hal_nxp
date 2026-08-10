@@ -51,6 +51,13 @@
 #include "mcmgr_imu_internal.h"
 #include "fwk_platform_mcu_nbu_common.h"
 
+#if defined(CONFIG_FLASH_K4_ASYNC_MODE) && (CONFIG_FLASH_K4_ASYNC_MODE == 1)
+#include "fsl_k4_flash.h"
+#if defined(CONFIG_PLAT_ASYNC_FLASH_CONTROLLER_SUSPEND) && (CONFIG_PLAT_ASYNC_FLASH_CONTROLLER_SUSPEND == 1)
+#include "controller_api.h"
+#endif
+#endif
+
 /* -------------------------------------------------------------------------- */
 /*                               Private macros                               */
 /* -------------------------------------------------------------------------- */
@@ -190,6 +197,8 @@ static const xtal_temp_comp_lut_t *pXtal32MTempCompLut = NULL;
 #if ((defined(gPlatformRequiresPowerDomainWakeup)) && (gPlatformRequiresPowerDomainWakeup > 0))
 /* Number of request for radio domain to remain active */
 static int8_t active_request_nb = 0;
+
+static OSA_MUTEX_HANDLE_DEFINE(mRemoteActiveMutexId);
 #endif
 
 PLATFORM_ErrorCallback_t pfPlatformErrorCallback = (void *)0;
@@ -202,9 +211,55 @@ static Platform_Fro6MCalCtx_t fro6M_calibration_ctx = {
 
 static volatile uint32_t last_nbu_sw_state = 0U;
 
+#if defined(CONFIG_FLASH_K4_ASYNC_MODE) && (CONFIG_FLASH_K4_ASYNC_MODE == 1)
+/* Mutex serializing access to the flash driver in async mode */
+static OSA_MUTEX_HANDLE_DEFINE(s_flashAsyncMutex);
+#endif /* CONFIG_FLASH_K4_ASYNC_MODE */
+
 /* -------------------------------------------------------------------------- */
 /*                              Private functions                              */
 /* -------------------------------------------------------------------------- */
+
+#if defined(CONFIG_FLASH_K4_ASYNC_MODE) && (CONFIG_FLASH_K4_ASYNC_MODE == 1)
+
+STATIC void PLATFORM_AsyncFlashLockCb(void *ud)
+{
+    OSA_MutexLock((osa_mutex_handle_t)ud, osaWaitForever_c);
+}
+
+STATIC void PLATFORM_AsyncFlashUnlockCb(void *ud)
+{
+    OSA_MutexUnlock((osa_mutex_handle_t)ud);
+}
+
+STATIC bool PLATFORM_AsyncFlashTryLockCb(void *ud)
+{
+    return (OSA_MutexLock((osa_mutex_handle_t)ud, 0U) == KOSA_StatusSuccess);
+}
+
+#if defined(CONFIG_PLAT_ASYNC_FLASH_CONTROLLER_SUSPEND) && (CONFIG_PLAT_ASYNC_FLASH_CONTROLLER_SUSPEND == 1)
+static uint32_t PLATFORM_GetRadioIdleDurationUs(void)
+{
+    int idle32K = PLATFORM_GetRadioIdleDuration32K();
+
+    if (idle32K <= 0)
+    {
+        /* Radio active or switching to idle - no idle window available */
+        return 0U;
+    }
+    /* Convert 32768 Hz ticks to microseconds */
+    return (uint32_t)COUNT_TO_USEC((uint32_t)idle32K, 32768U);
+}
+
+static uint32_t PLATFORM_ImminentFlashStallCb(uint32_t suspend)
+{
+    /* Suspend or resume the BLE controller LL so that it does not schedule
+     * any activity during the upcoming flash write/erase stall. */
+    return (uint32_t)Controller_SuspendResume(suspend);
+}
+#endif /* CONFIG_PLAT_ASYNC_FLASH_CONTROLLER_SUSPEND */
+#endif /* CONFIG_FLASH_K4_ASYNC_MODE */
+
 static int PLATFORM_SetXtalTempComp(const xtal_temp_comp_lut_t *lut, int16_t temperature)
 {
     int     ret = 0;
@@ -255,60 +310,7 @@ static int PLATFORM_SetXtalTempComp(const xtal_temp_comp_lut_t *lut, int16_t tem
 
     return ret;
 }
-#if ((defined(gPlatformRequiresPowerDomainWakeup)) && (gPlatformRequiresPowerDomainWakeup > 0))
-/*!
- * \brief Set interrupt mask to block interrupts below a certain priority level.
- *
- * This function sets the BASEPRI register to mask (disable) all interrupts
- * with priority values numerically equal to or greater than
- * PLATFORM_MAX_INTERRUPT_PRIORITY. It saves and returns the current BASEPRI
- * value before modification, allowing it to be restored later.
- *
- * The function includes memory barriers (DSB and ISB) to ensure the interrupt
- * masking takes effect immediately.
- *
- * \return uint32_t The previous BASEPRI register value. This value should be
- *                  saved and passed to PLATFORM_ClearInterruptMask() to restore
- *                  the original interrupt state.
- *
- * \note This function is typically used to enter a critical section where
- *       interrupts below PLATFORM_MAX_INTERRUPT_PRIORITY must be disabled.
- * \note The returned value must be used with PLATFORM_ClearInterruptMask()
- *       to properly restore the interrupt state.
- */
-static uint32_t PLATFORM_SetInterruptMask(void)
-{
-    uint32_t basepri = __get_BASEPRI();
-    __set_BASEPRI(PLATFORM_MAX_INTERRUPT_PRIORITY_BASEPRI);
-    __DSB();
-    __ISB();
-    return basepri;
-}
 
-/*!
- * \brief Clear interrupt mask and restore previous interrupt priority level.
- *
- * This function restores the BASEPRI register to a previously saved value,
- * effectively re-enabling interrupts that were masked by PLATFORM_SetInterruptMask().
- * It includes memory barriers (DSB and ISB) to ensure the change takes effect
- * immediately.
- *
- * \param[in] int_mask The previous BASEPRI value to restore. This should be
- *                     the value returned by a prior call to PLATFORM_SetInterruptMask().
- *
- *
- * \note This function is typically used to exit a critical section and restore
- *       the interrupt state that existed before calling PLATFORM_SetInterruptMask().
- * \note Always pair this function with PLATFORM_SetInterruptMask() to ensure
- *       proper interrupt state management.
- */
-static void PLATFORM_ClearInterruptMask(uint32_t int_mask)
-{
-    __set_BASEPRI(int_mask);
-    __DSB();
-    __ISB();
-}
-#endif
 /*!
  * \brief Allow keeping debugger on other core as one goes to sleep.
  */
@@ -348,6 +350,233 @@ static void PLATFORM_SetNbuPowerMode(void)
         }
     }
 }
+#endif
+
+#if ((defined(gPlatformRequiresPowerDomainWakeup)) && (gPlatformRequiresPowerDomainWakeup > 0))
+/*!
+ * \brief Initialize the mutex used to protect PLATFORM_RemoteActiveReq() and
+ *        PLATFORM_RemoteActiveRel() against concurrent access.
+ *
+ * A single mutex is shared by both functions because they operate on the same
+ * shared resource (active_request_nb). Using one mutex ensures that a Req and
+ * a Rel cannot run concurrently and corrupt the reference counter.
+ *
+ * \return 0 on success, negative value on failure.
+ */
+static int PLATFORM_InitRemoteActive(void)
+{
+    int status = 0;
+    if (KOSA_StatusSuccess != OSA_MutexCreate((osa_mutex_handle_t)mRemoteActiveMutexId))
+    {
+        assert(0);
+        status = -1;
+    }
+    return status;
+}
+
+/*!
+ * \brief Enter the Remote Active critical section.
+ *
+ * This function acquires the mutex protecting the "Remote Active" state,
+ * ensuring exclusive access for the calling task.
+ *
+ * \note This function must NOT be called from an interrupt context.
+ *       Calling it from an ISR will trigger an assertion failure.
+ *
+ * \param[in] platformId Identifier of the platform instance requesting access.
+ *
+ * \return None
+ *
+ * \details
+ * - The function first checks whether it is running in an ISR context using
+ *   PLATFORM_GET_IPSR().
+ * - If called from ISR, an assertion is triggered since mutex operations
+ *   are not allowed in interrupt context.
+ * - It then locks the mutex associated with the Remote Active state.
+ * - If the mutex lock operation fails, and an error callback is registered,
+ *   the callback is invoked with error code -3.
+ *
+ * \warning This function blocks indefinitely (osaWaitForever_c) until the mutex
+ *          is acquired.
+ */
+static void PLATFORM_RemoteActiveEnter(PLATFORM_Id_t platformId)
+{
+    osa_status_t osa_status;
+
+    /* Determine the context we are being called */
+    uint32_t isrNumber = PLATFORM_GET_IPSR();
+    if (isrNumber != 0U)
+    {
+        /* PLATFORM_RemoteActiveReq() does not support to be called from ISR */
+        assert(0);
+    }
+
+    osa_status = OSA_MutexLock((osa_mutex_handle_t)mRemoteActiveMutexId, osaWaitForever_c);
+    if (osa_status != KOSA_StatusSuccess)
+    {
+        if (pfPlatformErrorCallback != NULL)
+        {
+            pfPlatformErrorCallback(platformId, -3);
+        }
+        assert(0);
+        return;
+    }
+}
+
+/*!
+ * \brief Exit the Remote Active critical section.
+ *
+ * This function releases the mutex protecting the "Remote Active" state,
+ * allowing other tasks to enter the critical section.
+ *
+ * \param[in] platformId Identifier of the platform instance releasing access.
+ *
+ * \return None
+ *
+ * \details
+ * - Unlocks the mutex associated with the Remote Active state.
+ * - If the unlock operation fails, and an error callback is registered,
+ *   the callback is invoked with error code -4.
+ *
+ * \note This function is intended to be called after a successful call to
+ *       PLATFORM_RemoteActiveEnter().
+ */
+static void PLATFORM_RemoteActiveExit(PLATFORM_Id_t platformId)
+{
+    osa_status_t osa_status;
+
+    osa_status = OSA_MutexUnlock((osa_mutex_handle_t)mRemoteActiveMutexId);
+    if (osa_status != KOSA_StatusSuccess)
+    {
+        if (pfPlatformErrorCallback != NULL)
+        {
+            pfPlatformErrorCallback(platformId, -4);
+        }
+        assert(0);
+    }
+}
+
+/*!
+ * \brief Wait for the NBU radio to complete any ongoing low-power transition.
+ *
+ * This function must be called before asserting the BLE wake-up bit in
+ * RF2P4GHZ_CTRL. Due to a HW constraint, the radio must fully enter low-power
+ * mode before it can be woken up.
+ *
+ * The wait is implemented as a polling loop executed inside PRIMASK-protected
+ * critical sections. Interrupts are briefly re-enabled between iterations,
+ * allowing ISR execution and proper evaluation of the timeout condition.
+ *
+ * A timeout guard triggers the platform error callback (registered via
+ * PLATFORM_RegisterBleErrorCallback()) if the transition does not complete
+ * within FWK_PLATFORM_ACTIVE_REQ_TIMEOUT_US.
+ *
+ * \return true:  Radio reached low-power state and requires wake-up.
+ *         false: Radio is already active or in the process of waking up.
+ */
+
+static bool PLATFORM_WaitRemoteTransition(void)
+{
+    uint32_t regPrimask;
+    bool     remote_in_lp = false;
+    uint64_t timestamp    = PLATFORM_GetTimeStamp();
+    do
+    {
+        /* Brief PRIMASK critical section to atomically check the NBU state register.
+         * We need to ensure the register read and timeout check are atomic to prevent
+         * the NBU from changing state between our read and timeout evaluation */
+        regPrimask = DisableGlobalIRQ();
+
+        if ((RFMC->RF2P4GHZ_MAN2 & RFMC_RF2P4GHZ_MAN2_WKUP_TIME_MASK) == 0U)
+        {
+            /* Radio is already active*/
+            EnableGlobalIRQ(regPrimask);
+            break;
+        }
+        /* NBU started low power entry, to workaround HW issues, we need to
+         * wait for the radio to fully enter low power before waking it up */
+        if ((RFMC->RF2P4GHZ_STAT & RFMC_RF2P4GHZ_STAT_BLE_STATE_MASK) == RFMC_RF2P4GHZ_STAT_BLE_STATE(0x2U))
+        {
+            /* Radio is in low power, we can exit the loop and wake it up */
+            remote_in_lp = true;
+            EnableGlobalIRQ(regPrimask);
+            break;
+        }
+        if (((RFMC->RF2P4GHZ_STAT & RFMC_RF2P4GHZ_STAT_BLE_STATE_MASK) == RFMC_RF2P4GHZ_STAT_BLE_STATE(0x3U)) ||
+            /* Radio is currently waking up*/
+            ((RFMC->RF2P4GHZ_STAT & RFMC_RF2P4GHZ_STAT_BLE_WKUP_STAT_MASK) != 0U))
+        /* Radio will exit lowpower or will not be able to enter lowpower because a BLE event will soon expire */
+        {
+            /* We can exit the loop without waiting for the NBU to re-write WKUP_TIME register, as the radio will
+             * not enter lowpower or is already in the wakeup procedure */
+            EnableGlobalIRQ(regPrimask);
+            break;
+        }
+        /* Error callback set by PLATFORM_RegisterBleErrorCallback() */
+        if (PLATFORM_IsTimeoutExpired(timestamp, FWK_PLATFORM_ACTIVE_REQ_TIMEOUT_US) &&
+            (pfPlatformErrorCallback != NULL))
+        {
+            pfPlatformErrorCallback(PLATFORM_REMOTE_ACTIVE_REQ_ID, -1);
+            EnableGlobalIRQ(regPrimask);
+            break;
+        }
+        /* Re-enable interrupts to allow peripheral ISRs to execute while we wait for NBU acknowledgment */
+        EnableGlobalIRQ(regPrimask);
+
+        /* Flush pipeline to allow any pending interrupts to execute before interrupts are masked again */
+        __ISB();
+    } while (true);
+    return remote_in_lp;
+}
+
+/*!
+ * \brief Wait until the NBU radio reaches the active state.
+ *
+ * The function polls RF2P4GHZ_STAT in a loop within PRIMASK-protected
+ * critical sections. Interrupts are briefly re-enabled between iterations
+ * to allow ISR execution and proper timeout handling.
+ *
+ * A timeout guard triggers the platform error callback (registered via
+ * PLATFORM_RegisterBleErrorCallback()) if the transition does not complete
+ * within FWK_PLATFORM_ACTIVE_REQ_TIMEOUT_US.
+ */
+
+static void PLATFORM_WaitRemoteActive(void)
+{
+    uint32_t regPrimask;
+    uint64_t timestamp = PLATFORM_GetTimeStamp();
+    /* Wait for the NBU to become active */
+    do
+    {
+        /* Brief PRIMASK critical section to atomically check the NBU state register.
+         * We need to ensure the register read and timeout check are atomic to prevent
+         * the NBU from changing state between our read and timeout evaluation */
+        regPrimask = DisableGlobalIRQ();
+        if ((RFMC->RF2P4GHZ_STAT & RFMC_RF2P4GHZ_STAT_BLE_STATE_MASK) == RFMC_RF2P4GHZ_STAT_BLE_STATE(0x1U))
+        {
+            /* Radio is in active state */
+            EnableGlobalIRQ(regPrimask);
+            break;
+        }
+        BOARD_DBGLPIOSET(0, 1);
+        __ASM("NOP");
+        BOARD_DBGLPIOSET(0, 0);
+        /* Error callback set by PLATFORM_RegisterBleErrorCallback() */
+        if (PLATFORM_IsTimeoutExpired(timestamp, FWK_PLATFORM_ACTIVE_REQ_TIMEOUT_US) &&
+            (pfPlatformErrorCallback != NULL))
+        {
+            pfPlatformErrorCallback(PLATFORM_REMOTE_ACTIVE_REQ_ID, -2);
+            EnableGlobalIRQ(regPrimask);
+            break;
+        }
+        /* Re-enable interrupts to allow peripheral ISRs to execute while we wait for NBU acknowledgment */
+        EnableGlobalIRQ(regPrimask);
+
+        /* Flush pipeline to allow any pending interrupts to execute before interrupts are masked again */
+        __ISB();
+    } while (true);
+}
+
 #endif
 
 /* -------------------------------------------------------------------------- */
@@ -395,6 +624,16 @@ int PLATFORM_InitNbu(void)
 
         /* Initialize a memory zone of the shared memory that will be used to transmit a message later */
         PLATFORM_SetLowPowerFlag(false);
+#endif
+
+#if ((defined(gPlatformRequiresPowerDomainWakeup)) && (gPlatformRequiresPowerDomainWakeup > 0))
+        /* Create mutex which will be used in PLATFORM_RemoteActiveReq() and PLATFORM_RemoteActiveRel()*/
+        status = PLATFORM_InitRemoteActive();
+
+        if (status != 0)
+        {
+            status = RAISE_ERROR(0, 3);
+        }
 #endif
 
         rfmc_ctrl = RFMC->RF2P4GHZ_CTRL;
@@ -451,6 +690,26 @@ int PLATFORM_InitNbu(void)
             else
             {
                 DBG_NBU_GPIOD_ACCESS();
+
+#if defined(CONFIG_FLASH_K4_ASYNC_MODE) && (CONFIG_FLASH_K4_ASYNC_MODE == 1)
+                /* Initialize K4 flash async-mode platform layer.
+                 * Done here because the LL suspend feature (PLATFORM_ImminentFlashStallCb)
+                 * is tightly coupled to the NBU system initialized above. */
+                osa_status_t osaStatus = OSA_MutexCreate((osa_mutex_handle_t)s_flashAsyncMutex);
+                if (osaStatus != KOSA_StatusSuccess)
+                {
+                    /* Fatal: flash async-mode cannot operate without the mutex */
+                    assert(false);
+                    return -1;
+                }
+                (void)FLASH_RegisterLockCallbacks(PLATFORM_AsyncFlashLockCb, PLATFORM_AsyncFlashUnlockCb,
+                                                  s_flashAsyncMutex);
+                (void)FLASH_RegisterTryLockCallback(PLATFORM_AsyncFlashTryLockCb, s_flashAsyncMutex);
+#if defined(CONFIG_PLAT_ASYNC_FLASH_CONTROLLER_SUSPEND) && (CONFIG_PLAT_ASYNC_FLASH_CONTROLLER_SUSPEND == 1)
+                (void)FLASH_RegisterIdleDurationCB(PLATFORM_GetRadioIdleDurationUs);
+                (void)FLASH_RegisterNotifyImminentFlashStall(PLATFORM_ImminentFlashStallCb);
+#endif /* CONFIG_PLAT_ASYNC_FLASH_CONTROLLER_SUSPEND */
+#endif /* CONFIG_FLASH_K4_ASYNC_MODE */
 
                 /* nbu initialization completed */
                 nbu_init = 1;
@@ -931,13 +1190,12 @@ void PLATFORM_RemoteActiveReq(void)
     BOARD_DBGLPIOSET(1, 1);
     BOARD_DBGLPIOSET(0, 1);
 
-    OSA_InterruptDisable();
+    PLATFORM_RemoteActiveEnter(PLATFORM_REMOTE_ACTIVE_REQ_ID);
 
     if (active_request_nb == 0)
     {
         uint32_t rfmc_ctrl    = RFMC->RF2P4GHZ_CTRL;
         bool     remote_in_lp = false;
-        uint64_t timestamp    = PLATFORM_GetTimeStamp();
 
         /* Capture NBU software state before wake-up for race condition mitigation.
          *
@@ -968,35 +1226,8 @@ void PLATFORM_RemoteActiveReq(void)
         rfmc_ctrl |= RFMC_RF2P4GHZ_CTRL_LP_WKUP_DLY(0U);
         RFMC->RF2P4GHZ_CTRL = rfmc_ctrl;
 
-        /* NBU writes to WKUP_TIME register to notify application core it's going to low
-         * power, this is a software protocol to sync both cores */
-        while ((RFMC->RF2P4GHZ_MAN2 & RFMC_RF2P4GHZ_MAN2_WKUP_TIME_MASK) != 0U)
-        {
-            /* NBU started low power entry, to workaround HW issues, we need to
-             * wait for the radio to fully enter low power before waking it up */
-            if ((RFMC->RF2P4GHZ_STAT & RFMC_RF2P4GHZ_STAT_BLE_STATE_MASK) == RFMC_RF2P4GHZ_STAT_BLE_STATE(0x2U))
-            {
-                /* Radio is in low power, we can exit the loop and wake it up */
-                remote_in_lp = true;
-                break;
-            }
-            if (((RFMC->RF2P4GHZ_STAT & RFMC_RF2P4GHZ_STAT_BLE_STATE_MASK) == RFMC_RF2P4GHZ_STAT_BLE_STATE(0x3U)) ||
-                /* Radio is currently waking up*/
-                ((RFMC->RF2P4GHZ_STAT & RFMC_RF2P4GHZ_STAT_BLE_WKUP_STAT_MASK) != 0U))
-            /* Radio will exit lowpower or will not be able to enter lowpower because a BLE event will soon expire */
-            {
-                /* We can exit the loop without waiting for the NBU to re-write WKUP_TIME register, as the radio will
-                 * not enter lowpower or is already in the wakeup procedure */
-                break;
-            }
-            /* Error callback set by PLATFORM_RegisterBleErrorCallback() */
-            if (PLATFORM_IsTimeoutExpired(timestamp, FWK_PLATFORM_ACTIVE_REQ_TIMEOUT_US) &&
-                (pfPlatformErrorCallback != NULL))
-            {
-                pfPlatformErrorCallback(PLATFORM_REMOTE_ACTIVE_REQ_ID, -1);
-                break;
-            }
-        }
+        /* Ensure state of radio power domain before asserting BLE_WKUP bit */
+        remote_in_lp = PLATFORM_WaitRemoteTransition();
 
         rfmc_ctrl |= RFMC_RF2P4GHZ_CTRL_BLE_WKUP(0x1U);
         RFMC->RF2P4GHZ_CTRL = rfmc_ctrl;
@@ -1011,21 +1242,9 @@ void PLATFORM_RemoteActiveReq(void)
             PLATFORM_Delay(120U);
         }
 
-        timestamp = PLATFORM_GetTimeStamp();
-        /* Wait for the NBU to become active */
-        while ((RFMC->RF2P4GHZ_STAT & RFMC_RF2P4GHZ_STAT_BLE_STATE_MASK) != RFMC_RF2P4GHZ_STAT_BLE_STATE(0x1U))
-        {
-            BOARD_DBGLPIOSET(0, 1);
-            __ASM("NOP");
-            BOARD_DBGLPIOSET(0, 0);
-            /* Error callback set by PLATFORM_RegisterBleErrorCallback() */
-            if (PLATFORM_IsTimeoutExpired(timestamp, FWK_PLATFORM_ACTIVE_REQ_TIMEOUT_US) &&
-                (pfPlatformErrorCallback != NULL))
-            {
-                pfPlatformErrorCallback(PLATFORM_REMOTE_ACTIVE_REQ_ID, -2);
-                break;
-            }
-        }
+        /* Wait radio power domain to be active */
+        PLATFORM_WaitRemoteActive();
+
         rfmc_ctrl |= RFMC_RF2P4GHZ_CTRL_LP_WKUP_DLY(lp_wakeup_delay);
         RFMC->RF2P4GHZ_CTRL = rfmc_ctrl;
 #if defined(gPlatformNbuWakeUpInterruptAddr)
@@ -1041,7 +1260,7 @@ void PLATFORM_RemoteActiveReq(void)
 
     active_request_nb++;
 
-    OSA_InterruptEnable();
+    PLATFORM_RemoteActiveExit(PLATFORM_REMOTE_ACTIVE_REQ_ID);
 
     /* Re-initialize radio at the end of PLATFORM_RemoteActiveReq() */
     PLATFORM_InitRadio();
@@ -1055,32 +1274,7 @@ void PLATFORM_RemoteActiveRel(void)
 #if ((defined(gPlatformRequiresPowerDomainWakeup)) && (gPlatformRequiresPowerDomainWakeup > 0))
     BOARD_DBGLPIOSET(0, 1);
 
-    /* Determine the context we are being called */
-    uint32_t isrNumber = PLATFORM_GET_IPSR();
-
-    /* Security check: This function can only be safely called from:
-     * 1. Normal thread context (isrNumber == 0)
-     * 2. MU interrupt handler (for inter-core communication callbacks)
-     *
-     * Blocking calls from other ISRs prevents:
-     * - Race conditions on the reference counter
-     * - Unpredictable timing in the NBU handshake protocol */
-    if ((isrNumber != 0U) && (isrNumber != ((uint32_t)PLATFORM_MU_IRQn + (uint32_t)NVIC_USER_IRQ_OFFSET)))
-    {
-        /* Invalid calling context detected.
-         * This could corrupt the power management state machine */
-        if (pfPlatformErrorCallback != NULL)
-        {
-            pfPlatformErrorCallback(PLATFORM_REMOTE_ACTIVE_REL_ID, -2);
-        }
-        assert(false);
-    }
-
-    /* Use BASEPRI masking instead of PRIMASK to create a priority ceiling.
-     * This blocks lower priority interrupts (including MU) to protect our critical section,
-     * while still allowing high-priority system interrupts (priority < 4) to execute.
-     * This maintains system responsiveness during the handshake protocol */
-    uint32_t intMask = PLATFORM_SET_INTERRUPT_MASK();
+    PLATFORM_RemoteActiveEnter(PLATFORM_REMOTE_ACTIVE_REL_ID);
 
     if (active_request_nb > 0)
     {
@@ -1133,9 +1327,7 @@ void PLATFORM_RemoteActiveRel(void)
                     pfPlatformErrorCallback(PLATFORM_REMOTE_ACTIVE_REL_ID, -1);
                     break;
                 }
-                /* Re-enable interrupts (except those masked by BASEPRI) to allow
-                 * peripheral ISRs to execute while we wait for NBU acknowledgment.
-                 * MU interrupts remain blocked to prevent re-entrance */
+                /* Re-enable interrupts to allow peripheral ISRs to execute while we wait for NBU acknowledgment */
                 EnableGlobalIRQ(regPrimask);
 
                 /* Flush pipeline to allow any pending interrupts to execute before interrupts are masked again */
@@ -1156,8 +1348,7 @@ void PLATFORM_RemoteActiveRel(void)
         assert(false);
     }
 
-    /* Restore original interrupt masking state */
-    PLATFORM_CLEAR_INTERRUPT_MASK(intMask);
+    PLATFORM_RemoteActiveExit(PLATFORM_REMOTE_ACTIVE_REL_ID);
 
     BOARD_DBGLPIOSET(0, 0);
 #endif
@@ -1183,12 +1374,24 @@ void PLATFORM_GetResetCause(PLATFORM_ResetStatus_t *reset_status)
 
 void mcmgr_imu_remote_active_rel(void)
 {
-    PLATFORM_RemoteActiveRel();
+    /* Determine the context we are being called */
+    uint32_t isrNumber = PLATFORM_GET_IPSR();
+    if (isrNumber == 0U)
+    {
+        /* Only call PLATFORM_RemoteActiveRel() from thread context, not from ISR */
+        PLATFORM_RemoteActiveRel();
+    }
 }
 
 void mcmgr_imu_remote_active_req(void)
 {
-    PLATFORM_RemoteActiveReq();
+    /* Determine the context we are being called */
+    uint32_t isrNumber = PLATFORM_GET_IPSR();
+    if (isrNumber == 0U)
+    {
+        /* Only call PLATFORM_RemoteActiveReq() from thread context, not from ISR */
+        PLATFORM_RemoteActiveReq();
+    }
 }
 
 void PLATFORM_SetLdoCoreNormalDriveVoltage(void)
@@ -1229,17 +1432,35 @@ int PLATFORM_ClearIoIsolationFromLowPower(void)
 #endif
     return ret;
 }
-int PLATFORM_StartFro6MCalibration(void)
+
+/*
+ * Helper to set MRCC TSTMR0 clock configuration when going to FRO6M calibration
+ */
+static void PLATFORM_TstmrSetClockControl(clock_ip_control_t cc)
 {
-    Platform_Fro6MCalCtx_t *ctx = &fro6M_calibration_ctx;
+    uint32_t reg;
+    uint32_t regPrimask;
 
-    *FWK_MRCC_TSTMR0_REG = FWK_MRCC_TSTMR0_CC(FWK_MRCC_TSTMR0_CLK_EN_LP_STALL_IDLE);
+    /* Protect again concurrent modifications of FWK_MRCC_TSTMR0_REG */
+    regPrimask = DisableGlobalIRQ();
+    reg        = *FWK_MRCC_TSTMR0_REG;
+    reg &= ~(MRCC_CC_MASK);                 /* only touch CC field */
+    reg |= ((uint32_t)cc) | MRCC_RSTB_MASK; /* Must be released from reset if not doen priorly */
+    *FWK_MRCC_TSTMR0_REG = reg;             /* RSTB and MUX are preserved from the read */
+    EnableGlobalIRQ(regPrimask);
+}
 
-    /* Save current SysTick state */
-    ctx->saved_systick_ctrl = SysTick->CTRL;
-    ctx->saved_systick_load = SysTick->LOAD; /* Save original LOAD value */
+/*
+ * Helper to reconfigure the SysTick for FRO6M calibration.
+ */
+static void PLATFORM_FRO6MCalReconfigSystick(void)
+{
+    uint32_t ctrl; /* cache SysTick->CTRL to reduce unique operand count (HIS_VOCF) */
 
-    if (ctx->saved_systick_ctrl == 0x0U)
+    /* Read current SysTick control */
+    ctrl = SysTick->CTRL;
+
+    if (ctrl == 0x0U)
     {
         /* SysTick not in use - we own it, configure freely */
 
@@ -1255,12 +1476,48 @@ int PLATFORM_StartFro6MCalibration(void)
         /* SysTick in use - don't touch LOAD or VAL, just ensure it's running */
 
         /* If disabled (tickless idle), temporarily enable it */
-        if ((ctx->saved_systick_ctrl & SysTick_CTRL_ENABLE_Msk) == 0U)
+        if ((ctrl & SysTick_CTRL_ENABLE_Msk) == 0U)
         {
-            SysTick->CTRL = ctx->saved_systick_ctrl | SysTick_CTRL_ENABLE_Msk;
+            SysTick->CTRL = ctrl | SysTick_CTRL_ENABLE_Msk;
         }
         /* VAL and LOAD remain untouched */
     }
+}
+
+/*
+ * Helper to restore the Systick configuration from context
+ */
+static void PLATFORM_FRO6MCalRestoreSystickConfig(Platform_Fro6MCalCtx_t *ctx)
+{
+    uint32_t savedCtrl = ctx->saved_systick_ctrl; /* cache to reduce unique operand count (HIS_VOCF) */
+
+    /* Restore SysTick state */
+    if (savedCtrl == 0x0U)
+    {
+        /* We owned SysTick - restore it to original unused state */
+        SysTick->CTRL = 0U;                      /* Disable first */
+        SysTick->LOAD = ctx->saved_systick_load; /* Restore original LOAD */
+        SysTick->VAL  = 0U;                      /* Clear VAL */
+    }
+    else
+    {
+        /* SysTick was in use - just restore CTRL (may re-disable if in tickless) */
+        SysTick->CTRL = savedCtrl;
+        /* LOAD and VAL remain as they are */
+    }
+}
+
+int PLATFORM_StartFro6MCalibration(void)
+{
+    Platform_Fro6MCalCtx_t *ctx = &fro6M_calibration_ctx;
+
+    /* kCLOCK_IpClkControl_fun2 is MRCC_CC(CLK_EN_LP_STALL_IDLE) already pre-shifted */
+    PLATFORM_TstmrSetClockControl(kCLOCK_IpClkControl_fun2);
+
+    /* Stash SYSTICK configuration to be able to restore on FRO6M Calibration completion  */
+    ctx->saved_systick_ctrl = SysTick->CTRL;
+    ctx->saved_systick_load = SysTick->LOAD; /* Save original LOAD value */
+    PLATFORM_FRO6MCalReconfigSystick();
 
     /* Capture timing references as close together as possible for better accuracy */
     ctx->initial_ts            = PLATFORM_GetTimeStamp();
@@ -1338,20 +1595,7 @@ int PLATFORM_EndFro6MCalibration(void)
 
         fwk_platform_FRO6MHz_ratio = ctx->ratio;
 
-        /* Restore SysTick state */
-        if (ctx->saved_systick_ctrl == 0x0U)
-        {
-            /* We owned SysTick - restore it to original unused state */
-            SysTick->CTRL = 0U;                      /* Disable first */
-            SysTick->LOAD = ctx->saved_systick_load; /* Restore original LOAD */
-            SysTick->VAL  = 0U;                      /* Clear VAL */
-        }
-        else
-        {
-            /* SysTick was in use - just restore CTRL (may re-disable if in tickless) */
-            SysTick->CTRL = ctx->saved_systick_ctrl;
-            /* LOAD and VAL remain as they are */
-        }
+        PLATFORM_FRO6MCalRestoreSystickConfig(ctx);
 
         ctx->started = false;
     }

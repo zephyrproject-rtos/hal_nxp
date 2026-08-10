@@ -61,7 +61,7 @@ static const uint8_t ShmemConfigIdentifier[RL_PLATFORM_SHMEM_CFG_IDENTIFIER_LENG
 /* Compute CRC to protect shared memory strcuture stored in RAM by application core and retrieve by NBU */
 static uint16_t platform_compute_crc_over_shmem_struct(rpmsg_platform_shmem_config_protected_t *protec_shmem_struct);
 
-static bool first_time                            = RL_TRUE;
+static bool first_time                            = (bool)RL_TRUE;
 static rpmsg_platform_shmem_config_t shmem_config = {0U};
 #endif /* defined(RL_ALLOW_CUSTOM_SHMEM_CONFIG) && (RL_ALLOW_CUSTOM_SHMEM_CONFIG == 1) */
 
@@ -122,10 +122,12 @@ int32_t platform_init_interrupt(uint32_t vector_id, void *isr_data)
         env_lock_mutex(platform_lock);
 
         RL_ASSERT(0 <= isr_counter);
+#if !(defined(RL_USE_MCMGR_IPC_ISR_HANDLER) && (RL_USE_MCMGR_IPC_ISR_HANDLER == 1))
         if (isr_counter < 2)
         {
             (void)EnableIRQ(APP_MU_IRQn);
         }
+#endif
         isr_counter++;
 
         env_unlock_mutex(platform_lock);
@@ -145,10 +147,12 @@ int32_t platform_deinit_interrupt(uint32_t vector_id)
 
         RL_ASSERT(0 < isr_counter);
         isr_counter--;
+#if !(defined(RL_USE_MCMGR_IPC_ISR_HANDLER) && (RL_USE_MCMGR_IPC_ISR_HANDLER == 1))
         if (isr_counter < 2)
         {
             (void)DisableIRQ(APP_MU_IRQn);
         }
+#endif
 
         /* Unregister ISR from environment layer */
         env_unregister_isr(vector_id);
@@ -235,7 +239,9 @@ int32_t platform_interrupt_enable(uint32_t vector_id)
 
     if (disable_counter == 0)
     {
+#if !(defined(RL_USE_MCMGR_IPC_ISR_HANDLER) && (RL_USE_MCMGR_IPC_ISR_HANDLER == 1))
         NVIC_EnableIRQ(APP_MU_IRQn);
+#endif
     }
     platform_global_isr_enable();
     return 0;
@@ -260,7 +266,9 @@ int32_t platform_interrupt_disable(uint32_t vector_id)
        if counter is set - the interrupts are disabled */
     if (disable_counter == 0)
     {
+#if !(defined(RL_USE_MCMGR_IPC_ISR_HANDLER) && (RL_USE_MCMGR_IPC_ISR_HANDLER == 1))
         NVIC_DisableIRQ(APP_MU_IRQn);
+#endif
     }
     disable_counter++;
     platform_global_isr_enable();
@@ -356,14 +364,19 @@ int32_t platform_init(void)
  */
 int32_t platform_deinit(void)
 {
+#if !(defined(RL_USE_MCMGR_IPC_ISR_HANDLER) && (RL_USE_MCMGR_IPC_ISR_HANDLER == 1))
+    /* Only deinit the IMU when rpmsg-lite owns the link directly.
+     * When MCMGR owns the IMU (RL_USE_MCMGR_IPC_ISR_HANDLER == 1),
+     * calling IMU_Deinit here would kill the transport that MCMGR
+     * relies on for subsequent init cycles (event delivery). */
     IMU_Deinit(APP_IMU_LINK);
+#endif
 
     /* Delete lock used in multi-instanced RPMsg */
     env_delete_mutex(platform_lock);
     platform_lock = ((void *)0);
     return 0;
 }
-
 
 #if defined(RL_ALLOW_CUSTOM_SHMEM_CONFIG) && (RL_ALLOW_CUSTOM_SHMEM_CONFIG == 1)
 void platform_set_static_shmem_config(void)
@@ -372,7 +385,8 @@ void platform_set_static_shmem_config(void)
     rpmsg_platform_shmem_config_protected_t protec_shmem_struct;
 
     /* Identifier at the beginning of the structure that will be used to verify on nbu side validity of the structure */
-    (void)memcpy(&(protec_shmem_struct.identificationWord), ShmemConfigIdentifier, RL_PLATFORM_SHMEM_CFG_IDENTIFIER_LENGTH);
+    (void)memcpy(&(protec_shmem_struct.identificationWord), ShmemConfigIdentifier,
+                 RL_PLATFORM_SHMEM_CFG_IDENTIFIER_LENGTH);
 
     /* Fill shared memory structure with setting from the app core */
     protec_shmem_struct.config.buffer_payload_size = RL_BUFFER_PAYLOAD_SIZE;
@@ -384,7 +398,8 @@ void platform_set_static_shmem_config(void)
     protec_shmem_struct.shmemConfigCrc = platform_compute_crc_over_shmem_struct(&protec_shmem_struct);
 
     /* Store in SMU2 the all structure */
-    (void)memcpy((void *)rpmsg_sh_mem_start, (const void *)&protec_shmem_struct, sizeof(rpmsg_platform_shmem_config_protected_t));
+    (void)memcpy((void *)rpmsg_sh_mem_start, (const void *)&protec_shmem_struct,
+                 sizeof(rpmsg_platform_shmem_config_protected_t));
 }
 
 int32_t platform_get_custom_shmem_config(uint32_t link_id, rpmsg_platform_shmem_config_t *config)
@@ -394,16 +409,17 @@ int32_t platform_get_custom_shmem_config(uint32_t link_id, rpmsg_platform_shmem_
 
     do
     {
-        if (first_time == RL_FALSE)
+        if (first_time == (bool)RL_FALSE)
         {
             /* Variable shmem_config is already set if this is not the fisrt call */
             break;
         }
 
-        first_time = RL_FALSE;
+        first_time = (bool)RL_FALSE;
 
         /* Copy the full structure in local variable */
-        (void)memcpy((void *)&protec_shmem_struct, (const void *)rpmsg_sh_mem_start, sizeof(rpmsg_platform_shmem_config_protected_t));
+        (void)memcpy((void *)&protec_shmem_struct, (const void *)rpmsg_sh_mem_start,
+                     sizeof(rpmsg_platform_shmem_config_protected_t));
 
         /* By default set the values of the MR3 connectivity release */
         shmem_config.buffer_payload_size = 496U;
@@ -411,8 +427,8 @@ int32_t platform_get_custom_shmem_config(uint32_t link_id, rpmsg_platform_shmem_
         shmem_config.vring_size          = 0x80U;
         shmem_config.vring_align         = 0x10U;
 
-        if (memcmp(&(protec_shmem_struct.identificationWord), ShmemConfigIdentifier, RL_PLATFORM_SHMEM_CFG_IDENTIFIER_LENGTH) !=
-            0)
+        if (memcmp(&(protec_shmem_struct.identificationWord), ShmemConfigIdentifier,
+                   RL_PLATFORM_SHMEM_CFG_IDENTIFIER_LENGTH) != 0)
         {
             break;
         }

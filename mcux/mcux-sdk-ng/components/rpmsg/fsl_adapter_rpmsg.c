@@ -1,12 +1,11 @@
 /*
- * Copyright 2020, 2022-2023 NXP
- *
+ * Copyright 2020, 2022-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#include "fsl_common.h"
 #include "rpmsg_lite.h"
+#include "fsl_common.h"
 #include "fsl_component_generic_list.h"
 #include "fsl_adapter_rpmsg.h"
 #include "mcmgr.h"
@@ -50,12 +49,35 @@ typedef struct _hal_rpmsg_peer_ept_state
     hal_rpmsg_state_t *rpmsgHandle;
 } hal_rpmsg_peer_ept_state;
 
+/* MCMGR event latch state used by the COREUP/READY handshake.
+ *
+ * Primary sends COREUP pings while waiting for secondary to call
+ * rpmsg_lite_remote_init() and fire APP_RPMSG_READY_EVENT_DATA.
+ * Using a struct (rather than a bare uint16_t) prevents COREUP or
+ * EP_READY events from accidentally clearing the READY latch.
+ *
+ * Note: the secondary (role==1) does NOT wait for COREUP before calling
+ * rpmsg_lite_remote_init(); it fires READY on its own.  The COREUP ping
+ * from primary is therefore advisory on platforms where the secondary is
+ * compiled from source (RT1160, RT1170, etc.) and completely ignored by
+ * prebuilt NBU images (KW43) which use the old protocol.
+ */
+typedef struct _rpmsg_mcmgr_event_ctx
+{
+    volatile uint16_t last_event;
+    volatile uint8_t  ready_seen;
+    volatile uint8_t  coreup_seen;
+} rpmsg_mcmgr_event_ctx_t;
+
+static rpmsg_mcmgr_event_ctx_t s_mcmgrEventCtx = {0};
+
 #ifndef RPMSG_GLOBAL_VARIABLE_ALLOC
 #if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
 #ifndef SH_MEM_TOTAL_SIZE
-#define SH_MEM_TOTAL_SIZE   (2U * RL_BUFFER_COUNT * (RL_WORD_ALIGN_UP(RL_BUFFER_PAYLOAD_SIZE + \
-                            sizeof(struct rpmsg_std_hdr))) + RL_VRING_OVERHEAD)
-#endif /* SH_MEM_TOTAL_SIZE */
+#define SH_MEM_TOTAL_SIZE                                                                               \
+    (2U * RL_BUFFER_COUNT * (RL_WORD_ALIGN_UP(RL_BUFFER_PAYLOAD_SIZE + sizeof(struct rpmsg_std_hdr))) + \
+     RL_VRING_OVERHEAD)
+#endif                  /* SH_MEM_TOTAL_SIZE */
 #if defined(__ICCARM__) /* IAR Workbench */
 #pragma location = "rpmsg_sh_mem_section"
 static char rpmsg_lite_base[SH_MEM_TOTAL_SIZE];
@@ -93,13 +115,24 @@ extern uint32_t rpmsg_sh_mem_end[];
 #define RPMSG_REMOTE_READY_RETRY_COUNT 10000000U
 #endif
 
+/* Delay (ms) inserted after rpmsg_lite_master_init() returns and before
+ * s_rpmsgEptCount is set to 0 (which gates HAL_RpmsgInit).  On IMU/wireless
+ * boards (NBU ~64 MHz) the remote needs time to process the link-up kick,
+ * exit rpmsg_lite_is_link_up(), complete HAL_RpmsgMcmgrRemoteInit(), and
+ * call HAL_RpmsgInit() to register its endpoint before primary fires
+ * EP_READY and sends.  Default 0 = no-op on standard boards.  Override
+ * per-board via reconfig.cmake: -DRPMSG_MASTER_INIT_DELAY_MS=5 */
+#ifndef RPMSG_MASTER_INIT_DELAY_MS
+#define RPMSG_MASTER_INIT_DELAY_MS 0U
+#endif
+
 static int32_t s_rpmsgEptCount                    = -1;
 static uint8_t s_peerRpmsgEptCount                = 0U;
 static struct rpmsg_lite_instance *s_rpmsgContext = NULL;
 #if defined(RL_USE_STATIC_API) && (RL_USE_STATIC_API == 1)
 static struct rpmsg_lite_instance s_context = {0};
 #endif
-static uint8_t s_rpmsg_init_golbal                               = 0U;
+static uint8_t s_rpmsg_init_global                               = 0U;
 static list_label_t s_rpmsgEpList                                = {0};
 static volatile uint8_t s_rpmsgPeerEptData[MAX_EP_COUNT]         = {0};
 static hal_rpmsg_peer_ept_state s_rpmsgPeerEptStat[MAX_EP_COUNT] = {0};
@@ -150,15 +183,39 @@ static int32_t rpmsg_ept_read_cb(void *payload, uint32_t payload_len, uint32_t s
 
 static void RPMsgPeerReadyEventHandler(mcmgr_core_t coreNum, uint16_t eventData, void *context)
 {
-    uint16_t *data = (uint16_t *)context;
+    rpmsg_mcmgr_event_ctx_t *ctx = (rpmsg_mcmgr_event_ctx_t *)context;
     list_element_handle_t list_element;
     hal_rpmsg_peer_ept_state *rpmsgPeerEptState;
     uint8_t address = 0U;
 
-    if ((eventData & 0xff00U) == APP_RPMSG_EP_READY_EVENT_DATA << 0x8U)
+    (void)coreNum;
+
+    /* Capture last event for debug. */
+    ctx->last_event = eventData;
+
+    /* Latch READY and COREUP events separately so they cannot overwrite each
+     * other (a COREUP ping arriving while we wait for READY must not clear the
+     * READY latch, and vice versa). */
+    if (eventData == APP_RPMSG_READY_EVENT_DATA)
     {
-        address                                   = eventData & 0xffU;
-        s_rpmsgPeerEptData[s_peerRpmsgEptCount++] = address;
+        ctx->ready_seen = 1U;
+        return;
+    }
+
+    if (eventData == APP_RPMSG_COREUP_EVENT_DATA)
+    {
+        ctx->coreup_seen = 1U;
+        return;
+    }
+
+    /* EP_READY: record peer endpoint address and mark handle ready. */
+    if ((eventData & 0xff00U) == (APP_RPMSG_EP_READY_EVENT_DATA << 0x8U))
+    {
+        address = (uint8_t)(eventData & 0xffU);
+        if (s_peerRpmsgEptCount < MAX_EP_COUNT)
+        {
+            s_rpmsgPeerEptData[s_peerRpmsgEptCount++] = address;
+        }
     }
 
     list_element = LIST_GetHead(&s_rpmsgEpList);
@@ -166,30 +223,27 @@ static void RPMsgPeerReadyEventHandler(mcmgr_core_t coreNum, uint16_t eventData,
     {
         rpmsgPeerEptState = (hal_rpmsg_peer_ept_state *)(void *)list_element;
 
-        if (rpmsgPeerEptState->rpmsgHandle->remote_addr == address)
+        if ((rpmsgPeerEptState->rpmsgHandle != NULL) && (rpmsgPeerEptState->rpmsgHandle->remote_addr == address))
         {
             rpmsgPeerEptState->rpmsgHandle->rpmsg_lite_peer_ept_is_ready = 1U;
         }
         list_element = LIST_GetNext(list_element);
     }
-
-    *data = eventData;
 }
 
 #if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
 static hal_rpmsg_status_t HAL_RpmsgMcmgrMasterInit(void)
 {
-    static volatile uint16_t RPMsgRemoteReadyEventData = 0;
-    volatile uint32_t timeout                          = RPMSG_REMOTE_READY_RETRY_COUNT;
+    volatile uint32_t timeout = RPMSG_REMOTE_READY_RETRY_COUNT;
 
     if (0 > s_rpmsgEptCount)
     {
-        if (0U == s_rpmsg_init_golbal)
+        if (0U == s_rpmsg_init_global)
         {
-            s_rpmsg_init_golbal = 1U;
+            s_rpmsg_init_global = 1U;
             LIST_Init((&s_rpmsgEpList), 0);
             (void)MCMGR_RegisterEvent(kMCMGR_RemoteApplicationEvent, RPMsgPeerReadyEventHandler,
-                                      (void *)&RPMsgRemoteReadyEventData);
+                                      (void *)&s_mcmgrEventCtx);
             (void)MCMGR_Init();
             if (MCMGR_StartCore(kMCMGR_Core1, (void *)(char *)REMOTE_CORE_BOOT_ADDRESS, 2, kMCMGR_Start_Asynchronous) !=
                 kStatus_MCMGR_Success)
@@ -198,16 +252,28 @@ static hal_rpmsg_status_t HAL_RpmsgMcmgrMasterInit(void)
             }
         }
 
-        while ((APP_RPMSG_READY_EVENT_DATA != RPMsgRemoteReadyEventData) && (--timeout != 0u))
+        /* Wait for secondary to call rpmsg_lite_remote_init() and fire READY.
+         * Send periodic COREUP pings so that on fast cores (CM7 @ 600 MHz) the
+         * effective wait window is seconds rather than ~50 ms.
+         * On kw43 the prebuilt NBU ignores the COREUP pings and fires READY on
+         * its own; the ping is therefore harmless on all platforms. */
+        s_mcmgrEventCtx.ready_seen = 0U;
+        while (0U == s_mcmgrEventCtx.ready_seen)
         {
-        };
-        RPMsgRemoteReadyEventData = 0;
-        if (timeout == 0u)
-        {
-            return kStatus_HAL_RpmsgTimeout;
+            volatile uint32_t ping_wait;
+            if (--timeout == 0u)
+            {
+                return kStatus_HAL_RpmsgTimeout;
+            }
+            (void)MCMGR_TriggerEvent(kMCMGR_Core1, kMCMGR_RemoteApplicationEvent, APP_RPMSG_COREUP_EVENT_DATA);
+            /* Wait up to ~100 000 iterations for READY before re-pinging. */
+            ping_wait = 100000U;
+            while ((0U == s_mcmgrEventCtx.ready_seen) && (--ping_wait != 0u))
+            {
+            }
         }
 
-        /* Master init */
+        /* Remote ISR is live -- master_init virtqueue kick goes to live ISR. */
 #if defined(RL_USE_STATIC_API) && (RL_USE_STATIC_API == 1)
         s_rpmsgContext = rpmsg_lite_master_init((void *)rpmsg_lite_base, SH_MEM_TOTAL_SIZE, RPMSG_LITE_LINK_ID,
                                                 RL_NO_FLAGS, &s_context);
@@ -219,6 +285,10 @@ static hal_rpmsg_status_t HAL_RpmsgMcmgrMasterInit(void)
         {
             return kStatus_HAL_RpmsgError;
         }
+
+#if (RPMSG_MASTER_INIT_DELAY_MS > 0U)
+        env_sleep_msec(RPMSG_MASTER_INIT_DELAY_MS);
+#endif
 
         s_rpmsgEptCount = 0;
     }
@@ -252,32 +322,47 @@ static hal_rpmsg_status_t HAL_RpmsgMasterInit(hal_rpmsg_handle_t handle, hal_rpm
 #endif /* HAL_RPMSG_SELECT_ROLE */
 
 #if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 1U))
-static hal_rpmsg_status_t HAL_RpmsgMcmgrRemoteInit()
+static hal_rpmsg_status_t HAL_RpmsgMcmgrRemoteInit(void)
 {
     uint32_t startupData;
     mcmgr_status_t status;
-    volatile static uint16_t RPMsgRemoteReadyEventData = 0;
+    volatile uint32_t timeout;
 
     if (0 > s_rpmsgEptCount)
     {
-        if (0U == s_rpmsg_init_golbal)
+        if (0U == s_rpmsg_init_global)
         {
             LIST_Init((&s_rpmsgEpList), 0);
-            s_rpmsg_init_golbal = 1U;
+            s_rpmsg_init_global = 1U;
             (void)MCMGR_RegisterEvent(kMCMGR_RemoteApplicationEvent, RPMsgPeerReadyEventHandler,
-                                      (void *)&RPMsgRemoteReadyEventData);
+                                      (void *)&s_mcmgrEventCtx);
             (void)MCMGR_Init();
             do
             {
                 status = MCMGR_GetStartupData(kMCMGR_Core0, &startupData);
             } while (status != kStatus_MCMGR_Success);
         }
+
+        /* Wait for a COREUP ping from primary before rpmsg_lite_remote_init()
+         * and the subsequent READY trigger.  Primary sends COREUP only after
+         * it has cleared its ready_seen latch and is actively waiting, so our
+         * READY can never be lost on an init/deinit/reinit cycle (the lost-
+         * READY race that otherwise deadlocks both cores on fast SoCs).
+         * Bounded wait: if no COREUP arrives we fall back to firing READY
+         * anyway, degrading to legacy behaviour rather than hanging.  This
+         * path is only compiled for source-built secondaries; the prebuilt
+         * NBU (kw43) uses its own firmware and is unaffected. */
+        timeout = RPMSG_REMOTE_READY_RETRY_COUNT;
+        while ((0U == s_mcmgrEventCtx.coreup_seen) && (--timeout != 0u))
+        {
+        }
+        s_mcmgrEventCtx.coreup_seen = 0U;
+
 #if defined(RL_USE_STATIC_API) && (RL_USE_STATIC_API == 1)
         s_rpmsgContext =
             rpmsg_lite_remote_init((void *)(char *)rpmsg_sh_mem_start, RPMSG_LITE_LINK_ID, RL_NO_FLAGS, &s_context);
 #else
         s_rpmsgContext = rpmsg_lite_remote_init((void *)(char *)rpmsg_sh_mem_start, RPMSG_LITE_LINK_ID, RL_NO_FLAGS);
-
 #endif
         if (RL_NULL == s_rpmsgContext)
         {
@@ -326,11 +411,7 @@ static hal_rpmsg_status_t HAL_RpmsgRemoteInit(hal_rpmsg_handle_t handle, hal_rpm
 
 hal_rpmsg_status_t HAL_RpmsgMcmgrInit(void)
 {
-    hal_rpmsg_status_t state;
-    if (0U == s_rpmsg_init_golbal)
-    {
-        (void)MCMGR_EarlyInit();
-    }
+    hal_rpmsg_status_t state = kStatus_HAL_RpmsgError;
 
 #if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
     state = HAL_RpmsgMcmgrMasterInit();
@@ -345,10 +426,23 @@ hal_rpmsg_status_t HAL_RpmsgInit(hal_rpmsg_handle_t handle, hal_rpmsg_config_t *
     hal_rpmsg_status_t state;
     hal_rpmsg_state_t *rpmsgHandle;
     uint8_t count = 0;
+    uint8_t i;
 
     assert(HAL_RPMSG_HANDLE_SIZE >= sizeof(hal_rpmsg_state_t));
     assert(NULL != handle);
     rpmsgHandle = (hal_rpmsg_state_t *)handle;
+
+    /* Ensure HAL_RpmsgMcmgrInit has been called */
+    if (s_rpmsgEptCount < 0)
+    {
+        return kStatus_HAL_RpmsgError;
+    }
+
+    /* Reset peer-endpoint-ready flag so the spin-wait in HAL_RpmsgSendTimeout
+     * always waits for the fresh EP_READY event on every init/deinit cycle.
+     * Without this the flag left over from a previous cycle would make the
+     * sender proceed before the peer has actually re-created its endpoint. */
+    rpmsgHandle->rpmsg_lite_peer_ept_is_ready = 0U;
 
 #if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
     state = HAL_RpmsgMasterInit(handle, config);
@@ -358,11 +452,31 @@ hal_rpmsg_status_t HAL_RpmsgInit(hal_rpmsg_handle_t handle, hal_rpmsg_config_t *
     rpmsgHandle->rx.callback = config->callback;
     rpmsgHandle->rx.param    = config->param;
 
-    /* Send peer Edpt ready to peer device */
-    (void)MCMGR_TriggerEvent(kMCMGR_Core0, kMCMGR_RemoteApplicationEvent, APP_RPMSG_EP_READY_EVENT_DATA << 0x8U | config->local_addr);
-    s_rpmsgPeerEptStat[s_rpmsgEptCount].rpmsgHandle = rpmsgHandle;
-    (void)LIST_AddTail(&s_rpmsgEpList, (list_element_handle_t)&s_rpmsgPeerEptStat[s_rpmsgEptCount]);
-    s_rpmsgEptCount++;
+    /* Send peer endpoint ready to peer device */
+#if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
+    (void)MCMGR_TriggerEvent(kMCMGR_Core1, kMCMGR_RemoteApplicationEvent,
+                             APP_RPMSG_EP_READY_EVENT_DATA << 0x8U | config->local_addr);
+#else
+    (void)MCMGR_TriggerEvent(kMCMGR_Core0, kMCMGR_RemoteApplicationEvent,
+                             APP_RPMSG_EP_READY_EVENT_DATA << 0x8U | config->local_addr);
+#endif
+
+    /* Find an available slot in s_rpmsgPeerEptStat */
+    for (i = 0U; i < MAX_EP_COUNT; i++)
+    {
+        if (s_rpmsgPeerEptStat[i].rpmsgHandle == NULL)
+        {
+            s_rpmsgPeerEptStat[i].rpmsgHandle = rpmsgHandle;
+            (void)LIST_AddTail(&s_rpmsgEpList, (list_element_handle_t)&s_rpmsgPeerEptStat[i]);
+            s_rpmsgEptCount++;
+            break;
+        }
+    }
+
+    if (i == MAX_EP_COUNT)
+    {
+        return kStatus_HAL_RpmsgError;
+    }
 
     while (count < s_peerRpmsgEptCount)
     {
@@ -378,22 +492,44 @@ hal_rpmsg_status_t HAL_RpmsgInit(hal_rpmsg_handle_t handle, hal_rpmsg_config_t *
 hal_rpmsg_status_t HAL_RpmsgDeinit(hal_rpmsg_handle_t handle)
 {
     hal_rpmsg_state_t *rpmsgHandle;
+    uint8_t i;
 
     rpmsgHandle = (hal_rpmsg_state_t *)handle;
 
     if (s_rpmsgEptCount > 0)
     {
         (void)rpmsg_lite_destroy_ept(s_rpmsgContext, rpmsgHandle->pEndpoint);
-        s_rpmsgEptCount--;
+        /* Remove this endpoint's peer-state entry from the event list so the
+         * ISR handler does not walk stale pointers after deinit.
+         * Zero the link field so the struct is clean when reused by the
+         * next LIST_AddTail call (stale next/prev pointers corrupt the list). */
+        for (i = 0U; i < MAX_EP_COUNT; i++)
+        {
+            if (s_rpmsgPeerEptStat[i].rpmsgHandle == rpmsgHandle)
+            {
+                (void)LIST_RemoveElement((list_element_handle_t)&s_rpmsgPeerEptStat[i]);
+                (void)memset(&s_rpmsgPeerEptStat[i].link, 0, sizeof(s_rpmsgPeerEptStat[i].link));
+                s_rpmsgPeerEptStat[i].rpmsgHandle = NULL;
+                s_rpmsgEptCount--;
+                break;
+            }
+        }
     }
 
     if (0 == s_rpmsgEptCount)
     {
-        s_rpmsgEptCount = -1;
+        s_rpmsgEptCount             = -1;
+        s_peerRpmsgEptCount         = 0U;
+        /* Reset COREUP/READY handshake state so the next McmgrInit cycle
+         * re-runs the READY wait cleanly. */
+        s_mcmgrEventCtx.ready_seen  = 0U;
+        s_mcmgrEventCtx.coreup_seen = 0U;
+        (void)memset((void *)s_rpmsgPeerEptData, 0, sizeof(s_rpmsgPeerEptData));
         (void)rpmsg_lite_deinit(s_rpmsgContext);
-        for (int i = 0; i < MAX_EP_COUNT; i++)
+        s_rpmsgContext = NULL;
+        for (i = 0U; i < MAX_EP_COUNT; i++)
         {
-            s_rpmsgPeerEptData[i] = 0U;
+            s_rpmsgPeerEptStat[i].rpmsgHandle = NULL;
         }
     }
 
@@ -477,7 +613,7 @@ void *HAL_RpmsgAllocTxBufferTimeout(hal_rpmsg_handle_t handle, uint32_t size, ui
     uint32_t primask;
     primask = DisableGlobalIRQ();
 #endif
-    buf     = rpmsg_lite_alloc_tx_buffer(s_rpmsgContext, &size, timeout);
+    buf = rpmsg_lite_alloc_tx_buffer(s_rpmsgContext, &size, timeout);
 #if defined(HDI_MODE) && (HDI_MODE == 1)
     EnableGlobalIRQ(primask);
 #endif
@@ -572,4 +708,9 @@ hal_rpmsg_status_t HAL_RpmsgEnterLowpower(hal_rpmsg_handle_t handle)
 hal_rpmsg_status_t HAL_RpmsgExitLowpower(hal_rpmsg_handle_t handle)
 {
     return kStatus_HAL_RpmsgError;
+}
+
+uint32_t HAL_RpmsgAllBufferConsumed(void)
+{
+    return rpmsg_lite_are_all_buffers_consumed(s_rpmsgContext);
 }

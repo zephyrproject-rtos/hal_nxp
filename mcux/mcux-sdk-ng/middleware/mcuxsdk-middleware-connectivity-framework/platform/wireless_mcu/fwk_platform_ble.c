@@ -444,7 +444,6 @@ static hal_rpmsg_return_status_t PLATFORM_HciRpmsgRxCallback(void *param, uint8_
             }
         }
 #else
-        PLATFORM_RemoteActiveReq();
         hci_rx_callback(data[0], &data[1], (uint16_t)(len - 1U));
 
 #ifdef SERIAL_BTSNOOP
@@ -455,7 +454,6 @@ static hal_rpmsg_return_status_t PLATFORM_HciRpmsgRxCallback(void *param, uint8_
         {
             platform_hci_log_cb(data[0], &data[1], (uint16_t)(len - 1U), true);
         }
-        PLATFORM_RemoteActiveRel();
 #endif
 
     } while (false);

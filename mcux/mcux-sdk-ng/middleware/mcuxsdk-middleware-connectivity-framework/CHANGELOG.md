@@ -1,5 +1,47 @@
 ## Connectivity framework CHANGELOG
 
+### 7.4.2 mcux SDK 26.09.00 pvw2
+
+#### Major Changes
+
+- [NVM] Refactored NVM handling to centralize address computation using offset-based flash access helpers (`*_AtOffset`) instead of stored flash addresses, reducing unsafe pointer arithmetic. `NvUpdateSize()` now returns `uint16_t`, added `NV_PartitionBlankCheckAtOffset()`, and deprecated `NvIsMemoryAreaBlank()`. Also fixed a data integrity issue in `NvSaveAllDataSetEntry()` and various Coverity/CERT-C findings.
+- [platform] IFR BLE BD address is now reversed to match the BLE Host stack expectation. The `PLATFORM_IFR_BD_ADDR_IS_MSB_FIRST` option was removed with the reverse loop reworked accordingly.
+
+#### Minor Changes
+
+- [DBG] Added host-triggered NBU force fault for coredump capture through new `PLATFORM_ForceNbuFault()` and `NBUDBG_ForceNbuFault()` APIs, signaled to the NBU over MCMGR (`MCMGR_REMOTE_APP_EVENT_COUNT` set to 2 via Kconfig.defconfig for KW47/MCXW72).
+- [DBG] Deferred the stall HCI event out of `NBUDBG_StateCheck()`, which now only sets the halted state and notifies the callback. Added new `NBUDBG_SendStallEvent()` API to emit the stall vendor event on demand.
+- [DBG] Integrated Zephyr coredump capture into the app-core fault handler under `CONFIG_DEBUG_COREDUMP`.
+- [kw43_mcxw70] Added `PLATFORM_ReinitCrypto()` function for low power support with PSA.
+- [settings] Added IAR compiler support for iterable sections and disabled the `SETTINGS_NAME_END` IAR warning.
+- [rw61x][zb] Backported hal_nxp patches using `__ZEPHYR__` compile guards to disable dependencies not used in Zephyr.
+
+#### Bug Fixes
+
+- [wireless_mcu] Fixed FRO6M calibration by replacing `FWK_MRCC_TSTMR0_CC`/`FWK_MRCC_TSTMR0_MUX` macros with `MRCC_CC`/`MRCC_MUX` from `fsl_clock.h` and preserving the MUX clock selection in `PLATFORM_StartFro6MCalibration()`.
+- [PSA] Fixed Kconfig warning by adding KW43 support in crypto Kconfig.
+- [DBG] Guarded FreeRTOS `sys_dump_callstack_ext()` with `INCLUDE_xTaskGetHandle` to fix `-Werror=unused-function` build failures.
+- [Coverity] Various Coverity compliance fixes in SecLib (DHKey handling in `SecLib_GenerateBluetoothF5KeysSecure()`) and OTA (replaced union with structure for callback/argument passing in message buffer).
+
+### 7.4.1 mcux SDK 26.09.00 pvw1
+
+#### Major Changes
+
+- [SecLib_RNG] Enabled PSA by default on KW43/MCXW70 platforms.
+- [OTA] Introduced `gOtaEraseWholePartitionOnInit_d` option (KW43 only, disabled by default) to erase the whole OTA partition at start of image transfer.
+- [wireless_mcu] Replaced the critical section in `PLATFORM_RemoteActiveReq()` and `PLATFORM_RemoteActiveRel()` with a shared mutex to reduce critical section duration. **These APIs must not be called from ISR anymore.**
+- [wireless_nbu] Updated the low power callback to check for pending RPMSG buffers so the NBU enters WFI only when a Tx message is pending, reducing main core latency.
+
+#### Minor Changes
+
+- [SecLib_RNG] Added to `RNG_psa.c` seed support including WorkQueue-based automatic reseeding `gRngEnableAutoReseed_d`, NBU seed forwarding via `PLATFORM_SendRngSeed()`, reseed counter logic `gRngMaxRequests_d`, and new APIs `RNG_NotifyReseedNeeded()` and `RNG_IsReseedNeeded()`.
+- [OTA] Added a blank check of the OTA partition to avoid unnecessary erase operations and refactored `OTA_MakeHeadRoom()`.
+
+#### Bug Fixes
+
+- [zephyr][lib][crc] Fixed build conflict with EdgeFast OPN CRC by guarding CRC sources with the Zephyr common framework component check to avoid symbol redefinition.
+- [NVM] Fixed offset validation in `NvGetEntryFromDataPtr()` and corrected the bottom record address calculation in `NvGetPageFreeSpace()` when `gUnmirroredFeatureSet_d` is undefined.
+
 ### 7.3.3 mcux SDK 26.06.00
 
 New supported platform : kw43, mcxw70 (EAR: Engineering drop only) 

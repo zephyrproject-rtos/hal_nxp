@@ -30,55 +30,6 @@
 /*! VALUE - TIMESTAMP High */
 #define FWK_TSTMR_H_VALUE(x) (((uint32_t)(((uint32_t)(x)) << FWK_TSTMR_H_VALUE_SHIFT)) & FWK_TSTMR_H_VALUE_MASK)
 
-/* MRCC clock configuration definitions*/
-#define FWK_MRCC_TSTMR0_CLK_DIS                   0x00U
-#define FWK_MRCC_TSTMR0_CLK_EN_NO_LP_STALL        0x01U
-#define FWK_MRCC_TSTMR0_CLK_EN_LP_STALL_IDLE      0x02U
-#define FWK_MRCC_TSTMR0_CLK_EN_LP_STALL_DEEPSLEEP 0x03U
-
-/*! CC - Clock Config
- *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
- *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
- *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
- *  0b11..Peripheral clocks are enabled unless in SLEEP (or lower) mode; low power mode entry stalls until module
- *        is idle. Peripheral functional clocks that remain enabled in SLEEP mode are enabled and do not stall low
- *        power mode entry unless entering DEEPSLEEP (or lower) mode
- */
-#define FWK_MRCC_TSTMR0_CC_MASK  (0x3U)
-#define FWK_MRCC_TSTMR0_CC_SHIFT (0U)
-#define FWK_MRCC_TSTMR0_CC(x)    (((uint32_t)(((uint32_t)(x)) << FWK_MRCC_TSTMR0_CC_SHIFT)) & FWK_MRCC_TSTMR0_CC_MASK)
-
-/*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
- *  0b001..FRO_HF_DIV
- *  0b010..CLK_IN
- *  0b011..CLK_32K
- *  0b101..CLK_1M
- */
-/* TSTMR0 is always configured with 1MHz clock */
-#define FWK_MRCC_TSTMR0_MUX_MASK  (0x70U)
-#define FWK_MRCC_TSTMR0_MUX_SHIFT (4U)
-#define FWK_MRCC_TSTMR0_MUX(x)    (((uint32_t)(((uint32_t)(x)) << FWK_MRCC_TSTMR0_MUX_SHIFT)) & FWK_MRCC_TSTMR0_MUX_MASK)
-#define FWK_MRCC_TSTMR0_DIV_MASK  (0xF00U)
-#define FWK_MRCC_TSTMR0_DIV_SHIFT (8U)
-#define FWK_MRCC_TSTMR0_DIV(x)    (((uint32_t)(((uint32_t)(x)) << FWK_MRCC_TSTMR0_DIV_SHIFT)) & FWK_MRCC_TSTMR0_DIV_MASK)
-
-/*! RSTB - Reset Negation
- *  0b0..Module is held in reset
- *  0b1..Module released from reset
- */
-#define FWK_MRCC_TSTMR0_RSTB_MASK  (0x40000000U)
-#define FWK_MRCC_TSTMR0_RSTB_SHIFT (30U)
-#define FWK_MRCC_TSTMR0_RSTB(x)    (((uint32_t)(((uint32_t)(x)) << FWK_MRCC_RSTB_SHIFT)) & FWK_MRCC_RSTB_MASK)
-
-/*! PR - Peripheral Present
- *  0b0..Module is not present; writes to this register are ignored
- *  0b1..Module is present
- */
-#define FWK_MRCC_TSTMR0_PR_MASK  (0x80000000U)
-#define FWK_MRCC_TSTMR0_PR_SHIFT (31U)
-#define FWK_MRCC_TSTMR0_PR(x)    (((uint32_t)(((uint32_t)(x)) << FWK_MRCC_PR_SHIFT)) & FWK_MRCC_PR_MASK)
-
 /* gPlatformTstmr32Bit_d should have the same definition between MCU and NBU.
 * For better performance and to avoid hazardous glitches at LOW counter rollover,
 * define gPlatformTstmr32Bit_d as 1 by default, unless MSB are really needed.
