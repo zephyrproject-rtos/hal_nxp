@@ -16,6 +16,37 @@ import __main__
 # MEX file has a default namespace, map it here
 NAMESPACES = {'mex' : 'http://mcuxpresso.nxp.com/XSD/mex_configuration_14'}
 
+# Description formats used by the DAISY bit field values of an IOMUXC
+# select-input register. Both name the pad and the ALT mode that a given daisy
+# value selects; only the wording differs between SOC families.
+DAISY_DESCRIPTIONS = (
+    # i.MX RT266x: "PIO2_0---ALT11"
+    re.compile(r'(?P<pad>PIO\d+_\d+)---ALT(?P<alt>\d+)$'),
+    # i.MX RT 4-digit: "Selecting Pad: GPIO_AD_16 for Mode: ALT9"
+    re.compile(r'Selecting Pad:\s*(?P<pad>\S+)\s+for Mode:\s*ALT(?P<alt>\d+)$'),
+)
+
+
+def _parse_daisy_description(description):
+    """
+    Extract the (pad, alt mode) a daisy value selects from its description.
+    @param description: DAISY bit field value description
+    @return (pad name, alt mode) tuple, or (None, None) if unrecognized
+    """
+    for pattern in DAISY_DESCRIPTIONS:
+        match = pattern.fullmatch(description.strip())
+        if match:
+            return match.group('pad'), int(match.group('alt'))
+    return None, None
+
+
+# One entry of the daisy maps built by NXPSdkUtil.build_daisy_maps()
+DaisyForward = collections.namedtuple('DaisyForward',
+                                      'reg value signal instance pad')
+DaisyReverse = collections.namedtuple('DaisyReverse',
+                                      'mux_reg mux_mode pad instance signal')
+
+
 class Peripheral:
     """
     Internal class used to represent a peripheral
@@ -104,6 +135,14 @@ class Peripheral:
         self._load_registers()
         return self._registers[reg_name]
 
+    def get_registers(self):
+        """
+        Get every register in this peripheral, keyed by name. Templated
+        registers appear under their expanded name.
+        """
+        self._load_registers()
+        return self._registers
+
     def get_reg_addr(self, reg_name):
         """
         Gets full address of register in peripheral
@@ -172,6 +211,13 @@ class Register:
         """
         return self._bit_field_map.keys()
 
+    def get_bit_field_values(self, bit_field):
+        """
+        Get every value defined for a bit field in this register
+        @param bit_field: name of register bit field
+        """
+        return sorted(self._bit_field_map[bit_field].keys())
+
 
 class TemplatedRegister(Register):
     """
@@ -192,14 +238,23 @@ class TemplatedRegister(Register):
         for bit_field in template_xml.findall('bit_field'):
             bit_field_map = {}
             for bit_field_value in bit_field.findall('bit_field_value'):
-                desc = bit_field_value.attrib['description']
+                # Template parameters appear inside the bit field value
+                # attributes as well, not just in the register name and offset.
+                # The DAISY descriptions are the important case
+                # ("PIO{1}_{2}---ALT{5}"), since they name the pad and ALT mode
+                # each daisy value selects. Substitute the whole attribute dict
+                # so callers never see a raw placeholder.
+                attrib = {key: self._sub_template(val)
+                          for key, val in bit_field_value.attrib.items()}
+                desc = attrib['description']
                 if desc not in ('Reserved', ''):
                     # Some iMX8 fields have a ?, remove that
-                    bit_field_str = bit_field_value.attrib['value'].strip('?')
+                    bit_field_str = attrib['value'].strip('?')
                     field_val = int(bit_field_str, 0)
-                    bit_field_map[field_val] = bit_field_value.attrib
+                    bit_field_map[field_val] = attrib
             # Save bit field mapping
-            self._bit_field_map[bit_field.attrib['name']] = bit_field_map
+            self._bit_field_map[self._sub_template(
+                bit_field.attrib['name'])] = bit_field_map
 
     def _sub_template(self, string):
         """
@@ -219,12 +274,16 @@ class SignalPin:
     """
     Internal class representing a signal on the SOC
     """
-    def __init__(self, pin, peripheral_map, imx_rt):
+    def __init__(self, pin, peripheral_map, imx_rt, imx_rt2=False):
         """
         Initializes a SignalPin object
         @param pin: pin XML object from signal_configuration.xml
         @param peripheral_map mapping of peripheral names to peripheral objects
         @param imx_rt: is this signal configuration for an IMX RT part
+        @param imx_rt2: is this signal configuration for an i.MX RT266x part.
+            RT266x stores the pad configuration in the same PIO<port>_<pin>
+            register that holds MUX_MODE (no SW_PAD_CTL_PAD_* register), so the
+            pad-config discovery below is gated for this family.
         """
         self._name = pin.attrib['name']
         self._properties = self._get_pin_properties(pin.find('functional_properties'))
@@ -244,8 +303,15 @@ class SignalPin:
             if (prop_id != 'software_input_on') and (prop_id != 'SION'):
                 match = re.match(re.escape(periph_name) + r'_(\w+)', cfg_assign_xml.attrib['register'])
                 reg_name = match.group(1)
-                match = re.match(r'SW_PAD_CTL_PAD_(\w+)', reg_name)
-                pad_name = match.group(1)
+                if imx_rt2:
+                    # i.MX RT266x: pad config lives in the PIO<port>_<pin>
+                    # register (same register as MUX_MODE). The reg_name is
+                    # already the pad name, e.g. "PIO2_2". There is no
+                    # SW_PAD_CTL_PAD_* prefix to strip.
+                    pad_name = reg_name
+                else:
+                    match = re.match(r'SW_PAD_CTL_PAD_(\w+)', reg_name)
+                    pad_name = match.group(1)
                 cfg_reg = peripheral_map[periph_name].get_register(reg_name)
                 cfg_addr = peripheral_map[periph_name].get_base() + cfg_reg.get_offset()
                 # We have found the pad configuration address. Break.
@@ -271,7 +337,8 @@ class SignalPin:
                 pin_type = 'pue'
             else:
                 pin_type = 'unknown'
-            iomux_opt = IOMUXOption(connection, peripheral_map, cfg_addr, name, pin_type)
+            iomux_opt = IOMUXOption(connection, peripheral_map, cfg_addr, name,
+                                    pin_type, imx_rt2)
             peripheral = connection.find('peripheral_signal_ref').attrib['peripheral']
             channel = connection.find('peripheral_signal_ref').attrib.get('channel')
             if channel is not None:
@@ -389,7 +456,8 @@ class IOMUXOption:
     """
     Internal class representing an IOMUXC option
     """
-    def __init__(self, connection, peripheral_map, cfg_reg, name, pin_type):
+    def __init__(self, connection, peripheral_map, cfg_reg, name, pin_type,
+                 imx_rt2=False):
         """
         Initializes an IOMUXC option object
         @param connection: connection XML object from signal_configuration.xml
@@ -397,9 +465,13 @@ class IOMUXOption:
         @param cfg_reg: configuration register for this IOMUXC option
         @param name: allows caller to override iomuxc name, if it is known
         @param pin_type: sets pin type value for config register (for RT11xx)
+        @param imx_rt2: i.MX RT266x family. RT266x names GPIO peripherals
+            "HSP__GPIO_<n>" / "VBAT__GPIO" rather than "GPIO<n>", so GPIO port
+            extraction is gated for this family.
         """
         self._mux = 0
         self._mux_val = 0
+        self._mux_periph = None
         self._daisy = 0
         self._daisy_val = 0
         self._cfg_reg = cfg_reg
@@ -412,8 +484,14 @@ class IOMUXOption:
         peripheral = connection.find('peripheral_signal_ref').attrib.get('peripheral')
         channel = connection.find('peripheral_signal_ref').attrib.get('channel')
         if 'GPIO' in peripheral and channel is not None:
-            match = re.search(r'GPIO(\d+)', peripheral)
-            gpio_port = match.group(1)
+            if imx_rt2:
+                # RT266x GPIO peripherals are "HSP__GPIO_<n>" (numbered) or
+                # "VBAT__GPIO"/"WAKE__GPIO" (unnumbered, treated as port 0).
+                match = re.search(r'GPIO_(\d+)', peripheral)
+                gpio_port = match.group(1) if match else '0'
+            else:
+                match = re.search(r'GPIO(\d+)', peripheral)
+                gpio_port = match.group(1)
             self._is_gpio = True
             self._gpio = GPIO(int(gpio_port), int(channel))
         else:
@@ -456,6 +534,11 @@ class IOMUXOption:
         elif assignment.attrib.get('bit_field') == 'MUX_MODE':
             self._mux = addr
             self._mux_val = value
+            # Record which IOMUXC peripheral instance owns the mux register.
+            # RT266x exposes several instances (MAIN__IOMUXC, WAKE__IOMUXC,
+            # VBAT__IOMUXC) in distinct power domains; single-instance parts
+            # (RT10xx/RT11xx) simply report "IOMUXC" here.
+            self._mux_periph = periph_name
         elif periph_name == 'IOMUXC_GPR':
             self._has_gpr = True
             self._gpr_reg = addr
@@ -514,6 +597,14 @@ class IOMUXOption:
         Get the mux reg for this iomux option
         """
         return self._mux
+
+    def get_mux_periph(self):
+        """
+        Get the name of the IOMUXC peripheral instance that owns the mux
+        register (e.g. "MAIN__IOMUXC", "WAKE__IOMUXC", "VBAT__IOMUXC" on
+        RT266x, or "IOMUXC" on single-instance parts).
+        """
+        return self._mux_periph
 
     def is_gpio(self):
         """
@@ -947,7 +1038,8 @@ class NXPSdkUtil:
         gpio_map = collections.defaultdict(lambda: {})
         # regex to get pin number from gpio mux option
         pin_re = re.compile(r'gpio\d+_io(\d+)|\d+_gpiomux_io(\d\d)|_mux\d_io(\d\d)')
-        with open(outputfile, "w", encoding='utf8') as gpio_dsti:
+        # Newline pinned to LF; see write_pinctrl_defs.
+        with open(outputfile, "w", encoding='utf8', newline='\n') as gpio_dsti:
             # Write header
             gpio_dsti.write(f"/*\n"
                 f" * File created by {os.path.basename(__main__.__file__)}\n"
@@ -1012,14 +1104,79 @@ class NXPSdkUtil:
 
 
 
-    def write_pinctrl_defs(self, outputfile):
+    def build_daisy_maps(self):
+        """
+        Build the IOMUXC select-input (daisy) maps from the register data in the
+        configuration data pack.
+
+        A select-input register is a many-pads-to-one-signal multiplexer, so its
+        own definition has to enumerate the candidate pads: every DAISY bit field
+        value carries a description naming the pad and its ALT mode. That makes
+        the register data a second, independent source for the daisy column of a
+        pinmux entry - the signal configuration file is the only source for the
+        mux mode itself, but not for the daisy value.
+
+        @return dict with:
+            'forward': (mux_reg, mux_mode) -> DaisyForward
+            'reverse': (daisy_reg, daisy_val) -> DaisyReverse
+            'unparsed': list of DAISY descriptions that did not match a known
+                        pattern. Callers must treat a non-empty list as fatal:
+                        a description format this parser does not understand
+                        means the map is silently incomplete.
+        """
+        forward = {}
+        reverse = {}
+        unparsed = []
+        for periph_name, periph in self._peripheral_map.items():
+            if not re.fullmatch(r'(\w+__)?IOMUXC', periph_name):
+                continue
+            # Pad mux registers: PIO<port>_<pin> on RT266x, SW_MUX_CTL_PAD_<pad>
+            # on the RT 4-digit parts.
+            mux_addr = {}
+            daisy_regs = []
+            for reg_name, reg in periph.get_registers().items():
+                match = re.fullmatch(r'PIO\d+_\d+|SW_MUX_CTL_PAD_(\w+)',
+                                     reg_name)
+                if match:
+                    pad = match.group(1) if match.group(1) else reg_name
+                    mux_addr[pad] = periph.get_base() + reg.get_offset()
+                if 'DAISY' in reg.get_bit_fields():
+                    daisy_regs.append(reg)
+            for reg in daisy_regs:
+                daisy_addr = periph.get_base() + reg.get_offset()
+                for value in reg.get_bit_field_values('DAISY'):
+                    desc = reg.get_bit_field_value_description('DAISY', value)
+                    pad, alt = _parse_daisy_description(desc)
+                    if pad is None:
+                        unparsed.append((periph_name, reg.get_name(), desc))
+                        continue
+                    if pad not in mux_addr:
+                        # Pad is not bonded out on this package
+                        continue
+                    key = (mux_addr[pad], alt)
+                    forward[key] = DaisyForward(daisy_addr, value,
+                                                reg.get_name(), periph_name,
+                                                pad)
+                    reverse[(daisy_addr, value)] = DaisyReverse(
+                        mux_addr[pad], alt, pad, periph_name, reg.get_name())
+        return {'forward': forward, 'reverse': reverse, 'unparsed': unparsed}
+
+    def write_pinctrl_defs(self, outputfile, daisy_maps=None):
         """
         Writes a pinctrl dtsi file that defines all pinmux options. The board
         level pin groups will include the pinctrl definitions here, and define
         the properties to be set on each pin.
         @param outputfile file to write pinctrl dtsi file to
+        @param daisy_maps result of build_daisy_maps(). When given, mux options
+            that the signal configuration file does not list but that a
+            select-input candidate list names are emitted as well. Only used for
+            RT266x, where the pad configuration register is the mux register, so
+            a complete pinmux entry can be derived without the signal file.
+        @return list of node names recovered from daisy_maps
         """
-        with open(outputfile, "w", encoding='utf8') as soc_dtsi:
+        # Newline is pinned to LF: these files are checked in with LF endings,
+        # and the platform default would rewrite every line on Windows.
+        with open(outputfile, "w", encoding='utf8', newline='\n') as soc_dtsi:
             # Start by writing header
             header = (f"/*\n"
             f" * {self._copyright}\n"
@@ -1042,7 +1199,15 @@ class NXPSdkUtil:
             # RT11xx has multiple types of pin registers, with a variety
             # of register layouts. Define types here.
             soc_rt11xx = re.match(r'MIMXRT11\d+', self._soc) is not None
-            soc_dtsi.write("&iomuxc {\n")
+            # Collect the DTS node text per anchor so each anchor block is
+            # emitted once, in a stable order. A part with several IOMUXC
+            # instances (RT266x: MAIN__IOMUXC, WAKE__IOMUXC, VBAT__IOMUXC in
+            # distinct power domains) needs one devicetree node per instance,
+            # so the pinmux definitions are grouped by the IOMUXC peripheral
+            # that owns each pin's mux register. Single-instance parts report
+            # "IOMUXC" for every pin and collapse onto the legacy &iomuxc.
+            anchor_nodes = collections.defaultdict(list)
+            emitted = set()
             for pin in sorted(self._signal_map.values()):
                 for iomux_opt in sorted(pin.get_mux_options()):
                     # Get iomuxc constant values
@@ -1052,6 +1217,7 @@ class NXPSdkUtil:
                     input_reg = iomux_opt.get_daisy_reg()
                     input_daisy = iomux_opt.get_daisy_val()
                     config_reg = iomux_opt.get_cfg_reg()
+                    emitted.add((register, mode))
                     # build DTS node
                     dts_node = f"\t/omit-if-no-ref/ {iomuxc_name.lower()}: {iomuxc_name} {{\n"
                     dts_node += (f"\t\tpinmux = <0x{register:x} {mode:d} 0x{input_reg:x} "
@@ -1068,9 +1234,60 @@ class NXPSdkUtil:
                         # Add GPR configuration
                         dts_node += f"\t\tgpr = <0x{gpr_reg:x} 0x{gpr_shift:x} 0x{gpr_val:x}>;\n"
                     dts_node += "\t};\n"
-                    # Write iomuxc dts node to file
+                    anchor_nodes[self._iomuxc_anchor(iomux_opt.get_mux_periph())].append(dts_node)
+            # A pad/ALT pair can be named by a select-input candidate list
+            # without appearing in the signal file's <connections> data. The
+            # candidate list carries everything a pinmux entry needs (pad, ALT
+            # mode, daisy register and value), and on RT266x the pad
+            # configuration register is the mux register, so the entry can be
+            # completed from the register data alone. Recover those.
+            recovered = []
+            if daisy_maps and re.match(r'MIMXRT2\d+', self._soc):
+                for key, entry in sorted(daisy_maps['reverse'].items()):
+                    mux_key = (entry.mux_reg, entry.mux_mode)
+                    if mux_key in emitted:
+                        continue
+                    name = f"{entry.instance}_{entry.pad}_{entry.signal}"
+                    node = (f"\t/omit-if-no-ref/ {name.lower()}: {name} {{\n"
+                            f"\t\tpinmux = <0x{entry.mux_reg:x} "
+                            f"{entry.mux_mode:d} 0x{key[0]:x} {key[1]:d} "
+                            f"0x{entry.mux_reg:x}>;\n"
+                            "\t};\n")
+                    anchor_nodes[self._iomuxc_anchor(entry.instance)].append(node)
+                    emitted.add(mux_key)
+                    recovered.append(name)
+            # Emit one block per anchor. "&iomuxc" first (legacy / MAIN), then the
+            # remaining domain anchors in a stable order so single-instance
+            # parts produce byte-identical output to the previous generator.
+            for anchor in ["&iomuxc"] + sorted(a for a in anchor_nodes if a != "&iomuxc"):
+                if anchor not in anchor_nodes:
+                    continue
+                soc_dtsi.write(anchor + " {\n")
+                for dts_node in anchor_nodes[anchor]:
                     soc_dtsi.write(dts_node)
-            soc_dtsi.write("};\n\n")
+                soc_dtsi.write("};\n\n")
+        return recovered
+
+    @staticmethod
+    def _iomuxc_anchor(mux_periph):
+        """
+        Derive the devicetree anchor for a pin from the name of the IOMUXC
+        peripheral instance that owns its mux register.
+
+        The instance name carries the power-domain prefix straight from the
+        configuration data (e.g. "MAIN__IOMUXC", "WAKE__IOMUXC",
+        "VBAT__IOMUXC" on RT266x). MAIN keeps the legacy "&iomuxc" anchor so
+        single-instance parts (whose instance is just "IOMUXC") are unchanged;
+        every other domain maps to "&iomuxc_<domain>". No fixed instance list
+        or base-address table is baked in, so a new domain is routed
+        automatically without a script change.
+        """
+        if not mux_periph:
+            return "&iomuxc"
+        match = re.match(r'([A-Z]+)__IOMUXC', mux_periph)
+        if not match or match.group(1) == "MAIN":
+            return "&iomuxc"
+        return "&iomuxc_" + match.group(1).lower()
 
     def write_pinctrl_groups(self, mexfile, outputfile):
         """
@@ -1089,7 +1306,8 @@ class NXPSdkUtil:
         f" * Note: File generated by {os.path.basename(__main__.__file__)}\n"
         f" * from {os.path.basename(mexfile)}\n"
         " */\n\n")
-        with open(outputfile, "w", encoding="utf8") as dts_file:
+        # Newline pinned to LF; see write_pinctrl_defs.
+        with open(outputfile, "w", encoding="utf8", newline='\n') as dts_file:
             dts_file.write(header)
             if 'RT' in self.get_part_num():
                 dts_file.write("#include <nxp/nxp_imx/rt/"
@@ -1210,11 +1428,16 @@ class NXPSdkUtil:
         # the peripheral signal refs
         iomuxc_options = {}
         imx_rt = 'RT' in self._soc
+        # i.MX RT266x (RT2660 family) uses a different IOMUXC register layout
+        # (PIO<port>_<pin> registers, no SW_PAD_CTL_PAD_* registers). Detect it
+        # here so SignalPin can gate the pad-config discovery accordingly.
+        imx_rt2 = re.match(r'MIMXRT2\d+', self._soc) is not None
         for pad in pads:
             pad_name = pad.attrib['name']
             # Verify signal pad is configurable
             if len(pad.findall('functional_properties/functional_property')) != 0:
-                iomuxc_options[pad_name] = SignalPin(pad, self._peripheral_map, imx_rt)
+                iomuxc_options[pad_name] = SignalPin(pad, self._peripheral_map,
+                                                     imx_rt, imx_rt2)
         return iomuxc_options
 
 
