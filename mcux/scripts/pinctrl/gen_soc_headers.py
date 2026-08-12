@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright 2023-2025 NXP
+# Copyright 2023-2026 NXP
 #
 # SPDX-License-Identifier: Apache-2.0
 
@@ -36,6 +36,11 @@ Given a processor data pack, generates the SOC level pinctrl DTSI definitions
 required for Zephyr. This tool is intended to be used with the configuration
 data downloaded from NXP's MCUXpresso SDK builder.
 """
+
+# Data pack version this tool is verified against. Only used for a warning:
+# other versions usually work, but the layout of the register and signal
+# description files is not a stable interface.
+SUPPORTED_DATA_VERSION = 26.06
 
 
 def parse_args():
@@ -75,6 +80,9 @@ def processor_to_controller(processor_name):
     # Select family of pin controller based on SOC type
     if "IMXRT1" in processor_name:
         # Use IMX config tools
+        return 'IOMUX'
+    if "IMXRT2" in processor_name:
+        # i.MX RT266x (RT2660 family) uses IOMUXC, same IMX config tools flow
         return 'IOMUX'
     if "IMXRT7" in processor_name:
         # LPC config tools
@@ -142,9 +150,9 @@ def main():
 
     data_version = get_pack_version(temp_dir.name)
     print(f"Found data pack version {data_version}")
-    if round(data_version) != '25.06':
-        print("Warning: This tool is only verified for data pack version 25.06, "
-            "other versions may not work")
+    if abs(data_version - SUPPORTED_DATA_VERSION) > 1e-9:
+        print(f"Warning: This tool is verified for data pack version "
+            f"{SUPPORTED_DATA_VERSION}, other versions may not work")
 
     # Attempt to locate the signal XML files we will generate from
     proc_root = pathlib.Path(temp_dir.name) / 'processors'
@@ -158,8 +166,10 @@ def main():
             print("No signal configuration files were found in this data pack")
             sys.exit(255)
     if args.copyright:
-        # Add default copyright
-        nxp_copyright = (f"Copyright {datetime.datetime.today().year}, NXP\n"
+        # Add default copyright in the machine-parsable SPDX / REUSE form.
+        nxp_copyright = (f"SPDX-FileCopyrightText: Copyright "
+        f"{datetime.datetime.today().year} NXP\n"
+        f" *\n"
         f" * SPDX-License-Identifier: Apache-2.0")
     else:
         nxp_copyright = ""
@@ -217,19 +227,37 @@ def main():
         target_dir.mkdir(parents=True, exist_ok=True)
         out_path = str(target_dir / file_name)
 
-        cfg_util.write_pinctrl_defs(out_path)
+        if args.controller == 'IOMUX':
+            # Build the IOMUXC select-input maps from the register data before
+            # writing anything: they complete the daisy column of the generated
+            # entries, and an unrecognized description means the map would be
+            # silently incomplete, which must not be papered over.
+            daisy_maps = cfg_util.build_daisy_maps()
+            if daisy_maps['unparsed']:
+                print("Error: unrecognized IOMUXC select-input descriptions, "
+                    "the daisy map would be incomplete:")
+                for periph_name, reg_name, desc in daisy_maps['unparsed'][:10]:
+                    print(f"  {periph_name}.{reg_name}: \"{desc}\"")
+                sys.exit(1)
+            recovered = cfg_util.write_pinctrl_defs(out_path, daisy_maps)
+        else:
+            daisy_maps = None
+            recovered = cfg_util.write_pinctrl_defs(out_path)
         written_files.append(out_path)
         print(f"Wrote pinctrl headers to {out_path}")
+        if recovered:
+            print(f"  recovered {len(recovered)} mux option(s) from the "
+                "select-input candidate lists: " + ", ".join(recovered))
 
         if args.controller == 'IOMUX':
-            print(f"Running daisy register fixup using {args.iomuxc_file}")
             ground_truth = imx_fixup_pinmux.parse_iomuxc_ground_truth(args.iomuxc_file)
-            error_count = imx_fixup_pinmux.fixup_pinctrl_file(out_path, ground_truth)
-            if error_count > 0:
-                print(f"Fixed {error_count} daisy register error(s) in {out_path}")
-            else:
-                print("No daisy register errors found")
-
+            report = imx_fixup_pinmux.validate_pinctrl_file(out_path, daisy_maps,
+                                                            ground_truth)
+            for report_line in imx_fixup_pinmux.format_report(report, out_path):
+                print(report_line)
+            if imx_fixup_pinmux.report_is_fatal(report):
+                print("Error: daisy validation failed, see above")
+                sys.exit(1)
     if not args.no_dedup and written_files:
         # Deduplicate the generated files against each other AND against
         # the pinctrl files already present in the output directories, so

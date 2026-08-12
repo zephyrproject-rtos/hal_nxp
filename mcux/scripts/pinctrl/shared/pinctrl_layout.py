@@ -37,6 +37,7 @@ import re
 # (dts/arm/nxp/<family>/<series>/). See module docstring for refresh command.
 _DTS_EXISTING_SERIES = {
     "imxrt/imxrt10xx", "imxrt/imxrt118x", "imxrt/imxrt11xx",
+    "imxrt/imxrt266x",
     "imxrt/imxrt5xx", "imxrt/imxrt6xx", "imxrt/imxrt7xx",
     "kinetis/k2x", "kinetis/k32lx", "kinetis/k6x", "kinetis/k8x",
     "kinetis/ke1xf", "kinetis/ke1xz", "kinetis/kl2x", "kinetis/kv5x",
@@ -85,6 +86,7 @@ def _series_imxrt(p):
     if re.match(r"MIMXRT118", p):   return "imxrt118x"   # MUST precede RT11
     if re.match(r"MIMXRT10", p):    return "imxrt10xx"
     if re.match(r"MIMXRT11", p):    return "imxrt11xx"
+    if re.match(r"MIMXRT26", p):    return "imxrt266x"
     if re.match(r"MIMXRT5", p):     return "imxrt5xx"
     if re.match(r"MIMXRT6", p):     return "imxrt6xx"
     if re.match(r"MIMXRT7", p):     return "imxrt7xx"
