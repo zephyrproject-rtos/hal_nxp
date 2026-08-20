@@ -24,6 +24,8 @@ from imx import imx_fixup_pinmux
 from kinetis import kinetis_cfg_utils
 from lpc import lpc_cfg_utils
 
+from shared import pinctrl_layout
+
 import dedup_pinctrl
 
 
@@ -185,18 +187,35 @@ def main():
         if args.controller == 'IOMUX':
             cfg_util = imx_cfg_utils.NXPSdkUtil(str(package_root),
                                                 copyright_header=nxp_copyright)
-            out_path = f"{out_dir}/{cfg_util.get_part_num().lower()}-pinctrl.dtsi"
+            part_num = cfg_util.get_part_num()
+            file_name = f"{part_num.lower()}-pinctrl.dtsi"
         elif args.controller == 'IOCON':
             cfg_util = lpc_cfg_utils.NXPSdkUtil(str(package_root),
                                                 copyright_header=nxp_copyright)
-            out_path = f"{out_dir}/{cfg_util.get_part_num().upper()}-pinctrl.h"
+            part_num = cfg_util.get_part_num()
+            file_name = f"{part_num.upper()}-pinctrl.h"
         elif args.controller == 'PORT':
             cfg_util = kinetis_cfg_utils.NXPSdkUtil(str(package_root),
                                                     copyright_header=nxp_copyright)
-            out_path = f"{out_dir}/{cfg_util.get_part_num().upper()}-pinctrl.h"
+            part_num = cfg_util.get_part_num()
+            file_name = f"{part_num.upper()}-pinctrl.h"
         else:
             print("Error: unknown controller type")
             sys.exit(255)
+
+        # Route the generated file into the family/series/pinctrl/ layout that
+        # mirrors the zephyr DTS side, so regeneration does not re-flatten the
+        # tree. Falls back to the plain output dir when the part number cannot
+        # be classified (shared/pinctrl_layout.py is the single source of truth).
+        subdir = pinctrl_layout.resolve_subdir(part_num)
+        if subdir is None:
+            print(f"Warning: could not classify part {part_num} into a "
+                  "family/series layout; writing at output root")
+            target_dir = pathlib.Path(out_dir)
+        else:
+            target_dir = pathlib.Path(out_dir) / subdir
+        target_dir.mkdir(parents=True, exist_ok=True)
+        out_path = str(target_dir / file_name)
 
         cfg_util.write_pinctrl_defs(out_path)
         written_files.append(out_path)
