@@ -1,4 +1,4 @@
-# Copyright 2025 NXP
+# Copyright 2025-2026 NXP
 # SPDX-License-Identifier: BSD-3-Clause
 mcux_set_list(MCXW23_FAMILY "MCXW236 MCXW235")
 
@@ -117,6 +117,15 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.snps_ll)
         mcux_add_include(
             INCLUDES interface/snps_controller/sdk_integration/controller_api
             INCLUDES interface/
+        )
+    endif()
+
+    if(CONFIG_MCUX_COMPONENT_middleware.wireless.snps_ll_ble_controller_if)
+        mcux_add_source(
+            SOURCES interface/snps_controller/sdk_integration/ble_controller.h
+        )
+        mcux_add_include(
+            INCLUDES interface/snps_controller/sdk_integration
         )
     endif()
 endif()
