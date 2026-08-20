@@ -101,8 +101,32 @@ files into:
 
 ```
 python gen_soc_headers.py MIMXRT1062xxxxA_ConfigTools_data-v13.zip \
-        --soc-output ~/zephyrproject/modules/hal/nxp/dts/nxp/nxp_imx/rt/
+        --soc-output ~/zephyrproject/modules/hal/nxp/dts/nxp/
 ```
+
+`--soc-output` is the **root** of the `dts/nxp` tree, not a leaf directory.
+The generated file is routed automatically into a `pinctrl/` sub-directory that
+mirrors the zephyr DTS side layout (`dts/arm/nxp/<family>/<series>/`): series
+families land in `<family>/<series>/pinctrl/` and flat families in
+`<family>/pinctrl/`. For example the command above writes
+`imxrt/imxrt10xx/pinctrl/mimxrt1062xxxxa-pinctrl.dtsi`, an `MK02FN128` data pack
+writes `kinetis/k0x/pinctrl/MK02FN128-pinctrl.h`, and an i.MX part writes
+`imx/pinctrl/<part>-pinctrl.dtsi`. This keeps regeneration from re-flattening
+the tree.
+
+The family/series decision is made by `shared/pinctrl_layout.py`, which is the
+single source of truth for the layout:
+
+- `imxrt`, `lpc`, `mcx` use a series sub-dir when `<family>/<series>` already
+  exists on the DTS side (otherwise the part lands in `<family>/pinctrl/`).
+- `kinetis` is series-organized and **always** uses its series sub-dir, creating
+  it (e.g. `k0x`, `km3x`, `kv3x`) even when it does not yet exist on the DTS side.
+- `imx`, `s32`, `rw` are flat on the DTS side, so their parts are written into a
+  family-level `pinctrl/` dir (`imx/pinctrl/`, `s32/pinctrl/`, `rw/pinctrl/`).
+
+When the DTS side gains a new series dir, refresh the snapshot embedded in
+`shared/pinctrl_layout.py` (the refresh command is in that file's docstring).
+
 
 ## Unsupported SOCs
 
