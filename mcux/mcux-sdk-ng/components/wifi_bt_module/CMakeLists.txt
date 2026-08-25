@@ -9,11 +9,15 @@ if (CONFIG_MCUX_COMPONENT_component.wifi_bt_module.tx_pwr_limits)
                 Murata/tx_pwr_limits/wlan_txpwrlimit_cfg_murata_1ZM_WW.h
                 Murata/tx_pwr_limits/wlan_txpwrlimit_cfg_murata_2EL_WW.h
                 Murata/tx_pwr_limits/wlan_txpwrlimit_cfg_murata_NH.h
+                Quectel/tx_pwr_limits/wlan_txpwrlimit_cfg_quectel_FGS060N.h
                 u-blox/tx_pwr_limits/wlan_txpwrlimit_cfg_jody_w5_WW.h
+                u-blox/tx_pwr_limits/wlan_txpwrlimit_cfg_maya_W1.h
+                u-blox/tx_pwr_limits/wlan_txpwrlimit_cfg_maya_W276_WW.h
     )
     mcux_add_include(
         INCLUDES AzureWave/tx_pwr_limits
                  Murata/tx_pwr_limits u-blox/tx_pwr_limits
+                 Quectel/tx_pwr_limits
     )
 endif()
 
@@ -189,6 +193,18 @@ endif()
 if (CONFIG_MCUX_COMPONENT_component.wifi_bt_module.board_murata_2el_m2)
      mcux_add_macro(
         "-DWIFI_IW612_BOARD_MURATA_2EL_M2"
+    )
+endif()
+
+if (CONFIG_MCUX_COMPONENT_component.wifi_bt_module.board_ubx_maya_w276)
+     mcux_add_macro(
+         "-DWIFI_IW612_BOARD_UBX_MAYA_W276"
+    )
+endif()
+
+if (CONFIG_MCUX_COMPONENT_component.wifi_bt_module.board_quectel_fgs060n)
+     mcux_add_macro(
+         "-DWIFI_IW612_BOARD_QUECTEL_FGS060N"
     )
 endif()
 

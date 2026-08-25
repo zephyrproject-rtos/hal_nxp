@@ -217,6 +217,24 @@
         .ed_ctrl_2g = 0x1, .ed_offset_2g = 0xA, .ed_ctrl_5g = 0x1, .ed_offset_5g = 0xA \
     }
 
+/* u-blox MAYA W276 on board Firecrest module */
+#elif defined(WIFI_IW612_BOARD_UBX_MAYA_W276)
+#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_maya_W276_WW.h"
+#define SD9177
+#define SDMMCHOST_OPERATION_VOLTAGE_1V8
+#define SD_TIMING_MAX kSD_TimingDDR50Mode
+#define WIFI_BT_USE_M2_INTERFACE
+#define WLAN_ED_MAC_CTRL                                                               \
+    {                                                                                  \
+        .ed_ctrl_2g = 0x1, .ed_offset_2g = 0xA, .ed_ctrl_5g = 0x1, .ed_offset_5g = 0xA \
+    }
+
+#elif  defined(BT_NW61X_BOARD_NXP_RD_USD)
+/* AW-300 is a BT-Only module. WiFi functions are not used, but SD9177
+   firmware selection is still required for the underlying IW612 chipset
+ */
+#define SD9177
+#define WIFI_BT_USE_M2_INTERFACE
 /* u-blox EVK-JODY-W263 */
 #elif defined(WIFI_88W8987_BOARD_UBX_JODY_W2_USD)
 #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_WW.h"
@@ -275,9 +293,21 @@
         .ed_ctrl_2g = 0x1, .ed_offset_2g = 0xA, .ed_ctrl_5g = 0x1, .ed_offset_5g = 0xA \
     }
 
+/* Firecrest module from Quectel mounted on RT board */
+#elif defined(WIFI_IW612_BOARD_QUECTEL_FGS060N)
+#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_quectel_FGS060N.h"
+#define SD9177
+#define SDMMCHOST_OPERATION_VOLTAGE_1V8
+#define SD_TIMING_MAX kSD_TimingDDR50Mode
+#define WIFI_BT_USE_USD_INTERFACE
+#define WLAN_ED_MAC_CTRL                                                               \
+    {                                                                                  \
+        .ed_ctrl_2g = 0x1, .ed_offset_2g = 0xA, .ed_ctrl_5g = 0x1, .ed_offset_5g = 0xA \
+    }
+
 /* u-blox EVK-MAYA-W161/-W166 */
 #elif defined(WIFI_IW416_BOARD_UBX_MAYA_W1_USD)
-#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_WW.h"
+#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_maya_W1.h"
 #define SD8978
 #define SDMMCHOST_OPERATION_VOLTAGE_1V8
 #define WIFI_BT_USE_USD_INTERFACE
