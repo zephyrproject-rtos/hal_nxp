@@ -347,3 +347,19 @@ blobs:
     license-path: zephyr/blobs/license/BSD_3.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/4a3cb9ad/neutron/rt700/cm33/libNeutronFirmware.a
     description: "Neutron firmware library for RT700 CM33"
+
+#For MCXL255
+  - path: mcxl255/libadvc_cm0p.a
+    sha256: a2bbd65e25a7f1f363c0a4ee6ac8b03084301e8970c7d2224186a5c38bad71a6
+    type: lib
+    version: '26.09.00-pvw2'
+    license-path: zephyr/blobs/license/BSD_3.txt
+    url: https://github.com/nxp-mcuxpresso/mcux-devices-mcx/raw/main/MCXL/MCXL255/drivers/libadvc_cm0p.a
+    description: "ADVC library for MCXL255 CM0P core"
+  - path: mcxl255/libadvc_cm33.a
+    sha256: cc487d00944870fabf7433ab60833b175e37fe46ffd6024831cb67fd654afa68
+    type: lib
+    version: '26.09.00-pvw2'
+    license-path: zephyr/blobs/license/BSD_3.txt
+    url: https://github.com/nxp-mcuxpresso/mcux-devices-mcx/raw/main/MCXL/MCXL255/drivers/libadvc_cm33.a
+    description: "ADVC library for MCXL255 CM33 core"
