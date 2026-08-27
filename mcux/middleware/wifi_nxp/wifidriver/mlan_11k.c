@@ -324,6 +324,7 @@ static void wlan_process_rm_beacon_req(t_u8 *req,
     int ret = 0, i;
     wlan_scan_params_v2_t wlan_scan_param;
     wlan_rrm_scan_cb_param *param = NULL;
+    int valid = 0;
 
     if (beacon_req->mode != (t_u8)WLAN_RRM_MEASUREMENT_MODE_PASSIVE &&
         beacon_req->mode != (t_u8)WLAN_RRM_MEASUREMENT_MODE_ACTIVE &&
@@ -374,6 +375,14 @@ static void wlan_process_rm_beacon_req(t_u8 *req,
     (void)memset(&wlan_scan_param, 0, sizeof(wlan_scan_params_v2_t));
     if (beacon_req->channel > 0U && beacon_req->channel != 255U)
     {
+#if !CONFIG_5GHz_SUPPORT
+        if (beacon_req->channel > 14)
+        {
+            wifi_w("wlan_rrm: ignoring 5GHz chan %d (CONFIG_5GHz_SUPPORT=0)",
+                   beacon_req->channel);
+            goto output;
+        }
+#endif /* !CONFIG_5GHz_SUPPORT */
         wlan_scan_param.num_channels             = 1;
         wlan_scan_param.chan_list[0].chan_number = beacon_req->channel;
         if (beacon_req->mode == (t_u8)WLAN_RRM_MEASUREMENT_MODE_ACTIVE)
@@ -392,24 +401,40 @@ static void wlan_process_rm_beacon_req(t_u8 *req,
     }
     else if (beacon_req->channel == 255U && param->rep_data.channel_num > (t_u8)0U)
     {
-        wlan_scan_param.num_channels = param->rep_data.channel_num;
         for (i = 0; i < (int)param->rep_data.channel_num && i < MAX_CHANNEL_LIST; i++)
         {
-            wlan_scan_param.chan_list[i].chan_number = param->rep_data.channel[i];
+#if !CONFIG_5GHz_SUPPORT
+            if (param->rep_data.channel[i] > 14)
+            {
+                wifi_w("wlan_rrm: ignoring 5GHz chan %d (CONFIG_5GHz_SUPPORT=0)",
+                       param->rep_data.channel[i]);
+                continue;
+            }
+#endif /* !CONFIG_5GHz_SUPPORT */
+            wlan_scan_param.chan_list[valid].chan_number = param->rep_data.channel[i];
             if (beacon_req->mode == (t_u8)WLAN_RRM_MEASUREMENT_MODE_ACTIVE)
             {
-                wlan_scan_param.chan_list[i].scan_type = MLAN_SCAN_TYPE_ACTIVE;
+                wlan_scan_param.chan_list[valid].scan_type = MLAN_SCAN_TYPE_ACTIVE;
             }
             else
             {
-                wlan_scan_param.chan_list[i].scan_type = MLAN_SCAN_TYPE_PASSIVE;
+                wlan_scan_param.chan_list[valid].scan_type = MLAN_SCAN_TYPE_PASSIVE;
             }
 
             if (duration_mandatory)
             {
-                wlan_scan_param.chan_list[i].scan_time = beacon_req->duration;
+                wlan_scan_param.chan_list[valid].scan_time = beacon_req->duration;
             }
+            valid++;
         }
+        wlan_scan_param.num_channels = (t_u8)MIN(valid, 0xFF);
+#if !CONFIG_5GHz_SUPPORT
+        if (valid == 0)
+        {
+            wifi_w("wlan_rrm: all channels are 5GHz, skipping scan");
+            goto output;
+        }
+#endif /* !CONFIG_5GHz_SUPPORT */
     }
     else
     {

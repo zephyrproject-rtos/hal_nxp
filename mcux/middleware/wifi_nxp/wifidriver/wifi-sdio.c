@@ -3147,6 +3147,15 @@ static mlan_status _handle_sdio_packet_read(mlan_adapter *pmadapter, t_u8 **pack
 
     if ((*packet) == MNULL)
     {
+#if CONFIG_TX_RX_ZERO_COPY
+        /* SG read failed: recycle any net_buf already queued on the RX SG list
+         * by inbuf_2_sg_data(), otherwise the un-filled buffers leak and get
+         * mis-processed later */
+        if (g_rx_sg_data_head.sg_data.dataList != NULL)
+        {
+            sg_data_list_clear_rx();
+        }
+#endif
         return MLAN_STATUS_FAILURE;
     }
 
@@ -3267,8 +3276,19 @@ static mlan_status _handle_sdio_packet_read(mlan_adapter *pmadapter, t_u8 **pack
     *packet = wlan_read_rcv_packet(port, rx_len, rx_blocks, pkt_type, false);
 #endif
 
-    if (!*packet)
+    if ((*packet) == MNULL)
+    {
+#if CONFIG_TX_RX_ZERO_COPY
+        /* SG read failed: recycle any net_buf already queued on the RX SG list
+         * by inbuf_2_sg_data(), otherwise the un-filled buffers leak and get
+         * mis-processed later */
+        if (g_rx_sg_data_head.sg_data.dataList != NULL)
+        {
+            sg_data_list_clear_rx();
+        }
+#endif
         return MLAN_STATUS_FAILURE;
+    }
 
     return MLAN_STATUS_SUCCESS;
 }

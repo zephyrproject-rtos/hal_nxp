@@ -8254,28 +8254,6 @@ void wifi_enable_low_pwr_mode()
 }
 #endif
 
-#if CONFIG_ROAMING
-int wifi_config_roaming(const int enable, uint8_t rssi_low)
-{
-    mlan_private *pmpriv = mlan_adap->priv[0];
-
-    if (enable)
-    {
-        pmpriv->roaming_enabled = MTRUE;
-        pmpriv->rssi_low        = rssi_low;
-    }
-    else
-    {
-        if (pmpriv->roaming_enabled)
-        {
-            pmpriv->roaming_enabled = MFALSE;
-            pmpriv->rssi_low        = 0;
-            wifi_stop_bgscan();
-        }
-    }
-    return WM_SUCCESS;
-}
-#endif
 
 #if CONFIG_11AX
 int wifi_set_11ax_tx_omi(const mlan_bss_type bss_type,

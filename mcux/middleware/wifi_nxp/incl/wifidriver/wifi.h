@@ -497,7 +497,6 @@ int wifi_set_txrx_histogram(int bss_type, void *cfg, t_u8 *data);
 #endif
 
 #if CONFIG_ROAMING
-int wifi_config_roaming(const int enable, uint8_t rssi_low);
 int wifi_roaming_subscribe_event(uint8_t bitmap, uint8_t rssi_low, uint8_t snr_low);
 int wifi_roaming_clear_subscribe(void);
 #endif
@@ -916,7 +915,11 @@ void wifi_set_ps_cfg(t_u16 multiple_dtims,
                      t_u16 adhoc_wake_period,
                      t_u16 mode,
                      t_u16 delay_to_ps);
-int wifi_send_hs_cfg_cmd(mlan_bss_type interface, t_u32 ipv4_addr, t_u16 action, t_u32 conditions);
+int wifi_send_hs_cfg_cmd(mlan_bss_type interface,
+                         t_u32 *ipv4_addr,
+                         t_u8 ipv4_addr_cnt,
+                         t_u16 action,
+                         t_u32 conditions);
 #if CONFIG_HOST_SLEEP
 int wifi_cancel_host_sleep(mlan_bss_type interface);
 #endif
