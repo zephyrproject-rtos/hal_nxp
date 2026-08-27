@@ -620,7 +620,7 @@ int wifi_get_data_rate(wifi_ds_rate *ds_rate, mlan_bss_type bss_type)
     cmd->seq_num = HostCmd_SET_SEQ_NO_BSS_INFO(0 /* seq_num */, 0 /* bss_num */, bss_type);
     cmd->result  = 0x0;
 
-    mlan_status rv = MLAN_STATUS_SUCCESS;
+    mlan_status rv = MLAN_STATUS_FAILURE;
     if (bss_type == MLAN_BSS_TYPE_UAP)
     {
         if (is_uap_started())

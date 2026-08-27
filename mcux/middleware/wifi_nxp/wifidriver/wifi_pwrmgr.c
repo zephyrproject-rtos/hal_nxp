@@ -98,7 +98,11 @@ unsigned int wifi_get_delay_to_ps()
 }
 
 #if CONFIG_HOST_SLEEP
-int wifi_send_hs_cfg_cmd(mlan_bss_type interface, t_u32 ipv4_addr, t_u16 action, t_u32 conditions)
+int wifi_send_hs_cfg_cmd(mlan_bss_type interface,
+                         t_u32 *ipv4_addr,
+                         t_u8 ipv4_addr_cnt,
+                         t_u16 action,
+                         t_u32 conditions)
 {
     pmlan_adapter pmadapter     = ((mlan_private *)mlan_adap->priv[0])->adapter;
     arpfilter_header *arpfilter = NULL;
@@ -146,7 +150,7 @@ int wifi_send_hs_cfg_cmd(mlan_bss_type interface, t_u32 ipv4_addr, t_u16 action,
     arpfilter->type = TLV_TYPE_ARP_FILTER;
     arpfilter->len  = 0;
 
-    if ((ipv4_addr != 0U) && (action == (t_u16)HS_CONFIGURE) &&
+    if ((ipv4_addr != NULL) && (ipv4_addr_cnt > 0U) && (action == (t_u16)HS_CONFIGURE) &&
         (conditions &
          (WIFI_WAKE_ON_MULTICAST | WIFI_WAKE_ON_ALL_BROADCAST | WIFI_WAKE_ON_UNICAST | WIFI_WAKE_ON_ARP_BROADCAST)))
     {
@@ -167,14 +171,20 @@ int wifi_send_hs_cfg_cmd(mlan_bss_type interface, t_u32 ipv4_addr, t_u16 action,
             {
                 entry->eth_type  = ETHER_TYPE_ANY;
                 entry->ipv4_addr = IPV4_ADDR_ANY;
+                entry++;
+                arpfilter->len += (t_u16)sizeof(filter_entry);
             }
             else
             {
-                entry->eth_type  = ETHER_TYPE_ARP;
-                entry->ipv4_addr = ipv4_addr;
+                for (t_u8 i = 0U; i < ipv4_addr_cnt; i++)
+                {
+                    entry->addr_type = ADDR_TYPE_BROADCAST;
+                    entry->eth_type  = ETHER_TYPE_ARP;
+                    entry->ipv4_addr = ipv4_addr[i];
+                    entry++;
+                    arpfilter->len += (t_u16)sizeof(filter_entry);
+                }
             }
-            entry++;
-            arpfilter->len += sizeof(filter_entry);
         }
 
         if ((conditions & (t_u32)(WIFI_WAKE_ON_UNICAST)) != 0U)

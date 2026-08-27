@@ -2738,6 +2738,15 @@ mlan_status wlan_scan_networks(IN mlan_private *pmpriv,
     wlan_set_split_scan_status(true);
     ret = wlan_scan_channel_list(pmpriv, pioctl_buf, max_chan_per_scan, filtered_scan, &pscan_cfg_out->config,
                                  pchan_list_out, pscan_chan_list);
+    /* Get scan command from scan_pending_q and put to cmd_pending_q */
+    if (ret == MLAN_STATUS_SUCCESS)
+    {
+        /* fixme: This functionality is not needed. Recheck later */
+    }
+    else
+    {
+        split_scan_in_progress = false;
+    }
 #if !CONFIG_MEM_POOLS
     (void)pcb->moal_mfree(pmadapter->pmoal_handle, (t_u8 *)pscan_cfg_out);
     (void)pcb->moal_mfree(pmadapter->pmoal_handle, (t_u8 *)pscan_chan_list);

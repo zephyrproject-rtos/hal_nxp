@@ -93,7 +93,8 @@
 #endif
 
 #if CONFIG_ROAMING
-#define WLAN_ROAMING_COOLDOWN 2000
+#define WLAN_ROAMING_COOLDOWN_MIN 2000
+#define WLAN_ROAMING_COOLDOWN_MAX 60000
 #endif
 
 #define WL_ID_CONNECT      "wifi_connect"
@@ -276,9 +277,6 @@ void (*wlan_hs_notify_cb)(void) = NULL;
 static t_u16 scan_channel_gap = (t_u16)SCAN_CHANNEL_GAP_VALUE;
 #endif
 
-#if (CONFIG_11K) || (CONFIG_11V)
-#define NEIGHBOR_REQ_TIMEOUT (10 * 1000)
-#endif
 
 #if CONFIG_11R
 #if CONFIG_WPA_SUPP
@@ -434,6 +432,8 @@ struct roaming_report_state {
     uint8_t rssi_low_threshold;
     uint8_t snr_low_threshold;
     bool subscribed;
+    uint32_t cooldown_ms;        /* current cooldown interval (exponential backoff) */
+    uint16_t trigger_count;      /* number of triggers since last successful roam */
     OSA_TIMER_HANDLE_DEFINE(roaming_timer);
 };
 #endif
@@ -581,6 +581,12 @@ static struct
     unsigned int bgscan_attempt;
 #endif
     bool roam_reassoc : 1;
+#if CONFIG_11K
+    bool roaming_11k_in_progress : 1;
+#endif
+#if CONFIG_11V
+    bool roaming_11v_in_progress : 1;
+#endif
 #if CONFIG_WIFI_FW_DEBUG
     void (*wlan_usb_init_cb)(void);
 #endif
@@ -592,10 +598,6 @@ static struct
 #if CONFIG_11K
     bool enable_11k : 1;
     wlan_rrm_scan_cb_param rrm_scan_cb_param;
-#endif
-#if (CONFIG_11K) || (CONFIG_11V)
-    OSA_TIMER_HANDLE_DEFINE(neighbor_req_timer);
-    bool neighbor_req : 1;
 #endif
 #if (CONFIG_11K) || (CONFIG_11V)
     wlan_nlist_report_param nlist_rep_param;
@@ -925,7 +927,8 @@ static int wlan_set_pmfcfg(uint8_t mfpc, uint8_t mfpr);
 int wlan_send_host_sleep_int()
 {
     int ret = WM_SUCCESS;
-    unsigned int ipv4_addr = 0;
+    unsigned int ipv4_addr[2] = {0};
+    t_u8 ipv4_addr_cnt = 0;
     enum wlan_bss_type type = WLAN_BSS_TYPE_STA;
     uint32_t wake_up_conds = wlan.wakeup_conditions;
 
@@ -944,11 +947,7 @@ int wlan_send_host_sleep_int()
         goto exit;
     }
 
-    if (!is_sta_connected()
-#if UAP_SUPPORT
-        && !mlan_adap->priv[1]->media_connected
-#endif
-        )
+    if (!is_sta_connected() && !is_uap_started())
     {
         if ((wake_up_conds & (WAKE_ON_ALL_BROADCAST | WAKE_ON_UNICAST | WAKE_ON_MULTICAST
                                    | WAKE_ON_ARP_BROADCAST | WAKE_ON_MGMT_FRAME)) != 0)
@@ -965,37 +964,46 @@ int wlan_send_host_sleep_int()
 
     wlan.hs_wakeup_condition = wlan_map_to_wifi_wakeup_condtions(wake_up_conds);
 
-    if (is_sta_ipv4_connected() != 0)
+    if ((is_sta_connected() != 0) &&
+        (ipv4_addr_cnt < (t_u8)(sizeof(ipv4_addr)/sizeof(ipv4_addr[0]))))
     {
-        ret = wlan_get_ipv4_addr(&ipv4_addr);
+        ret = wlan_get_ipv4_addr(&ipv4_addr[ipv4_addr_cnt]);
         if (ret != WM_SUCCESS)
         {
             wlcm_e("HS: cannot get STA IP, check if STA disconnected");
             ret = -WM_FAIL;
             goto exit;
         }
+        ipv4_addr_cnt++;
+        type = WLAN_BSS_TYPE_STA;
     }
 #if UAP_SUPPORT
-    else if (is_uap_started())
+    if (is_uap_started() &&
+        (ipv4_addr_cnt < (t_u8)(sizeof(ipv4_addr)/sizeof(ipv4_addr[0]))))
     {
-        ret = wlan_get_uap_ipv4_addr(&ipv4_addr);
+        ret = wlan_get_uap_ipv4_addr(&ipv4_addr[ipv4_addr_cnt]);
         if (ret != WM_SUCCESS)
         {
             wlcm_e("HS: cannot get UAP IP, check if uAP stopped");
             ret = -WM_FAIL;
             goto exit;
         }
-        type = WLAN_BSS_TYPE_UAP;
+        ipv4_addr_cnt++;
+        if (ipv4_addr_cnt == 1)
+        {
+            type = WLAN_BSS_TYPE_UAP;
+        }
     }
 #endif
-    else
-    {
-        ipv4_addr = 0;
-    }
+
 #if CONFIG_IPV6
     wifi_set_ipv6_ra_offload(MTRUE);
 #endif
-    wifi_send_hs_cfg_cmd((mlan_bss_type)type, ipv4_addr, HS_CONFIGURE, wlan.hs_wakeup_condition);
+    wifi_send_hs_cfg_cmd((mlan_bss_type)type,
+                         ipv4_addr_cnt > 0 ? (t_u32 *)ipv4_addr : NULL,
+                         ipv4_addr_cnt,
+                         HS_CONFIGURE,
+                         wlan.hs_wakeup_condition);
 exit:
     if (ret != WM_SUCCESS)
     {
@@ -2622,7 +2630,6 @@ static int start_association(struct wlan_network *network, struct wifi_scan_resu
     bool is_ft                  = false;
 
     wlcm_d("starting association to \"%s\"", network->name);
-    wlan.roam_reassoc = false;
     ret               = configure_security(network, res);
     if (ret != 0)
     {
@@ -3141,9 +3148,18 @@ static void wlcm_process_scan_result_event(struct wifi_message *msg, enum cm_sta
         {
             if (wlan.sta_state == CM_STA_CONNECTED)
             {
-                wlcm_d("SM: returned to %s", dbg_sta_state_name(*next));
-                handle_scan_results();
+                if (msg->reason == WIFI_EVENT_REASON_SUCCESS)
+                {
+                    handle_scan_results();
+                }
+#if CONFIG_ROAMING
+                else
+                {
+                    wlan.roam_reassoc = false;
+                }
+#endif
                 *next = wlan.sta_state;
+                wlcm_d("SM: returned to %s", dbg_sta_state_name(*next));
                 return;
             }
         }
@@ -3725,7 +3741,7 @@ static void wlcm_process_hs_config_event(void)
     else
         ipv4_addr = 0;
 
-    (void)wifi_send_hs_cfg_cmd((mlan_bss_type)type, ipv4_addr, (uint16_t)HS_ACTIVATE, 0);
+    (void)wifi_send_hs_cfg_cmd((mlan_bss_type)type, NULL, 0, (uint16_t)HS_ACTIVATE, 0);
 }
 #endif
 
@@ -3949,11 +3965,6 @@ static void wlcm_process_authentication_event(struct wifi_message *msg,
     int ret         = 0;
 #endif
     void *if_handle = NULL;
-#if !CONFIG_WIFI_NM_WPA_SUPPLICANT
-#if CONFIG_WPA_SUPP
-    struct netif *netif = net_get_sta_interface();
-#endif
-#endif
 
 #if CONFIG_WPS2
     if (wlan_get_prov_session() == PROV_WPS_SESSION_ATTEMPT)
@@ -4027,19 +4038,8 @@ static void wlcm_process_authentication_event(struct wifi_message *msg,
 #if CONFIG_BG_SCAN
             wlan.bgscan_attempt = 0;
 #endif
-#if !CONFIG_WIFI_NM_WPA_SUPPLICANT
-#if CONFIG_WPA_SUPP
-            OSA_TimerDeactivate((osa_timer_handle_t)wlan.supp_status_timer);
-            wlan.status_timeout = 0;
 
-            wpa_supp_network_status(netif, network);
-#endif
-#endif
-
-#if CONFIG_WPA_SUPP
-#if CONFIG_11R
-            wlan.same_ess = wifi_same_ess_ft();
-#endif
+#if CONFIG_ROAMING
             wlan.roam_reassoc = false;
 #endif
             if (wlan.same_ess == true)
@@ -4181,19 +4181,14 @@ static void wlcm_process_authentication_event(struct wifi_message *msg,
 
 #if CONFIG_ROAMING && !CONFIG_WIFI_NM_WPA_SUPPLICANT
 /** Try to roaming if enabled based on priority:
- * 1. 11R roaming (full channel scan)
- * 2. 11K roaming
- * 3. 11V roaming
- * 4. Legacy roaming (full channel scan)
+ * 1. 11K roaming
+ * 2. 11V roaming
+ * 3. Legacy roaming (full channel scan)
  */
 static void wlcm_process_rssi_low_event(void)
 {
-#if CONFIG_BG_SCAN || CONFIG_11K || CONFIG_11V
     int ret;
-#endif
-#if CONFIG_BG_SCAN || CONFIG_11K || CONFIG_11V || CONFIG_11R
     struct wlan_network *network;
-#endif
 
     if (!wlan_get_roaming_status())
     {
@@ -4201,7 +4196,6 @@ static void wlcm_process_rssi_low_event(void)
         return;
     }
 
-#if CONFIG_BG_SCAN || CONFIG_11K || CONFIG_11V || CONFIG_11R
     if (wlan.cur_network_idx < 0 || wlan.cur_network_idx >= WLAN_MAX_KNOWN_NETWORKS)
     {
         wlcm_d("wlcm_process_rssi_low_event cur network idx invalid");
@@ -4209,33 +4203,21 @@ static void wlcm_process_rssi_low_event(void)
     }
 
     network = &wlan.networks[wlan.cur_network_idx];
-#endif
-#if CONFIG_11R
-    if (wlan.roam_reassoc == false)
-    {
-        wlan.ft_bss = false;
-        if ((network->ft_psk | network->ft_1x | network->ft_sae) == 1U)
-        {
-            wlan.ft_bss = true;
-            wlan.roam_reassoc = true;
 
-#if CONFIG_BG_SCAN
-            ret = wifi_config_bgscan_and_rssi(network->ssid);
-            if (ret == WM_SUCCESS)
-            {
-                wlcm_d("bgscan config successful");
-                return;
-            }
-#endif
-            wlan.roam_reassoc = false;
-        }
-    }
-    else
+    if (wlan.roam_reassoc == true)
     {
-        wlcm_d("11R Roaming already in progress");
+        wlcm_d("Roaming already in progress");
         return;
     }
-#endif
+
+    wlan.roam_reassoc = true;
+
+#if CONFIG_11R
+    if (network->ft_psk || network->ft_1x || network->ft_sae)
+    {
+        wlan.ft_bss = true;
+    }
+#endif /* CONFIG_11R */
 
 #if CONFIG_11K
     if (network->neighbor_report_supported == true &&
@@ -4245,6 +4227,7 @@ static void wlcm_process_rssi_low_event(void)
         ret = wlan_host_11k_neighbor_req((const char *)network->ssid);
         if (ret == WM_SUCCESS)
         {
+            wlan.roaming_11k_in_progress = true;
             wlcm_d("Sent 11K neighbor request");
             return;
         }
@@ -4259,29 +4242,42 @@ static void wlcm_process_rssi_low_event(void)
         ret = wlan_host_11v_bss_trans_query(0x10);
         if (ret == WM_SUCCESS)
         {
+            wlan.roaming_11v_in_progress = true;
             wlcm_d("Sent 11V bss transition query");
             return;
         }
     }
 #endif /* CONFIG_11V */
 
-    if (wlan.roam_reassoc == false)
-    {
-        wlan.roam_reassoc = true;
-#if CONFIG_BG_SCAN
-        ret = wifi_config_bgscan_and_rssi(network->ssid);
-        if (ret == WM_SUCCESS)
-        {
-            wlcm_d("bgscan config successful");
-            return;
-        }
+    ret = wifi_send_scan_cmd((t_u8)BSS_INFRASTRUCTURE, NULL, network->ssid, 1, 0,
+                                NULL, 0,
+#if CONFIG_SCAN_WITH_RSSIFILTER
+                                wlan.roaming_report.rssi_low_threshold,
 #endif
-        wlan.roam_reassoc = false;
-    }
-    else
+#if CONFIG_SCAN_CHANNEL_GAP
+                                scan_channel_gap,
+#endif
+                                false, false);
+    if (ret == WM_SUCCESS)
     {
-        wlcm_d("Roaming already in progress");
+        wlcm_d("Sent full channel scan request");
+        return;
     }
+
+    /** Error handling
+     * If it reaches here, it means that roaming is not possible.
+     * Failed to send 11K neighbor request, 11V bss transition query,
+     * or full channel scan request.
+     * So, need to reset roaming state.
+     */
+    wlcm_d("Failed to send request for roaming");
+#if CONFIG_11R
+    if (network->ft_psk || network->ft_1x || network->ft_sae)
+    {
+        wlan.ft_bss = false;
+    }
+#endif /* CONFIG_11R */
+    wlan.roam_reassoc = false;
 }
 #endif
 
@@ -4366,14 +4362,6 @@ static void wlcm_process_neighbor_list_report_event(struct wifi_message *msg,
         return;
     }
 
-#if CONFIG_11K
-    if (pnlist_rep_param->nlist_mode == WLAN_NLIST_11K)
-    {
-        wlan.neighbor_req = false;
-        (void)OSA_TimerDeactivate((osa_timer_handle_t)wlan.neighbor_req_timer);
-    }
-#endif
-
     wlan_sort_nlist_channels(pnlist_rep_param);
 #if !CONFIG_WIFI_NM_WPA_SUPPLICANT
     ret = wlan_11k_roam();
@@ -4405,32 +4393,17 @@ static void wlcm_process_neighbor_list_report_event(struct wifi_message *msg,
             wlan.roam_reassoc = false;
         }
 #endif
-        wlan.neighbor_req = false;
-        (void)OSA_TimerDeactivate((osa_timer_handle_t)wlan.neighbor_req_timer);
         return;
     }
 
     if (is_state(CM_STA_IDLE) || (pnlist_rep_param == NULL))
     {
         wlcm_d("ignoring neighbor list report event in idle state");
+#if CONFIG_ROAMING
+        wlan.roam_reassoc = false;
+#endif
         return;
     }
-
-#if CONFIG_11K
-    if (pnlist_rep_param->nlist_mode == WLAN_NLIST_11K)
-    {
-        wlan.neighbor_req = false;
-        (void)OSA_TimerDeactivate((osa_timer_handle_t)wlan.neighbor_req_timer);
-    }
-#endif
-
-#if CONFIG_11V
-    if ((pnlist_rep_param->nlist_mode == WLAN_NLIST_11V) || (pnlist_rep_param->nlist_mode == WLAN_NLIST_11V_PREFERRED))
-    {
-        wlan.neighbor_req = false;
-        (void)OSA_TimerDeactivate((osa_timer_handle_t)wlan.neighbor_req_timer);
-    }
-#endif
 
     wlan_sort_nlist_channels(pnlist_rep_param);
     memcpy(&wlan.nlist_rep_param, pnlist_rep_param, sizeof(wlan_nlist_report_param));
@@ -4457,7 +4430,6 @@ static void wlcm_process_neighbor_list_report_event(struct wifi_message *msg,
         wlan.ft_bss = true;
     }
 #endif
-    wlan.roam_reassoc = true;
     ret = wifi_send_scan_cmd((t_u8)BSS_INFRASTRUCTURE, bssid, network->ssid, 1, pnlist_rep_param->num_channels,
                              chan_list, 0,
 #if CONFIG_SCAN_WITH_RSSIFILTER
@@ -4473,7 +4445,9 @@ static void wlcm_process_neighbor_list_report_event(struct wifi_message *msg,
 #if CONFIG_11R
         wlan.ft_bss = false;
 #endif
+#if CONFIG_ROAMING
         wlan.roam_reassoc = false;
+#endif
     }
 
     if (pnlist_rep_param != NULL)
@@ -6916,23 +6890,59 @@ static void roaming_timer_cb(osa_timer_arg_t arg)
 
 static void roaming_subscribe_process(void)
 {
+    /*
+     * Called on roaming_timer expiry or authentication success.
+     * Clear 11K/11V in-progress flags. If roam_reassoc is still true,
+     * it means 11K/11V did not complete successfully - reset it to
+     * allow the next roaming attempt.
+     */
+#if CONFIG_11K
+    if (wlan.roaming_11k_in_progress)
+    {
+        wlan.roaming_11k_in_progress = false;
+        if (wlan.roam_reassoc)
+        {
+            wlcm_d("roaming_subscribe: 11K timeout, reset roam state");
+            wlan.roam_reassoc = false;
+        }
+    }
+#endif
+#if CONFIG_11V
+    if (wlan.roaming_11v_in_progress)
+    {
+        wlan.roaming_11v_in_progress = false;
+        if (wlan.roam_reassoc)
+        {
+            wlcm_d("roaming_subscribe: 11V timeout, reset roam state");
+            wlan.roam_reassoc = false;
+        }
+    }
+#endif
+
     if (wlan.roaming_report.bitmap == 0)
     {
+        wlcm_d("roaming_subscribe: bitmap is 0, skip");
         return;
     }
     if (wlan.roaming_report.subscribed)
     {
+        wlcm_d("roaming_subscribe: already subscribed, skip");
         return;
     }
     if (!is_sta_connected())
     {
         if (is_sta_connecting())
         {
+            wlcm_d("roaming_subscribe: sta connecting, retry later");
             /* Re-trigger timer if not already running */
             if (!OSA_TimerIsRunning((osa_timer_handle_t)wlan.roaming_report.roaming_timer))
             {
                 (void)OSA_TimerActivate((osa_timer_handle_t)wlan.roaming_report.roaming_timer);
             }
+        }
+        else
+        {
+            wlcm_d("roaming_subscribe: sta not connected, skip");
         }
         return;
     }
@@ -6987,9 +6997,27 @@ static void roaming_report_process(void)
     wlcm_process_rssi_low_event();
 #endif
 
-    /* Start cooldown timer */
+    /* Exponential backoff: increase cooldown for next cycle.
+     * Keep cooldown at minimum during 11K/11V fallback phase
+     * (2 * RETRY_CNT + 1 triggers), then start doubling. */
+    wlan.roaming_report.trigger_count++;
+    if (wlan.roaming_report.trigger_count > (2 * CONFIG_WIFI_ROAMING_RETRY_CNT + 1))
+    {
+        if (wlan.roaming_report.cooldown_ms < WLAN_ROAMING_COOLDOWN_MAX)
+        {
+            wlan.roaming_report.cooldown_ms = (wlan.roaming_report.cooldown_ms <= WLAN_ROAMING_COOLDOWN_MAX / 2U)
+                                                  ? wlan.roaming_report.cooldown_ms * 2U
+                                                  : WLAN_ROAMING_COOLDOWN_MAX;
+        }
+    }
+    wlcm_d("roaming_report: next cooldown %u ms (trigger_count=%d)",
+            wlan.roaming_report.cooldown_ms, wlan.roaming_report.trigger_count);
+
+    /* Start cooldown timer with current backoff interval */
     if (!OSA_TimerIsRunning((osa_timer_handle_t)wlan.roaming_report.roaming_timer))
     {
+        (void)OSA_TimerChange((osa_timer_handle_t)wlan.roaming_report.roaming_timer,
+                              MSEC_TO_TICK(wlan.roaming_report.cooldown_ms), 0);
         (void)OSA_TimerActivate((osa_timer_handle_t)wlan.roaming_report.roaming_timer);
     }
 }
@@ -7114,6 +7142,8 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
 #if CONFIG_ROAMING
             if (msg->reason == WIFI_EVENT_REASON_SUCCESS)
             {
+                wlan.roaming_report.cooldown_ms = WLAN_ROAMING_COOLDOWN_MIN;
+                wlan.roaming_report.trigger_count = 0;
                 roaming_subscribe_process();
             }
 #endif
@@ -7819,6 +7849,35 @@ static int wifi_wakeup_card_cb(osa_rw_lock_t *plock, unsigned int wait_time)
     return WM_SUCCESS;
 }
 
+
+#if CONFIG_EXT_ANT_GAIN
+static void wlan_init_ext_ant_gain(void)
+{
+#ifdef __ZEPHYR__
+#if DT_NODE_EXISTS(DT_NODELABEL(wifi_antenna))
+#define WIFI_ANT_NODE DT_NODELABEL(wifi_antenna)
+#define WIFI_GAIN_2G  ((int8_t)DT_PROP_OR(WIFI_ANT_NODE, antenna_gain_2ghz, 0))
+#define WIFI_GAIN_SB1 ((int8_t)DT_PROP_OR(WIFI_ANT_NODE, antenna_gain_5ghz_sb1, 0))
+#define WIFI_GAIN_SB2 ((int8_t)DT_PROP_OR(WIFI_ANT_NODE, antenna_gain_5ghz_sb2, 0))
+#define WIFI_GAIN_SB3 ((int8_t)DT_PROP_OR(WIFI_ANT_NODE, antenna_gain_5ghz_sb3, 0))
+
+    int8_t gains[WIFI_EXT_ANT_GAIN_MAX_SUBBAND];
+
+    (void)memset(&gains[0], 0, sizeof(gains));
+    gains[0] = WIFI_GAIN_2G;
+    gains[1] = WIFI_GAIN_SB1;
+    gains[2] = WIFI_GAIN_SB2;
+    gains[3] = WIFI_GAIN_SB3;
+
+    if (WM_SUCCESS != wlan_set_ext_ant_gain(gains, WIFI_EXT_ANT_GAIN_MAX_SUBBAND))
+    {
+        wlcm_e("Antenna gain set failed");
+    }
+#endif
+#endif //__ZEPHYR__
+}
+#endif
+
 int wlan_init(const uint8_t *fw_start_addr, const size_t size)
 {
     int ret;
@@ -7949,6 +8008,10 @@ int wlan_init(const uint8_t *fw_start_addr, const size_t size)
     wlan_init_ami_cfg();
 #endif
 
+#if CONFIG_EXT_ANT_GAIN
+    wlan_init_ext_ant_gain();
+#endif
+
     return ret;
 }
 
@@ -8063,23 +8126,6 @@ static void supp_status_timer_cb(osa_timer_arg_t arg)
     wlan.status_timeout++;
 }
 #endif
-#endif
-
-#if (CONFIG_11K) || (CONFIG_11V)
-static void neighbor_req_timer_cb(osa_timer_arg_t arg)
-{
-    if (wlan.neighbor_req == true)
-    {
-        wlan.neighbor_req = false;
-    }
-#if CONFIG_ROAMING
-    if (wlan.roam_reassoc == true)
-    {
-        wlan.roam_reassoc = false;
-        wlcm_d("neighbor req timeout, clearing roam state");
-    }
-#endif
-}
 #endif
 
 #if CONFIG_11R
@@ -8347,16 +8393,6 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
     memset(&wlan.nbr_rpt, 0x00, sizeof(wlan_rrm_neighbor_report_t));
 #endif
 
-#if (CONFIG_11K) || (CONFIG_11V)
-    status = OSA_TimerCreate((osa_timer_handle_t)wlan.neighbor_req_timer, MSEC_TO_TICK(NEIGHBOR_REQ_TIMEOUT),
-                          &neighbor_req_timer_cb, NULL, KOSA_TimerOnce, OSA_TIMER_NO_ACTIVATE);
-    if (status != KOSA_StatusSuccess)
-    {
-        wlcm_e("Unable to create neighbor request timer");
-        return ret;
-    }
-#endif
-
 #if CONFIG_11R
 #if CONFIG_WPA_SUPP
     status = OSA_TimerCreate((osa_timer_handle_t)wlan.ft_roam_timer, MSEC_TO_TICK(FT_ROAM_TIMEOUT),
@@ -8371,13 +8407,15 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
 
 #if CONFIG_ROAMING
     status = OSA_TimerCreate((osa_timer_handle_t)wlan.roaming_report.roaming_timer,
-                          MSEC_TO_TICK(WLAN_ROAMING_COOLDOWN),
+                          MSEC_TO_TICK(WLAN_ROAMING_COOLDOWN_MIN),
                           &roaming_timer_cb, NULL, KOSA_TimerOnce, OSA_TIMER_NO_ACTIVATE);
     if (status != KOSA_StatusSuccess)
     {
         wlcm_e("Failed to create roaming_timer");
         return -WM_FAIL;
     }
+    wlan.roaming_report.cooldown_ms   = WLAN_ROAMING_COOLDOWN_MIN;
+    wlan.roaming_report.trigger_count = 0;
 #endif
 
     wlan_wait_wlmgr_ready();
@@ -8391,7 +8429,6 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
         return 0;
     }
 #endif
-#if !(CONFIG_WIFI_RF_TEST_MODE) || (CONFIG_NXP_RW610) || (CONFIG_NXP_IW610)
     ret = wlan_basic_cli_init();
     if (ret != WM_SUCCESS)
     {
@@ -8426,7 +8463,6 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
         wlcm_e("Failed to initialize WPA SUPP CLIs");
         return 0;
     }
-#endif
 #endif
 #endif
 #endif
@@ -8509,15 +8545,6 @@ int wlan_stop(void)
         return WLAN_ERROR_STATE;
     }
 #endif
-#endif
-
-#if (CONFIG_11K) || (CONFIG_11V)
-    status = OSA_TimerDestroy((osa_timer_handle_t)wlan.neighbor_req_timer);
-    if (status != KOSA_StatusSuccess)
-    {
-        wlcm_w("failed to delete neighbor req timer: %d.", ret);
-        return WLAN_ERROR_STATE;
-    }
 #endif
 
 #if CONFIG_11R
@@ -10143,9 +10170,15 @@ bool is_sta_connected(void)
 bool is_sta_ipv4_connected(void)
 {
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
+    bool ret = false;
     int ip = 0;
-    net_get_if_ip_addr(&ip, net_get_sta_handle());
-    return (ip == 0 ? false : true);
+
+    if (is_sta_connected()) {
+        net_get_if_ip_addr(&ip, net_get_sta_handle());
+        ret = (ip != 0);
+    }
+
+    return ret;
 #else
     return (wlan.sta_ipv4_state == CM_STA_CONNECTED);
 #endif
@@ -13266,11 +13299,6 @@ int wlan_host_11k_neighbor_req(const char *ssid)
 #else
     ret = wifi_host_11k_neighbor_req(ssid);
 #endif
-    if (ret == WM_SUCCESS)
-    {
-        wlan.neighbor_req = true;
-        (void)OSA_TimerActivate((osa_timer_handle_t)wlan.neighbor_req_timer);
-    }
     return ret;
 }
 #endif
@@ -13300,11 +13328,6 @@ int wlan_host_11v_bss_trans_query(t_u8 query_reason)
 #endif
 #else
     ret = wifi_host_11v_bss_trans_query(query_reason);
-    if (ret == WM_SUCCESS)
-    {
-        wlan.neighbor_req = true;
-        (void)OSA_TimerActivate((osa_timer_handle_t)wlan.neighbor_req_timer);
-    }
     return ret;
 #endif
 }
@@ -13534,7 +13557,6 @@ int wlan_set_roaming(const uint8_t bitmap,
     wlan.roaming_report.bitmap = bitmap;
     wlan.roaming_report.rssi_low_threshold = rssi_low_threshold;
     wlan.roaming_report.snr_low_threshold = snr_low_threshold;
-    wifi_config_roaming((int)bitmap, rssi_low_threshold);
 
     /* Post WIFI_EVENT_ROAMING_TRIGGER to wlcmgr */
     (void)wifi_event_completion(WIFI_EVENT_ROAMING_TRIGGER,
@@ -14942,10 +14964,10 @@ int wlan_mef_set_auto_arp(t_u8 mef_action)
 
     if(is_uap_started() != 0)
     {
-        g_flt_cfg.mef_entry[index].filter_num++;
-        filter_num = g_flt_cfg.mef_entry[index].filter_num;
         if(ipv4_addr_num == 2)
             g_flt_cfg.mef_entry[index].rpn[filter_num] = RPN_TYPE_OR;
+        g_flt_cfg.mef_entry[index].filter_num++;
+        filter_num = g_flt_cfg.mef_entry[index].filter_num;
         g_flt_cfg.mef_entry[index].filter_item[filter_num - 1].type         = TYPE_BYTE_EQ;
         g_flt_cfg.mef_entry[index].filter_item[filter_num - 1].repeat       = 1;
         g_flt_cfg.mef_entry[index].filter_item[filter_num - 1].offset       = 46;
