@@ -1,0 +1,42 @@
+DCI_SDK (4.3.0) EAR Release Notes
+
+- Release: DCI_SDK
+- Version: V4.3.0
+- Date:    2026-07-24
+- Compiler: IAR C/C++ Compiler V9.60.2.399 for ARM
+- Code size: 
+    -delivery/mcxa2tsSdk_cosim_release/static_library/mcxa5xx/libclns.a
+        TEXT   RO RW ZI TOTAL_CONSUMPTION
+        182806 0  0  0  182806
+
+    -delivery/mcxa2xx_release/static_library/mcxa2xx/libclns.a
+        TEXT   RO RW ZI TOTAL_CONSUMPTION
+        183376 0  0  0  183376
+        
+    -delivery/mcxl2xx_release/static_library/mcxl2xx/libclns.a
+        TEXT   RO RW ZI TOTAL_CONSUMPTION
+        183158 0  0  0  183158
+
+    -delivery/mcxw7x_release/static_library/mcxw7x/libclns.a
+        TEXT   RO RW ZI TOTAL_CONSUMPTION
+        180720 0  0  0  180720
+
+
+--- Test Targets: 
+   - MCX A20 sample A0
+   - MCX L20 sample
+   - CCCS FPGA v2 using A20 CoSim v3 bitfile
+   - CCCS FPGA v2 using W70 (V3 r1789) bitfile
+   - CCCS FPGA v2 using A2TS (V3 r1787) bitfile
+
+--- New Features in V4.3.0:
+    - The Common SDK release: all features are enabled on all platforms
+
+--- Known Issues/Limitations:
+    - No binary release of the library included
+    - On A20/L20, the PRNG is implemented using the SFRMASK SGI register. If the SGI is busy when a PRNG request is issued, 
+      the request remains indefinitely in a waiting state. This behavior is the root cause of the failures observed 
+      in the non-blocking negative test cases.
+    - On A2TS, par_nxpClCipher_multipart_nonblocking_sgi_flush_check -> known limitation, the key is not flushed from the SGI after nxpClCipher_finish() for the mode nxpClCipher_Mode_AES_CTR, possible test issue
+    - On W70, par_nxpClCipher_multipart_nonblocking_sgi_flush_check -> known limitation, the key is not flushed from the SGI after nxpClCipher_finish() for the mode nxpClCipher_Mode_AES_CTR, possible test issue
+              - sim_rsa_GenerateProbablePrime, par_nxpClSignature_RSA* tests -> fail with NXPCLSESSION_STATUS_ERROR. The failures are seen only in tests using 4096 key bit size

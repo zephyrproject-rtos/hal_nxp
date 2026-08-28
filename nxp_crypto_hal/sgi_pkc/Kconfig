@@ -1,0 +1,459 @@
+# -------------------------------------
+# Copyright 2025 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+# -------------------------------------
+
+menu "SGI PKC"
+
+# ---------------------------------------------------------------------------
+# Helper configs that check whether the device being built belongs to a given
+# supported device family. Each symbol sums up all devices of a platform
+# family so the device list is defined in a single place instead of being
+# duplicated across every dependent config option. Reference these symbols
+# with "depends on" instead of repeating the MCUX_HW_DEVICE_* OR-chains.
+# The period (.) in the config name excludes these symbols from being placed
+# into the preinclude config header.
+# ---------------------------------------------------------------------------
+config is_device.MCXA
+    bool
+    default y if MCUX_HW_DEVICE_MCXA266 || MCUX_HW_DEVICE_MCXA366
+
+config is_device.MCXA5XX
+    bool
+    default y if MCUX_HW_DEVICE_MCXA286 || MCUX_HW_DEVICE_MCXA287 || MCUX_HW_DEVICE_MCXA456 || MCUX_HW_DEVICE_MCXA457 || MCUX_HW_DEVICE_MCXA536 || MCUX_HW_DEVICE_MCXA537 || MCUX_HW_DEVICE_MCXA556 || MCUX_HW_DEVICE_MCXA566 || MCUX_HW_DEVICE_MCXA567 || MCUX_HW_DEVICE_MCXA577
+
+config is_device.MCXL
+    bool
+    default y if MCUX_HW_DEVICE_MCXL253 || MCUX_HW_DEVICE_MCXL254 || MCUX_HW_DEVICE_MCXL255 || MCUX_HW_DEVICE_MCXL142 || MCUX_HW_DEVICE_MCXL143 || MCUX_HW_DEVICE_MCXL144
+
+config is_device.MCXW7X
+    bool
+    default y if MCUX_HW_DEVICE_KW43B43ZC2 || MCUX_HW_DEVICE_KW43B43ZC3 || MCUX_HW_DEVICE_KW43B43ZC6 || MCUX_HW_DEVICE_KW43B43ZC7 || MCUX_HW_DEVICE_KW43L43Z92 || MCUX_HW_DEVICE_KW43L43Z93 || MCUX_HW_DEVICE_KW43L43Z96 || MCUX_HW_DEVICE_KW43L43Z97 || MCUX_HW_DEVICE_MCXW70AC || MCUX_HW_DEVICE_MCXW70AD
+
+config MCUX_COMPONENT_component.sgi_pkc
+    bool "SGI PKC"
+
+    select MCUX_COMPONENT_component.sgi_pkc.sgi
+    select MCUX_COMPONENT_component.sgi_pkc.pkc
+    select MCUX_COMPONENT_component.sgi_pkc.trng
+
+	if MCUX_COMPONENT_component.sgi_pkc
+	  choice
+	    prompt "Target device family - Platform Support"
+		config MCUX_COMPONENT_component.sgi_pkc.platform.mcxa
+            bool "MCXA"
+			depends on is_device.MCXA
+			select MCUX_COMPONENT_driver.glikey
+
+		config MCUX_COMPONENT_component.sgi_pkc.platform.mcxa5xx
+            bool "MCXA5"
+			depends on is_device.MCXA5XX
+			select MCUX_COMPONENT_driver.glikey
+			
+		config MCUX_COMPONENT_component.sgi_pkc.platform.mcxl
+            bool "MCXL"
+			depends on is_device.MCXL
+			select MCUX_COMPONENT_driver.glikey
+
+		config MCUX_COMPONENT_component.sgi_pkc.platform.mcxw7x
+            bool "MCXW"
+			depends on is_device.MCXW7X
+	  endchoice
+	endif
+
+    menu "Documentation"
+        config MCUX_COMPONENT_component.sgi_pkc.doc.mcxa
+            bool "MCXA"
+			depends on is_device.MCXA
+
+        config MCUX_COMPONENT_component.sgi_pkc.doc.mcxa5xx
+            bool "MCXA5"
+			depends on is_device.MCXA5XX
+
+        config MCUX_COMPONENT_component.sgi_pkc.doc.mcxl
+            bool "MCXL"
+            depends on is_device.MCXL
+
+		config MCUX_COMPONENT_component.sgi_pkc.doc.mcxw7x
+            bool "MCXW"
+			depends on is_device.MCXW7X
+	  
+    endmenu
+
+    menu "Cryptographic Modules"
+        config MCUX_COMPONENT_component.sgi_pkc.aead
+            bool "AEAD"
+            select MCUX_COMPONENT_component.sgi_pkc.aes
+
+        config MCUX_COMPONENT_component.sgi_pkc.aead_modes
+            bool "AEAD modes"
+            select MCUX_COMPONENT_component.sgi_pkc.aead
+            select MCUX_COMPONENT_component.sgi_pkc.mac_modes
+
+        config MCUX_COMPONENT_component.sgi_pkc.aes
+            bool "AES"
+            select MCUX_COMPONENT_component.sgi_pkc.key
+            select MCUX_COMPONENT_component.sgi_pkc.crc
+            select MCUX_COMPONENT_component.sgi_pkc.prng
+
+        config MCUX_COMPONENT_component.sgi_pkc.buffer
+            bool "Buffer"
+            select MCUX_COMPONENT_component.sgi_pkc.core
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.data_integrity
+            select MCUX_COMPONENT_component.sgi_pkc.toolchain
+
+        config MCUX_COMPONENT_component.sgi_pkc.cipher
+            bool "Cipher"
+            select MCUX_COMPONENT_component.sgi_pkc.buffer
+
+        config MCUX_COMPONENT_component.sgi_pkc.cipher_modes
+            bool "Cipher modes"
+            select MCUX_COMPONENT_component.sgi_pkc.cipher
+            select MCUX_COMPONENT_component.sgi_pkc.dma
+            select MCUX_COMPONENT_component.sgi_pkc.padding
+
+        config MCUX_COMPONENT_component.sgi_pkc.core
+            bool "Core"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+
+        config MCUX_COMPONENT_component.sgi_pkc.crc
+            bool "CRC"
+            select MCUX_COMPONENT_component.sgi_pkc.core
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.data_integrity
+            select MCUX_COMPONENT_component.sgi_pkc.toolchain
+
+            select MCUX_COMPONENT_driver.crc
+
+        config MCUX_COMPONENT_component.sgi_pkc.dma
+            bool "DMA"
+
+        config MCUX_COMPONENT_component.sgi_pkc.ecc
+            bool "ECC"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.secure_counter
+            select MCUX_COMPONENT_component.sgi_pkc.pre_processor
+            select MCUX_COMPONENT_component.sgi_pkc.buffer
+            select MCUX_COMPONENT_component.sgi_pkc.mac
+            select MCUX_COMPONENT_component.sgi_pkc.math
+
+        config MCUX_COMPONENT_component.sgi_pkc.example
+            bool "Example helper"
+            select MCUX_COMPONENT_component.sgi_pkc.random_modes
+
+        config MCUX_COMPONENT_component.sgi_pkc.glikey
+            bool "GliKey"
+            select MCUX_COMPONENT_component.sgi_pkc.pre_processor
+
+        config MCUX_COMPONENT_component.sgi_pkc.hash
+            bool "Hash"
+            select MCUX_COMPONENT_component.sgi_pkc.session
+
+        config MCUX_COMPONENT_component.sgi_pkc.hashmodes
+            bool "Hash modes"
+            select MCUX_COMPONENT_component.sgi_pkc.hash
+            select MCUX_COMPONENT_component.sgi_pkc.buffer
+
+        config MCUX_COMPONENT_component.sgi_pkc.hmac
+            bool "HMAC"
+            select MCUX_COMPONENT_component.sgi_pkc.key
+            select MCUX_COMPONENT_component.sgi_pkc.toolchain
+            select MCUX_COMPONENT_component.sgi_pkc.padding
+
+        config MCUX_COMPONENT_component.sgi_pkc.kdf_modes
+            bool "KDF modes"
+            select MCUX_COMPONENT_component.sgi_pkc.key
+
+        config MCUX_COMPONENT_component.sgi_pkc.key
+            bool "Key"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.secure_counter
+            select MCUX_COMPONENT_component.sgi_pkc.pre_processor
+            select MCUX_COMPONENT_component.sgi_pkc.memory
+            select MCUX_COMPONENT_component.sgi_pkc.buffer
+
+        config MCUX_COMPONENT_component.sgi_pkc.mac
+            bool "MAC"
+            select MCUX_COMPONENT_component.sgi_pkc.toolchain
+            select MCUX_COMPONENT_component.sgi_pkc.padding
+
+        config MCUX_COMPONENT_component.sgi_pkc.mac_modes
+            bool "MAC modes"
+            select MCUX_COMPONENT_component.sgi_pkc.mac
+
+        config MCUX_COMPONENT_component.sgi_pkc.math
+            bool "Math"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.secure_counter
+            select MCUX_COMPONENT_component.sgi_pkc.pre_processor
+            select MCUX_COMPONENT_component.sgi_pkc.buffer
+
+        config MCUX_COMPONENT_component.sgi_pkc.memory
+            bool "Memory"
+            select MCUX_COMPONENT_component.sgi_pkc.param_integrity
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.secure_counter
+            select MCUX_COMPONENT_component.sgi_pkc.pre_processor
+            select MCUX_COMPONENT_component.sgi_pkc.toolchain
+
+        config MCUX_COMPONENT_component.sgi_pkc.padding
+            bool "Padding"
+            select MCUX_COMPONENT_component.sgi_pkc.buffer
+
+        config MCUX_COMPONENT_component.sgi_pkc.pkc
+            bool "PKC"
+
+            #select MCUX_COMPONENT_driver.glikey
+            select MCUX_COMPONENT_component.sgi_pkc.rsa
+            select MCUX_COMPONENT_component.sgi_pkc.ecc
+            select MCUX_COMPONENT_component.sgi_pkc.signature
+            select MCUX_COMPONENT_component.sgi_pkc.math
+
+        config MCUX_COMPONENT_component.sgi_pkc.prng
+            bool "PRNG"
+            select MCUX_COMPONENT_component.sgi_pkc.random
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.secure_counter
+            select MCUX_COMPONENT_component.sgi_pkc.pre_processor
+
+        config MCUX_COMPONENT_component.sgi_pkc.random
+            bool "Random"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.secure_counter
+            select MCUX_COMPONENT_component.sgi_pkc.pre_processor
+            select MCUX_COMPONENT_component.sgi_pkc.memory
+            select MCUX_COMPONENT_component.sgi_pkc.buffer
+
+        config MCUX_COMPONENT_component.sgi_pkc.random_modes
+            bool "Random modes"
+            select MCUX_COMPONENT_component.sgi_pkc.crc
+            select MCUX_COMPONENT_component.sgi_pkc.random
+
+        config MCUX_COMPONENT_component.sgi_pkc.resource
+            bool "Resource"
+            select MCUX_COMPONENT_component.sgi_pkc.buffer
+            select MCUX_COMPONENT_component.sgi_pkc.dma
+
+        config MCUX_COMPONENT_component.sgi_pkc.rsa
+            bool "RSA"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.signature
+            select MCUX_COMPONENT_component.sgi_pkc.hash
+
+        config MCUX_COMPONENT_component.sgi_pkc.session
+            bool "Session"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.random
+            select MCUX_COMPONENT_component.sgi_pkc.resource
+            select MCUX_COMPONENT_component.sgi_pkc.crc
+
+        config MCUX_COMPONENT_component.sgi_pkc.sgi
+            bool "SGI"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.secure_counter
+            select MCUX_COMPONENT_component.sgi_pkc.pre_processor
+            select MCUX_COMPONENT_component.sgi_pkc.memory
+            select MCUX_COMPONENT_component.sgi_pkc.toolchain
+            select MCUX_COMPONENT_component.sgi_pkc.key
+            select MCUX_COMPONENT_component.sgi_pkc.kdf_modes
+			select MCUX_COMPONENT_component.sgi_pkc.ffdh
+            select MCUX_COMPONENT_component.sgi_pkc.aes
+            select MCUX_COMPONENT_component.sgi_pkc.hash
+            select MCUX_COMPONENT_component.sgi_pkc.hashmodes
+            select MCUX_COMPONENT_component.sgi_pkc.aead
+            select MCUX_COMPONENT_component.sgi_pkc.aead_modes
+            select MCUX_COMPONENT_component.sgi_pkc.mac
+            select MCUX_COMPONENT_component.sgi_pkc.mac_modes
+            select MCUX_COMPONENT_component.sgi_pkc.hmac
+            select MCUX_COMPONENT_component.sgi_pkc.cipher
+            select MCUX_COMPONENT_component.sgi_pkc.cipher_modes
+            select MCUX_COMPONENT_component.sgi_pkc.trng
+            select MCUX_COMPONENT_component.sgi_pkc.xof_modes
+            select MCUX_COMPONENT_component.sgi_pkc.random_modes
+
+
+        config MCUX_COMPONENT_component.sgi_pkc.signature
+            bool "Signature"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.secure_counter
+            select MCUX_COMPONENT_component.sgi_pkc.pre_processor
+            select MCUX_COMPONENT_component.sgi_pkc.toolchain
+
+        config MCUX_COMPONENT_component.sgi_pkc.trng
+            bool "TRNG"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.secure_counter
+            select MCUX_COMPONENT_component.sgi_pkc.pre_processor
+            select MCUX_COMPONENT_component.sgi_pkc.memory
+
+            select MCUX_COMPONENT_driver.trng
+
+        config MCUX_COMPONENT_component.sgi_pkc.xof
+            bool "Xof"
+			
+        config MCUX_COMPONENT_component.sgi_pkc.xof_modes
+            bool "Xof modes"
+            select MCUX_COMPONENT_component.sgi_pkc.xof
+
+        config MCUX_COMPONENT_component.sgi_pkc.pre_processor
+            bool "Pre-processor"
+
+        config MCUX_COMPONENT_component.sgi_pkc.data_integrity
+            bool "Data integrity"
+
+        config MCUX_COMPONENT_component.sgi_pkc.ffdh
+            bool "FFDH"
+			
+        config MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            bool "Flow protection"
+
+        config MCUX_COMPONENT_component.sgi_pkc.param_integrity
+            bool "Parameter integrity"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.secure_counter
+            select MCUX_COMPONENT_component.sgi_pkc.pre_processor
+
+        config MCUX_COMPONENT_component.sgi_pkc.secure_counter
+            bool "Secure counter"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.pre_processor
+
+        config MCUX_COMPONENT_component.sgi_pkc.toolchain
+            bool "toolchain"
+    endmenu
+
+    menu "Examples"
+        config MCUX_COMPONENT_component.sgi_pkc.examples
+            bool "Examples common"
+            select MCUX_COMPONENT_component.sgi_pkc.example
+            select MCUX_COMPONENT_component.sgi_pkc.examples_aead
+            select MCUX_COMPONENT_component.sgi_pkc.examples_cipher_modes
+            select MCUX_COMPONENT_component.sgi_pkc.examples_crc
+            select MCUX_COMPONENT_component.sgi_pkc.examples_ecc
+            # select MCUX_COMPONENT_component.sgi_pkc.examples_ffdh
+            # select MCUX_COMPONENT_component.sgi_pkc.examples_glikey
+            select MCUX_COMPONENT_component.sgi_pkc.examples_hash_modes
+            select MCUX_COMPONENT_component.sgi_pkc.examples_hmac
+            # select MCUX_COMPONENT_component.sgi_pkc.examples_kdf_modes
+            select MCUX_COMPONENT_component.sgi_pkc.examples_key
+            select MCUX_COMPONENT_component.sgi_pkc.examples_mac_modes
+            select MCUX_COMPONENT_component.sgi_pkc.examples_random
+            select MCUX_COMPONENT_component.sgi_pkc.examples_random_modes
+            select MCUX_COMPONENT_component.sgi_pkc.examples_rsa
+            # select MCUX_COMPONENT_component.sgi_pkc.examples_xof_modes
+            select MCUX_COMPONENT_component.sgi_pkc.examples_flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.examples_memory
+
+        config MCUX_COMPONENT_component.sgi_pkc.examples_aead
+            bool "AEAD"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.session
+            select MCUX_COMPONENT_component.sgi_pkc.memory
+            select MCUX_COMPONENT_component.sgi_pkc.aead
+            select MCUX_COMPONENT_component.sgi_pkc.aead_modes
+
+        config MCUX_COMPONENT_component.sgi_pkc.examples_cipher_modes
+            bool "Cipher modes"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.session
+            select MCUX_COMPONENT_component.sgi_pkc.memory
+            select MCUX_COMPONENT_component.sgi_pkc.sgi
+            select MCUX_COMPONENT_component.sgi_pkc.examples_flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.cipher
+            select MCUX_COMPONENT_component.sgi_pkc.cipher_modes
+            select MCUX_COMPONENT_component.sgi_pkc.random_modes
+
+        config MCUX_COMPONENT_component.sgi_pkc.examples_flow_protection
+            bool "Flow protection"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.session
+            select MCUX_COMPONENT_component.sgi_pkc.memory
+
+        config MCUX_COMPONENT_component.sgi_pkc.examples_crc
+            bool "CRC"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.session
+            select MCUX_COMPONENT_component.sgi_pkc.memory
+
+        config MCUX_COMPONENT_component.sgi_pkc.examples_ecc
+            bool "ECC"
+            select MCUX_COMPONENT_component.sgi_pkc.ecc
+			
+        config MCUX_COMPONENT_component.sgi_pkc.examples_ffdh
+            bool "FFDH"
+            select MCUX_COMPONENT_component.sgi_pkc.ffdh
+			
+        config MCUX_COMPONENT_component.sgi_pkc.examples_glikey
+            bool "Glikey"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.session
+            select MCUX_COMPONENT_component.sgi_pkc.memory
+            select MCUX_COMPONENT_component.sgi_pkc.glikey
+
+        config MCUX_COMPONENT_component.sgi_pkc.examples_hash_modes
+            bool "Hash modes"
+            select MCUX_COMPONENT_component.sgi_pkc.hashmodes
+            select MCUX_COMPONENT_component.sgi_pkc.examples_flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.random_modes
+
+        config MCUX_COMPONENT_component.sgi_pkc.examples_hmac
+            bool "HMAC"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.session
+            select MCUX_COMPONENT_component.sgi_pkc.memory
+            select MCUX_COMPONENT_component.sgi_pkc.hmac
+
+        config MCUX_COMPONENT_component.sgi_pkc.examples_kdf_modes
+            bool "KDF modes"
+            select MCUX_COMPONENT_component.sgi_pkc.key
+            select MCUX_COMPONENT_component.sgi_pkc.kdf_modes
+
+
+        config MCUX_COMPONENT_component.sgi_pkc.examples_key
+            bool "Key"
+            select MCUX_COMPONENT_component.sgi_pkc.key
+            select MCUX_COMPONENT_component.sgi_pkc.cipher
+            select MCUX_COMPONENT_component.sgi_pkc.cipher_modes
+            select MCUX_COMPONENT_component.sgi_pkc.aes
+
+        config MCUX_COMPONENT_component.sgi_pkc.examples_mac_modes
+            bool "MAC modes"
+            select MCUX_COMPONENT_component.sgi_pkc.key
+            select MCUX_COMPONENT_component.sgi_pkc.mac
+            select MCUX_COMPONENT_component.sgi_pkc.mac_modes
+
+        config MCUX_COMPONENT_component.sgi_pkc.examples_random
+            bool "Random"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.session
+            select MCUX_COMPONENT_component.sgi_pkc.memory
+
+        config MCUX_COMPONENT_component.sgi_pkc.examples_random_modes
+            bool "Random"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.session
+            select MCUX_COMPONENT_component.sgi_pkc.memory
+            select MCUX_COMPONENT_component.sgi_pkc.random_modes
+            select MCUX_COMPONENT_component.sgi_pkc.example
+
+        config MCUX_COMPONENT_component.sgi_pkc.examples_rsa
+            bool "RSA"
+            select MCUX_COMPONENT_component.sgi_pkc.rsa
+
+        config MCUX_COMPONENT_component.sgi_pkc.examples_xof_modes
+            bool "Xof"
+            select MCUX_COMPONENT_component.sgi_pkc.xof_modes
+            select MCUX_COMPONENT_component.sgi_pkc.session
+            select MCUX_COMPONENT_component.sgi_pkc.memory
+
+        config MCUX_COMPONENT_component.sgi_pkc.examples_memory
+            bool "Memory"
+            select MCUX_COMPONENT_component.sgi_pkc.flow_protection
+            select MCUX_COMPONENT_component.sgi_pkc.session
+            select MCUX_COMPONENT_component.sgi_pkc.memory
+    endmenu
+
+rsource "pqc/Kconfig"
+
+endmenu
