@@ -1,0 +1,7 @@
+{
+    "prefix":       "ele_s4xx",
+    "type":         "transparent",
+    "mbedtls/h_condition":   "defined(PSA_CRYPTO_DRIVER_ELE_S4XX)",
+    "headers":      ["ele_s4xx.h"],
+    "capabilities": []
+}

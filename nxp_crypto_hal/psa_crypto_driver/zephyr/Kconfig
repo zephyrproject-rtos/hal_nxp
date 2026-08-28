@@ -1,0 +1,80 @@
+# psa-crypto-driver configuration options
+
+# Copyright 2024-2026 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+#
+# HW Acceleration Configs psa-crypto-driver
+#
+
+config MCUX_PSA_CRYPTO_DRIVER_ELS_PKC
+	bool "Build psa_crypto_driver for els_pkc"
+	depends on MCUX_ELS_PKC
+	default n
+	help
+	    Include the psa_crypto_driver component from the NXP MCU SDK in the build.
+	    This provides an abstraction on top of the els_pkc component in order to be
+	    able to access the hardware acceleration offered by els_pkc from mbedtls
+	    via the mbedtls psa_crypto_driver_wrapper.
+
+config MCUX_PSA_CRYPTO_DRIVER_ELS_PKC_THREAD
+	bool "Enables threading support in psa-crypto-driver"
+	depends on MCUX_ELS_PKC && MCUX_PSA_CRYPTO_DRIVER_ELS_PKC
+	default n if BUILD_WITH_TFM
+	help
+	    Enables threading support in psa-crypto-driver component.
+
+config MCUX_PSA_CRYPTO_DRIVER_USE_ELS_PKC_SHA1
+	bool "Enables use of SHA1 from els-pkc via psa-crypto-driver"
+	depends on MCUX_ELS_PKC && MCUX_PSA_CRYPTO_DRIVER_ELS_PKC
+	help
+	    Enables use of SHA1 from els-pkc via psa-crypto-driver component
+
+config PSA_CRYPTO_DRIVER_CAAM
+	bool "Build psa_crypto_driver for caam"
+	depends on MBEDTLS_PSA_CRYPTO_C
+	default n
+	help
+		Enables CAAM support in psa-crypto-driver component
+
+config PSA_CRYPTO_DRIVER_DCP
+	bool "Enables DCP support in psa-crypto-driver"
+	depends on MBEDTLS_PSA_CRYPTO_C
+	default n
+	help
+	    Enables DCP support in psa-crypto-driver component.
+
+config PSA_CRYPTO_DRIVER_ELE_S2XX
+	bool "Enables ELE S2XX support in psa-crypto-driver"
+	depends on MBEDTLS_PSA_CRYPTO_C && MCUX_DEVICE_HAS_ELE_S200
+	default n
+	help
+	    Enables ELE S2XX support in psa-crypto-driver component.
+
+config PSA_CRYPTO_DRIVER_ELE_S4xx
+	bool "Enables ELE S4xx support in psa-crypto-driver"
+	depends on MBEDTLS_PSA_CRYPTO_C && SOC_SERIES_IMXRT118X
+	select MBEDTLS_ASN1_WRITE_C
+	select MBEDTLS_BIGNUM_C
+	select ARM_MPU_SRAM_WRITE_THROUGH
+	select MBEDTLS_DECLARE_PRIVATE_IDENTIFIERS
+	default n
+	help
+	    Enables ELE S4xx support in psa-crypto-driver component.
+
+config PSA_CRYPTO_DRIVER_THREAD_EN
+	bool "Enables PSA Crypto Thread"
+	depends on MBEDTLS_PSA_CRYPTO_C
+	default n
+	help
+	    Enables PSA_CRYPTO_THREAD
+
+config USING_MBEDTLS_3X
+	bool
+	depends on MBEDTLS_PSA_CRYPTO_C
+	default y
+	help
+	    Tells the PSA crypto driver layer that it's caller is
+	    MbedTLS 3.x for backward compatibility.
+

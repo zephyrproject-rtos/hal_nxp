@@ -1,0 +1,6 @@
+SHA: d4d9a6db2715e21ef6fec8a90616acf07d8795b3
+
+Removed:
+./Kconfig
+./osal/baremetal/*
+./osal/frtos/*

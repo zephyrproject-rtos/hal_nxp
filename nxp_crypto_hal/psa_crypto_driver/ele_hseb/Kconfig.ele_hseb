@@ -1,0 +1,51 @@
+#
+# Copyright 2026 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+#########################################
+####   PUBLIC SYMBOLS WITH PROMPTS   ####
+#########################################
+
+config MCUX_COMPONENT_component.psa_crypto_driver.ele_hseb
+    bool "ELE HSEB"
+    select MCUX_COMPONENT_component.psa_crypto_driver
+    select MCUX_COMPONENT_component.ele_hseb
+    select MCUX_COMPONENT_component.psa_crypto_driver.util.wrapcheck_static_inline
+    imply MCUX_COMPONENT_component.psa_crypto_driver.ele_hseb.feature.autoformat_key_catalogs
+
+config MCUX_COMPONENT_component.psa_crypto_driver.ele_hseb.feature.autoformat_key_catalogs
+    bool "Automatically Format Key Catalogs"
+    depends on MCUX_COMPONENT_component.psa_crypto_driver.ele_hseb
+    default y
+    help
+        ELE HSEB requires the internal key catalogs to be formatted before
+        using any cryptographic operations. This option enables automatic
+        formatting of key catalogs during initialization via psa_crypto_init().
+        Disabling this option requires manual key catalog formatting before use.
+
+config MCUX_COMPONENT_component.psa_crypto_driver.ele_hseb.feature.use_custom_config_header
+    bool "Custom Configuration Header"
+    depends on MCUX_COMPONENT_component.psa_crypto_driver.ele_hseb
+    default n
+    help
+        Allows custom configuration of ELE HSEB internals via a user-provided
+        header file. When enabled, the application is responsible for providing
+        custom key catalog definitions and other configurations.
+        This is only for advanced users who need to customize key storage
+        and management for their specific use case.
+        The provided PSA feature set may not be fully supported with
+        custom configurations.
+        See ele_hseb_readme.md for more information.
+
+config ELE_HSEB_CUSTOM_CONFIG_HEADER
+    string "Header file with custom ELE HSEB key catalog definitions"
+    depends on MCUX_COMPONENT_component.psa_crypto_driver.ele_hseb.feature.use_custom_config_header
+
+#########################################
+#### PRIVATE SYMBOLS WITHOUT PROMPTS ####
+#########################################
+
+config ELE_HSEB_AUTOFORMAT_KEY_CATALOGS
+    bool
+    default y if MCUX_COMPONENT_component.psa_crypto_driver.ele_hseb.feature.autoformat_key_catalogs

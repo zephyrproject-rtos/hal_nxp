@@ -1,0 +1,7 @@
+{
+    "prefix":       "caam",
+    "type":         "transparent",
+    "mbedtls/h_condition":   "defined(PSA_CRYPTO_DRIVER_CAAM)",
+    "headers":      ["caam.h"],
+    "capabilities": []
+}

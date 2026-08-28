@@ -1,0 +1,7 @@
+{
+    "prefix":       "sgi",
+    "type":         "transparent",
+    "mbedtls/h_condition":   "defined(PSA_CRYPTO_DRIVER_SGI)",
+    "headers":      ["sgi.h"],
+    "capabilities": []
+}

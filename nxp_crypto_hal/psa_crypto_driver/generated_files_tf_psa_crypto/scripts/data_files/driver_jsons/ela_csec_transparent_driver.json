@@ -1,0 +1,9 @@
+{
+    "prefix": "ela_csec",
+    "type": "transparent",
+    "mbedtls/h_condition": "defined(PSA_CRYPTO_DRIVER_ELA_CSEC)",
+    "headers": [
+        "ela_csec.h"
+    ],
+    "capabilities": []
+}
