@@ -1818,6 +1818,8 @@
 #define FSL_FEATURE_TPM_FILTER_HAS_EFFECTn(x) (0)
 /* @brief Has TPM_QDCTRL register. */
 #define FSL_FEATURE_TPM_HAS_QDCTRL (0)
+/* @brief Has 32-bit counter in TPM. */
+#define FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x) (0)
 /* @brief Whether QDCTRL register has effect. */
 #define FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(x) (0)
 
