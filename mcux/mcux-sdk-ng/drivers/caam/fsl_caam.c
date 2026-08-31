@@ -9,6 +9,8 @@
 #include "fsl_caam.h"
 #include "fsl_clock.h"
 
+#include <zephyr/linker/sections.h>
+
 #if defined(FSL_FEATURE_HAS_L1CACHE) || defined(__DCACHE_PRESENT)
 #include "fsl_cache.h"
 
@@ -222,10 +224,10 @@ static uint32_t s_jrIndex2              = 0;    /*!< Current index in the input 
 static caam_job_ring_interface_t *s_jr3 = NULL; /*!< Pointer to job ring interface 3. */
 static uint32_t s_jrIndex3              = 0;    /*!< Current index in the input job ring 3. */
 
-AT_NONCACHEABLE_SECTION(static caam_rng_config_t rngConfig);
-AT_NONCACHEABLE_SECTION(static caam_desc_rng_t rngGenSeckey);
-AT_NONCACHEABLE_SECTION(static caam_desc_rng_t rngInstantiate);
-AT_NONCACHEABLE_SECTION(static caam_desc_rng_t descBuf);
+static caam_rng_config_t rngConfig __nocache;
+static caam_desc_rng_t rngGenSeckey __nocache;
+static caam_desc_rng_t rngInstantiate __nocache;
+static caam_desc_rng_t descBuf __nocache;
 /*******************************************************************************
  * Code
  ******************************************************************************/

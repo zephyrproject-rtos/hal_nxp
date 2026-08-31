@@ -138,8 +138,9 @@ License Link:
    https://spdx.org/licenses/BSD-3-Clause.html
 
 Patch List:
-  - mcux-sdk/drivers/caam/fsl_caam.c: Move used job descriptors in the CAAM driver from the stack to noncacheable section. At time of writing, there should
-     be four being used for entropy in zephyr.
+  - mcux-sdk-ng/drivers/caam/fsl_caam.c: Move used job descriptors in the CAAM driver from the stack to the
+     Zephyr nocache section via __nocache. At time of writing, there should be four being used for entropy
+     in zephyr. Requires CONFIG_NOCACHE_MEMORY (selected by PSA_CRYPTO_DRIVER_CAAM and ENTROPY_MCUX_CAAM).
 
   - Patched middleware\mcux-sdk-middleware-usb\middleware_usb_common_header.cmake to remove "#include(component_osa)". PR submitted to upstream
 
