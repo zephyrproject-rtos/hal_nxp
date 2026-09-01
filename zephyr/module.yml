@@ -192,6 +192,29 @@ blobs:
     description: "Combo firmware for NW61x A1 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.2/readme.txt
 
+#For IW611 Ezurio NX611
+  - path: nw61x/ezurio/sd_w61x_v1.18.99.3.p26.11.1.bin.se
+    sha256: 117495519e5d5f3eff93089c101fb867559f8e9509ee05fc383edcead39d005c
+    type: img
+    version: 'LRD-REL-13.98.0.12'
+    license-path: https://github.com/Ezurio/radio_firmware_release/raw/refs/tags/LRD-REL-13.98.0.12/LICENSE.ezurio
+    url: https://github.com/Ezurio/radio_firmware_release/raw/refs/tags/LRD-REL-13.98.0.12/summit-nx61x-firmware/lib/firmware/nxp/sd_w61x_v1.18.99.3.p26.11.1.bin.se
+    description: "Wi-Fi firmware for Ezurio Sona NX611 boards"
+  - path: nw61x/ezurio/uartspi_n61x_v1.18.99.3.p26.11.bin.se
+    sha256: 3ec78027c719d0cf0367b3306e449609f0854fa92e85cd0880631812d1f2ecf1
+    type: img
+    version: 'LRD-REL-13.98.0.12'
+    license-path: https://github.com/Ezurio/radio_firmware_release/raw/refs/tags/LRD-REL-13.98.0.12/LICENSE.ezurio
+    url: https://github.com/Ezurio/radio_firmware_release/raw/refs/tags/LRD-REL-13.98.0.12/summit-nx61x-firmware/lib/firmware/nxp/uartspi_n61x_v1.18.99.3.p26.11.bin.se
+    description: "BT firmware for Ezurio Sona NX611 boards"
+  - path: nw61x/ezurio/sduart_nw61x_v1.18.99.3.p26.11.1.bin.se
+    sha256: 1b0de19f399f202ea5a78c8d76ed4c4aba487b7d65e4ea297118c56ed0827345
+    type: img
+    version: 'LRD-REL-13.98.0.12'
+    license-path: https://github.com/Ezurio/radio_firmware_release/raw/refs/tags/LRD-REL-13.98.0.12/LICENSE.ezurio
+    url: https://github.com/Ezurio/radio_firmware_release/raw/refs/tags/LRD-REL-13.98.0.12/summit-nx61x-firmware/lib/firmware/nxp/sduart_nw61x_v1.18.99.3.p26.11.1.bin.se
+    description: "Combo firmware for Ezurio Sona NX611 boards"
+
 #For IW416
   - path: IW416/sdIW416_wlan.bin
     sha256: ca59ec4112dc03885604d9367bb21c926399d51fa69c476e1901da22be291bc9

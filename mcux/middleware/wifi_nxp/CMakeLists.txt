@@ -173,21 +173,37 @@ zephyr_compile_definitions_ifdef(CONFIG_NXP_IW611_MURATA_2DL_M2
     WIFI_BT_USE_M2_INTERFACE
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_US
-	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_US_RU_Tx_power.h"
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW611_EZURIO_NX611
+    CONFIG_NXP_WIFI_ED_OFFSET_2G=0x0A
+    CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0A
+    WIFI_BT_USE_USD_INTERFACE
 )
-zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_JP
-	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_JP_RU_Tx_power.h"
-)
-zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_CA
-	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_CA_RU_Tx_power.h"
-)
-zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_EU
-	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_EU_RU_Tx_power.h"
-)
-zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_WW
-	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_WW.h"
-)
+
+if(CONFIG_NXP_IW611_EZURIO_NX611)
+    # Ezurio Sona NX611 ships one vendor-qualified compressed Tx power table
+    # per region, all in a single file (see Ezurio/tx_pwr_limits/); the
+    # runtime region code selects the active table, same as the Murata/
+    # Quectel modules below.
+    zephyr_compile_definitions(
+         WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_ezurio_nx611.h"
+    )
+else()
+    zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_US
+         WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_US_RU_Tx_power.h"
+    )
+    zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_JP
+         WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_JP_RU_Tx_power.h"
+    )
+    zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_CA
+         WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_CA_RU_Tx_power.h"
+    )
+    zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_EU
+         WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_EU_RU_Tx_power.h"
+    )
+    zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_WW
+         WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_WW.h"
+    )
+endif()
 
 zephyr_compile_definitions_ifdef(CONFIG_NXP_88W8801_AW_NM191_USD
     WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_WW.h"
@@ -280,6 +296,7 @@ zephyr_include_directories(
     ${MCUX_SDK_DIR}/components/lists/
     ${MCUX_SDK_DIR}/components/wifi_bt_module/AzureWave/tx_pwr_limits/
     ${MCUX_SDK_DIR}/components/wifi_bt_module/Murata/tx_pwr_limits/
+    ${MCUX_SDK_DIR}/components/wifi_bt_module/Ezurio/tx_pwr_limits/
 )
 
 # OS abstraction layer source
