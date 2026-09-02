@@ -15,6 +15,7 @@
 #include <nxp_wifi_net.h> /* for net_inet_aton */
 #include <wifi.h>
 #include <wlan_tests.h>
+#include <mlan_decl.h> /* for NXP_CHANNEL_* CFP usability flags */
 
 #if defined(WIFI_BT_TX_PWR_LIMITS_OVERRIDE)
 #include WIFI_BT_TX_PWR_LIMITS_OVERRIDE
@@ -1139,6 +1140,60 @@ static void print_chanlist(wlan_chanlist_t chanlist)
     }
 }
 
+static void print_chanlist_ext(wlan_chanlist_ext_t chanlist)
+{
+    unsigned char i;
+    t_u16 flags;
+    bool dfs_or_passive;
+
+    (void)PRINTF("--------------------------------------------------------------------------------\r\n");
+    (void)PRINTF("Number of channels configured: %d\r\n", chanlist.num_chans);
+    (void)PRINTF("\r\n");
+    for (i = 0; i < chanlist.num_chans; i++)
+    {
+        flags = chanlist.chan_info[i].flags;
+        /* dynamic.flags PASSIVE/DFS bits are only set from OTP cal data, so fall
+         * back to the statically compiled-in passive_scan_or_radar_detect marker */
+        dfs_or_passive = chanlist.chan_info[i].passive_scan_or_radar_detect ||
+                         ((flags & (NXP_CHANNEL_PASSIVE | NXP_CHANNEL_DFS)) != 0U);
+
+        (void)PRINTF("ChanNum: %-3d ", chanlist.chan_info[i].chan_num);
+        (void)PRINTF("ChanFreq: %-4d ", chanlist.chan_info[i].chan_freq);
+        (void)PRINTF("MaxTxPower: %-3d ", chanlist.chan_info[i].max_tx_power);
+        (void)PRINTF("Flags(0x%04x):", flags);
+        (void)PRINTF(" %s", dfs_or_passive ? "DFS/PASSIVE" : "ACTIVE");
+        if ((flags & NXP_CHANNEL_DISABLED) != 0U)
+        {
+            (void)PRINTF(",DISABLED");
+        }
+        if ((flags & NXP_CHANNEL_NOHT40) != 0U)
+        {
+            (void)PRINTF(",NOHT40");
+        }
+        if ((flags & NXP_CHANNEL_NOHT80) != 0U)
+        {
+            (void)PRINTF(",NOHT80");
+        }
+        if ((flags & NXP_CHANNEL_NOHT160) != 0U)
+        {
+            (void)PRINTF(",NOHT160");
+        }
+        if ((flags & NXP_CHANNEL_NO_CCK) != 0U)
+        {
+            (void)PRINTF(",NO_CCK");
+        }
+        if ((flags & NXP_CHANNEL_NO_OFDM) != 0U)
+        {
+            (void)PRINTF(",NO_OFDM");
+        }
+        if (chanlist.chan_info[i].blacklist)
+        {
+            (void)PRINTF(",BLACKLISTED");
+        }
+        (void)PRINTF("\r\n");
+    }
+}
+
 static void dump_wlan_get_txpwrlimit_usage(void)
 {
     (void)PRINTF("Usage:\r\n");
@@ -1429,6 +1484,34 @@ static void test_wlan_get_chanlist(int argc, char **argv)
     }
 }
 
+static void dump_wlan_get_chanlist_flags_usage(void)
+{
+    (void)PRINTF("Usage:\r\n");
+    (void)PRINTF("wlan-get-chanlist-flags \r\n");
+}
+
+static void test_wlan_get_chanlist_ext(int argc, char **argv)
+{
+    wlan_chanlist_ext_t chanlist;
+
+    if (argc != 1)
+    {
+        dump_wlan_get_chanlist_flags_usage();
+        return;
+    }
+
+    (void)memset(&chanlist, 0x00, sizeof(wlan_chanlist_ext_t));
+    int rv = wlan_get_chanlist_ext(&chanlist);
+    if (rv != WM_SUCCESS)
+    {
+        (void)PRINTF("Unable to get channel list configuration\r\n");
+    }
+    else
+    {
+        print_chanlist_ext(chanlist);
+    }
+}
+
 #if CONFIG_11AX
 static void dump_wlan_set_txomi_usage()
 {
@@ -1702,11 +1785,11 @@ static void test_wlan_bcast_twt(int argc, char **argv)
         if (ret == WM_SUCCESS)
         {
             (void)PRINTF("btwt_cfg, bet_sta_wait %d, offset %d, twtli %d, count %d\r\n",
-                        btwt_cfg.bcast_bet_sta_wait, btwt_cfg.bcast_offset, 
+                        btwt_cfg.bcast_bet_sta_wait, btwt_cfg.bcast_offset,
                         btwt_cfg.bcast_twtli, btwt_cfg.count);
             for (t_u8 i = 0; i < btwt_cfg.count; ++i)
             {
-                (void)PRINTF("id %d, mantissa %d, exponent %d, nominal_wake %d\r\n", 
+                (void)PRINTF("id %d, mantissa %d, exponent %d, nominal_wake %d\r\n",
                         btwt_cfg.btwt_sets[i].btwt_id, btwt_cfg.btwt_sets[i].bcast_mantissa,
                         btwt_cfg.btwt_sets[i].bcast_exponent, btwt_cfg.btwt_sets[i].nominal_wake);
             }
@@ -2236,6 +2319,7 @@ static struct cli_command wlan_enhanced_commands[] = {
 #endif
     {"wlan-set-chanlist", NULL, test_wlan_set_chanlist},
     {"wlan-get-chanlist", NULL, test_wlan_get_chanlist},
+    {"wlan-get-chanlist-flags", NULL, test_wlan_get_chanlist_ext},
 #if CONFIG_11AC
     {"wlan-set-txratecfg", "<sta/uap> <format> <index> <nss> <rate_setting> <autoTx_set>", test_wlan_set_txratecfg},
 #else

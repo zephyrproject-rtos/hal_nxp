@@ -4256,6 +4256,53 @@ int wifi_get_chanlist(wifi_chanlist_t *chanlist)
     return WM_SUCCESS;
 }
 
+int wifi_get_chanlist_ext(wifi_chanlist_ext_t *chanlist)
+{
+    mlan_adapter *pmadapter      = mlan_adap->priv[0]->adapter;
+    region_chan_t *pchan_region  = MNULL;
+    const chan_freq_power_t *cfp = MNULL;
+    t_u32 region_idx             = 0;
+    t_u32 next_chan              = 0;
+    chanlist->num_chans          = 0;
+
+    for (region_idx = 0; region_idx < NELEMENTS(pmadapter->region_channel); region_idx++)
+    {
+        if (!pmadapter->region_channel[region_idx].valid)
+        {
+            continue;
+        }
+
+        pchan_region = &pmadapter->region_channel[region_idx];
+
+        for (next_chan = 0; next_chan < pchan_region->num_cfp; next_chan++)
+        {
+            cfp = pchan_region->pcfp + next_chan;
+            if (cfp == MNULL)
+            {
+                wifi_e("No cfp configured");
+                return -WM_FAIL;
+            }
+
+            /* unlike wifi_get_chanlist(), disabled channels are kept so callers can see why */
+            chanlist->chan_info[chanlist->num_chans].chan_num     = cfp->channel;
+            chanlist->chan_info[chanlist->num_chans].chan_freq    = cfp->freq;
+            chanlist->chan_info[chanlist->num_chans].max_tx_power = cfp->max_tx_power;
+            chanlist->chan_info[chanlist->num_chans].flags        = cfp->dynamic.flags;
+            chanlist->chan_info[chanlist->num_chans].blacklist    = cfp->dynamic.blacklist;
+            chanlist->chan_info[chanlist->num_chans].passive_scan_or_radar_detect =
+                cfp->passive_scan_or_radar_detect;
+            chanlist->num_chans++;
+
+            if (chanlist->num_chans >= NELEMENTS(chanlist->chan_info))
+            {
+                break;
+            }
+        }
+    }
+
+    return WM_SUCCESS;
+}
+
 int wifi_get_chanlist_by_band(t_u8 *chan_list, t_u8 *num_chans, t_u8 band)
 {
     mlan_adapter *pmadapter      = mlan_adap->priv[0]->adapter;
@@ -6537,7 +6584,7 @@ int wifi_channel_load(wlan_802_11_chan_load_t *cfg)
 
     mlan_status rv = wlan_ops_sta_prepare_cmd((mlan_private *)mlan_adap->priv[0], HostCmd_CMD_802_11_GET_CH_LOAD, HostCmd_ACT_GEN_GET, 0,
                                               NULL, &chan_load_cmd, cmd);
-    
+
     if (rv != MLAN_STATUS_SUCCESS)
     {
         wifi_put_command_lock();

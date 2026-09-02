@@ -336,7 +336,7 @@ int wifi_mmsf_cfg(const t_u16 action, t_u8 *enable, t_u8 *Density, t_u8 *MMSF);
 #if CONFIG_IPV6
 int wifi_set_ipv6_ra_offload(t_u8 enable);
 #endif
-#if CONFIG_WIFI_RECOVERY 
+#if CONFIG_WIFI_RECOVERY
 int wifi_recovery_test(void);
 #endif
 
@@ -449,6 +449,7 @@ int wifi_set_txpwrlimit(wifi_txpwrlimit_t *txpwrlimit);
 int wifi_send_rssi_info_cmd(wifi_rssi_info_t *rssi_info);
 void wifi_set_curr_bss_channel(uint8_t channel);
 int wifi_get_chanlist(wifi_chanlist_t *chanlist);
+int wifi_get_chanlist_ext(wifi_chanlist_ext_t *chanlist);
 int wifi_get_chanlist_by_band(t_u8 *chan_list, t_u8 *num_chans, t_u8 band);
 int wifi_get_set_bandcfg(wifi_bandcfg_t *bandcfg, mlan_act_ioctl action);
 #if (CONFIG_IPS)
