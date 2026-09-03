@@ -34,10 +34,12 @@ zephyr_compile_definitions_ifdef(CONFIG_NXP_88W8987
 
 zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416
     SD8978
+    WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1XK_WW.h"
 )
 
 zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X
     SD9177
+    WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_WW.h"
 )
 
 zephyr_compile_definitions_ifdef(CONFIG_NXP_88W8801
@@ -124,30 +126,6 @@ zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_MURATA_1XK_M2
     WIFI_IW416_BOARD_MURATA_1XK_M2
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_REGION_EU
-    WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1XK_EU.h"
-)
-
-zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_REGION_CA
-	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1XK_CA.h"
-)
-
-zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_REGION_WW
-	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1XK_WW.h"
-)
-
-zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_REGION_US
-	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1XK_US.h"
-)
-
-zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_REGION_JP
-	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1XK_JP.h"
-)
-
-zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_REGION_CA
-	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1XK_CA.h"
-)
-
 zephyr_compile_definitions_ifdef(CONFIG_NXP_IW612_MURATA_2EL_USD
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x0A
     CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0A
@@ -171,22 +149,6 @@ zephyr_compile_definitions_ifdef(CONFIG_NXP_IW611_MURATA_2DL_M2
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x0A
     CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0A
     WIFI_BT_USE_M2_INTERFACE
-)
-
-zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_US
-	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_US_RU_Tx_power.h"
-)
-zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_JP
-	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_JP_RU_Tx_power.h"
-)
-zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_CA
-	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_CA_RU_Tx_power.h"
-)
-zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_EU
-	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_EU_RU_Tx_power.h"
-)
-zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_WW
-	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_WW.h"
 )
 
 zephyr_compile_definitions_ifdef(CONFIG_NXP_88W8801_AW_NM191_USD
