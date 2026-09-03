@@ -1,0 +1,111 @@
+/** @file wlan_txpwrlimit_cfg_ezurio_nx611_US.h
+ *
+ *  @brief  This file provides Ezurio Sona NX611 WLAN United States Tx Power Limits.
+ *
+ *  The compressed Tx power table and 11ax RU (OFDMA) power table below are
+ *  extracted verbatim from Ezurio's vendor-qualified firmware NVRAM data.
+ *
+ *  Source: Ezurio/radio_firmware_release @ LRD-REL-13.98.0.12 (official public
+ *  release), summit-nx61x-firmware/lib/firmware/nxp/rgpower_US.bin.
+ *
+ *  This file contains data extracted from an Ezurio Authorized Product
+ *  firmware image. It may only be used with an Ezurio Authorized Product;
+ *  see LICENSE.ezurio in the parent Ezurio directory for the full license
+ *  terms.
+ *
+ *  Copyright 2008-2021 NXP
+ *  Copyright 2026 Ezurio LLC
+ *
+ *  SPDX-License-Identifier: LicenseRef-Ezurio-Clause
+ *
+ */
+
+#ifndef _WLAN_TXPWRLIMIT_CFG_EZURIO_NX611_US_H_
+#define _WLAN_TXPWRLIMIT_CFG_EZURIO_NX611_US_H_
+#include <wlan.h>
+#include <wifi.h>
+
+#define WLAN_REGION_CODE "US"
+
+/* unused in the SD9177 (IW61X) build path of wlan_txpwrlimit_cfg.c, but
+ * wlan_enhanced_tests.c's own static copy still references it unconditionally */
+static wlan_chanlist_t __attribute__((unused)) chanlist_2g_cfg = {
+    .num_chans = 0,
+    .chan_info[0] = { 0 }
+};
+
+#if CONFIG_5GHz_SUPPORT
+static wlan_chanlist_t __attribute__((unused)) chanlist_5g_cfg = {
+    .num_chans = 0,
+    .chan_info[0] = {0}
+};
+#endif /* CONFIG_5GHz_SUPPORT */
+
+#if CONFIG_COMPRESS_TX_PWTBL
+/* region_pwr_cfg with its 8-byte HostCmd_CMD_REGION_POWER_CFG header
+ * stripped; wlan_set_region_power_cfg() builds that header itself. */
+static const t_u8 rg_table_fc[] = {
+    0x01, 0x00, 0xee, 0x01, 0x06, 0x00, 0x55, 0x53, 0x20, 0x10, 0x01, 0x01,
+    0x06, 0x02, 0x84, 0x00, 0x5a, 0x45, 0x04, 0x01, 0x0b, 0x01, 0x00, 0x00,
+    0x00, 0x00, 0x55, 0x53, 0x20, 0x10, 0x23, 0x07, 0x01, 0x02, 0x08, 0x05,
+    0xab, 0xc0, 0x61, 0x20, 0x58, 0x00, 0x06, 0x0e, 0x82, 0xc1, 0xe1, 0x30,
+    0x88, 0x30, 0x36, 0x13, 0x0e, 0x86, 0xc2, 0x41, 0x91, 0x28, 0xa4, 0x46,
+    0x0d, 0x13, 0x00, 0x0e, 0xe2, 0x00, 0x38, 0xd8, 0x2e, 0x0a, 0x1f, 0x00,
+    0x01, 0x00, 0x60, 0xf9, 0x08, 0x30, 0x03, 0x02, 0x46, 0x03, 0x80, 0x60,
+    0x10, 0x00, 0xa8, 0x1e, 0x18, 0x00, 0x04, 0x41, 0xe1, 0x99, 0x8c, 0xce,
+    0x6a, 0x01, 0x06, 0xcc, 0x02, 0x20, 0xd9, 0xa4, 0xee, 0x7a, 0x0d, 0x00,
+    0x83, 0x02, 0xe0, 0x00, 0x90, 0x32, 0x61, 0x45, 0xa3, 0xc9, 0x81, 0xd3,
+    0xa0, 0x70, 0x04, 0x17, 0x43, 0x82, 0x00, 0x41, 0x55, 0x00, 0x55, 0x1e,
+    0xab, 0x44, 0xab, 0x84, 0x81, 0x54, 0x19, 0xd4, 0x9a, 0xae, 0x11, 0xac,
+    0xd8, 0x65, 0x82, 0xa0
+};
+static const t_u16 rg_table_fc_len = 148;
+
+/* wlan_txpwrlimit_cfg.c's SD9177 dispatch path (active for all NXP_IW61X
+ * boards, Ezurio's chip family included) expects a rg_power_cfg_info[]
+ * table with WW/JP/US/EU/CA entries populated simultaneously, selected at
+ * runtime by numeric region_code. Ezurio ships one vendor-qualified table
+ * per Kconfig-selected region (this file), so alias every region_code slot
+ * to the single table above -- whichever numeric region_code gets resolved
+ * at runtime, the same qualified US table is what actually gets
+ * applied. */
+#define rg_table_WW rg_table_fc
+#define rg_table_JP rg_table_fc
+#define rg_table_US rg_table_fc
+#define rg_table_EU rg_table_fc
+#define rg_table_CA rg_table_fc
+#else
+#error \
+    "Ezurio NX611 US Tx power table is only provided in compressed form; enable CONFIG_NXP_WIFI_COMPRESS_TX_PWTBL"
+#endif /* CONFIG_COMPRESS_TX_PWTBL */
+
+#if CONFIG_11AX
+#if CONFIG_COMPRESS_RU_TX_PWTBL
+/* subband_ru_power_cfg kept verbatim, header included; wlan_set_11ax_rutxpowerlimit()
+ * sends this buffer to the firmware as a raw HostCmd with no extra framing. */
+const static uint8_t rutxpowerlimit_cfg_set[] = {
+    0x6d, 0x02, 0x6c, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x01,
+    0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x00, 0x00, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
+    0x00, 0x00, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x00, 0x00, 0x08, 0x08, 0x08,
+    0x08, 0x08, 0x08, 0x00, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x00, 0x08,
+    0x08, 0x08, 0x08, 0x08, 0x08, 0x00, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08,
+    0x00, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x00, 0x08, 0x08, 0x08, 0x08,
+    0x08, 0x08, 0x00, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x00, 0x08, 0x08,
+    0x08, 0x08, 0x08, 0x08, 0x00, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x00,
+    0x08, 0x08, 0x08, 0x08, 0x08, 0x64, 0x02, 0x03, 0x00, 0x5a, 0x45, 0x01
+};
+
+/* Same rationale as the rg_table_* aliases above, for the RU (11ax OFDMA)
+ * dispatch table in wlan_set_ru_power_cfg(). */
+#define rutxpowerlimit_cfg_set_WW rutxpowerlimit_cfg_set
+#define rutxpowerlimit_cfg_set_JP rutxpowerlimit_cfg_set
+#define rutxpowerlimit_cfg_set_US rutxpowerlimit_cfg_set
+#define rutxpowerlimit_cfg_set_EU rutxpowerlimit_cfg_set
+#define rutxpowerlimit_cfg_set_CA rutxpowerlimit_cfg_set
+#else
+#error \
+    "Ezurio NX611 US RU Tx power table is only provided in compressed form; enable CONFIG_NXP_WIFI_COMPRESS_RU_TX_PWTBL"
+#endif /* CONFIG_COMPRESS_RU_TX_PWTBL */
+#endif /* CONFIG_11AX */
+
+#endif /* _WLAN_TXPWRLIMIT_CFG_EZURIO_NX611_US_H_ */

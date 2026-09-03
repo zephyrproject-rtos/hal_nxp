@@ -1015,6 +1015,44 @@ typedef PACK_START struct
     wifi_chan_info_t chan_info[54];
 } PACK_END wifi_chanlist_t;
 
+/**
+ * Data structure for extended Channel attributes, exposing the raw CFP
+ * usability flags (see NXP_CHANNEL_* in mlan_decl.h) in addition to the
+ * fields already available via \ref wifi_chan_info_t.
+ */
+typedef PACK_START struct
+{
+    /** Channel Number */
+    t_u8 chan_num;
+    /** Channel frequency for this channel */
+    t_u16 chan_freq;
+    /** Max allowed Tx power level (dBm) for this channel */
+    t_u16 max_tx_power;
+    /** Channel usability flags, see NXP_CHANNEL_* bitmask defines (only
+     *  populated from OTP calibration data; zero on non-OTP builds) */
+    t_u16 flags;
+    /** TRUE: Channel is blacklisted (do not use). Unlike \ref flags, no code
+     *  path in this driver ever sets this (not even the OTP path), so it is
+     *  always FALSE. */
+    bool blacklist;
+    /** TRUE: radar detect required for BAND A or passive scan for BAND B/G.
+     *  This is the statically compiled-in DFS/passive marker, always valid
+     *  (unlike \ref flags, which is only set when OTP channel info is used). */
+    bool passive_scan_or_radar_detect;
+} PACK_END wifi_chan_info_ext_t;
+
+/**
+ * Data structure for extended Channel List Config
+ *
+ */
+typedef PACK_START struct
+{
+    /** Number of Channels */
+    t_u8 num_chans;
+    /** Channel Info */
+    wifi_chan_info_ext_t chan_info[54];
+} PACK_END wifi_chanlist_ext_t;
+
 /** Wifi subband enum */
 typedef enum
 {

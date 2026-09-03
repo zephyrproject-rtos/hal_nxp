@@ -543,7 +543,9 @@ typedef struct _cfp_dyn_t
      *  bit 0 : if set, channel is passive
      */
     t_u16 flags;
-    /** TRUE: Channel is blacklisted (do not use) */
+    /** TRUE: Channel is blacklisted (do not use). Never set by this driver
+     *  (no code path assigns it, including the OTP path that sets \ref flags),
+     *  so it always reads FALSE. */
     t_bool blacklist;
 } cfp_dyn_t;
 

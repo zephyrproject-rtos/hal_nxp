@@ -12166,6 +12166,16 @@ int wlan_get_chanlist(wlan_chanlist_t *chanlist)
     return -WM_FAIL;
 }
 
+int wlan_get_chanlist_ext(wlan_chanlist_ext_t *chanlist)
+{
+    if (chanlist != NULL)
+    {
+        return wifi_get_chanlist_ext(chanlist);
+    }
+
+    return -WM_FAIL;
+}
+
 int wlan_set_txpwrlimit(wlan_txpwrlimit_t *txpwrlimit)
 {
     if (txpwrlimit != NULL)

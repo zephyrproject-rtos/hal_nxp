@@ -1609,6 +1609,10 @@ typedef wifi_cw_mode_ctrl_t wlan_cw_mode_ctrl_t;
  * \ref wifi_chanlist_t
  */
 typedef wifi_chanlist_t wlan_chanlist_t;
+/** Extended channel list with CFP usability flags from
+ * \ref wifi_chanlist_ext_t
+ */
+typedef wifi_chanlist_ext_t wlan_chanlist_ext_t;
 /** Configuration for TX power limit from
  * \ref wifi_txpwrlimit_t
  */
@@ -4826,6 +4830,21 @@ int wlan_set_chanlist(wlan_chanlist_t *chanlist);
  *
  */
 int wlan_get_chanlist(wlan_chanlist_t *chanlist);
+
+/**
+ * Gets the channel list configuration, including the raw CFP usability
+ * flags (NXP_CHANNEL_* bitmask: DFS, NOHT40/80/160, DISABLED, NO_CCK,
+ * NO_OFDM), per-channel max Tx power, and blacklist state.
+ *
+ * \param[out] chanlist: A pointer to wlan_chanlist_ext_t channel list configuration.
+ *
+ * \return WM_SUCCESS on success, error otherwise.
+ *
+ * \note Unlike \ref wlan_get_chanlist, disabled channels are included in the
+ * result so their flags can be inspected.
+ *
+ */
+int wlan_get_chanlist_ext(wlan_chanlist_ext_t *chanlist);
 
 /**
  * Sets the TRPC (transient receptor potential canonical) channel configuration.
