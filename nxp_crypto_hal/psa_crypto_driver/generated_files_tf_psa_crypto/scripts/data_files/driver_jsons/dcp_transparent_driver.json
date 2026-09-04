@@ -1,0 +1,8 @@
+
+{
+    "prefix":       "dcp",
+    "type":         "transparent",
+    "mbedtls/h_condition":   "defined(PSA_CRYPTO_DRIVER_DCP)",
+    "headers":      ["dcp.h"],
+    "capabilities": []
+}

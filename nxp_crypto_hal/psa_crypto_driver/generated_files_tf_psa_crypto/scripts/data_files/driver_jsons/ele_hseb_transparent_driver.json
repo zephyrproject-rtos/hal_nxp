@@ -1,0 +1,9 @@
+{
+    "prefix": "ele_hseb",
+    "type": "transparent",
+    "mbedtls/h_condition": "defined(PSA_CRYPTO_DRIVER_ELE_HSEB)",
+    "headers": [
+        "ele_hseb.h"
+    ],
+    "capabilities": []
+}

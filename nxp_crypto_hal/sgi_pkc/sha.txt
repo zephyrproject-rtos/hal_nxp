@@ -1,0 +1,9 @@
+SHA: 61062d16345d622caa14d646bc18306ae73fa012
+
+Removed:
+./doc/*
+./examples/*
+./includes/*
+./includes/platform/<platform>/<CMSIS and platform header files>
+./src/comps/<component>/ex/*
+./src/platforms/<platform>/<CMSIS and platform header files>

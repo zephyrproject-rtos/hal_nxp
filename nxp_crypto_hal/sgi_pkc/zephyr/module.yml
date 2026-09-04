@@ -1,0 +1,4 @@
+name: sgi_pkc
+build:
+  cmake: zephyr/.
+  kconfig: zephyr/Kconfig

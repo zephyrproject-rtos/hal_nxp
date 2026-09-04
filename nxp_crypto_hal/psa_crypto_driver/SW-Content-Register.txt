@@ -1,0 +1,15 @@
+--------------------------------------------
+
+NXP Software Content Register
+
+Name:             PSA CRYPTO DRIVER
+Version:          1.0.1
+Outgoing License: BSD-3-Clause
+License File:     LICENSE
+Format:           source code
+Description:      PSA crypto driver interface to use cryptographic
+                  library running on NXP crypto Hardware IP
+Location:         https://github.com/nxp/psa_crypto_driver
+Origin:           NXP (BSD-3-Clause)
+
+--------------------------------------------

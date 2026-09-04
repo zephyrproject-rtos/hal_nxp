@@ -1,0 +1,4 @@
+name: psa_crypto_driver
+build:
+  cmake: zephyr/.
+  kconfig: zephyr/Kconfig

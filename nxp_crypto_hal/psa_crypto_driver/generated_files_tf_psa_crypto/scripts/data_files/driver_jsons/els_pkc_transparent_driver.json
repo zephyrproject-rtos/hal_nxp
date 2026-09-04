@@ -1,0 +1,7 @@
+{
+    "prefix":       "els_pkc",
+    "type":         "transparent",
+    "mbedtls/h_condition":   "defined(PSA_CRYPTO_DRIVER_ELS_PKC)",
+    "headers":      ["els_pkc_driver.h"],
+    "capabilities": []
+}

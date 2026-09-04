@@ -1,0 +1,3 @@
+Latest documentation can be found here: https://github.com/nxp-mcuxpresso/sgi_pkc/tree/main/doc
+
+Removed from NXP_HAL due to size (~700MB)

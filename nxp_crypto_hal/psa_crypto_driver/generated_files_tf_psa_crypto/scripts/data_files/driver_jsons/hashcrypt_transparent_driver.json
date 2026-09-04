@@ -1,0 +1,7 @@
+{
+    "prefix":       "hashcrypt",
+    "type":         "transparent",
+    "mbedtls/h_condition":   "defined(PSA_CRYPTO_DRIVER_HASHCRYPT)",
+    "headers":      ["hashcrypt.h"],
+    "capabilities": []
+}

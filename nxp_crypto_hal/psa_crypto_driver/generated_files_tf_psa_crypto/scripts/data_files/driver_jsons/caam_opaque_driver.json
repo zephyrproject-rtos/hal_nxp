@@ -1,0 +1,14 @@
+{
+    "prefix":       "caam",
+    "type":         "opaque",
+    "location":     "0x000001",
+    "mbedtls/h_condition":   "defined(PSA_CRYPTO_DRIVER_CAAM)",
+    "headers":      ["caam.h"],
+    "capabilities": [
+        {
+            "_comment":     "The Mbed TLS opaque driver supports export_public key",
+            "mbedtls/c_condition":    "defined(PSA_CRYPTO_DRIVER_CAAM)",
+            "entry_points": []
+        }
+     ]
+}
