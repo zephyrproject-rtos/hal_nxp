@@ -33,7 +33,7 @@
 #include <osa.h>
 #include <wmerrno.h>
 
-#define WIFI_NXP_EVENT_GET_WIPHY_NUM_BANDS 2
+#define WIFI_NXP_EVENT_GET_WIPHY_NUM_BANDS 3
 
 #define WIFI_REG8(x)  (*(volatile unsigned char *)(x))
 #define WIFI_REG16(x) (*(volatile unsigned short *)(x))
@@ -136,6 +136,7 @@ typedef struct wifi_uap_client_disassoc
 {
     int reason_code;
     t_u8 sta_addr[MLAN_MAC_ADDR_LENGTH];
+    t_u8 bss_type;
 } wifi_uap_client_disassoc_t;
 
 typedef struct wifi_remain_channel_info
@@ -143,6 +144,12 @@ typedef struct wifi_remain_channel_info
     t_u8 cancel_channel;
     t_u8 bss_type;
 } wifi_remain_channel_info;
+
+typedef struct wifi_uap_client_event
+{
+    uint8_t mac[MLAN_MAC_ADDR_LENGTH];
+    t_u8 bss_type;
+} wifi_uap_client_event_t;
 
 /**
  * Initialize Wi-Fi driver module.
@@ -455,7 +462,7 @@ void wifi_sta_ampdu_rx_disable(void);
  *
  * @param[out] mac_addr Mac address
  *
- * @return WM_SUCESS
+ * @return WM_SUCCESS
  */
 int wifi_get_device_mac_addr(wifi_mac_addr_t *mac_addr);
 
@@ -464,9 +471,20 @@ int wifi_get_device_mac_addr(wifi_mac_addr_t *mac_addr);
  *
  * @param[out] mac_addr_uap Mac address
  *
- * @return WM_SUCESS
+ * @return WM_SUCCESS
  */
 int wifi_get_device_uap_mac_addr(wifi_mac_addr_t *mac_addr_uap);
+
+#if CONFIG_WPA_SUPP_P2P
+/**
+ * Get the device wfd MAC address
+ *
+ * @param[out] mac_addr_wfd Mac address
+ *
+ * @return WM_SUCCESS
+ */
+int wifi_get_device_wfd_mac_addr(wifi_mac_addr_t *mac_addr_wfd);
+#endif
 
 /**
  * Get the cached string representation of the wlan firmware extended version.
@@ -665,44 +683,6 @@ bool wifi_calibrate_tx_buf_size(uint16_t buf_size);
 void wifi_recfg_tx_buf_size(uint16_t buf_size);
 void _wifi_recfg_tx_buf_size(uint16_t buf_size, mlan_bss_type bss_type);
 #endif
-#if CONFIG_P2P
-int wifi_register_wfd_event_queue(osa_msgq_handle_t event_queue);
-int wifi_unregister_wfd_event_queue(osa_msgq_handle_t event_queue);
-void wifi_wfd_event(bool peer_event, bool action_frame, void *data);
-int wifi_wfd_start(char *ssid, int security, char *passphrase, int channel);
-int wifi_wfd_stop(void);
-
-/**
- * Returns the current STA list connected to our WFD
- *
- * This function gets its information after querying the firmware. It will
- * block till the response is received from firmware or a timeout.
- *
- * @param[in, out] list After this call returns this points to the
- * structure \ref sta_list_t allocated by the callee. This is variable
- * length structure and depends on count variable inside it. <b> The caller
- * needs to free this buffer after use.</b>. If this function is unable to
- * get the sta list, the value of list parameter will be NULL
- *
- * \note The caller needs to explicitly free the buffer returned by this
- * function.
- *
- * @return void
- */
-int wifi_wfd_bss_sta_list(sta_list_t **list);
-
-int wifi_get_wfd_mac_address(void);
-int wifi_wfd_ps_inactivity_sleep_enter(unsigned int ctrl_bitmap,
-                                       unsigned int inactivity_to,
-                                       unsigned int min_sleep,
-                                       unsigned int max_sleep,
-                                       unsigned int min_awake,
-                                       unsigned int max_awake);
-
-int wifi_wfd_ps_inactivity_sleep_exit();
-int wifidirectapcmd_sys_config();
-void wifidirectcmd_config();
-#endif
 
 int wifi_get_wpa_ie_in_assoc(uint8_t *wpa_ie);
 
@@ -890,8 +870,8 @@ wifi_sub_band_set_t *get_sub_band_from_region_code(int region_code, t_u8 *nr_sb)
 wifi_sub_band_set_t *get_sub_band_from_region_code_5ghz(int region_code, t_u8 *nr_sb);
 #endif
 
-int wifi_enable_11d_support();
-int wifi_disable_11d_support();
+int wifi_enable_11d_support(int bss_type);
+int wifi_disable_11d_support(int bss_type);
 
 #ifdef OTP_CHANINFO
 int wifi_get_fw_region_and_cfp_tables(void);
@@ -961,7 +941,11 @@ uint32_t wifi_get_board_type();
 void wifi_scan_enable_wpa2_enterprise_ap_only();
 #endif
 
-int wrapper_wlan_11d_enable(t_u32 state);
+#if CONFIG_WPA_SUPP_P2P
+int wifi_set_wifi_direct_mode(unsigned int bss_type, unsigned int role);
+#endif
+
+int wrapper_wlan_11d_enable(int bss_type, t_u32 state);
 
 int wifi_11h_enable(void);
 
@@ -971,9 +955,9 @@ int wrapper_wlan_cmd_11n_delba_rspgen(void *saved_event_buff);
 
 int wrapper_wlan_ecsa_enable(void);
 
-int wrapper_wlan_sta_ampdu_enable(
+int wrapper_wlan_sta_ampdu_enable(const t_u8 interface
 #if CONFIG_WMM
-    t_u8 tid
+    , t_u8 tid
 #endif
 );
 
@@ -1869,7 +1853,8 @@ bool get_monitor_flag();
 int wifi_mgmtframe_tx_cfg(wifi_host_tx_frame_params_t *mgmtframe);
 #endif
 
-int wifi_send_mgmt_auth_request(const t_u8 channel,
+int wifi_send_mgmt_auth_request(const unsigned int bss_type,
+                                const t_u8 channel,
                                 const t_u8 auth_alg,
                                 const t_u8 *auth_seq_num,
                                 const t_u8 *status_code,
@@ -2035,7 +2020,7 @@ int wifi_disable_uap_11d_support();
 int wrapper_wlan_uap_11d_enable(t_u32 state);
 
 void wifi_uap_set_httxcfg(const t_u16 ht_tx_cfg);
-int wifi_uap_set_httxcfg_int(unsigned short httxcfg);
+int wifi_uap_set_httxcfg_int(unsigned int bss_type, unsigned short httxcfg);
 
 int wifi_uap_ps_inactivity_sleep_exit(mlan_bss_type type);
 int wifi_uap_ps_inactivity_sleep_enter(mlan_bss_type type,
@@ -2069,7 +2054,7 @@ int wifi_uap_start(mlan_bss_type type,
 #endif
 );
 
-int wrapper_wlan_uap_ampdu_enable(uint8_t *addr
+int wrapper_wlan_uap_ampdu_enable(const t_u8 interface, uint8_t *addr
 #if CONFIG_WMM
                                   ,
                                   t_u8 tid
@@ -2078,7 +2063,7 @@ int wrapper_wlan_uap_ampdu_enable(uint8_t *addr
 
 int wifi_uap_stop();
 #if CONFIG_WPA_SUPP_AP
-int wifi_uap_do_acs(const int *freq_list);
+int wifi_uap_do_acs(enum wlan_bss_type bss_type, const int *freq_list);
 #endif
 
 int wifi_uap_set_bandwidth(const t_u8 bandwidth);
@@ -2091,7 +2076,7 @@ int wifi_uap_get_pmfcfg(t_u8 *mfpc, t_u8 *mfpr);
 t_u16 wifi_get_default_ht_capab();
 t_u32 wifi_get_default_vht_capab();
 
-void wifi_uap_client_assoc(t_u8 *sta_addr, unsigned char is_11n_enabled);
+void wifi_uap_client_assoc(t_u8 bss_type, t_u8 *sta_addr, unsigned char is_11n_enabled);
 void wifi_uap_client_deauth(t_u8 *sta_addr);
 #endif
 #endif /* UAP_SUPPORT */

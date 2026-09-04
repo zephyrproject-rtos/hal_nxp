@@ -2373,6 +2373,8 @@ typedef struct _tx_ampdu_prot_mode_para
 
 typedef wifi_uap_client_disassoc_t wlan_uap_client_disassoc_t;
 
+typedef wifi_uap_client_event_t wlan_uap_client_event_t;
+
 #if CONFIG_INACTIVITY_TIMEOUT_EXT
 typedef wifi_inactivity_to_t wlan_inactivity_to_t;
 #endif
@@ -2918,6 +2920,10 @@ int wlan_get_mac_address(uint8_t *dest);
  */
 int wlan_get_mac_address_uap(uint8_t *dest);
 
+#if CONFIG_WPA_SUPP_P2P
+int wlan_get_wfd_mac_address(unsigned char *dest);
+#endif
+
 /** Retrieve the IP address configuration of the station interface.
  *
  *  This function retrieves the IP address configuration
@@ -3091,6 +3097,10 @@ bool is_sta_ipv4_connected(void);
  *  \return FALSE otherwise.
  */
 bool is_sta_ipv6_connected(void);
+#endif
+
+#if CONFIG_WPA_SUPP_P2P
+bool is_wfd_go_started(void);
 #endif
 
 /** Retrieve the information about a known network using \a index.

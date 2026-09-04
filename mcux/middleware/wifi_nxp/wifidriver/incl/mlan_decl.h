@@ -85,7 +85,11 @@ Change log:
 /** Maximum BSS numbers */
 /* fixme: We have reduced this from 16 to 2. Ensure that this is Ok */
 #if UAP_SUPPORT
+#if CONFIG_WPA_SUPP_P2P
+#define MLAN_MAX_BSS_NUM 3U
+#else
 #define MLAN_MAX_BSS_NUM 2U
+#endif
 #else
 #define MLAN_MAX_BSS_NUM 1U
 #endif
@@ -401,12 +405,7 @@ typedef enum _mlan_bss_type
 {
     MLAN_BSS_TYPE_STA = 0,
     MLAN_BSS_TYPE_UAP = 1,
-    /* fixme: This macro will be enabled when
-     * mlan is completely integrated with wlan
-     */
-    /* #ifdef WIFI_DIRECT_SUPPORT*/
     MLAN_BSS_TYPE_WIFIDIRECT = 2,
-    /*#endif*/
     MLAN_BSS_TYPE_ANY = 0xff,
 } mlan_bss_type;
 

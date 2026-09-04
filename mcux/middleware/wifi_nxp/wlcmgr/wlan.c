@@ -301,6 +301,7 @@ enum user_request_type
 #if CONFIG_CPU_LOADING
     CM_STA_USER_REQUEST_CPU_LOADING,
 #endif
+    CM_WFD_USER_REQUEST_REMOVE,
     CM_STA_USER_REQUEST_LAST,
     /* All the STA related request are above and uAP related requests are
        below */
@@ -471,7 +472,7 @@ static struct
 #if UAP_SUPPORT
     uint8_t uap_mac[MLAN_MAC_ADDR_LENGTH];
 #endif
-#if CONFIG_P2P
+#if CONFIG_WPA_SUPP_P2P
     uint8_t wfd_mac[MLAN_MAC_ADDR_LENGTH];
 #endif
     /* callbacks */
@@ -627,6 +628,10 @@ void wlan_wake_up_card(void);
 
 #if CONFIG_CSI
 wlan_csi_config_params_t g_csi_params_default = {0};
+#endif
+
+#if CONFIG_WPA_SUPP_P2P
+bool is_wfd_gc_connected(void);
 #endif
 
 #if CONFIG_WLCMGR_DEBUG
@@ -1825,7 +1830,7 @@ static bool is_running(void)
 static bool is_sta_connecting(void)
 {
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
-    int state = wifi_nxp_supp_state();
+    int state = wifi_nxp_supp_state(MLAN_BSS_TYPE_STA);
 
     return ((state >= WPA_SCANNING) && (state <= WPA_COMPLETED));
 #else
@@ -1837,7 +1842,7 @@ static bool is_sta_connecting(void)
 static bool is_sta_idle(void)
 {
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
-    int state = wifi_nxp_supp_state();
+    int state = wifi_nxp_supp_state(MLAN_BSS_TYPE_STA);
 
     return (state <= WPA_INACTIVE);
 #else
@@ -1858,7 +1863,7 @@ static bool is_scanning_allowed(void)
 static bool is_sta_associated(void)
 {
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
-    int state = wifi_nxp_supp_state();
+    int state = wifi_nxp_supp_state(MLAN_BSS_TYPE_STA);
 
     return ((state >= WPA_ASSOCIATED) && (state <= WPA_COMPLETED));
 #else
@@ -2242,11 +2247,7 @@ static int do_start(struct wlan_network *network)
         }
 
         ret = wifi_uap_start((mlan_bss_type)network->type, network->ssid,
-#if CONFIG_P2P
-                             wlan.wfd_mac,
-#else
                              wlan.uap_mac,
-#endif
                              (int)network->security.type, network->security.key_mgmt, &network->security.psk[0], &network->security.password[0],
                              (int)network->channel, wlan.scan_chan_list,
                              network->security.pwe_derivation,
@@ -3235,9 +3236,6 @@ static void wlcm_process_sta_addr_config_event(struct wifi_message *msg,
             }
             *next                       = CM_STA_CONNECTED;
             wlan.sta_ipv4_state         = CM_STA_CONNECTED;
-#if CONFIG_P2P
-            if (network->security.type != WLAN_SECURITY_NONE)
-#endif
                 if (wlan.reassoc_control && wlan.reassoc_request)
                 {
                     wlan.reassoc_count   = 0;
@@ -3245,9 +3243,6 @@ static void wlcm_process_sta_addr_config_event(struct wifi_message *msg,
                 }
             mlan_adap->skip_dfs = false;
             CONNECTION_EVENT(WLAN_REASON_SUCCESS, NULL);
-#if CONFIG_P2P
-            wifi_wfd_event(false, false, (void *)1);
-#endif
             break;
         case ADDR_TYPE_DHCP:
         case ADDR_TYPE_LLA:
@@ -3617,14 +3612,36 @@ static void wlcm_process_channel_switch_supp(struct wifi_message *msg)
 #if UAP_SUPPORT
             if(is_uap_started())
             {
-                wm_wifi.supp_if_callbk_fns->ecsa_complete_callbk_fn(wm_wifi.hapd_if_priv, &chandef);
+#if CONFIG_WPA_SUPP_P2P
+               if (bss_type == WLAN_BSS_TYPE_WIFIDIRECT)
+               {
+                   wm_wifi.supp_if_callbk_fns->ecsa_complete_callbk_fn(wm_wifi.if_priv_wfd, &chandef);
+               }
+               else
+               {
+#endif
+               wm_wifi.supp_if_callbk_fns->ecsa_complete_callbk_fn(wm_wifi.hapd_if_priv, &chandef);
+#if CONFIG_WPA_SUPP_P2P
+               }
+#endif
                 wlcm_d("uap switch to channel %d success!", channel);
             }
 #endif
 
             if (is_sta_connected())
             {
+#if CONFIG_WPA_SUPP_P2P
+               if (bss_type == WLAN_BSS_TYPE_WIFIDIRECT)
+               {
+                   wm_wifi.supp_if_callbk_fns->ecsa_complete_callbk_fn(wm_wifi.if_priv_wfd, &chandef);
+               }
+               else
+               {
+#endif
                 wm_wifi.supp_if_callbk_fns->ecsa_complete_callbk_fn(wm_wifi.if_priv, &chandef);
+#if CONFIG_WPA_SUPP_P2P
+               }
+#endif
                 wlcm_d("sta switch to channel %d success!", channel);
             }
 #if !CONFIG_MEM_POOLS
@@ -4817,9 +4834,6 @@ static void wlcm_process_link_loss_event(struct wifi_message *msg,
         wpa2_tls_cleanup(network, false);
     }
 #endif
-#if CONFIG_P2P
-    wifi_wfd_event(false, false, NULL);
-#endif
 
 #if !CONFIG_WPA_SUPP
     if (wlan.reassoc_control)
@@ -5200,7 +5214,7 @@ static void wlcm_process_scan_failed()
 #if !CONFIG_WIFI_NM_WPA_SUPPLICANT
 static void wlcm_process_disconnected()
 {
-    (void)wifi_event_completion(WIFI_EVENT_LINK_LOSS, WIFI_EVENT_REASON_FAILURE, (void *)IEEEtypes_REASON_DEAUTH_LEAVING);
+    (void)wifi_event_completion(WLAN_BSS_TYPE_STA, WIFI_EVENT_LINK_LOSS, WIFI_EVENT_REASON_FAILURE, (void *)IEEEtypes_REASON_DEAUTH_LEAVING);
 }
 #endif
 #if CONFIG_11K
@@ -5494,7 +5508,7 @@ static void wpa_supplicant_msg_cb(const char *buf, size_t len)
         if (wlan.nbr_rpt.neighbor_cnt != 0U)
         {
             memset(&wlan.nbr_rpt, 0x00, sizeof(wlan_rrm_neighbor_report_t));
-            (void)wifi_event_completion(WIFI_EVENT_NLIST_REPORT, WIFI_EVENT_REASON_SUCCESS, NULL);
+            (void)wifi_event_completion(WLAN_BSS_TYPE_STA, WIFI_EVENT_NLIST_REPORT, WIFI_EVENT_REASON_SUCCESS, NULL);
         }
     }
 #endif
@@ -5951,6 +5965,9 @@ static void wlcm_process_init(enum cm_sta_state *next)
 
     wlan_set_11d_state(WLAN_BSS_TYPE_UAP, 1);
     wlan_set_11d_state(WLAN_BSS_TYPE_STA, 1);
+#if CONFIG_WPA_SUPP_P2P
+    wlan_set_11d_state(WLAN_BSS_TYPE_WIFIDIRECT, 1);
+#endif
 }
 
 static void wlcm_process_net_if_config_event(struct wifi_message *msg, enum cm_sta_state *next)
@@ -6014,7 +6031,7 @@ static void wlcm_process_net_if_config_event(struct wifi_message *msg, enum cm_s
 
 #if UAP_SUPPORT
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
-static void wlan_notify_uap_chan_switch(t_u8 channel)
+static void wlan_notify_uap_chan_switch(t_u8 bss_type, t_u8 channel)
 {
     wifi_ecsa_info *pecsa_info = NULL;
 
@@ -6028,11 +6045,11 @@ static void wlan_notify_uap_chan_switch(t_u8 channel)
          wlcm_w("No mem. Cannot process new channel from channel switch");
          return;
      }
-     pecsa_info->bss_type    = WLAN_BSS_TYPE_UAP;
+     pecsa_info->bss_type    = bss_type;
      pecsa_info->channel     = channel;
      pecsa_info->band_config = (channel > 14) ? BAND_5GHZ: BAND_2GHZ;
 
-    if (wifi_event_completion(WIFI_EVENT_CHAN_SWITCH, WIFI_EVENT_REASON_SUCCESS, pecsa_info) != WM_SUCCESS)
+    if (wifi_event_completion(bss_type, WIFI_EVENT_CHAN_SWITCH, WIFI_EVENT_REASON_SUCCESS, pecsa_info) != WM_SUCCESS)
     {
         /* If fail to send message on queue, free allocated memory ! */
 #if !CONFIG_MEM_POOLS
@@ -6090,17 +6107,40 @@ static enum cm_uap_state uap_state_machine(struct wifi_message *msg)
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
             if (msg->reason == WIFI_EVENT_REASON_SUCCESS)
             {
+                t_u8 bss_type = (t_u8)msg->bss_type;
                 t_u8 sta_channel = mlan_adap->priv[0]->curr_bss_params.bss_descriptor.channel;
-                t_u8 uap_channel = mlan_adap->priv[1]->uap_channel;
+                t_u8 uap_channel = mlan_adap->priv[bss_type]->uap_channel;
 
-                CONNECTION_EVENT(WLAN_REASON_UAP_SUCCESS, NULL);
+                CONNECTION_EVENT(WLAN_REASON_UAP_SUCCESS, (void *)msg->bss_type);
                 if(is_sta_connected() && uap_channel != sta_channel)
                 {
-                    while(!is_uap_started())
+                    while((bss_type == MLAN_BSS_TYPE_UAP && !is_uap_started())
+#if CONFIG_WPA_SUPP_P2P
+                           || (bss_type == MLAN_BSS_TYPE_WIFIDIRECT && !is_wfd_go_started())
+#endif
+                    )
                         OSA_TimeDelay(10);
                     wlcm_w("Station has connection on channel %d, switch to this channel", sta_channel);
-                    wlan_notify_uap_chan_switch(sta_channel);
+                    wlan_notify_uap_chan_switch(bss_type, sta_channel);
                 }
+#if CONFIG_WPA_SUPP_P2P
+                else
+                {
+                    t_u8 p2p_gc_channel = mlan_adap->priv[2]->curr_bss_params.bss_descriptor.channel;
+
+                    /* Check if P2P interface is GC (connected as STA role to a GO)
+                     * and its channel differs from the UAP channel being started */
+                    if (mlan_adap->priv[2]->media_connected &&
+                         GET_BSS_ROLE(mlan_adap->priv[2]) == MLAN_BSS_ROLE_STA &&
+                         uap_channel != p2p_gc_channel)
+                    {
+                        while(bss_type == MLAN_BSS_TYPE_UAP && !is_uap_started())
+                            OSA_TimeDelay(10);
+                        wlcm_w("P2P GC has connection on channel %d, switch to this channel", p2p_gc_channel);
+                        wlan_notify_uap_chan_switch(bss_type, p2p_gc_channel);
+                    }
+                }
+#endif /* CONFIG_WPA_SUPP_P2P */
             }
 #else
             if (!is_uap_state(CM_UAP_CONFIGURED))
@@ -6118,7 +6158,7 @@ static enum cm_uap_state uap_state_machine(struct wifi_message *msg)
                     (void)memcpy((void *)&network->bssid[0], (const void *)&wlan.uap_mac[0], 6);
                     if_handle = net_get_uap_handle();
                 }
-#if CONFIG_P2P
+#if CONFIG_WPA_SUPP_P2P
                 else if (network->type == WLAN_BSS_TYPE_WIFIDIRECT)
                 {
                     (void)memcpy((void *)&network->bssid[0], (const void *)&wlan.wfd_mac[0], 6);
@@ -6173,7 +6213,7 @@ static enum cm_uap_state uap_state_machine(struct wifi_message *msg)
                 /* BIT 14 indicate deauth is initiated by FW */
                 if(!(disassoc_resp->reason_code & MBIT(14)))
                 {
-                    wifi_nxp_sta_remove(disassoc_resp->sta_addr);
+                    wifi_nxp_sta_remove(msg->bss_type, disassoc_resp->sta_addr);
                 }
             }
 #else
@@ -6187,7 +6227,7 @@ static enum cm_uap_state uap_state_machine(struct wifi_message *msg)
 #endif
             break;
         case WIFI_EVENT_UAP_STOPPED:
-            CONNECTION_EVENT(WLAN_REASON_UAP_STOPPED, NULL);
+            CONNECTION_EVENT(WLAN_REASON_UAP_STOPPED, (void *)msg->bss_type);
             break;
         case WIFI_EVENT_UAP_NET_ADDR_CONFIG:
             if (!is_uap_state(CM_UAP_STARTED))
@@ -6672,7 +6712,7 @@ static void wifi_process_bg_scan_stopped(struct wifi_message *msg)
     {
         wlan.bgscan_attempt++;
         wlan.roam_reassoc = false;
-        (void)wifi_event_completion(WIFI_EVENT_RSSI_LOW, WIFI_EVENT_REASON_SUCCESS, NULL);
+        (void)wifi_event_completion(msg->bss_type, WIFI_EVENT_RSSI_LOW, WIFI_EVENT_REASON_SUCCESS, NULL);
     }
     else
     {
@@ -6884,7 +6924,7 @@ static void wlan_cpu_loading_request()
 #if CONFIG_ROAMING
 static void roaming_timer_cb(osa_timer_arg_t arg)
 {
-    (void)wifi_event_completion(WIFI_EVENT_ROAMING_TRIGGER,
+    (void)wifi_event_completion(WLAN_BSS_TYPE_STA, WIFI_EVENT_ROAMING_TRIGGER,
                                 WIFI_EVENT_REASON_SUCCESS, NULL);
 }
 
@@ -7083,7 +7123,7 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
             break;
         case CM_STA_USER_REQUEST_PS_ENTER:
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
-            state = wifi_nxp_supp_state();
+            state = wifi_nxp_supp_state(MLAN_BSS_TYPE_STA);
 
             if ((state >= WPA_SCANNING) && (state < WPA_COMPLETED))
 #else
@@ -7115,6 +7155,12 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
             wlan_cpu_loading_request();
             break;
 #endif
+#if CONFIG_WPA_SUPP_P2P
+        case CM_WFD_USER_REQUEST_REMOVE:
+            netif = net_get_wfd_interface();
+            nxp_supp_group_remove();
+            break;
+#endif
         case WIFI_EVENT_SCAN_START:
 #if CONFIG_WPA_SUPP
             wifi_scan_start(msg);
@@ -7136,7 +7182,7 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
                     msg->reason == WIFI_EVENT_REASON_SUCCESS ? "success" : "failure");
             if (msg->reason == WIFI_EVENT_REASON_SUCCESS)
             {
-                CONNECTION_EVENT(WLAN_REASON_ASSOC_SUCCESS, NULL);
+                CONNECTION_EVENT(WLAN_REASON_ASSOC_SUCCESS, (void *)msg->bss_type);
             }
             wlcm_process_association_event(msg, &next);
 #if CONFIG_ROAMING
@@ -7200,7 +7246,7 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
             if (is_sta_connected())
             {
-                CONNECTION_EVENT(WLAN_REASON_LINK_LOST, NULL);
+                CONNECTION_EVENT(WLAN_REASON_LINK_LOST, (void *)msg->bss_type);
 #if CONFIG_ECSA
                 wrapper_clear_media_connected_event();
                 wlan_switch_to_nondfs_channel();
@@ -7321,7 +7367,7 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
         case WIFI_EVENT_DEAUTHENTICATION:
             wlcm_d("got event: deauthentication");
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
-            CONNECTION_EVENT(WLAN_REASON_DISCONNECTED, NULL);
+            CONNECTION_EVENT(WLAN_REASON_DISCONNECTED, (void *)msg->bss_type);
 #endif
             wlcm_process_deauthentication_event(msg, &next, network);
             break;
@@ -7482,6 +7528,19 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
             if (msg->data != NULL)
             {
                 (void)memcpy((void *)&wlan.uap_mac[0], (const void *)msg->data, MLAN_MAC_ADDR_LENGTH);
+#if !CONFIG_MEM_POOLS
+                OSA_MemoryFree(msg->data);
+#else
+                OSA_MemoryPoolFree(buf_32_MemoryPool, msg->data);
+#endif
+            }
+            break;
+#endif
+#if CONFIG_WPA_SUPP_P2P
+        case WIFI_EVENT_WFD_MAC_ADDR_CONFIG:
+            if (msg->data != NULL)
+            {
+                (void)memcpy((void *)&wlan.wfd_mac[0], (const void *)msg->data, MLAN_MAC_ADDR_LENGTH);
 #if !CONFIG_MEM_POOLS
                 OSA_MemoryFree(msg->data);
 #else
@@ -7982,9 +8041,20 @@ int wlan_init(const uint8_t *fw_start_addr, const size_t size)
     (void)memcpy((void *)&wlan.uap_mac[0], (const void *)mac_addr_uap.mac, MLAN_MAC_ADDR_LENGTH);
 #endif
     (void)memcpy((void *)&wlan.sta_mac[0], (const void *)mac_addr.mac, MLAN_MAC_ADDR_LENGTH);
+#if CONFIG_WPA_SUPP_P2P
+    wifi_mac_addr_t mac_addr_wfd;
+    ret = wifi_get_device_wfd_mac_addr(&mac_addr_wfd);
+    if (ret != WM_SUCCESS)
+    {
+        wlcm_e("Failed to get wfd mac address");
+        return ret;
+    }
+
+    (void)memcpy((void *)&wlan.wfd_mac[0], (const void *)mac_addr_wfd.mac, MLAN_MAC_ADDR_LENGTH);
+#endif
     wlcm_d("STA MAC Address: ");
     print_mac((const char *)&wlan.sta_mac);
-#if CONFIG_P2P
+#if CONFIG_WPA_SUPP_P2P
     (void)memcpy((void *)&wlan.wfd_mac[0], (const void *)mac_addr.mac, MLAN_MAC_ADDR_LENGTH);
     wlan.wfd_mac[0] |= (0x01 << 1);
 #endif
@@ -10159,7 +10229,7 @@ bool is_uap_started(void)
 bool is_sta_connected(void)
 {
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
-    int state = wifi_nxp_supp_state();
+    int state = wifi_nxp_supp_state(MLAN_BSS_TYPE_STA);
 
     return (state == WPA_COMPLETED);
 #else
@@ -10188,6 +10258,43 @@ bool is_sta_ipv4_connected(void)
 bool is_sta_ipv6_connected(void)
 {
     return (wlan.sta_ipv6_state == CM_STA_CONNECTED);
+}
+#endif
+
+#if CONFIG_WPA_SUPP_P2P
+#if UAP_SUPPORT
+bool is_wfd_go_started(void)
+{
+#if CONFIG_WIFI_NM_WPA_SUPPLICANT
+    mlan_private *pmpriv = mlan_adap->priv[2];
+
+    return (pmpriv->bss_role == MLAN_BSS_ROLE_UAP && pmpriv->uap_bss_started == 1);
+#else
+    return false;
+#endif
+}
+#endif
+
+bool is_wfd_gc_connected(void)
+{
+#if CONFIG_WIFI_NM_WPA_SUPPLICANT
+    mlan_private *pmpriv = mlan_adap->priv[2];
+
+    return (pmpriv->bss_role == MLAN_BSS_ROLE_STA && pmpriv->media_connected);
+#else
+    return false;
+#endif
+}
+
+static bool is_wfd_idle(void)
+{
+#if CONFIG_WIFI_NM_WPA_SUPPLICANT
+    int state = wifi_nxp_supp_state(MLAN_BSS_TYPE_WIFIDIRECT);
+
+    return (state <= WPA_INACTIVE);
+#else
+    return true;
+#endif
 }
 #endif
 
@@ -10650,7 +10757,7 @@ void wlan_reset(cli_reset_option ResetOption)
 #if (CONFIG_WPA_SUPP) && (CONFIG_UAP_STA_MAC_ADDR_FILTER)
             wlan_set_sta_mac_filter(0, 0, NULL);
 #endif
-            /*Disconnect form AP if station is associated with an AP.*/
+            /* Disconnect from AP if station is associated. */
             if (is_sta_connecting())
             {
                 wlan_disconnect();
@@ -10659,6 +10766,7 @@ void wlan_reset(cli_reset_option ResetOption)
                     OSA_TimeDelay(1000);
                 }
             }
+
 #if CONFIG_CSI
             wlan_reset_csi_filter_data();
             /* CSI shutdown: unregister callback before destroying task to prevent race condition */
@@ -10688,6 +10796,22 @@ void wlan_reset(cli_reset_option ResetOption)
             }
 #endif
 #endif
+
+#if CONFIG_WPA_SUPP_P2P
+            if (is_wfd_gc_connected()
+#if UAP_SUPPORT
+                || is_wfd_go_started()
+#endif
+                )
+            {
+                send_user_request(CM_WFD_USER_REQUEST_REMOVE, 0);
+                while (!is_wfd_idle())
+                {
+                     OSA_TimeDelay(1000);
+                }
+            }
+#endif
+
 #if CONFIG_CPU_LOADING
             if(cpu_loading.status != CPU_LOADING_STATUS_DEAD)
                 wlan_cpu_loading_stop();
@@ -10783,12 +10907,15 @@ void wlan_reset(cli_reset_option ResetOption)
                 return;
             }
 
-            /* update the netif hwaddr after reset */
+			/* update the netif hwaddr after reset */
+            net_wlan_set_mac_address(&wlan.sta_mac[0], NULL, NULL);
 #if UAP_SUPPORT
-            net_wlan_set_mac_address(&wlan.sta_mac[0], &wlan.uap_mac[0]);
-#else
-            net_wlan_set_mac_address(&wlan.sta_mac[0], NULL);
+            net_wlan_set_mac_address(NULL, &wlan.uap_mac[0], NULL);
 #endif
+#if CONFIG_WPA_SUPP_P2P
+            net_wlan_set_mac_address(NULL, NULL, &wlan.wfd_mac[0]);
+#endif
+
             /* Bring netif up.
              * Triggers NET_EVENT_IF_ADMIN_UP -> add_interface()
              * -> wpa_drv_zep_init() -> wifi_nxp_wpa_supp_dev_init()
@@ -11125,24 +11252,28 @@ int wlan_set_mac_addr(uint8_t *mac)
 
     if (wlan.status == WLCMGR_INIT_DONE || wlan.status == WLCMGR_ACTIVATED)
     {
-#if UAP_SUPPORT
-        uint8_t ap_mac[MLAN_MAC_ADDR_LENGTH];
-
-        (void)memcpy(ap_mac, mac, MLAN_MAC_ADDR_LENGTH);
-        ap_mac[0] |= 2;
-        ap_mac[4] += 1;
-
-        net_wlan_set_mac_address((unsigned char *)mac, (unsigned char *)ap_mac);
-#else
-        net_wlan_set_mac_address((unsigned char *)mac, NULL);
-#endif
+        net_wlan_set_mac_address((unsigned char *)mac, NULL, NULL);
         /* save the sta mac */
         _wifi_set_mac_addr(mac, MLAN_BSS_TYPE_STA);
         (void)memcpy(&wlan.sta_mac[0], mac, MLAN_MAC_ADDR_LENGTH);
 #if UAP_SUPPORT
+        uint8_t ap_mac[MLAN_MAC_ADDR_LENGTH];
+        (void)memcpy(ap_mac, mac, MLAN_MAC_ADDR_LENGTH);
+        ap_mac[0] |= 2;
+        ap_mac[4] += 1;
+        net_wlan_set_mac_address(NULL, (unsigned char *)ap_mac, NULL);
         /* save the uap mac */
         _wifi_set_mac_addr(&ap_mac[0], MLAN_BSS_TYPE_UAP);
         (void)memcpy(&wlan.uap_mac[0], &ap_mac[0], MLAN_MAC_ADDR_LENGTH);
+#endif
+#if CONFIG_WPA_SUPP_P2P
+        uint8_t wfd_mac[MLAN_MAC_ADDR_LENGTH];
+        (void)memcpy(wfd_mac, mac, MLAN_MAC_ADDR_LENGTH);
+        wfd_mac[0] |= 0x02;
+        net_wlan_set_mac_address(NULL, NULL, (unsigned char *)wfd_mac);
+        /* save the wfd mac */
+        _wifi_set_mac_addr(&wfd_mac[0], MLAN_BSS_TYPE_WIFIDIRECT);
+        (void)memcpy(&wlan.wfd_mac[0], &wfd_mac[0], MLAN_MAC_ADDR_LENGTH);
 #endif
     }
     else
@@ -11178,7 +11309,7 @@ int wlan_set_uap_mac_addr(uint8_t *mac)
 
     if (wlan.status == WLCMGR_INIT_DONE || wlan.status == WLCMGR_ACTIVATED)
     {
-        net_wlan_set_mac_address(NULL, (unsigned char *)mac);
+        net_wlan_set_mac_address(NULL, (unsigned char *)mac, NULL);
 
         _wifi_set_mac_addr(mac, MLAN_BSS_TYPE_UAP);
 
@@ -11219,7 +11350,7 @@ int wlan_set_sta_mac_addr(uint8_t *mac)
 
     if (wlan.status == WLCMGR_INIT_DONE || wlan.status == WLCMGR_ACTIVATED)
     {
-        net_wlan_set_mac_address((unsigned char *)mac, NULL);
+        net_wlan_set_mac_address((unsigned char *)mac, NULL, NULL);
 
         _wifi_set_mac_addr(mac, MLAN_BSS_TYPE_STA);
 
@@ -11603,22 +11734,6 @@ int wlan_get_uap_channel(int *channel)
 #endif
 }
 
-#if CONFIG_P2P
-int wlan_get_wfd_address(struct wlan_ip_config *addr)
-{
-    void *if_handle = NULL;
-    if (addr == NULL)
-        return -WM_E_INVAL;
-    if (!is_running())
-        return WLAN_ERROR_STATE;
-
-    if_handle = net_get_wfd_handle();
-    if (net_get_if_addr((struct net_ip_config *)addr, if_handle))
-        return -WM_FAIL;
-    return WM_SUCCESS;
-}
-#endif
-
 int wlan_get_mac_address(unsigned char *dest)
 {
     if (!dest)
@@ -11641,7 +11756,7 @@ int wlan_get_mac_address_uap(unsigned char *dest)
 #endif
 }
 
-#if CONFIG_P2P
+#if CONFIG_WPA_SUPP_P2P
 int wlan_get_wfd_mac_address(unsigned char *dest)
 {
     if (dest == NULL)
@@ -13559,7 +13674,7 @@ int wlan_set_roaming(const uint8_t bitmap,
     wlan.roaming_report.snr_low_threshold = snr_low_threshold;
 
     /* Post WIFI_EVENT_ROAMING_TRIGGER to wlcmgr */
-    (void)wifi_event_completion(WIFI_EVENT_ROAMING_TRIGGER,
+    (void)wifi_event_completion(WLAN_BSS_TYPE_STA, WIFI_EVENT_ROAMING_TRIGGER,
                                 WIFI_EVENT_REASON_SUCCESS, NULL);
     return WM_SUCCESS;
 }
@@ -16260,7 +16375,7 @@ int wlan_set_11d_state(int bss_type, int state)
     }
     else
     {
-        return wlan_enable_11d(state);
+        return wlan_enable_11d(bss_type, state);
     }
 }
 

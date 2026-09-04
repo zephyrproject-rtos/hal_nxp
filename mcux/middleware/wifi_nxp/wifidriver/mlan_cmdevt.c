@@ -1161,9 +1161,11 @@ mlan_status wlan_ret_get_hw_spec(IN pmlan_private pmpriv, IN HostCmd_DS_COMMAND 
     if (pmpriv->curr_addr[0] == 0xffU)
     {
         (void)__memmove(pmadapter, pmpriv->curr_addr, hw_spec->permanent_addr, MLAN_MAC_ADDR_LENGTH);
-#if CONFIG_P2P
-        (void)__memmove(pmadapter, pmpriv->curr_p2p_addr, hw_spec->permanent_addr, MLAN_MAC_ADDR_LENGTH);
-        pmpriv->curr_p2p_addr[0] |= (0x01 << 1);
+#if CONFIG_WPA_SUPP_P2P
+        (void)__memmove(pmadapter, pmadapter->priv[2]->curr_p2p_addr, hw_spec->permanent_addr, MLAN_MAC_ADDR_LENGTH);
+                        pmadapter->priv[2]->curr_p2p_addr[0] |= (0x01 << 1);
+        (void)__memmove(pmadapter, pmadapter->priv[2]->curr_addr, pmadapter->priv[2]->curr_p2p_addr,
+                        MLAN_MAC_ADDR_LENGTH);
 #endif
     }
 
@@ -1480,6 +1482,66 @@ mlan_status wlan_cmd_region_power_cfg(pmlan_private pmpriv,
         __memcpy(pmpriv->adapter, (t_u8 *)cmd + S_DS_GEN, pdata_buf, buf_len);
     }
 
+    LEAVE();
+    return MLAN_STATUS_SUCCESS;
+}
+#endif
+
+#if CONFIG_WPA_SUPP_P2P
+/**
+ *  @brief This function prepares command of wifi direct mode.
+ *
+ *  @param pmpriv       A pointer to mlan_private structure
+ *  @param cmd          A pointer to HostCmd_DS_COMMAND structure
+ *  @param cmd_action   The action: GET or SET
+ *  @param pdata_buf    A pointer to data buffer
+ *
+ *  @return             MLAN_STATUS_SUCCESS
+ */
+mlan_status wlan_cmd_wifi_direct_mode(IN pmlan_private pmpriv,
+                                      IN HostCmd_DS_COMMAND *cmd,
+                                      IN t_u16 cmd_action,
+                                      IN t_void *pdata_buf)
+{
+    HostCmd_DS_WIFI_DIRECT_MODE *wfd_mode = &cmd->params.wifi_direct_mode;
+    t_u16 mode                            = *((t_u16 *)pdata_buf);
+
+    ENTER();
+    cmd->size        = wlan_cpu_to_le16((sizeof(HostCmd_DS_WIFI_DIRECT_MODE)) + S_DS_GEN);
+    cmd->command     = wlan_cpu_to_le16(HostCmd_CMD_WIFI_DIRECT_MODE_CONFIG);
+    wfd_mode->action = wlan_cpu_to_le16(cmd_action);
+    if (cmd_action == HostCmd_ACT_GEN_SET)
+    {
+        wfd_mode->mode = wlan_cpu_to_le16(mode);
+    }
+
+    LEAVE();
+    return MLAN_STATUS_SUCCESS;
+}
+
+/**
+ *  @brief This function handles the command response of wifi direct mode
+ *
+ *  @param pmpriv       A pointer to mlan_private structure
+ *  @param resp         A pointer to HostCmd_DS_COMMAND
+ *  @param pioctl_buf   A pointer to mlan_ioctl_req structure
+ *
+ *  @return             MLAN_STATUS_SUCCESS
+ */
+mlan_status wlan_ret_wifi_direct_mode(IN pmlan_private pmpriv,
+                                      IN HostCmd_DS_COMMAND *resp,
+                                      IN mlan_ioctl_req *pioctl_buf)
+{
+    HostCmd_DS_WIFI_DIRECT_MODE *wfd_mode = &resp->params.wifi_direct_mode;
+    mlan_ds_bss *bss                      = MNULL;
+
+    ENTER();
+    if (pioctl_buf)
+    {
+        bss                           = (mlan_ds_bss *)pioctl_buf->pbuf;
+        bss->param.wfd_mode           = wlan_le16_to_cpu(wfd_mode->mode);
+        pioctl_buf->data_read_written = sizeof(mlan_ds_bss);
+    }
     LEAVE();
     return MLAN_STATUS_SUCCESS;
 }
