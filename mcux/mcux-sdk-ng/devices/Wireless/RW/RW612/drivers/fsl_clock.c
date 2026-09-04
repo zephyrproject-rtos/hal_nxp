@@ -236,7 +236,15 @@ uint32_t CLOCK_GetTddrMciFlexspiClkFreq(void)
  */
 uint32_t CLOCK_GetTddrMciEnetClkFreq(void)
 {
-    uint32_t freq = CLOCK_MHZ(50UL);
+    /* The ENET module's MSCR/MDC divider is calculated by ENET_SetSMI() against
+     * whatever this function reports, but it is actually clocked from the M33
+     * processor/platform bus clock (260MHz), not from TDDR. The previous 50MHz
+     * value produced a real MDC of ~13MHz instead of the intended 2.5MHz, which
+     * exceeds the KSZ8081 (and most RMII PHYs') MIIM interface limits and causes
+     * unreliable/non-functional MDIO. Confirmed root cause and fix:
+     * https://community.nxp.com/t5/Zephyr-Project/Wrong-MDC-frequency-RW612-frdm-rw612/td-p/2054592
+     */
+    uint32_t freq = CLOCK_MHZ(260UL);
     return freq;
 }
 
