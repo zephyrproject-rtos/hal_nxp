@@ -2154,10 +2154,13 @@ static mlan_status wlan_interpret_bss_desc_with_ie(IN pmlan_adapter pmadapter,
                 break;
 #endif
             case RSNX_IE:
-                (void)__memcpy(NULL, &pbss_entry->rsnx_ie_saved, pcurrent_ptr, sizeof(pbss_entry->rsnx_ie_saved));
-                pbss_entry->prsnx_ie = &pbss_entry->rsnx_ie_saved;
-                wscan_d("RSNX_IE: tag len %d data 0x%02x", pbss_entry->prsnx_ie->ieee_hdr.len,
-                        pbss_entry->prsnx_ie->data[0]);
+                if (element_len <= (sizeof(pbss_entry->rsnx_ie_saved) - sizeof(IEEEtypes_Header_t)))
+                {
+                    (void)__memcpy(NULL, &pbss_entry->rsnx_ie_saved, pcurrent_ptr, element_len + sizeof(IEEEtypes_Header_t));
+                    pbss_entry->prsnx_ie = &pbss_entry->rsnx_ie_saved;
+                    wscan_d("RSNX_IE: tag len %d data 0x%02x", pbss_entry->prsnx_ie->ieee_hdr.len,
+                            pbss_entry->prsnx_ie->data[0]);
+                }
                 break;
 
             default:
@@ -3548,7 +3551,7 @@ static mlan_status wlan_update_ssid_in_beacon_buf(mlan_adapter *pmadapter,
     if (pnew_rsnx)
     {
         (void)__memcpy(pmadapter, &pnew_entry->rsnx_ie_saved, pnew_rsnx,
-                       sizeof(pnew_entry->rsnx_ie_saved));
+                       pnew_rsnx->ieee_hdr.len + sizeof(IEEEtypes_Header_t));
         pnew_entry->prsnx_ie = &pnew_entry->rsnx_ie_saved;
     }
 #if !CONFIG_WPA_SUPP
