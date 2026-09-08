@@ -725,7 +725,7 @@ typedef MLAN_PACK_START struct _IEEEtypes_Rsnx_t
     /** Generic IE header */
     IEEEtypes_Header_t ieee_hdr;
     /** Rsnx : data */
-    t_u8 data[1];
+    t_u8 data[3];
 } MLAN_PACK_END IEEEtypes_Rsnx_t, *pIEEEtypes_Rsnx_t;
 
 /** IEEEtypes_Rsnxo_t */
