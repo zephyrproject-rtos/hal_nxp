@@ -55,8 +55,6 @@ config PSA_CRYPTO_DRIVER_ELE_S2XX
 config PSA_CRYPTO_DRIVER_ELE_S4xx
 	bool "Enables ELE S4xx support in psa-crypto-driver"
 	depends on MBEDTLS_PSA_CRYPTO_C && SOC_SERIES_IMXRT118X
-	select MBEDTLS_ASN1_WRITE_C
-	select MBEDTLS_BIGNUM_C
 	select ARM_MPU_SRAM_WRITE_THROUGH
 	select MBEDTLS_DECLARE_PRIVATE_IDENTIFIERS
 	default n
