@@ -1,4 +1,6 @@
 # CAAM
+## [2.4.2]
+- Sync Zephyr-only changes to entropy descriptors which need to be placed in non-cacheable sections 
 
 ## [2.4.1]
 

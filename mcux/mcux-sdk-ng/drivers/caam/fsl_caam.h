@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -32,7 +32,7 @@ enum
 /*! @{ */
 /*! @brief CAAM driver version.
  *
- * Current version: 2.4.1
+ * Current version: 2.4.2
  *
  * Change log:
  * - Version 2.0.0
@@ -82,8 +82,10 @@ enum
  *     and support for black keys and blobs for both symmetric and asymmetric operations.
  * - Version 2.4.1
  *   - Fix MSG and MISRA-2012 issues.
+ * - Version 2.4.2
+ *   - Sync Zephyr-only changes to entropy descriptors which need to be placed in non-cacheable sections 
  */
-#define FSL_CAAM_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
+#define FSL_CAAM_DRIVER_VERSION (MAKE_VERSION(2, 4, 2))
 /*! @} */
 
 /*! @brief CAAM callback function. */
