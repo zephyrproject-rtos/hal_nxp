@@ -1,0 +1,63 @@
+SDK (5.0.0) Release Notes
+
+- Release: SDK RFP
+- Version: 5.0.0
+- Date:    2026-05-29
+- Compiler: IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM
+    ARM Compiler 6.15
+--- Test Target: 
+    Redfinch sample
+    Nirvana sample
+    Niobe4a sample
+
+--- CLNS memory consumption: 
+    
+    delivery/lpc_release/static_library/lpc/libclns.a
+    TEXT RO RW ZI TOTAL_CONSUMPTION
+    67794 17836 0 4 85634
+      
+    delivery/mcxn_release/static_library/mcxn/libclns.a
+    TEXT RO RW ZI TOTAL_CONSUMPTION
+    78650 18480 0 0 97130
+
+
+    delivery/rw61x_release/static_library/rw61x/libclns.a
+    TEXT RO RW ZI TOTAL_CONSUMPTION
+    92220 22187 0 0 114407
+
+
+    delivery/mimxrt_release/static_library/mimxrt/libclns.a
+    TEXT RO RW ZI TOTAL_CONSUMPTION
+    127808 24084 0 0 151892
+
+--- Features:
+    - RT700 components included: mcuxClAead, mcuxClAeadModes, mcuxClAes, mcuxClBuffer, mcuxClCipher, mcuxClCipherModes, mcuxClCore, mcuxClCrc,
+                                 mcuxClEcc, mcuxClEls, mcuxClExample, mcuxClGlikey, mcuxClHash, mcuxClHashModes, mcuxClHmac, mcuxClKey,
+                                 mcuxClMac, mcuxClMacModes, mcuxClMath, mcuxClMemory, mcuxClOsccaAeadModes, mcuxClOsccaCipherModes, mcuxClOsccaMacModes,
+                                 mcuxClOsccaPkc, mcuxClOsccaRandomModes, mcuxClOsccaSafo, mcuxClOsccaSm2, mcuxClOsccaSm3, mcuxClOsccaSm4,
+                                 mcuxClPadding, mcuxClPkc, mcuxClPrng, mcuxClRandom, mcuxClRandomModes, mcuxClRsa, mcuxClSession, mcuxClSignature,
+                                 mcuxClTrng, mcuxCsslCPreProcessor, mcuxCsslDataIntegrity, mcuxCsslFlowProtection, mcuxCsslMemory, mcuxCsslParamIntegrity,
+                                 mcuxCsslSecureCounter
+    - Redfinch components included: mcuxClAead, mcuxClAeadModes, mcuxClAes, mcuxClBuffer, mcuxClCipher, mcuxClCipherModes, mcuxClCore, mcuxClEcc,
+                                    mcuxClEls, mcuxClExample, mcuxClHash, mcuxClHashModes, mcuxClHmac, mcuxClKey, mcuxClMac, mcuxClMacModes,
+                                    mcuxClMath, mcuxClMemory, mcuxClPadding, mcuxClPkc, mcuxClPrng, mcuxClPsaDriver, mcuxClRandom, mcuxClRandomModes,
+                                    mcuxClRsa, mcuxClSession, mcuxClTrng, mcuxCsslCPreProcessor, mcuxCsslDataIntegrity, mcuxCsslFlowProtection,
+                                    mcuxCsslMemory, mcuxCsslParamIntegrity, mcuxCsslSecureCounter
+    - Nirvana components included: mcuxClAead, mcuxClAeadModes, mcuxClAes, mcuxClBuffer, mcuxClCipher, mcuxClCipherModes, mcuxClCore, mcuxClEcc,
+                                   mcuxClEls, mcuxClExample, mcuxClHash, mcuxClHashModes, mcuxClHmac, mcuxClKey, mcuxClMac, mcuxClMacModes,
+                                   mcuxClMath, mcuxClMemory, mcuxClOsccaPkc, mcuxClOsccaSafo, mcuxClOsccaSm3, mcuxClPadding, mcuxClPkc, mcuxClPrng,
+                                   mcuxClRandom, mcuxClRandomModes, mcuxClRsa, mcuxClSession, mcuxClTrng, mcuxCsslCPreProcessor, mcuxCsslDataIntegrity,
+                                   mcuxCsslFlowProtection, mcuxCsslMemory, mcuxCsslParamIntegrity, mcuxCsslSecureCounter
+    - Niobe4a components included: mcuxClAead, mcuxClAeadModes, mcuxClAes, mcuxClBuffer, mcuxClCipher, mcuxClCipherModes, mcuxClCore, mcuxClEcc,
+                                   mcuxClEls, mcuxClExample, mcuxClHash, mcuxClHashModes, mcuxClHmac, mcuxClKey, mcuxClMac, mcuxClMacModes,
+                                   mcuxClMath, mcuxClMemory, mcuxClPadding, mcuxClPkc, mcuxClPrng, mcuxClRandom, mcuxClRandomModes, mcuxClRsa,
+                                   mcuxClSession, mcuxCsslCPreProcessor, mcuxCsslDataIntegrity, mcuxCsslFlowProtection, mcuxCsslMemory, mcuxCsslParamIntegrity,
+                                   mcuxCsslSecureCounter
+
+
+
+--- New Features in version 5.0.0:
+    - Update License to BSD-3 Clause
+
+--- Known Issues Limitations in version 5.0.0:
+    - Zero Hash ECDSA fix is not part of this release
