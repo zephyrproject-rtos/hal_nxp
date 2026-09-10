@@ -61,6 +61,15 @@ config PSA_CRYPTO_DRIVER_ELE_S4xx
 	help
 	    Enables ELE S4xx support in psa-crypto-driver component.
 
+config PSA_CRYPTO_DRIVER_SGI_PKC
+	bool "Enables SGI PKC support in psa-crypto-driver"
+	depends on MBEDTLS_PSA_CRYPTO_C && HAS_MCUX_SGI_PKC
+	select SGI_PKC
+	default y
+	help
+	    Enables SGI PKC support in psa-crypto-driver component.
+	    Enabled by default on SoCs that integrate the SGI PKC accelerator.
+
 config PSA_CRYPTO_DRIVER_THREAD_EN
 	bool "Enables PSA Crypto Thread"
 	depends on MBEDTLS_PSA_CRYPTO_C

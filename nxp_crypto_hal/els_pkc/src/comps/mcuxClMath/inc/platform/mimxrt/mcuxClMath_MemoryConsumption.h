@@ -1,0 +1,64 @@
+/*--------------------------------------------------------------------------*/
+/* Copyright 2024 NXP                                                       */
+/*                                                                          */
+/* SPDX-License-Identifier: BSD-3-Clause                                    */
+/*                                                                          */
+/* Redistribution and use in source and binary forms, with or without       */
+/* modification, are permitted provided that the following conditions are   */
+/* met:                                                                     */
+/*                                                                          */
+/* 1. Redistributions of source code must retain the above copyright        */
+/*    notice, this list of conditions and the following disclaimer.         */
+/*                                                                          */
+/* 2. Redistributions in binary form must reproduce the above copyright     */
+/*    notice, this list of conditions and the following disclaimer in the   */
+/*    documentation and/or other materials provided with the distribution.  */
+/*                                                                          */
+/* 3. Neither the name of the copyright holder nor the names of its         */
+/*    contributors may be used to endorse or promote products derived from  */
+/*    this software without specific prior written permission.              */
+/*                                                                          */
+/* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS  */
+/* IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED    */
+/* TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A          */
+/* PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT       */
+/* HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,   */
+/* SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED */
+/* TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR   */
+/* PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF   */
+/* LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING     */
+/* NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS       */
+/* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.             */
+/*--------------------------------------------------------------------------*/
+
+/** @file  mcuxClMath_MemoryConsumption.h
+ *  @brief Defines the memory consumption for the mcuxClMath component
+ *         All work area sizes in bytes are a multiple of CPU wordsize.
+ */
+
+#ifndef MCUXCLMATH_MEMORYCONSUMPTION_H_
+#define MCUXCLMATH_MEMORYCONSUMPTION_H_
+
+#include <mcuxClCore_Macros.h>
+
+/**
+ * @defgroup mcuxClMath_MemoryConsumption mcuxClMath_MemoryConsumption
+ * @brief Defines the memory consumption for the mcuxClMath component
+ * @ingroup mcuxClMath
+ * @{
+ */
+
+/* Workarea sizes */
+#define MCUXCLMATH_MODMULT_CPU_WA_BUFFER_SIZE            (28u)  ///< CPU workarea size (in bytes) for #mcuxClMath_SecModMultOdd.
+#define MCUXCLMATH_MODMULT_CPU_WA_BUFFER_SIZE_IN_WORDS   MCUXCLCORE_NUM_OF_CPUWORDS_CEIL(MCUXCLMATH_MODMULT_CPU_WA_BUFFER_SIZE)
+
+#define MCUXCLMATH_PKC_WORDSIZE                          (8u)
+#define MCUXCLMATH_MODMULT_PKC_WA_BUFFER_SIZE(lengthX, lengthN) \
+	((MCUXCLCORE_ALIGN_TO_WORDSIZE(MCUXCLMATH_PKC_WORDSIZE,(((lengthX) > (lengthN)) ? (lengthX) : (lengthN))) + MCUXCLMATH_PKC_WORDSIZE) * (uint32_t) MCUXCLMATH_MODMULT_NO_OF_BUFFERS)
+#define MCUXCLMATH_MODMULT_PKC_WA_BUFFER_SIZE_IN_WORDS(lengthX, lengthN) \
+	(MCUXCLMATH_MODMULT_PKC_WA_BUFFER_SIZE((lengthX), (lengthN)) / (sizeof(uint32_t)))
+/**
+ * @}
+ */ /* mcuxClMath_MemoryConsumption */
+
+#endif /* MCUXCLMATH_MEMORYCONSUMPTION_H_ */
