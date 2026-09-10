@@ -1,0 +1,10 @@
+SHA: 861e0d86700ef64a66828f2ef7fd4634159afdef
+
+Removed:
+./doc/*
+./examples/*
+./Kconfig (MCUX)
+./src/comps/<component>/ex/*
+./includes/*
+./static_library/*
+./src/platforms/<platform>/<CMSIS and platform header files>

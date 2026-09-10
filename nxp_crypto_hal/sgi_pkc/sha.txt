@@ -4,6 +4,7 @@ Removed:
 ./doc/*
 ./examples/*
 ./includes/*
+./Kconfig (MCUX)
 ./includes/platform/<platform>/<CMSIS and platform header files>
 ./src/comps/<component>/ex/*
 ./src/platforms/<platform>/<CMSIS and platform header files>

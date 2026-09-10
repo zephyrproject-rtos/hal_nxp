@@ -1,0 +1,58 @@
+{
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "spdxVersion": "SPDX-2.3",
+  "creationInfo": {
+    "created": "2026-05-29T14:42:35Z",
+    "creators": [
+      "Organization: NXP"
+    ],
+    "licenseListVersion": "3.26"
+  },
+  "name": "MCU_CL-SDK_V5.0.0",
+  "dataLicense": "CC0-1.0",
+  "documentNamespace": "https://nxp.com/spdx/b3a3b786-49ab-4b21-bc03-a2245dfb91f4",
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-package-b3a3b786-49ab-4b21-bc03-a2245dfb91f4",
+      "name": "MCU_CL",
+      "versionInfo": "SDK_V5.0.0",
+      "licenseConcluded": "(BSD-3-Clause)",
+      "licenseDeclared": "(BSD-3-Clause)",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: MCU_CL",
+      "supplier": "NOASSERTION",
+      "externalRefs": [],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-b3a3b786-49ab-4b21-bc03-a2245dfb91f4---bad3c44a-4779-4434-957d-b2139496045e",
+      "name": "CMSIS_5",
+      "versionInfo": "5.5.1",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "homepage": "https://github.com/ARM-software/CMSIS_5",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: CMSIS_5",
+      "supplier": "NOASSERTION",
+      "externalRefs": [],
+      "filesAnalyzed": false
+    }
+  ],
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relationshipType": "DESCRIBES",
+      "relatedSpdxElement": "SPDXRef-package-b3a3b786-49ab-4b21-bc03-a2245dfb91f4"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-b3a3b786-49ab-4b21-bc03-a2245dfb91f4",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-package-b3a3b786-49ab-4b21-bc03-a2245dfb91f4---bad3c44a-4779-4434-957d-b2139496045e"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-b3a3b786-49ab-4b21-bc03-a2245dfb91f4",
+      "relationshipType": "DYNAMIC_LINK",
+      "relatedSpdxElement": "SPDXRef-package-b3a3b786-49ab-4b21-bc03-a2245dfb91f4---bad3c44a-4779-4434-957d-b2139496045e"
+    }
+  ]
+}
