@@ -558,10 +558,16 @@ def _find_zephyr(start):
     if os.environ.get("ZEPHYR_BASE"):
         return pathlib.Path(os.environ["ZEPHYR_BASE"])
     path = pathlib.Path(start).resolve()
-    for _ in range(8):
+    # The generated files sit nine levels below the west topdir in the standard
+    # layout (<topdir>/modules/hal/nxp/dts/nxp/<family>/<series>/pinctrl), and
+    # hal_nxp has a zephyr/ directory of its own that does not match, so the
+    # walk has to be able to go past it.
+    for _ in range(12):
         zephyr = path / "zephyr"
         if (zephyr / "include" / "zephyr").is_dir():
             return zephyr
+        if path.parent == path:
+            break
         path = path.parent
     return None
 
@@ -762,6 +768,13 @@ def apply_all(clusters, deltas):
     print(f"Verification: {verified} verified"
           + (f", {skipped} skipped (gcc/dtlib unavailable)" if skipped else "")
           + (f", {len(failures)} FAILED AND REVERTED" if failures else ""))
+    if skipped:
+        # A skipped check is not a passed check. Say so loudly, otherwise the
+        # run reads as if every rewritten file had been proven equivalent.
+        print(f"  WARNING: {skipped} rewritten file(s) were NOT proven "
+              "equivalent to their original content. Install gcc (for .h) and "
+              "put zephyr/scripts/dts/python-devicetree/src on PYTHONPATH (for "
+              ".dtsi) to enable the check.")
     for path in failures:
         print(f"  VERIFY FAILED (reverted to original): {path}")
     return verified, skipped, failures

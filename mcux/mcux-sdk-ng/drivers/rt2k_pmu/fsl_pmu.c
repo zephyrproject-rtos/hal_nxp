@@ -576,18 +576,6 @@ void PMU_ConfigTemperatureSensor(PMU_Type *base, const pmu_temperature_sensor_co
 /* Oscillators                                                                */
 /* -------------------------------------------------------------------------- */
 
-void PMU_ConfigLfro1M(PMU_Type *base, const pmu_lfro1m_config_t *config)
-{
-    assert(config != NULL);
-
-    uint32_t reg = base->PMU_CLK_REG & ~PMU_PMU_CLK_REG_PMU_LFRO1M_FROM_CGU_MASK;
-    if (config->fromCgu)
-    {
-        reg |= PMU_PMU_CLK_REG_PMU_LFRO1M_FROM_CGU_MASK;
-    }
-    base->PMU_CLK_REG = reg;
-}
-
 void PMU_ConfigXOSC32K(PMU_Type *base, const pmu_xosc32k_config_t *config)
 {
     assert(config != NULL);
