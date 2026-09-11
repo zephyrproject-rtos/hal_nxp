@@ -122,6 +122,8 @@ rg_power_cfg rg_power_cfg_info[] = {
 
 #if defined(IW610)
 rg_power_cfg rg_power_cfg_info[] = {
+    {0x00, .power_info[IW610_PACKAGE_TYPE_CSP] = {(t_u8 *)rg_table_WW_csp, sizeof(rg_table_WW_csp)},
+    },
     {0x10, .power_info[IW610_PACKAGE_TYPE_CSP] = {(t_u8 *)rg_table_US_csp, sizeof(rg_table_US_csp)},
     },
     {0x20, .power_info[IW610_PACKAGE_TYPE_CSP] = {(t_u8 *)rg_table_CA_csp, sizeof(rg_table_CA_csp)},
