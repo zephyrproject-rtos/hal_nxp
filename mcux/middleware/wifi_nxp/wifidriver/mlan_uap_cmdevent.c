@@ -343,6 +343,28 @@ static mlan_status wlan_uap_cmd_ap_config(pmlan_private pmpriv,
         tlv += sizeof(MrvlIEtypes_wmm_parameter_t);
     }
 
+#if !CONFIG_WPA_SUPP
+    if (pmpriv->ssid_protection == MTRUE)
+    {
+        MrvlIEtypes_RsnxParamSet_t *tlv_rsnx_tlv =
+            (MrvlIEtypes_RsnxParamSet_t *)(void *)tlv;
+        t_u16 len = 0;
+
+       (void)__memset(pmpriv->adapter, tlv_rsnx_tlv, 0x00,
+                      sizeof(MrvlIEtypes_RsnxParamSet_t));
+        tlv_rsnx_tlv->header.type = wlan_cpu_to_le16(TLV_TYPE_RSNX);
+        /* Set SSID Protection capability bit in the third octet,
+         * set bit 1 in the first octet and increment the len to 3
+         */
+        tlv_rsnx_tlv->data[0] |= 2;
+        tlv_rsnx_tlv->data[2] |= (0x1 << SSID_PROTECTION_OCTET3_BIT);
+        len = 3;
+        tlv_rsnx_tlv->header.len = wlan_cpu_to_le16(len);
+        cmd_size += sizeof(MrvlIEtypes_RsnxParamSet_t);
+        tlv += sizeof(MrvlIEtypes_RsnxParamSet_t);
+    }
+#endif
+
     cmd->size = (t_u16)wlan_cpu_to_le16(cmd_size);
     PRINTM(MCMND, "AP config: cmd_size=%d\n", cmd_size);
 #if CONFIG_WIFI_EXTRA_DEBUG

@@ -668,6 +668,19 @@ int wifi_get_pmfcfg(t_u8 *mfpc, t_u8 *mfpr)
     return WM_SUCCESS;
 }
 
+int wifi_set_ssid_protection(bool enable, enum wlan_bss_type bss_type)
+{
+    mlan_private *pmpriv = (mlan_private *)mlan_adap->priv[bss_type];
+
+    if ((t_u32)bss_type >= MLAN_MAX_BSS_NUM || mlan_adap->priv[bss_type] == MNULL)
+    {
+        return -WM_FAIL;
+    }
+    pmpriv->ssid_protection = enable;
+
+    return WM_SUCCESS;
+}
+
 int wifi_set_packet_filters(wifi_flt_cfg_t *flt_cfg)
 {
     (void)wifi_get_command_lock();

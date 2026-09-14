@@ -238,6 +238,8 @@ mlan_status wlan_init_priv(pmlan_private priv)
     priv->is_dpp_connect = MFALSE;
 #endif
 
+    priv->ssid_protection = MFALSE;
+
     LEAVE();
     return ret;
 }
