@@ -66,6 +66,9 @@
 
 #define HCI_EVT_PS_SLEEP_OCF 0x20U
 
+#define HCI_MIN_LEN (3U)
+#define HCI_MAX_LEN (((uint32_t)UINT16_MAX)) /* In pure BLE the limit is 258 but in ACL it can reach 65535 */
+
 #define get_opcode(ocg, ocf) (((uint16_t)(ocg) & (uint16_t)0x3FU) << 10) | (uint16_t)((ocf)&0x3FFU)
 
 /* The wake up done interrupt doesn't make any call to FreeRTOS API so it should
@@ -276,9 +279,10 @@ static hal_imumc_config_t hci_imumc_config = {
     .param       = NULL,
 };
 
-static bool              initialized    = false;
-static bool              hciInitialized = false;
-static volatile ble_ps_t blePowerState  = ble_awake_state;
+static volatile bool     initialized      = false;
+static volatile bool     hciInitialized   = false;
+static volatile bool     mutexInitialized = false;
+static volatile ble_ps_t blePowerState    = ble_awake_state;
 
 static OSA_EVENT_HANDLE_DEFINE(wakeUpEventGroup);
 static OSA_MUTEX_HANDLE_DEFINE(bleMutexHandle);
@@ -376,24 +380,56 @@ int PLATFORM_InitBle(void)
 {
     int          ret = 0;
     osa_status_t status;
+    uint32_t     regPrimask;
+    bool         mutex_locked = false;
 
-    /* PLATFORM_InitBle can be called from OT or Ethermind context in multi mode applications
-     * The 'initialized' variable will be set to true only when the initialization is complete
-     * We have to protect the initialization flow with a mutex to make sure the first task completes the initialization
-     * before the second reads 'initialized' */
-    status = OSA_MutexCreate((osa_mutex_handle_t)bleMutexHandle);
-    assert(status == KOSA_StatusSuccess);
-    status = OSA_MutexLock((osa_mutex_handle_t)bleMutexHandle, osaWaitForever_c);
-    assert(status == KOSA_StatusSuccess);
+    /* PLATFORM_InitBle can be called from OT or Ethermind/Edgefast_Open context in multi mode applications.
+     * The 'initialized' variable will be set to true only when the initialization is complete.
+     * The mutex is created once using interrupt masking (primask) to avoid a TOCTOU race on
+     * the mutex handle itself. The 'mutexInitialized' flag is declared volatile so its update
+     * is observed by subsequent (out-of-critical-section) reads without an explicit barrier.
+     * Once created, the mutex serializes the initialization flow so
+     * that the first caller completes initialization before any subsequent caller proceeds. */
+    regPrimask = DisableGlobalIRQ();
+    if (!mutexInitialized)
+    {
+        status = OSA_MutexCreate((osa_mutex_handle_t)bleMutexHandle);
+        if (status == KOSA_StatusSuccess)
+        {
+            mutexInitialized = true;
+        }
+    }
+    EnableGlobalIRQ(regPrimask);
 
     do
     {
+        /* Failed to create mutex, break out */
+        if (!mutexInitialized)
+        {
+            ret = -3;
+            break;
+        }
+
+        status = OSA_MutexLock((osa_mutex_handle_t)bleMutexHandle, osaWaitForever_c);
+        /* Failed to lock mutex, break out */
+        if (status != KOSA_StatusSuccess)
+        {
+            ret = -4;
+            break;
+        }
+        mutex_locked = true;
+
         if (initialized == true)
         {
             break;
         }
+
         status = OSA_EventCreate((osa_event_handle_t)wakeUpEventGroup, 0);
-        assert(status == KOSA_StatusSuccess);
+        if (status != KOSA_StatusSuccess)
+        {
+            ret = -5;
+            break;
+        }
 
         /* Initialize BLE controller */
         ret = PLATFORM_InitControllers(connBle_c);
@@ -419,9 +455,17 @@ int PLATFORM_InitBle(void)
         blePowerState = ble_awake_state;
     } while (false);
 
-    status = OSA_MutexUnlock((osa_mutex_handle_t)bleMutexHandle);
-    assert(status == KOSA_StatusSuccess);
-    (void)status;
+    /* Only unlock if the mutex was successfully locked */
+    if (mutex_locked)
+    {
+        status = OSA_MutexUnlock((osa_mutex_handle_t)bleMutexHandle);
+        /* Only report the unlock failure if no earlier error was recorded, so
+         * that the original failure reason (e.g. -1, -2, -4, -5) is preserved. */
+        if ((status != KOSA_StatusSuccess) && (ret == 0))
+        {
+            ret = -6;
+        }
+    }
 
     return ret;
 }
@@ -490,7 +534,8 @@ int PLATFORM_TerminateBle(void)
             break;
         }
 
-        initialized = false;
+        mutexInitialized = false;
+        initialized      = false;
         /* after re-init cpu2, Reset hciInitialized to false. */
         hciInitialized = false;
     } while (false);
@@ -820,38 +865,51 @@ static bool PLATFORM_IsBleAwake(void)
 
 static hal_imumc_return_status_t PLATFORM_HciImumcRxCallback(void *param, uint8_t *data, uint32_t len)
 {
-    bool    handled    = false;
-    uint8_t packetType = data[0];
+    bool    handled = false;
+    uint8_t packetType;
 
     (void)param;
 
-    (void)PLATFORM_HandleControllerPowerState();
-
-    /* If the macro BLE_VENDOR_EVENT_HANDLE is set to true, PLATFORM module will check if it can handle Vendor Specific
-     * Events without going through Ethermind's HCI tasks If the packet is not handled, then it is sent to upper layers
-     * This is likely used to handle Controller low power state, so this is
-     * completely transparent to the application. If the macro BLE_VENDOR_EVENT_HANDLE is set false, the Ethermind's HCI
-     * tasks will handle vendor event */
-    if (packetType == HCI_EVENT_PACKET)
+    /* The smallest possible HCI packet is an HCI Event of 3 bytes,
+     * while most event contain a 4th sub-event byte, the largest possible
+     * HCI packet is 256 bytes */
+    if ((len >= HCI_MIN_LEN) && (len <= HCI_MAX_LEN))
     {
-        uint8_t eventType = data[1];
+        packetType = data[0];
 
-        if (eventType == HCI_VENDOR_SPECIFIC_DEBUG_EVENT)
+        (void)PLATFORM_HandleControllerPowerState();
+
+        /* If the macro BLE_VENDOR_EVENT_HANDLE is set to true, PLATFORM module will check if it can handle Vendor
+         * Specific
+         * Events without going through Ethermind's HCI tasks If the packet is not handled, then it is sent to upper layers
+         * This is likely used to handle Controller low power state, so this is
+         * completely transparent to the application. If the macro BLE_VENDOR_EVENT_HANDLE is set false, the Ethermind's HCI
+         * tasks will handle vendor event */
+        if (packetType == HCI_EVENT_PACKET)
         {
-            /* Received packet is a Vendor Specific event, check if PLATFORM
-             * can process it, if not, it will be sent to Ethermind */
-            handled = PLATFORM_HandleHciVendorEvent(&data[3], data[2]);
-        }
-    }
+            uint8_t eventType = data[1];
 
-    if ((handled == false) && (hci_rx_callback != NULL))
-    {
-        hci_rx_callback(packetType, &data[1], (uint16_t)(len - 1U));
-    }
+            if (eventType == HCI_VENDOR_SPECIFIC_DEBUG_EVENT) /* sub-event */
+            {
+                /* Received packet is a Vendor Specific event, check if PLATFORM
+                 * can process it, if not, it will be sent to Ethermind */
+                if (len >= 4U)
+                {
+                    handled = PLATFORM_HandleHciVendorEvent(&data[3], data[2]);
+                }
+            }
+        }
+
+        if ((handled == false) && (hci_rx_callback != NULL))
+        {
+            /* len is guaranteed to be greater than 3 and smaller than 256 */
+            hci_rx_callback(packetType, &data[1], (uint16_t)(len - 1U));
+        }
 
 #ifdef SERIAL_BTSNOOP
-    sbtsnoop_write_hci_pkt(data[0U], 1U, &data[1], (uint16_t)(len - 1U));
+        sbtsnoop_write_hci_pkt(data[0U], 1U, &data[1], (uint16_t)(len - 1U));
 #endif
+    }
 
     return kStatus_HAL_RL_RELEASE;
 }

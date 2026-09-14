@@ -177,36 +177,31 @@ uint64_t PLATFORM_TSTMR_ReadTimeStamp(uint8_t tstmrId)
         timeStamp = (uint64_t)base->L;
 #else
         /* The actual implementation reading the full 56-bit timestamp */
-        if (tstmrId < FWK_TSTMR_NB_INST)
+        uint32_t primask = DisableGlobalIRQ();
+
+        /* Need to read LSB and MSB registers twice to ensure consistency,
+         * indeed in some rare cases the MSB may get updated before the LSB has wrapped-around */
+        uint32_t l1, l2;
+        uint32_t h1, h2;
+        l1 = base->L;
+        __DMB();
+        h1 = base->H & FWK_TSTMR_H_VALUE_MASK;
+        __DMB();
+        l2 = base->L;
+        __DMB();
+        h2 = base->H & FWK_TSTMR_H_VALUE_MASK;
+
+        EnableGlobalIRQ(primask);
+
+        if (l2 < l1)
         {
-            TSTMR_Type *base    = (TSTMR_Type *)tstmrBases[tstmrId];
-            uint32_t    primask = DisableGlobalIRQ();
-
-            /* Need to read LSB and MSB registers twice to ensure consistency,
-             * indeed in some rare cases the MSB may get updated before the LSB has wrapped-around */
-            uint32_t l1, l2;
-            uint32_t h1, h2;
-            l1 = base->L;
-            __DMB();
-            h1 = base->H & FWK_TSTMR_H_VALUE_MASK;
-
-            __DMB();
-            l2 = base->L;
-            __DMB();
-            h2 = base->H & FWK_TSTMR_H_VALUE_MASK;
-
-            EnableGlobalIRQ(primask);
-
-            if (l2 < l1)
-            {
-                /* Wrap (or early-carry window): use the pair that follows L2 */
-                timeStamp = (((uint64_t)h2) << 32) | l2;
-            }
-            else
-            {
-                /* No wrap between L1 and L2: use the earlier consistent pair */
-                timeStamp = (((uint64_t)h1) << 32) | l1;
-            }
+            /* Wrap (or early-carry window): use the pair that follows L2 */
+            timeStamp = (((uint64_t)h2) << 32) | l2;
+        }
+        else
+        {
+            /* No wrap between L1 and L2: use the earlier consistent pair */
+            timeStamp = (((uint64_t)h1) << 32) | l1;
         }
 #endif
     }

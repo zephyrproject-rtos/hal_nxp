@@ -495,6 +495,19 @@ int PLATFORM_GetRadioIdleDuration32K(void);
  */
 void PLATFORM_InitRadio(void);
 
+/*!
+ * \brief  Perform platform-specific NBU initialization
+ *
+ * \details This function handles device-specific NBU setup that complements the
+ *          common initialization done in PLATFORM_InitNbu(), such as granting
+ *          the NBU access to specific peripherals (e.g. GPIOD for debug).
+ *          It is called at the end of PLATFORM_InitNbu() upon successful
+ *          completion of the common NBU initialization.
+ *
+ * \return int 0 if success, negative value if error.
+ */
+int PLATFORM_InitNbuSpecific(void);
+
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */

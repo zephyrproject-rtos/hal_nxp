@@ -17,6 +17,17 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.platform.mcxw23)
         CORE_IDS "cm33_core0"
     )
 
+    # fwk_config_zephyr.h is only relevant to the Zephyr build (hal_nxp). Zephyr
+    # emits CONFIG_ZEPHYR_HAL_NXP_MODULE=y when building the hal_nxp module, so
+    # this file is not recorded in the MCUXSDK package.
+    if(CONFIG_ZEPHYR_HAL_NXP_MODULE)
+        mcux_add_source(SOURCES
+            configs/fwk_config_zephyr.h
+            DEVICE_IDS ${MCXW23_FAMILY}
+            CORE_IDS "cm33_core0"
+        )
+    endif()
+
     mcux_add_include(INCLUDES
         .
         ../include

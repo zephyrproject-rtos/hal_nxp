@@ -163,7 +163,9 @@ typedef enum
     gFwkSrvNbuRequestRngSeed_c                  = 0xAU,
     gFwkSrvNbuRequestNewTemperature_c           = 0xBU,
     gFwkSrvNbuEventIndication_c                 = 0xCU, /*!< Info - Warning - Error indications to Host */
-    gFwkSrvNbu2HostLast_c                       = 0xDU,
+    gFwkSrvNbuReadP256PublicKey_c               = 0xDU,
+    gFwkSrvNbuGenerateDHKey_c                   = 0xEU,
+    gFwkSrvNbu2HostLast_c                       = 0xFU,
     gFwkSrvHost2NbuFirst_c                      = 0x80U,
     gFwkSrvNbuVersionRequest_c                  = 0x81U,
     gFwkSrvXtal32MTrimIndication_c              = 0x82U,
@@ -177,7 +179,9 @@ typedef enum
     gFwkSrvFroEnableNotification_c              = 0x8AU,
     gFwkSrvRngReseed_c                          = 0x8BU,
     gFwkSrvHostSetNbuSharedCtxAddr_c            = 0x8CU, /*! Intercore shared context */
-    gFwkSrvHost2NbuLast_c                       = 0x8DU,
+    gFwkSrvNbuReadP256PublicKeyRsp_c            = 0x8DU,
+    gFwkSrvNbuGenerateDHKeyRsp_c                = 0x8EU,
+    gFwkSrvHost2NbuLast_c                       = 0x8FU,
 } eFwkSrvMsgType;
 
 typedef int32_t (*fwksrv_lowpower_constraint_func_t)(int32_t power_mode);

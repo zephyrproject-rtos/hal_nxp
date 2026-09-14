@@ -1,5 +1,5 @@
 Wireless Framework
-===============
+==================
 
 .. toctree::
    :maxdepth: 1
