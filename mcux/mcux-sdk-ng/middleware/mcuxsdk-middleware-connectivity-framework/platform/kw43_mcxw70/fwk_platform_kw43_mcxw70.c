@@ -7,11 +7,16 @@
 /*                                  Includes                                  */
 /* -------------------------------------------------------------------------- */
 
+#include "fwk_config.h"
 #include "fwk_platform.h"
 #include "fwk_debug.h"
 #include "fwk_platform_ics.h"
 #include "fsl_os_abstraction.h"
 #include "fwk_platform_mcu_nbu_common.h"
+
+#if defined(gPlatformNbuDebugGpioDAccessEnabled_d) && (gPlatformNbuDebugGpioDAccessEnabled_d == 1)
+#include "fsl_gpio.h"
+#endif
 
 #if defined PLAT_FWK_INTERCORE_DBG_LP && (PLAT_FWK_INTERCORE_DBG_LP > 0)
 #include "fsl_debug_console.h"
@@ -146,10 +151,28 @@ int PLATFORM_SetNbuSharedCtxAddress(void)
     return ret;
 }
 
-bool PLATFORM_IsNbuStuck(uint32_t nbuWatchdogDurationInUs)
+int PLATFORM_InitNbuSpecific(void)
 {
-    (void)nbuWatchdogDurationInUs;
-    return false;
+#if defined(gPlatformNbuDebugGpioDAccessEnabled_d) && (gPlatformNbuDebugGpioDAccessEnabled_d == 1)
+    /* Allocate all pins from GPIOD to the NBU */
+    GPIO_EnablePinControlNonSecure(GPIOD, ~0U);
+#endif
+    return 0;
+}
+
+/*!
+ * \brief Set the low power flag shared word.
+ *
+ * On KW43/MCXW70 the low power flag shared word is not used, so this is an
+ * empty stub. Keeping it empty ensures m_lowpower_flag_start is not referenced
+ * on these SOCs.
+ *
+ * \param[in] PwrDownOngoing unused on this SOC.
+ */
+void PLATFORM_SetLowPowerFlag(bool PwrDownOngoing)
+{
+    /* Low power flag shared word is not used on KW43/MCXW70 */
+    (void)PwrDownOngoing;
 }
 
 #if defined     PLAT_FWK_INTERCORE_DBG_LP && (PLAT_FWK_INTERCORE_DBG_LP > 0)

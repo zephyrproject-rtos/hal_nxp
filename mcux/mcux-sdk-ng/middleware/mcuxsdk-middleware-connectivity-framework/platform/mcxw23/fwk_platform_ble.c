@@ -40,6 +40,8 @@ static blec_result_t PLATFORM_HciRxCallback(blec_hciPacketType_t packetType, voi
 #define gAppMaxTxPowerDbm_c 6
 #endif
 
+#define HCI_MIN_LEN (3U)
+#define HCI_MAX_LEN (((uint32_t)UINT16_MAX)) /* In pure BLE the limit is 258 but in ACL it can reach 65535 */
 /* -------------------------------------------------------------------------- */
 /*                               Private memory                               */
 /* -------------------------------------------------------------------------- */
@@ -86,20 +88,27 @@ int PLATFORM_InitBle(void)
 
 int PLATFORM_SendHciMessage(uint8_t *msg, uint32_t len)
 {
-    return PLATFORM_SendHciMessageAlt(msg[0], &msg[1], len - 1U);
+    int ret = -1;
+    if ((msg != NULL) && (len >= HCI_MIN_LEN) && (len <= HCI_MAX_LEN))
+    {
+        ret = PLATFORM_SendHciMessageAlt(msg[0], &msg[1], len - 1U);
+    }
+    return ret;
 }
 
 int PLATFORM_SendHciMessageAlt(uint8_t packetType, uint8_t *msg, uint32_t len)
 {
-    int ret = 0;
+    int ret = -1;
 
 #ifdef SERIAL_BTSNOOP
     sbtsnoop_write_hci_pkt(packetType, 0U, msg, len);
 #endif
-
-    if (BLEController_ProcessHciPacket((blec_hciPacketType_t)packetType, msg, len) != kBLEC_Success)
+    if (len <= HCI_MAX_LEN)
     {
-        ret = -1;
+        if (BLEController_ProcessHciPacket((blec_hciPacketType_t)packetType, msg, len) == kBLEC_Success)
+        {
+            ret = 0;
+        }
     }
 
     return ret;

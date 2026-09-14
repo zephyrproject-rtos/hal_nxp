@@ -1,5 +1,31 @@
 ## Connectivity framework CHANGELOG
 
+### 7.4.3 mcux SDK 26.09.00 RFP
+
+#### Major Changes
+
+- [platform][DBG] Moved the NBU software watchdog (handcheck based NBU stuck detection) into the common platform_dbg sources, making the feature available on both KW43/MCXW70 and KW47/MCXW72 without additional files.
+
+#### Minor Changes
+
+- [wireless_mcu][wireless_nbu][kw43_mcxw70] Moved P256 public key generation and ECDH DH key computation from the NBU controller to the host. Added two ICS message types (ReadP256PublicKey/GenerateDHKey) with their host and NBU handlers, the new `PLATFORM_ReadLocalP256PublicKey()` and `PLATFORM_GenerateDHKey()` APIs, and the new `gPlatformIcsDeferDHKeyToHost_d` feature flag gating all host side DH key code. APIs are kept but empty when the flag is disabled so callers can keep the call unconditional. Also fixed the duplicate ICS enum sentinel `gFwkSrvNbu2HostLast_c`. `gPlatformIcsDeferDHKeyToHost_d` is disabled by default on the host to avoid pulling SecLib and the deferred DH key path into all applications; applications requiring this feature (e.g. hci_bb controller qualification) must explicitly build with `-DgPlatformIcsDeferDHKeyToHost_d=1`. The NBU configuration is unchanged and an assert catches the host/NBU misconfiguration in debug builds.
+- [platform][zephyr] Zephyr feature flag overrides are now owned by the framework repo in a per platform `configs/fwk_config_zephyr.h`, included at the top of `fwk_config.h` under `__ZEPHYR__`, removing the dual maintenance with the Zephyr integration. MCUXSDK defaults and package content are unchanged. Platforms: kw43_mcxw70, kw45_k32w1_mcxw71, kw47_mcxw72, mcxw23, rw61x.
+- [wireless_mcu][kw43_mcxw70] Added `gPlatformNbuDebugGpioDAccessEnabled_d` support on kw43_mcxw70 to grant the NBU access to all GPIOs managed by GPIOD, through the new `PLATFORM_InitNbuSpecific()` API performing the NBU platform specific initialization.
+- [DBG] The NBU debug path now preserves the first fault/assert information: `NBUDBG_StateCheck()` no longer consumes the NBU debug state before a consumer callback is registered, the `sys_debug_panic_triggered` guard is hoisted in the hard fault handler so capture, host indication and coredump only run for the first fault, and only the first fault/assert is recorded through the new `NBUDBG_RECORD_CLAIMED()` macro.
+- [KW43-LOC][lcl] Updated `PLATFORM_InitLcl()` to support antenna diversity on the KW43-LOC board.
+- [NVS] Replaced `memcpy()` by `HAL_FlashRead()` for internal flash reads so that HAL checks and Async Flash mode synchronization are not bypassed.
+- [kw43_mcxw70] `SecLib_psa_config.h` is now only added to the build when the PSA SecLib port is selected, aligned with kw45_k32w1_mcxw71 and kw47_mcxw72.
+- [wireless_mcu] Added the missing `fwk_config.h` as first include in the kw43_mcxw70, kw45_k32w1_mcxw71 and kw47_mcxw72 platform files so that feature flag overrides are taken into account.
+- [kw43_mcxw70] Removed the usage of the `m_lowpower_flag_(start|size|end)` linker symbols.
+
+#### Bug Fixes
+
+- [rw61x] Fixed RTOS heap exhaustion when initializing BLE several times (`bt init`/`bt disable` loops): the mutex is now created only once in `PLATFORM_InitBle()`, protected against TOCTOU with interrupt masking, the flag is reset in `PLATFORM_TerminateBle()` to allow re-creation after termination, and asserts are replaced by error code returns to remain correct in Release builds.
+- [platform][TSTMR] Fixed the 56 bit version of the timestamp, now reading the TSTMR instance base and testing only the base pointer validity.
+- [IW416][coex] Added the missing SD8978 firmware include guard in `fwk_platform_coex.c`, fixing the compilation error of IW416 coex_edgefast applications.
+- [docs] Fixed Sphinx/docutils warnings and errors in the framework documentation: index title underline, leading transitions after README titles, and FSCI C code blocks that could not be lexed.
+- [MISRA][CERT-C] Various MISRA, CERT-C and Coverity compliance fixes gathered across platform, LowPower, ICS (wireless_mcu and wireless_nbu), OTA, FSCI, SFC, SecLib and NVM modules: HCI packet length checks before field access, safe SWO prescaler computation, `US_TO_TICK`/`PWR_ConvertUsecToTicks()` saturation to TICK_TYPE_MAX, ICS message type re-validation in the Rx work handlers, OTA chunk length and CRC computation hardening, SFC unbalanced low power constraint release guard and 64 bit timestamp arithmetic, SecLib SHA-256 OVERRUN and padding fixes with AES block count overflow checks, NVM union initializer, plus in place annotations for the findings to be dismissed.
+
 ### 7.4.2 mcux SDK 26.09.00 pvw2
 
 #### Major Changes

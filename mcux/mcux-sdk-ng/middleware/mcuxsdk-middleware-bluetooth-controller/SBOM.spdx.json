@@ -22,7 +22,7 @@
     {
       "SPDXID": "SPDXRef-package-44cdf135-46c8-4ccd-a69f-d003bf9d80ee",
       "name": "mcuxsdk-middleware-bluetooth-controller",
-      "versionInfo": "v26.06.00",
+      "versionInfo": "1.9.38.0",
       "licenseConcluded": "(LicenseRef-babf777f-042b-42df-a5bf-638993427038)",
       "licenseDeclared": "(LicenseRef-babf777f-042b-42df-a5bf-638993427038)",
       "downloadLocation": "https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller",

@@ -43,10 +43,6 @@
 #include "fwk_platform_mws.h"
 #endif
 
-#if defined(gPlatformNbuDebugGpioDAccessEnabled_d) && (gPlatformNbuDebugGpioDAccessEnabled_d > 0)
-#include "fsl_trdc.h"
-#endif
-
 #include "fwk_debug.h"
 #include "mcmgr_imu_internal.h"
 #include "fwk_platform_mcu_nbu_common.h"
@@ -587,21 +583,6 @@ int PLATFORM_IsNbuStarted(void)
     return nbu_started;
 }
 
-void PLATFORM_SetLowPowerFlag(bool PwrDownOngoing)
-{
-    uint32_t           val = 0UL;
-    extern uint32_t    m_lowpower_flag_start[]; /* defined by linker */
-    volatile uint32_t *p_lp_flag = (volatile uint32_t *)(uint32_t)m_lowpower_flag_start;
-
-    /* if called with */
-    if (PwrDownOngoing)
-    {
-        val = PLATFORM_HOST_USE_POWER_DOWN;
-    }
-
-    *p_lp_flag = val;
-}
-
 int PLATFORM_InitNbu(void)
 {
     int status = 0;
@@ -613,15 +594,6 @@ int PLATFORM_InitNbu(void)
         int      cnt = 0;
 
 #if !(defined(FPGA_TARGET) && (FPGA_TARGET != 0))
-#if defined(gPlatformNbuDebugGpioDAccessEnabled_d) && (gPlatformNbuDebugGpioDAccessEnabled_d == 1)
-        /* Init TRDC for NBU - Allow NBU to access GPIOD*/
-        trdc_non_processor_domain_assignment_t domainAssignment;
-        TRDC_SetDacGlobalValid(TRDC);
-        TRDC_GetDefaultNonProcessorDomainAssignment(&domainAssignment);
-        domainAssignment.privilegeAttr = (uint8_t)kTRDC_ForcePrivilege;
-        TRDC_SetNonProcessorDomainAssignment(TRDC, (uint8_t)kTRDC_MasterRadioNBU, &domainAssignment);
-#endif
-
         /* Initialize a memory zone of the shared memory that will be used to transmit a message later */
         PLATFORM_SetLowPowerFlag(false);
 #endif
@@ -651,6 +623,7 @@ int PLATFORM_InitNbu(void)
 #if (defined(gPlatformHasRFPowerDomain_d) && (gPlatformHasRFPowerDomain_d == 1))
         PLATFORM_SetNbuPowerMode();
 #endif
+
         regPrimask = DisableGlobalIRQ();
         timestamp  = PLATFORM_GetTimeStamp();
         /* Wait for the NBU to become active as BLE_LP_EN has been asserted */
@@ -713,6 +686,9 @@ int PLATFORM_InitNbu(void)
 
                 /* nbu initialization completed */
                 nbu_init = 1;
+
+                /* Perform platform-specific NBU initialization */
+                status = PLATFORM_InitNbuSpecific();
             }
         }
     }

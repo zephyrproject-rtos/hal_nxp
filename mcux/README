@@ -12,11 +12,11 @@ Origin:
 
    NXP MCUXpresso SDK Connectivity Framework
    https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-connectivity-framework
-   BRANCH: release/26.09.00-pvw2
+   SHA: 312da7fa17af2b7d204c20768ae4adb5417e40b6
 
    NXP MCUXpresso SDK Bluetooth Controller
    https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller
-   BRANCH: release/26.09.00-pvw2
+   SHA: c04a004d3e8c516c3f9e9832b6cc7c0a4e87e5bc
 
    NXP MCUXpresso SDK Multicore middleware
    https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-multicore

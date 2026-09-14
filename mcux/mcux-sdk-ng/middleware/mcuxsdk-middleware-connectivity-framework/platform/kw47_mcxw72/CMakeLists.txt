@@ -16,20 +16,23 @@ if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.platform.kw47_mcxw72)
         CORE_IDS "cm33_core0" "cm33"
     )
 
+    # fwk_config_zephyr.h is only relevant to the Zephyr build (hal_nxp). Zephyr
+    # emits CONFIG_ZEPHYR_HAL_NXP_MODULE=y when building the hal_nxp module, so
+    # this file is not recorded in the MCUXSDK package.
+    if(CONFIG_ZEPHYR_HAL_NXP_MODULE)
+        mcux_add_source(SOURCES
+            configs/fwk_config_zephyr.h
+            DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY}
+            CORE_IDS "cm33_core0" "cm33"
+        )
+    endif()
+
     mcux_add_include(INCLUDES
         .
         configs
         DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY}
         CORE_IDS "cm33_core0" "cm33"
     )
-
-    if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.platform.platform_library)
-        mcux_add_library(
-            LIBS fwk_platform_kw47_mcxw72.a
-            DEVICE_IDS ${KW47_FAMILY} ${MCXW72_FAMILY}
-            CORE_IDS "cm33_core0"
-        )
-    endif()
 
     if(CONFIG_MCUX_COMPONENT_middleware.wireless.framework.platform.preprocessed_linker_scripts)
         # workaround to be able to use preprocessed linker scripts on packages
