@@ -692,7 +692,7 @@ if( CONFIG_BUILD_WITH_TFM)
 else()
 	zephyr_library_named(McuxPsaCryptoDriverElsPkc)
 	set(NXP_MODULE_CRYPTO_PATH ${ZEPHYR_MBEDTLS_MODULE_DIR}/../)
-	set(NXP_MODULE_ELS_PKC_PATH ${ZEPHYR_ELS_PKC_MODULE_DIR})
+	set(NXP_MODULE_ELS_PKC_PATH ${ZEPHYR_HAL_NXP_MODULE_DIR}/nxp_crypto_hal/els_pkc)
 
 	zephyr_compile_definitions(
 		# MBEDTLS_MCUX_USE_TRNG_AS_ENTROPY_SEED
