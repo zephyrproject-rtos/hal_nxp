@@ -12,7 +12,16 @@ if(CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_BT_H4_NXP_CTLR)
   endif()
 
   if(CONFIG_WIFI_NXP)
-    if(CONFIG_NXP_IW61X)
+    if(CONFIG_NXP_IW611_EZURIO_NX611)
+      list(APPEND output_includes_list ${ZEPHYR_BINARY_DIR}/include/generated/nw61x_wifi_fw.bin.se.inc)
+      set(wifi_binary_blob_name ezurio/sd_w61x_v1.18.99.3.p26.11.1.bin.se)
+      zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/nw61x/nw61x_cpu1.c)
+      set_source_files_properties(
+		${CMAKE_CURRENT_LIST_DIR}/nw61x/nw61x_cpu1.c
+		PROPERTIES OBJECT_DEPENDS ${ZEPHYR_BINARY_DIR}/include/generated/nw61x_wifi_fw.bin.se.inc
+		)
+      list(APPEND wifi_bt_binary_blobs_list ${hal_blobs_dir}/nw61x/${wifi_binary_blob_name})
+    elseif(CONFIG_NXP_IW61X)
       list(APPEND output_includes_list ${ZEPHYR_BINARY_DIR}/include/generated/nw61x_wifi_fw.bin.se.inc)
       set(wifi_binary_blob_name sd_w61x.bin.se)
       zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/nw61x/nw61x_cpu1.c)
@@ -63,7 +72,16 @@ if(CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_BT_H4_NXP_CTLR)
   endif()
 
   if (CONFIG_BT_H4_NXP_CTLR)
-    if(CONFIG_BT_NXP_NW612)
+    if(CONFIG_BT_NXP_EZURIO_NX611)
+      list(APPEND output_includes_list ${ZEPHYR_BINARY_DIR}/include/generated/nw61x_bt_fw.bin.inc)
+      set(bt_binary_blob_name  ezurio/uartspi_n61x_v1.18.99.3.p26.11.bin.se)
+      zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/nw61x/nw61x_cpu2.c)
+      set_source_files_properties(
+		${CMAKE_CURRENT_LIST_DIR}/nw61x/nw61x_cpu2.c
+		PROPERTIES OBJECT_DEPENDS ${ZEPHYR_BINARY_DIR}/include/generated/nw61x_bt_fw.bin.inc
+		)
+      list(APPEND wifi_bt_binary_blobs_list ${hal_blobs_dir}/nw61x/${bt_binary_blob_name})
+    elseif(CONFIG_BT_NXP_NW612)
       list(APPEND output_includes_list ${ZEPHYR_BINARY_DIR}/include/generated/nw61x_bt_fw.bin.inc)
       set(bt_binary_blob_name  uartspi_n61x.bin.se)
       zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/nw61x/nw61x_cpu2.c)
