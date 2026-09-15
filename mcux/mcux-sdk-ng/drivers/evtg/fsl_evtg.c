@@ -12,9 +12,57 @@
 #define FSL_COMPONENT_ID "platform.drivers.evtg"
 #endif
 
+#if (defined(EVTG_CLOCKS) && !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL))
+#define EVTG_DRIVER_CLK_CTRL 1
+#endif
+
+/*******************************************************************************
+ * Prototypes
+ ******************************************************************************/
+#if defined(EVTG_DRIVER_CLK_CTRL)
+/*!
+ * @brief Gets the instance from the base address to be used to gate or ungate the module clock
+ *
+ * @param base EVTG peripheral base address
+ *
+ * @return The EVTG instance
+ */
+static uint32_t EVTG_GetInstance(EVTG_Type *base);
+#endif /* EVTG_DRIVER_CLK_CTRL */
+
+/*******************************************************************************
+ * Variables
+ ******************************************************************************/
+#if defined(EVTG_DRIVER_CLK_CTRL)
+/*! @brief Pointers to EVTG bases for each instance. */
+static EVTG_Type *const s_evtgBases[] = EVTG_BASE_PTRS;
+
+/*! @brief Pointers to EVTG clocks for each instance. */
+static const clock_ip_name_t s_evtgClocks[] = EVTG_CLOCKS;
+#endif /* EVTG_DRIVER_CLK_CTRL */
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
+#if defined(EVTG_DRIVER_CLK_CTRL)
+static uint32_t EVTG_GetInstance(EVTG_Type *base)
+{
+    uint32_t instance;
+
+    /* Find the instance index from base address mappings. */
+    for (instance = 0; instance < ARRAY_SIZE(s_evtgBases); instance++)
+    {
+        if (MSDK_REG_NONSECURE_ADDR(s_evtgBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
+        {
+            break;
+        }
+    }
+
+    assert(instance < ARRAY_SIZE(s_evtgBases));
+
+    return instance;
+}
+#endif /* EVTG_DRIVER_CLK_CTRL */
 
 /*!
  * brief Initialize EVTG with a user configuration structure.
@@ -25,6 +73,11 @@
  */
 void EVTG_Init(EVTG_Type *base, evtg_index_t evtgIndex, evtg_config_t *psConfig)
 {
+#if defined(EVTG_DRIVER_CLK_CTRL)
+    /* Ungate the EVTG clock. */
+    CLOCK_EnableClock(s_evtgClocks[EVTG_GetInstance(base)]);
+#endif /* EVTG_DRIVER_CLK_CTRL */
+
     /* Configure Flip-Flop as expected mode. */
     base->EVTG_INST[(uint8_t)evtgIndex].EVTG_CTRL = EVTG_EVTG_INST_EVTG_CTRL_MODE_SEL((uint16_t)psConfig->flipflopMode);
 
@@ -103,6 +156,24 @@ void EVTG_Init(EVTG_Type *base, evtg_index_t evtgIndex, evtg_config_t *psConfig)
     base->EVTG_INST[(uint8_t)evtgIndex].EVTG_AOI1_FILT |=
         (EVTG_EVTG_INST_EVTG_AOI1_FILT_FILT_CNT((uint16_t)psConfig->aoi1Config.aoiOutFilterConfig.sampleCount) |
          EVTG_EVTG_INST_EVTG_AOI1_FILT_FILT_PER(psConfig->aoi1Config.aoiOutFilterConfig.samplePeriod));
+}
+
+/*!
+ * brief De-initialize EVTG.
+ *
+ * This function gates the EVTG peripheral clock. It is the counterpart of ref EVTG_Init().
+ *
+ * param base EVTG base address.
+ */
+void EVTG_Deinit(EVTG_Type *base)
+{
+#if defined(EVTG_DRIVER_CLK_CTRL)
+    /* Gate the EVTG clock. */
+    CLOCK_DisableClock(s_evtgClocks[EVTG_GetInstance(base)]);
+#else
+    /* Suppress unused-parameter warning when driver clock control is disabled. */
+    (void)base;
+#endif /* EVTG_DRIVER_CLK_CTRL */
 }
 
 /*!

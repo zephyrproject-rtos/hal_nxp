@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_JPEGDEC_H_
-#define _FSL_JPEGDEC_H_
+#ifndef FSL_JPEGDEC_H_
+#define FSL_JPEGDEC_H_
 
 #include "fsl_common.h"
 
@@ -468,4 +468,4 @@ void JPEGDEC_DescptReset(jpegdec_descpt_t *descriptor);
 
 /*! @}*/
 
-#endif /* _FSL_JPEGDEC_H_ */
+#endif /* FSL_JPEGDEC_H_ */

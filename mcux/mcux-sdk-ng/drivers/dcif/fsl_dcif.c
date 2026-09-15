@@ -94,7 +94,7 @@ static void DCIF_ResetRegister(DCIF_Type *base)
     base->CTRLDESC2_L1          = 0U;
     base->CTRLDESC3_L1          = 0U;
     base->CTRLDESC4_L1          = 0U;
-    base->CTRLDESC5_L1          = 0U;
+    /* CTRLDESC5_L1 is read-only, do not write. */
 }
 
 /*!

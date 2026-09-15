@@ -20,7 +20,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief TSC driver version */
-#define FSL_TSC_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3. */
+#define FSL_TSC_DRIVER_VERSION (MAKE_VERSION(2, 0, 4)) /*!< Version 2.0.4. */
 
 /*!
  * @ Controller detection mode.
@@ -439,11 +439,11 @@ static inline void TSC_EnableDebugMode(TSC_Type *base, bool enable)
 {
     if (enable)
     {
-        base->DEBUG_MODE |= TSC_DEBUG_MODE_DEBUG_EN_MASK;
+        base->DEBUG_MODE &= ~TSC_DEBUG_MODE_DEBUG_EN_MASK;
     }
     else
     {
-        base->DEBUG_MODE &= ~TSC_DEBUG_MODE_DEBUG_EN_MASK;
+        base->DEBUG_MODE |= TSC_DEBUG_MODE_DEBUG_EN_MASK;
     }
 }
 

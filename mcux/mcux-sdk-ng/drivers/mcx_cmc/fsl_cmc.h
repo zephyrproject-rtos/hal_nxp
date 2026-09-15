@@ -17,7 +17,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief CMC driver version 2.5.0. */
-#define FSL_CMC_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+#define FSL_CMC_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
 /* @} */
 
 #if (defined(FSL_FEATURE_MCX_CMC_HAS_BSR_SCR_BIT) && FSL_FEATURE_MCX_CMC_HAS_BSR_SCR_BIT)
@@ -970,6 +970,7 @@ void CMC_ConfigFlashMode(CMC_Type *base, bool wake, bool doze, bool disable);
  * @name Debug Configuration.
  */
 
+#if !(defined(FSL_FEATURE_MCX_CMC_HAS_DBGCTL_REG) && (FSL_FEATURE_MCX_CMC_HAS_DBGCTL_REG == 0U))
 /*!
  * @brief Enables/Disables debug Operation when the core sleep.
  *
@@ -991,6 +992,7 @@ static inline void CMC_EnableDebugOperation(CMC_Type *base, bool enable)
         base->DBGCTL |= CMC_DBGCTL_SOD_MASK;
     }
 }
+#endif /* FSL_FEATURE_MCX_CMC_HAS_DBGCTL_REG */
 
 /* @} */
 

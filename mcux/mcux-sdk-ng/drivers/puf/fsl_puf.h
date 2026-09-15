@@ -1,13 +1,13 @@
 /*
- * Copyright 2018-2021, 2025 NXP
+ * Copyright 2018-2021, 2025-2026 NXP
  * All rights reserved.
  *
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _PUF_H_
-#define _PUF_H_
+#ifndef FSL_PUF_H_
+#define FSL_PUF_H_
 
 #include <stddef.h>
 #include <stdint.h>
@@ -24,9 +24,9 @@
  */
 /*! @name Driver version */
 /*! @{ */
-/*! @brief PUF driver version. Version 2.2.0.
+/*! @brief PUF driver version. Version 2.2.1.
  *
- * Current version: 2.2.0
+ * Current version: 2.2.1
  *
  * Change log:
  * - 2.0.0
@@ -59,8 +59,11 @@
  * - 2.2.0
  * - Add support for kPUF_KeySlot4.
  * - Add new PUF_ClearKey() function, that clears a desired PUF internal HW key register.
+ * - 2.2.1
+ *   - Fix CERT-C violations (ARR30-C/OVERRUN in PUF_GetHwKey, INT30-C in PUF_GetKey).
  */
-#define FSL_PUF_DRIVER_VERSION (MAKE_VERSION(2, 1, 7))
+#define FSL_PUF_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+
 /*! @} */
 
 typedef enum _puf_key_index_register
@@ -348,4 +351,4 @@ status_t PUF_PowerCycle(PUF_Type *base, puf_config_t *conf);
 }
 #endif /* __cplusplus */
 
-#endif /* _PUF_H_ */
+#endif /* PUF_H_ */

@@ -296,7 +296,7 @@ static inline void NETC_PortGetTcPreemption(NETC_PORT_Type *base, netc_hw_tc_idx
  */
 static inline void NETC_PortGetTGSFPConfig(NETC_PORT_Type *base, netc_port_tg_preemption_config *config)
 {
-    config->holdAdvance = (base->PTGSHAR & NETC_PORT_PTGSHAR_HOLDADVANCE_MASK) >> NETC_PORT_PTGSHAR_HOLDADVANCE_SHIFT;
+    config->holdAdvance = ((base->PTGSHAR & NETC_PORT_PTGSHAR_HOLDADVANCE_MASK) >> NETC_PORT_PTGSHAR_HOLDADVANCE_SHIFT) & 0xffffU;
     config->releaseAdvance =
         (base->PTGSRAR & NETC_PORT_PTGSRAR_RELEASEADVANCE_MASK) >> NETC_PORT_PTGSRAR_RELEASEADVANCE_SHIFT;
 }

@@ -76,8 +76,13 @@ static void XSPI_TransferEDMACallback(edma_handle_t *handle, void *param, bool t
     xspi_edma_private_handle_t *xspiPrivateHandle = (xspi_edma_private_handle_t *)param;
 
     /* Avoid warning for unused parameters. */
-    handle = handle;
-    tcds   = tcds;
+    (void)handle;
+    (void)tcds;
+
+    if ((xspiPrivateHandle == NULL) || (xspiPrivateHandle->handle == NULL))
+    {
+        return;
+    }
 
     if (transferDone)
     {
@@ -114,6 +119,7 @@ void XSPI_TransferCreateHandleEDMA(XSPI_Type *base,
                                    edma_handle_t *txDmaHandle,
                                    edma_handle_t *rxDmaHandle)
 {
+    assert(base);
     assert(handle);
 
     uint32_t instance = XSPI_GetInstance(base);
@@ -165,6 +171,7 @@ status_t XSPI_TransferEDMA(XSPI_Type *base, xspi_edma_handle_t *handle, xspi_tra
     uint32_t instance = XSPI_GetInstance(base);
     uint8_t power     = 0;
 
+    assert(base);
     assert(handle);
     assert(xfer);
 
@@ -182,6 +189,7 @@ status_t XSPI_TransferEDMA(XSPI_Type *base, xspi_edma_handle_t *handle, xspi_tra
 
     if ((xfer->cmdType == kXSPI_Write) || (xfer->cmdType == kXSPI_Config))
     {
+        assert(handle->txDmaHandle);
         power          = XSPI_CalculatePower(4U * handle->count);
         handle->nbytes = xfer->dataSize;
         /* Prepare transfer. */
@@ -203,6 +211,7 @@ status_t XSPI_TransferEDMA(XSPI_Type *base, xspi_edma_handle_t *handle, xspi_tra
                                         xfer->lockArbitration);
         if (status != kStatus_Success)
         {
+            handle->state = kXSPI_Idle;
             return status;
         }
         while (XSPI_CheckTxBuffLockOpen(base) == false)
@@ -218,10 +227,12 @@ status_t XSPI_TransferEDMA(XSPI_Type *base, xspi_edma_handle_t *handle, xspi_tra
     }
     else if (xfer->cmdType == kXSPI_Read)
     {
+        assert(handle->rxDmaHandle);
         status = XSPI_StartIpAccess(base, xfer->deviceAddress, xfer->seqIndex, xfer->dataSize, xfer->targetGroup,
                                     xfer->lockArbitration);
         if (status != kStatus_Success)
         {
+            handle->state = kXSPI_Idle;
             return status;
         }
         XSPI_ClearRxBuffer(base);
@@ -229,13 +240,14 @@ status_t XSPI_TransferEDMA(XSPI_Type *base, xspi_edma_handle_t *handle, xspi_tra
 
         if (xfer->dataSize < 4U * (uint32_t)handle->count)
         {
-            handle->nbytes = (uint8_t)xfer->dataSize;
+            handle->nbytes = xfer->dataSize;
         }
         else
         {
             /* Check the handle->count is power of 2 */
             if (((handle->count) & (handle->count - 1U)) != 0U)
             {
+                handle->state = kXSPI_Idle;
                 return kStatus_InvalidArgument;
             }
             /* Store the initially configured eDMA minor byte transfer count into the XSPI handle */
@@ -250,7 +262,7 @@ status_t XSPI_TransferEDMA(XSPI_Type *base, xspi_edma_handle_t *handle, xspi_tra
 
         /* Submit transfer. */
         (void)EDMA_SubmitTransfer(handle->rxDmaHandle, &xferConfig);
-        EDMA_SetModulo(handle->txDmaHandle->base, handle->txDmaHandle->channel, (edma_modulo_t)power,
+        EDMA_SetModulo(handle->rxDmaHandle->base, handle->rxDmaHandle->channel, (edma_modulo_t)power,
                        kEDMA_ModuloDisable);
         EDMA_SetCallback(handle->rxDmaHandle, XSPI_TransferEDMACallback, &s_edmaPrivateHandle[instance]);
         EDMA_StartTransfer(handle->rxDmaHandle);
@@ -264,6 +276,7 @@ status_t XSPI_TransferEDMA(XSPI_Type *base, xspi_edma_handle_t *handle, xspi_tra
                                     xfer->lockArbitration);
         if (status != kStatus_Success)
         {
+            handle->state = kXSPI_Idle;
             return status;
         }
         /* Wait for bus idle. */
@@ -293,6 +306,7 @@ status_t XSPI_TransferEDMA(XSPI_Type *base, xspi_edma_handle_t *handle, xspi_tra
  */
 void XSPI_TransferAbortEDMA(XSPI_Type *base, xspi_edma_handle_t *handle)
 {
+    assert(base);
     assert(handle);
 
     if ((base->SR & XSPI_SR_TXWA_MASK) != 0x00U)
@@ -312,6 +326,7 @@ void XSPI_TransferAbortEDMA(XSPI_Type *base, xspi_edma_handle_t *handle)
 
 status_t XSPI_TransferGetTransferCountEDMA(XSPI_Type *base, xspi_edma_handle_t *handle, size_t *count)
 {
+    assert(base);
     assert(handle);
     assert(count);
 

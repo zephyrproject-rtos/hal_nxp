@@ -530,7 +530,7 @@ void SFA_GetDefaultConfig(sfa_config_t *config)
 {
     assert(config);
 
-    (void *)memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->mode                  = kSFA_FrequencyMeasurement0;
     config->cutSelect             = kSFA_CUTSelect0;

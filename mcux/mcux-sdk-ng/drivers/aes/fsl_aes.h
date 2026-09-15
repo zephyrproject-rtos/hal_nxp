@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020 NXP
+ * Copyright 2016-2017, 2020, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,9 +23,11 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Defines LPC AES driver version 2.0.3.
+/*! @brief Defines LPC AES driver version 2.0.4.
  *
  * Change log:
+ * - Version 2.0.4
+ *   - Bound-check tagSize in AES_DecryptTagGcm() before copying the tag into the local buffer.
  * - Version 2.0.3
  *   - Edit aes_one_block() function to be interrupt safe.
  * - Version 2.0.2
@@ -35,7 +37,7 @@
  * - Version 2.0.0
  *   - initial version
  */
-#define FSL_AES_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+#define FSL_AES_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*! @} */
 
 /*******************************************************************************

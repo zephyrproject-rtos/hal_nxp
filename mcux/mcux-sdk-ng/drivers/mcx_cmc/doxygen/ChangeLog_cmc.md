@@ -1,5 +1,11 @@
 # MCX_CMC
 
+## [2.6.0]
+
+- New Features
+  - Added feature macro FSL_FEATURE_MCX_CMC_HAS_DBGCTL_REG to be compatible
+    with platforms where CMC has no DBGCTL register.
+
 ## [2.5.0]
 
 - New features

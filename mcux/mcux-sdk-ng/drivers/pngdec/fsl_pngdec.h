@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_PNGDEC_H_
-#define _FSL_PNGDEC_H_
+#ifndef FSL_PNGDEC_H_
+#define FSL_PNGDEC_H_
 
 #include "fsl_common.h"
 
@@ -324,4 +324,4 @@ status_t PNGDEC_Decode(PNGDEC_Type *base, pngdec_image_t *image, uint32_t *statu
 
 /*! @}*/
 
-#endif /* _FSL_PNGDEC_H_ */
+#endif /* FSL_PNGDEC_H_ */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2025 NXP
+ * Copyright 2023-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -19,8 +19,8 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*! @{ */
-/*! @brief SAR ADC driver version 2.3.0. */
-#define FSL_SAR_ADC_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @brief SAR ADC driver version 2.4.0. */
+#define FSL_SAR_ADC_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*! @} */
 
 #define ADC_GROUP_COUNTS               FSL_FEATURE_ADC_CHANNEL_GROUPS_COUNT
@@ -499,7 +499,7 @@ typedef struct _adc_config
 #endif /* FSL_FEATURE_ADC_HAS_AMSIO */
 #if defined(FSL_FEATURE_ADC_HAS_DSDR) && (FSL_FEATURE_ADC_HAS_DSDR==1U)
     uint16_t convDelay;           /*!< Specifies the delay in terms of the number of module clock cycles. In case
-                                  the channel to convert changed since the last conversion and this new channel 
+                                  the channel to convert changed since the last conversion and this new channel
                                   is an external channel, the conversion starts after a delay configured by convDelay. */
 #endif /* FSL_FEATURE_ADC_HAS_DSDR */
 #if defined(FSL_FEATURE_ADC_HAS_BCTUMODE) && (FSL_FEATURE_ADC_HAS_BCTUMODE==1U)

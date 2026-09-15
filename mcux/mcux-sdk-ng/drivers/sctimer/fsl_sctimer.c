@@ -270,7 +270,7 @@ status_t SCTIMER_SetupPwm(SCT_Type *base,
                           uint32_t srcClock_Hz,
                           uint32_t *event)
 {
-    status_t status = kStatus_Fail;
+    status_t status;
     status_t status2;
     uint32_t period, pulsePeriod = 0;
     uint32_t sctClock    = srcClock_Hz / (((base->CTRL & SCT_CTRL_PRE_L_MASK) >> SCT_CTRL_PRE_L_SHIFT) + 1U);
@@ -561,6 +561,8 @@ static status_t SCTIMER_FindSharedPeriodEvent(SCT_Type *base, uint32_t period, b
         }
         matchReg       = base->EV[ev].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
         existingCenter = (0U != (base->CTRL & SCT_CTRL_BIDIR_L_MASK));
+
+        assert(matchReg < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE);
 
         if ((base->MATCH[matchReg] == period) && (existingCenter == requestCenter))
         {
@@ -1130,6 +1132,10 @@ status_t SCTIMER_UpdateComplementaryPwmDutycycle(SCT_Type *base,
     periodMatchReg   = base->EV[handle->periodEvent].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
     highFallMatchReg = base->EV[handle->highFallEvent].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
     lowRiseMatchReg  = base->EV[handle->lowRiseEvent].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
+
+    assert((periodMatchReg < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE) &&
+           (highFallMatchReg < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE) &&
+           (lowRiseMatchReg < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE));
 
     period  = base->MATCH[periodMatchReg];
     duty    = (uint32_t)((((uint64_t)period * dutyCyclePercent) / 100U) & 0xFFFFFFFFU);

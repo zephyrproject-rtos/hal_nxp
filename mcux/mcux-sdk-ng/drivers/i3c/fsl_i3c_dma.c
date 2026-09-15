@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2025 NXP
+ * Copyright 2022-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -392,8 +392,6 @@ static void I3C_MasterSetTxDMA(
 
     if (handle->transfer.busType == kI3C_TypeI3CDdr)
     {
-        instance = I3C_GetInstance(base);
-
 #if defined(FSL_FEATURE_I3C_HAS_NO_MASTER_DMA_WDATA_REG) && (FSL_FEATURE_I3C_HAS_NO_MASTER_DMA_WDATA_REG)
         address = (uint32_t)&base->MWDATAB;
 #else

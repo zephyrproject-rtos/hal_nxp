@@ -1,5 +1,11 @@
 # PUF
 
+## [2.2.1]
+
+- Fix CERT-C violations:
+  - ARR30-C / OVERRUN in PUF_GetHwKey(): bound the KEYMASK[] register index by PUF_KEYMASK_COUNT to avoid out-of-bounds access.
+  - INT30-C in PUF_GetKey(): add keySize range check to prevent unsigned integer wraparound.
+
 ## [2.2.0]
 
 - Add support for kPUF_KeySlot4.

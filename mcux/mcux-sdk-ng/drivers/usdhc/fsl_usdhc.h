@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Driver version */
-#define FSL_USDHC_DRIVER_VERSION (MAKE_VERSION(2U, 8U, 9U))
+#define FSL_USDHC_DRIVER_VERSION (MAKE_VERSION(2U, 8U, 10U))
 /*! @} */
 
 /*! @brief Maximum block count can be set one time */

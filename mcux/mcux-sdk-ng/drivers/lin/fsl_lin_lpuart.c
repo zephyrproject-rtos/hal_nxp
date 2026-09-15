@@ -37,7 +37,7 @@
  *
  * $Justification lin_lpuart_c_ref_4$
  * The LIN timerGetTimeInterval callback function shall always be installed for
- * buadrate calculation if user wants to use autobad function, and shall configured
+ * baudrate calculation if user wants to use autobaud function, and shall configured
  * by user during lin initialization.
  *
  * $Justification lin_lpuart_c_ref_5$
@@ -79,12 +79,12 @@
  * $Justification lin_lpuart_c_ref_13$
  * The LIN driver test cases are run in bare metal environment and can only be usd
  * in non-blocking interrupt way.
- * 
+ *
  * $Justification lin_lpuart_c_ref_14$
  * Normally no other interrupt status can be detected, the false branch can only be
  * covered when the interrupt enablement is corrupted in user application such as
  * other unrelated interrupt is enabled by mistake.
- * 
+ *
  * $Justification lin_lpuart_c_ref_15$
  * The measurement overflow can only happen when the registered function uses a timer
  * whose counter's clock source is not set properly, and the autobaud sequence the LIN
@@ -1897,7 +1897,7 @@ lin_status_t LIN_LPUART_AutoBaudCapture(uint32_t instance)
         {
             return LIN_ERROR; /* GCOVR_EXCL_LINE */
         }
-        
+
         /* Get two bits time length */
         s_timeMeasure[instance] += tmpTime;
         s_countMeasure[instance]++;

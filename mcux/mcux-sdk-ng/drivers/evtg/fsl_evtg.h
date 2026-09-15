@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief EVTG driver version. */
-#define FSL_EVTG_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3. */
+#define FSL_EVTG_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0. */
 /*! @} */
 
 /*! @brief EVTG instance index. */
@@ -215,6 +215,15 @@ extern "C" {
  * @param psConfig  EVTG initial configuration structure pointer.
  */
 void EVTG_Init(EVTG_Type *base, evtg_index_t evtgIndex, evtg_config_t *psConfig);
+
+/*!
+ * @brief De-initialize EVTG.
+ *
+ * This function gates the EVTG peripheral clock. It is the counterpart of @ref EVTG_Init().
+ *
+ * @param base EVTG base address.
+ */
+void EVTG_Deinit(EVTG_Type *base);
 
 /*!
  * @brief Loads default values to the EVTG configuration structure.

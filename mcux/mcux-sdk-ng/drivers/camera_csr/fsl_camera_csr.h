@@ -76,4 +76,4 @@ void CAMERACSR_PixelFormatting(BLK_CTRL_CAMERAMIX_Type *camera_csr, camera_csr_p
  *@}
  */
 
-#endif /* _FSL_MIPI_CSI2RX_H_ */
+#endif /* FSL_MIPI_CSI2RX_H_ */

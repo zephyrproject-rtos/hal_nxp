@@ -624,6 +624,7 @@ status_t SPC_EnableLowPowerModeSystemLowVoltageDetect(SPC_Type *base, bool enabl
 }
 
 #if (defined(FSL_FEATURE_MCX_SPC_HAS_IOVDD_VD) && FSL_FEATURE_MCX_SPC_HAS_IOVDD_VD)
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_VD_IO_CFG_LVSEL) && (FSL_FEATURE_MCX_SPC_HAS_VD_IO_CFG_LVSEL == 0U))
 /*!
  * brief Set IO VDD Low-Voltage level selection.
  *
@@ -644,6 +645,7 @@ void SPC_SetIOVDDLowVoltageLevel(SPC_Type *base, spc_low_voltage_level_select_t 
 
     base->VD_IO_CFG = reg;
 }
+#endif /* FSL_FEATURE_MCX_SPC_HAS_VD_IO_CFG_LVSEL */
 
 /*!
  * brief Configs IO VDD voltage detect options.
@@ -662,20 +664,29 @@ void SPC_SetIOVoltageDetectConfig(SPC_Type *base, const spc_io_voltage_detect_co
 
     uint32_t reg = 0UL;
 
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_VD_IO_CFG_LVSEL) && (FSL_FEATURE_MCX_SPC_HAS_VD_IO_CFG_LVSEL == 0U))
     /* Set trip voltage level. */
     SPC_SetIOVDDLowVoltageLevel(base, config->level);
+#endif /* FSL_FEATURE_MCX_SPC_HAS_VD_IO_CFG_LVSEL */
 
     reg = base->VD_IO_CFG;
-    reg &= ~(SPC_VD_IO_CFG_LVDRE_MASK | SPC_VD_IO_CFG_LVDIE_MASK | SPC_VD_IO_CFG_HVDRE_MASK | SPC_VD_IO_CFG_HVDIE_MASK);
+    reg &= ~(SPC_VD_IO_CFG_LVDRE_MASK | SPC_VD_IO_CFG_LVDIE_MASK
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD) && (FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD == 0U))
+             | SPC_VD_IO_CFG_HVDRE_MASK | SPC_VD_IO_CFG_HVDIE_MASK
+#endif /* FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD */
+    );
 
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD) && (FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD == 0U))
     reg |= (config->option.HVDInterruptEnable) ? SPC_VD_IO_CFG_HVDIE(1U) : SPC_VD_IO_CFG_HVDIE(0U);
-    reg |= (config->option.LVDInterruptEnable) ? SPC_VD_IO_CFG_LVDIE(1U) : SPC_VD_IO_CFG_LVDIE(0U);
     reg |= (config->option.HVDResetEnable) ? SPC_VD_IO_CFG_HVDRE(1U) : SPC_VD_IO_CFG_HVDRE(0U);
+#endif /* FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD */
+    reg |= (config->option.LVDInterruptEnable) ? SPC_VD_IO_CFG_LVDIE(1U) : SPC_VD_IO_CFG_LVDIE(0U);
     reg |= (config->option.LVDResetEnable) ? SPC_VD_IO_CFG_LVDRE(1U) : SPC_VD_IO_CFG_LVDRE(0U);
 
     base->VD_IO_CFG = reg;
 }
 
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD) && (FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD == 0U))
 /*!
  * brief Enables the IO VDD High Voltage Detector in Active mode.
  *
@@ -705,6 +716,7 @@ status_t SPC_EnableActiveModeIOHighVoltageDetect(SPC_Type *base, bool enable)
 
     return status;
 }
+#endif /* FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD */
 
 /*!
  * brief Enables the IO VDD Low Voltage Detector in Active mode.
@@ -736,6 +748,7 @@ status_t SPC_EnableActiveModeIOLowVoltageDetect(SPC_Type *base, bool enable)
     return status;
 }
 
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD) && (FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD == 0U))
 /*!
  * brief Enables the IO VDD High Voltage Detector in Low Power mode.
  *
@@ -764,6 +777,7 @@ status_t SPC_EnableLowPowerModeIOHighVoltageDetect(SPC_Type *base, bool enable)
 
     return status;
 }
+#endif /* FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD */
 
 /*!
  * brief Enables the IO VDD Low Voltage Detector in Low Power mode.

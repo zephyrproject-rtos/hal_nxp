@@ -1,5 +1,10 @@
 # PLS_PMU
 
+## [2.3.0]
+- New Features
+    - Added PMU_UpdateDCDCMainMode() API to update DCDC_Main power mode (normal/low power mode).
+    - Added PMU_GetDCDCMainMode() API to get the current power mode of the main DCDC.
+
 ## [2.2.0]
 - Deprecated APIs
     - Deprecate PMU_EnableFRO16K and PMU_UpdateDCDCWakeupWatchdogCounterValue functions

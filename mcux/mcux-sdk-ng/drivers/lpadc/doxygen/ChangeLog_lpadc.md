@@ -1,5 +1,15 @@
 # LPADC
 
+## [2.11.0]
+
+- New Features
+  - Added the LPADC_USE_FIXED_POINT_GAIN_CALCULATION configuration macro. When
+    set to 1, LPADC_FinishAutoCalibration() calculates the gain conversion
+    result with integer-only arithmetic instead of the float/double software
+    library, saving several kB of flash on code size sensitive devices. The
+    fixed point result keeps the gain fraction in Q17.14, so the two least
+    significant bits of the gain conversion result are always zero.
+
 ## [2.10.3]
 
 - Bug Fixes

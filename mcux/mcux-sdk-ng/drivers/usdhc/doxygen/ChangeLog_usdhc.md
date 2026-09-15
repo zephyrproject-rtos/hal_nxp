@@ -1,5 +1,10 @@
 # USDHC
 
+## [2.8.10]
+
+- Bug Fixes
+  - Fixed some quality issues.
+
 ## [2.8.9]
 
 - Bug Fixes

@@ -1,5 +1,12 @@
 # SDMA
 
+## [2.4.5]
+
+- Bug Fixes
+  - Fixed SDMA_HandleIRQ() storing a CPU-view address into CCB.currentBDAddr
+    on platforms with FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET. Use baseBDAddr
+    plus BD-index byte offset instead to provide the correct DMA-view address.
+
 ## [2.4.4]
 
 - Bug Fixes

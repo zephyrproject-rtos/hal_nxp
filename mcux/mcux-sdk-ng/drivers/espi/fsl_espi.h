@@ -20,7 +20,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_ESPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_ESPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
 #define ESPI_INVALID_PORT (0xFFU)

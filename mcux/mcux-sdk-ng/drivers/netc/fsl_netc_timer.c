@@ -395,7 +395,6 @@ void NETC_TimerAddOffset(netc_timer_handle_t *handle, int64_t nanosecond)
     }
 
     /* Calculate a new offset value based on the current one. */
-    assert(offset <= UINT64_MAX - ((uint64_t)handle->hw.base->TMROFF_H << 32U) - handle->hw.base->TMROFF_L);
     offset += ((uint64_t)handle->hw.base->TMROFF_H << 32U) + handle->hw.base->TMROFF_L;
     /* Update the latest offset. */
     handle->hw.base->TMROFF_L = (uint32_t)offset;

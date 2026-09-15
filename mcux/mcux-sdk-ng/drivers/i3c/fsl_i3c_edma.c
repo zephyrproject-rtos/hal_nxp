@@ -223,24 +223,22 @@ static status_t I3C_MasterInitTransferStateMachineEDMA(I3C_Type *base, i3c_maste
     return result;
 }
 
-static void I3C_SetEDMATcd(i3c_master_edma_handle_t *handle,
-                           edma_transfer_config_t *xferConfig,
-                           uint32_t tcdIdx,
-                           bool isEndTcd)
+static void I3C_SetEDMATcd(
+    I3C_Type *base, edma_handle_t *txDmaHandle, edma_transfer_config_t *xferConfig, uint32_t tcdIdx, bool isEndTcd)
 {
     assert(tcdIdx < (sizeof(s_edma_tcd) / sizeof(edma_tcd_t) / ARRAY_SIZE(kI3cBases)));
 
-    uint32_t instance   = I3C_GetInstance(handle->base);
+    uint32_t instance   = I3C_GetInstance(base);
     edma_tcd_t *edmaTcd = isEndTcd ? NULL : &s_edma_tcd[instance][tcdIdx + 1U];
 
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
-    EDMA_Type *edmaBase = handle->txDmaHandle->base;
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
+    EDMA_Type *edmaBase = txDmaHandle->base;
     EDMA_TcdResetExt(edmaBase, &s_edma_tcd[instance][tcdIdx]);
 #else
     EDMA_TcdReset(&s_edma_tcd[instance][tcdIdx]);
 #endif
 
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
     EDMA_TcdSetTransferConfigExt(edmaBase, &s_edma_tcd[instance][tcdIdx], xferConfig, edmaTcd);
 #else
     EDMA_TcdSetTransferConfig(&s_edma_tcd[instance][tcdIdx], xferConfig, edmaTcd);
@@ -248,7 +246,7 @@ static void I3C_SetEDMATcd(i3c_master_edma_handle_t *handle,
 
     if (isEndTcd)
     {
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
         EDMA_TcdEnableInterruptsExt(edmaBase, &s_edma_tcd[instance][tcdIdx], kEDMA_MajorInterruptEnable);
 #else
         EDMA_TcdEnableInterrupts(&s_edma_tcd[instance][tcdIdx], kEDMA_MajorInterruptEnable);
@@ -256,7 +254,7 @@ static void I3C_SetEDMATcd(i3c_master_edma_handle_t *handle,
     }
     else
     {
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
         EDMA_TcdDisableInterruptsExt(edmaBase, &s_edma_tcd[instance][tcdIdx], kEDMA_MajorInterruptEnable);
 #else
         EDMA_TcdDisableInterrupts(&s_edma_tcd[instance][tcdIdx], kEDMA_MajorInterruptEnable);
@@ -274,7 +272,7 @@ static void I3C_MasterSetTxEDMA(I3C_Type *base,
     {
         EDMA_PrepareTransfer(txChannelConfig, data, sizeof(uint8_t), (uint32_t *)(uint32_t)&base->MWDATAB1,
                              sizeof(uint8_t), 1, dataSize, kEDMA_MemoryToPeripheral);
-        I3C_SetEDMATcd(handle, txChannelConfig, 0, true);
+        I3C_SetEDMATcd(base, handle->txDmaHandle, txChannelConfig, 0, true);
     }
     else
     {
@@ -282,17 +280,17 @@ static void I3C_MasterSetTxEDMA(I3C_Type *base,
         {
             EDMA_PrepareTransfer(txChannelConfig, data, sizeof(uint8_t), (uint32_t *)(uint32_t)&base->MWDATABE,
                                  sizeof(uint8_t), 1, dataSize, kEDMA_MemoryToPeripheral);
-            I3C_SetEDMATcd(handle, txChannelConfig, 0, true);
+            I3C_SetEDMATcd(base, handle->txDmaHandle, txChannelConfig, 0, true);
         }
         else
         {
             EDMA_PrepareTransfer(txChannelConfig, data, sizeof(uint8_t), (uint32_t *)(uint32_t)&base->MWDATAB1,
                                  sizeof(uint8_t), 1, dataSize - 1U, kEDMA_MemoryToPeripheral);
-            I3C_SetEDMATcd(handle, txChannelConfig, 0, false);
+            I3C_SetEDMATcd(base, handle->txDmaHandle, txChannelConfig, 0, false);
             EDMA_PrepareTransfer(txChannelConfig, (uint8_t *)data + dataSize - 1U, sizeof(uint8_t),
                                  (uint32_t *)(uint32_t)&base->MWDATABE, sizeof(uint8_t), 1, 1U,
                                  kEDMA_MemoryToPeripheral);
-            I3C_SetEDMATcd(handle, txChannelConfig, 1, true);
+            I3C_SetEDMATcd(base, handle->txDmaHandle, txChannelConfig, 1, true);
         }
     }
 }
@@ -313,23 +311,23 @@ static void I3C_MasterPrepareEDMATransfer(I3C_Type *base, i3c_master_edma_handle
             EDMA_PrepareTransfer(&xferConfig, &handle->subaddressBuffer[0], sizeof(uint8_t),
                                  (uint32_t *)(uint32_t)&base->MWDATAB1, sizeof(uint8_t), 1, handle->subaddressCount,
                                  kEDMA_MemoryToPeripheral);
-            I3C_SetEDMATcd(handle, &xferConfig, 0, false);
+            I3C_SetEDMATcd(base, handle->txDmaHandle, &xferConfig, 0, false);
 
             if (dataSize == 1U)
             {
                 EDMA_PrepareTransfer(&xferConfig, data, sizeof(uint8_t), (uint32_t *)(uint32_t)&base->MWDATABE,
                                      sizeof(uint8_t), 1, 1, kEDMA_MemoryToPeripheral);
-                I3C_SetEDMATcd(handle, &xferConfig, 1, true);
+                I3C_SetEDMATcd(base, handle->txDmaHandle, &xferConfig, 1, true);
             }
             else
             {
                 EDMA_PrepareTransfer(&xferConfig, data, sizeof(uint8_t), (uint32_t *)(uint32_t)&base->MWDATAB1,
                                      sizeof(uint8_t), 1, dataSize - 1U, kEDMA_MemoryToPeripheral);
-                I3C_SetEDMATcd(handle, &xferConfig, 1, false);
+                I3C_SetEDMATcd(base, handle->txDmaHandle, &xferConfig, 1, false);
                 EDMA_PrepareTransfer(&xferConfig, (uint8_t *)data + dataSize - 1U, sizeof(uint8_t),
                                      (uint32_t *)(uint32_t)&base->MWDATABE, sizeof(uint8_t), 1, 1U,
                                      kEDMA_MemoryToPeripheral);
-                I3C_SetEDMATcd(handle, &xferConfig, 2, true);
+                I3C_SetEDMATcd(base, handle->txDmaHandle, &xferConfig, 2, true);
             }
         }
         else
@@ -857,17 +855,6 @@ static void I3C_SlaveTransferEDMACallback(edma_handle_t *dmaHandle, void *param,
         if (i3cHandle->txDmaHandle == dmaHandle)
         {
             i3cHandle->base->SDMACTRL &= ~I3C_SDMACTRL_DMATB_MASK;
-
-            if (i3cHandle->transfer.txDataSize > 1U)
-            {
-                /* Ensure there's space in the Tx FIFO. */
-                while ((i3cHandle->base->SDATACTRL & I3C_SDATACTRL_TXFULL_MASK) != 0U)
-                {
-                }
-                /* Send the last byte. */
-                i3cHandle->base->SWDATABE =
-                    *(uint8_t *)((uintptr_t)i3cHandle->transfer.txData + i3cHandle->transfer.txDataSize - 1U);
-            }
         }
         else
         {
@@ -939,24 +926,30 @@ void I3C_SlaveTransferCreateHandleEDMA(I3C_Type *base,
 
 static void I3C_SlavePrepareTxEDMA(I3C_Type *base, i3c_slave_edma_handle_t *handle)
 {
+    uint32_t instance               = I3C_GetInstance(base);
+    i3c_slave_edma_transfer_t *xfer = &handle->transfer;
     edma_transfer_config_t txConfig;
     uint32_t *txFifoBase;
-    i3c_slave_edma_transfer_t *xfer = &handle->transfer;
 
     if (xfer->txDataSize == 1U)
     {
         txFifoBase = (uint32_t *)(uintptr_t)&base->SWDATABE;
         EDMA_PrepareTransfer(&txConfig, xfer->txData, 1, (void *)txFifoBase, 1, 1, xfer->txDataSize,
                              kEDMA_MemoryToPeripheral);
+        I3C_SetEDMATcd(base, handle->txDmaHandle, &txConfig, 0, true);
     }
     else
     {
         txFifoBase = (uint32_t *)(uintptr_t)&base->SWDATAB1;
         EDMA_PrepareTransfer(&txConfig, xfer->txData, 1, (void *)txFifoBase, 1, 1, xfer->txDataSize - 1U,
                              kEDMA_MemoryToPeripheral);
+        I3C_SetEDMATcd(base, handle->txDmaHandle, &txConfig, 0, false);
+        EDMA_PrepareTransfer(&txConfig, xfer->txData + xfer->txDataSize - 1U, 1, (void *)(uintptr_t)&base->SWDATABE, 1,
+                             1, 1U, kEDMA_MemoryToPeripheral);
+        I3C_SetEDMATcd(base, handle->txDmaHandle, &txConfig, 1, true);
     }
 
-    (void)EDMA_SubmitTransfer(handle->txDmaHandle, &txConfig);
+    EDMA_InstallTCD(handle->txDmaHandle->base, handle->txDmaHandle->channel, &s_edma_tcd[instance][0]);
     EDMA_StartTransfer(handle->txDmaHandle);
 }
 

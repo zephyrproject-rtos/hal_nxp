@@ -611,7 +611,7 @@ status_t LCDIC_TransferCreateHandleDMA(LCDIC_Type *base,
  */
 status_t LCDIC_TransferDMA(LCDIC_Type *base, lcdic_dma_handle_t *handle, const lcdic_xfer_t *xfer)
 {
-    status_t status = kStatus_InvalidArgument;
+    status_t status;
 
     if (((kLCDIC_XferSendDataArray == xfer->mode) &&
          (NULL == handle->txDmaHandle)) || /* send mode but no TX DMA handle. */
@@ -676,7 +676,7 @@ status_t LCDIC_TransferDMA(LCDIC_Type *base, lcdic_dma_handle_t *handle, const l
  */
 status_t LCDIC_SendDataArrayDMA(LCDIC_Type *base, lcdic_dma_handle_t *handle, const lcdic_tx_xfer_t *xfer)
 {
-    status_t status = kStatus_InvalidArgument;
+    status_t status;
 
     if (NULL == handle->txDmaHandle)
     {
@@ -713,7 +713,7 @@ status_t LCDIC_SendDataArrayDMA(LCDIC_Type *base, lcdic_dma_handle_t *handle, co
  */
 status_t LCDIC_ReadDataArrayDMA(LCDIC_Type *base, lcdic_dma_handle_t *handle, const lcdic_rx_xfer_t *xfer)
 {
-    status_t status = kStatus_InvalidArgument;
+    status_t status;
 
     if (NULL == handle->rxDmaHandle) /* read mode but no RX DMA handle. */
     {

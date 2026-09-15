@@ -416,7 +416,7 @@ status_t LPI2C_MasterCheckAndClearError(LPI2C_Type *base, uint32_t status)
  */
 static status_t LPI2C_MasterWaitForTxReady(LPI2C_Type *base)
 {
-    status_t result = kStatus_Success;
+    status_t result;
     uint32_t status;
     size_t txCount;
     size_t txFifoSize = (size_t)FSL_FEATURE_LPI2C_FIFO_SIZEn(base);

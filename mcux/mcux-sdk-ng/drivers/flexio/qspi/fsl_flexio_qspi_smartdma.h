@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_FLEXIO_QSPI_SMARTDMA_H_
-#define _FSL_FLEXIO_QSPI_SMARTDMA_H_
+#ifndef FSL_FLEXIO_QSPI_SMARTDMA_H_
+#define FSL_FLEXIO_QSPI_SMARTDMA_H_
 
 #include "fsl_flexio_qspi.h"
 #include "fsl_smartdma.h"
@@ -122,4 +122,4 @@ void FLEXIO_QSPI_TransferAbortSMARTDMA(FLEXIO_QSPI_Type *base, flexio_qspi_smart
 /*!
  * @}
  */
-#endif /* _FSL_FLEXIO_QSPI_SMARTDMA_H_ */
+#endif /* FSL_FLEXIO_QSPI_SMARTDMA_H_ */

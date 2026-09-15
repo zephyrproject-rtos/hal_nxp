@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SPC driver version 2.12.1. */
-#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 12, 1))
+#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 13, 0))
 /*! @} */
 
 #define SPC_EVD_CFG_REG_EVDISO_SHIFT   0UL
@@ -85,7 +85,9 @@ enum
 enum _spc_voltage_detect_flags
 {
 #if (defined(FSL_FEATURE_MCX_SPC_HAS_IOVDD_VD) && FSL_FEATURE_MCX_SPC_HAS_IOVDD_VD)
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD) && (FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD == 0U))
     kSPC_IOVDDHighVoltageDetectFlag = SPC_VD_STAT_IOVDD_HVDF_MASK,      /*!< IO VDD High-Voltage detect flag. */
+#endif                                                                  /* FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD */
     kSPC_IOVDDLowVoltageDetectFlag  = SPC_VD_STAT_IOVDD_LVDF_MASK,      /*!< IO VDD Low-Voltage detect flag. */
 #endif                                                                  /* FSL_FEATURE_MCX_SPC_HAS_IOVDD_VD */
     kSPC_SystemVDDHighVoltageDetectFlag = SPC_VD_STAT_SYSVDD_HVDF_MASK, /*!< System VDD High-Voltage detect flag. */
@@ -948,7 +950,10 @@ static inline uint32_t SPC_GetActiveModeVoltageDetectStatus(SPC_Type *base)
     state = base->ACTIVE_CFG &
             (
 #if (defined(FSL_FEATURE_MCX_SPC_HAS_IOVDD_VD) && FSL_FEATURE_MCX_SPC_HAS_IOVDD_VD)
-                SPC_ACTIVE_CFG_IO_HVDE_MASK | SPC_ACTIVE_CFG_IO_LVDE_MASK |
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD) && (FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD == 0U))
+                SPC_ACTIVE_CFG_IO_HVDE_MASK |
+#endif /* FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD */
+                SPC_ACTIVE_CFG_IO_LVDE_MASK |
 
 #endif /* FSL_FEATURE_MCX_SPC_HAS_IOVDD_VD */
                 SPC_ACTIVE_CFG_SYS_HVDE_MASK | SPC_ACTIVE_CFG_SYS_LVDE_MASK | SPC_ACTIVE_CFG_CORE_LVDE_MASK
@@ -1160,7 +1165,10 @@ static inline uint32_t SPC_GetLowPowerModeVoltageDetectStatus(SPC_Type *base)
     uint32_t state;
     state = base->LP_CFG & (
 #if (defined(FSL_FEATURE_MCX_SPC_HAS_IOVDD_VD) && FSL_FEATURE_MCX_SPC_HAS_IOVDD_VD)
-                               SPC_LP_CFG_IO_HVDE_MASK | SPC_LP_CFG_IO_LVDE_MASK |
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD) && (FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD == 0U))
+                               SPC_LP_CFG_IO_HVDE_MASK |
+#endif /* FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD */
+                               SPC_LP_CFG_IO_LVDE_MASK |
 
 #endif /* FSL_FEATURE_MCX_SPC_HAS_IOVDD_VD */
                                SPC_LP_CFG_SYS_HVDE_MASK | SPC_LP_CFG_SYS_LVDE_MASK | SPC_LP_CFG_CORE_LVDE_MASK
@@ -1710,6 +1718,7 @@ status_t SPC_EnableLowPowerModeSystemLowVoltageDetect(SPC_Type *base, bool enabl
  * @name Voltage detect configuration for IO voltage domain
  * @{
  */
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_VD_IO_CFG_LVSEL) && (FSL_FEATURE_MCX_SPC_HAS_VD_IO_CFG_LVSEL == 0U))
 /*!
  * @brief Set IO VDD Low-Voltage level selection.
  *
@@ -1720,6 +1729,7 @@ status_t SPC_EnableLowPowerModeSystemLowVoltageDetect(SPC_Type *base, bool enabl
  * @param level IO VDD Low-voltage level selection.
  */
 void SPC_SetIOVDDLowVoltageLevel(SPC_Type *base, spc_low_voltage_level_select_t level);
+#endif /* FSL_FEATURE_MCX_SPC_HAS_VD_IO_CFG_LVSEL */
 
 /*!
  * @brief Configs IO voltage detect options.
@@ -1760,6 +1770,7 @@ static inline void SPC_UnlockIOVoltageDetectResetSetting(SPC_Type *base)
     base->VD_IO_CFG &= ~SPC_VD_IO_CFG_LOCK_MASK;
 }
 
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD) && (FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD == 0U))
 /*!
  * @brief Enables/Disables the IO High Voltage Detector in Active mode.
  *
@@ -1774,6 +1785,7 @@ static inline void SPC_UnlockIOVoltageDetectResetSetting(SPC_Type *base)
  * @retval #kStatus_Success Enable/Disable IO High Voltage Detect successfully.
  */
 status_t SPC_EnableActiveModeIOHighVoltageDetect(SPC_Type *base, bool enable);
+#endif /* FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD */
 
 /*!
  * @brief Enables/Disables the IO Low Voltage Detector in Active mode.
@@ -1790,6 +1802,7 @@ status_t SPC_EnableActiveModeIOHighVoltageDetect(SPC_Type *base, bool enable);
  */
 status_t SPC_EnableActiveModeIOLowVoltageDetect(SPC_Type *base, bool enable);
 
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD) && (FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD == 0U))
 /*!
  * @brief Enables/Disables the IO High Voltage Detector in Low Power mode.
  *
@@ -1804,6 +1817,7 @@ status_t SPC_EnableActiveModeIOLowVoltageDetect(SPC_Type *base, bool enable);
  * @retval #kStatus_Success Enable IO High Voltage Detect in low power mode successfully.
  */
 status_t SPC_EnableLowPowerModeIOHighVoltageDetect(SPC_Type *base, bool enable);
+#endif /* FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD */
 
 /*!
  * @brief Enables/Disables the IO Low Voltage Detector in Low Power mode.

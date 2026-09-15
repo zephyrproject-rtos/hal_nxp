@@ -167,7 +167,6 @@
        defined(KW43L43Z92_SERIES) || defined(KW43L43Z93_SERIES) || \
        defined(KW43L43Z96_SERIES) || defined(KW43L43Z97_SERIES) || \
        defined(MCXW70AC_SERIES) || defined(MCXW70AD_SERIES) || \
-       defined(MCXW70AA_SERIES) || \
        defined(MCXC151_SERIES) || \
        defined(MCXC161_SERIES) || defined(MCXC162_SERIES))
 
@@ -1908,7 +1907,7 @@ static status_t trng_SetStatisticalCheckLimit(TRNG_Type *base,
 
     if ((NULL != limit) && ((int32_t)limit->maximum > limit->minimum))
     {
-        range = limit->maximum - limit->minimum; /* Registers use range instead of minimum value.*/
+        range = limit->maximum - (uint32_t)limit->minimum; /* Registers use range instead of minimum value.*/
 
         if (statistical_check == kTRNG_StatisticalCheckMonobit) /* Allowable maximum and minimum number of ones/zero
                                                                    detected during entropy generation. */
@@ -1955,7 +1954,7 @@ static status_t trng_SetStatisticalCheckLimit(TRNG_Type *base,
                                                                                entropy sample frquency count during
                                                                                entropy generation . */
         {
-            status = trng_SetFrequencyCountMaxLimit(base, limit->minimum, limit->maximum);
+            status = trng_SetFrequencyCountMaxLimit(base, (uint32_t)limit->minimum, limit->maximum);
         }
         else
         {

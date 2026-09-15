@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief GPIO driver version. */
-#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*! @} */
 
 /*! @brief GPIO direction definition */
@@ -159,7 +159,10 @@ status_t GPIO_PinInit(GPIO_Type * GPIO_ATTR base, uint8_t pin, const gpio_pin_co
  * @param base GPIO peripheral base pointer (GPIOA, GPIOB, GPIOC, and so on.)
  * @param mask GPIO pins. For example, for pin 0 and pin 1, mask = (1<<0) | (1<<1)
  */
-void GPIO_PortInputEnable(GPIO_Type * GPIO_ATTR base, uint32_t mask);
+static inline void GPIO_PortInputEnable(GPIO_Type * GPIO_ATTR base, uint32_t mask)
+{
+    base->PIDR &= ~mask;
+}
 
 /*!
  * @brief Disable port input.
@@ -167,7 +170,10 @@ void GPIO_PortInputEnable(GPIO_Type * GPIO_ATTR base, uint32_t mask);
  * @param base GPIO peripheral base pointer (GPIOA, GPIOB, GPIOC, and so on.)
  * @param mask GPIO pins. For example, for pin 0 and pin 1, mask = (1<<0) | (1<<1)
  */
-void GPIO_PortInputDisable(GPIO_Type * GPIO_ATTR base, uint32_t mask);
+static inline void GPIO_PortInputDisable(GPIO_Type * GPIO_ATTR base, uint32_t mask)
+{
+    base->PIDR |= mask;
+}
 
 /*!
  * @brief Configure the GPIO pin as Input or Output for one pin.
@@ -178,7 +184,17 @@ void GPIO_PortInputDisable(GPIO_Type * GPIO_ATTR base, uint32_t mask);
  * @param pin           GPIO pin identifier.
  * @param direction     Direction of GPIO pin. @ref gpio_pin_direction_t
  */
-void GPIO_PinSetDirection(GPIO_Type * GPIO_ATTR base, uint8_t pin, gpio_pin_direction_t direction);
+static inline void GPIO_PinSetDirection(GPIO_Type * GPIO_ATTR base, uint8_t pin, gpio_pin_direction_t direction)
+{
+    if (direction == kGPIO_DigitalInput)
+    {
+        base->PDDR &= ~(1UL << pin);
+    }
+    else
+    {
+        base->PDDR |= (1UL << pin);
+    }
+}
 
 /*! @} */
 
@@ -194,7 +210,12 @@ void GPIO_PinSetDirection(GPIO_Type * GPIO_ATTR base, uint8_t pin, gpio_pin_dire
  *        - 0: corresponding pin output low-logic level.
  *        - 1: corresponding pin output high-logic level.
  */
-void GPIO_PinWrite(GPIO_Type * GPIO_ATTR base, uint8_t pin, uint8_t output);
+static inline void GPIO_PinWrite(GPIO_Type * GPIO_ATTR base, uint8_t pin, uint8_t output)
+{
+    assert(pin < GPIO_PDR_COUNT);
+
+    base->PDR[pin] = output;
+}
 
 /*!
  * @brief Sets the output level of the multiple GPIO pins to the logic 1.
@@ -202,7 +223,10 @@ void GPIO_PinWrite(GPIO_Type * GPIO_ATTR base, uint8_t pin, uint8_t output);
  * @param base GPIO peripheral base pointer (GPIOA, GPIOB, GPIOC, and so on.)
  * @param mask GPIO pins. For example, for pin 0 and pin 1, mask = (1<<0) | (1<<1)
  */
-void GPIO_PortSet(GPIO_Type * GPIO_ATTR base, uint32_t mask);
+static inline void GPIO_PortSet(GPIO_Type * GPIO_ATTR base, uint32_t mask)
+{
+    base->PSOR = mask;
+}
 
 /*!
  * @brief Sets the output level of the multiple GPIO pins to the logic 0.
@@ -210,7 +234,10 @@ void GPIO_PortSet(GPIO_Type * GPIO_ATTR base, uint32_t mask);
  * @param base GPIO peripheral base pointer (GPIOA, GPIOB, GPIOC, and so on.)
  * @param mask GPIO pins. For example, for pin 0 and pin 1, mask = (1<<0) | (1<<1)
  */
-void GPIO_PortClear(GPIO_Type * GPIO_ATTR base, uint32_t mask);
+static inline void GPIO_PortClear(GPIO_Type * GPIO_ATTR base, uint32_t mask)
+{
+    base->PCOR = mask;
+}
 
 /*!
  * @brief Reverses the current output logic of the multiple GPIO pins.
@@ -218,7 +245,10 @@ void GPIO_PortClear(GPIO_Type * GPIO_ATTR base, uint32_t mask);
  * @param base GPIO peripheral base pointer (GPIOA, GPIOB, GPIOC, and so on.)
  * @param mask GPIO pins. For example, for pin 0 and pin 1, mask = (1<<0) | (1<<1)
  */
-void GPIO_PortToggle(GPIO_Type * GPIO_ATTR base, uint32_t mask);
+static inline void GPIO_PortToggle(GPIO_Type * GPIO_ATTR base, uint32_t mask)
+{
+    base->PTOR = mask;
+}
 
 /*! @} */
 
@@ -231,7 +261,10 @@ void GPIO_PortToggle(GPIO_Type * GPIO_ATTR base, uint32_t mask);
  * @param base GPIO peripheral base pointer (GPIOA, GPIOB, GPIOC, and so on.)
  * @param mask GPIO pins. For example, for pin 0 and pin 1, mask = (1<<0) | (1<<1)
  */
-uint32_t GPIO_PortRead(GPIO_Type * GPIO_ATTR base);
+static inline uint32_t GPIO_PortRead(GPIO_Type * GPIO_ATTR base)
+{
+    return base->PDIR;
+}
 
 /*!
  * @brief Reads the current input value of the GPIO pin.
@@ -242,7 +275,12 @@ uint32_t GPIO_PortRead(GPIO_Type * GPIO_ATTR base);
  *        - 0: corresponding pin input low-logic level.
  *        - 1: corresponding pin input high-logic level.
  */
-uint8_t GPIO_PinRead(GPIO_Type * GPIO_ATTR base, uint8_t pin);
+static inline uint8_t GPIO_PinRead(GPIO_Type * GPIO_ATTR base, uint8_t pin)
+{
+    assert(pin < GPIO_PDR_COUNT);
+
+    return base->PDR[pin];
+}
 
 /*! @} */
 
@@ -269,7 +307,10 @@ uint8_t GPIO_PinRead(GPIO_Type * GPIO_ATTR base, uint8_t pin);
  *        - #kGPIO_ActiveHighTriggerOutputEnable : Enable active high-trigger output (if the trigger states exit).
  *        - #kGPIO_ActiveLowTriggerOutputEnable  : Enable active low-trigger output (if the trigger states exit).
  */
-void GPIO_SetPinInterruptConfig(GPIO_Type * GPIO_ATTR base, uint8_t pin, gpio_interrupt_config_t config);
+static inline void GPIO_SetPinInterruptConfig(GPIO_Type * GPIO_ATTR base, uint8_t pin, gpio_interrupt_config_t config)
+{
+    base->ICR[pin] = (base->ICR[pin] & ~GPIO_ICR_IRQC_MASK) | GPIO_ICR_IRQC(config);
+}
 
 /*!
  * @brief Configures the gpio pin interrupt/DMA request/trigger output channel selection.
@@ -280,7 +321,10 @@ void GPIO_SetPinInterruptConfig(GPIO_Type * GPIO_ATTR base, uint8_t pin, gpio_in
  *        - #kGPIO_InterruptOutput0: Interrupt/DMA request/trigger output 0.
  *        - #kGPIO_InterruptOutput1 : Interrupt/DMA request/trigger output 1.
  */
-void GPIO_SetPinInterruptChannel(GPIO_Type * GPIO_ATTR base, uint8_t pin, gpio_interrupt_selection_t selection);
+static inline void GPIO_SetPinInterruptChannel(GPIO_Type * GPIO_ATTR base, uint8_t pin, gpio_interrupt_selection_t selection)
+{
+    base->ICR[pin] = (base->ICR[pin] & ~GPIO_ICR_IRQS_MASK) | GPIO_ICR_IRQS(selection);
+}
 
 /*!
  * @brief Read the GPIO interrupt status flags based on selected interrupt channel(IRQS).
@@ -291,7 +335,12 @@ void GPIO_SetPinInterruptChannel(GPIO_Type * GPIO_ATTR base, uint8_t pin, gpio_i
  *         '1' means the related pin's flag is set, '0' means the related pin's flag not set.
  *          For example, the return value 0x00010001 means the pin 0 and 17 have the interrupt pending.
  */
-uint32_t GPIO_GpioGetInterruptChannelFlags(GPIO_Type * GPIO_ATTR base, uint8_t channel);
+static inline uint32_t GPIO_GpioGetInterruptChannelFlags(GPIO_Type * GPIO_ATTR base, uint8_t channel)
+{
+    assert(channel < GPIO_ISFR_COUNT);
+
+    return base->ISFR[channel];
+}
 
 /*!
  * @brief Read individual pin's interrupt status flag.
@@ -300,7 +349,10 @@ uint32_t GPIO_GpioGetInterruptChannelFlags(GPIO_Type * GPIO_ATTR base, uint8_t c
  * @param pin GPIO specific pin number.
  * @return 1 means flag asserted, 0 means not.
  */
-uint8_t GPIO_PinGetInterruptFlag(GPIO_Type * GPIO_ATTR base, uint8_t pin);
+static inline uint8_t GPIO_PinGetInterruptFlag(GPIO_Type * GPIO_ATTR base, uint8_t pin)
+{
+    return (uint8_t)((base->ICR[pin] & GPIO_ICR_ISF_MASK) >> GPIO_ICR_ISF_SHIFT);
+}
 
 /*!
  * @brief Clear GPIO individual pin's interrupt status flag.
@@ -308,7 +360,10 @@ uint8_t GPIO_PinGetInterruptFlag(GPIO_Type * GPIO_ATTR base, uint8_t pin);
  * @param base GPIO peripheral base pointer (GPIOA, GPIOB, GPIOC, and so on).
  * @param pin GPIO specific pin number.
  */
-void GPIO_PinClearInterruptFlag(GPIO_Type * GPIO_ATTR base, uint8_t pin);
+static inline void GPIO_PinClearInterruptFlag(GPIO_Type * GPIO_ATTR base, uint8_t pin)
+{
+    base->ICR[pin] |= GPIO_ICR_ISF_MASK;
+}
 
 /*!
  * @brief Clears GPIO pin interrupt status flags based on selected interrupt channel(IRQS).
@@ -317,7 +372,11 @@ void GPIO_PinClearInterruptFlag(GPIO_Type * GPIO_ATTR base, uint8_t pin);
  * @param mask GPIO pins. For example, for pin 0 and pin 1, mask = (1<<0) | (1<<1)
  * @param channel '0' means select interrupt channel 0, '1' means select interrupt channel 1.
  */
-void GPIO_GpioClearInterruptChannelFlags(GPIO_Type * GPIO_ATTR base, uint32_t mask, uint8_t channel);
+static inline void GPIO_GpioClearInterruptChannelFlags(GPIO_Type * GPIO_ATTR base, uint32_t mask, uint8_t channel)
+{
+    assert(channel < GPIO_ISFR_COUNT);
+    base->ISFR[channel] = mask;
+}
 
 /*!
  * @brief Sets the GPIO interrupt configuration in PCR register for multiple pins.
@@ -340,7 +399,19 @@ void GPIO_GpioClearInterruptChannelFlags(GPIO_Type * GPIO_ATTR base, uint32_t ma
  *        - #kGPIO_ActiveHighTriggerOutputEnable : Enable active high-trigger output (if the trigger states exit).
  *        - #kGPIO_ActiveLowTriggerOutputEnable  : Enable active low-trigger output (if the trigger states exit)..
  */
-void GPIO_SetMultipleInterruptPinsConfig(GPIO_Type * GPIO_ATTR base, uint32_t mask, gpio_interrupt_config_t config);
+static inline void GPIO_SetMultipleInterruptPinsConfig(GPIO_Type * GPIO_ATTR base, uint32_t mask, gpio_interrupt_config_t config)
+{
+    if (0UL != (mask & 0xffffUL))
+    {
+        base->GICLR = (GPIO_ICR_IRQC(config) | (mask & 0xffffU));
+    }
+
+    mask = mask >> 16U;
+    if (mask != 0UL)
+    {
+        base->GICHR = (GPIO_ICR_IRQC(config) | (mask & 0xffffU));
+    }
+}
 
 /*! @} */
 /*! @} */

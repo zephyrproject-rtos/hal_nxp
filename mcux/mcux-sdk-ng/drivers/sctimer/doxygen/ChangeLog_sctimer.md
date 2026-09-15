@@ -1,6 +1,13 @@
 # SCTIMER
 
 
+## [2.6.1]
+
+- Bug Fixes
+  - Fixed CERT-C Array (CERT ARR30-C) violation issues in
+    SCTIMER_FindSharedPeriodEvent and SCTIMER_UpdateComplementaryPwmDutycycle.
+  - Fixed UNUSED_VALUE issue in SCTIMER_SetupPwm.
+
 ## [2.6.0]
 
 - New Features

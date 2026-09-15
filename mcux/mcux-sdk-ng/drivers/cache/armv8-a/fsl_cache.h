@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_CACHE_H_
-#define _FSL_CACHE_H_
+#ifndef FSL_CACHE_H_
+#define FSL_CACHE_H_
 
 #include "fsl_common.h"
 
@@ -79,4 +79,4 @@ void DCACHE_CleanInvalidateByRange(uintptr_t address, size_t size_byte);
 
 /*! @}*/
 
-#endif /* _FSL_CACHE_H_*/
+#endif /* FSL_CACHE_H_*/

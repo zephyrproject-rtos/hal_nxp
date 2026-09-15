@@ -20,7 +20,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_BISS_DRIVER_VERSION (MAKE_VERSION(1, 0, 2)) /*!< Version 1.0.2 */
+#define FSL_BISS_DRIVER_VERSION (MAKE_VERSION(1, 0, 3)) /*!< Version 1.0.3 */
 /*! @} */
 
 /*! @name BiSS Command and IDA test setting of CTRLCOMM2 register */

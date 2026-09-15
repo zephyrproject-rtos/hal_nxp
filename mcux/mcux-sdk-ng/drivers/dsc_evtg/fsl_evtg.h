@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief EVTG driver version. */
-#define FSL_EVTG_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_EVTG_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*! @} */
 
 /*******************************************************************************
@@ -33,7 +33,12 @@
  * @defgroup evtg_driver_log The Driver Change Log
  * @ingroup evtg
  * @{
- * The current EVTG driver version is 2.0.0
+ * The current EVTG driver version is 2.0.1
+ *
+ *  - 2.0.1
+ *    - Bug Fixes
+ *      - Fixed mismatched parentheses in EVTG_Init() FORCE_BYPASS write that
+ *        broke the CodeWarrior DSC build when force-bypass flip-flop is enabled.
  *
  *  - 2.0.0
  *    - Initial version.
