@@ -7,7 +7,7 @@
 mcux_set_variable(core_id_suffix_name _hifi1)
 mcux_set_variable(multicore_foldername hifi1)
 if(NOT XTENSA_CORE)
-    mcux_set_variable(XTENSA_CORE rt700_hifi1_RI23_11_nlib)
+    mcux_set_variable(XTENSA_CORE rt700_hifi1_RJ26_6_newlib)
 endif()
 
 mcux_set_variable(XTENSA_LSP_DEBUG ${SdkRootDirPath}/${device_root}/RT/RT700/MIMXRT735S/xtensa/hifi1/gdbio)
