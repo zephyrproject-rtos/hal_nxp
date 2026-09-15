@@ -770,6 +770,11 @@ void VBAT_SetOscConfig(VBAT_Type *base, const vbat_osc_config_t *config)
 {
     uint32_t tmp32;
 
+    if (config == NULL)
+    {
+        return;
+    }
+
     if (config->enableCrystalOscillatorBypass == true)
     {
         base->OSCCTLA |= VBAT_OSCCTLA_OSC_BYP_EN_MASK;
@@ -781,23 +786,21 @@ void VBAT_SetOscConfig(VBAT_Type *base, const vbat_osc_config_t *config)
     {
         tmp32 = base->OSCCTLA;
 
-        if (config != NULL)
+        if (config->enableInternalCapBank)
         {
-            if (config->enableInternalCapBank)
-            {
-                tmp32 &= ~(VBAT_OSCCTLA_EXTAL_CAP_SEL_MASK | VBAT_OSCCTLA_XTAL_CAP_SEL_MASK);
-                tmp32 |= VBAT_OSCCTLA_EXTAL_CAP_SEL(config->extalCap) | VBAT_OSCCTLA_XTAL_CAP_SEL(config->xtalCap);
-                tmp32 |= VBAT_OSCCTLA_CAP_SEL_EN_MASK;
-            }
-            else
-            {
-                /* Disable the internal capacitance bank. */
-                tmp32 &= ~VBAT_OSCCTLA_CAP_SEL_EN_MASK;
-            }
-
-            tmp32 &= ~(VBAT_OSCCTLA_COARSE_AMP_GAIN_MASK);
-            tmp32 |= VBAT_OSCCTLA_COARSE_AMP_GAIN(config->coarseAdjustment);
+            tmp32 &= ~(VBAT_OSCCTLA_EXTAL_CAP_SEL_MASK | VBAT_OSCCTLA_XTAL_CAP_SEL_MASK);
+            tmp32 |= VBAT_OSCCTLA_EXTAL_CAP_SEL(config->extalCap) | VBAT_OSCCTLA_XTAL_CAP_SEL(config->xtalCap);
+            tmp32 |= VBAT_OSCCTLA_CAP_SEL_EN_MASK;
         }
+        else
+        {
+            /* Disable the internal capacitance bank. */
+            tmp32 &= ~VBAT_OSCCTLA_CAP_SEL_EN_MASK;
+        }
+
+        tmp32 &= ~(VBAT_OSCCTLA_COARSE_AMP_GAIN_MASK);
+        tmp32 |= VBAT_OSCCTLA_COARSE_AMP_GAIN(config->coarseAdjustment);
+
         base->OSCCTLA = tmp32;
         while ((VBAT0->STATUSA & VBAT_STATUSA_OSC_RDY_MASK) == 0U)
         {
@@ -2242,19 +2245,15 @@ static uint32_t CLOCK_GetClockOutClkFreq(void)
  */
 static uint32_t CLOCK_GetLposcFreq(void)
 {
-    uint32_t freq = 0U;
+    uint32_t freq;
 
-    switch ((RTC0->CTRL & RTC_CTRL_CLK_SEL_MASK) >> RTC_CTRL_CLK_SEL_SHIFT)
+    if ((RTC0->CTRL & RTC_CTRL_CLK_SEL_MASK) == 0U)
     {
-        case 0U:
-            freq = CLOCK_GetClk16KFreq((uint32_t)kCLOCK_Clk16KToVbat);
-            break;
-        case 1U:
-            freq = CLOCK_GetOsc32KFreq((uint32_t)kCLOCK_Osc32kToVbat);
-            break;
-        default:
-            freq = 0U;
-            break;
+        freq = CLOCK_GetClk16KFreq((uint32_t)kCLOCK_Clk16KToVbat);
+    }
+    else
+    {
+        freq = CLOCK_GetOsc32KFreq((uint32_t)kCLOCK_Osc32kToVbat);
     }
 
     return freq;
@@ -2389,7 +2388,7 @@ static uint32_t findPll1PostDiv(void)
 /* Get multiplier (M) from PLL0 SSCG and SEL_EXT settings */
 static float findPll0MMult(void)
 {
-    float mMult = 1.0F;
+    float mMult;
     float mMult_fract;
     uint32_t mMult_int;
 
@@ -2415,7 +2414,7 @@ static float findPll0MMult(void)
 /* Get multiplier (M) from PLL1 MDEC. */
 static float findPll1MMult(void)
 {
-    float mMult = 1.0F;
+    float mMult;
     float mMult_fract;
     uint32_t mMult_int;
 
@@ -2752,7 +2751,7 @@ static uint32_t findPllPostDivFromSetup(pll_setup_t *pSetup)
 /* Get multiplier (M) from from setup structure */
 static float findPllMMultFromSetup(pll_setup_t *pSetup)
 {
-    float mMult = 1.0F;
+    float mMult;
     float mMult_fract;
     uint32_t mMult_int;
 

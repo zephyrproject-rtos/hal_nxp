@@ -8,9 +8,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    Rev. 1 Draft F, 2025-10-18
+**     Reference manual:    Rev. 1, 2026-07-08
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260518
+**     Build:               b260722
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

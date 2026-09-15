@@ -1,13 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70AAMMP
-**                          MCXW70ACMFT
+**     Processors:          MCXW70ACMFT
 **                          MCXW70ACMMP
 **                          MCXW70ADMFT
 **                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260409
+**     Build:               b260813
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GENFSK
@@ -38,9 +37,7 @@
 #if !defined(PERI_GENFSK_H_)
 #define PERI_GENFSK_H_                           /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70AAMMP))
-#include "MCXW70AA_COMMON.h"
-#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
+#if (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
 #elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
@@ -638,13 +635,11 @@ typedef struct {
 /*! @name NTW_ADR_CTRL - NETWORK ADDRESS CONTROL */
 /*! @{ */
 
-#define GENFSK_NTW_ADR_CTRL_NTW_ADR_EN_MASK      (0xFU)
+#define GENFSK_NTW_ADR_CTRL_NTW_ADR_EN_MASK      (0x3U)
 #define GENFSK_NTW_ADR_CTRL_NTW_ADR_EN_SHIFT     (0U)
 /*! NTW_ADR_EN - Network Address Enable
- *  0b0001..Enable Network Address 0 for correlation
- *  0b0010..Enable Network Address 1 for correlation
- *  0b0100..Enable Network Address 2 for correlation
- *  0b1000..Enable Network Address 3 for correlation
+ *  0b01..Enable Network Address 0 for correlation
+ *  0b10..Enable Network Address 1 for correlation
  */
 #define GENFSK_NTW_ADR_CTRL_NTW_ADR_EN(x)        (((uint32_t)(((uint32_t)(x)) << GENFSK_NTW_ADR_CTRL_NTW_ADR_EN_SHIFT)) & GENFSK_NTW_ADR_CTRL_NTW_ADR_EN_MASK)
 

@@ -1,13 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70AAMMP
-**                          MCXW70ACMFT
+**     Processors:          MCXW70ACMFT
 **                          MCXW70ACMMP
 **                          MCXW70ADMFT
 **                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260409
+**     Build:               b260813
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MRCC
@@ -38,9 +37,7 @@
 #if !defined(PERI_MRCC_H_)
 #define PERI_MRCC_H_                             /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70AAMMP))
-#include "MCXW70AA_COMMON.h"
-#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
+#if (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
 #elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
@@ -212,11 +209,9 @@ typedef struct {
   __IO uint32_t MRCC_TRGMUX0_CLKSEL;               /**< TRGMUX0 clock selection control, offset: 0x280 */
        uint8_t RESERVED_41[4];
   __IO uint32_t MRCC_TSTMR0_CLKSEL;                /**< TSTMR0 clock selection control, offset: 0x288 */
-       uint8_t RESERVED_42[4];
-  __IO uint32_t MRCC_UDF0_CLKSEL;                  /**< UDF0 clock selection control, offset: 0x290 */
-       uint8_t RESERVED_43[4];
+       uint8_t RESERVED_42[12];
   __IO uint32_t MRCC_UTEAL_1_CLKSEL;               /**< UTEAL_1 clock selection control, offset: 0x298 */
-       uint8_t RESERVED_44[4];
+       uint8_t RESERVED_43[4];
   __IO uint32_t MRCC_WDG0_CLKSEL;                  /**< WDG0 clock selection control, offset: 0x2A0 */
   __IO uint32_t MRCC_WDG0_CLKDIV;                  /**< WDG0 clock divider control, offset: 0x2A4 */
   __IO uint32_t MRCC_WDG1_CLKSEL;                  /**< WDG1 clock selection control, offset: 0x2A8 */
@@ -239,15 +234,16 @@ typedef struct {
 #define MRCC_MRCC_ADC0_CLKSEL_MUX_MASK           (0x7U)
 #define MRCC_MRCC_ADC0_CLKSEL_MUX_SHIFT          (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
+ *  0b000..Reserved
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_ADC0_CLKSEL_MUX(x)             (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_ADC0_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_ADC0_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_ADC0_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_ADC0_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -312,7 +308,7 @@ typedef struct {
 
 #define MRCC_MRCC_AOI0_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_AOI0_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -344,7 +340,7 @@ typedef struct {
 
 #define MRCC_MRCC_ATX0_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_ATX0_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -376,7 +372,7 @@ typedef struct {
 
 #define MRCC_MRCC_CLK_1M_CLKSEL_CC_MASK          (0x30U)
 #define MRCC_MRCC_CLK_1M_CLKSEL_CC_SHIFT         (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -408,7 +404,7 @@ typedef struct {
 
 #define MRCC_MRCC_CLK_6M_CLKSEL_CC_MASK          (0x30U)
 #define MRCC_MRCC_CLK_6M_CLKSEL_CC_SHIFT         (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -440,7 +436,7 @@ typedef struct {
 
 #define MRCC_MRCC_CLK_32M_CLKSEL_CC_MASK         (0x30U)
 #define MRCC_MRCC_CLK_32M_CLKSEL_CC_SHIFT        (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -472,7 +468,7 @@ typedef struct {
 
 #define MRCC_MRCC_CMP0_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_CMP0_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -504,7 +500,7 @@ typedef struct {
 
 #define MRCC_MRCC_CRC0_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_CRC0_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -536,7 +532,7 @@ typedef struct {
 
 #define MRCC_MRCC_CRC1_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_CRC1_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -568,7 +564,7 @@ typedef struct {
 
 #define MRCC_MRCC_DATA_STREAM_2P4_CLKSEL_CC_MASK (0x30U)
 #define MRCC_MRCC_DATA_STREAM_2P4_CLKSEL_CC_SHIFT (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -600,7 +596,7 @@ typedef struct {
 
 #define MRCC_MRCC_DMA_CLKSEL_CC_MASK             (0x30U)
 #define MRCC_MRCC_DMA_CLKSEL_CC_SHIFT            (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -632,7 +628,7 @@ typedef struct {
 
 #define MRCC_MRCC_DSP_RAMC0_CLKSEL_CC_MASK       (0x30U)
 #define MRCC_MRCC_DSP_RAMC0_CLKSEL_CC_SHIFT      (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -684,7 +680,7 @@ typedef struct {
 
 #define MRCC_MRCC_EWM0_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_EWM0_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -749,7 +745,7 @@ typedef struct {
 
 #define MRCC_MRCC_EZRAMC_RAM0_CLKSEL_CC_MASK     (0x30U)
 #define MRCC_MRCC_EZRAMC_RAM0_CLKSEL_CC_SHIFT    (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -781,7 +777,7 @@ typedef struct {
 
 #define MRCC_MRCC_EZRAMC_RAM1_CLKSEL_CC_MASK     (0x30U)
 #define MRCC_MRCC_EZRAMC_RAM1_CLKSEL_CC_SHIFT    (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -813,7 +809,7 @@ typedef struct {
 
 #define MRCC_MRCC_EZRAMC_RAM2_CLKSEL_CC_MASK     (0x30U)
 #define MRCC_MRCC_EZRAMC_RAM2_CLKSEL_CC_SHIFT    (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -845,7 +841,7 @@ typedef struct {
 
 #define MRCC_MRCC_EZRAMC_RAM3_CLKSEL_CC_MASK     (0x30U)
 #define MRCC_MRCC_EZRAMC_RAM3_CLKSEL_CC_SHIFT    (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -880,13 +876,14 @@ typedef struct {
 /*! MUX - Functional Clock Mux Select
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
- *  0b100..FRO_200M
+ *  0b100..FRO200M
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_FLEXCAN0_CLKSEL_MUX(x)         (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_FLEXCAN0_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_FLEXCAN0_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_FLEXCAN0_CLKSEL_CC_MASK        (0x30U)
 #define MRCC_MRCC_FLEXCAN0_CLKSEL_CC_SHIFT       (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -951,7 +948,7 @@ typedef struct {
 
 #define MRCC_MRCC_FLEXPWM0_CLKSEL_CC_MASK        (0x30U)
 #define MRCC_MRCC_FLEXPWM0_CLKSEL_CC_SHIFT       (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -983,7 +980,7 @@ typedef struct {
 
 #define MRCC_MRCC_FMC_CLKSEL_CC_MASK             (0x30U)
 #define MRCC_MRCC_FMC_CLKSEL_CC_SHIFT            (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1015,7 +1012,7 @@ typedef struct {
 
 #define MRCC_MRCC_FRO200M_CLKSEL_CC_MASK         (0x30U)
 #define MRCC_MRCC_FRO200M_CLKSEL_CC_SHIFT        (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1047,7 +1044,7 @@ typedef struct {
 
 #define MRCC_MRCC_FRO_HF_DIV_CLKSEL_CC_MASK      (0x30U)
 #define MRCC_MRCC_FRO_HF_DIV_CLKSEL_CC_SHIFT     (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1112,7 +1109,7 @@ typedef struct {
 
 #define MRCC_MRCC_GDET_WRAPPER_CLKSEL_CC_MASK    (0x30U)
 #define MRCC_MRCC_GDET_WRAPPER_CLKSEL_CC_SHIFT   (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1177,7 +1174,7 @@ typedef struct {
 
 #define MRCC_MRCC_GPIOA_CLKSEL_CC_MASK           (0x30U)
 #define MRCC_MRCC_GPIOA_CLKSEL_CC_SHIFT          (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1209,7 +1206,7 @@ typedef struct {
 
 #define MRCC_MRCC_GPIOB_CLKSEL_CC_MASK           (0x30U)
 #define MRCC_MRCC_GPIOB_CLKSEL_CC_SHIFT          (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1241,7 +1238,7 @@ typedef struct {
 
 #define MRCC_MRCC_GPIOC_CLKSEL_CC_MASK           (0x30U)
 #define MRCC_MRCC_GPIOC_CLKSEL_CC_SHIFT          (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1273,7 +1270,7 @@ typedef struct {
 
 #define MRCC_MRCC_INTM_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_INTM_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1305,7 +1302,7 @@ typedef struct {
 
 #define MRCC_MRCC_IPSYNC_TRNG0_CLKSEL_CC_MASK    (0x30U)
 #define MRCC_MRCC_IPSYNC_TRNG0_CLKSEL_CC_SHIFT   (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1337,7 +1334,7 @@ typedef struct {
 
 #define MRCC_MRCC_ITRC_WRAPPER_CLKSEL_CC_MASK    (0x30U)
 #define MRCC_MRCC_ITRC_WRAPPER_CLKSEL_CC_SHIFT   (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1370,15 +1367,16 @@ typedef struct {
 #define MRCC_MRCC_LPI2C0_CLKSEL_MUX_MASK         (0x7U)
 #define MRCC_MRCC_LPI2C0_CLKSEL_MUX_SHIFT        (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
+ *  0b000..Reserved
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_LPI2C0_CLKSEL_MUX(x)           (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_LPI2C0_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_LPI2C0_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_LPI2C0_CLKSEL_CC_MASK          (0x30U)
 #define MRCC_MRCC_LPI2C0_CLKSEL_CC_SHIFT         (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1444,15 +1442,16 @@ typedef struct {
 #define MRCC_MRCC_LPI2C1_CLKSEL_MUX_MASK         (0x7U)
 #define MRCC_MRCC_LPI2C1_CLKSEL_MUX_SHIFT        (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
+ *  0b000..Reserved
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_LPI2C1_CLKSEL_MUX(x)           (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_LPI2C1_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_LPI2C1_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_LPI2C1_CLKSEL_CC_MASK          (0x30U)
 #define MRCC_MRCC_LPI2C1_CLKSEL_CC_SHIFT         (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1518,15 +1517,16 @@ typedef struct {
 #define MRCC_MRCC_LPIT0_CLKSEL_MUX_MASK          (0x7U)
 #define MRCC_MRCC_LPIT0_CLKSEL_MUX_SHIFT         (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
+ *  0b000..Reserved
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_LPIT0_CLKSEL_MUX(x)            (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_LPIT0_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_LPIT0_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_LPIT0_CLKSEL_CC_MASK           (0x30U)
 #define MRCC_MRCC_LPIT0_CLKSEL_CC_SHIFT          (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1592,16 +1592,17 @@ typedef struct {
 #define MRCC_MRCC_LPSPI0_CLKSEL_MUX_MASK         (0x7U)
 #define MRCC_MRCC_LPSPI0_CLKSEL_MUX_SHIFT        (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
+ *  0b000..Reserved
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
  *  0b101..CLK_1M
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_LPSPI0_CLKSEL_MUX(x)           (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_LPSPI0_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_LPSPI0_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_LPSPI0_CLKSEL_CC_MASK          (0x30U)
 #define MRCC_MRCC_LPSPI0_CLKSEL_CC_SHIFT         (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1667,15 +1668,16 @@ typedef struct {
 #define MRCC_MRCC_LPSPI1_CLKSEL_MUX_MASK         (0x7U)
 #define MRCC_MRCC_LPSPI1_CLKSEL_MUX_SHIFT        (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
+ *  0b000..Reserved
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_LPSPI1_CLKSEL_MUX(x)           (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_LPSPI1_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_LPSPI1_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_LPSPI1_CLKSEL_CC_MASK          (0x30U)
 #define MRCC_MRCC_LPSPI1_CLKSEL_CC_SHIFT         (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1741,15 +1743,16 @@ typedef struct {
 #define MRCC_MRCC_LPSPI2_CLKSEL_MUX_MASK         (0x7U)
 #define MRCC_MRCC_LPSPI2_CLKSEL_MUX_SHIFT        (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
+ *  0b000..Reserved
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_LPSPI2_CLKSEL_MUX(x)           (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_LPSPI2_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_LPSPI2_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_LPSPI2_CLKSEL_CC_MASK          (0x30U)
 #define MRCC_MRCC_LPSPI2_CLKSEL_CC_SHIFT         (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1815,15 +1818,16 @@ typedef struct {
 #define MRCC_MRCC_LPTMR0_CLKSEL_MUX_MASK         (0x7U)
 #define MRCC_MRCC_LPTMR0_CLKSEL_MUX_SHIFT        (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
+ *  0b000..Reserved
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_LPTMR0_CLKSEL_MUX(x)           (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_LPTMR0_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_LPTMR0_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_LPTMR0_CLKSEL_CC_MASK          (0x30U)
 #define MRCC_MRCC_LPTMR0_CLKSEL_CC_SHIFT         (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1889,15 +1893,16 @@ typedef struct {
 #define MRCC_MRCC_LPTMR1_CLKSEL_MUX_MASK         (0x7U)
 #define MRCC_MRCC_LPTMR1_CLKSEL_MUX_SHIFT        (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
+ *  0b000..Reserved
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_LPTMR1_CLKSEL_MUX(x)           (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_LPTMR1_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_LPTMR1_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_LPTMR1_CLKSEL_CC_MASK          (0x30U)
 #define MRCC_MRCC_LPTMR1_CLKSEL_CC_SHIFT         (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -1963,16 +1968,17 @@ typedef struct {
 #define MRCC_MRCC_LPUART0_CLKSEL_MUX_MASK        (0x7U)
 #define MRCC_MRCC_LPUART0_CLKSEL_MUX_SHIFT       (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
+ *  0b000..Reserved
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
  *  0b011..CLK_32K
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_LPUART0_CLKSEL_MUX(x)          (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_LPUART0_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_LPUART0_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_LPUART0_CLKSEL_CC_MASK         (0x30U)
 #define MRCC_MRCC_LPUART0_CLKSEL_CC_SHIFT        (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2038,16 +2044,17 @@ typedef struct {
 #define MRCC_MRCC_LPUART1_CLKSEL_MUX_MASK        (0x7U)
 #define MRCC_MRCC_LPUART1_CLKSEL_MUX_SHIFT       (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
+ *  0b000..Reserved
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
  *  0b011..CLK_32K
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_LPUART1_CLKSEL_MUX(x)          (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_LPUART1_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_LPUART1_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_LPUART1_CLKSEL_CC_MASK         (0x30U)
 #define MRCC_MRCC_LPUART1_CLKSEL_CC_SHIFT        (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2112,7 +2119,7 @@ typedef struct {
 
 #define MRCC_MRCC_MTR_CLKSEL_CC_MASK             (0x30U)
 #define MRCC_MRCC_MTR_CLKSEL_CC_SHIFT            (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2144,7 +2151,7 @@ typedef struct {
 
 #define MRCC_MRCC_MU0_CLKSEL_CC_MASK             (0x30U)
 #define MRCC_MRCC_MU0_CLKSEL_CC_SHIFT            (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2176,7 +2183,7 @@ typedef struct {
 
 #define MRCC_MRCC_MU1_CLKSEL_CC_MASK             (0x30U)
 #define MRCC_MRCC_MU1_CLKSEL_CC_SHIFT            (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2208,7 +2215,7 @@ typedef struct {
 
 #define MRCC_MRCC_PKC_RAM_CTRL_CLKSEL_CC_MASK    (0x30U)
 #define MRCC_MRCC_PKC_RAM_CTRL_CLKSEL_CC_SHIFT   (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2240,7 +2247,7 @@ typedef struct {
 
 #define MRCC_MRCC_PKC_WRAPPER_CLKSEL_CC_MASK     (0x30U)
 #define MRCC_MRCC_PKC_WRAPPER_CLKSEL_CC_SHIFT    (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2272,7 +2279,7 @@ typedef struct {
 
 #define MRCC_MRCC_PORTA_CLKSEL_CC_MASK           (0x30U)
 #define MRCC_MRCC_PORTA_CLKSEL_CC_SHIFT          (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2304,7 +2311,7 @@ typedef struct {
 
 #define MRCC_MRCC_PORTB_CLKSEL_CC_MASK           (0x30U)
 #define MRCC_MRCC_PORTB_CLKSEL_CC_SHIFT          (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2336,7 +2343,7 @@ typedef struct {
 
 #define MRCC_MRCC_PORTC_CLKSEL_CC_MASK           (0x30U)
 #define MRCC_MRCC_PORTC_CLKSEL_CC_SHIFT          (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2368,7 +2375,7 @@ typedef struct {
 
 #define MRCC_MRCC_ROMCP_CLKSEL_CC_MASK           (0x30U)
 #define MRCC_MRCC_ROMCP_CLKSEL_CC_SHIFT          (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2400,7 +2407,7 @@ typedef struct {
 
 #define MRCC_MRCC_SEMA_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_SEMA_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2432,7 +2439,7 @@ typedef struct {
 
 #define MRCC_MRCC_SFA_CLKSEL_CC_MASK             (0x30U)
 #define MRCC_MRCC_SFA_CLKSEL_CC_SHIFT            (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2464,7 +2471,7 @@ typedef struct {
 
 #define MRCC_MRCC_SFA1_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_SFA1_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2496,7 +2503,7 @@ typedef struct {
 
 #define MRCC_MRCC_SGI0_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_SGI0_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2528,7 +2535,7 @@ typedef struct {
 
 #define MRCC_MRCC_SYSPM_CLKSEL_CC_MASK           (0x30U)
 #define MRCC_MRCC_SYSPM_CLKSEL_CC_SHIFT          (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2560,7 +2567,7 @@ typedef struct {
 
 #define MRCC_MRCC_TCU_CLKSEL_CC_MASK             (0x30U)
 #define MRCC_MRCC_TCU_CLKSEL_CC_SHIFT            (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2593,16 +2600,17 @@ typedef struct {
 #define MRCC_MRCC_TPM0_CLKSEL_MUX_MASK           (0x7U)
 #define MRCC_MRCC_TPM0_CLKSEL_MUX_SHIFT          (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
+ *  0b000..Reserved
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
  *  0b011..CLK_32K
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_TPM0_CLKSEL_MUX(x)             (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_TPM0_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_TPM0_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_TPM0_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_TPM0_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2668,16 +2676,17 @@ typedef struct {
 #define MRCC_MRCC_TPM1_CLKSEL_MUX_MASK           (0x7U)
 #define MRCC_MRCC_TPM1_CLKSEL_MUX_SHIFT          (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
+ *  0b000..Reserved
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
  *  0b011..CLK_32K
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_TPM1_CLKSEL_MUX(x)             (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_TPM1_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_TPM1_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_TPM1_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_TPM1_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2743,16 +2752,17 @@ typedef struct {
 #define MRCC_MRCC_TPM2_CLKSEL_MUX_MASK           (0x7U)
 #define MRCC_MRCC_TPM2_CLKSEL_MUX_SHIFT          (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
+ *  0b000..Reserved
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
  *  0b011..CLK_32K
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_TPM2_CLKSEL_MUX(x)             (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_TPM2_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_TPM2_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_TPM2_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_TPM2_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2818,16 +2828,17 @@ typedef struct {
 #define MRCC_MRCC_TPM3_CLKSEL_MUX_MASK           (0x7U)
 #define MRCC_MRCC_TPM3_CLKSEL_MUX_SHIFT          (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
+ *  0b000..Reserved
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
  *  0b011..CLK_32K
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_TPM3_CLKSEL_MUX(x)             (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_TPM3_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_TPM3_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_TPM3_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_TPM3_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2893,16 +2904,17 @@ typedef struct {
 #define MRCC_MRCC_TPM4_CLKSEL_MUX_MASK           (0x7U)
 #define MRCC_MRCC_TPM4_CLKSEL_MUX_SHIFT          (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
+ *  0b000..Reserved
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
  *  0b011..CLK_32K
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_TPM4_CLKSEL_MUX(x)             (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_TPM4_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_TPM4_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_TPM4_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_TPM4_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -2988,17 +3000,18 @@ typedef struct {
 #define MRCC_MRCC_TSTMR0_CLKSEL_MUX_MASK         (0x7U)
 #define MRCC_MRCC_TSTMR0_CLKSEL_MUX_SHIFT        (0U)
 /*! MUX - Functional Clock Mux Select
- *  0b000..FRO_6M
+ *  0b000..Reserved
  *  0b001..FRO_HF_DIV
  *  0b010..CLK_IN
  *  0b011..CLK_32K
  *  0b101..CLK_1M
+ *  0b111..THE CLOCK IS OFF
  */
 #define MRCC_MRCC_TSTMR0_CLKSEL_MUX(x)           (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_TSTMR0_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_TSTMR0_CLKSEL_MUX_MASK)
 
 #define MRCC_MRCC_TSTMR0_CLKSEL_CC_MASK          (0x30U)
 #define MRCC_MRCC_TSTMR0_CLKSEL_CC_SHIFT         (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -3025,44 +3038,12 @@ typedef struct {
 #define MRCC_MRCC_TSTMR0_CLKSEL_PR(x)            (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_TSTMR0_CLKSEL_PR_SHIFT)) & MRCC_MRCC_TSTMR0_CLKSEL_PR_MASK)
 /*! @} */
 
-/*! @name MRCC_UDF0_CLKSEL - UDF0 clock selection control */
-/*! @{ */
-
-#define MRCC_MRCC_UDF0_CLKSEL_CC_MASK            (0x30U)
-#define MRCC_MRCC_UDF0_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
- *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
- *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
- *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
- *  0b11..Peripheral clocks are enabled unless in SLEEP (or lower) mode; low power mode entry stalls until module
- *        is idle. Peripheral functional clocks that remain enabled in SLEEP mode are enabled and do not stall low
- *        power mode entry unless entering DEEPSLEEP (or lower) mode
- */
-#define MRCC_MRCC_UDF0_CLKSEL_CC(x)              (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_UDF0_CLKSEL_CC_SHIFT)) & MRCC_MRCC_UDF0_CLKSEL_CC_MASK)
-
-#define MRCC_MRCC_UDF0_CLKSEL_RSTB_MASK          (0x40000000U)
-#define MRCC_MRCC_UDF0_CLKSEL_RSTB_SHIFT         (30U)
-/*! RSTB - Reset Negation
- *  0b0..Module is held in reset
- *  0b1..Module released from reset
- */
-#define MRCC_MRCC_UDF0_CLKSEL_RSTB(x)            (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_UDF0_CLKSEL_RSTB_SHIFT)) & MRCC_MRCC_UDF0_CLKSEL_RSTB_MASK)
-
-#define MRCC_MRCC_UDF0_CLKSEL_PR_MASK            (0x80000000U)
-#define MRCC_MRCC_UDF0_CLKSEL_PR_SHIFT           (31U)
-/*! PR - Peripheral Present
- *  0b0..Module is not present; writes to this register are ignored
- *  0b1..Module is present
- */
-#define MRCC_MRCC_UDF0_CLKSEL_PR(x)              (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_UDF0_CLKSEL_PR_SHIFT)) & MRCC_MRCC_UDF0_CLKSEL_PR_MASK)
-/*! @} */
-
 /*! @name MRCC_UTEAL_1_CLKSEL - UTEAL_1 clock selection control */
 /*! @{ */
 
 #define MRCC_MRCC_UTEAL_1_CLKSEL_CC_MASK         (0x30U)
 #define MRCC_MRCC_UTEAL_1_CLKSEL_CC_SHIFT        (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -3094,7 +3075,7 @@ typedef struct {
 
 #define MRCC_MRCC_WDG0_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_WDG0_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -3159,7 +3140,7 @@ typedef struct {
 
 #define MRCC_MRCC_WDG1_CLKSEL_CC_MASK            (0x30U)
 #define MRCC_MRCC_WDG1_CLKSEL_CC_SHIFT           (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -3224,7 +3205,7 @@ typedef struct {
 
 #define MRCC_MRCC_ZENV_CORE_CLKSEL_CC_MASK       (0x30U)
 #define MRCC_MRCC_ZENV_CORE_CLKSEL_CC_SHIFT      (4U)
-/*! CC - Clock Config
+/*! CC - Clock Configuration
  *  0b00..Peripheral clocks are disabled; module does not stall low power mode entry
  *  0b01..Peripheral clocks are enabled; module does not stall low power mode entry
  *  0b10..Peripheral clocks are enabled unless module is idle; low power mode entry stalls until module is idle
@@ -3278,6 +3259,7 @@ typedef struct {
 #define MRCC_HALT_MASK                            (0x40000000U)
 #define MRCC_HALT_SHIFT                           (30U)
 #define MRCC_HALT(x)                              (((uint32_t)(((uint32_t)(x)) << MRCC_HALT_SHIFT))  & MRCC_HALT_MASK)
+#define MRCC_UNSTAB_MASK                          (0x80000000U)
 
 
 /*!

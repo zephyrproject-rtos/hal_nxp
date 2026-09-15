@@ -1,13 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70AAMMP
-**                          MCXW70ACMFT
+**     Processors:          MCXW70ACMFT
 **                          MCXW70ACMMP
 **                          MCXW70ADMFT
 **                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260409
+**     Build:               b260813
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TRDC
@@ -38,9 +37,7 @@
 #if !defined(PERI_TRDC_H_)
 #define PERI_TRDC_H_                             /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70AAMMP))
-#include "MCXW70AA_COMMON.h"
-#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
+#if (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
 #elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
@@ -1219,8 +1216,8 @@ typedef struct {
 /*! NSE0 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE0(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE0_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE0_MASK)
 
@@ -1243,8 +1240,8 @@ typedef struct {
 /*! NSE1 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE1(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE1_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE1_MASK)
 
@@ -1267,8 +1264,8 @@ typedef struct {
 /*! NSE2 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE2(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE2_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE2_MASK)
 
@@ -1291,8 +1288,8 @@ typedef struct {
 /*! NSE3 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE3(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE3_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE3_MASK)
 
@@ -1315,8 +1312,8 @@ typedef struct {
 /*! NSE4 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE4(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE4_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE4_MASK)
 
@@ -1339,8 +1336,8 @@ typedef struct {
 /*! NSE5 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE5(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE5_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE5_MASK)
 
@@ -1363,8 +1360,8 @@ typedef struct {
 /*! NSE6 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE6(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE6_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE6_MASK)
 
@@ -1387,8 +1384,8 @@ typedef struct {
 /*! NSE7 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE7(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE7_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_CFG_W_NSE7_MASK)
 /*! @} */
@@ -1405,320 +1402,320 @@ typedef struct {
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT0_MASK   (0x1U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT0_SHIFT  (0U)
 /*! BIT0 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT0(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT0_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT0_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT1_MASK   (0x2U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT1_SHIFT  (1U)
 /*! BIT1 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT1(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT1_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT1_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT2_MASK   (0x4U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT2_SHIFT  (2U)
 /*! BIT2 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT2(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT2_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT2_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT3_MASK   (0x8U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT3_SHIFT  (3U)
 /*! BIT3 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT3(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT3_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT3_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT4_MASK   (0x10U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT4_SHIFT  (4U)
 /*! BIT4 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT4(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT4_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT4_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT5_MASK   (0x20U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT5_SHIFT  (5U)
 /*! BIT5 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT5(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT5_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT5_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT6_MASK   (0x40U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT6_SHIFT  (6U)
 /*! BIT6 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT6(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT6_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT6_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT7_MASK   (0x80U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT7_SHIFT  (7U)
 /*! BIT7 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT7(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT7_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT7_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT8_MASK   (0x100U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT8_SHIFT  (8U)
 /*! BIT8 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT8(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT8_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT8_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT9_MASK   (0x200U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT9_SHIFT  (9U)
 /*! BIT9 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT9(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT9_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT9_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT10_MASK  (0x400U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT10_SHIFT (10U)
 /*! BIT10 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT10(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT10_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT10_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT11_MASK  (0x800U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT11_SHIFT (11U)
 /*! BIT11 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT11(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT11_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT11_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT12_MASK  (0x1000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT12_SHIFT (12U)
 /*! BIT12 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT12(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT12_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT12_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT13_MASK  (0x2000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT13_SHIFT (13U)
 /*! BIT13 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT13(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT13_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT13_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT14_MASK  (0x4000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT14_SHIFT (14U)
 /*! BIT14 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT14(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT14_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT14_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT15_MASK  (0x8000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT15_SHIFT (15U)
 /*! BIT15 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT15(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT15_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT15_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT16_MASK  (0x10000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT16_SHIFT (16U)
 /*! BIT16 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT16(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT16_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT16_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT17_MASK  (0x20000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT17_SHIFT (17U)
 /*! BIT17 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT17(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT17_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT17_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT18_MASK  (0x40000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT18_SHIFT (18U)
 /*! BIT18 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT18(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT18_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT18_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT19_MASK  (0x80000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT19_SHIFT (19U)
 /*! BIT19 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT19(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT19_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT19_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT20_MASK  (0x100000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT20_SHIFT (20U)
 /*! BIT20 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT20(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT20_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT20_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT21_MASK  (0x200000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT21_SHIFT (21U)
 /*! BIT21 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT21(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT21_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT21_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT22_MASK  (0x400000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT22_SHIFT (22U)
 /*! BIT22 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT22(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT22_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT22_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT23_MASK  (0x800000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT23_SHIFT (23U)
 /*! BIT23 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT23(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT23_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT23_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT24_MASK  (0x1000000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT24_SHIFT (24U)
 /*! BIT24 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT24(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT24_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT24_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT25_MASK  (0x2000000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT25_SHIFT (25U)
 /*! BIT25 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT25(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT25_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT25_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT26_MASK  (0x4000000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT26_SHIFT (26U)
 /*! BIT26 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT26(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT26_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT26_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT27_MASK  (0x8000000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT27_SHIFT (27U)
 /*! BIT27 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT27(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT27_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT27_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT28_MASK  (0x10000000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT28_SHIFT (28U)
 /*! BIT28 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT28(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT28_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT28_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT29_MASK  (0x20000000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT29_SHIFT (29U)
 /*! BIT29 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT29(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT29_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT29_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT30_MASK  (0x40000000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT30_SHIFT (30U)
 /*! BIT30 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT30(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT30_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT30_MASK)
 
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT31_MASK  (0x80000000U)
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT31_SHIFT (31U)
 /*! BIT31 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT31(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT31_SHIFT)) & TRDC_MBC_DOM0_MEM0_BLK_NSE_W_BIT31_MASK)
 /*! @} */
@@ -1751,8 +1748,8 @@ typedef struct {
 /*! NSE0 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE0(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE0_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE0_MASK)
 
@@ -1775,8 +1772,8 @@ typedef struct {
 /*! NSE1 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE1(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE1_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE1_MASK)
 
@@ -1799,8 +1796,8 @@ typedef struct {
 /*! NSE2 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE2(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE2_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE2_MASK)
 
@@ -1823,8 +1820,8 @@ typedef struct {
 /*! NSE3 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE3(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE3_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE3_MASK)
 
@@ -1847,8 +1844,8 @@ typedef struct {
 /*! NSE4 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE4(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE4_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE4_MASK)
 
@@ -1871,8 +1868,8 @@ typedef struct {
 /*! NSE5 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE5(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE5_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE5_MASK)
 
@@ -1895,8 +1892,8 @@ typedef struct {
 /*! NSE6 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE6(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE6_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE6_MASK)
 
@@ -1919,8 +1916,8 @@ typedef struct {
 /*! NSE7 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE7(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE7_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_CFG_W_NSE7_MASK)
 /*! @} */
@@ -1937,320 +1934,320 @@ typedef struct {
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT0_MASK   (0x1U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT0_SHIFT  (0U)
 /*! BIT0 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT0(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT0_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT0_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT1_MASK   (0x2U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT1_SHIFT  (1U)
 /*! BIT1 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT1(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT1_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT1_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT2_MASK   (0x4U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT2_SHIFT  (2U)
 /*! BIT2 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT2(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT2_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT2_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT3_MASK   (0x8U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT3_SHIFT  (3U)
 /*! BIT3 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT3(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT3_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT3_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT4_MASK   (0x10U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT4_SHIFT  (4U)
 /*! BIT4 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT4(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT4_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT4_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT5_MASK   (0x20U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT5_SHIFT  (5U)
 /*! BIT5 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT5(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT5_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT5_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT6_MASK   (0x40U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT6_SHIFT  (6U)
 /*! BIT6 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT6(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT6_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT6_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT7_MASK   (0x80U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT7_SHIFT  (7U)
 /*! BIT7 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT7(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT7_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT7_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT8_MASK   (0x100U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT8_SHIFT  (8U)
 /*! BIT8 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT8(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT8_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT8_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT9_MASK   (0x200U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT9_SHIFT  (9U)
 /*! BIT9 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT9(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT9_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT9_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT10_MASK  (0x400U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT10_SHIFT (10U)
 /*! BIT10 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT10(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT10_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT10_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT11_MASK  (0x800U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT11_SHIFT (11U)
 /*! BIT11 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT11(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT11_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT11_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT12_MASK  (0x1000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT12_SHIFT (12U)
 /*! BIT12 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT12(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT12_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT12_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT13_MASK  (0x2000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT13_SHIFT (13U)
 /*! BIT13 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT13(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT13_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT13_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT14_MASK  (0x4000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT14_SHIFT (14U)
 /*! BIT14 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT14(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT14_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT14_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT15_MASK  (0x8000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT15_SHIFT (15U)
 /*! BIT15 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT15(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT15_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT15_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT16_MASK  (0x10000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT16_SHIFT (16U)
 /*! BIT16 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT16(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT16_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT16_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT17_MASK  (0x20000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT17_SHIFT (17U)
 /*! BIT17 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT17(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT17_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT17_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT18_MASK  (0x40000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT18_SHIFT (18U)
 /*! BIT18 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT18(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT18_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT18_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT19_MASK  (0x80000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT19_SHIFT (19U)
 /*! BIT19 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT19(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT19_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT19_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT20_MASK  (0x100000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT20_SHIFT (20U)
 /*! BIT20 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT20(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT20_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT20_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT21_MASK  (0x200000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT21_SHIFT (21U)
 /*! BIT21 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT21(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT21_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT21_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT22_MASK  (0x400000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT22_SHIFT (22U)
 /*! BIT22 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT22(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT22_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT22_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT23_MASK  (0x800000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT23_SHIFT (23U)
 /*! BIT23 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT23(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT23_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT23_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT24_MASK  (0x1000000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT24_SHIFT (24U)
 /*! BIT24 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT24(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT24_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT24_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT25_MASK  (0x2000000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT25_SHIFT (25U)
 /*! BIT25 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT25(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT25_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT25_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT26_MASK  (0x4000000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT26_SHIFT (26U)
 /*! BIT26 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT26(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT26_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT26_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT27_MASK  (0x8000000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT27_SHIFT (27U)
 /*! BIT27 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT27(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT27_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT27_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT28_MASK  (0x10000000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT28_SHIFT (28U)
 /*! BIT28 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT28(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT28_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT28_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT29_MASK  (0x20000000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT29_SHIFT (29U)
 /*! BIT29 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT29(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT29_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT29_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT30_MASK  (0x40000000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT30_SHIFT (30U)
 /*! BIT30 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT30(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT30_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT30_MASK)
 
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT31_MASK  (0x80000000U)
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT31_SHIFT (31U)
 /*! BIT31 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT31(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT31_SHIFT)) & TRDC_MBC_DOM0_MEM1_BLK_NSE_W_BIT31_MASK)
 /*! @} */
@@ -2283,8 +2280,8 @@ typedef struct {
 /*! NSE0 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE0(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE0_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE0_MASK)
 
@@ -2307,8 +2304,8 @@ typedef struct {
 /*! NSE1 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE1(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE1_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE1_MASK)
 
@@ -2331,8 +2328,8 @@ typedef struct {
 /*! NSE2 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE2(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE2_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE2_MASK)
 
@@ -2355,8 +2352,8 @@ typedef struct {
 /*! NSE3 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE3(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE3_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE3_MASK)
 
@@ -2379,8 +2376,8 @@ typedef struct {
 /*! NSE4 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE4(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE4_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE4_MASK)
 
@@ -2403,8 +2400,8 @@ typedef struct {
 /*! NSE5 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE5(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE5_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE5_MASK)
 
@@ -2427,8 +2424,8 @@ typedef struct {
 /*! NSE6 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE6(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE6_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE6_MASK)
 
@@ -2451,8 +2448,8 @@ typedef struct {
 /*! NSE7 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE7(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE7_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_CFG_W_NSE7_MASK)
 /*! @} */
@@ -2469,320 +2466,320 @@ typedef struct {
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT0_MASK   (0x1U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT0_SHIFT  (0U)
 /*! BIT0 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT0(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT0_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT0_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT1_MASK   (0x2U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT1_SHIFT  (1U)
 /*! BIT1 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT1(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT1_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT1_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT2_MASK   (0x4U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT2_SHIFT  (2U)
 /*! BIT2 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT2(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT2_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT2_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT3_MASK   (0x8U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT3_SHIFT  (3U)
 /*! BIT3 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT3(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT3_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT3_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT4_MASK   (0x10U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT4_SHIFT  (4U)
 /*! BIT4 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT4(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT4_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT4_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT5_MASK   (0x20U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT5_SHIFT  (5U)
 /*! BIT5 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT5(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT5_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT5_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT6_MASK   (0x40U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT6_SHIFT  (6U)
 /*! BIT6 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT6(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT6_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT6_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT7_MASK   (0x80U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT7_SHIFT  (7U)
 /*! BIT7 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT7(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT7_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT7_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT8_MASK   (0x100U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT8_SHIFT  (8U)
 /*! BIT8 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT8(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT8_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT8_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT9_MASK   (0x200U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT9_SHIFT  (9U)
 /*! BIT9 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT9(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT9_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT9_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT10_MASK  (0x400U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT10_SHIFT (10U)
 /*! BIT10 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT10(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT10_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT10_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT11_MASK  (0x800U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT11_SHIFT (11U)
 /*! BIT11 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT11(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT11_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT11_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT12_MASK  (0x1000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT12_SHIFT (12U)
 /*! BIT12 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT12(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT12_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT12_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT13_MASK  (0x2000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT13_SHIFT (13U)
 /*! BIT13 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT13(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT13_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT13_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT14_MASK  (0x4000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT14_SHIFT (14U)
 /*! BIT14 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT14(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT14_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT14_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT15_MASK  (0x8000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT15_SHIFT (15U)
 /*! BIT15 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT15(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT15_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT15_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT16_MASK  (0x10000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT16_SHIFT (16U)
 /*! BIT16 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT16(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT16_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT16_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT17_MASK  (0x20000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT17_SHIFT (17U)
 /*! BIT17 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT17(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT17_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT17_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT18_MASK  (0x40000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT18_SHIFT (18U)
 /*! BIT18 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT18(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT18_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT18_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT19_MASK  (0x80000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT19_SHIFT (19U)
 /*! BIT19 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT19(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT19_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT19_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT20_MASK  (0x100000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT20_SHIFT (20U)
 /*! BIT20 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT20(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT20_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT20_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT21_MASK  (0x200000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT21_SHIFT (21U)
 /*! BIT21 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT21(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT21_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT21_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT22_MASK  (0x400000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT22_SHIFT (22U)
 /*! BIT22 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT22(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT22_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT22_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT23_MASK  (0x800000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT23_SHIFT (23U)
 /*! BIT23 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT23(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT23_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT23_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT24_MASK  (0x1000000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT24_SHIFT (24U)
 /*! BIT24 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT24(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT24_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT24_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT25_MASK  (0x2000000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT25_SHIFT (25U)
 /*! BIT25 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT25(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT25_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT25_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT26_MASK  (0x4000000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT26_SHIFT (26U)
 /*! BIT26 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT26(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT26_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT26_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT27_MASK  (0x8000000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT27_SHIFT (27U)
 /*! BIT27 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT27(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT27_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT27_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT28_MASK  (0x10000000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT28_SHIFT (28U)
 /*! BIT28 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT28(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT28_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT28_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT29_MASK  (0x20000000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT29_SHIFT (29U)
 /*! BIT29 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT29(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT29_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT29_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT30_MASK  (0x40000000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT30_SHIFT (30U)
 /*! BIT30 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT30(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT30_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT30_MASK)
 
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT31_MASK  (0x80000000U)
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT31_SHIFT (31U)
 /*! BIT31 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT31(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT31_SHIFT)) & TRDC_MBC_DOM0_MEM2_BLK_NSE_W_BIT31_MASK)
 /*! @} */
@@ -2815,8 +2812,8 @@ typedef struct {
 /*! NSE0 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE0(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE0_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE0_MASK)
 
@@ -2839,8 +2836,8 @@ typedef struct {
 /*! NSE1 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE1(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE1_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE1_MASK)
 
@@ -2863,8 +2860,8 @@ typedef struct {
 /*! NSE2 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE2(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE2_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE2_MASK)
 
@@ -2887,8 +2884,8 @@ typedef struct {
 /*! NSE3 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE3(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE3_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE3_MASK)
 
@@ -2911,8 +2908,8 @@ typedef struct {
 /*! NSE4 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE4(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE4_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE4_MASK)
 
@@ -2935,8 +2932,8 @@ typedef struct {
 /*! NSE5 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE5(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE5_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE5_MASK)
 
@@ -2959,8 +2956,8 @@ typedef struct {
 /*! NSE6 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE6(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE6_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE6_MASK)
 
@@ -2983,8 +2980,8 @@ typedef struct {
 /*! NSE7 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE7(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE7_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_CFG_W_NSE7_MASK)
 /*! @} */
@@ -3001,320 +2998,320 @@ typedef struct {
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT0_MASK   (0x1U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT0_SHIFT  (0U)
 /*! BIT0 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT0(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT0_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT0_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT1_MASK   (0x2U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT1_SHIFT  (1U)
 /*! BIT1 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT1(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT1_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT1_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT2_MASK   (0x4U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT2_SHIFT  (2U)
 /*! BIT2 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT2(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT2_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT2_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT3_MASK   (0x8U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT3_SHIFT  (3U)
 /*! BIT3 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT3(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT3_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT3_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT4_MASK   (0x10U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT4_SHIFT  (4U)
 /*! BIT4 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT4(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT4_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT4_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT5_MASK   (0x20U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT5_SHIFT  (5U)
 /*! BIT5 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT5(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT5_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT5_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT6_MASK   (0x40U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT6_SHIFT  (6U)
 /*! BIT6 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT6(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT6_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT6_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT7_MASK   (0x80U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT7_SHIFT  (7U)
 /*! BIT7 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT7(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT7_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT7_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT8_MASK   (0x100U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT8_SHIFT  (8U)
 /*! BIT8 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT8(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT8_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT8_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT9_MASK   (0x200U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT9_SHIFT  (9U)
 /*! BIT9 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT9(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT9_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT9_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT10_MASK  (0x400U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT10_SHIFT (10U)
 /*! BIT10 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT10(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT10_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT10_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT11_MASK  (0x800U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT11_SHIFT (11U)
 /*! BIT11 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT11(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT11_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT11_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT12_MASK  (0x1000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT12_SHIFT (12U)
 /*! BIT12 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT12(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT12_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT12_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT13_MASK  (0x2000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT13_SHIFT (13U)
 /*! BIT13 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT13(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT13_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT13_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT14_MASK  (0x4000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT14_SHIFT (14U)
 /*! BIT14 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT14(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT14_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT14_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT15_MASK  (0x8000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT15_SHIFT (15U)
 /*! BIT15 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT15(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT15_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT15_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT16_MASK  (0x10000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT16_SHIFT (16U)
 /*! BIT16 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT16(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT16_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT16_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT17_MASK  (0x20000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT17_SHIFT (17U)
 /*! BIT17 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT17(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT17_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT17_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT18_MASK  (0x40000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT18_SHIFT (18U)
 /*! BIT18 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT18(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT18_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT18_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT19_MASK  (0x80000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT19_SHIFT (19U)
 /*! BIT19 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT19(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT19_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT19_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT20_MASK  (0x100000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT20_SHIFT (20U)
 /*! BIT20 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT20(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT20_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT20_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT21_MASK  (0x200000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT21_SHIFT (21U)
 /*! BIT21 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT21(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT21_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT21_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT22_MASK  (0x400000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT22_SHIFT (22U)
 /*! BIT22 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT22(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT22_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT22_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT23_MASK  (0x800000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT23_SHIFT (23U)
 /*! BIT23 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT23(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT23_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT23_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT24_MASK  (0x1000000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT24_SHIFT (24U)
 /*! BIT24 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT24(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT24_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT24_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT25_MASK  (0x2000000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT25_SHIFT (25U)
 /*! BIT25 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT25(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT25_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT25_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT26_MASK  (0x4000000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT26_SHIFT (26U)
 /*! BIT26 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT26(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT26_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT26_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT27_MASK  (0x8000000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT27_SHIFT (27U)
 /*! BIT27 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT27(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT27_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT27_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT28_MASK  (0x10000000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT28_SHIFT (28U)
 /*! BIT28 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT28(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT28_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT28_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT29_MASK  (0x20000000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT29_SHIFT (29U)
 /*! BIT29 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT29(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT29_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT29_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT30_MASK  (0x40000000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT30_SHIFT (30U)
 /*! BIT30 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT30(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT30_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT30_MASK)
 
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT31_MASK  (0x80000000U)
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT31_SHIFT (31U)
 /*! BIT31 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT31(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT31_SHIFT)) & TRDC_MBC_DOM0_MEM3_BLK_NSE_W_BIT31_MASK)
 /*! @} */
@@ -3347,8 +3344,8 @@ typedef struct {
 /*! NSE0 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE0(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE0_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE0_MASK)
 
@@ -3371,8 +3368,8 @@ typedef struct {
 /*! NSE1 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE1(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE1_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE1_MASK)
 
@@ -3395,8 +3392,8 @@ typedef struct {
 /*! NSE2 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE2(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE2_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE2_MASK)
 
@@ -3419,8 +3416,8 @@ typedef struct {
 /*! NSE3 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE3(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE3_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE3_MASK)
 
@@ -3443,8 +3440,8 @@ typedef struct {
 /*! NSE4 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE4(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE4_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE4_MASK)
 
@@ -3467,8 +3464,8 @@ typedef struct {
 /*! NSE5 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE5(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE5_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE5_MASK)
 
@@ -3491,8 +3488,8 @@ typedef struct {
 /*! NSE6 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE6(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE6_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE6_MASK)
 
@@ -3515,8 +3512,8 @@ typedef struct {
 /*! NSE7 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE7(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE7_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_CFG_W_NSE7_MASK)
 /*! @} */
@@ -3533,320 +3530,320 @@ typedef struct {
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT0_MASK   (0x1U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT0_SHIFT  (0U)
 /*! BIT0 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT0(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT0_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT0_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT1_MASK   (0x2U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT1_SHIFT  (1U)
 /*! BIT1 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT1(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT1_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT1_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT2_MASK   (0x4U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT2_SHIFT  (2U)
 /*! BIT2 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT2(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT2_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT2_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT3_MASK   (0x8U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT3_SHIFT  (3U)
 /*! BIT3 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT3(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT3_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT3_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT4_MASK   (0x10U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT4_SHIFT  (4U)
 /*! BIT4 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT4(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT4_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT4_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT5_MASK   (0x20U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT5_SHIFT  (5U)
 /*! BIT5 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT5(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT5_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT5_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT6_MASK   (0x40U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT6_SHIFT  (6U)
 /*! BIT6 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT6(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT6_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT6_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT7_MASK   (0x80U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT7_SHIFT  (7U)
 /*! BIT7 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT7(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT7_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT7_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT8_MASK   (0x100U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT8_SHIFT  (8U)
 /*! BIT8 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT8(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT8_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT8_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT9_MASK   (0x200U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT9_SHIFT  (9U)
 /*! BIT9 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT9(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT9_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT9_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT10_MASK  (0x400U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT10_SHIFT (10U)
 /*! BIT10 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT10(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT10_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT10_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT11_MASK  (0x800U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT11_SHIFT (11U)
 /*! BIT11 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT11(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT11_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT11_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT12_MASK  (0x1000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT12_SHIFT (12U)
 /*! BIT12 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT12(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT12_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT12_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT13_MASK  (0x2000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT13_SHIFT (13U)
 /*! BIT13 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT13(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT13_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT13_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT14_MASK  (0x4000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT14_SHIFT (14U)
 /*! BIT14 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT14(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT14_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT14_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT15_MASK  (0x8000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT15_SHIFT (15U)
 /*! BIT15 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT15(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT15_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT15_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT16_MASK  (0x10000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT16_SHIFT (16U)
 /*! BIT16 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT16(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT16_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT16_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT17_MASK  (0x20000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT17_SHIFT (17U)
 /*! BIT17 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT17(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT17_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT17_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT18_MASK  (0x40000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT18_SHIFT (18U)
 /*! BIT18 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT18(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT18_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT18_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT19_MASK  (0x80000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT19_SHIFT (19U)
 /*! BIT19 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT19(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT19_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT19_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT20_MASK  (0x100000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT20_SHIFT (20U)
 /*! BIT20 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT20(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT20_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT20_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT21_MASK  (0x200000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT21_SHIFT (21U)
 /*! BIT21 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT21(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT21_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT21_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT22_MASK  (0x400000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT22_SHIFT (22U)
 /*! BIT22 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT22(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT22_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT22_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT23_MASK  (0x800000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT23_SHIFT (23U)
 /*! BIT23 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT23(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT23_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT23_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT24_MASK  (0x1000000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT24_SHIFT (24U)
 /*! BIT24 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT24(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT24_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT24_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT25_MASK  (0x2000000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT25_SHIFT (25U)
 /*! BIT25 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT25(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT25_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT25_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT26_MASK  (0x4000000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT26_SHIFT (26U)
 /*! BIT26 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT26(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT26_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT26_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT27_MASK  (0x8000000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT27_SHIFT (27U)
 /*! BIT27 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT27(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT27_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT27_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT28_MASK  (0x10000000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT28_SHIFT (28U)
 /*! BIT28 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT28(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT28_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT28_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT29_MASK  (0x20000000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT29_SHIFT (29U)
 /*! BIT29 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT29(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT29_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT29_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT30_MASK  (0x40000000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT30_SHIFT (30U)
 /*! BIT30 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT30(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT30_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT30_MASK)
 
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT31_MASK  (0x80000000U)
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT31_SHIFT (31U)
 /*! BIT31 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT31(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT31_SHIFT)) & TRDC_MBC_DOM1_MEM0_BLK_NSE_W_BIT31_MASK)
 /*! @} */
@@ -3879,8 +3876,8 @@ typedef struct {
 /*! NSE0 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE0(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE0_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE0_MASK)
 
@@ -3903,8 +3900,8 @@ typedef struct {
 /*! NSE1 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE1(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE1_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE1_MASK)
 
@@ -3927,8 +3924,8 @@ typedef struct {
 /*! NSE2 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE2(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE2_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE2_MASK)
 
@@ -3951,8 +3948,8 @@ typedef struct {
 /*! NSE3 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE3(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE3_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE3_MASK)
 
@@ -3975,8 +3972,8 @@ typedef struct {
 /*! NSE4 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE4(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE4_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE4_MASK)
 
@@ -3999,8 +3996,8 @@ typedef struct {
 /*! NSE5 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE5(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE5_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE5_MASK)
 
@@ -4023,8 +4020,8 @@ typedef struct {
 /*! NSE6 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE6(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE6_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE6_MASK)
 
@@ -4047,8 +4044,8 @@ typedef struct {
 /*! NSE7 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE7(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE7_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_CFG_W_NSE7_MASK)
 /*! @} */
@@ -4065,320 +4062,320 @@ typedef struct {
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT0_MASK   (0x1U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT0_SHIFT  (0U)
 /*! BIT0 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT0(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT0_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT0_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT1_MASK   (0x2U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT1_SHIFT  (1U)
 /*! BIT1 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT1(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT1_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT1_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT2_MASK   (0x4U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT2_SHIFT  (2U)
 /*! BIT2 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT2(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT2_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT2_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT3_MASK   (0x8U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT3_SHIFT  (3U)
 /*! BIT3 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT3(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT3_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT3_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT4_MASK   (0x10U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT4_SHIFT  (4U)
 /*! BIT4 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT4(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT4_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT4_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT5_MASK   (0x20U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT5_SHIFT  (5U)
 /*! BIT5 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT5(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT5_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT5_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT6_MASK   (0x40U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT6_SHIFT  (6U)
 /*! BIT6 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT6(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT6_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT6_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT7_MASK   (0x80U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT7_SHIFT  (7U)
 /*! BIT7 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT7(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT7_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT7_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT8_MASK   (0x100U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT8_SHIFT  (8U)
 /*! BIT8 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT8(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT8_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT8_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT9_MASK   (0x200U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT9_SHIFT  (9U)
 /*! BIT9 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT9(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT9_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT9_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT10_MASK  (0x400U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT10_SHIFT (10U)
 /*! BIT10 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT10(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT10_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT10_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT11_MASK  (0x800U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT11_SHIFT (11U)
 /*! BIT11 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT11(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT11_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT11_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT12_MASK  (0x1000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT12_SHIFT (12U)
 /*! BIT12 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT12(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT12_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT12_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT13_MASK  (0x2000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT13_SHIFT (13U)
 /*! BIT13 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT13(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT13_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT13_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT14_MASK  (0x4000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT14_SHIFT (14U)
 /*! BIT14 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT14(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT14_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT14_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT15_MASK  (0x8000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT15_SHIFT (15U)
 /*! BIT15 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT15(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT15_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT15_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT16_MASK  (0x10000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT16_SHIFT (16U)
 /*! BIT16 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT16(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT16_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT16_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT17_MASK  (0x20000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT17_SHIFT (17U)
 /*! BIT17 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT17(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT17_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT17_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT18_MASK  (0x40000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT18_SHIFT (18U)
 /*! BIT18 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT18(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT18_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT18_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT19_MASK  (0x80000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT19_SHIFT (19U)
 /*! BIT19 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT19(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT19_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT19_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT20_MASK  (0x100000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT20_SHIFT (20U)
 /*! BIT20 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT20(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT20_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT20_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT21_MASK  (0x200000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT21_SHIFT (21U)
 /*! BIT21 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT21(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT21_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT21_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT22_MASK  (0x400000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT22_SHIFT (22U)
 /*! BIT22 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT22(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT22_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT22_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT23_MASK  (0x800000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT23_SHIFT (23U)
 /*! BIT23 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT23(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT23_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT23_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT24_MASK  (0x1000000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT24_SHIFT (24U)
 /*! BIT24 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT24(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT24_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT24_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT25_MASK  (0x2000000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT25_SHIFT (25U)
 /*! BIT25 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT25(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT25_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT25_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT26_MASK  (0x4000000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT26_SHIFT (26U)
 /*! BIT26 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT26(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT26_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT26_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT27_MASK  (0x8000000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT27_SHIFT (27U)
 /*! BIT27 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT27(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT27_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT27_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT28_MASK  (0x10000000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT28_SHIFT (28U)
 /*! BIT28 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT28(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT28_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT28_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT29_MASK  (0x20000000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT29_SHIFT (29U)
 /*! BIT29 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT29(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT29_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT29_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT30_MASK  (0x40000000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT30_SHIFT (30U)
 /*! BIT30 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT30(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT30_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT30_MASK)
 
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT31_MASK  (0x80000000U)
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT31_SHIFT (31U)
 /*! BIT31 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT31(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT31_SHIFT)) & TRDC_MBC_DOM1_MEM1_BLK_NSE_W_BIT31_MASK)
 /*! @} */
@@ -4411,8 +4408,8 @@ typedef struct {
 /*! NSE0 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE0(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE0_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE0_MASK)
 
@@ -4435,8 +4432,8 @@ typedef struct {
 /*! NSE1 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE1(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE1_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE1_MASK)
 
@@ -4459,8 +4456,8 @@ typedef struct {
 /*! NSE2 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE2(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE2_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE2_MASK)
 
@@ -4483,8 +4480,8 @@ typedef struct {
 /*! NSE3 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE3(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE3_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE3_MASK)
 
@@ -4507,8 +4504,8 @@ typedef struct {
 /*! NSE4 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE4(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE4_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE4_MASK)
 
@@ -4531,8 +4528,8 @@ typedef struct {
 /*! NSE5 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE5(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE5_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE5_MASK)
 
@@ -4555,8 +4552,8 @@ typedef struct {
 /*! NSE6 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE6(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE6_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE6_MASK)
 
@@ -4579,8 +4576,8 @@ typedef struct {
 /*! NSE7 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE7(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE7_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_CFG_W_NSE7_MASK)
 /*! @} */
@@ -4597,320 +4594,320 @@ typedef struct {
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT0_MASK   (0x1U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT0_SHIFT  (0U)
 /*! BIT0 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT0(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT0_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT0_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT1_MASK   (0x2U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT1_SHIFT  (1U)
 /*! BIT1 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT1(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT1_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT1_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT2_MASK   (0x4U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT2_SHIFT  (2U)
 /*! BIT2 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT2(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT2_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT2_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT3_MASK   (0x8U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT3_SHIFT  (3U)
 /*! BIT3 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT3(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT3_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT3_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT4_MASK   (0x10U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT4_SHIFT  (4U)
 /*! BIT4 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT4(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT4_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT4_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT5_MASK   (0x20U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT5_SHIFT  (5U)
 /*! BIT5 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT5(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT5_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT5_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT6_MASK   (0x40U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT6_SHIFT  (6U)
 /*! BIT6 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT6(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT6_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT6_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT7_MASK   (0x80U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT7_SHIFT  (7U)
 /*! BIT7 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT7(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT7_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT7_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT8_MASK   (0x100U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT8_SHIFT  (8U)
 /*! BIT8 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT8(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT8_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT8_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT9_MASK   (0x200U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT9_SHIFT  (9U)
 /*! BIT9 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT9(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT9_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT9_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT10_MASK  (0x400U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT10_SHIFT (10U)
 /*! BIT10 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT10(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT10_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT10_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT11_MASK  (0x800U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT11_SHIFT (11U)
 /*! BIT11 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT11(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT11_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT11_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT12_MASK  (0x1000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT12_SHIFT (12U)
 /*! BIT12 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT12(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT12_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT12_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT13_MASK  (0x2000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT13_SHIFT (13U)
 /*! BIT13 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT13(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT13_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT13_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT14_MASK  (0x4000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT14_SHIFT (14U)
 /*! BIT14 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT14(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT14_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT14_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT15_MASK  (0x8000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT15_SHIFT (15U)
 /*! BIT15 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT15(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT15_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT15_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT16_MASK  (0x10000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT16_SHIFT (16U)
 /*! BIT16 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT16(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT16_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT16_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT17_MASK  (0x20000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT17_SHIFT (17U)
 /*! BIT17 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT17(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT17_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT17_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT18_MASK  (0x40000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT18_SHIFT (18U)
 /*! BIT18 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT18(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT18_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT18_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT19_MASK  (0x80000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT19_SHIFT (19U)
 /*! BIT19 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT19(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT19_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT19_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT20_MASK  (0x100000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT20_SHIFT (20U)
 /*! BIT20 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT20(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT20_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT20_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT21_MASK  (0x200000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT21_SHIFT (21U)
 /*! BIT21 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT21(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT21_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT21_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT22_MASK  (0x400000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT22_SHIFT (22U)
 /*! BIT22 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT22(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT22_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT22_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT23_MASK  (0x800000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT23_SHIFT (23U)
 /*! BIT23 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT23(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT23_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT23_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT24_MASK  (0x1000000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT24_SHIFT (24U)
 /*! BIT24 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT24(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT24_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT24_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT25_MASK  (0x2000000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT25_SHIFT (25U)
 /*! BIT25 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT25(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT25_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT25_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT26_MASK  (0x4000000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT26_SHIFT (26U)
 /*! BIT26 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT26(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT26_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT26_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT27_MASK  (0x8000000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT27_SHIFT (27U)
 /*! BIT27 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT27(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT27_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT27_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT28_MASK  (0x10000000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT28_SHIFT (28U)
 /*! BIT28 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT28(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT28_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT28_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT29_MASK  (0x20000000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT29_SHIFT (29U)
 /*! BIT29 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT29(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT29_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT29_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT30_MASK  (0x40000000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT30_SHIFT (30U)
 /*! BIT30 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT30(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT30_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT30_MASK)
 
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT31_MASK  (0x80000000U)
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT31_SHIFT (31U)
 /*! BIT31 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT31(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT31_SHIFT)) & TRDC_MBC_DOM1_MEM2_BLK_NSE_W_BIT31_MASK)
 /*! @} */
@@ -4943,8 +4940,8 @@ typedef struct {
 /*! NSE0 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE0(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE0_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE0_MASK)
 
@@ -4967,8 +4964,8 @@ typedef struct {
 /*! NSE1 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE1(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE1_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE1_MASK)
 
@@ -4991,8 +4988,8 @@ typedef struct {
 /*! NSE2 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE2(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE2_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE2_MASK)
 
@@ -5015,8 +5012,8 @@ typedef struct {
 /*! NSE3 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE3(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE3_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE3_MASK)
 
@@ -5039,8 +5036,8 @@ typedef struct {
 /*! NSE4 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE4(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE4_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE4_MASK)
 
@@ -5063,8 +5060,8 @@ typedef struct {
 /*! NSE5 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE5(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE5_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE5_MASK)
 
@@ -5087,8 +5084,8 @@ typedef struct {
 /*! NSE6 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE6(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE6_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE6_MASK)
 
@@ -5111,8 +5108,8 @@ typedef struct {
 /*! NSE7 - NonSecure Enable for block B
  *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE7(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE7_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_CFG_W_NSE7_MASK)
 /*! @} */
@@ -5129,320 +5126,320 @@ typedef struct {
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT0_MASK   (0x1U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT0_SHIFT  (0U)
 /*! BIT0 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT0(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT0_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT0_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT1_MASK   (0x2U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT1_SHIFT  (1U)
 /*! BIT1 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT1(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT1_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT1_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT2_MASK   (0x4U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT2_SHIFT  (2U)
 /*! BIT2 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT2(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT2_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT2_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT3_MASK   (0x8U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT3_SHIFT  (3U)
 /*! BIT3 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT3(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT3_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT3_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT4_MASK   (0x10U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT4_SHIFT  (4U)
 /*! BIT4 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT4(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT4_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT4_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT5_MASK   (0x20U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT5_SHIFT  (5U)
 /*! BIT5 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT5(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT5_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT5_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT6_MASK   (0x40U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT6_SHIFT  (6U)
 /*! BIT6 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT6(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT6_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT6_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT7_MASK   (0x80U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT7_SHIFT  (7U)
 /*! BIT7 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT7(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT7_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT7_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT8_MASK   (0x100U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT8_SHIFT  (8U)
 /*! BIT8 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT8(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT8_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT8_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT9_MASK   (0x200U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT9_SHIFT  (9U)
 /*! BIT9 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT9(x)     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT9_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT9_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT10_MASK  (0x400U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT10_SHIFT (10U)
 /*! BIT10 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT10(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT10_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT10_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT11_MASK  (0x800U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT11_SHIFT (11U)
 /*! BIT11 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT11(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT11_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT11_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT12_MASK  (0x1000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT12_SHIFT (12U)
 /*! BIT12 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT12(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT12_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT12_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT13_MASK  (0x2000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT13_SHIFT (13U)
 /*! BIT13 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT13(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT13_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT13_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT14_MASK  (0x4000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT14_SHIFT (14U)
 /*! BIT14 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT14(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT14_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT14_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT15_MASK  (0x8000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT15_SHIFT (15U)
 /*! BIT15 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT15(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT15_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT15_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT16_MASK  (0x10000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT16_SHIFT (16U)
 /*! BIT16 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT16(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT16_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT16_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT17_MASK  (0x20000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT17_SHIFT (17U)
 /*! BIT17 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT17(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT17_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT17_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT18_MASK  (0x40000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT18_SHIFT (18U)
 /*! BIT18 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT18(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT18_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT18_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT19_MASK  (0x80000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT19_SHIFT (19U)
 /*! BIT19 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT19(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT19_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT19_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT20_MASK  (0x100000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT20_SHIFT (20U)
 /*! BIT20 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT20(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT20_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT20_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT21_MASK  (0x200000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT21_SHIFT (21U)
 /*! BIT21 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT21(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT21_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT21_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT22_MASK  (0x400000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT22_SHIFT (22U)
 /*! BIT22 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT22(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT22_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT22_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT23_MASK  (0x800000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT23_SHIFT (23U)
 /*! BIT23 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT23(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT23_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT23_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT24_MASK  (0x1000000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT24_SHIFT (24U)
 /*! BIT24 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT24(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT24_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT24_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT25_MASK  (0x2000000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT25_SHIFT (25U)
 /*! BIT25 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT25(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT25_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT25_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT26_MASK  (0x4000000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT26_SHIFT (26U)
 /*! BIT26 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT26(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT26_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT26_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT27_MASK  (0x8000000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT27_SHIFT (27U)
 /*! BIT27 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT27(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT27_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT27_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT28_MASK  (0x10000000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT28_SHIFT (28U)
 /*! BIT28 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT28(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT28_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT28_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT29_MASK  (0x20000000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT29_SHIFT (29U)
 /*! BIT29 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT29(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT29_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT29_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT30_MASK  (0x40000000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT30_SHIFT (30U)
 /*! BIT30 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT30(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT30_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT30_MASK)
 
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT31_MASK  (0x80000000U)
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT31_SHIFT (31U)
 /*! BIT31 - Bit b NonSecure Enable [b = 0 - 31]
- *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in register
+ *  0b0..Secure accesses to block B are based on corresponding MBACSEL field in this register
  *       (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]), nonsecure accesses to block B are not allowed.
- *  0b1..Secure accesses to block B are not allowed, nonsecure accesses to block B are based on corresponding
- *       MBACSEL field in register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
+ *  0b1..Secure executions to block B are not allowed. Secure read, secure write and nonsecure accesses to block B
+ *       are based on corresponding MBACSEL field in this register (MBCm_DOMd_MEMs_BLK_CFG_Ww[MBACSEL]).
  */
 #define TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT31(x)    (((uint32_t)(((uint32_t)(x)) << TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT31_SHIFT)) & TRDC_MBC_DOM1_MEM3_BLK_NSE_W_BIT31_MASK)
 /*! @} */

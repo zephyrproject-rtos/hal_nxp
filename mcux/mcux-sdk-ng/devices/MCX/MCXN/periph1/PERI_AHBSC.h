@@ -145,7 +145,7 @@ typedef struct {
        uint8_t RESERVED_13[8];
   __IO uint32_t AHB_PERIPHERAL1_SLAVE_PORT_P13_SLAVE_RULE0; /**< AHB Peripheral 1 Slave Port 13 Slave Rule 0, offset: 0x1F0 */
   __IO uint32_t AHB_PERIPHERAL1_SLAVE_PORT_P13_SLAVE_RULE1; /**< AHB Peripheral 1 Slave Port 13 Slave Rule 1, offset: 0x1F4 */
-       uint32_t AHB_PERIPHERAL1_SLAVE_PORT_P13_SLAVE_RULE2; /**< AHB Peripheral 1 Slave Port 13 Slave Rule 2, offset: 0x1F8 */
+  __I  uint32_t AHB_PERIPHERAL1_SLAVE_PORT_P13_SLAVE_RULE2; /**< AHB Peripheral 1 Slave Port 13 Slave Rule 2, offset: 0x1F8 */
        uint8_t RESERVED_14[4];
   __IO uint32_t AIPS_BRIDGE_GROUP2_MEM_RULE0;      /**< AIPS Bridge Group 2 Rule 0, offset: 0x200 */
   __IO uint32_t AIPS_BRIDGE_GROUP2_MEM_RULE1;      /**< AIPS Bridge Group 2 Memory Rule 1, offset: 0x204 */
@@ -1362,6 +1362,26 @@ typedef struct {
 
 /*! @name AIPS_BRIDGE_GROUP0_MEM_RULE1 - AIPS Bridge Group 0 Memory Rule 1 */
 /*! @{ */
+
+#define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_CMC_MASK (0x3U)
+#define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_CMC_SHIFT (0U)
+/*! CMC - CMC
+ *  0b00..Non-secure and non-privilege user access allowed
+ *  0b01..Non-secure and privilege access allowed
+ *  0b10..Secure and non-privilege user access allowed
+ *  0b11..Secure and privilege user access allowed
+ */
+#define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_CMC(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_CMC_SHIFT)) & AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_CMC_MASK)
+
+#define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_OSTIMER0_MASK (0x30U)
+#define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_OSTIMER0_SHIFT (4U)
+/*! OSTIMER0 - OSTIMER0
+ *  0b00..Non-secure and non-privilege user access allowed
+ *  0b01..Non-secure and privilege access allowed
+ *  0b10..Secure and non-privilege user access allowed
+ *  0b11..Secure and privilege user access allowed
+ */
+#define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_OSTIMER0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_OSTIMER0_SHIFT)) & AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_OSTIMER0_MASK)
 
 #define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_LPTMR0_MASK (0x300U)
 #define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_LPTMR0_SHIFT (8U)

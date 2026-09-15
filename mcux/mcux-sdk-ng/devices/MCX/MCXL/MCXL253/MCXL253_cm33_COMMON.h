@@ -10,7 +10,7 @@
 **
 **     Reference manual:    MCXL25x RM Rev.2
 **     Version:             rev. 2.1, 2026-05-02
-**     Build:               b260512
+**     Build:               b260713
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXL253_cm33
@@ -186,6 +186,45 @@ typedef enum IRQn {
 #endif
 /* CPU specific feature definitions */
 #include "MCXL253_cm33_features.h"
+
+/* ----------------------------------------------------------------------------
+   -- Mapping Information
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup Mapping_Information Mapping Information
+ * @{
+ */
+
+/** Mapping Information */
+/*!
+ * @addtogroup erm_memory_channel_mapping
+ * @{
+ */
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+
+/*!
+ * @brief Structure for the erm_memory_channel
+ *
+ *
+ * Defines the structure for the ERM resource collections.
+ */
+typedef enum _erm_memory_channel
+{
+    kERM_MemoryChannelRAMA0         = 0U,          /**< Memory RAMA0 */
+    kERM_MemoryChannelFMU0          = 1U,          /**< Memory FLASH */
+} erm_memory_channel_t;
+
+/* @} */
+
+
+/*!
+ * @}
+ */ /* end of group Mapping_Information */
+
 
 /* ADC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

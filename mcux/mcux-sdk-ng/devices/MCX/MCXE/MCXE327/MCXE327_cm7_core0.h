@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MCXE31 RM Rev2
 **     Version:             rev. 1.0, 2025-07-18
-**     Build:               b260603
+**     Build:               b260807
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXE327_cm7_core0
@@ -67,7 +67,6 @@
 #include "PERI_FLEXIO.h"
 #include "PERI_FXOSC.h"
 #include "PERI_I2S.h"
-#include "PERI_I3C.h"
 #include "PERI_INTM.h"
 #include "PERI_JDC.h"
 #include "PERI_LCU.h"

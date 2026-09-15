@@ -32,13 +32,13 @@
 **                          MCXA156VPJ
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260805
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSCON
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -137,7 +137,7 @@ typedef struct {
        uint8_t RESERVED_6[120];
   __IO uint32_t CLKUNLOCK;                         /**< Clock Configuration Unlock, offset: 0x3FC */
   __IO uint32_t NVM_CTRL;                          /**< NVM Control, offset: 0x400 */
-       uint32_t ROMCR;                             /**< ROM Wait State, offset: 0x404 */
+  __I  uint32_t ROMCR;                             /**< ROM Wait State, offset: 0x404 */
        uint8_t RESERVED_7[1028];
   __I  uint32_t CPUSTAT;                           /**< CPU Status, offset: 0x80C */
        uint8_t RESERVED_8[20];

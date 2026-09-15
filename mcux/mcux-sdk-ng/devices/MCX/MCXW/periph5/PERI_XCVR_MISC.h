@@ -1,13 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70AAMMP
-**                          MCXW70ACMFT
+**     Processors:          MCXW70ACMFT
 **                          MCXW70ACMMP
 **                          MCXW70ADMFT
 **                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260409
+**     Build:               b260813
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for XCVR_MISC
@@ -38,9 +37,7 @@
 #if !defined(PERI_XCVR_MISC_H_)
 #define PERI_XCVR_MISC_H_                        /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70AAMMP))
-#include "MCXW70AA_COMMON.h"
-#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
+#if (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
 #elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
@@ -111,7 +108,7 @@ typedef struct {
   __IO uint32_t RSM_CTRL6;                         /**< RSM CTRL 6, offset: 0x3C */
   __IO uint32_t LCL_RX_CFG0;                       /**< LCL CTRL RX CONFIG0, offset: 0x40 */
   __IO uint32_t LCL_RX_CFG1;                       /**< LCL CTRL RX CONFIG1, offset: 0x44 */
-       uint32_t LCL_RX_CFG2;                       /**< LCL CTRL RX CONFIG2, offset: 0x48 */
+  __I  uint32_t LCL_RX_CFG2;                       /**< LCL CTRL RX CONFIG2, offset: 0x48 */
   __IO uint32_t LCL_PM_MSB;                        /**< LCL CTRL PM MSB, offset: 0x4C */
   __IO uint32_t LCL_PM_LSB;                        /**< LCL CTRL PM LSB, offset: 0x50 */
   __IO uint32_t LCL_GPIO_CTRL0;                    /**< LCL GPIO CTRL 0, offset: 0x54 */

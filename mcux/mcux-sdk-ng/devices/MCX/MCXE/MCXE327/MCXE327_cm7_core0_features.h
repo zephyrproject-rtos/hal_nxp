@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.1, 2025-11-17
-**     Build:               b260716
+**     Build:               b260825
 **
 **     Abstract:
 **         Chip specific module features.
@@ -47,6 +47,8 @@
 #define FSL_FEATURE_SOC_EIM_COUNT (1)
 /* @brief EMAC availability on the SoC. */
 #define FSL_FEATURE_SOC_EMAC_COUNT (1)
+/* @brief ENET_QOS/EMAC is affected by errata ERR050705 (Head-Of-Line blocking error when GCL gates are closed). */
+#define FSL_FEATURE_ENET_QOS_HAS_ERRATA_050705 (1)
 /* @brief EMIOS availability on the SoC. */
 #define FSL_FEATURE_SOC_EMIOS_COUNT (2)
 /* @brief FLASH availability on the SoC. */
@@ -55,8 +57,6 @@
 #define FSL_FEATURE_SOC_FLEXCAN_COUNT (4)
 /* @brief FLEXIO availability on the SoC. */
 #define FSL_FEATURE_SOC_FLEXIO_COUNT (1)
-/* @brief I3C availability on the SoC. */
-#define FSL_FEATURE_SOC_I3C_COUNT (1)
 /* @brief I2S availability on the SoC. */
 #define FSL_FEATURE_SOC_I2S_COUNT (2)
 /* @brief LPCMP availability on the SoC. */
@@ -360,8 +360,8 @@
 #define FSL_FEATURE_FLEXCAN_HAS_NO_SUPV_SUPPORT (0)
 /* @brief Enhanced Rx FIFO size (Indicates how many CAN FD messages can be stored). */
 #define FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO_SIZE (20)
-/* @brief Has more than 64 MBs. Note: This feature value is not the same on all FLEXCAN instances. */
-#define FSL_FEATURE_FLEXCAN_HAS_MORE_THAN_64_MB (1)
+/* @brief Has more than 64 MBs. */
+#define FSL_FEATURE_FLEXCAN_HAS_MORE_THAN_64_MB (0)
 /* @brief The number of enhanced Rx FIFO filter element registers. */
 #define FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO_FILTER_MAX_NUMBER (128)
 /* @brief Does not support self wake feature(bitfield MCR[SLFWAK]) */
@@ -739,7 +739,7 @@
 /* @brief QSPI LUT SEQ unit. */
 #define FSL_FEATURE_QSPI_LUT_SEQ_UNIT (5U)
 /* @brief QSPI Tx FIFO depth. */
-#define FSL_FEATURE_QSPI_TXFIFO_DEPTH (64)
+#define FSL_FEATURE_QSPI_TXFIFO_DEPTH (32)
 /* @brief QSPI Rx FIFO depth. */
 #define FSL_FEATURE_QSPI_RXFIFO_DEPTH (64)
 /* @brief QSPI AHB buffer count. */
@@ -788,6 +788,8 @@
 #define FSL_FEATURE_QSPI_HAS_TX_BUFF_ENOUGH_DATA (0)
 /* @brief QSPI has DDR mode. */
 #define FSL_FEATURE_QSPI_HAS_DDR (0)
+/* @brief there is no RXBRD bit in RBCT register. */
+#define FSL_FEATURE_QSPI_HAS_NO_RXBRD (1)
 /* @brief SOC specific configuration is needed. */
 #define FSL_FEATURE_QSPI_HAS_SOC_SPECIFIC_CONFIG (1)
 

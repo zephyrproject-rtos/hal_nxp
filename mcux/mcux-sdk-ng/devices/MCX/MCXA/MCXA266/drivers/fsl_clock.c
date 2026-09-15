@@ -765,14 +765,19 @@ static uint32_t CLOCK_GetFroLfDivFreq(void)
  */
 static uint32_t CLOCK_GetClk45MFreq(void)
 {
+    uint32_t fircFreq;
+
     if ((SCG0->FIRCCSR & SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_MASK) == 0U)
     {
         return 0U;
     }
-    else
-    {
-        return 45000000U;
-    }
+    /* CLK_45M is FIRC divided by 4 */
+#if FSL_FEATURE_FIRC_SUPPORT_240M
+    fircFreq = (SCG0->FIRCTRIM == IFR1_VAL_180M_TRIM) ? 180000000U : 240000000U;
+#else
+    fircFreq = 180000000U;
+#endif
+    return fircFreq / 4U;
 }
 
 /*! brief  Return Frequency of FRO16K
@@ -2009,7 +2014,7 @@ static uint32_t findPll1PostDiv(void)
 /* Get multiplier (M) from PLL1 MDEC. */
 static float findPll1MMult(void)
 {
-    float mMult = 1.0F;
+    float mMult;
     float mMult_fract;
     uint32_t mMult_int;
 
@@ -2339,7 +2344,7 @@ static uint32_t findPllPostDivFromSetup(pll_setup_t *pSetup)
 /* Get multiplier (M) from from setup structure */
 static float findPllMMultFromSetup(pll_setup_t *pSetup)
 {
-    float mMult = 1.0F;
+    float mMult;
     float mMult_fract;
     uint32_t mMult_int;
 

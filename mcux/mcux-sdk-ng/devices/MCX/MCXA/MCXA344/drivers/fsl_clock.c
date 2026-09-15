@@ -695,14 +695,19 @@ static uint32_t CLOCK_GetFroLfDivFreq(void)
  */
 static uint32_t CLOCK_GetClk45MFreq(void)
 {
+    uint32_t fircFreq;
+
     if ((SCG0->FIRCCSR & SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_MASK) == 0U)
     {
         return 0U;
     }
-    else
-    {
-        return 45000000U;
-    }
+    /* CLK_45M is FIRC divided by 4 */
+#if FSL_FEATURE_FIRC_SUPPORT_240M
+    fircFreq = (SCG0->FIRCTRIM == IFR1_VAL_180M_TRIM) ? 180000000U : 240000000U;
+#else
+    fircFreq = 180000000U;
+#endif
+    return fircFreq / 4U;
 }
 
 /*! brief  Return Frequency of FRO16K

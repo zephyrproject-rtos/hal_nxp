@@ -4,6 +4,9 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+
+#ifndef MCUX_ROMAPI_TFM_INTERFACE 
+
 #include "fsl_runbootloader.h"
 #include "fsl_romapi_tree.h"
 
@@ -21,3 +24,5 @@ void ROMAPI_RunBootloader(void *arg)
     assert(BOOTLOADER_API_TREE_POINTER);
     BOOTLOADER_API_TREE_POINTER->runBootloader(arg);
 }
+
+#endif /* MCUX_ROMAPI_TFM_INTERFACE */

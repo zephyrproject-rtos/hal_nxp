@@ -100,14 +100,22 @@
 **                          MCXN547VPB_cm33_core1
 **                          MCXN556SCDF_cm33_core0
 **                          MCXN556SCDF_cm33_core1
+**                          MCXN556TCAB_cm33_core0
+**                          MCXN556TCAB_cm33_core1
 **                          MCXN556TCDF_cm33_core0
 **                          MCXN556TCDF_cm33_core1
+**                          MCXN556TVAB_cm33_core0
+**                          MCXN556TVAB_cm33_core1
 **                          MCXN556TVDF_cm33_core0
 **                          MCXN556TVDF_cm33_core1
 **                          MCXN557SCDF_cm33_core0
 **                          MCXN557SCDF_cm33_core1
+**                          MCXN557TCAB_cm33_core0
+**                          MCXN557TCAB_cm33_core1
 **                          MCXN557TCDF_cm33_core0
 **                          MCXN557TCDF_cm33_core1
+**                          MCXN557TVAB_cm33_core0
+**                          MCXN557TVAB_cm33_core1
 **                          MCXN557TVDF_cm33_core0
 **                          MCXN557TVDF_cm33_core1
 **                          MCXN946TVAB_cm33_core0
@@ -148,7 +156,7 @@
 **                          MCXN947VPB_cm33_core1
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260716
+**     Build:               b260812
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for EMVSIM
@@ -244,17 +252,17 @@
 #include "MCXN556S_cm33_core0_COMMON.h"
 #elif (defined(CPU_MCXN556SCDF_cm33_core1))
 #include "MCXN556S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MCXN556TCDF_cm33_core0) || defined(CPU_MCXN556TVDF_cm33_core0))
+#elif (defined(CPU_MCXN556TCAB_cm33_core0) || defined(CPU_MCXN556TCDF_cm33_core0) || defined(CPU_MCXN556TVAB_cm33_core0) || defined(CPU_MCXN556TVDF_cm33_core0))
 #include "MCXN556T_cm33_core0_COMMON.h"
-#elif (defined(CPU_MCXN556TCDF_cm33_core1) || defined(CPU_MCXN556TVDF_cm33_core1))
+#elif (defined(CPU_MCXN556TCAB_cm33_core1) || defined(CPU_MCXN556TCDF_cm33_core1) || defined(CPU_MCXN556TVAB_cm33_core1) || defined(CPU_MCXN556TVDF_cm33_core1))
 #include "MCXN556T_cm33_core1_COMMON.h"
 #elif (defined(CPU_MCXN557SCDF_cm33_core0))
 #include "MCXN557S_cm33_core0_COMMON.h"
 #elif (defined(CPU_MCXN557SCDF_cm33_core1))
 #include "MCXN557S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MCXN557TCDF_cm33_core0) || defined(CPU_MCXN557TVDF_cm33_core0))
+#elif (defined(CPU_MCXN557TCAB_cm33_core0) || defined(CPU_MCXN557TCDF_cm33_core0) || defined(CPU_MCXN557TVAB_cm33_core0) || defined(CPU_MCXN557TVDF_cm33_core0))
 #include "MCXN557T_cm33_core0_COMMON.h"
-#elif (defined(CPU_MCXN557TCDF_cm33_core1) || defined(CPU_MCXN557TVDF_cm33_core1))
+#elif (defined(CPU_MCXN557TCAB_cm33_core1) || defined(CPU_MCXN557TCDF_cm33_core1) || defined(CPU_MCXN557TVAB_cm33_core1) || defined(CPU_MCXN557TVDF_cm33_core1))
 #include "MCXN557T_cm33_core1_COMMON.h"
 #elif (defined(CPU_MCXN946TVAB_cm33_core0) || defined(CPU_MCXN946TVDF_cm33_core0) || defined(CPU_MCXN946TVKL_cm33_core0) || defined(CPU_MCXN946TVPB_cm33_core0))
 #include "MCXN946T_cm33_core0_COMMON.h"
@@ -934,7 +942,7 @@ typedef struct {
 /*! TX_RPTR - Transmit FIFO Read Pointer */
 #define EMVSIM_TX_STATUS_TX_RPTR(x)              (((uint32_t)(((uint32_t)(x)) << EMVSIM_TX_STATUS_TX_RPTR_SHIFT)) & EMVSIM_TX_STATUS_TX_RPTR_MASK)
 
-#define EMVSIM_TX_STATUS_TX_CNT_MASK             (0xF000000U)
+#define EMVSIM_TX_STATUS_TX_CNT_MASK             (0x1F000000U)
 #define EMVSIM_TX_STATUS_TX_CNT_SHIFT            (24U)
 /*! TX_CNT - Transmit FIFO Byte Count
  *  0b0000..FIFO empty

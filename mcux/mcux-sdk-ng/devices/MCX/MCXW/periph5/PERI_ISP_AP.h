@@ -1,13 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70AAMMP
-**                          MCXW70ACMFT
+**     Processors:          MCXW70ACMFT
 **                          MCXW70ACMMP
 **                          MCXW70ADMFT
 **                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260409
+**     Build:               b260813
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ISP_AP
@@ -38,9 +37,7 @@
 #if !defined(PERI_ISP_AP_H_)
 #define PERI_ISP_AP_H_                           /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70AAMMP))
-#include "MCXW70AA_COMMON.h"
-#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
+#if (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
 #elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
@@ -119,7 +116,7 @@ typedef struct {
 #define ISP_AP_CSW_REQ_PENDING_SHIFT             (1U)
 /*! REQ_PENDING - Request Pending
  *  0b0..No request pending
- *  0b1..Request for resynchronization pending
+ *  0b1..The debugger has written a value into the REQUEST register and it's pending the chip reading REQUEST
  */
 #define ISP_AP_CSW_REQ_PENDING(x)                (((uint32_t)(((uint32_t)(x)) << ISP_AP_CSW_REQ_PENDING_SHIFT)) & ISP_AP_CSW_REQ_PENDING_MASK)
 

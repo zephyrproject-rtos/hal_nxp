@@ -1,13 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70AAMMP
-**                          MCXW70ACMFT
+**     Processors:          MCXW70ACMFT
 **                          MCXW70ACMMP
 **                          MCXW70ADMFT
 **                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260409
+**     Build:               b260813
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ATX
@@ -38,9 +37,7 @@
 #if !defined(PERI_ATX_H_)
 #define PERI_ATX_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70AAMMP))
-#include "MCXW70AA_COMMON.h"
-#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
+#if (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
 #elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
@@ -89,7 +86,7 @@
 /** ATX - Register Layout Typedef */
 typedef struct {
   __I  uint32_t VERID;                             /**< ATX Version ID, offset: 0x0 */
-       uint32_t PARAM;                             /**< ATX Parameter, offset: 0x4 */
+  __I  uint32_t PARAM;                             /**< ATX Parameter, offset: 0x4 */
   __IO uint32_t TEST_UNLOCK;                       /**< TEST_UNLOCK register, offset: 0x8 */
   __IO uint32_t CTRL;                              /**< ATX Control Regs, offset: 0xC */
   __IO uint32_t CMP_CTRL;                          /**< ATX Cmp Control Regs, offset: 0x10 */

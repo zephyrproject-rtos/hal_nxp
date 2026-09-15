@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MCXE31 RM Rev2
 **     Version:             rev. 1.0, 2025-07-18
-**     Build:               b260609
+**     Build:               b260807
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXE327_cm7_core0
@@ -1091,16 +1091,6 @@ typedef enum _xbic_slave_port
 /** Interrupt vectors for the I2S peripheral type */
 #define I2S_RX_IRQS                              { SAI0_IRQn, SAI1_IRQn }
 #define I2S_TX_IRQS                              { SAI0_IRQn, SAI1_IRQn }
-
-/* I3C - Peripheral instance base addresses */
-/** Peripheral I3C base address */
-#define I3C_BASE                                 (0x400C0000u)
-/** Peripheral I3C base pointer */
-#define I3C                                      ((I3C_Type *)I3C_BASE)
-/** Array initializer of I3C peripheral base addresses */
-#define I3C_BASE_ADDRS                           { I3C_BASE }
-/** Array initializer of I3C peripheral base pointers */
-#define I3C_BASE_PTRS                            { I3C }
 
 /* INTM - Peripheral instance base addresses */
 /** Peripheral INTM base address */

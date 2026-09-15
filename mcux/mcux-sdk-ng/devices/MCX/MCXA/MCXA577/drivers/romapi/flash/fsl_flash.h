@@ -318,6 +318,13 @@ typedef struct
     bool useAhbRead;
 } flash_config_t;
 
+
+#ifdef MCUX_ROMAPI_TFM_INTERFACE
+#include "fsl_flash_tfm_ns.h"
+#elif !defined(MCUX_ROMAPI_TFM_INTERFACE) && (defined(DOMAIN_NS) && (DOMAIN_NS == 1))
+#error "You need to enable the MCUX_COMPONENT_middleware.tfm.ns.romapi for accessing the ROM APIs in NSPE!"
+#else
+
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -691,5 +698,7 @@ status_t IFR_VerifyEraseSector(flash_config_t *config, uint32_t start, uint32_t 
 #endif
 
 /*! @} */
+
+#endif /* MCUX_ROMAPI_TFM_INTERFACE */
 
 #endif /* FSL_FLASH_H_ */

@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.2, 2025-12-01
-**     Build:               b260209
+**     Build:               b260609
 **
 **     Abstract:
 **         Chip specific module features.
@@ -205,6 +205,11 @@
 
 /* @brief number of channels. */
 #define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS (4)
+
+/* OSTIMER module features */
+
+/* @brief Has binary encoded value in counter register. */
+#define FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER (0)
 
 /* PINT module features */
 

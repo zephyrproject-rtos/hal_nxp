@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 3.1, 2026-02-11
-**     Build:               b260717
+**     Build:               b260812
 **
 **     Abstract:
 **         Chip specific module features.
@@ -305,6 +305,8 @@
 #define FSL_FEATURE_CMC_HAS_RSTCNT_REGISTER (1)
 /* @brief Does not have SRAMCTL register */
 #define FSL_FEATURE_CMC_HAS_NO_SRAMCTL_REGISTER (1)
+/* @brief Does not have BLR register */
+#define FSL_FEATURE_CMC_HAS_NO_BOOTROM_LOCK_REGISTER (0)
 /* @brief Has DIER register */
 #define FSL_FEATURE_CMC_HAS_DIER_REG (1)
 /* @brief Has system clock generation reset (register bit SCG[SRIE]) */
@@ -855,14 +857,24 @@
 #define FSL_FEATURE_SPC_HAS_SC_SPC_LP_REQ_BIT (1)
 /* @brief Has DCDC_BURST_CFG register. */
 #define FSL_FEATURE_SPC_HAS_DCDC_BURST_CFG (1)
-/* @brief Has DCDC 2.5V output select (register bit DCDC_CFG[VOUT2P5_SEL]). */
-#define FSL_FEATURE_SPC_HAS_DCDC_VOUT2P5_SEL (1)
 /* @brief Has SYSLDO_CFG register. */
 #define FSL_FEATURE_SPC_HAS_SYS_LDO (1)
 /* @brief Has cmp bandgap buffer enable. */
 #define FSL_FEATURE_SPC_HAS_LPBUFF (1)
 /* @brief Has VD_SYS_CFG register. */
 #define FSL_FEATURE_SPC_HAS_VDD_SYS (1)
+/* @brief Has VDD1P8 low-voltage detect feature. */
+#define FSL_FEATURE_SPC_HAS_VDD1P8_LVD (0)
+/* @brief Has no DCDC frequency control (register bits DCDC_CFG[FREQ_CNTRL_ON/FREQ_CNTRL]). */
+#define FSL_FEATURE_SPC_HAS_NO_DCDC_FREQ_CNTRL (0)
+/* @brief Has DCDC 2.5V output select (register bits ACTIVE_CFG/HP_CFG[DCDC_VOUT2P5_SEL]) or (DCDC_CFG[VOUT2P5_SEL]). */
+#define FSL_FEATURE_SPC_HAS_DCDC_VOUT2P5_SEL (1)
+/* @brief DCDC 2.5V output select is in the per-mode ACTIVE_CFG/HP_CFG registers (vs DCDC_CFG). */
+#define FSL_FEATURE_SPC_DCDC_VOUT2P5_SEL_IN_ACTIVE_CFG (0)
+/* @brief Has DCDC output voltage ramp control (register bits DCDC_CFG[RAMP_CNTRL_EN/RAMP_CNTRL]). */
+#define FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL (1)
+/* @brief Has DCDC low-power ramp control (register bit DCDC_CFG[RAMP_CNTRL_LP]). */
+#define FSL_FEATURE_SPC_HAS_DCDC_RAMP_CNTRL_LP (0)
 
 /* SYSPM module features */
 
@@ -927,6 +939,8 @@
 #define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
 /* @brief Is affected by errata with ID 050050 (Incorrect duty output when EPWM mode is set to PS=0 during write 1 to CnV register). */
 #define FSL_FEATURE_TPM_HAS_ERRATA_050050 (0)
+/* @brief Has no CPWMS field in SC register (bitfield SC[CPWMS]). */
+#define FSL_FEATURE_TPM_HAS_NO_SC_CPWMS (0)
 
 /* VREF module features */
 

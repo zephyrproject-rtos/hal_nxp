@@ -1,13 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70AAMMP
-**                          MCXW70ACMFT
+**     Processors:          MCXW70ACMFT
 **                          MCXW70ACMMP
 **                          MCXW70ADMFT
 **                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260409
+**     Build:               b260813
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SCG
@@ -38,9 +37,7 @@
 #if !defined(PERI_SCG_H_)
 #define PERI_SCG_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70AAMMP))
-#include "MCXW70AA_COMMON.h"
-#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
+#if (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
 #elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
@@ -93,7 +90,8 @@ typedef struct {
        uint8_t RESERVED_0[8];
   __I  uint32_t CSR;                               /**< Clock Status Register, offset: 0x10 */
   __IO uint32_t RCCR;                              /**< Run Clock Control Register, offset: 0x14 */
-       uint8_t RESERVED_1[8];
+  __IO uint32_t VCCR;                              /**< VLPR Clock Control Register, offset: 0x18 */
+       uint8_t RESERVED_1[4];
   __IO uint32_t CLKOUTCNFG;                        /**< SCG CLKOUT Configuration Register, offset: 0x20 */
        uint8_t RESERVED_2[220];
   __IO uint32_t SOSCCSR;                           /**< System OSC Control Status Register, offset: 0x100 */
@@ -159,50 +157,28 @@ typedef struct {
 #define SCG_CSR_DIVSLOW_MASK                     (0xFU)
 #define SCG_CSR_DIVSLOW_SHIFT                    (0U)
 /*! DIVSLOW - Slow Clock Divide Ratio
- *  0b0000..Divide-by-1
- *  0b0001..Divide-by-2
- *  0b0010..Divide-by-3
+ *  0b0000..Reserved
+ *  0b0001..Reserved
+ *  0b0010..Reserved
  *  0b0011..Divide-by-4
- *  0b0100..Divide-by-5
- *  0b0101..Divide-by-6
- *  0b0110..Divide-by-7
- *  0b0111..Divide-by-8
- *  0b1000..Divide-by-9
- *  0b1001..Divide-by-10
- *  0b1010..Divide-by-11
- *  0b1011..Divide-by-12
- *  0b1100..Divide-by-13
- *  0b1101..Divide-by-14
- *  0b1110..Divide-by-15
- *  0b1111..Divide-by-16
+ *  0b0100..Reserved
+ *  0b0101..Reserved
+ *  0b0110..Reserved
+ *  0b0111..Reserved
+ *  0b1000..Reserved
+ *  0b1001..Reserved
+ *  0b1010..Reserved
+ *  0b1011..Reserved
+ *  0b1100..Reserved
+ *  0b1101..Reserved
+ *  0b1110..Reserved
+ *  0b1111..Reserved
  */
 #define SCG_CSR_DIVSLOW(x)                       (((uint32_t)(((uint32_t)(x)) << SCG_CSR_DIVSLOW_SHIFT)) & SCG_CSR_DIVSLOW_MASK)
 
 #define SCG_CSR_DIVBUS_MASK                      (0xF0U)
 #define SCG_CSR_DIVBUS_SHIFT                     (4U)
 /*! DIVBUS - Bus Clock Divide Ratio
- *  0b0000..Divide-by-1
- *  0b0001..Divide-by-2
- *  0b0010..Divide-by-3
- *  0b0011..Divide-by-4
- *  0b0100..Divide-by-5
- *  0b0101..Divide-by-6
- *  0b0110..Divide-by-7
- *  0b0111..Divide-by-8
- *  0b1000..Divide-by-9
- *  0b1001..Divide-by-10
- *  0b1010..Divide-by-11
- *  0b1011..Divide-by-12
- *  0b1100..Divide-by-13
- *  0b1101..Divide-by-14
- *  0b1110..Divide-by-15
- *  0b1111..Divide-by-16
- */
-#define SCG_CSR_DIVBUS(x)                        (((uint32_t)(((uint32_t)(x)) << SCG_CSR_DIVBUS_SHIFT)) & SCG_CSR_DIVBUS_MASK)
-
-#define SCG_CSR_DIVPLAT_MASK                     (0xF000U)
-#define SCG_CSR_DIVPLAT_SHIFT                    (12U)
-/*! DIVPLAT - Platform Clock Divide Ratio
  *  0b0000..Divide-by-1
  *  0b0001..Reserved
  *  0b0010..Reserved
@@ -220,7 +196,29 @@ typedef struct {
  *  0b1110..Reserved
  *  0b1111..Reserved
  */
-#define SCG_CSR_DIVPLAT(x)                       (((uint32_t)(((uint32_t)(x)) << SCG_CSR_DIVPLAT_SHIFT)) & SCG_CSR_DIVPLAT_MASK)
+#define SCG_CSR_DIVBUS(x)                        (((uint32_t)(((uint32_t)(x)) << SCG_CSR_DIVBUS_SHIFT)) & SCG_CSR_DIVBUS_MASK)
+
+#define SCG_CSR_DIVCORE1_MASK                    (0xF000U)
+#define SCG_CSR_DIVCORE1_SHIFT                   (12U)
+/*! DIVCORE1 - Platform Clock Divide Ratio
+ *  0b0000..Divide-by-1
+ *  0b0001..Divide-by-2
+ *  0b0010..Divide-by-3
+ *  0b0011..Divide-by-4
+ *  0b0100..Reserved
+ *  0b0101..Reserved
+ *  0b0110..Reserved
+ *  0b0111..Reserved
+ *  0b1000..Reserved
+ *  0b1001..Reserved
+ *  0b1010..Reserved
+ *  0b1011..Reserved
+ *  0b1100..Reserved
+ *  0b1101..Reserved
+ *  0b1110..Reserved
+ *  0b1111..Reserved
+ */
+#define SCG_CSR_DIVCORE1(x)                      (((uint32_t)(((uint32_t)(x)) << SCG_CSR_DIVCORE1_SHIFT)) & SCG_CSR_DIVCORE1_MASK)
 
 #define SCG_CSR_DIVCORE_MASK                     (0xF0000U)
 #define SCG_CSR_DIVCORE_SHIFT                    (16U)
@@ -265,50 +263,28 @@ typedef struct {
 #define SCG_RCCR_DIVSLOW_MASK                    (0xFU)
 #define SCG_RCCR_DIVSLOW_SHIFT                   (0U)
 /*! DIVSLOW - Slow Clock Divide Ratio
- *  0b0000..Divide-by-1
- *  0b0001..Divide-by-2
- *  0b0010..Divide-by-3
+ *  0b0000..Reserved
+ *  0b0001..Reserved
+ *  0b0010..Reserved
  *  0b0011..Divide-by-4
- *  0b0100..Divide-by-5
- *  0b0101..Divide-by-6
- *  0b0110..Divide-by-7
- *  0b0111..Divide-by-8
- *  0b1000..Divide-by-9
- *  0b1001..Divide-by-10
- *  0b1010..Divide-by-11
- *  0b1011..Divide-by-12
- *  0b1100..Divide-by-13
- *  0b1101..Divide-by-14
- *  0b1110..Divide-by-15
- *  0b1111..Divide-by-16
+ *  0b0100..Reserved
+ *  0b0101..Reserved
+ *  0b0110..Reserved
+ *  0b0111..Reserved
+ *  0b1000..Reserved
+ *  0b1001..Reserved
+ *  0b1010..Reserved
+ *  0b1011..Reserved
+ *  0b1100..Reserved
+ *  0b1101..Reserved
+ *  0b1110..Reserved
+ *  0b1111..Reserved
  */
 #define SCG_RCCR_DIVSLOW(x)                      (((uint32_t)(((uint32_t)(x)) << SCG_RCCR_DIVSLOW_SHIFT)) & SCG_RCCR_DIVSLOW_MASK)
 
 #define SCG_RCCR_DIVBUS_MASK                     (0xF0U)
 #define SCG_RCCR_DIVBUS_SHIFT                    (4U)
 /*! DIVBUS - Bus Clock Divide Ratio
- *  0b0000..Divide-by-1
- *  0b0001..Divide-by-2
- *  0b0010..Divide-by-3
- *  0b0011..Divide-by-4
- *  0b0100..Divide-by-5
- *  0b0101..Divide-by-6
- *  0b0110..Divide-by-7
- *  0b0111..Divide-by-8
- *  0b1000..Divide-by-9
- *  0b1001..Divide-by-10
- *  0b1010..Divide-by-11
- *  0b1011..Divide-by-12
- *  0b1100..Divide-by-13
- *  0b1101..Divide-by-14
- *  0b1110..Divide-by-15
- *  0b1111..Divide-by-16
- */
-#define SCG_RCCR_DIVBUS(x)                       (((uint32_t)(((uint32_t)(x)) << SCG_RCCR_DIVBUS_SHIFT)) & SCG_RCCR_DIVBUS_MASK)
-
-#define SCG_RCCR_DIVPLAT_MASK                    (0xF000U)
-#define SCG_RCCR_DIVPLAT_SHIFT                   (12U)
-/*! DIVPLAT - Platform Clock Divide Ratio
  *  0b0000..Divide-by-1
  *  0b0001..Reserved
  *  0b0010..Reserved
@@ -326,7 +302,29 @@ typedef struct {
  *  0b1110..Reserved
  *  0b1111..Reserved
  */
-#define SCG_RCCR_DIVPLAT(x)                      (((uint32_t)(((uint32_t)(x)) << SCG_RCCR_DIVPLAT_SHIFT)) & SCG_RCCR_DIVPLAT_MASK)
+#define SCG_RCCR_DIVBUS(x)                       (((uint32_t)(((uint32_t)(x)) << SCG_RCCR_DIVBUS_SHIFT)) & SCG_RCCR_DIVBUS_MASK)
+
+#define SCG_RCCR_DIVCORE1_MASK                   (0xF000U)
+#define SCG_RCCR_DIVCORE1_SHIFT                  (12U)
+/*! DIVCORE1 - Platform Clock Divide Ratio
+ *  0b0000..Divide-by-1
+ *  0b0001..Divide-by-2
+ *  0b0010..Divide-by-3
+ *  0b0011..Divide-by-4
+ *  0b0100..Reserved
+ *  0b0101..Reserved
+ *  0b0110..Reserved
+ *  0b0111..Reserved
+ *  0b1000..Reserved
+ *  0b1001..Reserved
+ *  0b1010..Reserved
+ *  0b1011..Reserved
+ *  0b1100..Reserved
+ *  0b1101..Reserved
+ *  0b1110..Reserved
+ *  0b1111..Reserved
+ */
+#define SCG_RCCR_DIVCORE1(x)                     (((uint32_t)(((uint32_t)(x)) << SCG_RCCR_DIVCORE1_SHIFT)) & SCG_RCCR_DIVCORE1_MASK)
 
 #define SCG_RCCR_DIVCORE_MASK                    (0xF0000U)
 #define SCG_RCCR_DIVCORE_SHIFT                   (16U)
@@ -365,13 +363,119 @@ typedef struct {
 #define SCG_RCCR_SCS(x)                          (((uint32_t)(((uint32_t)(x)) << SCG_RCCR_SCS_SHIFT)) & SCG_RCCR_SCS_MASK)
 /*! @} */
 
+/*! @name VCCR - VLPR Clock Control Register */
+/*! @{ */
+
+#define SCG_VCCR_DIVSLOW_MASK                    (0xFU)
+#define SCG_VCCR_DIVSLOW_SHIFT                   (0U)
+/*! DIVSLOW - Slow Clock Divide Ratio
+ *  0b0000..Reserved
+ *  0b0001..Reserved
+ *  0b0010..Reserved
+ *  0b0011..Divide-by-4
+ *  0b0100..Reserved
+ *  0b0101..Reserved
+ *  0b0110..Reserved
+ *  0b0111..Reserved
+ *  0b1000..Reserved
+ *  0b1001..Reserved
+ *  0b1010..Reserved
+ *  0b1011..Reserved
+ *  0b1100..Reserved
+ *  0b1101..Reserved
+ *  0b1110..Reserved
+ *  0b1111..Reserved
+ */
+#define SCG_VCCR_DIVSLOW(x)                      (((uint32_t)(((uint32_t)(x)) << SCG_VCCR_DIVSLOW_SHIFT)) & SCG_VCCR_DIVSLOW_MASK)
+
+#define SCG_VCCR_DIVBUS_MASK                     (0xF0U)
+#define SCG_VCCR_DIVBUS_SHIFT                    (4U)
+/*! DIVBUS - Bus Clock Divide Ratio
+ *  0b0000..Divide-by-1
+ *  0b0001..Reserved
+ *  0b0010..Reserved
+ *  0b0011..Reserved
+ *  0b0100..Reserved
+ *  0b0101..Reserved
+ *  0b0110..Reserved
+ *  0b0111..Reserved
+ *  0b1000..Reserved
+ *  0b1001..Reserved
+ *  0b1010..Reserved
+ *  0b1011..Reserved
+ *  0b1100..Reserved
+ *  0b1101..Reserved
+ *  0b1110..Reserved
+ *  0b1111..Reserved
+ */
+#define SCG_VCCR_DIVBUS(x)                       (((uint32_t)(((uint32_t)(x)) << SCG_VCCR_DIVBUS_SHIFT)) & SCG_VCCR_DIVBUS_MASK)
+
+#define SCG_VCCR_DIVCORE1_MASK                   (0xF000U)
+#define SCG_VCCR_DIVCORE1_SHIFT                  (12U)
+/*! DIVCORE1 - Platform Clock Divide Ratio
+ *  0b0000..Divide-by-1
+ *  0b0001..Divide-by-2
+ *  0b0010..Divide-by-3
+ *  0b0011..Divide-by-4
+ *  0b0100..Reserved
+ *  0b0101..Reserved
+ *  0b0110..Reserved
+ *  0b0111..Reserved
+ *  0b1000..Reserved
+ *  0b1001..Reserved
+ *  0b1010..Reserved
+ *  0b1011..Reserved
+ *  0b1100..Reserved
+ *  0b1101..Reserved
+ *  0b1110..Reserved
+ *  0b1111..Reserved
+ */
+#define SCG_VCCR_DIVCORE1(x)                     (((uint32_t)(((uint32_t)(x)) << SCG_VCCR_DIVCORE1_SHIFT)) & SCG_VCCR_DIVCORE1_MASK)
+
+#define SCG_VCCR_DIVCORE_MASK                    (0xF0000U)
+#define SCG_VCCR_DIVCORE_SHIFT                   (16U)
+/*! DIVCORE - Core Clock Divide Ratio
+ *  0b0000..Divide-by-1
+ *  0b0001..Divide-by-2
+ *  0b0010..Divide-by-3
+ *  0b0011..Divide-by-4
+ *  0b0100..Divide-by-5
+ *  0b0101..Divide-by-6
+ *  0b0110..Divide-by-7
+ *  0b0111..Divide-by-8
+ *  0b1000..Divide-by-9
+ *  0b1001..Divide-by-10
+ *  0b1010..Divide-by-11
+ *  0b1011..Divide-by-12
+ *  0b1100..Divide-by-13
+ *  0b1101..Divide-by-14
+ *  0b1110..Divide-by-15
+ *  0b1111..Divide-by-16
+ */
+#define SCG_VCCR_DIVCORE(x)                      (((uint32_t)(((uint32_t)(x)) << SCG_VCCR_DIVCORE_SHIFT)) & SCG_VCCR_DIVCORE_MASK)
+
+#define SCG_VCCR_SCS_MASK                        (0xF000000U)
+#define SCG_VCCR_SCS_SHIFT                       (24U)
+/*! SCS - System Clock Source
+ *  0b0000..Reserved
+ *  0b0001..System OSC (SOSC_CLK)
+ *  0b0010..Slow IRC (SIRC_CLK)
+ *  0b0011..Fast IRC (FIRC_CLK)
+ *  0b0100..RTC OSC (ROSC_CLK)
+ *  0b0101..Reserved
+ *  0b0110..Reserved
+ *  0b0111..Reserved
+ */
+#define SCG_VCCR_SCS(x)                          (((uint32_t)(((uint32_t)(x)) << SCG_VCCR_SCS_SHIFT)) & SCG_VCCR_SCS_MASK)
+/*! @} */
+
 /*! @name CLKOUTCNFG - SCG CLKOUT Configuration Register */
 /*! @{ */
 
 #define SCG_CLKOUTCNFG_CLKOUTSEL_MASK            (0xF000000U)
 #define SCG_CLKOUTCNFG_CLKOUTSEL_SHIFT           (24U)
 /*! CLKOUTSEL - SCG Clkout Select
- *  0b0000..SCG SLOW Clock
+ *  0b0000..Reserved
  *  0b0001..System OSC (SOSC_CLK)
  *  0b0010..Slow IRC (SIRC_CLK)
  *  0b0011..Fast IRC (FIRC_CLK)

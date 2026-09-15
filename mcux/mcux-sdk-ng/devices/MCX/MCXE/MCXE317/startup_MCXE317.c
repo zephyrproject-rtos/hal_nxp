@@ -2,7 +2,7 @@
 //*****************************************************************************
 // MCXE317 startup code
 //
-// Version : 140526
+// Version : 070826
 //*****************************************************************************
 //
 // Copyright 2016-2026 NXP
@@ -49,7 +49,7 @@ extern "C" {
 #endif
 
 //*****************************************************************************
-// Declaration of external function SystemInit function
+// Declaration of external SystemInit function
 //*****************************************************************************
 extern void SystemInit(void);
 
@@ -79,6 +79,7 @@ WEAK void PendSV_Handler(void);
 WEAK void SysTick_Handler(void);
 WEAK void DefaultISR(void);
 WEAK void DefaultISR1(uint32_t instance);
+WEAK void DefaultISR3(uint32_t instance, uint32_t start, uint32_t end);
 WEAK void DefaultISR4(uint32_t instance, uint32_t start, uint32_t end, uint32_t type);
 
 //*****************************************************************************
@@ -1058,6 +1059,17 @@ void Reset_Handler(void) {
 #error "Unsupported toolchain!"
 #endif
                     : "r0");
+
+    // ERR052460 Workaround: Cortex-M7: A hang scenario can occur when a reserved read locked memory region is accessed by application cores
+    __asm volatile ("LDR r0, =0x402AC0F0 \n"
+                    "LDR r1, =0x1CB0499D \n"
+                    "STR r1, [r0]        \n"
+                    "LDR r1, =0xB9920D38 \n"
+                    "STR r1, [r0]        \n"
+                    );
+    // Data Synchronization Barrier
+    __asm volatile ("dsb sy");
+
 
 // TCM/SRAM controller must perform a read-modify-write for any access < 32-bit(ITCM) or 64-bit to keep the ECC updated.
 // The Software must ensure the TCM is ECC clean by initializing all memories that have the potential to be accessed as < 32-bit(ITCM) or 64-bit.
