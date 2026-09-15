@@ -127,6 +127,36 @@ static inline void POWERCON_DisableSwAllowLowPower(POWERCON_CMC_CTRL_Type *base)
 }
 
 /*!
+ * @brief Allow this CMC's standby entry to trigger the System Sleep Controller.
+ *
+ * When enabled, completing this CMC's standby entry triggers the SSC
+ * (system-level standby sequence: PMU/PMIC steps). The silicon default is
+ * enabled; callers program it explicitly per low-power mode and must not
+ * rely on the default.
+ *
+ * @param base POWERCON_CMC_CTRL peripheral base address.
+ */
+static inline void POWERCON_EnableSystemSleepTrigger(POWERCON_CMC_CTRL_Type *base)
+{
+    base->CMC_CTRL |= POWERCON_CMC_CTRL_CMC_CTRL_TRIGGER_SS_MASK;
+}
+
+/*!
+ * @brief Prevent this CMC's standby entry from triggering the System Sleep Controller.
+ *
+ * The CMC's own standby step sequence still runs (unless disabled via the
+ * XMC standby mask, see POWERCON_SetXmcStandbyMask); only the system-level
+ * SSC trigger is suppressed. Used for Sleep, where CMC0's flow runs without
+ * a PMU/PMIC standby transition.
+ *
+ * @param base POWERCON_CMC_CTRL peripheral base address.
+ */
+static inline void POWERCON_DisableSystemSleepTrigger(POWERCON_CMC_CTRL_Type *base)
+{
+    base->CMC_CTRL &= ~POWERCON_CMC_CTRL_CMC_CTRL_TRIGGER_SS_MASK;
+}
+
+/*!
  * @brief Enable wakeup for the specified IRQ sources (RMW-clear in IRQ_WAKEUP_MASK).
  *
  * Register polarity: 0 = wakeup enabled, 1 = masked.
@@ -565,7 +595,7 @@ void POWERCON_SetSocStandbyConfig(POWERCON_SOC_CTRL_Type *base,
  * @param sleepCountModeMask  2-bit mask for SSC sleep steps 0–1.
  * @param wakeupCountModeMask 2-bit mask for SSC wakeup steps 0–1.
  */
-static inline void POWERCON_SetSysSleepCtrlStepModeMask(POWERCON_SYS_SLEEP_CTRL_Type *base,
+static inline void POWERCON_EnableSysSleepCtrlStepMode(POWERCON_SYS_SLEEP_CTRL_Type *base,
                                                          uint8_t sleepCountModeMask,
                                                          uint8_t wakeupCountModeMask)
 {
@@ -627,17 +657,20 @@ static inline void POWERCON_SetWakeupStandbyMask(POWERCON_SYS_SLEEP_CTRL_Type *b
  */
 
 /*!
- * @brief Set the XMC standby mask (which CMC instances participate in SSC).
+ * @brief Set the XMC standby mask (per-CMC internal-standby-flow disable).
  *
- * Controls bits 1–3 of XMC_STBY_MASK. Bit 0 (free-running clock) is NOT
- * controlled by this API. Reset state = 0x07 (all CMC excluded from SSC).
- * Call with mask=0x00 at init to allow all CMCs to participate in SSC;
- * if these bits remain set, SSC will never fire.
+ * Controls bits 1-3 of XMC_STBY_MASK. Bit 0 (free-running clock) is NOT
+ * controlled by this API. A mask bit set to 1 disables that CMC's internal
+ * standby step sequence entirely (the CMC stays active on WFI); 0 enables
+ * it. This gate is independent of the System Sleep Controller - SSC
+ * triggering is controlled per CMC by CMC_CTRL.TRIGGER_SS
+ * (POWERCON_EnableSystemSleepTrigger / POWERCON_DisableSystemSleepTrigger).
  *
+ * Reset state = 0x07 (all CMC standby flows disabled).
  * Bit 0 of mask = CMC0 (register bit 1), bit 1 = CMC1 (bit 2), bit 2 = CMC2 (bit 3).
  *
  * @param base POWERCON_GLOBAL peripheral base address.
- * @param mask 3-bit mask value (0x00 = all CMCs participate in SSC).
+ * @param mask 3-bit mask value (0x00 = all CMC standby flows enabled).
  */
 static inline void POWERCON_SetXmcStandbyMask(POWERCON_GLOBAL_Type *base, uint32_t mask)
 {

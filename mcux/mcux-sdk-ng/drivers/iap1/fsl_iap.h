@@ -566,4 +566,4 @@ void BOOTLOADER_UserEntry(void *arg);
 
 /*! @} */
 
-#endif /* __FLASH_FLASH_H_ */
+#endif /* FLASH_FLASH_H_ */

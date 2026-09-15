@@ -177,4 +177,4 @@ void MIPI_CSI2RX_Deinit(CSI2_CONTROLLER_Type *csi1, CSI2_CONTROLLER_Type *csi2, 
  *@}
  */
 
-#endif /* _FSL_MIPI_CSI2RX_H_ */
+#endif /* FSL_MIPI_CSI2RX_H_ */

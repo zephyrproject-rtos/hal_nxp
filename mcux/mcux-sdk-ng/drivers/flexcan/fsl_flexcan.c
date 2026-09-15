@@ -955,11 +955,6 @@ static status_t FLEXCAN_Reset(CAN_Type *base)
     base->MCR |= CAN_MCR_WRNEN_MASK | CAN_MCR_MAXMB((uint32_t)maxMB - 1U);
 #endif
 
-    /* Reset CTRL1 and CTRL2 register, default to eanble SMP feature which enable three sample point to determine the
-     * received bit's value of the. */
-    base->CTRL1 = CAN_CTRL1_SMP_MASK;
-    base->CTRL2 = CAN_CTRL2_TASD(0x16) | CAN_CTRL2_RRS_MASK | CAN_CTRL2_EACEN_MASK;
-
     /* Initialize memory for all FlexCAN RAM in order to have the parity bits in memory properly updated. */
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
     /* Enable unrestricted write access to FlexCAN memory. */
@@ -1100,6 +1095,7 @@ void FLEXCAN_Init(CAN_Type *base, const flexcan_config_t *pConfig, uint32_t sour
     int maxMB = FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(base);
     assert(maxMB != -1);
     assert((pConfig->maxMbNum > 0U) && (pConfig->maxMbNum <= (uint8_t)maxMB));
+    assert(pConfig->txArbitrationStartDelay <= 31U);
 #endif
     flexcan_timing_config_t timingCfg = pConfig->timingConfig;
     /* FlexCAN classical CAN frame or CAN FD frame nominal phase timing setting formula:
@@ -1206,9 +1202,24 @@ void FLEXCAN_Init(CAN_Type *base, const flexcan_config_t *pConfig, uint32_t sour
     /* Enable Listen Only Mode? */
     ctrl1Temp = (pConfig->enableListenOnlyMode) ? ctrl1Temp | CAN_CTRL1_LOM_MASK : ctrl1Temp & ~CAN_CTRL1_LOM_MASK;
 
+    /* Enable Three Sampling Mode? */
+    ctrl1Temp = (pConfig->enableThreeSamplingMode) ? (ctrl1Temp | CAN_CTRL1_SMP_MASK) :
+                                                     (ctrl1Temp & ~CAN_CTRL1_SMP_MASK);
+
+    /* Disable Bus Off Auto Recovery? */
+    ctrl1Temp = (pConfig->disableBusOffAutoRecovery) ? (ctrl1Temp | CAN_CTRL1_BOFFREC_MASK) :
+                                                       (ctrl1Temp & ~CAN_CTRL1_BOFFREC_MASK);
+
     /* Remote Response Frame is generated or Remote Request Frame is stored. */
     ctrl2Temp = (pConfig->enableRemoteRequestFrameStored) ? ctrl2Temp | CAN_CTRL2_RRS_MASK :
                                                             ctrl2Temp & ~CAN_CTRL2_RRS_MASK;
+
+    /* Configure Transmission Arbitration Start Delay. */
+    ctrl2Temp = (ctrl2Temp & ~CAN_CTRL2_TASD_MASK) | CAN_CTRL2_TASD((uint32_t)pConfig->txArbitrationStartDelay);
+
+    /* Enable Entire Frame Arbitration Field Comparison for Rx Message Buffers? */
+    ctrl2Temp = (pConfig->enableEntireArbitrationCompare) ? (ctrl2Temp | CAN_CTRL2_EACEN_MASK) :
+                                                            (ctrl2Temp & ~CAN_CTRL2_EACEN_MASK);
 
     /* Selects the byte order for the payload of transmit and receive frames. */
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENDIANNESS_SELECTION) && FSL_FEATURE_FLEXCAN_HAS_ENDIANNESS_SELECTION)
@@ -1574,6 +1585,10 @@ void FLEXCAN_GetDefaultConfig(flexcan_config_t *pConfig)
 #endif
 
     pConfig->enableRemoteRequestFrameStored = true;
+    pConfig->enableThreeSamplingMode        = true;
+    pConfig->disableBusOffAutoRecovery      = false;
+    pConfig->txArbitrationStartDelay        = 0x16U;
+    pConfig->enableEntireArbitrationCompare = true;
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENDIANNESS_SELECTION) && FSL_FEATURE_FLEXCAN_HAS_ENDIANNESS_SELECTION)
     pConfig->payloadEndianness = kFLEXCAN_bigEndian;

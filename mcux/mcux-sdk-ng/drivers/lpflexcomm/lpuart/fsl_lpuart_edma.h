@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief LPUART EDMA driver version. */
-#define FSL_LPUART_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_LPUART_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*! @} */
 
 /*! @brief LPUART TX transfer callback mode. */
@@ -63,9 +63,9 @@ struct _lpuart_edma_handle
 
     lpuart_tx_callback_mode_t txCbMode; /*!< TX transfer callback mode. */
 
-    volatile int8_t oneFifoBlockRxWatermark; /*!< Used to change RXWATER */
+    uint8_t rxWatermarkValue; /*!< RXWATER byte value written by DMA TCD when switching to remaining bytes */
 
-    edma_tcd_t edmaTcd[3]; /*!< eDMA TCDs for internal use */
+    edma_tcd_t edmaTcd[4]; /*!< eDMA TCDs for internal use */
 };
 
 /*******************************************************************************

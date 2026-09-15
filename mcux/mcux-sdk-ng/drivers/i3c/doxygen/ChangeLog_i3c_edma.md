@@ -1,5 +1,10 @@
 # I3C_EDMA
 
+## [2.2.13]
+
+- Changed
+  - Use linked TCD for the slave TX end byte instead of writing the last byte in the EDMA callback.
+
 ## [2.2.12]
 
 - Bug Fixes

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2025 NXP
+ * Copyright 2023-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief XSPI EDMA driver version 2.0.5. */
-#define FSL_XSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
+/*! @brief XSPI EDMA driver version 2.0.6. */
+#define FSL_XSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
 /*@}*/
 
 typedef struct _xspi_edma_handle xspi_edma_handle_t;

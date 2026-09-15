@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2025 NXP
+ * Copyright 2023-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -165,6 +165,15 @@ void ADC_Init(ADC_Type *base, const adc_config_t *config)
 #if defined(FSL_FEATURE_ADC_HAS_AMSIO) && (FSL_FEATURE_ADC_HAS_AMSIO==1U)
     ADC_SetAdcSpeedMode(base, config->speedMode);
 #endif /* FSL_FEATURE_ADC_HAS_AMSIO */
+
+#if defined(FSL_FEATURE_ADC_HAS_DSDR) && (FSL_FEATURE_ADC_HAS_DSDR==1U)
+#if defined (FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n)
+    if(1 == FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n(base))
+#endif /* FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n */
+    {
+        base->DSDR = ((base->DSDR & (~ADC_DSDR_DSD_MASK)) | ADC_DSDR_DSD(config->convDelay));
+    }
+#endif /* FSL_FEATURE_ADC_HAS_DSDR */
                                  
 #if (defined(FSL_FEATURE_ADC_HAS_CALBISTREG) && (FSL_FEATURE_ADC_HAS_CALBISTREG==1U))
     base->CALBISTREG = ((base->CALBISTREG & ~ADC_CALBISTREG_RESN_MASK) | ADC_CALBISTREG_RESN(config->convRes));

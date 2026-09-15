@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2025 NXP
+ * Copyright 2017-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,9 +26,9 @@ enum _hashcrypt_status
  */
 /*! @name Driver version */
 /*! @{ */
-/*! @brief HASHCRYPT driver version. Version 2.2.16.
+/*! @brief HASHCRYPT driver version. Version 2.2.18.
  *
- * Current version: 2.2.16
+ * Current version: 2.2.18
  *
  * Change log:
  * - Version 2.0.0
@@ -98,8 +98,11 @@ enum _hashcrypt_status
  *    - Add DSB instruction inside hashcrypt_sha_ldm_stm_16_words() to fix issues with some optimization flags
  * - Version 2.2.17
  *    - Fix context size when hashcrypt built with reload feature
+ * - Version 2.2.18
+ *    - Rename internal BUILD_ASSERT macro to HASHCRYPT_BUILD_ASSERT to
+ *      avoid conflicts with environment-specific implementations.
  */
-#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 2, 17))
+#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 2, 18))
 /*! @} */
 
 /*! @brief Algorithm definitions correspond with the values for Mode field in Control register !*/

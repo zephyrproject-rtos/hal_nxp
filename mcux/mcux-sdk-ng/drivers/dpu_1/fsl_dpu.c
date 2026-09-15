@@ -5,6 +5,7 @@
  */
 
 #include "fsl_dpu.h"
+#include <string.h>
 
 /*******************************************************************************
  * Definitions
@@ -622,12 +623,6 @@ static inline void DPU_LdWrite(DISPLAY_SEERIS_LD_Type *base, uint32_t offset, ui
 #define DPU_SIG_PANICCOLOR_PanicAlpha_MASK        (1UL << 7U)
 #define DPU_SIG_CONTINUOUSMODE_EnCont_MASK        (1UL << 0U)
 
-typedef union _u32_f32
-{
-    float f32;
-    uint32_t u32;
-} u32_f32_t;
-
 #if DPU_USE_GENERATE_HEADER
 #define DPU_STORE9_DYNAMIC_OFFSET       DPU_UNIT_OFFSET(PIXENGCFG.STORE9_DYNAMIC)
 #define DPU_FETCHDECODE9_DYNAMIC_OFFSET DPU_UNIT_OFFSET(PIXENGCFG.FETCHDECODE9_DYNAMIC)
@@ -1039,12 +1034,12 @@ static uint32_t DPU_ConvertFloat(float floatValue, uint8_t intBits, uint8_t frac
     /* One bit reserved for sign bit. */
     assert(intBits + fracBits + 1U < 32U);
 
-    u32_f32_t u32_f32;
+    uint32_t floatBits;
+    _Static_assert(sizeof(float) == sizeof(uint32_t), "float must be 32-bit for bit reinterpretation");
     uint32_t ret;
     uint32_t expBits;
 
-    u32_f32.f32        = floatValue;
-    uint32_t floatBits = u32_f32.u32;
+    (void)memcpy(&floatBits, &floatValue, sizeof(floatBits));
     expBits            = (floatBits & 0x7F800000U) >> 23U;
     int32_t expValue   = (int32_t)expBits - 127;
 

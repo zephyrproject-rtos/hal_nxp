@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_NETC_SOC_H_
-#define _FSL_NETC_SOC_H_
+#ifndef FSL_NETC_SOC_H_
+#define FSL_NETC_SOC_H_
 
 #include "netc_hw/fsl_netc_hw.h"
 
@@ -92,4 +92,4 @@ void NETC_SocGetBaseResource(netc_enetc_hw_t *hw, netc_hw_si_idx_t si);
  */
 uint32_t NETC_SocGetFuncInstance(netc_hw_eth_port_idx_t port);
 
-#endif /* _FSL_NETC_SOC_H_ */
+#endif /* FSL_NETC_SOC_H_ */

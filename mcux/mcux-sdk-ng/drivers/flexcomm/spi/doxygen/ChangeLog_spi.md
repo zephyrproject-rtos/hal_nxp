@@ -1,5 +1,10 @@
 # SPI
 
+## [2.4.0]
+
+- New Features
+  - Added `kSPI_FrameAssertEachFrame` to deassert PCS at the end of every frame.
+
 ## [2.3.2]
 
 - Bug Fixes

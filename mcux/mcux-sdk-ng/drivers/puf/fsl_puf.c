@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021, 2025 NXP
+ * Copyright 2018-2021, 2025-2026 NXP
  * All rights reserved.
  *
  *
@@ -751,15 +751,17 @@ status_t PUF_GetHwKey(
         case kPUF_KeySlot2:
             keyMask_reg = &base->KEYMASK[2];
             break;
-
+#endif /* PUF_KEYMASK_COUNT > 2 */
+#if (PUF_KEYMASK_COUNT > 3)
         case kPUF_KeySlot3:
             keyMask_reg = &base->KEYMASK[3];
             break;
-
+#endif /* PUF_KEYMASK_COUNT > 3 */
+#if (PUF_KEYMASK_COUNT > 4)
         case kPUF_KeySlot4:
             keyMask_reg = &base->KEYMASK[4];
             break;
-#endif /* PUF_KEYMASK_COUNT > 2 */
+#endif /* PUF_KEYMASK_COUNT > 4 */
         default:
             status = kStatus_InvalidArgument;
             break;
@@ -769,12 +771,22 @@ status_t PUF_GetHwKey(
     if (status != kStatus_InvalidArgument)
     {
 #if defined(PUF_KEYMASK_COUNT) && (PUF_KEYMASK_COUNT > 0)
+        /* keyMask_reg is only left NULL for an invalid key slot, which also sets
+         * status = kStatus_InvalidArgument and is excluded by the check above. A NULL
+         * here would mean an invalid slot, so bail out before touching any register or
+         * starting the key retrieval instead of continuing with an unmasked operation. */
+        if (keyMask_reg == NULL)
+        {
+            return kStatus_InvalidArgument;
+        }
+
         base->KEYRESET  = regVal;
         base->KEYENABLE = regVal;
         *keyMask_reg    = keyMask;
 #endif /* FSL_FEATURE_PUF_HAS_KEYSLOTS */
 
         status = puf_getHwKey(base, keyCode, keyCodeSize);
+
 
 #if defined(FSL_FEATURE_PUF_HAS_SHIFT_STATUS) && (FSL_FEATURE_PUF_HAS_SHIFT_STATUS > 0)
         size_t keyWords = 0;
@@ -864,6 +876,13 @@ status_t PUF_GetKey(PUF_Type *base, const uint8_t *keyCode, size_t keyCodeSize, 
     if (0U != (0x3u & (uintptr_t)key))
     {
         return kStatus_Fail;
+    }
+
+    /* Check that keySize is in the correct range. This also prevents unsigned integer
+     * wraparound in the PUF_GET_KEY_CODE_SIZE_FOR_KEY_SIZE() shift computation below. */
+    if ((keySize < (uint32_t)kPUF_KeySizeMin) || (keySize > (uint32_t)kPUF_KeySizeMax))
+    {
+        return kStatus_InvalidArgument;
     }
 
     /* check that keyCodeSize is correct for given keySize */

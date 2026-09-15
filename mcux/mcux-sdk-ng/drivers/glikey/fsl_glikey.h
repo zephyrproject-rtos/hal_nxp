@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_GLIKEY_H_
-#define _FSL_GLIKEY_H_
+#ifndef FSL_GLIKEY_H_
+#define FSL_GLIKEY_H_
 
 #include "fsl_common.h"
 
@@ -312,4 +312,4 @@ status_t GLIKEY_ResetIndex(GLIKEY_Type *base, uint32_t index);
 
 /*! @}*/ /* end of group glikey */
 
-#endif   /* _FSL_GLIKEY_H_ */
+#endif   /* FSL_GLIKEY_H_ */

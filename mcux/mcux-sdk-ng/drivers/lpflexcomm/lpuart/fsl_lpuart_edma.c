@@ -124,13 +124,6 @@ static void LPUART_ReceiveEDMACallback(edma_handle_t *handle, void *param, bool 
     handle = handle;
     tcds   = tcds;
 
-    if (lpuartPrivateHandle->handle->oneFifoBlockRxWatermark > -1)
-    {
-        LPUART_SetRxFifoWatermark(lpuartPrivateHandle->base, (uint8_t)lpuartPrivateHandle->handle->oneFifoBlockRxWatermark);
-        lpuartPrivateHandle->handle->oneFifoBlockRxWatermark = -1;
-        return;
-    }
-
     if (transferDone)
     {
         /* Disable transfer. */
@@ -381,12 +374,9 @@ status_t LPUART_ReceiveEDMA(LPUART_Type *base, lpuart_edma_handle_t *handle, lpu
         handle->rxDataSizeAll = xfer->dataSize;
         handle->rxData        = xfer->rxData;
 
-        handle->oneFifoBlockRxWatermark = -1;
-
         uint32_t rxAddr = LPUART_GetDataRegisterAddress(base);
 
-        edma_tcd_t *softwareTCD_oneFifoBlockRx  = (edma_tcd_t *)((uint32_t)(&handle->edmaTcd[2]) & ~(EDMA_TCD_ALIGN_SIZE - 1U));
-        edma_tcd_t *nextTcd                     = NULL;
+        edma_tcd_t *nextTcd = NULL;
 
         /* Count of blocks aligned to 4 FIFO words */
         uint32_t fourFifoBlocks = xfer->dataSize / 4U;
@@ -413,23 +403,56 @@ status_t LPUART_ReceiveEDMA(LPUART_Type *base, lpuart_edma_handle_t *handle, lpu
 
             if (fourFifoBlocks > 0U)
             {
+                /*
+                 * Mixed transfer: fourFifoBlocks x 4-byte groups followed by oneFifoBlocks remaining bytes.
+                 * Use 3 TCDs on a single channel:
+                 *   TCD_main (hardware channel) : reads fourFifoBlocks x 4 bytes, FIFO watermark = 3
+                 *   TCD_watermark (edmaTcd[2])  : writes rxWatermarkValue to WATER byte-2 (RXWATER field)
+                 *                                 fired immediately by scatter-gather START, no peripheral trigger
+                 *   TCD_oneFifo   (edmaTcd[3])  : reads remaining 1-3 bytes, FIFO watermark = oneFifoBlocks-1
+                 */
+                edma_tcd_t *softwareTCD_watermark      = (edma_tcd_t *)((uint32_t)(&handle->edmaTcd[2]) & ~(EDMA_TCD_ALIGN_SIZE - 1U));
+                edma_tcd_t *softwareTCD_oneFifoBlockRx = (edma_tcd_t *)((uint32_t)(&handle->edmaTcd[3]) & ~(EDMA_TCD_ALIGN_SIZE - 1U));
+
+                /* TCD_oneFifo: read remaining bytes, fires final interrupt */
                 EDMA_TcdResetExt(handle->rxEdmaHandle->base, softwareTCD_oneFifoBlockRx);
                 EDMA_TcdSetTransferConfigExt(handle->rxEdmaHandle->base, softwareTCD_oneFifoBlockRx,
-                                            &transferConfigRx, nextTcd);
+                                             &transferConfigRx, NULL);
                 EDMA_TcdEnableInterruptsExt(handle->rxEdmaHandle->base, softwareTCD_oneFifoBlockRx,
                                             (uint32_t)kEDMA_MajorInterruptEnable);
 
-                nextTcd = softwareTCD_oneFifoBlockRx;
+                /* Store the new RXWATER value in the handle; DMA reads it as a 1-byte source. */
+                handle->rxWatermarkValue = (uint8_t)(oneFifoBlocks - 1U);
+
+                /* TCD_watermark: 1-byte write to WATER byte-2 (bits [18:16] = RXWATER), chains to TCD_oneFifo */
+                edma_transfer_config_t watermarkCfg = {0};
+                watermarkCfg.srcAddr          = (uint32_t)&handle->rxWatermarkValue;
+                watermarkCfg.srcOffset        = 0;
+                watermarkCfg.destAddr         = (uint32_t)((uint8_t *)(&base->WATER) + 2U);
+                watermarkCfg.destOffset       = 0;
+                watermarkCfg.srcTransferSize  = kEDMA_TransferSize1Bytes;
+                watermarkCfg.destTransferSize = kEDMA_TransferSize1Bytes;
+                watermarkCfg.minorLoopBytes   = 1U;
+                watermarkCfg.majorLoopCounts  = 1U;
+
+                EDMA_TcdResetExt(handle->rxEdmaHandle->base, softwareTCD_watermark);
+                EDMA_TcdSetTransferConfigExt(handle->rxEdmaHandle->base, softwareTCD_watermark,
+                                             &watermarkCfg, softwareTCD_oneFifoBlockRx);
+                /* START=1: scatter-gather load triggers this TCD immediately, no LPUART DMA request needed */
+                EDMA_TCD_CSR(softwareTCD_watermark, EDMA_TCD_TYPE(handle->rxEdmaHandle->base)) |= DMA_CSR_START_MASK;
+
+                nextTcd = softwareTCD_watermark;
             }
             else
             {
+                /* Only remaining bytes (no 4-byte aligned group), set watermark directly */
                 EDMA_SetTransferConfig(handle->rxEdmaHandle->base, handle->rxEdmaHandle->channel,
-                                    &transferConfigRx, nextTcd);
+                                       &transferConfigRx, NULL);
 
                 /* Enable edma interrupt to finish transfer */
                 EDMA_EnableChannelInterrupts(handle->rxEdmaHandle->base,
-                                            handle->rxEdmaHandle->channel,
-                                            (uint32_t)kEDMA_MajorInterruptEnable);
+                                             handle->rxEdmaHandle->channel,
+                                             (uint32_t)kEDMA_MajorInterruptEnable);
 
                 LPUART_SetRxFifoWatermark(base, (uint8_t)oneFifoBlocks - 1U);
             }
@@ -449,18 +472,15 @@ status_t LPUART_ReceiveEDMA(LPUART_Type *base, lpuart_edma_handle_t *handle, lpu
             transferConfigRx.minorLoopBytes   = 4U;
             transferConfigRx.majorLoopCounts  = fourFifoBlocks;
 
-            if (oneFifoBlocks > 0U)
-            {
-                /* Set value of RX FIFO watermark for next part of data, used in LPUART_ReceiveEDMACallback() */
-                handle->oneFifoBlockRxWatermark = (int8_t)oneFifoBlocks - 1;
-            }
-
             EDMA_SetTransferConfig(handle->rxEdmaHandle->base, handle->rxEdmaHandle->channel,
-                                &transferConfigRx, nextTcd);
+                                   &transferConfigRx, nextTcd);
 
-            /* Enable eDMA interrupt to finish transfer or change RX FIFO watermark */
-            EDMA_EnableChannelInterrupts(handle->rxEdmaHandle->base, handle->rxEdmaHandle->channel,
-                                        (uint32_t)kEDMA_MajorInterruptEnable);
+            if (oneFifoBlocks == 0U)
+            {
+                /* Enable eDMA interrupt to finish transfer */
+                EDMA_EnableChannelInterrupts(handle->rxEdmaHandle->base, handle->rxEdmaHandle->channel,
+                                             (uint32_t)kEDMA_MajorInterruptEnable);
+            }
 
             /* Configure RX FIFO watermark to be possible read 4 FIFO entry per each DMA request */
             LPUART_SetRxFifoWatermark(base, 3U);

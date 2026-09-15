@@ -1,5 +1,13 @@
 # MCX_SPC
 
+## [2.13.0]
+
+- New Features
+  - Added feature macros FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD and
+    FSL_FEATURE_MCX_SPC_HAS_VD_IO_CFG_LVSEL to be compatible with platforms
+    where the IO VDD voltage detect has no high-voltage detect or no LVSEL
+    bitfield in the VD_IO_CFG register.
+
 ## [2.12.1]
 
 - Bug Fixes

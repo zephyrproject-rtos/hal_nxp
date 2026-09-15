@@ -373,15 +373,24 @@ static status_t BISS_ChannelInit(biss_master_t *master)
     /*
      * Clear CFGCH register.
      * 0x03 means the target channel is not used.
+     *
+     * All CFGCHx fields share the same 2-bit layout, so the mask for each
+     * channel is CFGCH1_MASK shifted by 2 bits per channel index. Building
+     * the all-channels mask from CFGCH1_MASK avoids depending on the
+     * per-channel CFGCH2..CFGCH8 macros, which are not present on all
+     * device header revisions.
      */
-    base->BISSINTDATACHCONFIG2 |= BISS_BISSINTDATACHCONFIG2_CFGCH1_MASK |
-                                  BISS_BISSINTDATACHCONFIG2_CFGCH2_MASK |
-                                  BISS_BISSINTDATACHCONFIG2_CFGCH3_MASK |
-                                  BISS_BISSINTDATACHCONFIG2_CFGCH4_MASK |
-                                  BISS_BISSINTDATACHCONFIG2_CFGCH5_MASK |
-                                  BISS_BISSINTDATACHCONFIG2_CFGCH6_MASK |
-                                  BISS_BISSINTDATACHCONFIG2_CFGCH7_MASK |
-                                  BISS_BISSINTDATACHCONFIG2_CFGCH8_MASK;
+    uint32_t cfgChAllMask = 0U;
+    uint8_t chIdx;
+
+    for (chIdx = 0U; chIdx < BISS_MAX_SLAVE_COUNT; chIdx++)
+    {
+        cfgChAllMask |= (BISS_BISSINTDATACHCONFIG2_CFGCH1_MASK << (chIdx * 2U));
+    }
+
+    base->BISSINTDATACHCONFIG2 |= cfgChAllMask;
+
+
 
     /* Set the 1st channel to the config protocol type. */
     base->BISSINTDATACHCONFIG2 =

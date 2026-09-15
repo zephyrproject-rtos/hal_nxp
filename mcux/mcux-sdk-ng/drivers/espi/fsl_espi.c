@@ -440,6 +440,9 @@ void ESPI_GetPortErrorStatus(ESPI_Type *base, uint32_t port, uint32_t pstat, esp
  */
 static void ESPI_HandleSAFIRQ(ESPI_Type *base, espi_handle_t *handle, uint32_t status)
 {
+    assert(handle != NULL);
+    assert(handle->flashOps != NULL);
+
     uint32_t dataIn              = base->PORT[handle->safPort].DATAIN;
     uint32_t length              = (dataIn & ESPI_DATAIN_DATA_LEN_MASK) + 1U;
     uint32_t tag                 = (dataIn & 0x3C000000U) >> 26U;
@@ -630,6 +633,8 @@ void ESPI_CreateHandle(ESPI_Type *base,
 {
     assert(handle != NULL);
     assert(config != NULL);
+    assert(callback != NULL);
+    assert((config->portCount == 0U) || (config->portConfig != NULL));
 
     uint32_t instance = ESPI_GetInstance(base);
 

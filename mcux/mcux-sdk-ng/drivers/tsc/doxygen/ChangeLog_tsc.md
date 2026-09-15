@@ -1,5 +1,11 @@
 # TSC
 
+## [2.0.4]
+
+- Improvements
+  - Corrected the code logic for the TSC_EnableDebugMode function. Setting the enable
+    parameter to false enables debug mode, while setting it to true disables debug mode.
+
 ## [2.0.3]
 
 - Bug Fixes

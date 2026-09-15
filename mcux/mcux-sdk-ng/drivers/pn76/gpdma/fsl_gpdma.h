@@ -443,4 +443,4 @@ void GPDMA_HandleIRQ(GPDMA_Type *base);
 
 /*! @} */
 
-#endif /* __GPDMA_H_ */
+#endif /* GPDMA_H_ */

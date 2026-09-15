@@ -1,5 +1,12 @@
 # RTC
 
+## [2.0.7]
+
+- Bug Fixes
+  - Fixed Coverity ASSERT_SIDE_EFFECT findings in RTC_SetAlarm and RTC_DriverIRQHandler by
+    reading the volatile s_CurrentTimeSeconds variable into a local before the assert, so the
+    check no longer has an observable side effect when asserts are compiled out.
+
 ## [2.0.6]
 
 - Bug Fixes

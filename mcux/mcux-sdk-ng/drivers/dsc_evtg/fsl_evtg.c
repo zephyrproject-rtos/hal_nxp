@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -43,8 +43,9 @@ void EVTG_Init(EVTG_Type *base, evtg_index_t eEvtgIndex, evtg_config_t *psConfig
     }
 
 #if defined(FSL_FEATURE_EVTG_HAS_FORCE_BYPASS_FLIPFLOP) && FSL_FEATURE_EVTG_HAS_FORCE_BYPASS_FLIPFLOP
-    base->EVTG_INST[(uint8_t)eEvtgIndex].EVTG_CTRL |= EVTG_EVTG_CTRL_FORCE_BYPASS(psConfig->bEnableForceBypassFlipFlopAOI1 << 1U) |
-    		                                                            (psConfig->bEnableForceBypassFlipFlopAOI0));
+    base->EVTG_INST[(uint8_t)eEvtgIndex].EVTG_CTRL |=
+        EVTG_EVTG_CTRL_FORCE_BYPASS(((uint16_t)(psConfig->bEnableForceBypassFlipFlopAOI1 ? 1U : 0U) << 1U) |
+                                    (uint16_t)(psConfig->bEnableForceBypassFlipFlopAOI0 ? 1U : 0U));
 #endif
 
     /* Configure EVTG input sync. */

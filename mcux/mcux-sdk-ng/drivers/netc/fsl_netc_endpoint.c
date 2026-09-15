@@ -489,7 +489,7 @@ status_t EP_Init(ep_handle_t *handle, uint8_t *macAddr, const ep_config_t *confi
     {
         /* Reset VF function */
         handle->hw.func.vf->PCI_CFC_PCIE_DEV_CTL |= ENETC_VF_PCI_TYPE0_PCI_CFC_PCIE_DEV_CTL_INIT_FLR_MASK;
-        while ((handle->hw.func.pf->PCI_CFC_PCIE_DEV_CTL & ENETC_VF_PCI_TYPE0_PCI_CFC_PCIE_DEV_CTL_INIT_FLR_MASK) != 0U)
+        while ((handle->hw.func.vf->PCI_CFC_PCIE_DEV_CTL & ENETC_VF_PCI_TYPE0_PCI_CFC_PCIE_DEV_CTL_INIT_FLR_MASK) != 0U)
         {
         }
         /* Enable master bus and memory access for PCIe and MSI-X */
@@ -731,8 +731,11 @@ status_t EP_Down(ep_handle_t *handle)
        cases, the transmitter may become inoperable and not be able to recover from FLR requiring a full reset instead.
        The issue can occur when FLR is triggered around the time MAC Tx has started backing off due to a half duplex
        collision detection. */
-    handle->hw.portGroup.eth->PM0_IF_MODE &= ~NETC_ETH_LINK_PM0_IF_MODE_HD_MASK;
-    handle->hw.portGroup.eth->PM1_IF_MODE &= ~NETC_ETH_LINK_PM0_IF_MODE_HD_MASK;
+    if (!NETC_PortIsPseudo(handle->hw.portGroup.port))
+    {
+        handle->hw.portGroup.eth->PM0_IF_MODE &= ~NETC_ETH_LINK_PM0_IF_MODE_HD_MASK;
+        handle->hw.portGroup.eth->PM1_IF_MODE &= ~NETC_ETH_LINK_PM0_IF_MODE_HD_MASK;
+    }
 #endif
 
     return kStatus_Success;

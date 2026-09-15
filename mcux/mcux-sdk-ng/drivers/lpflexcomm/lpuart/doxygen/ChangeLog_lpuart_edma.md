@@ -1,5 +1,10 @@
 # LPUART_EDMA
 
+## [2.1.2]
+
+- Bug Fixes
+  - Fixed race condition in LPUART_ReceiveEDMA() for transfers whose size is not a multiple of 4 bytes.
+
 ## [2.1.1]
 
 - Improvements

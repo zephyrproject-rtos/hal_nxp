@@ -1478,4 +1478,4 @@ void SAI_DriverIRQHandler(uint32_t instance);
 
 /*! @} */
 
-#endif /* _FSL_SAI_H_ */
+#endif /* FSL_SAI_H_ */

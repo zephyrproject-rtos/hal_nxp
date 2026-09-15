@@ -135,7 +135,7 @@ void MSGINTR3_IRQHandler(void)
 
     for (uint8_t channel = 0; channel < FSL_MSGINTR_CHANNEL_NUM; channel++)
     {
-        pendingIntr = MSGINTR2->MSI[channel].MSIR;
+        pendingIntr = MSGINTR3->MSI[channel].MSIR;
         if ((pendingIntr != 0U) && (s_msgintrCallback[3] != NULL))
         {
             s_msgintrCallback[3](MSGINTR3, channel, pendingIntr);
@@ -153,7 +153,7 @@ void MSGINTR4_IRQHandler(void)
 
     for (uint8_t channel = 0; channel < FSL_MSGINTR_CHANNEL_NUM; channel++)
     {
-        pendingIntr = MSGINTR2->MSI[channel].MSIR;
+        pendingIntr = MSGINTR4->MSI[channel].MSIR;
         if ((pendingIntr != 0U) && (s_msgintrCallback[4] != NULL))
         {
             s_msgintrCallback[4](MSGINTR4, channel, pendingIntr);
@@ -171,7 +171,7 @@ void MSGINTR5_IRQHandler(void)
 
     for (uint8_t channel = 0; channel < FSL_MSGINTR_CHANNEL_NUM; channel++)
     {
-        pendingIntr = MSGINTR2->MSI[channel].MSIR;
+        pendingIntr = MSGINTR5->MSI[channel].MSIR;
         if ((pendingIntr != 0U) && (s_msgintrCallback[5] != NULL))
         {
             s_msgintrCallback[5](MSGINTR5, channel, pendingIntr);
@@ -189,10 +189,46 @@ void MSGINTR6_IRQHandler(void)
 
     for (uint8_t channel = 0; channel < FSL_MSGINTR_CHANNEL_NUM; channel++)
     {
-        pendingIntr = MSGINTR2->MSI[channel].MSIR;
+        pendingIntr = MSGINTR6->MSI[channel].MSIR;
         if ((pendingIntr != 0U) && (s_msgintrCallback[6] != NULL))
         {
             s_msgintrCallback[6](MSGINTR6, channel, pendingIntr);
+        }
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
+
+#if defined(MSGINTR7)
+void MSGINTR7_IRQHandler(void);
+void MSGINTR7_IRQHandler(void)
+{
+    uint32_t pendingIntr;
+
+    for (uint8_t channel = 0; channel < FSL_MSGINTR_CHANNEL_NUM; channel++)
+    {
+        pendingIntr = MSGINTR7->MSI[channel].MSIR;
+        if ((pendingIntr != 0U) && (s_msgintrCallback[7] != NULL))
+        {
+            s_msgintrCallback[7](MSGINTR7, channel, pendingIntr);
+        }
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
+
+#if defined(MSGINTR8)
+void MSGINTR8_IRQHandler(void);
+void MSGINTR8_IRQHandler(void)
+{
+    uint32_t pendingIntr;
+
+    for (uint8_t channel = 0; channel < FSL_MSGINTR_CHANNEL_NUM; channel++)
+    {
+        pendingIntr = MSGINTR8->MSI[channel].MSIR;
+        if ((pendingIntr != 0U) && (s_msgintrCallback[8] != NULL))
+        {
+            s_msgintrCallback[8](MSGINTR8, channel, pendingIntr);
         }
     }
     SDK_ISR_EXIT_BARRIER;

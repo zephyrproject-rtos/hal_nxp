@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FlexCAN driver version. */
-#define FSL_FLEXCAN_DRIVER_VERSION (MAKE_VERSION(2, 15, 2))
+#define FSL_FLEXCAN_DRIVER_VERSION (MAKE_VERSION(2, 16, 0))
 /*! @} */
 
 #if !(defined(FLEXCAN_WAIT_TIMEOUT) && FLEXCAN_WAIT_TIMEOUT)
@@ -877,6 +877,20 @@ typedef struct _flexcan_config
 #endif
     bool enableRemoteRequestFrameStored;  /*!< true: Store Remote Request Frame in the same fashion of data frame.
                                                false: Generate an automatic Remote Response Frame. */
+    bool enableThreeSamplingMode;          /*!< true: Three samples are used to determine the value of the received
+                                                bit, providing noise immunity against fast transient changes.
+                                                false: One sample is used to determine the value of the received bit. */
+    bool disableBusOffAutoRecovery;        /*!< true: Automatic recovering from Bus-Off state is disabled.
+                                                false: Automatic recovering from Bus-Off state is enabled according to
+                                                CAN Specification. */
+    uint8_t txArbitrationStartDelay;       /*!< Determines how many CAN bits the transmission arbitration process
+                                                start point can be delayed from the first bit of CRC field on CAN bus,
+                                                valid range 0-31. */
+    bool enableEntireArbitrationCompare;   /*!< true: Enable Entire Frame Arbitration Field Comparison for Rx MB.
+                                                The IDE and RTR fields of the RX MBs are compared to their corresponding
+                                                bits within the incoming frame (mask bits apply).
+                                                false: The IDE field of the RX MB filter is always compared and
+                                                RTR is never compared despite mask bits. */
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENDIANNESS_SELECTION) && FSL_FEATURE_FLEXCAN_HAS_ENDIANNESS_SELECTION)
     flexcan_endianness_t payloadEndianness; /*!< Selects the byte order for the payload of transmit and

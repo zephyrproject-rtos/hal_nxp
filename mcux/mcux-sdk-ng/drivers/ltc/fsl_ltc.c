@@ -3343,11 +3343,11 @@ static void ltc_hash_prepare_context_switch(LTC_Type *base)
 
 static uint32_t ltc_hash_get_block_size(ltc_hash_algo_t algo)
 {
-    if ((algo == kLTC_Cmac)
 #if defined(LTC_KEY_REGISTER_READABLE) && LTC_KEY_REGISTER_READABLE
-        || (algo == kLTC_XcbcMac)
+    if ((algo == kLTC_Cmac) || (algo == kLTC_XcbcMac))
+#else
+    if (algo == kLTC_Cmac)
 #endif /* LTC_KEY_REGISTER_READABLE */
-    )
     {
         return (uint32_t)LTC_AES_BLOCK_SIZE;
     }

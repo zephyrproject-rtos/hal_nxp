@@ -1,5 +1,16 @@
 # XSPI
 
+## [2.7.7]
+
+- Bug Fixes
+  - Fixed CID 51973698 NO_EFFECT in XSPI_UpdateSFPConfig() where the non-EENV FRAD word2/word3
+    update was redundantly executed once per target group instead of once per FRAD region.
+
+## [2.7.6]
+
+- Bug Fixes
+  - Fixed CERT-C INT31-C violations in XSPI_TG_REG_ADDR_xxx macros
+
 ## [2.7.5]
 
 - Bug Fixes

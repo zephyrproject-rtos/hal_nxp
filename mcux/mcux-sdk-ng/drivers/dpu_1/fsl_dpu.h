@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_DPU_H_
-#define _FSL_DPU_H_
+#ifndef FSL_DPU_H_
+#define FSL_DPU_H_
 
 #include "fsl_common.h"
 

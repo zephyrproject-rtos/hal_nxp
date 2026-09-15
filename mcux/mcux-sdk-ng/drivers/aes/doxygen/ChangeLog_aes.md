@@ -1,5 +1,9 @@
 # AES
 
+## [2.0.4]
+
+- Bound-check tagSize in AES_DecryptTagGcm() before copying the tag into the local buffer.
+
 ## [2.0.3]
 
 - Edit aes_one_block() function to be interrupt safe.
