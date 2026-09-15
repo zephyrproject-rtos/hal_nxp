@@ -9,7 +9,7 @@
 **                          MKM34Z128ACLL5
 **
 **     Version:             rev. 2.1, 2025-11-11
-**     Build:               b260130
+**     Build:               b260810
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA
@@ -405,7 +405,7 @@ typedef struct {
     union {                                          /* offset: 0x108, array step: 0x10 */
       struct {                                         /* offset: 0x108, array step: 0x10 */
              uint8_t RESERVED_0[3];
-             uint8_t DSR;                                /**< DMA_DSR0 register...DMA_DSR3 register., array offset: 0x10B, array step: 0x10 */
+        __I  uint8_t DSR;                                /**< DMA_DSR0 register...DMA_DSR3 register., array offset: 0x10B, array step: 0x10 */
       } DMA_DSR_ACCESS8BIT;
       __IO uint32_t DSR_BCR;                           /**< DMA Status Register / Byte Count Register, array offset: 0x108, array step: 0x10 */
     };

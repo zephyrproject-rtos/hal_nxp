@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.0, 2025-11-11
-**     Build:               b260520
+**     Build:               b260819
 **
 **     Abstract:
 **         Chip specific module features.
@@ -170,6 +170,8 @@
 #define FSL_FEATURE_DMAMUX_HAS_A_ON (0)
 /* @brief Register CHCFGn width. */
 #define FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH (8)
+/* @brief Register CHCFGn sorted in order 3, 2 ,1 ,0 ,7 ,6 ,5 ,4 ... */
+#define FSL_FEATURE_DMAMUX_CHANNEL_NEEDS_ENDIAN_CONVERT (0)
 
 /* EWM module features */
 
@@ -483,6 +485,18 @@
     (((x) == FTM2) ? (0) : (-1))))
 /* @brief Is affected by errata with ID 010856 (FTM: Safe state is not removed from channel outputs after fault condition ends if SWOCTRL is being used to control the pin). */
 #define FSL_FEATURE_FTM_HAS_ERRATA_010856 (0)
+/* @brief Has no FAULTEN bit field in COMBINE register. */
+#define FSL_FEATURE_FTM_HAS_NO_COMBINE_FAULTEN (0)
+/* @brief Has no COMBINE1 bit field in COMBINE register (single channel pair device). */
+#define FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1 (0)
+/* @brief Has no FAULTM bit field in MODE register. */
+#define FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM (0)
+/* @brief Has no FAULTIE bit field in MODE register. */
+#define FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE (0)
+/* @brief Has no FLTCTRL register. */
+#define FSL_FEATURE_FTM_HAS_NO_FLTCTRL (0)
+/* @brief Has no FAULTF bit field in FMS register. */
+#define FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF (0)
 
 /* GPIO module features */
 
@@ -629,6 +643,11 @@
 /* @brief Highest interrupt request number. */
 #define FSL_FEATURE_INTERRUPT_IRQ_MAX (31)
 
+/* PCC module features */
+
+/* @brief Has CLOCK GATE CONTROL bit (e.g PCC_CGC) */
+#define FSL_FEATURE_PCC_HAS_FGPIO_CLOCK_GATE_CONTROL (0)
+
 /* PMC module features */
 
 /* @brief Has Bandgap Enable In VLPx Operation support. */
@@ -692,6 +711,11 @@
 #define FSL_FEATURE_PORT_HAS_IRQC_FLAG (0)
 /* @brief Defines whether PCR[IRQC] bit-field has trigger states. */
 #define FSL_FEATURE_PORT_HAS_IRQC_TRIGGER (0)
+
+/* PWT module features */
+
+/* @brief The width of PWT registers. */
+#define FSL_FEATURE_PWT_REG_WIDTH (8)
 
 /* RCM module features */
 

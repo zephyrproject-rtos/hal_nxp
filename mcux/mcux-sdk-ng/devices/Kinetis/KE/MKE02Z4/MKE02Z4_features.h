@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2017-05-19
-**     Build:               b260130
+**     Build:               b260708
 **
 **     Abstract:
 **         Chip specific module features.
@@ -141,6 +141,18 @@
 #define FSL_FEATURE_FTM_INSTANCE_FAULT_INPUT_NUMBERn(x) (4)
 /* @brief Is affected by errata with ID 010856 (FTM: Safe state is not removed from channel outputs after fault condition ends if SWOCTRL is being used to control the pin). */
 #define FSL_FEATURE_FTM_HAS_ERRATA_010856 (0)
+/* @brief Has no FAULTEN bit field in COMBINE register. */
+#define FSL_FEATURE_FTM_HAS_NO_COMBINE_FAULTEN (0)
+/* @brief Has no COMBINE1 bit field in COMBINE register (single channel pair device). */
+#define FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1 (0)
+/* @brief Has no FAULTM bit field in MODE register. */
+#define FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM (0)
+/* @brief Has no FAULTIE bit field in MODE register. */
+#define FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE (0)
+/* @brief Has no FLTCTRL register. */
+#define FSL_FEATURE_FTM_HAS_NO_FLTCTRL (0)
+/* @brief Has no FAULTF bit field in FMS register. */
+#define FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF (0)
 /* @brief TPM Has no CONF. */
 #define FSL_FEATURE_TPM_HAS_NO_CONF (1)
 /* @brief There is CLKS bit in SC register. */
