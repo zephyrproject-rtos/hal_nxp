@@ -8,7 +8,7 @@
 **
 **     Reference manual:    LPC83x User manual Rev.1.1  5 October 2016
 **     Version:             rev. 3.0, 2025-11-18
-**     Build:               b251118
+**     Build:               b260826
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

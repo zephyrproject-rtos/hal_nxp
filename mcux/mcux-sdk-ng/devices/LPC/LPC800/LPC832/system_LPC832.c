@@ -8,7 +8,7 @@
 **
 **     Reference manual:    LPC83x User manual Rev.1.1  5 October 2016
 **     Version:             rev. 3.0, 2025-11-18
-**     Build:               b260518
+**     Build:               b260826
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -137,7 +137,6 @@ void SystemCoreClockUpdate (void) {
     case 13U: wdt_osc = 4200000U; break;
     case 14U: wdt_osc = 4400000U; break;
     case 15U: wdt_osc = 4600000U; break;
-    default:  wdt_osc =       0U; break;
   }
   wdt_osc /= (((SYSCON->WDTOSCCTRL & SYSCON_WDTOSCCTRL_DIVSEL_MASK) + 1U) << 1U);
 
@@ -167,9 +166,6 @@ void SystemCoreClockUpdate (void) {
       break;
     case 3U:                                              /* System PLL  */
       SystemCoreClock = Clock_GetPLLFreq((SYSCON->SYSPLLCTRL & SYSCON_SYSPLLCTRL_MSEL_MASK), CLOCK_GetSystemPLLInClkRate());
-      break;
-    default:
-      SystemCoreClock = 0U;
       break;
   }
 

@@ -10,7 +10,7 @@
 **
 **     Reference manual:    LPC51U68 User manual User manual Rev. 1.0 13 Dec 2017
 **     Version:             rev. 3.0, 2025-11-18
-**     Build:               b260515
+**     Build:               b260826
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -230,7 +230,7 @@ static uint32_t findPllPostDiv(uint32_t ctrlReg, uint32_t pDecReg)
 /* Get multiplier (M) from PLL MDEC and BYPASS_FBDIV2 settings */
 static uint32_t findPllMMult(uint32_t ctrlReg, uint32_t mDecReg)
 {
-    uint32_t mMult = 1U;
+    uint32_t mMult;
 
     /* Decode MDEC value to get (M) multiplier */
     mMult = pllDecodeM(mDecReg & 0x1FFFFUL);

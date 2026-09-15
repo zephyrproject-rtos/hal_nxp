@@ -12,7 +12,7 @@
 **
 **     Reference manual:    LPC546xx User manual Rev.1.9  5 June 2017
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260826
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

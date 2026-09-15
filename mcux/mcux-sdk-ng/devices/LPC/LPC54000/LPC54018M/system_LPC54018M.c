@@ -10,7 +10,7 @@
 **
 **     Reference manual:    LPC54018JxM/LPC54S018JxM User manual Rev.1.0 20 September 2018
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260817
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -18,7 +18,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -236,7 +236,7 @@ static uint32_t findPllPostDiv(uint32_t ctrlReg, uint32_t pDecReg)
 /* Get multiplier (M) from PLL MDEC and BYPASS_FBDIV2 settings */
 static uint32_t findPllMMult(uint32_t ctrlReg, uint32_t mDecReg)
 {
-    uint32_t mMult = 1;
+    uint32_t mMult;
 
     /* Decode MDEC value to get (M) multiplier */
     mMult = pllDecodeM(mDecReg & 0x1FFFFUL);
@@ -287,7 +287,7 @@ void SystemInit (void) {
    ---------------------------------------------------------------------------- */
 
 void SystemCoreClockUpdate (void) {
-    uint32_t clkRate = 0;
+uint32_t clkRate = 0;
     uint32_t prediv, postdiv;
     uint64_t workRate;
 

@@ -1363,7 +1363,7 @@ static float findPll0MMult(void)
 /* Get multiplier (M) from PLL1 MDEC. */
 static uint32_t findPll1MMult(void)
 {
-    uint32_t mMult = 1UL;
+    uint32_t mMult;
 
     mMult = SYSCON->PLL1MDEC & SYSCON_PLL1MDEC_MDIV_MASK;
 
@@ -1698,7 +1698,7 @@ uint32_t CLOCK_GetPLL1InClockRate(void)
  */
 uint32_t CLOCK_GetPLL0OutFromSetup(pll_setup_t *pSetup)
 {
-    uint32_t clkRate = 0;
+    uint32_t clkRate;
     uint32_t prediv, postdiv;
     float workRate = 0.0F;
 
@@ -1729,7 +1729,7 @@ uint32_t CLOCK_GetPLL0OutFromSetup(pll_setup_t *pSetup)
  */
 uint32_t CLOCK_GetPLL1OutFromSetup(pll_setup_t *pSetup)
 {
-    uint32_t clkRate = 0;
+    uint32_t clkRate;
     uint32_t prediv, postdiv;
     uint32_t workRate = 0UL;
 

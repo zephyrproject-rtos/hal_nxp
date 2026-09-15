@@ -869,9 +869,9 @@ uint32_t CLOCK_GetFlexCommInputClock(uint32_t id)
 /* Get FLEXCOMM Clk */
 uint32_t CLOCK_GetFlexCommClkFreq(uint32_t id)
 {
-    uint32_t freq   = 0U;
-    uint32_t frgMul = 0U;
-    uint32_t frgDiv = 0U;
+    uint32_t freq;
+    uint32_t frgMul;
+    uint32_t frgDiv;
 
     freq   = CLOCK_GetFlexCommInputClock(id);
     frgMul = (SYSCON->FLEXFRGXCTRL[id] & SYSCON_FLEXFRG0CTRL_MULT_MASK) >> 8U;
@@ -1506,7 +1506,7 @@ uint32_t CLOCK_GetPLL1InClockRate(void)
  */
 uint32_t CLOCK_GetPLL0OutFromSetup(pll_setup_t *pSetup)
 {
-    uint32_t clkRate = 0;
+    uint32_t clkRate;
     uint32_t prediv, postdiv;
     float workRate = 0.0F;
 
@@ -2060,7 +2060,7 @@ bool CLOCK_EnableUsbhs0PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
 {
     volatile uint32_t i;
     uint32_t phyPllDiv  = 0U;
-    uint16_t multiplier = 0U;
+    uint16_t multiplier;
     bool ret            = true;
 
     POWER_DisablePD(kPDRUNCFG_PD_XTAL32M);

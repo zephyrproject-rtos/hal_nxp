@@ -12,7 +12,7 @@
 **
 **     Reference manual:    LPC84x User manual Rev.1.6  8 Dec 2017
 **     Version:             rev. 3.0, 2025-11-18
-**     Build:               b260509
+**     Build:               b260826
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -101,7 +101,6 @@ void SystemCoreClockUpdate (void) {
     case 1U:  fro_osc = 24000000U; break;
     case 2U:  fro_osc = 30000000U; break;
     case 3U:  fro_osc = 30000000U; break;
-    default:  fro_osc =        0U; break;
   }
   if (((SYSCON->FROOSCCTRL >> SYSCON_FROOSCCTRL_FRO_DIRECT_SHIFT) & 0x01U) == 0U) {
     fro_osc = fro_osc >> 1U;
@@ -124,7 +123,6 @@ void SystemCoreClockUpdate (void) {
     case 13U: wdt_osc = 4200000U; break;
     case 14U: wdt_osc = 4400000U; break;
     case 15U: wdt_osc = 4600000U; break;
-    default:  wdt_osc =       0U; break;
   }
   wdt_osc /= (((SYSCON->WDTOSCCTRL & SYSCON_WDTOSCCTRL_DIVSEL_MASK) + 1U) << 1U);
 
@@ -143,9 +141,6 @@ void SystemCoreClockUpdate (void) {
         case 3U:                                       /* Free running oscillator (FRO) / 2 */
           SystemCoreClock = (fro_osc >> 1U);
           break;
-        default:
-          SystemCoreClock = 0U;
-          break;
       }
       break;
     case 1U:                                           /* System PLL Clock Out  */
@@ -163,13 +158,7 @@ void SystemCoreClockUpdate (void) {
         case 3U:                                       /* Free running oscillator (FRO) / 2 */
           SystemCoreClock = (uint32_t)(((uint64_t)(fro_osc >> 1U) * msel) & 0xFFFFFFFFU);
           break;
-        default:
-          SystemCoreClock = 0U;
-          break;
       }
-      break;
-    default:
-      SystemCoreClock = 0U;
       break;
   }
 
