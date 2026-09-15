@@ -10,7 +10,7 @@
 **                          KW43L43Z97MFT
 **
 **     Version:             rev. 1.0, 2020-05-12
-**     Build:               b260410
+**     Build:               b260805
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCM
@@ -378,8 +378,8 @@ typedef struct {
 #define MCM_LMDR2_MT_MASK                        (0xE000U)
 #define MCM_LMDR2_MT_SHIFT                       (13U)
 /*! MT - Memory Type
- *  0b000..SRAM_L
- *  0b001..SRAM_U
+ *  0b000..SRAM_Lower
+ *  0b001..SRAM_Upper
  *  0b010..PC Cache
  *  0b011..PS Cache
  */

@@ -10,7 +10,7 @@
 **                          KW43L43Z97MFT
 **
 **     Version:             rev. 1.0, 2020-05-12
-**     Build:               b260407
+**     Build:               b260805
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ISP_AP
@@ -132,7 +132,7 @@ typedef struct {
 #define ISP_AP_CSW_REQ_PENDING_SHIFT             (1U)
 /*! REQ_PENDING - Request Pending
  *  0b0..No request pending
- *  0b1..Request for resynchronization pending
+ *  0b1..The debugger has written a value into the REQUEST register and it's pending the chip reading REQUEST
  */
 #define ISP_AP_CSW_REQ_PENDING(x)                (((uint32_t)(((uint32_t)(x)) << ISP_AP_CSW_REQ_PENDING_SHIFT)) & ISP_AP_CSW_REQ_PENDING_MASK)
 

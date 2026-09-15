@@ -6,9 +6,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    Rev. 1 Draft F, 2025-10-18
+**     Reference manual:    Rev. 1, 2026-07-08
 **     Version:             rev. 1.0, 2020-05-12
-**     Build:               b260410
+**     Build:               b260722
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for KW43L43Z92
@@ -64,7 +64,6 @@
 #include "PERI_GDET.h"
 #include "PERI_GEN4PHY.h"
 #include "PERI_GENFSK.h"
-#include "PERI_GLIKEY.h"
 #include "PERI_GPIO.h"
 #include "PERI_INTM.h"
 #include "PERI_ISP_AP.h"
@@ -105,7 +104,6 @@
 #include "PERI_TRNG.h"
 #include "PERI_TSTMR.h"
 #include "PERI_TX_PACKET_RAM.h"
-#include "PERI_UDF.h"
 #include "PERI_WDOG.h"
 #include "PERI_WOR.h"
 #include "PERI_WUU.h"

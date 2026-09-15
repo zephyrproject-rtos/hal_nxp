@@ -7,9 +7,7 @@
 **                          KW45B41Z82AFPA
 **                          KW45B41Z82AFTA
 **                          KW45B41Z83AFPA
-**                          KW45B41Z83AFPA_NBU
 **                          KW45B41Z83AFTA
-**                          KW45B41Z83AFTA_NBU
 **                          KW45Z41052AFPA
 **                          KW45Z41052AFTA
 **                          KW45Z41053AFPA
@@ -20,13 +18,13 @@
 **                          KW45Z41083AFTA
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b260810
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ATX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -62,8 +60,6 @@
 #include "KW45B41Z82_COMMON.h"
 #elif (defined(CPU_KW45B41Z83AFPA) || defined(CPU_KW45B41Z83AFTA))
 #include "KW45B41Z83_COMMON.h"
-#elif (defined(CPU_KW45B41Z83AFPA_NBU) || defined(CPU_KW45B41Z83AFTA_NBU))
-#include "KW45B41Z83_NBU_COMMON.h"
 #elif (defined(CPU_KW45Z41052AFPA) || defined(CPU_KW45Z41052AFTA))
 #include "KW45Z41052_COMMON.h"
 #elif (defined(CPU_KW45Z41053AFPA) || defined(CPU_KW45Z41053AFTA))
@@ -117,7 +113,7 @@
 /** ATX - Register Layout Typedef */
 typedef struct {
   __I  uint32_t VERID;                             /**< ATX Version ID, offset: 0x0 */
-       uint32_t PARAM;                             /**< ATX Parameter, offset: 0x4 */
+  __I  uint32_t PARAM;                             /**< ATX Parameter, offset: 0x4 */
   __IO uint32_t TEST_UNLOCK;                       /**< TEST_UNLOCK register, offset: 0x8 */
   __IO uint32_t CTRL;                              /**< ATX Control Regs, offset: 0xC */
   __IO uint32_t CMP_CTRL;                          /**< ATX Cmp Control Regs, offset: 0x10 */

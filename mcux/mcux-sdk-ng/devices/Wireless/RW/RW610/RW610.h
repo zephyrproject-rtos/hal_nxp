@@ -11,7 +11,7 @@
 **
 **     Reference manual:    RW61X reference manual Rev. 10.0 - 12 January 2026
 **     Version:             rev. 4.0, 2026-01-12
-**     Build:               b260114
+**     Build:               b260611
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RW610
@@ -72,7 +72,7 @@
 #include "PERI_CRC.h"
 #include "PERI_CTIMER.h"
 #include "PERI_DAC.h"
-#include "PERI_DBGMAILBOX.h"
+#include "PERI_DEBUGMAILBOX.h"
 #include "PERI_DMA.h"
 #include "PERI_DMIC.h"
 #include "PERI_ELS.h"
