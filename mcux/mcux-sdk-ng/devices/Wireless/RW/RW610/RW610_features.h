@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.0, 2025-11-17
-**     Build:               b260520
+**     Build:               b260609
 **
 **     Abstract:
 **         Chip specific module features.
@@ -174,7 +174,7 @@
 
 /* CTIMER module features */
 
-/* @brief CTIMER has no capture channel. */
+/* @brief CTIMER has no capture channel */
 #define FSL_FEATURE_CTIMER_HAS_NO_INPUT_CAPTURE (0)
 /* @brief CTIMER has no capture 2 interrupt. */
 #define FSL_FEATURE_CTIMER_HAS_NO_IR_CR2INT (0)
@@ -416,8 +416,10 @@
 
 /* OSTIMER module features */
 
-/* @brief Has no OS Timer control register in PMC */
+/* @brief Has no OS Timer control register in PMC. */
 #define FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG (1)
+/* @brief Has binary encoded value in counter register. */
+#define FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER (0)
 
 /* PINT module features */
 

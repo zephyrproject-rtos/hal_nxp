@@ -10,7 +10,7 @@
 **                          KW43L43Z97MFT
 **
 **     Version:             rev. 1.0, 2020-05-12
-**     Build:               b260407
+**     Build:               b260805
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RADIO_CTRL
@@ -603,8 +603,6 @@ typedef struct {
  *  0b0010..2bit Left shift
  *  0b0011..3bit Left shift
  *  0b0100..4bit Left shift
- *  0b0100..4bit Left shift
- *  0b0100..4bit Left shift
  *  0b0101..5bit Left shift
  *  0b0110..6bit Left shift
  *  0b0111..7bit Left shift
@@ -752,7 +750,17 @@ typedef struct {
 
 #define RADIO_CTRL_PACKET_RAM_TO_IPS_CTRL_PREFETCH_MODULE_EN_MASK (0xFF800000U)
 #define RADIO_CTRL_PACKET_RAM_TO_IPS_CTRL_PREFETCH_MODULE_EN_SHIFT (23U)
-/*! PREFETCH_MODULE_EN - Prefetch module enable */
+/*! PREFETCH_MODULE_EN - Prefetch module enable
+ *  0b1xxxxxxxx..prefetch_module_en[8] : RX packet RAM
+ *  0bx1xxxxxxx..prefetch_module_en[7] : TX packet RAM
+ *  0bxx1xxxxxx..prefetch_module_en[6] : XCVR registers
+ *  0bxxx1xxxxx..prefetch_module_en[5] : RF_CTRL registers (rf_ctrl, wor, bme,sfa, bric, ltc registers)
+ *  0bxxxx1xxxx..prefetch_module_en[4] : Generic LL Remap2
+ *  0bxxxxx1xxx..prefetch_module_en[3] : Generic LL Remap1
+ *  0bxxxxxx1xx..prefetch_module_en[2] : Generic LL Remap0
+ *  0bxxxxxxx1x..prefetch_module_en[1] : Generic LL
+ *  0bxxxxxxxx1..prefetch_module_en[0]: : Zigbee
+ */
 #define RADIO_CTRL_PACKET_RAM_TO_IPS_CTRL_PREFETCH_MODULE_EN(x) (((uint32_t)(((uint32_t)(x)) << RADIO_CTRL_PACKET_RAM_TO_IPS_CTRL_PREFETCH_MODULE_EN_SHIFT)) & RADIO_CTRL_PACKET_RAM_TO_IPS_CTRL_PREFETCH_MODULE_EN_MASK)
 /*! @} */
 

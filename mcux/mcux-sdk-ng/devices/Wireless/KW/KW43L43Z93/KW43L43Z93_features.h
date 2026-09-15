@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260717
+**     Build:               b260812
 **
 **     Abstract:
 **         Chip specific module features.
@@ -32,7 +32,7 @@
 /* @brief AXBS availability on the SoC. */
 #define FSL_FEATURE_SOC_AXBS_COUNT (2)
 /* @brief BLE2_REG availability on the SoC. */
-#define FSL_FEATURE_SOC_BLE2_REG_COUNT (2)
+#define FSL_FEATURE_SOC_BLE2_REG_COUNT (1)
 /* @brief BRIC availability on the SoC. */
 #define FSL_FEATURE_SOC_BRIC_COUNT (1)
 /* @brief BTRTU1 availability on the SoC. */
@@ -111,15 +111,6 @@
 #define FSL_FEATURE_SOC_WDOG_COUNT (2)
 /* @brief WUU availability on the SoC. */
 #define FSL_FEATURE_SOC_WUU_COUNT (1)
-
-/* CCM32K module features */
-
-/* @brief Has Amplifier gain fine adjustment bits (register bit OSC32K_CTRL[FINE_AMP_GAIN]). */
-#define FSL_FEATURE_CCM32K_HAS_FINE_AMP_GAIN (0)
-/* @brief Has CGC32K register. */
-#define FSL_FEATURE_CCM32K_HAS_CGC32K (1)
-/* @brief Has CLKMON_CTRL register. */
-#define FSL_FEATURE_CCM32K_HAS_CLKMON_CTRL (1)
 
 /* AOI module features */
 
@@ -202,6 +193,15 @@
 #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_050443 (0)
 /* @brief Support memory error interrupt (bitfield MECR[CEI_MSK]). */
 #define FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_INTERRUPT (0)
+
+/* CCM32K module features */
+
+/* @brief Has Amplifier gain fine adjustment bits (register bit OSC32K_CTRL[FINE_AMP_GAIN]). */
+#define FSL_FEATURE_CCM32K_HAS_FINE_AMP_GAIN (0)
+/* @brief Has CGC32K register. */
+#define FSL_FEATURE_CCM32K_HAS_CGC32K (1)
+/* @brief Has CLKMON_CTRL register. */
+#define FSL_FEATURE_CCM32K_HAS_CLKMON_CTRL (1)
 
 /* CDOG module features */
 
@@ -694,6 +694,8 @@
 #define FSL_FEATURE_MU_HAS_HR_BY_INSTANCEn(x) (0)
 /* @brief The number of general purpose interrupts supported by MU. */
 #define FSL_FEATURE_MU_GPI_COUNT (4)
+/* @brief MU does not support CIER0 (Core Interrupt Enable 0) register. */
+#define FSL_FEATURE_MU_NO_CIER0_REG (1)
 
 /* PORT module features */
 
@@ -815,7 +817,7 @@
 #define FSL_FEATURE_SPC_HAS_VDD1P8_LVD (1)
 /* @brief Has no DCDC frequency control (register bits DCDC_CFG[FREQ_CNTRL_ON/FREQ_CNTRL]). */
 #define FSL_FEATURE_SPC_HAS_NO_DCDC_FREQ_CNTRL (1)
-/* @brief Has DCDC 2.5V output select (register bits ACTIVE_CFG/HP_CFG[DCDC_VOUT2P5_SEL]). */
+/* @brief Has DCDC 2.5V output select (register bits ACTIVE_CFG/HP_CFG[DCDC_VOUT2P5_SEL]) or (DCDC_CFG[VOUT2P5_SEL]). */
 #define FSL_FEATURE_SPC_HAS_DCDC_VOUT2P5_SEL (1)
 /* @brief DCDC 2.5V output select is in the per-mode ACTIVE_CFG/HP_CFG registers (vs DCDC_CFG). */
 #define FSL_FEATURE_SPC_DCDC_VOUT2P5_SEL_IN_ACTIVE_CFG (1)
@@ -946,6 +948,8 @@
 #define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
 /* @brief Is affected by errata with ID 050050 (Incorrect duty output when EPWM mode is set to PS=0 during write 1 to CnV register). */
 #define FSL_FEATURE_TPM_HAS_ERRATA_050050 (0)
+/* @brief Has no CPWMS field in SC register (bitfield SC[CPWMS]). */
+#define FSL_FEATURE_TPM_HAS_NO_SC_CPWMS (0)
 
 /* TRDC module features */
 
@@ -967,8 +971,7 @@
 #define FSL_FEATURE_TRDC_HAS_DOMAIN_ERROR (1)
 /* @brief TRDC instance has TRDC_FLW_CTL. */
 #define FSL_FEATURE_TRDC_HAS_FLW (1)
-/* @brief TRDC DERRLOC.MBCINST uses flat one-bit-per-MBC-instance encoding (bit N = MBC[N]).
- *        Other devices use 4-bits-per-MBC encoding (bit 4i+j = MBC[i] SLV[j]). */
+/* @brief TRDC DERRLOC.MBCINST uses flat one-bit-per-MBC-instance encoding (bit N = MBC[N]). Other devices use 4-bits-per-MBC encoding (bit 4i+j = MBC[i] SLV[j]). */
 #define FSL_FEATURE_TRDC_DERRLOC_MBCINST_FLAT_ENCODING (1)
 
 /* TRNG module features */

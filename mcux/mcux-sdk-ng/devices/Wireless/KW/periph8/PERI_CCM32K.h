@@ -10,7 +10,7 @@
 **                          KW43L43Z97MFT
 **
 **     Version:             rev. 1.0, 2020-05-12
-**     Build:               b260407
+**     Build:               b260805
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CCM32K
@@ -107,9 +107,9 @@ typedef struct {
   __I  uint32_t STATUS;                            /**< Status Register, offset: 0xC */
        uint8_t RESERVED_0[4];
   __IO uint32_t CLKMON_CTRL;                       /**< Clock Monitor Control Register, offset: 0x14 */
-  __IO uint32_t CLKMON_TST;                        /**< Clock Monitor Test Register, offset: 0x18 */
-  __IO uint32_t CGC32K;                            /**< 32 kHz Clock Gate Control Register, offset: 0x1C */
        uint8_t RESERVED_1[4];
+  __IO uint32_t CGC32K;                            /**< 32 kHz Clock Gate Control Register, offset: 0x1C */
+       uint8_t RESERVED_2[4];
   __IO uint32_t OSC32K_MON_TRIM;                   /**< 32 kHz OSC Internal Monitor Trim Register, offset: 0x24 */
 } CCM32K_Type;
 
@@ -196,11 +196,6 @@ typedef struct {
  */
 #define CCM32K_OSC32K_CTRL_OSC_CLKMON_EN(x)      (((uint32_t)(((uint32_t)(x)) << CCM32K_OSC32K_CTRL_OSC_CLKMON_EN_SHIFT)) & CCM32K_OSC32K_CTRL_OSC_CLKMON_EN_MASK)
 
-#define CCM32K_OSC32K_CTRL_CAP_TRIM_MASK         (0x60U)
-#define CCM32K_OSC32K_CTRL_CAP_TRIM_SHIFT        (5U)
-/*! CAP_TRIM - SOX Capacitor Trim */
-#define CCM32K_OSC32K_CTRL_CAP_TRIM(x)           (((uint32_t)(((uint32_t)(x)) << CCM32K_OSC32K_CTRL_CAP_TRIM_SHIFT)) & CCM32K_OSC32K_CTRL_CAP_TRIM_MASK)
-
 #define CCM32K_OSC32K_CTRL_CAP_SEL_EN_MASK       (0x80U)
 #define CCM32K_OSC32K_CTRL_CAP_SEL_EN_SHIFT      (7U)
 /*! CAP_SEL_EN - Crystal Load Capacitance Selection Enable
@@ -212,7 +207,7 @@ typedef struct {
 #define CCM32K_OSC32K_CTRL_EXTAL_CAP_SEL_MASK    (0xF00U)
 #define CCM32K_OSC32K_CTRL_EXTAL_CAP_SEL_SHIFT   (8U)
 /*! EXTAL_CAP_SEL - Crystal load capacitance selection bits
- *  0b0000..0 pF
+ *  0b0000..Invalid configuration
  *  0b0001..2 pF
  *  0b0010..4 pF
  *  0b0011..6 pF
@@ -253,11 +248,6 @@ typedef struct {
  */
 #define CCM32K_OSC32K_CTRL_XTAL_CAP_SEL(x)       (((uint32_t)(((uint32_t)(x)) << CCM32K_OSC32K_CTRL_XTAL_CAP_SEL_SHIFT)) & CCM32K_OSC32K_CTRL_XTAL_CAP_SEL_MASK)
 
-#define CCM32K_OSC32K_CTRL_CMP_TRIM_MASK         (0x70000U)
-#define CCM32K_OSC32K_CTRL_CMP_TRIM_SHIFT        (16U)
-/*! CMP_TRIM - SOX Comparator trim */
-#define CCM32K_OSC32K_CTRL_CMP_TRIM(x)           (((uint32_t)(((uint32_t)(x)) << CCM32K_OSC32K_CTRL_CMP_TRIM_SHIFT)) & CCM32K_OSC32K_CTRL_CMP_TRIM_MASK)
-
 #define CCM32K_OSC32K_CTRL_OSC_HP_EN_MASK        (0x80000U)
 #define CCM32K_OSC32K_CTRL_OSC_HP_EN_SHIFT       (19U)
 /*! OSC_HP_EN - Crystal Oscillator High Power Enable
@@ -283,16 +273,6 @@ typedef struct {
  *  0b1..Required for crystal mode operation
  */
 #define CCM32K_OSC32K_CTRL_SOX_EN(x)             (((uint32_t)(((uint32_t)(x)) << CCM32K_OSC32K_CTRL_SOX_EN_SHIFT)) & CCM32K_OSC32K_CTRL_SOX_EN_MASK)
-
-#define CCM32K_OSC32K_CTRL_SUPPLY_DET_MASK       (0x6000000U)
-#define CCM32K_OSC32K_CTRL_SUPPLY_DET_SHIFT      (25U)
-/*! SUPPLY_DET - Supply Detector Trim */
-#define CCM32K_OSC32K_CTRL_SUPPLY_DET(x)         (((uint32_t)(((uint32_t)(x)) << CCM32K_OSC32K_CTRL_SUPPLY_DET_SHIFT)) & CCM32K_OSC32K_CTRL_SUPPLY_DET_MASK)
-
-#define CCM32K_OSC32K_CTRL_DLY_TRIM_MASK         (0x78000000U)
-#define CCM32K_OSC32K_CTRL_DLY_TRIM_SHIFT        (27U)
-/*! DLY_TRIM - SOX Delay Selection */
-#define CCM32K_OSC32K_CTRL_DLY_TRIM(x)           (((uint32_t)(((uint32_t)(x)) << CCM32K_OSC32K_CTRL_DLY_TRIM_SHIFT)) & CCM32K_OSC32K_CTRL_DLY_TRIM_MASK)
 
 #define CCM32K_OSC32K_CTRL_LOCK_EN_MASK          (0x80000000U)
 #define CCM32K_OSC32K_CTRL_LOCK_EN_SHIFT         (31U)
@@ -395,31 +375,14 @@ typedef struct {
 #define CCM32K_CLKMON_CTRL_LOCK_EN(x)            (((uint32_t)(((uint32_t)(x)) << CCM32K_CLKMON_CTRL_LOCK_EN_SHIFT)) & CCM32K_CLKMON_CTRL_LOCK_EN_MASK)
 /*! @} */
 
-/*! @name CLKMON_TST - Clock Monitor Test Register */
-/*! @{ */
-
-#define CCM32K_CLKMON_TST_CLKMON_TSTMODE_MASK    (0xFU)
-#define CCM32K_CLKMON_TST_CLKMON_TSTMODE_SHIFT   (0U)
-/*! CLKMON_TSTMODE - Test Mode */
-#define CCM32K_CLKMON_TST_CLKMON_TSTMODE(x)      (((uint32_t)(((uint32_t)(x)) << CCM32K_CLKMON_TST_CLKMON_TSTMODE_SHIFT)) & CCM32K_CLKMON_TST_CLKMON_TSTMODE_MASK)
-
-#define CCM32K_CLKMON_TST_LOCK_EN_MASK           (0x80000000U)
-#define CCM32K_CLKMON_TST_LOCK_EN_SHIFT          (31U)
-/*! LOCK_EN - Write Access Lock bit
- *  0b0..Register write access is unlocked
- *  0b1..Register write access is locked
- */
-#define CCM32K_CLKMON_TST_LOCK_EN(x)             (((uint32_t)(((uint32_t)(x)) << CCM32K_CLKMON_TST_LOCK_EN_SHIFT)) & CCM32K_CLKMON_TST_LOCK_EN_MASK)
-/*! @} */
-
 /*! @name CGC32K - 32 kHz Clock Gate Control Register */
 /*! @{ */
 
 #define CCM32K_CGC32K_CLK_OE_32K_MASK            (0x1FU)
 #define CCM32K_CGC32K_CLK_OE_32K_SHIFT           (0U)
 /*! CLK_OE_32K - 32 kHz clock output enable bits
- *  0b00000..Clock output is disabled
- *  0b00001..Clock output is enabled
+ *  0b00000..Clock output 0 is disabled
+ *  0b00001..Clock output 0 is enabled
  */
 #define CCM32K_CGC32K_CLK_OE_32K(x)              (((uint32_t)(((uint32_t)(x)) << CCM32K_CGC32K_CLK_OE_32K_SHIFT)) & CCM32K_CGC32K_CLK_OE_32K_MASK)
 

@@ -10,7 +10,7 @@
 **                          KW43L43Z97MFT
 **
 **     Version:             rev. 1.0, 2020-05-12
-**     Build:               b260407
+**     Build:               b260805
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BLE2_REG
@@ -114,10 +114,10 @@ typedef struct {
   __IO uint32_t BLE_REG_RX_CCM_PKT_CNT_1;          /**< Receive CCM Packet Count 1, offset: 0x224 */
   __IO uint32_t BLE_REG_TXRX_CNTRL;                /**< Transmit/Receive Packet Control, offset: 0x228 */
   __IO uint32_t BLE_REG_TXRX_CRC_INIT_VAL;         /**< CRC Initialization Value, offset: 0x22C */
-  __IO uint32_t BLE_REG_TX_ACC_ADDR;               /**< Tx Access Address, for Advt and Data Packets, offset: 0x230 */
+  __IO uint32_t BLE_REG_TX_ACC_ADDR;               /**< Tx Access Address; for Advt and Data Packets, offset: 0x230 */
        uint8_t RESERVED_1[12];
-  __I  uint32_t BLE_REG_RX_PKT_STATUS;             /**< Rx Packet Status, for Advt and Data Packets, offset: 0x240 */
-  __IO uint32_t BLE_REG_RX_CNTRL;                  /**< Receive Packet Control, offset: 0x244, available only on: RADIO.NBU.BLE2/BLE2 (missing on BLE2_REG) */
+  __I  uint32_t BLE_REG_RX_PKT_STATUS;             /**< Rx Packet Status; for Advt and Data Packets, offset: 0x240 */
+  __IO uint32_t BLE_REG_RX_CNTRL;                  /**< Receive Packet Control, offset: 0x244 */
        uint8_t RESERVED_2[8];
   __IO uint32_t BLE_REG_TXRX_CCM_CNTRL;            /**< CCM Operation (encryption/authentication) Control, offset: 0x250 */
        uint8_t RESERVED_3[4];
@@ -129,16 +129,13 @@ typedef struct {
   __IO uint32_t BLE_REG_TXRX_ERR_INJ_CNTRL;        /**< TxRx Error Injection Control, offset: 0x270 */
   __IO uint32_t BLE_REG_TXRX_CRC_CORRUPT;          /**< TxRx CRC Corruption Control, offset: 0x274 */
        uint8_t RESERVED_5[16];
-  __IO uint32_t BLE_REG_RL_DELAY;                  /**< BLE Register Loader Delay Register, offset: 0x288, available only on: RADIO.NBU.BLE2/BLE2 (missing on BLE2_REG) */
-  __IO uint32_t BLE_REG_RL_START_ADDR_ALT;         /**< Register Loader Alternate Start Address, offset: 0x28C, available only on: RADIO.NBU.BLE2/BLE2 (missing on BLE2_REG) */
+  __IO uint32_t BLE_REG_RL_DELAY;                  /**< BLE Register Loader Delay Register, offset: 0x288 */
+  __IO uint32_t BLE_REG_RL_START_ADDR_ALT;         /**< Register Loader Alternate Start Address, offset: 0x28C */
   __IO uint32_t BLE_REG_RL_START_ADDR;             /**< Register Loader Start Address, offset: 0x290 */
   __IO uint32_t BLE_REG_RL_CNTRL_STS;              /**< Register Loader Control and Status, offset: 0x294 */
-  __IO uint32_t BLE_REG_DFE_PKT_EXTENSION_CNTRL;   /**< Tx/Rx Packet Extension Control, offset: 0x298 */
-  __IO uint32_t BLE_REG_RX_ADV_PDU_TYPE;           /**< Rx Advertising Packet PDU Type, offset: 0x29C */
-  __IO uint32_t BLE_REG_PRNG_CTRL_STS;             /**< PRNG Control Status, offset: 0x2A0, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PRNG_IN;                   /**< PRNG Input, offset: 0x2A4, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __I  uint32_t BLE_REG_PRNG_OUT;                  /**< PRNG Output, offset: 0x2A8, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-       uint8_t RESERVED_6[44];
+  __IO uint32_t BLE_REG_DFE_PKT_EXTENSION_CNTRL;   /**< Tx/Rx Packet Extension Control, Control register to Data Field Extension after CRC for BLE location packet., offset: 0x298 */
+  __IO uint32_t BLE_REG_RX_ADV_PDU_TYPE;           /**< Rx Advertising Packet PDU Type, Control register of Bluetooth extended advertising packet PDU type., offset: 0x29C */
+       uint8_t RESERVED_6[56];
   __IO uint32_t BLE_REG_CODED_PKT_CNTRL;           /**< LE Coded Packet Control, offset: 0x2D8 */
   __IO uint32_t BLE_REG_IRK_BASE_ADDR;             /**< IRK Resolution Base address, offset: 0x2DC */
   __IO uint32_t BLE_REG_IRK_CTRL_0;                /**< IRK Resolution Control 0, offset: 0x2E0 */
@@ -154,9 +151,9 @@ typedef struct {
        uint8_t RESERVED_7[248];
   __IO uint32_t BLE_REG_RD_START_ADDR;             /**< Rx Descriptor Start Address, offset: 0x400 */
   __I  uint32_t BLE_REG_RD_STATUS;                 /**< Rx Descriptor Status, offset: 0x404 */
-  __IO uint32_t BLE_REG_RSSI_ARB_CTRL;             /**< BLE RSSI ARBITRATION CONTROL, offset: 0x408, available only on: RADIO.NBU.BLE2/BLE2 (missing on BLE2_REG) */
-  __IO uint32_t BLE_REG_RD_START_ADDR_ALT;         /**< Alternate Rx Descriptor Start Address, offset: 0x40C, available only on: RADIO.NBU.BLE2/BLE2 (missing on BLE2_REG) */
-  __IO uint32_t BLE_REG_RD_CTRL;                   /**< Rx Descriptor Control, offset: 0x410, available only on: RADIO.NBU.BLE2/BLE2 (missing on BLE2_REG) */
+  __IO uint32_t BLE_REG_RSSI_ARB_CTRL;             /**< BLE RSSI ARBITRATION CONTROL, offset: 0x408 */
+  __IO uint32_t BLE_REG_RD_START_ADDR_ALT;         /**< Alternate Rx Descriptor Start Address, offset: 0x40C */
+  __IO uint32_t BLE_REG_RD_CTRL;                   /**< Rx Descriptor Control, offset: 0x410 */
        uint8_t RESERVED_8[244];
   __IO uint32_t BLE_REG_CLK_CTRL_SLEEP_OK_TIMER;   /**< BLE sleep ok timer, offset: 0x508 */
        uint8_t RESERVED_9[244];
@@ -178,16 +175,16 @@ typedef struct {
   __IO uint32_t BLE_REG_INT_MASK_0;                /**< BLE Interrupt Mask 0, offset: 0x700 */
   __IO uint32_t BLE_REG_INT_MASK_1;                /**< BLE Interrupt Mask 0/1, offset: 0x704 */
   __IO uint32_t BLE_REG_INT_MASK_2;                /**< BLE Interrupt Mask 2, offset: 0x708 */
-  __IO uint32_t BLE_REG_HW_ABORT_MASK;             /**< BLE Interrupt Mask, hardware Abort, offset: 0x70C */
-  __IO uint32_t BLE_REG_RT_ERR_MASK;               /**< BLE Interrupt Mask, Real-time Error, offset: 0x710 */
+  __IO uint32_t BLE_REG_HW_ABORT_MASK;             /**< BLE Interrupt Mask; hardware Abort, offset: 0x70C */
+  __IO uint32_t BLE_REG_RT_ERR_MASK;               /**< BLE Interrupt Mask; Real-time Error, offset: 0x710 */
        uint8_t RESERVED_12[44];
   __IO uint32_t BLE_REG_INT_STS_0;                 /**< BLE Interrupt Status 0, offset: 0x740 */
   __IO uint32_t BLE_REG_INT_STS_1;                 /**< BLE Interrupt Status 1, offset: 0x744 */
   __IO uint32_t BLE_REG_INT_STS_2;                 /**< BLE Interrupt Status 2, offset: 0x748 */
-  __IO uint32_t BLE_REG_HW_ABORT_STS;              /**< BLE Interrupt Status, hardware Abort, offset: 0x74C */
-  __IO uint32_t BLE_REG_RT_ERR_STS;                /**< BLE Interrupt Status, Real-time Error, offset: 0x750 */
+  __IO uint32_t BLE_REG_HW_ABORT_STS;              /**< BLE Interrupt Status; hardware Abort, offset: 0x74C */
+  __IO uint32_t BLE_REG_RT_ERR_STS;                /**< BLE Interrupt Status; Real-time Error, offset: 0x750 */
        uint8_t RESERVED_13[44];
-  __IO uint32_t BLE_REG_INT_CFG_01;                /**< BLE Interrupt Configuration, offset: 0x780 */
+  __IO uint32_t BLE_REG_INT_CFG_01;                /**< BLE Interrupt Configuration, Used to route individual interrupt source to either BLE_REG_INT_STS_0 or BLE_REG_INT_STS_1., offset: 0x780 */
   __IO uint32_t BLE_REG_INT_DELAY_CTRL_01;         /**< BLE Interrupt Delay Control, offset: 0x784 */
   __IO uint32_t BLE_REG_INT_SW_MBOX;               /**< Software Mailbox Interrupt, offset: 0x788 */
        uint8_t RESERVED_14[116];
@@ -230,9 +227,9 @@ typedef struct {
   __IO uint32_t BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_2;  /**< Qus Count Offset Register: LE Coded Rx 2, offset: 0x890 */
   __IO uint32_t BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_3;  /**< Qus Count Offset Register: LE Coded Rx 3, offset: 0x894 */
   __IO uint32_t BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_4;  /**< Qus Count Offset Register: LE Coded Rx 4, offset: 0x898 */
-  __I  uint32_t BLE_REG_TMR_CDT_STS;               /**< Countdown timer Status, offset: 0x89C, available only on: RADIO.NBU.BLE2/BLE2 (missing on BLE2_REG) */
+  __I  uint32_t BLE_REG_TMR_CDT_STS;               /**< Countdown timer Status, offset: 0x89C */
        uint8_t RESERVED_19[96];
-  __IO uint32_t BLE_REG_ANT_SWITCH_TX_CNTRL;       /**< Tx Antenna Switch Control, offset: 0x900 */
+  __IO uint32_t BLE_REG_ANT_SWITCH_TX_CNTRL;       /**< Tx Antenna Switch Control, Control register of Bluetooth Tx antenna switching., offset: 0x900 */
   __IO uint32_t BLE_REG_ANT_SWITCH_TX_MAP_0;       /**< Tx Antenna Switch Map: Map 0, offset: 0x904 */
   __IO uint32_t BLE_REG_ANT_SWITCH_TX_MAP_1;       /**< Tx Antenna Switch Map: Map 1, offset: 0x908 */
   __IO uint32_t BLE_REG_ANT_SWITCH_TX_MAP_2;       /**< Tx Antenna Switch Map: Map 2, offset: 0x90C */
@@ -244,7 +241,7 @@ typedef struct {
   __IO uint32_t BLE_REG_ANT_SWITCH_TX_MAP_8;       /**< Tx Antenna Switch Map: Map 8, offset: 0x924 */
   __IO uint32_t BLE_REG_ANT_SWITCH_TX_MAP_9;       /**< Tx Antenna Switch Map: Map 9, offset: 0x928 */
        uint8_t RESERVED_20[4];
-  __IO uint32_t BLE_REG_ANT_SWITCH_RX_CNTRL;       /**< Rx Antenna Switch Control, offset: 0x930 */
+  __IO uint32_t BLE_REG_ANT_SWITCH_RX_CNTRL;       /**< Rx Antenna Switch Control, Control register of Bluetooth Rx antenna switching., offset: 0x930 */
   __IO uint32_t BLE_REG_ANT_SWITCH_RX_MAP_0;       /**< Rx Antenna Switch Map: Map 0, offset: 0x934 */
   __IO uint32_t BLE_REG_ANT_SWITCH_RX_MAP_1;       /**< Rx Antenna Switch Map: Map 1, offset: 0x938 */
   __IO uint32_t BLE_REG_ANT_SWITCH_RX_MAP_2;       /**< Rx Antenna Switch Map: Map 2, offset: 0x93C */
@@ -255,58 +252,21 @@ typedef struct {
   __IO uint32_t BLE_REG_ANT_SWITCH_RX_MAP_7;       /**< Rx Antenna Switch Map: Map 7, offset: 0x950 */
   __IO uint32_t BLE_REG_ANT_SWITCH_RX_MAP_8;       /**< Rx Antenna Switch Map: Map 8, offset: 0x954 */
   __IO uint32_t BLE_REG_ANT_SWITCH_RX_MAP_9;       /**< Rx Antenna Switch Map: Map 9, offset: 0x958 */
-       uint8_t RESERVED_21[164];
-  __IO uint32_t BLE_REG_PST_CTRL_0;                /**< Periodic SW Timer 0: Control, offset: 0xA00, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_STS_0;                 /**< Periodic SW Timer 0: Status, offset: 0xA04, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_FRST_ANCHR_0;          /**< Periodic SW Timer 0: First Anchor, offset: 0xA08, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_ANCHR_OFST_0;          /**< Periodic SW Timer 0: First Anchor Offset, offset: 0xA0C, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_ANCHR_ADJ_0;           /**< Periodic SW Timer 0: Anchor Adjustment, offset: 0xA10, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_INTVL_0;               /**< Periodic SW Timer 0: ISO Interval, offset: 0xA14, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_SPC_0;                 /**< Periodic SW Timer 0: Spacing, offset: 0xA18, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_SEL_STRM_0;            /**< Periodic SW Timer 0: Select Stream, offset: 0xA1C, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_SYNC_DLY_0;            /**< Periodic SW Timer 0: Group Sync Delay, offset: 0xA20, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_SE_CTRL_0;             /**< Periodic SW Timer 0: SubEvent Control, offset: 0xA24, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_SE_INTVL_0;            /**< Periodic SW Timer 0: SubEvent Interval, offset: 0xA28, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __I  uint32_t BLE_REG_PST_SE_DIS_0;              /**< Periodic SW Timer 0: SubEvent Disable, offset: 0xA2C, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_CTRL_1;                /**< Periodic SW Timer 1: Control, offset: 0xA30, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_STS_1;                 /**< Periodic SW Timer 1: Status, offset: 0xA34, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_FRST_ANCHR_1;          /**< Periodic SW Timer 1: First Anchor, offset: 0xA38, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_ANCHR_OFST_1;          /**< Periodic SW Timer 1: First Anchor Offset, offset: 0xA3C, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_ANCHR_ADJ_1;           /**< Periodic SW Timer 1: Anchor Adjustment, offset: 0xA40, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_INTVL_1;               /**< Periodic SW Timer 1: ISO Interval, offset: 0xA44, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_SPC_1;                 /**< Periodic SW Timer 1: Spacing, offset: 0xA48, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_SEL_STRM_1;            /**< Periodic SW Timer 1: Select Stream, offset: 0xA4C, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_SYNC_DLY_1;            /**< Periodic SW Timer 1: Group Sync Delay, offset: 0xA50, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_SE_CTRL_1;             /**< Periodic SW Timer 1: SubEvent Control, offset: 0xA54, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_SE_INTVL_1;            /**< Periodic SW Timer 1: SubEvent Interval, offset: 0xA58, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __I  uint32_t BLE_REG_PST_SE_DIS_1;              /**< Periodic SW Timer 1: SubEvent Disable, offset: 0xA5C, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_CTRL_2;                /**< Periodic SW Timer 2: Control, offset: 0xA60, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_STS_2;                 /**< Periodic SW Timer 2: Status, offset: 0xA64, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_FRST_ANCHR_2;          /**< Periodic SW Timer 2: First Anchor, offset: 0xA68, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_ANCHR_OFST_2;          /**< Periodic SW Timer 2: First Anchor Offset, offset: 0xA6C, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_ANCHR_ADJ_2;           /**< Periodic SW Timer 2: Anchor Adjustment, offset: 0xA70, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_INTVL_2;               /**< Periodic SW Timer 2: ISO Interval, offset: 0xA74, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_SPC_2;                 /**< Periodic SW Timer 2: Spacing, offset: 0xA78, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_SEL_STRM_2;            /**< Periodic SW Timer 2: Select Stream, offset: 0xA7C, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_SYNC_DLY_2;            /**< Periodic SW Timer 2: Group Sync Delay, offset: 0xA80, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_SE_CTRL_2;             /**< Periodic SW Timer 2: SubEvent Control, offset: 0xA84, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __IO uint32_t BLE_REG_PST_SE_INTVL_2;            /**< Periodic SW Timer 2: SubEvent Interval, offset: 0xA88, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-  __I  uint32_t BLE_REG_PST_SE_DIS_2;              /**< Periodic SW Timer 2: SubEvent Disable, offset: 0xA8C, available only on: BLE2_REG (missing on RADIO.NBU.BLE2/BLE2) */
-       uint8_t RESERVED_22[880];
+       uint8_t RESERVED_21[1188];
   __IO uint32_t BLE_REG_AHBW_FSM_MON_CNTRL;        /**< BLE AHBW FSM Monitor and Reset Control, offset: 0xE00 */
   __IO uint32_t BLE_REG_RX_FSM_MON_CNTRL;          /**< BLE Rx FSM Monitor and Reset Control, offset: 0xE04 */
   __IO uint32_t BLE_REG_TX_FSM_MON_CNTRL;          /**< BLE Tx FSM Monitor and Reset Control, offset: 0xE08 */
   __IO uint32_t BLE_REG_CCM_FSM_MON_CNTRL;         /**< BLE CCM FSM Monitor and Reset Control, offset: 0xE0C */
   __IO uint32_t BLE_REG_DEBUG_CNTRL;               /**< BLE Debug Test Bus Control, offset: 0xE10 */
   __IO uint32_t BLE_REG_DEBUG_BANK_SEL;            /**< BLE debug test bus bank selection set, offset: 0xE14 */
-       uint8_t RESERVED_23[8];
+       uint8_t RESERVED_22[8];
   __I  uint32_t BLE_REG_IP_REVISION;               /**< BTU IP Revision, offset: 0xE20 */
-       uint8_t RESERVED_24[12];
+       uint8_t RESERVED_23[12];
   __IO uint32_t BLE_REG_AES_MARGIN;                /**< BLE AES Margin, offset: 0xE30 */
   __IO uint32_t BLE_REG_DMA_MARGIN;                /**< BLE DMA Margin, offset: 0xE34 */
-       uint8_t RESERVED_25[4];
+       uint8_t RESERVED_24[4];
   __IO uint32_t BLE_REG_AHB_LAT;                   /**< BLE AHB Latency Monitors, offset: 0xE3C */
-       uint8_t RESERVED_26[64];
+       uint8_t RESERVED_25[64];
   __IO uint32_t BLE_REG_DEBUG_RVSD;                /**< Debug reserved, offset: 0xE80 */
 } BLE2_REG_Type;
 
@@ -414,34 +374,22 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_CONN_EVENT_ROLE_MASK (0x1U)
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_CONN_EVENT_ROLE_SHIFT (0U)
-/*! conn_event_role - Connection event Role, 0x0: slave, 0x1: master
- *  0b0..slave
- *  0b1..master
- */
+/*! conn_event_role - Connection event Role, 0x0: slave, 0x1: master */
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_CONN_EVENT_ROLE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CNTRL_CONN_EVENT_ROLE_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CNTRL_CONN_EVENT_ROLE_MASK)
 
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_DATA_CHAN_PKT_MASK (0x2U)
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_DATA_CHAN_PKT_SHIFT (1U)
-/*! data_chan_pkt - Channel to Distinguish pkt_header Fields, 0x0: advt channel, 0x1: data channel
- *  0b0..advt channel
- *  0b1..data channel
- */
+/*! data_chan_pkt - Channel to Distinguish pkt_header Fields, 0x0: advt channel, 0x1: data channel */
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_DATA_CHAN_PKT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CNTRL_DATA_CHAN_PKT_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CNTRL_DATA_CHAN_PKT_MASK)
 
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_RX_DATA_RATE_MASK (0x4U)
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_RX_DATA_RATE_SHIFT (2U)
-/*! rx_data_rate - LE Rx Packet Data Rate, 0x0: Rx packet data rate 1 Mbps, 0x1: Rx packet data rate 2 Mbps
- *  0b0..Rx packet data rate 1 Mbps
- *  0b1..Rx packet data rate 2 Mbps
- */
+/*! rx_data_rate - LE Rx Packet Data Rate, 0x0: Rx packet data rate 1 Mbps, 0x1: Rx packet data rate 2 Mbps */
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_RX_DATA_RATE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CNTRL_RX_DATA_RATE_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CNTRL_RX_DATA_RATE_MASK)
 
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_TX_DATA_RATE_MASK (0x8U)
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_TX_DATA_RATE_SHIFT (3U)
-/*! tx_data_rate - LE Tx Packet Data Rate, 0x0: Tx packet data rate 1 Mbps, 0x1: Tx packet data rate 2 Mbps
- *  0b0..Tx packet data rate 1 Mbps
- *  0b1..Tx packet data rate 2 Mbps
- */
+/*! tx_data_rate - LE Tx Packet Data Rate, 0x0: Tx packet data rate 1 Mbps, 0x1: Tx packet data rate 2 Mbps */
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_TX_DATA_RATE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CNTRL_TX_DATA_RATE_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CNTRL_TX_DATA_RATE_MASK)
 
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_DATA_LENGTH_EXT_MASK (0x10U)
@@ -449,8 +397,6 @@ typedef struct {
 /*! data_length_ext - LE Data Length Extension. Should be 0 when iso_pdu_sel is 1, 0x0: disable;
  *    support up to 31 bytes of payload for data channel PDU, 0x1: enable; support up to 255 bytes; or
  *    251 bytes for encryption packet; of payload, for data channel PDU
- *  0b0..disable; support up to 31 bytes of payload for data channel PDU
- *  0b1..enable; support up to 255 bytes, or 251 bytes for encryption packet, of payload for data channel PDU
  */
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_DATA_LENGTH_EXT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CNTRL_DATA_LENGTH_EXT_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CNTRL_DATA_LENGTH_EXT_MASK)
 
@@ -459,8 +405,6 @@ typedef struct {
 /*! advt_length_ext - LE Advertising Length Extension. Should be 0 when iso_pdu_sel is 1, 0x0:
  *    disable; support up to 37 bytes of payload for advertising channel PDU, 0x1: enable; support up to
  *    255 bytes of payload for advertising channel PDU
- *  0b0..disable; support up to 37 bytes of payload for advertising channel PDU
- *  0b1..enable; support up to 255 bytes of payload for advertising channel PDU
  */
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_ADVT_LENGTH_EXT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CNTRL_ADVT_LENGTH_EXT_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CNTRL_ADVT_LENGTH_EXT_MASK)
 
@@ -468,8 +412,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_ISO_PDU_SEL_SHIFT (6U)
 /*! iso_pdu_sel - Select ISO PDU type, 0x0: data_chan_pkt=0 selects Data PDU. data_chan_pkt=1
  *    selects Adv PDU, 0x1: data_chan_pkt=0 selects BIS PDU. data_chan_pkt=1 selects CIS PDU
- *  0b0..data_chan_pkt=0 selects Data PDU. data_chan_pkt=1 selects Adv PDU
- *  0b1..data_chan_pkt=0 selects BIS PDU. data_chan_pkt=1 selects CIS PDU
  */
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_ISO_PDU_SEL(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CNTRL_ISO_PDU_SEL_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CNTRL_ISO_PDU_SEL_MASK)
 
@@ -477,8 +419,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_DIRECT_TEST_MODE_SHIFT (7U)
 /*! direct_test_mode - BLE direct test mode, 0x0: BLE in normal mode, 0x1: BLE in direct test mode
  *    (bypass Rx packet length < 6 check in adv mode)
- *  0b0..BLE in normal mode
- *  0b1..BLE in direct test mode (bypass Rx packet length < 6 check in adv mode)
  */
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_DIRECT_TEST_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CNTRL_DIRECT_TEST_MODE_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CNTRL_DIRECT_TEST_MODE_MASK)
 
@@ -492,17 +432,12 @@ typedef struct {
 /*! tx_extn_en - Tx Extension Packet, Tx Extension Packet, 0x0: transmit data extension; regular;
  *    non-location BLE transmit packet, 0x1: transmit data extension; transmit extension field for
  *    current packet
- *  0b0..transmit data extension; regular, non-location BLE transmit packet
- *  0b1..transmit data extension; transmit extension field for current packet
  */
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_TX_EXTN_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CNTRL_TX_EXTN_EN_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CNTRL_TX_EXTN_EN_MASK)
 
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_WHIT_DIS_MASK (0x8000U)
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_WHIT_DIS_SHIFT (15U)
-/*! whit_dis - Disable Whitening, 0x0: enable, 0x1: disable
- *  0b0..enable
- *  0b1..disable
- */
+/*! whit_dis - Disable Whitening, 0x0: enable, 0x1: disable */
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_WHIT_DIS(x)  (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CNTRL_WHIT_DIS_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CNTRL_WHIT_DIS_MASK)
 
 #define BLE2_REG_BLE_REG_TXRX_CNTRL_RX_LENGTH_MAX_MASK (0xFF0000U)
@@ -541,7 +476,7 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TXRX_CRC_INIT_VAL_CRC_INIT_VALUE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CRC_INIT_VAL_CRC_INIT_VALUE_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CRC_INIT_VAL_CRC_INIT_VALUE_MASK)
 /*! @} */
 
-/*! @name BLE_REG_TX_ACC_ADDR - Tx Access Address, for Advt and Data Packets */
+/*! @name BLE_REG_TX_ACC_ADDR - Tx Access Address; for Advt and Data Packets */
 /*! @{ */
 
 #define BLE2_REG_BLE_REG_TX_ACC_ADDR_TX_ACCESS_ADDRESS_MASK (0xFFFFFFFFU)
@@ -550,7 +485,7 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TX_ACC_ADDR_TX_ACCESS_ADDRESS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TX_ACC_ADDR_TX_ACCESS_ADDRESS_SHIFT)) & BLE2_REG_BLE_REG_TX_ACC_ADDR_TX_ACCESS_ADDRESS_MASK)
 /*! @} */
 
-/*! @name BLE_REG_RX_PKT_STATUS - Rx Packet Status, for Advt and Data Packets */
+/*! @name BLE_REG_RX_PKT_STATUS - Rx Packet Status; for Advt and Data Packets */
 /*! @{ */
 
 #define BLE2_REG_BLE_REG_RX_PKT_STATUS_RX_PKT_HEADER_MASK (0xFFFFU)
@@ -568,8 +503,6 @@ typedef struct {
 /*! simul_scan_coded_en - Detected Rx Coded Packet Correlation Hit in Simultaneous Scan Mode, 0x0:
  *    Detected BLE 1M Packet Correlation Hit or no correlation at all in Simultaneous, Scan Mode,
  *    0x1: Detected Rx Coded Packet Correlation Hit in Simultaneous Scan Mode
- *  0b0..Detected BLE 1M Packet Correlation Hit or no correlation at all in Simultaneous Scan Mode
- *  0b1..Detected Rx Coded Packet Correlation Hit in Simultaneous Scan Mode
  */
 #define BLE2_REG_BLE_REG_RX_PKT_STATUS_SIMUL_SCAN_CODED_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RX_PKT_STATUS_SIMUL_SCAN_CODED_EN_SHIFT)) & BLE2_REG_BLE_REG_RX_PKT_STATUS_SIMUL_SCAN_CODED_EN_MASK)
 
@@ -578,8 +511,6 @@ typedef struct {
 /*! rx_preamble_match_sts - Detected Rx Preamble Match during BLE Long Range RX, 0x0: Preamble has
  *    not been detected on most recent RX in long range mode., 0x1: Preamble has been detected on
  *    most recent RX in long range mode. This indication, resets at the start of next RX
- *  0b0..Preamble has not been detected on most recent RX in long range mode.
- *  0b1..Preamble has been detected on most recent RX in long range mode. This indication resets at the start of next RX
  */
 #define BLE2_REG_BLE_REG_RX_PKT_STATUS_RX_PREAMBLE_MATCH_STS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RX_PKT_STATUS_RX_PREAMBLE_MATCH_STS_SHIFT)) & BLE2_REG_BLE_REG_RX_PKT_STATUS_RX_PREAMBLE_MATCH_STS_MASK)
 
@@ -605,22 +536,22 @@ typedef struct {
 /*! @name BLE_REG_RX_CNTRL - Receive Packet Control */
 /*! @{ */
 
-#define BLE2_REG_BLE_REG_RX_CNTRL_rx_cntrl_length_max_MASK (0xFFU)
-#define BLE2_REG_BLE_REG_RX_CNTRL_rx_cntrl_length_max_SHIFT (0U)
+#define BLE2_REG_BLE_REG_RX_CNTRL_RX_CNTRL_LENGTH_MAX_MASK (0xFFU)
+#define BLE2_REG_BLE_REG_RX_CNTRL_RX_CNTRL_LENGTH_MAX_SHIFT (0U)
 /*! rx_cntrl_length_max - Maximum Control PDU Length for rx_length_err, This is the length of max
  *    length Control PDUs., This field is used only if rx_cntrl_length_max_sel is set to 1.
  */
-#define BLE2_REG_BLE_REG_RX_CNTRL_rx_cntrl_length_max(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RX_CNTRL_rx_cntrl_length_max_SHIFT)) & BLE2_REG_BLE_REG_RX_CNTRL_rx_cntrl_length_max_MASK)
+#define BLE2_REG_BLE_REG_RX_CNTRL_RX_CNTRL_LENGTH_MAX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RX_CNTRL_RX_CNTRL_LENGTH_MAX_SHIFT)) & BLE2_REG_BLE_REG_RX_CNTRL_RX_CNTRL_LENGTH_MAX_MASK)
 
-#define BLE2_REG_BLE_REG_RX_CNTRL_rx_cntrl_length_max_sel_MASK (0x100U)
-#define BLE2_REG_BLE_REG_RX_CNTRL_rx_cntrl_length_max_sel_SHIFT (8U)
+#define BLE2_REG_BLE_REG_RX_CNTRL_RX_CNTRL_LENGTH_MAX_SEL_MASK (0x100U)
+#define BLE2_REG_BLE_REG_RX_CNTRL_RX_CNTRL_LENGTH_MAX_SEL_SHIFT (8U)
 /*! rx_cntrl_length_max_sel - Select Length Check Register for Control PDUs, 0x0: select
  *    rx_length_max for control PDU length check, 0x1: select rx_cntrl_length_max for control PDU length check
  */
-#define BLE2_REG_BLE_REG_RX_CNTRL_rx_cntrl_length_max_sel(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RX_CNTRL_rx_cntrl_length_max_sel_SHIFT)) & BLE2_REG_BLE_REG_RX_CNTRL_rx_cntrl_length_max_sel_MASK)
+#define BLE2_REG_BLE_REG_RX_CNTRL_RX_CNTRL_LENGTH_MAX_SEL(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RX_CNTRL_RX_CNTRL_LENGTH_MAX_SEL_SHIFT)) & BLE2_REG_BLE_REG_RX_CNTRL_RX_CNTRL_LENGTH_MAX_SEL_MASK)
 
-#define BLE2_REG_BLE_REG_RX_CNTRL_reuse_rx_adv_addr_done_intr_MASK (0x200U)
-#define BLE2_REG_BLE_REG_RX_CNTRL_reuse_rx_adv_addr_done_intr_SHIFT (9U)
+#define BLE2_REG_BLE_REG_RX_CNTRL_REUSE_RX_ADV_ADDR_DONE_INTR_MASK (0x200U)
+#define BLE2_REG_BLE_REG_RX_CNTRL_REUSE_RX_ADV_ADDR_DONE_INTR_SHIFT (9U)
 /*! reuse_rx_adv_addr_done_intr - Allow reuse of rx_adv_addr_done_intr for indicating the absence of
  *    advertiser address in the received advertising channel PDU, 0x0: rx_adv_addr_done_intr = 1
  *    for legacy and extended advertising channel packets, received with advertiser address
@@ -629,7 +560,7 @@ typedef struct {
  *    advertiser address and extended advertising channel , packets received without advertiser address
  *    (in conjunction with, adv_addr_not_present)
  */
-#define BLE2_REG_BLE_REG_RX_CNTRL_reuse_rx_adv_addr_done_intr(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RX_CNTRL_reuse_rx_adv_addr_done_intr_SHIFT)) & BLE2_REG_BLE_REG_RX_CNTRL_reuse_rx_adv_addr_done_intr_MASK)
+#define BLE2_REG_BLE_REG_RX_CNTRL_REUSE_RX_ADV_ADDR_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RX_CNTRL_REUSE_RX_ADV_ADDR_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_RX_CNTRL_REUSE_RX_ADV_ADDR_DONE_INTR_MASK)
 /*! @} */
 
 /*! @name BLE_REG_TXRX_CCM_CNTRL - CCM Operation (encryption/authentication) Control */
@@ -657,11 +588,6 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_INC_TX_PKT_CNT_MASK (0x100U)
 #define BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_INC_TX_PKT_CNT_SHIFT (8U)
-/*! inc_Tx_Pkt_Cnt - Increment Tx CCM Packet Count */
-#define BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_INC_TX_PKT_CNT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_INC_TX_PKT_CNT_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_INC_TX_PKT_CNT_MASK)
-
-#define BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_INC_TX_PKT_CNT_MASK (0x100U)
-#define BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_INC_TX_PKT_CNT_SHIFT (8U)
 /*! inc_tx_pkt_cnt - Increment Tx CCM Packet Count, For each new Tx packet; writing 1 will increment
  *    the value in BLE_REG_TX_CCM_PKT_CNT_0/1 registers by 1. This bit is self-cleared by hardware.
  */
@@ -669,20 +595,10 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_INC_RX_PKT_CNT_MASK (0x200U)
 #define BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_INC_RX_PKT_CNT_SHIFT (9U)
-/*! inc_Rx_Pkt_Cnt - Increment Rx CCM Packet Count */
-#define BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_INC_RX_PKT_CNT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_INC_RX_PKT_CNT_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_INC_RX_PKT_CNT_MASK)
-
-#define BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_INC_RX_PKT_CNT_MASK (0x200U)
-#define BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_INC_RX_PKT_CNT_SHIFT (9U)
 /*! inc_rx_pkt_cnt - Increment Rx CCM Packet Count, For each new Rx packet; writing 1 will increment
  *    the value in BLE_REG_RX_CCM_PKT_CNT_0/1 registers by 1. This bit is self-cleared by hardware.
  */
 #define BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_INC_RX_PKT_CNT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_INC_RX_PKT_CNT_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_INC_RX_PKT_CNT_MASK)
-
-#define BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_SK_DECIP_GO_MASK (0x10000U)
-#define BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_SK_DECIP_GO_SHIFT (16U)
-/*! sk_decip_go - Manually Invoke SK_Decipher Function */
-#define BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_SK_DECIP_GO(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_SK_DECIP_GO_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CCM_CNTRL_SK_DECIP_GO_MASK)
 /*! @} */
 
 /*! @name BLE_REG_TXRX_CORHIT_QUS_TIMESTAMP - Quarter microsecond level timestamp */
@@ -734,18 +650,12 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_ERR_INJ_EN_MASK (0x1U)
 #define BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_ERR_INJ_EN_SHIFT (0U)
-/*! err_inj_en - Software error injection enable, 0x0: disable error injection, 0x1: enable error injection
- *  0b0..disable error injection
- *  0b1..enable error injection
- */
+/*! err_inj_en - Software error injection enable, 0x0: disable error injection, 0x1: enable error injection */
 #define BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_ERR_INJ_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_ERR_INJ_EN_SHIFT)) & BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_ERR_INJ_EN_MASK)
 
 #define BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_ERR_INJ_DIR_MASK (0x2U)
 #define BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_ERR_INJ_DIR_SHIFT (1U)
-/*! err_inj_dir - software error injection direction, 0x0: error injection on Tx side, 0x1: error injection on Rx side
- *  0b0..error injection on Tx side
- *  0b1..error injection on Rx side
- */
+/*! err_inj_dir - software error injection direction, 0x0: error injection on Tx side, 0x1: error injection on Rx side */
 #define BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_ERR_INJ_DIR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_ERR_INJ_DIR_SHIFT)) & BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_ERR_INJ_DIR_MASK)
 
 #define BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_ERR_INJ_TIMER_MASK (0x1FFCU)
@@ -763,8 +673,6 @@ typedef struct {
  *    first 16-bit of Tx CRC if Tx DMEM underflow error interrupt is detected. Only valid when software
  *    controlled err_inj_en is zero. All the CRC bits transmitted will be inverted to cause CRC
  *    failure on the receiving device., 0x0: disable, 0x1: enable
- *  0b0..disable error injection
- *  0b1..enable error injection
  */
 #define BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_TX_DMEM_CRC_COR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_TX_DMEM_CRC_COR_SHIFT)) & BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_TX_DMEM_CRC_COR_MASK)
 
@@ -774,8 +682,6 @@ typedef struct {
  *    16-bit of Tx CRC if Tx AES underflow error interrupt is detected. Only valid when software
  *    controlled err_inj_en is zero. All the CRC bits transmitted will be inverted to cause CRC
  *    failure on the receiving device., 0x0: disable, 0x1: enable
- *  0b0..disable error injection
- *  0b1..enable error injection
  */
 #define BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_TX_AES_CRC_COR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_TX_AES_CRC_COR_SHIFT)) & BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_TX_AES_CRC_COR_MASK)
 
@@ -785,17 +691,12 @@ typedef struct {
  *    Tx CRC if Tx DMA error interrupt is detected. Only valid when software controlled err_inj_en
  *    is zero. All the CRC bits transmitted will be inverted to cause CRC failure on the receiving
  *    device., 0x0: disable, 0x1: enable
- *  0b0..disable error injection
- *  0b1..enable error injection
  */
 #define BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_TX_DMA_CRC_COR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_TX_DMA_CRC_COR_SHIFT)) & BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_TX_DMA_CRC_COR_MASK)
 
 #define BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_ERR_INJ_PATTERN_MASK (0xFFFF0000U)
 #define BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_ERR_INJ_PATTERN_SHIFT (16U)
-/*! err_inj_pattern - 16-Bit Error injection pattern, 0x0: do not flip the bit, 0x1: flip the bit
- *  0b0000000000000000..do not flip the bit
- *  0b0000000000000001..flip the bit
- */
+/*! err_inj_pattern - 16-Bit Error injection pattern, 0x0: do not flip the bit, 0x1: flip the bit */
 #define BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_ERR_INJ_PATTERN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_ERR_INJ_PATTERN_SHIFT)) & BLE2_REG_BLE_REG_TXRX_ERR_INJ_CNTRL_ERR_INJ_PATTERN_MASK)
 /*! @} */
 
@@ -808,8 +709,6 @@ typedef struct {
  *    CRC corruption if Rx DMEM underflow error interrupt is detected. Only valid when software
  *    controlled err_inj_en is zero. The crc_success bit is flipped at the end of Rx., 0x0: disable, 0x1:
  *    enable
- *  0b0..disable error injection
- *  0b1..enable error injection
  */
 #define BLE2_REG_BLE_REG_TXRX_CRC_CORRUPT_RX_DMEM_CRC_COR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CRC_CORRUPT_RX_DMEM_CRC_COR_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CRC_CORRUPT_RX_DMEM_CRC_COR_MASK)
 
@@ -819,8 +718,6 @@ typedef struct {
  *    corruption if Rx AES underflow error interrupt is detected. Only valid when software
  *    controlled err_inj_en is zero. The crc_success bit is flipped at the end of Rx, 0x0: disable, 0x1:
  *    enable
- *  0b0..disable error injection
- *  0b1..enable error injection
  */
 #define BLE2_REG_BLE_REG_TXRX_CRC_CORRUPT_RX_AES_CRC_COR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CRC_CORRUPT_RX_AES_CRC_COR_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CRC_CORRUPT_RX_AES_CRC_COR_MASK)
 
@@ -829,8 +726,6 @@ typedef struct {
 /*! rx_dma_crc_cor - hardware Rx DMA CRC corruption enable, Set this enable to enable CRC corruption
  *    if Rx DMA error interrupt is detected. Only valid when software controlled err_inj_en is
  *    zero. The crc_success bit is flipped at the end of Rx., 0x0: disable, 0x1: enable
- *  0b0..disable error injection
- *  0b1..enable error injection
  */
 #define BLE2_REG_BLE_REG_TXRX_CRC_CORRUPT_RX_DMA_CRC_COR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TXRX_CRC_CORRUPT_RX_DMA_CRC_COR_SHIFT)) & BLE2_REG_BLE_REG_TXRX_CRC_CORRUPT_RX_DMA_CRC_COR_MASK)
 /*! @} */
@@ -838,28 +733,28 @@ typedef struct {
 /*! @name BLE_REG_RL_DELAY - BLE Register Loader Delay Register */
 /*! @{ */
 
-#define BLE2_REG_BLE_REG_RL_DELAY_coex_lock_delay_MASK (0xFU)
-#define BLE2_REG_BLE_REG_RL_DELAY_coex_lock_delay_SHIFT (0U)
+#define BLE2_REG_BLE_REG_RL_DELAY_COEX_LOCK_DELAY_MASK (0xFU)
+#define BLE2_REG_BLE_REG_RL_DELAY_COEX_LOCK_DELAY_SHIFT (0U)
 /*! coex_lock_delay - Register Loader ALternate Start Address, Programmable delay in quarter
  *    microseconds after btu_bt_req assertion to MRC when Coex lock fail condition is checked in BTU. MRC
  *    samples TX power and TX/RX frequency value from BTU after sampling all bt_state serial
  *    information. This delay is used to give more time for first 8 bytes of RL.
  */
-#define BLE2_REG_BLE_REG_RL_DELAY_coex_lock_delay(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RL_DELAY_coex_lock_delay_SHIFT)) & BLE2_REG_BLE_REG_RL_DELAY_coex_lock_delay_MASK)
+#define BLE2_REG_BLE_REG_RL_DELAY_COEX_LOCK_DELAY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RL_DELAY_COEX_LOCK_DELAY_SHIFT)) & BLE2_REG_BLE_REG_RL_DELAY_COEX_LOCK_DELAY_MASK)
 /*! @} */
 
 /*! @name BLE_REG_RL_START_ADDR_ALT - Register Loader Alternate Start Address */
 /*! @{ */
 
-#define BLE2_REG_BLE_REG_RL_START_ADDR_ALT_rl_start_address_alt_MASK (0xFFFFU)
-#define BLE2_REG_BLE_REG_RL_START_ADDR_ALT_rl_start_address_alt_SHIFT (0U)
+#define BLE2_REG_BLE_REG_RL_START_ADDR_ALT_RL_START_ADDRESS_ALT_MASK (0xFFFFU)
+#define BLE2_REG_BLE_REG_RL_START_ADDR_ALT_RL_START_ADDRESS_ALT_SHIFT (0U)
 /*! rl_start_address_alt - Register Loader ALternate Start Address, This points to the alternate
  *    start address of memory structure that ble_reg_ldr should fetch from. This pointer is the only
  *    used when RL_alt is 1. In alternating mode; every alternate Register Loading is done from this
  *    pointer. Only Bits 15:0 are used from this register. The upper 16-bits are reused from
  *    BLE_REG_RL_START_ADDR
  */
-#define BLE2_REG_BLE_REG_RL_START_ADDR_ALT_rl_start_address_alt(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RL_START_ADDR_ALT_rl_start_address_alt_SHIFT)) & BLE2_REG_BLE_REG_RL_START_ADDR_ALT_rl_start_address_alt_MASK)
+#define BLE2_REG_BLE_REG_RL_START_ADDR_ALT_RL_START_ADDRESS_ALT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RL_START_ADDR_ALT_RL_START_ADDRESS_ALT_SHIFT)) & BLE2_REG_BLE_REG_RL_START_ADDR_ALT_RL_START_ADDRESS_ALT_MASK)
 /*! @} */
 
 /*! @name BLE_REG_RL_START_ADDR - Register Loader Start Address */
@@ -920,11 +815,6 @@ typedef struct {
  */
 #define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_LOCK(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_LOCK_SHIFT)) & BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_LOCK_MASK)
 
-#define BLE2_REG_BLE_REG_RL_CNTRL_STS_SK_DECIP_EN_MASK (0x20U)
-#define BLE2_REG_BLE_REG_RL_CNTRL_STS_SK_DECIP_EN_SHIFT (5U)
-/*! sk_decip_en - BLE SK_Decipher Mode Enable */
-#define BLE2_REG_BLE_REG_RL_CNTRL_STS_SK_DECIP_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RL_CNTRL_STS_SK_DECIP_EN_SHIFT)) & BLE2_REG_BLE_REG_RL_CNTRL_STS_SK_DECIP_EN_MASK)
-
 #define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_ALT_MASK (0x40U)
 #define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_ALT_SHIFT (6U)
 /*! rl_alt - BLE Register Loader Alternate Mode Enable, Indicates which RL_START_ADDR is to be
@@ -950,50 +840,34 @@ typedef struct {
  */
 #define BLE2_REG_BLE_REG_RL_CNTRL_STS_COEX_LOCK_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RL_CNTRL_STS_COEX_LOCK_BYPASS_SHIFT)) & BLE2_REG_BLE_REG_RL_CNTRL_STS_COEX_LOCK_BYPASS_MASK)
 
-#define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_CCM_DONE_MASK (0x1FF00U)
-#define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_CCM_DONE_SHIFT (8U)
+#define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_CCM_DONE_MASK (0x10000U)
+#define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_CCM_DONE_SHIFT (16U)
 /*! rl_ccm_done - Done loading CCM memory, Register Loader has done loading CCM related memory
  *    content into their BLE registers., 0x0: Not done., 0x1: Done loading.
- *  0b0..Not done.
- *  0b1..Done loading.
  */
 #define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_CCM_DONE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_CCM_DONE_SHIFT)) & BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_CCM_DONE_MASK)
 
-#define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_NON_CCM_DONE_MASK (0x3FE00U)
-#define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_NON_CCM_DONE_SHIFT (9U)
+#define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_NON_CCM_DONE_MASK (0x20000U)
+#define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_NON_CCM_DONE_SHIFT (17U)
 /*! rl_non_ccm_done - Done loading non-CCM memory, Register Loader has done loading non-CCM related
  *    memory content into their BLE registers., 0x0: Not done., 0x1: Done loading.
- *  0b0..Not done.
- *  0b1..Done loading.
  */
 #define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_NON_CCM_DONE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_NON_CCM_DONE_SHIFT)) & BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_NON_CCM_DONE_MASK)
 
-#define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_BUSY_MASK (0x7FC00U)
-#define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_BUSY_SHIFT (10U)
+#define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_BUSY_MASK (0x40000U)
+#define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_BUSY_SHIFT (18U)
 /*! rl_busy - Register Loader busy, Status indicating BLE Register Loader is busy. Asserted when
  *    fetching memory starts and de-asserted right after done writing to BLE registers., 0x0: Register
  *    Loader is idle., 0x1: Register Loader is busy.
- *  0b0..Register Loader is idle.
- *  0b1..Register Loader is busy.
  */
 #define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_BUSY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_BUSY_SHIFT)) & BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_BUSY_MASK)
 
-#define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_DMA_ERR_MASK (0xFF800U)
-#define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_DMA_ERR_SHIFT (11U)
+#define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_DMA_ERR_MASK (0x80000U)
+#define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_DMA_ERR_SHIFT (19U)
 /*! rl_dma_err - Register Loader Has DMA Error, Register Loader experienced DMA error., 0x0: No
  *    error, 0x1: SoC DMA slave has replied with ERROR response during Register Loader read, transfers.
- *  0b0..No error
- *  0b1..SoC DMA slave has replied with ERROR response during Register Loader read transfers.
  */
 #define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_DMA_ERR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_DMA_ERR_SHIFT)) & BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_DMA_ERR_MASK)
-
-#define BLE2_REG_BLE_REG_RL_CNTRL_STS_SK_DECIP_DONE_MASK (0x1000U)
-#define BLE2_REG_BLE_REG_RL_CNTRL_STS_SK_DECIP_DONE_SHIFT (12U)
-/*! sk_decip_done - SK_Decipher Done
- *  0b0..No done
- *  0b1..Done.
- */
-#define BLE2_REG_BLE_REG_RL_CNTRL_STS_SK_DECIP_DONE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RL_CNTRL_STS_SK_DECIP_DONE_SHIFT)) & BLE2_REG_BLE_REG_RL_CNTRL_STS_SK_DECIP_DONE_MASK)
 
 #define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_COEX_DONE_MASK (0x200000U)
 #define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_COEX_DONE_SHIFT (21U)
@@ -1018,7 +892,7 @@ typedef struct {
 #define BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_AT_CURR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_AT_CURR_SHIFT)) & BLE2_REG_BLE_REG_RL_CNTRL_STS_RL_AT_CURR_MASK)
 /*! @} */
 
-/*! @name BLE_REG_DFE_PKT_EXTENSION_CNTRL - Tx/Rx Packet Extension Control */
+/*! @name BLE_REG_DFE_PKT_EXTENSION_CNTRL - Tx/Rx Packet Extension Control, Control register to Data Field Extension after CRC for BLE location packet. */
 /*! @{ */
 
 #define BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_TX_EXTN_PATTERN_MASK (0x1U)
@@ -1027,8 +901,6 @@ typedef struct {
  *    will be sent out during the extension part of the Tx location packet. This value is also sent
  *    during the guard time at the beginning of the extension field., This bit is valid ONLY when
  *    tx_extn_en is set., 0x0: send 0000..., 0x1: send 1111...
- *  0b0..send 0000...
- *  0b1..send 1111...
  */
 #define BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_TX_EXTN_PATTERN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_TX_EXTN_PATTERN_SHIFT)) & BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_TX_EXTN_PATTERN_MASK)
 
@@ -1042,8 +914,6 @@ typedef struct {
  *    hardware. This setting might cause BLE not to be able to Tx or Rx following the packet extension
  *    corruption., 0x0: do not perform any CDT manipulation in hardware, 0x1: delay CDT timer to the
  *    estimated end of extension
- *  0b0..do not perform any CDT manipulation in hardware
- *  0b1..delay CDT timer to the "estimated" end of extension
  */
 #define BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_DELAY_EXTN_END(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_DELAY_EXTN_END_SHIFT)) & BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_DELAY_EXTN_END_MASK)
 
@@ -1052,10 +922,6 @@ typedef struct {
 /*! rx_iq_sample_rate - Rx IQ Sampling Rate, Define reception rate for IQ samples in extension
  *    field., 0x0: receive IQ sample every 4 usec, 0x1: receive IQ sample every 2 usec, 0x2: receive IQ
  *    sample every 1 usec, 0x3: not valid
- *  0b00..receive IQ sample every 4 usec
- *  0b01..receive IQ sample every 2 usec
- *  0b10..receive IQ sample every 1 usec
- *  0b11..not valid
  */
 #define BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_RX_IQ_SAMPLE_RATE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_RX_IQ_SAMPLE_RATE_SHIFT)) & BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_RX_IQ_SAMPLE_RATE_MASK)
 
@@ -1064,10 +930,6 @@ typedef struct {
 /*! extn_guard_time - Extension Packet Guard Time, Define the guard interval between the CRC and
  *    extension supplementals in the unit of usec., 0x0: guard interval is 1 usec, 0x1: guard interval
  *    is 2 usec, 0x2: guard interval is 3 usec, 0x3: guard interval is 4 usec
- *  0b00..guard interval is 1 usec
- *  0b01..guard interval is 2 usec
- *  0b10..guard interval is 3 usec
- *  0b11..guard interval is 4 usec
  */
 #define BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_EXTN_GUARD_TIME(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_EXTN_GUARD_TIME_SHIFT)) & BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_EXTN_GUARD_TIME_MASK)
 
@@ -1078,10 +940,6 @@ typedef struct {
  *    this interval; IQ samples received is considered in the same of which the reference antenna is
  *    used., 0x0: reference antenna interval is 0 usec, 0x1: reference antenna interval is 2 usec,
  *    0x2: reference antenna interval is 4 usec, 0x3: reference antenna interval is 8 usec
- *  0b00..reference antenna interval is 0 usec
- *  0b01..reference antenna interval is 2 usec
- *  0b10..reference antenna interval is 4 usec
- *  0b11..reference antenna interval is 8 usec
  */
 #define BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_EXTN_REF_ANT_TIME(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_EXTN_REF_ANT_TIME_SHIFT)) & BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_EXTN_REF_ANT_TIME_MASK)
 
@@ -1089,8 +947,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_RX_EXTN_EN_SHIFT (16U)
 /*! rx_extn_en - Rx Packet Extension Enable, Enable bit of Rx extension packet., 0x0: disable to
  *    receive data extension, 0x1: enable to receive data extension
- *  0b0..disable to receive data extension
- *  0b1..enable to receive data extension
  */
 #define BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_RX_EXTN_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_RX_EXTN_EN_SHIFT)) & BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_RX_EXTN_EN_MASK)
 
@@ -1108,8 +964,6 @@ typedef struct {
 /*! rx_extn_sw_override_en - Rx Extension Packet Software Override, Software enable bit to override
  *    rx_extn_rcv and rx_extn_length from Rx PDU header., 0x0: disable software override, 0x1:
  *    enable software override
- *  0b0..disable software override
- *  0b1..enable software override
  */
 #define BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_RX_EXTN_SW_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_RX_EXTN_SW_OVERRIDE_EN_SHIFT)) & BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_RX_EXTN_SW_OVERRIDE_EN_MASK)
 
@@ -1130,7 +984,7 @@ typedef struct {
 #define BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_RX_EXTN_SW_OVERRIDE_SUPPL_INFO(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_RX_EXTN_SW_OVERRIDE_SUPPL_INFO_SHIFT)) & BLE2_REG_BLE_REG_DFE_PKT_EXTENSION_CNTRL_RX_EXTN_SW_OVERRIDE_SUPPL_INFO_MASK)
 /*! @} */
 
-/*! @name BLE_REG_RX_ADV_PDU_TYPE - Rx Advertising Packet PDU Type */
+/*! @name BLE_REG_RX_ADV_PDU_TYPE - Rx Advertising Packet PDU Type, Control register of Bluetooth extended advertising packet PDU type. */
 /*! @{ */
 
 #define BLE2_REG_BLE_REG_RX_ADV_PDU_TYPE_RX_EXTN_ADV_PDU_TYPE_0_MASK (0xFU)
@@ -1145,8 +999,6 @@ typedef struct {
 /*! rx_extn_adv_pdu_type_0_en - Extended advertising PDU type enable, Use the defined extended
  *    advertising PDU type for Rx matching., 0x0: disable the defined PDU type for matching ext
  *    advertising, 0x1: enable the defined PDU type for matching ext advertising
- *  0b0..disable the defined PDU type for matching ext advertising
- *  0b1..enable the defined PDU type for matching ext advertising
  */
 #define BLE2_REG_BLE_REG_RX_ADV_PDU_TYPE_RX_EXTN_ADV_PDU_TYPE_0_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RX_ADV_PDU_TYPE_RX_EXTN_ADV_PDU_TYPE_0_EN_SHIFT)) & BLE2_REG_BLE_REG_RX_ADV_PDU_TYPE_RX_EXTN_ADV_PDU_TYPE_0_EN_MASK)
 
@@ -1162,8 +1014,6 @@ typedef struct {
 /*! rx_extn_adv_pdu_type_1_en - Extended advertising PDU type enable, Use the defined extended
  *    advertising PDU type for Rx matching., 0x0: disable the defined PDU type for matching ext
  *    advertising, 0x1: enable the defined PDU type for matching ext advertising
- *  0b0..disable the defined PDU type for matching ext advertising
- *  0b1..enable the defined PDU type for matching ext advertising
  */
 #define BLE2_REG_BLE_REG_RX_ADV_PDU_TYPE_RX_EXTN_ADV_PDU_TYPE_1_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RX_ADV_PDU_TYPE_RX_EXTN_ADV_PDU_TYPE_1_EN_SHIFT)) & BLE2_REG_BLE_REG_RX_ADV_PDU_TYPE_RX_EXTN_ADV_PDU_TYPE_1_EN_MASK)
 
@@ -1179,8 +1029,6 @@ typedef struct {
 /*! rx_extn_adv_pdu_type_2_en - Extended advertising PDU type enable, Use the defined extended
  *    advertising PDU type for Rx matching., 0x0: disable the defined PDU type for matching ext
  *    advertising, 0x1: enable the defined PDU type for matching ext advertising
- *  0b0..disable the defined PDU type for matching ext advertising
- *  0b1..enable the defined PDU type for matching ext advertising
  */
 #define BLE2_REG_BLE_REG_RX_ADV_PDU_TYPE_RX_EXTN_ADV_PDU_TYPE_2_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RX_ADV_PDU_TYPE_RX_EXTN_ADV_PDU_TYPE_2_EN_SHIFT)) & BLE2_REG_BLE_REG_RX_ADV_PDU_TYPE_RX_EXTN_ADV_PDU_TYPE_2_EN_MASK)
 
@@ -1193,53 +1041,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_RX_ADV_PDU_TYPE_RX_ADV_TYPE_CHK_VAL(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RX_ADV_PDU_TYPE_RX_ADV_TYPE_CHK_VAL_SHIFT)) & BLE2_REG_BLE_REG_RX_ADV_PDU_TYPE_RX_ADV_TYPE_CHK_VAL_MASK)
 /*! @} */
 
-/*! @name BLE_REG_PRNG_CTRL_STS - PRNG Control Status */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PRNG_CTRL_STS_PRNG_GO_MASK (0x1U)
-#define BLE2_REG_BLE_REG_PRNG_CTRL_STS_PRNG_GO_SHIFT (0U)
-/*! PRNG_Go - Start PRNG */
-#define BLE2_REG_BLE_REG_PRNG_CTRL_STS_PRNG_GO(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PRNG_CTRL_STS_PRNG_GO_SHIFT)) & BLE2_REG_BLE_REG_PRNG_CTRL_STS_PRNG_GO_MASK)
-
-#define BLE2_REG_BLE_REG_PRNG_CTRL_STS_PRNG_DONE_MASK (0x2U)
-#define BLE2_REG_BLE_REG_PRNG_CTRL_STS_PRNG_DONE_SHIFT (1U)
-/*! PRNG_Done - PRNG done */
-#define BLE2_REG_BLE_REG_PRNG_CTRL_STS_PRNG_DONE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PRNG_CTRL_STS_PRNG_DONE_SHIFT)) & BLE2_REG_BLE_REG_PRNG_CTRL_STS_PRNG_DONE_MASK)
-
-#define BLE2_REG_BLE_REG_PRNG_CTRL_STS_SUBEVENT_MODE_MASK (0x4U)
-#define BLE2_REG_BLE_REG_PRNG_CTRL_STS_SUBEVENT_MODE_SHIFT (2U)
-/*! Subevent_Mode - Selects mode of operation */
-#define BLE2_REG_BLE_REG_PRNG_CTRL_STS_SUBEVENT_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PRNG_CTRL_STS_SUBEVENT_MODE_SHIFT)) & BLE2_REG_BLE_REG_PRNG_CTRL_STS_SUBEVENT_MODE_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PRNG_IN - PRNG Input */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PRNG_IN_CHNL_ID_MASK    (0xFFFFU)
-#define BLE2_REG_BLE_REG_PRNG_IN_CHNL_ID_SHIFT   (0U)
-/*! Chnl_Id - Channel index */
-#define BLE2_REG_BLE_REG_PRNG_IN_CHNL_ID(x)      (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PRNG_IN_CHNL_ID_SHIFT)) & BLE2_REG_BLE_REG_PRNG_IN_CHNL_ID_MASK)
-
-#define BLE2_REG_BLE_REG_PRNG_IN_XOR_IN_MASK     (0xFFFF0000U)
-#define BLE2_REG_BLE_REG_PRNG_IN_XOR_IN_SHIFT    (16U)
-/*! XOR_In - Counter input */
-#define BLE2_REG_BLE_REG_PRNG_IN_XOR_IN(x)       (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PRNG_IN_XOR_IN_SHIFT)) & BLE2_REG_BLE_REG_PRNG_IN_XOR_IN_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PRNG_OUT - PRNG Output */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PRNG_OUT_MAM_OUT_MASK   (0xFFFFU)
-#define BLE2_REG_BLE_REG_PRNG_OUT_MAM_OUT_SHIFT  (0U)
-/*! MAM_Out - Pseudorandom output */
-#define BLE2_REG_BLE_REG_PRNG_OUT_MAM_OUT(x)     (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PRNG_OUT_MAM_OUT_SHIFT)) & BLE2_REG_BLE_REG_PRNG_OUT_MAM_OUT_MASK)
-
-#define BLE2_REG_BLE_REG_PRNG_OUT_XOR_OUT_MASK   (0xFFFF0000U)
-#define BLE2_REG_BLE_REG_PRNG_OUT_XOR_OUT_SHIFT  (16U)
-/*! XOR_Out - Pseudorandom output */
-#define BLE2_REG_BLE_REG_PRNG_OUT_XOR_OUT(x)     (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PRNG_OUT_XOR_OUT_SHIFT)) & BLE2_REG_BLE_REG_PRNG_OUT_XOR_OUT_MASK)
-/*! @} */
-
 /*! @name BLE_REG_CODED_PKT_CNTRL - LE Coded Packet Control */
 /*! @{ */
 
@@ -1247,8 +1048,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_CODED_PKT_CNTRL_TX_CODED_PKT_EN_SHIFT (0U)
 /*! tx_coded_pkt_en - Tx Coded Packet Enable, Tx Coded Packet Enable, 0x0: regular; use non-coded
  *    PHY to transmit packet, 0x1: use LE coded PHY to transmit packet
- *  0b0..regular, use non-coded PHY to transmit packet
- *  0b1..use LE coded PHY to transmit packet
  */
 #define BLE2_REG_BLE_REG_CODED_PKT_CNTRL_TX_CODED_PKT_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_CODED_PKT_CNTRL_TX_CODED_PKT_EN_SHIFT)) & BLE2_REG_BLE_REG_CODED_PKT_CNTRL_TX_CODED_PKT_EN_MASK)
 
@@ -1263,8 +1062,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_CODED_PKT_CNTRL_RX_CODED_PKT_EN_SHIFT (16U)
 /*! rx_coded_pkt_en - Rx Coded Packet Enable, Rx Coded Packet Enable, 0x0: regular; use non-coded
  *    PHY to receive packet, 0x1: use LE coded PHY to receive packet
- *  0b0..regular, use non-coded PHY to receive packet
- *  0b1..use LE coded PHY to receive packet
  */
 #define BLE2_REG_BLE_REG_CODED_PKT_CNTRL_RX_CODED_PKT_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_CODED_PKT_CNTRL_RX_CODED_PKT_EN_SHIFT)) & BLE2_REG_BLE_REG_CODED_PKT_CNTRL_RX_CODED_PKT_EN_MASK)
 
@@ -1273,8 +1070,6 @@ typedef struct {
 /*! simul_scan_en - Simultaneous Scan Enable, Enable simultaneous scan mode to receive BLE 1M and
  *    coded PHY ADV packets; whichever has correlation hit first., 0x0: disable, 0x1: enable. When
  *    enabled; rx_coded_pkt_en bit must set to 0.
- *  0b0..disable
- *  0b1..enable. When enabled, rx_coded_pkt_en bit must set to 0.
  */
 #define BLE2_REG_BLE_REG_CODED_PKT_CNTRL_SIMUL_SCAN_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_CODED_PKT_CNTRL_SIMUL_SCAN_EN_SHIFT)) & BLE2_REG_BLE_REG_CODED_PKT_CNTRL_SIMUL_SCAN_EN_MASK)
 
@@ -1285,8 +1080,6 @@ typedef struct {
  *    this bit decides which mode to continue Rx. This bit has no effect if only 1 of the correlator
  *    has correlation hit., 0x0: Continue Rx in coded PHY packet mode - preferred as it takes longer
  *    time to, correlate the access address., 0x1: Continue Rx in BLE 1M mode.
- *  0b0..Continue Rx in coded PHY packet mode - preferred as it takes longer time to correlate the access address.
- *  0b1..Continue Rx in BLE 1M mode.
  */
 #define BLE2_REG_BLE_REG_CODED_PKT_CNTRL_SIMUL_SCAN_1M(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_CODED_PKT_CNTRL_SIMUL_SCAN_1M_SHIFT)) & BLE2_REG_BLE_REG_CODED_PKT_CNTRL_SIMUL_SCAN_1M_MASK)
 /*! @} */
@@ -1350,8 +1143,6 @@ typedef struct {
 /*! irk_sw_lock - Lock bits for Software IRK queue access, This bit allows software and hardware to
  *    access the EBRAM IRK queue locations safely., 0x0: IRK queue is not in use by software, 0x1:
  *    IRK queue is in use by software
- *  0b0..IRK queue is not in use by software
- *  0b1..IRK queue is in use by software
  */
 #define BLE2_REG_BLE_REG_IRK_CTRL_1_IRK_SW_LOCK(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_IRK_CTRL_1_IRK_SW_LOCK_SHIFT)) & BLE2_REG_BLE_REG_IRK_CTRL_1_IRK_SW_LOCK_MASK)
 
@@ -1369,8 +1160,6 @@ typedef struct {
 /*! kill_irk_resolve - Kill IRK resolve process, This bit will kill IRK resolve process and put the
  *    state machine back to idle. Software is responsible to clear this bit., 0x0: IRK resolve is
  *    not killed, 0x1: IRK resolve is killed by software
- *  0b0..IRK resolve is not killed
- *  0b1..IRK resolve is killed by software
  */
 #define BLE2_REG_BLE_REG_IRK_CTRL_1_KILL_IRK_RESOLVE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_IRK_CTRL_1_KILL_IRK_RESOLVE_SHIFT)) & BLE2_REG_BLE_REG_IRK_CTRL_1_KILL_IRK_RESOLVE_MASK)
 
@@ -1416,10 +1205,6 @@ typedef struct {
  *    is finished or ongoing; successful or unsuccessful., 0x0: resolution in progress, 0x1: entry
  *    was found in IRK queue, 0x2: entry was not found in IRK queue, 0x3: IRK queue search not done
  *    for this packet
- *  0b00..resolution in progress
- *  0b01..entry was found in IRK queue
- *  0b10..entry was not found in IRK queue
- *  0b11..IRK queue search not done for this packet
  */
 #define BLE2_REG_BLE_REG_IRK_STATUS_1_IRK_RESOLUTION_RESULT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_IRK_STATUS_1_IRK_RESOLUTION_RESULT_SHIFT)) & BLE2_REG_BLE_REG_IRK_STATUS_1_IRK_RESOLUTION_RESULT_MASK)
 
@@ -1428,8 +1213,6 @@ typedef struct {
 /*! irk_hw_lock - Lock bits for Hardware IRK EBRAM access, This bit allows software and hardware to
  *    access the IRK queue locations safely., 0x0: IRK queue is not in use by hardware, 0x1: IRK
  *    queue is in use by hardware
- *  0b0..IRK queue is not in use by hardware
- *  0b1..IRK queue is in use by hardware
  */
 #define BLE2_REG_BLE_REG_IRK_STATUS_1_IRK_HW_LOCK(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_IRK_STATUS_1_IRK_HW_LOCK_SHIFT)) & BLE2_REG_BLE_REG_IRK_STATUS_1_IRK_HW_LOCK_MASK)
 
@@ -1451,11 +1234,6 @@ typedef struct {
 
 /*! @name BLE_REG_WHITELIST_BASE_ADDR - Whitelist Base address */
 /*! @{ */
-
-#define BLE2_REG_BLE_REG_WHITELIST_BASE_ADDR_WHITELIST_BASE_ADDR_MASK (0x3FFFU)
-#define BLE2_REG_BLE_REG_WHITELIST_BASE_ADDR_WHITELIST_BASE_ADDR_SHIFT (0U)
-/*! WHITELIST_BASE_ADDR - WHITELIST BASE ADDR */
-#define BLE2_REG_BLE_REG_WHITELIST_BASE_ADDR_WHITELIST_BASE_ADDR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_WHITELIST_BASE_ADDR_WHITELIST_BASE_ADDR_SHIFT)) & BLE2_REG_BLE_REG_WHITELIST_BASE_ADDR_WHITELIST_BASE_ADDR_MASK)
 
 #define BLE2_REG_BLE_REG_WHITELIST_BASE_ADDR_WHITELIST_BASE_ADDR_MASK (0x3FFFU)
 #define BLE2_REG_BLE_REG_WHITELIST_BASE_ADDR_WHITELIST_BASE_ADDR_SHIFT (0U)
@@ -1495,8 +1273,6 @@ typedef struct {
 /*! sw_wl_device_type - Software provided Device address type for whitelist search, This bit
  *    specifies the device address type to be used for software whitelist query., 0x0: public address, 0x1:
  *    random address
- *  0b0..public address
- *  0b1..random address
  */
 #define BLE2_REG_BLE_REG_WHITELIST_CTRL_1_SW_WL_DEVICE_TYPE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_WHITELIST_CTRL_1_SW_WL_DEVICE_TYPE_SHIFT)) & BLE2_REG_BLE_REG_WHITELIST_CTRL_1_SW_WL_DEVICE_TYPE_MASK)
 
@@ -1514,8 +1290,6 @@ typedef struct {
 /*! wl_sw_lock - Lock bits for software whitelist access, This bit should be set by software when it
  *    is modifying the EBRAM whitelist area, 0x0: whitelist is not in use by software, 0x1:
  *    whitelist is in use by software
- *  0b0..whitelist is not in use by software
- *  0b1..whitelist is in use by software
  */
 #define BLE2_REG_BLE_REG_WHITELIST_CTRL_1_WL_SW_LOCK(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_WHITELIST_CTRL_1_WL_SW_LOCK_SHIFT)) & BLE2_REG_BLE_REG_WHITELIST_CTRL_1_WL_SW_LOCK_MASK)
 
@@ -1534,8 +1308,6 @@ typedef struct {
 /*! kill_wl_search - Kill whitelist search, This bit will kill whitelist search process and put the
  *    state machine back to idle. Software is responsible to clear this bit., 0x0: whitelist search
  *    is not killed, 0x1: whitelist search is killed by software
- *  0b0..whitelist search is not killed
- *  0b1..whitelist search is killed by software
  */
 #define BLE2_REG_BLE_REG_WHITELIST_CTRL_1_KILL_WL_SEARCH(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_WHITELIST_CTRL_1_KILL_WL_SEARCH_SHIFT)) & BLE2_REG_BLE_REG_WHITELIST_CTRL_1_KILL_WL_SEARCH_MASK)
 
@@ -1556,10 +1328,6 @@ typedef struct {
  *    is finished or ongoing; successful or unsuccessful., 0x0: lookup in progress, 0x1: entry was
  *    found in whitelist, 0x2: entry was not found in whitelist, 0x3: whitelist search not done for
  *    this packet
- *  0b00..lookup in progress
- *  0b01..entry was found in whitelist
- *  0b10..entry was not found in whitelist
- *  0b11..whitelist search not done for this packet
  */
 #define BLE2_REG_BLE_REG_WHITELIST_STATUS_HW_WL_LOOKUP_RESULT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_WHITELIST_STATUS_HW_WL_LOOKUP_RESULT_SHIFT)) & BLE2_REG_BLE_REG_WHITELIST_STATUS_HW_WL_LOOKUP_RESULT_MASK)
 
@@ -1568,8 +1336,6 @@ typedef struct {
 /*! wl_hw_lock - Lock bits for Hardware whitelist access, This bit allows software and hardware to
  *    access the EBRAM whitelist locations safely., 0x0: whitelist is not in use by hardware, 0x1:
  *    whitelist is in use by hardware
- *  0b0..whitelist is not in use by hardware
- *  0b1..whitelist is in use by hardware
  */
 #define BLE2_REG_BLE_REG_WHITELIST_STATUS_WL_HW_LOCK(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_WHITELIST_STATUS_WL_HW_LOCK_SHIFT)) & BLE2_REG_BLE_REG_WHITELIST_STATUS_WL_HW_LOCK_MASK)
 
@@ -1596,10 +1362,6 @@ typedef struct {
  *    is finished or ongoing; successful or unsuccessful., 0x0: lookup in progress, 0x1: entry was
  *    found in whitelist, 0x2: entry was not found in whitelist, 0x3: whitelist search not done for
  *    this software command
- *  0b00..lookup in progress
- *  0b01..entry was found in whitelist
- *  0b10..entry was not found in whitelist
- *  0b11..whitelist search not done for this software command
  */
 #define BLE2_REG_BLE_REG_WHITELIST_STATUS_SW_WL_LOOKUP_RESULT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_WHITELIST_STATUS_SW_WL_LOOKUP_RESULT_SHIFT)) & BLE2_REG_BLE_REG_WHITELIST_STATUS_SW_WL_LOOKUP_RESULT_MASK)
 
@@ -1633,8 +1395,6 @@ typedef struct {
 /*! td_busy - TD busy, Status indicating the active TD is busy and being used by hardware. Asserted
  *    when fetching TD starts and de-asserted right after TD status writes back., 0x0: TD is idle,
  *    0x1: TD is busy and being used by hardware
- *  0b0..TD is idle
- *  0b1..TD is busy and being used by hardware
  */
 #define BLE2_REG_BLE_REG_TD_STATUS_TD_BUSY(x)    (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TD_STATUS_TD_BUSY_SHIFT)) & BLE2_REG_BLE_REG_TD_STATUS_TD_BUSY_MASK)
 
@@ -1644,8 +1404,6 @@ typedef struct {
  *    antenna switch for the current transmitted extension has failed., 0x0: Tx antenna switch
  *    pattern is honored; antSwitchStatus was never de-asserted, during packet extension, 0x1: Tx
  *    antenna switch pattern is not honored
- *  0b0..Tx antenna switch pattern is honored; antSwitchStatus was never de-asserted during packet extension
- *  0b1..Tx antenna switch pattern is not honored
  */
 #define BLE2_REG_BLE_REG_TD_STATUS_TX_EXTN_ANT_SWITCH_FAIL(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TD_STATUS_TX_EXTN_ANT_SWITCH_FAIL_SHIFT)) & BLE2_REG_BLE_REG_TD_STATUS_TX_EXTN_ANT_SWITCH_FAIL_MASK)
 
@@ -1654,8 +1412,6 @@ typedef struct {
 /*! tx_extn_abort - Tx extension packet hardware abort status, Status indicating the Tx extension
  *    packet is aborted by hardware., 0x0: No abort condition happened during Tx extension, 0x1:
  *    hardware abort condition was detected during Tx extension
- *  0b0..No abort condition happened during Tx extension
- *  0b1..hardware abort condition was detected during Tx extension
  */
 #define BLE2_REG_BLE_REG_TD_STATUS_TX_EXTN_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TD_STATUS_TX_EXTN_ABORT_SHIFT)) & BLE2_REG_BLE_REG_TD_STATUS_TX_EXTN_ABORT_MASK)
 
@@ -1664,8 +1420,6 @@ typedef struct {
 /*! tx_has_err - Tx Has Error, Tx packet of using this TD experienced at least 1 of the following
  *    errors., 0x0: No error, 0x1: At least 1 of rif_abort_tx; tx_dmem_underflow_intr;
  *    tx_aes_underflow_intr and, tx_lock_fail_intr has been asserted during packet transmission
- *  0b0..No error
- *  0b1..At least 1 of rif_abort_tx, tx_dmem_underflow_intr, and tx_aes_underflow_intr has been asserted during packet transmission
  */
 #define BLE2_REG_BLE_REG_TD_STATUS_TX_HAS_ERR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TD_STATUS_TX_HAS_ERR_SHIFT)) & BLE2_REG_BLE_REG_TD_STATUS_TX_HAS_ERR_MASK)
 
@@ -1673,8 +1427,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TD_STATUS_TX_DMA_ERR_SHIFT (5U)
 /*! tx_dma_err - Tx Has DMA Error, Tx packet of using this TD experienced DMA error., 0x0: No error,
  *    0x1: SoC DMA slave has replied with ERROR response during packet transmission
- *  0b0..No error
- *  0b1..SoC DMA slave has replied with ERROR response during packet transmission
  */
 #define BLE2_REG_BLE_REG_TD_STATUS_TX_DMA_ERR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TD_STATUS_TX_DMA_ERR_SHIFT)) & BLE2_REG_BLE_REG_TD_STATUS_TX_DMA_ERR_MASK)
 
@@ -1704,8 +1456,6 @@ typedef struct {
 /*! rd_busy - RD busy, Status indicating the active RD is busy and being used by hardware. Asserted
  *    when fetching RD starts and de-asserted right after RD status writes back., 0x0: RD is idle,
  *    0x1: RD is busy and being used by hardware
- *  0b0..RD is idle
- *  0b1..RD is busy and being used by hardware
  */
 #define BLE2_REG_BLE_REG_RD_STATUS_RD_BUSY(x)    (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RD_STATUS_RD_BUSY_SHIFT)) & BLE2_REG_BLE_REG_RD_STATUS_RD_BUSY_MASK)
 
@@ -1713,8 +1463,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_RD_STATUS_RX_EXTN_RCV_SHIFT (1U)
 /*! rx_extn_rcv - Extension Packet Received, This bit is valid ONLY on received packets when CRC has
  *    passed., 0x0: regular Rx packet was received, 0x1: extension field packet was received
- *  0b0..regular Rx packet was received
- *  0b1..extension field packet was received
  */
 #define BLE2_REG_BLE_REG_RD_STATUS_RX_EXTN_RCV(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RD_STATUS_RX_EXTN_RCV_SHIFT)) & BLE2_REG_BLE_REG_RD_STATUS_RX_EXTN_RCV_MASK)
 
@@ -1724,8 +1472,6 @@ typedef struct {
  *    antenna switch for the current receiving extension has failed., 0x0: Rx antenna switch
  *    pattern is honored; antSwitchStatus was never de-asserted, during packet extension, 0x1: Rx antenna
  *    switch pattern is not honored
- *  0b0..Rx antenna switch pattern is honored; antSwitchStatus was never de-asserted during packet extension
- *  0b1..Rx antenna switch pattern is not honored
  */
 #define BLE2_REG_BLE_REG_RD_STATUS_RX_EXTN_ANT_SWITCH_FAIL(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RD_STATUS_RX_EXTN_ANT_SWITCH_FAIL_SHIFT)) & BLE2_REG_BLE_REG_RD_STATUS_RX_EXTN_ANT_SWITCH_FAIL_MASK)
 
@@ -1734,8 +1480,6 @@ typedef struct {
 /*! rx_extn_abort - Rx extension packet hardware abort status, Status indicating the Rx extension
  *    packet is aborted by hardware., 0x0: no abort condition happened during Rx extension, 0x1:
  *    hardware abort condition was detected during Rx extension
- *  0b0..no abort condition happened during Rx extension
- *  0b1..hardware abort condition was detected during Rx extension
  */
 #define BLE2_REG_BLE_REG_RD_STATUS_RX_EXTN_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RD_STATUS_RX_EXTN_ABORT_SHIFT)) & BLE2_REG_BLE_REG_RD_STATUS_RX_EXTN_ABORT_MASK)
 
@@ -1744,8 +1488,6 @@ typedef struct {
 /*! rx_has_err - Rx Has Error, Rx packet of using this RD experienced at least 1 of the following
  *    errors., 0x0: No error, 0x1: At least 1 of rif_abort_rx; rx_dmem_overflow_intr;
  *    rx_aes_underflow_intr and, rx_lock_fail_intr has been asserted during packet reception
- *  0b0..No error
- *  0b1..At least 1 of rif_abort_rx, rx_dmem_overflow_intr, and rx_aes_underflow_intr has been asserted during packet reception
  */
 #define BLE2_REG_BLE_REG_RD_STATUS_RX_HAS_ERR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RD_STATUS_RX_HAS_ERR_SHIFT)) & BLE2_REG_BLE_REG_RD_STATUS_RX_HAS_ERR_MASK)
 
@@ -1753,8 +1495,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_RD_STATUS_RX_DMA_ERR_SHIFT (5U)
 /*! rx_dma_err - Rx Has DMA Error, Rx packet of using this RD experienced DMA error., 0x0: No error,
  *    0x1: SoC DMA slave has replied with ERROR response during packet reception
- *  0b0..No error
- *  0b1..SoC DMA slave has replied with ERROR response during packet reception
  */
 #define BLE2_REG_BLE_REG_RD_STATUS_RX_DMA_ERR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RD_STATUS_RX_DMA_ERR_SHIFT)) & BLE2_REG_BLE_REG_RD_STATUS_RX_DMA_ERR_MASK)
 
@@ -1787,39 +1527,39 @@ typedef struct {
 /*! @name BLE_REG_RSSI_ARB_CTRL - BLE RSSI ARBITRATION CONTROL */
 /*! @{ */
 
-#define BLE2_REG_BLE_REG_RSSI_ARB_CTRL_ble_arb_rssi_val_MASK (0xFFU)
-#define BLE2_REG_BLE_REG_RSSI_ARB_CTRL_ble_arb_rssi_val_SHIFT (0U)
+#define BLE2_REG_BLE_REG_RSSI_ARB_CTRL_BLE_ARB_RSSI_VAL_MASK (0xFFU)
+#define BLE2_REG_BLE_REG_RSSI_ARB_CTRL_BLE_ARB_RSSI_VAL_SHIFT (0U)
 /*! ble_arb_rssi_val - Software programable RSSI value for RSSI based arbitration */
-#define BLE2_REG_BLE_REG_RSSI_ARB_CTRL_ble_arb_rssi_val(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RSSI_ARB_CTRL_ble_arb_rssi_val_SHIFT)) & BLE2_REG_BLE_REG_RSSI_ARB_CTRL_ble_arb_rssi_val_MASK)
+#define BLE2_REG_BLE_REG_RSSI_ARB_CTRL_BLE_ARB_RSSI_VAL(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RSSI_ARB_CTRL_BLE_ARB_RSSI_VAL_SHIFT)) & BLE2_REG_BLE_REG_RSSI_ARB_CTRL_BLE_ARB_RSSI_VAL_MASK)
 /*! @} */
 
 /*! @name BLE_REG_RD_START_ADDR_ALT - Alternate Rx Descriptor Start Address */
 /*! @{ */
 
-#define BLE2_REG_BLE_REG_RD_START_ADDR_ALT_rd_start_address_alt_MASK (0xFFFFU)
-#define BLE2_REG_BLE_REG_RD_START_ADDR_ALT_rd_start_address_alt_SHIFT (0U)
+#define BLE2_REG_BLE_REG_RD_START_ADDR_ALT_RD_START_ADDRESS_ALT_MASK (0xFFFFU)
+#define BLE2_REG_BLE_REG_RD_START_ADDR_ALT_RD_START_ADDRESS_ALT_SHIFT (0U)
 /*! rd_start_address_alt - Alternate Rx Descriptor Start Address, The Alternate RD (Rx Descriptor) is pointed by rd_start_address_alt. */
-#define BLE2_REG_BLE_REG_RD_START_ADDR_ALT_rd_start_address_alt(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RD_START_ADDR_ALT_rd_start_address_alt_SHIFT)) & BLE2_REG_BLE_REG_RD_START_ADDR_ALT_rd_start_address_alt_MASK)
+#define BLE2_REG_BLE_REG_RD_START_ADDR_ALT_RD_START_ADDRESS_ALT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RD_START_ADDR_ALT_RD_START_ADDRESS_ALT_SHIFT)) & BLE2_REG_BLE_REG_RD_START_ADDR_ALT_RD_START_ADDRESS_ALT_MASK)
 /*! @} */
 
 /*! @name BLE_REG_RD_CTRL - Rx Descriptor Control */
 /*! @{ */
 
-#define BLE2_REG_BLE_REG_RD_CTRL_rd_alt_MASK     (0x1U)
-#define BLE2_REG_BLE_REG_RD_CTRL_rd_alt_SHIFT    (0U)
+#define BLE2_REG_BLE_REG_RD_CTRL_RD_ALT_MASK     (0x1U)
+#define BLE2_REG_BLE_REG_RD_CTRL_RD_ALT_SHIFT    (0U)
 /*! rd_alt - Toggle mode for RD_START_ADDRESS, This bit indicates which RD_START_ADDRESS is to be
  *    used, 0x0: always use rd_start_address, 0x1: use Toggle mode where rd_start_address and
  *    rd_start_address_alt are used for, alternating RX
  */
-#define BLE2_REG_BLE_REG_RD_CTRL_rd_alt(x)       (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RD_CTRL_rd_alt_SHIFT)) & BLE2_REG_BLE_REG_RD_CTRL_rd_alt_MASK)
+#define BLE2_REG_BLE_REG_RD_CTRL_RD_ALT(x)       (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RD_CTRL_RD_ALT_SHIFT)) & BLE2_REG_BLE_REG_RD_CTRL_RD_ALT_MASK)
 
-#define BLE2_REG_BLE_REG_RD_CTRL_rd_alt_reset_MASK (0x2U)
-#define BLE2_REG_BLE_REG_RD_CTRL_rd_alt_reset_SHIFT (1U)
+#define BLE2_REG_BLE_REG_RD_CTRL_RD_ALT_RESET_MASK (0x2U)
+#define BLE2_REG_BLE_REG_RD_CTRL_RD_ALT_RESET_SHIFT (1U)
 /*! rd_alt_reset - Reset bit, This bit is used to reset the alternating mode, 0x0: No reset, 0x1:
  *    reset; use the RD_START_ADDRESS for the next pkt irrespective of what was used, for the previous
  *    pkt
  */
-#define BLE2_REG_BLE_REG_RD_CTRL_rd_alt_reset(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RD_CTRL_rd_alt_reset_SHIFT)) & BLE2_REG_BLE_REG_RD_CTRL_rd_alt_reset_MASK)
+#define BLE2_REG_BLE_REG_RD_CTRL_RD_ALT_RESET(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RD_CTRL_RD_ALT_RESET_SHIFT)) & BLE2_REG_BLE_REG_RD_CTRL_RD_ALT_RESET_MASK)
 /*! @} */
 
 /*! @name BLE_REG_CLK_CTRL_SLEEP_OK_TIMER - BLE sleep ok timer */
@@ -1852,10 +1592,7 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_AES_CNTRL_SW_CCM_CLK_REQ_MASK (0x2U)
 #define BLE2_REG_BLE_REG_AES_CNTRL_SW_CCM_CLK_REQ_SHIFT (1U)
-/*! sw_ccm_clk_req - CCM/AES clock control, 0x0: disable clock for encryption, 0x1: request (enable) clock for encryption
- *  0b0..disable clock for encryption
- *  0b1..request (enable) clock for encryption
- */
+/*! sw_ccm_clk_req - CCM/AES clock control, 0x0: disable clock for encryption, 0x1: request (enable) clock for encryption */
 #define BLE2_REG_BLE_REG_AES_CNTRL_SW_CCM_CLK_REQ(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_AES_CNTRL_SW_CCM_CLK_REQ_SHIFT)) & BLE2_REG_BLE_REG_AES_CNTRL_SW_CCM_CLK_REQ_MASK)
 
 #define BLE2_REG_BLE_REG_AES_CNTRL_SECURE_IRK_DECRYPT_DYN_MASK (0x4U)
@@ -1881,8 +1618,6 @@ typedef struct {
  *    (BLE_REG_AES_KEY_0~3; BLE_REG_AES_DIN_0~3;, BLE_REG_AES_DOUT_0~3) can be written as normal.,
  *    0x1: All 12 Software AES registers are read-only. Software and hardware write to them, is
  *    disabled.
- *  0b0..All 12 Software AES registers (BLE_REG_AES_KEY_0~3, BLE_REG_AES_DIN_0~3, BLE_REG_AES_DOUT_0~3) can be written as normal.
- *  0b1..All 12 Software AES registers are read-only. Software and hardware write to them is disabled.
  */
 #define BLE2_REG_BLE_REG_AES_CNTRL_LOCK_SW_AES_REGS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_AES_CNTRL_LOCK_SW_AES_REGS_SHIFT)) & BLE2_REG_BLE_REG_AES_CNTRL_LOCK_SW_AES_REGS_MASK)
 /*! @} */
@@ -2002,226 +1737,129 @@ typedef struct {
 #define BLE2_REG_BLE_REG_INT_MASK_0_RT_ERR_INTR_SHIFT (0U)
 /*! rt_err_intr - rt_err_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt. The
  *    BLE_REG_RT_ERR_MASK should also be programmed to enable, desired event bit.
- *  0b0..disable interrupt
- *  0b1..enable interrupt. The BLE_REG_RT_ERR_MASK should also be programmed to enable desired event bit.
  */
 #define BLE2_REG_BLE_REG_INT_MASK_0_RT_ERR_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_RT_ERR_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_RT_ERR_INTR_MASK)
 
-#define BLE2_REG_BLE_REG_INT_MASK_0_PST_2_INTR_MASK (0x8U)
-#define BLE2_REG_BLE_REG_INT_MASK_0_PST_2_INTR_SHIFT (3U)
-/*! pst_2_intr - pst_2_intr interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
-#define BLE2_REG_BLE_REG_INT_MASK_0_PST_2_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_PST_2_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_PST_2_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_INT_MASK_0_PST_1_INTR_MASK (0x10U)
-#define BLE2_REG_BLE_REG_INT_MASK_0_PST_1_INTR_SHIFT (4U)
-/*! pst_1_intr - pst_2_intr interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
-#define BLE2_REG_BLE_REG_INT_MASK_0_PST_1_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_PST_1_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_PST_1_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_INT_MASK_0_PST_0_INTR_MASK (0x20U)
-#define BLE2_REG_BLE_REG_INT_MASK_0_PST_0_INTR_SHIFT (5U)
-/*! pst_0_intr - pst_2_intr interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
-#define BLE2_REG_BLE_REG_INT_MASK_0_PST_0_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_PST_0_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_PST_0_INTR_MASK)
-
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_5_MASK (0x40U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_5_SHIFT (6U)
-/*! cdt_expiry_intr_5 - cdt_expiry_intr[5] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! cdt_expiry_intr_5 - cdt_expiry_intr[5] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_5(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_5_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_5_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_4_MASK (0x80U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_4_SHIFT (7U)
-/*! cdt_expiry_intr_4 - cdt_expiry_intr[4] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! cdt_expiry_intr_4 - cdt_expiry_intr[4] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_4(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_4_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_4_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_3_MASK (0x100U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_3_SHIFT (8U)
-/*! cdt_expiry_intr_3 - cdt_expiry_intr[3] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! cdt_expiry_intr_3 - cdt_expiry_intr[3] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_3(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_3_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_3_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_2_MASK (0x200U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_2_SHIFT (9U)
-/*! cdt_expiry_intr_2 - cdt_expiry_intr[2] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! cdt_expiry_intr_2 - cdt_expiry_intr[2] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_2(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_2_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_2_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_1_MASK (0x400U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_1_SHIFT (10U)
-/*! cdt_expiry_intr_1 - cdt_expiry_intr[1] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! cdt_expiry_intr_1 - cdt_expiry_intr[1] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_1(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_1_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_1_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_0_MASK (0x800U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_0_SHIFT (11U)
-/*! cdt_expiry_intr_0 - cdt_expiry_intr[0] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! cdt_expiry_intr_0 - cdt_expiry_intr[0] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_0(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_0_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_CDT_EXPIRY_INTR_0_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_3_MASK (0x1000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_3_SHIFT (12U)
-/*! expiry_intr_3 - expiry_intr[3] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! expiry_intr_3 - expiry_intr[3] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_3(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_3_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_3_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_2_MASK (0x2000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_2_SHIFT (13U)
-/*! expiry_intr_2 - expiry_intr[2] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! expiry_intr_2 - expiry_intr[2] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_2(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_2_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_2_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_1_MASK (0x4000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_1_SHIFT (14U)
-/*! expiry_intr_1 - expiry_intr[1] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! expiry_intr_1 - expiry_intr[1] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_1(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_1_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_1_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_0_MASK (0x8000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_0_SHIFT (15U)
-/*! expiry_intr_0 - expiry_intr[0] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! expiry_intr_0 - expiry_intr[0] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_0(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_0_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_EXPIRY_INTR_0_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_TMR_ABORT_INTR_MASK (0x10000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_TMR_ABORT_INTR_SHIFT (16U)
-/*! tmr_abort_intr - tmr_abort_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! tmr_abort_intr - tmr_abort_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_TMR_ABORT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_TMR_ABORT_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_TMR_ABORT_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_HW_ABORT_INTR_MASK (0x20000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_HW_ABORT_INTR_SHIFT (17U)
 /*! hw_abort_intr - hw_abort_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt. The
  *    BLE_REG_HW_ABORT_MASK should also be programmed to enable, desired event bit.
- *  0b0..disable interrupt
- *  0b1..enable interrupt. The BLE_REG_HW_ABORT_MASK should also be programmed to enable desired event bit.
  */
 #define BLE2_REG_BLE_REG_INT_MASK_0_HW_ABORT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_HW_ABORT_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_HW_ABORT_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_SW_ABORT_INTR_MASK (0x40000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_SW_ABORT_INTR_SHIFT (18U)
-/*! sw_abort_intr - sw_abort_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! sw_abort_intr - sw_abort_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_SW_ABORT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_SW_ABORT_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_SW_ABORT_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_RX_PKT_DONE_INTR_MASK (0x200000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_RX_PKT_DONE_INTR_SHIFT (21U)
-/*! rx_pkt_done_intr - rx_pkt_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_pkt_done_intr - rx_pkt_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_RX_PKT_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_RX_PKT_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_RX_PKT_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_RX_DATA_DONE_INTR_MASK (0x400000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_RX_DATA_DONE_INTR_SHIFT (22U)
-/*! rx_data_done_intr - rx_data_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_data_done_intr - rx_data_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_RX_DATA_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_RX_DATA_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_RX_DATA_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_RX_ADV_EXT_HEADER_DONE_INTR_MASK (0x800000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_RX_ADV_EXT_HEADER_DONE_INTR_SHIFT (23U)
-/*! rx_adv_ext_header_done_intr - rx_adv_ext_header_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_adv_ext_header_done_intr - rx_adv_ext_header_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_RX_ADV_EXT_HEADER_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_RX_ADV_EXT_HEADER_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_RX_ADV_EXT_HEADER_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_IRK_RESOLVE_DONE_INTR_MASK (0x1000000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_IRK_RESOLVE_DONE_INTR_SHIFT (24U)
-/*! irk_resolve_done_intr - irk_resolve_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! irk_resolve_done_intr - irk_resolve_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_IRK_RESOLVE_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_IRK_RESOLVE_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_IRK_RESOLVE_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_RX_ADV_ADDR_DONE_INTR_MASK (0x2000000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_RX_ADV_ADDR_DONE_INTR_SHIFT (25U)
-/*! rx_adv_addr_done_intr - rx_adv_addr_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_adv_addr_done_intr - rx_adv_addr_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_RX_ADV_ADDR_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_RX_ADV_ADDR_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_RX_ADV_ADDR_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_RX_HDR_DONE_INTR_MASK (0x4000000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_RX_HDR_DONE_INTR_SHIFT (26U)
-/*! rx_hdr_done_intr - rx_hdr_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_hdr_done_intr - rx_hdr_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_RX_HDR_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_RX_HDR_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_RX_HDR_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_COR_HIT_INTR_MASK (0x8000000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_COR_HIT_INTR_SHIFT (27U)
-/*! cor_hit_intr - cor_hit_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! cor_hit_intr - cor_hit_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_COR_HIT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_COR_HIT_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_COR_HIT_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_TX_PKT_DONE_INTR_MASK (0x10000000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_TX_PKT_DONE_INTR_SHIFT (28U)
-/*! tx_pkt_done_intr - tx_pkt_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! tx_pkt_done_intr - tx_pkt_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_TX_PKT_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_TX_PKT_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_TX_PKT_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_TX_DATA_DONE_INTR_MASK (0x20000000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_TX_DATA_DONE_INTR_SHIFT (29U)
-/*! tx_data_done_intr - tx_data_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! tx_data_done_intr - tx_data_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_TX_DATA_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_TX_DATA_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_TX_DATA_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_TX_HDR_DONE_INTR_MASK (0x40000000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_TX_HDR_DONE_INTR_SHIFT (30U)
-/*! tx_hdr_done_intr - tx_hdr_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! tx_hdr_done_intr - tx_hdr_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_TX_HDR_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_TX_HDR_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_TX_HDR_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_0_TX_ACC_DONE_INTR_MASK (0x80000000U)
 #define BLE2_REG_BLE_REG_INT_MASK_0_TX_ACC_DONE_INTR_SHIFT (31U)
-/*! tx_acc_done_intr - tx_acc_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! tx_acc_done_intr - tx_acc_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_0_TX_ACC_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_0_TX_ACC_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_0_TX_ACC_DONE_INTR_MASK)
 /*! @} */
 
@@ -2232,226 +1870,129 @@ typedef struct {
 #define BLE2_REG_BLE_REG_INT_MASK_1_RT_ERR_INTR_SHIFT (0U)
 /*! rt_err_intr - rt_err_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt. The
  *    BLE_REG_RT_ERR_MASK should also be programmed to enable, desired event bit.
- *  0b0..disable interrupt
- *  0b1..enable interrupt. The BLE_REG_RT_ERR_MASK should also be programmed to enable desired event bit.
  */
 #define BLE2_REG_BLE_REG_INT_MASK_1_RT_ERR_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_RT_ERR_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_RT_ERR_INTR_MASK)
 
-#define BLE2_REG_BLE_REG_INT_MASK_1_PST_2_INTR_MASK (0x8U)
-#define BLE2_REG_BLE_REG_INT_MASK_1_PST_2_INTR_SHIFT (3U)
-/*! pst_2_intr - pst_2_intr interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
-#define BLE2_REG_BLE_REG_INT_MASK_1_PST_2_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_PST_2_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_PST_2_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_INT_MASK_1_PST_1_INTR_MASK (0x10U)
-#define BLE2_REG_BLE_REG_INT_MASK_1_PST_1_INTR_SHIFT (4U)
-/*! pst_1_intr - pst_2_intr interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
-#define BLE2_REG_BLE_REG_INT_MASK_1_PST_1_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_PST_1_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_PST_1_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_INT_MASK_1_PST_0_INTR_MASK (0x20U)
-#define BLE2_REG_BLE_REG_INT_MASK_1_PST_0_INTR_SHIFT (5U)
-/*! pst_0_intr - pst_2_intr interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
-#define BLE2_REG_BLE_REG_INT_MASK_1_PST_0_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_PST_0_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_PST_0_INTR_MASK)
-
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_5_MASK (0x40U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_5_SHIFT (6U)
-/*! cdt_expiry_intr_5 - cdt_expiry_intr[5] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! cdt_expiry_intr_5 - cdt_expiry_intr[5] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_5(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_5_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_5_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_4_MASK (0x80U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_4_SHIFT (7U)
-/*! cdt_expiry_intr_4 - cdt_expiry_intr[4] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! cdt_expiry_intr_4 - cdt_expiry_intr[4] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_4(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_4_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_4_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_3_MASK (0x100U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_3_SHIFT (8U)
-/*! cdt_expiry_intr_3 - cdt_expiry_intr[3] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! cdt_expiry_intr_3 - cdt_expiry_intr[3] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_3(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_3_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_3_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_2_MASK (0x200U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_2_SHIFT (9U)
-/*! cdt_expiry_intr_2 - cdt_expiry_intr[2] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! cdt_expiry_intr_2 - cdt_expiry_intr[2] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_2(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_2_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_2_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_1_MASK (0x400U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_1_SHIFT (10U)
-/*! cdt_expiry_intr_1 - cdt_expiry_intr[1] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! cdt_expiry_intr_1 - cdt_expiry_intr[1] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_1(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_1_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_1_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_0_MASK (0x800U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_0_SHIFT (11U)
-/*! cdt_expiry_intr_0 - cdt_expiry_intr[0] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! cdt_expiry_intr_0 - cdt_expiry_intr[0] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_0(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_0_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_CDT_EXPIRY_INTR_0_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_3_MASK (0x1000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_3_SHIFT (12U)
-/*! expiry_intr_3 - expiry_intr[3] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! expiry_intr_3 - expiry_intr[3] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_3(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_3_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_3_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_2_MASK (0x2000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_2_SHIFT (13U)
-/*! expiry_intr_2 - expiry_intr[2] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! expiry_intr_2 - expiry_intr[2] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_2(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_2_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_2_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_1_MASK (0x4000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_1_SHIFT (14U)
-/*! expiry_intr_1 - expiry_intr[1] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! expiry_intr_1 - expiry_intr[1] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_1(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_1_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_1_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_0_MASK (0x8000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_0_SHIFT (15U)
-/*! expiry_intr_0 - expiry_intr[0] interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! expiry_intr_0 - expiry_intr[0] interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_0(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_0_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_EXPIRY_INTR_0_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_TMR_ABORT_INTR_MASK (0x10000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_TMR_ABORT_INTR_SHIFT (16U)
-/*! tmr_abort_intr - tmr_abort_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! tmr_abort_intr - tmr_abort_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_TMR_ABORT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_TMR_ABORT_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_TMR_ABORT_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_HW_ABORT_INTR_MASK (0x20000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_HW_ABORT_INTR_SHIFT (17U)
 /*! hw_abort_intr - hw_abort_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt. The
  *    BLE_REG_HW_ABORT_MASK should also be programmed to enable, desired event bit.
- *  0b0..disable interrupt
- *  0b1..enable interrupt. The BLE_REG_HW_ABORT_MASK should also be programmed to enable desired event bit.
  */
 #define BLE2_REG_BLE_REG_INT_MASK_1_HW_ABORT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_HW_ABORT_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_HW_ABORT_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_SW_ABORT_INTR_MASK (0x40000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_SW_ABORT_INTR_SHIFT (18U)
-/*! sw_abort_intr - sw_abort_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! sw_abort_intr - sw_abort_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_SW_ABORT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_SW_ABORT_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_SW_ABORT_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_RX_PKT_DONE_INTR_MASK (0x200000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_RX_PKT_DONE_INTR_SHIFT (21U)
-/*! rx_pkt_done_intr - rx_pkt_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_pkt_done_intr - rx_pkt_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_RX_PKT_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_RX_PKT_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_RX_PKT_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_RX_DATA_DONE_INTR_MASK (0x400000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_RX_DATA_DONE_INTR_SHIFT (22U)
-/*! rx_data_done_intr - rx_data_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_data_done_intr - rx_data_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_RX_DATA_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_RX_DATA_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_RX_DATA_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_RX_ADV_EXT_HEADER_DONE_INTR_MASK (0x800000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_RX_ADV_EXT_HEADER_DONE_INTR_SHIFT (23U)
-/*! rx_adv_ext_header_done_intr - rx_adv_ext_header_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_adv_ext_header_done_intr - rx_adv_ext_header_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_RX_ADV_EXT_HEADER_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_RX_ADV_EXT_HEADER_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_RX_ADV_EXT_HEADER_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_IRK_RESOLVE_DONE_INTR_MASK (0x1000000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_IRK_RESOLVE_DONE_INTR_SHIFT (24U)
-/*! irk_resolve_done_intr - irk_resolve_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! irk_resolve_done_intr - irk_resolve_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_IRK_RESOLVE_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_IRK_RESOLVE_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_IRK_RESOLVE_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_RX_ADV_ADDR_DONE_INTR_MASK (0x2000000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_RX_ADV_ADDR_DONE_INTR_SHIFT (25U)
-/*! rx_adv_addr_done_intr - rx_adv_addr_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_adv_addr_done_intr - rx_adv_addr_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_RX_ADV_ADDR_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_RX_ADV_ADDR_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_RX_ADV_ADDR_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_RX_HDR_DONE_INTR_MASK (0x4000000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_RX_HDR_DONE_INTR_SHIFT (26U)
-/*! rx_hdr_done_intr - rx_hdr_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_hdr_done_intr - rx_hdr_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_RX_HDR_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_RX_HDR_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_RX_HDR_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_COR_HIT_INTR_MASK (0x8000000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_COR_HIT_INTR_SHIFT (27U)
-/*! cor_hit_intr - cor_hit_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! cor_hit_intr - cor_hit_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_COR_HIT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_COR_HIT_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_COR_HIT_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_TX_PKT_DONE_INTR_MASK (0x10000000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_TX_PKT_DONE_INTR_SHIFT (28U)
-/*! tx_pkt_done_intr - tx_pkt_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! tx_pkt_done_intr - tx_pkt_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_TX_PKT_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_TX_PKT_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_TX_PKT_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_TX_DATA_DONE_INTR_MASK (0x20000000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_TX_DATA_DONE_INTR_SHIFT (29U)
-/*! tx_data_done_intr - tx_data_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! tx_data_done_intr - tx_data_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_TX_DATA_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_TX_DATA_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_TX_DATA_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_TX_HDR_DONE_INTR_MASK (0x40000000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_TX_HDR_DONE_INTR_SHIFT (30U)
-/*! tx_hdr_done_intr - tx_hdr_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! tx_hdr_done_intr - tx_hdr_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_TX_HDR_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_TX_HDR_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_TX_HDR_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_1_TX_ACC_DONE_INTR_MASK (0x80000000U)
 #define BLE2_REG_BLE_REG_INT_MASK_1_TX_ACC_DONE_INTR_SHIFT (31U)
-/*! tx_acc_done_intr - tx_acc_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! tx_acc_done_intr - tx_acc_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_1_TX_ACC_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_1_TX_ACC_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_1_TX_ACC_DONE_INTR_MASK)
 /*! @} */
 
@@ -2460,35 +2001,18 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_INT_MASK_2_SW_AES_DONE_MASK (0x1U)
 #define BLE2_REG_BLE_REG_INT_MASK_2_SW_AES_DONE_SHIFT (0U)
-/*! sw_aes_done - sw_aes_done interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! sw_aes_done - sw_aes_done interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_2_SW_AES_DONE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_2_SW_AES_DONE_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_2_SW_AES_DONE_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_2_SW_DBUS_DONE_INTR_MASK (0x2U)
 #define BLE2_REG_BLE_REG_INT_MASK_2_SW_DBUS_DONE_INTR_SHIFT (1U)
-/*! sw_dbus_done_intr - sw_dbus_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! sw_dbus_done_intr - sw_dbus_done_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_2_SW_DBUS_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_2_SW_DBUS_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_2_SW_DBUS_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_2_SW_MAILBOX_INTR_MASK (0x10U)
 #define BLE2_REG_BLE_REG_INT_MASK_2_SW_MAILBOX_INTR_SHIFT (4U)
-/*! sw_mailbox_intr - sw_mailbox_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! sw_mailbox_intr - sw_mailbox_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_2_SW_MAILBOX_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_2_SW_MAILBOX_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_2_SW_MAILBOX_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_INT_MASK_2_MWS_FRAME_SYNC_REAL_IE_MASK (0x10000U)
-#define BLE2_REG_BLE_REG_INT_MASK_2_MWS_FRAME_SYNC_REAL_IE_SHIFT (16U)
-/*! MWS_Frame_Sync_Real_IE - MWS Frame Sync Interrupt Enable
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
-#define BLE2_REG_BLE_REG_INT_MASK_2_MWS_FRAME_SYNC_REAL_IE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_2_MWS_FRAME_SYNC_REAL_IE_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_2_MWS_FRAME_SYNC_REAL_IE_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_2_MWS_FRAME_SYNC_REAL_IE_MASK (0x10000U)
 #define BLE2_REG_BLE_REG_INT_MASK_2_MWS_FRAME_SYNC_REAL_IE_SHIFT (16U)
@@ -2497,24 +2021,8 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_INT_MASK_2_MWS_PATTERN_REAL_IE_MASK (0x20000U)
 #define BLE2_REG_BLE_REG_INT_MASK_2_MWS_PATTERN_REAL_IE_SHIFT (17U)
-/*! MWS_Pattern_Real_IE - MWS Pattern Interrupt Enable
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
-#define BLE2_REG_BLE_REG_INT_MASK_2_MWS_PATTERN_REAL_IE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_2_MWS_PATTERN_REAL_IE_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_2_MWS_PATTERN_REAL_IE_MASK)
-
-#define BLE2_REG_BLE_REG_INT_MASK_2_MWS_PATTERN_REAL_IE_MASK (0x20000U)
-#define BLE2_REG_BLE_REG_INT_MASK_2_MWS_PATTERN_REAL_IE_SHIFT (17U)
 /*! mws_pattern_real_ie - MWS Pattern Interrupt Enable, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_2_MWS_PATTERN_REAL_IE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_2_MWS_PATTERN_REAL_IE_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_2_MWS_PATTERN_REAL_IE_MASK)
-
-#define BLE2_REG_BLE_REG_INT_MASK_2_FRAME_SYNC_UPDATE_REAL_IE_MASK (0x40000U)
-#define BLE2_REG_BLE_REG_INT_MASK_2_FRAME_SYNC_UPDATE_REAL_IE_SHIFT (18U)
-/*! Frame_Sync_Update_Real_IE - MWS Frame Sync Update Interrupt Enable
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
-#define BLE2_REG_BLE_REG_INT_MASK_2_FRAME_SYNC_UPDATE_REAL_IE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_2_FRAME_SYNC_UPDATE_REAL_IE_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_2_FRAME_SYNC_UPDATE_REAL_IE_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_2_FRAME_SYNC_UPDATE_REAL_IE_MASK (0x40000U)
 #define BLE2_REG_BLE_REG_INT_MASK_2_FRAME_SYNC_UPDATE_REAL_IE_SHIFT (18U)
@@ -2523,24 +2031,8 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_INT_MASK_2_HARQ_PATTERN_SEL_REAL_IE_MASK (0x80000U)
 #define BLE2_REG_BLE_REG_INT_MASK_2_HARQ_PATTERN_SEL_REAL_IE_SHIFT (19U)
-/*! HARQ_Pattern_Sel_Real_IE - HARQ Pattern Sel Interrupt Enable
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
-#define BLE2_REG_BLE_REG_INT_MASK_2_HARQ_PATTERN_SEL_REAL_IE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_2_HARQ_PATTERN_SEL_REAL_IE_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_2_HARQ_PATTERN_SEL_REAL_IE_MASK)
-
-#define BLE2_REG_BLE_REG_INT_MASK_2_HARQ_PATTERN_SEL_REAL_IE_MASK (0x80000U)
-#define BLE2_REG_BLE_REG_INT_MASK_2_HARQ_PATTERN_SEL_REAL_IE_SHIFT (19U)
 /*! harq_pattern_sel_real_ie - HARQ Pattern Sel Interrupt Enable, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_2_HARQ_PATTERN_SEL_REAL_IE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_2_HARQ_PATTERN_SEL_REAL_IE_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_2_HARQ_PATTERN_SEL_REAL_IE_MASK)
-
-#define BLE2_REG_BLE_REG_INT_MASK_2_MWS_SCAN_FREQUENCY_REAL_IE_MASK (0x100000U)
-#define BLE2_REG_BLE_REG_INT_MASK_2_MWS_SCAN_FREQUENCY_REAL_IE_SHIFT (20U)
-/*! MWS_Scan_Frequency_Real_IE - MWS Scan Frequency Interrupt Enable
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
-#define BLE2_REG_BLE_REG_INT_MASK_2_MWS_SCAN_FREQUENCY_REAL_IE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_2_MWS_SCAN_FREQUENCY_REAL_IE_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_2_MWS_SCAN_FREQUENCY_REAL_IE_MASK)
 
 #define BLE2_REG_BLE_REG_INT_MASK_2_MWS_SCAN_FREQUENCY_REAL_IE_MASK (0x100000U)
 #define BLE2_REG_BLE_REG_INT_MASK_2_MWS_SCAN_FREQUENCY_REAL_IE_SHIFT (20U)
@@ -2549,99 +2041,61 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_INT_MASK_2_MWS_INACT_MSG_REAL_IE_MASK (0x200000U)
 #define BLE2_REG_BLE_REG_INT_MASK_2_MWS_INACT_MSG_REAL_IE_SHIFT (21U)
-/*! MWS_Inact_Msg_Real_IE - MWS Inactivity Message Interrupt Enable
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
-#define BLE2_REG_BLE_REG_INT_MASK_2_MWS_INACT_MSG_REAL_IE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_2_MWS_INACT_MSG_REAL_IE_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_2_MWS_INACT_MSG_REAL_IE_MASK)
-
-#define BLE2_REG_BLE_REG_INT_MASK_2_MWS_INACT_MSG_REAL_IE_MASK (0x200000U)
-#define BLE2_REG_BLE_REG_INT_MASK_2_MWS_INACT_MSG_REAL_IE_SHIFT (21U)
 /*! mws_inact_msg_real_ie - MWS Inactivity Message Interrupt Enable, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_INT_MASK_2_MWS_INACT_MSG_REAL_IE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_MASK_2_MWS_INACT_MSG_REAL_IE_SHIFT)) & BLE2_REG_BLE_REG_INT_MASK_2_MWS_INACT_MSG_REAL_IE_MASK)
 /*! @} */
 
-/*! @name BLE_REG_HW_ABORT_MASK - BLE Interrupt Mask, hardware Abort */
+/*! @name BLE_REG_HW_ABORT_MASK - BLE Interrupt Mask; hardware Abort */
 /*! @{ */
 
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_DENY_STS_MASK (0x1U)
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_DENY_STS_SHIFT (0U)
-/*! ble_deny_sts - ble_deny_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! ble_deny_sts - ble_deny_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_DENY_STS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_DENY_STS_SHIFT)) & BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_DENY_STS_MASK)
 
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_CUTOFF_STS_MASK (0x2U)
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_CUTOFF_STS_SHIFT (1U)
-/*! ble_cutoff_sts - ble_cutoff_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! ble_cutoff_sts - ble_cutoff_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_CUTOFF_STS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_CUTOFF_STS_SHIFT)) & BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_CUTOFF_STS_MASK)
 
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_BCADENY_STS_MASK (0x4U)
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_BCADENY_STS_SHIFT (2U)
-/*! ble_bcadeny_sts - ble_bcadeny_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! ble_bcadeny_sts - ble_bcadeny_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_BCADENY_STS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_BCADENY_STS_SHIFT)) & BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_BCADENY_STS_MASK)
 
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_BCACUTOFF_STS_MASK (0x8U)
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_BCACUTOFF_STS_SHIFT (3U)
-/*! ble_bcacutoff_sts - ble_bcacutoff_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! ble_bcacutoff_sts - ble_bcacutoff_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_BCACUTOFF_STS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_BCACUTOFF_STS_SHIFT)) & BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_BCACUTOFF_STS_MASK)
 
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_COR_TIMEOUT_INTR_STS_MASK (0x10U)
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_COR_TIMEOUT_INTR_STS_SHIFT (4U)
-/*! cor_timeout_intr_sts - cor_timeout_intr_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! cor_timeout_intr_sts - cor_timeout_intr_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_COR_TIMEOUT_INTR_STS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_HW_ABORT_MASK_COR_TIMEOUT_INTR_STS_SHIFT)) & BLE2_REG_BLE_REG_HW_ABORT_MASK_COR_TIMEOUT_INTR_STS_MASK)
 
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_RX_SYNC_PULSE_TIMEOUT_INTR_STS_MASK (0x20U)
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_RX_SYNC_PULSE_TIMEOUT_INTR_STS_SHIFT (5U)
-/*! rx_sync_pulse_timeout_intr_sts - rx_sync_pulse_timeout_intr_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_sync_pulse_timeout_intr_sts - rx_sync_pulse_timeout_intr_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_RX_SYNC_PULSE_TIMEOUT_INTR_STS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_HW_ABORT_MASK_RX_SYNC_PULSE_TIMEOUT_INTR_STS_SHIFT)) & BLE2_REG_BLE_REG_HW_ABORT_MASK_RX_SYNC_PULSE_TIMEOUT_INTR_STS_MASK)
 
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_RX_DATAVLD_TIMEOUT_INTR_STS_MASK (0x40U)
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_RX_DATAVLD_TIMEOUT_INTR_STS_SHIFT (6U)
-/*! rx_datavld_timeout_intr_sts - rx_datavld_timeout_intr_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_datavld_timeout_intr_sts - rx_datavld_timeout_intr_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_RX_DATAVLD_TIMEOUT_INTR_STS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_HW_ABORT_MASK_RX_DATAVLD_TIMEOUT_INTR_STS_SHIFT)) & BLE2_REG_BLE_REG_HW_ABORT_MASK_RX_DATAVLD_TIMEOUT_INTR_STS_MASK)
 
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_TXRX_ERROR_STS_MASK (0x80U)
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_TXRX_ERROR_STS_SHIFT (7U)
-/*! txrx_error_sts - txrx_error_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! txrx_error_sts - txrx_error_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_TXRX_ERROR_STS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_HW_ABORT_MASK_TXRX_ERROR_STS_SHIFT)) & BLE2_REG_BLE_REG_HW_ABORT_MASK_TXRX_ERROR_STS_MASK)
 
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_SW_ABORT_B4_A2_STS_MASK (0x100U)
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_SW_ABORT_B4_A2_STS_SHIFT (8U)
-/*! sw_abort_b4_a2_sts - sw_abort_b4_a2_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! sw_abort_b4_a2_sts - sw_abort_b4_a2_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_SW_ABORT_B4_A2_STS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_HW_ABORT_MASK_SW_ABORT_B4_A2_STS_SHIFT)) & BLE2_REG_BLE_REG_HW_ABORT_MASK_SW_ABORT_B4_A2_STS_MASK)
 
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_SW_ABORT_AFTER_A2_STS_MASK (0x200U)
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_SW_ABORT_AFTER_A2_STS_SHIFT (9U)
-/*! sw_abort_after_a2_sts - sw_abort_after_a2_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! sw_abort_after_a2_sts - sw_abort_after_a2_sts interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_SW_ABORT_AFTER_A2_STS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_HW_ABORT_MASK_SW_ABORT_AFTER_A2_STS_SHIFT)) & BLE2_REG_BLE_REG_HW_ABORT_MASK_SW_ABORT_AFTER_A2_STS_MASK)
 
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_CCA_ABORT_STS_MASK (0x400U)
@@ -2660,159 +2114,102 @@ typedef struct {
 #define BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_CCA_TXPKT_THD_MET_STS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_CCA_TXPKT_THD_MET_STS_SHIFT)) & BLE2_REG_BLE_REG_HW_ABORT_MASK_BLE_CCA_TXPKT_THD_MET_STS_MASK)
 /*! @} */
 
-/*! @name BLE_REG_RT_ERR_MASK - BLE Interrupt Mask, Real-time Error */
+/*! @name BLE_REG_RT_ERR_MASK - BLE Interrupt Mask; Real-time Error */
 /*! @{ */
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_BLE_CUTOFF_INTR_MASK (0x2U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_BLE_CUTOFF_INTR_SHIFT (1U)
-/*! ble_cutoff_intr - ble_cutoff_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! ble_cutoff_intr - ble_cutoff_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_BLE_CUTOFF_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_BLE_CUTOFF_INTR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_BLE_CUTOFF_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_BLE_EXTN_FAIL_INTR_MASK (0x4U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_BLE_EXTN_FAIL_INTR_SHIFT (2U)
-/*! ble_extn_fail_intr - ble_extn_fail_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! ble_extn_fail_intr - ble_extn_fail_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_BLE_EXTN_FAIL_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_BLE_EXTN_FAIL_INTR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_BLE_EXTN_FAIL_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_BLE_BCACUTOFF_INTR_MASK (0x8U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_BLE_BCACUTOFF_INTR_SHIFT (3U)
-/*! ble_bcacutoff_intr - ble_bcacutoff_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! ble_bcacutoff_intr - ble_bcacutoff_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_BLE_BCACUTOFF_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_BLE_BCACUTOFF_INTR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_BLE_BCACUTOFF_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_COR_TIMEOUT_INTR_MASK (0x10U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_COR_TIMEOUT_INTR_SHIFT (4U)
-/*! cor_timeout_intr - cor_timeout_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! cor_timeout_intr - cor_timeout_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_COR_TIMEOUT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_COR_TIMEOUT_INTR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_COR_TIMEOUT_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_SYNC_PULSE_TIMEOUT_INTR_MASK (0x20U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_SYNC_PULSE_TIMEOUT_INTR_SHIFT (5U)
-/*! rx_sync_pulse_timeout_intr - rx_sync_pulse_timeout_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_sync_pulse_timeout_intr - rx_sync_pulse_timeout_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_SYNC_PULSE_TIMEOUT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_RX_SYNC_PULSE_TIMEOUT_INTR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_RX_SYNC_PULSE_TIMEOUT_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_DATAVLD_TIMEOUT_INTR_MASK (0x40U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_DATAVLD_TIMEOUT_INTR_SHIFT (6U)
-/*! rx_datavld_timeout_intr - rx_datavld_timeout_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_datavld_timeout_intr - rx_datavld_timeout_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_DATAVLD_TIMEOUT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_RX_DATAVLD_TIMEOUT_INTR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_RX_DATAVLD_TIMEOUT_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_TX_EXTN_ANT_SWITCH_FAIL_INTR_MASK (0x100U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_TX_EXTN_ANT_SWITCH_FAIL_INTR_SHIFT (8U)
-/*! tx_extn_ant_switch_fail_intr - tx_extn_ant_switch_fail_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! tx_extn_ant_switch_fail_intr - tx_extn_ant_switch_fail_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_TX_EXTN_ANT_SWITCH_FAIL_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_TX_EXTN_ANT_SWITCH_FAIL_INTR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_TX_EXTN_ANT_SWITCH_FAIL_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_TX_EXTN_ABORT_INTR_MASK (0x200U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_TX_EXTN_ABORT_INTR_SHIFT (9U)
-/*! tx_extn_abort_intr - tx_extn_abort_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! tx_extn_abort_intr - tx_extn_abort_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_TX_EXTN_ABORT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_TX_EXTN_ABORT_INTR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_TX_EXTN_ABORT_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_EXTN_ANT_SWITCH_FAIL_INTR_MASK (0x400U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_EXTN_ANT_SWITCH_FAIL_INTR_SHIFT (10U)
-/*! rx_extn_ant_switch_fail_intr - rx_extn_ant_switch_fail_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_extn_ant_switch_fail_intr - rx_extn_ant_switch_fail_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_EXTN_ANT_SWITCH_FAIL_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_RX_EXTN_ANT_SWITCH_FAIL_INTR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_RX_EXTN_ANT_SWITCH_FAIL_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_EXTN_ABORT_INTR_MASK (0x800U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_EXTN_ABORT_INTR_SHIFT (11U)
-/*! rx_extn_abort_intr - rx_extn_abort_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_extn_abort_intr - rx_extn_abort_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_EXTN_ABORT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_RX_EXTN_ABORT_INTR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_RX_EXTN_ABORT_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_TX_LOCK_FAIL_INTR_MASK (0x10000U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_TX_LOCK_FAIL_INTR_SHIFT (16U)
-/*! tx_lock_fail_intr - tx_lock_fail_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! tx_lock_fail_intr - tx_lock_fail_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_TX_LOCK_FAIL_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_TX_LOCK_FAIL_INTR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_TX_LOCK_FAIL_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_TX_DMEM_UNDERFLOW_INTR_MASK (0x20000U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_TX_DMEM_UNDERFLOW_INTR_SHIFT (17U)
-/*! tx_dmem_underflow_intr - tx_dmem_underflow_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! tx_dmem_underflow_intr - tx_dmem_underflow_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_TX_DMEM_UNDERFLOW_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_TX_DMEM_UNDERFLOW_INTR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_TX_DMEM_UNDERFLOW_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_TX_AES_UNDERFLOW_INTR_MASK (0x40000U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_TX_AES_UNDERFLOW_INTR_SHIFT (18U)
-/*! tx_aes_underflow_intr - tx_aes_underflow_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! tx_aes_underflow_intr - tx_aes_underflow_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_TX_AES_UNDERFLOW_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_TX_AES_UNDERFLOW_INTR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_TX_AES_UNDERFLOW_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_LOCK_FAIL_INTR_MASK (0x100000U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_LOCK_FAIL_INTR_SHIFT (20U)
-/*! rx_lock_fail_intr - rx_lock_fail_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_lock_fail_intr - rx_lock_fail_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_LOCK_FAIL_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_RX_LOCK_FAIL_INTR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_RX_LOCK_FAIL_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_DMEM_OVERFLOW_INTR_MASK (0x200000U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_DMEM_OVERFLOW_INTR_SHIFT (21U)
-/*! rx_dmem_overflow_intr - rx_dmem_overflow_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_dmem_overflow_intr - rx_dmem_overflow_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_DMEM_OVERFLOW_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_RX_DMEM_OVERFLOW_INTR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_RX_DMEM_OVERFLOW_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_AES_UNDERFLOW_INTR_MASK (0x400000U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_AES_UNDERFLOW_INTR_SHIFT (22U)
-/*! rx_aes_underflow_intr - rx_aes_underflow_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_aes_underflow_intr - rx_aes_underflow_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_AES_UNDERFLOW_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_RX_AES_UNDERFLOW_INTR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_RX_AES_UNDERFLOW_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_LENGTH_ERR_INTR_MASK (0x800000U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_LENGTH_ERR_INTR_SHIFT (23U)
-/*! rx_length_err_intr - rx_length_err_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! rx_length_err_intr - rx_length_err_intr interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_RX_LENGTH_ERR_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_RX_LENGTH_ERR_INTR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_RX_LENGTH_ERR_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_AHB_ERROR_MASK (0x1000000U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_AHB_ERROR_SHIFT (24U)
-/*! ahb_error - ahb_error interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! ahb_error - ahb_error interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_AHB_ERROR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_AHB_ERROR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_AHB_ERROR_MASK)
 
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_DMA_ERROR_MASK (0x2000000U)
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_DMA_ERROR_SHIFT (25U)
-/*! dma_error - dma_error interrupt, 0x0: disable interrupt, 0x1: enable interrupt
- *  0b0..disable interrupt
- *  0b1..enable interrupt
- */
+/*! dma_error - dma_error interrupt, 0x0: disable interrupt, 0x1: enable interrupt */
 #define BLE2_REG_BLE_REG_RT_ERR_MASK_DMA_ERROR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_MASK_DMA_ERROR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_MASK_DMA_ERROR_MASK)
 /*! @} */
 
@@ -2823,21 +2220,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_INT_STS_0_RT_ERR_INTR_SHIFT (0U)
 /*! rt_err_intr - rt_err_intr interrupt, At least 1 of the real-time error events has been asserted. Read BLE_REG_RT_ERR_STS for details. */
 #define BLE2_REG_BLE_REG_INT_STS_0_RT_ERR_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_0_RT_ERR_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_0_RT_ERR_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_INT_STS_0_PST_2_INTR_MASK (0x8U)
-#define BLE2_REG_BLE_REG_INT_STS_0_PST_2_INTR_SHIFT (3U)
-/*! pst_2_intr - Periodic SW Timer 2 interrupt */
-#define BLE2_REG_BLE_REG_INT_STS_0_PST_2_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_0_PST_2_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_0_PST_2_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_INT_STS_0_PST_1_INTR_MASK (0x10U)
-#define BLE2_REG_BLE_REG_INT_STS_0_PST_1_INTR_SHIFT (4U)
-/*! pst_1_intr - Periodic SW Timer 1 interrupt */
-#define BLE2_REG_BLE_REG_INT_STS_0_PST_1_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_0_PST_1_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_0_PST_1_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_INT_STS_0_PST_0_INTR_MASK (0x20U)
-#define BLE2_REG_BLE_REG_INT_STS_0_PST_0_INTR_SHIFT (5U)
-/*! pst_0_intr - Periodic SW Timer 0 interrupt */
-#define BLE2_REG_BLE_REG_INT_STS_0_PST_0_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_0_PST_0_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_0_PST_0_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_STS_0_CDT_EXPIRY_INTR_5_MASK (0x40U)
 #define BLE2_REG_BLE_REG_INT_STS_0_CDT_EXPIRY_INTR_5_SHIFT (6U)
@@ -2973,21 +2355,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_INT_STS_1_RT_ERR_INTR_SHIFT (0U)
 /*! rt_err_intr - rt_err_intr interrupt, At least 1 of the real-time error events has been asserted. Read BLE_REG_RT_ERR_STS for details. */
 #define BLE2_REG_BLE_REG_INT_STS_1_RT_ERR_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_1_RT_ERR_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_1_RT_ERR_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_INT_STS_1_PST_2_INTR_MASK (0x8U)
-#define BLE2_REG_BLE_REG_INT_STS_1_PST_2_INTR_SHIFT (3U)
-/*! pst_2_intr - Periodic SW Timer 2 interrupt */
-#define BLE2_REG_BLE_REG_INT_STS_1_PST_2_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_1_PST_2_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_1_PST_2_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_INT_STS_1_PST_1_INTR_MASK (0x10U)
-#define BLE2_REG_BLE_REG_INT_STS_1_PST_1_INTR_SHIFT (4U)
-/*! pst_1_intr - Periodic SW Timer 1 interrupt */
-#define BLE2_REG_BLE_REG_INT_STS_1_PST_1_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_1_PST_1_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_1_PST_1_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_INT_STS_1_PST_0_INTR_MASK (0x20U)
-#define BLE2_REG_BLE_REG_INT_STS_1_PST_0_INTR_SHIFT (5U)
-/*! pst_0_intr - Periodic SW Timer 0 interrupt */
-#define BLE2_REG_BLE_REG_INT_STS_1_PST_0_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_1_PST_0_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_1_PST_0_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_STS_1_CDT_EXPIRY_INTR_5_MASK (0x40U)
 #define BLE2_REG_BLE_REG_INT_STS_1_CDT_EXPIRY_INTR_5_SHIFT (6U)
@@ -3136,28 +2503,13 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_INT_STS_2_MWS_FRAME_SYNC_REAL_INT_MASK (0x10000U)
 #define BLE2_REG_BLE_REG_INT_STS_2_MWS_FRAME_SYNC_REAL_INT_SHIFT (16U)
-/*! MWS_Frame_Sync_Real_Int - MWS Frame Sync Interrupt */
-#define BLE2_REG_BLE_REG_INT_STS_2_MWS_FRAME_SYNC_REAL_INT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_2_MWS_FRAME_SYNC_REAL_INT_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_2_MWS_FRAME_SYNC_REAL_INT_MASK)
-
-#define BLE2_REG_BLE_REG_INT_STS_2_MWS_FRAME_SYNC_REAL_INT_MASK (0x10000U)
-#define BLE2_REG_BLE_REG_INT_STS_2_MWS_FRAME_SYNC_REAL_INT_SHIFT (16U)
 /*! mws_frame_sync_real_int - MWS Frame Sync Interrupt */
 #define BLE2_REG_BLE_REG_INT_STS_2_MWS_FRAME_SYNC_REAL_INT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_2_MWS_FRAME_SYNC_REAL_INT_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_2_MWS_FRAME_SYNC_REAL_INT_MASK)
 
 #define BLE2_REG_BLE_REG_INT_STS_2_MWS_PATTERN_REAL_INT_MASK (0x20000U)
 #define BLE2_REG_BLE_REG_INT_STS_2_MWS_PATTERN_REAL_INT_SHIFT (17U)
-/*! MWS_Pattern_Real_Int - MWS Pattern Interrupt */
-#define BLE2_REG_BLE_REG_INT_STS_2_MWS_PATTERN_REAL_INT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_2_MWS_PATTERN_REAL_INT_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_2_MWS_PATTERN_REAL_INT_MASK)
-
-#define BLE2_REG_BLE_REG_INT_STS_2_MWS_PATTERN_REAL_INT_MASK (0x20000U)
-#define BLE2_REG_BLE_REG_INT_STS_2_MWS_PATTERN_REAL_INT_SHIFT (17U)
 /*! mws_pattern_real_int - MWS Pattern Interrupt */
 #define BLE2_REG_BLE_REG_INT_STS_2_MWS_PATTERN_REAL_INT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_2_MWS_PATTERN_REAL_INT_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_2_MWS_PATTERN_REAL_INT_MASK)
-
-#define BLE2_REG_BLE_REG_INT_STS_2_FRAME_SYNC_UPDATE_REAL_INT_MASK (0x40000U)
-#define BLE2_REG_BLE_REG_INT_STS_2_FRAME_SYNC_UPDATE_REAL_INT_SHIFT (18U)
-/*! Frame_Sync_Update_Real_Int - MWS Frame Sync Update Interrupt */
-#define BLE2_REG_BLE_REG_INT_STS_2_FRAME_SYNC_UPDATE_REAL_INT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_2_FRAME_SYNC_UPDATE_REAL_INT_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_2_FRAME_SYNC_UPDATE_REAL_INT_MASK)
 
 #define BLE2_REG_BLE_REG_INT_STS_2_FRAME_SYNC_UPDATE_REAL_INT_MASK (0x40000U)
 #define BLE2_REG_BLE_REG_INT_STS_2_FRAME_SYNC_UPDATE_REAL_INT_SHIFT (18U)
@@ -3169,18 +2521,8 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_INT_STS_2_HARQ_PATTERN_SEL_REAL_INT_MASK (0x80000U)
 #define BLE2_REG_BLE_REG_INT_STS_2_HARQ_PATTERN_SEL_REAL_INT_SHIFT (19U)
-/*! HARQ_Pattern_Sel_Real_Int - HARQ Pattern Sel Interrupt */
-#define BLE2_REG_BLE_REG_INT_STS_2_HARQ_PATTERN_SEL_REAL_INT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_2_HARQ_PATTERN_SEL_REAL_INT_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_2_HARQ_PATTERN_SEL_REAL_INT_MASK)
-
-#define BLE2_REG_BLE_REG_INT_STS_2_HARQ_PATTERN_SEL_REAL_INT_MASK (0x80000U)
-#define BLE2_REG_BLE_REG_INT_STS_2_HARQ_PATTERN_SEL_REAL_INT_SHIFT (19U)
 /*! harq_pattern_sel_real_int - HARQ Pattern Sel Interrupt */
 #define BLE2_REG_BLE_REG_INT_STS_2_HARQ_PATTERN_SEL_REAL_INT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_2_HARQ_PATTERN_SEL_REAL_INT_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_2_HARQ_PATTERN_SEL_REAL_INT_MASK)
-
-#define BLE2_REG_BLE_REG_INT_STS_2_MWS_SCAN_FREQUENCY_REAL_INT_MASK (0x100000U)
-#define BLE2_REG_BLE_REG_INT_STS_2_MWS_SCAN_FREQUENCY_REAL_INT_SHIFT (20U)
-/*! MWS_Scan_Frequency_Real_Int - MWS Scan Frequency Interrupt */
-#define BLE2_REG_BLE_REG_INT_STS_2_MWS_SCAN_FREQUENCY_REAL_INT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_2_MWS_SCAN_FREQUENCY_REAL_INT_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_2_MWS_SCAN_FREQUENCY_REAL_INT_MASK)
 
 #define BLE2_REG_BLE_REG_INT_STS_2_MWS_SCAN_FREQUENCY_REAL_INT_MASK (0x100000U)
 #define BLE2_REG_BLE_REG_INT_STS_2_MWS_SCAN_FREQUENCY_REAL_INT_SHIFT (20U)
@@ -3189,16 +2531,11 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_INT_STS_2_MWS_INACT_MSG_REAL_INT_MASK (0x200000U)
 #define BLE2_REG_BLE_REG_INT_STS_2_MWS_INACT_MSG_REAL_INT_SHIFT (21U)
-/*! MWS_Inact_Msg_Real_Int - MWS_Inactivity_Message Interrupt */
-#define BLE2_REG_BLE_REG_INT_STS_2_MWS_INACT_MSG_REAL_INT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_2_MWS_INACT_MSG_REAL_INT_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_2_MWS_INACT_MSG_REAL_INT_MASK)
-
-#define BLE2_REG_BLE_REG_INT_STS_2_MWS_INACT_MSG_REAL_INT_MASK (0x200000U)
-#define BLE2_REG_BLE_REG_INT_STS_2_MWS_INACT_MSG_REAL_INT_SHIFT (21U)
 /*! mws_inact_msg_real_int - MWS_Inactivity_Message Interrupt, Asserted when a new MWS_Inact_Msg[4:0] value is received from BCA. */
 #define BLE2_REG_BLE_REG_INT_STS_2_MWS_INACT_MSG_REAL_INT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_STS_2_MWS_INACT_MSG_REAL_INT_SHIFT)) & BLE2_REG_BLE_REG_INT_STS_2_MWS_INACT_MSG_REAL_INT_MASK)
 /*! @} */
 
-/*! @name BLE_REG_HW_ABORT_STS - BLE Interrupt Status, hardware Abort */
+/*! @name BLE_REG_HW_ABORT_STS - BLE Interrupt Status; hardware Abort */
 /*! @{ */
 
 #define BLE2_REG_BLE_REG_HW_ABORT_STS_BLE_DENY_STS_MASK (0x1U)
@@ -3271,7 +2608,7 @@ typedef struct {
 #define BLE2_REG_BLE_REG_HW_ABORT_STS_BLE_CCA_TXPKT_THD_MET_STS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_HW_ABORT_STS_BLE_CCA_TXPKT_THD_MET_STS_SHIFT)) & BLE2_REG_BLE_REG_HW_ABORT_STS_BLE_CCA_TXPKT_THD_MET_STS_MASK)
 /*! @} */
 
-/*! @name BLE_REG_RT_ERR_STS - BLE Interrupt Status, Real-time Error */
+/*! @name BLE_REG_RT_ERR_STS - BLE Interrupt Status; Real-time Error */
 /*! @{ */
 
 #define BLE2_REG_BLE_REG_RT_ERR_STS_BLE_CUTOFF_INTR_MASK (0x2U)
@@ -3378,231 +2715,147 @@ typedef struct {
 #define BLE2_REG_BLE_REG_RT_ERR_STS_DMA_ERROR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_RT_ERR_STS_DMA_ERROR_SHIFT)) & BLE2_REG_BLE_REG_RT_ERR_STS_DMA_ERROR_MASK)
 /*! @} */
 
-/*! @name BLE_REG_INT_CFG_01 - BLE Interrupt Configuration */
+/*! @name BLE_REG_INT_CFG_01 - BLE Interrupt Configuration, Used to route individual interrupt source to either BLE_REG_INT_STS_0 or BLE_REG_INT_STS_1. */
 /*! @{ */
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_RT_ERR_INTR_MASK (0x1U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_RT_ERR_INTR_SHIFT (0U)
-/*! rt_err_intr - rt_err_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! rt_err_intr - rt_err_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_RT_ERR_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_RT_ERR_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_RT_ERR_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_PST_2_INTR_MASK (0x8U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_PST_2_INTR_SHIFT (3U)
-/*! pst_2_intr - pst_2_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! pst_2_intr - pst_2_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_PST_2_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_PST_2_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_PST_2_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_PST_1_INTR_MASK (0x10U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_PST_1_INTR_SHIFT (4U)
-/*! pst_1_intr - pst_1_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! pst_1_intr - pst_1_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_PST_1_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_PST_1_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_PST_1_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_PST_0_INTR_MASK (0x20U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_PST_0_INTR_SHIFT (5U)
-/*! pst_0_intr - pst_0_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! pst_0_intr - pst_0_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_PST_0_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_PST_0_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_PST_0_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_5_MASK (0x40U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_5_SHIFT (6U)
-/*! cdt_expiry_intr_5 - cdt_expiry_intr[5] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! cdt_expiry_intr_5 - cdt_expiry_intr[5] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_5(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_5_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_5_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_4_MASK (0x80U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_4_SHIFT (7U)
-/*! cdt_expiry_intr_4 - cdt_expiry_intr[4] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! cdt_expiry_intr_4 - cdt_expiry_intr[4] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_4(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_4_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_4_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_3_MASK (0x100U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_3_SHIFT (8U)
-/*! cdt_expiry_intr_3 - cdt_expiry_intr[3] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! cdt_expiry_intr_3 - cdt_expiry_intr[3] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_3(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_3_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_3_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_2_MASK (0x200U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_2_SHIFT (9U)
-/*! cdt_expiry_intr_2 - cdt_expiry_intr[2] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! cdt_expiry_intr_2 - cdt_expiry_intr[2] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_2(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_2_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_2_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_1_MASK (0x400U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_1_SHIFT (10U)
-/*! cdt_expiry_intr_1 - cdt_expiry_intr[1] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! cdt_expiry_intr_1 - cdt_expiry_intr[1] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_1(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_1_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_1_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_0_MASK (0x800U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_0_SHIFT (11U)
-/*! cdt_expiry_intr_0 - cdt_expiry_intr[0] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! cdt_expiry_intr_0 - cdt_expiry_intr[0] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_0(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_0_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_CDT_EXPIRY_INTR_0_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_3_MASK (0x1000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_3_SHIFT (12U)
-/*! expiry_intr_3 - expiry_intr[3] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! expiry_intr_3 - expiry_intr[3] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_3(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_3_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_3_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_2_MASK (0x2000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_2_SHIFT (13U)
-/*! expiry_intr_2 - expiry_intr[2] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! expiry_intr_2 - expiry_intr[2] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_2(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_2_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_2_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_1_MASK (0x4000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_1_SHIFT (14U)
-/*! expiry_intr_1 - expiry_intr[1] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! expiry_intr_1 - expiry_intr[1] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_1(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_1_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_1_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_0_MASK (0x8000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_0_SHIFT (15U)
-/*! expiry_intr_0 - expiry_intr[0] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! expiry_intr_0 - expiry_intr[0] interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_0(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_0_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_EXPIRY_INTR_0_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_TMR_ABORT_INTR_MASK (0x10000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_TMR_ABORT_INTR_SHIFT (16U)
-/*! tmr_abort_intr - tmr_abort_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! tmr_abort_intr - tmr_abort_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_TMR_ABORT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_TMR_ABORT_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_TMR_ABORT_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_HW_ABORT_INTR_MASK (0x20000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_HW_ABORT_INTR_SHIFT (17U)
-/*! hw_abort_intr - hw_abort_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! hw_abort_intr - hw_abort_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_HW_ABORT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_HW_ABORT_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_HW_ABORT_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_SW_ABORT_INTR_MASK (0x40000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_SW_ABORT_INTR_SHIFT (18U)
-/*! sw_abort_intr - sw_abort_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! sw_abort_intr - sw_abort_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_SW_ABORT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_SW_ABORT_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_SW_ABORT_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_RX_PKT_DONE_INTR_MASK (0x200000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_RX_PKT_DONE_INTR_SHIFT (21U)
-/*! rx_pkt_done_intr - rx_pkt_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! rx_pkt_done_intr - rx_pkt_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_RX_PKT_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_RX_PKT_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_RX_PKT_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_RX_DATA_DONE_INTR_MASK (0x400000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_RX_DATA_DONE_INTR_SHIFT (22U)
-/*! rx_data_done_intr - rx_data_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! rx_data_done_intr - rx_data_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_RX_DATA_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_RX_DATA_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_RX_DATA_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_RX_ADV_EXT_HEADER_DONE_INTR_MASK (0x800000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_RX_ADV_EXT_HEADER_DONE_INTR_SHIFT (23U)
-/*! rx_adv_ext_header_done_intr - rx_adv_ext_header_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! rx_adv_ext_header_done_intr - rx_adv_ext_header_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_RX_ADV_EXT_HEADER_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_RX_ADV_EXT_HEADER_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_RX_ADV_EXT_HEADER_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_IRK_RESOLVE_DONE_INTR_MASK (0x1000000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_IRK_RESOLVE_DONE_INTR_SHIFT (24U)
-/*! irk_resolve_done_intr - irk_resolve_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! irk_resolve_done_intr - irk_resolve_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_IRK_RESOLVE_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_IRK_RESOLVE_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_IRK_RESOLVE_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_RX_ADV_ADDR_DONE_INTR_MASK (0x2000000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_RX_ADV_ADDR_DONE_INTR_SHIFT (25U)
-/*! rx_adv_addr_done_intr - rx_adv_addr_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! rx_adv_addr_done_intr - rx_adv_addr_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_RX_ADV_ADDR_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_RX_ADV_ADDR_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_RX_ADV_ADDR_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_RX_HDR_DONE_INTR_MASK (0x4000000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_RX_HDR_DONE_INTR_SHIFT (26U)
-/*! rx_hdr_done_intr - rx_hdr_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! rx_hdr_done_intr - rx_hdr_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_RX_HDR_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_RX_HDR_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_RX_HDR_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_COR_HIT_INTR_MASK (0x8000000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_COR_HIT_INTR_SHIFT (27U)
-/*! cor_hit_intr - cor_hit_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! cor_hit_intr - cor_hit_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_COR_HIT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_COR_HIT_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_COR_HIT_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_TX_PKT_DONE_INTR_MASK (0x10000000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_TX_PKT_DONE_INTR_SHIFT (28U)
-/*! tx_pkt_done_intr - tx_pkt_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! tx_pkt_done_intr - tx_pkt_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_TX_PKT_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_TX_PKT_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_TX_PKT_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_TX_DATA_DONE_INTR_MASK (0x20000000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_TX_DATA_DONE_INTR_SHIFT (29U)
-/*! tx_data_done_intr - tx_data_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! tx_data_done_intr - tx_data_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_TX_DATA_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_TX_DATA_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_TX_DATA_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_TX_HDR_DONE_INTR_MASK (0x40000000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_TX_HDR_DONE_INTR_SHIFT (30U)
-/*! tx_hdr_done_intr - tx_hdr_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! tx_hdr_done_intr - tx_hdr_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_TX_HDR_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_TX_HDR_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_TX_HDR_DONE_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_INT_CFG_01_TX_ACC_DONE_INTR_MASK (0x80000000U)
 #define BLE2_REG_BLE_REG_INT_CFG_01_TX_ACC_DONE_INTR_SHIFT (31U)
-/*! tx_acc_done_intr - tx_acc_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1
- *  0b0..route to BLE_REG_INT_STS_0
- *  0b1..route to BLE_REG_INT_STS_1
- */
+/*! tx_acc_done_intr - tx_acc_done_intr interrupt configuration, 0x0: route to BLE_REG_INT_STS_0, 0x1: route to BLE_REG_INT_STS_1 */
 #define BLE2_REG_BLE_REG_INT_CFG_01_TX_ACC_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_CFG_01_TX_ACC_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_CFG_01_TX_ACC_DONE_INTR_MASK)
 /*! @} */
 
@@ -3613,8 +2866,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_INT_DELAY_CTRL_01_RX_PKT_DONE_INTR_SHIFT (21U)
 /*! rx_pkt_done_intr - delay rx_pkt_done_intr interrupt assertion, 0x0: no delay, 0x1: delay
  *    interrupt assertion until DMA is done writing timestamp and status fields, into RD.
- *  0b0..no delay
- *  0b1..delay interrupt assertion until DMA is done writing timestamp and status fields into RD.
  */
 #define BLE2_REG_BLE_REG_INT_DELAY_CTRL_01_RX_PKT_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_DELAY_CTRL_01_RX_PKT_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_DELAY_CTRL_01_RX_PKT_DONE_INTR_MASK)
 
@@ -3622,8 +2873,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_INT_DELAY_CTRL_01_TX_PKT_DONE_INTR_SHIFT (28U)
 /*! tx_pkt_done_intr - delay tx_pkt_done_intr interrupt assertion, 0x0: no delay, 0x1: delay
  *    interrupt assertion until DMA is done writing timestamp and status fields, into TD.
- *  0b0..no delay
- *  0b1..delay interrupt assertion until DMA is done writing timestamp and status fields into TD.
  */
 #define BLE2_REG_BLE_REG_INT_DELAY_CTRL_01_TX_PKT_DONE_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_INT_DELAY_CTRL_01_TX_PKT_DONE_INTR_SHIFT)) & BLE2_REG_BLE_REG_INT_DELAY_CTRL_01_TX_PKT_DONE_INTR_MASK)
 /*! @} */
@@ -3644,18 +2893,13 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_0_TIMER_EN_MASK (0x1U)
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_0_TIMER_EN_SHIFT (0U)
-/*! timer_en - Set Timer Enable, This bit is self clearing by hardware after timer expires., 0x0: disable timer, 0x1: enable timer
- *  0b0..disable timer
- *  0b1..enable timer
- */
+/*! timer_en - Set Timer Enable, This bit is self clearing by hardware after timer expires., 0x0: disable timer, 0x1: enable timer */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_0_TIMER_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_0_TIMER_EN_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_0_TIMER_EN_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_TX_MASK (0x2U)
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_TX_SHIFT (1U)
 /*! expiry_emask_tx - Event Mask: Tx, Expiration Event Mask for triggering an Tx transaction., 0x0:
  *    no event, 0x1: Tx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Tx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_TX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_TX_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_TX_MASK)
 
@@ -3663,25 +2907,17 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_RX_SHIFT (2U)
 /*! expiry_emask_rx - Event Mask: Rx, Expiration Event Mask for triggering an Rx transaction., 0x0:
  *    no event, 0x1: Rx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Rx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_RX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_RX_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_RX_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_INTR_MASK (0x8U)
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_INTR_SHIFT (3U)
-/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer
- *  0b0..no event
- *  0b1..interrupt triggered at expiry of timer
- */
+/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_INTR_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_ABORT_MASK (0x10U)
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_ABORT_SHIFT (4U)
-/*! expiry_emask_abort - Event Mask: Abort, Expiration Event Mask for Abort, 0x0: no event, 0x1: Tx/Rx abort triggered at expiry of timer
- *  0b0..no event
- *  0b1..Tx/Rx abort triggered at expiry of timer
- */
+/*! expiry_emask_abort - Event Mask: Abort, Expiration Event Mask for Abort, 0x0: no event, 0x1: Tx/Rx abort triggered at expiry of timer */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_ABORT_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_ABORT_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_0_EXPIRY_EMASK_CS_MASK (0x20U)
@@ -3697,10 +2933,6 @@ typedef struct {
  *    are cleared; then the events will assert regardless of the matching state of the LSB bits.,
  *    frame,0x0: timer works on frame basis, 0x1: invalid, slot,0x2: timer works on slot basis,
  *    halfslot,0x3: timer works on half slot basis
- *  0b00..timer works on frame basis
- *  0b01..invalid
- *  0b10..timer works on slot basis
- *  0b11..timer works on half slot basis
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_0_SLOT_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_0_SLOT_MASK_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_0_SLOT_MASK_MASK)
 
@@ -3738,8 +2970,6 @@ typedef struct {
  *    this SWT expires again. For the purpose of this register; past value on SWT refers to a value
  *    up to 12 hours before the current BTC native clock value., 0x0: SWT expired at programmed
  *    value without any errors, 0x1: SWT was programmed for a value that is in the past
- *  0b0..SWT expired at programmed value without any errors
- *  0b1..SWT was programmed for a value that is in the past
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_STS_0_EXPIRY_STATUS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_STS_0_EXPIRY_STATUS_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_STS_0_EXPIRY_STATUS_MASK)
 
@@ -3751,8 +2981,6 @@ typedef struct {
  *    be updated with the most accurate value., 0x0: SWT expired at programmed value without any
  *    skipping error, 0x1: Current timer expiry is due to clock skipping over the programmed expiration,
  *    value
- *  0b0..SWT expired at programmed value without any skipping error
- *  0b1..Current timer expiry is due to clock skipping over the programmed expiration value
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_STS_0_SKIP_STATUS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_STS_0_SKIP_STATUS_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_STS_0_SKIP_STATUS_MASK)
 
@@ -3772,18 +3000,13 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_1_TIMER_EN_MASK (0x1U)
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_1_TIMER_EN_SHIFT (0U)
-/*! timer_en - Set Timer Enable, This bit is self clearing by hardware after timer expires., 0x0: disable timer, 0x1: enable timer
- *  0b0..disable timer
- *  0b1..enable timer
- */
+/*! timer_en - Set Timer Enable, This bit is self clearing by hardware after timer expires., 0x0: disable timer, 0x1: enable timer */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_1_TIMER_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_1_TIMER_EN_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_1_TIMER_EN_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_TX_MASK (0x2U)
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_TX_SHIFT (1U)
 /*! expiry_emask_tx - Event Mask: Tx, Expiration Event Mask for triggering an Tx transaction., 0x0:
  *    no event, 0x1: Tx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Tx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_TX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_TX_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_TX_MASK)
 
@@ -3791,25 +3014,17 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_RX_SHIFT (2U)
 /*! expiry_emask_rx - Event Mask: Rx, Expiration Event Mask for triggering an Rx transaction., 0x0:
  *    no event, 0x1: Rx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Rx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_RX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_RX_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_RX_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_INTR_MASK (0x8U)
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_INTR_SHIFT (3U)
-/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer
- *  0b0..no event
- *  0b1..interrupt triggered at expiry of timer
- */
+/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_INTR_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_ABORT_MASK (0x10U)
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_ABORT_SHIFT (4U)
-/*! expiry_emask_abort - Event Mask: Abort, Expiration Event Mask for Abort, 0x0: no event, 0x1: Tx/Rx abort triggered at expiry of timer
- *  0b0..no event
- *  0b1..Tx/Rx abort triggered at expiry of timer
- */
+/*! expiry_emask_abort - Event Mask: Abort, Expiration Event Mask for Abort, 0x0: no event, 0x1: Tx/Rx abort triggered at expiry of timer */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_ABORT_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_ABORT_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_1_EXPIRY_EMASK_CS_MASK (0x20U)
@@ -3825,10 +3040,6 @@ typedef struct {
  *    are cleared; then the events will assert regardless of the matching state of the LSB bits.,
  *    frame,0x0: timer works on frame basis, 0x1: invalid, slot,0x2: timer works on slot basis,
  *    halfslot,0x3: timer works on half slot basis
- *  0b00..timer works on frame basis
- *  0b01..invalid
- *  0b10..timer works on slot basis
- *  0b11..timer works on half slot basis
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_1_SLOT_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_1_SLOT_MASK_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_1_SLOT_MASK_MASK)
 
@@ -3866,8 +3077,6 @@ typedef struct {
  *    this SWT expires again. For the purpose of this register; past value on SWT refers to a value
  *    up to 12 hours before the current BTC native clock value., 0x0: SWT expired at programmed
  *    value without any errors, 0x1: SWT was programmed for a value that is in the past
- *  0b0..SWT expired at programmed value without any errors
- *  0b1..SWT was programmed for a value that is in the past
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_STS_1_EXPIRY_STATUS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_STS_1_EXPIRY_STATUS_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_STS_1_EXPIRY_STATUS_MASK)
 
@@ -3879,8 +3088,6 @@ typedef struct {
  *    be updated with the most accurate value., 0x0: SWT expired at programmed value without any
  *    skipping error, 0x1: Current timer expiry is due to clock skipping over the programmed expiration,
  *    value
- *  0b0..SWT expired at programmed value without any skipping error
- *  0b1..Current timer expiry is due to clock skipping over the programmed expiration value
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_STS_1_SKIP_STATUS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_STS_1_SKIP_STATUS_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_STS_1_SKIP_STATUS_MASK)
 
@@ -3900,18 +3107,13 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_2_TIMER_EN_MASK (0x1U)
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_2_TIMER_EN_SHIFT (0U)
-/*! timer_en - Set Timer Enable, This bit is self clearing by hardware after timer expires., 0x0: disable timer, 0x1: enable timer
- *  0b0..disable timer
- *  0b1..enable timer
- */
+/*! timer_en - Set Timer Enable, This bit is self clearing by hardware after timer expires., 0x0: disable timer, 0x1: enable timer */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_2_TIMER_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_2_TIMER_EN_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_2_TIMER_EN_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_TX_MASK (0x2U)
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_TX_SHIFT (1U)
 /*! expiry_emask_tx - Event Mask: Tx, Expiration Event Mask for triggering an Tx transaction., 0x0:
  *    no event, 0x1: Tx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Tx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_TX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_TX_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_TX_MASK)
 
@@ -3919,25 +3121,17 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_RX_SHIFT (2U)
 /*! expiry_emask_rx - Event Mask: Rx, Expiration Event Mask for triggering an Rx transaction., 0x0:
  *    no event, 0x1: Rx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Rx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_RX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_RX_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_RX_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_INTR_MASK (0x8U)
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_INTR_SHIFT (3U)
-/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer
- *  0b0..no event
- *  0b1..interrupt triggered at expiry of timer
- */
+/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_INTR_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_ABORT_MASK (0x10U)
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_ABORT_SHIFT (4U)
-/*! expiry_emask_abort - Event Mask: Abort, Expiration Event Mask for Abort, 0x0: no event, 0x1: Tx/Rx abort triggered at expiry of timer
- *  0b0..no event
- *  0b1..Tx/Rx abort triggered at expiry of timer
- */
+/*! expiry_emask_abort - Event Mask: Abort, Expiration Event Mask for Abort, 0x0: no event, 0x1: Tx/Rx abort triggered at expiry of timer */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_ABORT_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_ABORT_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_2_EXPIRY_EMASK_CS_MASK (0x20U)
@@ -3953,10 +3147,6 @@ typedef struct {
  *    are cleared; then the events will assert regardless of the matching state of the LSB bits.,
  *    frame,0x0: timer works on frame basis, 0x1: invalid, slot,0x2: timer works on slot basis,
  *    halfslot,0x3: timer works on half slot basis
- *  0b00..timer works on frame basis
- *  0b01..invalid
- *  0b10..timer works on slot basis
- *  0b11..timer works on half slot basis
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_2_SLOT_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_2_SLOT_MASK_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_2_SLOT_MASK_MASK)
 
@@ -3994,8 +3184,6 @@ typedef struct {
  *    this SWT expires again. For the purpose of this register; past value on SWT refers to a value
  *    up to 12 hours before the current BTC native clock value., 0x0: SWT expired at programmed
  *    value without any errors, 0x1: SWT was programmed for a value that is in the past
- *  0b0..SWT expired at programmed value without any errors
- *  0b1..SWT was programmed for a value that is in the past
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_STS_2_EXPIRY_STATUS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_STS_2_EXPIRY_STATUS_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_STS_2_EXPIRY_STATUS_MASK)
 
@@ -4007,8 +3195,6 @@ typedef struct {
  *    be updated with the most accurate value., 0x0: SWT expired at programmed value without any
  *    skipping error, 0x1: Current timer expiry is due to clock skipping over the programmed expiration,
  *    value
- *  0b0..SWT expired at programmed value without any skipping error
- *  0b1..Current timer expiry is due to clock skipping over the programmed expiration value
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_STS_2_SKIP_STATUS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_STS_2_SKIP_STATUS_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_STS_2_SKIP_STATUS_MASK)
 
@@ -4028,18 +3214,13 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_3_TIMER_EN_MASK (0x1U)
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_3_TIMER_EN_SHIFT (0U)
-/*! timer_en - Set Timer Enable, This bit is self clearing by hardware after timer expires., 0x0: disable timer, 0x1: enable timer
- *  0b0..disable timer
- *  0b1..enable timer
- */
+/*! timer_en - Set Timer Enable, This bit is self clearing by hardware after timer expires., 0x0: disable timer, 0x1: enable timer */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_3_TIMER_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_3_TIMER_EN_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_3_TIMER_EN_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_TX_MASK (0x2U)
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_TX_SHIFT (1U)
 /*! expiry_emask_tx - Event Mask: Tx, Expiration Event Mask for triggering an Tx transaction., 0x0:
  *    no event, 0x1: Tx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Tx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_TX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_TX_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_TX_MASK)
 
@@ -4047,25 +3228,17 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_RX_SHIFT (2U)
 /*! expiry_emask_rx - Event Mask: Rx, Expiration Event Mask for triggering an Rx transaction., 0x0:
  *    no event, 0x1: Rx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Rx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_RX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_RX_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_RX_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_INTR_MASK (0x8U)
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_INTR_SHIFT (3U)
-/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer
- *  0b0..no event
- *  0b1..interrupt triggered at expiry of timer
- */
+/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_INTR_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_ABORT_MASK (0x10U)
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_ABORT_SHIFT (4U)
-/*! expiry_emask_abort - Event Mask: Abort, Expiration Event Mask for Abort, 0x0: no event, 0x1: Tx/Rx abort triggered at expiry of timer
- *  0b0..no event
- *  0b1..Tx/Rx abort triggered at expiry of timer
- */
+/*! expiry_emask_abort - Event Mask: Abort, Expiration Event Mask for Abort, 0x0: no event, 0x1: Tx/Rx abort triggered at expiry of timer */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_ABORT_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_ABORT_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_3_EXPIRY_EMASK_CS_MASK (0x20U)
@@ -4081,10 +3254,6 @@ typedef struct {
  *    are cleared; then the events will assert regardless of the matching state of the LSB bits.,
  *    frame,0x0: timer works on frame basis, 0x1: invalid, slot,0x2: timer works on slot basis,
  *    halfslot,0x3: timer works on half slot basis
- *  0b00..timer works on frame basis
- *  0b01..invalid
- *  0b10..timer works on slot basis
- *  0b11..timer works on half slot basis
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_CTL_3_SLOT_MASK(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_CTL_3_SLOT_MASK_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_CTL_3_SLOT_MASK_MASK)
 
@@ -4122,8 +3291,6 @@ typedef struct {
  *    this SWT expires again. For the purpose of this register; past value on SWT refers to a value
  *    up to 12 hours before the current BTC native clock value., 0x0: SWT expired at programmed
  *    value without any errors, 0x1: SWT was programmed for a value that is in the past
- *  0b0..SWT expired at programmed value without any errors
- *  0b1..SWT was programmed for a value that is in the past
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_STS_3_EXPIRY_STATUS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_STS_3_EXPIRY_STATUS_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_STS_3_EXPIRY_STATUS_MASK)
 
@@ -4135,8 +3302,6 @@ typedef struct {
  *    be updated with the most accurate value., 0x0: SWT expired at programmed value without any
  *    skipping error, 0x1: Current timer expiry is due to clock skipping over the programmed expiration,
  *    value
- *  0b0..SWT expired at programmed value without any skipping error
- *  0b1..Current timer expiry is due to clock skipping over the programmed expiration value
  */
 #define BLE2_REG_BLE_REG_TMR_SWT_STS_3_SKIP_STATUS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_SWT_STS_3_SKIP_STATUS_SHIFT)) & BLE2_REG_BLE_REG_TMR_SWT_STS_3_SKIP_STATUS_MASK)
 
@@ -4154,13 +3319,13 @@ typedef struct {
 /*! @name BLE_REG_TMR_NATIVE_QUS - Native quarter microsecond counter Value */
 /*! @{ */
 
-#define BLE2_REG_BLE_REG_TMR_NATIVE_QUS_NAT_CLOCK_SLEEP_MASK (0x1FFFU)  /* Merged from fields with different position or width, of widths (11, 13), largest definition used */
+#define BLE2_REG_BLE_REG_TMR_NATIVE_QUS_NAT_CLOCK_SLEEP_MASK (0x7FFU)
 #define BLE2_REG_BLE_REG_TMR_NATIVE_QUS_NAT_CLOCK_SLEEP_SHIFT (0U)
 /*! nat_clock_sleep - Native quarter microsecond counter Value, This is the quarter miscrosecond
  *    timer for FW to read back. The value normally is between 0 to 1249; but it may overflow from this
  *    range in sleep mode. This is a read-only register.
  */
-#define BLE2_REG_BLE_REG_TMR_NATIVE_QUS_NAT_CLOCK_SLEEP(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_NATIVE_QUS_NAT_CLOCK_SLEEP_SHIFT)) & BLE2_REG_BLE_REG_TMR_NATIVE_QUS_NAT_CLOCK_SLEEP_MASK)  /* Merged from fields with different position or width, of widths (11, 13), largest definition used */
+#define BLE2_REG_BLE_REG_TMR_NATIVE_QUS_NAT_CLOCK_SLEEP(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_NATIVE_QUS_NAT_CLOCK_SLEEP_SHIFT)) & BLE2_REG_BLE_REG_TMR_NATIVE_QUS_NAT_CLOCK_SLEEP_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_NATIVE_QUS_NAT_CLOCK_SYS_VALID_MASK (0x80000000U)
 #define BLE2_REG_BLE_REG_TMR_NATIVE_QUS_NAT_CLOCK_SYS_VALID_SHIFT (31U)
@@ -4214,18 +3379,13 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_INTR_MASK (0x1U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_INTR_SHIFT (0U)
-/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer
- *  0b0..no event
- *  0b1..interrupt triggered at expiry of timer
- */
+/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_INTR_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_TX_MASK (0x2U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_TX_SHIFT (1U)
 /*! expiry_emask_tx - Event Mask: Tx, Expiration Event Mask for triggering an Tx transaction., 0x0:
  *    no event, 0x1: Tx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Tx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_TX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_TX_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_TX_MASK)
 
@@ -4233,8 +3393,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_RX_SHIFT (2U)
 /*! expiry_emask_rx - Event Mask: Rx, Expiration Event Mask for triggering an Rx transaction., 0x0:
  *    no event, 0x1: Rx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Rx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_RX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_RX_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_RX_MASK)
 
@@ -4242,8 +3400,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_ABORT_SHIFT (3U)
 /*! expiry_emask_abort - Event Mask: Abort, Expiration Event Mask for triggering an Abort from
  *    software., 0x0: no event, 0x1: Abort triggered at timer expiry
- *  0b0..no event
- *  0b1..Abort triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_ABORT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_EXPIRY_EMASK_ABORT_MASK)
 
@@ -4252,8 +3408,6 @@ typedef struct {
 /*! start_emask_ble_txstart - Event Mask: BLE Tx start, Start Event Mask for triggering the CDT
  *    counter. Start counting at the beginning of a BLE Tx transaction., 0x0: no event, 0x1: timer
  *    starts counting down from programmed value at start of next BLE Tx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at start of next BLE Tx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_TXSTART(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_TXSTART_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_TXSTART_MASK)
 
@@ -4262,8 +3416,6 @@ typedef struct {
 /*! start_emask_ble_rxstart - Event Mask: BLE Rx start, Start Event Mask for triggering the CDT
  *    counter. Start counting at the beginning of a BLE Rx transaction., 0x0: no event, 0x1: timer
  *    starts counting down from programmed value at start of next BLE Rx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at start of next BLE Rx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_RXSTART(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_RXSTART_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_RXSTART_MASK)
 
@@ -4272,8 +3424,6 @@ typedef struct {
 /*! start_emask_ble_txend - Event Mask: BLE Tx end, Start Event Mask for triggering the CDT counter.
  *    Start counting at the end of a BLE Tx transaction., 0x0: no event, 0x1: timer starts counting
  *    down from programmed value at end of next BLE Tx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BLE Tx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_TXEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_TXEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_TXEND_MASK)
 
@@ -4282,8 +3432,6 @@ typedef struct {
 /*! start_emask_ble_rxend - Event Mask: BLE Rx end, Start Event Mask for triggering the CDT counter.
  *    Start counting at the end of a BLE Rx transaction., 0x0: no event, 0x1: timer starts counting
  *    down from programmed value at end of next BLE Rx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BLE Rx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_RXEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_RXEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_RXEND_MASK)
 
@@ -4292,8 +3440,6 @@ typedef struct {
 /*! start_emask_btc_pktend - Event Mask: BTC PKT end, Start Event Mask for triggering the CDT
  *    counter. Start counting at the end of a BTC Tx or Rx transaction., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at end of next BTC packet (Tx, or Rx) transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BTC packet (Tx or Rx) transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BTC_PKTEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BTC_PKTEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BTC_PKTEND_MASK)
 
@@ -4302,8 +3448,6 @@ typedef struct {
 /*! start_emask_ble_corrhit - Event Mask: BLE CORR hit, Start Event Mask for triggering the CDT
  *    counter. Start counting at BLE correlation hit., 0x0: no event, 0x1: timer starts counting down
  *    from programmed value at next BLE correlation hit
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BLE correlation hit
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CORRHIT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CORRHIT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CORRHIT_MASK)
 
@@ -4312,8 +3456,6 @@ typedef struct {
 /*! start_emask_bca_req_assert - Event Mask: BCA request assertion, Start Event Mask for triggering
  *    the CDT counter. Start counting at BCA request assertion., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BCA_req assertion
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BCA_req assertion
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BCA_REQ_ASSERT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BCA_REQ_ASSERT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BCA_REQ_ASSERT_MASK)
 
@@ -4322,8 +3464,6 @@ typedef struct {
 /*! start_emask_bca_req_deassert - Event Mask: BCA request deassertion, Start Event Mask for
  *    triggering the CDT counter. Start counting at BCA_req de-assertion., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BCA_req de-assertion
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BCA_req de-assertion
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BCA_REQ_DEASSERT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BCA_REQ_DEASSERT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BCA_REQ_DEASSERT_MASK)
 
@@ -4332,8 +3472,6 @@ typedef struct {
 /*! start_emask_ble_corrmiss - Event Mask: BLE CORR miss, Start Event Mask for triggering the CDT
  *    counter. Start counting at BLE correlation timeout interrupt., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BLE correlation miss
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BLE correlation miss
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CORRMISS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CORRMISS_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CORRMISS_MASK)
 
@@ -4342,8 +3480,6 @@ typedef struct {
 /*! start_emask_sw_trigger - Event Mask: Software trigger, Start Event Mask for triggering the CDT
  *    counter. Start counting when the firmware sets this bit. This bit is self clearing., 0x0: no
  *    event, 0x1: timer starts counting down from the programmed value as soon as this bit is set
- *  0b0..no event
- *  0b1..timer starts counting down from the programmed value as soon as this bit is set
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_SW_TRIGGER(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_SW_TRIGGER_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_SW_TRIGGER_MASK)
 
@@ -4353,8 +3489,6 @@ typedef struct {
  *    counter. Start counting when hardware abort occurs. The abort may be for a transmit packet or a
  *    receive packet., 0x0: no event, 0x1: timer starts counting down from the programmed value bit
  *    when hardware abort, happens
- *  0b0..no event
- *  0b1..timer starts counting down from the programmed value bit when hardware abort happens
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_HW_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_HW_ABORT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_HW_ABORT_MASK)
 
@@ -4363,8 +3497,6 @@ typedef struct {
 /*! cdt_value_reset - CDT value reset, This bit resets the CDT counter to 0. It will not trigger any
  *    expiry conditions (if programmed). This bit is self clearing, 0x0: no event, 0x1: Timer is
  *    reset to 0 immediately
- *  0b0..no event
- *  0b1..Timer is reset to 0 immediately
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_CDT_VALUE_RESET(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_CDT_VALUE_RESET_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_CDT_VALUE_RESET_MASK)
 
@@ -4373,8 +3505,6 @@ typedef struct {
 /*! start_emask_ble_cdt0_expiry - Event Mask: Chain with CDT0, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT0 expires. This will chain the current CDT with CDT0., 0x0:
  *    no event, 0x1: timer starts counting down when CDT0 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT0 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT0_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT0_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT0_EXPIRY_MASK)
 
@@ -4383,8 +3513,6 @@ typedef struct {
 /*! start_emask_ble_cdt1_expiry - Event Mask: Chain with CDT1, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT1 expires. This will chain the current CDT with CDT1., 0x0:
  *    no event, 0x1: timer starts counting down when CDT1 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT1 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT1_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT1_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT1_EXPIRY_MASK)
 
@@ -4393,8 +3521,6 @@ typedef struct {
 /*! start_emask_ble_cdt2_expiry - Event Mask: Chain with CDT2, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT2 expires. This will chain the current CDT with CDT2., 0x0:
  *    no event, 0x1: timer starts counting down when CDT2 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT2 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT2_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT2_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT2_EXPIRY_MASK)
 
@@ -4403,8 +3529,6 @@ typedef struct {
 /*! start_emask_ble_cdt3_expiry - Event Mask: Chain with CDT3, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT3 expires. This will chain the current CDT with CDT3., 0x0:
  *    No event, 0x1: timer starts counting down when CDT3 expires
- *  0b0..No event
- *  0b1..timer starts counting down when CDT3 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT3_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT3_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT3_EXPIRY_MASK)
 
@@ -4413,8 +3537,6 @@ typedef struct {
 /*! start_emask_ble_cdt4_expiry - Event Mask: Chain with CDT4, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT4 expires. This will chain the current CDT with CDT4., 0x0:
  *    no event, 0x1: timer starts counting down when CDT4 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT4 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT4_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT4_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT4_EXPIRY_MASK)
 
@@ -4423,8 +3545,6 @@ typedef struct {
 /*! start_emask_ble_cdt5_expiry - Event Mask: Chain with CDT5, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT5 expires. This will chain the current CDT with CDT5., 0x0:
  *    no event, 0x1: timer starts counting down when CDT5 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT5 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT5_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT5_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_CDT5_EXPIRY_MASK)
 
@@ -4433,8 +3553,6 @@ typedef struct {
 /*! start_emask_ble_swt0_expiry - Event Mask: Chain with SWT0, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT0 expires. This will chain the current CDT with SWT0., 0x0:
  *    no event, 0x1: timer starts counting down when SWT0 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT0 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_SWT0_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_SWT0_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_SWT0_EXPIRY_MASK)
 
@@ -4443,8 +3561,6 @@ typedef struct {
 /*! start_emask_ble_swt1_expiry - Event Mask: Chain with SWT1, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT1 expires. This will chain the current CDT with SWT1., 0x0:
  *    no event, 0x1: timer starts counting down when SWT1 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT1 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_SWT1_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_SWT1_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_SWT1_EXPIRY_MASK)
 
@@ -4453,8 +3569,6 @@ typedef struct {
 /*! start_emask_ble_swt2_expiry - Event Mask: Chain with SWT2, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT2 expires. This will chain the current CDT with SWT2., 0x0:
  *    no event, 0x1: timer starts counting down when SWT2 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT2 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_SWT2_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_SWT2_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_SWT2_EXPIRY_MASK)
 
@@ -4463,8 +3577,6 @@ typedef struct {
 /*! start_emask_ble_swt3_expiry - Event Mask: Chain with SWT3, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT3 expires. This will chain the current CDT with SWT3., 0x0:
  *    no event, 0x1: timer starts counting down when SWT3 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT3 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_SWT3_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_SWT3_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_START_EMASK_BLE_SWT3_EXPIRY_MASK)
 
@@ -4487,8 +3599,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_CDT_ADJ_EN_SHIFT (31U)
 /*! cdt_adj_en - CDT timing adjustment enable, CDT timing adjustment enable for BLE 2M and BLE LR
  *    Tx/Rx for CI = 2;8., 0x0: disable, 0x1: enable
- *  0b0..disable
- *  0b1..enable
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_0_CDT_ADJ_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_0_CDT_ADJ_EN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_0_CDT_ADJ_EN_MASK)
 /*! @} */
@@ -4507,18 +3617,13 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_INTR_MASK (0x1U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_INTR_SHIFT (0U)
-/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer
- *  0b0..no event
- *  0b1..interrupt triggered at expiry of timer
- */
+/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_INTR_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_TX_MASK (0x2U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_TX_SHIFT (1U)
 /*! expiry_emask_tx - Event Mask: Tx, Expiration Event Mask for triggering an Tx transaction., 0x0:
  *    no event, 0x1: Tx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Tx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_TX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_TX_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_TX_MASK)
 
@@ -4526,8 +3631,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_RX_SHIFT (2U)
 /*! expiry_emask_rx - Event Mask: Rx, Expiration Event Mask for triggering an Rx transaction., 0x0:
  *    no event, 0x1: Rx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Rx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_RX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_RX_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_RX_MASK)
 
@@ -4535,8 +3638,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_ABORT_SHIFT (3U)
 /*! expiry_emask_abort - Event Mask: Abort, Expiration Event Mask for triggering an Abort from
  *    software., 0x0: no event, 0x1: Abort triggered at timer expiry
- *  0b0..no event
- *  0b1..Abort triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_ABORT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_EXPIRY_EMASK_ABORT_MASK)
 
@@ -4545,8 +3646,6 @@ typedef struct {
 /*! start_emask_ble_txstart - Event Mask: BLE Tx start, Start Event Mask for triggering the CDT
  *    counter. Start counting at the beginning of a BLE Tx transaction., 0x0: no event, 0x1: timer
  *    starts counting down from programmed value at start of next BLE Tx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at start of next BLE Tx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_TXSTART(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_TXSTART_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_TXSTART_MASK)
 
@@ -4555,8 +3654,6 @@ typedef struct {
 /*! start_emask_ble_rxstart - Event Mask: BLE Rx start, Start Event Mask for triggering the CDT
  *    counter. Start counting at the beginning of a BLE Rx transaction., 0x0: no event, 0x1: timer
  *    starts counting down from programmed value at start of next BLE Rx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at start of next BLE Rx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_RXSTART(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_RXSTART_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_RXSTART_MASK)
 
@@ -4565,8 +3662,6 @@ typedef struct {
 /*! start_emask_ble_txend - Event Mask: BLE Tx end, Start Event Mask for triggering the CDT counter.
  *    Start counting at the end of a BLE Tx transaction., 0x0: no event, 0x1: timer starts counting
  *    down from programmed value at end of next BLE Tx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BLE Tx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_TXEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_TXEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_TXEND_MASK)
 
@@ -4575,8 +3670,6 @@ typedef struct {
 /*! start_emask_ble_rxend - Event Mask: BLE Rx end, Start Event Mask for triggering the CDT counter.
  *    Start counting at the end of a BLE Rx transaction., 0x0: no event, 0x1: timer starts counting
  *    down from programmed value at end of next BLE Rx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BLE Rx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_RXEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_RXEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_RXEND_MASK)
 
@@ -4585,8 +3678,6 @@ typedef struct {
 /*! start_emask_btc_pktend - Event Mask: BTC PKT end, Start Event Mask for triggering the CDT
  *    counter. Start counting at the end of a BTC Tx or Rx transaction., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at end of next BTC packet (Tx, or Rx) transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BTC packet (Tx or Rx) transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BTC_PKTEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BTC_PKTEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BTC_PKTEND_MASK)
 
@@ -4595,8 +3686,6 @@ typedef struct {
 /*! start_emask_ble_corrhit - Event Mask: BLE CORR hit, Start Event Mask for triggering the CDT
  *    counter. Start counting at BLE correlation hit., 0x0: no event, 0x1: timer starts counting down
  *    from programmed value at next BLE correlation hit
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BLE correlation hit
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CORRHIT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CORRHIT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CORRHIT_MASK)
 
@@ -4605,8 +3694,6 @@ typedef struct {
 /*! start_emask_bca_req_assert - Event Mask: BCA request assertion, Start Event Mask for triggering
  *    the CDT counter. Start counting at BCA request assertion., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BCA_req assertion
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BCA_req assertion
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BCA_REQ_ASSERT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BCA_REQ_ASSERT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BCA_REQ_ASSERT_MASK)
 
@@ -4615,8 +3702,6 @@ typedef struct {
 /*! start_emask_bca_req_deassert - Event Mask: BCA request deassertion, Start Event Mask for
  *    triggering the CDT counter. Start counting at BCA_req de-assertion., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BCA_req de-assertion
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BCA_req de-assertion
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BCA_REQ_DEASSERT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BCA_REQ_DEASSERT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BCA_REQ_DEASSERT_MASK)
 
@@ -4625,8 +3710,6 @@ typedef struct {
 /*! start_emask_ble_corrmiss - Event Mask: BLE CORR miss, Start Event Mask for triggering the CDT
  *    counter. Start counting at BLE correlation timeout interrupt., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BLE correlation miss
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BLE correlation miss
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CORRMISS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CORRMISS_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CORRMISS_MASK)
 
@@ -4635,8 +3718,6 @@ typedef struct {
 /*! start_emask_sw_trigger - Event Mask: Software trigger, Start Event Mask for triggering the CDT
  *    counter. Start counting when the firmware sets this bit. This bit is self clearing., 0x0: no
  *    event, 0x1: timer starts counting down from the programmed value as soon as this bit is set
- *  0b0..no event
- *  0b1..timer starts counting down from the programmed value as soon as this bit is set
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_SW_TRIGGER(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_SW_TRIGGER_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_SW_TRIGGER_MASK)
 
@@ -4646,8 +3727,6 @@ typedef struct {
  *    counter. Start counting when hardware abort occurs. The abort may be for a transmit packet or a
  *    receive packet., 0x0: no event, 0x1: timer starts counting down from the programmed value bit
  *    when hardware abort, happens
- *  0b0..no event
- *  0b1..timer starts counting down from the programmed value bit when hardware abort happens
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_HW_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_HW_ABORT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_HW_ABORT_MASK)
 
@@ -4656,8 +3735,6 @@ typedef struct {
 /*! cdt_value_reset - CDT value reset, This bit resets the CDT counter to 0. It will not trigger any
  *    expiry conditions (if programmed). This bit is self clearing, 0x0: no event, 0x1: Timer is
  *    reset to 0 immediately
- *  0b0..no event
- *  0b1..Timer is reset to 0 immediately
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_CDT_VALUE_RESET(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_CDT_VALUE_RESET_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_CDT_VALUE_RESET_MASK)
 
@@ -4666,8 +3743,6 @@ typedef struct {
 /*! start_emask_ble_cdt0_expiry - Event Mask: Chain with CDT0, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT0 expires. This will chain the current CDT with CDT0., 0x0:
  *    no event, 0x1: timer starts counting down when CDT0 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT0 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT0_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT0_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT0_EXPIRY_MASK)
 
@@ -4676,8 +3751,6 @@ typedef struct {
 /*! start_emask_ble_cdt1_expiry - Event Mask: Chain with CDT1, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT1 expires. This will chain the current CDT with CDT1., 0x0:
  *    no event, 0x1: timer starts counting down when CDT1 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT1 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT1_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT1_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT1_EXPIRY_MASK)
 
@@ -4686,8 +3759,6 @@ typedef struct {
 /*! start_emask_ble_cdt2_expiry - Event Mask: Chain with CDT2, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT2 expires. This will chain the current CDT with CDT2., 0x0:
  *    no event, 0x1: timer starts counting down when CDT2 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT2 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT2_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT2_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT2_EXPIRY_MASK)
 
@@ -4696,8 +3767,6 @@ typedef struct {
 /*! start_emask_ble_cdt3_expiry - Event Mask: Chain with CDT3, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT3 expires. This will chain the current CDT with CDT3., 0x0:
  *    No event, 0x1: timer starts counting down when CDT3 expires
- *  0b0..No event
- *  0b1..timer starts counting down when CDT3 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT3_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT3_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT3_EXPIRY_MASK)
 
@@ -4706,8 +3775,6 @@ typedef struct {
 /*! start_emask_ble_cdt4_expiry - Event Mask: Chain with CDT4, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT4 expires. This will chain the current CDT with CDT4., 0x0:
  *    no event, 0x1: timer starts counting down when CDT4 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT4 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT4_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT4_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT4_EXPIRY_MASK)
 
@@ -4716,8 +3783,6 @@ typedef struct {
 /*! start_emask_ble_cdt5_expiry - Event Mask: Chain with CDT5, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT5 expires. This will chain the current CDT with CDT5., 0x0:
  *    no event, 0x1: timer starts counting down when CDT5 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT5 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT5_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT5_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_CDT5_EXPIRY_MASK)
 
@@ -4726,8 +3791,6 @@ typedef struct {
 /*! start_emask_ble_swt0_expiry - Event Mask: Chain with SWT0, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT0 expires. This will chain the current CDT with SWT0., 0x0:
  *    no event, 0x1: timer starts counting down when SWT0 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT0 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_SWT0_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_SWT0_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_SWT0_EXPIRY_MASK)
 
@@ -4736,8 +3799,6 @@ typedef struct {
 /*! start_emask_ble_swt1_expiry - Event Mask: Chain with SWT1, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT1 expires. This will chain the current CDT with SWT1., 0x0:
  *    no event, 0x1: timer starts counting down when SWT1 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT1 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_SWT1_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_SWT1_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_SWT1_EXPIRY_MASK)
 
@@ -4746,8 +3807,6 @@ typedef struct {
 /*! start_emask_ble_swt2_expiry - Event Mask: Chain with SWT2, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT2 expires. This will chain the current CDT with SWT2., 0x0:
  *    no event, 0x1: timer starts counting down when SWT2 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT2 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_SWT2_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_SWT2_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_SWT2_EXPIRY_MASK)
 
@@ -4756,8 +3815,6 @@ typedef struct {
 /*! start_emask_ble_swt3_expiry - Event Mask: Chain with SWT3, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT3 expires. This will chain the current CDT with SWT3., 0x0:
  *    no event, 0x1: timer starts counting down when SWT3 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT3 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_SWT3_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_SWT3_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_START_EMASK_BLE_SWT3_EXPIRY_MASK)
 
@@ -4780,8 +3837,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_CDT_ADJ_EN_SHIFT (31U)
 /*! cdt_adj_en - CDT timing adjustment enable, CDT timing adjustment enable for BLE 2M and BLE LR
  *    Tx/Rx for CI = 2;8., 0x0: disable, 0x1: enable
- *  0b0..disable
- *  0b1..enable
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_1_CDT_ADJ_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_1_CDT_ADJ_EN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_1_CDT_ADJ_EN_MASK)
 /*! @} */
@@ -4800,18 +3855,13 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_INTR_MASK (0x1U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_INTR_SHIFT (0U)
-/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer
- *  0b0..no event
- *  0b1..interrupt triggered at expiry of timer
- */
+/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_INTR_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_TX_MASK (0x2U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_TX_SHIFT (1U)
 /*! expiry_emask_tx - Event Mask: Tx, Expiration Event Mask for triggering an Tx transaction., 0x0:
  *    no event, 0x1: Tx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Tx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_TX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_TX_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_TX_MASK)
 
@@ -4819,8 +3869,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_RX_SHIFT (2U)
 /*! expiry_emask_rx - Event Mask: Rx, Expiration Event Mask for triggering an Rx transaction., 0x0:
  *    no event, 0x1: Rx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Rx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_RX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_RX_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_RX_MASK)
 
@@ -4828,8 +3876,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_ABORT_SHIFT (3U)
 /*! expiry_emask_abort - Event Mask: Abort, Expiration Event Mask for triggering an Abort from
  *    software., 0x0: no event, 0x1: Abort triggered at timer expiry
- *  0b0..no event
- *  0b1..Abort triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_ABORT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_EXPIRY_EMASK_ABORT_MASK)
 
@@ -4838,8 +3884,6 @@ typedef struct {
 /*! start_emask_ble_txstart - Event Mask: BLE Tx start, Start Event Mask for triggering the CDT
  *    counter. Start counting at the beginning of a BLE Tx transaction., 0x0: no event, 0x1: timer
  *    starts counting down from programmed value at start of next BLE Tx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at start of next BLE Tx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_TXSTART(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_TXSTART_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_TXSTART_MASK)
 
@@ -4848,8 +3892,6 @@ typedef struct {
 /*! start_emask_ble_rxstart - Event Mask: BLE Rx start, Start Event Mask for triggering the CDT
  *    counter. Start counting at the beginning of a BLE Rx transaction., 0x0: no event, 0x1: timer
  *    starts counting down from programmed value at start of next BLE Rx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at start of next BLE Rx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_RXSTART(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_RXSTART_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_RXSTART_MASK)
 
@@ -4858,8 +3900,6 @@ typedef struct {
 /*! start_emask_ble_txend - Event Mask: BLE Tx end, Start Event Mask for triggering the CDT counter.
  *    Start counting at the end of a BLE Tx transaction., 0x0: no event, 0x1: timer starts counting
  *    down from programmed value at end of next BLE Tx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BLE Tx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_TXEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_TXEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_TXEND_MASK)
 
@@ -4868,8 +3908,6 @@ typedef struct {
 /*! start_emask_ble_rxend - Event Mask: BLE Rx end, Start Event Mask for triggering the CDT counter.
  *    Start counting at the end of a BLE Rx transaction., 0x0: no event, 0x1: timer starts counting
  *    down from programmed value at end of next BLE Rx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BLE Rx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_RXEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_RXEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_RXEND_MASK)
 
@@ -4878,8 +3916,6 @@ typedef struct {
 /*! start_emask_btc_pktend - Event Mask: BTC PKT end, Start Event Mask for triggering the CDT
  *    counter. Start counting at the end of a BTC Tx or Rx transaction., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at end of next BTC packet (Tx, or Rx) transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BTC packet (Tx or Rx) transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BTC_PKTEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BTC_PKTEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BTC_PKTEND_MASK)
 
@@ -4888,8 +3924,6 @@ typedef struct {
 /*! start_emask_ble_corrhit - Event Mask: BLE CORR hit, Start Event Mask for triggering the CDT
  *    counter. Start counting at BLE correlation hit., 0x0: no event, 0x1: timer starts counting down
  *    from programmed value at next BLE correlation hit
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BLE correlation hit
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CORRHIT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CORRHIT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CORRHIT_MASK)
 
@@ -4898,8 +3932,6 @@ typedef struct {
 /*! start_emask_bca_req_assert - Event Mask: BCA request assertion, Start Event Mask for triggering
  *    the CDT counter. Start counting at BCA request assertion., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BCA_req assertion
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BCA_req assertion
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BCA_REQ_ASSERT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BCA_REQ_ASSERT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BCA_REQ_ASSERT_MASK)
 
@@ -4908,8 +3940,6 @@ typedef struct {
 /*! start_emask_bca_req_deassert - Event Mask: BCA request deassertion, Start Event Mask for
  *    triggering the CDT counter. Start counting at BCA_req de-assertion., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BCA_req de-assertion
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BCA_req de-assertion
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BCA_REQ_DEASSERT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BCA_REQ_DEASSERT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BCA_REQ_DEASSERT_MASK)
 
@@ -4918,8 +3948,6 @@ typedef struct {
 /*! start_emask_ble_corrmiss - Event Mask: BLE CORR miss, Start Event Mask for triggering the CDT
  *    counter. Start counting at BLE correlation timeout interrupt., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BLE correlation miss
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BLE correlation miss
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CORRMISS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CORRMISS_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CORRMISS_MASK)
 
@@ -4928,8 +3956,6 @@ typedef struct {
 /*! start_emask_sw_trigger - Event Mask: Software trigger, Start Event Mask for triggering the CDT
  *    counter. Start counting when the firmware sets this bit. This bit is self clearing., 0x0: no
  *    event, 0x1: timer starts counting down from the programmed value as soon as this bit is set
- *  0b0..no event
- *  0b1..timer starts counting down from the programmed value as soon as this bit is set
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_SW_TRIGGER(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_SW_TRIGGER_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_SW_TRIGGER_MASK)
 
@@ -4939,8 +3965,6 @@ typedef struct {
  *    counter. Start counting when hardware abort occurs. The abort may be for a transmit packet or a
  *    receive packet., 0x0: no event, 0x1: timer starts counting down from the programmed value bit
  *    when hardware abort, happens
- *  0b0..no event
- *  0b1..timer starts counting down from the programmed value bit when hardware abort happens
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_HW_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_HW_ABORT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_HW_ABORT_MASK)
 
@@ -4949,8 +3973,6 @@ typedef struct {
 /*! cdt_value_reset - CDT value reset, This bit resets the CDT counter to 0. It will not trigger any
  *    expiry conditions (if programmed). This bit is self clearing, 0x0: no event, 0x1: Timer is
  *    reset to 0 immediately
- *  0b0..no event
- *  0b1..Timer is reset to 0 immediately
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_CDT_VALUE_RESET(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_CDT_VALUE_RESET_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_CDT_VALUE_RESET_MASK)
 
@@ -4959,8 +3981,6 @@ typedef struct {
 /*! start_emask_ble_cdt0_expiry - Event Mask: Chain with CDT0, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT0 expires. This will chain the current CDT with CDT0., 0x0:
  *    no event, 0x1: timer starts counting down when CDT0 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT0 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT0_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT0_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT0_EXPIRY_MASK)
 
@@ -4969,8 +3989,6 @@ typedef struct {
 /*! start_emask_ble_cdt1_expiry - Event Mask: Chain with CDT1, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT1 expires. This will chain the current CDT with CDT1., 0x0:
  *    no event, 0x1: timer starts counting down when CDT1 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT1 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT1_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT1_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT1_EXPIRY_MASK)
 
@@ -4979,8 +3997,6 @@ typedef struct {
 /*! start_emask_ble_cdt2_expiry - Event Mask: Chain with CDT2, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT2 expires. This will chain the current CDT with CDT2., 0x0:
  *    no event, 0x1: timer starts counting down when CDT2 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT2 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT2_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT2_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT2_EXPIRY_MASK)
 
@@ -4989,8 +4005,6 @@ typedef struct {
 /*! start_emask_ble_cdt3_expiry - Event Mask: Chain with CDT3, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT3 expires. This will chain the current CDT with CDT3., 0x0:
  *    No event, 0x1: timer starts counting down when CDT3 expires
- *  0b0..No event
- *  0b1..timer starts counting down when CDT3 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT3_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT3_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT3_EXPIRY_MASK)
 
@@ -4999,8 +4013,6 @@ typedef struct {
 /*! start_emask_ble_cdt4_expiry - Event Mask: Chain with CDT4, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT4 expires. This will chain the current CDT with CDT4., 0x0:
  *    no event, 0x1: timer starts counting down when CDT4 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT4 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT4_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT4_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT4_EXPIRY_MASK)
 
@@ -5009,8 +4021,6 @@ typedef struct {
 /*! start_emask_ble_cdt5_expiry - Event Mask: Chain with CDT5, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT5 expires. This will chain the current CDT with CDT5., 0x0:
  *    no event, 0x1: timer starts counting down when CDT5 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT5 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT5_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT5_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_CDT5_EXPIRY_MASK)
 
@@ -5019,8 +4029,6 @@ typedef struct {
 /*! start_emask_ble_swt0_expiry - Event Mask: Chain with SWT0, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT0 expires. This will chain the current CDT with SWT0., 0x0:
  *    no event, 0x1: timer starts counting down when SWT0 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT0 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_SWT0_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_SWT0_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_SWT0_EXPIRY_MASK)
 
@@ -5029,8 +4037,6 @@ typedef struct {
 /*! start_emask_ble_swt1_expiry - Event Mask: Chain with SWT1, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT1 expires. This will chain the current CDT with SWT1., 0x0:
  *    no event, 0x1: timer starts counting down when SWT1 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT1 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_SWT1_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_SWT1_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_SWT1_EXPIRY_MASK)
 
@@ -5039,8 +4045,6 @@ typedef struct {
 /*! start_emask_ble_swt2_expiry - Event Mask: Chain with SWT2, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT2 expires. This will chain the current CDT with SWT2., 0x0:
  *    no event, 0x1: timer starts counting down when SWT2 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT2 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_SWT2_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_SWT2_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_SWT2_EXPIRY_MASK)
 
@@ -5049,8 +4053,6 @@ typedef struct {
 /*! start_emask_ble_swt3_expiry - Event Mask: Chain with SWT3, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT3 expires. This will chain the current CDT with SWT3., 0x0:
  *    no event, 0x1: timer starts counting down when SWT3 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT3 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_SWT3_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_SWT3_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_START_EMASK_BLE_SWT3_EXPIRY_MASK)
 
@@ -5073,8 +4075,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_CDT_ADJ_EN_SHIFT (31U)
 /*! cdt_adj_en - CDT timing adjustment enable, CDT timing adjustment enable for BLE 2M and BLE LR
  *    Tx/Rx for CI = 2;8., 0x0: disable, 0x1: enable
- *  0b0..disable
- *  0b1..enable
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_2_CDT_ADJ_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_2_CDT_ADJ_EN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_2_CDT_ADJ_EN_MASK)
 /*! @} */
@@ -5093,18 +4093,13 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_INTR_MASK (0x1U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_INTR_SHIFT (0U)
-/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer
- *  0b0..no event
- *  0b1..interrupt triggered at expiry of timer
- */
+/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_INTR_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_TX_MASK (0x2U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_TX_SHIFT (1U)
 /*! expiry_emask_tx - Event Mask: Tx, Expiration Event Mask for triggering an Tx transaction., 0x0:
  *    no event, 0x1: Tx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Tx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_TX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_TX_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_TX_MASK)
 
@@ -5112,8 +4107,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_RX_SHIFT (2U)
 /*! expiry_emask_rx - Event Mask: Rx, Expiration Event Mask for triggering an Rx transaction., 0x0:
  *    no event, 0x1: Rx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Rx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_RX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_RX_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_RX_MASK)
 
@@ -5121,8 +4114,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_ABORT_SHIFT (3U)
 /*! expiry_emask_abort - Event Mask: Abort, Expiration Event Mask for triggering an Abort from
  *    software., 0x0: no event, 0x1: Abort triggered at timer expiry
- *  0b0..no event
- *  0b1..Abort triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_ABORT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_EXPIRY_EMASK_ABORT_MASK)
 
@@ -5131,8 +4122,6 @@ typedef struct {
 /*! start_emask_ble_txstart - Event Mask: BLE Tx start, Start Event Mask for triggering the CDT
  *    counter. Start counting at the beginning of a BLE Tx transaction., 0x0: no event, 0x1: timer
  *    starts counting down from programmed value at start of next BLE Tx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at start of next BLE Tx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_TXSTART(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_TXSTART_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_TXSTART_MASK)
 
@@ -5141,8 +4130,6 @@ typedef struct {
 /*! start_emask_ble_rxstart - Event Mask: BLE Rx start, Start Event Mask for triggering the CDT
  *    counter. Start counting at the beginning of a BLE Rx transaction., 0x0: no event, 0x1: timer
  *    starts counting down from programmed value at start of next BLE Rx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at start of next BLE Rx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_RXSTART(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_RXSTART_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_RXSTART_MASK)
 
@@ -5151,8 +4138,6 @@ typedef struct {
 /*! start_emask_ble_txend - Event Mask: BLE Tx end, Start Event Mask for triggering the CDT counter.
  *    Start counting at the end of a BLE Tx transaction., 0x0: no event, 0x1: timer starts counting
  *    down from programmed value at end of next BLE Tx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BLE Tx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_TXEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_TXEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_TXEND_MASK)
 
@@ -5161,8 +4146,6 @@ typedef struct {
 /*! start_emask_ble_rxend - Event Mask: BLE Rx end, Start Event Mask for triggering the CDT counter.
  *    Start counting at the end of a BLE Rx transaction., 0x0: no event, 0x1: timer starts counting
  *    down from programmed value at end of next BLE Rx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BLE Rx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_RXEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_RXEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_RXEND_MASK)
 
@@ -5171,8 +4154,6 @@ typedef struct {
 /*! start_emask_btc_pktend - Event Mask: BTC PKT end, Start Event Mask for triggering the CDT
  *    counter. Start counting at the end of a BTC Tx or Rx transaction., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at end of next BTC packet (Tx, or Rx) transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BTC packet (Tx or Rx) transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BTC_PKTEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BTC_PKTEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BTC_PKTEND_MASK)
 
@@ -5181,8 +4162,6 @@ typedef struct {
 /*! start_emask_ble_corrhit - Event Mask: BLE CORR hit, Start Event Mask for triggering the CDT
  *    counter. Start counting at BLE correlation hit., 0x0: no event, 0x1: timer starts counting down
  *    from programmed value at next BLE correlation hit
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BLE correlation hit
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CORRHIT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CORRHIT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CORRHIT_MASK)
 
@@ -5191,8 +4170,6 @@ typedef struct {
 /*! start_emask_bca_req_assert - Event Mask: BCA request assertion, Start Event Mask for triggering
  *    the CDT counter. Start counting at BCA request assertion., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BCA_req assertion
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BCA_req assertion
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BCA_REQ_ASSERT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BCA_REQ_ASSERT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BCA_REQ_ASSERT_MASK)
 
@@ -5201,8 +4178,6 @@ typedef struct {
 /*! start_emask_bca_req_deassert - Event Mask: BCA request deassertion, Start Event Mask for
  *    triggering the CDT counter. Start counting at BCA_req de-assertion., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BCA_req de-assertion
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BCA_req de-assertion
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BCA_REQ_DEASSERT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BCA_REQ_DEASSERT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BCA_REQ_DEASSERT_MASK)
 
@@ -5211,8 +4186,6 @@ typedef struct {
 /*! start_emask_ble_corrmiss - Event Mask: BLE CORR miss, Start Event Mask for triggering the CDT
  *    counter. Start counting at BLE correlation timeout interrupt., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BLE correlation miss
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BLE correlation miss
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CORRMISS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CORRMISS_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CORRMISS_MASK)
 
@@ -5221,8 +4194,6 @@ typedef struct {
 /*! start_emask_sw_trigger - Event Mask: Software trigger, Start Event Mask for triggering the CDT
  *    counter. Start counting when the firmware sets this bit. This bit is self clearing., 0x0: no
  *    event, 0x1: timer starts counting down from the programmed value as soon as this bit is set
- *  0b0..no event
- *  0b1..timer starts counting down from the programmed value as soon as this bit is set
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_SW_TRIGGER(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_SW_TRIGGER_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_SW_TRIGGER_MASK)
 
@@ -5232,8 +4203,6 @@ typedef struct {
  *    counter. Start counting when hardware abort occurs. The abort may be for a transmit packet or a
  *    receive packet., 0x0: no event, 0x1: timer starts counting down from the programmed value bit
  *    when hardware abort, happens
- *  0b0..no event
- *  0b1..timer starts counting down from the programmed value bit when hardware abort happens
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_HW_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_HW_ABORT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_HW_ABORT_MASK)
 
@@ -5242,8 +4211,6 @@ typedef struct {
 /*! cdt_value_reset - CDT value reset, This bit resets the CDT counter to 0. It will not trigger any
  *    expiry conditions (if programmed). This bit is self clearing, 0x0: no event, 0x1: Timer is
  *    reset to 0 immediately
- *  0b0..no event
- *  0b1..Timer is reset to 0 immediately
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_CDT_VALUE_RESET(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_CDT_VALUE_RESET_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_CDT_VALUE_RESET_MASK)
 
@@ -5252,8 +4219,6 @@ typedef struct {
 /*! start_emask_ble_cdt0_expiry - Event Mask: Chain with CDT0, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT0 expires. This will chain the current CDT with CDT0., 0x0:
  *    no event, 0x1: timer starts counting down when CDT0 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT0 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT0_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT0_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT0_EXPIRY_MASK)
 
@@ -5262,8 +4227,6 @@ typedef struct {
 /*! start_emask_ble_cdt1_expiry - Event Mask: Chain with CDT1, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT1 expires. This will chain the current CDT with CDT1., 0x0:
  *    no event, 0x1: timer starts counting down when CDT1 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT1 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT1_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT1_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT1_EXPIRY_MASK)
 
@@ -5272,8 +4235,6 @@ typedef struct {
 /*! start_emask_ble_cdt2_expiry - Event Mask: Chain with CDT2, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT2 expires. This will chain the current CDT with CDT2., 0x0:
  *    no event, 0x1: timer starts counting down when CDT2 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT2 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT2_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT2_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT2_EXPIRY_MASK)
 
@@ -5282,8 +4243,6 @@ typedef struct {
 /*! start_emask_ble_cdt3_expiry - Event Mask: Chain with CDT3, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT3 expires. This will chain the current CDT with CDT3., 0x0:
  *    No event, 0x1: timer starts counting down when CDT3 expires
- *  0b0..No event
- *  0b1..timer starts counting down when CDT3 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT3_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT3_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT3_EXPIRY_MASK)
 
@@ -5292,8 +4251,6 @@ typedef struct {
 /*! start_emask_ble_cdt4_expiry - Event Mask: Chain with CDT4, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT4 expires. This will chain the current CDT with CDT4., 0x0:
  *    no event, 0x1: timer starts counting down when CDT4 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT4 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT4_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT4_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT4_EXPIRY_MASK)
 
@@ -5302,8 +4259,6 @@ typedef struct {
 /*! start_emask_ble_cdt5_expiry - Event Mask: Chain with CDT5, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT5 expires. This will chain the current CDT with CDT5., 0x0:
  *    no event, 0x1: timer starts counting down when CDT5 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT5 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT5_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT5_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_CDT5_EXPIRY_MASK)
 
@@ -5312,8 +4267,6 @@ typedef struct {
 /*! start_emask_ble_swt0_expiry - Event Mask: Chain with SWT0, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT0 expires. This will chain the current CDT with SWT0., 0x0:
  *    no event, 0x1: timer starts counting down when SWT0 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT0 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_SWT0_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_SWT0_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_SWT0_EXPIRY_MASK)
 
@@ -5322,8 +4275,6 @@ typedef struct {
 /*! start_emask_ble_swt1_expiry - Event Mask: Chain with SWT1, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT1 expires. This will chain the current CDT with SWT1., 0x0:
  *    no event, 0x1: timer starts counting down when SWT1 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT1 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_SWT1_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_SWT1_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_SWT1_EXPIRY_MASK)
 
@@ -5332,8 +4283,6 @@ typedef struct {
 /*! start_emask_ble_swt2_expiry - Event Mask: Chain with SWT2, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT2 expires. This will chain the current CDT with SWT2., 0x0:
  *    no event, 0x1: timer starts counting down when SWT2 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT2 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_SWT2_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_SWT2_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_SWT2_EXPIRY_MASK)
 
@@ -5342,8 +4291,6 @@ typedef struct {
 /*! start_emask_ble_swt3_expiry - Event Mask: Chain with SWT3, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT3 expires. This will chain the current CDT with SWT3., 0x0:
  *    no event, 0x1: timer starts counting down when SWT3 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT3 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_SWT3_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_SWT3_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_START_EMASK_BLE_SWT3_EXPIRY_MASK)
 
@@ -5366,8 +4313,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_CDT_ADJ_EN_SHIFT (31U)
 /*! cdt_adj_en - CDT timing adjustment enable, CDT timing adjustment enable for BLE 2M and BLE LR
  *    Tx/Rx for CI = 2;8., 0x0: disable, 0x1: enable
- *  0b0..disable
- *  0b1..enable
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_3_CDT_ADJ_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_3_CDT_ADJ_EN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_3_CDT_ADJ_EN_MASK)
 /*! @} */
@@ -5386,18 +4331,13 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_INTR_MASK (0x1U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_INTR_SHIFT (0U)
-/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer
- *  0b0..no event
- *  0b1..interrupt triggered at expiry of timer
- */
+/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_INTR_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_TX_MASK (0x2U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_TX_SHIFT (1U)
 /*! expiry_emask_tx - Event Mask: Tx, Expiration Event Mask for triggering an Tx transaction., 0x0:
  *    no event, 0x1: Tx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Tx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_TX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_TX_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_TX_MASK)
 
@@ -5405,8 +4345,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_RX_SHIFT (2U)
 /*! expiry_emask_rx - Event Mask: Rx, Expiration Event Mask for triggering an Rx transaction., 0x0:
  *    no event, 0x1: Rx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Rx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_RX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_RX_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_RX_MASK)
 
@@ -5414,8 +4352,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_ABORT_SHIFT (3U)
 /*! expiry_emask_abort - Event Mask: Abort, Expiration Event Mask for triggering an Abort from
  *    software., 0x0: no event, 0x1: Abort triggered at timer expiry
- *  0b0..no event
- *  0b1..Abort triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_ABORT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_EXPIRY_EMASK_ABORT_MASK)
 
@@ -5424,8 +4360,6 @@ typedef struct {
 /*! start_emask_ble_txstart - Event Mask: BLE Tx start, Start Event Mask for triggering the CDT
  *    counter. Start counting at the beginning of a BLE Tx transaction., 0x0: no event, 0x1: timer
  *    starts counting down from programmed value at start of next BLE Tx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at start of next BLE Tx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_TXSTART(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_TXSTART_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_TXSTART_MASK)
 
@@ -5434,8 +4368,6 @@ typedef struct {
 /*! start_emask_ble_rxstart - Event Mask: BLE Rx start, Start Event Mask for triggering the CDT
  *    counter. Start counting at the beginning of a BLE Rx transaction., 0x0: no event, 0x1: timer
  *    starts counting down from programmed value at start of next BLE Rx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at start of next BLE Rx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_RXSTART(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_RXSTART_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_RXSTART_MASK)
 
@@ -5444,8 +4376,6 @@ typedef struct {
 /*! start_emask_ble_txend - Event Mask: BLE Tx end, Start Event Mask for triggering the CDT counter.
  *    Start counting at the end of a BLE Tx transaction., 0x0: no event, 0x1: timer starts counting
  *    down from programmed value at end of next BLE Tx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BLE Tx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_TXEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_TXEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_TXEND_MASK)
 
@@ -5454,8 +4384,6 @@ typedef struct {
 /*! start_emask_ble_rxend - Event Mask: BLE Rx end, Start Event Mask for triggering the CDT counter.
  *    Start counting at the end of a BLE Rx transaction., 0x0: no event, 0x1: timer starts counting
  *    down from programmed value at end of next BLE Rx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BLE Rx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_RXEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_RXEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_RXEND_MASK)
 
@@ -5464,8 +4392,6 @@ typedef struct {
 /*! start_emask_btc_pktend - Event Mask: BTC PKT end, Start Event Mask for triggering the CDT
  *    counter. Start counting at the end of a BTC Tx or Rx transaction., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at end of next BTC packet (Tx, or Rx) transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BTC packet (Tx or Rx) transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BTC_PKTEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BTC_PKTEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BTC_PKTEND_MASK)
 
@@ -5474,8 +4400,6 @@ typedef struct {
 /*! start_emask_ble_corrhit - Event Mask: BLE CORR hit, Start Event Mask for triggering the CDT
  *    counter. Start counting at BLE correlation hit., 0x0: no event, 0x1: timer starts counting down
  *    from programmed value at next BLE correlation hit
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BLE correlation hit
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CORRHIT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CORRHIT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CORRHIT_MASK)
 
@@ -5484,8 +4408,6 @@ typedef struct {
 /*! start_emask_bca_req_assert - Event Mask: BCA request assertion, Start Event Mask for triggering
  *    the CDT counter. Start counting at BCA request assertion., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BCA_req assertion
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BCA_req assertion
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BCA_REQ_ASSERT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BCA_REQ_ASSERT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BCA_REQ_ASSERT_MASK)
 
@@ -5494,8 +4416,6 @@ typedef struct {
 /*! start_emask_bca_req_deassert - Event Mask: BCA request deassertion, Start Event Mask for
  *    triggering the CDT counter. Start counting at BCA_req de-assertion., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BCA_req de-assertion
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BCA_req de-assertion
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BCA_REQ_DEASSERT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BCA_REQ_DEASSERT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BCA_REQ_DEASSERT_MASK)
 
@@ -5504,8 +4424,6 @@ typedef struct {
 /*! start_emask_ble_corrmiss - Event Mask: BLE CORR miss, Start Event Mask for triggering the CDT
  *    counter. Start counting at BLE correlation timeout interrupt., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BLE correlation miss
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BLE correlation miss
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CORRMISS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CORRMISS_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CORRMISS_MASK)
 
@@ -5514,8 +4432,6 @@ typedef struct {
 /*! start_emask_sw_trigger - Event Mask: Software trigger, Start Event Mask for triggering the CDT
  *    counter. Start counting when the firmware sets this bit. This bit is self clearing., 0x0: no
  *    event, 0x1: timer starts counting down from the programmed value as soon as this bit is set
- *  0b0..no event
- *  0b1..timer starts counting down from the programmed value as soon as this bit is set
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_SW_TRIGGER(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_SW_TRIGGER_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_SW_TRIGGER_MASK)
 
@@ -5525,8 +4441,6 @@ typedef struct {
  *    counter. Start counting when hardware abort occurs. The abort may be for a transmit packet or a
  *    receive packet., 0x0: no event, 0x1: timer starts counting down from the programmed value bit
  *    when hardware abort, happens
- *  0b0..no event
- *  0b1..timer starts counting down from the programmed value bit when hardware abort happens
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_HW_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_HW_ABORT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_HW_ABORT_MASK)
 
@@ -5535,8 +4449,6 @@ typedef struct {
 /*! cdt_value_reset - CDT value reset, This bit resets the CDT counter to 0. It will not trigger any
  *    expiry conditions (if programmed). This bit is self clearing, 0x0: no event, 0x1: Timer is
  *    reset to 0 immediately
- *  0b0..no event
- *  0b1..Timer is reset to 0 immediately
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_CDT_VALUE_RESET(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_CDT_VALUE_RESET_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_CDT_VALUE_RESET_MASK)
 
@@ -5545,8 +4457,6 @@ typedef struct {
 /*! start_emask_ble_cdt0_expiry - Event Mask: Chain with CDT0, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT0 expires. This will chain the current CDT with CDT0., 0x0:
  *    no event, 0x1: timer starts counting down when CDT0 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT0 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT0_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT0_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT0_EXPIRY_MASK)
 
@@ -5555,8 +4465,6 @@ typedef struct {
 /*! start_emask_ble_cdt1_expiry - Event Mask: Chain with CDT1, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT1 expires. This will chain the current CDT with CDT1., 0x0:
  *    no event, 0x1: timer starts counting down when CDT1 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT1 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT1_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT1_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT1_EXPIRY_MASK)
 
@@ -5565,8 +4473,6 @@ typedef struct {
 /*! start_emask_ble_cdt2_expiry - Event Mask: Chain with CDT2, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT2 expires. This will chain the current CDT with CDT2., 0x0:
  *    no event, 0x1: timer starts counting down when CDT2 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT2 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT2_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT2_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT2_EXPIRY_MASK)
 
@@ -5575,8 +4481,6 @@ typedef struct {
 /*! start_emask_ble_cdt3_expiry - Event Mask: Chain with CDT3, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT3 expires. This will chain the current CDT with CDT3., 0x0:
  *    No event, 0x1: timer starts counting down when CDT3 expires
- *  0b0..No event
- *  0b1..timer starts counting down when CDT3 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT3_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT3_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT3_EXPIRY_MASK)
 
@@ -5585,8 +4489,6 @@ typedef struct {
 /*! start_emask_ble_cdt4_expiry - Event Mask: Chain with CDT4, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT4 expires. This will chain the current CDT with CDT4., 0x0:
  *    no event, 0x1: timer starts counting down when CDT4 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT4 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT4_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT4_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT4_EXPIRY_MASK)
 
@@ -5595,8 +4497,6 @@ typedef struct {
 /*! start_emask_ble_cdt5_expiry - Event Mask: Chain with CDT5, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT5 expires. This will chain the current CDT with CDT5., 0x0:
  *    no event, 0x1: timer starts counting down when CDT5 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT5 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT5_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT5_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_CDT5_EXPIRY_MASK)
 
@@ -5605,8 +4505,6 @@ typedef struct {
 /*! start_emask_ble_swt0_expiry - Event Mask: Chain with SWT0, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT0 expires. This will chain the current CDT with SWT0., 0x0:
  *    no event, 0x1: timer starts counting down when SWT0 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT0 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_SWT0_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_SWT0_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_SWT0_EXPIRY_MASK)
 
@@ -5615,8 +4513,6 @@ typedef struct {
 /*! start_emask_ble_swt1_expiry - Event Mask: Chain with SWT1, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT1 expires. This will chain the current CDT with SWT1., 0x0:
  *    no event, 0x1: timer starts counting down when SWT1 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT1 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_SWT1_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_SWT1_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_SWT1_EXPIRY_MASK)
 
@@ -5625,8 +4521,6 @@ typedef struct {
 /*! start_emask_ble_swt2_expiry - Event Mask: Chain with SWT2, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT2 expires. This will chain the current CDT with SWT2., 0x0:
  *    no event, 0x1: timer starts counting down when SWT2 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT2 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_SWT2_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_SWT2_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_SWT2_EXPIRY_MASK)
 
@@ -5635,8 +4529,6 @@ typedef struct {
 /*! start_emask_ble_swt3_expiry - Event Mask: Chain with SWT3, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT3 expires. This will chain the current CDT with SWT3., 0x0:
  *    no event, 0x1: timer starts counting down when SWT3 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT3 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_SWT3_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_SWT3_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_START_EMASK_BLE_SWT3_EXPIRY_MASK)
 
@@ -5659,8 +4551,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_CDT_ADJ_EN_SHIFT (31U)
 /*! cdt_adj_en - CDT timing adjustment enable, CDT timing adjustment enable for BLE 2M and BLE LR
  *    Tx/Rx for CI = 2;8., 0x0: disable, 0x1: enable
- *  0b0..disable
- *  0b1..enable
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_4_CDT_ADJ_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_4_CDT_ADJ_EN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_4_CDT_ADJ_EN_MASK)
 /*! @} */
@@ -5679,18 +4569,13 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_INTR_MASK (0x1U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_INTR_SHIFT (0U)
-/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer
- *  0b0..no event
- *  0b1..interrupt triggered at expiry of timer
- */
+/*! expiry_emask_intr - Event Mask: Interrupt, Expiration Event Mask for Interrupt, 0x0: no event, 0x1: interrupt triggered at expiry of timer */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_INTR_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_INTR_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_TX_MASK (0x2U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_TX_SHIFT (1U)
 /*! expiry_emask_tx - Event Mask: Tx, Expiration Event Mask for triggering an Tx transaction., 0x0:
  *    no event, 0x1: Tx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Tx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_TX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_TX_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_TX_MASK)
 
@@ -5698,8 +4583,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_RX_SHIFT (2U)
 /*! expiry_emask_rx - Event Mask: Rx, Expiration Event Mask for triggering an Rx transaction., 0x0:
  *    no event, 0x1: Rx event triggered at timer expiry
- *  0b0..no event
- *  0b1..Rx event triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_RX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_RX_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_RX_MASK)
 
@@ -5707,8 +4590,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_ABORT_SHIFT (3U)
 /*! expiry_emask_abort - Event Mask: Abort, Expiration Event Mask for triggering an Abort from
  *    software., 0x0: no event, 0x1: Abort triggered at timer expiry
- *  0b0..no event
- *  0b1..Abort triggered at timer expiry
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_ABORT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_EXPIRY_EMASK_ABORT_MASK)
 
@@ -5717,8 +4598,6 @@ typedef struct {
 /*! start_emask_ble_txstart - Event Mask: BLE Tx start, Start Event Mask for triggering the CDT
  *    counter. Start counting at the beginning of a BLE Tx transaction., 0x0: no event, 0x1: timer
  *    starts counting down from programmed value at start of next BLE Tx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at start of next BLE Tx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_TXSTART(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_TXSTART_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_TXSTART_MASK)
 
@@ -5727,8 +4606,6 @@ typedef struct {
 /*! start_emask_ble_rxstart - Event Mask: BLE Rx start, Start Event Mask for triggering the CDT
  *    counter. Start counting at the beginning of a BLE Rx transaction., 0x0: no event, 0x1: timer
  *    starts counting down from programmed value at start of next BLE Rx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at start of next BLE Rx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_RXSTART(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_RXSTART_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_RXSTART_MASK)
 
@@ -5737,8 +4614,6 @@ typedef struct {
 /*! start_emask_ble_txend - Event Mask: BLE Tx end, Start Event Mask for triggering the CDT counter.
  *    Start counting at the end of a BLE Tx transaction., 0x0: no event, 0x1: timer starts counting
  *    down from programmed value at end of next BLE Tx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BLE Tx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_TXEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_TXEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_TXEND_MASK)
 
@@ -5747,8 +4622,6 @@ typedef struct {
 /*! start_emask_ble_rxend - Event Mask: BLE Rx end, Start Event Mask for triggering the CDT counter.
  *    Start counting at the end of a BLE Rx transaction., 0x0: no event, 0x1: timer starts counting
  *    down from programmed value at end of next BLE Rx, transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BLE Rx transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_RXEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_RXEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_RXEND_MASK)
 
@@ -5757,8 +4630,6 @@ typedef struct {
 /*! start_emask_btc_pktend - Event Mask: BTC PKT end, Start Event Mask for triggering the CDT
  *    counter. Start counting at the end of a BTC Tx or Rx transaction., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at end of next BTC packet (Tx, or Rx) transaction
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at end of next BTC packet (Tx or Rx) transaction
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BTC_PKTEND(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BTC_PKTEND_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BTC_PKTEND_MASK)
 
@@ -5767,8 +4638,6 @@ typedef struct {
 /*! start_emask_ble_corrhit - Event Mask: BLE CORR hit, Start Event Mask for triggering the CDT
  *    counter. Start counting at BLE correlation hit., 0x0: no event, 0x1: timer starts counting down
  *    from programmed value at next BLE correlation hit
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BLE correlation hit
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CORRHIT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CORRHIT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CORRHIT_MASK)
 
@@ -5777,8 +4646,6 @@ typedef struct {
 /*! start_emask_bca_req_assert - Event Mask: BCA request assertion, Start Event Mask for triggering
  *    the CDT counter. Start counting at BCA request assertion., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BCA_req assertion
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BCA_req assertion
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BCA_REQ_ASSERT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BCA_REQ_ASSERT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BCA_REQ_ASSERT_MASK)
 
@@ -5787,8 +4654,6 @@ typedef struct {
 /*! start_emask_bca_req_deassert - Event Mask: BCA request deassertion, Start Event Mask for
  *    triggering the CDT counter. Start counting at BCA_req de-assertion., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BCA_req de-assertion
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BCA_req de-assertion
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BCA_REQ_DEASSERT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BCA_REQ_DEASSERT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BCA_REQ_DEASSERT_MASK)
 
@@ -5797,8 +4662,6 @@ typedef struct {
 /*! start_emask_ble_corrmiss - Event Mask: BLE CORR miss, Start Event Mask for triggering the CDT
  *    counter. Start counting at BLE correlation timeout interrupt., 0x0: no event, 0x1: timer starts
  *    counting down from programmed value at next BLE correlation miss
- *  0b0..no event
- *  0b1..timer starts counting down from programmed value at next BLE correlation miss
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CORRMISS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CORRMISS_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CORRMISS_MASK)
 
@@ -5807,8 +4670,6 @@ typedef struct {
 /*! start_emask_sw_trigger - Event Mask: Software trigger, Start Event Mask for triggering the CDT
  *    counter. Start counting when the firmware sets this bit. This bit is self clearing., 0x0: no
  *    event, 0x1: timer starts counting down from the programmed value as soon as this bit is set
- *  0b0..no event
- *  0b1..timer starts counting down from the programmed value as soon as this bit is set
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_SW_TRIGGER(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_SW_TRIGGER_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_SW_TRIGGER_MASK)
 
@@ -5818,8 +4679,6 @@ typedef struct {
  *    counter. Start counting when hardware abort occurs. The abort may be for a transmit packet or a
  *    receive packet., 0x0: no event, 0x1: timer starts counting down from the programmed value bit
  *    when hardware abort, happens
- *  0b0..no event
- *  0b1..timer starts counting down from the programmed value bit when hardware abort happens
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_HW_ABORT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_HW_ABORT_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_HW_ABORT_MASK)
 
@@ -5828,8 +4687,6 @@ typedef struct {
 /*! cdt_value_reset - CDT value reset, This bit resets the CDT counter to 0. It will not trigger any
  *    expiry conditions (if programmed). This bit is self clearing, 0x0: no event, 0x1: Timer is
  *    reset to 0 immediately
- *  0b0..no event
- *  0b1..Timer is reset to 0 immediately
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_CDT_VALUE_RESET(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_CDT_VALUE_RESET_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_CDT_VALUE_RESET_MASK)
 
@@ -5838,8 +4695,6 @@ typedef struct {
 /*! start_emask_ble_cdt0_expiry - Event Mask: Chain with CDT0, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT0 expires. This will chain the current CDT with CDT0., 0x0:
  *    no event, 0x1: timer starts counting down when CDT0 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT0 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT0_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT0_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT0_EXPIRY_MASK)
 
@@ -5848,8 +4703,6 @@ typedef struct {
 /*! start_emask_ble_cdt1_expiry - Event Mask: Chain with CDT1, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT1 expires. This will chain the current CDT with CDT1., 0x0:
  *    no event, 0x1: timer starts counting down when CDT1 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT1 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT1_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT1_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT1_EXPIRY_MASK)
 
@@ -5858,8 +4711,6 @@ typedef struct {
 /*! start_emask_ble_cdt2_expiry - Event Mask: Chain with CDT2, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT2 expires. This will chain the current CDT with CDT2., 0x0:
  *    no event, 0x1: timer starts counting down when CDT2 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT2 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT2_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT2_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT2_EXPIRY_MASK)
 
@@ -5868,8 +4719,6 @@ typedef struct {
 /*! start_emask_ble_cdt3_expiry - Event Mask: Chain with CDT3, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT3 expires. This will chain the current CDT with CDT3., 0x0:
  *    No event, 0x1: timer starts counting down when CDT3 expires
- *  0b0..No event
- *  0b1..timer starts counting down when CDT3 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT3_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT3_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT3_EXPIRY_MASK)
 
@@ -5878,8 +4727,6 @@ typedef struct {
 /*! start_emask_ble_cdt4_expiry - Event Mask: Chain with CDT4, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT4 expires. This will chain the current CDT with CDT4., 0x0:
  *    no event, 0x1: timer starts counting down when CDT4 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT4 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT4_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT4_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT4_EXPIRY_MASK)
 
@@ -5888,8 +4735,6 @@ typedef struct {
 /*! start_emask_ble_cdt5_expiry - Event Mask: Chain with CDT5, Start Event Mask for triggering the
  *    CDT counter. Start counting when CDT5 expires. This will chain the current CDT with CDT5., 0x0:
  *    no event, 0x1: timer starts counting down when CDT5 expires
- *  0b0..no event
- *  0b1..timer starts counting down when CDT5 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT5_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT5_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_CDT5_EXPIRY_MASK)
 
@@ -5898,8 +4743,6 @@ typedef struct {
 /*! start_emask_ble_swt0_expiry - Event Mask: Chain with SWT0, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT0 expires. This will chain the current CDT with SWT0., 0x0:
  *    no event, 0x1: timer starts counting down when SWT0 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT0 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_SWT0_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_SWT0_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_SWT0_EXPIRY_MASK)
 
@@ -5908,8 +4751,6 @@ typedef struct {
 /*! start_emask_ble_swt1_expiry - Event Mask: Chain with SWT1, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT1 expires. This will chain the current CDT with SWT1., 0x0:
  *    no event, 0x1: timer starts counting down when SWT1 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT1 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_SWT1_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_SWT1_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_SWT1_EXPIRY_MASK)
 
@@ -5918,8 +4759,6 @@ typedef struct {
 /*! start_emask_ble_swt2_expiry - Event Mask: Chain with SWT2, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT2 expires. This will chain the current CDT with SWT2., 0x0:
  *    no event, 0x1: timer starts counting down when SWT2 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT2 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_SWT2_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_SWT2_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_SWT2_EXPIRY_MASK)
 
@@ -5928,8 +4767,6 @@ typedef struct {
 /*! start_emask_ble_swt3_expiry - Event Mask: Chain with SWT3, Start Event Mask for triggering the
  *    CDT counter. Start counting when SWT3 expires. This will chain the current CDT with SWT3., 0x0:
  *    no event, 0x1: timer starts counting down when SWT3 expires
- *  0b0..no event
- *  0b1..timer starts counting down when SWT3 expires
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_SWT3_EXPIRY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_SWT3_EXPIRY_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_START_EMASK_BLE_SWT3_EXPIRY_MASK)
 
@@ -5952,8 +4789,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_CDT_ADJ_EN_SHIFT (31U)
 /*! cdt_adj_en - CDT timing adjustment enable, CDT timing adjustment enable for BLE 2M and BLE LR
  *    Tx/Rx for CI = 2;8., 0x0: disable, 0x1: enable
- *  0b0..disable
- *  0b1..enable
  */
 #define BLE2_REG_BLE_REG_TMR_CDT_CTL_5_CDT_ADJ_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CTL_5_CDT_ADJ_EN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CTL_5_CDT_ADJ_EN_MASK)
 /*! @} */
@@ -5977,10 +4812,7 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_2M_DATA_ADJ_RX_ADJ_SIGN_MASK (0x80U)
 #define BLE2_REG_BLE_REG_TMR_CDT_2M_DATA_ADJ_RX_ADJ_SIGN_SHIFT (7U)
-/*! rx_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate
- *  0b0..add
- *  0b1..substrate
- */
+/*! rx_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate */
 #define BLE2_REG_BLE_REG_TMR_CDT_2M_DATA_ADJ_RX_ADJ_SIGN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_2M_DATA_ADJ_RX_ADJ_SIGN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_2M_DATA_ADJ_RX_ADJ_SIGN_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_2M_DATA_ADJ_TX_ADJ_VALUE_MASK (0x7F0000U)
@@ -5990,10 +4822,7 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_2M_DATA_ADJ_TX_ADJ_SIGN_MASK (0x800000U)
 #define BLE2_REG_BLE_REG_TMR_CDT_2M_DATA_ADJ_TX_ADJ_SIGN_SHIFT (23U)
-/*! tx_adj_sign - Tx Operation Sign, 0x0: add, 0x1: substrate
- *  0b0..add
- *  0b1..substrate
- */
+/*! tx_adj_sign - Tx Operation Sign, 0x0: add, 0x1: substrate */
 #define BLE2_REG_BLE_REG_TMR_CDT_2M_DATA_ADJ_TX_ADJ_SIGN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_2M_DATA_ADJ_TX_ADJ_SIGN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_2M_DATA_ADJ_TX_ADJ_SIGN_MASK)
 /*! @} */
 
@@ -6007,10 +4836,7 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_TX_DATA_ADJ_TX_CI_2_ADJ_SIGN_MASK (0x80U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_TX_DATA_ADJ_TX_CI_2_ADJ_SIGN_SHIFT (7U)
-/*! tx_ci_2_adj_sign - Tx Operation Sign, 0x0: add, 0x1: substrate
- *  0b0..add
- *  0b1..substrate
- */
+/*! tx_ci_2_adj_sign - Tx Operation Sign, 0x0: add, 0x1: substrate */
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_TX_DATA_ADJ_TX_CI_2_ADJ_SIGN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CI_TX_DATA_ADJ_TX_CI_2_ADJ_SIGN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CI_TX_DATA_ADJ_TX_CI_2_ADJ_SIGN_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_TX_DATA_ADJ_TX_CI_8_ADJ_VALUE_MASK (0x7F0000U)
@@ -6020,10 +4846,7 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_TX_DATA_ADJ_TX_CI_8_ADJ_SIGN_MASK (0x800000U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_TX_DATA_ADJ_TX_CI_8_ADJ_SIGN_SHIFT (23U)
-/*! tx_ci_8_adj_sign - Tx Operation Sign, 0x0: add, 0x1: substrate
- *  0b0..add
- *  0b1..substrate
- */
+/*! tx_ci_8_adj_sign - Tx Operation Sign, 0x0: add, 0x1: substrate */
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_TX_DATA_ADJ_TX_CI_8_ADJ_SIGN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CI_TX_DATA_ADJ_TX_CI_8_ADJ_SIGN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CI_TX_DATA_ADJ_TX_CI_8_ADJ_SIGN_MASK)
 /*! @} */
 
@@ -6037,10 +4860,7 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_0_RX_CI_2_ADJ_SIGN_MASK (0x80U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_0_RX_CI_2_ADJ_SIGN_SHIFT (7U)
-/*! rx_ci_2_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate
- *  0b0..add
- *  0b1..substrate
- */
+/*! rx_ci_2_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate */
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_0_RX_CI_2_ADJ_SIGN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_0_RX_CI_2_ADJ_SIGN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_0_RX_CI_2_ADJ_SIGN_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_0_RX_CI_8_ADJ_VALUE_MASK (0x7F00U)
@@ -6050,10 +4870,7 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_0_RX_CI_8_ADJ_SIGN_MASK (0x8000U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_0_RX_CI_8_ADJ_SIGN_SHIFT (15U)
-/*! rx_ci_8_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate
- *  0b0..add
- *  0b1..substrate
- */
+/*! rx_ci_8_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate */
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_0_RX_CI_8_ADJ_SIGN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_0_RX_CI_8_ADJ_SIGN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_0_RX_CI_8_ADJ_SIGN_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_0_RX_CI_ADJ_EMASK_MASK (0x1F000000U)
@@ -6072,10 +4889,7 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_1_RX_CI_2_ADJ_SIGN_MASK (0x80U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_1_RX_CI_2_ADJ_SIGN_SHIFT (7U)
-/*! rx_ci_2_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate
- *  0b0..add
- *  0b1..substrate
- */
+/*! rx_ci_2_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate */
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_1_RX_CI_2_ADJ_SIGN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_1_RX_CI_2_ADJ_SIGN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_1_RX_CI_2_ADJ_SIGN_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_1_RX_CI_8_ADJ_VALUE_MASK (0x7F00U)
@@ -6085,10 +4899,7 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_1_RX_CI_8_ADJ_SIGN_MASK (0x8000U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_1_RX_CI_8_ADJ_SIGN_SHIFT (15U)
-/*! rx_ci_8_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate
- *  0b0..add
- *  0b1..substrate
- */
+/*! rx_ci_8_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate */
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_1_RX_CI_8_ADJ_SIGN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_1_RX_CI_8_ADJ_SIGN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_1_RX_CI_8_ADJ_SIGN_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_1_RX_CI_ADJ_EMASK_MASK (0x1F000000U)
@@ -6107,10 +4918,7 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_2_RX_CI_2_ADJ_SIGN_MASK (0x80U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_2_RX_CI_2_ADJ_SIGN_SHIFT (7U)
-/*! rx_ci_2_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate
- *  0b0..add
- *  0b1..substrate
- */
+/*! rx_ci_2_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate */
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_2_RX_CI_2_ADJ_SIGN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_2_RX_CI_2_ADJ_SIGN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_2_RX_CI_2_ADJ_SIGN_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_2_RX_CI_8_ADJ_VALUE_MASK (0x7F00U)
@@ -6120,10 +4928,7 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_2_RX_CI_8_ADJ_SIGN_MASK (0x8000U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_2_RX_CI_8_ADJ_SIGN_SHIFT (15U)
-/*! rx_ci_8_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate
- *  0b0..add
- *  0b1..substrate
- */
+/*! rx_ci_8_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate */
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_2_RX_CI_8_ADJ_SIGN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_2_RX_CI_8_ADJ_SIGN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_2_RX_CI_8_ADJ_SIGN_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_2_RX_CI_ADJ_EMASK_MASK (0x1F000000U)
@@ -6142,10 +4947,7 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_3_RX_CI_2_ADJ_SIGN_MASK (0x80U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_3_RX_CI_2_ADJ_SIGN_SHIFT (7U)
-/*! rx_ci_2_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate
- *  0b0..add
- *  0b1..substrate
- */
+/*! rx_ci_2_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate */
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_3_RX_CI_2_ADJ_SIGN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_3_RX_CI_2_ADJ_SIGN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_3_RX_CI_2_ADJ_SIGN_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_3_RX_CI_8_ADJ_VALUE_MASK (0x7F00U)
@@ -6155,10 +4957,7 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_3_RX_CI_8_ADJ_SIGN_MASK (0x8000U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_3_RX_CI_8_ADJ_SIGN_SHIFT (15U)
-/*! rx_ci_8_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate
- *  0b0..add
- *  0b1..substrate
- */
+/*! rx_ci_8_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate */
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_3_RX_CI_8_ADJ_SIGN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_3_RX_CI_8_ADJ_SIGN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_3_RX_CI_8_ADJ_SIGN_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_3_RX_CI_ADJ_EMASK_MASK (0x1F000000U)
@@ -6177,10 +4976,7 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_4_RX_CI_2_ADJ_SIGN_MASK (0x80U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_4_RX_CI_2_ADJ_SIGN_SHIFT (7U)
-/*! rx_ci_2_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate
- *  0b0..add
- *  0b1..substrate
- */
+/*! rx_ci_2_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate */
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_4_RX_CI_2_ADJ_SIGN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_4_RX_CI_2_ADJ_SIGN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_4_RX_CI_2_ADJ_SIGN_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_4_RX_CI_8_ADJ_VALUE_MASK (0x7F00U)
@@ -6190,10 +4986,7 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_4_RX_CI_8_ADJ_SIGN_MASK (0x8000U)
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_4_RX_CI_8_ADJ_SIGN_SHIFT (15U)
-/*! rx_ci_8_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate
- *  0b0..add
- *  0b1..substrate
- */
+/*! rx_ci_8_adj_sign - Rx Operation Sign, 0x0: add, 0x1: substrate */
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_4_RX_CI_8_ADJ_SIGN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_4_RX_CI_8_ADJ_SIGN_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_4_RX_CI_8_ADJ_SIGN_MASK)
 
 #define BLE2_REG_BLE_REG_TMR_CDT_CI_RX_DATA_ADJ_4_RX_CI_ADJ_EMASK_MASK (0x1F000000U)
@@ -6205,18 +4998,18 @@ typedef struct {
 /*! @name BLE_REG_TMR_CDT_STS - Countdown timer Status */
 /*! @{ */
 
-#define BLE2_REG_BLE_REG_TMR_CDT_STS_cdt_expiry_sts_MASK (0x3FU)
-#define BLE2_REG_BLE_REG_TMR_CDT_STS_cdt_expiry_sts_SHIFT (0U)
+#define BLE2_REG_BLE_REG_TMR_CDT_STS_CDT_EXPIRY_STS_MASK (0x3FU)
+#define BLE2_REG_BLE_REG_TMR_CDT_STS_CDT_EXPIRY_STS_SHIFT (0U)
 /*! cdt_expiry_sts - CDT Expiry Status in CDT Matching mode, This bit is updated at each CDT expiry;
  *    when CDT is programmed in cdt_matching_mode. For the purpose of this register; past value on
  *    CDT refers to any value less than the half-slot+qus timestamp at which CDT was programmed.
  *    Once set it remains set until this CDT expires again in the matching mode, 0x0: CDT matching was
  *    successful, 0x1: CDT matching value was in the past at the time of programming
  */
-#define BLE2_REG_BLE_REG_TMR_CDT_STS_cdt_expiry_sts(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_STS_cdt_expiry_sts_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_STS_cdt_expiry_sts_MASK)
+#define BLE2_REG_BLE_REG_TMR_CDT_STS_CDT_EXPIRY_STS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_TMR_CDT_STS_CDT_EXPIRY_STS_SHIFT)) & BLE2_REG_BLE_REG_TMR_CDT_STS_CDT_EXPIRY_STS_MASK)
 /*! @} */
 
-/*! @name BLE_REG_ANT_SWITCH_TX_CNTRL - Tx Antenna Switch Control */
+/*! @name BLE_REG_ANT_SWITCH_TX_CNTRL - Tx Antenna Switch Control, Control register of Bluetooth Tx antenna switching. */
 /*! @{ */
 
 #define BLE2_REG_BLE_REG_ANT_SWITCH_TX_CNTRL_TX_ANT_SWITCH_DELAY_1M_MASK (0xFFU)
@@ -6248,10 +5041,6 @@ typedef struct {
 /*! tx_ant_switch_rate - Antenna Switch Rate, Define the antenna switching rate for extension
  *    packet., 0x0: switch antenna every 4 usec, 0x1: switch antenna every 2 usec, 0x2: switch antenna
  *    every 1 usec (RFU), 0x3: not valid
- *  0b00..switch antenna every 4 usec
- *  0b01..switch antenna every 2 usec
- *  0b10..switch antenna every 1 usec (RFU)
- *  0b11..not valid
  */
 #define BLE2_REG_BLE_REG_ANT_SWITCH_TX_CNTRL_TX_ANT_SWITCH_RATE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_ANT_SWITCH_TX_CNTRL_TX_ANT_SWITCH_RATE_SHIFT)) & BLE2_REG_BLE_REG_ANT_SWITCH_TX_CNTRL_TX_ANT_SWITCH_RATE_MASK)
 
@@ -6265,8 +5054,6 @@ typedef struct {
 /*! tx_ant_switch_en - Antenna Switch Enable for Tx DFE, Switch antenna for extension when
  *    transmitting location packet., 0x0: disable antenna switch for Tx DFE, 0x1: enable antenna switch for
  *    Tx DFE
- *  0b0..disable antenna switch for Tx DFE
- *  0b1..enable antenna switch for Tx DFE
  */
 #define BLE2_REG_BLE_REG_ANT_SWITCH_TX_CNTRL_TX_ANT_SWITCH_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_ANT_SWITCH_TX_CNTRL_TX_ANT_SWITCH_EN_SHIFT)) & BLE2_REG_BLE_REG_ANT_SWITCH_TX_CNTRL_TX_ANT_SWITCH_EN_MASK)
 /*! @} */
@@ -6751,7 +5538,7 @@ typedef struct {
 #define BLE2_REG_BLE_REG_ANT_SWITCH_TX_MAP_9_TX_ANT_SWITCH_INDEX_3(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_ANT_SWITCH_TX_MAP_9_TX_ANT_SWITCH_INDEX_3_SHIFT)) & BLE2_REG_BLE_REG_ANT_SWITCH_TX_MAP_9_TX_ANT_SWITCH_INDEX_3_MASK)
 /*! @} */
 
-/*! @name BLE_REG_ANT_SWITCH_RX_CNTRL - Rx Antenna Switch Control */
+/*! @name BLE_REG_ANT_SWITCH_RX_CNTRL - Rx Antenna Switch Control, Control register of Bluetooth Rx antenna switching. */
 /*! @{ */
 
 #define BLE2_REG_BLE_REG_ANT_SWITCH_RX_CNTRL_RX_ANT_SWITCH_DELAY_1M_MASK (0xFFU)
@@ -6784,10 +5571,6 @@ typedef struct {
 /*! rx_ant_switch_rate - Antenna Switch Rate, Define the antenna switching rate for extension
  *    packet., 0x0: switch antenna every 4 usec, 0x1: switch antenna every 2 usec, 0x2: switch antenna
  *    every 1 usec (RFU), 0x3: not valid
- *  0b00..switch antenna every 4 usec
- *  0b01..switch antenna every 2 usec
- *  0b10..switch antenna every 1 usec (RFU)
- *  0b11..not valid
  */
 #define BLE2_REG_BLE_REG_ANT_SWITCH_RX_CNTRL_RX_ANT_SWITCH_RATE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_ANT_SWITCH_RX_CNTRL_RX_ANT_SWITCH_RATE_SHIFT)) & BLE2_REG_BLE_REG_ANT_SWITCH_RX_CNTRL_RX_ANT_SWITCH_RATE_MASK)
 
@@ -6801,8 +5584,6 @@ typedef struct {
 /*! rx_ant_switch_en - Antenna Switch Enable for Rx DFE, Switch antenna for extension when receiving
  *    location packet., 0x0: disable antenna switch for Rx DFE, 0x1: enable antenna switch for Rx
  *    DFE
- *  0b0..disable antenna switch for Rx DFE
- *  0b1..enable antenna switch for Rx DFE
  */
 #define BLE2_REG_BLE_REG_ANT_SWITCH_RX_CNTRL_RX_ANT_SWITCH_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_ANT_SWITCH_RX_CNTRL_RX_ANT_SWITCH_EN_SHIFT)) & BLE2_REG_BLE_REG_ANT_SWITCH_RX_CNTRL_RX_ANT_SWITCH_EN_MASK)
 /*! @} */
@@ -7287,936 +6068,6 @@ typedef struct {
 #define BLE2_REG_BLE_REG_ANT_SWITCH_RX_MAP_9_RX_ANT_SWITCH_INDEX_3(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_ANT_SWITCH_RX_MAP_9_RX_ANT_SWITCH_INDEX_3_SHIFT)) & BLE2_REG_BLE_REG_ANT_SWITCH_RX_MAP_9_RX_ANT_SWITCH_INDEX_3_MASK)
 /*! @} */
 
-/*! @name BLE_REG_PST_CTRL_0 - Periodic SW Timer 0: Control */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_CTRL_0_ISO_TMR_EN_MASK (0x1U)
-#define BLE2_REG_BLE_REG_PST_CTRL_0_ISO_TMR_EN_SHIFT (0U)
-/*! iso_tmr_en - Enable Periodic SW Timer's ISO_Intvl_Tmr/BIS_Spc_Tmr
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_0_ISO_TMR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_0_ISO_TMR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_0_ISO_TMR_EN_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_0_TIMER_MODE_MASK (0x2U)
-#define BLE2_REG_BLE_REG_PST_CTRL_0_TIMER_MODE_SHIFT (1U)
-/*! timer_mode - Configure Peridodic SW Timer Timer Mode
- *  0b0..configure to BIS timer mode
- *  0b1..configure to CIS timer mode
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_0_TIMER_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_0_TIMER_MODE_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_0_TIMER_MODE_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_0_SEQ_MODE_MASK (0x4U)
-#define BLE2_REG_BLE_REG_PST_CTRL_0_SEQ_MODE_SHIFT (2U)
-/*! seq_mode - Configure Multiple BISes/CISes To Sequential Or Interleaved Arrangement
- *  0b0..configure to interleaved arrangement
- *  0b1..configure to sequential arrangement
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_0_SEQ_MODE(x)  (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_0_SEQ_MODE_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_0_SEQ_MODE_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_0_TRIG_TX_EVT_MASK (0x10U)
-#define BLE2_REG_BLE_REG_PST_CTRL_0_TRIG_TX_EVT_SHIFT (4U)
-/*! trig_tx_evt - Trigger a Packet Tx Event Upon ISO_Intvl_Tmr/BIS_Spc_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_0_TRIG_TX_EVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_0_TRIG_TX_EVT_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_0_TRIG_TX_EVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_0_TRIG_RX_EVT_MASK (0x20U)
-#define BLE2_REG_BLE_REG_PST_CTRL_0_TRIG_RX_EVT_SHIFT (5U)
-/*! trig_rx_evt - Trigger a Packet Rx Event Upon ISO_Intvl_Tmr/BIS_Spc_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_0_TRIG_RX_EVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_0_TRIG_RX_EVT_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_0_TRIG_RX_EVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_0_TRIG_INTR_EVT_MASK (0x40U)
-#define BLE2_REG_BLE_REG_PST_CTRL_0_TRIG_INTR_EVT_SHIFT (6U)
-/*! trig_intr_evt - Trigger Interrupt Event Upon ISO_Intvl_Tmr/BIS_Spc_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable. If timer_mode is BIS timer mode, bis_anchr_intr will trigger, otherwise, cis_anchr_intr will.
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_0_TRIG_INTR_EVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_0_TRIG_INTR_EVT_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_0_TRIG_INTR_EVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_0_SYNC_DELAY_INTR_EN_MASK (0x100U)
-#define BLE2_REG_BLE_REG_PST_CTRL_0_SYNC_DELAY_INTR_EN_SHIFT (8U)
-/*! sync_delay_intr_en - Trigger Interrupt Event Upon Sync_Dly_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable. If timer_mode is BIS timer mode, big_sync_delay_intr will trigger, otherwise, cig_sync_delay_intr will.
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_0_SYNC_DELAY_INTR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_0_SYNC_DELAY_INTR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_0_SYNC_DELAY_INTR_EN_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_0_EARLY_INTR_TIME_MASK (0x1FF0000U)
-#define BLE2_REG_BLE_REG_PST_CTRL_0_EARLY_INTR_TIME_SHIFT (16U)
-/*! early_intr_time - Early Interrupt Assertion Time */
-#define BLE2_REG_BLE_REG_PST_CTRL_0_EARLY_INTR_TIME(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_0_EARLY_INTR_TIME_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_0_EARLY_INTR_TIME_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_0_EARLY_INTR_EN_MASK (0x10000000U)
-#define BLE2_REG_BLE_REG_PST_CTRL_0_EARLY_INTR_EN_SHIFT (28U)
-/*! early_intr_en - Enable Early Interrupt Assertion For bis_anchr_intr or cis_anchr_intr
- *  0b0..disable
- *  0b1..enable. When enabled, the bis_anchr_intr or cis_anchr_intr will be asserted ealier than anchor point by the specified early_intr_time time.
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_0_EARLY_INTR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_0_EARLY_INTR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_0_EARLY_INTR_EN_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_STS_0 - Periodic SW Timer 0: Status */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_STS_0_CURR_BIS_MASK (0x1FU)
-#define BLE2_REG_BLE_REG_PST_STS_0_CURR_BIS_SHIFT (0U)
-/*! curr_bis - Current Active BIS/CIS Number */
-#define BLE2_REG_BLE_REG_PST_STS_0_CURR_BIS(x)   (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_0_CURR_BIS_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_0_CURR_BIS_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_0_BIS_ANCHR_INTR_MASK (0x20U)
-#define BLE2_REG_BLE_REG_PST_STS_0_BIS_ANCHR_INTR_SHIFT (5U)
-/*! bis_anchr_intr - BIS Anchor Point Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_0_BIS_ANCHR_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_0_BIS_ANCHR_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_0_BIS_ANCHR_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_0_CIS_ANCHR_INTR_MASK (0x40U)
-#define BLE2_REG_BLE_REG_PST_STS_0_CIS_ANCHR_INTR_SHIFT (6U)
-/*! cis_anchr_intr - CIS Anchor Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_0_CIS_ANCHR_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_0_CIS_ANCHR_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_0_CIS_ANCHR_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_0_CURR_SUBEVT_MASK (0x1F00U)
-#define BLE2_REG_BLE_REG_PST_STS_0_CURR_SUBEVT_SHIFT (8U)
-/*! curr_subevt - Current Active Subevent Number */
-#define BLE2_REG_BLE_REG_PST_STS_0_CURR_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_0_CURR_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_0_CURR_SUBEVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_0_SUB_EVENT_INTR_MASK (0x2000U)
-#define BLE2_REG_BLE_REG_PST_STS_0_SUB_EVENT_INTR_SHIFT (13U)
-/*! sub_event_intr - Subevent Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_0_SUB_EVENT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_0_SUB_EVENT_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_0_SUB_EVENT_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_0_CTRL_SUBEVT_INTR_MASK (0x4000U)
-#define BLE2_REG_BLE_REG_PST_STS_0_CTRL_SUBEVT_INTR_SHIFT (14U)
-/*! ctrl_subevt_intr - Control Subevent Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_0_CTRL_SUBEVT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_0_CTRL_SUBEVT_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_0_CTRL_SUBEVT_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_0_BIG_SYNC_DELAY_INTR_MASK (0x10000U)
-#define BLE2_REG_BLE_REG_PST_STS_0_BIG_SYNC_DELAY_INTR_SHIFT (16U)
-/*! big_sync_delay_intr - BIG_Sync_Delay Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_0_BIG_SYNC_DELAY_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_0_BIG_SYNC_DELAY_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_0_BIG_SYNC_DELAY_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_0_CIG_SYNC_DELAY_INTR_MASK (0x20000U)
-#define BLE2_REG_BLE_REG_PST_STS_0_CIG_SYNC_DELAY_INTR_SHIFT (17U)
-/*! cig_sync_delay_intr - CIG_Sync_Delay Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_0_CIG_SYNC_DELAY_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_0_CIG_SYNC_DELAY_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_0_CIG_SYNC_DELAY_INTR_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_FRST_ANCHR_0 - Periodic SW Timer 0: First Anchor */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_FRST_ANCHR_0_FRST_ANCHR_NAT_CLK_VAL_MASK (0xFFFFFFFU)
-#define BLE2_REG_BLE_REG_PST_FRST_ANCHR_0_FRST_ANCHR_NAT_CLK_VAL_SHIFT (0U)
-/*! frst_anchr_nat_clk_val - First Anchor Native Clock Value */
-#define BLE2_REG_BLE_REG_PST_FRST_ANCHR_0_FRST_ANCHR_NAT_CLK_VAL(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_FRST_ANCHR_0_FRST_ANCHR_NAT_CLK_VAL_SHIFT)) & BLE2_REG_BLE_REG_PST_FRST_ANCHR_0_FRST_ANCHR_NAT_CLK_VAL_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_ANCHR_OFST_0 - Periodic SW Timer 0: First Anchor Offset */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_0_FRST_ANCHR_START_TIME_MASK (0x1FFU)
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_0_FRST_ANCHR_START_TIME_SHIFT (0U)
-/*! frst_anchr_start_time - First Anchor Start Time */
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_0_FRST_ANCHR_START_TIME(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_ANCHR_OFST_0_FRST_ANCHR_START_TIME_SHIFT)) & BLE2_REG_BLE_REG_PST_ANCHR_OFST_0_FRST_ANCHR_START_TIME_MASK)
-
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_0_CURR_ANCHR_START_TIME_MASK (0x1FF0000U)
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_0_CURR_ANCHR_START_TIME_SHIFT (16U)
-/*! curr_anchr_start_time - Current Anchor Start Time */
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_0_CURR_ANCHR_START_TIME(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_ANCHR_OFST_0_CURR_ANCHR_START_TIME_SHIFT)) & BLE2_REG_BLE_REG_PST_ANCHR_OFST_0_CURR_ANCHR_START_TIME_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_ANCHR_ADJ_0 - Periodic SW Timer 0: Anchor Adjustment */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_0_ANCHR_CORR_TIME_MASK (0x3FFU)
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_0_ANCHR_CORR_TIME_SHIFT (0U)
-/*! anchr_corr_time - Anchor Point To Correlation Hit Time */
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_0_ANCHR_CORR_TIME(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_ANCHR_ADJ_0_ANCHR_CORR_TIME_SHIFT)) & BLE2_REG_BLE_REG_PST_ANCHR_ADJ_0_ANCHR_CORR_TIME_MASK)
-
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_0_ADJ_AST_OFST_MASK (0x3F0000U)
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_0_ADJ_AST_OFST_SHIFT (16U)
-/*! adj_ast_ofst - Adjusted Anchor Start Time Offset */
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_0_ADJ_AST_OFST(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_ANCHR_ADJ_0_ADJ_AST_OFST_SHIFT)) & BLE2_REG_BLE_REG_PST_ANCHR_ADJ_0_ADJ_AST_OFST_MASK)
-
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_0_ADJ_AST_DIR_MASK (0x1000000U)
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_0_ADJ_AST_DIR_SHIFT (24U)
-/*! adj_ast_dir - Adjusted Anchor Start Time Direction
- *  0b0..Substract adj_ast_ofst from ISO_Intvl_Tmr value counting toward next BIS/CIS event, effectively moving
- *       next BIS/CIS anchor point to a earlier time. This is used when the averaged anchr_corr_time value is
- *       gradually decreasing, indicating the slave device's local clock is drifting slower.
- *  0b1..Add adj_ast_ofst to ISO_Intvl_Tmr value counting toward next BIS/CIS event, effectively delaying next
- *       BIS/CIS anchor point to a later time. This is used when the averaged anchr_corr_time value is gradually
- *       increasing, indicating the slave device's local clock is drifting faster.
- */
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_0_ADJ_AST_DIR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_ANCHR_ADJ_0_ADJ_AST_DIR_SHIFT)) & BLE2_REG_BLE_REG_PST_ANCHR_ADJ_0_ADJ_AST_DIR_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_INTVL_0 - Periodic SW Timer 0: ISO Interval */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_INTVL_0_ISO_INTERVAL_MASK (0xFFFU)
-#define BLE2_REG_BLE_REG_PST_INTVL_0_ISO_INTERVAL_SHIFT (0U)
-/*! iso_interval - Configure ISO Interval Time */
-#define BLE2_REG_BLE_REG_PST_INTVL_0_ISO_INTERVAL(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_INTVL_0_ISO_INTERVAL_SHIFT)) & BLE2_REG_BLE_REG_PST_INTVL_0_ISO_INTERVAL_MASK)
-
-#define BLE2_REG_BLE_REG_PST_INTVL_0_CURR_ISO_INTVL_TMR_MASK (0x3FFF0000U)
-#define BLE2_REG_BLE_REG_PST_INTVL_0_CURR_ISO_INTVL_TMR_SHIFT (16U)
-/*! curr_iso_intvl_tmr - Current ISO_Intvl_Tmr Timer Value */
-#define BLE2_REG_BLE_REG_PST_INTVL_0_CURR_ISO_INTVL_TMR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_INTVL_0_CURR_ISO_INTVL_TMR_SHIFT)) & BLE2_REG_BLE_REG_PST_INTVL_0_CURR_ISO_INTVL_TMR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_INTVL_0_BIT15_0_READ_MODE_MASK (0x40000000U)
-#define BLE2_REG_BLE_REG_PST_INTVL_0_BIT15_0_READ_MODE_SHIFT (30U)
-/*! bit15_0_read_mode - Bit[15:0] iso_interval field read back value
- *  0b0..iso_interval field will read back ISO_Interval time of BIS/CIS event being programmed. Unit is 1.25ms.
- *  0b1..iso_interval field will read back curr_iso_intvl_tmr_ofst[10:0] at the time of snapshot_iso_intvl_tmr
- *       command being programmed. Unit is 0.25 us.
- */
-#define BLE2_REG_BLE_REG_PST_INTVL_0_BIT15_0_READ_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_INTVL_0_BIT15_0_READ_MODE_SHIFT)) & BLE2_REG_BLE_REG_PST_INTVL_0_BIT15_0_READ_MODE_MASK)
-
-#define BLE2_REG_BLE_REG_PST_INTVL_0_SNAPSHOT_ISO_INTVL_TMR_MASK (0x80000000U)
-#define BLE2_REG_BLE_REG_PST_INTVL_0_SNAPSHOT_ISO_INTVL_TMR_SHIFT (31U)
-/*! snapshot_iso_intvl_tmr - Take a snapshot of ISO_Intvl_Tmr and offset counter value */
-#define BLE2_REG_BLE_REG_PST_INTVL_0_SNAPSHOT_ISO_INTVL_TMR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_INTVL_0_SNAPSHOT_ISO_INTVL_TMR_SHIFT)) & BLE2_REG_BLE_REG_PST_INTVL_0_SNAPSHOT_ISO_INTVL_TMR_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SPC_0 - Periodic SW Timer 0: Spacing */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SPC_0_BIS_SPACING_MASK (0xFFFFFU)
-#define BLE2_REG_BLE_REG_PST_SPC_0_BIS_SPACING_SHIFT (0U)
-/*! bis_spacing - Configure BIS Spacing Time */
-#define BLE2_REG_BLE_REG_PST_SPC_0_BIS_SPACING(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SPC_0_BIS_SPACING_SHIFT)) & BLE2_REG_BLE_REG_PST_SPC_0_BIS_SPACING_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SPC_0_NUM_BIS_MASK  (0x1F000000U)
-#define BLE2_REG_BLE_REG_PST_SPC_0_NUM_BIS_SHIFT (24U)
-/*! num_bis - Configure Number of BISes/CISes in BIG/CIG */
-#define BLE2_REG_BLE_REG_PST_SPC_0_NUM_BIS(x)    (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SPC_0_NUM_BIS_SHIFT)) & BLE2_REG_BLE_REG_PST_SPC_0_NUM_BIS_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SEL_STRM_0 - Periodic SW Timer 0: Select Stream */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SEL_STRM_0_SEL_STREAM_MASK (0xFFFFFFFEU)
-#define BLE2_REG_BLE_REG_PST_SEL_STRM_0_SEL_STREAM_SHIFT (1U)
-/*! sel_stream - Select Active Streams */
-#define BLE2_REG_BLE_REG_PST_SEL_STRM_0_SEL_STREAM(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SEL_STRM_0_SEL_STREAM_SHIFT)) & BLE2_REG_BLE_REG_PST_SEL_STRM_0_SEL_STREAM_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SYNC_DLY_0 - Periodic SW Timer 0: Group Sync Delay */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SYNC_DLY_0_SYNC_DELAY_MASK (0xFFFFFFU)
-#define BLE2_REG_BLE_REG_PST_SYNC_DLY_0_SYNC_DELAY_SHIFT (0U)
-/*! sync_delay - The BIG_Sync_Delay or CIG_Sync_Delay Time */
-#define BLE2_REG_BLE_REG_PST_SYNC_DLY_0_SYNC_DELAY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SYNC_DLY_0_SYNC_DELAY_SHIFT)) & BLE2_REG_BLE_REG_PST_SYNC_DLY_0_SYNC_DELAY_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SE_CTRL_0 - Periodic SW Timer 0: SubEvent Control */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_SUB_TMR_EN_MASK (0x1U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_SUB_TMR_EN_SHIFT (0U)
-/*! sub_tmr_en - Enable Periodic SW Timer's Sub_Intvl_Tmr
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_SUB_TMR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_0_SUB_TMR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_0_SUB_TMR_EN_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_TRIG_TX_SUBEVT_MASK (0x10U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_TRIG_TX_SUBEVT_SHIFT (4U)
-/*! trig_tx_subevt - Trigger a Packet Tx Event Upon Sub_Intvl_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_TRIG_TX_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_0_TRIG_TX_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_0_TRIG_TX_SUBEVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_TRIG_RX_SUBEVT_MASK (0x20U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_TRIG_RX_SUBEVT_SHIFT (5U)
-/*! trig_rx_subevt - Trigger a Packet Rx Event Upon Sub_Intvl_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_TRIG_RX_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_0_TRIG_RX_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_0_TRIG_RX_SUBEVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_TRIG_INTR_SUBEVT_MASK (0x40U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_TRIG_INTR_SUBEVT_SHIFT (6U)
-/*! trig_intr_subevt - Trigger Interrupt Event Upon Sub_Intvl_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable. Either sub_event_intr or ctrl_subevt_intr (if has_ctrl_subevt = 1) will trigger.
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_TRIG_INTR_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_0_TRIG_INTR_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_0_TRIG_INTR_SUBEVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_SUBEVT_EARLY_INTR_EN_MASK (0x100U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_SUBEVT_EARLY_INTR_EN_SHIFT (8U)
-/*! subevt_early_intr_en - Enable Early Interrupt Assertion For sub_event_intr
- *  0b0..disable
- *  0b1..enable. When enabled, the sub_event_intr will be asserted ealier than subevent anchor point by the specified early_intr_time time.
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_SUBEVT_EARLY_INTR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_0_SUBEVT_EARLY_INTR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_0_SUBEVT_EARLY_INTR_EN_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_CTRL_SUBEVT_EARLY_INTR_EN_MASK (0x200U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_CTRL_SUBEVT_EARLY_INTR_EN_SHIFT (9U)
-/*! ctrl_subevt_early_intr_en - Enable Early Interrupt Assertion For ctrl_subevt_intr
- *  0b0..disable
- *  0b1..enable. When enabled, the ctrl_subevt_intr will be asserted ealier than control subevent anchor point by the specified early_intr_time time.
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_CTRL_SUBEVT_EARLY_INTR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_0_CTRL_SUBEVT_EARLY_INTR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_0_CTRL_SUBEVT_EARLY_INTR_EN_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_HAS_CTRL_SUBEVT_MASK (0x10000U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_HAS_CTRL_SUBEVT_SHIFT (16U)
-/*! has_ctrl_subevt - Configure To Have Control Subevent In BIS Event
- *  0b0..disable
- *  0b1..enable. Enalbing time must meet in order to have control subevent triggered in current BIS event. Only
- *       applicable in timer_mode = 0 (BIS timer mode).
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_0_HAS_CTRL_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_0_HAS_CTRL_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_0_HAS_CTRL_SUBEVT_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SE_INTVL_0 - Periodic SW Timer 0: SubEvent Interval */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_0_SUB_INTERVAL_MASK (0xFFFFFU)
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_0_SUB_INTERVAL_SHIFT (0U)
-/*! sub_interval - Configure Subevent Interval Time */
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_0_SUB_INTERVAL(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_INTVL_0_SUB_INTERVAL_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_INTVL_0_SUB_INTERVAL_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_0_NSE_MASK (0x1F000000U)
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_0_NSE_SHIFT (24U)
-/*! nse - Configure Number of Subevents Per BIS/CIS Event */
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_0_NSE(x)   (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_INTVL_0_NSE_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_INTVL_0_NSE_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SE_DIS_0 - Periodic SW Timer 0: SubEvent Disable */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SE_DIS_0_DIS_REMAIN_SUBEVT_MASK (0xFFFFFFFEU)
-#define BLE2_REG_BLE_REG_PST_SE_DIS_0_DIS_REMAIN_SUBEVT_SHIFT (1U)
-/*! dis_remain_subevt - Disable Remaining Subevents */
-#define BLE2_REG_BLE_REG_PST_SE_DIS_0_DIS_REMAIN_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_DIS_0_DIS_REMAIN_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_DIS_0_DIS_REMAIN_SUBEVT_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_CTRL_1 - Periodic SW Timer 1: Control */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_CTRL_1_ISO_TMR_EN_MASK (0x1U)
-#define BLE2_REG_BLE_REG_PST_CTRL_1_ISO_TMR_EN_SHIFT (0U)
-/*! iso_tmr_en - Enable Periodic SW Timer's ISO_Intvl_Tmr/BIS_Spc_Tmr
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_1_ISO_TMR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_1_ISO_TMR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_1_ISO_TMR_EN_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_1_TIMER_MODE_MASK (0x2U)
-#define BLE2_REG_BLE_REG_PST_CTRL_1_TIMER_MODE_SHIFT (1U)
-/*! timer_mode - Configure Peridodic SW Timer Timer Mode
- *  0b0..configure to BIS timer mode
- *  0b1..configure to CIS timer mode
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_1_TIMER_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_1_TIMER_MODE_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_1_TIMER_MODE_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_1_SEQ_MODE_MASK (0x4U)
-#define BLE2_REG_BLE_REG_PST_CTRL_1_SEQ_MODE_SHIFT (2U)
-/*! seq_mode - Configure Multiple BISes/CISes To Sequential Or Interleaved Arrangement
- *  0b0..configure to interleaved arrangement
- *  0b1..configure to sequential arrangement
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_1_SEQ_MODE(x)  (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_1_SEQ_MODE_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_1_SEQ_MODE_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_1_TRIG_TX_EVT_MASK (0x10U)
-#define BLE2_REG_BLE_REG_PST_CTRL_1_TRIG_TX_EVT_SHIFT (4U)
-/*! trig_tx_evt - Trigger a Packet Tx Event Upon ISO_Intvl_Tmr/BIS_Spc_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_1_TRIG_TX_EVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_1_TRIG_TX_EVT_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_1_TRIG_TX_EVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_1_TRIG_RX_EVT_MASK (0x20U)
-#define BLE2_REG_BLE_REG_PST_CTRL_1_TRIG_RX_EVT_SHIFT (5U)
-/*! trig_rx_evt - Trigger a Packet Rx Event Upon ISO_Intvl_Tmr/BIS_Spc_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_1_TRIG_RX_EVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_1_TRIG_RX_EVT_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_1_TRIG_RX_EVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_1_TRIG_INTR_EVT_MASK (0x40U)
-#define BLE2_REG_BLE_REG_PST_CTRL_1_TRIG_INTR_EVT_SHIFT (6U)
-/*! trig_intr_evt - Trigger Interrupt Event Upon ISO_Intvl_Tmr/BIS_Spc_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable. If timer_mode is BIS timer mode, bis_anchr_intr will trigger, otherwise, cis_anchr_intr will.
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_1_TRIG_INTR_EVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_1_TRIG_INTR_EVT_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_1_TRIG_INTR_EVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_1_SYNC_DELAY_INTR_EN_MASK (0x100U)
-#define BLE2_REG_BLE_REG_PST_CTRL_1_SYNC_DELAY_INTR_EN_SHIFT (8U)
-/*! sync_delay_intr_en - Trigger Interrupt Event Upon Sync_Dly_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable. If timer_mode is BIS timer mode, big_sync_delay_intr will trigger, otherwise, cig_sync_delay_intr will.
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_1_SYNC_DELAY_INTR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_1_SYNC_DELAY_INTR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_1_SYNC_DELAY_INTR_EN_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_1_EARLY_INTR_TIME_MASK (0x1FF0000U)
-#define BLE2_REG_BLE_REG_PST_CTRL_1_EARLY_INTR_TIME_SHIFT (16U)
-/*! early_intr_time - Early Interrupt Assertion Time */
-#define BLE2_REG_BLE_REG_PST_CTRL_1_EARLY_INTR_TIME(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_1_EARLY_INTR_TIME_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_1_EARLY_INTR_TIME_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_1_EARLY_INTR_EN_MASK (0x10000000U)
-#define BLE2_REG_BLE_REG_PST_CTRL_1_EARLY_INTR_EN_SHIFT (28U)
-/*! early_intr_en - Enable Early Interrupt Assertion For bis_anchr_intr or cis_anchr_intr
- *  0b0..disable
- *  0b1..enable. When enabled, the bis_anchr_intr or cis_anchr_intr will be asserted ealier than anchor point by the specified early_intr_time time.
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_1_EARLY_INTR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_1_EARLY_INTR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_1_EARLY_INTR_EN_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_STS_1 - Periodic SW Timer 1: Status */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_STS_1_CURR_BIS_MASK (0x1FU)
-#define BLE2_REG_BLE_REG_PST_STS_1_CURR_BIS_SHIFT (0U)
-/*! curr_bis - Current Active BIS/CIS Number */
-#define BLE2_REG_BLE_REG_PST_STS_1_CURR_BIS(x)   (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_1_CURR_BIS_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_1_CURR_BIS_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_1_BIS_ANCHR_INTR_MASK (0x20U)
-#define BLE2_REG_BLE_REG_PST_STS_1_BIS_ANCHR_INTR_SHIFT (5U)
-/*! bis_anchr_intr - BIS Anchor Point Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_1_BIS_ANCHR_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_1_BIS_ANCHR_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_1_BIS_ANCHR_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_1_CIS_ANCHR_INTR_MASK (0x40U)
-#define BLE2_REG_BLE_REG_PST_STS_1_CIS_ANCHR_INTR_SHIFT (6U)
-/*! cis_anchr_intr - CIS Anchor Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_1_CIS_ANCHR_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_1_CIS_ANCHR_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_1_CIS_ANCHR_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_1_CURR_SUBEVT_MASK (0x1F00U)
-#define BLE2_REG_BLE_REG_PST_STS_1_CURR_SUBEVT_SHIFT (8U)
-/*! curr_subevt - Current Active Subevent Number */
-#define BLE2_REG_BLE_REG_PST_STS_1_CURR_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_1_CURR_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_1_CURR_SUBEVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_1_SUB_EVENT_INTR_MASK (0x2000U)
-#define BLE2_REG_BLE_REG_PST_STS_1_SUB_EVENT_INTR_SHIFT (13U)
-/*! sub_event_intr - Subevent Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_1_SUB_EVENT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_1_SUB_EVENT_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_1_SUB_EVENT_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_1_CTRL_SUBEVT_INTR_MASK (0x4000U)
-#define BLE2_REG_BLE_REG_PST_STS_1_CTRL_SUBEVT_INTR_SHIFT (14U)
-/*! ctrl_subevt_intr - Control Subevent Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_1_CTRL_SUBEVT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_1_CTRL_SUBEVT_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_1_CTRL_SUBEVT_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_1_BIG_SYNC_DELAY_INTR_MASK (0x10000U)
-#define BLE2_REG_BLE_REG_PST_STS_1_BIG_SYNC_DELAY_INTR_SHIFT (16U)
-/*! big_sync_delay_intr - BIG_Sync_Delay Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_1_BIG_SYNC_DELAY_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_1_BIG_SYNC_DELAY_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_1_BIG_SYNC_DELAY_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_1_CIG_SYNC_DELAY_INTR_MASK (0x20000U)
-#define BLE2_REG_BLE_REG_PST_STS_1_CIG_SYNC_DELAY_INTR_SHIFT (17U)
-/*! cig_sync_delay_intr - CIG_Sync_Delay Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_1_CIG_SYNC_DELAY_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_1_CIG_SYNC_DELAY_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_1_CIG_SYNC_DELAY_INTR_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_FRST_ANCHR_1 - Periodic SW Timer 1: First Anchor */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_FRST_ANCHR_1_FRST_ANCHR_NAT_CLK_VAL_MASK (0xFFFFFFFU)
-#define BLE2_REG_BLE_REG_PST_FRST_ANCHR_1_FRST_ANCHR_NAT_CLK_VAL_SHIFT (0U)
-/*! frst_anchr_nat_clk_val - First Anchor Native Clock Value */
-#define BLE2_REG_BLE_REG_PST_FRST_ANCHR_1_FRST_ANCHR_NAT_CLK_VAL(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_FRST_ANCHR_1_FRST_ANCHR_NAT_CLK_VAL_SHIFT)) & BLE2_REG_BLE_REG_PST_FRST_ANCHR_1_FRST_ANCHR_NAT_CLK_VAL_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_ANCHR_OFST_1 - Periodic SW Timer 1: First Anchor Offset */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_1_FRST_ANCHR_START_TIME_MASK (0x1FFU)
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_1_FRST_ANCHR_START_TIME_SHIFT (0U)
-/*! frst_anchr_start_time - First Anchor Start Time */
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_1_FRST_ANCHR_START_TIME(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_ANCHR_OFST_1_FRST_ANCHR_START_TIME_SHIFT)) & BLE2_REG_BLE_REG_PST_ANCHR_OFST_1_FRST_ANCHR_START_TIME_MASK)
-
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_1_CURR_ANCHR_START_TIME_MASK (0x1FF0000U)
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_1_CURR_ANCHR_START_TIME_SHIFT (16U)
-/*! curr_anchr_start_time - Current Anchor Start Time */
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_1_CURR_ANCHR_START_TIME(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_ANCHR_OFST_1_CURR_ANCHR_START_TIME_SHIFT)) & BLE2_REG_BLE_REG_PST_ANCHR_OFST_1_CURR_ANCHR_START_TIME_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_ANCHR_ADJ_1 - Periodic SW Timer 1: Anchor Adjustment */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_1_ANCHR_CORR_TIME_MASK (0x3FFU)
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_1_ANCHR_CORR_TIME_SHIFT (0U)
-/*! anchr_corr_time - Anchor Point To Correlation Hit Time */
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_1_ANCHR_CORR_TIME(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_ANCHR_ADJ_1_ANCHR_CORR_TIME_SHIFT)) & BLE2_REG_BLE_REG_PST_ANCHR_ADJ_1_ANCHR_CORR_TIME_MASK)
-
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_1_ADJ_AST_OFST_MASK (0x3F0000U)
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_1_ADJ_AST_OFST_SHIFT (16U)
-/*! adj_ast_ofst - Adjusted Anchor Start Time Offset */
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_1_ADJ_AST_OFST(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_ANCHR_ADJ_1_ADJ_AST_OFST_SHIFT)) & BLE2_REG_BLE_REG_PST_ANCHR_ADJ_1_ADJ_AST_OFST_MASK)
-
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_1_ADJ_AST_DIR_MASK (0x1000000U)
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_1_ADJ_AST_DIR_SHIFT (24U)
-/*! adj_ast_dir - Adjusted Anchor Start Time Direction
- *  0b0..Substract adj_ast_ofst from ISO_Intvl_Tmr value counting toward next BIS/CIS event, effectively moving
- *       next BIS/CIS anchor point to a earlier time. This is used when the averaged anchr_corr_time value is
- *       gradually decreasing, indicating the slave device's local clock is drifting slower.
- *  0b1..Add adj_ast_ofst to ISO_Intvl_Tmr value counting toward next BIS/CIS event, effectively delaying next
- *       BIS/CIS anchor point to a later time. This is used when the averaged anchr_corr_time value is gradually
- *       increasing, indicating the slave device's local clock is drifting faster.
- */
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_1_ADJ_AST_DIR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_ANCHR_ADJ_1_ADJ_AST_DIR_SHIFT)) & BLE2_REG_BLE_REG_PST_ANCHR_ADJ_1_ADJ_AST_DIR_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_INTVL_1 - Periodic SW Timer 1: ISO Interval */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_INTVL_1_ISO_INTERVAL_MASK (0xFFFU)
-#define BLE2_REG_BLE_REG_PST_INTVL_1_ISO_INTERVAL_SHIFT (0U)
-/*! iso_interval - Configure ISO Interval Time */
-#define BLE2_REG_BLE_REG_PST_INTVL_1_ISO_INTERVAL(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_INTVL_1_ISO_INTERVAL_SHIFT)) & BLE2_REG_BLE_REG_PST_INTVL_1_ISO_INTERVAL_MASK)
-
-#define BLE2_REG_BLE_REG_PST_INTVL_1_CURR_ISO_INTVL_TMR_MASK (0x3FFF0000U)
-#define BLE2_REG_BLE_REG_PST_INTVL_1_CURR_ISO_INTVL_TMR_SHIFT (16U)
-/*! curr_iso_intvl_tmr - Current ISO_Intvl_Tmr Timer Value */
-#define BLE2_REG_BLE_REG_PST_INTVL_1_CURR_ISO_INTVL_TMR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_INTVL_1_CURR_ISO_INTVL_TMR_SHIFT)) & BLE2_REG_BLE_REG_PST_INTVL_1_CURR_ISO_INTVL_TMR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_INTVL_1_BIT15_0_READ_MODE_MASK (0x40000000U)
-#define BLE2_REG_BLE_REG_PST_INTVL_1_BIT15_0_READ_MODE_SHIFT (30U)
-/*! bit15_0_read_mode - Bit[15:0] iso_interval field read back value
- *  0b0..iso_interval field will read back ISO_Interval time of BIS/CIS event being programmed. Unit is 1.25ms.
- *  0b1..iso_interval field will read back curr_iso_intvl_tmr_ofst[10:0] at the time of snapshot_iso_intvl_tmr
- *       command being programmed. Unit is 0.25 us.
- */
-#define BLE2_REG_BLE_REG_PST_INTVL_1_BIT15_0_READ_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_INTVL_1_BIT15_0_READ_MODE_SHIFT)) & BLE2_REG_BLE_REG_PST_INTVL_1_BIT15_0_READ_MODE_MASK)
-
-#define BLE2_REG_BLE_REG_PST_INTVL_1_SNAPSHOT_ISO_INTVL_TMR_MASK (0x80000000U)
-#define BLE2_REG_BLE_REG_PST_INTVL_1_SNAPSHOT_ISO_INTVL_TMR_SHIFT (31U)
-/*! snapshot_iso_intvl_tmr - Take a snapshot of ISO_Intvl_Tmr and offset counter value */
-#define BLE2_REG_BLE_REG_PST_INTVL_1_SNAPSHOT_ISO_INTVL_TMR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_INTVL_1_SNAPSHOT_ISO_INTVL_TMR_SHIFT)) & BLE2_REG_BLE_REG_PST_INTVL_1_SNAPSHOT_ISO_INTVL_TMR_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SPC_1 - Periodic SW Timer 1: Spacing */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SPC_1_BIS_SPACING_MASK (0xFFFFFU)
-#define BLE2_REG_BLE_REG_PST_SPC_1_BIS_SPACING_SHIFT (0U)
-/*! bis_spacing - Configure BIS Spacing Time */
-#define BLE2_REG_BLE_REG_PST_SPC_1_BIS_SPACING(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SPC_1_BIS_SPACING_SHIFT)) & BLE2_REG_BLE_REG_PST_SPC_1_BIS_SPACING_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SPC_1_NUM_BIS_MASK  (0x1F000000U)
-#define BLE2_REG_BLE_REG_PST_SPC_1_NUM_BIS_SHIFT (24U)
-/*! num_bis - Configure Number of BISes/CISes in BIG/CIG */
-#define BLE2_REG_BLE_REG_PST_SPC_1_NUM_BIS(x)    (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SPC_1_NUM_BIS_SHIFT)) & BLE2_REG_BLE_REG_PST_SPC_1_NUM_BIS_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SEL_STRM_1 - Periodic SW Timer 1: Select Stream */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SEL_STRM_1_SEL_STREAM_MASK (0xFFFFFFFEU)
-#define BLE2_REG_BLE_REG_PST_SEL_STRM_1_SEL_STREAM_SHIFT (1U)
-/*! sel_stream - Select Active Streams */
-#define BLE2_REG_BLE_REG_PST_SEL_STRM_1_SEL_STREAM(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SEL_STRM_1_SEL_STREAM_SHIFT)) & BLE2_REG_BLE_REG_PST_SEL_STRM_1_SEL_STREAM_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SYNC_DLY_1 - Periodic SW Timer 1: Group Sync Delay */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SYNC_DLY_1_SYNC_DELAY_MASK (0xFFFFFFU)
-#define BLE2_REG_BLE_REG_PST_SYNC_DLY_1_SYNC_DELAY_SHIFT (0U)
-/*! sync_delay - The BIG_Sync_Delay or CIG_Sync_Delay Time */
-#define BLE2_REG_BLE_REG_PST_SYNC_DLY_1_SYNC_DELAY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SYNC_DLY_1_SYNC_DELAY_SHIFT)) & BLE2_REG_BLE_REG_PST_SYNC_DLY_1_SYNC_DELAY_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SE_CTRL_1 - Periodic SW Timer 1: SubEvent Control */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_SUB_TMR_EN_MASK (0x1U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_SUB_TMR_EN_SHIFT (0U)
-/*! sub_tmr_en - Enable Periodic SW Timer's Sub_Intvl_Tmr
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_SUB_TMR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_1_SUB_TMR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_1_SUB_TMR_EN_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_TRIG_TX_SUBEVT_MASK (0x10U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_TRIG_TX_SUBEVT_SHIFT (4U)
-/*! trig_tx_subevt - Trigger a Packet Tx Event Upon Sub_Intvl_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_TRIG_TX_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_1_TRIG_TX_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_1_TRIG_TX_SUBEVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_TRIG_RX_SUBEVT_MASK (0x20U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_TRIG_RX_SUBEVT_SHIFT (5U)
-/*! trig_rx_subevt - Trigger a Packet Rx Event Upon Sub_Intvl_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_TRIG_RX_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_1_TRIG_RX_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_1_TRIG_RX_SUBEVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_TRIG_INTR_SUBEVT_MASK (0x40U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_TRIG_INTR_SUBEVT_SHIFT (6U)
-/*! trig_intr_subevt - Trigger Interrupt Event Upon Sub_Intvl_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable. Either sub_event_intr or ctrl_subevt_intr (if has_ctrl_subevt = 1) will trigger.
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_TRIG_INTR_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_1_TRIG_INTR_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_1_TRIG_INTR_SUBEVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_SUBEVT_EARLY_INTR_EN_MASK (0x100U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_SUBEVT_EARLY_INTR_EN_SHIFT (8U)
-/*! subevt_early_intr_en - Enable Early Interrupt Assertion For sub_event_intr
- *  0b0..disable
- *  0b1..enable. When enabled, the sub_event_intr will be asserted ealier than subevent anchor point by the specified early_intr_time time.
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_SUBEVT_EARLY_INTR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_1_SUBEVT_EARLY_INTR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_1_SUBEVT_EARLY_INTR_EN_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_CTRL_SUBEVT_EARLY_INTR_EN_MASK (0x200U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_CTRL_SUBEVT_EARLY_INTR_EN_SHIFT (9U)
-/*! ctrl_subevt_early_intr_en - Enable Early Interrupt Assertion For ctrl_subevt_intr
- *  0b0..disable
- *  0b1..enable. When enabled, the ctrl_subevt_intr will be asserted ealier than control subevent anchor point by the specified early_intr_time time.
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_CTRL_SUBEVT_EARLY_INTR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_1_CTRL_SUBEVT_EARLY_INTR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_1_CTRL_SUBEVT_EARLY_INTR_EN_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_HAS_CTRL_SUBEVT_MASK (0x10000U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_HAS_CTRL_SUBEVT_SHIFT (16U)
-/*! has_ctrl_subevt - Configure To Have Control Subevent In BIS Event
- *  0b0..disable
- *  0b1..enable. Enalbing time must meet in order to have control subevent triggered in current BIS event. Only
- *       applicable in timer_mode = 0 (BIS timer mode).
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_1_HAS_CTRL_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_1_HAS_CTRL_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_1_HAS_CTRL_SUBEVT_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SE_INTVL_1 - Periodic SW Timer 1: SubEvent Interval */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_1_SUB_INTERVAL_MASK (0xFFFFFU)
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_1_SUB_INTERVAL_SHIFT (0U)
-/*! sub_interval - Configure Subevent Interval Time */
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_1_SUB_INTERVAL(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_INTVL_1_SUB_INTERVAL_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_INTVL_1_SUB_INTERVAL_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_1_NSE_MASK (0x1F000000U)
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_1_NSE_SHIFT (24U)
-/*! nse - Configure Number of Subevents Per BIS/CIS Event */
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_1_NSE(x)   (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_INTVL_1_NSE_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_INTVL_1_NSE_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SE_DIS_1 - Periodic SW Timer 1: SubEvent Disable */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SE_DIS_1_DIS_REMAIN_SUBEVT_MASK (0xFFFFFFFEU)
-#define BLE2_REG_BLE_REG_PST_SE_DIS_1_DIS_REMAIN_SUBEVT_SHIFT (1U)
-/*! dis_remain_subevt - Disable Remaining Subevents */
-#define BLE2_REG_BLE_REG_PST_SE_DIS_1_DIS_REMAIN_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_DIS_1_DIS_REMAIN_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_DIS_1_DIS_REMAIN_SUBEVT_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_CTRL_2 - Periodic SW Timer 2: Control */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_CTRL_2_ISO_TMR_EN_MASK (0x1U)
-#define BLE2_REG_BLE_REG_PST_CTRL_2_ISO_TMR_EN_SHIFT (0U)
-/*! iso_tmr_en - Enable Periodic SW Timer's ISO_Intvl_Tmr/BIS_Spc_Tmr
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_2_ISO_TMR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_2_ISO_TMR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_2_ISO_TMR_EN_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_2_TIMER_MODE_MASK (0x2U)
-#define BLE2_REG_BLE_REG_PST_CTRL_2_TIMER_MODE_SHIFT (1U)
-/*! timer_mode - Configure Peridodic SW Timer Timer Mode
- *  0b0..configure to BIS timer mode
- *  0b1..configure to CIS timer mode
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_2_TIMER_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_2_TIMER_MODE_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_2_TIMER_MODE_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_2_SEQ_MODE_MASK (0x4U)
-#define BLE2_REG_BLE_REG_PST_CTRL_2_SEQ_MODE_SHIFT (2U)
-/*! seq_mode - Configure Multiple BISes/CISes To Sequential Or Interleaved Arrangement
- *  0b0..configure to interleaved arrangement
- *  0b1..configure to sequential arrangement
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_2_SEQ_MODE(x)  (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_2_SEQ_MODE_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_2_SEQ_MODE_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_2_TRIG_TX_EVT_MASK (0x10U)
-#define BLE2_REG_BLE_REG_PST_CTRL_2_TRIG_TX_EVT_SHIFT (4U)
-/*! trig_tx_evt - Trigger a Packet Tx Event Upon ISO_Intvl_Tmr/BIS_Spc_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_2_TRIG_TX_EVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_2_TRIG_TX_EVT_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_2_TRIG_TX_EVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_2_TRIG_RX_EVT_MASK (0x20U)
-#define BLE2_REG_BLE_REG_PST_CTRL_2_TRIG_RX_EVT_SHIFT (5U)
-/*! trig_rx_evt - Trigger a Packet Rx Event Upon ISO_Intvl_Tmr/BIS_Spc_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_2_TRIG_RX_EVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_2_TRIG_RX_EVT_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_2_TRIG_RX_EVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_2_TRIG_INTR_EVT_MASK (0x40U)
-#define BLE2_REG_BLE_REG_PST_CTRL_2_TRIG_INTR_EVT_SHIFT (6U)
-/*! trig_intr_evt - Trigger Interrupt Event Upon ISO_Intvl_Tmr/BIS_Spc_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable. If timer_mode is BIS timer mode, bis_anchr_intr will trigger, otherwise, cis_anchr_intr will.
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_2_TRIG_INTR_EVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_2_TRIG_INTR_EVT_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_2_TRIG_INTR_EVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_2_SYNC_DELAY_INTR_EN_MASK (0x100U)
-#define BLE2_REG_BLE_REG_PST_CTRL_2_SYNC_DELAY_INTR_EN_SHIFT (8U)
-/*! sync_delay_intr_en - Trigger Interrupt Event Upon Sync_Dly_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable. If timer_mode is BIS timer mode, big_sync_delay_intr will trigger, otherwise, cig_sync_delay_intr will.
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_2_SYNC_DELAY_INTR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_2_SYNC_DELAY_INTR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_2_SYNC_DELAY_INTR_EN_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_2_EARLY_INTR_TIME_MASK (0x1FF0000U)
-#define BLE2_REG_BLE_REG_PST_CTRL_2_EARLY_INTR_TIME_SHIFT (16U)
-/*! early_intr_time - Early Interrupt Assertion Time */
-#define BLE2_REG_BLE_REG_PST_CTRL_2_EARLY_INTR_TIME(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_2_EARLY_INTR_TIME_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_2_EARLY_INTR_TIME_MASK)
-
-#define BLE2_REG_BLE_REG_PST_CTRL_2_EARLY_INTR_EN_MASK (0x10000000U)
-#define BLE2_REG_BLE_REG_PST_CTRL_2_EARLY_INTR_EN_SHIFT (28U)
-/*! early_intr_en - Enable Early Interrupt Assertion For bis_anchr_intr or cis_anchr_intr
- *  0b0..disable
- *  0b1..enable. When enabled, the bis_anchr_intr or cis_anchr_intr will be asserted ealier than anchor point by the specified early_intr_time time.
- */
-#define BLE2_REG_BLE_REG_PST_CTRL_2_EARLY_INTR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_CTRL_2_EARLY_INTR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_CTRL_2_EARLY_INTR_EN_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_STS_2 - Periodic SW Timer 2: Status */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_STS_2_CURR_BIS_MASK (0x1FU)
-#define BLE2_REG_BLE_REG_PST_STS_2_CURR_BIS_SHIFT (0U)
-/*! curr_bis - Current Active BIS/CIS Number */
-#define BLE2_REG_BLE_REG_PST_STS_2_CURR_BIS(x)   (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_2_CURR_BIS_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_2_CURR_BIS_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_2_BIS_ANCHR_INTR_MASK (0x20U)
-#define BLE2_REG_BLE_REG_PST_STS_2_BIS_ANCHR_INTR_SHIFT (5U)
-/*! bis_anchr_intr - BIS Anchor Point Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_2_BIS_ANCHR_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_2_BIS_ANCHR_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_2_BIS_ANCHR_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_2_CIS_ANCHR_INTR_MASK (0x40U)
-#define BLE2_REG_BLE_REG_PST_STS_2_CIS_ANCHR_INTR_SHIFT (6U)
-/*! cis_anchr_intr - CIS Anchor Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_2_CIS_ANCHR_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_2_CIS_ANCHR_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_2_CIS_ANCHR_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_2_CURR_SUBEVT_MASK (0x1F00U)
-#define BLE2_REG_BLE_REG_PST_STS_2_CURR_SUBEVT_SHIFT (8U)
-/*! curr_subevt - Current Active Subevent Number */
-#define BLE2_REG_BLE_REG_PST_STS_2_CURR_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_2_CURR_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_2_CURR_SUBEVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_2_SUB_EVENT_INTR_MASK (0x2000U)
-#define BLE2_REG_BLE_REG_PST_STS_2_SUB_EVENT_INTR_SHIFT (13U)
-/*! sub_event_intr - Subevent Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_2_SUB_EVENT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_2_SUB_EVENT_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_2_SUB_EVENT_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_2_CTRL_SUBEVT_INTR_MASK (0x4000U)
-#define BLE2_REG_BLE_REG_PST_STS_2_CTRL_SUBEVT_INTR_SHIFT (14U)
-/*! ctrl_subevt_intr - Control Subevent Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_2_CTRL_SUBEVT_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_2_CTRL_SUBEVT_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_2_CTRL_SUBEVT_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_2_BIG_SYNC_DELAY_INTR_MASK (0x10000U)
-#define BLE2_REG_BLE_REG_PST_STS_2_BIG_SYNC_DELAY_INTR_SHIFT (16U)
-/*! big_sync_delay_intr - BIG_Sync_Delay Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_2_BIG_SYNC_DELAY_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_2_BIG_SYNC_DELAY_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_2_BIG_SYNC_DELAY_INTR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_STS_2_CIG_SYNC_DELAY_INTR_MASK (0x20000U)
-#define BLE2_REG_BLE_REG_PST_STS_2_CIG_SYNC_DELAY_INTR_SHIFT (17U)
-/*! cig_sync_delay_intr - CIG_Sync_Delay Interrupt */
-#define BLE2_REG_BLE_REG_PST_STS_2_CIG_SYNC_DELAY_INTR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_STS_2_CIG_SYNC_DELAY_INTR_SHIFT)) & BLE2_REG_BLE_REG_PST_STS_2_CIG_SYNC_DELAY_INTR_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_FRST_ANCHR_2 - Periodic SW Timer 2: First Anchor */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_FRST_ANCHR_2_FRST_ANCHR_NAT_CLK_VAL_MASK (0xFFFFFFFU)
-#define BLE2_REG_BLE_REG_PST_FRST_ANCHR_2_FRST_ANCHR_NAT_CLK_VAL_SHIFT (0U)
-/*! frst_anchr_nat_clk_val - First Anchor Native Clock Value */
-#define BLE2_REG_BLE_REG_PST_FRST_ANCHR_2_FRST_ANCHR_NAT_CLK_VAL(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_FRST_ANCHR_2_FRST_ANCHR_NAT_CLK_VAL_SHIFT)) & BLE2_REG_BLE_REG_PST_FRST_ANCHR_2_FRST_ANCHR_NAT_CLK_VAL_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_ANCHR_OFST_2 - Periodic SW Timer 2: First Anchor Offset */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_2_FRST_ANCHR_START_TIME_MASK (0x1FFU)
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_2_FRST_ANCHR_START_TIME_SHIFT (0U)
-/*! frst_anchr_start_time - First Anchor Start Time */
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_2_FRST_ANCHR_START_TIME(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_ANCHR_OFST_2_FRST_ANCHR_START_TIME_SHIFT)) & BLE2_REG_BLE_REG_PST_ANCHR_OFST_2_FRST_ANCHR_START_TIME_MASK)
-
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_2_CURR_ANCHR_START_TIME_MASK (0x1FF0000U)
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_2_CURR_ANCHR_START_TIME_SHIFT (16U)
-/*! curr_anchr_start_time - Current Anchor Start Time */
-#define BLE2_REG_BLE_REG_PST_ANCHR_OFST_2_CURR_ANCHR_START_TIME(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_ANCHR_OFST_2_CURR_ANCHR_START_TIME_SHIFT)) & BLE2_REG_BLE_REG_PST_ANCHR_OFST_2_CURR_ANCHR_START_TIME_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_ANCHR_ADJ_2 - Periodic SW Timer 2: Anchor Adjustment */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_2_ANCHR_CORR_TIME_MASK (0x3FFU)
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_2_ANCHR_CORR_TIME_SHIFT (0U)
-/*! anchr_corr_time - Anchor Point To Correlation Hit Time */
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_2_ANCHR_CORR_TIME(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_ANCHR_ADJ_2_ANCHR_CORR_TIME_SHIFT)) & BLE2_REG_BLE_REG_PST_ANCHR_ADJ_2_ANCHR_CORR_TIME_MASK)
-
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_2_ADJ_AST_OFST_MASK (0x3F0000U)
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_2_ADJ_AST_OFST_SHIFT (16U)
-/*! adj_ast_ofst - Adjusted Anchor Start Time Offset */
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_2_ADJ_AST_OFST(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_ANCHR_ADJ_2_ADJ_AST_OFST_SHIFT)) & BLE2_REG_BLE_REG_PST_ANCHR_ADJ_2_ADJ_AST_OFST_MASK)
-
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_2_ADJ_AST_DIR_MASK (0x1000000U)
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_2_ADJ_AST_DIR_SHIFT (24U)
-/*! adj_ast_dir - Adjusted Anchor Start Time Direction
- *  0b0..Substract adj_ast_ofst from ISO_Intvl_Tmr value counting toward next BIS/CIS event, effectively moving
- *       next BIS/CIS anchor point to a earlier time. This is used when the averaged anchr_corr_time value is
- *       gradually decreasing, indicating the slave device's local clock is drifting slower.
- *  0b1..Add adj_ast_ofst to ISO_Intvl_Tmr value counting toward next BIS/CIS event, effectively delaying next
- *       BIS/CIS anchor point to a later time. This is used when the averaged anchr_corr_time value is gradually
- *       increasing, indicating the slave device's local clock is drifting faster.
- */
-#define BLE2_REG_BLE_REG_PST_ANCHR_ADJ_2_ADJ_AST_DIR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_ANCHR_ADJ_2_ADJ_AST_DIR_SHIFT)) & BLE2_REG_BLE_REG_PST_ANCHR_ADJ_2_ADJ_AST_DIR_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_INTVL_2 - Periodic SW Timer 2: ISO Interval */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_INTVL_2_ISO_INTERVAL_MASK (0xFFFU)
-#define BLE2_REG_BLE_REG_PST_INTVL_2_ISO_INTERVAL_SHIFT (0U)
-/*! iso_interval - Configure ISO Interval Time */
-#define BLE2_REG_BLE_REG_PST_INTVL_2_ISO_INTERVAL(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_INTVL_2_ISO_INTERVAL_SHIFT)) & BLE2_REG_BLE_REG_PST_INTVL_2_ISO_INTERVAL_MASK)
-
-#define BLE2_REG_BLE_REG_PST_INTVL_2_CURR_ISO_INTVL_TMR_MASK (0x3FFF0000U)
-#define BLE2_REG_BLE_REG_PST_INTVL_2_CURR_ISO_INTVL_TMR_SHIFT (16U)
-/*! curr_iso_intvl_tmr - Current ISO_Intvl_Tmr Timer Value */
-#define BLE2_REG_BLE_REG_PST_INTVL_2_CURR_ISO_INTVL_TMR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_INTVL_2_CURR_ISO_INTVL_TMR_SHIFT)) & BLE2_REG_BLE_REG_PST_INTVL_2_CURR_ISO_INTVL_TMR_MASK)
-
-#define BLE2_REG_BLE_REG_PST_INTVL_2_BIT15_0_READ_MODE_MASK (0x40000000U)
-#define BLE2_REG_BLE_REG_PST_INTVL_2_BIT15_0_READ_MODE_SHIFT (30U)
-/*! bit15_0_read_mode - Bit[15:0] iso_interval field read back value
- *  0b0..iso_interval field will read back ISO_Interval time of BIS/CIS event being programmed. Unit is 1.25ms.
- *  0b1..iso_interval field will read back curr_iso_intvl_tmr_ofst[10:0] at the time of snapshot_iso_intvl_tmr
- *       command being programmed. Unit is 0.25 us.
- */
-#define BLE2_REG_BLE_REG_PST_INTVL_2_BIT15_0_READ_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_INTVL_2_BIT15_0_READ_MODE_SHIFT)) & BLE2_REG_BLE_REG_PST_INTVL_2_BIT15_0_READ_MODE_MASK)
-
-#define BLE2_REG_BLE_REG_PST_INTVL_2_SNAPSHOT_ISO_INTVL_TMR_MASK (0x80000000U)
-#define BLE2_REG_BLE_REG_PST_INTVL_2_SNAPSHOT_ISO_INTVL_TMR_SHIFT (31U)
-/*! snapshot_iso_intvl_tmr - Take a snapshot of ISO_Intvl_Tmr and offset counter value */
-#define BLE2_REG_BLE_REG_PST_INTVL_2_SNAPSHOT_ISO_INTVL_TMR(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_INTVL_2_SNAPSHOT_ISO_INTVL_TMR_SHIFT)) & BLE2_REG_BLE_REG_PST_INTVL_2_SNAPSHOT_ISO_INTVL_TMR_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SPC_2 - Periodic SW Timer 2: Spacing */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SPC_2_BIS_SPACING_MASK (0xFFFFFU)
-#define BLE2_REG_BLE_REG_PST_SPC_2_BIS_SPACING_SHIFT (0U)
-/*! bis_spacing - Configure BIS Spacing Time */
-#define BLE2_REG_BLE_REG_PST_SPC_2_BIS_SPACING(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SPC_2_BIS_SPACING_SHIFT)) & BLE2_REG_BLE_REG_PST_SPC_2_BIS_SPACING_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SPC_2_NUM_BIS_MASK  (0x1F000000U)
-#define BLE2_REG_BLE_REG_PST_SPC_2_NUM_BIS_SHIFT (24U)
-/*! num_bis - Configure Number of BISes/CISes in BIG/CIG */
-#define BLE2_REG_BLE_REG_PST_SPC_2_NUM_BIS(x)    (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SPC_2_NUM_BIS_SHIFT)) & BLE2_REG_BLE_REG_PST_SPC_2_NUM_BIS_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SEL_STRM_2 - Periodic SW Timer 2: Select Stream */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SEL_STRM_2_SEL_STREAM_MASK (0xFFFFFFFEU)
-#define BLE2_REG_BLE_REG_PST_SEL_STRM_2_SEL_STREAM_SHIFT (1U)
-/*! sel_stream - Select Active Streams */
-#define BLE2_REG_BLE_REG_PST_SEL_STRM_2_SEL_STREAM(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SEL_STRM_2_SEL_STREAM_SHIFT)) & BLE2_REG_BLE_REG_PST_SEL_STRM_2_SEL_STREAM_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SYNC_DLY_2 - Periodic SW Timer 2: Group Sync Delay */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SYNC_DLY_2_SYNC_DELAY_MASK (0xFFFFFFU)
-#define BLE2_REG_BLE_REG_PST_SYNC_DLY_2_SYNC_DELAY_SHIFT (0U)
-/*! sync_delay - The BIG_Sync_Delay or CIG_Sync_Delay Time */
-#define BLE2_REG_BLE_REG_PST_SYNC_DLY_2_SYNC_DELAY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SYNC_DLY_2_SYNC_DELAY_SHIFT)) & BLE2_REG_BLE_REG_PST_SYNC_DLY_2_SYNC_DELAY_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SE_CTRL_2 - Periodic SW Timer 2: SubEvent Control */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_SUB_TMR_EN_MASK (0x1U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_SUB_TMR_EN_SHIFT (0U)
-/*! sub_tmr_en - Enable Periodic SW Timer's Sub_Intvl_Tmr
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_SUB_TMR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_2_SUB_TMR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_2_SUB_TMR_EN_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_TRIG_TX_SUBEVT_MASK (0x10U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_TRIG_TX_SUBEVT_SHIFT (4U)
-/*! trig_tx_subevt - Trigger a Packet Tx Event Upon Sub_Intvl_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_TRIG_TX_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_2_TRIG_TX_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_2_TRIG_TX_SUBEVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_TRIG_RX_SUBEVT_MASK (0x20U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_TRIG_RX_SUBEVT_SHIFT (5U)
-/*! trig_rx_subevt - Trigger a Packet Rx Event Upon Sub_Intvl_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_TRIG_RX_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_2_TRIG_RX_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_2_TRIG_RX_SUBEVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_TRIG_INTR_SUBEVT_MASK (0x40U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_TRIG_INTR_SUBEVT_SHIFT (6U)
-/*! trig_intr_subevt - Trigger Interrupt Event Upon Sub_Intvl_Tmr Timer Expiry
- *  0b0..disable
- *  0b1..enable. Either sub_event_intr or ctrl_subevt_intr (if has_ctrl_subevt = 1) will trigger.
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_TRIG_INTR_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_2_TRIG_INTR_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_2_TRIG_INTR_SUBEVT_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_SUBEVT_EARLY_INTR_EN_MASK (0x100U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_SUBEVT_EARLY_INTR_EN_SHIFT (8U)
-/*! subevt_early_intr_en - Enable Early Interrupt Assertion For sub_event_intr
- *  0b0..disable
- *  0b1..enable. When enabled, the sub_event_intr will be asserted ealier than subevent anchor point by the specified early_intr_time time.
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_SUBEVT_EARLY_INTR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_2_SUBEVT_EARLY_INTR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_2_SUBEVT_EARLY_INTR_EN_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_CTRL_SUBEVT_EARLY_INTR_EN_MASK (0x200U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_CTRL_SUBEVT_EARLY_INTR_EN_SHIFT (9U)
-/*! ctrl_subevt_early_intr_en - Enable Early Interrupt Assertion For ctrl_subevt_intr
- *  0b0..disable
- *  0b1..enable. When enabled, the ctrl_subevt_intr will be asserted ealier than control subevent anchor point by the specified early_intr_time time.
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_CTRL_SUBEVT_EARLY_INTR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_2_CTRL_SUBEVT_EARLY_INTR_EN_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_2_CTRL_SUBEVT_EARLY_INTR_EN_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_HAS_CTRL_SUBEVT_MASK (0x10000U)
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_HAS_CTRL_SUBEVT_SHIFT (16U)
-/*! has_ctrl_subevt - Configure To Have Control Subevent In BIS Event
- *  0b0..disable
- *  0b1..enable. Enalbing time must meet in order to have control subevent triggered in current BIS event. Only
- *       applicable in timer_mode = 0 (BIS timer mode).
- */
-#define BLE2_REG_BLE_REG_PST_SE_CTRL_2_HAS_CTRL_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_CTRL_2_HAS_CTRL_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_CTRL_2_HAS_CTRL_SUBEVT_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SE_INTVL_2 - Periodic SW Timer 2: SubEvent Interval */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_2_SUB_INTERVAL_MASK (0xFFFFFU)
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_2_SUB_INTERVAL_SHIFT (0U)
-/*! sub_interval - Configure Subevent Interval Time */
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_2_SUB_INTERVAL(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_INTVL_2_SUB_INTERVAL_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_INTVL_2_SUB_INTERVAL_MASK)
-
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_2_NSE_MASK (0x1F000000U)
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_2_NSE_SHIFT (24U)
-/*! nse - Configure Number of Subevents Per BIS/CIS Event */
-#define BLE2_REG_BLE_REG_PST_SE_INTVL_2_NSE(x)   (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_INTVL_2_NSE_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_INTVL_2_NSE_MASK)
-/*! @} */
-
-/*! @name BLE_REG_PST_SE_DIS_2 - Periodic SW Timer 2: SubEvent Disable */
-/*! @{ */
-
-#define BLE2_REG_BLE_REG_PST_SE_DIS_2_DIS_REMAIN_SUBEVT_MASK (0xFFFFFFFEU)
-#define BLE2_REG_BLE_REG_PST_SE_DIS_2_DIS_REMAIN_SUBEVT_SHIFT (1U)
-/*! dis_remain_subevt - Disable Remaining Subevents */
-#define BLE2_REG_BLE_REG_PST_SE_DIS_2_DIS_REMAIN_SUBEVT(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_PST_SE_DIS_2_DIS_REMAIN_SUBEVT_SHIFT)) & BLE2_REG_BLE_REG_PST_SE_DIS_2_DIS_REMAIN_SUBEVT_MASK)
-/*! @} */
-
 /*! @name BLE_REG_AHBW_FSM_MON_CNTRL - BLE AHBW FSM Monitor and Reset Control */
 /*! @{ */
 
@@ -8456,11 +6307,6 @@ typedef struct {
 
 #define BLE2_REG_BLE_REG_IP_REVISION_BTU_IP_REV_MASK (0xFFFFU)
 #define BLE2_REG_BLE_REG_IP_REVISION_BTU_IP_REV_SHIFT (0U)
-/*! BTU_IP_Rev - BLE IP Revision */
-#define BLE2_REG_BLE_REG_IP_REVISION_BTU_IP_REV(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_IP_REVISION_BTU_IP_REV_SHIFT)) & BLE2_REG_BLE_REG_IP_REVISION_BTU_IP_REV_MASK)
-
-#define BLE2_REG_BLE_REG_IP_REVISION_BTU_IP_REV_MASK (0xFFFFU)
-#define BLE2_REG_BLE_REG_IP_REVISION_BTU_IP_REV_SHIFT (0U)
 /*! btu_ip_rev - BLE IP Revision, Bits[15:8] = major revision number (incremented at full tapeout),
  *    Bits[7:0] = minor revision number (incremented at post tapeout ECO), 88W8787 (Robin) = 0x0800
  *    88W8790 (uBB) = 0x0800 88W8797 (Starling) = 0x900 88W8766 (Geagle) = 0x0900 88W8897 (Kfisher)
@@ -8585,14 +6431,6 @@ typedef struct {
 /*! @name BLE_REG_DEBUG_RVSD - Debug reserved */
 /*! @{ */
 
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_CPU_GATEHCLK_SEL_MASK (0x1U)
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_CPU_GATEHCLK_SEL_SHIFT (0U)
-/*! ble_cpu_gatehclk_sel - BLE CPU Gatehclk Select
- *  0b0..gatehclk connected to GATEHCLK port from BLE CPU
- *  0b1..gatehclk connected to SLEEPING port from BLE CPU
- */
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_CPU_GATEHCLK_SEL(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_CPU_GATEHCLK_SEL_SHIFT)) & BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_CPU_GATEHCLK_SEL_MASK)
-
 #define BLE2_REG_BLE_REG_DEBUG_RVSD_BRF_PU_OPT_EN_MASK (0x1U)
 #define BLE2_REG_BLE_REG_DEBUG_RVSD_BRF_PU_OPT_EN_SHIFT (0U)
 /*! brf_pu_opt_en - BRF powerup Optimization Enable, Enable BRF_PU optimization to save power in BRF-FRF cross connect mode of Firecrest A1 */
@@ -8606,27 +6444,12 @@ typedef struct {
  */
 #define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_NAT_CLK_SLEEP_WR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_NAT_CLK_SLEEP_WR_EN_SHIFT)) & BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_NAT_CLK_SLEEP_WR_EN_MASK)
 
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_SW_MBOX_CLR_EN_MASK (0x2U)
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_SW_MBOX_CLR_EN_SHIFT (1U)
-/*! ble_sw_mbox_clr_en - BLE SW_Mbox_Clr_En */
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_SW_MBOX_CLR_EN(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_SW_MBOX_CLR_EN_SHIFT)) & BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_SW_MBOX_CLR_EN_MASK)
-
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_MASK_REQ_AT_SLEEP_REQ_RANGE_MASK (0x4U)
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_MASK_REQ_AT_SLEEP_REQ_RANGE_SHIFT (2U)
-/*! ble_mask_req_at_sleep_req_range - BLE Mask Request at Sleep_Req_Range */
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_MASK_REQ_AT_SLEEP_REQ_RANGE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_MASK_REQ_AT_SLEEP_REQ_RANGE_SHIFT)) & BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_MASK_REQ_AT_SLEEP_REQ_RANGE_MASK)
-
 #define BLE2_REG_BLE_REG_DEBUG_RVSD_SWTPAST_ECO_DISABLE_MASK (0x4U)
 #define BLE2_REG_BLE_REG_DEBUG_RVSD_SWTPAST_ECO_DISABLE_SHIFT (2U)
 /*! swtpast_eco_disable - SWT past Intr ECO disable, Disable bit for SWT past intr WIPBTU-478 fix,
  *    0x0: WIPBTU-478 fix is enabled in Owl A1, 0x1: WIPBTU-478 fix is disabled; older logic preserved
  */
 #define BLE2_REG_BLE_REG_DEBUG_RVSD_SWTPAST_ECO_DISABLE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DEBUG_RVSD_SWTPAST_ECO_DISABLE_SHIFT)) & BLE2_REG_BLE_REG_DEBUG_RVSD_SWTPAST_ECO_DISABLE_MASK)
-
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_MBOX_REQ_DELAY_MASK (0x8U)
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_MBOX_REQ_DELAY_SHIFT (3U)
-/*! ble_mbox_req_delay - BLE Mbox Request Delay */
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_MBOX_REQ_DELAY(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_MBOX_REQ_DELAY_SHIFT)) & BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_MBOX_REQ_DELAY_MASK)
 
 #define BLE2_REG_BLE_REG_DEBUG_RVSD_CCA_COEX_ECO_DIS_MASK (0x8U)
 #define BLE2_REG_BLE_REG_DEBUG_RVSD_CCA_COEX_ECO_DIS_SHIFT (3U)
@@ -8636,23 +6459,10 @@ typedef struct {
  */
 #define BLE2_REG_BLE_REG_DEBUG_RVSD_CCA_COEX_ECO_DIS(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DEBUG_RVSD_CCA_COEX_ECO_DIS_SHIFT)) & BLE2_REG_BLE_REG_DEBUG_RVSD_CCA_COEX_ECO_DIS_MASK)
 
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_SOC_REQ_MODE_MASK (0x10U)
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_SOC_REQ_MODE_SHIFT (4U)
-/*! ble_soc_req_mode - BLE SoC Request Mode */
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_SOC_REQ_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_SOC_REQ_MODE_SHIFT)) & BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_SOC_REQ_MODE_MASK)
-
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_DEBUG_RVSD_MASK (0xFFFFFFF0U)  /* Merged from fields with different position or width, of widths (26, 28), largest definition used */
+#define BLE2_REG_BLE_REG_DEBUG_RVSD_DEBUG_RVSD_MASK (0xFFFFFFF0U)
 #define BLE2_REG_BLE_REG_DEBUG_RVSD_DEBUG_RVSD_SHIFT (4U)
 /*! debug_rvsd - Debug Reserved, BLE-side reserved registers to be used for future ECO. */
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_DEBUG_RVSD(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DEBUG_RVSD_DEBUG_RVSD_SHIFT)) & BLE2_REG_BLE_REG_DEBUG_RVSD_DEBUG_RVSD_MASK)  /* Merged from fields with different position or width, of widths (26, 28), largest definition used */
-
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_CLK_CTRL_SOC_REQ_CDC_FIX_MASK (0x20U)
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_CLK_CTRL_SOC_REQ_CDC_FIX_SHIFT (5U)
-/*! ble_clk_ctrl_soc_req_cdc_fix - BLE_SoC_Req CDC Fix
- *  0b0..BLE_SoC_Req reverts to original without CDC Fix
- *  0b1..fix for SoC_Req is new
- */
-#define BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_CLK_CTRL_SOC_REQ_CDC_FIX(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_CLK_CTRL_SOC_REQ_CDC_FIX_SHIFT)) & BLE2_REG_BLE_REG_DEBUG_RVSD_BLE_CLK_CTRL_SOC_REQ_CDC_FIX_MASK)
+#define BLE2_REG_BLE_REG_DEBUG_RVSD_DEBUG_RVSD(x) (((uint32_t)(((uint32_t)(x)) << BLE2_REG_BLE_REG_DEBUG_RVSD_DEBUG_RVSD_SHIFT)) & BLE2_REG_BLE_REG_DEBUG_RVSD_DEBUG_RVSD_MASK)
 /*! @} */
 
 

@@ -7,9 +7,7 @@
 **                          KW45B41Z82AFPA
 **                          KW45B41Z82AFTA
 **                          KW45B41Z83AFPA
-**                          KW45B41Z83AFPA_NBU
 **                          KW45B41Z83AFTA
-**                          KW45B41Z83AFTA_NBU
 **                          KW45Z41052AFPA
 **                          KW45Z41052AFTA
 **                          KW45Z41053AFPA
@@ -62,8 +60,6 @@
 #include "KW45B41Z82_COMMON.h"
 #elif (defined(CPU_KW45B41Z83AFPA) || defined(CPU_KW45B41Z83AFTA))
 #include "KW45B41Z83_COMMON.h"
-#elif (defined(CPU_KW45B41Z83AFPA_NBU) || defined(CPU_KW45B41Z83AFTA_NBU))
-#include "KW45B41Z83_NBU_COMMON.h"
 #elif (defined(CPU_KW45Z41052AFPA) || defined(CPU_KW45Z41052AFTA))
 #include "KW45Z41052_COMMON.h"
 #elif (defined(CPU_KW45Z41053AFPA) || defined(CPU_KW45Z41053AFTA))

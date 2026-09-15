@@ -20,7 +20,7 @@
 **                          KW47Z420B3AFTA
 **
 **     Version:             rev. 3.0, 2026-02-11
-**     Build:               b260416
+**     Build:               b260518
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for VBAT
@@ -494,10 +494,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group VBAT_Register_Masks */
-
-/* Backward compatibility */
-#define VBAT_LDORAMC_RET_MASK VBAT_LDORAMC_RET0_MASK
-#define VBAT_LDORAMC_RET VBAT_LDORAMC_RET0
 
 
 /*!

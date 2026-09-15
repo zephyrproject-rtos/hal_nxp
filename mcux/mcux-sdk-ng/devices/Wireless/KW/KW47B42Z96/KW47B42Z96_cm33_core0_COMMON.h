@@ -8,7 +8,7 @@
 **
 **     Reference manual:    Rev. 5, 2026-03-24
 **     Version:             rev. 3.0, 2026-02-11
-**     Build:               b260506
+**     Build:               b260518
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for KW47B42Z96_cm33_core0
@@ -1928,6 +1928,10 @@ typedef enum _mu_core_boot_mode
   /** Array initializer of VBAT peripheral base pointers */
   #define VBAT_BASE_PTRS                           { VBAT0 }
 #endif
+/* Backward compatibility */
+#define VBAT_LDORAMC_RET_MASK VBAT_LDORAMC_RET0_MASK
+#define VBAT_LDORAMC_RET VBAT_LDORAMC_RET0
+
 
 /* VREF - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
