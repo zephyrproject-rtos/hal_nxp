@@ -10,7 +10,7 @@
 **
 **     Reference manual:    LPC54018JxM/LPC54S018JxM User manual Rev.1.0 20 September 2018
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260817
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

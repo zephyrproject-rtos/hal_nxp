@@ -11,7 +11,7 @@
 **
 **     Reference manual:    LPC546xx User manual Rev.1.9  5 June 2017
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260518
+**     Build:               b260826
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -237,7 +237,7 @@ static uint32_t findPllPostDiv(uint32_t ctrlReg, uint32_t pDecReg)
 /* Get multiplier (M) from PLL MDEC and BYPASS_FBDIV2 settings */
 static uint32_t findPllMMult(uint32_t ctrlReg, uint32_t mDecReg)
 {
-    uint32_t mMult = 1U;
+    uint32_t mMult;
 
     /* Decode MDEC value to get (M) multiplier */
     mMult = pllDecodeM(mDecReg & 0x1FFFFU);
