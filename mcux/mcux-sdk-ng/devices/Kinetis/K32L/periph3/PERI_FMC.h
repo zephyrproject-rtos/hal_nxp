@@ -4,7 +4,7 @@
 **                          K32L3A60VPJ1A_cm4
 **
 **     Version:             rev. 2.1, 2025-11-10
-**     Build:               b260130
+**     Build:               b260810
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FMC
@@ -96,7 +96,7 @@
 typedef struct {
   __IO uint32_t PFAPR;                             /**< Flash Access Protection Register, offset: 0x0 */
   __IO uint32_t PFB0CR;                            /**< Flash Bank 0 Control Register, offset: 0x4 */
-       uint32_t RESERVED_PFB1CR;                   /**< Reserved Flash Bank 1 Control Register, offset: 0x8 */
+  __I  uint32_t RESERVED_PFB1CR;                   /**< Reserved Flash Bank 1 Control Register, offset: 0x8 */
        uint8_t RESERVED_0[116];
   __IO uint32_t TAGVDWS[FMC_TAGVDW_COUNT][FMC_TAGVDW_S_COUNT]; /**< Cache Tag Storage, array offset: 0x80, array step: index*0x10, index2*0x4 */
        uint8_t RESERVED_1[64];
