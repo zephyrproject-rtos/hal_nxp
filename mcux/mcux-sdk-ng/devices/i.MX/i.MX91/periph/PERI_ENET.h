@@ -10,13 +10,13 @@
 **                          MIMX9131DVVXJ
 **
 **     Version:             rev. 1.0, 2024-11-15
-**     Build:               b250814
+**     Build:               b260728
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENET
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -2222,9 +2222,6 @@ typedef struct {
  * @}
  */ /* end of group ENET_Register_Masks */
 
-/* ENET Buffer Descriptor and Buffer Address Alignment. */
-#define ENET_BUFF_ALIGNMENT                      (64U)
-
 
 /*!
  * @}
@@ -2255,3 +2252,4 @@ typedef struct {
 
 
 #endif  /* PERI_ENET_H_ */
+

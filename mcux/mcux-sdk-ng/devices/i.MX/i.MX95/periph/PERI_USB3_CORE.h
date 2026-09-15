@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 4.0, 2026-02-28
-**     Build:               b260305
+**     Build:               b260721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USB3_CORE
@@ -425,7 +425,6 @@ typedef struct {
   __I  uint32_t HCCPARAMS2;                        /**< Host Controller Capability Parameters 2, offset: 0x1C */
   __IO uint32_t USBCMD;                            /**< USB Command, offset: 0x20 */
   __IO uint32_t USBSTS;                            /**< USB Status, offset: 0x24 */
-#undef PAGESIZE
   __I  uint32_t PAGESIZE;                          /**< Page Size, offset: 0x28 */
        uint8_t RESERVED_0[8];
   __IO uint32_t DNCTRL;                            /**< Device Notification, offset: 0x34 */
@@ -438,12 +437,12 @@ typedef struct {
        uint8_t RESERVED_2[964];
   __IO uint32_t PORTSC_20;                         /**< USB2 Port Status and Control, offset: 0x420 */
   __IO uint32_t PORTPMSC_20;                       /**< USB2 Port Power Management Status and Control, offset: 0x424 */
-       uint32_t PORTLI_20;                         /**< USB2 Port Link Information, offset: 0x428 */
+  __I  uint32_t PORTLI_20;                         /**< USB2 Port Link Information, offset: 0x428 */
   __IO uint32_t PORTHLPMC_20;                      /**< USB2 Port Hardware LPM Control, offset: 0x42C */
   __IO uint32_t PORTSC_30;                         /**< USB3 Port Status and Control, offset: 0x430 */
   __IO uint32_t PORTPMSC_30;                       /**< USB3 Port Power Management Status and Control, offset: 0x434 */
   __I  uint32_t PORTLI_30;                         /**< USB3 Port Link Information, offset: 0x438 */
-       uint32_t PORTHLPMC_30;                      /**< USB3 Port Hardware LPM Control, offset: 0x43C */
+  __I  uint32_t PORTHLPMC_30;                      /**< USB3 Port Hardware LPM Control, offset: 0x43C */
   __I  uint32_t MFINDEX;                           /**< Microframe Index, offset: 0x440 */
        uint8_t RESERVED_3[28];
   __IO uint32_t IMAN;                              /**< Interrupter Management, offset: 0x460 */
@@ -496,7 +495,7 @@ typedef struct {
        uint8_t RESERVED_12[4];
   __IO uint32_t GPRTBIMAP_FSLO;                    /**< Global Full-Speed Port to Bus Instance Mapping - Low, offset: 0xC188 */
        uint8_t RESERVED_13[8];
-       uint32_t GERRINJCTL[USB3_CORE_GERRINJCTL_COUNT]; /**< Global Error Injection 1 Control..Global Error Injection 2 Control, array offset: 0xC194, array step: 0x4 */
+  __I  uint32_t GERRINJCTL[USB3_CORE_GERRINJCTL_COUNT]; /**< Global Error Injection 1 Control..Global Error Injection 2 Control, array offset: 0xC194, array step: 0x4 */
   __IO uint32_t GUCTL2;                            /**< Global User Control 2, offset: 0xC19C */
        uint8_t RESERVED_14[96];
   __IO uint32_t GUSB2PHYCFG;                       /**< Global USB2 PHY Configuration, offset: 0xC200 */

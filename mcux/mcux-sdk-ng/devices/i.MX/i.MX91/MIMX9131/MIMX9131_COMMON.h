@@ -9,13 +9,13 @@
 **
 **     Reference manual:    IMX91RM Rev.1
 **     Version:             rev. 1.0, 2024-11-15
-**     Build:               b250814
+**     Build:               b260728
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX9131
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -376,7 +376,7 @@ typedef enum IRQn {
 #define __CA55_REV                     0x0000    /**< Core revision r2p0 */
 #define __GIC_PRIO_BITS                4         /**< Number of priority bits implemented in the GIC */
 #define __FPU_PRESENT                  1         /**< Defines if an FPU is present or not */
-#define __FPU_USED                     1         /**< Indicates whether an FPU is used or not */
+#define __FPU_USED                     1         /**< FPU used or not */
 #define __MMU_PRESENT                  1         /**< MMU present or not */
 #define __TIM_PRESENT                  1         /**< TIM present or not */
 #define __CACHE_PRESENT                1         /**< CACHE present or not */
@@ -517,6 +517,7 @@ typedef enum IRQn {
 #define CAN_Wake_Up_IRQS                         { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
 #define CAN_Error_IRQS                           { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
 #define CAN_Bus_Off_IRQS                         { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
+#define CAN_ORed_Message_buffer_IRQS             { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
 
 /* CCM_CTRL - Peripheral instance base addresses */
 /** Peripheral CCM_CTRL base address */
@@ -568,6 +569,16 @@ typedef enum IRQn {
 /** Array initializer of DMA4_TCD peripheral base pointers */
 #define DMA4_TCD_BASE_PTRS                       { EDMA4_2__TCD }
 
+/* DMA_TCD - Peripheral instance base addresses */
+/** Peripheral EDMA3_1__TCD base address */
+#define EDMA3_1__TCD_BASE                        (0x44010000u)
+/** Peripheral EDMA3_1__TCD base pointer */
+#define EDMA3_1__TCD                             ((DMA_TCD_Type *)EDMA3_1__TCD_BASE)
+/** Array initializer of DMA_TCD peripheral base addresses */
+#define DMA_TCD_BASE_ADDRS                       { EDMA3_1__TCD_BASE }
+/** Array initializer of DMA_TCD peripheral base pointers */
+#define DMA_TCD_BASE_PTRS                        { EDMA3_1__TCD }
+
 /* ENET - Peripheral instance base addresses */
 /** Peripheral ENET2 base address */
 #define ENET2_BASE                               (0x42890000u)
@@ -577,6 +588,9 @@ typedef enum IRQn {
 #define ENET_BASE_ADDRS                          { 0u, 0u, ENET2_BASE }
 /** Array initializer of ENET peripheral base pointers */
 #define ENET_BASE_PTRS                           { (ENET_Type *)0u, (ENET_Type *)0u, ENET2 }
+/* ENET Buffer Descriptor and Buffer Address Alignment. */
+#define ENET_BUFF_ALIGNMENT                      (64U)
+
 
 /* ENET_QOS - Peripheral instance base addresses */
 /** Peripheral ENET_QOS base address */
@@ -1136,16 +1150,6 @@ typedef enum IRQn {
 /** Array initializer of SYS_CTR_READ peripheral base pointers */
 #define SYS_CTR_READ_BASE_PTRS                   { SYS_CTR_CTLBASE1__SYS_CTR_READ }
 
-/* TCD - Peripheral instance base addresses */
-/** Peripheral EDMA3_1__TCD base address */
-#define EDMA3_1__TCD_BASE                        (0x44010000u)
-/** Peripheral EDMA3_1__TCD base pointer */
-#define EDMA3_1__TCD                             ((TCD_Type *)EDMA3_1__TCD_BASE)
-/** Array initializer of TCD peripheral base addresses */
-#define TCD_BASE_ADDRS                           { EDMA3_1__TCD_BASE }
-/** Array initializer of TCD peripheral base pointers */
-#define TCD_BASE_PTRS                            { EDMA3_1__TCD }
-
 /* TEMPSENSE - Peripheral instance base addresses */
 /** Peripheral U_TEMP_ANAMIX base address */
 #define U_TEMP_ANAMIX_BASE                       (0x44482000u)
@@ -1253,6 +1257,9 @@ typedef enum IRQn {
 #define TSTMR_BASE_ADDRS                         { TSTMR1__TSTMRA_BASE, TSTMR2__TSTMRA_BASE }
 /** Array initializer of TSTMR peripheral base pointers */
 #define TSTMR_BASE_PTRS                          { TSTMR1__TSTMRA, TSTMR2__TSTMRA }
+/* Extra definition */
+#define TSTMR_CLOCK_FREQUENCY_MHZ                (24U)
+
 
 /* USB - Peripheral instance base addresses */
 /** Peripheral USB__USB_OTG1 base address */
@@ -1329,6 +1336,10 @@ typedef enum IRQn {
 #define WDOG_BASE_PTRS                           { WDOG1, WDOG2, WDOG3, WDOG4, WDOG5 }
 /** Interrupt vectors for the WDOG peripheral type */
 #define WDOG_IRQS                                { WDOG1_IRQn, WDOG2_IRQn, WDOG3_IRQn, WDOG4_IRQn, WDOG5_IRQn }
+/* Extra definition */
+#define WDOG_UPDATE_KEY                          (0xD928C520U)
+#define WDOG_REFRESH_KEY                         (0xB480A602U)
+
 
 /* ----------------------------------------------------------------------------
    -- Macros for use with bit field definitions (xxx_SHIFT, xxx_MASK).
@@ -1384,3 +1395,4 @@ typedef enum IRQn {
 
 
 #endif  /* MIMX9131_COMMON_H_ */
+

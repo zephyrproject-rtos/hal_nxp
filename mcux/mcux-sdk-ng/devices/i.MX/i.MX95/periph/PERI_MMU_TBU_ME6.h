@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 4.0, 2026-02-28
-**     Build:               b260305
+**     Build:               b260721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MMU_TBU_ME6
@@ -410,9 +410,9 @@
 typedef struct {
        uint8_t RESERVED_0[4048];
   __I  uint32_t SMMU_PIDR4;                        /**< Peripheral ID4, offset: 0xFD0 */
-       uint32_t SMMU_PIDR5;                        /**< Peripheral ID5, offset: 0xFD4 */
-       uint32_t SMMU_PIDR6;                        /**< Peripheral ID6, offset: 0xFD8 */
-       uint32_t SMMU_PIDR7;                        /**< Peripheral ID7, offset: 0xFDC */
+  __I  uint32_t SMMU_PIDR5;                        /**< Peripheral ID5, offset: 0xFD4 */
+  __I  uint32_t SMMU_PIDR6;                        /**< Peripheral ID6, offset: 0xFD8 */
+  __I  uint32_t SMMU_PIDR7;                        /**< Peripheral ID7, offset: 0xFDC */
   __I  uint32_t SMMU_PIDR0;                        /**< Peripheral ID0, offset: 0xFE0 */
   __I  uint32_t SMMU_PIDR1;                        /**< Peripheral ID1, offset: 0xFE4 */
   __I  uint32_t SMMU_PIDR2;                        /**< Peripheral ID2, offset: 0xFE8 */
@@ -469,9 +469,9 @@ typedef struct {
        uint8_t RESERVED_13[12];
   __I  uint32_t SMMU_PMCG_PMDEVTYPE;               /**< PMU Device Type Register, offset: 0x2FCC */
   __I  uint32_t SMMU_PMCG_PIDR4;                   /**< PMU Peripheral ID4, offset: 0x2FD0 */
-       uint32_t SMMU_PMCG_PIDR5;                   /**< PMU Peripheral ID5, offset: 0x2FD4 */
-       uint32_t SMMU_PMCG_PIDR6;                   /**< PMU Peripheral ID6, offset: 0x2FD8 */
-       uint32_t SMMU_PMCG_PIDR7;                   /**< PMU Peripheral ID7, offset: 0x2FDC */
+  __I  uint32_t SMMU_PMCG_PIDR5;                   /**< PMU Peripheral ID5, offset: 0x2FD4 */
+  __I  uint32_t SMMU_PMCG_PIDR6;                   /**< PMU Peripheral ID6, offset: 0x2FD8 */
+  __I  uint32_t SMMU_PMCG_PIDR7;                   /**< PMU Peripheral ID7, offset: 0x2FDC */
   __I  uint32_t SMMU_PMCG_PIDR0;                   /**< PMU Peripheral ID0, offset: 0x2FE0 */
   __I  uint32_t SMMU_PMCG_PIDR1;                   /**< PMU Peripheral ID1, offset: 0x2FE4 */
   __I  uint32_t SMMU_PMCG_PIDR2;                   /**< PMU Peripheral ID2, offset: 0x2FE8 */
@@ -535,14 +535,14 @@ typedef struct {
   __I  uint32_t TBU_SYSDISC14;                     /**< TBU_SYSDISC14, offset: 0x8E68 */
        uint8_t RESERVED_31[20];
   __I  uint32_t TBU_ERRFR_LO;                      /**< TBU Error Feature Register (Least Significant 32-bits), offset: 0x8E80 */
-       uint32_t TBU_ERRFR_HI;                      /**< TBU Error Feature Register (Most Significant 32-bits), offset: 0x8E84 */
+  __I  uint32_t TBU_ERRFR_HI;                      /**< TBU Error Feature Register (Most Significant 32-bits), offset: 0x8E84 */
   __IO uint32_t TBU_ERRCTLR_LO;                    /**< TBU Error Control Register (Least Significant 32-bits), offset: 0x8E88 */
-       uint32_t TBU_ERRCTLR_HI;                    /**< TBU Error Control Register (Most Significant 32-bits), offset: 0x8E8C */
+  __I  uint32_t TBU_ERRCTLR_HI;                    /**< TBU Error Control Register (Most Significant 32-bits), offset: 0x8E8C */
   __IO uint32_t TBU_ERRSTATUS_LO;                  /**< TBU Error Record Primary Syndrome Register (Least Significant 32-bits), offset: 0x8E90 */
-       uint32_t TBU_ERRSTATUS_HI;                  /**< TBU Error Record Primary Syndrome Register (Most Significant 32-bits), offset: 0x8E94 */
+  __I  uint32_t TBU_ERRSTATUS_HI;                  /**< TBU Error Record Primary Syndrome Register (Most Significant 32-bits), offset: 0x8E94 */
        uint8_t RESERVED_32[40];
   __IO uint32_t TBU_ERRGEN_LO;                     /**< TBU Error Generation Register (Least Significant 32-bits), offset: 0x8EC0 */
-       uint32_t TBU_ERRGEN_HI;                     /**< TBU Error Generation Register (Most Significant 32-bits), offset: 0x8EC4 */
+  __I  uint32_t TBU_ERRGEN_HI;                     /**< TBU Error Generation Register (Most Significant 32-bits), offset: 0x8EC4 */
        uint8_t RESERVED_33[8504];
   __I  uint32_t MPAMF_IDR_LO_S;                    /**< MPAMF_IDR_s (Least Significant 32-bits), offset: 0xB000 */
   __I  uint32_t MPAMF_IDR_HI_S;                    /**< MPAMF_IDR_s (Most Significant 32-bits), offset: 0xB004 */

@@ -10,13 +10,13 @@
 **                          MIMX9131DVVXJ
 **
 **     Version:             rev. 1.0, 2024-11-15
-**     Build:               b250814
+**     Build:               b260728
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MU
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -102,7 +102,7 @@ typedef struct {
   __IO uint32_t CR;                                /**< Control, offset: 0x8 */
   __IO uint32_t SR;                                /**< Status, offset: 0xC */
   __IO uint32_t CCR0;                              /**< Core Control 0, offset: 0x10 */
-       uint32_t CIER0;                             /**< Core Interrupt Enable 0, offset: 0x14 */
+  __I  uint32_t CIER0;                             /**< Core Interrupt Enable 0, offset: 0x14 */
   __IO uint32_t CSSR0;                             /**< Core Sticky Status 0, offset: 0x18 */
        uint8_t RESERVED_0[228];
   __IO uint32_t FCR;                               /**< Flag Control, offset: 0x100 */
@@ -649,3 +649,4 @@ typedef struct {
 
 
 #endif  /* PERI_MU_H_ */
+

@@ -9,7 +9,7 @@
 **
 **     Reference manual:    iMX952RM rev1 draftM
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260416
+**     Build:               b260722
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX9529_ca55

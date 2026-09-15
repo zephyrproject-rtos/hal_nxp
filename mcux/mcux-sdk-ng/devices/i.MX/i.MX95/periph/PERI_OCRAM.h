@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 4.0, 2026-02-28
-**     Build:               b260305
+**     Build:               b260721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for OCRAM
@@ -425,7 +425,7 @@ typedef struct {
        uint8_t RESERVED_2[8];
   __IO uint32_t RAMMAXA;                           /**< RAM Maximum-Value Address, offset: 0x40 */
        uint8_t RESERVED_3[60];
-       uint32_t RAMCR2;                            /**< RAM Control 2, offset: 0x80 */
+  __I  uint32_t RAMCR2;                            /**< RAM Control 2, offset: 0x80 */
 } OCRAM_Type;
 
 /* ----------------------------------------------------------------------------

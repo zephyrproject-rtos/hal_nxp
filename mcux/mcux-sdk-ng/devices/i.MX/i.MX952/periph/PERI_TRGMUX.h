@@ -38,7 +38,7 @@
 **                          MIMX9529xxVZx_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260416
+**     Build:               b260722
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TRGMUX
@@ -150,9 +150,12 @@
  * @{
  */
 
+/** TRGMUX - Size of Registers Arrays */
+#define TRGMUX_TRGCFG_COUNT                       1u
+
 /** TRGMUX - Register Layout Typedef */
 typedef struct {
-  __IO uint32_t REG0;                              /**< TRGMUX REG0, offset: 0x0 */
+  __IO uint32_t TRGCFG[TRGMUX_TRGCFG_COUNT];       /**< TRGMUX REG0, array offset: 0x0, array step: 0x4 */
 } TRGMUX_Type;
 
 /* ----------------------------------------------------------------------------
@@ -164,26 +167,26 @@ typedef struct {
  * @{
  */
 
-/*! @name REG0 - TRGMUX REG0 */
+/*! @name TRGCFG - TRGMUX REG0 */
 /*! @{ */
 
-#define TRGMUX_REG0_SEL0_MASK                    (0xFU)
-#define TRGMUX_REG0_SEL0_SHIFT                   (0U)
+#define TRGMUX_TRGCFG_SEL0_MASK                  (0xFU)
+#define TRGMUX_TRGCFG_SEL0_SHIFT                 (0U)
 /*! SEL0 - TRGMUX Source Select 0 */
-#define TRGMUX_REG0_SEL0(x)                      (((uint32_t)(((uint32_t)(x)) << TRGMUX_REG0_SEL0_SHIFT)) & TRGMUX_REG0_SEL0_MASK)
+#define TRGMUX_TRGCFG_SEL0(x)                    (((uint32_t)(((uint32_t)(x)) << TRGMUX_TRGCFG_SEL0_SHIFT)) & TRGMUX_TRGCFG_SEL0_MASK)
 
-#define TRGMUX_REG0_SEL1_MASK                    (0xF00U)
-#define TRGMUX_REG0_SEL1_SHIFT                   (8U)
+#define TRGMUX_TRGCFG_SEL1_MASK                  (0xF00U)
+#define TRGMUX_TRGCFG_SEL1_SHIFT                 (8U)
 /*! SEL1 - TRGMUX Source Select 1 */
-#define TRGMUX_REG0_SEL1(x)                      (((uint32_t)(((uint32_t)(x)) << TRGMUX_REG0_SEL1_SHIFT)) & TRGMUX_REG0_SEL1_MASK)
+#define TRGMUX_TRGCFG_SEL1(x)                    (((uint32_t)(((uint32_t)(x)) << TRGMUX_TRGCFG_SEL1_SHIFT)) & TRGMUX_TRGCFG_SEL1_MASK)
 
-#define TRGMUX_REG0_LK_MASK                      (0x80000000U)
-#define TRGMUX_REG0_LK_SHIFT                     (31U)
+#define TRGMUX_TRGCFG_LK_MASK                    (0x80000000U)
+#define TRGMUX_TRGCFG_LK_SHIFT                   (31U)
 /*! LK - TRGMUX Register Lock
  *  0b0..Register is writable
  *  0b1..Register is not writable until the next system reset
  */
-#define TRGMUX_REG0_LK(x)                        (((uint32_t)(((uint32_t)(x)) << TRGMUX_REG0_LK_SHIFT)) & TRGMUX_REG0_LK_MASK)
+#define TRGMUX_TRGCFG_LK(x)                      (((uint32_t)(((uint32_t)(x)) << TRGMUX_TRGCFG_LK_SHIFT)) & TRGMUX_TRGCFG_LK_MASK)
 /*! @} */
 
 

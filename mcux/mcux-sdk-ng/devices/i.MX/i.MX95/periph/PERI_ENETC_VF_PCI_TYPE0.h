@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 4.0, 2026-02-28
-**     Build:               b260305
+**     Build:               b260721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENETC_VF_PCI_TYPE0
@@ -412,10 +412,10 @@ typedef struct {
   __IO uint16_t PCI_CFH_CMD;                       /**< PCI command register, offset: 0x4 */
   __I  uint16_t PCI_CFH_STAT;                      /**< PCI status register, offset: 0x6 */
   __I  uint32_t PCI_CFH_REVID_CLASSCODE;           /**< PCI revision ID and classcode register, offset: 0x8 */
-       uint8_t PCI_CFH_CL_SIZE;                    /**< PCI cache line size register, offset: 0xC */
-       uint8_t PCI_CFH_LAT_TIMER;                  /**< PCI latency timer register, offset: 0xD */
+  __I  uint8_t PCI_CFH_CL_SIZE;                    /**< PCI cache line size register, offset: 0xC */
+  __I  uint8_t PCI_CFH_LAT_TIMER;                  /**< PCI latency timer register, offset: 0xD */
   __I  uint8_t PCI_CFH_HDR_TYPE;                   /**< PCI header type register, offset: 0xE */
-       uint8_t PCI_CFH_BIST;                       /**< PCI BIST register, offset: 0xF */
+  __I  uint8_t PCI_CFH_BIST;                       /**< PCI BIST register, offset: 0xF */
   __I  uint32_t PCI_CFH_BAR0;                      /**< PCI base address register 0, offset: 0x10 */
   __I  uint32_t PCI_CFH_BAR1;                      /**< PCI base address register 1, offset: 0x14 */
   __I  uint32_t PCI_CFH_BAR2;                      /**< PCI base address register 2, offset: 0x18 */

@@ -1,10 +1,220 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX94398AVKE_ca55
-**                          MIMX94398AVKE_cm33_core0
-**                          MIMX94398AVKE_cm33_core1
-**                          MIMX94398AVKE_cm7_core0
-**                          MIMX94398AVKE_cm7_core1
+**     Processors:          MIMX94115CVMM_ca55
+**                          MIMX94115CVMM_cm33_core0
+**                          MIMX94115CVMM_cm33_core1
+**                          MIMX94115CVMM_cm7_core0
+**                          MIMX94115CVMM_cm7_core1
+**                          MIMX94115XVKM_ca55
+**                          MIMX94115XVKM_cm33_core0
+**                          MIMX94115XVKM_cm33_core1
+**                          MIMX94115XVKM_cm7_core0
+**                          MIMX94115XVKM_cm7_core1
+**                          MIMX94115XVMM_ca55
+**                          MIMX94115XVMM_cm33_core0
+**                          MIMX94115XVMM_cm33_core1
+**                          MIMX94115XVMM_cm7_core0
+**                          MIMX94115XVMM_cm7_core1
+**                          MIMX94135CVMM_ca55
+**                          MIMX94135CVMM_cm33_core0
+**                          MIMX94135CVMM_cm33_core1
+**                          MIMX94135CVMM_cm7_core0
+**                          MIMX94135CVMM_cm7_core1
+**                          MIMX94135XVKM_ca55
+**                          MIMX94135XVKM_cm33_core0
+**                          MIMX94135XVKM_cm33_core1
+**                          MIMX94135XVKM_cm7_core0
+**                          MIMX94135XVKM_cm7_core1
+**                          MIMX94135XVMM_ca55
+**                          MIMX94135XVMM_cm33_core0
+**                          MIMX94135XVMM_cm33_core1
+**                          MIMX94135XVMM_cm7_core0
+**                          MIMX94135XVMM_cm7_core1
+**                          MIMX94155CVMM_ca55
+**                          MIMX94155CVMM_cm33_core0
+**                          MIMX94155CVMM_cm33_core1
+**                          MIMX94155CVMM_cm7_core0
+**                          MIMX94155CVMM_cm7_core1
+**                          MIMX94155XVKM_ca55
+**                          MIMX94155XVKM_cm33_core0
+**                          MIMX94155XVKM_cm33_core1
+**                          MIMX94155XVKM_cm7_core0
+**                          MIMX94155XVKM_cm7_core1
+**                          MIMX94155XVMM_ca55
+**                          MIMX94155XVMM_cm33_core0
+**                          MIMX94155XVMM_cm33_core1
+**                          MIMX94155XVMM_cm7_core0
+**                          MIMX94155XVMM_cm7_core1
+**                          MIMX94175CVMM_ca55
+**                          MIMX94175CVMM_cm33_core0
+**                          MIMX94175CVMM_cm33_core1
+**                          MIMX94175CVMM_cm7_core0
+**                          MIMX94175CVMM_cm7_core1
+**                          MIMX94175XVKM_ca55
+**                          MIMX94175XVKM_cm33_core0
+**                          MIMX94175XVKM_cm33_core1
+**                          MIMX94175XVKM_cm7_core0
+**                          MIMX94175XVKM_cm7_core1
+**                          MIMX94175XVMM_ca55
+**                          MIMX94175XVMM_cm33_core0
+**                          MIMX94175XVMM_cm33_core1
+**                          MIMX94175XVMM_cm7_core0
+**                          MIMX94175XVMM_cm7_core1
+**                          MIMX94185CVMM_ca55
+**                          MIMX94185CVMM_cm33_core0
+**                          MIMX94185CVMM_cm33_core1
+**                          MIMX94185CVMM_cm7_core0
+**                          MIMX94185CVMM_cm7_core1
+**                          MIMX94214CVMM_ca55
+**                          MIMX94214CVMM_cm33_core0
+**                          MIMX94214CVMM_cm33_core1
+**                          MIMX94214CVMM_cm7_core0
+**                          MIMX94214CVMM_cm7_core1
+**                          MIMX94214XVKM_ca55
+**                          MIMX94214XVKM_cm33_core0
+**                          MIMX94214XVKM_cm33_core1
+**                          MIMX94214XVKM_cm7_core0
+**                          MIMX94214XVKM_cm7_core1
+**                          MIMX94214XVMM_ca55
+**                          MIMX94214XVMM_cm33_core0
+**                          MIMX94214XVMM_cm33_core1
+**                          MIMX94214XVMM_cm7_core0
+**                          MIMX94214XVMM_cm7_core1
+**                          MIMX94215CVMM_ca55
+**                          MIMX94215CVMM_cm33_core0
+**                          MIMX94215CVMM_cm33_core1
+**                          MIMX94215CVMM_cm7_core0
+**                          MIMX94215CVMM_cm7_core1
+**                          MIMX94215XVKM_ca55
+**                          MIMX94215XVKM_cm33_core0
+**                          MIMX94215XVKM_cm33_core1
+**                          MIMX94215XVKM_cm7_core0
+**                          MIMX94215XVKM_cm7_core1
+**                          MIMX94215XVMM_ca55
+**                          MIMX94215XVMM_cm33_core0
+**                          MIMX94215XVMM_cm33_core1
+**                          MIMX94215XVMM_cm7_core0
+**                          MIMX94215XVMM_cm7_core1
+**                          MIMX94235CVMM_ca55
+**                          MIMX94235CVMM_cm33_core0
+**                          MIMX94235CVMM_cm33_core1
+**                          MIMX94235CVMM_cm7_core0
+**                          MIMX94235CVMM_cm7_core1
+**                          MIMX94255CVMM_ca55
+**                          MIMX94255CVMM_cm33_core0
+**                          MIMX94255CVMM_cm33_core1
+**                          MIMX94255CVMM_cm7_core0
+**                          MIMX94255CVMM_cm7_core1
+**                          MIMX94275CVMM_ca55
+**                          MIMX94275CVMM_cm33_core0
+**                          MIMX94275CVMM_cm33_core1
+**                          MIMX94275CVMM_cm7_core0
+**                          MIMX94275CVMM_cm7_core1
+**                          MIMX94285CVMM_ca55
+**                          MIMX94285CVMM_cm33_core0
+**                          MIMX94285CVMM_cm33_core1
+**                          MIMX94285CVMM_cm7_core0
+**                          MIMX94285CVMM_cm7_core1
+**                          MIMX94294XVKM_ca55
+**                          MIMX94294XVKM_cm33_core0
+**                          MIMX94294XVKM_cm33_core1
+**                          MIMX94294XVKM_cm7_core0
+**                          MIMX94294XVKM_cm7_core1
+**                          MIMX94294XVMM_ca55
+**                          MIMX94294XVMM_cm33_core0
+**                          MIMX94294XVMM_cm33_core1
+**                          MIMX94294XVMM_cm7_core0
+**                          MIMX94294XVMM_cm7_core1
+**                          MIMX94295AVKM_ca55
+**                          MIMX94295AVKM_cm33_core0
+**                          MIMX94295AVKM_cm33_core1
+**                          MIMX94295AVKM_cm7_core0
+**                          MIMX94295AVKM_cm7_core1
+**                          MIMX94295AVMJ_ca55
+**                          MIMX94295AVMJ_cm33_core0
+**                          MIMX94295AVMJ_cm33_core1
+**                          MIMX94295AVMJ_cm7_core0
+**                          MIMX94295AVMJ_cm7_core1
+**                          MIMX94295CVMJ_ca55
+**                          MIMX94295CVMJ_cm33_core0
+**                          MIMX94295CVMJ_cm33_core1
+**                          MIMX94295CVMJ_cm7_core0
+**                          MIMX94295CVMJ_cm7_core1
+**                          MIMX94295XVKJ_ca55
+**                          MIMX94295XVKJ_cm33_core0
+**                          MIMX94295XVKJ_cm33_core1
+**                          MIMX94295XVKJ_cm7_core0
+**                          MIMX94295XVKJ_cm7_core1
+**                          MIMX94295XVMM_ca55
+**                          MIMX94295XVMM_cm33_core0
+**                          MIMX94295XVMM_cm33_core1
+**                          MIMX94295XVMM_cm7_core0
+**                          MIMX94295XVMM_cm7_core1
+**                          MIMX94316XVMM_ca55
+**                          MIMX94316XVMM_cm33_core0
+**                          MIMX94316XVMM_cm33_core1
+**                          MIMX94316XVMM_cm7_core0
+**                          MIMX94316XVMM_cm7_core1
+**                          MIMX94318XVMM_ca55
+**                          MIMX94318XVMM_cm33_core0
+**                          MIMX94318XVMM_cm33_core1
+**                          MIMX94318XVMM_cm7_core0
+**                          MIMX94318XVMM_cm7_core1
+**                          MIMX94376AVKM_ca55
+**                          MIMX94376AVKM_cm33_core0
+**                          MIMX94376AVKM_cm33_core1
+**                          MIMX94376AVKM_cm7_core0
+**                          MIMX94376AVKM_cm7_core1
+**                          MIMX94378AVKM_ca55
+**                          MIMX94378AVKM_cm33_core0
+**                          MIMX94378AVKM_cm33_core1
+**                          MIMX94378AVKM_cm7_core0
+**                          MIMX94378AVKM_cm7_core1
+**                          MIMX94386AVKM_ca55
+**                          MIMX94386AVKM_cm33_core0
+**                          MIMX94386AVKM_cm33_core1
+**                          MIMX94386AVKM_cm7_core0
+**                          MIMX94386AVKM_cm7_core1
+**                          MIMX94386XVMM_ca55
+**                          MIMX94386XVMM_cm33_core0
+**                          MIMX94386XVMM_cm33_core1
+**                          MIMX94386XVMM_cm7_core0
+**                          MIMX94386XVMM_cm7_core1
+**                          MIMX94388AVKM_ca55
+**                          MIMX94388AVKM_cm33_core0
+**                          MIMX94388AVKM_cm33_core1
+**                          MIMX94388AVKM_cm7_core0
+**                          MIMX94388AVKM_cm7_core1
+**                          MIMX94388AVMM_ca55
+**                          MIMX94388AVMM_cm33_core0
+**                          MIMX94388AVMM_cm33_core1
+**                          MIMX94388AVMM_cm7_core0
+**                          MIMX94388AVMM_cm7_core1
+**                          MIMX94388XVMM_ca55
+**                          MIMX94388XVMM_cm33_core0
+**                          MIMX94388XVMM_cm33_core1
+**                          MIMX94388XVMM_cm7_core0
+**                          MIMX94388XVMM_cm7_core1
+**                          MIMX94396AVKJ_ca55
+**                          MIMX94396AVKJ_cm33_core0
+**                          MIMX94396AVKJ_cm33_core1
+**                          MIMX94396AVKJ_cm7_core0
+**                          MIMX94396AVKJ_cm7_core1
+**                          MIMX94396AVKM_ca55
+**                          MIMX94396AVKM_cm33_core0
+**                          MIMX94396AVKM_cm33_core1
+**                          MIMX94396AVKM_cm7_core0
+**                          MIMX94396AVKM_cm7_core1
+**                          MIMX94396AVMJ_ca55
+**                          MIMX94396AVMJ_cm33_core0
+**                          MIMX94396AVMJ_cm33_core1
+**                          MIMX94396AVMJ_cm7_core0
+**                          MIMX94396AVMJ_cm7_core1
+**                          MIMX94396XVMM_ca55
+**                          MIMX94396XVMM_cm33_core0
+**                          MIMX94396XVMM_cm33_core1
+**                          MIMX94396XVMM_cm7_core0
+**                          MIMX94396XVMM_cm7_core1
 **                          MIMX94398AVKJ_ca55
 **                          MIMX94398AVKJ_cm33_core0
 **                          MIMX94398AVKJ_cm33_core1
@@ -15,11 +225,6 @@
 **                          MIMX94398AVKM_cm33_core1
 **                          MIMX94398AVKM_cm7_core0
 **                          MIMX94398AVKM_cm7_core1
-**                          MIMX94398AVME_ca55
-**                          MIMX94398AVME_cm33_core0
-**                          MIMX94398AVME_cm33_core1
-**                          MIMX94398AVME_cm7_core0
-**                          MIMX94398AVME_cm7_core1
 **                          MIMX94398AVMJ_ca55
 **                          MIMX94398AVMJ_cm33_core0
 **                          MIMX94398AVMJ_cm33_core1
@@ -30,91 +235,16 @@
 **                          MIMX94398AVMM_cm33_core1
 **                          MIMX94398AVMM_cm7_core0
 **                          MIMX94398AVMM_cm7_core1
-**                          MIMX94398CVKE_ca55
-**                          MIMX94398CVKE_cm33_core0
-**                          MIMX94398CVKE_cm33_core1
-**                          MIMX94398CVKE_cm7_core0
-**                          MIMX94398CVKE_cm7_core1
-**                          MIMX94398CVKJ_ca55
-**                          MIMX94398CVKJ_cm33_core0
-**                          MIMX94398CVKJ_cm33_core1
-**                          MIMX94398CVKJ_cm7_core0
-**                          MIMX94398CVKJ_cm7_core1
-**                          MIMX94398CVKM_ca55
-**                          MIMX94398CVKM_cm33_core0
-**                          MIMX94398CVKM_cm33_core1
-**                          MIMX94398CVKM_cm7_core0
-**                          MIMX94398CVKM_cm7_core1
-**                          MIMX94398CVME_ca55
-**                          MIMX94398CVME_cm33_core0
-**                          MIMX94398CVME_cm33_core1
-**                          MIMX94398CVME_cm7_core0
-**                          MIMX94398CVME_cm7_core1
-**                          MIMX94398CVMJ_ca55
-**                          MIMX94398CVMJ_cm33_core0
-**                          MIMX94398CVMJ_cm33_core1
-**                          MIMX94398CVMJ_cm7_core0
-**                          MIMX94398CVMJ_cm7_core1
-**                          MIMX94398CVMM_ca55
-**                          MIMX94398CVMM_cm33_core0
-**                          MIMX94398CVMM_cm33_core1
-**                          MIMX94398CVMM_cm7_core0
-**                          MIMX94398CVMM_cm7_core1
-**                          MIMX94398DVKE_ca55
-**                          MIMX94398DVKE_cm33_core0
-**                          MIMX94398DVKE_cm33_core1
-**                          MIMX94398DVKE_cm7_core0
-**                          MIMX94398DVKE_cm7_core1
-**                          MIMX94398DVKJ_ca55
-**                          MIMX94398DVKJ_cm33_core0
-**                          MIMX94398DVKJ_cm33_core1
-**                          MIMX94398DVKJ_cm7_core0
-**                          MIMX94398DVKJ_cm7_core1
 **                          MIMX94398DVKM_ca55
 **                          MIMX94398DVKM_cm33_core0
 **                          MIMX94398DVKM_cm33_core1
 **                          MIMX94398DVKM_cm7_core0
 **                          MIMX94398DVKM_cm7_core1
-**                          MIMX94398DVME_ca55
-**                          MIMX94398DVME_cm33_core0
-**                          MIMX94398DVME_cm33_core1
-**                          MIMX94398DVME_cm7_core0
-**                          MIMX94398DVME_cm7_core1
-**                          MIMX94398DVMJ_ca55
-**                          MIMX94398DVMJ_cm33_core0
-**                          MIMX94398DVMJ_cm33_core1
-**                          MIMX94398DVMJ_cm7_core0
-**                          MIMX94398DVMJ_cm7_core1
 **                          MIMX94398DVMM_ca55
 **                          MIMX94398DVMM_cm33_core0
 **                          MIMX94398DVMM_cm33_core1
 **                          MIMX94398DVMM_cm7_core0
 **                          MIMX94398DVMM_cm7_core1
-**                          MIMX94398XVKE_ca55
-**                          MIMX94398XVKE_cm33_core0
-**                          MIMX94398XVKE_cm33_core1
-**                          MIMX94398XVKE_cm7_core0
-**                          MIMX94398XVKE_cm7_core1
-**                          MIMX94398XVKJ_ca55
-**                          MIMX94398XVKJ_cm33_core0
-**                          MIMX94398XVKJ_cm33_core1
-**                          MIMX94398XVKJ_cm7_core0
-**                          MIMX94398XVKJ_cm7_core1
-**                          MIMX94398XVKM_ca55
-**                          MIMX94398XVKM_cm33_core0
-**                          MIMX94398XVKM_cm33_core1
-**                          MIMX94398XVKM_cm7_core0
-**                          MIMX94398XVKM_cm7_core1
-**                          MIMX94398XVME_ca55
-**                          MIMX94398XVME_cm33_core0
-**                          MIMX94398XVME_cm33_core1
-**                          MIMX94398XVME_cm7_core0
-**                          MIMX94398XVME_cm7_core1
-**                          MIMX94398XVMJ_ca55
-**                          MIMX94398XVMJ_cm33_core0
-**                          MIMX94398XVMJ_cm33_core1
-**                          MIMX94398XVMJ_cm7_core0
-**                          MIMX94398XVMJ_cm7_core1
 **                          MIMX94398XVMM_ca55
 **                          MIMX94398XVMM_cm33_core0
 **                          MIMX94398XVMM_cm33_core1
@@ -122,13 +252,13 @@
 **                          MIMX94398XVMM_cm7_core1
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250721
+**     Build:               b260804
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for XSPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -176,15 +306,215 @@
 #if !defined(PERI_XSPI_H_)
 #define PERI_XSPI_H_                             /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX94398AVKE_ca55) || defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVME_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398CVKE_ca55) || defined(CPU_MIMX94398CVKJ_ca55) || defined(CPU_MIMX94398CVKM_ca55) || defined(CPU_MIMX94398CVME_ca55) || defined(CPU_MIMX94398CVMJ_ca55) || defined(CPU_MIMX94398CVMM_ca55) || defined(CPU_MIMX94398DVKE_ca55) || defined(CPU_MIMX94398DVKJ_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVME_ca55) || defined(CPU_MIMX94398DVMJ_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVKE_ca55) || defined(CPU_MIMX94398XVKJ_ca55) || defined(CPU_MIMX94398XVKM_ca55) || defined(CPU_MIMX94398XVME_ca55) || defined(CPU_MIMX94398XVMJ_ca55) || defined(CPU_MIMX94398XVMM_ca55))
+#if (defined(CPU_MIMX94115CVMM_ca55) || defined(CPU_MIMX94115XVKM_ca55) || defined(CPU_MIMX94115XVMM_ca55))
+#include "MIMX94115_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm33_core0) || defined(CPU_MIMX94115XVKM_cm33_core0) || defined(CPU_MIMX94115XVMM_cm33_core0))
+#include "MIMX94115_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm33_core1) || defined(CPU_MIMX94115XVKM_cm33_core1) || defined(CPU_MIMX94115XVMM_cm33_core1))
+#include "MIMX94115_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm7_core0) || defined(CPU_MIMX94115XVKM_cm7_core0) || defined(CPU_MIMX94115XVMM_cm7_core0))
+#include "MIMX94115_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm7_core1) || defined(CPU_MIMX94115XVKM_cm7_core1) || defined(CPU_MIMX94115XVMM_cm7_core1))
+#include "MIMX94115_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_ca55) || defined(CPU_MIMX94135XVKM_ca55) || defined(CPU_MIMX94135XVMM_ca55))
+#include "MIMX94135_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm33_core0) || defined(CPU_MIMX94135XVKM_cm33_core0) || defined(CPU_MIMX94135XVMM_cm33_core0))
+#include "MIMX94135_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm33_core1) || defined(CPU_MIMX94135XVKM_cm33_core1) || defined(CPU_MIMX94135XVMM_cm33_core1))
+#include "MIMX94135_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm7_core0) || defined(CPU_MIMX94135XVKM_cm7_core0) || defined(CPU_MIMX94135XVMM_cm7_core0))
+#include "MIMX94135_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm7_core1) || defined(CPU_MIMX94135XVKM_cm7_core1) || defined(CPU_MIMX94135XVMM_cm7_core1))
+#include "MIMX94135_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_ca55) || defined(CPU_MIMX94155XVKM_ca55) || defined(CPU_MIMX94155XVMM_ca55))
+#include "MIMX94155_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm33_core0) || defined(CPU_MIMX94155XVKM_cm33_core0) || defined(CPU_MIMX94155XVMM_cm33_core0))
+#include "MIMX94155_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm33_core1) || defined(CPU_MIMX94155XVKM_cm33_core1) || defined(CPU_MIMX94155XVMM_cm33_core1))
+#include "MIMX94155_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm7_core0) || defined(CPU_MIMX94155XVKM_cm7_core0) || defined(CPU_MIMX94155XVMM_cm7_core0))
+#include "MIMX94155_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm7_core1) || defined(CPU_MIMX94155XVKM_cm7_core1) || defined(CPU_MIMX94155XVMM_cm7_core1))
+#include "MIMX94155_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_ca55) || defined(CPU_MIMX94175XVKM_ca55) || defined(CPU_MIMX94175XVMM_ca55))
+#include "MIMX94175_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm33_core0) || defined(CPU_MIMX94175XVKM_cm33_core0) || defined(CPU_MIMX94175XVMM_cm33_core0))
+#include "MIMX94175_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm33_core1) || defined(CPU_MIMX94175XVKM_cm33_core1) || defined(CPU_MIMX94175XVMM_cm33_core1))
+#include "MIMX94175_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm7_core0) || defined(CPU_MIMX94175XVKM_cm7_core0) || defined(CPU_MIMX94175XVMM_cm7_core0))
+#include "MIMX94175_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm7_core1) || defined(CPU_MIMX94175XVKM_cm7_core1) || defined(CPU_MIMX94175XVMM_cm7_core1))
+#include "MIMX94175_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_ca55))
+#include "MIMX94185_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm33_core0))
+#include "MIMX94185_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm33_core1))
+#include "MIMX94185_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm7_core0))
+#include "MIMX94185_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm7_core1))
+#include "MIMX94185_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_ca55) || defined(CPU_MIMX94214XVKM_ca55) || defined(CPU_MIMX94214XVMM_ca55))
+#include "MIMX94214_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm33_core0) || defined(CPU_MIMX94214XVKM_cm33_core0) || defined(CPU_MIMX94214XVMM_cm33_core0))
+#include "MIMX94214_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm33_core1) || defined(CPU_MIMX94214XVKM_cm33_core1) || defined(CPU_MIMX94214XVMM_cm33_core1))
+#include "MIMX94214_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm7_core0) || defined(CPU_MIMX94214XVKM_cm7_core0) || defined(CPU_MIMX94214XVMM_cm7_core0))
+#include "MIMX94214_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm7_core1) || defined(CPU_MIMX94214XVKM_cm7_core1) || defined(CPU_MIMX94214XVMM_cm7_core1))
+#include "MIMX94214_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_ca55) || defined(CPU_MIMX94215XVKM_ca55) || defined(CPU_MIMX94215XVMM_ca55))
+#include "MIMX94215_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm33_core0) || defined(CPU_MIMX94215XVKM_cm33_core0) || defined(CPU_MIMX94215XVMM_cm33_core0))
+#include "MIMX94215_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm33_core1) || defined(CPU_MIMX94215XVKM_cm33_core1) || defined(CPU_MIMX94215XVMM_cm33_core1))
+#include "MIMX94215_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm7_core0) || defined(CPU_MIMX94215XVKM_cm7_core0) || defined(CPU_MIMX94215XVMM_cm7_core0))
+#include "MIMX94215_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm7_core1) || defined(CPU_MIMX94215XVKM_cm7_core1) || defined(CPU_MIMX94215XVMM_cm7_core1))
+#include "MIMX94215_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_ca55))
+#include "MIMX94235_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm33_core0))
+#include "MIMX94235_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm33_core1))
+#include "MIMX94235_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm7_core0))
+#include "MIMX94235_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm7_core1))
+#include "MIMX94235_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_ca55))
+#include "MIMX94255_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm33_core0))
+#include "MIMX94255_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm33_core1))
+#include "MIMX94255_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm7_core0))
+#include "MIMX94255_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm7_core1))
+#include "MIMX94255_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_ca55))
+#include "MIMX94275_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm33_core0))
+#include "MIMX94275_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm33_core1))
+#include "MIMX94275_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm7_core0))
+#include "MIMX94275_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm7_core1))
+#include "MIMX94275_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_ca55))
+#include "MIMX94285_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm33_core0))
+#include "MIMX94285_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm33_core1))
+#include "MIMX94285_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm7_core0))
+#include "MIMX94285_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm7_core1))
+#include "MIMX94285_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_ca55) || defined(CPU_MIMX94294XVMM_ca55))
+#include "MIMX94294_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm33_core0) || defined(CPU_MIMX94294XVMM_cm33_core0))
+#include "MIMX94294_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm33_core1) || defined(CPU_MIMX94294XVMM_cm33_core1))
+#include "MIMX94294_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm7_core0) || defined(CPU_MIMX94294XVMM_cm7_core0))
+#include "MIMX94294_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm7_core1) || defined(CPU_MIMX94294XVMM_cm7_core1))
+#include "MIMX94294_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_ca55) || defined(CPU_MIMX94295AVMJ_ca55) || defined(CPU_MIMX94295CVMJ_ca55) || defined(CPU_MIMX94295XVKJ_ca55) || defined(CPU_MIMX94295XVMM_ca55))
+#include "MIMX94295_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm33_core0) || defined(CPU_MIMX94295AVMJ_cm33_core0) || defined(CPU_MIMX94295CVMJ_cm33_core0) || defined(CPU_MIMX94295XVKJ_cm33_core0) || defined(CPU_MIMX94295XVMM_cm33_core0))
+#include "MIMX94295_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm33_core1) || defined(CPU_MIMX94295AVMJ_cm33_core1) || defined(CPU_MIMX94295CVMJ_cm33_core1) || defined(CPU_MIMX94295XVKJ_cm33_core1) || defined(CPU_MIMX94295XVMM_cm33_core1))
+#include "MIMX94295_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm7_core0) || defined(CPU_MIMX94295AVMJ_cm7_core0) || defined(CPU_MIMX94295CVMJ_cm7_core0) || defined(CPU_MIMX94295XVKJ_cm7_core0) || defined(CPU_MIMX94295XVMM_cm7_core0))
+#include "MIMX94295_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm7_core1) || defined(CPU_MIMX94295AVMJ_cm7_core1) || defined(CPU_MIMX94295CVMJ_cm7_core1) || defined(CPU_MIMX94295XVKJ_cm7_core1) || defined(CPU_MIMX94295XVMM_cm7_core1))
+#include "MIMX94295_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_ca55))
+#include "MIMX94316_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm33_core0))
+#include "MIMX94316_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm33_core1))
+#include "MIMX94316_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm7_core0))
+#include "MIMX94316_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm7_core1))
+#include "MIMX94316_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_ca55))
+#include "MIMX94318_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm33_core0))
+#include "MIMX94318_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm33_core1))
+#include "MIMX94318_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm7_core0))
+#include "MIMX94318_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm7_core1))
+#include "MIMX94318_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_ca55))
+#include "MIMX94376_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm33_core0))
+#include "MIMX94376_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm33_core1))
+#include "MIMX94376_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm7_core0))
+#include "MIMX94376_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm7_core1))
+#include "MIMX94376_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_ca55))
+#include "MIMX94378_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm33_core0))
+#include "MIMX94378_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm33_core1))
+#include "MIMX94378_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm7_core0))
+#include "MIMX94378_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm7_core1))
+#include "MIMX94378_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_ca55) || defined(CPU_MIMX94386XVMM_ca55))
+#include "MIMX94386_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm33_core0) || defined(CPU_MIMX94386XVMM_cm33_core0))
+#include "MIMX94386_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm33_core1) || defined(CPU_MIMX94386XVMM_cm33_core1))
+#include "MIMX94386_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm7_core0) || defined(CPU_MIMX94386XVMM_cm7_core0))
+#include "MIMX94386_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm7_core1) || defined(CPU_MIMX94386XVMM_cm7_core1))
+#include "MIMX94386_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_ca55) || defined(CPU_MIMX94388AVMM_ca55) || defined(CPU_MIMX94388XVMM_ca55))
+#include "MIMX94388_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm33_core0) || defined(CPU_MIMX94388AVMM_cm33_core0) || defined(CPU_MIMX94388XVMM_cm33_core0))
+#include "MIMX94388_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm33_core1) || defined(CPU_MIMX94388AVMM_cm33_core1) || defined(CPU_MIMX94388XVMM_cm33_core1))
+#include "MIMX94388_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm7_core0) || defined(CPU_MIMX94388AVMM_cm7_core0) || defined(CPU_MIMX94388XVMM_cm7_core0))
+#include "MIMX94388_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm7_core1) || defined(CPU_MIMX94388AVMM_cm7_core1) || defined(CPU_MIMX94388XVMM_cm7_core1))
+#include "MIMX94388_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_ca55) || defined(CPU_MIMX94396AVKM_ca55) || defined(CPU_MIMX94396AVMJ_ca55) || defined(CPU_MIMX94396XVMM_ca55))
+#include "MIMX94396_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm33_core0) || defined(CPU_MIMX94396AVKM_cm33_core0) || defined(CPU_MIMX94396AVMJ_cm33_core0) || defined(CPU_MIMX94396XVMM_cm33_core0))
+#include "MIMX94396_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm33_core1) || defined(CPU_MIMX94396AVKM_cm33_core1) || defined(CPU_MIMX94396AVMJ_cm33_core1) || defined(CPU_MIMX94396XVMM_cm33_core1))
+#include "MIMX94396_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm7_core0) || defined(CPU_MIMX94396AVKM_cm7_core0) || defined(CPU_MIMX94396AVMJ_cm7_core0) || defined(CPU_MIMX94396XVMM_cm7_core0))
+#include "MIMX94396_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm7_core1) || defined(CPU_MIMX94396AVKM_cm7_core1) || defined(CPU_MIMX94396AVMJ_cm7_core1) || defined(CPU_MIMX94396XVMM_cm7_core1))
+#include "MIMX94396_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVMM_ca55))
 #include "MIMX94398_ca55_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm33_core0) || defined(CPU_MIMX94398AVKJ_cm33_core0) || defined(CPU_MIMX94398AVKM_cm33_core0) || defined(CPU_MIMX94398AVME_cm33_core0) || defined(CPU_MIMX94398AVMJ_cm33_core0) || defined(CPU_MIMX94398AVMM_cm33_core0) || defined(CPU_MIMX94398CVKE_cm33_core0) || defined(CPU_MIMX94398CVKJ_cm33_core0) || defined(CPU_MIMX94398CVKM_cm33_core0) || defined(CPU_MIMX94398CVME_cm33_core0) || defined(CPU_MIMX94398CVMJ_cm33_core0) || defined(CPU_MIMX94398CVMM_cm33_core0) || defined(CPU_MIMX94398DVKE_cm33_core0) || defined(CPU_MIMX94398DVKJ_cm33_core0) || defined(CPU_MIMX94398DVKM_cm33_core0) || defined(CPU_MIMX94398DVME_cm33_core0) || defined(CPU_MIMX94398DVMJ_cm33_core0) || defined(CPU_MIMX94398DVMM_cm33_core0) || defined(CPU_MIMX94398XVKE_cm33_core0) || defined(CPU_MIMX94398XVKJ_cm33_core0) || defined(CPU_MIMX94398XVKM_cm33_core0) || defined(CPU_MIMX94398XVME_cm33_core0) || defined(CPU_MIMX94398XVMJ_cm33_core0) || defined(CPU_MIMX94398XVMM_cm33_core0))
+#elif (defined(CPU_MIMX94398AVKJ_cm33_core0) || defined(CPU_MIMX94398AVKM_cm33_core0) || defined(CPU_MIMX94398AVMJ_cm33_core0) || defined(CPU_MIMX94398AVMM_cm33_core0) || defined(CPU_MIMX94398DVKM_cm33_core0) || defined(CPU_MIMX94398DVMM_cm33_core0) || defined(CPU_MIMX94398XVMM_cm33_core0))
 #include "MIMX94398_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm33_core1) || defined(CPU_MIMX94398AVKJ_cm33_core1) || defined(CPU_MIMX94398AVKM_cm33_core1) || defined(CPU_MIMX94398AVME_cm33_core1) || defined(CPU_MIMX94398AVMJ_cm33_core1) || defined(CPU_MIMX94398AVMM_cm33_core1) || defined(CPU_MIMX94398CVKE_cm33_core1) || defined(CPU_MIMX94398CVKJ_cm33_core1) || defined(CPU_MIMX94398CVKM_cm33_core1) || defined(CPU_MIMX94398CVME_cm33_core1) || defined(CPU_MIMX94398CVMJ_cm33_core1) || defined(CPU_MIMX94398CVMM_cm33_core1) || defined(CPU_MIMX94398DVKE_cm33_core1) || defined(CPU_MIMX94398DVKJ_cm33_core1) || defined(CPU_MIMX94398DVKM_cm33_core1) || defined(CPU_MIMX94398DVME_cm33_core1) || defined(CPU_MIMX94398DVMJ_cm33_core1) || defined(CPU_MIMX94398DVMM_cm33_core1) || defined(CPU_MIMX94398XVKE_cm33_core1) || defined(CPU_MIMX94398XVKJ_cm33_core1) || defined(CPU_MIMX94398XVKM_cm33_core1) || defined(CPU_MIMX94398XVME_cm33_core1) || defined(CPU_MIMX94398XVMJ_cm33_core1) || defined(CPU_MIMX94398XVMM_cm33_core1))
+#elif (defined(CPU_MIMX94398AVKJ_cm33_core1) || defined(CPU_MIMX94398AVKM_cm33_core1) || defined(CPU_MIMX94398AVMJ_cm33_core1) || defined(CPU_MIMX94398AVMM_cm33_core1) || defined(CPU_MIMX94398DVKM_cm33_core1) || defined(CPU_MIMX94398DVMM_cm33_core1) || defined(CPU_MIMX94398XVMM_cm33_core1))
 #include "MIMX94398_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm7_core0) || defined(CPU_MIMX94398AVKJ_cm7_core0) || defined(CPU_MIMX94398AVKM_cm7_core0) || defined(CPU_MIMX94398AVME_cm7_core0) || defined(CPU_MIMX94398AVMJ_cm7_core0) || defined(CPU_MIMX94398AVMM_cm7_core0) || defined(CPU_MIMX94398CVKE_cm7_core0) || defined(CPU_MIMX94398CVKJ_cm7_core0) || defined(CPU_MIMX94398CVKM_cm7_core0) || defined(CPU_MIMX94398CVME_cm7_core0) || defined(CPU_MIMX94398CVMJ_cm7_core0) || defined(CPU_MIMX94398CVMM_cm7_core0) || defined(CPU_MIMX94398DVKE_cm7_core0) || defined(CPU_MIMX94398DVKJ_cm7_core0) || defined(CPU_MIMX94398DVKM_cm7_core0) || defined(CPU_MIMX94398DVME_cm7_core0) || defined(CPU_MIMX94398DVMJ_cm7_core0) || defined(CPU_MIMX94398DVMM_cm7_core0) || defined(CPU_MIMX94398XVKE_cm7_core0) || defined(CPU_MIMX94398XVKJ_cm7_core0) || defined(CPU_MIMX94398XVKM_cm7_core0) || defined(CPU_MIMX94398XVME_cm7_core0) || defined(CPU_MIMX94398XVMJ_cm7_core0) || defined(CPU_MIMX94398XVMM_cm7_core0))
+#elif (defined(CPU_MIMX94398AVKJ_cm7_core0) || defined(CPU_MIMX94398AVKM_cm7_core0) || defined(CPU_MIMX94398AVMJ_cm7_core0) || defined(CPU_MIMX94398AVMM_cm7_core0) || defined(CPU_MIMX94398DVKM_cm7_core0) || defined(CPU_MIMX94398DVMM_cm7_core0) || defined(CPU_MIMX94398XVMM_cm7_core0))
 #include "MIMX94398_cm7_core0_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm7_core1) || defined(CPU_MIMX94398AVKJ_cm7_core1) || defined(CPU_MIMX94398AVKM_cm7_core1) || defined(CPU_MIMX94398AVME_cm7_core1) || defined(CPU_MIMX94398AVMJ_cm7_core1) || defined(CPU_MIMX94398AVMM_cm7_core1) || defined(CPU_MIMX94398CVKE_cm7_core1) || defined(CPU_MIMX94398CVKJ_cm7_core1) || defined(CPU_MIMX94398CVKM_cm7_core1) || defined(CPU_MIMX94398CVME_cm7_core1) || defined(CPU_MIMX94398CVMJ_cm7_core1) || defined(CPU_MIMX94398CVMM_cm7_core1) || defined(CPU_MIMX94398DVKE_cm7_core1) || defined(CPU_MIMX94398DVKJ_cm7_core1) || defined(CPU_MIMX94398DVKM_cm7_core1) || defined(CPU_MIMX94398DVME_cm7_core1) || defined(CPU_MIMX94398DVMJ_cm7_core1) || defined(CPU_MIMX94398DVMM_cm7_core1) || defined(CPU_MIMX94398XVKE_cm7_core1) || defined(CPU_MIMX94398XVKJ_cm7_core1) || defined(CPU_MIMX94398XVKM_cm7_core1) || defined(CPU_MIMX94398XVME_cm7_core1) || defined(CPU_MIMX94398XVMJ_cm7_core1) || defined(CPU_MIMX94398XVMM_cm7_core1))
+#elif (defined(CPU_MIMX94398AVKJ_cm7_core1) || defined(CPU_MIMX94398AVKM_cm7_core1) || defined(CPU_MIMX94398AVMJ_cm7_core1) || defined(CPU_MIMX94398AVMM_cm7_core1) || defined(CPU_MIMX94398DVKM_cm7_core1) || defined(CPU_MIMX94398DVMM_cm7_core1) || defined(CPU_MIMX94398XVMM_cm7_core1))
 #include "MIMX94398_cm7_core1_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -316,7 +646,7 @@ typedef struct {
   __IO uint32_t AHB_ERR_PAYLOAD_HI;                /**< AHB Error Payload High, offset: 0x4E0 */
   __IO uint32_t AHB_ERR_PAYLOAD_LO;                /**< AHB Error Payload Low, offset: 0x4E4 */
   __I  uint32_t AHB_RD_ERR_ADDR;                   /**< AHB Read Error Address, offset: 0x4E8 */
-  __I  uint32_t AHB_RD_ERR_MID;                    /**< AHB Read Error Manager ID, offset: 0x4EC */
+  __I  uint32_t AHB_RD_ERR_MID;                    /**< AHB Read Error Initiator ID, offset: 0x4EC */
   __I  uint32_t SPNDST_ADDR;                       /**< Suspend Transaction Address, offset: 0x4F0 */
   __IO uint32_t PPWF_TCNT;                         /**< Page Program Wait Time Counter, offset: 0x4F4 */
   __IO uint32_t PPW_RDSR;                          /**< Page Program Wait Read Status, offset: 0x4F8 */
@@ -391,21 +721,21 @@ typedef struct {
   __I  uint32_t FRAD7_WORD5;                       /**< Flash Region Word 5 - Compare Status Data, offset: 0x8F4 */
        uint8_t RESERVED_23[4];
   __IO uint32_t SFP_ARB_TIMEOUT;                   /**< SFP Arbitration Lock Timeout Counter, offset: 0x8FC */
-  __IO uint32_t TG0MDAD;                           /**< Target Group Manager Domain Access Descriptor, offset: 0x900 */
+  __IO uint32_t TG0MDAD;                           /**< Target Group Initiator Domain Access Descriptor, offset: 0x900 */
   __I  uint32_t TGSFAR;                            /**< Target Group SFAR Address, offset: 0x904 */
   __IO uint32_t TGSFARS;                           /**< Target Group SFAR Status, offset: 0x908 */
   __IO uint32_t TGIPCRS;                           /**< Target Group IP Configuration Status, offset: 0x90C */
-  __IO uint32_t TG1MDAD;                           /**< Target Group Manager Domain Access Descriptor, offset: 0x910 */
+  __IO uint32_t TG1MDAD;                           /**< Target Group Initiator Domain Access Descriptor, offset: 0x910 */
        uint8_t RESERVED_24[12];
-  __IO uint32_t MGC;                               /**< Manager Global Configuration, offset: 0x920 */
-  __IO uint32_t MRC;                               /**< Manager Read Command, offset: 0x924 */
-  __IO uint32_t MTO;                               /**< Manager Timeout, offset: 0x928 */
+  __IO uint32_t MGC;                               /**< Initiator Global Configuration, offset: 0x920 */
+  __IO uint32_t MRC;                               /**< Initiator Read Command, offset: 0x924 */
+  __IO uint32_t MTO;                               /**< Initiator Timeout, offset: 0x928 */
   __I  uint32_t FLSEQREQ;                          /**< Flash Sequence Request, offset: 0x92C */
   __I  uint32_t FSMSTAT;                           /**< FSM Status, offset: 0x930 */
   __IO uint32_t IPSERROR;                          /**< IPS Error, offset: 0x934 */
   __IO uint32_t ERRSTAT;                           /**< Error Status, offset: 0x938 */
   __IO uint32_t INT_EN;                            /**< Interrupt Enable, offset: 0x93C */
-  __IO uint32_t TGMDAD_EXT[XSPI_MDAD_EXT_COUNT];   /**< Target Group Manager Domain Access Descriptor Extended, array offset: 0x940, array step: 0x4 */
+  __IO uint32_t TGMDAD_EXT[XSPI_MDAD_EXT_COUNT];   /**< Target Group Initiator Domain Access Descriptor Extended, array offset: 0x940, array step: 0x4 */
        uint8_t RESERVED_25[12];
   __IO uint32_t SFP_TG_IPCR;                       /**< IP Configuration, offset: 0x958 */
   __IO uint32_t SFP_TG_SFAR;                       /**< Serial Flash Memory Address, offset: 0x95C */
@@ -496,7 +826,7 @@ typedef struct {
     __I  uint32_t RBDR_SUB_[XSPI_SUB_REG_ARRAY_RBDR_SUB_ARRAY_COUNT];   /**< RX Buffer Data, array offset: 0x10200, array step: index*0x10000, index2*0x4 */
          uint8_t RESERVED_8[488];
     __I  uint32_t AHB_RD_ERR_ADDR_SUB;               /**< AHB Read Error Address, array offset: 0x104E8, array step: 0x10000 */
-    __I  uint32_t AHB_RD_ERR_MID_SUB;                /**< AHB Read Error Manager ID, array offset: 0x104EC, array step: 0x10000 */
+    __I  uint32_t AHB_RD_ERR_MID_SUB;                /**< AHB Read Error Initiator ID, array offset: 0x104EC, array step: 0x10000 */
          uint8_t RESERVED_9[8];
     __I  uint32_t PPW_RDSR_SUB;                      /**< Page Program Wait Read Status, array offset: 0x104F8, array step: 0x10000 */
          uint8_t RESERVED_10[780];
@@ -622,6 +952,14 @@ typedef struct {
  *  0b1..Resets
  */
 #define XSPI_MCR_SWRSTHD(x)                      (((uint32_t)(((uint32_t)(x)) << XSPI_MCR_SWRSTHD_SHIFT)) & XSPI_MCR_SWRSTHD_MASK)
+
+#define XSPI_MCR_DQS_OUT_EN_MASK                 (0x10U)
+#define XSPI_MCR_DQS_OUT_EN_SHIFT                (4U)
+/*! DQS_OUT_EN - DQS Output Enable
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define XSPI_MCR_DQS_OUT_EN(x)                   (((uint32_t)(((uint32_t)(x)) << XSPI_MCR_DQS_OUT_EN_SHIFT)) & XSPI_MCR_DQS_OUT_EN_MASK)
 
 #define XSPI_MCR_DQS_LAT_EN_MASK                 (0x20U)
 #define XSPI_MCR_DQS_LAT_EN_SHIFT                (5U)
@@ -765,7 +1103,7 @@ typedef struct {
 
 #define XSPI_BUFCR_MSTRID_MASK                   (0xFU)
 #define XSPI_BUFCR_MSTRID_SHIFT                  (0U)
-/*! MSTRID - Manager ID */
+/*! MSTRID - Initiator ID */
 #define XSPI_BUFCR_MSTRID(x)                     (((uint32_t)(((uint32_t)(x)) << XSPI_BUFCR_MSTRID_SHIFT)) & XSPI_BUFCR_MSTRID_MASK)
 
 #define XSPI_BUFCR_ADATSZ_MASK                   (0x3FF00U)
@@ -813,7 +1151,7 @@ typedef struct {
 
 #define XSPI_BUFCR_ALLMST_MASK                   (0x80000000U)
 #define XSPI_BUFCR_ALLMST_SHIFT                  (31U)
-/*! ALLMST - All Manager Enable
+/*! ALLMST - All Initiator Enable
  *  0b0..Disables
  *  0b1..Enables
  */
@@ -1420,7 +1758,7 @@ typedef struct {
 
 #define XSPI_DLLSR_DLLA_RANGE_ERR_MASK           (0x2000U)
 #define XSPI_DLLSR_DLLA_RANGE_ERR_SHIFT          (13U)
-/*! DLLA_RANGE_ERR - DLL Manager Delay Chain Range Error - Flash Memory A
+/*! DLLA_RANGE_ERR - DLL Initiator Delay Chain Range Error - Flash Memory A
  *  0b0..In range
  *  0b1..Out of range
  */
@@ -2749,12 +3087,12 @@ typedef struct {
 #define XSPI_AHB_RD_ERR_ADDR_READDR(x)           (((uint32_t)(((uint32_t)(x)) << XSPI_AHB_RD_ERR_ADDR_READDR_SHIFT)) & XSPI_AHB_RD_ERR_ADDR_READDR_MASK)
 /*! @} */
 
-/*! @name AHB_RD_ERR_MID - AHB Read Error Manager ID */
+/*! @name AHB_RD_ERR_MID - AHB Read Error Initiator ID */
 /*! @{ */
 
 #define XSPI_AHB_RD_ERR_MID_REMID_MASK           (0xFU)
 #define XSPI_AHB_RD_ERR_MID_REMID_SHIFT          (0U)
-/*! REMID - Read Error Manager ID */
+/*! REMID - Read Error Initiator ID */
 #define XSPI_AHB_RD_ERR_MID_REMID(x)             (((uint32_t)(((uint32_t)(x)) << XSPI_AHB_RD_ERR_MID_REMID_SHIFT)) & XSPI_AHB_RD_ERR_MID_REMID_MASK)
 /*! @} */
 
@@ -3289,27 +3627,27 @@ typedef struct {
 
 #define XSPI_FRAD0_WORD2_MD0ACP_MASK             (0x7U)
 #define XSPI_FRAD0_WORD2_MD0ACP_SHIFT            (0U)
-/*! MD0ACP - Manager Domain Access Control Policy */
+/*! MD0ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD0_WORD2_MD0ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD0_WORD2_MD0ACP_SHIFT)) & XSPI_FRAD0_WORD2_MD0ACP_MASK)
 
 #define XSPI_FRAD0_WORD2_MD1ACP_MASK             (0x38U)
 #define XSPI_FRAD0_WORD2_MD1ACP_SHIFT            (3U)
-/*! MD1ACP - Manager Domain Access Control Policy */
+/*! MD1ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD0_WORD2_MD1ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD0_WORD2_MD1ACP_SHIFT)) & XSPI_FRAD0_WORD2_MD1ACP_MASK)
 
 #define XSPI_FRAD0_WORD2_MD2ACP_MASK             (0x1C0U)
 #define XSPI_FRAD0_WORD2_MD2ACP_SHIFT            (6U)
-/*! MD2ACP - Manager Domain Access Control Policy */
+/*! MD2ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD0_WORD2_MD2ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD0_WORD2_MD2ACP_SHIFT)) & XSPI_FRAD0_WORD2_MD2ACP_MASK)
 
 #define XSPI_FRAD0_WORD2_MD3ACP_MASK             (0xE00U)
 #define XSPI_FRAD0_WORD2_MD3ACP_SHIFT            (9U)
-/*! MD3ACP - Manager Domain Access Control Policy */
+/*! MD3ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD0_WORD2_MD3ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD0_WORD2_MD3ACP_SHIFT)) & XSPI_FRAD0_WORD2_MD3ACP_MASK)
 
 #define XSPI_FRAD0_WORD2_MD4ACP_MASK             (0x7000U)
 #define XSPI_FRAD0_WORD2_MD4ACP_SHIFT            (12U)
-/*! MD4ACP - Manager Domain Access Control Policy */
+/*! MD4ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD0_WORD2_MD4ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD0_WORD2_MD4ACP_SHIFT)) & XSPI_FRAD0_WORD2_MD4ACP_MASK)
 
 #define XSPI_FRAD0_WORD2_EALO_MASK               (0x3F000000U)
@@ -3423,27 +3761,27 @@ typedef struct {
 
 #define XSPI_FRAD1_WORD2_MD0ACP_MASK             (0x7U)
 #define XSPI_FRAD1_WORD2_MD0ACP_SHIFT            (0U)
-/*! MD0ACP - Manager Domain Access Control Policy */
+/*! MD0ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD1_WORD2_MD0ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD1_WORD2_MD0ACP_SHIFT)) & XSPI_FRAD1_WORD2_MD0ACP_MASK)
 
 #define XSPI_FRAD1_WORD2_MD1ACP_MASK             (0x38U)
 #define XSPI_FRAD1_WORD2_MD1ACP_SHIFT            (3U)
-/*! MD1ACP - Manager Domain Access Control Policy */
+/*! MD1ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD1_WORD2_MD1ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD1_WORD2_MD1ACP_SHIFT)) & XSPI_FRAD1_WORD2_MD1ACP_MASK)
 
 #define XSPI_FRAD1_WORD2_MD2ACP_MASK             (0x1C0U)
 #define XSPI_FRAD1_WORD2_MD2ACP_SHIFT            (6U)
-/*! MD2ACP - Manager Domain Access Control Policy */
+/*! MD2ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD1_WORD2_MD2ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD1_WORD2_MD2ACP_SHIFT)) & XSPI_FRAD1_WORD2_MD2ACP_MASK)
 
 #define XSPI_FRAD1_WORD2_MD3ACP_MASK             (0xE00U)
 #define XSPI_FRAD1_WORD2_MD3ACP_SHIFT            (9U)
-/*! MD3ACP - Manager Domain Access Control Policy */
+/*! MD3ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD1_WORD2_MD3ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD1_WORD2_MD3ACP_SHIFT)) & XSPI_FRAD1_WORD2_MD3ACP_MASK)
 
 #define XSPI_FRAD1_WORD2_MD4ACP_MASK             (0x7000U)
 #define XSPI_FRAD1_WORD2_MD4ACP_SHIFT            (12U)
-/*! MD4ACP - Manager Domain Access Control Policy */
+/*! MD4ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD1_WORD2_MD4ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD1_WORD2_MD4ACP_SHIFT)) & XSPI_FRAD1_WORD2_MD4ACP_MASK)
 
 #define XSPI_FRAD1_WORD2_EALO_MASK               (0x3F000000U)
@@ -3557,27 +3895,27 @@ typedef struct {
 
 #define XSPI_FRAD2_WORD2_MD0ACP_MASK             (0x7U)
 #define XSPI_FRAD2_WORD2_MD0ACP_SHIFT            (0U)
-/*! MD0ACP - Manager Domain Access Control Policy */
+/*! MD0ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD2_WORD2_MD0ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD2_WORD2_MD0ACP_SHIFT)) & XSPI_FRAD2_WORD2_MD0ACP_MASK)
 
 #define XSPI_FRAD2_WORD2_MD1ACP_MASK             (0x38U)
 #define XSPI_FRAD2_WORD2_MD1ACP_SHIFT            (3U)
-/*! MD1ACP - Manager Domain Access Control Policy */
+/*! MD1ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD2_WORD2_MD1ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD2_WORD2_MD1ACP_SHIFT)) & XSPI_FRAD2_WORD2_MD1ACP_MASK)
 
 #define XSPI_FRAD2_WORD2_MD2ACP_MASK             (0x1C0U)
 #define XSPI_FRAD2_WORD2_MD2ACP_SHIFT            (6U)
-/*! MD2ACP - Manager Domain Access Control Policy */
+/*! MD2ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD2_WORD2_MD2ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD2_WORD2_MD2ACP_SHIFT)) & XSPI_FRAD2_WORD2_MD2ACP_MASK)
 
 #define XSPI_FRAD2_WORD2_MD3ACP_MASK             (0xE00U)
 #define XSPI_FRAD2_WORD2_MD3ACP_SHIFT            (9U)
-/*! MD3ACP - Manager Domain Access Control Policy */
+/*! MD3ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD2_WORD2_MD3ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD2_WORD2_MD3ACP_SHIFT)) & XSPI_FRAD2_WORD2_MD3ACP_MASK)
 
 #define XSPI_FRAD2_WORD2_MD4ACP_MASK             (0x7000U)
 #define XSPI_FRAD2_WORD2_MD4ACP_SHIFT            (12U)
-/*! MD4ACP - Manager Domain Access Control Policy */
+/*! MD4ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD2_WORD2_MD4ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD2_WORD2_MD4ACP_SHIFT)) & XSPI_FRAD2_WORD2_MD4ACP_MASK)
 
 #define XSPI_FRAD2_WORD2_EALO_MASK               (0x3F000000U)
@@ -3691,27 +4029,27 @@ typedef struct {
 
 #define XSPI_FRAD3_WORD2_MD0ACP_MASK             (0x7U)
 #define XSPI_FRAD3_WORD2_MD0ACP_SHIFT            (0U)
-/*! MD0ACP - Manager Domain Access Control Policy */
+/*! MD0ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD3_WORD2_MD0ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD3_WORD2_MD0ACP_SHIFT)) & XSPI_FRAD3_WORD2_MD0ACP_MASK)
 
 #define XSPI_FRAD3_WORD2_MD1ACP_MASK             (0x38U)
 #define XSPI_FRAD3_WORD2_MD1ACP_SHIFT            (3U)
-/*! MD1ACP - Manager Domain Access Control Policy */
+/*! MD1ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD3_WORD2_MD1ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD3_WORD2_MD1ACP_SHIFT)) & XSPI_FRAD3_WORD2_MD1ACP_MASK)
 
 #define XSPI_FRAD3_WORD2_MD2ACP_MASK             (0x1C0U)
 #define XSPI_FRAD3_WORD2_MD2ACP_SHIFT            (6U)
-/*! MD2ACP - Manager Domain Access Control Policy */
+/*! MD2ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD3_WORD2_MD2ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD3_WORD2_MD2ACP_SHIFT)) & XSPI_FRAD3_WORD2_MD2ACP_MASK)
 
 #define XSPI_FRAD3_WORD2_MD3ACP_MASK             (0xE00U)
 #define XSPI_FRAD3_WORD2_MD3ACP_SHIFT            (9U)
-/*! MD3ACP - Manager Domain Access Control Policy */
+/*! MD3ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD3_WORD2_MD3ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD3_WORD2_MD3ACP_SHIFT)) & XSPI_FRAD3_WORD2_MD3ACP_MASK)
 
 #define XSPI_FRAD3_WORD2_MD4ACP_MASK             (0x7000U)
 #define XSPI_FRAD3_WORD2_MD4ACP_SHIFT            (12U)
-/*! MD4ACP - Manager Domain Access Control Policy */
+/*! MD4ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD3_WORD2_MD4ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD3_WORD2_MD4ACP_SHIFT)) & XSPI_FRAD3_WORD2_MD4ACP_MASK)
 
 #define XSPI_FRAD3_WORD2_EALO_MASK               (0x3F000000U)
@@ -3825,27 +4163,27 @@ typedef struct {
 
 #define XSPI_FRAD4_WORD2_MD0ACP_MASK             (0x7U)
 #define XSPI_FRAD4_WORD2_MD0ACP_SHIFT            (0U)
-/*! MD0ACP - Manager Domain Access Control Policy */
+/*! MD0ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD4_WORD2_MD0ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD4_WORD2_MD0ACP_SHIFT)) & XSPI_FRAD4_WORD2_MD0ACP_MASK)
 
 #define XSPI_FRAD4_WORD2_MD1ACP_MASK             (0x38U)
 #define XSPI_FRAD4_WORD2_MD1ACP_SHIFT            (3U)
-/*! MD1ACP - Manager Domain Access Control Policy */
+/*! MD1ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD4_WORD2_MD1ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD4_WORD2_MD1ACP_SHIFT)) & XSPI_FRAD4_WORD2_MD1ACP_MASK)
 
 #define XSPI_FRAD4_WORD2_MD2ACP_MASK             (0x1C0U)
 #define XSPI_FRAD4_WORD2_MD2ACP_SHIFT            (6U)
-/*! MD2ACP - Manager Domain Access Control Policy */
+/*! MD2ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD4_WORD2_MD2ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD4_WORD2_MD2ACP_SHIFT)) & XSPI_FRAD4_WORD2_MD2ACP_MASK)
 
 #define XSPI_FRAD4_WORD2_MD3ACP_MASK             (0xE00U)
 #define XSPI_FRAD4_WORD2_MD3ACP_SHIFT            (9U)
-/*! MD3ACP - Manager Domain Access Control Policy */
+/*! MD3ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD4_WORD2_MD3ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD4_WORD2_MD3ACP_SHIFT)) & XSPI_FRAD4_WORD2_MD3ACP_MASK)
 
 #define XSPI_FRAD4_WORD2_MD4ACP_MASK             (0x7000U)
 #define XSPI_FRAD4_WORD2_MD4ACP_SHIFT            (12U)
-/*! MD4ACP - Manager Domain Access Control Policy */
+/*! MD4ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD4_WORD2_MD4ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD4_WORD2_MD4ACP_SHIFT)) & XSPI_FRAD4_WORD2_MD4ACP_MASK)
 
 #define XSPI_FRAD4_WORD2_EALO_MASK               (0x3F000000U)
@@ -3959,27 +4297,27 @@ typedef struct {
 
 #define XSPI_FRAD5_WORD2_MD0ACP_MASK             (0x7U)
 #define XSPI_FRAD5_WORD2_MD0ACP_SHIFT            (0U)
-/*! MD0ACP - Manager Domain Access Control Policy */
+/*! MD0ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD5_WORD2_MD0ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD5_WORD2_MD0ACP_SHIFT)) & XSPI_FRAD5_WORD2_MD0ACP_MASK)
 
 #define XSPI_FRAD5_WORD2_MD1ACP_MASK             (0x38U)
 #define XSPI_FRAD5_WORD2_MD1ACP_SHIFT            (3U)
-/*! MD1ACP - Manager Domain Access Control Policy */
+/*! MD1ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD5_WORD2_MD1ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD5_WORD2_MD1ACP_SHIFT)) & XSPI_FRAD5_WORD2_MD1ACP_MASK)
 
 #define XSPI_FRAD5_WORD2_MD2ACP_MASK             (0x1C0U)
 #define XSPI_FRAD5_WORD2_MD2ACP_SHIFT            (6U)
-/*! MD2ACP - Manager Domain Access Control Policy */
+/*! MD2ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD5_WORD2_MD2ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD5_WORD2_MD2ACP_SHIFT)) & XSPI_FRAD5_WORD2_MD2ACP_MASK)
 
 #define XSPI_FRAD5_WORD2_MD3ACP_MASK             (0xE00U)
 #define XSPI_FRAD5_WORD2_MD3ACP_SHIFT            (9U)
-/*! MD3ACP - Manager Domain Access Control Policy */
+/*! MD3ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD5_WORD2_MD3ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD5_WORD2_MD3ACP_SHIFT)) & XSPI_FRAD5_WORD2_MD3ACP_MASK)
 
 #define XSPI_FRAD5_WORD2_MD4ACP_MASK             (0x7000U)
 #define XSPI_FRAD5_WORD2_MD4ACP_SHIFT            (12U)
-/*! MD4ACP - Manager Domain Access Control Policy */
+/*! MD4ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD5_WORD2_MD4ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD5_WORD2_MD4ACP_SHIFT)) & XSPI_FRAD5_WORD2_MD4ACP_MASK)
 
 #define XSPI_FRAD5_WORD2_EALO_MASK               (0x3F000000U)
@@ -4093,27 +4431,27 @@ typedef struct {
 
 #define XSPI_FRAD6_WORD2_MD0ACP_MASK             (0x7U)
 #define XSPI_FRAD6_WORD2_MD0ACP_SHIFT            (0U)
-/*! MD0ACP - Manager Domain Access Control Policy */
+/*! MD0ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD6_WORD2_MD0ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD6_WORD2_MD0ACP_SHIFT)) & XSPI_FRAD6_WORD2_MD0ACP_MASK)
 
 #define XSPI_FRAD6_WORD2_MD1ACP_MASK             (0x38U)
 #define XSPI_FRAD6_WORD2_MD1ACP_SHIFT            (3U)
-/*! MD1ACP - Manager Domain Access Control Policy */
+/*! MD1ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD6_WORD2_MD1ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD6_WORD2_MD1ACP_SHIFT)) & XSPI_FRAD6_WORD2_MD1ACP_MASK)
 
 #define XSPI_FRAD6_WORD2_MD2ACP_MASK             (0x1C0U)
 #define XSPI_FRAD6_WORD2_MD2ACP_SHIFT            (6U)
-/*! MD2ACP - Manager Domain Access Control Policy */
+/*! MD2ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD6_WORD2_MD2ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD6_WORD2_MD2ACP_SHIFT)) & XSPI_FRAD6_WORD2_MD2ACP_MASK)
 
 #define XSPI_FRAD6_WORD2_MD3ACP_MASK             (0xE00U)
 #define XSPI_FRAD6_WORD2_MD3ACP_SHIFT            (9U)
-/*! MD3ACP - Manager Domain Access Control Policy */
+/*! MD3ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD6_WORD2_MD3ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD6_WORD2_MD3ACP_SHIFT)) & XSPI_FRAD6_WORD2_MD3ACP_MASK)
 
 #define XSPI_FRAD6_WORD2_MD4ACP_MASK             (0x7000U)
 #define XSPI_FRAD6_WORD2_MD4ACP_SHIFT            (12U)
-/*! MD4ACP - Manager Domain Access Control Policy */
+/*! MD4ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD6_WORD2_MD4ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD6_WORD2_MD4ACP_SHIFT)) & XSPI_FRAD6_WORD2_MD4ACP_MASK)
 
 #define XSPI_FRAD6_WORD2_EALO_MASK               (0x3F000000U)
@@ -4227,27 +4565,27 @@ typedef struct {
 
 #define XSPI_FRAD7_WORD2_MD0ACP_MASK             (0x7U)
 #define XSPI_FRAD7_WORD2_MD0ACP_SHIFT            (0U)
-/*! MD0ACP - Manager Domain Access Control Policy */
+/*! MD0ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD7_WORD2_MD0ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD7_WORD2_MD0ACP_SHIFT)) & XSPI_FRAD7_WORD2_MD0ACP_MASK)
 
 #define XSPI_FRAD7_WORD2_MD1ACP_MASK             (0x38U)
 #define XSPI_FRAD7_WORD2_MD1ACP_SHIFT            (3U)
-/*! MD1ACP - Manager Domain Access Control Policy */
+/*! MD1ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD7_WORD2_MD1ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD7_WORD2_MD1ACP_SHIFT)) & XSPI_FRAD7_WORD2_MD1ACP_MASK)
 
 #define XSPI_FRAD7_WORD2_MD2ACP_MASK             (0x1C0U)
 #define XSPI_FRAD7_WORD2_MD2ACP_SHIFT            (6U)
-/*! MD2ACP - Manager Domain Access Control Policy */
+/*! MD2ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD7_WORD2_MD2ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD7_WORD2_MD2ACP_SHIFT)) & XSPI_FRAD7_WORD2_MD2ACP_MASK)
 
 #define XSPI_FRAD7_WORD2_MD3ACP_MASK             (0xE00U)
 #define XSPI_FRAD7_WORD2_MD3ACP_SHIFT            (9U)
-/*! MD3ACP - Manager Domain Access Control Policy */
+/*! MD3ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD7_WORD2_MD3ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD7_WORD2_MD3ACP_SHIFT)) & XSPI_FRAD7_WORD2_MD3ACP_MASK)
 
 #define XSPI_FRAD7_WORD2_MD4ACP_MASK             (0x7000U)
 #define XSPI_FRAD7_WORD2_MD4ACP_SHIFT            (12U)
-/*! MD4ACP - Manager Domain Access Control Policy */
+/*! MD4ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD7_WORD2_MD4ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD7_WORD2_MD4ACP_SHIFT)) & XSPI_FRAD7_WORD2_MD4ACP_MASK)
 
 #define XSPI_FRAD7_WORD2_EALO_MASK               (0x3F000000U)
@@ -4347,7 +4685,7 @@ typedef struct {
 #define XSPI_SFP_ARB_TIMEOUT_SFP_ARB_TOC(x)      (((uint32_t)(((uint32_t)(x)) << XSPI_SFP_ARB_TIMEOUT_SFP_ARB_TOC_SHIFT)) & XSPI_SFP_ARB_TIMEOUT_SFP_ARB_TOC_MASK)
 /*! @} */
 
-/*! @name TG0MDAD - Target Group Manager Domain Access Descriptor */
+/*! @name TG0MDAD - Target Group Initiator Domain Access Descriptor */
 /*! @{ */
 
 #define XSPI_TG0MDAD_MIDMATCH_MASK               (0x3FU)
@@ -4511,7 +4849,7 @@ typedef struct {
 #define XSPI_TGIPCRS_VLD(x)                      (((uint32_t)(((uint32_t)(x)) << XSPI_TGIPCRS_VLD_SHIFT)) & XSPI_TGIPCRS_VLD_MASK)
 /*! @} */
 
-/*! @name TG1MDAD - Target Group Manager Domain Access Descriptor */
+/*! @name TG1MDAD - Target Group Initiator Domain Access Descriptor */
 /*! @{ */
 
 #define XSPI_TG1MDAD_MIDMATCH_MASK               (0x3FU)
@@ -4559,7 +4897,7 @@ typedef struct {
 #define XSPI_TG1MDAD_VLD(x)                      (((uint32_t)(((uint32_t)(x)) << XSPI_TG1MDAD_VLD_SHIFT)) & XSPI_TG1MDAD_VLD_MASK)
 /*! @} */
 
-/*! @name MGC - Manager Global Configuration */
+/*! @name MGC - Initiator Global Configuration */
 /*! @{ */
 
 #define XSPI_MGC_GCLCKMID_MASK                   (0x3FU)
@@ -4610,7 +4948,7 @@ typedef struct {
 #define XSPI_MGC_GVLD(x)                         (((uint32_t)(((uint32_t)(x)) << XSPI_MGC_GVLD_SHIFT)) & XSPI_MGC_GVLD_MASK)
 /*! @} */
 
-/*! @name MRC - Manager Read Command */
+/*! @name MRC - Initiator Read Command */
 /*! @{ */
 
 #define XSPI_MRC_READ_CMD0_MASK                  (0x3FU)
@@ -4650,7 +4988,7 @@ typedef struct {
 #define XSPI_MRC_VLDCMD03(x)                     (((uint32_t)(((uint32_t)(x)) << XSPI_MRC_VLDCMD03_SHIFT)) & XSPI_MRC_VLDCMD03_MASK)
 /*! @} */
 
-/*! @name MTO - Manager Timeout */
+/*! @name MTO - Initiator Timeout */
 /*! @{ */
 
 #define XSPI_MTO_SFP_ACC_TO_MASK                 (0xFFFFFFFFU)
@@ -5287,7 +5625,7 @@ typedef struct {
 #define XSPI_INT_EN_LCK(x)                       (((uint32_t)(((uint32_t)(x)) << XSPI_INT_EN_LCK_SHIFT)) & XSPI_INT_EN_LCK_MASK)
 /*! @} */
 
-/*! @name TGMDAD_EXT - Target Group Manager Domain Access Descriptor Extended */
+/*! @name TGMDAD_EXT - Target Group Initiator Domain Access Descriptor Extended */
 /*! @{ */
 
 #define XSPI_TGMDAD_EXT_MIDMATCH_MASK            (0x3FU)
@@ -5552,27 +5890,27 @@ typedef struct {
 
 #define XSPI_FRAD8_WORD2_MD0ACP_MASK             (0x7U)
 #define XSPI_FRAD8_WORD2_MD0ACP_SHIFT            (0U)
-/*! MD0ACP - Manager Domain Access Control Policy */
+/*! MD0ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD8_WORD2_MD0ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD8_WORD2_MD0ACP_SHIFT)) & XSPI_FRAD8_WORD2_MD0ACP_MASK)
 
 #define XSPI_FRAD8_WORD2_MD1ACP_MASK             (0x38U)
 #define XSPI_FRAD8_WORD2_MD1ACP_SHIFT            (3U)
-/*! MD1ACP - Manager Domain Access Control Policy */
+/*! MD1ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD8_WORD2_MD1ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD8_WORD2_MD1ACP_SHIFT)) & XSPI_FRAD8_WORD2_MD1ACP_MASK)
 
 #define XSPI_FRAD8_WORD2_MD2ACP_MASK             (0x1C0U)
 #define XSPI_FRAD8_WORD2_MD2ACP_SHIFT            (6U)
-/*! MD2ACP - Manager Domain Access Control Policy */
+/*! MD2ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD8_WORD2_MD2ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD8_WORD2_MD2ACP_SHIFT)) & XSPI_FRAD8_WORD2_MD2ACP_MASK)
 
 #define XSPI_FRAD8_WORD2_MD3ACP_MASK             (0xE00U)
 #define XSPI_FRAD8_WORD2_MD3ACP_SHIFT            (9U)
-/*! MD3ACP - Manager Domain Access Control Policy */
+/*! MD3ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD8_WORD2_MD3ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD8_WORD2_MD3ACP_SHIFT)) & XSPI_FRAD8_WORD2_MD3ACP_MASK)
 
 #define XSPI_FRAD8_WORD2_MD4ACP_MASK             (0x7000U)
 #define XSPI_FRAD8_WORD2_MD4ACP_SHIFT            (12U)
-/*! MD4ACP - Manager Domain Access Control Policy */
+/*! MD4ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD8_WORD2_MD4ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD8_WORD2_MD4ACP_SHIFT)) & XSPI_FRAD8_WORD2_MD4ACP_MASK)
 
 #define XSPI_FRAD8_WORD2_EALO_MASK               (0x3F000000U)
@@ -5686,27 +6024,27 @@ typedef struct {
 
 #define XSPI_FRAD9_WORD2_MD0ACP_MASK             (0x7U)
 #define XSPI_FRAD9_WORD2_MD0ACP_SHIFT            (0U)
-/*! MD0ACP - Manager Domain Access Control Policy */
+/*! MD0ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD9_WORD2_MD0ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD9_WORD2_MD0ACP_SHIFT)) & XSPI_FRAD9_WORD2_MD0ACP_MASK)
 
 #define XSPI_FRAD9_WORD2_MD1ACP_MASK             (0x38U)
 #define XSPI_FRAD9_WORD2_MD1ACP_SHIFT            (3U)
-/*! MD1ACP - Manager Domain Access Control Policy */
+/*! MD1ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD9_WORD2_MD1ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD9_WORD2_MD1ACP_SHIFT)) & XSPI_FRAD9_WORD2_MD1ACP_MASK)
 
 #define XSPI_FRAD9_WORD2_MD2ACP_MASK             (0x1C0U)
 #define XSPI_FRAD9_WORD2_MD2ACP_SHIFT            (6U)
-/*! MD2ACP - Manager Domain Access Control Policy */
+/*! MD2ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD9_WORD2_MD2ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD9_WORD2_MD2ACP_SHIFT)) & XSPI_FRAD9_WORD2_MD2ACP_MASK)
 
 #define XSPI_FRAD9_WORD2_MD3ACP_MASK             (0xE00U)
 #define XSPI_FRAD9_WORD2_MD3ACP_SHIFT            (9U)
-/*! MD3ACP - Manager Domain Access Control Policy */
+/*! MD3ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD9_WORD2_MD3ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD9_WORD2_MD3ACP_SHIFT)) & XSPI_FRAD9_WORD2_MD3ACP_MASK)
 
 #define XSPI_FRAD9_WORD2_MD4ACP_MASK             (0x7000U)
 #define XSPI_FRAD9_WORD2_MD4ACP_SHIFT            (12U)
-/*! MD4ACP - Manager Domain Access Control Policy */
+/*! MD4ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD9_WORD2_MD4ACP(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD9_WORD2_MD4ACP_SHIFT)) & XSPI_FRAD9_WORD2_MD4ACP_MASK)
 
 #define XSPI_FRAD9_WORD2_EALO_MASK               (0x3F000000U)
@@ -5820,27 +6158,27 @@ typedef struct {
 
 #define XSPI_FRAD10_WORD2_MD0ACP_MASK            (0x7U)
 #define XSPI_FRAD10_WORD2_MD0ACP_SHIFT           (0U)
-/*! MD0ACP - Manager Domain Access Control Policy */
+/*! MD0ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD10_WORD2_MD0ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD10_WORD2_MD0ACP_SHIFT)) & XSPI_FRAD10_WORD2_MD0ACP_MASK)
 
 #define XSPI_FRAD10_WORD2_MD1ACP_MASK            (0x38U)
 #define XSPI_FRAD10_WORD2_MD1ACP_SHIFT           (3U)
-/*! MD1ACP - Manager Domain Access Control Policy */
+/*! MD1ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD10_WORD2_MD1ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD10_WORD2_MD1ACP_SHIFT)) & XSPI_FRAD10_WORD2_MD1ACP_MASK)
 
 #define XSPI_FRAD10_WORD2_MD2ACP_MASK            (0x1C0U)
 #define XSPI_FRAD10_WORD2_MD2ACP_SHIFT           (6U)
-/*! MD2ACP - Manager Domain Access Control Policy */
+/*! MD2ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD10_WORD2_MD2ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD10_WORD2_MD2ACP_SHIFT)) & XSPI_FRAD10_WORD2_MD2ACP_MASK)
 
 #define XSPI_FRAD10_WORD2_MD3ACP_MASK            (0xE00U)
 #define XSPI_FRAD10_WORD2_MD3ACP_SHIFT           (9U)
-/*! MD3ACP - Manager Domain Access Control Policy */
+/*! MD3ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD10_WORD2_MD3ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD10_WORD2_MD3ACP_SHIFT)) & XSPI_FRAD10_WORD2_MD3ACP_MASK)
 
 #define XSPI_FRAD10_WORD2_MD4ACP_MASK            (0x7000U)
 #define XSPI_FRAD10_WORD2_MD4ACP_SHIFT           (12U)
-/*! MD4ACP - Manager Domain Access Control Policy */
+/*! MD4ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD10_WORD2_MD4ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD10_WORD2_MD4ACP_SHIFT)) & XSPI_FRAD10_WORD2_MD4ACP_MASK)
 
 #define XSPI_FRAD10_WORD2_EALO_MASK              (0x3F000000U)
@@ -5954,27 +6292,27 @@ typedef struct {
 
 #define XSPI_FRAD11_WORD2_MD0ACP_MASK            (0x7U)
 #define XSPI_FRAD11_WORD2_MD0ACP_SHIFT           (0U)
-/*! MD0ACP - Manager Domain Access Control Policy */
+/*! MD0ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD11_WORD2_MD0ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD11_WORD2_MD0ACP_SHIFT)) & XSPI_FRAD11_WORD2_MD0ACP_MASK)
 
 #define XSPI_FRAD11_WORD2_MD1ACP_MASK            (0x38U)
 #define XSPI_FRAD11_WORD2_MD1ACP_SHIFT           (3U)
-/*! MD1ACP - Manager Domain Access Control Policy */
+/*! MD1ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD11_WORD2_MD1ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD11_WORD2_MD1ACP_SHIFT)) & XSPI_FRAD11_WORD2_MD1ACP_MASK)
 
 #define XSPI_FRAD11_WORD2_MD2ACP_MASK            (0x1C0U)
 #define XSPI_FRAD11_WORD2_MD2ACP_SHIFT           (6U)
-/*! MD2ACP - Manager Domain Access Control Policy */
+/*! MD2ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD11_WORD2_MD2ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD11_WORD2_MD2ACP_SHIFT)) & XSPI_FRAD11_WORD2_MD2ACP_MASK)
 
 #define XSPI_FRAD11_WORD2_MD3ACP_MASK            (0xE00U)
 #define XSPI_FRAD11_WORD2_MD3ACP_SHIFT           (9U)
-/*! MD3ACP - Manager Domain Access Control Policy */
+/*! MD3ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD11_WORD2_MD3ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD11_WORD2_MD3ACP_SHIFT)) & XSPI_FRAD11_WORD2_MD3ACP_MASK)
 
 #define XSPI_FRAD11_WORD2_MD4ACP_MASK            (0x7000U)
 #define XSPI_FRAD11_WORD2_MD4ACP_SHIFT           (12U)
-/*! MD4ACP - Manager Domain Access Control Policy */
+/*! MD4ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD11_WORD2_MD4ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD11_WORD2_MD4ACP_SHIFT)) & XSPI_FRAD11_WORD2_MD4ACP_MASK)
 
 #define XSPI_FRAD11_WORD2_EALO_MASK              (0x3F000000U)
@@ -6088,27 +6426,27 @@ typedef struct {
 
 #define XSPI_FRAD12_WORD2_MD0ACP_MASK            (0x7U)
 #define XSPI_FRAD12_WORD2_MD0ACP_SHIFT           (0U)
-/*! MD0ACP - Manager Domain Access Control Policy */
+/*! MD0ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD12_WORD2_MD0ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD12_WORD2_MD0ACP_SHIFT)) & XSPI_FRAD12_WORD2_MD0ACP_MASK)
 
 #define XSPI_FRAD12_WORD2_MD1ACP_MASK            (0x38U)
 #define XSPI_FRAD12_WORD2_MD1ACP_SHIFT           (3U)
-/*! MD1ACP - Manager Domain Access Control Policy */
+/*! MD1ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD12_WORD2_MD1ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD12_WORD2_MD1ACP_SHIFT)) & XSPI_FRAD12_WORD2_MD1ACP_MASK)
 
 #define XSPI_FRAD12_WORD2_MD2ACP_MASK            (0x1C0U)
 #define XSPI_FRAD12_WORD2_MD2ACP_SHIFT           (6U)
-/*! MD2ACP - Manager Domain Access Control Policy */
+/*! MD2ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD12_WORD2_MD2ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD12_WORD2_MD2ACP_SHIFT)) & XSPI_FRAD12_WORD2_MD2ACP_MASK)
 
 #define XSPI_FRAD12_WORD2_MD3ACP_MASK            (0xE00U)
 #define XSPI_FRAD12_WORD2_MD3ACP_SHIFT           (9U)
-/*! MD3ACP - Manager Domain Access Control Policy */
+/*! MD3ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD12_WORD2_MD3ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD12_WORD2_MD3ACP_SHIFT)) & XSPI_FRAD12_WORD2_MD3ACP_MASK)
 
 #define XSPI_FRAD12_WORD2_MD4ACP_MASK            (0x7000U)
 #define XSPI_FRAD12_WORD2_MD4ACP_SHIFT           (12U)
-/*! MD4ACP - Manager Domain Access Control Policy */
+/*! MD4ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD12_WORD2_MD4ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD12_WORD2_MD4ACP_SHIFT)) & XSPI_FRAD12_WORD2_MD4ACP_MASK)
 
 #define XSPI_FRAD12_WORD2_EALO_MASK              (0x3F000000U)
@@ -6222,27 +6560,27 @@ typedef struct {
 
 #define XSPI_FRAD13_WORD2_MD0ACP_MASK            (0x7U)
 #define XSPI_FRAD13_WORD2_MD0ACP_SHIFT           (0U)
-/*! MD0ACP - Manager Domain Access Control Policy */
+/*! MD0ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD13_WORD2_MD0ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD13_WORD2_MD0ACP_SHIFT)) & XSPI_FRAD13_WORD2_MD0ACP_MASK)
 
 #define XSPI_FRAD13_WORD2_MD1ACP_MASK            (0x38U)
 #define XSPI_FRAD13_WORD2_MD1ACP_SHIFT           (3U)
-/*! MD1ACP - Manager Domain Access Control Policy */
+/*! MD1ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD13_WORD2_MD1ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD13_WORD2_MD1ACP_SHIFT)) & XSPI_FRAD13_WORD2_MD1ACP_MASK)
 
 #define XSPI_FRAD13_WORD2_MD2ACP_MASK            (0x1C0U)
 #define XSPI_FRAD13_WORD2_MD2ACP_SHIFT           (6U)
-/*! MD2ACP - Manager Domain Access Control Policy */
+/*! MD2ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD13_WORD2_MD2ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD13_WORD2_MD2ACP_SHIFT)) & XSPI_FRAD13_WORD2_MD2ACP_MASK)
 
 #define XSPI_FRAD13_WORD2_MD3ACP_MASK            (0xE00U)
 #define XSPI_FRAD13_WORD2_MD3ACP_SHIFT           (9U)
-/*! MD3ACP - Manager Domain Access Control Policy */
+/*! MD3ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD13_WORD2_MD3ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD13_WORD2_MD3ACP_SHIFT)) & XSPI_FRAD13_WORD2_MD3ACP_MASK)
 
 #define XSPI_FRAD13_WORD2_MD4ACP_MASK            (0x7000U)
 #define XSPI_FRAD13_WORD2_MD4ACP_SHIFT           (12U)
-/*! MD4ACP - Manager Domain Access Control Policy */
+/*! MD4ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD13_WORD2_MD4ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD13_WORD2_MD4ACP_SHIFT)) & XSPI_FRAD13_WORD2_MD4ACP_MASK)
 
 #define XSPI_FRAD13_WORD2_EALO_MASK              (0x3F000000U)
@@ -6356,27 +6694,27 @@ typedef struct {
 
 #define XSPI_FRAD14_WORD2_MD0ACP_MASK            (0x7U)
 #define XSPI_FRAD14_WORD2_MD0ACP_SHIFT           (0U)
-/*! MD0ACP - Manager Domain Access Control Policy */
+/*! MD0ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD14_WORD2_MD0ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD14_WORD2_MD0ACP_SHIFT)) & XSPI_FRAD14_WORD2_MD0ACP_MASK)
 
 #define XSPI_FRAD14_WORD2_MD1ACP_MASK            (0x38U)
 #define XSPI_FRAD14_WORD2_MD1ACP_SHIFT           (3U)
-/*! MD1ACP - Manager Domain Access Control Policy */
+/*! MD1ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD14_WORD2_MD1ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD14_WORD2_MD1ACP_SHIFT)) & XSPI_FRAD14_WORD2_MD1ACP_MASK)
 
 #define XSPI_FRAD14_WORD2_MD2ACP_MASK            (0x1C0U)
 #define XSPI_FRAD14_WORD2_MD2ACP_SHIFT           (6U)
-/*! MD2ACP - Manager Domain Access Control Policy */
+/*! MD2ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD14_WORD2_MD2ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD14_WORD2_MD2ACP_SHIFT)) & XSPI_FRAD14_WORD2_MD2ACP_MASK)
 
 #define XSPI_FRAD14_WORD2_MD3ACP_MASK            (0xE00U)
 #define XSPI_FRAD14_WORD2_MD3ACP_SHIFT           (9U)
-/*! MD3ACP - Manager Domain Access Control Policy */
+/*! MD3ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD14_WORD2_MD3ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD14_WORD2_MD3ACP_SHIFT)) & XSPI_FRAD14_WORD2_MD3ACP_MASK)
 
 #define XSPI_FRAD14_WORD2_MD4ACP_MASK            (0x7000U)
 #define XSPI_FRAD14_WORD2_MD4ACP_SHIFT           (12U)
-/*! MD4ACP - Manager Domain Access Control Policy */
+/*! MD4ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD14_WORD2_MD4ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD14_WORD2_MD4ACP_SHIFT)) & XSPI_FRAD14_WORD2_MD4ACP_MASK)
 
 #define XSPI_FRAD14_WORD2_EALO_MASK              (0x3F000000U)
@@ -6490,27 +6828,27 @@ typedef struct {
 
 #define XSPI_FRAD15_WORD2_MD0ACP_MASK            (0x7U)
 #define XSPI_FRAD15_WORD2_MD0ACP_SHIFT           (0U)
-/*! MD0ACP - Manager Domain Access Control Policy */
+/*! MD0ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD15_WORD2_MD0ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD15_WORD2_MD0ACP_SHIFT)) & XSPI_FRAD15_WORD2_MD0ACP_MASK)
 
 #define XSPI_FRAD15_WORD2_MD1ACP_MASK            (0x38U)
 #define XSPI_FRAD15_WORD2_MD1ACP_SHIFT           (3U)
-/*! MD1ACP - Manager Domain Access Control Policy */
+/*! MD1ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD15_WORD2_MD1ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD15_WORD2_MD1ACP_SHIFT)) & XSPI_FRAD15_WORD2_MD1ACP_MASK)
 
 #define XSPI_FRAD15_WORD2_MD2ACP_MASK            (0x1C0U)
 #define XSPI_FRAD15_WORD2_MD2ACP_SHIFT           (6U)
-/*! MD2ACP - Manager Domain Access Control Policy */
+/*! MD2ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD15_WORD2_MD2ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD15_WORD2_MD2ACP_SHIFT)) & XSPI_FRAD15_WORD2_MD2ACP_MASK)
 
 #define XSPI_FRAD15_WORD2_MD3ACP_MASK            (0xE00U)
 #define XSPI_FRAD15_WORD2_MD3ACP_SHIFT           (9U)
-/*! MD3ACP - Manager Domain Access Control Policy */
+/*! MD3ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD15_WORD2_MD3ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD15_WORD2_MD3ACP_SHIFT)) & XSPI_FRAD15_WORD2_MD3ACP_MASK)
 
 #define XSPI_FRAD15_WORD2_MD4ACP_MASK            (0x7000U)
 #define XSPI_FRAD15_WORD2_MD4ACP_SHIFT           (12U)
-/*! MD4ACP - Manager Domain Access Control Policy */
+/*! MD4ACP - Initiator Domain Access Control Policy */
 #define XSPI_FRAD15_WORD2_MD4ACP(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_FRAD15_WORD2_MD4ACP_SHIFT)) & XSPI_FRAD15_WORD2_MD4ACP_MASK)
 
 #define XSPI_FRAD15_WORD2_EALO_MASK              (0x3F000000U)
@@ -6940,7 +7278,7 @@ typedef struct {
 
 #define XSPI_DLLSR_SUB_DLLA_RANGE_ERR_MASK       (0x2000U)
 #define XSPI_DLLSR_SUB_DLLA_RANGE_ERR_SHIFT      (13U)
-/*! DLLA_RANGE_ERR - DLL Manager Delay Chain Range Error - Flash Memory A
+/*! DLLA_RANGE_ERR - DLL Initiator Delay Chain Range Error - Flash Memory A
  *  0b0..In range
  *  0b1..Out of range
  */
@@ -7490,12 +7828,12 @@ typedef struct {
 /* The count of XSPI_AHB_RD_ERR_ADDR_SUB */
 #define XSPI_AHB_RD_ERR_ADDR_SUB_COUNT           (4U)
 
-/*! @name AHB_RD_ERR_MID_SUB - AHB Read Error Manager ID */
+/*! @name AHB_RD_ERR_MID_SUB - AHB Read Error Initiator ID */
 /*! @{ */
 
 #define XSPI_AHB_RD_ERR_MID_SUB_REMID_MASK       (0xFU)
 #define XSPI_AHB_RD_ERR_MID_SUB_REMID_SHIFT      (0U)
-/*! REMID - Read Error Manager ID */
+/*! REMID - Read Error Initiator ID */
 #define XSPI_AHB_RD_ERR_MID_SUB_REMID(x)         (((uint32_t)(((uint32_t)(x)) << XSPI_AHB_RD_ERR_MID_SUB_REMID_SHIFT)) & XSPI_AHB_RD_ERR_MID_SUB_REMID_MASK)
 /*! @} */
 
@@ -8232,7 +8570,7 @@ typedef struct {
 
 #define XSPI_TGSFARS_SUB_TG_MID_MASK             (0x3FU)
 #define XSPI_TGSFARS_SUB_TG_MID_SHIFT            (0U)
-/*! TG_MID - Transaction Manager ID */
+/*! TG_MID - Transaction Initiator ID */
 #define XSPI_TGSFARS_SUB_TG_MID(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_TGSFARS_SUB_TG_MID_SHIFT)) & XSPI_TGSFARS_SUB_TG_MID_MASK)
 
 #define XSPI_TGSFARS_SUB_SA_MASK                 (0x400U)

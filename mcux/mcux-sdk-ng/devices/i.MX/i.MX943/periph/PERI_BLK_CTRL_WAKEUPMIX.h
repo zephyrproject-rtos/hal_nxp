@@ -1,10 +1,220 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX94398AVKE_ca55
-**                          MIMX94398AVKE_cm33_core0
-**                          MIMX94398AVKE_cm33_core1
-**                          MIMX94398AVKE_cm7_core0
-**                          MIMX94398AVKE_cm7_core1
+**     Processors:          MIMX94115CVMM_ca55
+**                          MIMX94115CVMM_cm33_core0
+**                          MIMX94115CVMM_cm33_core1
+**                          MIMX94115CVMM_cm7_core0
+**                          MIMX94115CVMM_cm7_core1
+**                          MIMX94115XVKM_ca55
+**                          MIMX94115XVKM_cm33_core0
+**                          MIMX94115XVKM_cm33_core1
+**                          MIMX94115XVKM_cm7_core0
+**                          MIMX94115XVKM_cm7_core1
+**                          MIMX94115XVMM_ca55
+**                          MIMX94115XVMM_cm33_core0
+**                          MIMX94115XVMM_cm33_core1
+**                          MIMX94115XVMM_cm7_core0
+**                          MIMX94115XVMM_cm7_core1
+**                          MIMX94135CVMM_ca55
+**                          MIMX94135CVMM_cm33_core0
+**                          MIMX94135CVMM_cm33_core1
+**                          MIMX94135CVMM_cm7_core0
+**                          MIMX94135CVMM_cm7_core1
+**                          MIMX94135XVKM_ca55
+**                          MIMX94135XVKM_cm33_core0
+**                          MIMX94135XVKM_cm33_core1
+**                          MIMX94135XVKM_cm7_core0
+**                          MIMX94135XVKM_cm7_core1
+**                          MIMX94135XVMM_ca55
+**                          MIMX94135XVMM_cm33_core0
+**                          MIMX94135XVMM_cm33_core1
+**                          MIMX94135XVMM_cm7_core0
+**                          MIMX94135XVMM_cm7_core1
+**                          MIMX94155CVMM_ca55
+**                          MIMX94155CVMM_cm33_core0
+**                          MIMX94155CVMM_cm33_core1
+**                          MIMX94155CVMM_cm7_core0
+**                          MIMX94155CVMM_cm7_core1
+**                          MIMX94155XVKM_ca55
+**                          MIMX94155XVKM_cm33_core0
+**                          MIMX94155XVKM_cm33_core1
+**                          MIMX94155XVKM_cm7_core0
+**                          MIMX94155XVKM_cm7_core1
+**                          MIMX94155XVMM_ca55
+**                          MIMX94155XVMM_cm33_core0
+**                          MIMX94155XVMM_cm33_core1
+**                          MIMX94155XVMM_cm7_core0
+**                          MIMX94155XVMM_cm7_core1
+**                          MIMX94175CVMM_ca55
+**                          MIMX94175CVMM_cm33_core0
+**                          MIMX94175CVMM_cm33_core1
+**                          MIMX94175CVMM_cm7_core0
+**                          MIMX94175CVMM_cm7_core1
+**                          MIMX94175XVKM_ca55
+**                          MIMX94175XVKM_cm33_core0
+**                          MIMX94175XVKM_cm33_core1
+**                          MIMX94175XVKM_cm7_core0
+**                          MIMX94175XVKM_cm7_core1
+**                          MIMX94175XVMM_ca55
+**                          MIMX94175XVMM_cm33_core0
+**                          MIMX94175XVMM_cm33_core1
+**                          MIMX94175XVMM_cm7_core0
+**                          MIMX94175XVMM_cm7_core1
+**                          MIMX94185CVMM_ca55
+**                          MIMX94185CVMM_cm33_core0
+**                          MIMX94185CVMM_cm33_core1
+**                          MIMX94185CVMM_cm7_core0
+**                          MIMX94185CVMM_cm7_core1
+**                          MIMX94214CVMM_ca55
+**                          MIMX94214CVMM_cm33_core0
+**                          MIMX94214CVMM_cm33_core1
+**                          MIMX94214CVMM_cm7_core0
+**                          MIMX94214CVMM_cm7_core1
+**                          MIMX94214XVKM_ca55
+**                          MIMX94214XVKM_cm33_core0
+**                          MIMX94214XVKM_cm33_core1
+**                          MIMX94214XVKM_cm7_core0
+**                          MIMX94214XVKM_cm7_core1
+**                          MIMX94214XVMM_ca55
+**                          MIMX94214XVMM_cm33_core0
+**                          MIMX94214XVMM_cm33_core1
+**                          MIMX94214XVMM_cm7_core0
+**                          MIMX94214XVMM_cm7_core1
+**                          MIMX94215CVMM_ca55
+**                          MIMX94215CVMM_cm33_core0
+**                          MIMX94215CVMM_cm33_core1
+**                          MIMX94215CVMM_cm7_core0
+**                          MIMX94215CVMM_cm7_core1
+**                          MIMX94215XVKM_ca55
+**                          MIMX94215XVKM_cm33_core0
+**                          MIMX94215XVKM_cm33_core1
+**                          MIMX94215XVKM_cm7_core0
+**                          MIMX94215XVKM_cm7_core1
+**                          MIMX94215XVMM_ca55
+**                          MIMX94215XVMM_cm33_core0
+**                          MIMX94215XVMM_cm33_core1
+**                          MIMX94215XVMM_cm7_core0
+**                          MIMX94215XVMM_cm7_core1
+**                          MIMX94235CVMM_ca55
+**                          MIMX94235CVMM_cm33_core0
+**                          MIMX94235CVMM_cm33_core1
+**                          MIMX94235CVMM_cm7_core0
+**                          MIMX94235CVMM_cm7_core1
+**                          MIMX94255CVMM_ca55
+**                          MIMX94255CVMM_cm33_core0
+**                          MIMX94255CVMM_cm33_core1
+**                          MIMX94255CVMM_cm7_core0
+**                          MIMX94255CVMM_cm7_core1
+**                          MIMX94275CVMM_ca55
+**                          MIMX94275CVMM_cm33_core0
+**                          MIMX94275CVMM_cm33_core1
+**                          MIMX94275CVMM_cm7_core0
+**                          MIMX94275CVMM_cm7_core1
+**                          MIMX94285CVMM_ca55
+**                          MIMX94285CVMM_cm33_core0
+**                          MIMX94285CVMM_cm33_core1
+**                          MIMX94285CVMM_cm7_core0
+**                          MIMX94285CVMM_cm7_core1
+**                          MIMX94294XVKM_ca55
+**                          MIMX94294XVKM_cm33_core0
+**                          MIMX94294XVKM_cm33_core1
+**                          MIMX94294XVKM_cm7_core0
+**                          MIMX94294XVKM_cm7_core1
+**                          MIMX94294XVMM_ca55
+**                          MIMX94294XVMM_cm33_core0
+**                          MIMX94294XVMM_cm33_core1
+**                          MIMX94294XVMM_cm7_core0
+**                          MIMX94294XVMM_cm7_core1
+**                          MIMX94295AVKM_ca55
+**                          MIMX94295AVKM_cm33_core0
+**                          MIMX94295AVKM_cm33_core1
+**                          MIMX94295AVKM_cm7_core0
+**                          MIMX94295AVKM_cm7_core1
+**                          MIMX94295AVMJ_ca55
+**                          MIMX94295AVMJ_cm33_core0
+**                          MIMX94295AVMJ_cm33_core1
+**                          MIMX94295AVMJ_cm7_core0
+**                          MIMX94295AVMJ_cm7_core1
+**                          MIMX94295CVMJ_ca55
+**                          MIMX94295CVMJ_cm33_core0
+**                          MIMX94295CVMJ_cm33_core1
+**                          MIMX94295CVMJ_cm7_core0
+**                          MIMX94295CVMJ_cm7_core1
+**                          MIMX94295XVKJ_ca55
+**                          MIMX94295XVKJ_cm33_core0
+**                          MIMX94295XVKJ_cm33_core1
+**                          MIMX94295XVKJ_cm7_core0
+**                          MIMX94295XVKJ_cm7_core1
+**                          MIMX94295XVMM_ca55
+**                          MIMX94295XVMM_cm33_core0
+**                          MIMX94295XVMM_cm33_core1
+**                          MIMX94295XVMM_cm7_core0
+**                          MIMX94295XVMM_cm7_core1
+**                          MIMX94316XVMM_ca55
+**                          MIMX94316XVMM_cm33_core0
+**                          MIMX94316XVMM_cm33_core1
+**                          MIMX94316XVMM_cm7_core0
+**                          MIMX94316XVMM_cm7_core1
+**                          MIMX94318XVMM_ca55
+**                          MIMX94318XVMM_cm33_core0
+**                          MIMX94318XVMM_cm33_core1
+**                          MIMX94318XVMM_cm7_core0
+**                          MIMX94318XVMM_cm7_core1
+**                          MIMX94376AVKM_ca55
+**                          MIMX94376AVKM_cm33_core0
+**                          MIMX94376AVKM_cm33_core1
+**                          MIMX94376AVKM_cm7_core0
+**                          MIMX94376AVKM_cm7_core1
+**                          MIMX94378AVKM_ca55
+**                          MIMX94378AVKM_cm33_core0
+**                          MIMX94378AVKM_cm33_core1
+**                          MIMX94378AVKM_cm7_core0
+**                          MIMX94378AVKM_cm7_core1
+**                          MIMX94386AVKM_ca55
+**                          MIMX94386AVKM_cm33_core0
+**                          MIMX94386AVKM_cm33_core1
+**                          MIMX94386AVKM_cm7_core0
+**                          MIMX94386AVKM_cm7_core1
+**                          MIMX94386XVMM_ca55
+**                          MIMX94386XVMM_cm33_core0
+**                          MIMX94386XVMM_cm33_core1
+**                          MIMX94386XVMM_cm7_core0
+**                          MIMX94386XVMM_cm7_core1
+**                          MIMX94388AVKM_ca55
+**                          MIMX94388AVKM_cm33_core0
+**                          MIMX94388AVKM_cm33_core1
+**                          MIMX94388AVKM_cm7_core0
+**                          MIMX94388AVKM_cm7_core1
+**                          MIMX94388AVMM_ca55
+**                          MIMX94388AVMM_cm33_core0
+**                          MIMX94388AVMM_cm33_core1
+**                          MIMX94388AVMM_cm7_core0
+**                          MIMX94388AVMM_cm7_core1
+**                          MIMX94388XVMM_ca55
+**                          MIMX94388XVMM_cm33_core0
+**                          MIMX94388XVMM_cm33_core1
+**                          MIMX94388XVMM_cm7_core0
+**                          MIMX94388XVMM_cm7_core1
+**                          MIMX94396AVKJ_ca55
+**                          MIMX94396AVKJ_cm33_core0
+**                          MIMX94396AVKJ_cm33_core1
+**                          MIMX94396AVKJ_cm7_core0
+**                          MIMX94396AVKJ_cm7_core1
+**                          MIMX94396AVKM_ca55
+**                          MIMX94396AVKM_cm33_core0
+**                          MIMX94396AVKM_cm33_core1
+**                          MIMX94396AVKM_cm7_core0
+**                          MIMX94396AVKM_cm7_core1
+**                          MIMX94396AVMJ_ca55
+**                          MIMX94396AVMJ_cm33_core0
+**                          MIMX94396AVMJ_cm33_core1
+**                          MIMX94396AVMJ_cm7_core0
+**                          MIMX94396AVMJ_cm7_core1
+**                          MIMX94396XVMM_ca55
+**                          MIMX94396XVMM_cm33_core0
+**                          MIMX94396XVMM_cm33_core1
+**                          MIMX94396XVMM_cm7_core0
+**                          MIMX94396XVMM_cm7_core1
 **                          MIMX94398AVKJ_ca55
 **                          MIMX94398AVKJ_cm33_core0
 **                          MIMX94398AVKJ_cm33_core1
@@ -15,11 +225,6 @@
 **                          MIMX94398AVKM_cm33_core1
 **                          MIMX94398AVKM_cm7_core0
 **                          MIMX94398AVKM_cm7_core1
-**                          MIMX94398AVME_ca55
-**                          MIMX94398AVME_cm33_core0
-**                          MIMX94398AVME_cm33_core1
-**                          MIMX94398AVME_cm7_core0
-**                          MIMX94398AVME_cm7_core1
 **                          MIMX94398AVMJ_ca55
 **                          MIMX94398AVMJ_cm33_core0
 **                          MIMX94398AVMJ_cm33_core1
@@ -30,91 +235,16 @@
 **                          MIMX94398AVMM_cm33_core1
 **                          MIMX94398AVMM_cm7_core0
 **                          MIMX94398AVMM_cm7_core1
-**                          MIMX94398CVKE_ca55
-**                          MIMX94398CVKE_cm33_core0
-**                          MIMX94398CVKE_cm33_core1
-**                          MIMX94398CVKE_cm7_core0
-**                          MIMX94398CVKE_cm7_core1
-**                          MIMX94398CVKJ_ca55
-**                          MIMX94398CVKJ_cm33_core0
-**                          MIMX94398CVKJ_cm33_core1
-**                          MIMX94398CVKJ_cm7_core0
-**                          MIMX94398CVKJ_cm7_core1
-**                          MIMX94398CVKM_ca55
-**                          MIMX94398CVKM_cm33_core0
-**                          MIMX94398CVKM_cm33_core1
-**                          MIMX94398CVKM_cm7_core0
-**                          MIMX94398CVKM_cm7_core1
-**                          MIMX94398CVME_ca55
-**                          MIMX94398CVME_cm33_core0
-**                          MIMX94398CVME_cm33_core1
-**                          MIMX94398CVME_cm7_core0
-**                          MIMX94398CVME_cm7_core1
-**                          MIMX94398CVMJ_ca55
-**                          MIMX94398CVMJ_cm33_core0
-**                          MIMX94398CVMJ_cm33_core1
-**                          MIMX94398CVMJ_cm7_core0
-**                          MIMX94398CVMJ_cm7_core1
-**                          MIMX94398CVMM_ca55
-**                          MIMX94398CVMM_cm33_core0
-**                          MIMX94398CVMM_cm33_core1
-**                          MIMX94398CVMM_cm7_core0
-**                          MIMX94398CVMM_cm7_core1
-**                          MIMX94398DVKE_ca55
-**                          MIMX94398DVKE_cm33_core0
-**                          MIMX94398DVKE_cm33_core1
-**                          MIMX94398DVKE_cm7_core0
-**                          MIMX94398DVKE_cm7_core1
-**                          MIMX94398DVKJ_ca55
-**                          MIMX94398DVKJ_cm33_core0
-**                          MIMX94398DVKJ_cm33_core1
-**                          MIMX94398DVKJ_cm7_core0
-**                          MIMX94398DVKJ_cm7_core1
 **                          MIMX94398DVKM_ca55
 **                          MIMX94398DVKM_cm33_core0
 **                          MIMX94398DVKM_cm33_core1
 **                          MIMX94398DVKM_cm7_core0
 **                          MIMX94398DVKM_cm7_core1
-**                          MIMX94398DVME_ca55
-**                          MIMX94398DVME_cm33_core0
-**                          MIMX94398DVME_cm33_core1
-**                          MIMX94398DVME_cm7_core0
-**                          MIMX94398DVME_cm7_core1
-**                          MIMX94398DVMJ_ca55
-**                          MIMX94398DVMJ_cm33_core0
-**                          MIMX94398DVMJ_cm33_core1
-**                          MIMX94398DVMJ_cm7_core0
-**                          MIMX94398DVMJ_cm7_core1
 **                          MIMX94398DVMM_ca55
 **                          MIMX94398DVMM_cm33_core0
 **                          MIMX94398DVMM_cm33_core1
 **                          MIMX94398DVMM_cm7_core0
 **                          MIMX94398DVMM_cm7_core1
-**                          MIMX94398XVKE_ca55
-**                          MIMX94398XVKE_cm33_core0
-**                          MIMX94398XVKE_cm33_core1
-**                          MIMX94398XVKE_cm7_core0
-**                          MIMX94398XVKE_cm7_core1
-**                          MIMX94398XVKJ_ca55
-**                          MIMX94398XVKJ_cm33_core0
-**                          MIMX94398XVKJ_cm33_core1
-**                          MIMX94398XVKJ_cm7_core0
-**                          MIMX94398XVKJ_cm7_core1
-**                          MIMX94398XVKM_ca55
-**                          MIMX94398XVKM_cm33_core0
-**                          MIMX94398XVKM_cm33_core1
-**                          MIMX94398XVKM_cm7_core0
-**                          MIMX94398XVKM_cm7_core1
-**                          MIMX94398XVME_ca55
-**                          MIMX94398XVME_cm33_core0
-**                          MIMX94398XVME_cm33_core1
-**                          MIMX94398XVME_cm7_core0
-**                          MIMX94398XVME_cm7_core1
-**                          MIMX94398XVMJ_ca55
-**                          MIMX94398XVMJ_cm33_core0
-**                          MIMX94398XVMJ_cm33_core1
-**                          MIMX94398XVMJ_cm7_core0
-**                          MIMX94398XVMJ_cm7_core1
 **                          MIMX94398XVMM_ca55
 **                          MIMX94398XVMM_cm33_core0
 **                          MIMX94398XVMM_cm33_core1
@@ -122,13 +252,13 @@
 **                          MIMX94398XVMM_cm7_core1
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250721
+**     Build:               b260804
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BLK_CTRL_WAKEUPMIX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -176,15 +306,215 @@
 #if !defined(PERI_BLK_CTRL_WAKEUPMIX_H_)
 #define PERI_BLK_CTRL_WAKEUPMIX_H_               /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX94398AVKE_ca55) || defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVME_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398CVKE_ca55) || defined(CPU_MIMX94398CVKJ_ca55) || defined(CPU_MIMX94398CVKM_ca55) || defined(CPU_MIMX94398CVME_ca55) || defined(CPU_MIMX94398CVMJ_ca55) || defined(CPU_MIMX94398CVMM_ca55) || defined(CPU_MIMX94398DVKE_ca55) || defined(CPU_MIMX94398DVKJ_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVME_ca55) || defined(CPU_MIMX94398DVMJ_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVKE_ca55) || defined(CPU_MIMX94398XVKJ_ca55) || defined(CPU_MIMX94398XVKM_ca55) || defined(CPU_MIMX94398XVME_ca55) || defined(CPU_MIMX94398XVMJ_ca55) || defined(CPU_MIMX94398XVMM_ca55))
+#if (defined(CPU_MIMX94115CVMM_ca55) || defined(CPU_MIMX94115XVKM_ca55) || defined(CPU_MIMX94115XVMM_ca55))
+#include "MIMX94115_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm33_core0) || defined(CPU_MIMX94115XVKM_cm33_core0) || defined(CPU_MIMX94115XVMM_cm33_core0))
+#include "MIMX94115_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm33_core1) || defined(CPU_MIMX94115XVKM_cm33_core1) || defined(CPU_MIMX94115XVMM_cm33_core1))
+#include "MIMX94115_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm7_core0) || defined(CPU_MIMX94115XVKM_cm7_core0) || defined(CPU_MIMX94115XVMM_cm7_core0))
+#include "MIMX94115_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm7_core1) || defined(CPU_MIMX94115XVKM_cm7_core1) || defined(CPU_MIMX94115XVMM_cm7_core1))
+#include "MIMX94115_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_ca55) || defined(CPU_MIMX94135XVKM_ca55) || defined(CPU_MIMX94135XVMM_ca55))
+#include "MIMX94135_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm33_core0) || defined(CPU_MIMX94135XVKM_cm33_core0) || defined(CPU_MIMX94135XVMM_cm33_core0))
+#include "MIMX94135_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm33_core1) || defined(CPU_MIMX94135XVKM_cm33_core1) || defined(CPU_MIMX94135XVMM_cm33_core1))
+#include "MIMX94135_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm7_core0) || defined(CPU_MIMX94135XVKM_cm7_core0) || defined(CPU_MIMX94135XVMM_cm7_core0))
+#include "MIMX94135_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm7_core1) || defined(CPU_MIMX94135XVKM_cm7_core1) || defined(CPU_MIMX94135XVMM_cm7_core1))
+#include "MIMX94135_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_ca55) || defined(CPU_MIMX94155XVKM_ca55) || defined(CPU_MIMX94155XVMM_ca55))
+#include "MIMX94155_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm33_core0) || defined(CPU_MIMX94155XVKM_cm33_core0) || defined(CPU_MIMX94155XVMM_cm33_core0))
+#include "MIMX94155_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm33_core1) || defined(CPU_MIMX94155XVKM_cm33_core1) || defined(CPU_MIMX94155XVMM_cm33_core1))
+#include "MIMX94155_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm7_core0) || defined(CPU_MIMX94155XVKM_cm7_core0) || defined(CPU_MIMX94155XVMM_cm7_core0))
+#include "MIMX94155_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm7_core1) || defined(CPU_MIMX94155XVKM_cm7_core1) || defined(CPU_MIMX94155XVMM_cm7_core1))
+#include "MIMX94155_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_ca55) || defined(CPU_MIMX94175XVKM_ca55) || defined(CPU_MIMX94175XVMM_ca55))
+#include "MIMX94175_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm33_core0) || defined(CPU_MIMX94175XVKM_cm33_core0) || defined(CPU_MIMX94175XVMM_cm33_core0))
+#include "MIMX94175_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm33_core1) || defined(CPU_MIMX94175XVKM_cm33_core1) || defined(CPU_MIMX94175XVMM_cm33_core1))
+#include "MIMX94175_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm7_core0) || defined(CPU_MIMX94175XVKM_cm7_core0) || defined(CPU_MIMX94175XVMM_cm7_core0))
+#include "MIMX94175_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm7_core1) || defined(CPU_MIMX94175XVKM_cm7_core1) || defined(CPU_MIMX94175XVMM_cm7_core1))
+#include "MIMX94175_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_ca55))
+#include "MIMX94185_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm33_core0))
+#include "MIMX94185_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm33_core1))
+#include "MIMX94185_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm7_core0))
+#include "MIMX94185_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm7_core1))
+#include "MIMX94185_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_ca55) || defined(CPU_MIMX94214XVKM_ca55) || defined(CPU_MIMX94214XVMM_ca55))
+#include "MIMX94214_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm33_core0) || defined(CPU_MIMX94214XVKM_cm33_core0) || defined(CPU_MIMX94214XVMM_cm33_core0))
+#include "MIMX94214_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm33_core1) || defined(CPU_MIMX94214XVKM_cm33_core1) || defined(CPU_MIMX94214XVMM_cm33_core1))
+#include "MIMX94214_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm7_core0) || defined(CPU_MIMX94214XVKM_cm7_core0) || defined(CPU_MIMX94214XVMM_cm7_core0))
+#include "MIMX94214_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm7_core1) || defined(CPU_MIMX94214XVKM_cm7_core1) || defined(CPU_MIMX94214XVMM_cm7_core1))
+#include "MIMX94214_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_ca55) || defined(CPU_MIMX94215XVKM_ca55) || defined(CPU_MIMX94215XVMM_ca55))
+#include "MIMX94215_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm33_core0) || defined(CPU_MIMX94215XVKM_cm33_core0) || defined(CPU_MIMX94215XVMM_cm33_core0))
+#include "MIMX94215_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm33_core1) || defined(CPU_MIMX94215XVKM_cm33_core1) || defined(CPU_MIMX94215XVMM_cm33_core1))
+#include "MIMX94215_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm7_core0) || defined(CPU_MIMX94215XVKM_cm7_core0) || defined(CPU_MIMX94215XVMM_cm7_core0))
+#include "MIMX94215_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm7_core1) || defined(CPU_MIMX94215XVKM_cm7_core1) || defined(CPU_MIMX94215XVMM_cm7_core1))
+#include "MIMX94215_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_ca55))
+#include "MIMX94235_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm33_core0))
+#include "MIMX94235_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm33_core1))
+#include "MIMX94235_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm7_core0))
+#include "MIMX94235_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm7_core1))
+#include "MIMX94235_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_ca55))
+#include "MIMX94255_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm33_core0))
+#include "MIMX94255_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm33_core1))
+#include "MIMX94255_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm7_core0))
+#include "MIMX94255_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm7_core1))
+#include "MIMX94255_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_ca55))
+#include "MIMX94275_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm33_core0))
+#include "MIMX94275_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm33_core1))
+#include "MIMX94275_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm7_core0))
+#include "MIMX94275_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm7_core1))
+#include "MIMX94275_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_ca55))
+#include "MIMX94285_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm33_core0))
+#include "MIMX94285_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm33_core1))
+#include "MIMX94285_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm7_core0))
+#include "MIMX94285_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm7_core1))
+#include "MIMX94285_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_ca55) || defined(CPU_MIMX94294XVMM_ca55))
+#include "MIMX94294_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm33_core0) || defined(CPU_MIMX94294XVMM_cm33_core0))
+#include "MIMX94294_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm33_core1) || defined(CPU_MIMX94294XVMM_cm33_core1))
+#include "MIMX94294_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm7_core0) || defined(CPU_MIMX94294XVMM_cm7_core0))
+#include "MIMX94294_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm7_core1) || defined(CPU_MIMX94294XVMM_cm7_core1))
+#include "MIMX94294_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_ca55) || defined(CPU_MIMX94295AVMJ_ca55) || defined(CPU_MIMX94295CVMJ_ca55) || defined(CPU_MIMX94295XVKJ_ca55) || defined(CPU_MIMX94295XVMM_ca55))
+#include "MIMX94295_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm33_core0) || defined(CPU_MIMX94295AVMJ_cm33_core0) || defined(CPU_MIMX94295CVMJ_cm33_core0) || defined(CPU_MIMX94295XVKJ_cm33_core0) || defined(CPU_MIMX94295XVMM_cm33_core0))
+#include "MIMX94295_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm33_core1) || defined(CPU_MIMX94295AVMJ_cm33_core1) || defined(CPU_MIMX94295CVMJ_cm33_core1) || defined(CPU_MIMX94295XVKJ_cm33_core1) || defined(CPU_MIMX94295XVMM_cm33_core1))
+#include "MIMX94295_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm7_core0) || defined(CPU_MIMX94295AVMJ_cm7_core0) || defined(CPU_MIMX94295CVMJ_cm7_core0) || defined(CPU_MIMX94295XVKJ_cm7_core0) || defined(CPU_MIMX94295XVMM_cm7_core0))
+#include "MIMX94295_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm7_core1) || defined(CPU_MIMX94295AVMJ_cm7_core1) || defined(CPU_MIMX94295CVMJ_cm7_core1) || defined(CPU_MIMX94295XVKJ_cm7_core1) || defined(CPU_MIMX94295XVMM_cm7_core1))
+#include "MIMX94295_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_ca55))
+#include "MIMX94316_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm33_core0))
+#include "MIMX94316_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm33_core1))
+#include "MIMX94316_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm7_core0))
+#include "MIMX94316_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm7_core1))
+#include "MIMX94316_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_ca55))
+#include "MIMX94318_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm33_core0))
+#include "MIMX94318_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm33_core1))
+#include "MIMX94318_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm7_core0))
+#include "MIMX94318_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm7_core1))
+#include "MIMX94318_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_ca55))
+#include "MIMX94376_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm33_core0))
+#include "MIMX94376_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm33_core1))
+#include "MIMX94376_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm7_core0))
+#include "MIMX94376_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm7_core1))
+#include "MIMX94376_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_ca55))
+#include "MIMX94378_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm33_core0))
+#include "MIMX94378_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm33_core1))
+#include "MIMX94378_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm7_core0))
+#include "MIMX94378_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm7_core1))
+#include "MIMX94378_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_ca55) || defined(CPU_MIMX94386XVMM_ca55))
+#include "MIMX94386_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm33_core0) || defined(CPU_MIMX94386XVMM_cm33_core0))
+#include "MIMX94386_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm33_core1) || defined(CPU_MIMX94386XVMM_cm33_core1))
+#include "MIMX94386_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm7_core0) || defined(CPU_MIMX94386XVMM_cm7_core0))
+#include "MIMX94386_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm7_core1) || defined(CPU_MIMX94386XVMM_cm7_core1))
+#include "MIMX94386_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_ca55) || defined(CPU_MIMX94388AVMM_ca55) || defined(CPU_MIMX94388XVMM_ca55))
+#include "MIMX94388_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm33_core0) || defined(CPU_MIMX94388AVMM_cm33_core0) || defined(CPU_MIMX94388XVMM_cm33_core0))
+#include "MIMX94388_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm33_core1) || defined(CPU_MIMX94388AVMM_cm33_core1) || defined(CPU_MIMX94388XVMM_cm33_core1))
+#include "MIMX94388_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm7_core0) || defined(CPU_MIMX94388AVMM_cm7_core0) || defined(CPU_MIMX94388XVMM_cm7_core0))
+#include "MIMX94388_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm7_core1) || defined(CPU_MIMX94388AVMM_cm7_core1) || defined(CPU_MIMX94388XVMM_cm7_core1))
+#include "MIMX94388_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_ca55) || defined(CPU_MIMX94396AVKM_ca55) || defined(CPU_MIMX94396AVMJ_ca55) || defined(CPU_MIMX94396XVMM_ca55))
+#include "MIMX94396_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm33_core0) || defined(CPU_MIMX94396AVKM_cm33_core0) || defined(CPU_MIMX94396AVMJ_cm33_core0) || defined(CPU_MIMX94396XVMM_cm33_core0))
+#include "MIMX94396_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm33_core1) || defined(CPU_MIMX94396AVKM_cm33_core1) || defined(CPU_MIMX94396AVMJ_cm33_core1) || defined(CPU_MIMX94396XVMM_cm33_core1))
+#include "MIMX94396_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm7_core0) || defined(CPU_MIMX94396AVKM_cm7_core0) || defined(CPU_MIMX94396AVMJ_cm7_core0) || defined(CPU_MIMX94396XVMM_cm7_core0))
+#include "MIMX94396_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm7_core1) || defined(CPU_MIMX94396AVKM_cm7_core1) || defined(CPU_MIMX94396AVMJ_cm7_core1) || defined(CPU_MIMX94396XVMM_cm7_core1))
+#include "MIMX94396_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVMM_ca55))
 #include "MIMX94398_ca55_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm33_core0) || defined(CPU_MIMX94398AVKJ_cm33_core0) || defined(CPU_MIMX94398AVKM_cm33_core0) || defined(CPU_MIMX94398AVME_cm33_core0) || defined(CPU_MIMX94398AVMJ_cm33_core0) || defined(CPU_MIMX94398AVMM_cm33_core0) || defined(CPU_MIMX94398CVKE_cm33_core0) || defined(CPU_MIMX94398CVKJ_cm33_core0) || defined(CPU_MIMX94398CVKM_cm33_core0) || defined(CPU_MIMX94398CVME_cm33_core0) || defined(CPU_MIMX94398CVMJ_cm33_core0) || defined(CPU_MIMX94398CVMM_cm33_core0) || defined(CPU_MIMX94398DVKE_cm33_core0) || defined(CPU_MIMX94398DVKJ_cm33_core0) || defined(CPU_MIMX94398DVKM_cm33_core0) || defined(CPU_MIMX94398DVME_cm33_core0) || defined(CPU_MIMX94398DVMJ_cm33_core0) || defined(CPU_MIMX94398DVMM_cm33_core0) || defined(CPU_MIMX94398XVKE_cm33_core0) || defined(CPU_MIMX94398XVKJ_cm33_core0) || defined(CPU_MIMX94398XVKM_cm33_core0) || defined(CPU_MIMX94398XVME_cm33_core0) || defined(CPU_MIMX94398XVMJ_cm33_core0) || defined(CPU_MIMX94398XVMM_cm33_core0))
+#elif (defined(CPU_MIMX94398AVKJ_cm33_core0) || defined(CPU_MIMX94398AVKM_cm33_core0) || defined(CPU_MIMX94398AVMJ_cm33_core0) || defined(CPU_MIMX94398AVMM_cm33_core0) || defined(CPU_MIMX94398DVKM_cm33_core0) || defined(CPU_MIMX94398DVMM_cm33_core0) || defined(CPU_MIMX94398XVMM_cm33_core0))
 #include "MIMX94398_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm33_core1) || defined(CPU_MIMX94398AVKJ_cm33_core1) || defined(CPU_MIMX94398AVKM_cm33_core1) || defined(CPU_MIMX94398AVME_cm33_core1) || defined(CPU_MIMX94398AVMJ_cm33_core1) || defined(CPU_MIMX94398AVMM_cm33_core1) || defined(CPU_MIMX94398CVKE_cm33_core1) || defined(CPU_MIMX94398CVKJ_cm33_core1) || defined(CPU_MIMX94398CVKM_cm33_core1) || defined(CPU_MIMX94398CVME_cm33_core1) || defined(CPU_MIMX94398CVMJ_cm33_core1) || defined(CPU_MIMX94398CVMM_cm33_core1) || defined(CPU_MIMX94398DVKE_cm33_core1) || defined(CPU_MIMX94398DVKJ_cm33_core1) || defined(CPU_MIMX94398DVKM_cm33_core1) || defined(CPU_MIMX94398DVME_cm33_core1) || defined(CPU_MIMX94398DVMJ_cm33_core1) || defined(CPU_MIMX94398DVMM_cm33_core1) || defined(CPU_MIMX94398XVKE_cm33_core1) || defined(CPU_MIMX94398XVKJ_cm33_core1) || defined(CPU_MIMX94398XVKM_cm33_core1) || defined(CPU_MIMX94398XVME_cm33_core1) || defined(CPU_MIMX94398XVMJ_cm33_core1) || defined(CPU_MIMX94398XVMM_cm33_core1))
+#elif (defined(CPU_MIMX94398AVKJ_cm33_core1) || defined(CPU_MIMX94398AVKM_cm33_core1) || defined(CPU_MIMX94398AVMJ_cm33_core1) || defined(CPU_MIMX94398AVMM_cm33_core1) || defined(CPU_MIMX94398DVKM_cm33_core1) || defined(CPU_MIMX94398DVMM_cm33_core1) || defined(CPU_MIMX94398XVMM_cm33_core1))
 #include "MIMX94398_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm7_core0) || defined(CPU_MIMX94398AVKJ_cm7_core0) || defined(CPU_MIMX94398AVKM_cm7_core0) || defined(CPU_MIMX94398AVME_cm7_core0) || defined(CPU_MIMX94398AVMJ_cm7_core0) || defined(CPU_MIMX94398AVMM_cm7_core0) || defined(CPU_MIMX94398CVKE_cm7_core0) || defined(CPU_MIMX94398CVKJ_cm7_core0) || defined(CPU_MIMX94398CVKM_cm7_core0) || defined(CPU_MIMX94398CVME_cm7_core0) || defined(CPU_MIMX94398CVMJ_cm7_core0) || defined(CPU_MIMX94398CVMM_cm7_core0) || defined(CPU_MIMX94398DVKE_cm7_core0) || defined(CPU_MIMX94398DVKJ_cm7_core0) || defined(CPU_MIMX94398DVKM_cm7_core0) || defined(CPU_MIMX94398DVME_cm7_core0) || defined(CPU_MIMX94398DVMJ_cm7_core0) || defined(CPU_MIMX94398DVMM_cm7_core0) || defined(CPU_MIMX94398XVKE_cm7_core0) || defined(CPU_MIMX94398XVKJ_cm7_core0) || defined(CPU_MIMX94398XVKM_cm7_core0) || defined(CPU_MIMX94398XVME_cm7_core0) || defined(CPU_MIMX94398XVMJ_cm7_core0) || defined(CPU_MIMX94398XVMM_cm7_core0))
+#elif (defined(CPU_MIMX94398AVKJ_cm7_core0) || defined(CPU_MIMX94398AVKM_cm7_core0) || defined(CPU_MIMX94398AVMJ_cm7_core0) || defined(CPU_MIMX94398AVMM_cm7_core0) || defined(CPU_MIMX94398DVKM_cm7_core0) || defined(CPU_MIMX94398DVMM_cm7_core0) || defined(CPU_MIMX94398XVMM_cm7_core0))
 #include "MIMX94398_cm7_core0_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm7_core1) || defined(CPU_MIMX94398AVKJ_cm7_core1) || defined(CPU_MIMX94398AVKM_cm7_core1) || defined(CPU_MIMX94398AVME_cm7_core1) || defined(CPU_MIMX94398AVMJ_cm7_core1) || defined(CPU_MIMX94398AVMM_cm7_core1) || defined(CPU_MIMX94398CVKE_cm7_core1) || defined(CPU_MIMX94398CVKJ_cm7_core1) || defined(CPU_MIMX94398CVKM_cm7_core1) || defined(CPU_MIMX94398CVME_cm7_core1) || defined(CPU_MIMX94398CVMJ_cm7_core1) || defined(CPU_MIMX94398CVMM_cm7_core1) || defined(CPU_MIMX94398DVKE_cm7_core1) || defined(CPU_MIMX94398DVKJ_cm7_core1) || defined(CPU_MIMX94398DVKM_cm7_core1) || defined(CPU_MIMX94398DVME_cm7_core1) || defined(CPU_MIMX94398DVMJ_cm7_core1) || defined(CPU_MIMX94398DVMM_cm7_core1) || defined(CPU_MIMX94398XVKE_cm7_core1) || defined(CPU_MIMX94398XVKJ_cm7_core1) || defined(CPU_MIMX94398XVKM_cm7_core1) || defined(CPU_MIMX94398XVME_cm7_core1) || defined(CPU_MIMX94398XVMJ_cm7_core1) || defined(CPU_MIMX94398XVMM_cm7_core1))
+#elif (defined(CPU_MIMX94398AVKJ_cm7_core1) || defined(CPU_MIMX94398AVKM_cm7_core1) || defined(CPU_MIMX94398AVMJ_cm7_core1) || defined(CPU_MIMX94398AVMM_cm7_core1) || defined(CPU_MIMX94398DVKM_cm7_core1) || defined(CPU_MIMX94398DVMM_cm7_core1) || defined(CPU_MIMX94398XVMM_cm7_core1))
 #include "MIMX94398_cm7_core1_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -282,7 +612,7 @@ typedef struct {
   __IO uint32_t HIPERFACE1_SYNC_CTL1;              /**< Hiperface #1 sync source configuration register #1/2, offset: 0x210 */
   __IO uint32_t HIPERFACE1_SYNC_CTL2;              /**< Hiperface #1 sync source configuration register #2/2, offset: 0x214 */
   __IO uint32_t HIPERFACE2_SYNC_CTL1;              /**< Hiperface #2 sync source configuration register #1/2, offset: 0x218 */
-  __IO uint32_t HIPERFACE2_SYNC_CTL2;              /**< Hiperface #2 interrupt control register #2/2, offset: 0x21C */
+  __IO uint32_t HIPERFACE2_SYNC_CTL2;              /**< Hiperface #2 sync source configuration register #2/2, offset: 0x21C */
   __IO uint32_t HIPERFACE1_INT_CTL;                /**< Hiperface #1 interrupt control, offset: 0x220 */
   __IO uint32_t HIPERFACE2_INT_CTL;                /**< Hiperface #2 interrupt control, offset: 0x224 */
        uint8_t RESERVED_7[4];
@@ -295,7 +625,7 @@ typedef struct {
   __IO uint32_t DIAG_ENCODER_MUX_SEL;              /**< Encoder diagnostic bus mux selection, offset: 0x244 */
   __IO uint32_t IO_MUXING_SELECT_CTRL;             /**< IO muxing control of select signal, offset: 0x248 */
        uint8_t RESERVED_8[4];
-  __IO uint32_t XBAR_AOI_WE;                       /**< XBAR and AOI write protect register, offset: 0x250 */
+  __IO uint32_t XBAR_AOI_WE;                       /**< Reserved, offset: 0x250 */
   __IO uint32_t XBAR_TRIG_SYNC_CTRL1;              /**< XBAR trigger synchronizer control register1, offset: 0x254 */
   __IO uint32_t XBAR_TRIG_SYNC_CTRL2;              /**< XBAR trigger synchronizer control register2, offset: 0x258 */
   __IO uint32_t XBAR_TRIG_SYNC_CTRL3;              /**< XBAR trigger synchronizer control register2, offset: 0x25C */
@@ -674,10 +1004,10 @@ typedef struct {
 /*! sai4 - SAI4 debug */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_sai4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_sai4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_sai4_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma2_MASK (0x80000000U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma2_SHIFT (31U)
-/*! edma2 - EDMA2 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma2_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma5_2_MASK (0x80000000U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma5_2_SHIFT (31U)
+/*! edma5_2 - edma5_2 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma5_2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma5_2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma5_2_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_CA55C0 - IPG DEBUG mask bit for CA55 core0 */
@@ -838,10 +1168,10 @@ typedef struct {
 /*! sai4 - SAI4 debug */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_sai4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_sai4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_sai4_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma2_MASK (0x80000000U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma2_SHIFT (31U)
-/*! edma2 - EDMA2 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma2_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma5_2_MASK (0x80000000U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma5_2_SHIFT (31U)
+/*! edma5_2 - edma5_2 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma5_2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma5_2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma5_2_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_CA55C1 - IPG DEBUG mask bit for CA55 core1 */
@@ -1002,10 +1332,10 @@ typedef struct {
 /*! sai4 - SAI4 debug */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_sai4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_sai4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_sai4_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma2_MASK (0x80000000U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma2_SHIFT (31U)
-/*! edma2 - EDMA2 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma2_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma5_2_MASK (0x80000000U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma5_2_SHIFT (31U)
+/*! edma5_2 - edma5_2 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma5_2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma5_2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma5_2_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_CA55C2 - IPG DEBUG mask bit for CA55 core2 */
@@ -1166,10 +1496,10 @@ typedef struct {
 /*! sai4 - SAI4 debug */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_sai4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_sai4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_sai4_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma2_MASK (0x80000000U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma2_SHIFT (31U)
-/*! edma2 - EDMA2 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma2_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma5_2_MASK (0x80000000U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma5_2_SHIFT (31U)
+/*! edma5_2 - edma5_2 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma5_2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma5_2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma5_2_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_CA55C3 - IPG DEBUG mask bit for CA55 core3 */
@@ -1330,10 +1660,10 @@ typedef struct {
 /*! sai4 - SAI4 debug */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_sai4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_sai4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_sai4_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma2_MASK (0x80000000U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma2_SHIFT (31U)
-/*! edma2 - EDMA2 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma2_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma5_2_MASK (0x80000000U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma5_2_SHIFT (31U)
+/*! edma5_2 - edma5_2 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma5_2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma5_2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma5_2_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_CM7_0 - IPG DEBUG mask bit */
@@ -1494,10 +1824,10 @@ typedef struct {
 /*! sai4 - SAI4 debug */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_0_sai4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_0_sai4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_0_sai4_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_0_edma2_MASK (0x80000000U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_0_edma2_SHIFT (31U)
-/*! edma2 - EDMA2 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_0_edma2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_0_edma2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_0_edma2_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_0_edma5_2_MASK (0x80000000U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_0_edma5_2_SHIFT (31U)
+/*! edma5_2 - edma5_2 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_0_edma5_2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_0_edma5_2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_0_edma5_2_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_CM7_1 - IPG DEBUG mask bit */
@@ -1658,10 +1988,10 @@ typedef struct {
 /*! sai4 - SAI4 debug */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_1_sai4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_1_sai4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_1_sai4_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_1_edma2_MASK (0x80000000U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_1_edma2_SHIFT (31U)
-/*! edma2 - EDMA2 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_1_edma2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_1_edma2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_1_edma2_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_1_edma5_2_MASK (0x80000000U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_1_edma5_2_SHIFT (31U)
+/*! edma5_2 - edma5_2 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_1_edma5_2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_1_edma5_2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_1_edma5_2_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_CM33SYNC - IPG DEBUG mask bit */
@@ -1822,24 +2152,24 @@ typedef struct {
 /*! sai4 - SAI4 debug */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33SYNC_sai4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33SYNC_sai4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33SYNC_sai4_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33SYNC_edma2_MASK (0x80000000U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33SYNC_edma2_SHIFT (31U)
-/*! edma2 - EDMA2 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33SYNC_edma2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33SYNC_edma2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33SYNC_edma2_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33SYNC_edma5_2_MASK (0x80000000U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33SYNC_edma5_2_SHIFT (31U)
+/*! edma5_2 - EDMA5_2 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33SYNC_edma5_2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33SYNC_edma5_2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33SYNC_edma5_2_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_2_CM33 - IPG DEBUG mask bit */
 /*! @{ */
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma3_MASK (0x1U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma3_SHIFT (0U)
-/*! edma3 - EDMA3 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma3_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma5_3_MASK (0x1U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma5_3_SHIFT (0U)
+/*! edma5_3 - edma5_3 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma5_3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma5_3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma5_3_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma4_MASK (0x2U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma4_SHIFT (1U)
-/*! edma4 - EDMA4 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma4_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma5_4_MASK (0x2U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma5_4_SHIFT (1U)
+/*! edma5_4 - EDMA5_4 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma5_4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma5_4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma5_4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_gpt2_MASK (0x4U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_gpt2_SHIFT (2U)
@@ -1940,15 +2270,15 @@ typedef struct {
 /*! @name IPG_DEBUG_2_CA55C0 - IPG DEBUG mask bit for CA55 core0 */
 /*! @{ */
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma3_MASK (0x1U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma3_SHIFT (0U)
-/*! edma3 - EDMA3 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma3_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma5_3_MASK (0x1U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma5_3_SHIFT (0U)
+/*! edma5_3 - EDMA5_3 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma5_3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma5_3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma5_3_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma4_MASK (0x2U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma4_SHIFT (1U)
-/*! edma4 - EDMA4 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma4_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma5_4_MASK (0x2U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma5_4_SHIFT (1U)
+/*! edma5_4 - EDMA5_4 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma5_4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma5_4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma5_4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_gpt2_MASK (0x4U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_gpt2_SHIFT (2U)
@@ -2049,15 +2379,15 @@ typedef struct {
 /*! @name IPG_DEBUG_2_CA55C1 - IPG DEBUG mask bit for CA55 core1 */
 /*! @{ */
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma3_MASK (0x1U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma3_SHIFT (0U)
-/*! edma3 - EDMA3 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma3_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma5_3_MASK (0x1U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma5_3_SHIFT (0U)
+/*! edma5_3 - EDMA5_3 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma5_3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma5_3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma5_3_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma4_MASK (0x2U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma4_SHIFT (1U)
-/*! edma4 - EDMA4 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma4_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma5_4_MASK (0x2U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma5_4_SHIFT (1U)
+/*! edma5_4 - EDMA5_4 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma5_4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma5_4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma5_4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_gpt2_MASK (0x4U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_gpt2_SHIFT (2U)
@@ -2158,15 +2488,15 @@ typedef struct {
 /*! @name IPG_DEBUG_2_CA55C2 - IPG DEBUG mask bit for CA55 core2 */
 /*! @{ */
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma3_MASK (0x1U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma3_SHIFT (0U)
-/*! edma3 - EDMA3 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma3_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma5_3_MASK (0x1U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma5_3_SHIFT (0U)
+/*! edma5_3 - EDMA5_3 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma5_3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma5_3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma5_3_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma4_MASK (0x2U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma4_SHIFT (1U)
-/*! edma4 - EDMA4 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma4_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma5_4_MASK (0x2U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma5_4_SHIFT (1U)
+/*! edma5_4 - EDMA5_4 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma5_4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma5_4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma5_4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_gpt2_MASK (0x4U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_gpt2_SHIFT (2U)
@@ -2267,15 +2597,15 @@ typedef struct {
 /*! @name IPG_DEBUG_2_CA55C3 - IPG DEBUG mask bit for CA55 core3 */
 /*! @{ */
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma3_MASK (0x1U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma3_SHIFT (0U)
-/*! edma3 - EDMA3 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma3_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma5_3_MASK (0x1U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma5_3_SHIFT (0U)
+/*! edma5_3 - EDMA5_3 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma5_3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma5_3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma5_3_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma4_MASK (0x2U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma4_SHIFT (1U)
-/*! edma4 - EDMA4 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma4_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma5_4_MASK (0x2U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma5_4_SHIFT (1U)
+/*! edma5_4 - EDMA5_4 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma5_4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma5_4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma5_4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_gpt2_MASK (0x4U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_gpt2_SHIFT (2U)
@@ -2376,15 +2706,15 @@ typedef struct {
 /*! @name IPG_DEBUG_2_CM7_0 - IPG DEBUG mask bit */
 /*! @{ */
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma3_MASK (0x1U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma3_SHIFT (0U)
-/*! edma3 - EDMA3 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma3_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma5_3_MASK (0x1U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma5_3_SHIFT (0U)
+/*! edma5_3 - EDMA5_3 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma5_3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma5_3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma5_3_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma4_MASK (0x2U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma4_SHIFT (1U)
-/*! edma4 - EDMA4 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma4_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma5_4_MASK (0x2U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma5_4_SHIFT (1U)
+/*! edma5_4 - EDMA5_4 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma5_4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma5_4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_edma5_4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_gpt2_MASK (0x4U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_0_gpt2_SHIFT (2U)
@@ -2485,15 +2815,15 @@ typedef struct {
 /*! @name IPG_DEBUG_2_CM7_1 - IPG DEBUG mask bit */
 /*! @{ */
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma3_MASK (0x1U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma3_SHIFT (0U)
-/*! edma3 - EDMA3 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma3_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma5_3_MASK (0x1U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma5_3_SHIFT (0U)
+/*! edma5_3 - EDMA5_3 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma5_3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma5_3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma5_3_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma4_MASK (0x2U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma4_SHIFT (1U)
-/*! edma4 - EDMA4 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma4_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma5_4_MASK (0x2U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma5_4_SHIFT (1U)
+/*! edma5_4 - EDMA5_4 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma5_4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma5_4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_edma5_4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_gpt2_MASK (0x4U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_1_gpt2_SHIFT (2U)
@@ -2594,15 +2924,15 @@ typedef struct {
 /*! @name IPG_DEBUG_2_CM33SYNC - IPG DEBUG mask bit */
 /*! @{ */
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma3_MASK (0x1U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma3_SHIFT (0U)
-/*! edma3 - EDMA3 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma3_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma5_3_MASK (0x1U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma5_3_SHIFT (0U)
+/*! edma5_3 - EDMA5_3 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma5_3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma5_3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma5_3_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma4_MASK (0x2U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma4_SHIFT (1U)
-/*! edma4 - EDMA4 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma4_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma5_4_MASK (0x2U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma5_4_SHIFT (1U)
+/*! edma5_4 - EDMA5_4 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma5_4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma5_4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_edma5_4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_gpt2_MASK (0x4U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33SYNC_gpt2_SHIFT (2U)
@@ -3629,7 +3959,7 @@ typedef struct {
 #define BLK_CTRL_WAKEUPMIX_HIPERFACE2_SYNC_CTL1_clk_source_sel(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_HIPERFACE2_SYNC_CTL1_clk_source_sel_SHIFT)) & BLK_CTRL_WAKEUPMIX_HIPERFACE2_SYNC_CTL1_clk_source_sel_MASK)
 /*! @} */
 
-/*! @name HIPERFACE2_SYNC_CTL2 - Hiperface #2 interrupt control register #2/2 */
+/*! @name HIPERFACE2_SYNC_CTL2 - Hiperface #2 sync source configuration register #2/2 */
 /*! @{ */
 
 #define BLK_CTRL_WAKEUPMIX_HIPERFACE2_SYNC_CTL2_stretch_width_MASK (0x1FFU)
@@ -3820,12 +4150,22 @@ typedef struct {
 
 #define BLK_CTRL_WAKEUPMIX_DIAG_ENCODER_MUX_SEL_diag_enc1_sel_MASK (0x3U)
 #define BLK_CTRL_WAKEUPMIX_DIAG_ENCODER_MUX_SEL_diag_enc1_sel_SHIFT (0U)
-/*! diag_enc1_sel - diag_enc1_sel */
+/*! diag_enc1_sel - diag_enc1_sel
+ *  0b00..Select hiperface1
+ *  0b01..Select endata21
+ *  0b10..Select endat3
+ *  0b11..Select biss
+ */
 #define BLK_CTRL_WAKEUPMIX_DIAG_ENCODER_MUX_SEL_diag_enc1_sel(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_DIAG_ENCODER_MUX_SEL_diag_enc1_sel_SHIFT)) & BLK_CTRL_WAKEUPMIX_DIAG_ENCODER_MUX_SEL_diag_enc1_sel_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_DIAG_ENCODER_MUX_SEL_diag_enc2_sel_MASK (0x30U)
 #define BLK_CTRL_WAKEUPMIX_DIAG_ENCODER_MUX_SEL_diag_enc2_sel_SHIFT (4U)
-/*! diag_enc2_sel - diag_enc2_sel */
+/*! diag_enc2_sel - diag_enc2_sel
+ *  0b00..Select hiperface2
+ *  0b01..Select endata22
+ *  0b10..Select endat3
+ *  0b11..Select biss
+ */
 #define BLK_CTRL_WAKEUPMIX_DIAG_ENCODER_MUX_SEL_diag_enc2_sel(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_DIAG_ENCODER_MUX_SEL_diag_enc2_sel_SHIFT)) & BLK_CTRL_WAKEUPMIX_DIAG_ENCODER_MUX_SEL_diag_enc2_sel_MASK)
 /*! @} */
 
@@ -3838,12 +4178,12 @@ typedef struct {
 #define BLK_CTRL_WAKEUPMIX_IO_MUXING_SELECT_CTRL_io_muxing_ctrl(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IO_MUXING_SELECT_CTRL_io_muxing_ctrl_SHIFT)) & BLK_CTRL_WAKEUPMIX_IO_MUXING_SELECT_CTRL_io_muxing_ctrl_MASK)
 /*! @} */
 
-/*! @name XBAR_AOI_WE - XBAR and AOI write protect register */
+/*! @name XBAR_AOI_WE - Reserved */
 /*! @{ */
 
 #define BLK_CTRL_WAKEUPMIX_XBAR_AOI_WE_WE_MASK   (0x1U)
 #define BLK_CTRL_WAKEUPMIX_XBAR_AOI_WE_WE_SHIFT  (0U)
-/*! WE - Register write enable bit of XBAR and AOI */
+/*! WE - Reserved */
 #define BLK_CTRL_WAKEUPMIX_XBAR_AOI_WE_WE(x)     (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_XBAR_AOI_WE_WE_SHIFT)) & BLK_CTRL_WAKEUPMIX_XBAR_AOI_WE_WE_MASK)
 /*! @} */
 
@@ -4308,22 +4648,28 @@ typedef struct {
 
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_rise_ctrl_int_b_MASK (0x1U)
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_rise_ctrl_int_b_SHIFT (0U)
-/*! biss_eot_rise_ctrl_int_b - biss_eot_rise_ctrl_int_b control interrupt signal from BISS */
+/*! biss_eot_rise_ctrl_int_b - biss_eot_rise_ctrl_int_b Control Interrupt Signal from BISS
+ *  0b0..Mask rising edge interrupt status bit for EOT signal
+ *  0b1..Not mask rising edge interrupt status bit for EOT signal
+ */
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_rise_ctrl_int_b(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_rise_ctrl_int_b_SHIFT)) & BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_rise_ctrl_int_b_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_fall_ctrl_int_b_MASK (0x2U)
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_fall_ctrl_int_b_SHIFT (1U)
-/*! biss_eot_fall_ctrl_int_b - biss_eot_fall_ctrl_int_b control interrupt signal from BISS */
+/*! biss_eot_fall_ctrl_int_b - biss_eot_fall_ctrl_int_b Control Interrupt Signal from BISS
+ *  0b0..Mask falling edge interrupt status bit for EOT signal
+ *  0b1..Not mask falling edge interrupt status bit for EOT signal
+ */
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_fall_ctrl_int_b(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_fall_ctrl_int_b_SHIFT)) & BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_fall_ctrl_int_b_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_rise_clr_int_b_MASK (0x4U)
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_rise_clr_int_b_SHIFT (2U)
-/*! biss_eot_rise_clr_int_b - biss_eot_rise_clr_int_b clear interrupt signal from BISS */
+/*! biss_eot_rise_clr_int_b - biss_eot_rise_clr_int_b Clear Interrupt Signal from BISS */
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_rise_clr_int_b(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_rise_clr_int_b_SHIFT)) & BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_rise_clr_int_b_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_fall_clr_int_b_MASK (0x8U)
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_fall_clr_int_b_SHIFT (3U)
-/*! biss_eot_fall_clr_int_b - biss_eot_fall_clr_int_b clear interrupt signal from BISS */
+/*! biss_eot_fall_clr_int_b - biss_eot_fall_clr_int_b Clear Interrupt Signal from BISS */
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_fall_clr_int_b(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_fall_clr_int_b_SHIFT)) & BLK_CTRL_WAKEUPMIX_BISS1_EOT_CTL_biss_eot_fall_clr_int_b_MASK)
 /*! @} */
 
@@ -4332,12 +4678,18 @@ typedef struct {
 
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_STATUS_biss_eot_rise_int_b_MASK (0x1U)
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_STATUS_biss_eot_rise_int_b_SHIFT (0U)
-/*! biss_eot_rise_int_b - biss_eot_rise_int_b level interrupt signal from BISS */
+/*! biss_eot_rise_int_b - Rising Interrupt Signal from BISS Status
+ *  0b0..Not at the rising edge of EOT that is at the end of the Frame.
+ *  0b1..At the rising edge of EOT that is at the end of the Frame.
+ */
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_STATUS_biss_eot_rise_int_b(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_BISS1_EOT_STATUS_biss_eot_rise_int_b_SHIFT)) & BLK_CTRL_WAKEUPMIX_BISS1_EOT_STATUS_biss_eot_rise_int_b_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_STATUS_biss_eot_fall_int_b_MASK (0x2U)
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_STATUS_biss_eot_fall_int_b_SHIFT (1U)
-/*! biss_eot_fall_int_b - biss_eot_fall_int_b level interrupt signal from BISS */
+/*! biss_eot_fall_int_b - Falling Interrupt Signal from BISS Status
+ *  0b0..Not at the falling edge of EOT that is at the end of the Frame.
+ *  0b1..At the falling edge of EOT that is at the end of the Frame.
+ */
 #define BLK_CTRL_WAKEUPMIX_BISS1_EOT_STATUS_biss_eot_fall_int_b(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_BISS1_EOT_STATUS_biss_eot_fall_int_b_SHIFT)) & BLK_CTRL_WAKEUPMIX_BISS1_EOT_STATUS_biss_eot_fall_int_b_MASK)
 /*! @} */
 
@@ -4346,82 +4698,82 @@ typedef struct {
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel0_MASK (0x7U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel0_SHIFT (0U)
-/*! sel0 - GPIO IOMUX selection */
+/*! sel0 - GPIO IOMUX selection (IO PAD GPIO_IO17) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel0_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel0_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr0_MASK (0x8U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr0_SHIFT (3U)
-/*! ovr0 - GPIO IOMUX selection override */
+/*! ovr0 - GPIO IOMUX selection override (IO PAD GPIO_IO17) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr0_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr0_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel1_MASK (0x70U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel1_SHIFT (4U)
-/*! sel1 - GPIO IOMUX selection */
+/*! sel1 - GPIO IOMUX selection (IO PAD GPIO_IO18) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr1_MASK (0x80U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr1_SHIFT (7U)
-/*! ovr1 - GPIO IOMUX selection override */
+/*! ovr1 - GPIO IOMUX selection override (IO PAD GPIO_IO18) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel2_MASK (0x700U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel2_SHIFT (8U)
-/*! sel2 - GPIO IOMUX selection */
+/*! sel2 - GPIO IOMUX selection (IO PAD GPIO_IO19) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr2_MASK (0x800U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr2_SHIFT (11U)
-/*! ovr2 - GPIO IOMUX selection override */
+/*! ovr2 - GPIO IOMUX selection override (IO PAD GPIO_IO19) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel3_MASK (0x7000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel3_SHIFT (12U)
-/*! sel3 - GPIO IOMUX selection */
+/*! sel3 - GPIO IOMUX selection (IO PAD GPIO_IO37) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr3_MASK (0x8000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr3_SHIFT (15U)
-/*! ovr3 - GPIO IOMUX selection override */
+/*! ovr3 - GPIO IOMUX selection override (IO PAD GPIO_IO37) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel4_MASK (0x70000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel4_SHIFT (16U)
-/*! sel4 - GPIO IOMUX selection */
+/*! sel4 - GPIO IOMUX selection (IO PAD GPIO_IO55) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr4_MASK (0x80000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr4_SHIFT (19U)
-/*! ovr4 - GPIO IOMUX selection override */
+/*! ovr4 - GPIO IOMUX selection override (IO PAD GPIO_IO55) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel5_MASK (0x700000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel5_SHIFT (20U)
-/*! sel5 - GPIO IOMUX selection */
+/*! sel5 - GPIO IOMUX selection (IO PAD GPIO_IO57) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr5_MASK (0x800000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr5_SHIFT (23U)
-/*! ovr5 - GPIO IOMUX selection override */
+/*! ovr5 - GPIO IOMUX selection override (IO PAD GPIO_IO57) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel6_MASK (0x7000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel6_SHIFT (24U)
-/*! sel6 - GPIO IOMUX selection */
+/*! sel6 - GPIO IOMUX selection (IO PAD CCM_CLKO3) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr6_MASK (0x8000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr6_SHIFT (27U)
-/*! ovr6 - GPIO IOMUX selection override */
+/*! ovr6 - GPIO IOMUX selection override (IO PAD CCM_CLKO3) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel7_MASK (0x70000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel7_SHIFT (28U)
-/*! sel7 - GPIO IOMUX selection */
+/*! sel7 - GPIO IOMUX selection (IO PAD ETH4_TXD2) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel7(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel7_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_sel7_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr7_MASK (0x80000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr7_SHIFT (31U)
-/*! ovr7 - GPIO IOMUX selection override */
+/*! ovr7 - GPIO IOMUX selection override (IO PAD ETH4_TXD2) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr7(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr7_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_0_ovr7_MASK)
 /*! @} */
 
@@ -4430,82 +4782,82 @@ typedef struct {
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel0_MASK (0x7U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel0_SHIFT (0U)
-/*! sel0 - GPIO IOMUX selection */
+/*! sel0 - GPIO IOMUX selection (IO PAD XSPI1_SS1_B) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel0_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel0_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr0_MASK (0x8U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr0_SHIFT (3U)
-/*! ovr0 - GPIO IOMUX selection override */
+/*! ovr0 - GPIO IOMUX selection override (IO PAD XSPI1_SS1_B) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr0_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr0_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel1_MASK (0x70U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel1_SHIFT (4U)
-/*! sel1 - GPIO IOMUX selection */
+/*! sel1 - GPIO IOMUX selection (IO PAD ETH4_MDIO_GPIO2) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr1_MASK (0x80U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr1_SHIFT (7U)
-/*! ovr1 - GPIO IOMUX selection override */
+/*! ovr1 - GPIO IOMUX selection override (IO PAD ETH4_MDIO_GPIO2) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel2_MASK (0x700U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel2_SHIFT (8U)
-/*! sel2 - GPIO IOMUX selection */
+/*! sel2 - GPIO IOMUX selection (IO PAD ETH4_RX_CTL) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr2_MASK (0x800U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr2_SHIFT (11U)
-/*! ovr2 - GPIO IOMUX selection override */
+/*! ovr2 - GPIO IOMUX selection override (IO PAD ETH4_RX_CTL) */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel3_MASK (0x7000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel3_SHIFT (12U)
-/*! sel3 - GPIO IOMUX selection */
+/*! sel3 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr3_MASK (0x8000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr3_SHIFT (15U)
-/*! ovr3 - GPIO IOMUX selection override */
+/*! ovr3 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel4_MASK (0x70000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel4_SHIFT (16U)
-/*! sel4 - GPIO IOMUX selection */
+/*! sel4 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr4_MASK (0x80000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr4_SHIFT (19U)
-/*! ovr4 - GPIO IOMUX selection override */
+/*! ovr4 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel5_MASK (0x700000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel5_SHIFT (20U)
-/*! sel5 - GPIO IOMUX selection */
+/*! sel5 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr5_MASK (0x800000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr5_SHIFT (23U)
-/*! ovr5 - GPIO IOMUX selection override */
+/*! ovr5 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel6_MASK (0x7000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel6_SHIFT (24U)
-/*! sel6 - GPIO IOMUX selection */
+/*! sel6 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr6_MASK (0x8000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr6_SHIFT (27U)
-/*! ovr6 - GPIO IOMUX selection override */
+/*! ovr6 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel7_MASK (0x70000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel7_SHIFT (28U)
-/*! sel7 - GPIO IOMUX selection */
+/*! sel7 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel7(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel7_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_sel7_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr7_MASK (0x80000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr7_SHIFT (31U)
-/*! ovr7 - GPIO IOMUX selection override */
+/*! ovr7 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr7(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr7_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_1_ovr7_MASK)
 /*! @} */
 
@@ -4514,82 +4866,82 @@ typedef struct {
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel0_MASK (0x7U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel0_SHIFT (0U)
-/*! sel0 - GPIO IOMUX selection */
+/*! sel0 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel0_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel0_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr0_MASK (0x8U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr0_SHIFT (3U)
-/*! ovr0 - GPIO IOMUX selection override */
+/*! ovr0 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr0_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr0_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel1_MASK (0x70U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel1_SHIFT (4U)
-/*! sel1 - GPIO IOMUX selection */
+/*! sel1 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr1_MASK (0x80U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr1_SHIFT (7U)
-/*! ovr1 - GPIO IOMUX selection override */
+/*! ovr1 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel2_MASK (0x700U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel2_SHIFT (8U)
-/*! sel2 - GPIO IOMUX selection */
+/*! sel2 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr2_MASK (0x800U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr2_SHIFT (11U)
-/*! ovr2 - GPIO IOMUX selection override */
+/*! ovr2 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel3_MASK (0x7000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel3_SHIFT (12U)
-/*! sel3 - GPIO IOMUX selection */
+/*! sel3 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr3_MASK (0x8000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr3_SHIFT (15U)
-/*! ovr3 - GPIO IOMUX selection override */
+/*! ovr3 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel4_MASK (0x70000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel4_SHIFT (16U)
-/*! sel4 - GPIO IOMUX selection */
+/*! sel4 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr4_MASK (0x80000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr4_SHIFT (19U)
-/*! ovr4 - GPIO IOMUX selection override */
+/*! ovr4 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel5_MASK (0x700000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel5_SHIFT (20U)
-/*! sel5 - GPIO IOMUX selection */
+/*! sel5 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr5_MASK (0x800000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr5_SHIFT (23U)
-/*! ovr5 - GPIO IOMUX selection override */
+/*! ovr5 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel6_MASK (0x7000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel6_SHIFT (24U)
-/*! sel6 - GPIO IOMUX selection */
+/*! sel6 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr6_MASK (0x8000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr6_SHIFT (27U)
-/*! ovr6 - GPIO IOMUX selection override */
+/*! ovr6 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel7_MASK (0x70000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel7_SHIFT (28U)
-/*! sel7 - GPIO IOMUX selection */
+/*! sel7 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel7(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel7_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_sel7_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr7_MASK (0x80000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr7_SHIFT (31U)
-/*! ovr7 - GPIO IOMUX selection override */
+/*! ovr7 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr7(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr7_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_2_ovr7_MASK)
 /*! @} */
 
@@ -4598,82 +4950,82 @@ typedef struct {
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel0_MASK (0x7U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel0_SHIFT (0U)
-/*! sel0 - GPIO IOMUX selection */
+/*! sel0 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel0_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel0_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr0_MASK (0x8U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr0_SHIFT (3U)
-/*! ovr0 - GPIO IOMUX selection override */
+/*! ovr0 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr0_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr0_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel1_MASK (0x70U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel1_SHIFT (4U)
-/*! sel1 - GPIO IOMUX selection */
+/*! sel1 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr1_MASK (0x80U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr1_SHIFT (7U)
-/*! ovr1 - GPIO IOMUX selection override */
+/*! ovr1 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel2_MASK (0x700U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel2_SHIFT (8U)
-/*! sel2 - GPIO IOMUX selection */
+/*! sel2 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr2_MASK (0x800U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr2_SHIFT (11U)
-/*! ovr2 - GPIO IOMUX selection override */
+/*! ovr2 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel3_MASK (0x7000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel3_SHIFT (12U)
-/*! sel3 - GPIO IOMUX selection */
+/*! sel3 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr3_MASK (0x8000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr3_SHIFT (15U)
-/*! ovr3 - GPIO IOMUX selection override */
+/*! ovr3 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel4_MASK (0x70000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel4_SHIFT (16U)
-/*! sel4 - GPIO IOMUX selection */
+/*! sel4 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr4_MASK (0x80000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr4_SHIFT (19U)
-/*! ovr4 - GPIO IOMUX selection override */
+/*! ovr4 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel5_MASK (0x700000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel5_SHIFT (20U)
-/*! sel5 - GPIO IOMUX selection */
+/*! sel5 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr5_MASK (0x800000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr5_SHIFT (23U)
-/*! ovr5 - GPIO IOMUX selection override */
+/*! ovr5 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel6_MASK (0x7000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel6_SHIFT (24U)
-/*! sel6 - GPIO IOMUX selection */
+/*! sel6 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr6_MASK (0x8000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr6_SHIFT (27U)
-/*! ovr6 - GPIO IOMUX selection override */
+/*! ovr6 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel7_MASK (0x70000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel7_SHIFT (28U)
-/*! sel7 - GPIO IOMUX selection */
+/*! sel7 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel7(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel7_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_sel7_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr7_MASK (0x80000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr7_SHIFT (31U)
-/*! ovr7 - GPIO IOMUX selection override */
+/*! ovr7 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr7(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr7_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_3_ovr7_MASK)
 /*! @} */
 
@@ -4682,82 +5034,82 @@ typedef struct {
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel0_MASK (0x7U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel0_SHIFT (0U)
-/*! sel0 - GPIO IOMUX selection */
+/*! sel0 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel0_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel0_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr0_MASK (0x8U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr0_SHIFT (3U)
-/*! ovr0 - GPIO IOMUX selection override */
+/*! ovr0 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr0_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr0_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel1_MASK (0x70U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel1_SHIFT (4U)
-/*! sel1 - GPIO IOMUX selection */
+/*! sel1 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr1_MASK (0x80U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr1_SHIFT (7U)
-/*! ovr1 - GPIO IOMUX selection override */
+/*! ovr1 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel2_MASK (0x700U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel2_SHIFT (8U)
-/*! sel2 - GPIO IOMUX selection */
+/*! sel2 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr2_MASK (0x800U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr2_SHIFT (11U)
-/*! ovr2 - GPIO IOMUX selection override */
+/*! ovr2 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel3_MASK (0x7000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel3_SHIFT (12U)
-/*! sel3 - GPIO IOMUX selection */
+/*! sel3 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr3_MASK (0x8000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr3_SHIFT (15U)
-/*! ovr3 - GPIO IOMUX selection override */
+/*! ovr3 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel4_MASK (0x70000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel4_SHIFT (16U)
-/*! sel4 - GPIO IOMUX selection */
+/*! sel4 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr4_MASK (0x80000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr4_SHIFT (19U)
-/*! ovr4 - GPIO IOMUX selection override */
+/*! ovr4 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel5_MASK (0x700000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel5_SHIFT (20U)
-/*! sel5 - GPIO IOMUX selection */
+/*! sel5 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr5_MASK (0x800000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr5_SHIFT (23U)
-/*! ovr5 - GPIO IOMUX selection override */
+/*! ovr5 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel6_MASK (0x7000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel6_SHIFT (24U)
-/*! sel6 - GPIO IOMUX selection */
+/*! sel6 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr6_MASK (0x8000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr6_SHIFT (27U)
-/*! ovr6 - GPIO IOMUX selection override */
+/*! ovr6 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel7_MASK (0x70000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel7_SHIFT (28U)
-/*! sel7 - GPIO IOMUX selection */
+/*! sel7 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel7(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel7_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_sel7_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr7_MASK (0x80000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr7_SHIFT (31U)
-/*! ovr7 - GPIO IOMUX selection override */
+/*! ovr7 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr7(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr7_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_4_ovr7_MASK)
 /*! @} */
 
@@ -4766,82 +5118,82 @@ typedef struct {
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel0_MASK (0x7U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel0_SHIFT (0U)
-/*! sel0 - GPIO IOMUX selection */
+/*! sel0 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel0_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel0_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr0_MASK (0x8U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr0_SHIFT (3U)
-/*! ovr0 - GPIO IOMUX selection override */
+/*! ovr0 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr0_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr0_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel1_MASK (0x70U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel1_SHIFT (4U)
-/*! sel1 - GPIO IOMUX selection */
+/*! sel1 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr1_MASK (0x80U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr1_SHIFT (7U)
-/*! ovr1 - GPIO IOMUX selection override */
+/*! ovr1 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel2_MASK (0x700U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel2_SHIFT (8U)
-/*! sel2 - GPIO IOMUX selection */
+/*! sel2 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr2_MASK (0x800U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr2_SHIFT (11U)
-/*! ovr2 - GPIO IOMUX selection override */
+/*! ovr2 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel3_MASK (0x7000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel3_SHIFT (12U)
-/*! sel3 - GPIO IOMUX selection */
+/*! sel3 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr3_MASK (0x8000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr3_SHIFT (15U)
-/*! ovr3 - GPIO IOMUX selection override */
+/*! ovr3 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel4_MASK (0x70000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel4_SHIFT (16U)
-/*! sel4 - GPIO IOMUX selection */
+/*! sel4 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr4_MASK (0x80000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr4_SHIFT (19U)
-/*! ovr4 - GPIO IOMUX selection override */
+/*! ovr4 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel5_MASK (0x700000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel5_SHIFT (20U)
-/*! sel5 - GPIO IOMUX selection */
+/*! sel5 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr5_MASK (0x800000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr5_SHIFT (23U)
-/*! ovr5 - GPIO IOMUX selection override */
+/*! ovr5 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel6_MASK (0x7000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel6_SHIFT (24U)
-/*! sel6 - GPIO IOMUX selection */
+/*! sel6 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr6_MASK (0x8000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr6_SHIFT (27U)
-/*! ovr6 - GPIO IOMUX selection override */
+/*! ovr6 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel7_MASK (0x70000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel7_SHIFT (28U)
-/*! sel7 - GPIO IOMUX selection */
+/*! sel7 - GPIO IOMUX selection - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel7(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel7_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_sel7_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr7_MASK (0x80000000U)
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr7_SHIFT (31U)
-/*! ovr7 - GPIO IOMUX selection override */
+/*! ovr7 - GPIO IOMUX selection override - NOT USED */
 #define BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr7(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr7_SHIFT)) & BLK_CTRL_WAKEUPMIX_IOMUX_GPIO_CTRL_5_ovr7_MASK)
 /*! @} */
 

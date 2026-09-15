@@ -1,10 +1,220 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX94398AVKE_ca55
-**                          MIMX94398AVKE_cm33_core0
-**                          MIMX94398AVKE_cm33_core1
-**                          MIMX94398AVKE_cm7_core0
-**                          MIMX94398AVKE_cm7_core1
+**     Processors:          MIMX94115CVMM_ca55
+**                          MIMX94115CVMM_cm33_core0
+**                          MIMX94115CVMM_cm33_core1
+**                          MIMX94115CVMM_cm7_core0
+**                          MIMX94115CVMM_cm7_core1
+**                          MIMX94115XVKM_ca55
+**                          MIMX94115XVKM_cm33_core0
+**                          MIMX94115XVKM_cm33_core1
+**                          MIMX94115XVKM_cm7_core0
+**                          MIMX94115XVKM_cm7_core1
+**                          MIMX94115XVMM_ca55
+**                          MIMX94115XVMM_cm33_core0
+**                          MIMX94115XVMM_cm33_core1
+**                          MIMX94115XVMM_cm7_core0
+**                          MIMX94115XVMM_cm7_core1
+**                          MIMX94135CVMM_ca55
+**                          MIMX94135CVMM_cm33_core0
+**                          MIMX94135CVMM_cm33_core1
+**                          MIMX94135CVMM_cm7_core0
+**                          MIMX94135CVMM_cm7_core1
+**                          MIMX94135XVKM_ca55
+**                          MIMX94135XVKM_cm33_core0
+**                          MIMX94135XVKM_cm33_core1
+**                          MIMX94135XVKM_cm7_core0
+**                          MIMX94135XVKM_cm7_core1
+**                          MIMX94135XVMM_ca55
+**                          MIMX94135XVMM_cm33_core0
+**                          MIMX94135XVMM_cm33_core1
+**                          MIMX94135XVMM_cm7_core0
+**                          MIMX94135XVMM_cm7_core1
+**                          MIMX94155CVMM_ca55
+**                          MIMX94155CVMM_cm33_core0
+**                          MIMX94155CVMM_cm33_core1
+**                          MIMX94155CVMM_cm7_core0
+**                          MIMX94155CVMM_cm7_core1
+**                          MIMX94155XVKM_ca55
+**                          MIMX94155XVKM_cm33_core0
+**                          MIMX94155XVKM_cm33_core1
+**                          MIMX94155XVKM_cm7_core0
+**                          MIMX94155XVKM_cm7_core1
+**                          MIMX94155XVMM_ca55
+**                          MIMX94155XVMM_cm33_core0
+**                          MIMX94155XVMM_cm33_core1
+**                          MIMX94155XVMM_cm7_core0
+**                          MIMX94155XVMM_cm7_core1
+**                          MIMX94175CVMM_ca55
+**                          MIMX94175CVMM_cm33_core0
+**                          MIMX94175CVMM_cm33_core1
+**                          MIMX94175CVMM_cm7_core0
+**                          MIMX94175CVMM_cm7_core1
+**                          MIMX94175XVKM_ca55
+**                          MIMX94175XVKM_cm33_core0
+**                          MIMX94175XVKM_cm33_core1
+**                          MIMX94175XVKM_cm7_core0
+**                          MIMX94175XVKM_cm7_core1
+**                          MIMX94175XVMM_ca55
+**                          MIMX94175XVMM_cm33_core0
+**                          MIMX94175XVMM_cm33_core1
+**                          MIMX94175XVMM_cm7_core0
+**                          MIMX94175XVMM_cm7_core1
+**                          MIMX94185CVMM_ca55
+**                          MIMX94185CVMM_cm33_core0
+**                          MIMX94185CVMM_cm33_core1
+**                          MIMX94185CVMM_cm7_core0
+**                          MIMX94185CVMM_cm7_core1
+**                          MIMX94214CVMM_ca55
+**                          MIMX94214CVMM_cm33_core0
+**                          MIMX94214CVMM_cm33_core1
+**                          MIMX94214CVMM_cm7_core0
+**                          MIMX94214CVMM_cm7_core1
+**                          MIMX94214XVKM_ca55
+**                          MIMX94214XVKM_cm33_core0
+**                          MIMX94214XVKM_cm33_core1
+**                          MIMX94214XVKM_cm7_core0
+**                          MIMX94214XVKM_cm7_core1
+**                          MIMX94214XVMM_ca55
+**                          MIMX94214XVMM_cm33_core0
+**                          MIMX94214XVMM_cm33_core1
+**                          MIMX94214XVMM_cm7_core0
+**                          MIMX94214XVMM_cm7_core1
+**                          MIMX94215CVMM_ca55
+**                          MIMX94215CVMM_cm33_core0
+**                          MIMX94215CVMM_cm33_core1
+**                          MIMX94215CVMM_cm7_core0
+**                          MIMX94215CVMM_cm7_core1
+**                          MIMX94215XVKM_ca55
+**                          MIMX94215XVKM_cm33_core0
+**                          MIMX94215XVKM_cm33_core1
+**                          MIMX94215XVKM_cm7_core0
+**                          MIMX94215XVKM_cm7_core1
+**                          MIMX94215XVMM_ca55
+**                          MIMX94215XVMM_cm33_core0
+**                          MIMX94215XVMM_cm33_core1
+**                          MIMX94215XVMM_cm7_core0
+**                          MIMX94215XVMM_cm7_core1
+**                          MIMX94235CVMM_ca55
+**                          MIMX94235CVMM_cm33_core0
+**                          MIMX94235CVMM_cm33_core1
+**                          MIMX94235CVMM_cm7_core0
+**                          MIMX94235CVMM_cm7_core1
+**                          MIMX94255CVMM_ca55
+**                          MIMX94255CVMM_cm33_core0
+**                          MIMX94255CVMM_cm33_core1
+**                          MIMX94255CVMM_cm7_core0
+**                          MIMX94255CVMM_cm7_core1
+**                          MIMX94275CVMM_ca55
+**                          MIMX94275CVMM_cm33_core0
+**                          MIMX94275CVMM_cm33_core1
+**                          MIMX94275CVMM_cm7_core0
+**                          MIMX94275CVMM_cm7_core1
+**                          MIMX94285CVMM_ca55
+**                          MIMX94285CVMM_cm33_core0
+**                          MIMX94285CVMM_cm33_core1
+**                          MIMX94285CVMM_cm7_core0
+**                          MIMX94285CVMM_cm7_core1
+**                          MIMX94294XVKM_ca55
+**                          MIMX94294XVKM_cm33_core0
+**                          MIMX94294XVKM_cm33_core1
+**                          MIMX94294XVKM_cm7_core0
+**                          MIMX94294XVKM_cm7_core1
+**                          MIMX94294XVMM_ca55
+**                          MIMX94294XVMM_cm33_core0
+**                          MIMX94294XVMM_cm33_core1
+**                          MIMX94294XVMM_cm7_core0
+**                          MIMX94294XVMM_cm7_core1
+**                          MIMX94295AVKM_ca55
+**                          MIMX94295AVKM_cm33_core0
+**                          MIMX94295AVKM_cm33_core1
+**                          MIMX94295AVKM_cm7_core0
+**                          MIMX94295AVKM_cm7_core1
+**                          MIMX94295AVMJ_ca55
+**                          MIMX94295AVMJ_cm33_core0
+**                          MIMX94295AVMJ_cm33_core1
+**                          MIMX94295AVMJ_cm7_core0
+**                          MIMX94295AVMJ_cm7_core1
+**                          MIMX94295CVMJ_ca55
+**                          MIMX94295CVMJ_cm33_core0
+**                          MIMX94295CVMJ_cm33_core1
+**                          MIMX94295CVMJ_cm7_core0
+**                          MIMX94295CVMJ_cm7_core1
+**                          MIMX94295XVKJ_ca55
+**                          MIMX94295XVKJ_cm33_core0
+**                          MIMX94295XVKJ_cm33_core1
+**                          MIMX94295XVKJ_cm7_core0
+**                          MIMX94295XVKJ_cm7_core1
+**                          MIMX94295XVMM_ca55
+**                          MIMX94295XVMM_cm33_core0
+**                          MIMX94295XVMM_cm33_core1
+**                          MIMX94295XVMM_cm7_core0
+**                          MIMX94295XVMM_cm7_core1
+**                          MIMX94316XVMM_ca55
+**                          MIMX94316XVMM_cm33_core0
+**                          MIMX94316XVMM_cm33_core1
+**                          MIMX94316XVMM_cm7_core0
+**                          MIMX94316XVMM_cm7_core1
+**                          MIMX94318XVMM_ca55
+**                          MIMX94318XVMM_cm33_core0
+**                          MIMX94318XVMM_cm33_core1
+**                          MIMX94318XVMM_cm7_core0
+**                          MIMX94318XVMM_cm7_core1
+**                          MIMX94376AVKM_ca55
+**                          MIMX94376AVKM_cm33_core0
+**                          MIMX94376AVKM_cm33_core1
+**                          MIMX94376AVKM_cm7_core0
+**                          MIMX94376AVKM_cm7_core1
+**                          MIMX94378AVKM_ca55
+**                          MIMX94378AVKM_cm33_core0
+**                          MIMX94378AVKM_cm33_core1
+**                          MIMX94378AVKM_cm7_core0
+**                          MIMX94378AVKM_cm7_core1
+**                          MIMX94386AVKM_ca55
+**                          MIMX94386AVKM_cm33_core0
+**                          MIMX94386AVKM_cm33_core1
+**                          MIMX94386AVKM_cm7_core0
+**                          MIMX94386AVKM_cm7_core1
+**                          MIMX94386XVMM_ca55
+**                          MIMX94386XVMM_cm33_core0
+**                          MIMX94386XVMM_cm33_core1
+**                          MIMX94386XVMM_cm7_core0
+**                          MIMX94386XVMM_cm7_core1
+**                          MIMX94388AVKM_ca55
+**                          MIMX94388AVKM_cm33_core0
+**                          MIMX94388AVKM_cm33_core1
+**                          MIMX94388AVKM_cm7_core0
+**                          MIMX94388AVKM_cm7_core1
+**                          MIMX94388AVMM_ca55
+**                          MIMX94388AVMM_cm33_core0
+**                          MIMX94388AVMM_cm33_core1
+**                          MIMX94388AVMM_cm7_core0
+**                          MIMX94388AVMM_cm7_core1
+**                          MIMX94388XVMM_ca55
+**                          MIMX94388XVMM_cm33_core0
+**                          MIMX94388XVMM_cm33_core1
+**                          MIMX94388XVMM_cm7_core0
+**                          MIMX94388XVMM_cm7_core1
+**                          MIMX94396AVKJ_ca55
+**                          MIMX94396AVKJ_cm33_core0
+**                          MIMX94396AVKJ_cm33_core1
+**                          MIMX94396AVKJ_cm7_core0
+**                          MIMX94396AVKJ_cm7_core1
+**                          MIMX94396AVKM_ca55
+**                          MIMX94396AVKM_cm33_core0
+**                          MIMX94396AVKM_cm33_core1
+**                          MIMX94396AVKM_cm7_core0
+**                          MIMX94396AVKM_cm7_core1
+**                          MIMX94396AVMJ_ca55
+**                          MIMX94396AVMJ_cm33_core0
+**                          MIMX94396AVMJ_cm33_core1
+**                          MIMX94396AVMJ_cm7_core0
+**                          MIMX94396AVMJ_cm7_core1
+**                          MIMX94396XVMM_ca55
+**                          MIMX94396XVMM_cm33_core0
+**                          MIMX94396XVMM_cm33_core1
+**                          MIMX94396XVMM_cm7_core0
+**                          MIMX94396XVMM_cm7_core1
 **                          MIMX94398AVKJ_ca55
 **                          MIMX94398AVKJ_cm33_core0
 **                          MIMX94398AVKJ_cm33_core1
@@ -15,11 +225,6 @@
 **                          MIMX94398AVKM_cm33_core1
 **                          MIMX94398AVKM_cm7_core0
 **                          MIMX94398AVKM_cm7_core1
-**                          MIMX94398AVME_ca55
-**                          MIMX94398AVME_cm33_core0
-**                          MIMX94398AVME_cm33_core1
-**                          MIMX94398AVME_cm7_core0
-**                          MIMX94398AVME_cm7_core1
 **                          MIMX94398AVMJ_ca55
 **                          MIMX94398AVMJ_cm33_core0
 **                          MIMX94398AVMJ_cm33_core1
@@ -30,91 +235,16 @@
 **                          MIMX94398AVMM_cm33_core1
 **                          MIMX94398AVMM_cm7_core0
 **                          MIMX94398AVMM_cm7_core1
-**                          MIMX94398CVKE_ca55
-**                          MIMX94398CVKE_cm33_core0
-**                          MIMX94398CVKE_cm33_core1
-**                          MIMX94398CVKE_cm7_core0
-**                          MIMX94398CVKE_cm7_core1
-**                          MIMX94398CVKJ_ca55
-**                          MIMX94398CVKJ_cm33_core0
-**                          MIMX94398CVKJ_cm33_core1
-**                          MIMX94398CVKJ_cm7_core0
-**                          MIMX94398CVKJ_cm7_core1
-**                          MIMX94398CVKM_ca55
-**                          MIMX94398CVKM_cm33_core0
-**                          MIMX94398CVKM_cm33_core1
-**                          MIMX94398CVKM_cm7_core0
-**                          MIMX94398CVKM_cm7_core1
-**                          MIMX94398CVME_ca55
-**                          MIMX94398CVME_cm33_core0
-**                          MIMX94398CVME_cm33_core1
-**                          MIMX94398CVME_cm7_core0
-**                          MIMX94398CVME_cm7_core1
-**                          MIMX94398CVMJ_ca55
-**                          MIMX94398CVMJ_cm33_core0
-**                          MIMX94398CVMJ_cm33_core1
-**                          MIMX94398CVMJ_cm7_core0
-**                          MIMX94398CVMJ_cm7_core1
-**                          MIMX94398CVMM_ca55
-**                          MIMX94398CVMM_cm33_core0
-**                          MIMX94398CVMM_cm33_core1
-**                          MIMX94398CVMM_cm7_core0
-**                          MIMX94398CVMM_cm7_core1
-**                          MIMX94398DVKE_ca55
-**                          MIMX94398DVKE_cm33_core0
-**                          MIMX94398DVKE_cm33_core1
-**                          MIMX94398DVKE_cm7_core0
-**                          MIMX94398DVKE_cm7_core1
-**                          MIMX94398DVKJ_ca55
-**                          MIMX94398DVKJ_cm33_core0
-**                          MIMX94398DVKJ_cm33_core1
-**                          MIMX94398DVKJ_cm7_core0
-**                          MIMX94398DVKJ_cm7_core1
 **                          MIMX94398DVKM_ca55
 **                          MIMX94398DVKM_cm33_core0
 **                          MIMX94398DVKM_cm33_core1
 **                          MIMX94398DVKM_cm7_core0
 **                          MIMX94398DVKM_cm7_core1
-**                          MIMX94398DVME_ca55
-**                          MIMX94398DVME_cm33_core0
-**                          MIMX94398DVME_cm33_core1
-**                          MIMX94398DVME_cm7_core0
-**                          MIMX94398DVME_cm7_core1
-**                          MIMX94398DVMJ_ca55
-**                          MIMX94398DVMJ_cm33_core0
-**                          MIMX94398DVMJ_cm33_core1
-**                          MIMX94398DVMJ_cm7_core0
-**                          MIMX94398DVMJ_cm7_core1
 **                          MIMX94398DVMM_ca55
 **                          MIMX94398DVMM_cm33_core0
 **                          MIMX94398DVMM_cm33_core1
 **                          MIMX94398DVMM_cm7_core0
 **                          MIMX94398DVMM_cm7_core1
-**                          MIMX94398XVKE_ca55
-**                          MIMX94398XVKE_cm33_core0
-**                          MIMX94398XVKE_cm33_core1
-**                          MIMX94398XVKE_cm7_core0
-**                          MIMX94398XVKE_cm7_core1
-**                          MIMX94398XVKJ_ca55
-**                          MIMX94398XVKJ_cm33_core0
-**                          MIMX94398XVKJ_cm33_core1
-**                          MIMX94398XVKJ_cm7_core0
-**                          MIMX94398XVKJ_cm7_core1
-**                          MIMX94398XVKM_ca55
-**                          MIMX94398XVKM_cm33_core0
-**                          MIMX94398XVKM_cm33_core1
-**                          MIMX94398XVKM_cm7_core0
-**                          MIMX94398XVKM_cm7_core1
-**                          MIMX94398XVME_ca55
-**                          MIMX94398XVME_cm33_core0
-**                          MIMX94398XVME_cm33_core1
-**                          MIMX94398XVME_cm7_core0
-**                          MIMX94398XVME_cm7_core1
-**                          MIMX94398XVMJ_ca55
-**                          MIMX94398XVMJ_cm33_core0
-**                          MIMX94398XVMJ_cm33_core1
-**                          MIMX94398XVMJ_cm7_core0
-**                          MIMX94398XVMJ_cm7_core1
 **                          MIMX94398XVMM_ca55
 **                          MIMX94398XVMM_cm33_core0
 **                          MIMX94398XVMM_cm33_core1
@@ -122,13 +252,13 @@
 **                          MIMX94398XVMM_cm7_core1
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250721
+**     Build:               b260804
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PLL
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -176,15 +306,215 @@
 #if !defined(PERI_PLL_H_)
 #define PERI_PLL_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX94398AVKE_ca55) || defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVME_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398CVKE_ca55) || defined(CPU_MIMX94398CVKJ_ca55) || defined(CPU_MIMX94398CVKM_ca55) || defined(CPU_MIMX94398CVME_ca55) || defined(CPU_MIMX94398CVMJ_ca55) || defined(CPU_MIMX94398CVMM_ca55) || defined(CPU_MIMX94398DVKE_ca55) || defined(CPU_MIMX94398DVKJ_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVME_ca55) || defined(CPU_MIMX94398DVMJ_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVKE_ca55) || defined(CPU_MIMX94398XVKJ_ca55) || defined(CPU_MIMX94398XVKM_ca55) || defined(CPU_MIMX94398XVME_ca55) || defined(CPU_MIMX94398XVMJ_ca55) || defined(CPU_MIMX94398XVMM_ca55))
+#if (defined(CPU_MIMX94115CVMM_ca55) || defined(CPU_MIMX94115XVKM_ca55) || defined(CPU_MIMX94115XVMM_ca55))
+#include "MIMX94115_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm33_core0) || defined(CPU_MIMX94115XVKM_cm33_core0) || defined(CPU_MIMX94115XVMM_cm33_core0))
+#include "MIMX94115_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm33_core1) || defined(CPU_MIMX94115XVKM_cm33_core1) || defined(CPU_MIMX94115XVMM_cm33_core1))
+#include "MIMX94115_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm7_core0) || defined(CPU_MIMX94115XVKM_cm7_core0) || defined(CPU_MIMX94115XVMM_cm7_core0))
+#include "MIMX94115_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm7_core1) || defined(CPU_MIMX94115XVKM_cm7_core1) || defined(CPU_MIMX94115XVMM_cm7_core1))
+#include "MIMX94115_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_ca55) || defined(CPU_MIMX94135XVKM_ca55) || defined(CPU_MIMX94135XVMM_ca55))
+#include "MIMX94135_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm33_core0) || defined(CPU_MIMX94135XVKM_cm33_core0) || defined(CPU_MIMX94135XVMM_cm33_core0))
+#include "MIMX94135_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm33_core1) || defined(CPU_MIMX94135XVKM_cm33_core1) || defined(CPU_MIMX94135XVMM_cm33_core1))
+#include "MIMX94135_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm7_core0) || defined(CPU_MIMX94135XVKM_cm7_core0) || defined(CPU_MIMX94135XVMM_cm7_core0))
+#include "MIMX94135_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm7_core1) || defined(CPU_MIMX94135XVKM_cm7_core1) || defined(CPU_MIMX94135XVMM_cm7_core1))
+#include "MIMX94135_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_ca55) || defined(CPU_MIMX94155XVKM_ca55) || defined(CPU_MIMX94155XVMM_ca55))
+#include "MIMX94155_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm33_core0) || defined(CPU_MIMX94155XVKM_cm33_core0) || defined(CPU_MIMX94155XVMM_cm33_core0))
+#include "MIMX94155_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm33_core1) || defined(CPU_MIMX94155XVKM_cm33_core1) || defined(CPU_MIMX94155XVMM_cm33_core1))
+#include "MIMX94155_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm7_core0) || defined(CPU_MIMX94155XVKM_cm7_core0) || defined(CPU_MIMX94155XVMM_cm7_core0))
+#include "MIMX94155_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm7_core1) || defined(CPU_MIMX94155XVKM_cm7_core1) || defined(CPU_MIMX94155XVMM_cm7_core1))
+#include "MIMX94155_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_ca55) || defined(CPU_MIMX94175XVKM_ca55) || defined(CPU_MIMX94175XVMM_ca55))
+#include "MIMX94175_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm33_core0) || defined(CPU_MIMX94175XVKM_cm33_core0) || defined(CPU_MIMX94175XVMM_cm33_core0))
+#include "MIMX94175_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm33_core1) || defined(CPU_MIMX94175XVKM_cm33_core1) || defined(CPU_MIMX94175XVMM_cm33_core1))
+#include "MIMX94175_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm7_core0) || defined(CPU_MIMX94175XVKM_cm7_core0) || defined(CPU_MIMX94175XVMM_cm7_core0))
+#include "MIMX94175_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm7_core1) || defined(CPU_MIMX94175XVKM_cm7_core1) || defined(CPU_MIMX94175XVMM_cm7_core1))
+#include "MIMX94175_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_ca55))
+#include "MIMX94185_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm33_core0))
+#include "MIMX94185_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm33_core1))
+#include "MIMX94185_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm7_core0))
+#include "MIMX94185_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm7_core1))
+#include "MIMX94185_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_ca55) || defined(CPU_MIMX94214XVKM_ca55) || defined(CPU_MIMX94214XVMM_ca55))
+#include "MIMX94214_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm33_core0) || defined(CPU_MIMX94214XVKM_cm33_core0) || defined(CPU_MIMX94214XVMM_cm33_core0))
+#include "MIMX94214_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm33_core1) || defined(CPU_MIMX94214XVKM_cm33_core1) || defined(CPU_MIMX94214XVMM_cm33_core1))
+#include "MIMX94214_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm7_core0) || defined(CPU_MIMX94214XVKM_cm7_core0) || defined(CPU_MIMX94214XVMM_cm7_core0))
+#include "MIMX94214_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm7_core1) || defined(CPU_MIMX94214XVKM_cm7_core1) || defined(CPU_MIMX94214XVMM_cm7_core1))
+#include "MIMX94214_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_ca55) || defined(CPU_MIMX94215XVKM_ca55) || defined(CPU_MIMX94215XVMM_ca55))
+#include "MIMX94215_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm33_core0) || defined(CPU_MIMX94215XVKM_cm33_core0) || defined(CPU_MIMX94215XVMM_cm33_core0))
+#include "MIMX94215_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm33_core1) || defined(CPU_MIMX94215XVKM_cm33_core1) || defined(CPU_MIMX94215XVMM_cm33_core1))
+#include "MIMX94215_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm7_core0) || defined(CPU_MIMX94215XVKM_cm7_core0) || defined(CPU_MIMX94215XVMM_cm7_core0))
+#include "MIMX94215_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm7_core1) || defined(CPU_MIMX94215XVKM_cm7_core1) || defined(CPU_MIMX94215XVMM_cm7_core1))
+#include "MIMX94215_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_ca55))
+#include "MIMX94235_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm33_core0))
+#include "MIMX94235_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm33_core1))
+#include "MIMX94235_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm7_core0))
+#include "MIMX94235_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm7_core1))
+#include "MIMX94235_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_ca55))
+#include "MIMX94255_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm33_core0))
+#include "MIMX94255_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm33_core1))
+#include "MIMX94255_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm7_core0))
+#include "MIMX94255_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm7_core1))
+#include "MIMX94255_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_ca55))
+#include "MIMX94275_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm33_core0))
+#include "MIMX94275_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm33_core1))
+#include "MIMX94275_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm7_core0))
+#include "MIMX94275_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm7_core1))
+#include "MIMX94275_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_ca55))
+#include "MIMX94285_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm33_core0))
+#include "MIMX94285_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm33_core1))
+#include "MIMX94285_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm7_core0))
+#include "MIMX94285_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm7_core1))
+#include "MIMX94285_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_ca55) || defined(CPU_MIMX94294XVMM_ca55))
+#include "MIMX94294_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm33_core0) || defined(CPU_MIMX94294XVMM_cm33_core0))
+#include "MIMX94294_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm33_core1) || defined(CPU_MIMX94294XVMM_cm33_core1))
+#include "MIMX94294_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm7_core0) || defined(CPU_MIMX94294XVMM_cm7_core0))
+#include "MIMX94294_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm7_core1) || defined(CPU_MIMX94294XVMM_cm7_core1))
+#include "MIMX94294_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_ca55) || defined(CPU_MIMX94295AVMJ_ca55) || defined(CPU_MIMX94295CVMJ_ca55) || defined(CPU_MIMX94295XVKJ_ca55) || defined(CPU_MIMX94295XVMM_ca55))
+#include "MIMX94295_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm33_core0) || defined(CPU_MIMX94295AVMJ_cm33_core0) || defined(CPU_MIMX94295CVMJ_cm33_core0) || defined(CPU_MIMX94295XVKJ_cm33_core0) || defined(CPU_MIMX94295XVMM_cm33_core0))
+#include "MIMX94295_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm33_core1) || defined(CPU_MIMX94295AVMJ_cm33_core1) || defined(CPU_MIMX94295CVMJ_cm33_core1) || defined(CPU_MIMX94295XVKJ_cm33_core1) || defined(CPU_MIMX94295XVMM_cm33_core1))
+#include "MIMX94295_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm7_core0) || defined(CPU_MIMX94295AVMJ_cm7_core0) || defined(CPU_MIMX94295CVMJ_cm7_core0) || defined(CPU_MIMX94295XVKJ_cm7_core0) || defined(CPU_MIMX94295XVMM_cm7_core0))
+#include "MIMX94295_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm7_core1) || defined(CPU_MIMX94295AVMJ_cm7_core1) || defined(CPU_MIMX94295CVMJ_cm7_core1) || defined(CPU_MIMX94295XVKJ_cm7_core1) || defined(CPU_MIMX94295XVMM_cm7_core1))
+#include "MIMX94295_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_ca55))
+#include "MIMX94316_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm33_core0))
+#include "MIMX94316_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm33_core1))
+#include "MIMX94316_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm7_core0))
+#include "MIMX94316_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm7_core1))
+#include "MIMX94316_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_ca55))
+#include "MIMX94318_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm33_core0))
+#include "MIMX94318_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm33_core1))
+#include "MIMX94318_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm7_core0))
+#include "MIMX94318_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm7_core1))
+#include "MIMX94318_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_ca55))
+#include "MIMX94376_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm33_core0))
+#include "MIMX94376_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm33_core1))
+#include "MIMX94376_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm7_core0))
+#include "MIMX94376_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm7_core1))
+#include "MIMX94376_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_ca55))
+#include "MIMX94378_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm33_core0))
+#include "MIMX94378_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm33_core1))
+#include "MIMX94378_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm7_core0))
+#include "MIMX94378_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm7_core1))
+#include "MIMX94378_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_ca55) || defined(CPU_MIMX94386XVMM_ca55))
+#include "MIMX94386_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm33_core0) || defined(CPU_MIMX94386XVMM_cm33_core0))
+#include "MIMX94386_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm33_core1) || defined(CPU_MIMX94386XVMM_cm33_core1))
+#include "MIMX94386_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm7_core0) || defined(CPU_MIMX94386XVMM_cm7_core0))
+#include "MIMX94386_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm7_core1) || defined(CPU_MIMX94386XVMM_cm7_core1))
+#include "MIMX94386_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_ca55) || defined(CPU_MIMX94388AVMM_ca55) || defined(CPU_MIMX94388XVMM_ca55))
+#include "MIMX94388_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm33_core0) || defined(CPU_MIMX94388AVMM_cm33_core0) || defined(CPU_MIMX94388XVMM_cm33_core0))
+#include "MIMX94388_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm33_core1) || defined(CPU_MIMX94388AVMM_cm33_core1) || defined(CPU_MIMX94388XVMM_cm33_core1))
+#include "MIMX94388_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm7_core0) || defined(CPU_MIMX94388AVMM_cm7_core0) || defined(CPU_MIMX94388XVMM_cm7_core0))
+#include "MIMX94388_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm7_core1) || defined(CPU_MIMX94388AVMM_cm7_core1) || defined(CPU_MIMX94388XVMM_cm7_core1))
+#include "MIMX94388_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_ca55) || defined(CPU_MIMX94396AVKM_ca55) || defined(CPU_MIMX94396AVMJ_ca55) || defined(CPU_MIMX94396XVMM_ca55))
+#include "MIMX94396_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm33_core0) || defined(CPU_MIMX94396AVKM_cm33_core0) || defined(CPU_MIMX94396AVMJ_cm33_core0) || defined(CPU_MIMX94396XVMM_cm33_core0))
+#include "MIMX94396_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm33_core1) || defined(CPU_MIMX94396AVKM_cm33_core1) || defined(CPU_MIMX94396AVMJ_cm33_core1) || defined(CPU_MIMX94396XVMM_cm33_core1))
+#include "MIMX94396_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm7_core0) || defined(CPU_MIMX94396AVKM_cm7_core0) || defined(CPU_MIMX94396AVMJ_cm7_core0) || defined(CPU_MIMX94396XVMM_cm7_core0))
+#include "MIMX94396_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm7_core1) || defined(CPU_MIMX94396AVKM_cm7_core1) || defined(CPU_MIMX94396AVMJ_cm7_core1) || defined(CPU_MIMX94396XVMM_cm7_core1))
+#include "MIMX94396_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVMM_ca55))
 #include "MIMX94398_ca55_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm33_core0) || defined(CPU_MIMX94398AVKJ_cm33_core0) || defined(CPU_MIMX94398AVKM_cm33_core0) || defined(CPU_MIMX94398AVME_cm33_core0) || defined(CPU_MIMX94398AVMJ_cm33_core0) || defined(CPU_MIMX94398AVMM_cm33_core0) || defined(CPU_MIMX94398CVKE_cm33_core0) || defined(CPU_MIMX94398CVKJ_cm33_core0) || defined(CPU_MIMX94398CVKM_cm33_core0) || defined(CPU_MIMX94398CVME_cm33_core0) || defined(CPU_MIMX94398CVMJ_cm33_core0) || defined(CPU_MIMX94398CVMM_cm33_core0) || defined(CPU_MIMX94398DVKE_cm33_core0) || defined(CPU_MIMX94398DVKJ_cm33_core0) || defined(CPU_MIMX94398DVKM_cm33_core0) || defined(CPU_MIMX94398DVME_cm33_core0) || defined(CPU_MIMX94398DVMJ_cm33_core0) || defined(CPU_MIMX94398DVMM_cm33_core0) || defined(CPU_MIMX94398XVKE_cm33_core0) || defined(CPU_MIMX94398XVKJ_cm33_core0) || defined(CPU_MIMX94398XVKM_cm33_core0) || defined(CPU_MIMX94398XVME_cm33_core0) || defined(CPU_MIMX94398XVMJ_cm33_core0) || defined(CPU_MIMX94398XVMM_cm33_core0))
+#elif (defined(CPU_MIMX94398AVKJ_cm33_core0) || defined(CPU_MIMX94398AVKM_cm33_core0) || defined(CPU_MIMX94398AVMJ_cm33_core0) || defined(CPU_MIMX94398AVMM_cm33_core0) || defined(CPU_MIMX94398DVKM_cm33_core0) || defined(CPU_MIMX94398DVMM_cm33_core0) || defined(CPU_MIMX94398XVMM_cm33_core0))
 #include "MIMX94398_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm33_core1) || defined(CPU_MIMX94398AVKJ_cm33_core1) || defined(CPU_MIMX94398AVKM_cm33_core1) || defined(CPU_MIMX94398AVME_cm33_core1) || defined(CPU_MIMX94398AVMJ_cm33_core1) || defined(CPU_MIMX94398AVMM_cm33_core1) || defined(CPU_MIMX94398CVKE_cm33_core1) || defined(CPU_MIMX94398CVKJ_cm33_core1) || defined(CPU_MIMX94398CVKM_cm33_core1) || defined(CPU_MIMX94398CVME_cm33_core1) || defined(CPU_MIMX94398CVMJ_cm33_core1) || defined(CPU_MIMX94398CVMM_cm33_core1) || defined(CPU_MIMX94398DVKE_cm33_core1) || defined(CPU_MIMX94398DVKJ_cm33_core1) || defined(CPU_MIMX94398DVKM_cm33_core1) || defined(CPU_MIMX94398DVME_cm33_core1) || defined(CPU_MIMX94398DVMJ_cm33_core1) || defined(CPU_MIMX94398DVMM_cm33_core1) || defined(CPU_MIMX94398XVKE_cm33_core1) || defined(CPU_MIMX94398XVKJ_cm33_core1) || defined(CPU_MIMX94398XVKM_cm33_core1) || defined(CPU_MIMX94398XVME_cm33_core1) || defined(CPU_MIMX94398XVMJ_cm33_core1) || defined(CPU_MIMX94398XVMM_cm33_core1))
+#elif (defined(CPU_MIMX94398AVKJ_cm33_core1) || defined(CPU_MIMX94398AVKM_cm33_core1) || defined(CPU_MIMX94398AVMJ_cm33_core1) || defined(CPU_MIMX94398AVMM_cm33_core1) || defined(CPU_MIMX94398DVKM_cm33_core1) || defined(CPU_MIMX94398DVMM_cm33_core1) || defined(CPU_MIMX94398XVMM_cm33_core1))
 #include "MIMX94398_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm7_core0) || defined(CPU_MIMX94398AVKJ_cm7_core0) || defined(CPU_MIMX94398AVKM_cm7_core0) || defined(CPU_MIMX94398AVME_cm7_core0) || defined(CPU_MIMX94398AVMJ_cm7_core0) || defined(CPU_MIMX94398AVMM_cm7_core0) || defined(CPU_MIMX94398CVKE_cm7_core0) || defined(CPU_MIMX94398CVKJ_cm7_core0) || defined(CPU_MIMX94398CVKM_cm7_core0) || defined(CPU_MIMX94398CVME_cm7_core0) || defined(CPU_MIMX94398CVMJ_cm7_core0) || defined(CPU_MIMX94398CVMM_cm7_core0) || defined(CPU_MIMX94398DVKE_cm7_core0) || defined(CPU_MIMX94398DVKJ_cm7_core0) || defined(CPU_MIMX94398DVKM_cm7_core0) || defined(CPU_MIMX94398DVME_cm7_core0) || defined(CPU_MIMX94398DVMJ_cm7_core0) || defined(CPU_MIMX94398DVMM_cm7_core0) || defined(CPU_MIMX94398XVKE_cm7_core0) || defined(CPU_MIMX94398XVKJ_cm7_core0) || defined(CPU_MIMX94398XVKM_cm7_core0) || defined(CPU_MIMX94398XVME_cm7_core0) || defined(CPU_MIMX94398XVMJ_cm7_core0) || defined(CPU_MIMX94398XVMM_cm7_core0))
+#elif (defined(CPU_MIMX94398AVKJ_cm7_core0) || defined(CPU_MIMX94398AVKM_cm7_core0) || defined(CPU_MIMX94398AVMJ_cm7_core0) || defined(CPU_MIMX94398AVMM_cm7_core0) || defined(CPU_MIMX94398DVKM_cm7_core0) || defined(CPU_MIMX94398DVMM_cm7_core0) || defined(CPU_MIMX94398XVMM_cm7_core0))
 #include "MIMX94398_cm7_core0_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm7_core1) || defined(CPU_MIMX94398AVKJ_cm7_core1) || defined(CPU_MIMX94398AVKM_cm7_core1) || defined(CPU_MIMX94398AVME_cm7_core1) || defined(CPU_MIMX94398AVMJ_cm7_core1) || defined(CPU_MIMX94398AVMM_cm7_core1) || defined(CPU_MIMX94398CVKE_cm7_core1) || defined(CPU_MIMX94398CVKJ_cm7_core1) || defined(CPU_MIMX94398CVKM_cm7_core1) || defined(CPU_MIMX94398CVME_cm7_core1) || defined(CPU_MIMX94398CVMJ_cm7_core1) || defined(CPU_MIMX94398CVMM_cm7_core1) || defined(CPU_MIMX94398DVKE_cm7_core1) || defined(CPU_MIMX94398DVKJ_cm7_core1) || defined(CPU_MIMX94398DVKM_cm7_core1) || defined(CPU_MIMX94398DVME_cm7_core1) || defined(CPU_MIMX94398DVMJ_cm7_core1) || defined(CPU_MIMX94398DVMM_cm7_core1) || defined(CPU_MIMX94398XVKE_cm7_core1) || defined(CPU_MIMX94398XVKJ_cm7_core1) || defined(CPU_MIMX94398XVKM_cm7_core1) || defined(CPU_MIMX94398XVME_cm7_core1) || defined(CPU_MIMX94398XVMJ_cm7_core1) || defined(CPU_MIMX94398XVMM_cm7_core1))
+#elif (defined(CPU_MIMX94398AVKJ_cm7_core1) || defined(CPU_MIMX94398AVKM_cm7_core1) || defined(CPU_MIMX94398AVMJ_cm7_core1) || defined(CPU_MIMX94398AVMM_cm7_core1) || defined(CPU_MIMX94398DVKM_cm7_core1) || defined(CPU_MIMX94398DVMM_cm7_core1) || defined(CPU_MIMX94398XVMM_cm7_core1))
 #include "MIMX94398_cm7_core1_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -241,22 +571,22 @@ typedef struct {
   } CTRL;
        uint8_t RESERVED_0[32];
   struct {                                         /* offset: 0x30 */
-    __IO uint32_t RW;                                /**< Spread Spectrum, offset: 0x30, not available in all instances (available on 144 out of 192) */
-    __IO uint32_t SET;                               /**< Spread Spectrum, offset: 0x34, not available in all instances (available on 144 out of 192) */
-    __IO uint32_t CLR;                               /**< Spread Spectrum, offset: 0x38, not available in all instances (available on 144 out of 192) */
-    __IO uint32_t TOG;                               /**< Spread Spectrum, offset: 0x3C, not available in all instances (available on 144 out of 192) */
+    __IO uint32_t RW;                                /**< Spread Spectrum, offset: 0x30, not available in all instances (available on 300 out of 400) */
+    __IO uint32_t SET;                               /**< Spread Spectrum, offset: 0x34, not available in all instances (available on 300 out of 400) */
+    __IO uint32_t CLR;                               /**< Spread Spectrum, offset: 0x38, not available in all instances (available on 300 out of 400) */
+    __IO uint32_t TOG;                               /**< Spread Spectrum, offset: 0x3C, not available in all instances (available on 300 out of 400) */
   } SPREAD_SPECTRUM;
   struct {                                         /* offset: 0x40 */
-    __IO uint32_t RW;                                /**< Numerator, offset: 0x40, not available in all instances (available on 144 out of 192) */
-    __IO uint32_t SET;                               /**< Numerator, offset: 0x44, not available in all instances (available on 144 out of 192) */
-    __IO uint32_t CLR;                               /**< Numerator, offset: 0x48, not available in all instances (available on 144 out of 192) */
-    __IO uint32_t TOG;                               /**< Numerator, offset: 0x4C, not available in all instances (available on 144 out of 192) */
+    __IO uint32_t RW;                                /**< Numerator, offset: 0x40, not available in all instances (available on 300 out of 400) */
+    __IO uint32_t SET;                               /**< Numerator, offset: 0x44, not available in all instances (available on 300 out of 400) */
+    __IO uint32_t CLR;                               /**< Numerator, offset: 0x48, not available in all instances (available on 300 out of 400) */
+    __IO uint32_t TOG;                               /**< Numerator, offset: 0x4C, not available in all instances (available on 300 out of 400) */
   } NUMERATOR;
   struct {                                         /* offset: 0x50 */
-    __IO uint32_t RW;                                /**< Denominator, offset: 0x50, not available in all instances (available on 144 out of 192) */
-    __IO uint32_t SET;                               /**< Denominator, offset: 0x54, not available in all instances (available on 144 out of 192) */
-    __IO uint32_t CLR;                               /**< Denominator, offset: 0x58, not available in all instances (available on 144 out of 192) */
-    __IO uint32_t TOG;                               /**< Denominator, offset: 0x5C, not available in all instances (available on 144 out of 192) */
+    __IO uint32_t RW;                                /**< Denominator, offset: 0x50, not available in all instances (available on 300 out of 400) */
+    __IO uint32_t SET;                               /**< Denominator, offset: 0x54, not available in all instances (available on 300 out of 400) */
+    __IO uint32_t CLR;                               /**< Denominator, offset: 0x58, not available in all instances (available on 300 out of 400) */
+    __IO uint32_t TOG;                               /**< Denominator, offset: 0x5C, not available in all instances (available on 300 out of 400) */
   } DENOMINATOR;
   struct {                                         /* offset: 0x60 */
     __IO uint32_t RW;                                /**< PLL Dividers, offset: 0x60 */
@@ -279,7 +609,7 @@ typedef struct {
     } DFS_DIV;
   } DFS[PLL_DFS_COUNT];
   __I  uint32_t PLL_STATUS;                        /**< PLL Status, offset: 0xF0 */
-  __I  uint32_t DFS_STATUS;                        /**< DFS Status, offset: 0xF4, not available in all instances (available on 72 out of 192) */
+  __I  uint32_t DFS_STATUS;                        /**< DFS Status, offset: 0xF4, not available in all instances (available on 150 out of 400) */
 } PLL_Type;
 
 /* ----------------------------------------------------------------------------
@@ -388,18 +718,7 @@ typedef struct {
 
 #define PLL_DIV_ODIV_MASK                        (0xFFU)
 #define PLL_DIV_ODIV_SHIFT                       (0U)
-/*! ODIV - Output Frequency Divider for Clock Output
- *  0b00000000..Divide by 2
- *  0b00000001..Divide by 3
- *  0b00000010..Divide by 2
- *  0b00000011..Divide by 3
- *  0b00000100..Divide by 4
- *  0b00000101..Divide by 5
- *  0b00000110..Divide by 6
- *  0b00001010..Divide by 10
- *  0b10000010..Divide by 130
- *  0b11111111..Divide by 255
- */
+/*! ODIV - Output Frequency Divider for Clock Output */
 #define PLL_DIV_ODIV(x)                          (((uint32_t)(((uint32_t)(x)) << PLL_DIV_ODIV_SHIFT)) & PLL_DIV_ODIV_MASK)
 
 #define PLL_DIV_RDIV_MASK                        (0xE000U)

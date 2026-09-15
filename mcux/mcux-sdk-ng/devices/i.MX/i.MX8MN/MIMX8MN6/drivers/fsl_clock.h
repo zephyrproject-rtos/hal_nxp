@@ -138,7 +138,7 @@
 /*! @brief Clock ip name array for SDMA. */
 #define SDMA_CLOCKS                              \
     {                                            \
-        kCLOCK_Sdma1, kCLOCK_Sdma2, kCLOCK_Sdma3 \
+        kCLOCK_IpInvalid, kCLOCK_Sdma1, kCLOCK_Sdma2, kCLOCK_Sdma3 \
     }
 
 /*! @brief Clock ip name array for MU. */

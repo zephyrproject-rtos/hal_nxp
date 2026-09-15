@@ -1,10 +1,220 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX94398AVKE_ca55
-**                          MIMX94398AVKE_cm33_core0
-**                          MIMX94398AVKE_cm33_core1
-**                          MIMX94398AVKE_cm7_core0
-**                          MIMX94398AVKE_cm7_core1
+**     Processors:          MIMX94115CVMM_ca55
+**                          MIMX94115CVMM_cm33_core0
+**                          MIMX94115CVMM_cm33_core1
+**                          MIMX94115CVMM_cm7_core0
+**                          MIMX94115CVMM_cm7_core1
+**                          MIMX94115XVKM_ca55
+**                          MIMX94115XVKM_cm33_core0
+**                          MIMX94115XVKM_cm33_core1
+**                          MIMX94115XVKM_cm7_core0
+**                          MIMX94115XVKM_cm7_core1
+**                          MIMX94115XVMM_ca55
+**                          MIMX94115XVMM_cm33_core0
+**                          MIMX94115XVMM_cm33_core1
+**                          MIMX94115XVMM_cm7_core0
+**                          MIMX94115XVMM_cm7_core1
+**                          MIMX94135CVMM_ca55
+**                          MIMX94135CVMM_cm33_core0
+**                          MIMX94135CVMM_cm33_core1
+**                          MIMX94135CVMM_cm7_core0
+**                          MIMX94135CVMM_cm7_core1
+**                          MIMX94135XVKM_ca55
+**                          MIMX94135XVKM_cm33_core0
+**                          MIMX94135XVKM_cm33_core1
+**                          MIMX94135XVKM_cm7_core0
+**                          MIMX94135XVKM_cm7_core1
+**                          MIMX94135XVMM_ca55
+**                          MIMX94135XVMM_cm33_core0
+**                          MIMX94135XVMM_cm33_core1
+**                          MIMX94135XVMM_cm7_core0
+**                          MIMX94135XVMM_cm7_core1
+**                          MIMX94155CVMM_ca55
+**                          MIMX94155CVMM_cm33_core0
+**                          MIMX94155CVMM_cm33_core1
+**                          MIMX94155CVMM_cm7_core0
+**                          MIMX94155CVMM_cm7_core1
+**                          MIMX94155XVKM_ca55
+**                          MIMX94155XVKM_cm33_core0
+**                          MIMX94155XVKM_cm33_core1
+**                          MIMX94155XVKM_cm7_core0
+**                          MIMX94155XVKM_cm7_core1
+**                          MIMX94155XVMM_ca55
+**                          MIMX94155XVMM_cm33_core0
+**                          MIMX94155XVMM_cm33_core1
+**                          MIMX94155XVMM_cm7_core0
+**                          MIMX94155XVMM_cm7_core1
+**                          MIMX94175CVMM_ca55
+**                          MIMX94175CVMM_cm33_core0
+**                          MIMX94175CVMM_cm33_core1
+**                          MIMX94175CVMM_cm7_core0
+**                          MIMX94175CVMM_cm7_core1
+**                          MIMX94175XVKM_ca55
+**                          MIMX94175XVKM_cm33_core0
+**                          MIMX94175XVKM_cm33_core1
+**                          MIMX94175XVKM_cm7_core0
+**                          MIMX94175XVKM_cm7_core1
+**                          MIMX94175XVMM_ca55
+**                          MIMX94175XVMM_cm33_core0
+**                          MIMX94175XVMM_cm33_core1
+**                          MIMX94175XVMM_cm7_core0
+**                          MIMX94175XVMM_cm7_core1
+**                          MIMX94185CVMM_ca55
+**                          MIMX94185CVMM_cm33_core0
+**                          MIMX94185CVMM_cm33_core1
+**                          MIMX94185CVMM_cm7_core0
+**                          MIMX94185CVMM_cm7_core1
+**                          MIMX94214CVMM_ca55
+**                          MIMX94214CVMM_cm33_core0
+**                          MIMX94214CVMM_cm33_core1
+**                          MIMX94214CVMM_cm7_core0
+**                          MIMX94214CVMM_cm7_core1
+**                          MIMX94214XVKM_ca55
+**                          MIMX94214XVKM_cm33_core0
+**                          MIMX94214XVKM_cm33_core1
+**                          MIMX94214XVKM_cm7_core0
+**                          MIMX94214XVKM_cm7_core1
+**                          MIMX94214XVMM_ca55
+**                          MIMX94214XVMM_cm33_core0
+**                          MIMX94214XVMM_cm33_core1
+**                          MIMX94214XVMM_cm7_core0
+**                          MIMX94214XVMM_cm7_core1
+**                          MIMX94215CVMM_ca55
+**                          MIMX94215CVMM_cm33_core0
+**                          MIMX94215CVMM_cm33_core1
+**                          MIMX94215CVMM_cm7_core0
+**                          MIMX94215CVMM_cm7_core1
+**                          MIMX94215XVKM_ca55
+**                          MIMX94215XVKM_cm33_core0
+**                          MIMX94215XVKM_cm33_core1
+**                          MIMX94215XVKM_cm7_core0
+**                          MIMX94215XVKM_cm7_core1
+**                          MIMX94215XVMM_ca55
+**                          MIMX94215XVMM_cm33_core0
+**                          MIMX94215XVMM_cm33_core1
+**                          MIMX94215XVMM_cm7_core0
+**                          MIMX94215XVMM_cm7_core1
+**                          MIMX94235CVMM_ca55
+**                          MIMX94235CVMM_cm33_core0
+**                          MIMX94235CVMM_cm33_core1
+**                          MIMX94235CVMM_cm7_core0
+**                          MIMX94235CVMM_cm7_core1
+**                          MIMX94255CVMM_ca55
+**                          MIMX94255CVMM_cm33_core0
+**                          MIMX94255CVMM_cm33_core1
+**                          MIMX94255CVMM_cm7_core0
+**                          MIMX94255CVMM_cm7_core1
+**                          MIMX94275CVMM_ca55
+**                          MIMX94275CVMM_cm33_core0
+**                          MIMX94275CVMM_cm33_core1
+**                          MIMX94275CVMM_cm7_core0
+**                          MIMX94275CVMM_cm7_core1
+**                          MIMX94285CVMM_ca55
+**                          MIMX94285CVMM_cm33_core0
+**                          MIMX94285CVMM_cm33_core1
+**                          MIMX94285CVMM_cm7_core0
+**                          MIMX94285CVMM_cm7_core1
+**                          MIMX94294XVKM_ca55
+**                          MIMX94294XVKM_cm33_core0
+**                          MIMX94294XVKM_cm33_core1
+**                          MIMX94294XVKM_cm7_core0
+**                          MIMX94294XVKM_cm7_core1
+**                          MIMX94294XVMM_ca55
+**                          MIMX94294XVMM_cm33_core0
+**                          MIMX94294XVMM_cm33_core1
+**                          MIMX94294XVMM_cm7_core0
+**                          MIMX94294XVMM_cm7_core1
+**                          MIMX94295AVKM_ca55
+**                          MIMX94295AVKM_cm33_core0
+**                          MIMX94295AVKM_cm33_core1
+**                          MIMX94295AVKM_cm7_core0
+**                          MIMX94295AVKM_cm7_core1
+**                          MIMX94295AVMJ_ca55
+**                          MIMX94295AVMJ_cm33_core0
+**                          MIMX94295AVMJ_cm33_core1
+**                          MIMX94295AVMJ_cm7_core0
+**                          MIMX94295AVMJ_cm7_core1
+**                          MIMX94295CVMJ_ca55
+**                          MIMX94295CVMJ_cm33_core0
+**                          MIMX94295CVMJ_cm33_core1
+**                          MIMX94295CVMJ_cm7_core0
+**                          MIMX94295CVMJ_cm7_core1
+**                          MIMX94295XVKJ_ca55
+**                          MIMX94295XVKJ_cm33_core0
+**                          MIMX94295XVKJ_cm33_core1
+**                          MIMX94295XVKJ_cm7_core0
+**                          MIMX94295XVKJ_cm7_core1
+**                          MIMX94295XVMM_ca55
+**                          MIMX94295XVMM_cm33_core0
+**                          MIMX94295XVMM_cm33_core1
+**                          MIMX94295XVMM_cm7_core0
+**                          MIMX94295XVMM_cm7_core1
+**                          MIMX94316XVMM_ca55
+**                          MIMX94316XVMM_cm33_core0
+**                          MIMX94316XVMM_cm33_core1
+**                          MIMX94316XVMM_cm7_core0
+**                          MIMX94316XVMM_cm7_core1
+**                          MIMX94318XVMM_ca55
+**                          MIMX94318XVMM_cm33_core0
+**                          MIMX94318XVMM_cm33_core1
+**                          MIMX94318XVMM_cm7_core0
+**                          MIMX94318XVMM_cm7_core1
+**                          MIMX94376AVKM_ca55
+**                          MIMX94376AVKM_cm33_core0
+**                          MIMX94376AVKM_cm33_core1
+**                          MIMX94376AVKM_cm7_core0
+**                          MIMX94376AVKM_cm7_core1
+**                          MIMX94378AVKM_ca55
+**                          MIMX94378AVKM_cm33_core0
+**                          MIMX94378AVKM_cm33_core1
+**                          MIMX94378AVKM_cm7_core0
+**                          MIMX94378AVKM_cm7_core1
+**                          MIMX94386AVKM_ca55
+**                          MIMX94386AVKM_cm33_core0
+**                          MIMX94386AVKM_cm33_core1
+**                          MIMX94386AVKM_cm7_core0
+**                          MIMX94386AVKM_cm7_core1
+**                          MIMX94386XVMM_ca55
+**                          MIMX94386XVMM_cm33_core0
+**                          MIMX94386XVMM_cm33_core1
+**                          MIMX94386XVMM_cm7_core0
+**                          MIMX94386XVMM_cm7_core1
+**                          MIMX94388AVKM_ca55
+**                          MIMX94388AVKM_cm33_core0
+**                          MIMX94388AVKM_cm33_core1
+**                          MIMX94388AVKM_cm7_core0
+**                          MIMX94388AVKM_cm7_core1
+**                          MIMX94388AVMM_ca55
+**                          MIMX94388AVMM_cm33_core0
+**                          MIMX94388AVMM_cm33_core1
+**                          MIMX94388AVMM_cm7_core0
+**                          MIMX94388AVMM_cm7_core1
+**                          MIMX94388XVMM_ca55
+**                          MIMX94388XVMM_cm33_core0
+**                          MIMX94388XVMM_cm33_core1
+**                          MIMX94388XVMM_cm7_core0
+**                          MIMX94388XVMM_cm7_core1
+**                          MIMX94396AVKJ_ca55
+**                          MIMX94396AVKJ_cm33_core0
+**                          MIMX94396AVKJ_cm33_core1
+**                          MIMX94396AVKJ_cm7_core0
+**                          MIMX94396AVKJ_cm7_core1
+**                          MIMX94396AVKM_ca55
+**                          MIMX94396AVKM_cm33_core0
+**                          MIMX94396AVKM_cm33_core1
+**                          MIMX94396AVKM_cm7_core0
+**                          MIMX94396AVKM_cm7_core1
+**                          MIMX94396AVMJ_ca55
+**                          MIMX94396AVMJ_cm33_core0
+**                          MIMX94396AVMJ_cm33_core1
+**                          MIMX94396AVMJ_cm7_core0
+**                          MIMX94396AVMJ_cm7_core1
+**                          MIMX94396XVMM_ca55
+**                          MIMX94396XVMM_cm33_core0
+**                          MIMX94396XVMM_cm33_core1
+**                          MIMX94396XVMM_cm7_core0
+**                          MIMX94396XVMM_cm7_core1
 **                          MIMX94398AVKJ_ca55
 **                          MIMX94398AVKJ_cm33_core0
 **                          MIMX94398AVKJ_cm33_core1
@@ -15,11 +225,6 @@
 **                          MIMX94398AVKM_cm33_core1
 **                          MIMX94398AVKM_cm7_core0
 **                          MIMX94398AVKM_cm7_core1
-**                          MIMX94398AVME_ca55
-**                          MIMX94398AVME_cm33_core0
-**                          MIMX94398AVME_cm33_core1
-**                          MIMX94398AVME_cm7_core0
-**                          MIMX94398AVME_cm7_core1
 **                          MIMX94398AVMJ_ca55
 **                          MIMX94398AVMJ_cm33_core0
 **                          MIMX94398AVMJ_cm33_core1
@@ -30,91 +235,16 @@
 **                          MIMX94398AVMM_cm33_core1
 **                          MIMX94398AVMM_cm7_core0
 **                          MIMX94398AVMM_cm7_core1
-**                          MIMX94398CVKE_ca55
-**                          MIMX94398CVKE_cm33_core0
-**                          MIMX94398CVKE_cm33_core1
-**                          MIMX94398CVKE_cm7_core0
-**                          MIMX94398CVKE_cm7_core1
-**                          MIMX94398CVKJ_ca55
-**                          MIMX94398CVKJ_cm33_core0
-**                          MIMX94398CVKJ_cm33_core1
-**                          MIMX94398CVKJ_cm7_core0
-**                          MIMX94398CVKJ_cm7_core1
-**                          MIMX94398CVKM_ca55
-**                          MIMX94398CVKM_cm33_core0
-**                          MIMX94398CVKM_cm33_core1
-**                          MIMX94398CVKM_cm7_core0
-**                          MIMX94398CVKM_cm7_core1
-**                          MIMX94398CVME_ca55
-**                          MIMX94398CVME_cm33_core0
-**                          MIMX94398CVME_cm33_core1
-**                          MIMX94398CVME_cm7_core0
-**                          MIMX94398CVME_cm7_core1
-**                          MIMX94398CVMJ_ca55
-**                          MIMX94398CVMJ_cm33_core0
-**                          MIMX94398CVMJ_cm33_core1
-**                          MIMX94398CVMJ_cm7_core0
-**                          MIMX94398CVMJ_cm7_core1
-**                          MIMX94398CVMM_ca55
-**                          MIMX94398CVMM_cm33_core0
-**                          MIMX94398CVMM_cm33_core1
-**                          MIMX94398CVMM_cm7_core0
-**                          MIMX94398CVMM_cm7_core1
-**                          MIMX94398DVKE_ca55
-**                          MIMX94398DVKE_cm33_core0
-**                          MIMX94398DVKE_cm33_core1
-**                          MIMX94398DVKE_cm7_core0
-**                          MIMX94398DVKE_cm7_core1
-**                          MIMX94398DVKJ_ca55
-**                          MIMX94398DVKJ_cm33_core0
-**                          MIMX94398DVKJ_cm33_core1
-**                          MIMX94398DVKJ_cm7_core0
-**                          MIMX94398DVKJ_cm7_core1
 **                          MIMX94398DVKM_ca55
 **                          MIMX94398DVKM_cm33_core0
 **                          MIMX94398DVKM_cm33_core1
 **                          MIMX94398DVKM_cm7_core0
 **                          MIMX94398DVKM_cm7_core1
-**                          MIMX94398DVME_ca55
-**                          MIMX94398DVME_cm33_core0
-**                          MIMX94398DVME_cm33_core1
-**                          MIMX94398DVME_cm7_core0
-**                          MIMX94398DVME_cm7_core1
-**                          MIMX94398DVMJ_ca55
-**                          MIMX94398DVMJ_cm33_core0
-**                          MIMX94398DVMJ_cm33_core1
-**                          MIMX94398DVMJ_cm7_core0
-**                          MIMX94398DVMJ_cm7_core1
 **                          MIMX94398DVMM_ca55
 **                          MIMX94398DVMM_cm33_core0
 **                          MIMX94398DVMM_cm33_core1
 **                          MIMX94398DVMM_cm7_core0
 **                          MIMX94398DVMM_cm7_core1
-**                          MIMX94398XVKE_ca55
-**                          MIMX94398XVKE_cm33_core0
-**                          MIMX94398XVKE_cm33_core1
-**                          MIMX94398XVKE_cm7_core0
-**                          MIMX94398XVKE_cm7_core1
-**                          MIMX94398XVKJ_ca55
-**                          MIMX94398XVKJ_cm33_core0
-**                          MIMX94398XVKJ_cm33_core1
-**                          MIMX94398XVKJ_cm7_core0
-**                          MIMX94398XVKJ_cm7_core1
-**                          MIMX94398XVKM_ca55
-**                          MIMX94398XVKM_cm33_core0
-**                          MIMX94398XVKM_cm33_core1
-**                          MIMX94398XVKM_cm7_core0
-**                          MIMX94398XVKM_cm7_core1
-**                          MIMX94398XVME_ca55
-**                          MIMX94398XVME_cm33_core0
-**                          MIMX94398XVME_cm33_core1
-**                          MIMX94398XVME_cm7_core0
-**                          MIMX94398XVME_cm7_core1
-**                          MIMX94398XVMJ_ca55
-**                          MIMX94398XVMJ_cm33_core0
-**                          MIMX94398XVMJ_cm33_core1
-**                          MIMX94398XVMJ_cm7_core0
-**                          MIMX94398XVMJ_cm7_core1
 **                          MIMX94398XVMM_ca55
 **                          MIMX94398XVMM_cm33_core0
 **                          MIMX94398XVMM_cm33_core1
@@ -122,13 +252,13 @@
 **                          MIMX94398XVMM_cm7_core1
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250721
+**     Build:               b260804
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PXP
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -176,15 +306,215 @@
 #if !defined(PERI_PXP_H_)
 #define PERI_PXP_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX94398AVKE_ca55) || defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVME_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398CVKE_ca55) || defined(CPU_MIMX94398CVKJ_ca55) || defined(CPU_MIMX94398CVKM_ca55) || defined(CPU_MIMX94398CVME_ca55) || defined(CPU_MIMX94398CVMJ_ca55) || defined(CPU_MIMX94398CVMM_ca55) || defined(CPU_MIMX94398DVKE_ca55) || defined(CPU_MIMX94398DVKJ_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVME_ca55) || defined(CPU_MIMX94398DVMJ_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVKE_ca55) || defined(CPU_MIMX94398XVKJ_ca55) || defined(CPU_MIMX94398XVKM_ca55) || defined(CPU_MIMX94398XVME_ca55) || defined(CPU_MIMX94398XVMJ_ca55) || defined(CPU_MIMX94398XVMM_ca55))
+#if (defined(CPU_MIMX94115CVMM_ca55) || defined(CPU_MIMX94115XVKM_ca55) || defined(CPU_MIMX94115XVMM_ca55))
+#include "MIMX94115_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm33_core0) || defined(CPU_MIMX94115XVKM_cm33_core0) || defined(CPU_MIMX94115XVMM_cm33_core0))
+#include "MIMX94115_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm33_core1) || defined(CPU_MIMX94115XVKM_cm33_core1) || defined(CPU_MIMX94115XVMM_cm33_core1))
+#include "MIMX94115_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm7_core0) || defined(CPU_MIMX94115XVKM_cm7_core0) || defined(CPU_MIMX94115XVMM_cm7_core0))
+#include "MIMX94115_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm7_core1) || defined(CPU_MIMX94115XVKM_cm7_core1) || defined(CPU_MIMX94115XVMM_cm7_core1))
+#include "MIMX94115_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_ca55) || defined(CPU_MIMX94135XVKM_ca55) || defined(CPU_MIMX94135XVMM_ca55))
+#include "MIMX94135_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm33_core0) || defined(CPU_MIMX94135XVKM_cm33_core0) || defined(CPU_MIMX94135XVMM_cm33_core0))
+#include "MIMX94135_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm33_core1) || defined(CPU_MIMX94135XVKM_cm33_core1) || defined(CPU_MIMX94135XVMM_cm33_core1))
+#include "MIMX94135_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm7_core0) || defined(CPU_MIMX94135XVKM_cm7_core0) || defined(CPU_MIMX94135XVMM_cm7_core0))
+#include "MIMX94135_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm7_core1) || defined(CPU_MIMX94135XVKM_cm7_core1) || defined(CPU_MIMX94135XVMM_cm7_core1))
+#include "MIMX94135_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_ca55) || defined(CPU_MIMX94155XVKM_ca55) || defined(CPU_MIMX94155XVMM_ca55))
+#include "MIMX94155_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm33_core0) || defined(CPU_MIMX94155XVKM_cm33_core0) || defined(CPU_MIMX94155XVMM_cm33_core0))
+#include "MIMX94155_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm33_core1) || defined(CPU_MIMX94155XVKM_cm33_core1) || defined(CPU_MIMX94155XVMM_cm33_core1))
+#include "MIMX94155_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm7_core0) || defined(CPU_MIMX94155XVKM_cm7_core0) || defined(CPU_MIMX94155XVMM_cm7_core0))
+#include "MIMX94155_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm7_core1) || defined(CPU_MIMX94155XVKM_cm7_core1) || defined(CPU_MIMX94155XVMM_cm7_core1))
+#include "MIMX94155_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_ca55) || defined(CPU_MIMX94175XVKM_ca55) || defined(CPU_MIMX94175XVMM_ca55))
+#include "MIMX94175_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm33_core0) || defined(CPU_MIMX94175XVKM_cm33_core0) || defined(CPU_MIMX94175XVMM_cm33_core0))
+#include "MIMX94175_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm33_core1) || defined(CPU_MIMX94175XVKM_cm33_core1) || defined(CPU_MIMX94175XVMM_cm33_core1))
+#include "MIMX94175_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm7_core0) || defined(CPU_MIMX94175XVKM_cm7_core0) || defined(CPU_MIMX94175XVMM_cm7_core0))
+#include "MIMX94175_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm7_core1) || defined(CPU_MIMX94175XVKM_cm7_core1) || defined(CPU_MIMX94175XVMM_cm7_core1))
+#include "MIMX94175_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_ca55))
+#include "MIMX94185_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm33_core0))
+#include "MIMX94185_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm33_core1))
+#include "MIMX94185_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm7_core0))
+#include "MIMX94185_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm7_core1))
+#include "MIMX94185_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_ca55) || defined(CPU_MIMX94214XVKM_ca55) || defined(CPU_MIMX94214XVMM_ca55))
+#include "MIMX94214_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm33_core0) || defined(CPU_MIMX94214XVKM_cm33_core0) || defined(CPU_MIMX94214XVMM_cm33_core0))
+#include "MIMX94214_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm33_core1) || defined(CPU_MIMX94214XVKM_cm33_core1) || defined(CPU_MIMX94214XVMM_cm33_core1))
+#include "MIMX94214_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm7_core0) || defined(CPU_MIMX94214XVKM_cm7_core0) || defined(CPU_MIMX94214XVMM_cm7_core0))
+#include "MIMX94214_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm7_core1) || defined(CPU_MIMX94214XVKM_cm7_core1) || defined(CPU_MIMX94214XVMM_cm7_core1))
+#include "MIMX94214_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_ca55) || defined(CPU_MIMX94215XVKM_ca55) || defined(CPU_MIMX94215XVMM_ca55))
+#include "MIMX94215_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm33_core0) || defined(CPU_MIMX94215XVKM_cm33_core0) || defined(CPU_MIMX94215XVMM_cm33_core0))
+#include "MIMX94215_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm33_core1) || defined(CPU_MIMX94215XVKM_cm33_core1) || defined(CPU_MIMX94215XVMM_cm33_core1))
+#include "MIMX94215_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm7_core0) || defined(CPU_MIMX94215XVKM_cm7_core0) || defined(CPU_MIMX94215XVMM_cm7_core0))
+#include "MIMX94215_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm7_core1) || defined(CPU_MIMX94215XVKM_cm7_core1) || defined(CPU_MIMX94215XVMM_cm7_core1))
+#include "MIMX94215_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_ca55))
+#include "MIMX94235_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm33_core0))
+#include "MIMX94235_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm33_core1))
+#include "MIMX94235_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm7_core0))
+#include "MIMX94235_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm7_core1))
+#include "MIMX94235_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_ca55))
+#include "MIMX94255_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm33_core0))
+#include "MIMX94255_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm33_core1))
+#include "MIMX94255_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm7_core0))
+#include "MIMX94255_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm7_core1))
+#include "MIMX94255_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_ca55))
+#include "MIMX94275_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm33_core0))
+#include "MIMX94275_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm33_core1))
+#include "MIMX94275_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm7_core0))
+#include "MIMX94275_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm7_core1))
+#include "MIMX94275_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_ca55))
+#include "MIMX94285_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm33_core0))
+#include "MIMX94285_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm33_core1))
+#include "MIMX94285_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm7_core0))
+#include "MIMX94285_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm7_core1))
+#include "MIMX94285_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_ca55) || defined(CPU_MIMX94294XVMM_ca55))
+#include "MIMX94294_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm33_core0) || defined(CPU_MIMX94294XVMM_cm33_core0))
+#include "MIMX94294_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm33_core1) || defined(CPU_MIMX94294XVMM_cm33_core1))
+#include "MIMX94294_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm7_core0) || defined(CPU_MIMX94294XVMM_cm7_core0))
+#include "MIMX94294_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm7_core1) || defined(CPU_MIMX94294XVMM_cm7_core1))
+#include "MIMX94294_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_ca55) || defined(CPU_MIMX94295AVMJ_ca55) || defined(CPU_MIMX94295CVMJ_ca55) || defined(CPU_MIMX94295XVKJ_ca55) || defined(CPU_MIMX94295XVMM_ca55))
+#include "MIMX94295_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm33_core0) || defined(CPU_MIMX94295AVMJ_cm33_core0) || defined(CPU_MIMX94295CVMJ_cm33_core0) || defined(CPU_MIMX94295XVKJ_cm33_core0) || defined(CPU_MIMX94295XVMM_cm33_core0))
+#include "MIMX94295_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm33_core1) || defined(CPU_MIMX94295AVMJ_cm33_core1) || defined(CPU_MIMX94295CVMJ_cm33_core1) || defined(CPU_MIMX94295XVKJ_cm33_core1) || defined(CPU_MIMX94295XVMM_cm33_core1))
+#include "MIMX94295_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm7_core0) || defined(CPU_MIMX94295AVMJ_cm7_core0) || defined(CPU_MIMX94295CVMJ_cm7_core0) || defined(CPU_MIMX94295XVKJ_cm7_core0) || defined(CPU_MIMX94295XVMM_cm7_core0))
+#include "MIMX94295_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm7_core1) || defined(CPU_MIMX94295AVMJ_cm7_core1) || defined(CPU_MIMX94295CVMJ_cm7_core1) || defined(CPU_MIMX94295XVKJ_cm7_core1) || defined(CPU_MIMX94295XVMM_cm7_core1))
+#include "MIMX94295_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_ca55))
+#include "MIMX94316_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm33_core0))
+#include "MIMX94316_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm33_core1))
+#include "MIMX94316_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm7_core0))
+#include "MIMX94316_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm7_core1))
+#include "MIMX94316_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_ca55))
+#include "MIMX94318_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm33_core0))
+#include "MIMX94318_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm33_core1))
+#include "MIMX94318_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm7_core0))
+#include "MIMX94318_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm7_core1))
+#include "MIMX94318_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_ca55))
+#include "MIMX94376_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm33_core0))
+#include "MIMX94376_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm33_core1))
+#include "MIMX94376_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm7_core0))
+#include "MIMX94376_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm7_core1))
+#include "MIMX94376_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_ca55))
+#include "MIMX94378_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm33_core0))
+#include "MIMX94378_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm33_core1))
+#include "MIMX94378_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm7_core0))
+#include "MIMX94378_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm7_core1))
+#include "MIMX94378_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_ca55) || defined(CPU_MIMX94386XVMM_ca55))
+#include "MIMX94386_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm33_core0) || defined(CPU_MIMX94386XVMM_cm33_core0))
+#include "MIMX94386_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm33_core1) || defined(CPU_MIMX94386XVMM_cm33_core1))
+#include "MIMX94386_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm7_core0) || defined(CPU_MIMX94386XVMM_cm7_core0))
+#include "MIMX94386_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm7_core1) || defined(CPU_MIMX94386XVMM_cm7_core1))
+#include "MIMX94386_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_ca55) || defined(CPU_MIMX94388AVMM_ca55) || defined(CPU_MIMX94388XVMM_ca55))
+#include "MIMX94388_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm33_core0) || defined(CPU_MIMX94388AVMM_cm33_core0) || defined(CPU_MIMX94388XVMM_cm33_core0))
+#include "MIMX94388_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm33_core1) || defined(CPU_MIMX94388AVMM_cm33_core1) || defined(CPU_MIMX94388XVMM_cm33_core1))
+#include "MIMX94388_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm7_core0) || defined(CPU_MIMX94388AVMM_cm7_core0) || defined(CPU_MIMX94388XVMM_cm7_core0))
+#include "MIMX94388_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm7_core1) || defined(CPU_MIMX94388AVMM_cm7_core1) || defined(CPU_MIMX94388XVMM_cm7_core1))
+#include "MIMX94388_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_ca55) || defined(CPU_MIMX94396AVKM_ca55) || defined(CPU_MIMX94396AVMJ_ca55) || defined(CPU_MIMX94396XVMM_ca55))
+#include "MIMX94396_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm33_core0) || defined(CPU_MIMX94396AVKM_cm33_core0) || defined(CPU_MIMX94396AVMJ_cm33_core0) || defined(CPU_MIMX94396XVMM_cm33_core0))
+#include "MIMX94396_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm33_core1) || defined(CPU_MIMX94396AVKM_cm33_core1) || defined(CPU_MIMX94396AVMJ_cm33_core1) || defined(CPU_MIMX94396XVMM_cm33_core1))
+#include "MIMX94396_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm7_core0) || defined(CPU_MIMX94396AVKM_cm7_core0) || defined(CPU_MIMX94396AVMJ_cm7_core0) || defined(CPU_MIMX94396XVMM_cm7_core0))
+#include "MIMX94396_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm7_core1) || defined(CPU_MIMX94396AVKM_cm7_core1) || defined(CPU_MIMX94396AVMJ_cm7_core1) || defined(CPU_MIMX94396XVMM_cm7_core1))
+#include "MIMX94396_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVMM_ca55))
 #include "MIMX94398_ca55_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm33_core0) || defined(CPU_MIMX94398AVKJ_cm33_core0) || defined(CPU_MIMX94398AVKM_cm33_core0) || defined(CPU_MIMX94398AVME_cm33_core0) || defined(CPU_MIMX94398AVMJ_cm33_core0) || defined(CPU_MIMX94398AVMM_cm33_core0) || defined(CPU_MIMX94398CVKE_cm33_core0) || defined(CPU_MIMX94398CVKJ_cm33_core0) || defined(CPU_MIMX94398CVKM_cm33_core0) || defined(CPU_MIMX94398CVME_cm33_core0) || defined(CPU_MIMX94398CVMJ_cm33_core0) || defined(CPU_MIMX94398CVMM_cm33_core0) || defined(CPU_MIMX94398DVKE_cm33_core0) || defined(CPU_MIMX94398DVKJ_cm33_core0) || defined(CPU_MIMX94398DVKM_cm33_core0) || defined(CPU_MIMX94398DVME_cm33_core0) || defined(CPU_MIMX94398DVMJ_cm33_core0) || defined(CPU_MIMX94398DVMM_cm33_core0) || defined(CPU_MIMX94398XVKE_cm33_core0) || defined(CPU_MIMX94398XVKJ_cm33_core0) || defined(CPU_MIMX94398XVKM_cm33_core0) || defined(CPU_MIMX94398XVME_cm33_core0) || defined(CPU_MIMX94398XVMJ_cm33_core0) || defined(CPU_MIMX94398XVMM_cm33_core0))
+#elif (defined(CPU_MIMX94398AVKJ_cm33_core0) || defined(CPU_MIMX94398AVKM_cm33_core0) || defined(CPU_MIMX94398AVMJ_cm33_core0) || defined(CPU_MIMX94398AVMM_cm33_core0) || defined(CPU_MIMX94398DVKM_cm33_core0) || defined(CPU_MIMX94398DVMM_cm33_core0) || defined(CPU_MIMX94398XVMM_cm33_core0))
 #include "MIMX94398_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm33_core1) || defined(CPU_MIMX94398AVKJ_cm33_core1) || defined(CPU_MIMX94398AVKM_cm33_core1) || defined(CPU_MIMX94398AVME_cm33_core1) || defined(CPU_MIMX94398AVMJ_cm33_core1) || defined(CPU_MIMX94398AVMM_cm33_core1) || defined(CPU_MIMX94398CVKE_cm33_core1) || defined(CPU_MIMX94398CVKJ_cm33_core1) || defined(CPU_MIMX94398CVKM_cm33_core1) || defined(CPU_MIMX94398CVME_cm33_core1) || defined(CPU_MIMX94398CVMJ_cm33_core1) || defined(CPU_MIMX94398CVMM_cm33_core1) || defined(CPU_MIMX94398DVKE_cm33_core1) || defined(CPU_MIMX94398DVKJ_cm33_core1) || defined(CPU_MIMX94398DVKM_cm33_core1) || defined(CPU_MIMX94398DVME_cm33_core1) || defined(CPU_MIMX94398DVMJ_cm33_core1) || defined(CPU_MIMX94398DVMM_cm33_core1) || defined(CPU_MIMX94398XVKE_cm33_core1) || defined(CPU_MIMX94398XVKJ_cm33_core1) || defined(CPU_MIMX94398XVKM_cm33_core1) || defined(CPU_MIMX94398XVME_cm33_core1) || defined(CPU_MIMX94398XVMJ_cm33_core1) || defined(CPU_MIMX94398XVMM_cm33_core1))
+#elif (defined(CPU_MIMX94398AVKJ_cm33_core1) || defined(CPU_MIMX94398AVKM_cm33_core1) || defined(CPU_MIMX94398AVMJ_cm33_core1) || defined(CPU_MIMX94398AVMM_cm33_core1) || defined(CPU_MIMX94398DVKM_cm33_core1) || defined(CPU_MIMX94398DVMM_cm33_core1) || defined(CPU_MIMX94398XVMM_cm33_core1))
 #include "MIMX94398_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm7_core0) || defined(CPU_MIMX94398AVKJ_cm7_core0) || defined(CPU_MIMX94398AVKM_cm7_core0) || defined(CPU_MIMX94398AVME_cm7_core0) || defined(CPU_MIMX94398AVMJ_cm7_core0) || defined(CPU_MIMX94398AVMM_cm7_core0) || defined(CPU_MIMX94398CVKE_cm7_core0) || defined(CPU_MIMX94398CVKJ_cm7_core0) || defined(CPU_MIMX94398CVKM_cm7_core0) || defined(CPU_MIMX94398CVME_cm7_core0) || defined(CPU_MIMX94398CVMJ_cm7_core0) || defined(CPU_MIMX94398CVMM_cm7_core0) || defined(CPU_MIMX94398DVKE_cm7_core0) || defined(CPU_MIMX94398DVKJ_cm7_core0) || defined(CPU_MIMX94398DVKM_cm7_core0) || defined(CPU_MIMX94398DVME_cm7_core0) || defined(CPU_MIMX94398DVMJ_cm7_core0) || defined(CPU_MIMX94398DVMM_cm7_core0) || defined(CPU_MIMX94398XVKE_cm7_core0) || defined(CPU_MIMX94398XVKJ_cm7_core0) || defined(CPU_MIMX94398XVKM_cm7_core0) || defined(CPU_MIMX94398XVME_cm7_core0) || defined(CPU_MIMX94398XVMJ_cm7_core0) || defined(CPU_MIMX94398XVMM_cm7_core0))
+#elif (defined(CPU_MIMX94398AVKJ_cm7_core0) || defined(CPU_MIMX94398AVKM_cm7_core0) || defined(CPU_MIMX94398AVMJ_cm7_core0) || defined(CPU_MIMX94398AVMM_cm7_core0) || defined(CPU_MIMX94398DVKM_cm7_core0) || defined(CPU_MIMX94398DVMM_cm7_core0) || defined(CPU_MIMX94398XVMM_cm7_core0))
 #include "MIMX94398_cm7_core0_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm7_core1) || defined(CPU_MIMX94398AVKJ_cm7_core1) || defined(CPU_MIMX94398AVKM_cm7_core1) || defined(CPU_MIMX94398AVME_cm7_core1) || defined(CPU_MIMX94398AVMJ_cm7_core1) || defined(CPU_MIMX94398AVMM_cm7_core1) || defined(CPU_MIMX94398CVKE_cm7_core1) || defined(CPU_MIMX94398CVKJ_cm7_core1) || defined(CPU_MIMX94398CVKM_cm7_core1) || defined(CPU_MIMX94398CVME_cm7_core1) || defined(CPU_MIMX94398CVMJ_cm7_core1) || defined(CPU_MIMX94398CVMM_cm7_core1) || defined(CPU_MIMX94398DVKE_cm7_core1) || defined(CPU_MIMX94398DVKJ_cm7_core1) || defined(CPU_MIMX94398DVKM_cm7_core1) || defined(CPU_MIMX94398DVME_cm7_core1) || defined(CPU_MIMX94398DVMJ_cm7_core1) || defined(CPU_MIMX94398DVMM_cm7_core1) || defined(CPU_MIMX94398XVKE_cm7_core1) || defined(CPU_MIMX94398XVKJ_cm7_core1) || defined(CPU_MIMX94398XVKM_cm7_core1) || defined(CPU_MIMX94398XVME_cm7_core1) || defined(CPU_MIMX94398XVMJ_cm7_core1) || defined(CPU_MIMX94398XVMM_cm7_core1))
+#elif (defined(CPU_MIMX94398AVKJ_cm7_core1) || defined(CPU_MIMX94398AVKM_cm7_core1) || defined(CPU_MIMX94398AVMJ_cm7_core1) || defined(CPU_MIMX94398AVMM_cm7_core1) || defined(CPU_MIMX94398DVKM_cm7_core1) || defined(CPU_MIMX94398DVMM_cm7_core1) || defined(CPU_MIMX94398XVMM_cm7_core1))
 #include "MIMX94398_cm7_core1_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -230,268 +560,268 @@
 
 /** PXP - Register Layout Typedef */
 typedef struct {
-  __IO uint32_t CTRL;                              /**< Control Register 0, offset: 0x0 */
-  __IO uint32_t CTRL_SET;                          /**< Control Register 0, offset: 0x4 */
-  __IO uint32_t CTRL_CLR;                          /**< Control Register 0, offset: 0x8 */
-  __IO uint32_t CTRL_TOG;                          /**< Control Register 0, offset: 0xC */
-  __IO uint32_t STAT;                              /**< Status Register, offset: 0x10 */
-  __IO uint32_t STAT_SET;                          /**< Status Register, offset: 0x14 */
-  __IO uint32_t STAT_CLR;                          /**< Status Register, offset: 0x18 */
-  __IO uint32_t STAT_TOG;                          /**< Status Register, offset: 0x1C */
-  __IO uint32_t OUT_CTRL;                          /**< Output Buffer Control Register, offset: 0x20 */
-  __IO uint32_t OUT_CTRL_SET;                      /**< Output Buffer Control Register, offset: 0x24 */
-  __IO uint32_t OUT_CTRL_CLR;                      /**< Output Buffer Control Register, offset: 0x28 */
-  __IO uint32_t OUT_CTRL_TOG;                      /**< Output Buffer Control Register, offset: 0x2C */
-  __IO uint32_t OUT_BUF;                           /**< Output Frame Buffer Pointer Register, offset: 0x30 */
+  __IO uint32_t CTRL;                              /**< Control 0, offset: 0x0 */
+  __IO uint32_t CTRL_SET;                          /**< Control 0, offset: 0x4 */
+  __IO uint32_t CTRL_CLR;                          /**< Control 0, offset: 0x8 */
+  __IO uint32_t CTRL_TOG;                          /**< Control 0, offset: 0xC */
+  __IO uint32_t STAT;                              /**< Status, offset: 0x10 */
+  __IO uint32_t STAT_SET;                          /**< Status, offset: 0x14 */
+  __IO uint32_t STAT_CLR;                          /**< Status, offset: 0x18 */
+  __IO uint32_t STAT_TOG;                          /**< Status, offset: 0x1C */
+  __IO uint32_t OUT_CTRL;                          /**< Output Buffer Control, offset: 0x20 */
+  __IO uint32_t OUT_CTRL_SET;                      /**< Output Buffer Control, offset: 0x24 */
+  __IO uint32_t OUT_CTRL_CLR;                      /**< Output Buffer Control, offset: 0x28 */
+  __IO uint32_t OUT_CTRL_TOG;                      /**< Output Buffer Control, offset: 0x2C */
+  __IO uint32_t OUT_BUF;                           /**< Output Frame Buffer Pointer, offset: 0x30 */
        uint8_t RESERVED_0[12];
-  __IO uint32_t OUT_BUF2;                          /**< Output Frame Buffer Pointer #2 Register, offset: 0x40 */
+  __IO uint32_t OUT_BUF2;                          /**< Output Frame Buffer Pointer #2, offset: 0x40 */
        uint8_t RESERVED_1[12];
-  __IO uint32_t OUT_PITCH;                         /**< Output Buffer Pitch Register, offset: 0x50 */
+  __IO uint32_t OUT_PITCH;                         /**< Output Buffer Pitch, offset: 0x50 */
        uint8_t RESERVED_2[12];
-  __IO uint32_t OUT_LRC;                           /**< Output Surface Lower Right Coordinate Register, offset: 0x60 */
+  __IO uint32_t OUT_LRC;                           /**< Output Surface Lower Right Coordinate, offset: 0x60 */
        uint8_t RESERVED_3[12];
-  __IO uint32_t OUT_PS_ULC;                        /**< Processed Surface Upper Left Coordinate Register, offset: 0x70 */
+  __IO uint32_t OUT_PS_ULC;                        /**< Processed Surface Upper Left Coordinate, offset: 0x70 */
        uint8_t RESERVED_4[12];
-  __IO uint32_t OUT_PS_LRC;                        /**< Processed Surface Lower Right Coordinate Register, offset: 0x80 */
+  __IO uint32_t OUT_PS_LRC;                        /**< Processed Surface Lower Right Coordinate, offset: 0x80 */
        uint8_t RESERVED_5[12];
-  __IO uint32_t OUT_AS_ULC;                        /**< Alpha Surface Upper Left Coordinate Register, offset: 0x90 */
+  __IO uint32_t OUT_AS_ULC;                        /**< Alpha Surface Upper Left Coordinate, offset: 0x90 */
        uint8_t RESERVED_6[12];
-  __IO uint32_t OUT_AS_LRC;                        /**< Alpha Surface Lower Right Coordinate Register, offset: 0xA0 */
+  __IO uint32_t OUT_AS_LRC;                        /**< Alpha Surface Lower Right Coordinate, offset: 0xA0 */
        uint8_t RESERVED_7[12];
-  __IO uint32_t PS_CTRL;                           /**< Processed Surface (PS) Control Register, offset: 0xB0 */
-  __IO uint32_t PS_CTRL_SET;                       /**< Processed Surface (PS) Control Register, offset: 0xB4 */
-  __IO uint32_t PS_CTRL_CLR;                       /**< Processed Surface (PS) Control Register, offset: 0xB8 */
-  __IO uint32_t PS_CTRL_TOG;                       /**< Processed Surface (PS) Control Register, offset: 0xBC */
-  __IO uint32_t PS_BUF;                            /**< PS Input Buffer Address Register, offset: 0xC0 */
+  __IO uint32_t PS_CTRL;                           /**< Processed Surface (PS) Control, offset: 0xB0 */
+  __IO uint32_t PS_CTRL_SET;                       /**< Processed Surface (PS) Control, offset: 0xB4 */
+  __IO uint32_t PS_CTRL_CLR;                       /**< Processed Surface (PS) Control, offset: 0xB8 */
+  __IO uint32_t PS_CTRL_TOG;                       /**< Processed Surface (PS) Control, offset: 0xBC */
+  __IO uint32_t PS_BUF;                            /**< PS Input Buffer Address, offset: 0xC0 */
        uint8_t RESERVED_8[12];
-  __IO uint32_t PS_UBUF;                           /**< PS U/Cb or 2 Plane UV Input Buffer Address Register, offset: 0xD0 */
+  __IO uint32_t PS_UBUF;                           /**< PS U/Cb or 2 Plane UV Input Buffer Address, offset: 0xD0 */
        uint8_t RESERVED_9[12];
-  __IO uint32_t PS_VBUF;                           /**< PS V/Cr Input Buffer Address Register, offset: 0xE0 */
+  __IO uint32_t PS_VBUF;                           /**< PS V/Cr Input Buffer Address, offset: 0xE0 */
        uint8_t RESERVED_10[12];
-  __IO uint32_t PS_PITCH;                          /**< Processed Surface Pitch Register, offset: 0xF0 */
+  __IO uint32_t PS_PITCH;                          /**< Processed Surface Pitch, offset: 0xF0 */
        uint8_t RESERVED_11[12];
-  __IO uint32_t PS_BACKGROUND_0;                   /**< PS Background Color Register, offset: 0x100 */
+  __IO uint32_t PS_BACKGROUND_0;                   /**< PS Background Color, offset: 0x100 */
        uint8_t RESERVED_12[12];
-  __IO uint32_t PS_SCALE;                          /**< PS Scale Factor Register, offset: 0x110 */
+  __IO uint32_t PS_SCALE;                          /**< PS Scale Factor, offset: 0x110 */
        uint8_t RESERVED_13[12];
-  __IO uint32_t PS_OFFSET;                         /**< PS Scale Offset Register, offset: 0x120 */
+  __IO uint32_t PS_OFFSET;                         /**< PS Scale Offset, offset: 0x120 */
        uint8_t RESERVED_14[12];
-  __IO uint32_t PS_CLRKEYLOW_0;                    /**< PS Color Key Low Register, offset: 0x130 */
+  __IO uint32_t PS_CLRKEYLOW_0;                    /**< PS Color Key Low, offset: 0x130 */
        uint8_t RESERVED_15[12];
-  __IO uint32_t PS_CLRKEYHIGH_0;                   /**< PS Color Key High Register, offset: 0x140 */
+  __IO uint32_t PS_CLRKEYHIGH_0;                   /**< PS Color Key High, offset: 0x140 */
        uint8_t RESERVED_16[12];
-  __IO uint32_t AS_CTRL;                           /**< Alpha Surface Control Register, offset: 0x150 */
+  __IO uint32_t AS_CTRL;                           /**< Alpha Surface Control, offset: 0x150 */
        uint8_t RESERVED_17[12];
-  __IO uint32_t AS_BUF;                            /**< Alpha Surface Buffer Pointer Register, offset: 0x160 */
+  __IO uint32_t AS_BUF;                            /**< Alpha Surface Buffer Pointer, offset: 0x160 */
        uint8_t RESERVED_18[12];
-  __IO uint32_t AS_PITCH;                          /**< Alpha Surface Pitch Register, offset: 0x170 */
+  __IO uint32_t AS_PITCH;                          /**< Alpha Surface Pitch, offset: 0x170 */
        uint8_t RESERVED_19[12];
-  __IO uint32_t AS_CLRKEYLOW_0;                    /**< Overlay Color Key Low Register, offset: 0x180 */
+  __IO uint32_t AS_CLRKEYLOW_0;                    /**< Overlay Color Key Low, offset: 0x180 */
        uint8_t RESERVED_20[12];
-  __IO uint32_t AS_CLRKEYHIGH_0;                   /**< Overlay Color Key High Register, offset: 0x190 */
+  __IO uint32_t AS_CLRKEYHIGH_0;                   /**< Overlay Color Key High, offset: 0x190 */
        uint8_t RESERVED_21[12];
-  __IO uint32_t CSC1_COEF0;                        /**< Color Space Conversion 1 Coefficient 0 Register, offset: 0x1A0 */
+  __IO uint32_t CSC1_COEF0;                        /**< Color Space Conversion 1 Coefficient 0, offset: 0x1A0 */
        uint8_t RESERVED_22[12];
-  __IO uint32_t CSC1_COEF1;                        /**< Color Space Conversion 1 Coefficient 1 Register, offset: 0x1B0 */
+  __IO uint32_t CSC1_COEF1;                        /**< Color Space Conversion 1 Coefficient 1, offset: 0x1B0 */
        uint8_t RESERVED_23[12];
-  __IO uint32_t CSC1_COEF2;                        /**< Color Space Conversion 1 Coefficient 2 Register, offset: 0x1C0 */
+  __IO uint32_t CSC1_COEF2;                        /**< Color Space Conversion 1 Coefficient 2, offset: 0x1C0 */
        uint8_t RESERVED_24[12];
-  __IO uint32_t CSC2_CTRL;                         /**< Color Space Conversion 2 Control Register, offset: 0x1D0 */
+  __IO uint32_t CSC2_CTRL;                         /**< Color Space Conversion 2 Control, offset: 0x1D0 */
        uint8_t RESERVED_25[12];
-  __IO uint32_t CSC2_COEF0;                        /**< Color Space Conversion 2 Coefficient 0 Register, offset: 0x1E0 */
+  __IO uint32_t CSC2_COEF0;                        /**< Color Space Conversion 2 Coefficient 0, offset: 0x1E0 */
        uint8_t RESERVED_26[12];
-  __IO uint32_t CSC2_COEF1;                        /**< Color Space Conversion 2 Coefficient 1 Register, offset: 0x1F0 */
+  __IO uint32_t CSC2_COEF1;                        /**< Color Space Conversion 2 Coefficient 1, offset: 0x1F0 */
        uint8_t RESERVED_27[12];
-  __IO uint32_t CSC2_COEF2;                        /**< Color Space Conversion 2 Coefficient 2 Register, offset: 0x200 */
+  __IO uint32_t CSC2_COEF2;                        /**< Color Space Conversion 2 Coefficient 2, offset: 0x200 */
        uint8_t RESERVED_28[12];
-  __IO uint32_t CSC2_COEF3;                        /**< Color Space Conversion 2 Coefficient 3 Register, offset: 0x210 */
+  __IO uint32_t CSC2_COEF3;                        /**< Color Space Conversion 2 Coefficient 3, offset: 0x210 */
        uint8_t RESERVED_29[12];
-  __IO uint32_t CSC2_COEF4;                        /**< Color Space Conversion 2 Coefficient 4 Register, offset: 0x220 */
+  __IO uint32_t CSC2_COEF4;                        /**< Color Space Conversion 2 Coefficient 4, offset: 0x220 */
        uint8_t RESERVED_30[12];
-  __IO uint32_t CSC2_COEF5;                        /**< Color Space Conversion 2 Coefficient 5 Register, offset: 0x230 */
+  __IO uint32_t CSC2_COEF5;                        /**< Color Space Conversion 2 Coefficient 5, offset: 0x230 */
        uint8_t RESERVED_31[92];
-  __IO uint32_t ALPHA_A_CTRL;                      /**< Alpha Engine A Control Register, offset: 0x290 */
+  __IO uint32_t ALPHA_A_CTRL;                      /**< Alpha Engine A Control, offset: 0x290 */
        uint8_t RESERVED_32[12];
-  __IO uint32_t ALPHA_B_CTRL;                      /**< Alpha Engine B Control Register, offset: 0x2A0 */
+  __IO uint32_t ALPHA_B_CTRL;                      /**< Alpha Engine B Control, offset: 0x2A0 */
        uint8_t RESERVED_33[12];
-  __IO uint32_t ALPHA_B_CTRL_1;                    /**< Alpha Engine B Control 1 Register, offset: 0x2B0 */
+  __IO uint32_t ALPHA_B_CTRL_1;                    /**< Alpha Engine B Control 1, offset: 0x2B0 */
        uint8_t RESERVED_34[12];
-  __IO uint32_t PS_BACKGROUND_1;                   /**< PS Background Color 1 Register, offset: 0x2C0 */
+  __IO uint32_t PS_BACKGROUND_1;                   /**< PS Background Color 1, offset: 0x2C0 */
        uint8_t RESERVED_35[12];
-  __IO uint32_t PS_CLRKEYLOW_1;                    /**< PS Color Key Low Register, offset: 0x2D0 */
+  __IO uint32_t PS_CLRKEYLOW_1;                    /**< PS Color Key Low, offset: 0x2D0 */
        uint8_t RESERVED_36[12];
-  __IO uint32_t PS_CLRKEYHIGH_1;                   /**< PS Color Key High Register, offset: 0x2E0 */
+  __IO uint32_t PS_CLRKEYHIGH_1;                   /**< PS Color Key High, offset: 0x2E0 */
        uint8_t RESERVED_37[12];
-  __IO uint32_t AS_CLRKEYLOW_1;                    /**< Overlay Color Key Low Register, offset: 0x2F0 */
+  __IO uint32_t AS_CLRKEYLOW_1;                    /**< Overlay Color Key Low, offset: 0x2F0 */
        uint8_t RESERVED_38[12];
-  __IO uint32_t AS_CLRKEYHIGH_1;                   /**< Overlay Color Key High Register, offset: 0x300 */
+  __IO uint32_t AS_CLRKEYHIGH_1;                   /**< Overlay Color Key High, offset: 0x300 */
        uint8_t RESERVED_39[12];
-  __IO uint32_t CTRL2;                             /**< Control Register 2, offset: 0x310 */
-  __IO uint32_t CTRL2_SET;                         /**< Control Register 2, offset: 0x314 */
-  __IO uint32_t CTRL2_CLR;                         /**< Control Register 2, offset: 0x318 */
-  __IO uint32_t CTRL2_TOG;                         /**< Control Register 2, offset: 0x31C */
+  __IO uint32_t CTRL2;                             /**< Control 2, offset: 0x310 */
+  __IO uint32_t CTRL2_SET;                         /**< Control 2, offset: 0x314 */
+  __IO uint32_t CTRL2_CLR;                         /**< Control 2, offset: 0x318 */
+  __IO uint32_t CTRL2_TOG;                         /**< Control 2, offset: 0x31C */
   __IO uint32_t POWER_REG0;                        /**< Power Control Register 0, offset: 0x320 */
        uint8_t RESERVED_40[12];
   __IO uint32_t POWER_REG1;                        /**< Power Control Register 1, offset: 0x330 */
        uint8_t RESERVED_41[12];
-  __IO uint32_t DATA_PATH_CTRL0;                   /**< Data Path Control 0 Register, offset: 0x340 */
-  __IO uint32_t DATA_PATH_CTRL0_SET;               /**< Data Path Control 0 Register, offset: 0x344 */
-  __IO uint32_t DATA_PATH_CTRL0_CLR;               /**< Data Path Control 0 Register, offset: 0x348 */
-  __IO uint32_t DATA_PATH_CTRL0_TOG;               /**< Data Path Control 0 Register, offset: 0x34C */
+  __IO uint32_t DATA_PATH_CTRL0;                   /**< Data Path Control 0, offset: 0x340 */
+  __IO uint32_t DATA_PATH_CTRL0_SET;               /**< Data Path Control 0, offset: 0x344 */
+  __IO uint32_t DATA_PATH_CTRL0_CLR;               /**< Data Path Control 0, offset: 0x348 */
+  __IO uint32_t DATA_PATH_CTRL0_TOG;               /**< Data Path Control 0, offset: 0x34C */
        uint8_t RESERVED_42[64];
-  __IO uint32_t IRQ_MASK;                          /**< IRQ Mask Register, offset: 0x390 */
-  __IO uint32_t IRQ_MASK_SET;                      /**< IRQ Mask Register, offset: 0x394 */
-  __IO uint32_t IRQ_MASK_CLR;                      /**< IRQ Mask Register, offset: 0x398 */
-  __IO uint32_t IRQ_MASK_TOG;                      /**< IRQ Mask Register, offset: 0x39C */
-  __IO uint32_t IRQ;                               /**< Interrupt Register, offset: 0x3A0 */
-  __IO uint32_t IRQ_SET;                           /**< Interrupt Register, offset: 0x3A4 */
-  __IO uint32_t IRQ_CLR;                           /**< Interrupt Register, offset: 0x3A8 */
-  __IO uint32_t IRQ_TOG;                           /**< Interrupt Register, offset: 0x3AC */
+  __IO uint32_t IRQ_MASK;                          /**< IRQ Mask, offset: 0x390 */
+  __IO uint32_t IRQ_MASK_SET;                      /**< IRQ Mask, offset: 0x394 */
+  __IO uint32_t IRQ_MASK_CLR;                      /**< IRQ Mask, offset: 0x398 */
+  __IO uint32_t IRQ_MASK_TOG;                      /**< IRQ Mask, offset: 0x39C */
+  __IO uint32_t IRQ;                               /**< Interrupt, offset: 0x3A0 */
+  __IO uint32_t IRQ_SET;                           /**< Interrupt, offset: 0x3A4 */
+  __IO uint32_t IRQ_CLR;                           /**< Interrupt, offset: 0x3A8 */
+  __IO uint32_t IRQ_TOG;                           /**< Interrupt, offset: 0x3AC */
        uint8_t RESERVED_43[80];
-  __IO uint32_t NEXT;                              /**< Next Frame Pointer Register, offset: 0x400 */
+  __IO uint32_t NEXT;                              /**< Next Frame Pointer, offset: 0x400 */
        uint8_t RESERVED_44[60];
-  __IO uint32_t OUT_BUF3;                          /**< Output Frame Buffer Pointer #3 Register, offset: 0x440 */
+  __IO uint32_t OUT_BUF3;                          /**< Output Frame Buffer Pointer #3, offset: 0x440 */
        uint8_t RESERVED_45[12];
-  __IO uint32_t INPUT_FETCH_CTRL_CH0;              /**< Input Fetch Control Channel 0 Register, offset: 0x450 */
-  __IO uint32_t INPUT_FETCH_CTRL_CH0_SET;          /**< Input Fetch Control Channel 0 Register, offset: 0x454 */
-  __IO uint32_t INPUT_FETCH_CTRL_CH0_CLR;          /**< Input Fetch Control Channel 0 Register, offset: 0x458 */
-  __IO uint32_t INPUT_FETCH_CTRL_CH0_TOG;          /**< Input Fetch Control Channel 0 Register, offset: 0x45C */
-  __IO uint32_t INPUT_FETCH_CTRL_CH1;              /**< Input Fetch Control Channel 1 Register, offset: 0x460 */
-  __IO uint32_t INPUT_FETCH_CTRL_CH1_SET;          /**< Input Fetch Control Channel 1 Register, offset: 0x464 */
-  __IO uint32_t INPUT_FETCH_CTRL_CH1_CLR;          /**< Input Fetch Control Channel 1 Register, offset: 0x468 */
-  __IO uint32_t INPUT_FETCH_CTRL_CH1_TOG;          /**< Input Fetch Control Channel 1 Register, offset: 0x46C */
-  __I  uint32_t INPUT_FETCH_STATUS_CH0;            /**< Input Fetch Status Channel 0 Register, offset: 0x470 */
+  __IO uint32_t INPUT_FETCH_CTRL_CH0;              /**< Input Fetch Control Channel 0, offset: 0x450 */
+  __IO uint32_t INPUT_FETCH_CTRL_CH0_SET;          /**< Input Fetch Control Channel 0, offset: 0x454 */
+  __IO uint32_t INPUT_FETCH_CTRL_CH0_CLR;          /**< Input Fetch Control Channel 0, offset: 0x458 */
+  __IO uint32_t INPUT_FETCH_CTRL_CH0_TOG;          /**< Input Fetch Control Channel 0, offset: 0x45C */
+  __IO uint32_t INPUT_FETCH_CTRL_CH1;              /**< Input Fetch Control Channel 1, offset: 0x460 */
+  __IO uint32_t INPUT_FETCH_CTRL_CH1_SET;          /**< Input Fetch Control Channel 1, offset: 0x464 */
+  __IO uint32_t INPUT_FETCH_CTRL_CH1_CLR;          /**< Input Fetch Control Channel 1, offset: 0x468 */
+  __IO uint32_t INPUT_FETCH_CTRL_CH1_TOG;          /**< Input Fetch Control Channel 1, offset: 0x46C */
+  __I  uint32_t INPUT_FETCH_STATUS_CH0;            /**< Input Fetch Status Channel 0, offset: 0x470 */
        uint8_t RESERVED_46[12];
-  __I  uint32_t INPUT_FETCH_STATUS_CH1;            /**< Input Fetch Status Channel 1 Register, offset: 0x480 */
+  __I  uint32_t INPUT_FETCH_STATUS_CH1;            /**< Input Fetch Status Channel 1, offset: 0x480 */
        uint8_t RESERVED_47[12];
-  __IO uint32_t INPUT_FETCH_ACTIVE_SIZE_ULC_CH0;   /**< Input Fetch Active Size ULC Channel 0 Register, offset: 0x490 */
+  __IO uint32_t INPUT_FETCH_ACTIVE_SIZE_ULC_CH0;   /**< Input Fetch Active Size ULC Channel 0, offset: 0x490 */
        uint8_t RESERVED_48[12];
-  __IO uint32_t INPUT_FETCH_ACTIVE_SIZE_LRC_CH0;   /**< Input Fetch Active Size LRC Channel 0 Register, offset: 0x4A0 */
+  __IO uint32_t INPUT_FETCH_ACTIVE_SIZE_LRC_CH0;   /**< Input Fetch Active Size LRC Channel 0, offset: 0x4A0 */
        uint8_t RESERVED_49[12];
-  __IO uint32_t INPUT_FETCH_ACTIVE_SIZE_ULC_CH1;   /**< Input Fetch Active Size ULC Channel 1 Register, offset: 0x4B0 */
+  __IO uint32_t INPUT_FETCH_ACTIVE_SIZE_ULC_CH1;   /**< Input Fetch Active Size ULC Channel 1, offset: 0x4B0 */
        uint8_t RESERVED_50[12];
-  __IO uint32_t INPUT_FETCH_ACTIVE_SIZE_LRC_CH1;   /**< Input Fetch Active Size LRC Channel 1 Register, offset: 0x4C0 */
+  __IO uint32_t INPUT_FETCH_ACTIVE_SIZE_LRC_CH1;   /**< Input Fetch Active Size LRC Channel 1, offset: 0x4C0 */
        uint8_t RESERVED_51[12];
-  __IO uint32_t INPUT_FETCH_SIZE_CH0;              /**< Input Fetch Size Channel 0 Register, offset: 0x4D0 */
+  __IO uint32_t INPUT_FETCH_SIZE_CH0;              /**< Input Fetch Size Channel 0, offset: 0x4D0 */
        uint8_t RESERVED_52[12];
-  __IO uint32_t INPUT_FETCH_SIZE_CH1;              /**< Input Fetch Size Channel 1 Register, offset: 0x4E0 */
+  __IO uint32_t INPUT_FETCH_SIZE_CH1;              /**< Input Fetch Size Channel 1, offset: 0x4E0 */
        uint8_t RESERVED_53[12];
-  __IO uint32_t INPUT_FETCH_BACKGROUND_COLOR_CH0;  /**< Input Fetch Background Color Channel 0 Register, offset: 0x4F0 */
+  __IO uint32_t INPUT_FETCH_BACKGROUND_COLOR_CH0;  /**< Input Fetch Background Color Channel 0, offset: 0x4F0 */
        uint8_t RESERVED_54[12];
-  __IO uint32_t INPUT_FETCH_BACKGROUND_COLOR_CH1;  /**< Input Fetch Background Color Channel 1 Register, offset: 0x500 */
+  __IO uint32_t INPUT_FETCH_BACKGROUND_COLOR_CH1;  /**< Input Fetch Background Color Channel 1, offset: 0x500 */
        uint8_t RESERVED_55[12];
-  __IO uint32_t INPUT_FETCH_PITCH;                 /**< Input Fetch Pitch Register, offset: 0x510 */
+  __IO uint32_t INPUT_FETCH_PITCH;                 /**< Input Fetch Pitch, offset: 0x510 */
        uint8_t RESERVED_56[12];
-  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH0;        /**< Input Fetch Shift Control Channel 0 Register, offset: 0x520 */
-  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH0_SET;    /**< Input Fetch Shift Control Channel 0 Register, offset: 0x524 */
-  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH0_CLR;    /**< Input Fetch Shift Control Channel 0 Register, offset: 0x528 */
-  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH0_TOG;    /**< Input Fetch Shift Control Channel 0 Register, offset: 0x52C */
-  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH1;        /**< Input Fetch Shift Control Channel 1 Register, offset: 0x530 */
-  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH1_SET;    /**< Input Fetch Shift Control Channel 1 Register, offset: 0x534 */
-  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH1_CLR;    /**< Input Fetch Shift Control Channel 1 Register, offset: 0x538 */
-  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH1_TOG;    /**< Input Fetch Shift Control Channel 1 Register, offset: 0x53C */
-  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH0;      /**< Input Fetch Shift Offset Channel 0 Register, offset: 0x540 */
-  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH0_SET;  /**< Input Fetch Shift Offset Channel 0 Register, offset: 0x544 */
-  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH0_CLR;  /**< Input Fetch Shift Offset Channel 0 Register, offset: 0x548 */
-  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH0_TOG;  /**< Input Fetch Shift Offset Channel 0 Register, offset: 0x54C */
-  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH1;      /**< Input Fetch Shift Offset Channel 1 Register, offset: 0x550 */
-  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH1_SET;  /**< Input Fetch Shift Offset Channel 1 Register, offset: 0x554 */
-  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH1_CLR;  /**< Input Fetch Shift Offset Channel 1 Register, offset: 0x558 */
-  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH1_TOG;  /**< Input Fetch Shift Offset Channel 1 Register, offset: 0x55C */
-  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH0;       /**< Input Fetch Shift Width Channel 0 Register, offset: 0x560 */
-  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH0_SET;   /**< Input Fetch Shift Width Channel 0 Register, offset: 0x564 */
-  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH0_CLR;   /**< Input Fetch Shift Width Channel 0 Register, offset: 0x568 */
-  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH0_TOG;   /**< Input Fetch Shift Width Channel 0 Register, offset: 0x56C */
-  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH1;       /**< Input Fetch Shift Width Channel 1 Register, offset: 0x570 */
-  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH1_SET;   /**< Input Fetch Shift Width Channel 1 Register, offset: 0x574 */
-  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH1_CLR;   /**< Input Fetch Shift Width Channel 1 Register, offset: 0x578 */
-  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH1_TOG;   /**< Input Fetch Shift Width Channel 1 Register, offset: 0x57C */
-  __IO uint32_t INPUT_FETCH_ADDR_0_CH0;            /**< Input Fetch Address 0 Channel 0 Register, offset: 0x580 */
+  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH0;        /**< Input Fetch Shift Control Channel 0, offset: 0x520 */
+  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH0_SET;    /**< Input Fetch Shift Control Channel 0, offset: 0x524 */
+  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH0_CLR;    /**< Input Fetch Shift Control Channel 0, offset: 0x528 */
+  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH0_TOG;    /**< Input Fetch Shift Control Channel 0, offset: 0x52C */
+  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH1;        /**< Input Fetch Shift Control Channel 1, offset: 0x530 */
+  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH1_SET;    /**< Input Fetch Shift Control Channel 1, offset: 0x534 */
+  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH1_CLR;    /**< Input Fetch Shift Control Channel 1, offset: 0x538 */
+  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH1_TOG;    /**< Input Fetch Shift Control Channel 1, offset: 0x53C */
+  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH0;      /**< Input Fetch Shift Offset Channel 0, offset: 0x540 */
+  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH0_SET;  /**< Input Fetch Shift Offset Channel 0, offset: 0x544 */
+  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH0_CLR;  /**< Input Fetch Shift Offset Channel 0, offset: 0x548 */
+  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH0_TOG;  /**< Input Fetch Shift Offset Channel 0, offset: 0x54C */
+  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH1;      /**< Input Fetch Shift Offset Channel 1, offset: 0x550 */
+  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH1_SET;  /**< Input Fetch Shift Offset Channel 1, offset: 0x554 */
+  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH1_CLR;  /**< Input Fetch Shift Offset Channel 1, offset: 0x558 */
+  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH1_TOG;  /**< Input Fetch Shift Offset Channel 1, offset: 0x55C */
+  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH0;       /**< Input Fetch Shift Width Channel 0, offset: 0x560 */
+  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH0_SET;   /**< Input Fetch Shift Width Channel 0, offset: 0x564 */
+  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH0_CLR;   /**< Input Fetch Shift Width Channel 0, offset: 0x568 */
+  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH0_TOG;   /**< Input Fetch Shift Width Channel 0, offset: 0x56C */
+  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH1;       /**< Input Fetch Shift Width Channel 1, offset: 0x570 */
+  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH1_SET;   /**< Input Fetch Shift Width Channel 1, offset: 0x574 */
+  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH1_CLR;   /**< Input Fetch Shift Width Channel 1, offset: 0x578 */
+  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH1_TOG;   /**< Input Fetch Shift Width Channel 1, offset: 0x57C */
+  __IO uint32_t INPUT_FETCH_ADDR_0_CH0;            /**< Input Fetch Address 0 Channel 0, offset: 0x580 */
        uint8_t RESERVED_57[12];
-  __IO uint32_t INPUT_FETCH_ADDR_1_CH0;            /**< Input Fetch Address 1 Channel 0 Register, offset: 0x590 */
+  __IO uint32_t INPUT_FETCH_ADDR_1_CH0;            /**< Input Fetch Address 1 Channel 0, offset: 0x590 */
        uint8_t RESERVED_58[12];
-  __IO uint32_t INPUT_FETCH_ADDR_0_CH1;            /**< Input Fetch Address 0 Channel 1 Register, offset: 0x5A0 */
+  __IO uint32_t INPUT_FETCH_ADDR_0_CH1;            /**< Input Fetch Address 0 Channel 1, offset: 0x5A0 */
        uint8_t RESERVED_59[12];
-  __IO uint32_t INPUT_FETCH_ADDR_1_CH1;            /**< Input Fetch Address 1 Channel 1 Register, offset: 0x5B0 */
+  __IO uint32_t INPUT_FETCH_ADDR_1_CH1;            /**< Input Fetch Address 1 Channel 1, offset: 0x5B0 */
        uint8_t RESERVED_60[12];
-  __IO uint32_t INPUT_STORE_CTRL_CH0;              /**< Input Store Control Channel 0 Register, offset: 0x5C0 */
-  __IO uint32_t INPUT_STORE_CTRL_CH0_SET;          /**< Input Store Control Channel 0 Register, offset: 0x5C4 */
-  __IO uint32_t INPUT_STORE_CTRL_CH0_CLR;          /**< Input Store Control Channel 0 Register, offset: 0x5C8 */
-  __IO uint32_t INPUT_STORE_CTRL_CH0_TOG;          /**< Input Store Control Channel 0 Register, offset: 0x5CC */
-  __IO uint32_t INPUT_STORE_CTRL_CH1;              /**< Input Store Control Channel 1 Register, offset: 0x5D0 */
-  __IO uint32_t INPUT_STORE_CTRL_CH1_SET;          /**< Input Store Control Channel 1 Register, offset: 0x5D4 */
-  __IO uint32_t INPUT_STORE_CTRL_CH1_CLR;          /**< Input Store Control Channel 1 Register, offset: 0x5D8 */
-  __IO uint32_t INPUT_STORE_CTRL_CH1_TOG;          /**< Input Store Control Channel 1 Register, offset: 0x5DC */
-  __I  uint32_t INPUT_STORE_STATUS_CH0;            /**< Input Store Status Channel 0 Register, offset: 0x5E0 */
+  __IO uint32_t INPUT_STORE_CTRL_CH0;              /**< Input Store Control Channel 0, offset: 0x5C0 */
+  __IO uint32_t INPUT_STORE_CTRL_CH0_SET;          /**< Input Store Control Channel 0, offset: 0x5C4 */
+  __IO uint32_t INPUT_STORE_CTRL_CH0_CLR;          /**< Input Store Control Channel 0, offset: 0x5C8 */
+  __IO uint32_t INPUT_STORE_CTRL_CH0_TOG;          /**< Input Store Control Channel 0, offset: 0x5CC */
+  __IO uint32_t INPUT_STORE_CTRL_CH1;              /**< Input Store Control Channel 1, offset: 0x5D0 */
+  __IO uint32_t INPUT_STORE_CTRL_CH1_SET;          /**< Input Store Control Channel 1, offset: 0x5D4 */
+  __IO uint32_t INPUT_STORE_CTRL_CH1_CLR;          /**< Input Store Control Channel 1, offset: 0x5D8 */
+  __IO uint32_t INPUT_STORE_CTRL_CH1_TOG;          /**< Input Store Control Channel 1, offset: 0x5DC */
+  __I  uint32_t INPUT_STORE_STATUS_CH0;            /**< Input Store Status Channel 0, offset: 0x5E0 */
        uint8_t RESERVED_61[12];
-  __I  uint32_t INPUT_STORE_STATUS_CH1;            /**< Input Store Status Channel 1 Register, offset: 0x5F0 */
+  __I  uint32_t INPUT_STORE_STATUS_CH1;            /**< Input Store Status Channel 1, offset: 0x5F0 */
        uint8_t RESERVED_62[12];
-  __IO uint32_t INPUT_STORE_SIZE_CH0;              /**< Input Store Size Channel 0 Register, offset: 0x600 */
+  __IO uint32_t INPUT_STORE_SIZE_CH0;              /**< Input Store Size Channel 0, offset: 0x600 */
        uint8_t RESERVED_63[12];
-  __IO uint32_t INPUT_STORE_SIZE_CH1;              /**< Input Store Size Channel 1 Register, offset: 0x610 */
+  __IO uint32_t INPUT_STORE_SIZE_CH1;              /**< Input Store Size Channel 1, offset: 0x610 */
        uint8_t RESERVED_64[12];
-  __IO uint32_t INPUT_STORE_PITCH;                 /**< Input Store Pitch Register, offset: 0x620 */
+  __IO uint32_t INPUT_STORE_PITCH;                 /**< Input Store Pitch, offset: 0x620 */
        uint8_t RESERVED_65[12];
-  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH0;        /**< Input Store Shift Control Channel 0 Register, offset: 0x630 */
-  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH0_SET;    /**< Input Store Shift Control Channel 0 Register, offset: 0x634 */
-  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH0_CLR;    /**< Input Store Shift Control Channel 0 Register, offset: 0x638 */
-  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH0_TOG;    /**< Input Store Shift Control Channel 0 Register, offset: 0x63C */
-  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH1;        /**< Input Store Shift Control Channel 1 Register, offset: 0x640 */
-  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH1_SET;    /**< Input Store Shift Control Channel 1 Register, offset: 0x644 */
-  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH1_CLR;    /**< Input Store Shift Control Channel 1 Register, offset: 0x648 */
-  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH1_TOG;    /**< Input Store Shift Control Channel 1 Register, offset: 0x64C */
+  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH0;        /**< Input Store Shift Control Channel 0, offset: 0x630 */
+  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH0_SET;    /**< Input Store Shift Control Channel 0, offset: 0x634 */
+  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH0_CLR;    /**< Input Store Shift Control Channel 0, offset: 0x638 */
+  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH0_TOG;    /**< Input Store Shift Control Channel 0, offset: 0x63C */
+  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH1;        /**< Input Store Shift Control Channel 1, offset: 0x640 */
+  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH1_SET;    /**< Input Store Shift Control Channel 1, offset: 0x644 */
+  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH1_CLR;    /**< Input Store Shift Control Channel 1, offset: 0x648 */
+  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH1_TOG;    /**< Input Store Shift Control Channel 1, offset: 0x64C */
        uint8_t RESERVED_66[64];
-  __IO uint32_t INPUT_STORE_ADDR_0_CH0;            /**< Input Store Address 0 Channel 0 Register, offset: 0x690 */
+  __IO uint32_t INPUT_STORE_ADDR_0_CH0;            /**< Input Store Address 0 Channel 0, offset: 0x690 */
        uint8_t RESERVED_67[12];
-  __IO uint32_t INPUT_STORE_ADDR_1_CH0;            /**< Input Store Address 1 Channel 0 Register, offset: 0x6A0 */
+  __IO uint32_t INPUT_STORE_ADDR_1_CH0;            /**< Input Store Address 1 Channel 0, offset: 0x6A0 */
        uint8_t RESERVED_68[12];
-  __IO uint32_t INPUT_STORE_FILL_DATA_CH0;         /**< Input Store Fill Data Channel 0 Register, offset: 0x6B0 */
+  __IO uint32_t INPUT_STORE_FILL_DATA_CH0;         /**< Input Store Fill Data Channel 0, offset: 0x6B0 */
        uint8_t RESERVED_69[12];
-  __IO uint32_t INPUT_STORE_ADDR_0_CH1;            /**< Input Store Address 0 Channel 1 Register, offset: 0x6C0 */
+  __IO uint32_t INPUT_STORE_ADDR_0_CH1;            /**< Input Store Address 0 Channel 1, offset: 0x6C0 */
        uint8_t RESERVED_70[12];
-  __IO uint32_t INPUT_STORE_ADDR_1_CH1;            /**< Input Store Address 1 Channel 1 Register, offset: 0x6D0 */
+  __IO uint32_t INPUT_STORE_ADDR_1_CH1;            /**< Input Store Address 1 Channel 1, offset: 0x6D0 */
        uint8_t RESERVED_71[12];
-  __IO uint32_t INPUT_STORE_D_MASK0_H_CH0;         /**< Input Store Data Mask 0 High Byte Channel 0 Register, offset: 0x6E0 */
+  __IO uint32_t INPUT_STORE_D_MASK0_H_CH0;         /**< Input Store Data Mask 0 High Byte Channel 0, offset: 0x6E0 */
        uint8_t RESERVED_72[12];
-  __IO uint32_t INPUT_STORE_D_MASK0_L_CH0;         /**< Input Store Data Mask 0 Low Byte Channel 0 Register, offset: 0x6F0 */
+  __IO uint32_t INPUT_STORE_D_MASK0_L_CH0;         /**< Input Store Data Mask 0 Low Byte Channel 0, offset: 0x6F0 */
        uint8_t RESERVED_73[12];
-  __IO uint32_t INPUT_STORE_D_MASK1_H_CH0;         /**< Input Store Data Mask 1 High Byte Channel 0 Register, offset: 0x700 */
+  __IO uint32_t INPUT_STORE_D_MASK1_H_CH0;         /**< Input Store Data Mask 1 High Byte Channel 0, offset: 0x700 */
        uint8_t RESERVED_74[12];
-  __IO uint32_t INPUT_STORE_D_MASK1_L_CH0;         /**< Input Store Data Mask 1 Low Byte Channel 0 Register, offset: 0x710 */
+  __IO uint32_t INPUT_STORE_D_MASK1_L_CH0;         /**< Input Store Data Mask 1 Low Byte Channel 0, offset: 0x710 */
        uint8_t RESERVED_75[12];
-  __IO uint32_t INPUT_STORE_D_MASK2_H_CH0;         /**< Input Store Data Mask 2 High Byte Channel 0 Register, offset: 0x720 */
+  __IO uint32_t INPUT_STORE_D_MASK2_H_CH0;         /**< Input Store Data Mask 2 High Byte Channel 0, offset: 0x720 */
        uint8_t RESERVED_76[12];
-  __IO uint32_t INPUT_STORE_D_MASK2_L_CH0;         /**< Input Store Data Mask 2 Low Byte Channel 0 Register, offset: 0x730 */
+  __IO uint32_t INPUT_STORE_D_MASK2_L_CH0;         /**< Input Store Data Mask 2 Low Byte Channel 0, offset: 0x730 */
        uint8_t RESERVED_77[12];
-  __IO uint32_t INPUT_STORE_D_MASK3_H_CH0;         /**< Input Store Data Mask 3 High Byte Channel 0 Register, offset: 0x740 */
+  __IO uint32_t INPUT_STORE_D_MASK3_H_CH0;         /**< Input Store Data Mask 3 High Byte Channel 0, offset: 0x740 */
        uint8_t RESERVED_78[12];
-  __IO uint32_t INPUT_STORE_D_MASK3_L_CH0;         /**< Input Store Data Mask 3 Low Byte Channel 0 Register, offset: 0x750 */
+  __IO uint32_t INPUT_STORE_D_MASK3_L_CH0;         /**< Input Store Data Mask 3 Low Byte Channel 0, offset: 0x750 */
        uint8_t RESERVED_79[12];
-  __IO uint32_t INPUT_STORE_D_MASK4_H_CH0;         /**< Input Store Data Mask 4 High Byte Channel 0 Register, offset: 0x760 */
+  __IO uint32_t INPUT_STORE_D_MASK4_H_CH0;         /**< Input Store Data Mask 4 High Byte Channel 0, offset: 0x760 */
        uint8_t RESERVED_80[12];
-  __IO uint32_t INPUT_STORE_D_MASK4_L_CH0;         /**< Input Store Data Mask 4 Low Byte Channel 0 Register, offset: 0x770 */
+  __IO uint32_t INPUT_STORE_D_MASK4_L_CH0;         /**< Input Store Data Mask 4 Low Byte Channel 0, offset: 0x770 */
        uint8_t RESERVED_81[12];
-  __IO uint32_t INPUT_STORE_D_MASK5_H_CH0;         /**< Input Store Data Mask 5 High Byte Channel 0 Register, offset: 0x780 */
+  __IO uint32_t INPUT_STORE_D_MASK5_H_CH0;         /**< Input Store Data Mask 5 High Byte Channel 0, offset: 0x780 */
        uint8_t RESERVED_82[12];
-  __IO uint32_t INPUT_STORE_D_MASK5_L_CH0;         /**< Input Store Data Mask 5 Low Byte Channel 0 Register, offset: 0x790 */
+  __IO uint32_t INPUT_STORE_D_MASK5_L_CH0;         /**< Input Store Data Mask 5 Low Byte Channel 0, offset: 0x790 */
        uint8_t RESERVED_83[12];
-  __IO uint32_t INPUT_STORE_D_MASK6_H_CH0;         /**< Input Store Data Mask 6 High Byte Channel 0 Register, offset: 0x7A0 */
+  __IO uint32_t INPUT_STORE_D_MASK6_H_CH0;         /**< Input Store Data Mask 6 High Byte Channel 0, offset: 0x7A0 */
        uint8_t RESERVED_84[12];
-  __IO uint32_t INPUT_STORE_D_MASK6_L_CH0;         /**< Input Store Data Mask 6 Low Byte Channel 0 Register, offset: 0x7B0 */
+  __IO uint32_t INPUT_STORE_D_MASK6_L_CH0;         /**< Input Store Data Mask 6 Low Byte Channel 0, offset: 0x7B0 */
        uint8_t RESERVED_85[12];
-  __IO uint32_t INPUT_STORE_D_MASK7_H_CH0;         /**< Input Store Data Mask 7 High Byte Channel 0 Register, offset: 0x7C0 */
+  __IO uint32_t INPUT_STORE_D_MASK7_H_CH0;         /**< Input Store Data Mask 7 High Byte Channel 0, offset: 0x7C0 */
        uint8_t RESERVED_86[28];
-  __IO uint32_t INPUT_STORE_D_MASK7_L_CH0;         /**< Input Store Data Mask 7 Low Byte Channel 0 Register, offset: 0x7E0 */
+  __IO uint32_t INPUT_STORE_D_MASK7_L_CH0;         /**< Input Store Data Mask 7 Low Byte Channel 0, offset: 0x7E0 */
        uint8_t RESERVED_87[12];
-  __IO uint32_t INPUT_STORE_D_SHIFT_L_CH0;         /**< Input Store Data Shift Low Channel 0 Register, offset: 0x7F0 */
+  __IO uint32_t INPUT_STORE_D_SHIFT_L_CH0;         /**< Input Store Data Shift Low Channel 0, offset: 0x7F0 */
        uint8_t RESERVED_88[12];
-  __IO uint32_t INPUT_STORE_D_SHIFT_H_CH0;         /**< Input Store Data Shift High Channel 0 Register, offset: 0x800 */
+  __IO uint32_t INPUT_STORE_D_SHIFT_H_CH0;         /**< Input Store Data Shift High Channel 0, offset: 0x800 */
        uint8_t RESERVED_89[9436];
-  __IO uint32_t BUS_MUX;                           /**< Bus MUX Register, offset: 0x2CE0 */
+  __IO uint32_t BUS_MUX;                           /**< Bus MUX, offset: 0x2CE0 */
        uint8_t RESERVED_90[796];
-  __IO uint32_t PS_LRC;                            /**< Processed Surface Lower Right Coordinate Register, offset: 0x3000 */
+  __IO uint32_t PS_LRC;                            /**< Processed Surface Lower Right Coordinate, offset: 0x3000 */
        uint8_t RESERVED_91[12];
-  __IO uint32_t AS_BACKGROUND;                     /**< AS Background Color Register, offset: 0x3010 */
+  __IO uint32_t AS_BACKGROUND;                     /**< AS Background Color, offset: 0x3010 */
 } PXP_Type;
 
 /* ----------------------------------------------------------------------------
@@ -503,7 +833,7 @@ typedef struct {
  * @{
  */
 
-/*! @name CTRL - Control Register 0 */
+/*! @name CTRL - Control 0 */
 /*! @{ */
 
 #define PXP_CTRL_ENABLE_MASK                     (0x1U)
@@ -528,7 +858,7 @@ typedef struct {
 
 #define PXP_CTRL_HANDSHAKE_ABORT_SKIP_MASK       (0x20U)
 #define PXP_CTRL_HANDSHAKE_ABORT_SKIP_SHIFT      (5U)
-/*! HANDSHAKE_ABORT_SKIP - HANDSHAKE_ABORT_SKIP */
+/*! HANDSHAKE_ABORT_SKIP - HANDSHAKE_STOP_SKIP */
 #define PXP_CTRL_HANDSHAKE_ABORT_SKIP(x)         (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_HANDSHAKE_ABORT_SKIP_SHIFT)) & PXP_CTRL_HANDSHAKE_ABORT_SKIP_MASK)
 
 #define PXP_CTRL_ROTATE0_MASK                    (0x300U)
@@ -623,7 +953,7 @@ typedef struct {
 #define PXP_CTRL_SFTRST(x)                       (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SFTRST_SHIFT)) & PXP_CTRL_SFTRST_MASK)
 /*! @} */
 
-/*! @name CTRL_SET - Control Register 0 */
+/*! @name CTRL_SET - Control 0 */
 /*! @{ */
 
 #define PXP_CTRL_SET_ENABLE_MASK                 (0x1U)
@@ -648,7 +978,7 @@ typedef struct {
 
 #define PXP_CTRL_SET_HANDSHAKE_ABORT_SKIP_MASK   (0x20U)
 #define PXP_CTRL_SET_HANDSHAKE_ABORT_SKIP_SHIFT  (5U)
-/*! HANDSHAKE_ABORT_SKIP - HANDSHAKE_ABORT_SKIP */
+/*! HANDSHAKE_ABORT_SKIP - HANDSHAKE_STOP_SKIP */
 #define PXP_CTRL_SET_HANDSHAKE_ABORT_SKIP(x)     (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_HANDSHAKE_ABORT_SKIP_SHIFT)) & PXP_CTRL_SET_HANDSHAKE_ABORT_SKIP_MASK)
 
 #define PXP_CTRL_SET_ROTATE0_MASK                (0x300U)
@@ -727,7 +1057,7 @@ typedef struct {
 #define PXP_CTRL_SET_SFTRST(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_SFTRST_SHIFT)) & PXP_CTRL_SET_SFTRST_MASK)
 /*! @} */
 
-/*! @name CTRL_CLR - Control Register 0 */
+/*! @name CTRL_CLR - Control 0 */
 /*! @{ */
 
 #define PXP_CTRL_CLR_ENABLE_MASK                 (0x1U)
@@ -752,7 +1082,7 @@ typedef struct {
 
 #define PXP_CTRL_CLR_HANDSHAKE_ABORT_SKIP_MASK   (0x20U)
 #define PXP_CTRL_CLR_HANDSHAKE_ABORT_SKIP_SHIFT  (5U)
-/*! HANDSHAKE_ABORT_SKIP - HANDSHAKE_ABORT_SKIP */
+/*! HANDSHAKE_ABORT_SKIP - HANDSHAKE_STOP_SKIP */
 #define PXP_CTRL_CLR_HANDSHAKE_ABORT_SKIP(x)     (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_HANDSHAKE_ABORT_SKIP_SHIFT)) & PXP_CTRL_CLR_HANDSHAKE_ABORT_SKIP_MASK)
 
 #define PXP_CTRL_CLR_ROTATE0_MASK                (0x300U)
@@ -831,7 +1161,7 @@ typedef struct {
 #define PXP_CTRL_CLR_SFTRST(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_SFTRST_SHIFT)) & PXP_CTRL_CLR_SFTRST_MASK)
 /*! @} */
 
-/*! @name CTRL_TOG - Control Register 0 */
+/*! @name CTRL_TOG - Control 0 */
 /*! @{ */
 
 #define PXP_CTRL_TOG_ENABLE_MASK                 (0x1U)
@@ -856,7 +1186,7 @@ typedef struct {
 
 #define PXP_CTRL_TOG_HANDSHAKE_ABORT_SKIP_MASK   (0x20U)
 #define PXP_CTRL_TOG_HANDSHAKE_ABORT_SKIP_SHIFT  (5U)
-/*! HANDSHAKE_ABORT_SKIP - HANDSHAKE_ABORT_SKIP */
+/*! HANDSHAKE_ABORT_SKIP - HANDSHAKE_STOP_SKIP */
 #define PXP_CTRL_TOG_HANDSHAKE_ABORT_SKIP(x)     (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_HANDSHAKE_ABORT_SKIP_SHIFT)) & PXP_CTRL_TOG_HANDSHAKE_ABORT_SKIP_MASK)
 
 #define PXP_CTRL_TOG_ROTATE0_MASK                (0x300U)
@@ -935,7 +1265,7 @@ typedef struct {
 #define PXP_CTRL_TOG_SFTRST(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_SFTRST_SHIFT)) & PXP_CTRL_TOG_SFTRST_MASK)
 /*! @} */
 
-/*! @name STAT - Status Register */
+/*! @name STAT - Status */
 /*! @{ */
 
 #define PXP_STAT_IRQ0_MASK                       (0x1U)
@@ -989,7 +1319,7 @@ typedef struct {
 #define PXP_STAT_BLOCKX(x)                       (((uint32_t)(((uint32_t)(x)) << PXP_STAT_BLOCKX_SHIFT)) & PXP_STAT_BLOCKX_MASK)
 /*! @} */
 
-/*! @name STAT_SET - Status Register */
+/*! @name STAT_SET - Status */
 /*! @{ */
 
 #define PXP_STAT_SET_IRQ0_MASK                   (0x1U)
@@ -1043,7 +1373,7 @@ typedef struct {
 #define PXP_STAT_SET_BLOCKX(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_STAT_SET_BLOCKX_SHIFT)) & PXP_STAT_SET_BLOCKX_MASK)
 /*! @} */
 
-/*! @name STAT_CLR - Status Register */
+/*! @name STAT_CLR - Status */
 /*! @{ */
 
 #define PXP_STAT_CLR_IRQ0_MASK                   (0x1U)
@@ -1097,7 +1427,7 @@ typedef struct {
 #define PXP_STAT_CLR_BLOCKX(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_STAT_CLR_BLOCKX_SHIFT)) & PXP_STAT_CLR_BLOCKX_MASK)
 /*! @} */
 
-/*! @name STAT_TOG - Status Register */
+/*! @name STAT_TOG - Status */
 /*! @{ */
 
 #define PXP_STAT_TOG_IRQ0_MASK                   (0x1U)
@@ -1151,7 +1481,7 @@ typedef struct {
 #define PXP_STAT_TOG_BLOCKX(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_STAT_TOG_BLOCKX_SHIFT)) & PXP_STAT_TOG_BLOCKX_MASK)
 /*! @} */
 
-/*! @name OUT_CTRL - Output Buffer Control Register */
+/*! @name OUT_CTRL - Output Buffer Control */
 /*! @{ */
 
 #define PXP_OUT_CTRL_FORMAT_MASK                 (0x1FU)
@@ -1204,7 +1534,7 @@ typedef struct {
 #define PXP_OUT_CTRL_ALPHA(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_ALPHA_SHIFT)) & PXP_OUT_CTRL_ALPHA_MASK)
 /*! @} */
 
-/*! @name OUT_CTRL_SET - Output Buffer Control Register */
+/*! @name OUT_CTRL_SET - Output Buffer Control */
 /*! @{ */
 
 #define PXP_OUT_CTRL_SET_FORMAT_MASK             (0x1FU)
@@ -1228,7 +1558,7 @@ typedef struct {
 #define PXP_OUT_CTRL_SET_ALPHA(x)                (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_SET_ALPHA_SHIFT)) & PXP_OUT_CTRL_SET_ALPHA_MASK)
 /*! @} */
 
-/*! @name OUT_CTRL_CLR - Output Buffer Control Register */
+/*! @name OUT_CTRL_CLR - Output Buffer Control */
 /*! @{ */
 
 #define PXP_OUT_CTRL_CLR_FORMAT_MASK             (0x1FU)
@@ -1252,7 +1582,7 @@ typedef struct {
 #define PXP_OUT_CTRL_CLR_ALPHA(x)                (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_CLR_ALPHA_SHIFT)) & PXP_OUT_CTRL_CLR_ALPHA_MASK)
 /*! @} */
 
-/*! @name OUT_CTRL_TOG - Output Buffer Control Register */
+/*! @name OUT_CTRL_TOG - Output Buffer Control */
 /*! @{ */
 
 #define PXP_OUT_CTRL_TOG_FORMAT_MASK             (0x1FU)
@@ -1276,7 +1606,7 @@ typedef struct {
 #define PXP_OUT_CTRL_TOG_ALPHA(x)                (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_TOG_ALPHA_SHIFT)) & PXP_OUT_CTRL_TOG_ALPHA_MASK)
 /*! @} */
 
-/*! @name OUT_BUF - Output Frame Buffer Pointer Register */
+/*! @name OUT_BUF - Output Frame Buffer Pointer */
 /*! @{ */
 
 #define PXP_OUT_BUF_ADDR_MASK                    (0xFFFFFFFFU)
@@ -1285,7 +1615,7 @@ typedef struct {
 #define PXP_OUT_BUF_ADDR(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_OUT_BUF_ADDR_SHIFT)) & PXP_OUT_BUF_ADDR_MASK)
 /*! @} */
 
-/*! @name OUT_BUF2 - Output Frame Buffer Pointer #2 Register */
+/*! @name OUT_BUF2 - Output Frame Buffer Pointer #2 */
 /*! @{ */
 
 #define PXP_OUT_BUF2_ADDR_MASK                   (0xFFFFFFFFU)
@@ -1294,7 +1624,7 @@ typedef struct {
 #define PXP_OUT_BUF2_ADDR(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_OUT_BUF2_ADDR_SHIFT)) & PXP_OUT_BUF2_ADDR_MASK)
 /*! @} */
 
-/*! @name OUT_PITCH - Output Buffer Pitch Register */
+/*! @name OUT_PITCH - Output Buffer Pitch */
 /*! @{ */
 
 #define PXP_OUT_PITCH_PITCH_MASK                 (0xFFFFU)
@@ -1303,7 +1633,7 @@ typedef struct {
 #define PXP_OUT_PITCH_PITCH(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_OUT_PITCH_PITCH_SHIFT)) & PXP_OUT_PITCH_PITCH_MASK)
 /*! @} */
 
-/*! @name OUT_LRC - Output Surface Lower Right Coordinate Register */
+/*! @name OUT_LRC - Output Surface Lower Right Coordinate */
 /*! @{ */
 
 #define PXP_OUT_LRC_Y_MASK                       (0x3FFFU)
@@ -1317,7 +1647,7 @@ typedef struct {
 #define PXP_OUT_LRC_X(x)                         (((uint32_t)(((uint32_t)(x)) << PXP_OUT_LRC_X_SHIFT)) & PXP_OUT_LRC_X_MASK)
 /*! @} */
 
-/*! @name OUT_PS_ULC - Processed Surface Upper Left Coordinate Register */
+/*! @name OUT_PS_ULC - Processed Surface Upper Left Coordinate */
 /*! @{ */
 
 #define PXP_OUT_PS_ULC_Y_MASK                    (0x3FFFU)
@@ -1331,7 +1661,7 @@ typedef struct {
 #define PXP_OUT_PS_ULC_X(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_OUT_PS_ULC_X_SHIFT)) & PXP_OUT_PS_ULC_X_MASK)
 /*! @} */
 
-/*! @name OUT_PS_LRC - Processed Surface Lower Right Coordinate Register */
+/*! @name OUT_PS_LRC - Processed Surface Lower Right Coordinate */
 /*! @{ */
 
 #define PXP_OUT_PS_LRC_Y_MASK                    (0x3FFFU)
@@ -1345,7 +1675,7 @@ typedef struct {
 #define PXP_OUT_PS_LRC_X(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_OUT_PS_LRC_X_SHIFT)) & PXP_OUT_PS_LRC_X_MASK)
 /*! @} */
 
-/*! @name OUT_AS_ULC - Alpha Surface Upper Left Coordinate Register */
+/*! @name OUT_AS_ULC - Alpha Surface Upper Left Coordinate */
 /*! @{ */
 
 #define PXP_OUT_AS_ULC_Y_MASK                    (0x3FFFU)
@@ -1359,7 +1689,7 @@ typedef struct {
 #define PXP_OUT_AS_ULC_X(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_OUT_AS_ULC_X_SHIFT)) & PXP_OUT_AS_ULC_X_MASK)
 /*! @} */
 
-/*! @name OUT_AS_LRC - Alpha Surface Lower Right Coordinate Register */
+/*! @name OUT_AS_LRC - Alpha Surface Lower Right Coordinate */
 /*! @{ */
 
 #define PXP_OUT_AS_LRC_Y_MASK                    (0x3FFFU)
@@ -1373,7 +1703,7 @@ typedef struct {
 #define PXP_OUT_AS_LRC_X(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_OUT_AS_LRC_X_SHIFT)) & PXP_OUT_AS_LRC_X_MASK)
 /*! @} */
 
-/*! @name PS_CTRL - Processed Surface (PS) Control Register */
+/*! @name PS_CTRL - Processed Surface (PS) Control */
 /*! @{ */
 
 #define PXP_PS_CTRL_FORMAT_MASK                  (0x3FU)
@@ -1432,7 +1762,7 @@ typedef struct {
 #define PXP_PS_CTRL_DECX(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_DECX_SHIFT)) & PXP_PS_CTRL_DECX_MASK)
 /*! @} */
 
-/*! @name PS_CTRL_SET - Processed Surface (PS) Control Register */
+/*! @name PS_CTRL_SET - Processed Surface (PS) Control */
 /*! @{ */
 
 #define PXP_PS_CTRL_SET_FORMAT_MASK              (0x3FU)
@@ -1456,7 +1786,7 @@ typedef struct {
 #define PXP_PS_CTRL_SET_DECX(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_SET_DECX_SHIFT)) & PXP_PS_CTRL_SET_DECX_MASK)
 /*! @} */
 
-/*! @name PS_CTRL_CLR - Processed Surface (PS) Control Register */
+/*! @name PS_CTRL_CLR - Processed Surface (PS) Control */
 /*! @{ */
 
 #define PXP_PS_CTRL_CLR_FORMAT_MASK              (0x3FU)
@@ -1480,7 +1810,7 @@ typedef struct {
 #define PXP_PS_CTRL_CLR_DECX(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_CLR_DECX_SHIFT)) & PXP_PS_CTRL_CLR_DECX_MASK)
 /*! @} */
 
-/*! @name PS_CTRL_TOG - Processed Surface (PS) Control Register */
+/*! @name PS_CTRL_TOG - Processed Surface (PS) Control */
 /*! @{ */
 
 #define PXP_PS_CTRL_TOG_FORMAT_MASK              (0x3FU)
@@ -1504,7 +1834,7 @@ typedef struct {
 #define PXP_PS_CTRL_TOG_DECX(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_TOG_DECX_SHIFT)) & PXP_PS_CTRL_TOG_DECX_MASK)
 /*! @} */
 
-/*! @name PS_BUF - PS Input Buffer Address Register */
+/*! @name PS_BUF - PS Input Buffer Address */
 /*! @{ */
 
 #define PXP_PS_BUF_ADDR_MASK                     (0xFFFFFFFFU)
@@ -1513,7 +1843,7 @@ typedef struct {
 #define PXP_PS_BUF_ADDR(x)                       (((uint32_t)(((uint32_t)(x)) << PXP_PS_BUF_ADDR_SHIFT)) & PXP_PS_BUF_ADDR_MASK)
 /*! @} */
 
-/*! @name PS_UBUF - PS U/Cb or 2 Plane UV Input Buffer Address Register */
+/*! @name PS_UBUF - PS U/Cb or 2 Plane UV Input Buffer Address */
 /*! @{ */
 
 #define PXP_PS_UBUF_ADDR_MASK                    (0xFFFFFFFFU)
@@ -1522,7 +1852,7 @@ typedef struct {
 #define PXP_PS_UBUF_ADDR(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_PS_UBUF_ADDR_SHIFT)) & PXP_PS_UBUF_ADDR_MASK)
 /*! @} */
 
-/*! @name PS_VBUF - PS V/Cr Input Buffer Address Register */
+/*! @name PS_VBUF - PS V/Cr Input Buffer Address */
 /*! @{ */
 
 #define PXP_PS_VBUF_ADDR_MASK                    (0xFFFFFFFFU)
@@ -1531,7 +1861,7 @@ typedef struct {
 #define PXP_PS_VBUF_ADDR(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_PS_VBUF_ADDR_SHIFT)) & PXP_PS_VBUF_ADDR_MASK)
 /*! @} */
 
-/*! @name PS_PITCH - Processed Surface Pitch Register */
+/*! @name PS_PITCH - Processed Surface Pitch */
 /*! @{ */
 
 #define PXP_PS_PITCH_PITCH_MASK                  (0xFFFFU)
@@ -1540,7 +1870,7 @@ typedef struct {
 #define PXP_PS_PITCH_PITCH(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_PS_PITCH_PITCH_SHIFT)) & PXP_PS_PITCH_PITCH_MASK)
 /*! @} */
 
-/*! @name PS_BACKGROUND_0 - PS Background Color Register */
+/*! @name PS_BACKGROUND_0 - PS Background Color */
 /*! @{ */
 
 #define PXP_PS_BACKGROUND_0_COLOR_MASK           (0xFFFFFFFFU)
@@ -1549,7 +1879,7 @@ typedef struct {
 #define PXP_PS_BACKGROUND_0_COLOR(x)             (((uint32_t)(((uint32_t)(x)) << PXP_PS_BACKGROUND_0_COLOR_SHIFT)) & PXP_PS_BACKGROUND_0_COLOR_MASK)
 /*! @} */
 
-/*! @name PS_SCALE - PS Scale Factor Register */
+/*! @name PS_SCALE - PS Scale Factor */
 /*! @{ */
 
 #define PXP_PS_SCALE_XSCALE_MASK                 (0x7FFFU)
@@ -1563,7 +1893,7 @@ typedef struct {
 #define PXP_PS_SCALE_YSCALE(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_PS_SCALE_YSCALE_SHIFT)) & PXP_PS_SCALE_YSCALE_MASK)
 /*! @} */
 
-/*! @name PS_OFFSET - PS Scale Offset Register */
+/*! @name PS_OFFSET - PS Scale Offset */
 /*! @{ */
 
 #define PXP_PS_OFFSET_XOFFSET_MASK               (0xFFFU)
@@ -1577,7 +1907,7 @@ typedef struct {
 #define PXP_PS_OFFSET_YOFFSET(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_PS_OFFSET_YOFFSET_SHIFT)) & PXP_PS_OFFSET_YOFFSET_MASK)
 /*! @} */
 
-/*! @name PS_CLRKEYLOW_0 - PS Color Key Low Register */
+/*! @name PS_CLRKEYLOW_0 - PS Color Key Low */
 /*! @{ */
 
 #define PXP_PS_CLRKEYLOW_0_PIXEL_MASK            (0xFFFFFFU)
@@ -1586,7 +1916,7 @@ typedef struct {
 #define PXP_PS_CLRKEYLOW_0_PIXEL(x)              (((uint32_t)(((uint32_t)(x)) << PXP_PS_CLRKEYLOW_0_PIXEL_SHIFT)) & PXP_PS_CLRKEYLOW_0_PIXEL_MASK)
 /*! @} */
 
-/*! @name PS_CLRKEYHIGH_0 - PS Color Key High Register */
+/*! @name PS_CLRKEYHIGH_0 - PS Color Key High */
 /*! @{ */
 
 #define PXP_PS_CLRKEYHIGH_0_PIXEL_MASK           (0xFFFFFFU)
@@ -1595,16 +1925,16 @@ typedef struct {
 #define PXP_PS_CLRKEYHIGH_0_PIXEL(x)             (((uint32_t)(((uint32_t)(x)) << PXP_PS_CLRKEYHIGH_0_PIXEL_SHIFT)) & PXP_PS_CLRKEYHIGH_0_PIXEL_MASK)
 /*! @} */
 
-/*! @name AS_CTRL - Alpha Surface Control Register */
+/*! @name AS_CTRL - Alpha Surface Control */
 /*! @{ */
 
 #define PXP_AS_CTRL_ALPHA_CTRL_MASK              (0x6U)
 #define PXP_AS_CTRL_ALPHA_CTRL_SHIFT             (1U)
 /*! ALPHA_CTRL - ALPHA_CTRL
- *  0b00..Embedded : Indicates that the AS pixel alpha value will be used to blend the AS with PS. The ALPHA field is ignored.
- *  0b01..Override : Indicates that the value in the ALPHA field should be used instead of the alpha values present in the input pixels.
- *  0b10..Multiply : Indicates that the value in the ALPHA field should be used to scale all pixel alpha values.
- *        Each pixel alpha is multiplied by the value in the ALPHA field.
+ *  0b00..Embedded : Indicates that the AS pixel alpha value is used to blend the AS with PS. ALPHA is ignored.
+ *  0b01..Override : Indicates that the value in ALPHA should be used instead of the alpha values present in the input pixels.
+ *  0b10..Multiply : Indicates that the value in ALPHA should be used to scale all pixel alpha values. Each pixel
+ *        alpha is multiplied by the value in ALPHA.
  *  0b11..ROPs : Enable ROPs. The ROP field indicates an operation to be performed on the alpha surface and PS pixels.
  */
 #define PXP_AS_CTRL_ALPHA_CTRL(x)                (((uint32_t)(((uint32_t)(x)) << PXP_AS_CTRL_ALPHA_CTRL_SHIFT)) & PXP_AS_CTRL_ALPHA_CTRL_MASK)
@@ -1667,7 +1997,7 @@ typedef struct {
 #define PXP_AS_CTRL_ALPHA1_INVERT(x)             (((uint32_t)(((uint32_t)(x)) << PXP_AS_CTRL_ALPHA1_INVERT_SHIFT)) & PXP_AS_CTRL_ALPHA1_INVERT_MASK)
 /*! @} */
 
-/*! @name AS_BUF - Alpha Surface Buffer Pointer Register */
+/*! @name AS_BUF - Alpha Surface Buffer Pointer */
 /*! @{ */
 
 #define PXP_AS_BUF_ADDR_MASK                     (0xFFFFFFFFU)
@@ -1676,7 +2006,7 @@ typedef struct {
 #define PXP_AS_BUF_ADDR(x)                       (((uint32_t)(((uint32_t)(x)) << PXP_AS_BUF_ADDR_SHIFT)) & PXP_AS_BUF_ADDR_MASK)
 /*! @} */
 
-/*! @name AS_PITCH - Alpha Surface Pitch Register */
+/*! @name AS_PITCH - Alpha Surface Pitch */
 /*! @{ */
 
 #define PXP_AS_PITCH_PITCH_MASK                  (0xFFFFU)
@@ -1685,7 +2015,7 @@ typedef struct {
 #define PXP_AS_PITCH_PITCH(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_AS_PITCH_PITCH_SHIFT)) & PXP_AS_PITCH_PITCH_MASK)
 /*! @} */
 
-/*! @name AS_CLRKEYLOW_0 - Overlay Color Key Low Register */
+/*! @name AS_CLRKEYLOW_0 - Overlay Color Key Low */
 /*! @{ */
 
 #define PXP_AS_CLRKEYLOW_0_PIXEL_MASK            (0xFFFFFFU)
@@ -1694,7 +2024,7 @@ typedef struct {
 #define PXP_AS_CLRKEYLOW_0_PIXEL(x)              (((uint32_t)(((uint32_t)(x)) << PXP_AS_CLRKEYLOW_0_PIXEL_SHIFT)) & PXP_AS_CLRKEYLOW_0_PIXEL_MASK)
 /*! @} */
 
-/*! @name AS_CLRKEYHIGH_0 - Overlay Color Key High Register */
+/*! @name AS_CLRKEYHIGH_0 - Overlay Color Key High */
 /*! @{ */
 
 #define PXP_AS_CLRKEYHIGH_0_PIXEL_MASK           (0xFFFFFFU)
@@ -1703,7 +2033,7 @@ typedef struct {
 #define PXP_AS_CLRKEYHIGH_0_PIXEL(x)             (((uint32_t)(((uint32_t)(x)) << PXP_AS_CLRKEYHIGH_0_PIXEL_SHIFT)) & PXP_AS_CLRKEYHIGH_0_PIXEL_MASK)
 /*! @} */
 
-/*! @name CSC1_COEF0 - Color Space Conversion 1 Coefficient 0 Register */
+/*! @name CSC1_COEF0 - Color Space Conversion 1 Coefficient 0 */
 /*! @{ */
 
 #define PXP_CSC1_COEF0_Y_OFFSET_MASK             (0x1FFU)
@@ -1732,7 +2062,7 @@ typedef struct {
 #define PXP_CSC1_COEF0_YCBCR_MODE(x)             (((uint32_t)(((uint32_t)(x)) << PXP_CSC1_COEF0_YCBCR_MODE_SHIFT)) & PXP_CSC1_COEF0_YCBCR_MODE_MASK)
 /*! @} */
 
-/*! @name CSC1_COEF1 - Color Space Conversion 1 Coefficient 1 Register */
+/*! @name CSC1_COEF1 - Color Space Conversion 1 Coefficient 1 */
 /*! @{ */
 
 #define PXP_CSC1_COEF1_C4_MASK                   (0x7FFU)
@@ -1746,7 +2076,7 @@ typedef struct {
 #define PXP_CSC1_COEF1_C1(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC1_COEF1_C1_SHIFT)) & PXP_CSC1_COEF1_C1_MASK)
 /*! @} */
 
-/*! @name CSC1_COEF2 - Color Space Conversion 1 Coefficient 2 Register */
+/*! @name CSC1_COEF2 - Color Space Conversion 1 Coefficient 2 */
 /*! @{ */
 
 #define PXP_CSC1_COEF2_C3_MASK                   (0x7FFU)
@@ -1760,7 +2090,7 @@ typedef struct {
 #define PXP_CSC1_COEF2_C2(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC1_COEF2_C2_SHIFT)) & PXP_CSC1_COEF2_C2_MASK)
 /*! @} */
 
-/*! @name CSC2_CTRL - Color Space Conversion 2 Control Register */
+/*! @name CSC2_CTRL - Color Space Conversion 2 Control */
 /*! @{ */
 
 #define PXP_CSC2_CTRL_BYPASS_MASK                (0x1U)
@@ -1779,7 +2109,7 @@ typedef struct {
 #define PXP_CSC2_CTRL_CSC_MODE(x)                (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_CTRL_CSC_MODE_SHIFT)) & PXP_CSC2_CTRL_CSC_MODE_MASK)
 /*! @} */
 
-/*! @name CSC2_COEF0 - Color Space Conversion 2 Coefficient 0 Register */
+/*! @name CSC2_COEF0 - Color Space Conversion 2 Coefficient 0 */
 /*! @{ */
 
 #define PXP_CSC2_COEF0_A1_MASK                   (0x7FFU)
@@ -1793,7 +2123,7 @@ typedef struct {
 #define PXP_CSC2_COEF0_A2(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF0_A2_SHIFT)) & PXP_CSC2_COEF0_A2_MASK)
 /*! @} */
 
-/*! @name CSC2_COEF1 - Color Space Conversion 2 Coefficient 1 Register */
+/*! @name CSC2_COEF1 - Color Space Conversion 2 Coefficient 1 */
 /*! @{ */
 
 #define PXP_CSC2_COEF1_A3_MASK                   (0x7FFU)
@@ -1807,7 +2137,7 @@ typedef struct {
 #define PXP_CSC2_COEF1_B1(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF1_B1_SHIFT)) & PXP_CSC2_COEF1_B1_MASK)
 /*! @} */
 
-/*! @name CSC2_COEF2 - Color Space Conversion 2 Coefficient 2 Register */
+/*! @name CSC2_COEF2 - Color Space Conversion 2 Coefficient 2 */
 /*! @{ */
 
 #define PXP_CSC2_COEF2_B2_MASK                   (0x7FFU)
@@ -1821,7 +2151,7 @@ typedef struct {
 #define PXP_CSC2_COEF2_B3(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF2_B3_SHIFT)) & PXP_CSC2_COEF2_B3_MASK)
 /*! @} */
 
-/*! @name CSC2_COEF3 - Color Space Conversion 2 Coefficient 3 Register */
+/*! @name CSC2_COEF3 - Color Space Conversion 2 Coefficient 3 */
 /*! @{ */
 
 #define PXP_CSC2_COEF3_C1_MASK                   (0x7FFU)
@@ -1835,7 +2165,7 @@ typedef struct {
 #define PXP_CSC2_COEF3_C2(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF3_C2_SHIFT)) & PXP_CSC2_COEF3_C2_MASK)
 /*! @} */
 
-/*! @name CSC2_COEF4 - Color Space Conversion 2 Coefficient 4 Register */
+/*! @name CSC2_COEF4 - Color Space Conversion 2 Coefficient 4 */
 /*! @{ */
 
 #define PXP_CSC2_COEF4_C3_MASK                   (0x7FFU)
@@ -1849,7 +2179,7 @@ typedef struct {
 #define PXP_CSC2_COEF4_D1(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF4_D1_SHIFT)) & PXP_CSC2_COEF4_D1_MASK)
 /*! @} */
 
-/*! @name CSC2_COEF5 - Color Space Conversion 2 Coefficient 5 Register */
+/*! @name CSC2_COEF5 - Color Space Conversion 2 Coefficient 5 */
 /*! @{ */
 
 #define PXP_CSC2_COEF5_D2_MASK                   (0x1FFU)
@@ -1863,86 +2193,86 @@ typedef struct {
 #define PXP_CSC2_COEF5_D3(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF5_D3_SHIFT)) & PXP_CSC2_COEF5_D3_MASK)
 /*! @} */
 
-/*! @name ALPHA_A_CTRL - Alpha Engine A Control Register */
+/*! @name ALPHA_A_CTRL - Alpha Engine A Control */
 /*! @{ */
 
 #define PXP_ALPHA_A_CTRL_PORTER_DUFF_ENABLE_MASK (0x1U)
 #define PXP_ALPHA_A_CTRL_PORTER_DUFF_ENABLE_SHIFT (0U)
 /*! PORTER_DUFF_ENABLE - PORTER_DUFF_ENABLE
- *  0b0..porter duff disable.
- *  0b1..porter duff enable.
+ *  0b0..Porter duff disable.
+ *  0b1..Porter duff enable.
  */
 #define PXP_ALPHA_A_CTRL_PORTER_DUFF_ENABLE(x)   (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_A_CTRL_PORTER_DUFF_ENABLE_SHIFT)) & PXP_ALPHA_A_CTRL_PORTER_DUFF_ENABLE_MASK)
 
 #define PXP_ALPHA_A_CTRL_S0_S1_FACTOR_MODE_MASK  (0x6U)
 #define PXP_ALPHA_A_CTRL_S0_S1_FACTOR_MODE_SHIFT (1U)
 /*! S0_S1_FACTOR_MODE - S0_S1_FACTOR_MODE
- *  0b00..using 1.
- *  0b01..using 0.
- *  0b10..using straight alpha.
- *  0b11..using inverse alpha.
+ *  0b00..Using 1.
+ *  0b01..Using 0.
+ *  0b10..Using straight alpha.
+ *  0b11..Using inverse alpha.
  */
 #define PXP_ALPHA_A_CTRL_S0_S1_FACTOR_MODE(x)    (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_A_CTRL_S0_S1_FACTOR_MODE_SHIFT)) & PXP_ALPHA_A_CTRL_S0_S1_FACTOR_MODE_MASK)
 
 #define PXP_ALPHA_A_CTRL_S0_GLOBAL_ALPHA_MODE_MASK (0x18U)
 #define PXP_ALPHA_A_CTRL_S0_GLOBAL_ALPHA_MODE_SHIFT (3U)
 /*! S0_GLOBAL_ALPHA_MODE - S0_GLOBAL_ALPHA_MODE
- *  0b00..using global alpha.
- *  0b01..using local alpha.
- *  0b10..using scaled alpha.
- *  0b11..using scaled alpha.
+ *  0b00..Using global alpha.
+ *  0b01..Using local alpha.
+ *  0b10..Using scaled alpha.
+ *  0b11..Using scaled alpha.
  */
 #define PXP_ALPHA_A_CTRL_S0_GLOBAL_ALPHA_MODE(x) (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_A_CTRL_S0_GLOBAL_ALPHA_MODE_SHIFT)) & PXP_ALPHA_A_CTRL_S0_GLOBAL_ALPHA_MODE_MASK)
 
 #define PXP_ALPHA_A_CTRL_S0_ALPHA_MODE_MASK      (0x20U)
 #define PXP_ALPHA_A_CTRL_S0_ALPHA_MODE_SHIFT     (5U)
 /*! S0_ALPHA_MODE - S0_ALPHA_MODE
- *  0b0..straight mode for s0 alpha
- *  0b1..inversed mode for s0 alpha
+ *  0b0..Straight mode for s0 alpha
+ *  0b1..Inversed mode for s0 alpha
  */
 #define PXP_ALPHA_A_CTRL_S0_ALPHA_MODE(x)        (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_A_CTRL_S0_ALPHA_MODE_SHIFT)) & PXP_ALPHA_A_CTRL_S0_ALPHA_MODE_MASK)
 
 #define PXP_ALPHA_A_CTRL_S0_COLOR_MODE_MASK      (0x40U)
 #define PXP_ALPHA_A_CTRL_S0_COLOR_MODE_SHIFT     (6U)
 /*! S0_COLOR_MODE - S0_COLOR_MODE
- *  0b0..straight mode for s0 color
- *  0b1..multiply mode for s0 color
+ *  0b0..Straight mode for s0 color
+ *  0b1..Multiply mode for s0 color
  */
 #define PXP_ALPHA_A_CTRL_S0_COLOR_MODE(x)        (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_A_CTRL_S0_COLOR_MODE_SHIFT)) & PXP_ALPHA_A_CTRL_S0_COLOR_MODE_MASK)
 
 #define PXP_ALPHA_A_CTRL_S1_S0_FACTOR_MODE_MASK  (0x300U)
 #define PXP_ALPHA_A_CTRL_S1_S0_FACTOR_MODE_SHIFT (8U)
 /*! S1_S0_FACTOR_MODE - S1_S0_FACTOR_MODE
- *  0b00..using 1.
- *  0b01..using 0.
- *  0b10..using straight alpha.
- *  0b11..using inverse alpha.
+ *  0b00..Using 1.
+ *  0b01..Using 0.
+ *  0b10..Using straight alpha.
+ *  0b11..Using inverse alpha.
  */
 #define PXP_ALPHA_A_CTRL_S1_S0_FACTOR_MODE(x)    (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_A_CTRL_S1_S0_FACTOR_MODE_SHIFT)) & PXP_ALPHA_A_CTRL_S1_S0_FACTOR_MODE_MASK)
 
 #define PXP_ALPHA_A_CTRL_S1_GLOBAL_ALPHA_MODE_MASK (0xC00U)
 #define PXP_ALPHA_A_CTRL_S1_GLOBAL_ALPHA_MODE_SHIFT (10U)
 /*! S1_GLOBAL_ALPHA_MODE - S1_GLOBAL_ALPHA_MODE
- *  0b00..using global alpha.
- *  0b01..using local alpha.
- *  0b10..using scaled alpha.
- *  0b11..using scaled alpha.
+ *  0b00..Using global alpha.
+ *  0b01..Using local alpha.
+ *  0b10..Using scaled alpha.
+ *  0b11..Using scaled alpha.
  */
 #define PXP_ALPHA_A_CTRL_S1_GLOBAL_ALPHA_MODE(x) (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_A_CTRL_S1_GLOBAL_ALPHA_MODE_SHIFT)) & PXP_ALPHA_A_CTRL_S1_GLOBAL_ALPHA_MODE_MASK)
 
 #define PXP_ALPHA_A_CTRL_S1_ALPHA_MODE_MASK      (0x1000U)
 #define PXP_ALPHA_A_CTRL_S1_ALPHA_MODE_SHIFT     (12U)
 /*! S1_ALPHA_MODE - S1_ALPHA_MODE
- *  0b0..straight mode for s1 alpha
- *  0b1..inversed mode for s1 alpha
+ *  0b0..Straight mode for s1 alpha
+ *  0b1..Inversed mode for s1 alpha
  */
 #define PXP_ALPHA_A_CTRL_S1_ALPHA_MODE(x)        (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_A_CTRL_S1_ALPHA_MODE_SHIFT)) & PXP_ALPHA_A_CTRL_S1_ALPHA_MODE_MASK)
 
 #define PXP_ALPHA_A_CTRL_S1_COLOR_MODE_MASK      (0x2000U)
 #define PXP_ALPHA_A_CTRL_S1_COLOR_MODE_SHIFT     (13U)
 /*! S1_COLOR_MODE - S1_COLOR_MODE
- *  0b0..straight mode for s1 color
- *  0b1..multiply mode for s1 color
+ *  0b0..Straight mode for s1 color
+ *  0b1..Multiply mode for s1 color
  */
 #define PXP_ALPHA_A_CTRL_S1_COLOR_MODE(x)        (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_A_CTRL_S1_COLOR_MODE_SHIFT)) & PXP_ALPHA_A_CTRL_S1_COLOR_MODE_MASK)
 
@@ -1957,86 +2287,86 @@ typedef struct {
 #define PXP_ALPHA_A_CTRL_S1_GLOBAL_ALPHA(x)      (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_A_CTRL_S1_GLOBAL_ALPHA_SHIFT)) & PXP_ALPHA_A_CTRL_S1_GLOBAL_ALPHA_MASK)
 /*! @} */
 
-/*! @name ALPHA_B_CTRL - Alpha Engine B Control Register */
+/*! @name ALPHA_B_CTRL - Alpha Engine B Control */
 /*! @{ */
 
 #define PXP_ALPHA_B_CTRL_PORTER_DUFF_ENABLE_MASK (0x1U)
 #define PXP_ALPHA_B_CTRL_PORTER_DUFF_ENABLE_SHIFT (0U)
 /*! PORTER_DUFF_ENABLE - PORTER_DUFF_ENABLE
- *  0b0..porter duff disable.
- *  0b1..porter duff enable.
+ *  0b0..Porter duff disable.
+ *  0b1..Porter duff enable.
  */
 #define PXP_ALPHA_B_CTRL_PORTER_DUFF_ENABLE(x)   (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_PORTER_DUFF_ENABLE_SHIFT)) & PXP_ALPHA_B_CTRL_PORTER_DUFF_ENABLE_MASK)
 
 #define PXP_ALPHA_B_CTRL_S0_S1_FACTOR_MODE_MASK  (0x6U)
 #define PXP_ALPHA_B_CTRL_S0_S1_FACTOR_MODE_SHIFT (1U)
 /*! S0_S1_FACTOR_MODE - S0_S1_FACTOR_MODE
- *  0b00..using 1.
- *  0b01..using 0.
- *  0b10..using straight alpha.
- *  0b11..using inverse alpha.
+ *  0b00..Using 1.
+ *  0b01..Using 0.
+ *  0b10..Using straight alpha.
+ *  0b11..Using inverse alpha.
  */
 #define PXP_ALPHA_B_CTRL_S0_S1_FACTOR_MODE(x)    (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_S0_S1_FACTOR_MODE_SHIFT)) & PXP_ALPHA_B_CTRL_S0_S1_FACTOR_MODE_MASK)
 
 #define PXP_ALPHA_B_CTRL_S0_GLOBAL_ALPHA_MODE_MASK (0x18U)
 #define PXP_ALPHA_B_CTRL_S0_GLOBAL_ALPHA_MODE_SHIFT (3U)
 /*! S0_GLOBAL_ALPHA_MODE - S0_GLOBAL_ALPHA_MODE
- *  0b00..using global alpha.
- *  0b01..using local alpha.
- *  0b10..using scaled alpha.
- *  0b11..using scaled alpha.
+ *  0b00..Using global alpha.
+ *  0b01..Using local alpha.
+ *  0b10..Using scaled alpha.
+ *  0b11..Using scaled alpha.
  */
 #define PXP_ALPHA_B_CTRL_S0_GLOBAL_ALPHA_MODE(x) (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_S0_GLOBAL_ALPHA_MODE_SHIFT)) & PXP_ALPHA_B_CTRL_S0_GLOBAL_ALPHA_MODE_MASK)
 
 #define PXP_ALPHA_B_CTRL_S0_ALPHA_MODE_MASK      (0x20U)
 #define PXP_ALPHA_B_CTRL_S0_ALPHA_MODE_SHIFT     (5U)
 /*! S0_ALPHA_MODE - S0_ALPHA_MODE
- *  0b0..straight mode for s0 alpha
- *  0b1..inversed mode for s0 alpha
+ *  0b0..Straight mode for s0 alpha
+ *  0b1..Inversed mode for s0 alpha
  */
 #define PXP_ALPHA_B_CTRL_S0_ALPHA_MODE(x)        (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_S0_ALPHA_MODE_SHIFT)) & PXP_ALPHA_B_CTRL_S0_ALPHA_MODE_MASK)
 
 #define PXP_ALPHA_B_CTRL_S0_COLOR_MODE_MASK      (0x40U)
 #define PXP_ALPHA_B_CTRL_S0_COLOR_MODE_SHIFT     (6U)
 /*! S0_COLOR_MODE - S0_COLOR_MODE
- *  0b0..straight mode for s0 color
- *  0b1..multiply mode for s0 color
+ *  0b0..Straight mode for s0 color
+ *  0b1..Multiply mode for s0 color
  */
 #define PXP_ALPHA_B_CTRL_S0_COLOR_MODE(x)        (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_S0_COLOR_MODE_SHIFT)) & PXP_ALPHA_B_CTRL_S0_COLOR_MODE_MASK)
 
 #define PXP_ALPHA_B_CTRL_S1_S0_FACTOR_MODE_MASK  (0x300U)
 #define PXP_ALPHA_B_CTRL_S1_S0_FACTOR_MODE_SHIFT (8U)
 /*! S1_S0_FACTOR_MODE - S1_S0_FACTOR_MODE
- *  0b00..using 1.
- *  0b01..using 0.
- *  0b10..using straight alpha.
- *  0b11..using inverse alpha.
+ *  0b00..Using 1.
+ *  0b01..Using 0.
+ *  0b10..Using straight alpha.
+ *  0b11..Using inverse alpha.
  */
 #define PXP_ALPHA_B_CTRL_S1_S0_FACTOR_MODE(x)    (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_S1_S0_FACTOR_MODE_SHIFT)) & PXP_ALPHA_B_CTRL_S1_S0_FACTOR_MODE_MASK)
 
 #define PXP_ALPHA_B_CTRL_S1_GLOBAL_ALPHA_MODE_MASK (0xC00U)
 #define PXP_ALPHA_B_CTRL_S1_GLOBAL_ALPHA_MODE_SHIFT (10U)
 /*! S1_GLOBAL_ALPHA_MODE - S1_GLOBAL_ALPHA_MODE
- *  0b00..using global alpha.
- *  0b01..using local alpha.
- *  0b10..using scaled alpha.
- *  0b11..using scaled alpha.
+ *  0b00..Using global alpha.
+ *  0b01..Using local alpha.
+ *  0b10..Using scaled alpha.
+ *  0b11..Using scaled alpha.
  */
 #define PXP_ALPHA_B_CTRL_S1_GLOBAL_ALPHA_MODE(x) (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_S1_GLOBAL_ALPHA_MODE_SHIFT)) & PXP_ALPHA_B_CTRL_S1_GLOBAL_ALPHA_MODE_MASK)
 
 #define PXP_ALPHA_B_CTRL_S1_ALPHA_MODE_MASK      (0x1000U)
 #define PXP_ALPHA_B_CTRL_S1_ALPHA_MODE_SHIFT     (12U)
 /*! S1_ALPHA_MODE - S1_ALPHA_MODE
- *  0b0..straight mode for s1 alpha
- *  0b1..inversed mode for s1 alpha
+ *  0b0..Straight mode for s1 alpha
+ *  0b1..Inversed mode for s1 alpha
  */
 #define PXP_ALPHA_B_CTRL_S1_ALPHA_MODE(x)        (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_S1_ALPHA_MODE_SHIFT)) & PXP_ALPHA_B_CTRL_S1_ALPHA_MODE_MASK)
 
 #define PXP_ALPHA_B_CTRL_S1_COLOR_MODE_MASK      (0x2000U)
 #define PXP_ALPHA_B_CTRL_S1_COLOR_MODE_SHIFT     (13U)
 /*! S1_COLOR_MODE - S1_COLOR_MODE
- *  0b0..straight mode for s1 color
- *  0b1..multiply mode for s1 color
+ *  0b0..Straight mode for s1 color
+ *  0b1..Multiply mode for s1 color
  */
 #define PXP_ALPHA_B_CTRL_S1_COLOR_MODE(x)        (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_S1_COLOR_MODE_SHIFT)) & PXP_ALPHA_B_CTRL_S1_COLOR_MODE_MASK)
 
@@ -2051,7 +2381,7 @@ typedef struct {
 #define PXP_ALPHA_B_CTRL_S1_GLOBAL_ALPHA(x)      (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_S1_GLOBAL_ALPHA_SHIFT)) & PXP_ALPHA_B_CTRL_S1_GLOBAL_ALPHA_MASK)
 /*! @} */
 
-/*! @name ALPHA_B_CTRL_1 - Alpha Engine B Control 1 Register */
+/*! @name ALPHA_B_CTRL_1 - Alpha Engine B Control 1 */
 /*! @{ */
 
 #define PXP_ALPHA_B_CTRL_1_ROP_ENABLE_MASK       (0x1U)
@@ -2083,7 +2413,7 @@ typedef struct {
 #define PXP_ALPHA_B_CTRL_1_ROP(x)                (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_1_ROP_SHIFT)) & PXP_ALPHA_B_CTRL_1_ROP_MASK)
 /*! @} */
 
-/*! @name PS_BACKGROUND_1 - PS Background Color 1 Register */
+/*! @name PS_BACKGROUND_1 - PS Background Color 1 */
 /*! @{ */
 
 #define PXP_PS_BACKGROUND_1_COLOR_MASK           (0xFFFFFFFFU)
@@ -2092,7 +2422,7 @@ typedef struct {
 #define PXP_PS_BACKGROUND_1_COLOR(x)             (((uint32_t)(((uint32_t)(x)) << PXP_PS_BACKGROUND_1_COLOR_SHIFT)) & PXP_PS_BACKGROUND_1_COLOR_MASK)
 /*! @} */
 
-/*! @name PS_CLRKEYLOW_1 - PS Color Key Low Register */
+/*! @name PS_CLRKEYLOW_1 - PS Color Key Low */
 /*! @{ */
 
 #define PXP_PS_CLRKEYLOW_1_PIXEL_MASK            (0xFFFFFFU)
@@ -2101,7 +2431,7 @@ typedef struct {
 #define PXP_PS_CLRKEYLOW_1_PIXEL(x)              (((uint32_t)(((uint32_t)(x)) << PXP_PS_CLRKEYLOW_1_PIXEL_SHIFT)) & PXP_PS_CLRKEYLOW_1_PIXEL_MASK)
 /*! @} */
 
-/*! @name PS_CLRKEYHIGH_1 - PS Color Key High Register */
+/*! @name PS_CLRKEYHIGH_1 - PS Color Key High */
 /*! @{ */
 
 #define PXP_PS_CLRKEYHIGH_1_PIXEL_MASK           (0xFFFFFFU)
@@ -2110,7 +2440,7 @@ typedef struct {
 #define PXP_PS_CLRKEYHIGH_1_PIXEL(x)             (((uint32_t)(((uint32_t)(x)) << PXP_PS_CLRKEYHIGH_1_PIXEL_SHIFT)) & PXP_PS_CLRKEYHIGH_1_PIXEL_MASK)
 /*! @} */
 
-/*! @name AS_CLRKEYLOW_1 - Overlay Color Key Low Register */
+/*! @name AS_CLRKEYLOW_1 - Overlay Color Key Low */
 /*! @{ */
 
 #define PXP_AS_CLRKEYLOW_1_PIXEL_MASK            (0xFFFFFFU)
@@ -2119,7 +2449,7 @@ typedef struct {
 #define PXP_AS_CLRKEYLOW_1_PIXEL(x)              (((uint32_t)(((uint32_t)(x)) << PXP_AS_CLRKEYLOW_1_PIXEL_SHIFT)) & PXP_AS_CLRKEYLOW_1_PIXEL_MASK)
 /*! @} */
 
-/*! @name AS_CLRKEYHIGH_1 - Overlay Color Key High Register */
+/*! @name AS_CLRKEYHIGH_1 - Overlay Color Key High */
 /*! @{ */
 
 #define PXP_AS_CLRKEYHIGH_1_PIXEL_MASK           (0xFFFFFFU)
@@ -2128,33 +2458,13 @@ typedef struct {
 #define PXP_AS_CLRKEYHIGH_1_PIXEL(x)             (((uint32_t)(((uint32_t)(x)) << PXP_AS_CLRKEYHIGH_1_PIXEL_SHIFT)) & PXP_AS_CLRKEYHIGH_1_PIXEL_MASK)
 /*! @} */
 
-/*! @name CTRL2 - Control Register 2 */
+/*! @name CTRL2 - Control 2 */
 /*! @{ */
 
 #define PXP_CTRL2_ENABLE_MASK                    (0x1U)
 #define PXP_CTRL2_ENABLE_SHIFT                   (0U)
 /*! ENABLE - ENABLE */
 #define PXP_CTRL2_ENABLE(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_ENABLE_SHIFT)) & PXP_CTRL2_ENABLE_MASK)
-
-#define PXP_CTRL2_ROTATE0_MASK                   (0x300U)
-#define PXP_CTRL2_ROTATE0_SHIFT                  (8U)
-/*! ROTATE0 - ROTATE0
- *  0b00..ROT_0 : rotate 0 degrees
- *  0b01..ROT_90 : rotate 90 degrees
- *  0b10..ROT_180 : rotate 180 degrees
- *  0b11..ROT_270 : rotate 270 degrees
- */
-#define PXP_CTRL2_ROTATE0(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_ROTATE0_SHIFT)) & PXP_CTRL2_ROTATE0_MASK)
-
-#define PXP_CTRL2_HFLIP0_MASK                    (0x400U)
-#define PXP_CTRL2_HFLIP0_SHIFT                   (10U)
-/*! HFLIP0 - HFLIP0 */
-#define PXP_CTRL2_HFLIP0(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_HFLIP0_SHIFT)) & PXP_CTRL2_HFLIP0_MASK)
-
-#define PXP_CTRL2_VFLIP0_MASK                    (0x800U)
-#define PXP_CTRL2_VFLIP0_SHIFT                   (11U)
-/*! VFLIP0 - VFLIP0 */
-#define PXP_CTRL2_VFLIP0(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_VFLIP0_SHIFT)) & PXP_CTRL2_VFLIP0_MASK)
 
 #define PXP_CTRL2_ROTATE1_MASK                   (0x3000U)
 #define PXP_CTRL2_ROTATE1_SHIFT                  (12U)
@@ -2207,39 +2517,19 @@ typedef struct {
 /*! ENABLE_CSC2 - ENABLE_CSC2 */
 #define PXP_CTRL2_ENABLE_CSC2(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_ENABLE_CSC2_SHIFT)) & PXP_CTRL2_ENABLE_CSC2_MASK)
 
-#define PXP_CTRL2_ENABLE_ROTATE0_MASK            (0x4000000U)
-#define PXP_CTRL2_ENABLE_ROTATE0_SHIFT           (26U)
-/*! ENABLE_ROTATE0 - ENABLE_ROTATE0 */
-#define PXP_CTRL2_ENABLE_ROTATE0(x)              (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_ENABLE_ROTATE0_SHIFT)) & PXP_CTRL2_ENABLE_ROTATE0_MASK)
-
 #define PXP_CTRL2_ENABLE_ROTATE1_MASK            (0x8000000U)
 #define PXP_CTRL2_ENABLE_ROTATE1_SHIFT           (27U)
 /*! ENABLE_ROTATE1 - ENABLE_ROTATE1 */
 #define PXP_CTRL2_ENABLE_ROTATE1(x)              (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_ENABLE_ROTATE1_SHIFT)) & PXP_CTRL2_ENABLE_ROTATE1_MASK)
 /*! @} */
 
-/*! @name CTRL2_SET - Control Register 2 */
+/*! @name CTRL2_SET - Control 2 */
 /*! @{ */
 
 #define PXP_CTRL2_SET_ENABLE_MASK                (0x1U)
 #define PXP_CTRL2_SET_ENABLE_SHIFT               (0U)
 /*! ENABLE - ENABLE */
 #define PXP_CTRL2_SET_ENABLE(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_ENABLE_SHIFT)) & PXP_CTRL2_SET_ENABLE_MASK)
-
-#define PXP_CTRL2_SET_ROTATE0_MASK               (0x300U)
-#define PXP_CTRL2_SET_ROTATE0_SHIFT              (8U)
-/*! ROTATE0 - ROTATE0 */
-#define PXP_CTRL2_SET_ROTATE0(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_ROTATE0_SHIFT)) & PXP_CTRL2_SET_ROTATE0_MASK)
-
-#define PXP_CTRL2_SET_HFLIP0_MASK                (0x400U)
-#define PXP_CTRL2_SET_HFLIP0_SHIFT               (10U)
-/*! HFLIP0 - HFLIP0 */
-#define PXP_CTRL2_SET_HFLIP0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_HFLIP0_SHIFT)) & PXP_CTRL2_SET_HFLIP0_MASK)
-
-#define PXP_CTRL2_SET_VFLIP0_MASK                (0x800U)
-#define PXP_CTRL2_SET_VFLIP0_SHIFT               (11U)
-/*! VFLIP0 - VFLIP0 */
-#define PXP_CTRL2_SET_VFLIP0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_VFLIP0_SHIFT)) & PXP_CTRL2_SET_VFLIP0_MASK)
 
 #define PXP_CTRL2_SET_ROTATE1_MASK               (0x3000U)
 #define PXP_CTRL2_SET_ROTATE1_SHIFT              (12U)
@@ -2281,39 +2571,19 @@ typedef struct {
 /*! ENABLE_CSC2 - ENABLE_CSC2 */
 #define PXP_CTRL2_SET_ENABLE_CSC2(x)             (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_ENABLE_CSC2_SHIFT)) & PXP_CTRL2_SET_ENABLE_CSC2_MASK)
 
-#define PXP_CTRL2_SET_ENABLE_ROTATE0_MASK        (0x4000000U)
-#define PXP_CTRL2_SET_ENABLE_ROTATE0_SHIFT       (26U)
-/*! ENABLE_ROTATE0 - ENABLE_ROTATE0 */
-#define PXP_CTRL2_SET_ENABLE_ROTATE0(x)          (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_ENABLE_ROTATE0_SHIFT)) & PXP_CTRL2_SET_ENABLE_ROTATE0_MASK)
-
 #define PXP_CTRL2_SET_ENABLE_ROTATE1_MASK        (0x8000000U)
 #define PXP_CTRL2_SET_ENABLE_ROTATE1_SHIFT       (27U)
 /*! ENABLE_ROTATE1 - ENABLE_ROTATE1 */
 #define PXP_CTRL2_SET_ENABLE_ROTATE1(x)          (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_ENABLE_ROTATE1_SHIFT)) & PXP_CTRL2_SET_ENABLE_ROTATE1_MASK)
 /*! @} */
 
-/*! @name CTRL2_CLR - Control Register 2 */
+/*! @name CTRL2_CLR - Control 2 */
 /*! @{ */
 
 #define PXP_CTRL2_CLR_ENABLE_MASK                (0x1U)
 #define PXP_CTRL2_CLR_ENABLE_SHIFT               (0U)
 /*! ENABLE - ENABLE */
 #define PXP_CTRL2_CLR_ENABLE(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_ENABLE_SHIFT)) & PXP_CTRL2_CLR_ENABLE_MASK)
-
-#define PXP_CTRL2_CLR_ROTATE0_MASK               (0x300U)
-#define PXP_CTRL2_CLR_ROTATE0_SHIFT              (8U)
-/*! ROTATE0 - ROTATE0 */
-#define PXP_CTRL2_CLR_ROTATE0(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_ROTATE0_SHIFT)) & PXP_CTRL2_CLR_ROTATE0_MASK)
-
-#define PXP_CTRL2_CLR_HFLIP0_MASK                (0x400U)
-#define PXP_CTRL2_CLR_HFLIP0_SHIFT               (10U)
-/*! HFLIP0 - HFLIP0 */
-#define PXP_CTRL2_CLR_HFLIP0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_HFLIP0_SHIFT)) & PXP_CTRL2_CLR_HFLIP0_MASK)
-
-#define PXP_CTRL2_CLR_VFLIP0_MASK                (0x800U)
-#define PXP_CTRL2_CLR_VFLIP0_SHIFT               (11U)
-/*! VFLIP0 - VFLIP0 */
-#define PXP_CTRL2_CLR_VFLIP0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_VFLIP0_SHIFT)) & PXP_CTRL2_CLR_VFLIP0_MASK)
 
 #define PXP_CTRL2_CLR_ROTATE1_MASK               (0x3000U)
 #define PXP_CTRL2_CLR_ROTATE1_SHIFT              (12U)
@@ -2355,39 +2625,19 @@ typedef struct {
 /*! ENABLE_CSC2 - ENABLE_CSC2 */
 #define PXP_CTRL2_CLR_ENABLE_CSC2(x)             (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_ENABLE_CSC2_SHIFT)) & PXP_CTRL2_CLR_ENABLE_CSC2_MASK)
 
-#define PXP_CTRL2_CLR_ENABLE_ROTATE0_MASK        (0x4000000U)
-#define PXP_CTRL2_CLR_ENABLE_ROTATE0_SHIFT       (26U)
-/*! ENABLE_ROTATE0 - ENABLE_ROTATE0 */
-#define PXP_CTRL2_CLR_ENABLE_ROTATE0(x)          (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_ENABLE_ROTATE0_SHIFT)) & PXP_CTRL2_CLR_ENABLE_ROTATE0_MASK)
-
 #define PXP_CTRL2_CLR_ENABLE_ROTATE1_MASK        (0x8000000U)
 #define PXP_CTRL2_CLR_ENABLE_ROTATE1_SHIFT       (27U)
 /*! ENABLE_ROTATE1 - ENABLE_ROTATE1 */
 #define PXP_CTRL2_CLR_ENABLE_ROTATE1(x)          (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_ENABLE_ROTATE1_SHIFT)) & PXP_CTRL2_CLR_ENABLE_ROTATE1_MASK)
 /*! @} */
 
-/*! @name CTRL2_TOG - Control Register 2 */
+/*! @name CTRL2_TOG - Control 2 */
 /*! @{ */
 
 #define PXP_CTRL2_TOG_ENABLE_MASK                (0x1U)
 #define PXP_CTRL2_TOG_ENABLE_SHIFT               (0U)
 /*! ENABLE - ENABLE */
 #define PXP_CTRL2_TOG_ENABLE(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_ENABLE_SHIFT)) & PXP_CTRL2_TOG_ENABLE_MASK)
-
-#define PXP_CTRL2_TOG_ROTATE0_MASK               (0x300U)
-#define PXP_CTRL2_TOG_ROTATE0_SHIFT              (8U)
-/*! ROTATE0 - ROTATE0 */
-#define PXP_CTRL2_TOG_ROTATE0(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_ROTATE0_SHIFT)) & PXP_CTRL2_TOG_ROTATE0_MASK)
-
-#define PXP_CTRL2_TOG_HFLIP0_MASK                (0x400U)
-#define PXP_CTRL2_TOG_HFLIP0_SHIFT               (10U)
-/*! HFLIP0 - HFLIP0 */
-#define PXP_CTRL2_TOG_HFLIP0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_HFLIP0_SHIFT)) & PXP_CTRL2_TOG_HFLIP0_MASK)
-
-#define PXP_CTRL2_TOG_VFLIP0_MASK                (0x800U)
-#define PXP_CTRL2_TOG_VFLIP0_SHIFT               (11U)
-/*! VFLIP0 - VFLIP0 */
-#define PXP_CTRL2_TOG_VFLIP0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_VFLIP0_SHIFT)) & PXP_CTRL2_TOG_VFLIP0_MASK)
 
 #define PXP_CTRL2_TOG_ROTATE1_MASK               (0x3000U)
 #define PXP_CTRL2_TOG_ROTATE1_SHIFT              (12U)
@@ -2429,11 +2679,6 @@ typedef struct {
 /*! ENABLE_CSC2 - ENABLE_CSC2 */
 #define PXP_CTRL2_TOG_ENABLE_CSC2(x)             (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_ENABLE_CSC2_SHIFT)) & PXP_CTRL2_TOG_ENABLE_CSC2_MASK)
 
-#define PXP_CTRL2_TOG_ENABLE_ROTATE0_MASK        (0x4000000U)
-#define PXP_CTRL2_TOG_ENABLE_ROTATE0_SHIFT       (26U)
-/*! ENABLE_ROTATE0 - ENABLE_ROTATE0 */
-#define PXP_CTRL2_TOG_ENABLE_ROTATE0(x)          (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_ENABLE_ROTATE0_SHIFT)) & PXP_CTRL2_TOG_ENABLE_ROTATE0_MASK)
-
 #define PXP_CTRL2_TOG_ENABLE_ROTATE1_MASK        (0x8000000U)
 #define PXP_CTRL2_TOG_ENABLE_ROTATE1_SHIFT       (27U)
 /*! ENABLE_ROTATE1 - ENABLE_ROTATE1 */
@@ -2468,7 +2713,7 @@ typedef struct {
 #define PXP_POWER_REG1_ROT1_MEM_LP_STATE(x)      (((uint32_t)(((uint32_t)(x)) << PXP_POWER_REG1_ROT1_MEM_LP_STATE_SHIFT)) & PXP_POWER_REG1_ROT1_MEM_LP_STATE_MASK)
 /*! @} */
 
-/*! @name DATA_PATH_CTRL0 - Data Path Control 0 Register */
+/*! @name DATA_PATH_CTRL0 - Data Path Control 0 */
 /*! @{ */
 
 #define PXP_DATA_PATH_CTRL0_MUX0_SEL_MASK        (0x3U)
@@ -2487,7 +2732,7 @@ typedef struct {
  *  0b00..Input stage Fetch engine, Channel 0
  *  0b01..Output of the Rotation1 engine
  *  0b10..No output
- *  0b11..No Output
+ *  0b11..No output
  */
 #define PXP_DATA_PATH_CTRL0_MUX1_SEL(x)          (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_MUX1_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_MUX1_SEL_MASK)
 
@@ -2497,7 +2742,7 @@ typedef struct {
  *  0b00..Input stage Fetch engine, Channel 1
  *  0b01..Output of the Rotation1 engine
  *  0b10..No output
- *  0b11..No Output
+ *  0b11..No output
  */
 #define PXP_DATA_PATH_CTRL0_MUX2_SEL(x)          (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_MUX2_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_MUX2_SEL_MASK)
 
@@ -2507,14 +2752,9 @@ typedef struct {
  *  0b00..Output of the CSC1 engine
  *  0b01..Output of the Rotation1 engine
  *  0b10..No output
- *  0b11..No Output
+ *  0b11..No output
  */
 #define PXP_DATA_PATH_CTRL0_MUX3_SEL(x)          (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_MUX3_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_MUX3_SEL_MASK)
-
-#define PXP_DATA_PATH_CTRL0_MUX4_SEL_MASK        (0x300U)
-#define PXP_DATA_PATH_CTRL0_MUX4_SEL_SHIFT       (8U)
-/*! MUX4_SEL - MUX4_SEL */
-#define PXP_DATA_PATH_CTRL0_MUX4_SEL(x)          (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_MUX4_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_MUX4_SEL_MASK)
 
 #define PXP_DATA_PATH_CTRL0_MUX5_SEL_MASK        (0xC00U)
 #define PXP_DATA_PATH_CTRL0_MUX5_SEL_SHIFT       (10U)
@@ -2522,7 +2762,7 @@ typedef struct {
  *  0b00..Output of MUX1
  *  0b01..Output of alpha blending / color key 1
  *  0b10..No output
- *  0b11..No Output
+ *  0b11..No output
  */
 #define PXP_DATA_PATH_CTRL0_MUX5_SEL(x)          (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_MUX5_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_MUX5_SEL_MASK)
 
@@ -2532,7 +2772,7 @@ typedef struct {
  *  0b00..Output of alpha blending / color key 1
  *  0b01..Output of alpha blending / color key 0
  *  0b10..No output
- *  0b11..No Output
+ *  0b11..No output
  */
 #define PXP_DATA_PATH_CTRL0_MUX6_SEL(x)          (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_MUX6_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_MUX6_SEL_MASK)
 
@@ -2542,7 +2782,7 @@ typedef struct {
  *  0b00..Output of MUX 5
  *  0b01..Output of CSC2
  *  0b10..No output
- *  0b11..No Output
+ *  0b11..No output
  */
 #define PXP_DATA_PATH_CTRL0_MUX7_SEL(x)          (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_MUX7_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_MUX7_SEL_MASK)
 
@@ -2552,14 +2792,9 @@ typedef struct {
  *  0b00..Output of CSC2
  *  0b01..Output of alpha blending / color key 0
  *  0b10..No output
- *  0b11..No Output
+ *  0b11..No output
  */
 #define PXP_DATA_PATH_CTRL0_MUX8_SEL(x)          (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_MUX8_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_MUX8_SEL_MASK)
-
-#define PXP_DATA_PATH_CTRL0_MUX9_SEL_MASK        (0xC0000U)
-#define PXP_DATA_PATH_CTRL0_MUX9_SEL_SHIFT       (18U)
-/*! MUX9_SEL - MUX9_SEL */
-#define PXP_DATA_PATH_CTRL0_MUX9_SEL(x)          (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_MUX9_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_MUX9_SEL_MASK)
 
 #define PXP_DATA_PATH_CTRL0_MUX10_SEL_MASK       (0x300000U)
 #define PXP_DATA_PATH_CTRL0_MUX10_SEL_SHIFT      (20U)
@@ -2567,7 +2802,7 @@ typedef struct {
  *  0b00..Output of MUX 7
  *  0b01..No output
  *  0b10..No output
- *  0b11..No Output
+ *  0b11..No output
  */
 #define PXP_DATA_PATH_CTRL0_MUX10_SEL(x)         (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_MUX10_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_MUX10_SEL_MASK)
 
@@ -2577,17 +2812,17 @@ typedef struct {
  *  0b00..No output
  *  0b01..Output of MUX 8
  *  0b10..No output
- *  0b11..No Output
+ *  0b11..No output
  */
 #define PXP_DATA_PATH_CTRL0_MUX11_SEL(x)         (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_MUX11_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_MUX11_SEL_MASK)
 
 #define PXP_DATA_PATH_CTRL0_MUX12_SEL_MASK       (0x3000000U)
 #define PXP_DATA_PATH_CTRL0_MUX12_SEL_SHIFT      (24U)
 /*! MUX12_SEL - MUX12_SEL
- *  0b00..Output of MUX 10
+ *  0b00..No output
  *  0b01..Output of MUX 11
  *  0b10..No output
- *  0b11..No Output
+ *  0b11..No output
  */
 #define PXP_DATA_PATH_CTRL0_MUX12_SEL(x)         (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_MUX12_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_MUX12_SEL_MASK)
 
@@ -2597,7 +2832,7 @@ typedef struct {
  *  0b00..Input stage Fetch engine, Channel 1
  *  0b01..No output
  *  0b10..No output
- *  0b11..No Output
+ *  0b11..No output
  */
 #define PXP_DATA_PATH_CTRL0_MUX13_SEL(x)         (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_MUX13_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_MUX13_SEL_MASK)
 
@@ -2607,7 +2842,7 @@ typedef struct {
  *  0b00..Output of Rotation 0.
  *  0b01..Output of MUX 11
  *  0b10..No output
- *  0b11..No Output
+ *  0b11..No output
  */
 #define PXP_DATA_PATH_CTRL0_MUX14_SEL(x)         (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_MUX14_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_MUX14_SEL_MASK)
 
@@ -2617,12 +2852,12 @@ typedef struct {
  *  0b00..Output of Input fetch, Channel 0
  *  0b01..Output of MUX 10
  *  0b10..No output
- *  0b11..No Output
+ *  0b11..No output
  */
 #define PXP_DATA_PATH_CTRL0_MUX15_SEL(x)         (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_MUX15_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_MUX15_SEL_MASK)
 /*! @} */
 
-/*! @name DATA_PATH_CTRL0_SET - Data Path Control 0 Register */
+/*! @name DATA_PATH_CTRL0_SET - Data Path Control 0 */
 /*! @{ */
 
 #define PXP_DATA_PATH_CTRL0_SET_MUX0_SEL_MASK    (0x3U)
@@ -2645,11 +2880,6 @@ typedef struct {
 /*! MUX3_SEL - MUX3_SEL */
 #define PXP_DATA_PATH_CTRL0_SET_MUX3_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX3_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX3_SEL_MASK)
 
-#define PXP_DATA_PATH_CTRL0_SET_MUX4_SEL_MASK    (0x300U)
-#define PXP_DATA_PATH_CTRL0_SET_MUX4_SEL_SHIFT   (8U)
-/*! MUX4_SEL - MUX4_SEL */
-#define PXP_DATA_PATH_CTRL0_SET_MUX4_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX4_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX4_SEL_MASK)
-
 #define PXP_DATA_PATH_CTRL0_SET_MUX5_SEL_MASK    (0xC00U)
 #define PXP_DATA_PATH_CTRL0_SET_MUX5_SEL_SHIFT   (10U)
 /*! MUX5_SEL - MUX5_SEL */
@@ -2669,11 +2899,6 @@ typedef struct {
 #define PXP_DATA_PATH_CTRL0_SET_MUX8_SEL_SHIFT   (16U)
 /*! MUX8_SEL - MUX8_SEL */
 #define PXP_DATA_PATH_CTRL0_SET_MUX8_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX8_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX8_SEL_MASK)
-
-#define PXP_DATA_PATH_CTRL0_SET_MUX9_SEL_MASK    (0xC0000U)
-#define PXP_DATA_PATH_CTRL0_SET_MUX9_SEL_SHIFT   (18U)
-/*! MUX9_SEL - MUX9_SEL */
-#define PXP_DATA_PATH_CTRL0_SET_MUX9_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX9_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX9_SEL_MASK)
 
 #define PXP_DATA_PATH_CTRL0_SET_MUX10_SEL_MASK   (0x300000U)
 #define PXP_DATA_PATH_CTRL0_SET_MUX10_SEL_SHIFT  (20U)
@@ -2706,7 +2931,7 @@ typedef struct {
 #define PXP_DATA_PATH_CTRL0_SET_MUX15_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX15_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX15_SEL_MASK)
 /*! @} */
 
-/*! @name DATA_PATH_CTRL0_CLR - Data Path Control 0 Register */
+/*! @name DATA_PATH_CTRL0_CLR - Data Path Control 0 */
 /*! @{ */
 
 #define PXP_DATA_PATH_CTRL0_CLR_MUX0_SEL_MASK    (0x3U)
@@ -2729,11 +2954,6 @@ typedef struct {
 /*! MUX3_SEL - MUX3_SEL */
 #define PXP_DATA_PATH_CTRL0_CLR_MUX3_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX3_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX3_SEL_MASK)
 
-#define PXP_DATA_PATH_CTRL0_CLR_MUX4_SEL_MASK    (0x300U)
-#define PXP_DATA_PATH_CTRL0_CLR_MUX4_SEL_SHIFT   (8U)
-/*! MUX4_SEL - MUX4_SEL */
-#define PXP_DATA_PATH_CTRL0_CLR_MUX4_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX4_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX4_SEL_MASK)
-
 #define PXP_DATA_PATH_CTRL0_CLR_MUX5_SEL_MASK    (0xC00U)
 #define PXP_DATA_PATH_CTRL0_CLR_MUX5_SEL_SHIFT   (10U)
 /*! MUX5_SEL - MUX5_SEL */
@@ -2753,11 +2973,6 @@ typedef struct {
 #define PXP_DATA_PATH_CTRL0_CLR_MUX8_SEL_SHIFT   (16U)
 /*! MUX8_SEL - MUX8_SEL */
 #define PXP_DATA_PATH_CTRL0_CLR_MUX8_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX8_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX8_SEL_MASK)
-
-#define PXP_DATA_PATH_CTRL0_CLR_MUX9_SEL_MASK    (0xC0000U)
-#define PXP_DATA_PATH_CTRL0_CLR_MUX9_SEL_SHIFT   (18U)
-/*! MUX9_SEL - MUX9_SEL */
-#define PXP_DATA_PATH_CTRL0_CLR_MUX9_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX9_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX9_SEL_MASK)
 
 #define PXP_DATA_PATH_CTRL0_CLR_MUX10_SEL_MASK   (0x300000U)
 #define PXP_DATA_PATH_CTRL0_CLR_MUX10_SEL_SHIFT  (20U)
@@ -2790,7 +3005,7 @@ typedef struct {
 #define PXP_DATA_PATH_CTRL0_CLR_MUX15_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX15_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX15_SEL_MASK)
 /*! @} */
 
-/*! @name DATA_PATH_CTRL0_TOG - Data Path Control 0 Register */
+/*! @name DATA_PATH_CTRL0_TOG - Data Path Control 0 */
 /*! @{ */
 
 #define PXP_DATA_PATH_CTRL0_TOG_MUX0_SEL_MASK    (0x3U)
@@ -2813,11 +3028,6 @@ typedef struct {
 /*! MUX3_SEL - MUX3_SEL */
 #define PXP_DATA_PATH_CTRL0_TOG_MUX3_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX3_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX3_SEL_MASK)
 
-#define PXP_DATA_PATH_CTRL0_TOG_MUX4_SEL_MASK    (0x300U)
-#define PXP_DATA_PATH_CTRL0_TOG_MUX4_SEL_SHIFT   (8U)
-/*! MUX4_SEL - MUX4_SEL */
-#define PXP_DATA_PATH_CTRL0_TOG_MUX4_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX4_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX4_SEL_MASK)
-
 #define PXP_DATA_PATH_CTRL0_TOG_MUX5_SEL_MASK    (0xC00U)
 #define PXP_DATA_PATH_CTRL0_TOG_MUX5_SEL_SHIFT   (10U)
 /*! MUX5_SEL - MUX5_SEL */
@@ -2837,11 +3047,6 @@ typedef struct {
 #define PXP_DATA_PATH_CTRL0_TOG_MUX8_SEL_SHIFT   (16U)
 /*! MUX8_SEL - MUX8_SEL */
 #define PXP_DATA_PATH_CTRL0_TOG_MUX8_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX8_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX8_SEL_MASK)
-
-#define PXP_DATA_PATH_CTRL0_TOG_MUX9_SEL_MASK    (0xC0000U)
-#define PXP_DATA_PATH_CTRL0_TOG_MUX9_SEL_SHIFT   (18U)
-/*! MUX9_SEL - MUX9_SEL */
-#define PXP_DATA_PATH_CTRL0_TOG_MUX9_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX9_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX9_SEL_MASK)
 
 #define PXP_DATA_PATH_CTRL0_TOG_MUX10_SEL_MASK   (0x300000U)
 #define PXP_DATA_PATH_CTRL0_TOG_MUX10_SEL_SHIFT  (20U)
@@ -2874,7 +3079,7 @@ typedef struct {
 #define PXP_DATA_PATH_CTRL0_TOG_MUX15_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX15_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX15_SEL_MASK)
 /*! @} */
 
-/*! @name IRQ_MASK - IRQ Mask Register */
+/*! @name IRQ_MASK - IRQ Mask */
 /*! @{ */
 
 #define PXP_IRQ_MASK_FIRST_CH0_PREFETCH_IRQ_EN_MASK (0x1U)
@@ -2903,7 +3108,7 @@ typedef struct {
 #define PXP_IRQ_MASK_FIRST_STORE_IRQ_EN(x)       (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_FIRST_STORE_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_FIRST_STORE_IRQ_EN_MASK)
 /*! @} */
 
-/*! @name IRQ_MASK_SET - IRQ Mask Register */
+/*! @name IRQ_MASK_SET - IRQ Mask */
 /*! @{ */
 
 #define PXP_IRQ_MASK_SET_FIRST_CH0_PREFETCH_IRQ_EN_MASK (0x1U)
@@ -2932,7 +3137,7 @@ typedef struct {
 #define PXP_IRQ_MASK_SET_FIRST_STORE_IRQ_EN(x)   (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_SET_FIRST_STORE_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_SET_FIRST_STORE_IRQ_EN_MASK)
 /*! @} */
 
-/*! @name IRQ_MASK_CLR - IRQ Mask Register */
+/*! @name IRQ_MASK_CLR - IRQ Mask */
 /*! @{ */
 
 #define PXP_IRQ_MASK_CLR_FIRST_CH0_PREFETCH_IRQ_EN_MASK (0x1U)
@@ -2961,7 +3166,7 @@ typedef struct {
 #define PXP_IRQ_MASK_CLR_FIRST_STORE_IRQ_EN(x)   (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_CLR_FIRST_STORE_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_CLR_FIRST_STORE_IRQ_EN_MASK)
 /*! @} */
 
-/*! @name IRQ_MASK_TOG - IRQ Mask Register */
+/*! @name IRQ_MASK_TOG - IRQ Mask */
 /*! @{ */
 
 #define PXP_IRQ_MASK_TOG_FIRST_CH0_PREFETCH_IRQ_EN_MASK (0x1U)
@@ -2990,7 +3195,7 @@ typedef struct {
 #define PXP_IRQ_MASK_TOG_FIRST_STORE_IRQ_EN(x)   (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_TOG_FIRST_STORE_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_TOG_FIRST_STORE_IRQ_EN_MASK)
 /*! @} */
 
-/*! @name IRQ - Interrupt Register */
+/*! @name IRQ - Interrupt */
 /*! @{ */
 
 #define PXP_IRQ_FIRST_CH0_PREFETCH_IRQ_MASK      (0x1U)
@@ -3019,7 +3224,7 @@ typedef struct {
 #define PXP_IRQ_FIRST_STORE_IRQ(x)               (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_FIRST_STORE_IRQ_SHIFT)) & PXP_IRQ_FIRST_STORE_IRQ_MASK)
 /*! @} */
 
-/*! @name IRQ_SET - Interrupt Register */
+/*! @name IRQ_SET - Interrupt */
 /*! @{ */
 
 #define PXP_IRQ_SET_FIRST_CH0_PREFETCH_IRQ_MASK  (0x1U)
@@ -3048,7 +3253,7 @@ typedef struct {
 #define PXP_IRQ_SET_FIRST_STORE_IRQ(x)           (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_SET_FIRST_STORE_IRQ_SHIFT)) & PXP_IRQ_SET_FIRST_STORE_IRQ_MASK)
 /*! @} */
 
-/*! @name IRQ_CLR - Interrupt Register */
+/*! @name IRQ_CLR - Interrupt */
 /*! @{ */
 
 #define PXP_IRQ_CLR_FIRST_CH0_PREFETCH_IRQ_MASK  (0x1U)
@@ -3077,7 +3282,7 @@ typedef struct {
 #define PXP_IRQ_CLR_FIRST_STORE_IRQ(x)           (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_CLR_FIRST_STORE_IRQ_SHIFT)) & PXP_IRQ_CLR_FIRST_STORE_IRQ_MASK)
 /*! @} */
 
-/*! @name IRQ_TOG - Interrupt Register */
+/*! @name IRQ_TOG - Interrupt */
 /*! @{ */
 
 #define PXP_IRQ_TOG_FIRST_CH0_PREFETCH_IRQ_MASK  (0x1U)
@@ -3106,7 +3311,7 @@ typedef struct {
 #define PXP_IRQ_TOG_FIRST_STORE_IRQ(x)           (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_TOG_FIRST_STORE_IRQ_SHIFT)) & PXP_IRQ_TOG_FIRST_STORE_IRQ_MASK)
 /*! @} */
 
-/*! @name NEXT - Next Frame Pointer Register */
+/*! @name NEXT - Next Frame Pointer */
 /*! @{ */
 
 #define PXP_NEXT_ENABLED_MASK                    (0x1U)
@@ -3120,7 +3325,7 @@ typedef struct {
 #define PXP_NEXT_POINTER(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_NEXT_POINTER_SHIFT)) & PXP_NEXT_POINTER_MASK)
 /*! @} */
 
-/*! @name OUT_BUF3 - Output Frame Buffer Pointer #3 Register */
+/*! @name OUT_BUF3 - Output Frame Buffer Pointer #3 */
 /*! @{ */
 
 #define PXP_OUT_BUF3_ADDR_MASK                   (0xFFFFFFFFU)
@@ -3129,7 +3334,7 @@ typedef struct {
 #define PXP_OUT_BUF3_ADDR(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_OUT_BUF3_ADDR_SHIFT)) & PXP_OUT_BUF3_ADDR_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_CTRL_CH0 - Input Fetch Control Channel 0 Register */
+/*! @name INPUT_FETCH_CTRL_CH0 - Input Fetch Control Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_CTRL_CH0_CH_EN_MASK      (0x1U)
@@ -3198,22 +3403,22 @@ typedef struct {
  *  0b010..NUM_32_BYTES : 32 bytes
  *  0b011..NUM_64_BYTES : 64 bytes
  *  0b100..NUM_128_BYTES : 128 bytes
- *  0b101..reserved
- *  0b110..reserved
- *  0b111..reserved
+ *  0b101..Reserved
+ *  0b110..Reserved
+ *  0b111..Reserved
  */
 #define PXP_INPUT_FETCH_CTRL_CH0_RD_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_RD_NUM_BYTES_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_RD_NUM_BYTES_MASK)
 
 #define PXP_INPUT_FETCH_CTRL_CH0_ARBIT_EN_MASK   (0x80000000U)
 #define PXP_INPUT_FETCH_CTRL_CH0_ARBIT_EN_SHIFT  (31U)
 /*! ARBIT_EN - ARBIT_EN
- *  0b0..Arbitration disable. If using 2 channels, will output 2 axi bus sets.
- *  0b1..Arbitration enable. If using 2 channel, will only output 1 axi bus sets
+ *  0b0..Arbitration disable. If using 2 channels, outputs 2 axi bus sets.
+ *  0b1..Arbitration enable. If using 2 channel, only outputs 1 axi bus sets
  */
 #define PXP_INPUT_FETCH_CTRL_CH0_ARBIT_EN(x)     (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_ARBIT_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_ARBIT_EN_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_CTRL_CH0_SET - Input Fetch Control Channel 0 Register */
+/*! @name INPUT_FETCH_CTRL_CH0_SET - Input Fetch Control Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_CTRL_CH0_SET_CH_EN_MASK  (0x1U)
@@ -3262,7 +3467,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_CTRL_CH0_SET_ARBIT_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_SET_ARBIT_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_SET_ARBIT_EN_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_CTRL_CH0_CLR - Input Fetch Control Channel 0 Register */
+/*! @name INPUT_FETCH_CTRL_CH0_CLR - Input Fetch Control Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_CTRL_CH0_CLR_CH_EN_MASK  (0x1U)
@@ -3311,7 +3516,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_CTRL_CH0_CLR_ARBIT_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_CLR_ARBIT_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_CLR_ARBIT_EN_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_CTRL_CH0_TOG - Input Fetch Control Channel 0 Register */
+/*! @name INPUT_FETCH_CTRL_CH0_TOG - Input Fetch Control Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_CTRL_CH0_TOG_CH_EN_MASK  (0x1U)
@@ -3360,7 +3565,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_CTRL_CH0_TOG_ARBIT_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_TOG_ARBIT_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_TOG_ARBIT_EN_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_CTRL_CH1 - Input Fetch Control Channel 1 Register */
+/*! @name INPUT_FETCH_CTRL_CH1 - Input Fetch Control Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_CTRL_CH1_CH_EN_MASK      (0x1U)
@@ -3429,14 +3634,14 @@ typedef struct {
  *  0b010..NUM_32_BYTES : 32 bytes
  *  0b011..NUM_64_BYTES : 64 bytes
  *  0b100..NUM_128_BYTES : 128 bytes
- *  0b101..reserved
- *  0b110..reserved
- *  0b111..reserved
+ *  0b101..Reserved
+ *  0b110..Reserved
+ *  0b111..Reserved
  */
 #define PXP_INPUT_FETCH_CTRL_CH1_RD_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_RD_NUM_BYTES_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_RD_NUM_BYTES_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_CTRL_CH1_SET - Input Fetch Control Channel 1 Register */
+/*! @name INPUT_FETCH_CTRL_CH1_SET - Input Fetch Control Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_CTRL_CH1_SET_CH_EN_MASK  (0x1U)
@@ -3480,7 +3685,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_CTRL_CH1_SET_RD_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_SET_RD_NUM_BYTES_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_SET_RD_NUM_BYTES_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_CTRL_CH1_CLR - Input Fetch Control Channel 1 Register */
+/*! @name INPUT_FETCH_CTRL_CH1_CLR - Input Fetch Control Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_CTRL_CH1_CLR_CH_EN_MASK  (0x1U)
@@ -3524,7 +3729,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_CTRL_CH1_CLR_RD_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_CLR_RD_NUM_BYTES_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_CLR_RD_NUM_BYTES_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_CTRL_CH1_TOG - Input Fetch Control Channel 1 Register */
+/*! @name INPUT_FETCH_CTRL_CH1_TOG - Input Fetch Control Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_CTRL_CH1_TOG_CH_EN_MASK  (0x1U)
@@ -3568,7 +3773,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_CTRL_CH1_TOG_RD_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_TOG_RD_NUM_BYTES_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_TOG_RD_NUM_BYTES_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_STATUS_CH0 - Input Fetch Status Channel 0 Register */
+/*! @name INPUT_FETCH_STATUS_CH0 - Input Fetch Status Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_STATUS_CH0_PREFETCH_BLOCK_X_MASK (0xFFFFU)
@@ -3582,7 +3787,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_STATUS_CH0_PREFETCH_BLOCK_Y(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_STATUS_CH0_PREFETCH_BLOCK_Y_SHIFT)) & PXP_INPUT_FETCH_STATUS_CH0_PREFETCH_BLOCK_Y_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_STATUS_CH1 - Input Fetch Status Channel 1 Register */
+/*! @name INPUT_FETCH_STATUS_CH1 - Input Fetch Status Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_STATUS_CH1_PREFETCH_BLOCK_X_MASK (0xFFFFU)
@@ -3596,7 +3801,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_STATUS_CH1_PREFETCH_BLOCK_Y(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_STATUS_CH1_PREFETCH_BLOCK_Y_SHIFT)) & PXP_INPUT_FETCH_STATUS_CH1_PREFETCH_BLOCK_Y_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_ACTIVE_SIZE_ULC_CH0 - Input Fetch Active Size ULC Channel 0 Register */
+/*! @name INPUT_FETCH_ACTIVE_SIZE_ULC_CH0 - Input Fetch Active Size ULC Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_ACTIVE_SIZE_ULC_CH0_ACTIVE_SIZE_ULC_X_MASK (0xFFFFU)
@@ -3610,7 +3815,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_ACTIVE_SIZE_ULC_CH0_ACTIVE_SIZE_ULC_Y(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_ACTIVE_SIZE_ULC_CH0_ACTIVE_SIZE_ULC_Y_SHIFT)) & PXP_INPUT_FETCH_ACTIVE_SIZE_ULC_CH0_ACTIVE_SIZE_ULC_Y_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_ACTIVE_SIZE_LRC_CH0 - Input Fetch Active Size LRC Channel 0 Register */
+/*! @name INPUT_FETCH_ACTIVE_SIZE_LRC_CH0 - Input Fetch Active Size LRC Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_ACTIVE_SIZE_LRC_CH0_ACTIVE_SIZE_LRC_X_MASK (0xFFFFU)
@@ -3624,7 +3829,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_ACTIVE_SIZE_LRC_CH0_ACTIVE_SIZE_LRC_Y(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_ACTIVE_SIZE_LRC_CH0_ACTIVE_SIZE_LRC_Y_SHIFT)) & PXP_INPUT_FETCH_ACTIVE_SIZE_LRC_CH0_ACTIVE_SIZE_LRC_Y_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_ACTIVE_SIZE_ULC_CH1 - Input Fetch Active Size ULC Channel 1 Register */
+/*! @name INPUT_FETCH_ACTIVE_SIZE_ULC_CH1 - Input Fetch Active Size ULC Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_ACTIVE_SIZE_ULC_CH1_ACTIVE_SIZE_ULC_X_MASK (0xFFFFU)
@@ -3638,7 +3843,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_ACTIVE_SIZE_ULC_CH1_ACTIVE_SIZE_ULC_Y(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_ACTIVE_SIZE_ULC_CH1_ACTIVE_SIZE_ULC_Y_SHIFT)) & PXP_INPUT_FETCH_ACTIVE_SIZE_ULC_CH1_ACTIVE_SIZE_ULC_Y_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_ACTIVE_SIZE_LRC_CH1 - Input Fetch Active Size LRC Channel 1 Register */
+/*! @name INPUT_FETCH_ACTIVE_SIZE_LRC_CH1 - Input Fetch Active Size LRC Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_ACTIVE_SIZE_LRC_CH1_ACTIVE_SIZE_LRC_X_MASK (0xFFFFU)
@@ -3652,7 +3857,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_ACTIVE_SIZE_LRC_CH1_ACTIVE_SIZE_LRC_Y(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_ACTIVE_SIZE_LRC_CH1_ACTIVE_SIZE_LRC_Y_SHIFT)) & PXP_INPUT_FETCH_ACTIVE_SIZE_LRC_CH1_ACTIVE_SIZE_LRC_Y_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SIZE_CH0 - Input Fetch Size Channel 0 Register */
+/*! @name INPUT_FETCH_SIZE_CH0 - Input Fetch Size Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SIZE_CH0_INPUT_TOTAL_WIDTH_MASK (0xFFFFU)
@@ -3666,7 +3871,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SIZE_CH0_INPUT_TOTAL_HEIGHT(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SIZE_CH0_INPUT_TOTAL_HEIGHT_SHIFT)) & PXP_INPUT_FETCH_SIZE_CH0_INPUT_TOTAL_HEIGHT_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SIZE_CH1 - Input Fetch Size Channel 1 Register */
+/*! @name INPUT_FETCH_SIZE_CH1 - Input Fetch Size Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SIZE_CH1_INPUT_TOTAL_WIDTH_MASK (0xFFFFU)
@@ -3680,7 +3885,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SIZE_CH1_INPUT_TOTAL_HEIGHT(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SIZE_CH1_INPUT_TOTAL_HEIGHT_SHIFT)) & PXP_INPUT_FETCH_SIZE_CH1_INPUT_TOTAL_HEIGHT_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_BACKGROUND_COLOR_CH0 - Input Fetch Background Color Channel 0 Register */
+/*! @name INPUT_FETCH_BACKGROUND_COLOR_CH0 - Input Fetch Background Color Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_BACKGROUND_COLOR_CH0_BACKGROUND_COLOR_MASK (0xFFFFFFFFU)
@@ -3689,7 +3894,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_BACKGROUND_COLOR_CH0_BACKGROUND_COLOR(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_BACKGROUND_COLOR_CH0_BACKGROUND_COLOR_SHIFT)) & PXP_INPUT_FETCH_BACKGROUND_COLOR_CH0_BACKGROUND_COLOR_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_BACKGROUND_COLOR_CH1 - Input Fetch Background Color Channel 1 Register */
+/*! @name INPUT_FETCH_BACKGROUND_COLOR_CH1 - Input Fetch Background Color Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_BACKGROUND_COLOR_CH1_BACKGROUND_COLOR_MASK (0xFFFFFFFFU)
@@ -3698,7 +3903,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_BACKGROUND_COLOR_CH1_BACKGROUND_COLOR(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_BACKGROUND_COLOR_CH1_BACKGROUND_COLOR_SHIFT)) & PXP_INPUT_FETCH_BACKGROUND_COLOR_CH1_BACKGROUND_COLOR_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_PITCH - Input Fetch Pitch Register */
+/*! @name INPUT_FETCH_PITCH - Input Fetch Pitch */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_PITCH_CH0_INPUT_PITCH_MASK (0xFFFFU)
@@ -3712,7 +3917,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_PITCH_CH1_INPUT_PITCH(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_PITCH_CH1_INPUT_PITCH_SHIFT)) & PXP_INPUT_FETCH_PITCH_CH1_INPUT_PITCH_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_CTRL_CH0 - Input Fetch Shift Control Channel 0 Register */
+/*! @name INPUT_FETCH_SHIFT_CTRL_CH0 - Input Fetch Shift Control Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_INPUT_ACTIVE_BPP_MASK (0x3U)
@@ -3742,21 +3947,21 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_EXPAND_EN_MASK (0x800U)
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_EXPAND_EN_SHIFT (11U)
 /*! EXPAND_EN - EXPAND_EN
- *  0b0..channel0 format expanding disable
- *  0b1..channel0 format expanding enable
+ *  0b0..Channel0 format expanding disable
+ *  0b1..Channel0 format expanding enable
  */
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_EXPAND_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_EXPAND_EN_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_EXPAND_EN_MASK)
 
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SHIFT_BYPASS_MASK (0x1000U)
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SHIFT_BYPASS_SHIFT (12U)
 /*! SHIFT_BYPASS - SHIFT_BYPASS
- *  0b0..channel0 data will do shift function
- *  0b1..channel0 will bypass shift function
+ *  0b0..Channel0 data does shift function
+ *  0b1..Channel0 bypasses shift function
  */
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SHIFT_BYPASS_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_CTRL_CH0_SET - Input Fetch Shift Control Channel 0 Register */
+/*! @name INPUT_FETCH_SHIFT_CTRL_CH0_SET - Input Fetch Shift Control Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_INPUT_ACTIVE_BPP_MASK (0x3U)
@@ -3780,7 +3985,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_SHIFT_BYPASS_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_CTRL_CH0_CLR - Input Fetch Shift Control Channel 0 Register */
+/*! @name INPUT_FETCH_SHIFT_CTRL_CH0_CLR - Input Fetch Shift Control Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_INPUT_ACTIVE_BPP_MASK (0x3U)
@@ -3804,7 +4009,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_SHIFT_BYPASS_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_CTRL_CH0_TOG - Input Fetch Shift Control Channel 0 Register */
+/*! @name INPUT_FETCH_SHIFT_CTRL_CH0_TOG - Input Fetch Shift Control Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_INPUT_ACTIVE_BPP_MASK (0x3U)
@@ -3828,7 +4033,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_SHIFT_BYPASS_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_CTRL_CH1 - Input Fetch Shift Control Channel 1 Register */
+/*! @name INPUT_FETCH_SHIFT_CTRL_CH1 - Input Fetch Shift Control Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_INPUT_ACTIVE_BPP_MASK (0x3U)
@@ -3858,21 +4063,21 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_EXPAND_EN_MASK (0x800U)
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_EXPAND_EN_SHIFT (11U)
 /*! EXPAND_EN - EXPAND_EN
- *  0b0..channel1 format expanding disable
- *  0b1..channel1 format expanding enable
+ *  0b0..Channel1 format expanding disable
+ *  0b1..Channel1 format expanding enable
  */
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_EXPAND_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_EXPAND_EN_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_EXPAND_EN_MASK)
 
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SHIFT_BYPASS_MASK (0x1000U)
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SHIFT_BYPASS_SHIFT (12U)
 /*! SHIFT_BYPASS - SHIFT_BYPASS
- *  0b0..channel1 data will do shift function
- *  0b1..channel1 will bypass shift function
+ *  0b0..Channel1 data does shift function
+ *  0b1..Channel1 bypasses shift function
  */
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SHIFT_BYPASS_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_CTRL_CH1_SET - Input Fetch Shift Control Channel 1 Register */
+/*! @name INPUT_FETCH_SHIFT_CTRL_CH1_SET - Input Fetch Shift Control Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_INPUT_ACTIVE_BPP_MASK (0x3U)
@@ -3896,7 +4101,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_SHIFT_BYPASS_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_CTRL_CH1_CLR - Input Fetch Shift Control Channel 1 Register */
+/*! @name INPUT_FETCH_SHIFT_CTRL_CH1_CLR - Input Fetch Shift Control Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_INPUT_ACTIVE_BPP_MASK (0x3U)
@@ -3920,7 +4125,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_SHIFT_BYPASS_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_CTRL_CH1_TOG - Input Fetch Shift Control Channel 1 Register */
+/*! @name INPUT_FETCH_SHIFT_CTRL_CH1_TOG - Input Fetch Shift Control Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_INPUT_ACTIVE_BPP_MASK (0x3U)
@@ -3944,7 +4149,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_SHIFT_BYPASS_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_OFFSET_CH0 - Input Fetch Shift Offset Channel 0 Register */
+/*! @name INPUT_FETCH_SHIFT_OFFSET_CH0 - Input Fetch Shift Offset Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET0_MASK (0x1FU)
@@ -3968,7 +4173,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET3_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_OFFSET_CH0_SET - Input Fetch Shift Offset Channel 0 Register */
+/*! @name INPUT_FETCH_SHIFT_OFFSET_CH0_SET - Input Fetch Shift Offset Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET0_MASK (0x1FU)
@@ -3992,7 +4197,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET3_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_OFFSET_CH0_CLR - Input Fetch Shift Offset Channel 0 Register */
+/*! @name INPUT_FETCH_SHIFT_OFFSET_CH0_CLR - Input Fetch Shift Offset Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET0_MASK (0x1FU)
@@ -4016,7 +4221,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET3_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_OFFSET_CH0_TOG - Input Fetch Shift Offset Channel 0 Register */
+/*! @name INPUT_FETCH_SHIFT_OFFSET_CH0_TOG - Input Fetch Shift Offset Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET0_MASK (0x1FU)
@@ -4040,7 +4245,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET3_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_OFFSET_CH1 - Input Fetch Shift Offset Channel 1 Register */
+/*! @name INPUT_FETCH_SHIFT_OFFSET_CH1 - Input Fetch Shift Offset Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET0_MASK (0x1FU)
@@ -4064,7 +4269,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET3_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_OFFSET_CH1_SET - Input Fetch Shift Offset Channel 1 Register */
+/*! @name INPUT_FETCH_SHIFT_OFFSET_CH1_SET - Input Fetch Shift Offset Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET0_MASK (0x1FU)
@@ -4088,7 +4293,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET3_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_OFFSET_CH1_CLR - Input Fetch Shift Offset Channel 1 Register */
+/*! @name INPUT_FETCH_SHIFT_OFFSET_CH1_CLR - Input Fetch Shift Offset Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET0_MASK (0x1FU)
@@ -4112,7 +4317,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET3_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_OFFSET_CH1_TOG - Input Fetch Shift Offset Channel 1 Register */
+/*! @name INPUT_FETCH_SHIFT_OFFSET_CH1_TOG - Input Fetch Shift Offset Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET0_MASK (0x1FU)
@@ -4136,7 +4341,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET3_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_WIDTH_CH0 - Input Fetch Shift Width Channel 0 Register */
+/*! @name INPUT_FETCH_SHIFT_WIDTH_CH0 - Input Fetch Shift Width Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_WIDTH0_MASK (0xFU)
@@ -4160,7 +4365,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_WIDTH3_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_WIDTH_CH0_SET - Input Fetch Shift Width Channel 0 Register */
+/*! @name INPUT_FETCH_SHIFT_WIDTH_CH0_SET - Input Fetch Shift Width Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH0_MASK (0xFU)
@@ -4184,7 +4389,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH3_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_WIDTH_CH0_CLR - Input Fetch Shift Width Channel 0 Register */
+/*! @name INPUT_FETCH_SHIFT_WIDTH_CH0_CLR - Input Fetch Shift Width Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH0_MASK (0xFU)
@@ -4208,7 +4413,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH3_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_WIDTH_CH0_TOG - Input Fetch Shift Width Channel 0 Register */
+/*! @name INPUT_FETCH_SHIFT_WIDTH_CH0_TOG - Input Fetch Shift Width Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH0_MASK (0xFU)
@@ -4232,7 +4437,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH3_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_WIDTH_CH1 - Input Fetch Shift Width Channel 1 Register */
+/*! @name INPUT_FETCH_SHIFT_WIDTH_CH1 - Input Fetch Shift Width Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_WIDTH0_MASK (0xFU)
@@ -4256,7 +4461,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_WIDTH3_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_WIDTH_CH1_SET - Input Fetch Shift Width Channel 1 Register */
+/*! @name INPUT_FETCH_SHIFT_WIDTH_CH1_SET - Input Fetch Shift Width Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH0_MASK (0xFU)
@@ -4280,7 +4485,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH3_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_WIDTH_CH1_CLR - Input Fetch Shift Width Channel 1 Register */
+/*! @name INPUT_FETCH_SHIFT_WIDTH_CH1_CLR - Input Fetch Shift Width Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH0_MASK (0xFU)
@@ -4304,7 +4509,7 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH3_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_SHIFT_WIDTH_CH1_TOG - Input Fetch Shift Width Channel 1 Register */
+/*! @name INPUT_FETCH_SHIFT_WIDTH_CH1_TOG - Input Fetch Shift Width Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH0_MASK (0xFU)
@@ -4328,43 +4533,43 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH3_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_ADDR_0_CH0 - Input Fetch Address 0 Channel 0 Register */
+/*! @name INPUT_FETCH_ADDR_0_CH0 - Input Fetch Address 0 Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_ADDR_0_CH0_INPUT_BASE_ADDR0_MASK (0xFFFFFFFFU)
 #define PXP_INPUT_FETCH_ADDR_0_CH0_INPUT_BASE_ADDR0_SHIFT (0U)
-/*! INPUT_BASE_ADDR0 - INPUT_BASE_ADDR0 */
+/*! INPUT_BASE_ADDR0 - Input Base Address 0 */
 #define PXP_INPUT_FETCH_ADDR_0_CH0_INPUT_BASE_ADDR0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_ADDR_0_CH0_INPUT_BASE_ADDR0_SHIFT)) & PXP_INPUT_FETCH_ADDR_0_CH0_INPUT_BASE_ADDR0_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_ADDR_1_CH0 - Input Fetch Address 1 Channel 0 Register */
+/*! @name INPUT_FETCH_ADDR_1_CH0 - Input Fetch Address 1 Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_ADDR_1_CH0_INPUT_BASE_ADDR1_MASK (0xFFFFFFFFU)
 #define PXP_INPUT_FETCH_ADDR_1_CH0_INPUT_BASE_ADDR1_SHIFT (0U)
-/*! INPUT_BASE_ADDR1 - INPUT_BASE_ADDR1 */
+/*! INPUT_BASE_ADDR1 - Input Base Address 1 */
 #define PXP_INPUT_FETCH_ADDR_1_CH0_INPUT_BASE_ADDR1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_ADDR_1_CH0_INPUT_BASE_ADDR1_SHIFT)) & PXP_INPUT_FETCH_ADDR_1_CH0_INPUT_BASE_ADDR1_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_ADDR_0_CH1 - Input Fetch Address 0 Channel 1 Register */
+/*! @name INPUT_FETCH_ADDR_0_CH1 - Input Fetch Address 0 Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_ADDR_0_CH1_INPUT_BASE_ADDR0_MASK (0xFFFFFFFFU)
 #define PXP_INPUT_FETCH_ADDR_0_CH1_INPUT_BASE_ADDR0_SHIFT (0U)
-/*! INPUT_BASE_ADDR0 - INPUT_BASE_ADDR0 */
+/*! INPUT_BASE_ADDR0 - Input Base Address 0 */
 #define PXP_INPUT_FETCH_ADDR_0_CH1_INPUT_BASE_ADDR0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_ADDR_0_CH1_INPUT_BASE_ADDR0_SHIFT)) & PXP_INPUT_FETCH_ADDR_0_CH1_INPUT_BASE_ADDR0_MASK)
 /*! @} */
 
-/*! @name INPUT_FETCH_ADDR_1_CH1 - Input Fetch Address 1 Channel 1 Register */
+/*! @name INPUT_FETCH_ADDR_1_CH1 - Input Fetch Address 1 Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_FETCH_ADDR_1_CH1_INPUT_BASE_ADDR1_MASK (0xFFFFFFFFU)
 #define PXP_INPUT_FETCH_ADDR_1_CH1_INPUT_BASE_ADDR1_SHIFT (0U)
-/*! INPUT_BASE_ADDR1 - INPUT_BASE_ADDR1 */
+/*! INPUT_BASE_ADDR1 - Input Base Address 1 */
 #define PXP_INPUT_FETCH_ADDR_1_CH1_INPUT_BASE_ADDR1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_ADDR_1_CH1_INPUT_BASE_ADDR1_SHIFT)) & PXP_INPUT_FETCH_ADDR_1_CH1_INPUT_BASE_ADDR1_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_CTRL_CH0 - Input Store Control Channel 0 Register */
+/*! @name INPUT_STORE_CTRL_CH0 - Input Store Control Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_CTRL_CH0_CH_EN_MASK      (0x1U)
@@ -4394,8 +4599,8 @@ typedef struct {
 #define PXP_INPUT_STORE_CTRL_CH0_STORE_MEMORY_EN_MASK (0x200U)
 #define PXP_INPUT_STORE_CTRL_CH0_STORE_MEMORY_EN_SHIFT (9U)
 /*! STORE_MEMORY_EN - STORE_MEMORY_EN
- *  0b0..store memory mode disable.
- *  0b1..store memory mode enable. Data will store to memory
+ *  0b0..Store memory mode disable.
+ *  0b1..Store memory mode enable. Data stores to memory
  */
 #define PXP_INPUT_STORE_CTRL_CH0_STORE_MEMORY_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_STORE_MEMORY_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_STORE_MEMORY_EN_MASK)
 
@@ -4403,7 +4608,7 @@ typedef struct {
 #define PXP_INPUT_STORE_CTRL_CH0_FILL_DATA_EN_SHIFT (11U)
 /*! FILL_DATA_EN - FILL_DATA_EN
  *  0b0..Fill data mode disable.
- *  0b1..Fill data mode enable. When using fill_data mode, store_engine will store fixed data defined in fill_data register
+ *  0b1..Fill data mode enable. When using fill_data mode, store_engine stores the fixed data defined in fill_data register.
  */
 #define PXP_INPUT_STORE_CTRL_CH0_FILL_DATA_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_FILL_DATA_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_FILL_DATA_EN_MASK)
 
@@ -4423,22 +4628,22 @@ typedef struct {
  *  0b010..NUM_32_BYTES : 32 bytes
  *  0b011..NUM_64_BYTES : 64 bytes
  *  0b100..NUM_128_BYTES : 128 bytes
- *  0b101..reserved
- *  0b110..reserved
- *  0b111..reserved
+ *  0b101..Reserved
+ *  0b110..Reserved
+ *  0b111..Reserved
  */
 #define PXP_INPUT_STORE_CTRL_CH0_WR_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_WR_NUM_BYTES_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_WR_NUM_BYTES_MASK)
 
 #define PXP_INPUT_STORE_CTRL_CH0_ARBIT_EN_MASK   (0x80000000U)
 #define PXP_INPUT_STORE_CTRL_CH0_ARBIT_EN_SHIFT  (31U)
 /*! ARBIT_EN - ARBIT_EN
- *  0b0..Arbitration disable. If using 2 channels, will output 2 axi bus sets
- *  0b1..Arbitration enable. If using 2 channel, will only output 1 axi bus sets
+ *  0b0..Arbitration disable. If using 2 channels, outputs 2 axi bus sets
+ *  0b1..Arbitration enable. If using 2 channel, only outputs 1 axi bus sets
  */
 #define PXP_INPUT_STORE_CTRL_CH0_ARBIT_EN(x)     (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_ARBIT_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_ARBIT_EN_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_CTRL_CH0_SET - Input Store Control Channel 0 Register */
+/*! @name INPUT_STORE_CTRL_CH0_SET - Input Store Control Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_CTRL_CH0_SET_CH_EN_MASK  (0x1U)
@@ -4482,7 +4687,7 @@ typedef struct {
 #define PXP_INPUT_STORE_CTRL_CH0_SET_ARBIT_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_SET_ARBIT_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_SET_ARBIT_EN_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_CTRL_CH0_CLR - Input Store Control Channel 0 Register */
+/*! @name INPUT_STORE_CTRL_CH0_CLR - Input Store Control Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_CTRL_CH0_CLR_CH_EN_MASK  (0x1U)
@@ -4526,7 +4731,7 @@ typedef struct {
 #define PXP_INPUT_STORE_CTRL_CH0_CLR_ARBIT_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_CLR_ARBIT_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_CLR_ARBIT_EN_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_CTRL_CH0_TOG - Input Store Control Channel 0 Register */
+/*! @name INPUT_STORE_CTRL_CH0_TOG - Input Store Control Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_CTRL_CH0_TOG_CH_EN_MASK  (0x1U)
@@ -4570,7 +4775,7 @@ typedef struct {
 #define PXP_INPUT_STORE_CTRL_CH0_TOG_ARBIT_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_TOG_ARBIT_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_TOG_ARBIT_EN_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_CTRL_CH1 - Input Store Control Channel 1 Register */
+/*! @name INPUT_STORE_CTRL_CH1 - Input Store Control Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_CTRL_CH1_CH_EN_MASK      (0x1U)
@@ -4600,8 +4805,8 @@ typedef struct {
 #define PXP_INPUT_STORE_CTRL_CH1_STORE_MEMORY_EN_MASK (0x200U)
 #define PXP_INPUT_STORE_CTRL_CH1_STORE_MEMORY_EN_SHIFT (9U)
 /*! STORE_MEMORY_EN - STORE_MEMORY_EN
- *  0b0..store memory mode disable.
- *  0b1..store memory mode enable. Data will store to memory.
+ *  0b0..Store memory mode disable.
+ *  0b1..Store memory mode enable. Data stores to memory.
  */
 #define PXP_INPUT_STORE_CTRL_CH1_STORE_MEMORY_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_STORE_MEMORY_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_STORE_MEMORY_EN_MASK)
 
@@ -4621,14 +4826,14 @@ typedef struct {
  *  0b010..NUM_32_BYTES : 32 bytes
  *  0b011..NUM_64_BYTES : 64 bytes
  *  0b100..NUM_128_BYTES : 128 bytes
- *  0b101..reserved
- *  0b110..reserved
- *  0b111..reserved
+ *  0b101..Reserved
+ *  0b110..Reserved
+ *  0b111..Reserved
  */
 #define PXP_INPUT_STORE_CTRL_CH1_WR_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_WR_NUM_BYTES_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_WR_NUM_BYTES_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_CTRL_CH1_SET - Input Store Control Channel 1 Register */
+/*! @name INPUT_STORE_CTRL_CH1_SET - Input Store Control Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_CTRL_CH1_SET_CH_EN_MASK  (0x1U)
@@ -4662,7 +4867,7 @@ typedef struct {
 #define PXP_INPUT_STORE_CTRL_CH1_SET_WR_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_SET_WR_NUM_BYTES_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_SET_WR_NUM_BYTES_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_CTRL_CH1_CLR - Input Store Control Channel 1 Register */
+/*! @name INPUT_STORE_CTRL_CH1_CLR - Input Store Control Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_CTRL_CH1_CLR_CH_EN_MASK  (0x1U)
@@ -4696,7 +4901,7 @@ typedef struct {
 #define PXP_INPUT_STORE_CTRL_CH1_CLR_WR_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_CLR_WR_NUM_BYTES_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_CLR_WR_NUM_BYTES_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_CTRL_CH1_TOG - Input Store Control Channel 1 Register */
+/*! @name INPUT_STORE_CTRL_CH1_TOG - Input Store Control Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_CTRL_CH1_TOG_CH_EN_MASK  (0x1U)
@@ -4730,7 +4935,7 @@ typedef struct {
 #define PXP_INPUT_STORE_CTRL_CH1_TOG_WR_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_TOG_WR_NUM_BYTES_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_TOG_WR_NUM_BYTES_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_STATUS_CH0 - Input Store Status Channel 0 Register */
+/*! @name INPUT_STORE_STATUS_CH0 - Input Store Status Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_STATUS_CH0_STORE_BLOCK_X_MASK (0xFFFFU)
@@ -4744,7 +4949,7 @@ typedef struct {
 #define PXP_INPUT_STORE_STATUS_CH0_STORE_BLOCK_Y(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_STATUS_CH0_STORE_BLOCK_Y_SHIFT)) & PXP_INPUT_STORE_STATUS_CH0_STORE_BLOCK_Y_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_STATUS_CH1 - Input Store Status Channel 1 Register */
+/*! @name INPUT_STORE_STATUS_CH1 - Input Store Status Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_STATUS_CH1_STORE_BLOCK_X_MASK (0xFFFFU)
@@ -4758,7 +4963,7 @@ typedef struct {
 #define PXP_INPUT_STORE_STATUS_CH1_STORE_BLOCK_Y(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_STATUS_CH1_STORE_BLOCK_Y_SHIFT)) & PXP_INPUT_STORE_STATUS_CH1_STORE_BLOCK_Y_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_SIZE_CH0 - Input Store Size Channel 0 Register */
+/*! @name INPUT_STORE_SIZE_CH0 - Input Store Size Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_SIZE_CH0_OUT_WIDTH_MASK  (0xFFFFU)
@@ -4772,7 +4977,7 @@ typedef struct {
 #define PXP_INPUT_STORE_SIZE_CH0_OUT_HEIGHT(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SIZE_CH0_OUT_HEIGHT_SHIFT)) & PXP_INPUT_STORE_SIZE_CH0_OUT_HEIGHT_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_SIZE_CH1 - Input Store Size Channel 1 Register */
+/*! @name INPUT_STORE_SIZE_CH1 - Input Store Size Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_SIZE_CH1_OUT_WIDTH_MASK  (0xFFFFU)
@@ -4786,7 +4991,7 @@ typedef struct {
 #define PXP_INPUT_STORE_SIZE_CH1_OUT_HEIGHT(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SIZE_CH1_OUT_HEIGHT_SHIFT)) & PXP_INPUT_STORE_SIZE_CH1_OUT_HEIGHT_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_PITCH - Input Store Pitch Register */
+/*! @name INPUT_STORE_PITCH - Input Store Pitch */
 /*! @{ */
 
 #define PXP_INPUT_STORE_PITCH_CH0_OUT_PITCH_MASK (0xFFFFU)
@@ -4800,7 +5005,7 @@ typedef struct {
 #define PXP_INPUT_STORE_PITCH_CH1_OUT_PITCH(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_PITCH_CH1_OUT_PITCH_SHIFT)) & PXP_INPUT_STORE_PITCH_CH1_OUT_PITCH_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_SHIFT_CTRL_CH0 - Input Store Shift Control Channel 0 Register */
+/*! @name INPUT_STORE_SHIFT_CTRL_CH0 - Input Store Shift Control Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH0_OUTPUT_ACTIVE_BPP_MASK (0xCU)
@@ -4832,13 +5037,13 @@ typedef struct {
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SHIFT_BYPASS_MASK (0x80U)
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SHIFT_BYPASS_SHIFT (7U)
 /*! SHIFT_BYPASS - SHIFT_BYPASS
- *  0b0..data will do shift processing.
- *  0b1..data will bypass shift module.
+ *  0b0..data does shift processing.
+ *  0b1..Data bypasses shift module.
  */
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_SHIFT_BYPASS_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_SHIFT_CTRL_CH0_SET - Input Store Shift Control Channel 0 Register */
+/*! @name INPUT_STORE_SHIFT_CTRL_CH0_SET - Input Store Shift Control Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_OUTPUT_ACTIVE_BPP_MASK (0xCU)
@@ -4862,7 +5067,7 @@ typedef struct {
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_SHIFT_BYPASS_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_SHIFT_CTRL_CH0_CLR - Input Store Shift Control Channel 0 Register */
+/*! @name INPUT_STORE_SHIFT_CTRL_CH0_CLR - Input Store Shift Control Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_OUTPUT_ACTIVE_BPP_MASK (0xCU)
@@ -4886,7 +5091,7 @@ typedef struct {
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_SHIFT_BYPASS_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_SHIFT_CTRL_CH0_TOG - Input Store Shift Control Channel 0 Register */
+/*! @name INPUT_STORE_SHIFT_CTRL_CH0_TOG - Input Store Shift Control Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_OUTPUT_ACTIVE_BPP_MASK (0xCU)
@@ -4910,7 +5115,7 @@ typedef struct {
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_SHIFT_BYPASS_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_SHIFT_CTRL_CH1 - Input Store Shift Control Channel 1 Register */
+/*! @name INPUT_STORE_SHIFT_CTRL_CH1 - Input Store Shift Control Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH1_OUTPUT_ACTIVE_BPP_MASK (0xCU)
@@ -4940,7 +5145,7 @@ typedef struct {
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH1_OUT_YUV422_2P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH1_OUT_YUV422_2P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH1_OUT_YUV422_2P_EN_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_SHIFT_CTRL_CH1_SET - Input Store Shift Control Channel 1 Register */
+/*! @name INPUT_STORE_SHIFT_CTRL_CH1_SET - Input Store Shift Control Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUTPUT_ACTIVE_BPP_MASK (0xCU)
@@ -4959,7 +5164,7 @@ typedef struct {
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUT_YUV422_2P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUT_YUV422_2P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUT_YUV422_2P_EN_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_SHIFT_CTRL_CH1_CLR - Input Store Shift Control Channel 1 Register */
+/*! @name INPUT_STORE_SHIFT_CTRL_CH1_CLR - Input Store Shift Control Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUTPUT_ACTIVE_BPP_MASK (0xCU)
@@ -4978,7 +5183,7 @@ typedef struct {
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUT_YUV422_2P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUT_YUV422_2P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUT_YUV422_2P_EN_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_SHIFT_CTRL_CH1_TOG - Input Store Shift Control Channel 1 Register */
+/*! @name INPUT_STORE_SHIFT_CTRL_CH1_TOG - Input Store Shift Control Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUTPUT_ACTIVE_BPP_MASK (0xCU)
@@ -4997,25 +5202,25 @@ typedef struct {
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUT_YUV422_2P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUT_YUV422_2P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUT_YUV422_2P_EN_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_ADDR_0_CH0 - Input Store Address 0 Channel 0 Register */
+/*! @name INPUT_STORE_ADDR_0_CH0 - Input Store Address 0 Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_ADDR_0_CH0_OUT_BASE_ADDR0_MASK (0xFFFFFFFFU)
 #define PXP_INPUT_STORE_ADDR_0_CH0_OUT_BASE_ADDR0_SHIFT (0U)
-/*! OUT_BASE_ADDR0 - OUT_BASE_ADDR0 */
+/*! OUT_BASE_ADDR0 - Output Base Address 0 */
 #define PXP_INPUT_STORE_ADDR_0_CH0_OUT_BASE_ADDR0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_ADDR_0_CH0_OUT_BASE_ADDR0_SHIFT)) & PXP_INPUT_STORE_ADDR_0_CH0_OUT_BASE_ADDR0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_ADDR_1_CH0 - Input Store Address 1 Channel 0 Register */
+/*! @name INPUT_STORE_ADDR_1_CH0 - Input Store Address 1 Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_ADDR_1_CH0_OUT_BASE_ADDR1_MASK (0xFFFFFFFFU)
 #define PXP_INPUT_STORE_ADDR_1_CH0_OUT_BASE_ADDR1_SHIFT (0U)
-/*! OUT_BASE_ADDR1 - OUT_BASE_ADDR1 */
+/*! OUT_BASE_ADDR1 - Output Base Address 1 */
 #define PXP_INPUT_STORE_ADDR_1_CH0_OUT_BASE_ADDR1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_ADDR_1_CH0_OUT_BASE_ADDR1_SHIFT)) & PXP_INPUT_STORE_ADDR_1_CH0_OUT_BASE_ADDR1_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_FILL_DATA_CH0 - Input Store Fill Data Channel 0 Register */
+/*! @name INPUT_STORE_FILL_DATA_CH0 - Input Store Fill Data Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_FILL_DATA_CH0_FILL_DATA_CH0_MASK (0xFFFFFFFFU)
@@ -5024,25 +5229,25 @@ typedef struct {
 #define PXP_INPUT_STORE_FILL_DATA_CH0_FILL_DATA_CH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_FILL_DATA_CH0_FILL_DATA_CH0_SHIFT)) & PXP_INPUT_STORE_FILL_DATA_CH0_FILL_DATA_CH0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_ADDR_0_CH1 - Input Store Address 0 Channel 1 Register */
+/*! @name INPUT_STORE_ADDR_0_CH1 - Input Store Address 0 Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_ADDR_0_CH1_OUT_BASE_ADDR0_MASK (0xFFFFFFFFU)
 #define PXP_INPUT_STORE_ADDR_0_CH1_OUT_BASE_ADDR0_SHIFT (0U)
-/*! OUT_BASE_ADDR0 - OUT_BASE_ADDR0 */
+/*! OUT_BASE_ADDR0 - Output Base Address 0 */
 #define PXP_INPUT_STORE_ADDR_0_CH1_OUT_BASE_ADDR0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_ADDR_0_CH1_OUT_BASE_ADDR0_SHIFT)) & PXP_INPUT_STORE_ADDR_0_CH1_OUT_BASE_ADDR0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_ADDR_1_CH1 - Input Store Address 1 Channel 1 Register */
+/*! @name INPUT_STORE_ADDR_1_CH1 - Input Store Address 1 Channel 1 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_ADDR_1_CH1_OUT_BASE_ADDR1_MASK (0xFFFFFFFFU)
 #define PXP_INPUT_STORE_ADDR_1_CH1_OUT_BASE_ADDR1_SHIFT (0U)
-/*! OUT_BASE_ADDR1 - OUT_BASE_ADDR1 */
+/*! OUT_BASE_ADDR1 - Output Base Address 1 */
 #define PXP_INPUT_STORE_ADDR_1_CH1_OUT_BASE_ADDR1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_ADDR_1_CH1_OUT_BASE_ADDR1_SHIFT)) & PXP_INPUT_STORE_ADDR_1_CH1_OUT_BASE_ADDR1_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_MASK0_H_CH0 - Input Store Data Mask 0 High Byte Channel 0 Register */
+/*! @name INPUT_STORE_D_MASK0_H_CH0 - Input Store Data Mask 0 High Byte Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_MASK0_H_CH0_D_MASK0_H_CH0_MASK (0xFFFFFFFFU)
@@ -5051,7 +5256,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_MASK0_H_CH0_D_MASK0_H_CH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_MASK0_H_CH0_D_MASK0_H_CH0_SHIFT)) & PXP_INPUT_STORE_D_MASK0_H_CH0_D_MASK0_H_CH0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_MASK0_L_CH0 - Input Store Data Mask 0 Low Byte Channel 0 Register */
+/*! @name INPUT_STORE_D_MASK0_L_CH0 - Input Store Data Mask 0 Low Byte Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_MASK0_L_CH0_D_MASK0_L_CH0_MASK (0xFFFFFFFFU)
@@ -5060,7 +5265,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_MASK0_L_CH0_D_MASK0_L_CH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_MASK0_L_CH0_D_MASK0_L_CH0_SHIFT)) & PXP_INPUT_STORE_D_MASK0_L_CH0_D_MASK0_L_CH0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_MASK1_H_CH0 - Input Store Data Mask 1 High Byte Channel 0 Register */
+/*! @name INPUT_STORE_D_MASK1_H_CH0 - Input Store Data Mask 1 High Byte Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_MASK1_H_CH0_D_MASK1_H_CH0_MASK (0xFFFFFFFFU)
@@ -5069,7 +5274,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_MASK1_H_CH0_D_MASK1_H_CH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_MASK1_H_CH0_D_MASK1_H_CH0_SHIFT)) & PXP_INPUT_STORE_D_MASK1_H_CH0_D_MASK1_H_CH0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_MASK1_L_CH0 - Input Store Data Mask 1 Low Byte Channel 0 Register */
+/*! @name INPUT_STORE_D_MASK1_L_CH0 - Input Store Data Mask 1 Low Byte Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_MASK1_L_CH0_D_MASK1_L_CH0_MASK (0xFFFFFFFFU)
@@ -5078,7 +5283,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_MASK1_L_CH0_D_MASK1_L_CH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_MASK1_L_CH0_D_MASK1_L_CH0_SHIFT)) & PXP_INPUT_STORE_D_MASK1_L_CH0_D_MASK1_L_CH0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_MASK2_H_CH0 - Input Store Data Mask 2 High Byte Channel 0 Register */
+/*! @name INPUT_STORE_D_MASK2_H_CH0 - Input Store Data Mask 2 High Byte Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_MASK2_H_CH0_D_MASK2_H_CH0_MASK (0xFFFFFFFFU)
@@ -5087,7 +5292,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_MASK2_H_CH0_D_MASK2_H_CH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_MASK2_H_CH0_D_MASK2_H_CH0_SHIFT)) & PXP_INPUT_STORE_D_MASK2_H_CH0_D_MASK2_H_CH0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_MASK2_L_CH0 - Input Store Data Mask 2 Low Byte Channel 0 Register */
+/*! @name INPUT_STORE_D_MASK2_L_CH0 - Input Store Data Mask 2 Low Byte Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_MASK2_L_CH0_D_MASK2_L_CH0_MASK (0xFFFFFFFFU)
@@ -5096,7 +5301,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_MASK2_L_CH0_D_MASK2_L_CH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_MASK2_L_CH0_D_MASK2_L_CH0_SHIFT)) & PXP_INPUT_STORE_D_MASK2_L_CH0_D_MASK2_L_CH0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_MASK3_H_CH0 - Input Store Data Mask 3 High Byte Channel 0 Register */
+/*! @name INPUT_STORE_D_MASK3_H_CH0 - Input Store Data Mask 3 High Byte Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_MASK3_H_CH0_D_MASK3_H_CH0_MASK (0xFFFFFFFFU)
@@ -5105,7 +5310,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_MASK3_H_CH0_D_MASK3_H_CH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_MASK3_H_CH0_D_MASK3_H_CH0_SHIFT)) & PXP_INPUT_STORE_D_MASK3_H_CH0_D_MASK3_H_CH0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_MASK3_L_CH0 - Input Store Data Mask 3 Low Byte Channel 0 Register */
+/*! @name INPUT_STORE_D_MASK3_L_CH0 - Input Store Data Mask 3 Low Byte Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_MASK3_L_CH0_D_MASK3_L_CH0_MASK (0xFFFFFFFFU)
@@ -5114,7 +5319,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_MASK3_L_CH0_D_MASK3_L_CH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_MASK3_L_CH0_D_MASK3_L_CH0_SHIFT)) & PXP_INPUT_STORE_D_MASK3_L_CH0_D_MASK3_L_CH0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_MASK4_H_CH0 - Input Store Data Mask 4 High Byte Channel 0 Register */
+/*! @name INPUT_STORE_D_MASK4_H_CH0 - Input Store Data Mask 4 High Byte Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_MASK4_H_CH0_D_MASK4_H_CH0_MASK (0xFFFFFFFFU)
@@ -5123,7 +5328,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_MASK4_H_CH0_D_MASK4_H_CH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_MASK4_H_CH0_D_MASK4_H_CH0_SHIFT)) & PXP_INPUT_STORE_D_MASK4_H_CH0_D_MASK4_H_CH0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_MASK4_L_CH0 - Input Store Data Mask 4 Low Byte Channel 0 Register */
+/*! @name INPUT_STORE_D_MASK4_L_CH0 - Input Store Data Mask 4 Low Byte Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_MASK4_L_CH0_D_MASK4_L_CH0_MASK (0xFFFFFFFFU)
@@ -5132,7 +5337,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_MASK4_L_CH0_D_MASK4_L_CH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_MASK4_L_CH0_D_MASK4_L_CH0_SHIFT)) & PXP_INPUT_STORE_D_MASK4_L_CH0_D_MASK4_L_CH0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_MASK5_H_CH0 - Input Store Data Mask 5 High Byte Channel 0 Register */
+/*! @name INPUT_STORE_D_MASK5_H_CH0 - Input Store Data Mask 5 High Byte Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_MASK5_H_CH0_D_MASK5_H_CH0_MASK (0xFFFFFFFFU)
@@ -5141,7 +5346,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_MASK5_H_CH0_D_MASK5_H_CH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_MASK5_H_CH0_D_MASK5_H_CH0_SHIFT)) & PXP_INPUT_STORE_D_MASK5_H_CH0_D_MASK5_H_CH0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_MASK5_L_CH0 - Input Store Data Mask 5 Low Byte Channel 0 Register */
+/*! @name INPUT_STORE_D_MASK5_L_CH0 - Input Store Data Mask 5 Low Byte Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_MASK5_L_CH0_D_MASK5_L_CH0_MASK (0xFFFFFFFFU)
@@ -5150,7 +5355,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_MASK5_L_CH0_D_MASK5_L_CH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_MASK5_L_CH0_D_MASK5_L_CH0_SHIFT)) & PXP_INPUT_STORE_D_MASK5_L_CH0_D_MASK5_L_CH0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_MASK6_H_CH0 - Input Store Data Mask 6 High Byte Channel 0 Register */
+/*! @name INPUT_STORE_D_MASK6_H_CH0 - Input Store Data Mask 6 High Byte Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_MASK6_H_CH0_D_MASK6_H_CH0_MASK (0xFFFFFFFFU)
@@ -5159,7 +5364,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_MASK6_H_CH0_D_MASK6_H_CH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_MASK6_H_CH0_D_MASK6_H_CH0_SHIFT)) & PXP_INPUT_STORE_D_MASK6_H_CH0_D_MASK6_H_CH0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_MASK6_L_CH0 - Input Store Data Mask 6 Low Byte Channel 0 Register */
+/*! @name INPUT_STORE_D_MASK6_L_CH0 - Input Store Data Mask 6 Low Byte Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_MASK6_L_CH0_D_MASK6_L_CH0_MASK (0xFFFFFFFFU)
@@ -5168,7 +5373,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_MASK6_L_CH0_D_MASK6_L_CH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_MASK6_L_CH0_D_MASK6_L_CH0_SHIFT)) & PXP_INPUT_STORE_D_MASK6_L_CH0_D_MASK6_L_CH0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_MASK7_H_CH0 - Input Store Data Mask 7 High Byte Channel 0 Register */
+/*! @name INPUT_STORE_D_MASK7_H_CH0 - Input Store Data Mask 7 High Byte Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_MASK7_H_CH0_D_MASK7_H_CH0_MASK (0xFFFFFFFFU)
@@ -5177,7 +5382,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_MASK7_H_CH0_D_MASK7_H_CH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_MASK7_H_CH0_D_MASK7_H_CH0_SHIFT)) & PXP_INPUT_STORE_D_MASK7_H_CH0_D_MASK7_H_CH0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_MASK7_L_CH0 - Input Store Data Mask 7 Low Byte Channel 0 Register */
+/*! @name INPUT_STORE_D_MASK7_L_CH0 - Input Store Data Mask 7 Low Byte Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_MASK7_L_CH0_D_MASK7_L_CH0_MASK (0xFFFFFFFFU)
@@ -5186,7 +5391,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_MASK7_L_CH0_D_MASK7_L_CH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_MASK7_L_CH0_D_MASK7_L_CH0_SHIFT)) & PXP_INPUT_STORE_D_MASK7_L_CH0_D_MASK7_L_CH0_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_SHIFT_L_CH0 - Input Store Data Shift Low Channel 0 Register */
+/*! @name INPUT_STORE_D_SHIFT_L_CH0 - Input Store Data Shift Low Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_WIDTH0_MASK (0x3FU)
@@ -5230,7 +5435,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_FLAG3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_FLAG3_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_FLAG3_MASK)
 /*! @} */
 
-/*! @name INPUT_STORE_D_SHIFT_H_CH0 - Input Store Data Shift High Channel 0 Register */
+/*! @name INPUT_STORE_D_SHIFT_H_CH0 - Input Store Data Shift High Channel 0 */
 /*! @{ */
 
 #define PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_WIDTH4_MASK (0x3FU)
@@ -5274,7 +5479,7 @@ typedef struct {
 #define PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_FLAG7(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_FLAG7_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_FLAG7_MASK)
 /*! @} */
 
-/*! @name BUS_MUX - Bus MUX Register */
+/*! @name BUS_MUX - Bus MUX */
 /*! @{ */
 
 #define PXP_BUS_MUX_RD_SEL_MASK                  (0xFFU)
@@ -5288,7 +5493,7 @@ typedef struct {
 #define PXP_BUS_MUX_WR_SEL(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_BUS_MUX_WR_SEL_SHIFT)) & PXP_BUS_MUX_WR_SEL_MASK)
 /*! @} */
 
-/*! @name PS_LRC - Processed Surface Lower Right Coordinate Register */
+/*! @name PS_LRC - Processed Surface Lower Right Coordinate */
 /*! @{ */
 
 #define PXP_PS_LRC_Y_MASK                        (0x3FFFU)
@@ -5302,7 +5507,7 @@ typedef struct {
 #define PXP_PS_LRC_X(x)                          (((uint32_t)(((uint32_t)(x)) << PXP_PS_LRC_X_SHIFT)) & PXP_PS_LRC_X_MASK)
 /*! @} */
 
-/*! @name AS_BACKGROUND - AS Background Color Register */
+/*! @name AS_BACKGROUND - AS Background Color */
 /*! @{ */
 
 #define PXP_AS_BACKGROUND_COLOR_MASK             (0xFFFFFFFFU)

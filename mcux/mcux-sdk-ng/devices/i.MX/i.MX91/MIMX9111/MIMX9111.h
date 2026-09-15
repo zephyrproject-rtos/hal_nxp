@@ -9,13 +9,13 @@
 **
 **     Reference manual:    IMX91RM Rev.1
 **     Version:             rev. 1.0, 2024-11-15
-**     Build:               b250814
+**     Build:               b260728
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX9111
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -57,6 +57,7 @@
 #include "PERI_DMA.h"
 #include "PERI_DMA4.h"
 #include "PERI_DMA4_TCD.h"
+#include "PERI_DMA_TCD.h"
 #include "PERI_ENET_QOS.h"
 #include "PERI_FLEXIO.h"
 #include "PERI_FLEXSPI.h"
@@ -87,7 +88,6 @@
 #include "PERI_SYS_CTR_COMPARE.h"
 #include "PERI_SYS_CTR_CONTROL.h"
 #include "PERI_SYS_CTR_READ.h"
-#include "PERI_TCD.h"
 #include "PERI_TEMPSENSE.h"
 #include "PERI_TPM.h"
 #include "PERI_TRDC_MBC0.h"

@@ -10,13 +10,13 @@
 **                          MIMX9131DVVXJ
 **
 **     Version:             rev. 1.0, 2024-11-15
-**     Build:               b250814
+**     Build:               b260728
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BLK_CTRL_MEDIAMIX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -653,3 +653,4 @@ typedef struct {
 
 
 #endif  /* PERI_BLK_CTRL_MEDIAMIX_H_ */
+
