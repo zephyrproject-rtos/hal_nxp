@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2026-04-09
-**     Build:               b260624
+**     Build:               b260722
 **
 **     Abstract:
 **         Chip specific module features.
@@ -43,6 +43,8 @@
 #define FSL_FEATURE_SOC_FLEXCAN_COUNT (3)
 /* @brief FLEXIO availability on the SoC. */
 #define FSL_FEATURE_SOC_FLEXIO_COUNT (2)
+/* @brief FRACT_PLL availability on the SoC. */
+#define FSL_FEATURE_SOC_FRACT_PLL_COUNT (7)
 /* @brief GPC availability on the SoC. */
 #define FSL_FEATURE_SOC_GPC_COUNT (7)
 /* @brief GPT availability on the SoC. */
@@ -108,6 +110,8 @@
 #define FSL_FEATURE_ADC_THRESHOLDS_COUNT (8)
 /* @brief Self-test threshold counts of ADC. */
 #define FSL_FEATURE_ADC_SELF_TEST_THRESHOLDS_COUNT (6)
+/* @brief Has external trigger or not. */
+#define FSL_FEATURE_ADC_HAS_EXTERNAL_TRIGGER (0)
 
 /* CRC module features */
 
@@ -155,10 +159,6 @@
 
 /* @brief Register name is ASRPM or ASRPMn */
 #define FSL_FEATURE_ASRC_PARAMETER_REGISTER_NAME_ASRPM (1)
-
-/* BLK_CTRL_CAMERAMIX module features */
-
-/* No feature definitions */
 
 /* CACHEC module features */
 
@@ -254,6 +254,7 @@
 
 /* @brief Display SEERIS MDR version */
 #define FSL_FEATURE_DISPLAY_SEERIS_MDR7 (1)
+/* @brief Display SEERIS has LD */
 #define FSL_FEATURE_DISPLAY_SEERIS_HAS_LD (0)
 
 /* EDMA module features */
@@ -957,27 +958,6 @@
 
 /* @brief Is affected by errata with ID 3777. */
 #define FSL_FEATURE_GPT_HAS_ERRATA_3777 (0)
-
-/* TRDC module features */
-
-/* @brief Process master count. */
-#define FSL_FEATURE_TRDC_PROCESSOR_MASTER_COUNT (2)
-/* @brief TRDC instance has PID configuration or not. */
-#define FSL_FEATURE_TRDC_INSTANCE_HAS_PID_CONFIGURATIONn(x) (0)
-/* @brief TRDC domain number (reset value of HWCFG0[NDID]). */
-#define FSL_FEATURE_TRDC_DOMAIN_COUNT (16)
-/* @brief TRDC instance has MBC. Note: This feature value is not the same on all TRDC instances. */
-#define FSL_FEATURE_TRDC_HAS_MBC (1)
-/* @brief TRDC instance has MRC. Note: This feature value is not the same on all TRDC instances. */
-#define FSL_FEATURE_TRDC_HAS_MRC (1)
-/* @brief TRDC instance has TRDC_CR. */
-#define FSL_FEATURE_TRDC_HAS_GENERAL_CONFIG (1)
-/* @brief TRDC instance has MDA_Wx_y_DFMT. */
-#define FSL_FEATURE_TRDC_HAS_DOMAIN_ASSIGNMENT (1)
-/* @brief TRDC instance has TRDC_FDID. */
-#define FSL_FEATURE_TRDC_HAS_DOMAIN_ERROR (1)
-/* @brief TRDC instance has TRDC_FLW_CTL. */
-#define FSL_FEATURE_TRDC_HAS_FLW (1)
 
 /* WDOG module features */
 

@@ -1,4 +1,4 @@
-# Copyright 2024 NXP
+# Copyright 2024, 2026 NXP
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -9,7 +9,12 @@ mcux_set_variable(device MIMX9352)
 mcux_set_variable(device_root devices)
 mcux_set_variable(soc_series i.MX93)
 mcux_set_variable(soc_periph periph)
-mcux_set_variable(core_id_suffix_name "_cm33")
-mcux_set_variable(multicore_foldername .)
+
+if (NOT DEFINED core_id)
+    mcux_set_variable(core_id cm33)
+endif()
+
+include(${SdkRootDirPath}/devices/i.MX/${soc_series}/${device}/${core_id}/variable.cmake)
+
 
 #### Source record

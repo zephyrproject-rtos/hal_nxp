@@ -1,10 +1,220 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX94398AVKE_ca55
-**                          MIMX94398AVKE_cm33_core0
-**                          MIMX94398AVKE_cm33_core1
-**                          MIMX94398AVKE_cm7_core0
-**                          MIMX94398AVKE_cm7_core1
+**     Processors:          MIMX94115CVMM_ca55
+**                          MIMX94115CVMM_cm33_core0
+**                          MIMX94115CVMM_cm33_core1
+**                          MIMX94115CVMM_cm7_core0
+**                          MIMX94115CVMM_cm7_core1
+**                          MIMX94115XVKM_ca55
+**                          MIMX94115XVKM_cm33_core0
+**                          MIMX94115XVKM_cm33_core1
+**                          MIMX94115XVKM_cm7_core0
+**                          MIMX94115XVKM_cm7_core1
+**                          MIMX94115XVMM_ca55
+**                          MIMX94115XVMM_cm33_core0
+**                          MIMX94115XVMM_cm33_core1
+**                          MIMX94115XVMM_cm7_core0
+**                          MIMX94115XVMM_cm7_core1
+**                          MIMX94135CVMM_ca55
+**                          MIMX94135CVMM_cm33_core0
+**                          MIMX94135CVMM_cm33_core1
+**                          MIMX94135CVMM_cm7_core0
+**                          MIMX94135CVMM_cm7_core1
+**                          MIMX94135XVKM_ca55
+**                          MIMX94135XVKM_cm33_core0
+**                          MIMX94135XVKM_cm33_core1
+**                          MIMX94135XVKM_cm7_core0
+**                          MIMX94135XVKM_cm7_core1
+**                          MIMX94135XVMM_ca55
+**                          MIMX94135XVMM_cm33_core0
+**                          MIMX94135XVMM_cm33_core1
+**                          MIMX94135XVMM_cm7_core0
+**                          MIMX94135XVMM_cm7_core1
+**                          MIMX94155CVMM_ca55
+**                          MIMX94155CVMM_cm33_core0
+**                          MIMX94155CVMM_cm33_core1
+**                          MIMX94155CVMM_cm7_core0
+**                          MIMX94155CVMM_cm7_core1
+**                          MIMX94155XVKM_ca55
+**                          MIMX94155XVKM_cm33_core0
+**                          MIMX94155XVKM_cm33_core1
+**                          MIMX94155XVKM_cm7_core0
+**                          MIMX94155XVKM_cm7_core1
+**                          MIMX94155XVMM_ca55
+**                          MIMX94155XVMM_cm33_core0
+**                          MIMX94155XVMM_cm33_core1
+**                          MIMX94155XVMM_cm7_core0
+**                          MIMX94155XVMM_cm7_core1
+**                          MIMX94175CVMM_ca55
+**                          MIMX94175CVMM_cm33_core0
+**                          MIMX94175CVMM_cm33_core1
+**                          MIMX94175CVMM_cm7_core0
+**                          MIMX94175CVMM_cm7_core1
+**                          MIMX94175XVKM_ca55
+**                          MIMX94175XVKM_cm33_core0
+**                          MIMX94175XVKM_cm33_core1
+**                          MIMX94175XVKM_cm7_core0
+**                          MIMX94175XVKM_cm7_core1
+**                          MIMX94175XVMM_ca55
+**                          MIMX94175XVMM_cm33_core0
+**                          MIMX94175XVMM_cm33_core1
+**                          MIMX94175XVMM_cm7_core0
+**                          MIMX94175XVMM_cm7_core1
+**                          MIMX94185CVMM_ca55
+**                          MIMX94185CVMM_cm33_core0
+**                          MIMX94185CVMM_cm33_core1
+**                          MIMX94185CVMM_cm7_core0
+**                          MIMX94185CVMM_cm7_core1
+**                          MIMX94214CVMM_ca55
+**                          MIMX94214CVMM_cm33_core0
+**                          MIMX94214CVMM_cm33_core1
+**                          MIMX94214CVMM_cm7_core0
+**                          MIMX94214CVMM_cm7_core1
+**                          MIMX94214XVKM_ca55
+**                          MIMX94214XVKM_cm33_core0
+**                          MIMX94214XVKM_cm33_core1
+**                          MIMX94214XVKM_cm7_core0
+**                          MIMX94214XVKM_cm7_core1
+**                          MIMX94214XVMM_ca55
+**                          MIMX94214XVMM_cm33_core0
+**                          MIMX94214XVMM_cm33_core1
+**                          MIMX94214XVMM_cm7_core0
+**                          MIMX94214XVMM_cm7_core1
+**                          MIMX94215CVMM_ca55
+**                          MIMX94215CVMM_cm33_core0
+**                          MIMX94215CVMM_cm33_core1
+**                          MIMX94215CVMM_cm7_core0
+**                          MIMX94215CVMM_cm7_core1
+**                          MIMX94215XVKM_ca55
+**                          MIMX94215XVKM_cm33_core0
+**                          MIMX94215XVKM_cm33_core1
+**                          MIMX94215XVKM_cm7_core0
+**                          MIMX94215XVKM_cm7_core1
+**                          MIMX94215XVMM_ca55
+**                          MIMX94215XVMM_cm33_core0
+**                          MIMX94215XVMM_cm33_core1
+**                          MIMX94215XVMM_cm7_core0
+**                          MIMX94215XVMM_cm7_core1
+**                          MIMX94235CVMM_ca55
+**                          MIMX94235CVMM_cm33_core0
+**                          MIMX94235CVMM_cm33_core1
+**                          MIMX94235CVMM_cm7_core0
+**                          MIMX94235CVMM_cm7_core1
+**                          MIMX94255CVMM_ca55
+**                          MIMX94255CVMM_cm33_core0
+**                          MIMX94255CVMM_cm33_core1
+**                          MIMX94255CVMM_cm7_core0
+**                          MIMX94255CVMM_cm7_core1
+**                          MIMX94275CVMM_ca55
+**                          MIMX94275CVMM_cm33_core0
+**                          MIMX94275CVMM_cm33_core1
+**                          MIMX94275CVMM_cm7_core0
+**                          MIMX94275CVMM_cm7_core1
+**                          MIMX94285CVMM_ca55
+**                          MIMX94285CVMM_cm33_core0
+**                          MIMX94285CVMM_cm33_core1
+**                          MIMX94285CVMM_cm7_core0
+**                          MIMX94285CVMM_cm7_core1
+**                          MIMX94294XVKM_ca55
+**                          MIMX94294XVKM_cm33_core0
+**                          MIMX94294XVKM_cm33_core1
+**                          MIMX94294XVKM_cm7_core0
+**                          MIMX94294XVKM_cm7_core1
+**                          MIMX94294XVMM_ca55
+**                          MIMX94294XVMM_cm33_core0
+**                          MIMX94294XVMM_cm33_core1
+**                          MIMX94294XVMM_cm7_core0
+**                          MIMX94294XVMM_cm7_core1
+**                          MIMX94295AVKM_ca55
+**                          MIMX94295AVKM_cm33_core0
+**                          MIMX94295AVKM_cm33_core1
+**                          MIMX94295AVKM_cm7_core0
+**                          MIMX94295AVKM_cm7_core1
+**                          MIMX94295AVMJ_ca55
+**                          MIMX94295AVMJ_cm33_core0
+**                          MIMX94295AVMJ_cm33_core1
+**                          MIMX94295AVMJ_cm7_core0
+**                          MIMX94295AVMJ_cm7_core1
+**                          MIMX94295CVMJ_ca55
+**                          MIMX94295CVMJ_cm33_core0
+**                          MIMX94295CVMJ_cm33_core1
+**                          MIMX94295CVMJ_cm7_core0
+**                          MIMX94295CVMJ_cm7_core1
+**                          MIMX94295XVKJ_ca55
+**                          MIMX94295XVKJ_cm33_core0
+**                          MIMX94295XVKJ_cm33_core1
+**                          MIMX94295XVKJ_cm7_core0
+**                          MIMX94295XVKJ_cm7_core1
+**                          MIMX94295XVMM_ca55
+**                          MIMX94295XVMM_cm33_core0
+**                          MIMX94295XVMM_cm33_core1
+**                          MIMX94295XVMM_cm7_core0
+**                          MIMX94295XVMM_cm7_core1
+**                          MIMX94316XVMM_ca55
+**                          MIMX94316XVMM_cm33_core0
+**                          MIMX94316XVMM_cm33_core1
+**                          MIMX94316XVMM_cm7_core0
+**                          MIMX94316XVMM_cm7_core1
+**                          MIMX94318XVMM_ca55
+**                          MIMX94318XVMM_cm33_core0
+**                          MIMX94318XVMM_cm33_core1
+**                          MIMX94318XVMM_cm7_core0
+**                          MIMX94318XVMM_cm7_core1
+**                          MIMX94376AVKM_ca55
+**                          MIMX94376AVKM_cm33_core0
+**                          MIMX94376AVKM_cm33_core1
+**                          MIMX94376AVKM_cm7_core0
+**                          MIMX94376AVKM_cm7_core1
+**                          MIMX94378AVKM_ca55
+**                          MIMX94378AVKM_cm33_core0
+**                          MIMX94378AVKM_cm33_core1
+**                          MIMX94378AVKM_cm7_core0
+**                          MIMX94378AVKM_cm7_core1
+**                          MIMX94386AVKM_ca55
+**                          MIMX94386AVKM_cm33_core0
+**                          MIMX94386AVKM_cm33_core1
+**                          MIMX94386AVKM_cm7_core0
+**                          MIMX94386AVKM_cm7_core1
+**                          MIMX94386XVMM_ca55
+**                          MIMX94386XVMM_cm33_core0
+**                          MIMX94386XVMM_cm33_core1
+**                          MIMX94386XVMM_cm7_core0
+**                          MIMX94386XVMM_cm7_core1
+**                          MIMX94388AVKM_ca55
+**                          MIMX94388AVKM_cm33_core0
+**                          MIMX94388AVKM_cm33_core1
+**                          MIMX94388AVKM_cm7_core0
+**                          MIMX94388AVKM_cm7_core1
+**                          MIMX94388AVMM_ca55
+**                          MIMX94388AVMM_cm33_core0
+**                          MIMX94388AVMM_cm33_core1
+**                          MIMX94388AVMM_cm7_core0
+**                          MIMX94388AVMM_cm7_core1
+**                          MIMX94388XVMM_ca55
+**                          MIMX94388XVMM_cm33_core0
+**                          MIMX94388XVMM_cm33_core1
+**                          MIMX94388XVMM_cm7_core0
+**                          MIMX94388XVMM_cm7_core1
+**                          MIMX94396AVKJ_ca55
+**                          MIMX94396AVKJ_cm33_core0
+**                          MIMX94396AVKJ_cm33_core1
+**                          MIMX94396AVKJ_cm7_core0
+**                          MIMX94396AVKJ_cm7_core1
+**                          MIMX94396AVKM_ca55
+**                          MIMX94396AVKM_cm33_core0
+**                          MIMX94396AVKM_cm33_core1
+**                          MIMX94396AVKM_cm7_core0
+**                          MIMX94396AVKM_cm7_core1
+**                          MIMX94396AVMJ_ca55
+**                          MIMX94396AVMJ_cm33_core0
+**                          MIMX94396AVMJ_cm33_core1
+**                          MIMX94396AVMJ_cm7_core0
+**                          MIMX94396AVMJ_cm7_core1
+**                          MIMX94396XVMM_ca55
+**                          MIMX94396XVMM_cm33_core0
+**                          MIMX94396XVMM_cm33_core1
+**                          MIMX94396XVMM_cm7_core0
+**                          MIMX94396XVMM_cm7_core1
 **                          MIMX94398AVKJ_ca55
 **                          MIMX94398AVKJ_cm33_core0
 **                          MIMX94398AVKJ_cm33_core1
@@ -15,11 +225,6 @@
 **                          MIMX94398AVKM_cm33_core1
 **                          MIMX94398AVKM_cm7_core0
 **                          MIMX94398AVKM_cm7_core1
-**                          MIMX94398AVME_ca55
-**                          MIMX94398AVME_cm33_core0
-**                          MIMX94398AVME_cm33_core1
-**                          MIMX94398AVME_cm7_core0
-**                          MIMX94398AVME_cm7_core1
 **                          MIMX94398AVMJ_ca55
 **                          MIMX94398AVMJ_cm33_core0
 **                          MIMX94398AVMJ_cm33_core1
@@ -30,91 +235,16 @@
 **                          MIMX94398AVMM_cm33_core1
 **                          MIMX94398AVMM_cm7_core0
 **                          MIMX94398AVMM_cm7_core1
-**                          MIMX94398CVKE_ca55
-**                          MIMX94398CVKE_cm33_core0
-**                          MIMX94398CVKE_cm33_core1
-**                          MIMX94398CVKE_cm7_core0
-**                          MIMX94398CVKE_cm7_core1
-**                          MIMX94398CVKJ_ca55
-**                          MIMX94398CVKJ_cm33_core0
-**                          MIMX94398CVKJ_cm33_core1
-**                          MIMX94398CVKJ_cm7_core0
-**                          MIMX94398CVKJ_cm7_core1
-**                          MIMX94398CVKM_ca55
-**                          MIMX94398CVKM_cm33_core0
-**                          MIMX94398CVKM_cm33_core1
-**                          MIMX94398CVKM_cm7_core0
-**                          MIMX94398CVKM_cm7_core1
-**                          MIMX94398CVME_ca55
-**                          MIMX94398CVME_cm33_core0
-**                          MIMX94398CVME_cm33_core1
-**                          MIMX94398CVME_cm7_core0
-**                          MIMX94398CVME_cm7_core1
-**                          MIMX94398CVMJ_ca55
-**                          MIMX94398CVMJ_cm33_core0
-**                          MIMX94398CVMJ_cm33_core1
-**                          MIMX94398CVMJ_cm7_core0
-**                          MIMX94398CVMJ_cm7_core1
-**                          MIMX94398CVMM_ca55
-**                          MIMX94398CVMM_cm33_core0
-**                          MIMX94398CVMM_cm33_core1
-**                          MIMX94398CVMM_cm7_core0
-**                          MIMX94398CVMM_cm7_core1
-**                          MIMX94398DVKE_ca55
-**                          MIMX94398DVKE_cm33_core0
-**                          MIMX94398DVKE_cm33_core1
-**                          MIMX94398DVKE_cm7_core0
-**                          MIMX94398DVKE_cm7_core1
-**                          MIMX94398DVKJ_ca55
-**                          MIMX94398DVKJ_cm33_core0
-**                          MIMX94398DVKJ_cm33_core1
-**                          MIMX94398DVKJ_cm7_core0
-**                          MIMX94398DVKJ_cm7_core1
 **                          MIMX94398DVKM_ca55
 **                          MIMX94398DVKM_cm33_core0
 **                          MIMX94398DVKM_cm33_core1
 **                          MIMX94398DVKM_cm7_core0
 **                          MIMX94398DVKM_cm7_core1
-**                          MIMX94398DVME_ca55
-**                          MIMX94398DVME_cm33_core0
-**                          MIMX94398DVME_cm33_core1
-**                          MIMX94398DVME_cm7_core0
-**                          MIMX94398DVME_cm7_core1
-**                          MIMX94398DVMJ_ca55
-**                          MIMX94398DVMJ_cm33_core0
-**                          MIMX94398DVMJ_cm33_core1
-**                          MIMX94398DVMJ_cm7_core0
-**                          MIMX94398DVMJ_cm7_core1
 **                          MIMX94398DVMM_ca55
 **                          MIMX94398DVMM_cm33_core0
 **                          MIMX94398DVMM_cm33_core1
 **                          MIMX94398DVMM_cm7_core0
 **                          MIMX94398DVMM_cm7_core1
-**                          MIMX94398XVKE_ca55
-**                          MIMX94398XVKE_cm33_core0
-**                          MIMX94398XVKE_cm33_core1
-**                          MIMX94398XVKE_cm7_core0
-**                          MIMX94398XVKE_cm7_core1
-**                          MIMX94398XVKJ_ca55
-**                          MIMX94398XVKJ_cm33_core0
-**                          MIMX94398XVKJ_cm33_core1
-**                          MIMX94398XVKJ_cm7_core0
-**                          MIMX94398XVKJ_cm7_core1
-**                          MIMX94398XVKM_ca55
-**                          MIMX94398XVKM_cm33_core0
-**                          MIMX94398XVKM_cm33_core1
-**                          MIMX94398XVKM_cm7_core0
-**                          MIMX94398XVKM_cm7_core1
-**                          MIMX94398XVME_ca55
-**                          MIMX94398XVME_cm33_core0
-**                          MIMX94398XVME_cm33_core1
-**                          MIMX94398XVME_cm7_core0
-**                          MIMX94398XVME_cm7_core1
-**                          MIMX94398XVMJ_ca55
-**                          MIMX94398XVMJ_cm33_core0
-**                          MIMX94398XVMJ_cm33_core1
-**                          MIMX94398XVMJ_cm7_core0
-**                          MIMX94398XVMJ_cm7_core1
 **                          MIMX94398XVMM_ca55
 **                          MIMX94398XVMM_cm33_core0
 **                          MIMX94398XVMM_cm33_core1
@@ -122,13 +252,13 @@
 **                          MIMX94398XVMM_cm7_core1
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250721
+**     Build:               b260804
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NETC_SW_ENETC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -176,15 +306,215 @@
 #if !defined(PERI_NETC_SW_ENETC_H_)
 #define PERI_NETC_SW_ENETC_H_                    /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX94398AVKE_ca55) || defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVME_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398CVKE_ca55) || defined(CPU_MIMX94398CVKJ_ca55) || defined(CPU_MIMX94398CVKM_ca55) || defined(CPU_MIMX94398CVME_ca55) || defined(CPU_MIMX94398CVMJ_ca55) || defined(CPU_MIMX94398CVMM_ca55) || defined(CPU_MIMX94398DVKE_ca55) || defined(CPU_MIMX94398DVKJ_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVME_ca55) || defined(CPU_MIMX94398DVMJ_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVKE_ca55) || defined(CPU_MIMX94398XVKJ_ca55) || defined(CPU_MIMX94398XVKM_ca55) || defined(CPU_MIMX94398XVME_ca55) || defined(CPU_MIMX94398XVMJ_ca55) || defined(CPU_MIMX94398XVMM_ca55))
+#if (defined(CPU_MIMX94115CVMM_ca55) || defined(CPU_MIMX94115XVKM_ca55) || defined(CPU_MIMX94115XVMM_ca55))
+#include "MIMX94115_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm33_core0) || defined(CPU_MIMX94115XVKM_cm33_core0) || defined(CPU_MIMX94115XVMM_cm33_core0))
+#include "MIMX94115_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm33_core1) || defined(CPU_MIMX94115XVKM_cm33_core1) || defined(CPU_MIMX94115XVMM_cm33_core1))
+#include "MIMX94115_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm7_core0) || defined(CPU_MIMX94115XVKM_cm7_core0) || defined(CPU_MIMX94115XVMM_cm7_core0))
+#include "MIMX94115_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm7_core1) || defined(CPU_MIMX94115XVKM_cm7_core1) || defined(CPU_MIMX94115XVMM_cm7_core1))
+#include "MIMX94115_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_ca55) || defined(CPU_MIMX94135XVKM_ca55) || defined(CPU_MIMX94135XVMM_ca55))
+#include "MIMX94135_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm33_core0) || defined(CPU_MIMX94135XVKM_cm33_core0) || defined(CPU_MIMX94135XVMM_cm33_core0))
+#include "MIMX94135_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm33_core1) || defined(CPU_MIMX94135XVKM_cm33_core1) || defined(CPU_MIMX94135XVMM_cm33_core1))
+#include "MIMX94135_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm7_core0) || defined(CPU_MIMX94135XVKM_cm7_core0) || defined(CPU_MIMX94135XVMM_cm7_core0))
+#include "MIMX94135_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm7_core1) || defined(CPU_MIMX94135XVKM_cm7_core1) || defined(CPU_MIMX94135XVMM_cm7_core1))
+#include "MIMX94135_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_ca55) || defined(CPU_MIMX94155XVKM_ca55) || defined(CPU_MIMX94155XVMM_ca55))
+#include "MIMX94155_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm33_core0) || defined(CPU_MIMX94155XVKM_cm33_core0) || defined(CPU_MIMX94155XVMM_cm33_core0))
+#include "MIMX94155_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm33_core1) || defined(CPU_MIMX94155XVKM_cm33_core1) || defined(CPU_MIMX94155XVMM_cm33_core1))
+#include "MIMX94155_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm7_core0) || defined(CPU_MIMX94155XVKM_cm7_core0) || defined(CPU_MIMX94155XVMM_cm7_core0))
+#include "MIMX94155_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm7_core1) || defined(CPU_MIMX94155XVKM_cm7_core1) || defined(CPU_MIMX94155XVMM_cm7_core1))
+#include "MIMX94155_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_ca55) || defined(CPU_MIMX94175XVKM_ca55) || defined(CPU_MIMX94175XVMM_ca55))
+#include "MIMX94175_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm33_core0) || defined(CPU_MIMX94175XVKM_cm33_core0) || defined(CPU_MIMX94175XVMM_cm33_core0))
+#include "MIMX94175_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm33_core1) || defined(CPU_MIMX94175XVKM_cm33_core1) || defined(CPU_MIMX94175XVMM_cm33_core1))
+#include "MIMX94175_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm7_core0) || defined(CPU_MIMX94175XVKM_cm7_core0) || defined(CPU_MIMX94175XVMM_cm7_core0))
+#include "MIMX94175_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm7_core1) || defined(CPU_MIMX94175XVKM_cm7_core1) || defined(CPU_MIMX94175XVMM_cm7_core1))
+#include "MIMX94175_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_ca55))
+#include "MIMX94185_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm33_core0))
+#include "MIMX94185_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm33_core1))
+#include "MIMX94185_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm7_core0))
+#include "MIMX94185_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm7_core1))
+#include "MIMX94185_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_ca55) || defined(CPU_MIMX94214XVKM_ca55) || defined(CPU_MIMX94214XVMM_ca55))
+#include "MIMX94214_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm33_core0) || defined(CPU_MIMX94214XVKM_cm33_core0) || defined(CPU_MIMX94214XVMM_cm33_core0))
+#include "MIMX94214_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm33_core1) || defined(CPU_MIMX94214XVKM_cm33_core1) || defined(CPU_MIMX94214XVMM_cm33_core1))
+#include "MIMX94214_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm7_core0) || defined(CPU_MIMX94214XVKM_cm7_core0) || defined(CPU_MIMX94214XVMM_cm7_core0))
+#include "MIMX94214_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm7_core1) || defined(CPU_MIMX94214XVKM_cm7_core1) || defined(CPU_MIMX94214XVMM_cm7_core1))
+#include "MIMX94214_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_ca55) || defined(CPU_MIMX94215XVKM_ca55) || defined(CPU_MIMX94215XVMM_ca55))
+#include "MIMX94215_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm33_core0) || defined(CPU_MIMX94215XVKM_cm33_core0) || defined(CPU_MIMX94215XVMM_cm33_core0))
+#include "MIMX94215_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm33_core1) || defined(CPU_MIMX94215XVKM_cm33_core1) || defined(CPU_MIMX94215XVMM_cm33_core1))
+#include "MIMX94215_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm7_core0) || defined(CPU_MIMX94215XVKM_cm7_core0) || defined(CPU_MIMX94215XVMM_cm7_core0))
+#include "MIMX94215_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm7_core1) || defined(CPU_MIMX94215XVKM_cm7_core1) || defined(CPU_MIMX94215XVMM_cm7_core1))
+#include "MIMX94215_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_ca55))
+#include "MIMX94235_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm33_core0))
+#include "MIMX94235_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm33_core1))
+#include "MIMX94235_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm7_core0))
+#include "MIMX94235_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm7_core1))
+#include "MIMX94235_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_ca55))
+#include "MIMX94255_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm33_core0))
+#include "MIMX94255_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm33_core1))
+#include "MIMX94255_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm7_core0))
+#include "MIMX94255_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm7_core1))
+#include "MIMX94255_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_ca55))
+#include "MIMX94275_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm33_core0))
+#include "MIMX94275_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm33_core1))
+#include "MIMX94275_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm7_core0))
+#include "MIMX94275_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm7_core1))
+#include "MIMX94275_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_ca55))
+#include "MIMX94285_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm33_core0))
+#include "MIMX94285_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm33_core1))
+#include "MIMX94285_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm7_core0))
+#include "MIMX94285_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm7_core1))
+#include "MIMX94285_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_ca55) || defined(CPU_MIMX94294XVMM_ca55))
+#include "MIMX94294_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm33_core0) || defined(CPU_MIMX94294XVMM_cm33_core0))
+#include "MIMX94294_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm33_core1) || defined(CPU_MIMX94294XVMM_cm33_core1))
+#include "MIMX94294_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm7_core0) || defined(CPU_MIMX94294XVMM_cm7_core0))
+#include "MIMX94294_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm7_core1) || defined(CPU_MIMX94294XVMM_cm7_core1))
+#include "MIMX94294_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_ca55) || defined(CPU_MIMX94295AVMJ_ca55) || defined(CPU_MIMX94295CVMJ_ca55) || defined(CPU_MIMX94295XVKJ_ca55) || defined(CPU_MIMX94295XVMM_ca55))
+#include "MIMX94295_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm33_core0) || defined(CPU_MIMX94295AVMJ_cm33_core0) || defined(CPU_MIMX94295CVMJ_cm33_core0) || defined(CPU_MIMX94295XVKJ_cm33_core0) || defined(CPU_MIMX94295XVMM_cm33_core0))
+#include "MIMX94295_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm33_core1) || defined(CPU_MIMX94295AVMJ_cm33_core1) || defined(CPU_MIMX94295CVMJ_cm33_core1) || defined(CPU_MIMX94295XVKJ_cm33_core1) || defined(CPU_MIMX94295XVMM_cm33_core1))
+#include "MIMX94295_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm7_core0) || defined(CPU_MIMX94295AVMJ_cm7_core0) || defined(CPU_MIMX94295CVMJ_cm7_core0) || defined(CPU_MIMX94295XVKJ_cm7_core0) || defined(CPU_MIMX94295XVMM_cm7_core0))
+#include "MIMX94295_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm7_core1) || defined(CPU_MIMX94295AVMJ_cm7_core1) || defined(CPU_MIMX94295CVMJ_cm7_core1) || defined(CPU_MIMX94295XVKJ_cm7_core1) || defined(CPU_MIMX94295XVMM_cm7_core1))
+#include "MIMX94295_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_ca55))
+#include "MIMX94316_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm33_core0))
+#include "MIMX94316_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm33_core1))
+#include "MIMX94316_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm7_core0))
+#include "MIMX94316_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm7_core1))
+#include "MIMX94316_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_ca55))
+#include "MIMX94318_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm33_core0))
+#include "MIMX94318_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm33_core1))
+#include "MIMX94318_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm7_core0))
+#include "MIMX94318_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm7_core1))
+#include "MIMX94318_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_ca55))
+#include "MIMX94376_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm33_core0))
+#include "MIMX94376_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm33_core1))
+#include "MIMX94376_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm7_core0))
+#include "MIMX94376_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm7_core1))
+#include "MIMX94376_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_ca55))
+#include "MIMX94378_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm33_core0))
+#include "MIMX94378_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm33_core1))
+#include "MIMX94378_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm7_core0))
+#include "MIMX94378_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm7_core1))
+#include "MIMX94378_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_ca55) || defined(CPU_MIMX94386XVMM_ca55))
+#include "MIMX94386_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm33_core0) || defined(CPU_MIMX94386XVMM_cm33_core0))
+#include "MIMX94386_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm33_core1) || defined(CPU_MIMX94386XVMM_cm33_core1))
+#include "MIMX94386_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm7_core0) || defined(CPU_MIMX94386XVMM_cm7_core0))
+#include "MIMX94386_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm7_core1) || defined(CPU_MIMX94386XVMM_cm7_core1))
+#include "MIMX94386_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_ca55) || defined(CPU_MIMX94388AVMM_ca55) || defined(CPU_MIMX94388XVMM_ca55))
+#include "MIMX94388_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm33_core0) || defined(CPU_MIMX94388AVMM_cm33_core0) || defined(CPU_MIMX94388XVMM_cm33_core0))
+#include "MIMX94388_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm33_core1) || defined(CPU_MIMX94388AVMM_cm33_core1) || defined(CPU_MIMX94388XVMM_cm33_core1))
+#include "MIMX94388_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm7_core0) || defined(CPU_MIMX94388AVMM_cm7_core0) || defined(CPU_MIMX94388XVMM_cm7_core0))
+#include "MIMX94388_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm7_core1) || defined(CPU_MIMX94388AVMM_cm7_core1) || defined(CPU_MIMX94388XVMM_cm7_core1))
+#include "MIMX94388_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_ca55) || defined(CPU_MIMX94396AVKM_ca55) || defined(CPU_MIMX94396AVMJ_ca55) || defined(CPU_MIMX94396XVMM_ca55))
+#include "MIMX94396_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm33_core0) || defined(CPU_MIMX94396AVKM_cm33_core0) || defined(CPU_MIMX94396AVMJ_cm33_core0) || defined(CPU_MIMX94396XVMM_cm33_core0))
+#include "MIMX94396_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm33_core1) || defined(CPU_MIMX94396AVKM_cm33_core1) || defined(CPU_MIMX94396AVMJ_cm33_core1) || defined(CPU_MIMX94396XVMM_cm33_core1))
+#include "MIMX94396_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm7_core0) || defined(CPU_MIMX94396AVKM_cm7_core0) || defined(CPU_MIMX94396AVMJ_cm7_core0) || defined(CPU_MIMX94396XVMM_cm7_core0))
+#include "MIMX94396_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm7_core1) || defined(CPU_MIMX94396AVKM_cm7_core1) || defined(CPU_MIMX94396AVMJ_cm7_core1) || defined(CPU_MIMX94396XVMM_cm7_core1))
+#include "MIMX94396_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVMM_ca55))
 #include "MIMX94398_ca55_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm33_core0) || defined(CPU_MIMX94398AVKJ_cm33_core0) || defined(CPU_MIMX94398AVKM_cm33_core0) || defined(CPU_MIMX94398AVME_cm33_core0) || defined(CPU_MIMX94398AVMJ_cm33_core0) || defined(CPU_MIMX94398AVMM_cm33_core0) || defined(CPU_MIMX94398CVKE_cm33_core0) || defined(CPU_MIMX94398CVKJ_cm33_core0) || defined(CPU_MIMX94398CVKM_cm33_core0) || defined(CPU_MIMX94398CVME_cm33_core0) || defined(CPU_MIMX94398CVMJ_cm33_core0) || defined(CPU_MIMX94398CVMM_cm33_core0) || defined(CPU_MIMX94398DVKE_cm33_core0) || defined(CPU_MIMX94398DVKJ_cm33_core0) || defined(CPU_MIMX94398DVKM_cm33_core0) || defined(CPU_MIMX94398DVME_cm33_core0) || defined(CPU_MIMX94398DVMJ_cm33_core0) || defined(CPU_MIMX94398DVMM_cm33_core0) || defined(CPU_MIMX94398XVKE_cm33_core0) || defined(CPU_MIMX94398XVKJ_cm33_core0) || defined(CPU_MIMX94398XVKM_cm33_core0) || defined(CPU_MIMX94398XVME_cm33_core0) || defined(CPU_MIMX94398XVMJ_cm33_core0) || defined(CPU_MIMX94398XVMM_cm33_core0))
+#elif (defined(CPU_MIMX94398AVKJ_cm33_core0) || defined(CPU_MIMX94398AVKM_cm33_core0) || defined(CPU_MIMX94398AVMJ_cm33_core0) || defined(CPU_MIMX94398AVMM_cm33_core0) || defined(CPU_MIMX94398DVKM_cm33_core0) || defined(CPU_MIMX94398DVMM_cm33_core0) || defined(CPU_MIMX94398XVMM_cm33_core0))
 #include "MIMX94398_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm33_core1) || defined(CPU_MIMX94398AVKJ_cm33_core1) || defined(CPU_MIMX94398AVKM_cm33_core1) || defined(CPU_MIMX94398AVME_cm33_core1) || defined(CPU_MIMX94398AVMJ_cm33_core1) || defined(CPU_MIMX94398AVMM_cm33_core1) || defined(CPU_MIMX94398CVKE_cm33_core1) || defined(CPU_MIMX94398CVKJ_cm33_core1) || defined(CPU_MIMX94398CVKM_cm33_core1) || defined(CPU_MIMX94398CVME_cm33_core1) || defined(CPU_MIMX94398CVMJ_cm33_core1) || defined(CPU_MIMX94398CVMM_cm33_core1) || defined(CPU_MIMX94398DVKE_cm33_core1) || defined(CPU_MIMX94398DVKJ_cm33_core1) || defined(CPU_MIMX94398DVKM_cm33_core1) || defined(CPU_MIMX94398DVME_cm33_core1) || defined(CPU_MIMX94398DVMJ_cm33_core1) || defined(CPU_MIMX94398DVMM_cm33_core1) || defined(CPU_MIMX94398XVKE_cm33_core1) || defined(CPU_MIMX94398XVKJ_cm33_core1) || defined(CPU_MIMX94398XVKM_cm33_core1) || defined(CPU_MIMX94398XVME_cm33_core1) || defined(CPU_MIMX94398XVMJ_cm33_core1) || defined(CPU_MIMX94398XVMM_cm33_core1))
+#elif (defined(CPU_MIMX94398AVKJ_cm33_core1) || defined(CPU_MIMX94398AVKM_cm33_core1) || defined(CPU_MIMX94398AVMJ_cm33_core1) || defined(CPU_MIMX94398AVMM_cm33_core1) || defined(CPU_MIMX94398DVKM_cm33_core1) || defined(CPU_MIMX94398DVMM_cm33_core1) || defined(CPU_MIMX94398XVMM_cm33_core1))
 #include "MIMX94398_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm7_core0) || defined(CPU_MIMX94398AVKJ_cm7_core0) || defined(CPU_MIMX94398AVKM_cm7_core0) || defined(CPU_MIMX94398AVME_cm7_core0) || defined(CPU_MIMX94398AVMJ_cm7_core0) || defined(CPU_MIMX94398AVMM_cm7_core0) || defined(CPU_MIMX94398CVKE_cm7_core0) || defined(CPU_MIMX94398CVKJ_cm7_core0) || defined(CPU_MIMX94398CVKM_cm7_core0) || defined(CPU_MIMX94398CVME_cm7_core0) || defined(CPU_MIMX94398CVMJ_cm7_core0) || defined(CPU_MIMX94398CVMM_cm7_core0) || defined(CPU_MIMX94398DVKE_cm7_core0) || defined(CPU_MIMX94398DVKJ_cm7_core0) || defined(CPU_MIMX94398DVKM_cm7_core0) || defined(CPU_MIMX94398DVME_cm7_core0) || defined(CPU_MIMX94398DVMJ_cm7_core0) || defined(CPU_MIMX94398DVMM_cm7_core0) || defined(CPU_MIMX94398XVKE_cm7_core0) || defined(CPU_MIMX94398XVKJ_cm7_core0) || defined(CPU_MIMX94398XVKM_cm7_core0) || defined(CPU_MIMX94398XVME_cm7_core0) || defined(CPU_MIMX94398XVMJ_cm7_core0) || defined(CPU_MIMX94398XVMM_cm7_core0))
+#elif (defined(CPU_MIMX94398AVKJ_cm7_core0) || defined(CPU_MIMX94398AVKM_cm7_core0) || defined(CPU_MIMX94398AVMJ_cm7_core0) || defined(CPU_MIMX94398AVMM_cm7_core0) || defined(CPU_MIMX94398DVKM_cm7_core0) || defined(CPU_MIMX94398DVMM_cm7_core0) || defined(CPU_MIMX94398XVMM_cm7_core0))
 #include "MIMX94398_cm7_core0_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm7_core1) || defined(CPU_MIMX94398AVKJ_cm7_core1) || defined(CPU_MIMX94398AVKM_cm7_core1) || defined(CPU_MIMX94398AVME_cm7_core1) || defined(CPU_MIMX94398AVMJ_cm7_core1) || defined(CPU_MIMX94398AVMM_cm7_core1) || defined(CPU_MIMX94398CVKE_cm7_core1) || defined(CPU_MIMX94398CVKJ_cm7_core1) || defined(CPU_MIMX94398CVKM_cm7_core1) || defined(CPU_MIMX94398CVME_cm7_core1) || defined(CPU_MIMX94398CVMJ_cm7_core1) || defined(CPU_MIMX94398CVMM_cm7_core1) || defined(CPU_MIMX94398DVKE_cm7_core1) || defined(CPU_MIMX94398DVKJ_cm7_core1) || defined(CPU_MIMX94398DVKM_cm7_core1) || defined(CPU_MIMX94398DVME_cm7_core1) || defined(CPU_MIMX94398DVMJ_cm7_core1) || defined(CPU_MIMX94398DVMM_cm7_core1) || defined(CPU_MIMX94398XVKE_cm7_core1) || defined(CPU_MIMX94398XVKJ_cm7_core1) || defined(CPU_MIMX94398XVKM_cm7_core1) || defined(CPU_MIMX94398XVME_cm7_core1) || defined(CPU_MIMX94398XVMJ_cm7_core1) || defined(CPU_MIMX94398XVMM_cm7_core1))
+#elif (defined(CPU_MIMX94398AVKJ_cm7_core1) || defined(CPU_MIMX94398AVKM_cm7_core1) || defined(CPU_MIMX94398AVMJ_cm7_core1) || defined(CPU_MIMX94398AVMM_cm7_core1) || defined(CPU_MIMX94398DVKM_cm7_core1) || defined(CPU_MIMX94398DVMM_cm7_core1) || defined(CPU_MIMX94398XVMM_cm7_core1))
 #include "MIMX94398_cm7_core1_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -236,14 +566,14 @@
 typedef struct {
   __I  uint32_t IPCAPR;                            /**< Ingress port capability register, offset: 0x0 */
   __I  uint32_t EPCAPR;                            /**< Egress port capability register, offset: 0x4 */
-  __I  uint32_t EVMCAPR;                           /**< Event monitor capability register, offset: 0x8, not available in all instances (available on 24 out of 96) */
+  __I  uint32_t EVMCAPR;                           /**< Event monitor capability register, offset: 0x8, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_0[4];
   __I  uint32_t OSR;                               /**< Operational state register, offset: 0x10 */
        uint8_t RESERVED_1[4];
-  __IO uint32_t SWCR;                              /**< Switch configuration register, offset: 0x18, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t NSTCR;                             /**< NS Tag configuration register, offset: 0x1C */
+  __IO uint32_t SWCR;                              /**< Switch configuration register, offset: 0x18, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t NSTCR;                             /**< NS Tag configuration register, offset: 0x1C, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_2[16];
-  __I  uint32_t MPCR;                              /**< Management port configuration register, offset: 0x30, not available in all instances (available on 24 out of 96) */
+  __I  uint32_t MPCR;                              /**< Management port configuration register, offset: 0x30, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_3[12];
   __IO uint32_t CMECR;                             /**< Correctable memory error configuration register, offset: 0x40 */
   __IO uint32_t CMESR;                             /**< Correctable memory error status register, offset: 0x44 */
@@ -253,10 +583,10 @@ typedef struct {
   __IO uint32_t UNMACECR;                          /**< Uncorrectable non-fatal MAC error configuration register, offset: 0x60 */
   __I  uint32_t UNMACESR;                          /**< Uncorrectable non-fatal MAC error status register, offset: 0x64 */
        uint8_t RESERVED_6[8];
-  __IO uint32_t UNSBECR;                           /**< Uncorrectable non-fatal system bus error configuration register, offset: 0x70, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t UNSBESR;                           /**< Uncorrectable non-fatal system bus error status register, offset: 0x74, not available in all instances (available on 24 out of 96) */
+  __IO uint32_t UNSBECR;                           /**< Uncorrectable non-fatal system bus error configuration register, offset: 0x70, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t UNSBESR;                           /**< Uncorrectable non-fatal system bus error status register, offset: 0x74, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_7[4];
-  __I  uint32_t UNSBECTR;                          /**< Uncorrectable non-fatal system bus error count register, offset: 0x7C, not available in all instances (available on 24 out of 96) */
+  __I  uint32_t UNSBECTR;                          /**< Uncorrectable non-fatal system bus error count register, offset: 0x7C, not available in all instances (available on 50 out of 200) */
   __IO uint32_t UFSBECR;                           /**< Uncorrectable fatal system bus error configuration register, offset: 0x80 */
   __IO uint32_t UFSBESR;                           /**< Uncorrectable fatal system bus error status register, offset: 0x84 */
        uint8_t RESERVED_8[8];
@@ -270,30 +600,30 @@ typedef struct {
        uint8_t RESERVED_9[36];
   __I  uint32_t MIRR;                              /**< MAC interrupt reason register, offset: 0xD0 */
   __IO uint32_t MMSIVR;                            /**< MAC MSI-X vector register, offset: 0xD4 */
-  __I  uint32_t PCSIRR;                            /**< PCS interrupt reason register, offset: 0xD8, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t PCSMSIVR;                          /**< PCS MSI-X vector register, offset: 0xDC, not available in all instances (available on 24 out of 96) */
+  __I  uint32_t PCSIRR;                            /**< PCS interrupt reason register, offset: 0xD8, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t PCSMSIVR;                          /**< PCS MSI-X vector register, offset: 0xDC, not available in all instances (available on 50 out of 200) */
   __I  uint32_t IMDIOIRR;                          /**< Internal MDIO interrupt reason register, offset: 0xE0 */
   __IO uint32_t IMDIOMSIVR;                        /**< Internal MDIO MSI-X vector register, offset: 0xE4 */
   __I  uint32_t EMDIOIRR;                          /**< External MDIO interrupt reason register, offset: 0xE8 */
   __IO uint32_t EMDIOMSIVR;                        /**< External MDIO MSI-X vector register, offset: 0xEC */
        uint8_t RESERVED_10[16];
-  __IO uint32_t TCCR;                              /**< Time capture configuration register, offset: 0x100, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t TCIER;                             /**< Time capture interrupt enable register, offset: 0x104, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t TCRPIDR;                           /**< Time capture receive port interrupt detect register, offset: 0x108, not available in all instances (available on 24 out of 96) */
-  __I  uint32_t TCRPSR;                            /**< Time capture receive port status register, offset: 0x10C, not available in all instances (available on 24 out of 96) */
+  __IO uint32_t TCCR;                              /**< Time capture configuration register, offset: 0x100, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t TCIER;                             /**< Time capture interrupt enable register, offset: 0x104, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t TCRPIDR;                           /**< Time capture receive port interrupt detect register, offset: 0x108, not available in all instances (available on 50 out of 200) */
+  __I  uint32_t TCRPSR;                            /**< Time capture receive port status register, offset: 0x10C, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_11[4];
-  __I  uint32_t TCRPTSR;                           /**< Time capture receive port timestamp register, offset: 0x114, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t TCMSIVR;                           /**< Time capture MSI-X vector register, offset: 0x118, not available in all instances (available on 24 out of 96) */
+  __I  uint32_t TCRPTSR;                           /**< Time capture receive port timestamp register, offset: 0x114, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t TCMSIVR;                           /**< Time capture MSI-X vector register, offset: 0x118, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_12[4];
-  __IO uint32_t EVMIER;                            /**< Event monitor interrupt enable register, offset: 0x120, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t EVMIDR;                            /**< Event monitor interrupt detect register, offset: 0x124, not available in all instances (available on 24 out of 96) */
+  __IO uint32_t EVMIER;                            /**< Event monitor interrupt enable register, offset: 0x120, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t EVMIDR;                            /**< Event monitor interrupt detect register, offset: 0x124, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_13[4];
-  __IO uint32_t EVMEIR;                            /**< Event monitor event invocation register, offset: 0x12C, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t EVMMSIVR;                          /**< Event monitor MSI-X vector register, offset: 0x130, not available in all instances (available on 24 out of 96) */
+  __IO uint32_t EVMEIR;                            /**< Event monitor event invocation register, offset: 0x12C, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t EVMMSIVR;                          /**< Event monitor MSI-X vector register, offset: 0x130, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_14[204];
   __IO uint32_t CVLANR1;                           /**< Custom VLAN EtherType register 1, offset: 0x200 */
   __IO uint32_t CVLANR2;                           /**< Custom VLAN EtherType register 2, offset: 0x204 */
-  __IO uint32_t PSRTAGETR;                         /**< Pre-Standard RTAG EtherType register, offset: 0x208, not available in all instances (available on 24 out of 96) */
+  __IO uint32_t PSRTAGETR;                         /**< Pre-Standard RTAG EtherType register, offset: 0x208, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_15[20];
   __IO uint32_t DOSL2CR;                           /**< DoS L2 configuration register, offset: 0x220 */
   __IO uint32_t DOSL3CR;                           /**< DoS L3 configuration register, offset: 0x224 */
@@ -324,9 +654,9 @@ typedef struct {
   __IO uint32_t ISITMAR;                           /**< Ingress stream index table memory allocation register, offset: 0x838 */
   __I  uint32_t ISITOR;                            /**< Ingress stream index table operational register, offset: 0x83C */
        uint8_t RESERVED_21[4];
-  __I  uint32_t ISQGITCAPR;                        /**< Ingress sequence generation index table capability register, offset: 0x844, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t ISQGITMAR;                         /**< Ingress sequence generation index table memory allocation register, offset: 0x848, not available in all instances (available on 24 out of 96) */
-  __I  uint32_t ISQGITOR;                          /**< Ingress sequence generation index table operational register, offset: 0x84C, not available in all instances (available on 24 out of 96) */
+  __I  uint32_t ISQGITCAPR;                        /**< Ingress sequence generation index table capability register, offset: 0x844, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t ISQGITMAR;                         /**< Ingress sequence generation index table memory allocation register, offset: 0x848, not available in all instances (available on 50 out of 200) */
+  __I  uint32_t ISQGITOR;                          /**< Ingress sequence generation index table operational register, offset: 0x84C, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_22[16];
   __I  uint32_t SGCAPR;                            /**< Stream gate capability register, offset: 0x860 */
   __I  uint32_t SGIITCAPR;                         /**< Stream gate instance index table capability register, offset: 0x864 */
@@ -336,26 +666,26 @@ typedef struct {
   __I  uint32_t SGCLITCAPR;                        /**< Stream gate control list index table capability register, offset: 0x874 */
   __IO uint32_t SGCLITMAR;                         /**< Stream gate control list index table memory allocation register, offset: 0x878 */
   __I  uint32_t SGCLTMOR;                          /**< Stream gate control list table memory operational register, offset: 0x87C */
-  __I  uint32_t FMICAPR;                           /**< Frame modification ingress capability register, offset: 0x880, not available in all instances (available on 24 out of 96) */
-  __I  uint32_t FMECAPR;                           /**< Frame modification egress capability register, offset: 0x884, not available in all instances (available on 24 out of 96) */
-  __I  uint32_t FMITCAPR;                          /**< Frame modification index table capability register, offset: 0x888, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t FMITMAR;                           /**< Frame modification index table memory allocation register, offset: 0x88C, not available in all instances (available on 24 out of 96) */
-  __I  uint32_t FMITOR;                            /**< Frame modification index table operational register, offset: 0x890, not available in all instances (available on 24 out of 96) */
-  __I  uint32_t FMDITCAPR;                         /**< Frame modification data index table capability register, offset: 0x894, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t FMDITMAR;                          /**< Frame modification data index table memory allocation register, offset: 0x898, not available in all instances (available on 24 out of 96) */
+  __I  uint32_t FMICAPR;                           /**< Frame modification ingress capability register, offset: 0x880, not available in all instances (available on 50 out of 200) */
+  __I  uint32_t FMECAPR;                           /**< Frame modification egress capability register, offset: 0x884, not available in all instances (available on 50 out of 200) */
+  __I  uint32_t FMITCAPR;                          /**< Frame modification index table capability register, offset: 0x888, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t FMITMAR;                           /**< Frame modification index table memory allocation register, offset: 0x88C, not available in all instances (available on 50 out of 200) */
+  __I  uint32_t FMITOR;                            /**< Frame modification index table operational register, offset: 0x890, not available in all instances (available on 50 out of 200) */
+  __I  uint32_t FMDITCAPR;                         /**< Frame modification data index table capability register, offset: 0x894, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t FMDITMAR;                          /**< Frame modification data index table memory allocation register, offset: 0x898, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_24[36];
-  __I  uint32_t ETCAPR;                            /**< Egress treatment capability register, offset: 0x8C0, not available in all instances (available on 24 out of 96) */
-  __I  uint32_t ETTCAPR;                           /**< Egress treatment table capability register, offset: 0x8C4, not available in all instances (available on 24 out of 96) */
+  __I  uint32_t ETCAPR;                            /**< Egress treatment capability register, offset: 0x8C0, not available in all instances (available on 50 out of 200) */
+  __I  uint32_t ETTCAPR;                           /**< Egress treatment table capability register, offset: 0x8C4, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_25[4];
-  __I  uint32_t ETTOR;                             /**< Egress treatment table operational register, offset: 0x8CC, not available in all instances (available on 24 out of 96) */
+  __I  uint32_t ETTOR;                             /**< Egress treatment table operational register, offset: 0x8CC, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_26[4];
   __I  uint32_t TGSTCAPR;                          /**< Time gate scheduling table capability register, offset: 0x8D4 */
        uint8_t RESERVED_27[4];
   __I  uint32_t TGSTMOR;                           /**< Time gate scheduling table memory operation register, offset: 0x8DC */
-  __I  uint32_t ESQRCAPR;                          /**< Egress sequence recovery capability register, offset: 0x8E0, not available in all instances (available on 24 out of 96) */
-  __I  uint32_t ESQRTCAPR;                         /**< Egress sequence recovery table capability register, offset: 0x8E4, not available in all instances (available on 24 out of 96) */
+  __I  uint32_t ESQRCAPR;                          /**< Egress sequence recovery capability register, offset: 0x8E0, not available in all instances (available on 50 out of 200) */
+  __I  uint32_t ESQRTCAPR;                         /**< Egress sequence recovery table capability register, offset: 0x8E4, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_28[4];
-  __I  uint32_t ECTCAPR;                           /**< Egress counter table capability register, offset: 0x8EC, not available in all instances (available on 24 out of 96) */
+  __I  uint32_t ECTCAPR;                           /**< Egress counter table capability register, offset: 0x8EC, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_29[16];
   __I  uint32_t HTMCAPR;                           /**< Hash table memory capability register, offset: 0x900 */
   __I  uint32_t HTMOR;                             /**< Hash table memory operational register, offset: 0x904 */
@@ -377,29 +707,29 @@ typedef struct {
   __IO uint32_t ISIDKC1PF1CR;                      /**< Ingress stream identification key construction 1 payload field 1 configuration register, offset: 0x954 */
   __IO uint32_t ISIDKC1PF2CR;                      /**< Ingress stream identification key construction 1 payload field 2 configuration register, offset: 0x958 */
   __IO uint32_t ISIDKC1PF3CR;                      /**< Ingress stream identification key construction 1 payload field 3 configuration register, offset: 0x95C */
-  __I  uint32_t ISIDKC2OR;                         /**< Ingress stream identification key construction 2 operational register, offset: 0x960, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t ISIDKC2CR0;                        /**< Ingress stream identification key construction 2 configuration register 0, offset: 0x964, not available in all instances (available on 24 out of 96) */
+  __I  uint32_t ISIDKC2OR;                         /**< Ingress stream identification key construction 2 operational register, offset: 0x960, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t ISIDKC2CR0;                        /**< Ingress stream identification key construction 2 configuration register 0, offset: 0x964, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_34[8];
-  __IO uint32_t ISIDKC2PF0CR;                      /**< Ingress stream identification key construction 2 payload field 0 configuration register, offset: 0x970, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t ISIDKC2PF1CR;                      /**< Ingress stream identification key construction 2 payload field 1 configuration register, offset: 0x974, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t ISIDKC2PF2CR;                      /**< Ingress stream identification key construction 2 payload field 2 configuration register, offset: 0x978, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t ISIDKC2PF3CR;                      /**< Ingress stream identification key construction 2 payload field 3 configuration register, offset: 0x97C, not available in all instances (available on 24 out of 96) */
-  __I  uint32_t ISIDKC3OR;                         /**< Ingress stream identification key construction 3 operational register, offset: 0x980, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t ISIDKC3CR0;                        /**< Ingress stream identification key construction 3 configuration register 0, offset: 0x984, not available in all instances (available on 24 out of 96) */
+  __IO uint32_t ISIDKC2PF0CR;                      /**< Ingress stream identification key construction 2 payload field 0 configuration register, offset: 0x970, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t ISIDKC2PF1CR;                      /**< Ingress stream identification key construction 2 payload field 1 configuration register, offset: 0x974, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t ISIDKC2PF2CR;                      /**< Ingress stream identification key construction 2 payload field 2 configuration register, offset: 0x978, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t ISIDKC2PF3CR;                      /**< Ingress stream identification key construction 2 payload field 3 configuration register, offset: 0x97C, not available in all instances (available on 50 out of 200) */
+  __I  uint32_t ISIDKC3OR;                         /**< Ingress stream identification key construction 3 operational register, offset: 0x980, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t ISIDKC3CR0;                        /**< Ingress stream identification key construction 3 configuration register 0, offset: 0x984, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_35[8];
-  __IO uint32_t ISIDKC3PF0CR;                      /**< Ingress stream identification key construction 3 payload field 0 configuration register, offset: 0x990, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t ISIDKC3PF1CR;                      /**< Ingress stream identification key construction 3 payload field 1 configuration register, offset: 0x994, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t ISIDKC3PF2CR;                      /**< Ingress stream identification key construction 3 payload field 2 configuration register, offset: 0x998, not available in all instances (available on 24 out of 96) */
-  __IO uint32_t ISIDKC3PF3CR;                      /**< Ingress stream identification key construction 3 payload field 3 configuration register, offset: 0x99C, not available in all instances (available on 24 out of 96) */
+  __IO uint32_t ISIDKC3PF0CR;                      /**< Ingress stream identification key construction 3 payload field 0 configuration register, offset: 0x990, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t ISIDKC3PF1CR;                      /**< Ingress stream identification key construction 3 payload field 1 configuration register, offset: 0x994, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t ISIDKC3PF2CR;                      /**< Ingress stream identification key construction 3 payload field 2 configuration register, offset: 0x998, not available in all instances (available on 50 out of 200) */
+  __IO uint32_t ISIDKC3PF3CR;                      /**< Ingress stream identification key construction 3 payload field 3 configuration register, offset: 0x99C, not available in all instances (available on 50 out of 200) */
        uint8_t RESERVED_36[96];
   __I  uint32_t ISFHTCAPR;                         /**< Ingress stream filter hash table capability register, offset: 0xA00 */
   __I  uint32_t ISFHTOR;                           /**< Ingress stream filter hash table operational register, offset: 0xA04 */
        uint8_t RESERVED_37[504];
   struct {                                         /* offset: 0xC00, array step: 0x20 */
-    __IO uint32_t EVMCFGCR;                          /**< Event monitor 0 configuration and control register..Event monitor 3 configuration and control register, array offset: 0xC00, array step: 0x20, not available in all instances (available on 24 out of 96) */
-    __IO uint32_t EVMMR;                             /**< Event monitor 0 measuring register..Event monitor 3 measuring register, array offset: 0xC04, array step: 0x20, not available in all instances (available on 24 out of 96) */
-    __IO uint32_t EVMRR;                             /**< Event monitor 0 reporting register..Event monitor 3 reporting register, array offset: 0xC08, array step: 0x20, not available in all instances (available on 24 out of 96) */
-    __IO uint32_t EVMSRR;                            /**< Event monitor 0 special reporting register..Event monitor 3 special reporting register, array offset: 0xC0C, array step: 0x20, not available in all instances (available on 24 out of 96) */
+    __IO uint32_t EVMCFGCR;                          /**< Event monitor 0 configuration and control register..Event monitor 3 configuration and control register, array offset: 0xC00, array step: 0x20, not available in all instances (available on 50 out of 200) */
+    __IO uint32_t EVMMR;                             /**< Event monitor 0 measuring register..Event monitor 3 measuring register, array offset: 0xC04, array step: 0x20, not available in all instances (available on 50 out of 200) */
+    __IO uint32_t EVMRR;                             /**< Event monitor 0 reporting register..Event monitor 3 reporting register, array offset: 0xC08, array step: 0x20, not available in all instances (available on 50 out of 200) */
+    __IO uint32_t EVMSRR;                            /**< Event monitor 0 special reporting register..Event monitor 3 special reporting register, array offset: 0xC0C, array step: 0x20, not available in all instances (available on 50 out of 200) */
          uint8_t RESERVED_0[16];
   } NUM_EVMR[NETC_SW_ENETC_NUM_EVMR_COUNT];
 } NETC_SW_ENETC_Type;

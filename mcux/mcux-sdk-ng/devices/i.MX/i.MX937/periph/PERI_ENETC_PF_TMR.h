@@ -17,7 +17,7 @@
 **                          MIMX9375xxVZx_cm7
 **
 **     Version:             rev. 1.0, 2026-04-09
-**     Build:               b260624
+**     Build:               b260722
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENETC_PF_TMR
@@ -116,7 +116,6 @@
 
 /** ENETC_PF_TMR - Register Layout Typedef */
 typedef struct {
-  struct {                                         /* offset: 0x0, array step: 0xFC */
     __I  uint32_t TMR_ID;                            /**< Module ID, array offset: 0x0, array step: 0xFC */
          uint8_t RESERVED_0[4];
     __I  uint32_t TMR_CAPR;                          /**< Timer Capability, array offset: 0x8, array step: 0xFC */
@@ -157,7 +156,6 @@ typedef struct {
     __I  uint32_t TMR_CUR_TIME_L;                    /**< Timer Current Time Low, array offset: 0xF0, array step: 0xFC */
     __I  uint32_t TMR_CUR_TIME_H;                    /**< Timer Current Time High, array offset: 0xF4, array step: 0xFC */
     __IO uint32_t TMR_PARAM;                         /**< Timer Parameter, array offset: 0xF8, array step: 0xFC */
-  } ALL_REG_ARRAYS[ENETC_PF_TMR_ALL_REG_ARRAYS_COUNT];
 } ENETC_PF_TMR_Type;
 
 /* ----------------------------------------------------------------------------

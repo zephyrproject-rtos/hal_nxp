@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2021-11-16
-**     Build:               b260318
+**     Build:               b260721
 **
 **     Abstract:
 **         Chip specific module features.
@@ -45,6 +45,8 @@
 #define FSL_FEATURE_SOC_FLEXIO_COUNT (2)
 /* @brief FLEXSPI availability on the SoC. */
 #define FSL_FEATURE_SOC_FLEXSPI_COUNT (1)
+/* @brief FRACT_PLL availability on the SoC. */
+#define FSL_FEATURE_SOC_FRACT_PLL_COUNT (7)
 /* @brief GPC availability on the SoC. */
 #define FSL_FEATURE_SOC_GPC_COUNT (7)
 /* @brief I3C availability on the SoC. */
@@ -112,10 +114,8 @@
 #define FSL_FEATURE_ADC_THRESHOLDS_COUNT (8)
 /* @brief Self-test threshold counts of ADC. */
 #define FSL_FEATURE_ADC_SELF_TEST_THRESHOLDS_COUNT (6)
-
-/* BLK_CTRL_CAMERAMIX module features */
-
-/* No feature definitions */
+/* @brief Has external trigger or not. */
+#define FSL_FEATURE_ADC_HAS_EXTERNAL_TRIGGER (0)
 
 /* CACHEC module features */
 
@@ -130,7 +130,7 @@
 #define FSL_FEATURE_MU_SIDE_A (1)
 /* @brief MU side for current core */
 #define FSL_FEATURE_MU_SIDE_B (1)
-/* @brief MU supports reset assert interrupt. CIER0[RAIE] or CR[RAIE] or BCR[RAIE]. */
+/* @brief MU supports reset assert interrupt. CIER0[RAIE] or CR[RAIE] or BCR[RAIE]. Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_HAS_RESET_ASSERT_INT (1)
 /* @brief MU supports reset de-assert interrupt. CR[RDIE] or BCR[RDIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT (0)
@@ -138,9 +138,9 @@
 #define FSL_FEATURE_MU_NO_CORE_STATUS (0)
 /* @brief MU does not support NMI. Register bit CCR0[NMI]. */
 #define FSL_FEATURE_MU_NO_NMI (0)
-/* @brief MU does not support core event pending. Register bit SR[CEP]. */
+/* @brief MU does not support core event pending. Register bit SR[CEP]. Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_NO_CEP (1)
-/* @brief MU supports Power-Down mode entry interrupt. CIER0[PDIE] */
+/* @brief MU supports Power-Down mode entry interrupt. CIER0[PDIE] Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_HAS_PD_INT (1)
 /* @brief MU supports STOP mode entry interrupt. CIER0[STOPIE] */
 #define FSL_FEATURE_MU_HAS_STOP_INT (0)
@@ -260,10 +260,12 @@
 
 /* @brief Display SEERIS MDR version */
 #define FSL_FEATURE_DISPLAY_SEERIS_MDR5 (1)
+/* @brief Display SEERIS has LD */
+#define FSL_FEATURE_DISPLAY_SEERIS_HAS_LD (0)
 
 /* EDMA module features */
 
-/* @brief Number of DMA channels (related to number of registers TCD, DCHPRI, bit fields ERQ[ERQn], EEI[EEIn], INT[INTn], ERR[ERRn], HRS[HRSn] and bit field widths ES[ERRCHN], CEEI[CEEI], SEEI[SEEI], CERQ[CERQ], SERQ[SERQ], CDNE[CDNE], SSRT[SSRT], CERR[CERR], CINT[CINT], TCDn_CITER_ELINKYES[LINKCH], TCDn_CSR[MAJORLINKCH], TCDn_BITER_ELINKYES[LINKCH]). (Valid only for eDMA modules.) */
+/* @brief Number of DMA channels (related to number of registers TCD, DCHPRI, bit fields ERQ[ERQn], EEI[EEIn], INT[INTn], ERR[ERRn], HRS[HRSn] and bit field widths ES[ERRCHN], CEEI[CEEI], SEEI[SEEI], CERQ[CERQ], SERQ[SERQ], CDNE[CDNE], SSRT[SSRT], CERR[CERR], CINT[CINT], TCDn_CITER_ELINKYES[LINKCH], TCDn_CSR[MAJORLINKCH], TCDn_BITER_ELINKYES[LINKCH]). (Valid only for eDMA modules.) Note: This feature value is not the same on all EDMA instances. */
 #define FSL_FEATURE_EDMA_MODULE_CHANNEL (64)
 /* @brief If 8 bytes transfer supported. */
 #define FSL_FEATURE_EDMA_SUPPORT_8_BYTES_TRANSFER (1)
@@ -357,7 +359,7 @@
     (((x) == EDMA5_3) ? (1) : \
     (((x) == EDMA5_4) ? (1) : \
     (((x) == EDMA5_2) ? (1) : (-1)))))
-/* @brief Whether has MP channel mux */
+/* @brief Whether has MP channel mux Note: This feature value is not the same on all EDMA instances. */
 #define FSL_FEATURE_EDMA_HAS_MP_CHANNEL_MUX (1)
 /* @brief Has register bit field CH_CSR[SWAP]. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_SWAP_SIZE (1)
@@ -371,7 +373,7 @@
     (((x) == DMA3) ? (0) : (-1)))))
 /* @brief Has register bit field TCD_CSR[BWC]. */
 #define FSL_FEATURE_EDMA_HAS_BANDWIDTH (1)
-/* @brief Has channel mux */
+/* @brief Has channel mux Note: This feature value is not the same on all EDMA instances. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_MUX (1)
 /* @brief Has register bit field CH_SBR[INSTR]. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_ACCESS_TYPE (1)
@@ -815,7 +817,7 @@
     (((x) == SAI5) ? (4) : (-1))))))
 /* @brief Maximum words per frame (register bit fields TCR3[WDFL], TCR4[FRSZ], TMR[TWM], RCR3[WDFL], RCR4[FRSZ], RMR[RWM]). */
 #define FSL_FEATURE_SAI_MAX_WORDS_PER_FRAME (32)
-/* @brief Has support of combining multiple data channel FIFOs into single channel FIFO (register bit fields TCR3[CFR], TCR4[FCOMB], TFR0[WCP], TFR1[WCP], RCR3[CFR], RCR4[FCOMB], RFR0[RCP], RFR1[RCP]). */
+/* @brief Has support of combining multiple data channel FIFOs into single channel FIFO (register bit fields TCR3[CFR], TCR4[FCOMB], TFR0[WCP], TFR1[WCP], RCR3[CFR], RCR4[FCOMB], RFR0[RCP], RFR1[RCP]). Note: This feature value is not the same on all SAI instances. */
 #define FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE (1)
 /* @brief Has packing of 8-bit and 16-bit data into each 32-bit FIFO word (register bit fields TCR4[FPACK], RCR4[FPACK]). */
 #define FSL_FEATURE_SAI_HAS_FIFO_PACKING (1)
@@ -900,21 +902,14 @@
 #define FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT (1)
 /* @brief Whether 32 bits counter has effect. */
 #define FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x) (1)
-/* @brief Has global time base enable. */
+/* @brief Has global time base enable. Note: This feature value is not the same on all TPM instances. */
 #define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (1)
-/* @brief Has global time base sync. */
+/* @brief Has global time base sync. Note: This feature value is not the same on all TPM instances. */
 #define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
 /* @brief Is affected by errata with ID 050050 (Incorrect duty output when EPWM mode is set to PS=0 during write 1 to CnV register). */
 #define FSL_FEATURE_TPM_HAS_ERRATA_050050 (0)
-
-/* TRDC module features */
-
-/* @brief Process master count. */
-#define FSL_FEATURE_TRDC_PROCESSOR_MASTER_COUNT (2)
-/* @brief TRDC instance has PID configuration or not. */
-#define FSL_FEATURE_TRDC_INSTANCE_HAS_PID_CONFIGURATIONn(x) (0)
-/* @brief TRDC domain number (reset value of HWCFG0[NDID]). */
-#define FSL_FEATURE_TRDC_DOMAIN_COUNT (16)
+/* @brief Has no CPWMS field in SC register (bitfield SC[CPWMS]). */
+#define FSL_FEATURE_TPM_HAS_NO_SC_CPWMS (0)
 
 /* USBHS module features */
 

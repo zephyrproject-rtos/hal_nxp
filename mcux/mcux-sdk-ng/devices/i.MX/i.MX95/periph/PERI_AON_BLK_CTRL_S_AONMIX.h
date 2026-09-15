@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 4.0, 2026-02-28
-**     Build:               b260305
+**     Build:               b260721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AON_BLK_CTRL_S_AONMIX
@@ -458,10 +458,10 @@ typedef struct {
   __IO uint32_t DAP_ACCESS_STKYBIT;                /**< Dap Access Sticky Bit, offset: 0x134 */
   __IO uint32_t LP_HANDSHAKE_ELE;                  /**< Low Power Handshake for ELE Register, offset: 0x138 */
   __IO uint32_t LP_HANDSHAKE2_ELE;                 /**< Low Power Handshake 2 for ELE Register, offset: 0x13C */
-       uint32_t LP_HANDSHAKE3_ELE;                 /**< Low Power Handshake 3 for ELE Register, offset: 0x140 */
+  __I  uint32_t LP_HANDSHAKE3_ELE;                 /**< Low Power Handshake 3 for ELE Register, offset: 0x140 */
   __IO uint32_t LP_HANDSHAKE_SM;                   /**< Low Power Handshake for System Manager, offset: 0x144 */
   __IO uint32_t LP_HANDSHAKE2_SM;                  /**< Low Power Handshake 2 for System Manager, offset: 0x148 */
-       uint32_t LP_HANDSHAKE3_SM;                  /**< Low Power Handshake 3 for System Manager, offset: 0x14C */
+  __I  uint32_t LP_HANDSHAKE3_SM;                  /**< Low Power Handshake 3 for System Manager, offset: 0x14C */
   __IO uint32_t SM_LP_HANDSHAKE_STATUS;            /**< Register interface for system manager to react for the lp_handshake, offset: 0x150 */
        uint8_t RESERVED_5[12];
   __IO uint32_t CA55_CPUWAIT;                      /**< CPUWAIT settings for CA55 CPU, offset: 0x160 */

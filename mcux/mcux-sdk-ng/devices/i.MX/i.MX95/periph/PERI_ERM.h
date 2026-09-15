@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 4.0, 2026-02-28
-**     Build:               b260305
+**     Build:               b260721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ERM
@@ -409,50 +409,28 @@
 /** ERM - Register Layout Typedef */
 typedef struct {
   __IO uint32_t CR0;                               /**< ERM Configuration Register 0, offset: 0x0 */
-  __IO uint32_t CR1;                               /**< ERM Configuration Register 1, offset: 0x4, not available in all instances (available on 82 out of 328) */
-       uint8_t RESERVED_0[8];
+       uint8_t RESERVED_0[12];
   __IO uint32_t SR0;                               /**< ERM Status Register 0, offset: 0x10 */
-  __IO uint32_t SR1;                               /**< ERM Status Register 1, offset: 0x14, not available in all instances (available on 82 out of 328) */
-       uint8_t RESERVED_1[232];
-  __I  uint32_t EAR0;                              /**< ERM Memory 0 Error Address Register, offset: 0x100, not available in all instances (available on 246 out of 328) */
-  __I  uint32_t SYN0;                              /**< ERM Memory 0 Syndrome Register, offset: 0x104, not available in all instances (available on 246 out of 328) */
+       uint8_t RESERVED_1[244];
   __IO uint32_t CORR_ERR_CNT0;                     /**< ERM Memory 0 Correctable Error Count Register, offset: 0x108 */
-       uint8_t RESERVED_2[4];
-  __I  uint32_t EAR1;                              /**< ERM Memory 1 Error Address Register, offset: 0x110, not available in all instances (available on 82 out of 328) */
-  __I  uint32_t SYN1;                              /**< ERM Memory 1 Syndrome Register, offset: 0x114, not available in all instances (available on 82 out of 328) */
-  __IO uint32_t CORR_ERR_CNT1;                     /**< ERM Memory 1 Correctable Error Count Register, offset: 0x118, not available in all instances (available on 164 out of 328) */
-       uint8_t RESERVED_3[4];
-  __I  uint32_t EAR2;                              /**< ERM Memory 2 Error Address Register, offset: 0x120, not available in all instances (available on 82 out of 328) */
-  __I  uint32_t SYN2;                              /**< ERM Memory 2 Syndrome Register, offset: 0x124, not available in all instances (available on 82 out of 328) */
-  __IO uint32_t CORR_ERR_CNT2;                     /**< ERM Memory 2 Correctable Error Count Register, offset: 0x128, not available in all instances (available on 164 out of 328) */
-       uint8_t RESERVED_4[4];
-  __I  uint32_t EAR3;                              /**< ERM Memory 3 Error Address Register, offset: 0x130, not available in all instances (available on 82 out of 328) */
-  __I  uint32_t SYN3;                              /**< ERM Memory 3 Syndrome Register, offset: 0x134, not available in all instances (available on 82 out of 328) */
-  __IO uint32_t CORR_ERR_CNT3;                     /**< ERM Memory 3 Correctable Error Count Register, offset: 0x138, not available in all instances (available on 164 out of 328) */
-       uint8_t RESERVED_5[4];
-  __I  uint32_t EAR4;                              /**< ERM Memory 4 Error Address Register, offset: 0x140, not available in all instances (available on 82 out of 328) */
-  __I  uint32_t SYN4;                              /**< ERM Memory 4 Syndrome Register, offset: 0x144, not available in all instances (available on 82 out of 328) */
-  __IO uint32_t CORR_ERR_CNT4;                     /**< ERM Memory 4 Correctable Error Count Register, offset: 0x148, not available in all instances (available on 82 out of 328) */
+       uint8_t RESERVED_2[12];
+  __IO uint32_t CORR_ERR_CNT1;                     /**< ERM Memory 1 Correctable Error Count Register, offset: 0x118 */
+       uint8_t RESERVED_3[12];
+  __IO uint32_t CORR_ERR_CNT2;                     /**< ERM Memory 2 Correctable Error Count Register, offset: 0x128 */
+       uint8_t RESERVED_4[12];
+  __IO uint32_t CORR_ERR_CNT3;                     /**< ERM Memory 3 Correctable Error Count Register, offset: 0x138 */
+       uint8_t RESERVED_5[20];
+  __I  uint32_t EAR5;                              /**< ERM Memory 5 Error Address Register, offset: 0x150 */
+  __I  uint32_t SYN5;                              /**< ERM Memory 5 Syndrome Register, offset: 0x154 */
+  __IO uint32_t CORR_ERR_CNT5;                     /**< ERM Memory 5 Correctable Error Count Register, offset: 0x158 */
        uint8_t RESERVED_6[4];
-  __I  uint32_t EAR5;                              /**< ERM Memory 5 Error Address Register, offset: 0x150, not available in all instances (available on 164 out of 328) */
-  __I  uint32_t SYN5;                              /**< ERM Memory 5 Syndrome Register, offset: 0x154, not available in all instances (available on 164 out of 328) */
-  __IO uint32_t CORR_ERR_CNT5;                     /**< ERM Memory 5 Correctable Error Count Register, offset: 0x158, not available in all instances (available on 164 out of 328) */
+  __I  uint32_t EAR6;                              /**< ERM Memory 6 Error Address Register, offset: 0x160 */
+  __I  uint32_t SYN6;                              /**< ERM Memory 6 Syndrome Register, offset: 0x164 */
+  __IO uint32_t CORR_ERR_CNT6;                     /**< ERM Memory 6 Correctable Error Count Register, offset: 0x168 */
        uint8_t RESERVED_7[4];
-  __I  uint32_t EAR6;                              /**< ERM Memory 6 Error Address Register, offset: 0x160, not available in all instances (available on 164 out of 328) */
-  __I  uint32_t SYN6;                              /**< ERM Memory 6 Syndrome Register, offset: 0x164, not available in all instances (available on 164 out of 328) */
-  __IO uint32_t CORR_ERR_CNT6;                     /**< ERM Memory 6 Correctable Error Count Register, offset: 0x168, not available in all instances (available on 164 out of 328) */
-       uint8_t RESERVED_8[4];
-  __I  uint32_t EAR7;                              /**< ERM Memory 7 Error Address Register, offset: 0x170, not available in all instances (available on 164 out of 328) */
-  __I  uint32_t SYN7;                              /**< ERM Memory 7 Syndrome Register, offset: 0x174, not available in all instances (available on 164 out of 328) */
-  __IO uint32_t CORR_ERR_CNT7;                     /**< ERM Memory 7 Correctable Error Count Register, offset: 0x178, not available in all instances (available on 164 out of 328) */
-       uint8_t RESERVED_9[4];
-  __I  uint32_t EAR8;                              /**< ERM Memory 8 Error Address Register, offset: 0x180, not available in all instances (available on 82 out of 328) */
-  __I  uint32_t SYN8;                              /**< ERM Memory 8 Syndrome Register, offset: 0x184, not available in all instances (available on 82 out of 328) */
-  __IO uint32_t CORR_ERR_CNT8;                     /**< ERM Memory 8 Correctable Error Count Register, offset: 0x188, not available in all instances (available on 82 out of 328) */
-       uint8_t RESERVED_10[4];
-  __I  uint32_t EAR9;                              /**< ERM Memory 9 Error Address Register, offset: 0x190, not available in all instances (available on 82 out of 328) */
-  __I  uint32_t SYN9;                              /**< ERM Memory 9 Syndrome Register, offset: 0x194, not available in all instances (available on 82 out of 328) */
-  __IO uint32_t CORR_ERR_CNT9;                     /**< ERM Memory 9 Correctable Error Count Register, offset: 0x198, not available in all instances (available on 82 out of 328) */
+  __I  uint32_t EAR7;                              /**< ERM Memory 7 Error Address Register, offset: 0x170 */
+  __I  uint32_t SYN7;                              /**< ERM Memory 7 Syndrome Register, offset: 0x174 */
+  __IO uint32_t CORR_ERR_CNT7;                     /**< ERM Memory 7 Correctable Error Count Register, offset: 0x178 */
 } ERM_Type;
 
 /* ----------------------------------------------------------------------------
@@ -514,22 +492,6 @@ typedef struct {
  *  0b1..Interrupt notification of Memory 5 single-bit correction events is enabled.
  */
 #define ERM_CR0_ESCIE5(x)                        (((uint32_t)(((uint32_t)(x)) << ERM_CR0_ESCIE5_SHIFT)) & ERM_CR0_ESCIE5_MASK)
-
-#define ERM_CR0_ENCIE4_MASK                      (0x4000U)
-#define ERM_CR0_ENCIE4_SHIFT                     (14U)
-/*! ENCIE4 - ENCIE4
- *  0b0..Interrupt notification of Memory 4 non-correctable error events is disabled.
- *  0b1..Interrupt notification of Memory 4 non-correctable error events is enabled.
- */
-#define ERM_CR0_ENCIE4(x)                        (((uint32_t)(((uint32_t)(x)) << ERM_CR0_ENCIE4_SHIFT)) & ERM_CR0_ENCIE4_MASK)
-
-#define ERM_CR0_ESCIE4_MASK                      (0x8000U)
-#define ERM_CR0_ESCIE4_SHIFT                     (15U)
-/*! ESCIE4 - ESCIE4
- *  0b0..Interrupt notification of Memory 4 single-bit correction events is disabled.
- *  0b1..Interrupt notification of Memory 4 single-bit correction events is enabled.
- */
-#define ERM_CR0_ESCIE4(x)                        (((uint32_t)(((uint32_t)(x)) << ERM_CR0_ESCIE4_SHIFT)) & ERM_CR0_ESCIE4_MASK)
 
 #define ERM_CR0_ENCIE3_MASK                      (0x40000U)
 #define ERM_CR0_ENCIE3_SHIFT                     (18U)
@@ -596,42 +558,6 @@ typedef struct {
 #define ERM_CR0_ESCIE0(x)                        (((uint32_t)(((uint32_t)(x)) << ERM_CR0_ESCIE0_SHIFT)) & ERM_CR0_ESCIE0_MASK)
 /*! @} */
 
-/*! @name CR1 - ERM Configuration Register 1 */
-/*! @{ */
-
-#define ERM_CR1_ENCIE9_MASK                      (0x4000000U)
-#define ERM_CR1_ENCIE9_SHIFT                     (26U)
-/*! ENCIE9 - ENCIE9
- *  0b0..Interrupt notification of Memory 9 non-correctable error events is disabled.
- *  0b1..Interrupt notification of Memory 9 non-correctable error events is enabled.
- */
-#define ERM_CR1_ENCIE9(x)                        (((uint32_t)(((uint32_t)(x)) << ERM_CR1_ENCIE9_SHIFT)) & ERM_CR1_ENCIE9_MASK)
-
-#define ERM_CR1_ESCIE9_MASK                      (0x8000000U)
-#define ERM_CR1_ESCIE9_SHIFT                     (27U)
-/*! ESCIE9 - ESCIE9
- *  0b0..Interrupt notification of Memory 9 single-bit correction events is disabled.
- *  0b1..Interrupt notification of Memory 9 single-bit correction events is enabled.
- */
-#define ERM_CR1_ESCIE9(x)                        (((uint32_t)(((uint32_t)(x)) << ERM_CR1_ESCIE9_SHIFT)) & ERM_CR1_ESCIE9_MASK)
-
-#define ERM_CR1_ENCIE8_MASK                      (0x40000000U)
-#define ERM_CR1_ENCIE8_SHIFT                     (30U)
-/*! ENCIE8 - ENCIE8
- *  0b0..Interrupt notification of Memory 8 non-correctable error events is disabled.
- *  0b1..Interrupt notification of Memory 8 non-correctable error events is enabled.
- */
-#define ERM_CR1_ENCIE8(x)                        (((uint32_t)(((uint32_t)(x)) << ERM_CR1_ENCIE8_SHIFT)) & ERM_CR1_ENCIE8_MASK)
-
-#define ERM_CR1_ESCIE8_MASK                      (0x80000000U)
-#define ERM_CR1_ESCIE8_SHIFT                     (31U)
-/*! ESCIE8 - ESCIE8
- *  0b0..Interrupt notification of Memory 8 single-bit correction events is disabled.
- *  0b1..Interrupt notification of Memory 8 single-bit correction events is enabled.
- */
-#define ERM_CR1_ESCIE8(x)                        (((uint32_t)(((uint32_t)(x)) << ERM_CR1_ESCIE8_SHIFT)) & ERM_CR1_ESCIE8_MASK)
-/*! @} */
-
 /*! @name SR0 - ERM Status Register 0 */
 /*! @{ */
 
@@ -682,22 +608,6 @@ typedef struct {
  *  0b1..Single-bit correction event on Memory 5 detected.
  */
 #define ERM_SR0_SBC5(x)                          (((uint32_t)(((uint32_t)(x)) << ERM_SR0_SBC5_SHIFT)) & ERM_SR0_SBC5_MASK)
-
-#define ERM_SR0_NCE4_MASK                        (0x4000U)
-#define ERM_SR0_NCE4_SHIFT                       (14U)
-/*! NCE4 - NCE4
- *  0b0..No non-correctable error event on Memory 4 detected.
- *  0b1..Non-correctable error event on Memory 4 detected.
- */
-#define ERM_SR0_NCE4(x)                          (((uint32_t)(((uint32_t)(x)) << ERM_SR0_NCE4_SHIFT)) & ERM_SR0_NCE4_MASK)
-
-#define ERM_SR0_SBC4_MASK                        (0x8000U)
-#define ERM_SR0_SBC4_SHIFT                       (15U)
-/*! SBC4 - SBC4
- *  0b0..No single-bit correction event on Memory 4 detected.
- *  0b1..Single-bit correction event on Memory 4 detected.
- */
-#define ERM_SR0_SBC4(x)                          (((uint32_t)(((uint32_t)(x)) << ERM_SR0_SBC4_SHIFT)) & ERM_SR0_SBC4_MASK)
 
 #define ERM_SR0_NCE3_MASK                        (0x40000U)
 #define ERM_SR0_NCE3_SHIFT                       (18U)
@@ -764,60 +674,6 @@ typedef struct {
 #define ERM_SR0_SBC0(x)                          (((uint32_t)(((uint32_t)(x)) << ERM_SR0_SBC0_SHIFT)) & ERM_SR0_SBC0_MASK)
 /*! @} */
 
-/*! @name SR1 - ERM Status Register 1 */
-/*! @{ */
-
-#define ERM_SR1_NCE9_MASK                        (0x4000000U)
-#define ERM_SR1_NCE9_SHIFT                       (26U)
-/*! NCE9 - NCE9
- *  0b0..No non-correctable error event on Memory 9 detected.
- *  0b1..Non-correctable error event on Memory 9 detected.
- */
-#define ERM_SR1_NCE9(x)                          (((uint32_t)(((uint32_t)(x)) << ERM_SR1_NCE9_SHIFT)) & ERM_SR1_NCE9_MASK)
-
-#define ERM_SR1_SBC9_MASK                        (0x8000000U)
-#define ERM_SR1_SBC9_SHIFT                       (27U)
-/*! SBC9 - SBC9
- *  0b0..No single-bit correction event on Memory 9 detected.
- *  0b1..Single-bit correction event on Memory 9 detected.
- */
-#define ERM_SR1_SBC9(x)                          (((uint32_t)(((uint32_t)(x)) << ERM_SR1_SBC9_SHIFT)) & ERM_SR1_SBC9_MASK)
-
-#define ERM_SR1_NCE8_MASK                        (0x40000000U)
-#define ERM_SR1_NCE8_SHIFT                       (30U)
-/*! NCE8 - NCE8
- *  0b0..No non-correctable error event on Memory 8 detected.
- *  0b1..Non-correctable error event on Memory 8 detected.
- */
-#define ERM_SR1_NCE8(x)                          (((uint32_t)(((uint32_t)(x)) << ERM_SR1_NCE8_SHIFT)) & ERM_SR1_NCE8_MASK)
-
-#define ERM_SR1_SBC8_MASK                        (0x80000000U)
-#define ERM_SR1_SBC8_SHIFT                       (31U)
-/*! SBC8 - SBC8
- *  0b0..No single-bit correction event on Memory 8 detected.
- *  0b1..Single-bit correction event on Memory 8 detected.
- */
-#define ERM_SR1_SBC8(x)                          (((uint32_t)(((uint32_t)(x)) << ERM_SR1_SBC8_SHIFT)) & ERM_SR1_SBC8_MASK)
-/*! @} */
-
-/*! @name EAR0 - ERM Memory 0 Error Address Register */
-/*! @{ */
-
-#define ERM_EAR0_EAR_MASK                        (0xFFFFFFFFU)
-#define ERM_EAR0_EAR_SHIFT                       (0U)
-/*! EAR - EAR */
-#define ERM_EAR0_EAR(x)                          (((uint32_t)(((uint32_t)(x)) << ERM_EAR0_EAR_SHIFT)) & ERM_EAR0_EAR_MASK)
-/*! @} */
-
-/*! @name SYN0 - ERM Memory 0 Syndrome Register */
-/*! @{ */
-
-#define ERM_SYN0_SYNDROME_MASK                   (0xFF000000U)
-#define ERM_SYN0_SYNDROME_SHIFT                  (24U)
-/*! SYNDROME - SYNDROME */
-#define ERM_SYN0_SYNDROME(x)                     (((uint32_t)(((uint32_t)(x)) << ERM_SYN0_SYNDROME_SHIFT)) & ERM_SYN0_SYNDROME_MASK)
-/*! @} */
-
 /*! @name CORR_ERR_CNT0 - ERM Memory 0 Correctable Error Count Register */
 /*! @{ */
 
@@ -825,24 +681,6 @@ typedef struct {
 #define ERM_CORR_ERR_CNT0_COUNT_SHIFT            (0U)
 /*! COUNT - Memory n Correctable Error Count */
 #define ERM_CORR_ERR_CNT0_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << ERM_CORR_ERR_CNT0_COUNT_SHIFT)) & ERM_CORR_ERR_CNT0_COUNT_MASK)
-/*! @} */
-
-/*! @name EAR1 - ERM Memory 1 Error Address Register */
-/*! @{ */
-
-#define ERM_EAR1_EAR_MASK                        (0xFFFFFFFFU)
-#define ERM_EAR1_EAR_SHIFT                       (0U)
-/*! EAR - EAR */
-#define ERM_EAR1_EAR(x)                          (((uint32_t)(((uint32_t)(x)) << ERM_EAR1_EAR_SHIFT)) & ERM_EAR1_EAR_MASK)
-/*! @} */
-
-/*! @name SYN1 - ERM Memory 1 Syndrome Register */
-/*! @{ */
-
-#define ERM_SYN1_SYNDROME_MASK                   (0xFF000000U)
-#define ERM_SYN1_SYNDROME_SHIFT                  (24U)
-/*! SYNDROME - SYNDROME */
-#define ERM_SYN1_SYNDROME(x)                     (((uint32_t)(((uint32_t)(x)) << ERM_SYN1_SYNDROME_SHIFT)) & ERM_SYN1_SYNDROME_MASK)
 /*! @} */
 
 /*! @name CORR_ERR_CNT1 - ERM Memory 1 Correctable Error Count Register */
@@ -854,24 +692,6 @@ typedef struct {
 #define ERM_CORR_ERR_CNT1_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << ERM_CORR_ERR_CNT1_COUNT_SHIFT)) & ERM_CORR_ERR_CNT1_COUNT_MASK)
 /*! @} */
 
-/*! @name EAR2 - ERM Memory 2 Error Address Register */
-/*! @{ */
-
-#define ERM_EAR2_EAR_MASK                        (0xFFFFFFFFU)
-#define ERM_EAR2_EAR_SHIFT                       (0U)
-/*! EAR - EAR */
-#define ERM_EAR2_EAR(x)                          (((uint32_t)(((uint32_t)(x)) << ERM_EAR2_EAR_SHIFT)) & ERM_EAR2_EAR_MASK)
-/*! @} */
-
-/*! @name SYN2 - ERM Memory 2 Syndrome Register */
-/*! @{ */
-
-#define ERM_SYN2_SYNDROME_MASK                   (0xFF000000U)
-#define ERM_SYN2_SYNDROME_SHIFT                  (24U)
-/*! SYNDROME - SYNDROME */
-#define ERM_SYN2_SYNDROME(x)                     (((uint32_t)(((uint32_t)(x)) << ERM_SYN2_SYNDROME_SHIFT)) & ERM_SYN2_SYNDROME_MASK)
-/*! @} */
-
 /*! @name CORR_ERR_CNT2 - ERM Memory 2 Correctable Error Count Register */
 /*! @{ */
 
@@ -881,24 +701,6 @@ typedef struct {
 #define ERM_CORR_ERR_CNT2_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << ERM_CORR_ERR_CNT2_COUNT_SHIFT)) & ERM_CORR_ERR_CNT2_COUNT_MASK)
 /*! @} */
 
-/*! @name EAR3 - ERM Memory 3 Error Address Register */
-/*! @{ */
-
-#define ERM_EAR3_EAR_MASK                        (0xFFFFFFFFU)
-#define ERM_EAR3_EAR_SHIFT                       (0U)
-/*! EAR - EAR */
-#define ERM_EAR3_EAR(x)                          (((uint32_t)(((uint32_t)(x)) << ERM_EAR3_EAR_SHIFT)) & ERM_EAR3_EAR_MASK)
-/*! @} */
-
-/*! @name SYN3 - ERM Memory 3 Syndrome Register */
-/*! @{ */
-
-#define ERM_SYN3_SYNDROME_MASK                   (0xFF000000U)
-#define ERM_SYN3_SYNDROME_SHIFT                  (24U)
-/*! SYNDROME - SYNDROME */
-#define ERM_SYN3_SYNDROME(x)                     (((uint32_t)(((uint32_t)(x)) << ERM_SYN3_SYNDROME_SHIFT)) & ERM_SYN3_SYNDROME_MASK)
-/*! @} */
-
 /*! @name CORR_ERR_CNT3 - ERM Memory 3 Correctable Error Count Register */
 /*! @{ */
 
@@ -906,33 +708,6 @@ typedef struct {
 #define ERM_CORR_ERR_CNT3_COUNT_SHIFT            (0U)
 /*! COUNT - Memory n Correctable Error Count */
 #define ERM_CORR_ERR_CNT3_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << ERM_CORR_ERR_CNT3_COUNT_SHIFT)) & ERM_CORR_ERR_CNT3_COUNT_MASK)
-/*! @} */
-
-/*! @name EAR4 - ERM Memory 4 Error Address Register */
-/*! @{ */
-
-#define ERM_EAR4_EAR_MASK                        (0xFFFFFFFFU)
-#define ERM_EAR4_EAR_SHIFT                       (0U)
-/*! EAR - EAR */
-#define ERM_EAR4_EAR(x)                          (((uint32_t)(((uint32_t)(x)) << ERM_EAR4_EAR_SHIFT)) & ERM_EAR4_EAR_MASK)
-/*! @} */
-
-/*! @name SYN4 - ERM Memory 4 Syndrome Register */
-/*! @{ */
-
-#define ERM_SYN4_SYNDROME_MASK                   (0xFF000000U)
-#define ERM_SYN4_SYNDROME_SHIFT                  (24U)
-/*! SYNDROME - SYNDROME */
-#define ERM_SYN4_SYNDROME(x)                     (((uint32_t)(((uint32_t)(x)) << ERM_SYN4_SYNDROME_SHIFT)) & ERM_SYN4_SYNDROME_MASK)
-/*! @} */
-
-/*! @name CORR_ERR_CNT4 - ERM Memory 4 Correctable Error Count Register */
-/*! @{ */
-
-#define ERM_CORR_ERR_CNT4_COUNT_MASK             (0xFFU)
-#define ERM_CORR_ERR_CNT4_COUNT_SHIFT            (0U)
-/*! COUNT - Memory n Correctable Error Count */
-#define ERM_CORR_ERR_CNT4_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << ERM_CORR_ERR_CNT4_COUNT_SHIFT)) & ERM_CORR_ERR_CNT4_COUNT_MASK)
 /*! @} */
 
 /*! @name EAR5 - ERM Memory 5 Error Address Register */
@@ -1014,60 +789,6 @@ typedef struct {
 #define ERM_CORR_ERR_CNT7_COUNT_SHIFT            (0U)
 /*! COUNT - Memory n Correctable Error Count */
 #define ERM_CORR_ERR_CNT7_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << ERM_CORR_ERR_CNT7_COUNT_SHIFT)) & ERM_CORR_ERR_CNT7_COUNT_MASK)
-/*! @} */
-
-/*! @name EAR8 - ERM Memory 8 Error Address Register */
-/*! @{ */
-
-#define ERM_EAR8_EAR_MASK                        (0xFFFFFFFFU)
-#define ERM_EAR8_EAR_SHIFT                       (0U)
-/*! EAR - EAR */
-#define ERM_EAR8_EAR(x)                          (((uint32_t)(((uint32_t)(x)) << ERM_EAR8_EAR_SHIFT)) & ERM_EAR8_EAR_MASK)
-/*! @} */
-
-/*! @name SYN8 - ERM Memory 8 Syndrome Register */
-/*! @{ */
-
-#define ERM_SYN8_SYNDROME_MASK                   (0xFF000000U)
-#define ERM_SYN8_SYNDROME_SHIFT                  (24U)
-/*! SYNDROME - SYNDROME */
-#define ERM_SYN8_SYNDROME(x)                     (((uint32_t)(((uint32_t)(x)) << ERM_SYN8_SYNDROME_SHIFT)) & ERM_SYN8_SYNDROME_MASK)
-/*! @} */
-
-/*! @name CORR_ERR_CNT8 - ERM Memory 8 Correctable Error Count Register */
-/*! @{ */
-
-#define ERM_CORR_ERR_CNT8_COUNT_MASK             (0xFFU)
-#define ERM_CORR_ERR_CNT8_COUNT_SHIFT            (0U)
-/*! COUNT - Memory n Correctable Error Count */
-#define ERM_CORR_ERR_CNT8_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << ERM_CORR_ERR_CNT8_COUNT_SHIFT)) & ERM_CORR_ERR_CNT8_COUNT_MASK)
-/*! @} */
-
-/*! @name EAR9 - ERM Memory 9 Error Address Register */
-/*! @{ */
-
-#define ERM_EAR9_EAR_MASK                        (0xFFFFFFFFU)
-#define ERM_EAR9_EAR_SHIFT                       (0U)
-/*! EAR - EAR */
-#define ERM_EAR9_EAR(x)                          (((uint32_t)(((uint32_t)(x)) << ERM_EAR9_EAR_SHIFT)) & ERM_EAR9_EAR_MASK)
-/*! @} */
-
-/*! @name SYN9 - ERM Memory 9 Syndrome Register */
-/*! @{ */
-
-#define ERM_SYN9_SYNDROME_MASK                   (0xFF000000U)
-#define ERM_SYN9_SYNDROME_SHIFT                  (24U)
-/*! SYNDROME - SYNDROME */
-#define ERM_SYN9_SYNDROME(x)                     (((uint32_t)(((uint32_t)(x)) << ERM_SYN9_SYNDROME_SHIFT)) & ERM_SYN9_SYNDROME_MASK)
-/*! @} */
-
-/*! @name CORR_ERR_CNT9 - ERM Memory 9 Correctable Error Count Register */
-/*! @{ */
-
-#define ERM_CORR_ERR_CNT9_COUNT_MASK             (0xFFU)
-#define ERM_CORR_ERR_CNT9_COUNT_SHIFT            (0U)
-/*! COUNT - Memory n Correctable Error Count */
-#define ERM_CORR_ERR_CNT9_COUNT(x)               (((uint32_t)(((uint32_t)(x)) << ERM_CORR_ERR_CNT9_COUNT_SHIFT)) & ERM_CORR_ERR_CNT9_COUNT_MASK)
 /*! @} */
 
 

@@ -38,7 +38,7 @@
 **                          MIMX9529xxVZx_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260416
+**     Build:               b260722
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MECC
@@ -169,7 +169,7 @@ typedef struct {
        uint8_t RESERVED_2[8];
   __IO uint32_t RAMMAXA;                           /**< RAM Maximum-Value Address, offset: 0x40 */
        uint8_t RESERVED_3[60];
-       uint32_t RAMCR2;                            /**< RAM Control 2, offset: 0x80 */
+  __I  uint32_t RAMCR2;                            /**< RAM Control 2, offset: 0x80 */
 } MECC_Type;
 
 /* ----------------------------------------------------------------------------

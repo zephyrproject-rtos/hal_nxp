@@ -14,7 +14,7 @@
 **
 **     Reference manual:    iMX95RM rev4
 **     Version:             rev. 4.0, 2026-02-28
-**     Build:               b260305
+**     Build:               b260721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX9576_cm7
@@ -63,7 +63,6 @@
 #include "PERI_ANALOG_VDET.h"
 #include "PERI_AON_BLK_CTRL_NS_AONMIX.h"
 #include "PERI_AON_BLK_CTRL_S_AONMIX.h"
-#include "PERI_AON_CMU.h"
 #include "PERI_AON_FCCU.h"
 #include "PERI_AON_MCM.h"
 #include "PERI_AON_ROMCP.h"
@@ -117,7 +116,6 @@
 #include "PERI_DRC.h"
 #include "PERI_EE.h"
 #include "PERI_EIM.h"
-#include "PERI_ENETC.h"
 #include "PERI_ENETC_GLOBAL.h"
 #include "PERI_ENETC_PCI_TYPE0.h"
 #include "PERI_ENETC_PF_EMDIO.h"
@@ -199,24 +197,6 @@
 #include "PERI_NEUTRONS.h"
 #include "PERI_NEUTRON_NPU.h"
 #include "PERI_NOC_BLK_CTRL_NOCMIX.h"
-#include "PERI_NOC_CMU.h"
-#include "PERI_NOC_GICA.h"
-#include "PERI_NOC_GICP.h"
-#include "PERI_NOC_GICRLPI0.h"
-#include "PERI_NOC_GICRLPI1.h"
-#include "PERI_NOC_GICRLPI2.h"
-#include "PERI_NOC_GICRLPI3.h"
-#include "PERI_NOC_GICRLPI4.h"
-#include "PERI_NOC_GICRLPI5.h"
-#include "PERI_NOC_GICRSGI0.h"
-#include "PERI_NOC_GICRSGI1.h"
-#include "PERI_NOC_GICRSGI2.h"
-#include "PERI_NOC_GICRSGI3.h"
-#include "PERI_NOC_GICRSGI4.h"
-#include "PERI_NOC_GICRSGI5.h"
-#include "PERI_NOC_GICT.h"
-#include "PERI_NOC_GITS0.h"
-#include "PERI_NOC_GITS0TRANSLATER.h"
 #include "PERI_NOC_LSTCU.h"
 #include "PERI_NOC_SRAMCTL.h"
 #include "PERI_NOC_TCU.h"

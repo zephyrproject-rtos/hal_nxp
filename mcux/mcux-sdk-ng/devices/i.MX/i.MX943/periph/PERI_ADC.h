@@ -1,10 +1,220 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX94398AVKE_ca55
-**                          MIMX94398AVKE_cm33_core0
-**                          MIMX94398AVKE_cm33_core1
-**                          MIMX94398AVKE_cm7_core0
-**                          MIMX94398AVKE_cm7_core1
+**     Processors:          MIMX94115CVMM_ca55
+**                          MIMX94115CVMM_cm33_core0
+**                          MIMX94115CVMM_cm33_core1
+**                          MIMX94115CVMM_cm7_core0
+**                          MIMX94115CVMM_cm7_core1
+**                          MIMX94115XVKM_ca55
+**                          MIMX94115XVKM_cm33_core0
+**                          MIMX94115XVKM_cm33_core1
+**                          MIMX94115XVKM_cm7_core0
+**                          MIMX94115XVKM_cm7_core1
+**                          MIMX94115XVMM_ca55
+**                          MIMX94115XVMM_cm33_core0
+**                          MIMX94115XVMM_cm33_core1
+**                          MIMX94115XVMM_cm7_core0
+**                          MIMX94115XVMM_cm7_core1
+**                          MIMX94135CVMM_ca55
+**                          MIMX94135CVMM_cm33_core0
+**                          MIMX94135CVMM_cm33_core1
+**                          MIMX94135CVMM_cm7_core0
+**                          MIMX94135CVMM_cm7_core1
+**                          MIMX94135XVKM_ca55
+**                          MIMX94135XVKM_cm33_core0
+**                          MIMX94135XVKM_cm33_core1
+**                          MIMX94135XVKM_cm7_core0
+**                          MIMX94135XVKM_cm7_core1
+**                          MIMX94135XVMM_ca55
+**                          MIMX94135XVMM_cm33_core0
+**                          MIMX94135XVMM_cm33_core1
+**                          MIMX94135XVMM_cm7_core0
+**                          MIMX94135XVMM_cm7_core1
+**                          MIMX94155CVMM_ca55
+**                          MIMX94155CVMM_cm33_core0
+**                          MIMX94155CVMM_cm33_core1
+**                          MIMX94155CVMM_cm7_core0
+**                          MIMX94155CVMM_cm7_core1
+**                          MIMX94155XVKM_ca55
+**                          MIMX94155XVKM_cm33_core0
+**                          MIMX94155XVKM_cm33_core1
+**                          MIMX94155XVKM_cm7_core0
+**                          MIMX94155XVKM_cm7_core1
+**                          MIMX94155XVMM_ca55
+**                          MIMX94155XVMM_cm33_core0
+**                          MIMX94155XVMM_cm33_core1
+**                          MIMX94155XVMM_cm7_core0
+**                          MIMX94155XVMM_cm7_core1
+**                          MIMX94175CVMM_ca55
+**                          MIMX94175CVMM_cm33_core0
+**                          MIMX94175CVMM_cm33_core1
+**                          MIMX94175CVMM_cm7_core0
+**                          MIMX94175CVMM_cm7_core1
+**                          MIMX94175XVKM_ca55
+**                          MIMX94175XVKM_cm33_core0
+**                          MIMX94175XVKM_cm33_core1
+**                          MIMX94175XVKM_cm7_core0
+**                          MIMX94175XVKM_cm7_core1
+**                          MIMX94175XVMM_ca55
+**                          MIMX94175XVMM_cm33_core0
+**                          MIMX94175XVMM_cm33_core1
+**                          MIMX94175XVMM_cm7_core0
+**                          MIMX94175XVMM_cm7_core1
+**                          MIMX94185CVMM_ca55
+**                          MIMX94185CVMM_cm33_core0
+**                          MIMX94185CVMM_cm33_core1
+**                          MIMX94185CVMM_cm7_core0
+**                          MIMX94185CVMM_cm7_core1
+**                          MIMX94214CVMM_ca55
+**                          MIMX94214CVMM_cm33_core0
+**                          MIMX94214CVMM_cm33_core1
+**                          MIMX94214CVMM_cm7_core0
+**                          MIMX94214CVMM_cm7_core1
+**                          MIMX94214XVKM_ca55
+**                          MIMX94214XVKM_cm33_core0
+**                          MIMX94214XVKM_cm33_core1
+**                          MIMX94214XVKM_cm7_core0
+**                          MIMX94214XVKM_cm7_core1
+**                          MIMX94214XVMM_ca55
+**                          MIMX94214XVMM_cm33_core0
+**                          MIMX94214XVMM_cm33_core1
+**                          MIMX94214XVMM_cm7_core0
+**                          MIMX94214XVMM_cm7_core1
+**                          MIMX94215CVMM_ca55
+**                          MIMX94215CVMM_cm33_core0
+**                          MIMX94215CVMM_cm33_core1
+**                          MIMX94215CVMM_cm7_core0
+**                          MIMX94215CVMM_cm7_core1
+**                          MIMX94215XVKM_ca55
+**                          MIMX94215XVKM_cm33_core0
+**                          MIMX94215XVKM_cm33_core1
+**                          MIMX94215XVKM_cm7_core0
+**                          MIMX94215XVKM_cm7_core1
+**                          MIMX94215XVMM_ca55
+**                          MIMX94215XVMM_cm33_core0
+**                          MIMX94215XVMM_cm33_core1
+**                          MIMX94215XVMM_cm7_core0
+**                          MIMX94215XVMM_cm7_core1
+**                          MIMX94235CVMM_ca55
+**                          MIMX94235CVMM_cm33_core0
+**                          MIMX94235CVMM_cm33_core1
+**                          MIMX94235CVMM_cm7_core0
+**                          MIMX94235CVMM_cm7_core1
+**                          MIMX94255CVMM_ca55
+**                          MIMX94255CVMM_cm33_core0
+**                          MIMX94255CVMM_cm33_core1
+**                          MIMX94255CVMM_cm7_core0
+**                          MIMX94255CVMM_cm7_core1
+**                          MIMX94275CVMM_ca55
+**                          MIMX94275CVMM_cm33_core0
+**                          MIMX94275CVMM_cm33_core1
+**                          MIMX94275CVMM_cm7_core0
+**                          MIMX94275CVMM_cm7_core1
+**                          MIMX94285CVMM_ca55
+**                          MIMX94285CVMM_cm33_core0
+**                          MIMX94285CVMM_cm33_core1
+**                          MIMX94285CVMM_cm7_core0
+**                          MIMX94285CVMM_cm7_core1
+**                          MIMX94294XVKM_ca55
+**                          MIMX94294XVKM_cm33_core0
+**                          MIMX94294XVKM_cm33_core1
+**                          MIMX94294XVKM_cm7_core0
+**                          MIMX94294XVKM_cm7_core1
+**                          MIMX94294XVMM_ca55
+**                          MIMX94294XVMM_cm33_core0
+**                          MIMX94294XVMM_cm33_core1
+**                          MIMX94294XVMM_cm7_core0
+**                          MIMX94294XVMM_cm7_core1
+**                          MIMX94295AVKM_ca55
+**                          MIMX94295AVKM_cm33_core0
+**                          MIMX94295AVKM_cm33_core1
+**                          MIMX94295AVKM_cm7_core0
+**                          MIMX94295AVKM_cm7_core1
+**                          MIMX94295AVMJ_ca55
+**                          MIMX94295AVMJ_cm33_core0
+**                          MIMX94295AVMJ_cm33_core1
+**                          MIMX94295AVMJ_cm7_core0
+**                          MIMX94295AVMJ_cm7_core1
+**                          MIMX94295CVMJ_ca55
+**                          MIMX94295CVMJ_cm33_core0
+**                          MIMX94295CVMJ_cm33_core1
+**                          MIMX94295CVMJ_cm7_core0
+**                          MIMX94295CVMJ_cm7_core1
+**                          MIMX94295XVKJ_ca55
+**                          MIMX94295XVKJ_cm33_core0
+**                          MIMX94295XVKJ_cm33_core1
+**                          MIMX94295XVKJ_cm7_core0
+**                          MIMX94295XVKJ_cm7_core1
+**                          MIMX94295XVMM_ca55
+**                          MIMX94295XVMM_cm33_core0
+**                          MIMX94295XVMM_cm33_core1
+**                          MIMX94295XVMM_cm7_core0
+**                          MIMX94295XVMM_cm7_core1
+**                          MIMX94316XVMM_ca55
+**                          MIMX94316XVMM_cm33_core0
+**                          MIMX94316XVMM_cm33_core1
+**                          MIMX94316XVMM_cm7_core0
+**                          MIMX94316XVMM_cm7_core1
+**                          MIMX94318XVMM_ca55
+**                          MIMX94318XVMM_cm33_core0
+**                          MIMX94318XVMM_cm33_core1
+**                          MIMX94318XVMM_cm7_core0
+**                          MIMX94318XVMM_cm7_core1
+**                          MIMX94376AVKM_ca55
+**                          MIMX94376AVKM_cm33_core0
+**                          MIMX94376AVKM_cm33_core1
+**                          MIMX94376AVKM_cm7_core0
+**                          MIMX94376AVKM_cm7_core1
+**                          MIMX94378AVKM_ca55
+**                          MIMX94378AVKM_cm33_core0
+**                          MIMX94378AVKM_cm33_core1
+**                          MIMX94378AVKM_cm7_core0
+**                          MIMX94378AVKM_cm7_core1
+**                          MIMX94386AVKM_ca55
+**                          MIMX94386AVKM_cm33_core0
+**                          MIMX94386AVKM_cm33_core1
+**                          MIMX94386AVKM_cm7_core0
+**                          MIMX94386AVKM_cm7_core1
+**                          MIMX94386XVMM_ca55
+**                          MIMX94386XVMM_cm33_core0
+**                          MIMX94386XVMM_cm33_core1
+**                          MIMX94386XVMM_cm7_core0
+**                          MIMX94386XVMM_cm7_core1
+**                          MIMX94388AVKM_ca55
+**                          MIMX94388AVKM_cm33_core0
+**                          MIMX94388AVKM_cm33_core1
+**                          MIMX94388AVKM_cm7_core0
+**                          MIMX94388AVKM_cm7_core1
+**                          MIMX94388AVMM_ca55
+**                          MIMX94388AVMM_cm33_core0
+**                          MIMX94388AVMM_cm33_core1
+**                          MIMX94388AVMM_cm7_core0
+**                          MIMX94388AVMM_cm7_core1
+**                          MIMX94388XVMM_ca55
+**                          MIMX94388XVMM_cm33_core0
+**                          MIMX94388XVMM_cm33_core1
+**                          MIMX94388XVMM_cm7_core0
+**                          MIMX94388XVMM_cm7_core1
+**                          MIMX94396AVKJ_ca55
+**                          MIMX94396AVKJ_cm33_core0
+**                          MIMX94396AVKJ_cm33_core1
+**                          MIMX94396AVKJ_cm7_core0
+**                          MIMX94396AVKJ_cm7_core1
+**                          MIMX94396AVKM_ca55
+**                          MIMX94396AVKM_cm33_core0
+**                          MIMX94396AVKM_cm33_core1
+**                          MIMX94396AVKM_cm7_core0
+**                          MIMX94396AVKM_cm7_core1
+**                          MIMX94396AVMJ_ca55
+**                          MIMX94396AVMJ_cm33_core0
+**                          MIMX94396AVMJ_cm33_core1
+**                          MIMX94396AVMJ_cm7_core0
+**                          MIMX94396AVMJ_cm7_core1
+**                          MIMX94396XVMM_ca55
+**                          MIMX94396XVMM_cm33_core0
+**                          MIMX94396XVMM_cm33_core1
+**                          MIMX94396XVMM_cm7_core0
+**                          MIMX94396XVMM_cm7_core1
 **                          MIMX94398AVKJ_ca55
 **                          MIMX94398AVKJ_cm33_core0
 **                          MIMX94398AVKJ_cm33_core1
@@ -15,11 +225,6 @@
 **                          MIMX94398AVKM_cm33_core1
 **                          MIMX94398AVKM_cm7_core0
 **                          MIMX94398AVKM_cm7_core1
-**                          MIMX94398AVME_ca55
-**                          MIMX94398AVME_cm33_core0
-**                          MIMX94398AVME_cm33_core1
-**                          MIMX94398AVME_cm7_core0
-**                          MIMX94398AVME_cm7_core1
 **                          MIMX94398AVMJ_ca55
 **                          MIMX94398AVMJ_cm33_core0
 **                          MIMX94398AVMJ_cm33_core1
@@ -30,105 +235,30 @@
 **                          MIMX94398AVMM_cm33_core1
 **                          MIMX94398AVMM_cm7_core0
 **                          MIMX94398AVMM_cm7_core1
-**                          MIMX94398CVKE_ca55
-**                          MIMX94398CVKE_cm33_core0
-**                          MIMX94398CVKE_cm33_core1
-**                          MIMX94398CVKE_cm7_core0
-**                          MIMX94398CVKE_cm7_core1
-**                          MIMX94398CVKJ_ca55
-**                          MIMX94398CVKJ_cm33_core0
-**                          MIMX94398CVKJ_cm33_core1
-**                          MIMX94398CVKJ_cm7_core0
-**                          MIMX94398CVKJ_cm7_core1
-**                          MIMX94398CVKM_ca55
-**                          MIMX94398CVKM_cm33_core0
-**                          MIMX94398CVKM_cm33_core1
-**                          MIMX94398CVKM_cm7_core0
-**                          MIMX94398CVKM_cm7_core1
-**                          MIMX94398CVME_ca55
-**                          MIMX94398CVME_cm33_core0
-**                          MIMX94398CVME_cm33_core1
-**                          MIMX94398CVME_cm7_core0
-**                          MIMX94398CVME_cm7_core1
-**                          MIMX94398CVMJ_ca55
-**                          MIMX94398CVMJ_cm33_core0
-**                          MIMX94398CVMJ_cm33_core1
-**                          MIMX94398CVMJ_cm7_core0
-**                          MIMX94398CVMJ_cm7_core1
-**                          MIMX94398CVMM_ca55
-**                          MIMX94398CVMM_cm33_core0
-**                          MIMX94398CVMM_cm33_core1
-**                          MIMX94398CVMM_cm7_core0
-**                          MIMX94398CVMM_cm7_core1
-**                          MIMX94398DVKE_ca55
-**                          MIMX94398DVKE_cm33_core0
-**                          MIMX94398DVKE_cm33_core1
-**                          MIMX94398DVKE_cm7_core0
-**                          MIMX94398DVKE_cm7_core1
-**                          MIMX94398DVKJ_ca55
-**                          MIMX94398DVKJ_cm33_core0
-**                          MIMX94398DVKJ_cm33_core1
-**                          MIMX94398DVKJ_cm7_core0
-**                          MIMX94398DVKJ_cm7_core1
 **                          MIMX94398DVKM_ca55
 **                          MIMX94398DVKM_cm33_core0
 **                          MIMX94398DVKM_cm33_core1
 **                          MIMX94398DVKM_cm7_core0
 **                          MIMX94398DVKM_cm7_core1
-**                          MIMX94398DVME_ca55
-**                          MIMX94398DVME_cm33_core0
-**                          MIMX94398DVME_cm33_core1
-**                          MIMX94398DVME_cm7_core0
-**                          MIMX94398DVME_cm7_core1
-**                          MIMX94398DVMJ_ca55
-**                          MIMX94398DVMJ_cm33_core0
-**                          MIMX94398DVMJ_cm33_core1
-**                          MIMX94398DVMJ_cm7_core0
-**                          MIMX94398DVMJ_cm7_core1
 **                          MIMX94398DVMM_ca55
 **                          MIMX94398DVMM_cm33_core0
 **                          MIMX94398DVMM_cm33_core1
 **                          MIMX94398DVMM_cm7_core0
 **                          MIMX94398DVMM_cm7_core1
-**                          MIMX94398XVKE_ca55
-**                          MIMX94398XVKE_cm33_core0
-**                          MIMX94398XVKE_cm33_core1
-**                          MIMX94398XVKE_cm7_core0
-**                          MIMX94398XVKE_cm7_core1
-**                          MIMX94398XVKJ_ca55
-**                          MIMX94398XVKJ_cm33_core0
-**                          MIMX94398XVKJ_cm33_core1
-**                          MIMX94398XVKJ_cm7_core0
-**                          MIMX94398XVKJ_cm7_core1
-**                          MIMX94398XVKM_ca55
-**                          MIMX94398XVKM_cm33_core0
-**                          MIMX94398XVKM_cm33_core1
-**                          MIMX94398XVKM_cm7_core0
-**                          MIMX94398XVKM_cm7_core1
-**                          MIMX94398XVME_ca55
-**                          MIMX94398XVME_cm33_core0
-**                          MIMX94398XVME_cm33_core1
-**                          MIMX94398XVME_cm7_core0
-**                          MIMX94398XVME_cm7_core1
-**                          MIMX94398XVMJ_ca55
-**                          MIMX94398XVMJ_cm33_core0
-**                          MIMX94398XVMJ_cm33_core1
-**                          MIMX94398XVMJ_cm7_core0
-**                          MIMX94398XVMJ_cm7_core1
 **                          MIMX94398XVMM_ca55
 **                          MIMX94398XVMM_cm33_core0
 **                          MIMX94398XVMM_cm33_core1
 **                          MIMX94398XVMM_cm7_core0
 **                          MIMX94398XVMM_cm7_core1
 **
-**     Version:             rev. 1.0, 2023-11-01
-**     Build:               b250109
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b260804
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ADC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -157,31 +287,234 @@
 **         +---------------------------------------------------------------------+
 **         | ca55_core3 | a55, ca55, a55_3, ca55_3                               |
 **         +---------------------------------------------------------------------+
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file ADC.h
- * @version 1.0
- * @date 2023-11-01
+ * @file PERI_ADC.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for ADC
  *
  * CMSIS Peripheral Access Layer for ADC
  */
 
-#if !defined(ADC_H_)
-#define ADC_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_ADC_H_)
+#define PERI_ADC_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX94398AVKE_ca55) || defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVME_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398CVKE_ca55) || defined(CPU_MIMX94398CVKJ_ca55) || defined(CPU_MIMX94398CVKM_ca55) || defined(CPU_MIMX94398CVME_ca55) || defined(CPU_MIMX94398CVMJ_ca55) || defined(CPU_MIMX94398CVMM_ca55) || defined(CPU_MIMX94398DVKE_ca55) || defined(CPU_MIMX94398DVKJ_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVME_ca55) || defined(CPU_MIMX94398DVMJ_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVKE_ca55) || defined(CPU_MIMX94398XVKJ_ca55) || defined(CPU_MIMX94398XVKM_ca55) || defined(CPU_MIMX94398XVME_ca55) || defined(CPU_MIMX94398XVMJ_ca55) || defined(CPU_MIMX94398XVMM_ca55))
+#if (defined(CPU_MIMX94115CVMM_ca55) || defined(CPU_MIMX94115XVKM_ca55) || defined(CPU_MIMX94115XVMM_ca55))
+#include "MIMX94115_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm33_core0) || defined(CPU_MIMX94115XVKM_cm33_core0) || defined(CPU_MIMX94115XVMM_cm33_core0))
+#include "MIMX94115_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm33_core1) || defined(CPU_MIMX94115XVKM_cm33_core1) || defined(CPU_MIMX94115XVMM_cm33_core1))
+#include "MIMX94115_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm7_core0) || defined(CPU_MIMX94115XVKM_cm7_core0) || defined(CPU_MIMX94115XVMM_cm7_core0))
+#include "MIMX94115_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94115CVMM_cm7_core1) || defined(CPU_MIMX94115XVKM_cm7_core1) || defined(CPU_MIMX94115XVMM_cm7_core1))
+#include "MIMX94115_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_ca55) || defined(CPU_MIMX94135XVKM_ca55) || defined(CPU_MIMX94135XVMM_ca55))
+#include "MIMX94135_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm33_core0) || defined(CPU_MIMX94135XVKM_cm33_core0) || defined(CPU_MIMX94135XVMM_cm33_core0))
+#include "MIMX94135_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm33_core1) || defined(CPU_MIMX94135XVKM_cm33_core1) || defined(CPU_MIMX94135XVMM_cm33_core1))
+#include "MIMX94135_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm7_core0) || defined(CPU_MIMX94135XVKM_cm7_core0) || defined(CPU_MIMX94135XVMM_cm7_core0))
+#include "MIMX94135_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94135CVMM_cm7_core1) || defined(CPU_MIMX94135XVKM_cm7_core1) || defined(CPU_MIMX94135XVMM_cm7_core1))
+#include "MIMX94135_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_ca55) || defined(CPU_MIMX94155XVKM_ca55) || defined(CPU_MIMX94155XVMM_ca55))
+#include "MIMX94155_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm33_core0) || defined(CPU_MIMX94155XVKM_cm33_core0) || defined(CPU_MIMX94155XVMM_cm33_core0))
+#include "MIMX94155_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm33_core1) || defined(CPU_MIMX94155XVKM_cm33_core1) || defined(CPU_MIMX94155XVMM_cm33_core1))
+#include "MIMX94155_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm7_core0) || defined(CPU_MIMX94155XVKM_cm7_core0) || defined(CPU_MIMX94155XVMM_cm7_core0))
+#include "MIMX94155_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94155CVMM_cm7_core1) || defined(CPU_MIMX94155XVKM_cm7_core1) || defined(CPU_MIMX94155XVMM_cm7_core1))
+#include "MIMX94155_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_ca55) || defined(CPU_MIMX94175XVKM_ca55) || defined(CPU_MIMX94175XVMM_ca55))
+#include "MIMX94175_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm33_core0) || defined(CPU_MIMX94175XVKM_cm33_core0) || defined(CPU_MIMX94175XVMM_cm33_core0))
+#include "MIMX94175_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm33_core1) || defined(CPU_MIMX94175XVKM_cm33_core1) || defined(CPU_MIMX94175XVMM_cm33_core1))
+#include "MIMX94175_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm7_core0) || defined(CPU_MIMX94175XVKM_cm7_core0) || defined(CPU_MIMX94175XVMM_cm7_core0))
+#include "MIMX94175_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94175CVMM_cm7_core1) || defined(CPU_MIMX94175XVKM_cm7_core1) || defined(CPU_MIMX94175XVMM_cm7_core1))
+#include "MIMX94175_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_ca55))
+#include "MIMX94185_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm33_core0))
+#include "MIMX94185_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm33_core1))
+#include "MIMX94185_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm7_core0))
+#include "MIMX94185_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94185CVMM_cm7_core1))
+#include "MIMX94185_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_ca55) || defined(CPU_MIMX94214XVKM_ca55) || defined(CPU_MIMX94214XVMM_ca55))
+#include "MIMX94214_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm33_core0) || defined(CPU_MIMX94214XVKM_cm33_core0) || defined(CPU_MIMX94214XVMM_cm33_core0))
+#include "MIMX94214_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm33_core1) || defined(CPU_MIMX94214XVKM_cm33_core1) || defined(CPU_MIMX94214XVMM_cm33_core1))
+#include "MIMX94214_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm7_core0) || defined(CPU_MIMX94214XVKM_cm7_core0) || defined(CPU_MIMX94214XVMM_cm7_core0))
+#include "MIMX94214_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94214CVMM_cm7_core1) || defined(CPU_MIMX94214XVKM_cm7_core1) || defined(CPU_MIMX94214XVMM_cm7_core1))
+#include "MIMX94214_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_ca55) || defined(CPU_MIMX94215XVKM_ca55) || defined(CPU_MIMX94215XVMM_ca55))
+#include "MIMX94215_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm33_core0) || defined(CPU_MIMX94215XVKM_cm33_core0) || defined(CPU_MIMX94215XVMM_cm33_core0))
+#include "MIMX94215_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm33_core1) || defined(CPU_MIMX94215XVKM_cm33_core1) || defined(CPU_MIMX94215XVMM_cm33_core1))
+#include "MIMX94215_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm7_core0) || defined(CPU_MIMX94215XVKM_cm7_core0) || defined(CPU_MIMX94215XVMM_cm7_core0))
+#include "MIMX94215_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94215CVMM_cm7_core1) || defined(CPU_MIMX94215XVKM_cm7_core1) || defined(CPU_MIMX94215XVMM_cm7_core1))
+#include "MIMX94215_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_ca55))
+#include "MIMX94235_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm33_core0))
+#include "MIMX94235_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm33_core1))
+#include "MIMX94235_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm7_core0))
+#include "MIMX94235_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94235CVMM_cm7_core1))
+#include "MIMX94235_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_ca55))
+#include "MIMX94255_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm33_core0))
+#include "MIMX94255_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm33_core1))
+#include "MIMX94255_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm7_core0))
+#include "MIMX94255_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94255CVMM_cm7_core1))
+#include "MIMX94255_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_ca55))
+#include "MIMX94275_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm33_core0))
+#include "MIMX94275_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm33_core1))
+#include "MIMX94275_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm7_core0))
+#include "MIMX94275_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94275CVMM_cm7_core1))
+#include "MIMX94275_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_ca55))
+#include "MIMX94285_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm33_core0))
+#include "MIMX94285_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm33_core1))
+#include "MIMX94285_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm7_core0))
+#include "MIMX94285_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94285CVMM_cm7_core1))
+#include "MIMX94285_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_ca55) || defined(CPU_MIMX94294XVMM_ca55))
+#include "MIMX94294_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm33_core0) || defined(CPU_MIMX94294XVMM_cm33_core0))
+#include "MIMX94294_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm33_core1) || defined(CPU_MIMX94294XVMM_cm33_core1))
+#include "MIMX94294_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm7_core0) || defined(CPU_MIMX94294XVMM_cm7_core0))
+#include "MIMX94294_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94294XVKM_cm7_core1) || defined(CPU_MIMX94294XVMM_cm7_core1))
+#include "MIMX94294_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_ca55) || defined(CPU_MIMX94295AVMJ_ca55) || defined(CPU_MIMX94295CVMJ_ca55) || defined(CPU_MIMX94295XVKJ_ca55) || defined(CPU_MIMX94295XVMM_ca55))
+#include "MIMX94295_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm33_core0) || defined(CPU_MIMX94295AVMJ_cm33_core0) || defined(CPU_MIMX94295CVMJ_cm33_core0) || defined(CPU_MIMX94295XVKJ_cm33_core0) || defined(CPU_MIMX94295XVMM_cm33_core0))
+#include "MIMX94295_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm33_core1) || defined(CPU_MIMX94295AVMJ_cm33_core1) || defined(CPU_MIMX94295CVMJ_cm33_core1) || defined(CPU_MIMX94295XVKJ_cm33_core1) || defined(CPU_MIMX94295XVMM_cm33_core1))
+#include "MIMX94295_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm7_core0) || defined(CPU_MIMX94295AVMJ_cm7_core0) || defined(CPU_MIMX94295CVMJ_cm7_core0) || defined(CPU_MIMX94295XVKJ_cm7_core0) || defined(CPU_MIMX94295XVMM_cm7_core0))
+#include "MIMX94295_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94295AVKM_cm7_core1) || defined(CPU_MIMX94295AVMJ_cm7_core1) || defined(CPU_MIMX94295CVMJ_cm7_core1) || defined(CPU_MIMX94295XVKJ_cm7_core1) || defined(CPU_MIMX94295XVMM_cm7_core1))
+#include "MIMX94295_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_ca55))
+#include "MIMX94316_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm33_core0))
+#include "MIMX94316_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm33_core1))
+#include "MIMX94316_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm7_core0))
+#include "MIMX94316_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94316XVMM_cm7_core1))
+#include "MIMX94316_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_ca55))
+#include "MIMX94318_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm33_core0))
+#include "MIMX94318_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm33_core1))
+#include "MIMX94318_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm7_core0))
+#include "MIMX94318_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94318XVMM_cm7_core1))
+#include "MIMX94318_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_ca55))
+#include "MIMX94376_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm33_core0))
+#include "MIMX94376_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm33_core1))
+#include "MIMX94376_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm7_core0))
+#include "MIMX94376_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94376AVKM_cm7_core1))
+#include "MIMX94376_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_ca55))
+#include "MIMX94378_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm33_core0))
+#include "MIMX94378_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm33_core1))
+#include "MIMX94378_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm7_core0))
+#include "MIMX94378_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94378AVKM_cm7_core1))
+#include "MIMX94378_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_ca55) || defined(CPU_MIMX94386XVMM_ca55))
+#include "MIMX94386_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm33_core0) || defined(CPU_MIMX94386XVMM_cm33_core0))
+#include "MIMX94386_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm33_core1) || defined(CPU_MIMX94386XVMM_cm33_core1))
+#include "MIMX94386_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm7_core0) || defined(CPU_MIMX94386XVMM_cm7_core0))
+#include "MIMX94386_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94386AVKM_cm7_core1) || defined(CPU_MIMX94386XVMM_cm7_core1))
+#include "MIMX94386_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_ca55) || defined(CPU_MIMX94388AVMM_ca55) || defined(CPU_MIMX94388XVMM_ca55))
+#include "MIMX94388_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm33_core0) || defined(CPU_MIMX94388AVMM_cm33_core0) || defined(CPU_MIMX94388XVMM_cm33_core0))
+#include "MIMX94388_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm33_core1) || defined(CPU_MIMX94388AVMM_cm33_core1) || defined(CPU_MIMX94388XVMM_cm33_core1))
+#include "MIMX94388_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm7_core0) || defined(CPU_MIMX94388AVMM_cm7_core0) || defined(CPU_MIMX94388XVMM_cm7_core0))
+#include "MIMX94388_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94388AVKM_cm7_core1) || defined(CPU_MIMX94388AVMM_cm7_core1) || defined(CPU_MIMX94388XVMM_cm7_core1))
+#include "MIMX94388_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_ca55) || defined(CPU_MIMX94396AVKM_ca55) || defined(CPU_MIMX94396AVMJ_ca55) || defined(CPU_MIMX94396XVMM_ca55))
+#include "MIMX94396_ca55_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm33_core0) || defined(CPU_MIMX94396AVKM_cm33_core0) || defined(CPU_MIMX94396AVMJ_cm33_core0) || defined(CPU_MIMX94396XVMM_cm33_core0))
+#include "MIMX94396_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm33_core1) || defined(CPU_MIMX94396AVKM_cm33_core1) || defined(CPU_MIMX94396AVMJ_cm33_core1) || defined(CPU_MIMX94396XVMM_cm33_core1))
+#include "MIMX94396_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm7_core0) || defined(CPU_MIMX94396AVKM_cm7_core0) || defined(CPU_MIMX94396AVMJ_cm7_core0) || defined(CPU_MIMX94396XVMM_cm7_core0))
+#include "MIMX94396_cm7_core0_COMMON.h"
+#elif (defined(CPU_MIMX94396AVKJ_cm7_core1) || defined(CPU_MIMX94396AVKM_cm7_core1) || defined(CPU_MIMX94396AVMJ_cm7_core1) || defined(CPU_MIMX94396XVMM_cm7_core1))
+#include "MIMX94396_cm7_core1_COMMON.h"
+#elif (defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVMM_ca55))
 #include "MIMX94398_ca55_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm33_core0) || defined(CPU_MIMX94398AVKJ_cm33_core0) || defined(CPU_MIMX94398AVKM_cm33_core0) || defined(CPU_MIMX94398AVME_cm33_core0) || defined(CPU_MIMX94398AVMJ_cm33_core0) || defined(CPU_MIMX94398AVMM_cm33_core0) || defined(CPU_MIMX94398CVKE_cm33_core0) || defined(CPU_MIMX94398CVKJ_cm33_core0) || defined(CPU_MIMX94398CVKM_cm33_core0) || defined(CPU_MIMX94398CVME_cm33_core0) || defined(CPU_MIMX94398CVMJ_cm33_core0) || defined(CPU_MIMX94398CVMM_cm33_core0) || defined(CPU_MIMX94398DVKE_cm33_core0) || defined(CPU_MIMX94398DVKJ_cm33_core0) || defined(CPU_MIMX94398DVKM_cm33_core0) || defined(CPU_MIMX94398DVME_cm33_core0) || defined(CPU_MIMX94398DVMJ_cm33_core0) || defined(CPU_MIMX94398DVMM_cm33_core0) || defined(CPU_MIMX94398XVKE_cm33_core0) || defined(CPU_MIMX94398XVKJ_cm33_core0) || defined(CPU_MIMX94398XVKM_cm33_core0) || defined(CPU_MIMX94398XVME_cm33_core0) || defined(CPU_MIMX94398XVMJ_cm33_core0) || defined(CPU_MIMX94398XVMM_cm33_core0))
+#elif (defined(CPU_MIMX94398AVKJ_cm33_core0) || defined(CPU_MIMX94398AVKM_cm33_core0) || defined(CPU_MIMX94398AVMJ_cm33_core0) || defined(CPU_MIMX94398AVMM_cm33_core0) || defined(CPU_MIMX94398DVKM_cm33_core0) || defined(CPU_MIMX94398DVMM_cm33_core0) || defined(CPU_MIMX94398XVMM_cm33_core0))
 #include "MIMX94398_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm33_core1) || defined(CPU_MIMX94398AVKJ_cm33_core1) || defined(CPU_MIMX94398AVKM_cm33_core1) || defined(CPU_MIMX94398AVME_cm33_core1) || defined(CPU_MIMX94398AVMJ_cm33_core1) || defined(CPU_MIMX94398AVMM_cm33_core1) || defined(CPU_MIMX94398CVKE_cm33_core1) || defined(CPU_MIMX94398CVKJ_cm33_core1) || defined(CPU_MIMX94398CVKM_cm33_core1) || defined(CPU_MIMX94398CVME_cm33_core1) || defined(CPU_MIMX94398CVMJ_cm33_core1) || defined(CPU_MIMX94398CVMM_cm33_core1) || defined(CPU_MIMX94398DVKE_cm33_core1) || defined(CPU_MIMX94398DVKJ_cm33_core1) || defined(CPU_MIMX94398DVKM_cm33_core1) || defined(CPU_MIMX94398DVME_cm33_core1) || defined(CPU_MIMX94398DVMJ_cm33_core1) || defined(CPU_MIMX94398DVMM_cm33_core1) || defined(CPU_MIMX94398XVKE_cm33_core1) || defined(CPU_MIMX94398XVKJ_cm33_core1) || defined(CPU_MIMX94398XVKM_cm33_core1) || defined(CPU_MIMX94398XVME_cm33_core1) || defined(CPU_MIMX94398XVMJ_cm33_core1) || defined(CPU_MIMX94398XVMM_cm33_core1))
+#elif (defined(CPU_MIMX94398AVKJ_cm33_core1) || defined(CPU_MIMX94398AVKM_cm33_core1) || defined(CPU_MIMX94398AVMJ_cm33_core1) || defined(CPU_MIMX94398AVMM_cm33_core1) || defined(CPU_MIMX94398DVKM_cm33_core1) || defined(CPU_MIMX94398DVMM_cm33_core1) || defined(CPU_MIMX94398XVMM_cm33_core1))
 #include "MIMX94398_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm7_core0) || defined(CPU_MIMX94398AVKJ_cm7_core0) || defined(CPU_MIMX94398AVKM_cm7_core0) || defined(CPU_MIMX94398AVME_cm7_core0) || defined(CPU_MIMX94398AVMJ_cm7_core0) || defined(CPU_MIMX94398AVMM_cm7_core0) || defined(CPU_MIMX94398CVKE_cm7_core0) || defined(CPU_MIMX94398CVKJ_cm7_core0) || defined(CPU_MIMX94398CVKM_cm7_core0) || defined(CPU_MIMX94398CVME_cm7_core0) || defined(CPU_MIMX94398CVMJ_cm7_core0) || defined(CPU_MIMX94398CVMM_cm7_core0) || defined(CPU_MIMX94398DVKE_cm7_core0) || defined(CPU_MIMX94398DVKJ_cm7_core0) || defined(CPU_MIMX94398DVKM_cm7_core0) || defined(CPU_MIMX94398DVME_cm7_core0) || defined(CPU_MIMX94398DVMJ_cm7_core0) || defined(CPU_MIMX94398DVMM_cm7_core0) || defined(CPU_MIMX94398XVKE_cm7_core0) || defined(CPU_MIMX94398XVKJ_cm7_core0) || defined(CPU_MIMX94398XVKM_cm7_core0) || defined(CPU_MIMX94398XVME_cm7_core0) || defined(CPU_MIMX94398XVMJ_cm7_core0) || defined(CPU_MIMX94398XVMM_cm7_core0))
+#elif (defined(CPU_MIMX94398AVKJ_cm7_core0) || defined(CPU_MIMX94398AVKM_cm7_core0) || defined(CPU_MIMX94398AVMJ_cm7_core0) || defined(CPU_MIMX94398AVMM_cm7_core0) || defined(CPU_MIMX94398DVKM_cm7_core0) || defined(CPU_MIMX94398DVMM_cm7_core0) || defined(CPU_MIMX94398XVMM_cm7_core0))
 #include "MIMX94398_cm7_core0_COMMON.h"
-#elif (defined(CPU_MIMX94398AVKE_cm7_core1) || defined(CPU_MIMX94398AVKJ_cm7_core1) || defined(CPU_MIMX94398AVKM_cm7_core1) || defined(CPU_MIMX94398AVME_cm7_core1) || defined(CPU_MIMX94398AVMJ_cm7_core1) || defined(CPU_MIMX94398AVMM_cm7_core1) || defined(CPU_MIMX94398CVKE_cm7_core1) || defined(CPU_MIMX94398CVKJ_cm7_core1) || defined(CPU_MIMX94398CVKM_cm7_core1) || defined(CPU_MIMX94398CVME_cm7_core1) || defined(CPU_MIMX94398CVMJ_cm7_core1) || defined(CPU_MIMX94398CVMM_cm7_core1) || defined(CPU_MIMX94398DVKE_cm7_core1) || defined(CPU_MIMX94398DVKJ_cm7_core1) || defined(CPU_MIMX94398DVKM_cm7_core1) || defined(CPU_MIMX94398DVME_cm7_core1) || defined(CPU_MIMX94398DVMJ_cm7_core1) || defined(CPU_MIMX94398DVMM_cm7_core1) || defined(CPU_MIMX94398XVKE_cm7_core1) || defined(CPU_MIMX94398XVKJ_cm7_core1) || defined(CPU_MIMX94398XVKM_cm7_core1) || defined(CPU_MIMX94398XVME_cm7_core1) || defined(CPU_MIMX94398XVMJ_cm7_core1) || defined(CPU_MIMX94398XVMM_cm7_core1))
+#elif (defined(CPU_MIMX94398AVKJ_cm7_core1) || defined(CPU_MIMX94398AVKM_cm7_core1) || defined(CPU_MIMX94398AVMJ_cm7_core1) || defined(CPU_MIMX94398AVMM_cm7_core1) || defined(CPU_MIMX94398DVKM_cm7_core1) || defined(CPU_MIMX94398DVMM_cm7_core1) || defined(CPU_MIMX94398XVMM_cm7_core1))
 #include "MIMX94398_cm7_core1_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -307,7 +640,7 @@ typedef struct {
   __IO uint32_t STAW1AR;                           /**< Self-Test Analog Watchdog 1A, offset: 0x384 */
   __IO uint32_t STAW1BR;                           /**< Self-Test Analog Watchdog 1B, offset: 0x388 */
   __IO uint32_t STAW2R;                            /**< Self-Test Analog Watchdog 2, offset: 0x38C */
-       uint32_t STAW3R;                            /**< Self-Test Analog Watchdog 3, offset: 0x390 */
+  __I  uint32_t STAW3R;                            /**< Self-Test Analog Watchdog 3, offset: 0x390 */
   __IO uint32_t STAW4R;                            /**< Self-Test Analog Watchdog 4, offset: 0x394 */
   __IO uint32_t STAW5R;                            /**< Self-Test Analog Watchdog 5, offset: 0x398 */
   __I  uint32_t CALSTAT;                           /**< Calibration Status, offset: 0x39C */
@@ -468,7 +801,7 @@ typedef struct {
 /*! ADCSTATUS - ADC Status
  *  0b000..Idle
  *  0b001..Power-down
- *  0b010..Wait state
+ *  0b010..Wait state (waiting to start conversion after [external trigger]).
  *  0b011..Busy in calibration
  *  0b100..Sample
  *  0b110..Conversion
@@ -569,8 +902,8 @@ typedef struct {
 /*! ECH - End of Conversion Chain
  *  0b0..End of conversion chain has not occurred
  *  0b0..No effect
- *  0b1..End of conversion chain has occurred
  *  0b1..Clear the flag
+ *  0b1..End of conversion chain has occurred
  */
 #define ADC_ISR_ECH(x)                           (((uint32_t)(((uint32_t)(x)) << ADC_ISR_ECH_SHIFT)) & ADC_ISR_ECH_MASK)
 
@@ -589,8 +922,8 @@ typedef struct {
 /*! JECH - Injected End of Conversion Chain
  *  0b0..Injected channel end of conversion chain has not occurred
  *  0b0..No effect
- *  0b1..Injected channel end of conversion chain has occurred
  *  0b1..Clear the flag
+ *  0b1..Injected channel end of conversion chain has occurred
  */
 #define ADC_ISR_JECH(x)                          (((uint32_t)(((uint32_t)(x)) << ADC_ISR_JECH_SHIFT)) & ADC_ISR_JECH_MASK)
 
@@ -599,8 +932,8 @@ typedef struct {
 /*! JEOC - Injected Channel End of Conversion
  *  0b0..Injected channel end of conversion has not occurred
  *  0b0..No effect
- *  0b1..Injected channel end of conversion has occurred
  *  0b1..Clear the flag
+ *  0b1..Injected channel end of conversion has occurred
  */
 #define ADC_ISR_JEOC(x)                          (((uint32_t)(((uint32_t)(x)) << ADC_ISR_JEOC_SHIFT)) & ADC_ISR_JEOC_MASK)
 /*! @} */
@@ -613,8 +946,8 @@ typedef struct {
 /*! EOC_CH0 - Channel 0 EOC Status
  *  0b0..Conversion not complete
  *  0b0..No effect
- *  0b1..Conversion complete
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR0_EOC_CH0(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR0_EOC_CH0_SHIFT)) & ADC_CEOCFR0_EOC_CH0_MASK)
 
@@ -623,8 +956,8 @@ typedef struct {
 /*! EOC_CH1 - Channel 1 EOC Status
  *  0b0..Conversion not complete
  *  0b0..No effect
- *  0b1..Conversion complete
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR0_EOC_CH1(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR0_EOC_CH1_SHIFT)) & ADC_CEOCFR0_EOC_CH1_MASK)
 
@@ -633,8 +966,8 @@ typedef struct {
 /*! EOC_CH2 - Channel 2 EOC Status
  *  0b0..Conversion not complete
  *  0b0..No effect
- *  0b1..Conversion complete
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR0_EOC_CH2(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR0_EOC_CH2_SHIFT)) & ADC_CEOCFR0_EOC_CH2_MASK)
 
@@ -643,8 +976,8 @@ typedef struct {
 /*! EOC_CH3 - Channel 3 EOC Status
  *  0b0..Conversion not complete
  *  0b0..No effect
- *  0b1..Conversion complete
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR0_EOC_CH3(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR0_EOC_CH3_SHIFT)) & ADC_CEOCFR0_EOC_CH3_MASK)
 
@@ -653,8 +986,8 @@ typedef struct {
 /*! EOC_CH4 - Channel 4 EOC Status
  *  0b0..Conversion not complete
  *  0b0..No effect
- *  0b1..Conversion complete
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR0_EOC_CH4(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR0_EOC_CH4_SHIFT)) & ADC_CEOCFR0_EOC_CH4_MASK)
 
@@ -663,8 +996,8 @@ typedef struct {
 /*! EOC_CH5 - Channel 5 EOC Status
  *  0b0..Conversion not complete
  *  0b0..No effect
- *  0b1..Conversion complete
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR0_EOC_CH5(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR0_EOC_CH5_SHIFT)) & ADC_CEOCFR0_EOC_CH5_MASK)
 
@@ -673,8 +1006,8 @@ typedef struct {
 /*! EOC_CH6 - Channel 6 EOC Status
  *  0b0..Conversion not complete
  *  0b0..No effect
- *  0b1..Conversion complete
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR0_EOC_CH6(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR0_EOC_CH6_SHIFT)) & ADC_CEOCFR0_EOC_CH6_MASK)
 
@@ -683,8 +1016,8 @@ typedef struct {
 /*! EOC_CH7 - Channel 7 EOC Status
  *  0b0..Conversion not complete
  *  0b0..No effect
- *  0b1..Conversion complete
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR0_EOC_CH7(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR0_EOC_CH7_SHIFT)) & ADC_CEOCFR0_EOC_CH7_MASK)
 /*! @} */
@@ -697,8 +1030,8 @@ typedef struct {
 /*! EOC_CH32 - Channel 32 EOC Status
  *  0b0..Conversion not complete
  *  0b0..No effect
- *  0b1..Conversion complete
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR1_EOC_CH32(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR1_EOC_CH32_SHIFT)) & ADC_CEOCFR1_EOC_CH32_MASK)
 
@@ -707,8 +1040,8 @@ typedef struct {
 /*! EOC_CH33 - Channel 33 EOC Status
  *  0b0..Conversion not complete
  *  0b0..No effect
- *  0b1..Conversion complete
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR1_EOC_CH33(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR1_EOC_CH33_SHIFT)) & ADC_CEOCFR1_EOC_CH33_MASK)
 
@@ -717,8 +1050,8 @@ typedef struct {
 /*! EOC_CH34 - Channel 34 EOC Status
  *  0b0..Conversion not complete
  *  0b0..No effect
- *  0b1..Conversion complete
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR1_EOC_CH34(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR1_EOC_CH34_SHIFT)) & ADC_CEOCFR1_EOC_CH34_MASK)
 
@@ -727,8 +1060,8 @@ typedef struct {
 /*! EOC_CH35 - Channel 35 EOC Status
  *  0b0..Conversion not complete
  *  0b0..No effect
- *  0b1..Conversion complete
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR1_EOC_CH35(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR1_EOC_CH35_SHIFT)) & ADC_CEOCFR1_EOC_CH35_MASK)
 
@@ -737,8 +1070,8 @@ typedef struct {
 /*! EOC_CH36 - Channel 36 EOC Status
  *  0b0..Conversion not complete
  *  0b0..No effect
- *  0b1..Conversion complete
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR1_EOC_CH36(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR1_EOC_CH36_SHIFT)) & ADC_CEOCFR1_EOC_CH36_MASK)
 
@@ -747,8 +1080,8 @@ typedef struct {
 /*! EOC_CH37 - Channel 37 EOC Status
  *  0b0..Conversion not complete
  *  0b0..No effect
- *  0b1..Conversion complete
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR1_EOC_CH37(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR1_EOC_CH37_SHIFT)) & ADC_CEOCFR1_EOC_CH37_MASK)
 
@@ -757,8 +1090,8 @@ typedef struct {
 /*! EOC_CH38 - Channel 38 EOC Status
  *  0b0..Conversion not complete
  *  0b0..No effect
- *  0b1..Conversion complete
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR1_EOC_CH38(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR1_EOC_CH38_SHIFT)) & ADC_CEOCFR1_EOC_CH38_MASK)
 
@@ -767,8 +1100,8 @@ typedef struct {
 /*! EOC_CH39 - Channel 39 EOC Status
  *  0b0..Conversion not complete
  *  0b0..No effect
- *  0b1..Conversion complete
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR1_EOC_CH39(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR1_EOC_CH39_SHIFT)) & ADC_CEOCFR1_EOC_CH39_MASK)
 
@@ -1081,8 +1414,8 @@ typedef struct {
 /*! WDG0L - Channel 0 Watchdog Low Threshold Interrupt
  *  0b0..Interrupt not asserted
  *  0b0..No effect
- *  0b1..Interrupt asserted
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG0L(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG0L_SHIFT)) & ADC_WTISR_WDG0L_MASK)
 
@@ -1091,8 +1424,8 @@ typedef struct {
 /*! WDG0H - Channel 0 Watchdog High Threshold Interrupt
  *  0b0..Interrupt not asserted
  *  0b0..No effect
- *  0b1..Interrupt asserted
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG0H(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG0H_SHIFT)) & ADC_WTISR_WDG0H_MASK)
 
@@ -1101,8 +1434,8 @@ typedef struct {
 /*! WDG1L - Channel 1 Watchdog Low Threshold Interrupt
  *  0b0..Interrupt not asserted
  *  0b0..No effect
- *  0b1..Interrupt asserted
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG1L(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG1L_SHIFT)) & ADC_WTISR_WDG1L_MASK)
 
@@ -1111,8 +1444,8 @@ typedef struct {
 /*! WDG1H - Channel 1 Watchdog High Threshold Interrupt
  *  0b0..Interrupt not asserted
  *  0b0..No effect
- *  0b1..Interrupt asserted
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG1H(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG1H_SHIFT)) & ADC_WTISR_WDG1H_MASK)
 
@@ -1121,8 +1454,8 @@ typedef struct {
 /*! WDG2L - Channel 2 Watchdog Low Threshold Interrupt
  *  0b0..Interrupt not asserted
  *  0b0..No effect
- *  0b1..Interrupt asserted
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG2L(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG2L_SHIFT)) & ADC_WTISR_WDG2L_MASK)
 
@@ -1131,8 +1464,8 @@ typedef struct {
 /*! WDG2H - Channel 2 Watchdog High Threshold Interrupt
  *  0b0..Interrupt not asserted
  *  0b0..No effect
- *  0b1..Interrupt asserted
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG2H(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG2H_SHIFT)) & ADC_WTISR_WDG2H_MASK)
 
@@ -1141,8 +1474,8 @@ typedef struct {
 /*! WDG3L - Channel 3 Watchdog Low Threshold Interrupt
  *  0b0..Interrupt not asserted
  *  0b0..No effect
- *  0b1..Interrupt asserted
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG3L(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG3L_SHIFT)) & ADC_WTISR_WDG3L_MASK)
 
@@ -1151,8 +1484,8 @@ typedef struct {
 /*! WDG3H - Channel 3 Watchdog High Threshold Interrupt
  *  0b0..Interrupt not asserted
  *  0b0..No effect
- *  0b1..Interrupt asserted
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG3H(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG3H_SHIFT)) & ADC_WTISR_WDG3H_MASK)
 
@@ -1161,8 +1494,8 @@ typedef struct {
 /*! WDG4L - Channel 4 Watchdog Low Threshold Interrupt
  *  0b0..Interrupt not asserted
  *  0b0..No effect
- *  0b1..Interrupt asserted
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG4L(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG4L_SHIFT)) & ADC_WTISR_WDG4L_MASK)
 
@@ -1171,8 +1504,8 @@ typedef struct {
 /*! WDG4H - Channel 4 Watchdog High Threshold Interrupt
  *  0b0..Interrupt not asserted
  *  0b0..No effect
- *  0b1..Interrupt asserted
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG4H(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG4H_SHIFT)) & ADC_WTISR_WDG4H_MASK)
 
@@ -1181,8 +1514,8 @@ typedef struct {
 /*! WDG5L - Channel 5 Watchdog Low Threshold Interrupt
  *  0b0..Interrupt not asserted
  *  0b0..No effect
- *  0b1..Interrupt asserted
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG5L(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG5L_SHIFT)) & ADC_WTISR_WDG5L_MASK)
 
@@ -1191,8 +1524,8 @@ typedef struct {
 /*! WDG5H - Channel 5 Watchdog High Threshold Interrupt
  *  0b0..Interrupt not asserted
  *  0b0..No effect
- *  0b1..Interrupt asserted
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG5H(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG5H_SHIFT)) & ADC_WTISR_WDG5H_MASK)
 
@@ -1201,8 +1534,8 @@ typedef struct {
 /*! WDG6L - Channel 6 Watchdog Low Threshold Interrupt
  *  0b0..Interrupt not asserted
  *  0b0..No effect
- *  0b1..Interrupt asserted
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG6L(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG6L_SHIFT)) & ADC_WTISR_WDG6L_MASK)
 
@@ -1211,8 +1544,8 @@ typedef struct {
 /*! WDG6H - Channel 6 Watchdog High Threshold Interrupt
  *  0b0..Interrupt not asserted
  *  0b0..No effect
- *  0b1..Interrupt asserted
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG6H(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG6H_SHIFT)) & ADC_WTISR_WDG6H_MASK)
 
@@ -1221,8 +1554,8 @@ typedef struct {
 /*! WDG7L - Channel 7 Watchdog Low Threshold Interrupt
  *  0b0..Interrupt not asserted
  *  0b0..No effect
- *  0b1..Interrupt asserted
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG7L(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG7L_SHIFT)) & ADC_WTISR_WDG7L_MASK)
 
@@ -1231,8 +1564,8 @@ typedef struct {
 /*! WDG7H - Channel 7 Watchdog High Threshold Interrupt
  *  0b0..Interrupt not asserted
  *  0b0..No effect
- *  0b1..Interrupt asserted
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG7H(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG7H_SHIFT)) & ADC_WTISR_WDG7H_MASK)
 /*! @} */
@@ -2780,8 +3113,8 @@ typedef struct {
 /*! AWOR_CH0 - Analog Watchdog Out of Range for Channel 0
  *  0b0..Converted data is in range
  *  0b0..No effect
- *  0b1..Converted data is out of range
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR0_AWOR_CH0(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_AWORR0_AWOR_CH0_SHIFT)) & ADC_AWORR0_AWOR_CH0_MASK)
 
@@ -2790,8 +3123,8 @@ typedef struct {
 /*! AWOR_CH1 - Analog Watchdog Out of Range for Channel 1
  *  0b0..Converted data is in range
  *  0b0..No effect
- *  0b1..Converted data is out of range
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR0_AWOR_CH1(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_AWORR0_AWOR_CH1_SHIFT)) & ADC_AWORR0_AWOR_CH1_MASK)
 
@@ -2800,8 +3133,8 @@ typedef struct {
 /*! AWOR_CH2 - Analog Watchdog Out of Range for Channel 2
  *  0b0..Converted data is in range
  *  0b0..No effect
- *  0b1..Converted data is out of range
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR0_AWOR_CH2(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_AWORR0_AWOR_CH2_SHIFT)) & ADC_AWORR0_AWOR_CH2_MASK)
 
@@ -2810,8 +3143,8 @@ typedef struct {
 /*! AWOR_CH3 - Analog Watchdog Out of Range for Channel 3
  *  0b0..Converted data is in range
  *  0b0..No effect
- *  0b1..Converted data is out of range
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR0_AWOR_CH3(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_AWORR0_AWOR_CH3_SHIFT)) & ADC_AWORR0_AWOR_CH3_MASK)
 
@@ -2820,8 +3153,8 @@ typedef struct {
 /*! AWOR_CH4 - Analog Watchdog Out of Range for Channel 4
  *  0b0..Converted data is in range
  *  0b0..No effect
- *  0b1..Converted data is out of range
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR0_AWOR_CH4(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_AWORR0_AWOR_CH4_SHIFT)) & ADC_AWORR0_AWOR_CH4_MASK)
 
@@ -2830,8 +3163,8 @@ typedef struct {
 /*! AWOR_CH5 - Analog Watchdog Out of Range for Channel 5
  *  0b0..Converted data is in range
  *  0b0..No effect
- *  0b1..Converted data is out of range
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR0_AWOR_CH5(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_AWORR0_AWOR_CH5_SHIFT)) & ADC_AWORR0_AWOR_CH5_MASK)
 
@@ -2840,8 +3173,8 @@ typedef struct {
 /*! AWOR_CH6 - Analog Watchdog Out of Range for Channel 6
  *  0b0..Converted data is in range
  *  0b0..No effect
- *  0b1..Converted data is out of range
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR0_AWOR_CH6(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_AWORR0_AWOR_CH6_SHIFT)) & ADC_AWORR0_AWOR_CH6_MASK)
 
@@ -2850,8 +3183,8 @@ typedef struct {
 /*! AWOR_CH7 - Analog Watchdog Out of Range for Channel 7
  *  0b0..Converted data is in range
  *  0b0..No effect
- *  0b1..Converted data is out of range
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR0_AWOR_CH7(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_AWORR0_AWOR_CH7_SHIFT)) & ADC_AWORR0_AWOR_CH7_MASK)
 /*! @} */
@@ -2864,8 +3197,8 @@ typedef struct {
 /*! AWOR_CH32 - Analog Watchdog Out of Range for Channel 32
  *  0b0..Converted data is in range
  *  0b0..No effect
- *  0b1..Converted data is out of range
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR1_AWOR_CH32(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_AWORR1_AWOR_CH32_SHIFT)) & ADC_AWORR1_AWOR_CH32_MASK)
 
@@ -2874,8 +3207,8 @@ typedef struct {
 /*! AWOR_CH33 - Analog Watchdog Out of Range for Channel 33
  *  0b0..Converted data is in range
  *  0b0..No effect
- *  0b1..Converted data is out of range
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR1_AWOR_CH33(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_AWORR1_AWOR_CH33_SHIFT)) & ADC_AWORR1_AWOR_CH33_MASK)
 
@@ -2884,8 +3217,8 @@ typedef struct {
 /*! AWOR_CH34 - Analog Watchdog Out of Range for Channel 34
  *  0b0..Converted data is in range
  *  0b0..No effect
- *  0b1..Converted data is out of range
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR1_AWOR_CH34(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_AWORR1_AWOR_CH34_SHIFT)) & ADC_AWORR1_AWOR_CH34_MASK)
 
@@ -2894,8 +3227,8 @@ typedef struct {
 /*! AWOR_CH35 - Analog Watchdog Out of Range for Channel 35
  *  0b0..Converted data is in range
  *  0b0..No effect
- *  0b1..Converted data is out of range
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR1_AWOR_CH35(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_AWORR1_AWOR_CH35_SHIFT)) & ADC_AWORR1_AWOR_CH35_MASK)
 
@@ -2904,8 +3237,8 @@ typedef struct {
 /*! AWOR_CH36 - Analog Watchdog Out of Range for Channel 36
  *  0b0..Converted data is in range
  *  0b0..No effect
- *  0b1..Converted data is out of range
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR1_AWOR_CH36(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_AWORR1_AWOR_CH36_SHIFT)) & ADC_AWORR1_AWOR_CH36_MASK)
 
@@ -2914,8 +3247,8 @@ typedef struct {
 /*! AWOR_CH37 - Analog Watchdog Out of Range for Channel 37
  *  0b0..Converted data is in range
  *  0b0..No effect
- *  0b1..Converted data is out of range
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR1_AWOR_CH37(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_AWORR1_AWOR_CH37_SHIFT)) & ADC_AWORR1_AWOR_CH37_MASK)
 
@@ -2924,8 +3257,8 @@ typedef struct {
 /*! AWOR_CH38 - Analog Watchdog Out of Range for Channel 38
  *  0b0..Converted data is in range
  *  0b0..No effect
- *  0b1..Converted data is out of range
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR1_AWOR_CH38(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_AWORR1_AWOR_CH38_SHIFT)) & ADC_AWORR1_AWOR_CH38_MASK)
 
@@ -2934,8 +3267,8 @@ typedef struct {
 /*! AWOR_CH39 - Analog Watchdog Out of Range for Channel 39
  *  0b0..Converted data is in range
  *  0b0..No effect
- *  0b1..Converted data is out of range
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR1_AWOR_CH39(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_AWORR1_AWOR_CH39_SHIFT)) & ADC_AWORR1_AWOR_CH39_MASK)
 
@@ -3194,8 +3527,8 @@ typedef struct {
 /*! ERR_S0 - Algorithm S0 Error
  *  0b0..No VREF error
  *  0b0..No effect
- *  0b1..VREF error occurred
  *  0b1..Clear the flag
+ *  0b1..VREF error occurred
  */
 #define ADC_STSR1_ERR_S0(x)                      (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_ERR_S0_SHIFT)) & ADC_STSR1_ERR_S0_MASK)
 
@@ -3204,18 +3537,18 @@ typedef struct {
 /*! ERR_S1 - Algorithm S1 Error
  *  0b0..No VDD ERROR
  *  0b0..No effect
- *  0b1..VDD ERROR occurred
  *  0b1..Clear the flag
+ *  0b1..VDD ERROR occurred
  */
 #define ADC_STSR1_ERR_S1(x)                      (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_ERR_S1_SHIFT)) & ADC_STSR1_ERR_S1_MASK)
 
 #define ADC_STSR1_ERR_S2_MASK                    (0x2000U)
 #define ADC_STSR1_ERR_S2_SHIFT                   (13U)
 /*! ERR_S2 - Algorithm S2 Error
- *  0b0..No error occurred on the sampled signal
  *  0b0..No effect
- *  0b1..Error occurred on the sampled signal
+ *  0b0..No error occurred on the sampled signal
  *  0b1..Clear the flag
+ *  0b1..Error occurred on the sampled signal
  */
 #define ADC_STSR1_ERR_S2(x)                      (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_ERR_S2_SHIFT)) & ADC_STSR1_ERR_S2_MASK)
 
@@ -3232,60 +3565,60 @@ typedef struct {
 #define ADC_STSR1_WDG_EOA_S_MASK                 (0x10000U)
 #define ADC_STSR1_WDG_EOA_S_SHIFT                (16U)
 /*! WDG_EOA_S - Watchdog End of Algorithm S
- *  0b0..Self-test end of Algorithm S conversion is not complete.
  *  0b0..No effect
- *  0b1..Self-test end of Algorithm S conversion is complete.
+ *  0b0..Self-test end of Algorithm S conversion is not complete.
  *  0b1..Clear the flag
+ *  0b1..Self-test end of Algorithm S conversion is complete.
  */
 #define ADC_STSR1_WDG_EOA_S(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_WDG_EOA_S_SHIFT)) & ADC_STSR1_WDG_EOA_S_MASK)
 
 #define ADC_STSR1_WDG_EOA_C_MASK                 (0x40000U)
 #define ADC_STSR1_WDG_EOA_C_SHIFT                (18U)
 /*! WDG_EOA_C - Watchdog End of Algorithm C
- *  0b0..Self-test end of Algorithm C conversion is not complete
  *  0b0..No effect
- *  0b1..Self-test end of Algorithm C conversion is complete
+ *  0b0..Self-test end of Algorithm C conversion is not complete
  *  0b1..Clear the flag
+ *  0b1..Self-test end of Algorithm C conversion is complete
  */
 #define ADC_STSR1_WDG_EOA_C(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_WDG_EOA_C_SHIFT)) & ADC_STSR1_WDG_EOA_C_MASK)
 
 #define ADC_STSR1_ST_EOC_MASK                    (0x800000U)
 #define ADC_STSR1_ST_EOC_SHIFT                   (23U)
 /*! ST_EOC - Self-Test EOC
- *  0b0..Self-test end of conversion is not complete
  *  0b0..No effect
- *  0b1..Self-test end of conversion is complete
+ *  0b0..Self-test end of conversion is not complete
  *  0b1..Clear the flag
+ *  0b1..Self-test end of conversion is complete
  */
 #define ADC_STSR1_ST_EOC(x)                      (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_ST_EOC_SHIFT)) & ADC_STSR1_ST_EOC_MASK)
 
 #define ADC_STSR1_OVERWR_MASK                    (0x1000000U)
 #define ADC_STSR1_OVERWR_SHIFT                   (24U)
 /*! OVERWR - Overwrite Error
- *  0b0..No overwrite error
  *  0b0..No effect
- *  0b1..Overwrite error occurred
+ *  0b0..No overwrite error
  *  0b1..Clear the flag
+ *  0b1..Overwrite error occurred
  */
 #define ADC_STSR1_OVERWR(x)                      (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_OVERWR_SHIFT)) & ADC_STSR1_OVERWR_MASK)
 
 #define ADC_STSR1_WDTERR_MASK                    (0x2000000U)
 #define ADC_STSR1_WDTERR_SHIFT                   (25U)
 /*! WDTERR - Watchdog Timer Error
- *  0b0..No failure
  *  0b0..No effect
- *  0b1..Failure occurred
+ *  0b0..No failure
  *  0b1..Clear the flag
+ *  0b1..Failure occurred
  */
 #define ADC_STSR1_WDTERR(x)                      (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_WDTERR_SHIFT)) & ADC_STSR1_WDTERR_MASK)
 
 #define ADC_STSR1_WDSERR_MASK                    (0x8000000U)
 #define ADC_STSR1_WDSERR_SHIFT                   (27U)
 /*! WDSERR - Watchdog Sequence Errors
- *  0b0..No failure
  *  0b0..No effect
- *  0b1..Failure occurred
+ *  0b0..No failure
  *  0b1..Clear the flag
+ *  0b1..Failure occurred
  */
 #define ADC_STSR1_WDSERR(x)                      (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_WDSERR_SHIFT)) & ADC_STSR1_WDSERR_MASK)
 /*! @} */
@@ -3656,5 +3989,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* ADC_H_ */
+#endif  /* PERI_ADC_H_ */
 

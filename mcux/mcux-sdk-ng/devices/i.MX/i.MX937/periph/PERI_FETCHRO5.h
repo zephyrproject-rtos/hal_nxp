@@ -17,7 +17,7 @@
 **                          MIMX9375xxVZx_cm7
 **
 **     Version:             rev. 1.0, 2026-04-09
-**     Build:               b260624
+**     Build:               b260722
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for fetchro5

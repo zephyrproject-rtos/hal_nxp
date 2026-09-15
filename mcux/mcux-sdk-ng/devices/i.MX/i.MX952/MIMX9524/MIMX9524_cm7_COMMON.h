@@ -9,7 +9,7 @@
 **
 **     Reference manual:    iMX952RM rev1 draftM
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260416
+**     Build:               b260722
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX9524_cm7
@@ -3240,8 +3240,6 @@ typedef enum _mu_core_boot_mode
 #define TPM_BASE_PTRS                            { (TPM_Type *)0u, TPM1, TPM2, TPM3, TPM4, TPM5, TPM6 }
 /** Interrupt vectors for the TPM peripheral type */
 #define TPM_IRQS                                 { NotAvail_IRQn, TPM1_IRQn, TPM2_IRQn, TPM3_IRQn, TPM4_IRQn, TPM5_IRQn, TPM6_IRQn }
-
-
 
 /* TRGMUX - Peripheral instance base addresses */
 /** Peripheral ANALOG__TRGMUX base address */

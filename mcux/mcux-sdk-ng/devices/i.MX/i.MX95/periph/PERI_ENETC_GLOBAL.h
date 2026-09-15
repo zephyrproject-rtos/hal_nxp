@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 4.0, 2026-02-28
-**     Build:               b260305
+**     Build:               b260721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENETC_GLOBAL
@@ -461,12 +461,12 @@ typedef struct {
        uint8_t RESERVED_10[280];
   union {                                          /* offset: 0xE20 */
     struct {                                         /* offset: 0xE20 */
-      __IO uint32_t EMDIOUFSBECR;                      /**< EMDIO uncorrectable fatal system bus error configuration register, offset: 0xE20, not available in all instances (available on 82 out of 328) */
-      __IO uint32_t EMDIOUFSBESR;                      /**< EMDIO uncorrectable fatal system bus error status register, offset: 0xE24, not available in all instances (available on 82 out of 328) */
+      __IO uint32_t EMDIOUFSBECR;                      /**< EMDIO uncorrectable fatal system bus error configuration register, offset: 0xE20, not available in all instances (available on 82 out of 410) */
+      __IO uint32_t EMDIOUFSBESR;                      /**< EMDIO uncorrectable fatal system bus error status register, offset: 0xE24, not available in all instances (available on 82 out of 410) */
     } EMDIO;
     struct {                                         /* offset: 0xE20 */
-      __IO uint32_t TUFSBECR;                          /**< Timer uncorrectable fatal system bus error configuration register, offset: 0xE20, not available in all instances (available on 82 out of 328) */
-      __IO uint32_t TUFSBESR;                          /**< Timer uncorrectable fatal system bus error status register, offset: 0xE24, not available in all instances (available on 82 out of 328) */
+      __IO uint32_t TUFSBECR;                          /**< Timer uncorrectable fatal system bus error configuration register, offset: 0xE20, not available in all instances (available on 82 out of 410) */
+      __IO uint32_t TUFSBESR;                          /**< Timer uncorrectable fatal system bus error status register, offset: 0xE24, not available in all instances (available on 82 out of 410) */
     } TIMER;
   };
 } ENETC_GLOBAL_Type;
