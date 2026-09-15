@@ -1659,6 +1659,12 @@ function(_mcux_remove_configuration TYPE CONFIGS)
       if(NOT "${_match}" STREQUAL "")
         mcux_clear_property(MCUX_${TYPE}_MACRO_${CMAKE_MATCH_1})
       endif()
+      # same for IAR --config_def linker defines, which are deduplicated the
+      # same way in mcux_append_single_compiler_flags_variable.
+      string(REGEX MATCH "^--config_def[ =]([A-Za-z0-9_]+)=(.*)$" _config_def_match "${item}")
+      if(NOT "${_config_def_match}" STREQUAL "")
+        mcux_clear_property(MCUX_${TYPE}_CONFIG_DEF_${CMAKE_MATCH_1})
+      endif()
     endforeach()
   endif()
 
@@ -2143,6 +2149,32 @@ function(mcux_append_single_compiler_flags_variable type flag)
      mcux_set_property(MCUX_${type}_MACRO_${CMAKE_MATCH_1} ${MACRO_VALUE})
    endif()
  endif()
+
+  # Handle IAR linker config define (--config_def=NAME=VALUE) with the same
+  # deduplication semantics as the -D macros above: IAR's ilinkarm aborts with
+  # "Lc105 Duplicate symbol" when the same symbol is passed more than once, so
+  # drop an exact duplicate and let a later definition override an earlier value.
+  string(REGEX MATCH "^--config_def[ =]([A-Za-z0-9_]+)=(.*)$" _config_def_match "${flag}")
+  if(NOT "${_config_def_match}" STREQUAL "")
+    set(_config_def_name "${CMAKE_MATCH_1}")
+    mcux_get_property(_saved_config_def_flag MCUX_${type}_CONFIG_DEF_${_config_def_name})
+    if(_saved_config_def_flag)
+      log_debug("${type} config define ${flag} has duplication definition"
+              ${CMAKE_CURRENT_LIST_FILE})
+      # use later one to overwrite the first one if found duplicated define with different value
+      if(NOT "${_saved_config_def_flag}" STREQUAL "${flag}")
+        string(REPLACE "${_saved_config_def_flag}" "${flag}" CMAKE_${lang_type}_FLAGS "${CMAKE_${lang_type}_FLAGS}")
+        set(CMAKE_${lang_type}_FLAGS  "${CMAKE_${lang_type}_FLAGS}" CACHE STRING "" FORCE)
+        log_notice("Found duplication ${type} config define, use ${flag} to override previous ${_saved_config_def_flag}"
+                ${CMAKE_CURRENT_LIST_FILE})
+        mcux_set_property(MCUX_${type}_CONFIG_DEF_${_config_def_name} "${flag}")
+      endif()
+      # duplicated define with same value, or override already applied: do not append again
+      return()
+    else()
+      mcux_set_property(MCUX_${type}_CONFIG_DEF_${_config_def_name} "${flag}")
+    endif()
+  endif()
   set(CMAKE_${lang_type}_FLAGS  "${CMAKE_${lang_type}_FLAGS} ${flag}" CACHE STRING "" FORCE)
 endfunction()
 
@@ -2520,8 +2552,8 @@ endfunction()
 function(mcux_add_custom_command)
   set(single_value BUILD_EVENT WORKING_DIRECTORY)
   set(multi_value TARGETS TOOLCHAINS BYPRODUCTS BUILD_COMMAND)
-  cmake_parse_arguments(_ "${options}" "${single_value}" "${multi_value}"
-          ${ARGN})
+  cmake_parse_arguments(PARSE_ARGV 0 _ "${options}" "${single_value}"
+          "${multi_value}")
   set(match_target false)
   if(__TARGETS)
     foreach(item ${__TARGETS})
