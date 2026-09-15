@@ -18,7 +18,7 @@
 **                          MCXA344VLL
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260428
+**     Build:               b260604
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for EIM
@@ -63,72 +63,6 @@
 #else
   #error "No valid CPU defined!"
 #endif
-
-/* ----------------------------------------------------------------------------
-   -- Mapping Information
-   ---------------------------------------------------------------------------- */
-
-/*!
- * @addtogroup Mapping_Information Mapping Information
- * @{
- */
-
-/** Mapping Information */
-#if !defined(EIM_MEMORY_CHANNEL_T_)
-#define EIM_MEMORY_CHANNEL_T_
-/*!
- * @addtogroup eim_memory_channel
- * @{
- */
-
-/*******************************************************************************
- * Definitions
- ******************************************************************************/
-
-/*!
- * @brief Structure for the eim_memory_channel
- *
- * Defines the structure for the EIM resource collections.
- */
-
-typedef enum _eim_memory_channel
-{
-    kEIM_MemoryChannelRAMA0         = 0U,          /**< Memory RAMA0 */
-} eim_memory_channel_t;
-
-/* @} */
-#endif /* EIM_MEMORY_CHANNEL_T_ */
-
-#if !defined(EIM_ERROR_INJECTION_CHANNEL_ENABLE_T_)
-#define EIM_ERROR_INJECTION_CHANNEL_ENABLE_T_
-/*!
- * @addtogroup eim_error_injection_channel_enable
- * @{
- */
-
-/*******************************************************************************
- * Definitions
- ******************************************************************************/
-
-/*!
- * @brief Structure for the eim_error_injection_channel_enable
- *
- * Defines the structure for the EIM error injection resource collections.
- */
-
-typedef enum _eim_error_injection_channel_enable
-{
-    kEIM_MemoryChannelRAMAEnable    = 0x80000000U, /**< Memory channel 0(RAMA0) error injection enable */
-} eim_error_injection_channel_enable_t;
-
-/* @} */
-#endif /* EIM_ERROR_INJECTION_CHANNEL_ENABLE_T_ */
-
-
-/*!
- * @}
- */ /* end of group Mapping_Information */
-
 
 /* ----------------------------------------------------------------------------
    -- Device Peripheral Access Layer

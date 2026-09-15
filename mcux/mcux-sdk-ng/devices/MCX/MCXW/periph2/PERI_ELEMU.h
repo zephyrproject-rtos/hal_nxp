@@ -6,13 +6,13 @@
 **                          MCXW716CMFTA
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b260810
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ELEMU
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -94,7 +94,7 @@
 typedef struct {
   __I  uint32_t VER;                               /**< Version ID Register, offset: 0x0 */
   __I  uint32_t PAR;                               /**< Parameter Register, offset: 0x4 */
-       uint32_t UNUSED0;                           /**< Unused Register 0, offset: 0x8 */
+  __I  uint32_t UNUSED0;                           /**< Unused Register 0, offset: 0x8 */
   __I  uint32_t SR;                                /**< Status Register, offset: 0xC */
        uint8_t RESERVED_0[272];
   __IO uint32_t TCR;                               /**< Transmit Control Register, offset: 0x120 */

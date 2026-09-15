@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2025-11-17
-**     Build:               b260717
+**     Build:               b260812
 **
 **     Abstract:
 **         Chip specific module features.
@@ -344,6 +344,8 @@
 #define FSL_FEATURE_MCX_CMC_HAS_NO_FLASHCR_WAKE (1)
 /* @brief Has SCR bit in BSR register */
 #define FSL_FEATURE_MCX_CMC_HAS_BSR_SCR_BIT (0)
+/* @brief Has DBGCTL register */
+#define FSL_FEATURE_MCX_CMC_HAS_DBGCTL_REG (1)
 
 /* LPCMP module features */
 
@@ -1134,6 +1136,10 @@
 #define FSL_FEATURE_MCX_SPC_HAS_PD_STATUS_REG (1)
 /* @brief Has SRAMRETLDO_REFTRIM register. */
 #define FSL_FEATURE_MCX_SPC_HAS_SRAMRETLDO_REFTRIM_REG (0)
+/* @brief Has LVSEL bitfield in VD_IO_CFG register. */
+#define FSL_FEATURE_MCX_SPC_HAS_VD_IO_CFG_LVSEL (1)
+/* @brief Has high-voltage detect on IO VDD. */
+#define FSL_FEATURE_MCX_SPC_HAS_IOVDD_HVD (1)
 
 /* SYSCON module features */
 
@@ -1179,6 +1185,8 @@
 #define FSL_FEATURE_TRDC_HAS_DOMAIN_ERROR (0)
 /* @brief TRDC instance has TRDC_FLW_CTL. */
 #define FSL_FEATURE_TRDC_HAS_FLW (0)
+/* @brief TRDC DERRLOC.MBCINST uses flat one-bit-per-MBC-instance encoding (bit N = MBC[N]). Other devices use 4-bits-per-MBC encoding (bit 4i+j = MBC[i] SLV[j]). */
+#define FSL_FEATURE_TRDC_DERRLOC_MBCINST_FLAT_ENCODING (0)
 
 /* TSI module features */
 

@@ -5,13 +5,13 @@
 **                          MCXE246VLQ
 **
 **     Version:             rev. 1.0, 2025-02-21
-**     Build:               b250424
+**     Build:               b260609
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for EIM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -41,74 +41,6 @@
 #else
   #error "No valid CPU defined!"
 #endif
-
-/* ----------------------------------------------------------------------------
-   -- Mapping Information
-   ---------------------------------------------------------------------------- */
-
-/*!
- * @addtogroup Mapping_Information Mapping Information
- * @{
- */
-
-/** Mapping Information */
-#if !defined(EIM_MEMORY_CHANNEL_T_)
-#define EIM_MEMORY_CHANNEL_T_
-/*!
- * @addtogroup eim_memory_channel
- * @{
- */
-
-/*******************************************************************************
- * Definitions
- ******************************************************************************/
-
-/*!
- * @brief Structure for the eim_memory_channel
- *
- * Defines the structure for the EIM resource collections.
- */
-
-typedef enum _eim_memory_channel
-{
-    kEIM_MemoryChannelSRAML         = 0U,          /**< Memory SRAM_L */
-    kEIM_MemoryChannelSRAMU         = 1U,          /**< Memory SRAM_U */
-} eim_memory_channel_t;
-
-/* @} */
-#endif /* EIM_MEMORY_CHANNEL_T_ */
-
-#if !defined(EIM_ERROR_INJECTION_CHANNEL_ENABLE_T_)
-#define EIM_ERROR_INJECTION_CHANNEL_ENABLE_T_
-/*!
- * @addtogroup eim_error_injection_channel_enable
- * @{
- */
-
-/*******************************************************************************
- * Definitions
- ******************************************************************************/
-
-/*!
- * @brief Structure for the eim_error_injection_channel_enable
- *
- * Defines the structure for the EIM error injection resource collections.
- */
-
-typedef enum _eim_error_injection_channel_enable
-{
-    kEIM_MemoryChannelSRAMLEnable   = 0x80000000U, /**< Memory channel 0 (SRAM_L) error injection enable */
-    kEIM_MemoryChannelSRAMUEnable   = 0x40000000U, /**< Memory channel 1 (SRAM_U) error injection enable */
-} eim_error_injection_channel_enable_t;
-
-/* @} */
-#endif /* EIM_ERROR_INJECTION_CHANNEL_ENABLE_T_ */
-
-
-/*!
- * @}
- */ /* end of group Mapping_Information */
-
 
 /* ----------------------------------------------------------------------------
    -- Device Peripheral Access Layer

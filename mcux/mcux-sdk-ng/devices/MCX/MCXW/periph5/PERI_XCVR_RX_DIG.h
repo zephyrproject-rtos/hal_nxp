@@ -1,13 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70AAMMP
-**                          MCXW70ACMFT
+**     Processors:          MCXW70ACMFT
 **                          MCXW70ACMMP
 **                          MCXW70ADMFT
 **                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260409
+**     Build:               b260813
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for XCVR_RX_DIG
@@ -38,9 +37,7 @@
 #if !defined(PERI_XCVR_RX_DIG_H_)
 #define PERI_XCVR_RX_DIG_H_                      /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70AAMMP))
-#include "MCXW70AA_COMMON.h"
-#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
+#if (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
 #elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
@@ -303,13 +300,13 @@ typedef struct {
  */
 #define XCVR_RX_DIG_CTRL0_RX_IQ_8B_OUT_MODE(x)   (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_CTRL0_RX_IQ_8B_OUT_MODE_SHIFT)) & XCVR_RX_DIG_CTRL0_RX_IQ_8B_OUT_MODE_MASK)
 
-#define XCVR_RX_DIG_CTRL0_RX_FSK_ZB_SEL_MASK     (0x8000000U)
-#define XCVR_RX_DIG_CTRL0_RX_FSK_ZB_SEL_SHIFT    (27U)
-/*! RX_FSK_ZB_SEL
+#define XCVR_RX_DIG_CTRL0_RX_FSK_SEL_MASK        (0x8000000U)
+#define XCVR_RX_DIG_CTRL0_RX_FSK_SEL_SHIFT       (27U)
+/*! RX_FSK_SEL
  *  0b0..2.4GHz PHY is selected
  *  0b1..15.4 PHY is selected
  */
-#define XCVR_RX_DIG_CTRL0_RX_FSK_ZB_SEL(x)       (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_CTRL0_RX_FSK_ZB_SEL_SHIFT)) & XCVR_RX_DIG_CTRL0_RX_FSK_ZB_SEL_MASK)
+#define XCVR_RX_DIG_CTRL0_RX_FSK_SEL(x)          (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_CTRL0_RX_FSK_SEL_SHIFT)) & XCVR_RX_DIG_CTRL0_RX_FSK_SEL_MASK)
 
 #define XCVR_RX_DIG_CTRL0_RX_DEMOD_IN_SEL_MASK   (0x10000000U)
 #define XCVR_RX_DIG_CTRL0_RX_DEMOD_IN_SEL_SHIFT  (28U)

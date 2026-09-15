@@ -6,13 +6,13 @@
 **                          MCXW716CMFTA
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b260810
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for VREF
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -89,7 +89,7 @@
 /** VREF - Register Layout Typedef */
 typedef struct {
   __I  uint32_t VERID;                             /**< Version ID, offset: 0x0 */
-       uint32_t PARAM;                             /**< Parameters, offset: 0x4 */
+  __I  uint32_t PARAM;                             /**< Parameters, offset: 0x4 */
   __IO uint32_t CSR;                               /**< Control and Status, offset: 0x8 */
        uint8_t RESERVED_0[4];
   __IO uint32_t UTRIM;                             /**< User Trim, offset: 0x10 */

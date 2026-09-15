@@ -169,7 +169,7 @@ typedef struct {
        uint8_t RESERVED_10[16];
   __IO uint32_t SMARTDMAINT;                       /**< SmartDMA Interrupt Hijack, offset: 0x214 */
        uint8_t RESERVED_11[36];
-       uint32_t BOOTROM;                           /**< Immediate cessation of execution following the completion of ROM execution, offset: 0x23C */
+  __I  uint32_t BOOTROM;                           /**< Immediate cessation of execution following the completion of ROM execution, offset: 0x23C */
        uint8_t RESERVED_12[48];
   __IO uint32_t RAM_CASP_CTRL;                     /**< Controls Shared RAM Integration, offset: 0x270 */
        uint8_t RESERVED_13[152];

@@ -1,13 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70AAMMP
-**                          MCXW70ACMFT
+**     Processors:          MCXW70ACMFT
 **                          MCXW70ACMMP
 **                          MCXW70ADMFT
 **                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260409
+**     Build:               b260813
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TRGMUX
@@ -38,9 +37,7 @@
 #if !defined(PERI_TRGMUX_H_)
 #define PERI_TRGMUX_H_                           /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70AAMMP))
-#include "MCXW70AA_COMMON.h"
-#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
+#if (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
 #elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
@@ -138,21 +135,20 @@ typedef enum _trgmux_source
     kTRGMUX_SourceAdcGp0Output2     = 60U,         /**< ADC-GP0 Trigger Output 2 is selected */
     kTRGMUX_SourceAdcGp0Output3     = 61U,         /**< ADC-GP0 Trigger Output 3 is selected */
     kTRGMUX_SourceCmpGp0Output      = 62U,         /**< CMP-GP0 Comparator Output is selected */
-    kTRGMUX_SourceSpc0DcdcBurst     = 63U,         /**< SPC0 DCDC Burst Trig is selected */
-    kTRGMUX_SourceRf2p4gTofTimestamp = 64U,        /**< RF-2.4G TOF TIMESTAMP TRIG is selected */
-    kTRGMUX_SourceRf2p4gLantSw      = 65U,         /**< RF-2.4G LANT_SW is selected */
-    kTRGMUX_SourceCpu0TxEv          = 66U,         /**< CM33 (Main) */
-    kTRGMUX_SourceCpu1TxEv          = 67U,         /**< CM33 (Radio) */
-    kTRGMUX_SourcAoiOut0            = 68U,         /**< AOI_OUT0 input is selected */
-    kTRGMUX_SourcAoiOut1            = 69U,         /**< AOI_OUT1 input is selected */
-    kTRGMUX_SourcAoiOut2            = 70U,         /**< AOI_OUT2 input is selected */
-    kTRGMUX_SourcAoiOut3            = 71U,         /**< AOI_OUT3 input is selected */
-    kTRGMUX_SourcFlexPwmMux0Trigger0 = 72U,        /**< FLEXPWM MUX0 trigger 0 input is selected */
-    kTRGMUX_SourcFlexPwmMux0Trigger1 = 73U,        /**< FLEXPWM MUX0 trigger 1 input is selected */
-    kTRGMUX_SourcFlexPwmMux0Trigger2 = 74U,        /**< FLEXPWM MUX0 trigger 2 input is selected */
-    kTRGMUX_SourcFlexPwmMux1Trigger0 = 75U,        /**< FLEXPWM MUX1 trigger 0 input is selected */
-    kTRGMUX_SourcFlexPwmMux1Trigger1 = 76U,        /**< FLEXPWM MUX1 trigger 1 input is selected */
-    kTRGMUX_SourcFlexPwmMux1Trigger2 = 77U,        /**< FLEXPWM MUX1 trigger 2 input is selected */
+    kTRGMUX_SourceRf2p4gTofTimestamp = 63U,        /**< RF-2.4G TOF TIMESTAMP TRIG is selected */
+    kTRGMUX_SourceRf2p4gLantSw      = 64U,         /**< RF-2.4G LANT_SW is selected */
+    kTRGMUX_SourceCpu0TxEv          = 65U,         /**< CM33 (Main) */
+    kTRGMUX_SourceCpu1TxEv          = 66U,         /**< CM33 (Radio) */
+    kTRGMUX_SourceAoiOut0           = 67U,         /**< AOI_OUT0 input is selected */
+    kTRGMUX_SourceAoiOut1           = 68U,         /**< AOI_OUT1 input is selected */
+    kTRGMUX_SourceAoiOut2           = 69U,         /**< AOI_OUT2 input is selected */
+    kTRGMUX_SourceAoiOut3           = 70U,         /**< AOI_OUT3 input is selected */
+    kTRGMUX_SourceFlexPwmMux0Trigger0 = 71U,       /**< FLEXPWM MUX0 trigger 0 input is selected */
+    kTRGMUX_SourceFlexPwmMux0Trigger1 = 72U,       /**< FLEXPWM MUX0 trigger 1 input is selected */
+    kTRGMUX_SourceFlexPwmMux0Trigger2 = 73U,       /**< FLEXPWM MUX0 trigger 2 input is selected */
+    kTRGMUX_SourceFlexPwmMux1Trigger0 = 74U,       /**< FLEXPWM MUX1 trigger 0 input is selected */
+    kTRGMUX_SourceFlexPwmMux1Trigger1 = 75U,       /**< FLEXPWM MUX1 trigger 1 input is selected */
+    kTRGMUX_SourceFlexPwmMux1Trigger2 = 76U,       /**< FLEXPWM MUX1 trigger 2 input is selected */
 } trgmux_source_t;
 
 /* @} */
@@ -182,10 +178,10 @@ typedef enum _trgmux_device
     kTRGMUX_Trgmux0AdcGp0           = 12U,         /**< ADC_GP0 device trigger input */
     kTRGMUX_Trgmux0CmpGp0           = 13U,         /**< CMP_GP0 device trigger input */
     kTRGMUX_Trgmux0Can0             = 14U,         /**< CAN0 device trigger input */
-    kTRGMUX_Trgmux0Aoi3             = 15U,         /**< AOI3 device trigger input */
-    kTRGMUX_Trgmux0Aoi0             = 16U,         /**< AOI0 device trigger input */
-    kTRGMUX_Trgmux0Aoi1             = 17U,         /**< AOI1 device trigger input */
-    kTRGMUX_Trgmux0Aoi2             = 18U,         /**< AOI2 device trigger input */
+    kTRGMUX_Trgmux0Aoi0             = 15U,         /**< AOI0 device trigger input */
+    kTRGMUX_Trgmux0Aoi1             = 16U,         /**< AOI1 device trigger input */
+    kTRGMUX_Trgmux0Aoi2             = 17U,         /**< AOI2 device trigger input */
+    kTRGMUX_Trgmux0Aoi3             = 18U,         /**< AOI3 device trigger input */
     kTRGMUX_Trgmux0FlexPwm2         = 19U,         /**< FLEXPWM2 device trigger input */
     kTRGMUX_Trgmux0FlexPwm1         = 20U,         /**< FLEXPWM1 device trigger input */
     kTRGMUX_Trgmux0FlexPwm0         = 21U,         /**< FLEXPWM0 device trigger input */

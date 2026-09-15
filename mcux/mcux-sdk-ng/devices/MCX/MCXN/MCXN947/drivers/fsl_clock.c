@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2025 NXP
+ * Copyright 2022-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -153,15 +153,15 @@ status_t CLOCK_SetupFROHFClocking(uint32_t iFreq)
     SCG0->FIRCCFG = SCG_FIRCCFG_RANGE((iFreq == 48000000U) ? 0 : 1);
 
     /* Unlock FIRCCSR */
-    SCG0->FIRCCSR &= ~SCG_FIRCCSR_LK_MASK;
+    SCG0->FIRCCSR = SCG0->FIRCCSR & (~SCG_FIRCCSR_LK_MASK);
 
     /* Enable FIRC 48 MHz clock for peripheral use */
-    SCG0->FIRCCSR |= SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_MASK;
+    SCG0->FIRCCSR = SCG0->FIRCCSR | (SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_MASK);
     /* Enable FIRC 144 MHz clock for peripheral use */
-    SCG0->FIRCCSR |= SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_MASK;
+    SCG0->FIRCCSR = SCG0->FIRCCSR | (SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_MASK);
 
     /* Enable FIRC */
-    SCG0->FIRCCSR |= SCG_FIRCCSR_FIRCEN_MASK;
+    SCG0->FIRCCSR = SCG0->FIRCCSR | (SCG_FIRCCSR_FIRCEN_MASK);
 
     /* Wait for FIRC clock to be valid. */
     while ((SCG0->FIRCCSR & SCG_FIRCCSR_FIRCVLD_MASK) == 0U)
@@ -224,16 +224,16 @@ status_t CLOCK_SetupExtClocking(uint32_t iFreq)
     SCG0->SOSCCSR = SCG_SOSCCSR_SOSCERR_MASK;
 
     /* Enable LDO */
-    SCG0->LDOCSR |= SCG_LDOCSR_LDOEN_MASK;
+    SCG0->LDOCSR = SCG0->LDOCSR | (SCG_LDOCSR_LDOEN_MASK);
 
     /* Select SOSC source (internal crystal oscillator) and Configure SOSC range */
     SCG0->SOSCCFG = SCG_SOSCCFG_EREFS_MASK | SCG_SOSCCFG_RANGE(range);
 
     /* Unlock SOSCCSR */
-    SCG0->SOSCCSR &= ~SCG_SOSCCSR_LK_MASK;
+    SCG0->SOSCCSR = SCG0->SOSCCSR & (~SCG_SOSCCSR_LK_MASK);
 
     /* Enable SOSC clock monitor and Enable SOSC */
-    SCG0->SOSCCSR |= (SCG_SOSCCSR_SOSCCM_MASK | SCG_SOSCCSR_SOSCEN_MASK);
+    SCG0->SOSCCSR = SCG0->SOSCCSR | (SCG_SOSCCSR_SOSCCM_MASK | SCG_SOSCCSR_SOSCEN_MASK);
 
     /* Wait for SOSC clock to be valid. */
     while ((SCG0->SOSCCSR & SCG_SOSCCSR_SOSCVLD_MASK) == 0U)
@@ -298,19 +298,19 @@ status_t CLOCK_SetupExtRefClocking(uint32_t iFreq)
     SCG0->SOSCCSR = SCG_SOSCCSR_SOSCERR_MASK;
 
     /* Enable LDO */
-    SCG0->LDOCSR |= SCG_LDOCSR_LDOEN_MASK;
+    SCG0->LDOCSR = SCG0->LDOCSR | (SCG_LDOCSR_LDOEN_MASK);
 
     /* Select SOSC source (external reference clock)*/
-    SCG0->SOSCCFG &= ~SCG_SOSCCFG_EREFS_MASK;
+    SCG0->SOSCCFG = SCG0->SOSCCFG & (~SCG_SOSCCFG_EREFS_MASK);
 
     /*Configure SOSC range */
-    SCG0->SOSCCFG |= SCG_SOSCCFG_RANGE(range);
+    SCG0->SOSCCFG = SCG0->SOSCCFG | (SCG_SOSCCFG_RANGE(range));
 
     /* Unlock SOSCCSR */
-    SCG0->SOSCCSR &= ~SCG_SOSCCSR_LK_MASK;
+    SCG0->SOSCCSR = SCG0->SOSCCSR & (~SCG_SOSCCSR_LK_MASK);
 
     /* Enable SOSC clock monitor and Enable SOSC */
-    SCG0->SOSCCSR |= (SCG_SOSCCSR_SOSCCM_MASK | SCG_SOSCCSR_SOSCEN_MASK);
+    SCG0->SOSCCSR = SCG0->SOSCCSR | (SCG_SOSCCSR_SOSCCM_MASK | SCG_SOSCCSR_SOSCEN_MASK);
 
     /* Wait for SOSC clock to be valid. */
     while ((SCG0->SOSCCSR & SCG_SOSCCSR_SOSCVLD_MASK) == 0U)
@@ -332,7 +332,7 @@ status_t CLOCK_SetupOsc32KClocking(uint32_t id)
     uint32_t temp32 = 0U;
 
     /* Enable LDO */
-    SCG0->LDOCSR |= SCG_LDOCSR_LDOEN_MASK;
+    SCG0->LDOCSR = SCG0->LDOCSR | (SCG_LDOCSR_LDOEN_MASK);
 
     temp32 = (VBAT0->OSCCTLA & ~(VBAT_OSCCTLA_MODE_EN_MASK | VBAT_OSCCTLA_CAP_SEL_EN_MASK | VBAT_OSCCTLA_OSC_EN_MASK)) |
              VBAT_OSCCTLA_MODE_EN(0x0) | VBAT_OSCCTLA_CAP_SEL_EN_MASK | VBAT_OSCCTLA_OSC_EN_MASK;
@@ -345,18 +345,18 @@ status_t CLOCK_SetupOsc32KClocking(uint32_t id)
     }
 
     /* Clear CAP_SEL */
-    VBAT0->OSCCTLA &= ~(VBAT_OSCCTLA_EXTAL_CAP_SEL_MASK | VBAT_OSCCTLA_XTAL_CAP_SEL_MASK);
+    VBAT0->OSCCTLA = VBAT0->OSCCTLA & (~(VBAT_OSCCTLA_EXTAL_CAP_SEL_MASK | VBAT_OSCCTLA_XTAL_CAP_SEL_MASK));
 
-    VBAT0->OSCCLKE |= VBAT_OSCCLKE_CLKE(id);
+    VBAT0->OSCCLKE = VBAT0->OSCCLKE | (VBAT_OSCCLKE_CLKE(id));
 
     /* De-initializes the SCG ROSC */
     SCG0->ROSCCSR = SCG_ROSCCSR_ROSCERR_MASK;
 
     /* Unlock ROSCCSR */
-    SCG0->ROSCCSR &= ~SCG_ROSCCSR_LK_MASK;
+    SCG0->ROSCCSR = SCG0->ROSCCSR & (~SCG_ROSCCSR_LK_MASK);
 
     /* Enable SOSC clock monitor and Enable ROSC */
-    SCG0->ROSCCSR |= SCG_ROSCCSR_ROSCCM_MASK;
+    SCG0->ROSCCSR = SCG0->ROSCCSR | (SCG_ROSCCSR_ROSCCM_MASK);
 
     /* Wait for ROSC clock to be valid. */
     while ((SCG0->ROSCCSR & SCG_ROSCCSR_ROSCVLD_MASK) == 0U)
@@ -413,7 +413,7 @@ status_t CLOCK_SetupOsc32KClockingConfig(osc_32k_config_t config)
     uint32_t oscctlaMask = 0U;
 
     /* Enable LDO */
-    SCG0->LDOCSR |= SCG_LDOCSR_LDOEN_MASK;
+    SCG0->LDOCSR = SCG0->LDOCSR | (SCG_LDOCSR_LDOEN_MASK);
 
     oscctlaMask =
         (VBAT_OSCCTLA_MODE_EN_MASK | VBAT_OSCCTLA_CAP_SEL_EN_MASK | VBAT_OSCCTLA_OSC_EN_MASK |
@@ -482,20 +482,20 @@ status_t CLOCK_SetupOsc32KClockingConfig(osc_32k_config_t config)
         if (config.mode == kVBAT_OscNormalModeEnable)
         {
             /* Clear CAP_SEL */
-            VBAT0->OSCCTLA &= ~(VBAT_OSCCTLA_EXTAL_CAP_SEL_MASK | VBAT_OSCCTLA_XTAL_CAP_SEL_MASK);
+            VBAT0->OSCCTLA = VBAT0->OSCCTLA & (~(VBAT_OSCCTLA_EXTAL_CAP_SEL_MASK | VBAT_OSCCTLA_XTAL_CAP_SEL_MASK));
         }
     }
 
-    VBAT0->OSCCLKE |= VBAT_OSCCLKE_CLKE(config.id);
+    VBAT0->OSCCLKE = VBAT0->OSCCLKE | (VBAT_OSCCLKE_CLKE(config.id));
 
     /* De-initializes the SCG ROSC */
     SCG0->ROSCCSR = SCG_ROSCCSR_ROSCERR_MASK;
 
     /* Unlock ROSCCSR */
-    SCG0->ROSCCSR &= ~SCG_ROSCCSR_LK_MASK;
+    SCG0->ROSCCSR = SCG0->ROSCCSR & (~SCG_ROSCCSR_LK_MASK);
 
     /* Enable SOSC clock monitor and Enable ROSC */
-    SCG0->ROSCCSR |= SCG_ROSCCSR_ROSCCM_MASK;
+    SCG0->ROSCCSR = SCG0->ROSCCSR | (SCG_ROSCCSR_ROSCCM_MASK);
 
     /* Wait for ROSC clock to be valid. */
     while ((SCG0->ROSCCSR & SCG_ROSCCSR_ROSCVLD_MASK) == 0U)
@@ -514,13 +514,13 @@ status_t CLOCK_SetupOsc32KClockingConfig(osc_32k_config_t config)
  */
 status_t CLOCK_SetupClk16KClocking(uint32_t id)
 {
-    VBAT0->FROCTLA |= VBAT_FROCTLA_FRO_EN_MASK;
-    VBAT0->FROCTLB &= ~VBAT_FROCTLB_INVERSE_MASK;
+    VBAT0->FROCTLA = VBAT0->FROCTLA | (VBAT_FROCTLA_FRO_EN_MASK);
+    VBAT0->FROCTLB = VBAT0->FROCTLB & (~VBAT_FROCTLB_INVERSE_MASK);
 
-    VBAT0->FROLCKA |= VBAT_FROLCKA_LOCK_MASK;
-    VBAT0->FROLCKB &= ~VBAT_FROLCKB_LOCK_MASK;
+    VBAT0->FROLCKA = VBAT0->FROLCKA | (VBAT_FROLCKA_LOCK_MASK);
+    VBAT0->FROLCKB = VBAT0->FROLCKB & (~VBAT_FROLCKB_LOCK_MASK);
 
-    VBAT0->FROCLKE |= VBAT_FROCLKE_CLKE(id);
+    VBAT0->FROCLKE = VBAT0->FROCLKE | (VBAT_FROCLKE_CLKE(id));
 
     return kStatus_Success;
 }
@@ -793,9 +793,14 @@ void VBAT_SetOscConfig(VBAT_Type *base, const vbat_osc_config_t *config)
 {
     uint32_t tmp32;
 
+    if (config == NULL)
+    {
+        return;
+    }
+
     if (config->enableCrystalOscillatorBypass == true)
     {
-        base->OSCCTLA |= VBAT_OSCCTLA_OSC_BYP_EN_MASK;
+        base->OSCCTLA = base->OSCCTLA | (VBAT_OSCCTLA_OSC_BYP_EN_MASK);
         while ((VBAT0->STATUSA & VBAT_STATUSA_OSC_RDY_MASK) == 0U)
         {
         }
@@ -804,23 +809,21 @@ void VBAT_SetOscConfig(VBAT_Type *base, const vbat_osc_config_t *config)
     {
         tmp32 = base->OSCCTLA;
 
-        if (config != NULL)
+        if (config->enableInternalCapBank)
         {
-            if (config->enableInternalCapBank)
-            {
-                tmp32 &= ~(VBAT_OSCCTLA_EXTAL_CAP_SEL_MASK | VBAT_OSCCTLA_XTAL_CAP_SEL_MASK);
-                tmp32 |= VBAT_OSCCTLA_EXTAL_CAP_SEL(config->extalCap) | VBAT_OSCCTLA_XTAL_CAP_SEL(config->xtalCap);
-                tmp32 |= VBAT_OSCCTLA_CAP_SEL_EN_MASK;
-            }
-            else
-            {
-                /* Disable the internal capacitance bank. */
-                tmp32 &= ~VBAT_OSCCTLA_CAP_SEL_EN_MASK;
-            }
-
-            tmp32 &= ~(VBAT_OSCCTLA_COARSE_AMP_GAIN_MASK);
-            tmp32 |= VBAT_OSCCTLA_COARSE_AMP_GAIN(config->coarseAdjustment);
+            tmp32 &= ~(VBAT_OSCCTLA_EXTAL_CAP_SEL_MASK | VBAT_OSCCTLA_XTAL_CAP_SEL_MASK);
+            tmp32 |= VBAT_OSCCTLA_EXTAL_CAP_SEL(config->extalCap) | VBAT_OSCCTLA_XTAL_CAP_SEL(config->xtalCap);
+            tmp32 |= VBAT_OSCCTLA_CAP_SEL_EN_MASK;
         }
+        else
+        {
+            /* Disable the internal capacitance bank. */
+            tmp32 &= ~VBAT_OSCCTLA_CAP_SEL_EN_MASK;
+        }
+
+        tmp32 &= ~(VBAT_OSCCTLA_COARSE_AMP_GAIN_MASK);
+        tmp32 |= VBAT_OSCCTLA_COARSE_AMP_GAIN(config->coarseAdjustment);
+
         base->OSCCTLA = tmp32;
         while ((VBAT0->STATUSA & VBAT_STATUSA_OSC_RDY_MASK) == 0U)
         {
@@ -987,7 +990,7 @@ void CLOCK_SetClkDiv(clock_div_name_t div_name, uint32_t divided_by_value)
             /* Write new DIV value while keeping HALT bit set */
             *pDivReg = (divided_by_value - 1U) | (1UL << 30U);
             /* Clear HALT bit to start the divider with the new value */
-            *pDivReg &= ~(1UL << 30U);
+            *pDivReg = *pDivReg & (~(1UL << 30U));
         }
     }
 
@@ -1048,7 +1051,7 @@ void CLOCK_HaltClkDiv(clock_div_name_t div_name)
  */
 void CLOCK_SetupClockCtrl(uint32_t mask)
 {
-    SYSCON->CLOCK_CTRL |= mask;
+    SYSCON->CLOCK_CTRL = SYSCON->CLOCK_CTRL | (mask);
 
     return;
 }
@@ -2352,10 +2355,10 @@ pll_error_t CLOCK_SetPLL0Freq(const pll_setup_t *pSetup)
     uint32_t inRate, clkRate, prediv;
 
     /* Enable LDO */
-    SCG0->LDOCSR |= SCG_LDOCSR_LDOEN_MASK;
+    SCG0->LDOCSR = SCG0->LDOCSR | (SCG_LDOCSR_LDOEN_MASK);
 
     /* Power off PLL0 and disable PLL0 clock during setup changes */
-    SCG0->APLLCSR &= ~(SCG_APLLCSR_APLLPWREN_MASK | SCG_APLLCSR_APLLCLKEN_MASK);
+    SCG0->APLLCSR = SCG0->APLLCSR & (~(SCG_APLLCSR_APLLPWREN_MASK | SCG_APLLCSR_APLLCLKEN_MASK));
 
     /* Write PLL setup data */
     SCG0->APLLCTRL  = pSetup->pllctrl;
@@ -2379,7 +2382,7 @@ pll_error_t CLOCK_SetPLL0Freq(const pll_setup_t *pSetup)
     SCG0->APLLLOCK_CNFG = SCG_APLLLOCK_CNFG_LOCK_TIME(clkRate / 2000U + 300U);
 
     /* Power on PLL0 and enable PLL0 clock */
-    SCG0->APLLCSR |= (SCG_APLLCSR_APLLPWREN_MASK | SCG_APLLCSR_APLLCLKEN_MASK);
+    SCG0->APLLCSR = SCG0->APLLCSR | (SCG_APLLCSR_APLLPWREN_MASK | SCG_APLLCSR_APLLCLKEN_MASK);
 
     /* Wait for APLL lock */
     while (CLOCK_IsPLL0Locked() == false)
@@ -2410,10 +2413,10 @@ pll_error_t CLOCK_SetPLL1Freq(const pll_setup_t *pSetup)
     uint32_t inRate, clkRate, prediv;
 
     /* Enable LDO */
-    SCG0->LDOCSR |= SCG_LDOCSR_LDOEN_MASK;
+    SCG0->LDOCSR = SCG0->LDOCSR | (SCG_LDOCSR_LDOEN_MASK);
 
     /* Power off PLL1 and disable PLL1 clock during setup changes */
-    SCG0->SPLLCSR &= ~(SCG_SPLLCSR_SPLLPWREN_MASK | SCG_SPLLCSR_SPLLCLKEN_MASK);
+    SCG0->SPLLCSR = SCG0->SPLLCSR & (~(SCG_SPLLCSR_SPLLPWREN_MASK | SCG_SPLLCSR_SPLLCLKEN_MASK));
 
     /* Write PLL setup data */
     SCG0->SPLLCTRL  = pSetup->pllctrl;
@@ -2437,7 +2440,7 @@ pll_error_t CLOCK_SetPLL1Freq(const pll_setup_t *pSetup)
     SCG0->SPLLLOCK_CNFG = SCG_SPLLLOCK_CNFG_LOCK_TIME(clkRate / 2000U + 300U);
 
     /* Power on PLL1 and enable PLL1 clock */
-    SCG0->SPLLCSR |= (SCG_SPLLCSR_SPLLPWREN_MASK | SCG_SPLLCSR_SPLLCLKEN_MASK);
+    SCG0->SPLLCSR = SCG0->SPLLCSR | (SCG_SPLLCSR_SPLLPWREN_MASK | SCG_SPLLCSR_SPLLCLKEN_MASK);
 
     /* Wait for APLL lock */
     while (CLOCK_IsPLL1Locked() == false)
@@ -2677,19 +2680,15 @@ static uint32_t CLOCK_GetClockOutClkFreq(void)
  */
 static uint32_t CLOCK_GetLposcFreq(void)
 {
-    uint32_t freq = 0U;
+    uint32_t freq;
 
-    switch ((RTC0->CTRL & RTC_CTRL_CLK_SEL_MASK) >> RTC_CTRL_CLK_SEL_SHIFT)
+    if ((RTC0->CTRL & RTC_CTRL_CLK_SEL_MASK) == 0U)
     {
-        case 0U:
-            freq = CLOCK_GetClk16KFreq((uint32_t)kCLOCK_Clk16KToVbat);
-            break;
-        case 1U:
-            freq = CLOCK_GetOsc32KFreq((uint32_t)kCLOCK_Osc32kToVbat);
-            break;
-        default:
-            freq = 0U;
-            break;
+        freq = CLOCK_GetClk16KFreq((uint32_t)kCLOCK_Clk16KToVbat);
+    }
+    else
+    {
+        freq = CLOCK_GetOsc32KFreq((uint32_t)kCLOCK_Osc32kToVbat);
     }
 
     return freq;
@@ -2824,7 +2823,7 @@ static uint32_t findPll1PostDiv(void)
 /* Get multiplier (M) from PLL0 SSCG and SEL_EXT settings */
 static float findPll0MMult(void)
 {
-    float mMult = 1.0F;
+    float mMult;
     float mMult_fract;
     uint32_t mMult_int;
 
@@ -2850,7 +2849,7 @@ static float findPll0MMult(void)
 /* Get multiplier (M) from PLL1 MDEC. */
 static float findPll1MMult(void)
 {
-    float mMult = 1.0F;
+    float mMult;
     float mMult_fract;
     uint32_t mMult_int;
 
@@ -3187,7 +3186,7 @@ static uint32_t findPllPostDivFromSetup(pll_setup_t *pSetup)
 /* Get multiplier (M) from from setup structure */
 static float findPllMMultFromSetup(pll_setup_t *pSetup)
 {
-    float mMult = 1.0F;
+    float mMult;
     float mMult_fract;
     uint32_t mMult_int;
 
@@ -3217,7 +3216,7 @@ bool CLOCK_EnableUsbfsClock(void)
 {
     SYSCON->USB0CLKSEL = 0x3U; /* Clk 48 MHz clock */
     CLOCK_SetClkDiv(kCLOCK_DivUsb0Clk, 1);
-    SYSCON->USB0CLKDIV &= (uint32_t) ~(SYSCON_USB0CLKDIV_HALT_MASK | SYSCON_USB0CLKDIV_RESET_MASK);
+    SYSCON->USB0CLKDIV = SYSCON->USB0CLKDIV & (uint32_t) ~(SYSCON_USB0CLKDIV_HALT_MASK | SYSCON_USB0CLKDIV_RESET_MASK);
     /* Wait until clock change completes */
     while ((SYSCON->USB0CLKDIV & SYSCON_SYSTICKCLKDIV_UNSTAB_MASK) != 0U)
     {
@@ -3346,7 +3345,7 @@ bool CLOCK_EnableUsbhsPhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
  */
 void CLOCK_DisableUsbhsPhyPllClock(void)
 {
-    USBPHY->CTRL |= USBPHY_CTRL_CLKGATE_MASK; /* Set to 1U to gate clocks */
+    USBPHY->CTRL = USBPHY->CTRL | (USBPHY_CTRL_CLKGATE_MASK); /* Set to 1U to gate clocks */
 }
 
 /*! brief Enable USB HS clock.
@@ -3355,7 +3354,7 @@ void CLOCK_DisableUsbhsPhyPllClock(void)
  */
 bool CLOCK_EnableUsbhsClock(void)
 {
-    USBHS1__USBC->USBCMD |= USBHS_USBCMD_RST_MASK;
+    USBHS1__USBC->USBCMD = USBHS1__USBC->USBCMD | (USBHS_USBCMD_RST_MASK);
     /* Add a delay between RST and RS so make sure there is a DP pullup sequence*/
     for (uint32_t i = 0; i < 400000U; i++)
     {

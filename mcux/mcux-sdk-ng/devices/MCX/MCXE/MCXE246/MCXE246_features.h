@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2025-02-21
-**     Build:               b260518
+**     Build:               b260708
 **
 **     Abstract:
 **         Chip specific module features.
@@ -612,6 +612,18 @@
     (((x) == FTM5) ? (2) : (-1)))))))
 /* @brief Is affected by errata with ID 010856 (FTM: Safe state is not removed from channel outputs after fault condition ends if SWOCTRL is being used to control the pin). */
 #define FSL_FEATURE_FTM_HAS_ERRATA_010856 (1)
+/* @brief Has no FAULTEN bit field in COMBINE register. */
+#define FSL_FEATURE_FTM_HAS_NO_COMBINE_FAULTEN (0)
+/* @brief Has no COMBINE1 bit field in COMBINE register (single channel pair device). */
+#define FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1 (0)
+/* @brief Has no FAULTM bit field in MODE register. */
+#define FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM (0)
+/* @brief Has no FAULTIE bit field in MODE register. */
+#define FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE (0)
+/* @brief Has no FLTCTRL register. */
+#define FSL_FEATURE_FTM_HAS_NO_FLTCTRL (0)
+/* @brief Has no FAULTF bit field in FMS register. */
+#define FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF (0)
 
 /* GPIO module features */
 
@@ -780,6 +792,11 @@
 #define FSL_FEATURE_MSCM_HAS_CP_COUNT (1)
 /* @brief Has data cache. */
 #define FSL_FEATURE_MSCM_HAS_DATACACHE (0)
+
+/* PCC module features */
+
+/* @brief Has CLOCK GATE CONTROL bit (e.g PCC_CGC) */
+#define FSL_FEATURE_PCC_HAS_FGPIO_CLOCK_GATE_CONTROL (0)
 
 /* PDB module features */
 

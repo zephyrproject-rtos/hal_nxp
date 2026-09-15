@@ -32,13 +32,13 @@
 **                          MCXA156VPJ
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260805
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USB
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -169,9 +169,9 @@ typedef struct {
        uint8_t RESERVED_18[3];
   __IO uint8_t USBTRC0;                            /**< USB Transceiver Control 0, offset: 0x10C */
        uint8_t RESERVED_19[23];
-       uint8_t KEEP_ALIVE_CTRL_RSVD;               /**< Reserved, offset: 0x124 */
+  __I  uint8_t KEEP_ALIVE_CTRL_RSVD;               /**< Reserved, offset: 0x124 */
        uint8_t RESERVED_20[3];
-       uint8_t KEEP_ALIVE_WKCTRL_RSVD;             /**< Reserved, offset: 0x128 */
+  __I  uint8_t KEEP_ALIVE_WKCTRL_RSVD;             /**< Reserved, offset: 0x128 */
        uint8_t RESERVED_21[3];
   __IO uint8_t MISCCTRL;                           /**< Miscellaneous Control, offset: 0x12C */
        uint8_t RESERVED_22[3];

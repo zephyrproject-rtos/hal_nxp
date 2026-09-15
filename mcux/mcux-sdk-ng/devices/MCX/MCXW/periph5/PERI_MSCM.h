@@ -1,13 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70AAMMP
-**                          MCXW70ACMFT
+**     Processors:          MCXW70ACMFT
 **                          MCXW70ACMMP
 **                          MCXW70ADMFT
 **                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260409
+**     Build:               b260813
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MSCM
@@ -38,9 +37,7 @@
 #if !defined(PERI_MSCM_H_)
 #define PERI_MSCM_H_                             /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70AAMMP))
-#include "MCXW70AA_COMMON.h"
-#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
+#if (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
 #elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
@@ -597,14 +594,6 @@ typedef struct {
  */
 #define MSCM_SID_CMP(x)                          (((uint32_t)(((uint32_t)(x)) << MSCM_SID_CMP_SHIFT)) & MSCM_SID_CMP_MASK)
 
-#define MSCM_SID_FLXIO_MASK                      (0x100U)
-#define MSCM_SID_FLXIO_SHIFT                     (8U)
-/*! FLXIO - FlexIO Presence
- *  0b0..No FlexIO
- *  0b1..FlexIO present
- */
-#define MSCM_SID_FLXIO(x)                        (((uint32_t)(((uint32_t)(x)) << MSCM_SID_FLXIO_SHIFT)) & MSCM_SID_FLXIO_MASK)
-
 #define MSCM_SID_VREF_MASK                       (0x200U)
 #define MSCM_SID_VREF_SHIFT                      (9U)
 /*! VREF - VREF Presence
@@ -667,9 +656,9 @@ typedef struct {
 #define MSCM_SID_RADIOF_MASK                     (0xF000000U)
 #define MSCM_SID_RADIOF_SHIFT                    (24U)
 /*! RADIOF - Radio Feature
- *  0b0000..802.15.4
+ *  0b0000..Reserved
  *  0b0001..Bluetooth LE
- *  0b0010..Bluetooth LE + 802.15.4
+ *  0b0010..Reserved
  */
 #define MSCM_SID_RADIOF(x)                       (((uint32_t)(((uint32_t)(x)) << MSCM_SID_RADIOF_SHIFT)) & MSCM_SID_RADIOF_MASK)
 

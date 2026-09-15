@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.1, 2025-11-17
-**     Build:               b260716
+**     Build:               b260810
 **
 **     Abstract:
 **         Chip specific module features.
@@ -298,7 +298,7 @@
 #define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_DOZE_MODE_SUPPORTn(x) (0)
 /* @brief Has a glitch filter on the receive pin (register bit field MCR[WAKSRC]). */
 #define FSL_FEATURE_FLEXCAN_HAS_GLITCH_FILTER (0)
-/* @brief Has extended interrupt mask and flag register (register IMASK2, IFLAG2). Note: This feature value is not the same on all FLEXCAN instances. */
+/* @brief Has extended interrupt mask and flag register (register IMASK2, IFLAG2). */
 #define FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER (1)
 /* @brief Instance has extended bit timing register (register CBT). */
 #define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_EXTENDED_TIMING_REGISTERn(x) (1)
@@ -642,9 +642,9 @@
 #define FSL_FEATURE_MU_HAS_RESET_ASSERT_INT (0)
 /* @brief MU supports reset de-assert interrupt. CR[RDIE] or BCR[RDIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT (0)
-/* @brief MU does not support core status. Register CSSR0 or CSR0. Note: This feature value is not the same on all MU instances. */
+/* @brief MU does not support core status. Register CSSR0 or CSR0. */
 #define FSL_FEATURE_MU_NO_CORE_STATUS (1)
-/* @brief MU does not support NMI. Register bit CCR0[NMI]. Note: This feature value is not the same on all MU instances. */
+/* @brief MU does not support NMI. Register bit CCR0[NMI]. */
 #define FSL_FEATURE_MU_NO_NMI (1)
 /* @brief MU does not support core event pending. Register bit SR[CEP]. */
 #define FSL_FEATURE_MU_NO_CEP (1)
@@ -694,7 +694,7 @@
 
 /* @brief Number of channels (related to number of registers LDVALn, CVALn, TCTRLn, TFLGn). */
 #define FSL_FEATURE_PIT_TIMER_COUNT (4)
-/* @brief Has lifetime timer (related to existence of registers LTMR64L and LTMR64H). Note: This feature value is not the same on all PIT instances. */
+/* @brief Has lifetime timer (related to existence of registers LTMR64L and LTMR64H). */
 #define FSL_FEATURE_PIT_HAS_LIFETIME_TIMER (1)
 /* @brief Has chain mode (related to existence of register bit field TCTRLn[CHN]). */
 #define FSL_FEATURE_PIT_HAS_CHAIN_MODE (1)

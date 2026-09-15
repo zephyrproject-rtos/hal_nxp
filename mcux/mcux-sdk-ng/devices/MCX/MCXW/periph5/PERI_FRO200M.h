@@ -1,13 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70AAMMP
-**                          MCXW70ACMFT
+**     Processors:          MCXW70ACMFT
 **                          MCXW70ACMMP
 **                          MCXW70ADMFT
 **                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260409
+**     Build:               b260813
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FRO200M
@@ -38,9 +37,7 @@
 #if !defined(PERI_FRO200M_H_)
 #define PERI_FRO200M_H_                          /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70AAMMP))
-#include "MCXW70AA_COMMON.h"
-#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
+#if (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
 #elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
@@ -88,8 +85,8 @@
 
 /** FRO200M - Register Layout Typedef */
 typedef struct {
-  __IO uint32_t FROCCSR;                           /**< FRO192 Clock Control Status Register, offset: 0x0 */
-  __IO uint32_t FRODIV;                            /**< FRO192 Divide Register, offset: 0x4 */
+  __IO uint32_t FROCCSR;                           /**< FRO200 Clock Control Status Register, offset: 0x0 */
+  __IO uint32_t FRODIV;                            /**< FRO200 Divide Register, offset: 0x4 */
 } FRO200M_Type;
 
 /* ----------------------------------------------------------------------------
@@ -101,7 +98,7 @@ typedef struct {
  * @{
  */
 
-/*! @name FROCCSR - FRO192 Clock Control Status Register */
+/*! @name FROCCSR - FRO200 Clock Control Status Register */
 /*! @{ */
 
 #define FRO200M_FROCCSR_FRODIV_MASK              (0x3U)
@@ -117,11 +114,11 @@ typedef struct {
 #define FRO200M_FROCCSR_POSTDIV_SEL_MASK         (0x7000U)
 #define FRO200M_FROCCSR_POSTDIV_SEL_SHIFT        (12U)
 /*! POSTDIV_SEL - Post Divider Clock Select
- *  0b000..FRO 16MHz Range selected.
- *  0b001..FRO 24MHz Range selected
- *  0b010..FRO 32MHz Range selected
- *  0b011..FRO 48MHz Range selected
- *  0b100..FRO 64MHz Range selected
+ *  0b000..RESERVED. Not Supported
+ *  0b000..RESERVED. Not Supported
+ *  0b010..RESERVED. Not Supported
+ *  0b011..RESERVED. Not Supported
+ *  0b100..RESERVED. Not Supported
  *  0b101..RESERVED. Not Supported
  *  0b110..RESERVED. Not Supported
  *  0b111..FRO undivided Clock selected
@@ -131,13 +128,13 @@ typedef struct {
 #define FRO200M_FROCCSR_VALID_MASK               (0x1000000U)
 #define FRO200M_FROCCSR_VALID_SHIFT              (24U)
 /*! VALID - Clock Valid Flag
- *  0b0..FRO192 is not enabled or clock is not valid.
- *  0b1..FRO192 is enabled and output clock is valid.
+ *  0b0..FRO200 is not enabled or clock is not valid.
+ *  0b1..FRO200 is enabled and output clock is valid.
  */
 #define FRO200M_FROCCSR_VALID(x)                 (((uint32_t)(((uint32_t)(x)) << FRO200M_FROCCSR_VALID_SHIFT)) & FRO200M_FROCCSR_VALID_MASK)
 /*! @} */
 
-/*! @name FRODIV - FRO192 Divide Register */
+/*! @name FRODIV - FRO200 Divide Register */
 /*! @{ */
 
 #define FRO200M_FRODIV_FRODIV_MASK               (0x3U)

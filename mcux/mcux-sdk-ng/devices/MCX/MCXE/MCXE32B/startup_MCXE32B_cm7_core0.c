@@ -2,7 +2,7 @@
 //*****************************************************************************
 // MCXE32B_cm7_core0 startup code
 //
-// Version : 090626
+// Version : 070826
 //*****************************************************************************
 //
 // Copyright 2016-2026 NXP
@@ -15,12 +15,12 @@
 #if defined(__GNUC__)
 #pragma GCC push_options
 #pragma GCC optimize("Og")
-#endif //(__GNUC__)
-#endif //(DEBUG)
+#endif
+#endif // DEBUG
 
 #if defined(__cplusplus)
 #if defined(__MCUXPRESSO)
-#if defined(__REDLIB__)
+#ifdef __REDLIB__
 #error Redlib does not support C++
 #else
 //*****************************************************************************
@@ -31,9 +31,9 @@
 extern "C" {
     extern void __libc_init_array(void);
 }
-#endif //(__REDLIB__)
-#endif //(__MCUXPRESSO)
-#endif //(__cplusplus)
+#endif // __REDLIB__
+#endif // __MCUXPRESSO
+#endif // __cplusplus
 
 #define WEAK __attribute__ ((weak))
 #if defined(__MCUXPRESSO)
@@ -46,7 +46,7 @@ extern "C" {
 //*****************************************************************************
 #if defined(__cplusplus)
 extern "C" {
-#endif //(__cplusplus)
+#endif
 
 //*****************************************************************************
 // Declaration of external SystemInit function
@@ -66,7 +66,7 @@ extern void SystemInit(void);
 void ResetISR(void);
 #else
 void Reset_Handler(void);
-#endif //(__MCUXPRESSO)
+#endif // __MCUXPRESSO
 void Reset_Handler_C(void);
 WEAK void NMI_Handler(void);
 WEAK void HardFault_Handler(void);
@@ -79,6 +79,7 @@ WEAK void PendSV_Handler(void);
 WEAK void SysTick_Handler(void);
 WEAK void DefaultISR(void);
 WEAK void DefaultISR1(uint32_t instance);
+WEAK void DefaultISR3(uint32_t instance, uint32_t start, uint32_t end);
 WEAK void DefaultISR4(uint32_t instance, uint32_t start, uint32_t end, uint32_t type);
 
 //*****************************************************************************
@@ -504,7 +505,7 @@ extern void __main(void);
 extern void __main(void);
 #else
 extern int main(void);
-#endif //(__REDLIB__)
+#endif // __REDLIB__
 #elif defined(__ICCARM__)
 extern void __iar_program_start(void);
 #elif defined(__GNUC__)
@@ -512,10 +513,10 @@ extern void __iar_program_start(void);
 extern void __main(void);
 #else
 extern void _start(void);
-#endif //(__REDLIB__)
+#endif // __REDLIB
 #else
 #error Unsupported toolchain!
-#endif //(__MCUXPRESSO)
+#endif
 
 //*****************************************************************************
 // External declaration for the pointer to the stack top from the Linker Script
@@ -555,12 +556,13 @@ extern uint32_t __bss_start__[];
 extern uint32_t __bss_end__[];
 #else
 #error Unsupported toolchain!
-#endif //(__CC_ARM) || (__ARMCC_VERSION)
+#endif
 
 //*****************************************************************************
 #if defined (__cplusplus)
 } // extern "C"
-#endif //(__cplusplus)
+#endif
+
 //*****************************************************************************
 // The vector table.
 // This relies on the linker script to place at correct location in memory.
@@ -595,7 +597,7 @@ void (* const __isr_vector[])(void) = {
     Reset_Handler,                     // The reset handler
 #else
 #error Unsupported toolchain!
-#endif //(__CC_ARM) || (__ARMCC_VERSION)
+#endif
     NMI_Handler,                       // NMI Handler
     HardFault_Handler,                 // Hard Fault Handler
     MemManage_Handler,                 // MPU Fault Handler
@@ -611,7 +613,7 @@ void (* const __isr_vector[])(void) = {
     PendSV_Handler,                    // PendSV Handler
     SysTick_Handler,                   // SysTick Handler
 
-    // Chip Level - MCXE32B_core0
+    // Chip Level
     INT0_IRQHandler,               // 16 : CPU to CPU int0
     INT1_IRQHandler,               // 17 : CPU to CPU int1
     INT2_IRQHandler,               // 18 : CPU to CPU int2
@@ -869,7 +871,7 @@ extern unsigned int __data_section_table;
 extern unsigned int __data_section_table_end;
 extern unsigned int __bss_section_table;
 extern unsigned int __bss_section_table_end;
-#endif //(__MCUXPRESSO)
+#endif
 
 //*****************************************************************************
 // Reset entry point for your code.
@@ -1045,6 +1047,17 @@ void Reset_Handler(void) {
 #error "Unsupported toolchain!"
 #endif
                     : "r0");
+
+    // ERR052460 Workaround: Cortex-M7: A hang scenario can occur when a reserved read locked memory region is accessed by application cores
+    __asm volatile ("LDR r0, =0x402AC0F0 \n"
+                    "LDR r1, =0x1CB0499D \n"
+                    "STR r1, [r0]        \n"
+                    "LDR r1, =0xB9920D38 \n"
+                    "STR r1, [r0]        \n"
+                    );
+    // Data Synchronization Barrier
+    __asm volatile ("dsb sy");
+
 
 // TCM/SRAM controller must perform a read-modify-write for any access < 32-bit(ITCM) or 64-bit to keep the ECC updated.
 // The Software must ensure the TCM is ECC clean by initializing all memories that have the potential to be accessed as < 32-bit(ITCM) or 64-bit.
@@ -2328,5 +2341,5 @@ WEAK void HSE_B_CLK_FAIL_IRQHandler(void)
 #if defined(DEBUG)
 #if defined(__GNUC__)
 #pragma GCC pop_options
-#endif //(__GNUC__)
-#endif //(DEBUG)
+#endif
+#endif // (DEBUG)

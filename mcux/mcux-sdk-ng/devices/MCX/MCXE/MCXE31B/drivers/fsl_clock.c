@@ -387,6 +387,8 @@ uint32_t CLOCK_GetClkSwitchTriggerCause(clock_attach_id_t connection)
 
 status_t CLOCK_InitFxosc(const fxosc_config_t *config)
 {
+    assert(config != NULL);
+
     CLOCK_EnableClock(kCLOCK_Fxosc);
     if ((FXOSC->STAT & FXOSC_STAT_OSC_STAT_MASK) != 0U)
     {
@@ -396,7 +398,7 @@ status_t CLOCK_InitFxosc(const fxosc_config_t *config)
                                                                            again. */
     }
 
-    FXOSC->CTRL = config->workMode | FXOSC_CTRL_OSCON_MASK | FXOSC_CTRL_GM_SEL(config->overdriveProtect) |
+    FXOSC->CTRL = (uint32_t)config->workMode | FXOSC_CTRL_OSCON_MASK | FXOSC_CTRL_GM_SEL(config->overdriveProtect) |
                   FXOSC_CTRL_EOCV(config->startupDelay);
 
 #if (CLOCK_RETRY_TIMES != 0U)

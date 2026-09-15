@@ -13,13 +13,13 @@
 **                          MCXC444VMP
 **
 **     Version:             rev. 3.0, 2025-11-17
-**     Build:               b251117
+**     Build:               b260810
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -223,7 +223,7 @@ typedef struct {
     union {                                          /* offset: 0x108, array step: 0x10 */
       struct {                                         /* offset: 0x108, array step: 0x10 */
              uint8_t RESERVED_0[3];
-             uint8_t DSR;                                /**< DMA_DSR0 register...DMA_DSR3 register., array offset: 0x10B, array step: 0x10 */
+        __I  uint8_t DSR;                                /**< DMA_DSR0 register...DMA_DSR3 register., array offset: 0x10B, array step: 0x10 */
       } DMA_DSR_ACCESS8BIT;
       __IO uint32_t DSR_BCR;                           /**< DMA Status Register / Byte Count Register, array offset: 0x108, array step: 0x10 */
     };

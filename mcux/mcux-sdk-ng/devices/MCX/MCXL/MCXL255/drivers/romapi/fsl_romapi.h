@@ -181,6 +181,13 @@ typedef struct _bootloader_tree
  * @{
  */
 
+#ifdef MCUX_ROMAPI_TFM_INTERFACE
+#include "fsl_flash_tfm_ns.h" 
+#include "fsl_romapi_tfm_ns.h"
+#elif !defined(MCUX_ROMAPI_TFM_INTERFACE) && (defined(DOMAIN_NS) && (DOMAIN_NS == 1))
+#error "You need to enable the MCUX_COMPONENT_middleware.tfm.ns.romapi for accessing the ROM APIs in NSPE!"
+#else
+
 /*!
  * @brief Initializes the global flash properties structure members
  *
@@ -391,6 +398,8 @@ static inline void ROMAPI_RunBootloader(void *arg)
 {
     ROM_API->run_bootloader(arg);
 }
+
+#endif /* MCUX_ROMAPI_TFM_INTERFACE */
 
 /* @} */
 

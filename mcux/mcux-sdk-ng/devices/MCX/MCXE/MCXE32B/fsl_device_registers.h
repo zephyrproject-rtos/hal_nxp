@@ -13,9 +13,9 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_MCXE32BMPB_cm7_core0))
+#if (defined(CPU_MCXE32BMLL_cm7_core0) || defined(CPU_MCXE32BMPB_cm7_core0))
 #include "MCXE32B_cm7_core0.h"
-#elif (defined(CPU_MCXE32BMPB_cm7_core1))
+#elif (defined(CPU_MCXE32BMLL_cm7_core1) || defined(CPU_MCXE32BMPB_cm7_core1))
 #include "MCXE32B_cm7_core1.h"
 #else
   #error "No valid CPU defined!"

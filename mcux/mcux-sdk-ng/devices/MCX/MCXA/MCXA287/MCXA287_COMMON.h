@@ -13,7 +13,7 @@
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1_DraftC
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260708
+**     Build:               b260805
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXA287
@@ -1745,6 +1745,8 @@ typedef enum _erm_memory_channel
   /** Array initializer of PKC peripheral base pointers */
   #define PKC_BASE_PTRS                            { PKC0 }
 #endif
+/** Interrupt vectors for the PKC peripheral type */
+#define PKC_IRQS                                 { PKC_IRQn }
 
 /* PORT - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

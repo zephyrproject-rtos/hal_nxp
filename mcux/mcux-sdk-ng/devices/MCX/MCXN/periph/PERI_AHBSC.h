@@ -100,14 +100,22 @@
 **                          MCXN547VPB_cm33_core1
 **                          MCXN556SCDF_cm33_core0
 **                          MCXN556SCDF_cm33_core1
+**                          MCXN556TCAB_cm33_core0
+**                          MCXN556TCAB_cm33_core1
 **                          MCXN556TCDF_cm33_core0
 **                          MCXN556TCDF_cm33_core1
+**                          MCXN556TVAB_cm33_core0
+**                          MCXN556TVAB_cm33_core1
 **                          MCXN556TVDF_cm33_core0
 **                          MCXN556TVDF_cm33_core1
 **                          MCXN557SCDF_cm33_core0
 **                          MCXN557SCDF_cm33_core1
+**                          MCXN557TCAB_cm33_core0
+**                          MCXN557TCAB_cm33_core1
 **                          MCXN557TCDF_cm33_core0
 **                          MCXN557TCDF_cm33_core1
+**                          MCXN557TVAB_cm33_core0
+**                          MCXN557TVAB_cm33_core1
 **                          MCXN557TVDF_cm33_core0
 **                          MCXN557TVDF_cm33_core1
 **                          MCXN946TVAB_cm33_core0
@@ -148,7 +156,7 @@
 **                          MCXN947VPB_cm33_core1
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260716
+**     Build:               b260820
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AHBSC
@@ -244,17 +252,17 @@
 #include "MCXN556S_cm33_core0_COMMON.h"
 #elif (defined(CPU_MCXN556SCDF_cm33_core1))
 #include "MCXN556S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MCXN556TCDF_cm33_core0) || defined(CPU_MCXN556TVDF_cm33_core0))
+#elif (defined(CPU_MCXN556TCAB_cm33_core0) || defined(CPU_MCXN556TCDF_cm33_core0) || defined(CPU_MCXN556TVAB_cm33_core0) || defined(CPU_MCXN556TVDF_cm33_core0))
 #include "MCXN556T_cm33_core0_COMMON.h"
-#elif (defined(CPU_MCXN556TCDF_cm33_core1) || defined(CPU_MCXN556TVDF_cm33_core1))
+#elif (defined(CPU_MCXN556TCAB_cm33_core1) || defined(CPU_MCXN556TCDF_cm33_core1) || defined(CPU_MCXN556TVAB_cm33_core1) || defined(CPU_MCXN556TVDF_cm33_core1))
 #include "MCXN556T_cm33_core1_COMMON.h"
 #elif (defined(CPU_MCXN557SCDF_cm33_core0))
 #include "MCXN557S_cm33_core0_COMMON.h"
 #elif (defined(CPU_MCXN557SCDF_cm33_core1))
 #include "MCXN557S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MCXN557TCDF_cm33_core0) || defined(CPU_MCXN557TVDF_cm33_core0))
+#elif (defined(CPU_MCXN557TCAB_cm33_core0) || defined(CPU_MCXN557TCDF_cm33_core0) || defined(CPU_MCXN557TVAB_cm33_core0) || defined(CPU_MCXN557TVDF_cm33_core0))
 #include "MCXN557T_cm33_core0_COMMON.h"
-#elif (defined(CPU_MCXN557TCDF_cm33_core1) || defined(CPU_MCXN557TVDF_cm33_core1))
+#elif (defined(CPU_MCXN557TCAB_cm33_core1) || defined(CPU_MCXN557TCDF_cm33_core1) || defined(CPU_MCXN557TVAB_cm33_core1) || defined(CPU_MCXN557TVDF_cm33_core1))
 #include "MCXN557T_cm33_core1_COMMON.h"
 #elif (defined(CPU_MCXN946TVAB_cm33_core0) || defined(CPU_MCXN946TVDF_cm33_core0) || defined(CPU_MCXN946TVKL_cm33_core0) || defined(CPU_MCXN946TVPB_cm33_core0))
 #include "MCXN946T_cm33_core0_COMMON.h"
@@ -1975,6 +1983,26 @@ typedef struct {
 
 /*! @name AIPS_BRIDGE_GROUP0_MEM_RULE1 - AIPS Bridge Group 0 Memory Rule 1 */
 /*! @{ */
+
+#define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_CMC_MASK (0x3U)
+#define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_CMC_SHIFT (0U)
+/*! CMC - CMC
+ *  0b00..Non-secure and non-privilege user access allowed
+ *  0b01..Non-secure and privilege access allowed
+ *  0b10..Secure and non-privilege user access allowed
+ *  0b11..Secure and privilege user access allowed
+ */
+#define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_CMC(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_CMC_SHIFT)) & AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_CMC_MASK)
+
+#define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_OSTIMER0_MASK (0x30U)
+#define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_OSTIMER0_SHIFT (4U)
+/*! OSTIMER0 - OSTIMER0
+ *  0b00..Non-secure and non-privilege user access allowed
+ *  0b01..Non-secure and privilege access allowed
+ *  0b10..Secure and non-privilege user access allowed
+ *  0b11..Secure and privilege user access allowed
+ */
+#define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_OSTIMER0(x) (((uint32_t)(((uint32_t)(x)) << AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_OSTIMER0_SHIFT)) & AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_OSTIMER0_MASK)
 
 #define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_LPTMR0_MASK (0x300U)
 #define AHBSC_AIPS_BRIDGE_GROUP0_MEM_RULE1_LPTMR0_SHIFT (8U)

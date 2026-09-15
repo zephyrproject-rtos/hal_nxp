@@ -14,7 +14,7 @@
 **                          MCXL255VLL_cm33
 **
 **     Version:             rev. 2.1, 2026-05-02
-**     Build:               b260512
+**     Build:               b260810
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ATX
@@ -108,7 +108,7 @@
 /** ATX - Register Layout Typedef */
 typedef struct {
   __I  uint32_t VERID;                             /**< ATX Version ID, offset: 0x0 */
-       uint32_t PARAM;                             /**< ATX Parameter, offset: 0x4 */
+  __I  uint32_t PARAM;                             /**< ATX Parameter, offset: 0x4 */
   __IO uint32_t TEST_UNLOCK;                       /**< TEST_UNLOCK register, offset: 0x8 */
   __IO uint32_t CTRL;                              /**< ATX Control Regs, offset: 0xC */
   __IO uint32_t CMP_CTRL;                          /**< ATX Cmp Control Regs, offset: 0x10 */

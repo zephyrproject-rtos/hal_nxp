@@ -1,13 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70AAMMP
-**                          MCXW70ACMFT
+**     Processors:          MCXW70ACMFT
 **                          MCXW70ACMMP
 **                          MCXW70ADMFT
 **                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260409
+**     Build:               b260813
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CAN
@@ -38,9 +37,7 @@
 #if !defined(PERI_CAN_H_)
 #define PERI_CAN_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70AAMMP))
-#include "MCXW70AA_COMMON.h"
-#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
+#if (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
 #elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
@@ -183,8 +180,7 @@ typedef struct {
   __IO uint32_t ERFCR;                             /**< Enhanced RX FIFO Control, offset: 0xC0C */
   __IO uint32_t ERFIER;                            /**< Enhanced RX FIFO Interrupt Enable, offset: 0xC10 */
   __IO uint32_t ERFSR;                             /**< Enhanced RX FIFO Status, offset: 0xC14 */
-  __IO uint32_t FDLCR;                             /**< CANFD Light Module Control, offset: 0xC18 */
-       uint8_t RESERVED_9[20];
+       uint8_t RESERVED_9[24];
   __IO uint32_t HR_TIME_STAMP[CAN_HR_TIME_STAMP_COUNT]; /**< High-Resolution Timestamp, array offset: 0xC30, array step: 0x4 */
        uint8_t RESERVED_10[9040];
   __IO uint32_t ERFFEL[CAN_ERFFEL_COUNT];          /**< Enhanced RX FIFO Filter Element, array offset: 0x3000, array step: 0x4 */
@@ -339,15 +335,15 @@ typedef struct {
 
 #define CAN_MCR_NOTRDY_MASK                      (0x8000000U)
 #define CAN_MCR_NOTRDY_SHIFT                     (27U)
-/*! NOTRDY - FlexCAN Not Ready
- *  0b0..FlexCAN is in Normal mode, Listen-Only mode, or Loopback mode.
- *  0b1..FlexCAN is in Disable mode, Doze mode, Stop mode, or Freeze mode.
+/*! NOTRDY - FLEXCAN Not Ready
+ *  0b0..FLEXCAN is in Normal mode, Listen-Only mode, or Loopback mode.
+ *  0b1..FLEXCAN is in Disable mode, Doze mode, Stop mode, or Freeze mode.
  */
 #define CAN_MCR_NOTRDY(x)                        (((uint32_t)(((uint32_t)(x)) << CAN_MCR_NOTRDY_SHIFT)) & CAN_MCR_NOTRDY_MASK)
 
 #define CAN_MCR_HALT_MASK                        (0x10000000U)
 #define CAN_MCR_HALT_SHIFT                       (28U)
-/*! HALT - Halt FlexCAN
+/*! HALT - Halt FLEXCAN
  *  0b0..No request
  *  0b1..Enter Freeze mode, if MCR[FRZ] = 1.
  */
@@ -390,7 +386,7 @@ typedef struct {
 #define CAN_CTRL1_LOM_SHIFT                      (3U)
 /*! LOM - Listen-Only Mode
  *  0b0..Listen-Only mode is deactivated.
- *  0b1..FlexCAN module operates in Listen-Only mode.
+ *  0b1..FLEXCAN module operates in Listen-Only mode.
  */
 #define CAN_CTRL1_LOM(x)                         (((uint32_t)(((uint32_t)(x)) << CAN_CTRL1_LOM_SHIFT)) & CAN_CTRL1_LOM_MASK)
 
@@ -571,13 +567,13 @@ typedef struct {
 #define CAN_ESR1_BOFFINT_SHIFT                   (2U)
 /*! BOFFINT - Bus Off Interrupt Flag
  *  0b0..No such occurrence.
- *  0b1..FlexCAN module entered Bus Off state.
+ *  0b1..FLEXCAN module entered Bus Off state.
  */
 #define CAN_ESR1_BOFFINT(x)                      (((uint32_t)(((uint32_t)(x)) << CAN_ESR1_BOFFINT_SHIFT)) & CAN_ESR1_BOFFINT_MASK)
 
 #define CAN_ESR1_RX_MASK                         (0x8U)
 #define CAN_ESR1_RX_SHIFT                        (3U)
-/*! RX - FlexCAN in Reception Flag
+/*! RX - FLEXCAN in Reception Flag
  *  0b0..Not receiving
  *  0b1..Receiving
  */
@@ -594,7 +590,7 @@ typedef struct {
 
 #define CAN_ESR1_TX_MASK                         (0x40U)
 #define CAN_ESR1_TX_SHIFT                        (6U)
-/*! TX - FlexCAN In Transmission
+/*! TX - FLEXCAN In Transmission
  *  0b0..Not transmitting
  *  0b1..Transmitting
  */
@@ -700,7 +696,7 @@ typedef struct {
 #define CAN_ESR1_BOFFDONEINT_SHIFT               (19U)
 /*! BOFFDONEINT - Bus Off Done Interrupt Flag
  *  0b0..No such occurrence
- *  0b1..FlexCAN module has completed Bus Off process.
+ *  0b1..FLEXCAN module has completed Bus Off process.
  */
 #define CAN_ESR1_BOFFDONEINT(x)                  (((uint32_t)(((uint32_t)(x)) << CAN_ESR1_BOFFDONEINT_SHIFT)) & CAN_ESR1_BOFFDONEINT_MASK)
 
@@ -2226,50 +2222,6 @@ typedef struct {
  *  0b1..Underflow
  */
 #define CAN_ERFSR_ERFUFW(x)                      (((uint32_t)(((uint32_t)(x)) << CAN_ERFSR_ERFUFW_SHIFT)) & CAN_ERFSR_ERFUFW_MASK)
-/*! @} */
-
-/*! @name FDLCR - CANFD Light Module Control */
-/*! @{ */
-
-#define CAN_FDLCR_CMDR_HS_MASK                   (0x1U)
-#define CAN_FDLCR_CMDR_HS_SHIFT                  (0U)
-/*! CMDR_HS - Commander High-Speed Mode
- *  0b0..CAN FD Light commander disabled
- *  0b1..CAN FD Light commander enabled
- */
-#define CAN_FDLCR_CMDR_HS(x)                     (((uint32_t)(((uint32_t)(x)) << CAN_FDLCR_CMDR_HS_SHIFT)) & CAN_FDLCR_CMDR_HS_MASK)
-
-#define CAN_FDLCR_RSDR_HS_MASK                   (0x2U)
-#define CAN_FDLCR_RSDR_HS_SHIFT                  (1U)
-/*! RSDR_HS - Responder High-Speed Mode
- *  0b0..CAN FD Light responder disabled
- *  0b1..CAN FD Light responder enabled
- */
-#define CAN_FDLCR_RSDR_HS(x)                     (((uint32_t)(((uint32_t)(x)) << CAN_FDLCR_RSDR_HS_SHIFT)) & CAN_FDLCR_RSDR_HS_MASK)
-
-#define CAN_FDLCR_ACK_RESP_MASK                  (0x10U)
-#define CAN_FDLCR_ACK_RESP_SHIFT                 (4U)
-/*! ACK_RESP - ACK Response Configuration
- *  0b0..Disabled ACK response
- *  0b1..Enabled ACK response
- */
-#define CAN_FDLCR_ACK_RESP(x)                    (((uint32_t)(((uint32_t)(x)) << CAN_FDLCR_ACK_RESP_SHIFT)) & CAN_FDLCR_ACK_RESP_MASK)
-
-#define CAN_FDLCR_ACK_TOL_MASK                   (0x20U)
-#define CAN_FDLCR_ACK_TOL_SHIFT                  (5U)
-/*! ACK_TOL - ACK Tolerance Configuration
- *  0b0..Disabled ACK tolerance
- *  0b1..Enabled ACK tolerance
- */
-#define CAN_FDLCR_ACK_TOL(x)                     (((uint32_t)(((uint32_t)(x)) << CAN_FDLCR_ACK_TOL_SHIFT)) & CAN_FDLCR_ACK_TOL_MASK)
-
-#define CAN_FDLCR_TX_SYNC_MASK                   (0x40U)
-#define CAN_FDLCR_TX_SYNC_SHIFT                  (6U)
-/*! TX_SYNC - TX Synchronization Configuration
- *  0b0..Disable Tx Synchronization
- *  0b1..Enable Tx Synchronization
- */
-#define CAN_FDLCR_TX_SYNC(x)                     (((uint32_t)(((uint32_t)(x)) << CAN_FDLCR_TX_SYNC_SHIFT)) & CAN_FDLCR_TX_SYNC_MASK)
 /*! @} */
 
 /*! @name HR_TIME_STAMP - High-Resolution Timestamp */

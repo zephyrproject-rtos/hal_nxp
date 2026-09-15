@@ -1,6 +1,8 @@
 /*
 ** ###################################################################
-**     Processors:          MCXN556TCDF_cm33_core1
+**     Processors:          MCXN556TCAB_cm33_core1
+**                          MCXN556TCDF_cm33_core1
+**                          MCXN556TVAB_cm33_core1
 **                          MCXN556TVDF_cm33_core1
 **
 **     Compilers:           GNU C Compiler
@@ -10,7 +12,7 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260716
+**     Build:               b260812
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN556T_cm33_core1

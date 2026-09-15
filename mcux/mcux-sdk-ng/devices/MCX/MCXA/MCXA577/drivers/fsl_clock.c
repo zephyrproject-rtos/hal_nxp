@@ -1022,19 +1022,15 @@ static uint32_t CLOCK_GetOsc32KFreq(uint32_t id)
  */
 static uint32_t CLOCK_GetLposcFreq(void)
 {
-    uint32_t freq = 0U;
+    uint32_t freq;
 
-    switch ((RTC0->CTRL & RTC_CTRL_CLK_SEL_MASK) >> RTC_CTRL_CLK_SEL_SHIFT)
+    if ((RTC0->CTRL & RTC_CTRL_CLK_SEL_MASK) == 0U)
     {
-        case 0U:
-            freq = CLOCK_GetClk16KFreq(0);
-            break;
-        case 1U:
-            freq = CLOCK_GetOsc32KFreq(0);
-            break;
-        default:
-            freq = 0U;
-            break;
+        freq = CLOCK_GetClk16KFreq(0);
+    }
+    else
+    {
+        freq = CLOCK_GetOsc32KFreq(0);
     }
 
     return freq;
@@ -2821,7 +2817,7 @@ static uint32_t findPll1PostDiv(void)
 /* Get multiplier (M) from PLL1 MDEC. */
 static float findPll1MMult(void)
 {
-    float mMult = 1.0F;
+    float mMult;
     float mMult_fract;
     uint32_t mMult_int;
 
@@ -3151,7 +3147,7 @@ static uint32_t findPllPostDivFromSetup(pll_setup_t *pSetup)
 /* Get multiplier (M) from from setup structure */
 static float findPllMMultFromSetup(pll_setup_t *pSetup)
 {
-    float mMult = 1.0F;
+    float mMult;
     float mMult_fract;
     uint32_t mMult_int;
 

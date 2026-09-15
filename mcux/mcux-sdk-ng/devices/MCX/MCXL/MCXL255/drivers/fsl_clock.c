@@ -444,7 +444,7 @@ void CLOCK_AttachClk(clock_attach_id_t connection)
                 break;
         }
 
-        CLOCK_SetClockSelect((clock_select_name_t)reg_offset, clk_sel);
+        (void)CLOCK_SetClockSelect((clock_select_name_t)reg_offset, clk_sel);
 
         if (run_advc_postchg)
         {
@@ -1335,7 +1335,8 @@ static uint32_t CLOCK_GetAonRootAuxFreq(void)
         {
 #if __CORTEX_M == (33U) /* Building on the main core */
             /* SYSCON register is needed for calculation. Accessible from main core only. */
-            freq = CLOCK_GetFroHfFreq() / CLOCK_GetClockDiv(kCLOCK_DivAONAUXCLK);
+            uint32_t aonAuxDiv = CLOCK_GetClockDiv(kCLOCK_DivAONAUXCLK);
+            freq = (aonAuxDiv != 0U) ? (CLOCK_GetFroHfFreq() / aonAuxDiv) : 0U;
 #else /* Building on AON */
             freq = 0U;
 #endif
@@ -2458,28 +2459,6 @@ status_t CLOCK_FROHFAutoTrimEnable(bool enable)
     SCG0->FIRCCSR |= SCG_FIRCCSR_LK_MASK;
 
     return st;
-}
-
-/*!
- * @brief Get trimming data for VDD CORE MAIN, HVD and LVD.
- * @param drive : Main core drive mode
- * @param config : Pointer to configuration (trimmed parameters values) which are read from IFR1
- * @return  Nothing
- */
-void CLOCK_GetVDDCoreMainConfig(main_drive_t drive, vdd_core_main_config_t *config)
-{
-    if (drive == kCLOCK_MidDrive)
-    {
-        config->vddCoreMainAconfig = (*(IFR1_VDD_CORE_MAIN_1P0_TRIM) & IFR1_VDD_CORE_MAIN_MASK);
-        config->lvdLvTrim          = (((*IFR1_LVD_HVD_TRIM_0) >> IFR1_LVD_LV_1P0_TRIM_SHIFT) & IFR1_LVD_HVD_TRIM_MASK);
-        config->hvdLvTrim          = (((*IFR1_LVD_HVD_TRIM_0) >> IFR1_HVD_LV_1P0_TRIM_SHIFT) & IFR1_LVD_HVD_TRIM_MASK);
-    }
-    else
-    {
-        config->vddCoreMainAconfig = (*(IFR1_VDD_CORE_MAIN_1P1_TRIM) & IFR1_VDD_CORE_MAIN_MASK);
-        config->lvdLvTrim          = (((*IFR1_LVD_HVD_TRIM_0) >> IFR1_LVD_LV_1P1_TRIM_SHIFT) & IFR1_LVD_HVD_TRIM_MASK);
-        config->hvdLvTrim          = (((*IFR1_LVD_HVD_TRIM_1) >> IFR1_HVD_LV_1P1_TRIM_SHIFT) & IFR1_LVD_HVD_TRIM_MASK);
-    }
 }
 
 #endif /* Building on the main core */

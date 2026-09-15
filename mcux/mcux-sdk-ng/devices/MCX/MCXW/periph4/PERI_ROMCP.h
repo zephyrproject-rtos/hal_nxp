@@ -10,13 +10,13 @@
 **                          MCXW236BIUKAR
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250819
+**     Build:               b260810
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ROMCP
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -99,7 +99,7 @@ typedef struct {
        uint8_t RESERVED_0[212];
   __IO uint32_t ROMPATCHD[ROMCP_ROMPATCHD_COUNT];  /**< ROMC Data Registers, array offset: 0xD4, array step: 0x4 */
   __IO uint32_t ROMPATCHCNTL;                      /**< ROMC Control Register, offset: 0xF4 */
-       uint32_t ROMPATCHENH;                       /**< ROMC Enable Register High, offset: 0xF8 */
+  __I  uint32_t ROMPATCHENH;                       /**< ROMC Enable Register High, offset: 0xF8 */
   __IO uint32_t ROMPATCHENL;                       /**< ROMC Enable Register Low, offset: 0xFC */
   __IO uint32_t ROMPATCHA[ROMCP_ROMPATCHA_COUNT];  /**< ROMC Address Registers, array offset: 0x100, array step: 0x4 */
        uint8_t RESERVED_1[200];

@@ -6,6 +6,8 @@
  *
  */
 
+#ifndef MCUX_ROMAPI_TFM_INTERFACE
+
 #include "fsl_flash.h"
 #include "fsl_flexspi_nor_flash.h"
 #include "fsl_lpspi_flash.h"
@@ -507,3 +509,5 @@ status_t LPSPI_EepromEraseAll(void)
     assert(BOOTLOADER_API_TREE_POINTER);
     return LPSPI_EEPROM_DRIVER->spi_eeprom_erase_all();
 }
+
+#endif /* MCUX_ROMAPI_TFM_INTERFACE */

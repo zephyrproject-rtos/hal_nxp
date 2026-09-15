@@ -43,8 +43,8 @@ if (CONFIG_MCUX_COMPONENT_driver.romapi_runbootloader)
 
     mcux_add_source(
         SOURCES
-            ./runbootloader/fsl_runbootloader.h
             ./runbootloader/fsl_runbootloader.c
+            ./runbootloader/fsl_runbootloader.h
             ./fsl_romapi_tree.h
     )
 

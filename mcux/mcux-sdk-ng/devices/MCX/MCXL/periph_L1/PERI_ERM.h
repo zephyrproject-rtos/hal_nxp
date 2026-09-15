@@ -14,7 +14,7 @@
 **                          MCXL144VLL_cm33
 **
 **     Version:             rev. 2.1, 2026-05-02
-**     Build:               b260512
+**     Build:               b260810
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ERM
@@ -66,48 +66,6 @@
 #else
   #error "No valid CPU defined!"
 #endif
-
-/* ----------------------------------------------------------------------------
-   -- Mapping Information
-   ---------------------------------------------------------------------------- */
-
-/*!
- * @addtogroup Mapping_Information Mapping Information
- * @{
- */
-
-/** Mapping Information */
-#if !defined(ERM_MEMORY_CHANNEL_T_)
-#define ERM_MEMORY_CHANNEL_T_
-/*!
- * @addtogroup erm_memory_channel
- * @{
- */
-
-/*******************************************************************************
- * Definitions
- ******************************************************************************/
-
-/*!
- * @brief Structure for the erm_memory_channel
- *
- * Defines the structure for the ERM resource collections.
- */
-
-typedef enum _erm_memory_channel
-{
-    kERM_MemoryChannelRAMA0         = 0U,          /**< Memory RAMA0 */
-    kERM_MemoryChannelFMU0          = 1U,          /**< Memory FLASH */
-} erm_memory_channel_t;
-
-/* @} */
-#endif /* ERM_MEMORY_CHANNEL_T_ */
-
-
-/*!
- * @}
- */ /* end of group Mapping_Information */
-
 
 /* ----------------------------------------------------------------------------
    -- Device Peripheral Access Layer
