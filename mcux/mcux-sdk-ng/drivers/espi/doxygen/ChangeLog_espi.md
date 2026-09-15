@@ -1,5 +1,10 @@
 # ESPI
 
+## [2.2.1]
+
+- Improvements
+  - Fixed Coverity issue.
+
 ## [2.2.0]
 
 - New Features

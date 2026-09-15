@@ -8,7 +8,7 @@
 **                          MK02FN64VLH10
 **
 **     Version:             rev. 1.0, 2024-10-29
-**     Build:               b260130
+**     Build:               b260810
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SIM
@@ -102,7 +102,7 @@
 /** SIM - Register Layout Typedef */
 typedef struct {
   __IO uint32_t SOPT1;                             /**< System Options Register 1, offset: 0x0 */
-       uint32_t SOPT1CFG;                          /**< SOPT1 Configuration Register, offset: 0x4 */
+  __I  uint32_t SOPT1CFG;                          /**< SOPT1 Configuration Register, offset: 0x4 */
        uint8_t RESERVED_0[4092];
   __IO uint32_t SOPT2;                             /**< System Options Register 2, offset: 0x1004 */
        uint8_t RESERVED_1[4];

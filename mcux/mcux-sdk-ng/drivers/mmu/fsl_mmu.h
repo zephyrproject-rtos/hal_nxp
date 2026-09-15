@@ -679,4 +679,4 @@ static inline void MMU_DisableInterrupts(MMU_Type *base, uint32_t mask)
 /*!
  * @}
  */
-#endif /* _FSL_MMU_H__ */
+#endif /* FSL_MMU_H__ */

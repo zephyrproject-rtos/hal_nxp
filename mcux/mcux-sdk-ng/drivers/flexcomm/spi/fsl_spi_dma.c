@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2025 NXP
+ * Copyright 2016-2020, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -53,18 +53,6 @@ SDK_ALIGN(static dma_descriptor_t s_spi_descriptor_table[FSL_FEATURE_SOC_SPI_COU
 /*******************************************************************************
  * Code
  ******************************************************************************/
-static void XferToFifoWR(spi_transfer_t *xfer, uint32_t *fifowr)
-{
-    *fifowr |= (xfer->configFlags & ((uint32_t)kSPI_FrameDelay | (uint32_t)kSPI_FrameAssert));
-}
-
-static void SpiConfigToFifoWR(const spi_config_t *config, uint32_t *fifowr)
-{
-    *fifowr |= ((uint32_t)SPI_DEASSERT_ALL & (~(uint32_t)SPI_DEASSERTNUM_SSEL((uint32_t)config->sselNum)));
-    /* set width of data - range asserted at entry */
-    *fifowr |= SPI_FIFOWR_LEN(config->dataWidth);
-}
-
 static void PrepareTxLastWord(spi_dma_handle_t *handle, spi_transfer_t *xfer, const spi_config_t *config)
 {
     uint32_t txLastWord;
@@ -86,8 +74,7 @@ static void PrepareTxLastWord(spi_dma_handle_t *handle, spi_transfer_t *xfer, co
         txLastWord |= (txLastWord << 8U);
     }
 
-    XferToFifoWR(xfer, &txLastWord);
-    SpiConfigToFifoWR(config, &txLastWord);
+    txLastWord |= SPI_GenFifoWriteControl(xfer->configFlags, config, true);
 
     handle->lastword = txLastWord;
 }
@@ -217,15 +204,20 @@ static void SPI_TransferSubmitNextRxDMA(SPI_Type *base, spi_dma_handle_t *handle
 static void SPI_TransferSetupTxContextDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_transfer_t *xfer, const spi_config_t *spi_config_p)
 {
     uint8_t *address;
+    uint32_t frameFifoWriteControl;
+    uint32_t lastFrameFifoWriteControl;
 
     handle->txNextData       = xfer->txData;
     handle->txRemainingBytes = xfer->dataSize;
 
+    frameFifoWriteControl     = SPI_GenFifoWriteControl(xfer->configFlags, spi_config_p, false);
+    lastFrameFifoWriteControl = SPI_GenFifoWriteControl(xfer->configFlags, spi_config_p, true);
+
     /*
-     * If SSEL need be deasserted at last, then the EOT of the last data frame will
-     * be different from previous data frame. Use a seperate DMA descriptor for it.
+     * Only when each frame control flags and the last frame control flags are different,
+     * the last frame needs special handling.
      */
-    if ((xfer->configFlags & (uint32_t)kSPI_FrameAssert) != 0U)
+    if (frameFifoWriteControl != lastFrameFifoWriteControl)
     {
         handle->lastwordBytes     = handle->bytesPerFrame;
         handle->txRemainingBytes -= handle->bytesPerFrame;
@@ -269,10 +261,9 @@ static void SPI_TransferSetupTxContextDMA(SPI_Type *base, spi_dma_handle_t *hand
      * Halfword writes to just the control bits (offset 0xE22) doesn't push anything into the FIFO.
      * And the data access type of control bits must be uint16_t, byte writes or halfword writes to FIFOWR
      * will push the data and the current control bits into the FIFO.
-     * Clear the SPI_FIFOWR_EOT_MASK bit when data is not the last.
      */
     uint32_t writeAddress = ((uintptr_t) & (base->FIFOWR)) + 2UL;
-    *(volatile uint16_t *)writeAddress = (uint16_t)((handle->lastword & (~(uint32_t)kSPI_FrameAssert)) >> 16u);
+    *(volatile uint16_t *)writeAddress = (uint16_t)(frameFifoWriteControl >> 16u);
 }
 
 /*!

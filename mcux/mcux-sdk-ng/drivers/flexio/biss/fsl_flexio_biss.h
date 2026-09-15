@@ -347,4 +347,4 @@ uint8_t FLEXIO_BISS_CalFrameHeadLen(uint64_t *data);
 
 /*! @} */
 
-#endif /* _FSL_FLEXIO_BISS_H_ */
+#endif /* FSL_FLEXIO_BISS_H_ */

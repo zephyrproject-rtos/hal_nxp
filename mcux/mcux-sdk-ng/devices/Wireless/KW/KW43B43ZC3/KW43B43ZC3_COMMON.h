@@ -6,9 +6,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    Rev. 1 Draft F, 2025-10-18
+**     Reference manual:    Rev. 1, 2026-07-08
 **     Version:             rev. 1.0, 2020-05-12
-**     Build:               b260421
+**     Build:               b260721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for KW43B43ZC3
@@ -158,7 +158,7 @@ typedef enum IRQn {
   FLEXPWM0_SUBMODULE2_RELOAD_IRQn = 87,            /**< PWM_RELOAD2: Submodule 2 Reload interrupt */
   FLEXPWM0_RELOAD_ERROR_IRQn   = 88,               /**< PWM_RERR: Reload Error interrupt */
   FLEXPWM0_FAULT_IRQn          = 89,               /**< PWM_FAULT: PWM fault input interrupt */
-  ITRC_IRQn                    = 90,               /**< Output of Intrusion and tamper response controller (ITRC_IRQ) */
+  ITRC0_IRQn                   = 90,               /**< Output of Intrusion and tamper response controller (ITRC_IRQ) */
   TDET_IRQn                    = 91,               /**< Tamper detection interrupt */
   MU0_IRQn                     = 92,               /**< Interrupt from MU0 to CPU0 */
   INTM_IRQn                    = 93,               /**< Error flag to show Radio interrrupt is not serviced in time */
@@ -319,9 +319,9 @@ typedef enum IRQn {
   /** Peripheral AXBS_0 base pointer */
   #define AXBS_0_NS                                ((AXBS_Type *)AXBS_0_BASE_NS)
   /** Peripheral AXBS_MAIN_0 base address */
-  #define AXBS_MAIN_0_BASE                         (0x503D0000u)
+  #define AXBS_MAIN_0_BASE                         (0x5003D000u)
   /** Peripheral AXBS_MAIN_0 base address */
-  #define AXBS_MAIN_0_BASE_NS                      (0x403D0000u)
+  #define AXBS_MAIN_0_BASE_NS                      (0x4003D000u)
   /** Peripheral AXBS_MAIN_0 base pointer */
   #define AXBS_MAIN_0                              ((AXBS_Type *)AXBS_MAIN_0_BASE)
   /** Peripheral AXBS_MAIN_0 base pointer */
@@ -340,7 +340,7 @@ typedef enum IRQn {
   /** Peripheral AXBS_0 base pointer */
   #define AXBS_0                                   ((AXBS_Type *)AXBS_0_BASE)
   /** Peripheral AXBS_MAIN_0 base address */
-  #define AXBS_MAIN_0_BASE                         (0x403D0000u)
+  #define AXBS_MAIN_0_BASE                         (0x4003D000u)
   /** Peripheral AXBS_MAIN_0 base pointer */
   #define AXBS_MAIN_0                              ((AXBS_Type *)AXBS_MAIN_0_BASE)
   /** Array initializer of AXBS peripheral base addresses */
@@ -351,14 +351,6 @@ typedef enum IRQn {
 
 /* BLE2_REG - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral BLE2 base address */
-  #define BLE2_BASE                                (0x50110000u)
-  /** Peripheral BLE2 base address */
-  #define BLE2_BASE_NS                             (0x40110000u)
-  /** Peripheral BLE2 base pointer */
-  #define BLE2                                     ((BLE2_REG_Type *)BLE2_BASE)
-  /** Peripheral BLE2 base pointer */
-  #define BLE2_NS                                  ((BLE2_REG_Type *)BLE2_BASE_NS)
   /** Peripheral BLE2_REG base address */
   #define BLE2_REG_BASE                            (0x50110000u)
   /** Peripheral BLE2_REG base address */
@@ -368,26 +360,22 @@ typedef enum IRQn {
   /** Peripheral BLE2_REG base pointer */
   #define BLE2_REG_NS                              ((BLE2_REG_Type *)BLE2_REG_BASE_NS)
   /** Array initializer of BLE2_REG peripheral base addresses */
-  #define BLE2_REG_BASE_ADDRS                      { BLE2_BASE, BLE2_REG_BASE }
+  #define BLE2_REG_BASE_ADDRS                      { BLE2_REG_BASE }
   /** Array initializer of BLE2_REG peripheral base pointers */
-  #define BLE2_REG_BASE_PTRS                       { BLE2, BLE2_REG }
+  #define BLE2_REG_BASE_PTRS                       { BLE2_REG }
   /** Array initializer of BLE2_REG peripheral base addresses */
-  #define BLE2_REG_BASE_ADDRS_NS                   { BLE2_BASE_NS, BLE2_REG_BASE_NS }
+  #define BLE2_REG_BASE_ADDRS_NS                   { BLE2_REG_BASE_NS }
   /** Array initializer of BLE2_REG peripheral base pointers */
-  #define BLE2_REG_BASE_PTRS_NS                    { BLE2_NS, BLE2_REG_NS }
+  #define BLE2_REG_BASE_PTRS_NS                    { BLE2_REG_NS }
 #else
-  /** Peripheral BLE2 base address */
-  #define BLE2_BASE                                (0x40110000u)
-  /** Peripheral BLE2 base pointer */
-  #define BLE2                                     ((BLE2_REG_Type *)BLE2_BASE)
   /** Peripheral BLE2_REG base address */
   #define BLE2_REG_BASE                            (0x40110000u)
   /** Peripheral BLE2_REG base pointer */
   #define BLE2_REG                                 ((BLE2_REG_Type *)BLE2_REG_BASE)
   /** Array initializer of BLE2_REG peripheral base addresses */
-  #define BLE2_REG_BASE_ADDRS                      { BLE2_BASE, BLE2_REG_BASE }
+  #define BLE2_REG_BASE_ADDRS                      { BLE2_REG_BASE }
   /** Array initializer of BLE2_REG peripheral base pointers */
-  #define BLE2_REG_BASE_PTRS                       { BLE2, BLE2_REG }
+  #define BLE2_REG_BASE_PTRS                       { BLE2_REG }
 #endif
 
 /* BRIC - Peripheral instance base addresses */
@@ -544,31 +532,31 @@ typedef enum IRQn {
 
 /* CCM32K - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral ANAREG_0 base address */
-  #define ANAREG_0_BASE                            (0x5018A000u)
-  /** Peripheral ANAREG_0 base address */
-  #define ANAREG_0_BASE_NS                         (0x4018A000u)
-  /** Peripheral ANAREG_0 base pointer */
-  #define ANAREG_0                                 ((CCM32K_Type *)ANAREG_0_BASE)
-  /** Peripheral ANAREG_0 base pointer */
-  #define ANAREG_0_NS                              ((CCM32K_Type *)ANAREG_0_BASE_NS)
+  /** Peripheral CCM32K_0 base address */
+  #define CCM32K_0_BASE                            (0x5018A000u)
+  /** Peripheral CCM32K_0 base address */
+  #define CCM32K_0_BASE_NS                         (0x4018A000u)
+  /** Peripheral CCM32K_0 base pointer */
+  #define CCM32K_0                                 ((CCM32K_Type *)CCM32K_0_BASE)
+  /** Peripheral CCM32K_0 base pointer */
+  #define CCM32K_0_NS                              ((CCM32K_Type *)CCM32K_0_BASE_NS)
   /** Array initializer of CCM32K peripheral base addresses */
-  #define CCM32K_BASE_ADDRS                        { ANAREG_0_BASE }
+  #define CCM32K_BASE_ADDRS                        { CCM32K_0_BASE }
   /** Array initializer of CCM32K peripheral base pointers */
-  #define CCM32K_BASE_PTRS                         { ANAREG_0 }
+  #define CCM32K_BASE_PTRS                         { CCM32K_0 }
   /** Array initializer of CCM32K peripheral base addresses */
-  #define CCM32K_BASE_ADDRS_NS                     { ANAREG_0_BASE_NS }
+  #define CCM32K_BASE_ADDRS_NS                     { CCM32K_0_BASE_NS }
   /** Array initializer of CCM32K peripheral base pointers */
-  #define CCM32K_BASE_PTRS_NS                      { ANAREG_0_NS }
+  #define CCM32K_BASE_PTRS_NS                      { CCM32K_0_NS }
 #else
-  /** Peripheral ANAREG_0 base address */
-  #define ANAREG_0_BASE                            (0x4018A000u)
-  /** Peripheral ANAREG_0 base pointer */
-  #define ANAREG_0                                 ((CCM32K_Type *)ANAREG_0_BASE)
+  /** Peripheral CCM32K_0 base address */
+  #define CCM32K_0_BASE                            (0x4018A000u)
+  /** Peripheral CCM32K_0 base pointer */
+  #define CCM32K_0                                 ((CCM32K_Type *)CCM32K_0_BASE)
   /** Array initializer of CCM32K peripheral base addresses */
-  #define CCM32K_BASE_ADDRS                        { ANAREG_0_BASE }
+  #define CCM32K_BASE_ADDRS                        { CCM32K_0_BASE }
   /** Array initializer of CCM32K peripheral base pointers */
-  #define CCM32K_BASE_PTRS                         { ANAREG_0 }
+  #define CCM32K_BASE_PTRS                         { CCM32K_0 }
 #endif
 
 /* CDOG - Peripheral instance base addresses */
@@ -1005,35 +993,6 @@ typedef enum IRQn {
   #define GENFSK_BASE_ADDRS                        { GENFSK_BASE }
   /** Array initializer of GENFSK peripheral base pointers */
   #define GENFSK_BASE_PTRS                         { GENFSK }
-#endif
-
-/* GLIKEY - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral GLIKEY base address */
-  #define GLIKEY_BASE                              (0x5019FD00u)
-  /** Peripheral GLIKEY base address */
-  #define GLIKEY_BASE_NS                           (0x4019FD00u)
-  /** Peripheral GLIKEY base pointer */
-  #define GLIKEY                                   ((GLIKEY_Type *)GLIKEY_BASE)
-  /** Peripheral GLIKEY base pointer */
-  #define GLIKEY_NS                                ((GLIKEY_Type *)GLIKEY_BASE_NS)
-  /** Array initializer of GLIKEY peripheral base addresses */
-  #define GLIKEY_BASE_ADDRS                        { GLIKEY_BASE }
-  /** Array initializer of GLIKEY peripheral base pointers */
-  #define GLIKEY_BASE_PTRS                         { GLIKEY }
-  /** Array initializer of GLIKEY peripheral base addresses */
-  #define GLIKEY_BASE_ADDRS_NS                     { GLIKEY_BASE_NS }
-  /** Array initializer of GLIKEY peripheral base pointers */
-  #define GLIKEY_BASE_PTRS_NS                      { GLIKEY_NS }
-#else
-  /** Peripheral GLIKEY base address */
-  #define GLIKEY_BASE                              (0x4019FD00u)
-  /** Peripheral GLIKEY base pointer */
-  #define GLIKEY                                   ((GLIKEY_Type *)GLIKEY_BASE)
-  /** Array initializer of GLIKEY peripheral base addresses */
-  #define GLIKEY_BASE_ADDRS                        { GLIKEY_BASE }
-  /** Array initializer of GLIKEY peripheral base pointers */
-  #define GLIKEY_BASE_PTRS                         { GLIKEY }
 #endif
 
 /* GPIO - Peripheral instance base addresses */
@@ -2454,35 +2413,6 @@ typedef enum IRQn {
   #define TX_PACKET_RAM_BASE_PTRS                  { TX_PACKET_RAM }
 #endif
 
-/* UDF - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral UDF_0 base address */
-  #define UDF_0_BASE                               (0x5003B000u)
-  /** Peripheral UDF_0 base address */
-  #define UDF_0_BASE_NS                            (0x4003B000u)
-  /** Peripheral UDF_0 base pointer */
-  #define UDF_0                                    ((UDF_Type *)UDF_0_BASE)
-  /** Peripheral UDF_0 base pointer */
-  #define UDF_0_NS                                 ((UDF_Type *)UDF_0_BASE_NS)
-  /** Array initializer of UDF peripheral base addresses */
-  #define UDF_BASE_ADDRS                           { UDF_0_BASE }
-  /** Array initializer of UDF peripheral base pointers */
-  #define UDF_BASE_PTRS                            { UDF_0 }
-  /** Array initializer of UDF peripheral base addresses */
-  #define UDF_BASE_ADDRS_NS                        { UDF_0_BASE_NS }
-  /** Array initializer of UDF peripheral base pointers */
-  #define UDF_BASE_PTRS_NS                         { UDF_0_NS }
-#else
-  /** Peripheral UDF_0 base address */
-  #define UDF_0_BASE                               (0x4003B000u)
-  /** Peripheral UDF_0 base pointer */
-  #define UDF_0                                    ((UDF_Type *)UDF_0_BASE)
-  /** Array initializer of UDF peripheral base addresses */
-  #define UDF_BASE_ADDRS                           { UDF_0_BASE }
-  /** Array initializer of UDF peripheral base pointers */
-  #define UDF_BASE_PTRS                            { UDF_0 }
-#endif
-
 /* WDOG - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
   /** Peripheral WDOG_0 base address */
@@ -2839,7 +2769,7 @@ typedef enum IRQn {
 #define LPCMP0 CMP_0
 #define FMU0_NS FMU_NS
 #define LPTMR0 LPTMR_0
-#define CCM32K ANAREG_0
+#define CCM32K CCM32K_0
 #define MU0_MUA MU_0__MUA
 #define MU0_MUB MU_0__MUB
 #define MU1_MUA MU_1__MUA

@@ -20,7 +20,7 @@
 **                          KW47Z420B3AFTA
 **
 **     Version:             rev. 3.0, 2026-02-11
-**     Build:               b260416
+**     Build:               b260811
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TRDC

@@ -195,4 +195,4 @@ int FLASH_Read(FLASH_Type *pFLASH, uint8_t *pu8Start, uint32_t u32ReadMode, uint
 }
 #endif
 
-#endif /* __FLASH_JN518X_H_ */
+#endif /* FLASH_JN518X_H_ */

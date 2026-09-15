@@ -6,8 +6,8 @@
  */
 
 
-#ifndef _FSL_PMU_H
-#define _FSL_PMU_H
+#ifndef FSL_PMU_H
+#define FSL_PMU_H
 
 
 #include "fsl_common.h"
@@ -26,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief pls_pmu driver version 2.2.0. */
-#define FSL_PMU_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief pls_pmu driver version 2.3.0. */
+#define FSL_PMU_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 /*!
@@ -38,6 +38,15 @@ typedef enum _pmu_fro16k_output_freq
     kPMU_FRO16KOutput16KHz = 0x0U,  /*!< FRM16K output 16KHz. */
     kPMU_FRO16KOutput8KHz,          /*!< FRM16K output 8KHz. */
 } pmu_fro16k_output_freq_t;
+
+/*!
+ * @brief The enumeration of main DCDC power modes.
+ */
+typedef enum _pmu_dcdc_main_power_mode
+{
+    kPMU_DcdcMain_NormalPowerMode = 0x0U, /*!< DCDC main in normal power mode. */
+    kPMU_DcdcMain_LowPowerMode,           /*!< DCDC main in low power mode. */
+} pmu_dcdc_main_power_mode_t;
 
 
 /*******************************************************************************
@@ -68,6 +77,40 @@ static inline void PMU_EnableFixedDCDC(PMU_Type *base, bool enable)
 #if CONFIG_PLS_PMU_REG_WRITE_DELAY_VAL
     SDK_DelayAtLeastUs(CONFIG_PLS_PMU_REG_WRITE_DELAY_VAL, SystemCoreClock);
 #endif /* CONFIG_PLS_PMU_REG_WRITE_DELAY_VAL */
+}
+
+/*!
+ * @brief Update the power mode of the main DCDC.
+ * 
+ * @param base PMU peripheral base address.
+ * @param mode Power mode to set for the main DCDC.
+ */
+static inline void PMU_UpdateDCDCMainMode(PMU_Type *base, pmu_dcdc_main_power_mode_t mode)
+{
+    if (mode == kPMU_DcdcMain_NormalPowerMode)
+    {
+        base->PCTRL &= ~PMU_PCTRL_VDD_MAIN_LPWR_MASK;
+    }
+    else
+    {
+        base->PCTRL |= PMU_PCTRL_VDD_MAIN_LPWR_MASK;
+    }
+#if CONFIG_PLS_PMU_REG_WRITE_DELAY_VAL
+    SDK_DelayAtLeastUs(CONFIG_PLS_PMU_REG_WRITE_DELAY_VAL, SystemCoreClock);
+#endif /* CONFIG_PLS_PMU_REG_WRITE_DELAY_VAL */
+}
+
+/*!
+
+ * @brief Get the current power mode of the main DCDC.
+ * 
+ * @param base PMU peripheral base address.
+ * @return pmu_dcdc_main_power_mode_t Current power mode of the main DCDC.
+ */
+static inline pmu_dcdc_main_power_mode_t PMU_GetDCDCMainMode(PMU_Type *base)
+{
+    return (((base->PCTRL & PMU_PCTRL_VDD_MAIN_LPWR_MASK) != 0UL) ? kPMU_DcdcMain_LowPowerMode : \
+        kPMU_DcdcMain_NormalPowerMode);
 }
 
 /*!
@@ -444,4 +487,4 @@ static inline void PMU_DoHandshakeBetweenPMUAndPAC(PMU_Type *base)
 /*!
  * @}
  */
-#endif /* __FSL_PMU_H */
+#endif /* FSL_PMU_H */

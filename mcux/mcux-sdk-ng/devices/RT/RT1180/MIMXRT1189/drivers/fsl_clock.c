@@ -1330,7 +1330,7 @@ uint32_t CLOCK_GetPllFreq(clock_pll_t pll)
                         ANADIG_PLL_ARM_PLL_CTRL_DIV_SELECT_SHIFT;
             postDiv = (ANADIG_PLL->ARM_PLL_CTRL & ANADIG_PLL_ARM_PLL_CTRL_POST_DIV_SEL_MASK) >>
                       ANADIG_PLL_ARM_PLL_CTRL_POST_DIV_SEL_SHIFT;
-            postDiv = (1UL << (postDiv + 1UL));
+            postDiv = (postDiv == 3UL) ? 1UL : (1UL << (postDiv + 1UL));
             freq    = (uint32_t)(((uint64_t)XTAL_FREQ / ((uint64_t)2UL * postDiv)) & 0xFFFFFFFFUL);
             freq    = (uint32_t)(((uint64_t)freq * divSelect) & 0xFFFFFFFFUL);
 #else

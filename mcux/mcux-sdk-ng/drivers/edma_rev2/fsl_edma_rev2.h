@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_EDMA_REV2_H_
-#define _FSL_EDMA_REV2_H_
+#ifndef FSL_EDMA_REV2_H_
+#define FSL_EDMA_REV2_H_
 
 #include "fsl_common.h"
 
@@ -327,4 +327,4 @@ status_t EDMA_ConfigureTransfer(edma_config_t *cfg, int channel,
 #if defined(__cplusplus)
 }
 #endif
-#endif /* _FSL_EDMA_REV2_H_ */
+#endif /* FSL_EDMA_REV2_H_ */

@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 2.3.3. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
+/*! @brief power driver version 2.3.5. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 3, 5))
 /*@}*/
 
 #if __CORTEX_M == 33U

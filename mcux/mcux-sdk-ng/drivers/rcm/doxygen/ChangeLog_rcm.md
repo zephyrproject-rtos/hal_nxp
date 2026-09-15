@@ -1,5 +1,9 @@
 # RCM
 
+## [2.0.6]
+- Bug Fixes
+  - Fixed RCM_GetVersionId() always returning 0 for the major version field due to a wrong mask/shift combination (CID 8644199).
+
 ## [2.0.5]
 - Bug Fixes
   - Replace direct boolean to integer casts with explicit ternary operators for INT31-C compliance.

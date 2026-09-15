@@ -9,7 +9,7 @@
 **
 **     Reference manual:    iMX937RM Rev. 1 Draft A
 **     Version:             rev. 1.0, 2026-04-09
-**     Build:               b260624
+**     Build:               b260722
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX9373_cm7
@@ -310,7 +310,6 @@
 #include "PERI_TCM_ECC_MCM.h"
 #include "PERI_TMPSNS.h"
 #include "PERI_TPM.h"
-#include "PERI_TRDC.h"
 #include "PERI_TRGMUX.h"
 #include "PERI_TSTMR.h"
 #include "PERI_USB.h"

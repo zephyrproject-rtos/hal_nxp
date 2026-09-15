@@ -1,5 +1,12 @@
 # ENET_QOS
 
+## [2.7.7]
+
+- Bug Fixes
+  - Applied workaround for errata ERR050705 on MCXE32B/MCXE327: set the DDBF bit of the
+    MTL_EST_CONTROL register when programming the gate control list to avoid incorrect
+    Head-Of-Line blocking (HLBF) frame drops.
+
 ## [2.7.6]
 
 - New features

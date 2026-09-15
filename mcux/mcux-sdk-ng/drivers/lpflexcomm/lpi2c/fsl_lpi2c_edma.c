@@ -338,7 +338,7 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
 
         if (commandCount != 0U)
         {
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
             /* Create a software TCD, which will be chained after the commands. */
             EDMA_TcdResetExt(handle->tx->base, tcd);
             EDMA_TcdSetTransferConfigExt(handle->tx->base, tcd, &transferConfig, NULL);
@@ -386,7 +386,7 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
                enabling rx dma and disabling tx dma, which will be chained onto the commands transfer,
                and create another software TCD of transfering data and chain it onto the last TCD.
                Notice that in this situation assume tx/rx uses same channel */
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
             EDMA_TcdResetExt(handle->rx->base, tcd);
             EDMA_TcdSetTransferConfigExt(handle->rx->base, tcd, &transferConfig, NULL);
             EDMA_TcdEnableInterruptsExt(handle->rx->base, tcd, (uint32_t)kEDMA_MajorInterruptEnable);
@@ -407,7 +407,7 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
 
             edma_tcd_t *tcdSetRxClearTxDMA = (edma_tcd_t *)((uint32_t)(&handle->tcds[2]) & (~ALIGN_32_MASK));
 
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
             EDMA_TcdResetExt(handle->rx->base, tcdSetRxClearTxDMA);
             EDMA_TcdSetTransferConfigExt(handle->rx->base, tcdSetRxClearTxDMA, &transferConfig, tcd);
 #else

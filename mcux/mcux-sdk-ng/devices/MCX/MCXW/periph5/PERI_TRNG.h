@@ -1,13 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70AAMMP
-**                          MCXW70ACMFT
+**     Processors:          MCXW70ACMFT
 **                          MCXW70ACMMP
 **                          MCXW70ADMFT
 **                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260409
+**     Build:               b260813
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TRNG
@@ -38,9 +37,7 @@
 #if !defined(PERI_TRNG_H_)
 #define PERI_TRNG_H_                             /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70AAMMP))
-#include "MCXW70AA_COMMON.h"
-#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
+#if (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
 #elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
@@ -457,6 +454,7 @@ typedef struct {
 
 #define TRNG_ENT_ENT_MASK                        (0xFFFFFFFFU)
 #define TRNG_ENT_ENT_SHIFT                       (0U)
+/*! ENT - Entropy Value */
 #define TRNG_ENT_ENT(x)                          (((uint32_t)(((uint32_t)(x)) << TRNG_ENT_ENT_SHIFT)) & TRNG_ENT_ENT_MASK)
 /*! @} */
 
@@ -552,7 +550,7 @@ typedef struct {
 
 #define TRNG_INT_STATUS_HW_ERR_MASK              (0x1U)
 #define TRNG_INT_STATUS_HW_ERR_SHIFT             (0U)
-/*! HW_ERR
+/*! HW_ERR - TRNG Error.
  *  0b0..No error.
  *  0b1..Error detected.
  */
@@ -560,7 +558,7 @@ typedef struct {
 
 #define TRNG_INT_STATUS_ENT_VAL_MASK             (0x2U)
 #define TRNG_INT_STATUS_ENT_VAL_SHIFT            (1U)
-/*! ENT_VAL
+/*! ENT_VAL - Entropy Valid.
  *  0b0..Busy generating entropy. Any value read from the Entropy registers is invalid.
  *  0b1..Values read from the Entropy registers are valid.
  */
@@ -568,7 +566,7 @@ typedef struct {
 
 #define TRNG_INT_STATUS_FRQ_CT_FAIL_MASK         (0x4U)
 #define TRNG_INT_STATUS_FRQ_CT_FAIL_SHIFT        (2U)
-/*! FRQ_CT_FAIL
+/*! FRQ_CT_FAIL - Frequency Count Fail.
  *  0b0..No hardware nor self test frequency errors.
  *  0b1..The frequency counter has detected a failure.
  */
@@ -576,7 +574,7 @@ typedef struct {
 
 #define TRNG_INT_STATUS_INTG_FLT_MASK            (0x8U)
 #define TRNG_INT_STATUS_INTG_FLT_SHIFT           (3U)
-/*! INTG_FLT
+/*! INTG_FLT - Integrity Fault.
  *  0b0..No internal fault has been detected.
  *  0b1..TRNG has detected internal fault.
  */

@@ -111,7 +111,7 @@ status_t DWC_DPHY_Init(CAMERA_MIPI_CSI2_Type *csibase, CAMERA_DSI_OR_CSI_PHY_CSR
 /*!
  * @}
  */
-#endif /* _PIN_MUX_H_ */
+#endif /* PIN_MUX_H_ */
 
 /***********************************************************************************************************************
  * EOF

@@ -40,7 +40,7 @@ Origin:
 
    NXP MCUXpresso SDK Core
    https://github.com/nxp-mcuxpresso/mcuxsdk-core
-   SHA: 88e69085dfaab35652ca79fdf3f05c7551eed601
+   SHA: fd4dc182034f1bbfc6ca465312aa8eabcab92625
    Source folder: cmake/extension
    Destination folder: mcux-sdk-ng/cmake/extension
 
@@ -58,37 +58,37 @@ Origin:
 
    NXP MCUXpresso SDK Device i.MX
    https://github.com/nxp-mcuxpresso/mcux-devices-imx
-   SHA: c44c70545f236cf75b9f3a5a72c6694816593ca6
+   SHA: 8c5a76ed3c5e90552fd799bc2583edb5d1223efa
    Source folder: Root folder of the NXP MCUXpresso SDK Device i.MX Repository
    Destination folder: mcux-sdk-ng/devices/i.MX
 
    NXP MCUXpresso SDK Device RT
    https://github.com/nxp-mcuxpresso/mcux-devices-rt
-   SHA: 5aca9adfa3dd9be25fb31144dc52a5a845fd95aa
+   SHA: f7b174ef993614aaa3a23b3ca77a996c2211994c
    Source folder: Root folder of the NXP MCUXpresso SDK Device RT Repository
    Destination folder: mcux-sdk-ng/devices/RT
 
    NXP MCUXpresso SDK Device Kinetis
    https://github.com/nxp-mcuxpresso/mcux-devices-kinetis
-   SHA: b8c9e31246223da57b9e85bfe638da9a853bf125
+   SHA: 3a0a8dfdd90669dea9998bad0657cf5787073006
    Source folder: Root folder of the NXP MCUXpresso SDK Device Kinetis Repository
    Destination folder: mcux-sdk-ng/devices/Kinetis
 
    NXP MCUXpresso SDK Device LPC
    https://github.com/nxp-mcuxpresso/mcux-devices-lpc
-   SHA: fdf4429f3dda7f427bf4ef438a0e85fca083e178
+   SHA: 3219d258961967797d435d874d1ca01b474aa390
    Source folder: Root folder of the NXP MCUXpresso SDK Device LPC Repository
    Destination folder: mcux-sdk-ng/devices/LPC
 
    NXP MCUXpresso SDK Device MCX
    https://github.com/nxp-mcuxpresso/mcux-devices-mcx
-   SHA: fcdafec0dec36f939375b3c67a40967c98dde0f8
+   SHA: 5265e58df14d31bcb3bc88c28a305ce9e230b090
    Source folder: Root folder of the NXP MCUXpresso SDK Device MCX Repository
    Destination folder: mcux-sdk-ng/devices/MCX
 
    NXP MCUXpresso SDK Device Wireless
    https://github.com/nxp-mcuxpresso/mcux-devices-wireless
-   SHA: e565121a5b815d43e85144ee6f34d53f758822eb
+   SHA: 0d2c97770475558c72f5b6947f468bf97282df79
    Source folder: Root folder of the NXP MCUXpresso SDK Device Wireless Repository
    Destination folder: mcux-sdk-ng/devices/Wireless
 
@@ -219,26 +219,6 @@ Patch List:
      Also since the additions about C40 Flash geometry in S32K344_features.h and defining local Flash Aliases in
      S32K344_glue_mcux.h, are for S32K344 SoC so they are not present in the mcusdk-core repo.
 
-  - mcux-sdk-ng: MCXW70: Added the missing FMU_NS definition
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/56a9107d359e483c3d12603bfa00389f4b1d8cee
-   - This patch is in hal_nxp but is not in 26.06.00 release.
-
-  - hal_nxp: imx8mp: add clock_root_t entries for media MIPI PHY1 REF and DISP1 PIX
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/229842509954fa28ce8820211ece30c6ac4ebae9
-   - This patch is in hal_nxp but is not in 26.06.00 release.
-
-  - hal_nxp: fsl_esai: Remove stray #endif
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/870437e97db5831f938b2e9efca9db547cab3a50
-   - This patch is in hal_nxp but is not in 26.06.00 release.
-
-  - device: RW: power: fix GDET disableCount corruption on PM3 entry failure
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/1b298128359649cf257130a2a47abfcce874cf2f
-   - This patch is in hal_nxp but is not in 26.06.00 release.
-
-   - MCUX SDK 26.09.00-pvw2 sync special patches:
+   - MCUX SDK 26.09.00 RC1 sync special patches:
     - hal_nxp: undefine PAGESIZE macro before naming fields
       - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/2199f173d1b3cd31f3d97677479270314154fd55
-    - mcux: sdk_ng: drivers: ecspi: fix stale conreg and configreg bits
-      - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/6dfad8efcea1369210896f561e2d73ad45c7489a
-    - mcux-sdk-ng: MIMX94398: remove exception source file for a55
-      - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/1fad84dd567809ba69cc519c7bc58bc6458d1654

@@ -5,6 +5,10 @@ include(${SdkRootDirPath}/arch/arm/cortexm/core_${CONFIG_MCUX_HW_FPU_TYPE}.cmake
 include(${SdkRootDirPath}/arch/arm/cortexm/cpu_define.cmake)
 endif()
 
+if(CONFIG_CPU_CORTEX_A)
+include(${SdkRootDirPath}/arch/arm/cortexa/cpu_define.cmake)
+endif()
+
 if(CONFIG_MCUX_COMPONENT_device.RTE)
 
     mcux_add_source(BASE_PATH ${SdkRootDirPath}/${device_root}/${soc_portfolio}/${soc_series}/${device}/template SOURCES RTE_Device.h CONFIG

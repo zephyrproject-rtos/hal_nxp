@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 4.0, 2026-02-28
-**     Build:               b260305
+**     Build:               b260721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENETC_PCI_TYPE0
@@ -450,7 +450,7 @@ typedef struct {
   __I  uint16_t PCI_CFC_PCIPM_CAP;                 /**< PCI PCI-PM capabilities register, offset: 0x92 */
   __IO uint16_t PCI_CFC_PCIPM_CTL_STAT;            /**< PCI PCI-PM control and status register, offset: 0x94 */
        uint8_t RESERVED_8[1];
-       uint8_t PCI_CFC_PCIPM_DATA;                 /**< PCI PCI-PM capabilities data register, offset: 0x97 */
+  __I  uint8_t PCI_CFC_PCIPM_DATA;                 /**< PCI PCI-PM capabilities data register, offset: 0x97 */
        uint8_t RESERVED_9[4];
   __I  uint16_t PCI_CFC_EA_CAP_LIST;               /**< PCI EA capabilities list register, offset: 0x9C */
   __I  uint16_t PCI_CFC_EA_CAP;                    /**< PCI EA capabilities register, offset: 0x9E */

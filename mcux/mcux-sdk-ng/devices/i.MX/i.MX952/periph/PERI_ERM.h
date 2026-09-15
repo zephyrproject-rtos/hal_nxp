@@ -38,7 +38,7 @@
 **                          MIMX9529xxVZx_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260416
+**     Build:               b260722
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ERM
@@ -153,50 +153,50 @@
 /** ERM - Register Layout Typedef */
 typedef struct {
   __IO uint32_t CR0;                               /**< ERM Configuration Register 0, offset: 0x0 */
-  __IO uint32_t CR1;                               /**< ERM Configuration Register 1, offset: 0x4, not available in all instances (available on 12 out of 60) */
+  __IO uint32_t CR1;                               /**< ERM Configuration Register 1, offset: 0x4, available only on: AON.ERMA/AON__ERMA (missing on DISPLAY.ERM/DISPLAY__ERM, M7.ERM/M7__ERM) */
        uint8_t RESERVED_0[8];
   __IO uint32_t SR0;                               /**< ERM Status Register 0, offset: 0x10 */
-  __IO uint32_t SR1;                               /**< ERM Status Register 1, offset: 0x14, not available in all instances (available on 12 out of 60) */
+  __IO uint32_t SR1;                               /**< ERM Status Register 1, offset: 0x14, available only on: AON.ERMA/AON__ERMA (missing on DISPLAY.ERM/DISPLAY__ERM, M7.ERM/M7__ERM) */
        uint8_t RESERVED_1[232];
-  __I  uint32_t EAR0;                              /**< ERM Memory 0 Error Address Register, offset: 0x100, not available in all instances (available on 36 out of 60) */
-  __I  uint32_t SYN0;                              /**< ERM Memory 0 Syndrome Register, offset: 0x104, not available in all instances (available on 36 out of 60) */
-  __IO uint32_t CORR_ERR_CNT0;                     /**< ERM Memory 0 Correctable Error Count Register, offset: 0x108, not available in all instances (available on 48 out of 60) */
+  __I  uint32_t EAR0;                              /**< ERM Memory 0 Error Address Register, offset: 0x100, available only on: AON.ERMA/AON__ERMA (missing on DISPLAY.ERM/DISPLAY__ERM, M7.ERM/M7__ERM) */
+  __I  uint32_t SYN0;                              /**< ERM Memory 0 Syndrome Register, offset: 0x104, available only on: AON.ERMA/AON__ERMA (missing on DISPLAY.ERM/DISPLAY__ERM, M7.ERM/M7__ERM) */
+  __IO uint32_t CORR_ERR_CNT0;                     /**< ERM Memory 0 Correctable Error Count Register, offset: 0x108, available only on: AON.ERMA/AON__ERMA, M7.ERM/M7__ERM (missing on DISPLAY.ERM/DISPLAY__ERM) */
        uint8_t RESERVED_2[4];
-  __I  uint32_t EAR1;                              /**< ERM Memory 1 Error Address Register, offset: 0x110, not available in all instances (available on 24 out of 60) */
-  __I  uint32_t SYN1;                              /**< ERM Memory 1 Syndrome Register, offset: 0x114, not available in all instances (available on 24 out of 60) */
-  __IO uint32_t CORR_ERR_CNT1;                     /**< ERM Memory 1 Correctable Error Count Register, offset: 0x118, not available in all instances (available on 36 out of 60) */
+  __I  uint32_t EAR1;                              /**< ERM Memory 1 Error Address Register, offset: 0x110, available only on: AON.ERMA/AON__ERMA, DISPLAY.ERM/DISPLAY__ERM (missing on M7.ERM/M7__ERM) */
+  __I  uint32_t SYN1;                              /**< ERM Memory 1 Syndrome Register, offset: 0x114, available only on: AON.ERMA/AON__ERMA, DISPLAY.ERM/DISPLAY__ERM (missing on M7.ERM/M7__ERM) */
+  __IO uint32_t CORR_ERR_CNT1;                     /**< ERM Memory 1 Correctable Error Count Register, offset: 0x118 */
        uint8_t RESERVED_3[4];
-  __I  uint32_t EAR2;                              /**< ERM Memory 2 Error Address Register, offset: 0x120, not available in all instances (available on 24 out of 60) */
-  __I  uint32_t SYN2;                              /**< ERM Memory 2 Syndrome Register, offset: 0x124, not available in all instances (available on 24 out of 60) */
-  __IO uint32_t CORR_ERR_CNT2;                     /**< ERM Memory 2 Correctable Error Count Register, offset: 0x128, not available in all instances (available on 36 out of 60) */
+  __I  uint32_t EAR2;                              /**< ERM Memory 2 Error Address Register, offset: 0x120, available only on: AON.ERMA/AON__ERMA, DISPLAY.ERM/DISPLAY__ERM (missing on M7.ERM/M7__ERM) */
+  __I  uint32_t SYN2;                              /**< ERM Memory 2 Syndrome Register, offset: 0x124, available only on: AON.ERMA/AON__ERMA, DISPLAY.ERM/DISPLAY__ERM (missing on M7.ERM/M7__ERM) */
+  __IO uint32_t CORR_ERR_CNT2;                     /**< ERM Memory 2 Correctable Error Count Register, offset: 0x128 */
        uint8_t RESERVED_4[4];
-  __I  uint32_t EAR3;                              /**< ERM Memory 3 Error Address Register, offset: 0x130, not available in all instances (available on 24 out of 60) */
-  __I  uint32_t SYN3;                              /**< ERM Memory 3 Syndrome Register, offset: 0x134, not available in all instances (available on 24 out of 60) */
-  __IO uint32_t CORR_ERR_CNT3;                     /**< ERM Memory 3 Correctable Error Count Register, offset: 0x138, not available in all instances (available on 36 out of 60) */
+  __I  uint32_t EAR3;                              /**< ERM Memory 3 Error Address Register, offset: 0x130, available only on: AON.ERMA/AON__ERMA, DISPLAY.ERM/DISPLAY__ERM (missing on M7.ERM/M7__ERM) */
+  __I  uint32_t SYN3;                              /**< ERM Memory 3 Syndrome Register, offset: 0x134, available only on: AON.ERMA/AON__ERMA, DISPLAY.ERM/DISPLAY__ERM (missing on M7.ERM/M7__ERM) */
+  __IO uint32_t CORR_ERR_CNT3;                     /**< ERM Memory 3 Correctable Error Count Register, offset: 0x138 */
        uint8_t RESERVED_5[4];
-  __I  uint32_t EAR4;                              /**< ERM Memory 4 Error Address Register, offset: 0x140, not available in all instances (available on 12 out of 60) */
-  __I  uint32_t SYN4;                              /**< ERM Memory 4 Syndrome Register, offset: 0x144, not available in all instances (available on 12 out of 60) */
-  __IO uint32_t CORR_ERR_CNT4;                     /**< ERM Memory 4 Correctable Error Count Register, offset: 0x148, not available in all instances (available on 12 out of 60) */
+  __I  uint32_t EAR4;                              /**< ERM Memory 4 Error Address Register, offset: 0x140, available only on: AON.ERMA/AON__ERMA (missing on DISPLAY.ERM/DISPLAY__ERM, M7.ERM/M7__ERM) */
+  __I  uint32_t SYN4;                              /**< ERM Memory 4 Syndrome Register, offset: 0x144, available only on: AON.ERMA/AON__ERMA (missing on DISPLAY.ERM/DISPLAY__ERM, M7.ERM/M7__ERM) */
+  __IO uint32_t CORR_ERR_CNT4;                     /**< ERM Memory 4 Correctable Error Count Register, offset: 0x148, available only on: AON.ERMA/AON__ERMA (missing on DISPLAY.ERM/DISPLAY__ERM, M7.ERM/M7__ERM) */
        uint8_t RESERVED_6[4];
-  __I  uint32_t EAR5;                              /**< ERM Memory 5 Error Address Register, offset: 0x150, not available in all instances (available on 36 out of 60) */
-  __I  uint32_t SYN5;                              /**< ERM Memory 5 Syndrome Register, offset: 0x154, not available in all instances (available on 36 out of 60) */
-  __IO uint32_t CORR_ERR_CNT5;                     /**< ERM Memory 5 Correctable Error Count Register, offset: 0x158, not available in all instances (available on 36 out of 60) */
+  __I  uint32_t EAR5;                              /**< ERM Memory 5 Error Address Register, offset: 0x150 */
+  __I  uint32_t SYN5;                              /**< ERM Memory 5 Syndrome Register, offset: 0x154 */
+  __IO uint32_t CORR_ERR_CNT5;                     /**< ERM Memory 5 Correctable Error Count Register, offset: 0x158 */
        uint8_t RESERVED_7[4];
-  __I  uint32_t EAR6;                              /**< ERM Memory 6 Error Address Register, offset: 0x160, not available in all instances (available on 36 out of 60) */
-  __I  uint32_t SYN6;                              /**< ERM Memory 6 Syndrome Register, offset: 0x164, not available in all instances (available on 36 out of 60) */
-  __IO uint32_t CORR_ERR_CNT6;                     /**< ERM Memory 6 Correctable Error Count Register, offset: 0x168, not available in all instances (available on 36 out of 60) */
+  __I  uint32_t EAR6;                              /**< ERM Memory 6 Error Address Register, offset: 0x160 */
+  __I  uint32_t SYN6;                              /**< ERM Memory 6 Syndrome Register, offset: 0x164 */
+  __IO uint32_t CORR_ERR_CNT6;                     /**< ERM Memory 6 Correctable Error Count Register, offset: 0x168 */
        uint8_t RESERVED_8[4];
-  __I  uint32_t EAR7;                              /**< ERM Memory 7 Error Address Register, offset: 0x170, not available in all instances (available on 48 out of 60) */
-  __I  uint32_t SYN7;                              /**< ERM Memory 7 Syndrome Register, offset: 0x174, not available in all instances (available on 48 out of 60) */
-  __IO uint32_t CORR_ERR_CNT7;                     /**< ERM Memory 7 Correctable Error Count Register, offset: 0x178, not available in all instances (available on 48 out of 60) */
+  __I  uint32_t EAR7;                              /**< ERM Memory 7 Error Address Register, offset: 0x170 */
+  __I  uint32_t SYN7;                              /**< ERM Memory 7 Syndrome Register, offset: 0x174 */
+  __IO uint32_t CORR_ERR_CNT7;                     /**< ERM Memory 7 Correctable Error Count Register, offset: 0x178 */
        uint8_t RESERVED_9[4];
-  __I  uint32_t EAR8;                              /**< ERM Memory 8 Error Address Register, offset: 0x180, not available in all instances (available on 12 out of 60) */
-  __I  uint32_t SYN8;                              /**< ERM Memory 8 Syndrome Register, offset: 0x184, not available in all instances (available on 12 out of 60) */
-  __IO uint32_t CORR_ERR_CNT8;                     /**< ERM Memory 8 Correctable Error Count Register, offset: 0x188, not available in all instances (available on 12 out of 60) */
+  __I  uint32_t EAR8;                              /**< ERM Memory 8 Error Address Register, offset: 0x180, available only on: AON.ERMA/AON__ERMA (missing on DISPLAY.ERM/DISPLAY__ERM, M7.ERM/M7__ERM) */
+  __I  uint32_t SYN8;                              /**< ERM Memory 8 Syndrome Register, offset: 0x184, available only on: AON.ERMA/AON__ERMA (missing on DISPLAY.ERM/DISPLAY__ERM, M7.ERM/M7__ERM) */
+  __IO uint32_t CORR_ERR_CNT8;                     /**< ERM Memory 8 Correctable Error Count Register, offset: 0x188, available only on: AON.ERMA/AON__ERMA (missing on DISPLAY.ERM/DISPLAY__ERM, M7.ERM/M7__ERM) */
        uint8_t RESERVED_10[4];
-  __I  uint32_t EAR9;                              /**< ERM Memory 9 Error Address Register, offset: 0x190, not available in all instances (available on 12 out of 60) */
-  __I  uint32_t SYN9;                              /**< ERM Memory 9 Syndrome Register, offset: 0x194, not available in all instances (available on 12 out of 60) */
-  __IO uint32_t CORR_ERR_CNT9;                     /**< ERM Memory 9 Correctable Error Count Register, offset: 0x198, not available in all instances (available on 12 out of 60) */
+  __I  uint32_t EAR9;                              /**< ERM Memory 9 Error Address Register, offset: 0x190, available only on: AON.ERMA/AON__ERMA (missing on DISPLAY.ERM/DISPLAY__ERM, M7.ERM/M7__ERM) */
+  __I  uint32_t SYN9;                              /**< ERM Memory 9 Syndrome Register, offset: 0x194, available only on: AON.ERMA/AON__ERMA (missing on DISPLAY.ERM/DISPLAY__ERM, M7.ERM/M7__ERM) */
+  __IO uint32_t CORR_ERR_CNT9;                     /**< ERM Memory 9 Correctable Error Count Register, offset: 0x198, available only on: AON.ERMA/AON__ERMA (missing on DISPLAY.ERM/DISPLAY__ERM, M7.ERM/M7__ERM) */
 } ERM_Type;
 
 /* ----------------------------------------------------------------------------

@@ -1,5 +1,10 @@
 # SAR_ADC
 
+## [2.4.0]
+
+- New Feature
+  - Added support for configuring ADC MUX delay through the DSDR register.
+
 ## [2.3.0]
 
 - New Feature

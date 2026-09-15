@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.1, 2026-05-02
-**     Build:               b260717
+**     Build:               b260804
 **
 **     Abstract:
 **         Chip specific module features.
@@ -439,6 +439,8 @@
 #define FSL_FEATURE_MCX_CMC_HAS_NO_FLASHCR_WAKE (0)
 /* @brief Has SCR bit in BSR register */
 #define FSL_FEATURE_MCX_CMC_HAS_BSR_SCR_BIT (1)
+/* @brief Has DBGCTL register */
+#define FSL_FEATURE_MCX_CMC_HAS_DBGCTL_REG (1)
 
 /* CRC module features */
 
@@ -602,6 +604,8 @@
 #define FSL_FEATURE_TRDC_HAS_DOMAIN_ERROR (0)
 /* @brief TRDC instance has TRDC_FLW_CTL. */
 #define FSL_FEATURE_TRDC_HAS_FLW (0)
+/* @brief TRDC DERRLOC.MBCINST uses flat one-bit-per-MBC-instance encoding (bit N = MBC[N]). Other devices use 4-bits-per-MBC encoding (bit 4i+j = MBC[i] SLV[j]). */
+#define FSL_FEATURE_TRDC_DERRLOC_MBCINST_FLAT_ENCODING (0)
 
 /* MU module features */
 

@@ -25,8 +25,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 1.6.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(1, 6, 0))
+/*! @brief CLOCK driver version 1.7.0. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(1, 7, 0))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -56,6 +56,8 @@
 #define IFR1_VDD_CORE_MAIN_1P0_TRIM ((uint32_t *)0x01100884U)
 #define IFR1_VDD_CORE_MAIN_1P1_TRIM ((uint32_t *)0x01100888U)
 #define IFR1_VDD_CORE_MAIN_MASK (0xFFU)
+#define IFR1_VDD_CORE_MAIN_LPWR_MASK (0x1F00U)
+#define IFR1_VDD_CORE_MAIN_LPWR_SHIFT (8U)
 #define IFR1_LVD_HVD_TRIM_0 ((uint32_t *)0x01100890U)
 #define IFR1_LVD_HVD_TRIM_1 ((uint32_t *)0x01100894U)
 #define IFR1_LVD_LV_1P0_TRIM_SHIFT (12U)
@@ -810,25 +812,6 @@ typedef struct _scg_rosc_config
     scg_rosc_monitor_mode_t monitorMode; /*!< Clock monitor mode selected.     */
 } scg_rosc_config_t;
 
-/*!
- * @brief VDD_CORE_MAIN related configuration.
- */
-typedef struct _vdd_core_main_config
-{
-    uint8_t vddCoreMainAconfig; /*!< VDD_CORE DCDC_MAIN Active Configuration */
-    uint8_t lvdLvTrim; /*!< Trim bits for vdd_lv low voltage detect */
-    uint8_t hvdLvTrim; /*!< VBAT low voltage detect trim */
-} vdd_core_main_config_t;
-
-/*!
- * @brief Main core drive modes.
- */
-typedef enum _main_drive_t
-{
-    kCLOCK_MidDrive = 0U,   /*!< Mid drive mode */
-    kCLOCK_StandardDrive,   /*!< Standard drive mode */
-} main_drive_t;
-
 #endif /* Building on the main core */
 
 /*!
@@ -1281,12 +1264,84 @@ status_t CLOCK_FRO12MAutoTrimEnable(bool enable);
 status_t CLOCK_FROHFAutoTrimEnable(bool enable);
 
 /*!
- * @brief Get trimming data for VDD CORE MAIN, HVD and LVD.
- * @param drive : Main core drive mode
- * @param config : Pointer to configuration (trimmed parameters values) which are read from IFR1
- * @return  Nothing
+ * @brief Get VDD_CORE_MAIN active mode trim for mid drive (1.0V) from IFR1.
+ *
+ * @return Trim value read from IFR1_VDD_CORE_MAIN_1P0_TRIM active config field.
  */
-void CLOCK_GetVDDCoreMainConfig(main_drive_t drive, vdd_core_main_config_t *config);
+static inline uint8_t CLOCK_GetVDDCore1P0InActiveModeTrim(void)
+{
+    return (uint8_t)((*IFR1_VDD_CORE_MAIN_1P0_TRIM) & IFR1_VDD_CORE_MAIN_MASK);
+}
+
+/*!
+ * @brief Get VDD_CORE_MAIN low power mode trim for mid drive (1.0V) from IFR1.
+ *
+ * @return Trim value read from IFR1_VDD_CORE_MAIN_1P0_TRIM low power config field.
+ */
+static inline uint8_t CLOCK_GetVDDCore1P0InLpModeTrim(void)
+{
+    return (uint8_t)(((*IFR1_VDD_CORE_MAIN_1P0_TRIM) & IFR1_VDD_CORE_MAIN_LPWR_MASK) >> IFR1_VDD_CORE_MAIN_LPWR_SHIFT);
+}
+
+/*!
+ * @brief Get VDD_CORE_MAIN active mode trim for standard drive (1.1V) from IFR1.
+ *
+ * @return Trim value read from IFR1_VDD_CORE_MAIN_1P1_TRIM active config field.
+ */
+static inline uint8_t CLOCK_GetVDDCore1P1InActiveModeTrim(void)
+{
+    return (uint8_t)((*IFR1_VDD_CORE_MAIN_1P1_TRIM) & IFR1_VDD_CORE_MAIN_MASK);
+}
+
+/*!
+ * @brief Get VDD_CORE_MAIN low power mode trim for standard drive (1.1V) from IFR1.
+ *
+ * @return Trim value read from IFR1_VDD_CORE_MAIN_1P1_TRIM low power config field.
+ */
+static inline uint8_t CLOCK_GetVDDCore1P1InLpModeTrim(void)
+{
+    return (uint8_t)(((*IFR1_VDD_CORE_MAIN_1P1_TRIM) & IFR1_VDD_CORE_MAIN_LPWR_MASK) >> IFR1_VDD_CORE_MAIN_LPWR_SHIFT);
+}
+
+/*!
+ * @brief Get LVD low voltage trim for mid drive (1.0V) from IFR1.
+ *
+ * @return LVD trim value for 1P0 drive read from IFR1_LVD_HVD_TRIM_0.
+ */
+static inline uint8_t CLOCK_GetLvdLvTrim1P0(void)
+{
+    return (uint8_t)(((*IFR1_LVD_HVD_TRIM_0) >> IFR1_LVD_LV_1P0_TRIM_SHIFT) & IFR1_LVD_HVD_TRIM_MASK);
+}
+
+/*!
+ * @brief Get LVD low voltage trim for standard drive (1.1V) from IFR1.
+ *
+ * @return LVD trim value for 1P1 drive read from IFR1_LVD_HVD_TRIM_0.
+ */
+static inline uint8_t CLOCK_GetLvdLvTrim1P1(void)
+{
+    return (uint8_t)(((*IFR1_LVD_HVD_TRIM_0) >> IFR1_LVD_LV_1P1_TRIM_SHIFT) & IFR1_LVD_HVD_TRIM_MASK);
+}
+
+/*!
+ * @brief Get HVD low voltage trim for mid drive (1.0V) from IFR1.
+ *
+ * @return HVD trim value for 1P0 drive read from IFR1_LVD_HVD_TRIM_0.
+ */
+static inline uint8_t CLOCK_GetHvdLvTrim1P0(void)
+{
+    return (uint8_t)(((*IFR1_LVD_HVD_TRIM_0) >> IFR1_HVD_LV_1P0_TRIM_SHIFT) & IFR1_LVD_HVD_TRIM_MASK);
+}
+
+/*!
+ * @brief Get HVD low voltage trim for standard drive (1.1V) from IFR1.
+ *
+ * @return HVD trim value for 1P1 drive read from IFR1_LVD_HVD_TRIM_1.
+ */
+static inline uint8_t CLOCK_GetHvdLvTrim1P1(void)
+{
+    return (uint8_t)(((*IFR1_LVD_HVD_TRIM_1) >> IFR1_HVD_LV_1P1_TRIM_SHIFT) & IFR1_LVD_HVD_TRIM_MASK);
+}
 
 #endif /* Building on the main core */
 

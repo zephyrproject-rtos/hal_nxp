@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.0, 2025-11-17
-**     Build:               b260520
+**     Build:               b260609
 **
 **     Abstract:
 **         Chip specific module features.
@@ -416,8 +416,10 @@
 
 /* OSTIMER module features */
 
-/* @brief Has no OS Timer control register in PMC */
+/* @brief Has no OS Timer control register in PMC. */
 #define FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG (1)
+/* @brief Has binary encoded value in counter register. */
+#define FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER (0)
 
 /* PINT module features */
 

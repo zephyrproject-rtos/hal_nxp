@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief LPSPI driver version. */
-#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*! @} */
 
 #ifndef LPSPI_DUMMY_DATA
@@ -300,7 +300,7 @@ typedef struct _lpspi_master_config
 
     lpspi_pin_config_t pinCfg; /*!< Configures which pins are used for input and output data
                                 *during single bit transfers.*/
-    
+
 #if !(defined(FSL_FEATURE_LPSPI_HAS_NO_PCSCFG) && FSL_FEATURE_LPSPI_HAS_NO_PCSCFG)
     lpspi_pcs_function_config_t pcsFunc; /*!< Configures cs pins function.*/
 #endif
@@ -541,7 +541,7 @@ static inline void LPSPI_Enable(LPSPI_Type *base, bool enable)
         base->CR &= ~LPSPI_CR_MEN_MASK;
     }
 #if defined(FSL_FEATURE_LPSPI_HAS_ERRATA_051472) && FSL_FEATURE_LPSPI_HAS_ERRATA_051472
-    /* ERRATA051472: The SR[REF] would assert if software disables the LPSPI module 
+    /* ERRATA051472: The SR[REF] would assert if software disables the LPSPI module
        after receiving some data and then enabled the LPSPI again without performing a software reset.
        Clear SR[REF] flag after LPSPI module enabled*/
     if ((base->SR & (uint32_t)kLPSPI_ReceiveErrorFlag) != 0U)
@@ -577,7 +577,7 @@ static inline uint32_t LPSPI_GetStatusFlags(LPSPI_Type *base)
  */
 static inline uint8_t LPSPI_GetTxFifoSize(LPSPI_Type *base)
 {
-    return (1U << ((base->PARAM & LPSPI_PARAM_TXFIFO_MASK) >> LPSPI_PARAM_TXFIFO_SHIFT));
+    return (uint8_t)((1U << ((base->PARAM & LPSPI_PARAM_TXFIFO_MASK) >> LPSPI_PARAM_TXFIFO_SHIFT)) & 0xFFU);
 }
 
 /*!
@@ -587,7 +587,7 @@ static inline uint8_t LPSPI_GetTxFifoSize(LPSPI_Type *base)
  */
 static inline uint8_t LPSPI_GetRxFifoSize(LPSPI_Type *base)
 {
-    return (1U << ((base->PARAM & LPSPI_PARAM_RXFIFO_MASK) >> LPSPI_PARAM_RXFIFO_SHIFT));
+    return (uint8_t)((1U << ((base->PARAM & LPSPI_PARAM_RXFIFO_MASK) >> LPSPI_PARAM_RXFIFO_SHIFT)) & 0xFFU);
 }
 
 /*!
@@ -640,12 +640,12 @@ static inline void LPSPI_ClearStatusFlags(LPSPI_Type *base, uint32_t statusFlags
 static inline uint32_t LPSPI_GetTcr(LPSPI_Type *base)
 {
     uint32_t tcr_values[2];
-    uint32_t i = 0u;
+    uint32_t i = 0U;
 
     tcr_values[0] = base->TCR;
     do
     {
-        i = (i + 1u) % 2u;
+        i ^= 1U;
         /* ERR050606 LPSPI: TCR value does not get resampled when polling the register
          * Workaround: After reading the Transmit Command Register must always access a different register in
          * between subsequent reads from TCR.
@@ -888,7 +888,7 @@ static inline void LPSPI_FlushFifo(LPSPI_Type *base, bool flushTxFifo, bool flus
 
     LPSPI_Enable(base, enabled);
 #else
-    base->CR |= ((flushTxFifo ? 1U : 0U) << LPSPI_CR_RTF_SHIFT) | ((flushRxFifo ? 1U : 0U) << LPSPI_CR_RRF_SHIFT);
+    base->CR |= ((uint32_t)(flushTxFifo ? 1U : 0U) << LPSPI_CR_RTF_SHIFT) | ((uint32_t)(flushRxFifo ? 1U : 0U) << LPSPI_CR_RRF_SHIFT);
 #endif
 }
 
@@ -948,6 +948,7 @@ static inline void LPSPI_SetAllPcsPolarity(LPSPI_Type *base, uint32_t mask)
  */
 static inline void LPSPI_SetFrameSize(LPSPI_Type *base, uint32_t frameSize)
 {
+    assert(frameSize > 0U);
     base->TCR = (LPSPI_GetTcr(base) & ~LPSPI_TCR_FRAMESZ_MASK) | LPSPI_TCR_FRAMESZ(frameSize - 1U);
 }
 

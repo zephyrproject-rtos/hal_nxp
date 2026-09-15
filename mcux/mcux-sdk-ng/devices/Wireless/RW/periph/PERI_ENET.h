@@ -8,7 +8,7 @@
 **                          RW612UKA2I
 **
 **     Version:             rev. 4.0, 2026-01-12
-**     Build:               b260114
+**     Build:               b260805
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENET
@@ -167,7 +167,7 @@ typedef struct {
   __I  uint32_t RMON_T_P1024TO2047;                /**< Tx 1024- to 2047-byte Packets Statistic Register, offset: 0x23C */
   __I  uint32_t RMON_T_P_GTE2048;                  /**< Tx Packets Greater Than 2048 Bytes Statistic Register, offset: 0x240 */
   __I  uint32_t RMON_T_OCTETS;                     /**< Tx Octets Statistic Register, offset: 0x244 */
-       uint32_t IEEE_T_DROP;                       /**< Reserved Statistic Register, offset: 0x248 */
+  __I  uint32_t IEEE_T_DROP;                       /**< Reserved Statistic Register, offset: 0x248 */
   __I  uint32_t IEEE_T_FRAME_OK;                   /**< Frames Transmitted OK Statistic Register, offset: 0x24C */
   __I  uint32_t IEEE_T_1COL;                       /**< Frames Transmitted with Single Collision Statistic Register, offset: 0x250 */
   __I  uint32_t IEEE_T_MCOL;                       /**< Frames Transmitted with Multiple Collisions Statistic Register, offset: 0x254 */

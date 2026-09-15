@@ -1,5 +1,13 @@
 # LPSPI_EDMA
 
+## [2.4.11]
+
+- Bug Fixes
+  - Fixed CERT-C issues.
+  - Fixed MISRA issues.
+- Improvements
+  - Improved HIS CCM in LPSPI_MasterTransferEDMALite() and LPSPI_SlaveTransferEDMA().
+
 ## [2.4.10]
 
 - Bug Fixes

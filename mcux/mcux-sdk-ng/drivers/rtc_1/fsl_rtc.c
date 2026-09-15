@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020, 2025 NXP
+ * Copyright 2017-2020, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -380,9 +380,11 @@ void RTC_GetDatetime(rtc_datetime_t *datetime)
  */
 void RTC_SetAlarm(uint32_t second)
 {
-    assert(second < UINT32_MAX - s_CurrentTimeSeconds);
+    uint32_t currentTimeSeconds = s_CurrentTimeSeconds; /* Avoid assert side effect on volatile access. */
+
+    assert(second < UINT32_MAX - currentTimeSeconds);
     /* Set alarm time seconds */
-    s_AlarmTimeSeconds = second + s_CurrentTimeSeconds;
+    s_AlarmTimeSeconds = second + currentTimeSeconds;
 }
 
 /*!
@@ -415,8 +417,10 @@ void RTC_DriverIRQHandler(void)
 
     if ((RTC_GetInterruptFlags(RTC) & (uint32_t)kRTC_InterruptFlag) != 0U)
     {
-        assert(s_CurrentTimeSeconds < UINT32_MAX - 1U);
-        s_CurrentTimeSeconds++;
+        uint32_t currentTimeSeconds = s_CurrentTimeSeconds; /* Avoid assert side effect on volatile access. */
+
+        assert(currentTimeSeconds < UINT32_MAX - 1U);
+        s_CurrentTimeSeconds = currentTimeSeconds + 1U;
         /* Clear second interrupt flag */
         RTC_ClearInterruptFlags(RTC, (uint32_t)kRTC_InterruptFlag);
     }

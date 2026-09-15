@@ -6,7 +6,7 @@
 **                          MK22FN128VMP10
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260130
+**     Build:               b260810
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCG
@@ -108,7 +108,7 @@ typedef struct {
   __IO uint8_t C2;                                 /**< MCG Control 2 Register, offset: 0x1 */
   __IO uint8_t C3;                                 /**< MCG Control 3 Register, offset: 0x2 */
   __IO uint8_t C4;                                 /**< MCG Control 4 Register, offset: 0x3 */
-       uint8_t C5;                                 /**< MCG Control 5 Register, offset: 0x4 */
+  __I  uint8_t C5;                                 /**< MCG Control 5 Register, offset: 0x4 */
   __IO uint8_t C6;                                 /**< MCG Control 6 Register, offset: 0x5 */
   __I  uint8_t S;                                  /**< MCG Status Register, offset: 0x6 */
        uint8_t RESERVED_0[1];

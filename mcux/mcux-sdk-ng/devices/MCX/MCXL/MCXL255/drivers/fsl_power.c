@@ -350,14 +350,48 @@ static status_t Power_PrepareVddCoreAndFro10M(power_vdd_core_output_voltage_t vd
     return kStatus_Success;
 }
 
+#if __CORTEX_M == 33U
+/*!
+ * @brief Apply PMU errata ERR053099 workaround before switching DCDC Main to Low Drive.
+ *
+ * Errata ERR053099: when DCDC Main switches from Normal Drive (Active) to Low Drive (low power
+ * modes), the output can collapse unless the Normal Drive voltage is raised above the Low Drive
+ * target before the switch. Raise Normal Drive to the IFR-trimmed 1.1V and let it settle, then
+ * program the Low Drive target to the IFR-trimmed 1.0V, and only then switch PCTRL[VDD_MAIN_LPWR]
+ * to Low Power so the Normal Drive voltage stays higher than the Low Drive voltage throughout the
+ * transition.
+ */
+static void Power_ApplyDcdcMainDriveErrata053099(void)
+{
+    if (PMU_GetDCDCMainMode(AON__PMU) != kPMU_DcdcMain_NormalPowerMode)
+    {
+        /* DCDC Main is already in Low Drive, no Normal->Low switch is happening. */
+        return;
+    }
+
+    PMU_UpdateVDDCore1P1InActiveMode(AON__PMU, CLOCK_GetVDDCore1P1InActiveModeTrim());
+    SDK_DelayAtLeastUs(20U, SystemCoreClock);
+
+    uint32_t lpModeTrim = CLOCK_GetVDDCore1P0InLpModeTrim();
+    if (lpModeTrim != 0U)
+    {
+        PMU_UpdateVDDCore1P1InLpMode(AON__PMU, lpModeTrim);
+    }
+    else
+    {
+        /* Trim value not available, use default value */
+        PMU_UpdateVDDCore1P1InLpMode(AON__PMU, 8U);
+    }
+    PMU_UpdateDCDCMainMode(AON__PMU, kPMU_DcdcMain_LowPowerMode);
+}
+#endif /* __CORTEX_M == 33U */
+
 #if __CORTEX_M == 0U
 static status_t Power_ReqestCM33StartLpSeq(power_low_power_mode_t targetMode)
 {
-    uint32_t tmp32            = 0UL;
     power_handle_t *curHandle = (power_handle_t *)(POWER_SHARED_RAM_BASE_ADDR + g_Handle_Offset);
-
-    tmp32 = Power_PopulateMuMessage(kPower_MsgTypeRequest, kPower_MsgDirAonToMain, targetMode,
-                                    (uint16_t)(g_Handle_Offset & 0xFFFFUL));
+    uint32_t tmp32 = Power_PopulateMuMessage(kPower_MsgTypeRequest, kPower_MsgDirAonToMain, targetMode,
+                                             (uint16_t)(g_Handle_Offset & 0xFFFFUL));
     MU_SendMsg(POWER_USED_MU, curHandle->muChannelId, tmp32);
 
 #if POWER_MU_TRANSFER_TIMEOUT
@@ -1557,6 +1591,7 @@ status_t Power_EnterDeepPowerDown1(power_dpd1_config_t *config)
     SMM_EnableIvsModeForSramRetention(AON__SMM, config->enableIVSMode);
     SMM_StartPowerDownSequence(AON__SMM);
 
+    Power_ApplyDcdcMainDriveErrata053099();
     PMU_DoHandshakeBetweenPMUAndPAC(AON__PMU);
 
     /* 2. Configuration for CMC. */
@@ -1694,6 +1729,8 @@ status_t Power_EnterDeepPowerDown2(power_dpd2_config_t *config)
     while (sharedHandle->cm0pWFI == false)
     {
     }
+
+    Power_ApplyDcdcMainDriveErrata053099();
 
     /*2. Enable wakeup sources for main and aon domain. */
     Power_EnableDualDomainWakeupSources(config->mainWakeupSource, config->aonWakeupSource);
@@ -2305,6 +2342,10 @@ void Power_LowPowerBoot(void)
     AON__CGU->PER_CLK_EN |= CGU_PER_CLK_EN_APB_CLK_MASK;
     __ISB();
 #if __CORTEX_M == 33U
+    if (CMC->SRS != 0x1)
+    {
+        return;
+    }
     if (POWER_BCKP2_MSB_VALUE != 0UL)
     {
         /* Recover g_Handle_Offset from backup2 MSB first. */

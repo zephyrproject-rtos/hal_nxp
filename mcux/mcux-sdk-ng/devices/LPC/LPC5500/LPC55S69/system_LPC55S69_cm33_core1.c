@@ -12,7 +12,7 @@
 **
 **     Reference manual:    LPC55S6x/LPC55S2x/LPC552x User manual(UM11126) Rev.1.3  16 May 2019
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260515
+**     Build:               b260817
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -168,7 +168,7 @@ static uint32_t findPll1PostDiv(void)
 /* Get multiplier (M) from PLL1 MDEC settings */
 static uint32_t findPll1MMult(void)
 {
-    uint32_t mMult = 1UL;
+    uint32_t mMult;
 
     mMult = SYSCON->PLL1MDEC & SYSCON_PLL1MDEC_MDIV_MASK;
 

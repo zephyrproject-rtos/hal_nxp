@@ -1,5 +1,14 @@
 # I3C
 
+## [2.15.0]
+
+- Improvements
+  - Added new timing APIs (I3C_MasterCalcTiming, I3C_MasterSetTiming) and supporting types to provide bus-topology-aware baud rate calculation with ODHPP control and pre-computed timing switching.
+- New Features
+  - Added I3C_MasterGetI2CPresetTiming to get baud rate settings which meet I2C timing.
+- Bug Fixes
+  - Fixed Coverity issues.
+
 ## [2.14.7]
 
 - Bug Fixes

@@ -21,10 +21,6 @@
  * In this process, the successful De-init will Write One to clear the
  * FIRCERR bit of the FIRCCSR register.And trim, has only two modes to
  * choose from, and the setting trim mode is always successful.
- *
- * $Justification clock_c_ref_4$
- * After the board starts, the FRO192M output clock is always valid.
- *
  */
 
 /*******************************************************************************
@@ -41,9 +37,6 @@
 #define SCG_FIRCCFG_RANGE_VAL ((CLOCK_REG(&SCG_0->FIRCCFG) & SCG_FIRCCFG_RANGE_MASK) >> SCG_FIRCCFG_RANGE_SHIFT)
 /*! @brief Get the value of each field in MRCC register. */
 #define MRCC_MUX_VAL(reg) (((reg)&MRCC_MUX_MASK) >> MRCC_MUX_SHIFT)
-/*! @brief Get the POSTDIV_SEL value of the FRO192M. */
-#define FRO192M_FROCCSR_POSTDIV_SEL_VAL \
-    ((CLOCK_REG(&FRO192M0->FROCCSR) & FRO192M_FROCCSR_POSTDIV_SEL_MASK) >> FRO192M_FROCCSR_POSTDIV_SEL_SHIFT)
 
 /*******************************************************************************
  * Variables
@@ -89,7 +82,7 @@ uint32_t CLOCK_GetBusClkFreq(void)
  */
 uint32_t CLOCK_GetPlatClkFreq(void)
 {
-    return CLOCK_GetSysClkFreq(kSCG_SysClkCore);
+    return CLOCK_GetSysClkFreq(kSCG_SysClkPlatform);
 }
 
 /*!
@@ -130,8 +123,32 @@ uint32_t CLOCK_GetFreq(clock_name_t clockName)
         case kCLOCK_SlowClk:
             freq = CLOCK_GetSysClkFreq(kSCG_SysClkSlow);
             break;
-        /* Original clock source. */
+        /* Current active system clock source (pre-divider). */
         case kCLOCK_SysClk:
+        {
+            scg_sys_clk_config_t sysClkConfig;
+            CLOCK_GetCurSysClkConfig(&sysClkConfig);
+            switch ((scg_sys_clk_src_t)sysClkConfig.src)
+            {
+                case kSCG_SysClkSrcSysOsc:
+                    freq = CLOCK_GetSysOscFreq();
+                    break;
+                case kSCG_SysClkSrcSirc:
+                    freq = CLOCK_GetSircFreq();
+                    break;
+                case kSCG_SysClkSrcFirc:
+                    freq = CLOCK_GetFircFreq();
+                    break;
+                case kSCG_SysClkSrcRosc:
+                    freq = CLOCK_GetRtcOscFreq();
+                    break;
+                default:
+                    freq = 0U;
+                    break;
+            }
+            break;
+        }
+        /* SCG system OSC clock source. */
         case kCLOCK_ScgSysOscClk:
             freq = CLOCK_GetSysOscFreq();
             break;
@@ -168,9 +185,11 @@ uint32_t CLOCK_GetIpFreq(clock_ip_name_t name)
         return 0U;
     }
 
-    uint32_t reg = CLOCK_REG(name);
-    uint32_t div = CLOCK_REG(name + 4U);
+    uint32_t reg  = CLOCK_REG(name);
     uint32_t freq = 0U;
+
+    volatile uint32_t *pDivCtrl = CLOCK_GetClockDivider(name);
+    uint32_t div                = (pDivCtrl != NULL) ? *pDivCtrl : 0U;
 
     assert(reg & MRCC_PR_MASK);
 
@@ -236,7 +255,7 @@ uint32_t CLOCK_GetIpFreq(clock_ip_name_t name)
                     freq = CLOCK_GetSysOscFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
                     break;
                 case (uint32_t)kCLOCK_IpSrcFro200M:
-                    freq = 2000000U / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
+                    freq = 200000000U / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
                     break;
                 default:
                     freq = 0U;
@@ -246,9 +265,6 @@ uint32_t CLOCK_GetIpFreq(clock_ip_name_t name)
         case kCLOCK_Tstmr0:
             switch (MRCC_MUX_VAL(reg))
             {
-                case (uint32_t)kCLOCK_IpSrcFro6M:
-                    freq = CLOCK_GetSircFreq();
-                    break;
                 case (uint32_t)kCLOCK_IpSrcFro192M:
                     freq = CLOCK_GetFircFreq();
                     break;
@@ -279,7 +295,7 @@ uint32_t CLOCK_GetIpFreq(clock_ip_name_t name)
                     freq = CLOCK_GetSysOscFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
                     break;
                 case (uint32_t)kCLOCK_IpSrc1M:
-                    freq = CLOCK_Get1MClkFreq();
+                    freq = CLOCK_Get1MClkFreq() / (((div & MRCC_DIV_MASK) >> MRCC_DIV_SHIFT) + 1U);
                     break;
                 default:
                     freq = 0U;
@@ -344,9 +360,10 @@ uint32_t CLOCK_GetSysClkFreq(scg_sys_clk_t type)
         case kSCG_SysClkBus:
             freq /= ((sysClkConfig.divCore + 1U) * (sysClkConfig.divBus + 1U)); /* Divided by the DIVBUS. */
             break;
-        case kSCG_SysClkPlatform:
-            freq /= ((sysClkConfig.divCore + 1U) * (sysClkConfig.divPlat + 1U)); /* Divided by the DIVPLAT. */
+        case kSCG_SysClkCore1:
+            freq /= ((sysClkConfig.divCore + 1U) * (sysClkConfig.divCore1 + 1U)); /* Divided by the DIVCORE1. */
             break;
+        case kSCG_SysClkPlatform:
         case kSCG_SysClkCore:
             freq /= (sysClkConfig.divCore + 1U); /* Divided by the DIVCORE. */
             break;
@@ -393,6 +410,8 @@ status_t CLOCK_InitSysOsc(const scg_sosc_config_t *config)
     while ((CLOCK_REG(&SCG_0->SOSCCSR) & SCG_SOSCCSR_SOSCVLD_MASK) != SCG_SOSCCSR_SOSCVLD_MASK)
     {
     }
+
+    CLOCK_SetXtal0Freq(config->freq);
 
     return (status_t)kStatus_Success;
 }
@@ -585,7 +604,8 @@ status_t CLOCK_InitFirc(const scg_firc_config_t *config)
 
         if (kSCG_FircTrimNonUpdate == config->trimConfig->trimMode)
         {
-            CLOCK_REG(&SCG_0->FIRCSTAT) = SCG_FIRCSTAT_TRIMFINE(config->trimConfig->trimFine);
+            CLOCK_REG(&SCG_0->FIRCSTAT) = SCG_FIRCSTAT_TRIMFINE(config->trimConfig->trimFine) |
+                                          SCG_FIRCSTAT_TRIMCOAR(config->trimConfig->trimCoar);
         }
 
         /* Set trim mode. */
@@ -761,7 +781,7 @@ uint32_t CLOCK_GetRtcOscFreq(void)
 uint32_t CLOCK_Get1MClkFreq(void)
 {
     uint32_t sircFreq = CLOCK_GetSircFreq();
-    uint32_t reg = CLOCK_REG(kCLOCK_CLK_1M);
+    uint32_t reg      = CLOCK_REG(kCLOCK_CLK_1M);
 
     assert(reg & MRCC_PR_MASK);
 
@@ -802,16 +822,16 @@ uint32_t CLOCK_GetTstmrFreq(uint32_t instance)
 
     switch (instance)
     {
-      case 0U:
-        freq = CLOCK_GetIpFreq(kCLOCK_Tstmr0);
-        break;
-      case 1U:
-      case 2U:
-        freq = CLOCK_GetRtcOscFreq();
-        break;
-      default:
-        freq = 0U;
-        break;
+        case 0U:
+            freq = CLOCK_GetIpFreq(kCLOCK_Tstmr0);
+            break;
+        case 1U:
+        case 2U:
+            freq = CLOCK_GetRtcOscFreq();
+            break;
+        default:
+            freq = 0U;
+            break;
     }
 
     return freq;

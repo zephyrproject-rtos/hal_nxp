@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 4.0, 2026-02-28
-**     Build:               b260305
+**     Build:               b260721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BLK_CTRL_WAKEUPMIX
@@ -453,9 +453,9 @@ typedef struct {
   __IO uint32_t IPG_STOP_CTL_0;                    /**< IPG_STOP control register 0, offset: 0xD0 */
   __I  uint32_t IPG_STOP_ACK_STATUS_0;             /**< IPG_STOP_ACK status 0, offset: 0xD4 */
   __IO uint32_t IPG_DOZE_CTL_0;                    /**< IPG_DOZE control 0, offset: 0xD8 */
-       uint32_t IPG_WAIT_CTL_0;                    /**< IPG_WAIT control 0, offset: 0xDC */
+  __I  uint32_t IPG_WAIT_CTL_0;                    /**< IPG_WAIT control 0, offset: 0xDC */
   __IO uint32_t IPG_STOP_CTL_1;                    /**< IPG_STOP control register 1, offset: 0xE0 */
-       uint32_t IPG_STOP_ACK_STATUS_1;             /**< IPG_STOP_ACK status 1, offset: 0xE4 */
+  __I  uint32_t IPG_STOP_ACK_STATUS_1;             /**< IPG_STOP_ACK status 1, offset: 0xE4 */
   __IO uint32_t IPG_DOZE_CTL_1;                    /**< IPG_DOZE control 1, offset: 0xE8 */
   __IO uint32_t IPG_WAIT_CTL_1;                    /**< IPG_WAIT control 1, offset: 0xEC */
        uint8_t RESERVED_6[16];

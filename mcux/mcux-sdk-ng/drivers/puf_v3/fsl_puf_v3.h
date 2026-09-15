@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _PUF_V3_H_
-#define _PUF_V3_H_
+#ifndef FSL_PUF_V3_H_
+#define FSL_PUF_V3_H_
 
 #include <stddef.h>
 #include <stdint.h>
@@ -328,4 +328,4 @@ status_t PUF_SetCtxMask(PUF_Type *base, uint32_t appCtxMask);
 }
 #endif /* __cplusplus */
 
-#endif /* _PUF_H_ */
+#endif /* PUF_H_ */

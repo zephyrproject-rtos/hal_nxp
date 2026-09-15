@@ -803,9 +803,9 @@ uint32_t CLOCK_GetFlexCommInputClock(uint32_t id)
 /* Get FLEXCOMM Clk */
 uint32_t CLOCK_GetFlexCommClkFreq(uint32_t id)
 {
-    uint32_t freq   = 0U;
-    uint32_t frgMul = 0U;
-    uint32_t frgDiv = 0U;
+    uint32_t freq;
+    uint32_t frgMul;
+    uint32_t frgDiv;
 
     freq   = CLOCK_GetFlexCommInputClock(id);
     frgMul = (SYSCON->FLEXFRGXCTRL[id] & SYSCON_FLEXFRG0CTRL_MULT_MASK) >> 8U;
@@ -1153,7 +1153,7 @@ static float findPll0MMult(void)
 /* Get multiplier (M) from PLL1 MDEC. */
 static uint32_t findPll1MMult(void)
 {
-    uint32_t mMult = 1UL;
+    uint32_t mMult;
 
     mMult = SYSCON->PLL1MDEC & SYSCON_PLL1MDEC_MDIV_MASK;
 
@@ -1488,7 +1488,7 @@ uint32_t CLOCK_GetPLL1InClockRate(void)
  */
 uint32_t CLOCK_GetPLL0OutFromSetup(pll_setup_t *pSetup)
 {
-    uint32_t clkRate = 0;
+    uint32_t clkRate;
     uint32_t prediv, postdiv;
     float workRate = 0.0F;
 
@@ -1519,7 +1519,7 @@ uint32_t CLOCK_GetPLL0OutFromSetup(pll_setup_t *pSetup)
  */
 uint32_t CLOCK_GetPLL1OutFromSetup(pll_setup_t *pSetup)
 {
-    uint32_t clkRate = 0;
+    uint32_t clkRate;
     uint32_t prediv, postdiv;
     uint32_t workRate = 0UL;
 

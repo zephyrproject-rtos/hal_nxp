@@ -1,13 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW70AAMMP
-**                          MCXW70ACMFT
+**     Processors:          MCXW70ACMFT
 **                          MCXW70ACMMP
 **                          MCXW70ADMFT
 **                          MCXW70ADMMP
 **
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260409
+**     Build:               b260813
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AXBS
@@ -38,9 +37,7 @@
 #if !defined(PERI_AXBS_H_)
 #define PERI_AXBS_H_                             /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW70AAMMP))
-#include "MCXW70AA_COMMON.h"
-#elif (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
+#if (defined(CPU_MCXW70ACMFT) || defined(CPU_MCXW70ACMMP))
 #include "MCXW70AC_COMMON.h"
 #elif (defined(CPU_MCXW70ADMFT) || defined(CPU_MCXW70ADMMP))
 #include "MCXW70AD_COMMON.h"
@@ -171,7 +168,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS0_M2(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS0_M2_SHIFT)) & AXBS_PRS0_M2_MASK)
 
@@ -185,7 +182,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS0_M3(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS0_M3_SHIFT)) & AXBS_PRS0_M3_MASK)
 
@@ -199,7 +196,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS0_M4(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS0_M4_SHIFT)) & AXBS_PRS0_M4_MASK)
 
@@ -213,7 +210,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS0_M5(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS0_M5_SHIFT)) & AXBS_PRS0_M5_MASK)
 
@@ -227,7 +224,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS0_M6(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS0_M6_SHIFT)) & AXBS_PRS0_M6_MASK)
 
@@ -241,7 +238,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS0_M7(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS0_M7_SHIFT)) & AXBS_PRS0_M7_MASK)
 /*! @} */
@@ -342,7 +339,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS1_M2(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS1_M2_SHIFT)) & AXBS_PRS1_M2_MASK)
 
@@ -356,7 +353,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS1_M3(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS1_M3_SHIFT)) & AXBS_PRS1_M3_MASK)
 
@@ -370,7 +367,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS1_M4(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS1_M4_SHIFT)) & AXBS_PRS1_M4_MASK)
 
@@ -384,7 +381,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS1_M5(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS1_M5_SHIFT)) & AXBS_PRS1_M5_MASK)
 
@@ -398,7 +395,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS1_M6(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS1_M6_SHIFT)) & AXBS_PRS1_M6_MASK)
 
@@ -412,7 +409,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS1_M7(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS1_M7_SHIFT)) & AXBS_PRS1_M7_MASK)
 /*! @} */
@@ -513,7 +510,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS2_M2(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS2_M2_SHIFT)) & AXBS_PRS2_M2_MASK)
 
@@ -527,7 +524,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS2_M3(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS2_M3_SHIFT)) & AXBS_PRS2_M3_MASK)
 
@@ -541,7 +538,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS2_M4(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS2_M4_SHIFT)) & AXBS_PRS2_M4_MASK)
 
@@ -555,7 +552,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS2_M5(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS2_M5_SHIFT)) & AXBS_PRS2_M5_MASK)
 
@@ -569,7 +566,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS2_M6(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS2_M6_SHIFT)) & AXBS_PRS2_M6_MASK)
 
@@ -583,7 +580,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS2_M7(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS2_M7_SHIFT)) & AXBS_PRS2_M7_MASK)
 /*! @} */
@@ -684,7 +681,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS3_M2(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS3_M2_SHIFT)) & AXBS_PRS3_M2_MASK)
 
@@ -698,7 +695,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS3_M3(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS3_M3_SHIFT)) & AXBS_PRS3_M3_MASK)
 
@@ -712,7 +709,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS3_M4(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS3_M4_SHIFT)) & AXBS_PRS3_M4_MASK)
 
@@ -726,7 +723,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS3_M5(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS3_M5_SHIFT)) & AXBS_PRS3_M5_MASK)
 
@@ -740,7 +737,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS3_M6(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS3_M6_SHIFT)) & AXBS_PRS3_M6_MASK)
 
@@ -754,7 +751,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS3_M7(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS3_M7_SHIFT)) & AXBS_PRS3_M7_MASK)
 /*! @} */
@@ -855,7 +852,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS4_M2(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS4_M2_SHIFT)) & AXBS_PRS4_M2_MASK)
 
@@ -869,7 +866,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS4_M3(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS4_M3_SHIFT)) & AXBS_PRS4_M3_MASK)
 
@@ -883,7 +880,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS4_M4(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS4_M4_SHIFT)) & AXBS_PRS4_M4_MASK)
 
@@ -897,7 +894,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS4_M5(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS4_M5_SHIFT)) & AXBS_PRS4_M5_MASK)
 
@@ -911,7 +908,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS4_M6(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS4_M6_SHIFT)) & AXBS_PRS4_M6_MASK)
 
@@ -925,7 +922,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS4_M7(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS4_M7_SHIFT)) & AXBS_PRS4_M7_MASK)
 /*! @} */
@@ -1026,7 +1023,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS5_M2(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS5_M2_SHIFT)) & AXBS_PRS5_M2_MASK)
 
@@ -1040,7 +1037,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS5_M3(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS5_M3_SHIFT)) & AXBS_PRS5_M3_MASK)
 
@@ -1054,7 +1051,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS5_M4(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS5_M4_SHIFT)) & AXBS_PRS5_M4_MASK)
 
@@ -1068,7 +1065,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS5_M5(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS5_M5_SHIFT)) & AXBS_PRS5_M5_MASK)
 
@@ -1082,7 +1079,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS5_M6(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS5_M6_SHIFT)) & AXBS_PRS5_M6_MASK)
 
@@ -1096,7 +1093,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS5_M7(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS5_M7_SHIFT)) & AXBS_PRS5_M7_MASK)
 /*! @} */
@@ -1197,7 +1194,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS6_M2(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS6_M2_SHIFT)) & AXBS_PRS6_M2_MASK)
 
@@ -1211,7 +1208,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS6_M3(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS6_M3_SHIFT)) & AXBS_PRS6_M3_MASK)
 
@@ -1225,7 +1222,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS6_M4(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS6_M4_SHIFT)) & AXBS_PRS6_M4_MASK)
 
@@ -1239,7 +1236,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS6_M5(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS6_M5_SHIFT)) & AXBS_PRS6_M5_MASK)
 
@@ -1253,7 +1250,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS6_M6(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS6_M6_SHIFT)) & AXBS_PRS6_M6_MASK)
 
@@ -1267,7 +1264,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS6_M7(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS6_M7_SHIFT)) & AXBS_PRS6_M7_MASK)
 /*! @} */
@@ -1368,7 +1365,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS7_M2(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS7_M2_SHIFT)) & AXBS_PRS7_M2_MASK)
 
@@ -1382,7 +1379,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS7_M3(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS7_M3_SHIFT)) & AXBS_PRS7_M3_MASK)
 
@@ -1396,7 +1393,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS7_M4(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS7_M4_SHIFT)) & AXBS_PRS7_M4_MASK)
 
@@ -1410,7 +1407,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS7_M5(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS7_M5_SHIFT)) & AXBS_PRS7_M5_MASK)
 
@@ -1424,7 +1421,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS7_M6(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS7_M6_SHIFT)) & AXBS_PRS7_M6_MASK)
 
@@ -1438,7 +1435,7 @@ typedef struct {
  *  0b100..This initiator has level 5 priority when accessing the target port.
  *  0b101..This initiator has level 6 priority when accessing the target port.
  *  0b110..This initiator has level 7 priority when accessing the target port.
- *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS7_M7(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_PRS7_M7_SHIFT)) & AXBS_PRS7_M7_MASK)
 /*! @} */

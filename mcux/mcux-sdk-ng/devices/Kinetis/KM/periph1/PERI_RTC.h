@@ -4,7 +4,7 @@
 **                          MKM34Z256VLQ7
 **
 **     Version:             rev. 2.1, 2025-11-11
-**     Build:               b260130
+**     Build:               b260810
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RTC
@@ -137,15 +137,15 @@ typedef struct {
  *  0b0000..Illegal Value
  *  0b0001..January
  *  0b0010..February
- *  0b0010..October
  *  0b0011..March
- *  0b0011..November
  *  0b0100..April
  *  0b0101..May
  *  0b0110..June
  *  0b0111..July
  *  0b1000..August
  *  0b1001..September
+ *  0b1010..October
+ *  0b1011..November
  *  0b1100..December
  *  0b1101..Illegal Value
  *  0b1110..Illegal Value
@@ -280,7 +280,6 @@ typedef struct {
 /*! ALM_MATCH - Alarm Match bits.
  *  0b00..Only Seconds, Minutes, and Hours matched.
  *  0b01..Only Seconds, Minutes, Hours, and Days matched.
- *  0b10..Only Seconds, Minutes, Hours, Days, and Months matched.
  *  0b11..Only Seconds, Minutes, Hours, Days, Months, and Year (offset) matched.
  */
 #define RTC_CTRL_ALM_MATCH(x)                    (((uint16_t)(((uint16_t)(x)) << RTC_CTRL_ALM_MATCH_SHIFT)) & RTC_CTRL_ALM_MATCH_MASK)

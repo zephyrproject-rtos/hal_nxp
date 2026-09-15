@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.9, 2016-06-08
-**     Build:               b260209
+**     Build:               b260602
 **
 **     Abstract:
 **         Chip specific module features.
@@ -1351,6 +1351,8 @@
 #define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
 /* @brief Is affected by errata with ID 050050 (Incorrect duty output when EPWM mode is set to PS=0 during write 1 to CnV register). */
 #define FSL_FEATURE_TPM_HAS_ERRATA_050050 (0)
+/* @brief Has no CPWMS field in SC register (bitfield SC[CPWMS]). */
+#define FSL_FEATURE_TPM_HAS_NO_SC_CPWMS (0)
 
 /* UART module features */
 

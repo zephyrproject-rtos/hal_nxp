@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MCXE24x RM Rev.1
 **     Version:             rev. 1.0, 2025-02-21
-**     Build:               b260209
+**     Build:               b260609
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXE245
@@ -200,6 +200,91 @@ typedef enum IRQn {
 #endif
 /* CPU specific feature definitions */
 #include "MCXE245_features.h"
+
+/* ----------------------------------------------------------------------------
+   -- Mapping Information
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup Mapping_Information Mapping Information
+ * @{
+ */
+
+/** Mapping Information */
+/*!
+ * @addtogroup eim_memory_channel_mapping
+ * @{
+ */
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+
+/*!
+ * @brief Structure for the eim_memory_channel
+ *
+ *
+ * Defines the structure for the EIM resource collections.
+ */
+typedef enum _eim_memory_channel
+{
+    kEIM_MemoryChannelSRAML         = 0U,          /**< Memory SRAM_L */
+    kEIM_MemoryChannelSRAMU         = 1U,          /**< Memory SRAM_U */
+} eim_memory_channel_t;
+
+/* @} */
+
+/*!
+ * @addtogroup eim_error_injection_channel_enab_mapping
+ * @{
+ */
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+
+/*!
+ * @brief Structure for the eim_error_injection_channel_enable
+ *
+ *
+ * Defines the structure for the EIM error injection resource collections.
+ */
+typedef enum _eim_error_injection_channel_enab
+{
+    kEIM_MemoryChannelSRAMLEnable   = 0x80000000U, /**< Memory channel 0 (SRAM_L) error injection enable */
+    kEIM_MemoryChannelSRAMUEnable   = 0x40000000U, /**< Memory channel 1 (SRAM_U) error injection enable */
+} eim_error_injection_channel_enab_t;
+
+/* @} */
+
+/*!
+ * @addtogroup erm_memory_channel_mapping
+ * @{
+ */
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+
+/*!
+ * @brief Structure for the erm_memory_channel
+ *
+ *
+ * Defines the structure for the ERM resource collections.
+ */
+typedef enum _erm_memory_channel
+{
+    kERM_MemoryChannelSRAML         = 0U,          /**< Memory SRAM_L */
+    kERM_MemoryChannelSRAMU         = 1U,          /**< Memory SRAM_U */
+} erm_memory_channel_t;
+
+/* @} */
+
+
+/*!
+ * @}
+ */ /* end of group Mapping_Information */
+
 
 /* ADC - Peripheral instance base addresses */
 /** Peripheral ADC0 base address */

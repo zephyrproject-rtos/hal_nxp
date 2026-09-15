@@ -10,7 +10,7 @@
 **
 **     Reference manual:    LPC540xx/LPC54S0xx User manual Rev.0.8 5 June 2018
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260826
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

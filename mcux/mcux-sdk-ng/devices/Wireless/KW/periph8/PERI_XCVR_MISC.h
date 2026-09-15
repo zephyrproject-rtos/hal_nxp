@@ -10,7 +10,7 @@
 **                          KW43L43Z97MFT
 **
 **     Version:             rev. 1.0, 2020-05-12
-**     Build:               b260407
+**     Build:               b260805
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for XCVR_MISC
@@ -124,7 +124,7 @@ typedef struct {
   __IO uint32_t RSM_CTRL6;                         /**< RSM CTRL 6, offset: 0x3C */
   __IO uint32_t LCL_RX_CFG0;                       /**< LCL CTRL RX CONFIG0, offset: 0x40 */
   __IO uint32_t LCL_RX_CFG1;                       /**< LCL CTRL RX CONFIG1, offset: 0x44 */
-       uint32_t LCL_RX_CFG2;                       /**< LCL CTRL RX CONFIG2, offset: 0x48 */
+  __I  uint32_t LCL_RX_CFG2;                       /**< LCL CTRL RX CONFIG2, offset: 0x48 */
   __IO uint32_t LCL_PM_MSB;                        /**< LCL CTRL PM MSB, offset: 0x4C */
   __IO uint32_t LCL_PM_LSB;                        /**< LCL CTRL PM LSB, offset: 0x50 */
   __IO uint32_t LCL_GPIO_CTRL0;                    /**< LCL GPIO CTRL 0, offset: 0x54 */

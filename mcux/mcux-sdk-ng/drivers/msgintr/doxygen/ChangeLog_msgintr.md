@@ -1,5 +1,13 @@
 # MSGINTR
 
+## [2.0.4]
+
+- Bug Fixes
+  - Fixed wrong base pointer in IRQ handlers for MSGINTR instances 3 to 6, which
+    read and cleared the status register of instance 2 instead of their own
+    instance.
+  - Added missing IRQ handlers for MSGINTR instances 7 and 8.
+
 ## [2.0.3]
 
 - New Features

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2025 NXP
+ * Copyright 2022-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -1505,12 +1505,12 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
 
     if (index == (uint32_t)REG_PWM0SUBCTL)
     {
-        SYSCON->PWM0SUBCTL |= (1UL << bit);
+        SYSCON->PWM0SUBCTL = SYSCON->PWM0SUBCTL | (1UL << bit);
         SYSCON->AHBCLKCTRLSET[3] = 0x40U;
     }
     else if (index == (uint32_t)REG_PWM1SUBCTL)
     {
-        SYSCON->PWM1SUBCTL |= (1UL << bit);
+        SYSCON->PWM1SUBCTL = SYSCON->PWM1SUBCTL | (1UL << bit);
         SYSCON->AHBCLKCTRLSET[3] = 0x80U;
     }
     else
@@ -1539,7 +1539,7 @@ static inline void CLOCK_DisableClock(clock_ip_name_t clk)
 
     if (index == (uint32_t)REG_PWM0SUBCTL)
     {
-        SYSCON->PWM0SUBCTL &= ~(1UL << bit);
+        SYSCON->PWM0SUBCTL = SYSCON->PWM0SUBCTL & ~(1UL << bit);
         if (0U == (SYSCON->PWM0SUBCTL & 0xFU))
         {
             SYSCON->AHBCLKCTRLCLR[3] = 0x20U;
@@ -1547,7 +1547,7 @@ static inline void CLOCK_DisableClock(clock_ip_name_t clk)
     }
     else if (index == (uint32_t)REG_PWM1SUBCTL)
     {
-        SYSCON->PWM1SUBCTL &= ~(1UL << bit);
+        SYSCON->PWM1SUBCTL = SYSCON->PWM1SUBCTL & ~(1UL << bit);
         if (0U == (SYSCON->PWM1SUBCTL & 0xFU))
         {
             SYSCON->AHBCLKCTRLCLR[3] = 0x40U;
@@ -2197,11 +2197,11 @@ static inline void CLOCK_EnableCpu1Clock(SYSCON_Type *base, bool enable)
 {
     if (enable)
     {
-        base->CPUCTRL |= SYSCON_CPUCTRL_CPU1CLKEN_MASK;
+        base->CPUCTRL = base->CPUCTRL | SYSCON_CPUCTRL_CPU1CLKEN_MASK;
     }
     else
     {
-        base->CPUCTRL &= ~SYSCON_CPUCTRL_CPU1CLKEN_MASK;
+        base->CPUCTRL = base->CPUCTRL & ~SYSCON_CPUCTRL_CPU1CLKEN_MASK;
     }
 }
 

@@ -21,19 +21,17 @@
 #define CONFIG_LLC_MAINTENANCE_TIMEOUT (1000U)
 #endif
 
-#define LLC_WAY_NUMBER (8U)
-
-#define LLC_SET_NUMBER (256U)
-
-#define LLC_WAY_PARTITION_COUNT (8U)
-
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-static llc_callback_t s_LLCCallback;
 
 /* Array of LLC peripheral base address */
 static LLC_Type *const s_llcBases[] = LLC_BASE_PTRS;
+
+/* Per-instance user callback table. Indexed by the LLC instance number that
+   LLC_GetInstanceByAddr()/LLC_BASE_PTRS resolve to, so multiple LLC instances
+   each get their own callback instead of sharing a single static handler. */
+static llc_callback_t s_LLCCallback[ARRAY_SIZE(s_llcBases)];
 
 #if (defined(LLC_PHYMEM_BASE_ALIAS_COUNT))
 #define LLC_PHYMEM_COLUMN_COUNT LLC_PHYMEM_BASE_ALIAS_COUNT
@@ -345,7 +343,6 @@ void LLC_GetCapabilities(LLC_Type *base, llc_feature_capability_t *feature)
 
     /* Performance Monitor Hardware Information (CCUPMHI) */
     uint32_t pmhi         = base->CCUPMHI;
-    feature->freeRun      = (((pmhi & LLC_CCUPMHI_FREERUN_MASK) >> LLC_CCUPMHI_FREERUN_SHIFT) != 0U);
     feature->counterWidth = (uint8_t)((pmhi & LLC_CCUPMHI_COUNTERWIDTH_MASK) >> LLC_CCUPMHI_COUNTERWIDTH_SHIFT);
 }
 
@@ -389,7 +386,7 @@ status_t LLC_CleanInvalidateCacheAtSetAndWay(LLC_Type *base, uint16_t set, uint8
     assert(base != NULL);
 
     /* Validate parameters */
-    if (way >= LLC_WAY_NUMBER || set >= LLC_SET_NUMBER)
+    if (way >= LLC_WAY_COUNT || set >= LLC_SET_COUNT)
     {
         return kStatus_InvalidArgument;
     }
@@ -446,18 +443,30 @@ status_t LLC_CleanInvalidateCacheAtAddressRange(LLC_Type *base, uint32_t address
 {
     assert(base != NULL);
 
+    /* A zero-line range is meaningless. Reject it instead of programming
+       MNTRANGE with an underflowed count (0 - 1 wraps to 0xFFFF and would
+       flush 65536 lines, overrunning the requested region). */
+    if (sizeInCacheLines == 0U)
+    {
+        return kStatus_InvalidArgument;
+    }
+
     uint32_t cacheLineOffsetBits = LLC_GetCacheLineOffsetBits(base);
     assert(cacheLineOffsetBits > 0U);
 
     uint32_t lineLow = address >> cacheLineOffsetBits;
 
+    /* MNTRANGE is a zero-based line count: the hardware flushes (MNTRANGE + 1)
+       lines. Program (sizeInCacheLines - 1) so exactly sizeInCacheLines lines
+       are maintained (no off-by-one over-run past the requested range). */
     base->CCUCMLR0 = lineLow;
     base->CCUCMLR1 = 0U;
-    base->CCUCMLR2 = (base->CCUCMLR2 & ~LLC_CCUCMLR2_MNTRANGE_MASK) | LLC_CCUCMLR2_MNTRANGE(sizeInCacheLines + 1U);
+    base->CCUCMLR2 = (base->CCUCMLR2 & ~LLC_CCUCMLR2_MNTRANGE_MASK) | LLC_CCUCMLR2_MNTRANGE(sizeInCacheLines - 1U);
 
     /* Perform flush address range operation */
     return LLC_RunMaintenance(base, 0U, kLLC_MaintenanceFlushAddressRange);
 }
+
 
 /*!
  * brief Cleans and invalidates cache at set and way range.
@@ -478,18 +487,22 @@ status_t LLC_CleanInvalidateCacheAtSetWayRange(LLC_Type *base, uint16_t set, uin
     assert(base != NULL);
 
     /* Validate parameters */
-    if ((way >= LLC_WAY_NUMBER) || (set >= LLC_SET_NUMBER) || (sizeInCacheLines == 0U))
+    if ((way >= LLC_WAY_COUNT) || (set >= LLC_SET_COUNT) || (sizeInCacheLines == 0U))
     {
         return kStatus_InvalidArgument;
     }
 
-    /* Set maintenance location registers */
+    /* Set maintenance location registers. MNTRANGE is a zero-based line count
+       (hardware flushes MNTRANGE + 1 lines), so program (sizeInCacheLines - 1)
+       to maintain exactly sizeInCacheLines lines. sizeInCacheLines == 0 is
+       already rejected above, so the subtraction cannot underflow. */
     base->CCUCMLR0 = LLC_CCUCMLR0_MNTSET(set) | LLC_CCUCMLR0_MNTWAY(way) | LLC_CCUCMLR0_MNTWORD(0U);
     base->CCUCMLR1 = 0U;
-    base->CCUCMLR2 = (base->CCUCMLR2 & ~LLC_CCUCMLR2_MNTRANGE_MASK) | LLC_CCUCMLR2_MNTRANGE(sizeInCacheLines + 1U);
+    base->CCUCMLR2 = (base->CCUCMLR2 & ~LLC_CCUCMLR2_MNTRANGE_MASK) | LLC_CCUCMLR2_MNTRANGE(sizeInCacheLines - 1U);
 
     /* Perform flush set way range operation */
     return LLC_RunMaintenance(base, 0U, kLLC_MaintenanceFlushSetWayRange);
+
 }
 
 /*!
@@ -502,6 +515,8 @@ status_t LLC_CleanInvalidateCacheAtSetWayRange(LLC_Type *base, uint16_t set, uin
  * The operation evicts any dirty lines in the affected range (write-back) and
  * invalidates them.
  *
+ * The complete range must be contained within one LLC physical-memory alias.
+ *
  * param address   The physical start address.
  * param sizeByte  Size of the memory to be invalidated in bytes. Must be > 0. Better to align to cache line size.
  * return kStatus_Success Cache invalidation succeeded.
@@ -510,11 +525,21 @@ status_t LLC_CleanInvalidateCacheAtSetWayRange(LLC_Type *base, uint16_t set, uin
  */
 status_t LLC_CleanInvalidateCacheByRange(uint32_t address, uint32_t sizeByte)
 {
-    /* Validate inputs */
-    assert(sizeByte > 0U);
-    assert(address < UINT32_MAX - sizeByte);
+    /* Validate inputs. The public API advertises kStatus_InvalidArgument, so
+       perform runtime validation (not just assert) before computing
+       address + sizeByte - 1U, which would underflow/overflow on a zero size
+       or an address+size that wraps past UINT32_MAX. */
+    if (sizeByte == 0U)
+    {
+        return kStatus_InvalidArgument;
+    }
+    if (address > (UINT32_MAX - (sizeByte - 1U)))
+    {
+        return kStatus_InvalidArgument;
+    }
 
     /* Determine the LLC instance from the start address */
+
     uint32_t instance = LLC_GetInstanceByAddr(address);
     if (instance >= ARRAY_SIZE(s_llcBases))
     {
@@ -526,24 +551,57 @@ status_t LLC_CleanInvalidateCacheByRange(uint32_t address, uint32_t sizeByte)
     uint32_t startAddress = MSDK_REG_NONSECURE_ADDR(LLC_AlignAddressToCacheLine(base, address));
     /* Compute inclusive end address of requested range */
     uint32_t endAddress = address + sizeByte - 1U;
-    uint32_t endAddressLimitation;
+    uint32_t aliasOffset;
+    uint32_t cacheLineOffsetBits;
+    uint32_t cacheLineSize;
     uint32_t cacheLineNumber = 0U;
+    status_t status          = kStatus_Success;
 
     uint32_t phyMemBase[FSL_FEATURE_SOC_LLC_COUNT][LLC_PHYMEM_COLUMN_COUNT];
     uint32_t phyMemSize[FSL_FEATURE_SOC_LLC_COUNT][LLC_PHYMEM_COLUMN_COUNT];
     memcpy(phyMemBase, s_llcPhymemBases, sizeof(s_llcPhymemBases));
     memcpy(phyMemSize, s_llcPhymemSizes, sizeof(s_llcPhymemSizes));
 
-    endAddressLimitation = phyMemBase[instance][g_llcMemPhyAliasId] + phyMemSize[instance][g_llcMemPhyAliasId] - 1U;
-    endAddress           = (endAddress > endAddressLimitation) ? endAddressLimitation : endAddress;
+    aliasOffset = MSDK_REG_NONSECURE_ADDR(address) -
+                  MSDK_REG_NONSECURE_ADDR(phyMemBase[instance][g_llcMemPhyAliasId]);
+    if (sizeByte > (phyMemSize[instance][g_llcMemPhyAliasId] - aliasOffset))
+    {
+        return kStatus_InvalidArgument;
+    }
     endAddress           = MSDK_REG_NONSECURE_ADDR(LLC_AlignAddressToCacheLine(base, endAddress));
 
-    /* Compute the number of cache lines to invalidate */
-    cacheLineNumber = (uint16_t)(((endAddress - startAddress) >> LLC_GetCacheLineOffsetBits(base)) + 1U);
+    cacheLineOffsetBits = LLC_GetCacheLineOffsetBits(base);
+    cacheLineSize       = 1UL << cacheLineOffsetBits;
 
-    /* Invalidate at the current cache line address */
-    return LLC_CleanInvalidateCacheAtAddressRange(base, startAddress, cacheLineNumber);
+    /* Compute the total number of cache lines to invalidate. Keep the full
+       32-bit width here: a wide byte span can span more than 65535 lines and a
+       uint16_t cast would silently drop the high bits (dropping most of the
+       range). */
+    cacheLineNumber = ((endAddress - startAddress) >> cacheLineOffsetBits) + 1U;
+
+    /* A single operation does not need to cover more lines than the cache can
+       hold. Split larger requests into cache-capacity chunks so each operation
+       completes within the maintenance polling budget. */
+    uint32_t maxChunkLines = LLC_WAY_COUNT * LLC_SET_COUNT;
+    maxChunkLines = (maxChunkLines > (uint32_t)UINT16_MAX) ? (uint32_t)UINT16_MAX : maxChunkLines;
+
+    while (cacheLineNumber > 0U)
+    {
+        uint32_t chunkLines = (cacheLineNumber > maxChunkLines) ? maxChunkLines : cacheLineNumber;
+
+        status = LLC_CleanInvalidateCacheAtAddressRange(base, startAddress, (uint16_t)chunkLines);
+        if (status != kStatus_Success)
+        {
+            return status;
+        }
+
+        startAddress += chunkLines * cacheLineSize;
+        cacheLineNumber -= chunkLines;
+    }
+
+    return status;
 }
+
 
 /*!
  * brief Configures the scratchpad.
@@ -559,7 +617,7 @@ status_t LLC_ConfigScratchpad(LLC_Type *base, const llc_scratchpad_config_t *con
     assert(config != NULL);
 
     /* Validate parameters */
-    if ((config->numberOfWays == 0U) || (config->numberOfWays >= LLC_WAY_NUMBER) || (config->size == 0U))
+    if ((config->numberOfWays == 0U) || (config->numberOfWays >= LLC_WAY_COUNT) || (config->size == 0U))
     {
         return kStatus_InvalidArgument;
     }
@@ -843,10 +901,13 @@ void LLC_DisableInterrupts(LLC_Type *base, uint32_t mask)
     uint32_t ueirValue = base->CCUUEIR;
     uint32_t emrValue  = base->CCUEMR;
 
-    /* Correctable error */
+    /* Correctable error. ERRDETEN and ERRINTEN are separate, non-overlapping
+       bits, so both must be cleared with a bitwise-OR of their masks. Using
+       bitwise-AND here yields 0 (the masks do not overlap) and would clear
+       neither bit. */
     if ((mask & kLLC_CorrectableErrorInterruptEnable) != 0U)
     {
-        cecrValue &= (uint32_t)(~(LLC_CCUCECR_ERRDETEN_MASK & LLC_CCUCECR_ERRINTEN_MASK));
+        cecrValue &= (uint32_t)(~(LLC_CCUCECR_ERRDETEN_MASK | LLC_CCUCECR_ERRINTEN_MASK));
     }
 
     /* Uncorrectable memory protection error (only interrupt enable bit cleared) */
@@ -1115,38 +1176,78 @@ status_t LLC_GetPerformanceCounters(LLC_Type *base, llc_performance_counters_t *
 }
 
 /*!
- * brief LLC interrupt handler.
+ * brief Returns an instance number given an LLC peripheral base address.
  *
- * This function is called when the LLC interrupt occurs.
- * It clears the interrupt flags and calls the registered callback function if set.
+ * param base LLC peripheral base address.
+ * return LLC instance number starting from 0, or ARRAY_SIZE(s_llcBases) if not found.
  */
-void CMPT_LLC_DriverIRQHandler(void);
-void CMPT_LLC_DriverIRQHandler(void)
+static uint32_t LLC_GetInstance(LLC_Type *base)
 {
-    uint32_t interrupt_flags = LLC_GetStatusFlags(CMPT__LLC);
+    uint32_t instance;
 
-    LLC_ClearStatusFlags(CMPT__LLC, interrupt_flags);
-
-    if ((s_LLCCallback != NULL) && (interrupt_flags != 0U))
+    for (instance = 0U; instance < ARRAY_SIZE(s_llcBases); instance++)
     {
-        /* Invoke callback once per asserted flag (Option A) */
-        if ((interrupt_flags & (uint32_t)kLLC_CorrectableErrorValidFlag) != 0U)
+        /* Normalize both pointers to their non-secure alias before comparing.
+           RT2660 exposes secure and non-secure peripheral aliases; a base
+           passed through one alias must still match the table entry stored via
+           the other, mirroring the STM/CMU instance-lookup pattern. */
+        if (MSDK_REG_NONSECURE_ADDR((uint32_t)s_llcBases[instance]) == MSDK_REG_NONSECURE_ADDR((uint32_t)base))
         {
-            s_LLCCallback(kLLC_CorrectableErrorCallback);
-        }
-        if ((interrupt_flags & (uint32_t)kLLC_UncorrectableErrorValidFlag) != 0U)
-        {
-            s_LLCCallback(kLLC_UncorrectableErrorCallback);
-        }
-        if ((interrupt_flags & (uint32_t)kLLC_MaintenanceCompletionFlag) != 0U)
-        {
-            s_LLCCallback(kLLC_MaintenanceCompletionCallback);
-        }
-        if ((interrupt_flags & (uint32_t)kLLC_PerformanceMonitorEventFlag) != 0U)
-        {
-            s_LLCCallback(kLLC_PerformanceMonitorCallback);
+            break;
         }
     }
 
+    assert(instance < ARRAY_SIZE(s_llcBases));
+
+    return instance;
+
+}
+
+/*!
+ * brief Registers a user callback for an LLC instance.
+ *
+ * The callback is stored per instance, so multiple LLC instances can each have
+ * their own handler. Pass NULL to unregister the callback for the instance.
+ *
+ * param base     LLC peripheral base address.
+ * param callback User callback function, or NULL to unregister.
+ */
+void LLC_RegisterCallBack(LLC_Type *base, llc_callback_t callback)
+{
+    assert(base != NULL);
+
+    uint32_t instance = LLC_GetInstance(base);
+    if (instance < ARRAY_SIZE(s_llcBases))
+    {
+        s_LLCCallback[instance] = callback;
+    }
+}
+
+/*!
+ * brief LLC common interrupt handler.
+ *
+ * param instance LLC instance number.
+ */
+void LLC_DriverIRQHandler(uint32_t instance)
+{
+    if (instance >= ARRAY_SIZE(s_llcBases))
+    {
+        return;
+    }
+
+    uint32_t statusFlags = LLC_GetStatusFlags(s_llcBases[instance]);
+    LLC_ClearStatusFlags(s_llcBases[instance], statusFlags);
+
+    if (s_LLCCallback[instance] != NULL)
+    {
+        s_LLCCallback[instance](statusFlags);
+    }
+
     SDK_ISR_EXIT_BARRIER;
+}
+
+void CMPT_LLC_DriverIRQHandler(void);
+void CMPT_LLC_DriverIRQHandler(void)
+{
+    LLC_DriverIRQHandler(0U);
 }

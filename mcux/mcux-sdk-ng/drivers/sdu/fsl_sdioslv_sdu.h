@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SDIOSLV_SDU_H_
-#define _FSL_SDIOSLV_SDU_H_
+#ifndef FSL_SDIOSLV_SDU_H_
+#define FSL_SDIOSLV_SDU_H_
 
 #include "fsl_common.h"
 #include "cis_table.h"
@@ -496,4 +496,4 @@ status_t SDIOSLV_WriteScratchRegister(sdioslv_func_t fun_num,
 
 /* @}*/
 
-#endif /* _FSL_SDIOSLV_SDU_H_ */
+#endif /* FSL_SDIOSLV_SDU_H_ */

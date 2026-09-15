@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2023-11-01
-**     Build:               b260527
+**     Build:               b260729
 **
 **     Abstract:
 **         Chip specific module features.
@@ -92,7 +92,7 @@
 /* @brief LPUART availability on the SoC. */
 #define FSL_FEATURE_SOC_LPUART_COUNT (12)
 /* @brief MCM availability on the SoC. */
-#define FSL_FEATURE_SOC_MCM_COUNT (1)
+#define FSL_FEATURE_SOC_MCM_COUNT (2)
 /* @brief MU availability on the SoC. */
 #define FSL_FEATURE_SOC_MU_COUNT (50)
 /* @brief PDM availability on the SoC. */
@@ -109,6 +109,8 @@
 #define FSL_FEATURE_SOC_SFA_COUNT (1)
 /* @brief SINC availability on the SoC. */
 #define FSL_FEATURE_SOC_SINC_COUNT (4)
+/* @brief SYSPM availability on the SoC. */
+#define FSL_FEATURE_SOC_SYSPM_COUNT (4)
 /* @brief TMR availability on the SoC. */
 #define FSL_FEATURE_SOC_TMR_COUNT (8)
 /* @brief TPM availability on the SoC. */
@@ -119,6 +121,8 @@
 #define FSL_FEATURE_SOC_USB_COUNT (1)
 /* @brief USBNC availability on the SoC. */
 #define FSL_FEATURE_SOC_USBNC_COUNT (1)
+/* @brief USDHC availability on the SoC. */
+#define FSL_FEATURE_SOC_USDHC_COUNT (3)
 /* @brief WDOG availability on the SoC. */
 #define FSL_FEATURE_SOC_WDOG_COUNT (8)
 /* @brief XBAR_DSC availability on the SoC. */
@@ -141,6 +145,22 @@
 #define FSL_FEATURE_AOI_MODULE_INPUTS (4)
 /* @brief Number of events related to number of registers AOIx_BFCRT01n/AOIx_BFCRT23n. */
 #define FSL_FEATURE_AOI_EVENT_COUNT (4)
+
+/* INTM module features */
+
+/* @brief Up to 4 programmable interrupt monitors */
+#define FSL_FEATURE_INTM_MONITOR_COUNT (4)
+
+/* SYSPM module features */
+
+/* @brief SYSPM support disable counters if stopped or halted. */
+#define FSL_FEATURE_SYSPM_HAS_PMCR_DCIFSH (1)
+/* @brief SYSPM has reset instruction counter. */
+#define FSL_FEATURE_SYSPM_HAS_PMCR_RICTR (1)
+/* @brief Number of PMCR registers signals number of performance monitors available in single SYSPM instance. */
+#define FSL_FEATURE_SYSPM_PMCR_COUNT (1)
+/* @brief SYSPM has instruction counter. */
+#define FSL_FEATURE_SYSPM_HAS_PMICTR (1)
 
 /* CACHEC module features */
 
@@ -239,7 +259,7 @@
 
 /* EDMA module features */
 
-/* @brief Number of DMA channels (related to number of registers TCD, DCHPRI, bit fields ERQ[ERQn], EEI[EEIn], INT[INTn], ERR[ERRn], HRS[HRSn] and bit field widths ES[ERRCHN], CEEI[CEEI], SEEI[SEEI], CERQ[CERQ], SERQ[SERQ], CDNE[CDNE], SSRT[SSRT], CERR[CERR], CINT[CINT], TCDn_CITER_ELINKYES[LINKCH], TCDn_CSR[MAJORLINKCH], TCDn_BITER_ELINKYES[LINKCH]). (Valid only for eDMA modules.) */
+/* @brief Number of DMA channels (related to number of registers TCD, DCHPRI, bit fields ERQ[ERQn], EEI[EEIn], INT[INTn], ERR[ERRn], HRS[HRSn] and bit field widths ES[ERRCHN], CEEI[CEEI], SEEI[SEEI], CERQ[CERQ], SERQ[SERQ], CDNE[CDNE], SSRT[SSRT], CERR[CERR], CINT[CINT], TCDn_CITER_ELINKYES[LINKCH], TCDn_CSR[MAJORLINKCH], TCDn_BITER_ELINKYES[LINKCH]). (Valid only for eDMA modules.) Note: This feature value is not the same on all EDMA instances. */
 #define FSL_FEATURE_EDMA_MODULE_CHANNEL (64)
 /* @brief If 8 bytes transfer supported. */
 #define FSL_FEATURE_EDMA_SUPPORT_8_BYTES_TRANSFER (1)
@@ -281,7 +301,7 @@
 #define FSL_FEATURE_EDMA_HAS_SBR (1)
 /* @brief If dma has common clock gate */
 #define FSL_FEATURE_EDMA_HAS_COMMON_CLOCK_GATE (0)
-/* @brief Has channel mux */
+/* @brief Has channel mux Note: This feature value is not the same on all EDMA instances. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_MUX (1)
 /* @brief Whether instance has prot register. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_PROT_REGISTERn(x) \
@@ -301,7 +321,7 @@
     (((x) == EDMA4) ? (1) : (-1)))))
 /* @brief Whether has MP channel mux */
 #define FSL_FEATURE_EDMA_HAS_MP_CHANNEL_MUX (1)
-/* @brief Has register bit field CH_CSR[SWAP]. */
+/* @brief Has register bit field CH_CSR[SWAP]. Note: This feature value is not the same on all EDMA instances. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_SWAP_SIZE (1)
 /* @brief Whether instance has MP channel mux. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_MP_CHANNEL_MUXn(x) \
@@ -315,7 +335,7 @@
     (((x) == EDMA3) ? (1) : \
     (((x) == EDMA4) ? (1) : \
     (((x) == EDMA1) ? (0) : (-1)))))
-/* @brief Has register bit field CH_SBR[INSTR]. */
+/* @brief Has register bit field CH_SBR[INSTR]. Note: This feature value is not the same on all EDMA instances. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_ACCESS_TYPE (1)
 /* @brief Instance has register bit field CH_SBR[INSTR]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_ACCESS_TYPEn(x) \
@@ -323,7 +343,7 @@
     (((x) == EDMA3) ? (1) : \
     (((x) == EDMA4) ? (1) : \
     (((x) == EDMA1) ? (0) : (-1)))))
-/* @brief Has register bit fields CH_MATTR[WCACHE], CH_MATTR[RCACHE]. */
+/* @brief Has register bit fields CH_MATTR[WCACHE], CH_MATTR[RCACHE]. Note: This feature value is not the same on all EDMA instances. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_MEMORY_ATTRIBUTE (1)
 /* @brief Instance has register CH_MATTR. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_MEMORY_ATTRIBUTEn(x) \
@@ -331,7 +351,7 @@
     (((x) == EDMA3) ? (1) : \
     (((x) == EDMA4) ? (1) : \
     (((x) == EDMA1) ? (0) : (-1)))))
-/* @brief Has register bit field CH_CSR[SIGNEXT]. */
+/* @brief Has register bit field CH_CSR[SIGNEXT]. Note: This feature value is not the same on all EDMA instances. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_SIGN_EXTENSION (1)
 /* @brief Instance Has register bit field CH_CSR[SIGNEXT]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_SIGN_EXTENSIONn(x) \
@@ -345,7 +365,7 @@
     (((x) == EDMA3) ? (0) : \
     (((x) == EDMA4) ? (0) : \
     (((x) == EDMA1) ? (1) : (-1)))))
-/* @brief Has register bit fields TCD_CSR[TMC]. */
+/* @brief Has register bit fields TCD_CSR[TMC]. Note: This feature value is not the same on all EDMA instances. */
 #define FSL_FEATURE_EDMA_HAS_TRANSFER_MODE (1)
 /* @brief Instance has register bit fields TCD_CSR[TMC]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_TRANSFER_MODEn(x) \
@@ -621,33 +641,33 @@
 #define FSL_FEATURE_MU_SIDE_A (1)
 /* @brief MU side for current core */
 #define FSL_FEATURE_MU_SIDE_B (1)
-/* @brief MU supports reset assert interrupt. CIER0[RAIE] or CR[RAIE] or BCR[RAIE]. */
+/* @brief MU supports reset assert interrupt. CIER0[RAIE] or CR[RAIE] or BCR[RAIE]. Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_HAS_RESET_ASSERT_INT (1)
 /* @brief MU supports reset de-assert interrupt. CR[RDIE] or BCR[RDIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT (0)
-/* @brief MU does not support core status. Register CSSR0 or CSR0. */
-#define FSL_FEATURE_MU_NO_CORE_STATUS (0)
+/* @brief MU does not support core status. Register CSSR0 or CSR0. Note: This feature value is not the same on all MU instances. */
+#define FSL_FEATURE_MU_NO_CORE_STATUS (1)
 /* @brief MU does not support NMI. Register bit CCR0[NMI]. */
-#define FSL_FEATURE_MU_NO_NMI (0)
-/* @brief MU does not support core event pending. Register bit SR[CEP]. */
+#define FSL_FEATURE_MU_NO_NMI (1)
+/* @brief MU does not support core event pending. Register bit SR[CEP]. Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_NO_CEP (1)
-/* @brief MU supports Power-Down mode entry interrupt. CIER0[PDIE] */
+/* @brief MU supports Power-Down mode entry interrupt. CIER0[PDIE] Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_HAS_PD_INT (1)
-/* @brief MU supports STOP mode entry interrupt. CIER0[STOPIE] */
+/* @brief MU supports STOP mode entry interrupt. CIER0[STOPIE] Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_HAS_STOP_INT (1)
-/* @brief MU supports WAIT mode entry interrupt. CIER0[WAITIE] */
+/* @brief MU supports WAIT mode entry interrupt. CIER0[WAITIE] Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_HAS_WAIT_INT (1)
-/* @brief MU supports HALT mode entry interrupt. CIER0[HALTIE] */
+/* @brief MU supports HALT mode entry interrupt. CIER0[HALTIE] Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_HAS_HALT_INT (1)
-/* @brief MU supports RUN mode entry interrupt. CIER0[RUNIE] */
+/* @brief MU supports RUN mode entry interrupt. CIER0[RUNIE] Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_HAS_RUN_INT (1)
-/* @brief MU supports hardware reset interrupt. CSSR0[HRIP] or CSR0[HRIP]. */
+/* @brief MU supports hardware reset interrupt. CSSR0[HRIP] or CSR0[HRIP]. Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_HAS_SR_HRIP (1)
 /* @brief MU supports reset interrupt. Register bit SR[MURIP]. */
 #define FSL_FEATURE_MU_HAS_SR_MURIP (1)
 /* @brief MU does not support enable clock of the other core, CR[CLKE] or CCR[CLKE]. */
 #define FSL_FEATURE_MU_NO_CLKE (1)
-/* @brief MU has bit CCR0[RSTH]. */
+/* @brief MU has bit CCR0[RSTH]. Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_HAS_RSTH (1)
 /* @brief MU has bit CCR0[RSTH] by instance. */
 #define FSL_FEATURE_MU_HAS_RSTH_BY_INSTANCEn(x) \
@@ -669,7 +689,7 @@
     (((x) == MU8_MUB) ? (1) : \
     (((x) == MU9_MUA) ? (0) : \
     (((x) == MU9_MUB) ? (1) : (-1)))))))))))))))))))
-/* @brief MU has bit CCR0[BOOT]. */
+/* @brief MU has bit CCR0[BOOT]. Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_HAS_BOOT (1)
 /* @brief MU has bit CCR0[BOOT] by instance. */
 #define FSL_FEATURE_MU_HAS_BOOT_BY_INSTANCEn(x) \
@@ -693,7 +713,7 @@
     (((x) == MU9_MUB) ? (1) : (-1)))))))))))))))))))
 /* @brief MU supports MU reset, CR[MUR]. */
 #define FSL_FEATURE_MU_HAS_MUR (1)
-/* @brief MU supports hardware reset, CR[HR] or CCR0[HR]. */
+/* @brief MU supports hardware reset, CR[HR] or CCR0[HR]. Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_HAS_HR (1)
 /* @brief MU supports hardware reset by instance */
 #define FSL_FEATURE_MU_HAS_HR_BY_INSTANCEn(x) \
@@ -850,8 +870,8 @@
 #define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELX (1)
 /* @brief Is affected by errata with ID 51989. */
 #define FSL_FEATURE_PWM_HAS_ERRATA_51989 (0)
-/* @brief If (e)FlexPWM MASK register has UPDATE_MASK bit field. */
-#define FSL_FEATURE_PWM_MASK_HAS_UPDATE_MASK_BITFIELD (0)
+/* @brief If (e)FlexPWM MASK register has UPDATE_MASK bit field. Note: This feature value is not the same on all PWM instances. */
+#define FSL_FEATURE_PWM_MASK_HAS_UPDATE_MASK_BITFIELD (1)
 /* @brief If (e)FlexPWM MCTRL2 register has STRETCH_CNT_PRSC bit field. */
 #define FSL_FEATURE_PWM_MCTRL2_HAS_STRETCH_CNT_PRSC_BITFIELD (0)
 /* @brief If (e)FlexPWM MCTRL2 register has WRPROT bit field. */
@@ -892,7 +912,7 @@
     (((x) == SAI4) ? (1) : (-1)))))
 /* @brief Maximum words per frame (register bit fields TCR3[WDFL], TCR4[FRSZ], TMR[TWM], RCR3[WDFL], RCR4[FRSZ], RMR[RWM]). */
 #define FSL_FEATURE_SAI_MAX_WORDS_PER_FRAME (32)
-/* @brief Has support of combining multiple data channel FIFOs into single channel FIFO (register bit fields TCR3[CFR], TCR4[FCOMB], TFR0[WCP], TFR1[WCP], RCR3[CFR], RCR4[FCOMB], RFR0[RCP], RFR1[RCP]). */
+/* @brief Has support of combining multiple data channel FIFOs into single channel FIFO (register bit fields TCR3[CFR], TCR4[FCOMB], TFR0[WCP], TFR1[WCP], RCR3[CFR], RCR4[FCOMB], RFR0[RCP], RFR1[RCP]). Note: This feature value is not the same on all SAI instances. */
 #define FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE (1)
 /* @brief Has packing of 8-bit and 16-bit data into each 32-bit FIFO word (register bit fields TCR4[FPACK], RCR4[FPACK]). */
 #define FSL_FEATURE_SAI_HAS_FIFO_PACKING (1)
@@ -938,6 +958,8 @@
 #define FSL_FEATURE_SINC_CHANNEL_COUNT (4)
 /* @brief SINC CACFR register has bitfield ADMASEL. */
 #define FSL_FEATURE_SINC_CACFR_HAS_ADMASEL (0)
+/* @brief SINC CACFR register has no bitfield PTMUX. */
+#define FSL_FEATURE_SINC_CACFR_HAS_NO_PTMUX (0)
 
 /* TMR module features */
 
@@ -990,6 +1012,35 @@
 #define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (0)
 /* @brief Is affected by errata with ID 050050 (Incorrect duty output when EPWM mode is set to PS=0 during write 1 to CnV register). */
 #define FSL_FEATURE_TPM_HAS_ERRATA_050050 (0)
+/* @brief Has no CPWMS field in SC register (bitfield SC[CPWMS]). */
+#define FSL_FEATURE_TPM_HAS_NO_SC_CPWMS (0)
+
+/* USDHC module features */
+
+/* @brief Has external DMA support (VEND_SPEC[EXT_DMA_EN]) */
+#define FSL_FEATURE_USDHC_HAS_EXT_DMA (0)
+/* @brief Has HS400 mode (MIX_CTRL[HS400_MODE]) */
+#define FSL_FEATURE_USDHC_HAS_HS400_MODE (1)
+/* @brief Has SDR50 support (HOST_CTRL_CAP[SDR50_SUPPORT]) */
+#define FSL_FEATURE_USDHC_HAS_SDR50_MODE (1)
+/* @brief Has SDR104 support (HOST_CTRL_CAP[SDR104_SUPPORT]) */
+#define FSL_FEATURE_USDHC_HAS_SDR104_MODE (1)
+/* @brief USDHC has reset control */
+#define FSL_FEATURE_USDHC_HAS_RESET (0)
+/* @brief USDHC has no bitfield WTMK_LVL[WR_BRST_LEN] and WTMK_LVL[RD_BRST_LEN] */
+#define FSL_FEATURE_USDHC_HAS_NO_RW_BURST_LEN (1)
+/* @brief If USDHC instance support 8 bit width */
+#define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_8_BIT_WIDTHn(x) (1)
+/* @brief If USDHC instance support HS400 mode */
+#define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_HS400_MODEn(x) (0)
+/* @brief If USDHC instance support 1v8 signal */
+#define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_1V8_SIGNALn(x) (1)
+/* @brief Has no retuning time counter (HOST_CTRL_CAP[TIME_COUNT_RETURNING]) */
+#define FSL_FEATURE_USDHC_REGISTER_HOST_CTRL_CAP_HAS_NO_RETUNING_TIME_COUNTER (1)
+/* @brief Has no VSELECT bit in VEND_SPEC register */
+#define FSL_FEATURE_USDHC_HAS_NO_VOLTAGE_SELECT (0)
+/* @brief Has no VS18 bit in HOST_CTRL_CAP register */
+#define FSL_FEATURE_USDHC_HAS_NO_VS18 (0)
 
 /* WDOG module features */
 

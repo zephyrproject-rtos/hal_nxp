@@ -13,7 +13,7 @@
 **
 **     Reference manual:    LPC802 User manual Rev.1.0  1 Dec 2017
 **     Version:             rev. 3.0, 2025-11-18
-**     Build:               b251118
+**     Build:               b260826
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

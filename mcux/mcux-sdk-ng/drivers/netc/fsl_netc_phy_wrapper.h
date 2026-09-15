@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_NETC_PHY_WRAPPER_H_
-#define _FSL_NETC_PHY_WRAPPER_H_
+#ifndef FSL_NETC_PHY_WRAPPER_H_
+#define FSL_NETC_PHY_WRAPPER_H_
 
 #include "fsl_common.h"
 #include "fsl_netc_mdio.h"
@@ -414,4 +414,4 @@ status_t NETC_PHYReadReg(netc_mdio_handle_t *handle, bool pcs, const volatile ui
 #if defined(__cplusplus)
 }
 #endif
-#endif /* _FSL_NETC_PHY_WRAPPER_H_ */
+#endif /* FSL_NETC_PHY_WRAPPER_H_ */

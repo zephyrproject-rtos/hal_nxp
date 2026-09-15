@@ -27,8 +27,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _FSL_FRACT_PLL_H_
-#define _FSL_FRACT_PLL_H_
+#ifndef FSL_FRACT_PLL_H_
+#define FSL_FRACT_PLL_H_
 
 /*!
  * @addtogroup CLOCK_driver
@@ -61,6 +61,6 @@ bool FRACTPLL_SetDfsRate(uint32_t pllIdx, uint8_t dfsIdx, uint64_t rate);
 
 /* Externs */
 
-#endif /* _FSL_FRACT_PLL_H_ */
+#endif /* FSL_FRACT_PLL_H_ */
 
 /** @} */

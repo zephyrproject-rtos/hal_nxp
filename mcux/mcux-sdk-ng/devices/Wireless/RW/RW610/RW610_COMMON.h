@@ -11,7 +11,7 @@
 **
 **     Reference manual:    RW61X reference manual Rev. 10.0 - 12 January 2026
 **     Version:             rev. 4.0, 2026-01-12
-**     Build:               b260519
+**     Build:               b260805
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RW610
@@ -946,33 +946,33 @@ typedef enum IRQn {
 /** Interrupt vectors for the DAC peripheral type */
 #define DAC_IRQS                                 { GAU_DAC_IRQn }
 
-/* DBGMAILBOX - Peripheral instance base addresses */
+/* DEBUGMAILBOX - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
   /** Peripheral DBGMAILBOX base address */
   #define DBGMAILBOX_BASE                          (0x5010F000u)
   /** Peripheral DBGMAILBOX base address */
   #define DBGMAILBOX_BASE_NS                       (0x4010F000u)
   /** Peripheral DBGMAILBOX base pointer */
-  #define DBGMAILBOX                               ((DBGMAILBOX_Type *)DBGMAILBOX_BASE)
+  #define DBGMAILBOX                               ((DEBUGMAILBOX_Type *)DBGMAILBOX_BASE)
   /** Peripheral DBGMAILBOX base pointer */
-  #define DBGMAILBOX_NS                            ((DBGMAILBOX_Type *)DBGMAILBOX_BASE_NS)
-  /** Array initializer of DBGMAILBOX peripheral base addresses */
-  #define DBGMAILBOX_BASE_ADDRS                    { DBGMAILBOX_BASE }
-  /** Array initializer of DBGMAILBOX peripheral base pointers */
-  #define DBGMAILBOX_BASE_PTRS                     { DBGMAILBOX }
-  /** Array initializer of DBGMAILBOX peripheral base addresses */
-  #define DBGMAILBOX_BASE_ADDRS_NS                 { DBGMAILBOX_BASE_NS }
-  /** Array initializer of DBGMAILBOX peripheral base pointers */
-  #define DBGMAILBOX_BASE_PTRS_NS                  { DBGMAILBOX_NS }
+  #define DBGMAILBOX_NS                            ((DEBUGMAILBOX_Type *)DBGMAILBOX_BASE_NS)
+  /** Array initializer of DEBUGMAILBOX peripheral base addresses */
+  #define DEBUGMAILBOX_BASE_ADDRS                  { DBGMAILBOX_BASE }
+  /** Array initializer of DEBUGMAILBOX peripheral base pointers */
+  #define DEBUGMAILBOX_BASE_PTRS                   { DBGMAILBOX }
+  /** Array initializer of DEBUGMAILBOX peripheral base addresses */
+  #define DEBUGMAILBOX_BASE_ADDRS_NS               { DBGMAILBOX_BASE_NS }
+  /** Array initializer of DEBUGMAILBOX peripheral base pointers */
+  #define DEBUGMAILBOX_BASE_PTRS_NS                { DBGMAILBOX_NS }
 #else
   /** Peripheral DBGMAILBOX base address */
   #define DBGMAILBOX_BASE                          (0x4010F000u)
   /** Peripheral DBGMAILBOX base pointer */
-  #define DBGMAILBOX                               ((DBGMAILBOX_Type *)DBGMAILBOX_BASE)
-  /** Array initializer of DBGMAILBOX peripheral base addresses */
-  #define DBGMAILBOX_BASE_ADDRS                    { DBGMAILBOX_BASE }
-  /** Array initializer of DBGMAILBOX peripheral base pointers */
-  #define DBGMAILBOX_BASE_PTRS                     { DBGMAILBOX }
+  #define DBGMAILBOX                               ((DEBUGMAILBOX_Type *)DBGMAILBOX_BASE)
+  /** Array initializer of DEBUGMAILBOX peripheral base addresses */
+  #define DEBUGMAILBOX_BASE_ADDRS                  { DBGMAILBOX_BASE }
+  /** Array initializer of DEBUGMAILBOX peripheral base pointers */
+  #define DEBUGMAILBOX_BASE_PTRS                   { DBGMAILBOX }
 #endif
 
 /* DMA - Peripheral instance base addresses */
@@ -1800,6 +1800,8 @@ typedef enum IRQn {
   /** Array initializer of PKC peripheral base pointers */
   #define PKC_BASE_PTRS                            { PKC }
 #endif
+/** Interrupt vectors for the PKC peripheral type */
+#define PKC_IRQS                                 { PKC_INT_IRQn }
 
 /* PMU - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

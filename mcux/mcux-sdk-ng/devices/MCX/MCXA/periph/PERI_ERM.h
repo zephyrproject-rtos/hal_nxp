@@ -24,13 +24,13 @@
 **                          MCXA153VLH
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260604
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ERM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -73,48 +73,6 @@
 #else
   #error "No valid CPU defined!"
 #endif
-
-/* ----------------------------------------------------------------------------
-   -- Mapping Information
-   ---------------------------------------------------------------------------- */
-
-/*!
- * @addtogroup Mapping_Information Mapping Information
- * @{
- */
-
-/** Mapping Information */
-#if !defined(ERM_MEMORY_CHANNEL_T_)
-#define ERM_MEMORY_CHANNEL_T_
-/*!
- * @addtogroup erm_memory_channel
- * @{
- */
-
-/*******************************************************************************
- * Definitions
- ******************************************************************************/
-
-/*!
- * @brief Structure for the erm_memory_channel
- *
- * Defines the structure for the ERM resource collections.
- */
-
-typedef enum _erm_memory_channel
-{
-    kERM_MemoryChannelRAMA0         = 0U,          /**< Memory RAMA0 */
-    kERM_MemoryChannelFLASH         = 1U,          /**< Memory FLASH */
-} erm_memory_channel_t;
-
-/* @} */
-#endif /* ERM_MEMORY_CHANNEL_T_ */
-
-
-/*!
- * @}
- */ /* end of group Mapping_Information */
-
 
 /* ----------------------------------------------------------------------------
    -- Device Peripheral Access Layer

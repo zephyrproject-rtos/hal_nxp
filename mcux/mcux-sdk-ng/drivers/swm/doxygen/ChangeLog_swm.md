@@ -1,5 +1,10 @@
 # SWM
 
+## [2.1.3]
+
+- Bug Fixes:
+  - Fix BAD_SHIFT Coverity finding.
+
 ## [2.1.2]
 
 - Improvements

@@ -6,13 +6,13 @@
 **                          MCXW716CMFTA
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b260810
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GEN4PHY
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -103,7 +103,7 @@ typedef struct {
   __IO uint32_t FSK_CFG0;                          /**< PHY Uncoded Config 0, offset: 0x24 */
   __IO uint32_t FSK_CFG1;                          /**< PHY Uncoded Config 1, offset: 0x28 */
   __IO uint32_t FSK_CFG2;                          /**< PHY Uncoded Config 2, offset: 0x2C */
-       uint32_t FSK_CFG3;                          /**< PHY Uncoded Config 3, offset: 0x30 */
+  __I  uint32_t FSK_CFG3;                          /**< PHY Uncoded Config 3, offset: 0x30 */
   __IO uint32_t FSK_PT;                            /**< PHY Uncoded Power Threshold Config, offset: 0x34 */
   __IO uint32_t FSK_FAD_CTRL;                      /**< PHY Uncoded FAD Control, offset: 0x38 */
   __IO uint32_t FSK_FAD_CFG;                       /**< PHY Uncoded FAD Config, offset: 0x3C */

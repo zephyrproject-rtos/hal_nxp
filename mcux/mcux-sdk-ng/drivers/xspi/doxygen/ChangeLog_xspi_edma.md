@@ -1,5 +1,9 @@
 # XSPI EDMA Driver
 
+## [2.0.4]
+- Bug Fixes
+  - Fixed violations in XSPI_TransferEDMACallback() function, avoid warning of unused parameters.
+
 ## [2.0.3]
 
 - Bug Fixes

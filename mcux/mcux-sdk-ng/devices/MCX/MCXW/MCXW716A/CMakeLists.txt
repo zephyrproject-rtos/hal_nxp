@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-#### device spepcific drivers
+#### device specific drivers
 include(${SdkRootDirPath}/devices/arm/device_header.cmake)
 mcux_add_cmakelists(${SdkRootDirPath}/${device_root}/MCX/MCXW/MCXW716A/drivers)
 

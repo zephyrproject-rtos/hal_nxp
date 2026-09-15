@@ -845,13 +845,10 @@ lin_status_t LIN_SetResponse(uint8_t instance,
                              uint8_t response_length,
                              uint8_t max_frame_res_timeout)
 {
-    lin_status_t retVal = LIN_ERROR;
     /* Set correct timeout value */
     LIN_SetTimeoutCounter(instance, max_frame_res_timeout);
     /* Start sending data from the buffer */
-    retVal = LIN_SendFrameData(instance, response_buff, response_length);
-
-    return retVal;
+    return LIN_SendFrameData(instance, response_buff, response_length);
 }
 
 /*!
@@ -868,13 +865,10 @@ lin_status_t LIN_RxResponse(uint8_t instance,
                             uint8_t response_length,
                             uint8_t max_frame_res_timeout)
 {
-    lin_status_t retVal = LIN_ERROR;
     /* Set correct timeout value */
     LIN_SetTimeoutCounter(instance, max_frame_res_timeout);
     /* Start receiving frame data into input buffer */
-    retVal = LIN_ReceiveFrameData(instance, response_buff, response_length);
-
-    return retVal;
+    return LIN_ReceiveFrameData(instance, response_buff, response_length);
 }
 
 /*!
@@ -885,10 +879,6 @@ lin_status_t LIN_RxResponse(uint8_t instance,
  */
 lin_status_t LIN_IgnoreResponse(uint8_t instance)
 {
-    lin_status_t retVal = LIN_ERROR;
-
     /* Abort frame data transferring */
-    retVal = LIN_GotoIdleState(instance);
-
-    return retVal;
+    return LIN_GotoIdleState(instance);
 }

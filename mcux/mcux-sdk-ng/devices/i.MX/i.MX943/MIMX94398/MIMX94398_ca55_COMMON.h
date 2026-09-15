@@ -1,28 +1,11 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX94398AVKE_ca55
-**                          MIMX94398AVKJ_ca55
+**     Processors:          MIMX94398AVKJ_ca55
 **                          MIMX94398AVKM_ca55
-**                          MIMX94398AVME_ca55
 **                          MIMX94398AVMJ_ca55
 **                          MIMX94398AVMM_ca55
-**                          MIMX94398CVKE_ca55
-**                          MIMX94398CVKJ_ca55
-**                          MIMX94398CVKM_ca55
-**                          MIMX94398CVME_ca55
-**                          MIMX94398CVMJ_ca55
-**                          MIMX94398CVMM_ca55
-**                          MIMX94398DVKE_ca55
-**                          MIMX94398DVKJ_ca55
 **                          MIMX94398DVKM_ca55
-**                          MIMX94398DVME_ca55
-**                          MIMX94398DVMJ_ca55
 **                          MIMX94398DVMM_ca55
-**                          MIMX94398XVKE_ca55
-**                          MIMX94398XVKJ_ca55
-**                          MIMX94398XVKM_ca55
-**                          MIMX94398XVME_ca55
-**                          MIMX94398XVMJ_ca55
 **                          MIMX94398XVMM_ca55
 **
 **     Compilers:           GNU C Compiler
@@ -31,13 +14,13 @@
 **
 **     Reference manual:    iMX943RM rev1 draftK
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b251125
+**     Build:               b260730
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX94398_ca55
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -134,412 +117,382 @@ typedef enum IRQn {
   LegacyIRQ_IRQn               = 31,               /**< Cortex-A55 Legacy nIRQ Interrupt */
 
   /* Device specific interrupts */
-  Reserved16_IRQn              = 32,                /**< Reserved interrupt */
-  Reserved17_IRQn              = 33,                /**< DAP interrupt */
-  Reserved18_IRQn              = 34,                /**< CTI trigger outputs from CM7 platform */
-  Reserved19_IRQn              = 35,                /**< CTI trigger outputs from CM33 platform */
-  Reserved20_IRQn              = 36,                /**< CTI trigger outputs from CA55 platform */
-  Reserved21_IRQn              = 37,                /**< Performance Unit Interrupts from CA55 platform */
-  Reserved22_IRQn              = 38,                /**< ECC error from CA55 platform cache */
-  Reserved23_IRQn              = 39,                /**< 1-bit or 2-bit ECC or Parity error from CA55 platform cache */
-  Reserved24_IRQn              = 40,                /**< CTI trigger outputs from CM7_1 platform */
-  Reserved25_IRQn              = 41,                /**< CTI trigger outputs from CM33_sync platform */
-  CAN1_IRQn                    = 42,               /**< CAN1 interrupt */
-  CAN1_ERROR_IRQn              = 43,               /**< CAN1 error interrupt */
-  GPIO1_INT0_IRQn              = 44,               /**< General Purpose Input/Output 1 interrupt 0 */
-  GPIO1_INT1_IRQn              = 45,               /**< General Purpose Input/Output 1 interrupt 1 */
-  I3C1_IRQn                    = 46,               /**< Improved Inter-Integrated Circuit 1 interrupt */
-  LPI2C1_IRQn                  = 47,               /**< Low Power Inter-Integrated Circuit module 1 */
-  LPI2C2_IRQn                  = 48,               /**< Low Power Inter-Integrated Circuit module 2 */
-  LPIT1_IRQn                   = 49,               /**< Low Power Periodic Interrupt Timer 1 */
-  LPSPI1_IRQn                  = 50,               /**< Low Power Serial Peripheral Interface 1 */
-  LPSPI2_IRQn                  = 51,               /**< Low Power Serial Peripheral Interface 2 */
-  LPTMR1_IRQn                  = 52,               /**< Low Power Timer 1 */
-  LPUART1_IRQn                 = 53,               /**< Low Power UART 1 */
-  LPUART2_IRQn                 = 54,               /**< Low Power UART 2 */
-  Reserved39_IRQn              = 55,               /**< AONMIX Sentinel MU0 SideA interrupt */
-  Reserved40_IRQn              = 56,               /**< AONMIX Sentinel MU1 SideA interrupt */
-  Reserved41_IRQn              = 57,               /**< AONMIX Sentinel MU2 SideA interrupt */
-  Reserved42_IRQn              = 58,               /**< AONMIX Sentinel MU3 SideA interrupt */
-  Reserved43_IRQn              = 59,               /**< AONMIX Sentinel MU4 SideA interrupt */
-  Reserved44_IRQn              = 60,               /**< AONMIX Sentinel MU5 SideA interrupt */
-  Reserved45_IRQn              = 61,               /**< AONMIX Sentinel MU6 SideA interrupt */
-  Reserved46_IRQn              = 62,               /**< AONMIX Sentinel MU7 SideA interrupt */
-  Reserved47_IRQn              = 63,               /**< AONMIX Sentinel MU8 SideA interrupt */
-  V2X_FH_APCH0_IRQn            = 64,               /**< V2X-FH MU APCH0 (APP0) interrupt */
-  V2X_FH_APHSM1_IRQn           = 65,               /**< V2X-FH MU APHSM1 (HSM1) interrupt */
-  TPM1_IRQn                    = 66,               /**< Timer PWM module 1 */
-  TPM2_IRQn                    = 67,               /**< Timer PWM module 2 */
-  WDOG1_IRQn                   = 68,               /**< Watchdog 1 Interrupt */
-  WDOG2_IRQn                   = 69,               /**< Watchdog 2 Interrupt */
-  SAI1_IRQn                    = 70,               /**< Serial Audio Interface 1 */
-  GPT1_IRQn                    = 71,               /**< AONMIX GPT1 */
-  CAN2_IRQn                    = 72,               /**< WAKEUPMIX CAN2 interrupt */
-  CAN2_ERROR_IRQn              = 73,               /**< WAKEUPMIX CAN2 error interrupt */
-  CAN3_IRQn                    = 74,               /**< WAKEUPMIX CAN3 interrupt */
-  CAN3_ERROR_IRQn              = 75,               /**< WAKEUPMIX CAN3 error interrupt */
-  CAN4_IRQn                    = 76,               /**< WAKEUPMIX CAN4 interrupt */
-  CAN4_ERROR_IRQn              = 77,               /**< WAKEUPMIX CAN4 error interrupt */
-  CAN5_IRQn                    = 78,               /**< WAKEUPMIX CAN5 interrupt */
-  CAN5_ERROR_IRQn              = 79,               /**< WAKEUPMIX CAN5 error interrupt */
-  FLEXIO1_IRQn                 = 80,               /**< WAKEUPMIX Flexible IO 1 interrupt */
-  FLEXIO2_IRQn                 = 81,               /**< WAKEUPMIX Flexible IO 2 interrupt */
-  FLEXIO3_IRQn                 = 82,               /**< NETCMIX Flexible IO 3 interrupt */
-  FLEXIO4_IRQn                 = 83,               /**< NETCMIX Flexible IO 4 interrupt */
-  Reserved68_IRQn              = 84,               /**< Earlier assigned for WAKEUPMIX XSPI1 interrupt */
-  Reserved69_IRQn              = 85,               /**< Earlier assigned for WAKEUPMIX XSPI2 interrupt */
-  GPIO2_INT0_IRQn              = 86,               /**< WAKEUPMIX General Purpose Input/Output 2 interrupt 0 */
-  GPIO2_INT1_IRQn              = 87,               /**< WAKEUPMIX General Purpose Input/Output 2 interrupt 1 */
-  GPIO3_INT0_IRQn              = 88,               /**< WAKEUPMIX General Purpose Input/Output 3 interrupt 0 */
-  GPIO3_INT1_IRQn              = 89,               /**< WAKEUPMIX General Purpose Input/Output 3 interrupt 1 */
-  GPIO4_INT0_IRQn              = 90,               /**< WAKEUPMIX General Purpose Input/Output 4 interrupt 0 */
-  GPIO4_INT1_IRQn              = 91,               /**< WAKEUPMIX General Purpose Input/Output 4 interrupt 1 */
-  GPIO5_INT0_IRQn              = 92,               /**< WAKEUPMIX General Purpose Input/Output 5 interrupt 0 */
-  GPIO5_INT1_IRQn              = 93,               /**< WAKEUPMIX General Purpose Input/Output 5 interrupt 1 */
-  GPIO6_INT0_IRQn              = 94,               /**< WAKEUPMIX General Purpose Input/Output 6 interrupt 0 */
-  GPIO6_INT1_IRQn              = 95,               /**< WAKEUPMIX General Purpose Input/Output 6 interrupt 1 */
-  GPIO7_INT0_IRQn              = 96,               /**< WAKEUPMIX General Purpose Input/Output 7 interrupt 0 */
-  GPIO7_INT1_IRQn              = 97,               /**< WAKEUPMIX General Purpose Input/Output 7 interrupt 1 */
-  I3C2_IRQn                    = 98,               /**< WAKEUPMIX Improved Inter-Integrated Circuit 2 interrupt */
-  LPI2C3_IRQn                  = 99,               /**< WAKEUPMIX Low Power Inter-Integrated Circuit module 3 */
-  LPI2C4_IRQn                  = 100,               /**< WAKEUPMIX Low Power Inter-Integrated Circuit module 4 */
-  LPIT2_IRQn                   = 101,               /**< WAKEUPMIX Low Power Periodic Interrupt Timer 2 */
-  LPIT3_IRQn                   = 102,               /**< WAKEUPMIX Low Power Periodic Interrupt Timer 3 */
-  LPSPI3_IRQn                  = 103,               /**< WAKEUPMIX Low Power Serial Peripheral Interface 3 */
-  LPSPI4_IRQn                  = 104,               /**< WAKEUPMIX Low Power Serial Peripheral Interface 4 */
-  LPTMR2_IRQn                  = 105,               /**< WAKEUPMIX Low Power Timer 2 */
-  LPUART3_IRQn                 = 106,               /**< WAKEUPMIX Low Power UART 3 */
-  LPUART4_IRQn                 = 107,               /**< WAKEUPMIX Low Power UART 4 */
-  LPUART5_IRQn                 = 108,               /**< WAKEUPMIX Low Power UART 5 */
-  LPUART6_IRQn                 = 109,               /**< WAKEUPMIX Low Power UART 6 */
-  LPUART7_IRQn                 = 110,               /**< WAKEUPMIX Low Power UART 7 */
-  LPUART8_IRQn                 = 111,               /**< WAKEUPMIX Low Power UART 8 */
-  LPUART9_IRQn                 = 112,               /**< WAKEUPMIX Low Power UART 9 */
-  LPUART10_IRQn                = 113,               /**< WAKEUPMIX Low Power UART 10 */
-  LPUART11_IRQn                = 114,               /**< WAKEUPMIX Low Power UART 11 */
-  LPUART12_IRQn                = 115,               /**< WAKEUPMIX Low Power UART 12 */
-  BBNSM_IRQn                   = 116,               /**< BBNSM Non-Secure interrupt */
-  SYSCTR1_IRQn                 = 117,               /**< AONMIX System Counter compare interrupt */
-  TPM3_IRQn                    = 118,               /**< WAKEUPMIX Timer PWM module 3 */
-  TPM4_IRQn                    = 119,               /**< WAKEUPMIX Timer PWM module 4 */
-  TPM5_IRQn                    = 120,               /**< WAKEUPMIX Timer PWM module 5 */
-  TPM6_IRQn                    = 121,               /**< WAKEUPMIX Timer PWM module 6 */
-  WDOG3_IRQn                   = 122,               /**< WAKEUPMIX Watchdog 3 Interrupt */
-  WDOG4_IRQn                   = 123,               /**< WAKEUPMIX Watchdog 4 Interrupt */
-  WDOG5_IRQn                   = 124,               /**< WAKEUPMIX Watchdog 5 Interrupt */
-  WDOG6_IRQn                   = 125,               /**< WAKEUPMIX Watchdog 6 Interrupt */
-  WDOG7_IRQn                   = 126,               /**< NETCMIX Watchdog 7 Interrupt */
-  WDOG8_IRQn                   = 127,               /**< NETCMIX Watchdog 8 Interrupt */
-  USDHC1_IRQn                  = 128,               /**< MEGAMIX uSDHC1 Enhanced SDHC Interrupt Request */
-  USDHC2_IRQn                  = 129,               /**< MEGAMIX uSDHC2 Enhanced SDHC Interrupt Request */
-  EDMA2_ERROR_IRQn             = 130,               /**< WAKEUPMIX EDMA2 error interrupt */
-  Reserved115_IRQn             = 131,               /**< JTAGSW DAP MDM-AP SRC reset source */
-  Reserved116_IRQn             = 132,              /**< JTAGC SRC reset source (the JTAGC used for boundary scan, not JTAGC used for password authentication) */
-  SAI2_IRQn                    = 133,              /**< WAKEUPMIX SAI2 interrupt */
-  SAI3_IRQn                    = 134,              /**< WAKEUPMIX SAI3 interrupt */
-  SAI4_IRQn                    = 135,              /**< WAKEUPMIX SAI4 interrupt */
-  LPSPI5_IRQn                  = 136,              /**< WAKEUPMIX LPSPI5 interrupt */
-  LPSPI6_IRQn                  = 137,              /**< WAKEUPMIX LPSPI6 interrupt */
-  LPSPI7_IRQn                  = 138,              /**< WAKEUPMIX LPSPI7 interrupt */
-  LPSPI8_IRQn                  = 139,              /**< WAKEUPMIX LPSPI8 interrupt */
-  LPI2C5_IRQn                  = 140,              /**< WAKEUPMIX LPI2C5 interrupt */
-  LPI2C6_IRQn                  = 141,              /**< WAKEUPMIX LPI2C6 interrupt */
-  LPI2C7_IRQn                  = 142,              /**< WAKEUPMIX LPI2C7 interrupt */
-  LPI2C8_IRQn                  = 143,              /**< WAKEUPMIX LPI2C8 interrupt */
-  PDM_HWVAD_ERROR_IRQn         = 144,              /**< WAKEUPMIX PDM interrupt(hwvad err) */
-  PDM_HWVAD_EVENT_IRQn         = 145,              /**< WAKEUPMIX PDM interrupt(hwvad event) */
-  PDM_ERROR_IRQn               = 146,              /**< WAKEUPMIX PDM interrupt(mic err) */
-  PDM_EVENT_IRQn               = 147,              /**< WAKEUPMIX PDM interrupt(mic event) */
-  USDHC3_IRQn                  = 148,              /**< MEGAMIX uSDHC3 Enhanced SDHC Interrupt Request */
-  ADC_ER_IRQn                  = 149,              /**< WAKEUPMIX ADC1 interrupt(er) */
-  ADC_WD_IRQn                  = 150,              /**< WAKEUPMIX ADC1 interrupt(wd) */
-  ADC_EOC_IRQn                 = 151,              /**< WAKEUPMIX ADC1 interrupt(eoc) */
-  Reserved136_IRQn             = 152,              /**< I3C1 wakeup irq after double sync */
-  Reserved137_IRQn             = 153,              /**< I3C2 wakeup irq after double sync */
-  MU5_A_IRQn                   = 154,              /**< AONMIX MU5 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU6_A_IRQn                   = 155,              /**< AONMIX MU6 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU7_A_IRQn                   = 156,              /**< AONMIX MU7 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU10_B_IRQn                  = 157,              /**< WAKEUPMIX MU10 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU11_B_IRQn                  = 158,              /**< WAKEUPMIX MU11 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU12_A_IRQn                  = 159,              /**< WAKEUPMIX MU12 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU13_A_IRQn                  = 160,              /**< WAKEUPMIX MU13 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU18_A_IRQn                  = 161,              /**< WAKEUPMIX MU18 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU18_B_IRQn                  = 162,              /**< WAKEUPMIX MU18 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU_E1_A_IRQn                 = 163,              /**< NETCMIX MU E1 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU_E2_A_IRQn                 = 164,              /**< NETCMIX MU E2 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU_E3_A_IRQn                 = 165,              /**< NETCMIX MU E3 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU_E4_A_IRQn                 = 166,              /**< NETCMIX MU E4 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  XSPI_SLV_IRQn                = 167,              /**< WAKEUPMIX XSPI Responder */
-  FCCU_INT0_IRQn               = 168,              /**< AONMIX FCCU Interrupt Reaction 0 */
-  FCCU_INT1_IRQn               = 169,              /**< AONMIX FCCU Interrupt Reaction 1 */
-  FCCU_INT2_IRQn               = 170,              /**< AONMIX FCCU Interrupt Reaction 2 */
-  FCCU_INT3_IRQn               = 171,              /**< AONMIX FCCU Interrupt Reaction 3(new interrupt for CM33_sync) */
-  FCCU_INT4_IRQn               = 172,              /**< AONMIX FCCU Interrupt Reaction 4(new interrupt for CM7_1) */
-  STCU_IRQn                    = 173,              /**< AONMIX STCU Selftest end Interrupt */
-  XBAR1_CH0_CH1_IRQn           = 174,              /**< XBAR1 interrupt 0 and 1 */
-  XBAR1_CH2_CH3_IRQn           = 175,              /**< XBAR1 interrupt 2 and 3 */
-  GPT2_IRQn                    = 176,              /**< WAKEUPMIX GPT2 interrupt */
-  GPT3_IRQn                    = 177,              /**< WAKEUPMIX GPT3 interrupt */
-  GPT4_IRQn                    = 178,              /**< WAKEUPMIX GPT4 interrupt */
-  Reserved163_IRQn             = 179,              /**< Endat2_1 interrupt/Hiperface1-DSL interrupt for safe events logged in EVENT_S register/Endat3 interrupt for background communication */
-  Reserved164_IRQn             = 180,              /**< Hiperface1-DSL interrupt for events logged in EVENT_H or EVENT_L register/Endat3 interrupt */
-  Reserved165_IRQn             = 181,              /**< Endat2_2  interrupt/Hiperface2-DSL interrupt for safe events logged in EVENT_S register/Biss interrupt for start of frame transmission */
-  Reserved166_IRQn             = 182,              /**< Hiperface2-DSL interrupt for events logged in EVENT_H or EVENT_L register/Biss interrupt for end of frame transmission */
-  Reserved167_IRQn             = 183,              /**< Flexpwm1(reload error, fault condition) */
-  Reserved168_IRQn             = 184,              /**< Flexpwm1(capt0, comp0, reload0) */
-  Reserved169_IRQn             = 185,              /**< Flexpwm1(capt1, comp1, reload1) */
-  Reserved170_IRQn             = 186,              /**< Flexpwm1(capt2, comp2, reload2) */
-  Reserved171_IRQn             = 187,              /**< Flexpwm1(capt3, comp3, reload3) */
-  Reserved172_IRQn             = 188,              /**< Flexpwm2(reload error, fault condition) */
-  Reserved173_IRQn             = 189,              /**< Flexpwm2(capt0, comp0, reload0) */
-  Reserved174_IRQn             = 190,              /**< Flexpwm2(capt1, comp1, reload1) */
-  Reserved175_IRQn             = 191,              /**< Flexpwm2(capt2, comp2, reload2) */
-  Reserved176_IRQn             = 192,              /**< Flexpwm2(capt3, comp3, reload3) */
-  Reserved177_IRQn             = 193,              /**< Flexpwm3(reload error, fault condition) */
-  Reserved178_IRQn             = 194,              /**< Flexpwm3(capt0, comp0, reload0) */
-  Reserved179_IRQn             = 195,              /**< Flexpwm3(capt1, comp1, reload1) */
-  Reserved180_IRQn             = 196,              /**< Flexpwm3(capt2, comp2, reload2) */
-  Reserved181_IRQn             = 197,              /**< Flexpwm3(capt3, comp3, reload3) */
-  Reserved182_IRQn             = 198,              /**< Flexpwm4(reload error, fault condition) */
-  Reserved183_IRQn             = 199,              /**< Flexpwm4(capt0, comp0, reload0) */
-  Reserved184_IRQn             = 200,              /**< Flexpwm4(capt1, comp1, reload1) */
-  Reserved185_IRQn             = 201,              /**< Flexpwm4(capt2, comp2, reload2) */
-  Reserved186_IRQn             = 202,              /**< Flexpwm4(capt3, comp3, reload3) */
-  ENC1_IRQn                    = 203,              /**< Quad dec1 interrupt */
-  ENC2_IRQn                    = 204,              /**< Quad dec2 interrupt */
-  ENC3_IRQn                    = 205,              /**< Quad dec3 interrupt */
-  ENC4_IRQn                    = 206,              /**< Quad dec4 interrupt */
-  EWM_IRQn                     = 207,              /**< Ewm out interrupt */
-  Reserved192_IRQn             = 208,              /**< Ethercat interrupt(PDI_OPB) */
-  Reserved193_IRQn             = 209,              /**< Ethercat interrupt(RESET_OUT) */
-  Reserved194_IRQn             = 210,              /**< Ethercat interrupt(SYNC_OUT0) */
-  Reserved195_IRQn             = 211,              /**< Ethercat interrupt(SYNC_OUT1) */
-  USB1_IRQn                    = 212,              /**< USB-1(USB 3.0 Controller) interrupt */
-  USB2_IRQn                    = 213,              /**< USB-2(USB 2.0 Controller) interrupt */
-  SINC1_CH0_IRQn               = 214,              /**< SINC Filter1(sinc filter glue1) Channel 0 interrupt */
-  SINC1_CH1_IRQn               = 215,              /**< SINC Filter1(sinc filter glue1) Channel 1 interrupt */
-  SINC1_CH2_IRQn               = 216,              /**< SINC Filter1(sinc filter glue1) Channel 2 interrupt */
-  SINC1_CH3_IRQn               = 217,              /**< SINC Filter1(sinc filter glue1) Channel 3 interrupt */
-  SINC2_CH0_IRQn               = 218,              /**< SINC Filter2(sinc filter glue2) Channel 0 interrupt */
-  SINC2_CH1_IRQn               = 219,              /**< SINC Filter2(sinc filter glue2) Channel 1 interrupt */
-  SINC2_CH2_IRQn               = 220,              /**< SINC Filter2(sinc filter glue2) Channel 2 interrupt */
-  SINC2_CH3_IRQn               = 221,              /**< SINC Filter2(sinc filter glue2) Channel 3 interrupt */
-  SINC3_CH0_IRQn               = 222,              /**< SINC Filter3(sinc filter glue3 Channel 0 interrupt */
-  SINC3_CH1_IRQn               = 223,              /**< SINC Filter3(sinc filter glue3) Channel 1 interrupt */
-  SINC3_CH2_IRQn               = 224,              /**< SINC Filter3(sinc filter glue3) Channel 2 interrupt */
-  SINC3_CH3_IRQn               = 225,              /**< SINC Filter3(sinc filter glue3) Channel 3 interrupt */
-  SINC4_CH0_IRQn               = 226,              /**< SINC Filter4(sinc filter glue4 Channel 0 interrupt */
-  SINC4_CH1_IRQn               = 227,              /**< SINC Filter4(sinc filter glue4) Channel 1 interrupt */
-  SINC4_CH2_IRQn               = 228,              /**< SINC Filter4(sinc filter glue4) Channel 2 interrupt */
-  SINC4_CH3_IRQn               = 229,              /**< SINC Filter4(sinc filter glue4) Channel 3 interrupt */
-  TMR1_IRQn                    = 230,              /**< QTIMER1 interrupt */
-  TMR2_IRQn                    = 231,              /**< QTIMER2 interrupt */
-  TMR3_IRQn                    = 232,              /**< QTIMER3 interrupt */
-  TMR4_IRQn                    = 233,              /**< QTIMER4 interrupt */
-  TMR5_IRQn                    = 234,              /**< QTIMER5 interrupt */
-  TMR6_IRQn                    = 235,              /**< QTIMER6 interrupt */
-  TMR7_IRQn                    = 236,              /**< QTIMER7 interrupt */
-  TMR8_IRQn                    = 237,              /**< QTIMER8 interrupt */
-  EDMA4_ERROR_IRQn             = 238,              /**< EDMA4 error interrupt */
-  Reserved223_IRQn             = 239,              /**< Anamix Gllitch Detector output (da_ip_voltage_glitch_detector_cln16ffc). It's a latch signal. It can be cleared. */
-  Reserved224_IRQn             = 240,              /**< Anamix VDET output (da_ip_vdetect_c16ffc). Detects high threshold on Core supply. It's a latch signal. It can be cleared. */
-  Reserved225_IRQn             = 241,              /**< Anamix VDET output (da_ip_vdetect_c16ffc). Detects Low threshold on Core supply. It's a latch signal. It can be cleared */
-  Reserved226_IRQn             = 242,              /**< LPCG Timeout interrupt generated by CCGR (CCM) */
-  Reserved227_IRQn             = 243,              /**< Reserved227 */
-  Reserved228_IRQn             = 244,              /**< Reserved228 */
-  Reserved229_IRQn             = 245,              /**< Reserved229 */
-  Reserved230_IRQn             = 246,              /**< Reserved230 */
-  Reserved231_IRQn             = 247,              /**< Reserved231 */
-  Reserved232_IRQn             = 248,              /**< Reserved232 */
-  Reserved233_IRQn             = 249,              /**< Reserved233 */
-  Reserved234_IRQn             = 250,              /**< Reserved234 */
-  Reserved235_IRQn             = 251,              /**< Reserved235 */
-  Reserved236_IRQn             = 252,              /**< Reserved236 */
-  Reserved237_IRQn             = 253,              /**< Reserved237 */
-  Reserved238_IRQn             = 254,              /**< Reserved238 */
-  Reserved239_IRQn             = 255,              /**< Reserved239 */
-  IRQSTEERM33_CH0_IRQn         = 256,              /**< IRQSTEERM33 output channel 0 interrupt */
-  IRQSTEERM33_CH1_IRQn         = 257,              /**< IRQSTEERM33 output channel 1 interrupt */
-  IRQSTEERM33_CH2_IRQn         = 258,              /**< IRQSTEERM33 output channel 2 interrupt */
-  IRQSTEERM33_CH3_IRQn         = 259,              /**< IRQSTEERM33 output channel 3 interrupt */
-  IRQSTEERM33_CH4_IRQn         = 260,              /**< IRQSTEERM33 output channel 4 interrupt */
-  IRQSTEERM33_CH5_IRQn         = 261,              /**< IRQSTEERM33 output channel 5 interrupt */
-  EDMA1_CH0_IRQn               = 262,              /**< WAKEUPMIX EDMA1 channel 0 interrupt */
-  EDMA1_CH1_IRQn               = 263,              /**< WAKEUPMIX EDMA1 channel 1 interrupt */
-  EDMA1_CH2_IRQn               = 264,              /**< WAKEUPMIX EDMA1 channel 2 interrupt */
-  EDMA1_CH3_IRQn               = 265,              /**< WAKEUPMIX EDMA1 channel 3 interrupt */
-  EDMA1_CH4_IRQn               = 266,              /**< WAKEUPMIX EDMA1 channel 4 interrupt */
-  EDMA1_CH5_IRQn               = 267,              /**< WAKEUPMIX EDMA1 channel 5 interrupt */
-  EDMA1_CH6_IRQn               = 268,              /**< WAKEUPMIX EDMA1 channel 6 interrupt */
-  EDMA1_CH7_IRQn               = 269,              /**< WAKEUPMIX EDMA1 channel 7 interrupt */
-  EDMA1_CH8_IRQn               = 270,              /**< WAKEUPMIX EDMA1 channel 8 interrupt */
-  EDMA1_CH9_IRQn               = 271,              /**< WAKEUPMIX EDMA1 channel 9 interrupt */
-  EDMA1_CH10_IRQn              = 272,              /**< WAKEUPMIX EDMA1 channel 10 interrupt */
-  EDMA1_CH11_IRQn              = 273,              /**< WAKEUPMIX EDMA1 channel 11 interrupt */
-  EDMA1_CH12_IRQn              = 274,              /**< WAKEUPMIX EDMA1 channel 12 interrupt */
-  EDMA1_CH13_IRQn              = 275,              /**< WAKEUPMIX EDMA1 channel 13 interrupt */
-  EDMA1_CH14_IRQn              = 276,              /**< WAKEUPMIX EDMA1 channel 14 interrupt */
-  EDMA1_CH15_IRQn              = 277,              /**< WAKEUPMIX EDMA1 channel 15 interrupt */
-  EDMA1_CH16_IRQn              = 278,              /**< WAKEUPMIX EDMA1 channel 16 interrupt */
-  EDMA1_CH17_IRQn              = 279,              /**< WAKEUPMIX EDMA1 channel 17 interrupt */
-  EDMA1_CH18_IRQn              = 280,              /**< WAKEUPMIX EDMA1 channel 18 interrupt */
-  EDMA1_CH19_IRQn              = 281,              /**< WAKEUPMIX EDMA1 channel 19 interrupt */
-  EDMA1_CH20_IRQn              = 282,              /**< WAKEUPMIX EDMA1 channel 20 interrupt */
-  EDMA1_CH21_IRQn              = 283,              /**< WAKEUPMIX EDMA1 channel 21 interrupt */
-  EDMA1_CH22_IRQn              = 284,              /**< WAKEUPMIX EDMA1 channel 22 interrupt */
-  EDMA1_CH23_IRQn              = 285,              /**< WAKEUPMIX EDMA1 channel 23 interrupt */
-  EDMA1_CH24_IRQn              = 286,              /**< WAKEUPMIX EDMA1 channel 24 interrupt */
-  EDMA1_CH25_IRQn              = 287,              /**< WAKEUPMIX EDMA1 channel 25 interrupt */
-  EDMA1_CH26_IRQn              = 288,              /**< WAKEUPMIX EDMA1 channel 26 interrupt */
-  EDMA1_CH27_IRQn              = 289,              /**< WAKEUPMIX EDMA1 channel 27 interrupt */
-  EDMA1_CH28_IRQn              = 290,              /**< WAKEUPMIX EDMA1 channel 28 interrupt */
-  EDMA1_CH29_IRQn              = 291,              /**< WAKEUPMIX EDMA1 channel 29 interrupt */
-  EDMA1_CH30_IRQn              = 292,              /**< WAKEUPMIX EDMA1 channel 30 interrupt */
-  EDMA1_CH31_IRQn              = 293,              /**< WAKEUPMIX EDMA1 channel 31 interrupt */
-  MU1_A_IRQn                   = 294,              /**< AONMIX MU1 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU1_B_IRQn                   = 295,              /**< AONMIX MU1 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU2_A_IRQn                   = 296,              /**< AONMIX MU2 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU2_B_IRQn                   = 297,              /**< AONMIX MU2 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU3_A_IRQn                   = 298,              /**< AONMIX MU3 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU3_B_IRQn                   = 299,              /**< AONMIX MU3 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU4_A_IRQn                   = 300,              /**< AONMIX MU4 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU4_B_IRQn                   = 301,              /**< AONMIX MU4 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU5_B_IRQn                   = 302,              /**< AONMIX MU5 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU6_B_IRQn                   = 303,              /**< AONMIX MU6 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU7_B_IRQn                   = 304,              /**< AONMIX MU7 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU8_A_IRQn                   = 305,              /**< AONMIX MU8 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU8_B_IRQn                   = 306,              /**< AONMIX MU8 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU9_A_IRQn                   = 307,              /**< AONMIX MU9 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU9_B_IRQn                   = 308,              /**< AONMIX MU9 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU10_A_IRQn                  = 309,              /**< WAKEUPMIX MU10 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU11_A_IRQn                  = 310,              /**< WAKEUPMIX MU11 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU12_B_IRQn                  = 311,              /**< WAKEUPMIX MU12 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU13_B_IRQn                  = 312,              /**< WAKEUPMIX MU13 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU14_A_IRQn                  = 313,              /**< WAKEUPMIX MU14 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU14_B_IRQn                  = 314,              /**< WAKEUPMIX MU14 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU15_A_IRQn                  = 315,              /**< WAKEUPMIX MU15 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU15_B_IRQn                  = 316,              /**< WAKEUPMIX MU15 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU16_A_IRQn                  = 317,              /**< WAKEUPMIX MU16 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU16_B_IRQn                  = 318,              /**< WAKEUPMIX MU16 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU17_A_IRQn                  = 319,              /**< WAKEUPMIX MU17 Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
-  MU17_B_IRQn                  = 320,              /**< WAKEUPMIX MU17 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU_E1_B_IRQn                 = 321,              /**< NETCMIX MU E1 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU_E2_B_IRQn                 = 322,              /**< NETCMIX MU E2 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU_E3_B_IRQn                 = 323,              /**< NETCMIX MU E3 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MU_E4_B_IRQn                 = 324,              /**< NETCMIX MU E4 Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
-  MSGINTR1_IRQn                = 325,              /**< MSGINTR Instance 1 Interrupt */
-  MSGINTR2_IRQn                = 326,              /**< MSGINTR Instance 2 Interrupt */
-  MSGINTR3_IRQn                = 327,              /**< MSGINTR Instance 3 Interrupt */
-  MSGINTR4_IRQn                = 328,              /**< MSGINTR Instance 4 Interrupt */
-  MSGINTR5_IRQn                = 329,              /**< MSGINTR Instance 5 Interrupt */
-  MSGINTR6_IRQn                = 330,              /**< MSGINTR Instance 6 Interrupt */
-  MSGINTR7_IRQn                = 331,              /**< MSGINTR Instance 7 Interrupt */
-  MSGINTR8_IRQn                = 332,              /**< MSGINTR Instance 8 Interrupt */
-  V2X_FH_MU_APCH1_IRQn         = 333,              /**< V2X-FH MU APCH1 (APP1) interrupt */
-  V2X_FH_MU_APHSM2_IRQn        = 334,              /**< V2X-FH MU APHSM2 (HSM2) interrupt */
-  Reserved319_IRQn             = 335,              /**< Sentinel Group 1 reset source if no s500 reference clock is detected.  Output synchronized to 32khz clk. New signal name for i.MX943 is s4v1_fdet0_tclk_err_irq. (Cause Reset) */
-  Reserved320_IRQn             = 336,              /**< Sentinel Group 2 reset source s500 reference clock is not detected or too slow.  Output synchronized to ref1_clk the S500 clock. New signal name for i.MX943 is s4v1_fdet2_tclk_err_irq.  (Reset Request in CM33 domain) */
-  Reserved321_IRQn             = 337,              /**< Sentinel Group 2 reset source s500 reference clock is not detected or too slow.  Output synchronized to ref1_clk. New signal name for i.MX943 is s4v1_fdet3_tclk_err_irq */
-  Reserved322_IRQn             = 338,              /**< Sentinel Group 2 reset source s500 reference clock is not detected or too slow.  Output synchronized to S500 clock domain. New signal name for i.MX943 is s4v1_fdet1_tclk_err_irq */
-  Reserved323_IRQn             = 339,              /**< s500 glue logic IRQ */
-  GPC_SM_REQ_IRQn              = 340,              /**< SRC/GPC Low Power Handshake Gasket interrupt request for system management */
-  EDMA1_ERROR_IRQn             = 341,              /**< AONMIX EDMA1 error interrupt */
-  Reserved326_IRQn             = 342,              /**< AONMIX TRDC transfer error interrupt */
-  Reserved327_IRQn             = 343,              /**< WAKEUPMIX TRDC-MGR1 transfer error interrupt */
-  Reserved328_IRQn             = 344,              /**< MEGAMIX TRDC transfer error interrupt */
-  Reserved329_IRQn             = 345,              /**< NOCMIX TRDC transfer error interrupt */
-  Reserved330_IRQn             = 346,              /**< DISPLAYMIX TRDC transfer error interrupt */
-  Reserved331_IRQn             = 347,              /**< NETCMIX TRDC/NET_M33_Sync Platform transfer error interrupt */
-  Reserved332_IRQn             = 348,              /**< HSIOMIX TRDC transfer error interrupt */
-  Reserved333_IRQn             = 349,              /**< WAKEUPMIX TRDC-MGR2 transfer error interrupt */
-  Reserved334_IRQn             = 350,              /**< AONMIX ERM Single bit corrected ECC error */
-  Reserved335_IRQn             = 351,              /**< M7MIX0 ERM Single bit corrected ECC error */
-  Reserved336_IRQn             = 352,              /**< M7MIX1 ERM Single bit corrected ECC error */
-  Reserved337_IRQn             = 353,              /**< WAKEUPMIX ERM Single bit corrected ECC error */
-  Reserved338_IRQn             = 354,              /**< NPUMIX ERM Single bit corrected ECC error */
-  Reserved339_IRQn             = 355,              /**< NETCMIX ERM Single bit corrected ECC error */
-  Reserved340_IRQn             = 356,              /**< OCRAM ECC multi bit error */
-  Reserved341_IRQn             = 357,              /**< AONMIX MTR Master error interrupt */
-  EDMA3_ERROR_IRQn             = 358,              /**< EDMA3 DMA error interrupt */
-  Reserved343_IRQn             = 359,              /**< AONMIX M33 PS Tag/Data parity error */
-  M33_TCM_ERROR_IRQn           = 360,              /**< AONMIX M33 TCM error interrupt */
-  Reserved345_IRQn             = 361,              /**< M7MIX ECC multi bit error */
-  Reserved346_IRQn             = 362,              /**< NETCMIX M33 PS Tag/Data parity error */
-  M33_SYNC_TCM_ERROR_IRQn      = 363,              /**< NETCMIX M33 TCM error interrupt */
-  ONE_POINT_FIVE_MB_OCRAM_ERROR_IRQn = 332,        /**< NETCMIX 1.5MB OCSRAM Error interrupt */
-  Reserved349_IRQn             = 365,              /**< M7MIX1 ECC Multi-bit error */
-  GIC700_FAULT_IRQn            = 366,              /**< GIC700 Fault(Uncorrectable ECC errors) */
-  M33_MCM_IRQn                 = 367,              /**< CM33 MCM interrupt */
-  M33_SYNC_MCM_IRQn            = 368,              /**< CM33_sync MCM interrupt */
-  ONE_POINT_FIVE_MB_SRAM_MCM_IRQn = 337,           /**< NETCMIX 1.5MB SRAM MCM interrupt */
-  M7MIX0_MCM_IRQn              = 370,              /**< M7MIX0 MCM interrupt */
-  M7MIX1_MCM_IRQn              = 371,              /**< M7MIX1 MCM interrupt */
-  OCRAM_ECC_SINGLE_BIT_ERROR_IRQn = 340,           /**< OCRAM ECC single bit error */
-  GIC700_ERROR_IRQn            = 373,              /**< GIC700 Error(Correctable ECC errors) */
-  SFA_IRQn                     = 374,              /**< ANAMIX SFA(Signal Frequency Analyzer) interrupt */
-  TMPSNS_THR1_IRQn             = 375,              /**< ANAMIX TempSensor non-secure interrupt from Threshold 1 */
-  TMPSNS_THR2_IRQn             = 376,              /**< ANAMIX TempSensor non-secure interrupt from Threshold 2 */
-  Reserved361_IRQn             = 377,              /**< ANAMIX TempSensor non-secure data ready interrupt */
-  Reserved362_IRQn             = 378,              /**< CORTEXAMIX TempSensor non-secure interrupt from Threshold 1 */
-  Reserved363_IRQn             = 379,              /**< CORTEXAMIX TempSensor non-secure interrupt from Threshold 2 */
-  Reserved364_IRQn             = 380,              /**< CORTEXAMIX TempSensor non-secure data ready interrupt */
-  CM33_0_SYSRESETREQ_IRQn      = 381,              /**< AONMIX CM33 SYSREQRST SRC reset source */
-  CM33_0_LOCKUP_IRQn           = 382,              /**< AONMIX CM33 LOCKUP SRC reset source */
-  CM7_0_SYSRESETREQ_IRQn       = 383,              /**< CM7_0 SYSREQRST SRC reset source */
-  CM7_0_LOCKUP_IRQn            = 384,              /**< CM7_0 LOCKUP SRC reset source */
-  CM33_1_SYSRESETREQ_IRQn      = 385,              /**< NETCMIX CM33_sync SYSREQRST SRC reset source */
-  CM33_1_LOCKUP_IRQn           = 386,              /**< NETCMIX CM33_sync LOCKUP SRC reset source */
-  CM7_1_SYSRESETREQ_IRQn       = 387,              /**< CM7_1 SYSREQRST SRC reset source */
-  CM7_1_LOCKUP_IRQn            = 388,              /**< CM7_1 LOCKUP SRC reset source */
-  SOC_RESET_WO_NETC_IRQn       = 389,              /**< SoC reset without netc interrupt */
-  Reserved374_IRQn             = 390,              /**< NETC iEPRC PCI INT (one per each of two RC-EC, first one) */
-  Reserved375_IRQn             = 391,              /**< NETC iEPRC PCI INT (one per each of two RC-EC, second one) */
-  PCIE1_INTA_IRQn              = 392,              /**< PCIe Controller 1 INTA */
-  PCIE1_INTB_IRQn              = 393,              /**< PCIe Controller 1 INTB */
-  PCIE1_INTC_IRQn              = 394,              /**< PCIe Controller 1 INTC */
-  PCIE1_INTD_IRQn              = 395,              /**< PCIe Controller 1 INTD */
-  Reserved380_IRQn             = 396,              /**< PCIe 1 miscellaneous interrupts/PCIe MSI reception interrupt for RC mode/PCIe Link reset request interrupt */
-  Reserved381_IRQn             = 397,              /**< PCIe Controller 1 EDMA channel interrupt */
-  PCIE2_INTA_IRQn              = 398,              /**< PCIe Controller 2 INTA */
-  PCIE2_INTB_IRQn              = 399,              /**< PCIe Controller 2 INTB */
-  PCIE2_INTC_IRQn              = 400,              /**< PCIe Controller 2 INTC */
-  PCIE2_INTD_IRQn              = 401,              /**< PCIe Controller 2 INTD */
-  Reserved386_IRQn             = 402,              /**< PCIe 2 miscellaneous interrupts/PCIe MSI reception interrupt for RC mode/PCIe Link reset request interrupt */
-  Reserved387_IRQn             = 403,              /**< PCIe Controller 2 EDMA channel interrupt */
-  Reserved388_IRQn             = 404,              /**< NPUMIX Wakeup interrupt from CLKREQ#, WAKEUP#, BEACON_DET */
-  NPUMIX_FUNC_IRQn             = 405,              /**< NPUMIX Functional interrupt */
-  Reserved390_IRQn             = 406,              /**< DRAM controller Performance Monitor Interrupt */
-  Reserved391_IRQn             = 407,              /**< DRAM controller Critical Interrupt */
-  Reserved392_IRQn             = 408,              /**< DRAM Phy Critical Interrupt 0~15 */
-  DCIF_CPU_DOMAIN0_IRQn        = 409,              /**< DISPLAYMIX DCIF: Interrupt output for CPU domain0 (Controlled by common registers group) */
-  DCIF_CPU_DOMAIN1_IRQn        = 410,              /**< DISPLAYMIX DCIF: Interrupt output for CPU domain1 (Controlled by background layer registers group) */
-  DCIF_CPU_DOMAIN2_IRQn        = 411,              /**< DISPLAYMIX DCIF: Interrupt output for CPU domain2 (Controlled by foreground layer registers group) */
-  Reserved396_IRQn             = 412,              /**< Reserved */
-  Reserved397_IRQn             = 413,              /**< Reserved */
-  PXP_0_IRQn                   = 414,              /**< DISPLAYMIX PXP interrupt 0 */
-  PXP_1_IRQn                   = 415,              /**< DISPLAYMIX PXP interrupt 1 */
-  Reserved400_IRQn             = 416,              /**< V2X-FH MU APSHE (SHE) A_TX/A_RX interrupt */
-  Reserved401_IRQn             = 417,              /**< V2X-FH MU SCU/APDEBUG (DEBUG) B_TX/B_RX interrupt */
-  Reserved402_IRQn             = 418,              /**< USB-1 (USB 3.0) Wake-up Interrupt */
-  Reserved403_IRQn             = 419,              /**< USB-2 (USB 2.0) Wake-up Interrupt */
-  Reserved404_IRQn             = 420,              /**< GIC700 PMU Counter Overflow */
-  Reserved405_IRQn             = 421,              /**< Reserved */
-  XSPI1_IRQn                   = 422,              /**< xspi1 all interrupts ORed output for EENV0 (MEENV)/xspi1 arbitration lock timeout interrupt for EENV0/xspi1 arbitration win interrupt for EENV0/xspi1 FlashA error interrupt for EENV0 */
-  Reserved407_IRQn             = 423,              /**< xspi1 all interrupts ORed output for EENV1 (MEENV)/xspi1 arbitration lock timeout interrupt for EENV1/xspi1 arbitration lock timeout interrupt for EENV1/xspi1 arbitration win interrupt for EENV1/xspi1 FlashA error interrupt for EENV1 */
-  Reserved408_IRQn             = 424,              /**< xspi1 all interrupts ORed output for EENV2 (MEENV)/xspi1 arbitration lock timeout interrupt for EENV2/        xspi1 arbitration win interrupt for EENV2/xspi1 FlashA error interrupt for EENV2 */
-  Reserved409_IRQn             = 425,              /**< xspi1 all interrupts ORed output for EENV3 (MEENV)/xspi1 arbitration lock timeout interrupt for EENV3/xspi1 arbitration win interrupt for EENV3/xspi1 FlashA error interrupt for EENV3 */
-  Reserved410_IRQn             = 426,              /**< xspi1 all interrupts ORed output for EENV4 (MEENV)/xspi1 arbitration lock timeout interrupt for EENV4/xspi1 arbitration win interrupt for EENV4/xspi1 FlashA error interrupt for EENV4 */
-  XSPI2_IRQn                   = 427,              /**< xspi2 all interrupts ORed output for EENV0 (MEENV)/xspi2 arbitration lock timeout interrupt for EENV0/xspi2 arbitration lock timeout interrupt for EENV0/xspi2 arbitration win interrupt for EENV0/xspi2 FlashA error interrupt for EENV0 */
-  Reserved412_IRQn             = 428,              /**< xspi2 all interrupts ORed output for EENV1 (MEENV)/xspi2 arbitration lock timeout interrupt for EENV1/xspi2 arbitration lock timeout interrupt for EENV1/xspi2 arbitration win interrupt for EENV1/xspi2 FlashA error interrupt for EENV1 */
-  Reserved413_IRQn             = 429,              /**< xspi2 all interrupts ORed output for EENV2 (MEENV)/xspi2 arbitration lock timeout interrupt for EENV2/xspi2 arbitration win interrupt for EENV2/xspi2 FlashA error interrupt for EENV2 */
-  Reserved414_IRQn             = 430,              /**< xspi2 all interrupts ORed output for EENV3 (MEENV)/xspi2 arbitration lock timeout interrupt for EENV3/xspi2 arbitration win interrupt for EENV3/xspi2 FlashA error interrupt for EENV3 */
-  Reserved415_IRQn             = 431,              /**< xspi2 all interrupts ORed output for EENV4 (MEENV)/xspi2 arbitration lock timeout interrupt for EENV4/xspi2 arbitration win interrupt for EENV4/xspi2 FlashA error interrupt for EENV4 */
-  Reserved416_IRQn             = 432,              /**< Reserved */
-  Reserved417_IRQn             = 433,              /**< Reserved */
-  Reserved418_IRQn             = 434,              /**< Reserved */
-  Reserved419_IRQn             = 435,              /**< Reserved */
-  Reserved420_IRQn             = 436,              /**< Reserved */
-  Reserved421_IRQn             = 437,              /**< Reserved */
+  Reserved32_IRQn              = 32,               /**< Reserved interrupt */
+  Reserved33_IRQn              = 33,               /**< DAP interrupt */
+  Reserved34_IRQn              = 34,               /**< CTI trigger outputs from CM7 platform */
+  Reserved35_IRQn              = 35,               /**< CTI trigger outputs from CM33 platform */
+  Reserved36_IRQn              = 36,               /**< CTI trigger outputs from CA55 platform */
+  Reserved37_IRQn              = 37,               /**< Performance Unit Interrupts from CA55 platform */
+  Reserved38_IRQn              = 38,               /**< ECC error from CA55 platform cache */
+  Reserved39_IRQn              = 39,               /**< 1-bit or 2-bit ECC or Parity error from CA55 platform cache */
+  CAN1_IRQn                    = 40,               /**< CAN1 interrupt */
+  CAN1_ERROR_IRQn              = 41,               /**< CAN1 error interrupt */
+  Reserved42_IRQn              = 42,               /**< General Purpose Input/Output 1 interrupt 0 */
+  Reserved43_IRQn              = 43,               /**< General Purpose Input/Output 1 interrupt 1 */
+  I3C1_IRQn                    = 44,               /**< Improved Inter-Integrated Circuit 1 interrupt */
+  LPI2C1_IRQn                  = 45,               /**< Low Power Inter-Integrated Circuit module 1 */
+  LPI2C2_IRQn                  = 46,               /**< Low Power Inter-Integrated Circuit module 2 */
+  LPIT1_IRQn                   = 47,               /**< Low Power Periodic Interrupt Timer 1 */
+  LPSPI1_IRQn                  = 48,               /**< Low Power Serial Peripheral Interface 1 */
+  LPSPI2_IRQn                  = 49,               /**< Low Power Serial Peripheral Interface 2 */
+  LPTMR1_IRQn                  = 50,               /**< Low Power Timer 1 */
+  LPUART1_IRQn                 = 51,               /**< Low Power UART 1 */
+  LPUART2_IRQn                 = 52,               /**< Low Power UART 2 */
+  Reserved53_IRQn              = 53,               /**< AONMIX Sentinel MU0 SideA interrupt */
+  Reserved54_IRQn              = 54,               /**< AONMIX Sentinel MU1 SideA interrupt */
+  Reserved55_IRQn              = 55,               /**< AONMIX Sentinel MU2 SideA interrupt */
+  Reserved56_IRQn              = 56,               /**< AONMIX Sentinel MU3 SideA interrupt */
+  Reserved57_IRQn              = 57,               /**< AONMIX Sentinel MU4 SideA interrupt */
+  Reserved58_IRQn              = 58,               /**< AONMIX Sentinel MU5 SideA interrupt */
+  V2X_FH_APCH0_IRQn            = 59,               /**< V2X-FH MU APCH0 (APP0) interrupt */
+  V2X_FH_APHSM1_IRQn           = 60,               /**< V2X-FH MU APHSM1 (HSM1) interrupt */
+  TPM1_IRQn                    = 61,               /**< Timer PWM module 1 */
+  TPM2_IRQn                    = 62,               /**< Timer PWM module 2 */
+  WDOG1_IRQn                   = 63,               /**< Watchdog 1 Interrupt */
+  WDOG2_IRQn                   = 64,               /**< Watchdog 2 Interrupt */
+  TRDC_MGR_A_IRQn              = 65,               /**< AONMIX TRDC transfer error interrupt */
+  SAI1_IRQn                    = 66,               /**< Serial Audio Interface 1 */
+  Reserved67_IRQn              = 67,               /**< AONMIX M33 PS Error */
+  Reserved68_IRQn              = 68,               /**< AONMIX M33 TCM Error interrupt */
+  Reserved69_IRQn              = 69,               /**< M7MIX ECC Multi-bit error */
+  CAN2_IRQn                    = 70,               /**< CAN2 interrupt */
+  CAN2_ERROR_IRQn              = 71,               /**< CAN2 error interrupt */
+  CAN3_IRQn                    = 72,               /**< CAN3 interrupt */
+  CAN3_ERROR_IRQn              = 73,               /**< CAN3 error interrupt */
+  CAN4_IRQn                    = 74,               /**< CAN4 interrupt */
+  CAN4_ERROR_IRQn              = 75,               /**< CAN4 error interrupt */
+  CAN5_IRQn                    = 76,               /**< CAN5 interrupt */
+  CAN5_ERROR_IRQn              = 77,               /**< CAN5 error interrupt */
+  FLEXIO1_IRQn                 = 78,               /**< Flexible IO 1 interrupt */
+  FLEXIO2_IRQn                 = 79,               /**< Flexible IO 2 interrupt */
+  FlexSPI1_IRQn                = 80,               /**< FlexSPI controller interface interrupt 1 */
+  Reserved81_IRQn              = 81,               /**< General Purpose Input/Output 2 interrupt 0 */
+  Reserved82_IRQn              = 82,               /**< General Purpose Input/Output 2 interrupt 1 */
+  Reserved83_IRQn              = 83,               /**< General Purpose Input/Output 3 interrupt 0 */
+  Reserved84_IRQn              = 84,               /**< General Purpose Input/Output 3 interrupt 1 */
+  Reserved85_IRQn              = 85,               /**< General Purpose Input/Output 4 interrupt 0 */
+  Reserved86_IRQn              = 86,               /**< General Purpose Input/Output 4 interrupt 1 */
+  Reserved87_IRQn              = 87,               /**< General Purpose Input/Output 5 interrupt 0 */
+  Reserved88_IRQn              = 88,               /**< General Purpose Input/Output 5 interrupt 1 */
+  I3C2_IRQn                    = 89,               /**< Improved Inter-Integrated Circuit 2 interrupt */
+  LPI2C3_IRQn                  = 90,               /**< Low Power Inter-Integrated Circuit module 3 */
+  LPI2C4_IRQn                  = 91,               /**< Low Power Inter-Integrated Circuit module 4 */
+  LPIT2_IRQn                   = 92,               /**< Low Power Periodic Interrupt Timer 2 */
+  LPSPI3_IRQn                  = 93,               /**< Low Power Serial Peripheral Interface 3 */
+  LPSPI4_IRQn                  = 94,               /**< Low Power Serial Peripheral Interface 4 */
+  LPTMR2_IRQn                  = 95,               /**< Low Power Timer 2 */
+  LPUART3_IRQn                 = 96,               /**< Low Power UART 3 */
+  LPUART4_IRQn                 = 97,               /**< Low Power UART 4 */
+  LPUART5_IRQn                 = 98,               /**< Low Power UART 5 */
+  LPUART6_IRQn                 = 99,               /**< Low Power UART 6 */
+  LPUART7_IRQn                 = 100,              /**< Low Power UART 7 */
+  LPUART8_IRQn                 = 101,              /**< Low Power UART 8 */
+  Reserved102_IRQn             = 102,              /**< MTR Master error interrupt */
+  Reserved103_IRQn             = 103,              /**< BBNSM Non-Secure interrupt */
+  Reserved104_IRQn             = 104,              /**< System Counter compare interrupt */
+  TPM3_IRQn                    = 105,              /**< Timer PWM module 3 */
+  TPM4_IRQn                    = 106,              /**< Timer PWM module 4 */
+  TPM5_IRQn                    = 107,              /**< Timer PWM module 5 */
+  TPM6_IRQn                    = 108,              /**< Timer PWM module 6 */
+  WDOG3_IRQn                   = 109,              /**< Watchdog 3 Interrupt */
+  WDOG4_IRQn                   = 110,              /**< Watchdog 4 Interrupt */
+  WDOG5_IRQn                   = 111,              /**< Watchdog 5 Interrupt */
+  Reserved112_IRQn             = 112,              /**< ANAMIX TempSensor non-secure interrupt from Threshold 1 */
+  Reserved113_IRQn             = 113,              /**< ANAMIX TempSensor non-secure interrupt from Threshold 2 */
+  Reserved114_IRQn             = 114,              /**< ANAMIX TempSensor non-secure interrupt from Threshold 3 */
+  Reserved115_IRQn             = 115,              /**< CORTEXAMIX TempSensor non-secure interrupt from Threshold 1 */
+  Reserved116_IRQn             = 116,              /**< CORTEXAMIX TempSensor non-secure interrupt from Threshold 2 */
+  Reserved117_IRQn             = 117,              /**< CORTEXAMIX TempSensor non-secure data ready interrupt */
+  uSDHC1_IRQn                  = 118,              /**< ultra Secure Digital Host Controller interrupt 1 */
+  uSDHC2_IRQn                  = 119,              /**< ultra Secure Digital Host Controller interrupt 2 */
+  Reserved120_IRQn             = 120,              /**< MEGAMIX TRDC transfer error interrupt */
+  Reserved121_IRQn             = 121,              /**< NIC_WRAPPER TRDC transfer error interrupt */
+  Reserved122_IRQn             = 122,              /**< NOCMIX TRDC transfer error interrupt */
+  Reserved123_IRQn             = 123,              /**< DRAM controller Performance Monitor Interrupt */
+  Reserved124_IRQn             = 124,              /**< DRAM controller Critical Interrupt */
+  Reserved125_IRQn             = 125,              /**< DRAM Phy Critical Interrupt */
+  Reserved126_IRQn             = 126,              /**< Reserved */
+  DMA3_ERROR_IRQn              = 127,              /**< eDMA1 error interrupt */
+  DMA3_0_IRQn                  = 128,              /**< eDMA1 channel 0 interrupt */
+  DMA3_1_IRQn                  = 129,              /**< eDMA1 channel 1 interrupt */
+  DMA3_2_IRQn                  = 130,              /**< eDMA1 channel 2 interrupt */
+  DMA3_3_IRQn                  = 131,              /**< eDMA1 channel 3 interrupt */
+  DMA3_4_IRQn                  = 132,              /**< eDMA1 channel 4 interrupt */
+  DMA3_5_IRQn                  = 133,              /**< eDMA1 channel 5 interrupt */
+  DMA3_6_IRQn                  = 134,              /**< eDMA1 channel 6 interrupt */
+  DMA3_7_IRQn                  = 135,              /**< eDMA1 channel 7 interrupt */
+  DMA3_8_IRQn                  = 136,              /**< eDMA1 channel 8 interrupt */
+  DMA3_9_IRQn                  = 137,              /**< eDMA1 channel 9 interrupt */
+  DMA3_10_IRQn                 = 138,              /**< eDMA1 channel 10 interrupt */
+  DMA3_11_IRQn                 = 139,              /**< eDMA1 channel 11 interrupt */
+  DMA3_12_IRQn                 = 140,              /**< eDMA1 channel 12 interrupt */
+  DMA3_13_IRQn                 = 141,              /**< eDMA1 channel 13 interrupt */
+  DMA3_14_IRQn                 = 142,              /**< eDMA1 channel 14 interrupt */
+  DMA3_15_IRQn                 = 143,              /**< eDMA1 channel 15 interrupt */
+  DMA3_16_IRQn                 = 144,              /**< eDMA1 channel 16 interrupt */
+  DMA3_17_IRQn                 = 145,              /**< eDMA1 channel 17 interrupt */
+  DMA3_18_IRQn                 = 146,              /**< eDMA1 channel 18 interrupt */
+  DMA3_19_IRQn                 = 147,              /**< eDMA1 channel 19 interrupt */
+  DMA3_20_IRQn                 = 148,              /**< eDMA1 channel 20 interrupt */
+  DMA3_21_IRQn                 = 149,              /**< eDMA1 channel 21 interrupt */
+  DMA3_22_IRQn                 = 150,              /**< eDMA1 channel 22 interrupt */
+  DMA3_23_IRQn                 = 151,              /**< eDMA1 channel 23 interrupt */
+  DMA3_24_IRQn                 = 152,              /**< eDMA1 channel 24 interrupt */
+  DMA3_25_IRQn                 = 153,              /**< eDMA1 channel 25 interrupt */
+  DMA3_26_IRQn                 = 154,              /**< eDMA1 channel 26 interrupt */
+  DMA3_27_IRQn                 = 155,              /**< eDMA1 channel 27 interrupt */
+  DMA3_28_IRQn                 = 156,              /**< eDMA1 channel 28 interrupt */
+  DMA3_29_IRQn                 = 157,              /**< eDMA1 channel 29 interrupt */
+  DMA3_30_IRQn                 = 158,              /**< eDMA1 channel 30 interrupt */
+  DMA4_ERROR_IRQn              = 159,              /**< eDMA2 error interrupt */
+  DMA4_0_1_IRQn                = 160,              /**< eDMA2 channel 0/1 interrupt */
+  DMA4_2_3_IRQn                = 161,              /**< eDMA2 channel 2/3 interrupt */
+  DMA4_4_5_IRQn                = 162,              /**< eDMA2 channel 4/5 interrupt */
+  DMA4_6_7_IRQn                = 163,              /**< eDMA2 channel 6/7 interrupt */
+  DMA4_8_9_IRQn                = 164,              /**< eDMA2 channel 8/9 interrupt */
+  DMA4_10_11_IRQn              = 165,              /**< eDMA2 channel 10/11 interrupt */
+  DMA4_12_13_IRQn              = 166,              /**< eDMA2 channel 12/13 interrupt */
+  DMA4_14_15_IRQn              = 167,              /**< eDMA2 channel 14/15 interrupt */
+  DMA4_16_17_IRQn              = 168,              /**< eDMA2 channel 16/17 interrupt */
+  DMA4_18_19_IRQn              = 169,              /**< eDMA2 channel 18/19 interrupt */
+  DMA4_20_21_IRQn              = 170,              /**< eDMA2 channel 20/21 interrupt */
+  DMA4_22_23_IRQn              = 171,              /**< eDMA2 channel 22/23 interrupt */
+  DMA4_24_25_IRQn              = 172,              /**< eDMA2 channel 24/25 interrupt */
+  DMA4_26_27_IRQn              = 173,              /**< eDMA2 channel 26/27 interrupt */
+  DMA4_28_29_IRQn              = 174,              /**< eDMA2 channel 28/29 interrupt */
+  DMA4_30_31_IRQn              = 175,              /**< eDMA2 channel 30/31 interrupt */
+  DMA4_32_33_IRQn              = 176,              /**< eDMA2 channel 32/33 interrupt */
+  DMA4_34_35_IRQn              = 177,              /**< eDMA2 channel 34/35 interrupt */
+  DMA4_36_37_IRQn              = 178,              /**< eDMA2 channel 36/37 interrupt */
+  DMA4_38_39_IRQn              = 179,              /**< eDMA2 channel 38/39 interrupt */
+  DMA4_40_41_IRQn              = 180,              /**< eDMA2 channel 40/41 interrupt */
+  DMA4_42_43_IRQn              = 181,              /**< eDMA2 channel 42/43 interrupt */
+  DMA4_44_45_IRQn              = 182,              /**< eDMA2 channel 44/45 interrupt */
+  DMA4_46_47_IRQn              = 183,              /**< eDMA2 channel 46/47 interrupt */
+  DMA4_48_49_IRQn              = 184,              /**< eDMA2 channel 48/49 interrupt */
+  DMA4_50_51_IRQn              = 185,              /**< eDMA2 channel 50/51 interrupt */
+  DMA4_52_53_IRQn              = 186,              /**< eDMA2 channel 52/53 interrupt */
+  DMA4_54_55_IRQn              = 187,              /**< eDMA2 channel 54/55 interrupt */
+  DMA4_56_57_IRQn              = 188,              /**< eDMA2 channel 56/57 interrupt */
+  DMA4_58_59_IRQn              = 189,              /**< eDMA2 channel 58/59 interrupt */
+  DMA4_60_61_IRQn              = 190,              /**< eDMA2 channel 60/61 interrupt */
+  DMA4_62_63_IRQn              = 191,              /**< eDMA2 channel 62/63 interrupt */
+  Reserved192_IRQn             = 192,              /**< Sentinel Group 1 reset source if no s500 reference clock is detected.  Output synchronized to 32khz clk. */
+  Reserved193_IRQn             = 193,              /**< Sentinel Group 2 reset source s500 reference clock is not detected or too slow.  Output synchronized to ref1_clk. */
+  Reserved194_IRQn             = 194,              /**< Sentinel Group 2 reset source s500 reference clock is not detected or too slow.  Output synchronized to ref1_clk. */
+  Reserved195_IRQn             = 195,              /**< JTAGSW DAP MDM-AP SRC reset source */
+  Reserved196_IRQn             = 196,              /**< JTAGC SRC reset source */
+  CM33_SYSRESETREQ_IRQn        = 197,              /**< CM33 SYSREQRST SRC reset source */
+  CM33_LOCKUP_IRQn             = 198,              /**< CM33 LOCKUP SRC reset source */
+  CM7_SYSRESETREQ_IRQn         = 199,              /**< CM7 SYSREQRST SRC reset source */
+  CM7_LOCKUP_IRQn              = 200,              /**< CM7 LOCKUP SRC reset source */
+  SAI2_IRQn                    = 201,              /**< Serial Audio Interface 2 */
+  SAI3_IRQn                    = 202,              /**< Serial Audio Interface 3 */
+  SAI4_IRQn                    = 203,              /**< Serial Audio Interface 4 */
+  SAI5_IRQn                    = 204,              /**< Serial Audio Interface 5 */
+  Reserved205_IRQn             = 205,              /**< USB-1 Wake-up Interrupt */
+  Reserved206_IRQn             = 206,              /**< USB-2 Wake-up Interrupt */
+  USB1_IRQn                    = 207,              /**< USB-1 Interrupt */
+  USB2_IRQn                    = 208,              /**< USB-2 Interrupt */
+  LPSPI5_IRQn                  = 209,              /**< Low Power Serial Peripheral Interface 5 */
+  LPSPI6_IRQn                  = 210,              /**< Low Power Serial Peripheral Interface 6 */
+  LPSPI7_IRQn                  = 211,              /**< Low Power Serial Peripheral Interface 7 */
+  LPSPI8_IRQn                  = 212,              /**< Low Power Serial Peripheral Interface 8 */
+  LPI2C5_IRQn                  = 213,              /**< Low Power Inter-Integrated Circuit module 5 */
+  LPI2C6_IRQn                  = 214,              /**< Low Power Inter-Integrated Circuit module 6 */
+  LPI2C7_IRQn                  = 215,              /**< Low Power Inter-Integrated Circuit module 7 */
+  LPI2C8_IRQn                  = 216,              /**< Low Power Inter-Integrated Circuit module 8 */
+  PDM_HWVAD_ERROR_IRQn         = 217,              /**< PDM interrupt */
+  PDM_HWVAD_EVENT_IRQn         = 218,              /**< PDM interrupt */
+  PDM_ERROR_IRQn               = 219,              /**< PDM interrupt */
+  PDM_EVENT_IRQn               = 220,              /**< PDM interrupt */
+  Reserved221_IRQn             = 221,              /**< AUDIO XCVR interrupt */
+  Reserved222_IRQn             = 222,              /**< AUDIO XCVR interrupt */
+  uSDHC3_IRQn                  = 223,              /**< ultra Secure Digital Host Controller interrupt 3 */
+  Reserved224_IRQn             = 224,              /**< OCRAM MECC interrupt */
+  Reserved225_IRQn             = 225,              /**< OCRAM MECC interrupt */
+  Reserved226_IRQn             = 226,              /**< CM33 MCM interrupt */
+  Reserved227_IRQn             = 227,              /**< ANAMIX SFA interrupt */
+  Reserved228_IRQn             = 228,              /**< GIC700 Fault */
+  Reserved229_IRQn             = 229,              /**< GIC700 Error */
+  Reserved230_IRQn             = 230,              /**< GIC700 PMU Counter Overflow */
+  ADC_ER_IRQn                  = 231,              /**< ADC interrupt */
+  ADC_WD_IRQn                  = 232,              /**< ADC interrupt */
+  ADC_EOC_IRQn                 = 233,              /**< ADC interrupt */
+  Reserved234_IRQn             = 234,              /**< s500 glue logic IRQ */
+  Reserved235_IRQn             = 235,              /**< I3C1 wakeup irq after double sync */
+  Reserved236_IRQn             = 236,              /**< I3C2 wakeup irq after double sync */
+  MU5_A_IRQn                   = 237,              /**< AONMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
+  MU6_A_IRQn                   = 238,              /**< AONMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
+  MU7_B_IRQn                   = 239,              /**< AONMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
+  MU8_B_IRQn                   = 240,              /**< AONMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
+  Reserved241_IRQn             = 241,              /**< WAKEUPMIX XSPI Responder */
+  Reserved242_IRQn             = 242,              /**< AONMIX FCCU Interrupt Reaction 0 */
+  Reserved243_IRQn             = 243,              /**< AONMIX FCCU Interrupt Reaction 1 */
+  Reserved244_IRQn             = 244,              /**< AONMIX FCCU Interrupt Reaction 2 */
+  Reserved245_IRQn             = 245,              /**< AONMIX STCU Selftest end Interrupt */
+  DISP_IRQSTEER0_IRQn          = 246,              /**< DISPLAYMIX IRQSTEER 0 */
+  DISP_IRQSTEER1_IRQn          = 247,              /**< DISPLAYMIX IRQSTEER 1 */
+  DISP_IRQSTEER2_IRQn          = 248,              /**< DISPLAYMIX IRQSTEER 2 */
+  DISP_IRQSTEER3_IRQn          = 249,              /**< DISPLAYMIX IRQSTEER 3 */
+  DISP_IRQSTEER4_IRQn          = 250,              /**< DISPLAYMIX IRQSTEER 4 */
+  DISP_IRQSTEER7_IRQn          = 251,              /**< DISPLAYMIX IRQSTEER 7 */
+  Reserved252_IRQn             = 252,              /**< CAMERAMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
+  Reserved253_IRQn             = 253,              /**< CAMERAMIX ISI interrupt Channel 0 */
+  Reserved254_IRQn             = 254,              /**< ISP Processing Interrupt - Context 0 */
+  Reserved255_IRQn             = 255,              /**< M7MIX MCM interrupt */
+  MU1_A_IRQn                   = 256,              /**< AONMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
+  MU1_B_IRQn                   = 257,              /**< AONMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
+  MU2_A_IRQn                   = 258,              /**< AONMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
+  MU2_B_IRQn                   = 259,              /**< AONMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
+  MU3_A_IRQn                   = 260,              /**< AONMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
+  MU3_B_IRQn                   = 261,              /**< AONMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
+  MU4_A_IRQn                   = 262,              /**< AONMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
+  MU4_B_IRQn                   = 263,              /**< AONMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
+  MU5_B_IRQn                   = 264,              /**< AONMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
+  MU6_B_IRQn                   = 265,              /**< AONMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUB */
+  MU7_A_IRQn                   = 266,              /**< WAKEUPMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
+  MU8_A_IRQn                   = 267,              /**< WAKEUPMIX MU Ored of all (tx,rx,gp,core,murip) interrupt to MUA */
+  MSGINTR1_IRQn                = 268,              /**< MSGINTR Instance 1, Interrupt */
+  MSGINTR2_IRQn                = 269,              /**< MSGINTR Instance 2, Interrupts */
+  Reserved270_IRQn             = 270,              /**< V2X-FH MU APCH1 (APP1) interrupt */
+  Reserved271_IRQn             = 271,              /**< V2X-FH MU APHSM2 (HSM2) interrupt */
+  Reserved272_IRQn             = 272,              /**< CAMERAMIX TRDC transfer error interrupt */
+  Reserved273_IRQn             = 273,              /**< DISPLAYMIX TRDC transfer error interrupt */
+  Reserved274_IRQn             = 274,              /**< NETCMIX TRDC transfer error interrupt */
+  Reserved275_IRQn             = 275,              /**< GPUMIX TRDC transfer error interrupt */
+  Reserved276_IRQn             = 276,              /**< HSIOMIX TRDC transfer error interrupt */
+  Reserved277_IRQn             = 277,              /**< VPUMIX TRDC transfer error interrupt */
+  Reserved278_IRQn             = 278,              /**< AONMIX ERM Single bit corrected ECC Error */
+  Reserved279_IRQn             = 279,              /**< M7MIX ERM Single bit corrected ECC Error */
+  Reserved280_IRQn             = 280,              /**< WAKEUPMIX ERM Single bit corrected ECC Error */
+  Reserved281_IRQn             = 281,              /**< NPUMIX ERM Single bit corrected ECC Error */
+  Reserved282_IRQn             = 282,              /**< WAKEUPMIX ACP EDMA error interrupt */
+  Reserved283_IRQn             = 283,              /**< OCRAM_C ECC multiple bit or address error */
+  Reserved284_IRQn             = 284,              /**< CAMERAMIX Cortex-M0+ Cache write-buffer error */
+  Reserved285_IRQn             = 285,              /**< CAMERAMIX Cortex-M0+ Cache data parity error */
+  Reserved286_IRQn             = 286,              /**< V2X-FH MU APSHE (SHE) interrupt */
+  Reserved287_IRQn             = 287,              /**< V2X-FH MU SCU/APDEBUG (DEBUG) interrupt */
+  DMA5_0_1_IRQn                = 288,              /**< eDMA3 channel 0/1 interrupt */
+  DMA5_2_3_IRQn                = 289,              /**< eDMA3 channel 2/3 interrupt */
+  DMA5_4_5_IRQn                = 290,              /**< eDMA3 channel 4/5 interrupt */
+  DMA5_6_7_IRQn                = 291,              /**< eDMA3 channel 6/7 interrupt */
+  DMA5_8_9_IRQn                = 292,              /**< eDMA3 channel 8/9 interrupt */
+  DMA5_10_11_IRQn              = 293,              /**< eDMA3 channel 10/11 interrupt */
+  DMA5_12_13_IRQn              = 294,              /**< eDMA3 channel 12/13 interrupt */
+  DMA5_14_15_IRQn              = 295,              /**< eDMA3 channel 14/15 interrupt */
+  DMA5_16_17_IRQn              = 296,              /**< eDMA3 channel 16/17 interrupt */
+  DMA5_18_19_IRQn              = 297,              /**< eDMA3 channel 18/19 interrupt */
+  DMA5_20_21_IRQn              = 298,              /**< eDMA3 channel 20/21 interrupt */
+  DMA5_22_23_IRQn              = 299,              /**< eDMA3 channel 22/23 interrupt */
+  DMA5_24_25_IRQn              = 300,              /**< eDMA3 channel 24/25 interrupt */
+  DMA5_26_27_IRQn              = 301,              /**< eDMA3 channel 26/27 interrupt */
+  DMA5_28_29_IRQn              = 302,              /**< eDMA3 channel 28/29 interrupt */
+  DMA5_30_31_IRQn              = 303,              /**< eDMA3 channel 30/31 interrupt */
+  DMA5_32_33_IRQn              = 304,              /**< eDMA3 channel 32/33 interrupt */
+  DMA5_34_35_IRQn              = 305,              /**< eDMA3 channel 34/35 interrupt */
+  DMA5_36_37_IRQn              = 306,              /**< eDMA3 channel 36/37 interrupt */
+  DMA5_38_39_IRQn              = 307,              /**< eDMA3 channel 38/39 interrupt */
+  DMA5_40_41_IRQn              = 308,              /**< eDMA3 channel 40/41 interrupt */
+  DMA5_42_43_IRQn              = 309,              /**< eDMA3 channel 42/43 interrupt */
+  DMA5_44_45_IRQn              = 310,              /**< eDMA3 channel 44/45 interrupt */
+  DMA5_46_47_IRQn              = 311,              /**< eDMA3 channel 46/47 interrupt */
+  DMA5_48_49_IRQn              = 312,              /**< eDMA3 channel 48/49 interrupt */
+  DMA5_50_51_IRQn              = 313,              /**< eDMA3 channel 50/51 interrupt */
+  DMA5_52_53_IRQn              = 314,              /**< eDMA3 channel 52/53 interrupt */
+  DMA5_54_55_IRQn              = 315,              /**< eDMA3 channel 54/55 interrupt */
+  DMA5_56_57_IRQn              = 316,              /**< eDMA3 channel 56/57 interrupt */
+  DMA5_58_59_IRQn              = 317,              /**< eDMA3 channel 58/59 interrupt */
+  DMA5_60_61_IRQn              = 318,              /**< eDMA3 channel 60/61 interrupt */
+  DMA5_62_63_IRQn              = 319,              /**< eDMA3 channel 62/63 interrupt */
+  Reserved320_IRQn             = 320,              /**< GPUMIX GPU Interrupt */
+  Reserved321_IRQn             = 321,              /**< GPUMIX Job Interrupt */
+  Reserved322_IRQn             = 322,              /**< GPUMIX MMU Interrupt */
+  Reserved323_IRQn             = 323,              /**< Reserved INTERRUPT */
+  Reserved324_IRQn             = 324,              /**< Reserved interrupt */
+  Reserved325_IRQn             = 325,              /**< Reserved interrupt */
+  Reserved326_IRQn             = 326,              /**< Reserved interrupt */
+  Reserved327_IRQn             = 327,              /**< Reserved interrupt */
+  Reserved328_IRQn             = 328,              /**< Reserved interrupt */
+  Reserved329_IRQn             = 329,              /**< Reserved interrupt */
+  Reserved330_IRQn             = 330,              /**< Reserved interrupt */
+  Reserved331_IRQn             = 331,              /**< Reserved interrupt */
+  Reserved332_IRQn             = 332,              /**< Reserved interrupt */
+  Reserved333_IRQn             = 333,              /**< Reserved interrupt */
+  Reserved334_IRQn             = 334,              /**< Reserved interrupt */
+  Reserved335_IRQn             = 335,              /**< Reserved interrupt */
+  Reserved336_IRQn             = 336,              /**< NETC iEPRC PCI INT */
+  Reserved337_IRQn             = 337,              /**< NETC iEPRC PCI INT */
+  Reserved338_IRQn             = 338,              /**< PCIe Controller 1 INTA */
+  Reserved339_IRQn             = 339,              /**< PCIe Controller 1 INTB */
+  Reserved340_IRQn             = 340,              /**< PCIe Controller 1 INTC */
+  Reserved341_IRQn             = 341,              /**< PCIe Controller 1 INTD */
+  Reserved342_IRQn             = 342,              /**< PCIe interrupts */
+  Reserved343_IRQn             = 343,              /**< PCIe Controller EDMA channel interrupt */
+  Reserved344_IRQn             = 344,              /**< PCIe Controller 1 INTA */
+  Reserved345_IRQn             = 345,              /**< PCIe Controller 1 INTB */
+  Reserved346_IRQn             = 346,              /**< PCIe Controller 1 INTC */
+  Reserved347_IRQn             = 347,              /**< PCIe Controller 1 INTD */
+  Reserved348_IRQn             = 348,              /**< PCIe miscellaneous interrupts */
+  Reserved349_IRQn             = 349,              /**< PCIe Controller EDMA channel interrupt */
+  Reserved350_IRQn             = 350,              /**< Wakeup interrupt from CLKREQ#, WAKEUP#, BEACON_DET */
+  Reserved351_IRQn             = 351,              /**< NPUMIX Functional interrupt */
+  Reserved352_IRQn             = 352,              /**< DISPLAYMIX Real-time traffic TBU: Fault Handling RAS Interrupt for a contained error */
+  Reserved353_IRQn             = 353,              /**< DISPLAYMIX Real-time traffic TBU: Error Handling RAS Interrupt for an uncontained error */
+  Reserved354_IRQn             = 354,              /**< DISPLAYMIX Real-time traffic TBU: Critical Error Interrupt for an uncontainable error */
+  Reserved355_IRQn             = 355,              /**< DISPLAYMIX Real-time traffic TBU: PMU Interrupt */
+  Reserved356_IRQn             = 356,              /**< TCU Event queue, secure interrupt */
+  Reserved357_IRQn             = 357,              /**< TCU Event queue, non-secure interrupt */
+  Reserved358_IRQn             = 358,              /**< TCU SYNC complete, non-secure interrupt */
+  Reserved359_IRQn             = 359,              /**< TCU SYNC complete, secure interrupt */
+  Reserved360_IRQn             = 360,              /**< TCU global non-secure interrupt */
+  Reserved361_IRQn             = 361,              /**< TCU global secure interrupt */
+  Reserved362_IRQn             = 362,              /**< TCU fault handling RAS interrupt for a contained error */
+  Reserved363_IRQn             = 363,              /**< TCU error recovery RAS interrupt for an uncontained error */
+  Reserved364_IRQn             = 364,              /**< TCU critical error interrupt, for an uncontainable uncorrected error */
+  Reserved365_IRQn             = 365,              /**< TCU PMU interrupt */
+  Reserved366_IRQn             = 366,              /**< TCU Page Request Interface */
+  GPC_SM_REQ_IRQn              = 367,              /**< SRC/GPC Low Power Handshake Gasket interrupt request for system management */
+  Reserved368_IRQn             = 368,              /**< CAMERAMIX MU Ored of all */
+  Reserved369_IRQn             = 369,              /**< CAMERAMIX MU Ored of all */
+  Reserved370_IRQn             = 370,              /**< CAMERAMIX MU Ored of all */
+  Reserved371_IRQn             = 371,              /**< CAMERAMIX MU Ored of all */
+  Reserved372_IRQn             = 372,              /**< CAMERAMIX MU Ored of all */
+  Reserved373_IRQn             = 373,              /**< CAMERAMIX MU Ored of all */
+  Reserved374_IRQn             = 374,              /**< CAMERAMIX MU Ored of all */
+  Reserved375_IRQn             = 375,              /**< CAMERAMIX MU Ored of all */
+  Reserved376_IRQn             = 376,              /**< CAMERAMIX ISI interrupt Channel 1 */
+  Reserved377_IRQn             = 377,              /**< CAMERAMIX ISI interrupt Channel 2 */
+  Reserved378_IRQn             = 378,              /**< CAMERAMIX ISI interrupt Channel 3 */
+  Reserved379_IRQn             = 379,              /**< CAMERAMIX ISI interrupt Channel 4 */
+  Reserved380_IRQn             = 380,              /**< CAMERAMIX ISI interrupt Channel 5 */
+  Reserved381_IRQn             = 381,              /**< CAMERAMIX ISI interrupt Channel 6 */
+  Reserved382_IRQn             = 382,              /**< CAMERAMIX ISI interrupt Channel 7 */
+  Reserved383_IRQn             = 383,              /**< CAMERAMIX EDMA error interrupt */
+  Reserved384_IRQn             = 384,              /**< CAMERAMIX EDMA channel 0 interrupt */
+  Reserved385_IRQn             = 385,              /**< CAMERAMIX EDMA channel 2 interrupt */
+  Reserved386_IRQn             = 386,              /**< CAMERAMIX EDMA channel 4 interrupt */
+  Reserved387_IRQn             = 387,              /**< CAMERAMIX EDMA channel 6 interrupt */
+  Reserved388_IRQn             = 388,              /**< CAMERAMIX EDMA channel 8 interrupt */
+  Reserved389_IRQn             = 389,              /**< CAMERAMIX EDMA channel 10 interrupt */
+  Reserved390_IRQn             = 390,              /**< CAMERAMIX EDMA channel 12 interrupt */
+  Reserved391_IRQn             = 391,              /**< CAMERAMIX EDMA channel 14 interrupt */
+  Reserved392_IRQn             = 392,              /**< CAMERAMIX EDMA channel 16 interrupt */
+  Reserved393_IRQn             = 393,              /**< CAMERAMIX EDMA channel 18 interrupt */
+  Reserved394_IRQn             = 394,              /**< CAMERAMIX EDMA channel 20 interrupt */
+  Reserved395_IRQn             = 395,              /**< CAMERAMIX EDMA channel 22 interrupt */
+  Reserved396_IRQn             = 396,              /**< CAMERAMIX EDMA channel 24 interrupt */
+  Reserved397_IRQn             = 397,              /**< CAMERAMIX EDMA channel 26 interrupt */
+  Reserved398_IRQn             = 398,              /**< CAMERAMIX EDMA channel 28 interrupt */
+  Reserved399_IRQn             = 399,              /**< CAMERAMIX EDMA channel 30 interrupt */
+  Reserved400_IRQn             = 400,              /**< CAMERAMIX CSI Formatting Unit 1: Buffer overflow */
+  Reserved401_IRQn             = 401,              /**< CAMERAMIX CSI Formatting Unit 1: Interlaced Error */
+  Reserved402_IRQn             = 402,              /**< CAMERAMIX CSI Formatting Unit 1: Pixel Data Type Error */
+  Reserved403_IRQn             = 403,              /**< CAMERAMIX CSI Formatting Unit 2: Buffer overflow */
+  Reserved404_IRQn             = 404,              /**< CAMERAMIX CSI Formatting Unit 2: Interlaced Error */
+  Reserved405_IRQn             = 405,              /**< CAMERAMIX CSI Formatting Unit 2: Pixel Data Type Error */
+  Reserved406_IRQn             = 406,              /**< CAMERAMIX CSI1 */
+  Reserved407_IRQn             = 407               /**< CAMERAMIX CSI2 */
 } IRQn_Type;
 
 /*!
@@ -1680,65 +1633,15 @@ typedef enum _xbar_output_signal
 /** Array initializer of ADC peripheral base pointers */
 #define ADC_BASE_PTRS                            { ADC }
 
-/* ANALOG_AGDET - Peripheral instance base addresses */
+/* AGDET - Peripheral instance base addresses */
 /** Peripheral ANALOG__AGDET base address */
 #define ANALOG__AGDET_BASE                       (0x44487000u)
 /** Peripheral ANALOG__AGDET base pointer */
-#define ANALOG__AGDET                            ((ANALOG_AGDET_Type *)ANALOG__AGDET_BASE)
-/** Array initializer of ANALOG_AGDET peripheral base addresses */
-#define ANALOG_AGDET_BASE_ADDRS                  { ANALOG__AGDET_BASE }
-/** Array initializer of ANALOG_AGDET peripheral base pointers */
-#define ANALOG_AGDET_BASE_PTRS                   { ANALOG__AGDET }
-
-/* ANALOG_CMU - Peripheral instance base addresses */
-/** Peripheral ANALOG__CMU0 base address */
-#define ANALOG__CMU0_BASE                        (0x44670000u)
-/** Peripheral ANALOG__CMU0 base pointer */
-#define ANALOG__CMU0                             ((ANALOG_CMU_Type *)ANALOG__CMU0_BASE)
-/** Array initializer of ANALOG_CMU peripheral base addresses */
-#define ANALOG_CMU_BASE_ADDRS                    { ANALOG__CMU0_BASE }
-/** Array initializer of ANALOG_CMU peripheral base pointers */
-#define ANALOG_CMU_BASE_PTRS                     { ANALOG__CMU0 }
-
-/* ANALOG_PMRO - Peripheral instance base addresses */
-/** Peripheral ANALOG__PMRO base address */
-#define ANALOG__PMRO_BASE                        (0x44484000u)
-/** Peripheral ANALOG__PMRO base pointer */
-#define ANALOG__PMRO                             ((ANALOG_PMRO_Type *)ANALOG__PMRO_BASE)
-/** Array initializer of ANALOG_PMRO peripheral base addresses */
-#define ANALOG_PMRO_BASE_ADDRS                   { ANALOG__PMRO_BASE }
-/** Array initializer of ANALOG_PMRO peripheral base pointers */
-#define ANALOG_PMRO_BASE_PTRS                    { ANALOG__PMRO }
-
-/* ANALOG_SFA - Peripheral instance base addresses */
-/** Peripheral ANALOG__SFA base address */
-#define ANALOG__SFA_BASE                         (0x44483000u)
-/** Peripheral ANALOG__SFA base pointer */
-#define ANALOG__SFA                              ((ANALOG_SFA_Type *)ANALOG__SFA_BASE)
-/** Array initializer of ANALOG_SFA peripheral base addresses */
-#define ANALOG_SFA_BASE_ADDRS                    { ANALOG__SFA_BASE }
-/** Array initializer of ANALOG_SFA peripheral base pointers */
-#define ANALOG_SFA_BASE_PTRS                     { ANALOG__SFA }
-
-/* ANALOG_TCU - Peripheral instance base addresses */
-/** Peripheral ANALOG__TCU base address */
-#define ANALOG__TCU_BASE                         (0x444C0000u)
-/** Peripheral ANALOG__TCU base pointer */
-#define ANALOG__TCU                              ((ANALOG_TCU_Type *)ANALOG__TCU_BASE)
-/** Array initializer of ANALOG_TCU peripheral base addresses */
-#define ANALOG_TCU_BASE_ADDRS                    { ANALOG__TCU_BASE }
-/** Array initializer of ANALOG_TCU peripheral base pointers */
-#define ANALOG_TCU_BASE_PTRS                     { ANALOG__TCU }
-
-/* ANALOG_VDET - Peripheral instance base addresses */
-/** Peripheral ANALOG__VDET base address */
-#define ANALOG__VDET_BASE                        (0x44486000u)
-/** Peripheral ANALOG__VDET base pointer */
-#define ANALOG__VDET                             ((ANALOG_VDET_Type *)ANALOG__VDET_BASE)
-/** Array initializer of ANALOG_VDET peripheral base addresses */
-#define ANALOG_VDET_BASE_ADDRS                   { ANALOG__VDET_BASE }
-/** Array initializer of ANALOG_VDET peripheral base pointers */
-#define ANALOG_VDET_BASE_PTRS                    { ANALOG__VDET }
+#define ANALOG__AGDET                            ((AGDET_Type *)ANALOG__AGDET_BASE)
+/** Array initializer of AGDET peripheral base addresses */
+#define AGDET_BASE_ADDRS                         { ANALOG__AGDET_BASE }
+/** Array initializer of AGDET peripheral base pointers */
+#define AGDET_BASE_PTRS                          { ANALOG__AGDET }
 
 /* AOI - Peripheral instance base addresses */
 /** Peripheral AOI1 base address */
@@ -1762,122 +1665,13 @@ typedef enum _xbar_output_signal
 /** Array initializer of AOI peripheral base pointers */
 #define AOI_BASE_PTRS                            { (AOI_Type *)0u, AOI1, AOI2, AOI3, AOI4 }
 
-/* AON_CMU - Peripheral instance base addresses */
-/** Peripheral AON__CMUA1 base address */
-#define AON__CMUA1_BASE                          (0x44540000u)
-/** Peripheral AON__CMUA1 base pointer */
-#define AON__CMUA1                               ((AON_CMU_Type *)AON__CMUA1_BASE)
-/** Peripheral AON__CMUA2 base address */
-#define AON__CMUA2_BASE                          (0x44650000u)
-/** Peripheral AON__CMUA2 base pointer */
-#define AON__CMUA2                               ((AON_CMU_Type *)AON__CMUA2_BASE)
-/** Array initializer of AON_CMU peripheral base addresses */
-#define AON_CMU_BASE_ADDRS                       { AON__CMUA1_BASE, AON__CMUA2_BASE }
-/** Array initializer of AON_CMU peripheral base pointers */
-#define AON_CMU_BASE_PTRS                        { AON__CMUA1, AON__CMUA2 }
-
-/* AON_CRC - Peripheral instance base addresses */
-/** Peripheral AON__CRCA base address */
-#define AON__CRCA_BASE                           (0x44660000u)
-/** Peripheral AON__CRCA base pointer */
-#define AON__CRCA                                ((AON_CRC_Type *)AON__CRCA_BASE)
-/** Array initializer of AON_CRC peripheral base addresses */
-#define AON_CRC_BASE_ADDRS                       { AON__CRCA_BASE }
-/** Array initializer of AON_CRC peripheral base pointers */
-#define AON_CRC_BASE_PTRS                        { AON__CRCA }
-
-/* AON_CSTCU - Peripheral instance base addresses */
-/** Peripheral AON__CSTCU base address */
-#define AON__CSTCU_BASE                          (0x44590000u)
-/** Peripheral AON__CSTCU base pointer */
-#define AON__CSTCU                               ((AON_CSTCU_Type *)AON__CSTCU_BASE)
-/** Array initializer of AON_CSTCU peripheral base addresses */
-#define AON_CSTCU_BASE_ADDRS                     { AON__CSTCU_BASE }
-/** Array initializer of AON_CSTCU peripheral base pointers */
-#define AON_CSTCU_BASE_PTRS                      { AON__CSTCU }
-
-/* AON_EIM - Peripheral instance base addresses */
-/** Peripheral AON__EIMA base address */
-#define AON__EIMA_BASE                           (0x44550000u)
-/** Peripheral AON__EIMA base pointer */
-#define AON__EIMA                                ((AON_EIM_Type *)AON__EIMA_BASE)
-/** Array initializer of AON_EIM peripheral base addresses */
-#define AON_EIM_BASE_ADDRS                       { AON__EIMA_BASE }
-/** Array initializer of AON_EIM peripheral base pointers */
-#define AON_EIM_BASE_PTRS                        { AON__EIMA }
-
-/* AON_FCCU - Peripheral instance base addresses */
-/** Peripheral AON__FCCU base address */
-#define AON__FCCU_BASE                           (0x44570000u)
-/** Peripheral AON__FCCU base pointer */
-#define AON__FCCU                                ((AON_FCCU_Type *)AON__FCCU_BASE)
-/** Array initializer of AON_FCCU peripheral base addresses */
-#define AON_FCCU_BASE_ADDRS                      { AON__FCCU_BASE }
-/** Array initializer of AON_FCCU peripheral base pointers */
-#define AON_FCCU_BASE_PTRS                       { AON__FCCU }
-
-/* AON_INTM - Peripheral instance base addresses */
-/** Peripheral AON__INTM base address */
-#define AON__INTM_BASE                           (0x44580000u)
-/** Peripheral AON__INTM base pointer */
-#define AON__INTM                                ((AON_INTM_Type *)AON__INTM_BASE)
-/** Array initializer of AON_INTM peripheral base addresses */
-#define AON_INTM_BASE_ADDRS                      { AON__INTM_BASE }
-/** Array initializer of AON_INTM peripheral base pointers */
-#define AON_INTM_BASE_PTRS                       { AON__INTM }
-
-/* AON_LSTCU - Peripheral instance base addresses */
-/** Peripheral AON__LSTCUA base address */
-#define AON__LSTCUA_BASE                         (0x445A0000u)
-/** Peripheral AON__LSTCUA base pointer */
-#define AON__LSTCUA                              ((AON_LSTCU_Type *)AON__LSTCUA_BASE)
-/** Array initializer of AON_LSTCU peripheral base addresses */
-#define AON_LSTCU_BASE_ADDRS                     { AON__LSTCUA_BASE }
-/** Array initializer of AON_LSTCU peripheral base pointers */
-#define AON_LSTCU_BASE_PTRS                      { AON__LSTCUA }
-
-/* AON_MCM - Peripheral instance base addresses */
-/** Peripheral AON__MCM base address */
-#define AON__MCM_BASE                            (0xE0080000u)
-/** Peripheral AON__MCM base pointer */
-#define AON__MCM                                 ((AON_MCM_Type *)AON__MCM_BASE)
-/** Array initializer of AON_MCM peripheral base addresses */
-#define AON_MCM_BASE_ADDRS                       { AON__MCM_BASE }
-/** Array initializer of AON_MCM peripheral base pointers */
-#define AON_MCM_BASE_PTRS                        { AON__MCM }
-
-/* AON_SYSPM - Peripheral instance base addresses */
-/** Peripheral AON__M33_PCF1 base address */
-#define AON__M33_PCF1_BASE                       (0x443E0000u)
-/** Peripheral AON__M33_PCF1 base pointer */
-#define AON__M33_PCF1                            ((AON_SYSPM_Type *)AON__M33_PCF1_BASE)
-/** Peripheral AON__M33_PSF1 base address */
-#define AON__M33_PSF1_BASE                       (0x443F0000u)
-/** Peripheral AON__M33_PSF1 base pointer */
-#define AON__M33_PSF1                            ((AON_SYSPM_Type *)AON__M33_PSF1_BASE)
-/** Array initializer of AON_SYSPM peripheral base addresses */
-#define AON_SYSPM_BASE_ADDRS                     { AON__M33_PCF1_BASE, AON__M33_PSF1_BASE }
-/** Array initializer of AON_SYSPM peripheral base pointers */
-#define AON_SYSPM_BASE_PTRS                      { AON__M33_PCF1, AON__M33_PSF1 }
-
-/* AON_TCU - Peripheral instance base addresses */
-/** Peripheral AON__TCU base address */
-#define AON__TCU_BASE                            (0x444B0000u)
-/** Peripheral AON__TCU base pointer */
-#define AON__TCU                                 ((AON_TCU_Type *)AON__TCU_BASE)
-/** Array initializer of AON_TCU peripheral base addresses */
-#define AON_TCU_BASE_ADDRS                       { AON__TCU_BASE }
-/** Array initializer of AON_TCU peripheral base pointers */
-#define AON_TCU_BASE_PTRS                        { AON__TCU }
-
-
 /* ARDB - Peripheral instance base addresses */
 /** Peripheral WAKEUP__XSPI1__ARDB base address */
-#define WAKEUP__XSPI1__ARDB_BASE                 (0x42B90000u)
+#define WAKEUP__XSPI1__ARDB_BASE                 (0x47420000u)
 /** Peripheral WAKEUP__XSPI1__ARDB base pointer */
 #define WAKEUP__XSPI1__ARDB                      ((ARDB_Type *)WAKEUP__XSPI1__ARDB_BASE)
 /** Peripheral WAKEUP__XSPI2__ARDB base address */
-#define WAKEUP__XSPI2__ARDB_BASE                 (0x42BE0000u)
+#define WAKEUP__XSPI2__ARDB_BASE                 (0x47440000u)
 /** Peripheral WAKEUP__XSPI2__ARDB base pointer */
 #define WAKEUP__XSPI2__ARDB                      ((ARDB_Type *)WAKEUP__XSPI2__ARDB_BASE)
 /** Array initializer of ARDB peripheral base addresses */
@@ -1885,15 +1679,43 @@ typedef enum _xbar_output_signal
 /** Array initializer of ARDB peripheral base pointers */
 #define ARDB_BASE_PTRS                           { WAKEUP__XSPI1__ARDB, WAKEUP__XSPI2__ARDB }
 
-/* ATU_USB2 - Peripheral instance base addresses */
+/* ATU - Peripheral instance base addresses */
+/** Peripheral DISPLAY__ATU base address */
+#define DISPLAY__ATU_BASE                        (0x4B060000u)
+/** Peripheral DISPLAY__ATU base pointer */
+#define DISPLAY__ATU                             ((ATU_Type *)DISPLAY__ATU_BASE)
 /** Peripheral HSIO__ATU_USB2 base address */
 #define HSIO__ATU_USB2_BASE                      (0x4C070000u)
 /** Peripheral HSIO__ATU_USB2 base pointer */
-#define HSIO__ATU_USB2                           ((ATU_USB2_Type *)HSIO__ATU_USB2_BASE)
-/** Array initializer of ATU_USB2 peripheral base addresses */
-#define ATU_USB2_BASE_ADDRS                      { HSIO__ATU_USB2_BASE }
-/** Array initializer of ATU_USB2 peripheral base pointers */
-#define ATU_USB2_BASE_PTRS                       { HSIO__ATU_USB2 }
+#define HSIO__ATU_USB2                           ((ATU_Type *)HSIO__ATU_USB2_BASE)
+/** Peripheral WAKEUP__ATUA base address */
+#define WAKEUP__ATUA_BASE                        (0x42760000u)
+/** Peripheral WAKEUP__ATUA base pointer */
+#define WAKEUP__ATUA                             ((ATU_Type *)WAKEUP__ATUA_BASE)
+/** Peripheral WAKEUP__ATUM base address */
+#define WAKEUP__ATUM_BASE                        (0x42770000u)
+/** Peripheral WAKEUP__ATUM base pointer */
+#define WAKEUP__ATUM                             ((ATU_Type *)WAKEUP__ATUM_BASE)
+/** Peripheral WAKEUP__ATUM33 base address */
+#define WAKEUP__ATUM33_BASE                      (0x427D0000u)
+/** Peripheral WAKEUP__ATUM33 base pointer */
+#define WAKEUP__ATUM33                           ((ATU_Type *)WAKEUP__ATUM33_BASE)
+/** Peripheral WAKEUP__ATU_M70 base address */
+#define WAKEUP__ATU_M70_BASE                     (0x42A90000u)
+/** Peripheral WAKEUP__ATU_M70 base pointer */
+#define WAKEUP__ATU_M70                          ((ATU_Type *)WAKEUP__ATU_M70_BASE)
+/** Peripheral WAKEUP__ATU_M71 base address */
+#define WAKEUP__ATU_M71_BASE                     (0x42AA0000u)
+/** Peripheral WAKEUP__ATU_M71 base pointer */
+#define WAKEUP__ATU_M71                          ((ATU_Type *)WAKEUP__ATU_M71_BASE)
+/** Peripheral WAKEUP__WAKEUP_ATU_V2X base address */
+#define WAKEUP__WAKEUP_ATU_V2X_BASE              (0x42680000u)
+/** Peripheral WAKEUP__WAKEUP_ATU_V2X base pointer */
+#define WAKEUP__WAKEUP_ATU_V2X                   ((ATU_Type *)WAKEUP__WAKEUP_ATU_V2X_BASE)
+/** Array initializer of ATU peripheral base addresses */
+#define ATU_BASE_ADDRS                           { DISPLAY__ATU_BASE, HSIO__ATU_USB2_BASE, WAKEUP__ATUA_BASE, WAKEUP__ATUM_BASE, WAKEUP__ATUM33_BASE, WAKEUP__ATU_M70_BASE, WAKEUP__ATU_M71_BASE, WAKEUP__WAKEUP_ATU_V2X_BASE }
+/** Array initializer of ATU peripheral base pointers */
+#define ATU_BASE_PTRS                            { DISPLAY__ATU, HSIO__ATU_USB2, WAKEUP__ATUA, WAKEUP__ATUM, WAKEUP__ATUM33, WAKEUP__ATU_M70, WAKEUP__ATU_M71, WAKEUP__WAKEUP_ATU_V2X }
 
 /* AXBS - Peripheral instance base addresses */
 /** Peripheral AXBS base address */
@@ -1915,26 +1737,6 @@ typedef enum _xbar_output_signal
 /** Array initializer of BBNSM peripheral base pointers */
 #define BBNSM_BASE_PTRS                          { BBNSM }
 
-/* BBSM_BLK_CTRL_BBSMMIX - Peripheral instance base addresses */
-/** Peripheral BLK_CTRL_BBSMMIX base address */
-#define BLK_CTRL_BBSMMIX_BASE                    (0x44410000u)
-/** Peripheral BLK_CTRL_BBSMMIX base pointer */
-#define BLK_CTRL_BBSMMIX                         ((BBSM_BLK_CTRL_BBSMMIX_Type *)BLK_CTRL_BBSMMIX_BASE)
-/** Array initializer of BBSM_BLK_CTRL_BBSMMIX peripheral base addresses */
-#define BBSM_BLK_CTRL_BBSMMIX_BASE_ADDRS         { BLK_CTRL_BBSMMIX_BASE }
-/** Array initializer of BBSM_BLK_CTRL_BBSMMIX peripheral base pointers */
-#define BBSM_BLK_CTRL_BBSMMIX_BASE_PTRS          { BLK_CTRL_BBSMMIX }
-
-/* BBSM_TCU - Peripheral instance base addresses */
-/** Peripheral BBSM__TCU_BBSMMIX base address */
-#define BBSM__TCU_BBSMMIX_BASE                   (0x444E0000u)
-/** Peripheral BBSM__TCU_BBSMMIX base pointer */
-#define BBSM__TCU_BBSMMIX                        ((BBSM_TCU_Type *)BBSM__TCU_BBSMMIX_BASE)
-/** Array initializer of BBSM_TCU peripheral base addresses */
-#define BBSM_TCU_BASE_ADDRS                      { BBSM__TCU_BBSMMIX_BASE }
-/** Array initializer of BBSM_TCU peripheral base pointers */
-#define BBSM_TCU_BASE_PTRS                       { BBSM__TCU_BBSMMIX }
-
 /* BISS - Peripheral instance base addresses */
 /** Peripheral BISS1 base address */
 #define BISS1_BASE                               (0x42CE0000u)
@@ -1945,6 +1747,56 @@ typedef enum _xbar_output_signal
 /** Array initializer of BISS peripheral base pointers */
 #define BISS_BASE_PTRS                           { BISS1 }
 
+/* BLK_CTRL_BBSMMIX - Peripheral instance base addresses */
+/** Peripheral BLK_CTRL_BBSMMIX base address */
+#define BLK_CTRL_BBSMMIX_BASE                    (0x44410000u)
+/** Peripheral BLK_CTRL_BBSMMIX base pointer */
+#define BLK_CTRL_BBSMMIX                         ((BLK_CTRL_BBSMMIX_Type *)BLK_CTRL_BBSMMIX_BASE)
+/** Array initializer of BLK_CTRL_BBSMMIX peripheral base addresses */
+#define BLK_CTRL_BBSMMIX_BASE_ADDRS              { BLK_CTRL_BBSMMIX_BASE }
+/** Array initializer of BLK_CTRL_BBSMMIX peripheral base pointers */
+#define BLK_CTRL_BBSMMIX_BASE_PTRS               { BLK_CTRL_BBSMMIX }
+
+/* BLK_CTRL_DDRMIX - Peripheral instance base addresses */
+/** Peripheral BLK_CTRL_DDRMIX base address */
+#define BLK_CTRL_DDRMIX_BASE                     (0x4E010000u)
+/** Peripheral BLK_CTRL_DDRMIX base pointer */
+#define BLK_CTRL_DDRMIX                          ((BLK_CTRL_DDRMIX_Type *)BLK_CTRL_DDRMIX_BASE)
+/** Array initializer of BLK_CTRL_DDRMIX peripheral base addresses */
+#define BLK_CTRL_DDRMIX_BASE_ADDRS               { BLK_CTRL_DDRMIX_BASE }
+/** Array initializer of BLK_CTRL_DDRMIX peripheral base pointers */
+#define BLK_CTRL_DDRMIX_BASE_PTRS                { BLK_CTRL_DDRMIX }
+
+/* BLK_CTRL_DISPLAYMIX - Peripheral instance base addresses */
+/** Peripheral BLK_CTRL_DISPLAYMIX base address */
+#define BLK_CTRL_DISPLAYMIX_BASE                 (0x4B010000u)
+/** Peripheral BLK_CTRL_DISPLAYMIX base pointer */
+#define BLK_CTRL_DISPLAYMIX                      ((BLK_CTRL_DISPLAYMIX_Type *)BLK_CTRL_DISPLAYMIX_BASE)
+/** Array initializer of BLK_CTRL_DISPLAYMIX peripheral base addresses */
+#define BLK_CTRL_DISPLAYMIX_BASE_ADDRS           { BLK_CTRL_DISPLAYMIX_BASE }
+/** Array initializer of BLK_CTRL_DISPLAYMIX peripheral base pointers */
+#define BLK_CTRL_DISPLAYMIX_BASE_PTRS            { BLK_CTRL_DISPLAYMIX }
+
+/* BLK_CTRL_HSIOMIX - Peripheral instance base addresses */
+/** Peripheral BLK_CTRL_HSIOMIX base address */
+#define BLK_CTRL_HSIOMIX_BASE                    (0x4C010000u)
+/** Peripheral BLK_CTRL_HSIOMIX base pointer */
+#define BLK_CTRL_HSIOMIX                         ((BLK_CTRL_HSIOMIX_Type *)BLK_CTRL_HSIOMIX_BASE)
+/** Array initializer of BLK_CTRL_HSIOMIX peripheral base addresses */
+#define BLK_CTRL_HSIOMIX_BASE_ADDRS              { BLK_CTRL_HSIOMIX_BASE }
+/** Array initializer of BLK_CTRL_HSIOMIX peripheral base pointers */
+#define BLK_CTRL_HSIOMIX_BASE_PTRS               { BLK_CTRL_HSIOMIX }
+
+/* BLK_CTRL_LVDS - Peripheral instance base addresses */
+/** Peripheral BLK_CTRL_LVDS base address */
+#define BLK_CTRL_LVDS_BASE                       (0x4B0C0000u)
+/** Peripheral BLK_CTRL_LVDS base pointer */
+#define BLK_CTRL_LVDS                            ((BLK_CTRL_LVDS_Type *)BLK_CTRL_LVDS_BASE)
+/** Array initializer of BLK_CTRL_LVDS peripheral base addresses */
+#define BLK_CTRL_LVDS_BASE_ADDRS                 { BLK_CTRL_LVDS_BASE }
+/** Array initializer of BLK_CTRL_LVDS peripheral base pointers */
+#define BLK_CTRL_LVDS_BASE_PTRS                  { BLK_CTRL_LVDS }
+
 /* BLK_CTRL_NETCMIX - Peripheral instance base addresses */
 /** Peripheral BLK_CTRL_NETCMIX base address */
 #define BLK_CTRL_NETCMIX_BASE                    (0x4C810000u)
@@ -1954,6 +1806,16 @@ typedef enum _xbar_output_signal
 #define BLK_CTRL_NETCMIX_BASE_ADDRS              { BLK_CTRL_NETCMIX_BASE }
 /** Array initializer of BLK_CTRL_NETCMIX peripheral base pointers */
 #define BLK_CTRL_NETCMIX_BASE_PTRS               { BLK_CTRL_NETCMIX }
+
+/* BLK_CTRL_NOCMIX - Peripheral instance base addresses */
+/** Peripheral BLK_CTRL_NOCMIX base address */
+#define BLK_CTRL_NOCMIX_BASE                     (0x49000000u)
+/** Peripheral BLK_CTRL_NOCMIX base pointer */
+#define BLK_CTRL_NOCMIX                          ((BLK_CTRL_NOCMIX_Type *)BLK_CTRL_NOCMIX_BASE)
+/** Array initializer of BLK_CTRL_NOCMIX peripheral base addresses */
+#define BLK_CTRL_NOCMIX_BASE_ADDRS               { BLK_CTRL_NOCMIX_BASE }
+/** Array initializer of BLK_CTRL_NOCMIX peripheral base pointers */
+#define BLK_CTRL_NOCMIX_BASE_PTRS                { BLK_CTRL_NOCMIX }
 
 /* BLK_CTRL_NS_AONMIX - Peripheral instance base addresses */
 /** Peripheral BLK_CTRL_NS_AONMIX base address */
@@ -1998,16 +1860,6 @@ typedef enum _xbar_output_signal
 #define CACHE_ECC_MCM_BASE_ADDRS                 { AON__M33_CACHE_CTRL_ECC0__CM33_CACHE_ECC_MCM_BASE, NETC__M33_CACHE_CTRL_ECC0__CM33_CACHE_ECC_MCM_BASE }
 /** Array initializer of CACHE_ECC_MCM peripheral base pointers */
 #define CACHE_ECC_MCM_BASE_PTRS                  { AON__M33_CACHE_CTRL_ECC0__CM33_CACHE_ECC_MCM, NETC__M33_CACHE_CTRL_ECC0__CM33_CACHE_ECC_MCM }
-
-/* CAMERA_ATU - Peripheral instance base addresses */
-/** Peripheral DISPLAY__ATU base address */
-#define DISPLAY__ATU_BASE                        (0x4B060000u)
-/** Peripheral DISPLAY__ATU base pointer */
-#define DISPLAY__ATU                             ((CAMERA_ATU_Type *)DISPLAY__ATU_BASE)
-/** Array initializer of CAMERA_ATU peripheral base addresses */
-#define CAMERA_ATU_BASE_ADDRS                    { DISPLAY__ATU_BASE }
-/** Array initializer of CAMERA_ATU peripheral base pointers */
-#define CAMERA_ATU_BASE_PTRS                     { DISPLAY__ATU }
 
 /* CAMIX_BLK_CTRL - Peripheral instance base addresses */
 /** Peripheral BLK_CTRL_CAMIX base address */
@@ -2062,25 +1914,87 @@ typedef enum _xbar_output_signal
 /** Array initializer of CCM peripheral base pointers */
 #define CCM_BASE_PTRS                            { CCM_CTRL }
 
-/* CCMSRCGPC_TCU - Peripheral instance base addresses */
-/** Peripheral CCMSRCGPC__TCU base address */
-#define CCMSRCGPC__TCU_BASE                      (0x444D0000u)
-/** Peripheral CCMSRCGPC__TCU base pointer */
-#define CCMSRCGPC__TCU                           ((CCMSRCGPC_TCU_Type *)CCMSRCGPC__TCU_BASE)
-/** Array initializer of CCMSRCGPC_TCU peripheral base addresses */
-#define CCMSRCGPC_TCU_BASE_ADDRS                 { CCMSRCGPC__TCU_BASE }
-/** Array initializer of CCMSRCGPC_TCU peripheral base pointers */
-#define CCMSRCGPC_TCU_BASE_PTRS                  { CCMSRCGPC__TCU }
+/* CMU - Peripheral instance base addresses */
+/** Peripheral ANALOG__CMU0 base address */
+#define ANALOG__CMU0_BASE                        (0x44670000u)
+/** Peripheral ANALOG__CMU0 base pointer */
+#define ANALOG__CMU0                             ((CMU_Type *)ANALOG__CMU0_BASE)
+/** Peripheral AON__CMUA1 base address */
+#define AON__CMUA1_BASE                          (0x44540000u)
+/** Peripheral AON__CMUA1 base pointer */
+#define AON__CMUA1                               ((CMU_Type *)AON__CMUA1_BASE)
+/** Peripheral AON__CMUA2 base address */
+#define AON__CMUA2_BASE                          (0x44650000u)
+/** Peripheral AON__CMUA2 base pointer */
+#define AON__CMUA2                               ((CMU_Type *)AON__CMUA2_BASE)
+/** Peripheral DDRC__CMU_1 base address */
+#define DDRC__CMU_1_BASE                         (0x4E060000u)
+/** Peripheral DDRC__CMU_1 base pointer */
+#define DDRC__CMU_1                              ((CMU_Type *)DDRC__CMU_1_BASE)
+/** Peripheral DDRC__CMU_2 base address */
+#define DDRC__CMU_2_BASE                         (0x4E070000u)
+/** Peripheral DDRC__CMU_2 base pointer */
+#define DDRC__CMU_2                              ((CMU_Type *)DDRC__CMU_2_BASE)
+/** Peripheral M7_1__CMU_M0 base address */
+#define M7_1__CMU_M0_BASE                        (0x49C80000u)
+/** Peripheral M7_1__CMU_M0 base pointer */
+#define M7_1__CMU_M0                             ((CMU_Type *)M7_1__CMU_M0_BASE)
+/** Peripheral M7_1__CMU_M1 base address */
+#define M7_1__CMU_M1_BASE                        (0x49C90000u)
+/** Peripheral M7_1__CMU_M1 base pointer */
+#define M7_1__CMU_M1                             ((CMU_Type *)M7_1__CMU_M1_BASE)
+/** Peripheral M7__CMU_M0 base address */
+#define M7__CMU_M0_BASE                          (0x4A080000u)
+/** Peripheral M7__CMU_M0 base pointer */
+#define M7__CMU_M0                               ((CMU_Type *)M7__CMU_M0_BASE)
+/** Peripheral M7__CMU_M1 base address */
+#define M7__CMU_M1_BASE                          (0x4A090000u)
+/** Peripheral M7__CMU_M1 base pointer */
+#define M7__CMU_M1                               ((CMU_Type *)M7__CMU_M1_BASE)
+/** Peripheral NETC__CMU base address */
+#define NETC__CMU_BASE                           (0x4D080000u)
+/** Peripheral NETC__CMU base pointer */
+#define NETC__CMU                                ((CMU_Type *)NETC__CMU_BASE)
+/** Peripheral NOC__CMU_N0 base address */
+#define NOC__CMU_N0_BASE                         (0x49070000u)
+/** Peripheral NOC__CMU_N0 base pointer */
+#define NOC__CMU_N0                              ((CMU_Type *)NOC__CMU_N0_BASE)
+/** Peripheral NOC__CMU_N1 base address */
+#define NOC__CMU_N1_BASE                         (0x49080000u)
+/** Peripheral NOC__CMU_N1 base pointer */
+#define NOC__CMU_N1                              ((CMU_Type *)NOC__CMU_N1_BASE)
+/** Peripheral WAKEUP__CMU1 base address */
+#define WAKEUP__CMU1_BASE                        (0x42750000u)
+/** Peripheral WAKEUP__CMU1 base pointer */
+#define WAKEUP__CMU1                             ((CMU_Type *)WAKEUP__CMU1_BASE)
+/** Peripheral WAKEUP__CMU2 base address */
+#define WAKEUP__CMU2_BASE                        (0x427A0000u)
+/** Peripheral WAKEUP__CMU2 base pointer */
+#define WAKEUP__CMU2                             ((CMU_Type *)WAKEUP__CMU2_BASE)
+/** Array initializer of CMU peripheral base addresses */
+#define CMU_BASE_ADDRS                           { ANALOG__CMU0_BASE, AON__CMUA1_BASE, AON__CMUA2_BASE, DDRC__CMU_1_BASE, DDRC__CMU_2_BASE, M7_1__CMU_M0_BASE, M7_1__CMU_M1_BASE, M7__CMU_M0_BASE, M7__CMU_M1_BASE, NETC__CMU_BASE, NOC__CMU_N0_BASE, NOC__CMU_N1_BASE, WAKEUP__CMU1_BASE, WAKEUP__CMU2_BASE }
+/** Array initializer of CMU peripheral base pointers */
+#define CMU_BASE_PTRS                            { ANALOG__CMU0, AON__CMUA1, AON__CMUA2, DDRC__CMU_1, DDRC__CMU_2, M7_1__CMU_M0, M7_1__CMU_M1, M7__CMU_M0, M7__CMU_M1, NETC__CMU, NOC__CMU_N0, NOC__CMU_N1, WAKEUP__CMU1, WAKEUP__CMU2 }
 
-/* CORTEXA_TCU - Peripheral instance base addresses */
-/** Peripheral CORTEXA__TCU base address */
-#define CORTEXA__TCU_BASE                        (0x4A400000u)
-/** Peripheral CORTEXA__TCU base pointer */
-#define CORTEXA__TCU                             ((CORTEXA_TCU_Type *)CORTEXA__TCU_BASE)
-/** Array initializer of CORTEXA_TCU peripheral base addresses */
-#define CORTEXA_TCU_BASE_ADDRS                   { CORTEXA__TCU_BASE }
-/** Array initializer of CORTEXA_TCU peripheral base pointers */
-#define CORTEXA_TCU_BASE_PTRS                    { CORTEXA__TCU }
+/* CRCA - Peripheral instance base addresses */
+/** Peripheral AON__CRCA base address */
+#define AON__CRCA_BASE                           (0x44660000u)
+/** Peripheral AON__CRCA base pointer */
+#define AON__CRCA                                ((CRCA_Type *)AON__CRCA_BASE)
+/** Array initializer of CRCA peripheral base addresses */
+#define CRCA_BASE_ADDRS                          { AON__CRCA_BASE }
+/** Array initializer of CRCA peripheral base pointers */
+#define CRCA_BASE_PTRS                           { AON__CRCA }
+
+/* CSTCU - Peripheral instance base addresses */
+/** Peripheral AON__CSTCU base address */
+#define AON__CSTCU_BASE                          (0x44590000u)
+/** Peripheral AON__CSTCU base pointer */
+#define AON__CSTCU                               ((CSTCU_Type *)AON__CSTCU_BASE)
+/** Array initializer of CSTCU peripheral base addresses */
+#define CSTCU_BASE_ADDRS                         { AON__CSTCU_BASE }
+/** Array initializer of CSTCU peripheral base pointers */
+#define CSTCU_BASE_PTRS                          { AON__CSTCU }
 
 /* DCIF - Peripheral instance base addresses */
 /** Peripheral DCIF base address */
@@ -2101,81 +2015,6 @@ typedef enum _xbar_output_signal
 #define DDRC_BASE_ADDRS                          { DDRC_BASE }
 /** Array initializer of DDRC peripheral base pointers */
 #define DDRC_BASE_PTRS                           { DDRC }
-
-/* DDR_BLK_CTRL_DDRMIX - Peripheral instance base addresses */
-/** Peripheral BLK_CTRL_DDRMIX base address */
-#define BLK_CTRL_DDRMIX_BASE                     (0x4E010000u)
-/** Peripheral BLK_CTRL_DDRMIX base pointer */
-#define BLK_CTRL_DDRMIX                          ((DDR_BLK_CTRL_DDRMIX_Type *)BLK_CTRL_DDRMIX_BASE)
-/** Array initializer of DDR_BLK_CTRL_DDRMIX peripheral base addresses */
-#define DDR_BLK_CTRL_DDRMIX_BASE_ADDRS           { BLK_CTRL_DDRMIX_BASE }
-/** Array initializer of DDR_BLK_CTRL_DDRMIX peripheral base pointers */
-#define DDR_BLK_CTRL_DDRMIX_BASE_PTRS            { BLK_CTRL_DDRMIX }
-
-/* DDR_CMU - Peripheral instance base addresses */
-/** Peripheral DDRC__CMU_1 base address */
-#define DDRC__CMU_1_BASE                         (0x4E060000u)
-/** Peripheral DDRC__CMU_1 base pointer */
-#define DDRC__CMU_1                              ((DDR_CMU_Type *)DDRC__CMU_1_BASE)
-/** Peripheral DDRC__CMU_2 base address */
-#define DDRC__CMU_2_BASE                         (0x4E070000u)
-/** Peripheral DDRC__CMU_2 base pointer */
-#define DDRC__CMU_2                              ((DDR_CMU_Type *)DDRC__CMU_2_BASE)
-/** Array initializer of DDR_CMU peripheral base addresses */
-#define DDR_CMU_BASE_ADDRS                       { DDRC__CMU_1_BASE, DDRC__CMU_2_BASE }
-/** Array initializer of DDR_CMU peripheral base pointers */
-#define DDR_CMU_BASE_PTRS                        { DDRC__CMU_1, DDRC__CMU_2 }
-
-/* DDR_LSTCU - Peripheral instance base addresses */
-/** Peripheral DDRC__LSTCU base address */
-#define DDRC__LSTCU_BASE                         (0x4E050000u)
-/** Peripheral DDRC__LSTCU base pointer */
-#define DDRC__LSTCU                              ((DDR_LSTCU_Type *)DDRC__LSTCU_BASE)
-/** Array initializer of DDR_LSTCU peripheral base addresses */
-#define DDR_LSTCU_BASE_ADDRS                     { DDRC__LSTCU_BASE }
-/** Array initializer of DDR_LSTCU peripheral base pointers */
-#define DDR_LSTCU_BASE_PTRS                      { DDRC__LSTCU }
-
-/* DDR_TCU - Peripheral instance base addresses */
-/** Peripheral DDRC__TCU base address */
-#define DDRC__TCU_BASE                           (0x4E000000u)
-/** Peripheral DDRC__TCU base pointer */
-#define DDRC__TCU                                ((DDR_TCU_Type *)DDRC__TCU_BASE)
-/** Array initializer of DDR_TCU peripheral base addresses */
-#define DDR_TCU_BASE_ADDRS                       { DDRC__TCU_BASE }
-/** Array initializer of DDR_TCU peripheral base pointers */
-#define DDR_TCU_BASE_PTRS                        { DDRC__TCU }
-
-/* DISPLAY_BLK_CTRL_DISPLAYMIX - Peripheral instance base addresses */
-/** Peripheral BLK_CTRL_DISPLAYMIX base address */
-#define BLK_CTRL_DISPLAYMIX_BASE                 (0x4B010000u)
-/** Peripheral BLK_CTRL_DISPLAYMIX base pointer */
-#define BLK_CTRL_DISPLAYMIX                      ((DISPLAY_BLK_CTRL_DISPLAYMIX_Type *)BLK_CTRL_DISPLAYMIX_BASE)
-/** Array initializer of DISPLAY_BLK_CTRL_DISPLAYMIX peripheral base addresses */
-#define DISPLAY_BLK_CTRL_DISPLAYMIX_BASE_ADDRS   { BLK_CTRL_DISPLAYMIX_BASE }
-/** Array initializer of DISPLAY_BLK_CTRL_DISPLAYMIX peripheral base pointers */
-#define DISPLAY_BLK_CTRL_DISPLAYMIX_BASE_PTRS    { BLK_CTRL_DISPLAYMIX }
-
-/* DISPLAY_BLK_CTRL_LVDS - Peripheral instance base addresses */
-/** Peripheral BLK_CTRL_LVDS base address */
-#define BLK_CTRL_LVDS_BASE                       (0x4B0C0000u)
-/** Peripheral BLK_CTRL_LVDS base pointer */
-#define BLK_CTRL_LVDS                            ((DISPLAY_BLK_CTRL_LVDS_Type *)BLK_CTRL_LVDS_BASE)
-/** Array initializer of DISPLAY_BLK_CTRL_LVDS peripheral base addresses */
-#define DISPLAY_BLK_CTRL_LVDS_BASE_ADDRS         { BLK_CTRL_LVDS_BASE }
-/** Array initializer of DISPLAY_BLK_CTRL_LVDS peripheral base pointers */
-#define DISPLAY_BLK_CTRL_LVDS_BASE_PTRS          { BLK_CTRL_LVDS }
-
-/* DISPLAY_TCU - Peripheral instance base addresses */
-/** Peripheral DISPLAY__TCU base address */
-#define DISPLAY__TCU_BASE                        (0x4B000000u)
-/** Peripheral DISPLAY__TCU base pointer */
-#define DISPLAY__TCU                             ((DISPLAY_TCU_Type *)DISPLAY__TCU_BASE)
-/** Array initializer of DISPLAY_TCU peripheral base addresses */
-#define DISPLAY_TCU_BASE_ADDRS                   { DISPLAY__TCU_BASE }
-/** Array initializer of DISPLAY_TCU peripheral base pointers */
-#define DISPLAY_TCU_BASE_PTRS                    { DISPLAY__TCU }
-
 
 /* DMA - Peripheral instance base addresses */
 /** Peripheral EDMA1 base address */
@@ -2201,9 +2040,23 @@ typedef enum _xbar_output_signal
 /** Peripheral EDMA4 base pointer */
 #define EDMA4                                    ((DMA5_Type *)EDMA4_BASE)
 /** Array initializer of DMA5 peripheral base addresses */
-#define DMA5_BASE_ADDRS                          { 0u, 0u, EDMA2_BASE, EDMA3_BASE, EDMA4_BASE }
+#define DMA5_BASE_ADDRS                          { EDMA2_BASE, EDMA3_BASE, EDMA4_BASE }
 /** Array initializer of DMA5 peripheral base pointers */
-#define DMA5_BASE_PTRS                           { (DMA5_Type *)0u, (DMA5_Type *)0u, EDMA2, EDMA3, EDMA4 }
+#define DMA5_BASE_PTRS                           { EDMA2, EDMA3, EDMA4 }
+
+/* DMA_CRC - Peripheral instance base addresses */
+/** Peripheral WAKEUP__DMA_CRC2 base address */
+#define WAKEUP__DMA_CRC2_BASE                    (0x427B0000u)
+/** Peripheral WAKEUP__DMA_CRC2 base pointer */
+#define WAKEUP__DMA_CRC2                         ((DMA_CRC_Type *)WAKEUP__DMA_CRC2_BASE)
+/** Peripheral WAKEUP__DMA_CRC4 base address */
+#define WAKEUP__DMA_CRC4_BASE                    (0x427C0000u)
+/** Peripheral WAKEUP__DMA_CRC4 base pointer */
+#define WAKEUP__DMA_CRC4                         ((DMA_CRC_Type *)WAKEUP__DMA_CRC4_BASE)
+/** Array initializer of DMA_CRC peripheral base addresses */
+#define DMA_CRC_BASE_ADDRS                       { WAKEUP__DMA_CRC2_BASE, WAKEUP__DMA_CRC4_BASE }
+/** Array initializer of DMA_CRC peripheral base pointers */
+#define DMA_CRC_BASE_PTRS                        { WAKEUP__DMA_CRC2, WAKEUP__DMA_CRC4 }
 
 /* DWC_usb3 - Peripheral instance base addresses */
 /** Peripheral HSIO__USB_3_01__USB3 base address */
@@ -2224,6 +2077,40 @@ typedef enum _xbar_output_signal
 #define ECAT_BASE_ADDRS                          { ETHERCAT_BASE }
 /** Array initializer of ECAT peripheral base pointers */
 #define ECAT_BASE_PTRS                           { ETHERCAT }
+
+/* EIM - Peripheral instance base addresses */
+/** Peripheral AON__EIMA base address */
+#define AON__EIMA_BASE                           (0x44550000u)
+/** Peripheral AON__EIMA base pointer */
+#define AON__EIMA                                ((EIM_Type *)AON__EIMA_BASE)
+/** Peripheral M7_1__EIM base address */
+#define M7_1__EIM_BASE                           (0x49C60000u)
+/** Peripheral M7_1__EIM base pointer */
+#define M7_1__EIM                                ((EIM_Type *)M7_1__EIM_BASE)
+/** Peripheral M7__EIM base address */
+#define M7__EIM_BASE                             (0x4A060000u)
+/** Peripheral M7__EIM base pointer */
+#define M7__EIM                                  ((EIM_Type *)M7__EIM_BASE)
+/** Peripheral NETC__EIM base address */
+#define NETC__EIM_BASE                           (0x4D070000u)
+/** Peripheral NETC__EIM base pointer */
+#define NETC__EIM                                ((EIM_Type *)NETC__EIM_BASE)
+/** Peripheral NOC__EIMN base address */
+#define NOC__EIMN_BASE                           (0x49210000u)
+/** Peripheral NOC__EIMN base pointer */
+#define NOC__EIMN                                ((EIM_Type *)NOC__EIMN_BASE)
+/** Peripheral NPU__EIM_NPUMIX base address */
+#define NPU__EIM_NPUMIX_BASE                     (0x4A860000u)
+/** Peripheral NPU__EIM_NPUMIX base pointer */
+#define NPU__EIM_NPUMIX                          ((EIM_Type *)NPU__EIM_NPUMIX_BASE)
+/** Peripheral WAKEUP__EIM base address */
+#define WAKEUP__EIM_BASE                         (0x42780000u)
+/** Peripheral WAKEUP__EIM base pointer */
+#define WAKEUP__EIM                              ((EIM_Type *)WAKEUP__EIM_BASE)
+/** Array initializer of EIM peripheral base addresses */
+#define EIM_BASE_ADDRS                           { AON__EIMA_BASE, M7_1__EIM_BASE, M7__EIM_BASE, NETC__EIM_BASE, NOC__EIMN_BASE, NPU__EIM_NPUMIX_BASE, WAKEUP__EIM_BASE }
+/** Array initializer of EIM peripheral base pointers */
+#define EIM_BASE_PTRS                            { AON__EIMA, M7_1__EIM, M7__EIM, NETC__EIM, NOC__EIMN, NPU__EIM_NPUMIX, WAKEUP__EIM }
 
 /* ENDAT2P2 - Peripheral instance base addresses */
 /** Peripheral ENDAT2P2_1 base address */
@@ -2405,6 +2292,16 @@ typedef enum _xbar_output_signal
 /** Array initializer of ENETC_VF_PCI_TYPE0 peripheral base pointers */
 #define ENETC_VF_PCI_TYPE0_BASE_PTRS             { NETC_VF1_PCI_HDR_TYPE0, NETC_VF2_PCI_HDR_TYPE0, NETC_VF3_PCI_HDR_TYPE0 }
 
+/* ENET_PHY - Peripheral instance base addresses */
+/** Peripheral NETC__ENET_PHY0__ENET_PHY base address */
+#define NETC__ENET_PHY0__ENET_PHY_BASE           (0xC00000u)
+/** Peripheral NETC__ENET_PHY0__ENET_PHY base pointer */
+#define NETC__ENET_PHY0__ENET_PHY                ((ENET_PHY_Type *)NETC__ENET_PHY0__ENET_PHY_BASE)
+/** Array initializer of ENET_PHY peripheral base addresses */
+#define ENET_PHY_BASE_ADDRS                      { NETC__ENET_PHY0__ENET_PHY_BASE }
+/** Array initializer of ENET_PHY peripheral base pointers */
+#define ENET_PHY_BASE_PTRS                       { NETC__ENET_PHY0__ENET_PHY }
+
 /* ENET_PHY_CTRL_EX - Peripheral instance base addresses */
 /** Peripheral ENET_PHY_CTRL_EX base address */
 #define ENET_PHY_CTRL_EX_BASE                    (0xC00000u)
@@ -2447,6 +2344,28 @@ typedef enum _xbar_output_signal
 /** Array initializer of EQDC peripheral base pointers */
 #define EQDC_BASE_PTRS                           { EQDC1, EQDC2, EQDC3, EQDC4 }
 
+/* ERM - Peripheral instance base addresses */
+/** Peripheral M7_1__ERM base address */
+#define M7_1__ERM_BASE                           (0x49C70000u)
+/** Peripheral M7_1__ERM base pointer */
+#define M7_1__ERM                                ((ERM_Type *)M7_1__ERM_BASE)
+/** Peripheral M7__ERM base address */
+#define M7__ERM_BASE                             (0x4A070000u)
+/** Peripheral M7__ERM base pointer */
+#define M7__ERM                                  ((ERM_Type *)M7__ERM_BASE)
+/** Peripheral NETC__ERM base address */
+#define NETC__ERM_BASE                           (0x4D060000u)
+/** Peripheral NETC__ERM base pointer */
+#define NETC__ERM                                ((ERM_Type *)NETC__ERM_BASE)
+/** Peripheral WAKEUP__ERM base address */
+#define WAKEUP__ERM_BASE                         (0x42790000u)
+/** Peripheral WAKEUP__ERM base pointer */
+#define WAKEUP__ERM                              ((ERM_Type *)WAKEUP__ERM_BASE)
+/** Array initializer of ERM peripheral base addresses */
+#define ERM_BASE_ADDRS                           { M7_1__ERM_BASE, M7__ERM_BASE, NETC__ERM_BASE, WAKEUP__ERM_BASE }
+/** Array initializer of ERM peripheral base pointers */
+#define ERM_BASE_PTRS                            { M7_1__ERM, M7__ERM, NETC__ERM, WAKEUP__ERM }
+
 /* EWM - Peripheral instance base addresses */
 /** Peripheral EWM base address */
 #define EWM_BASE                                 (0x42950000u)
@@ -2480,6 +2399,16 @@ typedef enum _xbar_output_signal
 #define FLEXIO_BASE_PTRS                         { (FLEXIO_Type *)0u, FLEXIO1, FLEXIO2, FLEXIO3, FLEXIO4 }
 /** Interrupt vectors for the FLEXIO peripheral type */
 #define FLEXIO_IRQS                              { NotAvail_IRQn, FLEXIO1_IRQn, FLEXIO2_IRQn, NotAvail_IRQn, NotAvail_IRQn }
+
+/* FLEXSPI_SLV - Peripheral instance base addresses */
+/** Peripheral WAKEUP__XSPI_RESPONDER base address */
+#define WAKEUP__XSPI_RESPONDER_BASE              (0x42890000u)
+/** Peripheral WAKEUP__XSPI_RESPONDER base pointer */
+#define WAKEUP__XSPI_RESPONDER                   ((FLEXSPI_SLV_Type *)WAKEUP__XSPI_RESPONDER_BASE)
+/** Array initializer of FLEXSPI_SLV peripheral base addresses */
+#define FLEXSPI_SLV_BASE_ADDRS                   { WAKEUP__XSPI_RESPONDER_BASE }
+/** Array initializer of FLEXSPI_SLV peripheral base pointers */
+#define FLEXSPI_SLV_BASE_PTRS                    { WAKEUP__XSPI_RESPONDER }
 
 /* FRO - Peripheral instance base addresses */
 /** Peripheral FRO base address */
@@ -2579,27 +2508,6 @@ typedef enum _xbar_output_signal
 /** Array initializer of HIPERFACE peripheral base pointers */
 #define HIPERFACE_BASE_PTRS                      { HIPERFACE1, HIPERFACE2 }
 
-/* HSIO_BLK_CTRL_HSIOMIX - Peripheral instance base addresses */
-/** Peripheral BLK_CTRL_HSIOMIX base address */
-#define BLK_CTRL_HSIOMIX_BASE                    (0x4C010000u)
-/** Peripheral BLK_CTRL_HSIOMIX base pointer */
-#define BLK_CTRL_HSIOMIX                         ((HSIO_BLK_CTRL_HSIOMIX_Type *)BLK_CTRL_HSIOMIX_BASE)
-/** Array initializer of HSIO_BLK_CTRL_HSIOMIX peripheral base addresses */
-#define HSIO_BLK_CTRL_HSIOMIX_BASE_ADDRS         { BLK_CTRL_HSIOMIX_BASE }
-/** Array initializer of HSIO_BLK_CTRL_HSIOMIX peripheral base pointers */
-#define HSIO_BLK_CTRL_HSIOMIX_BASE_PTRS          { BLK_CTRL_HSIOMIX }
-
-/* HSIO_TCU - Peripheral instance base addresses */
-/** Peripheral HSIO__TCU base address */
-#define HSIO__TCU_BASE                           (0x4C000000u)
-/** Peripheral HSIO__TCU base pointer */
-#define HSIO__TCU                                ((HSIO_TCU_Type *)HSIO__TCU_BASE)
-/** Array initializer of HSIO_TCU peripheral base addresses */
-#define HSIO_TCU_BASE_ADDRS                      { HSIO__TCU_BASE }
-/** Array initializer of HSIO_TCU peripheral base pointers */
-#define HSIO_TCU_BASE_PTRS                       { HSIO__TCU }
-
-
 /* I2S - Peripheral instance base addresses */
 /** Peripheral SAI1 base address */
 #define SAI1_BASE                                (0x443B0000u)
@@ -2650,6 +2558,16 @@ typedef enum _xbar_output_signal
 #define IGF_BASE_ADDRS                           { IGF_BASE }
 /** Array initializer of IGF peripheral base pointers */
 #define IGF_BASE_PTRS                            { IGF }
+
+/* INTM - Peripheral instance base addresses */
+/** Peripheral AON__INTM base address */
+#define AON__INTM_BASE                           (0x44580000u)
+/** Peripheral AON__INTM base pointer */
+#define AON__INTM                                ((INTM_Type *)AON__INTM_BASE)
+/** Array initializer of INTM peripheral base addresses */
+#define INTM_BASE_ADDRS                          { AON__INTM_BASE }
+/** Array initializer of INTM peripheral base pointers */
+#define INTM_BASE_PTRS                           { AON__INTM }
 
 /* IOMUXC - Peripheral instance base addresses */
 /** Peripheral IOMUXC base address */
@@ -2865,99 +2783,65 @@ typedef enum _xbar_output_signal
 /** Array initializer of LPUART peripheral base pointers */
 #define LPUART_BASE_PTRS                         { (LPUART_Type *)0u, LPUART1, LPUART2, LPUART3, LPUART4, LPUART5, LPUART6, LPUART7, LPUART8, LPUART9, LPUART10, LPUART11, LPUART12 }
 /** Interrupt vectors for the LPUART peripheral type */
-#define LPUART_RX_TX_IRQS                        { NotAvail_IRQn, LPUART1_IRQn, LPUART2_IRQn, LPUART3_IRQn, LPUART4_IRQn, LPUART5_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }
+#define LPUART_RX_TX_IRQS                        { NotAvail_IRQn, LPUART1_IRQn, LPUART2_IRQn, LPUART3_IRQn, LPUART4_IRQn, LPUART5_IRQn, LPUART6_IRQn, LPUART7_IRQn, LPUART8_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }
 
-/* M7_A7_APB_MCM - Peripheral instance base addresses */
-/** Peripheral M7_1__A7_APB_MCM1 base address */
-#define M7_1__A7_APB_MCM1_BASE                   (0x49CA0000u)
-/** Peripheral M7_1__A7_APB_MCM1 base pointer */
-#define M7_1__A7_APB_MCM1                        ((M7_A7_APB_MCM_Type *)M7_1__A7_APB_MCM1_BASE)
-/** Peripheral M7__A7_APB_MCM1 base address */
-#define M7__A7_APB_MCM1_BASE                     (0x4A0A0000u)
-/** Peripheral M7__A7_APB_MCM1 base pointer */
-#define M7__A7_APB_MCM1                          ((M7_A7_APB_MCM_Type *)M7__A7_APB_MCM1_BASE)
-/** Array initializer of M7_A7_APB_MCM peripheral base addresses */
-#define M7_A7_APB_MCM_BASE_ADDRS                 { M7_1__A7_APB_MCM1_BASE, M7__A7_APB_MCM1_BASE }
-/** Array initializer of M7_A7_APB_MCM peripheral base pointers */
-#define M7_A7_APB_MCM_BASE_PTRS                  { M7_1__A7_APB_MCM1, M7__A7_APB_MCM1 }
-
-/* M7_CMU - Peripheral instance base addresses */
-/** Peripheral M7_1__CMU_M0 base address */
-#define M7_1__CMU_M0_BASE                        (0x49C80000u)
-/** Peripheral M7_1__CMU_M0 base pointer */
-#define M7_1__CMU_M0                             ((M7_CMU_Type *)M7_1__CMU_M0_BASE)
-/** Peripheral M7_1__CMU_M1 base address */
-#define M7_1__CMU_M1_BASE                        (0x49C90000u)
-/** Peripheral M7_1__CMU_M1 base pointer */
-#define M7_1__CMU_M1                             ((M7_CMU_Type *)M7_1__CMU_M1_BASE)
-/** Peripheral M7__CMU_M0 base address */
-#define M7__CMU_M0_BASE                          (0x4A080000u)
-/** Peripheral M7__CMU_M0 base pointer */
-#define M7__CMU_M0                               ((M7_CMU_Type *)M7__CMU_M0_BASE)
-/** Peripheral M7__CMU_M1 base address */
-#define M7__CMU_M1_BASE                          (0x4A090000u)
-/** Peripheral M7__CMU_M1 base pointer */
-#define M7__CMU_M1                               ((M7_CMU_Type *)M7__CMU_M1_BASE)
-/** Array initializer of M7_CMU peripheral base addresses */
-#define M7_CMU_BASE_ADDRS                        { M7_1__CMU_M0_BASE, M7_1__CMU_M1_BASE, M7__CMU_M0_BASE, M7__CMU_M1_BASE }
-/** Array initializer of M7_CMU peripheral base pointers */
-#define M7_CMU_BASE_PTRS                         { M7_1__CMU_M0, M7_1__CMU_M1, M7__CMU_M0, M7__CMU_M1 }
-
-/* M7_EIM - Peripheral instance base addresses */
-/** Peripheral M7_1__EIM base address */
-#define M7_1__EIM_BASE                           (0x49C60000u)
-/** Peripheral M7_1__EIM base pointer */
-#define M7_1__EIM                                ((M7_EIM_Type *)M7_1__EIM_BASE)
-/** Peripheral M7__EIM base address */
-#define M7__EIM_BASE                             (0x4A060000u)
-/** Peripheral M7__EIM base pointer */
-#define M7__EIM                                  ((M7_EIM_Type *)M7__EIM_BASE)
-/** Array initializer of M7_EIM peripheral base addresses */
-#define M7_EIM_BASE_ADDRS                        { M7_1__EIM_BASE, M7__EIM_BASE }
-/** Array initializer of M7_EIM peripheral base pointers */
-#define M7_EIM_BASE_PTRS                         { M7_1__EIM, M7__EIM }
-
-/* M7_ERM - Peripheral instance base addresses */
-/** Peripheral M7_1__ERM base address */
-#define M7_1__ERM_BASE                           (0x49C70000u)
-/** Peripheral M7_1__ERM base pointer */
-#define M7_1__ERM                                ((M7_ERM_Type *)M7_1__ERM_BASE)
-/** Peripheral M7__ERM base address */
-#define M7__ERM_BASE                             (0x4A070000u)
-/** Peripheral M7__ERM base pointer */
-#define M7__ERM                                  ((M7_ERM_Type *)M7__ERM_BASE)
-/** Array initializer of M7_ERM peripheral base addresses */
-#define M7_ERM_BASE_ADDRS                        { M7_1__ERM_BASE, M7__ERM_BASE }
-/** Array initializer of M7_ERM peripheral base pointers */
-#define M7_ERM_BASE_PTRS                         { M7_1__ERM, M7__ERM }
-
-/* M7_LSTCU - Peripheral instance base addresses */
+/* LSTCU - Peripheral instance base addresses */
+/** Peripheral AON__LSTCUA base address */
+#define AON__LSTCUA_BASE                         (0x445A0000u)
+/** Peripheral AON__LSTCUA base pointer */
+#define AON__LSTCUA                              ((LSTCU_Type *)AON__LSTCUA_BASE)
+/** Peripheral DDRC__LSTCU base address */
+#define DDRC__LSTCU_BASE                         (0x4E050000u)
+/** Peripheral DDRC__LSTCU base pointer */
+#define DDRC__LSTCU                              ((LSTCU_Type *)DDRC__LSTCU_BASE)
 /** Peripheral M7_1__LSTCU_M7MIX base address */
 #define M7_1__LSTCU_M7MIX_BASE                   (0x49C50000u)
 /** Peripheral M7_1__LSTCU_M7MIX base pointer */
-#define M7_1__LSTCU_M7MIX                        ((M7_LSTCU_Type *)M7_1__LSTCU_M7MIX_BASE)
+#define M7_1__LSTCU_M7MIX                        ((LSTCU_Type *)M7_1__LSTCU_M7MIX_BASE)
 /** Peripheral M7__LSTCU_M7MIX base address */
 #define M7__LSTCU_M7MIX_BASE                     (0x4A050000u)
 /** Peripheral M7__LSTCU_M7MIX base pointer */
-#define M7__LSTCU_M7MIX                          ((M7_LSTCU_Type *)M7__LSTCU_M7MIX_BASE)
-/** Array initializer of M7_LSTCU peripheral base addresses */
-#define M7_LSTCU_BASE_ADDRS                      { M7_1__LSTCU_M7MIX_BASE, M7__LSTCU_M7MIX_BASE }
-/** Array initializer of M7_LSTCU peripheral base pointers */
-#define M7_LSTCU_BASE_PTRS                       { M7_1__LSTCU_M7MIX, M7__LSTCU_M7MIX }
+#define M7__LSTCU_M7MIX                          ((LSTCU_Type *)M7__LSTCU_M7MIX_BASE)
+/** Peripheral NETC__LSTCU base address */
+#define NETC__LSTCU_BASE                         (0x4D090000u)
+/** Peripheral NETC__LSTCU base pointer */
+#define NETC__LSTCU                              ((LSTCU_Type *)NETC__LSTCU_BASE)
+/** Peripheral NOC__LSTCUN base address */
+#define NOC__LSTCUN_BASE                         (0x490B0000u)
+/** Peripheral NOC__LSTCUN base pointer */
+#define NOC__LSTCUN                              ((LSTCU_Type *)NOC__LSTCUN_BASE)
+/** Peripheral NPU__LSTCU_NPUMIX base address */
+#define NPU__LSTCU_NPUMIX_BASE                   (0x4A850000u)
+/** Peripheral NPU__LSTCU_NPUMIX base pointer */
+#define NPU__LSTCU_NPUMIX                        ((LSTCU_Type *)NPU__LSTCU_NPUMIX_BASE)
+/** Array initializer of LSTCU peripheral base addresses */
+#define LSTCU_BASE_ADDRS                         { AON__LSTCUA_BASE, DDRC__LSTCU_BASE, M7_1__LSTCU_M7MIX_BASE, M7__LSTCU_M7MIX_BASE, NETC__LSTCU_BASE, NOC__LSTCUN_BASE, NPU__LSTCU_NPUMIX_BASE }
+/** Array initializer of LSTCU peripheral base pointers */
+#define LSTCU_BASE_PTRS                          { AON__LSTCUA, DDRC__LSTCU, M7_1__LSTCU_M7MIX, M7__LSTCU_M7MIX, NETC__LSTCU, NOC__LSTCUN, NPU__LSTCU_NPUMIX }
 
-/* M7_TCU - Peripheral instance base addresses */
-/** Peripheral M7_1__TCU base address */
-#define M7_1__TCU_BASE                           (0x49C00000u)
-/** Peripheral M7_1__TCU base pointer */
-#define M7_1__TCU                                ((M7_TCU_Type *)M7_1__TCU_BASE)
-/** Peripheral M7__TCU base address */
-#define M7__TCU_BASE                             (0x4A000000u)
-/** Peripheral M7__TCU base pointer */
-#define M7__TCU                                  ((M7_TCU_Type *)M7__TCU_BASE)
-/** Array initializer of M7_TCU peripheral base addresses */
-#define M7_TCU_BASE_ADDRS                        { M7_1__TCU_BASE, M7__TCU_BASE }
-/** Array initializer of M7_TCU peripheral base pointers */
-#define M7_TCU_BASE_PTRS                         { M7_1__TCU, M7__TCU }
+/* MCM - Peripheral instance base addresses */
+/** Peripheral M7_1__A7_APB_MCM1 base address */
+#define M7_1__A7_APB_MCM1_BASE                   (0x49CA0000u)
+/** Peripheral M7_1__A7_APB_MCM1 base pointer */
+#define M7_1__A7_APB_MCM1                        ((MCM_Type *)M7_1__A7_APB_MCM1_BASE)
+/** Peripheral M7__A7_APB_MCM1 base address */
+#define M7__A7_APB_MCM1_BASE                     (0x4A0A0000u)
+/** Peripheral M7__A7_APB_MCM1 base pointer */
+#define M7__A7_APB_MCM1                          ((MCM_Type *)M7__A7_APB_MCM1_BASE)
+/** Array initializer of MCM peripheral base addresses */
+#define MCM_BASE_ADDRS                           { M7_1__A7_APB_MCM1_BASE, M7__A7_APB_MCM1_BASE }
+/** Array initializer of MCM peripheral base pointers */
+#define MCM_BASE_PTRS                            { M7_1__A7_APB_MCM1, M7__A7_APB_MCM1 }
+
+/* MCM_CM4 - Peripheral instance base addresses */
+/** Peripheral AON__MCM base address */
+#define AON__MCM_BASE                            (0xE0080000u)
+/** Peripheral AON__MCM base pointer */
+#define AON__MCM                                 ((MCM_CM4_Type *)AON__MCM_BASE)
+/** Array initializer of MCM_CM4 peripheral base addresses */
+#define MCM_CM4_BASE_ADDRS                       { AON__MCM_BASE }
+/** Array initializer of MCM_CM4 peripheral base pointers */
+#define MCM_CM4_BASE_PTRS                        { AON__MCM }
 
 /* MSGINTR - Peripheral instance base addresses */
 /** Peripheral MSGINTR1 base address */
@@ -3174,70 +3058,46 @@ typedef enum _xbar_output_signal
 #define WAKEUP__MUI_A18__MUB_BASE                (0x42B80000u)
 /** Peripheral WAKEUP__MUI_A18__MUB base pointer */
 #define WAKEUP__MUI_A18__MUB                     ((MU_Type *)WAKEUP__MUI_A18__MUB_BASE)
-/** Peripheral WAKEUP__V2X__MU0__MUA base address */
-#define WAKEUP__V2X__MU0__MUA_BASE               (0x87300000u)
-/** Peripheral WAKEUP__V2X__MU0__MUA base pointer */
-#define WAKEUP__V2X__MU0__MUA                    ((MU_Type *)WAKEUP__V2X__MU0__MUA_BASE)
-/** Peripheral WAKEUP__V2X__MU1__MUA base address */
-#define WAKEUP__V2X__MU1__MUA_BASE               (0x87310000u)
-/** Peripheral WAKEUP__V2X__MU1__MUA base pointer */
-#define WAKEUP__V2X__MU1__MUA                    ((MU_Type *)WAKEUP__V2X__MU1__MUA_BASE)
-/** Peripheral WAKEUP__V2X__MU2__MUA base address */
-#define WAKEUP__V2X__MU2__MUA_BASE               (0x87320000u)
-/** Peripheral WAKEUP__V2X__MU2__MUA base pointer */
-#define WAKEUP__V2X__MU2__MUA                    ((MU_Type *)WAKEUP__V2X__MU2__MUA_BASE)
-/** Peripheral WAKEUP__V2X__MU3__MUA base address */
-#define WAKEUP__V2X__MU3__MUA_BASE               (0x87330000u)
-/** Peripheral WAKEUP__V2X__MU3__MUA base pointer */
-#define WAKEUP__V2X__MU3__MUA                    ((MU_Type *)WAKEUP__V2X__MU3__MUA_BASE)
-/** Peripheral WAKEUP__V2X__MU4__MUA base address */
-#define WAKEUP__V2X__MU4__MUA_BASE               (0x87340000u)
-/** Peripheral WAKEUP__V2X__MU4__MUA base pointer */
-#define WAKEUP__V2X__MU4__MUA                    ((MU_Type *)WAKEUP__V2X__MU4__MUA_BASE)
-/** Peripheral WAKEUP__V2X__MU5__MUB base address */
-#define WAKEUP__V2X__MU5__MUB_BASE               (0x87358000u)
-/** Peripheral WAKEUP__V2X__MU5__MUB base pointer */
-#define WAKEUP__V2X__MU5__MUB                    ((MU_Type *)WAKEUP__V2X__MU5__MUB_BASE)
+/** Peripheral WAKEUP__PRIME__MU0__MUA base address */
+#define WAKEUP__PRIME__MU0__MUA_BASE             (0x87300000u)
+/** Peripheral WAKEUP__PRIME__MU0__MUA base pointer */
+#define WAKEUP__PRIME__MU0__MUA                  ((MU_Type *)WAKEUP__PRIME__MU0__MUA_BASE)
+/** Peripheral WAKEUP__PRIME__MU1__MUA base address */
+#define WAKEUP__PRIME__MU1__MUA_BASE             (0x87310000u)
+/** Peripheral WAKEUP__PRIME__MU1__MUA base pointer */
+#define WAKEUP__PRIME__MU1__MUA                  ((MU_Type *)WAKEUP__PRIME__MU1__MUA_BASE)
+/** Peripheral WAKEUP__PRIME__MU2__MUA base address */
+#define WAKEUP__PRIME__MU2__MUA_BASE             (0x87320000u)
+/** Peripheral WAKEUP__PRIME__MU2__MUA base pointer */
+#define WAKEUP__PRIME__MU2__MUA                  ((MU_Type *)WAKEUP__PRIME__MU2__MUA_BASE)
+/** Peripheral WAKEUP__PRIME__MU3__MUA base address */
+#define WAKEUP__PRIME__MU3__MUA_BASE             (0x87330000u)
+/** Peripheral WAKEUP__PRIME__MU3__MUA base pointer */
+#define WAKEUP__PRIME__MU3__MUA                  ((MU_Type *)WAKEUP__PRIME__MU3__MUA_BASE)
+/** Peripheral WAKEUP__PRIME__MU4__MUA base address */
+#define WAKEUP__PRIME__MU4__MUA_BASE             (0x87340000u)
+/** Peripheral WAKEUP__PRIME__MU4__MUA base pointer */
+#define WAKEUP__PRIME__MU4__MUA                  ((MU_Type *)WAKEUP__PRIME__MU4__MUA_BASE)
+/** Peripheral WAKEUP__PRIME__MU5__MUB base address */
+#define WAKEUP__PRIME__MU5__MUB_BASE             (0x87358000u)
+/** Peripheral WAKEUP__PRIME__MU5__MUB base pointer */
+#define WAKEUP__PRIME__MU5__MUB                  ((MU_Type *)WAKEUP__PRIME__MU5__MUB_BASE)
 /** Array initializer of MU peripheral base addresses */
-#define MU_BASE_ADDRS                            { MU1_MUA_BASE, MU1_MUB_BASE, MU2_MUA_BASE, MU2_MUB_BASE, MU3_MUA_BASE, MU3_MUB_BASE, MU4_MUA_BASE, MU4_MUB_BASE, MU5_MUA_BASE, MU5_MUB_BASE, MU6_MUA_BASE, MU6_MUB_BASE, MU7_MUA_BASE, MU7_MUB_BASE, MU8_MUA_BASE, MU8_MUB_BASE, MU9_MUA_BASE, MU9_MUB_BASE, NETC__MUA1__MUA_BASE, NETC__MUA1__MUB_BASE, NETC__MUA2__MUA_BASE, NETC__MUA2__MUB_BASE, NETC__MUA3__MUA_BASE, NETC__MUA3__MUB_BASE, NETC__MUA4__MUA_BASE, NETC__MUA4__MUB_BASE, WAKEUP__MUI_A10__MUA_BASE, WAKEUP__MUI_A10__MUB_BASE, WAKEUP__MUI_A11__MUA_BASE, WAKEUP__MUI_A11__MUB_BASE, WAKEUP__MUI_A12__MUA_BASE, WAKEUP__MUI_A12__MUB_BASE, WAKEUP__MUI_A13__MUA_BASE, WAKEUP__MUI_A13__MUB_BASE, WAKEUP__MUI_A14__MUA_BASE, WAKEUP__MUI_A14__MUB_BASE, WAKEUP__MUI_A15__MUA_BASE, WAKEUP__MUI_A15__MUB_BASE, WAKEUP__MUI_A16__MUA_BASE, WAKEUP__MUI_A16__MUB_BASE, WAKEUP__MUI_A17__MUA_BASE, WAKEUP__MUI_A17__MUB_BASE, WAKEUP__MUI_A18__MUA_BASE, WAKEUP__MUI_A18__MUB_BASE, WAKEUP__V2X__MU0__MUA_BASE, WAKEUP__V2X__MU1__MUA_BASE, WAKEUP__V2X__MU2__MUA_BASE, WAKEUP__V2X__MU3__MUA_BASE, WAKEUP__V2X__MU4__MUA_BASE, WAKEUP__V2X__MU5__MUB_BASE }
+#define MU_BASE_ADDRS                            { MU1_MUA_BASE, MU1_MUB_BASE, MU2_MUA_BASE, MU2_MUB_BASE, MU3_MUA_BASE, MU3_MUB_BASE, MU4_MUA_BASE, MU4_MUB_BASE, MU5_MUA_BASE, MU5_MUB_BASE, MU6_MUA_BASE, MU6_MUB_BASE, MU7_MUA_BASE, MU7_MUB_BASE, MU8_MUA_BASE, MU8_MUB_BASE, MU9_MUA_BASE, MU9_MUB_BASE, NETC__MUA1__MUA_BASE, NETC__MUA1__MUB_BASE, NETC__MUA2__MUA_BASE, NETC__MUA2__MUB_BASE, NETC__MUA3__MUA_BASE, NETC__MUA3__MUB_BASE, NETC__MUA4__MUA_BASE, NETC__MUA4__MUB_BASE, WAKEUP__MUI_A10__MUA_BASE, WAKEUP__MUI_A10__MUB_BASE, WAKEUP__MUI_A11__MUA_BASE, WAKEUP__MUI_A11__MUB_BASE, WAKEUP__MUI_A12__MUA_BASE, WAKEUP__MUI_A12__MUB_BASE, WAKEUP__MUI_A13__MUA_BASE, WAKEUP__MUI_A13__MUB_BASE, WAKEUP__MUI_A14__MUA_BASE, WAKEUP__MUI_A14__MUB_BASE, WAKEUP__MUI_A15__MUA_BASE, WAKEUP__MUI_A15__MUB_BASE, WAKEUP__MUI_A16__MUA_BASE, WAKEUP__MUI_A16__MUB_BASE, WAKEUP__MUI_A17__MUA_BASE, WAKEUP__MUI_A17__MUB_BASE, WAKEUP__MUI_A18__MUA_BASE, WAKEUP__MUI_A18__MUB_BASE, WAKEUP__PRIME__MU0__MUA_BASE, WAKEUP__PRIME__MU1__MUA_BASE, WAKEUP__PRIME__MU2__MUA_BASE, WAKEUP__PRIME__MU3__MUA_BASE, WAKEUP__PRIME__MU4__MUA_BASE, WAKEUP__PRIME__MU5__MUB_BASE }
 /** Array initializer of MU peripheral base pointers */
-#define MU_BASE_PTRS                             { MU1_MUA, MU1_MUB, MU2_MUA, MU2_MUB, MU3_MUA, MU3_MUB, MU4_MUA, MU4_MUB, MU5_MUA, MU5_MUB, MU6_MUA, MU6_MUB, MU7_MUA, MU7_MUB, MU8_MUA, MU8_MUB, MU9_MUA, MU9_MUB, NETC__MUA1__MUA, NETC__MUA1__MUB, NETC__MUA2__MUA, NETC__MUA2__MUB, NETC__MUA3__MUA, NETC__MUA3__MUB, NETC__MUA4__MUA, NETC__MUA4__MUB, WAKEUP__MUI_A10__MUA, WAKEUP__MUI_A10__MUB, WAKEUP__MUI_A11__MUA, WAKEUP__MUI_A11__MUB, WAKEUP__MUI_A12__MUA, WAKEUP__MUI_A12__MUB, WAKEUP__MUI_A13__MUA, WAKEUP__MUI_A13__MUB, WAKEUP__MUI_A14__MUA, WAKEUP__MUI_A14__MUB, WAKEUP__MUI_A15__MUA, WAKEUP__MUI_A15__MUB, WAKEUP__MUI_A16__MUA, WAKEUP__MUI_A16__MUB, WAKEUP__MUI_A17__MUA, WAKEUP__MUI_A17__MUB, WAKEUP__MUI_A18__MUA, WAKEUP__MUI_A18__MUB, WAKEUP__V2X__MU0__MUA, WAKEUP__V2X__MU1__MUA, WAKEUP__V2X__MU2__MUA, WAKEUP__V2X__MU3__MUA, WAKEUP__V2X__MU4__MUA, WAKEUP__V2X__MU5__MUB }
+#define MU_BASE_PTRS                             { MU1_MUA, MU1_MUB, MU2_MUA, MU2_MUB, MU3_MUA, MU3_MUB, MU4_MUA, MU4_MUB, MU5_MUA, MU5_MUB, MU6_MUA, MU6_MUB, MU7_MUA, MU7_MUB, MU8_MUA, MU8_MUB, MU9_MUA, MU9_MUB, NETC__MUA1__MUA, NETC__MUA1__MUB, NETC__MUA2__MUA, NETC__MUA2__MUB, NETC__MUA3__MUA, NETC__MUA3__MUB, NETC__MUA4__MUA, NETC__MUA4__MUB, WAKEUP__MUI_A10__MUA, WAKEUP__MUI_A10__MUB, WAKEUP__MUI_A11__MUA, WAKEUP__MUI_A11__MUB, WAKEUP__MUI_A12__MUA, WAKEUP__MUI_A12__MUB, WAKEUP__MUI_A13__MUA, WAKEUP__MUI_A13__MUB, WAKEUP__MUI_A14__MUA, WAKEUP__MUI_A14__MUB, WAKEUP__MUI_A15__MUA, WAKEUP__MUI_A15__MUB, WAKEUP__MUI_A16__MUA, WAKEUP__MUI_A16__MUB, WAKEUP__MUI_A17__MUA, WAKEUP__MUI_A17__MUB, WAKEUP__MUI_A18__MUA, WAKEUP__MUI_A18__MUB, WAKEUP__PRIME__MU0__MUA, WAKEUP__PRIME__MU1__MUA, WAKEUP__PRIME__MU2__MUA, WAKEUP__PRIME__MU3__MUA, WAKEUP__PRIME__MU4__MUA, WAKEUP__PRIME__MU5__MUB }
 /** Interrupt vectors for the MU peripheral type */
 #define MU_IRQS                                  { MU1_A_IRQn, MU1_B_IRQn, MU2_A_IRQn, MU2_B_IRQn, MU3_A_IRQn, MU3_B_IRQn, MU4_A_IRQn, MU4_B_IRQn, MU5_A_IRQn, MU5_B_IRQn, MU6_A_IRQn, MU6_B_IRQn, NotAvail_IRQn, MU7_B_IRQn, NotAvail_IRQn, MU8_B_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }
+/*!
+ * @brief Core boot mode.
+ */
+typedef enum _mu_core_boot_mode
+{
+    kMU_CoreBootFromAddr0 = 0x00U, /*!< Boot from 0x00.      */
+    kMU_CoreBootFromFlash = 0x01U, /*!< Boot from Flash base. */
+    kMU_CoreBootFromItcm  = 0x02U, /*!< Boot from ITCM base. */
+} mu_core_boot_mode_t;
 
-/* NECTMIX_CM33_AIPS - Peripheral instance base addresses */
-/** Peripheral NETC__CM33_PCF1 base address */
-#define NETC__CM33_PCF1_BASE                     (0x4D1B0000u)
-/** Peripheral NETC__CM33_PCF1 base pointer */
-#define NETC__CM33_PCF1                          ((NECTMIX_CM33_AIPS_Type *)NETC__CM33_PCF1_BASE)
-/** Peripheral NETC__CM33_PSF1 base address */
-#define NETC__CM33_PSF1_BASE                     (0x4D1C0000u)
-/** Peripheral NETC__CM33_PSF1 base pointer */
-#define NETC__CM33_PSF1                          ((NECTMIX_CM33_AIPS_Type *)NETC__CM33_PSF1_BASE)
-/** Array initializer of NECTMIX_CM33_AIPS peripheral base addresses */
-#define NECTMIX_CM33_AIPS_BASE_ADDRS             { NETC__CM33_PCF1_BASE, NETC__CM33_PSF1_BASE }
-/** Array initializer of NECTMIX_CM33_AIPS peripheral base pointers */
-#define NECTMIX_CM33_AIPS_BASE_PTRS              { NETC__CM33_PCF1, NETC__CM33_PSF1 }
-
-/* NETC_CMU - Peripheral instance base addresses */
-/** Peripheral NETC__CMU base address */
-#define NETC__CMU_BASE                           (0x4D080000u)
-/** Peripheral NETC__CMU base pointer */
-#define NETC__CMU                                ((NETC_CMU_Type *)NETC__CMU_BASE)
-/** Array initializer of NETC_CMU peripheral base addresses */
-#define NETC_CMU_BASE_ADDRS                      { NETC__CMU_BASE }
-/** Array initializer of NETC_CMU peripheral base pointers */
-#define NETC_CMU_BASE_PTRS                       { NETC__CMU }
-
-/* NETC_EIM - Peripheral instance base addresses */
-/** Peripheral NETC__EIM base address */
-#define NETC__EIM_BASE                           (0x4D070000u)
-/** Peripheral NETC__EIM base pointer */
-#define NETC__EIM                                ((NETC_EIM_Type *)NETC__EIM_BASE)
-/** Array initializer of NETC_EIM peripheral base addresses */
-#define NETC_EIM_BASE_ADDRS                      { NETC__EIM_BASE }
-/** Array initializer of NETC_EIM peripheral base pointers */
-#define NETC_EIM_BASE_PTRS                       { NETC__EIM }
 
 /* NETC_ENETC - Peripheral instance base addresses */
 /** Peripheral ENETC0_BASE base address */
@@ -3260,16 +3120,6 @@ typedef enum _xbar_output_signal
 #define NETC_ENETC_BASE_ADDRS                    { ENETC0_BASE_BASE, ENETC1_BASE_BASE, ENETC2_BASE_BASE, ENETC3_BASE_BASE }
 /** Array initializer of NETC_ENETC peripheral base pointers */
 #define NETC_ENETC_BASE_PTRS                     { ENETC0_BASE, ENETC1_BASE, ENETC2_BASE, ENETC3_BASE }
-
-/* NETC_ERM - Peripheral instance base addresses */
-/** Peripheral NETC__ERM base address */
-#define NETC__ERM_BASE                           (0x4D060000u)
-/** Peripheral NETC__ERM base pointer */
-#define NETC__ERM                                ((NETC_ERM_Type *)NETC__ERM_BASE)
-/** Array initializer of NETC_ERM peripheral base addresses */
-#define NETC_ERM_BASE_ADDRS                      { NETC__ERM_BASE }
-/** Array initializer of NETC_ERM peripheral base pointers */
-#define NETC_ERM_BASE_PTRS                       { NETC__ERM }
 
 /* NETC_ETH_LINK - Peripheral instance base addresses */
 /** Peripheral ENETC0_ETH_MAC_PORT base address */
@@ -3310,16 +3160,6 @@ typedef enum _xbar_output_signal
 #define NETC_IERB_BASE_ADDRS                     { NETC_IERB_BASE }
 /** Array initializer of NETC_IERB peripheral base pointers */
 #define NETC_IERB_BASE_PTRS                      { NETC_IERB }
-
-/* NETC_LSTCU - Peripheral instance base addresses */
-/** Peripheral NETC__LSTCU base address */
-#define NETC__LSTCU_BASE                         (0x4D090000u)
-/** Peripheral NETC__LSTCU base pointer */
-#define NETC__LSTCU                              ((NETC_LSTCU_Type *)NETC__LSTCU_BASE)
-/** Array initializer of NETC_LSTCU peripheral base addresses */
-#define NETC_LSTCU_BASE_ADDRS                    { NETC__LSTCU_BASE }
-/** Array initializer of NETC_LSTCU peripheral base pointers */
-#define NETC_LSTCU_BASE_PTRS                     { NETC__LSTCU }
 
 /* NETC_MAX_CORE - Peripheral instance base addresses */
 /** Peripheral NETC__AXBS_MAX_CORE base address */
@@ -3423,26 +3263,6 @@ typedef enum _xbar_output_signal
 /** Array initializer of NETC_SW_ENETC peripheral base pointers */
 #define NETC_SW_ENETC_BASE_PTRS                  { ENETC0_COMMON, ENETC1_COMMON, ENETC2_COMMON, SW0_COMMON }
 
-/* NETC_TCU - Peripheral instance base addresses */
-/** Peripheral NETC__TCU base address */
-#define NETC__TCU_BASE                           (0x4C800000u)
-/** Peripheral NETC__TCU base pointer */
-#define NETC__TCU                                ((NETC_TCU_Type *)NETC__TCU_BASE)
-/** Array initializer of NETC_TCU peripheral base addresses */
-#define NETC_TCU_BASE_ADDRS                      { NETC__TCU_BASE }
-/** Array initializer of NETC_TCU peripheral base pointers */
-#define NETC_TCU_BASE_PTRS                       { NETC__TCU }
-
-/* NETC_TCU_CM33 - Peripheral instance base addresses */
-/** Peripheral NETC__TCU_CM33 base address */
-#define NETC__TCU_CM33_BASE                      (0x4D000000u)
-/** Peripheral NETC__TCU_CM33 base pointer */
-#define NETC__TCU_CM33                           ((NETC_TCU_CM33_Type *)NETC__TCU_CM33_BASE)
-/** Array initializer of NETC_TCU_CM33 peripheral base addresses */
-#define NETC_TCU_CM33_BASE_ADDRS                 { NETC__TCU_CM33_BASE }
-/** Array initializer of NETC_TCU_CM33 peripheral base pointers */
-#define NETC_TCU_CM33_BASE_PTRS                  { NETC__TCU_CM33 }
-
 /* NETC_TMR_BASE - Peripheral instance base addresses */
 /** Peripheral NETC__ECAM_PCI_EMDIO0_BAR_0__TMR1_BASE base address */
 #define NETC__ECAM_PCI_EMDIO0_BAR_0__TMR1_BASE_BASE (0x4CDA0000u)
@@ -3457,8 +3277,6 @@ typedef enum _xbar_output_signal
 /** Array initializer of NETC_TMR_BASE peripheral base pointers */
 #define NETC_TMR_BASE_BASE_PTRS                  { NETC__ECAM_PCI_EMDIO0_BAR_0__TMR1_BASE, NETC__ECAM_PCI_EMDIO0_BAR_0__TMR2_BASE }
 
-
-
 /* NEUTRON - Peripheral instance base addresses */
 /** Peripheral NPU__NEUTRON_NPU__NEUTRON0__NEUTRON base address */
 #define NPU__NEUTRON_NPU__NEUTRON0__NEUTRON_BASE (0x4ABC0000u)
@@ -3472,727 +3290,6 @@ typedef enum _xbar_output_signal
 #define NEUTRON_BASE_ADDRS                       { NPU__NEUTRON_NPU__NEUTRON0__NEUTRON_BASE, NPU__NEUTRON_NPU__NEUTRON_GANGED__NEUTRON_BASE }
 /** Array initializer of NEUTRON peripheral base pointers */
 #define NEUTRON_BASE_PTRS                        { NPU__NEUTRON_NPU__NEUTRON0__NEUTRON, NPU__NEUTRON_NPU__NEUTRON_GANGED__NEUTRON }
-
-/* NOC_BLK_CTRL_NOCMIX - Peripheral instance base addresses */
-/** Peripheral BLK_CTRL_NOCMIX base address */
-#define BLK_CTRL_NOCMIX_BASE                     (0x49000000u)
-/** Peripheral BLK_CTRL_NOCMIX base pointer */
-#define BLK_CTRL_NOCMIX                          ((NOC_BLK_CTRL_NOCMIX_Type *)BLK_CTRL_NOCMIX_BASE)
-/** Array initializer of NOC_BLK_CTRL_NOCMIX peripheral base addresses */
-#define NOC_BLK_CTRL_NOCMIX_BASE_ADDRS           { BLK_CTRL_NOCMIX_BASE }
-/** Array initializer of NOC_BLK_CTRL_NOCMIX peripheral base pointers */
-#define NOC_BLK_CTRL_NOCMIX_BASE_PTRS            { BLK_CTRL_NOCMIX }
-
-/* NOC_CMU - Peripheral instance base addresses */
-/** Peripheral NOC__CMU_N0 base address */
-#define NOC__CMU_N0_BASE                         (0x49070000u)
-/** Peripheral NOC__CMU_N0 base pointer */
-#define NOC__CMU_N0                              ((NOC_CMU_Type *)NOC__CMU_N0_BASE)
-/** Peripheral NOC__CMU_N1 base address */
-#define NOC__CMU_N1_BASE                         (0x49080000u)
-/** Peripheral NOC__CMU_N1 base pointer */
-#define NOC__CMU_N1                              ((NOC_CMU_Type *)NOC__CMU_N1_BASE)
-/** Array initializer of NOC_CMU peripheral base addresses */
-#define NOC_CMU_BASE_ADDRS                       { NOC__CMU_N0_BASE, NOC__CMU_N1_BASE }
-/** Array initializer of NOC_CMU peripheral base pointers */
-#define NOC_CMU_BASE_PTRS                        { NOC__CMU_N0, NOC__CMU_N1 }
-
-/* NOC_EIM - Peripheral instance base addresses */
-/** Peripheral NOC__EIMN base address */
-#define NOC__EIMN_BASE                           (0x49210000u)
-/** Peripheral NOC__EIMN base pointer */
-#define NOC__EIMN                                ((NOC_EIM_Type *)NOC__EIMN_BASE)
-/** Array initializer of NOC_EIM peripheral base addresses */
-#define NOC_EIM_BASE_ADDRS                       { NOC__EIMN_BASE }
-/** Array initializer of NOC_EIM peripheral base pointers */
-#define NOC_EIM_BASE_PTRS                        { NOC__EIMN }
-
-/* NOC_GICA - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICA base address */
-#define NOC__GIC__GICA_BASE                      (0x48010000u)
-/** Peripheral NOC__GIC__GICA base pointer */
-#define NOC__GIC__GICA                           ((NOC_GICA_Type *)NOC__GIC__GICA_BASE)
-/** Array initializer of NOC_GICA peripheral base addresses */
-#define NOC_GICA_BASE_ADDRS                      { NOC__GIC__GICA_BASE }
-/** Array initializer of NOC_GICA peripheral base pointers */
-#define NOC_GICA_BASE_PTRS                       { NOC__GIC__GICA }
-
-
-
-/* NOC_GICP - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICP base address */
-#define NOC__GIC__GICP_BASE                      (0x48030000u)
-/** Peripheral NOC__GIC__GICP base pointer */
-#define NOC__GIC__GICP                           ((NOC_GICP_Type *)NOC__GIC__GICP_BASE)
-/** Array initializer of NOC_GICP peripheral base addresses */
-#define NOC_GICP_BASE_ADDRS                      { NOC__GIC__GICP_BASE }
-/** Array initializer of NOC_GICP peripheral base pointers */
-#define NOC_GICP_BASE_PTRS                       { NOC__GIC__GICP }
-
-/* NOC_GICRlpi0 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRLPI0 base address */
-#define NOC__GIC__GICRLPI0_BASE                  (0x48060000u)
-/** Peripheral NOC__GIC__GICRLPI0 base pointer */
-#define NOC__GIC__GICRLPI0                       ((NOC_GICRlpi0_Type *)NOC__GIC__GICRLPI0_BASE)
-/** Array initializer of NOC_GICRlpi0 peripheral base addresses */
-#define NOC_GICRlpi0_BASE_ADDRS                  { NOC__GIC__GICRLPI0_BASE }
-/** Array initializer of NOC_GICRlpi0 peripheral base pointers */
-#define NOC_GICRlpi0_BASE_PTRS                   { NOC__GIC__GICRLPI0 }
-
-/* NOC_GICRlpi1 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRLPI1 base address */
-#define NOC__GIC__GICRLPI1_BASE                  (0x48080000u)
-/** Peripheral NOC__GIC__GICRLPI1 base pointer */
-#define NOC__GIC__GICRLPI1                       ((NOC_GICRlpi1_Type *)NOC__GIC__GICRLPI1_BASE)
-/** Array initializer of NOC_GICRlpi1 peripheral base addresses */
-#define NOC_GICRlpi1_BASE_ADDRS                  { NOC__GIC__GICRLPI1_BASE }
-/** Array initializer of NOC_GICRlpi1 peripheral base pointers */
-#define NOC_GICRlpi1_BASE_PTRS                   { NOC__GIC__GICRLPI1 }
-
-/* NOC_GICRlpi2 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRLPI2 base address */
-#define NOC__GIC__GICRLPI2_BASE                  (0x480A0000u)
-/** Peripheral NOC__GIC__GICRLPI2 base pointer */
-#define NOC__GIC__GICRLPI2                       ((NOC_GICRlpi2_Type *)NOC__GIC__GICRLPI2_BASE)
-/** Array initializer of NOC_GICRlpi2 peripheral base addresses */
-#define NOC_GICRlpi2_BASE_ADDRS                  { NOC__GIC__GICRLPI2_BASE }
-/** Array initializer of NOC_GICRlpi2 peripheral base pointers */
-#define NOC_GICRlpi2_BASE_PTRS                   { NOC__GIC__GICRLPI2 }
-
-/* NOC_GICRlpi3 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRLPI3 base address */
-#define NOC__GIC__GICRLPI3_BASE                  (0x480C0000u)
-/** Peripheral NOC__GIC__GICRLPI3 base pointer */
-#define NOC__GIC__GICRLPI3                       ((NOC_GICRlpi3_Type *)NOC__GIC__GICRLPI3_BASE)
-/** Array initializer of NOC_GICRlpi3 peripheral base addresses */
-#define NOC_GICRlpi3_BASE_ADDRS                  { NOC__GIC__GICRLPI3_BASE }
-/** Array initializer of NOC_GICRlpi3 peripheral base pointers */
-#define NOC_GICRlpi3_BASE_PTRS                   { NOC__GIC__GICRLPI3 }
-
-/* NOC_GICRsgi0 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRSGI0 base address */
-#define NOC__GIC__GICRSGI0_BASE                  (0x48070000u)
-/** Peripheral NOC__GIC__GICRSGI0 base pointer */
-#define NOC__GIC__GICRSGI0                       ((NOC_GICRsgi0_Type *)NOC__GIC__GICRSGI0_BASE)
-/** Array initializer of NOC_GICRsgi0 peripheral base addresses */
-#define NOC_GICRsgi0_BASE_ADDRS                  { NOC__GIC__GICRSGI0_BASE }
-/** Array initializer of NOC_GICRsgi0 peripheral base pointers */
-#define NOC_GICRsgi0_BASE_PTRS                   { NOC__GIC__GICRSGI0 }
-
-/* NOC_GICRsgi2 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRSGI2 base address */
-#define NOC__GIC__GICRSGI2_BASE                  (0x480B0000u)
-/** Peripheral NOC__GIC__GICRSGI2 base pointer */
-#define NOC__GIC__GICRSGI2                       ((NOC_GICRsgi2_Type *)NOC__GIC__GICRSGI2_BASE)
-/** Array initializer of NOC_GICRsgi2 peripheral base addresses */
-#define NOC_GICRsgi2_BASE_ADDRS                  { NOC__GIC__GICRSGI2_BASE }
-/** Array initializer of NOC_GICRsgi2 peripheral base pointers */
-#define NOC_GICRsgi2_BASE_PTRS                   { NOC__GIC__GICRSGI2 }
-
-/* NOC_GICRsgi3 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRSGI3 base address */
-#define NOC__GIC__GICRSGI3_BASE                  (0x480D0000u)
-/** Peripheral NOC__GIC__GICRSGI3 base pointer */
-#define NOC__GIC__GICRSGI3                       ((NOC_GICRsgi3_Type *)NOC__GIC__GICRSGI3_BASE)
-/** Array initializer of NOC_GICRsgi3 peripheral base addresses */
-#define NOC_GICRsgi3_BASE_ADDRS                  { NOC__GIC__GICRSGI3_BASE }
-/** Array initializer of NOC_GICRsgi3 peripheral base pointers */
-#define NOC_GICRsgi3_BASE_PTRS                   { NOC__GIC__GICRSGI3 }
-
-/* NOC_GICRsgil - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRSGI1 base address */
-#define NOC__GIC__GICRSGI1_BASE                  (0x48090000u)
-/** Peripheral NOC__GIC__GICRSGI1 base pointer */
-#define NOC__GIC__GICRSGI1                       ((NOC_GICRsgil_Type *)NOC__GIC__GICRSGI1_BASE)
-/** Array initializer of NOC_GICRsgil peripheral base addresses */
-#define NOC_GICRsgil_BASE_ADDRS                  { NOC__GIC__GICRSGI1_BASE }
-/** Array initializer of NOC_GICRsgil peripheral base pointers */
-#define NOC_GICRsgil_BASE_PTRS                   { NOC__GIC__GICRSGI1 }
-
-/* NOC_GICT - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICT base address */
-#define NOC__GIC__GICT_BASE                      (0x48020000u)
-/** Peripheral NOC__GIC__GICT base pointer */
-#define NOC__GIC__GICT                           ((NOC_GICT_Type *)NOC__GIC__GICT_BASE)
-/** Array initializer of NOC_GICT peripheral base addresses */
-#define NOC_GICT_BASE_ADDRS                      { NOC__GIC__GICT_BASE }
-/** Array initializer of NOC_GICT peripheral base pointers */
-#define NOC_GICT_BASE_PTRS                       { NOC__GIC__GICT }
-
-/* NOC_GITS0 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GITS0 base address */
-#define NOC__GIC__GITS0_BASE                     (0x48040000u)
-/** Peripheral NOC__GIC__GITS0 base pointer */
-#define NOC__GIC__GITS0                          ((NOC_GITS0_Type *)NOC__GIC__GITS0_BASE)
-/** Array initializer of NOC_GITS0 peripheral base addresses */
-#define NOC_GITS0_BASE_ADDRS                     { NOC__GIC__GITS0_BASE }
-/** Array initializer of NOC_GITS0 peripheral base pointers */
-#define NOC_GITS0_BASE_PTRS                      { NOC__GIC__GITS0 }
-
-/* NOC_GITS0translater - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GITS0TRANSLATER base address */
-#define NOC__GIC__GITS0TRANSLATER_BASE           (0x48050000u)
-/** Peripheral NOC__GIC__GITS0TRANSLATER base pointer */
-#define NOC__GIC__GITS0TRANSLATER                ((NOC_GITS0translater_Type *)NOC__GIC__GITS0TRANSLATER_BASE)
-/** Array initializer of NOC_GITS0translater peripheral base addresses */
-#define NOC_GITS0translater_BASE_ADDRS           { NOC__GIC__GITS0TRANSLATER_BASE }
-/** Array initializer of NOC_GITS0translater peripheral base pointers */
-#define NOC_GITS0translater_BASE_PTRS            { NOC__GIC__GITS0TRANSLATER }
-
-/* NOC_I_LCDIF_rd_I_main_QosG - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__I_LCDIF_RD_I_MAIN_QOSGENERATOR base address */
-#define DISPLAY__GPV__I_LCDIF_RD_I_MAIN_QOSGENERATOR_BASE (0x4B151000u)
-/** Peripheral DISPLAY__GPV__I_LCDIF_RD_I_MAIN_QOSGENERATOR base pointer */
-#define DISPLAY__GPV__I_LCDIF_RD_I_MAIN_QOSGENERATOR ((NOC_I_LCDIF_rd_I_main_QosG_Type *)DISPLAY__GPV__I_LCDIF_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_I_LCDIF_rd_I_main_QosG peripheral base addresses */
-#define NOC_I_LCDIF_rd_I_main_QosG_BASE_ADDRS    { DISPLAY__GPV__I_LCDIF_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_I_LCDIF_rd_I_main_QosG peripheral base pointers */
-#define NOC_I_LCDIF_rd_I_main_QosG_BASE_PTRS     { DISPLAY__GPV__I_LCDIF_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_I_LCDIF_rd_I_main_TranStatFltr - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__I_LCDIF_RD_I_MAIN_TRANSACTIONSTATFILTER base
- * address */
-#define DISPLAY__GPV__I_LCDIF_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B151180u)
-/** Peripheral DISPLAY__GPV__I_LCDIF_RD_I_MAIN_TRANSACTIONSTATFILTER base
- * pointer */
-#define DISPLAY__GPV__I_LCDIF_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_I_LCDIF_rd_I_main_TranStatFltr_Type *)DISPLAY__GPV__I_LCDIF_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_I_LCDIF_rd_I_main_TranStatFltr peripheral base
- * addresses */
-#define NOC_I_LCDIF_rd_I_main_TranStatFltr_BASE_ADDRS { DISPLAY__GPV__I_LCDIF_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_I_LCDIF_rd_I_main_TranStatFltr peripheral base
- * pointers */
-#define NOC_I_LCDIF_rd_I_main_TranStatFltr_BASE_PTRS { DISPLAY__GPV__I_LCDIF_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_I_PXP_rd_I_main_QosG - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__I_PXP_RD_I_MAIN_QOSGENERATOR base address */
-#define DISPLAY__GPV__I_PXP_RD_I_MAIN_QOSGENERATOR_BASE (0x4B151080u)
-/** Peripheral DISPLAY__GPV__I_PXP_RD_I_MAIN_QOSGENERATOR base pointer */
-#define DISPLAY__GPV__I_PXP_RD_I_MAIN_QOSGENERATOR ((NOC_I_PXP_rd_I_main_QosG_Type *)DISPLAY__GPV__I_PXP_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_I_PXP_rd_I_main_QosG peripheral base addresses */
-#define NOC_I_PXP_rd_I_main_QosG_BASE_ADDRS      { DISPLAY__GPV__I_PXP_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_I_PXP_rd_I_main_QosG peripheral base pointers */
-#define NOC_I_PXP_rd_I_main_QosG_BASE_PTRS       { DISPLAY__GPV__I_PXP_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_I_PXP_rd_I_main_TranStatFltr - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__I_PXP_RD_I_MAIN_TRANSACTIONSTATFILTER base address
- * */
-#define DISPLAY__GPV__I_PXP_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B151200u)
-/** Peripheral DISPLAY__GPV__I_PXP_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer
- * */
-#define DISPLAY__GPV__I_PXP_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_I_PXP_rd_I_main_TranStatFltr_Type *)DISPLAY__GPV__I_PXP_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_I_PXP_rd_I_main_TranStatFltr peripheral base
- * addresses */
-#define NOC_I_PXP_rd_I_main_TranStatFltr_BASE_ADDRS { DISPLAY__GPV__I_PXP_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_I_PXP_rd_I_main_TranStatFltr peripheral base
- * pointers */
-#define NOC_I_PXP_rd_I_main_TranStatFltr_BASE_PTRS { DISPLAY__GPV__I_PXP_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_I_PXP_wr_I_main_QosG - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__I_PXP_WR_I_MAIN_QOSGENERATOR base address */
-#define DISPLAY__GPV__I_PXP_WR_I_MAIN_QOSGENERATOR_BASE (0x4B151100u)
-/** Peripheral DISPLAY__GPV__I_PXP_WR_I_MAIN_QOSGENERATOR base pointer */
-#define DISPLAY__GPV__I_PXP_WR_I_MAIN_QOSGENERATOR ((NOC_I_PXP_wr_I_main_QosG_Type *)DISPLAY__GPV__I_PXP_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_I_PXP_wr_I_main_QosG peripheral base addresses */
-#define NOC_I_PXP_wr_I_main_QosG_BASE_ADDRS      { DISPLAY__GPV__I_PXP_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_I_PXP_wr_I_main_QosG peripheral base pointers */
-#define NOC_I_PXP_wr_I_main_QosG_BASE_PTRS       { DISPLAY__GPV__I_PXP_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_I_PXP_wr_I_main_TranStatFltr - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__I_PXP_WR_I_MAIN_TRANSACTIONSTATFILTER base address
- * */
-#define DISPLAY__GPV__I_PXP_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B151280u)
-/** Peripheral DISPLAY__GPV__I_PXP_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer
- * */
-#define DISPLAY__GPV__I_PXP_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_I_PXP_wr_I_main_TranStatFltr_Type *)DISPLAY__GPV__I_PXP_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_I_PXP_wr_I_main_TranStatFltr peripheral base
- * addresses */
-#define NOC_I_PXP_wr_I_main_TranStatFltr_BASE_ADDRS { DISPLAY__GPV__I_PXP_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_I_PXP_wr_I_main_TranStatFltr peripheral base
- * pointers */
-#define NOC_I_PXP_wr_I_main_TranStatFltr_BASE_PTRS { DISPLAY__GPV__I_PXP_WR_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_LSTCU - Peripheral instance base addresses */
-/** Peripheral NOC__LSTCUN base address */
-#define NOC__LSTCUN_BASE                         (0x490B0000u)
-/** Peripheral NOC__LSTCUN base pointer */
-#define NOC__LSTCUN                              ((NOC_LSTCU_Type *)NOC__LSTCUN_BASE)
-/** Array initializer of NOC_LSTCU peripheral base addresses */
-#define NOC_LSTCU_BASE_ADDRS                     { NOC__LSTCUN_BASE }
-/** Array initializer of NOC_LSTCU peripheral base pointers */
-#define NOC_LSTCU_BASE_PTRS                      { NOC__LSTCUN }
-
-/* NOC_Probe_LCDIF_rd_main_Probe - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__PROBE_LCDIF_RD_MAIN_PROBE base address */
-#define DISPLAY__GPV__PROBE_LCDIF_RD_MAIN_PROBE_BASE (0x4B150400u)
-/** Peripheral DISPLAY__GPV__PROBE_LCDIF_RD_MAIN_PROBE base pointer */
-#define DISPLAY__GPV__PROBE_LCDIF_RD_MAIN_PROBE  ((NOC_Probe_LCDIF_rd_main_Probe_Type *)DISPLAY__GPV__PROBE_LCDIF_RD_MAIN_PROBE_BASE)
-/** Array initializer of NOC_Probe_LCDIF_rd_main_Probe peripheral base addresses
- * */
-#define NOC_Probe_LCDIF_rd_main_Probe_BASE_ADDRS { DISPLAY__GPV__PROBE_LCDIF_RD_MAIN_PROBE_BASE }
-/** Array initializer of NOC_Probe_LCDIF_rd_main_Probe peripheral base pointers
- * */
-#define NOC_Probe_LCDIF_rd_main_Probe_BASE_PTRS  { DISPLAY__GPV__PROBE_LCDIF_RD_MAIN_PROBE }
-
-/* NOC_Probe_LCDIF_rd_main_TrStProf - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__PROBE_LCDIF_RD_MAIN_TRANSACTIONSTATPROFILER base
- * address */
-#define DISPLAY__GPV__PROBE_LCDIF_RD_MAIN_TRANSACTIONSTATPROFILER_BASE (0x4B151300u)
-/** Peripheral DISPLAY__GPV__PROBE_LCDIF_RD_MAIN_TRANSACTIONSTATPROFILER base
- * pointer */
-#define DISPLAY__GPV__PROBE_LCDIF_RD_MAIN_TRANSACTIONSTATPROFILER ((NOC_Probe_LCDIF_rd_main_TrStProf_Type *)DISPLAY__GPV__PROBE_LCDIF_RD_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_Probe_LCDIF_rd_main_TrStProf peripheral base
- * addresses */
-#define NOC_Probe_LCDIF_rd_main_TrStProf_BASE_ADDRS { DISPLAY__GPV__PROBE_LCDIF_RD_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_Probe_LCDIF_rd_main_TrStProf peripheral base
- * pointers */
-#define NOC_Probe_LCDIF_rd_main_TrStProf_BASE_PTRS { DISPLAY__GPV__PROBE_LCDIF_RD_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_Probe_PXP_rd_main_Probe - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__PROBE_PXP_RD_MAIN_PROBE base address */
-#define DISPLAY__GPV__PROBE_PXP_RD_MAIN_PROBE_BASE (0x4B150800u)
-/** Peripheral DISPLAY__GPV__PROBE_PXP_RD_MAIN_PROBE base pointer */
-#define DISPLAY__GPV__PROBE_PXP_RD_MAIN_PROBE    ((NOC_Probe_PXP_rd_main_Probe_Type *)DISPLAY__GPV__PROBE_PXP_RD_MAIN_PROBE_BASE)
-/** Array initializer of NOC_Probe_PXP_rd_main_Probe peripheral base addresses */
-#define NOC_Probe_PXP_rd_main_Probe_BASE_ADDRS   { DISPLAY__GPV__PROBE_PXP_RD_MAIN_PROBE_BASE }
-/** Array initializer of NOC_Probe_PXP_rd_main_Probe peripheral base pointers */
-#define NOC_Probe_PXP_rd_main_Probe_BASE_PTRS    { DISPLAY__GPV__PROBE_PXP_RD_MAIN_PROBE }
-
-/* NOC_Probe_PXP_rd_main_TrStProf - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__PROBE_PXP_RD_MAIN_TRANSACTIONSTATPROFILER base
- * address */
-#define DISPLAY__GPV__PROBE_PXP_RD_MAIN_TRANSACTIONSTATPROFILER_BASE (0x4B151380u)
-/** Peripheral DISPLAY__GPV__PROBE_PXP_RD_MAIN_TRANSACTIONSTATPROFILER base
- * pointer */
-#define DISPLAY__GPV__PROBE_PXP_RD_MAIN_TRANSACTIONSTATPROFILER ((NOC_Probe_PXP_rd_main_TrStProf_Type *)DISPLAY__GPV__PROBE_PXP_RD_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_Probe_PXP_rd_main_TrStProf peripheral base
- * addresses */
-#define NOC_Probe_PXP_rd_main_TrStProf_BASE_ADDRS { DISPLAY__GPV__PROBE_PXP_RD_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_Probe_PXP_rd_main_TrStProf peripheral base pointers
- * */
-#define NOC_Probe_PXP_rd_main_TrStProf_BASE_PTRS { DISPLAY__GPV__PROBE_PXP_RD_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_Probe_PXP_wr_main_Probe - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__PROBE_PXP_WR_MAIN_PROBE base address */
-#define DISPLAY__GPV__PROBE_PXP_WR_MAIN_PROBE_BASE (0x4B150C00u)
-/** Peripheral DISPLAY__GPV__PROBE_PXP_WR_MAIN_PROBE base pointer */
-#define DISPLAY__GPV__PROBE_PXP_WR_MAIN_PROBE    ((NOC_Probe_PXP_wr_main_Probe_Type *)DISPLAY__GPV__PROBE_PXP_WR_MAIN_PROBE_BASE)
-/** Array initializer of NOC_Probe_PXP_wr_main_Probe peripheral base addresses */
-#define NOC_Probe_PXP_wr_main_Probe_BASE_ADDRS   { DISPLAY__GPV__PROBE_PXP_WR_MAIN_PROBE_BASE }
-/** Array initializer of NOC_Probe_PXP_wr_main_Probe peripheral base pointers */
-#define NOC_Probe_PXP_wr_main_Probe_BASE_PTRS    { DISPLAY__GPV__PROBE_PXP_WR_MAIN_PROBE }
-
-/* NOC_Probe_PXP_wr_main_TrStProf - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__PROBE_PXP_WR_MAIN_TRANSACTIONSTATPROFILER base
- * address */
-#define DISPLAY__GPV__PROBE_PXP_WR_MAIN_TRANSACTIONSTATPROFILER_BASE (0x4B151400u)
-/** Peripheral DISPLAY__GPV__PROBE_PXP_WR_MAIN_TRANSACTIONSTATPROFILER base
- * pointer */
-#define DISPLAY__GPV__PROBE_PXP_WR_MAIN_TRANSACTIONSTATPROFILER ((NOC_Probe_PXP_wr_main_TrStProf_Type *)DISPLAY__GPV__PROBE_PXP_WR_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_Probe_PXP_wr_main_TrStProf peripheral base
- * addresses */
-#define NOC_Probe_PXP_wr_main_TrStProf_BASE_ADDRS { DISPLAY__GPV__PROBE_PXP_WR_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_Probe_PXP_wr_main_TrStProf peripheral base pointers
- * */
-#define NOC_Probe_PXP_wr_main_TrStProf_BASE_PTRS { DISPLAY__GPV__PROBE_PXP_WR_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_Probe_m_e_0_main_Probe - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_0_MAIN_PROBE base address */
-#define NOC__GPV__PROBE_M_E_0_MAIN_PROBE_BASE    (0x49060000u)
-/** Peripheral NOC__GPV__PROBE_M_E_0_MAIN_PROBE base pointer */
-#define NOC__GPV__PROBE_M_E_0_MAIN_PROBE         ((NOC_Probe_m_e_0_main_Probe_Type *)NOC__GPV__PROBE_M_E_0_MAIN_PROBE_BASE)
-/** Array initializer of NOC_Probe_m_e_0_main_Probe peripheral base addresses */
-#define NOC_Probe_m_e_0_main_Probe_BASE_ADDRS    { NOC__GPV__PROBE_M_E_0_MAIN_PROBE_BASE }
-/** Array initializer of NOC_Probe_m_e_0_main_Probe peripheral base pointers */
-#define NOC_Probe_m_e_0_main_Probe_BASE_PTRS     { NOC__GPV__PROBE_M_E_0_MAIN_PROBE }
-
-/* NOC_Probe_m_e_0_main_TranStatProf - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER base address */
-#define NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063980u)
-/** Peripheral NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER base pointer */
-#define NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER ((NOC_Probe_m_e_0_main_TranStatProf_Type *)NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_Probe_m_e_0_main_TranStatProf peripheral base
- * addresses */
-#define NOC_Probe_m_e_0_main_TranStatProf_BASE_ADDRS { NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_Probe_m_e_0_main_TranStatProf peripheral base
- * pointers */
-#define NOC_Probe_m_e_0_main_TranStatProf_BASE_PTRS { NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_Probe_m_e_3_main_Probe - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_3_MAIN_PROBE base address */
-#define NOC__GPV__PROBE_M_E_3_MAIN_PROBE_BASE    (0x49060400u)
-/** Peripheral NOC__GPV__PROBE_M_E_3_MAIN_PROBE base pointer */
-#define NOC__GPV__PROBE_M_E_3_MAIN_PROBE         ((NOC_Probe_m_e_3_main_Probe_Type *)NOC__GPV__PROBE_M_E_3_MAIN_PROBE_BASE)
-/** Array initializer of NOC_Probe_m_e_3_main_Probe peripheral base addresses */
-#define NOC_Probe_m_e_3_main_Probe_BASE_ADDRS    { NOC__GPV__PROBE_M_E_3_MAIN_PROBE_BASE }
-/** Array initializer of NOC_Probe_m_e_3_main_Probe peripheral base pointers */
-#define NOC_Probe_m_e_3_main_Probe_BASE_PTRS     { NOC__GPV__PROBE_M_E_3_MAIN_PROBE }
-
-/* NOC_Probe_m_e_3_main_TranStatProf - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER base address */
-#define NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063A00u)
-/** Peripheral NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER base pointer */
-#define NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER ((NOC_Probe_m_e_3_main_TranStatProf_Type *)NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_Probe_m_e_3_main_TranStatProf peripheral base
- * addresses */
-#define NOC_Probe_m_e_3_main_TranStatProf_BASE_ADDRS { NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_Probe_m_e_3_main_TranStatProf peripheral base
- * pointers */
-#define NOC_Probe_m_e_3_main_TranStatProf_BASE_PTRS { NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_Probe_m_e_6_main_Probe - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_6_MAIN_PROBE base address */
-#define NOC__GPV__PROBE_M_E_6_MAIN_PROBE_BASE    (0x49061000u)
-/** Peripheral NOC__GPV__PROBE_M_E_6_MAIN_PROBE base pointer */
-#define NOC__GPV__PROBE_M_E_6_MAIN_PROBE         ((NOC_Probe_m_e_6_main_Probe_Type *)NOC__GPV__PROBE_M_E_6_MAIN_PROBE_BASE)
-/** Array initializer of NOC_Probe_m_e_6_main_Probe peripheral base addresses */
-#define NOC_Probe_m_e_6_main_Probe_BASE_ADDRS    { NOC__GPV__PROBE_M_E_6_MAIN_PROBE_BASE }
-/** Array initializer of NOC_Probe_m_e_6_main_Probe peripheral base pointers */
-#define NOC_Probe_m_e_6_main_Probe_BASE_PTRS     { NOC__GPV__PROBE_M_E_6_MAIN_PROBE }
-
-/* NOC_Probe_m_e_6_main_TranStatProf - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER base address */
-#define NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063B80u)
-/** Peripheral NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER base pointer */
-#define NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER ((NOC_Probe_m_e_6_main_TranStatProf_Type *)NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_Probe_m_e_6_main_TranStatProf peripheral base
- * addresses */
-#define NOC_Probe_m_e_6_main_TranStatProf_BASE_ADDRS { NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_Probe_m_e_6_main_TranStatProf peripheral base
- * pointers */
-#define NOC_Probe_m_e_6_main_TranStatProf_BASE_PTRS { NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_Probe_m_e_7_main_Probe - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_7_MAIN_PROBE base address */
-#define NOC__GPV__PROBE_M_E_7_MAIN_PROBE_BASE    (0x49061400u)
-/** Peripheral NOC__GPV__PROBE_M_E_7_MAIN_PROBE base pointer */
-#define NOC__GPV__PROBE_M_E_7_MAIN_PROBE         ((NOC_Probe_m_e_7_main_Probe_Type *)NOC__GPV__PROBE_M_E_7_MAIN_PROBE_BASE)
-/** Array initializer of NOC_Probe_m_e_7_main_Probe peripheral base addresses */
-#define NOC_Probe_m_e_7_main_Probe_BASE_ADDRS    { NOC__GPV__PROBE_M_E_7_MAIN_PROBE_BASE }
-/** Array initializer of NOC_Probe_m_e_7_main_Probe peripheral base pointers */
-#define NOC_Probe_m_e_7_main_Probe_BASE_PTRS     { NOC__GPV__PROBE_M_E_7_MAIN_PROBE }
-
-/* NOC_Probe_m_e_7_main_TranStatProf - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER base address */
-#define NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063C00u)
-/** Peripheral NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER base pointer */
-#define NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER ((NOC_Probe_m_e_7_main_TranStatProf_Type *)NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_Probe_m_e_7_main_TranStatProf peripheral base
- * addresses */
-#define NOC_Probe_m_e_7_main_TranStatProf_BASE_ADDRS { NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_Probe_m_e_7_main_TranStatProf peripheral base
- * pointers */
-#define NOC_Probe_m_e_7_main_TranStatProf_BASE_PTRS { NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_Probe_m_e_9_main_Probe - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_9_MAIN_PROBE base address */
-#define NOC__GPV__PROBE_M_E_9_MAIN_PROBE_BASE    (0x49061800u)
-/** Peripheral NOC__GPV__PROBE_M_E_9_MAIN_PROBE base pointer */
-#define NOC__GPV__PROBE_M_E_9_MAIN_PROBE         ((NOC_Probe_m_e_9_main_Probe_Type *)NOC__GPV__PROBE_M_E_9_MAIN_PROBE_BASE)
-/** Array initializer of NOC_Probe_m_e_9_main_Probe peripheral base addresses */
-#define NOC_Probe_m_e_9_main_Probe_BASE_ADDRS    { NOC__GPV__PROBE_M_E_9_MAIN_PROBE_BASE }
-/** Array initializer of NOC_Probe_m_e_9_main_Probe peripheral base pointers */
-#define NOC_Probe_m_e_9_main_Probe_BASE_PTRS     { NOC__GPV__PROBE_M_E_9_MAIN_PROBE }
-
-/* NOC_Probe_m_e_9_main_TranStatProf - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER base address */
-#define NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063C80u)
-/** Peripheral NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER base pointer */
-#define NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER ((NOC_Probe_m_e_9_main_TranStatProf_Type *)NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_Probe_m_e_9_main_TranStatProf peripheral base
- * addresses */
-#define NOC_Probe_m_e_9_main_TranStatProf_BASE_ADDRS { NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_Probe_m_e_9_main_TranStatProf peripheral base
- * pointers */
-#define NOC_Probe_m_e_9_main_TranStatProf_BASE_PTRS { NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_TCU - Peripheral instance base addresses */
-/** Peripheral NOC__TCU base address */
-#define NOC__TCU_BASE                            (0x49040000u)
-/** Peripheral NOC__TCU base pointer */
-#define NOC__TCU                                 ((NOC_TCU_Type *)NOC__TCU_BASE)
-/** Array initializer of NOC_TCU peripheral base addresses */
-#define NOC_TCU_BASE_ADDRS                       { NOC__TCU_BASE }
-/** Array initializer of NOC_TCU peripheral base pointers */
-#define NOC_TCU_BASE_PTRS                        { NOC__TCU }
-
-
-/* NOC_always_on_main_ResFaultCntr - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER base address */
-#define NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER_BASE (0x49063080u)
-/** Peripheral NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER base pointer */
-#define NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER ((NOC_always_on_main_ResFaultCntr_Type *)NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER_BASE)
-/** Array initializer of NOC_always_on_main_ResFaultCntr peripheral base
- * addresses */
-#define NOC_always_on_main_ResFaultCntr_BASE_ADDRS { NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER_BASE }
-/** Array initializer of NOC_always_on_main_ResFaultCntr peripheral base
- * pointers */
-#define NOC_always_on_main_ResFaultCntr_BASE_PTRS { NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER }
-
-/* NOC_m_e_0_rd_I_m_QosGen - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR_BASE (0x49062400u)
-/** Peripheral NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR   ((NOC_m_e_0_rd_I_m_QosGen_Type *)NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_m_e_0_rd_I_m_QosGen peripheral base addresses */
-#define NOC_m_e_0_rd_I_m_QosGen_BASE_ADDRS       { NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_m_e_0_rd_I_m_QosGen peripheral base pointers */
-#define NOC_m_e_0_rd_I_m_QosGen_BASE_PTRS        { NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_m_e_0_rd_I_main_TranStatFilt - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063100u)
-/** Peripheral NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_m_e_0_rd_I_main_TranStatFilt_Type *)NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_m_e_0_rd_I_main_TranStatFilt peripheral base
- * addresses */
-#define NOC_m_e_0_rd_I_main_TranStatFilt_BASE_ADDRS { NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_m_e_0_rd_I_main_TranStatFilt peripheral base
- * pointers */
-#define NOC_m_e_0_rd_I_main_TranStatFilt_BASE_PTRS { NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_m_e_0_wr_I_main_QosGen - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR_BASE (0x49062480u)
-/** Peripheral NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR   ((NOC_m_e_0_wr_I_main_QosGen_Type *)NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_m_e_0_wr_I_main_QosGen peripheral base addresses */
-#define NOC_m_e_0_wr_I_main_QosGen_BASE_ADDRS    { NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_m_e_0_wr_I_main_QosGen peripheral base pointers */
-#define NOC_m_e_0_wr_I_main_QosGen_BASE_PTRS     { NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_m_e_0_wr_I_main_TranStatFilt - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063180u)
-/** Peripheral NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_m_e_0_wr_I_main_TranStatFilt_Type *)NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_m_e_0_wr_I_main_TranStatFilt peripheral base
- * addresses */
-#define NOC_m_e_0_wr_I_main_TranStatFilt_BASE_ADDRS { NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_m_e_0_wr_I_main_TranStatFilt peripheral base
- * pointers */
-#define NOC_m_e_0_wr_I_main_TranStatFilt_BASE_PTRS { NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_m_e_1a_rd_I_main_QosGen - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR_BASE (0x49062500u)
-/** Peripheral NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR  ((NOC_m_e_1a_rd_I_main_QosGen_Type *)NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_m_e_1a_rd_I_main_QosGen peripheral base addresses */
-#define NOC_m_e_1a_rd_I_main_QosGen_BASE_ADDRS   { NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_m_e_1a_rd_I_main_QosGen peripheral base pointers */
-#define NOC_m_e_1a_rd_I_main_QosGen_BASE_PTRS    { NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_m_e_1a_wr_I_main_QosGen - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR_BASE (0x49062580u)
-/** Peripheral NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR  ((NOC_m_e_1a_wr_I_main_QosGen_Type *)NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_m_e_1a_wr_I_main_QosGen peripheral base addresses */
-#define NOC_m_e_1a_wr_I_main_QosGen_BASE_ADDRS   { NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_m_e_1a_wr_I_main_QosGen peripheral base pointers */
-#define NOC_m_e_1a_wr_I_main_QosGen_BASE_PTRS    { NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_m_e_1b_rd_I_main_QosGen - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR_BASE (0x49062600u)
-/** Peripheral NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR  ((NOC_m_e_1b_rd_I_main_QosGen_Type *)NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_m_e_1b_rd_I_main_QosGen peripheral base addresses */
-#define NOC_m_e_1b_rd_I_main_QosGen_BASE_ADDRS   { NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_m_e_1b_rd_I_main_QosGen peripheral base pointers */
-#define NOC_m_e_1b_rd_I_main_QosGen_BASE_PTRS    { NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_m_e_1b_wr_I_main_QosGen - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR_BASE (0x49062680u)
-/** Peripheral NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR  ((NOC_m_e_1b_wr_I_main_QosGen_Type *)NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_m_e_1b_wr_I_main_QosGen peripheral base addresses */
-#define NOC_m_e_1b_wr_I_main_QosGen_BASE_ADDRS   { NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_m_e_1b_wr_I_main_QosGen peripheral base pointers */
-#define NOC_m_e_1b_wr_I_main_QosGen_BASE_PTRS    { NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_m_e_3_rd_I_main_QosGen - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR_BASE (0x49062800u)
-/** Peripheral NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR   ((NOC_m_e_3_rd_I_main_QosGen_Type *)NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_m_e_3_rd_I_main_QosGen peripheral base addresses */
-#define NOC_m_e_3_rd_I_main_QosGen_BASE_ADDRS    { NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_m_e_3_rd_I_main_QosGen peripheral base pointers */
-#define NOC_m_e_3_rd_I_main_QosGen_BASE_PTRS     { NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_m_e_3_rd_I_main_TranStatFilt - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063200u)
-/** Peripheral NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_m_e_3_rd_I_main_TranStatFilt_Type *)NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_m_e_3_rd_I_main_TranStatFilt peripheral base
- * addresses */
-#define NOC_m_e_3_rd_I_main_TranStatFilt_BASE_ADDRS { NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_m_e_3_rd_I_main_TranStatFilt peripheral base
- * pointers */
-#define NOC_m_e_3_rd_I_main_TranStatFilt_BASE_PTRS { NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_m_e_3_wr_I_main_QosGen - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR_BASE (0x49062880u)
-/** Peripheral NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR   ((NOC_m_e_3_wr_I_main_QosGen_Type *)NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_m_e_3_wr_I_main_QosGen peripheral base addresses */
-#define NOC_m_e_3_wr_I_main_QosGen_BASE_ADDRS    { NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_m_e_3_wr_I_main_QosGen peripheral base pointers */
-#define NOC_m_e_3_wr_I_main_QosGen_BASE_PTRS     { NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_m_e_6_rd_I_main_QosGen - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR_BASE (0x49062B00u)
-/** Peripheral NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR   ((NOC_m_e_6_rd_I_main_QosGen_Type *)NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_m_e_6_rd_I_main_QosGen peripheral base addresses */
-#define NOC_m_e_6_rd_I_main_QosGen_BASE_ADDRS    { NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_m_e_6_rd_I_main_QosGen peripheral base pointers */
-#define NOC_m_e_6_rd_I_main_QosGen_BASE_PTRS     { NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_m_e_6_rd_I_main_TranStatFilt - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063500u)
-/** Peripheral NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_m_e_6_rd_I_main_TranStatFilt_Type *)NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_m_e_6_rd_I_main_TranStatFilt peripheral base
- * addresses */
-#define NOC_m_e_6_rd_I_main_TranStatFilt_BASE_ADDRS { NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_m_e_6_rd_I_main_TranStatFilt peripheral base
- * pointers */
-#define NOC_m_e_6_rd_I_main_TranStatFilt_BASE_PTRS { NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_m_e_6_wr_I_main_QosGen - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_6_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_6_WR_I_MAIN_QOSGENERATOR_BASE (0x49062B80u)
-/** Peripheral NOC__GPV__M_E_6_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_6_WR_I_MAIN_QOSGENERATOR   ((NOC_m_e_6_wr_I_main_QosGen_Type *)NOC__GPV__M_E_6_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_m_e_6_wr_I_main_QosGen peripheral base addresses */
-#define NOC_m_e_6_wr_I_main_QosGen_BASE_ADDRS    { NOC__GPV__M_E_6_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_m_e_6_wr_I_main_QosGen peripheral base pointers */
-#define NOC_m_e_6_wr_I_main_QosGen_BASE_PTRS     { NOC__GPV__M_E_6_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_m_e_6_wr_I_main_TranStatFilt - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_6_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_6_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063580u)
-/** Peripheral NOC__GPV__M_E_6_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_6_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_m_e_6_wr_I_main_TranStatFilt_Type *)NOC__GPV__M_E_6_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_m_e_6_wr_I_main_TranStatFilt peripheral base
- * addresses */
-#define NOC_m_e_6_wr_I_main_TranStatFilt_BASE_ADDRS { NOC__GPV__M_E_6_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_m_e_6_wr_I_main_TranStatFilt peripheral base
- * pointers */
-#define NOC_m_e_6_wr_I_main_TranStatFilt_BASE_PTRS { NOC__GPV__M_E_6_WR_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_m_e_7_rd_I_main_QosGen - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR_BASE (0x49062C00u)
-/** Peripheral NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR   ((NOC_m_e_7_rd_I_main_QosGen_Type *)NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_m_e_7_rd_I_main_QosGen peripheral base addresses */
-#define NOC_m_e_7_rd_I_main_QosGen_BASE_ADDRS    { NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_m_e_7_rd_I_main_QosGen peripheral base pointers */
-#define NOC_m_e_7_rd_I_main_QosGen_BASE_PTRS     { NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_m_e_7_rd_I_main_TranStatFilt - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063600u)
-/** Peripheral NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_m_e_7_rd_I_main_TranStatFilt_Type *)NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_m_e_7_rd_I_main_TranStatFilt peripheral base
- * addresses */
-#define NOC_m_e_7_rd_I_main_TranStatFilt_BASE_ADDRS { NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_m_e_7_rd_I_main_TranStatFilt peripheral base
- * pointers */
-#define NOC_m_e_7_rd_I_main_TranStatFilt_BASE_PTRS { NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_m_e_7_wr_I_main_QosGen - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR_BASE (0x49062D80u)
-/** Peripheral NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR   ((NOC_m_e_7_wr_I_main_QosGen_Type *)NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_m_e_7_wr_I_main_QosGen peripheral base addresses */
-#define NOC_m_e_7_wr_I_main_QosGen_BASE_ADDRS    { NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_m_e_7_wr_I_main_QosGen peripheral base pointers */
-#define NOC_m_e_7_wr_I_main_QosGen_BASE_PTRS     { NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_m_e_7_wr_I_main_TranStatFilt - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063680u)
-/** Peripheral NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_m_e_7_wr_I_main_TranStatFilt_Type *)NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_m_e_7_wr_I_main_TranStatFilt peripheral base
- * addresses */
-#define NOC_m_e_7_wr_I_main_TranStatFilt_BASE_ADDRS { NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_m_e_7_wr_I_main_TranStatFilt peripheral base
- * pointers */
-#define NOC_m_e_7_wr_I_main_TranStatFilt_BASE_PTRS { NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_m_e_9_rd_I_main_QosGen - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR_BASE (0x49062E00u)
-/** Peripheral NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR   ((NOC_m_e_9_rd_I_main_QosGen_Type *)NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_m_e_9_rd_I_main_QosGen peripheral base addresses */
-#define NOC_m_e_9_rd_I_main_QosGen_BASE_ADDRS    { NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_m_e_9_rd_I_main_QosGen peripheral base pointers */
-#define NOC_m_e_9_rd_I_main_QosGen_BASE_PTRS     { NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_m_e_9_wr_I_main_QosGen - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR_BASE (0x49062E80u)
-/** Peripheral NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR   ((NOC_m_e_9_wr_I_main_QosGen_Type *)NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_m_e_9_wr_I_main_QosGen peripheral base addresses */
-#define NOC_m_e_9_wr_I_main_QosGen_BASE_ADDRS    { NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_m_e_9_wr_I_main_QosGen peripheral base pointers */
-#define NOC_m_e_9_wr_I_main_QosGen_BASE_PTRS     { NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_m_e_9_wr_I_main_TranStatFilt - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063780u)
-/** Peripheral NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_m_e_9_wr_I_main_TranStatFilt_Type *)NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_m_e_9_wr_I_main_TranStatFilt peripheral base
- * addresses */
-#define NOC_m_e_9_wr_I_main_TranStatFilt_BASE_ADDRS { NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_m_e_9_wr_I_main_TranStatFilt peripheral base
- * pointers */
-#define NOC_m_e_9_wr_I_main_TranStatFilt_BASE_PTRS { NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NPU_EIM - Peripheral instance base addresses */
-/** Peripheral NPU__EIM_NPUMIX base address */
-#define NPU__EIM_NPUMIX_BASE                     (0x4A860000u)
-/** Peripheral NPU__EIM_NPUMIX base pointer */
-#define NPU__EIM_NPUMIX                          ((NPU_EIM_Type *)NPU__EIM_NPUMIX_BASE)
-/** Array initializer of NPU_EIM peripheral base addresses */
-#define NPU_EIM_BASE_ADDRS                       { NPU__EIM_NPUMIX_BASE }
-/** Array initializer of NPU_EIM peripheral base pointers */
-#define NPU_EIM_BASE_PTRS                        { NPU__EIM_NPUMIX }
-
-/* NPU_LSTCU - Peripheral instance base addresses */
-/** Peripheral NPU__LSTCU_NPUMIX base address */
-#define NPU__LSTCU_NPUMIX_BASE                   (0x4A850000u)
-/** Peripheral NPU__LSTCU_NPUMIX base pointer */
-#define NPU__LSTCU_NPUMIX                        ((NPU_LSTCU_Type *)NPU__LSTCU_NPUMIX_BASE)
-/** Array initializer of NPU_LSTCU peripheral base addresses */
-#define NPU_LSTCU_BASE_ADDRS                     { NPU__LSTCU_NPUMIX_BASE }
-/** Array initializer of NPU_LSTCU peripheral base pointers */
-#define NPU_LSTCU_BASE_PTRS                      { NPU__LSTCU_NPUMIX }
-
-/* NPU_TCU - Peripheral instance base addresses */
-/** Peripheral NPU__TCU base address */
-#define NPU__TCU_BASE                            (0x4A800000u)
-/** Peripheral NPU__TCU base pointer */
-#define NPU__TCU                                 ((NPU_TCU_Type *)NPU__TCU_BASE)
-/** Array initializer of NPU_TCU peripheral base addresses */
-#define NPU_TCU_BASE_ADDRS                       { NPU__TCU_BASE }
-/** Array initializer of NPU_TCU peripheral base pointers */
-#define NPU_TCU_BASE_PTRS                        { NPU__TCU }
 
 /* OSC24M - Peripheral instance base addresses */
 /** Peripheral OSC24M base address */
@@ -4312,6 +3409,16 @@ typedef enum _xbar_output_signal
 #define PLL_BASE_ADDRS                           { SYS_PLL1_BASE, AUDIO_PLL1_BASE, AUDIO_PLL2_BASE, ENCODER_PLL_BASE, ARM_PLL_BASE, DRAM_PLL_BASE, HSIO_PLL_BASE, LDB_PLL_BASE }
 /** Array initializer of PLL peripheral base pointers */
 #define PLL_BASE_PTRS                            { SYS_PLL1, AUDIO_PLL1, AUDIO_PLL2, ENCODER_PLL, ARM_PLL, DRAM_PLL, HSIO_PLL, LDB_PLL }
+
+/* PMRO - Peripheral instance base addresses */
+/** Peripheral ANALOG__PMRO base address */
+#define ANALOG__PMRO_BASE                        (0x44484000u)
+/** Peripheral ANALOG__PMRO base pointer */
+#define ANALOG__PMRO                             ((PMRO_Type *)ANALOG__PMRO_BASE)
+/** Array initializer of PMRO peripheral base addresses */
+#define PMRO_BASE_ADDRS                          { ANALOG__PMRO_BASE }
+/** Array initializer of PMRO peripheral base pointers */
+#define PMRO_BASE_PTRS                           { ANALOG__PMRO }
 
 /* PWM - Peripheral instance base addresses */
 /** Peripheral PWM1 base address */
@@ -4434,6 +3541,16 @@ typedef enum _xbar_output_signal
 #define SEMA42_BASE_ADDRS                        { 0u, SEMA42_1_BASE, SEMA42_2_BASE }
 /** Array initializer of SEMA42 peripheral base pointers */
 #define SEMA42_BASE_PTRS                         { (SEMA42_Type *)0u, SEMA42_1, SEMA42_2 }
+
+/* SFA - Peripheral instance base addresses */
+/** Peripheral ANALOG__SFA base address */
+#define ANALOG__SFA_BASE                         (0x44483000u)
+/** Peripheral ANALOG__SFA base pointer */
+#define ANALOG__SFA                              ((SFA_Type *)ANALOG__SFA_BASE)
+/** Array initializer of SFA peripheral base addresses */
+#define SFA_BASE_ADDRS                           { ANALOG__SFA_BASE }
+/** Array initializer of SFA peripheral base pointers */
+#define SFA_BASE_PTRS                            { ANALOG__SFA }
 
 /* SINC - Peripheral instance base addresses */
 /** Peripheral SINC1 base address */
@@ -4663,6 +3780,28 @@ typedef enum _xbar_output_signal
 /** Array initializer of SW_PSEUDO_MAC_PORT peripheral base pointers */
 #define SW_PSEUDO_MAC_PORT_BASE_PTRS             { NETC__ECAM_PCI_EMDIO0_BAR_0__SW0_PSEUDO_MAC_PORT3 }
 
+/* SYSPM - Peripheral instance base addresses */
+/** Peripheral AON__M33_PCF1 base address */
+#define AON__M33_PCF1_BASE                       (0x443E0000u)
+/** Peripheral AON__M33_PCF1 base pointer */
+#define AON__M33_PCF1                            ((SYSPM_Type *)AON__M33_PCF1_BASE)
+/** Peripheral AON__M33_PSF1 base address */
+#define AON__M33_PSF1_BASE                       (0x443F0000u)
+/** Peripheral AON__M33_PSF1 base pointer */
+#define AON__M33_PSF1                            ((SYSPM_Type *)AON__M33_PSF1_BASE)
+/** Peripheral NETC__CM33_PCF1 base address */
+#define NETC__CM33_PCF1_BASE                     (0x4D1B0000u)
+/** Peripheral NETC__CM33_PCF1 base pointer */
+#define NETC__CM33_PCF1                          ((SYSPM_Type *)NETC__CM33_PCF1_BASE)
+/** Peripheral NETC__CM33_PSF1 base address */
+#define NETC__CM33_PSF1_BASE                     (0x4D1C0000u)
+/** Peripheral NETC__CM33_PSF1 base pointer */
+#define NETC__CM33_PSF1                          ((SYSPM_Type *)NETC__CM33_PSF1_BASE)
+/** Array initializer of SYSPM peripheral base addresses */
+#define SYSPM_BASE_ADDRS                         { AON__M33_PCF1_BASE, AON__M33_PSF1_BASE, NETC__CM33_PCF1_BASE, NETC__CM33_PSF1_BASE }
+/** Array initializer of SYSPM peripheral base pointers */
+#define SYSPM_BASE_PTRS                          { AON__M33_PCF1, AON__M33_PSF1, NETC__CM33_PCF1, NETC__CM33_PSF1 }
+
 /* SYS_CTR_COMPARE - Peripheral instance base addresses */
 /** Peripheral AON__SYS_CTR1__SYS_CTR_COMPARE base address */
 #define AON__SYS_CTR1__SYS_CTR_COMPARE_BASE      (0x442A0000u)
@@ -4720,6 +3859,78 @@ typedef enum _xbar_output_signal
 #define TCM_ECC_MCM_BASE_ADDRS                   { AON__M33_CACHE_CTRL_ECC0__CM33_TCM_MCM_BASE, NETC__M33_CACHE_CTRL_ECC0__CM33_TCM_MCM_BASE }
 /** Array initializer of TCM_ECC_MCM peripheral base pointers */
 #define TCM_ECC_MCM_BASE_PTRS                    { AON__M33_CACHE_CTRL_ECC0__CM33_TCM_MCM, NETC__M33_CACHE_CTRL_ECC0__CM33_TCM_MCM }
+
+/* TCU - Peripheral instance base addresses */
+/** Peripheral ANALOG__TCU base address */
+#define ANALOG__TCU_BASE                         (0x444C0000u)
+/** Peripheral ANALOG__TCU base pointer */
+#define ANALOG__TCU                              ((TCU_Type *)ANALOG__TCU_BASE)
+/** Peripheral AON__TCU base address */
+#define AON__TCU_BASE                            (0x444B0000u)
+/** Peripheral AON__TCU base pointer */
+#define AON__TCU                                 ((TCU_Type *)AON__TCU_BASE)
+/** Peripheral BBSM__TCU_BBSMMIX base address */
+#define BBSM__TCU_BBSMMIX_BASE                   (0x444E0000u)
+/** Peripheral BBSM__TCU_BBSMMIX base pointer */
+#define BBSM__TCU_BBSMMIX                        ((TCU_Type *)BBSM__TCU_BBSMMIX_BASE)
+/** Peripheral CCMSRCGPC__TCU base address */
+#define CCMSRCGPC__TCU_BASE                      (0x444D0000u)
+/** Peripheral CCMSRCGPC__TCU base pointer */
+#define CCMSRCGPC__TCU                           ((TCU_Type *)CCMSRCGPC__TCU_BASE)
+/** Peripheral CORTEXA__TCU base address */
+#define CORTEXA__TCU_BASE                        (0x4A400000u)
+/** Peripheral CORTEXA__TCU base pointer */
+#define CORTEXA__TCU                             ((TCU_Type *)CORTEXA__TCU_BASE)
+/** Peripheral DDRC__TCU base address */
+#define DDRC__TCU_BASE                           (0x4E000000u)
+/** Peripheral DDRC__TCU base pointer */
+#define DDRC__TCU                                ((TCU_Type *)DDRC__TCU_BASE)
+/** Peripheral DISPLAY__TCU base address */
+#define DISPLAY__TCU_BASE                        (0x4B000000u)
+/** Peripheral DISPLAY__TCU base pointer */
+#define DISPLAY__TCU                             ((TCU_Type *)DISPLAY__TCU_BASE)
+/** Peripheral HSIO__TCU base address */
+#define HSIO__TCU_BASE                           (0x4C000000u)
+/** Peripheral HSIO__TCU base pointer */
+#define HSIO__TCU                                ((TCU_Type *)HSIO__TCU_BASE)
+/** Peripheral M7_1__TCU base address */
+#define M7_1__TCU_BASE                           (0x49C00000u)
+/** Peripheral M7_1__TCU base pointer */
+#define M7_1__TCU                                ((TCU_Type *)M7_1__TCU_BASE)
+/** Peripheral M7__TCU base address */
+#define M7__TCU_BASE                             (0x4A000000u)
+/** Peripheral M7__TCU base pointer */
+#define M7__TCU                                  ((TCU_Type *)M7__TCU_BASE)
+/** Peripheral NETC__TCU base address */
+#define NETC__TCU_BASE                           (0x4C800000u)
+/** Peripheral NETC__TCU base pointer */
+#define NETC__TCU                                ((TCU_Type *)NETC__TCU_BASE)
+/** Peripheral NETC__TCU_CM33 base address */
+#define NETC__TCU_CM33_BASE                      (0x4D000000u)
+/** Peripheral NETC__TCU_CM33 base pointer */
+#define NETC__TCU_CM33                           ((TCU_Type *)NETC__TCU_CM33_BASE)
+/** Peripheral NOC__TCU base address */
+#define NOC__TCU_BASE                            (0x49040000u)
+/** Peripheral NOC__TCU base pointer */
+#define NOC__TCU                                 ((TCU_Type *)NOC__TCU_BASE)
+/** Peripheral NPU__TCU base address */
+#define NPU__TCU_BASE                            (0x4A800000u)
+/** Peripheral NPU__TCU base pointer */
+#define NPU__TCU                                 ((TCU_Type *)NPU__TCU_BASE)
+/** Array initializer of TCU peripheral base addresses */
+#define TCU_BASE_ADDRS                           { ANALOG__TCU_BASE, AON__TCU_BASE, BBSM__TCU_BBSMMIX_BASE, CCMSRCGPC__TCU_BASE, CORTEXA__TCU_BASE, DDRC__TCU_BASE, DISPLAY__TCU_BASE, HSIO__TCU_BASE, M7_1__TCU_BASE, M7__TCU_BASE, NETC__TCU_BASE, NETC__TCU_CM33_BASE, NOC__TCU_BASE, NPU__TCU_BASE }
+/** Array initializer of TCU peripheral base pointers */
+#define TCU_BASE_PTRS                            { ANALOG__TCU, AON__TCU, BBSM__TCU_BBSMMIX, CCMSRCGPC__TCU, CORTEXA__TCU, DDRC__TCU, DISPLAY__TCU, HSIO__TCU, M7_1__TCU, M7__TCU, NETC__TCU, NETC__TCU_CM33, NOC__TCU, NPU__TCU }
+
+/* TCW - Peripheral instance base addresses */
+/** Peripheral WAKEUP__TCW base address */
+#define WAKEUP__TCW_BASE                         (0x42620000u)
+/** Peripheral WAKEUP__TCW base pointer */
+#define WAKEUP__TCW                              ((TCW_Type *)WAKEUP__TCW_BASE)
+/** Array initializer of TCW peripheral base addresses */
+#define TCW_BASE_ADDRS                           { WAKEUP__TCW_BASE }
+/** Array initializer of TCW peripheral base pointers */
+#define TCW_BASE_PTRS                            { WAKEUP__TCW }
 
 /* TMPSNS - Peripheral instance base addresses */
 /** Peripheral CORTEXA__TMPSNS base address */
@@ -4833,8 +4044,6 @@ typedef enum _xbar_output_signal
 /** Interrupt vectors for the TPM peripheral type */
 #define TPM_IRQS                                 { NotAvail_IRQn, TPM1_IRQn, TPM2_IRQn, TPM3_IRQn, TPM4_IRQn, TPM5_IRQn, TPM6_IRQn }
 
-
-
 /* TSTMR - Peripheral instance base addresses */
 /** Peripheral TSTMR1_A base address */
 #define TSTMR1_A_BASE                            (0x442C0000u)
@@ -4848,6 +4057,9 @@ typedef enum _xbar_output_signal
 #define TSTMR_BASE_ADDRS                         { TSTMR1_A_BASE, TSTMR2_A_BASE }
 /** Array initializer of TSTMR peripheral base pointers */
 #define TSTMR_BASE_PTRS                          { TSTMR1_A, TSTMR2_A }
+/* Extra definition */
+#define TSTMR_CLOCK_FREQUENCY_MHZ                (24U)
+
 
 /* USB - Peripheral instance base addresses */
 /** Peripheral HSIO__USB_2_0__USB_OTG1 base address */
@@ -4889,122 +4101,43 @@ typedef enum _xbar_output_signal
 /** Array initializer of USBNC peripheral base pointers */
 #define USBNC_BASE_PTRS                          { HSIO__USB_2_0__USBNC_OTG1 }
 
-/* WAKEUP_ATU - Peripheral instance base addresses */
-/** Peripheral WAKEUP__ATUA base address */
-#define WAKEUP__ATUA_BASE                        (0x42760000u)
-/** Peripheral WAKEUP__ATUA base pointer */
-#define WAKEUP__ATUA                             ((WAKEUP_ATU_Type *)WAKEUP__ATUA_BASE)
-/** Peripheral WAKEUP__ATUM base address */
-#define WAKEUP__ATUM_BASE                        (0x42770000u)
-/** Peripheral WAKEUP__ATUM base pointer */
-#define WAKEUP__ATUM                             ((WAKEUP_ATU_Type *)WAKEUP__ATUM_BASE)
-/** Peripheral WAKEUP__ATUM33 base address */
-#define WAKEUP__ATUM33_BASE                      (0x427D0000u)
-/** Peripheral WAKEUP__ATUM33 base pointer */
-#define WAKEUP__ATUM33                           ((WAKEUP_ATU_Type *)WAKEUP__ATUM33_BASE)
-/** Peripheral WAKEUP__ATU_M70 base address */
-#define WAKEUP__ATU_M70_BASE                     (0x42A90000u)
-/** Peripheral WAKEUP__ATU_M70 base pointer */
-#define WAKEUP__ATU_M70                          ((WAKEUP_ATU_Type *)WAKEUP__ATU_M70_BASE)
-/** Peripheral WAKEUP__ATU_M71 base address */
-#define WAKEUP__ATU_M71_BASE                     (0x42AA0000u)
-/** Peripheral WAKEUP__ATU_M71 base pointer */
-#define WAKEUP__ATU_M71                          ((WAKEUP_ATU_Type *)WAKEUP__ATU_M71_BASE)
-/** Peripheral WAKEUP__AUDIO_XCVR base address */
-#define WAKEUP__AUDIO_XCVR_BASE                  (0x42680000u)
-/** Peripheral WAKEUP__AUDIO_XCVR base pointer */
-#define WAKEUP__AUDIO_XCVR                       ((WAKEUP_ATU_Type *)WAKEUP__AUDIO_XCVR_BASE)
-/** Array initializer of WAKEUP_ATU peripheral base addresses */
-#define WAKEUP_ATU_BASE_ADDRS                    { WAKEUP__ATUA_BASE, WAKEUP__ATUM_BASE, WAKEUP__ATUM33_BASE, WAKEUP__ATU_M70_BASE, WAKEUP__ATU_M71_BASE, WAKEUP__AUDIO_XCVR_BASE }
-/** Array initializer of WAKEUP_ATU peripheral base pointers */
-#define WAKEUP_ATU_BASE_PTRS                     { WAKEUP__ATUA, WAKEUP__ATUM, WAKEUP__ATUM33, WAKEUP__ATU_M70, WAKEUP__ATU_M71, WAKEUP__AUDIO_XCVR }
-
-/* WAKEUP_CMU - Peripheral instance base addresses */
-/** Peripheral WAKEUP__CMU1 base address */
-#define WAKEUP__CMU1_BASE                        (0x42750000u)
-/** Peripheral WAKEUP__CMU1 base pointer */
-#define WAKEUP__CMU1                             ((WAKEUP_CMU_Type *)WAKEUP__CMU1_BASE)
-/** Peripheral WAKEUP__CMU2 base address */
-#define WAKEUP__CMU2_BASE                        (0x427A0000u)
-/** Peripheral WAKEUP__CMU2 base pointer */
-#define WAKEUP__CMU2                             ((WAKEUP_CMU_Type *)WAKEUP__CMU2_BASE)
-/** Array initializer of WAKEUP_CMU peripheral base addresses */
-#define WAKEUP_CMU_BASE_ADDRS                    { WAKEUP__CMU1_BASE, WAKEUP__CMU2_BASE }
-/** Array initializer of WAKEUP_CMU peripheral base pointers */
-#define WAKEUP_CMU_BASE_PTRS                     { WAKEUP__CMU1, WAKEUP__CMU2 }
-
-/* WAKEUP_DMA_CRC - Peripheral instance base addresses */
-/** Peripheral WAKEUP__DMA_CRC2 base address */
-#define WAKEUP__DMA_CRC2_BASE                    (0x427B0000u)
-/** Peripheral WAKEUP__DMA_CRC2 base pointer */
-#define WAKEUP__DMA_CRC2                         ((WAKEUP_DMA_CRC_Type *)WAKEUP__DMA_CRC2_BASE)
-/** Peripheral WAKEUP__DMA_CRC4 base address */
-#define WAKEUP__DMA_CRC4_BASE                    (0x427C0000u)
-/** Peripheral WAKEUP__DMA_CRC4 base pointer */
-#define WAKEUP__DMA_CRC4                         ((WAKEUP_DMA_CRC_Type *)WAKEUP__DMA_CRC4_BASE)
-/** Array initializer of WAKEUP_DMA_CRC peripheral base addresses */
-#define WAKEUP_DMA_CRC_BASE_ADDRS                { WAKEUP__DMA_CRC2_BASE, WAKEUP__DMA_CRC4_BASE }
-/** Array initializer of WAKEUP_DMA_CRC peripheral base pointers */
-#define WAKEUP_DMA_CRC_BASE_PTRS                 { WAKEUP__DMA_CRC2, WAKEUP__DMA_CRC4 }
-
-/* WAKEUP_EIM - Peripheral instance base addresses */
-/** Peripheral WAKEUP__EIM base address */
-#define WAKEUP__EIM_BASE                         (0x42780000u)
-/** Peripheral WAKEUP__EIM base pointer */
-#define WAKEUP__EIM                              ((WAKEUP_EIM_Type *)WAKEUP__EIM_BASE)
-/** Array initializer of WAKEUP_EIM peripheral base addresses */
-#define WAKEUP_EIM_BASE_ADDRS                    { WAKEUP__EIM_BASE }
-/** Array initializer of WAKEUP_EIM peripheral base pointers */
-#define WAKEUP_EIM_BASE_PTRS                     { WAKEUP__EIM }
-
-/* WAKEUP_ERM - Peripheral instance base addresses */
-/** Peripheral WAKEUP__ERM base address */
-#define WAKEUP__ERM_BASE                         (0x42790000u)
-/** Peripheral WAKEUP__ERM base pointer */
-#define WAKEUP__ERM                              ((WAKEUP_ERM_Type *)WAKEUP__ERM_BASE)
-/** Array initializer of WAKEUP_ERM peripheral base addresses */
-#define WAKEUP_ERM_BASE_ADDRS                    { WAKEUP__ERM_BASE }
-/** Array initializer of WAKEUP_ERM peripheral base pointers */
-#define WAKEUP_ERM_BASE_PTRS                     { WAKEUP__ERM }
-
-/* WAKEUP_TCW - Peripheral instance base addresses */
-/** Peripheral WAKEUP__TCW base address */
-#define WAKEUP__TCW_BASE                         (0x42620000u)
-/** Peripheral WAKEUP__TCW base pointer */
-#define WAKEUP__TCW                              ((WAKEUP_TCW_Type *)WAKEUP__TCW_BASE)
-/** Array initializer of WAKEUP_TCW peripheral base addresses */
-#define WAKEUP_TCW_BASE_ADDRS                    { WAKEUP__TCW_BASE }
-/** Array initializer of WAKEUP_TCW peripheral base pointers */
-#define WAKEUP_TCW_BASE_PTRS                     { WAKEUP__TCW }
-
-
-/* WAKEUP_USDHC - Peripheral instance base addresses */
+/* USDHC - Peripheral instance base addresses */
 /** Peripheral WAKEUP__USDHC1 base address */
 #define WAKEUP__USDHC1_BASE                      (0x42850000u)
 /** Peripheral WAKEUP__USDHC1 base pointer */
-#define WAKEUP__USDHC1                           ((WAKEUP_USDHC_Type *)WAKEUP__USDHC1_BASE)
+#define WAKEUP__USDHC1                           ((USDHC_Type *)WAKEUP__USDHC1_BASE)
 /** Peripheral WAKEUP__USDHC2 base address */
 #define WAKEUP__USDHC2_BASE                      (0x42860000u)
 /** Peripheral WAKEUP__USDHC2 base pointer */
-#define WAKEUP__USDHC2                           ((WAKEUP_USDHC_Type *)WAKEUP__USDHC2_BASE)
+#define WAKEUP__USDHC2                           ((USDHC_Type *)WAKEUP__USDHC2_BASE)
 /** Peripheral WAKEUP__USDHC3 base address */
 #define WAKEUP__USDHC3_BASE                      (0x42880000u)
 /** Peripheral WAKEUP__USDHC3 base pointer */
-#define WAKEUP__USDHC3                           ((WAKEUP_USDHC_Type *)WAKEUP__USDHC3_BASE)
-/** Array initializer of WAKEUP_USDHC peripheral base addresses */
-#define WAKEUP_USDHC_BASE_ADDRS                  { WAKEUP__USDHC1_BASE, WAKEUP__USDHC2_BASE, WAKEUP__USDHC3_BASE }
-/** Array initializer of WAKEUP_USDHC peripheral base pointers */
-#define WAKEUP_USDHC_BASE_PTRS                   { WAKEUP__USDHC1, WAKEUP__USDHC2, WAKEUP__USDHC3 }
+#define WAKEUP__USDHC3                           ((USDHC_Type *)WAKEUP__USDHC3_BASE)
+/** Array initializer of USDHC peripheral base addresses */
+#define USDHC_BASE_ADDRS                         { 0u, WAKEUP__USDHC1_BASE, WAKEUP__USDHC2_BASE, WAKEUP__USDHC3_BASE }
+/** Array initializer of USDHC peripheral base pointers */
+#define USDHC_BASE_PTRS                          { (USDHC_Type *)0u, WAKEUP__USDHC1, WAKEUP__USDHC2, WAKEUP__USDHC3 }
 
-/* WAKEUP_XSPI_RESPONDER - Peripheral instance base addresses */
-/** Peripheral WAKEUP__XSPI_RESPONDER base address */
-#define WAKEUP__XSPI_RESPONDER_BASE              (0x42890000u)
-/** Peripheral WAKEUP__XSPI_RESPONDER base pointer */
-#define WAKEUP__XSPI_RESPONDER                   ((WAKEUP_XSPI_RESPONDER_Type *)WAKEUP__XSPI_RESPONDER_BASE)
-/** Array initializer of WAKEUP_XSPI_RESPONDER peripheral base addresses */
-#define WAKEUP_XSPI_RESPONDER_BASE_ADDRS         { WAKEUP__XSPI_RESPONDER_BASE }
-/** Array initializer of WAKEUP_XSPI_RESPONDER peripheral base pointers */
-#define WAKEUP_XSPI_RESPONDER_BASE_PTRS          { WAKEUP__XSPI_RESPONDER }
+/* VDET - Peripheral instance base addresses */
+/** Peripheral ANALOG__VDET base address */
+#define ANALOG__VDET_BASE                        (0x44486000u)
+/** Peripheral ANALOG__VDET base pointer */
+#define ANALOG__VDET                             ((VDET_Type *)ANALOG__VDET_BASE)
+/** Array initializer of VDET peripheral base addresses */
+#define VDET_BASE_ADDRS                          { ANALOG__VDET_BASE }
+/** Array initializer of VDET peripheral base pointers */
+#define VDET_BASE_PTRS                           { ANALOG__VDET }
+
+/* VFCCU - Peripheral instance base addresses */
+/** Peripheral AON__FCCU base address */
+#define AON__FCCU_BASE                           (0x44570000u)
+/** Peripheral AON__FCCU base pointer */
+#define AON__FCCU                                ((VFCCU_Type *)AON__FCCU_BASE)
+/** Array initializer of VFCCU peripheral base addresses */
+#define VFCCU_BASE_ADDRS                         { AON__FCCU_BASE }
+/** Array initializer of VFCCU peripheral base pointers */
+#define VFCCU_BASE_PTRS                          { AON__FCCU }
 
 /* WDOG - Peripheral instance base addresses */
 /** Peripheral WDOG1 base address */
@@ -5043,6 +4176,10 @@ typedef enum _xbar_output_signal
 #define WDOG_BASE_ADDRS                          { WDOG1_BASE, WDOG2_BASE, WDOG3_BASE, WDOG4_BASE, WDOG5_BASE, WDOG6_BASE, WDOG7_BASE, WDOG8_BASE }
 /** Array initializer of WDOG peripheral base pointers */
 #define WDOG_BASE_PTRS                           { WDOG1, WDOG2, WDOG3, WDOG4, WDOG5, WDOG6, WDOG7, WDOG8 }
+/* Extra definition */
+#define WDOG_UPDATE_KEY                          (0xD928C520U)
+#define WDOG_REFRESH_KEY                         (0xB480A602U)
+
 
 /* XBAR1 - Peripheral instance base addresses */
 /** Peripheral XBAR1 base address */
@@ -5161,32 +4298,9 @@ typedef enum
 /** Array initializer of ieprc_prb peripheral base pointers */
 #define ieprc_prb_BASE_PTRS                      { NETC__IEPRC_1__IEPRC_PRB }
 
-/* m_e_3_wr_I_main_TranStatFilt - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063280u)
-/** Peripheral NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER ((m_e_3_wr_I_main_TranStatFilt_Type *)NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of m_e_3_wr_I_main_TranStatFilt peripheral base addresses
- * */
-#define m_e_3_wr_I_main_TranStatFilt_BASE_ADDRS  { NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of m_e_3_wr_I_main_TranStatFilt peripheral base pointers */
-#define m_e_3_wr_I_main_TranStatFilt_BASE_PTRS   { NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* m_e_9_rd_I_main_TransactionStatFilter - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063700u)
-/** Peripheral NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER ((m_e_9_rd_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of m_e_9_rd_I_main_TransactionStatFilter peripheral base
- * addresses */
-#define m_e_9_rd_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of m_e_9_rd_I_main_TransactionStatFilter peripheral base
- * pointers */
-#define m_e_9_rd_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
 /* neutrons - Peripheral instance base addresses */
 /** Peripheral NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC base address */
-#define NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC_BASE (0x4AC00000u)
+#define NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC_BASE (0x4AB00000u)
 /** Peripheral NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC base pointer */
 #define NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC     ((neutrons_Type *)NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC_BASE)
 /** Peripheral NPU__NEUTRON_NPU__NEUTRON_S__MMR_ZV base address */

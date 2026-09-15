@@ -30,7 +30,7 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-#define FSL_XSPI_DRIVER_VERSION (MAKE_VERSION(2, 7, 5))
+#define FSL_XSPI_DRIVER_VERSION (MAKE_VERSION(2, 7, 7))
 /*@{*/
 
 /*! @brief Formula to form XSPI instructions in LUT table. */
@@ -52,33 +52,33 @@
 
 #if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
 #define XSPI_TG_REG_ADDR(base, tg, reg)                             \
-    ((uint32_t)(((uint32_t)tg == 0U) ? (uint32_t)(&((base)->reg)) : \
-                                       (uint32_t)(&((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].reg##_SUB))))
+    ((uintptr_t)(((uint32_t)tg == 0U) ? (uintptr_t)(&((base)->reg)) : \
+                                        (uintptr_t)(&((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].reg##_SUB))))
 #define XSPI_TG_REG_VAL(base, tg, reg) \
     ((uint32_t)(((uint32_t)tg == 0U) ? ((base)->reg) : ((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].reg##_SUB)))
 
 #define XSPI_TG_REG_ADDR_RBDR(base, tg)                       \
-    ((uint32_t)(((uint32_t)tg == 0U) ? (&((base)->RBDR[0])) : \
-                                       (&((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].RBDR_SUB_[0]))))
+    ((uintptr_t)(((uint32_t)tg == 0U) ? (uintptr_t)(&((base)->RBDR[0])) : \
+                                        (uintptr_t)(&((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].RBDR_SUB_[0]))))
 #define XSPI_TG_REG_VAL_RBDR_INDEX(base, tg, i) \
     ((uint32_t)(((uint32_t)tg == 0U) ? ((base)->RBDR[i]) : ((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].RBDR_SUB_[i])))
 
 #define XSPI_TG_REG_ADDR_INT_EN(base, tg)                              \
-    ((uint32_t)(((uint32_t)tg == 0U) ? (uint32_t)(&((base)->INT_EN)) : \
-                                       (uint32_t)(&((base)->SFP_INT_EN_SUB[(uint32_t)tg - 1U]))))
+    ((uintptr_t)(((uint32_t)tg == 0U) ? (uintptr_t)(&((base)->INT_EN)) : \
+                                        (uintptr_t)(&((base)->SFP_INT_EN_SUB[(uint32_t)tg - 1U]))))
 
 #define XSPI_TG_REG_ADDR_RSER(base, tg)                              \
-    ((uint32_t)(((uint32_t)tg == 0U) ? (uint32_t)(&((base)->RSER)) : \
-                                       (uint32_t)(&((base)->RSER_SUB[(uint32_t)tg - 1U]))))
+    ((uintptr_t)(((uint32_t)tg == 0U) ? (uintptr_t)(&((base)->RSER)) : \
+                                        (uintptr_t)(&((base)->RSER_SUB[(uint32_t)tg - 1U]))))
 
 #else
 
-#define XSPI_TG_REG_ADDR(base, tg, reg)         ((uint32_t)(&((base)->reg)))
+#define XSPI_TG_REG_ADDR(base, tg, reg)         ((uintptr_t)(&((base)->reg)))
 #define XSPI_TG_REG_VAL(base, tg, reg)          ((uint32_t)((base)->reg))
-#define XSPI_TG_REG_ADDR_RBDR(base, tg)         ((uint32_t)(&((base)->RBDR[0])))
+#define XSPI_TG_REG_ADDR_RBDR(base, tg)         ((uintptr_t)(&((base)->RBDR[0])))
 #define XSPI_TG_REG_VAL_RBDR_INDEX(base, tg, i) ((uint32_t)((base)->RBDR[i]))
-#define XSPI_TG_REG_ADDR_INT_EN(base, tg)       (uint32_t)(&((base)->INT_EN))
-#define XSPI_TG_REG_ADDR_RSER(base, tg)         (uint32_t)(&((base)->RSER))
+#define XSPI_TG_REG_ADDR_INT_EN(base, tg)       (uintptr_t)(&((base)->INT_EN))
+#define XSPI_TG_REG_ADDR_RSER(base, tg)         (uintptr_t)(&((base)->RSER))
 
 #endif /* (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV) */
 

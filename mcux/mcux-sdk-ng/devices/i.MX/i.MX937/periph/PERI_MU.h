@@ -17,7 +17,7 @@
 **                          MIMX9375xxVZx_cm7
 **
 **     Version:             rev. 1.0, 2026-04-09
-**     Build:               b260624
+**     Build:               b260722
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MU
@@ -121,7 +121,7 @@ typedef struct {
   __IO uint32_t CCR0;                              /**< Core Control 0, offset: 0x10 */
   __IO uint32_t CIER0;                             /**< Core Interrupt Enable 0, offset: 0x14 */
   __IO uint32_t CSSR0;                             /**< Core Sticky Status 0, offset: 0x18 */
-  __I  uint32_t CSR0;                              /**< Core Status 0, offset: 0x1C, not available in all instances (available on 105 out of 110) */
+  __I  uint32_t CSR0;                              /**< Core Status 0, offset: 0x1C, not available in all instances (available on 75 out of 80) */
        uint8_t RESERVED_0[224];
   __IO uint32_t FCR;                               /**< Flag Control, offset: 0x100 */
   __I  uint32_t FSR;                               /**< Flag Status, offset: 0x104 */
@@ -410,8 +410,8 @@ typedef struct {
 #define MU_CSSR0_RUN_MASK                        (0x4U)
 #define MU_CSSR0_RUN_SHIFT                       (2U)
 /*! RUN - Processor B Run Mode Entry Interrupt Pending Flag
- *  0b0..Processor A did not enter Run mode.
- *  0b1..Processor A entered Run mode.
+ *  0b0..Processor B did not enter Run mode.
+ *  0b1..Processor B entered Run mode.
  */
 #define MU_CSSR0_RUN(x)                          (((uint32_t)(((uint32_t)(x)) << MU_CSSR0_RUN_SHIFT)) & MU_CSSR0_RUN_MASK)
 

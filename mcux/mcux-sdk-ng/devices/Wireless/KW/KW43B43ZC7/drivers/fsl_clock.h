@@ -254,14 +254,16 @@ typedef enum _clock_name
  */
 typedef enum _clock_ip_control
 {
-    kCLOCK_IpClkControl_fun0 = MRCC_CC(0U), /*!< Peripheral clocks are disabled, module does not stall low power mode entry. */
-    kCLOCK_IpClkControl_fun1 = MRCC_CC(1U), /*!< Peripheral clocks are enabled, module does not stall low power mode entry. */
-    kCLOCK_IpClkControl_fun2 = MRCC_CC(2U), /*!< Peripheral clocks are enabled unless module is idle, low power mode entry
-                                      stalls until module is idle. */
+    kCLOCK_IpClkControl_fun0 =
+        MRCC_CC(0U), /*!< Peripheral clocks are disabled, module does not stall low power mode entry. */
+    kCLOCK_IpClkControl_fun1 =
+        MRCC_CC(1U), /*!< Peripheral clocks are enabled, module does not stall low power mode entry. */
+    kCLOCK_IpClkControl_fun2 = MRCC_CC(2U), /*!< Peripheral clocks are enabled unless module is idle, low power mode
+                                      entry stalls until module is idle. */
     kCLOCK_IpClkControl_fun3 =
-        MRCC_CC(3U), /*!<  Peripheral clocks are enabled unless in SLEEP (or lower) mode, low power mode entry stalls until
-               module is idle. Peripheral functional clocks that remain enabled in SLEEP mode are enabled and do not
-               stall low power mode entry unless entering DEEPSLEEP (or lower) mode. */
+        MRCC_CC(3U), /*!<  Peripheral clocks are enabled unless in SLEEP (or lower) mode, low power mode entry stalls
+               until module is idle. Peripheral functional clocks that remain enabled in SLEEP mode are enabled and do
+               not stall low power mode entry unless entering DEEPSLEEP (or lower) mode. */
 } clock_ip_control_t;
 
 /*!
@@ -359,7 +361,6 @@ typedef enum _clock_ip_name
     kCLOCK_Tpm4            = MAKE_MRCC_REGADDR(MRCC_0_BASE, 0x278), /*!< Clock tpm4 */
     kCLOCK_Trgmux0         = MAKE_MRCC_REGADDR(MRCC_0_BASE, 0x280), /*!< Clock trgmux0 */
     kCLOCK_Tstmr0          = MAKE_MRCC_REGADDR(MRCC_0_BASE, 0x288), /*!< Clock tstmr0 */
-    kCLOCK_Udf0            = MAKE_MRCC_REGADDR(MRCC_0_BASE, 0x290), /*!< Clock udf0 */
     kCLOCK_Uteal1          = MAKE_MRCC_REGADDR(MRCC_0_BASE, 0x298), /*!< Clock uteal_1 */
     kCLOCK_Wdog0           = MAKE_MRCC_REGADDR(MRCC_0_BASE, 0x2A0), /*!< Clock wdog0 */
     kCLOCK_Wdog1           = MAKE_MRCC_REGADDR(MRCC_0_BASE, 0x2A8), /*!< Clock wdog1 */
@@ -383,7 +384,8 @@ typedef enum _scg_sys_clk
     kSCG_SysClkSlow,     /*!< System slow clock. */
     kSCG_SysClkBus,      /*!< Bus clock.         */
     kSCG_SysClkPlatform, /*!< Platform clock.    */
-    kSCG_SysClkCore,     /*!< Core clock.        */
+    kSCG_SysClkCore,     /*!< Core0 clock.       */
+    kSCG_SysClkCore1,    /*!< Core1 clock.       */
 } scg_sys_clk_t;
 
 /*!
@@ -425,14 +427,14 @@ typedef enum _scg_sys_clk_div
  */
 typedef struct _scg_sys_clk_config
 {
-    uint32_t divSlow : 4; /*!< Slow clock divider, see @ref scg_sys_clk_div_t. */
-    uint32_t divBus : 4;  /*!< Bus clock divider, see @ref scg_sys_clk_div_t.  */
-    uint32_t : 4;         /*!< Reserved. */
-    uint32_t divPlat : 4; /*!< Plat clock divider (core#1), see @ref scg_sys_clk_div_t. */
-    uint32_t divCore : 4; /*!< Core clock divider (core#0), see @ref scg_sys_clk_div_t. */
-    uint32_t : 4;         /*!< Reserved. */
-    uint32_t src : 3;     /*!< System clock source, see @ref scg_sys_clk_src_t. */
-    uint32_t : 5;         /*!< reserved. */
+    uint32_t divSlow : 4;  /*!< Slow clock divider, see @ref scg_sys_clk_div_t. */
+    uint32_t divBus : 4;   /*!< Bus clock divider, see @ref scg_sys_clk_div_t.  */
+    uint32_t : 4;          /*!< Reserved. */
+    uint32_t divCore1 : 4; /*!< Core1 clock divider (core#1), see @ref scg_sys_clk_div_t. */
+    uint32_t divCore : 4;  /*!< Core0 clock divider (core#0), see @ref scg_sys_clk_div_t. */
+    uint32_t : 4;          /*!< Reserved. */
+    uint32_t src : 3;      /*!< System clock source, see @ref scg_sys_clk_src_t. */
+    uint32_t : 5;          /*!< reserved. */
 } scg_sys_clk_config_t;
 
 /*!
@@ -461,9 +463,10 @@ typedef enum _scg_sosc_monitor_mode
 /*! @brief SOSC enable mode. */
 enum
 {
-    kSCG_SoscDisable       = 0,                         /*!< Disable SOSC clock.             */
-    kSCG_SoscEnable        = SCG_SOSCCSR_SOSCEN_MASK,   /*!< Enable SOSC clock.              */
-    kSCG_SoscEnableInSleep = SCG_SOSCCSR_SOSCSTEN_MASK, /*!< Enable SOSC in sleep mode.      */
+    kSCG_SoscDisable          = 0,                         /*!< Disable SOSC clock.                    */
+    kSCG_SoscEnable           = SCG_SOSCCSR_SOSCEN_MASK,   /*!< Enable SOSC clock.                     */
+    kSCG_SoscEnableInSleep    = SCG_SOSCCSR_SOSCSTEN_MASK, /*!< Enable SOSC in stop mode.              */
+    kSCG_SoscEnableInLowPower = SCG_SOSCCSR_SOSCLPEN_MASK, /*!< Enable SOSC in low power (VLP) mode.   */
 };
 
 /*!
@@ -498,8 +501,9 @@ typedef struct _scg_rosc_config
 /*! @brief SIRC enable mode. */
 typedef enum _scg_sirc_enable_mode
 {
-    kSCG_SircDisableInSleep = 0,                         /*!< Disable SIRC clock.             */
-    kSCG_SircEnableInSleep  = SCG_SIRCCSR_SIRCSTEN_MASK, /*!< Enable SIRC in sleep mode.      */
+    kSCG_SircDisableInSleep   = 0,                         /*!< Disable SIRC in stop mode.             */
+    kSCG_SircEnableInSleep    = SCG_SIRCCSR_SIRCSTEN_MASK, /*!< Enable SIRC in stop mode.              */
+    kSCG_SircEnableInLowPower = SCG_SIRCCSR_SIRCLPEN_MASK, /*!< Enable SIRC in low power (VLP) mode.   */
 } scg_sirc_enable_mode_t;
 
 /*!
@@ -551,9 +555,10 @@ typedef struct _scg_firc_trim_config
 /*! @brief FIRC enable mode. */
 enum
 {
-    kSCG_FircDisable       = 0,                         /*!< Disable FIRC clock.             */
-    kSCG_FircEnable        = SCG_FIRCCSR_FIRCEN_MASK,   /*!< Enable FIRC clock.              */
-    kSCG_FircEnableInSleep = SCG_FIRCCSR_FIRCSTEN_MASK, /*!< Enable FIRC in sleep mode.      */
+    kSCG_FircDisable          = 0,                         /*!< Disable FIRC clock.                    */
+    kSCG_FircEnable           = SCG_FIRCCSR_FIRCEN_MASK,   /*!< Enable FIRC clock.                     */
+    kSCG_FircEnableInSleep    = SCG_FIRCCSR_FIRCSTEN_MASK, /*!< Enable FIRC in stop mode.              */
+    kSCG_FircEnableInLowPower = SCG_FIRCCSR_FIRCLPEN_MASK, /*!< Enable FIRC in low power (VLP) mode.   */
 };
 
 /*!
@@ -580,14 +585,10 @@ typedef struct _scg_firc_config_t
 
 typedef enum _tstmr_clk_sel
 {
-    kTSTMR_ClkSel_ClkRoot12M,
-    kTSTMR_ClkSel_FIRCDix,
-    kTSTMR_ClkSel_SOSC,
-    kTSTMR_ClkSel_32kHz,
-    kTSTMR_ClkSel_200MHz,
-    kTSTMR_ClkSel_1MHz, /*!< TSTMR 1MHz precision. */
-    kTSTMR_ClkSel_Null, /*!< TSTMR not counting. */
-    kTSTMR_ClkSel_IPCClkDiv,
+    kTSTMR_ClkSel_FIRCDix = 1,
+    kTSTMR_ClkSel_SOSC    = 2,
+    kTSTMR_ClkSel_32kHz   = 3,
+    kTSTMR_ClkSel_1MHz    = 5, /*!< TSTMR 1MHz precision. */
 } tstmr_clk_sel_t;
 
 /*******************************************************************************
@@ -609,12 +610,10 @@ static inline void CLOCK_StartTstmr0(tstmr_clk_sel_t src, clock_ip_control_t cc)
     uint32_t reg = CLOCK_REG(kCLOCK_Tstmr0);
 
     assert(reg & MRCC_PR_MASK);
-    assert(kCLOCK_IpClkControl_fun1 == cc ||
-           kCLOCK_IpClkControl_fun2 == cc ||
-           kCLOCK_IpClkControl_fun3 == cc);
+    assert(kCLOCK_IpClkControl_fun1 == cc || kCLOCK_IpClkControl_fun2 == cc || kCLOCK_IpClkControl_fun3 == cc);
     if ((reg & MRCC_PR_MASK) == MRCC_PR_MASK)
     {
-        CLOCK_REG(kCLOCK_Tstmr0) |= MRCC_RSTB_MASK;
+        reg |= MRCC_RSTB_MASK;
     }
     reg &= ~(MRCC_MUX_MASK | MRCC_CC_MASK);
     reg |= (MRCC_MUX(src) | ((uint32_t)cc & MRCC_CC_MASK));
@@ -637,14 +636,12 @@ static inline volatile uint32_t *CLOCK_GetClockDivider(clock_ip_name_t name)
 {
     volatile uint32_t *pDiv = NULL;
 
-    if ((name == kCLOCK_Lpadc0) || (name == kCLOCK_Ewm0) || (name == kCLOCK_Can0) ||
-        (name == kCLOCK_Fro_hf_div) || (name == kCLOCK_Gdet_wrapper) || (name == kCLOCK_Lpi2c0) ||
-        (name == kCLOCK_Lpi2c1) || (name == kCLOCK_Lpit0) || (name == kCLOCK_Lpspi0) ||
-        (name == kCLOCK_Lpspi1) || (name == kCLOCK_Lpspi2) || (name == kCLOCK_Lptmr0) ||
-        (name == kCLOCK_Lptmr1) || (name == kCLOCK_Lpuart0) || (name == kCLOCK_Lpuart1) ||
-        (name == kCLOCK_Tpm0) || (name == kCLOCK_Tpm1) || (name == kCLOCK_Tpm2) ||
-        (name == kCLOCK_Tpm3) || (name == kCLOCK_Tpm4) || (name == kCLOCK_Wdog0) ||
-        (name == kCLOCK_Wdog1))
+    if ((name == kCLOCK_Lpadc0) || (name == kCLOCK_Ewm0) || (name == kCLOCK_Can0) || (name == kCLOCK_Fro_hf_div) ||
+        (name == kCLOCK_Gdet_wrapper) || (name == kCLOCK_Lpi2c0) || (name == kCLOCK_Lpi2c1) || (name == kCLOCK_Lpit0) ||
+        (name == kCLOCK_Lpspi0) || (name == kCLOCK_Lpspi1) || (name == kCLOCK_Lpspi2) || (name == kCLOCK_Lptmr0) ||
+        (name == kCLOCK_Lptmr1) || (name == kCLOCK_Lpuart0) || (name == kCLOCK_Lpuart1) || (name == kCLOCK_Tpm0) ||
+        (name == kCLOCK_Tpm1) || (name == kCLOCK_Tpm2) || (name == kCLOCK_Tpm3) || (name == kCLOCK_Tpm4) ||
+        (name == kCLOCK_Wdog0) || (name == kCLOCK_Wdog1))
     {
         pDiv = (volatile uint32_t *)((uint32_t)name + 4U);
     }
@@ -671,7 +668,7 @@ static inline void CLOCK_EnableClockLPMode(clock_ip_name_t name, clock_ip_contro
     else
     {
         assert(kCLOCK_IpClkControl_fun1 == control || kCLOCK_IpClkControl_fun2 == control ||
-            kCLOCK_IpClkControl_fun3 == control);
+               kCLOCK_IpClkControl_fun3 == control);
 
         uint32_t reg = CLOCK_REG(name);
 
@@ -813,6 +810,11 @@ static inline void CLOCK_SetIpSrcDiv(clock_ip_name_t name, uint8_t divValue)
          * Enable divider clock and release it from reset state.
          */
         *pDivCtrl = (uint32_t)divValue & MRCC_DIV_MASK;
+
+        /* Wait for divider output to be stable before re-enabling the clock. */
+        while ((*pDivCtrl & MRCC_UNSTAB_MASK) != 0U)
+        {
+        }
 
         /* Enable peripheral clocks */
         CLOCK_REG(name) = reg;
@@ -1354,6 +1356,7 @@ static inline void CLOCK_SetXtal0Freq(uint32_t freq)
 static inline void CLOCK_SetXtal32Freq(uint32_t freq)
 {
     g_xtal32Freq = freq;
+    __DMB();
 }
 
 /* @} */

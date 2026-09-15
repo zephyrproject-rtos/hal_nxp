@@ -15,7 +15,7 @@
 **
 **     Reference manual:    iMX95RM rev4
 **     Version:             rev. 4.0, 2026-02-28
-**     Build:               b260305
+**     Build:               b260721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX9596_cm7
@@ -1044,20 +1044,6 @@ typedef enum IRQn {
 /** Array initializer of AON_BLK_CTRL_S_AONMIX peripheral base pointers */
 #define AON_BLK_CTRL_S_AONMIX_BASE_PTRS          { AON__BLK_CTRL_S_AONMIX2 }
 
-/* AON_CMU - Peripheral instance base addresses */
-/** Peripheral AON_CMUA1 base address */
-#define AON_CMUA1_BASE                           (0x44540000u)
-/** Peripheral AON_CMUA1 base pointer */
-#define AON_CMUA1                                ((AON_CMU_Type *)AON_CMUA1_BASE)
-/** Peripheral AON_CMUA2 base address */
-#define AON_CMUA2_BASE                           (0x44650000u)
-/** Peripheral AON_CMUA2 base pointer */
-#define AON_CMUA2                                ((AON_CMU_Type *)AON_CMUA2_BASE)
-/** Array initializer of AON_CMU peripheral base addresses */
-#define AON_CMU_BASE_ADDRS                       { AON_CMUA1_BASE, AON_CMUA2_BASE }
-/** Array initializer of AON_CMU peripheral base pointers */
-#define AON_CMU_BASE_PTRS                        { AON_CMUA1, AON_CMUA2 }
-
 /* AON_FCCU - Peripheral instance base addresses */
 /** Peripheral AON__FCCU base address */
 #define AON__FCCU_BASE                           (0x44570000u)
@@ -1360,6 +1346,14 @@ typedef enum IRQn {
 #define ANALOG_CMU0_BASE                         (0x44670000u)
 /** Peripheral ANALOG_CMU0 base pointer */
 #define ANALOG_CMU0                              ((CMU_Type *)ANALOG_CMU0_BASE)
+/** Peripheral AON_CMUA1 base address */
+#define AON_CMUA1_BASE                           (0x44540000u)
+/** Peripheral AON_CMUA1 base pointer */
+#define AON_CMUA1                                ((CMU_Type *)AON_CMUA1_BASE)
+/** Peripheral AON_CMUA2 base address */
+#define AON_CMUA2_BASE                           (0x44650000u)
+/** Peripheral AON_CMUA2 base pointer */
+#define AON_CMUA2                                ((CMU_Type *)AON_CMUA2_BASE)
 /** Peripheral DDRC_CMU1 base address */
 #define DDRC_CMU1_BASE                           (0x4E060000u)
 /** Peripheral DDRC_CMU1 base pointer */
@@ -1376,6 +1370,14 @@ typedef enum IRQn {
 #define M7_CMUM1_BASE                            (0x4A090000u)
 /** Peripheral M7_CMUM1 base pointer */
 #define M7_CMUM1                                 ((CMU_Type *)M7_CMUM1_BASE)
+/** Peripheral NOC_CMUN0 base address */
+#define NOC_CMUN0_BASE                           (0x49070000u)
+/** Peripheral NOC_CMUN0 base pointer */
+#define NOC_CMUN0                                ((CMU_Type *)NOC_CMUN0_BASE)
+/** Peripheral NOC_CMUN1 base address */
+#define NOC_CMUN1_BASE                           (0x49080000u)
+/** Peripheral NOC_CMUN1 base pointer */
+#define NOC_CMUN1                                ((CMU_Type *)NOC_CMUN1_BASE)
 /** Peripheral WAKEUP_CMU1 base address */
 #define WAKEUP_CMU1_BASE                         (0x42750000u)
 /** Peripheral WAKEUP_CMU1 base pointer */
@@ -1385,9 +1387,9 @@ typedef enum IRQn {
 /** Peripheral WAKEUP_CMU2 base pointer */
 #define WAKEUP_CMU2                              ((CMU_Type *)WAKEUP_CMU2_BASE)
 /** Array initializer of CMU peripheral base addresses */
-#define CMU_BASE_ADDRS                           { ANALOG_CMU0_BASE, DDRC_CMU1_BASE, DDRC_CMU2_BASE, M7_CMUM0_BASE, M7_CMUM1_BASE, WAKEUP_CMU1_BASE, WAKEUP_CMU2_BASE }
+#define CMU_BASE_ADDRS                           { ANALOG_CMU0_BASE, AON_CMUA1_BASE, AON_CMUA2_BASE, DDRC_CMU1_BASE, DDRC_CMU2_BASE, M7_CMUM0_BASE, M7_CMUM1_BASE, NOC_CMUN0_BASE, NOC_CMUN1_BASE, WAKEUP_CMU1_BASE, WAKEUP_CMU2_BASE }
 /** Array initializer of CMU peripheral base pointers */
-#define CMU_BASE_PTRS                            { ANALOG_CMU0, DDRC_CMU1, DDRC_CMU2, M7_CMUM0, M7_CMUM1, WAKEUP_CMU1, WAKEUP_CMU2 }
+#define CMU_BASE_PTRS                            { ANALOG_CMU0, AON_CMUA1, AON_CMUA2, DDRC_CMU1, DDRC_CMU2, M7_CMUM0, M7_CMUM1, NOC_CMUN0, NOC_CMUN1, WAKEUP_CMU1, WAKEUP_CMU2 }
 
 /* COLOR_TEMP - Peripheral instance base addresses */
 /** Peripheral CAMERA__ISP__COLOR_TEMP base address */
@@ -1667,21 +1669,15 @@ typedef enum IRQn {
 /** Array initializer of EIM peripheral base pointers */
 #define EIM_BASE_PTRS                            { AON__EIMA, M7__EIM, NOC__EIMN, NPU__EIM_NPUMIX, WAKEUP__EIMW }
 
-/* ENETC - Peripheral instance base addresses */
-/** Peripheral ENETC0_GLOBAL base address */
-#define ENETC0_GLOBAL_BASE                       (0x4CC20000u)
-/** Peripheral ENETC0_GLOBAL base pointer */
-#define ENETC0_GLOBAL                            ((ENETC_Type *)ENETC0_GLOBAL_BASE)
-/** Array initializer of ENETC peripheral base addresses */
-#define ENETC_BASE_ADDRS                         { ENETC0_GLOBAL_BASE }
-/** Array initializer of ENETC peripheral base pointers */
-#define ENETC_BASE_PTRS                          { ENETC0_GLOBAL }
-
 /* ENETC_GLOBAL - Peripheral instance base addresses */
 /** Peripheral EMDIO_GLOBAL base address */
 #define EMDIO_GLOBAL_BASE                        (0x4CCF0000u)
 /** Peripheral EMDIO_GLOBAL base pointer */
 #define EMDIO_GLOBAL                             ((ENETC_GLOBAL_Type *)EMDIO_GLOBAL_BASE)
+/** Peripheral ENETC0_GLOBAL base address */
+#define ENETC0_GLOBAL_BASE                       (0x4CC20000u)
+/** Peripheral ENETC0_GLOBAL base pointer */
+#define ENETC0_GLOBAL                            ((ENETC_GLOBAL_Type *)ENETC0_GLOBAL_BASE)
 /** Peripheral ENETC1_GLOBAL base address */
 #define ENETC1_GLOBAL_BASE                       (0x4CC60000u)
 /** Peripheral ENETC1_GLOBAL base pointer */
@@ -1695,9 +1691,9 @@ typedef enum IRQn {
 /** Peripheral TMR0_GLOBAL base pointer */
 #define TMR0_GLOBAL                              ((ENETC_GLOBAL_Type *)TMR0_GLOBAL_BASE)
 /** Array initializer of ENETC_GLOBAL peripheral base addresses */
-#define ENETC_GLOBAL_BASE_ADDRS                  { EMDIO_GLOBAL_BASE, ENETC1_GLOBAL_BASE, ENETC2_GLOBAL_BASE, TMR0_GLOBAL_BASE }
+#define ENETC_GLOBAL_BASE_ADDRS                  { EMDIO_GLOBAL_BASE, ENETC0_GLOBAL_BASE, ENETC1_GLOBAL_BASE, ENETC2_GLOBAL_BASE, TMR0_GLOBAL_BASE }
 /** Array initializer of ENETC_GLOBAL peripheral base pointers */
-#define ENETC_GLOBAL_BASE_PTRS                   { EMDIO_GLOBAL, ENETC1_GLOBAL, ENETC2_GLOBAL, TMR0_GLOBAL }
+#define ENETC_GLOBAL_BASE_PTRS                   { EMDIO_GLOBAL, ENETC0_GLOBAL, ENETC1_GLOBAL, ENETC2_GLOBAL, TMR0_GLOBAL }
 
 /* ENETC_PCI_TYPE0 - Peripheral instance base addresses */
 /** Peripheral EMDIO0_PCI_HDR_TYPE0 base address */
@@ -1898,7 +1894,7 @@ typedef enum IRQn {
 #define FLEXSPI_AMBA_BASE_ALIAS_COUNT     (1)
 /* FlexSPI AMBA base address array. */
 #define FlexSPI_AMBA_BASE_ARRAY                  { {0x28000000u} }
-/* FlexSPI AMBA end address. */
+/* FlexSPI AMBA end address array. */
 #define FlexSPI_AMBA_END_ARRAY                   { {0x2FFFFFFFu} }
 /* FlexSPI AMBA address. */
 #define FlexSPI_AMBA_BASE                        (0x28000000u)
@@ -2789,192 +2785,6 @@ typedef enum IRQn {
 /** Array initializer of NOC_BLK_CTRL_NOCMIX peripheral base pointers */
 #define NOC_BLK_CTRL_NOCMIX_BASE_PTRS            { NOC__BLK_CTRL_NOCMIX }
 
-/* NOC_CMU - Peripheral instance base addresses */
-/** Peripheral NOC_CMUN0 base address */
-#define NOC_CMUN0_BASE                           (0x49070000u)
-/** Peripheral NOC_CMUN0 base pointer */
-#define NOC_CMUN0                                ((NOC_CMU_Type *)NOC_CMUN0_BASE)
-/** Peripheral NOC_CMUN1 base address */
-#define NOC_CMUN1_BASE                           (0x49080000u)
-/** Peripheral NOC_CMUN1 base pointer */
-#define NOC_CMUN1                                ((NOC_CMU_Type *)NOC_CMUN1_BASE)
-/** Array initializer of NOC_CMU peripheral base addresses */
-#define NOC_CMU_BASE_ADDRS                       { NOC_CMUN0_BASE, NOC_CMUN1_BASE }
-/** Array initializer of NOC_CMU peripheral base pointers */
-#define NOC_CMU_BASE_PTRS                        { NOC_CMUN0, NOC_CMUN1 }
-
-/* NOC_GICA - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICA base address */
-#define NOC__GIC__GICA_BASE                      (0x48010000u)
-/** Peripheral NOC__GIC__GICA base pointer */
-#define NOC__GIC__GICA                           ((NOC_GICA_Type *)NOC__GIC__GICA_BASE)
-/** Array initializer of NOC_GICA peripheral base addresses */
-#define NOC_GICA_BASE_ADDRS                      { NOC__GIC__GICA_BASE }
-/** Array initializer of NOC_GICA peripheral base pointers */
-#define NOC_GICA_BASE_PTRS                       { NOC__GIC__GICA }
-
-
-
-/* NOC_GICP - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICP base address */
-#define NOC__GIC__GICP_BASE                      (0x48030000u)
-/** Peripheral NOC__GIC__GICP base pointer */
-#define NOC__GIC__GICP                           ((NOC_GICP_Type *)NOC__GIC__GICP_BASE)
-/** Array initializer of NOC_GICP peripheral base addresses */
-#define NOC_GICP_BASE_ADDRS                      { NOC__GIC__GICP_BASE }
-/** Array initializer of NOC_GICP peripheral base pointers */
-#define NOC_GICP_BASE_PTRS                       { NOC__GIC__GICP }
-
-/* NOC_GICRLPI0 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRLPI0 base address */
-#define NOC__GIC__GICRLPI0_BASE                  (0x48060000u)
-/** Peripheral NOC__GIC__GICRLPI0 base pointer */
-#define NOC__GIC__GICRLPI0                       ((NOC_GICRLPI0_Type *)NOC__GIC__GICRLPI0_BASE)
-/** Array initializer of NOC_GICRLPI0 peripheral base addresses */
-#define NOC_GICRLPI0_BASE_ADDRS                  { NOC__GIC__GICRLPI0_BASE }
-/** Array initializer of NOC_GICRLPI0 peripheral base pointers */
-#define NOC_GICRLPI0_BASE_PTRS                   { NOC__GIC__GICRLPI0 }
-
-/* NOC_GICRLPI1 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRLPI1 base address */
-#define NOC__GIC__GICRLPI1_BASE                  (0x48080000u)
-/** Peripheral NOC__GIC__GICRLPI1 base pointer */
-#define NOC__GIC__GICRLPI1                       ((NOC_GICRLPI1_Type *)NOC__GIC__GICRLPI1_BASE)
-/** Array initializer of NOC_GICRLPI1 peripheral base addresses */
-#define NOC_GICRLPI1_BASE_ADDRS                  { NOC__GIC__GICRLPI1_BASE }
-/** Array initializer of NOC_GICRLPI1 peripheral base pointers */
-#define NOC_GICRLPI1_BASE_PTRS                   { NOC__GIC__GICRLPI1 }
-
-/* NOC_GICRLPI2 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRLPI2 base address */
-#define NOC__GIC__GICRLPI2_BASE                  (0x480A0000u)
-/** Peripheral NOC__GIC__GICRLPI2 base pointer */
-#define NOC__GIC__GICRLPI2                       ((NOC_GICRLPI2_Type *)NOC__GIC__GICRLPI2_BASE)
-/** Array initializer of NOC_GICRLPI2 peripheral base addresses */
-#define NOC_GICRLPI2_BASE_ADDRS                  { NOC__GIC__GICRLPI2_BASE }
-/** Array initializer of NOC_GICRLPI2 peripheral base pointers */
-#define NOC_GICRLPI2_BASE_PTRS                   { NOC__GIC__GICRLPI2 }
-
-/* NOC_GICRLPI3 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRLPI3 base address */
-#define NOC__GIC__GICRLPI3_BASE                  (0x480C0000u)
-/** Peripheral NOC__GIC__GICRLPI3 base pointer */
-#define NOC__GIC__GICRLPI3                       ((NOC_GICRLPI3_Type *)NOC__GIC__GICRLPI3_BASE)
-/** Array initializer of NOC_GICRLPI3 peripheral base addresses */
-#define NOC_GICRLPI3_BASE_ADDRS                  { NOC__GIC__GICRLPI3_BASE }
-/** Array initializer of NOC_GICRLPI3 peripheral base pointers */
-#define NOC_GICRLPI3_BASE_PTRS                   { NOC__GIC__GICRLPI3 }
-
-/* NOC_GICRLPI4 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRLPI4 base address */
-#define NOC__GIC__GICRLPI4_BASE                  (0x480E0000u)
-/** Peripheral NOC__GIC__GICRLPI4 base pointer */
-#define NOC__GIC__GICRLPI4                       ((NOC_GICRLPI4_Type *)NOC__GIC__GICRLPI4_BASE)
-/** Array initializer of NOC_GICRLPI4 peripheral base addresses */
-#define NOC_GICRLPI4_BASE_ADDRS                  { NOC__GIC__GICRLPI4_BASE }
-/** Array initializer of NOC_GICRLPI4 peripheral base pointers */
-#define NOC_GICRLPI4_BASE_PTRS                   { NOC__GIC__GICRLPI4 }
-
-/* NOC_GICRLPI5 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRLPI5 base address */
-#define NOC__GIC__GICRLPI5_BASE                  (0x48100000u)
-/** Peripheral NOC__GIC__GICRLPI5 base pointer */
-#define NOC__GIC__GICRLPI5                       ((NOC_GICRLPI5_Type *)NOC__GIC__GICRLPI5_BASE)
-/** Array initializer of NOC_GICRLPI5 peripheral base addresses */
-#define NOC_GICRLPI5_BASE_ADDRS                  { NOC__GIC__GICRLPI5_BASE }
-/** Array initializer of NOC_GICRLPI5 peripheral base pointers */
-#define NOC_GICRLPI5_BASE_PTRS                   { NOC__GIC__GICRLPI5 }
-
-/* NOC_GICRSGI0 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRSGI0 base address */
-#define NOC__GIC__GICRSGI0_BASE                  (0x48070000u)
-/** Peripheral NOC__GIC__GICRSGI0 base pointer */
-#define NOC__GIC__GICRSGI0                       ((NOC_GICRSGI0_Type *)NOC__GIC__GICRSGI0_BASE)
-/** Array initializer of NOC_GICRSGI0 peripheral base addresses */
-#define NOC_GICRSGI0_BASE_ADDRS                  { NOC__GIC__GICRSGI0_BASE }
-/** Array initializer of NOC_GICRSGI0 peripheral base pointers */
-#define NOC_GICRSGI0_BASE_PTRS                   { NOC__GIC__GICRSGI0 }
-
-/* NOC_GICRSGI1 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRSGI1 base address */
-#define NOC__GIC__GICRSGI1_BASE                  (0x48090000u)
-/** Peripheral NOC__GIC__GICRSGI1 base pointer */
-#define NOC__GIC__GICRSGI1                       ((NOC_GICRSGI1_Type *)NOC__GIC__GICRSGI1_BASE)
-/** Array initializer of NOC_GICRSGI1 peripheral base addresses */
-#define NOC_GICRSGI1_BASE_ADDRS                  { NOC__GIC__GICRSGI1_BASE }
-/** Array initializer of NOC_GICRSGI1 peripheral base pointers */
-#define NOC_GICRSGI1_BASE_PTRS                   { NOC__GIC__GICRSGI1 }
-
-/* NOC_GICRSGI2 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRSGI2 base address */
-#define NOC__GIC__GICRSGI2_BASE                  (0x480B0000u)
-/** Peripheral NOC__GIC__GICRSGI2 base pointer */
-#define NOC__GIC__GICRSGI2                       ((NOC_GICRSGI2_Type *)NOC__GIC__GICRSGI2_BASE)
-/** Array initializer of NOC_GICRSGI2 peripheral base addresses */
-#define NOC_GICRSGI2_BASE_ADDRS                  { NOC__GIC__GICRSGI2_BASE }
-/** Array initializer of NOC_GICRSGI2 peripheral base pointers */
-#define NOC_GICRSGI2_BASE_PTRS                   { NOC__GIC__GICRSGI2 }
-
-/* NOC_GICRSGI3 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRSGI3 base address */
-#define NOC__GIC__GICRSGI3_BASE                  (0x480D0000u)
-/** Peripheral NOC__GIC__GICRSGI3 base pointer */
-#define NOC__GIC__GICRSGI3                       ((NOC_GICRSGI3_Type *)NOC__GIC__GICRSGI3_BASE)
-/** Array initializer of NOC_GICRSGI3 peripheral base addresses */
-#define NOC_GICRSGI3_BASE_ADDRS                  { NOC__GIC__GICRSGI3_BASE }
-/** Array initializer of NOC_GICRSGI3 peripheral base pointers */
-#define NOC_GICRSGI3_BASE_PTRS                   { NOC__GIC__GICRSGI3 }
-
-/* NOC_GICRSGI4 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRSGI4 base address */
-#define NOC__GIC__GICRSGI4_BASE                  (0x480F0000u)
-/** Peripheral NOC__GIC__GICRSGI4 base pointer */
-#define NOC__GIC__GICRSGI4                       ((NOC_GICRSGI4_Type *)NOC__GIC__GICRSGI4_BASE)
-/** Array initializer of NOC_GICRSGI4 peripheral base addresses */
-#define NOC_GICRSGI4_BASE_ADDRS                  { NOC__GIC__GICRSGI4_BASE }
-/** Array initializer of NOC_GICRSGI4 peripheral base pointers */
-#define NOC_GICRSGI4_BASE_PTRS                   { NOC__GIC__GICRSGI4 }
-
-/* NOC_GICRSGI5 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICRSGI5 base address */
-#define NOC__GIC__GICRSGI5_BASE                  (0x48110000u)
-/** Peripheral NOC__GIC__GICRSGI5 base pointer */
-#define NOC__GIC__GICRSGI5                       ((NOC_GICRSGI5_Type *)NOC__GIC__GICRSGI5_BASE)
-/** Array initializer of NOC_GICRSGI5 peripheral base addresses */
-#define NOC_GICRSGI5_BASE_ADDRS                  { NOC__GIC__GICRSGI5_BASE }
-/** Array initializer of NOC_GICRSGI5 peripheral base pointers */
-#define NOC_GICRSGI5_BASE_PTRS                   { NOC__GIC__GICRSGI5 }
-
-/* NOC_GICT - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GICT base address */
-#define NOC__GIC__GICT_BASE                      (0x48020000u)
-/** Peripheral NOC__GIC__GICT base pointer */
-#define NOC__GIC__GICT                           ((NOC_GICT_Type *)NOC__GIC__GICT_BASE)
-/** Array initializer of NOC_GICT peripheral base addresses */
-#define NOC_GICT_BASE_ADDRS                      { NOC__GIC__GICT_BASE }
-/** Array initializer of NOC_GICT peripheral base pointers */
-#define NOC_GICT_BASE_PTRS                       { NOC__GIC__GICT }
-
-/* NOC_GITS0 - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GITS0 base address */
-#define NOC__GIC__GITS0_BASE                     (0x48040000u)
-/** Peripheral NOC__GIC__GITS0 base pointer */
-#define NOC__GIC__GITS0                          ((NOC_GITS0_Type *)NOC__GIC__GITS0_BASE)
-/** Array initializer of NOC_GITS0 peripheral base addresses */
-#define NOC_GITS0_BASE_ADDRS                     { NOC__GIC__GITS0_BASE }
-/** Array initializer of NOC_GITS0 peripheral base pointers */
-#define NOC_GITS0_BASE_PTRS                      { NOC__GIC__GITS0 }
-
-/* NOC_GITS0TRANSLATER - Peripheral instance base addresses */
-/** Peripheral NOC__GIC__GITS0TRANSLATER base address */
-#define NOC__GIC__GITS0TRANSLATER_BASE           (0x48050000u)
-/** Peripheral NOC__GIC__GITS0TRANSLATER base pointer */
-#define NOC__GIC__GITS0TRANSLATER                ((NOC_GITS0TRANSLATER_Type *)NOC__GIC__GITS0TRANSLATER_BASE)
-/** Array initializer of NOC_GITS0TRANSLATER peripheral base addresses */
-#define NOC_GITS0TRANSLATER_BASE_ADDRS           { NOC__GIC__GITS0TRANSLATER_BASE }
-/** Array initializer of NOC_GITS0TRANSLATER peripheral base pointers */
-#define NOC_GITS0TRANSLATER_BASE_PTRS            { NOC__GIC__GITS0TRANSLATER }
-
 /* NOC_LSTCU - Peripheral instance base addresses */
 /** Peripheral NOC__LSTCUN base address */
 #define NOC__LSTCUN_BASE                         (0x490B0000u)
@@ -3565,7 +3375,6 @@ typedef enum IRQn {
 #define TPM_BASE_PTRS                            { (TPM_Type *)0u, TPM1, TPM2, TPM3, TPM4, TPM5, TPM6 }
 /** Interrupt vectors for the TPM peripheral type */
 #define TPM_IRQS                                 { NotAvail_IRQn, TPM1_IRQn, TPM2_IRQn, TPM3_IRQn, TPM4_IRQn, TPM5_IRQn, TPM6_IRQn }
-
 
 /* TSTMR - Peripheral instance base addresses */
 /** Peripheral TSTMR1 base address */

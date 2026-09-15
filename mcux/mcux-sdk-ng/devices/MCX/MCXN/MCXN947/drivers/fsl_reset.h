@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2025 NXP
+ * Copyright 2022-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -319,11 +319,11 @@ static inline void CLOCK_SetCpu1Reset(SYSCON_Type *base, bool enable)
 {
     if (enable)
     {
-        base->CPUCTRL |= SYSCON_CPUCTRL_CPU1RSTEN_MASK;
+        base->CPUCTRL = base->CPUCTRL | SYSCON_CPUCTRL_CPU1RSTEN_MASK;
     }
     else
     {
-        base->CPUCTRL &= ~SYSCON_CPUCTRL_CPU1RSTEN_MASK;
+        base->CPUCTRL = base->CPUCTRL & ~SYSCON_CPUCTRL_CPU1RSTEN_MASK;
     }
 }
 

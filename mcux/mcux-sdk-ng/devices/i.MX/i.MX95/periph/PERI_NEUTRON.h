@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 4.0, 2026-02-28
-**     Build:               b260305
+**     Build:               b260721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NEUTRON
@@ -427,7 +427,7 @@ typedef struct {
   __IO uint32_t RES_Y;                             /**< Result Writer Configuration Y, offset: 0x2C */
   __IO uint32_t RES_X;                             /**< Result Writer Configuration X, offset: 0x30 */
        uint8_t RESERVED_0[4];
-       uint32_t ASYMCTRL;                          /**< Asymmetric Control Register, offset: 0x38 */
+  __I  uint32_t ASYMCTRL;                          /**< Asymmetric Control Register, offset: 0x38 */
   __IO uint32_t FLUSH;                             /**< Flush, offset: 0x3C */
   __IO uint32_t INTR;                              /**< Interrupt, offset: 0x40 */
   __IO uint32_t WEIGHTCTRL;                        /**< Weight Control, offset: 0x44 */

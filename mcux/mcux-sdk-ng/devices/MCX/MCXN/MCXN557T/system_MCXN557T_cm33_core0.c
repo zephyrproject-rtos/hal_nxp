@@ -1,6 +1,8 @@
 /*
 ** ###################################################################
-**     Processors:          MCXN557TCDF_cm33_core0
+**     Processors:          MCXN557TCAB_cm33_core0
+**                          MCXN557TCDF_cm33_core0
+**                          MCXN557TVAB_cm33_core0
 **                          MCXN557TVDF_cm33_core0
 **
 **     Compilers:           GNU C Compiler
@@ -10,7 +12,7 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260716
+**     Build:               b260812
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

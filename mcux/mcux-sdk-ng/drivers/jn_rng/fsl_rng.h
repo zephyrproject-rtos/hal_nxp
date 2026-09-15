@@ -120,4 +120,4 @@ status_t TRNG_GetRandomData(RNG_Type *base, void *data, size_t data_size);
 
 /*! @}*/
 
-#endif /* __RNG_JN518X_H_*/
+#endif /* RNG_JN518X_H_*/

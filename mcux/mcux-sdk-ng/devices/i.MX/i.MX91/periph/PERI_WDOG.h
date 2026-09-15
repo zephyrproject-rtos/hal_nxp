@@ -10,13 +10,13 @@
 **                          MIMX9131DVVXJ
 **
 **     Version:             rev. 1.0, 2024-11-15
-**     Build:               b250814
+**     Build:               b260728
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for WDOG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -274,10 +274,6 @@ typedef struct {
  * @}
  */ /* end of group WDOG_Register_Masks */
 
-/* Extra definition */
-#define WDOG_UPDATE_KEY                          (0xD928C520U)
-#define WDOG_REFRESH_KEY                         (0xB480A602U)
-
 
 /*!
  * @}
@@ -308,3 +304,4 @@ typedef struct {
 
 
 #endif  /* PERI_WDOG_H_ */
+

@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 3.1, 2026-01-30
-**     Build:               b260202
+**     Build:               b260819
 **
 **     Abstract:
 **         Chip specific module features.
@@ -662,6 +662,18 @@
     (((x) == FTM2) ? (0) : (-1))))
 /* @brief Is affected by errata with ID 010856 (FTM: Safe state is not removed from channel outputs after fault condition ends if SWOCTRL is being used to control the pin). */
 #define FSL_FEATURE_FTM_HAS_ERRATA_010856 (0)
+/* @brief Has no FAULTEN bit field in COMBINE register. */
+#define FSL_FEATURE_FTM_HAS_NO_COMBINE_FAULTEN (0)
+/* @brief Has no COMBINE1 bit field in COMBINE register (single channel pair device). */
+#define FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1 (0)
+/* @brief Has no FAULTM bit field in MODE register. */
+#define FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM (0)
+/* @brief Has no FAULTIE bit field in MODE register. */
+#define FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE (0)
+/* @brief Has no FLTCTRL register. */
+#define FSL_FEATURE_FTM_HAS_NO_FLTCTRL (0)
+/* @brief Has no FAULTF bit field in FMS register. */
+#define FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF (0)
 
 /* GPIO module features */
 
@@ -869,6 +881,11 @@
 #define FSL_FEATURE_PORT_HAS_IRQC_FLAG (0)
 /* @brief Defines whether PCR[IRQC] bit-field has trigger states. */
 #define FSL_FEATURE_PORT_HAS_IRQC_TRIGGER (0)
+
+/* PWT module features */
+
+/* @brief The width of PWT registers. */
+#define FSL_FEATURE_PWT_REG_WIDTH (8)
 
 /* RCM module features */
 

@@ -1,5 +1,11 @@
 # ECSPI
 
+## [2.3.5]
+
+- Bug Fixes
+  - Fixed stale CONREG/CONFIGREG bits in ECSPI_SetBaudRate() and ECSPI_SetChannelConfig()
+    by clearing the target bit-fields before writing them.
+
 ## [2.3.4]
 
 - New Features

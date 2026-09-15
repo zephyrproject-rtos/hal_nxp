@@ -111,6 +111,11 @@ void SystemCoreClockUpdate(void);
  */
 void SystemInitHook(void);
 
+/* Ensure "core_cm33.h" is included before overriding NVIC_SystemReset below, so the
+ * override below always wins regardless of caller include order (the header's
+ * own include guards make this a no-op when "core_cm33.h" is already included). */
+#include "core_cm33.h"
+
 /**
  * @brief Override NVIC_SystemReset
  *
