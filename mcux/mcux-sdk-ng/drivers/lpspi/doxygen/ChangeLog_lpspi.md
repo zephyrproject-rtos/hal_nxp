@@ -1,5 +1,13 @@
 # LPSPI
 
+## [2.7.8]
+
+- Bug Fixes
+  - Fixed CERT-C issues.
+  - Fixed MISRA issues.
+- Improvements
+  - Improved HIS CCM.
+
 ## [2.7.7]
 
 - Bug Fixes

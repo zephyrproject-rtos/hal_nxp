@@ -3682,6 +3682,14 @@ exit:
         control &= ~ENET_QOS_MTL_EST_CONTROL_PTOV_MASK;
         control |= ENET_QOS_MTL_EST_CONTROL_SSWL_MASK | ENET_QOS_MTL_EST_CONTROL_EEST_MASK |
                    ENET_QOS_MTL_EST_CONTROL_PTOV((1000000000U / ptpClk_Hz) * 6U);
+#if defined(FSL_FEATURE_ENET_QOS_HAS_ERRATA_050705) && FSL_FEATURE_ENET_QOS_HAS_ERRATA_050705
+        /* ERR050705: When the gates of the gate control list (GCL) are closed for two
+         * complete GCL iterations while a packet is available for scheduling, an incorrect
+         * Head-Of-Line blocking (HLBF) error is detected and the packet is wrongly dropped
+         * when DDBF is 0, causing data loss. Workaround: set DDBF to 1 so frames are not
+         * dropped on the frame-size error, and provide a new gate control list. */
+        control |= ENET_QOS_MTL_EST_CONTROL_DDBF_MASK;
+#endif /* FSL_FEATURE_ENET_QOS_HAS_ERRATA_050705 */
     }
     else
     {

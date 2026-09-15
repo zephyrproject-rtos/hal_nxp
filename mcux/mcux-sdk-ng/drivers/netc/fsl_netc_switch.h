@@ -1297,6 +1297,24 @@ status_t SWT_BridgeConfigPort(swt_handle_t *handle,
 status_t SWT_BridgeConfigPortDefaultVid(swt_handle_t *handle, netc_hw_port_idx_t portIdx, uint16_t vid);
 
 /*!
+ * @brief Set the spanning tree group (STG) state for a specific STG on a switch port
+ *
+ * Updates the STP state for a single STG group on the specified port using a
+ * read-modify-write on the BPSTGSR register. The stgID corresponds to the
+ * Spanning Tree Group Member ID assigned to VLANs in the VLAN filter table.
+ *
+ * @param handle   Switch driver handle
+ * @param portIdx  Port index (must be less than NETC_SOC_SWT_PORT_NUM)
+ * @param stgID    Spanning tree group ID, range 0 ~ 15
+ * @param state    STP state to apply (discard, learn without forward, or forward)
+ * @return kStatus_Success
+ */
+status_t SWT_SetPortSTGState(swt_handle_t *handle,
+                             netc_hw_port_idx_t portIdx,
+                             uint8_t stgID,
+                             netc_swt_port_stg_mode_t state);
+
+/*!
  * @brief Get remaining available entry number (entry size is 24 bytes) of bridge vlan filter table
  * @note This is a Exact Match hash table, and it shares the remaining available entries with Ingress Stream
  *       Identification, Ingress Stream Filter, FDB, L2 IPV4 Multicast Filter table.
@@ -1825,7 +1843,7 @@ status_t SWT_GetBPEntryState(swt_handle_t *handle, uint32_t entryID, netc_tb_bp_
  */
 static inline uint32_t SWT_GetSBPTableEntryNum(swt_handle_t *handle)
 {
-    return (handle->hw.base->BPCAPR & NETC_SW_BPCAPR_NUM_SPB_MASK) >> NETC_SW_BPCAPR_NUM_SPB_SHIFT;
+    return (handle->hw.base->BPCAPR & NETC_SW_BPCAPR_NUM_SBP_MASK) >> NETC_SW_BPCAPR_NUM_SBP_SHIFT;
 }
 
 /*!
@@ -2455,11 +2473,11 @@ static inline status_t SWT_ClearPortDiscardReason(swt_handle_t *handle,
 static inline status_t SWT_GetFDBInUseEntriesNumber(swt_handle_t *handle, netc_switch_inuse_fdb_statistic_t *statistic)
 {
     statistic->staticEntries     = (uint16_t)(handle->hw.base->FDBHTOR0 & NETC_SW_FDBHTOR0_STATIC_ENTRIES_MASK);
-    statistic->camEntries        = (uint16_t)(((handle->hw.base->FDBHTOR0 >> NETC_SW_FDBHTOR0_NUM_GENTRIES_SHIFT) &
-                                       NETC_SW_FDBHTOR0_NUM_GENTRIES_MASK) & 0xFFFFU);
+    statistic->camEntries        = (uint16_t)(((handle->hw.base->FDBHTOR0 & NETC_SW_FDBHTOR0_NUM_GENTRIES_MASK) >>
+                                               NETC_SW_FDBHTOR0_NUM_GENTRIES_SHIFT) & 0xFFFFU);
     statistic->dynamicEntries    = (uint16_t)(handle->hw.base->FDBHTOR1 & NETC_SW_FDBHTOR1_DYN_ENTRIES_MASK);
-    statistic->dynamicEntriesHWM = (uint16_t)(((handle->hw.base->FDBHTOR1 >> NETC_SW_FDBHTOR1_HWM_DYN_ENTRIES_SHIFT) &
-                                              NETC_SW_FDBHTOR1_HWM_DYN_ENTRIES_MASK) & 0xFFFFU);
+    statistic->dynamicEntriesHWM = (uint16_t)(((handle->hw.base->FDBHTOR1 & NETC_SW_FDBHTOR1_HWM_DYN_ENTRIES_MASK) >>
+                                               NETC_SW_FDBHTOR1_HWM_DYN_ENTRIES_SHIFT) & 0xFFFFU);
     return kStatus_Success;
 }
 

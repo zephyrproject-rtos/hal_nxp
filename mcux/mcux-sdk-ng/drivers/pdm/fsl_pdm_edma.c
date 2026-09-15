@@ -94,7 +94,7 @@ static void PDM_EDMACallback(edma_handle_t *handle, void *userData, bool done, u
         (void)memset(&pdmHandle->tcd[pdmHandle->tcdDriver], 0, sizeof(edma_tcd_t));
         pdmHandle->tcdDriver = (pdmHandle->tcdDriver + 1U) % pdmHandle->tcdNum;
     }
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
     pdmHandle->receivedBytes +=
         EDMA_TCD_BITER((&pdmHandle->tcd[pdmHandle->tcdDriver]), EDMA_TCD_TYPE(handle->base)) *
         (EDMA_TCD_NBYTES((&pdmHandle->tcd[pdmHandle->tcdDriver]), EDMA_TCD_TYPE(handle->base)) & 0x3FFU);
@@ -355,7 +355,7 @@ status_t PDM_TransferReceiveEDMA(PDM_Type *base, pdm_edma_handle_t *handle, pdm_
                                        FSL_FEATURE_PDM_FIFO_WIDTH, (int16_t)destOffset,
                                        mappedChannel * (uint32_t)FSL_FEATURE_PDM_FIFO_WIDTH, currentTransfer->dataSize);
         }
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
         EDMA_TcdSetTransferConfigExt(handle->dmaHandle->base, (edma_tcd_t *)&handle->tcd[handle->tcdUser], &config,
                                      (edma_tcd_t *)&handle->tcd[nextTcdIndex]);
 
@@ -404,7 +404,7 @@ status_t PDM_TransferReceiveEDMA(PDM_Type *base, pdm_edma_handle_t *handle, pdm_
             /* If the number of allocated TCDs is greater than the number of used TCDs, link the last TCD to the first one */
             if (handle->tcdNum > handle->tcdUsedNum)
             {
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
                 EDMA_TCD_DLAST_SGA(&handle->tcd[handle->tcdUser-1], EDMA_TCD_TYPE(handle->dmaHandle->base)) = (uint32_t)&handle->tcd[0];
 #else
                 handle->tcd[handle->tcdUser-1].DLAST_SGA = (uint32_t)&handle->tcd[0];

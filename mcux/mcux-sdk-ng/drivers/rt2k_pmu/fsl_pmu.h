@@ -451,12 +451,6 @@ typedef struct _pmu_temperature_sensor_config
 /* Oscillator Configs                                                         */
 /* -------------------------------------------------------------------------- */
 
-/*! @brief LFRO 1 MHz oscillator configuration. */
-typedef struct _pmu_lfro1m_config
-{
-    bool fromCgu; /*!< true = FSM clock from CGU 1M; false = from PMU internal FRO_1M. Maps to PMU_CLK_REG bit 1. */
-} pmu_lfro1m_config_t;
-
 /*!
  * @brief XOSC 32K crystal oscillator configuration.
  *
@@ -772,14 +766,6 @@ static inline bool PMU_IsTemperatureLow(PMU_Type *base)
  * @name Oscillators
  * @{
  */
-
-/*!
- * @brief Configure the 1 MHz low-frequency RC oscillator (LFRO 1M).
- *
- * @param base    PMU peripheral base address.
- * @param config  Pointer to LFRO 1M configuration. Must not be NULL.
- */
-void PMU_ConfigLfro1M(PMU_Type *base, const pmu_lfro1m_config_t *config);
 
 /*!
  * @brief Configure the 32 kHz crystal oscillator (XOSC 32K).

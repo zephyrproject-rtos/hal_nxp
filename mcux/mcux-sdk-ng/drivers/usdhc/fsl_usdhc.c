@@ -1735,6 +1735,8 @@ static status_t USDHC_SetScatterGatherAdmaTableConfig(USDHC_Type *base,
         }
 #endif
 
+        assert(*totalTransferSize <= UINT32_MAX - sgDataList->dataSize);
+
         *totalTransferSize += sgDataList->dataSize;
         if (sgDataList->dataList != NULL)
         {
@@ -1748,13 +1750,14 @@ static status_t USDHC_SetScatterGatherAdmaTableConfig(USDHC_Type *base,
             }
             if (dmaConfig->dmaMode == kUSDHC_DmaModeAdma1)
             {
-                admaDesBuffer[miniEntries * 2U - 1U] &= ~kUSDHC_Adma1DescriptorEndFlag;
+                admaDesBuffer[miniEntries * 2U - 1U] &= ~(uint32_t)kUSDHC_Adma1DescriptorEndFlag;
             }
             else
             {
-                admaDesBuffer[miniEntries * 2U - 2U] &= ~kUSDHC_Adma2DescriptorEndFlag;
+                admaDesBuffer[miniEntries * 2U - 2U] &= ~(uint32_t)kUSDHC_Adma2DescriptorEndFlag;
             }
             admaDesBuffer += miniEntries * 2U;
+            assert(admaDesLen >= miniEntries * 2U);
             admaDesLen -= miniEntries * 2U;
         }
 

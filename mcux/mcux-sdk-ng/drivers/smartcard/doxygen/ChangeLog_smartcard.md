@@ -1,5 +1,10 @@
 # SMARTCARD
 
+## [2.3.2]
+
+- Bug Fixes:
+  - Fix NULL_FIELD Coverity finding.
+
 ## [2.3.1]
 
 - Bug Fixes:

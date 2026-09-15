@@ -1,9 +1,19 @@
 # NETC
 
-## [2.10.7]
+## [2.10.8]
 
 - Bug Fixes
+  - Fixed switch driver to use the BPCAPR NUM_SBP macro spelling.
+  - Fixed some code quality issues.
+
+## [2.10.7]
+
+- New Features
+  - Added i.MX937 SOC driver.
+- Bug Fixes
   - Fixed i.MX943 PCIE VF config register addresses.
+  - Fixed i.MX943 PCIE VF MSIX table addresses.
+  - Fixed NETC_TimerAddOffset function.
 - Improvements
   - Updated VSI-PSI message driver for link status/speed per protocol v0.7.
 

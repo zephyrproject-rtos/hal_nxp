@@ -1048,9 +1048,14 @@ void SDMA_HandleIRQ(sdma_handle_t *handle)
     /* Set the current BD address to the CCB */
     if (handle->BDPool != NULL)
     {
-        /* Set the DONE bits */
-        handle->bdIndex                                    = (handle->bdIndex + 1U) % handle->bdCount;
-        s_SDMACCB[instance][handle->channel].currentBDAddr = (uint32_t)(&handle->BDPool[handle->bdIndex]);
+        handle->bdIndex = (handle->bdIndex + 1U) % handle->bdCount;
+        /* baseBDAddr already holds a DMA-view address set by SDMA_InstallBDMemory().
+         * Adding the BD-index byte offset gives the correct DMA-view address of the
+         * next BD without a second MEMORY_ConvertMemoryMapAddress() call.
+         * This is consistent with SDMA_InstallBDMemory() and SDMA_CreateHandle(). */
+        s_SDMACCB[instance][handle->channel].currentBDAddr =
+            s_SDMACCB[instance][handle->channel].baseBDAddr +
+            (uint32_t)(handle->bdIndex) * (uint32_t)sizeof(sdma_buffer_descriptor_t);
     }
     else
     {

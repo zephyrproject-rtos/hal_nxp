@@ -128,7 +128,7 @@ static void SPDIF_RxEDMACallback(edma_handle_t *handle, void *userData, bool don
 
 static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_config_t *config, uint32_t rightChannel)
 {
-#if defined(FSL_EDMA_DRIVER_EDMA4) && FSL_EDMA_DRIVER_EDMA4
+#if defined(FSL_EDMA_DRIVER_UNIFIED) && FSL_EDMA_DRIVER_UNIFIED
     edma_tcd_t *tcdRegs = handle->tcdBase;
 #else
     edma_tcd_t *tcdRegs = (edma_tcd_t *)(uint32_t)&handle->base->TCD[handle->channel];
@@ -166,7 +166,7 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
     assert(tcdSize > 0);
     previousTcd = (currentTcd != 0x00) ? (currentTcd - 0x01) : (handle->tcdSize - 0x01);
     /* Configure current TCD block. */
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
     EDMA_TcdResetExt(handle->base, &handle->tcdPool[currentTcd]);
     EDMA_TcdSetTransferConfigExt(handle->base, &handle->tcdPool[currentTcd], config, NULL);
     /* Set channel link */
@@ -179,7 +179,7 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
     EDMA_TcdSetChannelLink(&handle->tcdPool[currentTcd], kEDMA_MinorLink, rightChannel);
     EDMA_TcdSetChannelLink(&handle->tcdPool[currentTcd], kEDMA_MajorLink, rightChannel);
 #endif
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
     /* Enable major interrupt */
     EDMA_TCD_CSR((&handle->tcdPool[currentTcd]), EDMA_TCD_TYPE(handle->base)) |= DMA_CSR_INTMAJOR_MASK;
     /* Link current TCD with next TCD for identification of current TCD */
@@ -337,7 +337,7 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
             */
         }
     }
-#endif /* FSL_EDMA_DRIVER_EDMA4 */
+#endif /* FSL_EDMA_DRIVER_UNIFIED */
     /* There is no live chain, TCD block need to be installed in TCD registers. */
     EDMA_InstallTCD(handle->base, handle->channel, &handle->tcdPool[currentTcd]);
     /* Enable channel request again. */

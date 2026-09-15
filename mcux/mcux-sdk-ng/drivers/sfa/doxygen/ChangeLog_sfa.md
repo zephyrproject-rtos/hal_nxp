@@ -1,5 +1,10 @@
 # SFA
 
+## [2.1.8]
+
+- Bug Fixes
+  - Fixed incorrect `(void *)memset()` cast to `(void)memset()` to resolve unused-value compiler warning.
+
 ## [2.1.7]
 
 - New Features

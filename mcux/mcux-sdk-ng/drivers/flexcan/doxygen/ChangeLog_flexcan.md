@@ -1,5 +1,16 @@
 # FLEXCAN
 
+## [2.16.0]
+
+- Improvements
+  - Added four new members to `flexcan_config_t` so that the previously hard-coded register values
+    can now be configured by the application:
+    - `enableThreeSamplingMode` - controls CTRL1[SMP]; default `true` (backward compatible).
+    - `disableBusOffAutoRecovery` - controls CTRL1[BOFFREC]; default `false` (backward compatible).
+    - `txArbitrationStartDelay` - controls CTRL2[TASD] (0–31 Tq); default `0x16` (backward compatible).
+    - `enableEntireArbitrationCompare` - controls CTRL2[EACEN]; default `true` (backward compatible).
+  - Remove above unconditionally overwritten hard-coded registers value from `FLEXCAN_Reset`.
+
 ## [2.15.2]
 
 - Bug Fixes

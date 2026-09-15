@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_LDB_H_
-#define _FSL_LDB_H_
+#ifndef FSL_LDB_H_
+#define FSL_LDB_H_
 
 #include "fsl_common.h"
 
@@ -53,4 +53,4 @@ void LDB_Init(LDB_Type *base, uint8_t diIndex, uint8_t dualpanelIndex, uint8_t d
 #endif /*_cplusplus*/
 /*@}*/
 
-#endif /* _FSL_LDB_H_ */
+#endif /* FSL_LDB_H_ */

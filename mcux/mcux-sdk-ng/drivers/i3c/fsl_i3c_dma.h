@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2025 NXP
+ * Copyright 2022-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -16,7 +16,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I3C DMA driver version. */
-#define FSL_I3C_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 10))
+#define FSL_I3C_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 11))
 /*@}*/
 
 #if defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123)

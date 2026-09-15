@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef __S3MU_DRIVER_H__
-#define __S3MU_DRIVER_H__
+#ifndef FSL_S3MU_DRIVER_H__
+#define FSL_S3MU_DRIVER_H__
 
 #include "fsl_common.h"
 #include "fsl_device_registers.h"
@@ -158,4 +158,4 @@ uint32_t S3MU_ComputeMsgCrc(uint32_t *msg, uint32_t msg_len);
 
 /*! @} */ /* end of group s3mu */
 
-#endif /* __S3MU_DRIVER_H__ */
+#endif /* S3MU_DRIVER_H__ */

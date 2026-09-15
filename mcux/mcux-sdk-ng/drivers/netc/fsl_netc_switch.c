@@ -1318,6 +1318,23 @@ status_t SWT_BridgeConfigPortDefaultVid(swt_handle_t *handle, netc_hw_port_idx_t
     return kStatus_Success;
 }
 
+status_t SWT_SetPortSTGState(swt_handle_t *handle,
+                             netc_hw_port_idx_t portIdx,
+                             uint8_t stgID,
+                             netc_swt_port_stg_mode_t state)
+{
+    assert(handle != NULL);
+    assert(portIdx < NETC_SOC_SWT_PORT_NUM);
+    assert(stgID < 16U);
+
+    NETC_PORT_Type *base = handle->hw.ports[portIdx].port;
+
+    base->BPSTGSR = (base->BPSTGSR & ~(NETC_PORT_BPSTGSR_STG_STATE0_MASK << (stgID * 2U))) |
+                    (((uint32_t)state & NETC_PORT_BPSTGSR_STG_STATE0_MASK) << (stgID * 2U));
+
+    return kStatus_Success;
+}
+
 status_t SWT_BridgeAddVFTableEntry(swt_handle_t *handle, netc_tb_vf_config_t *config, uint32_t *entryID)
 {
     assert((handle != NULL) && (config != NULL));
@@ -3258,7 +3275,7 @@ status_t SWT_UpdateSBPTableEntry(swt_handle_t *handle, netc_tb_sbp_config_t *con
 {
     assert(handle != NULL);
 
-    uint32_t entryNumMax = (handle->hw.base->BPCAPR & NETC_SW_BPCAPR_NUM_SPB_MASK) >> NETC_SW_BPCAPR_NUM_SPB_SHIFT;
+    uint32_t entryNumMax = (handle->hw.base->BPCAPR & NETC_SW_BPCAPR_NUM_SBP_MASK) >> NETC_SW_BPCAPR_NUM_SBP_SHIFT;
     status_t status      = kStatus_NETC_LackOfResource;
     netc_cmd_bd_t cmdBd  = {0};
     netc_cbdr_handle_t cdbrHandle;
@@ -3290,7 +3307,7 @@ status_t SWT_GetSBPEntryState(swt_handle_t *handle, uint32_t entryID, netc_tb_sb
 {
     assert(handle != NULL);
 
-    uint32_t entryNumMax = (handle->hw.base->BPCAPR & NETC_SW_BPCAPR_NUM_SPB_MASK) >> NETC_SW_BPCAPR_NUM_SPB_SHIFT;
+    uint32_t entryNumMax = (handle->hw.base->BPCAPR & NETC_SW_BPCAPR_NUM_SBP_MASK) >> NETC_SW_BPCAPR_NUM_SBP_SHIFT;
     status_t status      = kStatus_NETC_LackOfResource;
     netc_cmd_bd_t cmdBd  = {0};
     netc_cbdr_handle_t cdbrHandle;

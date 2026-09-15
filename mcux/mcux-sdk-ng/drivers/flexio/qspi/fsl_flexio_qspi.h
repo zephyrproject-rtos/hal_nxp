@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_FLEXIO_QSPI_H_
-#define _FSL_FLEXIO_QSPI_H_
+#ifndef FSL_FLEXIO_QSPI_H_
+#define FSL_FLEXIO_QSPI_H_
 
 #include "fsl_common.h"
 #include "fsl_flexio.h"
@@ -357,4 +357,4 @@ void FLEXIO_QSPI_EnableDMA(FLEXIO_QSPI_Type *base, uint32_t mask, bool enable);
 #endif /*_cplusplus*/
 /*@}*/
 
-#endif /*_FSL_FLEXIO_QSPI_H_*/
+#endif /*FSL_FLEXIO_QSPI_H_*/

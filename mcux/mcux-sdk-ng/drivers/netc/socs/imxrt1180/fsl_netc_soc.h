@@ -201,4 +201,11 @@ status_t NETC_SocSetLinkAddr(netc_soc_link_t link, uint8_t phyAddr);
  */
 uint32_t NETC_SocGetFuncInstance(netc_hw_eth_port_idx_t port);
 
+#ifndef NETC_SW_BPCAPR_NUM_SBP_MASK
+#define NETC_SW_BPCAPR_NUM_SBP_MASK  NETC_SW_BPCAPR_NUM_SPB_MASK
+#endif
+#ifndef NETC_SW_BPCAPR_NUM_SBP_SHIFT
+#define NETC_SW_BPCAPR_NUM_SBP_SHIFT NETC_SW_BPCAPR_NUM_SPB_SHIFT
+#endif
+
 #endif /* FSL_NETC_SOC_H_ */

@@ -19,8 +19,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief RCM driver version 2.0.5. */
-#define FSL_RCM_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
+/*! @brief RCM driver version 2.0.6. */
+#define FSL_RCM_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
 /*! @} */
 
 /*!
@@ -196,7 +196,7 @@ static inline void RCM_GetVersionId(RCM_Type *base, rcm_version_id_t *versionId)
 
     versionId->feature = (uint16_t)(tmp & 0x0000FFFFUL);
     versionId->minor   = (uint8_t)((tmp & 0x00FF0000UL) >> 16U);
-    versionId->major   = (uint8_t)((tmp & 0x000000FFUL) >> 24U);
+    versionId->major   = (uint8_t)((tmp & 0xFF000000UL) >> 24U);
 }
 #endif
 

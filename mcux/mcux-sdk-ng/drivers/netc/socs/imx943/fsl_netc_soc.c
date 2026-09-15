@@ -25,7 +25,7 @@ void NETC_SocGetBaseResource(netc_enetc_hw_t *hw, netc_hw_si_idx_t si)
     uint8_t siNum    = getSiNum(si);
     uint8_t siIdx    = getSiIdx(si);
 
-    assert(1U + siIdx < sizeof(s_netcBases) / sizeof(s_netcBases[0]));
+    assert(siIdx < sizeof(s_enetcSiBases) / sizeof(s_enetcSiBases[0]));
 
     hw->si             = s_enetcSiBases[siIdx];
     hw->base           = s_netcEnetcBases[instance];
@@ -33,16 +33,17 @@ void NETC_SocGetBaseResource(netc_enetc_hw_t *hw, netc_hw_si_idx_t si)
     hw->portGroup.port = (NETC_PORT_Type *)((uintptr_t)hw->base + 0x4000U);
     hw->portGroup.eth  = (NETC_ETH_LINK_Type *)((uintptr_t)hw->base + 0x5000U);
     hw->global         = (ENETC_GLOBAL_Type *)((uintptr_t)hw->base + 0x10000U);
+    hw->msixTable      = (netc_msix_entry_t *)((uintptr_t)hw->si + 0x30000U);
+
     if (siNum == 0U)
     {
+        assert(1U + siIdx < sizeof(s_netcBases) / sizeof(s_netcBases[0]));
         hw->func.pf   = s_netcBases[1 + siIdx];
-        hw->msixTable = (netc_msix_entry_t *)((uintptr_t)hw->si + 0x30000U);
     }
     else
     {
         assert(siIdx >= 4U);
         hw->func.vf   = s_netcVfBases[siIdx - 4U];
-        hw->msixTable = (netc_msix_entry_t *)((uintptr_t)hw->si + 0x60000U);
     }
 }
 
@@ -252,31 +253,20 @@ status_t NETC_PHYInit(netc_mdio_handle_t *handle, phy_mode_t mode)
         value = ((value & 0xE000) | 0x028A);
         NETC_SocPHYWrite(handle, 0x0, 0x5F, 0x8073, value);
 
-        value = NETC_SocPHYRead(handle, 0x0, 0x5F, 0x8072);
-        value = ((value & 0x0));
-        NETC_SocPHYWrite(handle, 0x0, 0x5F, 0x8072, value);
+        NETC_SocPHYWrite(handle, 0x0, 0x5F, 0x8072, 0);
 
-        value = NETC_SocPHYRead(handle, 0x0, 0x5F, 0x807A);
-        value = ((value & 0x0));
-        NETC_SocPHYWrite(handle, 0x0, 0x5F, 0x807A, value);
+        NETC_SocPHYWrite(handle, 0x0, 0x5F, 0x807A, 0);
 
-        value = NETC_SocPHYRead(handle, 0x0, 0x5F, 0x8079);
-        value = ((value & 0x0));
-        NETC_SocPHYWrite(handle, 0x0, 0x5F, 0x8079, value);
+        NETC_SocPHYWrite(handle, 0x0, 0x5F, 0x8079, 0);
 
-        value = NETC_SocPHYRead(handle, 0x0, 0x5F, 0x807A);
-        value = ((value & 0x0));
-        NETC_SocPHYWrite(handle, 0x0, 0x5F, 0x807A, value);
+        NETC_SocPHYWrite(handle, 0x0, 0x5F, 0x807A, 0);
 
-        value = NETC_SocPHYRead(handle, 0x0, 0x5F, 0x8072);
-        value = ((value & 0x0));
-        NETC_SocPHYWrite(handle, 0x0, 0x5F, 0x8072, value);
+        NETC_SocPHYWrite(handle, 0x0, 0x5F, 0x8072, 0);
 
         value = NETC_SocPHYRead(handle, 0x0, 0x5F, 0x8071);
         value = ((value & 0xFF00) | 0x0028);
         NETC_SocPHYWrite(handle, 0x0, 0x5F, 0x8071, value);
 
-        value = NETC_SocPHYRead(handle, 0x0, 0x5F, 0x8077);
         NETC_SocPHYWrite(handle, 0x0, 0x5F, 0x8077, 0xA017);
     }
     value = NETC_SocPHYRead(handle, 0x0, 0x5F, 0x8090);
@@ -312,7 +302,6 @@ status_t NETC_PHYInit(netc_mdio_handle_t *handle, phy_mode_t mode)
     NETC_SocPHYWrite(handle, 0x0, 0x1F, 0x8034, value);
 
     SDK_DelayAtLeastUs(1000U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
-    value = NETC_SocPHYRead(handle, 0x0, 0x5F, 0x8034);
 
     value = NETC_SocPHYRead(handle, 0x0, 0x5F, 0x8032);
     value = ((value & 0xFCFF) | 0x0100);

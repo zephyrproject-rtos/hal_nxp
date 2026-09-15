@@ -15,7 +15,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief HIPERFACE driver version. */
-#define FSL_HIPERFACE_DRIVER_VERSION (MAKE_VERSION(1, 0, 0))
+#define FSL_HIPERFACE_DRIVER_VERSION (MAKE_VERSION(1, 0, 3))
 
 #define POS_READY_MODE_SHOWS_TIME_ALL_TRANSMISSIONS      1
 #define POS_READY_MODE_SHOWS_TIME_SYNC_TRANSMISSIONS     0
@@ -477,8 +477,8 @@ typedef struct _dsl_rdb_error_protocol
     uint16_t internalSupplyVoltage; // Internal supply voltage in mV during the error
     uint16_t rotationSpeed;         // Rotation speed in min-1 during the error
     uint16_t reserved;
-    uint16_t additionalErrorConde;    // Additional error code
-    uint16_t errorConde;            // Error code
+    uint16_t additionalErrorCode;    /* Additional error code */
+    uint16_t errorCode;            /* Error code */
 } dsl_rdb_error_protocol_t;
 
 /*******************************************************************************
@@ -491,6 +491,7 @@ extern "C" {
 void DSL_GetDefaultConfig(hiperface_config_t *config);
 void DSL_MasterInit(HIPERFACE_Type *base, hiperface_config_t *config);
 int DSL_SyncModeEnable(HIPERFACE_Type *base, uint32_t syncFreqHz, hiperface_config_t *config);
+void DSL_SyncModeDisable(HIPERFACE_Type *base);
 void DSL_GetMasterReleaseInfo(HIPERFACE_Type *base, dsl_encoder_version_info_t *info);
 void DSL_EncoderInit(HIPERFACE_Type *base, dsl_encoder_t *enc);
 status_t DSL_CheckLinkStatus(HIPERFACE_Type *base, uint32_t timeout_ms);
@@ -529,7 +530,7 @@ status_t DSL_RDB_GetResolution(HIPERFACE_Type *base, uint32_t *resolution);
 status_t DSL_RDB_GetMeasurementRange(HIPERFACE_Type *base, uint32_t *range);
 status_t DSL_RDB_GetTypeNameOfEncoder(HIPERFACE_Type *base, uint8_t *name, uint32_t len);
 status_t DSL_RDB_GetSerialNumber(HIPERFACE_Type *base, uint8_t *serialNumber, uint32_t len);
-status_t DSL_RDB_GetBaseiceVersion(HIPERFACE_Type *base, uint8_t *firmware_version, uint32_t len0, uint8_t *hardware_version, uint32_t len1);
+status_t DSL_RDB_GetBasicVersion(HIPERFACE_Type *base, uint8_t *firmware_version, uint32_t len0, uint8_t *hardware_version, uint32_t len1);
 status_t DSL_RDB_GetFirmwareDate(HIPERFACE_Type *base, uint8_t *date, uint32_t len);
 status_t DSL_RDB_GetEEPROMSize(HIPERFACE_Type *base, uint16_t *size);
 status_t DSL_RDB_GetSafeChannel2Resolution(HIPERFACE_Type *base, uint32_t *resolution);
@@ -581,6 +582,7 @@ status_t DSL_RDB_GetDirectoryFileNmae(HIPERFACE_Type *base, char *fileName, uint
 status_t DSL_RDB_DigitalOutputWithNumber(HIPERFACE_Type *base, uint8_t IO_index, uint8_t value);
 status_t DSL_RDB_DigitalInputWithNumber(HIPERFACE_Type *base, uint8_t IO_index, uint8_t *value);
 uint8_t ENC_ST_register_reading(HIPERFACE_Type *base, uint8_t offset);
+uint8_t ENC_ST_register_writing(HIPERFACE_Type *base, uint8_t offset, uint8_t value);
 void Slave_Mail_register_writing(HIPERFACE_Type *base, uint8_t value);
 void Slave_Ping_register_writing(HIPERFACE_Type *base, uint8_t value);
 uint8_t Slave_Ping_register_reading(HIPERFACE_Type *base);

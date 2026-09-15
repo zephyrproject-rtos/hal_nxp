@@ -21,8 +21,18 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief cache driver version. */
-#define FSL_LLC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_LLC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+
 /*! @} */
+
+/*! @brief Number of ways in each LLC instance. */
+#define LLC_WAY_COUNT (FSL_FEATURE_LLC_WAY_COUNT)
+
+/*! @brief Number of sets in each LLC instance. */
+#define LLC_SET_COUNT (FSL_FEATURE_LLC_SET_COUNT)
+
+/*! @brief Number of way partition register sets in each LLC instance. */
+#define LLC_WAY_PARTITION_COUNT (FSL_FEATURE_LLC_WAY_PARTITION_COUNT)
 
 /* Helper: memory barrier order for cache control changes (DSB then ISB) */
 #ifndef LLC_BARRIER
@@ -113,7 +123,6 @@ typedef struct _llc_feature_capability
 {
     llc_cache_line_size_t cacheLineSize; /*!< Cache line size capability */
     llc_axi_data_width_t axiDataWidth;   /*!< AXI data width capability */
-    bool freeRun;                        /*!< Free run mode capability */
     uint8_t counterWidth;                /*!< Performance counter width capability */
 } llc_feature_capability_t;
 
@@ -195,33 +204,15 @@ typedef struct _llc_performance_counters
     uint32_t wttAboveThresholdCounter; /*!< WTT above threshold counter */
 } llc_performance_counters_t;
 
-/*! @brief Callback type when registering for a callback. */
-typedef enum
-{
-    kLLC_CorrectableErrorCallback,      /*!< Correctable error interrupt callback */
-    kLLC_UncorrectableErrorCallback,    /*!< Uncorrectable error interrupt callback */
-    kLLC_MaintenanceCompletionCallback, /*!< Maintenance completion interrupt callback */
-    kLLC_PerformanceMonitorCallback,    /*!< Performance monitor interrupt callback */
-} llc_callback_type_t;
-
 /*!
  * @brief LLC callback function.
  *
- * The registered callback is invoked once for each asserted event flag
- * detected in the LLC interrupt handler. If multiple events occur in the
- * same interrupt (e.g. a correctable error and a maintenance completion),
- * the handler will call the callback multiple times sequentially—one call
- * per @ref llc_callback_type_t value—using the following order of
- * precedence:
- * 1. kLLC_CorrectableErrorCallback
- * 2. kLLC_UncorrectableErrorCallback
- * 3. kLLC_MaintenanceCompletionCallback
- * 4. kLLC_PerformanceMonitorCallback
+ * The callback is invoked once per interrupt with a logical OR of members of
+ * @ref llc_status_flags_t that were asserted when the interrupt was handled.
  *
- * This preserves backward compatibility for simple single-event users
- * while eliminating silent loss of additional simultaneous events.
+ * @param statusFlags Asserted LLC status flags.
  */
-typedef void (*llc_callback_t)(llc_callback_type_t type);
+typedef void (*llc_callback_t)(uint32_t statusFlags);
 
 /*******************************************************************************
  * API
@@ -230,6 +221,9 @@ typedef void (*llc_callback_t)(llc_callback_type_t type);
 #if defined(__cplusplus)
 extern "C" {
 #endif
+
+/*! @brief LLC common interrupt handler. */
+void LLC_DriverIRQHandler(uint32_t instance);
 
 /*!
  * @name LLC Control
@@ -386,6 +380,8 @@ status_t LLC_CleanInvalidateCacheAtSetWayRange(LLC_Type *base, uint16_t set, uin
  * The operation evicts any dirty lines in the affected range (write-back) and
  * invalidates them.
  *
+ * The complete range must be contained within one LLC physical-memory alias.
+ *
  * @param address   The physical start address.
  * @param sizeByte  Size of the memory to be invalidated in bytes. Must be > 0. Better to align to cache line size.
  * @return kStatus_Success Cache invalidation succeeded.
@@ -492,11 +488,34 @@ status_t LLC_GetErrorStatus(LLC_Type *base, llc_error_status_t *errorStatus);
  * Set the number of correctable errors that must be corrected before the correctable
  * error interrupt output signal (IRQ_C_LEVEL) is asserted.
  */
-void LLC_SetCorrectableErrorInterruptThreshold(LLC_Type *base, uint8_t threshold)
+static inline void LLC_SetCorrectableErrorInterruptThreshold(LLC_Type *base, uint8_t threshold)
 {
     assert(base != NULL);
     base->CCUCECR = (base->CCUCECR & ~LLC_CCUCECR_ERRTHRESHOLD_MASK) | LLC_CCUCECR_ERRTHRESHOLD(threshold);
 }
+
+/*!
+ * @brief Registers a user callback for an LLC instance.
+ *
+ * The callback is invoked from the LLC interrupt handler for the given
+ * instance. Callbacks are stored per instance, so multiple LLC instances can
+ * each register their own handler. Pass NULL to unregister.
+ *
+ * @note Registering a callback and enabling an LLC interrupt source through
+ * LLC_EnableInterrupts() is not sufficient by itself to deliver the callback.
+ * The application must also enable the corresponding NVIC channel, e.g.
+ * @code
+ *   EnableIRQ(CMPT_LLC_IRQn);
+ * @endcode
+ * The driver deliberately does not touch the NVIC so the application retains
+ * full control over interrupt priority and masking.
+ *
+ * @param base LLC peripheral base address.
+ * @param callback User callback function, or NULL to unregister.
+ */
+void LLC_RegisterCallBack(LLC_Type *base, llc_callback_t callback);
+
+
 
 /*!
  * @brief Enable LLC interrupts.

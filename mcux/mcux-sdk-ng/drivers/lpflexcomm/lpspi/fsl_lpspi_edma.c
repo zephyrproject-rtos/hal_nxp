@@ -342,7 +342,7 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
         transferConfigRx.minorLoopBytes   = lastBytes;
         transferConfigRx.majorLoopCounts  = 1U;
 
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
         EDMA_TcdResetExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_lastBytesRx);
         EDMA_TcdSetTransferConfigExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_lastBytesRx,
                                      &transferConfigRx, NULL);
@@ -379,7 +379,7 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
 
         if (fourFifoBlocks > 0U)
         {
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
             EDMA_TcdResetExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_oneFifoBlockRx);
             EDMA_TcdSetTransferConfigExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_oneFifoBlockRx,
                                          &transferConfigRx, nextTcd);
@@ -464,7 +464,7 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
         transferConfigTx.minorLoopBytes   = 4U;
         transferConfigTx.majorLoopCounts  = 1U;
 
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
         EDMA_TcdResetExt(handle->edmaTxDataToTxRegHandle->base, softwareTCD_pcsContinuous);
         EDMA_TcdSetTransferConfigExt(handle->edmaTxDataToTxRegHandle->base, softwareTCD_pcsContinuous,
                                      &transferConfigTx, NULL);
@@ -495,7 +495,7 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
         transferConfigTx.minorLoopBytes   = lastBytes;
         transferConfigTx.majorLoopCounts  = 1U;
 
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
         EDMA_TcdResetExt(handle->edmaTxDataToTxRegHandle->base, softwareTCD_lastBytesTx);
         EDMA_TcdSetTransferConfigExt(handle->edmaTxDataToTxRegHandle->base, softwareTCD_lastBytesTx,
                                      &transferConfigTx, nextTcd);
@@ -529,7 +529,7 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
 
         if (fourFifoBlocks > 0U)
         {
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
             EDMA_TcdResetExt(handle->edmaTxDataToTxRegHandle->base, softwareTCD_oneFifoBlockTx);
             EDMA_TcdSetTransferConfigExt(handle->edmaTxDataToTxRegHandle->base, softwareTCD_oneFifoBlockTx,
                                          &transferConfigTx, nextTcd);
@@ -858,7 +858,7 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
         transferConfigRx.minorLoopBytes   = lastBytes;
         transferConfigRx.majorLoopCounts  = 1U;
 
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
         EDMA_TcdResetExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_lastBytesRx);
         EDMA_TcdSetTransferConfigExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_lastBytesRx,
                                      &transferConfigRx, NULL);
@@ -895,7 +895,7 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
 
         if (fourFifoBlocks > 0U)
         {
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
             EDMA_TcdResetExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_oneFifoBlockRx);
             EDMA_TcdSetTransferConfigExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_oneFifoBlockRx,
                                          &transferConfigRx, nextTcd);
@@ -994,7 +994,7 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
         transferConfigTx.minorLoopBytes   = lastBytes;
         transferConfigTx.majorLoopCounts  = 1U;
 
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
         EDMA_TcdResetExt(handle->edmaTxDataToTxRegHandle->base, softwareTCD_lastBytesTx);
         EDMA_TcdSetTransferConfigExt(handle->edmaTxDataToTxRegHandle->base, softwareTCD_lastBytesTx,
                                      &transferConfigTx, nextTcd);
@@ -1028,7 +1028,7 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
 
         if (fourFifoBlocks > 0U)
         {
-#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+#if defined FSL_EDMA_DRIVER_UNIFIED && FSL_EDMA_DRIVER_UNIFIED
             EDMA_TcdResetExt(handle->edmaTxDataToTxRegHandle->base, softwareTCD_oneFifoBlockTx);
             EDMA_TcdSetTransferConfigExt(handle->edmaTxDataToTxRegHandle->base, softwareTCD_oneFifoBlockTx,
                                          &transferConfigTx, nextTcd);

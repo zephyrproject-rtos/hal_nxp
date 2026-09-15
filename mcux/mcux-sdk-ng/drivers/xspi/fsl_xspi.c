@@ -21,46 +21,46 @@
 #if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
 
 #define XSPI_TG_REG_ADDR_SFP_IPCR(base, tg)                                 \
-    ((uint32_t)(((uint32_t)tg == 0U) ? (uint32_t)(&((base)->SFP_TG_IPCR)) : \
-                                       (uint32_t)(&((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].SFP_TG_SUB_IPCR))))
+    ((uintptr_t)(((uint32_t)tg == 0U) ? (uintptr_t)(&((base)->SFP_TG_IPCR)) : \
+                                        (uintptr_t)(&((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].SFP_TG_SUB_IPCR))))
 
 #define XSPI_TG_REG_ADDR_SFP_SFAR(base, tg)                                 \
-    ((uint32_t)(((uint32_t)tg == 0U) ? (uint32_t)(&((base)->SFP_TG_SFAR)) : \
-                                       (uint32_t)(&((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].SFP_TG_SUB_SFAR))))
+    ((uintptr_t)(((uint32_t)tg == 0U) ? (uintptr_t)(&((base)->SFP_TG_SFAR)) : \
+                                        (uintptr_t)(&((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].SFP_TG_SUB_SFAR))))
 
 #define XSPI_TG_REG_ADDR_MDAD(base, tg)                                                         \
-    ((uint32_t)(((uint32_t)tg == 0U) ? (uint32_t)(&((base)->TG0MDAD)) :                         \
-                                       (((uint32_t)tg == 1U) ? (uint32_t)(&((base)->TG1MDAD)) : \
-                                                               (uint32_t)(&((base)->TGMDAD_EXT[(uint32_t)tg - 2U])))))
+    ((uintptr_t)(((uint32_t)tg == 0U) ? (uintptr_t)(&((base)->TG0MDAD)) :                         \
+                                        (((uint32_t)tg == 1U) ? (uintptr_t)(&((base)->TG1MDAD)) : \
+                                                                (uintptr_t)(&((base)->TGMDAD_EXT[(uint32_t)tg - 2U])))))
 
 #define XSPI_REG_ADDR_FRAD_ADDR(base, frad, word) \
-    ((uint32_t)(((word) > 1U) ? 0U : (uint32_t)&((base)->FRAD0_WORD##word) + ((frad) * 0x20U)))
+    ((uintptr_t)(((word) > 1U) ? 0U : (uintptr_t)&((base)->FRAD0_WORD##word) + ((uintptr_t)(frad) * 0x20U)))
 
 #define XSPI_TG_REG_ADDR_FRAD(base, tg, frad, word)                                                                 \
-    ((uint32_t)(((word) <= 1U) ?                                                                                    \
+    ((uintptr_t)(((word) <= 1U) ?                                                                                    \
                     0U :                                                                                            \
                 ((uint32_t)tg == 0U) ?                                                                              \
-                    (((frad) < 8U) ? (uint32_t)&((base)->FRAD0_WORD##word) + ((frad) * 0x20U) :                     \
-                                     (uint32_t)&((base)->FRAD8_WORD##word) + (((frad) - 8U) * 0x20U)) :             \
-                    (((frad) < 8U) ? (uint32_t)&((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].FRAD0_WORD##word##_SUB) + \
-                                         ((frad) * 0x20U) :                                                         \
-                                     (uint32_t)&((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].FRAD8_WORD##word##_SUB) + \
-                                         (((frad) - 8U) * 0x20U))))
+                    (((frad) < 8U) ? (uintptr_t)&((base)->FRAD0_WORD##word) + ((uintptr_t)(frad) * 0x20U) :         \
+                                     (uintptr_t)&((base)->FRAD8_WORD##word) + ((uintptr_t)((frad) - 8U) * 0x20U)) : \
+                    (((frad) < 8U) ? (uintptr_t)&((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].FRAD0_WORD##word##_SUB) + \
+                                         ((uintptr_t)(frad) * 0x20U) :                                              \
+                                     (uintptr_t)&((base)->SUB_REG_ARRAY[(uint32_t)tg - 1U].FRAD8_WORD##word##_SUB) + \
+                                         ((uintptr_t)((frad) - 8U) * 0x20U))))
 #else
 
 #define XSPI_TG_REG_ADDR_SFP_IPCR(base, tg)              \
-    ((uint32_t)((((uint32_t)tg) == 0U) ?                 \
-                    (uint32_t)(&((base)->SFP_TG_IPCR)) : \
-                    (uint32_t)(&((base)->SUB_REG_MDAM_ARRAY[((uint32_t)tg) - 1U].SFP_TG_SUB_IPCR))))
+    ((uintptr_t)((((uint32_t)tg) == 0U) ?                 \
+                    (uintptr_t)(&((base)->SFP_TG_IPCR)) : \
+                    (uintptr_t)(&((base)->SUB_REG_MDAM_ARRAY[((uint32_t)tg) - 1U].SFP_TG_SUB_IPCR))))
 
 #define XSPI_TG_REG_ADDR_SFP_SFAR(base, tg)              \
-    ((uint32_t)((((uint32_t)tg) == 0U) ?                 \
-                    (uint32_t)(&((base)->SFP_TG_SFAR)) : \
-                    (uint32_t)(&((base)->SUB_REG_MDAM_ARRAY[((uint32_t)tg) - 1U].SFP_TG_SUB_SFAR))))
+    ((uintptr_t)((((uint32_t)tg) == 0U) ?                 \
+                    (uintptr_t)(&((base)->SFP_TG_SFAR)) : \
+                    (uintptr_t)(&((base)->SUB_REG_MDAM_ARRAY[((uint32_t)tg) - 1U].SFP_TG_SUB_SFAR))))
 
-#define XSPI_REG_ADDR_FRAD_ADDR(base, frad, word) ((uint32_t)&((base)->FRAD0_WORD##word) + (frad * 0x20U))
+#define XSPI_REG_ADDR_FRAD_ADDR(base, frad, word) ((uintptr_t)&((base)->FRAD0_WORD##word) + ((uintptr_t)(frad) * 0x20U))
 
-#define XSPI_TG_REG_ADDR_MDAD(base, tg) (((tg) == 0) ? (uint32_t)(&((base)->TG0MDAD)) : (uint32_t)(&((base)->TG1MDAD)))
+#define XSPI_TG_REG_ADDR_MDAD(base, tg) (((tg) == 0) ? (uintptr_t)(&((base)->TG0MDAD)) : (uintptr_t)(&((base)->TG1MDAD)))
 
 #endif /* (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV) */
 
@@ -1268,9 +1268,9 @@ RAMFUNC void XSPI_UpdateSFPConfig(XSPI_Type *base,
                 /* Set the most-significant 16 bits of the ending address(64-KB alignment). */
                 *(uint32_t *)fradWord1RegAddr = ptrSfpFradConfig->fradConfig[i].endAddress & 0xFFFF0000UL;
 
+#if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
                 for (uint8_t tgId = 0U; tgId < XSPI_TARGET_GROUP_COUNT; tgId++)
                 {
-#if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
                     fradWord2RegAddr = XSPI_TG_REG_ADDR_FRAD(base, tgId, i, 2);
                     fradWord3RegAddr = XSPI_TG_REG_ADDR_FRAD(base, tgId, i, 3);
                     XSPI_SetSFPFradEALModeTG(base, (xspi_target_group_t)tgId,
@@ -1290,27 +1290,27 @@ RAMFUNC void XSPI_UpdateSFPConfig(XSPI_Type *base,
                     *(uint32_t *)fradWord3RegAddr =
                         (XSPI_FRAD0_WORD3_VLD(ptrSfpFradConfig->fradConfig[i].tgConfig[tgId].assignIsValid) |
                          XSPI_FRAD0_WORD3_LOCK(ptrSfpFradConfig->fradConfig[i].tgConfig[tgId].descriptorLock));
-#else
-                    fradWord2RegAddr = XSPI_REG_ADDR_FRAD_ADDR(base, i, 2);
-                    fradWord3RegAddr = XSPI_REG_ADDR_FRAD_ADDR(base, i, 3);
-
-                    XSPI_SetSFPFradEALMode(base, ptrSfpFradConfig->fradConfig[i].exclusiveAccessLock, i);
-
-                    if (ptrSfpFradConfig->fradConfig[i].exclusiveAccessLock == kXSPI_ExclusiveAccessLockDisabled)
-                    {
-                        *(uint32_t *)fradWord2RegAddr =
-                            (*(uint32_t *)fradWord3RegAddr &
-                             (~(XSPI_FRAD0_WORD2_MD0ACP_MASK | XSPI_FRAD0_WORD2_MD1ACP_MASK))) |
-                            (XSPI_FRAD0_WORD2_MD0ACP(ptrSfpFradConfig->fradConfig[i].tg0MasterAccess) |
-                             XSPI_FRAD0_WORD2_MD1ACP(ptrSfpFradConfig->fradConfig[i].tg1MasterAccess));
-                    }
-                    *(uint32_t *)fradWord3RegAddr =
-                        ((*(uint32_t *)fradWord3RegAddr) &
-                         (~(XSPI_FRAD0_WORD3_LOCK_MASK | XSPI_FRAD0_WORD3_VLD_MASK))) |
-                        (XSPI_FRAD0_WORD3_VLD(ptrSfpFradConfig->fradConfig[i].assignIsValid) |
-                         XSPI_FRAD0_WORD3_LOCK(ptrSfpFradConfig->fradConfig[i].descriptorLock));
-#endif
                 }
+#else
+                fradWord2RegAddr = XSPI_REG_ADDR_FRAD_ADDR(base, i, 2);
+                fradWord3RegAddr = XSPI_REG_ADDR_FRAD_ADDR(base, i, 3);
+
+                XSPI_SetSFPFradEALMode(base, ptrSfpFradConfig->fradConfig[i].exclusiveAccessLock, i);
+
+                if (ptrSfpFradConfig->fradConfig[i].exclusiveAccessLock == kXSPI_ExclusiveAccessLockDisabled)
+                {
+                    *(uint32_t *)fradWord2RegAddr =
+                        (*(uint32_t *)fradWord3RegAddr &
+                         (~(XSPI_FRAD0_WORD2_MD0ACP_MASK | XSPI_FRAD0_WORD2_MD1ACP_MASK))) |
+                        (XSPI_FRAD0_WORD2_MD0ACP(ptrSfpFradConfig->fradConfig[i].tg0MasterAccess) |
+                         XSPI_FRAD0_WORD2_MD1ACP(ptrSfpFradConfig->fradConfig[i].tg1MasterAccess));
+                }
+                *(uint32_t *)fradWord3RegAddr =
+                    ((*(uint32_t *)fradWord3RegAddr) &
+                     (~(XSPI_FRAD0_WORD3_LOCK_MASK | XSPI_FRAD0_WORD3_VLD_MASK))) |
+                    (XSPI_FRAD0_WORD3_VLD(ptrSfpFradConfig->fradConfig[i].assignIsValid) |
+                     XSPI_FRAD0_WORD3_LOCK(ptrSfpFradConfig->fradConfig[i].descriptorLock));
+#endif
             }
         }
     }
@@ -2116,6 +2116,7 @@ RAMFUNC void XSPI_TransferCreateHandle(XSPI_Type *base,
 #endif
 )
 {
+    assert(NULL != base);
     assert(NULL != handle);
 
     uint32_t instance = XSPI_GetInstance(base);
@@ -3038,6 +3039,11 @@ status_t XSPI_EnableAhbWriteTerminate(XSPI_Type *base, bool enable)
 #if defined(FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ) && FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ
 RAMFUNC static void XSPI_CommonIRQHandler(XSPI_Type *base, xspi_handle_t *handle)
 {
+    if ((base == NULL) || (handle == NULL))
+    {
+        return;
+    }
+
 #if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
     uint32_t errFlags = XSPI_GetErrorStatusFlagsTG(base, handle->tgId);
     uint32_t flags    = XSPI_GetCmdExecutionArbitrationStatusFlagsTG(base, handle->tgId);
@@ -3073,7 +3079,10 @@ RAMFUNC static void XSPI_CommonIRQHandler(XSPI_Type *base, xspi_handle_t *handle
         XSPI_ResetTgQueue(base);
 #endif
         XSPI_ResetSfmAndAhbDomain(base);
-        handle->completionCallback(base, handle, kStatus_Timeout, handle->userData);
+        if (handle->completionCallback != NULL)
+        {
+            handle->completionCallback(base, handle, kStatus_Timeout, handle->userData);
+        }
     }
 
 #if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
@@ -3090,7 +3099,10 @@ RAMFUNC static void XSPI_CommonIRQHandler(XSPI_Type *base, xspi_handle_t *handle
         XSPI_ClearErrorStatusFlags(base, ((uint32_t)kXSPI_ErrorTg0Sfar | (uint32_t)kXSPI_ErrorTg1Sfar));
 #endif
         g_IpAccessSfarFail = true;
-        handle->completionCallback(base, handle, kStatus_XSPI_IpAccessAddrSettingInvalid, handle->userData);
+        if (handle->completionCallback != NULL)
+        {
+            handle->completionCallback(base, handle, kStatus_XSPI_IpAccessAddrSettingInvalid, handle->userData);
+        }
     }
 
 #if (defined(FSL_FEATURE_XSPI_HAS_EENV) && FSL_FEATURE_XSPI_HAS_EENV)
@@ -3107,7 +3119,10 @@ RAMFUNC static void XSPI_CommonIRQHandler(XSPI_Type *base, xspi_handle_t *handle
         XSPI_ClearErrorStatusFlags(base, (uint32_t)(kXSPI_ErrorTg0Ipcr | kXSPI_ErrorTg1Ipcr));
 #endif
         g_IpAccessIpcrFail = true;
-        handle->completionCallback(base, handle, kStatus_XSPI_IpAccessIPCRInvalid, handle->userData);
+        if (handle->completionCallback != NULL)
+        {
+            handle->completionCallback(base, handle, kStatus_XSPI_IpAccessIPCRInvalid, handle->userData);
+        }
     }
 
     if ((errFlags & kXSPI_ArbitrationWin) != 0UL)
@@ -3132,7 +3147,10 @@ RAMFUNC static void XSPI_CommonIRQHandler(XSPI_Type *base, xspi_handle_t *handle
         XSPI_DisableInterrupts(base, (uint64_t)(kXSPI_TxBufferUnderrunIntEnable));
         XSPI_ClearCmdExecutionArbitrationStatusFlags(base, (uint32_t)kXSPI_FlagTxBufferUnderRun);
 #endif
-        handle->completionCallback(base, handle, kStatus_XSPI_TxBufferUnderrun, handle->userData);
+        if (handle->completionCallback != NULL)
+        {
+            handle->completionCallback(base, handle, kStatus_XSPI_TxBufferUnderrun, handle->userData);
+        }
     }
 
     if (((flags & (uint32_t)kXSPI_FlagTxBufferFill) != 0UL) && (handle->state == kXSPI_StateBusyWrite))
@@ -3183,7 +3201,10 @@ RAMFUNC static void XSPI_CommonIRQHandler(XSPI_Type *base, xspi_handle_t *handle
         }
         else
         {
-            handle->completionCallback(base, handle, kStatus_XSPI_IpWriteFinished, handle->userData);
+            if (handle->completionCallback != NULL)
+            {
+                handle->completionCallback(base, handle, kStatus_XSPI_IpWriteFinished, handle->userData);
+            }
         }
     }
 
@@ -3277,7 +3298,10 @@ RAMFUNC static void XSPI_CommonIRQHandler(XSPI_Type *base, xspi_handle_t *handle
         }
         else
         {
-            handle->completionCallback(base, handle, kStatus_XSPI_IpReadFinished, handle->userData);
+            if (handle->completionCallback != NULL)
+            {
+                handle->completionCallback(base, handle, kStatus_XSPI_IpReadFinished, handle->userData);
+            }
         }
     }
 }

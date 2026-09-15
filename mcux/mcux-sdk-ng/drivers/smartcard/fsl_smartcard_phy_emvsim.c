@@ -173,7 +173,7 @@ status_t SMARTCARD_PHY_Activate(void *base, smartcard_context_t *context, smartc
 
 status_t SMARTCARD_PHY_Deactivate(void *base, smartcard_context_t *context)
 {
-    if ((NULL == context))
+    if ((NULL == context) || (NULL == context->timeDelay))
     {
         return kStatus_SMARTCARD_InvalidInput;
     }

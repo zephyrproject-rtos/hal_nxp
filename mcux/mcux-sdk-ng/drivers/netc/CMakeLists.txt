@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.netc_rt1180)
-    mcux_component_version(2.0.0)
+    mcux_component_version(2.0.1)
 
     mcux_add_source(SOURCES socs/imxrt1180/fsl_netc_soc.c socs/imxrt1180/fsl_netc_soc.h)
 
@@ -49,7 +49,7 @@ if(CONFIG_MCUX_COMPONENT_driver.netc_imx943)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.netc)
-    mcux_component_version(2.10.4)
+    mcux_component_version(2.10.5)
 
     mcux_add_source(
         SOURCES
@@ -77,7 +77,7 @@ if(CONFIG_MCUX_COMPONENT_driver.netc)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.netc_switch)
-    mcux_component_version(2.8.1)
+    mcux_component_version(2.8.2)
 
     mcux_add_source(
         SOURCES

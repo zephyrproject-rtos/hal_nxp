@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020 NXP
+ * Copyright 2016-2017, 2020, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1273,6 +1273,12 @@ status_t AES_DecryptTagGcm(AES_Type *base,
     tag_ptr = NULL;
     if (tag != NULL)
     {
+        /* tagSize is validated later in aes_gcm_process(), but the copy below must not
+         * overflow the local temp_tag[] buffer, so bound-check tagSize up front. */
+        if (tagSize > sizeof(temp_tag))
+        {
+            return kStatus_InvalidArgument;
+        }
         (void)aes_memcpy(temp_tag, tag, tagSize);
         tag_ptr = &temp_tag[0];
     }

@@ -621,4 +621,4 @@ status_t FLASH_GetCommandState(flash_config_t *config);
 
 /*! @} */
 
-#endif /* _FLASH_FLASH_H_ */
+#endif /* FLASH_FLASH_H_ */

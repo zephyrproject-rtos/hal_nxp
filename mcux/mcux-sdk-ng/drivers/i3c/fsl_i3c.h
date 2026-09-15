@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I3C driver version */
-#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 14, 7))
+#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 15, 0))
 /*! @} */
 
 /*!
@@ -133,7 +133,7 @@ enum _i3c_master_flags
     kI3C_MasterErrorFlag          = I3C_MSTATUS_ERRWARN_MASK,   /*!< Error occurred flag */
     kI3C_MasterSlave2MasterFlag   = I3C_MSTATUS_NOWMASTER_MASK, /*!< Switch from slave to master flag */
     kI3C_MasterClearFlags         = kI3C_MasterSlaveStartFlag | kI3C_MasterControlDoneFlag | kI3C_MasterCompleteFlag |
-                            kI3C_MasterArbitrationWonFlag | kI3C_MasterSlave2MasterFlag | kI3C_MasterErrorFlag,
+                                    kI3C_MasterArbitrationWonFlag | kI3C_MasterSlave2MasterFlag | kI3C_MasterErrorFlag,
 };
 
 /*!
@@ -305,6 +305,68 @@ typedef struct _i3c_master_daa_baudrate
     uint32_t i3cPushPullBaud;  /*!< Desired I3C push-pull baud rate in Hertz. */
     uint32_t i3cOpenDrainBaud; /*!< Desired I3C open-drain baud rate in Hertz. */
 } i3c_master_daa_baudrate_t;
+
+/*!
+ * @brief I3C bus topology. Selects how the baud rate is calculated for the bus.
+ */
+typedef enum _i3c_master_bus_mode
+{
+    kI3C_PureBus      = 0U, /*!< Only I3C devices on the bus. */
+    kI3C_MixedFastBus = 1U, /*!< I3C and legacy I2C Fm/Fm+ devices share the bus. */
+    kI3C_LimitedBus   = 2U, /*!< I3C controller on a legacy I2C bus. */
+} i3c_master_bus_mode_t;
+
+/*! @brief Legacy I2C preset selector. */
+typedef enum _i3c_legacy_i2c_speed_mode
+{
+    kI3C_LegacyI2CStandardMode = 0U, /*!< Reserved for future Standard-mode support. */
+    kI3C_LegacyI2CFastMode     = 1U, /*!< Legacy I2C Fast-mode preset. */
+    kI3C_LegacyI2CFastModePlus = 2U, /*!< Legacy I2C Fast-mode Plus preset. */
+} i3c_legacy_i2c_speed_mode_t;
+
+/*! @brief Validated source clock selector for I2C timing presets. */
+typedef enum _i3c_master_src_clk
+{
+    kI3C_MasterSrcClk24M = 0U, /*!< Use the validated 24 MHz timing table. */
+    kI3C_MasterSrcClk25M = 1U, /*!< Use the validated 25 MHz timing table. */
+} i3c_master_src_clk_t;
+
+/*!
+ * @brief I3C master baud rate configuration.
+ */
+typedef struct _i3c_master_baudrate_config
+{
+    i3c_master_bus_mode_t busMode; /*!< Bus topology. */
+    uint32_t i2cBaud;              /*!< Desired legacy I2C baud rate in Hz; 0 = do not program I2CBAUD. */
+    uint32_t i3cPushPullBaud;      /*!< Desired I3C push-pull SCL frequency in Hz. */
+    uint32_t i3cOpenDrainBaud;     /*!< Desired I3C open-drain SCL frequency in Hz. */
+    bool enableODHPP;              /*!< Open-drain HIGH shape: true = narrow (normal I3C frames),
+                                        false = symmetric (required for the first-7Eh broadcast). */
+} i3c_master_baudrate_config_t;
+
+/*!
+ * @brief Pre-calculated I3C MCONFIG timing fields.
+ *
+ * Pre-compute the timing at init, then switch with I3C_MasterSetTiming().
+ * The actualXxxBaud fields report the rates the hardware achieves.
+ */
+typedef struct _i3c_timing
+{
+    uint8_t ppBaud;  /*!< MCONFIG[PPBAUD] field. */
+    uint8_t ppLow;   /*!< MCONFIG[PPLOW] field. */
+    uint8_t odBaud;  /*!< MCONFIG[ODBAUD] field (0 is forbidden). */
+    bool odHighPP;   /*!< MCONFIG[ODHPP] field. */
+    uint8_t i2cBaud; /*!< MCONFIG[I2CBAUD] field. */
+#if defined(FSL_FEATURE_I3C_HAS_I2CBLOW) && FSL_FEATURE_I3C_HAS_I2CBLOW
+    uint8_t i2cBlow; /*!< MCONFIG_EXT[I2CBLOW] I2C SCL LOW period. */
+#endif
+#if defined(FSL_FEATURE_I3C_HAS_I2CHS) && FSL_FEATURE_I3C_HAS_I2CHS
+    bool i2cHs;             /*!< MCONFIG_EXT[I2CHS] push-pull SCL for I2C High-Speed. */
+#endif
+    uint32_t actualPpBaud;  /*!< Achieved PP SCL frequency in Hz. */
+    uint32_t actualOdBaud;  /*!< Achieved OD SCL frequency in Hz. */
+    uint32_t actualI2cBaud; /*!< Achieved I2C SCL frequency in Hz (0 if no I2C is configured). */
+} i3c_timing_t;
 
 /*!
  * @brief Structure with settings to initialize the I3C master module.
@@ -1115,10 +1177,46 @@ void I3C_MasterSetBaudRate(I3C_Type *base, const i3c_baudrate_hz_t *baudRate_Hz,
 
 /*!
  * @ingroup i3c_master_driver
+ * @brief Get prevalidated timing values for supported I2C speed.
+ *
+ * @param[in]  speed   I2C Speed mode.
+ * @param[in]  srcClk  FCLK source clock.
+ * @param[out] timing  Prevalidated timing values. Valid when kStatus_Success is returned.
+ * @return kStatus_Success A supported preset timing is found.
+ *         kStatus_Fail The requested timing is not supported.
+ */
+status_t I3C_MasterGetI2CPresetTiming(i3c_legacy_i2c_speed_mode_t speed,
+                                      i3c_master_src_clk_t srcClk,
+                                      i3c_timing_t *timing);
+
+/*!
+ * @ingroup i3c_master_driver
+ * @brief Calculate timing from desired baud rates.
+ *
+ * @param[in]  baudRate        Desired baud rates and bus configuration.
+ * @param[in]  sourceClock_Hz  Master peripheral clock (FCLK) frequency in Hz.
+ * @param[out] timing          I3C timing register field values. Valid only when kStatus_Success is returned.
+ * @return kStatus_Success Target rate is achieved.
+ *         kStatus_Fail Target rate isn't achieved.
+ */
+status_t I3C_MasterCalcTiming(const i3c_master_baudrate_config_t *baudRate,
+                              uint32_t sourceClock_Hz,
+                              i3c_timing_t *timing);
+
+/*!
+ * @ingroup i3c_master_driver
+ * @brief Set I3C timing parameters.
+ *
+ * @param base    I3C peripheral base address.
+ * @param timing  Pre-calculated timing values.
+ */
+void I3C_MasterSetTiming(I3C_Type *base, const i3c_timing_t *timing);
+
+/*!
+ * @ingroup i3c_master_driver
  * @brief Returns whether the bus is idle.
  *
  * Requires the master mode to be enabled.
- *
  * @param base The I3C peripheral base address.
  * @retval true Bus is busy.
  * @retval false Bus is idle.

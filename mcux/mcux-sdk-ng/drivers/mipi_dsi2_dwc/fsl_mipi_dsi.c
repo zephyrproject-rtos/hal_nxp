@@ -5,6 +5,7 @@
  */
 
 #include "fsl_mipi_dsi.h"
+#include <string.h>
 
 /*******************************************************************************
  * Definitions
@@ -19,12 +20,6 @@
 #ifndef FSL_MIPI_DSI_TIMEOUT
 #define FSL_MIPI_DSI_TIMEOUT 0x1000U
 #endif
-
-typedef union _mipi_u32_f32
-{
-    float f32;
-    uint32_t u32;
-} mipi_u32_f32_t;
 
 /*******************************************************************************
  * Variables
@@ -116,12 +111,12 @@ uint32_t MIPI_ConvertFloat(float floatValue, uint8_t intBits, uint8_t fracBits)
     /* One bit reserved for sign bit. */
     assert(intBits + fracBits + 1U < 32U);
 
-    mipi_u32_f32_t u32_f32;
+    uint32_t floatBits;
+    _Static_assert(sizeof(float) == sizeof(uint32_t), "float must be 32-bit for bit reinterpretation");
     uint32_t ret;
     uint32_t expBits;
 
-    u32_f32.f32        = floatValue;
-    uint32_t floatBits = u32_f32.u32;
+    (void)memcpy(&floatBits, &floatValue, sizeof(floatBits));
     expBits            = (floatBits & 0x7F800000U) >> 23U;
     int32_t expValue   = (int32_t)expBits - 127;
 

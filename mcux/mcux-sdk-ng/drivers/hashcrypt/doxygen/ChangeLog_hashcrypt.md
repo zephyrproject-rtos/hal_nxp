@@ -116,3 +116,8 @@
 ## [2.2.17]
 
 - Fix context size when hashcrypt built with reload feature
+
+## [2.2.18]
+
+- Rename the internal BUILD_ASSERT macro to HASHCRYPT_BUILD_ASSERT to
+  avoid conflicts with environment-specific implementations.

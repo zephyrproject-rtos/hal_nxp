@@ -1,5 +1,10 @@
 # I3C_DMA
 
+## [2.1.11]
+
+- Bug Fixes
+  - Fixed the Coverity unused value issue in I3C_MasterSetTxDMA.
+
 ## [2.1.10]
 
 - Improvements

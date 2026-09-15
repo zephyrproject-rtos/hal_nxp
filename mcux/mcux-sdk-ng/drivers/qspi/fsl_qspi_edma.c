@@ -30,15 +30,6 @@ enum _qspi_edma_tansfer_states
     kQSPI_BusBusy /* RX busy. */
 };
 
-/*!
- * @brief Used for conversion between `void*` and `uint32_t`.
- */
-typedef union pvoid_to_u32
-{
-    void *pvoid;
-    uint32_t u32;
-} pvoid_to_u32_t;
-
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -83,8 +74,8 @@ static void QSPI_SendEDMACallback(edma_handle_t *handle, void *param, bool trans
     qspi_edma_private_handle_t *qspiPrivateHandle = (qspi_edma_private_handle_t *)param;
 
     /* Avoid the warning for unused variables. */
-    handle = handle;
-    tcds   = tcds;
+    (void)handle;
+    (void)tcds;
 
     if (transferDone)
     {
@@ -103,8 +94,8 @@ static void QSPI_ReceiveEDMACallback(edma_handle_t *handle, void *param, bool tr
     qspi_edma_private_handle_t *qspiPrivateHandle = (qspi_edma_private_handle_t *)param;
 
     /* Avoid warning for unused parameters. */
-    handle = handle;
-    tcds   = tcds;
+    (void)handle;
+    (void)tcds;
 
     if (transferDone)
     {
@@ -152,7 +143,6 @@ void QSPI_TransferTxCreateHandleEDMA(QuadSPI_Type *base,
     /* Get the watermark value */
     /* INT31-C: Validate before narrowing conversion */
     uint32_t value = ((uint32_t)(base->TBCT & QuadSPI_TBCT_WMRK_MASK)) + 1U;
-    assert(value <= 0xFFU);
     handle->count = (uint8_t)value;
 
     /* Configure TX edma callback */
@@ -192,7 +182,6 @@ void QSPI_TransferRxCreateHandleEDMA(QuadSPI_Type *base,
     /* Get the watermark value */
     /* INT31-C: Validate before narrowing conversion */
     uint32_t value = ((uint32_t)(base->RBCT & QuadSPI_RBCT_WMRK_MASK)) + 1U;
-    assert(value <= 0xFFU);
     handle->count = (uint8_t)value;
 
     /* Configure RX edma callback */
@@ -213,7 +202,7 @@ status_t QSPI_TransferSendEDMA(QuadSPI_Type *base, qspi_edma_handle_t *handle, q
 
     edma_transfer_config_t xferConfig;
     status_t status;
-    pvoid_to_u32_t destAddr;
+    void *destAddr;
 
     /* If previous TX not finished. */
     if ((uint8_t)kQSPI_BusBusy == handle->state)
@@ -224,9 +213,9 @@ status_t QSPI_TransferSendEDMA(QuadSPI_Type *base, qspi_edma_handle_t *handle, q
     {
         handle->state = (uint32_t)kQSPI_BusBusy;
 
-        destAddr.u32 = QSPI_GetTxDataRegisterAddress(base);
+        destAddr = (void *)&(base->TBDR);
         /* Prepare transfer. */
-        EDMA_PrepareTransfer(&xferConfig, xfer->data, sizeof(uint32_t), destAddr.pvoid, sizeof(uint32_t),
+        EDMA_PrepareTransfer(&xferConfig, xfer->data, sizeof(uint32_t), destAddr, sizeof(uint32_t),
                              (sizeof(uint32_t) * (uint32_t)handle->count), xfer->dataSize, kEDMA_MemoryToPeripheral);
 
         /* Store the initially configured eDMA minor byte transfer count into the QSPI handle */
@@ -269,7 +258,7 @@ status_t QSPI_TransferReceiveEDMA(QuadSPI_Type *base, qspi_edma_handle_t *handle
 
     edma_transfer_config_t xferConfig;
     status_t status;
-    pvoid_to_u32_t srcAddr;
+    void *srcAddr;
 
     /* If previous TX not finished. */
     if ((uint32_t)kQSPI_BusBusy == handle->state)
@@ -280,9 +269,9 @@ status_t QSPI_TransferReceiveEDMA(QuadSPI_Type *base, qspi_edma_handle_t *handle
     {
         handle->state = (uint32_t)kQSPI_BusBusy;
 
-        srcAddr.u32 = QSPI_GetRxDataRegisterAddress(base);
+        srcAddr = (void *)(uintptr_t)QSPI_GetRxDataRegisterAddress(base);
         /* Prepare transfer. */
-        EDMA_PrepareTransfer(&xferConfig, srcAddr.pvoid, sizeof(uint32_t), xfer->data, sizeof(uint32_t),
+        EDMA_PrepareTransfer(&xferConfig, srcAddr, sizeof(uint32_t), xfer->data, sizeof(uint32_t),
                              (sizeof(uint32_t) * (uint32_t)handle->count), xfer->dataSize, kEDMA_MemoryToMemory);
 
         /* Store the initially configured eDMA minor byte transfer count into the QSPI handle */
@@ -364,6 +353,7 @@ void QSPI_TransferAbortReceiveEDMA(QuadSPI_Type *base, qspi_edma_handle_t *handl
 status_t QSPI_TransferGetSendCountEDMA(QuadSPI_Type *base, qspi_edma_handle_t *handle, size_t *count)
 {
     assert(NULL != handle);
+    assert(NULL != handle->dmaHandle);
 
     status_t status = kStatus_Success;
 
@@ -393,6 +383,7 @@ status_t QSPI_TransferGetSendCountEDMA(QuadSPI_Type *base, qspi_edma_handle_t *h
 status_t QSPI_TransferGetReceiveCountEDMA(QuadSPI_Type *base, qspi_edma_handle_t *handle, size_t *count)
 {
     assert(NULL != handle);
+    assert(NULL != handle->dmaHandle);
 
     status_t status = kStatus_Success;
 

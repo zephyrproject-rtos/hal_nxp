@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief QSPI driver version. */
-#define FSL_QSPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
+#define FSL_QSPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 4))
 /*! @} */
 
 /*! @brief Macro functions for LUT table */
@@ -593,15 +593,7 @@ static inline void QSPI_SetIPCommandAddress(QuadSPI_Type *base, uint32_t addr)
  */
 static inline void QSPI_SetIPCommandSize(QuadSPI_Type *base, uint32_t size)
 {
-    union
-    {
-        volatile uint32_t *commandRegBase;
-        ip_command_config_t *commandConfigPtr;
-    } command;
-    command.commandRegBase             = &(base->IPCR);
-    ip_command_config_t *ipCommand     = command.commandConfigPtr;
-    size                               = QuadSPI_IPCR_IDATSZ(size);
-    ipCommand->IPCR_REG.BITFIELD.IDATZ = (uint16_t)size;
+    base->IPCR = (base->IPCR & (~QuadSPI_IPCR_IDATSZ_MASK)) | QuadSPI_IPCR_IDATSZ(size);
 }
 
 /*! @brief Executes IP commands located in LUT table.

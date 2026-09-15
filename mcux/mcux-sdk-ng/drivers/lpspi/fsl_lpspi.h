@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief LPSPI driver version. */
-#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 7, 7))
+#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 7, 8))
 /*! @} */
 
 #ifndef LPSPI_DUMMY_DATA
@@ -577,7 +577,7 @@ static inline uint32_t LPSPI_GetStatusFlags(LPSPI_Type *base)
  */
 static inline uint8_t LPSPI_GetTxFifoSize(LPSPI_Type *base)
 {
-    return (1U << ((base->PARAM & LPSPI_PARAM_TXFIFO_MASK) >> LPSPI_PARAM_TXFIFO_SHIFT));
+    return (uint8_t)((1U << ((base->PARAM & LPSPI_PARAM_TXFIFO_MASK) >> LPSPI_PARAM_TXFIFO_SHIFT)) & 0xFFU);
 }
 
 /*!
@@ -587,7 +587,7 @@ static inline uint8_t LPSPI_GetTxFifoSize(LPSPI_Type *base)
  */
 static inline uint8_t LPSPI_GetRxFifoSize(LPSPI_Type *base)
 {
-    return (1U << ((base->PARAM & LPSPI_PARAM_RXFIFO_MASK) >> LPSPI_PARAM_RXFIFO_SHIFT));
+    return (uint8_t)((1U << ((base->PARAM & LPSPI_PARAM_RXFIFO_MASK) >> LPSPI_PARAM_RXFIFO_SHIFT)) & 0xFFU);
 }
 
 /*!
@@ -640,19 +640,24 @@ static inline void LPSPI_ClearStatusFlags(LPSPI_Type *base, uint32_t statusFlags
 static inline uint32_t LPSPI_GetTcr(LPSPI_Type *base)
 {
     uint32_t tcr_values[2];
-    uint32_t i = 0u;
+    uint32_t i = 0U;
 
     tcr_values[0] = base->TCR;
     do
     {
-        i = (i + 1u) % 2u;
+        i ^= 1U;
         /* ERR050606 LPSPI: TCR value does not get resampled when polling the register
          * Workaround: After reading the Transmit Command Register must always access a different register in
          * between subsequent reads from TCR.
          */
         (void)base->SR;
         tcr_values[i] = base->TCR;
-    } while(tcr_values[0] != tcr_values[1]);
+
+    /*
+     * $Branch Coverage Justification$
+     * Device specific.
+     */
+    } while(tcr_values[0] != tcr_values[1]); /* GCOVR_EXCL_BR_LINE */
 
     return tcr_values[0];
 }
@@ -948,6 +953,7 @@ static inline void LPSPI_SetAllPcsPolarity(LPSPI_Type *base, uint32_t mask)
  */
 static inline void LPSPI_SetFrameSize(LPSPI_Type *base, uint32_t frameSize)
 {
+    assert(frameSize > 0U);
     base->TCR = (LPSPI_GetTcr(base) & ~LPSPI_TCR_FRAMESZ_MASK) | LPSPI_TCR_FRAMESZ(frameSize - 1U);
 }
 

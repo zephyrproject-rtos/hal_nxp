@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief ECSPI driver version. */
-#define FSL_ECSPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 4))
+#define FSL_ECSPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 5))
 /*! @} */
 
 #ifndef ECSPI_DUMMYDATA

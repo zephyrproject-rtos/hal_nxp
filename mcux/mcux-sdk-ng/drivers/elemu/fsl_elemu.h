@@ -1,11 +1,11 @@
 /*
- * Copyright 2019-2026 NXP
+ * Copyright 2019-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef __ELEMU_DRIVER_H__
-#define __ELEMU_DRIVER_H__
+#ifndef FSL_ELEMU_DRIVER_H__
+#define FSL_ELEMU_DRIVER_H__
 
 #include "fsl_common.h"
 #include "fsl_device_registers.h"
@@ -228,6 +228,20 @@ void ELEMU_mu_init(ELEMU_Type *mu);
  */
 status_t ELEMU_LP_WakeupPathInit(ELEMU_Type *mu);
 
+#if (defined(ELEMU_HAS_LOADABLE_FW) && ELEMU_HAS_LOADABLE_FW)
+/*!
+ * @brief Load firmware into ELE.
+ *
+ * This function uploads firmware to ELEMU using secure tunnel.
+ *
+ * @param mu ELEMU peripheral base address
+ * @param image Pointer to firmware image data
+ *
+ * @return kStatus_Success if successful, kStatus_Fail otherwise
+ */
+status_t ELEMU_loadFw(ELEMU_Type *mu, uint32_t image[]);
+#endif /* ELEMU_HAS_LOADABLE_FW */
+
 /** @}*/
 
-#endif /* __ELEMU_DRIVER_H__ */
+#endif /* ELEMU_DRIVER_H__ */

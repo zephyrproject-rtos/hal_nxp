@@ -219,4 +219,4 @@ status_t FLEXIO_ENDAT2_FlexIO_BuadrateVerify(uint32_t srcClock_Hz, uint32_t baud
 #endif /*_cplusplus*/
 /*! @} */
 
-#endif /*_FSL_FLEXIO_ENDAT2_H_*/
+#endif /*FSL_FLEXIO_ENDAT2_H_*/

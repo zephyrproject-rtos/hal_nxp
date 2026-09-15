@@ -195,4 +195,4 @@ void CSI2RX_Deinit(CAMERA_MIPI_CSI2_Type *base);
  *@}
  */
 
-#endif /* _FSL_MIPI_CSI2RX_H_ */
+#endif /* FSL_MIPI_CSI2RX_H_ */

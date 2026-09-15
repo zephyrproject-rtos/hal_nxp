@@ -1,5 +1,10 @@
 # INPUTMUX
 
+## [2.0.11]
+
+- Bug Fixes
+  - Fixed Coverity UNUSED_VALUE finding in INPUTMUX_EnableSignal().
+
 ## [2.0.10]
 
 - Bug Fixes

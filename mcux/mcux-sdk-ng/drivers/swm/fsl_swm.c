@@ -187,7 +187,7 @@ void SWM_SetFlextimerPinSelect(SWM_Type *base, swm_flextimer_pin_func_t func, sw
 
     uint32_t temp = 0x00U;
 
-    if (((uint32_t)func & 0x10U) == 0x00U)
+    if ((uint32_t)func < 16U)
     {
         temp = base->FTM_PINASSIGN0;
         temp &= ~(0x03UL << ((uint32_t)func * 2U));

@@ -195,7 +195,7 @@ void INPUTMUX_AttachSignal(void *base, uint16_t index, inputmux_connection_t con
 void INPUTMUX_EnableSignal(void *base, inputmux_signal_t signal, bool enable)
 {
     uint32_t ena_id;
-    uint32_t ena_id_mask = (1UL << (32U - ENA_SHIFT)) - 1U;
+    uint32_t ena_id_mask;
     uint32_t bit_offset;
 
 #if defined(FSL_FEATURE_INPUTMUX_HAS_CHANNEL_MUX) && FSL_FEATURE_INPUTMUX_HAS_CHANNEL_MUX
@@ -210,6 +210,8 @@ void INPUTMUX_EnableSignal(void *base, inputmux_signal_t signal, bool enable)
         *(volatile uint32_t *)(((uint32_t)base) + chmux_offset) = chmux_value;
     }
     ena_id_mask = (1UL << (CHMUX_VAL_SHIFT - ENA_SHIFT)) - 1U;
+#else
+    ena_id_mask = (1UL << (32U - ENA_SHIFT)) - 1U;
 #endif
     /* extract enable register to be used */
     ena_id = (((uint32_t)signal) >> ENA_SHIFT) & ena_id_mask;

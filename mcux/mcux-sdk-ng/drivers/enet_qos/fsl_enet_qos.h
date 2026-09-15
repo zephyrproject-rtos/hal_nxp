@@ -181,6 +181,7 @@
 #define ENET_QOS_MTL_EST_CONTROL_SSWL_MASK                       EMAC_MTL_EST_CONTROL_SSWL_MASK
 #define ENET_QOS_MTL_EST_CONTROL_PTOV_MASK                       EMAC_MTL_EST_CONTROL_PTOV_MASK
 #define ENET_QOS_MTL_EST_CONTROL_EEST_MASK                       EMAC_MTL_EST_CONTROL_EEST_MASK
+#define ENET_QOS_MTL_EST_CONTROL_DDBF_MASK                       EMAC_MTL_EST_CONTROL_DDBF_MASK
 #define ENET_QOS_MTL_EST_CONTROL_PTOV                            EMAC_MTL_EST_CONTROL_PTOV
 #define ENET_QOS_MTL_RXP_INDIRECT_ACC_CONTROL_STATUS_STARTBUSY_MASK \
     EMAC_MTL_RXP_INDIRECT_ACC_CONTROL_STATUS_STARTBUSY_MASK
@@ -278,7 +279,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Defines the driver version. */
-#define FSL_ENET_QOS_DRIVER_VERSION (MAKE_VERSION(2, 7, 6))
+#define FSL_ENET_QOS_DRIVER_VERSION (MAKE_VERSION(2, 7, 7))
 /*! @} */
 
 /*! @name Control and status region bit masks of the receive buffer descriptor. */

@@ -6,8 +6,8 @@
  */
 
 
-#ifndef _FSL_SMM_H
-#define _FSL_SMM_H
+#ifndef FSL_SMM_H
+#define FSL_SMM_H
 
 
 #include "fsl_common.h"
@@ -709,4 +709,4 @@ static inline void SMM_ClearComparatorMatchFlag(SMM_Type *base)
 /*!
  * @}
  */
-#endif /* __FSL_SMM_H */
+#endif /* FSL_SMM_H */

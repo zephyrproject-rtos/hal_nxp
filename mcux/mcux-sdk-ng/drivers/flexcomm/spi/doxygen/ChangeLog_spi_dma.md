@@ -1,5 +1,10 @@
 # SPI_DMA
 
+## [2.3.0]
+
+- Improvements
+  - Added support for `kSPI_FrameAssertEachFrame` so DMA transfers can deassert PCS after each frame.
+
 ## [2.2.3]
 
 - Bug Fixes
