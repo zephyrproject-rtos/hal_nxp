@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -74,8 +74,12 @@ void DSP_Init(void)
 
     CLOCK_EnableClock(kCLOCK_Hifi4);
 #elif defined(SLEEPCON1)
-    RESET_ClearPeripheralReset(kHIFI1_DEBUG_RST_SHIFT_RSTn);
-    RESET_ClearPeripheralReset(kHIFI1_RST_SHIFT_RSTn);
+    /* Stall HiFi1 so it stays halted after reset release while the image is loaded. */
+    DSP_Stop();
+    /* HiFi1 is in the always-on SENSE domain and survives a CM33 core1 reset; a full
+     * reset pulse (not just release) is required to restart it on every launch. */
+    RESET_PeripheralReset(kHIFI1_DEBUG_RST_SHIFT_RSTn);
+    RESET_PeripheralReset(kHIFI1_RST_SHIFT_RSTn);
     CLOCK_EnableClock(kCLOCK_Hifi1);
 #else
 #error "Unsupported core!"

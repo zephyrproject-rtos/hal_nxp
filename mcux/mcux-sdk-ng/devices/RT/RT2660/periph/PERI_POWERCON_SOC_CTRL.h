@@ -1,0 +1,684 @@
+/*
+** ###################################################################
+**     Processors:          MIMXRT2660CHPAA
+**                          MIMXRT2660CVVAA
+**                          MIMXRT2660DHPAA
+**                          MIMXRT2660DVVAA
+**                          MIMXRT2660XHP8A
+**                          MIMXRT2660XVV8A
+**                          MIMXRT2661CHPAA
+**                          MIMXRT2661CVVAA
+**                          MIMXRT2661DHPAA
+**                          MIMXRT2661DVVAA
+**                          MIMXRT2661XHP8A
+**                          MIMXRT2661XVV8A
+**                          MIMXRT2662AHP8A
+**                          MIMXRT2662AVV8A
+**                          MIMXRT2662CHPAA
+**                          MIMXRT2662CVVAA
+**                          MIMXRT2662DHPAA
+**                          MIMXRT2662DVVAA
+**                          MIMXRT2662XHP8A
+**                          MIMXRT2662XVV8A
+**                          MIMXRT2663AHP8A
+**                          MIMXRT2663AVV8A
+**                          MIMXRT2663CHPAA
+**                          MIMXRT2663CVVAA
+**                          MIMXRT2663DHPAA
+**                          MIMXRT2663DVVAA
+**                          MIMXRT2663XHP8A
+**                          MIMXRT2663XHPAA
+**                          MIMXRT2663XVV8A
+**                          MIMXRT2663XVVAA
+**
+**     Version:             rev. 1.0, 2024-11-05
+**     Build:               b260818
+**
+**     Abstract:
+**         CMSIS Peripheral Access Layer for POWERCON_SOC_CTRL
+**
+**     Copyright 1997-2016 Freescale Semiconductor, Inc.
+**     Copyright 2016-2026 NXP
+**     SPDX-License-Identifier: BSD-3-Clause
+**
+**     http:                 www.nxp.com
+**     mail:                 support@nxp.com
+**
+**     Revisions:
+**     - rev. 1.0 (2024-11-05)
+**         Initial version.
+**
+** ###################################################################
+*/
+
+/*!
+ * @file PERI_POWERCON_SOC_CTRL.h
+ * @version 1.0
+ * @date 2024-11-05
+ * @brief CMSIS Peripheral Access Layer for POWERCON_SOC_CTRL
+ *
+ * CMSIS Peripheral Access Layer for POWERCON_SOC_CTRL
+ */
+
+#if !defined(PERI_POWERCON_SOC_CTRL_H_)
+#define PERI_POWERCON_SOC_CTRL_H_                /**< Symbol preventing repeated inclusion */
+
+#if (defined(CPU_MIMXRT2660CHPAA) || defined(CPU_MIMXRT2660CVVAA) || defined(CPU_MIMXRT2660DHPAA) || defined(CPU_MIMXRT2660DVVAA) || defined(CPU_MIMXRT2660XHP8A) || defined(CPU_MIMXRT2660XVV8A))
+#include "MIMXRT2660_COMMON.h"
+#elif (defined(CPU_MIMXRT2661CHPAA) || defined(CPU_MIMXRT2661CVVAA) || defined(CPU_MIMXRT2661DHPAA) || defined(CPU_MIMXRT2661DVVAA) || defined(CPU_MIMXRT2661XHP8A) || defined(CPU_MIMXRT2661XVV8A))
+#include "MIMXRT2661_COMMON.h"
+#elif (defined(CPU_MIMXRT2662AHP8A) || defined(CPU_MIMXRT2662AVV8A) || defined(CPU_MIMXRT2662CHPAA) || defined(CPU_MIMXRT2662CVVAA) || defined(CPU_MIMXRT2662DHPAA) || defined(CPU_MIMXRT2662DVVAA) || defined(CPU_MIMXRT2662XHP8A) || defined(CPU_MIMXRT2662XVV8A))
+#include "MIMXRT2662_COMMON.h"
+#elif (defined(CPU_MIMXRT2663AHP8A) || defined(CPU_MIMXRT2663AVV8A) || defined(CPU_MIMXRT2663CHPAA) || defined(CPU_MIMXRT2663CVVAA) || defined(CPU_MIMXRT2663DHPAA) || defined(CPU_MIMXRT2663DVVAA) || defined(CPU_MIMXRT2663XHP8A) || defined(CPU_MIMXRT2663XHPAA) || defined(CPU_MIMXRT2663XVV8A) || defined(CPU_MIMXRT2663XVVAA))
+#include "MIMXRT2663_COMMON.h"
+#else
+  #error "No valid CPU defined!"
+#endif
+
+/* ----------------------------------------------------------------------------
+   -- Device Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup Peripheral_access_layer Device Peripheral Access Layer
+ * @{
+ */
+
+
+/*
+** Start of section using anonymous unions
+*/
+
+#if defined(__ARMCC_VERSION)
+  #if (__ARMCC_VERSION >= 6010050)
+    #pragma clang diagnostic push
+  #else
+    #pragma push
+    #pragma anon_unions
+  #endif
+#elif defined(__GNUC__)
+  /* anonymous unions are enabled by default */
+#elif defined(__IAR_SYSTEMS_ICC__)
+  #pragma language=extended
+#else
+  #error Not supported compiler type
+#endif
+
+/* ----------------------------------------------------------------------------
+   -- POWERCON_SOC_CTRL Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup POWERCON_SOC_CTRL_Peripheral_Access_Layer POWERCON_SOC_CTRL Peripheral Access Layer
+ * @{
+ */
+
+/** POWERCON_SOC_CTRL - Size of Registers Arrays */
+#define POWERCON_SOC_CTRL_GPR_COLD_COUNT          4u
+#define POWERCON_SOC_CTRL_GPR_WARM_COUNT          3u
+
+/** POWERCON_SOC_CTRL - Register Layout Typedef */
+typedef struct {
+  __IO uint32_t ACCESS_CTRL;                       /**< Global Access Control, offset: 0x0 */
+  __IO uint32_t RCGCFG_HSK_SEL;                    /**< Root Clock Handshake Select Control, offset: 0x4 */
+  __IO uint32_t RCGCFG_ACTIVE;                     /**< Root Clock Active Mode Control, offset: 0x8 */
+  __IO uint32_t RCGCFG_STBY;                       /**< Root Clock Standby Mode Control, offset: 0xC */
+       uint8_t RESERVED_0[4];
+  __IO uint32_t CSRCCFG_HSK_SEL;                   /**< Clock Source Handshake Select Control, offset: 0x14 */
+  __IO uint32_t CSRCCFG_HSK_SEL1;                  /**< Clock Source Handshake Select Control 1, offset: 0x18 */
+       uint8_t RESERVED_1[8];
+  __IO uint32_t CSRCCFG_ACTIVE;                    /**< Clock Source Active Mode Control, offset: 0x24 */
+  __IO uint32_t CSRCCFG_STBY;                      /**< Clock Source Standby Mode Control, offset: 0x28 */
+       uint8_t RESERVED_2[20];
+  __IO uint32_t PMUCFG_ACTIVE;                     /**< PMU Active Mode Control, offset: 0x40 */
+  __IO uint32_t PMUCFG_STBY;                       /**< PMU Standby Mode Control, offset: 0x44 */
+  __IO uint32_t PMICCFG_ACTIVE;                    /**< PMIC Control Active, offset: 0x48 */
+  __IO uint32_t PMICCFG_STBY;                      /**< PMIC Control Standby, offset: 0x4C */
+       uint8_t RESERVED_3[16];
+  __IO uint32_t SOC_CTRL_STATUS;                   /**< SoC Control Status, offset: 0x60 */
+       uint8_t RESERVED_4[28];
+  __IO uint32_t GPR_COLD[POWERCON_SOC_CTRL_GPR_COLD_COUNT]; /**< GPR 0 Cold Reset..GPR 3 Cold Reset, array offset: 0x80, array step: 0x4 */
+       uint8_t RESERVED_5[16];
+  __IO uint32_t GPR_WARM_0;                        /**< GPR 0 Warm Reset, offset: 0xA0 */
+  __IO uint32_t GPR_WARM[POWERCON_SOC_CTRL_GPR_WARM_COUNT]; /**< GPR 1 Warm Reset..GPR 3 Warm Reset, array offset: 0xA4, array step: 0x4 */
+} POWERCON_SOC_CTRL_Type;
+
+/* ----------------------------------------------------------------------------
+   -- POWERCON_SOC_CTRL Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup POWERCON_SOC_CTRL_Register_Masks POWERCON_SOC_CTRL Register Masks
+ * @{
+ */
+
+/*! @name ACCESS_CTRL - Global Access Control */
+/*! @{ */
+
+#define POWERCON_SOC_CTRL_ACCESS_CTRL_ALLOW_ACCESS_MASK (0xFU)
+#define POWERCON_SOC_CTRL_ACCESS_CTRL_ALLOW_ACCESS_SHIFT (0U)
+/*! ALLOW_ACCESS - Configuration Lock */
+#define POWERCON_SOC_CTRL_ACCESS_CTRL_ALLOW_ACCESS(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_ACCESS_CTRL_ALLOW_ACCESS_SHIFT)) & POWERCON_SOC_CTRL_ACCESS_CTRL_ALLOW_ACCESS_MASK)
+
+#define POWERCON_SOC_CTRL_ACCESS_CTRL_USER_MASK  (0x10000U)
+#define POWERCON_SOC_CTRL_ACCESS_CTRL_USER_SHIFT (16U)
+/*! USER - User Mode Access
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define POWERCON_SOC_CTRL_ACCESS_CTRL_USER(x)    (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_ACCESS_CTRL_USER_SHIFT)) & POWERCON_SOC_CTRL_ACCESS_CTRL_USER_MASK)
+
+#define POWERCON_SOC_CTRL_ACCESS_CTRL_NONSECURE_MASK (0x20000U)
+#define POWERCON_SOC_CTRL_ACCESS_CTRL_NONSECURE_SHIFT (17U)
+/*! NONSECURE - Non-Secure Mode Access
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define POWERCON_SOC_CTRL_ACCESS_CTRL_NONSECURE(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_ACCESS_CTRL_NONSECURE_SHIFT)) & POWERCON_SOC_CTRL_ACCESS_CTRL_NONSECURE_MASK)
+
+#define POWERCON_SOC_CTRL_ACCESS_CTRL_LOCK_MASK  (0x80000000U)
+#define POWERCON_SOC_CTRL_ACCESS_CTRL_LOCK_SHIFT (31U)
+/*! LOCK - White List Lock
+ *  0b0..Unlocks
+ *  0b1..Locks
+ */
+#define POWERCON_SOC_CTRL_ACCESS_CTRL_LOCK(x)    (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_ACCESS_CTRL_LOCK_SHIFT)) & POWERCON_SOC_CTRL_ACCESS_CTRL_LOCK_MASK)
+/*! @} */
+
+/*! @name RCGCFG_HSK_SEL - Root Clock Handshake Select Control */
+/*! @{ */
+
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_CMPT_SS_CGC_HSK_SEL_MASK (0x7U)
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_CMPT_SS_CGC_HSK_SEL_SHIFT (0U)
+/*! CMPT_SS_CGC_HSK_SEL - Compute Subsystem Clock Root Gating Handshake Selection */
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_CMPT_SS_CGC_HSK_SEL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_CMPT_SS_CGC_HSK_SEL_SHIFT)) & POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_CMPT_SS_CGC_HSK_SEL_MASK)
+
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_MAIN_SS_CGC_HSK_SEL_MASK (0x70U)
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_MAIN_SS_CGC_HSK_SEL_SHIFT (4U)
+/*! MAIN_SS_CGC_HSK_SEL - Main Subsystem Clock Root Gating Handshake Selection */
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_MAIN_SS_CGC_HSK_SEL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_MAIN_SS_CGC_HSK_SEL_SHIFT)) & POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_MAIN_SS_CGC_HSK_SEL_MASK)
+
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_WAKE_SS_CGC_HSK_SEL_MASK (0x700U)
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_WAKE_SS_CGC_HSK_SEL_SHIFT (8U)
+/*! WAKE_SS_CGC_HSK_SEL - Wake Subsystem Clock Root Gating Handshake Selection */
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_WAKE_SS_CGC_HSK_SEL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_WAKE_SS_CGC_HSK_SEL_SHIFT)) & POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_WAKE_SS_CGC_HSK_SEL_MASK)
+
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_COMM_SS_CGC_HSK_SEL_MASK (0x7000U)
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_COMM_SS_CGC_HSK_SEL_SHIFT (12U)
+/*! COMM_SS_CGC_HSK_SEL - Communication Subsystem Clock Root Gating Handshake Selection */
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_COMM_SS_CGC_HSK_SEL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_COMM_SS_CGC_HSK_SEL_SHIFT)) & POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_COMM_SS_CGC_HSK_SEL_MASK)
+
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_MEDIA_SS_CGC_HSK_SEL_MASK (0x70000U)
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_MEDIA_SS_CGC_HSK_SEL_SHIFT (16U)
+/*! MEDIA_SS_CGC_HSK_SEL - Media Subsystem Clock Root Gating Handshake Selection */
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_MEDIA_SS_CGC_HSK_SEL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_MEDIA_SS_CGC_HSK_SEL_SHIFT)) & POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_MEDIA_SS_CGC_HSK_SEL_MASK)
+
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_AUDIO_SS_CGC_HSK_SEL_MASK (0x700000U)
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_AUDIO_SS_CGC_HSK_SEL_SHIFT (20U)
+/*! AUDIO_SS_CGC_HSK_SEL - Audio Subsystem Clock Root Gating Handshake Selection */
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_AUDIO_SS_CGC_HSK_SEL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_AUDIO_SS_CGC_HSK_SEL_SHIFT)) & POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_AUDIO_SS_CGC_HSK_SEL_MASK)
+
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_WAKE_1M_RCG_HSK_SEL_MASK (0x7000000U)
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_WAKE_1M_RCG_HSK_SEL_SHIFT (24U)
+/*! WAKE_1M_RCG_HSK_SEL - Wake Subsystem 1 MHz Clock Root Gating Handshake Selection */
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_WAKE_1M_RCG_HSK_SEL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_WAKE_1M_RCG_HSK_SEL_SHIFT)) & POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_WAKE_1M_RCG_HSK_SEL_MASK)
+
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_WAKE_2M_RCG_HSK_SEL_MASK (0x70000000U)
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_WAKE_2M_RCG_HSK_SEL_SHIFT (28U)
+/*! WAKE_2M_RCG_HSK_SEL - Wake Subsystem 2 MHz Clock Root Gating Handshake Selection */
+#define POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_WAKE_2M_RCG_HSK_SEL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_WAKE_2M_RCG_HSK_SEL_SHIFT)) & POWERCON_SOC_CTRL_RCGCFG_HSK_SEL_WAKE_2M_RCG_HSK_SEL_MASK)
+/*! @} */
+
+/*! @name RCGCFG_ACTIVE - Root Clock Active Mode Control */
+/*! @{ */
+
+#define POWERCON_SOC_CTRL_RCGCFG_ACTIVE_CFG_ACTIVE_MASK (0xFFU)
+#define POWERCON_SOC_CTRL_RCGCFG_ACTIVE_CFG_ACTIVE_SHIFT (0U)
+/*! CFG_ACTIVE - Configuration for Active Mode */
+#define POWERCON_SOC_CTRL_RCGCFG_ACTIVE_CFG_ACTIVE(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_RCGCFG_ACTIVE_CFG_ACTIVE_SHIFT)) & POWERCON_SOC_CTRL_RCGCFG_ACTIVE_CFG_ACTIVE_MASK)
+/*! @} */
+
+/*! @name RCGCFG_STBY - Root Clock Standby Mode Control */
+/*! @{ */
+
+#define POWERCON_SOC_CTRL_RCGCFG_STBY_CFG_STBY_MASK (0xFFU)
+#define POWERCON_SOC_CTRL_RCGCFG_STBY_CFG_STBY_SHIFT (0U)
+/*! CFG_STBY - Configuration for Standby Mode */
+#define POWERCON_SOC_CTRL_RCGCFG_STBY_CFG_STBY(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_RCGCFG_STBY_CFG_STBY_SHIFT)) & POWERCON_SOC_CTRL_RCGCFG_STBY_CFG_STBY_MASK)
+/*! @} */
+
+/*! @name CSRCCFG_HSK_SEL - Clock Source Handshake Select Control */
+/*! @{ */
+
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_LDOA_0V8_CGC_HSK_SEL_MASK (0x7U)
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_LDOA_0V8_CGC_HSK_SEL_SHIFT (0U)
+/*! LDOA_0V8_CGC_HSK_SEL - LDOA 0.8 V Handshake Selection */
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_LDOA_0V8_CGC_HSK_SEL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_LDOA_0V8_CGC_HSK_SEL_SHIFT)) & POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_LDOA_0V8_CGC_HSK_SEL_MASK)
+
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_FRO192M_CGC_HSK_SEL_MASK (0x70U)
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_FRO192M_CGC_HSK_SEL_SHIFT (4U)
+/*! FRO192M_CGC_HSK_SEL - CGU FRO192M Gating Handshake Selection */
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_FRO192M_CGC_HSK_SEL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_FRO192M_CGC_HSK_SEL_SHIFT)) & POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_FRO192M_CGC_HSK_SEL_MASK)
+
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_FRO12M_CGC_HSK_SEL_MASK (0x700U)
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_FRO12M_CGC_HSK_SEL_SHIFT (8U)
+/*! FRO12M_CGC_HSK_SEL - CGU FRO12M Gating Handshake Selection */
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_FRO12M_CGC_HSK_SEL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_FRO12M_CGC_HSK_SEL_SHIFT)) & POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_FRO12M_CGC_HSK_SEL_MASK)
+
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_MAINPLL_CGC_HSK_SEL_MASK (0x7000U)
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_MAINPLL_CGC_HSK_SEL_SHIFT (12U)
+/*! MAINPLL_CGC_HSK_SEL - CGU MAINPLL Gating Handshake Selection */
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_MAINPLL_CGC_HSK_SEL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_MAINPLL_CGC_HSK_SEL_SHIFT)) & POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_MAINPLL_CGC_HSK_SEL_MASK)
+
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_COREPLL_CGC_HSK_SEL_MASK (0x70000U)
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_COREPLL_CGC_HSK_SEL_SHIFT (16U)
+/*! COREPLL_CGC_HSK_SEL - CGU COREPLL Gating Handshake Selection */
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_COREPLL_CGC_HSK_SEL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_COREPLL_CGC_HSK_SEL_SHIFT)) & POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_COREPLL_CGC_HSK_SEL_MASK)
+
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_SYSPLL_CGC_HSK_SEL_MASK (0x700000U)
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_SYSPLL_CGC_HSK_SEL_SHIFT (20U)
+/*! SYSPLL_CGC_HSK_SEL - CGU SYSPLL Gating Handshake Selection */
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_SYSPLL_CGC_HSK_SEL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_SYSPLL_CGC_HSK_SEL_SHIFT)) & POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_SYSPLL_CGC_HSK_SEL_MASK)
+
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_LDOQ_0V8_CGC_HSK_SEL_MASK (0x7000000U)
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_LDOQ_0V8_CGC_HSK_SEL_SHIFT (24U)
+/*! LDOQ_0V8_CGC_HSK_SEL - LDOQ 0.8 V Handshake Selection */
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_LDOQ_0V8_CGC_HSK_SEL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_LDOQ_0V8_CGC_HSK_SEL_SHIFT)) & POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_LDOQ_0V8_CGC_HSK_SEL_MASK)
+
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_SXOSC_CGC_HSK_SEL_MASK (0x70000000U)
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_SXOSC_CGC_HSK_SEL_SHIFT (28U)
+/*! SXOSC_CGC_HSK_SEL - SXOSC Gating Handshake Selection */
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_SXOSC_CGC_HSK_SEL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_SXOSC_CGC_HSK_SEL_SHIFT)) & POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL_SXOSC_CGC_HSK_SEL_MASK)
+/*! @} */
+
+/*! @name CSRCCFG_HSK_SEL1 - Clock Source Handshake Select Control 1 */
+/*! @{ */
+
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL1_FRO12M_LP_HSK_SEL_MASK (0x7U)
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL1_FRO12M_LP_HSK_SEL_SHIFT (0U)
+/*! FRO12M_LP_HSK_SEL - CGU FRO12M Low-Power Handshake Selection */
+#define POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL1_FRO12M_LP_HSK_SEL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL1_FRO12M_LP_HSK_SEL_SHIFT)) & POWERCON_SOC_CTRL_CSRCCFG_HSK_SEL1_FRO12M_LP_HSK_SEL_MASK)
+/*! @} */
+
+/*! @name CSRCCFG_ACTIVE - Clock Source Active Mode Control */
+/*! @{ */
+
+#define POWERCON_SOC_CTRL_CSRCCFG_ACTIVE_CFG_ACTIVE_MASK (0x1FFU)
+#define POWERCON_SOC_CTRL_CSRCCFG_ACTIVE_CFG_ACTIVE_SHIFT (0U)
+/*! CFG_ACTIVE - Configuration for Active Mode */
+#define POWERCON_SOC_CTRL_CSRCCFG_ACTIVE_CFG_ACTIVE(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_CSRCCFG_ACTIVE_CFG_ACTIVE_SHIFT)) & POWERCON_SOC_CTRL_CSRCCFG_ACTIVE_CFG_ACTIVE_MASK)
+/*! @} */
+
+/*! @name CSRCCFG_STBY - Clock Source Standby Mode Control */
+/*! @{ */
+
+#define POWERCON_SOC_CTRL_CSRCCFG_STBY_CFG_STBY_MASK (0x1FFU)
+#define POWERCON_SOC_CTRL_CSRCCFG_STBY_CFG_STBY_SHIFT (0U)
+/*! CFG_STBY - Configuration for Standby Mode */
+#define POWERCON_SOC_CTRL_CSRCCFG_STBY_CFG_STBY(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_CSRCCFG_STBY_CFG_STBY_SHIFT)) & POWERCON_SOC_CTRL_CSRCCFG_STBY_CFG_STBY_MASK)
+/*! @} */
+
+/*! @name PMUCFG_ACTIVE - PMU Active Mode Control */
+/*! @{ */
+
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_TEMP_MASK (0x1U)
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_TEMP_SHIFT (0U)
+/*! SENSOR_TEMP - PMU Temperature Sensor Control
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_TEMP(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_TEMP_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_TEMP_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_0V8_MASK (0x2U)
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_0V8_SHIFT (1U)
+/*! SENSOR_0V8 - PMU VDD_0V8 Sensor Control
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_0V8(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_0V8_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_0V8_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_1V8_MASK (0x4U)
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_1V8_SHIFT (2U)
+/*! SENSOR_1V8 - PMU VDD_1V8 Sensor Control
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_1V8(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_1V8_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_1V8_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_VDDA_MASK (0x8U)
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_VDDA_SHIFT (3U)
+/*! SENSOR_VDDA - PMU VDDA_1V8 Sensor Control
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_VDDA(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_VDDA_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_VDDA_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_CORE_MASK (0x10U)
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_CORE_SHIFT (4U)
+/*! SENSOR_CORE - PMU VDD_CORE Sensor Control
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_CORE(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_CORE_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_CORE_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_PMU_MASK (0x20U)
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_PMU_SHIFT (5U)
+/*! SENSOR_PMU - PMU VDD_PMU Sensor Control
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_PMU(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_PMU_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_ACTIVE_SENSOR_PMU_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_HQREF_MASK (0x40U)
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_HQREF_SHIFT (6U)
+/*! HQREF - PMU HQREF Control
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_HQREF(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_ACTIVE_HQREF_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_ACTIVE_HQREF_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_DCDC_MODE_MASK (0x80U)
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_DCDC_MODE_SHIFT (7U)
+/*! DCDC_MODE - PMU DCDC Control
+ *  0b0..DCDC to low load mode
+ *  0b1..DCDC to high load mode (PWM)
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_DCDC_MODE(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_ACTIVE_DCDC_MODE_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_ACTIVE_DCDC_MODE_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_LDO_VDD_0V8_MASK (0x300U)
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_LDO_VDD_0V8_SHIFT (8U)
+/*! LDO_VDD_0V8 - PMU VDD_0V8 LDO Control
+ *  0b00..Disables
+ *  0b01..High-power mode
+ *  0b10..Low-power mode
+ *  0b11..
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_LDO_VDD_0V8(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_ACTIVE_LDO_VDD_0V8_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_ACTIVE_LDO_VDD_0V8_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_LDO_VDD_1V8_MASK (0xC00U)
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_LDO_VDD_1V8_SHIFT (10U)
+/*! LDO_VDD_1V8 - PMU VDD_1V8 LDO Control
+ *  0b00..Disables
+ *  0b01..High-power mode
+ *  0b10..Low-power mode
+ *  0b11..
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_LDO_VDD_1V8(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_ACTIVE_LDO_VDD_1V8_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_ACTIVE_LDO_VDD_1V8_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_LDO_VDDA_1V8_MASK (0x3000U)
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_LDO_VDDA_1V8_SHIFT (12U)
+/*! LDO_VDDA_1V8 - PMU VDDA_1V8 LDO Control
+ *  0b00..Disables
+ *  0b01..High-power mode
+ *  0b10..Low-power mode
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_LDO_VDDA_1V8(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_ACTIVE_LDO_VDDA_1V8_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_ACTIVE_LDO_VDDA_1V8_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_CORE_LVL_MASK (0xF8000U)
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_CORE_LVL_SHIFT (15U)
+/*! CORE_LVL - PMU DCDC Output Voltage Control
+ *  0b00000..Output voltage is 0.8 V
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_CORE_LVL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_ACTIVE_CORE_LVL_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_ACTIVE_CORE_LVL_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_PMU_MODE_MASK (0x700000U)
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_PMU_MODE_SHIFT (20U)
+/*! PMU_MODE - PMU Mode Control
+ *  0b000..High-power (HP) mode
+ *  0b010..Low-power (LP) mode
+ *  0b011..Retention (RET) mode
+ *  0b100..Battery backed (BB) mode
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_ACTIVE_PMU_MODE(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_ACTIVE_PMU_MODE_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_ACTIVE_PMU_MODE_MASK)
+/*! @} */
+
+/*! @name PMUCFG_STBY - PMU Standby Mode Control */
+/*! @{ */
+
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_TEMP_MASK (0x1U)
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_TEMP_SHIFT (0U)
+/*! SENSOR_TEMP - PMU Temperature Sensor Control
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_TEMP(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_TEMP_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_TEMP_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_0V8_MASK (0x2U)
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_0V8_SHIFT (1U)
+/*! SENSOR_0V8 - PMU VDD_0V8 Sensor Control
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_0V8(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_0V8_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_0V8_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_1V8_MASK (0x4U)
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_1V8_SHIFT (2U)
+/*! SENSOR_1V8 - PMU VDD_1V8 Sensor Control
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_1V8(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_1V8_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_1V8_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_VDDA_MASK (0x8U)
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_VDDA_SHIFT (3U)
+/*! SENSOR_VDDA - PMU VDDA_1V8 Sensor Control
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_VDDA(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_VDDA_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_VDDA_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_CORE_MASK (0x10U)
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_CORE_SHIFT (4U)
+/*! SENSOR_CORE - PMU VDD_CORE Sensor Control
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_CORE(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_CORE_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_CORE_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_PMU_MASK (0x20U)
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_PMU_SHIFT (5U)
+/*! SENSOR_PMU - PMU VDD_PMU Sensor Control
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_PMU(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_PMU_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_STBY_SENSOR_PMU_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_HQREF_MASK (0x40U)
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_HQREF_SHIFT (6U)
+/*! HQREF - PMU HQREF Control
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_HQREF(x)   (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_STBY_HQREF_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_STBY_HQREF_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_DCDC_MODE_MASK (0x80U)
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_DCDC_MODE_SHIFT (7U)
+/*! DCDC_MODE - PMU DCDC Control
+ *  0b0..DCDC to low load mode
+ *  0b1..DCDC to high load mode (PWM)
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_DCDC_MODE(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_STBY_DCDC_MODE_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_STBY_DCDC_MODE_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_LDO_VDD_0V8_MASK (0x300U)
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_LDO_VDD_0V8_SHIFT (8U)
+/*! LDO_VDD_0V8 - PMU VDD_0V8 LDO Control
+ *  0b00..Disables
+ *  0b01..High-power mode
+ *  0b10..Low-power mode
+ *  0b11..
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_LDO_VDD_0V8(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_STBY_LDO_VDD_0V8_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_STBY_LDO_VDD_0V8_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_LDO_VDD_1V8_MASK (0xC00U)
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_LDO_VDD_1V8_SHIFT (10U)
+/*! LDO_VDD_1V8 - PMU VDD_1V8 LDO Control
+ *  0b00..Disables
+ *  0b01..High-power mode
+ *  0b10..Low-power mode
+ *  0b11..
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_LDO_VDD_1V8(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_STBY_LDO_VDD_1V8_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_STBY_LDO_VDD_1V8_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_LDO_VDDA_1V8_MASK (0x3000U)
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_LDO_VDDA_1V8_SHIFT (12U)
+/*! LDO_VDDA_1V8 - PMU VDDA_1V8 LDO Control
+ *  0b00..Disables
+ *  0b01..High-power mode
+ *  0b10..Low-power mode
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_LDO_VDDA_1V8(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_STBY_LDO_VDDA_1V8_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_STBY_LDO_VDDA_1V8_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_DCDC_OFF_PMU_RET_MASK (0x4000U)
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_DCDC_OFF_PMU_RET_SHIFT (14U)
+/*! DCDC_OFF_PMU_RET - DCDC Control
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_DCDC_OFF_PMU_RET(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_STBY_DCDC_OFF_PMU_RET_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_STBY_DCDC_OFF_PMU_RET_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_CORE_LVL_MASK (0xF8000U)
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_CORE_LVL_SHIFT (15U)
+/*! CORE_LVL - PMU DCDC Output Voltage Control
+ *  0b00000..Output voltage is 0.8 V
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_CORE_LVL(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_STBY_CORE_LVL_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_STBY_CORE_LVL_MASK)
+
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_PMU_MODE_MASK (0x700000U)
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_PMU_MODE_SHIFT (20U)
+/*! PMU_MODE - PMU Mode Control
+ *  0b000..High-power (HP) mode
+ *  0b010..Low-power (LP) mode
+ *  0b011..Retention (RET) mode
+ *  0b100..Battery backed (BB) mode
+ */
+#define POWERCON_SOC_CTRL_PMUCFG_STBY_PMU_MODE(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMUCFG_STBY_PMU_MODE_SHIFT)) & POWERCON_SOC_CTRL_PMUCFG_STBY_PMU_MODE_MASK)
+/*! @} */
+
+/*! @name PMICCFG_ACTIVE - PMIC Control Active */
+/*! @{ */
+
+#define POWERCON_SOC_CTRL_PMICCFG_ACTIVE_PMIC_MODE_MASK (0x3U)
+#define POWERCON_SOC_CTRL_PMICCFG_ACTIVE_PMIC_MODE_SHIFT (0U)
+/*! PMIC_MODE - PMIC Configuration */
+#define POWERCON_SOC_CTRL_PMICCFG_ACTIVE_PMIC_MODE(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMICCFG_ACTIVE_PMIC_MODE_SHIFT)) & POWERCON_SOC_CTRL_PMICCFG_ACTIVE_PMIC_MODE_MASK)
+/*! @} */
+
+/*! @name PMICCFG_STBY - PMIC Control Standby */
+/*! @{ */
+
+#define POWERCON_SOC_CTRL_PMICCFG_STBY_PMIC_MODE_MASK (0x3U)
+#define POWERCON_SOC_CTRL_PMICCFG_STBY_PMIC_MODE_SHIFT (0U)
+/*! PMIC_MODE - PMIC Configuration */
+#define POWERCON_SOC_CTRL_PMICCFG_STBY_PMIC_MODE(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_PMICCFG_STBY_PMIC_MODE_SHIFT)) & POWERCON_SOC_CTRL_PMICCFG_STBY_PMIC_MODE_MASK)
+/*! @} */
+
+/*! @name SOC_CTRL_STATUS - SoC Control Status */
+/*! @{ */
+
+#define POWERCON_SOC_CTRL_SOC_CTRL_STATUS_P_STAT_MASK (0x7U)
+#define POWERCON_SOC_CTRL_SOC_CTRL_STATUS_P_STAT_SHIFT (0U)
+/*! P_STAT - P-Channel FSM State */
+#define POWERCON_SOC_CTRL_SOC_CTRL_STATUS_P_STAT(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_SOC_CTRL_STATUS_P_STAT_SHIFT)) & POWERCON_SOC_CTRL_SOC_CTRL_STATUS_P_STAT_MASK)
+
+#define POWERCON_SOC_CTRL_SOC_CTRL_STATUS_P_TRG_MASK (0x10000U)
+#define POWERCON_SOC_CTRL_SOC_CTRL_STATUS_P_TRG_SHIFT (16U)
+/*! P_TRG - P-Channel Update Trigger by Software
+ *  0b1..Trigger start
+ */
+#define POWERCON_SOC_CTRL_SOC_CTRL_STATUS_P_TRG(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_SOC_CTRL_STATUS_P_TRG_SHIFT)) & POWERCON_SOC_CTRL_SOC_CTRL_STATUS_P_TRG_MASK)
+
+#define POWERCON_SOC_CTRL_SOC_CTRL_STATUS_P_OVER_MASK (0x20000U)
+#define POWERCON_SOC_CTRL_SOC_CTRL_STATUS_P_OVER_SHIFT (17U)
+/*! P_OVER - P-Channel Update Complete
+ *  0b0..P-channel is busy
+ *  0b1..Previous P-channel update is complete
+ */
+#define POWERCON_SOC_CTRL_SOC_CTRL_STATUS_P_OVER(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_SOC_CTRL_STATUS_P_OVER_SHIFT)) & POWERCON_SOC_CTRL_SOC_CTRL_STATUS_P_OVER_MASK)
+
+#define POWERCON_SOC_CTRL_SOC_CTRL_STATUS_FCEN_MASK (0x80000000U)
+#define POWERCON_SOC_CTRL_SOC_CTRL_STATUS_FCEN_SHIFT (31U)
+/*! FCEN - POWERCON Function Clock Enable
+ *  0b0..Gate function clock
+ *  0b1..Enable function clock
+ */
+#define POWERCON_SOC_CTRL_SOC_CTRL_STATUS_FCEN(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_SOC_CTRL_STATUS_FCEN_SHIFT)) & POWERCON_SOC_CTRL_SOC_CTRL_STATUS_FCEN_MASK)
+/*! @} */
+
+/*! @name GPR_COLD - GPR 0 Cold Reset..GPR 3 Cold Reset */
+/*! @{ */
+
+#define POWERCON_SOC_CTRL_GPR_COLD_GPR_MASK      (0xFFFFFFFFU)
+#define POWERCON_SOC_CTRL_GPR_COLD_GPR_SHIFT     (0U)
+/*! GPR - General Purpose Register */
+#define POWERCON_SOC_CTRL_GPR_COLD_GPR(x)        (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_GPR_COLD_GPR_SHIFT)) & POWERCON_SOC_CTRL_GPR_COLD_GPR_MASK)
+/*! @} */
+
+/*! @name GPR_WARM_0 - GPR 0 Warm Reset */
+/*! @{ */
+
+#define POWERCON_SOC_CTRL_GPR_WARM_0_MASK_CCM_ACK0_MASK (0x7FU)
+#define POWERCON_SOC_CTRL_GPR_WARM_0_MASK_CCM_ACK0_SHIFT (0U)
+/*! MASK_CCM_ACK0 - Mask Acknowledge of CCM for CMC0 */
+#define POWERCON_SOC_CTRL_GPR_WARM_0_MASK_CCM_ACK0(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_GPR_WARM_0_MASK_CCM_ACK0_SHIFT)) & POWERCON_SOC_CTRL_GPR_WARM_0_MASK_CCM_ACK0_MASK)
+
+#define POWERCON_SOC_CTRL_GPR_WARM_0_MASK_CCM_ACK1_MASK (0x3F80U)
+#define POWERCON_SOC_CTRL_GPR_WARM_0_MASK_CCM_ACK1_SHIFT (7U)
+/*! MASK_CCM_ACK1 - Mask Acknowledge of CCM for DMC0 (CMC1) */
+#define POWERCON_SOC_CTRL_GPR_WARM_0_MASK_CCM_ACK1(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_GPR_WARM_0_MASK_CCM_ACK1_SHIFT)) & POWERCON_SOC_CTRL_GPR_WARM_0_MASK_CCM_ACK1_MASK)
+
+#define POWERCON_SOC_CTRL_GPR_WARM_0_MASK_CCM_ACK2_MASK (0x1FC000U)
+#define POWERCON_SOC_CTRL_GPR_WARM_0_MASK_CCM_ACK2_SHIFT (14U)
+/*! MASK_CCM_ACK2 - Mask Acknowledge of CCM for DMC1 (CMC2) */
+#define POWERCON_SOC_CTRL_GPR_WARM_0_MASK_CCM_ACK2(x) (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_GPR_WARM_0_MASK_CCM_ACK2_SHIFT)) & POWERCON_SOC_CTRL_GPR_WARM_0_MASK_CCM_ACK2_MASK)
+
+#define POWERCON_SOC_CTRL_GPR_WARM_0_GPR_MASK    (0xFFE00000U)
+#define POWERCON_SOC_CTRL_GPR_WARM_0_GPR_SHIFT   (21U)
+/*! GPR - General Purpose Register */
+#define POWERCON_SOC_CTRL_GPR_WARM_0_GPR(x)      (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_GPR_WARM_0_GPR_SHIFT)) & POWERCON_SOC_CTRL_GPR_WARM_0_GPR_MASK)
+/*! @} */
+
+/*! @name GPR_WARM - GPR 1 Warm Reset..GPR 3 Warm Reset */
+/*! @{ */
+
+#define POWERCON_SOC_CTRL_GPR_WARM_GPR_MASK      (0xFFFFFFFFU)
+#define POWERCON_SOC_CTRL_GPR_WARM_GPR_SHIFT     (0U)
+/*! GPR - General Purpose Register */
+#define POWERCON_SOC_CTRL_GPR_WARM_GPR(x)        (((uint32_t)(((uint32_t)(x)) << POWERCON_SOC_CTRL_GPR_WARM_GPR_SHIFT)) & POWERCON_SOC_CTRL_GPR_WARM_GPR_MASK)
+/*! @} */
+
+
+/*!
+ * @}
+ */ /* end of group POWERCON_SOC_CTRL_Register_Masks */
+
+
+/*!
+ * @}
+ */ /* end of group POWERCON_SOC_CTRL_Peripheral_Access_Layer */
+
+
+/*
+** End of section using anonymous unions
+*/
+
+#if defined(__ARMCC_VERSION)
+  #if (__ARMCC_VERSION >= 6010050)
+    #pragma clang diagnostic pop
+  #else
+    #pragma pop
+  #endif
+#elif defined(__GNUC__)
+  /* leave anonymous unions enabled */
+#elif defined(__IAR_SYSTEMS_ICC__)
+  #pragma language=default
+#else
+  #error Not supported compiler type
+#endif
+
+/*!
+ * @}
+ */ /* end of group Peripheral_access_layer */
+
+
+#endif  /* PERI_POWERCON_SOC_CTRL_H_ */
+
