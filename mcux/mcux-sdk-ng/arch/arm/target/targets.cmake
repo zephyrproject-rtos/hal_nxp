@@ -10,6 +10,8 @@ mcux_add_iar_configuration(
             flexspi_nor_debug
             flexspi_nor_sdram_debug
             flexspi_nor_hyperram_debug
+            xspi_nor_debug
+            xspi_nor_psram_debug
             sdram_debug
             psram_debug
             sdram_txt_debug
@@ -29,6 +31,8 @@ mcux_add_iar_configuration(
             flexspi_nor_release
             flexspi_nor_sdram_release
             flexspi_nor_hyperram_release
+            xspi_nor_release
+            xspi_nor_psram_release
             sdram_release
             psram_release
             sdram_txt_release
@@ -47,6 +51,8 @@ mcux_add_mdk_configuration(
             flexspi_nor_debug
             flexspi_nor_sdram_debug
             flexspi_nor_hyperram_debug
+            xspi_nor_debug
+            xspi_nor_psram_debug
             sdram_debug
             psram_debug
             sdram_txt_debug
@@ -66,6 +72,8 @@ mcux_add_mdk_configuration(
             flexspi_nor_release
             flexspi_nor_sdram_release
             flexspi_nor_hyperram_release
+            xspi_nor_release
+            xspi_nor_psram_release
             sdram_release
             psram_release
             sdram_txt_release
@@ -84,6 +92,8 @@ mcux_add_armgcc_configuration(
             flexspi_nor_debug
             flexspi_nor_sdram_debug
             flexspi_nor_hyperram_debug
+            xspi_nor_debug
+            xspi_nor_psram_debug
             sdram_debug
             psram_debug
             sdram_txt_debug
@@ -104,6 +114,8 @@ mcux_add_armgcc_configuration(
             flexspi_nor_release
             flexspi_nor_sdram_release
             flexspi_nor_hyperram_release
+            xspi_nor_release
+            xspi_nor_psram_release
             sdram_release
             psram_release
             sdram_txt_release
