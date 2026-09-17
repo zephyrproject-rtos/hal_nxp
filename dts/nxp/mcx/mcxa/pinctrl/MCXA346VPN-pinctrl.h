@@ -7,14 +7,14 @@
 
 /*
  * Content deduplicated by dedup_pinctrl.py:
- * the pin mux data of this part is identical to MCXA346VLQ-pinctrl.h.
+ * the pin mux data of this part is identical to MCXA356VLQ-pinctrl.h.
  * Do not edit; edit the canonical file instead.
- * target-hash: 24c102d70574c90c
+ * target-hash: 106afdbc67ee90f1
  */
 
 #ifndef _ZEPHYR_DTS_BINDING_MCXA346VPN_WRAPPER_
 #define _ZEPHYR_DTS_BINDING_MCXA346VPN_WRAPPER_
 
-#include "MCXA346VLQ-pinctrl.h"
+#include "MCXA356VLQ-pinctrl.h"
 
 #endif /* _ZEPHYR_DTS_BINDING_MCXA346VPN_WRAPPER_ */

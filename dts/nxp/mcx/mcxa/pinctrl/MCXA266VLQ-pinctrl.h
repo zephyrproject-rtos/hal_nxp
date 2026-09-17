@@ -9,9 +9,9 @@
  * Delta-deduplicated by dedup_pinctrl.py:
  * based on MCXA366VLL-pinctrl.h with this part's differences applied
  * below (45 removed, 0 changed,
- * 155 added). Regenerate with dedup_pinctrl.py;
+ * 157 added). Regenerate with dedup_pinctrl.py;
  * do not edit by hand.
- * target-hash: a0f6521a5e7a64e3
+ * target-hash: 011ef572d22de35a
  */
 
 #ifndef _ZEPHYR_DTS_BINDING_MCXA266VLQ_WRAPPER_
@@ -206,6 +206,8 @@
 #define SmartDMA_PIO3_P3_3 A15X_MUX('3',3,10)
 #define SmartDMA_PIO4_P3_4 A15X_MUX('3',4,10)
 #define SmartDMA_PIO5_P3_5 A15X_MUX('3',5,10)
+#define TAMPER2_P3_26 A15X_MUX('3',26,0)
+#define TAMPER3_P3_25 A15X_MUX('3',25,0)
 #define TRIG_IN10/CT_INP14_P3_26_P3_26 A15X_MUX('3',26,4)
 #define TRIG_IN10_P3_26 A15X_MUX('3',26,1)
 #define TRIG_IN11_P3_24 A15X_MUX('3',24,1)

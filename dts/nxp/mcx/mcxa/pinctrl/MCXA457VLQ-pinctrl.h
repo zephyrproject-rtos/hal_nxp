@@ -8,10 +8,10 @@
 /*
  * Delta-deduplicated by dedup_pinctrl.py:
  * based on MCXA577VPN-pinctrl.h with this part's differences applied
- * below (104 removed, 0 changed,
+ * below (106 removed, 0 changed,
  * 0 added). Regenerate with dedup_pinctrl.py;
  * do not edit by hand.
- * target-hash: 032d9fd64d5a6002
+ * target-hash: 47bd448f730443d5
  */
 
 #ifndef _ZEPHYR_DTS_BINDING_MCXA457VLQ_WRAPPER_
@@ -21,6 +21,7 @@
 
 /* Signals not present on this part */
 #undef ADC0_A7_P2_7
+#undef ADC1_A7_P2_7
 #undef CT0_MAT0_P0_10
 #undef CT0_MAT1_P0_11
 #undef CT2_MAT0_P3_18
@@ -124,5 +125,6 @@
 #undef TSI0_CH50_P3_18
 #undef TSI0_CH51_P3_19
 #undef VREFI_P2_7
+#undef VREFO_P2_7
 
 #endif /* _ZEPHYR_DTS_BINDING_MCXA457VLQ_WRAPPER_ */
