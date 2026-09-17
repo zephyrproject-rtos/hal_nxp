@@ -85,7 +85,13 @@ python gen_soc_headers.py ${path_to_data_pack}
 ```
 
 Replacing `${path_to_data_pack}` with the path to your MCUXpresso config tools
-data pack.
+data pack. `${path_to_data_pack}` may also be a directory containing MCUXpresso
+Config Tools data already on disk (e.g. an installed config tools data
+directory) instead of a downloaded zip archive; either the pack root (which
+contains a `processors` subdirectory) or that `processors` directory itself
+is accepted. The script processes every `signal_configuration.xml` file found
+under the pack, so a data pack directory covering multiple processors and
+variants generates pinctrl files for all of them in one run.
 
 
 ### Examples

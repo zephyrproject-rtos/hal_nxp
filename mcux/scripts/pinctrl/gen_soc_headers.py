@@ -47,7 +47,10 @@ def parse_args():
             formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('data_pack', metavar = 'DATA_PACK',
                         type=str,
-                        help='Path to downloaded data package zip')
+                        help=('Path to downloaded data package zip, or a directory '
+                        'containing MCUXpresso Config Tools data already on disk '
+                        '(either the pack root, which contains a "processors" '
+                        'subdirectory, or that "processors" directory itself)'))
     parser.add_argument('--copyright', action='store_true',
                         help='Enable default NXP copyright')
     parser.add_argument('--soc-output', metavar = 'SOC_OUT', type=str,
@@ -110,9 +113,14 @@ def get_pack_version(pack_dir):
     """
     Gets datapack version
     @param pack_dir: root directory data pack is in
+    @return version as a float, or None if pack_dir has no npidata.mf (this
+        file is only shipped in downloaded data pack archives, not in a
+        config tool data directory already installed/extracted on disk)
     """
     # Check version of the config tools archive
     npi_data = pathlib.Path(pack_dir) / 'npidata.mf'
+    if not npi_data.is_file():
+        return None
     data_version = 0.0
     with open(npi_data, 'r', encoding='UTF8') as stream:
         line = stream.readline()
@@ -136,18 +144,35 @@ def main():
         print('SOC output path must be a directory')
         sys.exit(255)
 
-    # Extract the Data pack to a temporary directory
-    temp_dir = tempfile.TemporaryDirectory()
-    zipfile.ZipFile(args.data_pack).extractall(temp_dir.name)
+    # Resolve the pack root: either extract a downloaded data pack zip to a
+    # temporary directory (original flow), or use a directory already on
+    # disk directly (e.g. an installed MCUXpresso Config Tools data
+    # directory). `temp_dir` is kept alive for the rest of main() so its
+    # backing directory is not cleaned up early.
+    data_pack_path = pathlib.Path(args.data_pack)
+    temp_dir = None
+    if data_pack_path.is_dir():
+        pack_root = data_pack_path
+        # Accept either the pack root (holds a "processors" subdirectory) or
+        # that "processors" directory itself.
+        proc_root = pack_root / 'processors' if (pack_root / 'processors').is_dir() \
+            else pack_root
+    else:
+        temp_dir = tempfile.TemporaryDirectory()
+        zipfile.ZipFile(args.data_pack).extractall(temp_dir.name)
+        pack_root = pathlib.Path(temp_dir.name)
+        proc_root = pack_root / 'processors'
 
-    data_version = get_pack_version(temp_dir.name)
-    print(f"Found data pack version {data_version}")
-    if round(data_version) != '25.06':
-        print("Warning: This tool is only verified for data pack version 25.06, "
-            "other versions may not work")
+    data_version = get_pack_version(pack_root)
+    if data_version is None:
+        print("No npidata.mf found; skipping data pack version check")
+    else:
+        print(f"Found data pack version {data_version}")
+        if round(data_version) != '25.06':
+            print("Warning: This tool is only verified for data pack version 25.06, "
+                "other versions may not work")
 
     # Attempt to locate the signal XML files we will generate from
-    proc_root = pathlib.Path(temp_dir.name) / 'processors'
     search_pattern = "*/ksdk2_0/*/signal_configuration.xml"
     # Pathlib glob returns an iteration, so use sum to count the length
     package_count = sum(1 for _ in proc_root.glob(search_pattern))
