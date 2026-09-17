@@ -8,10 +8,10 @@
 /*
  * Delta-deduplicated by dedup_pinctrl.py:
  * based on MCXA577VPN-pinctrl.h with this part's differences applied
- * below (418 removed, 4 changed,
- * 311 added). Regenerate with dedup_pinctrl.py;
+ * below (438 removed, 1 changed,
+ * 319 added). Regenerate with dedup_pinctrl.py;
  * do not edit by hand.
- * target-hash: 9b2c405468751680
+ * target-hash: 47bd448f730443d5
  */
 
 #ifndef _ZEPHYR_DTS_BINDING_MCXA366VLQ_WRAPPER_
@@ -23,9 +23,14 @@
 #undef ADC0_A10_P0_14
 #undef ADC0_A11_P0_15
 #undef ADC1_A20_P5_0
+#undef ADC1_A21_P5_1
 #undef ADC1_A22_P5_2
 #undef CMP0_IN0_P1_0
 #undef CMP0_IN3_P1_5
+#undef CMP0_INN4_P2_2
+#undef CMP0_INN5_P2_3
+#undef CMP0_INP4_P2_15
+#undef CMP0_INP5_P2_23
 #undef CT0_MAT0_P0_10
 #undef CT0_MAT1_P0_11
 #undef CT3_MAT0_P4_10
@@ -82,6 +87,7 @@
 #undef EWM0_OUT_B_P0_19
 #undef EWM0_OUT_B_P0_23
 #undef EWM0_OUT_B_P0_5
+#undef EXTAL32K_P5_0
 #undef FLEXIO0_D0_P0_8
 #undef FLEXIO0_D16_P4_8
 #undef FLEXIO0_D17_P4_9
@@ -96,19 +102,28 @@
 #undef FLEXSPI0_A_DATA3_P3_11
 #undef FLEXSPI0_A_DQS_P3_6
 #undef FLEXSPI0_A_SCLK_P3_7
+#undef FLEXSPI0_A_SS0_B_P3_0
+#undef FLEXSPI0_A_SS1_B_P3_1
 #undef FLEXSPI0_B_DATA0_P3_15
 #undef FLEXSPI0_B_DATA1_P3_14
 #undef FLEXSPI0_B_DATA2_P3_13
 #undef FLEXSPI0_B_DATA3_P3_12
 #undef FLEXSPI0_B_DQS_P3_1
 #undef FLEXSPI0_B_SCLK_P3_16
-#undef FREQME_CLK_OUT0_P3_7
+#undef FLEXSPI0_B_SS0_B_P3_17
+#undef FLEXSPI0_B_SS1_B_P3_6
 #undef I3C0_PUR_P0_22
 #undef I3C0_SCL_P0_21
 #undef I3C0_SDA_P0_20
 #undef I3C1_PUR_P1_15
 #undef I3C1_SCL_P1_17
 #undef I3C1_SCL_P1_9
+#undef I3C1_SDA1_P1_14
+#undef I3C1_SDA1_P1_7
+#undef I3C1_SDA2_P1_19
+#undef I3C1_SDA2_P1_6
+#undef I3C1_SDA3_P1_18
+#undef I3C1_SDA3_P1_5
 #undef I3C1_SDA_P1_16
 #undef I3C1_SDA_P1_8
 #undef I3C2_PUR_P4_0
@@ -231,6 +246,10 @@
 #undef P0_11
 #undef P0_8
 #undef P0_9
+#undef P2_28
+#undef P2_29
+#undef P2_30
+#undef P2_31
 #undef P4_10
 #undef P4_11
 #undef P4_12
@@ -238,6 +257,7 @@
 #undef P4_8
 #undef P4_9
 #undef P5_0
+#undef P5_1
 #undef P5_2
 #undef P5_3
 #undef P5_4
@@ -246,19 +266,7 @@
 #undef P5_7
 #undef P5_8
 #undef P5_9
-#undef PF_QSPI_CS0_DIS_P3_0
-#undef PF_QSPI_CS1_DIS_P3_1
-#undef PF_QSPI_CS_N_P3_6
-#undef PF_QSPI_DATA0_P3_8
-#undef PF_QSPI_DATA1_P3_9
-#undef PF_QSPI_DATA2_P3_10
-#undef PF_QSPI_DATA3_P3_11
-#undef PF_QSPI_SCKIN_P3_7
-#undef PF_SPI_CS0_DIS_N_P3_13
-#undef PF_SPI_CS0_N_P3_17
-#undef PF_SPI_CS1_DIS_N_P3_12
-#undef PF_SPI_DATA_P3_15
-#undef PF_SPI_SCKIN_P3_16
+#undef RTC_CLKOUT_P5_3
 #undef SMARTDMA_PIO0_P0_4
 #undef SMARTDMA_PIO0_P1_4
 #undef SMARTDMA_PIO0_P3_0
@@ -349,11 +357,14 @@
 #undef SMARTDMA_PIO9_P3_9
 #undef SPC_LPREQ_P5_2
 #undef SPC_LPREQ_P5_4
-#undef TENBASET1S_DEBUG0_P0_18
-#undef TENBASET1S_DEBUG1_P0_19
-#undef TENBASET1S_DEBUG2_P0_20
-#undef TENBASET1S_DEBUG3_P0_21
-#undef TENBASET1S_DEBUG4_P0_22
+#undef TAMPER0_P5_2
+#undef TAMPER1_P5_3
+#undef TAMPER2_P5_4
+#undef TAMPER3_P5_5
+#undef TAMPER4_P5_6
+#undef TAMPER5_P5_7
+#undef TAMPER6_P5_8
+#undef TAMPER7_P5_9
 #undef TENBASET1S_ED_P1_1
 #undef TENBASET1S_ED_P1_12
 #undef TENBASET1S_RX_P1_0
@@ -364,6 +375,7 @@
 #undef TRIG_IN10_P5_5
 #undef TRIG_IN11_P5_3
 #undef TRIG_IN11_P5_7
+#undef TRIG_OUT6_P5_1
 #undef TRIG_OUT6_P5_6
 #undef TRIG_OUT7_P5_4
 #undef TSI0_CH0_P5_3
@@ -436,16 +448,18 @@
 #undef TSI0_CH7_P0_19
 #undef TSI0_CH8_P0_20
 #undef TSI0_CH9_P0_21
+#undef USB1_OTGN_ID_P2_13
+#undef USB1_OTGN_OC_P2_17
+#undef USB1_OTGN_PWR_P2_16
+#undef USB1_VBUSVALID_EXT_P2_12
+#undef USB1_VBUSVALID_EXT_P2_15
+#undef VBAT_WAKEUP_B_P5_2
+#undef VREFO_P2_7
 #undef WUU0_IN26_P3_17
 #undef WUU0_IN27_P3_20
+#undef XTAL32K_P5_1
 
 /* Signals with different mux data on this part */
-#undef CLKOUT_P0_6
-#define CLKOUT_P0_6 A15X_MUX('0',6,12)
-#undef CLKOUT_P3_8
-#define CLKOUT_P3_8 A15X_MUX('3',8,12)
-#undef FREQME_CLK_OUT1_P3_6
-#define FREQME_CLK_OUT1_P3_6 A15X_MUX('3',6,12)
 #undef TRIG_IN4
 #define TRIG_IN4/CT_INP6_P4_6_P4_6 A15X_MUX('4',6,1)
 
@@ -455,7 +469,6 @@
 #define ADC1_A20_P3_31 A15X_MUX('3',31,0)
 #define ADC1_A21_P3_30 A15X_MUX('3',30,0)
 #define ADC1_A22_P3_29 A15X_MUX('3',29,0)
-#define ADC1_A7_P2_7 A15X_MUX('2',7,0)
 #define ADC2_A0_P2_4 A15X_MUX('2',4,0)
 #define ADC2_A10_P0_5 A15X_MUX('0',5,0)
 #define ADC2_A11_P0_7 A15X_MUX('0',7,0)
@@ -504,6 +517,8 @@
 #define ADC3_A7_P2_7 A15X_MUX('2',7,0)
 #define ADC3_A8_P3_2 A15X_MUX('3',2,0)
 #define ADC3_A9_P3_3 A15X_MUX('3',3,0)
+#define CLKOUT_P0_6 A15X_MUX('0',6,12)
+#define CLKOUT_P3_8 A15X_MUX('3',8,12)
 #define CMP0_IN0_P2_2 A15X_MUX('2',2,0)
 #define CMP0_IN3_P1_0 A15X_MUX('1',0,0)
 #define CMP1_IN0_P2_3 A15X_MUX('2',3,0)
@@ -530,6 +545,7 @@
 #define FLEXIO0_D30_P3_30 A15X_MUX('3',30,6)
 #define FLEXIO0_D31_P3_31 A15X_MUX('3',31,6)
 #define FREQME_CLK_OUT0_P3_1 A15X_MUX('3',1,12)
+#define FREQME_CLK_OUT1_P3_6 A15X_MUX('3',6,12)
 #define I3C0_PUR_P1_11 A15X_MUX('1',11,10)
 #define I3C0_SCL_P1_31 A15X_MUX('1',31,10)
 #define I3C0_SCL_P1_9 A15X_MUX('1',9,10)
@@ -747,6 +763,12 @@
 #define SmartDMA_PIO9_P0_19 A15X_MUX('0',19,7)
 #define SmartDMA_PIO9_P1_13 A15X_MUX('1',13,7)
 #define SmartDMA_PIO9_P3_9 A15X_MUX('3',9,10)
+#define TAMPER0_P3_31 A15X_MUX('3',31,0)
+#define TAMPER1_P3_29 A15X_MUX('3',29,0)
+#define TAMPER2_P3_26 A15X_MUX('3',26,0)
+#define TAMPER3_P3_25 A15X_MUX('3',25,0)
+#define TAMPER4_P3_19 A15X_MUX('3',19,0)
+#define TAMPER5_P3_18 A15X_MUX('3',18,0)
 #define TRIG_IN10/CT_INP14_P3_26_P3_26 A15X_MUX('3',26,4)
 #define TRIG_IN10_P3_26 A15X_MUX('3',26,1)
 #define TRIG_IN10_P3_31 A15X_MUX('3',31,1)

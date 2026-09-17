@@ -8,10 +8,10 @@
 /*
  * Delta-deduplicated by dedup_pinctrl.py:
  * based on MCXA577VPN-pinctrl.h with this part's differences applied
- * below (572 removed, 0 changed,
+ * below (580 removed, 0 changed,
  * 0 added). Regenerate with dedup_pinctrl.py;
  * do not edit by hand.
- * target-hash: 032d9fd64d5a6002
+ * target-hash: 47bd448f730443d5
  */
 
 #ifndef _ZEPHYR_DTS_BINDING_MCXA537VLL_WRAPPER_
@@ -40,6 +40,7 @@
 #undef ADC1_A4_P2_3
 #undef ADC1_A5_P2_13
 #undef ADC1_A6_P2_17
+#undef ADC1_A7_P2_7
 #undef ADC1_A8_P1_10
 #undef ADC1_A9_P1_11
 #undef CAN0_RXD_P1_11
@@ -261,6 +262,12 @@
 #undef I3C1_PUR_P1_15
 #undef I3C1_SCL_P1_17
 #undef I3C1_SCL_P1_9
+#undef I3C1_SDA1_P1_14
+#undef I3C1_SDA1_P1_7
+#undef I3C1_SDA2_P1_19
+#undef I3C1_SDA2_P1_6
+#undef I3C1_SDA3_P1_18
+#undef I3C1_SDA3_P1_5
 #undef I3C1_SDA_P1_16
 #undef I3C1_SDA_P1_8
 #undef I3C2_PUR_P4_0
@@ -588,6 +595,7 @@
 #undef UTICK_CAP1_P0_15
 #undef UTICK_CAP2_P0_4
 #undef UTICK_CAP3_P0_5
+#undef VREFO_P2_7
 #undef WUU0_IN0_P0_4
 #undef WUU0_IN14_P1_16
 #undef WUU0_IN15_P1_19
