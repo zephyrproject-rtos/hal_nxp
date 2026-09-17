@@ -11,7 +11,7 @@
  * below (45 removed, 0 changed,
  * 0 added). Regenerate with dedup_pinctrl.py;
  * do not edit by hand.
- * target-hash: a0f6521a5e7a64e3
+ * target-hash: 011ef572d22de35a
  */
 
 #ifndef _ZEPHYR_DTS_BINDING_MCXA266VLL_WRAPPER_

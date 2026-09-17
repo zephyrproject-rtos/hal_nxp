@@ -9,7 +9,7 @@
  * Delta-deduplicated by dedup_pinctrl.py:
  * based on MCXA344VLH-pinctrl.h with this part's differences applied
  * below (85 removed, 0 changed,
- * 183 added). Regenerate with dedup_pinctrl.py;
+ * 185 added). Regenerate with dedup_pinctrl.py;
  * do not edit by hand.
  * target-hash: 796e143b40c94355
  */
@@ -280,6 +280,8 @@
 #define SmartDMA_PIO8_P3_8 A15X_MUX('3',8,10)
 #define SmartDMA_PIO9_P1_13 A15X_MUX('1',13,7)
 #define SmartDMA_PIO9_P3_9 A15X_MUX('3',9,10)
+#define TAMPER0_P3_31 A15X_MUX('3',31,0)
+#define TAMPER1_P3_29 A15X_MUX('3',29,0)
 #define TRIG_IN0/CT_INP16_P3_0_P3_0 A15X_MUX('3',0,4)
 #define TRIG_IN1/CT_INP17_P3_1_P3_1 A15X_MUX('3',1,4)
 #define TRIG_IN11/CT_INP12_P3_28_P3_28 A15X_MUX('3',28,4)

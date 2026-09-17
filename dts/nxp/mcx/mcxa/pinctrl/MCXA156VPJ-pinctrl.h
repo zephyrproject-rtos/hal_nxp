@@ -8,10 +8,10 @@
 /*
  * Delta-deduplicated by dedup_pinctrl.py:
  * based on MCXA366VLL-pinctrl.h with this part's differences applied
- * below (213 removed, 0 changed,
- * 21 added). Regenerate with dedup_pinctrl.py;
+ * below (217 removed, 0 changed,
+ * 20 added). Regenerate with dedup_pinctrl.py;
  * do not edit by hand.
- * target-hash: a0f6521a5e7a64e3
+ * target-hash: 011ef572d22de35a
  */
 
 #ifndef _ZEPHYR_DTS_BINDING_MCXA156VPJ_WRAPPER_
@@ -216,6 +216,10 @@
 #undef SmartDMA_PIO9_P0_19
 #undef SmartDMA_PIO9_P1_13
 #undef SmartDMA_PIO9_P3_9
+#undef TAMPER0_P3_31
+#undef TAMPER1_P3_29
+#undef TAMPER4_P3_19
+#undef TAMPER5_P3_18
 #undef TRIG_IN0
 #undef TRIG_IN1
 #undef TRIG_IN11
@@ -245,7 +249,6 @@
 #define CT_INP10_P1_14 A15X_MUX('1',14,4)
 #define CT_INP11_P1_15 A15X_MUX('1',15,4)
 #define FLEXIO0_D10_P3_2 A15X_MUX('3',2,6)
-#define ISPMODE_N_P3_29 A15X_MUX('3',29,1)
 #define LPSPI1_PCS1_P3_2 A15X_MUX('3',2,2)
 #define OPAMP0_INP0_P2_12 A15X_MUX('2',12,0)
 #define OPAMP0_INP1_P2_13 A15X_MUX('2',13,0)
