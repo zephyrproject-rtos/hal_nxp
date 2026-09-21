@@ -879,7 +879,7 @@ int wifi_nxp_wpa_supp_scan2(void *if_priv, struct wpa_driver_scan_params *params
         }
     }
 
-    wifi_d("initiating wifi-scan");
+    supp_d("initiating wifi-scan");
 
     if (params->freqs)
     {
@@ -963,7 +963,7 @@ int wifi_nxp_wpa_supp_scan2(void *if_priv, struct wpa_driver_scan_params *params
 
         if (status != WM_SUCCESS)
         {
-            wifi_d("wifi set scan IEs failed");
+            supp_d("wifi set scan IEs failed");
             goto out;
         }
     }
@@ -1000,7 +1000,7 @@ int wifi_nxp_wpa_supp_scan2(void *if_priv, struct wpa_driver_scan_params *params
                                 false, false);
     if (status != WM_SUCCESS)
     {
-        wifi_d("wifi send scan cmd failed");
+        supp_d("wifi send scan cmd failed");
         goto out;
     }
 
@@ -1448,7 +1448,7 @@ int wifi_nxp_wpa_supp_deauthenticate(void *if_priv, const char *addr, unsigned s
         goto out;
     }
 
-    wifi_d("initiating wifi-deauth");
+    supp_d("initiating wifi-deauth");
 
     wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
     if (wifi_if_ctx_rtos->ft_roaming)
@@ -1457,7 +1457,10 @@ int wifi_nxp_wpa_supp_deauthenticate(void *if_priv, const char *addr, unsigned s
     }
 
     status = wifi_nxp_deauthenticate(MLAN_BSS_TYPE_STA, (const unsigned char *)addr, reason_code);
-
+#if CONFIG_11MC
+    g_ftm_civic_cfg.civic_req  = 0;
+    g_ftm_location_cfg.lci_req = 0;
+#endif
     if (status != WM_SUCCESS)
     {
         supp_e("%s: wifi_nxp_wpa_supp_deauthenticate failed", __func__);
@@ -1638,7 +1641,7 @@ int wifi_nxp_wpa_supp_authenticate(void *if_priv, struct wpa_driver_auth_params 
 
     channel = freq_to_chan(params->freq);
 
-    wifi_d("initiating wifi-auth");
+    supp_d("initiating wifi-auth");
 
     status = wifi_send_mgmt_auth_request(channel, auth_alg, auth_trans_num, status_code, params->bssid,
                                          (const unsigned char *)pos, len);
@@ -1752,7 +1755,7 @@ int wifi_nxp_wpa_supp_associate(void *if_priv, struct wpa_driver_associate_param
 
     assoc_params->control_port = 1;
 
-    wifi_d("initiating wifi-assoc");
+    supp_d("initiating wifi-assoc");
 
     status = wifi_nxp_send_assoc(assoc_params);
 
@@ -2001,7 +2004,7 @@ int wifi_nxp_wpa_supp_set_supp_port(void *if_priv, int authorized, char *bssid)
 
     wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
 
-    wifi_d("initiating wifi-set-port authorized: %d", authorized);
+    supp_d("initiating wifi-set-port authorized: %d", authorized);
 
     if (wifi_if_ctx_rtos->associated)
     {
@@ -3107,7 +3110,7 @@ int wifi_nxp_wpa_supp_init_ap(void *if_priv, struct wpa_driver_associate_params 
 //       memcpy(ap_params->wpa_ie.ie, params->wpa_ie, params->wpa_ie_len);
     }
 
-    wifi_d("initiating init ap");
+    supp_d("initiating init ap");
 
     status = wifi_nxp_init_ap(ap_params);
 

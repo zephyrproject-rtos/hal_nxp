@@ -19,7 +19,7 @@
 #include <wifi_events.h>
 #include <wifi.h>
 
-#define WLAN_DRV_VERSION "v1.3.r54.z_up.p4"
+#define WLAN_DRV_VERSION "v1.3.r54.z_up.p5"
 
 #if CONFIG_WPA2_ENTP
 #include <wm_mbedtls_helper_api.h>
@@ -3848,9 +3848,12 @@ int wlan_get_antcfg(uint32_t *ant, uint16_t *evaluate_time, uint8_t *evaluate_mo
 /**
  * Set external antenna gain for all sub-bands.
  *
- * \param[in] ext_ant_gain  Pointer to array of per-sub-band gains in dB (int8_t).
- *                          Array size must match firmware MAX_SUBBAND.
- * \param[in] num_subbands  Number of sub-bands (must be <= WIFI_EXT_ANT_GAIN_MAX_SUBBAND).
+ * \param[in] ext_ant_gain  Pointer to array of per-sub-band net antenna gains
+ *                          (antenna gain - path loss), in 0.25 dB step,
+ *                          valid range [-127, 127] (-31.75 ~ +31.75 dBi).
+ *                          The last sub-band is reserved and set internally to -128.
+ * \param[in] num_subbands  Number of user sub-bands
+ *                          (must be <= WIFI_EXT_ANT_GAIN_MAX_SUBBAND - 1).
  *
  * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
  */
@@ -3861,7 +3864,7 @@ int wlan_set_ext_ant_gain(const int8_t *ext_ant_gain, const uint8_t num_subbands
  *
  * \param[in] band         Band index (0=2.4GHz, 1=5GHz).
  * \param[in] channel      Channel number within the specified band.
- * \param[out] net_ant_gain Pointer to store the computed net gain in dB (int8_t).
+ * \param[out] net_ant_gain Pointer to store the computed net gain, in 0.25 dB step (int8_t).
  *
  * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
  */
@@ -6504,6 +6507,10 @@ int wlan_ftm_location_cfg(location_cfg_info_t *ftm_location_cfg);
  * \return -WM_FAIL if failed.
  */
 int wlan_ftm_civic_cfg(location_civic_rep_t *ftm_civic_cfg);
+
+extern location_cfg_info_t g_ftm_location_cfg;
+extern location_civic_rep_t g_ftm_civic_cfg;
+
 #endif
 
 #if CONFIG_WPA_SUPP

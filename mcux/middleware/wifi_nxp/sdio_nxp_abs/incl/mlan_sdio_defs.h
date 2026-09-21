@@ -425,7 +425,12 @@ Change log:
 #define IO_PORT_2_REG 0x7A
 #endif
 
+#if  defined(SD9177)
+#define MAX_WRITE_IOMEM_RETRY 20
+#else
 #define MAX_WRITE_IOMEM_RETRY 10
+#endif
+
 #define IO_ABORT 0x06
 
 #if CONFIG_TX_RX_ZERO_COPY

@@ -152,18 +152,18 @@ static OSA_TASK_DEFINE(wifi_core_task, OSA_PRIORITY_NORMAL, 1, CONFIG_WIFI_CORE_
 static void wifi_scan_task(osa_task_param_t arg);
 
 /* OSA_TASKS: name, priority, instances, stackSz, useFloat */
-static OSA_TASK_DEFINE(wifi_scan_task, CONFIG_NXP_WIFI_SCAN_TASK_PRIO, 1, CONFIG_NXP_WIFI_SCAN_TASK_STACK_SIZE, 0);
+static OSA_TASK_DEFINE(wifi_scan_task, CONFIG_NXP_WIFI_SCAN_TASK_PRIO, 1, CONFIG_WIFI_SCAN_STACK_SIZE, 0);
 
 static void wifi_drv_task(osa_task_param_t arg);
 
 /* OSA_TASKS: name, priority, instances, stackSz, useFloat */
-static OSA_TASK_DEFINE(wifi_drv_task, CONFIG_NXP_WIFI_DRIVER_TASK_PRIO, 1, CONFIG_NXP_WIFI_DRIVER_TASK_STACK_SIZE, 0);
+static OSA_TASK_DEFINE(wifi_drv_task, CONFIG_NXP_WIFI_DRIVER_TASK_PRIO, 1, CONFIG_WIFI_DRIVER_STACK_SIZE, 0);
 
 #if CONFIG_WMM
 static void wifi_drv_tx_task(osa_task_param_t arg);
 
 /* OSA_TASKS: name, priority, instances, stackSz, useFloat */
-static OSA_TASK_DEFINE(wifi_drv_tx_task, CONFIG_NXP_WIFI_TX_TASK_PRIO, 1, CONFIG_NXP_WIFI_TX_TASK_STACK_SIZE, 0);
+static OSA_TASK_DEFINE(wifi_drv_tx_task, CONFIG_NXP_WIFI_TX_TASK_PRIO, 1, CONFIG_WIFI_DRV_TX_STACK_SIZE, 0);
 #endif
 
 int wifi_set_mac_multicast_addr(const char *mlist, t_u32 num_of_addr);

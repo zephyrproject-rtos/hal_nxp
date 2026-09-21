@@ -1791,6 +1791,7 @@ typedef enum _ENH_PS_MODES
 #define WLS_SUB_EVENT_ANQP_RESP_RECEIVED 3
 #define WLS_SUB_EVENT_RTT_RESULTS        4
 #define WLS_SUB_EVENT_FTM_FAIL           5
+#define WLS_SUB_EVENT_DISTANCE           6
 
 #endif
 
@@ -2533,6 +2534,12 @@ enum
     CHAN_BW_10MHZ,
     CHAN_BW_40MHZ,
     CHAN_BW_80MHZ,
+};
+/** scan mode */
+enum
+{
+    SCAN_MODE_MANUAL = 0,
+    SCAN_MODE_ACS,
 };
 /** ChanScanParamSet_t */
 typedef MLAN_PACK_START struct _ChanScanParamSet_t
@@ -5705,9 +5712,9 @@ typedef MLAN_PACK_START struct _HostCmd_DS_EXT_ANT_GAIN_CFG
     t_u8 band;
     /** Channel number */
     t_u8 channel;
-    /** Net antenna gain in dB */
+    /** Net antenna gain (antenna gain - path loss), in 0.25 dB step */
     t_s8 net_ant_gain;
-    /** Per-sub-band external antenna gains in dB */
+    /** Per-sub-band net antenna gains (antenna gain - path loss), in 0.25 dB step */
     t_s8 ext_ant_gain[WIFI_EXT_ANT_GAIN_MAX_SUBBAND];
 } MLAN_PACK_END HostCmd_DS_EXT_ANT_GAIN_CFG;
 #endif
@@ -7495,6 +7502,17 @@ typedef MLAN_PACK_START struct _wls_subevent_ftm_complete
     t_u32 meas_start_tsf;
 } MLAN_PACK_END wls_subevent_ftm_complete_t;
 
+/**Structure for FTM distance subevent*/
+typedef MLAN_PACK_START struct wls_subevent_ftm_distance
+{
+    /** distance in 32.8 meters */
+    t_u32 distance;
+    /** MAC address of the responder */
+    t_u8 mac[ETH_ALEN];
+    /** Measure start timestamp */
+    t_u32 meas_start_tsf;
+} MLAN_PACK_END wls_subevent_ftm_distance_t;
+
 /** Structure for FTM events*/
 typedef MLAN_PACK_START struct _wls_event_t
 {
@@ -7514,6 +7532,7 @@ typedef MLAN_PACK_START struct _wls_event_t
     {
         /** FTM Complete Sub event*/
         wls_subevent_ftm_complete_t ftm_complete;
+        wls_subevent_ftm_distance_t ftm_distance;
     } e;
 } MLAN_PACK_END wls_event_t;
 

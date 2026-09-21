@@ -2616,6 +2616,15 @@ int wifi_send_scan_cmd(t_u8 bss_mode,
         }
     }
 
+    /* Propagate scan type hint for full-band scans where neither
+     * BAND_SPECIFIED nor explicit channels carry it through. */
+    if (chan_list != MNULL &&
+        chan_list[0].scan_type != MLAN_SCAN_TYPE_UNCHANGED)
+    {
+        user_scan_cfg->chan_list[0].scan_type = chan_list[0].scan_type;
+        user_scan_cfg->chan_list[0].scan_time = chan_list[0].scan_time;
+    }
+
     if (active_scan_triggered)
     {
         mlan_adap->active_scan_triggered = MTRUE;
@@ -3145,7 +3154,7 @@ int wifi_set_ext_ant_gain(const int8_t *ext_ant_gain, const uint8_t num_subbands
     HostCmd_DS_EXT_ANT_GAIN_CFG cfg;
 
     if (ext_ant_gain == NULL || num_subbands == 0U ||
-        num_subbands > WIFI_EXT_ANT_GAIN_MAX_SUBBAND)
+        num_subbands > (WIFI_EXT_ANT_GAIN_MAX_SUBBAND - 1))
     {
         return -WM_FAIL;
     }
@@ -3155,6 +3164,8 @@ int wifi_set_ext_ant_gain(const int8_t *ext_ant_gain, const uint8_t num_subbands
     cfg.action = HostCmd_ACT_GEN_SET;
     (void)memcpy(cfg.ext_ant_gain, ext_ant_gain,
                  (size_t)num_subbands * sizeof(t_s8));
+    /* The last sub-band is not user-configurable; set to -128 (invalid) */
+    cfg.ext_ant_gain[WIFI_EXT_ANT_GAIN_MAX_SUBBAND - 1] = (t_s8)0x80;
 
     (void)wifi_get_command_lock();
     HostCmd_DS_COMMAND *cmd = wifi_get_command_buffer();
@@ -3188,7 +3199,7 @@ int wifi_get_ext_ant_gain(const uint8_t band, const uint8_t channel, int8_t *net
 
     if (band == BAND_2GHZ)
     {
-        if (wlan_find_cfp_by_band_and_channel(mlan_adap, BAND_G, channel) == NULL)
+        if (channel < 1 || channel > 14)
         {
             wifi_e("Channel %d is not valid for band 2.4GHz", channel);
             return -WM_E_INVAL;
@@ -3197,7 +3208,7 @@ int wifi_get_ext_ant_gain(const uint8_t band, const uint8_t channel, int8_t *net
 #if CONFIG_5GHz_SUPPORT
     else if (band == BAND_5GHZ)
     {
-        if (wlan_find_cfp_by_band_and_channel(mlan_adap, BAND_A, channel) == NULL)
+        if (channel < 36 || channel > 181)
         {
             wifi_e("Channel %d is not valid for band 5GHz", channel);
             return -WM_E_INVAL;
@@ -6951,6 +6962,7 @@ static int mlanwls_update_distance_to_gui(int distance, unsigned int tsf)
     unsigned int time_ms = tsf / 1000;
     float distance_flt   = 1.0f * distance / (1 << 8); // in meters
     float distance_kalman;
+    OSA_TimeDelay(10);
 
     if (range_input_str.time == 0)
     {

@@ -3370,7 +3370,7 @@ int wifi_process_cmd_response(HostCmd_DS_COMMAND *resp)
                         nxp_wifi_acs_params acs_params;
                         wm_wifi.cmd_resp_status = WM_SUCCESS;
 #ifndef SD8801
-                        wifi_d("ACS scan done: bandcfg=%x, channel=%d\r\n", acs_scan->bandcfg, acs_scan->chan);
+                        wifi_d("ACS scan done: bandcfg=%x, channel=%d\r\n", *(t_u8 *)&acs_scan->bandcfg, acs_scan->chan);
 #else
                         wifi_d("ACS scan done: bandcfg=0, channel=%d\r\n", acs_scan->chan);
 #endif
@@ -6796,8 +6796,11 @@ int wifi_handle_fw_event(struct bus_message *msg)
 #if CONFIG_WLS_CSI_PROC
             // wifi_get_wls_csi_sem(); // Get wls csi sem to prevent CSI event raw data from being overwritten before
             //  processing.
-            memcpy(wls_data, (t_u8 *)msg->data, WLS_CSI_DATA_LEN);
-            wifi_event_completion(WIFI_EVENT_WLS_CSI, WIFI_EVENT_REASON_SUCCESS, wls_data);
+            if (g_csi_event_for_wls)
+            {
+                memcpy(wls_data, (t_u8 *)msg->data, WLS_CSI_DATA_LEN);
+                wifi_event_completion(WIFI_EVENT_WLS_CSI, WIFI_EVENT_REASON_SUCCESS, wls_data);
+            }
 #endif
 #endif
         }
@@ -6961,7 +6964,8 @@ static void process_rsn_ie(t_u8 *rsn_ie,
 {
     t_u8 *temp;
     t_u16 count;
-    t_u16 group_cipher_count    = 0;
+    t_u16 ie_len                = 0;
+    t_u16 rsn_version           = 0;
     t_u16 pairwise_cipher_count = 0;
     t_u16 akm_suite_count       = 0;
     t_u16 rsn_cap               = 0;
@@ -6998,59 +7002,106 @@ static void process_rsn_ie(t_u8 *rsn_ie,
 
     if (rsn_ie[0] == (t_u8)RSN_IE)
     {
-        /* Do nothing */
+        /* RSN IE: rsn_ie[1] is IE body length (from Version onward). */
+        ie_len = rsn_ie[1];
     }
     else if (rsn_ie[0] == (t_u8)VENDOR_SPECIFIC_221 &&
              !memcmp(&rsn_ie[2], wfa_oui, sizeof(wfa_oui)) &&
              (rsn_ie[5] == MLAN_OUI_TYPE_RSNO || rsn_ie[5] == MLAN_OUI_TYPE_RSNO2))
     {
-        /* This is RSN Override or RSN Override 2 IE, move ptr to adapt RSN case */
+        /* RSN Override / RSN Override 2 IE.
+         * Original layout: [221][len][OUI 3B][type 1B][Version 2B][Group 4B]...
+         * Save body length before adjusting pointer; the suite content starts
+         * MLAN_RSNO_SUITE_OFFSET bytes into the body. */
+        if (rsn_ie[1] < MLAN_RSNO_SUITE_OFFSET)
+        {
+            goto done;
+        }
+        ie_len = rsn_ie[1] - MLAN_RSNO_SUITE_OFFSET;
         rsn_ie += MLAN_RSNO_SUITE_OFFSET;
     }
     else
     {
         goto done;
     }
-    /*  2 bytes header + 2 bytes version + 4 bytes group_cipher_suite +
-     *  2 bytes pairwise_cipher_count + pairwise_cipher_count *
-     * PAIRWISE_CIPHER_SUITE_LEN (4) + 2 bytes akm_suite_count +
-     * akm_suite_count * AKM_SUITE_LEN (4)
-     */
-    count              = *(t_u16 *)(void *)(rsn_ie + 2);
-    count              = wlan_le16_to_cpu(count);
-    group_cipher_count = count;
-    temp               = (t_u8 *)(rsn_ie + 2 + sizeof(t_u16));
+    /* RSN IE body layout (after pointer adjustment for RSNO/RSNO2).
+     * Per IEEE 802.11i-2004 §7.3.2.25 (Table 20e) /
+     * IEEE 802.11-2020 §9.4.2.24 (Table 9-264):
+     *
+     *   Offset  Size  Field
+     *   [2..3]  2B    Version              (fixed = 1; values 0 and >=2 reserved)
+     *   [4..7]  4B    Group Cipher Suite   (OUI 3B + type 1B; single suite, NO count field)
+     *   [8..9]  2B    Pairwise Cipher Suite Count
+     *   [10..]  4B*N  Pairwise Cipher Suite List
+     *           2B    AKM Suite Count
+     *           4B*M  AKM Suite List
+     *           2B    RSN Capabilities
+     *
+     * ie_len holds the body length starting from Version for all three paths
+     * (RSN IE, RSNO, RSNO2). */
 
-    while (count > 0U)
+    /* Validate Version field (applies to RSN IE, RSNO, and RSNO2; for RSNO/RSNO2
+     * the pointer has already been adjusted past the WFA OUI+type prefix).
+     * IEEE 802.11i-2004 §7.3.2.25 p.42 / IEEE 802.11-2020 §9.4.2.24:
+     *   "Values 0 and 2 or higher of the Version field are reserved.
+     *    RSN Version 1 is defined in this amendment."
+     * A non-1 Version indicates a malformed IE; skip processing. */
+    if (ie_len < 2U)
     {
-        if (!memcmp(temp, (const void *)wpa2_oui04, sizeof(wpa2_oui04)))
-        {
-            mcstCipher->ccmp = true;
-        }
-        else if (!memcmp(temp, (const void *)wpa2_oui02, sizeof(wpa2_oui02)))
-        {
-            mcstCipher->tkip = true;
-        }
-        else if (!memcmp(temp, (const void *)wpa3_oui05, sizeof(wpa3_oui05)))
-        {
-            mcstCipher->wep104 = true;
-        }
-        else if (!memcmp(temp, (const void *)wpa2_oui01, sizeof(wpa2_oui01)))
-        {
-            mcstCipher->wep40 = true;
-        }
-        else
-        { /* Do nothing */
-        }
-        count--;
-        temp += 4;
+        wifi_e("process_rsn_ie: ie body too short (len=%u)", ie_len);
+        goto done;
+    }
+    rsn_version = wlan_le16_to_cpu(*(t_u16 *)(void *)(rsn_ie + 2));
+    if (rsn_version != 1U)
+    {
+        wifi_e("process_rsn_ie: unsupported RSN version %u, skip AP", rsn_version);
+        goto done;
     }
 
-    count                 = *(t_u16 *)(void *)(rsn_ie + 2 + sizeof(t_u16) + (int)group_cipher_count * 4);
-    count                 = wlan_le16_to_cpu(count);
+    /* Group Cipher Suite: single fixed 4-byte entry at rsn_ie+4.
+     * There is NO Group Cipher Count field before it. */
+    if (ie_len < 6U)
+    {
+        goto done;
+    }
+    temp = (t_u8 *)(rsn_ie + 4);
+    if (!memcmp(temp, (const void *)wpa2_oui04, sizeof(wpa2_oui04)))
+    {
+        mcstCipher->ccmp = true;
+    }
+    else if (!memcmp(temp, (const void *)wpa2_oui02, sizeof(wpa2_oui02)))
+    {
+        mcstCipher->tkip = true;
+    }
+    else if (!memcmp(temp, (const void *)wpa3_oui05, sizeof(wpa3_oui05)))
+    {
+        mcstCipher->wep104 = true;
+    }
+    else if (!memcmp(temp, (const void *)wpa2_oui01, sizeof(wpa2_oui01)))
+    {
+        mcstCipher->wep40 = true;
+    }
+    else
+    { /* Do nothing */
+    }
+
+    /* Pairwise Cipher Suite Count at fixed offset rsn_ie+8:
+     *   2(ver) + 4(group) = 6 bytes of body => count at body offset 6 => rsn_ie+8 */
+    if (ie_len < 8U)
+    {
+        goto done;
+    }
+    count = wlan_le16_to_cpu(*(t_u16 *)(void *)(rsn_ie + 8));
+    if (count > 0U && (count * 4U) > (ie_len - 8U))
+    {
+        wifi_e("process_rsn_ie: invalid pairwise count %u (ie_len=%u)", count, ie_len);
+        goto done;
+    }
     pairwise_cipher_count = count;
 
-    temp = (t_u8 *)(rsn_ie + 2 + sizeof(t_u16) + (int)group_cipher_count * 4 + (int)sizeof(t_u16));
+    /* Pairwise list starts at rsn_ie+10:
+     *   2(ver) + 4(group) + 2(pw_count) = 8 bytes of body => rsn_ie+10 */
+    temp = (t_u8 *)(rsn_ie + 10);
 
     while (count > 0U)
     {
@@ -7069,13 +7120,23 @@ static void process_rsn_ie(t_u8 *rsn_ie,
         temp += 4;
     }
 
-    count           = *(t_u16 *)(void *)(rsn_ie + 2 + sizeof(t_u16) + (int)group_cipher_count * 4 + (int)sizeof(t_u16) +
-                               (int)pairwise_cipher_count * 4);
-    count           = wlan_le16_to_cpu(count);
+    /* AKM Suite Count at: rsn_ie+10 + pairwise_count*4
+     *   2(ver) + 4(group) + 2(pw_count) + pairwise*4 = rsn_ie+10+pairwise*4 */
+    if (ie_len < (10U + pairwise_cipher_count * 4U + 2U))
+    {
+        goto done;
+    }
+    count = wlan_le16_to_cpu(*(t_u16 *)(void *)(rsn_ie + 10 + (int)pairwise_cipher_count * 4));
+    if (count > 0U &&
+        (count * 4U) > (ie_len - 10U - pairwise_cipher_count * 4U - 2U))
+    {
+        wifi_e("process_rsn_ie: invalid akm count %u (ie_len=%u)", count, ie_len);
+        goto done;
+    }
     akm_suite_count = count;
 
-    temp = (t_u8 *)(rsn_ie + 2 + sizeof(t_u16) + (int)group_cipher_count * 4 + (int)sizeof(t_u16) +
-                    (int)pairwise_cipher_count * 4 + (int)sizeof(t_u16));
+    /* AKM list starts at rsn_ie+12 + pairwise_count*4 */
+    temp = (t_u8 *)(rsn_ie + 12 + (int)pairwise_cipher_count * 4);
 
     while (count > 0U)
     {
@@ -7142,9 +7203,14 @@ static void process_rsn_ie(t_u8 *rsn_ie,
         count--;
     }
 
-    rsn_cap = *(t_u16 *)(void *)(rsn_ie + 2 + sizeof(t_u16) + 4 * (int)sizeof(t_u8) + (int)sizeof(t_u16) +
-                                 (int)pairwise_cipher_count * 4 + (int)sizeof(t_u16) + (int)akm_suite_count * 4);
-    rsn_cap = (t_u16)wlan_le16_to_cpu(rsn_cap);
+    /* RSN Capabilities at: 2(ver) + 4(group) + 2(pw_count) + pw*4 + 2(akm_count) + akm*4
+     *                    = 10 + pw*4 + akm*4 bytes of body => rsn_ie + 12 + pw*4 + akm*4 */
+    if (ie_len < (12U + pairwise_cipher_count * 4U + akm_suite_count * 4U))
+    {
+        goto done;
+    }
+    rsn_cap = (t_u16)wlan_le16_to_cpu(
+        *(t_u16 *)(void *)(rsn_ie + 12 + (int)pairwise_cipher_count * 4 + (int)akm_suite_count * 4));
 
     (*ap_mfpc) |= ((rsn_cap & (0x1 << MFPC_BIT)) == (0x1 << MFPC_BIT));
     (*ap_mfpr) &= ((rsn_cap & (0x1 << MFPR_BIT)) == (0x1 << MFPR_BIT));
@@ -9401,8 +9467,8 @@ int wifi_roaming_clear_subscribe(void)
 #endif
 
 #if CONFIG_11MC
-static location_cfg_info_t g_ftm_location_cfg;
-static location_civic_rep_t g_ftm_civic_cfg;
+location_cfg_info_t g_ftm_location_cfg;
+location_civic_rep_t g_ftm_civic_cfg;
 
 void wlan_civic_ftm_cfg(location_civic_rep_t *ftm_civic_cfg)
 {
@@ -9468,7 +9534,9 @@ void wlan_dot11mc_ftm_cfg(void *p_buf, ftm_11mc_nego_cfg_t *ftm_11mc_nego_cfg)
         cmd->size += (cfg_11mc->civic_tlv.len + sizeof(t_u32)) + sizeof(t_u16);
     }
 
-    cmd->size = wlan_cpu_to_le16(cmd->size);
+    cmd->size                  = wlan_cpu_to_le16(cmd->size);
+    g_ftm_location_cfg.lci_req = 0;
+    g_ftm_civic_cfg.civic_req  = 0;
 }
 #endif
 
@@ -9601,6 +9669,16 @@ void wifi_ftm_process_event(void *p_data)
             wifi_d("WLS_SUB_EVENT_ANQP_RESP_RECEIVED\n");
             PRINTF("\nFTM Session Failed!\r\n");
             break;
+        case WLS_SUB_EVENT_DISTANCE:
+            distance = ftm_event->e.ftm_distance.distance / 256.0f;
+            wifi_d("================================\r\n");
+            wifi_d("FTM distance report (MAC %02X:%02X:%02X:%02X:%02X:%02X)\r\n",
+                   ftm_event->e.ftm_distance.mac[0], ftm_event->e.ftm_distance.mac[1],
+                   ftm_event->e.ftm_distance.mac[2], ftm_event->e.ftm_distance.mac[3],
+                   ftm_event->e.ftm_distance.mac[4], ftm_event->e.ftm_distance.mac[5]);
+            wifi_d("TSF: %x\r\n", ftm_event->e.ftm_distance.meas_start_tsf);
+            wifi_d("distance: %.2f meters\r\n", distance);
+            break;
         default:
             wifi_d("[ERROR] Unknown sub event\n");
             break;
@@ -9618,8 +9696,13 @@ void wifi_dump_driver_info()
     PRINTF("IMU TxFifoStatus: 0x%x, RxFifoStatus: 0x%x\r\n", ImuTxFifoStatus, ImuRxFifoStatus);
     PRINTF("IMU sleep grant flag: 0x%x\r\n", *sleep_flag);
 #else
-    uint32_t resp = 0;
     int ret;
+    mlan_adapter *pmadapter = mlan_adap;
+    if (pmadapter == NULL)
+    {
+        wifi_e("wifi_dump_driver_info: mlan_adap is NULL");
+        return;
+    }
 #if !CONFIG_MEM_POOLS
     t_u8 *mp_regs_buf = (t_u8 *)OSA_MemoryAllocate(MAX_MP_REGS + DMA_ALIGNMENT);
 #else
@@ -9630,8 +9713,12 @@ void wifi_dump_driver_info()
         return;
     }
 
+    PRINTF("SDIO: last_recv_wr_bitmap=0x%x, curr_wr_port=0x%x, last_recv_rd_bitmap=0x%x, curr_rd_port=0x%x\r\n",
+            pmadapter->last_recv_wr_bitmap, pmadapter->curr_wr_port,
+            pmadapter->last_recv_rd_bitmap, pmadapter->curr_rd_port);
+
     (void)wifi_sdio_lock();
-    ret = sdio_drv_read(REG_PORT | MLAN_SDIO_BYTE_MODE_MASK, 1, 1, MAX_MP_REGS, mp_regs_buf, &resp);
+    ret = sdio_drv_read(REG_PORT | MLAN_SDIO_BYTE_MODE_MASK, 1, 1, MAX_MP_REGS, mp_regs_buf);
     if (ret)
     {
         PRINTF("SDIO multiple port group registers value:\r\n");

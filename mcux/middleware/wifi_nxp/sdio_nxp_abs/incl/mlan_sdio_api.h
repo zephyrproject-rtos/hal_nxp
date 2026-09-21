@@ -90,10 +90,9 @@ int sdio_drv_creg_write(int addr, int fn, uint8_t data, uint32_t *resp);
  *  \param bcnt Number of blocks to be read
  *  \param bsize Size of each block
  *  \param buf Buffer to read the data into
- *  \param resp Response of CMD53
  *  \return true on success, false otherwise
  */
-int sdio_drv_read(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, uint8_t *buf, uint32_t *resp);
+int sdio_drv_read(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, uint8_t *buf);
 
 /** Write Data to SDIO
  *
@@ -105,10 +104,9 @@ int sdio_drv_read(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, uin
  *  \param bcnt Number of blocks to be written
  *  \param bsize Size of each block
  *  \param buf Buffer to write the data into
- *  \param resp Response of CMD53
  *  \return true on success, false otherwise
  */
-int sdio_drv_write(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, uint8_t *buf, uint32_t *resp);
+int sdio_drv_write(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, uint8_t *buf);
 
 #if CONFIG_TX_RX_ZERO_COPY
 /** SDIO Scatter and Gather DMA transfer apis
