@@ -1055,7 +1055,7 @@ typedef struct _mlan_uap_bss_param
     /** preamble type */
     t_u8 preamble_type;
     /** band cfg */
-    t_u8 band_cfg;
+    Band_Config_t band_cfg;
     /** channel */
     t_u8 channel;
     /** auth mode */

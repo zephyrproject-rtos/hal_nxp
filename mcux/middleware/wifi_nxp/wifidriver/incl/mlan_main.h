@@ -2221,6 +2221,10 @@ struct _mlan_adapter
     t_u32 mp_rd_bitmap;
     /** SDIO multiple port write bitmap */
     t_u32 mp_wr_bitmap;
+    /** last wr_bitmap from FW */
+    t_u32 last_recv_wr_bitmap;
+    /** last rd_bitmap from FW */
+    t_u32 last_recv_rd_bitmap;
     /** SDIO end port from txbufcfg */
     t_u16 mp_end_port;
     /** SDIO port mask calculated based on txbufcfg end port */

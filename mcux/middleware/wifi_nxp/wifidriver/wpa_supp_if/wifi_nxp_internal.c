@@ -120,8 +120,6 @@ void wifi_process_remain_on_channel(struct wifi_message *msg)
         if (remain_channel_info->cancel_channel == true)
         {
             wifi_if_ctx_rtos->remain_on_channel          = false;
-            wifi_if_ctx_rtos->remain_on_channel_freq     = 0;
-            wifi_if_ctx_rtos->remain_on_channel_duration = 0;
             if (wifi_if_ctx_rtos->remain_on_channel_cookie != 0)
             {
                 wm_wifi.supp_if_callbk_fns->remain_on_channel_callbk_fn(wifi_if_ctx_rtos, 1);
@@ -615,7 +613,7 @@ int wifi_setup_he_cap(nxp_wifi_he_capabilities *he_cap, t_u8 band)
     else
     {
         he_cap->phy_cap[6] &= ~MBIT(7);
-        wifi_d("Clear PPE threshold 0x%x\r\n", he_cap->phy_cap[7]);
+        supp_d("Clear PPE threshold 0x%x\r\n", he_cap->phy_cap[7]);
     }
 #ifdef ENABLE_802_116E
     if (band->band == BAND_6GHZ)

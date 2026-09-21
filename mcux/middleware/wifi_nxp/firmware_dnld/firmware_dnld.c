@@ -62,7 +62,6 @@ int32_t conn_download_decomp_fw(t_u8 *wlanfw_xz, t_u32 firmwarelen, t_u32 ioport
     t_u16 len    = 0;
     t_u32 offset = 0;
     t_u32 tries  = 0;
-    uint32_t resp;
     uint32_t outbuf_len;
     uint8_t *loutbuf = NULL :
 
@@ -149,7 +148,7 @@ int32_t conn_download_decomp_fw(t_u8 *wlanfw_xz, t_u32 firmwarelen, t_u32 ioport
 
         calculate_sdio_write_params(txlen, &tx_blocks, &buflen);
 
-        sdio_drv_write(ioport, 1, tx_blocks, buflen, (t_u8 *)loutbuf, &resp);
+        sdio_drv_write(ioport, 1, tx_blocks, buflen, (t_u8 *)loutbuf);
 
         if (ret == XZ_STREAM_END)
         {

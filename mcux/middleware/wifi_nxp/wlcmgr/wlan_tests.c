@@ -3982,12 +3982,13 @@ static void wlan_ext_ant_gain_set(int argc, char *argv[])
     uint8_t num;
     int i;
 
-    if (argc < 2 || (argc - 1) > WIFI_EXT_ANT_GAIN_MAX_SUBBAND)
+    if (argc < 2 || (argc - 1) > (WIFI_EXT_ANT_GAIN_MAX_SUBBAND - 1))
     {
         (void)PRINTF("Usage:\r\n");
         (void)PRINTF("wlan-set-ant-gain <gain0> [gain1 ... gainN]\r\n");
-        (void)PRINTF("  gains: per-sub-band net antenna gain in dB (int8)\r\n");
-        (void)PRINTF("  max sub-bands: %d\r\n", WIFI_EXT_ANT_GAIN_MAX_SUBBAND);
+        (void)PRINTF("  gains: per-sub-band net antenna gain (antenna gain - path loss),\r\n");
+        (void)PRINTF("         in 0.25 dB step, range [-127, 127] (-31.75 ~ +31.75 dBi)\r\n");
+        (void)PRINTF("  max sub-bands: %d\r\n", WIFI_EXT_ANT_GAIN_MAX_SUBBAND - 1);
         return;
     }
 
@@ -3997,9 +3998,9 @@ static void wlan_ext_ant_gain_set(int argc, char *argv[])
         char *endptr = NULL;
         errno = 0;
         long v = strtol(argv[i + 1], &endptr, 10);
-        if (errno != 0 || endptr == argv[i + 1] || *endptr != '\0' || v < -10 || v > 10)
+        if (errno != 0 || endptr == argv[i + 1] || *endptr != '\0' || v < -127 || v > 127)
         {
-            (void)PRINTF("Error: gain[%d] invalid or out of range [-10, 10]\r\n", i);
+            (void)PRINTF("Error: gain[%d] invalid or out of range [-127, 127]\r\n", i);
             return;
         }
         gains[i] = (int8_t)v;
@@ -4055,7 +4056,7 @@ static void wlan_ext_ant_gain_get(int argc, char *argv[])
     ret = wlan_get_ext_ant_gain(band, channel, &net_ant_gain);
     if (ret == WM_SUCCESS)
     {
-        (void)PRINTF("Band %d, channel %d: net antenna gain = %d dB\r\n",
+        (void)PRINTF("Band %d, channel %d: net antenna gain = %d (0.25 dB step)\r\n",
                      band, channel, net_ant_gain);
     }
     else

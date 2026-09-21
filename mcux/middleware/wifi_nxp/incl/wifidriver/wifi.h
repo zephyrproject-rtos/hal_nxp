@@ -1627,6 +1627,9 @@ int wifi_get_mc_cfg_ext(wifi_drcs_cfg_t *drcs, int num);
 int wifi_inject_frame(const enum wlan_bss_type bss_type, const uint8_t *buff, const size_t len);
 
 int wifi_supp_inject_frame(const unsigned int bss_type, const uint8_t *buff, const size_t len);
+
+t_u8 wifi_get_sec_channel_offset(unsigned int chan);
+
 #if CONFIG_WPA_SUPP
 void wifi_is_wpa_supplicant_input(const uint8_t interface, const uint8_t *buffer, const uint16_t len);
 void wifi_wpa_supplicant_eapol_input(const uint8_t interface,
@@ -1635,7 +1638,7 @@ void wifi_wpa_supplicant_eapol_input(const uint8_t interface,
                                      const uint16_t len);
 int wifi_nxp_get_wiphy(const unsigned int bss_type);
 int wifi_nxp_get_conn_info(uint16_t *beacon_interval, uint8_t *dtim_period, bool *twt_capable);
-t_u8 wifi_get_sec_channel_offset(unsigned int chan);
+
 int wifi_nxp_scan_res_get(void);
 int wifi_nxp_survey_res_get(void);
 int wifi_nxp_set_default_scan_ies(const u8 *ies, size_t ies_len);

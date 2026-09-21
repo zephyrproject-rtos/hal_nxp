@@ -158,14 +158,15 @@ static mlan_status wlan_uap_cmd_ap_config(pmlan_private pmpriv,
         tlv += sizeof(MrvlIEtypes_bcast_ssid_t);
     }
 
-    if ((((bss->param.bss_config.band_cfg & BAND_CONFIG_ACS_MODE) == BAND_CONFIG_MANUAL) &&
+
+    if (((bss->param.bss_config.band_cfg.scanMode == SCAN_MODE_MANUAL) &&
          (bss->param.bss_config.channel > 0U) && (bss->param.bss_config.channel <= MLAN_MAX_CHANNEL)) ||
-        (bss->param.bss_config.band_cfg & BAND_CONFIG_ACS_MODE))
+        (bss->param.bss_config.band_cfg.scanMode == SCAN_MODE_ACS))
     {
         tlv_chan_band              = (MrvlIEtypes_channel_band_t *)(void *)tlv;
         tlv_chan_band->header.type = wlan_cpu_to_le16(TLV_TYPE_UAP_CHAN_BAND_CONFIG);
         tlv_chan_band->header.len  = wlan_cpu_to_le16(sizeof(t_u8) + sizeof(t_u8));
-        tlv_chan_band->band_config = bss->param.bss_config.band_cfg;
+        (void)__memcpy(pmpriv->adapter, &tlv_chan_band->band_config, &bss->param.bss_config.band_cfg, sizeof(t_u8));
         tlv_chan_band->channel     = bss->param.bss_config.channel;
         cmd_size += sizeof(MrvlIEtypes_channel_band_t);
         tlv += sizeof(MrvlIEtypes_channel_band_t);

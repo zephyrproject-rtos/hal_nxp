@@ -236,13 +236,10 @@ int sdio_init(void)
                 (void)sdio_drv_creg_write(FN1_BLOCK_SIZE_1, 0, 0x0, &resp);
 
                 uint8_t buf[256];
-                ret = sdio_drv_read(0x10000, 1, rd_len, 8, buf, &resp);
+                ret = sdio_drv_read(0x10000, 1, rd_len, 8, buf);
                 if (!ret)
                 {
-                    sdio_io_e(
-                        "SDIO read failed, "
-                        "resp:%x",
-                        resp);
+                    sdio_io_e("SDIO read failed");
                     return -1;
                 }
             }

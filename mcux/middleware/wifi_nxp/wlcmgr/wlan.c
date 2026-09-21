@@ -349,7 +349,7 @@ static struct wifi_scan_params_t g_wifi_scan_params = {NULL,
 static void wlcmgr_task(osa_task_param_t arg);
 
 /* OSA_TASKS: name, priority, instances, stackSz, useFloat */
-static OSA_TASK_DEFINE(wlcmgr_task, CONFIG_NXP_WIFI_WLCMGR_TASK_PRIO, 1, CONFIG_NXP_WIFI_WLCMGR_TASK_STACK_SIZE, 0);
+static OSA_TASK_DEFINE(wlcmgr_task, CONFIG_NXP_WIFI_WLCMGR_TASK_PRIO, 1, CONFIG_WLCMGR_STACK_SIZE, 0);
 
 #if CONFIG_WPS2
 #define CONFIG_WPS_STACK_SIZE (5120)
@@ -409,7 +409,7 @@ static struct wps_config wps_conf = {
 static void wlcmgr_mon_task(osa_task_param_t arg);
 
 /* OSA_TASKS: name, priority, instances, stackSz, useFloat */
-static OSA_TASK_DEFINE(wlcmgr_mon_task, CONFIG_NXP_WIFI_MON_TASK_PRIO , 1, CONFIG_NXP_WIFI_MON_TASK_STACK_SIZE, 0);
+static OSA_TASK_DEFINE(wlcmgr_mon_task, CONFIG_NXP_WIFI_MON_TASK_PRIO , 1, CONFIG_WLCMGR_MON_STACK_SIZE, 0);
 
 /* The monitor thread event queue receives events from the power manager
  * wlan notifier when idle hook is invoked and host is ready to enter
@@ -4784,6 +4784,10 @@ static void wlcm_process_link_loss_event(struct wifi_message *msg,
             *next = CM_STA_IDLE;
         }
 
+#if CONFIG_11MC
+        g_ftm_civic_cfg.civic_req = 0;
+        g_ftm_location_cfg.lci_req = 0;
+#endif
         CONNECTION_EVENT(WLAN_REASON_LINK_LOST, NULL);
 #if CONFIG_ECSA
         wrapper_clear_media_connected_event();
@@ -7058,12 +7062,6 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
         case CM_STA_USER_REQUEST_DISCONNECT:
 #if CONFIG_WPA_SUPP
             nxp_supp_disconnect((void *)netif);
-#else
-            if ((network->role == WLAN_BSS_ROLE_STA) &&
-                (network->security.type != WLAN_SECURITY_NONE && network->security.type != WLAN_SECURITY_WEP_OPEN))
-            {
-                wifi_send_clear_wpa_psk((int)network->role, network->ssid);
-            }
 #endif
             if (wlan.cur_network_idx >= WLAN_MAX_KNOWN_NETWORKS)
             {
@@ -7076,6 +7074,13 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
             }
 
             wlcm_request_disconnect(&next, network);
+#if !CONFIG_WPA_SUPP
+            if ((network->role == WLAN_BSS_ROLE_STA) &&
+                (network->security.type != WLAN_SECURITY_NONE && network->security.type != WLAN_SECURITY_WEP_OPEN))
+            {
+                wifi_send_clear_wpa_psk((int)network->role, network->ssid);
+            }
+#endif
             break;
 
         case CM_STA_USER_REQUEST_SCAN:
@@ -7856,20 +7861,39 @@ static void wlan_init_ext_ant_gain(void)
 #ifdef __ZEPHYR__
 #if DT_NODE_EXISTS(DT_NODELABEL(wifi_antenna))
 #define WIFI_ANT_NODE DT_NODELABEL(wifi_antenna)
+
+#define ANT_GAIN_MIN  (-127)
+#define ANT_GAIN_MAX  ( 127)
+
+#define CHECK_ANT_GAIN(prop) \
+    BUILD_ASSERT( \
+        DT_PROP(WIFI_ANT_NODE, prop) >= ANT_GAIN_MIN && \
+        DT_PROP(WIFI_ANT_NODE, prop) <= ANT_GAIN_MAX, \
+        #prop " out of range [-127, 127] (unit: 0.25 dBi)" \
+    )
+
+CHECK_ANT_GAIN(antenna_gain_2ghz);
+CHECK_ANT_GAIN(antenna_gain_5ghz_sb1);
+CHECK_ANT_GAIN(antenna_gain_5ghz_sb2);
+CHECK_ANT_GAIN(antenna_gain_5ghz_sb3);
+CHECK_ANT_GAIN(antenna_gain_5ghz_sb4);
+
 #define WIFI_GAIN_2G  ((int8_t)DT_PROP_OR(WIFI_ANT_NODE, antenna_gain_2ghz, 0))
 #define WIFI_GAIN_SB1 ((int8_t)DT_PROP_OR(WIFI_ANT_NODE, antenna_gain_5ghz_sb1, 0))
 #define WIFI_GAIN_SB2 ((int8_t)DT_PROP_OR(WIFI_ANT_NODE, antenna_gain_5ghz_sb2, 0))
 #define WIFI_GAIN_SB3 ((int8_t)DT_PROP_OR(WIFI_ANT_NODE, antenna_gain_5ghz_sb3, 0))
+#define WIFI_GAIN_SB4 ((int8_t)DT_PROP_OR(WIFI_ANT_NODE, antenna_gain_5ghz_sb4, 0))
 
-    int8_t gains[WIFI_EXT_ANT_GAIN_MAX_SUBBAND];
+    int8_t gains[WIFI_EXT_ANT_GAIN_MAX_SUBBAND - 1];
 
     (void)memset(&gains[0], 0, sizeof(gains));
     gains[0] = WIFI_GAIN_2G;
     gains[1] = WIFI_GAIN_SB1;
     gains[2] = WIFI_GAIN_SB2;
     gains[3] = WIFI_GAIN_SB3;
+    gains[4] = WIFI_GAIN_SB4;
 
-    if (WM_SUCCESS != wlan_set_ext_ant_gain(gains, WIFI_EXT_ANT_GAIN_MAX_SUBBAND))
+    if (WM_SUCCESS != wlan_set_ext_ant_gain(gains, WIFI_EXT_ANT_GAIN_MAX_SUBBAND - 1))
     {
         wlcm_e("Antenna gain set failed");
     }
@@ -8488,6 +8512,7 @@ int wlan_stop(void)
     int check_interval  = 200;  /* millisecs */
     int num_iterations  = total_wait_time / check_interval;
 #endif
+
     if (wlan.status != WLCMGR_ACTIVATED)
     {
         wlcm_e("cannot stop wlcmgr. unexpected status: %d", wlan.status);
@@ -8638,6 +8663,10 @@ int wlan_stop(void)
 
 #if CONFIG_WMM_UAPSD
     OSA_SemaphoreDestroy((osa_semaphore_handle_t)uapsd_sem);
+#endif
+#if CONFIG_11MC
+    g_ftm_civic_cfg.civic_req = 0;
+    g_ftm_location_cfg.lci_req = 0;
 #endif
     return ret;
 }

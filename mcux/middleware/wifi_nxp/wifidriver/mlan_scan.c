@@ -485,10 +485,19 @@ static t_void wlan_scan_create_channel_list(IN mlan_private *pmpriv,
         }
         for (next_chan = 0; next_chan < pscan_region->num_cfp; next_chan++)
         {
-            /* Set the default scan type to the user specified type, will later
-               be changed to passive on a per channel basis if restricted by
-               regulatory requirements (11d or 11h) */
-            scan_type = pmadapter->scan_type;
+            /* Honor user-requested scan type when provided (e.g. passive scan
+               without explicit channel list). Fall back to adapter default
+               otherwise. Regulatory requirements (11d/11h) may still override
+               this on a per-channel basis below. */
+            if ((puser_scan_in != MNULL) &&
+                puser_scan_in->chan_list[0].scan_type != MLAN_SCAN_TYPE_UNCHANGED)
+            {
+                scan_type = puser_scan_in->chan_list[0].scan_type;
+            }
+            else
+            {
+                scan_type = pmadapter->scan_type;
+            }
             cfp       = pscan_region->pcfp + next_chan;
             if ((cfp->dynamic.flags & NXP_CHANNEL_DISABLED) != 0U)
             {
@@ -507,7 +516,12 @@ static t_void wlan_scan_create_channel_list(IN mlan_private *pmpriv,
                         if (pmadapter->skip_dfs)
                             continue;
 #if defined(RW610) || defined(SD9177) || defined(SD8978) || defined(IW610)
-                        scan_type = MLAN_SCAN_TYPE_PASSIVE_TO_ACTIVE;
+                        /* If user explicitly requested passive scan, honor it.
+                         * Only use passive-to-active for default/active scans. */
+                        if (scan_type != MLAN_SCAN_TYPE_PASSIVE)
+                        {
+                            scan_type = MLAN_SCAN_TYPE_PASSIVE_TO_ACTIVE;
+                        }
 #else
                         scan_type = MLAN_SCAN_TYPE_PASSIVE;
 #endif
@@ -1378,7 +1392,12 @@ static mlan_status wlan_scan_setup_scan_config(IN mlan_private *pmpriv,
                         if (pmadapter->skip_dfs)
                             continue;
 #if defined(RW610) || defined(SD9177) || defined(SD8978) || defined(IW610)
-                        scan_type = MLAN_SCAN_TYPE_PASSIVE_TO_ACTIVE;
+                        /* If user explicitly requested passive scan, honor it.
+                         * Only use passive-to-active for default/active scans. */
+                        if (scan_type != MLAN_SCAN_TYPE_PASSIVE)
+                        {
+                            scan_type = MLAN_SCAN_TYPE_PASSIVE_TO_ACTIVE;
+                        }
 #else
                         scan_type = MLAN_SCAN_TYPE_PASSIVE;
 #endif

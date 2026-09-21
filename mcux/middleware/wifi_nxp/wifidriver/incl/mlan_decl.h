@@ -146,7 +146,9 @@ Change log:
 
 /** Default Win size attached during ADDBA response */
 #ifndef MLAN_UAP_AMPDU_DEF_RXWINSIZE
-#if defined(SD9177) && !defined(COEX_APP_SUPPORT)
+#if CONFIG_WIFI_SLIM
+#define MLAN_UAP_AMPDU_DEF_RXWINSIZE 16
+#elif defined(SD9177) && !defined(COEX_APP_SUPPORT)
 #define MLAN_UAP_AMPDU_DEF_RXWINSIZE 64
 #else
 #define MLAN_UAP_AMPDU_DEF_RXWINSIZE 32
@@ -261,9 +263,6 @@ typedef t_u8 mlan_802_11_mac_addr[MLAN_MAC_ADDR_LENGTH];
 #define MLAN_SDIO_IO_PORT_MASK 0xfffff
 /** SDIO Block/Byte mode mask */
 #define MLAN_SDIO_BYTE_MODE_MASK 0x80000000U
-
-/** Max retry number of IO write */
-#define MAX_READ_IOMEM_RETRY 2
 
 /** IN parameter */
 #define IN

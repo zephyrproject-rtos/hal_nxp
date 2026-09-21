@@ -244,7 +244,6 @@ static fwdnld_intf_ret_t sdio_interface_send(fwdnld_intf_t *intf,
     uint32_t tx_blocks = 0, txlen = 0, buflen = 0, offset = 0;
     uint32_t outbuf_len;
     uint8_t *loutbuf = NULL;
-    uint32_t resp;
     uint32_t tries        = 0, ioport;
     fwdnld_intf_ret_t ret = FWDNLD_INTF_SUCCESS;
 
@@ -312,7 +311,7 @@ static fwdnld_intf_ret_t sdio_interface_send(fwdnld_intf_t *intf,
         ioport = GET_INTF_SDIO_IOPORT(intf);
         (void)memcpy((void *)loutbuf, (const void *)(buffer + offset), txlen);
         calculate_sdio_write_params(txlen, (unsigned int *)&tx_blocks, (unsigned int *)&buflen);
-        (void)sdio_drv_write(ioport, 1, tx_blocks, buflen, (uint8_t *)loutbuf, &resp);
+        (void)sdio_drv_write(ioport, 1, tx_blocks, buflen, (uint8_t *)loutbuf);
 
         if (*len <= transfer_len)
         {

@@ -51,41 +51,50 @@ int sdio_drv_creg_write(int addr, int fn, uint8_t data, uint32_t *resp)
     return 1;
 }
 
-int sdio_drv_read(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, uint8_t *buf, uint32_t *resp)
-{
-    struct sdio_func *func = &g_sdio_funcs[fn];
-
-    if (sdio_read_addr(func, addr, buf, bcnt * bsize) != 0)
-    {
-        return 0;
-    }
-
-    return 1;
-}
-
-int sdio_drv_write(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, uint8_t *buf, uint32_t *resp)
+int sdio_drv_read(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, uint8_t *buf)
 {
     struct sdio_func *func = &g_sdio_funcs[fn];
     uint32_t sd_retry = 0;
     uint32_t sd_status = 0;
 
-retry:
-    if (sdio_write_addr(func, addr, buf, bcnt * bsize) != 0)
+    do
     {
+        if (sdio_read_addr(func, addr, buf, bcnt * bsize) == 0)
+        {
+            return 1;
+        }
         /* issue abort cmd52 command through Fn0 */
         (void)sdio_drv_creg_write(IO_ABORT, 0, 0x01, &sd_status);
         /* issue terminate CMD53 */
         (void)sdio_drv_creg_write(HOST_TO_CARD_EVENT_REG, 1, HOST_TERM_CMD53, &sd_status);
+    } while (sd_retry++ < MAX_WRITE_IOMEM_RETRY);
 
-        if (sd_retry < MAX_WRITE_IOMEM_RETRY)
+    return 0;
+}
+
+int sdio_drv_write(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, uint8_t *buf)
+{
+    struct sdio_func *func = &g_sdio_funcs[fn];
+    uint32_t sd_retry = 0;
+    uint32_t sd_status = 0;
+
+    do
+    {
+        if (sdio_write_addr(func, addr, buf, bcnt * bsize) == 0)
         {
-            sd_retry++;
-            goto retry;
+            return 1;
         }
-        return 0;
-    }
+        /* issue abort cmd52 command through Fn0 */
+        (void)sdio_drv_creg_write(IO_ABORT, 0, 0x01, &sd_status);
+        /* issue terminate CMD53 */
+        (void)sdio_drv_creg_write(HOST_TO_CARD_EVENT_REG, 1, HOST_TERM_CMD53, &sd_status);
+#if defined(SD9177)
+        /* This is a WAR, TODO: RCA for sdio failure is needed */
+        OSA_TimeDelay(1);
+#endif
+    } while (sd_retry++ < MAX_WRITE_IOMEM_RETRY);
 
-    return 1;
+    return 0;
 }
 
 #if CONFIG_TX_RX_ZERO_COPY
@@ -154,25 +163,7 @@ static int sdio_drv_request_sg(uint32_t reg_addr,
     return ret;
 }
 
-int sdio_drv_read_sg(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, void *sg_list)
-{
-    struct net_buf *buf;
-
-    buf = sg_to_net_buf(sg_list);
-    if (!buf)
-    {
-        return 0;
-    }
-
-    if (sdio_drv_request_sg(addr, fn, bcnt, bsize, (void *)buf, SDIO_IO_READ) != 0)
-    {
-        return 0;
-    }
-
-    return 1;
-}
-
-int sdio_drv_write_sg(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, void *sg_list)
+static int sdio_drv_xfer_sg(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, void *sg_list, int direction)
 {
     uint32_t sd_retry = 0;
     uint32_t sd_status = 0;
@@ -184,23 +175,29 @@ int sdio_drv_write_sg(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize,
         return 0;
     }
 
-retry:
-    if (sdio_drv_request_sg(addr, fn, bcnt, bsize, (void *)buf, SDIO_IO_WRITE) != 0)
+    do
     {
+        if (sdio_drv_request_sg(addr, fn, bcnt, bsize, (void *)buf, direction) == 0)
+        {
+            return 1;
+        }
         /* issue abort cmd52 command through Fn0 */
         (void)sdio_drv_creg_write(IO_ABORT, 0, 0x01, &sd_status);
         /* issue terminate CMD53 */
         (void)sdio_drv_creg_write(HOST_TO_CARD_EVENT_REG, 1, HOST_TERM_CMD53, &sd_status);
+    } while (sd_retry++ < MAX_WRITE_IOMEM_RETRY);
 
-        if (sd_retry < MAX_WRITE_IOMEM_RETRY)
-        {
-            sd_retry++;
-            goto retry;
-        }
-        return 0;
-    }
+    return 0;
+}
 
-    return 1;
+int sdio_drv_read_sg(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, void *sg_list)
+{
+    return sdio_drv_xfer_sg(addr, fn, bcnt, bsize, sg_list, SDIO_IO_READ);
+}
+
+int sdio_drv_write_sg(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, void *sg_list)
+{
+    return sdio_drv_xfer_sg(addr, fn, bcnt, bsize, sg_list, SDIO_IO_WRITE);
 }
 #endif
 
