@@ -169,7 +169,7 @@ typedef MLAN_PACK_START enum _IEEEtypes_ElementId_e {
     WMM_IE              = VENDOR_SPECIFIC_221,
 
     WPS_IE = VENDOR_SPECIFIC_221,
-
+    P2P_IE    = VENDOR_SPECIFIC_221,
     WPA_IE    = VENDOR_SPECIFIC_221,
     RSN_IE    = 48,
     VS_IE     = VENDOR_SPECIFIC_221,

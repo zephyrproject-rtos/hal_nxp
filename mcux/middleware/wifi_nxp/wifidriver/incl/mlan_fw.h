@@ -1295,9 +1295,9 @@ typedef MLAN_PACK_START struct _MrvlIEtypes_fw_cap_info_t
 #define HostCmd_CMD_CONFIG_GTK_REKEY_OFFLOAD_CFG 0x010f
 #endif
 
-#ifdef WIFI_DIRECT_SUPPORT
+#if CONFIG_WPA_SUPP_P2P
 /** Host Command ID: WIFI_DIRECT_MODE_CONFIG */
-#define HOST_CMD_WIFI_DIRECT_MODE_CONFIG 0x00eb
+#define HostCmd_CMD_WIFI_DIRECT_MODE_CONFIG 0x00eb
 #endif
 /** Host Command ID: Remain On Channel */
 #define HostCmd_CMD_802_11_REMAIN_ON_CHANNEL 0x010d
@@ -4463,12 +4463,7 @@ typedef MLAN_PACK_START struct _HostCmd_DS_802_11_RF_TX_POWER
 #define CONNECTION_TYPE_INFRA 0
 /** Connection type adhoc */
 #define CONNECTION_TYPE_ADHOC 1
-#ifdef WIFI_DIRECT_SUPPORT
-/** BSS Mode: WIFIDIRECT Client */
-#define BSS_MODE_WIFIDIRECT_CLIENT 0
-/** BSS Mode: WIFIDIRECT GO */
-#define BSS_MODE_WIFIDIRECT_GO 2
-#endif
+
 /** HostCmd_DS_SET_BSS_MODE */
 typedef MLAN_PACK_START struct _HostCmd_DS_SET_BSS_MODE
 {
@@ -4492,17 +4487,6 @@ typedef MLAN_PACK_START struct _HostCmd_DS_REMAIN_ON_CHANNEL
     /** remain time: Unit ms*/
     t_u32 remain_period;
 } MLAN_PACK_END HostCmd_DS_REMAIN_ON_CHANNEL;
-
-#ifdef WIFI_DIRECT_SUPPORT
-/** HostCmd_DS_WIFI_DIRECT_MODE */
-typedef MLAN_PACK_START struct _HostCmd_DS_WIFI_DIRECT_MODE
-{
-    /** Action 0-GET, 1-SET*/
-    t_u16 action;
-    /**0:disable 1:listen 2:GO 3:p2p client 4:find 5:stop find*/
-    t_u16 mode;
-} MLAN_PACK_END HostCmd_DS_WIFI_DIRECT_MODE;
-#endif
 
 #ifdef STA_SUPPORT
 
@@ -5476,17 +5460,6 @@ typedef MLAN_PACK_START struct _MrvlIETypes_OperModeNtf_t
     t_u8 oper_mode;
 } MLAN_PACK_END MrvlIETypes_OperModeNtf_t;
 
-#ifdef WIFI_DIRECT_SUPPORT
-/** MrvlIEtypes_psk_t */
-typedef MLAN_PACK_START struct _MrvlIEtypes_psk_t
-{
-    /** Header */
-    MrvlIEtypesHeader_t header;
-    /** PSK */
-    t_u8 psk[MLAN_MAX_KEY_LENGTH];
-} MLAN_PACK_END MrvlIEtypes_psk_t;
-#endif /* WIFI_DIRECT_SUPPORT */
-
 /** MrvlIEtypes_PMK_t */
 typedef MLAN_PACK_START struct _MrvlIEtypes_PMK_t
 {
@@ -6107,11 +6080,6 @@ typedef MLAN_PACK_START struct _HostCmd_DS_ExtBLECoex_Config_t
 #if UAP_SUPPORT
 /** TLV type : WPA3 SAE Passowrd */
 #define TLV_TYPE_UAP_WPA3_SAE_PASSWORD (PROPRIETARY_TLV_BASE_ID + 0x141) // 0x0241
-
-#ifdef WIFI_DIRECT_SUPPORT
-/** TLV type : AP PSK */
-#define TLV_TYPE_UAP_PSK (PROPRIETARY_TLV_BASE_ID + 0xa8) // 0x01a8
-#endif                                                    /* WIFI_DIRECT_SUPPORT */
 
 /** MrvlIEtypes_AutoLinkParamSet_t */
 typedef MLAN_PACK_START struct _MrvlIEtypes_AutoLinkParamSet_t
@@ -8038,6 +8006,22 @@ typedef MLAN_PACK_START struct _HostCmd_DS_80211_TX_FRAME
     t_u8 buffer[];
 } MLAN_PACK_END HostCmd_DS_80211_TX_FRAME;
 
+#if CONFIG_WPA_SUPP_P2P
+/** BSS Mode: WIFIDIRECT Client */
+#define BSS_MODE_WIFIDIRECT_CLIENT 0
+/** BSS Mode: WIFIDIRECT GO */
+#define BSS_MODE_WIFIDIRECT_GO 2
+
+/** HostCmd_DS_WIFI_DIRECT_MODE */
+typedef MLAN_PACK_START struct _HostCmd_DS_WIFI_DIRECT_MODE
+{
+    /** Action 0-GET, 1-SET*/
+    t_u16 action;
+    /**0:disable 1:listen 2:GO 3:p2p client 4:find 5:stop find*/
+    t_u16 mode;
+} MLAN_PACK_END HostCmd_DS_WIFI_DIRECT_MODE;
+#endif
+
 /** HostCmd_DS_COMMAND */
 /* Note in case the fixed header of 8 bytes is modified please modify WIFI_HOST_CMD_FIXED_HEADER_LEN too */
 typedef MLAN_PACK_START struct _HostCmd_DS_COMMAND
@@ -8262,7 +8246,7 @@ typedef MLAN_PACK_START struct _HostCmd_DS_COMMAND
         HostCmd_DS_SET_BSS_MODE bss_mode;
         HostCmd_DS_CMD_TX_DATA_PAUSE tx_data_pause;
         HostCmd_DS_REMAIN_ON_CHANNEL remain_on_chan;
-#ifdef WIFI_DIRECT_SUPPORT
+#if CONFIG_WPA_SUPP_P2P
         HostCmd_DS_WIFI_DIRECT_MODE wifi_direct_mode;
 #endif
 #ifdef WLAN_LOW_POWER_ENABLE
