@@ -477,6 +477,23 @@ class NXPSdkUtil:
         logging.info("Loaded XML for %s", self._part_num)
 
         periphs_node = signal_root.find("peripherals")
+        if periphs_node is None:
+            # Some variants (typically ones differing from a sibling variant
+            # only in temperature/speed grade) ship a signal_configuration.xml
+            # with no inline pin data, and instead point at a sibling
+            # variant's file via a <reference file="..."/> element (path
+            # relative to this file's parent directory, e.g.
+            # "MCXN235VKL/signal_configuration.xml"). Resolve it and parse
+            # the referenced file for the pin/peripheral data, while keeping
+            # this file's own part number.
+            reference_node = signal_root.find("reference")
+            if reference_node is None:
+                logging.error("No peripherals or reference node found in %s", signal_fn)
+                return
+            ref_fn = signal_fn.parent.parent / reference_node.get('file')
+            signal_root = ET.parse(ref_fn).getroot()
+            periphs_node = signal_root.find("peripherals")
+
         periphs = []
         for pin in periphs_node:
             pin_id = pin.attrib.get("id")

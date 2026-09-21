@@ -11,7 +11,7 @@
  * below (22 removed, 0 changed,
  * 0 added). Regenerate with dedup_pinctrl.py;
  * do not edit by hand.
- * target-hash: 032d9fd64d5a6002
+ * target-hash: 47bd448f730443d5
  */
 
 #ifndef _ZEPHYR_DTS_BINDING_MCXA457VPN_WRAPPER_
