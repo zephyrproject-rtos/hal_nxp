@@ -124,11 +124,11 @@ blobs:
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller/raw/refs/heads/release/26.09.00-pvw2/bin/mcxw72_nbu_ble_hosted.bin
     description: "BLE Controller for MCXW72 boards"
   - path: mcxw70/mcxw70_nbu_dyn_reduced.sb4
-    sha256: e6ef703810e67c98a3c428ce9f5774e614433cc0ab927a6ffc38ac0c0bfeb4d5
+    sha256: 3d0b6a254454f511747ba9661c1d799c27780f20e79cb874bc21cb367d0d0fdb
     type: img
     version: '26.09.00-pvw2'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/26.09.00-pvw2/bin/mcxw70/mcxw70_nbu_dyn_reduced.sb4
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/26.09.00/bin/mcxw70/mcxw70_nbu_dyn_reduced.sb4
     description: "Minimal BLE Controller and IEEE 802.15.4 MAC & PHY combo firmware for MCXW70 boards"
   - path: mcxw71/mcxw71_nbu_dyn_reduced.sb3
     sha256: 1936151e66c019e09554b771c7eae53034d0fe3d97b66113b7990255255972cb
