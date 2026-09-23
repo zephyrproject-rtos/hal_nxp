@@ -64,7 +64,7 @@ static const country_code_mapping_t country_code_mapping[] = {
     {"CA", 0x10, 0x20}, /* IC Canada */
     {"SG", 0x10, 0x10}, /* Singapore */
     {"EU", 0x30, 0x30}, /* ETSI */
-    {"AU", 0x30, 0x30}, /* Australia */
+    {"AU", 0x30, 0x20}, /* Australia */
     {"KR", 0x30, 0x30}, /* Republic Of Korea */
     {"FR", 0x32, 0x32}, /* France */
     {"JP", 0xFF, 0x40}, /* Japan */
