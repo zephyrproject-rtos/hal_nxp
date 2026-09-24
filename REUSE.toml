@@ -1,0 +1,63 @@
+# SPDX-FileCopyrightText: Copyright The Zephyr Project Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# REUSE.toml — REUSE Specification 3.3 bulk annotations for binary blobs
+# https://reuse.software/spec-3.3/
+#
+# This file provides SPDX license and copyright metadata for west-fetched
+# binary blobs (zephyr/blobs/), which cannot carry in-file SPDX tags.
+# License text is taken from the blob license-path in zephyr/module.yml.
+# Paths below do not overlap (REUSE combines overlapping annotations with AND).
+# In-file tags always take precedence over entries below (REUSE spec §3.3).
+#
+# Licenses referenced here must have their full text under LICENSES/.
+
+version = 1
+
+# ---------------------------------------------------------------------------
+# Binary blobs — NXP Software License (LA_OPT_NXP_Software_License)
+# ---------------------------------------------------------------------------
+[[annotations]]
+path = [
+  "zephyr/blobs/libcsi/**",
+  "zephyr/blobs/rw61x/**",
+  "zephyr/blobs/nw61x/**",
+  "zephyr/blobs/IW416/**",
+  "zephyr/blobs/IW610/**",
+  "zephyr/blobs/imx-boot-firmware/**",
+  "zephyr/blobs/mcxw70/mcxw70_nbu_dyn_reduced.sb4",
+  "zephyr/blobs/mcxw71/mcxw71_nbu_dyn_reduced.sb3",
+  "zephyr/blobs/mcxw71/libieee/**",
+  "zephyr/blobs/mcxw72/mcxw72_nbu_dyn_reduced.bin",
+  "zephyr/blobs/mcxw72/mcxw72_nbu_dyn_full.bin",
+  "zephyr/blobs/mcxw72/libieee/**",
+  "zephyr/blobs/license/LA_OPT_NXP_Software_License.txt",
+]
+SPDX-FileCopyrightText = "Copyright (c) NXP"
+SPDX-License-Identifier = "LicenseRef-NXP-Software-License"
+
+# ---------------------------------------------------------------------------
+# Binary blobs — NXP Online Code Hosting Software License
+# (mcxw23 BLE controller libs; mcxw70/71/72 hosted BLE controller images)
+# ---------------------------------------------------------------------------
+[[annotations]]
+path = [
+  "zephyr/blobs/mcxw23/**",
+  "zephyr/blobs/mcxw70/mcxw70_nbu_ble.sb4",
+  "zephyr/blobs/mcxw71/mcxw71_nbu_ble.sb3",
+  "zephyr/blobs/mcxw72/mcxw72_nbu_ble_all_hosted.bin",
+  "zephyr/blobs/license/LA_OPT_NXP_Online_Code_Hosting.txt",
+]
+SPDX-FileCopyrightText = "Copyright (c) NXP"
+SPDX-License-Identifier = "LicenseRef-NXP-Online-Code-Hosting"
+
+# ---------------------------------------------------------------------------
+# Binary blobs — BSD-3-Clause (Neutron NPU)
+# ---------------------------------------------------------------------------
+[[annotations]]
+path = [
+  "zephyr/blobs/neutron/**",
+  "zephyr/blobs/license/BSD_3.txt",
+]
+SPDX-FileCopyrightText = "Copyright (c) NXP"
+SPDX-License-Identifier = "BSD-3-Clause"
