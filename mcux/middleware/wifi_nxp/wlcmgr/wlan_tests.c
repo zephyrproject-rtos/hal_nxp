@@ -8,6 +8,7 @@
  *
  */
 
+#include <stdlib.h>
 #include <string.h>
 #include <osa.h>
 #include <nxp_wifi_net.h> /* for net_inet_aton */
