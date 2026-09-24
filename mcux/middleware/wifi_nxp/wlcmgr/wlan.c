@@ -2098,7 +2098,13 @@ static int do_connect(int netindex)
 }
 #endif
 
-#if !CONFIG_WIFI_NM_WPA_SUPPLICANT && UAP_SUPPORT
+#if !CONFIG_WIFI_NM_WPA_SUPPLICANT
+static void wlan_set_ssid_protection(bool enable, enum wlan_bss_type bss_type)
+{
+    wifi_set_ssid_protection(enable, bss_type);
+}
+
+#if UAP_SUPPORT
 static int do_start(struct wlan_network *network)
 {
     int ret = 0;
@@ -2241,6 +2247,8 @@ static int do_start(struct wlan_network *network)
             wifi_uap_set_bandwidth(BANDWIDTH_20MHZ);
         }
 
+        wlan_set_ssid_protection(network->ssid_protection, WLAN_BSS_TYPE_UAP);
+
         ret = wifi_uap_start((mlan_bss_type)network->type, network->ssid,
 #if CONFIG_P2P
                              wlan.wfd_mac,
@@ -2329,7 +2337,8 @@ static int do_stop(struct wlan_network *network)
 
     return WM_SUCCESS;
 }
-#endif /* !CONFIG_WIFI_NM_WPA_SUPPLICANT && UAP_SUPPORT */
+#endif /* UAP_SUPPORT */
+#endif /* !CONFIG_WIFI_NM_WPA_SUPPLICANT */
 
 /* A connection attempt has failed for 'reason', decide whether to try to
  * connect to another network (in that case, tell the state machine to
@@ -6576,6 +6585,10 @@ static void wlcm_request_connect(struct wifi_message *msg, enum cm_sta_state *ne
 #endif /* CONFIG_WLAN_FAST_PATH */
 
     (void)wlan_set_pmfcfg((t_u8)new_network->security.mfpc, (t_u8)new_network->security.mfpr);
+
+#if !CONFIG_WPA_SUPP
+    wlan_set_ssid_protection(new_network->ssid_protection, WLAN_BSS_TYPE_STA);
+#endif
 
     if ((wlan.roam_reassoc == false) && (wlan.sta_state >= CM_STA_ASSOCIATING))
     {
