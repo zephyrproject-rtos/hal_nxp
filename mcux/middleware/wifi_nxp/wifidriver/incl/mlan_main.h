@@ -1678,6 +1678,7 @@ struct _mlan_private
     /** configured by DPP */
     bool is_dpp_connect;
 #endif
+    bool ssid_protection;
 };
 
 /** BA stream status */
