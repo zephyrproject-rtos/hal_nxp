@@ -1,8 +1,0 @@
-name: rpmsg-lite
-build:
-  cmake: ./zephyr/
-  kconfig: ./zephyr/Kconfig
-samples:
-  - ./zephyr/samples
-tests:
-  - ./zephyr/tests
