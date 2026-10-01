@@ -10,21 +10,21 @@ blobs:
     sha256: 80b3e7e5b8eff2575d65fe954d7d17e82962302391dc5302122f622e9c421478
     type: lib
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.3/libcsi/cm33/libcsi.a
     description: "csi library for cortex-cm33, toolchain use zephyr-sdk-0.17.4"
   - path: libcsi/cm7/cm7f/libcsi.a
     sha256: 181167df6ca8ba2f8e451dafa137d2fd869ad56280d2e5668c1306cb05293952
     type: lib
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.3/libcsi/cm7/cm7f/libcsi.a
     description: "csi library for cortex-m7 non-20M chip, toolchain use zephyr-sdk-0.17.4"
   - path: libcsi/cm7/cm7f_sta_20_only/libcsi.a
     sha256: 5bc634273bc559d65110f8bebfeb108c845c35f52171af4f6e6d88a4ac2d7335
     type: lib
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.3/libcsi/cm7/cm7f_sta_20_only/libcsi.a
     description: "csi library for cortex-m7 20M chip, toolchain use zephyr-sdk-0.17.4"
 
@@ -33,7 +33,7 @@ blobs:
     sha256: 2efac0d771e371377d57159c40f0909c7ecc6f6b950ce69ed2a3e02ac7eb686a
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.3/rw61x/rw61x_sb_ble_15d4_combo_a2.bin
     description: "BLE and 15.4 combo firmware for RW612 A2 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -41,7 +41,7 @@ blobs:
     sha256: 66e96dadd8aa9429c1e4ae99fbc128623065eda0fa88c34f697cd6e26ba58b16
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.3/rw61x/rw61x_sb_ble_15d4_combo_a2_compressed.bin
     description: "BLE and 15.4 combo firmware for RW612 A2 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -49,7 +49,7 @@ blobs:
     sha256: 5482324fd26ee61529316e99ac44f6ad8b73f6f108f4c6d3f24388785aa18797
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.3/rw61x/rw61x_sb_ble_a2.bin
     description: "BLE firmware for RW612 A2 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -57,7 +57,7 @@ blobs:
     sha256: ee6a0a2c92c8058ec42c1fd02a415af8cacd5eca4343800322d2f3303e43dec7
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.3/rw61x/rw61x_sb_ble_a2_compressed.bin
     description: "BLE firmware for RW612 A2 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -65,7 +65,7 @@ blobs:
     sha256: deaf82a348d11cf92bff1fcf9aa080c6db82e5ff3b6a78528262dc16899d2980
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.3/rw61x/rw61x_sb_wifi_a2.bin
     description: "WiFi firmware for RW612 A2 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -73,7 +73,7 @@ blobs:
     sha256: d35688c7ff6ee370e856f5c9bd134d4cc18db9382193e358a5311b8361de1b6f
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.3/rw61x/rw61x_sb_wifi_a2_compressed.bin
     description: "WiFi firmware for RW612 A2 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -81,7 +81,7 @@ blobs:
     sha256: 5d6256eb95c8817a62600a0bfe2e2afb156af260e2dff5e61ffa802a8f635180
     type: lib
     version: '26.09.00'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/26.09.00/ieee_802_15_4/lib/libieee-802.15.4_MAC_intf_RW612.a
     description: "IEEE 802.15.4 MAC & PHY library for RW612 boards"
 
@@ -90,14 +90,14 @@ blobs:
     sha256: b9ce3ecf6929632750a81fb96a0f82c1bed1aef38ba38a7a10547c37082d900e
     type: lib
     version: '26.09.00-rc1'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Online_Code_Hosting.txt
+    license-path: LICENSES/LicenseRef-NXP-Online-Code-Hosting.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller/raw/c04a004d3e8c516c3f9e9832b6cc7c0a4e87e5bc/lib/snps_controller/libble_ll_os.a
     description: "BLE Controller Lib for MCXW23 boards"
   - path: mcxw23/libble_ll_utils_os.a
     sha256: ddb5726abbc4efcba1f7350a2edc9ec832a3f3e88cf1461543837c7bf46ad78a
     type: lib
     version: '26.09.00-rc1'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Online_Code_Hosting.txt
+    license-path: LICENSES/LicenseRef-NXP-Online-Code-Hosting.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller/raw/c04a004d3e8c516c3f9e9832b6cc7c0a4e87e5bc/lib/snps_controller/libble_ll_utils_os.a
     description: "BLE Controller Lib utils for MCXW23 boards"
 
@@ -106,77 +106,77 @@ blobs:
     sha256: 79150bf0fa3f4ddfdfa7e320f964a15678ff6577000f8b4ebc5b76897e530070
     type: img
     version: '26.09.00-rc1'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Online_Code_Hosting.txt
+    license-path: LICENSES/LicenseRef-NXP-Online-Code-Hosting.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller/raw/c04a004d3e8c516c3f9e9832b6cc7c0a4e87e5bc/bin/kw43_nbu_ble_hosted.sb4
     description: "BLE Controller for MCXW70 boards"
   - path: mcxw71/mcxw71_nbu_ble.sb3
     sha256: d56f38623cd39e7d4eac662632817695684bb0e5057b8a7c32c21c9694c1cb25
     type: img
     version: '26.09.00-rc1'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Online_Code_Hosting.txt
+    license-path: LICENSES/LicenseRef-NXP-Online-Code-Hosting.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller/raw/c04a004d3e8c516c3f9e9832b6cc7c0a4e87e5bc/bin/mcxw71_nbu_ble_hosted.sb3
     description: "BLE Controller for MCXW71 boards"
   - path: mcxw72/mcxw72_nbu_ble_all_hosted.bin
     sha256: 90a3e240ad8ccdc38845a6418aa7428cb33afaf5e22941beebbadaec262d390f
     type: img
     version: '26.09.00-rc1'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Online_Code_Hosting.txt
+    license-path: LICENSES/LicenseRef-NXP-Online-Code-Hosting.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller/raw/c04a004d3e8c516c3f9e9832b6cc7c0a4e87e5bc/bin/mcxw72_nbu_ble_hosted.bin
     description: "BLE Controller for MCXW72 boards"
   - path: mcxw70/mcxw70_nbu_dyn_reduced.sb4
     sha256: 3d0b6a254454f511747ba9661c1d799c27780f20e79cb874bc21cb367d0d0fdb
     type: img
     version: '26.09.00'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/26.09.00/bin/mcxw70/mcxw70_nbu_dyn_reduced.sb4
     description: "Minimal BLE Controller and IEEE 802.15.4 MAC & PHY combo firmware for MCXW70 boards"
   - path: mcxw71/mcxw71_nbu_dyn_reduced.sb3
     sha256: 1936151e66c019e09554b771c7eae53034d0fe3d97b66113b7990255255972cb
     type: img
     version: '26.09.00-pvw2'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/26.09.00-pvw2/bin/mcxw71/mcxw71_nbu_dyn_reduced.sb3
     description: "Minimal BLE Controller and IEEE 802.15.4 MAC & PHY combo firmware for MCXW71 boards"
   - path: mcxw71/libieee/libieee-802.15.4_MAC_intf.a
     sha256: ec11b34705364f372d9d781d1289a09691572f41da05222516500091b68ad57f
     type: lib
     version: '26.09.00-pvw2'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/26.09.00-pvw2/ieee_802_15_4/lib/libieee-802.15.4_MAC_intf.a
     description: "IEEE 802.15.4 MAC & PHY library for MCXW71 boards"
   - path: mcxw71/KW45_K32W1xx_MCXW71_SDKFW3.0_RFP1.sb3
     sha256: 0be724c9dae0f7a9b7dd7604244ac8dac470863490f865c7a30c28b3c2919f6e
     type: img
     version: '26.06.00'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Online_Code_Hosting.txt
+    license-path: LICENSES/LicenseRef-NXP-Online-Code-Hosting.txt
     url: https://github.com/nxp-mcuxpresso/mcux-edgelock/raw/refs/heads/release/26.06.00/S200/KW45_K32W1xx_MCXW71_SDKFW3.0_RFP1.sb3
     description: "S200 SecureSubSystem EdgeLock2Go-enabled firmware for MCXW71 boards"
   - path: mcxw72/mcxw72_nbu_dyn_reduced.bin
     sha256: fc54226ae5c42ebbdedddaba7d1cdfaf97982117605f8c27e6ace94a9745923f
     type: img
     version: '26.09.00'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/26.09.00/bin/mcxw72/mcxw72_nbu_dyn_reduced.bin
     description: "Minimal BLE Controller and IEEE 802.15.4 MAC & PHY combo firmware for MCXW72 boards"
   - path: mcxw72/mcxw72_nbu_dyn_full.bin
     sha256: f0a0861f4688bfe82321548b75c78b24e67504533c9fd5cc96cdeb041541c488
     type: img
     version: '26.09.00'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/26.09.00/bin/mcxw72/mcxw72_nbu_dyn_full.bin
     description: "BLE Controller and IEEE 802.15.4 MAC & PHY combo firmware for MCXW72 boards"
   - path: mcxw72/libieee/libieee-802.15.4_MAC_intf.a
     sha256: 88c7fe2b23b9ea8a4d212f871a38121dcaa1026b12c05cd3aa5113981ab09689
     type: lib
     version: '26.09.00'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/26.09.00/ieee_802_15_4/lib/libieee-802.15.4_MAC_intf_MCXW72.a
     description: "IEEE 802.15.4 MAC & PHY library for MCXW72 boards"
   - path: mcxw72/KW47_A2_1_SDKFW4_0.sb3
     sha256: ba5183299ce699d3a40b9befaea9a82d1bbd4401cf7c957f5ee1b5cdda21c6c5
     type: img
     version: '26.06.00'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Online_Code_Hosting.txt
+    license-path: LICENSES/LicenseRef-NXP-Online-Code-Hosting.txt
     url: https://github.com/nxp-mcuxpresso/mcux-edgelock/raw/refs/heads/release/26.06.00/S200/KW47_A2_1_SDKFW4_0.sb3
     description: "S200 SecureSubSystem EdgeLock2Go-enabled firmware for MCXW72 boards"
 
@@ -185,7 +185,7 @@ blobs:
     sha256: 1563a4bc7c295da16db40821da034c99a4a99159d40cbb8099a71239ebb3c29a
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.4.3/nw61x/sd_w61x.bin.se
     description: "Wi-Fi firmware for NW61x A1 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -193,7 +193,7 @@ blobs:
     sha256: a53925d81761b82d8e4cba9e6f100d1d71454bca6c76c6cfa319c082d7b479cd
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.4.3/nw61x/uartspi_n61x.bin.se
     description: "BT firmware for NW61x A1 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -201,7 +201,7 @@ blobs:
     sha256: e740929459db8bdc438a441cd71f2ad56f6e2223cb263b7003a2c292b2dcabc9
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.4.3/nw61x/sduart_nw61x.bin.se
     description: "Combo firmware for NW61x A1 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -211,7 +211,7 @@ blobs:
     sha256: bf99334d4a338a2c5574bcceecdfc2693d7d77583dd4cd2779227e02078fc1d0
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.4.3/IW416/sdIW416_wlan.bin
     description: "Wi-Fi firmware for IW416 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -219,7 +219,7 @@ blobs:
     sha256: 8d6b9b8545527067268e9233fd2fef9789613ddcfe9a5ccc4231c7d212da535a
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.4.3/IW416/uartIW416_bt.bin
     description: "BT firmware for IW416 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -227,7 +227,7 @@ blobs:
     sha256: 8436022e3f612bac2987500f7b615ebd89eaee7e5a1de7145caef5cbdde36553
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.4.3/IW416/sduartIW416_wlan_bt.bin
     description: "Combo firmware for IW416 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -237,7 +237,7 @@ blobs:
     sha256: 181dee5ded8f0651d39c0144eb8b5ae9c12773772637b885f953f66619b5c018
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.3/IW610/sd_iw610.bin.se
     description: "Wi-Fi firmware for IW610 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -245,7 +245,7 @@ blobs:
     sha256: f36b3c59e632450288f87858de70ee696d5d97e4da584ad343ea6d2f2f0621aa
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.3/IW610/sd_iw610_compressed.bin.se
     description: "Wi-Fi firmware for IW610 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -253,7 +253,7 @@ blobs:
     sha256: 5c2e8e603c7e3221c1c38a00f9d4c7f3347668fb96a17e115a02d5e8d17e4a36
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.3/IW610/uart_iw610_bt.bin.se
     description: "BT firmware for IW610 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -261,7 +261,7 @@ blobs:
     sha256: 7f721b073f307557bb6c83a8a8a4309e5cb2335d6b2ff9ef8eade3a34e27d057
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.3/IW610/uart_iw610_bt_compressed.bin.se
     description: "BT firmware for IW610 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -269,7 +269,7 @@ blobs:
     sha256: e3d1a112cfaec247bd4267395b545eb39bacb52905a6e8e8c89e52ddff03deca
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.3/IW610/sduart_iw610.bin.se
     description: "Combo firmware for IW610 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -277,7 +277,7 @@ blobs:
     sha256: e7d6a9b42e39313976563de8a20368491978490f8b10cda2ced886081d5993c4
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.3/IW610/sduart_iw610_compressed.bin.se
     description: "Combo firmware for IW610 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -285,7 +285,7 @@ blobs:
     sha256: 4bf9e06fd7a16640707e055c5c8a2add9be71d817a864ffff57bd1cd49510f39
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.3/IW610/uartspi_iw610.bin.se
     description: "Wi-Fi firmware for IW610 boards (SPI interface)"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -293,7 +293,7 @@ blobs:
     sha256: 98f09525f0be7cfa2eeeb50d811e0d2ad2f5def0f6ca555d2bfbb230865f2a82
     type: img
     version: '1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.4.3/IW610/uartspi_iw610_compressed.bin.se
     description: "Wi-Fi firmware for IW610 boards (SPI interface)"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.4.3/readme.txt
@@ -303,7 +303,7 @@ blobs:
     sha256: c64413394db04d302587886edb3eb58b19ac8a02286d44963cbe86209b05399a
     type: img
     version: '6.12.34-2.1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     click-through: True
     url: https://www.nxp.com.cn/lgfiles/NMG/MAD/YOCTO/imx95-evk-boot-firmware-6.12.34-2.1.0.bin
     description: "Boot firmware for i.MX 95 EVK board"
@@ -311,7 +311,7 @@ blobs:
     sha256: c43bcc7bac17f277e507d0719bda3af86b037bd0ee33b23691e1df1a59f8a5a4
     type: img
     version: '6.12.34-2.1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     click-through: True
     url: https://www.nxp.com.cn/lgfiles/NMG/MAD/YOCTO/imx93evk-boot-firmware-6.12.34-2.1.0.bin
     description: "Boot firmware for i.MX 93 EVK board"
@@ -319,7 +319,7 @@ blobs:
     sha256: 373fd35e23c1f272a0bc4d007bebab93dda8c46d7187e8b2a6fccfd35ee91ff9
     type: img
     version: '6.12.34-2.1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     click-through: True
     url: https://www.nxp.com.cn/lgfiles/NMG/MAD/YOCTO/imx91evk-boot-firmware-6.12.34-2.1.0.bin
     description: "Boot firmware for i.MX 91 EVK board"
@@ -327,7 +327,7 @@ blobs:
     sha256: cbc7df5b47816001c14e9d067a5aa0b8cc91c919ec7c6e3d219ca1d253e0f23b
     type: img
     version: '6.12.34-2.1.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    license-path: LICENSES/LicenseRef-NXP-Software-License.txt
     click-through: True
     url: https://www.nxp.com.cn/lgfiles/NMG/MAD/YOCTO/imx943-evk-boot-firmware-6.12.34-2.1.0.bin
     description: "Boot firmware for i.MX 943 evk board"
@@ -337,42 +337,42 @@ blobs:
     sha256: 4b65e374eeea7da088dc6fb7c5dd60e22a58911bc14c8e1f2f67c26823e3a6e1
     type: lib
     version: '3.2.2'
-    license-path: zephyr/blobs/license/BSD_3.txt
+    license-path: LICENSES/BSD-3-Clause.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/913be37c/neutron/mcxn/libNeutronDriver.a
     description: "Neutron driver library for MCXN"
   - path: neutron/mcxn/libNeutronFirmware.a
     sha256: a0f48e8d9cf4e6198a5359a85cf504cff7ca0bf35ae74449d9c1721291a32632
     type: lib
     version: '3.2.2'
-    license-path: zephyr/blobs/license/BSD_3.txt
+    license-path: LICENSES/BSD-3-Clause.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/913be37c/neutron/mcxn/libNeutronFirmware.a
     description: "Neutron firmware library for MCXN"
   - path: neutron/rt700/cm33/libNeutronDriver.a
     sha256: b2070931a8f4e5fbce1a9b31de23da33d0aa9998040397955e78646dd98965f4
     type: lib
     version: '3.2.2'
-    license-path: zephyr/blobs/license/BSD_3.txt
+    license-path: LICENSES/BSD-3-Clause.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/913be37c/neutron/rt700/cm33/libNeutronDriver.a
     description: "Neutron driver library for RT700 CM33"
   - path: neutron/rt700/cm33/libNeutronFirmware.a
     sha256: b7e0bc3af4597da89e3c08307daf0f9f419693da51593c6a4a73b826bdc3d2d1
     type: lib
     version: '3.2.2'
-    license-path: zephyr/blobs/license/BSD_3.txt
+    license-path: LICENSES/BSD-3-Clause.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/913be37c/neutron/rt700/cm33/libNeutronFirmware.a
     description: "Neutron firmware library for RT700 CM33"
   - path: neutron/rt2660/libNeutronDriver.a
     sha256: 90183db2bd7bfe17815cdb3a3967e2b59a1f6390e5644c30a593779398b3c4d6
     type: lib
     version: '3.2.2'
-    license-path: zephyr/blobs/license/BSD_3.txt
+    license-path: LICENSES/BSD-3-Clause.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/913be37c/neutron/rt2660/libNeutronDriver.a
     description: "Neutron driver library for RT2660"
   - path: neutron/rt2660/NeutronFirmware.elf
     sha256: 378a339ec5ba68a7b920f550796e860dc91ddd281d0fc2a2855897a93f36d07c
     type: img
     version: '3.2.2'
-    license-path: zephyr/blobs/license/BSD_3.txt
+    license-path: LICENSES/BSD-3-Clause.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/913be37c/neutron/rt2660/NeutronFirmware.elf
     description: "Neutron firmware for RT2660"
 
@@ -381,13 +381,13 @@ blobs:
     sha256: a2bbd65e25a7f1f363c0a4ee6ac8b03084301e8970c7d2224186a5c38bad71a6
     type: lib
     version: '26.09.00-pvw2'
-    license-path: zephyr/blobs/license/BSD_3.txt
+    license-path: LICENSES/BSD-3-Clause.txt
     url: https://github.com/nxp-mcuxpresso/mcux-devices-mcx/raw/main/MCXL/MCXL255/drivers/libadvc_cm0p.a
     description: "ADVC library for MCXL255 CM0P core"
   - path: mcxl255/libadvc_cm33.a
     sha256: cc487d00944870fabf7433ab60833b175e37fe46ffd6024831cb67fd654afa68
     type: lib
     version: '26.09.00-pvw2'
-    license-path: zephyr/blobs/license/BSD_3.txt
+    license-path: LICENSES/BSD-3-Clause.txt
     url: https://github.com/nxp-mcuxpresso/mcux-devices-mcx/raw/main/MCXL/MCXL255/drivers/libadvc_cm33.a
     description: "ADVC library for MCXL255 CM33 core"
