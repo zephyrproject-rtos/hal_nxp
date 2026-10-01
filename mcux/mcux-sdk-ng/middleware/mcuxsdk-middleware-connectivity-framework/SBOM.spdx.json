@@ -8,7 +8,7 @@
     ],
     "licenseListVersion": "3.20"
   },
-  "name": "mcux-sdk-middleware-connectivity-framework-v25.09.00",
+  "name": "mcux-sdk-middleware-connectivity-framework-v26.09.00",
   "dataLicense": "CC0-1.0",
   "hasExtractedLicensingInfos": [
     {
@@ -22,7 +22,7 @@
     {
       "SPDXID": "SPDXRef-package-8d9bfb12-8a9e-46e4-9306-e155cb7c32aa",
       "name": "mcux-sdk-middleware-connectivity-framework",
-      "versionInfo": "v25.09.00",
+      "versionInfo": "v26.09.00",
       "licenseConcluded": "(LicenseRef-babf777f-042b-42df-a5bf-638993427038)",
       "licenseDeclared": "(LicenseRef-babf777f-042b-42df-a5bf-638993427038)",
       "downloadLocation": "https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-connectivity-framework",

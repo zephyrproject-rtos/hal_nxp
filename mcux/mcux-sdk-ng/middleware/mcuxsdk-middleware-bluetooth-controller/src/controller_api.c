@@ -56,6 +56,7 @@ typedef enum
     API_Controller_ConfigureIDSSecurityEvent,
     API_Controller_ReadMemory,
     API_Controller_SuspendResume,
+    API_Controller_AntennaSwitching,
     API_Last
 } PLATFORM_NbuApiId;
 
@@ -520,3 +521,32 @@ osa_status_t Controller_SuspendResume(uint32_t suspend)
     return api_status;
 }
 #endif
+
+osa_status_t Controller_AntennaSwitching(uint8_t enable, uint8_t lant_ctrl)
+{
+    osa_status_t api_status = KOSA_StatusSuccess;
+
+    /* lant_ctrl cannot be 0 */
+    if( enable != 0U && lant_ctrl == 0U  )
+    {
+        api_status = KOSA_StatusError;
+    }
+    else
+    {
+        uint32_t     ret;
+        uint32_t     tab[2] = {enable, lant_ctrl};
+
+        bool rpmsg_status = PLATFORM_NbuApiReq((uint8_t*)&ret, API_Controller_AntennaSwitching,
+                                    (const uint8_t*)"\x01\x01", tab, 4U);
+        if (rpmsg_status)
+        {
+          api_status = (osa_status_t)ret;
+        }
+        else
+        {
+          api_status = KOSA_StatusError;
+        }
+    }
+
+    return api_status;
+}
