@@ -49,24 +49,14 @@ typedef struct _hal_rpmsg_peer_ept_state
     hal_rpmsg_state_t *rpmsgHandle;
 } hal_rpmsg_peer_ept_state;
 
-/* MCMGR event latch state used by the COREUP/READY handshake.
- *
- * Primary sends COREUP pings while waiting for secondary to call
- * rpmsg_lite_remote_init() and fire APP_RPMSG_READY_EVENT_DATA.
- * Using a struct (rather than a bare uint16_t) prevents COREUP or
- * EP_READY events from accidentally clearing the READY latch.
- *
- * Note: the secondary (role==1) does NOT wait for COREUP before calling
- * rpmsg_lite_remote_init(); it fires READY on its own.  The COREUP ping
- * from primary is therefore advisory on platforms where the secondary is
- * compiled from source (RT1160, RT1170, etc.) and completely ignored by
- * prebuilt NBU images (KW43) which use the old protocol.
- */
+/* READY is a consume-on-observation latch. It must remain set if READY arrives
+ * before the master starts waiting; clearing it in the master init path would
+ * lose an early notification. The master consumes it only after observing it,
+ * leaving any later READY pending for the next initialization cycle. */
 typedef struct _rpmsg_mcmgr_event_ctx
 {
     volatile uint16_t last_event;
     volatile uint8_t  ready_seen;
-    volatile uint8_t  coreup_seen;
 } rpmsg_mcmgr_event_ctx_t;
 
 static rpmsg_mcmgr_event_ctx_t s_mcmgrEventCtx = {0};
@@ -111,8 +101,23 @@ extern uint32_t rpmsg_sh_mem_end[];
 #define APP_RPMSG_READY_EVENT_DATA    (1U)
 #define APP_RPMSG_EP_READY_EVENT_DATA (2U)
 
+/* Total busy-wait budget (loop iterations, not milliseconds) for the
+ * master-side wait for READY.
+ *
+ * No hardware timer is used here on purpose: this is shared middleware and a
+ * timer/counter peripheral is not the same across every board, so the
+ * timeout is expressed as a flat iteration count that is spent entirely in
+ * the single busy-wait below. There is no nested "outer retries x inner wait"
+ * multiplication, so this value is the actual worst-case spin count.
+ *
+ * To size this for a board where the peer can be slow/non-responsive
+ * (e.g. KW47 NBU): toggle a GPIO immediately before returning
+ * kStatus_HAL_RpmsgTimeout, measure the elapsed time on a scope/logic
+ * analyzer for a few candidate values, then pick a value with margin (e.g.
+ * 2x-4x the worst observed peer response time) -- there is no need to know
+ * cycles-per-iteration up front, just bisect until reliable. */
 #ifndef RPMSG_REMOTE_READY_RETRY_COUNT
-#define RPMSG_REMOTE_READY_RETRY_COUNT 10000000U
+#define RPMSG_REMOTE_READY_RETRY_COUNT 200000000U
 #endif
 
 /* Delay (ms) inserted after rpmsg_lite_master_init() returns and before
@@ -193,9 +198,8 @@ static void RPMsgPeerReadyEventHandler(mcmgr_core_t coreNum, uint16_t eventData,
     /* Capture last event for debug. */
     ctx->last_event = eventData;
 
-    /* Latch READY and COREUP events separately so they cannot overwrite each
-     * other (a COREUP ping arriving while we wait for READY must not clear the
-     * READY latch, and vice versa). */
+    /* READY may arrive before the master enters its wait loop. Keep it latched
+     * until the master consumes it after observation. */
     if (eventData == APP_RPMSG_READY_EVENT_DATA)
     {
         ctx->ready_seen = 1U;
@@ -204,7 +208,7 @@ static void RPMsgPeerReadyEventHandler(mcmgr_core_t coreNum, uint16_t eventData,
 
     if (eventData == APP_RPMSG_COREUP_EVENT_DATA)
     {
-        ctx->coreup_seen = 1U;
+        /* Accepted for compatibility with peers that send advisory COREUP. */
         return;
     }
 
@@ -252,26 +256,18 @@ static hal_rpmsg_status_t HAL_RpmsgMcmgrMasterInit(void)
             }
         }
 
-        /* Wait for secondary to call rpmsg_lite_remote_init() and fire READY.
-         * Send periodic COREUP pings so that on fast cores (CM7 @ 600 MHz) the
-         * effective wait window is seconds rather than ~50 ms.
-         * On kw43 the prebuilt NBU ignores the COREUP pings and fires READY on
-         * its own; the ping is therefore harmless on all platforms. */
-        s_mcmgrEventCtx.ready_seen = 0U;
+        /* Do not clear ready_seen here: the secondary may have sent READY while
+         * MCMGR_Init() or MCMGR_StartCore() was still running. */
         while (0U == s_mcmgrEventCtx.ready_seen)
         {
-            volatile uint32_t ping_wait;
             if (--timeout == 0u)
             {
                 return kStatus_HAL_RpmsgTimeout;
             }
-            (void)MCMGR_TriggerEvent(kMCMGR_Core1, kMCMGR_RemoteApplicationEvent, APP_RPMSG_COREUP_EVENT_DATA);
-            /* Wait up to ~100 000 iterations for READY before re-pinging. */
-            ping_wait = 100000U;
-            while ((0U == s_mcmgrEventCtx.ready_seen) && (--ping_wait != 0u))
-            {
-            }
         }
+        /* Consume this cycle's READY. A READY received after this point remains
+         * latched for the next cycle instead of being cleared by deinit. */
+        s_mcmgrEventCtx.ready_seen = 0U;
 
         /* Remote ISR is live -- master_init virtqueue kick goes to live ISR. */
 #if defined(RL_USE_STATIC_API) && (RL_USE_STATIC_API == 1)
@@ -326,7 +322,6 @@ static hal_rpmsg_status_t HAL_RpmsgMcmgrRemoteInit(void)
 {
     uint32_t startupData;
     mcmgr_status_t status;
-    volatile uint32_t timeout;
 
     if (0 > s_rpmsgEptCount)
     {
@@ -342,21 +337,6 @@ static hal_rpmsg_status_t HAL_RpmsgMcmgrRemoteInit(void)
                 status = MCMGR_GetStartupData(kMCMGR_Core0, &startupData);
             } while (status != kStatus_MCMGR_Success);
         }
-
-        /* Wait for a COREUP ping from primary before rpmsg_lite_remote_init()
-         * and the subsequent READY trigger.  Primary sends COREUP only after
-         * it has cleared its ready_seen latch and is actively waiting, so our
-         * READY can never be lost on an init/deinit/reinit cycle (the lost-
-         * READY race that otherwise deadlocks both cores on fast SoCs).
-         * Bounded wait: if no COREUP arrives we fall back to firing READY
-         * anyway, degrading to legacy behaviour rather than hanging.  This
-         * path is only compiled for source-built secondaries; the prebuilt
-         * NBU (kw43) uses its own firmware and is unaffected. */
-        timeout = RPMSG_REMOTE_READY_RETRY_COUNT;
-        while ((0U == s_mcmgrEventCtx.coreup_seen) && (--timeout != 0u))
-        {
-        }
-        s_mcmgrEventCtx.coreup_seen = 0U;
 
 #if defined(RL_USE_STATIC_API) && (RL_USE_STATIC_API == 1)
         s_rpmsgContext =
@@ -411,7 +391,7 @@ static hal_rpmsg_status_t HAL_RpmsgRemoteInit(hal_rpmsg_handle_t handle, hal_rpm
 
 hal_rpmsg_status_t HAL_RpmsgMcmgrInit(void)
 {
-    hal_rpmsg_status_t state = kStatus_HAL_RpmsgError;
+    hal_rpmsg_status_t state;
 
 #if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
     state = HAL_RpmsgMcmgrMasterInit();
@@ -520,10 +500,9 @@ hal_rpmsg_status_t HAL_RpmsgDeinit(hal_rpmsg_handle_t handle)
     {
         s_rpmsgEptCount             = -1;
         s_peerRpmsgEptCount         = 0U;
-        /* Reset COREUP/READY handshake state so the next McmgrInit cycle
-         * re-runs the READY wait cleanly. */
-        s_mcmgrEventCtx.ready_seen  = 0U;
-        s_mcmgrEventCtx.coreup_seen = 0U;
+        /* Do not clear ready_seen here. A peer may already have entered its
+         * next cycle and sent READY; the master consumes the latch after it
+         * observes the notification. */
         (void)memset((void *)s_rpmsgPeerEptData, 0, sizeof(s_rpmsgPeerEptData));
         (void)rpmsg_lite_deinit(s_rpmsgContext);
         s_rpmsgContext = NULL;

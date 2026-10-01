@@ -3,7 +3,7 @@
  * @{
  ********************************************************************************** */
 /*!
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2024, 2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -333,6 +333,17 @@ osa_status_t Controller_ReadMemory(uint32_t address, uint32_t size, void* pBuffe
  ********************************************************************************** */
 osa_status_t Controller_SuspendResume(uint32_t suspend);
 #endif
+
+/*! *********************************************************************************
+ * \brief  Enable BLE non CS antenna switching
+ * \param[in]  enable: enable switching (1) or disable switching (0)
+ *             lant_ctrl: localization antenna control for the antenna switching 1/2/4/8 for lant_lut_gpio[0/1/2/3]
+ * \return KOSA_StatusSuccess in case of success otherwise error.
+ *
+ * \remarks
+ * The port used for the antenna control must be set to the RF_GPO assignment.
+ ********************************************************************************** */
+osa_status_t Controller_AntennaSwitching(uint8_t enable, uint8_t lant_ctrl);
 
 #ifdef __cplusplus
 }
