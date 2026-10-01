@@ -12,23 +12,23 @@ Origin:
 
    NXP MCUXpresso SDK Connectivity Framework
    https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-connectivity-framework
-   SHA: 312da7fa17af2b7d204c20768ae4adb5417e40b6
+   BRANCH: release/26.09.00
 
    NXP MCUXpresso SDK Bluetooth Controller
    https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller
-   SHA: c04a004d3e8c516c3f9e9832b6cc7c0a4e87e5bc
+   BRANCH: release/26.09.00
 
    NXP MCUXpresso SDK Multicore middleware
    https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-multicore
-   SHA: 220db1c5c30bfdfe5ea1a48b934c206412365b9c
+   SHA: 739a25c4b50d1694de7d2e07b9bc92529abbb837
 
    NXP MCUXpresso SDK Multicore Manager middleware
    https://github.com/nxp-mcuxpresso/mcux-mcmgr
-   SHA: c7d42f5b94c8b1b91fb4aa999dd4fb1a2d1776cb
+   SHA: 7ab6fbaf6a252ae91efd6b09d5092f3b0c59f1e3
 
    RPMsg Component
    https://github.com/nxp-mcuxpresso/rpmsg-lite
-   SHA: e6200b4735fb2fdc4ee7620ea583f05762c42962
+   SHA: 44dc877be860e6f1ec3ad78b9524ca9b1bef8f32
 
    NXP MCUXpresso SDK secure subsystem
    https://github.com/nxp-mcuxpresso/mcux-secure-subsystem

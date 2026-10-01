@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [v5.3.0]
 
 ### Added
 
@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - MCUX-88924: Fix KW43 ICS init-handshake hang (RPSDK-1183 regression): s_mcmgrInitialized is now set before mcmgr_platform_init_internal() enables the MU RX IRQ, so re-entrant ISR dispatch during MCMGR_Init() is no longer silently dropped by MCMGR_CHECK_INIT().
+- MCUX-89876: Fix Coverity DEADCODE and UNUSED_VALUE findings in mcmgr_internal_core_api_imxrt700.c: align mcmgr_mu_channel_handler event-range guard with positive-logic form (matching imxrt1170), and aggregate mcmgr_trigger_event_internal return values in mcmgr_platform_init_internal_early so earlier errors are not silently overwritten.
 
 ## [v5.2.0]
 
@@ -221,7 +222,8 @@ MCMGR_Init();
 
 - Initial release.
 
-[Unreleased]: https://github.com/nxp-mcuxpresso/mcux-mcmgr/compare/v5.2.0...HEAD
+[Unreleased]: https://github.com/nxp-mcuxpresso/mcux-mcmgr/compare/v5.3.0...HEAD
+[v5.3.0]: https://github.com/nxp-mcuxpresso/mcux-mcmgr/compare/v5.2.0...v5.3.0
 [v5.2.0]: https://github.com/nxp-mcuxpresso/mcux-mcmgr/compare/v5.1.0...v5.2.0
 [v5.1.0]: https://github.com/nxp-mcuxpresso/mcux-mcmgr/compare/v5.0.2...v5.1.0
 [v5.0.2]: https://github.com/nxp-mcuxpresso/mcux-mcmgr/compare/v5.0.1...v5.0.2

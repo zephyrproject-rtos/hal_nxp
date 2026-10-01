@@ -20,11 +20,13 @@
 
 #### Bug Fixes
 
+- [WorkQ] Increased the default `FWK_SYSWORKQ_STACK_SIZE` from 608 to 640 bytes to fix a stack overflow on the system work queue thread.
 - [rw61x] Fixed RTOS heap exhaustion when initializing BLE several times (`bt init`/`bt disable` loops): the mutex is now created only once in `PLATFORM_InitBle()`, protected against TOCTOU with interrupt masking, the flag is reset in `PLATFORM_TerminateBle()` to allow re-creation after termination, and asserts are replaced by error code returns to remain correct in Release builds.
 - [platform][TSTMR] Fixed the 56 bit version of the timestamp, now reading the TSTMR instance base and testing only the base pointer validity.
 - [IW416][coex] Added the missing SD8978 firmware include guard in `fwk_platform_coex.c`, fixing the compilation error of IW416 coex_edgefast applications.
 - [docs] Fixed Sphinx/docutils warnings and errors in the framework documentation: index title underline, leading transitions after README titles, and FSCI C code blocks that could not be lexed.
 - [MISRA][CERT-C] Various MISRA, CERT-C and Coverity compliance fixes gathered across platform, LowPower, ICS (wireless_mcu and wireless_nbu), OTA, FSCI, SFC, SecLib and NVM modules: HCI packet length checks before field access, safe SWO prescaler computation, `US_TO_TICK`/`PWR_ConvertUsecToTicks()` saturation to TICK_TYPE_MAX, ICS message type re-validation in the Rx work handlers, OTA chunk length and CRC computation hardening, SFC unbalanced low power constraint release guard and 64 bit timestamp arithmetic, SecLib SHA-256 OVERRUN and padding fixes with AES block count overflow checks, NVM union initializer, plus in place annotations for the findings to be dismissed.
+- [SFC] Prevent unnecessary SFA measurement retrieval when SFC is disabled. Added a check in the SFC ISR to verify that the SFC module is enabled before retrieving the SFA frequency measurement.
 
 ### 7.4.2 mcux SDK 26.09.00 pvw2
 
