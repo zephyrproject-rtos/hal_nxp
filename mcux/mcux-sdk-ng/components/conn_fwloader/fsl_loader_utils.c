@@ -310,6 +310,8 @@ status_t sb3_fw_download_impl(LOAD_Target_Type loadTarget, uint32_t flag, uint32
         return status;
     }
 
+    PRINTF("[FW Download] Start to download %u firmware: %u\r\n", target_type, OSA_TimeGetMsec());
+
     if (loadTarget & 0x80)
     {
         status = load_service_monolithic(loadTarget, sourceAddr);
@@ -335,6 +337,7 @@ status_t sb3_fw_download_impl(LOAD_Target_Type loadTarget, uint32_t flag, uint32
         else
         {
             status = kStatus_Success;
+            PRINTF("[FW Download] %u FW is active: %u\r\n", target_type, OSA_TimeGetMsec());
             break;
         }
     }
