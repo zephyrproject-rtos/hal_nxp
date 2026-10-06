@@ -925,7 +925,6 @@ mlan_status wlan_cmd_802_11_associate(IN mlan_private *pmpriv, IN HostCmd_DS_COM
     MrvlIEtypes_AuthType_t *pauth_tlv      = MNULL;
     MrvlIEtypes_RsnParamSet_t *prsn_ie_tlv = MNULL;
     MrvlIEtypes_ChanListParamSet_t *pchan_tlv;
-    MrvlIEtypes_SAE_PWE_Mode_t *prsnx_ie_tlv = MNULL;
     WLAN_802_11_RATES rates = {0x00};
     t_u32 rates_size;
     t_u16 tmp_cap;
@@ -1187,6 +1186,44 @@ mlan_status wlan_cmd_802_11_associate(IN mlan_private *pmpriv, IN HostCmd_DS_COM
     }
 #endif
 
+#if !CONFIG_WPA_SUPP
+    /* insert RSNX IE TLV */
+    if (pbss_desc->prsnx_ie != MNULL && pbss_desc->prsnx_ie->ieee_hdr.len)
+    {
+        MrvlIEtypes_RsnxParamSet_t *rsnx_tlv;
+        t_u16 len = 0;
+
+        rsnx_tlv = (MrvlIEtypes_RsnxParamSet_t *)pos;
+        rsnx_tlv->header.type = wlan_cpu_to_le16(TLV_TYPE_RSNX);
+        rsnx_tlv->data[0] = rsnx_tlv->data[1] = rsnx_tlv->data[2] = 0;
+        if (pauth_tlv != MNULL &&
+            (pauth_tlv->auth_type == wlan_cpu_to_le16(AssocAgentAuth_Wpa3Sae)) &&
+            (pbss_desc->prsnx_ie->data[0] & (0x1 << SAE_H2E_BIT)))
+        {
+            /* Set SAE H2E bit in the first octet */
+            rsnx_tlv->data[0] |= (0x1 << SAE_H2E_BIT);
+            len = 1;
+        }
+
+        if ((pmpriv->ssid_protection == MTRUE) &&
+            (pbss_desc->prsnx_ie->ieee_hdr.len > 2) &&
+            (pbss_desc->prsnx_ie->data[2] & (0x1 << SSID_PROTECTION_OCTET3_BIT)))
+        {
+            /* Set SSID Protection capability bit in the third octet,
+             * set bit 1 in the first octet and increment the len to 3
+             */
+            rsnx_tlv->data[0] |= 2;
+            rsnx_tlv->data[2] |= (0x1 << SSID_PROTECTION_OCTET3_BIT);
+            len = 3;
+        }
+        if (len)
+        {
+            rsnx_tlv->header.len = wlan_cpu_to_le16(len);
+            pos += sizeof(rsnx_tlv->header) + len;
+        }
+    }
+#endif
+
     if ((pauth_tlv != MNULL) && (pauth_tlv->auth_type == wlan_cpu_to_le16(AssocAgentAuth_Wpa3Sae)))
     {
         wlan_cmd_append_pwe_tlv(pmpriv, pbss_desc, &pos);
@@ -1239,25 +1276,6 @@ mlan_status wlan_cmd_802_11_associate(IN mlan_private *pmpriv, IN HostCmd_DS_COM
         /* Do nothing */
     }
 #endif
-
-    if ((pbss_desc->prsnx_ie) && (akm_type == AssocAgentAuth_Wpa3Sae))
-    {
-        prsnx_ie_tlv = (MrvlIEtypes_SAE_PWE_Mode_t *)pos;
-        prsnx_ie_tlv->header.type = (t_u16)(*(pbss_desc->prsnx_ie)).ieee_hdr.element_id;
-        prsnx_ie_tlv->header.type = prsnx_ie_tlv->header.type & 0x00FF;
-        prsnx_ie_tlv->header.type = wlan_cpu_to_le16(prsnx_ie_tlv->header.type);
-        prsnx_ie_tlv->header.len = (t_u16)(*(pbss_desc->prsnx_ie)).ieee_hdr.len;
-        prsnx_ie_tlv->header.len = prsnx_ie_tlv->header.len & 0x00FF;
-
-        __memcpy(pmadapter,prsnx_ie_tlv->pwe,
-                   &((*(pbss_desc->prsnx_ie)).data[0]), prsnx_ie_tlv->header.len);
-
-        HEXDUMP("ASSOC_CMD: RSNX IE",(t_u8 *)prsnx_ie_tlv,
-                  sizeof(prsnx_ie_tlv->header) + prsnx_ie_tlv->header.len);
-
-        pos += sizeof(prsnx_ie_tlv->header) + prsnx_ie_tlv->header.len;
-        prsnx_ie_tlv->header.len = wlan_cpu_to_le16(prsnx_ie_tlv->header.len);
-    }
 
 #if CONFIG_HOST_MLME
     if (pmpriv->curr_bss_params.host_mlme)

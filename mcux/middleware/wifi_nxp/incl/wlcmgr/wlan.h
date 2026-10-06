@@ -2130,6 +2130,8 @@ struct wlan_network
     bool twt_capab;
 #endif
 #endif
+    /* SSID protection */
+    bool ssid_protection;
 };
 
 /** This structure is for IEEE PS (power save) configuration. */
