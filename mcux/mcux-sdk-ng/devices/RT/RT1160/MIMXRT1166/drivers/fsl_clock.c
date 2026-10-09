@@ -1483,6 +1483,7 @@ static uint32_t CLOCK_GetAvPllFreq(clock_pll_t pll)
     double tmpDouble;
     double denom;
     double numer;
+    uint32_t numerField;
 
     assert((pll == kCLOCK_PllAudio) || (pll == kCLOCK_PllVideo));
 
@@ -1490,7 +1491,14 @@ static uint32_t CLOCK_GetAvPllFreq(clock_pll_t pll)
     post_div = (div & (0xE000000UL)) >> 25UL;
     div &= 0x7fUL;
     denom = (double)ANATOP_AI_Read(pll == kCLOCK_PllAudio ? kAI_Itf_Audio : kAI_Itf_Video, PLL_AI_CTRL3_REG);
-    numer = (double)ANATOP_AI_Read(pll == kCLOCK_PllAudio ? kAI_Itf_Audio : kAI_Itf_Video, PLL_AI_CTRL2_REG);
+    /* The numerator is a signed 30-bit number (MFN): bit 29 is the sign. */
+    numerField = ANATOP_AI_Read(pll == kCLOCK_PllAudio ? kAI_Itf_Audio : kAI_Itf_Video, PLL_AI_CTRL2_REG) &
+                 0x3FFFFFFFUL;
+    numer      = (double)numerField;
+    if ((numerField & 0x20000000UL) != 0UL)
+    {
+        numer -= (double)(1UL << 30UL);
+    }
 
     tmpDouble = ((double)XTAL_FREQ * ((double)div + (numer / denom)) / (double)(uint32_t)(1UL << post_div));
     freq      = (uint32_t)tmpDouble;
