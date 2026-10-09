@@ -207,6 +207,10 @@ Patch List:
       - Update usb_host_ehci.c and usb_host_ip3516hs.c to not depend on usb_host_device_instance_t struct.
   - mcux-sdk: devices: fix MKV56F24.h wrong macro
       - The MKV56F24 device doesn't contain CAN2 peripheral. Remove it from the device header.
+  - mcux-sdk-ng: devices: RT1150/RT1160/RT1170: fsl_clock: read the AUDIO/VIDEO PLL numerator as signed
+      - CLOCK_GetAvPllFreq() converted the numerator (MFN) as unsigned, but it is a signed 30-bit field
+        (RM, NUMERATOR[NUM]; AN14420), so a numerator with bit 29 set gave a wrong frequency.
+      - This patch is in hal_nxp but is not in mcux-devices-rt (main, 2026-10-09).
 
   - hal_nxp: undefine PAGESIZE macro before naming fields.
    - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/6ef86202a220da2a02c1ba9a6e148d4d896aa26f
