@@ -50,7 +50,7 @@ typedef enum _mlan_ioctl_req_id
 #if defined(STA_SUPPORT) && UAP_SUPPORT
     MLAN_OID_BSS_ROLE,
 #endif
-#ifdef WIFI_DIRECT_SUPPORT
+#if CONFIG_WPA_SUPP_P2P
     MLAN_OID_WIFI_DIRECT_MODE,
 #endif
 #if UAP_HOST_MLME
@@ -67,9 +67,6 @@ typedef enum _mlan_ioctl_req_id
     MLAN_OID_RADIO_CTRL,
     MLAN_OID_BAND_CFG,
     MLAN_OID_ANT_CFG,
-#ifdef WIFI_DIRECT_SUPPORT
-    MLAN_OID_REMAIN_CHAN_CFG,
-#endif
 
     /* SNMP MIB Group */
     MLAN_IOCTL_SNMP_MIB = 0x00040000,
@@ -1095,10 +1092,6 @@ typedef struct _mlan_uap_bss_param
     t_u16 key_mgmt_operation;
     /** BSS status */
     t_u16 bss_status;
-#ifdef WIFI_DIRECT_SUPPORT
-    /* pre shared key */
-    t_u8 psk[MLAN_MAX_KEY_LENGTH];
-#endif /* WIFI_DIRECT_SUPPORT */
     /** Number of channels in scan_channel_list */
     t_u32 num_of_chan;
     /** scan channel list in ACS mode */
@@ -1229,6 +1222,9 @@ typedef struct _mlan_ds_bss
 {
     /** Sub-command */
     mlan_ioctl_req_id sub_command;
+    t_u8 bss_type;
+    /** Action: set or get */
+    mlan_act_ioctl action;
     /** BSS parameter */
     union
     {
@@ -1268,7 +1264,7 @@ typedef struct _mlan_ds_bss
         /** BSS role */
         mlan_bss_role bss_role;
 #endif
-#ifdef WIFI_DIRECT_SUPPORT
+#if CONFIG_WPA_SUPP_P2P
         t_u16 wfd_mode;
 #endif
         /** AP acs scan MLAN_OID_UAP_ACS_SCAN */
@@ -1395,10 +1391,6 @@ typedef struct _mlan_ds_radio_cfg
         mlan_ds_band_cfg band_cfg;
         /** Antenna info for MLAN_OID_ANT_CFG */
         t_u32 antenna;
-#ifdef WIFI_DIRECT_SUPPORT
-        /** remain on channel for MLAN_OID_REMAIN_CHAN_CFG */
-        mlan_ds_remain_chan remain_chan;
-#endif
     } param;
 } mlan_ds_radio_cfg, *pmlan_ds_radio_cfg;
 
@@ -1988,6 +1980,17 @@ typedef enum _mlan_psk_type
     MLAN_PSK_QUERY,
     MLAN_PSK_PASSWORD,
 } mlan_psk_type;
+
+#if CONFIG_WPA_SUPP_P2P
+typedef enum
+{
+    WIFI_DIRECT_MODE_NONE = 0,
+    WIFI_DIRECT_MODE_DEVICE,
+    WIFI_DIRECT_MODE_GO,
+    WIFI_DIRECT_MODE_CLIENT,
+    WIFI_DIRECT_MODE_NOT_SPECIFIED,
+} WifiDirect_op_mode;
+#endif
 
 /** The bit to indicate the key is for unicast */
 #define MLAN_KEY_INDEX_UNICAST 0x40000000
@@ -3323,6 +3326,8 @@ typedef struct _mlan_ds_11n_cfg
 {
     /** Sub-command */
     t_u32 sub_command;
+    /** BSS type */
+    t_u8 bss_type;
     /** 802.11n configuration parameter */
     union
     {

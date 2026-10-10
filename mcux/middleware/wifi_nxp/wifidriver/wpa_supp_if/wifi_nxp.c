@@ -28,6 +28,9 @@ static struct wifi_nxp_ctx_rtos *g_wifi_if_ctx_rtos = NULL;
 #if CONFIG_WIFI_NM_HOSTAPD_AP
 static struct wifi_nxp_ctx_rtos *g_wifi_hapd_if_ctx_rtos = NULL;
 #endif
+#if CONFIG_WPA_SUPP_P2P
+static struct wifi_nxp_ctx_rtos *g_wifi_wfd_if_ctx_rtos = NULL;
+#endif
 
 int wifi_nxp_set_mac_addr(const t_u8 *mac);
 #if !CONFIG_WIFI_NM_WPA_SUPPLICANT
@@ -168,6 +171,9 @@ int wifi_supp_init(void)
 #ifdef CONFIG_WIFI_SOFTAP_SUPPORT
     char uap_iface_name[NETIF_NAMESIZE];
 #endif
+#if CONFIG_WPA_SUPP_P2P
+    char wfd_iface_name[NETIF_NAMESIZE];
+#endif
     struct netif *iface = NULL;
 
     if (wifi_supp_init_done)
@@ -211,6 +217,7 @@ int wifi_supp_init(void)
             goto out;
         }
     }
+
     wm_wifi.hapd_if_priv = (void *)g_wifi_hapd_if_ctx_rtos;
 
     iface = net_get_uap_interface();
@@ -221,6 +228,30 @@ int wifi_supp_init(void)
     }
 
     (void)net_get_if_name_netif(uap_iface_name, iface);
+#endif
+#if CONFIG_WPA_SUPP_P2P
+    if (g_wifi_wfd_if_ctx_rtos == NULL)
+    {
+        g_wifi_wfd_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)OSA_MemoryAllocate(sizeof(struct wifi_nxp_ctx_rtos));
+
+        if (!g_wifi_wfd_if_ctx_rtos)
+        {
+            wifi_e("Interface ctx alloc failed.");
+            goto out;
+        }
+    }
+
+    wm_wifi.if_priv_wfd = (void *)g_wifi_wfd_if_ctx_rtos;
+
+    iface = net_get_wfd_interface();
+ 
+    if (iface == NULL)
+    {
+        wifi_e("net_get_wfd_interface failed.");
+        goto out;
+    }
+
+    (void)net_get_if_name_netif(wfd_iface_name, iface);
 #endif
     wifi_supp_init_done = true;
 

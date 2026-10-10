@@ -36,7 +36,7 @@
 #define supp_d(...)
 #endif /* ! CONFIG_SUPP_DEBUG */
 
-int wifi_nxp_supp_state(void);
+int wifi_nxp_supp_state(mlan_bss_type bss_type);
 int wifi_nxp_hapd_state(void);
 
 void *wifi_nxp_wpa_supp_dev_init(void *supp_drv_if_ctx,
@@ -163,6 +163,18 @@ void wifi_nxp_wpa_supp_event_proc_eapol_rx(void *if_priv,
 void wifi_nxp_wpa_supp_event_proc_dfs_cac_started(void *if_priv, nxp_wifi_dfs_cac_info *dfs_cac_info);
 void wifi_nxp_wpa_supp_event_proc_dfs_cac_finished(void *if_priv, nxp_wifi_dfs_cac_info *dfs_cac_info);
 void wifi_nxp_wpa_supp_event_signal_change(void *if_priv);
+#if CONFIG_WPA_SUPP_P2P
+int wifi_nxp_wpa_supp_register_frame(void *if_priv,
+                                     t_u16 type,
+                                     const t_u8 *match,
+                                     size_t match_len,
+                                     bool multicast);
+int wifi_nxp_wpa_supp_deinit_ap(void *if_priv);
+int wifi_nxp_wpa_supp_set_p2p_powersave(void *if_priv,
+                                        int legacy_ps,
+                                        int opp_ps,
+                                        int ctwindow);
+#endif
 #if CONFIG_WIFI_SOFTAP_SUPPORT
 int wifi_nxp_wpa_supp_init_ap(void *if_priv, struct wpa_driver_associate_params *params);
 #endif

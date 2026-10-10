@@ -1026,7 +1026,7 @@ void wlan_process_neighbor_report_response(t_u8 *frame, t_u32 len, t_u8 *dest_ad
     pnlist_rep_param->nlist_mode   = WLAN_NLIST_11K;
     pnlist_rep_param->num_channels = entry_num;
 
-    if (wifi_event_completion(WIFI_EVENT_NLIST_REPORT, WIFI_EVENT_REASON_SUCCESS, pnlist_rep_param) != WM_SUCCESS)
+    if (wifi_event_completion(WLAN_BSS_TYPE_STA, WIFI_EVENT_NLIST_REPORT, WIFI_EVENT_REASON_SUCCESS, pnlist_rep_param) != WM_SUCCESS)
     {
         /* If fail to send message on queue, free allocated memory ! */
         goto out;
@@ -1035,7 +1035,7 @@ void wlan_process_neighbor_report_response(t_u8 *frame, t_u32 len, t_u8 *dest_ad
 
 out:
     /* Post failure event to notify upper layer */
-    if (wifi_event_completion(WIFI_EVENT_NLIST_REPORT, WIFI_EVENT_REASON_FAILURE, NULL) != WM_SUCCESS)
+    if (wifi_event_completion(WLAN_BSS_TYPE_STA, WIFI_EVENT_NLIST_REPORT, WIFI_EVENT_REASON_FAILURE, (void *)NULL) != WM_SUCCESS)
     {
         wifi_e("Failed to post nlist report failure event");
     }
