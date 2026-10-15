@@ -38,17 +38,11 @@ typedef struct timer_data *os_timer_t;
 typedef os_timer_t osa_timer_arg_t;
 typedef int osa_timer_tick;
 
-/** OS Timer data structure
+/** OS Timer data structure: alias to osa_zephyr_timerHandle_t.
+ * The two structures are kept in sync so that OSA_TIMER_HANDLE_DEFINE()
+ * always allocates a buffer large enough for the actual timer layout.
  */
-struct timer_data
-{
-    void (*callback)(osa_timer_arg_t);
-    void *user_arg;
-    int period;
-    int reload_options;
-    struct k_timer timer;
-    struct k_work work;
-};
+typedef osa_zephyr_timerHandle_t timer_data;
 
 /**
  * OS Timer Activate Options
