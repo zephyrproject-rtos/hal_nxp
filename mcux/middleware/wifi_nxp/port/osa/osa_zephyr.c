@@ -15,7 +15,7 @@
 /*** Timer Management ***/
 static void timer_callback_work_handler(struct k_work *item)
 {
-    struct timer_data *ptimer = CONTAINER_OF(item, struct timer_data, work);
+    timer_data *ptimer = CONTAINER_OF(item, timer_data, work);
 
     ptimer->callback(ptimer);
 }
@@ -23,7 +23,7 @@ static void timer_callback_work_handler(struct k_work *item)
 static void timer_callback(struct k_timer *tmr)
 {
     int ret;
-    struct timer_data *ptimer = k_timer_user_data_get(tmr);
+    timer_data *ptimer = k_timer_user_data_get(tmr);
 
     ret = k_work_submit(&ptimer->work);
     if (ret < 0)
@@ -43,11 +43,11 @@ osa_status_t OSA_TimerCreate(osa_timer_handle_t timerHandle,
 
     assert(timerHandle != NULL);
 
-    struct timer_data *ptimer = (struct timer_data *)timerHandle;
+    timer_data *ptimer = (timer_data *)timerHandle;
 
     ptimer->reload_options = reload;
     ptimer->period         = ticks;
-    ptimer->callback       = call_back;
+    ptimer->callback       = (void (*)(void *))call_back;
     ptimer->user_arg       = cb_arg;
     k_timer_init(&ptimer->timer, timer_callback, NULL);
     k_timer_user_data_set(&ptimer->timer, ptimer);
@@ -76,7 +76,7 @@ osa_status_t OSA_TimerActivate(osa_timer_handle_t timerHandle)
 
     assert(timerHandle != NULL);
 
-    struct timer_data *ptimer = (struct timer_data *)timerHandle;
+    timer_data *ptimer = (timer_data *)timerHandle;
 
     if (ptimer->reload_options == KOSA_TimerOnce)
     {
@@ -97,7 +97,7 @@ osa_status_t OSA_TimerChange(osa_timer_handle_t timerHandle, osa_timer_tick ntim
 
     assert(timerHandle != NULL);
 
-    struct timer_data *ptimer = (struct timer_data *)timerHandle;
+    timer_data *ptimer = (timer_data *)timerHandle;
 
     ptimer->period = ntime;
 
@@ -110,7 +110,7 @@ bool OSA_TimerIsRunning(osa_timer_handle_t timerHandle)
 
     assert(timerHandle != NULL);
 
-    struct timer_data *ptimer = (struct timer_data *)timerHandle;
+    timer_data *ptimer = (timer_data *)timerHandle;
 
     ret = k_timer_remaining_ticks(&ptimer->timer);
 
@@ -121,7 +121,7 @@ void *OSA_TimerGetContext(osa_timer_handle_t timerHandle)
 {
     assert(timerHandle != NULL);
 
-    struct timer_data *ptimer = (struct timer_data *)(void *)(uintptr_t *)(*(uintptr_t *)timerHandle);
+    timer_data *ptimer = (timer_data *)(void *)(uintptr_t *)(*(uintptr_t *)timerHandle);
 
     return ptimer->user_arg;
 }
@@ -139,7 +139,7 @@ osa_status_t OSA_TimerDeactivate(osa_timer_handle_t timerHandle)
 
     assert(timerHandle != NULL);
 
-    struct timer_data *ptimer = (struct timer_data *)timerHandle;
+    timer_data *ptimer = (timer_data *)timerHandle;
 
     k_timer_stop(&ptimer->timer);
 
@@ -152,7 +152,7 @@ osa_status_t OSA_TimerDestroy(osa_timer_handle_t timerHandle)
 
     assert(timerHandle != NULL);
 
-    struct timer_data *ptimer = (struct timer_data *)timerHandle;
+    timer_data *ptimer = (timer_data *)timerHandle;
 
     k_timer_stop(&ptimer->timer);
     k_work_cancel(&ptimer->work);
