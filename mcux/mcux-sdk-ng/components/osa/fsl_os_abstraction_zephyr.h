@@ -107,9 +107,12 @@ typedef struct _osa_zephyr_semHandle
 /*! @brief Private Zephyr OSA timer handle. Do not use directly.*/
 typedef struct _osa_zephyr_timerHandle
 {
-    struct k_timer handle;
+    void (*callback)(void *);
+    void *user_arg;
+    int period;
+    int reload_options;
+    struct k_timer timer;
     struct k_work work;
-    uint32_t padding[4];
 } osa_zephyr_timerHandle_t;
 
 /*! @brief Zephyr OSA task handle size. */
