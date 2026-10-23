@@ -334,33 +334,47 @@ blobs:
 
 #For NEUTRON NPU
   - path: neutron/mcxn/libNeutronDriver.a
-    sha256: 452b1077a015265d1ab34831db3a25a4ef266c28c94afa6a308b28794baac358
+    sha256: 4b65e374eeea7da088dc6fb7c5dd60e22a58911bc14c8e1f2f67c26823e3a6e1
     type: lib
-    version: '3.0.0'
+    version: '3.2.2'
     license-path: zephyr/blobs/license/BSD_3.txt
-    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/4a3cb9ad/neutron/mcxn/libNeutronDriver.a
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/913be37c/neutron/mcxn/libNeutronDriver.a
     description: "Neutron driver library for MCXN"
   - path: neutron/mcxn/libNeutronFirmware.a
-    sha256: ae2dd4cc45e0a7d89dd5e5688eb393269c3392bc4e0e5897f0a9429919af37f1
+    sha256: a0f48e8d9cf4e6198a5359a85cf504cff7ca0bf35ae74449d9c1721291a32632
     type: lib
-    version: '3.0.0'
+    version: '3.2.2'
     license-path: zephyr/blobs/license/BSD_3.txt
-    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/4a3cb9ad/neutron/mcxn/libNeutronFirmware.a
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/913be37c/neutron/mcxn/libNeutronFirmware.a
     description: "Neutron firmware library for MCXN"
   - path: neutron/rt700/cm33/libNeutronDriver.a
-    sha256: 2a8d004fea0bd21520c1df2d33749b74c8cb4f4615bc950a909313a0fcb942ad
+    sha256: b2070931a8f4e5fbce1a9b31de23da33d0aa9998040397955e78646dd98965f4
     type: lib
-    version: '3.0.0'
+    version: '3.2.2'
     license-path: zephyr/blobs/license/BSD_3.txt
-    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/4a3cb9ad/neutron/rt700/cm33/libNeutronDriver.a
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/913be37c/neutron/rt700/cm33/libNeutronDriver.a
     description: "Neutron driver library for RT700 CM33"
   - path: neutron/rt700/cm33/libNeutronFirmware.a
-    sha256: fc2f01e1f65fb4561cab5a086659f276822d6c29753b34cebd4b9176f7c4d8f0
+    sha256: b7e0bc3af4597da89e3c08307daf0f9f419693da51593c6a4a73b826bdc3d2d1
     type: lib
-    version: '3.0.0'
+    version: '3.2.2'
     license-path: zephyr/blobs/license/BSD_3.txt
-    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/4a3cb9ad/neutron/rt700/cm33/libNeutronFirmware.a
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/913be37c/neutron/rt700/cm33/libNeutronFirmware.a
     description: "Neutron firmware library for RT700 CM33"
+  - path: neutron/rt2660/libNeutronDriver.a
+    sha256: 90183db2bd7bfe17815cdb3a3967e2b59a1f6390e5644c30a593779398b3c4d6
+    type: lib
+    version: '3.2.2'
+    license-path: zephyr/blobs/license/BSD_3.txt
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/913be37c/neutron/rt2660/libNeutronDriver.a
+    description: "Neutron driver library for RT2660"
+  - path: neutron/rt2660/NeutronFirmware.elf
+    sha256: 378a339ec5ba68a7b920f550796e860dc91ddd281d0fc2a2855897a93f36d07c
+    type: img
+    version: '3.2.2'
+    license-path: zephyr/blobs/license/BSD_3.txt
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-eiq/raw/913be37c/neutron/rt2660/NeutronFirmware.elf
+    description: "Neutron firmware for RT2660"
 
 #For MCXL255
   - path: mcxl255/libadvc_cm0p.a
