@@ -4047,18 +4047,7 @@ static void wlcm_process_authentication_event(struct wifi_message *msg,
 #if CONFIG_11R
                 wlan.ft_bss = false;
 #endif
-                (void)net_get_if_addr((struct net_ip_config *)&network->ip, if_handle);
-                wlan.sta_state      = CM_STA_CONNECTED;
-                *next               = CM_STA_CONNECTED;
-                wlan.sta_ipv4_state = CM_STA_CONNECTED;
-
-                if (wlan.reassoc_control && wlan.reassoc_request)
-                {
-                    wlan.reassoc_count   = 0;
-                    wlan.reassoc_request = false;
-                }
-                mlan_adap->skip_dfs = false;
-                CONNECTION_EVENT(WLAN_REASON_SUCCESS, NULL);
+                CONNECTION_EVENT(WLAN_REASON_ROAMING_AUTH_SUCCESS, NULL);
                 return;
             }
 
@@ -16834,4 +16823,46 @@ int wlan_set_network_chanlist(char *name, const uint8_t *chan_list, uint8_t num_
 
 out:
     return WM_SUCCESS;
+}
+
+int wlan_gw_probe_done(bool reachable_same_gw)
+{
+    struct wlan_network *network = &wlan.networks[wlan.cur_network_idx];
+    void *if_handle = NULL;
+
+    if (network->type == WLAN_BSS_TYPE_STA)
+    {
+        if_handle = net_get_mlan_handle();
+    }
+#if CONFIG_P2P
+    else if (network->type == WLAN_BSS_TYPE_WIFIDIRECT)
+    {
+        if_handle = net_get_wfd_handle();
+    }
+    else
+    {
+        /* Do nothing */
+    }
+#endif /* CONFIG_P2P */
+
+    if (reachable_same_gw)
+    {
+        (void)net_get_if_addr((struct net_ip_config *)&network->ip, if_handle);
+        wlan.sta_state      = CM_STA_CONNECTED;
+        wlan.sta_ipv4_state = CM_STA_CONNECTED;
+
+        if (wlan.reassoc_control && wlan.reassoc_request)
+        {
+            wlan.reassoc_count   = 0;
+            wlan.reassoc_request = false;
+        }
+        mlan_adap->skip_dfs = false;
+        CONNECTION_EVENT(WLAN_REASON_SUCCESS, NULL);
+
+        return WM_SUCCESS;
+    }
+
+    wlan.same_ess = false;
+    return wlan_wlcmgr_send_msg(WIFI_EVENT_AUTHENTICATION,
+                         WIFI_EVENT_REASON_SUCCESS, NULL);
 }
