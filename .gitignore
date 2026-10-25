@@ -1,5 +1,3 @@
 __pycache__/
 *.swp
 zephyr/blobs/*
-!zephyr/blobs/license/
-!zephyr/blobs/license/**
