@@ -168,6 +168,13 @@ zephyr_library_compile_definitions_ifdef(CONFIG_NXP_IW611_MURATA_2DL_M2
     WIFI_BT_USE_M2_INTERFACE
 )
 
+zephyr_library_compile_definitions_ifdef(CONFIG_NXP_IW611_EZURIO_NX611
+    WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_ezurio_nx611.h"
+    CONFIG_NXP_WIFI_ED_OFFSET_2G=0x0A
+    CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0A
+    WIFI_BT_USE_USD_INTERFACE
+)
+
 zephyr_library_compile_definitions_ifdef(CONFIG_NXP_IW612_UBX_MAYA_W276_M2
     WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_maya_W276_WW.h"
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x0A
@@ -291,6 +298,7 @@ zephyr_library_include_directories(
     ${MCUX_SDK_DIR}/components/wifi_bt_module/Quectel/tx_pwr_limits/
     ${MCUX_SDK_DIR}/components/wifi_bt_module/AzureWave/tx_pwr_limits/
     ${MCUX_SDK_DIR}/components/wifi_bt_module/Murata/tx_pwr_limits/
+    ${MCUX_SDK_DIR}/components/wifi_bt_module/Ezurio/tx_pwr_limits/
 )
 
 # Chip-specific firmware header directories — only the active chip is needed.
