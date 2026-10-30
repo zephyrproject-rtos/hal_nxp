@@ -303,6 +303,8 @@ extern "C" {
 #define OVERRIDE_CALIBRATION_DATA "wifi_cal_data_iw612_2ant_lo_iso.h"
 #elif defined(CONFIG_WLAN_CALDATA_2ANT_HI_ISO_41DB)
 #define OVERRIDE_CALIBRATION_DATA "wifi_cal_data_iw612_2ant_hi_iso_41db.h"
+#elif defined(CONFIG_NXP_WIFI_CALDATA_UBX_IRIS_W1)
+#define OVERRIDE_CALIBRATION_DATA "wifi_cal_data_ubx_iris_w1_1ant.h"
 #else
 #define OVERRIDE_CALIBRATION_DATA "wifi_cal_data_override.h"
 #endif
