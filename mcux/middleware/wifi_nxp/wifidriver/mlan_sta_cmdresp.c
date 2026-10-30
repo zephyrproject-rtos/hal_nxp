@@ -945,6 +945,11 @@ mlan_status wlan_ops_sta_process_cmdresp(IN t_void *priv, IN t_u16 cmdresp_no, I
             ret = wlan_ret_ind_rst_cfg(pmpriv, resp, pioctl_buf);
             break;
 #endif
+#if CONFIG_WPA_SUPP_P2P
+        case HostCmd_CMD_WIFI_DIRECT_MODE_CONFIG:
+            ret = wlan_ret_wifi_direct_mode(pmpriv, resp, pioctl_buf);
+            break;
+#endif
         default:
             PRINTM(MERROR, "CMD_RESP: Unknown command response %#x\n", resp->command);
             break;
