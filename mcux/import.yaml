@@ -1,0 +1,149 @@
+# import.yaml
+#
+# Records the address, version, and restore steps (copy / remove / pin) of every
+# sync source in hal_nxp. See scripts/sync_msdk/import-schema.md for the schema,
+# and scripts/sync_msdk/sync-guide.md for the concepts and workflow.
+#
+
+entries:
+
+  - name: basic
+    description: "MCUXpresso SDK basic files (device headers, components)"
+    manifest:
+      repo: https://github.com/nxp-mcuxpresso/mcuxsdk-manifests
+      revision: v26.09.00-pvw2
+
+    sources:
+      - repo: https://github.com/nxp-mcuxpresso/mcuxsdk-core
+        name: mcuxsdk-core
+        revision: 88e69085dfaab35652ca79fdf3f05c7551eed601
+        dest_path: mcux/mcux-sdk-ng
+        copy:
+          - "^arch/arm/"
+          - "^arch/xtensa/"
+          - "^cmake/extension/basic_settings_lite.cmake"
+          - "^cmake/extension/function.cmake"
+          - "^cmake/extension/logging.cmake"
+          - "^drivers/"
+
+      - repo: https://github.com/nxp-mcuxpresso/mcux-component
+        name: mcux-component
+        revision: 496290abd168b9fcee2fd6a16c12c14ae99d5f50
+        dest_path: mcux/mcux-sdk-ng/components
+        copy:
+          - "^conn_fwloader/"
+          - "^flash/fsl_flash\\.h$"
+          - "^flash/mflash/\\w*\\.[ch]$"
+          - "^flash/mflash/evkcmimxrt1060/"
+          - "^flash/mflash/rdrw612bga/"
+          - "^flash/nand/"
+          - "^flash/nor/"
+          - "^imu_adapter/"
+          - "^lists/"
+          - "^misc_utilities/"
+          - "^osa/"
+          - "^phy/"
+          - "^rpmsg/"
+          - "^wifi_bt_module/"
+
+      - repo: https://github.com/nxp-mcuxpresso/mcux-devices-imx
+        name: mcux-devices-imx
+        revision: c44c70545f236cf75b9f3a5a72c6694816593ca6
+        dest_path: mcux/mcux-sdk-ng/devices/i.MX
+        copy:
+          - ".*"
+
+      - repo: https://github.com/nxp-mcuxpresso/mcux-devices-rt
+        name: mcux-devices-rt
+        revision: 5aca9adfa3dd9be25fb31144dc52a5a845fd95aa
+        dest_path: mcux/mcux-sdk-ng/devices/RT
+        copy:
+          - ".*"
+
+      - repo: https://github.com/nxp-mcuxpresso/mcux-devices-kinetis
+        name: mcux-devices-kinetis
+        revision: b8c9e31246223da57b9e85bfe638da9a853bf125
+        dest_path: mcux/mcux-sdk-ng/devices/Kinetis
+        copy:
+          - ".*"
+
+      - repo: https://github.com/nxp-mcuxpresso/mcux-devices-lpc
+        name: mcux-devices-lpc
+        revision: fdf4429f3dda7f427bf4ef438a0e85fca083e178
+        dest_path: mcux/mcux-sdk-ng/devices/LPC
+        copy:
+          - ".*"
+
+      - repo: https://github.com/nxp-mcuxpresso/mcux-devices-mcx
+        name: mcux-devices-mcx
+        revision: fcdafec0dec36f939375b3c67a40967c98dde0f8
+        dest_path: mcux/mcux-sdk-ng/devices/MCX
+        copy:
+          - ".*"
+
+      - repo: https://github.com/nxp-mcuxpresso/mcux-devices-wireless
+        name: mcux-devices-wireless
+        revision: e565121a5b815d43e85144ee6f34d53f758822eb
+        dest_path: mcux/mcux-sdk-ng/devices/Wireless
+        copy:
+          - ".*"
+
+    actions:
+      - type: remove
+        patterns:
+          - "^mcux/mcux-sdk-ng/(devices|components|drivers|arch)/(.*/)?Kconfig[^/]*$"
+          - "^mcux/mcux-sdk-ng/(devices|components|drivers)/(.*/)?[Dd]oxygen(/|$)"
+      - type: remove
+        patterns:
+          - "^mcux/mcux-sdk-ng/devices/(.*/)?example(/|$)"
+          - "^mcux/mcux-sdk-ng/devices/(.*/)?arm(/|$)"
+          - "^mcux/mcux-sdk-ng/devices/(.*/)?xtensa(/|$)"
+          - "^mcux/mcux-sdk-ng/devices/(.*/)?README\\.md$"
+          - "^mcux/mcux-sdk-ng/devices/(.*/)?RTE_Device\\.h$"
+          - "^mcux/mcux-sdk-ng/devices/.*\\.yml$"
+          - "^mcux/mcux-sdk-ng/devices/.*\\.icf$"
+          - "^mcux/mcux-sdk-ng/devices/.*\\.ld$"
+          - "^mcux/mcux-sdk-ng/devices/.*\\.scf$"
+          - "^mcux/mcux-sdk-ng/devices/.*\\.FLM$"
+          - "^mcux/mcux-sdk-ng/devices/.*\\.sdf$"
+          - "^mcux/mcux-sdk-ng/devices/.*\\.a$"
+          - "^mcux/mcux-sdk-ng/devices/.*\\.lib$"
+          - "^mcux/mcux-sdk-ng/devices/.*\\.dbgconf$"
+          - "^mcux/mcux-sdk-ng/devices/(.*/)?startup[^/]*\\.(s|S|c|cpp)$"
+          - "^mcux/mcux-sdk-ng/devices/.*/mcuxpresso/startup_[^/]*\\.cpp$"
+          - "^mcux/mcux-sdk-ng/devices/(.*/)?prj\\.conf$"
+          - "^mcux/mcux-sdk-ng/drivers/.*/\\.gitignore$"
+          - "^mcux/mcux-sdk-ng/drivers/.*\\.template$"
+          - "^mcux/mcux-sdk-ng/drivers/.*\\.dox$"
+          - "^mcux/mcux-sdk-ng/drivers/\\.gitignore$"
+          - "^mcux/mcux-sdk-ng/drivers/.*/template\\.readme$"
+          - "^mcux/mcux-sdk-ng/arch/arm/target/.*$"
+    drop_patch:
+      - bc22c70f46957b2a8d3855f71a560ac417dc8287
+      - 6c77523dfdfc5a1ecefbafb31feee6499a5de8ec
+      - 4ed7196fbaab68050354b6c359ed6ecd567a5fd8
+      - fbb03f0e57d0b771a2b06c66525b866bd93881aa
+      - 650b0cbf1053bc99c00a56bce487dd2639fb2ae5
+
+  - name: usb
+    description: "NXP MCUXpresso SDK USB middleware"
+    manifest:
+      repo: https://github.com/nxp-mcuxpresso/mcuxsdk-manifests
+      revision: 02c9635cb200291d1664aefdd6a48aee5f4901d6
+
+    sources:
+      - repo: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-usb
+        name: mcuxsdk-middleware-usb   # TODO: confirm the GitHub repo name
+        revision: <revision-here>   # TODO: resolve from manifest and fill in, source branch: release/25.12.00-pvw2
+        note: "from branch: release/25.12.00-pvw2"
+        dest_path: mcux/mcux-sdk-ng/middleware/usb
+        copy:
+          - ".*"
+
+    actions:
+      - type: remove
+        patterns:
+          - "^mcux/.*\\.a$"
+          - "^mcux/mcux-sdk-ng/middleware/usb/(.*/)?Kconfig[^/]*$"
+          - "^mcux/mcux-sdk-ng/middleware/usb/example(/|$)"
+          - "^mcux/mcux-sdk-ng/middleware/usb/docs(/|$)"
