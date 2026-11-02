@@ -463,24 +463,44 @@ _Pragma("diag_suppress=Pm120")
      defined(FSL_FEATURE_L1ICACHE_LINESIZE_BYTE))
 
 #if (defined(__ICCARM__))
+#ifndef AT_NONCACHEABLE_SECTION
 #define AT_NONCACHEABLE_SECTION(var)                   var @"NonCacheable"
+#endif
+#ifndef AT_NONCACHEABLE_SECTION_ALIGN
 #define AT_NONCACHEABLE_SECTION_ALIGN(var, alignbytes) SDK_PRAGMA(data_alignment = alignbytes) var @"NonCacheable"
+#endif
+#ifndef AT_NONCACHEABLE_SECTION_INIT
 #define AT_NONCACHEABLE_SECTION_INIT(var)              var @"NonCacheable.init"
+#endif
+#ifndef AT_NONCACHEABLE_SECTION_ALIGN_INIT
 #define AT_NONCACHEABLE_SECTION_ALIGN_INIT(var, alignbytes) \
     SDK_PRAGMA(data_alignment = alignbytes) var @"NonCacheable.init"
+#endif
 
 #elif (defined(__CC_ARM) || defined(__ARMCC_VERSION))
+#ifndef AT_NONCACHEABLE_SECTION_INIT
 #define AT_NONCACHEABLE_SECTION_INIT(var) __attribute__((section("NonCacheable.init"))) var
+#endif
+#ifndef AT_NONCACHEABLE_SECTION_ALIGN_INIT
 #define AT_NONCACHEABLE_SECTION_ALIGN_INIT(var, alignbytes) \
     __attribute__((section("NonCacheable.init"))) __attribute__((aligned(alignbytes))) var
+#endif
 #if (defined(__CC_ARM))
+#ifndef AT_NONCACHEABLE_SECTION
 #define AT_NONCACHEABLE_SECTION(var) __attribute__((section("NonCacheable"), zero_init)) var
+#endif
+#ifndef AT_NONCACHEABLE_SECTION_ALIGN
 #define AT_NONCACHEABLE_SECTION_ALIGN(var, alignbytes) \
     __attribute__((section("NonCacheable"), zero_init)) __attribute__((aligned(alignbytes))) var
+#endif
 #else
+#ifndef AT_NONCACHEABLE_SECTION
 #define AT_NONCACHEABLE_SECTION(var) __attribute__((section(".bss.NonCacheable"))) var
+#endif
+#ifndef AT_NONCACHEABLE_SECTION_ALIGN
 #define AT_NONCACHEABLE_SECTION_ALIGN(var, alignbytes) \
     __attribute__((section(".bss.NonCacheable"))) __attribute__((aligned(alignbytes))) var
+#endif
 #endif
 
 #elif (defined(__GNUC__)) || defined(DOXYGEN_OUTPUT)
@@ -493,22 +513,38 @@ _Pragma("diag_suppress=Pm120")
 /* For GCC, when the non-cacheable section is required, please define "__STARTUP_INITIALIZE_NONCACHEDATA"
  * in your projects to make sure the non-cacheable section variables will be initialized in system startup.
  */
+#ifndef AT_NONCACHEABLE_SECTION_INIT
 #define AT_NONCACHEABLE_SECTION_INIT(var) __attribute__((section("NonCacheable.init"))) var
+#endif
+#ifndef AT_NONCACHEABLE_SECTION_ALIGN_INIT
 #define AT_NONCACHEABLE_SECTION_ALIGN_INIT(var, alignbytes) \
     __attribute__((section("NonCacheable.init"))) var __attribute__((aligned(alignbytes)))
+#endif
+#ifndef AT_NONCACHEABLE_SECTION
 #define AT_NONCACHEABLE_SECTION(var) __attribute__((section("NonCacheable,\"aw\",%nobits " MCUX_CS))) var
+#endif
+#ifndef AT_NONCACHEABLE_SECTION_ALIGN
 #define AT_NONCACHEABLE_SECTION_ALIGN(var, alignbytes) \
     __attribute__((section("NonCacheable,\"aw\",%nobits " MCUX_CS))) var __attribute__((aligned(alignbytes)))
+#endif
 #else
 #error Toolchain not supported.
 #endif
 
 #else
 
+#ifndef AT_NONCACHEABLE_SECTION
 #define AT_NONCACHEABLE_SECTION(var)                        var
+#endif
+#ifndef AT_NONCACHEABLE_SECTION_ALIGN
 #define AT_NONCACHEABLE_SECTION_ALIGN(var, alignbytes)      SDK_ALIGN(var, alignbytes)
+#endif
+#ifndef AT_NONCACHEABLE_SECTION_INIT
 #define AT_NONCACHEABLE_SECTION_INIT(var)                   var
+#endif
+#ifndef AT_NONCACHEABLE_SECTION_ALIGN_INIT
 #define AT_NONCACHEABLE_SECTION_ALIGN_INIT(var, alignbytes) SDK_ALIGN(var, alignbytes)
+#endif
 
 #endif
 
