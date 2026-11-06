@@ -75,7 +75,9 @@ static t_u16 wlan_get_bitmap_index(MrvlRateScope_t *rate_scope)
     if (rate_scope != MNULL)
     {
         index += NELEMENTS(rate_scope->ht_mcs_rate_bitmap);
+#if CONFIG_11AC
         index += NELEMENTS(rate_scope->vht_mcs_rate_bitmap);
+#endif
     }
     return index;
 }
@@ -747,7 +749,10 @@ mlan_status wlan_ret_tx_rate_cfg(IN pmlan_private pmpriv, IN HostCmd_DS_COMMAND 
                     for (i = 0; i < NELEMENTS(prate_scope->he_mcs_rate_bitmap); i++)
                     {
                         pmpriv->bitmap_rates[2 + sizeof(prate_scope->ht_mcs_rate_bitmap) / sizeof(t_u16) +
-                                             sizeof(prate_scope->vht_mcs_rate_bitmap) / sizeof(t_u16) + i] =
+#if CONFIG_11AC
+                                             sizeof(prate_scope->vht_mcs_rate_bitmap) / sizeof(t_u16) +
+#endif
+                                             i] =
                             wlan_le16_to_cpu(prate_scope->he_mcs_rate_bitmap[i]);
                     }
                 }
@@ -1068,11 +1073,18 @@ mlan_status wlan_ret_get_hw_spec(IN pmlan_private pmpriv, IN HostCmd_DS_COMMAND 
         pmadapter->fw_bands = (t_u16)GET_FW_DEFAULT_BANDS(pmadapter);
         if (ISSUPP_NO5G(pmadapter->fw_cap_ext))
         {
-            pmadapter->fw_bands &= ~(BAND_A | BAND_AN | BAND_AAC);
+            pmadapter->fw_bands &= ~(BAND_A | BAND_AN | BAND_AAC
+#if CONFIG_11AX
+                                     | BAND_AAX
+#endif
+            );
         }
 #if !CONFIG_5GHz_SUPPORT
-        /* fixme: Re-check if this is the correct way to disable 5 GHz. */
-        pmadapter->fw_bands &= ~(BAND_A | BAND_AN | BAND_AAC);
+        pmadapter->fw_bands &= ~(BAND_A | BAND_AN | BAND_AAC
+#if CONFIG_11AX
+                                 | BAND_AAX
+#endif
+        );
 #endif /* CONFIG_5GHz_SUPPORT */
     }
     else

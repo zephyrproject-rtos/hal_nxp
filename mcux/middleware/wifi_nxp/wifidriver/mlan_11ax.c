@@ -258,8 +258,15 @@ void wlan_update_11ax_cap(mlan_adapter *pmadapter,
         he_cap_2g = MTRUE;
         DBG_HEXDUMP(MCMD_D, "2.4G HE capability IE ", (t_u8 *)pmadapter->hw_2g_he_cap, pmadapter->hw_2g_hecap_len);
     }
+#if CONFIG_5GHz_SUPPORT
     else
     {
+        if ((pmadapter->fw_bands & BAND_A) == 0U)
+        {
+            PRINTM(MINFO, "Ignoring 5GHz HE capability because 5GHz is not supported\n");
+            LEAVE();
+            return;
+        }
         pmadapter->fw_bands |= BAND_AAX;
         pmadapter->config_bands |= BAND_AAX;
         pmadapter->hw_hecap_len = hw_he_cap->len + sizeof(MrvlIEtypesHeader_t);
@@ -267,6 +274,14 @@ void wlan_update_11ax_cap(mlan_adapter *pmadapter,
                        hw_he_cap->len + sizeof(MrvlIEtypesHeader_t));
         DBG_HEXDUMP(MCMD_D, "5G HE capability IE ", (t_u8 *)pmadapter->hw_he_cap, pmadapter->hw_hecap_len);
     }
+#else
+    else
+    {
+        PRINTM(MINFO, "Ignoring 5GHz HE capability because 5GHz is disabled\n");
+        LEAVE();
+        return;
+    }
+#endif
     for (i = 0; i < pmadapter->priv_num; i++)
     {
         if (pmadapter->priv[i])
