@@ -88,6 +88,25 @@ typedef struct _oper_bw_chan
     t_u8 channel_list[13];
 } oper_bw_chan;
 
+typedef struct _global_oper_class
+{
+    t_u8 mode;
+    t_u8 global_oper_class;
+    t_u8 bandwidth;
+    /* channel list or center-channel list */
+    t_u8 channel_list[13];
+} global_oper_class_t;
+
+enum
+{
+    OPER_CLASS_BW_20MHZ = 0,
+    OPER_CLASS_BW_40PLUS,
+    OPER_CLASS_BW_40MINUS,
+    OPER_CLASS_BW_80MHZ,
+    OPER_CLASS_BW_160MHZ,
+    OPER_CLASS_BW_80P80MHZ
+} oper_class_bw;
+
 /** oper class table for US*/
 static oper_bw_chan oper_bw_chan_us[] = {
     /** non-Global oper class, global oper class, bandwidth, channel list*/
@@ -185,6 +204,33 @@ static oper_bw_chan oper_bw_chan_cn[] = {
     {128, 128, 2, {42, 58, 106, 122, 138, 155, 0, 0, 0, 0, 0, 0, 0}},
     {129, 129, 3, {50, 114, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
     {130, 130, 2, {42, 58, 106, 122, 138, 155, 0, 0, 0, 0, 0, 0, 0}},
+#endif
+};
+
+static const global_oper_class_t global_oper_class_table[] = {
+    {BAND_2GHZ, 81, OPER_CLASS_BW_20MHZ, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}},
+    {BAND_2GHZ, 82, OPER_CLASS_BW_20MHZ, {14}},
+    {BAND_2GHZ, 83, OPER_CLASS_BW_40PLUS, {1, 2, 3, 4, 5, 6, 7, 8, 9}},
+    {BAND_2GHZ, 84, OPER_CLASS_BW_40MINUS, {5, 6, 7, 8, 9, 10, 11, 12, 13}},
+#if CONFIG_5GHz_SUPPORT
+    {BAND_5GHZ, 115, OPER_CLASS_BW_20MHZ, {36, 40, 44, 48}},
+    {BAND_5GHZ, 116, OPER_CLASS_BW_40PLUS, {36, 44}},
+    {BAND_5GHZ, 117, OPER_CLASS_BW_40MINUS, {40, 48}},
+    {BAND_5GHZ, 118, OPER_CLASS_BW_20MHZ, {52, 56, 60, 64}},
+    {BAND_5GHZ, 119, OPER_CLASS_BW_40PLUS, {52, 60}},
+    {BAND_5GHZ, 120, OPER_CLASS_BW_40MINUS, {56, 64}},
+    {BAND_5GHZ, 121, OPER_CLASS_BW_20MHZ, {100, 104, 108, 112, 116, 120, 124, 128, 132, 136, 140, 144}},
+    {BAND_5GHZ, 122, OPER_CLASS_BW_40PLUS, {100, 108, 116, 124, 132, 140}},
+    {BAND_5GHZ, 123, OPER_CLASS_BW_40MINUS, {104, 112, 120, 128, 136, 144}},
+    {BAND_5GHZ, 124, OPER_CLASS_BW_20MHZ, {149, 153, 157, 161}},
+    {BAND_5GHZ, 125, OPER_CLASS_BW_20MHZ, {149, 153, 157, 161, 165, 169, 173, 177}},
+    {BAND_5GHZ, 126, OPER_CLASS_BW_40PLUS, {149, 157, 165, 173}},
+    {BAND_5GHZ, 127, OPER_CLASS_BW_40MINUS, {153, 161, 169, 177}},
+#if CONFIG_11AC || CONFIG_11AX
+    {BAND_5GHZ, 128, OPER_CLASS_BW_80MHZ, {42, 58, 106, 122, 138, 155, 171}},
+    {BAND_5GHZ, 129, OPER_CLASS_BW_160MHZ, {50, 114, 163}},
+    {BAND_5GHZ, 130, OPER_CLASS_BW_80P80MHZ, {42, 58, 106, 122, 138, 155, 171}},
+#endif
 #endif
 };
 
@@ -2740,149 +2786,356 @@ mlan_status wlan_get_global_nonglobal_oper_class(
     return MLAN_STATUS_FAILURE;
 }
 
-int wlan_add_supported_oper_class_ie(mlan_private *pmpriv, t_u8 **pptlv_out, t_u8 curr_oper_class)
+static t_bool wlan_oper_class_channel_usable(mlan_private *pmpriv, t_u16 band, t_u16 channel)
 {
-    t_u8 oper_class_us[] = {115,
-                            118,
-                            124,
-                            121,
-                            125,
-                            81,
-                            116,
-                            119,
-                            122,
-                            126,
-                            126,
-                            117,
-                            120,
-                            123,
-                            127,
-                            127,
-                            83,
-                            84
-#if CONFIG_11AC
-                            ,
-                            128,
-                            129,
-                            130
-#endif
-    };
-    t_u8 oper_class_eu[] = {115,
-                            118,
-                            121,
-                            81,
-                            116,
-                            119,
-                            122,
-                            117,
-                            120,
-                            123,
-                            83,
-                            84,
-                            125
-#if CONFIG_11AC
-                            ,
-                            128,
-                            129,
-                            130
-#endif
-    };
-    t_u8 oper_class_jp[] = {115,
-                            81,
-                            82,
-                            118,
-                            118,
-                            121,
-                            121,
-                            116,
-                            119,
-                            119,
-                            122,
-                            122,
-                            117,
-                            120,
-                            120,
-                            123,
-                            123,
-                            83,
-                            84,
-                            121
-#if CONFIG_11AC
-                            ,
-                            128,
-                            129,
-                            130
-#endif
-    };
-    t_u8 oper_class_cn[] = {115,
-                            118,
-                            125,
-                            116,
-                            119,
-                            126,
-                            81,
-                            83,
-                            84
-#if CONFIG_11AC
-                            ,
-                            128,
-                            129,
-                            130
-#endif
-    };
-    t_u8 country_code[][COUNTRY_CODE_LEN] = {"US", "JP", "CN"};
-    int country_id = 0, ret = 0;
-    MrvlIETypes_SuppOperClass_t *poper_class = MNULL;
-    t_u32 meas_country_code_len              = 0;
+    const chan_freq_power_t *cfp;
 
-    ENTER();
-
-    for (country_id = 0; country_id < 3; country_id++)
+    cfp = wlan_get_cfp_by_band_and_channel(pmpriv->adapter, band, channel, pmpriv->adapter->region_channel);
+    if (cfp == MNULL || cfp->dynamic.blacklist != MFALSE ||
+        (cfp->dynamic.flags & NXP_CHANNEL_DISABLED) != 0U)
     {
-        meas_country_code_len = COUNTRY_CODE_LEN - 1U;
-        if (__memcmp(pmpriv->adapter, pmpriv->adapter->country_code, country_code[country_id], meas_country_code_len) ==
-            0)
-        {
+        return MFALSE;
+    }
+
+    return MTRUE;
+}
+
+static t_bool wlan_oper_class_he_bandwidth_supported(mlan_private *pmpriv, t_u16 band, t_u8 bandwidth)
+{
+#if CONFIG_11AX
+    const t_u8 *he_cap;
+    t_u8 he_phy_cap;
+    t_u8 he_phy_cap_mask;
+
+    if (!IS_FW_SUPPORT_11AX(pmpriv->adapter))
+    {
+        return MFALSE;
+    }
+
+    switch (band)
+    {
+        case BAND_G:
+            if ((pmpriv->config_bands & BAND_GAX) == 0U)
+            {
+                return MFALSE;
+            }
+            he_cap = pmpriv->user_2g_he_cap;
             break;
+#if CONFIG_5GHz_SUPPORT
+        case BAND_A:
+            if ((pmpriv->config_bands & BAND_AAX) == 0U)
+            {
+                return MFALSE;
+            }
+            he_cap = pmpriv->user_he_cap;
+            break;
+#endif
+        default:
+            return MFALSE;
+    }
+
+    if (band == BAND_G)
+    {
+        if (bandwidth != OPER_CLASS_BW_40PLUS && bandwidth != OPER_CLASS_BW_40MINUS)
+        {
+            return MFALSE;
         }
-    }
-    if (country_id >= 3)
-    {
-        country_id = COUNTRY_ID_US; /*Set default to US*/
-    }
-    if (wlan_is_etsi_country(pmpriv->adapter, pmpriv->adapter->country_code))
-    {
-        country_id = COUNTRY_ID_EU; /** Country in EU */
-    }
-    poper_class = (MrvlIETypes_SuppOperClass_t *)(void *)*pptlv_out;
-    (void)__memset(pmpriv->adapter, poper_class, 0, sizeof(MrvlIETypes_SuppOperClass_t));
-    poper_class->header.type = wlan_cpu_to_le16(REGULATORY_CLASS);
-    if (country_id == COUNTRY_ID_US)
-    {
-        poper_class->header.len = (t_u16)sizeof(oper_class_us);
-        (void)__memcpy(pmpriv->adapter, &poper_class->oper_class, oper_class_us, sizeof(oper_class_us));
-    }
-    else if (country_id == COUNTRY_ID_JP)
-    {
-        poper_class->header.len = (t_u16)sizeof(oper_class_jp);
-        (void)__memcpy(pmpriv->adapter, &poper_class->oper_class, oper_class_jp, sizeof(oper_class_jp));
-    }
-    else if (country_id == COUNTRY_ID_CN)
-    {
-        poper_class->header.len = (t_u16)sizeof(oper_class_cn);
-        (void)__memcpy(pmpriv->adapter, &poper_class->oper_class, oper_class_cn, sizeof(oper_class_cn));
-    }
-    else if (country_id == COUNTRY_ID_EU)
-    {
-        poper_class->header.len = (t_u16)sizeof(oper_class_eu);
-        (void)__memcpy(pmpriv->adapter, &poper_class->oper_class, oper_class_eu, sizeof(oper_class_eu));
+        he_phy_cap_mask = AX_2G_40MHZ_SUPPORT;
     }
     else
     {
-        /* Do nothing */
+        switch (bandwidth)
+        {
+            case OPER_CLASS_BW_40PLUS:
+            case OPER_CLASS_BW_40MINUS:
+            case OPER_CLASS_BW_80MHZ:
+                he_phy_cap_mask = AX_5G_40MHZ_80MHZ_SUPPORT;
+                break;
+            case OPER_CLASS_BW_160MHZ:
+                he_phy_cap_mask = AX_5G_160MHZ_SUPPORT;
+                break;
+            case OPER_CLASS_BW_80P80MHZ:
+                he_phy_cap_mask = AX_5G_80PLUS80MHZ_SUPPORT;
+                break;
+            default:
+                return MFALSE;
+        }
     }
+
+    he_phy_cap = he_cap[util_offsetof(MrvlIEtypes_He_cap_t, he_phy_cap)];
+    return (he_phy_cap & he_phy_cap_mask) != 0U ? MTRUE : MFALSE;
+#else
+    (void)pmpriv;
+    (void)band;
+    (void)bandwidth;
+    return MFALSE;
+#endif
+}
+
+static t_bool wlan_oper_class_mode_supported(mlan_private *pmpriv, const global_oper_class_t *oper_class)
+{
+    t_u16 config_bands = pmpriv->config_bands;
+    t_u16 mode_band_mask, ht_band_mask;
+    t_u16 band;
+    t_u32 ht_dev_cap;
+    t_bool ht40_supported = MFALSE;
+
+    switch (oper_class->mode)
+    {
+        case BAND_2GHZ:
+            band = BAND_G;
+            mode_band_mask = (BAND_B | BAND_G | BAND_GN | BAND_GAC
+#if CONFIG_11AX
+                              | BAND_GAX
+#endif
+            );
+            ht_band_mask = BAND_GN | BAND_GAC;
+            ht_dev_cap = pmpriv->adapter->usr_dot_11n_dev_cap_bg;
+            break;
+
+#if CONFIG_5GHz_SUPPORT
+        case BAND_5GHZ:
+            band = BAND_A;
+            mode_band_mask = (BAND_A | BAND_AN | BAND_AAC
+#if CONFIG_11AX
+                              | BAND_AAX
+#endif
+            );
+            ht_band_mask = BAND_AN | BAND_AAC;
+            ht_dev_cap = pmpriv->adapter->usr_dot_11n_dev_cap_a;
+            break;
+#endif
+        default:
+            return MFALSE;
+    }
+
+    switch (oper_class->bandwidth)
+    {
+        case OPER_CLASS_BW_20MHZ:
+            return (config_bands & mode_band_mask) != 0U ? MTRUE : MFALSE;
+        case OPER_CLASS_BW_40PLUS:
+        case OPER_CLASS_BW_40MINUS:
+            ht40_supported = ((config_bands & ht_band_mask) != 0U && ISSUPP_CHANWIDTH40(ht_dev_cap) != 0U)
+                                ? MTRUE : MFALSE;
+            return (ht40_supported == MTRUE ||
+                    wlan_oper_class_he_bandwidth_supported(pmpriv, band, oper_class->bandwidth) == MTRUE)
+                    ? MTRUE : MFALSE;
+        case OPER_CLASS_BW_80MHZ:
+            if (band != BAND_A)
+            {
+                return MFALSE;
+            }
+#if CONFIG_11AC
+            if ((config_bands & BAND_AAC) != 0U && ISSUPP_11ACENABLED(pmpriv->adapter->fw_cap_info) != 0U &&
+                ISSUPP_CHANWIDTH40(ht_dev_cap) != 0U)
+            {
+                return MTRUE;
+            }
+#endif
+            return wlan_oper_class_he_bandwidth_supported(pmpriv, band, oper_class->bandwidth);
+        case OPER_CLASS_BW_160MHZ:
+            if (band != BAND_A)
+            {
+                return MFALSE;
+            }
+#if CONFIG_11AC
+            if ((config_bands & BAND_AAC) != 0U && ISSUPP_11ACENABLED(pmpriv->adapter->fw_cap_info) != 0U &&
+                ISSUPP_11ACBW160(pmpriv->adapter->hw_dot_11ac_dev_cap) != 0U &&
+                (GET_VHTCAP_CHWDSET(pmpriv->adapter->usr_dot_11ac_dev_cap_a) == VHT_CAP_CHWD_160MHZ ||
+                GET_VHTCAP_CHWDSET(pmpriv->adapter->usr_dot_11ac_dev_cap_a) == VHT_CAP_CHWD_80_80MHZ))
+            {
+                return MTRUE;
+            }
+#endif
+            return wlan_oper_class_he_bandwidth_supported(pmpriv, band, oper_class->bandwidth);
+        case OPER_CLASS_BW_80P80MHZ:
+            if (band != BAND_A)
+            {
+                return MFALSE;
+            }
+#if CONFIG_11AC
+            if ((config_bands & BAND_AAC) != 0U && ISSUPP_11ACENABLED(pmpriv->adapter->fw_cap_info) != 0U &&
+                ISSUPP_11ACBW8080(pmpriv->adapter->hw_dot_11ac_dev_cap) != 0U &&
+                GET_VHTCAP_CHWDSET(pmpriv->adapter->usr_dot_11ac_dev_cap_a) == VHT_CAP_CHWD_80_80MHZ)
+            {
+                return MTRUE;
+            }
+#endif
+            return wlan_oper_class_he_bandwidth_supported(pmpriv, band, oper_class->bandwidth);
+        default:
+            return MFALSE;
+    }
+}
+
+static t_bool wlan_oper_class_channel_block_usable(mlan_private *pmpriv, t_u16 center_channel, t_u8 bandwidth)
+{
+    t_u8 first_channel = (t_u8)(center_channel - (bandwidth == OPER_CLASS_BW_80MHZ ? 6U : 14U));
+    t_u8 channel_count = bandwidth == OPER_CLASS_BW_80MHZ ? 4U : 8U;
+    t_u8 i;
+
+    for (i = 0; i < channel_count; i++)
+    {
+        if (!wlan_oper_class_channel_usable(pmpriv, BAND_A, (t_u16)(first_channel + i * 4U)))
+        {
+            return MFALSE;
+        }
+    }
+
+    return MTRUE;
+}
+
+#define OPER_CLASS_ADJACENT_80MHZ_CENTER_SEPARATION 16U
+
+static t_bool wlan_oper_class_80p80_usable(mlan_private *pmpriv, const global_oper_class_t *oper_class)
+{
+    t_u8 usable_centers[NELEMENTS(oper_class->channel_list)];
+    t_u8 usable_count = 0U;
+    t_u8 center_channel;
+    t_u8 i;
+    t_u8 j;
+    t_u16 separation;
+
+    /* Collect complete and usable 80 MHz channel blocks. */
+    for (i = 0U; i < NELEMENTS(oper_class->channel_list) &&
+            oper_class->channel_list[i] != 0U; i++)
+    {
+        center_channel = oper_class->channel_list[i];
+        if (wlan_oper_class_channel_block_usable(pmpriv, center_channel, OPER_CLASS_BW_80MHZ))
+        {
+            usable_centers[usable_count] = center_channel;
+            usable_count++;
+        }
+    }
+
+    if (usable_count < 2U)
+    {
+        return MFALSE;
+    }
+
+    /* Need at least two usable, non-contiguous 80 MHz blocks. */
+    for (i = 0U; i < (t_u8)(usable_count - 1U); i++)
+    {
+        for (j = (t_u8)(i + 1U); j < usable_count; j++)
+        {
+            if (usable_centers[i] > usable_centers[j])
+            {
+                separation = (t_u16)usable_centers[i] - (t_u16)usable_centers[j];
+            }
+            else
+            {
+                separation = (t_u16)usable_centers[j] - (t_u16)usable_centers[i];
+            }
+
+            if (separation > OPER_CLASS_ADJACENT_80MHZ_CENTER_SEPARATION)
+            {
+                return MTRUE;
+            }
+        }
+    }
+
+    return MFALSE;
+}
+
+static t_bool wlan_oper_class_supported(mlan_private *pmpriv, const global_oper_class_t *oper_class)
+{
+    t_u16 band, channel, secondary_channel;
+    t_u8 i, center_channel;
+
+    if (!wlan_oper_class_mode_supported(pmpriv, oper_class))
+    {
+        return MFALSE;
+    }
+
+    switch (oper_class->mode)
+    {
+        case BAND_2GHZ:
+            band = BAND_G;
+            break;
+#if CONFIG_5GHz_SUPPORT
+        case BAND_5GHZ:
+            band = BAND_A;
+            break;
+#endif
+        default:
+            return MFALSE;
+    }
+
+    switch (oper_class->bandwidth)
+    {
+        case OPER_CLASS_BW_20MHZ:
+            for (i = 0; i < NELEMENTS(oper_class->channel_list) && oper_class->channel_list[i] != 0U; i++)
+            {
+                channel = oper_class->channel_list[i];
+                if (wlan_oper_class_channel_usable(pmpriv, band, channel))
+                {
+                    return MTRUE;
+                }
+            }
+            break;
+        case OPER_CLASS_BW_40PLUS:
+        case OPER_CLASS_BW_40MINUS:
+            for (i = 0; i < NELEMENTS(oper_class->channel_list) && oper_class->channel_list[i] != 0U; i++)
+            {
+                channel = oper_class->channel_list[i];
+                secondary_channel = oper_class->bandwidth == OPER_CLASS_BW_40MINUS ? channel - 4U : channel + 4U;
+                if (wlan_oper_class_channel_usable(pmpriv, band, channel) &&
+                    wlan_oper_class_channel_usable(pmpriv, band, secondary_channel))
+                {
+                    return MTRUE;
+                }
+            }
+            break;
+        case OPER_CLASS_BW_80MHZ:
+        case OPER_CLASS_BW_160MHZ:
+            for (i = 0; i < NELEMENTS(oper_class->channel_list) && oper_class->channel_list[i] != 0U; i++)
+            {
+                center_channel = oper_class->channel_list[i];
+                if (wlan_oper_class_channel_block_usable(pmpriv, center_channel, oper_class->bandwidth))
+                {
+                    return MTRUE;
+                }
+            }
+            break;
+        case OPER_CLASS_BW_80P80MHZ:
+            return wlan_oper_class_80p80_usable(pmpriv, oper_class);
+        default:
+            break;
+    }
+
+    return MFALSE;
+}
+
+int wlan_add_supported_oper_class_ie(mlan_private *pmpriv, t_u8 **pptlv_out, t_u8 curr_oper_class)
+{
+    MrvlIETypes_SuppOperClass_t *poper_class;
+    t_u8 oper_class_list[NELEMENTS(global_oper_class_table)] = {0};
+    t_u8 oper_class_count = 0U;
+    int ret = 0, i;
+
+    ENTER();
+
+    if (pmpriv == MNULL || pmpriv->adapter == MNULL || pptlv_out == MNULL || *pptlv_out == MNULL)
+    {
+        LEAVE();
+        return 0;
+    }
+
+    poper_class   = (MrvlIETypes_SuppOperClass_t *)(void *)*pptlv_out;
+    (void)__memset(pmpriv->adapter, poper_class, 0, sizeof(MrvlIETypes_SuppOperClass_t));
+    poper_class->header.type = (t_u16)wlan_cpu_to_le16(REGULATORY_CLASS);
     poper_class->current_oper_class = curr_oper_class;
-    poper_class->header.len += (t_u16)sizeof(poper_class->current_oper_class);
+
+    for (i = 0; i < NELEMENTS(global_oper_class_table); i++)
+    {
+        if (wlan_oper_class_supported(pmpriv, &global_oper_class_table[i]))
+        {
+            oper_class_list[oper_class_count] = global_oper_class_table[i].global_oper_class;
+            oper_class_count++;
+        }
+    }
+
+    (void)__memcpy(pmpriv->adapter, &poper_class->oper_class, oper_class_list, oper_class_count);
+    poper_class->header.len = (t_u16)(sizeof(poper_class->current_oper_class) + oper_class_count);
     DBG_HEXDUMP(MCMD_D, "Operating class", (t_u8 *)poper_class, sizeof(MrvlIEtypesHeader_t) + poper_class->header.len);
     ret = (int)sizeof(MrvlIEtypesHeader_t) + (int)poper_class->header.len;
     *pptlv_out += ret;

@@ -15993,6 +15993,7 @@ int wlan_set_bandcfg(wlan_bandcfg_t *bandcfg)
 #if CONFIG_11AX
     uint16_t enable_11ax = bandcfg->band_cfg & WLAN_BANDCFG_11AX;
 #endif
+    uint16_t supported_bands;
     wifi_bandcfg_t cfg;
 
     if (is_sta_connected() || is_uap_started())
@@ -16024,38 +16025,52 @@ int wlan_set_bandcfg(wlan_bandcfg_t *bandcfg)
         return -WM_FAIL;
     }
 
+    /* Band B, G and A are not configurable. They are mandantory. */
     cfg.config_bands = 0;
-    /* Band B, G and A are not configurable. They are mandatory. */
-    cfg.config_bands |= (BAND_B | BAND_G | BAND_A);
+    cfg.config_bands = (BAND_B | BAND_G);
+#if CONFIG_5GHz_SUPPORT
+    cfg.config_bands |= BAND_A;
+#endif
+
     if (enable_11n)
     {
-        cfg.config_bands |= (BAND_GN | BAND_AN);
+        supported_bands = cfg.fw_bands & BAND_GN;
+#if CONFIG_5GHz_SUPPORT
+        supported_bands |= cfg.fw_bands & BAND_AN;
+#endif
+        cfg.config_bands |= supported_bands;
+        if (supported_bands == 0U)
+        {
+            wlcm_w("Warning: hardware doesn't support 11N, ignore 11N setting\r\n");
+        }
     }
+
 #if CONFIG_11AC
     if (enable_11ac)
     {
-        uint16_t supp_11ac = cfg.fw_bands & (BAND_GAC | BAND_AAC);
-        if (supp_11ac)
+        supported_bands = cfg.fw_bands & BAND_GAC;
+#if CONFIG_5GHz_SUPPORT
+        supported_bands |= cfg.fw_bands & BAND_AAC;
+#endif
+        cfg.config_bands |= supported_bands;
+        if (supported_bands == 0U)
         {
-            cfg.config_bands |= (BAND_GAC | BAND_AAC);
-        }
-        else
-        {
-            wlcm_w("Warning: hardware doesn't support 11AC, ignore 11AC setting");
+            wlcm_w("Warning: hardware doesn't support 11AC, ignore 11AC setting\r\n");
         }
     }
 #endif
+
 #if CONFIG_11AX
     if (enable_11ax)
     {
-        uint16_t supp_11ax = cfg.fw_bands & (BAND_GAX | BAND_AAX);
-        if (supp_11ax)
+        supported_bands = cfg.fw_bands & BAND_GAX;
+#if CONFIG_5GHz_SUPPORT
+        supported_bands |= cfg.fw_bands & BAND_AAX;
+#endif
+        cfg.config_bands |= supported_bands;
+        if (supported_bands == 0U)
         {
-            cfg.config_bands |= (BAND_GAX | BAND_AAX);
-        }
-        else
-        {
-            wlcm_w("Warning: hardware doesn't support 11AX, ignore 11AX setting");
+            wlcm_w("Warning: hardware doesn't support 11AX, ignore 11AX setting\r\n");
         }
     }
 #endif

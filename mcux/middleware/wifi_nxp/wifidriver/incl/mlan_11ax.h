@@ -15,9 +15,15 @@
 #define _MLAN_11AX_H_
 
 /** device support 2.4G 40MHZ */
-#define AX_2G_40MHZ_SUPPORT MBIT(1)
+#define AX_2G_40MHZ_SUPPORT       MBIT(1)
+/** device support 5G 40MHZ/80MHZ */
+#define AX_5G_40MHZ_80MHZ_SUPPORT MBIT(2)
+/** device support 5G 160MHZ */
+#define AX_5G_160MHZ_SUPPORT      MBIT(3)
+/** device support 5G 80MHZ+80MHZ */
+#define AX_5G_80PLUS80MHZ_SUPPORT MBIT(4)
 /** device support 2.4G 242 tone RUs */
-#define AX_2G_20MHZ_SUPPORT MBIT(5)
+#define AX_2G_20MHZ_SUPPORT       MBIT(5)
 
 #if defined(RW610) || defined(IW610)
 /**
