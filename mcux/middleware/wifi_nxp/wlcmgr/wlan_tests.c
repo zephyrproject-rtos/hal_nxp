@@ -131,7 +131,6 @@ static int __scan_cb(unsigned int count)
             (void)PRINTF(" (hidden) %s\r\n", print_role(res.role));
         }
         (void)PRINTF("\tmode: ");
-#if CONFIG_11AC
 #if CONFIG_11AX
         if (res.dot11ax != 0U)
         {
@@ -139,7 +138,8 @@ static int __scan_cb(unsigned int count)
         }
         else
 #endif
-            if (res.dot11ac != 0U)
+#if CONFIG_11AC
+        if (res.dot11ac != 0U)
         {
             (void)PRINTF("802.11AC ");
         }
@@ -6664,13 +6664,13 @@ static void dump_wlan_set_bandcfg(void)
         "    wlan-set-bandcfg <value>\r\n"
         "        value -- 0x0: legacy\r\n"
         "                 0x1: 11N\r\n"
-#ifdef CONFIG_11AC
+#if CONFIG_11AC
         "                 0x3: 11N + 11AC\r\n"
 #endif
-#ifdef CONFIG_11AX
+#if CONFIG_11AX
         "                 0x5: 11N + 11AX\r\n"
 #endif
-#if defined(CONFIG_11AC) && defined(CONFIG_11AX)
+#if (CONFIG_11AC) && (CONFIG_11AX)
         "                 0x7: 11N + 11AC + 11AX\r\n"
 #endif
     );
