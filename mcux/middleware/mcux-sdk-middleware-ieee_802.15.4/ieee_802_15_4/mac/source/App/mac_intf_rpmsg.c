@@ -301,7 +301,10 @@ static hal_rpmsg_return_status_t mac_rpmsg_rx_callback(void *param, uint8_t *dat
             return kStatus_HAL_RL_RELEASE;
         }
 
-        memcpy(msg->msgData.scanCnf.resList.pEnergyDetectList, tmp->msgData.scanCnf.resList.pEnergyDetectList, msg->msgData.scanCnf.resultListSize);
+        /* The energy bytes are appended after the struct by the sender; the
+           pEnergyDetectList field itself holds a pointer into the sender address
+           space and must not be dereferenced here (see the length check above) */
+        memcpy(msg->msgData.scanCnf.resList.pEnergyDetectList, (uint8_t *)tmp + sizeof(nwkMessage_t), msg->msgData.scanCnf.resultListSize);
     }
     else
     {
