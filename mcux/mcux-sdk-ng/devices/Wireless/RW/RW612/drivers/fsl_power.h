@@ -23,9 +23,23 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief POWER driver version 2.6.3. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 6, 4))
+/*! @brief POWER driver version 2.7.0. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 7, 0))
 /*@}*/
+
+/*!
+ * @brief Power modes.
+ *
+ * These values are logical PM numbers, not PWR_MODE register encodings.
+ */
+typedef enum _power_mode
+{
+    kPOWER_Pm0 = 0U, /*!< Power mode PM0. */
+    kPOWER_Pm1 = 1U, /*!< Power mode PM1. */
+    kPOWER_Pm2 = 2U, /*!< Power mode PM2. */
+    kPOWER_Pm3 = 3U, /*!< Power mode PM3. */
+    kPOWER_Pm4 = 4U, /*!< Power mode PM4. */
+} power_mode_t;
 
 /*!
  * @brief Pin edge for wakeup.
@@ -316,13 +330,13 @@ void POWER_DisableWakeup(IRQn_Type irq);
 
 /**
  * @brief   Set power mode on idle.
- * @param   mode : 0 ~ 4 stands for PM0 ~ PM4.
+ * @param   mode : Power mode from @ref power_mode_t.
  */
 AT_QUICKACCESS_SECTION_CODE(void POWER_SetSleepMode(uint32_t mode));
 
 /**
  * @brief   Get power mode waken up from.
- * @return  Power mode.
+ * @return  Power mode from @ref power_mode_t. PM0 and PM1 are reported as kPOWER_Pm1.
  */
 __STATIC_INLINE uint32_t POWER_GetWakenMode(void)
 {
@@ -361,7 +375,7 @@ void POWER_SetPowerSwitchCallback(power_switch_callback_t pre,
 
 /**
  * @brief   Switch system into certain power mode.
- * @param   mode : 0 ~ 4 stands for PM0 ~ PM4.
+ * @param   mode : Power mode from @ref power_mode_t.
  * @param   config : Sleep configuration on PM2-PM4.
  * @return  True for success, else failure.
  */
