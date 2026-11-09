@@ -47,6 +47,16 @@ config ELE_TRACK_SESSION_STATE
 	  of the session state in-software.
 	  On other devices has no effect.
 
+config SSCP_MU_THREAD_SAFE
+	bool "Serialize SSCP MU transactions with an OSA mutex"
+	depends on MCUX_SECURE_SUBSYSTEM
+	depends on MULTITHREADING
+	default y
+	help
+	  Protect the ELE MU request/response transaction in fsl_sscp_mu.c
+	  with a mutex from the MCUX OS abstraction layer (OSA). The Zephyr
+	  OSA backend (fsl_os_abstraction_zephyr.c) is linked automatically.
+
 config MCUX_SECURE_SUBSYSTEM_SESSION_ID
 	int
 	depends on MCUX_SECURE_SUBSYSTEM

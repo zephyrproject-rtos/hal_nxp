@@ -4,10 +4,10 @@
 This repository is for MCUXpresso SDK Secure Subsystem (SSS) middleware delivery and it contains the components officially provided in NXP MCUXpresso SDK. This repository is part of the MCUXpresso SDK overall delivery which is composed of several sub-repositories/projects. Navigate to the top/parent repository [mcuxsdk](https://github.com/nxp-mcuxpresso/mcuxsdk-manifests/) for the complete delivery of MCUXpresso SDK to be able to build and run the examples that are based on this delivery.
 
 ## Documentation
-Overall details can be reviewed here: [MCUXpresso SDK Online Documentation](https://mcuxpresso.nxp.com/mcuxsdk/latest/html/introduction/README.html)
+Overall details can be reviewed here: [MCUXpresso SDK Online Documentation](https://docs.mcuxpresso.nxp.com/mcuxsdk/latest/introduction/README.html)
 
 ## Setup
-Instructions on how to install the MCUXpresso SDK provided from GitHub via west manifest [Getting Started with SDK - Detailed Installation Instructions](https://mcuxpresso.nxp.com/mcuxsdk/latest/html/gsd/installation.html#installation)
+Instructions on how to install the MCUXpresso SDK provided from GitHub via west manifest [Getting Started with SDK - Detailed Installation Instructions](https://docs.mcuxpresso.nxp.com/mcuxsdk/latest/gsd/installation.html#installation)
 
 ## Contribution
 Contributions are not currently accepted. Guidelines to contribute will be posted in the future.
