@@ -213,6 +213,11 @@ Patch List:
       - Update usb_host_ehci.c and usb_host_ip3516hs.c to not depend on usb_host_device_instance_t struct.
   - mcux-sdk: devices: fix MKV56F24.h wrong macro
       - The MKV56F24 device doesn't contain CAN2 peripheral. Remove it from the device header.
+  - mcux-sdk-ng: drivers: csi: make the frame buffer queue circular
+      - buf_queue_t only reused its array once it had drained, so four buffers queued before
+        CSI_TransferStart() left the queue reported full with two entries and the first
+        returned buffer was refused (kStatus_CSI_QueueFull).
+      - This patch is in hal_nxp but is not in mcux-sdk-ng (main, 2026-11-09).
   - hal/nxp: s32K344: flash_c40: add C40 features, IP aliases
    - Commit: https://github.com/zephyrproject-rtos/hal_nxp/pull/618/commits/64395f565184964bbf21e247df6ca88dc4d7cf83
    - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
