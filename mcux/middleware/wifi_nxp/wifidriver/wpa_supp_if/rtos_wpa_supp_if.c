@@ -584,6 +584,13 @@ void wifi_nxp_wpa_supp_event_proc_assoc_resp(void *if_priv,
             event.assoc_info.req_ies     = (unsigned char *)req_frame;
             event.assoc_info.req_ies_len = assoc_resp->req_ie_len;
         }
+
+        /* EAPOL is sent through the regular data path, which drops packets
+         * while the interface is dormant. Clear dormancy before notifying the
+         * supplicant; the WLAN_REASON_ASSOC_SUCCESS event that otherwise does
+         * this arrives later and loses the race with the first EAPOL frame.
+         */
+        net_interface_up(net_get_mlan_handle());
     }
 
     wifi_if_ctx_rtos->supp_callbk_fns.assoc_resp(wifi_if_ctx_rtos->supp_drv_if_ctx, &event, status);
