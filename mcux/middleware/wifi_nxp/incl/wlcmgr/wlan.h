@@ -413,6 +413,8 @@ enum wlan_event_reason
     /** WPS session is done */
     WLAN_REASON_WPS_SESSION_DONE,
 #endif
+    /** The Wi-Fi client roaming auth success */
+    WLAN_REASON_ROAMING_AUTH_SUCCESS,
 };
 
 /** Wakeup event bitmap */
@@ -7656,5 +7658,15 @@ int wlan_supp_dpp_listen(int bss_type, int enable);
  * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
  */
 int wlan_set_network_chanlist(char *name, const uint8_t *chan_list, uint8_t num_chans, enum wlan_frequency_bands freq_band);
+
+
+/**
+ * Trigger or skip DHCP base on gateway same or not
+ *
+ * \param[in]  reachable_same_gw: same or different gateway
+ *
+ * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
+ */
+int wlan_gw_probe_done(bool reachable_same_gw);
 
 #endif /* __WLAN_H__ */
