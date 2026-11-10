@@ -8,6 +8,7 @@
  *
  */
 
+#include <stdlib.h>
 #include <wlan.h>
 #include <cli_utils.h>
 #include <string.h>
