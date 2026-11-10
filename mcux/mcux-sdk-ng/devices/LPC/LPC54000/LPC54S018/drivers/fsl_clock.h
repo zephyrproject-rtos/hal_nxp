@@ -679,7 +679,9 @@ typedef enum _clock_attach_id
 
     kNONE_to_USB0_CLK = MUX_A(CM_USB0CLKSEL, 7), /*!< Attach NONE to USB0_CLK. */
 
-    kFRO_HF_to_USB1_CLK = MUX_A(CM_USB1CLKSEL, 0), /*!< Attach FRO_HF to USB1_CLK. */
+    kMAIN_CLK_to_USB1_CLK = MUX_A(CM_USB1CLKSEL, 0), /*!< Attach MAIN_CLK to USB1_CLK. */
+
+    kFRO_HF_to_USB1_CLK = MUX_A(CM_USB1CLKSEL, 0), /*!< Deprecated! Same as kMAIN_CLK_to_USB1_CLK. */
 
     kSYS_PLL_to_USB1_CLK = MUX_A(CM_USB1CLKSEL, 1), /*!< Attach SYS_PLL to USB1_CLK. */
 
@@ -689,7 +691,9 @@ typedef enum _clock_attach_id
 
     kFRO12M_to_FLEXCOMM0 = MUX_A(CM_FXCOMCLKSEL0, 0), /*!< Attach FRO12M to FLEXCOMM0. */
 
-    kFRO_HF_to_FLEXCOMM0 = MUX_A(CM_FXCOMCLKSEL0, 1), /*!< Attach FRO_HF to FLEXCOMM0. */
+    kFRO_HF_DIV_to_FLEXCOMM0 = MUX_A(CM_FXCOMCLKSEL0, 1), /*!< Attach FRO_HF_DIV to FLEXCOMM0. */
+
+    kFRO_HF_to_FLEXCOMM0 = MUX_A(CM_FXCOMCLKSEL0, 1), /*!< Deprecated! Same as kFRO_HF_DIV_to_FLEXCOMM0. */
 
     kAUDIO_PLL_to_FLEXCOMM0 = MUX_A(CM_FXCOMCLKSEL0, 2), /*!< Attach AUDIO_PLL to FLEXCOMM0. */
 
@@ -701,7 +705,9 @@ typedef enum _clock_attach_id
 
     kFRO12M_to_FLEXCOMM1 = MUX_A(CM_FXCOMCLKSEL1, 0), /*!< Attach FRO12M to FLEXCOMM1. */
 
-    kFRO_HF_to_FLEXCOMM1 = MUX_A(CM_FXCOMCLKSEL1, 1), /*!< Attach FRO_HF to FLEXCOMM1. */
+    kFRO_HF_DIV_to_FLEXCOMM1 = MUX_A(CM_FXCOMCLKSEL1, 1), /*!< Attach FRO_HF_DIV to FLEXCOMM1. */
+
+    kFRO_HF_to_FLEXCOMM1 = MUX_A(CM_FXCOMCLKSEL1, 1), /*!< Deprecated! Same as kFRO_HF_DIV_to_FLEXCOMM1. */
 
     kAUDIO_PLL_to_FLEXCOMM1 = MUX_A(CM_FXCOMCLKSEL1, 2), /*!< Attach AUDIO_PLL to FLEXCOMM1. */
 
@@ -713,7 +719,9 @@ typedef enum _clock_attach_id
 
     kFRO12M_to_FLEXCOMM2 = MUX_A(CM_FXCOMCLKSEL2, 0), /*!< Attach FRO12M to FLEXCOMM2. */
 
-    kFRO_HF_to_FLEXCOMM2 = MUX_A(CM_FXCOMCLKSEL2, 1), /*!< Attach FRO_HF to FLEXCOMM2. */
+    kFRO_HF_DIV_to_FLEXCOMM2 = MUX_A(CM_FXCOMCLKSEL2, 1), /*!< Attach FRO_HF_DIV to FLEXCOMM2. */
+
+    kFRO_HF_to_FLEXCOMM2 = MUX_A(CM_FXCOMCLKSEL2, 1), /*!< Deprecated! Same as kFRO_HF_DIV_to_FLEXCOMM2. */
 
     kAUDIO_PLL_to_FLEXCOMM2 = MUX_A(CM_FXCOMCLKSEL2, 2), /*!< Attach AUDIO_PLL to FLEXCOMM2. */
 
@@ -725,7 +733,9 @@ typedef enum _clock_attach_id
 
     kFRO12M_to_FLEXCOMM3 = MUX_A(CM_FXCOMCLKSEL3, 0), /*!< Attach FRO12M to FLEXCOMM3. */
 
-    kFRO_HF_to_FLEXCOMM3 = MUX_A(CM_FXCOMCLKSEL3, 1), /*!< Attach FRO_HF to FLEXCOMM3. */
+    kFRO_HF_DIV_to_FLEXCOMM3 = MUX_A(CM_FXCOMCLKSEL3, 1), /*!< Attach FRO_HF_DIV to FLEXCOMM3. */
+
+    kFRO_HF_to_FLEXCOMM3 = MUX_A(CM_FXCOMCLKSEL3, 1), /*!< Deprecated! Same as kFRO_HF_DIV_to_FLEXCOMM3. */
 
     kAUDIO_PLL_to_FLEXCOMM3 = MUX_A(CM_FXCOMCLKSEL3, 2), /*!< Attach AUDIO_PLL to FLEXCOMM3. */
 
@@ -737,7 +747,9 @@ typedef enum _clock_attach_id
 
     kFRO12M_to_FLEXCOMM4 = MUX_A(CM_FXCOMCLKSEL4, 0), /*!< Attach FRO12M to FLEXCOMM4. */
 
-    kFRO_HF_to_FLEXCOMM4 = MUX_A(CM_FXCOMCLKSEL4, 1), /*!< Attach FRO_HF to FLEXCOMM4. */
+    kFRO_HF_DIV_to_FLEXCOMM4 = MUX_A(CM_FXCOMCLKSEL4, 1), /*!< Attach FRO_HF_DIV to FLEXCOMM4. */
+
+    kFRO_HF_to_FLEXCOMM4 = MUX_A(CM_FXCOMCLKSEL4, 1), /*!< Deprecated! Same as kFRO_HF_DIV_to_FLEXCOMM4. */
 
     kAUDIO_PLL_to_FLEXCOMM4 = MUX_A(CM_FXCOMCLKSEL4, 2), /*!< Attach AUDIO_PLL to FLEXCOMM4. */
 
@@ -749,7 +761,9 @@ typedef enum _clock_attach_id
 
     kFRO12M_to_FLEXCOMM5 = MUX_A(CM_FXCOMCLKSEL5, 0), /*!< Attach FRO12M to FLEXCOMM5. */
 
-    kFRO_HF_to_FLEXCOMM5 = MUX_A(CM_FXCOMCLKSEL5, 1), /*!< Attach FRO_HF to FLEXCOMM5. */
+    kFRO_HF_DIV_to_FLEXCOMM5 = MUX_A(CM_FXCOMCLKSEL5, 1), /*!< Attach FRO_HF_DIV to FLEXCOMM5. */
+
+    kFRO_HF_to_FLEXCOMM5 = MUX_A(CM_FXCOMCLKSEL5, 1), /*!< Deprecated! Same as kFRO_HF_DIV_to_FLEXCOMM5. */
 
     kAUDIO_PLL_to_FLEXCOMM5 = MUX_A(CM_FXCOMCLKSEL5, 2), /*!< Attach AUDIO_PLL to FLEXCOMM5. */
 
@@ -761,7 +775,9 @@ typedef enum _clock_attach_id
 
     kFRO12M_to_FLEXCOMM6 = MUX_A(CM_FXCOMCLKSEL6, 0), /*!< Attach FRO12M to FLEXCOMM6. */
 
-    kFRO_HF_to_FLEXCOMM6 = MUX_A(CM_FXCOMCLKSEL6, 1), /*!< Attach FRO_HF to FLEXCOMM6. */
+    kFRO_HF_DIV_to_FLEXCOMM6 = MUX_A(CM_FXCOMCLKSEL6, 1), /*!< Attach FRO_HF_DIV to FLEXCOMM6. */
+
+    kFRO_HF_to_FLEXCOMM6 = MUX_A(CM_FXCOMCLKSEL6, 1), /*!< Deprecated! Same as kFRO_HF_DIV_to_FLEXCOMM6. */
 
     kAUDIO_PLL_to_FLEXCOMM6 = MUX_A(CM_FXCOMCLKSEL6, 2), /*!< Attach AUDIO_PLL to FLEXCOMM6. */
 
@@ -773,7 +789,9 @@ typedef enum _clock_attach_id
 
     kFRO12M_to_FLEXCOMM7 = MUX_A(CM_FXCOMCLKSEL7, 0), /*!< Attach FRO12M to FLEXCOMM7. */
 
-    kFRO_HF_to_FLEXCOMM7 = MUX_A(CM_FXCOMCLKSEL7, 1), /*!< Attach FRO_HF to FLEXCOMM7. */
+    kFRO_HF_DIV_to_FLEXCOMM7 = MUX_A(CM_FXCOMCLKSEL7, 1), /*!< Attach FRO_HF_DIV to FLEXCOMM7. */
+
+    kFRO_HF_to_FLEXCOMM7 = MUX_A(CM_FXCOMCLKSEL7, 1), /*!< Deprecated! Same as kFRO_HF_DIV_to_FLEXCOMM7. */
 
     kAUDIO_PLL_to_FLEXCOMM7 = MUX_A(CM_FXCOMCLKSEL7, 2), /*!< Attach AUDIO_PLL to FLEXCOMM7. */
 
@@ -785,7 +803,9 @@ typedef enum _clock_attach_id
 
     kFRO12M_to_FLEXCOMM8 = MUX_A(CM_FXCOMCLKSEL8, 0), /*!< Attach FRO12M to FLEXCOMM8. */
 
-    kFRO_HF_to_FLEXCOMM8 = MUX_A(CM_FXCOMCLKSEL8, 1), /*!< Attach FRO_HF to FLEXCOMM8. */
+    kFRO_HF_DIV_to_FLEXCOMM8 = MUX_A(CM_FXCOMCLKSEL8, 1), /*!< Attach FRO_HF_DIV to FLEXCOMM8. */
+
+    kFRO_HF_to_FLEXCOMM8 = MUX_A(CM_FXCOMCLKSEL8, 1), /*!< Deprecated! Same as kFRO_HF_DIV_to_FLEXCOMM8. */
 
     kAUDIO_PLL_to_FLEXCOMM8 = MUX_A(CM_FXCOMCLKSEL8, 2), /*!< Attach AUDIO_PLL to FLEXCOMM8. */
 
@@ -797,7 +817,9 @@ typedef enum _clock_attach_id
 
     kFRO12M_to_FLEXCOMM9 = MUX_A(CM_FXCOMCLKSEL9, 0), /*!< Attach FRO12M to FLEXCOMM9. */
 
-    kFRO_HF_to_FLEXCOMM9 = MUX_A(CM_FXCOMCLKSEL9, 1), /*!< Attach FRO_HF to FLEXCOMM9. */
+    kFRO_HF_DIV_to_FLEXCOMM9 = MUX_A(CM_FXCOMCLKSEL9, 1), /*!< Attach FRO_HF_DIV to FLEXCOMM9. */
+
+    kFRO_HF_to_FLEXCOMM9 = MUX_A(CM_FXCOMCLKSEL9, 1), /*!< Deprecated! Same as kFRO_HF_DIV_to_FLEXCOMM9. */
 
     kAUDIO_PLL_to_FLEXCOMM9 = MUX_A(CM_FXCOMCLKSEL9, 2), /*!< Attach AUDIO_PLL to FLEXCOMM9. */
 
@@ -819,7 +841,9 @@ typedef enum _clock_attach_id
 
     kNONE_to_FLEXCOMM10 = MUX_A(CM_FXCOMCLKSEL10, 7), /*!< Attach NONE to FLEXCOMM10. */
 
-    kFRO_HF_to_MCLK = MUX_A(CM_MCLKCLKSEL, 0), /*!< Attach FRO_HF to MCLK. */
+    kFRO_HF_DIV_to_MCLK = MUX_A(CM_MCLKCLKSEL, 0), /*!< Attach FRO_HF_DIV to MCLK. */
+
+    kFRO_HF_to_MCLK = MUX_A(CM_MCLKCLKSEL, 0), /*!< Deprecated! Same as kFRO_HF_DIV_to_MCLK. */
 
     kAUDIO_PLL_to_MCLK = MUX_A(CM_MCLKCLKSEL, 1), /*!< Attach AUDIO_PLL to MCLK. */
 
