@@ -438,6 +438,10 @@ int wifi_set_ed_mac_mode(wifi_ed_mac_ctrl_t *wifi_ed_mac_ctrl, int bss_type);
 int wifi_get_pmfcfg(t_u8 *mfpc, t_u8 *mfpr);
 int wifi_get_ed_mac_mode(wifi_ed_mac_ctrl_t *wifi_ed_mac_ctrl, int bss_type);
 int wifi_set_pmfcfg(t_u8 mfpc, t_u8 mfpr);
+int wifi_set_ssid_protection(bool enable, enum wlan_bss_type bss_type);
+#if UAP_SUPPORT
+int wifi_set_uap_rsnx_ie(bool enable);
+#endif
 int wifi_set_chanlist(wifi_chanlist_t *chanlist);
 int wifi_get_txpwrlimit(wifi_SubBand_t subband, wifi_txpwrlimit_t *txpwrlimit);
 int wifi_get_data_rate(wifi_ds_rate *ds_rate, mlan_bss_type bss_type);
