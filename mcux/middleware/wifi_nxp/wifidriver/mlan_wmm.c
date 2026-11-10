@@ -288,7 +288,7 @@ t_void wlan_wmm_init(pmlan_adapter pmadapter)
 #endif
 #if UAP_SUPPORT
             if (priv->bss_type == MLAN_BSS_TYPE_UAP
-#ifdef WIFI_DIRECT_SUPPORT
+#if CONFIG_WPA_SUPP_P2P
                 || priv->bss_type == MLAN_BSS_TYPE_WIFIDIRECT
 #endif
             )
