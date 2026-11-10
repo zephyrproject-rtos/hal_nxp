@@ -27,6 +27,33 @@ DAISY_DESCRIPTIONS = (
 )
 
 
+# i.MX RT266x routes each XBAR INOUT pad through a MODCON direction register
+# (e.g. "MAIN__MODCON_IOMUX_HSP_XBAR0"), one bit per pad.
+XBAR_DIR_REGISTER = re.compile(r'\w+MODCON_IOMUX_\w*XBAR\d+$')
+
+
+def _xbar_inout_name_part(connection, name_part):
+    """
+    Split an RT266x XBAR INOUT connection name into its IN or OUT form.
+    Each pad has one "HSP_XBAR<n>_INOUT<m>" name_part shared by all of its
+    XBAR connections, but the connections differ in the MODCON direction bit
+    they program: 1 when the pad feeds the crossbar, 0 when the crossbar
+    drives the pad. Naming them "..._IN<m>" and "..._OUT<m>" keeps the two
+    directions as distinct pinmux entries instead of collapsing them.
+    @param connection: connection XML object
+    @param name_part: connections name_part attribute
+    @return name_part with INOUT replaced by IN or OUT, or unchanged
+    """
+    match = re.fullmatch(r'(\w+_XBAR\d+_)INOUT(\d+)', name_part)
+    if not match:
+        return name_part
+    for assignment in connection.iter('assign'):
+        if XBAR_DIR_REGISTER.match(assignment.attrib.get('register', '')):
+            direction = 'IN' if int(assignment.attrib['bit_field_value'], 0) else 'OUT'
+            return f"{match.group(1)}{direction}{match.group(2)}"
+    return name_part
+
+
 def _parse_daisy_description(description):
     """
     Extract the (pad, alt mode) a daisy value selects from its description.
@@ -320,6 +347,8 @@ class SignalPin:
             name_part = connections.attrib.get('name_part')
             connection = connections.find('connection')
             signal = connection.find('peripheral_signal_ref').attrib['signal']
+            if imx_rt2:
+                name_part = _xbar_inout_name_part(connection, name_part)
             if imx_rt:
                 name = f"{periph_name}_{pad_name}_{name_part}"
             else:
@@ -539,7 +568,8 @@ class IOMUXOption:
             # VBAT__IOMUXC) in distinct power domains; single-instance parts
             # (RT10xx/RT11xx) simply report "IOMUXC" here.
             self._mux_periph = periph_name
-        elif periph_name == 'IOMUXC_GPR':
+        elif (periph_name == 'IOMUXC_GPR' or
+              XBAR_DIR_REGISTER.match(assignment.attrib['register'])):
             self._has_gpr = True
             self._gpr_reg = addr
             gpr_mask = int(assignment.attrib.get('bit_field_mask'), 0)
