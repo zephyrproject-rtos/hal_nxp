@@ -2,8 +2,6 @@ name: hal_nxp
 build:
   cmake-ext: True
   kconfig-ext: True
-  settings:
-    dts_root: .
 blobs:
 #For LIBCSI
   - path: libcsi/cm33/libcsi.a
