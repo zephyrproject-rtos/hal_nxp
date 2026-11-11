@@ -3003,14 +3003,17 @@ int wifi_nxp_get_wiphy(const unsigned int bss_type)
     }
 
 #if CONFIG_11AC
-    wiphy.sband[0].vht_cap.wifi_nxp_vht_supported = 1;
-
-    status = wifi_setup_vht_cap((t_u32 *)&wiphy.sband[0].vht_cap.wifi_nxp_cap,
-                                (t_u8 *)(&wiphy.sband[0].vht_cap.vht_mcs), 0);
-    if (status != WM_SUCCESS)
+    if (ISSUPP_11AC2GENABLED(mlan_adap->fw_cap_info))
     {
-        wifi_e("%s: wifi nxp set 2G infra vht cap failed", __func__);
-        return -WM_FAIL;
+        wiphy.sband[0].vht_cap.wifi_nxp_vht_supported = 1;
+
+        status = wifi_setup_vht_cap((t_u32 *)&wiphy.sband[0].vht_cap.wifi_nxp_cap,
+                                    (t_u8 *)(&wiphy.sband[0].vht_cap.vht_mcs), 0);
+        if (status != WM_SUCCESS)
+        {
+            wifi_e("%s: wifi nxp set 2G infra vht cap failed", __func__);
+            return -WM_FAIL;
+        }
     }
 #endif
 
@@ -3058,19 +3061,22 @@ int wifi_nxp_get_wiphy(const unsigned int bss_type)
                 &wiphy.sband[1].ht_cap.wifi_nxp_ampdu_factor, 1);
         if (status != WM_SUCCESS)
         {
-            wifi_e("%s: wifi nxp set 2G infra ht cap failed", __func__);
+            wifi_e("%s: wifi nxp set 5G infra ht cap failed", __func__);
             return -WM_FAIL;
         }
 
 #if CONFIG_11AC
-        wiphy.sband[1].vht_cap.wifi_nxp_vht_supported = 1;
-
-        status = wifi_setup_vht_cap((t_u32 *)&wiphy.sband[1].vht_cap.wifi_nxp_cap,
-                (t_u8 *)(&wiphy.sband[1].vht_cap.vht_mcs), 1);
-        if (status != WM_SUCCESS)
+        if (ISSUPP_11AC5GENABLED(mlan_adap->fw_cap_info))
         {
-            wifi_e("%s: wifi nxp set 2G infra vht cap failed", __func__);
-            return -WM_FAIL;
+            wiphy.sband[1].vht_cap.wifi_nxp_vht_supported = 1;
+
+            status = wifi_setup_vht_cap((t_u32 *)&wiphy.sband[1].vht_cap.wifi_nxp_cap,
+                    (t_u8 *)(&wiphy.sband[1].vht_cap.vht_mcs), 1);
+            if (status != WM_SUCCESS)
+            {
+                wifi_e("%s: wifi nxp set 5G infra vht cap failed", __func__);
+                return -WM_FAIL;
+            }
         }
 #endif
 
@@ -3080,7 +3086,7 @@ int wifi_nxp_get_wiphy(const unsigned int bss_type)
             status = wifi_setup_he_cap((nxp_wifi_he_capabilities *)&wiphy.sband[1].he_cap, 1);
             if (status != WM_SUCCESS)
             {
-                wifi_e("%s: wifi nxp set 2G infra he cap failed", __func__);
+                wifi_e("%s: wifi nxp set 5G infra he cap failed", __func__);
                 return -WM_FAIL;
             }
 
