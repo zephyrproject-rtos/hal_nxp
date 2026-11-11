@@ -34,6 +34,18 @@ if((CONFIG_NET_L2_OPENTHREAD OR CONFIG_NXP_NBU) AND (CONFIG_IEEE802154 OR CONFIG
     endif()
 endif()
 
+if(CONFIG_NXP_IEEE802154_SMAC)
+    zephyr_include_directories(
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-ieee_802.15.4/smac/common
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-ieee_802.15.4/smac/interface
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-ieee_802.15.4/smac/source
+    )
+
+    zephyr_library_sources(
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-ieee_802.15.4/smac/source/SMAC.c
+    )
+endif()
+
 if(CONFIG_NXP_NEUTRON)
   add_subdirectory(
     ${CMAKE_CURRENT_LIST_DIR}/neutron

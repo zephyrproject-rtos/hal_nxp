@@ -427,7 +427,7 @@ typedef struct phyRxParams_tag
 typedef struct phyChannelParams_tag
 {
     phyStatus_t channelStatus;    /*!< Channel busy or idle */
-    uint8_t     energyLeveldB;    /*!< Channel energy level in dBm */
+    int8_t      energyLeveldB;    /*!< Channel energy level in dBm */
     int8_t      maxEnergyLeveldB; /*!< MAX Channel energy level in dBm */
 } phyChannelParams_t;
 
@@ -444,6 +444,7 @@ typedef struct phyCcaParams_tag
     phyContCCAMode_t cccaMode;
     uint32_t edScanCnt;
     uint32_t edScanMaxCnt;
+    bool_t edSampleMissed;  /*!< An ED window produced no hardware measurement */
 } phyCcaParams_t;
 
 /* this message is for both requests and responses */
