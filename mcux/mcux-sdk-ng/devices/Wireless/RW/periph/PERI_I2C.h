@@ -1,6 +1,7 @@
 /*
 ** ###################################################################
 **     Processors:          RW610ETA2I
+**                          RW610FMLA2AI
 **                          RW610HNA2I
 **                          RW610UKA2I
 **                          RW612ETA2I
@@ -8,7 +9,7 @@
 **                          RW612UKA2I
 **
 **     Version:             rev. 4.0, 2026-01-12
-**     Build:               b260114
+**     Build:               b260909
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for I2C
@@ -48,7 +49,7 @@
 #if !defined(PERI_I2C_H_)
 #define PERI_I2C_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_RW610ETA2I) || defined(CPU_RW610HNA2I) || defined(CPU_RW610UKA2I))
+#if (defined(CPU_RW610ETA2I) || defined(CPU_RW610FMLA2AI) || defined(CPU_RW610HNA2I) || defined(CPU_RW610UKA2I))
 #include "RW610_COMMON.h"
 #elif (defined(CPU_RW612ETA2I) || defined(CPU_RW612HNA2I) || defined(CPU_RW612UKA2I))
 #include "RW612_COMMON.h"

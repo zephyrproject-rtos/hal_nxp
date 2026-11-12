@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.0, 2025-11-17
-**     Build:               b260609
+**     Build:               b260911
 **
 **     Abstract:
 **         Chip specific module features.
@@ -174,7 +174,7 @@
 
 /* CTIMER module features */
 
-/* @brief CTIMER has no capture channel */
+/* @brief CTIMER has no capture channel. */
 #define FSL_FEATURE_CTIMER_HAS_NO_INPUT_CAPTURE (0)
 /* @brief CTIMER has no capture 2 interrupt. */
 #define FSL_FEATURE_CTIMER_HAS_NO_IR_CR2INT (0)
@@ -424,7 +424,7 @@
 /* PINT module features */
 
 /* @brief Number of connected outputs */
-#define FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS (8)
+#define FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTSn(x) (8)
 
 /* POWERLIB module features */
 

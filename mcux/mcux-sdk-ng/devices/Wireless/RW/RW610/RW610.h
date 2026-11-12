@@ -1,6 +1,7 @@
 /*
 ** ###################################################################
 **     Processors:          RW610ETA2I
+**                          RW610FMLA2AI
 **                          RW610HNA2I
 **                          RW610UKA2I
 **
@@ -11,7 +12,7 @@
 **
 **     Reference manual:    RW61X reference manual Rev. 10.0 - 12 January 2026
 **     Version:             rev. 4.0, 2026-01-12
-**     Build:               b260611
+**     Build:               b260909
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RW610

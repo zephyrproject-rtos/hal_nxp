@@ -54,6 +54,12 @@
         kCLOCK_HsGpio0, kCLOCK_HsGpio1 \
     }
 
+/*! @brief Clock ip name array for PINT. */
+#define PINT_CLOCKS \
+    {               \
+        kCLOCK_Pint \
+    }
+
 /*! @brief Clock ip name array for CACHE64. */
 #define CACHE64_CLOCKS                 \
     {                                  \
