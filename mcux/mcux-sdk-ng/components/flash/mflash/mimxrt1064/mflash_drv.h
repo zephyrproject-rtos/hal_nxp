@@ -33,8 +33,8 @@
 #define MFLASH_INC_WRITE 1
 #endif
 
-/* Flash Size expressed in bytes : 8MB - 64Mb QSPI */
-#define MFLASH_BSIZE 0x800000UL
+/* Flash Size expressed in bytes : 4MB - 32Mb W25Q32JV Quad SPI (QSPI)*/
+#define MFLASH_BSIZE 0x400000UL
 
 #define MFLASH_REMAP_OFFSET() (IOMUXC_GPR->GPR32 & 0xFFFFF000UL)
 #define MFLASH_REMAP_START()  (IOMUXC_GPR->GPR30 & 0xFFFFF000UL)

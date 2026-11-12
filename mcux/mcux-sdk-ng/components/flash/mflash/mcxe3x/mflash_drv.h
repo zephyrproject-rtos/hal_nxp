@@ -19,7 +19,7 @@
 
 #define MFLASH_PHRASE_SIZE (8)
 
-#define MFLASH_BASE_ADDRESS (0)
+#define MFLASH_BASE_ADDRESS (0x400000)
 
 int32_t mflash_drv_phrase_program(uint32_t phrase_addr, uint32_t *data);
 

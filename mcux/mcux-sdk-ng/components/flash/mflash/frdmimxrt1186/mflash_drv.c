@@ -481,7 +481,7 @@ uint32_t mflash_drv_log2phys(void *ptr, uint32_t len)
 {
     if ((uint32_t)ptr < MFLASH_BASE_ADDRESS)
     {
-        return kStatus_InvalidArgument;
+        return MFLASH_INVALID_ADDRESS;
     }
 
     return ((uint32_t)ptr - MFLASH_BASE_ADDRESS);
