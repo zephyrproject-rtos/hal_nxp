@@ -715,6 +715,7 @@ void Reserved193_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved194_DriverIRQHandler(void) ALIAS(DefaultISR);
 void LPSPI_DriverIRQHandler(uint32_t instance) ALIAS(DefaultISR1);
 void LPUART_DriverIRQHandler(uint32_t instance) ALIAS(DefaultISR1);
+void GPIO_DriverIRQHandler(uint32_t instance) ALIAS(DefaultISR1);
 void HSP_GPIO0_CH0_DriverIRQHandler(void) ALIAS(DefaultISR);
 void HSP_GPIO0_CH1_DriverIRQHandler(void) ALIAS(DefaultISR);
 void HSP_GPIO1_CH0_DriverIRQHandler(void) ALIAS(DefaultISR);
@@ -1867,52 +1868,52 @@ WEAK void HSP_LPUART5_IRQHandler(void)
 
 WEAK void HSP_GPIO0_CH0_IRQHandler(void)
 {
-    HSP_GPIO0_CH0_DriverIRQHandler();
+    GPIO_DriverIRQHandler(0U);
 }
 
 WEAK void HSP_GPIO0_CH1_IRQHandler(void)
 {
-    HSP_GPIO0_CH1_DriverIRQHandler();
+    GPIO_DriverIRQHandler(0U);
 }
 
 WEAK void HSP_GPIO1_CH0_IRQHandler(void)
 {
-    HSP_GPIO1_CH0_DriverIRQHandler();
+    GPIO_DriverIRQHandler(1U);
 }
 
 WEAK void HSP_GPIO1_CH1_IRQHandler(void)
 {
-    HSP_GPIO1_CH1_DriverIRQHandler();
+    GPIO_DriverIRQHandler(1U);
 }
 
 WEAK void HSP_GPIO2_CH0_IRQHandler(void)
 {
-    HSP_GPIO2_CH0_DriverIRQHandler();
+    GPIO_DriverIRQHandler(2U);
 }
 
 WEAK void HSP_GPIO2_CH1_IRQHandler(void)
 {
-    HSP_GPIO2_CH1_DriverIRQHandler();
+    GPIO_DriverIRQHandler(2U);
 }
 
 WEAK void HSP_GPIO3_CH0_IRQHandler(void)
 {
-    HSP_GPIO3_CH0_DriverIRQHandler();
+    GPIO_DriverIRQHandler(3U);
 }
 
 WEAK void HSP_GPIO3_CH1_IRQHandler(void)
 {
-    HSP_GPIO3_CH1_DriverIRQHandler();
+    GPIO_DriverIRQHandler(3U);
 }
 
 WEAK void HSP_GPIO4_CH0_IRQHandler(void)
 {
-    HSP_GPIO4_CH0_DriverIRQHandler();
+    GPIO_DriverIRQHandler(4U);
 }
 
 WEAK void HSP_GPIO4_CH1_IRQHandler(void)
 {
-    HSP_GPIO4_CH1_DriverIRQHandler();
+    GPIO_DriverIRQHandler(4U);
 }
 
 WEAK void Reserved216_IRQHandler(void)
@@ -2117,12 +2118,12 @@ WEAK void WAKE_LPUART1_IRQHandler(void)
 
 WEAK void WAKE_GPIO_CH0_IRQHandler(void)
 {
-    WAKE_GPIO_CH0_DriverIRQHandler();
+    GPIO_DriverIRQHandler(6U);
 }
 
 WEAK void WAKE_GPIO_CH1_IRQHandler(void)
 {
-    WAKE_GPIO_CH1_DriverIRQHandler();
+    GPIO_DriverIRQHandler(6U);
 }
 
 WEAK void WAKE_PDM_EVENT_IRQHandler(void)
@@ -2177,12 +2178,12 @@ WEAK void VBAT_RTC_IRQHandler(void)
 
 WEAK void VBAT_GPIO_CH0_IRQHandler(void)
 {
-    VBAT_GPIO_CH0_DriverIRQHandler();
+    GPIO_DriverIRQHandler(5U);
 }
 
 WEAK void VBAT_GPIO_CH1_IRQHandler(void)
 {
-    VBAT_GPIO_CH1_DriverIRQHandler();
+    GPIO_DriverIRQHandler(5U);
 }
 
 WEAK void VBAT_VBATCON_IRQHandler(void)

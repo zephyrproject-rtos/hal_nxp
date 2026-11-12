@@ -257,9 +257,9 @@ extern volatile uint32_t g_mclkFreq;
     }
 
 /*! @brief Clock ip name array for PINT. */
-#define PINT_CLOCKS       \
-    {                     \
-        kCLOCK_GpioIntCtl \
+#define PINT_CLOCKS \
+    {               \
+        kCLOCK_Pint \
     }
 
 /*! @brief Clock ip name array for I3C. */

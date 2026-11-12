@@ -8,6 +8,10 @@
 **                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
 **                          MIMXRT1182XVP2C
+**                          MIMXRT1183CHM8C_cm33
+**                          MIMXRT1183CHM8C_cm7
+**                          MIMXRT1184CHM8C_cm33
+**                          MIMXRT1184CHM8C_cm7
 **                          MIMXRT1185CVJ8C_cm33
 **                          MIMXRT1185CVJ8C_cm7
 **                          MIMXRT1185XVJ8C_cm33
@@ -40,9 +44,17 @@
 **                          MIMXRT118CCVJ8C_cm7
 **                          MIMXRT118CXVJ8C_cm33
 **                          MIMXRT118CXVJ8C_cm7
+**                          MIMXRT118DCHM8C_cm33
+**                          MIMXRT118DCHM8C_cm7
+**                          MIMXRT118DXHM8C_cm33
+**                          MIMXRT118DXHM8C_cm7
+**                          MIMXRT118ECHM8C_cm33
+**                          MIMXRT118ECHM8C_cm7
+**                          MIMXRT118EXHM8C_cm33
+**                          MIMXRT118EXHM8C_cm7
 **
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260206
+**     Version:             rev. 4.0, 2026-08-14
+**     Build:               b260822
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NETC_PORT
@@ -62,14 +74,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2026-08-14)
+**         Based on RM Rev 10.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_NETC_PORT.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-08-14
  * @brief CMSIS Peripheral Access Layer for NETC_PORT
  *
  * CMSIS Peripheral Access Layer for NETC_PORT
@@ -82,6 +96,14 @@
 #include "MIMXRT1181_COMMON.h"
 #elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
+#elif (defined(CPU_MIMXRT1183CHM8C_cm33))
+#include "MIMXRT1183_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1183CHM8C_cm7))
+#include "MIMXRT1183_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1184CHM8C_cm33))
+#include "MIMXRT1184_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1184CHM8C_cm7))
+#include "MIMXRT1184_cm7_COMMON.h"
 #elif (defined(CPU_MIMXRT1185CVJ8C_cm33) || defined(CPU_MIMXRT1185XVJ8C_cm33))
 #include "MIMXRT1185_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT1185CVJ8C_cm7) || defined(CPU_MIMXRT1185XVJ8C_cm7))
@@ -102,6 +124,14 @@
 #include "MIMXRT118C_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT118CCVJ8C_cm7) || defined(CPU_MIMXRT118CXVJ8C_cm7))
 #include "MIMXRT118C_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118DCHM8C_cm33) || defined(CPU_MIMXRT118DXHM8C_cm33))
+#include "MIMXRT118D_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118DCHM8C_cm7) || defined(CPU_MIMXRT118DXHM8C_cm7))
+#include "MIMXRT118D_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118ECHM8C_cm33) || defined(CPU_MIMXRT118EXHM8C_cm33))
+#include "MIMXRT118E_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118ECHM8C_cm7) || defined(CPU_MIMXRT118EXHM8C_cm7))
+#include "MIMXRT118E_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -161,7 +191,7 @@ typedef struct {
   __IO uint32_t PTAR;                              /**< Port TPID acceptance register, offset: 0x50 */
   __IO uint32_t PQOSMR;                            /**< Port QoS mode register, offset: 0x54 */
        uint8_t RESERVED_3[8];
-  __I  uint32_t PQOR;                              /**< Port Queue Operational register, offset: 0x60, not available in all instances (available on 110 out of 154) */
+  __I  uint32_t PQOR;                              /**< Port Queue Operational register, offset: 0x60, not available in all instances (available on 140 out of 196) */
        uint8_t RESERVED_4[28];
   __IO uint32_t PPCR;                              /**< Port parser configuration register, offset: 0x80 */
   __IO uint32_t PIPFCR;                            /**< Port ingress port filter configuration register, offset: 0x84 */
@@ -176,12 +206,12 @@ typedef struct {
   __I  uint32_t PTGAGLSR;                          /**< Port time gate scheduling admin gate list status register, offset: 0x114 */
   __I  uint32_t PTGAGLLR;                          /**< Port time gate scheduling admin gate list length register, offset: 0x118 */
   __I  uint32_t PTGOGLLR;                          /**< Port time gating operational gate list length register, offset: 0x11C */
-  __IO uint32_t PTGSATOR;                          /**< Port time gate scheduling advance time offset register, offset: 0x120, not available in all instances (available on 44 out of 154) */
-  __I  uint32_t PTGSHAR;                           /**< Port time gate scheduling hold advance register, offset: 0x124, not available in all instances (available on 110 out of 154) */
-  __I  uint32_t PTGSRAR;                           /**< Port time gate scheduling release advance register, offset: 0x128, not available in all instances (available on 110 out of 154) */
-  __IO uint32_t PTGSHCR;                           /**< Port time gate scheduling hold configuration register, offset: 0x12C, not available in all instances (available on 110 out of 154) */
+  __IO uint32_t PTGSATOR;                          /**< Port time gate scheduling advance time offset register, offset: 0x120, not available in all instances (available on 56 out of 196) */
+  __I  uint32_t PTGSHAR;                           /**< Port time gate scheduling hold advance register, offset: 0x124, not available in all instances (available on 140 out of 196) */
+  __I  uint32_t PTGSRAR;                           /**< Port time gate scheduling release advance register, offset: 0x128, not available in all instances (available on 140 out of 196) */
+  __IO uint32_t PTGSHCR;                           /**< Port time gate scheduling hold configuration register, offset: 0x12C, not available in all instances (available on 140 out of 196) */
        uint8_t RESERVED_7[4];
-  __IO uint32_t PFPCR;                             /**< Port frame preemption configuration register, offset: 0x134, not available in all instances (available on 110 out of 154) */
+  __IO uint32_t PFPCR;                             /**< Port frame preemption configuration register, offset: 0x134, not available in all instances (available on 140 out of 196) */
   __IO uint32_t PDGSR;                             /**< Port default gate state register, offset: 0x138 */
        uint8_t RESERVED_8[132];
   __I  uint32_t PRXDCR;                            /**< Port Rx discard count register, offset: 0x1C0 */
@@ -189,10 +219,10 @@ typedef struct {
   __IO uint32_t PRXDCRR0;                          /**< Port Rx discard count reason register 0, offset: 0x1C8 */
   __IO uint32_t PRXDCRR1;                          /**< Port Rx discard count reason register 1, offset: 0x1CC */
        uint8_t RESERVED_10[16];
-  __I  uint32_t PTXDCR;                            /**< Port Tx discard count register, offset: 0x1E0, not available in all instances (available on 110 out of 154) */
+  __I  uint32_t PTXDCR;                            /**< Port Tx discard count register, offset: 0x1E0, not available in all instances (available on 140 out of 196) */
        uint8_t RESERVED_11[4];
-  __IO uint32_t PTXDCRR0;                          /**< Port Tx discard count reason register 0, offset: 0x1E8, not available in all instances (available on 110 out of 154) */
-  __IO uint32_t PTXDCRR1;                          /**< Port Tx discard count reason register 1, offset: 0x1EC, not available in all instances (available on 110 out of 154) */
+  __IO uint32_t PTXDCRR0;                          /**< Port Tx discard count reason register 0, offset: 0x1E8, not available in all instances (available on 140 out of 196) */
+  __IO uint32_t PTXDCRR1;                          /**< Port Tx discard count reason register 1, offset: 0x1EC, not available in all instances (available on 140 out of 196) */
        uint8_t RESERVED_12[16];
   struct {                                         /* offset: 0x200, array step: 0x20 */
     __I  uint32_t PTGSTCSR;                          /**< Port time gate scheduling traffic class 0 status register..Port time gate scheduling traffic class 7 status register, array offset: 0x200, array step: 0x20 */
@@ -204,40 +234,40 @@ typedef struct {
          uint8_t RESERVED_2[8];
   } TCT_NUM[NETC_PORT_TCT_NUM_COUNT];
        uint8_t RESERVED_13[256];
-  __IO uint32_t PBPMCR0;                           /**< Port buffer pool mapping configuration register 0, offset: 0x400, not available in all instances (available on 110 out of 154) */
-  __IO uint32_t PBPMCR1;                           /**< Port buffer pool mapping configuration register 1, offset: 0x404, not available in all instances (available on 110 out of 154) */
+  __IO uint32_t PBPMCR0;                           /**< Port buffer pool mapping configuration register 0, offset: 0x400, not available in all instances (available on 140 out of 196) */
+  __IO uint32_t PBPMCR1;                           /**< Port buffer pool mapping configuration register 1, offset: 0x404, not available in all instances (available on 140 out of 196) */
        uint8_t RESERVED_14[48];
   __IO uint32_t PPCPDEIMR;                         /**< Port PCP DEI mapping register, offset: 0x438 */
        uint8_t RESERVED_15[4];
-  __IO uint32_t PMCR;                              /**< Port mirror configuration register, offset: 0x440, not available in all instances (available on 110 out of 154) */
+  __IO uint32_t PMCR;                              /**< Port mirror configuration register, offset: 0x440, not available in all instances (available on 140 out of 196) */
        uint8_t RESERVED_16[12];
-  __IO uint32_t PCTFCR;                            /**< Port cut through forwarding configuration register, offset: 0x450, not available in all instances (available on 88 out of 154) */
+  __IO uint32_t PCTFCR;                            /**< Port cut through forwarding configuration register, offset: 0x450, not available in all instances (available on 112 out of 196) */
        uint8_t RESERVED_17[4];
-  __IO uint32_t PLANIDCR;                          /**< Port LANID configuration register, offset: 0x458, not available in all instances (available on 110 out of 154) */
+  __IO uint32_t PLANIDCR;                          /**< Port LANID configuration register, offset: 0x458, not available in all instances (available on 140 out of 196) */
        uint8_t RESERVED_18[4];
   __IO uint32_t PISIDCR;                           /**< Port ingress stream identification configuration register, offset: 0x460 */
-  __IO uint32_t PFMCR;                             /**< Port frame modification configuration register, offset: 0x464, not available in all instances (available on 110 out of 154) */
+  __IO uint32_t PFMCR;                             /**< Port frame modification configuration register, offset: 0x464, not available in all instances (available on 140 out of 196) */
        uint8_t RESERVED_19[8];
-  __IO uint32_t PIPV2QMR0;                         /**< Port IPV to queue mapping register 0, offset: 0x470, not available in all instances (available on 110 out of 154) */
+  __IO uint32_t PIPV2QMR0;                         /**< Port IPV to queue mapping register 0, offset: 0x470, not available in all instances (available on 140 out of 196) */
        uint8_t RESERVED_20[60];
-  __I  uint32_t PTCMINLR;                          /**< Port time capture minimum latency register, offset: 0x4B0, not available in all instances (available on 110 out of 154) */
-  __I  uint32_t PTCMAXLR;                          /**< Port time capture maximum latency register, offset: 0x4B4, not available in all instances (available on 110 out of 154) */
+  __I  uint32_t PTCMINLR;                          /**< Port time capture minimum latency register, offset: 0x4B0, not available in all instances (available on 140 out of 196) */
+  __I  uint32_t PTCMAXLR;                          /**< Port time capture maximum latency register, offset: 0x4B4, not available in all instances (available on 140 out of 196) */
        uint8_t RESERVED_21[72];
-  __IO uint32_t BPCR;                              /**< Bridge port configuration register, offset: 0x500, not available in all instances (available on 110 out of 154) */
+  __IO uint32_t BPCR;                              /**< Bridge port configuration register, offset: 0x500, not available in all instances (available on 140 out of 196) */
        uint8_t RESERVED_22[12];
-  __IO uint32_t BPDVR;                             /**< Bridge port default VLAN register, offset: 0x510, not available in all instances (available on 110 out of 154) */
+  __IO uint32_t BPDVR;                             /**< Bridge port default VLAN register, offset: 0x510, not available in all instances (available on 140 out of 196) */
        uint8_t RESERVED_23[12];
-  __IO uint32_t BPSTGSR;                           /**< Bridge port spanning tree group state register, offset: 0x520, not available in all instances (available on 110 out of 154) */
+  __IO uint32_t BPSTGSR;                           /**< Bridge port spanning tree group state register, offset: 0x520, not available in all instances (available on 140 out of 196) */
        uint8_t RESERVED_24[4];
-  __IO uint32_t BPSCR0;                            /**< Bridge port storm control register 0, offset: 0x528, not available in all instances (available on 110 out of 154) */
-  __IO uint32_t BPSCR1;                            /**< Bridge port storm control register 1, offset: 0x52C, not available in all instances (available on 110 out of 154) */
-  __I  uint32_t BPOR;                              /**< Bridge port operational register, offset: 0x530, not available in all instances (available on 110 out of 154) */
+  __IO uint32_t BPSCR0;                            /**< Bridge port storm control register 0, offset: 0x528, not available in all instances (available on 140 out of 196) */
+  __IO uint32_t BPSCR1;                            /**< Bridge port storm control register 1, offset: 0x52C, not available in all instances (available on 140 out of 196) */
+  __I  uint32_t BPOR;                              /**< Bridge port operational register, offset: 0x530, not available in all instances (available on 140 out of 196) */
        uint8_t RESERVED_25[76];
-  __I  uint32_t BPDCR;                             /**< Bridge port discard count register, offset: 0x580, not available in all instances (available on 110 out of 154) */
+  __I  uint32_t BPDCR;                             /**< Bridge port discard count register, offset: 0x580, not available in all instances (available on 140 out of 196) */
        uint8_t RESERVED_26[4];
-  __IO uint32_t BPDCRR0;                           /**< Bridge port discard count reason register 0, offset: 0x588, not available in all instances (available on 110 out of 154) */
-  __IO uint32_t BPDCRR1;                           /**< Bridge port discard count reason register 1, offset: 0x58C, not available in all instances (available on 110 out of 154) */
-  __IO uint32_t BPMLFSR;                           /**< Bridge port MAC learning failure status register, offset: 0x590, not available in all instances (available on 110 out of 154) */
+  __IO uint32_t BPDCRR0;                           /**< Bridge port discard count reason register 0, offset: 0x588, not available in all instances (available on 140 out of 196) */
+  __IO uint32_t BPDCRR1;                           /**< Bridge port discard count reason register 1, offset: 0x58C, not available in all instances (available on 140 out of 196) */
+  __IO uint32_t BPMLFSR;                           /**< Bridge port MAC learning failure status register, offset: 0x590, not available in all instances (available on 140 out of 196) */
 } NETC_PORT_Type;
 
 /* ----------------------------------------------------------------------------

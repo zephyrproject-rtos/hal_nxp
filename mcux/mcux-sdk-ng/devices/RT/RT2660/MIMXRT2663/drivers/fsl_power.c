@@ -7,9 +7,6 @@
 #include "fsl_power.h"
 #include "fsl_modcon.h"
 #include "fsl_clock.h"
-#if MCUX_POWER_PF9453_SUPPLY
-#include "fsl_pf9453.h" /* External VDD_CORE supply (Option D). fsl_power never includes fsl_lpi2c. */
-#endif
 
 /*******************************************************************************
  * Definitions
@@ -17,13 +14,6 @@
 
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.power"
-#endif
-
-#if MCUX_POWER_PF9453_SUPPLY
-/* PF9453 BUCK2 (VDD_CORE) millivolt set-points, mapped from the DCDC VOUT_ADJ codes below. */
-#define POWER_PF9453_BUCK2_RUN_HP_MV  (900U) /*!< HP run: 0.9 V. */
-#define POWER_PF9453_BUCK2_RUN_LP_MV  (800U) /*!< NP / LP run: 0.8 V. */
-#define POWER_PF9453_BUCK2_STANDBY_MV (650U) /*!< Deep-sleep standby: 0.65 V (matches SoC DAC). */
 #endif
 
 /* Number of 32-bit words covering all 384 NVIC IRQs and 64 DMA sources. */
@@ -62,13 +52,7 @@
      ((cfg)->enableFro12MLpClockSource ? (1UL << (uint32_t)kPOWER_ClockSource_FRO12M_LP) : 0UL))
 
 /* RT2660 MEMCON layout constants. */
-#define POWER_MEMCON_MAX_BLOCKS_PER_SLICE     12U /*!< Maximum blocks configurable per MEMCON slice */
-#define POWER_MEMCON_OCRAM0_SLICE_IDX         2U  /*!< OCRAM0 resides in MEMCON slice 2 */
-#define POWER_MEMCON_OCRAM0_DS_BLOCK_COUNT    9U  /*!< OCRAM0 blocks configured for Deep Sleep retention */
-#define POWER_MEMCON_OCRAM0_MAX_RETAIN_BLOCKS 8U  /*!< Max blocks for PD retention (64 KB / 8 KB each) */
-#define POWER_MEMCON_OCRAM0_PKC_BLOCK_IDX     11U /*!< PKC RAM block index within OCRAM0 slice */
-#define POWER_MEMCON_OCRAM0_LLC_BLOCK_IDX     8U  /*!< LLC cache block index within OCRAM0 slice (S2 B8) */
-#define POWER_MEMCON_AUDIO8KB_BLOCK_IDX       10U /*!< Audio SRAM 8KB block index within OCRAM0 slice (S2 B10) */
+#define POWER_MEMCON_MAX_BLOCKS_PER_SLICE 12U /*!< Maximum blocks configurable per MEMCON slice */
 
 /* PMUCFG.pmuMode bitfield values (RT2660 PMU mode encoding). */
 #define POWER_PMU_MODE_LP  2U /*!< Low Power (ZBB, 0.8 V DCDC) */
@@ -79,19 +63,46 @@
 #define POWER_LDO_MODE_LP 2U /*!< LDO Low Power mode */
 
 /*
- * Body-bias reference values from the verification-team sequence
- * (rt2660_bodybias_configuration.drawio).
+ * Body-bias FBB voltage codes.
  *
- * IMPORTANT: these are temporary reference trim values until OTP/PMU
- * characterization data is available through the production trim flow.
- * fsl_power only uses ZBB and full FBB (N-well + P-well); it does not use
- * P-well-only, N-well-only, Hi-Z, standby, or VDD-tracking body-bias modes.
+ * Primary source: OTP fuse ANA_CFG12 (FSB shadow word 50, RamAccessFSB=Public per
+ * the RT2660 fusemap OTP_CONFIG_OCOTP_V2 sheet). Layout:
+ *   [2:0]   PMU_OTP_WB_MODE_SEL_PRIMARY   (cached for future PMU driver use)
+ *   [22:16] PMU_OTP_WB_NWELL_V_SEL_PRIMARY (7-bit) -> pmu_body_bias_config_t.nwellVolSel
+ *   [30:24] PMU_OTP_WB_PWELL_V_SEL_PRIMARY (7-bit) -> pmu_body_bias_config_t.pwellVolSel
+ *
+ * Backup source: OTP fuse ANA_CFG13 (FSB shadow word 51). Same layout as CFG12 for
+ * bits [2:0] / [22:16] / [30:24], plus a select bit at [31]:
+ *   [31]    PMU_OTP_WB_TRIM_SEL
+ * When TRIM_SEL=1, the BACKUP fields from CFG13 override the PRIMARY fields from
+ * CFG12 (per field: BACKUP is used only if non-zero, otherwise fall back to PRIMARY).
+ * This is the OTP-level hook for a re-trim after silicon characterization when the
+ * PRIMARY word cannot be re-burned.
+ *
+ * Both reads run once inside POWER_SetPolicy() and cache into s_fbbTrim. FBB
+ * transitions reuse the cache without re-reading the FSB.
+ *
+ * Fallback (blank fuse, FSB error, or selected field reads back as zero): the
+ * verification-team reference codes below from rt2660_bodybias_configuration.drawio.
+ * This keeps un-fused silicon and pre-characterization parts running through the FBB
+ * flow instead of faulting into 0 mV body bias.
  */
-#define POWER_BODYBIAS_FBB_NWELL_VOL_SEL (0x18U) // 1200mV
-#define POWER_BODYBIAS_FBB_PWELL_VOL_SEL (0x24U) // 1800mV
+#define POWER_BODYBIAS_FUSE_WORD_ANA_CFG12 (50U)
+#define POWER_BODYBIAS_FUSE_WORD_ANA_CFG13 (51U)
 
-/* OCRAM0 block granularity used for retention sizing. */
-#define POWER_OCRAM0_BLOCK_SIZE_KB 8U /*!< Each MEMCON OCRAM0 block covers 8 KB */
+/* CFG12 PRIMARY and CFG13 BACKUP share the same bit layout for the three trim fields. */
+#define POWER_ANA_CFG_MODE_SEL_MASK     (0x00000007U) /* [2:0]   */
+#define POWER_ANA_CFG_MODE_SEL_SHIFT    (0U)
+#define POWER_ANA_CFG_NWELL_V_SEL_MASK  (0x007F0000U) /* [22:16] */
+#define POWER_ANA_CFG_NWELL_V_SEL_SHIFT (16U)
+#define POWER_ANA_CFG_PWELL_V_SEL_MASK  (0x7F000000U) /* [30:24] */
+#define POWER_ANA_CFG_PWELL_V_SEL_SHIFT (24U)
+
+/* CFG13-only select bit. */
+#define POWER_ANA_CFG13_TRIM_SEL_MASK (0x80000000U) /* [31] */
+
+#define POWER_BODYBIAS_FBB_NWELL_VOL_SEL (0x18U)    /* fallback: ~1200 mV per verification ref */
+#define POWER_BODYBIAS_FBB_PWELL_VOL_SEL (0x24U)    /* fallback: ~1800 mV per verification ref */
 
 /* POWERCON GPR_COLD_0 bit 0 is a force-alive override for MAIN-domain TCM.
  * 1 = keep the MAIN-domain TCM powered; 0 = allow the configured low-power
@@ -115,10 +126,10 @@
 /* VDD_CORE set-point codes. These are DCDC VOUT_ADJ codes (VOUT = 0.225 V + N x 0.025 V,
  * with N=0 a special case = 0.8 V). In active run modes the voltage is applied through the
  * DCDC via PMU_ConfigDcdc(); PMUCFG_ACTIVE.coreLvl alone does not move the rail and is only
- * kept consistent with the applied VOUT_ADJ. In standby the same codes drive the PMU DAC. */
-#define POWER_PMUCFG_CORELEVEL_090V 0x1BU /*!< 0.9 V (VOUT_ADJ=27) - HP run mode. */
-#define POWER_PMUCFG_CORELEVEL_080V 0U    /*!< 0.8 V (VOUT_ADJ=0) - NP / LP run mode. */
-#define POWER_PMUCFG_CORELEVEL_065V 17U   /*!< 0.65 V - Deep Sleep standby (0.225 + 17 x 0.025). */
+ * kept consistent with the applied VOUT_ADJ. In standby the same codes drive the PMU DAC.
+ * POWER_PMUCFG_CORELEVEL_090V / _080V are declared in fsl_power.h (public) since they are also
+ * part of power_ext_regulator_hooks_t::setCoreVoltage's documented contract. */
+#define POWER_PMUCFG_CORELEVEL_065V 17U /*!< 0.65 V - Deep Sleep standby (0.225 + 17 x 0.025). */
 
 /* Core-frequency classification thresholds (Hz) for POWER_GetCurrentRunMode(). Margins are
  * deliberate: Normal Run cannot always be divided to exactly 800 MHz (typically ~792 MHz),
@@ -136,6 +147,24 @@
 #define POWER_NPU_TCM_SLICES   {kPOWER_Mem_NpuWeightCache, kPOWER_Mem_NpuResultBuffers}
 #define POWER_COMM_TCM_SLICES  {kPOWER_Mem_CommShared, kPOWER_Mem_CommType2}
 #define POWER_MEDIA_TCM_SLICES {kPOWER_Mem_MediaShared}
+
+/* Slice 2 SRAM: OCRAM per-block plus LLC/Audio/WakeSram are 1-block writes issued via
+ * POWER_SetMemBlockSleepMode() with the enum constant directly (no macro/array needed).
+ * S2 B0 (kPOWER_Mem_ComputeSram01) is hardcoded to Retention in the driver — see
+ * POWER_EnterDeepSleep(). */
+
+/* All fsl_power-managed memcon-controllable blocks. Used by POWER_EnterSleep to write
+ * MEM_SLPCFG=Active explicitly for state hygiene (Sleep does not physically transition
+ * memories, but this clears stale Retention/PowerDown values left by a prior Deep-Sleep
+ * or Power-Down entry). Keep this list in sync with the per-group macros above +
+ * POWER_{CPU,NPU,COMM,MEDIA}_TCM_SLICES. */
+#define POWER_ALL_MEMORY_SLICES                                                                                 \
+    {kPOWER_Mem_WakeSram,       kPOWER_Mem_ComputeSram01,    kPOWER_Mem_ComputeSram23, kPOWER_Mem_ComputeSram4, \
+     kPOWER_Mem_ComputeSram5,   kPOWER_Mem_ComputeSram6,     kPOWER_Mem_ComputeSram7,  kPOWER_Mem_ComputeSram8, \
+     kPOWER_Mem_ComputeSram9,   kPOWER_Mem_LlcCacheBuffer,   kPOWER_Mem_Audio8Kb,      kPOWER_Mem_CpuICache,    \
+     kPOWER_Mem_CpuDCacheData,  kPOWER_Mem_CpuITCM,          kPOWER_Mem_CpuDTCM,       kPOWER_Mem_CpuDCacheTag, \
+     kPOWER_Mem_NpuWeightCache, kPOWER_Mem_NpuResultBuffers, kPOWER_Mem_MediaShared,   kPOWER_Mem_CommShared,   \
+     kPOWER_Mem_CommType2}
 
 /* PMU standby word for Power Down: pmuMode=RET, DCDC off, all LDOs off. */
 #define POWER_PMU_STATE_PD_WORD                          \
@@ -167,8 +196,58 @@ static uint32_t s_irqWakeupMask[POWER_IRQ_WAKEUP_MASK_COUNT];
 static uint32_t s_mainDmaWakeupMask[POWER_DMA_WAKEUP_MASK_COUNT];
 static uint32_t s_wakeDmaWakeupMask[POWER_DMA_WAKEUP_MASK_COUNT];
 
+#if PMU_DRIVER_UPDATE_TRIM_VALUE
+/*
+ * Cached FBB trim values from OTP fuses ANA_CFG12 / ANA_CFG13. Loaded by
+ * POWER_InitBodyBiasConfig() on the first POWER_SetPolicy() call. `s_fbbTrim` keeps the
+ * three primitive fields (nwell / pwell / modeSel) mainly for diagnostics; the mode-run
+ * paths consume the pre-built `s_fbbCfg` directly.
+ *
+ * Initialized to the reference fallback so any pre-POWER_SetPolicy() body-bias apply
+ * (should not happen in normal flow) still uses safe values.
+ */
+static struct
+{
+    uint8_t nwell;   /*!< 7-bit N-well voltage selection code. */
+    uint8_t pwell;   /*!< 7-bit P-well voltage selection code. */
+    uint8_t modeSel; /*!< 3-bit PMU_OTP_WB_MODE_SEL from CFG12 or CFG13 (per TRIM_SEL). Not applied
+                          to s_fbbCfg.mode: fsl_power's HP/NP run modes always request FBBFull. */
+} s_fbbTrim = {
+    .nwell   = POWER_BODYBIAS_FBB_NWELL_VOL_SEL,
+    .pwell   = POWER_BODYBIAS_FBB_PWELL_VOL_SEL,
+    .modeSel = 0U,
+};
+#endif /* PMU_DRIVER_UPDATE_TRIM_VALUE */
+
+/*
+ * Pre-built FBB body-bias config used by every POWER_Enter*Run() FBB apply. Populated
+ * by POWER_InitBodyBiasConfig() (called from POWER_SetPolicy()) as:
+ *   PMU_GetDefaultBodyBiasConfig(&s_fbbCfg);
+ *   s_fbbCfg.mode        = kPMU_BodyBiasFBBFull;               // always
+ *   s_fbbCfg.nwellVolSel = s_fbbTrim.nwell;                     // only if PMU_DRIVER_UPDATE_TRIM_VALUE
+ *   s_fbbCfg.pwellVolSel = s_fbbTrim.pwell;                     // only if PMU_DRIVER_UPDATE_TRIM_VALUE
+ *
+ * `mode` is always FBBFull: which body-bias mode to request is a driver policy decision,
+ * independent of whether the trim value is known. `nwellVolSel`/`pwellVolSel` are only
+ * populated from the OTP fuse trim when PMU_DRIVER_UPDATE_TRIM_VALUE (fsl_pmu.h) is enabled.
+ * That same macro also gates PMU_ConfigBodyBias() (fsl_pmu.c): disabled (default), it leaves
+ * the NWELL_VOL/PWELL_VOL register bits untouched so ROM's own trim (once the fuses are
+ * trimmed) is never clobbered by SW, and these two fields go unused; enabled, it writes them
+ * like every other field. Both sides read the one macro so they can't drift out of sync.
+ *
+ * Zero-initialized here so a body-bias apply before POWER_SetPolicy() would come out as
+ * pmu_body_bias_mode_t=kPMU_BodyBiasZBB (0) — the safe default that PMU_ApplyBodyBias
+ * accepts without N-well/P-well OK gating. In normal flow, s_fbbCfg is always populated
+ * before any FBB apply.
+ */
+static pmu_body_bias_config_t s_fbbCfg;
+
+/* File-scope MEMCON slice base pointers. Shared by every helper that touches MEMCON
+ * so the array is not redeclared on the stack of each callee. */
+static MEMCON_SLICE_Type *const s_memconSliceBases[] = MEMCON_SLICE_BASE_PTRS;
+
 /* Four RT2660 SW-controllable power domains (PD_CPU/NPU/COMM/MEDIA). */
-static const uint8_t s_powerDomains[] = {
+static const uint8_t s_swPowerDomains[] = {
     (uint8_t)kPOWER_DomainCpu,
     (uint8_t)kPOWER_DomainNpu,
     (uint8_t)kPOWER_DomainComm,
@@ -186,21 +265,13 @@ static const uint8_t s_powerDomains[] = {
  */
 static bool s_cssiBypass = true;
 
-#if MCUX_POWER_PF9453_SUPPLY
-/* Internal PF9453 handle, created in POWER_InitExtSupply() from the board-supplied I2C transport. In
- * Option D fsl_power owns the PMIC and drives BUCK2 (VDD_CORE) directly at the run-mode/standby points. */
-static pf9453_handle_t s_pmic;
-/* Set by POWER_InitExtSupply(). Until then the PMIC handle/transport is not ready, so the run-mode and
- * standby paths skip the BUCK2 write (a run-mode DVS legitimately runs during boot-clock setup, before
- * POWER_InitExtSupply, when the board is ordered per the reference; the PMIC keeps its power-on voltage). */
-static bool s_pmicReady = false;
-#endif
+/* Board-registered external-regulator hooks (NULL = use the on-chip DCDC/LDOs, the default).
+ * fsl_power stores only the pointer; the board owns the pointed-to struct's lifetime. */
+static const power_ext_regulator_hooks_t *s_extRegHooks = NULL;
 
 /*******************************************************************************
  * Private helpers
  ******************************************************************************/
-
-static void POWER_SetBodyBiasFbbFullConfig(pmu_body_bias_config_t *config);
 
 /*
  * Builds step-mode masks from a power_cmc_step_config_t and applies them to
@@ -311,7 +382,7 @@ void POWER_ApplyWakeupSources(void)
 /*
  * Applies body bias ZBB (disables FBB/NBB before any standby entry).
  */
-static void POWER_ApplyZbb(void)
+static void POWER_ApplyZeroBodyBias(void)
 {
     pmu_body_bias_config_t bbCfg;
     PMU_GetDefaultBodyBiasConfig(&bbCfg);
@@ -319,15 +390,106 @@ static void POWER_ApplyZbb(void)
     (void)PMU_ApplyBodyBiasBlocking(SYSCON__PMU);
 }
 
-/* Full FBB used by fsl_power: N-well + P-well only. */
-static void POWER_SetBodyBiasFbbFullConfig(pmu_body_bias_config_t *config)
+/*
+ * Establishes the FBBFull body-bias config used by every POWER_Enter*Run() FBB apply.
+ * Called once from POWER_SetPolicy().
+ *
+ * `mode` is always set to FBBFull: which body-bias mode to request is a driver policy
+ * decision, independent of whether the trim value is known.
+ *
+ * `nwellVolSel`/`pwellVolSel` are only overridden from the OTP fuse trim when
+ * PMU_DRIVER_UPDATE_TRIM_VALUE (fsl_pmu.h) is enabled — the same macro that gates whether
+ * PMU_ConfigBodyBias() (fsl_pmu.c) actually writes them to hardware, so this fuse read and
+ * that hardware write can't drift out of sync. At its default (disabled, P-Well/N-Well
+ * fuse not yet trimmed) this fuse-read block is skipped entirely and PMU_ConfigBodyBias()
+ * leaves the NWELL_VOL/PWELL_VOL register bits at ROM's own trim.
+ */
+static void POWER_InitBodyBiasConfig(void)
 {
-    assert(config != NULL);
+    PMU_GetDefaultBodyBiasConfig(&s_fbbCfg);
+    s_fbbCfg.mode = kPMU_BodyBiasFBBFull;
 
-    PMU_GetDefaultBodyBiasConfig(config);
-    config->mode        = kPMU_BodyBiasFBBFull;
-    config->nwellVolSel = POWER_BODYBIAS_FBB_NWELL_VOL_SEL;
-    config->pwellVolSel = POWER_BODYBIAS_FBB_PWELL_VOL_SEL;
+#if PMU_DRIVER_UPDATE_TRIM_VALUE
+    /*
+     * Reads OTP fuses ANA_CFG12 (PRIMARY) and ANA_CFG13 (BACKUP + TRIM_SEL) once via the
+     * FSB shadow and caches the resolved Well-Bias trim codes in s_fbbTrim.
+     *
+     * Per-field selection order (independent for nwell / pwell / modeSel):
+     *   1. If CFG13.TRIM_SEL == 1 and the BACKUP field is non-zero, use BACKUP.
+     *   2. Otherwise, if the PRIMARY field is non-zero, use PRIMARY.
+     *   3. Otherwise, leave s_fbbTrim at its initialized fallback (reference macros for
+     *      nwell / pwell, zero for modeSel).
+     *
+     * Failure modes that leave s_fbbTrim at its initialized fallback (bring-up safety):
+     *   - All fuses not yet valid (FSB_STATUS.VALL == 0) — skip both reads
+     *   - FSB reports RD_ERR / RLD_ERR / FUSE_ERR / ADDR_ERR on the CFG12 read — skip both
+     *   - FSB reports error on the CFG13 read only — CFG12 PRIMARY path still applies
+     */
+    const uint32_t errMask = FSB_FUSE_STAT_RD_ERR_MASK | FSB_FUSE_STAT_RLD_ERR_MASK | FSB_FUSE_STAT_FUSE_ERR_MASK |
+                             FSB_FUSE_STAT_ADDR_ERR_MASK;
+
+    /* Seed s_fbbCfg's well-voltage fields from the SW fallback so any early-return path
+     * below leaves a valid config behind (overridden by the fuse read further down). */
+    s_fbbCfg.nwellVolSel = s_fbbTrim.nwell;
+    s_fbbCfg.pwellVolSel = s_fbbTrim.pwell;
+
+    /* Skip the FSB access entirely if fuse shadow load has not completed;
+     * s_fbbTrim / s_fbbCfg keep their initialized fallback values. */
+    if ((MAIN__FSB->FSB_STATUS & FSB_FSB_STATUS_VALL_MASK) == 0U)
+    {
+        return;
+    }
+
+    /* Read PRIMARY (CFG12). Clear sticky FUSE_STAT bits, read, then check. */
+    MAIN__FSB->FUSE_STAT = MAIN__FSB->FUSE_STAT;
+    uint32_t primary     = MAIN__FSB->FUSE[POWER_BODYBIAS_FUSE_WORD_ANA_CFG12];
+    if ((MAIN__FSB->FUSE_STAT & errMask) != 0U)
+    {
+        return;
+    }
+
+    uint8_t priNwell = (uint8_t)((primary & POWER_ANA_CFG_NWELL_V_SEL_MASK) >> POWER_ANA_CFG_NWELL_V_SEL_SHIFT);
+    uint8_t priPwell = (uint8_t)((primary & POWER_ANA_CFG_PWELL_V_SEL_MASK) >> POWER_ANA_CFG_PWELL_V_SEL_SHIFT);
+    uint8_t priMode  = (uint8_t)((primary & POWER_ANA_CFG_MODE_SEL_MASK) >> POWER_ANA_CFG_MODE_SEL_SHIFT);
+
+    /* Read BACKUP (CFG13). If this read fails, keep PRIMARY-only path. */
+    MAIN__FSB->FUSE_STAT = MAIN__FSB->FUSE_STAT;
+    uint32_t backup      = MAIN__FSB->FUSE[POWER_BODYBIAS_FUSE_WORD_ANA_CFG13];
+    bool backupValid     = ((MAIN__FSB->FUSE_STAT & errMask) == 0U);
+
+    uint8_t bakNwell = 0U;
+    uint8_t bakPwell = 0U;
+    uint8_t bakMode  = 0U;
+    bool useBackup   = false;
+    if (backupValid)
+    {
+        useBackup = ((backup & POWER_ANA_CFG13_TRIM_SEL_MASK) != 0U);
+        bakNwell  = (uint8_t)((backup & POWER_ANA_CFG_NWELL_V_SEL_MASK) >> POWER_ANA_CFG_NWELL_V_SEL_SHIFT);
+        bakPwell  = (uint8_t)((backup & POWER_ANA_CFG_PWELL_V_SEL_MASK) >> POWER_ANA_CFG_PWELL_V_SEL_SHIFT);
+        bakMode   = (uint8_t)((backup & POWER_ANA_CFG_MODE_SEL_MASK) >> POWER_ANA_CFG_MODE_SEL_SHIFT);
+    }
+
+    /* Per-field select: BACKUP if TRIM_SEL and BACKUP non-zero, else PRIMARY if non-zero,
+     * else leave the initialized fallback (reference macros for nwell/pwell, 0 for mode). */
+    uint8_t nwell = (useBackup && bakNwell != 0U) ? bakNwell : priNwell;
+    uint8_t pwell = (useBackup && bakPwell != 0U) ? bakPwell : priPwell;
+    uint8_t mode  = (useBackup && bakMode != 0U) ? bakMode : priMode;
+
+    if (nwell != 0U)
+    {
+        s_fbbTrim.nwell = nwell;
+    }
+    if (pwell != 0U)
+    {
+        s_fbbTrim.pwell = pwell;
+    }
+    s_fbbTrim.modeSel = mode;
+
+    /* Reflect the resolved trim into the pre-built FBB config so POWER_Enter*Run()
+     * FBB paths can hand s_fbbCfg to PMU_ConfigBodyBias directly. */
+    s_fbbCfg.nwellVolSel = s_fbbTrim.nwell;
+    s_fbbCfg.pwellVolSel = s_fbbTrim.pwell;
+#endif /* PMU_DRIVER_UPDATE_TRIM_VALUE */
 }
 
 /*
@@ -356,17 +518,354 @@ static void POWER_ClearMainTcmForceAlive(void)
 }
 
 /*
- * Configures MEMCON sleep-mode power state for a list of memory identifiers.
+ * Switches every SW-controllable power domain from software to hardware trigger.
+ * Used before every standby entry so CMC/SSC drives the standby sequence rather
+ * than software.
  */
-static void POWER_SetMemSlicesSleepMode(memcon_power_mode_t mode, const power_memory_t *mems, uint32_t count)
+static inline void POWER_ForceAllDomainsToHwTrigger(void)
 {
-    MEMCON_SLICE_Type *const sliceBases[] = MEMCON_SLICE_BASE_PTRS;
+    for (uint32_t i = 0U; i < ARRAY_SIZE(s_swPowerDomains); i++)
+    {
+        PDCON_EnableDomainSwTrigger(SYSCON__PDCON, s_swPowerDomains[i], false);
+    }
+}
+
+/*
+ * Configures MEMCON sleep-mode power state for a single memory identifier.
+ * Convenience wrapper for the common 1-block case (OCRAM per-block, LLC, Audio, WakeSram)
+ * that avoids the 1-element array boilerplate of POWER_SetMemSlicesSleepMode().
+ */
+static void POWER_SetMemBlockSleepMode(power_memory_t mem, memcon_power_mode_t mode)
+{
+    uint8_t sliceIdx = (uint8_t)((uint32_t)mem >> 8U);
+    uint8_t blockIdx = (uint8_t)((uint32_t)mem & 0xFFU);
+    MEMCON_SLICE_SetSleepBlockMode(s_memconSliceBases[sliceIdx], blockIdx, mode);
+}
+
+/*
+ * Configures MEMCON sleep-mode power state for a list of memory identifiers that share
+ * the same mode. Use POWER_SetMemBlockSleepMode() for the 1-block case.
+ */
+static void POWER_SetMemSlicesSleepMode(const power_memory_t *mems, uint32_t count, memcon_power_mode_t mode)
+{
     for (uint32_t i = 0U; i < count; i++)
     {
         uint8_t sliceIdx = (uint8_t)((uint32_t)mems[i] >> 8U);
         uint8_t blockIdx = (uint8_t)((uint32_t)mems[i] & 0xFFU);
-        MEMCON_SLICE_SetSleepBlockMode(sliceBases[sliceIdx], blockIdx, mode);
+        MEMCON_SLICE_SetSleepBlockMode(s_memconSliceBases[sliceIdx], blockIdx, mode);
     }
+}
+
+/*
+ * Standby/run-mode helpers used by every POWER_Enter*() path.
+ */
+/*!
+ * brief Perform the CSSI/ELS LP handshake before standby entry.
+ *
+ * When bypass is disabled (production mode), this function:
+ *   1. Sends an LP permission request to CSSI firmware via MU.
+ *   2. Waits for CSSI firmware to respond allow/deny via MU reply.
+ *   3. If allowed, asserts MAIN__MODCON ELS_LP_HDSK.ELS_LP_REQ to notify
+ *      the ELS hardware block that LP entry is imminent.
+ *
+ * Communication with CSSI uses the Messaging Unit (MU).  The exact MU
+ * message protocol will be defined when CSSI firmware is ready.
+ *
+ * Returns true if LP entry is allowed (or bypass is active),
+ * false if CSSI denied the LP request.
+ */
+static bool POWER_RequestCssiLpEntry(void)
+{
+    if (s_cssiBypass)
+    {
+        /*
+         * TEST ONLY: CSSI handshake bypassed.
+         * CSSI firmware is not yet available for this bring-up phase.
+         * Remove this bypass before production validation - call
+         * POWER_SetCssiLpHandshakeBypass(false) when CSSI firmware is ready.
+         */
+        SYSCON__POWERCON_CMC0_CTRL->NON_IRQ_CS &= ~POWERCON_CMC_CTRL_NON_IRQ_CS_CSSI_EN_MASK;
+        SYSCON__POWERCON_CMC1_CTRL->NON_IRQ_CS &= ~POWERCON_CMC_CTRL_NON_IRQ_CS_CSSI_EN_MASK;
+        SYSCON__POWERCON_CMC2_CTRL->NON_IRQ_CS &= ~POWERCON_CMC_CTRL_NON_IRQ_CS_CSSI_EN_MASK;
+        return true;
+    }
+
+    /*
+     * Production path - CSSI firmware required.
+     *
+     * Step 1: Send LP request to CSSI via MU and wait for allow/deny response.
+     *         Communication protocol (message codes and MU channel assignment)
+     *         will be defined when CSSI firmware is available.
+     *         TODO: implement MU send + receive when CSSI firmware is ready.
+     *
+     * Step 2: If CSSI allows LP entry, assert ELS_LP_REQ via MAIN__MODCON
+     *         ELS_LP_HDSK register (IP[53].CFG[3], bit 16) to notify the ELS
+     *         hardware block.  CSSI then asserts allow_lp to POWERCON.
+     *
+     * Step 3: If CSSI denies, return false - the caller must not issue WFI.
+     */
+
+    /* Placeholder: always allow until MU protocol is finalized. */
+    /* TODO: replace with actual MU send/receive and MODCON write. */
+    MAIN__MODCON->IP[53U].CFG[3U] |= MODCON_CFG_ELS_LP_REQ_MASK;
+
+    return true; /* TODO: return false if CSSI MU response is deny. */
+}
+
+/*!
+ * brief Apply the active-mode VDD_CORE level by programming the DCDC.
+ *
+ * The active-mode core voltage is owned by the DCDC BUCK_VDDCORE_VOUT_ADJ register, not by
+ * PMUCFG_ACTIVE.coreLvl. Writing coreLvl alone does not move the rail; this function performs
+ * the effective change via PMU_ConfigDcdc(). The run-mode DCDC config uses PWM mode with the
+ * output-voltage monitor disabled (bring-up); the PWM loop compensation programmed at
+ * POWER_SetPolicy() is left untouched. Callers order this relative to the clock callback:
+ * raise voltage before speeding the core up, lower voltage only after the core is slowed.
+ *
+ * param voutAdj VOUT_ADJ code (POWER_PMUCFG_CORELEVEL_090V for HP, _080V for NP/LP).
+ */
+static void POWER_ApplyRunCoreVoltage(uint8_t voutAdj)
+{
+    if ((s_extRegHooks != NULL) && (s_extRegHooks->setCoreVoltage != NULL))
+    {
+        /* Board-registered external regulator (e.g. a PMIC) supplies VDD_CORE; the on-chip DCDC
+         * is not touched. The hook returns status_t so an I2C (or other) failure is observable;
+         * this function stays void (see REQ-002's noted limitation), so assert is the only
+         * failure signal available here. */
+        assert(s_extRegHooks->setCoreVoltage(voutAdj) == kStatus_Success);
+    }
+    else
+    {
+        pmu_dcdc_config_t dcdcConfig = {
+            .mode                 = kPMU_DcdcModePWM,
+            .voutAdj              = voutAdj,
+            .voutFineAdj          = 0U,
+            .ovlVthAdj            = 0U,
+            .vsensorVoutAdjEn     = false,
+            .bypassEn             = false,
+            .ovlPdEn              = false,
+            .sensorEnable         = false, /* DCDC output monitor off during bring-up ([hw-defer]). */
+            .irqOnVmaxError       = false,
+            .irqOnVminError       = false,
+            .irqOnClkLost         = false,
+            .irqOnUvlo            = false,
+            .irqOnOclWarn         = false,
+            .warmResetOnVmaxError = false,
+            .warmResetOnVminError = false,
+            .warmResetOnClkLost   = false,
+            .warmResetOnUvlo      = false,
+            .warmResetOnOclWarn   = false,
+            .coldResetOnVmaxError = false,
+            .coldResetOnVminError = false,
+            .coldResetOnClkLost   = false,
+            .coldResetOnUvlo      = false,
+            .coldResetOnOclWarn   = false,
+        };
+        PMU_ConfigDcdc(SYSCON__PMU, &dcdcConfig);
+    }
+}
+
+static status_t POWER_StandbyPrologue(void)
+{
+    if (!POWER_RequestCssiLpEntry())
+    {
+        return kStatus_Fail;
+    }
+    POWER_ClearPdsef();
+    POWER_ClearMainTcmForceAlive();
+    POWER_ApplyZeroBodyBias();
+    return kStatus_Success;
+}
+
+static inline void POWER_ExecuteWfi(void)
+{
+    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
+    __DSB();
+    __WFI();
+    __ISB();
+}
+
+static inline void POWER_RestoreActiveXmcMask(void)
+{
+    POWERCON_SetXmcStandbyMask(SYSCON__POWERCON_GLOBAL, 0x07U);
+    SYSCON__POWERCON_CMC0_CTRL->CMC_CTRL &= ~(POWERCON_CMC_CTRL_CMC_CTRL_SLEEP_HOLD_EN_MASK);
+}
+
+static inline uint32_t POWER_BuildPmucfgStbyWord(uint32_t pmuMode,
+                                                 pmu_dcdc_mode_t dcdcMode,
+                                                 uint32_t coreLevel,
+                                                 pmu_ldo_mode_t ldo0V8Mode,
+                                                 pmu_ldo_mode_t ldo1V8Mode,
+                                                 uint32_t ldoVdda1V8Mode,
+                                                 bool hqref,
+                                                 uint8_t sensorMask)
+{
+    power_pmu_state_t pmucfgStby = {0};
+    pmucfgStby.pmuMode           = pmuMode;
+    pmucfgStby.dcdcMode          = (dcdcMode == kPMU_DcdcModePWM) ? 1U : 0U;
+    pmucfgStby.coreLvl           = coreLevel;
+    pmucfgStby.ldo0V8Mode        = (uint32_t)ldo0V8Mode;
+    pmucfgStby.ldo1V8Mode        = (uint32_t)ldo1V8Mode;
+    pmucfgStby.ldoVdda1V8Mode    = ldoVdda1V8Mode;
+    pmucfgStby.hqref             = hqref ? 1U : 0U;
+    pmucfgStby.sensorTemp        = (sensorMask >> 0U) & 1U;
+    pmucfgStby.sensor0V8         = (sensorMask >> 1U) & 1U;
+    pmucfgStby.sensor1V8         = (sensorMask >> 2U) & 1U;
+    pmucfgStby.sensorVdda        = (sensorMask >> 3U) & 1U;
+    pmucfgStby.sensorCore        = (sensorMask >> 4U) & 1U;
+    pmucfgStby.sensorPmu         = (sensorMask >> 5U) & 1U;
+    return pmucfgStby.word;
+}
+
+static inline void POWER_ConfigureAllDomainSleepEvents(
+    pdcon_event_t cpu, pdcon_event_t npu, pdcon_event_t comm, pdcon_event_t media, pdcon_event_t main)
+{
+    const pdcon_event_t events[] = {cpu, npu, comm, media};
+    for (uint32_t i = 0U; i < ARRAY_SIZE(s_swPowerDomains); i++)
+    {
+        (void)PDCON_SetEventInLowPowerModes(SYSCON__PDCON, s_swPowerDomains[i], events[i]);
+    }
+    (void)PDCON_SetEventInLowPowerModes(SYSCON__PDCON, kPOWER_DomainMain, main);
+}
+
+static inline void POWER_ApplyRunModePmuState(uint32_t pmuMode, uint32_t coreLvl)
+{
+    POWER_ApplyRunCoreVoltage((uint8_t)coreLvl);
+    power_pmu_state_t pmuState;
+    pmuState.word     = SYSCON__POWERCON_SOC_CTRL->PMUCFG_ACTIVE;
+    pmuState.pmuMode  = pmuMode;
+    pmuState.dcdcMode = 1U;
+    pmuState.coreLvl  = coreLvl;
+    POWERCON_SetPmucfgActive(SYSCON__POWERCON_SOC_CTRL, pmuState.word);
+    POWERCON_TriggerSocUpdate(SYSCON__POWERCON_SOC_CTRL);
+    while (!POWERCON_IsSocUpdateDone(SYSCON__POWERCON_SOC_CTRL))
+    {
+    }
+}
+
+static inline void POWER_ApplyRunModeBodyBias(bool fbb)
+{
+    if (fbb)
+    {
+        PMU_ConfigBodyBias(SYSCON__PMU, &s_fbbCfg);
+        (void)PMU_ApplyBodyBiasBlocking(SYSCON__PMU);
+    }
+    else
+    {
+        POWER_ApplyZeroBodyBias();
+    }
+}
+
+/*
+ * Applies a single wakeup-source update to the SW shadow masks.
+ *
+ * Decodes the opaque power_wakeup_source_t encoding and applies enable / disable
+ * to the correct CMC shadow array (IRQ / MAIN DMA / WAKE DMA). Inverted polarity:
+ * enable = clear the bit; disable = set the bit (matches hardware register).
+ *
+ * bits[31:28] = 0x0 -> IRQ (CMC0),     index = bits[8:0] (0-383)
+ * bits[31:28] = 0x1 -> MAIN DMA (CMC1), index = bits[5:0] (0-63)
+ * bits[31:28] = 0x2 -> WAKE DMA (CMC2), index = bits[5:0] (0-63)
+ */
+static inline void POWER_UpdateWakeupMask(power_wakeup_source_t source, bool enable)
+{
+    uint32_t type      = ((uint32_t)source >> 28U) & 0xFU;
+    uint32_t index     = (uint32_t)source & 0x1FFU;
+    uint32_t *mask     = NULL;
+    uint32_t wordCount = 0U;
+
+    switch (type)
+    {
+        case 0x0U: /* IRQ -> CMC0 (9-bit index) */
+            mask      = s_irqWakeupMask;
+            wordCount = POWER_IRQ_WAKEUP_MASK_COUNT;
+            break;
+        case 0x1U: /* MAIN domain DMA -> CMC1 (6-bit index) */
+            index     = (uint32_t)source & 0x3FU;
+            mask      = s_mainDmaWakeupMask;
+            wordCount = POWER_DMA_WAKEUP_MASK_COUNT;
+            break;
+        case 0x2U: /* WAKE domain DMA -> CMC2 (6-bit index) */
+            index     = (uint32_t)source & 0x3FU;
+            mask      = s_wakeDmaWakeupMask;
+            wordCount = POWER_DMA_WAKEUP_MASK_COUNT;
+            break;
+        default:
+            return; /* Unknown source type - no action. */
+    }
+
+    if (index >= (wordCount * 32U))
+    {
+        return;
+    }
+
+    uint32_t bit = 1UL << (index % 32U);
+    if (enable)
+    {
+        mask[index / 32U] &= ~bit;
+    }
+    else
+    {
+        mask[index / 32U] |= bit;
+    }
+}
+
+/*
+ * Media MIPI CSI/DSI PHY 0.8 V supply, controlled by WAKE_MODCON MIPI_0V8_CFG
+ * (PWR_EN bit 0: power switch; DATA_EN bit 1: data isolation).
+ * The PHY must never be powered while PD_MEDIA is unpowered, and must be isolated
+ * before the domain loses power.
+ */
+/*
+ * Powers the WAKE_MIPI_0V8 PHY on or off with the correct isolation sequence.
+ *   off: isolate first (DATA_EN=0), then drop PHY supply (PWR_EN=0).
+ *   on : ensure fully isolated/off, raise PHY supply (PWR_EN=1), then de-isolate (DATA_EN=1).
+ */
+static inline void POWER_MediaMipiPhySetPower(bool on)
+{
+    uint32_t cfg = MODCON_GetCFG((uint32_t)kModCon_WAKE_MIPI_0V8, 0U);
+
+    if (on)
+    {
+        cfg &= ~(MODCON_CFG_DATA_EN_MASK | MODCON_CFG_PWR_EN_MASK);
+        MODCON_SetCFG((uint32_t)kModCon_WAKE_MIPI_0V8, 0U, cfg);
+        cfg |= MODCON_CFG_PWR_EN_MASK;
+        MODCON_SetCFG((uint32_t)kModCon_WAKE_MIPI_0V8, 0U, cfg);
+        cfg |= MODCON_CFG_DATA_EN_MASK;
+        MODCON_SetCFG((uint32_t)kModCon_WAKE_MIPI_0V8, 0U, cfg);
+    }
+    else
+    {
+        cfg &= ~MODCON_CFG_DATA_EN_MASK;
+        MODCON_SetCFG((uint32_t)kModCon_WAKE_MIPI_0V8, 0U, cfg);
+        cfg &= ~MODCON_CFG_PWR_EN_MASK;
+        MODCON_SetCFG((uint32_t)kModCon_WAKE_MIPI_0V8, 0U, cfg);
+    }
+}
+
+static inline void POWER_MediaMipiPhyPowerOff(void)
+{
+    POWER_MediaMipiPhySetPower(false);
+}
+static inline void POWER_MediaMipiPhyPowerOn(void)
+{
+    POWER_MediaMipiPhySetPower(true);
+}
+
+/*!
+ * @brief Power down the VBAT retention SRAM (Deep Power Down 2, no retention).
+ *
+ * VBAT__SRAM CTRL PWR_MODE [5:2] must not step ACTIVE->SHUTDOWN directly - the RM
+ * requires the INTERMEDIATE state in between - so step ACTIVE(6) -> INTERMEDIATE(2)
+ * -> SHUTDOWN(0).  For Deep Power Down 1 (retain) the SRAM is left ACTIVE and held
+ * by the always-on VBAT domain (VDD_PMU stays on), so this is not called.
+ * [hw-defer] pending silicon confirmation of the VBAT SRAM power sequence.
+ */
+static void POWER_ShutdownVbatSram(void)
+{
+    uint32_t ctrl    = VBAT__SRAM->CTRL & ~(uint32_t)SRAM_CTRL_PWR_MODE_MASK;
+    VBAT__SRAM->CTRL = ctrl | SRAM_CTRL_PWR_MODE(2U); /* INTERMEDIATE (INT) */
+    VBAT__SRAM->CTRL = 0UL;                           /* SHUTDOWN (SD = 0)  */
 }
 
 /*******************************************************************************
@@ -444,6 +943,99 @@ void POWER_SetHandshakeRouting(const power_handshake_routing_config_t *config)
 }
 
 /*!
+ * brief One-time hardware baseline setup: POWERCON/PDCON function clocks, body-bias trim,
+ *       standby gating baseline, active-mode clock sources, NPU/Media/Comm domain power-up,
+ *       and MEMCON slice init. Call once at boot, before POWER_SetPolicy(). Not safe to call
+ *       more than once (re-runs the one-time PDCON/MEMCON bring-up).
+ */
+void POWER_Init(void)
+{
+    /* 1. Enable POWERCON function clock FIRST (must precede all POWERCON accesses). */
+    POWERCON_EnableFunctionClock(SYSCON__POWERCON_SOC_CTRL);
+
+    /* 2. Enable PDCON function clock. */
+    PDCON_EnableFunctionClock(SYSCON__PDCON, true);
+
+    /* Establish the FBBFull body-bias config once here; FBB apply paths read from s_fbbCfg.
+     * The OTP trim override inside is gated by PMU_DRIVER_UPDATE_TRIM_VALUE (fsl_pmu.h). */
+    POWER_InitBodyBiasConfig();
+
+    /* 3. Standby gating baseline: XMC_STBY_MASK = 0x07 disables all CMC internal
+     *    standby flows while active, so a bare application WFI stays a simple
+     *    core WFI. Each POWER_Enter*() programs the mode-specific mask before
+     *    its WFI. TRIGGER_SS is set explicitly on all CMCs (silicon default
+     *    made deterministic); Sleep entry clears it on CMC0. */
+    POWERCON_SetXmcStandbyMask(SYSCON__POWERCON_GLOBAL, 0x07U);
+    SYSCON__POWERCON_CMC0_CTRL->CMC_CTRL &= ~(POWERCON_CMC_CTRL_CMC_CTRL_SLEEP_HOLD_EN_MASK);
+
+    /* 4. Configure PDCON trigger mode for the four SW-controllable domains.
+     *    Default: HW trigger enabled (CMC drives standby transitions).
+     *             SW trigger disabled (enabled transiently in POWER_SetDomainRunMode). */
+    for (uint32_t i = 0U; i < ARRAY_SIZE(s_swPowerDomains); i++)
+    {
+        PDCON_EnableDomainHwTrigger(SYSCON__PDCON, s_swPowerDomains[i], true);
+        PDCON_EnableDomainSwTrigger(SYSCON__PDCON, s_swPowerDomains[i], false);
+        (void)PDCON_SetEventInLowPowerModes(SYSCON__PDCON, s_swPowerDomains[i], kPDCON_EventNoneOrActive);
+    }
+    /* PD_MAIN (domain 1) is not SW-triggerable and not in s_swPowerDomains, but it DOES have a
+     * PDSLPCFG field. Its low-power event is driver-fixed: NoneOrActive everywhere except
+     * Power Down / Deep Power Down (set to PowerOff in those entry paths). Establish the
+     * active-mode default here. */
+    (void)PDCON_SetEventInLowPowerModes(SYSCON__PDCON, kPOWER_DomainMain, kPDCON_EventNoneOrActive);
+
+    /* 5. Enable active-mode clock sources. Moved here from POWER_EnterHpRun/NormalRun/LpRun
+     *     (was duplicated identically in all three) -- those functions are voltage/frequency
+     *     only now. */
+    for (uint8_t i = 0U; i <= 8U; i++)
+    {
+        POWERCON_EnableClockSourceInActiveMode(SYSCON__POWERCON_SOC_CTRL, i);
+    }
+
+    /* 6. Bring the NPU/Media/Comm domains active, if not already (idempotent -- a domain
+     *     already at kPDCON_EventNoneOrActive is not re-triggered). Moved here from
+     *     POWER_EnterHpRun/NormalRun/LpRun for the same reason as step 9.
+     *
+     *     Must come BEFORE step 11 (MEMCON slice SW-trigger): each MEMCON slice's memory
+     *     macros sit inside a specific power domain (S6/S7 -> NPU, S9 -> Media, S10/S11 ->
+     *     Comm), so touching those slices' MDCTRL/RUNCFG or issuing a SWTRG before the
+     *     hosting domain is active either wedges the MEMCON SWTRG self-clear busy-wait or
+     *     leaves stale state that only surfaces later as a PDCON_SoftwareTrigger() hang on
+     *     Deep Power Down entry/exit (no timeout in this build). */
+    static const power_domain_t kActiveDomains[] = {kPOWER_DomainNpu, kPOWER_DomainMedia, kPOWER_DomainComm};
+    for (uint8_t i = 0U; i < ARRAY_SIZE(kActiveDomains); i++)
+    {
+        if (PDCON_GetDomainState(SYSCON__PDCON, (uint8_t)kActiveDomains[i]) != kPDCON_EventNoneOrActive)
+        {
+            (void)POWER_SetDomainRunMode(kActiveDomains[i], kPDCON_EventNoneOrActive);
+        }
+    }
+
+    /* 7. Enable MEMCON function clock; set all slices to HW-trigger mode with all
+     *    blocks in NormalPower (Active) active state.  SLPCFG (standby registers)
+     *    are NOT written here - they are configured only at standby entry.
+     *    Order-dependent on step 10 (see step 10 comment). */
+    MEMCON_GLOBAL_EnableFunctionClock(SYSCON__MEMCON_GLOBAL, true);
+    for (uint32_t i = 0U; i < ARRAY_SIZE(s_memconSliceBases); i++)
+    {
+        /* Write RUNCFG = Active for every block (hardware reset default made explicit;
+         * hardware applies this on wakeup from standby - no SW restore needed). */
+        MEMCON_SLICE_SetTriggerMode(s_memconSliceBases[i], kMEMCON_TriggerSoftware);
+        for (uint8_t blk = 0U; blk < POWER_MEMCON_MAX_BLOCKS_PER_SLICE; blk++)
+        {
+            MEMCON_SLICE_SetActiveBlockMode(s_memconSliceBases[i], blk, kMEMCON_PowerModeActive);
+        }
+        MEMCON_SLICE_SoftwareTrigger(s_memconSliceBases[i]);
+        /* HW-trigger mode: CMC/SSC drives standby transitions. */
+        MEMCON_SLICE_SetTriggerMode(s_memconSliceBases[i], kMEMCON_TriggerHardware);
+    }
+
+    /* 8. Initialise SW wakeup state: mask all sources. */
+    (void)memset(s_irqWakeupMask, 0xFF, sizeof(s_irqWakeupMask));
+    (void)memset(s_mainDmaWakeupMask, 0xFF, sizeof(s_mainDmaWakeupMask));
+    (void)memset(s_wakeDmaWakeupMask, 0xFF, sizeof(s_wakeDmaWakeupMask));
+}
+
+/*!
  * brief Applies the power management policy (active/low-power baseline, NPU/Media/Comm
  *       domain state, active-mode clock sources). Safe to call more than once.
  */
@@ -451,25 +1043,19 @@ void POWER_SetPolicy(const power_policy_config_t *config)
 {
     assert(config != NULL);
 
-    /* 1. Enable POWERCON function clock FIRST (must precede all POWERCON accesses). */
-    POWERCON_EnableFunctionClock(SYSCON__POWERCON_SOC_CTRL);
-
-    /* 2. Enable PDCON function clock. */
-    PDCON_EnableFunctionClock(SYSCON__PDCON, true);
-
-    /* 3. Apply SoC handshake routing (HSK_SEL routing and PDCON HSKCTRL).
+    /* 1. Apply SoC handshake routing (HSK_SEL routing and PDCON HSKCTRL).
      *    NULL -> apply POR-default values; non-NULL -> apply caller-supplied config. */
     if (config->handshakeRouting != NULL)
     {
         POWER_SetHandshakeRouting(config->handshakeRouting);
     }
 
-    /* 4. Apply per-CMC step-mode configuration. */
+    /* 2. Apply per-CMC step-mode configuration. */
     POWER_ApplyCmcStepConfig(SYSCON__POWERCON_CMC0_CTRL, &config->cmcCpu);
     POWER_ApplyCmcStepConfig(SYSCON__POWERCON_CMC1_CTRL, &config->cmcMain);
     POWER_ApplyCmcStepConfig(SYSCON__POWERCON_CMC2_CTRL, &config->cmcWake);
 
-    /* 6. Build SSC step-mode bitmasks. */
+    /* 3. Build SSC step-mode bitmasks. */
     uint8_t sscSleepMask                  = 0U;
     uint8_t sscWakeupMask                 = 0U;
     uint32_t sscCountValue                = 0U;
@@ -494,195 +1080,32 @@ void POWER_SetPolicy(const power_policy_config_t *config)
         /* In case of step-mode count being used, set the SSC count value. */
         POWERCON_SetSysSleepCtrlCountValue(SYSCON__POWERCON_SYS_SLEEP_CTRL, sscCountValue);
     }
-
-    /* 7. Standby gating baseline: XMC_STBY_MASK = 0x07 disables all CMC internal
-     *    standby flows while active, so a bare application WFI stays a simple
-     *    core WFI. Each POWER_Enter*() programs the mode-specific mask before
-     *    its WFI. TRIGGER_SS is set explicitly on all CMCs (silicon default
-     *    made deterministic); Sleep entry clears it on CMC0. */
-    POWERCON_SetXmcStandbyMask(SYSCON__POWERCON_GLOBAL, 0x07U);
-    SYSCON__POWERCON_CMC0_CTRL->CMC_CTRL &= ~(POWERCON_CMC_CTRL_CMC_CTRL_SLEEP_HOLD_EN_MASK);
-
-    /* 8. Configure PDCON trigger mode for the four SW-controllable domains.
-     *    Default: HW trigger enabled (CMC drives standby transitions).
-     *             SW trigger disabled (enabled transiently in POWER_SetDomainRunMode). */
-    for (uint32_t i = 0U; i < ARRAY_SIZE(s_powerDomains); i++)
-    {
-        PDCON_EnableDomainHwTrigger(SYSCON__PDCON, s_powerDomains[i], true);
-        PDCON_EnableDomainSwTrigger(SYSCON__PDCON, s_powerDomains[i], false);
-        (void)PDCON_SetEventInLowPowerModes(SYSCON__PDCON, s_powerDomains[i], kPDCON_EventNoneOrActive);
-    }
-    /* PD_MAIN (domain 1) is not SW-triggerable and not in s_powerDomains, but it DOES have a
-     * PDSLPCFG field. Its low-power event is driver-fixed: NoneOrActive everywhere except
-     * Power Down / Deep Power Down (set to PowerOff in those entry paths). Establish the
-     * active-mode default here. */
-    (void)PDCON_SetEventInLowPowerModes(SYSCON__PDCON, kPOWER_DomainMain, kPDCON_EventNoneOrActive);
-
-    /* 9. Enable active-mode clock sources. Moved here from POWER_EnterHpRun/NormalRun/LpRun
-     *     (was duplicated identically in all three) -- those functions are voltage/frequency
-     *     only now. */
-    for (uint8_t i = 0U; i <= 8U; i++)
-    {
-        POWERCON_EnableClockSourceInActiveMode(SYSCON__POWERCON_SOC_CTRL, i);
-    }
-
-    /* 10. Bring the NPU/Media/Comm domains active, if not already (idempotent -- a domain
-     *     already at kPDCON_EventNoneOrActive is not re-triggered). Moved here from
-     *     POWER_EnterHpRun/NormalRun/LpRun for the same reason as step 9.
-     *
-     *     Must come BEFORE step 11 (MEMCON slice SW-trigger): each MEMCON slice's memory
-     *     macros sit inside a specific power domain (S6/S7 -> NPU, S9 -> Media, S10/S11 ->
-     *     Comm), so touching those slices' MDCTRL/RUNCFG or issuing a SWTRG before the
-     *     hosting domain is active either wedges the MEMCON SWTRG self-clear busy-wait or
-     *     leaves stale state that only surfaces later as a PDCON_SoftwareTrigger() hang on
-     *     Deep Power Down entry/exit (no timeout in this build). */
-    static const power_domain_t kActiveDomains[] = {kPOWER_DomainNpu, kPOWER_DomainMedia, kPOWER_DomainComm};
-    for (uint8_t i = 0U; i < ARRAY_SIZE(kActiveDomains); i++)
-    {
-        if (PDCON_GetDomainState(SYSCON__PDCON, (uint8_t)kActiveDomains[i]) != kPDCON_EventNoneOrActive)
-        {
-            (void)POWER_SetDomainRunMode(kActiveDomains[i], kPDCON_EventNoneOrActive);
-        }
-    }
-
-    /* 11. Enable MEMCON function clock; set all slices to HW-trigger mode with all
-     *    blocks in NormalPower (Active) active state.  SLPCFG (standby registers)
-     *    are NOT written here - they are configured only at standby entry.
-     *    Order-dependent on step 10 (see step 10 comment). */
-    MEMCON_GLOBAL_EnableFunctionClock(SYSCON__MEMCON_GLOBAL, true);
-    MEMCON_SLICE_Type *const sliceBases[] = MEMCON_SLICE_BASE_PTRS;
-    for (uint32_t i = 0U; i < ARRAY_SIZE(sliceBases); i++)
-    {
-        /* Write RUNCFG = Active for every block (hardware reset default made explicit;
-         * hardware applies this on wakeup from standby - no SW restore needed). */
-        MEMCON_SLICE_SetTriggerMode(sliceBases[i], kMEMCON_TriggerSoftware);
-        for (uint8_t blk = 0U; blk < POWER_MEMCON_MAX_BLOCKS_PER_SLICE; blk++)
-        {
-            MEMCON_SLICE_SetActiveBlockMode(sliceBases[i], blk, kMEMCON_PowerModeActive);
-        }
-        MEMCON_SLICE_SoftwareTrigger(sliceBases[i]);
-        /* HW-trigger mode: CMC/SSC drives standby transitions. */
-        MEMCON_SLICE_SetTriggerMode(sliceBases[i], kMEMCON_TriggerHardware);
-    }
-
-    /* 12. Initialise SW wakeup state: mask all sources. */
-    (void)memset(s_irqWakeupMask, 0xFF, sizeof(s_irqWakeupMask));
-    (void)memset(s_mainDmaWakeupMask, 0xFF, sizeof(s_mainDmaWakeupMask));
-    (void)memset(s_wakeDmaWakeupMask, 0xFF, sizeof(s_wakeDmaWakeupMask));
 }
 
-#if MCUX_POWER_PF9453_SUPPLY
-void POWER_InitExtSupply(const power_ext_supply_config_t *config)
+void POWER_SetExtRegulatorHooks(const power_ext_regulator_hooks_t *hooks)
 {
-    assert(config != NULL);
-    assert(config->I2C_SendFunc != NULL);
-    assert(config->I2C_ReceiveFunc != NULL);
-
-    pf9453_config_t pmicConfig;
-    pf9453_buck2_config_t buck2Config;
-
-    /* Create the PMIC handle from the board-supplied I2C transport. */
-    pmicConfig.I2C_SendFunc    = config->I2C_SendFunc;
-    pmicConfig.I2C_ReceiveFunc = config->I2C_ReceiveFunc;
-    pmicConfig.slaveAddress    = config->slaveAddress;
-    PF9453_CreateHandle(&s_pmic, &pmicConfig);
-
-    /* One-shot BUCK2 bring-up: enable in ACTIVE/STANDBY, initial run voltage (HP 0.9 V so the boot
-     * ramp to HP has adequate VDD_CORE), standby voltage, DVS ramp. Run-mode DVS and standby-target
-     * changes are then handled at the transition points. */
-    buck2Config.runMillivolt     = POWER_PF9453_BUCK2_RUN_HP_MV;
-    buck2Config.standbyMillivolt = POWER_PF9453_BUCK2_STANDBY_MV;
-    buck2Config.enableMode       = kPF9453_EnableOnActiveStandby; /* B2_ENMODE = 10. */
-    buck2Config.forcePwm         = false;
-    buck2Config.activeDischarge  = false;
-    buck2Config.dvsRamp          = kPF9453_Buck2Ramp_25mVPer2us; /* reset default. */
-    (void)PF9453_ConfigBuck2(&s_pmic, &buck2Config);
-
-    /* Arm the ready flag: subsequent run-mode DVS / standby-target changes now drive the PMIC. */
-    s_pmicReady = true;
+    s_extRegHooks = hooks;
 }
-#endif /* MCUX_POWER_PF9453_SUPPLY */
 
 /*!
  * brief Accumulates a wakeup source into SW state.
  *
- * Decodes the opaque power_wakeup_source_t encoding:
- *   bits[31:28] = 0x0 -> IRQ (CMC0),  index = bits[8:0]  (0-383)
- *   bits[31:28] = 0x1 -> MAIN DMA (CMC1), index = bits[5:0]  (0-63)
- *   bits[31:28] = 0x2 -> WAKE DMA (CMC2), index = bits[5:0]  (0-63)
- *
- * Inverted polarity: clear the bit to enable wakeup (matches hardware register).
+ * Decodes the opaque power_wakeup_source_t encoding and clears the corresponding
+ * bit (inverted polarity: clear = enable wakeup).
  */
 void POWER_EnableWakeupSource(power_wakeup_source_t source)
 {
-    uint32_t type  = (source >> 28U) & 0xFU;
-    uint32_t index = source & 0x1FFU; /* 9-bit max for IRQ index */
-
-    switch (type)
-    {
-        case 0x0U: /* IRQ -> CMC0 */
-            if (index < ((uint32_t)POWER_IRQ_WAKEUP_MASK_COUNT * 32U))
-            {
-                s_irqWakeupMask[index / 32U] &= ~(1UL << (index % 32U));
-            }
-            break;
-        case 0x1U:                  /* MAIN domain DMA -> CMC1 */
-            index = source & 0x3FU; /* 6-bit DMA index */
-            if (index < ((uint32_t)POWER_DMA_WAKEUP_MASK_COUNT * 32U))
-            {
-                s_mainDmaWakeupMask[index / 32U] &= ~(1UL << (index % 32U));
-            }
-            break;
-        case 0x2U: /* WAKE domain DMA -> CMC2 */
-            index = source & 0x3FU;
-            if (index < ((uint32_t)POWER_DMA_WAKEUP_MASK_COUNT * 32U))
-            {
-                s_wakeDmaWakeupMask[index / 32U] &= ~(1UL << (index % 32U));
-            }
-            break;
-        default:
-            /* Unknown source type - no action. */
-            break;
-    }
+    POWER_UpdateWakeupMask(source, true);
 }
 
 /*!
  * brief Removes a wakeup source from SW state.
  *
- * Same opaque encoding as POWER_EnableWakeupSource.
- * Sets the bit to mask the source (inverted polarity).
+ * Sets the bit for the decoded source (inverted polarity: set = mask wakeup).
  */
 void POWER_DisableWakeupSource(power_wakeup_source_t source)
 {
-    uint32_t type  = (source >> 28U) & 0xFU;
-    uint32_t index = source & 0x1FFU;
-
-    switch (type)
-    {
-        case 0x0U: /* IRQ -> CMC0 */
-            if (index < ((uint32_t)POWER_IRQ_WAKEUP_MASK_COUNT * 32U))
-            {
-                s_irqWakeupMask[index / 32U] |= (1UL << (index % 32U));
-            }
-            break;
-        case 0x1U: /* MAIN domain DMA -> CMC1 */
-            index = source & 0x3FU;
-            if (index < ((uint32_t)POWER_DMA_WAKEUP_MASK_COUNT * 32U))
-            {
-                s_mainDmaWakeupMask[index / 32U] |= (1UL << (index % 32U));
-            }
-            break;
-        case 0x2U: /* WAKE domain DMA -> CMC2 */
-            index = source & 0x3FU;
-            if (index < ((uint32_t)POWER_DMA_WAKEUP_MASK_COUNT * 32U))
-            {
-                s_wakeDmaWakeupMask[index / 32U] |= (1UL << (index % 32U));
-            }
-            break;
-        default:
-            /* Unknown source type - no action. */
-            break;
-    }
+    POWER_UpdateWakeupMask(source, false);
 }
 
 /*!
@@ -695,36 +1118,6 @@ void POWER_ClearAllWakeupSources(void)
     (void)memset(s_irqWakeupMask, 0xFF, sizeof(s_irqWakeupMask));
     (void)memset(s_mainDmaWakeupMask, 0xFF, sizeof(s_mainDmaWakeupMask));
     (void)memset(s_wakeDmaWakeupMask, 0xFF, sizeof(s_wakeDmaWakeupMask));
-}
-
-/*
- * Media MIPI CSI/DSI PHY 0.8 V supply, controlled by WAKE_MODCON MIPI_0V8_CFG
- * (PWR_EN bit 0: power switch; DATA_EN bit 1: data isolation).
- * The PHY must never be powered while PD_MEDIA is unpowered, and must be isolated
- * before the domain loses power.
- */
-static void POWER_MediaMipiPhyPowerOff(void)
-{
-    uint32_t cfg = MODCON_GetCFG((uint32_t)kModCon_WAKE_MIPI_0V8, 0U);
-
-    /* Isolate first (DATA_EN=0), then switch the PHY supply off (PWR_EN=0). */
-    cfg &= ~MODCON_CFG_DATA_EN_MASK;
-    MODCON_SetCFG((uint32_t)kModCon_WAKE_MIPI_0V8, 0U, cfg);
-    cfg &= ~MODCON_CFG_PWR_EN_MASK;
-    MODCON_SetCFG((uint32_t)kModCon_WAKE_MIPI_0V8, 0U, cfg);
-}
-
-static void POWER_MediaMipiPhyPowerOn(void)
-{
-    uint32_t cfg = MODCON_GetCFG((uint32_t)kModCon_WAKE_MIPI_0V8, 0U);
-
-    /* Ensure isolated/off, switch the PHY supply on (PWR_EN=1), then de-isolate (DATA_EN=1). */
-    cfg &= ~(MODCON_CFG_DATA_EN_MASK | MODCON_CFG_PWR_EN_MASK);
-    MODCON_SetCFG((uint32_t)kModCon_WAKE_MIPI_0V8, 0U, cfg);
-    cfg |= MODCON_CFG_PWR_EN_MASK;
-    MODCON_SetCFG((uint32_t)kModCon_WAKE_MIPI_0V8, 0U, cfg);
-    cfg |= MODCON_CFG_DATA_EN_MASK;
-    MODCON_SetCFG((uint32_t)kModCon_WAKE_MIPI_0V8, 0U, cfg);
 }
 
 /*!
@@ -770,16 +1163,15 @@ status_t POWER_SetDomainRunMode(power_domain_t domain, pdcon_event_t event)
  */
 status_t POWER_SetMemoryRunMode(power_memory_t mem, memcon_power_mode_t mode)
 {
-    MEMCON_SLICE_Type *const sliceBases[] = MEMCON_SLICE_BASE_PTRS;
-    uint8_t sliceIdx                      = (uint8_t)((uint32_t)mem >> 8U);
-    uint8_t blockIdx                      = (uint8_t)((uint32_t)mem & 0xFFU);
+    uint8_t sliceIdx = (uint8_t)((uint32_t)mem >> 8U);
+    uint8_t blockIdx = (uint8_t)((uint32_t)mem & 0xFFU);
 
     /* Switch to SW trigger to apply the change immediately, then restore HW trigger
      * so CMC/SSC remains in control of standby transitions. */
-    MEMCON_SLICE_SetTriggerMode(sliceBases[sliceIdx], kMEMCON_TriggerSoftware);
-    MEMCON_SLICE_SetActiveBlockMode(sliceBases[sliceIdx], blockIdx, mode);
-    MEMCON_SLICE_SoftwareTrigger(sliceBases[sliceIdx]);
-    MEMCON_SLICE_SetTriggerMode(sliceBases[sliceIdx], kMEMCON_TriggerHardware);
+    MEMCON_SLICE_SetTriggerMode(s_memconSliceBases[sliceIdx], kMEMCON_TriggerSoftware);
+    MEMCON_SLICE_SetActiveBlockMode(s_memconSliceBases[sliceIdx], blockIdx, mode);
+    MEMCON_SLICE_SoftwareTrigger(s_memconSliceBases[sliceIdx]);
+    MEMCON_SLICE_SetTriggerMode(s_memconSliceBases[sliceIdx], kMEMCON_TriggerHardware);
     return kStatus_Success;
 }
 
@@ -913,62 +1305,6 @@ power_run_mode_t POWER_GetCurrentRunMode(void)
 }
 
 /*!
- * brief Apply the active-mode VDD_CORE level by programming the DCDC.
- *
- * The active-mode core voltage is owned by the DCDC BUCK_VDDCORE_VOUT_ADJ register, not by
- * PMUCFG_ACTIVE.coreLvl. Writing coreLvl alone does not move the rail; this function performs
- * the effective change via PMU_ConfigDcdc(). The run-mode DCDC config uses PWM mode with the
- * output-voltage monitor disabled (bring-up); the PWM loop compensation programmed at
- * POWER_SetPolicy() is left untouched. Callers order this relative to the clock callback:
- * raise voltage before speeding the core up, lower voltage only after the core is slowed.
- *
- * param voutAdj VOUT_ADJ code (POWER_PMUCFG_CORELEVEL_090V for HP, _080V for NP/LP).
- */
-static void POWER_ApplyRunCoreVoltage(uint8_t voutAdj)
-{
-#if MCUX_POWER_PF9453_SUPPLY
-    /* PMIC path: VDD_CORE is BUCK2. Map the VOUT_ADJ code to millivolts and DVS BUCK2 directly.
-     * PF9453_SetBuck2RunVoltage re-issues the regulator unlock and RMW-writes BUCK2OUT internally.
-     * The on-chip DCDC is not touched (its VOUT_ADJ path is compiled out below).
-     * Skip until POWER_InitExtSupply has created the handle: the boot-clock setup may call a run-mode
-     * DVS before the PMIC transport is up, and the PF9453 already holds its power-on voltage then. */
-    if (s_pmicReady)
-    {
-        uint16_t millivolt =
-            (voutAdj == POWER_PMUCFG_CORELEVEL_090V) ? POWER_PF9453_BUCK2_RUN_HP_MV : POWER_PF9453_BUCK2_RUN_LP_MV;
-        (void)PF9453_SetBuck2RunVoltage(&s_pmic, millivolt);
-    }
-#else
-    pmu_dcdc_config_t dcdcConfig = {
-        .mode                 = kPMU_DcdcModePWM,
-        .voutAdj              = voutAdj,
-        .voutFineAdj          = 0U,
-        .ovlVthAdj            = 0U,
-        .vsensorVoutAdjEn     = false,
-        .bypassEn             = false,
-        .ovlPdEn              = false,
-        .sensorEnable         = false, /* DCDC output monitor off during bring-up ([hw-defer]). */
-        .irqOnVmaxError       = false,
-        .irqOnVminError       = false,
-        .irqOnClkLost         = false,
-        .irqOnUvlo            = false,
-        .irqOnOclWarn         = false,
-        .warmResetOnVmaxError = false,
-        .warmResetOnVminError = false,
-        .warmResetOnClkLost   = false,
-        .warmResetOnUvlo      = false,
-        .warmResetOnOclWarn   = false,
-        .coldResetOnVmaxError = false,
-        .coldResetOnVminError = false,
-        .coldResetOnClkLost   = false,
-        .coldResetOnUvlo      = false,
-        .coldResetOnOclWarn   = false,
-    };
-    PMU_ConfigDcdc(SYSCON__PMU, &dcdcConfig);
-#endif /* MCUX_POWER_PF9453_SUPPLY */
-}
-
-/*!
  * brief Enters HP run mode (VDD_CORE=0.9 V, DCDC PWM, FBB).
  *
  * Determines ordering from the current run mode (detected via the CPU core frequency):
@@ -981,52 +1317,20 @@ static void POWER_ApplyRunCoreVoltage(uint8_t voutAdj)
  */
 void POWER_EnterHpRun(power_clock_cb_t clockCb)
 {
-    pmu_body_bias_config_t bbCfg;
-    power_pmu_state_t pmuState;
+    bool fromLp = (POWER_GetCurrentRunMode() == kPOWER_RunModeLp);
 
-    /* Read-modify-write: preserve all fields except the three that change per run mode. */
-    pmuState.word     = SYSCON__POWERCON_SOC_CTRL->PMUCFG_ACTIVE;
-    pmuState.pmuMode  = 0U; /* HP */
-    pmuState.dcdcMode = 1U; /* PWM */
-    pmuState.coreLvl  = POWER_PMUCFG_CORELEVEL_090V;
+    /* Increase into HP: raise the DCDC voltage before the core clock speeds up. */
+    POWER_ApplyRunModePmuState(0U, POWER_PMUCFG_CORELEVEL_090V);
 
-    if (POWER_GetCurrentRunMode() == kPOWER_RunModeLp) /* LP (ZBB) -> HP */
+    /* Body bias: only switch when leaving LP (ZBB); HP/NP already share s_fbbCfg. */
+    if (fromLp)
     {
-        /* LP -> HP: raise voltage first (DCDC + consistent coreLvl), then switch clocks. */
-        POWER_ApplyRunCoreVoltage(POWER_PMUCFG_CORELEVEL_090V);
-        POWERCON_SetPmucfgActive(SYSCON__POWERCON_SOC_CTRL, pmuState.word);
-        POWERCON_TriggerSocUpdate(SYSCON__POWERCON_SOC_CTRL);
-        while (!POWERCON_IsSocUpdateDone(SYSCON__POWERCON_SOC_CTRL))
-        {
-        }
-        POWER_SetBodyBiasFbbFullConfig(&bbCfg);
-        PMU_ConfigBodyBias(SYSCON__PMU, &bbCfg);
-        (void)PMU_ApplyBodyBiasBlocking(SYSCON__PMU);
-        if (clockCb != NULL)
-        {
-            clockCb();
-        }
+        POWER_ApplyRunModeBodyBias(true);
     }
-    else
+
+    if (clockCb != NULL)
     {
-        /* HP/NP -> HP: must transition through ZBB before switching FBB target. */
-        PMU_GetDefaultBodyBiasConfig(&bbCfg);
-        PMU_ConfigBodyBias(SYSCON__PMU, &bbCfg);
-        (void)PMU_ApplyBodyBiasBlocking(SYSCON__PMU);
-        /* Increase into HP: raise the DCDC voltage before the core clock speeds up. */
-        POWER_ApplyRunCoreVoltage(POWER_PMUCFG_CORELEVEL_090V);
-        POWERCON_SetPmucfgActive(SYSCON__POWERCON_SOC_CTRL, pmuState.word);
-        POWERCON_TriggerSocUpdate(SYSCON__POWERCON_SOC_CTRL);
-        while (!POWERCON_IsSocUpdateDone(SYSCON__POWERCON_SOC_CTRL))
-        {
-        }
-        if (clockCb != NULL)
-        {
-            clockCb();
-        }
-        POWER_SetBodyBiasFbbFullConfig(&bbCfg);
-        PMU_ConfigBodyBias(SYSCON__PMU, &bbCfg);
-        (void)PMU_ApplyBodyBiasBlocking(SYSCON__PMU);
+        clockCb();
     }
 }
 
@@ -1035,28 +1339,14 @@ void POWER_EnterHpRun(power_clock_cb_t clockCb)
  */
 void POWER_EnterNormalRun(power_clock_cb_t clockCb)
 {
-    pmu_body_bias_config_t bbCfg;
-    power_pmu_state_t pmuState;
+    bool fromLp = (POWER_GetCurrentRunMode() == kPOWER_RunModeLp);
 
-    /* Read-modify-write: preserve all fields except the three that change per run mode. */
-    pmuState.word     = SYSCON__POWERCON_SOC_CTRL->PMUCFG_ACTIVE;
-    pmuState.pmuMode  = 0U; /* HP/NP share the same pmuMode=0 */
-    pmuState.dcdcMode = 1U; /* PWM */
-    pmuState.coreLvl  = POWER_PMUCFG_CORELEVEL_080V;
-
-    if (POWER_GetCurrentRunMode() == kPOWER_RunModeLp) /* LP (ZBB) -> NP */
+    if (fromLp)
     {
-        /* LP -> NP: VDD_CORE is unchanged (both 0.8 V); apply the DCDC level for
-         * consistency, then switch body bias and clocks. */
-        POWER_ApplyRunCoreVoltage(POWER_PMUCFG_CORELEVEL_080V);
-        POWERCON_SetPmucfgActive(SYSCON__POWERCON_SOC_CTRL, pmuState.word);
-        POWERCON_TriggerSocUpdate(SYSCON__POWERCON_SOC_CTRL);
-        while (!POWERCON_IsSocUpdateDone(SYSCON__POWERCON_SOC_CTRL))
-        {
-        }
-        POWER_SetBodyBiasFbbFullConfig(&bbCfg);
-        PMU_ConfigBodyBias(SYSCON__PMU, &bbCfg);
-        (void)PMU_ApplyBodyBiasBlocking(SYSCON__PMU);
+        /* LP -> NP: raise voltage (level unchanged, DCDC apply for consistency), switch to FBB,
+         * then run clockCb. */
+        POWER_ApplyRunModePmuState(0U, POWER_PMUCFG_CORELEVEL_080V);
+        POWER_ApplyRunModeBodyBias(true);
         if (clockCb != NULL)
         {
             clockCb();
@@ -1064,27 +1354,12 @@ void POWER_EnterNormalRun(power_clock_cb_t clockCb)
     }
     else
     {
-        /* HP/NP -> NP: must transition through ZBB before switching FBB target. */
-        PMU_GetDefaultBodyBiasConfig(&bbCfg);
-        PMU_ConfigBodyBias(SYSCON__PMU, &bbCfg);
-        (void)PMU_ApplyBodyBiasBlocking(SYSCON__PMU);
-        /* Decrease from HP (0.9 V) into NP (0.8 V): reduce the core clock first, then
-         * lower the DCDC voltage. Applying 0.8 V while still at HP frequency would
-         * undervolt the core. */
+        /* HP/NP -> NP: body bias already FBB. Reduce clocks first, then lower voltage. */
         if (clockCb != NULL)
         {
             clockCb();
         }
-        POWER_ApplyRunCoreVoltage(POWER_PMUCFG_CORELEVEL_080V);
-        POWERCON_SetPmucfgActive(SYSCON__POWERCON_SOC_CTRL, pmuState.word);
-        POWERCON_TriggerSocUpdate(SYSCON__POWERCON_SOC_CTRL);
-        while (!POWERCON_IsSocUpdateDone(SYSCON__POWERCON_SOC_CTRL))
-        {
-        }
-        /* Switch body bias to FBB after clocks are settled at the new voltage. */
-        POWER_SetBodyBiasFbbFullConfig(&bbCfg);
-        PMU_ConfigBodyBias(SYSCON__PMU, &bbCfg);
-        (void)PMU_ApplyBodyBiasBlocking(SYSCON__PMU);
+        POWER_ApplyRunModePmuState(0U, POWER_PMUCFG_CORELEVEL_080V);
     }
 }
 
@@ -1093,32 +1368,33 @@ void POWER_EnterNormalRun(power_clock_cb_t clockCb)
  */
 void POWER_EnterLpRun(power_clock_cb_t clockCb)
 {
-    pmu_body_bias_config_t bbCfg;
-    power_pmu_state_t pmuState;
-
-    /* Read-modify-write: preserve all fields except the three that change per run mode. */
-    pmuState.word     = SYSCON__POWERCON_SOC_CTRL->PMUCFG_ACTIVE;
-    pmuState.pmuMode  = 0U; /* LP (ZBB standby path) */
-    pmuState.dcdcMode = 1U; /* PWM (V0.9: all active run modes use PWM; PFM is a DS2/DS3-only standby choice) */
-    pmuState.coreLvl  = POWER_PMUCFG_CORELEVEL_080V;
-
-    PMU_GetDefaultBodyBiasConfig(&bbCfg);
-
-    /* HP/NP -> LP: reduce clocks first, then lower voltage. */
+    /* HP/NP -> LP: reduce clocks first, switch to ZBB, then lower voltage. */
     if (clockCb != NULL)
     {
         clockCb();
     }
-    PMU_GetDefaultBodyBiasConfig(&bbCfg);
-    PMU_ConfigBodyBias(SYSCON__PMU, &bbCfg);
-    (void)PMU_ApplyBodyBiasBlocking(SYSCON__PMU);
-    /* Clocks are already reduced, so it is safe to lower the DCDC voltage (0.8 V). From HP
-     * this is a decrease; from NP the level is unchanged. */
-    POWER_ApplyRunCoreVoltage(POWER_PMUCFG_CORELEVEL_080V);
-    POWERCON_SetPmucfgActive(SYSCON__POWERCON_SOC_CTRL, pmuState.word);
-    POWERCON_TriggerSocUpdate(SYSCON__POWERCON_SOC_CTRL);
-    while (!POWERCON_IsSocUpdateDone(SYSCON__POWERCON_SOC_CTRL))
+    POWER_ApplyRunModeBodyBias(false);
+    POWER_ApplyRunModePmuState(0U, POWER_PMUCFG_CORELEVEL_080V);
+}
+
+/*!
+ * brief Unified run-mode entry: dispatches to POWER_EnterHpRun/NormalRun/LpRun.
+ */
+void POWER_EnterRunMode(power_run_mode_t runMode, power_clock_cb_t clockCb)
+{
+    switch (runMode)
     {
+        case kPOWER_RunModeHp:
+            POWER_EnterHpRun(clockCb);
+            break;
+        case kPOWER_RunModeNormal:
+            POWER_EnterNormalRun(clockCb);
+            break;
+        case kPOWER_RunModeLp:
+            POWER_EnterLpRun(clockCb);
+            break;
+        default:
+            break;
     }
 }
 
@@ -1128,59 +1404,6 @@ void POWER_EnterLpRun(power_clock_cb_t clockCb)
 void POWER_SetCssiLpHandshakeBypass(bool bypass)
 {
     s_cssiBypass = bypass;
-}
-
-/*!
- * brief Perform the CSSI/ELS LP handshake before standby entry.
- *
- * When bypass is disabled (production mode), this function:
- *   1. Sends an LP permission request to CSSI firmware via MU.
- *   2. Waits for CSSI firmware to respond allow/deny via MU reply.
- *   3. If allowed, asserts MAIN__MODCON ELS_LP_HDSK.ELS_LP_REQ to notify
- *      the ELS hardware block that LP entry is imminent.
- *
- * Communication with CSSI uses the Messaging Unit (MU).  The exact MU
- * message protocol will be defined when CSSI firmware is ready.
- *
- * Returns true if LP entry is allowed (or bypass is active),
- * false if CSSI denied the LP request.
- */
-static bool POWER_RequestCssiLpEntry(void)
-{
-    if (s_cssiBypass)
-    {
-        /*
-         * TEST ONLY: CSSI handshake bypassed.
-         * CSSI firmware is not yet available for this bring-up phase.
-         * Remove this bypass before production validation - call
-         * POWER_SetCssiLpHandshakeBypass(false) when CSSI firmware is ready.
-         */
-        SYSCON__POWERCON_CMC0_CTRL->NON_IRQ_CS &= ~POWERCON_CMC_CTRL_NON_IRQ_CS_CSSI_EN_MASK;
-        SYSCON__POWERCON_CMC1_CTRL->NON_IRQ_CS &= ~POWERCON_CMC_CTRL_NON_IRQ_CS_CSSI_EN_MASK;
-        SYSCON__POWERCON_CMC2_CTRL->NON_IRQ_CS &= ~POWERCON_CMC_CTRL_NON_IRQ_CS_CSSI_EN_MASK;
-        return true;
-    }
-
-    /*
-     * Production path - CSSI firmware required.
-     *
-     * Step 1: Send LP request to CSSI via MU and wait for allow/deny response.
-     *         Communication protocol (message codes and MU channel assignment)
-     *         will be defined when CSSI firmware is available.
-     *         TODO: implement MU send + receive when CSSI firmware is ready.
-     *
-     * Step 2: If CSSI allows LP entry, assert ELS_LP_REQ via MAIN__MODCON
-     *         ELS_LP_HDSK register (IP[53].CFG[3], bit 16) to notify the ELS
-     *         hardware block.  CSSI then asserts allow_lp to POWERCON.
-     *
-     * Step 3: If CSSI denies, return false - the caller must not issue WFI.
-     */
-
-    /* Placeholder: always allow until MU protocol is finalized. */
-    /* TODO: replace with actual MU send/receive and MODCON write. */
-    MAIN__MODCON->IP[53U].CFG[3U] |= MODCON_CFG_ELS_LP_REQ_MASK;
-
-    return true; /* TODO: return false if CSSI MU response is deny. */
 }
 
 /*!
@@ -1199,66 +1422,34 @@ status_t POWER_EnterSleep(const power_sleep_config_t *config)
         return kStatus_Fail;
     }
 
-    MEMCON_SLICE_Type *const sliceBases[] = MEMCON_SLICE_BASE_PTRS;
-
-    /* 1. Configure MEMCON SLPCFG from config memory fields. */
-    /* Slice 0: Wake SRAM (B0). */
-    MEMCON_SLICE_SetSleepBlockMode(sliceBases[0U], 0U, config->setWakeSramMode);
-    /* Slice 2: OCRAM0 (B0-B7), LLC cache (B8), Audio 8KB (B10). */
-    for (uint8_t blk = 0U; blk < POWER_MEMCON_OCRAM0_MAX_RETAIN_BLOCKS; blk++)
-    {
-        MEMCON_SLICE_SetSleepBlockMode(sliceBases[POWER_MEMCON_OCRAM0_SLICE_IDX], blk, config->setOcramMode);
-    }
-    MEMCON_SLICE_SetSleepBlockMode(sliceBases[POWER_MEMCON_OCRAM0_SLICE_IDX], POWER_MEMCON_OCRAM0_LLC_BLOCK_IDX,
-                                   config->setLlcCacheMode);
-    MEMCON_SLICE_SetSleepBlockMode(sliceBases[POWER_MEMCON_OCRAM0_SLICE_IDX], POWER_MEMCON_AUDIO8KB_BLOCK_IDX,
-                                   config->setAudio8KbMode);
-    /* TCM slices from config. */
-    const power_memory_t cpuMems[]   = POWER_CPU_TCM_SLICES;
-    const power_memory_t npuMems[]   = POWER_NPU_TCM_SLICES;
-    const power_memory_t commMems[]  = POWER_COMM_TCM_SLICES;
-    const power_memory_t mediaMems[] = POWER_MEDIA_TCM_SLICES;
-    POWER_SetMemSlicesSleepMode(config->setM85TcmMode, cpuMems, ARRAY_SIZE(cpuMems));
-    POWER_SetMemSlicesSleepMode(config->setNpuTcmMode, npuMems, ARRAY_SIZE(npuMems));
-    POWER_SetMemSlicesSleepMode(config->setCommTcmMode, commMems, ARRAY_SIZE(commMems));
-    POWER_SetMemSlicesSleepMode(config->setMediaTcmMode, mediaMems, ARRAY_SIZE(mediaMems));
+    /* 1. Explicitly set every fsl_power-managed MEMCON block to Active for state hygiene.
+     *
+     *    Sleep does not physically transition the memories (SSC P-Channel is not triggered
+     *    and the supply rails are unchanged), but MEMCON MEM_SLPCFG retains the value the
+     *    previous Deep-Sleep / Power-Down entry wrote. Leaving those bits as Retention or
+     *    PowerDown while resuming active operation makes the register state inconsistent
+     *    with the physical memory state - a debugging trap. Writing Active here clears any
+     *    stale entry-mode value from a previous cycle. */
+    const power_memory_t allMems[] = POWER_ALL_MEMORY_SLICES;
+    POWER_SetMemSlicesSleepMode(allMems, ARRAY_SIZE(allMems), kMEMCON_PowerModeActive);
 
     /* 2. Ensure all SW-controllable domains use HW trigger (CMC drives standby sequence). */
-    for (uint32_t i = 0U; i < ARRAY_SIZE(s_powerDomains); i++)
-    {
-        PDCON_EnableDomainSwTrigger(SYSCON__PDCON, s_powerDomains[i], false);
-    }
+    POWER_ForceAllDomainsToHwTrigger();
 
     /* 3. Configure PDCON sleep events for each domain (PDSLPCFG standby registers). */
-    const pdcon_event_t domainEvents[] = {config->setCpuDomainEvent, config->setNpuDomainEvent,
-                                          config->setCommDomainEvent, config->setMediaDomainEvent};
-    for (uint32_t i = 0U; i < ARRAY_SIZE(s_powerDomains); i++)
-    {
-        (void)PDCON_SetEventInLowPowerModes(SYSCON__PDCON, s_powerDomains[i], domainEvents[i]);
-    }
-    /* PD_MAIN: fixed NoneOrActive in Sleep (only PD/DPD power it off). */
-    (void)PDCON_SetEventInLowPowerModes(SYSCON__PDCON, kPOWER_DomainMain, kPDCON_EventNoneOrActive);
+    POWER_ConfigureAllDomainSleepEvents(config->setCpuDomainEvent, config->setNpuDomainEvent,
+                                        config->setCommDomainEvent, config->setMediaDomainEvent,
+                                        kPDCON_EventNoneOrActive);
 
-    /* 4. Build PMUCFG_STBY and CSRCCFG_STBY from config fields. */
-    power_pmu_state_t pmucfgStby = {0};
-    pmucfgStby.pmuMode           = config->setPmuMode;
-    pmucfgStby.dcdcMode          = (config->setDcdcMode == kPMU_DcdcModePWM) ? 1U : 0U;
-    pmucfgStby.coreLvl           = config->setCoreLevel;
-    pmucfgStby.ldo0V8Mode        = (uint32_t)config->setLdo0V8Mode;
-    pmucfgStby.ldo1V8Mode        = (uint32_t)config->setLdo1V8Mode;
-    pmucfgStby.ldoVdda1V8Mode    = config->setLdoVdda1V8Mode;
-    pmucfgStby.hqref             = config->enableHqref ? 1U : 0U;
-    pmucfgStby.sensorTemp        = (config->enableSensors >> 0U) & 1U;
-    pmucfgStby.sensor0V8         = (config->enableSensors >> 1U) & 1U;
-    pmucfgStby.sensor1V8         = (config->enableSensors >> 2U) & 1U;
-    pmucfgStby.sensorVdda        = (config->enableSensors >> 3U) & 1U;
-    pmucfgStby.sensorCore        = (config->enableSensors >> 4U) & 1U;
-    pmucfgStby.sensorPmu         = (config->enableSensors >> 5U) & 1U;
+    /* 4. Build PMUCFG_STBY via helper. */
+    uint32_t pmucfgStby = POWER_BuildPmucfgStbyWord(
+        config->setPmuMode, config->setDcdcMode, config->setCoreLevel, config->setLdo0V8Mode, config->setLdo1V8Mode,
+        config->setLdoVdda1V8Mode, config->enableHqref, config->enableSensors);
 
     powercon_soc_standby_config_t socCfg;
     socCfg.rcgcfgStby  = POWER_BUILD_RCGCFG_STBY(config);
     socCfg.csrccfgStby = POWER_BUILD_CSRCCFG_STBY(config);
-    socCfg.pmucfgStby  = pmucfgStby.word;
+    socCfg.pmucfgStby  = pmucfgStby;
     socCfg.pmiccfgStby = 0U;
     POWERCON_SetSocStandbyConfig(SYSCON__POWERCON_SOC_CTRL, &socCfg);
 
@@ -1272,19 +1463,14 @@ status_t POWER_EnterSleep(const power_sleep_config_t *config)
     POWER_ApplyWakeupSources();
     SYSCON__POWERCON_CMC0_CTRL->CMC_CTRL |= (POWERCON_CMC_CTRL_CMC_CTRL_SLEEP_HOLD_EN_MASK);
 
-    /* 6. Execute WFI. WFI is the hardware-triggered low-power entry request. */
-    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
-
-    /* 7. Clear PDCON sleep event flags (W1C).
-     *    Prevents stale flags from persisting into the next LP entry. */
+    /* 6. Clear PDCON sleep event flags before arming WFI so stale flags cannot
+     *    persist into the next LP entry, then arm and execute WFI. */
     POWER_ClearPdsef();
-    SYSCON__POWERCON_CMC0_CTRL->CMC_CTRL &= ~(POWERCON_CMC_CTRL_CMC_CTRL_SLEEP_HOLD_EN_MASK);
-    __DSB();
-    __WFI();
-    __ISB();
+    //    SYSCON__POWERCON_CMC0_CTRL->CMC_CTRL &= ~(POWERCON_CMC_CTRL_CMC_CTRL_SLEEP_HOLD_EN_MASK);
+    POWER_ExecuteWfi();
 
     /* Restore the active-mode baseline so a later bare WFI stays a bare WFI. */
-    POWERCON_SetXmcStandbyMask(SYSCON__POWERCON_GLOBAL, 0x07U);
+    POWER_RestoreActiveXmcMask();
 
     return kStatus_Success;
 }
@@ -1299,79 +1485,72 @@ status_t POWER_EnterDeepSleep(const power_deep_sleep_config_t *config)
         return kStatus_InvalidArgument;
     }
 
-    /* 0. CSSI/ELS LP handshake - abort if CSSI denies LP entry. */
-    if (!POWER_RequestCssiLpEntry())
+    if (POWER_StandbyPrologue() != kStatus_Success)
     {
         return kStatus_Fail;
     }
 
-    POWER_ClearPdsef();
-    POWER_ClearMainTcmForceAlive();
-    POWER_ApplyZbb();
-
-    MEMCON_SLICE_Type *const sliceBases[] = MEMCON_SLICE_BASE_PTRS;
-
-    /* 1. Configure MEMCON SLPCFG from config memory fields. */
-    /* Slice 0: Wake SRAM (B0). */
-    MEMCON_SLICE_SetSleepBlockMode(sliceBases[0U], 0U, config->setWakeSramMode);
-    /* Slice 2: OCRAM0 (B0-B7), LLC cache (B8), Audio 8KB (B10). */
-    for (uint8_t blk = 0U; blk < POWER_MEMCON_OCRAM0_MAX_RETAIN_BLOCKS; blk++)
-    {
-        MEMCON_SLICE_SetSleepBlockMode(sliceBases[POWER_MEMCON_OCRAM0_SLICE_IDX], blk, config->setOcramMode);
-    }
-    MEMCON_SLICE_SetSleepBlockMode(sliceBases[POWER_MEMCON_OCRAM0_SLICE_IDX], POWER_MEMCON_OCRAM0_LLC_BLOCK_IDX,
-                                   config->setLlcCacheMode);
-    MEMCON_SLICE_SetSleepBlockMode(sliceBases[POWER_MEMCON_OCRAM0_SLICE_IDX], POWER_MEMCON_AUDIO8KB_BLOCK_IDX,
-                                   config->setAudio8KbMode);
-    /* TCM slices from config. */
+    /* 1. Configure MEMCON SLPCFG.
+     *
+     *    Every fsl_power-managed memcon block is driven from `config`. Two blocks
+     *    have hardware retention paths that make Active a valid choice in DS:
+     *      - S0 B0 (WakeSram): WAKE_SS is always-on across Sleep/DS/PD, so Active
+     *        is safe (and is the recommended default).
+     *      - S2 B0 (OCRAM0 M0/1): first-class always-retained slot; Retention is
+     *        the recommended default. Callers may set PowerDown, but this block
+     *        holds the first 64 KB of OCRAM0 (commonly stack/heap) - the driver
+     *        does not police the value.
+     *    S2 B1-B7 and the other rows come from per-field config. */
+    POWER_SetMemBlockSleepMode(kPOWER_Mem_WakeSram, config->setWakeSramMode);
+    POWER_SetMemBlockSleepMode(kPOWER_Mem_ComputeSram01, config->setComputeSram01Mode);
+    POWER_SetMemBlockSleepMode(kPOWER_Mem_ComputeSram23, config->setOcram0M23Mode);
+    POWER_SetMemBlockSleepMode(kPOWER_Mem_ComputeSram4, config->setOcram0M4Mode);
+    POWER_SetMemBlockSleepMode(kPOWER_Mem_ComputeSram5, config->setOcram0M5Mode);
+    POWER_SetMemBlockSleepMode(kPOWER_Mem_ComputeSram6, config->setOcram1M0Mode);
+    POWER_SetMemBlockSleepMode(kPOWER_Mem_ComputeSram7, config->setOcram1M1Mode);
+    POWER_SetMemBlockSleepMode(kPOWER_Mem_ComputeSram8, config->setOcram2M0Mode);
+    POWER_SetMemBlockSleepMode(kPOWER_Mem_ComputeSram9, config->setOcram2M1Mode);
+    POWER_SetMemBlockSleepMode(kPOWER_Mem_LlcCacheBuffer, config->setLlcCacheMode);
+    POWER_SetMemBlockSleepMode(kPOWER_Mem_Audio8Kb, config->setAudio8KbMode);
+    /* Multi-block groups: one mode across every block in the group. */
     const power_memory_t cpuMems[]   = POWER_CPU_TCM_SLICES;
     const power_memory_t npuMems[]   = POWER_NPU_TCM_SLICES;
     const power_memory_t commMems[]  = POWER_COMM_TCM_SLICES;
     const power_memory_t mediaMems[] = POWER_MEDIA_TCM_SLICES;
-    POWER_SetMemSlicesSleepMode(config->setM85TcmMode, cpuMems, ARRAY_SIZE(cpuMems));
-    POWER_SetMemSlicesSleepMode(config->setNpuTcmMode, npuMems, ARRAY_SIZE(npuMems));
-    POWER_SetMemSlicesSleepMode(config->setCommTcmMode, commMems, ARRAY_SIZE(commMems));
-    POWER_SetMemSlicesSleepMode(config->setMediaTcmMode, mediaMems, ARRAY_SIZE(mediaMems));
+    POWER_SetMemSlicesSleepMode(cpuMems, ARRAY_SIZE(cpuMems), config->setM85TcmMode);
+    POWER_SetMemSlicesSleepMode(npuMems, ARRAY_SIZE(npuMems), config->setNpuTcmMode);
+    POWER_SetMemSlicesSleepMode(commMems, ARRAY_SIZE(commMems), config->setCommTcmMode);
+    POWER_SetMemSlicesSleepMode(mediaMems, ARRAY_SIZE(mediaMems), config->setMediaTcmMode);
 
     /* 2. Ensure HW trigger for all domains (CMC drives standby sequence). */
-    for (uint32_t i = 0U; i < ARRAY_SIZE(s_powerDomains); i++)
-    {
-        PDCON_EnableDomainSwTrigger(SYSCON__PDCON, s_powerDomains[i], false);
-    }
+    POWER_ForceAllDomainsToHwTrigger();
 
     /* 3. Configure PDCON sleep events (PDSLPCFG standby registers only;
      *    PDRUNCFG active registers are NOT modified here). */
-    const pdcon_event_t domainEvents[] = {config->setCpuDomainEvent, config->setNpuDomainEvent,
-                                          config->setCommDomainEvent, config->setMediaDomainEvent};
-    for (uint32_t i = 0U; i < ARRAY_SIZE(s_powerDomains); i++)
-    {
-        (void)PDCON_SetEventInLowPowerModes(SYSCON__PDCON, s_powerDomains[i], domainEvents[i]);
-    }
-    /* PD_MAIN: fixed NoneOrActive in Deep Sleep (only PD/DPD power it off). */
-    (void)PDCON_SetEventInLowPowerModes(SYSCON__PDCON, kPOWER_DomainMain, kPDCON_EventNoneOrActive);
+    POWER_ConfigureAllDomainSleepEvents(config->setCpuDomainEvent, config->setNpuDomainEvent,
+                                        config->setCommDomainEvent, config->setMediaDomainEvent,
+                                        kPDCON_EventNoneOrActive);
 
-    /* 4. Build PMUCFG_STBY and CSRCCFG_STBY from config fields. */
-    power_pmu_state_t pmucfgStby = {0};
-    pmucfgStby.pmuMode           = config->setPmuMode;
-    pmucfgStby.dcdcMode          = (config->setDcdcMode == kPMU_DcdcModePWM) ? 1U : 0U;
-    pmucfgStby.coreLvl           = config->setCoreLevel;
-    pmucfgStby.ldo0V8Mode        = (uint32_t)config->setLdo0V8Mode;
-    pmucfgStby.ldo1V8Mode        = (uint32_t)config->setLdo1V8Mode;
-    pmucfgStby.ldoVdda1V8Mode    = config->setLdoVdda1V8Mode;
-    pmucfgStby.hqref             = config->enableHqref ? 1U : 0U;
-    pmucfgStby.sensorTemp        = (config->enableSensors >> 0U) & 1U;
-    pmucfgStby.sensor0V8         = (config->enableSensors >> 1U) & 1U;
-    pmucfgStby.sensor1V8         = (config->enableSensors >> 2U) & 1U;
-    pmucfgStby.sensorVdda        = (config->enableSensors >> 3U) & 1U;
-    pmucfgStby.sensorCore        = (config->enableSensors >> 4U) & 1U;
-    pmucfgStby.sensorPmu         = (config->enableSensors >> 5U) & 1U;
+    /* 4. Build PMUCFG_STBY via helper. */
+    uint32_t pmucfgStby = POWER_BuildPmucfgStbyWord(
+        config->setPmuMode, config->setDcdcMode, config->setCoreLevel, config->setLdo0V8Mode, config->setLdo1V8Mode,
+        config->setLdoVdda1V8Mode, config->enableHqref, config->enableSensors);
 
     /* 5. Configure SoC standby for Deep Sleep. */
     powercon_soc_standby_config_t socCfg;
     socCfg.rcgcfgStby  = POWER_BUILD_RCGCFG_STBY(config) | POWER_RCGCFG_STBY_DEEPSLEEP_REQUIRED;
     socCfg.csrccfgStby = POWER_BUILD_CSRCCFG_STBY(config);
-    socCfg.pmucfgStby  = pmucfgStby.word;
+    socCfg.pmucfgStby  = pmucfgStby;
     socCfg.pmiccfgStby = 0U;
+    if ((s_extRegHooks != NULL) && (s_extRegHooks->setStandbyTarget != NULL))
+    {
+        /* Board hook selects the external regulator's STANDBY profile via I2C
+         * and reports the PMICCFG_STBY.PMIC_MODE code fsl_power forwards to hardware below. */
+        if (s_extRegHooks->setStandbyTarget(kPOWER_DeepSleep, &socCfg.pmiccfgStby) != kStatus_Success)
+        {
+            return kStatus_Fail;
+        }
+    }
     POWERCON_SetSocStandbyConfig(SYSCON__POWERCON_SOC_CTRL, &socCfg);
     /* Deep Sleep: enable all CMC internal standby flows (XMC_STBY_MASK = 0) and
      * have every CMC trigger the SSC (explicit; also repairs the CMC0 TRIGGER_SS
@@ -1393,21 +1572,8 @@ status_t POWER_EnterDeepSleep(const power_deep_sleep_config_t *config)
         POWER_MediaMipiPhyPowerOff();
     }
 
-#if MCUX_POWER_PF9453_SUPPLY
-    /* 6c. Select the PMIC STANDBY (not DPSTANDBY) target so BUCK2 stays on and drops to its standby
-     *     voltage when POWERCON's sscPmic step asserts PMIC_STBY_REQ. Enable-mode and standby voltage
-     *     were already programmed by POWER_InitExtSupply (skip if the PMIC transport is not up). */
-    if (s_pmicReady)
-    {
-        (void)PF9453_SetStandbyTarget(&s_pmic, kPF9453_StandbySbyt);
-    }
-#endif
-
     /* 7. Execute WFI. WFI is the hardware-triggered low-power entry request. */
-    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
-    __DSB();
-    __WFI();
-    __ISB();
+    POWER_ExecuteWfi();
 
     /* 8. On return: hardware has already applied PDRUNCFG (PDCON active registers)
      *    and MEMCON RUNCFG.
@@ -1418,8 +1584,7 @@ status_t POWER_EnterDeepSleep(const power_deep_sleep_config_t *config)
      *    if the CPU was running from COREPLL before entry no clock restoration
      *    is needed for the core. */
     /* Restore the active-mode baseline so a later bare WFI stays a bare WFI. */
-    POWERCON_SetXmcStandbyMask(SYSCON__POWERCON_GLOBAL, 0x07U);
-    SYSCON__POWERCON_CMC0_CTRL->CMC_CTRL &= ~(POWERCON_CMC_CTRL_CMC_CTRL_SLEEP_HOLD_EN_MASK);
+    POWER_RestoreActiveXmcMask();
 
     /* 8b. Deep Sleep wake resumes in place (no reset) and hardware restores PD_MEDIA,
      *     so restore the MIPI PHY supply if it was powered off on entry. */
@@ -1438,77 +1603,33 @@ status_t POWER_EnterPowerDown(const power_down_config_t *config)
 {
     assert(config != NULL);
 
-    /* 0. CSSI/ELS LP handshake - must consent before powering off. */
-    if (!POWER_RequestCssiLpEntry())
+    if (POWER_StandbyPrologue() != kStatus_Success)
     {
         return kStatus_Fail;
     }
 
-    POWER_ClearPdsef();
-    POWER_ClearMainTcmForceAlive();
-    POWER_ApplyZbb();
-
-    MEMCON_SLICE_Type *const sliceBases[] = MEMCON_SLICE_BASE_PTRS;
-
-    /* 1. Configure MEMCON for OCRAM0/PKC retention per RM Table 793.
-     *    OCRAM0 = SRAMCTL_0 (Slice 2, Blocks 0-3) + SRAMCTL_1 (Slice 2, B4-5)
-     *           + SRAMCTL_2 (Slice 2, B6-7).  Total: 8 blocks = 64 KB max.
-     *    retainOcram0KB selects how many 8 KB blocks to retain (0-64 in 8 KB units).
-     *    PKC RAM = Slice 2, Block 11 (RM Table 793: ELE PKC RAM). */
-    /* Round up retainOcram0KB to 8 KB blocks, clamped to 8 blocks max before cast. */
-    uint32_t retainBlocksRaw =
-        (config->retainOcram0KB + (POWER_OCRAM0_BLOCK_SIZE_KB - 1U)) / POWER_OCRAM0_BLOCK_SIZE_KB;
-    uint8_t retainBlocks = (retainBlocksRaw > POWER_MEMCON_OCRAM0_MAX_RETAIN_BLOCKS) ?
-                               (uint8_t)POWER_MEMCON_OCRAM0_MAX_RETAIN_BLOCKS :
-                               (uint8_t)retainBlocksRaw;
-    for (uint8_t blk = 0U; blk < POWER_MEMCON_MAX_BLOCKS_PER_SLICE; blk++)
-    {
-        memcon_power_mode_t mode;
-        if (blk < retainBlocks)
-        {
-            mode = kMEMCON_PowerModeRetention; /* OCRAM0 retention */
-        }
-        else if ((blk == POWER_MEMCON_OCRAM0_LLC_BLOCK_IDX) && config->retainLlcCache)
-        {
-            mode = kMEMCON_PowerModeRetention; /* LLC cache retention */
-        }
-        else if ((blk == POWER_MEMCON_AUDIO8KB_BLOCK_IDX) && config->retainAudio8Kb)
-        {
-            mode = kMEMCON_PowerModeRetention; /* Audio SRAM 8KB retention */
-        }
-        else if ((blk == POWER_MEMCON_OCRAM0_PKC_BLOCK_IDX) && config->retainPkcMem)
-        {
-            mode = kMEMCON_PowerModeRetention; /* PKC RAM retention */
-        }
-        else
-        {
-            mode = kMEMCON_PowerModePowerDown;
-        }
-        MEMCON_SLICE_SetSleepBlockMode(sliceBases[POWER_MEMCON_OCRAM0_SLICE_IDX], blk, mode);
-    }
-
-    /* All other SRAM slices: power-off in Power Down. */
-    for (uint32_t s = 0U; s < ARRAY_SIZE(sliceBases); s++)
-    {
-        if (s == POWER_MEMCON_OCRAM0_SLICE_IDX)
-        {
-            continue;
-        } /* slice handled above */
-        for (uint8_t blk = 0U; blk < POWER_MEMCON_MAX_BLOCKS_PER_SLICE; blk++)
-        {
-            MEMCON_SLICE_SetSleepBlockMode(sliceBases[s], blk, kMEMCON_PowerModePowerDown);
-        }
-    }
+    /* 1. Configure MEMCON for Power Down.
+     *
+     *    In Power Down the DCDC that supplies VDD_CORE is off. Only two blocks
+     *    have retention supplies that survive PD, both driven from `config`:
+     *      - S0 B0 (WakeSram):    WAKE_SS is always-on so contents survive
+     *                             regardless of the SLPCFG bit; caller selects
+     *                             Retention or PowerDown (Active is not offered
+     *                             as a valid caller choice - see the field
+     *                             docstring in power_down_config_t).
+     *      - S2 B0 (OCRAM0 M0/1): hardware retention supply routes the array to
+     *                             an always-on rail when MEM_SLPCFG=Retention.
+     *                             Select Retention to preserve contents across
+     *                             the PoR wakeup boot; PowerDown to drop them.
+     *    Every other memcon block loses its supply regardless of SLPCFG value,
+     *    so those writes would be no-ops - not issued. */
+    POWER_SetMemBlockSleepMode(kPOWER_Mem_WakeSram, config->setWakeSramMode);
+    POWER_SetMemBlockSleepMode(kPOWER_Mem_ComputeSram01, config->setComputeSram01Mode);
 
     /* 2. Ensure HW trigger; configure all domains to power-off in standby. */
-    for (uint32_t i = 0U; i < ARRAY_SIZE(s_powerDomains); i++)
-    {
-        PDCON_EnableDomainSwTrigger(SYSCON__PDCON, s_powerDomains[i], false);
-        (void)PDCON_SetEventInLowPowerModes(SYSCON__PDCON, s_powerDomains[i], kPDCON_EventPowerOff);
-    }
-    /* PD_MAIN (fixed): powered off in Power Down via its PDSLPCFG event. */
-    (void)PDCON_SetEventInLowPowerModes(SYSCON__PDCON, kPOWER_DomainMain, kPDCON_EventPowerOff);
-
+    POWER_ForceAllDomainsToHwTrigger();
+    POWER_ConfigureAllDomainSleepEvents(kPDCON_EventPowerOff, kPDCON_EventPowerOff, kPDCON_EventPowerOff,
+                                        kPDCON_EventPowerOff, kPDCON_EventPowerOff);
 
     /* 3. Configure SoC standby: retain the clocks required by the Power Down reset flow.
      * MAIN domain is powered off directly in Power Down, and CGU is inside MAIN domain,
@@ -1520,6 +1641,17 @@ status_t POWER_EnterPowerDown(const power_down_config_t *config)
     socCfg.csrccfgStby = POWER_CSRCCFG_STBY_ALL_ON;
     socCfg.pmucfgStby  = POWER_PMU_STATE_PD_WORD;
     socCfg.pmiccfgStby = 0U;
+    if ((s_extRegHooks != NULL) && (s_extRegHooks->setStandbyTarget != NULL))
+    {
+        /* Board hook selects the external regulator's STANDBY profile via I2C
+         * (the same profile Deep Sleep selects — Power Down is distinguished from Deep Sleep by
+         * the board's I2C enableMode rewrite inside the hook, not by the profile) and
+         * reports the PMICCFG_STBY.PMIC_MODE code fsl_power forwards to hardware below. */
+        if (s_extRegHooks->setStandbyTarget(kPOWER_PowerDown, &socCfg.pmiccfgStby) != kStatus_Success)
+        {
+            return kStatus_Fail;
+        }
+    }
     POWERCON_SetSocStandbyConfig(SYSCON__POWERCON_SOC_CTRL, &socCfg);
 
     /* Power Down: enable all CMC internal standby flows (XMC_STBY_MASK = 0) and
@@ -1539,41 +1671,12 @@ status_t POWER_EnterPowerDown(const power_down_config_t *config)
      *     power-on sequence. */
     POWER_MediaMipiPhyPowerOff();
 
-#if MCUX_POWER_PF9453_SUPPLY
-    /* 4c. Select the PMIC DPSTANDBY target so BUCK2 turns OFF when POWERCON's sscPmic step asserts
-     *     PMIC_STBY_REQ (Power Down wakeup is a PoR; the PF9453 stays alive on VSYS). Skip if the PMIC
-     *     transport is not up (POWER_InitExtSupply not called). */
-    if (s_pmicReady)
-    {
-        (void)PF9453_SetStandbyTarget(&s_pmic, kPF9453_StandbyDeepStby);
-    }
-#endif
-
     /* 5. Execute WFI - wakeup triggers PoR; no return. */
-    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
-    __DSB();
-    __WFI();
-    __ISB();
+    POWER_ExecuteWfi();
 
     while (true) /* Safety net - should never reach here. */
     {
     }
-}
-
-/*!
- * @brief Power down the VBAT retention SRAM (Deep Power Down 2, no retention).
- *
- * VBAT__SRAM CTRL PWR_MODE [5:2] must not step ACTIVE->SHUTDOWN directly - the RM
- * requires the INTERMEDIATE state in between - so step ACTIVE(6) -> INTERMEDIATE(2)
- * -> SHUTDOWN(0).  For Deep Power Down 1 (retain) the SRAM is left ACTIVE and held
- * by the always-on VBAT domain (VDD_PMU stays on), so this is not called.
- * [hw-defer] pending silicon confirmation of the VBAT SRAM power sequence.
- */
-static void POWER_ShutdownVbatSram(void)
-{
-   uint32_t ctrl = VBAT__SRAM->CTRL & ~(uint32_t)SRAM_CTRL_PWR_MODE_MASK;
-   VBAT__SRAM->CTRL = ctrl | SRAM_CTRL_PWR_MODE(2U); /* INTERMEDIATE (INT) */
-   VBAT__SRAM->CTRL = 0UL;                          /* SHUTDOWN (SD = 0)  */
 }
 
 /*!
@@ -1583,44 +1686,26 @@ status_t POWER_EnterDeepPowerDown(const power_deep_power_down_config_t *config)
 {
     assert(config != NULL);
 
-    /* 0. CSSI/ELS LP handshake - must consent before powering off. */
-    if (!POWER_RequestCssiLpEntry())
+    if (POWER_StandbyPrologue() != kStatus_Success)
     {
         return kStatus_Fail;
     }
 
-    POWER_ClearPdsef();
-    POWER_ClearMainTcmForceAlive();
-    POWER_ApplyZbb();
-
-    MEMCON_SLICE_Type *const sliceBases[] = MEMCON_SLICE_BASE_PTRS;
-
-    /* 1. Configure MEMCON: VBAT SRAM follows retainVbatSram. */
-    /* VBAT SRAM is in the VBAT domain (not controlled by MEMCON_SLICE here).
-     * For MEMCON slices under VDD_MAIN: power down all. */
-    for (uint32_t s = 0U; s < ARRAY_SIZE(sliceBases); s++)
-    {
-        for (uint8_t blk = 0U; blk < POWER_MEMCON_MAX_BLOCKS_PER_SLICE; blk++)
-        {
-            MEMCON_SLICE_SetSleepBlockMode(sliceBases[s], blk, kMEMCON_PowerModePowerDown);
-        }
-    }
-    /* VBAT retention SRAM: DPD1 (retainVbatSram) leaves it ACTIVE - the always-on
-     * VBAT domain holds the contents while VDD_PMU stays on.  DPD2 does not retain,
-     * so power the SRAM down (ACT -> INT -> SD) before the PMIC removes VDD_PMU. */
+    /* 1. MEMCON: Deep Power Down removes VDD_PMU and every memcon-controlled memory
+     *    array loses its supply, so MEM_SLPCFG bits have no effect on retention.
+     *    No memcon writes are issued here - same reasoning as POWER_EnterPowerDown.
+     *    VBAT SRAM lives in the always-on VBAT domain (not MEMCON) and follows
+     *    retainVbatSram: DPD1 leaves it powered by VBAT; DPD2 shuts it down (ACT
+     *    -> INT -> SD) before the PMIC removes VDD_PMU. */
     if (config->retainVbatSram == false)
     {
         POWER_ShutdownVbatSram();
     }
 
     /* 2. Ensure HW trigger; configure all domains to power-off in standby. */
-    for (uint32_t i = 0U; i < ARRAY_SIZE(s_powerDomains); i++)
-    {
-        PDCON_EnableDomainSwTrigger(SYSCON__PDCON, s_powerDomains[i], false);
-        (void)PDCON_SetEventInLowPowerModes(SYSCON__PDCON, s_powerDomains[i], kPDCON_EventPowerOff);
-    }
-    /* PD_MAIN (fixed): powered off in Deep Power Down via its PDSLPCFG event. */
-    (void)PDCON_SetEventInLowPowerModes(SYSCON__PDCON, kPOWER_DomainMain, kPDCON_EventPowerOff);
+    POWER_ForceAllDomainsToHwTrigger();
+    POWER_ConfigureAllDomainSleepEvents(kPDCON_EventPowerOff, kPDCON_EventPowerOff, kPDCON_EventPowerOff,
+                                        kPDCON_EventPowerOff, kPDCON_EventPowerOff);
 
     /* 3. Configure SoC standby: all off, PMU to BB mode. */
     power_pmu_state_t dpd_pmucfg = {0};
@@ -1634,6 +1719,19 @@ status_t POWER_EnterDeepPowerDown(const power_deep_power_down_config_t *config)
      * regardless of CSRCCFG_STBY. Main clock sources are turned off in DPD. */
     socCfg.csrccfgStby = POWER_CSRCCFG_STBY_ALL_OFF;
     socCfg.pmucfgStby  = dpd_pmucfg.word;
+    socCfg.pmiccfgStby = 0U;
+    if ((s_extRegHooks != NULL) && (s_extRegHooks->setStandbyTarget != NULL))
+    {
+        /* Board hook selects the external regulator's DPSTANDBY profile via I2C
+         * - the one profile distinct from Deep Sleep/Power Down's STANDBY - and reports the
+         * PMICCFG_STBY.PMIC_MODE code fsl_power forwards to hardware below. This call did not
+         * exist before this change; POWER_EnterDeepPowerDown() had no external-regulator-related code, and
+         * `socCfg.pmiccfgStby` was left uninitialized (a pre-existing bug, now fixed). */
+        if (s_extRegHooks->setStandbyTarget(kPOWER_DeepPowerDown, &socCfg.pmiccfgStby) != kStatus_Success)
+        {
+            return kStatus_Fail;
+        }
+    }
 
     POWERCON_SetSocStandbyConfig(SYSCON__POWERCON_SOC_CTRL, &socCfg);
 
@@ -1653,12 +1751,34 @@ status_t POWER_EnterDeepPowerDown(const power_deep_power_down_config_t *config)
     POWERCON_EnableSystemSleepTrigger(SYSCON__POWERCON_CMC0_CTRL);
     POWERCON_EnableSystemSleepTrigger(SYSCON__POWERCON_CMC1_CTRL);
     POWERCON_EnableSystemSleepTrigger(SYSCON__POWERCON_CMC2_CTRL);
-    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
-    __DSB();
-    __WFI();
-    __ISB();
+    POWER_ExecuteWfi();
 
     while (true) /* Should not reach here. */
     {
+    }
+}
+
+/*!
+ * brief Unified low-power entry: dispatches to POWER_EnterSleep/DeepSleep/PowerDown/DeepPowerDown.
+ */
+status_t POWER_EnterLowPowerMode(power_low_power_mode_t lowPowerMode, const void *lpModeConfig)
+{
+    if (lpModeConfig == NULL)
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    switch (lowPowerMode)
+    {
+        case kPOWER_Sleep:
+            return POWER_EnterSleep((const power_sleep_config_t *)lpModeConfig);
+        case kPOWER_DeepSleep:
+            return POWER_EnterDeepSleep((const power_deep_sleep_config_t *)lpModeConfig);
+        case kPOWER_PowerDown:
+            return POWER_EnterPowerDown((const power_down_config_t *)lpModeConfig);                /* does not return */
+        case kPOWER_DeepPowerDown:
+            return POWER_EnterDeepPowerDown((const power_deep_power_down_config_t *)lpModeConfig); /* does not return */
+        default:
+            return kStatus_InvalidArgument;
     }
 }

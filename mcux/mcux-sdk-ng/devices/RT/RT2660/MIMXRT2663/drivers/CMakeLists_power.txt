@@ -21,13 +21,4 @@ if (CONFIG_MCUX_COMPONENT_driver.power)
                  drivers/rt2k_pmu
     )
 
-    # Option D: external VDD_CORE supply via the PF9453 PMIC. The Kconfig symbol selects the
-    # fsl_pf9453 component (its CMake block adds the include); here we define the compile macro
-    # that gates the PMIC code in fsl_power.c/.h. Unset -> on-chip DCDC path, no PMIC dependency.
-    if (CONFIG_MCUX_POWER_PF9453_SUPPLY)
-        mcux_add_macro(
-            CC "-DMCUX_POWER_PF9453_SUPPLY=1"
-        )
-    endif()
-
 endif()

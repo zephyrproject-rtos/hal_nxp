@@ -8,9 +8,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    IMXRT1180RM, Rev 5, 01/2024
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260206
+**     Reference manual:    IMXRT1180RM, Rev 10, 05/2026
+**     Version:             rev. 4.0, 2026-08-14
+**     Build:               b260822
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1186_cm33
@@ -30,14 +30,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2026-08-14)
+**         Based on RM Rev 10.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1186_cm33_COMMON.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-08-14
  * @brief CMSIS Peripheral Access Layer for MIMXRT1186_cm33
  *
  * CMSIS Peripheral Access Layer for MIMXRT1186_cm33
@@ -48,7 +50,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0300U
+#define MCU_MEM_MAP_VERSION 0x0400U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -88,7 +90,7 @@ typedef enum
  */
 
 /** Interrupt Number Definitions */
-#define NUMBER_OF_INT_VECTORS 255                /**< Number of interrupts in the Vector table */
+#define NUMBER_OF_INT_VECTORS 256                /**< Number of interrupts in the Vector table */
 
 typedef enum IRQn {
   /* Auxiliary constants */
@@ -345,7 +347,8 @@ typedef enum IRQn {
   ASRC_IRQn                    = 235,              /**< ASRC interrupt */
   GPIO6_IRQn                   = 236,              /**< GPIO6 interrupt */
   DBG_TRACE_IRQn               = 237,              /**< JTAGSW DAP MDM-AP SRC reset source */
-  ECAT_RST_OUT_IRQn            = 238               /**< ECAT reset out interrupt */
+  ECAT_RST_OUT_IRQn            = 238,              /**< ECAT reset out interrupt */
+  EDGELOCK_IRQn                = 239               /**< Edgelock interrupt */
 } IRQn_Type;
 
 /*!
@@ -412,14 +415,11 @@ typedef enum _asrc_clock_source
     kASRC_ClockSourceBitClock1_SAI1_RX = 1U,       /**< SAI1 RX */
     kASRC_ClockSourceBitClock2_SAI2_TX = 2U,       /**< SAI2 TX */
     kASRC_ClockSourceBitClock3_SAI2_RX = 3U,       /**< SAI2 RX */
-    kASRC_ClockSourceBitClock4_SAI3_TX = 4U,       /**< SAI3 TX */
-    kASRC_ClockSourceBitClock5_SAI3_RX = 5U,       /**< SAI3 RX */
     kASRC_ClockSourceBitClock6_SAI4_TX = 6U,       /**< SAI4 TX */
     kASRC_ClockSourceBitClock7_SAI4_RX = 7U,       /**< SAI4 RX */
     kASRC_ClockSourceBitClock8_SPDIF_TX = 8U,      /**< SPDIF TX */
     kASRC_ClockSourceBitClock9_SPDIF_RX = 9U,      /**< SPDIF RX */
     kASRC_ClockSourceBitClocka_SAI2_CLOCK_ROOT = 10U, /**< SAI2 CLOCK ROOT */
-    kASRC_ClockSourceBitClockb_SAI3_CLOCK_ROOT = 11U, /**< SAI3 CLOCK ROOT */
     kASRC_ClockSourceBitClockc_SAI4_CLOCK_ROOT = 12U, /**< SAI4 CLOCK ROOT */
     kASRC_ClockSourceBitClockd_MIC_CLOCK_ROOT = 13U, /**< MIC CLOCK ROOT */
     kASRC_ClockSourceBitClocke_MQS_CLOCK_ROOT = 14U, /**< MQS CLOCK ROOT */
