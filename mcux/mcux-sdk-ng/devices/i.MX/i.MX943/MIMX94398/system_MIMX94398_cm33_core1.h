@@ -112,7 +112,6 @@
 #define SYSTEM_PLATFORM_MU_IRQ MU8_A_IRQn
 
 /* Logical Machine */
-#define SYSTEM_PLATFORM_LMID_ALL (0U)
 #define SYSTEM_PLATFORM_LMID_A55 (4U)
 
 /* Doorbell*/
