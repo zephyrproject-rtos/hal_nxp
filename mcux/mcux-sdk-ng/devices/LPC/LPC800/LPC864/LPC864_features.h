@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 3.0, 2026-02-09
-**     Build:               b260209
+**     Build:               b260911
 **
 **     Abstract:
 **         Chip specific module features.
@@ -177,6 +177,18 @@
     (((x) == FTM1) ? (0) : (-1)))
 /* @brief Is affected by errata with ID 010856 (FTM: Safe state is not removed from channel outputs after fault condition ends if SWOCTRL is being used to control the pin). */
 #define FSL_FEATURE_FTM_HAS_ERRATA_010856 (0)
+/* @brief Has no FAULTEN bit field in COMBINE register. */
+#define FSL_FEATURE_FTM_HAS_NO_COMBINE_FAULTEN (0)
+/* @brief Has no COMBINE1 bit field in COMBINE register (single channel pair device). */
+#define FSL_FEATURE_FTM_HAS_NO_COMBINE_COMBINE1 (0)
+/* @brief Has no FAULTM bit field in MODE register. */
+#define FSL_FEATURE_FTM_HAS_NO_MODE_FAULTM (0)
+/* @brief Has no FAULTIE bit field in MODE register. */
+#define FSL_FEATURE_FTM_HAS_NO_MODE_FAULTIE (0)
+/* @brief Has no FLTCTRL register. */
+#define FSL_FEATURE_FTM_HAS_NO_FLTCTRL (0)
+/* @brief Has no FAULTF bit field in FMS register. */
+#define FSL_FEATURE_FTM_HAS_NO_FMS_FAULTF (0)
 
 /* I3C module features */
 
@@ -233,7 +245,7 @@
 /* PINT module features */
 
 /* @brief Number of connected outputs */
-#define FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS (8)
+#define FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTSn(x) (8)
 
 /* SPI module features */
 

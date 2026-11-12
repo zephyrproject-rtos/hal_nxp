@@ -87,6 +87,11 @@ extern volatile uint32_t g_Ext_Clk_Freq;
     {                   \
         kCLOCK_GpioInt, \
     }
+/*! @brief Clock ip name array for PINT. */
+#define PINT_CLOCKS   \
+    {                 \
+        kCLOCK_Gpio0, \
+    }
 /*! @brief Clock ip name array for DMA. */
 #define DMA_CLOCKS  \
     {               \
