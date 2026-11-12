@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2025-11-17
-**     Build:               b260812
+**     Build:               b260908
 **
 **     Abstract:
 **         Chip specific module features.
@@ -878,7 +878,7 @@
 /* PINT module features */
 
 /* @brief Number of connected outputs */
-#define FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS (8)
+#define FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTSn(x) (8)
 /* @brief PINT Interrupt Combine */
 #define FSL_FEATURE_PINT_INTERRUPT_COMBINE (1)
 

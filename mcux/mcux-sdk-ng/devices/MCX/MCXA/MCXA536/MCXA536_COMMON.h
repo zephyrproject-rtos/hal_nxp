@@ -12,7 +12,7 @@
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1_DraftC
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260805
+**     Build:               b260916
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXA536
@@ -1838,104 +1838,6 @@ typedef enum _erm_memory_channel
   #define TRNG_BASE_PTRS                           { TRNG0 }
 #endif
 
-/* USBHSDCD - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral USBHS1_PHY_DCD base address */
-  #define USBHS1_PHY_DCD_BASE                      (0x5002F800u)
-  /** Peripheral USBHS1_PHY_DCD base address */
-  #define USBHS1_PHY_DCD_BASE_NS                   (0x4002F800u)
-  /** Peripheral USBHS1_PHY_DCD base pointer */
-  #define USBHS1_PHY_DCD                           ((USBHSDCD_Type *)USBHS1_PHY_DCD_BASE)
-  /** Peripheral USBHS1_PHY_DCD base pointer */
-  #define USBHS1_PHY_DCD_NS                        ((USBHSDCD_Type *)USBHS1_PHY_DCD_BASE_NS)
-  /** Array initializer of USBHSDCD peripheral base addresses */
-  #define USBHSDCD_BASE_ADDRS                      { USBHS1_PHY_DCD_BASE }
-  /** Array initializer of USBHSDCD peripheral base pointers */
-  #define USBHSDCD_BASE_PTRS                       { USBHS1_PHY_DCD }
-  /** Array initializer of USBHSDCD peripheral base addresses */
-  #define USBHSDCD_BASE_ADDRS_NS                   { USBHS1_PHY_DCD_BASE_NS }
-  /** Array initializer of USBHSDCD peripheral base pointers */
-  #define USBHSDCD_BASE_PTRS_NS                    { USBHS1_PHY_DCD_NS }
-#else
-  /** Peripheral USBHS1_PHY_DCD base address */
-  #define USBHS1_PHY_DCD_BASE                      (0x4002F800u)
-  /** Peripheral USBHS1_PHY_DCD base pointer */
-  #define USBHS1_PHY_DCD                           ((USBHSDCD_Type *)USBHS1_PHY_DCD_BASE)
-  /** Array initializer of USBHSDCD peripheral base addresses */
-  #define USBHSDCD_BASE_ADDRS                      { USBHS1_PHY_DCD_BASE }
-  /** Array initializer of USBHSDCD peripheral base pointers */
-  #define USBHSDCD_BASE_PTRS                       { USBHS1_PHY_DCD }
-#endif
-
-/* USBNC - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral USBHS1NC base address */
-  #define USBHS1NC_BASE                            (0x5002E200u)
-  /** Peripheral USBHS1NC base address */
-  #define USBHS1NC_BASE_NS                         (0x4002E200u)
-  /** Peripheral USBHS1NC base pointer */
-  #define USBHS1NC                                 ((USBNC_Type *)USBHS1NC_BASE)
-  /** Peripheral USBHS1NC base pointer */
-  #define USBHS1NC_NS                              ((USBNC_Type *)USBHS1NC_BASE_NS)
-  /** Array initializer of USBNC peripheral base addresses */
-  #define USBNC_BASE_ADDRS                         { USBHS1NC_BASE }
-  /** Array initializer of USBNC peripheral base pointers */
-  #define USBNC_BASE_PTRS                          { USBHS1NC }
-  /** Array initializer of USBNC peripheral base addresses */
-  #define USBNC_BASE_ADDRS_NS                      { USBHS1NC_BASE_NS }
-  /** Array initializer of USBNC peripheral base pointers */
-  #define USBNC_BASE_PTRS_NS                       { USBHS1NC_NS }
-#else
-  /** Peripheral USBHS1NC base address */
-  #define USBHS1NC_BASE                            (0x4002E200u)
-  /** Peripheral USBHS1NC base pointer */
-  #define USBHS1NC                                 ((USBNC_Type *)USBHS1NC_BASE)
-  /** Array initializer of USBNC peripheral base addresses */
-  #define USBNC_BASE_ADDRS                         { USBHS1NC_BASE }
-  /** Array initializer of USBNC peripheral base pointers */
-  #define USBNC_BASE_PTRS                          { USBHS1NC }
-#endif
-
-/* USBPHY - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral USBHS1_PHY base address */
-  #define USBHS1_PHY_BASE                          (0x5002F000u)
-  /** Peripheral USBHS1_PHY base address */
-  #define USBHS1_PHY_BASE_NS                       (0x4002F000u)
-  /** Peripheral USBHS1_PHY base pointer */
-  #define USBHS1_PHY                               ((USBPHY_Type *)USBHS1_PHY_BASE)
-  /** Peripheral USBHS1_PHY base pointer */
-  #define USBHS1_PHY_NS                            ((USBPHY_Type *)USBHS1_PHY_BASE_NS)
-  /** Array initializer of USBPHY peripheral base addresses */
-  #define USBPHY_BASE_ADDRS                        { USBHS1_PHY_BASE }
-  /** Array initializer of USBPHY peripheral base pointers */
-  #define USBPHY_BASE_PTRS                         { USBHS1_PHY }
-  /** Array initializer of USBPHY peripheral base addresses */
-  #define USBPHY_BASE_ADDRS_NS                     { USBHS1_PHY_BASE_NS }
-  /** Array initializer of USBPHY peripheral base pointers */
-  #define USBPHY_BASE_PTRS_NS                      { USBHS1_PHY_NS }
-#else
-  /** Peripheral USBHS1_PHY base address */
-  #define USBHS1_PHY_BASE                          (0x4002F000u)
-  /** Peripheral USBHS1_PHY base pointer */
-  #define USBHS1_PHY                               ((USBPHY_Type *)USBHS1_PHY_BASE)
-  /** Array initializer of USBPHY peripheral base addresses */
-  #define USBPHY_BASE_ADDRS                        { USBHS1_PHY_BASE }
-  /** Array initializer of USBPHY peripheral base pointers */
-  #define USBPHY_BASE_PTRS                         { USBHS1_PHY }
-#endif
-/** Interrupt vectors for the USBPHY peripheral type */
-#define USBPHY_IRQS                              { USB1_HS_PHY_IRQn }
-/* Backward compatibility */
-#define USBPHY_CTRL_ENDEVPLUGINDET_MASK     USBPHY_CTRL_ENDEVPLUGINDETECT_MASK
-#define USBPHY_CTRL_ENDEVPLUGINDET_SHIFT    USBPHY_CTRL_ENDEVPLUGINDETECT_SHIFT
-#define USBPHY_CTRL_ENDEVPLUGINDET(x)       USBPHY_CTRL_ENDEVPLUGINDETECT(x)
-#define USBPHY_TX_TXCAL45DM_MASK            USBPHY_TX_TXCAL45DN_MASK
-#define USBPHY_TX_TXCAL45DM_SHIFT           USBPHY_TX_TXCAL45DN_SHIFT
-#define USBPHY_TX_TXCAL45DM(x)              USBPHY_TX_TXCAL45DN(x)
-
-
-
 /* UTICK - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
   /** Peripheral UTICK0 base address */
@@ -2127,6 +2029,8 @@ typedef enum _erm_memory_channel
   /** Array initializer of WWDT peripheral base pointers */
   #define WWDT_BASE_PTRS                           { WWDT0, WWDT1 }
 #endif
+/** Interrupt vectors for the WWDT peripheral type */
+#define WWDT_IRQS                                { WWDT0_IRQn, WWDT1_IRQn }
 
 /* ----------------------------------------------------------------------------
    -- Macros for use with bit field definitions (xxx_SHIFT, xxx_MASK).
