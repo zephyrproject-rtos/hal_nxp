@@ -19,6 +19,8 @@ mcux_add_iar_configuration(
             hyperram_txt_debug
             psram_txt_debug
             ram_0x1400_debug
+            psram_only_debug
+            ram_only_debug
             ddr_debug
     AS "-r"
     CC "-On --debug --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --no_clustering --no_scheduling"
@@ -40,6 +42,8 @@ mcux_add_iar_configuration(
             hyperram_txt_release
             psram_txt_release
             ram_0x1400_release
+            psram_only_release
+            ram_only_release
             ddr_release
     CC "-Oh"
     CX "-Oh"
@@ -60,6 +64,8 @@ mcux_add_mdk_configuration(
             hyperram_txt_debug
             psram_txt_debug
             ram_0x1400_debug
+            psram_only_debug
+            ram_only_debug
             ddr_debug
     AS "-g"
     CC "-g -O1"
@@ -81,6 +87,8 @@ mcux_add_mdk_configuration(
             hyperram_txt_release
             psram_txt_release
             ram_0x1400_release
+            psram_only_release
+            ram_only_release
             ddr_release
     CC "-Oz"
     CX "-Oz"
@@ -101,6 +109,8 @@ mcux_add_armgcc_configuration(
             hyperram_txt_debug
             psram_txt_debug
             ram_0x1400_debug
+            psram_only_debug
+            ram_only_debug
             ddr_debug
     AS "-g"
     CC "-g -O0"
@@ -123,6 +133,8 @@ mcux_add_armgcc_configuration(
             hyperram_txt_release
             psram_txt_release
             ram_0x1400_release
+            psram_only_release
+            ram_only_release
             ddr_release
     CC "-Os"
     CX "-Os"
