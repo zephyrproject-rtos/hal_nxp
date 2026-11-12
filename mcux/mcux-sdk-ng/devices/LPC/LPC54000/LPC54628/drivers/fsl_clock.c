@@ -857,7 +857,7 @@ uint32_t CLOCK_GetFlexCommClkFreq(uint32_t id)
             freq = CLOCK_GetFroHfFreq() / ((SYSCON->FROHFCLKDIV & SYSCON_FROHFCLKDIV_DIV_MASK) + 1U);
             break;
         case 2U:
-            freq = CLOCK_GetPllOutFreq();
+            freq = CLOCK_GetAudioPllOutFreq();
             break;
         case 3U:
             freq = CLOCK_GetI2SMClkFreq();
