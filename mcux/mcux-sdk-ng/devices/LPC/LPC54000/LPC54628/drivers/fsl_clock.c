@@ -807,9 +807,6 @@ uint32_t CLOCK_GetAsyncApbClkFreq(void)
         case kCLOCK_AsyncFro12Mhz:
             clkRate = CLK_FRO_12MHZ;
             break;
-        case kCLOCK_AsyncAudioPllClk:
-            clkRate = CLOCK_GetAudioPllOutFreq();
-            break;
         default:
             clkRate = 0U;
             break;
@@ -860,7 +857,7 @@ uint32_t CLOCK_GetFlexCommClkFreq(uint32_t id)
             freq = CLOCK_GetFroHfFreq() / ((SYSCON->FROHFCLKDIV & SYSCON_FROHFCLKDIV_DIV_MASK) + 1U);
             break;
         case 2U:
-            freq = CLOCK_GetAudioPllOutFreq();
+            freq = CLOCK_GetPllOutFreq();
             break;
         case 3U:
             freq = CLOCK_GetI2SMClkFreq();
@@ -945,13 +942,19 @@ uint32_t CLOCK_GetDmicClkFreq(void)
             freq = CLOCK_GetFro12MFreq();
             break;
         case 1U:
-            freq = CLOCK_GetFroHfFreq() / ((SYSCON->FROHFCLKDIV & SYSCON_FROHFCLKDIV_DIV_MASK) + 1U);
+            freq = CLOCK_GetFroHfFreq();
             break;
         case 2U:
-            freq = CLOCK_GetAudioPllOutFreq();
+            freq = CLOCK_GetPllOutFreq();
             break;
         case 3U:
             freq = CLOCK_GetI2SMClkFreq();
+            break;
+        case 4U:
+            freq = CLOCK_GetCoreSysClkFreq();
+            break;
+        case 5U:
+            freq = CLOCK_GetWdtOscFreq();
             break;
         default:
             assert(false);

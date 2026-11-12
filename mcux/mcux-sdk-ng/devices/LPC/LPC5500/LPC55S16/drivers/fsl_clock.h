@@ -91,9 +91,9 @@
         kCLOCK_Gpio0, kCLOCK_Gpio1 \
     }
 /*! @brief Clock ip name array for PINT. */
-#define PINT_CLOCKS \
-    {               \
-        kCLOCK_Pint \
+#define PINT_CLOCKS                      \
+    {                                    \
+        kCLOCK_Pint, kCLOCK_Gpio_Sec_Int \
     }
 /*! @brief Clock ip name array for GINT. */
 #define GINT_CLOCKS              \

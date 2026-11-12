@@ -93,6 +93,11 @@
     {                              \
         kCLOCK_Gpio0, kCLOCK_Gpio1 \
     }
+/*! @brief Clock ip name array for PINT. */
+#define PINT_CLOCKS \
+    {               \
+        kCLOCK_Pint \
+    }
 /*! @brief Clock ip name array for ADC. */
 #define ADC_CLOCKS  \
     {               \

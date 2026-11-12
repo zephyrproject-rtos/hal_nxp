@@ -103,6 +103,11 @@ extern volatile uint32_t g_Fro_Osc_Freq;
     {                   \
         kCLOCK_GpioInt, \
     }
+/*! @brief Clock ip name array for PINT. */
+#define PINT_CLOCKS     \
+    {                   \
+        kCLOCK_GpioInt, \
+    }
 /*! @brief Clock ip name array for CRC. */
 #define CRC_CLOCKS  \
     {               \

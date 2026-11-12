@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.1, 2025-12-01
-**     Build:               b260717
+**     Build:               b260911
 **
 **     Abstract:
 **         Chip specific module features.
@@ -399,7 +399,9 @@
 /* PINT module features */
 
 /* @brief Number of connected outputs */
-#define FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS (8)
+#define FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTSn(x) \
+    (((x) == PINT) ? (8) : \
+    (((x) == SECPINT) ? (2) : (-1)))
 
 /* PLU module features */
 
@@ -452,11 +454,6 @@
 #define FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS (10)
 /* @brief Writing a zero asserts the SCT reset. */
 #define FSL_FEATURE_SCT_WRITE_ZERO_ASSERT_RESET (0)
-
-/* SECPINT module features */
-
-/* @brief Number of connected outputs */
-#define FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS (2)
 
 /* SPI module features */
 
