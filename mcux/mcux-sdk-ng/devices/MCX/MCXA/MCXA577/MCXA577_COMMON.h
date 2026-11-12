@@ -1,6 +1,8 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA577VLL
+**     Processors:          MCXA577VAPR
+**                          MCXA577VASR
+**                          MCXA577VLL
 **                          MCXA577VLQ
 **                          MCXA577VPN
 **
@@ -12,7 +14,7 @@
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1_DraftC
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260805
+**     Build:               b260916
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXA577
@@ -2558,6 +2560,8 @@ typedef enum _erm_memory_channel
   /** Array initializer of WWDT peripheral base pointers */
   #define WWDT_BASE_PTRS                           { WWDT0, WWDT1 }
 #endif
+/** Interrupt vectors for the WWDT peripheral type */
+#define WWDT_IRQS                                { WWDT0_IRQn, WWDT1_IRQn }
 
 /* ----------------------------------------------------------------------------
    -- Macros for use with bit field definitions (xxx_SHIFT, xxx_MASK).

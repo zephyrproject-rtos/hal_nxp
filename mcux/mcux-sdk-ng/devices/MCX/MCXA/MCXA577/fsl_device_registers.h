@@ -13,7 +13,7 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_MCXA577VLL) || defined(CPU_MCXA577VLQ) || defined(CPU_MCXA577VPN))
+#if (defined(CPU_MCXA577VAPR) || defined(CPU_MCXA577VASR) || defined(CPU_MCXA577VLL) || defined(CPU_MCXA577VLQ) || defined(CPU_MCXA577VPN))
 #include "MCXA577.h"
 #else
   #error "No valid CPU defined!"

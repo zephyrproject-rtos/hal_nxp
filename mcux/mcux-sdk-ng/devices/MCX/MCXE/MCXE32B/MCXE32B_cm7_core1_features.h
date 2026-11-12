@@ -49,6 +49,8 @@
 #define FSL_FEATURE_SOC_EMAC_COUNT (1)
 /* @brief ENET_QOS/EMAC is affected by errata ERR050705 (Head-Of-Line blocking error when GCL gates are closed). */
 #define FSL_FEATURE_ENET_QOS_HAS_ERRATA_050705 (1)
+/* @brief Is affected by errata with ID 050595 (GMAC/EMAC: Incorrect pps output generation on target time error). */
+#define FSL_FEATURE_EMAC_HAS_ERRATA_050595 (1)
 /* @brief EMIOS availability on the SoC. */
 #define FSL_FEATURE_SOC_EMIOS_COUNT (3)
 /* @brief FLEXCAN availability on the SoC. */

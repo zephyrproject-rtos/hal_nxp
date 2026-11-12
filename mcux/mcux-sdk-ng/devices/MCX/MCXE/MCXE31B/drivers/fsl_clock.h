@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -19,8 +19,8 @@
  *****************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.2.1 */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+/*! @brief CLOCK driver version 2.2.2 */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */
@@ -265,7 +265,7 @@ extern volatile uint32_t g_xtal0Freq;
         kCLOCK_Lpuart0, kCLOCK_Lpuart1, kCLOCK_Lpuart2, kCLOCK_Lpuart3 \
     }
 #endif
-#if defined(FSL_FEATURE_SOC_LPSPI_COUNT) && (FSL_FEATURE_SOC_LPUART_COUNT == 6U)
+#if defined(FSL_FEATURE_SOC_LPSPI_COUNT) && (FSL_FEATURE_SOC_LPSPI_COUNT == 6U)
 /*! @brief Clock ip name array for LPSPI. */
 #define LPSPI_CLOCKS                                                                             \
     {                                                                                            \
@@ -791,8 +791,11 @@ typedef enum clock_firc_div
 /*! @brief The FXOSC work mode. */
 typedef enum _fxosc_mode
 {
-    kFXOSC_ModeCrystal = FXOSC_CTRL_COMP_EN_MASK,                           /*!< Crystal mode. */
-    kFXOSC_ModeBypass  = FXOSC_CTRL_COMP_EN_MASK | FXOSC_CTRL_OSC_BYP_MASK, /*!< Use external clock.   */
+    kFXOSC_ModeCrystal = FXOSC_CTRL_COMP_EN_MASK, /*!< Crystal mode: comparator enabled. */
+    kFXOSC_ModeBypass  = FXOSC_CTRL_OSC_BYP_MASK, /*!< Single-input bypass mode: use an external clock on EXTAL.
+                                                   * OSC_BYP is set and COMP_EN stays cleared. In this mode the
+                                                   * transconductance (GM_SEL) is 0, which makes the OSC_STAT
+                                                   * status flag invalid, so no stabilization check is performed. */
 } fxosc_mode_t;
 
 /*!
@@ -805,8 +808,9 @@ typedef struct _fxosc_config
     uint32_t freqHz;       /*!< Frequency in Herz. */
     fxosc_mode_t workMode; /*!< FXOSC work mode setting.       */
     uint8_t startupDelay; /*!< Specifies the end-of-count. Runs on crystal clock divided by 4 and counts to startupDelay
-                           * 128. */
-    uint8_t overdriveProtect; /*! < Crystal overdrive protection. Depends on crystal spec, referring datasheet. */
+                           * 128. Ignored in @ref kFXOSC_ModeBypass, where the counter is held in reset. */
+    uint8_t overdriveProtect; /*! < Crystal overdrive protection. Depends on crystal spec, referring datasheet.
+                               * Ignored in @ref kFXOSC_ModeBypass, which requires a transconductance of 0. */
 } fxosc_config_t;
 
 /*! @brief The PLL work mode. */
@@ -1049,6 +1053,15 @@ uint32_t CLOCK_GetClkSwitchTriggerCause(clock_attach_id_t connection);
 
 /*!
  * @brief Initialize the FXOSC.
+ *
+ * The FXOSC is disabled first if it is currently enabled, then the selected work mode is
+ * configured while the oscillator is off, and finally the oscillator is enabled.
+ *
+ * In @ref kFXOSC_ModeCrystal the function waits until OSC_STAT reports a stable clock.
+ * In @ref kFXOSC_ModeBypass no stabilization wait is performed, because the mode requires
+ * a transconductance of 0, which makes OSC_STAT invalid; @p startupDelay and
+ * @p overdriveProtect are ignored in that mode.
+ *
  * @code
  *   fxosc_config_t config =
  *   {
@@ -1154,6 +1167,13 @@ uint32_t CLOCK_GetFircClkFreq(void);
 
 /*!
  * @brief Get the FXOSC clock frequency.
+ *
+ * Returns 0 when the FXOSC is disabled. In bypass mode the configured frequency is
+ * returned, since OSC_STAT is invalid there; the returned value is the frequency passed to
+ * @ref CLOCK_InitFxosc and is not a measurement, so it does not prove that an external
+ * clock signal is present. In crystal mode the configured frequency is returned only once
+ * OSC_STAT reports a stable clock.
+ *
  * @return FXOSC frequency in HZ.
  */
 uint32_t CLOCK_GetFxoscFreq(void);

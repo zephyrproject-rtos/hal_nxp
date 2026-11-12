@@ -306,7 +306,7 @@ typedef struct api_core_context
     soc_mem_regions_t memRegions;
     arena_context_t arenaCtx;
     flash_config_t flashConfig;
-    uint32_t reserved;
+    uint32_t reserved[128];
     mem_context_t memCtx;
     ldr_Context_v4_t *sbloaderCtx;
     nboot_context_t *nbootCtx;

@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1_DraftC
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260708
+**     Build:               b260916
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXA556

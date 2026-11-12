@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2025-11-17
-**     Build:               b260804
+**     Build:               b260908
 **
 **     Abstract:
 **         Chip specific module features.
@@ -863,7 +863,7 @@
 /* PINT module features */
 
 /* @brief Number of connected outputs */
-#define FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS (8)
+#define FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTSn(x) (8)
 /* @brief PINT Interrupt Combine */
 #define FSL_FEATURE_PINT_INTERRUPT_COMBINE (1)
 
@@ -1088,6 +1088,8 @@
 #define FSL_FEATURE_SINC_CACFR_HAS_ADMASEL (1)
 /* @brief SINC CACFR register has no bitfield PTMUX. */
 #define FSL_FEATURE_SINC_CACFR_HAS_NO_PTMUX (1)
+/* @brief SINC MCR register has bitfield DOZEN. */
+#define FSL_FEATURE_SINC_MCR_HAS_DOZEN (1)
 
 /* SPC module features */
 

@@ -104,10 +104,12 @@ static uint32_t CLOCK_GetPll1ClkFreq(void);
 static uint32_t CLOCK_GetOsc32KFreq(uint32_t id);
 /* Get LP_OSC Clk */
 static uint32_t CLOCK_GetLposcFreq(void);
+#if defined(USBHS1_PHY)
 /* Get UsbPll */
 static uint32_t CLOCK_GetUsbPllFreq(void);
 /* Get UsbPfdClk */
 static uint32_t CLOCK_GetUsbPfdClkFreq(void);
+#endif
 
 /* Find SELP, SELI, and SELR values for raw M value, max M = MVALMAX */
 static void pllFindSel(uint32_t M, uint32_t *pSelP, uint32_t *pSelI, uint32_t *pSelR);
@@ -862,12 +864,14 @@ uint32_t CLOCK_GetFreq(clock_name_t clockName)
         case kCLOCK_Pll1ClkDiv: /* Pll1ClkDiv */
             freq = CLOCK_GetPll1ClkDivFreq();
             break;
+#if defined(USBHS1_PHY)
         case kCLOCK_UsbPll:
             freq = CLOCK_GetUsbPllFreq();
             break;
         case kCLOCK_UsbPfdClk:
             freq = CLOCK_GetUsbPfdClkFreq();
             break;
+#endif
         case kCLOCK_Osc32K0:
             freq = CLOCK_GetOsc32KFreq(0);
             break;
@@ -1042,6 +1046,7 @@ static uint32_t CLOCK_GetPll1ClkDivFreq(void)
     return CLOCK_GetPll1ClkFreq() / ((SYSCON->PLL1CLKDIV & SYSCON_PLL1CLKDIV_DIV_MASK) + 1U);
 }
 
+#if defined(USBHS1_PHY)
 /*! brief Enable USB HS PHY PLL clock.
  *
  * This function enables the internal 480MHz USB PHY PLL clock.
@@ -1288,6 +1293,7 @@ static uint32_t CLOCK_GetUsbPfdClkFreq(void)
 
     return freq;
 }
+#endif /* defined(USBHS1_PHY) */
 
 /* Get ENET TX CLK */
 /*! brief  Initialize the ENET TX CLK to given frequency.
@@ -1334,9 +1340,11 @@ uint32_t CLOCK_GetMainClk(void)
         case 6U:
             freq = CLOCK_GetPll1ClkFreq() / ((SCG0->SPLLCSR & SCG_SPLLCSR_SPLL_DIV2_EN_MASK) ? 2U : 1U);
             break;
+#if defined(USBHS1_PHY)
         case 7U:
             freq = CLOCK_GetUsbPfdClkFreq();
             break;
+#endif
         default:
             freq = 0U;
             break;
@@ -1758,6 +1766,9 @@ uint32_t CLOCK_GetOstimerClkFreq(void)
         case 0U:
             freq = CLOCK_GetClk16KFreq(1);
             break;
+        case 1U:
+            freq = CLOCK_GetOsc32KFreq(1);
+            break;
         case 2U:
             freq = CLOCK_GetClk1MFreq();
             break;
@@ -1796,9 +1807,11 @@ uint32_t CLOCK_GetAdcClkFreq(uint32_t id)
         case 3U:
             freq = CLOCK_GetExtClkFreq();
             break;
+#if defined(USBHS1_PHY)
         case 4U:
             freq = CLOCK_GetUsbPllFreq();
             break;
+#endif
         case 5U:
             freq = CLOCK_GetClk1MFreq();
             break;
@@ -2124,9 +2137,11 @@ uint32_t CLOCK_GetFlexcanClkFreq(uint32_t id)
         case 3U:
             freq = CLOCK_GetExtClkFreq();
             break;
+#if defined(USBHS1_PHY)
         case 4:
             freq = CLOCK_GetUsbPllFreq();
             break;
+#endif
         case 6:
             freq = CLOCK_GetPll1ClkDivFreq();
             break;
@@ -2158,9 +2173,11 @@ uint32_t CLOCK_GetFlexspiClkFreq(void)
         case 1U:
             freq = CLOCK_GetFroHfFreq();
             break;
+#if defined(USBHS1_PHY)
         case 4U:
             freq = CLOCK_GetUsbPfdClkFreq();
             break;
+#endif
         case 6U:
             freq = CLOCK_GetPll1ClkFreq();
             break;

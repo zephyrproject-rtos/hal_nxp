@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2026-01-09
-**     Build:               b260812
+**     Build:               b260902
 **
 **     Abstract:
 **         Chip specific module features.
@@ -459,7 +459,7 @@
 /* @brief Do not has prescaler clock source 1. */
 #define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_1_SUPPORT (1)
 /* @brief Do not has prescaler clock source 2. */
-#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_2_SUPPORT (0)
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_2_SUPPORT (1)
 /* @brief Do not has prescaler clock source 3. */
 #define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_3_SUPPORT (0)
 
@@ -581,17 +581,17 @@
 #define FSL_FEATURE_MU_HAS_RESET_ASSERT_INT (0)
 /* @brief MU supports reset de-assert interrupt. CR[RDIE] or BCR[RDIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT (0)
-/* @brief MU does not support core status. Register CSSR0 or CSR0. */
+/* @brief MU does not support core status. Register CSSR0 or CSR0. Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_NO_CORE_STATUS (1)
-/* @brief MU does not support NMI. Register bit CCR0[NMI]. */
+/* @brief MU does not support NMI. Register bit CCR0[NMI]. Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_NO_NMI (1)
-/* @brief MU does not support core event pending. Register bit SR[CEP]. */
+/* @brief MU does not support core event pending. Register bit SR[CEP]. Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_NO_CEP (1)
 /* @brief MU supports Power-Down mode entry interrupt. CIER0[PDIE] */
 #define FSL_FEATURE_MU_HAS_PD_INT (0)
 /* @brief MU supports STOP mode entry interrupt. CIER0[STOPIE] */
 #define FSL_FEATURE_MU_HAS_STOP_INT (0)
-/* @brief MU supports WAIT mode entry interrupt. CIER0[WAITIE] */
+/* @brief MU supports WAIT mode entry interrupt. CIER0[WAITIE] Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_HAS_WAIT_INT (1)
 /* @brief MU supports HALT mode entry interrupt. CIER0[HALTIE] */
 #define FSL_FEATURE_MU_HAS_HALT_INT (0)
@@ -599,7 +599,7 @@
 #define FSL_FEATURE_MU_HAS_RUN_INT (0)
 /* @brief MU supports hardware reset interrupt. CSSR0[HRIP] or CSR0[HRIP]. */
 #define FSL_FEATURE_MU_HAS_SR_HRIP (0)
-/* @brief MU supports reset interrupt. Register bit SR[MURIP]. */
+/* @brief MU supports reset interrupt. Register bit SR[MURIP]. Note: This feature value is not the same on all MU instances. */
 #define FSL_FEATURE_MU_HAS_SR_MURIP (1)
 /* @brief MU does not support enable clock of the other core, CR[CLKE] or CCR[CLKE]. */
 #define FSL_FEATURE_MU_NO_CLKE (1)
@@ -636,13 +636,13 @@
 #define FSL_FEATURE_PORT_HAS_PULL_SELECTION (1)
 /* @brief Has pull resistor enable (register bit PCR[PE]). */
 #define FSL_FEATURE_PORT_HAS_PULL_ENABLE (1)
-/* @brief Has slew rate control (register bit PCR[SRE]). */
+/* @brief Has slew rate control (register bit PCR[SRE]). Note: This feature value is not the same on all PORT instances. */
 #define FSL_FEATURE_PORT_HAS_SLEW_RATE (1)
 /* @brief Has passive filter (register bit field PCR[PFE]). */
 #define FSL_FEATURE_PORT_HAS_PASSIVE_FILTER (1)
 /* @brief Do not has interrupt control (register ISFR). */
 #define FSL_FEATURE_PORT_HAS_NO_INTERRUPT (1)
-/* @brief Has pull value (register bit field PCR[PV]). */
+/* @brief Has pull value (register bit field PCR[PV]). Note: This feature value is not the same on all PORT instances. */
 #define FSL_FEATURE_PORT_PCR_HAS_PULL_VALUE (1)
 /* @brief Has drive strength1 control (register bit PCR[DSE1]). */
 #define FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH1 (0)
@@ -652,9 +652,9 @@
 #define FSL_FEATURE_PORT_SUPPORT_DIFFERENT_VOLTAGE_RANGE (1)
 /* @brief Has EFT detect (registers EDFR, EDIER and EDCR). */
 #define FSL_FEATURE_PORT_SUPPORT_EFT (0)
-/* @brief Has drive strength control (register bit PCR[DSE]). */
+/* @brief Has drive strength control (register bit PCR[DSE]). Note: This feature value is not the same on all PORT instances. */
 #define FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH (1)
-/* @brief Defines width of PCR[MUX] field. */
+/* @brief Defines width of PCR[MUX] field. Note: This feature value is not the same on all PORT instances. */
 #define FSL_FEATURE_PORT_PCR_MUX_WIDTH (4)
 /* @brief Has dedicated interrupt vector. */
 #define FSL_FEATURE_PORT_HAS_INTERRUPT_VECTOR (1)
@@ -664,7 +664,7 @@
 #define FSL_FEATURE_PORT_HAS_MULTIPLE_IRQ_CONFIG (0)
 /* @brief Has Input Buffer Enable (register bit field PCR[IBE]). */
 #define FSL_FEATURE_PORT_HAS_INPUT_BUFFER (0)
-/* @brief Has Invert Input (register bit field PCR[INV]). */
+/* @brief Has Invert Input (register bit field PCR[INV]). Note: This feature value is not the same on all PORT instances. */
 #define FSL_FEATURE_PORT_HAS_INVERT_INPUT (1)
 /* @brief Defines whether PCR[IRQC] bit-field has flag states. */
 #define FSL_FEATURE_PORT_HAS_IRQC_FLAG (0)

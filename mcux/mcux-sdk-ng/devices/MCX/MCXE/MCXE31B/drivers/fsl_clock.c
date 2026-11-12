@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -387,31 +387,67 @@ uint32_t CLOCK_GetClkSwitchTriggerCause(clock_attach_id_t connection)
 
 status_t CLOCK_InitFxosc(const fxosc_config_t *config)
 {
+    uint32_t ctrl;
+    bool bypass;
+
     assert(config != NULL);
 
+    bypass = (config->workMode == kFXOSC_ModeBypass);
+
     CLOCK_EnableClock(kCLOCK_Fxosc);
-    if ((FXOSC->STAT & FXOSC_STAT_OSC_STAT_MASK) != 0U)
+
+    /* OSCON reflects whether the FXOSC is enabled. OSC_STAT must not be used here: it is
+     * invalid when the transconductance is 0, which is the case in bypass mode. */
+    if ((FXOSC->CTRL & FXOSC_CTRL_OSCON_MASK) != 0U)
     {
-        FXOSC->CTRL &= ~FXOSC_CTRL_OSCON_MASK;                          /* Disable FXOSC first. */
-        SDK_DelayAtLeastUs(2U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY); /*Wait for at least 2us
-                                                                           before enabling FXOSC
-                                                                           again. */
+        FXOSC->CTRL &= ~FXOSC_CTRL_OSCON_MASK; /* Disable FXOSC first. */
+
+        /* Wait for at least 2us before enabling FXOSC again, and for at least 16 FXOSC_CLK
+         * cycles before changing any other value. Waiting the longer of the two covers both. */
+        uint32_t delayUs = 2U;
+        if (config->freqHz != 0U)
+        {
+            uint32_t cycleUs = (16000000U + config->freqHz - 1U) / config->freqHz;
+            if (cycleUs > delayUs)
+            {
+                delayUs = cycleUs;
+            }
+        }
+        SDK_DelayAtLeastUs(delayUs, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
     }
 
-    FXOSC->CTRL = (uint32_t)config->workMode | FXOSC_CTRL_OSCON_MASK | FXOSC_CTRL_GM_SEL(config->overdriveProtect) |
-                  FXOSC_CTRL_EOCV(config->startupDelay);
-
-#if (CLOCK_RETRY_TIMES != 0U)
-    uint32_t waitTimes = CLOCK_RETRY_TIMES;
-#endif
-    while ((FXOSC->STAT & FXOSC_STAT_OSC_STAT_MASK) == 0U)
+    /* Configure the operating mode while the FXOSC is disabled, then enable it. Bypass mode
+     * requires a transconductance of 0, and its end-of-count value is irrelevant because the
+     * counter is held in reset, so GM_SEL and EOCV are left at 0 there. */
+    if (bypass)
     {
+        ctrl = (uint32_t)kFXOSC_ModeBypass;
+    }
+    else
+    {
+        ctrl = (uint32_t)config->workMode | FXOSC_CTRL_GM_SEL(config->overdriveProtect) |
+               FXOSC_CTRL_EOCV(config->startupDelay);
+    }
+    FXOSC->CTRL = ctrl;
+
+    /* Enable the FXOSC. */
+    FXOSC->CTRL = ctrl | FXOSC_CTRL_OSCON_MASK;
+
+    if (!bypass)
+    {
+        /* Crystal mode only: wait until the oscillator provides a stable clock. */
 #if (CLOCK_RETRY_TIMES != 0U)
-        if (--waitTimes == 0U)
-        {
-            return kStatus_Timeout;
-        }
+        uint32_t waitTimes = CLOCK_RETRY_TIMES;
 #endif
+        while ((FXOSC->STAT & FXOSC_STAT_OSC_STAT_MASK) == 0U)
+        {
+#if (CLOCK_RETRY_TIMES != 0U)
+            if (--waitTimes == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
+        }
     }
 
     g_xtal0Freq = config->freqHz;
@@ -600,14 +636,29 @@ uint32_t CLOCK_GetFircClkFreq(void)
 uint32_t CLOCK_GetFxoscFreq(void)
 {
     uint32_t freq = 0U;
-    if ((FXOSC->STAT & FXOSC_STAT_OSC_STAT_MASK) != 0U)
+    uint32_t ctrl = FXOSC->CTRL;
+
+    if ((ctrl & FXOSC_CTRL_OSCON_MASK) == 0U)
     {
+        /* FXOSC is disabled. */
+        freq = 0U;
+    }
+    else if ((ctrl & FXOSC_CTRL_OSC_BYP_MASK) != 0U)
+    {
+        /* Bypass mode: OSC_STAT is invalid because the transconductance is 0, so report the
+         * configured frequency. This is the configured value, not a measurement. */
+        freq = g_xtal0Freq;
+    }
+    else if ((FXOSC->STAT & FXOSC_STAT_OSC_STAT_MASK) != 0U)
+    {
+        /* Crystal mode: the oscillator is on and providing a stable clock. */
         freq = g_xtal0Freq;
     }
     else
     {
         freq = 0U;
     }
+
     return freq;
 }
 
