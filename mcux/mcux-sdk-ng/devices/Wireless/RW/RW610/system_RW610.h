@@ -1,6 +1,7 @@
 /*
 ** ###################################################################
 **     Processors:          RW610ETA2I
+**                          RW610FMLA2AI
 **                          RW610HNA2I
 **                          RW610UKA2I
 **
@@ -11,7 +12,7 @@
 **
 **     Reference manual:    RW61X reference manual Rev. 10.0 - 12 January 2026
 **     Version:             rev. 4.0, 2026-01-12
-**     Build:               b260605
+**     Build:               b260909
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -44,7 +45,7 @@
 /*!
  * @file RW610
  * @version 1.0
- * @date 2026-06-05
+ * @date 2026-09-09
  * @brief Device specific configuration file for RW610 (header file)
  *
  * Provides a system configuration function and a global variable that contains
