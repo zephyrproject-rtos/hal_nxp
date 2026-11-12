@@ -807,6 +807,9 @@ uint32_t CLOCK_GetAsyncApbClkFreq(void)
         case kCLOCK_AsyncFro12Mhz:
             clkRate = CLK_FRO_12MHZ;
             break;
+        case kCLOCK_AsyncAudioPllClk:
+            clkRate = CLOCK_GetAudioPllOutFreq();
+            break;
         default:
             clkRate = 0U;
             break;
