@@ -1,5 +1,11 @@
 # ISI
 
+## [2.1.0]
+
+- New Features
+  - Support ISI output selection on certain SoCs. The frames can be output to memory or directly to
+    display controller or both.
+
 ## [2.2.5]
 
 - Update to adapter head file

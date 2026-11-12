@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief SFA driver version 2.1.8 */
-#define FSL_SFA_DRIVER_VERSION (MAKE_VERSION(2, 1, 8))
+/*! @brief SFA driver version 2.2.0 */
+#define FSL_SFA_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*! @} */
 
 /*! @name Configuration
@@ -453,8 +453,11 @@ status_t SFA_MeasureBlocking(SFA_Type *base);
  * function.
  * @note This function has different functions for different instances.
  * @param base SFA peripheral base address.
+ *
+ * @retval kStatus_Success Measure successfully.
+ * @retval kStatus_Timeout Timeout error occurred.
  */
-void SFA_MeasureNonBlocking(SFA_Type *base);
+status_t SFA_MeasureNonBlocking(SFA_Type *base);
 
 /*!
  * @brief Abort SFA measurement sequence.

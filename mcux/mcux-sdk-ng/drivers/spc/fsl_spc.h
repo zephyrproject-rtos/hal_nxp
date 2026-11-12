@@ -27,8 +27,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief SPC driver version 2.9.0. */
-#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 9, 0))
+/*! @brief SPC driver version 2.10.0. */
+#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 10, 0))
 /*! @} */
 
 /*! @name Configuration */
@@ -192,6 +192,19 @@ enum _spc_power_domains
     kSPC_2P4GPowerDoaminRetain  = 1UL << 18U, /*!< Peripherals and IO pads retion in 2.4G Power Domain. */
 #endif                                        /* FSL_FEATURE_SPC_HAS_2P4G_POWER_DOMAIN */
     kSPC_INFRAPowerDomainRetain = 1UL << 19U, /*!< Peripherals and IO pads retain in INFRA Power Domain. */
+};
+
+
+/*!
+ * @brief Bitmask values for @ref SPC_EnableRegulators, one bit per regulator enable in SPC->CNTRL.
+ */
+enum _spc_regulator_enable
+{
+    kSPC_CoreLDORegulatorEnable = SPC_CNTRL_CORELDO_EN_MASK, /*!< Enable the Core LDO regulator. */
+    kSPC_DCDCRegulatorEnable    = SPC_CNTRL_DCDC_EN_MASK,    /*!< Enable the DCDC regulator. */
+#if (defined(FSL_FEATURE_SPC_HAS_SYS_LDO) && FSL_FEATURE_SPC_HAS_SYS_LDO)
+    kSPC_SystemLDORegulatorEnable = SPC_CNTRL_SYSLDO_EN_MASK, /*!< Enable the System LDO regulator. */
+#endif
 };
 
 /*!
@@ -2403,6 +2416,44 @@ status_t SPC_SetActiveModeDCDCRegulatorConfig(SPC_Type *base, const spc_active_m
  * @retval #kStatus_Timeout Timeout occurs while waiting completion.
  */
 status_t SPC_SetLowPowerModeDCDCRegulatorConfig(SPC_Type *base, const spc_lowpower_mode_dcdc_option_t *option);
+
+/*! @} */
+
+/*!
+ * @name Enable Multiple Regulators
+ * @{
+ */
+
+/*!
+ * @brief Enable one or more regulators (Core LDO / System LDO / DCDC) with a single write to SPC->CNTRL.
+ *
+ * @note On some devices (e.g. KW45/KW47), SPC->CNTRL accepts only one write in total between
+ * POR/LVD/HVD events: only the first write to the register takes effect, regardless of which
+ * bits it touches, and every later write is ignored by hardware. Calling #SPC_EnableCoreLDORegulator,
+ * #SPC_EnableSystemLDORegulator, and #SPC_EnableDCDCRegulator one after another therefore only
+ * applies the first of those calls; the later ones silently have no effect. Use this function to
+ * enable every regulator needed at once, in a single write, instead of calling the per-regulator
+ * enable functions separately. The caller is responsible for calling this at most once per
+ * POR/LVD/HVD event.
+ *
+ * @param base SPC peripheral base address.
+ * @param mask Bitwise OR of #_spc_regulator_enable values for the regulators to enable.
+ */
+static inline void SPC_EnableRegulators(SPC_Type *base, uint32_t mask)
+{
+    base->CNTRL |= mask;
+}
+
+/*!
+ * @brief Disable one or more regulators (Core LDO / System LDO / DCDC) with a single write to SPC->CNTRL.
+ *
+ * @param base SPC peripheral base address.
+ * @param mask Bitwise OR of #_spc_regulator_enable values for the regulators to disable.
+ */
+static inline void SPC_DisableRegulators(SPC_Type *base, uint32_t mask)
+{
+    base->CNTRL &= ~mask;
+}
 
 /*! @} */
 

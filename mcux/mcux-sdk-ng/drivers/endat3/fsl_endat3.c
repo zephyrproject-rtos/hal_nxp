@@ -21,7 +21,6 @@
  * Prototypes
  ******************************************************************************/
 
-
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -32,979 +31,1278 @@
 uint32_t timerstamp = 0;
 __WEAK uint32_t getTimestampMS()
 {
-	return timerstamp++;
+    /* Intentional uint32 wrap-around; checkTimeout handles rollover. */
+    uint32_t ts = timerstamp;
+    timerstamp  = ts + 1U;
+    return ts;
 }
 
 static uint32_t addTimeout(uint32_t timeout)
 {
-	return getTimestampMS() + timeout;
+    return getTimestampMS() + timeout;
 }
 
 static int checkTimeout(uint32_t nextValue)
 {
-	uint32_t curr = getTimestampMS();
-	if (nextValue >= curr) {
-		return 0;
-	} else {
-		if (curr - nextValue > 0x80000000) {
-			return 0;
-		}
-	}
-	return 1;
+    uint32_t curr = getTimestampMS();
+    if (nextValue >= curr)
+    {
+        return 0;
+    }
+    else
+    {
+        if (curr - nextValue > 0x80000000)
+        {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 status_t ENDAT3_RxTxClkConfig(ENDAT3_Type *base, uint32_t clk_sys, uint8_t rate, uint16_t watchdag_us)
 {
-	uint16_t clkdiv, dec[4];
-	uint32_t watchDogVal;
+    uint16_t clkdiv, dec[4];
+    uint32_t watchDogVal;
 
-	if (rate == ENDAT3_RXTX_RATE_12_5MBPS) {
-		if (clk_sys == 100000000) {
-			clkdiv = 8;
-			dec[0] = 1;
-			dec[1] = 8;
-			dec[2] = 9;
-			dec[3] = 15;
-		}
-		else {
-			clkdiv = 16;
-			dec[0] = 9;
-			dec[1] = 18;
-			dec[2] = 19;
-			dec[3] = 26;
-		}
-	} else {
-		clkdiv = 8;
-		dec[0] = 1;
-		dec[1] = 8;
-		dec[2] = 9;
-		dec[3] = 15;
-	}
+    if (rate == ENDAT3_RXTX_RATE_12_5MBPS)
+    {
+        if (clk_sys == 100000000)
+        {
+            clkdiv = 8;
+            dec[0] = 1;
+            dec[1] = 8;
+            dec[2] = 9;
+            dec[3] = 15;
+        }
+        else
+        {
+            clkdiv = 16;
+            dec[0] = 9;
+            dec[1] = 18;
+            dec[2] = 19;
+            dec[3] = 26;
+        }
+    }
+    else
+    {
+        clkdiv = 8;
+        dec[0] = 1;
+        dec[1] = 8;
+        dec[2] = 9;
+        dec[3] = 15;
+    }
 
-	watchDogVal = watchdag_us * (clk_sys / 1000000);
-	base->CONFIG_1 = ENDAT3_CONFIG_1_CFG_CLKDIV(clkdiv);
-	base->CONFIG_2 = ENDAT3_CONFIG_2_CFG_DEC_1(dec[1]) | ENDAT3_CONFIG_2_CFG_DEC_0(dec[0]);
-	base->CONFIG_3 = ENDAT3_CONFIG_3_CFG_DEC_3(dec[3]) | ENDAT3_CONFIG_3_CFG_DEC_2(dec[2]);
+    watchDogVal    = watchdag_us * (clk_sys / 1000000);
+    base->CONFIG_1 = ENDAT3_CONFIG_1_CFG_CLKDIV(clkdiv);
+    base->CONFIG_2 = ENDAT3_CONFIG_2_CFG_DEC_1(dec[1]) | ENDAT3_CONFIG_2_CFG_DEC_0(dec[0]);
+    base->CONFIG_3 = ENDAT3_CONFIG_3_CFG_DEC_3(dec[3]) | ENDAT3_CONFIG_3_CFG_DEC_2(dec[2]);
 
-	if (watchDogVal == 0 || watchDogVal > 0xFFFF) {
-		base->CONFIG_4 = ENDAT3_CONFIG_4_CFG_WATCHDOG(0xffff);
-	} else {
-		base->CONFIG_4 = ENDAT3_CONFIG_4_CFG_WATCHDOG(watchDogVal);
-	}
+    if (watchDogVal == 0 || watchDogVal > 0xFFFF)
+    {
+        base->CONFIG_4 = ENDAT3_CONFIG_4_CFG_WATCHDOG(0xffff);
+    }
+    else
+    {
+        base->CONFIG_4 = ENDAT3_CONFIG_4_CFG_WATCHDOG(watchDogVal);
+    }
 
-	return kStatus_Success;
+    return kStatus_Success;
 }
 
 status_t ENDAT3_FG_WaitingMasterReady(ENDAT3_Type *base)
 {
-	uint8_t fg_status = base->FG_STATUS & 0xFF;
+    uint8_t fg_status = base->FG_STATUS & 0xFF;
 
-	while (!(fg_status & ENDAT3_FG_STATUS_MASTER_READY_MASK)) {
-		fg_status = base->FG_STATUS & 0xFF;
-	}
+    while (!(fg_status & ENDAT3_FG_STATUS_MASTER_READY_MASK))
+    {
+        fg_status = base->FG_STATUS & 0xFF;
+    }
 
-	if (fg_status & (ENDAT3_FG_STATUS_STROBE_ERROR_MASK | ENDAT3_FG_STATUS_WD_ERROR_MASK |
-					ENDAT3_FG_STATUS_PHY_ERROR_MASK | ENDAT3_FG_STATUS_CS_ERROR_MASK)) {
-		if (fg_status & ENDAT3_FG_STATUS_STROBE_ERROR_MASK) {
-				return kStatus_Endat3_FG_Strobe_Error;
-			}
-		else if (fg_status & ENDAT3_FG_STATUS_WD_ERROR_MASK) {
-			return kStatus_Endat3_FG_Watchdog_Error;
-		}
-		else if (fg_status & ENDAT3_FG_STATUS_PHY_ERROR_MASK) {
-			return kStatus_Endat3_FG_PHY_Error;
-		}
-		else if (fg_status & ENDAT3_FG_STATUS_CS_ERROR_MASK) {
-			return kStatus_Endat3_FG_CRC_Error;
-		}
-	}
+    if (fg_status & (ENDAT3_FG_STATUS_STROBE_ERROR_MASK | ENDAT3_FG_STATUS_WD_ERROR_MASK |
+                     ENDAT3_FG_STATUS_PHY_ERROR_MASK | ENDAT3_FG_STATUS_CS_ERROR_MASK))
+    {
+        if (fg_status & ENDAT3_FG_STATUS_STROBE_ERROR_MASK)
+        {
+            return kStatus_Endat3_FG_Strobe_Error;
+        }
+        else if (fg_status & ENDAT3_FG_STATUS_WD_ERROR_MASK)
+        {
+            return kStatus_Endat3_FG_Watchdog_Error;
+        }
+        else if (fg_status & ENDAT3_FG_STATUS_PHY_ERROR_MASK)
+        {
+            return kStatus_Endat3_FG_PHY_Error;
+        }
+        else if (fg_status & ENDAT3_FG_STATUS_CS_ERROR_MASK)
+        {
+            return kStatus_Endat3_FG_CRC_Error;
+        }
+    }
 
-	return kStatus_Success;
+    return kStatus_Success;
 }
 
 bool ENDAT3_FG_CheckStatus(ENDAT3_Type *base)
 {
-	if (base->FG_STATUS & (ENDAT3_FG_STATUS_STROBE_ERROR_MASK | ENDAT3_FG_STATUS_WD_ERROR_MASK |
-							ENDAT3_FG_STATUS_PHY_ERROR_MASK | ENDAT3_FG_STATUS_CS_ERROR_MASK))
-		return false;
-	else
-		return true;
+    if (base->FG_STATUS & (ENDAT3_FG_STATUS_STROBE_ERROR_MASK | ENDAT3_FG_STATUS_WD_ERROR_MASK |
+                           ENDAT3_FG_STATUS_PHY_ERROR_MASK | ENDAT3_FG_STATUS_CS_ERROR_MASK))
+        return false;
+    else
+        return true;
 }
 
 uint8_t ENDAT3_getRsp(ENDAT3_Type *base, uint8_t bus_addr, endat3_rsp_t *rsp)
 {
-	struct HPF *hpf = ENDAT3_GET_HPF_ADDR(base, bus_addr);
-	struct LPH *lph = ENDAT3_GET_LPH_ADDR(base, bus_addr);
-	struct LPF *lpf;
-	int i;
+    struct HPF *hpf = ENDAT3_GET_HPF_ADDR(base, bus_addr);
+    struct LPH *lph = ENDAT3_GET_LPH_ADDR(base, bus_addr);
+    struct LPF *lpf;
+    int i;
 
-	rsp->hpf.hpf64 = hpf->hpf64;
-	rsp->lph.lph32 = lph->lph32;
-	rsp->ydim = rsp->lph.lph.nlpf & 0xF;
-	rsp->xdim = (rsp->lph.lph.nlpf >> 4) & 0xF;
-	rsp->zdim = (rsp->lph.lph.status >> 4) & 0x07;
-	for (i = 0; i < rsp->xdim; i++) {
-		lpf = ENDAT3_GET_LPF_ADDR(base, bus_addr, i);
-		rsp->lpf[i].lpf64 = lpf->lpf64;
-	}
-	return rsp->xdim;
+    /* Use struct member access so reads and writes go through the same union member. */
+    rsp->hpf.hpf = hpf->hpf;
+    rsp->lph.lph = lph->lph;
+    rsp->ydim    = rsp->lph.lph.nlpf & 0xF;
+    rsp->xdim    = (rsp->lph.lph.nlpf >> 4) & 0xF;
+    rsp->zdim    = (rsp->lph.lph.status >> 4) & 0x07;
+    for (i = 0; i < rsp->xdim; i++)
+    {
+        lpf               = ENDAT3_GET_LPF_ADDR(base, bus_addr, i);
+        rsp->lpf[i].lpf64 = lpf->lpf64;
+    }
+    return rsp->xdim;
 }
 
 status_t ENDAT3_FG_Req_Rsp(ENDAT3_Type *base, uint8_t req, uint16_t data, endat3_rsp_t *rsp)
 {
-	status_t status;
-	ENDAT3_FG_Req(base, req, data);
+    status_t status;
+    ENDAT3_FG_Req(base, req, data);
 
-	if ((status = ENDAT3_FG_WaitingMasterReady(base)) != kStatus_Success) {
-		return status;
-	}
+    if ((status = ENDAT3_FG_WaitingMasterReady(base)) != kStatus_Success)
+    {
+        return status;
+    }
 
-	if (rsp != NULL)
-		ENDAT3_getRsp(base, 0, rsp);
+    if (rsp != NULL)
+        ENDAT3_getRsp(base, 0, rsp);
 
-	return kStatus_Success;
+    return kStatus_Success;
 }
 
 /* FG Request: Hello */
 status_t ENDAT3_FG_Hello(ENDAT3_Type *base)
 {
-	status_t status;
-	uint32_t timeOutMS = addTimeout(ENDAT3_HELLO_TIMEOUT);
+    status_t status;
+    uint32_t timeOutMS = addTimeout(ENDAT3_HELLO_TIMEOUT);
 
-	do {
-		status = ENDAT3_FG_Req_Rsp(base, ENDAT3_FG_REQ_HELLO, ENDAT3_FG_DATA_HELLO, NULL);
+    do
+    {
+        status = ENDAT3_FG_Req_Rsp(base, ENDAT3_FG_REQ_HELLO, ENDAT3_FG_DATA_HELLO, NULL);
 
-		if (status == kStatus_Success) {
-			return kStatus_Success;
-		}
-	} while (!checkTimeout(timeOutMS));
+        if (status == kStatus_Success)
+        {
+            return kStatus_Success;
+        }
+    } while (!checkTimeout(timeOutMS));
 
-	return kStatus_Endat3_FG_Hello_Failed;
+    return kStatus_Endat3_FG_Hello_Failed;
 }
-
 
 /*FG Request: Echo */
 status_t ENDAT3_FG_Echo(ENDAT3_Type *base, uint16_t arbitrary_data)
 {
-	endat3_rsp_t rsp;
-	status_t status;
+    endat3_rsp_t rsp;
+    status_t status;
 
-	if ((status = ENDAT3_FG_Req_Rsp(base, ENDAT3_FG_REQ_ECHO, arbitrary_data, &rsp)) != kStatus_Success) {
-		return status;
-	}
+    if ((status = ENDAT3_FG_Req_Rsp(base, ENDAT3_FG_REQ_ECHO, arbitrary_data, &rsp)) != kStatus_Success)
+    {
+        return status;
+    }
 
-	if (ENDAT3_READ_HPF_STATUS_HPFV(rsp.hpf.hpf64) != 0x0) {
-		return kStatus_Endat3_FG_ECHO_Failed;
-	}
+    if (ENDAT3_READ_HPF_STATUS_HPFV(rsp.hpf.hpf64) != 0x0)
+    {
+        return kStatus_Endat3_FG_ECHO_Failed;
+    }
 
-	if (rsp.hpf.hpf.data[1] != 0x0 || rsp.hpf.hpf.data[0] != 0x02) {
-		return kStatus_Endat3_FG_ECHO_Failed;
-	}
+    if (rsp.hpf.hpf.data[1] != 0x0 || rsp.hpf.hpf.data[0] != 0x02)
+    {
+        return kStatus_Endat3_FG_ECHO_Failed;
+    }
 
-	if (rsp.hpf.hpf.data[5] != (arbitrary_data >> 8) || rsp.hpf.hpf.data[4] != (arbitrary_data & 0xFF)) {
-		return kStatus_Endat3_FG_ECHO_Failed;
-	}
+    if (rsp.hpf.hpf.data[5] != (arbitrary_data >> 8) || rsp.hpf.hpf.data[4] != (arbitrary_data & 0xFF))
+    {
+        return kStatus_Endat3_FG_ECHO_Failed;
+    }
 
-	return kStatus_Success;
+    return kStatus_Success;
 }
 
 /* FG requests for BUS mode */
 
-status_t ENDAT3_FG_Bus_Req_Rsp(ENDAT3_Type *base, uint8_t bus_addr, uint8_t req, uint16_t data, uint8_t busCode,
-								uint16_t busData, endat3_rsp_t *rsp)
+status_t ENDAT3_FG_Bus_Req_Rsp(ENDAT3_Type *base,
+                               uint8_t bus_addr,
+                               uint8_t req,
+                               uint16_t data,
+                               uint8_t busCode,
+                               uint16_t busData,
+                               endat3_rsp_t *rsp)
 {
-	status_t status;
-	ENDAT3_FG_Bus_Req(base, req, data, busCode, busData);
+    status_t status;
+    ENDAT3_FG_Bus_Req(base, req, data, busCode, busData);
 
-	if ((status = ENDAT3_FG_WaitingMasterReady(base)) != kStatus_Success) {
-		return status;
-	}
+    if ((status = ENDAT3_FG_WaitingMasterReady(base)) != kStatus_Success)
+    {
+        return status;
+    }
 
-	if (rsp != NULL)
-		ENDAT3_getRsp(base, bus_addr, rsp);
+    if (rsp != NULL)
+        ENDAT3_getRsp(base, bus_addr, rsp);
 
-	return kStatus_Success;
+    return kStatus_Success;
 }
 
 /* FG Request: Hello */
 status_t ENDAT3_FG_Bus_P2P_Hello(ENDAT3_Type *base, uint8_t addr)
 {
-	status_t status;
-	uint32_t timeOutMS = addTimeout(200);
+    status_t status;
+    uint32_t timeOutMS = addTimeout(200);
 
-	do {
-		status = ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, ENDAT3_FG_REQ_HELLO, ENDAT3_FG_DATA_HELLO, NULL);
+    do
+    {
+        status = ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, ENDAT3_FG_REQ_HELLO, ENDAT3_FG_DATA_HELLO, NULL);
 
-		if (status == kStatus_Success) {
-			return kStatus_Success;
-		}
-	} while (!checkTimeout(timeOutMS));
+        if (status == kStatus_Success)
+        {
+            return kStatus_Success;
+        }
+    } while (!checkTimeout(timeOutMS));
 
-	return kStatus_Endat3_FG_Hello_Failed;
+    return kStatus_Endat3_FG_Hello_Failed;
 }
 
 /* FG Request: RATE */
 status_t ENDAT3_FG_Bus_Rate_Switch(ENDAT3_Type *base, uint8_t nodes_num, uint8_t rate)
 {
-	status_t status = kStatus_Success;
-	uint8_t addr = 1;
+    status_t status = kStatus_Success;
+    uint8_t addr    = 1;
 
-	while (addr <= nodes_num ) {
-		if (ENDAT3_FG_Bus_P2P_Rate(base, addr, rate) != kStatus_Success) {
-			status = kStatus_Endat3_FG_RATE_Failed;
-		}
-		addr++;
-	}
+    while (addr <= nodes_num)
+    {
+        if (ENDAT3_FG_Bus_P2P_Rate(base, addr, rate) != kStatus_Success)
+        {
+            status = kStatus_Endat3_FG_RATE_Failed;
+        }
+        addr++;
+    }
 
-	addr = 1;
-	while (addr <= nodes_num) {
-		if (ENDAT3_FG_Bus_P2P_Hello(base, addr) != kStatus_Success) {
-			status = kStatus_Endat3_FG_Hello_Failed;
-		}
-		addr++;
-	}
-	return status;
+    addr = 1;
+    while (addr <= nodes_num)
+    {
+        if (ENDAT3_FG_Bus_P2P_Hello(base, addr) != kStatus_Success)
+        {
+            status = kStatus_Endat3_FG_Hello_Failed;
+        }
+        addr++;
+    }
+    return status;
 }
 
 /*FG Request: Echo */
 status_t ENDAT3_FG_Bus_P2P_Echo(ENDAT3_Type *base, uint8_t addr, uint16_t arbitrary_data)
 {
-	endat3_rsp_t rsp;
-	status_t status;
+    endat3_rsp_t rsp;
+    status_t status;
 
-	if ((status = ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, ENDAT3_FG_REQ_ECHO, arbitrary_data, &rsp)) != kStatus_Success) {
-		return status;
-	}
+    if ((status = ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, ENDAT3_FG_REQ_ECHO, arbitrary_data, &rsp)) != kStatus_Success)
+    {
+        return status;
+    }
 
-	if (ENDAT3_READ_HPF_STATUS_HPFV(rsp.hpf.hpf64) != 0x0) {
-		return kStatus_Endat3_FG_ECHO_Failed;
-	}
+    if (ENDAT3_READ_HPF_STATUS_HPFV(rsp.hpf.hpf64) != 0x0)
+    {
+        return kStatus_Endat3_FG_ECHO_Failed;
+    }
 
-	if (rsp.hpf.hpf.data[1] != 0x0 || rsp.hpf.hpf.data[0] != 0x02) {
-		return kStatus_Endat3_FG_ECHO_Failed;
-	}
+    if (rsp.hpf.hpf.data[1] != 0x0 || rsp.hpf.hpf.data[0] != 0x02)
+    {
+        return kStatus_Endat3_FG_ECHO_Failed;
+    }
 
-	if (rsp.hpf.hpf.data[5] != (arbitrary_data >> 8) || rsp.hpf.hpf.data[4] != (arbitrary_data & 0xFF)) {
-		return kStatus_Endat3_FG_ECHO_Failed;
-	}
+    if (rsp.hpf.hpf.data[5] != (arbitrary_data >> 8) || rsp.hpf.hpf.data[4] != (arbitrary_data & 0xFF))
+    {
+        return kStatus_Endat3_FG_ECHO_Failed;
+    }
 
-	return kStatus_Success;
+    return kStatus_Success;
 }
 
 /* API interface for BG commnunication*/
 void ENDAT3_BG_Req(ENDAT3_Type *base, uint8_t bus_addr, struct BGREQ *req, uint8_t wait_rsp)
 {
-	uint32_t req_h32 = BSWAP32(req->BGREQ64 & 0xFFFFFFFF); 
-	uint32_t req_l32 = BSWAP32(req->BGREQ64 >> 32); 
-	uint64_t req64 = ((uint64_t)req_h32 << 32) | req_l32;
-	base->BG_REQ_0 = ENDAT3_BG_REQ_0_BG_ADDR(bus_addr);
-	base->BG_REQ_1 = ENDAT3_BG_REQ_1_BG_REQ_LO(req64 & 0xFFFFFFFF);
-	base->BG_REQ_2 = ENDAT3_BG_REQ_2_BG_REQ_HI(req64 >> 32) | ENDAT3_BG_REQ_2_BG_STROBE(1) |
-						ENDAT3_BG_REQ_2_WAIT_RSP(wait_rsp);
+    uint32_t req_h32 = BSWAP32(req->BGREQ64 & 0xFFFFFFFF);
+    uint32_t req_l32 = BSWAP32(req->BGREQ64 >> 32);
+    uint64_t req64   = ((uint64_t)req_h32 << 32) | req_l32;
+    base->BG_REQ_0   = ENDAT3_BG_REQ_0_BG_ADDR(bus_addr);
+    base->BG_REQ_1   = ENDAT3_BG_REQ_1_BG_REQ_LO(req64 & 0xFFFFFFFF);
+    base->BG_REQ_2 =
+        ENDAT3_BG_REQ_2_BG_REQ_HI(req64 >> 32) | ENDAT3_BG_REQ_2_BG_STROBE(1) | ENDAT3_BG_REQ_2_WAIT_RSP(wait_rsp);
 }
 
-status_t ENDAT3_BG_WaitReqFinished(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fg_strobes, uint32_t timeout_ms,
-									enum op_mode op)
+status_t ENDAT3_BG_WaitReqFinished(
+    ENDAT3_Type *base, uint8_t bus_addr, uint8_t fg_strobes, uint32_t timeout_ms, enum op_mode op)
 {
-	uint32_t timeout = addTimeout(timeout_ms);
-	while (!(base->BG_RSP_1 & ENDAT3_BG_RSP_1_BG_HANDLER_IDLE_MASK)) {
-		if (fg_strobes) {
-			if (op == Point2Point) {
-				ENDAT3_FG_Data(base, ENDAT3_FG_REQ_DATA0, NULL);
-			} else if (op == Peer2Peer) {
-				ENDAT3_FG_Bus_P2P_Data(base, bus_addr, ENDAT3_FG_REQ_DATA0, NULL);
-			}
-		}
+    uint32_t timeout = addTimeout(timeout_ms);
+    while (!(base->BG_RSP_1 & ENDAT3_BG_RSP_1_BG_HANDLER_IDLE_MASK))
+    {
+        if (fg_strobes)
+        {
+            if (op == Point2Point)
+            {
+                (void)ENDAT3_FG_Data(base, ENDAT3_FG_REQ_DATA0, NULL);
+            }
+            else if (op == Peer2Peer)
+            {
+                (void)ENDAT3_FG_Bus_P2P_Data(base, bus_addr, ENDAT3_FG_REQ_DATA0, NULL);
+            }
+        }
 
-		if (base->BG_RSP_1 & ENDAT3_BG_RSP_1_BG_HANDLER_ERROR_MASK) {
-			return kStatus_Endat3_BG_Handler_Error;
-		}
+        if (base->BG_RSP_1 & ENDAT3_BG_RSP_1_BG_HANDLER_ERROR_MASK)
+        {
+            return kStatus_Endat3_BG_Handler_Error;
+        }
 
-		if (timeout_ms && checkTimeout(timeout)) {
-			base->BG_REQ_2 |= ENDAT3_BG_REQ_2_BG_ABORT_MASK;
-			return kStatus_Timeout;
-		}
-	}
-	return kStatus_Success;
+        if (timeout_ms && checkTimeout(timeout))
+        {
+            base->BG_REQ_2 |= ENDAT3_BG_REQ_2_BG_ABORT_MASK;
+            return kStatus_Timeout;
+        }
+    }
+    return kStatus_Success;
 }
 
 status_t ENDAT3_BG_GetRsp(ENDAT3_Type *base, uint64_t *rsp, uint32_t timeout_ms)
 {
-	uint32_t timeout = addTimeout(timeout_ms);
-	uint64_t temp;
-	while (!(base->BG_RSP_1 & (ENDAT3_BG_RSP_1_BG_RSP_DATA_UPDATED_MASK))) {
-		if (timeout_ms && checkTimeout(timeout)) {
-			return kStatus_Timeout;
-		}
-	}
-	temp = ((base->BG_RSP_1 & ENDAT3_BG_RSP_1_BG_RSP_HI_MASK));
-	*rsp = (((temp)) <<32) | base->BG_RSP_0;
-	return kStatus_Success;
+    uint32_t timeout = addTimeout(timeout_ms);
+    uint64_t temp;
+    while (!(base->BG_RSP_1 & (ENDAT3_BG_RSP_1_BG_RSP_DATA_UPDATED_MASK)))
+    {
+        if (timeout_ms && checkTimeout(timeout))
+        {
+            return kStatus_Timeout;
+        }
+    }
+    temp = ((base->BG_RSP_1 & ENDAT3_BG_RSP_1_BG_RSP_HI_MASK));
+    *rsp = (((temp)) << 32) | base->BG_RSP_0;
+    return kStatus_Success;
 }
 
-status_t ENDAT3_BG_Req_Rsp(ENDAT3_Type *base, uint8_t bus_addr, struct BGREQ *req, uint64_t *rsp, uint8_t fg_strobes,
-							uint32_t timeout_ms, enum op_mode op)
+status_t ENDAT3_BG_Req_Rsp(ENDAT3_Type *base,
+                           uint8_t bus_addr,
+                           struct BGREQ *req,
+                           uint64_t *rsp,
+                           uint8_t fg_strobes,
+                           uint32_t timeout_ms,
+                           enum op_mode op)
 {
-	uint8_t wait_rsp;
-	status_t status;
-	if (rsp != NULL)
-		wait_rsp = 1;
-	else
-		wait_rsp = 0;
+    uint8_t wait_rsp;
+    status_t status;
+    if (rsp != NULL)
+        wait_rsp = 1;
+    else
+        wait_rsp = 0;
 
-	ENDAT3_BG_Req(base, bus_addr, req, wait_rsp);
-	if ((status = ENDAT3_BG_WaitReqFinished(base, bus_addr, fg_strobes, timeout_ms, op)) != kStatus_Success) {
-		return status;
-	}
+    ENDAT3_BG_Req(base, bus_addr, req, wait_rsp);
+    if ((status = ENDAT3_BG_WaitReqFinished(base, bus_addr, fg_strobes, timeout_ms, op)) != kStatus_Success)
+    {
+        return status;
+    }
 
-	if (rsp != NULL) {
-		if ((status = ENDAT3_BG_GetRsp(base, rsp, timeout_ms)) != kStatus_Success) {
-			return status;
-		}
-	}
+    if (rsp != NULL)
+    {
+        if ((status = ENDAT3_BG_GetRsp(base, rsp, timeout_ms)) != kStatus_Success)
+        {
+            return status;
+        }
+    }
 
-	return kStatus_Success;
+    return kStatus_Success;
 }
 
-status_t ENDAT3_BG_Nop_OP(ENDAT3_Type *base, uint8_t bus_addr, uint64_t arbitrary, uint64_t *bg_rsp, uint8_t fg_strobes,
-						enum op_mode op)
+status_t ENDAT3_BG_Nop_OP(
+    ENDAT3_Type *base, uint8_t bus_addr, uint64_t arbitrary, uint64_t *bg_rsp, uint8_t fg_strobes, enum op_mode op)
 {
-	struct BGREQ req = {0};
+    struct BGREQ req = {0};
 
-	req.NOP.code = ENDAT3_BG_OPCODE_NOP;
-	req.NOP.arbitrary[0] = (arbitrary >> 32) & 0xFF;
-	req.NOP.arbitrary[1] = (arbitrary >> 24) & 0xFF;
-	req.NOP.arbitrary[2] = (arbitrary >> 16) & 0xFF;
-	req.NOP.arbitrary[3] = (arbitrary >> 8) & 0xFF;
-	req.NOP.arbitrary[4] = arbitrary & 0xFF;
+    req.NOP.code         = ENDAT3_BG_OPCODE_NOP;
+    req.NOP.arbitrary[0] = (arbitrary >> 32) & 0xFF;
+    req.NOP.arbitrary[1] = (arbitrary >> 24) & 0xFF;
+    req.NOP.arbitrary[2] = (arbitrary >> 16) & 0xFF;
+    req.NOP.arbitrary[3] = (arbitrary >> 8) & 0xFF;
+    req.NOP.arbitrary[4] = arbitrary & 0xFF;
 
-	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
+    return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
 }
 
 status_t ENDAT3_BG_Reconfigure_OP(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fg_strobes, enum op_mode op)
 {
-	struct BGREQ req = {0};
-	uint64_t bg_rsp;
+    struct BGREQ req = {0};
+    uint64_t bg_rsp;
 
-	req.RECONFIGURE.code = ENDAT3_BG_OPCODE_RECONFIGURE;
-	req.RECONFIGURE.res1[0] = 0;
-	req.RECONFIGURE.res1[1] = 0;
-	req.RECONFIGURE.res1[2] = 0;
-	req.RECONFIGURE.res1[3] = 0;
-	req.RECONFIGURE.res1[4] = 0;
-	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
+    req.RECONFIGURE.code    = ENDAT3_BG_OPCODE_RECONFIGURE;
+    req.RECONFIGURE.res1[0] = 0;
+    req.RECONFIGURE.res1[1] = 0;
+    req.RECONFIGURE.res1[2] = 0;
+    req.RECONFIGURE.res1[3] = 0;
+    req.RECONFIGURE.res1[4] = 0;
+    return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
 }
 
-status_t ENDAT3_BG_Read_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, uint8_t num_words, uint16_t *words,
-							uint8_t fg_strobes, enum op_mode op)
+status_t ENDAT3_BG_Read_OP(ENDAT3_Type *base,
+                           uint8_t bus_addr,
+                           uint32_t addr,
+                           uint8_t num_words,
+                           uint16_t *words,
+                           uint8_t fg_strobes,
+                           enum op_mode op)
 {
-	struct BGREQ req = {0};
-	uint64_t bg_rsp;
-	status_t status;
-	req.READ.code = ENDAT3_BG_OPCODE_READ;
-	req.READ.addr[0] = (addr >> 16) & 0xFF;
-	req.READ.addr[1] = (addr >> 8) & 0xFF;
-	req.READ.addr[2] = (addr) & 0xFF;
-	req.READ.num_words = num_words;
+    struct BGREQ req = {0};
+    uint64_t bg_rsp;
+    status_t status;
+    req.READ.code      = ENDAT3_BG_OPCODE_READ;
+    req.READ.addr[0]   = (addr >> 16) & 0xFF;
+    req.READ.addr[1]   = (addr >> 8) & 0xFF;
+    req.READ.addr[2]   = (addr) & 0xFF;
+    req.READ.num_words = num_words;
 
-	status = ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
-	if (status != kStatus_Success)
-		return status;
-	if (num_words > 0) {
-		words[0] = bg_rsp & 0xFFFF;
-	}
+    status = ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
+    if (status != kStatus_Success)
+        return status;
+    if (num_words > 0)
+    {
+        words[0] = bg_rsp & 0xFFFF;
+    }
 
-	if (num_words > 1) {
-		words[1] = (bg_rsp >> 16) & 0xFFFF;
-	}
+    if (num_words > 1)
+    {
+        words[1] = (bg_rsp >> 16) & 0xFFFF;
+    }
 
-	if (num_words > 2) {
-		words[2] = (bg_rsp >> 32) & 0xFFFF;
-	}
+    if (num_words > 2)
+    {
+        words[2] = (bg_rsp >> 32) & 0xFFFF;
+    }
 
-	return status;
+    return status;
 }
 
-status_t ENDAT3_BG_Write_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, const uint16_t word,
-							uint8_t fg_strobes, enum op_mode op)
+status_t ENDAT3_BG_Write_OP(
+    ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, const uint16_t word, uint8_t fg_strobes, enum op_mode op)
 {
-	struct BGREQ req = {0};
-	uint64_t bg_rsp;
+    struct BGREQ req = {0};
+    uint64_t bg_rsp;
 
-	req.WRITE.code = ENDAT3_BG_OPCODE_WRITE;
-	req.WRITE.addr[0] = (addr >> 16) & 0xFF;
-	req.WRITE.addr[1] = (addr >> 8) & 0xFF;
-	req.WRITE.addr[2] = (addr) & 0xFF;
-	req.WRITE.data[0] = (word >> 8) & 0xFF;
-	req.WRITE.data[1] = (word) & 0xFF;
-	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
+    req.WRITE.code    = ENDAT3_BG_OPCODE_WRITE;
+    req.WRITE.addr[0] = (addr >> 16) & 0xFF;
+    req.WRITE.addr[1] = (addr >> 8) & 0xFF;
+    req.WRITE.addr[2] = (addr) & 0xFF;
+    req.WRITE.data[0] = (word >> 8) & 0xFF;
+    req.WRITE.data[1] = (word) & 0xFF;
+    return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
 }
 
-status_t ENDAT3_BG_Auth_OP(ENDAT3_Type *base, uint8_t bus_addr, uint8_t usrlevel, uint32_t pass, uint8_t fg_strobes,
-						enum op_mode op)
+status_t ENDAT3_BG_Auth_OP(
+    ENDAT3_Type *base, uint8_t bus_addr, uint8_t usrlevel, uint32_t pass, uint8_t fg_strobes, enum op_mode op)
 {
-	struct BGREQ req = {0};
-	uint64_t bg_rsp;
-	req.AUTH.code = ENDAT3_BG_OPCODE_AUTH;
-	req.AUTH.usrlevel = usrlevel;
-	req.AUTH.pass = BSWAP32(pass);
-	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
+    struct BGREQ req = {0};
+    uint64_t bg_rsp;
+    req.AUTH.code     = ENDAT3_BG_OPCODE_AUTH;
+    req.AUTH.usrlevel = usrlevel;
+    req.AUTH.pass     = BSWAP32(pass);
+    return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
 }
 
-status_t ENDAT3_BG_Setpass_OP(ENDAT3_Type *base, uint8_t bus_addr, uint8_t usrlevel, uint32_t pass, uint8_t fg_strobes,
-							enum op_mode op)
+status_t ENDAT3_BG_Setpass_OP(
+    ENDAT3_Type *base, uint8_t bus_addr, uint8_t usrlevel, uint32_t pass, uint8_t fg_strobes, enum op_mode op)
 {
-	struct BGREQ req = {0};
-	uint64_t bg_rsp;
-	req.SETPASS.code = ENDAT3_BG_OPCODE_SETPASS;
-	req.SETPASS.usrlevel = usrlevel;
-	req.SETPASS.pass = BSWAP32(pass);
-	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
+    struct BGREQ req = {0};
+    uint64_t bg_rsp;
+    req.SETPASS.code     = ENDAT3_BG_OPCODE_SETPASS;
+    req.SETPASS.usrlevel = usrlevel;
+    req.SETPASS.pass     = BSWAP32(pass);
+    return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
 }
 
-status_t ENDAT3_BG_Protect_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, uint8_t mode, const uint8_t acclevel,
-							uint8_t *al_write, uint8_t *al_read, uint8_t fg_strobes, enum op_mode op)
+status_t ENDAT3_BG_Protect_OP(ENDAT3_Type *base,
+                              uint8_t bus_addr,
+                              uint32_t addr,
+                              uint8_t mode,
+                              const uint8_t acclevel,
+                              uint8_t *al_write,
+                              uint8_t *al_read,
+                              uint8_t fg_strobes,
+                              enum op_mode op)
 {
-	struct BGREQ req = {0};
-	uint64_t bg_rsp;
-	status_t status;
-	req.PROTECT.code = ENDAT3_BG_OPCODE_PROTECT;
-	req.PROTECT.address[0] = (addr >> 16) & 0xFF;
-	req.PROTECT.address[1] = (addr >> 8) & 0xFF;
-	req.PROTECT.address[2] = (addr) & 0xFF;
-	req.PROTECT.mode = mode;
-	req.PROTECT.acclevel = acclevel;
+    struct BGREQ req = {0};
+    uint64_t bg_rsp  = 0U;
+    status_t status;
+    req.PROTECT.code       = ENDAT3_BG_OPCODE_PROTECT;
+    req.PROTECT.address[0] = (addr >> 16) & 0xFF;
+    req.PROTECT.address[1] = (addr >> 8) & 0xFF;
+    req.PROTECT.address[2] = (addr) & 0xFF;
+    req.PROTECT.mode       = mode;
+    req.PROTECT.acclevel   = acclevel;
 
-	status = ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
+    status = ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
 
-	*al_write = (bg_rsp >> 8) & 0xFF;
-	*al_read  = bg_rsp & 0xFF;
+    if (status == kStatus_Success)
+    {
+        *al_write = (uint8_t)((bg_rsp >> 8U) & 0xFFU);
+        *al_read  = (uint8_t)(bg_rsp & 0xFFU);
+    }
+    else
+    {
+        *al_write = 0U;
+        *al_read  = 0U;
+    }
 
-	return status;
+    return status;
 }
 
 status_t ENDAT3_BG_Locate_OP(ENDAT3_Type *base, uint8_t bus_addr, uint8_t ctrl, uint8_t fg_strobes, enum op_mode op)
 {
-	struct BGREQ req = {0};
-	uint64_t bg_rsp;
-	req.LOCATE.code = ENDAT3_BG_OPCODE_LOCATE;
-	req.LOCATE.ctrl = ctrl;
-	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
+    struct BGREQ req = {0};
+    uint64_t bg_rsp;
+    req.LOCATE.code = ENDAT3_BG_OPCODE_LOCATE;
+    req.LOCATE.ctrl = ctrl;
+    return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
 }
 
-status_t ENDAT3_memRead_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr,  uint16_t n_words, uint16_t *pbuf,
-						uint8_t fg_strobes, enum op_mode op)
+status_t ENDAT3_memRead_OP(ENDAT3_Type *base,
+                           uint8_t bus_addr,
+                           uint32_t addr,
+                           uint16_t n_words,
+                           uint16_t *pbuf,
+                           uint8_t fg_strobes,
+                           enum op_mode op)
 {
-	int n;
-	uint16_t words[3];
-	status_t status;
+    int n;
+    uint16_t words[3];
+    status_t status;
 
-	while (n_words > 0) {
+    while (n_words > 0)
+    {
+        /* 3 words for one BG read request*/
+        if (n_words > 3)
+        {
+            n = 3;
+            n_words -= 3;
+        }
+        else
+        {
+            n       = n_words;
+            n_words = 0;
+        }
 
-		/* 3 words for one BG read request*/
-		if (n_words > 3) {
-			n = 3;
-			n_words -= 3;
-		} else {
-			n = n_words;
-			n_words = 0;
-		}
+        if ((status = ENDAT3_BG_Read_OP(base, bus_addr, addr, n, words, fg_strobes, op)) != kStatus_Success)
+        {
+            return status;
+        }
 
-		if ((status = ENDAT3_BG_Read_OP(base, bus_addr, addr, n, words, fg_strobes, op)) != kStatus_Success) {
-			return status;
-		}
-
-		memcpy(pbuf, words, n * sizeof(n_words));
-		pbuf += n;
-		addr += n;
-	}
-	return kStatus_Success;
+        memcpy(pbuf, words, n * sizeof(n_words));
+        pbuf += n;
+        addr += n;
+    }
+    return kStatus_Success;
 }
 
-status_t ENDAT3_memWrite_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr,  uint16_t n_words, uint16_t *pbuf,
-							uint8_t fg_strobes, enum op_mode op)
+status_t ENDAT3_memWrite_OP(ENDAT3_Type *base,
+                            uint8_t bus_addr,
+                            uint32_t addr,
+                            uint16_t n_words,
+                            uint16_t *pbuf,
+                            uint8_t fg_strobes,
+                            enum op_mode op)
 {
-	status_t status;
-	while (n_words > 0) {
-		if ((status = ENDAT3_BG_Write_OP(base, bus_addr, addr, *pbuf, fg_strobes, op)) != kStatus_Success) {
-			return status;
-		}
-		addr++;
-		n_words--;
-		pbuf++;
-	}
+    status_t status;
+    while (n_words > 0)
+    {
+        if ((status = ENDAT3_BG_Write_OP(base, bus_addr, addr, *pbuf, fg_strobes, op)) != kStatus_Success)
+        {
+            return status;
+        }
+        addr++;
+        n_words--;
+        pbuf++;
+    }
 
-	return kStatus_Success;
+    return kStatus_Success;
 }
 
-status_t ENDAT3_memCacheInit_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t mem_base, endat3_mem_cache_t *cache,
-								uint16_t *pbuf, uint32_t pbufSize, uint8_t fg_strobes, enum op_mode op)
+status_t ENDAT3_memCacheInit_OP(ENDAT3_Type *base,
+                                uint8_t bus_addr,
+                                uint32_t mem_base,
+                                endat3_mem_cache_t *cache,
+                                uint16_t *pbuf,
+                                uint32_t pbufSize,
+                                uint8_t fg_strobes,
+                                enum op_mode op)
 {
-	cache->memBase = mem_base;
-	cache->cacheMem = pbuf;
-	cache->cacheMemSize = pbufSize;
-	cache->memSize = ENDAT3_memGetRangeSize_OP(base, bus_addr, mem_base, fg_strobes, op);
-	if (cache->memSize == 0) {
-		return kStatus_Endat3_MEM_Cache_Not_Initialized;
-	}
+    cache->memBase      = mem_base;
+    cache->cacheMem     = pbuf;
+    cache->cacheMemSize = pbufSize;
+    cache->memSize      = ENDAT3_memGetRangeSize_OP(base, bus_addr, mem_base, fg_strobes, op);
+    if (cache->memSize == 0)
+    {
+        return kStatus_Endat3_MEM_Cache_Not_Initialized;
+    }
 
-	if (cache->memSize > pbufSize || cache->memSize > MAX_MEMORY_AREA_SIZE) {
-		return kStatus_Endat3_MEM_Cache_Size_Exceeded;
-	}
-	memset(cache->dirtyWordMap, 0, sizeof(uint32_t) * MAX_MEMORY_AREA_SIZE/32);
-	return kStatus_Success;
+    if (cache->memSize > pbufSize || cache->memSize > MAX_MEMORY_AREA_SIZE)
+    {
+        return kStatus_Endat3_MEM_Cache_Size_Exceeded;
+    }
+    memset(cache->dirtyWordMap, 0, sizeof(uint32_t) * MAX_MEMORY_AREA_SIZE / 32);
+    return kStatus_Success;
 }
 
 void ENDAT3_memCacheSetDirty(endat3_mem_cache_t *cache, int word_index, int isDirty)
 {
-	uint32_t mod_index, mod_bit;
-	mod_index = (word_index / 32U);
-	mod_bit = word_index % 32U;
-	if (isDirty)
-		cache->dirtyWordMap[mod_index] |= (1U << mod_bit);
-	else
-		cache->dirtyWordMap[mod_index] &= ~(1U << mod_bit);
+    uint32_t mod_index, mod_bit;
+    mod_index = ((uint32_t)word_index / 32U);
+    mod_bit   = (uint32_t)word_index % 32U;
+    if (isDirty)
+        cache->dirtyWordMap[mod_index] |= (1U << mod_bit);
+    else
+        cache->dirtyWordMap[mod_index] &= ~(1U << mod_bit);
 }
 
 int ENDAT3_memCacheDirty(endat3_mem_cache_t *cache, int word_index)
 {
-	uint32_t mod_index, mod_bit;
-	mod_index = (word_index / 32U);
-	mod_bit = word_index % 32U;
+    uint32_t mod_index, mod_bit;
+    mod_index = ((uint32_t)word_index / 32U);
+    mod_bit   = (uint32_t)word_index % 32U;
 
-	return cache->dirtyWordMap[mod_index] & (1U << mod_bit);
+    return cache->dirtyWordMap[mod_index] & (1U << mod_bit);
 }
 
-status_t ENDAT3_memCacheFlush_OP(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *cache, uint8_t fg_strobes,
-								enum op_mode op)
+status_t ENDAT3_memCacheFlush_OP(
+    ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *cache, uint8_t fg_strobes, enum op_mode op)
 {
-	int i;
-	status_t status;
-	for (i = 0; i < cache->memSize; i++) {
-		if (ENDAT3_memCacheDirty(cache, i)) {
-			status = ENDAT3_BG_Write_OP(base, bus_addr, cache->memBase + i, cache->cacheMem[i], fg_strobes, op);
-			if (status != kStatus_Success) {
-				return status;
-			}
-			ENDAT3_memCacheSetDirty(cache, i, 0);
-		}
-	}
-	return kStatus_Success;
+    int i;
+    status_t status;
+    for (i = 0; i < cache->memSize; i++)
+    {
+        if (ENDAT3_memCacheDirty(cache, i))
+        {
+            status = ENDAT3_BG_Write_OP(base, bus_addr, cache->memBase + i, cache->cacheMem[i], fg_strobes, op);
+            if (status != kStatus_Success)
+            {
+                return status;
+            }
+            ENDAT3_memCacheSetDirty(cache, i, 0);
+        }
+    }
+    return kStatus_Success;
 }
 
-status_t ENDAT3_memCacheFetch_OP(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *cache, uint8_t fg_strobes,
-								enum op_mode op)
+status_t ENDAT3_memCacheFetch_OP(
+    ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *cache, uint8_t fg_strobes, enum op_mode op)
 {
-	status_t status;
-	if ((status = ENDAT3_memRead_OP(base, bus_addr, cache->memBase, cache->memSize, cache->cacheMem, fg_strobes, op))
-			 != kStatus_Success) {
-		return status;
-	}
-	memset(cache->dirtyWordMap, 0, sizeof(uint32_t) * MAX_MEMORY_AREA_SIZE/32);
-	return status;
+    status_t status;
+    if ((status = ENDAT3_memRead_OP(base, bus_addr, cache->memBase, cache->memSize, cache->cacheMem, fg_strobes, op)) !=
+        kStatus_Success)
+    {
+        return status;
+    }
+    memset(cache->dirtyWordMap, 0, sizeof(uint32_t) * MAX_MEMORY_AREA_SIZE / 32);
+    return status;
 }
 
-uint16_t ENDAT3_memGetRangeSize_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t mem_base, uint8_t fg_strobes, enum op_mode op)
+uint16_t ENDAT3_memGetRangeSize_OP(
+    ENDAT3_Type *base, uint8_t bus_addr, uint32_t mem_base, uint8_t fg_strobes, enum op_mode op)
 {
-	uint32_t addr;
-	uint16_t size;
+    uint32_t addr;
+    uint16_t size;
 
-	mem_base &= (uint32_t)(~0xFFFFU);
-	switch (mem_base) {
-		case ENDAT3_MEM_BASE_EL:
-			addr = ENDAT3_MEM_EL_ELSIZE_OFFSET; break;
-		case ENDAT3_MEM_BASE_XEL:
-			addr = ENDAT3_MEM_EL_XELSIZE_OFFSET; break;
-		case ENDAT3_MEM_BASE_SET:
-			addr = ENDAT3_MEM_EL_SETSIZE_OFFSET; break;
-		case ENDAT3_MEM_BASE_XSET:
-			addr = ENDAT3_MEM_EL_XSETSIZE_OFFSET; break;
-		case ENDAT3_MEM_BASE_LPFSET:
-			addr = ENDAT3_MEM_EL_LPFSETSIZE_OFFSET; break;
-		case ENDAT3_MEM_BASE_OEM1:
-			addr = ENDAT3_MEM_EL_OEM1SIZE_OFFSET; break;
-		case ENDAT3_MEM_BASE_OEM2:
-			addr = ENDAT3_MEM_EL_OEM2SIZE_OFFSET; break;
-		case ENDAT3_MEM_BASE_OEM3:
-			addr = ENDAT3_MEM_EL_OEM3SIZE_OFFSET; break;
-		case ENDAT3_MEM_BASE_SENSORS:
-			addr = ENDAT3_MEM_EL_SENSORSSIZE_OFFSET; break;
-		case ENDAT3_MEM_BASE_LPFLIVE:
-			addr = ENDAT3_MEM_EL_LPFLIVESIZE_OFFSET; break;
-		case ENDAT3_MEM_BASE_FEATURE:
-			addr = ENDAT3_MEM_FEATURE_SIZE_OFFSET; break;
-		case ENDAT3_MEM_BASE_FEATURE1:
-			addr = ENDAT3_MEM_FEATURE1_SIZE_OFFSET; break;
-		case ENDAT3_MEM_BASE_FEATURE2:
-			addr = ENDAT3_MEM_FEATURE2_SIZE_OFFSET; break;
-		default: return 0;
-	}
+    mem_base &= (uint32_t)(~0xFFFFU);
+    switch (mem_base)
+    {
+        case ENDAT3_MEM_BASE_EL:
+            addr = ENDAT3_MEM_EL_ELSIZE_OFFSET;
+            break;
+        case ENDAT3_MEM_BASE_XEL:
+            addr = ENDAT3_MEM_EL_XELSIZE_OFFSET;
+            break;
+        case ENDAT3_MEM_BASE_SET:
+            addr = ENDAT3_MEM_EL_SETSIZE_OFFSET;
+            break;
+        case ENDAT3_MEM_BASE_XSET:
+            addr = ENDAT3_MEM_EL_XSETSIZE_OFFSET;
+            break;
+        case ENDAT3_MEM_BASE_LPFSET:
+            addr = ENDAT3_MEM_EL_LPFSETSIZE_OFFSET;
+            break;
+        case ENDAT3_MEM_BASE_OEM1:
+            addr = ENDAT3_MEM_EL_OEM1SIZE_OFFSET;
+            break;
+        case ENDAT3_MEM_BASE_OEM2:
+            addr = ENDAT3_MEM_EL_OEM2SIZE_OFFSET;
+            break;
+        case ENDAT3_MEM_BASE_OEM3:
+            addr = ENDAT3_MEM_EL_OEM3SIZE_OFFSET;
+            break;
+        case ENDAT3_MEM_BASE_SENSORS:
+            addr = ENDAT3_MEM_EL_SENSORSSIZE_OFFSET;
+            break;
+        case ENDAT3_MEM_BASE_LPFLIVE:
+            addr = ENDAT3_MEM_EL_LPFLIVESIZE_OFFSET;
+            break;
+        case ENDAT3_MEM_BASE_FEATURE:
+            addr = ENDAT3_MEM_FEATURE_SIZE_OFFSET;
+            break;
+        case ENDAT3_MEM_BASE_FEATURE1:
+            addr = ENDAT3_MEM_FEATURE1_SIZE_OFFSET;
+            break;
+        case ENDAT3_MEM_BASE_FEATURE2:
+            addr = ENDAT3_MEM_FEATURE2_SIZE_OFFSET;
+            break;
+        default:
+            return 0;
+    }
 
-	if (ENDAT3_memRead_OP(base, bus_addr, addr, 1, &size, fg_strobes, op) != kStatus_Success) {
-		return 0;
-	}
+    if (ENDAT3_memRead_OP(base, bus_addr, addr, 1, &size, fg_strobes, op) != kStatus_Success)
+    {
+        return 0;
+    }
 
-	return size;
+    return size;
 }
 
 static uint32_t ENDAT3_memCalcCSReflect(uint32_t data, uint32_t bitnum)
 {
-	uint32_t i;
-	uint32_t j = 1;
-	uint32_t data_out = 0;
+    uint32_t i;
+    uint32_t j        = 1;
+    uint32_t data_out = 0;
 
-	for (i = 1U << (bitnum-1U); i > 0; i = i >> 1U) {
-		if (data & i) {
-			data_out = data_out | j;
-		}
+    for (i = (bitnum > 0U) ? (1U << (bitnum - 1U)) : 0U; i > 0U; i = i >> 1U)
+    {
+        if (data & i)
+        {
+            data_out = data_out | j;
+        }
 
-		j = j << 1;
-	}
+        j = j << 1;
+    }
 
-	return data_out;
+    return data_out;
 }
 
 static uint32_t ENDAT3_memCalcCS(uint16_t *p, const uint16_t len)
 {
-	const uint32_t order      = 32;
-	const uint32_t polynom    = 0x04C11DB7;
-	const uint32_t init_value = 0xFFFFFFFF;
-	const uint32_t xor_value  = 0xFFFFFFFF;
-	const uint32_t high_bit   = (uint32_t)1 << (order - 1);
+    const uint32_t order      = 32;
+    const uint32_t polynom    = 0x04C11DB7;
+    const uint32_t init_value = 0xFFFFFFFF;
+    const uint32_t xor_value  = 0xFFFFFFFF;
+    const uint32_t high_bit   = (uint32_t)1 << (order - 1);
 
-	uint32_t i;
-	uint32_t j;
-	uint32_t c;
-	uint32_t bit;
-	uint32_t cs = init_value;
+    uint32_t i;
+    uint32_t j;
+    uint32_t c;
+    uint32_t bit;
+    uint32_t cs = init_value;
 
-	for (i = 0; i < len; i++) {
-		c = (uint32_t)p[i];
-		c = ENDAT3_memCalcCSReflect(c, 16);
+    for (i = 0; i < len; i++)
+    {
+        c = (uint32_t)p[i];
+        c = ENDAT3_memCalcCSReflect(c, 16);
 
-		for (j = 0x8000; j > 0; j = j >> 1) {
-			bit = cs & high_bit;
-			cs = cs << 1;
-			if (c & j) {
-				bit = bit ^ high_bit;
-			}
+        for (j = 0x8000; j > 0; j = j >> 1)
+        {
+            bit = cs & high_bit;
+            cs  = cs << 1;
+            if (c & j)
+            {
+                bit = bit ^ high_bit;
+            }
 
-			if (bit) {
-				cs = cs ^ polynom;
-			}
-		}
-	}
+            if (bit)
+            {
+                cs = cs ^ polynom;
+            }
+        }
+    }
 
-	cs = ENDAT3_memCalcCSReflect(cs, order);
-	cs = cs ^ xor_value;
+    cs = ENDAT3_memCalcCSReflect(cs, order);
+    cs = cs ^ xor_value;
 
-	return cs;
+    return cs;
 }
 
 status_t ENDAT3_memCacheCheckCS(endat3_mem_cache_t *cache)
 {
-	uint32_t cs_calc= ENDAT3_memCalcCS(&cache->cacheMem[2], cache->memSize - 2U);
-	uint32_t cs_stored = (cache->cacheMem[1] << 16U) | cache->cacheMem[0];
-	if (cs_stored != cs_calc) {
-		return kStatus_Endat3_MEM_Cache_Wrong_CS;
-	}
-	return kStatus_Success;
+    uint32_t cs_calc   = ENDAT3_memCalcCS(&cache->cacheMem[2], (uint16_t)(cache->memSize - 2U));
+    uint32_t cs_stored = ((uint32_t)cache->cacheMem[1] << 16U) | (uint32_t)cache->cacheMem[0];
+    if (cs_stored != cs_calc)
+    {
+        return kStatus_Endat3_MEM_Cache_Wrong_CS;
+    }
+    return kStatus_Success;
 }
 
 status_t ENDAT3_memCacheUpdataCS(endat3_mem_cache_t *cache)
 {
-	uint32_t cs_calc= ENDAT3_memCalcCS(&cache->cacheMem[2], cache->memSize - 2U);
+    uint32_t cs_calc = ENDAT3_memCalcCS(&cache->cacheMem[2], (uint16_t)(cache->memSize - 2U));
 
-	cache->cacheMem[0] = cs_calc & 0xFFFF;
-	cache->cacheMem[1] = (cs_calc >> 16U) & 0xFFFF;
-	ENDAT3_memCacheSetDirty(cache, 0, 1);
-	ENDAT3_memCacheSetDirty(cache, 1, 1);
-	return kStatus_Success;
+    cache->cacheMem[0] = cs_calc & 0xFFFF;
+    cache->cacheMem[1] = (cs_calc >> 16U) & 0xFFFF;
+    ENDAT3_memCacheSetDirty(cache, 0, 1);
+    ENDAT3_memCacheSetDirty(cache, 1, 1);
+    return kStatus_Success;
 }
 
-uint16_t  ENDAT3_lpfCacheGetPointer(uint8_t z, endat3_mem_cache_t *lpf_cache)
+uint16_t ENDAT3_lpfCacheGetPointer(uint8_t z, endat3_mem_cache_t *lpf_cache)
 {
-	return *(lpf_cache->cacheMem + ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_OFFSET + z - 1U);
+    return *(lpf_cache->cacheMem + ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_OFFSET + z - 1U);
 }
 
 void ENDAT3_lpfCacheGetXdimYdim(uint8_t z, endat3_mem_cache_t *lpf_cache, uint8_t *xdim, uint8_t *y_dim)
 {
-	uint8_t z_list = z - 1U;
-	uint16_t temp;
-	temp = *(lpf_cache->cacheMem + ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_OFFSET + z_list / 2U);
-	temp = temp >> ((z_list % 2U) * 8);
-	*y_dim = (temp & 0xF) + 1;
-	*xdim = (temp >> 4U) & 0xF;
+    uint8_t z_list = (uint8_t)(z - 1U);
+    uint16_t temp;
+    temp   = *(lpf_cache->cacheMem + ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_OFFSET + z_list / 2U);
+    temp   = (uint16_t)(temp >> ((z_list % 2U) * 8U));
+    *y_dim = (uint8_t)((temp & 0xFU) + 1U);
+    *xdim  = (uint8_t)((temp >> 4U) & 0xFU);
 }
 
 void ENDAT3_lpfCacheSetPointer(uint8_t z, endat3_mem_cache_t *lpf_cache, uint16_t pointer)
 {
-	ENDAT3_memCacheSetDirty(lpf_cache, ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_OFFSET  + z - 1U, 1U);
-	*(lpf_cache->cacheMem + ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_OFFSET  + z - 1U) = pointer;
+    ENDAT3_memCacheSetDirty(lpf_cache, ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_OFFSET + z - 1U, 1U);
+    *(lpf_cache->cacheMem + ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_OFFSET + z - 1U) = pointer;
 }
 
 void ENDAT3_lpfCacheSetXdimYdim(uint8_t z, endat3_mem_cache_t *lpf_cache, uint8_t xdim, uint8_t y_dim)
 {
-	uint8_t z_list, xy_dim, *addr;
-	z_list = z - 1U;
-	if (y_dim == 0) {
-		xy_dim = (xdim << 4U) | ((y_dim) & 0xF);
-	} else {
-		xy_dim = (xdim << 4U) | ((y_dim - 1U) & 0xF);
-	}
-	addr = (uint8_t *)(lpf_cache->cacheMem + ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_OFFSET + z_list / 2);
-	ENDAT3_memCacheSetDirty(lpf_cache, ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_OFFSET  + z_list / 2, 1);
-	addr += z_list % 2;
-	*addr = xy_dim;
+    uint8_t z_list, xy_dim, *addr;
+    z_list = (uint8_t)(z - 1U);
+    if (y_dim == 0U)
+    {
+        xy_dim = (uint8_t)((xdim << 4U) | ((uint8_t)(y_dim) & 0xFU));
+    }
+    else
+    {
+        xy_dim = (uint8_t)((xdim << 4U) | (((uint8_t)(y_dim - 1U)) & 0xFU));
+    }
+    addr = (uint8_t *)(lpf_cache->cacheMem + ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_OFFSET + z_list / 2);
+    ENDAT3_memCacheSetDirty(lpf_cache, ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_OFFSET + z_list / 2, 1);
+    addr += z_list % 2;
+    *addr = xy_dim;
 }
 
-void ENDAT3_lpfCacheListSetFid(endat3_mem_cache_t *lpf_cache, uint8_t xdim, uint8_t x, uint8_t y, uint16_t pointer, uint8_t fid)
+void ENDAT3_lpfCacheListSetFid(
+    endat3_mem_cache_t *lpf_cache, uint8_t xdim, uint8_t x, uint8_t y, uint16_t pointer, uint8_t fid)
 {
-	uint8_t *addr = (uint8_t *)(lpf_cache->cacheMem + ENDAT3_LPF_HEAD_SIZE_WORDS) + pointer;
-	ENDAT3_memCacheSetDirty(lpf_cache, ENDAT3_LPF_HEAD_SIZE_WORDS  + (pointer + y * xdim + x)/ 2, 1);
-	addr += y * xdim + x;
-	*addr = fid;
+    uint8_t *addr = (uint8_t *)(lpf_cache->cacheMem + ENDAT3_LPF_HEAD_SIZE_WORDS) + pointer;
+    ENDAT3_memCacheSetDirty(lpf_cache, ENDAT3_LPF_HEAD_SIZE_WORDS + (pointer + y * xdim + x) / 2, 1);
+    addr += y * xdim + x;
+    *addr = fid;
 }
 
-void ENDAT3_lpfCacheListSetSendlist(endat3_mem_cache_t *lpf_cache, uint8_t z, uint8_t xdim, uint8_t ydim, uint16_t pointer,
-									uint8_t *fids)
+void ENDAT3_lpfCacheListSetSendlist(
+    endat3_mem_cache_t *lpf_cache, uint8_t z, uint8_t xdim, uint8_t ydim, uint16_t pointer, uint8_t *fids)
 {
-	uint8_t x, y;
-	ENDAT3_lpfCacheSetPointer(z, lpf_cache, pointer);
-	ENDAT3_lpfCacheSetXdimYdim(z, lpf_cache, xdim, ydim);
-	for(y = 0; y < ydim; y++) {
-		for (x = 0; x < xdim; x++) {
-			ENDAT3_lpfCacheListSetFid(lpf_cache, xdim, x, y, pointer, fids[y * xdim + x]);
-		}
-	}
+    uint8_t x, y;
+    ENDAT3_lpfCacheSetPointer(z, lpf_cache, pointer);
+    ENDAT3_lpfCacheSetXdimYdim(z, lpf_cache, xdim, ydim);
+    for (y = 0; y < ydim; y++)
+    {
+        for (x = 0; x < xdim; x++)
+        {
+            ENDAT3_lpfCacheListSetFid(lpf_cache, xdim, x, y, pointer, fids[y * xdim + x]);
+        }
+    }
 }
 
 uint8_t ENDAT3_lpfCacheListGetFid(endat3_mem_cache_t *lpf_cache, uint8_t xdim, uint8_t x, uint8_t y, uint16_t pointer)
 {
-	uint8_t *addr = (uint8_t *)(lpf_cache->cacheMem + ENDAT3_LPF_HEAD_SIZE_WORDS) + pointer;
-	addr += y * xdim + x;
-	return *addr;
+    uint8_t *addr = (uint8_t *)(lpf_cache->cacheMem + ENDAT3_LPF_HEAD_SIZE_WORDS) + pointer;
+    addr += y * xdim + x;
+    return *addr;
 }
 
-status_t ENDAT3_lpfCacheUpdateFromEnconder_OP(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *lpf_cache, uint16_t *pdat,
-											uint32_t pdat_size, uint8_t from_set, uint8_t fg_strobes, enum op_mode op)
+status_t ENDAT3_lpfCacheUpdateFromEnconder_OP(ENDAT3_Type *base,
+                                              uint8_t bus_addr,
+                                              endat3_mem_cache_t *lpf_cache,
+                                              uint16_t *pdat,
+                                              uint32_t pdat_size,
+                                              uint8_t from_set,
+                                              uint8_t fg_strobes,
+                                              enum op_mode op)
 {
-	uint16_t mem_actual_size;
-	status_t status;
-	if (from_set) {
-		mem_actual_size = ENDAT3_memGetRangeSize_OP(base, bus_addr, ENDAT3_MEM_BASE_LPFSET, fg_strobes, op);
-		lpf_cache->memBase = ENDAT3_MEM_BASE_LPFSET;
-	} else {
-		mem_actual_size = ENDAT3_memGetRangeSize_OP(base, bus_addr, ENDAT3_MEM_BASE_LPFLIVE, fg_strobes, op);
-		lpf_cache->memBase = ENDAT3_MEM_BASE_LPFLIVE;
-	}
+    uint16_t mem_actual_size;
+    status_t status;
+    if (from_set)
+    {
+        mem_actual_size    = ENDAT3_memGetRangeSize_OP(base, bus_addr, ENDAT3_MEM_BASE_LPFSET, fg_strobes, op);
+        lpf_cache->memBase = ENDAT3_MEM_BASE_LPFSET;
+    }
+    else
+    {
+        mem_actual_size    = ENDAT3_memGetRangeSize_OP(base, bus_addr, ENDAT3_MEM_BASE_LPFLIVE, fg_strobes, op);
+        lpf_cache->memBase = ENDAT3_MEM_BASE_LPFLIVE;
+    }
 
-	if (mem_actual_size > pdat_size) {
-		return kStatus_Endat3_MEM_Cache_Out_Of_Size;
-	}
+    if (mem_actual_size > pdat_size)
+    {
+        return kStatus_Endat3_MEM_Cache_Out_Of_Size;
+    }
 
-	lpf_cache->memSize = mem_actual_size;
-	lpf_cache->cacheMem = pdat;
+    lpf_cache->memSize  = mem_actual_size;
+    lpf_cache->cacheMem = pdat;
 
-	if ((status = ENDAT3_memCacheFetch_OP(base, bus_addr, lpf_cache, fg_strobes, op)) != kStatus_Success) {
-		return status;
-	}
+    if ((status = ENDAT3_memCacheFetch_OP(base, bus_addr, lpf_cache, fg_strobes, op)) != kStatus_Success)
+    {
+        return status;
+    }
 
-	status = ENDAT3_memCacheCheckCS(lpf_cache);
-	return status;
+    status = ENDAT3_memCacheCheckCS(lpf_cache);
+    return status;
 }
 
-status_t ENDAT3_lpfCacheFlushToEncoder_OP(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *lpf_cache,
-										uint8_t fg_strobes, enum op_mode op)
+status_t ENDAT3_lpfCacheFlushToEncoder_OP(
+    ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *lpf_cache, uint8_t fg_strobes, enum op_mode op)
 {
-	ENDAT3_memCacheUpdataCS(lpf_cache);
-	return ENDAT3_memCacheFlush_OP(base, bus_addr, lpf_cache, fg_strobes, op);
+    ENDAT3_memCacheUpdataCS(lpf_cache);
+    return ENDAT3_memCacheFlush_OP(base, bus_addr, lpf_cache, fg_strobes, op);
 }
 
-void ENDAT3_lpfCacheListUpdate(endat3_mem_cache_t *global_cache, endat3_mem_cache_t *lpf_cache, uint8_t z,
-								uint8_t xdim, uint8_t ydim, uint16_t pointer, uint8_t *fid)
+void ENDAT3_lpfCacheListUpdate(endat3_mem_cache_t *global_cache,
+                               endat3_mem_cache_t *lpf_cache,
+                               uint8_t z,
+                               uint8_t xdim,
+                               uint8_t ydim,
+                               uint16_t pointer,
+                               uint8_t *fid)
 {
-	int32_t i,j;
-	ENDAT3_lpfCacheSetPointer(z, global_cache, pointer);
-	ENDAT3_lpfCacheSetXdimYdim(z, global_cache, xdim, ydim);
-	for (i = 0; i < ydim; i++) {
-		for (j = 0; j < xdim; j++) {
-			ENDAT3_lpfCacheListSetFid(lpf_cache, xdim, j, i, pointer, fid[i*xdim + j]);
-		}
-	}
+    int32_t i, j;
+    ENDAT3_lpfCacheSetPointer(z, global_cache, pointer);
+    ENDAT3_lpfCacheSetXdimYdim(z, global_cache, xdim, ydim);
+    for (i = 0; i < ydim; i++)
+    {
+        for (j = 0; j < xdim; j++)
+        {
+            ENDAT3_lpfCacheListSetFid(lpf_cache, xdim, j, i, pointer, fid[i * xdim + j]);
+        }
+    }
 }
 
 /* FID_BASED_MEM API */
 status_t ENDAT3_FIDMEM_getLpf(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fid, struct FID *fid_res)
 {
-	struct FID *temp =  ENDAT3_GET_FID_ADDR(base, bus_addr, fid);
-	memcpy (fid_res, temp, sizeof(struct FID));
-	return kStatus_Success;
+    struct FID *temp = ENDAT3_GET_FID_ADDR(base, bus_addr, fid);
+    memcpy(fid_res, temp, sizeof(struct FID));
+    return kStatus_Success;
 }
 
 uint8_t ENDAT3_FIDMEM_getTimestamp(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fid)
 {
-
-	struct FID *temp =  ENDAT3_GET_FID_ADDR(base, bus_addr, fid);
-	return temp->fid.timeStamp;
+    struct FID *temp = ENDAT3_GET_FID_ADDR(base, bus_addr, fid);
+    return temp->fid.timeStamp;
 }
 
 uint8_t ENDAT3_lpfGetLPFVByFID(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fid)
 {
-
-	struct FID *temp =  ENDAT3_GET_FID_ADDR(base, bus_addr, fid);
-	return temp->fid.lpfv;
+    struct FID *temp = ENDAT3_GET_FID_ADDR(base, bus_addr, fid);
+    return temp->fid.lpfv;
 }
 
 uint64_t ENDAT3_FIDMEM_getData(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fid)
 {
-
-	struct FID *temp =  ENDAT3_GET_FID_ADDR(base, bus_addr, fid);
-	return ENDAT3_READ_FID_LPF_DATA(temp->fid64);
+    struct FID *temp = ENDAT3_GET_FID_ADDR(base, bus_addr, fid);
+    return ENDAT3_READ_FID_LPF_DATA(temp->fid64);
 }
 
 /* Assign bus address for all encoders */
 status_t ENDAT3_Bus_Assign_Address(ENDAT3_Type *base, uint8_t address)
 {
-	status_t status;
-	uint16_t cache_buf[0x100] = {0};
-	endat3_mem_cache_t mem_cache;
+    status_t status;
+    uint16_t cache_buf[0x100] = {0};
+    endat3_mem_cache_t mem_cache;
 
-	if ((status = ENDAT3_memCacheInit_OP(base, 0, ENDAT3_MEM_BASE_SET, &mem_cache, cache_buf, 0x100, 1, Peer2Peer)) != kStatus_Success) {
-		return status;
-	}
-	if ((status = ENDAT3_memCacheFetch_OP(base, 0, &mem_cache, 1, Peer2Peer)) != kStatus_Success) {
-		return status;
-	}
+    if ((status = ENDAT3_memCacheInit_OP(base, 0, ENDAT3_MEM_BASE_SET, &mem_cache, cache_buf, 0x100, 1, Peer2Peer)) !=
+        kStatus_Success)
+    {
+        return status;
+    }
+    if ((status = ENDAT3_memCacheFetch_OP(base, 0, &mem_cache, 1, Peer2Peer)) != kStatus_Success)
+    {
+        return status;
+    }
 
-	ENDAT3_MEM_CACHE_WRITE_SET_BUSADDRESS(&mem_cache, address);
-	ENDAT3_memCacheUpdataCS(&mem_cache);
-	if ((status = ENDAT3_Bus_P2P_memCacheFlush(base, 0, &mem_cache, 1)) != kStatus_Success) {
-		return status;
-	}
+    ENDAT3_MEM_CACHE_WRITE_SET_BUSADDRESS(&mem_cache, address);
+    ENDAT3_memCacheUpdataCS(&mem_cache);
+    if ((status = ENDAT3_Bus_P2P_memCacheFlush(base, 0, &mem_cache, 1)) != kStatus_Success)
+    {
+        return status;
+    }
 
-	ENDAT3_FG_Bus_P2P_Reset(base, 0);
+    ENDAT3_FG_Bus_P2P_Reset(base, 0);
 
-	return kStatus_Success;
+    return kStatus_Success;
 }
 
 status_t ENDAT3_Bus_Hello_ForAllParticipants(ENDAT3_Type *base, int nodes_num)
 {
-	status_t status = kStatus_Success;
-	for (int i = nodes_num; i > 0;  i--) {
-		ENDAT3_FG_Hello(base);
-		if (ENDAT3_FG_Bus_P2P_Hello(base, (uint8_t)i) != kStatus_Success) {
-			status = kStatus_Endat3_FG_ECHO_Failed;
-		}
-	}
-	return status;
+    status_t status = kStatus_Success;
+    for (int i = nodes_num; i > 0; i--)
+    {
+        ENDAT3_FG_Hello(base);
+        if (ENDAT3_FG_Bus_P2P_Hello(base, (uint8_t)i) != kStatus_Success)
+        {
+            status = kStatus_Endat3_FG_ECHO_Failed;
+        }
+    }
+    return status;
 }
 
 void ENDAT3_Bus_Init_ForAllParticipants(ENDAT3_Type *base, int nodes_num)
 {
-	uint8_t address[8] = {0};
-	uint32_t index = 0;
-		for (int i = nodes_num; i >= 0;  i--) {
-			ENDAT3_FG_Hello(base);
-			if (ENDAT3_FG_Bus_P2P_Hello(base, (uint8_t)i) == kStatus_Success) {
-				if (index < 8) {
-					address[index++] = (uint8_t)i;
-				}
-			}
-		}
+    uint8_t address[8] = {0};
+    uint32_t index     = 0;
+    for (int i = nodes_num; i >= 0; i--)
+    {
+        ENDAT3_FG_Hello(base);
+        if (ENDAT3_FG_Bus_P2P_Hello(base, (uint8_t)i) == kStatus_Success)
+        {
+            if (index < 8)
+            {
+                address[index++] = (uint8_t)i;
+            }
+        }
+    }
 
-		for (int i = 0; i < index; i++) {
-			ENDAT3_FG_Bus_P2P_BUSINIT(base, address[i]);
-		}
+    for (int i = 0; i < index; i++)
+    {
+        (void)ENDAT3_FG_Bus_P2P_BUSINIT(base, address[i]);
+    }
 }
 
-char* ENDAT3_FID2str(const uint8_t fid)
+char *ENDAT3_FID2str(const uint8_t fid)
 {
-	char *ret;
-	switch (fid) {
-		case 0x00: ret =  "NOP"            ; break;
-		case 0x01: ret =  "POS1"           ; break;
-		case 0x02: ret =  "POS2"           ; break;
-		case 0x03: ret =  "TOUCHPROBE"     ; break;
-		case 0x04: ret =  "POS_ABS"        ; break;
-		case 0x05: ret =  "ZERODATA"       ; break;
-		case 0x0A: ret =  "ERRMSG"         ; break;
-		case 0x11: ret =  "EVALNUM"        ; break;
-		case 0x12: ret =  "MOUNT0"         ; break;
-		case 0x13: ret =  "MOUNT1"         ; break;
-		case 0x1A: ret =  "COMMU"          ; break;
-		case 0x20: ret =  "SENSOR_TEMP_MAX"; break;
-		case 0x21: ret =  "SENSOR_TEMP_INT"; break;
-		case 0x22: ret =  "SENSOR_TEMP_M1" ; break;
-		case 0x23: ret =  "SENSOR_TEMP_M2" ; break;
-		case 0x24: ret =  "SENSOR_TEMP_M3" ; break;
-		case 0x50: ret =  "SF_POS1"        ; break;
-		case 0x60: ret =  "BGRSP"          ; break;
-		case 0x68: ret =  "BGREQ"          ; break;
-		case 0x70: ret =  "BUS_ADDR"       ; break;
-		default: ret = "UNKNOWN FID";
-	}
-	return ret;
+    char *ret;
+    switch (fid)
+    {
+        case 0x00:
+            ret = "NOP";
+            break;
+        case 0x01:
+            ret = "POS1";
+            break;
+        case 0x02:
+            ret = "POS2";
+            break;
+        case 0x03:
+            ret = "TOUCHPROBE";
+            break;
+        case 0x04:
+            ret = "POS_ABS";
+            break;
+        case 0x05:
+            ret = "ZERODATA";
+            break;
+        case 0x0A:
+            ret = "ERRMSG";
+            break;
+        case 0x11:
+            ret = "EVALNUM";
+            break;
+        case 0x12:
+            ret = "MOUNT0";
+            break;
+        case 0x13:
+            ret = "MOUNT1";
+            break;
+        case 0x1A:
+            ret = "COMMU";
+            break;
+        case 0x20:
+            ret = "SENSOR_TEMP_MAX";
+            break;
+        case 0x21:
+            ret = "SENSOR_TEMP_INT";
+            break;
+        case 0x22:
+            ret = "SENSOR_TEMP_M1";
+            break;
+        case 0x23:
+            ret = "SENSOR_TEMP_M2";
+            break;
+        case 0x24:
+            ret = "SENSOR_TEMP_M3";
+            break;
+        case 0x50:
+            ret = "SF_POS1";
+            break;
+        case 0x60:
+            ret = "BGRSP";
+            break;
+        case 0x68:
+            ret = "BGREQ";
+            break;
+        case 0x70:
+            ret = "BUS_ADDR";
+            break;
+        default:
+            ret = "UNKNOWN FID";
+    }
+    return ret;
 }
 
 char *ENDAT3_Err2str(uint16_t errCode)
 {
-	char *ret;
-	switch (errCode)
-	{
-		// Foreground error codes
-		case 0x0001: ret = "FGERR_RECONFIGURE"                     ; break;
-		case 0x0002: ret = "FGERR_ECHO"                            ; break;
-		case 0x0100: ret = "FGERR_INVALID_FID"                     ; break;
-		case 0x0101: ret = "FGERR_DUPLICATE_FID"                   ; break;
-		case 0x0200: ret = "FGERR_INVALID_DATA"                    ; break;
-		case 0x0201: ret = "FGERR_INT_TRM"                         ; break;
-		case 0x0300: ret = "FGERR_NO_SENSOR_DATA"                  ; break;
+    char *ret;
+    switch (errCode)
+    {
+        // Foreground error codes
+        case 0x0001:
+            ret = "FGERR_RECONFIGURE";
+            break;
+        case 0x0002:
+            ret = "FGERR_ECHO";
+            break;
+        case 0x0100:
+            ret = "FGERR_INVALID_FID";
+            break;
+        case 0x0101:
+            ret = "FGERR_DUPLICATE_FID";
+            break;
+        case 0x0200:
+            ret = "FGERR_INVALID_DATA";
+            break;
+        case 0x0201:
+            ret = "FGERR_INT_TRM";
+            break;
+        case 0x0300:
+            ret = "FGERR_NO_SENSOR_DATA";
+            break;
 
-		// Background error codes
-		case 0x1100: ret = "BGERR_USAGE"                           ; break;
-		case 0x1101: ret = "BGERR_USAGE_OPCODE"                    ; break;
-		case 0x1102: ret = "BGERR_USAGE_ARGUMENTS"                 ; break;
-		case 0x1103: ret = "BGERR_USAGE_SEQUENCE"                  ; break;
-		case 0x1104: ret = "BGERR_USAGE_ACCESS_DENIED"             ; break;
-		case 0x1105: ret = "BGERR_USAGE_MEM_ADDRESS"               ; break;
-		case 0x1106: ret = "BGERR_USAGE_NO_BG"                     ; break;
-		case 0x1200: ret = "BGERR_BGERR_INTERNAL"                  ; break;
-		case 0x1201: ret = "BGERR_BGERR_INTERNAL_MEMORY"           ; break;
+        // Background error codes
+        case 0x1100:
+            ret = "BGERR_USAGE";
+            break;
+        case 0x1101:
+            ret = "BGERR_USAGE_OPCODE";
+            break;
+        case 0x1102:
+            ret = "BGERR_USAGE_ARGUMENTS";
+            break;
+        case 0x1103:
+            ret = "BGERR_USAGE_SEQUENCE";
+            break;
+        case 0x1104:
+            ret = "BGERR_USAGE_ACCESS_DENIED";
+            break;
+        case 0x1105:
+            ret = "BGERR_USAGE_MEM_ADDRESS";
+            break;
+        case 0x1106:
+            ret = "BGERR_USAGE_NO_BG";
+            break;
+        case 0x1200:
+            ret = "BGERR_BGERR_INTERNAL";
+            break;
+        case 0x1201:
+            ret = "BGERR_BGERR_INTERNAL_MEMORY";
+            break;
 
-		// C-API error codes
-		case 0x8100: ret = "APIERR_ACTIVATION_HELLO_FAILED"        ; break;
-		case 0x8101: ret = "APIERR_INIT_WRONG_CLK_FREQ"            ; break;
-		case 0x8200: ret = "APIERR_FG_TRM_ERROR"                   ; break;
-		case 0x8201: ret = "APIERR_FG_WATCHDOG_ERROR"              ; break;
-		case 0x8300: ret = "APIERR_BG_PROC_ERROR"                  ; break;
-		case 0x8301: ret = "APIERR_BG_ERR_EXEC"                    ; break;
-		case 0x8400: ret = "APIERR_MEM_NOT_A_BASE_ADDRESS"         ; break;
-		case 0x8401: ret = "APIERR_MEM_CACHE_SIZE_EXCEEDED"        ; break;
-		case 0x8402: ret = "APIERR_MEM_CACHE_NOT_INITIALIZED"      ; break;
-		case 0x8403: ret = "APIERR_MEM_CACHE_WRONG_BASE"           ; break;
-		case 0x8404: ret = "APIERR_MEM_CACHE_OUT_OF_SIZE"          ; break;
-		case 0x8405: ret = "APIERR_MEM_CACHE_WRONG_CS"             ; break;
-		case 0x8500: ret = "APIERR_LPF_DATA_SIZE_EXCEEDED"         ; break;
-		case 0x8501: ret = "APIERR_LPF_LIST_NOT_CONFIGURABLE"      ; break;
-		case 0x8502: ret = "APIERR_LPF_LIST_ALREADY_CONFIGURED"    ; break;
-		case 0x8503: ret = "APIERR_LPF_INVALID_FID_LOCATION"       ; break;
-		case 0x8504: ret = "APIERR_LPF_INVALID_XY"                 ; break;
-		case 0x8505: ret = "APIERR_LPF_LIST_SIZE_EXCEEDED"         ; break;
+        // C-API error codes
+        case 0x8100:
+            ret = "APIERR_ACTIVATION_HELLO_FAILED";
+            break;
+        case 0x8101:
+            ret = "APIERR_INIT_WRONG_CLK_FREQ";
+            break;
+        case 0x8200:
+            ret = "APIERR_FG_TRM_ERROR";
+            break;
+        case 0x8201:
+            ret = "APIERR_FG_WATCHDOG_ERROR";
+            break;
+        case 0x8300:
+            ret = "APIERR_BG_PROC_ERROR";
+            break;
+        case 0x8301:
+            ret = "APIERR_BG_ERR_EXEC";
+            break;
+        case 0x8400:
+            ret = "APIERR_MEM_NOT_A_BASE_ADDRESS";
+            break;
+        case 0x8401:
+            ret = "APIERR_MEM_CACHE_SIZE_EXCEEDED";
+            break;
+        case 0x8402:
+            ret = "APIERR_MEM_CACHE_NOT_INITIALIZED";
+            break;
+        case 0x8403:
+            ret = "APIERR_MEM_CACHE_WRONG_BASE";
+            break;
+        case 0x8404:
+            ret = "APIERR_MEM_CACHE_OUT_OF_SIZE";
+            break;
+        case 0x8405:
+            ret = "APIERR_MEM_CACHE_WRONG_CS";
+            break;
+        case 0x8500:
+            ret = "APIERR_LPF_DATA_SIZE_EXCEEDED";
+            break;
+        case 0x8501:
+            ret = "APIERR_LPF_LIST_NOT_CONFIGURABLE";
+            break;
+        case 0x8502:
+            ret = "APIERR_LPF_LIST_ALREADY_CONFIGURED";
+            break;
+        case 0x8503:
+            ret = "APIERR_LPF_INVALID_FID_LOCATION";
+            break;
+        case 0x8504:
+            ret = "APIERR_LPF_INVALID_XY";
+            break;
+        case 0x8505:
+            ret = "APIERR_LPF_LIST_SIZE_EXCEEDED";
+            break;
 
-		// DLL error codes
-		case 0x9000: ret = "DLLERR_OPEN_CONNECTION_FIRST"          ; break;
-		case 0x9001: ret = "DLLERR_OPEN_ARGUMENT_NOT_OK"           ; break;
-		case 0x9002: ret = "DLLERR_FTDI_DLL_NOT_FOUND"             ; break;
-		case 0x9003: ret = "DLLERR_DLL_USB_CONNECTION_ALREADY_OPEN"; break;
-		case 0x9004: ret = "DLLERR_EVALBOARD_NOT_FOUND_ON_USB"     ; break;
-		case 0x9005: ret = "DLLERR_EVALBOARD_NOT_CONNECTED"        ; break;
-		case 0x9006: ret = "DLLERR_GUI_USB_CONNECTION_NOT_OPEN"    ; break;
-		case 0x9007: ret = "DLLERR_GUI_NOT_OPEN_ANY_MORE"          ; break;
-		case 0x9008: ret = "DLLERR_WRONG_ADDRESS"                  ; break;
-		case 0x9009: ret = "DLLERR_WRONG_API_VERSION"              ; break;
-		default: ret = "ERR_UNKNOWN";
-	}
+        // DLL error codes
+        case 0x9000:
+            ret = "DLLERR_OPEN_CONNECTION_FIRST";
+            break;
+        case 0x9001:
+            ret = "DLLERR_OPEN_ARGUMENT_NOT_OK";
+            break;
+        case 0x9002:
+            ret = "DLLERR_FTDI_DLL_NOT_FOUND";
+            break;
+        case 0x9003:
+            ret = "DLLERR_DLL_USB_CONNECTION_ALREADY_OPEN";
+            break;
+        case 0x9004:
+            ret = "DLLERR_EVALBOARD_NOT_FOUND_ON_USB";
+            break;
+        case 0x9005:
+            ret = "DLLERR_EVALBOARD_NOT_CONNECTED";
+            break;
+        case 0x9006:
+            ret = "DLLERR_GUI_USB_CONNECTION_NOT_OPEN";
+            break;
+        case 0x9007:
+            ret = "DLLERR_GUI_NOT_OPEN_ANY_MORE";
+            break;
+        case 0x9008:
+            ret = "DLLERR_WRONG_ADDRESS";
+            break;
+        case 0x9009:
+            ret = "DLLERR_WRONG_API_VERSION";
+            break;
+        default:
+            ret = "ERR_UNKNOWN";
+    }
 
-	return ret;
+    return ret;
 }

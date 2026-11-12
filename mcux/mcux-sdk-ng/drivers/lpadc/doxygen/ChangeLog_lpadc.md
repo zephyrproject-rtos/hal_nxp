@@ -1,5 +1,20 @@
 # LPADC
 
+## [2.12.0]
+
+- Improvements
+  - Added the `FSL_FEATURE_LPADC_HAS_CFG_REFSEL` feature macro and used it to gate
+    `CFG[REFSEL]`, the `lpadc_reference_voltage_source_t` enum and the
+    `lpadc_config_t::referenceVoltageSource` member, so SoCs whose LPADC has no
+    reference voltage select field in CFG build and no longer expose an unavailable
+    setting.
+
+## [2.11.1]
+
+- Bug Fixes
+  - Fixed a MISRA C-2012 Rule 10.4 violation in `LPADC_SetConvTriggerConfig`, where the
+    unsigned `triggerId` was compared against the signed `FSL_FEATURE_LPADC_TCTRL_COUNT`.
+
 ## [2.11.0]
 
 - New Features

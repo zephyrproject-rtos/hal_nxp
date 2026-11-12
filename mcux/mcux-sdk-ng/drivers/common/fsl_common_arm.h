@@ -1162,7 +1162,14 @@ static inline bool _SDK_AtomicLocalCompareAndSet1Byte(volatile uint8_t *addr, ui
 #endif
             return false;
         }
-    } while (0U != (__STREXB((newValue), (addr))));
+    /*
+     * $Branch Coverage Justification$
+     * (0U != (__STREXB((newValue), (addr)))) not covered. Whether the exclusive
+     * store is interrupted and the retry branch is taken depends on interrupt
+     * timing during the test run, so coverage of this branch is not guaranteed
+     * across all test executions.
+     */
+    } while (0U != (__STREXB((newValue), (addr)))); /* GCOVR_EXCL_BR_LINE */
 
     return true;
     
@@ -1187,7 +1194,14 @@ static inline bool _SDK_AtomicLocalCompareAndSet2Byte(volatile uint16_t *addr, u
 #endif
             return false;
         }
-    } while (0U != (__STREXH((newValue), (addr))));
+    /*
+     * $Branch Coverage Justification$
+     * (0U != (__STREXH((newValue), (addr)))) not covered. Whether the exclusive
+     * store is interrupted and the retry branch is taken depends on interrupt
+     * timing during the test run, so coverage of this branch is not guaranteed
+     * across all test executions.
+     */
+    } while (0U != (__STREXH((newValue), (addr)))); /* GCOVR_EXCL_BR_LINE */
 
     return true;
 }
@@ -1211,7 +1225,14 @@ static inline bool _SDK_AtomicLocalCompareAndSet4Byte(volatile uint32_t *addr, u
 #endif
             return false;
         }
-    } while (0U != (__STREXW((newValue), (addr))));
+    /*
+     * $Branch Coverage Justification$
+     * (0U != (__STREXW((newValue), (addr)))) not covered. Whether the exclusive
+     * store is interrupted and the retry branch is taken depends on interrupt
+     * timing during the test run, so coverage of this branch is not guaranteed
+     * across all test executions.
+     */
+    } while (0U != (__STREXW((newValue), (addr)))); /* GCOVR_EXCL_BR_LINE */
 
     return true;
 }
@@ -1223,7 +1244,14 @@ static inline uint8_t _SDK_AtomicLocalTestAndSet1Byte(volatile uint8_t *addr, ui
     do
     {
         s_old = __LDREXB(addr);
-    } while (0U != (__STREXB((newValue), (addr))));
+    /*
+     * $Branch Coverage Justification$
+     * (0U != (__STREXB((newValue), (addr)))) not covered. Whether the exclusive
+     * store is interrupted and the retry branch is taken depends on interrupt
+     * timing during the test run, so coverage of this branch is not guaranteed
+     * across all test executions.
+     */
+    } while (0U != (__STREXB((newValue), (addr)))); /* GCOVR_EXCL_BR_LINE */
 
     return s_old;
 }
@@ -1235,7 +1263,14 @@ static inline uint16_t _SDK_AtomicLocalTestAndSet2Byte(volatile uint16_t *addr, 
     do
     {
         s_old = __LDREXH(addr);
-    } while (0U != (__STREXH((newValue), (addr))));
+    /*
+     * $Branch Coverage Justification$
+     * (0U != (__STREXH((newValue), (addr)))) not covered. Whether the exclusive
+     * store is interrupted and the retry branch is taken depends on interrupt
+     * timing during the test run, so coverage of this branch is not guaranteed
+     * across all test executions.
+     */
+    } while (0U != (__STREXH((newValue), (addr)))); /* GCOVR_EXCL_BR_LINE */
 
     return s_old;
 }
@@ -1247,7 +1282,14 @@ static inline uint32_t _SDK_AtomicLocalTestAndSet4Byte(volatile uint32_t *addr, 
     do
     {
         s_old = __LDREXW(addr);
-    } while (0U != (__STREXW((newValue), (addr))));
+    /*
+     * $Branch Coverage Justification$
+     * (0U != (__STREXW((newValue), (addr)))) not covered. Whether the exclusive
+     * store is interrupted and the retry branch is taken depends on interrupt
+     * timing during the test run, so coverage of this branch is not guaranteed
+     * across all test executions.
+     */
+    } while (0U != (__STREXW((newValue), (addr)))); /* GCOVR_EXCL_BR_LINE */
 
     return s_old;
 }

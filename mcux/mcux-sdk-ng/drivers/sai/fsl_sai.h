@@ -46,7 +46,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 4, 11)) /*!< Version 2.4.11 */
+#define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 4, 12)) /*!< Version 2.4.12 */
 /*! @} */
 
 /*! @brief _sai_status_t, SAI return status.*/

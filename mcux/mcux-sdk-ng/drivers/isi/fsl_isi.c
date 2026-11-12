@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020-2025 NXP
+ * Copyright 2016-2017, 2020-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -278,13 +278,22 @@ void ISI_SetConfig(ISI_Type *base, const isi_config_t *config)
 
     /* Set control bit fields in register CTRL. */
     reg = base->CHNL[ISI_CHNL_INDEX].CTRL;
-    reg &= ~(ISI_CTRL_CHNL_BYPASS_MASK | ISI_CTRL_CHAIN_BUF_MASK | ISI_CTRL_VC_ID_0_MASK | ISI_CTRL_SRC_TYPE_MASK | ISI_CTRL_SRC_MASK);
+#if defined(FSL_FEATURE_ISI_SUPPORT_DEST) && FSL_FEATURE_ISI_SUPPORT_DEST
+    reg &= ~(ISI_CTRL_CHNL_BYPASS_MASK | ISI_CTRL_CHAIN_BUF_MASK | ISI_CTRL_VC_ID_0_MASK |
+        ISI_CTRL_SRC_TYPE_MASK | ISI_CTRL_SRC_MASK | ISI_CTRL_DEST_MASK);
+#else
+    reg &= ~(ISI_CTRL_CHNL_BYPASS_MASK | ISI_CTRL_CHAIN_BUF_MASK | ISI_CTRL_VC_ID_0_MASK |
+        ISI_CTRL_SRC_TYPE_MASK | ISI_CTRL_SRC_MASK);
+#endif
 
 #if defined(ISI_CTRL_BLANK_PXL_MASK)
     reg &= ~(ISI_CTRL_BLANK_PXL_MASK);
 #endif
 
     reg |= ISI_CTRL_CHNL_BYPASS(config->isChannelBypassed ? 1 : 0) | ISI_CTRL_CHAIN_BUF(config->chainMode) |
+#if defined(FSL_FEATURE_ISI_SUPPORT_DEST) && FSL_FEATURE_ISI_SUPPORT_DEST
+           ISI_CTRL_DEST((uint32_t)config->outputDest) |
+#endif
            ISI_CTRL_VC_ID_0(config->mipiChannel) | ISI_CTRL_SRC_TYPE(config->isSourceMemory) | ISI_CTRL_SRC(config->sourcePort);
 
 #if defined(ISI_CTRL_BLANK_PXL_MASK)
@@ -334,6 +343,7 @@ void ISI_SetConfig(ISI_Type *base, const isi_config_t *config)
     config->inputHeight = 1080U;
     config->inputWidth = 1920U;
     config->outputFormat = kISI_OutputRGBA8888;
+    config->outputDest = kISI_OutputDestMemory;
     config->outputLinePitchBytes = 0U;
     config->thresholdY = kISI_ThresholdDisable;
     config->thresholdU = kISI_ThresholdDisable;
@@ -364,6 +374,9 @@ void ISI_GetDefaultConfig(isi_config_t *config)
     config->thresholdY           = kISI_ThresholdDisable;
     config->thresholdU           = kISI_ThresholdDisable;
     config->thresholdV           = kISI_ThresholdDisable;
+#if defined(FSL_FEATURE_ISI_SUPPORT_DEST) && FSL_FEATURE_ISI_SUPPORT_DEST
+    config->outputDest           = kISI_OutputDestMemory;
+#endif
 }
 
 /*!
@@ -558,28 +571,28 @@ void ISI_SetRegionAlphaConfig(ISI_Type *base, uint8_t index, const isi_region_al
         case ISI_ROI_INDEX_0:
             base->CHNL[ISI_CHNL_INDEX].ROI_0_ALPHA = (base->CHNL[ISI_CHNL_INDEX].ROI_0_ALPHA & ~ISI_ROI_0_ALPHA_ALPHA_EN_MASK) |
                                                      ISI_ROI_0_ALPHA_ALPHA(config->alpha);
-                    
+
             base->CHNL[ISI_CHNL_INDEX].ROI_0_ULC = ISI_ROI_0_ULC_X(config->upperLeftX) | ISI_ROI_0_ULC_Y(config->upperLeftY);
             base->CHNL[ISI_CHNL_INDEX].ROI_0_LRC = ISI_ROI_0_LRC_X(config->lowerRightX) | ISI_ROI_0_LRC_Y(config->lowerRightY);
             break;
         case ISI_ROI_INDEX_1:
             base->CHNL[ISI_CHNL_INDEX].ROI_1_ALPHA = (base->CHNL[ISI_CHNL_INDEX].ROI_1_ALPHA & ~ISI_ROI_1_ALPHA_ALPHA_EN_MASK) |
                                                      ISI_ROI_1_ALPHA_ALPHA(config->alpha);
-                    
+
             base->CHNL[ISI_CHNL_INDEX].ROI_1_ULC = ISI_ROI_1_ULC_X(config->upperLeftX) | ISI_ROI_1_ULC_Y(config->upperLeftY);
             base->CHNL[ISI_CHNL_INDEX].ROI_1_LRC = ISI_ROI_1_LRC_X(config->lowerRightX) | ISI_ROI_1_LRC_Y(config->lowerRightY);
             break;
         case ISI_ROI_INDEX_2:
             base->CHNL[ISI_CHNL_INDEX].ROI_2_ALPHA = (base->CHNL[ISI_CHNL_INDEX].ROI_2_ALPHA & ~ISI_ROI_2_ALPHA_ALPHA_EN_MASK) |
                                                      ISI_ROI_2_ALPHA_ALPHA(config->alpha);
-                    
+
             base->CHNL[ISI_CHNL_INDEX].ROI_2_ULC = ISI_ROI_2_ULC_X(config->upperLeftX) | ISI_ROI_2_ULC_Y(config->upperLeftY);
             base->CHNL[ISI_CHNL_INDEX].ROI_2_LRC = ISI_ROI_2_LRC_X(config->lowerRightX) | ISI_ROI_2_LRC_Y(config->lowerRightY);
             break;
         case ISI_ROI_INDEX_3:
             base->CHNL[ISI_CHNL_INDEX].ROI_3_ALPHA = (base->CHNL[ISI_CHNL_INDEX].ROI_3_ALPHA & ~ISI_ROI_3_ALPHA_ALPHA_EN_MASK) |
                                                      ISI_ROI_3_ALPHA_ALPHA(config->alpha);
-                    
+
             base->CHNL[ISI_CHNL_INDEX].ROI_3_ULC = ISI_ROI_3_ULC_X(config->upperLeftX) | ISI_ROI_3_ULC_Y(config->upperLeftY);
             base->CHNL[ISI_CHNL_INDEX].ROI_3_LRC = ISI_ROI_3_LRC_X(config->lowerRightX) | ISI_ROI_3_LRC_Y(config->lowerRightY);
             break;

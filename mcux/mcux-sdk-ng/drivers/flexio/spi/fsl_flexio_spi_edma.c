@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2022 NXP
+ * Copyright 2016-2020, 2022, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -76,12 +76,13 @@ static flexio_spi_master_edma_private_handle_t s_edmaPrivateHandle[FLEXIO_SPI_HA
 
 static void FLEXIO_SPI_TxEDMACallback(edma_handle_t *handle, void *param, bool transferDone, uint32_t tcds)
 {
-    tcds                                                      = tcds;
+    (void)tcds;
     flexio_spi_master_edma_private_handle_t *spiPrivateHandle = (flexio_spi_master_edma_private_handle_t *)param;
 
     /* Disable Tx DMA */
     if (transferDone)
     {
+        assert(spiPrivateHandle->base != NULL);
         FLEXIO_SPI_EnableDMA(spiPrivateHandle->base, (uint32_t)kFLEXIO_SPI_TxDmaEnable, false);
 
         /* change the state */
@@ -101,11 +102,13 @@ static void FLEXIO_SPI_TxEDMACallback(edma_handle_t *handle, void *param, bool t
 
 static void FLEXIO_SPI_RxEDMACallback(edma_handle_t *handle, void *param, bool transferDone, uint32_t tcds)
 {
-    tcds                                                      = tcds;
+    (void)tcds;
     flexio_spi_master_edma_private_handle_t *spiPrivateHandle = (flexio_spi_master_edma_private_handle_t *)param;
 
     if (transferDone)
     {
+        assert(spiPrivateHandle->base != NULL);
+
         /* Disable Rx dma */
         FLEXIO_SPI_EnableDMA(spiPrivateHandle->base, (uint32_t)kFLEXIO_SPI_RxDmaEnable, false);
 
@@ -329,11 +332,11 @@ status_t FLEXIO_SPI_MasterTransferCreateHandleEDMA(FLEXIO_SPI_Type *base,
     /* Install callback for Tx/Rx dma channel. */
     if (handle->txHandle != NULL)
     {
-        EDMA_SetCallback(handle->txHandle, FLEXIO_SPI_TxEDMACallback, &s_edmaPrivateHandle[index]);
+        EDMA_SetCallback(handle->txHandle, &FLEXIO_SPI_TxEDMACallback, &s_edmaPrivateHandle[index]);
     }
     if (handle->rxHandle != NULL)
     {
-        EDMA_SetCallback(handle->rxHandle, FLEXIO_SPI_RxEDMACallback, &s_edmaPrivateHandle[index]);
+        EDMA_SetCallback(handle->rxHandle, &FLEXIO_SPI_RxEDMACallback, &s_edmaPrivateHandle[index]);
     }
 
     return kStatus_Success;
@@ -361,7 +364,7 @@ status_t FLEXIO_SPI_MasterTransferEDMA(FLEXIO_SPI_Type *base,
     assert(xfer != NULL);
 
     uint32_t dataMode  = 0;
-    uint16_t timerCmp  = (uint16_t)base->flexioBase->TIMCMP[base->timerIndex[0]];
+    uint16_t timerCmp  = (uint16_t)(base->flexioBase->TIMCMP[base->timerIndex[0]] & 0xFFFFU);
     uint8_t dataFormat = FLEXIO_SPI_XFER_DATA_FORMAT(xfer->flags);
 
     timerCmp &= 0x00FFU;
@@ -442,12 +445,14 @@ status_t FLEXIO_SPI_MasterTransferGetCountEDMA(FLEXIO_SPI_Type *base,
 
     if (handle->rxInProgress)
     {
+        assert(handle->rxHandle != NULL);
         *count =
             (handle->transferSize - (uint32_t)handle->nbytes * EDMA_GetRemainingMajorLoopCount(
                                                                    handle->rxHandle->base, handle->rxHandle->channel));
     }
     else
     {
+        assert(handle->txHandle != NULL);
         *count =
             (handle->transferSize - (uint32_t)handle->nbytes * EDMA_GetRemainingMajorLoopCount(
                                                                    handle->txHandle->base, handle->txHandle->channel));
@@ -467,8 +472,15 @@ void FLEXIO_SPI_MasterTransferAbortEDMA(FLEXIO_SPI_Type *base, flexio_spi_master
     assert(handle != NULL);
 
     /* Disable dma. */
-    EDMA_AbortTransfer(handle->txHandle);
-    EDMA_AbortTransfer(handle->rxHandle);
+    if (handle->txHandle != NULL)
+    {
+        EDMA_AbortTransfer(handle->txHandle);
+    }
+
+    if (handle->rxHandle != NULL)
+    {
+        EDMA_AbortTransfer(handle->rxHandle);
+    }
 
     /* Disable DMA enable bit. */
     FLEXIO_SPI_EnableDMA(base, (uint32_t)kFLEXIO_SPI_DmaAllEnable, false);

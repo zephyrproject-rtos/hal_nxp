@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021,2025 NXP
+ * Copyright 2019-2021,2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_ASRC_DRIVER_VERSION (MAKE_VERSION(2, 0, 7)) /*!< Version 2.0.7 */
+#define FSL_ASRC_DRIVER_VERSION (MAKE_VERSION(2, 0, 8)) /*!< Version 2.0.8 */
 /*! @} */
 
 /*! @brief ASRC fifo depth */

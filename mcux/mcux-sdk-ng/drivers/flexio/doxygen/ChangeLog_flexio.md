@@ -1,5 +1,10 @@
 # FLEXIO
 
+## [2.4.0]
+
+- New Features
+  - Added `FLEXIO_EnableTimerStatusDMA` API.
+
 ## [2.3.2]
 
 - Bug Fixes

@@ -1,5 +1,13 @@
 # FLEXCAN
 
+## [2.16.1]
+
+- Bug Fixes
+  - Remove the unnecessary `CAN_IMASK2_BUF63TO32M_MASK` preprocessor guard and the `maxMB > 32` runtime check in ERRATA_9595 `FLEXCAN_EnterFreezeMode()`.
+  - Fixed ERRATA_9595 `FLEXCAN_EnterFreezeMode()` Bus Off path restoring MCR with HALT=0, causing FlexCAN to exit Freeze mode immediately after soft reset.
+  - Fixed violations of the DEADCODE, CONSTANT_EXPRESSION_RESULT.
+  - Fixed violations of the CERT INT31-C.
+
 ## [2.16.0]
 
 - Improvements

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019,2021 NXP
+ * Copyright 2016-2019,2021,2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -279,7 +279,7 @@ static status_t I2C_InitTransferStateMachineDMA(I2C_Type *base,
                 base->S = (uint8_t)kI2C_IntPendingFlag;
 
                 handle->transfer.subaddressSize--;
-                base->D = (uint8_t)((handle->transfer.subaddress) >> (8U * handle->transfer.subaddressSize));
+                base->D = (uint8_t)(((handle->transfer.subaddress) >> (8U * handle->transfer.subaddressSize)) & 0xFFU);
 
                 /* Wait until data transfer complete. */
 #if I2C_RETRY_TIMES
@@ -416,7 +416,7 @@ void I2C_MasterTransferCreateHandleDMA(I2C_Type *base,
     s_dmaPrivateHandle[instance].base   = base;
     s_dmaPrivateHandle[instance].handle = handle;
 
-    DMA_SetCallback(dmaHandle, (dma_callback)I2C_MasterTransferCallbackDMA, &s_dmaPrivateHandle[instance]);
+    DMA_SetCallback(dmaHandle, (dma_callback)&I2C_MasterTransferCallbackDMA, &s_dmaPrivateHandle[instance]);
 }
 
 /*!
@@ -473,7 +473,7 @@ status_t I2C_MasterTransferDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, 
         if (handle->transfer.direction == kI2C_Read)
         {
             /* Change direction for receive. */
-            base->C1 &= ~((uint8_t)I2C_C1_TX_MASK | (uint8_t)I2C_C1_TXAK_MASK);
+            base->C1 &= (uint8_t)((~(I2C_C1_TX_MASK | I2C_C1_TXAK_MASK)) & 0xFFU);
 
             /* Read dummy to release the bus. */
             (void)base->D;
@@ -497,7 +497,7 @@ status_t I2C_MasterTransferDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, 
             tmpReg = base->C1;
 
             /* Change direction to Rx. */
-            tmpReg &= ~(uint8_t)I2C_C1_TX_MASK;
+            tmpReg &= (uint8_t)((~I2C_C1_TX_MASK) & 0xFFU);
 
             /* Configure send NAK */
             tmpReg |= I2C_C1_TXAK_MASK;

@@ -1,5 +1,13 @@
 # I2C
 
+## [2.0.13]
+
+- Bug Fixes
+  - Fixed CERT-C issues.
+  - Fixed MISRA issues.
+- Improvements
+  - Improved HIS CCM.
+
 ## [2.0.12]
 
 - Bug Fixes

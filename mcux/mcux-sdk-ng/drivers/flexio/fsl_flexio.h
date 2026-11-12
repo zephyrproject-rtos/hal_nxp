@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FlexIO driver version. */
-#define FSL_FLEXIO_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+#define FSL_FLEXIO_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*! @} */
 
 /*! @brief Calculate FlexIO timer trigger.*/
@@ -731,6 +731,32 @@ static inline void FLEXIO_EnableShifterStatusDMA(FLEXIO_Type *base, uint32_t mas
         base->SHIFTSDEN &= ~mask;
     }
 }
+
+#if defined(FSL_FEATURE_FLEXIO_HAS_TIMER_STATUS_DMA) && (FSL_FEATURE_FLEXIO_HAS_TIMER_STATUS_DMA != 0)
+/*!
+ * @brief Enables/disables the timer status DMA
+ *
+ * The DMA request generates when the corresponding TSF is set.
+ *
+ * @note For multiple timer status DMA enables, for example, calculate
+ * the mask by using ((1 << timer index0) | (1 << timer index1))
+ *
+ * @param base FlexIO peripheral base address
+ * @param mask The timer status mask which can be calculated by (1 << timer index)
+ * @param enable True to enable, false to disable.
+ */
+static inline void FLEXIO_EnableTimerStatusDMA(FLEXIO_Type *base, uint32_t mask, bool enable)
+{
+    if (enable)
+    {
+        base->TIMERSDEN |= mask;
+    }
+    else
+    {
+        base->TIMERSDEN &= ~mask;
+    }
+}
+#endif /* FSL_FEATURE_FLEXIO_HAS_TIMER_STATUS_DMA */
 
 /*!
  * @brief Gets the shifter buffer address for the DMA transfer usage.

@@ -20,26 +20,26 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_ENDAT2P2_DRIVER_VERSION (MAKE_VERSION(1, 0, 1)) /*!< Version 1.0.1 */
+#define FSL_ENDAT2P2_DRIVER_VERSION (MAKE_VERSION(1, 0, 2))
 /*! @} */
 
-#define SSI_MODE            0x1
-#define ENDAT_MODE          0x2
+#define SSI_MODE   0x1
+#define ENDAT_MODE 0x2
 
 /*! @name EnDat2.2 clock */
 /*! @{ */
-#define ENDAT2P2_CLK_100M   (100 * 1000 * 1000)
-#define ENDAT2P2_CLK_64M    (64 * 1000 * 1000)
-#define ENDAT2P2_CLK_50M    (50 * 1000 * 1000)
-#define ENDAT2P2_CLK_48M    (48 * 1000 * 1000)
-#define ENDAT2P2_CLK_32M    (32 * 1000 * 1000)
-#define ENDAT2P2_CLK_16M    (16 * 1000 * 1000)
-#define ENDAT2P2_CLK_8M     (8 * 1000 * 1000)
-#define ENDAT2P2_CLK_4M     (4 * 1000 * 1000)
-#define ENDAT2P2_CLK_2M     (2 * 1000 * 1000)
-#define ENDAT2P2_CLK_1M     (1 * 1000 * 1000)
-#define ENDAT2P2_CLK_200K   (200 * 1000)
-#define ENDAT2P2_CLK_100K   (100 * 1000)
+#define ENDAT2P2_CLK_100M (100 * 1000 * 1000)
+#define ENDAT2P2_CLK_64M  (64 * 1000 * 1000)
+#define ENDAT2P2_CLK_50M  (50 * 1000 * 1000)
+#define ENDAT2P2_CLK_48M  (48 * 1000 * 1000)
+#define ENDAT2P2_CLK_32M  (32 * 1000 * 1000)
+#define ENDAT2P2_CLK_16M  (16 * 1000 * 1000)
+#define ENDAT2P2_CLK_8M   (8 * 1000 * 1000)
+#define ENDAT2P2_CLK_4M   (4 * 1000 * 1000)
+#define ENDAT2P2_CLK_2M   (2 * 1000 * 1000)
+#define ENDAT2P2_CLK_1M   (1 * 1000 * 1000)
+#define ENDAT2P2_CLK_200K (200 * 1000)
+#define ENDAT2P2_CLK_100K (100 * 1000)
 /*! @} */
 
 /*! @brief EnDat2.2 addation information */
@@ -56,11 +56,11 @@
 #define ENDAT2P2_ADDINFO_WRN_MASK       (0x1 << 23)
 
 /*! @brief EnDat2.2 addation information 1 */
-#define ENDAT2P2_ADDINFO1_STATUS_POS2_MASK      (0x1 << 0)
-#define ENDAT2P2_ADDINFO1_STATUS_TEST_MASK      (0x1 << 1)
-#define ENDAT2P2_ADDINFO1_STATUS_TEMP1_MASK     (0x1 << 2)
-#define ENDAT2P2_ADDINFO1_STATUS_TEMP2_MASK     (0x1 << 3)
-#define ENDAT2P2_ADDINFO1_STATUS_SENSORS_MASK   (0x1 << 4)
+#define ENDAT2P2_ADDINFO1_STATUS_POS2_MASK    (0x1 << 0)
+#define ENDAT2P2_ADDINFO1_STATUS_TEST_MASK    (0x1 << 1)
+#define ENDAT2P2_ADDINFO1_STATUS_TEMP1_MASK   (0x1 << 2)
+#define ENDAT2P2_ADDINFO1_STATUS_TEMP2_MASK   (0x1 << 3)
+#define ENDAT2P2_ADDINFO1_STATUS_SENSORS_MASK (0x1 << 4)
 
 /*! @brief EnDat2.2 addation information 2 */
 #define ENDAT2P2_ADDINFO2_STATUS_COMMUTATION_MASK  (0x1 << 0)
@@ -72,23 +72,23 @@
 #define ENDAT2P2_ADDINFO2_STATUS_TIMESTAMP_MASK    (0x1 << 7)
 
 /*! @brief EnDat2.2 operating status */
-#define ENDAT2P2_OPT_ERR_LIGHTING_MASk          (1 << 0x0)
-#define ENDAT2P2_OPT_ERR_SIGNAL_AMPLITUDE_MASk  (1 << 0x1)
-#define ENDAT2P2_OPT_ERR_POSITION_MASk          (1 << 0x2)
-#define ENDAT2P2_OPT_ERR_OVERVOLTAGE_MASk       (1 << 0x3)
-#define ENDAT2P2_OPT_ERR_UNDERVLOTAGE_MASk      (1 << 0x4)
-#define ENDAT2P2_OPT_ERR_OVERCURRENT_MASk       (1 << 0x5)
-#define ENDAT2P2_OPT_ERR_BATTERY_MASk           (1 << 0x6)
+#define ENDAT2P2_OPT_ERR_LIGHTING_MASk         (1 << 0x0)
+#define ENDAT2P2_OPT_ERR_SIGNAL_AMPLITUDE_MASk (1 << 0x1)
+#define ENDAT2P2_OPT_ERR_POSITION_MASk         (1 << 0x2)
+#define ENDAT2P2_OPT_ERR_OVERVOLTAGE_MASk      (1 << 0x3)
+#define ENDAT2P2_OPT_ERR_UNDERVLOTAGE_MASk     (1 << 0x4)
+#define ENDAT2P2_OPT_ERR_OVERCURRENT_MASk      (1 << 0x5)
+#define ENDAT2P2_OPT_ERR_BATTERY_MASk          (1 << 0x6)
 
-#define ENDAT2P2_OPT_WARN_FREQ_COLLISION_MASk   (1 << 0x0)
-#define ENDAT2P2_OPT_WARN_TEMP_EXCEEDED_MASk    (1 << 0x1)
-#define ENDAT2P2_OPT_WARN_LIGHT_RESERVE_MASk    (1 << 0x2)
-#define ENDAT2P2_OPT_WARN_BATTERY_CHARGE_MASk   (1 << 0x3)
-#define ENDAT2P2_OPT_WARN_REGERNVE_POINT_MASk   (1 << 0x4)
-#define ENDAT2P2_OPT_WARN_CYCLIC_MODE_MASk      (1 << 0x5)
-#define ENDAT2P2_OPT_WARN_LIMIT_POSITION_MASk   (1 << 0x6)
-#define ENDAT2P2_OPT_WARN_STANDBY_MASk          (1 << 0x7)
-#define ENDAT2P2_OPT_WARN_DIAGNOSTICS_MASk      (1 << 0x8)
+#define ENDAT2P2_OPT_WARN_FREQ_COLLISION_MASk (1 << 0x0)
+#define ENDAT2P2_OPT_WARN_TEMP_EXCEEDED_MASk  (1 << 0x1)
+#define ENDAT2P2_OPT_WARN_LIGHT_RESERVE_MASk  (1 << 0x2)
+#define ENDAT2P2_OPT_WARN_BATTERY_CHARGE_MASk (1 << 0x3)
+#define ENDAT2P2_OPT_WARN_REGERNVE_POINT_MASk (1 << 0x4)
+#define ENDAT2P2_OPT_WARN_CYCLIC_MODE_MASk    (1 << 0x5)
+#define ENDAT2P2_OPT_WARN_LIMIT_POSITION_MASk (1 << 0x6)
+#define ENDAT2P2_OPT_WARN_STANDBY_MASk        (1 << 0x7)
+#define ENDAT2P2_OPT_WARN_DIAGNOSTICS_MASk    (1 << 0x8)
 
 #define ENDAT_NUM_BITS_POSITION_CRC 5
 #define ENDAT_NUM_BITS_F1           1
@@ -99,76 +99,78 @@
 /*! @brief EnDat2.2 mode command */
 typedef enum _ENDAT2P2P2_mode_cmd
 {
-    ENDAT2P2_CMD_SEND_POSITION_VALUE                    = 0x07,
-    ENDAT2P2_CMD_SELECT_MEM_AREA                        = 0x0E,
-    ENDAT2P2_CMD_RECEIVE_PARAMETERS                     = 0x1C,
-    ENDAT2P2_CMD_SEND_PARAMETERS                        = 0x23,
-    ENDAT2P2_CMD_RECEIVE_RESET                          = 0x2A,
-    ENDAT2P2_CMD_SEND_TEST_VALUES                       = 0x15,
-    ENDAT2P2_CMD_RECEIVE_TEST_COMMAND                   = 0x31,
-    ENDAT2P2_CMD_SEND_POSVAL_WITH_ADDINFO               = 0x38,
-    ENDAT2P2_CMD_SEND_POSVAL_WITH_ADDINFO_SEL_MEM       = 0x09,
-    ENDAT2P2_CMD_SEND_POSVAL_WITH_ADDINFO_RECV_PARAM    = 0x1B,
-    ENDAT2P2_CMD_SEND_POSVAL_WITH_ADDINFO_SEND_PARAM    = 0x24,
-    ENDAT2P2_CMD_SEND_POSVAL_WITH_ADDINFO_RECV_ERR_RST  = 0x2D,
-    ENDAT2P2_CMD_SEND_POSVAL_WITH_ADDINFO_RECV_TESTCMD  = 0x36,
-    ENDAT2P2_CMD_RECEIVE_COMMUNICATION_CMD              = 0x12,
+    ENDAT2P2_CMD_SEND_POSITION_VALUE                   = 0x07,
+    ENDAT2P2_CMD_SELECT_MEM_AREA                       = 0x0E,
+    ENDAT2P2_CMD_RECEIVE_PARAMETERS                    = 0x1C,
+    ENDAT2P2_CMD_SEND_PARAMETERS                       = 0x23,
+    ENDAT2P2_CMD_RECEIVE_RESET                         = 0x2A,
+    ENDAT2P2_CMD_SEND_TEST_VALUES                      = 0x15,
+    ENDAT2P2_CMD_RECEIVE_TEST_COMMAND                  = 0x31,
+    ENDAT2P2_CMD_SEND_POSVAL_WITH_ADDINFO              = 0x38,
+    ENDAT2P2_CMD_SEND_POSVAL_WITH_ADDINFO_SEL_MEM      = 0x09,
+    ENDAT2P2_CMD_SEND_POSVAL_WITH_ADDINFO_RECV_PARAM   = 0x1B,
+    ENDAT2P2_CMD_SEND_POSVAL_WITH_ADDINFO_SEND_PARAM   = 0x24,
+    ENDAT2P2_CMD_SEND_POSVAL_WITH_ADDINFO_RECV_ERR_RST = 0x2D,
+    ENDAT2P2_CMD_SEND_POSVAL_WITH_ADDINFO_RECV_TESTCMD = 0x36,
+    ENDAT2P2_CMD_RECEIVE_COMMUNICATION_CMD             = 0x12,
 } endat2p2_mode_cmd_t;
 
 /*! @brief EnDat2.2 MRS code */
-typedef enum _mrs_mode {
+typedef enum _mrs_mode
+{
     /* MRS code for selecting the memory area */
-    MRS_CODE_OPERATING_STATUS                            = 0xB9, /* 4 words */
-    MRS_CODE_PARAM_ENCODER_MANUFACTURER_PAGE0            = 0xA1, /* 12 words */
-    MRS_CODE_PARAM_ENCODER_MANUFACTURER_PAGE1            = 0xA3, /* 16 words */
-    MRS_CODE_PARAM_ENCODER_MANUFACTURER_PAGE2            = 0xA5, /* 16 words */
-    MRS_CODE_PARAM_OPERATING_PARAMS                      = 0xA7, /* 16 words */
-    MRS_CODE_PARAM_OEM_PAGE0                             = 0xA9, /* 64 words */
-    MRS_CODE_PARAM_OEM_PAGE1                             = 0xAB, /* 128 words */
-    MRS_CODE_PARAM_OEM_PAGE2                             = 0xAD, /* 128 words */
-    MRS_CODE_PARAM_OEM_PAGE3                             = 0xAF, /* 128 words */
-    MRS_CODE_COMPENSATION_ENCODER_MANUFACTURER_1         = 0xB1,
-    MRS_CODE_COMPENSATION_ENCODER_MANUFACTURER_2         = 0xB3,
-    MRS_CODE_COMPENSATION_ENCODER_MANUFACTURER_3         = 0xB5,
-    MRS_CODE_COMPENSATION_ENCODER_MANUFACTURER_4         = 0xB7,
-    MRS_CODE_PARAM_ENCODER_MFG_ENDAT2P2_2                = 0xBD, /*  64 words */
-    MRS_CODE_PARAM_SECTION2_MEMORY_AREA                  = 0xBF,
-    MRS_CODE_OPERATING_PARAMETERS                        = 0xBB,
+    MRS_CODE_OPERATING_STATUS                    = 0xB9, /* 4 words */
+    MRS_CODE_PARAM_ENCODER_MANUFACTURER_PAGE0    = 0xA1, /* 12 words */
+    MRS_CODE_PARAM_ENCODER_MANUFACTURER_PAGE1    = 0xA3, /* 16 words */
+    MRS_CODE_PARAM_ENCODER_MANUFACTURER_PAGE2    = 0xA5, /* 16 words */
+    MRS_CODE_PARAM_OPERATING_PARAMS              = 0xA7, /* 16 words */
+    MRS_CODE_PARAM_OEM_PAGE0                     = 0xA9, /* 64 words */
+    MRS_CODE_PARAM_OEM_PAGE1                     = 0xAB, /* 128 words */
+    MRS_CODE_PARAM_OEM_PAGE2                     = 0xAD, /* 128 words */
+    MRS_CODE_PARAM_OEM_PAGE3                     = 0xAF, /* 128 words */
+    MRS_CODE_COMPENSATION_ENCODER_MANUFACTURER_1 = 0xB1,
+    MRS_CODE_COMPENSATION_ENCODER_MANUFACTURER_2 = 0xB3,
+    MRS_CODE_COMPENSATION_ENCODER_MANUFACTURER_3 = 0xB5,
+    MRS_CODE_COMPENSATION_ENCODER_MANUFACTURER_4 = 0xB7,
+    MRS_CODE_PARAM_ENCODER_MFG_ENDAT2P2_2        = 0xBD, /*  64 words */
+    MRS_CODE_PARAM_SECTION2_MEMORY_AREA          = 0xBF,
+    MRS_CODE_OPERATING_PARAMETERS                = 0xBB,
 
     /* MRS code for selecting the additional data */
-    MRS_CODE_ADDITIONAL_INFO1_WITHOUT_DATA              = 0x40,
-    MRS_CODE_ADDITIONAL_INFO1_DIAGNOSTIC                = 0x41,
-    MRS_CODE_ADDITIONAL_INFO1_POSVAL2_WORD1_LSB         = 0x42,
-    MRS_CODE_ADDITIONAL_INFO1_POSVAL2_WORD2             = 0x43,
-    MRS_CODE_ADDITIONAL_INFO1_POSVAL2_WORD3_MSB         = 0x44,
-    MRS_CODE_ADDITIONAL_INFO1_ACK_MEM_LSB               = 0x45,
-    MRS_CODE_ADDITIONAL_INFO1_ACK_MEM_MSB               = 0x46,
-    MRS_CODE_ADDITIONAL_INFO1_ACK_MRS_CODE              = 0x47,
-    MRS_CODE_ADDITIONAL_INFO1_ACK_TEST_CMD              = 0x48,
-    MRS_CODE_ADDITIONAL_INFO1_TESTVAL_WORD1_LSB         = 0x49,
-    MRS_CODE_ADDITIONAL_INFO1_TESTVAL_WORD2             = 0x4A,
-    MRS_CODE_ADDITIONAL_INFO1_TESTVAL_WORD3_MSB         = 0x4B,
-    MRS_CODE_ADDITIONAL_INFO1_TEMPERATURE1              = 0x4C,
-    MRS_CODE_ADDITIONAL_INFO1_TEMPERATURE2              = 0x4D,
-    MRS_CODE_ADDITIONAL_INFO1_ADTL_SENSORS              = 0x4E,
-    MRS_CODE_ADDITIONAL_INFO1_STOP_DATA                 = 0x4F,
+    MRS_CODE_ADDITIONAL_INFO1_WITHOUT_DATA      = 0x40,
+    MRS_CODE_ADDITIONAL_INFO1_DIAGNOSTIC        = 0x41,
+    MRS_CODE_ADDITIONAL_INFO1_POSVAL2_WORD1_LSB = 0x42,
+    MRS_CODE_ADDITIONAL_INFO1_POSVAL2_WORD2     = 0x43,
+    MRS_CODE_ADDITIONAL_INFO1_POSVAL2_WORD3_MSB = 0x44,
+    MRS_CODE_ADDITIONAL_INFO1_ACK_MEM_LSB       = 0x45,
+    MRS_CODE_ADDITIONAL_INFO1_ACK_MEM_MSB       = 0x46,
+    MRS_CODE_ADDITIONAL_INFO1_ACK_MRS_CODE      = 0x47,
+    MRS_CODE_ADDITIONAL_INFO1_ACK_TEST_CMD      = 0x48,
+    MRS_CODE_ADDITIONAL_INFO1_TESTVAL_WORD1_LSB = 0x49,
+    MRS_CODE_ADDITIONAL_INFO1_TESTVAL_WORD2     = 0x4A,
+    MRS_CODE_ADDITIONAL_INFO1_TESTVAL_WORD3_MSB = 0x4B,
+    MRS_CODE_ADDITIONAL_INFO1_TEMPERATURE1      = 0x4C,
+    MRS_CODE_ADDITIONAL_INFO1_TEMPERATURE2      = 0x4D,
+    MRS_CODE_ADDITIONAL_INFO1_ADTL_SENSORS      = 0x4E,
+    MRS_CODE_ADDITIONAL_INFO1_STOP_DATA         = 0x4F,
 
-    MRS_CODE_ADDITIONAL_INFO2_WITHOUT_DATA              = 0x50,
-    MRS_CODE_ADDITIONAL_INFO2_COMMUNICATION             = 0x51,
-    MRS_CODE_ADDITIONAL_INFO2_ACCELERATION              = 0x52,
-    MRS_CODE_ADDITIONAL_INFO2_COMM_AND_ACCLN            = 0x53,
-    MRS_CODE_ADDITIONAL_INFO2_LIMIT_POS_SIGNAL          = 0x54,
-    MRS_CODE_ADDITIONAL_INFO2_LPS_AND_ACCLN             = 0x55,
-    MRS_CODE_ADDITIONAL_INFO2_ASYNCPOSVAL2_WORD1_LSB    = 0x56,
-    MRS_CODE_ADDITIONAL_INFO2_ASYNCPOSVAL2_WORD2        = 0x57,
-    MRS_CODE_ADDITIONAL_INFO2_ASYNCPOSVAL2_WORD3_MSB    = 0x58,
-    MRS_CODE_ADDITIONAL_INFO2_OPSTATUS_ERRSOURCE        = 0x59,
-    MRS_CODE_ADDITIONAL_INFO2_TIMESTAMP                 = 0x5B,
-    MRS_CODE_ADDITIONAL_INFO2_STOP_DATA                 = 0x5F,
+    MRS_CODE_ADDITIONAL_INFO2_WITHOUT_DATA           = 0x50,
+    MRS_CODE_ADDITIONAL_INFO2_COMMUNICATION          = 0x51,
+    MRS_CODE_ADDITIONAL_INFO2_ACCELERATION           = 0x52,
+    MRS_CODE_ADDITIONAL_INFO2_COMM_AND_ACCLN         = 0x53,
+    MRS_CODE_ADDITIONAL_INFO2_LIMIT_POS_SIGNAL       = 0x54,
+    MRS_CODE_ADDITIONAL_INFO2_LPS_AND_ACCLN          = 0x55,
+    MRS_CODE_ADDITIONAL_INFO2_ASYNCPOSVAL2_WORD1_LSB = 0x56,
+    MRS_CODE_ADDITIONAL_INFO2_ASYNCPOSVAL2_WORD2     = 0x57,
+    MRS_CODE_ADDITIONAL_INFO2_ASYNCPOSVAL2_WORD3_MSB = 0x58,
+    MRS_CODE_ADDITIONAL_INFO2_OPSTATUS_ERRSOURCE     = 0x59,
+    MRS_CODE_ADDITIONAL_INFO2_TIMESTAMP              = 0x5B,
+    MRS_CODE_ADDITIONAL_INFO2_STOP_DATA              = 0x5F,
 } mrs_mode_t;
 
 /*! @brief EnDat2.2 memory address */
-typedef enum _endat2p2_mem_word_addr {
+typedef enum _endat2p2_mem_word_addr
+{
     ENDAT2P2_MEM_WORD_0  = 0,
     ENDAT2P2_MEM_WORD_1  = 1,
     ENDAT2P2_MEM_WORD_2  = 2,
@@ -196,27 +198,29 @@ typedef enum _endat2p2_mem_word_addr {
 #define ENDAT2P2_TYPE_ROTARY_SHIFT       3
 
 /*! @brief EnDat2.2 encoder type */
-typedef enum  _encoder_type {
-    ENDAT2P2_ENCODER_TYPE_INCR_LINEAR_WITHOUT_DCRM            = 0b0000,
-    ENDAT2P2_ENCODER_TYPE_INCR_LINEAR_WITH_DCRM               = 0b0001,
-    ENDAT2P2_ENCODER_TYPE_INCR_LINEAR_WITH_BAT_WITHOUT_DCRM   = 0b0010,
-    ENDAT2P2_ENCODER_TYPE_INCR_LINEAR_WITH_BAT_WITH_DCRM      = 0b0011,
-    ENDAT2P2_ENCODER_TYPE_ABSO_LINEAR                         = 0b0100,
-    ENDAT2P2_ENCODER_TYPE_ABSO_LINEAR_WITH_CYCLIC             = 0x0110,
-    ENDAT2P2_ENCODER_TYPE_NOTE_TOUCH_D                        = 0x0101,
-    ENDAT2P2_ENCODER_TYPE_NOTE_D                              = 0x0111,
-    ENDAT2P2_ENCODER_TYPE_INCR_ROTARY_WITHOUT_DCRM            = 0b1000,
-    ENDAT2P2_ENCODER_TYPE_INCR_ROTARY_WITH_DCRM               = 0b1001,
-    ENDAT2P2_ENCODER_TYPE_INCR_ROTARY_WITH_BAT_WITHOUT_DCRM   = 0b1010,
-    ENDAT2P2_ENCODER_TYPE_INCR_ROTARY_WITH_BAT_WITH_DCRM      = 0b1011,
-    ENDAT2P2_ENCODER_TYPE_ABSO_ROTARY_SINGLETURN              = 0b1100,
-    ENDAT2P2_ENCODER_TYPE_ABSO_ROTARY_MULTITURN_WITH_BAT      = 0b1101,
-    ENDAT2P2_ENCODER_TYPE_ABSO_ROTARY_MULTITURN_WITH_GEARS    = 0b1110,
-    ENDAT2P2_ENCODER_TYPE_EIB                                 = 0b1111,
+typedef enum _encoder_type
+{
+    ENDAT2P2_ENCODER_TYPE_INCR_LINEAR_WITHOUT_DCRM          = 0b0000,
+    ENDAT2P2_ENCODER_TYPE_INCR_LINEAR_WITH_DCRM             = 0b0001,
+    ENDAT2P2_ENCODER_TYPE_INCR_LINEAR_WITH_BAT_WITHOUT_DCRM = 0b0010,
+    ENDAT2P2_ENCODER_TYPE_INCR_LINEAR_WITH_BAT_WITH_DCRM    = 0b0011,
+    ENDAT2P2_ENCODER_TYPE_ABSO_LINEAR                       = 0b0100,
+    ENDAT2P2_ENCODER_TYPE_ABSO_LINEAR_WITH_CYCLIC           = 0x0110,
+    ENDAT2P2_ENCODER_TYPE_NOTE_TOUCH_D                      = 0x0101,
+    ENDAT2P2_ENCODER_TYPE_NOTE_D                            = 0x0111,
+    ENDAT2P2_ENCODER_TYPE_INCR_ROTARY_WITHOUT_DCRM          = 0b1000,
+    ENDAT2P2_ENCODER_TYPE_INCR_ROTARY_WITH_DCRM             = 0b1001,
+    ENDAT2P2_ENCODER_TYPE_INCR_ROTARY_WITH_BAT_WITHOUT_DCRM = 0b1010,
+    ENDAT2P2_ENCODER_TYPE_INCR_ROTARY_WITH_BAT_WITH_DCRM    = 0b1011,
+    ENDAT2P2_ENCODER_TYPE_ABSO_ROTARY_SINGLETURN            = 0b1100,
+    ENDAT2P2_ENCODER_TYPE_ABSO_ROTARY_MULTITURN_WITH_BAT    = 0b1101,
+    ENDAT2P2_ENCODER_TYPE_ABSO_ROTARY_MULTITURN_WITH_GEARS  = 0b1110,
+    ENDAT2P2_ENCODER_TYPE_EIB                               = 0b1111,
 } encode_type_t;
 
 /*! @brief EnDat2.2 device */
-typedef struct _endat2p2_dev {
+typedef struct _endat2p2_dev
+{
     ENDAT2P2_Type *base;
     uint32_t fsys;
     uint32_t ftclk;
@@ -242,11 +246,11 @@ typedef struct _endat2p2_dev {
 typedef struct _endat2p2_data
 {
     /* position */
-    uint64_t  recvd1;
+    uint64_t recvd1;
     /* addinfo 2 */
-    uint32_t  recvd2;
+    uint32_t recvd2;
     /* addinfo 1 */
-    uint32_t  recvd3;
+    uint32_t recvd3;
 } endat2p2_data_t;
 
 /*! @brief EnDat2.2 position value */
@@ -268,8 +272,8 @@ typedef struct endat2p2_position_addinfo
 /*! @brief EnDat2.2 memory addr and parameter */
 typedef struct _endat2p2_addr_param
 {
-    uint8_t     address;
-    uint16_t    param;
+    uint8_t address;
+    uint16_t param;
 } endat2p2_addr_param_t;
 
 /*! @brief EnDat2.2 encoder received data */
@@ -277,9 +281,9 @@ typedef struct _endat2p2_recv_data
 {
     union
     {
-        endat2p2_position_t         position;
+        endat2p2_position_t position;
         endat2p2_position_addinfo_t position_addinfo;
-        endat2p2_addr_param_t       addr_param;
+        endat2p2_addr_param_t addr_param;
     };
     uint32_t status;
 
@@ -423,8 +427,7 @@ endat2p2_addr_param_t ENDAT2P2_RecvAddrParam(endat2p2_dev_t *dev);
  * @return 0 - successfully get the data
  * @return -EINVAL - invalid mode command
  */
-int ENDAT2P2_RecvData(endat2p2_dev_t *dev, endat2p2_mode_cmd_t cmd,
-                      endat2p2_recv_data_t *data);
+int ENDAT2P2_RecvData(endat2p2_dev_t *dev, endat2p2_mode_cmd_t cmd, endat2p2_recv_data_t *data);
 
 /*!
  * @brief Create the command and write to the send register.
@@ -433,8 +436,7 @@ int ENDAT2P2_RecvData(endat2p2_dev_t *dev, endat2p2_mode_cmd_t cmd,
  * @param mrs_or_addr MRS code or memory address.
  * @param param Parameter of memory.
  */
-void ENDAT2P2_CMDBuild(endat2p2_dev_t *dev, endat2p2_mode_cmd_t cmd,
-                       uint8_t mrs_or_addr, uint16_t param);
+void ENDAT2P2_CMDBuild(endat2p2_dev_t *dev, endat2p2_mode_cmd_t cmd, uint8_t mrs_or_addr, uint16_t param);
 
 /*!
  * @brief trigger master to send out the command.
@@ -455,8 +457,7 @@ void ENDAT2P2_CMDWait(endat2p2_dev_t *dev);
  * @param mrs_or_addr MRS code or memory address.
  * @param param Parameter of memory.
  */
-void ENDAT2P2_CMDProcess(endat2p2_dev_t *dev, endat2p2_mode_cmd_t cmd,
-                         uint8_t msr_or_addr, uint16_t param);
+void ENDAT2P2_CMDProcess(endat2p2_dev_t *dev, endat2p2_mode_cmd_t cmd, uint8_t msr_or_addr, uint16_t param);
 
 /*!
  * @brief Reset encoder
@@ -480,8 +481,7 @@ int ENDAT2P2_GetParam(endat2p2_dev_t *dev, uint8_t page, uint8_t addr);
  * @param addr Memory address.
  * @param data Parameter of memory.
  */
-void ENDAT2P2_SetParam(endat2p2_dev_t *dev, uint8_t page,
-                       uint8_t addr, uint16_t data);
+void ENDAT2P2_SetParam(endat2p2_dev_t *dev, uint8_t page, uint8_t addr, uint16_t data);
 
 /*!
  * @brief Reset encoder and get the position resolution.
@@ -505,8 +505,7 @@ int ENDAT2P2_GetParamWithPos(endat2p2_dev_t *dev, uint8_t page, uint8_t addr);
  * @param addr Memory address.
  * @param data Parameter of memory.
  */
-void ENDAT2P2_SetParamWithPos(endat2p2_dev_t *dev, uint8_t page,
-                              uint8_t addr, uint16_t data);
+void ENDAT2P2_SetParamWithPos(endat2p2_dev_t *dev, uint8_t page, uint8_t addr, uint16_t data);
 
 /*!
  * @brief Get the position resolution.
@@ -569,7 +568,7 @@ void ENDAT2P2_GetStatusAddInfo(endat2p2_dev_t *dev);
  * @param dev EnDat2.2 device handle pointer.
  * @return the value of the encoder error.
  */
-int  ENDAT2P2_GetEncoderError(endat2p2_dev_t *dev);
+int ENDAT2P2_GetEncoderError(endat2p2_dev_t *dev);
 
 /*!
  * @brief Clear the encoder error.
@@ -582,7 +581,7 @@ void ENDAT2P2_ClearEncoderError(endat2p2_dev_t *dev);
  * @param dev EnDat2.2 device handle pointer.
  * @return the value of the encoder warning.
  */
-int  ENDAT2P2_GetEncoderWarning(endat2p2_dev_t *dev);
+int ENDAT2P2_GetEncoderWarning(endat2p2_dev_t *dev);
 
 /*!
  * @brief Clear the encoder warning.
@@ -608,7 +607,7 @@ int ENDAT2P2_InitEncoder(endat2p2_dev_t *dev);
  * @param dev EnDat2.2 device handle pointer.
  * @return the error value.
  */
-int  ENDAT2P2_GetEncoderErrorWithPos(endat2p2_dev_t *dev);
+int ENDAT2P2_GetEncoderErrorWithPos(endat2p2_dev_t *dev);
 
 /*!
  * @brief Clear encoder error with the position value.
@@ -621,7 +620,7 @@ void ENDAT2P2_ClearEncoderErrorWithPos(endat2p2_dev_t *dev);
  * @param dev EnDat2.2 device handle pointer.
  * @return the warning value.
  */
-int  ENDAT2P2_GetEncoderWarningWithPos(endat2p2_dev_t *dev);
+int ENDAT2P2_GetEncoderWarningWithPos(endat2p2_dev_t *dev);
 
 /*!
  * @brief Clear encoder warning with the position value.

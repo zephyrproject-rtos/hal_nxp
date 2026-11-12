@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2020, 2026 NXP
  * All rights reserved.
  *
  *
@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SPDIF_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 9)) /*!< Version 2.0.9 */
+#define FSL_SPDIF_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 10)) /*!< Version 2.0.10 */
 /*! @} */
 
 typedef struct _spdif_edma_handle spdif_edma_handle_t;

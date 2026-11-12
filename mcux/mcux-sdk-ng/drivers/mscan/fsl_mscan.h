@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief MsCAN driver version. */
-#define FSL_MSCAN_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+#define FSL_MSCAN_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
 /*! @} */
 
 /*! @brief MsCAN Rx Message Buffer Mask helper macro. */

@@ -348,10 +348,10 @@ void SDMA_DumpScript(SDMAARM_Type *base, uint32_t srcAddr, void *destAddr, size_
 #if defined FSL_FEATURE_SOC_SPBA_COUNT && (FSL_FEATURE_SOC_SPBA_COUNT > 0)
 bool SDMA_IsPeripheralInSPBA(uint32_t addr)
 {
-    uint32_t spbaNum = FSL_FEATURE_SOC_SPBA_COUNT;
-    uint32_t i       = 0;
+    uint32_t i = 0;
     SPBA_Type *spbaBase;
     SPBA_Type *spbaArray[] = SPBA_BASE_PTRS;
+    uint32_t spbaNum = ARRAY_SIZE(spbaArray);
 
     for (i = 0; i < spbaNum; i++)
     {

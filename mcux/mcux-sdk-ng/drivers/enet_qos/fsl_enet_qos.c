@@ -54,6 +54,16 @@
 #define ENET_QOS_NTOHL(n) __REV(n)
 
 #define ENET_QOS_DMA_CHX_RX_CTRL_RBSZ
+/*! @brief Busy-loop count that lets a MAC config write settle across clock domains before the
+ * same register is written again. Configurable via CONFIG_ENET_QOS_SETMII_DELAY. */
+#ifndef ENET_QOS_SETMII_DELAY
+#ifdef CONFIG_ENET_QOS_SETMII_DELAY
+#define ENET_QOS_SETMII_DELAY (uint32_t) CONFIG_ENET_QOS_SETMII_DELAY
+#else
+#define ENET_QOS_SETMII_DELAY (1000UL)
+#endif
+#endif
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -1371,6 +1381,8 @@ void ENET_QOS_RxBufferFreeAll(ENET_QOS_Type *base, enet_qos_handle_t *handle)
  *
  * note This must be called after all the ENET initilization.
  * And should be called when the ENET receive/transmit is required.
+ * note The MAC transmitter (MAC_Configuration[TE]) is enabled before the transmit DMA
+ * is started as a workaround for errata ERR051222.
  */
 void ENET_QOS_StartRxTx(ENET_QOS_Type *base, uint8_t txRingNum, uint8_t rxRingNum)
 {
@@ -1387,18 +1399,32 @@ void ENET_QOS_StartRxTx(ENET_QOS_Type *base, uint8_t txRingNum, uint8_t rxRingNu
     {
         rxRingNum = ENET_QOS_RING_NUM_MAX;
     }
-    /* Start/Acive the DMA first. */
+    /* Start/Active the RX DMA first. */
     for (index = 0; index < rxRingNum; index++)
     {
         base->DMA_CH[index].DMA_CHX_RX_CTRL |= ENET_QOS_DMA_CHX_RX_CTRL_SR_MASK;
     }
+
+    /*
+     * Errata ERR051222 (GMAC/EMAC: Un-Correctable FSM Timeout Safety Interrupt
+     * incorrectly getting generated due to long waiting FSM states): if the
+     * transmit DMA is started (DMA_CH0_Tx_Control[ST] = 1) while the MAC
+     * transmitter is still disabled (MAC_Configuration[TE] = 0), the transmit
+     * FSM stalls and an FSM timeout interrupt is incorrectly generated.
+     * Workaround: enable the MAC transmitter before starting the transmit DMA.
+     * Enabling the MAC before the DMA is always safe, so this ordering is used
+     * unconditionally. The MAC receiver (RE) is enabled in the same
+     * MAC_CONFIGURATION write to keep a single register access; RE may be set
+     * at any point after the RX DMA has been started and has no timing
+     * dependency on the ERR051222 transmit-side workaround.
+     */
+    base->MAC_CONFIGURATION |= (ENET_QOS_MAC_CONFIGURATION_TE_MASK | ENET_QOS_MAC_CONFIGURATION_RE_MASK);
+
+    /* Start/Active the TX DMA after the MAC transmitter is enabled. */
     for (index = 0; index < txRingNum; index++)
     {
         base->DMA_CH[index].DMA_CHX_TX_CTRL |= ENET_QOS_DMA_CHX_TX_CTRL_ST_MASK;
     }
-
-    /* Enable the RX and TX at same time. */
-    base->MAC_CONFIGURATION |= (ENET_QOS_MAC_CONFIGURATION_TE_MASK | ENET_QOS_MAC_CONFIGURATION_RE_MASK);
 }
 
 /*!
@@ -1801,6 +1827,8 @@ void ENET_QOS_LeaveMulticastGroup(ENET_QOS_Type *base, uint8_t *address)
  * brief Sets the ENET MII speed and duplex.
  *
  * This API is provided to dynamically change the speed and duplex for MAC.
+ * The databook requires speed/duplex to change only while TX/RX are disabled,
+ * so any enabled TE/RE bits are cleared before the change and restored after.
  *
  * param base  ENET peripheral base address.
  * param speed The speed of the RMII mode.
@@ -1810,18 +1838,44 @@ void ENET_QOS_LeaveMulticastGroup(ENET_QOS_Type *base, uint8_t *address)
  */
 status_t ENET_QOS_SetMII(ENET_QOS_Type *base, enet_qos_mii_speed_t speed, enet_qos_mii_duplex_t duplex)
 {
-    uint32_t reg = base->MAC_CONFIGURATION & ~(ENET_QOS_MAC_CONFIGURATION_DM_MASK | ENET_QOS_MAC_CONFIGURATION_PS_MASK |
-                                               ENET_QOS_MAC_CONFIGURATION_FES_MASK);
     enet_qos_mii_mode_t configured_mode = s_enetStates[ENET_QOS_GetInstance(base)].miiMode;
+    uint32_t reg;
+    uint32_t teRe;
 
     if (!ENET_QOS_IsMIIConfigValid(configured_mode, speed))
     {
         return kStatus_InvalidArgument;
     }
 
-    reg |= ENET_QOS_MAC_CONFIGURATION_DM(duplex) | (uint32_t)speed;
+    reg  = base->MAC_CONFIGURATION;
+    teRe = reg & (ENET_QOS_MAC_CONFIGURATION_TE_MASK | ENET_QOS_MAC_CONFIGURATION_RE_MASK);
 
+    if (teRe != 0U)
+    {
+        /* Speed/duplex may only change while TX/RX are disabled; disable and let it settle. */
+        base->MAC_CONFIGURATION = reg & ~(ENET_QOS_MAC_CONFIGURATION_TE_MASK | ENET_QOS_MAC_CONFIGURATION_RE_MASK);
+
+        for (uint32_t i = 0U; i < ENET_QOS_SETMII_DELAY; i++)
+        {
+            __NOP();
+        }
+    }
+
+    reg &= ~(ENET_QOS_MAC_CONFIGURATION_DM_MASK | ENET_QOS_MAC_CONFIGURATION_PS_MASK |
+             ENET_QOS_MAC_CONFIGURATION_FES_MASK | ENET_QOS_MAC_CONFIGURATION_TE_MASK |
+             ENET_QOS_MAC_CONFIGURATION_RE_MASK);
+    reg |= ENET_QOS_MAC_CONFIGURATION_DM(duplex) | (uint32_t)speed;
     base->MAC_CONFIGURATION = reg;
+
+    if (teRe != 0U)
+    {
+        /* Let the write settle, then restore TX/RX. */
+        for (uint32_t i = 0U; i < ENET_QOS_SETMII_DELAY; i++)
+        {
+            __NOP();
+        }
+        base->MAC_CONFIGURATION = reg | teRe;
+    }
 
     return kStatus_Success;
 }
@@ -3498,6 +3552,43 @@ status_t ENET_QOS_Ptp1588PpsSetTrgtTime(ENET_QOS_Type *base,
         return kStatus_ENET_QOS_TrgtBusy;
     }
 
+#if defined(FSL_FEATURE_EMAC_HAS_ERRATA_050595) && (FSL_FEATURE_EMAC_HAS_ERRATA_050595)
+    /*
+     * Errata ERR050595: GMAC/EMAC incorrect pps output generation on target time error.
+     * When the programmed PPS target time is less than the current system time, the pps
+     * output signal is generated incorrectly despite the target being in the past.
+     * Workaround: read the current system time and reject any target time that is not
+     * strictly in the future, so the target time register is never programmed with an
+     * already elapsed time value.
+     *
+     * Note: ERR050595 also lists a second scenario (loss of sub-nanosecond accuracy in
+     * binary rollover mode). That scenario has no code workaround; it is avoided by
+     * configuring the PTP timer for digital rollover (kENET_QOS_DigitalRollover) instead
+     * of binary rollover, which the driver already supports.
+     *
+     * Limitation: this check is best-effort. The system time is sampled here and only
+     * afterwards written to the target time registers. On a preemptive RTOS or on a
+     * multi-core device (for example MCXE32B CM7 core0/core1), an interrupt or context
+     * switch between the sample and the register write may advance the system clock past
+     * the requested target, re-creating the exact errata condition. The erratum itself
+     * requires a future target, so callers should program the target time sufficiently
+     * far ahead (for example at least a few milliseconds) to make this race window
+     * negligible in practice.
+     */
+    {
+        uint64_t currentSecond     = 0U;
+        uint32_t currentNanosecond = 0U;
+
+        ENET_QOS_Ptp1588GetTimer(base, &currentSecond, &currentNanosecond);
+
+        if (((uint64_t)seconds < currentSecond) ||
+            (((uint64_t)seconds == currentSecond) && (nanoseconds <= currentNanosecond)))
+        {
+            return kStatus_InvalidArgument;
+        }
+    }
+#endif
+
     *mac_pps_trgt_ns = ENET_QOS_MAC_PPS0_TARGET_TIME_NANOSECONDS_TTSL0(nanoseconds);
     *mac_pps_trgt_s  = ENET_QOS_MAC_PPS0_TARGET_TIME_SECONDS_TSTRH0(seconds);
 
@@ -3981,8 +4072,47 @@ void ENET_QOS_GetStatistics(ENET_QOS_Type *base, enet_qos_transfer_stats_t *stat
     statistics->statsRxFifoOverflowErr = base->MAC_RX_FIFO_OVERFLOW_PACKETS;
 
     /* Tx statistics */
-    statistics->statsTxFrameCount      = base->MAC_TX_PACKET_COUNT_GOOD_BAD;
-    statistics->statsTxFifoUnderRunErr = base->MAC_TX_UNDERFLOW_ERROR_PACKETS;
+    /* ERR050597: When frame preemption (FPE) is enabled, a frame can be sent as
+     * several preempted fragments. The hardware updates the transmit MAC
+     * management counters (MMC) per fragment rather than per frame, so the whole
+     * transmit MMC block becomes unreliable while FPE is active (for example the
+     * internal byte accumulators overflow once the fragment bytes exceed the
+     * Jabber limit, which in turn corrupts the derived packet counters). The
+     * erratum workaround is therefore to not use any transmit MMC counter while
+     * FPE is enabled. Report 0 for the transmit counters we expose in that case
+     * so callers do not act on corrupted values; the reads resume normally when
+     * FPE is disabled. Note: 0 is not distinguishable from a genuine idle
+     * reading - see the statsTxFrameCount / statsTxFifoUnderRunErr field notes
+     * in fsl_enet_qos.h.
+     */
+    if ((base->MAC_FPE_CTRL_STS & ENET_QOS_MAC_FPE_CTRL_STS_EFPE_MASK) != 0U)
+    {
+        statistics->statsTxFrameCount      = 0U;
+        statistics->statsTxFifoUnderRunErr = 0U;
+    }
+    else
+    {
+        statistics->statsTxFrameCount      = base->MAC_TX_PACKET_COUNT_GOOD_BAD;
+        statistics->statsTxFifoUnderRunErr = base->MAC_TX_UNDERFLOW_ERROR_PACKETS;
+    }
+}
+
+/* ERR050707 (MCXE32B): a fatal bus error (FBE) aborts a DMA access that the MAC cannot recover; the
+   only recovery is a software reset (ENET_QOS_Deinit) followed by a full reconfigure. This helper
+   checks the channel's raw DMA_CHX_STAT (not masked by DMA_CHX_INT_EN) so the error is always detected
+   even when the application never enabled the kENET_QOS_DmaBusErr interrupt. When FBE is set it clears
+   the FBE and abnormal interrupt summary (AIS) flags (write-1-to-clear) and reports
+   kENET_QOS_DmaBusErrEvent so the application can perform the software reset and reconfigure. */
+static inline void ENET_QOS_HandleFbeErrata(ENET_QOS_Type *base, enet_qos_handle_t *handle, uint8_t channel)
+{
+    if ((base->DMA_CH[channel].DMA_CHX_STAT & ENET_QOS_DMA_CHX_STAT_FBE_MASK) != 0U)
+    {
+        base->DMA_CH[channel].DMA_CHX_STAT = ENET_QOS_DMA_CHX_STAT_FBE_MASK | ENET_QOS_DMA_CHX_STAT_AIS_MASK;
+        if (handle->callback != NULL)
+        {
+            handle->callback(base, handle, kENET_QOS_DmaBusErrEvent, channel, handle->userData);
+        }
+    }
 }
 
 /*!
@@ -4015,6 +4145,7 @@ void ENET_QOS_CommonIRQHandler(ENET_QOS_Type *base, enet_qos_handle_t *handle)
             base->DMA_CH[0].DMA_CHX_STAT = ENET_QOS_DMA_CHX_STAT_TI_MASK | ENET_QOS_DMA_CHX_STAT_NIS_MASK;
             ENET_QOS_ReclaimTxDescriptor(base, handle, 0);
         }
+        ENET_QOS_HandleFbeErrata(base, handle, 0);
     }
 #endif /* ENET_QOS_DMA_INTERRUPT_STATUS_DC0IS_MASK */
 
@@ -4038,6 +4169,7 @@ void ENET_QOS_CommonIRQHandler(ENET_QOS_Type *base, enet_qos_handle_t *handle)
             base->DMA_CH[1].DMA_CHX_STAT = ENET_QOS_DMA_CHX_STAT_TI_MASK | ENET_QOS_DMA_CHX_STAT_NIS_MASK;
             ENET_QOS_ReclaimTxDescriptor(base, handle, 1);
         }
+        ENET_QOS_HandleFbeErrata(base, handle, 1);
     }
 #endif /* ENET_QOS_DMA_INTERRUPT_STATUS_DC1IS_MASK */
 
@@ -4061,6 +4193,7 @@ void ENET_QOS_CommonIRQHandler(ENET_QOS_Type *base, enet_qos_handle_t *handle)
             base->DMA_CH[2].DMA_CHX_STAT = ENET_QOS_DMA_CHX_STAT_TI_MASK | ENET_QOS_DMA_CHX_STAT_NIS_MASK;
             ENET_QOS_ReclaimTxDescriptor(base, handle, 2);
         }
+        ENET_QOS_HandleFbeErrata(base, handle, 2);
     }
 #endif /* ENET_QOS_DMA_INTERRUPT_STATUS_DC2IS_MASK */
 
@@ -4084,6 +4217,7 @@ void ENET_QOS_CommonIRQHandler(ENET_QOS_Type *base, enet_qos_handle_t *handle)
             base->DMA_CH[3].DMA_CHX_STAT = ENET_QOS_DMA_CHX_STAT_TI_MASK | ENET_QOS_DMA_CHX_STAT_NIS_MASK;
             ENET_QOS_ReclaimTxDescriptor(base, handle, 3);
         }
+        ENET_QOS_HandleFbeErrata(base, handle, 3);
     }
 #endif /* ENET_QOS_DMA_INTERRUPT_STATUS_DC3IS_MASK */
 

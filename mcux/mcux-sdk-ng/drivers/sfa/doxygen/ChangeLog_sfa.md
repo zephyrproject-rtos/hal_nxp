@@ -1,5 +1,10 @@
 # SFA
 
+## [2.2.0]
+
+- Bug Fixes
+  - Checked the return value of `SFA_StartMeasureFrequency()` and `SFA_StartMeasurePeriod()` in `SFA_MeasureBlocking()` and `SFA_MeasureNonBlocking()` check wrong return value, to resolve a MISRA C-2012 Rule 17.7 violation.
+
 ## [2.1.8]
 
 - Bug Fixes

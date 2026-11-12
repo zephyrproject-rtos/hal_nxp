@@ -1,5 +1,7 @@
 # ELEMU
 
+- 2.1.4 Move ELEMU_loadFw to the SSSAPI layer, as it depends on the middleware.
+
 - 2.1.3 Fix CERT INT30-C and CERT INT31-C findings.
 
 - 2.1.2 Fix macro `BIT` redefined issue when compiling with Zephyr.
