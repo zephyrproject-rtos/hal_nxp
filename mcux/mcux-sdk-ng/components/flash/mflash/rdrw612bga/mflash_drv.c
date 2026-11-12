@@ -523,7 +523,7 @@ void * mflash_drv_phys2log(uint32_t addr, uint32_t len)
     uint32_t bus_addr;
 
     do {
-        if (addr >= MFLASH_BSIZE)
+        if (addr >= MFLASH_BSIZE || len > MFLASH_BSIZE)
         {
             bus_addr = 0UL;
             break;
@@ -573,7 +573,7 @@ uint32_t mflash_drv_log2phys(void *ptr, uint32_t len)
     do {
         uint32_t bus_addr = (uint32_t)ptr;
 
-        if(bus_addr < MFLASH_BASE_ADDRESS)
+        if (bus_addr < MFLASH_BASE_ADDRESS || len > MFLASH_BSIZE)
         {
             /* the pointer points outside of the flash memory area */
             break;

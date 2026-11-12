@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,5 +22,15 @@
 #ifndef MFLASH_PAGE_SIZE
 #define MFLASH_PAGE_SIZE (128U)
 #endif
+
+#ifndef MFLASH_PHRASE_SIZE
+#define MFLASH_PHRASE_SIZE (16)
+#endif
+
+#ifndef MFLASH_BASE_ADDRESS
+#define MFLASH_BASE_ADDRESS (0U)
+#endif
+
+int32_t mflash_drv_phrase_program(uint32_t phrase_addr, uint32_t *data);
 
 #endif
