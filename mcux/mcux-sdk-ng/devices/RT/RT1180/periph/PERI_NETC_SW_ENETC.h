@@ -8,6 +8,10 @@
 **                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
 **                          MIMXRT1182XVP2C
+**                          MIMXRT1183CHM8C_cm33
+**                          MIMXRT1183CHM8C_cm7
+**                          MIMXRT1184CHM8C_cm33
+**                          MIMXRT1184CHM8C_cm7
 **                          MIMXRT1185CVJ8C_cm33
 **                          MIMXRT1185CVJ8C_cm7
 **                          MIMXRT1185XVJ8C_cm33
@@ -40,9 +44,17 @@
 **                          MIMXRT118CCVJ8C_cm7
 **                          MIMXRT118CXVJ8C_cm33
 **                          MIMXRT118CXVJ8C_cm7
+**                          MIMXRT118DCHM8C_cm33
+**                          MIMXRT118DCHM8C_cm7
+**                          MIMXRT118DXHM8C_cm33
+**                          MIMXRT118DXHM8C_cm7
+**                          MIMXRT118ECHM8C_cm33
+**                          MIMXRT118ECHM8C_cm7
+**                          MIMXRT118EXHM8C_cm33
+**                          MIMXRT118EXHM8C_cm7
 **
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260206
+**     Version:             rev. 4.0, 2026-08-14
+**     Build:               b260822
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NETC_SW_ENETC
@@ -62,14 +74,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2026-08-14)
+**         Based on RM Rev 10.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_NETC_SW_ENETC.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-08-14
  * @brief CMSIS Peripheral Access Layer for NETC_SW_ENETC
  *
  * CMSIS Peripheral Access Layer for NETC_SW_ENETC
@@ -82,6 +96,14 @@
 #include "MIMXRT1181_COMMON.h"
 #elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
+#elif (defined(CPU_MIMXRT1183CHM8C_cm33))
+#include "MIMXRT1183_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1183CHM8C_cm7))
+#include "MIMXRT1183_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1184CHM8C_cm33))
+#include "MIMXRT1184_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1184CHM8C_cm7))
+#include "MIMXRT1184_cm7_COMMON.h"
 #elif (defined(CPU_MIMXRT1185CVJ8C_cm33) || defined(CPU_MIMXRT1185XVJ8C_cm33))
 #include "MIMXRT1185_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT1185CVJ8C_cm7) || defined(CPU_MIMXRT1185XVJ8C_cm7))
@@ -102,6 +124,14 @@
 #include "MIMXRT118C_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT118CCVJ8C_cm7) || defined(CPU_MIMXRT118CXVJ8C_cm7))
 #include "MIMXRT118C_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118DCHM8C_cm33) || defined(CPU_MIMXRT118DXHM8C_cm33))
+#include "MIMXRT118D_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118DCHM8C_cm7) || defined(CPU_MIMXRT118DXHM8C_cm7))
+#include "MIMXRT118D_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118ECHM8C_cm33) || defined(CPU_MIMXRT118EXHM8C_cm33))
+#include "MIMXRT118E_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118ECHM8C_cm7) || defined(CPU_MIMXRT118EXHM8C_cm7))
+#include "MIMXRT118E_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -163,12 +193,12 @@ typedef struct {
   __IO uint32_t UNMACECR;                          /**< Uncorrectable non-fatal MAC error configuration register, offset: 0x1060 */
   __I  uint32_t UNMACESR;                          /**< Uncorrectable non-fatal MAC error status register, offset: 0x1064 */
        uint8_t RESERVED_5[8];
-  __IO uint32_t UNSBECR;                           /**< Uncorrectable non-fatal system bus error configuration register, offset: 0x1070, not available in all instances (available on 22 out of 66) */
-  __IO uint32_t UNSBESR;                           /**< Uncorrectable non-fatal system bus error status register, offset: 0x1074, not available in all instances (available on 22 out of 66) */
+  __IO uint32_t UNSBECR;                           /**< Uncorrectable non-fatal system bus error configuration register, offset: 0x1070, not available in all instances (available on 28 out of 84) */
+  __IO uint32_t UNSBESR;                           /**< Uncorrectable non-fatal system bus error status register, offset: 0x1074, not available in all instances (available on 28 out of 84) */
        uint8_t RESERVED_6[4];
-  __I  uint32_t UNSBECTR;                          /**< Uncorrectable non-fatal system bus error count register, offset: 0x107C, not available in all instances (available on 22 out of 66) */
-  __IO uint32_t UFSBECR;                           /**< Uncorrectable fatal system bus error configuration register, offset: 0x1080, not available in all instances (available on 22 out of 66) */
-  __IO uint32_t UFSBESR;                           /**< Uncorrectable fatal system bus error status register, offset: 0x1084, not available in all instances (available on 22 out of 66) */
+  __I  uint32_t UNSBECTR;                          /**< Uncorrectable non-fatal system bus error count register, offset: 0x107C, not available in all instances (available on 28 out of 84) */
+  __IO uint32_t UFSBECR;                           /**< Uncorrectable fatal system bus error configuration register, offset: 0x1080, not available in all instances (available on 28 out of 84) */
+  __IO uint32_t UFSBESR;                           /**< Uncorrectable fatal system bus error status register, offset: 0x1084, not available in all instances (available on 28 out of 84) */
        uint8_t RESERVED_7[8];
   __IO uint32_t UNMECR;                            /**< Uncorrectable non-fatal memory error configuration register, offset: 0x1090 */
   __IO uint32_t UNMESR0;                           /**< Uncorrectable non-fatal memory error status register 0, offset: 0x1094 */
@@ -178,22 +208,22 @@ typedef struct {
   __IO uint32_t UFMESR0;                           /**< Uncorrectable fatal memory error status register 0, offset: 0x10A4 */
   __I  uint32_t UFMESR1;                           /**< Uncorrectable fatal memory error status register 1, offset: 0x10A8 */
        uint8_t RESERVED_8[52];
-  __I  uint32_t IMDIOIRR;                          /**< Internal MDIO interrupt reason register, offset: 0x10E0, not available in all instances (available on 44 out of 66) */
-  __IO uint32_t IMDIOMSIVR;                        /**< Internal MDIO MSI-X vector register, offset: 0x10E4, not available in all instances (available on 44 out of 66) */
-  __I  uint32_t EMDIOIRR;                          /**< External MDIO interrupt reason register, offset: 0x10E8, not available in all instances (available on 44 out of 66) */
-  __IO uint32_t EMDIOMSIVR;                        /**< External MDIO MSI-X vector register, offset: 0x10EC, not available in all instances (available on 44 out of 66) */
+  __I  uint32_t IMDIOIRR;                          /**< Internal MDIO interrupt reason register, offset: 0x10E0, not available in all instances (available on 56 out of 84) */
+  __IO uint32_t IMDIOMSIVR;                        /**< Internal MDIO MSI-X vector register, offset: 0x10E4, not available in all instances (available on 56 out of 84) */
+  __I  uint32_t EMDIOIRR;                          /**< External MDIO interrupt reason register, offset: 0x10E8, not available in all instances (available on 56 out of 84) */
+  __IO uint32_t EMDIOMSIVR;                        /**< External MDIO MSI-X vector register, offset: 0x10EC, not available in all instances (available on 56 out of 84) */
        uint8_t RESERVED_9[16];
-  __IO uint32_t TCCR;                              /**< Time capture configuration register, offset: 0x1100, not available in all instances (available on 22 out of 66) */
-  __IO uint32_t TCIER;                             /**< Time capture interrupt enable register, offset: 0x1104, not available in all instances (available on 22 out of 66) */
-  __IO uint32_t TCRPIDR;                           /**< Time capture receive port interrupt detect register, offset: 0x1108, not available in all instances (available on 22 out of 66) */
-  __I  uint32_t TCRPSR;                            /**< Time capture receive port status register, offset: 0x110C, not available in all instances (available on 22 out of 66) */
+  __IO uint32_t TCCR;                              /**< Time capture configuration register, offset: 0x1100, not available in all instances (available on 28 out of 84) */
+  __IO uint32_t TCIER;                             /**< Time capture interrupt enable register, offset: 0x1104, not available in all instances (available on 28 out of 84) */
+  __IO uint32_t TCRPIDR;                           /**< Time capture receive port interrupt detect register, offset: 0x1108, not available in all instances (available on 28 out of 84) */
+  __I  uint32_t TCRPSR;                            /**< Time capture receive port status register, offset: 0x110C, not available in all instances (available on 28 out of 84) */
        uint8_t RESERVED_10[4];
-  __I  uint32_t TCRPTSR;                           /**< Time capture receive port timestamp register, offset: 0x1114, not available in all instances (available on 22 out of 66) */
-  __IO uint32_t TCMSIVR;                           /**< Time capture MSI-X vector register, offset: 0x1118, not available in all instances (available on 22 out of 66) */
+  __I  uint32_t TCRPTSR;                           /**< Time capture receive port timestamp register, offset: 0x1114, not available in all instances (available on 28 out of 84) */
+  __IO uint32_t TCMSIVR;                           /**< Time capture MSI-X vector register, offset: 0x1118, not available in all instances (available on 28 out of 84) */
        uint8_t RESERVED_11[228];
   __IO uint32_t CVLANR1;                           /**< Custom VLAN EtherType register 1, offset: 0x1200 */
   __IO uint32_t CVLANR2;                           /**< Custom VLAN EtherType register 2, offset: 0x1204 */
-  __IO uint32_t PSRTAGETR;                         /**< Pre-Standard RTAG EtherType register, offset: 0x1208, not available in all instances (available on 22 out of 66) */
+  __IO uint32_t PSRTAGETR;                         /**< Pre-Standard RTAG EtherType register, offset: 0x1208, not available in all instances (available on 28 out of 84) */
        uint8_t RESERVED_12[20];
   __IO uint32_t DOSL2CR;                           /**< DoS L2 configuration register, offset: 0x1220 */
        uint8_t RESERVED_13[220];
@@ -223,9 +253,9 @@ typedef struct {
   __IO uint32_t ISITMAR;                           /**< Ingress stream index table memory allocation register, offset: 0x1838 */
   __I  uint32_t ISITOR;                            /**< Ingress stream index table operational register, offset: 0x183C */
        uint8_t RESERVED_18[4];
-  __I  uint32_t ISQGITCAPR;                        /**< Ingress sequence generation index table capability register, offset: 0x1844, not available in all instances (available on 22 out of 66) */
-  __IO uint32_t ISQGITMAR;                         /**< Ingress sequence generation index table memory allocation register, offset: 0x1848, not available in all instances (available on 22 out of 66) */
-  __I  uint32_t ISQGITOR;                          /**< Ingress sequence generation index table operational register, offset: 0x184C, not available in all instances (available on 22 out of 66) */
+  __I  uint32_t ISQGITCAPR;                        /**< Ingress sequence generation index table capability register, offset: 0x1844, not available in all instances (available on 28 out of 84) */
+  __IO uint32_t ISQGITMAR;                         /**< Ingress sequence generation index table memory allocation register, offset: 0x1848, not available in all instances (available on 28 out of 84) */
+  __I  uint32_t ISQGITOR;                          /**< Ingress sequence generation index table operational register, offset: 0x184C, not available in all instances (available on 28 out of 84) */
        uint8_t RESERVED_19[16];
   __I  uint32_t SGCAPR;                            /**< Stream gate capability register, offset: 0x1860 */
   __I  uint32_t SGIITCAPR;                         /**< Stream gate instance index table capability register, offset: 0x1864 */
@@ -235,26 +265,26 @@ typedef struct {
   __I  uint32_t SGCLITCAPR;                        /**< Stream gate control list index table capability register, offset: 0x1874 */
   __IO uint32_t SGCLITMAR;                         /**< Stream gate control list index table memory allocation register, offset: 0x1878 */
   __I  uint32_t SGCLTMOR;                          /**< Stream gate control list table memory operational register, offset: 0x187C */
-  __I  uint32_t FMICAPR;                           /**< Frame modification ingress capability register, offset: 0x1880, not available in all instances (available on 22 out of 66) */
-  __I  uint32_t FMECAPR;                           /**< Frame modification egress capability register, offset: 0x1884, not available in all instances (available on 22 out of 66) */
-  __I  uint32_t FMITCAPR;                          /**< Frame modification index table capability register, offset: 0x1888, not available in all instances (available on 22 out of 66) */
-  __IO uint32_t FMITMAR;                           /**< Frame modification index table memory allocation register, offset: 0x188C, not available in all instances (available on 22 out of 66) */
-  __I  uint32_t FMITOR;                            /**< Frame modification index table operational register, offset: 0x1890, not available in all instances (available on 22 out of 66) */
-  __I  uint32_t FMDITCAPR;                         /**< Frame modification data index table capability register, offset: 0x1894, not available in all instances (available on 22 out of 66) */
-  __IO uint32_t FMDITMAR;                          /**< Frame modification data index table memory allocation register, offset: 0x1898, not available in all instances (available on 22 out of 66) */
+  __I  uint32_t FMICAPR;                           /**< Frame modification ingress capability register, offset: 0x1880, not available in all instances (available on 28 out of 84) */
+  __I  uint32_t FMECAPR;                           /**< Frame modification egress capability register, offset: 0x1884, not available in all instances (available on 28 out of 84) */
+  __I  uint32_t FMITCAPR;                          /**< Frame modification index table capability register, offset: 0x1888, not available in all instances (available on 28 out of 84) */
+  __IO uint32_t FMITMAR;                           /**< Frame modification index table memory allocation register, offset: 0x188C, not available in all instances (available on 28 out of 84) */
+  __I  uint32_t FMITOR;                            /**< Frame modification index table operational register, offset: 0x1890, not available in all instances (available on 28 out of 84) */
+  __I  uint32_t FMDITCAPR;                         /**< Frame modification data index table capability register, offset: 0x1894, not available in all instances (available on 28 out of 84) */
+  __IO uint32_t FMDITMAR;                          /**< Frame modification data index table memory allocation register, offset: 0x1898, not available in all instances (available on 28 out of 84) */
        uint8_t RESERVED_21[36];
-  __I  uint32_t ETCAPR;                            /**< Egress treatment capability register, offset: 0x18C0, not available in all instances (available on 22 out of 66) */
-  __I  uint32_t ETTCAPR;                           /**< Egress treatment table capability register, offset: 0x18C4, not available in all instances (available on 22 out of 66) */
+  __I  uint32_t ETCAPR;                            /**< Egress treatment capability register, offset: 0x18C0, not available in all instances (available on 28 out of 84) */
+  __I  uint32_t ETTCAPR;                           /**< Egress treatment table capability register, offset: 0x18C4, not available in all instances (available on 28 out of 84) */
        uint8_t RESERVED_22[4];
-  __I  uint32_t ETTOR;                             /**< Egress treatment table operational register, offset: 0x18CC, not available in all instances (available on 22 out of 66) */
+  __I  uint32_t ETTOR;                             /**< Egress treatment table operational register, offset: 0x18CC, not available in all instances (available on 28 out of 84) */
        uint8_t RESERVED_23[4];
   __I  uint32_t TGSTCAPR;                          /**< Time gate scheduling table capability register, offset: 0x18D4 */
        uint8_t RESERVED_24[4];
   __I  uint32_t TGSTMOR;                           /**< Time gate scheduling table memory operation register, offset: 0x18DC */
-  __I  uint32_t ESQRCAPR;                          /**< Egress sequence recovery capability register, offset: 0x18E0, not available in all instances (available on 22 out of 66) */
-  __I  uint32_t ESQRTCAPR;                         /**< Egress sequence recovery table capability register, offset: 0x18E4, not available in all instances (available on 22 out of 66) */
+  __I  uint32_t ESQRCAPR;                          /**< Egress sequence recovery capability register, offset: 0x18E0, not available in all instances (available on 28 out of 84) */
+  __I  uint32_t ESQRTCAPR;                         /**< Egress sequence recovery table capability register, offset: 0x18E4, not available in all instances (available on 28 out of 84) */
        uint8_t RESERVED_25[4];
-  __I  uint32_t ECTCAPR;                           /**< Egress counter table capability register, offset: 0x18EC, not available in all instances (available on 22 out of 66) */
+  __I  uint32_t ECTCAPR;                           /**< Egress counter table capability register, offset: 0x18EC, not available in all instances (available on 28 out of 84) */
        uint8_t RESERVED_26[16];
   __I  uint32_t HTMCAPR;                           /**< Hash table memory capability register, offset: 0x1900 */
   __I  uint32_t HTMOR;                             /**< Hash table memory operational register, offset: 0x1904 */
@@ -276,20 +306,20 @@ typedef struct {
   __IO uint32_t ISIDKC1PF1CR;                      /**< Ingress stream identification key construction 1 payload field 1 configuration register, offset: 0x1954 */
   __IO uint32_t ISIDKC1PF2CR;                      /**< Ingress stream identification key construction 1 payload field 2 configuration register, offset: 0x1958 */
   __IO uint32_t ISIDKC1PF3CR;                      /**< Ingress stream identification key construction 1 payload field 3 configuration register, offset: 0x195C */
-  __I  uint32_t ISIDKC2OR;                         /**< Ingress stream identification key construction 2 operational register, offset: 0x1960, not available in all instances (available on 22 out of 66) */
-  __IO uint32_t ISIDKC2CR0;                        /**< Ingress stream identification key construction 2 configuration register 0, offset: 0x1964, not available in all instances (available on 22 out of 66) */
+  __I  uint32_t ISIDKC2OR;                         /**< Ingress stream identification key construction 2 operational register, offset: 0x1960, not available in all instances (available on 28 out of 84) */
+  __IO uint32_t ISIDKC2CR0;                        /**< Ingress stream identification key construction 2 configuration register 0, offset: 0x1964, not available in all instances (available on 28 out of 84) */
        uint8_t RESERVED_31[8];
-  __IO uint32_t ISIDKC2PF0CR;                      /**< Ingress stream identification key construction 2 payload field 0 configuration register, offset: 0x1970, not available in all instances (available on 22 out of 66) */
-  __IO uint32_t ISIDKC2PF1CR;                      /**< Ingress stream identification key construction 2 payload field 1 configuration register, offset: 0x1974, not available in all instances (available on 22 out of 66) */
-  __IO uint32_t ISIDKC2PF2CR;                      /**< Ingress stream identification key construction 2 payload field 2 configuration register, offset: 0x1978, not available in all instances (available on 22 out of 66) */
-  __IO uint32_t ISIDKC2PF3CR;                      /**< Ingress stream identification key construction 2 payload field 3 configuration register, offset: 0x197C, not available in all instances (available on 22 out of 66) */
-  __I  uint32_t ISIDKC3OR;                         /**< Ingress stream identification key construction 3 operational register, offset: 0x1980, not available in all instances (available on 22 out of 66) */
-  __IO uint32_t ISIDKC3CR0;                        /**< Ingress stream identification key construction 3 configuration register 0, offset: 0x1984, not available in all instances (available on 22 out of 66) */
+  __IO uint32_t ISIDKC2PF0CR;                      /**< Ingress stream identification key construction 2 payload field 0 configuration register, offset: 0x1970, not available in all instances (available on 28 out of 84) */
+  __IO uint32_t ISIDKC2PF1CR;                      /**< Ingress stream identification key construction 2 payload field 1 configuration register, offset: 0x1974, not available in all instances (available on 28 out of 84) */
+  __IO uint32_t ISIDKC2PF2CR;                      /**< Ingress stream identification key construction 2 payload field 2 configuration register, offset: 0x1978, not available in all instances (available on 28 out of 84) */
+  __IO uint32_t ISIDKC2PF3CR;                      /**< Ingress stream identification key construction 2 payload field 3 configuration register, offset: 0x197C, not available in all instances (available on 28 out of 84) */
+  __I  uint32_t ISIDKC3OR;                         /**< Ingress stream identification key construction 3 operational register, offset: 0x1980, not available in all instances (available on 28 out of 84) */
+  __IO uint32_t ISIDKC3CR0;                        /**< Ingress stream identification key construction 3 configuration register 0, offset: 0x1984, not available in all instances (available on 28 out of 84) */
        uint8_t RESERVED_32[8];
-  __IO uint32_t ISIDKC3PF0CR;                      /**< Ingress stream identification key construction 3 payload field 0 configuration register, offset: 0x1990, not available in all instances (available on 22 out of 66) */
-  __IO uint32_t ISIDKC3PF1CR;                      /**< Ingress stream identification key construction 3 payload field 1 configuration register, offset: 0x1994, not available in all instances (available on 22 out of 66) */
-  __IO uint32_t ISIDKC3PF2CR;                      /**< Ingress stream identification key construction 3 payload field 2 configuration register, offset: 0x1998, not available in all instances (available on 22 out of 66) */
-  __IO uint32_t ISIDKC3PF3CR;                      /**< Ingress stream identification key construction 3 payload field 3 configuration register, offset: 0x199C, not available in all instances (available on 22 out of 66) */
+  __IO uint32_t ISIDKC3PF0CR;                      /**< Ingress stream identification key construction 3 payload field 0 configuration register, offset: 0x1990, not available in all instances (available on 28 out of 84) */
+  __IO uint32_t ISIDKC3PF1CR;                      /**< Ingress stream identification key construction 3 payload field 1 configuration register, offset: 0x1994, not available in all instances (available on 28 out of 84) */
+  __IO uint32_t ISIDKC3PF2CR;                      /**< Ingress stream identification key construction 3 payload field 2 configuration register, offset: 0x1998, not available in all instances (available on 28 out of 84) */
+  __IO uint32_t ISIDKC3PF3CR;                      /**< Ingress stream identification key construction 3 payload field 3 configuration register, offset: 0x199C, not available in all instances (available on 28 out of 84) */
        uint8_t RESERVED_33[96];
   __I  uint32_t ISFHTCAPR;                         /**< Ingress stream filter hash table capability register, offset: 0x1A00 */
   __I  uint32_t ISFHTOR;                           /**< Ingress stream filter hash table operational register, offset: 0x1A04 */

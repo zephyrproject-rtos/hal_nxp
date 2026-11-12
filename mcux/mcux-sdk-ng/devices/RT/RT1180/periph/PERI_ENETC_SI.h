@@ -8,6 +8,10 @@
 **                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
 **                          MIMXRT1182XVP2C
+**                          MIMXRT1183CHM8C_cm33
+**                          MIMXRT1183CHM8C_cm7
+**                          MIMXRT1184CHM8C_cm33
+**                          MIMXRT1184CHM8C_cm7
 **                          MIMXRT1185CVJ8C_cm33
 **                          MIMXRT1185CVJ8C_cm7
 **                          MIMXRT1185XVJ8C_cm33
@@ -40,9 +44,17 @@
 **                          MIMXRT118CCVJ8C_cm7
 **                          MIMXRT118CXVJ8C_cm33
 **                          MIMXRT118CXVJ8C_cm7
+**                          MIMXRT118DCHM8C_cm33
+**                          MIMXRT118DCHM8C_cm7
+**                          MIMXRT118DXHM8C_cm33
+**                          MIMXRT118DXHM8C_cm7
+**                          MIMXRT118ECHM8C_cm33
+**                          MIMXRT118ECHM8C_cm7
+**                          MIMXRT118EXHM8C_cm33
+**                          MIMXRT118EXHM8C_cm7
 **
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260509
+**     Version:             rev. 4.0, 2026-08-14
+**     Build:               b260822
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENETC_SI
@@ -62,14 +74,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2026-08-14)
+**         Based on RM Rev 10.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_ENETC_SI.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-08-14
  * @brief CMSIS Peripheral Access Layer for ENETC_SI
  *
  * CMSIS Peripheral Access Layer for ENETC_SI
@@ -82,6 +96,14 @@
 #include "MIMXRT1181_COMMON.h"
 #elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
+#elif (defined(CPU_MIMXRT1183CHM8C_cm33))
+#include "MIMXRT1183_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1183CHM8C_cm7))
+#include "MIMXRT1183_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1184CHM8C_cm33))
+#include "MIMXRT1184_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1184CHM8C_cm7))
+#include "MIMXRT1184_cm7_COMMON.h"
 #elif (defined(CPU_MIMXRT1185CVJ8C_cm33) || defined(CPU_MIMXRT1185XVJ8C_cm33))
 #include "MIMXRT1185_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT1185CVJ8C_cm7) || defined(CPU_MIMXRT1185XVJ8C_cm7))
@@ -102,6 +124,14 @@
 #include "MIMXRT118C_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT118CCVJ8C_cm7) || defined(CPU_MIMXRT118CXVJ8C_cm7))
 #include "MIMXRT118C_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118DCHM8C_cm33) || defined(CPU_MIMXRT118DXHM8C_cm33))
+#include "MIMXRT118D_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118DCHM8C_cm7) || defined(CPU_MIMXRT118DXHM8C_cm7))
+#include "MIMXRT118D_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118ECHM8C_cm33) || defined(CPU_MIMXRT118EXHM8C_cm33))
+#include "MIMXRT118E_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118ECHM8C_cm7) || defined(CPU_MIMXRT118EXHM8C_cm7))
+#include "MIMXRT118E_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -161,12 +191,12 @@ typedef struct {
   __I  uint32_t SIPCAPR0;                          /**< Station interface port capability register 0, offset: 0x20 */
   __I  uint32_t SIPCAPR1;                          /**< Station interface port capability register 1, offset: 0x24 */
        uint8_t RESERVED_1[8];
-  __I  uint32_t SITSR;                             /**< Station interface timer status register, offset: 0x30, not available in all instances (available on 44 out of 66) */
+  __I  uint32_t SITSR;                             /**< Station interface timer status register, offset: 0x30, not available in all instances (available on 56 out of 84) */
        uint8_t RESERVED_2[4];
   __IO uint32_t SIRBGCR;                           /**< Station interface receive BDR group control register, offset: 0x38 */
        uint8_t RESERVED_3[4];
   __IO uint32_t SIBCAR;                            /**< Station interface buffer cache attribute register, offset: 0x40 */
-  __IO uint32_t SIMCAR;                            /**< Station interface message cache attribute register, offset: 0x44, not available in all instances (available on 22 out of 66) */
+  __IO uint32_t SIMCAR;                            /**< Station interface message cache attribute register, offset: 0x44, not available in all instances (available on 28 out of 84) */
   __IO uint32_t SICCAR;                            /**< Station interface command cache attribute register, offset: 0x48 */
        uint8_t RESERVED_4[52];
   __I  uint32_t SIPMAR0;                           /**< Station interface primary MAC address register 0, offset: 0x80 */
@@ -182,20 +212,20 @@ typedef struct {
        uint8_t RESERVED_8[176];
   union {                                          /* offset: 0x204 */
     struct {                                         /* offset: 0x204 */
-      __IO uint32_t PSIMSGRR;                          /**< Physical station interface message receive register, offset: 0x204, not available in all instances (available on 22 out of 66) */
-      __IO uint32_t PSIMSGSR;                          /**< Physical station interface message send register, offset: 0x208, not available in all instances (available on 22 out of 66) */
+      __IO uint32_t PSIMSGRR;                          /**< Physical station interface message receive register, offset: 0x204, not available in all instances (available on 28 out of 84) */
+      __IO uint32_t PSIMSGSR;                          /**< Physical station interface message send register, offset: 0x208, not available in all instances (available on 28 out of 84) */
            uint8_t RESERVED_0[4];
       struct {                                         /* offset: 0x210, array step: 0x8 */
-        __IO uint32_t PSIVMSGRCVAR0;                     /**< PSI VSI 1 message receive address register 0, array offset: 0x210, array step: 0x8, not available in all instances (available on 22 out of 66) */
-        __IO uint32_t PSIVMSGRCVAR1;                     /**< PSI VSI 1 message receive address register 1, array offset: 0x214, array step: 0x8, not available in all instances (available on 22 out of 66) */
+        __IO uint32_t PSIVMSGRCVAR0;                     /**< PSI VSI 1 message receive address register 0, array offset: 0x210, array step: 0x8, not available in all instances (available on 28 out of 84) */
+        __IO uint32_t PSIVMSGRCVAR1;                     /**< PSI VSI 1 message receive address register 1, array offset: 0x214, array step: 0x8, not available in all instances (available on 28 out of 84) */
       } VSI_NUM[ENETC_SI_MSGSR_PSI_A_VSI_NUM_COUNT];
     } PSI_A;
     struct {                                         /* offset: 0x204 */
-      __I  uint32_t VSIMSGSR;                          /**< Virtual station interface message send register, offset: 0x204, not available in all instances (available on 22 out of 66) */
-      __I  uint32_t VSIMSGRR;                          /**< Virtual station interface message receive register, offset: 0x208, not available in all instances (available on 22 out of 66) */
+      __I  uint32_t VSIMSGSR;                          /**< Virtual station interface message send register, offset: 0x204, not available in all instances (available on 28 out of 84) */
+      __I  uint32_t VSIMSGRR;                          /**< Virtual station interface message receive register, offset: 0x208, not available in all instances (available on 28 out of 84) */
            uint8_t RESERVED_0[4];
-      __IO uint32_t VSIMSGSNDAR0;                      /**< Virtual station interface message send register 0, offset: 0x210, not available in all instances (available on 22 out of 66) */
-      __IO uint32_t VSIMSGSNDAR1;                      /**< Virtual station interface message send address register 1, offset: 0x214, not available in all instances (available on 22 out of 66) */
+      __IO uint32_t VSIMSGSNDAR0;                      /**< Virtual station interface message send register 0, offset: 0x210, not available in all instances (available on 28 out of 84) */
+      __IO uint32_t VSIMSGSNDAR1;                      /**< Virtual station interface message send address register 1, offset: 0x214, not available in all instances (available on 28 out of 84) */
     } VSI_A;
   };
        uint8_t RESERVED_9[232];
@@ -216,7 +246,7 @@ typedef struct {
   __I  uint32_t SITMCA0;                           /**< Station interface transmit multicast frame counter (ifOutMulticastPkts) 0, offset: 0x338 */
   __I  uint32_t SITMCA1;                           /**< Station interface transmit multicast frame counter (ifOutMulticastPkts) 1, offset: 0x33C */
        uint8_t RESERVED_10[176];
-  __I  uint32_t SIBLPR[ENETC_SI_SI_BOOT_LOAD_COUNT]; /**< Station interface boot loader parameter register 0..Station interface boot loader parameter register 1, array offset: 0x3F0, array step: 0x4, not available in all instances (available on 22 out of 66) */
+  __I  uint32_t SIBLPR[ENETC_SI_SI_BOOT_LOAD_COUNT]; /**< Station interface boot loader parameter register 0..Station interface boot loader parameter register 1, array offset: 0x3F0, array step: 0x4, not available in all instances (available on 28 out of 84) */
        uint8_t RESERVED_11[1032];
   __IO uint32_t SICBDRMR;                          /**< Station interface command BDR mode register, offset: 0x800 */
   __I  uint32_t SICBDRSR;                          /**< Station interface command BDR status register, offset: 0x804 */
@@ -236,14 +266,14 @@ typedef struct {
        uint8_t RESERVED_15[244];
   union {                                          /* offset: 0xA00 */
     struct {                                         /* offset: 0xA00 */
-      __IO uint32_t PSIIER;                            /**< Physical station interface interrupt enable register, offset: 0xA00, not available in all instances (available on 22 out of 66) */
+      __IO uint32_t PSIIER;                            /**< Physical station interface interrupt enable register, offset: 0xA00, not available in all instances (available on 28 out of 84) */
            uint8_t RESERVED_0[4];
-      __IO uint32_t PSIIDR;                            /**< Physical station interface interrupt detect register, offset: 0xA08, not available in all instances (available on 22 out of 66) */
+      __IO uint32_t PSIIDR;                            /**< Physical station interface interrupt detect register, offset: 0xA08, not available in all instances (available on 28 out of 84) */
     } PSI;
     struct {                                         /* offset: 0xA00 */
-      __IO uint32_t VSIIER;                            /**< Virtual station interface interrupt enable register, offset: 0xA00, not available in all instances (available on 22 out of 66) */
+      __IO uint32_t VSIIER;                            /**< Virtual station interface interrupt enable register, offset: 0xA00, not available in all instances (available on 28 out of 84) */
            uint8_t RESERVED_0[4];
-      __IO uint32_t VSIIDR;                            /**< Virtual station interface interrupt detect register, offset: 0xA08, not available in all instances (available on 22 out of 66) */
+      __IO uint32_t VSIIDR;                            /**< Virtual station interface interrupt detect register, offset: 0xA08, not available in all instances (available on 28 out of 84) */
     } VSI;
   };
        uint8_t RESERVED_16[12];
@@ -251,7 +281,7 @@ typedef struct {
        uint8_t RESERVED_17[12];
   __IO uint32_t SIRXIDR0;                          /**< Station interface receive interrupt detect register 0, offset: 0xA28 */
        uint8_t RESERVED_18[4];
-  __IO uint32_t SIMSIVR;                           /**< Station interface MSI-X vector register, offset: 0xA30, not available in all instances (available on 44 out of 66) */
+  __IO uint32_t SIMSIVR;                           /**< Station interface MSI-X vector register, offset: 0xA30, not available in all instances (available on 56 out of 84) */
   __IO uint32_t SICMSIVR;                          /**< Station interface command MSI-X vector register, offset: 0xA34 */
        uint8_t RESERVED_19[8];
   __IO uint32_t SITMRIER;                          /**< Station interface timer interrupt enable register, offset: 0xA40 */

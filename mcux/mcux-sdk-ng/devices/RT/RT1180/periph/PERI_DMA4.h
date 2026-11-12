@@ -8,6 +8,10 @@
 **                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
 **                          MIMXRT1182XVP2C
+**                          MIMXRT1183CHM8C_cm33
+**                          MIMXRT1183CHM8C_cm7
+**                          MIMXRT1184CHM8C_cm33
+**                          MIMXRT1184CHM8C_cm7
 **                          MIMXRT1185CVJ8C_cm33
 **                          MIMXRT1185CVJ8C_cm7
 **                          MIMXRT1185XVJ8C_cm33
@@ -40,9 +44,17 @@
 **                          MIMXRT118CCVJ8C_cm7
 **                          MIMXRT118CXVJ8C_cm33
 **                          MIMXRT118CXVJ8C_cm7
+**                          MIMXRT118DCHM8C_cm33
+**                          MIMXRT118DCHM8C_cm7
+**                          MIMXRT118DXHM8C_cm33
+**                          MIMXRT118DXHM8C_cm7
+**                          MIMXRT118ECHM8C_cm33
+**                          MIMXRT118ECHM8C_cm7
+**                          MIMXRT118EXHM8C_cm33
+**                          MIMXRT118EXHM8C_cm7
 **
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260206
+**     Version:             rev. 4.0, 2026-08-14
+**     Build:               b260822
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA4
@@ -62,14 +74,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2026-08-14)
+**         Based on RM Rev 10.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_DMA4.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-08-14
  * @brief CMSIS Peripheral Access Layer for DMA4
  *
  * CMSIS Peripheral Access Layer for DMA4
@@ -82,6 +96,14 @@
 #include "MIMXRT1181_COMMON.h"
 #elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
+#elif (defined(CPU_MIMXRT1183CHM8C_cm33))
+#include "MIMXRT1183_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1183CHM8C_cm7))
+#include "MIMXRT1183_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1184CHM8C_cm33))
+#include "MIMXRT1184_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1184CHM8C_cm7))
+#include "MIMXRT1184_cm7_COMMON.h"
 #elif (defined(CPU_MIMXRT1185CVJ8C_cm33) || defined(CPU_MIMXRT1185XVJ8C_cm33))
 #include "MIMXRT1185_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT1185CVJ8C_cm7) || defined(CPU_MIMXRT1185XVJ8C_cm7))
@@ -102,6 +124,14 @@
 #include "MIMXRT118C_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT118CCVJ8C_cm7) || defined(CPU_MIMXRT118CXVJ8C_cm7))
 #include "MIMXRT118C_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118DCHM8C_cm33) || defined(CPU_MIMXRT118DXHM8C_cm33))
+#include "MIMXRT118D_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118DCHM8C_cm7) || defined(CPU_MIMXRT118DXHM8C_cm7))
+#include "MIMXRT118D_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118ECHM8C_cm33) || defined(CPU_MIMXRT118EXHM8C_cm33))
+#include "MIMXRT118E_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118ECHM8C_cm7) || defined(CPU_MIMXRT118EXHM8C_cm7))
+#include "MIMXRT118E_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -180,8 +210,6 @@ typedef enum _dma_request_source
     kDma4RequestMuxI3C2FromBusRequest = 7|0x200U,  /**< I3C2 From-bus Request */
     kDma4RequestMuxLPI2C3Tx         = 8|0x200U,    /**< LPI2C3 TX */
     kDma4RequestMuxLPI2C3Rx         = 9|0x200U,    /**< LPI2C3 RX */
-    kDma4RequestMuxReserved10       = 10|0x200U,   /**< Reserved 10 */
-    kDma4RequestMuxReserved11       = 11|0x200U,   /**< Reserved 11 */
     kDma4RequestMuxLPSPI3Tx         = 12|0x200U,   /**< LPSPI3 TX */
     kDma4RequestMuxLPSPI3Rx         = 13|0x200U,   /**< LPSPI3 RX */
     kDma4RequestMuxLPSPI4Tx         = 14|0x200U,   /**< LPSPI4 TX */
@@ -275,8 +303,6 @@ typedef enum _dma_request_source
     kDma4RequestMuxEQDC2            = 160|0x200U,  /**< EQDC2 */
     kDma4RequestMuxEQDC3            = 161|0x200U,  /**< EQDC3 */
     kDma4RequestMuxEQDC4            = 162|0x200U,  /**< EQDC4 */
-    kDma4RequestMuxReserved163      = 163|0x200U,  /**< Reserved 163 */
-    kDma4RequestMuxReserved164      = 164|0x200U,  /**< Reserved 164 */
     kDma4RequestMuxLPSPI5Tx         = 167|0x200U,  /**< LPSPI5 TX */
     kDma4RequestMuxLPSPI5Rx         = 168|0x200U,  /**< LPSPI5 RX */
     kDma4RequestMuxLPSPI6Tx         = 169|0x200U,  /**< LPSPI6 TX */
@@ -308,6 +334,11 @@ typedef enum _dma_request_source
     kDma4RequestMuxSINC3Request3    = 219|0x200U,  /**< SINC3 Request 3 */
     kDma4RequestMuxADC1Request1     = 220|0x200U,  /**< ADC1 Request 1 */
     kDma4RequestMuxADC2Request1     = 221|0x200U,  /**< ADC2 Request 1 */
+    kDma3RequestMuxLPUART12Tx       = 31|0x100U,   /**< LPUART12 TX */
+    kDma3RequestMuxLPUART12Rx       = 32|0x100U,   /**< LPUART12 RX */
+    kDma4RequestMuxCAN2             = 1|0x200U,    /**< CAN2 */
+    kDma4RequestMuxLPI2C4Tx         = 10|0x200U,   /**< LPI2C4 TX */
+    kDma4RequestMuxLPI2C4Rx         = 11|0x200U,   /**< LPI2C4 RX */
     kDma4RequestMuxLPTMR2Request    = 16|0x200U,   /**< LPTMR2 */
     kDma4RequestMuxTPM4Request0Request2 = 28|0x200U, /**< TPM4 request 0 and request 2 */
     kDma4RequestMuxTPM4Request1Request3 = 29|0x200U, /**< TPM4 request 1 and request 3 */
@@ -360,13 +391,25 @@ typedef enum _dma_request_source
     kDma4RequestMuxQTIMER8Cmpld1Timer1Cmpld2Timer0 = 151|0x200U, /**< TMR8 cmpld1 in timer 1 or cmpld2 in timer 0 */
     kDma4RequestMuxQTIMER8Cmpld1Timer2Cmpld2Timer3 = 152|0x200U, /**< TMR8 cmpld1 in timer 2 or cmpld2 in timer 3 */
     kDma4RequestMuxQTIMER8Cmpld1Timer3Cmpld2Timer2 = 153|0x200U, /**< TMR8 cmpld1 in timer 3 or cmpld2 in timer 2 */
+    kDma4RequestMuxLPI2C5Tx         = 163|0x200U,  /**< LPI2C5 TX */
+    kDma4RequestMuxLPI2C5Rx         = 164|0x200U,  /**< LPI2C5 RX */
     kDma4RequestMuxLPI2C6Tx         = 165|0x200U,  /**< LPI2C6 TX */
     kDma4RequestMuxLPI2C6Rx         = 166|0x200U,  /**< LPI2C6 RX */
     kDma4RequestMuxLPTMR3Request    = 171|0x200U,  /**< LPTMR3 */
+    kDma4RequestMuxLPUART9Tx        = 172|0x200U,  /**< LPUART9 TX */
+    kDma4RequestMuxLPUART9Rx        = 173|0x200U,  /**< LPUART9 RX */
+    kDma4RequestMuxLPUART10Tx       = 174|0x200U,  /**< LPUART10 TX */
+    kDma4RequestMuxLPUART10Rx       = 175|0x200U,  /**< LPUART10 RX */
+    kDma4RequestMuxLPUART11Tx       = 176|0x200U,  /**< LPUART11 TX */
+    kDma4RequestMuxLPUART11Rx       = 177|0x200U,  /**< LPUART11 RX */
     kDma4RequestMuxSai2Tx           = 180|0x200U,  /**< SAI2 TX */
     kDma4RequestMuxSai2Rx           = 181|0x200U,  /**< SAI2 RX */
+    kDma4RequestMuxSai3Tx           = 182|0x200U,  /**< SAI3 TX */
+    kDma4RequestMuxSai3Rx           = 183|0x200U,  /**< SAI3 RX */
     kDma4RequestMuxSai4Tx           = 184|0x200U,  /**< SAI4 TX */
     kDma4RequestMuxSai4Rx           = 185|0x200U,  /**< SAI4 RX */
+    kDma4RequestMuxCMP1             = 187|0x200U,  /**< CMP1 */
+    kDma4RequestMuxCMP2             = 188|0x200U,  /**< CMP2 */
     kDma4RequestMuxSINC1Request0    = 208|0x200U,  /**< SINC1 Request 0 */
     kDma4RequestMuxSINC1Request1    = 209|0x200U,  /**< SINC1 Request 1 */
     kDma4RequestMuxSINC1Request2    = 210|0x200U,  /**< SINC1 Request 2 */
@@ -375,25 +418,12 @@ typedef enum _dma_request_source
     kDma4RequestMuxSINC2Request1    = 213|0x200U,  /**< SINC2 Request 1 */
     kDma4RequestMuxSINC2Request2    = 214|0x200U,  /**< SINC2 Request 2 */
     kDma4RequestMuxSINC2Request3    = 215|0x200U,  /**< SINC2 Request 3 */
-    kDma3RequestMuxLPUART12Tx       = 31|0x100U,   /**< LPUART12 TX */
-    kDma3RequestMuxLPUART12Rx       = 32|0x100U,   /**< LPUART12 RX */
-    kDma4RequestMuxCAN2             = 1|0x200U,    /**< CAN2 */
     kDma4RequestMuxTPM5Request0Request2 = 31|0x200U, /**< TPM5 request 0 and request 2 */
     kDma4RequestMuxTPM5Request1Request3 = 32|0x200U, /**< TPM5 request 1 and request 3 */
     kDma4RequestMuxTPM5OverflowRequest = 33|0x200U, /**< TPM5 Overflow request */
     kDma4RequestMuxTPM6Request0Request2 = 34|0x200U, /**< TPM6 request 0 and request 2 */
     kDma4RequestMuxTPM6Request1Request3 = 35|0x200U, /**< TPM6 request 1 and request 3 */
     kDma4RequestMuxTPM6OverflowRequest = 36|0x200U, /**< TPM6 Overflow request */
-    kDma4RequestMuxLPUART9Tx        = 172|0x200U,  /**< LPUART9 TX */
-    kDma4RequestMuxLPUART9Rx        = 173|0x200U,  /**< LPUART9 RX */
-    kDma4RequestMuxLPUART10Tx       = 174|0x200U,  /**< LPUART10 TX */
-    kDma4RequestMuxLPUART10Rx       = 175|0x200U,  /**< LPUART10 RX */
-    kDma4RequestMuxLPUART11Tx       = 176|0x200U,  /**< LPUART11 TX */
-    kDma4RequestMuxLPUART11Rx       = 177|0x200U,  /**< LPUART11 RX */
-    kDma4RequestMuxSai3Tx           = 182|0x200U,  /**< SAI3 TX */
-    kDma4RequestMuxSai3Rx           = 183|0x200U,  /**< SAI3 RX */
-    kDma4RequestMuxCMP1             = 187|0x200U,  /**< CMP1 */
-    kDma4RequestMuxCMP2             = 188|0x200U,  /**< CMP2 */
     kDma4RequestMuxCMP4             = 190|0x200U,  /**< CMP4 */
 } dma_request_source_t;
 

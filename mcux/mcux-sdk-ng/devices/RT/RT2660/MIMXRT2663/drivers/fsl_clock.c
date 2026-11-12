@@ -1116,11 +1116,16 @@ static void CGUANA_InitAvPll(
     volatile const uint32_t *stsReg,
     const clock_cguana_avpll_config_t *config)
 {
-    /* Clear PWREN/PLL_EN/RSTN/CLKOUT_EN before reconfiguring */
-    *pll1Reg &= ~(CGUANA_CGUA_AUDIOPLL_PLL1_REG_AUDIOPLL_CLKOUT_EN_MASK |
-                  CGUANA_CGUA_AUDIOPLL_PLL1_REG_AUDIOPLL_PLL_EN_MASK    |
-                  CGUANA_CGUA_AUDIOPLL_PLL1_REG_AUDIOPLL_RSTN_MASK      |
-                  CGUANA_CGUA_AUDIOPLL_PLL1_REG_AUDIOPLL_PWREN_MASK);
+    /*
+     * Clear PWREN/PLL_EN/RSTN/CLKOUT_EN before reconfiguring, and also clear the
+     * FREF_SET/CCO_FREQ_BAND_SEL fields
+     */
+    *pll1Reg &= ~(CGUANA_CGUA_AUDIOPLL_PLL1_REG_AUDIOPLL_CLKOUT_EN_MASK        |
+                  CGUANA_CGUA_AUDIOPLL_PLL1_REG_AUDIOPLL_PLL_EN_MASK           |
+                  CGUANA_CGUA_AUDIOPLL_PLL1_REG_AUDIOPLL_RSTN_MASK             |
+                  CGUANA_CGUA_AUDIOPLL_PLL1_REG_AUDIOPLL_PWREN_MASK            |
+                  CGUANA_CGUA_AUDIOPLL_PLL1_REG_AUDIOPLL_FREF_SET_MASK         |
+                  CGUANA_CGUA_AUDIOPLL_PLL1_REG_AUDIOPLL_CCO_FREQ_BAND_SEL_MASK);
 
     /* Configure PLL parameters */
     *pll1Reg |=

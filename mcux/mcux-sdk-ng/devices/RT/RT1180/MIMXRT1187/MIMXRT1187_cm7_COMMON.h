@@ -12,9 +12,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    IMXRT1180RM, Rev 5, 01/2024
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260206
+**     Reference manual:    IMXRT1180RM, Rev 10, 05/2026
+**     Version:             rev. 4.0, 2026-08-14
+**     Build:               b260822
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1187_cm7
@@ -34,14 +34,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2026-08-14)
+**         Based on RM Rev 10.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1187_cm7_COMMON.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-08-14
  * @brief CMSIS Peripheral Access Layer for MIMXRT1187_cm7
  *
  * CMSIS Peripheral Access Layer for MIMXRT1187_cm7
@@ -52,7 +54,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0300U
+#define MCU_MEM_MAP_VERSION 0x0400U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -92,7 +94,7 @@ typedef enum
  */
 
 /** Interrupt Number Definitions */
-#define NUMBER_OF_INT_VECTORS 255                /**< Number of interrupts in the Vector table */
+#define NUMBER_OF_INT_VECTORS 256                /**< Number of interrupts in the Vector table */
 
 typedef enum IRQn {
   /* Auxiliary constants */
@@ -348,7 +350,8 @@ typedef enum IRQn {
   ASRC_IRQn                    = 235,              /**< ASRC interrupt */
   GPIO6_IRQn                   = 236,              /**< GPIO6 interrupt */
   DBG_TRACE_IRQn               = 237,              /**< JTAGSW DAP MDM-AP SRC reset source */
-  Reserved254_IRQn             = 238               /**< Reserved interrupt */
+  Reserved254_IRQn             = 238,              /**< Reserved interrupt */
+  EDGELOCK_IRQn                = 239               /**< Edgelock interrupt */
 } IRQn_Type;
 
 /*!
@@ -2139,6 +2142,16 @@ typedef enum _xbar_output_signal
 #define LPUART_BASE_PTRS                         { (LPUART_Type *)0u, LPUART1, LPUART2, LPUART3, LPUART4, LPUART5, LPUART6, LPUART7, LPUART8, LPUART9, LPUART10, LPUART11, LPUART12 }
 /** Interrupt vectors for the LPUART peripheral type */
 #define LPUART_RX_TX_IRQS                        { NotAvail_IRQn, LPUART1_IRQn, LPUART2_IRQn, LPUART3_IRQn, LPUART4_IRQn, LPUART5_IRQn, LPUART6_IRQn, LPUART7_IRQn, LPUART8_IRQn, LPUART9_IRQn, LPUART10_IRQn, LPUART11_IRQn, LPUART12_IRQn }
+
+/* M7_ECC_MCM - Peripheral instance base addresses */
+/** Peripheral M7_ECC_MCM base address */
+#define M7_ECC_MCM_BASE                          (0x4B850000u)
+/** Peripheral M7_ECC_MCM base pointer */
+#define M7_ECC_MCM                               ((M7_ECC_MCM_Type *)M7_ECC_MCM_BASE)
+/** Array initializer of M7_ECC_MCM peripheral base addresses */
+#define M7_ECC_MCM_BASE_ADDRS                    { M7_ECC_MCM_BASE }
+/** Array initializer of M7_ECC_MCM peripheral base pointers */
+#define M7_ECC_MCM_BASE_PTRS                     { M7_ECC_MCM }
 
 /* M7_MCM - Peripheral instance base addresses */
 /** Peripheral M7_MCM base address */

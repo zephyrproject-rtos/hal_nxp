@@ -8,6 +8,10 @@
 **                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
 **                          MIMXRT1182XVP2C
+**                          MIMXRT1183CHM8C_cm33
+**                          MIMXRT1183CHM8C_cm7
+**                          MIMXRT1184CHM8C_cm33
+**                          MIMXRT1184CHM8C_cm7
 **                          MIMXRT1185CVJ8C_cm33
 **                          MIMXRT1185CVJ8C_cm7
 **                          MIMXRT1185XVJ8C_cm33
@@ -40,9 +44,17 @@
 **                          MIMXRT118CCVJ8C_cm7
 **                          MIMXRT118CXVJ8C_cm33
 **                          MIMXRT118CXVJ8C_cm7
+**                          MIMXRT118DCHM8C_cm33
+**                          MIMXRT118DCHM8C_cm7
+**                          MIMXRT118DXHM8C_cm33
+**                          MIMXRT118DXHM8C_cm7
+**                          MIMXRT118ECHM8C_cm33
+**                          MIMXRT118ECHM8C_cm7
+**                          MIMXRT118EXHM8C_cm33
+**                          MIMXRT118EXHM8C_cm7
 **
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260509
+**     Version:             rev. 4.0, 2026-08-14
+**     Build:               b260822
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NETC_ENETC
@@ -62,14 +74,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2026-08-14)
+**         Based on RM Rev 10.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_NETC_ENETC.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-08-14
  * @brief CMSIS Peripheral Access Layer for NETC_ENETC
  *
  * CMSIS Peripheral Access Layer for NETC_ENETC
@@ -82,6 +96,14 @@
 #include "MIMXRT1181_COMMON.h"
 #elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
+#elif (defined(CPU_MIMXRT1183CHM8C_cm33))
+#include "MIMXRT1183_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1183CHM8C_cm7))
+#include "MIMXRT1183_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1184CHM8C_cm33))
+#include "MIMXRT1184_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1184CHM8C_cm7))
+#include "MIMXRT1184_cm7_COMMON.h"
 #elif (defined(CPU_MIMXRT1185CVJ8C_cm33) || defined(CPU_MIMXRT1185XVJ8C_cm33))
 #include "MIMXRT1185_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT1185CVJ8C_cm7) || defined(CPU_MIMXRT1185XVJ8C_cm7))
@@ -102,6 +124,14 @@
 #include "MIMXRT118C_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT118CCVJ8C_cm7) || defined(CPU_MIMXRT118CXVJ8C_cm7))
 #include "MIMXRT118C_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118DCHM8C_cm33) || defined(CPU_MIMXRT118DXHM8C_cm33))
+#include "MIMXRT118D_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118DCHM8C_cm7) || defined(CPU_MIMXRT118DXHM8C_cm7))
+#include "MIMXRT118D_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118ECHM8C_cm33) || defined(CPU_MIMXRT118EXHM8C_cm33))
+#include "MIMXRT118E_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118ECHM8C_cm7) || defined(CPU_MIMXRT118EXHM8C_cm7))
+#include "MIMXRT118E_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -198,8 +228,8 @@ typedef struct {
   __I  uint32_t PMFDVFR;                           /**< Port multicast frames dropped VLAN filtering register, offset: 0x2D4 */
   __I  uint32_t PBFDVFR;                           /**< Port broadcast frames dropped VLAN filtering register, offset: 0x2D8 */
        uint8_t RESERVED_10[100];
-  __IO uint32_t PLPMR;                             /**< Port low power mode register, offset: 0x340, not available in all instances (available on 22 out of 44) */
-  __I  uint32_t PWOSR;                             /**< Port wake-on status register, offset: 0x344, not available in all instances (available on 22 out of 44) */
+  __IO uint32_t PLPMR;                             /**< Port low power mode register, offset: 0x340, not available in all instances (available on 28 out of 56) */
+  __I  uint32_t PWOSR;                             /**< Port wake-on status register, offset: 0x344, not available in all instances (available on 28 out of 56) */
        uint8_t RESERVED_11[40];
   __IO uint32_t IPV2ICMPMR0;                       /**< Receive IPV to ICM priority mapping register 0, offset: 0x370 */
        uint8_t RESERVED_12[12];
@@ -209,7 +239,7 @@ typedef struct {
        uint8_t RESERVED_14[1104];
   __I  uint32_t SMCAPR;                            /**< Switch management capability register, offset: 0x800 */
        uint8_t RESERVED_15[124];
-  __IO uint32_t SMHRBDRMR[NETC_ENETC_NUM_SMHRBDRMR_COUNT]; /**< Switch management host reason 1 receive BD ring mapping register..Switch management host reason 15 receive BD ring mapping register, array offset: 0x880, array step: 0x4, not available in all instances (available on 22 out of 44) */
+  __IO uint32_t SMHRBDRMR[NETC_ENETC_NUM_SMHRBDRMR_COUNT]; /**< Switch management host reason 1 receive BD ring mapping register..Switch management host reason 15 receive BD ring mapping register, array offset: 0x880, array step: 0x4, not available in all instances (available on 28 out of 56) */
        uint8_t RESERVED_16[5956];
   struct {                                         /* offset: 0x2000, array step: 0x80 */
     __IO uint32_t PSIPMAR0;                          /**< Port station interface 0 primary MAC address register 0..Port station interface 1 primary MAC address register 0, array offset: 0x2000, array step: 0x80, irregular array, not all indices are valid */
@@ -217,7 +247,7 @@ typedef struct {
     __IO uint32_t PSIVLANR;                          /**< Port station interface 0 VLAN register..Port station interface 1 VLAN register, array offset: 0x2008, array step: 0x80, irregular array, not all indices are valid */
          uint8_t RESERVED_0[4];
     __IO uint32_t PSICFGR0;                          /**< Port station interface 0 configuration register 0..Port station interface 1 configuration register 0, array offset: 0x2010, array step: 0x80, irregular array, not all indices are valid */
-    __IO uint32_t PSICFGR1;                          /**< Port station interface 1 configuration register 1, array offset: 0x2014, array step: 0x80, not available in all instances (available on 22 out of 44), valid indices: [1] */
+    __IO uint32_t PSICFGR1;                          /**< Port station interface 1 configuration register 1, array offset: 0x2014, array step: 0x80, not available in all instances (available on 28 out of 56), valid indices: [1] */
     __IO uint32_t PSICFGR2;                          /**< Port station interface 0 configuration register 2..Port station interface 1 configuration register 2, array offset: 0x2018, array step: 0x80, irregular array, not all indices are valid */
          uint8_t RESERVED_1[20];
     __IO uint32_t PSIVMAFCFGR;                       /**< Port station interface 0 VSI MAC address filtering configuration register..Port station interface 1 VSI MAC address filtering configuration register, array offset: 0x2030, array step: 0x80, irregular array, not all indices are valid */

@@ -8,6 +8,10 @@
 **                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
 **                          MIMXRT1182XVP2C
+**                          MIMXRT1183CHM8C_cm33
+**                          MIMXRT1183CHM8C_cm7
+**                          MIMXRT1184CHM8C_cm33
+**                          MIMXRT1184CHM8C_cm7
 **                          MIMXRT1185CVJ8C_cm33
 **                          MIMXRT1185CVJ8C_cm7
 **                          MIMXRT1185XVJ8C_cm33
@@ -40,9 +44,17 @@
 **                          MIMXRT118CCVJ8C_cm7
 **                          MIMXRT118CXVJ8C_cm33
 **                          MIMXRT118CXVJ8C_cm7
+**                          MIMXRT118DCHM8C_cm33
+**                          MIMXRT118DCHM8C_cm7
+**                          MIMXRT118DXHM8C_cm33
+**                          MIMXRT118DXHM8C_cm7
+**                          MIMXRT118ECHM8C_cm33
+**                          MIMXRT118ECHM8C_cm7
+**                          MIMXRT118EXHM8C_cm33
+**                          MIMXRT118EXHM8C_cm7
 **
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260206
+**     Version:             rev. 4.0, 2026-08-14
+**     Build:               b260822
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ECAT
@@ -62,14 +74,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2026-08-14)
+**         Based on RM Rev 10.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_ECAT.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-08-14
  * @brief CMSIS Peripheral Access Layer for ECAT
  *
  * CMSIS Peripheral Access Layer for ECAT
@@ -82,6 +96,14 @@
 #include "MIMXRT1181_COMMON.h"
 #elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
+#elif (defined(CPU_MIMXRT1183CHM8C_cm33))
+#include "MIMXRT1183_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1183CHM8C_cm7))
+#include "MIMXRT1183_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1184CHM8C_cm33))
+#include "MIMXRT1184_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1184CHM8C_cm7))
+#include "MIMXRT1184_cm7_COMMON.h"
 #elif (defined(CPU_MIMXRT1185CVJ8C_cm33) || defined(CPU_MIMXRT1185XVJ8C_cm33))
 #include "MIMXRT1185_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT1185CVJ8C_cm7) || defined(CPU_MIMXRT1185XVJ8C_cm7))
@@ -102,6 +124,14 @@
 #include "MIMXRT118C_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT118CCVJ8C_cm7) || defined(CPU_MIMXRT118CXVJ8C_cm7))
 #include "MIMXRT118C_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118DCHM8C_cm33) || defined(CPU_MIMXRT118DXHM8C_cm33))
+#include "MIMXRT118D_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118DCHM8C_cm7) || defined(CPU_MIMXRT118DXHM8C_cm7))
+#include "MIMXRT118D_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118ECHM8C_cm33) || defined(CPU_MIMXRT118EXHM8C_cm33))
+#include "MIMXRT118E_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118ECHM8C_cm7) || defined(CPU_MIMXRT118EXHM8C_cm7))
+#include "MIMXRT118E_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -287,8 +317,8 @@ typedef struct {
   };
        uint8_t RESERVED_23[14];
   union {                                          /* offset: 0x420 */
-    __IO uint16_t WATCHDOG_TIME_PROCESS_DATA;        /**< Regsister Watchdog Time Process Data, offset: 0x420 */
-    __I  uint16_t WATCHDOG_TIME_PROCESS_DATA_PDI;    /**< Regsister Watchdog Time Process Data, offset: 0x420 */
+    __IO uint16_t WATCHDOG_TIME_PROCESS_DATA;        /**< Register Watchdog Time Process Data, offset: 0x420 */
+    __I  uint16_t WATCHDOG_TIME_PROCESS_DATA_PDI;    /**< Register Watchdog Time Process Data, offset: 0x420 */
   };
        uint8_t RESERVED_24[30];
   __I  uint16_t WATCHDOG_STATUS_PROCESS_DATA;      /**< Watchdog Status Process Data, offset: 0x440 */
@@ -2019,7 +2049,7 @@ typedef struct {
 #define ECAT_WATCHDOG_TIME_PDI_PDI_BF0(x)        (((uint16_t)(((uint16_t)(x)) << ECAT_WATCHDOG_TIME_PDI_PDI_BF0_SHIFT)) & ECAT_WATCHDOG_TIME_PDI_PDI_BF0_MASK)
 /*! @} */
 
-/*! @name WATCHDOG_TIME_PROCESS_DATA - Regsister Watchdog Time Process Data */
+/*! @name WATCHDOG_TIME_PROCESS_DATA - Register Watchdog Time Process Data */
 /*! @{ */
 
 #define ECAT_WATCHDOG_TIME_PROCESS_DATA_BF0_MASK (0xFFFFU)
@@ -2028,7 +2058,7 @@ typedef struct {
 #define ECAT_WATCHDOG_TIME_PROCESS_DATA_BF0(x)   (((uint16_t)(((uint16_t)(x)) << ECAT_WATCHDOG_TIME_PROCESS_DATA_BF0_SHIFT)) & ECAT_WATCHDOG_TIME_PROCESS_DATA_BF0_MASK)
 /*! @} */
 
-/*! @name WATCHDOG_TIME_PROCESS_DATA_PDI - Regsister Watchdog Time Process Data */
+/*! @name WATCHDOG_TIME_PROCESS_DATA_PDI - Register Watchdog Time Process Data */
 /*! @{ */
 
 #define ECAT_WATCHDOG_TIME_PROCESS_DATA_PDI_BF0_MASK (0xFFFFU)
@@ -2474,7 +2504,7 @@ typedef struct {
 #define ECAT_MII_MANAGEMENT_CONTROL_OR_STATUS_PDI_BF2_SHIFT (2U)
 /*! BF2 - MI link detection and configuration:
  *  0b0..Disabled for all ports
- *  0b1..Enabled for at least one MII port, refer to PHY Port Status (0x0518 ff.) for details
+ *  0b1..Enabled for at least one MII port, refer to PHY Port Status (0x0518 is FF or not) for details
  */
 #define ECAT_MII_MANAGEMENT_CONTROL_OR_STATUS_PDI_BF2(x) (((uint16_t)(((uint16_t)(x)) << ECAT_MII_MANAGEMENT_CONTROL_OR_STATUS_PDI_BF2_SHIFT)) & ECAT_MII_MANAGEMENT_CONTROL_OR_STATUS_PDI_BF2_MASK)
 
@@ -3286,7 +3316,7 @@ typedef struct {
 
 #define ECAT_SYNCMANAGER_PDI_CONTROL_BF0_MASK    (0x1U)
 #define ECAT_SYNCMANAGER_PDI_CONTROL_BF0_SHIFT   (0U)
-/*! BF0 - Deactivate SyncManager: */
+/*! BF0 - Deactivate SyncManager:Read */
 #define ECAT_SYNCMANAGER_PDI_CONTROL_BF0(x)      (((uint8_t)(((uint8_t)(x)) << ECAT_SYNCMANAGER_PDI_CONTROL_BF0_SHIFT)) & ECAT_SYNCMANAGER_PDI_CONTROL_BF0_MASK)
 
 #define ECAT_SYNCMANAGER_PDI_CONTROL_BF1_MASK    (0x2U)
@@ -3308,7 +3338,7 @@ typedef struct {
 
 #define ECAT_SYNCMANAGER_PDI_CONTROL_PDI_BF0_MASK (0x1U)
 #define ECAT_SYNCMANAGER_PDI_CONTROL_PDI_BF0_SHIFT (0U)
-/*! BF0 - Deactivate SyncManager: */
+/*! BF0 - Deactivate SyncManager:Read */
 #define ECAT_SYNCMANAGER_PDI_CONTROL_PDI_BF0(x)  (((uint8_t)(((uint8_t)(x)) << ECAT_SYNCMANAGER_PDI_CONTROL_PDI_BF0_SHIFT)) & ECAT_SYNCMANAGER_PDI_CONTROL_PDI_BF0_MASK)
 
 #define ECAT_SYNCMANAGER_PDI_CONTROL_PDI_BF1_MASK (0x2U)
@@ -3630,9 +3660,7 @@ typedef struct {
 
 #define ECAT_UNI_PULSE_LENGTH_OF_SYNCSIGNALS_BF0_MASK (0xFFFFU)
 #define ECAT_UNI_PULSE_LENGTH_OF_SYNCSIGNALS_BF0_SHIFT (0U)
-/*! BF0 - Pulse length of SyncSignals (in Units of 10ns)
- *  0b0000000000000000..Acknowledge mode: SyncSignal will be cleared by reading SYNC[1:0] Status register
- */
+/*! BF0 - Pulse length of SyncSignals (in Units of 10ns) */
 #define ECAT_UNI_PULSE_LENGTH_OF_SYNCSIGNALS_BF0(x) (((uint16_t)(((uint16_t)(x)) << ECAT_UNI_PULSE_LENGTH_OF_SYNCSIGNALS_BF0_SHIFT)) & ECAT_UNI_PULSE_LENGTH_OF_SYNCSIGNALS_BF0_MASK)
 /*! @} */
 

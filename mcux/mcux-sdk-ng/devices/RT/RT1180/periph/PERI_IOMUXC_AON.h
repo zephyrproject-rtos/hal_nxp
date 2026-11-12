@@ -8,6 +8,10 @@
 **                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
 **                          MIMXRT1182XVP2C
+**                          MIMXRT1183CHM8C_cm33
+**                          MIMXRT1183CHM8C_cm7
+**                          MIMXRT1184CHM8C_cm33
+**                          MIMXRT1184CHM8C_cm7
 **                          MIMXRT1185CVJ8C_cm33
 **                          MIMXRT1185CVJ8C_cm7
 **                          MIMXRT1185XVJ8C_cm33
@@ -40,9 +44,17 @@
 **                          MIMXRT118CCVJ8C_cm7
 **                          MIMXRT118CXVJ8C_cm33
 **                          MIMXRT118CXVJ8C_cm7
+**                          MIMXRT118DCHM8C_cm33
+**                          MIMXRT118DCHM8C_cm7
+**                          MIMXRT118DXHM8C_cm33
+**                          MIMXRT118DXHM8C_cm7
+**                          MIMXRT118ECHM8C_cm33
+**                          MIMXRT118ECHM8C_cm7
+**                          MIMXRT118EXHM8C_cm33
+**                          MIMXRT118EXHM8C_cm7
 **
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260206
+**     Version:             rev. 4.0, 2026-08-14
+**     Build:               b260822
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC_AON
@@ -62,14 +74,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2026-08-14)
+**         Based on RM Rev 10.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_IOMUXC_AON.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-08-14
  * @brief CMSIS Peripheral Access Layer for IOMUXC_AON
  *
  * CMSIS Peripheral Access Layer for IOMUXC_AON
@@ -82,6 +96,14 @@
 #include "MIMXRT1181_COMMON.h"
 #elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
+#elif (defined(CPU_MIMXRT1183CHM8C_cm33))
+#include "MIMXRT1183_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1183CHM8C_cm7))
+#include "MIMXRT1183_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1184CHM8C_cm33))
+#include "MIMXRT1184_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1184CHM8C_cm7))
+#include "MIMXRT1184_cm7_COMMON.h"
 #elif (defined(CPU_MIMXRT1185CVJ8C_cm33) || defined(CPU_MIMXRT1185XVJ8C_cm33))
 #include "MIMXRT1185_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT1185CVJ8C_cm7) || defined(CPU_MIMXRT1185XVJ8C_cm7))
@@ -102,6 +124,14 @@
 #include "MIMXRT118C_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT118CCVJ8C_cm7) || defined(CPU_MIMXRT118CXVJ8C_cm7))
 #include "MIMXRT118C_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118DCHM8C_cm33) || defined(CPU_MIMXRT118DXHM8C_cm33))
+#include "MIMXRT118D_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118DCHM8C_cm7) || defined(CPU_MIMXRT118DXHM8C_cm7))
+#include "MIMXRT118D_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118ECHM8C_cm33) || defined(CPU_MIMXRT118EXHM8C_cm33))
+#include "MIMXRT118E_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118ECHM8C_cm7) || defined(CPU_MIMXRT118EXHM8C_cm7))
+#include "MIMXRT118E_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -322,7 +352,7 @@ typedef enum _iomuxc_aon_select_input
 typedef struct {
   __IO uint32_t SW_MUX_CTL_PAD[IOMUXC_AON_SW_MUX_CTL_PAD_COUNT]; /**< SW_MUX_CTL_PAD_GPIO_AON_00 SW MUX Control Register..SW_MUX_CTL_PAD_GPIO_AON_28_DUMMY SW MUX Control Register, array offset: 0x0, array step: 0x4 */
   __IO uint32_t SW_PAD_CTL_PAD[IOMUXC_AON_SW_PAD_CTL_PAD_COUNT]; /**< SW_PAD_CTL_PAD_GPIO_AON_00 SW PAD Control Register..SW_PAD_CTL_PAD_GPIO_AON_28_DUMMY SW PAD Control Register, array offset: 0x74, array step: 0x4 */
-  __IO uint32_t SELECT_INPUT[IOMUXC_AON_SELECT_INPUT_COUNT]; /**< I3C1_PIN_SCL_IN_SELECT_INPUT DAISY Register..SAI1_IPP_IND_SAI_TXSYNC_SELECT_INPUT DAISY Register, array offset: 0xE8, array step: 0x4 */
+  __IO uint32_t SELECT_INPUT[IOMUXC_AON_SELECT_INPUT_COUNT]; /**< Select I3C1_SCL DAISY Register..Select SAI1_TX_SYNC DAISY Register, array offset: 0xE8, array step: 0x4 */
 } IOMUXC_AON_Type;
 
 /* ----------------------------------------------------------------------------
@@ -340,18 +370,18 @@ typedef struct {
 #define IOMUXC_AON_SW_MUX_CTL_PAD_MUX_MODE_MASK  (0xFU)  /* Merged from fields with different position or width, of widths (3, 4), largest definition used */
 #define IOMUXC_AON_SW_MUX_CTL_PAD_MUX_MODE_SHIFT (0U)
 /*! MUX_MODE - MUX Mode Select Field.
- *  0b0000..Select mux mode: ALT0 mux port: SRC_BOOT_MODE02 of instance: src
- *  0b0001..Select mux mode: ALT1 mux port: CAN3_TX of instance: can3
+ *  0b0000..Select mux mode: ALT0 mux port: SRC_BOOT_MODE2 of instance: src
+ *  0b0001..Select mux mode: ALT1 mux port: FLEXCAN3_TX of instance: can3
  *  0b0010..Select mux mode: ALT2 mux port: LPSPI2_PCS3 of instance: lpspi2
- *  0b0011..Select mux mode: ALT3 mux port: LPSPI2_SDO of instance: lpspi2
+ *  0b0011..Select mux mode: ALT3 mux port: LPSPI2_SOUT of instance: lpspi2
  *  0b0100..Select mux mode: ALT4 mux port: LPTMR1_ALT3 of instance: lptmr1
  *  0b0101..Select mux mode: ALT5 mux port: GPIO1_IO02 of instance: gpio1
  *  0b0110..Select mux mode: ALT6 mux port: LPUART2_RTS_B of instance: lpuart2
- *  0b1000..Select mux mode: ALT8 mux port: TPM1_CH01 of instance: tpm1
+ *  0b1000..Select mux mode: ALT8 mux port: TPM1_CH1 of instance: tpm1
  *  0b1001..Reserved
  *  0b1010..Reserved
  *  0b1011..Reserved
- *  0b1100..Select mux mode: ALT12 mux port: ECAT_CLK_ECAT_CLK25 of instance: ecat
+ *  0b1100..Select mux mode: ALT12 mux port: CLKOUT25M of instance: ecat
  */
 #define IOMUXC_AON_SW_MUX_CTL_PAD_MUX_MODE(x)    (((uint32_t)(((uint32_t)(x)) << IOMUXC_AON_SW_MUX_CTL_PAD_MUX_MODE_SHIFT)) & IOMUXC_AON_SW_MUX_CTL_PAD_MUX_MODE_MASK)  /* Merged from fields with different position or width, of widths (3, 4), largest definition used */
 
@@ -418,7 +448,7 @@ typedef struct {
 #define IOMUXC_AON_SW_PAD_CTL_PAD_DWP_LOCK(x)    (((uint32_t)(((uint32_t)(x)) << IOMUXC_AON_SW_PAD_CTL_PAD_DWP_LOCK_SHIFT)) & IOMUXC_AON_SW_PAD_CTL_PAD_DWP_LOCK_MASK)
 /*! @} */
 
-/*! @name SELECT_INPUT - I3C1_PIN_SCL_IN_SELECT_INPUT DAISY Register..SAI1_IPP_IND_SAI_TXSYNC_SELECT_INPUT DAISY Register */
+/*! @name SELECT_INPUT - Select I3C1_SCL DAISY Register..Select SAI1_TX_SYNC DAISY Register */
 /*! @{ */
 
 #define IOMUXC_AON_SELECT_INPUT_DAISY_MASK       (0x3U)  /* Merged from fields with different position or width, of widths (1, 2), largest definition used */

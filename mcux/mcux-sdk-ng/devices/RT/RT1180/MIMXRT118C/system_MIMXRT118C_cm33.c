@@ -8,9 +8,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    IMXRT1180RM, Rev 5, 01/2024
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260206
+**     Reference manual:    IMXRT1180RM, Rev 10, 05/2026
+**     Version:             rev. 4.0, 2026-08-14
+**     Build:               b260822
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -32,6 +32,8 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2026-08-14)
+**         Based on RM Rev 10.
 **
 ** ###################################################################
 */
@@ -39,7 +41,7 @@
 /*!
  * @file MIMXRT118C_cm33
  * @version 1.0
- * @date 2026-02-06
+ * @date 2026-08-22
  * @brief Device specific configuration file for MIMXRT118C_cm33 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains

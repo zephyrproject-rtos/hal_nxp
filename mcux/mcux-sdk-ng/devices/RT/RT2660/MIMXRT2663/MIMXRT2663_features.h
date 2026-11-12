@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2024-11-13
-**     Build:               b260818
+**     Build:               b260908
 **
 **     Abstract:
 **         Chip specific module features.
@@ -666,9 +666,9 @@
 /* @brief Init memory size 1 */
 #define FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_1 (0xA60)
 /* @brief Init memory base 2 */
-#define FSL_FEATURE_FLEXCAN_INIT_MEMORY_BASE_2 (0xF28)
+#define FSL_FEATURE_FLEXCAN_INIT_MEMORY_BASE_2 (0xC20)
 /* @brief Init memory size 2 */
-#define FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_2 (0xD8)
+#define FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_2 (0x25E0)
 /* @brief Has enhanced bit timing register (register EPRS, ENCBT, EDCBT and ETDC). */
 #define FSL_FEATURE_FLEXCAN_HAS_ENHANCED_BIT_TIMING_REG (1)
 /* @brief Has Pretended Networking mode support. */
@@ -947,6 +947,8 @@
 #define FSL_FEATURE_SINC_CACFR_HAS_ADMASEL (0)
 /* @brief SINC CACFR register has no bitfield PTMUX. */
 #define FSL_FEATURE_SINC_CACFR_HAS_NO_PTMUX (0)
+/* @brief SINC MCR register has bitfield DOZEN. */
+#define FSL_FEATURE_SINC_MCR_HAS_DOZEN (0)
 
 /* TPM module features */
 
@@ -1060,6 +1062,11 @@
 #define FSL_FEATURE_DCIF_GAMMA_RAM_OFFSET (0x01400UL)
 /* @brief CULT RAM OFFSET. */
 #define FSL_FEATURE_DCIF_CLUT_RAM_OFFSET (0x01000UL)
+
+/* ISI module features */
+
+/* @brief Indicate whether ISI supports destination selection (bitfield CTRL[DEST]). */
+#define FSL_FEATURE_ISI_SUPPORT_DEST (1)
 
 /* MEMORY module features */
 
