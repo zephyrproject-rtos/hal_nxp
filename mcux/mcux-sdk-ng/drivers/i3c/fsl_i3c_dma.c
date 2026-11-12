@@ -47,6 +47,9 @@ enum _i3c_dma_flag_constants
 
     /*! Errors to check for. */
     kMasterErrorFlags = kI3C_MasterErrorNackFlag | kI3C_MasterErrorWriteAbortFlag |
+#if defined(I3C_MERRWARN_URUN_MASK)
+                        kI3C_MasterErrorUnderrunFlag |
+#endif
 #if !defined(FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM) || (!FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM)
                         kI3C_MasterErrorTermFlag |
 #endif
@@ -541,11 +544,11 @@ static void I3C_MasterRunDMATransfer(I3C_Type *base, i3c_master_dma_handle_t *ha
         I3C_MasterSetDMARxLoop(handle);
 #else
         dma_channel_config_t xferConfig;
-        DMA_PrepareChannelTransfer(&xferConfig, (uint32_t *)(uint32_t)&base->MRDATAB, data,
-                                   DMA_CHANNEL_XFER(false, false, true, false, sizeof(uint8_t),
-                                                    kDMA_AddressInterleave0xWidth, kDMA_AddressInterleave1xWidth,
-                                                    dataSize),
-                                   kDMA_PeripheralToMemory, NULL, NULL);
+        DMA_PrepareChannelTransfer(
+            &xferConfig, (uint32_t *)(uint32_t)&base->MRDATAB, data,
+            DMA_CHANNEL_XFER(false, false, true, false, sizeof(uint8_t), kDMA_AddressInterleave0xWidth,
+                             kDMA_AddressInterleave1xWidth, dataSize),
+            kDMA_PeripheralToMemory, NULL, NULL);
         (void)DMA_SubmitChannelTransfer(handle->rxDmaHandle, &xferConfig);
         DMA_StartTransfer(handle->rxDmaHandle);
 #endif
@@ -753,10 +756,10 @@ static status_t I3C_MasterRunTransferStateMachineDMA(I3C_Type *base, i3c_master_
 #endif
                     handle->state = (uint8_t)kWaitForCompletionState;
                     /* Send repeated start and slave address. */
-                    if (handle->transfer.dataSize < 256U)
+                    if (handle->transfer.dataSize <= (size_t)FSL_I3C_RDTERM_MAX)
                     {
                         result = I3C_MasterRepeatedStartWithRxSize(base, xfer->busType, xfer->slaveAddress, kI3C_Read,
-                                                                   (uint8_t)handle->transfer.dataSize);
+                                                                   (uint32_t)handle->transfer.dataSize);
                     }
                     else
                     {

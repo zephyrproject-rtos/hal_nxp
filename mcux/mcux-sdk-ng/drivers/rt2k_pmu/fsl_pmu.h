@@ -38,6 +38,23 @@
 #endif
 #endif
 
+/*! @brief Let PMU_ConfigBodyBias() write the NWELL_VOL/PWELL_VOL trim bitfields.
+ *
+ *  0 (default) = PMU_ConfigBodyBias() does a read-modify-write and never touches
+ *  NWELL_VOL/PWELL_VOL, so it cannot clobber a ROM-applied trim on parts whose
+ *  P-Well/N-Well fuse is not yet trimmed. 1 = PMU_ConfigBodyBias() also writes
+ *  config->nwellVolSel/pwellVolSel, for parts/boards where SW is meant to supply
+ *  the trim. Override via Kconfig (CONFIG_PMU_DRIVER_UPDATE_TRIM_VALUE) or a direct
+ *  preprocessor definition.
+ */
+#ifndef PMU_DRIVER_UPDATE_TRIM_VALUE
+#ifdef CONFIG_PMU_DRIVER_UPDATE_TRIM_VALUE
+#define PMU_DRIVER_UPDATE_TRIM_VALUE CONFIG_PMU_DRIVER_UPDATE_TRIM_VALUE
+#else
+#define PMU_DRIVER_UPDATE_TRIM_VALUE 0U
+#endif
+#endif
+
 /*!
  * @brief PMU overall operating mode.
  *
@@ -402,8 +419,14 @@ typedef enum _pmu_bb_pwell_clk
 typedef struct _pmu_body_bias_config
 {
     pmu_body_bias_mode_t mode;        /*!< Body bias operating mode. */
-    uint8_t              nwellVolSel; /*!< N-well target voltage selection code (0 = 0 mV for ZBB). */
-    uint8_t              pwellVolSel; /*!< P-well target voltage selection code (0 = 0 mV for ZBB). */
+    uint8_t nwellVolSel; /*!< N-well target voltage selection code. Only written to hardware by
+                              @ref PMU_ConfigBodyBias when PMU_DRIVER_UPDATE_TRIM_VALUE is enabled;
+                              at its default (disabled) this field is diagnostic-only, since ROM owns
+                              the trim on parts whose P-Well/N-Well fuse is not yet trimmed.
+                              @ref PMU_ApplyBodyBiasBlocking derives its own stability-check value
+                              straight from the register, not from this field. */
+    uint8_t pwellVolSel; /*!< P-well target voltage selection code. Same PMU_DRIVER_UPDATE_TRIM_VALUE
+                              gating as nwellVolSel. */
     bool                 advcEnable;  /*!< true = enable advanced body bias control. */
     pmu_bb_ramp_clk_t    rampClkSel;  /*!< Voltage ramp clock frequency. */
     pmu_bb_pwell_clk_t   pwellClkSel; /*!< P-well charge pump clock divider. */
@@ -606,6 +629,12 @@ static inline bool PMU_IsVddPmu1V8Range(PMU_Type *base)
  * Writes configuration but does NOT trigger the body bias FSM update.
  * Call @ref PMU_ApplyBodyBiasBlocking or @ref PMU_ApplyBodyBiasNonBlocking
  * after this function to apply the new configuration to hardware.
+ *
+ * Always updates mode/pwellClkSel/rampClkSel/advcEnable. Whether it also writes
+ * config->nwellVolSel/pwellVolSel to the NWELL_VOL/PWELL_VOL bitfields depends on
+ * PMU_DRIVER_UPDATE_TRIM_VALUE: disabled (default) does a read-modify-write that leaves those
+ * bitfields untouched, so a ROM-applied trim on parts with an untrimmed P-Well/N-Well fuse is
+ * never overwritten; enabled writes them like every other field.
  *
  * @param base    PMU peripheral base address.
  * @param config  Pointer to body bias configuration. Must not be NULL.

@@ -1,5 +1,12 @@
 # SAI
 
+## [2.4.12]
+
+- Bug Fixes
+  - Fixed MSG NULL_FIELD findings in SAI_TransferTxHandleIRQ and
+    SAI_TransferRxHandleIRQ by guarding the transfer buffer against NULL
+    before it is passed to SAI_WriteNonBlocking/SAI_ReadNonBlocking.
+
 ## [2.4.11]
 
 - Bug Fixes

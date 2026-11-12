@@ -406,6 +406,8 @@ struct _dsi_handle
     dsi_callback_t callback;  /*!< DSI callback */
     void *userData;           /*!< Callback parameter */
     const MIPI_DSI_Type *dsi; /*!< Pointer to MIPI DSI peripheral. */
+    bool videoModeWasEnabled; /*!< Video mode was enabled and disabled for the in-flight
+                                   APB transfer; restore it once that transfer completes. */
 };
 
 /*******************************************************************************

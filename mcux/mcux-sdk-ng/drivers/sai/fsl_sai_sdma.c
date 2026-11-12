@@ -91,6 +91,11 @@ static void SAI_TxSDMACallback(sdma_handle_t *handle, void *userData, bool trans
     sai_sdma_private_handle_t *privHandle = (sai_sdma_private_handle_t *)userData;
     sai_sdma_handle_t *saiHandle          = privHandle->handle;
 
+    if (saiHandle == NULL)
+    {
+        return;
+    }
+
     /* If finished a block, call the callback function */
     (void)memset(&saiHandle->saiQueue[saiHandle->queueDriver], 0, sizeof(sai_transfer_t));
     saiHandle->queueDriver = (saiHandle->queueDriver + 1U) % SAI_XFER_QUEUE_SIZE;
@@ -117,6 +122,11 @@ static void SAI_RxSDMACallback(sdma_handle_t *handle, void *userData, bool trans
 {
     sai_sdma_private_handle_t *privHandle = (sai_sdma_private_handle_t *)userData;
     sai_sdma_handle_t *saiHandle          = privHandle->handle;
+
+    if (saiHandle == NULL)
+    {
+        return;
+    }
 
     /* If finished a block, call the callback function */
     (void)memset(&saiHandle->saiQueue[saiHandle->queueDriver], 0, sizeof(sai_transfer_t));

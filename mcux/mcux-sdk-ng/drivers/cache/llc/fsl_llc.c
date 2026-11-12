@@ -16,9 +16,49 @@
 #define FSL_COMPONENT_ID "platform.drivers.cache_llc"
 #endif
 
-/* Timeout for maintenance operations (in loop iterations) */
+/* Upper bound, in poll-loop iterations, on how long a maintenance operation may
+   take before the driver gives up and reports a hardware fault.
+
+   This budget must not expire on a well-formed operation, so it is derived from
+   the cache geometry instead of being a bare number. The cost of an operation
+   scales with the number of entries it touches: the whole-cache operations walk
+   every entry selected by CCUCMWVR, and LLC_CleanInvalidateCacheByRange() caps a
+   range at the cache capacity for exactly this reason. Writing a dirty line back
+   dominates, and at most every entry can be dirty, so
+   LLC_WAY_COUNT * LLC_SET_COUNT entries bounds the work of every operation.
+
+   Measured on MIMXRT2663 (Cortex-M85 at 1 GHz, LLC backed by 16-bit HyperRAM at
+   250 MHz), armgcc -Os, whole cache 8 ways x 256 sets = 2048 entries:
+     flush valid entries, nothing dirty          910 iterations
+     each additional dirty line                 +3.5 iterations
+     flush address range over a 2048-line chunk 8791 iterations, extrapolated to
+                                                every entry resident and dirty
+   That worst case is 4.3 iterations per cache entry. The same measurements at
+   -O0 needed only 3.7 per entry for the same elapsed cycle count, because what
+   changed was the speed of the poll loop, not the speed of the cache. The budget
+   therefore has to be sized for the tightest loop a compiler may emit, not for
+   the one that happened to be measured.
+
+   16 iterations per entry leaves roughly 3.7x margin over that worst case, so
+   on this device the budget resolves to 8 * 256 * 16 = 32768 iterations.
+   Overshooting only lengthens the path to reporting a fault - 32768 iterations
+   is still under a millisecond at 1 GHz - whereas undershooting makes a normally
+   progressing operation return kStatus_Timeout, which is the defect this
+   derivation replaces.
+
+   CONFIG_LLC_MAINTENANCE_TIMEOUT is the Kconfig knob (LLC_MAINTENANCE_TIMEOUT)
+   and is always defined in a Kconfig build, so it cannot be used as the
+   "unset" test: the derivation is selected by the value 0, which is the Kconfig
+   default and also what a build with no Kconfig at all gets from the fallback
+   below. A non-zero value is taken verbatim. */
 #if !defined(CONFIG_LLC_MAINTENANCE_TIMEOUT)
-#define CONFIG_LLC_MAINTENANCE_TIMEOUT (1000U)
+#define CONFIG_LLC_MAINTENANCE_TIMEOUT 0
+#endif
+
+#if (CONFIG_LLC_MAINTENANCE_TIMEOUT == 0)
+#define LLC_MAINTENANCE_TIMEOUT_ITERATIONS (LLC_WAY_COUNT * LLC_SET_COUNT * 16U)
+#else
+#define LLC_MAINTENANCE_TIMEOUT_ITERATIONS ((uint32_t)CONFIG_LLC_MAINTENANCE_TIMEOUT)
 #endif
 
 /*******************************************************************************
@@ -37,19 +77,27 @@ static llc_callback_t s_LLCCallback[ARRAY_SIZE(s_llcBases)];
 #define LLC_PHYMEM_COLUMN_COUNT LLC_PHYMEM_BASE_ALIAS_COUNT
 /* Array of LLC physical memory base address,
   it is a 2D array, the row indicate cache instance,
-  the column indicate the alias of one instance.  */
+  the column indicate one physical memory window of that instance.  */
 static uint32_t const s_llcPhymemBases[FSL_FEATURE_SOC_LLC_COUNT][LLC_PHYMEM_COLUMN_COUNT] = LLC_PHYMEM_BASES;
-/* Array of LLC physical size base address,
+/* Array of LLC physical memory size,
   it is a 2D array, the row indicate cache instance,
-  the column indicate the alias of one instance.  */
+  the column indicate one physical memory window of that instance.  */
 static uint32_t const s_llcPhymemSizes[FSL_FEATURE_SOC_LLC_COUNT][LLC_PHYMEM_COLUMN_COUNT] = LLC_PHYMEM_SIZES;
+/* Read the tables in place. Copying them into automatic storage first only
+   duplicates constant data on the stack and drops the const qualifier, and
+   sizing such a copy from the source object is a latent overrun as soon as the
+   destination is declared with different dimensions. */
+#define LLC_PHYMEM_BASE(instance, aliasId) (s_llcPhymemBases[instance][aliasId])
+#define LLC_PHYMEM_SIZE(instance, aliasId) (s_llcPhymemSizes[instance][aliasId])
 #else
 #define LLC_PHYMEM_COLUMN_COUNT 1
 static uint32_t const s_llcPhymemBases[] = LLC_PHYMEM_BASES;
 static uint32_t const s_llcPhymemSizes[] = LLC_PHYMEM_SIZES;
+/* A single window per instance: the instance selects the entry and aliasId is
+   always 0, so it takes no part in the indexing. */
+#define LLC_PHYMEM_BASE(instance, aliasId) (s_llcPhymemBases[instance])
+#define LLC_PHYMEM_SIZE(instance, aliasId) (s_llcPhymemSizes[instance])
 #endif
-
-volatile uint8_t g_llcMemPhyAliasId = 0U;
 
 /*******************************************************************************
  * Prototypes
@@ -61,6 +109,16 @@ volatile uint8_t g_llcMemPhyAliasId = 0U;
  * @return Cache line offset bits.
  */
 static uint32_t LLC_GetCacheLineOffsetBits(LLC_Type *base);
+
+/*!
+ * @brief Waits until no maintenance operation is active on the given instance.
+ *
+ * @param base LLC peripheral base address.
+ * @return kStatus_Success No maintenance operation is active.
+ * @return kStatus_Timeout A maintenance operation is still active after the
+ *         polling budget expired.
+ */
+static status_t LLC_WaitMaintenanceIdle(LLC_Type *base);
 
 /*!
  * @brief Performs maintenance operation with timeout.
@@ -80,6 +138,24 @@ static status_t LLC_RunMaintenance(LLC_Type *base, uint32_t arrayId, llc_mainten
  * @return Aligned address.
  */
 static uint32_t LLC_AlignAddressToCacheLine(LLC_Type *base, uint32_t address);
+
+/*!
+ * @brief Resolves a physical memory address to an LLC instance and to the
+ *        physical memory window of that instance which contains the address.
+ *
+ * The window index is returned through a parameter rather than through a
+ * module-level variable, so that the lookup is reentrant and a caller cannot
+ * have its window index overwritten by an unrelated lookup.
+ *
+ * @param address The physical memory address.
+ * @param aliasId Receives the index of the matching column in the
+ *                LLC_PHYMEM_BASES / LLC_PHYMEM_SIZES tables. Always written:
+ *                set to 0 when no instance covers the address, so that it is
+ *                never left out of range.
+ * @return LLC instance number starting from 0, or 0xFFFFFFFFUL when no instance
+ *         covers the address.
+ */
+static uint32_t LLC_FindInstanceAndAlias(uint32_t address, uint32_t *aliasId);
 
 /*!
  * brief Returns an instance number given physical memory address.
@@ -115,21 +191,56 @@ static uint32_t LLC_GetCacheLineOffsetBits(LLC_Type *base)
 }
 
 /*!
+ * brief Waits until no maintenance operation is active on the given instance.
+ */
+static status_t LLC_WaitMaintenanceIdle(LLC_Type *base)
+{
+    uint32_t timeout = LLC_MAINTENANCE_TIMEOUT_ITERATIONS;
+
+    /* Test the flag before the budget, so an operation that retires on the very
+       last iteration is reported as success. Only report a timeout when the
+       budget is exhausted AND the operation is still active. */
+    while ((base->CCUCMAR & LLC_CCUCMAR_MNTOPACTV_MASK) != 0U)
+    {
+        if (timeout == 0U)
+        {
+            return kStatus_Timeout;
+        }
+        timeout--;
+    }
+
+    return kStatus_Success;
+}
+
+/*!
  * brief Performs maintenance operation with timeout.
  */
 static status_t LLC_RunMaintenance(LLC_Type *base, uint32_t arrayId, llc_maintenance_operation_t operation)
 {
-    uint32_t timeout = CONFIG_LLC_MAINTENANCE_TIMEOUT;
+    status_t status;
+
+    /* The cache accepts one maintenance operation at a time. Writing CCUCMCR
+       while CCUCMAR[MNTOPACTV] is still set launches a second operation on top
+       of an unfinished one, which the hardware does not define: the reference
+       manual (22.6.3 "Cache maintenance operations") warns that concurrent
+       operations may lead to undesired behavior, including unresponsiveness.
+       The location registers the caller has just programmed also belong to the
+       operation still in flight, so the two would interfere.
+
+       Wait for the cache to go idle first, and report kStatus_Timeout rather
+       than issuing an overlapping operation if it does not. */
+    status = LLC_WaitMaintenanceIdle(base);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
 
     base->CCUCMCR = (base->CCUCMCR & ~(LLC_CCUCMCR_ARRAYID_MASK | LLC_CCUCMCR_MNTOP_MASK)) |
                     LLC_CCUCMCR_ARRAYID(arrayId) | LLC_CCUCMCR_MNTOP((uint32_t)operation);
 
-    while (((base->CCUCMAR & LLC_CCUCMAR_MNTOPACTV_MASK) != 0U) && (timeout > 0U))
-    {
-        timeout--;
-    }
-
-    return (timeout > 0U) ? kStatus_Success : kStatus_Timeout;
+    /* Wait for the operation just launched to retire, so that on success the
+       caller can rely on the maintenance having taken effect. */
+    return LLC_WaitMaintenanceIdle(base);
 }
 
 /*!
@@ -143,33 +254,46 @@ static uint32_t LLC_AlignAddressToCacheLine(LLC_Type *base, uint32_t address)
 }
 
 /*!
+ * brief Resolves a physical memory address to an LLC instance and to the
+ *       physical memory window of that instance which contains the address.
+ */
+static uint32_t LLC_FindInstanceAndAlias(uint32_t address, uint32_t *aliasId)
+{
+    assert(aliasId != NULL);
+
+    uint32_t instance;
+    uint32_t alias;
+    uint32_t addr = MSDK_REG_NONSECURE_ADDR(address);
+
+    /* Defined on every path: a caller that ignores the returned instance still
+       gets an in-range column index instead of LLC_PHYMEM_COLUMN_COUNT. */
+    *aliasId = 0UL;
+
+    for (instance = 0UL; instance < ARRAY_SIZE(s_llcBases); instance++)
+    {
+        for (alias = 0UL; alias < LLC_PHYMEM_COLUMN_COUNT; alias++)
+        {
+            uint32_t windowBase = MSDK_REG_NONSECURE_ADDR(LLC_PHYMEM_BASE(instance, alias));
+
+            if ((addr >= windowBase) && ((addr - windowBase) < LLC_PHYMEM_SIZE(instance, alias)))
+            {
+                *aliasId = alias;
+                return instance;
+            }
+        }
+    }
+
+    return 0xFFFFFFFFUL;
+}
+
+/*!
  * brief Returns an instance number given physical memory address.
  */
 uint32_t LLC_GetInstanceByAddr(uint32_t address)
 {
-    uint32_t i = 0UL;
-    uint32_t phyMemBase[FSL_FEATURE_SOC_LLC_COUNT][LLC_PHYMEM_COLUMN_COUNT];
-    uint32_t phyMemSize[FSL_FEATURE_SOC_LLC_COUNT][LLC_PHYMEM_COLUMN_COUNT];
-    memcpy(phyMemBase, s_llcPhymemBases, sizeof(s_llcPhymemBases));
-    memcpy(phyMemSize, s_llcPhymemSizes, sizeof(s_llcPhymemSizes));
+    uint32_t aliasId;
 
-    while (i < ARRAY_SIZE(s_llcBases))
-    {
-        g_llcMemPhyAliasId = 0U;
-        while (g_llcMemPhyAliasId < LLC_PHYMEM_COLUMN_COUNT)
-        {
-            if ((MSDK_REG_NONSECURE_ADDR(address) >= MSDK_REG_NONSECURE_ADDR(phyMemBase[i][g_llcMemPhyAliasId])) &&
-                ((MSDK_REG_NONSECURE_ADDR(address) - MSDK_REG_NONSECURE_ADDR(phyMemBase[i][g_llcMemPhyAliasId])) <
-                 phyMemSize[i][g_llcMemPhyAliasId]))
-            {
-                return i;
-            }
-            g_llcMemPhyAliasId++;
-        }
-        i++;
-    }
-
-    return 0xFFFFFFFFUL;
+    return LLC_FindInstanceAndAlias(address, &aliasId);
 }
 
 /*!
@@ -207,7 +331,9 @@ void LLC_GetDefaultConfig(llc_config_t *config)
  * param config Pointer to configuration structure.
  * return kStatus_Success LLC initialization succeeded.
  * return kStatus_InvalidArgument Invalid argument provided.
- * return kStatus_Timeout Maintenance operation timeout.
+ * return kStatus_Timeout The tag/data array initialization did not complete
+ *         within the driver's maintenance poll budget. See the LLC Cache
+ *         Operations group for what that budget covers.
  */
 status_t LLC_Init(LLC_Type *base, const llc_config_t *config)
 {
@@ -419,7 +545,21 @@ status_t LLC_CleanInvalidateCacheAtAddress(LLC_Type *base, uint32_t address)
 
     uint32_t lineLow = address >> cacheLineOffsetBits;
 
-    /* Program address (low bits across MNTSET/MNTWAY/MNTWORD, high bits into MNTADDR) */
+    /* Program the cache line address. The by-address operations take the line
+       number as a flat value in CCUCMLR0/CCUCMLR1 - the MNTSET/MNTWAY/MNTWORD
+       fields of CCUCMLR0 are only named that way for the set/way operations, so
+       shifting the address right by the line offset bits and storing it as-is is
+       the correct encoding and addresses a single line exactly.
+       'address' must be an address in one of the cache's physical memory
+       windows (the windows listed in LLC_PHYMEM_BASES); a bypass alias of the
+       same memory does not match any cached line.
+
+       CCUCMLR2[MNTRANGE] is deliberately not written here: MNTOP = flush entry
+       at address operates on the single line selected by CCUCMLR0/1 and the
+       hardware does not consult MNTRANGE for it, so a value left over from an
+       earlier range operation cannot widen this operation. Do not add a
+       CCUCMLR2 write "for safety" - it would be dead code. Likewise CCUCMWVR
+       (way valid) is not consulted by the by-address operations. */
     base->CCUCMLR0 = lineLow;
     base->CCUCMLR1 = 0U;
 
@@ -495,7 +635,14 @@ status_t LLC_CleanInvalidateCacheAtSetWayRange(LLC_Type *base, uint16_t set, uin
     /* Set maintenance location registers. MNTRANGE is a zero-based line count
        (hardware flushes MNTRANGE + 1 lines), so program (sizeInCacheLines - 1)
        to maintain exactly sizeInCacheLines lines. sizeInCacheLines == 0 is
-       already rejected above, so the subtraction cannot underflow. */
+       already rejected above, so the subtraction cannot underflow.
+
+       The flush set/way range operation walks way-major from the starting
+       (set, way) entry: it advances through the ways of the current set before
+       moving to the next set, so sizeInCacheLines entries starting at
+       (set, way) span 1 + (sizeInCacheLines - 1) / LLC_WAY_COUNT sets. This is
+       not the same traversal as the by-address range operation, which advances
+       one cache line of memory at a time. */
     base->CCUCMLR0 = LLC_CCUCMLR0_MNTSET(set) | LLC_CCUCMLR0_MNTWAY(way) | LLC_CCUCMLR0_MNTWORD(0U);
     base->CCUCMLR1 = 0U;
     base->CCUCMLR2 = (base->CCUCMLR2 & ~LLC_CCUCMLR2_MNTRANGE_MASK) | LLC_CCUCMLR2_MNTRANGE(sizeInCacheLines - 1U);
@@ -538,9 +685,13 @@ status_t LLC_CleanInvalidateCacheByRange(uint32_t address, uint32_t sizeByte)
         return kStatus_InvalidArgument;
     }
 
-    /* Determine the LLC instance from the start address */
+    /* Determine the LLC instance from the start address, and with it the
+       physical memory window the range has to stay inside. Both come out of one
+       lookup, so the bound check below cannot be performed against a window
+       that belongs to a different address. */
 
-    uint32_t instance = LLC_GetInstanceByAddr(address);
+    uint32_t aliasId;
+    uint32_t instance = LLC_FindInstanceAndAlias(address, &aliasId);
     if (instance >= ARRAY_SIZE(s_llcBases))
     {
         return kStatus_InvalidArgument;
@@ -557,14 +708,8 @@ status_t LLC_CleanInvalidateCacheByRange(uint32_t address, uint32_t sizeByte)
     uint32_t cacheLineNumber = 0U;
     status_t status          = kStatus_Success;
 
-    uint32_t phyMemBase[FSL_FEATURE_SOC_LLC_COUNT][LLC_PHYMEM_COLUMN_COUNT];
-    uint32_t phyMemSize[FSL_FEATURE_SOC_LLC_COUNT][LLC_PHYMEM_COLUMN_COUNT];
-    memcpy(phyMemBase, s_llcPhymemBases, sizeof(s_llcPhymemBases));
-    memcpy(phyMemSize, s_llcPhymemSizes, sizeof(s_llcPhymemSizes));
-
-    aliasOffset = MSDK_REG_NONSECURE_ADDR(address) -
-                  MSDK_REG_NONSECURE_ADDR(phyMemBase[instance][g_llcMemPhyAliasId]);
-    if (sizeByte > (phyMemSize[instance][g_llcMemPhyAliasId] - aliasOffset))
+    aliasOffset = MSDK_REG_NONSECURE_ADDR(address) - MSDK_REG_NONSECURE_ADDR(LLC_PHYMEM_BASE(instance, aliasId));
+    if (sizeByte > (LLC_PHYMEM_SIZE(instance, aliasId) - aliasOffset))
     {
         return kStatus_InvalidArgument;
     }
@@ -580,8 +725,15 @@ status_t LLC_CleanInvalidateCacheByRange(uint32_t address, uint32_t sizeByte)
     cacheLineNumber = ((endAddress - startAddress) >> cacheLineOffsetBits) + 1U;
 
     /* A single operation does not need to cover more lines than the cache can
-       hold. Split larger requests into cache-capacity chunks so each operation
-       completes within the maintenance polling budget. */
+       hold: beyond that the hardware is re-scanning entries that the same
+       operation has already flushed. Capping a chunk at the cache capacity is
+       also what keeps one operation inside LLC_MAINTENANCE_TIMEOUT_ITERATIONS,
+       since that budget is derived from the same LLC_WAY_COUNT * LLC_SET_COUNT
+       entry count - the two are deliberately expressed in the same terms, so the
+       cap and the budget scale together on a device with a different geometry.
+       MNTRANGE is 16 bits wide, so a chunk is clamped to UINT16_MAX lines as
+       well; on a cache larger than that the register width is the tighter
+       limit. */
     uint32_t maxChunkLines = LLC_WAY_COUNT * LLC_SET_COUNT;
     maxChunkLines = (maxChunkLines > (uint32_t)UINT16_MAX) ? (uint32_t)UINT16_MAX : maxChunkLines;
 

@@ -763,8 +763,11 @@ status_t SFA_MeasureBlocking(SFA_Type *base)
 
     if (mode == kSFA_FrequencyMeasurement0 || mode == kSFA_FrequencyMeasurement1)
     {
-        SFA_StartMeasureFrequency(base);
-        status = SFA_MeasureFrequencyBlocking(base, mode);
+        status = SFA_StartMeasureFrequency(base);
+        if (status == kStatus_Success)
+        {
+            status = SFA_MeasureFrequencyBlocking(base, mode);
+        }
     }
     /*
      * $Branch Coverage Justification$
@@ -772,8 +775,11 @@ status_t SFA_MeasureBlocking(SFA_Type *base)
      */
     else if (mode == kSFA_CUTPeriodMeasurement || mode == kSFA_TriggerBasedMeasurement) /* GCOVR_EXCL_BR_LINE */
     {
-        SFA_StartMeasurePeriod(base);
-        status = SFA_MeasurePeriodBlocking(base);
+        status = SFA_StartMeasurePeriod(base);
+        if (status == kStatus_Success)
+        {
+            status = SFA_MeasurePeriodBlocking(base);
+        }
     }
     else
     {
@@ -792,11 +798,12 @@ status_t SFA_MeasureBlocking(SFA_Type *base)
  * note This function has different functions for different instances.
  * param base SFA peripheral base address.
  */
-void SFA_MeasureNonBlocking(SFA_Type *base)
+status_t SFA_MeasureNonBlocking(SFA_Type *base)
 {
     assert(1 == FSL_FEATURE_SFA_INSTANCE_HAS_INTERRUPTn(base));
 
     sfa_measurement_mode_t mode;
+    status_t status = kStatus_Success;
 
     mode = (sfa_measurement_mode_t)SFA_GetMode(base);
 
@@ -804,7 +811,7 @@ void SFA_MeasureNonBlocking(SFA_Type *base)
 
     if (mode == kSFA_FrequencyMeasurement0 || mode == kSFA_FrequencyMeasurement1)
     {
-        SFA_StartMeasureFrequency(base);
+        status = SFA_StartMeasureFrequency(base);
     }
     /*
      * $Branch Coverage Justification$
@@ -812,12 +819,14 @@ void SFA_MeasureNonBlocking(SFA_Type *base)
      */
     else if (mode == kSFA_CUTPeriodMeasurement || mode == kSFA_TriggerBasedMeasurement) /* GCOVR_EXCL_BR_LINE */
     {
-        SFA_StartMeasurePeriod(base);
+        status = SFA_StartMeasurePeriod(base);
     }
     else
     {
-        /* Add comments to prevent the case of MISRA C-2012 ruel 15.7. */
+        /* Add comments to prevent the case of MISRA C-2012 rule 15.7. */
     }
+
+    return status;
 }
 
 /*!

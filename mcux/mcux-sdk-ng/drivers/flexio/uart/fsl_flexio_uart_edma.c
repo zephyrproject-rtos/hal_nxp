@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -80,11 +80,12 @@ static void FLEXIO_UART_TransferSendEDMACallback(edma_handle_t *handle, void *pa
 {
     flexio_uart_edma_private_handle_t *uartPrivateHandle = (flexio_uart_edma_private_handle_t *)param;
 
+    assert(uartPrivateHandle->base != NULL);
     assert(uartPrivateHandle->handle != NULL);
 
     /* Avoid the warning for unused variables. */
-    handle = handle;
-    tcds   = tcds;
+    (void)handle;
+    (void)tcds;
 
     if (transferDone)
     {
@@ -105,11 +106,12 @@ static void FLEXIO_UART_TransferReceiveEDMACallback(edma_handle_t *handle,
 {
     flexio_uart_edma_private_handle_t *uartPrivateHandle = (flexio_uart_edma_private_handle_t *)param;
 
+    assert(uartPrivateHandle->base != NULL);
     assert(uartPrivateHandle->handle != NULL);
 
     /* Avoid the warning for unused variables. */
-    handle = handle;
-    tcds   = tcds;
+    (void)handle;
+    (void)tcds;
 
     if (transferDone)
     {
@@ -177,13 +179,13 @@ status_t FLEXIO_UART_TransferCreateHandleEDMA(FLEXIO_UART_Type *base,
     /* Configure TX. */
     if (txEdmaHandle != NULL)
     {
-        EDMA_SetCallback(handle->txEdmaHandle, FLEXIO_UART_TransferSendEDMACallback, &s_edmaPrivateHandle);
+        EDMA_SetCallback(handle->txEdmaHandle, &FLEXIO_UART_TransferSendEDMACallback, &s_edmaPrivateHandle);
     }
 
     /* Configure RX. */
     if (rxEdmaHandle != NULL)
     {
-        EDMA_SetCallback(handle->rxEdmaHandle, FLEXIO_UART_TransferReceiveEDMACallback, &s_edmaPrivateHandle);
+        EDMA_SetCallback(handle->rxEdmaHandle, &FLEXIO_UART_TransferReceiveEDMACallback, &s_edmaPrivateHandle);
     }
 
     return kStatus_Success;

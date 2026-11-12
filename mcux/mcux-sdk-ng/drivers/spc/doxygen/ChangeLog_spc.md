@@ -1,5 +1,14 @@
 # SPC
 
+## [2.10.0]
+
+- New Features
+  - Added SPC_EnableRegulators()/SPC_DisableRegulators() to enable or disable the Core LDO,
+    System LDO, and DCDC regulators together with a single write to SPC->CNTRL. On devices
+    such as KW45/KW47 where SPC->CNTRL accepts only one write in total between POR/LVD/HVD
+    events, calling the existing per-regulator enable functions one after another only
+    applies the first call; the new combined API avoids that hazard.
+
 ## [2.9.0]
 
 - New Features

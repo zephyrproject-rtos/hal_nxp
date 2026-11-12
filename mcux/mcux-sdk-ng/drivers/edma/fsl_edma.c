@@ -1447,8 +1447,10 @@ void EDMA_HandleIRQ(edma_handle_t *handle)
         /* Get the index of the next transfer TCD blocks to be loaded into the eDMA engine. */
         sga_index = sga / sizeof(edma_tcd_t);
         /* Adjust header positions, new_header should be the index of the current transfer TCD blocks.
-         * sga_index is bounded by tcdSize (<= 127, asserted in EDMA_InstallTCDMemory), fits in int8_t. */
-        new_header = sga_index != 0U ? (int8_t)(sga_index - 1U) : (int8_t)(handle->tcdSize - 1);
+         * sga_index is bounded by tcdSize (<= 127, asserted in EDMA_InstallTCDMemory), fits in int8_t.
+         * Mask to 8 bits in unsigned width before the narrowing cast to satisfy CERT INT31-C. */
+        new_header = sga_index != 0U ? (int8_t)((sga_index - 1U) & 0xFFU) :
+                                       (int8_t)(((uint32_t)handle->tcdSize - 1U) & 0xFFU);
 
         /* Calculate the number of finished TCDs */
         assert(handle->header >= 0);

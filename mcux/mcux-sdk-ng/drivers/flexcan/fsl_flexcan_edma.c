@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2025 NXP
+ * Copyright 2016-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -60,8 +60,8 @@ static void FLEXCAN_ReceiveFifoEDMACallback(edma_handle_t *handle, void *param, 
  ******************************************************************************/
 static void FLEXCAN_ReceiveFifoEDMACallback(edma_handle_t *handle, void *param, bool transferDone, uint32_t tcds)
 {
-    handle = handle;
-    tcds   = tcds;
+    (void)handle;
+    (void)tcds;
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
     flexcan_fd_frame_t *framefd;
     uint32_t idHitIndex;
@@ -276,6 +276,7 @@ status_t FLEXCAN_TransferGetReceiveFifoCountEMDA(CAN_Type *base, flexcan_edma_ha
     }
     else
     {
+        assert(NULL != handle->rxFifoEdmaHandle);
         *count = handle->frameNum -
                  EDMA_GetRemainingMajorLoopCount(handle->rxFifoEdmaHandle->base, handle->rxFifoEdmaHandle->channel);
     }

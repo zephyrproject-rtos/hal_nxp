@@ -1,5 +1,11 @@
 # SPDIF DMA Driver
 
+## [2.0.10]
+
+- Bug Fixes
+  - Fixed MSG NULL_FIELD and INCONSISTENT_UNION_ACCESS findings in
+    SPDIF_TransferSendEDMA/SPDIF_TransferReceiveEDMA.
+
 ## [2.0.9]
 
 - Bug fixes

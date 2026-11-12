@@ -1,5 +1,24 @@
 # PDM
 
+## [2.9.8]
+- Bug Fixes
+  - Fixed Coverity CERT INT30-C unsigned integer wraparound defects in PDM_ReadFifo by
+    guarding both the channel index (startChannel + j) and the buffer-pointer advance
+    against wraparound before each FIFO read (CID 26532168).
+  - Fixed Coverity CERT INT30-C unsigned integer wraparound and CERT INT31-C
+    value-changing conversion defects in PDM_ReadNonBlocking by guarding the channel
+    index and copying the 16-bit sample bit pattern with memcpy to avoid a
+    value-changing unsigned-to-signed conversion (CID 33831988, CID 33831989).
+
+## [2.9.7]
+- Bug Fixes
+  - Fixed Coverity NULL_FIELD defect in PDM_TransferHandleIRQ: added NULL check for
+    pdmQueue[queueDriver].data before using the pointer in PDM_ReadFifo and pointer
+    arithmetic, preventing a potential null pointer dereference when no transfer is queued
+    (CID 53914872).
+  - Added a data != NULL guard to the block-complete check in PDM_TransferHandleIRQ to
+    avoid a spurious kStatus_PDM_Idle callback and queueDriver advance on IRQs that arrive when no transfer is queued (an empty queue entry also has dataSize == 0U).
+
 ## [2.9.6]
 - Improvements
   - Added instance-aware dispatch for PDM EVENT, PDM ERROR, HWVAD EVENT, and HWVAD ERROR IRQ handlers while preserving existing wrapper compatibility.

@@ -272,7 +272,9 @@ void LPADC_Init(ADC_Type *base, const lpadc_config_t *config)
         tmp32 |= ADC_CFG_PWREN_MASK;
     }
     tmp32 |= (ADC_CFG_PUDLY(config->powerUpDelay)              /* Power up delay. */
+#if !(defined(FSL_FEATURE_LPADC_HAS_CFG_REFSEL) && (FSL_FEATURE_LPADC_HAS_CFG_REFSEL == 0U))
               | ADC_CFG_REFSEL(config->referenceVoltageSource) /* Reference voltage. */
+#endif /* !(defined(FSL_FEATURE_LPADC_HAS_CFG_REFSEL) && (FSL_FEATURE_LPADC_HAS_CFG_REFSEL == 0U)) */
 #if defined(FSL_FEATURE_LPADC_HAS_CFG_PWRSEL) && (FSL_FEATURE_LPADC_HAS_CFG_PWRSEL == 1U)
               | ADC_CFG_PWRSEL(config->powerLevelMode)         /* Power configuration. */
 #endif /* defined(FSL_FEATURE_LPADC_HAS_CFG_PWRSEL) && (FSL_FEATURE_LPADC_HAS_CFG_PWRSEL == 1U) */
@@ -360,7 +362,9 @@ void LPADC_GetDefaultConfig(lpadc_config_t *config)
 #endif /* FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS */
     config->enableAnalogPreliminary = false;
     config->powerUpDelay            = 0x80;
-    config->referenceVoltageSource  = kLPADC_ReferenceVoltageAlt1;
+#if !(defined(FSL_FEATURE_LPADC_HAS_CFG_REFSEL) && (FSL_FEATURE_LPADC_HAS_CFG_REFSEL == 0U))
+    config->referenceVoltageSource = kLPADC_ReferenceVoltageAlt1;
+#endif /* !(defined(FSL_FEATURE_LPADC_HAS_CFG_REFSEL) && (FSL_FEATURE_LPADC_HAS_CFG_REFSEL == 0U)) */
 #if defined(FSL_FEATURE_LPADC_HAS_CFG_PWRSEL) && (FSL_FEATURE_LPADC_HAS_CFG_PWRSEL == 1U)
     config->powerLevelMode = kLPADC_PowerLevelAlt1;
 #endif /* defined(FSL_FEATURE_LPADC_HAS_CFG_PWRSEL) && (FSL_FEATURE_LPADC_HAS_CFG_PWRSEL == 1U) */
@@ -513,9 +517,10 @@ void LPADC_GetConvResultBlocking(ADC_Type *base, lpadc_conv_result_t *result)
 void LPADC_SetConvTriggerConfig(ADC_Type *base, uint32_t triggerId, const lpadc_conv_trigger_config_t *config)
 {
 #if defined(FSL_FEATURE_LPADC_TCTRL_COUNT)
-    assert(triggerId < FSL_FEATURE_LPADC_TCTRL_COUNT); /* Check if the triggerId is available in this device. */
+    /* Check if the triggerId is available in this device. */
+    assert(triggerId < (uint32_t)FSL_FEATURE_LPADC_TCTRL_COUNT);
 #endif
-    assert(config != NULL);              /* Check if the input pointer is available. */
+    assert(config != NULL); /* Check if the input pointer is available. */
 
     uint32_t tmp32;
 

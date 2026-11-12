@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FlexIO UART driver version. */
-#define FSL_FLEXIO_UART_DRIVER_VERSION (MAKE_VERSION(2, 6, 5))
+#define FSL_FLEXIO_UART_DRIVER_VERSION (MAKE_VERSION(2, 6, 6))
 /*! @} */
 
 /*! @brief Retry times for waiting flag. */
@@ -376,7 +376,7 @@ static inline void FLEXIO_UART_WriteByte(FLEXIO_UART_Type *base, const uint8_t *
  */
 static inline void FLEXIO_UART_ReadByte(FLEXIO_UART_Type *base, uint8_t *buffer)
 {
-    *buffer = (uint8_t)(base->flexioBase->SHIFTBUFBYS[base->shifterIndex[1]]);
+    *buffer = (uint8_t)(base->flexioBase->SHIFTBUFBYS[base->shifterIndex[1]] & 0xFFU);
 }
 
 /*!

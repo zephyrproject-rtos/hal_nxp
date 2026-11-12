@@ -1,5 +1,9 @@
 # SINC
 
+## [2.2.0]
+- Improvements
+  - Added support for chips that MCR has no DOZEN.
+
 ## [2.1.5]
 
 - Bug Fixes

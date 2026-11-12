@@ -1,5 +1,10 @@
 # FLEXIO_I2S
 
+## [2.2.3]
+
+- Bug Fixes
+  - Fixed Coverity NULL_FIELD findings in FLEXIO_I2S_TransferTxHandleIRQ and FLEXIO_I2S_TransferRxHandleIRQ by scoping the transfer data pointer inside the existing NULL-checked branch.
+
 ## [2.2.2]
 
 - Bug Fixes

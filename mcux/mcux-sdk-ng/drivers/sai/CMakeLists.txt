@@ -12,7 +12,7 @@ if(CONFIG_MCUX_COMPONENT_driver.sai_dma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.sai_edma)
-    mcux_component_version(2.7.3)
+    mcux_component_version(2.7.6)
 
     mcux_add_source(SOURCES fsl_sai_edma.h fsl_sai_edma.c)
 
@@ -21,7 +21,7 @@ if(CONFIG_MCUX_COMPONENT_driver.sai_edma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.sai_sdma)
-    mcux_component_version(2.6.0)
+    mcux_component_version(2.6.2)
 
     mcux_add_source(SOURCES fsl_sai_sdma.h fsl_sai_sdma.c)
 
@@ -30,7 +30,7 @@ if(CONFIG_MCUX_COMPONENT_driver.sai_sdma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.sai)
-    mcux_component_version(2.4.10)
+    mcux_component_version(2.4.12)
 
     mcux_add_source(SOURCES fsl_sai.h fsl_sai.c)
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021,2025 NXP
+ * Copyright 2019-2021,2025-2026 NXP
  * All rights reserved.
  *
  *
@@ -329,6 +329,12 @@ static status_t ASRC_TransferSubmitOutM2MSDMA(ASRC_Type *base,
     uint32_t *nonAlignAddr           = NULL;
     uint32_t outWaterMarkSize = (uint32_t)handle->outDMAHandle.asrcOutWatermark * handle->outDMAHandle.bytesPerSample;
 
+    /* guard against a null sdma handle or buffer descriptor pool before BDPool is dereferenced below */
+    if ((outDMAHandle == NULL) || (outDMAHandle->BDPool == NULL))
+    {
+        return kStatus_InvalidArgument;
+    }
+
     if (handle->outDMAHandle.asrcQueue[handle->outDMAHandle.queueUser] != NULL)
     {
         return kStatus_ASRCQueueFull;
@@ -449,6 +455,12 @@ static status_t ASRC_TransferOutSDMA(ASRC_Type *base,
     sdma_handle_t *outDMAHandle      = handle->outDMAHandle.sdmaHandle;
     sdma_p2p_config_t p2pConfig      = {0U};
 
+    /* guard against a null sdma handle or buffer descriptor pool before BDPool is dereferenced below */
+    if ((outDMAHandle == NULL) || (outDMAHandle->BDPool == NULL))
+    {
+        return kStatus_InvalidArgument;
+    }
+
     if ((handle->outDMAHandle.peripheralConfig != NULL) && (handle->outDMAHandle.peripheralConfig->enableContinuous) &&
         (handle->outDMAHandle.state == (uint32_t)kStatus_ASRCBusy))
     {
@@ -529,6 +541,12 @@ static status_t ASRC_TransferInSDMA(ASRC_Type *base,
     uint32_t asrcInAddr             = ASRC_GetWriteContextFifoAddr(base, handle->context);
     sdma_handle_t *inDMAHandle      = handle->inDMAHandle.sdmaHandle;
     sdma_p2p_config_t p2pConfig     = {0U};
+
+    /* guard against a null sdma handle or buffer descriptor pool before BDPool is dereferenced below */
+    if ((inDMAHandle == NULL) || (inDMAHandle->BDPool == NULL))
+    {
+        return kStatus_InvalidArgument;
+    }
 
     if ((handle->inDMAHandle.peripheralConfig != NULL) && (handle->inDMAHandle.peripheralConfig->enableContinuous) &&
         (handle->inDMAHandle.state == (uint32_t)kStatus_ASRCBusy))

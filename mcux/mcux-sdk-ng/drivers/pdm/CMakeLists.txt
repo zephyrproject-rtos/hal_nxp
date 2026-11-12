@@ -21,7 +21,8 @@ if(CONFIG_MCUX_COMPONENT_driver.pdm_sdma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.pdm)
-    mcux_component_version(2.9.6)
+    mcux_component_version(2.9.8)
+
 
     mcux_add_source(SOURCES fsl_pdm.h fsl_pdm.c)
 

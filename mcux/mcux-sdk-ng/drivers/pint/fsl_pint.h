@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_PINT_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+#define FSL_PINT_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*! @} */
 
 /* Legacy code sets callback for each PINT event resource. */
@@ -64,34 +64,16 @@ typedef enum _pint_pin_enable
 /*! @brief PINT Pin Interrupt type */
 typedef enum _pint_int
 {
-    kPINT_PinInt0 = 0U, /*!< Pin Interrupt  0 */
-#if defined(FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 1U)
-    kPINT_PinInt1 = 1U, /*!< Pin Interrupt  1 */
-#endif
-#if defined(FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 2U)
-    kPINT_PinInt2 = 2U, /*!< Pin Interrupt  2 */
-#endif
-#if defined(FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 3U)
-    kPINT_PinInt3 = 3U, /*!< Pin Interrupt  3 */
-#endif
-#if defined(FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 4U)
-    kPINT_PinInt4 = 4U, /*!< Pin Interrupt  4 */
-#endif
-#if defined(FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 5U)
-    kPINT_PinInt5 = 5U, /*!< Pin Interrupt  5 */
-#endif
-#if defined(FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 6U)
-    kPINT_PinInt6 = 6U, /*!< Pin Interrupt  6 */
-#endif
-#if defined(FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 7U)
-    kPINT_PinInt7 = 7U, /*!< Pin Interrupt  7 */
-#endif
-#if defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS > 0U)
+    kPINT_PinInt0    = 0U, /*!< Pin Interrupt  0 */
+    kPINT_PinInt1    = 1U, /*!< Pin Interrupt  1 */
+    kPINT_PinInt2    = 2U, /*!< Pin Interrupt  2 */
+    kPINT_PinInt3    = 3U, /*!< Pin Interrupt  3 */
+    kPINT_PinInt4    = 4U, /*!< Pin Interrupt  4 */
+    kPINT_PinInt5    = 5U, /*!< Pin Interrupt  5 */
+    kPINT_PinInt6    = 6U, /*!< Pin Interrupt  6 */
+    kPINT_PinInt7    = 7U, /*!< Pin Interrupt  7 */
     kPINT_SecPinInt0 = 0U, /*!< Secure Pin Interrupt  0 */
-#endif
-#if defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS > 1U)
     kPINT_SecPinInt1 = 1U, /*!< Secure Pin Interrupt  1 */
-#endif
 } pint_pin_int_t;
 
 /*! @brief PINT Pattern Match bit slice input source type */
@@ -112,34 +94,16 @@ typedef enum _pint_pmatch_input_src
 /*! @brief PINT Pattern Match bit slice type */
 typedef enum _pint_pmatch_bslice
 {
-    kPINT_PatternMatchBSlice0 = 0U, /*!< Bit slice 0 */
-#if defined(FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 1U)
-    kPINT_PatternMatchBSlice1 = 1U, /*!< Bit slice 1 */
-#endif
-#if defined(FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 2U)
-    kPINT_PatternMatchBSlice2 = 2U, /*!< Bit slice 2 */
-#endif
-#if defined(FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 3U)
-    kPINT_PatternMatchBSlice3 = 3U, /*!< Bit slice 3 */
-#endif
-#if defined(FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 4U)
-    kPINT_PatternMatchBSlice4 = 4U, /*!< Bit slice 4 */
-#endif
-#if defined(FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 5U)
-    kPINT_PatternMatchBSlice5 = 5U, /*!< Bit slice 5 */
-#endif
-#if defined(FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 6U)
-    kPINT_PatternMatchBSlice6 = 6U, /*!< Bit slice 6 */
-#endif
-#if defined(FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 7U)
-    kPINT_PatternMatchBSlice7 = 7U, /*!< Bit slice 7 */
-#endif
-#if defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS > 0U)
+    kPINT_PatternMatchBSlice0    = 0U, /*!< Bit slice 0 */
+    kPINT_PatternMatchBSlice1    = 1U, /*!< Bit slice 1 */
+    kPINT_PatternMatchBSlice2    = 2U, /*!< Bit slice 2 */
+    kPINT_PatternMatchBSlice3    = 3U, /*!< Bit slice 3 */
+    kPINT_PatternMatchBSlice4    = 4U, /*!< Bit slice 4 */
+    kPINT_PatternMatchBSlice5    = 5U, /*!< Bit slice 5 */
+    kPINT_PatternMatchBSlice6    = 6U, /*!< Bit slice 6 */
+    kPINT_PatternMatchBSlice7    = 7U, /*!< Bit slice 7 */
     kPINT_SecPatternMatchBSlice0 = 0U, /*!< Bit slice 0 */
-#endif
-#if defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && (FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS > 1U)
     kPINT_SecPatternMatchBSlice1 = 1U, /*!< Bit slice 1 */
-#endif
 } pint_pmatch_bslice_t;
 
 /*! @brief PINT Pattern Match configuration type */

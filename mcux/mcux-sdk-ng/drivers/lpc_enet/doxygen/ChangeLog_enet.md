@@ -1,5 +1,14 @@
 # LPC_ENET
 
+## [2.3.9]
+
+- Bug Fixes
+  - Fixed ENET_SetMII to reconfigure MAC speed/duplex safely while the
+    transmitter/receiver are enabled, per the Synopsys ENET databook. It now
+    clears TE/RE, applies the new speed/duplex in a single MAC_CONFIG write,
+    and (only when TE/RE were set) re-enables them after a clock-domain settle
+    delay.
+
 ## [2.3.8]
 
 - New Features

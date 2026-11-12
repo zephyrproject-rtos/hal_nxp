@@ -1,5 +1,15 @@
 # FLEXIO_UART
 
+## [2.6.6]
+
+- Bug Fixes
+  - Fixed CERT INT30-C violations in ring buffer length calculation.
+  - Fixed CERT INT31-C violations in baud rate timer compare setup and receive data reads.
+  - Fixed UNUSED_VALUE violation in baud rate divider calculation.
+  - Fixed MISRA issues.
+- Improvements
+  - Improved HIS CCM in FLEXIO_UART_TransferHandleIRQ().
+
 ## [2.6.5]
 
 - Bug Fixes

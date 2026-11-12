@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020,2025 NXP
+ * Copyright 2018-2020,2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,9 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_PDM_DRIVER_VERSION (MAKE_VERSION(2, 9, 6)) /*!< Version 2.9.6 */
+#define FSL_PDM_DRIVER_VERSION (MAKE_VERSION(2, 9, 8)) /*!< Version 2.9.8 */
 /*! @} */
+
 
 /*! @brief PDM XFER QUEUE SIZE */
 #define PDM_XFER_QUEUE_SIZE (4U)
@@ -1216,6 +1217,16 @@ void PDM_TransferAbortReceive(PDM_Type *base, pdm_handle_t *handle);
  * @param handle Pointer to the pdm_handle_t structure.
  */
 void PDM_TransferHandleIRQ(PDM_Type *base, pdm_handle_t *handle);
+void PDM_EventHandleIRQ(uint32_t instance);
+#if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
+void PDM_ErrorHandleIRQ(uint32_t instance);
+#endif
+#if !(defined(FSL_FEATURE_PDM_HAS_NO_HWVAD) && FSL_FEATURE_PDM_HAS_NO_HWVAD)
+void PDM_HwvadEventHandleIRQ(uint32_t instance);
+#if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
+void PDM_HwvadErrorHandleIRQ(uint32_t instance);
+#endif
+#endif
 
 /*! @} */
 

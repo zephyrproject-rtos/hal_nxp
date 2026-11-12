@@ -1,4 +1,15 @@
 # HIPERFACE
+
+## [1.0.5]
+
+- Code style
+    - Apply clang-format code style
+
+## [1.0.4]
+
+- Bug Fixes
+    - Fixed type conversion issues
+
 ## [1.0.3]
 
 - Bug Fixes

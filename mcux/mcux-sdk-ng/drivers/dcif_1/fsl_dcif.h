@@ -670,7 +670,7 @@ static inline void DCIF_SetLayerStride(DCIF_Type *base, uint8_t layer, uint32_t 
  *
  * @param base DCIF peripheral base address.
  * @param layer Layer index.
- * @param address The stride in byte.
+ * @param address The layer address.
  */
 static inline void DCIF_SetLayerAddr(DCIF_Type *base, uint8_t layer, uint32_t address)
 {
@@ -687,7 +687,7 @@ static inline void DCIF_SetLayerAddr(DCIF_Type *base, uint8_t layer, uint32_t ad
  *
  * @param base DCIF peripheral base address.
  * @param layer Layer index.
- * @param address The stride in byte.
+ * @param address The UV layer address.
  */
 static inline void DCIF_SetLayerUVAddr(DCIF_Type *base, uint8_t layer, uint32_t address)
 {
@@ -965,10 +965,10 @@ void DCIF_FbdSetConfig(DCIF_Type *base, const dcif_fbd_config_t *config);
    config->vfp = 0;
    config->vbp = 0;
    config->polarityFlags = kDCIF_HsyncActiveLow | kDCIF_VsyncActiveLow | kDCIF_DriveDataOnFallingClkEdge;
-   config->format = kDCIF_DpiRGB565;;
-   config->dcif_dpi_display_mode_t = kDCIF_DpiNormal;
+   config->format = kDCIF_DpiRGB565;
+   config->displayMode = kDCIF_DpiNormal;
    config->frameFetch = kDCIF_DpiVfpBegin;
-   config->tcFifoFill = kDCIF_DpiVbpEnd;
+   config->txFifoFill = kDCIF_DpiVfpBegin;
    config->enableBackground = true;
  * @endcode
  *

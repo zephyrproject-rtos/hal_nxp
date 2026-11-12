@@ -1,5 +1,11 @@
 # SPI DMA Driver
 
+## [2.1.2]
+
+- Bug Fixes
+  - Fixed CERT-C issue.
+  - Fixed MISRA issues.
+
 ## [2.1.1]
 
 - Bug Fixes

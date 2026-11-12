@@ -1,5 +1,10 @@
 # COMMON
 
+## [2.6.8]
+
+- New Features
+  - Added `MCUX_BUILD_ASSERT` compile-time assertion macro.
+
 ## [2.6.7]
 
 - Improvements

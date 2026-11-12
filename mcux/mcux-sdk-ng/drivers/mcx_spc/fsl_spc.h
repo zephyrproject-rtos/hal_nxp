@@ -1880,6 +1880,10 @@ static inline uint8_t SPC_GetExternalDomainsStatus(SPC_Type *base)
  *
  * @note The CORE LDO enable bit is write-once.
  *
+ * @note LDO_CORE and DCDC_CORE both generate the chip core voltage, and the regulator that currently powers
+ * the chip cannot be disabled. RAM contents are lost only when both of them are disabled, because that removes
+ * the VDD_CORE supply.
+ *
  * @param base SPC peripheral base address.
  * @param enable Enable/Disable CORE LDO Regulator.
  *          true   -   Enable CORE LDO Regulator.
@@ -1895,7 +1899,7 @@ static inline void SPC_EnableCoreLDORegulator(SPC_Type *base, bool enable)
     {
         /*
          * $Branch Coverage Justification$
-         * If CORE_LDO is disabled, all RAMs data will powered off.
+         * If LDO_CORE and DCDC_CORE are both disabled, all RAMs data will be powered off.
          */
         base->CNTRL &= ~SPC_CNTRL_CORELDO_EN_MASK;
     }
@@ -2266,6 +2270,10 @@ static inline spc_sys_ldo_drive_strength_t SPC_GetLowPowerModeSystemLDORegulator
  *
  * @note The DCDC enable bit is write-once, settings only reset after a POR, LVD, or HVD event.
  *
+ * @note DCDC_CORE and LDO_CORE both generate the chip core voltage, and the regulator that currently powers
+ * the chip cannot be disabled. RAM contents are lost only when both of them are disabled, because that removes
+ * the VDD_CORE supply.
+ *
  * @param base SPC peripheral base address.
  * @param enable Enable/Disable DCDC Regulator.
  *          true    -   Enable DCDC Regulator.
@@ -2281,7 +2289,7 @@ static inline void SPC_EnableDCDCRegulator(SPC_Type *base, bool enable)
     {
         /*
          * $Branch Coverage Justification$
-         * If DCDC is disabled, all RAMs data will powered off.
+         * If DCDC_CORE and LDO_CORE are both disabled, all RAMs data will be powered off.
          */
         base->CNTRL &= ~SPC_CNTRL_DCDC_EN_MASK;
     }

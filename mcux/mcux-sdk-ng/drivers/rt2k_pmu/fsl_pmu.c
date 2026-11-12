@@ -446,13 +446,24 @@ void PMU_ConfigBodyBias(PMU_Type *base, const pmu_body_bias_config_t *config)
 {
     assert(config != NULL);
 
-    uint32_t reg = 0U;
+    /* Fields this call always owns. NWELL_VOL/PWELL_VOL are added to the mask only when
+     * PMU_DRIVER_UPDATE_TRIM_VALUE is enabled; otherwise this is a read-modify-write that
+     * never clobbers whatever well-bias trim is already latched into the register (e.g. ROM). */
+    uint32_t ownedFieldsMask =
+        (BB_MODE_MASK << BB_MODE_SHIFT) | (0x3U << BB_PWELL_CLK_SHIFT) | (0x3U << BB_RAMP_CLK_SHIFT) | (1UL << BB_ADVC_EN_POS);
+#if PMU_DRIVER_UPDATE_TRIM_VALUE
+    ownedFieldsMask |= BB_NWELL_VOL_MASK | BB_PWELL_VOL_MASK;
+#endif /* PMU_DRIVER_UPDATE_TRIM_VALUE */
+
+    uint32_t reg = base->PMU_BODYBIAS_CONFIG_REG & ~ownedFieldsMask;
     reg |= ((uint32_t)config->mode & BB_MODE_MASK) << BB_MODE_SHIFT;
     reg |= ((uint32_t)config->pwellClkSel & 0x3U) << BB_PWELL_CLK_SHIFT;
     reg |= ((uint32_t)config->rampClkSel & 0x3U) << BB_RAMP_CLK_SHIFT;
     if (config->advcEnable) { reg |= (1UL << BB_ADVC_EN_POS); }
+#if PMU_DRIVER_UPDATE_TRIM_VALUE
     reg |= ((uint32_t)config->nwellVolSel & 0x7FU) << BB_NWELL_VOL_SHIFT;
     reg |= ((uint32_t)config->pwellVolSel & 0x7FU) << BB_PWELL_VOL_SHIFT;
+#endif /* PMU_DRIVER_UPDATE_TRIM_VALUE */
     base->PMU_BODYBIAS_CONFIG_REG = reg;
 
     /* Interrupt enable register. */

@@ -496,9 +496,13 @@ static void SCTIMER_ConfigurePwmChannelOutput(SCT_Type *base,
     {
         if (mode == kSCTIMER_EdgeAlignedPwm)
         {
-            /* Inactive (low) at start; set at period boundary, clear at pulse. */
+            /* Inactive (low) at start; set at period boundary, clear at pulse. A 0% duty registers no
+             * period-boundary set at all, so the output simply holds the inactive level. */
             base->OUTPUT &= ~(1UL << output);
-            SCTIMER_SetupOutputSetAction(base, output, periodEvent);
+            if (0U != param->dutyCyclePercent)
+            {
+                SCTIMER_SetupOutputSetAction(base, output, periodEvent);
+            }
             SCTIMER_SetupOutputClearAction(base, output, pulseEvent);
         }
         else
@@ -513,9 +517,13 @@ static void SCTIMER_ConfigurePwmChannelOutput(SCT_Type *base,
     {
         if (mode == kSCTIMER_EdgeAlignedPwm)
         {
-            /* Inactive (high) at start; clear at period boundary, set at pulse. */
+            /* Inactive (high) at start; clear at period boundary, set at pulse. A 0% duty registers no
+             * period-boundary clear at all, so the output simply holds the inactive level. */
             base->OUTPUT |= (1UL << output);
-            SCTIMER_SetupOutputClearAction(base, output, periodEvent);
+            if (0U != param->dutyCyclePercent)
+            {
+                SCTIMER_SetupOutputClearAction(base, output, periodEvent);
+            }
             SCTIMER_SetupOutputSetAction(base, output, pulseEvent);
         }
         else
@@ -761,6 +769,8 @@ void SCTIMER_UpdatePwmDutycycleByEvent(SCT_Type *base,
     uint32_t pulsePeriod, period;
     /* High-true channels clear the output on the pulse event (see SCTIMER_ConfigurePwmChannelOutput). */
     bool isHighTrue = (0U != (base->OUT[output].CLR & (1UL << pulseEvent)));
+    bool isEdgeAligned = (0U == (base->CTRL & SCT_CTRL_BIDIR_L_MASK));
+    bool immediate = (updateMode == kSCTIMER_UpdateImmediately);
 
     periodMatchReg = base->EV[periodEvent].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
     pulseMatchReg  = base->EV[pulseEvent].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
@@ -779,7 +789,7 @@ void SCTIMER_UpdatePwmDutycycleByEvent(SCT_Type *base,
         pulsePeriod = (uint32_t)((((uint64_t)period * dutyCyclePercent) / 100U) & 0xFFFFFFFFU);
     }
 
-    if (updateMode == kSCTIMER_UpdateImmediately)
+    if (immediate)
     {
         /* Writing the active MATCH register requires the counter halted. */
         SCTIMER_StopTimer(base, (uint32_t)kSCTIMER_Counter_U);
@@ -796,16 +806,49 @@ void SCTIMER_UpdatePwmDutycycleByEvent(SCT_Type *base,
                 base->OUTPUT &= ~(1UL << (uint32_t)output);
             }
         }
+        else if (0U == dutyCyclePercent)
+        {
+            /* Drive the output to its inactive level for a constant 0% signal. */
+            if (isHighTrue)
+            {
+                base->OUTPUT &= ~(1UL << (uint32_t)output);
+            }
+            else
+            {
+                base->OUTPUT |= (1UL << (uint32_t)output);
+            }
+        }
+        else
+        {
+            /* A switching duty needs no forced level. */
+        }
+    }
 
-        base->MATCH[pulseMatchReg]    = pulsePeriod;
-        base->MATCHREL[pulseMatchReg] = pulsePeriod;
+    base->MATCHREL[pulseMatchReg] = pulsePeriod;
+
+    /* Only edge-aligned mode puts an action on the period event. */
+    if (isEdgeAligned)
+    {
+        /* Pick the register holding the events that start the pulse: SET for high-true, CLR for low-true.
+         * Pulse-start is an edge-aligned notion only: center-aligned puts no action on the period event. */
+        volatile uint32_t *pulseStartEvents = isHighTrue ? &base->OUT[output].SET : &base->OUT[output].CLR;
+
+        if (0U != dutyCyclePercent)
+        {
+            *pulseStartEvents |= (1UL << periodEvent);
+        }
+        else
+        {
+            *pulseStartEvents &= ~(1UL << periodEvent);
+        }
+    }
+
+    if (immediate)
+    {
+        /* Live compare value, then resume; only reached with the counter halted. */
+        base->MATCH[pulseMatchReg] = pulsePeriod;
 
         SCTIMER_StartTimer(base, (uint32_t)kSCTIMER_Counter_U);
-    }
-    else
-    {
-        /* Glitchless: write only the reload register; the new duty loads at the next counter cycle. */
-        base->MATCHREL[pulseMatchReg] = pulsePeriod;
     }
 }
 

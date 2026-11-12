@@ -1,5 +1,10 @@
 # TSI_V6
 
+## [2.1.2]
+
+- Bug Fixes
+  - Removed dead code guarded by the always-false is_int_enabled variable in TSI_InitSelfCapMode and TSI_InitMutualCapMode (Coverity DEADCODE).
+
 ## [2.1.1]
 
 - Bug Fixes

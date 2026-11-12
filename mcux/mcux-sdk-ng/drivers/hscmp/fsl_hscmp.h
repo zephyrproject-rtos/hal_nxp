@@ -170,7 +170,8 @@ typedef struct _hscmp_dac_config
 #if (defined(FSL_FEATURE_HSCMP_HAS_DAC_REF_VOL_SELECT) && FSL_FEATURE_HSCMP_HAS_DAC_REF_VOL_SELECT)
     hscmp_dac_reference_voltage_source_t referenceVoltageSource; /*!< Internal DAC supply voltage reference source. */
 #endif
-    uint8_t DACValue;         /*!< Value for the DAC Output Voltage. Available range is 0-63.*/
+    uint8_t DACValue;         /*!< Value for the DAC Output Voltage. Available range is 0-255.
+                                   DAC output formula: DACO = (Vin / 256) * DAC_DATA. */
     bool enableDacOutput;     /*!< Enables the DAC output to be available for other on-chip peripherals. */
 #if (defined(FSL_FEATURE_HSCMP_HAS_DAC_STOP_EN) && FSL_FEATURE_HSCMP_HAS_DAC_STOP_EN)
     bool enableDacStopMode;   /*!< Allow DAC_EN to enable the DAC in stop mode. */
@@ -468,8 +469,10 @@ void HSCMP_SetDACConfig(HSCMP_Type *base, const hscmp_dac_config_t *config);
 /*!
  * @brief Dynamically update the DAC output voltage.
  *
+ * DAC output formula: DACO = (Vin / 256) * DAC_DATA.
+ *
  * @param base  HSCMP peripheral base address.
- * @param value New DAC output voltage code.
+ * @param value New DAC output voltage code. Available range is 0-255.
  */
 static inline void HSCMP_SetDACValue(HSCMP_Type *base, uint8_t value)
 {

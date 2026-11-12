@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief cache driver version. */
-#define FSL_LLC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_LLC_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 
 /*! @} */
 
@@ -255,7 +255,9 @@ void LLC_GetDefaultConfig(llc_config_t *config);
  * @param config Pointer to configuration structure.
  * @return kStatus_Success LLC initialization succeeded.
  * @return kStatus_InvalidArgument Invalid argument provided.
- * @return kStatus_Timeout Maintenance operation timeout.
+ * @return kStatus_Timeout The tag/data array initialization did not complete
+ *         within the driver's maintenance poll budget. See the LLC Cache
+ *         Operations group for what that budget covers.
  */
 status_t LLC_Init(LLC_Type *base, const llc_config_t *config);
 
@@ -297,6 +299,31 @@ void LLC_GetCapabilities(LLC_Type *base, llc_feature_capability_t *feature);
 
 /*!
  * @name LLC Cache Operations
+ *
+ * The cache accepts one maintenance operation at a time, so every function in
+ * this group first waits for any operation already in flight to retire, then
+ * starts its own and waits for that to retire as well. On kStatus_Success the
+ * maintenance has therefore taken effect and the caller may rely on it; there is
+ * no separate "wait for completion" API to call afterwards.
+ *
+ * kStatus_Timeout means the cache did not clear CCUCMAR[MNTOPACTV] within the
+ * driver's poll budget. That budget is derived from the cache geometry with
+ * margin over the measured worst case (every entry resident and dirty), so a
+ * well-formed operation on a supported configuration does not reach it: treat
+ * kStatus_Timeout as a hardware or clocking fault, not as "the operation needs
+ * more time". The Kconfig symbol LLC_MAINTENANCE_TIMEOUT
+ * (CONFIG_LLC_MAINTENANCE_TIMEOUT) selects that derivation with its default of
+ * 0; set it to an explicit iteration count only to raise the budget, for
+ * instance if the memory behind the cache is slower than the devices this driver
+ * was characterized on.
+ *
+ * Note the latency ceiling the two waits imply: one call can consume up to twice
+ * the budget before it returns. On a device with the RT2660 geometry that is
+ * 2 x 32768 iterations, measured at roughly 27 cycles each, so about 1.8 ms at
+ * 1 GHz. Only a stalled cache reaches that ceiling - the measured worst case for
+ * a whole-cache operation is about 8800 iterations (240 us at 1 GHz), making a
+ * genuine back-to-back pair around 0.5 ms. A caller with a hard deadline should
+ * budget for the ceiling rather than for the typical cost.
  * @{
  */
 

@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief LPADC driver version 2.10.3. */
-#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 11, 0))
+/*! @brief LPADC driver version 2.12.0. */
+#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 12, 0))
 /*! @} */
 
 /*! @name Configuration */
@@ -550,6 +550,7 @@ typedef enum _lpadc_conversion_average_mode
 } lpadc_conversion_average_mode_t;
 #endif /* defined(FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS) && FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS */
 
+#if !(defined(FSL_FEATURE_LPADC_HAS_CFG_REFSEL) && (FSL_FEATURE_LPADC_HAS_CFG_REFSEL == 0U))
 /*!
  * @brief Define enumeration of reference voltage source.
  *
@@ -561,6 +562,7 @@ typedef enum _lpadc_reference_voltage_mode
     kLPADC_ReferenceVoltageAlt2 = 1U, /*!< Option 2 setting. */
     kLPADC_ReferenceVoltageAlt3 = 2U, /*!< Option 3 setting. */
 } lpadc_reference_voltage_source_t;
+#endif /* !(defined(FSL_FEATURE_LPADC_HAS_CFG_REFSEL) && (FSL_FEATURE_LPADC_HAS_CFG_REFSEL == 0U)) */
 
 /*!
  * @brief Define enumeration of power configuration.
@@ -720,8 +722,10 @@ typedef struct
                                 initial trigger transitions the ADC from its Idle state to allow time for the analog
                                 circuits to stabilize. The startup delay count of (powerUpDelay * 4) ADCK cycles must
                                 result in a longer delay than the analog startup time. */
+#if !(defined(FSL_FEATURE_LPADC_HAS_CFG_REFSEL) && (FSL_FEATURE_LPADC_HAS_CFG_REFSEL == 0U))
     lpadc_reference_voltage_source_t referenceVoltageSource; /*!< Selects the voltage reference high used for
                                                                   conversions.*/
+#endif /* !(defined(FSL_FEATURE_LPADC_HAS_CFG_REFSEL) && (FSL_FEATURE_LPADC_HAS_CFG_REFSEL == 0U)) */
 
 #if defined(FSL_FEATURE_LPADC_HAS_CFG_PWRSEL) && (FSL_FEATURE_LPADC_HAS_CFG_PWRSEL == 1U)
     lpadc_power_level_mode_t powerLevelMode; /*!< Power Configuration Selection. */

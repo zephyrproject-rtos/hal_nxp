@@ -138,6 +138,29 @@ static uint32_t DSI_DphyGetPllDivider(
 static void DSI_ApbClearRxFifo(const MIPI_DSI_Type *base);
 
 /*!
+ * @brief Disable video mode, if currently enabled, before an APB transfer.
+ *
+ * An APB (command-mode) packet transfer must not run while the DPI video
+ * interface is actively streaming, so callers disable it here immediately
+ * before starting a transfer, and restore it with @ref DSI_RestoreVideoMode
+ * once that transfer completes.
+ *
+ * @param base MIPI DSI peripheral base address.
+ * @return true if video mode was enabled (and has now been disabled), false
+   if it was already disabled.
+ */
+static bool DSI_DisableVideoModeForApbTransfer(const MIPI_DSI_Type *base);
+
+/*!
+ * @brief Re-enable video mode after an APB transfer, if it was disabled for it.
+ *
+ * @param base MIPI DSI peripheral base address.
+ * @param videoModeWasEnabled The return value of the @ref DSI_DisableVideoModeForApbTransfer
+   call made before the transfer that has now completed.
+ */
+static void DSI_RestoreVideoMode(const MIPI_DSI_Type *base, bool videoModeWasEnabled);
+
+/*!
  * @brief Handle the DSI transfer result.
  *
  * @param base MIPI DSI peripheral base address.
@@ -366,6 +389,27 @@ static void DSI_ApbClearRxFifo(const MIPI_DSI_Type *base)
     DSI_ClearApbInterruptStatus(base,
         (uint32_t)(kDSI_ApbRxPacketReceived | kDSI_ApbRxHeaderReceived |
                    kDSI_ApbRxOverflow       | kDSI_ApbRxUnderflow));
+}
+
+static bool DSI_DisableVideoModeForApbTransfer(const MIPI_DSI_Type *base)
+{
+    DSI2_HOST_VID_IF_Type *dpi = base->dpi;
+    bool videoModeWasEnabled = (0U != (dpi->CFG_VID_MODE & DSI2_HOST_VID_IF_CFG_VID_MODE_CFG_VID_ENABLE_MASK));
+
+    if (videoModeWasEnabled)
+    {
+        dpi->CFG_VID_MODE &= ~DSI2_HOST_VID_IF_CFG_VID_MODE_CFG_VID_ENABLE_MASK;
+    }
+
+    return videoModeWasEnabled;
+}
+
+static void DSI_RestoreVideoMode(const MIPI_DSI_Type *base, bool videoModeWasEnabled)
+{
+    if (videoModeWasEnabled)
+    {
+        base->dpi->CFG_VID_MODE |= DSI2_HOST_VID_IF_CFG_VID_MODE_CFG_VID_ENABLE_MASK;
+    }
 }
 
 /*!
@@ -1058,6 +1102,7 @@ status_t DSI_TransferBlocking(const MIPI_DSI_Type *base, dsi_transfer_t *xfer)
 {
     status_t status;
     uint32_t intFlags;
+    bool videoModeWasEnabled;
 
     DSI2_HOST_APB_PKT_IF_Type *apb = base->apb;
 
@@ -1065,6 +1110,12 @@ status_t DSI_TransferBlocking(const MIPI_DSI_Type *base, dsi_transfer_t *xfer)
     while (0U != (apb->CFG_PKT_STATUS & (uint32_t)kDSI_ApbNotIdle))
     {
     }
+
+    /* This APB transfer must not run while DPI video mode is actively
+     * streaming; disable it here and restore it (if it was enabled) before
+     * returning.
+     */
+    videoModeWasEnabled = DSI_DisableVideoModeForApbTransfer(base);
 
     status = DSI_PrepareApbTransfer(base, xfer);
 
@@ -1095,14 +1146,20 @@ status_t DSI_TransferBlocking(const MIPI_DSI_Type *base, dsi_transfer_t *xfer)
                 if (0U != (intFlags & (uint32_t)(kDSI_ApbBtaTo | kDSI_ApbLrxTo)))
                 {
                     DSI_ClearApbInterruptStatus(base, intFlags);
-                    return kStatus_Timeout;
+                    status = kStatus_Timeout;
+                    break;
                 }
             }
         }
 
-        DSI_ClearApbInterruptStatus(base, intFlags);
-        status = DSI_HandleResult(base, intFlags, xfer);
+        if (kStatus_Timeout != status)
+        {
+            DSI_ClearApbInterruptStatus(base, intFlags);
+            status = DSI_HandleResult(base, intFlags, xfer);
+        }
     }
+
+    DSI_RestoreVideoMode(base, videoModeWasEnabled);
 
     return status;
 }
@@ -1274,6 +1331,13 @@ status_t DSI_TransferNonBlocking(const MIPI_DSI_Type *base, dsi_handle_t *handle
     {
         handle->xfer = *xfer;
 
+        /* This APB transfer must not run while DPI video mode is actively
+         * streaming; disable it here and restore it (if it was enabled) once
+         * the transfer completes -- DSI_TransferHandleIRQ()/DSI_TransferAbort(),
+         * or right below if it never actually starts.
+         */
+        handle->videoModeWasEnabled = DSI_DisableVideoModeForApbTransfer(base);
+
         status = DSI_PrepareApbTransfer(base, &handle->xfer);
 
         if (kStatus_Success == status)
@@ -1296,6 +1360,13 @@ status_t DSI_TransferNonBlocking(const MIPI_DSI_Type *base, dsi_handle_t *handle
             {
                 DSI_EnableApbInterrupts(base, (uint32_t)(kDSI_ApbHtxTo | kDSI_ApbTxDone));
             }
+        }
+        else
+        {
+            /* Prepare failed: no transfer starts, so nothing will restore
+             * video mode later -- do it now.
+             */
+            DSI_RestoreVideoMode(base, handle->videoModeWasEnabled);
         }
     }
 
@@ -1328,6 +1399,9 @@ void DSI_TransferAbort(const MIPI_DSI_Type *base, dsi_handle_t *handle)
 
         /* Reset the state to idle. */
         handle->isBusy = false;
+
+        /* Restore video mode, if this transfer had disabled it. */
+        DSI_RestoreVideoMode(base, handle->videoModeWasEnabled);
     }
 }
 
@@ -1380,6 +1454,9 @@ void DSI_TransferHandleIRQ(const MIPI_DSI_Type *base, dsi_handle_t *handle)
             DSI_ClearApbInterruptStatus(dsi, flags);
             status = DSI_HandleResult(dsi, flags, &handle->xfer);
             handle->isBusy = false;
+
+            /* Restore video mode, if this transfer had disabled it. */
+            DSI_RestoreVideoMode(dsi, handle->videoModeWasEnabled);
         }
 
         if (NULL != handle->callback)

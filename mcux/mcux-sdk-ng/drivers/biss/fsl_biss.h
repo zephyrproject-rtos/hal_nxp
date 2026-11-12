@@ -20,277 +20,265 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_BISS_DRIVER_VERSION (MAKE_VERSION(1, 0, 3)) /*!< Version 1.0.3 */
+#define FSL_BISS_DRIVER_VERSION (MAKE_VERSION(1, 0, 5))
 /*! @} */
 
 /*! @name BiSS Command and IDA test setting of CTRLCOMM2 register */
 /*! @{ */
-#define BISS_CTRLCOMM2_CMD_MASK             (0x3000)
-#define BISS_CTRLCOMM2_CMD_SHIFT            (12U)
-#define BISS_CTRLCOMM2_CMD(x)               (((uint32_t)(((uint32_t)(x)) << BISS_CTRLCOMM2_CMD_SHIFT)) & BISS_CTRLCOMM2_CMD_MASK)
+#define BISS_CTRLCOMM2_CMD_MASK  (0x3000)
+#define BISS_CTRLCOMM2_CMD_SHIFT (12U)
+#define BISS_CTRLCOMM2_CMD(x)    (((uint32_t)(((uint32_t)(x)) << BISS_CTRLCOMM2_CMD_SHIFT)) & BISS_CTRLCOMM2_CMD_MASK)
 
-#define BISS_CTRLCOMM2_IDA_TEST_MASK        (0x800)
-#define BISS_CTRLCOMM2_IDA_TEST_SHIFT       (11U)
-#define BISS_CTRLCOMM2_IDA_TEST(x)          (((uint32_t)(((uint32_t)(x)) << BISS_CTRLCOMM2_IDA_TEST_SHIFT)) & BISS_CTRLCOMM2_IDA_TEST_MASK)
+#define BISS_CTRLCOMM2_IDA_TEST_MASK  (0x800)
+#define BISS_CTRLCOMM2_IDA_TEST_SHIFT (11U)
+#define BISS_CTRLCOMM2_IDA_TEST(x) \
+    (((uint32_t)(((uint32_t)(x)) << BISS_CTRLCOMM2_IDA_TEST_SHIFT)) & BISS_CTRLCOMM2_IDA_TEST_MASK)
 /*! @} */
 
 /*! @name BiSS Master and Slave ID setting */
 /*! @{ */
-#define BISS_MASTER_COUNT                   (1U)
-#define BISS_MAX_SLAVE_COUNT                (8U)
-#define BISS_MAX_CHAN_COUNT                 (8U)
+#define BISS_MASTER_COUNT    (1U)
+#define BISS_MAX_SLAVE_COUNT (8U)
+#define BISS_MAX_CHAN_COUNT  (8U)
 
-#define BISS_IDS_VALID_MASK                 (0b0)
-#define BISS_STATUS1_SVALID_MASK(slvID)     ((uint32_t)1 << (9 + ((slvID) * 2)))
+#define BISS_IDS_VALID_MASK             (0b0)
+#define BISS_STATUS1_SVALID_MASK(slvID) ((uint32_t)1 << (9 + ((slvID) * 2)))
 /*! @} */
 
 /*! @name BiSS MA and SYS clock setting */
 /*! @{ */
-#define BISS_MIN_MA_FREQ                    (80000U)
-#define BISS_MAX_SYS_CLK_FREQ               (25000000U)
+#define BISS_MIN_MA_FREQ      (80000U)
+#define BISS_MAX_SYS_CLK_FREQ (25000000U)
 /*! @} */
 
 /*! @brief BiSS default MA clock 100KHZ */
-#define BISS_FREQS_DEFAULT                  (0x9F) /* 100kHZ */
+#define BISS_FREQS_DEFAULT (0x9F) /* 100kHZ */
 /* When setting BISS-C protocol, the FREQR should be set to 0x05 */
-#define BISS_FREQR_DEFAULT                  (0x05U)
+#define BISS_FREQR_DEFAULT (0x05U)
 
-#define BISS_AGS_MIN                        (0x7CU)
-#define BISS_AGS_INFINITE                   (0x7DU)
+#define BISS_AGS_MIN      (0x7CU)
+#define BISS_AGS_INFINITE (0x7DU)
 
-#define BISS_CMD_IDS_BOARDCAST              (0b00000000)
-#define BISS_CMD_IDS_FRM_SLV(slvID)         (0b1 << (7 - (slvID)))
+#define BISS_CMD_IDS_BOARDCAST      (0b00000000)
+#define BISS_CMD_IDS_FRM_SLV(slvID) (0b1 << (7 - (slvID)))
 
-#define BISS_CFGCH_MASK(x)                  (0xFF << ((x) * 2))
-#define BISS_CFGCH_SEL(x,y)                 ((y) << ((x) * 2))
+#define BISS_CFGCH_MASK(x)   (0xFF << ((x) * 2))
+#define BISS_CFGCH_SEL(x, y) ((y) << ((x) * 2))
 
-#define BISS_CHSEL(x)                       (0b1 << (x - 1))
-#define BISS_CHANNEL1                       (0x01)
+#define BISS_CHSEL(x) (0b1 << (x - 1))
+#define BISS_CHANNEL1 (0x01)
 
-#define BISS_CMD_BOARDCAST_ALL_DEACTIVATED  (0b00)
-#define BISS_CMD_BOARDCAST_CTRL_ACTIVATED   (0b01)
-#define BISS_CMD_BOARDCAST_DEACTIVATED_BUS  (0b10)
-#define BISS_CMD_BOARDCAST_RESERVED         (0b11)
+#define BISS_CMD_BOARDCAST_ALL_DEACTIVATED (0b00)
+#define BISS_CMD_BOARDCAST_CTRL_ACTIVATED  (0b01)
+#define BISS_CMD_BOARDCAST_DEACTIVATED_BUS (0b10)
+#define BISS_CMD_BOARDCAST_RESERVED        (0b11)
 
-#define BISS_CMD_ADDRESSED_ACTIVATED        (0b00)
-#define BISS_CMD_ADDRESSED_DEACTIVATED      (0b01)
-#define BISS_CMD_ADDRESSED_ACTIVATE_BUS     (0b10)
-#define BISS_CMD_ADDRESSED_FREE             (0b11)
+#define BISS_CMD_ADDRESSED_ACTIVATED    (0b00)
+#define BISS_CMD_ADDRESSED_DEACTIVATED  (0b01)
+#define BISS_CMD_ADDRESSED_ACTIVATE_BUS (0b10)
+#define BISS_CMD_ADDRESSED_FREE         (0b11)
 
-#define BISS_CTRL_CMD                       (0b0)
-#define BISS_REG_ACCESS                     (0b1)
+#define BISS_CTRL_CMD   (0b0)
+#define BISS_REG_ACCESS (0b1)
 
-#define BISS_MAX_RDATA_COUNT                (64U)
-#define BISS_REG_ACCESS_READ                (0b0)
-#define BISS_REG_ACCESS_WRITE               (0b1)
+#define BISS_MAX_RDATA_COUNT  (64U)
+#define BISS_REG_ACCESS_READ  (0b0)
+#define BISS_REG_ACCESS_WRITE (0b1)
 
-#define BISS_REGVERS_B                      (0b0)
-#define BISS_REGVERS_C                      (0b1)
+#define BISS_REGVERS_B (0b0)
+#define BISS_REGVERS_C (0b1)
 
-#define BISS_INIT_PROC                      (0b1)
+#define BISS_INIT_PROC (0b1)
 
-#define BISS_EN_MO_DISABLE                  (0b0)
-#define BISS_EN_MO_ENABLE                   (0b1)
+#define BISS_EN_MO_DISABLE (0b0)
+#define BISS_EN_MO_ENABLE  (0b1)
 
 /*! @name BiSS Instruction and AGS value */
 /*! @{ */
-#define BISS_INSTR_CDM_0                    (0b010)
-#define BISS_INSTR_CDM_1                    (0b001)
-#define BISS_INSTR_CDM_NOT                  (0b011)
-#define BISS_INSTR_CTRL_FRAME               (0b100)
-#define BISS_INSTR_REDUCE_CTRL_FRAME        (0b111)
-#define BISS_AGS_ENABLE                     (1)
-#define BISS_AGS_DISABLE                    (0)
+#define BISS_INSTR_CDM_0             (0b010)
+#define BISS_INSTR_CDM_1             (0b001)
+#define BISS_INSTR_CDM_NOT           (0b011)
+#define BISS_INSTR_CTRL_FRAME        (0b100)
+#define BISS_INSTR_REDUCE_CTRL_FRAME (0b111)
+#define BISS_AGS_ENABLE              (1)
+#define BISS_AGS_DISABLE             (0)
 /*! @} */
 
 /*! @brief BiSS slave device register. */
-#define BISS_DEV_REG_LEN_1                  1
-#define BISS_DEV_REG_LEN_2                  2
-#define BISS_DEV_REG_LEN_3                  3
-#define BISS_DEV_REG_LEN_4                  4
+#define BISS_DEV_REG_LEN_1 1
+#define BISS_DEV_REG_LEN_2 2
+#define BISS_DEV_REG_LEN_3 3
+#define BISS_DEV_REG_LEN_4 4
 
-#define BISS_DEV_BANK_SEL_ADDR              0x40
-#define BISS_DEV_EDS_BANK_NUM_ADDR          0x41
-#define BISS_DEV_PROFILE_ADDR               0x42
-#define BISS_DEV_PROFILE_LEN                2
-#define BISS_DEV_SN_ADDR                    0x44
-#define BISS_DEV_SN_LEN                     4
-#define BISS_DEV_ID_ADDR                    0x78
-#define BISS_DEV_ID_LEN                     6U
-#define BISS_DEV_MFR_ID_ADDR                0x7E
-#define BISS_DEV_MFR_ID_LEN                 2
+#define BISS_DEV_BANK_SEL_ADDR     0x40
+#define BISS_DEV_EDS_BANK_NUM_ADDR 0x41
+#define BISS_DEV_PROFILE_ADDR      0x42
+#define BISS_DEV_PROFILE_LEN       2
+#define BISS_DEV_SN_ADDR           0x44
+#define BISS_DEV_SN_LEN            4
+#define BISS_DEV_ID_ADDR           0x78
+#define BISS_DEV_ID_LEN            6U
+#define BISS_DEV_MFR_ID_ADDR       0x7E
+#define BISS_DEV_MFR_ID_LEN        2
 
 /*! @brief BiSS slave device EDS Commo register. */
-#define BISS_EDS_VER_ADDR                   0x00
-#define BISS_EDS_LEN_ADDR                   0x01
-#define BISS_EDS_USR_STA_ADDR               0x02
-#define BISS_EDS_USR_END_ADDR               0x03
-#define BISS_EDS_TMA_ADDR                   0x04
-#define BISS_EDS_TO_MIN_ADDR                0x05
-#define BISS_EDS_TO_MAX_ADDR                0x06
-#define BISS_EDS_TOS_MIN_ADDR               0x07
-#define BISS_EDS_TOS_MAX_ADDR               0x08
-#define BISS_EDS_TCLK_MIN_ADDR              0x09
-#define BISS_EDS_TCLK_MAX_ADDR              0x0A
-#define BISS_EDS_TCYC_ADDR                  0x0B
-#define BISS_EDS_TBUSY_MAX_ADDR             0x0C
-#define BISS_EDS_BUSY_S_ADDR                0x0D
-#define BISS_EDS_PON_DLY_ADDR               0x0E
-#define BISS_EDS_PON_DLY_LEN                2
-#define BISS_EDS_DC_NUM_ADDR                0x10
-#define BISS_EDS_SL_NUM_ADDR                0x11
-#define BISS_EDS_SL_OFF_ADDR                0x12
+#define BISS_EDS_VER_ADDR       0x00
+#define BISS_EDS_LEN_ADDR       0x01
+#define BISS_EDS_USR_STA_ADDR   0x02
+#define BISS_EDS_USR_END_ADDR   0x03
+#define BISS_EDS_TMA_ADDR       0x04
+#define BISS_EDS_TO_MIN_ADDR    0x05
+#define BISS_EDS_TO_MAX_ADDR    0x06
+#define BISS_EDS_TOS_MIN_ADDR   0x07
+#define BISS_EDS_TOS_MAX_ADDR   0x08
+#define BISS_EDS_TCLK_MIN_ADDR  0x09
+#define BISS_EDS_TCLK_MAX_ADDR  0x0A
+#define BISS_EDS_TCYC_ADDR      0x0B
+#define BISS_EDS_TBUSY_MAX_ADDR 0x0C
+#define BISS_EDS_BUSY_S_ADDR    0x0D
+#define BISS_EDS_PON_DLY_ADDR   0x0E
+#define BISS_EDS_PON_DLY_LEN    2
+#define BISS_EDS_DC_NUM_ADDR    0x10
+#define BISS_EDS_SL_NUM_ADDR    0x11
+#define BISS_EDS_SL_OFF_ADDR    0x12
 
-#define BISS_EDS_BANK1_ADDR                 0x14
-#define BISS_EDS_DLEN1_ADDR                 0x15
-#define BISS_EDS_FORMAT1_ADDR               0x16
-#define BISS_EDS_CPOLY1_ADDR                0x17
+#define BISS_EDS_BANK1_ADDR   0x14
+#define BISS_EDS_DLEN1_ADDR   0x15
+#define BISS_EDS_FORMAT1_ADDR 0x16
+#define BISS_EDS_CPOLY1_ADDR  0x17
 
-#define BISS_EDS_BANK_CHAN_BASE             0x14
-#define BISS_EDS_CHAN_OFFSET                4
-#define BISS_EDS_BANK_CHAN_ADDR(channel)    (BISS_EDS_BANK_CHAN_BASE + ((channel) * BISS_EDS_CHAN_OFFSET))
-#define BISS_EDS_DLEN_CHAN_BASE             0x15
-#define BISS_EDS_DLEN_CHAN_ADDR(channel)    (BISS_EDS_DLEN_CHAN_BASE + ((channel) * BISS_EDS_CHAN_OFFSET))
-#define BISS_EDS_FORMAT_CHAN_BASE           0x16
-#define BISS_EDS_FORMAT_CHAN_ADDR(channel)  (BISS_EDS_FORMAT_CHAN_BASE + ((channel) * BISS_EDS_CHAN_OFFSET))
-#define BISS_EDS_CPOLY_CHAN_BASE            0x17
-#define BISS_EDS_CPOLY_CHAN_ADDR(channel)   (BISS_EDS_CPOLY_CHAN_BASE + ((channel) * BISS_EDS_CHAN_OFFSET))
+#define BISS_EDS_BANK_CHAN_BASE            0x14
+#define BISS_EDS_CHAN_OFFSET               4
+#define BISS_EDS_BANK_CHAN_ADDR(channel)   (BISS_EDS_BANK_CHAN_BASE + ((channel) * BISS_EDS_CHAN_OFFSET))
+#define BISS_EDS_DLEN_CHAN_BASE            0x15
+#define BISS_EDS_DLEN_CHAN_ADDR(channel)   (BISS_EDS_DLEN_CHAN_BASE + ((channel) * BISS_EDS_CHAN_OFFSET))
+#define BISS_EDS_FORMAT_CHAN_BASE          0x16
+#define BISS_EDS_FORMAT_CHAN_ADDR(channel) (BISS_EDS_FORMAT_CHAN_BASE + ((channel) * BISS_EDS_CHAN_OFFSET))
+#define BISS_EDS_CPOLY_CHAN_BASE           0x17
+#define BISS_EDS_CPOLY_CHAN_ADDR(channel)  (BISS_EDS_CPOLY_CHAN_BASE + ((channel) * BISS_EDS_CHAN_OFFSET))
 
-#define BISS_EDS_FORMAT_TYPE_OFFSET         (0U)
-#define BISS_EDS_FORMAT_TYPE_MASK           (0x01)
-#define BISS_EDS_FORMAT_GET_TYPE(x)         (((x) & BISS_EDS_FORMAT_TYPE_MASK) >> \
-                                            BISS_EDS_FORMAT_TYPE_OFFSET)
+#define BISS_EDS_FORMAT_TYPE_OFFSET (0U)
+#define BISS_EDS_FORMAT_TYPE_MASK   (0x01)
+#define BISS_EDS_FORMAT_GET_TYPE(x) (((x) & BISS_EDS_FORMAT_TYPE_MASK) >> BISS_EDS_FORMAT_TYPE_OFFSET)
 
-#define BISS_EDS_FORMAT_ALIGN_OFFSET        (1U)
-#define BISS_EDS_FORMAT_ALIGN_MASK          (0x02)
-#define BISS_EDS_FORMAT_GET_ALIGN(x)        (((x) & BISS_EDS_FORMAT_ALIGN_MASK) >> \
-                                            BISS_EDS_FORMAT_ALIGN_OFFSET)
+#define BISS_EDS_FORMAT_ALIGN_OFFSET (1U)
+#define BISS_EDS_FORMAT_ALIGN_MASK   (0x02)
+#define BISS_EDS_FORMAT_GET_ALIGN(x) (((x) & BISS_EDS_FORMAT_ALIGN_MASK) >> BISS_EDS_FORMAT_ALIGN_OFFSET)
 
-#define BISS_EDS_FORMAT_STOPBIT_OFFSET      (3U)
-#define BISS_EDS_FORMAT_STOPBIT_MASK        (0x08)
-#define BISS_EDS_FORMAT_GET_STOPBIT(x)      (((x) & BISS_EDS_FORMAT_STOPBIT_MASK) >> \
-                                            BISS_EDS_FORMAT_STOPBIT_OFFSET)
+#define BISS_EDS_FORMAT_STOPBIT_OFFSET (3U)
+#define BISS_EDS_FORMAT_STOPBIT_MASK   (0x08)
+#define BISS_EDS_FORMAT_GET_STOPBIT(x) (((x) & BISS_EDS_FORMAT_STOPBIT_MASK) >> BISS_EDS_FORMAT_STOPBIT_OFFSET)
 
-#define BISS_FORMAT_TYPE_MASK               (0x01)
-#define BISS_FORMAT_TYPE_SHIFT              (0U)
-#define BISS_FORMAT_GET_TYPE(x)             (((x) & BISS_FORMAT_TYPE_MASK) >> \
-                                            BISS_FORMAT_TYPE_SHIFT)
-#define BISS_SENSOR_ROLE                    (0x00)
-#define BISS_ACTUATOR_ROLE                  (0x01)
+#define BISS_FORMAT_TYPE_MASK   (0x01)
+#define BISS_FORMAT_TYPE_SHIFT  (0U)
+#define BISS_FORMAT_GET_TYPE(x) (((x) & BISS_FORMAT_TYPE_MASK) >> BISS_FORMAT_TYPE_SHIFT)
+#define BISS_SENSOR_ROLE        (0x00)
+#define BISS_ACTUATOR_ROLE      (0x01)
 
-#define BISS_FORMAT_LSTOP_MASK              (0x08)
-#define BISS_FORMAT_LSTOP_SHIFT             (3U)
-#define BISS_FORMAT_LSTOP_GET(x)            (((x) & BISS_FORMAT_LSTOP_MASK) >> \
-                                            BISS_FORMAT_LSTOP_SHIFT)
-#define BISS_FORMAT_LSTOP_DISABLE           (0x00)
-#define BISS_FORMAT_LSTOP_ENABLE            (0x01)
+#define BISS_FORMAT_LSTOP_MASK    (0x08)
+#define BISS_FORMAT_LSTOP_SHIFT   (3U)
+#define BISS_FORMAT_LSTOP_GET(x)  (((x) & BISS_FORMAT_LSTOP_MASK) >> BISS_FORMAT_LSTOP_SHIFT)
+#define BISS_FORMAT_LSTOP_DISABLE (0x00)
+#define BISS_FORMAT_LSTOP_ENABLE  (0x01)
 
-#define BISS_FORMAT_ALIGN_MASK              (0x02)
-#define BISS_FORMAT_ALIGN_SHIFT             (1U)
-#define BISS_FORMAT_ALIGN_GET(x)            (((x) & BISS_FORMAT_ALIGN_MASK) >> \
-                                            BISS_FORMAT_ALIGN_SHIFT)
-#define BISS_FORMAT_ALIGN_RIGHT             (0x00)
-#define BISS_FORMAT_ALIGN_LEFT              (0x01)
+#define BISS_FORMAT_ALIGN_MASK   (0x02)
+#define BISS_FORMAT_ALIGN_SHIFT  (1U)
+#define BISS_FORMAT_ALIGN_GET(x) (((x) & BISS_FORMAT_ALIGN_MASK) >> BISS_FORMAT_ALIGN_SHIFT)
+#define BISS_FORMAT_ALIGN_RIGHT  (0x00)
+#define BISS_FORMAT_ALIGN_LEFT   (0x01)
 
-#define BISS_EDS_BC_OFFSET_ADDR             (0x34)
-#define BISS_EDS_BC_OFFSET_LEN              (1U)
-#define BISS_BC_ENABLE_MASK                 (0x10)
-#define BISS_BC_OFFSET_MASK                 (0x0F)
+#define BISS_EDS_BC_OFFSET_ADDR (0x34)
+#define BISS_EDS_BC_OFFSET_LEN  (1U)
+#define BISS_BC_ENABLE_MASK     (0x10)
+#define BISS_BC_OFFSET_MASK     (0x0F)
 
-#define BISS_EDS_MTLEN_ADDR                 (0x0A)
-#define BISS_EDS_MTLEN_LEN                  (1U)
+#define BISS_EDS_MTLEN_ADDR (0x0A)
+#define BISS_EDS_MTLEN_LEN  (1U)
 
-#define BISS_EDS_MTFMT_ADDR                 (0x0B)
-#define BISS_EDS_MTFMT_LEN                  (1U)
+#define BISS_EDS_MTFMT_ADDR (0x0B)
+#define BISS_EDS_MTFMT_LEN  (1U)
 
-#define BISS_EDS_SIPCNT_ADDR                (0x14)
-#define BISS_EDS_SIPCNT_LEN                 (4U)
+#define BISS_EDS_SIPCNT_ADDR (0x14)
+#define BISS_EDS_SIPCNT_LEN  (4U)
 
-#define BISS_EDS_ENTYP_ADDR                 (0x08)
-#define BISS_EDS_ENTYP_LEN                  (1U)
+#define BISS_EDS_ENTYP_ADDR (0x08)
+#define BISS_EDS_ENTYP_LEN  (1U)
 
 /*! @brief BiSS slave device BP0 register. */
-#define BISS_BP0_PROFILE_ID                 (0x00)
-#define BISS_BP0_PROFILE_ID_MASK            (0xE0)
-#define BISS_BP0_PROFILE_ID_SHIFT           (5U)
-#define BISS_BP0_PROFILE_ID_GET(x)          (((x) & BISS_BP0_PROFILE_ID_MASK) >> \
-                                            BISS_BP0_PROFILE_ID_SHIFT)
-#define BISS_BP0_DATA_LEN_MASK              (0x1F)
-#define BISS_BP0_DATA_LEN_SHIFT             (0U)
-#define BISS_BP0_DATA_LEN_GET(x)            ((uint8_t)(((x) & BISS_BP0_DATA_LEN_MASK) >> \
-                                            BISS_BP0_DATA_LEN_SHIFT))
-#define BISS_BP0_APL_ID_MASK                (0x7F00)
-#define BISS_BP0_APL_ID_SHIFT               (8U)
-#define BISS_BP0_APL_TYPE_MASK              (0x8000)
-#define BISS_BP0_APL_TYPE_SHIFT             (15U)
-#define BISS_BP0_APL_TYPE_GET(x)            (((x) & BISS_BP0_APL_TYPE_MASK) >> \
-                                            BISS_BP0_APL_TYPE_SHIFT)
-#define BISS_BP0_SENSOR                     (0x00)
-#define BISS_BP0_ACTUATOR                   (0x01)
-#define BISS_BP0_CRCPOLY                    (0x25)
+#define BISS_BP0_PROFILE_ID        (0x00)
+#define BISS_BP0_PROFILE_ID_MASK   (0xE0)
+#define BISS_BP0_PROFILE_ID_SHIFT  (5U)
+#define BISS_BP0_PROFILE_ID_GET(x) (((x) & BISS_BP0_PROFILE_ID_MASK) >> BISS_BP0_PROFILE_ID_SHIFT)
+#define BISS_BP0_DATA_LEN_MASK     (0x1F)
+#define BISS_BP0_DATA_LEN_SHIFT    (0U)
+#define BISS_BP0_DATA_LEN_GET(x)   ((uint8_t)(((x) & BISS_BP0_DATA_LEN_MASK) >> BISS_BP0_DATA_LEN_SHIFT))
+#define BISS_BP0_APL_ID_MASK       (0x7F00)
+#define BISS_BP0_APL_ID_SHIFT      (8U)
+#define BISS_BP0_APL_TYPE_MASK     (0x8000)
+#define BISS_BP0_APL_TYPE_SHIFT    (15U)
+#define BISS_BP0_APL_TYPE_GET(x)   (((x) & BISS_BP0_APL_TYPE_MASK) >> BISS_BP0_APL_TYPE_SHIFT)
+#define BISS_BP0_SENSOR            (0x00)
+#define BISS_BP0_ACTUATOR          (0x01)
+#define BISS_BP0_CRCPOLY           (0x25)
 
-#define BISS_TEMP_8BIT_MASK                 (0xFF)
-#define BISS_TEMP_12BIT_SYM_MASK            (0x0800)
-#define BISS_TEMP_16BIT_MASK                (0xFFFF)
+#define BISS_TEMP_8BIT_MASK      (0xFF)
+#define BISS_TEMP_12BIT_SYM_MASK (0x0800)
+#define BISS_TEMP_16BIT_MASK     (0xFFFF)
 
 /*! @brief BiSS slave device BP3 register. */
-#define BISS_BP3_PROFILE_ID                 (0x06)
-#define BISS_BP3_PROFILE_ID_MASK            (0xF0)
-#define BISS_BP3_PROFILE_ID_SHIFT           (4U)
-#define BISS_BP3_PROFILE_ID_GET(x)          (((x) & BISS_BP3_PROFILE_ID_MASK) >> \
-                                            BISS_BP3_PROFILE_ID_SHIFT)
-#define BISS_BP3_CRC_MASK                   (0x01)
-#define BISS_BP3_VER_MASK                   (0x0E)
-#define BISS_BP3_VER_SHIFT                  (1U)
-#define BISS_BP3_DATA_LEN_MASK              (0xEF00)
-#define BISS_BP3_DATA_LEN_SHIFT             (8U)
-#define BISS_BP3_DATA_LEN_GET(x)            ((uint8_t)(((x) & BISS_BP3_DATA_LEN_MASK) >> \
-                                            BISS_BP3_DATA_LEN_SHIFT))
-#define BISS_BP3_CRCPOLY                    (0x43)
+#define BISS_BP3_PROFILE_ID        (0x06)
+#define BISS_BP3_PROFILE_ID_MASK   (0xF0)
+#define BISS_BP3_PROFILE_ID_SHIFT  (4U)
+#define BISS_BP3_PROFILE_ID_GET(x) (((x) & BISS_BP3_PROFILE_ID_MASK) >> BISS_BP3_PROFILE_ID_SHIFT)
+#define BISS_BP3_CRC_MASK          (0x01)
+#define BISS_BP3_VER_MASK          (0x0E)
+#define BISS_BP3_VER_SHIFT         (1U)
+#define BISS_BP3_DATA_LEN_MASK     (0xEF00)
+#define BISS_BP3_DATA_LEN_SHIFT    (8U)
+#define BISS_BP3_DATA_LEN_GET(x)   ((uint8_t)(((x) & BISS_BP3_DATA_LEN_MASK) >> BISS_BP3_DATA_LEN_SHIFT))
+#define BISS_BP3_CRCPOLY           (0x43)
 
-#define BISS_BP3S_PROFILE_ID                (0x07)
-#define BISS_BP3S_PROFILE_ID_MASK           (0x70)
-#define BISS_BP3S_PROFILE_ID_SHIFT          (4U)
-#define BISS_BP3S_PROFILE_ID_GET(x)         (((x) & BISS_BP3S_PROFILE_ID_MASK) >> \
-                                            BISS_BP3S_PROFILE_ID_SHIFT)
-#define BISS_BP3S_CRC_MASK                  (0x01)
-#define BISS_BP3S_VER_MASK                  (0x0E)
-#define BISS_BP3S_VER_SHIFT                 (1U)
-#define BISS_BP3S_DATA_LEN_MASK             (0x7F00)
-#define BISS_BP3S_DATA_LEN_SHIFT            (8U)
-#define BISS_BP3S_DATA_LEN_GET(x)           ((uint8_t)(((x) & BISS_BP3S_DATA_LEN_MASK) >> \
-                                            BISS_BP3S_DATA_LEN_SHIFT))
-#define BISS_BP3S_CRCPOLY                   (0x190D9)
+#define BISS_BP3S_PROFILE_ID        (0x07)
+#define BISS_BP3S_PROFILE_ID_MASK   (0x70)
+#define BISS_BP3S_PROFILE_ID_SHIFT  (4U)
+#define BISS_BP3S_PROFILE_ID_GET(x) (((x) & BISS_BP3S_PROFILE_ID_MASK) >> BISS_BP3S_PROFILE_ID_SHIFT)
+#define BISS_BP3S_CRC_MASK          (0x01)
+#define BISS_BP3S_VER_MASK          (0x0E)
+#define BISS_BP3S_VER_SHIFT         (1U)
+#define BISS_BP3S_DATA_LEN_MASK     (0x7F00)
+#define BISS_BP3S_DATA_LEN_SHIFT    (8U)
+#define BISS_BP3S_DATA_LEN_GET(x)   ((uint8_t)(((x) & BISS_BP3S_DATA_LEN_MASK) >> BISS_BP3S_DATA_LEN_SHIFT))
+#define BISS_BP3S_CRCPOLY           (0x190D9)
 
-#define BISS_SPEC_CPOLY_ADDR                (0x1C)
-#define BISS_SPEC_CPOLY_LEN                 (4U)
-#define BISS_SPEC_CSTART_ADDR               (0x20)
-#define BISS_SPEC_CSTART_LEN                (4U)
+#define BISS_SPEC_CPOLY_ADDR  (0x1C)
+#define BISS_SPEC_CPOLY_LEN   (4U)
+#define BISS_SPEC_CSTART_ADDR (0x20)
+#define BISS_SPEC_CSTART_LEN  (4U)
 
-#define BISS_SCD_BINARY_CODED               (0x00)
-#define BISS_SCD_GRAY_CODED                 (0x01)
+#define BISS_SCD_BINARY_CODED (0x00)
+#define BISS_SCD_GRAY_CODED   (0x01)
 
-#define BISS_SEL_SCRCLEN                    (0x00)
-#define BISS_SEL_SCRCPOLY                   (0x01)
+#define BISS_SEL_SCRCLEN  (0x00)
+#define BISS_SEL_SCRCPOLY (0x01)
 
-#define BISS_LINEDELAY_MASK                 (0xFF)
+#define BISS_LINEDELAY_MASK (0xFF)
 
-#define BISS_BREAK_ENABLE                   (1U)
+#define BISS_BREAK_ENABLE (1U)
 
 /*! @brief Defines the BiSS channel flag. */
 typedef enum _biss_channel_flags_t
 {
     BISS_UseCurrentChannel = 0U,
-    BISS_UsePhyChannel1 = 1U,
-    BISS_UseNextChannel = 1U,
+    BISS_UsePhyChannel1    = 1U,
+    BISS_UseNextChannel    = 1U,
 } biss_chan_flag_t;
 
 /*! @brief Defines the BiSS Master protocol type. */
 typedef enum _biss_prot_type_t
 {
-    PROTOCOL_BISS_B = 0x00U,
-    PROTOCOL_BISS_C = 0x01U,
-    PROTOCOL_SSI = 0x02U,
+    PROTOCOL_BISS_B   = 0x00U,
+    PROTOCOL_BISS_C   = 0x01U,
+    PROTOCOL_SSI      = 0x02U,
     PROTOCOL_NOT_USED = 0x03U,
 } biss_prot_type_t;
 
@@ -319,12 +307,12 @@ typedef enum _biss_trigger_mode_t
 /*! @brief BiSS slave role type. */
 typedef enum _biss_slave_role_t
 {
-    BISS_Actuator = 0U,
-    BISS_BusCoupler = 1U,
-    BISS_TempSensor = 2U,
+    BISS_Actuator      = 0U,
+    BISS_BusCoupler    = 1U,
+    BISS_TempSensor    = 2U,
     BISS_RotaryEncoder = 3U,
     BISS_LinearEncoder = 4U,
-    BISS_UnknowRole = 5U,
+    BISS_UnknowRole    = 5U,
 } biss_slave_role_t;
 
 typedef enum _biss_encoder_type_t
@@ -335,62 +323,62 @@ typedef enum _biss_encoder_type_t
 
 typedef enum _biss_data_type_t
 {
-    BISS_DATA_SENSOR = 0u,
+    BISS_DATA_SENSOR   = 0u,
     BISS_DATA_ACTUATOR = 1u,
 } biss_data_type_t;
 
 /*! @brief BiSS slave information. */
 typedef struct _biss_slave_info_t
 {
-    biss_slave_role_t   role;       /* !< slave role
-                                     * BISS_Actuator
-                                     * BISS_BusCoupler
-                                     * BISS_TempSensor
-                                     * BISS_RotaryEncoder
-                                     * BISS_LinearEncoder
-                                     * BISS_UnknowRole
-                                     */
-    bool                stopBit;    /*!< Stop bit enable flag, enabled with role is Actuator */
-    uint16_t            profile;
-    uint16_t            mid;
-    uint32_t            sn;
-    uint8_t             did[6];
-    uint8_t             tma;        /* Minimum permitted clock period on MA Unit(1ns) */
-    uint8_t             EDSSlvID;   /*!< The slave ID which has EDS info */
-    uint8_t             commEDS;    /*!< common EDS ID, enabled with commEDS != 0 */
-    uint8_t             profileEDS; /*!< specification EDS ID, enabled with specEDS != 0 */
-    uint8_t             crcLen;      /*!< CRC length of tranfered data */
-    uint32_t            crcPoly;    /*!< CRC poly for transfer, enabled with dataLen != 0 */
-    uint32_t            crcStart;   /*!< CRC start value, enabled with dataLen != 0 */
-    biss_data_type_t    dataType;   /*!< Sensor or Actuator */
-    uint8_t             dataLen;    /*!< Data length of tranfered data */
-    uint8_t             errWarLen;  /*!< error and warning bit number */
-    uint8_t             mtLen;      /*!< Multiturn number, enabled with role = rotary */
-    uint8_t             stLen;      /*!< Singleturn number, enabled with role = rotary */
-    biss_align_type_t   dataAlign;  /*!< Data align type, the align show data format which
-                                     * stored in SCData register, left align or right align */
-    uint8_t             mtAlign;    /*!< Multiturn data align type */
-    uint8_t             stAlign;    /*!< Singleturn data align type stored in SCData */
-    uint64_t            mtMask;     /*!< Multiturn mask for multitrun data getting */
-    uint64_t            stMask;     /*!< Singleturn mask for singleturn data getting */
-    uint32_t            step;       /*!< The resolution ratio for singleturn data */
+    biss_slave_role_t role; /* !< slave role
+                             * BISS_Actuator
+                             * BISS_BusCoupler
+                             * BISS_TempSensor
+                             * BISS_RotaryEncoder
+                             * BISS_LinearEncoder
+                             * BISS_UnknowRole
+                             */
+    bool stopBit;           /*!< Stop bit enable flag, enabled with role is Actuator */
+    uint16_t profile;
+    uint16_t mid;
+    uint32_t sn;
+    uint8_t did[6];
+    uint8_t tma;                 /* Minimum permitted clock period on MA Unit(1ns) */
+    uint8_t EDSSlvID;            /*!< The slave ID which has EDS info */
+    uint8_t commEDS;             /*!< common EDS ID, enabled with commEDS != 0 */
+    uint8_t profileEDS;          /*!< specification EDS ID, enabled with specEDS != 0 */
+    uint8_t crcLen;              /*!< CRC length of tranfered data */
+    uint32_t crcPoly;            /*!< CRC poly for transfer, enabled with dataLen != 0 */
+    uint32_t crcStart;           /*!< CRC start value, enabled with dataLen != 0 */
+    biss_data_type_t dataType;   /*!< Sensor or Actuator */
+    uint8_t dataLen;             /*!< Data length of tranfered data */
+    uint8_t errWarLen;           /*!< error and warning bit number */
+    uint8_t mtLen;               /*!< Multiturn number, enabled with role = rotary */
+    uint8_t stLen;               /*!< Singleturn number, enabled with role = rotary */
+    biss_align_type_t dataAlign; /*!< Data align type, the align show data format which
+                                  * stored in SCData register, left align or right align */
+    uint8_t mtAlign;             /*!< Multiturn data align type */
+    uint8_t stAlign;             /*!< Singleturn data align type stored in SCData */
+    uint64_t mtMask;             /*!< Multiturn mask for multitrun data getting */
+    uint64_t stMask;             /*!< Singleturn mask for singleturn data getting */
+    uint32_t step;               /*!< The resolution ratio for singleturn data */
 } biss_slave_info_t;
 
 /*! @brief BiSS Master information. */
 typedef struct _biss_master_t
 {
-    BISS_Type           *base;
-    uint8_t             freqMADiv;
-    uint8_t             freqAGSDiv;
-    uint8_t             maxProcTime;    /*!< The max process time allowed */
-    uint8_t             processTime;    /*!< Additional processing time SCD in clocks */
-    uint8_t             slvCnt;
-    uint8_t             lineDelay;
-    uint32_t            dacq;
-    uint32_t            ctrlcomm2;
-    biss_prot_type_t    protType;
+    BISS_Type *base;
+    uint8_t freqMADiv;
+    uint8_t freqAGSDiv;
+    uint8_t maxProcTime; /*!< The max process time allowed */
+    uint8_t processTime; /*!< Additional processing time SCD in clocks */
+    uint8_t slvCnt;
+    uint8_t lineDelay;
+    uint32_t dacq;
+    uint32_t ctrlcomm2;
+    biss_prot_type_t protType;
     biss_trigger_mode_t triggerMode;
-    biss_slave_info_t   slvList[BISS_MAX_SLAVE_COUNT];
+    biss_slave_info_t slvList[BISS_MAX_SLAVE_COUNT];
 } biss_master_t;
 
 /*******************************************************************************
@@ -596,7 +584,6 @@ biss_trigger_mode_t BISS_GetTriggerMode(biss_master_t *master);
  */
 void BISS_ChangeTriggerMode(biss_master_t *master, biss_trigger_mode_t triggerMode);
 
-
 /*!
  * @brief Initialize BiSS sequence.
  *
@@ -755,8 +742,7 @@ void BISS_SLVSetLStop(biss_master_t *master, uint8_t slvID, bool enable);
  * @param slvID slave device ID 0 - 7.
  * @param dataType data type - sensor or actuator.
  */
-void BISS_SLVSetDataType(biss_master_t *master, uint8_t slvID,
-                         biss_data_type_t dataType);
+void BISS_SLVSetDataType(biss_master_t *master, uint8_t slvID, biss_data_type_t dataType);
 
 /*!
  * @brief Get EDS bank number of the slave device.
@@ -767,7 +753,7 @@ void BISS_SLVSetDataType(biss_master_t *master, uint8_t slvID,
  * @return kStatus_Success  Successfully get EDS bank number.
  * @return kStatus_Fail failed to get EDS bank number.
  */
-status_t BISS_SLVGetEDSBank(biss_master_t *master, uint8_t slvID, uint8_t* bank);
+status_t BISS_SLVGetEDSBank(biss_master_t *master, uint8_t slvID, uint8_t *bank);
 
 /*! @brief Slect Ram bank of the slave device.
  *
@@ -970,8 +956,7 @@ uint64_t BISS_SCDGetLinear(biss_master_t *master, uint8_t slvID, uint64_t SCData
  * @param slvID slave device ID 0 - 7.
  * @return multiple turn data.
  */
-uint64_t BISS_SCDGetMtVal(biss_master_t *master,
-                          uint8_t slvID, uint64_t SCData);
+uint64_t BISS_SCDGetMtVal(biss_master_t *master, uint8_t slvID, uint64_t SCData);
 
 /*!
  * @brief Get single turn data from SCDdata.
@@ -980,8 +965,7 @@ uint64_t BISS_SCDGetMtVal(biss_master_t *master,
  * @param slvID slave device ID 0 - 7.
  * @return single turn data.
  */
-uint64_t BISS_SLVGetStVal(biss_master_t *master,
-                          uint8_t slvID, uint64_t SCData);
+uint64_t BISS_SLVGetStVal(biss_master_t *master, uint8_t slvID, uint64_t SCData);
 
 #if defined(__cplusplus)
 }

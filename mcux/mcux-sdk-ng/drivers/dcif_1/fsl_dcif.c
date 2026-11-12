@@ -370,7 +370,8 @@ void DCIF_SetGammaData(DCIF_Type *base, uint32_t mask, uint8_t startIndex, const
      * color table, 0 allows them. The caller passes the tables it wants to
      * access, so mask all three first, then unmask (clear) the requested ones
      * before writing, otherwise the gamma RAM writes are silently dropped. */
-    base->GC_CTRL = (base->GC_CTRL | 0xE0000000U) & ~mask;
+    base->GC_CTRL = (base->GC_CTRL | DCIF_GC_CTRL_GC_B_MASK_MASK | DCIF_GC_CTRL_GC_G_MASK_MASK |
+        DCIF_GC_CTRL_GC_R_MASK_MASK) & ~mask;
     for (uint16_t i = 0U; i < gammaLen; i++)
     {
         (DCIF_GAMMA_MEM(base))[startIndex + i] = gamma[i];
@@ -661,11 +662,11 @@ void DCIF_ClearLayerInterruptStatus(DCIF_Type *base, uint8_t domain, uint8_t lay
  *
  * code
  * config->enable = false;
- * config->skipFirstFrame = false;
+ * config->skipFirstFrame = true;
  * config->vsyncControl = false;
  * config->vsyncDelay_pclk = 0;
  * config->vsyncTimeout_hsync = 0;
- * config->polarityFlags = kDCIF_PdiVsyncActiveLow | kDCIF_PdiDriveDataOnFallingClkEdge;
+ * config->polarityFlags = 0;
  * config->format = kDCIF_PdiRGB888;
  * config->layer = kDCIF_PdiLayer0;
  * endcode
@@ -678,7 +679,7 @@ void DCIF_PdiGetDefaultConfig(dcif_pdi_config_t *config)
 
     (void)memset(config, 0, sizeof(*config));
 
-    config->polarityFlags = (uint32_t)(kDCIF_PdiVsyncActiveLow | kDCIF_PdiDriveDataOnFallingClkEdge);
+    config->skipFirstFrame = true;
 }
 
 /*!
@@ -755,7 +756,7 @@ void DCIF_FbdSetConfig(DCIF_Type *base, const dcif_fbd_config_t *config)
  * config->format = kDCIF_DpiRGB565;
  * config->displayMode = kDCIF_DpiNormal;
  * config->frameFetch = kDCIF_DpiVfpBegin;
- * config->txFfifoFill = kDCIF_DpiVbpEnd;
+ * config->txFfifoFill = kDCIF_DpiVfpBegin;
  * config->enableBackground = true;
  * endcode
  *

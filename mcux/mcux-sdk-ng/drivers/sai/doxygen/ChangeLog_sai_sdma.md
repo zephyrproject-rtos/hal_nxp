@@ -1,5 +1,10 @@
 # SAI_SDMA
 
+## [2.6.2]
+
+- Bug Fixes
+  - Fixed Coverity NULL_FIELD findings by adding a NULL check on the SAI handle in the Tx and Rx SDMA callbacks.
+
 ## [2.6.1]
 
 - Bug Fixes

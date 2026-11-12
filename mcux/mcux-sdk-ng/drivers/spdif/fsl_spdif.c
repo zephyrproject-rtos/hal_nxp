@@ -706,7 +706,8 @@ void SPDIF_TransferTxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
     uint32_t i = 0, j = 0, data = 0;
 
     /* Do Transfer */
-    if (((SPDIF_GetStatusFlag(base) & (uint32_t)kSPDIF_TxFIFOEmpty) != 0x00U) &&
+    if ((buffer != NULL) &&
+        ((SPDIF_GetStatusFlag(base) & (uint32_t)kSPDIF_TxFIFOEmpty) != 0x00U) &&
         ((base->SIE & (uint32_t)kSPDIF_TxFIFOEmpty) != 0x00U))
     {
         dataSize = handle->watermark;
@@ -838,11 +839,12 @@ void SPDIF_TransferRxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
     }
 
     /* Handle audio data transfer */
-    if (((SPDIF_GetStatusFlag(base) & (uint32_t)kSPDIF_RxFIFOFull) != 0x00U) &&
+    buffer = handle->spdifQueue[handle->queueDriver].data;
+    if ((buffer != NULL) &&
+        ((SPDIF_GetStatusFlag(base) & (uint32_t)kSPDIF_RxFIFOFull) != 0x00U) &&
         ((base->SIE & (uint32_t)kSPDIF_RxFIFOFull) != 0x00U))
     {
         dataSize = handle->watermark;
-        buffer   = handle->spdifQueue[handle->queueDriver].data;
         while (i < dataSize)
         {
             /* Read left channel data */

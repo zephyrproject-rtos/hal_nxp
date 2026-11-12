@@ -25,7 +25,7 @@ extern TSI_Type *const s_tsiBases[];
  ******************************************************************************/
 
 /*! @brief TSI driver version */
-#define FSL_TSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_TSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 
 /*! @brief TSI status flags macro collection */
 #define ALL_FLAGS_MASK (TSI_DATA_EOSF_MASK | TSI_DATA_OUTRGF_MASK)

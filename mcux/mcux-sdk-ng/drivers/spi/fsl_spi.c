@@ -88,6 +88,13 @@ static void SPI_ReceiveTransfer(SPI_Type *base, spi_master_handle_t *handle);
  * @param instance SPI instance number.
  */
 static void SPI_CommonIRQHandler(SPI_Type *base, uint32_t instance);
+
+/*!
+ * @brief Flushes any stale data from the SPI receive buffer or FIFO.
+ *
+ * @param base SPI base pointer
+ */
+static void SPI_FlushRxData(SPI_Type *base);
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -148,16 +155,15 @@ void SPI_SetDummyData(SPI_Type *base, uint8_t dummyData)
 
 static void SPI_WriteNonBlocking(SPI_Type *base, const uint8_t *buffer, size_t size)
 {
-    uint32_t i            = 0;
-    uint8_t bytesPerFrame = 1U;
-    uint32_t instance     = SPI_GetInstance(base);
-
+    uint32_t instance = SPI_GetInstance(base);
 #if defined(FSL_FEATURE_SPI_16BIT_TRANSFERS) && FSL_FEATURE_SPI_16BIT_TRANSFERS
     /* Check if 16 bits or 8 bits */
-    bytesPerFrame = ((base->C2 & SPI_C2_SPIMODE_MASK) >> SPI_C2_SPIMODE_SHIFT) + 1U;
+    uint8_t bytesPerFrame = (uint8_t)(((base->C2 & SPI_C2_SPIMODE_MASK) >> SPI_C2_SPIMODE_SHIFT) + 1U);
+#else
+    uint8_t bytesPerFrame = 1U;
 #endif
 
-    while (i < size)
+    while (size >= (size_t)bytesPerFrame)
     {
         if (buffer != NULL)
         {
@@ -182,21 +188,20 @@ static void SPI_WriteNonBlocking(SPI_Type *base, const uint8_t *buffer, size_t s
             base->D   = g_spiDummyData[instance] & 0xFFU;
 #endif
         }
-        i += bytesPerFrame;
+        size -= (size_t)bytesPerFrame;
     }
 }
 
 static void SPI_ReadNonBlocking(SPI_Type *base, uint8_t *buffer, size_t size)
 {
-    uint32_t i            = 0U;
-    uint8_t bytesPerFrame = 1U;
-
 #if defined(FSL_FEATURE_SPI_16BIT_TRANSFERS) && FSL_FEATURE_SPI_16BIT_TRANSFERS
     /* Check if 16 bits or 8 bits */
-    bytesPerFrame = ((base->C2 & SPI_C2_SPIMODE_MASK) >> SPI_C2_SPIMODE_SHIFT) + 1U;
+    uint8_t bytesPerFrame = ((base->C2 & SPI_C2_SPIMODE_MASK) >> SPI_C2_SPIMODE_SHIFT) + 1U;
+#else
+    uint8_t bytesPerFrame = 1U;
 #endif
 
-    while (i < size)
+    while (size >= (size_t)bytesPerFrame)
     {
         if (buffer != NULL)
         {
@@ -215,7 +220,7 @@ static void SPI_ReadNonBlocking(SPI_Type *base, uint8_t *buffer, size_t size)
         {
             (void)SPI_ReadData(base);
         }
-        i += bytesPerFrame;
+        size -= (size_t)bytesPerFrame;
     }
 }
 
@@ -275,7 +280,8 @@ static void SPI_SendInitialTransfer(SPI_Type *base, spi_master_handle_t *handle)
     {
         handle->txData += bytestoTransfer;
     }
-    handle->txRemainingBytes -= bytestoTransfer;
+    assert(handle->txRemainingBytes >= (size_t)bytestoTransfer);
+    handle->txRemainingBytes -= (size_t)bytestoTransfer;
 }
 
 static void SPI_SendTransfer(SPI_Type *base, spi_master_handle_t *handle)
@@ -297,7 +303,8 @@ static void SPI_SendTransfer(SPI_Type *base, spi_master_handle_t *handle)
                 {
                     handle->txData += bytes;
                 }
-                handle->txRemainingBytes -= bytes;
+                assert(handle->txRemainingBytes >= (size_t)bytes);
+                handle->txRemainingBytes -= (size_t)bytes;
             }
         }
         else
@@ -312,7 +319,7 @@ static void SPI_SendTransfer(SPI_Type *base, spi_master_handle_t *handle)
                 {
                     handle->txData += bytes;
                 }
-                handle->txRemainingBytes -= bytes;
+                handle->txRemainingBytes -= (size_t)bytes;
             }
         }
     }
@@ -322,7 +329,7 @@ static void SPI_SendTransfer(SPI_Type *base, spi_master_handle_t *handle)
     else
     {
         /* The FIFO's entry width is 16 bits, need to translate it to bytes. */
-        uint8_t bytestoTransfer = (uint8_t)handle->watermark * 2U;
+        uint8_t bytestoTransfer = (uint8_t)(((uint32_t)handle->watermark * 2U) & 0xFFU);
 
         if (handle->txRemainingBytes < 8U)
         {
@@ -336,7 +343,8 @@ static void SPI_SendTransfer(SPI_Type *base, spi_master_handle_t *handle)
         {
             handle->txData += bytestoTransfer;
         }
-        handle->txRemainingBytes -= bytestoTransfer;
+        assert(handle->txRemainingBytes >= (size_t)bytestoTransfer);
+        handle->txRemainingBytes -= (size_t)bytestoTransfer;
     }
 #endif
 }
@@ -357,7 +365,8 @@ static void SPI_ReceiveTransfer(SPI_Type *base, spi_master_handle_t *handle)
             {
                 handle->rxData += bytes;
             }
-            handle->rxRemainingBytes -= bytes;
+            assert(handle->rxRemainingBytes >= (size_t)bytes);
+            handle->rxRemainingBytes -= (size_t)bytes;
         }
     }
 #if defined(FSL_FEATURE_SPI_HAS_FIFO) && (FSL_FEATURE_SPI_HAS_FIFO)
@@ -374,7 +383,8 @@ static void SPI_ReceiveTransfer(SPI_Type *base, spi_master_handle_t *handle)
             {
                 handle->rxData += bytes;
             }
-            handle->rxRemainingBytes -= bytes;
+            assert(handle->rxRemainingBytes >= (size_t)bytes);
+            handle->rxRemainingBytes -= (size_t)bytes;
 
             /* If the reamining data equals to watermark, leave to last interrupt */
             if (handle->rxRemainingBytes == ((uint32_t)handle->watermark * 2U))
@@ -454,7 +464,7 @@ void SPI_MasterInit(SPI_Type *base, const spi_master_config_t *config, uint32_t 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
     /* Disable SPI before configuration */
-    base->C1 &= (uint8_t)(~SPI_C1_SPE_MASK);
+    base->C1 &= (uint8_t)(~SPI_C1_SPE_MASK & 0xFFU);
 
     /* Configure clock polarity and phase, set SPI to master */
     base->C1 = SPI_C1_MSTR(1U) | SPI_C1_CPOL(config->polarity) | SPI_C1_CPHA(config->phase) |
@@ -557,7 +567,7 @@ void SPI_SlaveInit(SPI_Type *base, const spi_slave_config_t *config)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
     /* Disable SPI before configuration */
-    base->C1 &= (uint8_t)(~SPI_C1_SPE_MASK);
+    base->C1 &= (uint8_t)(~SPI_C1_SPE_MASK & 0xFFU);
 
     /* Configure master and clock polarity and phase */
     base->C1 =
@@ -602,7 +612,7 @@ void SPI_SlaveInit(SPI_Type *base, const spi_slave_config_t *config)
 void SPI_Deinit(SPI_Type *base)
 {
     /* Disable SPI module before shutting down */
-    base->C1 &= (uint8_t)(~SPI_C1_SPE_MASK);
+    base->C1 &= (uint8_t)(~SPI_C1_SPE_MASK & 0xFFU);
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Gate the clock */
@@ -694,19 +704,19 @@ void SPI_DisableInterrupts(SPI_Type *base, uint32_t mask)
     /* Rx full interrupt */
     if ((mask & (uint32_t)kSPI_RxFullAndModfInterruptEnable) != 0U)
     {
-        base->C1 &= (uint8_t)(~SPI_C1_SPIE_MASK);
+        base->C1 &= (uint8_t)(~SPI_C1_SPIE_MASK & 0xFFU);
     }
 
     /* Tx empty interrupt */
     if ((mask & (uint32_t)kSPI_TxEmptyInterruptEnable) != 0U)
     {
-        base->C1 &= (uint8_t)(~SPI_C1_SPTIE_MASK);
+        base->C1 &= (uint8_t)(~SPI_C1_SPTIE_MASK & 0xFFU);
     }
 
     /* Data match interrupt */
     if ((mask & (uint32_t)kSPI_MatchInterruptEnable) != 0U)
     {
-        base->C2 &= (uint8_t)(~SPI_C2_SPMIE_MASK);
+        base->C2 &= (uint8_t)(~SPI_C2_SPMIE_MASK & 0xFFU);
     }
 
 #if defined(FSL_FEATURE_SPI_HAS_FIFO) && FSL_FEATURE_SPI_HAS_FIFO
@@ -715,13 +725,13 @@ void SPI_DisableInterrupts(SPI_Type *base, uint32_t mask)
         /* Rx FIFO near full interrupt */
         if ((mask & (uint32_t)kSPI_RxFifoNearFullInterruptEnable) != 0U)
         {
-            base->C3 &= (uint8_t)(~SPI_C3_RNFULLIEN_MASK);
+            base->C3 &= (uint8_t)(~SPI_C3_RNFULLIEN_MASK & 0xFFU);
         }
 
         /* Tx FIFO near empty interrupt */
         if ((mask & (uint32_t)kSPI_TxFifoNearEmptyInterruptEnable) != 0U)
         {
-            base->C3 &= (uint8_t)(~SPI_C3_TNEARIEN_MASK);
+            base->C3 &= (uint8_t)(~SPI_C3_TNEARIEN_MASK & 0xFFU);
         }
     }
 #endif /* FSL_FEATURE_SPI_HAS_FIFO */
@@ -736,10 +746,10 @@ void SPI_DisableInterrupts(SPI_Type *base, uint32_t mask)
  */
 void SPI_MasterSetBaudRate(SPI_Type *base, uint32_t baudRate_Bps, uint32_t srcClock_Hz)
 {
-    uint32_t prescaler;
-    uint32_t bestPrescaler;
-    uint32_t rateDivisor;
-    uint32_t bestDivisor;
+    uint8_t prescaler;
+    uint8_t bestPrescaler;
+    uint8_t rateDivisor;
+    uint8_t bestDivisor;
     uint32_t rateDivisorValue;
     uint32_t realBaudrate;
     uint32_t diff;
@@ -763,14 +773,14 @@ void SPI_MasterSetBaudRate(SPI_Type *base, uint32_t baudRate_Bps, uint32_t srcCl
         /* Initialize to div-by-2 */
         rateDivisorValue = 2U;
 
-        for (rateDivisor = 0; rateDivisor <= 8U; rateDivisor++)
+        for (rateDivisor = 0U; rateDivisor <= 8U; rateDivisor++)
         {
             if (min_diff == 0U)
             {
                 break;
             }
             /* Calculate actual baud rate, note need to add 1 to prescaler */
-            realBaudrate = ((srcClock_Hz) / ((prescaler + 1U) * rateDivisorValue));
+            realBaudrate = ((srcClock_Hz) / (((uint32_t)prescaler + 1U) * rateDivisorValue));
 
             /* Calculate the baud rate difference based on the conditional statement ,that states that the
             calculated baud rate must not exceed the desired baud rate */
@@ -808,12 +818,12 @@ void SPI_MasterSetBaudRate(SPI_Type *base, uint32_t baudRate_Bps, uint32_t srcCl
  */
 status_t SPI_WriteBlocking(SPI_Type *base, uint8_t *buffer, size_t size)
 {
-    uint32_t i            = 0;
-    uint8_t bytesPerFrame = 1U;
-
+    uint32_t i = 0;
 #if defined(FSL_FEATURE_SPI_16BIT_TRANSFERS) && FSL_FEATURE_SPI_16BIT_TRANSFERS
     /* Check if 16 bits or 8 bits */
-    bytesPerFrame = ((base->C2 & SPI_C2_SPIMODE_MASK) >> SPI_C2_SPIMODE_SHIFT) + 1U;
+    uint8_t bytesPerFrame = ((base->C2 & SPI_C2_SPIMODE_MASK) >> SPI_C2_SPIMODE_SHIFT) + 1U;
+#else
+    uint8_t bytesPerFrame = 1U;
 #endif
 
 #if SPI_RETRY_TIMES
@@ -866,7 +876,7 @@ void SPI_EnableFIFO(SPI_Type *base, bool enable)
         }
         else
         {
-            base->C3 &= (uint8_t)(~SPI_C3_FIFOMODE_MASK);
+            base->C3 &= (uint8_t)(~SPI_C3_FIFOMODE_MASK & 0xFFU);
         }
     }
 }
@@ -919,7 +929,6 @@ status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer)
 {
     assert(xfer != NULL);
 
-    uint8_t bytesPerFrame = 1U;
 #if SPI_RETRY_TIMES
     uint32_t waitTimes = SPI_RETRY_TIMES;
 #endif
@@ -932,7 +941,9 @@ status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer)
 
 #if defined(FSL_FEATURE_SPI_16BIT_TRANSFERS) && FSL_FEATURE_SPI_16BIT_TRANSFERS
     /* Check if 16 bits or 8 bits */
-    bytesPerFrame = ((base->C2 & SPI_C2_SPIMODE_MASK) >> SPI_C2_SPIMODE_SHIFT) + 1U;
+    uint8_t bytesPerFrame = ((base->C2 & SPI_C2_SPIMODE_MASK) >> SPI_C2_SPIMODE_SHIFT) + 1U;
+#else
+    uint8_t bytesPerFrame = 1U;
 #endif
 
     if ((xfer->dataSize % bytesPerFrame) != 0U)
@@ -947,7 +958,7 @@ status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer)
        size. */
     if (FSL_FEATURE_SPI_FIFO_SIZEn(base) != 0)
     {
-        base->C3 &= (uint8_t)(~SPI_C3_FIFOMODE_MASK);
+        base->C3 &= (uint8_t)(~SPI_C3_FIFOMODE_MASK & 0xFFU);
     }
 
 #endif /* FSL_FEATURE_SPI_HAS_FIFO */
@@ -997,7 +1008,7 @@ status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer)
         }
 
         /* Decrease the number */
-        xfer->dataSize -= bytesPerFrame;
+        xfer->dataSize -= (size_t)bytesPerFrame;
     }
 
     return kStatus_Success;
@@ -1030,7 +1041,7 @@ void SPI_MasterTransferCreateHandle(SPI_Type *base,
     s_spiHandle[instance] = handle;
     handle->callback      = callback;
     handle->userData      = userData;
-    s_spiMasterIsr        = SPI_MasterTransferHandleIRQ;
+    s_spiMasterIsr        = &SPI_MasterTransferHandleIRQ;
     handle->watermark     = SPI_GetWatermark(base);
 
 /* Get the bytes per frame */
@@ -1290,7 +1301,33 @@ void SPI_SlaveTransferCreateHandle(SPI_Type *base,
     /* Slave create handle share same logic with master create handle, the only difference
     is the Isr pointer. */
     SPI_MasterTransferCreateHandle(base, handle, callback, userData);
-    s_spiSlaveIsr = SPI_SlaveTransferHandleIRQ;
+    s_spiSlaveIsr = &SPI_SlaveTransferHandleIRQ;
+}
+
+static void SPI_FlushRxData(SPI_Type *base)
+{
+#if defined(FSL_FEATURE_SPI_HAS_FIFO) && FSL_FEATURE_SPI_HAS_FIFO
+    /* If instance has FIFO and FIFO is enabled. */
+    if ((FSL_FEATURE_SPI_FIFO_SIZEn(base) != 0) && ((base->C3 & SPI_C3_FIFOMODE_MASK) != 0U))
+    {
+        while ((SPI_GetStatusFlags(base) & (uint32_t)kSPI_RxFifoEmptyFlag) == 0U)
+        {
+            (void)SPI_ReadData(base);
+        }
+    }
+    else
+    {
+        if ((SPI_GetStatusFlags(base) & (uint32_t)kSPI_RxBufferFullFlag) != 0U)
+        {
+            (void)SPI_ReadData(base);
+        }
+    }
+#else
+    if ((SPI_GetStatusFlags(base) & (uint32_t)kSPI_RxBufferFullFlag) != 0U)
+    {
+        (void)SPI_ReadData(base);
+    }
+#endif /* FSL_FEATURE_SPI_HAS_FIFO */
 }
 
 /*!
@@ -1325,28 +1362,7 @@ status_t SPI_SlaveTransferNonBlocking(SPI_Type *base, spi_slave_handle_t *handle
     }
 
     /* Read out any possible data */
-#if defined(FSL_FEATURE_SPI_HAS_FIFO) && FSL_FEATURE_SPI_HAS_FIFO
-    /* If instance has FIFO and FIFO is enabled. */
-    if ((FSL_FEATURE_SPI_FIFO_SIZEn(base) != 0) && ((base->C3 & SPI_C3_FIFOMODE_MASK) != 0U))
-    {
-        while ((SPI_GetStatusFlags(base) & (uint32_t)kSPI_RxFifoEmptyFlag) == 0U)
-        {
-            (void)SPI_ReadData(base);
-        }
-    }
-    else
-    {
-        if ((SPI_GetStatusFlags(base) & (uint32_t)kSPI_RxBufferFullFlag) != 0U)
-        {
-            (void)SPI_ReadData(base);
-        }
-    }
-#else
-    if ((SPI_GetStatusFlags(base) & (uint32_t)kSPI_RxBufferFullFlag) != 0U)
-    {
-        (void)SPI_ReadData(base);
-    }
-#endif /* FSL_FEATURE_SPI_HAS_FIFO */
+    SPI_FlushRxData(base);
 
     /* Set the handle information */
     handle->txData           = xfer->txData;

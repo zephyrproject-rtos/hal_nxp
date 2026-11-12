@@ -39,6 +39,9 @@ enum _i3c_flag_constants
 
     /*! Errors to check for. */
     kMasterErrorFlags = kI3C_MasterErrorNackFlag | kI3C_MasterErrorWriteAbortFlag |
+#if defined(I3C_MERRWARN_URUN_MASK)
+                        kI3C_MasterErrorUnderrunFlag |
+#endif
 #if !defined(FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM) || (!FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM)
                         kI3C_MasterErrorTermFlag |
 #endif
@@ -485,6 +488,12 @@ status_t I3C_MasterCheckAndClearError(I3C_Type *base, uint32_t status)
         {
             result = kStatus_I3C_WriteAbort;
         }
+#if defined(I3C_MERRWARN_URUN_MASK)
+        else if (0UL != (status & (uint32_t)kI3C_MasterErrorUnderrunFlag))
+        {
+            result = kStatus_I3C_UnderrunError;
+        }
+#endif
 #if !defined(FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM) || (!FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM)
         else if (0UL != (status & (uint32_t)kI3C_MasterErrorTermFlag))
         {
@@ -1528,12 +1537,12 @@ void I3C_MasterSetTiming(I3C_Type *base, const i3c_timing_t *timing)
  * param address 7-bit slave device address, in bits [6:0].
  * param dir Master transfer direction, either #kI3C_Read or #kI3C_Write. This parameter is used to set
  *      the R/w bit (bit 0) in the transmitted slave address.
- * param rxSize Read terminate size for the followed read transfer, limit to 255 bytes.
+ * param rxSize Read terminate size for the followed read transfer, limit to MCTRL.RDTERM field width.
  * retval #kStatus_Success START signal and address were successfully enqueued in the transmit FIFO.
  * retval #kStatus_I3C_Busy Another master is currently utilizing the bus.
  */
 status_t I3C_MasterStartWithRxSize(
-    I3C_Type *base, i3c_bus_type_t type, uint8_t address, i3c_direction_t dir, uint8_t rxSize)
+    I3C_Type *base, i3c_bus_type_t type, uint8_t address, i3c_direction_t dir, uint32_t rxSize)
 {
     i3c_master_state_t masterState = I3C_MasterGetState(base);
     bool checkDdrState             = (type == kI3C_TypeI3CDdr) ? (masterState != kI3C_MasterStateDdr) : true;
@@ -1584,11 +1593,11 @@ status_t I3C_MasterStart(I3C_Type *base, i3c_bus_type_t type, uint8_t address, i
  * param address 7-bit slave device address, in bits [6:0].
  * param dir Master transfer direction, either #kI3C_Read or #kI3C_Write. This parameter is used to set
  *      the R/w bit (bit 0) in the transmitted slave address.
- * param rxSize Read terminate size for the followed read transfer, limit to 255 bytes.
+ * param rxSize Read terminate size for the followed read transfer, limit to MCTRL.RDTERM field width.
  * retval #kStatus_Success Repeated START signal and address were successfully enqueued in the transmit FIFO.
  */
 status_t I3C_MasterRepeatedStartWithRxSize(
-    I3C_Type *base, i3c_bus_type_t type, uint8_t address, i3c_direction_t dir, uint8_t rxSize)
+    I3C_Type *base, i3c_bus_type_t type, uint8_t address, i3c_direction_t dir, uint32_t rxSize)
 {
     uint32_t mctrlVal;
 
@@ -2121,13 +2130,13 @@ static void I3C_MasterClearFlagsAndEnableIRQ(I3C_Type *base)
  * @param address 7-bit slave device address, in bits [6:0].
  * @param dir Master transfer direction, either #kI3C_Read or #kI3C_Write. This parameter is used to set
  *      the R/w bit (bit 0) in the transmitted slave address.
- * @param tSize Read terminate size for the followed read transfer, limit to 255 bytes.
+ * @param tSize Read terminate size for the followed read transfer, limit to MCTRL.RDTERM field width.
  * @retval #kStatus_Success Data was received successfully.
  * @retval #kStatus_I3C_Busy Another master is currently utilizing the bus.
  * @retval #kStatus_I3C_Nak The slave device sent a NAK in response to a byte.
  */
 static status_t I3C_MasterStartPolling(
-    I3C_Type *base, i3c_bus_type_t type, uint8_t address, i3c_direction_t dir, uint8_t tSize)
+    I3C_Type *base, i3c_bus_type_t type, uint8_t address, i3c_direction_t dir, uint32_t tSize)
 {
     status_t result = kStatus_Success;
 
@@ -2164,12 +2173,13 @@ static status_t I3C_MasterStartPolling(
  */
 static status_t I3C_MasterTransferPrepare(I3C_Type *base, i3c_master_transfer_t *transfer)
 {
-    assert(!(0U != (transfer->flags & (uint32_t)kI3C_TransferRxAutoTermFlag)) || transfer->dataSize <= 0xFFU);
+    assert(!(0U != (transfer->flags & (uint32_t)kI3C_TransferRxAutoTermFlag)) ||
+           transfer->dataSize <= (size_t)FSL_I3C_RDTERM_MAX);
 
     status_t result           = kStatus_Success;
     i3c_direction_t direction = transfer->direction;
     uint32_t subaddressRemaining;
-    uint8_t tSize;
+    uint32_t tSize;
 
     if (transfer->busType != kI3C_TypeI3CDdr)
     {
@@ -2189,7 +2199,7 @@ static status_t I3C_MasterTransferPrepare(I3C_Type *base, i3c_master_transfer_t 
 
     if (0UL == (transfer->flags & (uint32_t)kI3C_TransferNoStartFlag))
     {
-        tSize  = (0U != (transfer->flags & (uint32_t)kI3C_TransferRxAutoTermFlag)) ? (uint8_t)transfer->dataSize : 0U;
+        tSize  = (0U != (transfer->flags & (uint32_t)kI3C_TransferRxAutoTermFlag)) ? (uint32_t)transfer->dataSize : 0U;
         result = I3C_MasterStartPolling(base, transfer->busType, transfer->slaveAddress, direction, tSize);
         if (result != kStatus_Success)
         {
@@ -2231,7 +2241,7 @@ static status_t I3C_MasterTransferPrepare(I3C_Type *base, i3c_master_transfer_t 
         if ((transfer->busType != kI3C_TypeI3CDdr) && (transfer->direction == kI3C_Read))
         {
             tSize =
-                (0U != (transfer->flags & (uint32_t)kI3C_TransferRxAutoTermFlag)) ? (uint8_t)transfer->dataSize : 0U;
+                (0U != (transfer->flags & (uint32_t)kI3C_TransferRxAutoTermFlag)) ? (uint32_t)transfer->dataSize : 0U;
             result = I3C_MasterStartPolling(base, transfer->busType, transfer->slaveAddress, kI3C_Read, tSize);
         }
     }
@@ -2517,11 +2527,11 @@ static void I3C_TransferStateMachineWaitRepeatedStartCompleteState(I3C_Type *bas
         handle->state = (uint8_t)kTransferDataState;
         I3C_MasterDisableInterrupts(base, (uint32_t)kI3C_MasterTxReadyFlag);
 
-        if ((handle->remainingBytes < 256U) && (handle->rxTermOps == kI3C_RxAutoTerm))
+        if ((handle->remainingBytes <= (size_t)FSL_I3C_RDTERM_MAX) && (handle->rxTermOps == kI3C_RxAutoTerm))
         {
             stateParams->result =
                 I3C_MasterRepeatedStartWithRxSize(base, handle->transfer.busType, handle->transfer.slaveAddress,
-                                                  kI3C_Read, (uint8_t)handle->remainingBytes);
+                                                  kI3C_Read, (uint32_t)handle->remainingBytes);
         }
         else
         {
@@ -2808,10 +2818,10 @@ static status_t I3C_InitTransferStateMachine(I3C_Type *base, i3c_master_handle_t
     /* If repeated start is requested, send repeated start. */
     else if (0U != (xfer->flags & (uint32_t)kI3C_TransferRepeatedStartFlag))
     {
-        if ((handle->remainingBytes < 256U) && (direction == kI3C_Read))
+        if ((handle->remainingBytes <= (size_t)FSL_I3C_RDTERM_MAX) && (direction == kI3C_Read))
         {
             result = I3C_MasterRepeatedStartWithRxSize(base, xfer->busType, xfer->slaveAddress, direction,
-                                                       (uint8_t)handle->remainingBytes);
+                                                       (uint32_t)handle->remainingBytes);
         }
         else
         {
@@ -2820,10 +2830,10 @@ static status_t I3C_InitTransferStateMachine(I3C_Type *base, i3c_master_handle_t
     }
     else /* For normal transfer, send start. */
     {
-        if ((handle->remainingBytes < 256U) && (direction == kI3C_Read))
+        if ((handle->remainingBytes <= (size_t)FSL_I3C_RDTERM_MAX) && (direction == kI3C_Read))
         {
             result = I3C_MasterStartWithRxSize(base, xfer->busType, xfer->slaveAddress, direction,
-                                               (uint8_t)handle->remainingBytes);
+                                               (uint32_t)handle->remainingBytes);
         }
         else
         {

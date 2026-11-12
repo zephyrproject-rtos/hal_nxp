@@ -1042,7 +1042,13 @@ void EDMA_PrepareTransfer(edma_transfer_config_t *config,
     assert(srcWidth <= (uint32_t)INT16_MAX);
     assert(destWidth <= (uint32_t)INT16_MAX);
 
-    switch (transferType)
+    /*
+     * $Branch Coverage Justification$
+     * The default clause is not covered. All valid edma_transfer_type_t values
+     * are listed above, so the default is unreachable and only guards against an
+     * invalid transferType via assert.
+     */
+    switch (transferType) /* GCOVR_EXCL_BR_LINE */
     {
         case kEDMA_MemoryToMemory:
             destOffset = (int16_t)destWidth;
@@ -1060,11 +1066,11 @@ void EDMA_PrepareTransfer(edma_transfer_config_t *config,
             destOffset = 0;
             srcOffset  = 0;
             break;
-        default:
+        default: /* GCOVR_EXCL_START */
             /* All the cases have been listed above, the default clause should not be reached. */
             assert(false);
             break;
-    }
+    } /* GCOVR_EXCL_STOP */
 
     EDMA_PrepareTransferConfig(config, srcAddr, srcWidth, srcOffset, destAddr, destWidth, destOffset, bytesEachRequest,
                                transferBytes);

@@ -42,6 +42,9 @@ enum _i3c_edma_flag_constants
 
     /*! Errors to check for. */
     kMasterErrorFlags = kI3C_MasterErrorNackFlag | kI3C_MasterErrorWriteAbortFlag |
+#if defined(I3C_MERRWARN_URUN_MASK)
+                        kI3C_MasterErrorUnderrunFlag |
+#endif
 #if !defined(FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM) || (!FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM)
                         kI3C_MasterErrorTermFlag |
 #endif

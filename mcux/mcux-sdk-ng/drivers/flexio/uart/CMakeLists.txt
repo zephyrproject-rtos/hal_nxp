@@ -1,4 +1,4 @@
-# Copyright 2024-2025 NXP
+# Copyright 2024-2026 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
@@ -12,7 +12,7 @@ if(CONFIG_MCUX_COMPONENT_driver.flexio_uart_dma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.flexio_uart_edma)
-    mcux_component_version(2.4.1)
+    mcux_component_version(2.4.2)
 
     mcux_add_source(SOURCES fsl_flexio_uart_edma.c fsl_flexio_uart_edma.h)
 
@@ -21,7 +21,7 @@ if(CONFIG_MCUX_COMPONENT_driver.flexio_uart_edma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.flexio_uart)
-    mcux_component_version(2.6.5)
+    mcux_component_version(2.6.6)
 
     mcux_add_source(SOURCES fsl_flexio_uart.c fsl_flexio_uart.h)
 

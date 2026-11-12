@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2024, 2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,8 +20,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief lower_component_name driver version 2.1.5. */
-#define FSL_SINC_DRIVER_VERSION (MAKE_VERSION(2, 1, 5))
+/*! @brief lower_component_name driver version 2.2.0. */
+#define FSL_SINC_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*! @} */
 #ifndef SINC_CHANNEL_COUNT
 #define SINC_CHANNEL_COUNT (FSL_FEATURE_SINC_CHANNEL_COUNT)
@@ -852,7 +852,9 @@ typedef struct _sinc_config
                                                    channelsConfigArray[3] corresponding to channel3, if some channels
                                                    are not used, the corresponding elements should be set as NULL. */
 
+#if !(defined(FSL_FEATURE_SINC_MCR_HAS_DOZEN) && (FSL_FEATURE_SINC_MCR_HAS_DOZEN == 0U))
     bool disableDozeMode; /*!< Disable/enable SINC module when the chip enters Doze or stop mode.  */
+#endif /* FSL_FEATURE_SINC_MCR_HAS_DOZEN */
     bool enableMaster;    /*!< Enable/disable all function blocks of SINC module. */
 } sinc_config_t;
 
@@ -939,6 +941,7 @@ static inline void SINC_DoSoftwareReset(SINC_Type *base)
     base->MCR &= ~SINC_MCR_RST_MASK;
 }
 
+#if !(defined(FSL_FEATURE_SINC_MCR_HAS_DOZEN) && (FSL_FEATURE_SINC_MCR_HAS_DOZEN == 0U))
 /*!
  * @brief Disable/enable SINC module when the chip enters Doze or Stop mode.
  *
@@ -958,6 +961,7 @@ static inline void SINC_DisableDozeMode(SINC_Type *base, bool disable)
         base->MCR &= ~SINC_MCR_DOZEN_MASK;
     }
 }
+#endif /* FSL_FEATURE_SINC_MCR_HAS_DOZEN */
 
 /*! @} */
 

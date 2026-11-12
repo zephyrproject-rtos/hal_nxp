@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021,2025 NXP
+ * Copyright 2019-2021,2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -487,6 +487,12 @@ static status_t ASRC_SetResamplerConfig(ASRC_Type *base,
     uint32_t i                   = 0U;
     const uint32_t *coeffPointer = config->filterCoeffAddress;
 
+    /* guard against a null coefficient pointer before it is dereferenced below */
+    if (coeffPointer == NULL)
+    {
+        return kStatus_InvalidArgument;
+    }
+
     contextReg &= ~(ASRC_CTX_CTRL_EXT1_RS_INIT_MODE_MASK | ASRC_CTX_CTRL_EXT1_RS_STOP_MODE_MASK);
     contextReg |= ASRC_CTX_CTRL_EXT1_RS_INIT_MODE(config->initMode) | ASRC_CTX_CTRL_EXT1_RS_STOP_MODE(config->stopMode);
     base->CTX_CTRL_EXT1[context] = contextReg;
@@ -536,6 +542,7 @@ static status_t ASRC_SetSlotConfig(ASRC_Type *base,
     uint32_t i                = 0U;
     uint32_t slot0UsedChannel = 0U, slot1UsedChannel = 0U;
     uint32_t stage1MemSize = 0U, stage1MemAddr = 0U, stage2MemSize = 0U, stage2MemAddr = 0U, stage1Exp = 0U;
+    uint32_t slotChannel = 0U;
     uint32_t leftChannel = requestChannel;
 
     for (i = 0U; i < ASRC_SUPPORT_MAXIMUM_CONTEXT_PROCESSOR_NUMBER; i++)
@@ -559,25 +566,26 @@ static status_t ASRC_SetSlotConfig(ASRC_Type *base,
         if ((slot0UsedChannel == 0U) && (slot1UsedChannel == 0U))
         {
             availableSlot    = 0U;
-            availableChannel = ASRC_SUPPORT_CONTEXT_PROCESSOR_MAXIMUM_CHANNEL_NUMBER;
+            slotChannel      = ASRC_SUPPORT_CONTEXT_PROCESSOR_MAXIMUM_CHANNEL_NUMBER;
             availableContext = i;
         }
         /* context slot 0 is busy, slot 1 is idle */
         else if (slot0UsedChannel != 0U)
         {
             availableSlot    = 1U;
-            availableChannel = ASRC_SUPPORT_CONTEXT_PROCESSOR_MAXIMUM_CHANNEL_NUMBER - slot0UsedChannel;
+            slotChannel      = ASRC_SUPPORT_CONTEXT_PROCESSOR_MAXIMUM_CHANNEL_NUMBER - slot0UsedChannel;
             availableContext = i;
         }
         /* context slot0 is idle, slot 1 is busy, ((slot0UsedChannel == 0U) && (slot1UsedChannel != 0U))*/
         else
         {
             availableSlot    = 0U;
-            availableChannel = ASRC_SUPPORT_CONTEXT_PROCESSOR_MAXIMUM_CHANNEL_NUMBER - slot1UsedChannel;
+            slotChannel      = ASRC_SUPPORT_CONTEXT_PROCESSOR_MAXIMUM_CHANNEL_NUMBER - slot1UsedChannel;
             availableContext = i;
         }
 
-        availableChannel = availableChannel > leftChannel ? leftChannel : availableChannel;
+        /* clamp to the remaining requested channels, assigned once so no dead store remains */
+        availableChannel = slotChannel > leftChannel ? leftChannel : slotChannel;
         leftChannel -= availableChannel;
         /* enable the available slot */
         ASRC_EnableContextSlot(base, availableContext, availableSlot, availableChannel, startChannel, context);

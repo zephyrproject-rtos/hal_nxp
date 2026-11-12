@@ -1,5 +1,10 @@
 # EnDat2.2
 
+## [1.0.2]
+
+- Code style
+  - Apply clang-format code style
+
 ## [1.0.1]
 
 - Bug Fixes

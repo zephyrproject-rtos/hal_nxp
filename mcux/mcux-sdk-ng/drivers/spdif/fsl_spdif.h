@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 10)) /*!< Version 2.0.10 */
+#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 11)) /*!< Version 2.0.11 */
 /*! @} */
 
 /*! @brief SPDIF return status*/

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2023, 2026 NXP
  *
  * All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause
@@ -106,7 +106,9 @@ void SINC_Init(SINC_Type *base, const sinc_config_t *config)
     SINC_DisableModulatorClockOutput(base, (uint32_t)kSINC_ModClk1, config->disableModClk1Output);
     SINC_DisableModulatorClockOutput(base, (uint32_t)kSINC_ModClk2, config->disableModClk2Output);
 
+#if !(defined(FSL_FEATURE_SINC_MCR_HAS_DOZEN) && (FSL_FEATURE_SINC_MCR_HAS_DOZEN == 0U))
     SINC_DisableDozeMode(base, config->disableDozeMode);
+#endif /* FSL_FEATURE_SINC_MCR_HAS_DOZEN */
 
     for (i = 0U; i < (uint8_t)SINC_CHANNEL_COUNT; i++)
     {
@@ -197,7 +199,9 @@ void SINC_GetDefaultConfig(sinc_config_t *config)
         config->channelsConfigArray[i] = NULL;
     }
 
+#if !(defined(FSL_FEATURE_SINC_MCR_HAS_DOZEN) && (FSL_FEATURE_SINC_MCR_HAS_DOZEN == 0U))
     config->disableDozeMode = false;
+#endif /* FSL_FEATURE_SINC_MCR_HAS_DOZEN */
     config->enableMaster    = false;
 }
 

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2020, 2026 NXP
  * All rights reserved.
  *
  *
@@ -29,15 +29,6 @@ typedef struct _spdif_edma_private_handle
     SPDIF_Type *base;
     spdif_edma_handle_t *handle;
 } spdif_edma_private_handle_t;
-
-/*!
- * @brief Used for conversion between `void*` and `uint32_t`.
- */
-typedef union pvoid_to_u32
-{
-    void *pvoid;
-    uint32_t u32;
-} pvoid_to_u32_t;
 
 /*! @brief spdif edma transfer state. */
 enum
@@ -477,12 +468,13 @@ status_t SPDIF_TransferSendEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle, s
     assert(handle != NULL);
     assert(xfer != NULL);
 
-    pvoid_to_u32_t destAddr;
+    void *destAddr;
     edma_transfer_config_t config = {0};
-    destAddr.u32                  = SPDIF_TxGetLeftDataRegisterAddress(base);
+    destAddr                      = (void *)(uintptr_t)SPDIF_TxGetLeftDataRegisterAddress(base);
 
     /* Check if input parameter invalid */
-    if ((xfer->leftData == NULL) || (xfer->dataSize == 0U) || (xfer->rightData == NULL))
+    if ((xfer->leftData == NULL) || (xfer->dataSize == 0U) || (xfer->rightData == NULL) ||
+        (handle->dmaLeftHandle == NULL) || (handle->dmaRightHandle == NULL))
     {
         return kStatus_InvalidArgument;
     }
@@ -508,13 +500,13 @@ status_t SPDIF_TransferSendEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle, s
     handle->nbytes = handle->count * 8U;
 
     /* Prepare edma configure */
-    EDMA_PrepareTransfer(&config, xfer->leftData, 4U, destAddr.pvoid, 4U, (uint32_t)handle->count * 4U, xfer->dataSize,
+    EDMA_PrepareTransfer(&config, xfer->leftData, 4U, destAddr, 4U, (uint32_t)handle->count * 4U, xfer->dataSize,
                          kEDMA_MemoryToPeripheral);
     (void)SPDIF_SubmitTransfer(handle->dmaLeftHandle, &config, handle->dmaRightHandle->channel);
 
     /* Prepare right channel */
-    destAddr.u32 = SPDIF_TxGetRightDataRegisterAddress(base);
-    EDMA_PrepareTransfer(&config, xfer->rightData, 4U, destAddr.pvoid, 4U, (uint32_t)handle->count * 4U, xfer->dataSize,
+    destAddr = (void *)(uintptr_t)SPDIF_TxGetRightDataRegisterAddress(base);
+    EDMA_PrepareTransfer(&config, xfer->rightData, 4U, destAddr, 4U, (uint32_t)handle->count * 4U, xfer->dataSize,
                          kEDMA_MemoryToPeripheral);
     (void)EDMA_SubmitTransfer(handle->dmaRightHandle, &config);
 
@@ -548,12 +540,13 @@ status_t SPDIF_TransferReceiveEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle
     assert(handle != NULL);
     assert(xfer != NULL);
 
-    pvoid_to_u32_t srcAddr;
+    void *srcAddr;
     edma_transfer_config_t config = {0};
-    srcAddr.u32                   = SPDIF_RxGetLeftDataRegisterAddress(base);
+    srcAddr                       = (void *)(uintptr_t)SPDIF_RxGetLeftDataRegisterAddress(base);
 
     /* Check if input parameter invalid */
-    if ((xfer->leftData == NULL) || (xfer->dataSize == 0U) || (xfer->rightData == NULL))
+    if ((xfer->leftData == NULL) || (xfer->dataSize == 0U) || (xfer->rightData == NULL) ||
+        (handle->dmaLeftHandle == NULL) || (handle->dmaRightHandle == NULL))
     {
         return kStatus_InvalidArgument;
     }
@@ -579,14 +572,14 @@ status_t SPDIF_TransferReceiveEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle
     handle->nbytes = handle->count * 8U;
 
     /* Prepare edma configure */
-    EDMA_PrepareTransfer(&config, srcAddr.pvoid, 4U, xfer->leftData, 4U, (uint32_t)handle->count * 4U, xfer->dataSize,
+    EDMA_PrepareTransfer(&config, srcAddr, 4U, xfer->leftData, 4U, (uint32_t)handle->count * 4U, xfer->dataSize,
                          kEDMA_PeripheralToMemory);
     /* Use specific submit function to enable channel link */
     (void)SPDIF_SubmitTransfer(handle->dmaLeftHandle, &config, handle->dmaRightHandle->channel);
 
     /* Prepare right channel */
-    srcAddr.u32 = SPDIF_RxGetRightDataRegisterAddress(base);
-    EDMA_PrepareTransfer(&config, srcAddr.pvoid, 4U, xfer->rightData, 4U, (uint32_t)handle->count * 4U, xfer->dataSize,
+    srcAddr = (void *)(uintptr_t)SPDIF_RxGetRightDataRegisterAddress(base);
+    EDMA_PrepareTransfer(&config, srcAddr, 4U, xfer->rightData, 4U, (uint32_t)handle->count * 4U, xfer->dataSize,
                          kEDMA_PeripheralToMemory);
     (void)EDMA_SubmitTransfer(handle->dmaRightHandle, &config);
 
@@ -613,8 +606,14 @@ void SPDIF_TransferAbortSendEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle)
     assert(handle != NULL);
 
     /* Disable dma */
-    EDMA_AbortTransfer(handle->dmaLeftHandle);
-    EDMA_AbortTransfer(handle->dmaRightHandle);
+    if (handle->dmaLeftHandle != NULL)
+    {
+        EDMA_AbortTransfer(handle->dmaLeftHandle);
+    }
+    if (handle->dmaRightHandle != NULL)
+    {
+        EDMA_AbortTransfer(handle->dmaRightHandle);
+    }
 
     /* Disable DMA enable bit */
     SPDIF_EnableDMA(base, kSPDIF_TxDMAEnable, false);
@@ -640,14 +639,21 @@ void SPDIF_TransferAbortReceiveEDMA(SPDIF_Type *base, spdif_edma_handle_t *handl
     assert(handle != NULL);
 
     /* Disable dma */
-    EDMA_AbortTransfer(handle->dmaLeftHandle);
-    EDMA_AbortTransfer(handle->dmaRightHandle);
+    if (handle->dmaLeftHandle != NULL)
+    {
+        EDMA_AbortTransfer(handle->dmaLeftHandle);
+    }
+    if (handle->dmaRightHandle != NULL)
+    {
+        EDMA_AbortTransfer(handle->dmaRightHandle);
+    }
 
     /* Disable DMA enable bit */
     SPDIF_EnableDMA(base, kSPDIF_RxDMAEnable, false);
 
     /* Set internal state */
     (void)memset(handle->spdifQueue, 0, sizeof(handle->spdifQueue));
+
     (void)memset(handle->transferSize, 0, sizeof(handle->transferSize));
     handle->queueUser   = 0U;
     handle->queueDriver = 0U;

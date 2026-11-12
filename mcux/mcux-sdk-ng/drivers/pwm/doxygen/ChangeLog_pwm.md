@@ -1,5 +1,17 @@
 # PWM
 
+## [2.10.2]
+
+- Improvements
+  - Added inline API `PWM_SetTriggerStretchPrescaler` to configure MCTRL2[STRETCH_CNT_PRSC] at the module level.
+    Because MCTRL2 is a module-level register shared by all submodules, this API is deliberately kept separate from
+    `PWM_Init` (which is per-submodule) to prevent unintentional overwrites when multiple submodules are initialised.
+    Call it once after all submodules are initialised with `PWM_Init`.
+- Bug Fixes
+  - Updated ERR051989 workaround in PWM_SetPhaseDelay: when delayCycles is 0 and master reload is active, set SMxPHASEDLY
+    to 0x0001 (minimum value) instead of adjusting INIT and VALy registers. The residual one-cycle phase offset must be
+    considered in the application design.
+
 ## [2.10.1]
 
 - Bug Fixes

@@ -1,5 +1,10 @@
 # MSCAN
 
+## [2.1.3]
+
+- Bug Fixes
+  - Fixed violations of the NULL_FIELD.
+
 ## [2.1.2]
 
 - Improvements

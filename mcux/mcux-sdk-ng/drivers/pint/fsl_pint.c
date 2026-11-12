@@ -16,10 +16,6 @@
  * Definitions
  ******************************************************************************/
 
-#ifndef FSL_FEATURE_PINT_NUMBER_OF_INSTANCE
-#define FSL_FEATURE_PINT_NUMBER_OF_INSTANCE (1U)
-#endif
-
 #if defined(GPIOINT_RSTS_N)
 #define PINT_RESETS_ARRAY GPIOINT_RSTS_N
 #elif defined(PINT_RSTS)
@@ -40,23 +36,17 @@ static PINT_Type *const s_pintBases[] = PINT_BASE_PTRS;
 static const reset_ip_name_t s_pintResets[] = PINT_RESETS_ARRAY;
 #endif
 
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-/*! @brief Irq number array */
-static const IRQn_Type s_pintIRQ[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS +
-                                 FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS] = PINT_IRQS;
+/*! @brief Irq number array, sized from the PINT_IRQS initializer so it fits any
+ * combination of PINT instances and per-instance interrupt counts. */
+static const IRQn_Type s_pintIRQ[] = PINT_IRQS;
+
+/*! @brief Array to map PINT instance number to clock name. */
+static const clock_ip_name_t s_pintClocks[] = PINT_CLOCKS;
 
 #if (defined(PINT_USE_LEGACY_CALLBACK) && PINT_USE_LEGACY_CALLBACK)
-/*! @brief Callback function array for SECPINT(s). */
-static pint_cb_t s_secpintCallback[FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS];
-#endif
-#else
-/*! @brief Irq number array */
-static const IRQn_Type s_pintIRQ[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS] = PINT_IRQS;
-#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
-
-#if (defined(PINT_USE_LEGACY_CALLBACK) && PINT_USE_LEGACY_CALLBACK)
-/*! @brief Deprecated Callback function array for PINT(s). */
-static pint_cb_t s_pintCallback[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS];
+/*! @brief Deprecated per-event callback array, one slot per connected output across
+ * all PINT instances. */
+static pint_cb_t s_pintCallback[ARRAY_SIZE(s_pintIRQ)];
 #else
 static pint_cb_t s_pintCallback[ARRAY_SIZE(s_pintBases)];
 #endif
@@ -90,6 +80,53 @@ static uint32_t PINT_GetInstance(PINT_Type *base)
 }
 
 /*!
+ * @brief Returns the number of connected outputs (pin interrupts) for a PINT base.
+ *
+ * @param base The PINT peripheral base address.
+ * @return Connected-output count for that base, clamped to a non-negative value.
+ */
+static uint32_t PINT_GetIRQCount(PINT_Type *base)
+{
+    int32_t count = (int32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTSn(base);
+
+    return (count > 0) ? (uint32_t)count : 0U;
+}
+
+/*!
+ * @brief Returns the offset of a PINT instance's first IRQ within s_pintIRQ[].
+ *
+ * @param instance PINT instance number.
+ * @return Index of the instance's IRQ 0 in s_pintIRQ[].
+ */
+static uint32_t PINT_GetIRQBaseIndex(uint32_t instance)
+{
+    uint32_t index = 0U;
+
+    assert(instance < ARRAY_SIZE(s_pintBases));
+
+    for (uint32_t i = 0U; i < instance; i++)
+    {
+        index += PINT_GetIRQCount(s_pintBases[i]);
+    }
+
+    return index;
+}
+
+#if (defined(PINT_USE_LEGACY_CALLBACK) && PINT_USE_LEGACY_CALLBACK)
+/*!
+ * @brief Returns a base instance's flat slot in the legacy per-event s_pintCallback[] array.
+ *
+ * @param base The PINT peripheral base address.
+ * @param idx Pin/bit-slice index local to that instance.
+ * @return Flat index into s_pintCallback[], unique across all instances.
+ */
+static uint32_t PINT_GetCbIdx(PINT_Type *base, uint32_t idx)
+{
+    return PINT_GetIRQBaseIndex(PINT_GetInstance(base)) + idx;
+}
+#endif /* PINT_USE_LEGACY_CALLBACK */
+
+/*!
  * brief Initialize PINT peripheral.
 
  * This function initializes the PINT peripheral and enables the clock.
@@ -100,103 +137,41 @@ static uint32_t PINT_GetInstance(PINT_Type *base)
  */
 void PINT_Init(PINT_Type *base)
 {
-    uint32_t pmcfg    = 0;
-    uint8_t pintcount = 0;
-    uint32_t instance;
-    uint32_t i;
     assert(base != NULL);
 
+    uint32_t irqCount = 0U;
+    uint32_t pmcfg    = 0;
+    uint32_t instance;
+    uint32_t i;
+
     instance = PINT_GetInstance(base);
-
-    if (instance < FSL_FEATURE_PINT_NUMBER_OF_INSTANCE)
-    {
-        pintcount = FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS;
-        /* Clear PINT callback array */
+    irqCount = PINT_GetIRQCount(base);
 #if (defined(PINT_USE_LEGACY_CALLBACK) && PINT_USE_LEGACY_CALLBACK)
-        for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
-        {
-            s_pintCallback[i] = NULL;
-        }
-#endif
-    }
-    else
+    uint32_t irqBase = PINT_GetIRQBaseIndex(instance);
+    for (i = 0; i < irqCount; i++)
     {
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-        pintcount = FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS;
-#if (defined(PINT_USE_LEGACY_CALLBACK) && PINT_USE_LEGACY_CALLBACK)
-        /* Clear SECPINT callback array */
-        for (i = 0; i < (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
-        {
-            s_secpintCallback[i] = NULL;
-        }
-#endif /* PINT_USE_LEGACY_CALLBACK */
-#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
+        s_pintCallback[irqBase + i] = NULL;
     }
-
-#if (defined(PINT_USE_LEGACY_CALLBACK) && (!PINT_USE_LEGACY_CALLBACK))
+#else
     s_pintCallback[instance] = NULL;
-#endif
+#endif /* PINT_USE_LEGACY_CALLBACK */
 
     /* Disable all bit slices for pint*/
-    for (i = 0; i < pintcount; i++)
+    for (i = 0; i < irqCount; i++)
     {
         pmcfg = pmcfg | ((uint32_t)kPINT_PatternMatchNever << (PININT_BITSLICE_CFG_START + (i * 3U)));
     }
 
-#if defined(FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE) && (FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE == 1)
-
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    /* Enable the clock. */
-    CLOCK_EnableClock(kCLOCK_GpioInt);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-#if defined(PINT_RESETS_ARRAY)
-    RESET_ReleasePeripheralReset(s_pintResets[instance]);
-#endif /* PINT_RESETS_ARRAY */
-
-#elif defined(FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE) && (FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE == 0)
-
-    if (instance < FSL_FEATURE_PINT_NUMBER_OF_INSTANCE)
+    if (instance < ARRAY_SIZE(s_pintClocks))
     {
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-        CLOCK_EnableClock(kCLOCK_Gpio0);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+        CLOCK_EnableClock(s_pintClocks[instance]);
     }
-    else
-    {
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-        CLOCK_EnableClock(kCLOCK_Gpio_Sec);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
-    }
 
 #if defined(PINT_RESETS_ARRAY)
     RESET_ReleasePeripheralReset(s_pintResets[instance]);
 #endif /* PINT_RESETS_ARRAY */
-
-#else
-
-    if (instance < FSL_FEATURE_PINT_NUMBER_OF_INSTANCE)
-    {
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-        CLOCK_EnableClock(kCLOCK_Pint);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-    }
-    else
-    {
-        /* if need config SECURE PINT device,then enable secure pint interrupt clock */
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-        CLOCK_EnableClock(kCLOCK_Gpio_Sec_Int);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
-    }
-
-#if defined(PINT_RESETS_ARRAY)
-    RESET_ReleasePeripheralReset(s_pintResets[instance]);
-#endif /* PINT_RESETS_ARRAY */
-
-#endif /* FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE */
 
     /* Disable all pattern match bit slices */
     base->PMCFG = pmcfg;
@@ -241,24 +216,14 @@ void PINT_PinInterruptConfig(PINT_Type *base, pint_pin_int_t intr, pint_pin_enab
 #endif
 {
     assert(base != NULL);
+    assert((uint32_t)intr < PINT_GetIRQCount(base));
 
     /* Clear Rise and Fall flags first */
     PINT_PinInterruptClrRiseFlag(base, intr);
     PINT_PinInterruptClrFallFlag(base, intr);
 
 #if (defined(PINT_USE_LEGACY_CALLBACK) && PINT_USE_LEGACY_CALLBACK)
-    uint32_t instance = PINT_GetInstance(base);
-    /* Security PINT uses additional callback array */
-    if (instance < FSL_FEATURE_PINT_NUMBER_OF_INSTANCE)
-    {
-        s_pintCallback[intr] = callback;
-    }
-    else
-    {
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-        s_secpintCallback[intr] = callback;
-#endif
-    }
+    s_pintCallback[PINT_GetCbIdx(base, (uint32_t)intr)] = callback;
 #endif
 
     /* select level or edge sensitive */
@@ -304,10 +269,11 @@ void PINT_PinInterruptGetConfig(PINT_Type *base, pint_pin_int_t pintr, pint_pin_
 void PINT_PinInterruptGetConfig(PINT_Type *base, pint_pin_int_t pintr, pint_pin_enable_t *enable)
 #endif
 {
+    assert(base != NULL);
+    assert((uint32_t)pintr < PINT_GetIRQCount(base));
+
     uint32_t mask;
     bool level;
-
-    assert(base != NULL);
 
     *enable = kPINT_PinIntEnableNone;
     level   = false;
@@ -357,18 +323,7 @@ void PINT_PinInterruptGetConfig(PINT_Type *base, pint_pin_int_t pintr, pint_pin_
     }
 
 #if (defined(PINT_USE_LEGACY_CALLBACK) && PINT_USE_LEGACY_CALLBACK)
-    uint32_t instance = PINT_GetInstance(base);
-    /* Security PINT uses additional callback array */
-    if (instance < FSL_FEATURE_PINT_NUMBER_OF_INSTANCE)
-    {
-        *callback = s_pintCallback[pintr];
-    }
-    else
-    {
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-        *callback = s_secpintCallback[pintr];
-#endif
-    }
+    *callback = s_pintCallback[PINT_GetCbIdx(base, (uint32_t)pintr)];
 #endif
 }
 
@@ -419,24 +374,10 @@ void PINT_PatternMatchConfig(PINT_Type *base, pint_pmatch_bslice_t bslice, pint_
     base->PMCFG = pmcfg;
 
 #if (defined(PINT_USE_LEGACY_CALLBACK) && PINT_USE_LEGACY_CALLBACK)
-    uint32_t instance = PINT_GetInstance(base);
-
     /* Save callback pointer */
-    if (instance < FSL_FEATURE_PINT_NUMBER_OF_INSTANCE)
+    if ((uint32_t)bslice < PINT_GetIRQCount(base))
     {
-        if ((uint32_t)bslice < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS)
-        {
-            s_pintCallback[bslice] = cfg->callback;
-        }
-    }
-    else
-    {
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-        if ((uint32_t)bslice < (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-        {
-            s_secpintCallback[bslice] = cfg->callback;
-        }
-#endif
+        s_pintCallback[PINT_GetCbIdx(base, (uint32_t)bslice)] = cfg->callback;
     }
 #endif
 }
@@ -464,8 +405,10 @@ void PINT_PatternMatchGetConfig(PINT_Type *base, pint_pmatch_bslice_t bslice, pi
     src_shift = PININT_BITSLICE_SRC_START + ((uint32_t)bslice * 3UL);
     cfg_shift = PININT_BITSLICE_CFG_START + ((uint32_t)bslice * 3UL);
 
-    cfg->bs_src = (pint_pmatch_input_src_t)(uint32_t)((base->PMSRC & (tmp_src_shift << src_shift)) >> src_shift);
-    cfg->bs_cfg = (pint_pmatch_bslice_cfg_t)(uint32_t)((base->PMCFG & (tmp_cfg_shift << cfg_shift)) >> cfg_shift);
+    cfg->bs_src = (pint_pmatch_input_src_t)(uint32_t)(((base->PMSRC & (tmp_src_shift << src_shift)) >> src_shift) &
+                                                      PININT_BITSLICE_SRC_MASK);
+    cfg->bs_cfg = (pint_pmatch_bslice_cfg_t)(uint32_t)(((base->PMCFG & (tmp_cfg_shift << cfg_shift)) >> cfg_shift) &
+                                                       PININT_BITSLICE_CFG_MASK);
 
     if ((uint32_t)bslice == 7U)
     {
@@ -477,23 +420,9 @@ void PINT_PatternMatchGetConfig(PINT_Type *base, pint_pmatch_bslice_t bslice, pi
     }
 
 #if (defined(PINT_USE_LEGACY_CALLBACK) && PINT_USE_LEGACY_CALLBACK)
-    uint32_t instance = PINT_GetInstance(base);
-
-    if (instance < FSL_FEATURE_PINT_NUMBER_OF_INSTANCE)
+    if ((uint32_t)bslice < PINT_GetIRQCount(base))
     {
-        if ((uint32_t)bslice < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS)
-        {
-            cfg->callback = s_pintCallback[bslice];
-        }
-    }
-    else
-    {
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-        if ((uint32_t)bslice < (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-        {
-            cfg->callback = s_secpintCallback[bslice];
-        }
-#endif
+        cfg->callback = s_pintCallback[PINT_GetCbIdx(base, (uint32_t)bslice)];
     }
 #endif
 }
@@ -537,6 +466,9 @@ uint32_t PINT_PatternMatchResetDetectLogic(PINT_Type *base)
  */
 void PINT_PinInterruptClrStatus(PINT_Type *base, pint_pin_int_t pintr)
 {
+    assert(base != NULL);
+    assert((uint32_t)pintr < PINT_GetIRQCount(base));
+
     uint32_t pinIntMode   = base->ISEL & (1UL << (uint32_t)pintr);
     uint32_t pinIntStatus = base->IST & (1UL << (uint32_t)pintr);
 
@@ -558,23 +490,13 @@ void PINT_PinInterruptClrStatus(PINT_Type *base, pint_pin_int_t pintr)
  */
 void PINT_PinInterruptClrStatusAll(PINT_Type *base)
 {
-    uint32_t instance     = PINT_GetInstance(base);
     uint32_t pinIntMode   = 0;
     uint32_t pinIntStatus = 0;
     uint32_t pinIntCount  = 0;
     uint32_t mask         = 0;
     uint32_t i;
 
-    if (instance < FSL_FEATURE_PINT_NUMBER_OF_INSTANCE)
-    {
-        pinIntCount = (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS;
-    }
-    else
-    {
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-        pinIntCount = (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS;
-#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
-    }
+    pinIntCount = PINT_GetIRQCount(base);
 
     for (i = 0; i < pinIntCount; i++)
     {
@@ -604,39 +526,28 @@ void PINT_PinInterruptClrStatusAll(PINT_Type *base)
 void PINT_EnableCallback(PINT_Type *base)
 {
     uint32_t instance = PINT_GetInstance(base);
+    uint32_t count    = PINT_GetIRQCount(base);
+    uint32_t irqBase  = PINT_GetIRQBaseIndex(instance);
     uint32_t i;
 
     assert(base != NULL);
 
-    if (instance < FSL_FEATURE_PINT_NUMBER_OF_INSTANCE)
-    {
 #if defined(FSL_FEATURE_PINT_INTERRUPT_COMBINE) && (FSL_FEATURE_PINT_INTERRUPT_COMBINE == 1)
-        for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
-        {
-            PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
-        }
-        NVIC_ClearPendingIRQ(s_pintIRQ[0]);
-        (void)EnableIRQ(s_pintIRQ[0]);
-#else
-        for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
-        {
-            PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
-            NVIC_ClearPendingIRQ(s_pintIRQ[i]);
-            (void)EnableIRQ(s_pintIRQ[i]);
-        }
-#endif
-    }
-    else
+    /* All outputs of the instance share a single IRQ line. */
+    for (i = 0; i < count; i++)
     {
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-        for (i = 0; i < (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
-        {
-            PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
-            NVIC_ClearPendingIRQ(s_pintIRQ[i + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS]);
-            (void)EnableIRQ(s_pintIRQ[i + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS]);
-        }
-#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
+        PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
     }
+    NVIC_ClearPendingIRQ(s_pintIRQ[irqBase]);
+    (void)EnableIRQ(s_pintIRQ[irqBase]);
+#else
+    for (i = 0; i < count; i++)
+    {
+        PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
+        NVIC_ClearPendingIRQ(s_pintIRQ[irqBase + i]);
+        (void)EnableIRQ(s_pintIRQ[irqBase + i]);
+    }
+#endif
 }
 
 /*!
@@ -652,25 +563,18 @@ void PINT_EnableCallback(PINT_Type *base)
 void PINT_EnableCallbackByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
 {
     assert(base != NULL);
+    assert((uint32_t)pintIdx < PINT_GetIRQCount(base));
 
     PINT_PinInterruptClrStatus(base, (pint_pin_int_t)pintIdx);
 
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-    /* Get the right security pint irq index in array */
-    if ((base == SECPINT) && ((uint32_t)pintIdx < (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS))
-    {
-        pintIdx =
-            (pint_pin_int_t)(uint32_t)((uint32_t)pintIdx + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS);
-    }
-#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
-
+    uint32_t irqBase = PINT_GetIRQBaseIndex(PINT_GetInstance(base));
 #if defined(FSL_FEATURE_PINT_INTERRUPT_COMBINE) && (FSL_FEATURE_PINT_INTERRUPT_COMBINE == 1)
-    NVIC_ClearPendingIRQ(s_pintIRQ[0]);
-    (void)EnableIRQ(s_pintIRQ[0]);
+    uint32_t irqIndex = irqBase;
 #else
-    NVIC_ClearPendingIRQ(s_pintIRQ[pintIdx]);
-    (void)EnableIRQ(s_pintIRQ[pintIdx]);
+    uint32_t irqIndex = irqBase + (uint32_t)pintIdx;
 #endif
+    NVIC_ClearPendingIRQ(s_pintIRQ[irqIndex]);
+    (void)EnableIRQ(s_pintIRQ[irqIndex]);
 }
 
 /*!
@@ -685,40 +589,29 @@ void PINT_EnableCallbackByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
  */
 void PINT_DisableCallback(PINT_Type *base)
 {
-    uint32_t instance = PINT_GetInstance(base);
-    uint32_t i;
-
     assert(base != NULL);
 
-    if (instance < FSL_FEATURE_PINT_NUMBER_OF_INSTANCE)
-    {
+    uint32_t instance = PINT_GetInstance(base);
+    uint32_t count    = PINT_GetIRQCount(base);
+    uint32_t irqBase  = PINT_GetIRQBaseIndex(instance);
+    uint32_t i;
+
 #if defined(FSL_FEATURE_PINT_INTERRUPT_COMBINE) && (FSL_FEATURE_PINT_INTERRUPT_COMBINE == 1)
-        (void)DisableIRQ(s_pintIRQ[0]);
-        for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
-        {
-            PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
-        }
-        NVIC_ClearPendingIRQ(s_pintIRQ[0]);
-#else
-        for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
-        {
-            (void)DisableIRQ(s_pintIRQ[i]);
-            PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
-            NVIC_ClearPendingIRQ(s_pintIRQ[i]);
-        }
-#endif
-    }
-    else
+    /* All outputs of the instance share a single IRQ line. */
+    (void)DisableIRQ(s_pintIRQ[irqBase]);
+    for (i = 0; i < count; i++)
     {
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-        for (i = 0; i < (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
-        {
-            (void)DisableIRQ(s_pintIRQ[i + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS]);
-            PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
-            NVIC_ClearPendingIRQ(s_pintIRQ[i + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS]);
-        }
-#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
+        PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
     }
+    NVIC_ClearPendingIRQ(s_pintIRQ[irqBase]);
+#else
+    for (i = 0; i < count; i++)
+    {
+        (void)DisableIRQ(s_pintIRQ[irqBase + i]);
+        PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
+        NVIC_ClearPendingIRQ(s_pintIRQ[irqBase + i]);
+    }
+#endif
 }
 
 /*!
@@ -733,30 +626,19 @@ void PINT_DisableCallback(PINT_Type *base)
  */
 void PINT_DisableCallbackByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
 {
-    uint32_t instance = PINT_GetInstance(base);
-
     assert(base != NULL);
+    assert((uint32_t)pintIdx < PINT_GetIRQCount(base));
 
-    if (instance < FSL_FEATURE_PINT_NUMBER_OF_INSTANCE)
-    {
+    uint32_t instance = PINT_GetInstance(base);
+    uint32_t irqBase  = PINT_GetIRQBaseIndex(instance);
 #if defined(FSL_FEATURE_PINT_INTERRUPT_COMBINE) && (FSL_FEATURE_PINT_INTERRUPT_COMBINE == 1)
-        (void)DisableIRQ(s_pintIRQ[0]);
-        PINT_PinInterruptClrStatus(base, (pint_pin_int_t)pintIdx);
-        NVIC_ClearPendingIRQ(s_pintIRQ[0]);
+    uint32_t irqIndex = irqBase;
 #else
-        (void)DisableIRQ(s_pintIRQ[pintIdx]);
-        PINT_PinInterruptClrStatus(base, (pint_pin_int_t)pintIdx);
-        NVIC_ClearPendingIRQ(s_pintIRQ[pintIdx]);
+    uint32_t irqIndex = irqBase + (uint32_t)pintIdx;
 #endif
-    }
-    else
-    {
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-        (void)DisableIRQ(s_pintIRQ[(uint32_t)pintIdx + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS]);
-        PINT_PinInterruptClrStatus(base, (pint_pin_int_t)pintIdx);
-        NVIC_ClearPendingIRQ(s_pintIRQ[(uint32_t)pintIdx + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS]);
-#endif
-    }
+    (void)DisableIRQ(s_pintIRQ[irqIndex]);
+    PINT_PinInterruptClrStatus(base, (pint_pin_int_t)pintIdx);
+    NVIC_ClearPendingIRQ(s_pintIRQ[irqIndex]);
 }
 
 /*!
@@ -778,20 +660,13 @@ void PINT_DisableCallbackByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
 void PINT_EnableInterruptByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
 {
     assert(base != NULL);
+    assert((uint32_t)pintIdx < PINT_GetIRQCount(base));
 
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-    /* Get the right security pint irq index in array */
-    if ((base == SECPINT) && ((uint32_t)pintIdx < (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS))
-    {
-        pintIdx =
-            (pint_pin_int_t)(uint32_t)((uint32_t)pintIdx + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS);
-    }
-#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
-
+    uint32_t irqBase = PINT_GetIRQBaseIndex(PINT_GetInstance(base));
 #if defined(FSL_FEATURE_PINT_INTERRUPT_COMBINE) && (FSL_FEATURE_PINT_INTERRUPT_COMBINE == 1)
-    (void)EnableIRQ(s_pintIRQ[0]);
+    (void)EnableIRQ(s_pintIRQ[irqBase]);
 #else
-    (void)EnableIRQ(s_pintIRQ[pintIdx]);
+    (void)EnableIRQ(s_pintIRQ[irqBase + (uint32_t)pintIdx]);
 #endif
 }
 
@@ -812,24 +687,16 @@ void PINT_EnableInterruptByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
  */
 void PINT_DisableInterruptByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
 {
-    uint32_t instance = PINT_GetInstance(base);
-
     assert(base != NULL);
+    assert((uint32_t)pintIdx < PINT_GetIRQCount(base));
 
-    if (instance < FSL_FEATURE_PINT_NUMBER_OF_INSTANCE)
-    {
+    uint32_t instance = PINT_GetInstance(base);
+    uint32_t irqBase  = PINT_GetIRQBaseIndex(instance);
 #if defined(FSL_FEATURE_PINT_INTERRUPT_COMBINE) && (FSL_FEATURE_PINT_INTERRUPT_COMBINE == 1)
-        (void)DisableIRQ(s_pintIRQ[0]);
+    (void)DisableIRQ(s_pintIRQ[irqBase]);
 #else
-        (void)DisableIRQ(s_pintIRQ[pintIdx]);
+    (void)DisableIRQ(s_pintIRQ[irqBase + (uint32_t)pintIdx]);
 #endif
-    }
-    else
-    {
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-        (void)DisableIRQ(s_pintIRQ[(uint32_t)pintIdx + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS]);
-#endif
-    }
 }
 
 /*!
@@ -854,77 +721,30 @@ void PINT_Deinit(PINT_Type *base)
     PINT_DisableCallback(base);
 
 #if (defined(PINT_USE_LEGACY_CALLBACK) && PINT_USE_LEGACY_CALLBACK)
-    if (instance < FSL_FEATURE_PINT_NUMBER_OF_INSTANCE)
+    /* Clear PINT callback array */
+    uint32_t irqBase = PINT_GetIRQBaseIndex(instance);
+    for (uint32_t i = 0; i < (uint32_t)PINT_GetIRQCount(base); i++)
     {
-        /* Clear PINT callback array */
-        for (uint32_t i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
-        {
-            s_pintCallback[i] = NULL;
-        }
-    }
-    else
-    {
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-        /* Clear SECPINT callback array */
-        for (uint32_t i = 0; i < (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
-        {
-            s_secpintCallback[i] = NULL;
-        }
-#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
+        s_pintCallback[irqBase + i] = NULL;
     }
 #endif
 
-#if defined(FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE) && (FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE == 1)
-
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    CLOCK_DisableClock(kCLOCK_GpioInt);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
-#elif defined(FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE) && (FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE == 0)
-
-    if (instance < FSL_FEATURE_PINT_NUMBER_OF_INSTANCE)
+    if (instance < ARRAY_SIZE(s_pintClocks))
     {
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-        CLOCK_DisableClock(kCLOCK_Gpio0);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+        CLOCK_DisableClock(s_pintClocks[instance]);
     }
-    else
-    {
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-        CLOCK_DisableClock(kCLOCK_Gpio_Sec);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
-    }
-
-#else
-
-    if (instance < FSL_FEATURE_PINT_NUMBER_OF_INSTANCE)
-    {
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-        CLOCK_DisableClock(kCLOCK_Pint);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-    }
-    else
-    {
-        /* if need config SECURE PINT device,then enable secure pint interrupt clock */
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-        CLOCK_DisableClock(kCLOCK_Gpio_Sec_Int);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
-    }
-#endif /* FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE */
 }
 
-static void PINT_CommonIRQHanlder(uint32_t instance, pint_pin_int_t pintr)
+static void PINT_CommonIRQHandler(uint32_t instance, pint_pin_int_t pintr)
 {
-    PINT_Type *base = s_pintBases[instance];
+    PINT_Type *base          = s_pintBases[instance];
     pint_status_t pintStatus = {0};
 
-    pintStatus.pmstatus = PINT_PatternMatchResetDetectLogic(base);
-    pintStatus.riseFlag = (bool)PINT_PinInterruptGetRiseFlag(base, pintr);
-    pintStatus.fallFlag = (bool)PINT_PinInterruptGetFallFlag(base, pintr);
+    pintStatus.pmstatus        = PINT_PatternMatchResetDetectLogic(base);
+    pintStatus.riseFlag        = (bool)PINT_PinInterruptGetRiseFlag(base, pintr);
+    pintStatus.fallFlag        = (bool)PINT_PinInterruptGetFallFlag(base, pintr);
     pintStatus.activeLevelFlag = (bool)PINT_PinInterruptGetStatus(base, pintr);
 
     if (pintStatus.riseFlag)
@@ -937,21 +757,10 @@ static void PINT_CommonIRQHanlder(uint32_t instance, pint_pin_int_t pintr)
     }
 
 #if (defined(PINT_USE_LEGACY_CALLBACK) && PINT_USE_LEGACY_CALLBACK)
-    if (instance < FSL_FEATURE_PINT_NUMBER_OF_INSTANCE)
+    uint32_t cbIdx = PINT_GetIRQBaseIndex(instance) + (uint32_t)pintr;
+    if (s_pintCallback[cbIdx] != NULL)
     {
-        if (s_pintCallback[pintr] != NULL)
-        {
-            s_pintCallback[pintr](pintr, &pintStatus);
-        }
-    }
-    else
-    {
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-        if (s_secpintCallback[pintr] != NULL)
-        {
-            s_secpintCallback[pintr](pintr, &pintStatus);
-        }
-#endif
+        s_pintCallback[cbIdx](pintr, &pintStatus);
     }
 #else
     if (s_pintCallback[instance] != NULL)
@@ -965,99 +774,79 @@ void PINT_DriverIRQHandler(uint32_t instance)
 {
     if (instance < ARRAY_SIZE(s_pintBases))
     {
-        uint32_t flags = (s_pintBases[instance]->IST & PINT_IST_PSTAT_MASK) |
-                         PINT_PatternMatchGetStatusAll(s_pintBases[instance]);
-        for (uint8_t i = 0U; i < (uint8_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+        uint32_t flags =
+            (s_pintBases[instance]->IST & PINT_IST_PSTAT_MASK) | PINT_PatternMatchGetStatusAll(s_pintBases[instance]);
+        uint32_t count = PINT_GetIRQCount(s_pintBases[instance]);
+        for (uint32_t i = 0U; i < count; i++)
         {
             if ((flags & (1UL << i)) != 0UL)
             {
-                PINT_CommonIRQHanlder(instance, (pint_pin_int_t)i);
+                PINT_CommonIRQHandler(instance, (pint_pin_int_t)i);
             }
         }
     }
     SDK_ISR_EXIT_BARRIER;
 }
 
-#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-/* IRQ handler functions overloading weak symbols in the startup */
-void SEC_GPIO_INT0_IRQ0_DriverIRQHandler(void);
-void SEC_GPIO_INT0_IRQ0_DriverIRQHandler(void)
-{
-    PINT_CommonIRQHanlder(FSL_FEATURE_PINT_NUMBER_OF_INSTANCE, kPINT_SecPinInt0);
-    SDK_ISR_EXIT_BARRIER;
-}
-
-#if (FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS > 1U)
-/* IRQ handler functions overloading weak symbols in the startup */
-void SEC_GPIO_INT0_IRQ1_DriverIRQHandler(void);
-void SEC_GPIO_INT0_IRQ1_DriverIRQHandler(void)
-{
-    PINT_CommonIRQHanlder(FSL_FEATURE_PINT_NUMBER_OF_INSTANCE, kPINT_SecPinInt1);
-    SDK_ISR_EXIT_BARRIER;
-}
-#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
-#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
-
 void PINT0_DriverIRQHandler(void);
 void PINT0_DriverIRQHandler(void)
 {
-    uint32_t flags = (s_pintBases[0]->IST & PINT_IST_PSTAT_MASK) | PINT_PatternMatchGetStatusAll(s_pintBases[0]);
+    PINT_DriverIRQHandler(0);
+}
 
-    for (uint8_t i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
-    {
-        if ((flags & (1UL << i)) != 0UL)
-        {
-            PINT_CommonIRQHanlder(0, (pint_pin_int_t)i);
-        }
-    }
+#if defined(SECPINT)
+/* For devices with secure PINT instance. */
+void SEC_GPIO_INT0_IRQ0_DriverIRQHandler(void);
+void SEC_GPIO_INT0_IRQ0_DriverIRQHandler(void)
+{
+    PINT_CommonIRQHandler(1U, kPINT_SecPinInt0);
     SDK_ISR_EXIT_BARRIER;
 }
+
+void SEC_GPIO_INT0_IRQ1_DriverIRQHandler(void);
+void SEC_GPIO_INT0_IRQ1_DriverIRQHandler(void)
+{
+    PINT_CommonIRQHandler(1U, kPINT_SecPinInt1);
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif /* SECPINT */
 
 /* IRQ handler functions overloading weak symbols in the startup */
 void PIN_INT0_DriverIRQHandler(void);
 void PIN_INT0_DriverIRQHandler(void)
 {
-    PINT_CommonIRQHanlder(0, kPINT_PinInt0);
+    PINT_CommonIRQHandler(0, kPINT_PinInt0);
     SDK_ISR_EXIT_BARRIER;
 }
 
-#if (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 1U)
 void PIN_INT1_DriverIRQHandler(void);
 void PIN_INT1_DriverIRQHandler(void)
 {
-    PINT_CommonIRQHanlder(0, kPINT_PinInt1);
+    PINT_CommonIRQHandler(0, kPINT_PinInt1);
     SDK_ISR_EXIT_BARRIER;
 }
-#endif
 
-#if (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 2U)
 void PIN_INT2_DriverIRQHandler(void);
 void PIN_INT2_DriverIRQHandler(void)
 {
-    PINT_CommonIRQHanlder(0, kPINT_PinInt2);
+    PINT_CommonIRQHandler(0, kPINT_PinInt2);
     SDK_ISR_EXIT_BARRIER;
 }
-#endif
 
-#if (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 3U)
 void PIN_INT3_DriverIRQHandler(void);
 void PIN_INT3_DriverIRQHandler(void)
 {
-    PINT_CommonIRQHanlder(0, kPINT_PinInt3);
+    PINT_CommonIRQHandler(0, kPINT_PinInt3);
     SDK_ISR_EXIT_BARRIER;
 }
-#endif
 
-#if (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 4U)
 void PIN_INT4_DriverIRQHandler(void);
 void PIN_INT4_DriverIRQHandler(void)
 {
-    PINT_CommonIRQHanlder(0, kPINT_PinInt4);
+    PINT_CommonIRQHandler(0, kPINT_PinInt4);
     SDK_ISR_EXIT_BARRIER;
 }
-#endif
 
-#if (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 5U)
 #if defined(FSL_FEATURE_NVIC_HAS_SHARED_INTERTTUPT_NUMBER) && FSL_FEATURE_NVIC_HAS_SHARED_INTERTTUPT_NUMBER
 void PIN_INT5_DAC1_IRQHandler(void);
 void PIN_INT5_DAC1_IRQHandler(void)
@@ -1066,12 +855,10 @@ void PIN_INT5_DriverIRQHandler(void);
 void PIN_INT5_DriverIRQHandler(void)
 #endif /* FSL_FEATURE_NVIC_HAS_SHARED_INTERTTUPT_NUMBER */
 {
-    PINT_CommonIRQHanlder(0, kPINT_PinInt5);
+    PINT_CommonIRQHandler(0, kPINT_PinInt5);
     SDK_ISR_EXIT_BARRIER;
 }
-#endif
 
-#if (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 6U)
 #if defined(FSL_FEATURE_NVIC_HAS_SHARED_INTERTTUPT_NUMBER) && FSL_FEATURE_NVIC_HAS_SHARED_INTERTTUPT_NUMBER
 void PIN_INT6_USART3_IRQHandler(void);
 void PIN_INT6_USART3_IRQHandler(void)
@@ -1080,12 +867,10 @@ void PIN_INT6_DriverIRQHandler(void);
 void PIN_INT6_DriverIRQHandler(void)
 #endif /* FSL_FEATURE_NVIC_HAS_SHARED_INTERTTUPT_NUMBER */
 {
-    PINT_CommonIRQHanlder(0, kPINT_PinInt6);
+    PINT_CommonIRQHandler(0, kPINT_PinInt6);
     SDK_ISR_EXIT_BARRIER;
 }
-#endif
 
-#if (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 7U)
 #if defined(FSL_FEATURE_NVIC_HAS_SHARED_INTERTTUPT_NUMBER) && FSL_FEATURE_NVIC_HAS_SHARED_INTERTTUPT_NUMBER
 void PIN_INT7_USART4_IRQHandler(void);
 void PIN_INT7_USART4_IRQHandler(void)
@@ -1094,7 +879,32 @@ void PIN_INT7_DriverIRQHandler(void);
 void PIN_INT7_DriverIRQHandler(void)
 #endif /* FSL_FEATURE_NVIC_HAS_SHARED_INTERTTUPT_NUMBER */
 {
-    PINT_CommonIRQHanlder(0, kPINT_PinInt7);
+    PINT_CommonIRQHandler(0, kPINT_PinInt7);
     SDK_ISR_EXIT_BARRIER;
 }
-#endif
+
+#if defined(PINT0) && defined(PINT1)
+/* Per-instance IRQ handlers for devices whose vector table names interrupts as
+ * PINT<instance>_INT<pin>. */
+#define PINT_DEFINE_IRQ_HANDLER(inst, pin)                    \
+    void PINT##inst##_INT##pin##_DriverIRQHandler(void);      \
+    void PINT##inst##_INT##pin##_DriverIRQHandler(void)       \
+    {                                                         \
+        PINT_CommonIRQHandler((inst), (pint_pin_int_t)(pin)); \
+        SDK_ISR_EXIT_BARRIER;                                 \
+    }
+
+PINT_DEFINE_IRQ_HANDLER(0, 0)
+PINT_DEFINE_IRQ_HANDLER(0, 1)
+PINT_DEFINE_IRQ_HANDLER(0, 2)
+PINT_DEFINE_IRQ_HANDLER(0, 3)
+PINT_DEFINE_IRQ_HANDLER(0, 4)
+PINT_DEFINE_IRQ_HANDLER(0, 5)
+PINT_DEFINE_IRQ_HANDLER(0, 6)
+PINT_DEFINE_IRQ_HANDLER(0, 7)
+PINT_DEFINE_IRQ_HANDLER(1, 0)
+PINT_DEFINE_IRQ_HANDLER(1, 1)
+PINT_DEFINE_IRQ_HANDLER(1, 2)
+PINT_DEFINE_IRQ_HANDLER(1, 3)
+
+#endif /* defined(PINT0) && defined(PINT1) */

@@ -189,6 +189,8 @@
 #define ENET_QOS_MTL_RXP_INDIRECT_ACC_CONTROL_STATUS_WRRDN_MASK EMAC_MTL_RXP_INDIRECT_ACC_CONTROL_STATUS_WRRDN_MASK
 #define ENET_QOS_DMA_INTERRUPT_STATUS_DC0IS_MASK                EMAC_DMA_INTERRUPT_STATUS_DC0IS_MASK
 #define ENET_QOS_DMA_CHX_STAT_RI_MASK                           EMAC_DMA_CHX_STAT_RI_MASK
+#define ENET_QOS_DMA_CHX_STAT_FBE_MASK                          EMAC_DMA_CHX_STAT_FBE_MASK
+#define ENET_QOS_DMA_CHX_STAT_AIS_MASK                          EMAC_DMA_CHX_STAT_AIS_MASK
 #define ENET_QOS_DMA_CHX_STAT_NIS_MASK                          EMAC_DMA_CHX_STAT_NIS_MASK
 #define ENET_QOS_DMA_CHX_STAT_TI_MASK                           EMAC_DMA_CHX_STAT_TI_MASK
 #define ENET_QOS_DMA_INTERRUPT_STATUS_DC1IS_MASK                EMAC_DMA_INTERRUPT_STATUS_DC1IS_MASK
@@ -279,7 +281,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Defines the driver version. */
-#define FSL_ENET_QOS_DRIVER_VERSION (MAKE_VERSION(2, 7, 7))
+#define FSL_ENET_QOS_DRIVER_VERSION (MAKE_VERSION(2, 7, 9))
 /*! @} */
 
 /*! @name Control and status region bit masks of the receive buffer descriptor. */
@@ -536,6 +538,7 @@ typedef enum _enet_qos_event
     kENET_QOS_TxIntEvent,        /*!< Transmit interrupt event. */
     kENET_QOS_WakeUpIntEvent,    /*!< Wake up interrupt event. */
     kENET_QOS_TimeStampIntEvent, /*!< Time stamp interrupt event. */
+    kENET_QOS_DmaBusErrEvent,    /*!< DMA fatal bus error event. Application must perform software reset and full reconfigure. */
 } enet_qos_event_t;
 
 /*! @brief Define the MTL mode for multiple queues/rings. */
@@ -981,8 +984,12 @@ typedef struct _enet_qos_transfer_stats
     uint32_t statsRxAlignErr;        /*!< Rx frame number with alignment error. */
     uint32_t statsRxLengthErr;       /*!< Rx frame length field doesn't equal to packet size. */
     uint32_t statsRxFifoOverflowErr; /*!< Rx FIFO overflow count. */
-    uint32_t statsTxFrameCount;      /*!< Tx frame number. */
-    uint32_t statsTxFifoUnderRunErr; /*!< Tx FIFO underrun count. */
+    uint32_t statsTxFrameCount;      /*!< Tx frame number. Reported as 0 when frame preemption (EFPE) is
+                                          enabled, because the transmit MMC counters are unreliable under
+                                          frame preemption (ERR050597 workaround). */
+    uint32_t statsTxFifoUnderRunErr; /*!< Tx FIFO underrun count. Reported as 0 when frame preemption (EFPE)
+                                          is enabled, because the transmit MMC counters are unreliable under
+                                          frame preemption (ERR050597 workaround). */
 } enet_qos_transfer_stats_t;
 
 /* Typedef for interrupt handler. */
@@ -1160,6 +1167,8 @@ void ENET_QOS_RxBufferFreeAll(ENET_QOS_Type *base, enet_qos_handle_t *handle);
  *
  * @note This must be called after all the ENET initialization.
  * And should be called when the ENET receive/transmit is required.
+ * @note The MAC transmitter (MAC_Configuration[TE]) is enabled before the transmit DMA
+ *       is started as a workaround for errata ERR051222.
  */
 void ENET_QOS_StartRxTx(ENET_QOS_Type *base, uint8_t txRingNum, uint8_t rxRingNum);
 
@@ -2025,6 +2034,14 @@ static inline status_t ENET_Ptp1588PpsControl(ENET_QOS_Type *base,
  * @param instance The ENET QOS PTP PPS instance.
  * @param seconds The target seconds.
  * @param nanoseconds The target nanoseconds.
+ * @retval kStatus_Success  Target time registers programmed successfully.
+ * @retval kStatus_ENET_QOS_TrgtBusy  Target time register busy, previous target not yet consumed.
+ * @retval kStatus_InvalidArgument  On devices affected by errata ERR050595 (MCXE32B), the
+ *         requested target time is not strictly in the future. The caller must read the current
+ *         system time with ENET_QOS_Ptp1588GetTimer, compute a target time in the future and
+ *         retry, otherwise the erratum could produce an incorrect PPS output.
+ * @note   kStatus_InvalidArgument can only be returned on MCXE32B targets (errata ERR050595
+ *         workaround). On all other devices this return code is never produced by this function.
  */
 status_t ENET_QOS_Ptp1588PpsSetTrgtTime(ENET_QOS_Type *base,
                                         enet_qos_ptp_pps_instance_t instance,

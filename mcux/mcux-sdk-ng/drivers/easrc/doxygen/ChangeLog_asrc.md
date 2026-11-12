@@ -1,5 +1,10 @@
 # eASRC
 
+## [2.0.8]
+
+- Bug Fixes
+  - Fixed Coverity NULL_FIELD in ASRC_SetResamplerConfig and UNUSED_VALUE findings in ASRC_SetSlotConfig.
+
 ## [2.0.7]
 
 - Bug Fixes

@@ -194,7 +194,7 @@ int32_t CE_CmdLaunch(int32_t force_launch)
 int32_t CE_CmdLaunchBlocking(void)
 {
     uint32_t n_cmd;
-    status_t status = kStatus_Fail;
+    status_t status;
 
 #if CE_COMPUTE_TIMEOUT
     uint32_t timeout = CE_COMPUTE_TIMEOUT;
@@ -257,7 +257,7 @@ int32_t CE_CmdLaunchBlocking(void)
  */
 int32_t CE_CmdLaunchNonBlocking(void)
 {
-    status_t status = kStatus_Fail;
+    status_t status;
 
     /* Launches non-blocking */
     if (s_ce_cmdbuffer->n_cmd == 0U)
@@ -295,7 +295,7 @@ int32_t CE_CmdLaunchNonBlocking(void)
  */
 int32_t CE_CmdCheckStatus(void)
 {
-    int32_t status         = -1;
+    int32_t status;
     uint32_t n_cmd = *(s_ce_cmdbuffer->buffer_base_ptr);
 
     if (n_cmd != CE_COMPUTE_DONE)

@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FlexIO SPI driver version. */
-#define FSL_FLEXIO_SPI_DRIVER_VERSION (MAKE_VERSION(2, 4, 4))
+#define FSL_FLEXIO_SPI_DRIVER_VERSION (MAKE_VERSION(2, 4, 5))
 /*! @} */
 
 #ifndef FLEXIO_SPI_DUMMYDATA
@@ -423,11 +423,13 @@ void FLEXIO_SPI_EnableDMA(FLEXIO_SPI_Type *base, uint32_t mask, bool enable);
 static inline uint32_t FLEXIO_SPI_GetTxDataRegisterAddress(FLEXIO_SPI_Type *base,
                                                            flexio_spi_shift_direction_t direction)
 {
+    uint32_t addr;
     if (direction == kFLEXIO_SPI_MsbFirst)
     {
-        return FLEXIO_GetShifterBufferAddress(base->flexioBase, kFLEXIO_ShifterBufferBitSwapped,
-                                              base->shifterIndex[0]) +
-               3U;
+        addr = FLEXIO_GetShifterBufferAddress(base->flexioBase, kFLEXIO_ShifterBufferBitSwapped,
+                                              base->shifterIndex[0]);
+        assert(addr <= (UINT32_MAX - 3U));
+        return addr + 3U;
     }
     else
     {
@@ -447,13 +449,16 @@ static inline uint32_t FLEXIO_SPI_GetTxDataRegisterAddress(FLEXIO_SPI_Type *base
 static inline uint32_t FLEXIO_SPI_GetRxDataRegisterAddress(FLEXIO_SPI_Type *base,
                                                            flexio_spi_shift_direction_t direction)
 {
+    uint32_t addr;
     if (direction == kFLEXIO_SPI_MsbFirst)
     {
         return FLEXIO_GetShifterBufferAddress(base->flexioBase, kFLEXIO_ShifterBufferBitSwapped, base->shifterIndex[1]);
     }
     else
     {
-        return FLEXIO_GetShifterBufferAddress(base->flexioBase, kFLEXIO_ShifterBuffer, base->shifterIndex[1]) + 3U;
+        addr = FLEXIO_GetShifterBufferAddress(base->flexioBase, kFLEXIO_ShifterBuffer, base->shifterIndex[1]);
+        assert(addr <= (UINT32_MAX - 3U));
+        return addr + 3U;
     }
 }
 

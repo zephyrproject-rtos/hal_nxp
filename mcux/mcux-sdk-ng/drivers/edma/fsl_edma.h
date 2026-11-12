@@ -490,7 +490,7 @@ static inline void EDMA_EnableAsyncRequest(DMA_Type *base, uint32_t channel, boo
     assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 
     base->EARS &= ~((uint32_t)1U << channel);
-    base->EARS |= ((uint32_t)(true == enable ? 1U : 0U) << channel);
+    base->EARS |= (uint32_t)(((true == enable) ? 1U : 0U) << channel);
 }
 #endif /* FSL_FEATURE_EDMA_ASYNCHRO_REQUEST_CHANNEL_COUNT */
 

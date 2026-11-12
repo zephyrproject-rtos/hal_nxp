@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2023, 2024-2025 NXP
+ * Copyright 2016-2023, 2024-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief GPIO driver version. */
-#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 8, 6))
+#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 9, 0))
 /*! @} */
 
 #if defined(FSL_FEATURE_GPIO_REGISTERS_WIDTH) && (FSL_FEATURE_GPIO_REGISTERS_WIDTH == 8U)
@@ -132,6 +132,61 @@ typedef enum
 } gpio_pin_interrupt_control_t;
 #endif /* FSL_FEATURE_GPIO_HAS_SECURE_PRIVILEGE_CONTROL */
 
+/*!
+ * @brief Number of independent callback entries tracked per GPIO handle.
+ *
+ * Each entry binds a pin bitmask to one callback, so the count is the number of distinct
+ * consumers that can share a single GPIO controller, not the number of pins. A consumer that
+ * cares about several pins at once occupies a single entry (compare Zephyr's gpio_callback,
+ * which also keys on a pin mask). The default keeps the handle small; override it if a board
+ * needs more independent consumers on one controller.
+ */
+#ifndef GPIO_PIN_CALLBACK_COUNT
+#ifdef CONFIG_GPIO_PIN_CALLBACK_COUNT
+#define GPIO_PIN_CALLBACK_COUNT CONFIG_GPIO_PIN_CALLBACK_COUNT
+#else
+#define GPIO_PIN_CALLBACK_COUNT 4U
+#endif
+#endif
+
+#if GPIO_PIN_CALLBACK_COUNT
+
+/*! @brief Forward declaration of the GPIO interrupt handle. */
+typedef struct _gpio_handle gpio_handle_t;
+
+/*!
+ * @brief GPIO interrupt callback prototype.
+ *
+ * Invoked by GPIO_DriverIRQHandler() with the bitmask of pins that fired for this entry. The
+ * mask matches the hardware interrupt status register layout, so a consumer that watches several
+ * pins is notified once with all of them set instead of once per pin.
+ *
+ * @param base     GPIO peripheral base pointer of the controller that fired.
+ * @param handle   GPIO handle the callback is registered on.
+ * @param pinMask  Bitmask of pins whose interrupt flag was pending for this entry (bit n == pin n).
+ * @param userData User data pointer supplied at registration time.
+ */
+typedef void (*gpio_pin_callback_t)(GPIO_Type *base, gpio_handle_t *handle, uint32_t pinMask, void *userData);
+
+/*!
+ * @brief One callback entry: a pin bitmask bound to a callback and its user data.
+ */
+typedef struct _gpio_callback_entry
+{
+    uint32_t pinMask;             /*!< Pins this entry watches (bit n == pin n). 0 marks an empty slot. */
+    gpio_pin_callback_t callback; /*!< Callback for the watched pins, NULL if the slot is empty. */
+    void *userData;               /*!< User data passed back to the callback. */
+} gpio_callback_entry_t;
+
+/*!
+ * @brief GPIO handle.
+ */
+struct _gpio_handle
+{
+    gpio_callback_entry_t entries[GPIO_PIN_CALLBACK_COUNT]; /*!< Pin-mask callback entries. */
+};
+#endif /* GPIO_PIN_CALLBACK_COUNT */
+
 /*! @} */
 
 /*******************************************************************************
@@ -146,6 +201,19 @@ extern "C" {
  * @addtogroup gpio_driver
  * @{
  */
+
+/*! @name GPIO instance */
+/*! @{ */
+
+/*!
+ * @brief Gets the GPIO instance according to the GPIO base
+ *
+ * @param base    GPIO peripheral base pointer.
+ * @retval GPIO instance
+ */
+uint32_t GPIO_GetInstance(GPIO_Type *base);
+
+/*! @} */
 
 /*! @name GPIO Configuration */
 /*! @{ */
@@ -628,6 +696,81 @@ void GPIO_CheckAttributeBytes(GPIO_Type *base, gpio_checker_attribute_t attribut
 #endif
 
 /*! @} */
+
+/*!
+ * @name GPIO interrupt and handle
+ * @{
+ */
+
+#if GPIO_PIN_CALLBACK_COUNT
+
+/* gpio_handle_t is typedef'd from struct _gpio_handle forward-declared above (before
+ * gpio_pin_callback_t); this completes the struct. */
+
+/*!
+ * @brief Initializes a GPIO interrupt handle and registers it for the controller.
+ *
+ * Clears the handle's per-pin callback table and stores the handle in the driver's
+ * instance-indexed table so the shared dispatcher GPIO_DriverIRQHandler(instance) can find it from
+ * the controller instance alone. Call once before registering any pin callback.
+ *
+ * @param base   GPIO peripheral base pointer (GPIOA, GPIOB, GPIOC, and so on).
+ * @param handle Pointer to the caller-owned GPIO interrupt handle.
+ */
+void GPIO_CreateHandle(GPIO_Type *base, gpio_handle_t *handle);
+
+/*!
+ * @brief Registers a pin-mask interrupt callback in the handle.
+ *
+ * Binds a bitmask of pins to one callback. The callback is later invoked by GPIO_DriverIRQHandler()
+ * with the subset of pinMask that is actually pending, so a single consumer can service several pins
+ * in one call. If an existing entry already watches exactly pinMask, it is replaced; otherwise the
+ * first free entry is used. Passing a NULL callback clears any entry that watches exactly pinMask.
+ *
+ * @note Matching is by exact pinMask, not by overlap. Registering masks that share a pin (for
+ * example 0x3 then 0x1) creates two separate entries, and both callbacks run when the shared pin
+ * fires. Register each pin under a single mask if only one callback should service it.
+ *
+ * @param handle   Pointer to the GPIO interrupt handle.
+ * @param pinMask  Bitmask of pins to register the callback for (bit n == pin n).
+ * @param callback Callback to invoke for the watched pins. Passing NULL removes the matching entry.
+ * @param userData User data pointer passed back to the callback.
+ * @retval kStatus_Success         Callback stored (or removed when callback is NULL).
+ * @retval kStatus_InvalidArgument pinMask is 0.
+ * @retval kStatus_OutOfRange      No free entry is available to store a new callback.
+ */
+status_t GPIO_SetPinCallback(gpio_handle_t *handle, uint32_t pinMask, gpio_pin_callback_t callback, void *userData);
+
+/*!
+ * @brief Clears a pin-mask interrupt callback in the handle.
+ *
+ * Removes the entry that watches exactly pinMask. After this call the dispatcher no longer invokes
+ * the previously-registered callback for those pins.
+ *
+ * @param handle  Pointer to the GPIO interrupt handle.
+ * @param pinMask Bitmask of pins whose callback entry is removed (bit n == pin n).
+ * @retval kStatus_Success         Callback cleared.
+ * @retval kStatus_InvalidArgument pinMask is 0.
+ * @retval kStatus_OutOfRange      No entry watches exactly pinMask.
+ */
+status_t GPIO_ClearPinCallback(gpio_handle_t *handle, uint32_t pinMask);
+#endif /* GPIO_PIN_CALLBACK_COUNT */
+
+/*!
+ * @brief Unified GPIO interrupt dispatcher.
+ *
+ * Looks up the handle registered for instance via GPIO_CreateHandle(), reads the controller's
+ * pending interrupt flags, and for each callback entry whose watched pins intersect the pending
+ * flags: clears those flags first, then invokes the callback once with the pending subset as a
+ * pin bitmask. After the entries are serviced, any pending flags not claimed by a registered entry
+ * are cleared as well, so a pin whose interrupt is enabled in hardware but has no callback cannot
+ * keep re-firing (interrupt storm).
+ *
+ * @param instance   GPIO peripheral instance number, can get by @ref GPIO_GetInstance.
+ */
+void GPIO_DriverIRQHandler(uint32_t instance);
+
+/*! @} */
 /*! @} */
 
 /*!
@@ -644,6 +787,19 @@ void GPIO_CheckAttributeBytes(GPIO_Type *base, gpio_checker_attribute_t attribut
  */
 
 #if defined(FSL_FEATURE_SOC_FGPIO_COUNT) && FSL_FEATURE_SOC_FGPIO_COUNT
+
+/*! @name FGPIO instance. */
+/*! @{ */
+
+/*!
+ * @brief Gets the FGPIO instance according to the GPIO base
+ *
+ * @param base    FGPIO peripheral base pointer
+ * @retval FGPIO instance
+ */
+uint32_t FGPIO_GetInstance(FGPIO_Type *base);
+
+/*! @} */
 
 /*! @name FGPIO Configuration */
 /*! @{ */

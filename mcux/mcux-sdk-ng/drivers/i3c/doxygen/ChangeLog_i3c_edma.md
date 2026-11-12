@@ -1,5 +1,11 @@
 # I3C_EDMA
 
+## [2.2.14]
+
+- Improvements
+  - Added reporting of master MERRWARN.URUN (to-bus buffer/FIFO underrun) as
+    kStatus_I3C_UnderrunError on devices that have the field.
+
 ## [2.2.13]
 
 - Changed

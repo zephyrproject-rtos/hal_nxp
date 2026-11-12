@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I2C driver version. */
-#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 12))
+#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 13))
 /*! @} */
 
 /*! @brief Retry times for waiting flag. */
@@ -390,7 +390,7 @@ static inline void I2C_Enable(I2C_Type *base, bool enable)
     }
     else
     {
-        base->C1 &= ~(uint8_t)I2C_C1_IICEN_MASK;
+        base->C1 &= (uint8_t)((~I2C_C1_IICEN_MASK) & 0xFFU);
     }
 }
 
@@ -440,7 +440,7 @@ static inline void I2C_MasterClearStatusFlags(I2C_Type *base, uint32_t statusMas
     if ((uint32_t)kI2C_StartDetectFlag == (statusMask & (uint32_t)kI2C_StartDetectFlag))
     {
         /* Shift the odd-ball flags back into place. */
-        base->FLT |= (uint8_t)(statusMask >> 8U);
+        base->FLT |= (uint8_t)((statusMask >> 8U) & 0xFFU);
     }
 #endif
 
@@ -448,7 +448,7 @@ static inline void I2C_MasterClearStatusFlags(I2C_Type *base, uint32_t statusMas
     if ((uint32_t)kI2C_StopDetectFlag == (statusMask & (uint32_t)kI2C_StopDetectFlag))
     {
         /* Shift the odd-ball flags back into place. */
-        base->FLT |= (uint8_t)(statusMask >> 8U);
+        base->FLT |= (uint8_t)((statusMask >> 8U) & 0xFFU);
     }
 #endif
 
@@ -524,7 +524,7 @@ static inline void I2C_EnableDMA(I2C_Type *base, bool enable)
     }
     else
     {
-        base->C1 &= ~(uint8_t)I2C_C1_DMAEN_MASK;
+        base->C1 &= (uint8_t)((~I2C_C1_DMAEN_MASK) & 0xFFU);
     }
 }
 
