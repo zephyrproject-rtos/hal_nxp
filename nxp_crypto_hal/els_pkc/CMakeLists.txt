@@ -66,8 +66,8 @@ if(CONFIG_SOC_SERIES_RW6XX)
 
     target_include_directories(McuxElsPkc
         PRIVATE
-            # cmsis required to build els_pkc (use Zephyr's common CMSIS)
-            ${ZEPHYR_CMSIS_MODULE_DIR}/CMSIS/Core/Include
+            # cmsis required to build els_pkc (use Zephyr's common CMSIS 6)
+            ${ZEPHYR_CMSIS_6_MODULE_DIR}/CMSIS/Core/Include
     )
 
     target_include_directories(McuxElsPkc
@@ -112,8 +112,8 @@ if(CONFIG_SOC_FAMILY_MCXN)
 
     target_include_directories(McuxElsPkc
         PRIVATE
-            # cmsis required to build els_pkc (use Zephyr's common CMSIS)
-            ${ZEPHYR_CMSIS_MODULE_DIR}/CMSIS/Core/Include
+            # cmsis required to build els_pkc (use Zephyr's common CMSIS 6)
+            ${ZEPHYR_CMSIS_6_MODULE_DIR}/CMSIS/Core/Include
     )
 
     target_include_directories(McuxElsPkc
@@ -170,7 +170,7 @@ if(CONFIG_SOC_SERIES_IMXRT7XX)
 
     target_include_directories(McuxElsPkc
         PRIVATE
-            ${ZEPHYR_CMSIS_MODULE_DIR}/CMSIS/Core/Include
+            ${ZEPHYR_CMSIS_6_MODULE_DIR}/CMSIS/Core/Include
     )
 
     target_include_directories(McuxElsPkc
