@@ -61,6 +61,12 @@ foreach(_option IN ITEMS
     continue()
   endif()
 
+  # GLIKEY is not available on the mcxw platform (no GLIKEY_Type /
+  # MCUXCL_FEATURE_GLIKEY), mirroring the Kconfig "depends on !MCXW".
+  if(_option STREQUAL "CONFIG_SGI_PKC_GLIKEY" AND CONFIG_SGI_PKC_PLATFORM_MCXW)
+    continue()
+  endif()
+
   sgi_pkc_default_on(${_option})
 endforeach()
 
