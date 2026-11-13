@@ -75,13 +75,13 @@ static uint32_t PINT_GetInstance(PINT_Type *base)
     {
         if (MSDK_REG_NONSECURE_ADDR(s_pintBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
-            break;
+            return instance;
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_pintBases));
+    assert(false);
 
-    return instance;
+    return 0U;
 }
 
 /*!
