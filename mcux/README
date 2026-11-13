@@ -234,4 +234,8 @@ Patch List:
     - mcux: sdk-ng: pint: support legacy device headers
       - Guard clock metadata when SDK driver clock control is disabled.
       - Retain kCLOCK_Pint and the fixed connected-output count for legacy device headers.
-      - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/4a52c5f38988265209de1c779bce0f76766feba1
+      - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/1a0bad66a30137aaf1fb7cd1a176a070e041fee1
+    - mcux: sdk-ng: pint: keep instance lookup within bounds
+      - Return matched instances directly; assert and use the documented zero fallback on a miss.
+      - Avoid the optimized legacy-callback array-bounds diagnostic without changing IRQ offsets.
+      - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/020eecad5f0f176e432358a3f6cb5ec397e78fbe
