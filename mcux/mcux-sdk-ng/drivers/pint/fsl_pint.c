@@ -40,8 +40,13 @@ static const reset_ip_name_t s_pintResets[] = PINT_RESETS_ARRAY;
  * combination of PINT instances and per-instance interrupt counts. */
 static const IRQn_Type s_pintIRQ[] = PINT_IRQS;
 
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#ifndef PINT_CLOCKS
+#define PINT_CLOCKS {kCLOCK_Pint}
+#endif
 /*! @brief Array to map PINT instance number to clock name. */
 static const clock_ip_name_t s_pintClocks[] = PINT_CLOCKS;
+#endif
 
 #if (defined(PINT_USE_LEGACY_CALLBACK) && PINT_USE_LEGACY_CALLBACK)
 /*! @brief Deprecated per-event callback array, one slot per connected output across
@@ -87,7 +92,13 @@ static uint32_t PINT_GetInstance(PINT_Type *base)
  */
 static uint32_t PINT_GetIRQCount(PINT_Type *base)
 {
+#if defined(FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTSn)
     int32_t count = (int32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTSn(base);
+#else
+    int32_t count = (int32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS;
+
+    (void)base;
+#endif
 
     return (count > 0) ? (uint32_t)count : 0U;
 }
