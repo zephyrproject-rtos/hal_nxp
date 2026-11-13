@@ -1,4 +1,4 @@
-# Copyright 2024-2025 NXP
+# Copyright 2024-2026 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 function(mcux_add_source)
@@ -617,6 +617,14 @@ function(mcux_convert_binary)
     return()
   endif()
 
+  # Mark this target as having a user-defined conversion so the global
+  # Kconfig-gated block in run.cmake can detect it and skip adding a
+  # redundant (and order-disrupting) conversion. This must be stamped here,
+  # before any of the early return() paths below (CONVERT_CUSTOM_COMMANDS,
+  # codewarrior link-option path), so every registration path sets it.
+  set_target_properties(${target_name}
+                        PROPERTIES MCUX_BINARY_CONVERSION_REGISTERED TRUE)
+
   # Get the absolute folder path
   get_filename_component(FILE_PATH ${binary_name} DIRECTORY)
   file(MAKE_DIRECTORY ${FILE_PATH})
@@ -661,6 +669,18 @@ function(mcux_convert_binary)
       log_debug("Codewarrior does not support hex format, use bin instead" ${CMAKE_CURRENT_LIST_FILE})
     elseif (${CONFIG_TOOLCHAIN} STREQUAL "xtensa")
       set(OBJDUMP_BIN_CMD "-Oihex")
+    endif()
+  elseif(${FILE_EXT} STREQUAL ".bin")
+    if (${CONFIG_TOOLCHAIN} STREQUAL "armgcc")
+      set(OBJDUMP_BIN_CMD "-Obinary")
+    elseif (${CONFIG_TOOLCHAIN} STREQUAL "riscvllvm")
+      set(OBJDUMP_BIN_CMD "-Obinary")
+    elseif (${CONFIG_TOOLCHAIN} STREQUAL "iar")
+      set(OBJDUMP_BIN_CMD "--bin")
+    elseif (${CONFIG_TOOLCHAIN} STREQUAL "mdk")
+      set(OBJDUMP_BIN_CMD "--bincombined")
+    elseif (${CONFIG_TOOLCHAIN} STREQUAL "xtensa")
+      set(OBJDUMP_BIN_CMD "-Obinary")
     endif()
   endif()
   if (${CONFIG_TOOLCHAIN} STREQUAL "codewarrior")

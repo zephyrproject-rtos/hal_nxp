@@ -64,7 +64,6 @@ void TSI_InitSelfCapMode(TSI_Type *base, const tsi_selfCap_config_t *config)
     assert(config != NULL);
 
     bool is_module_enabled = false;
-    bool is_int_enabled    = false;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     uint32_t instance = TSI_GetInstance(base);
@@ -131,10 +130,6 @@ void TSI_InitSelfCapMode(TSI_Type *base, const tsi_selfCap_config_t *config)
     {
         TSI_EnableModule(base, true);
     }
-    if (is_int_enabled)
-    {
-        TSI_EnableInterrupts(base, (uint32_t)kTSI_GlobalInterruptEnable);
-    }
 }
 
 /*!
@@ -152,7 +147,6 @@ void TSI_InitMutualCapMode(TSI_Type *base, const tsi_mutualCap_config_t *config)
     assert(config != NULL);
 
     bool is_module_enabled = false;
-    bool is_int_enabled    = false;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     uint32_t instance = TSI_GetInstance(base);
@@ -211,10 +205,6 @@ void TSI_InitMutualCapMode(TSI_Type *base, const tsi_mutualCap_config_t *config)
     if (is_module_enabled)
     {
         TSI_EnableModule(base, true);
-    }
-    if (is_int_enabled)
-    {
-        TSI_EnableInterrupts(base, (uint32_t)kTSI_EndOfScanInterruptEnable);
     }
 }
 

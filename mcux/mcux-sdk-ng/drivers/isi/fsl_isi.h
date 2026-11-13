@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020-2025 NXP
+ * Copyright 2016-2017, 2020-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -28,7 +28,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief ISI driver version */
-#define FSL_ISI_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+#define FSL_ISI_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*! @} */
 
 /*! @brief ISI interrupts. */
@@ -187,6 +187,16 @@ typedef enum _isi_threshold
     kISI_Threshold75Percent = 3U  /*!< Panic will assert when the buffers are 75% full. */
 } isi_threshold_t;
 
+#if defined(FSL_FEATURE_ISI_SUPPORT_DEST) && FSL_FEATURE_ISI_SUPPORT_DEST
+/*! @brief ISI channel output image destination (CHNL_CTRL[DEST]). */
+typedef enum _isi_output_dest
+{
+    kISI_OutputDestMemory        = 0U, /*!< Output image is stored in memory only. */
+    kISI_OutputDestMemoryDisplay = 2U, /*!< Output image is sent to both memory and display controller 0. */
+    kISI_OutputDestDisplay       = 6U, /*!< Output image is sent to display controller 0 only. */
+} isi_output_dest_t;
+#endif
+
 /*! @brief ISI basic configuration. */
 typedef struct _isi_config
 {
@@ -206,6 +216,11 @@ typedef struct _isi_config
     isi_threshold_t thresholdY;       /*!< Panic alert threshold for RGB or Luma (Y) buffer. */
     isi_threshold_t thresholdU;       /*!< Panic alert threshold for Chroma (U/Cb/UV/CbCr) buffer. */
     isi_threshold_t thresholdV;       /*!< Panic alert threshold for Chroma (V/Cr) buffer. */
+#if defined(FSL_FEATURE_ISI_SUPPORT_DEST) && FSL_FEATURE_ISI_SUPPORT_DEST
+    isi_output_dest_t outputDest;     /*!< Output image destination: memory, display controller, or both.
+                                           Use kISI_OutputDestMemoryDisplay (or ...Display) to feed the
+                                           pixel-link path to the DCIF (e.g. the PDI low-latency display). */
+#endif
 } isi_config_t;
 
 /*! @brief ISI color space conversion mode. */

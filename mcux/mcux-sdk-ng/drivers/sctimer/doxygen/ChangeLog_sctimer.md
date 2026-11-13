@@ -1,6 +1,17 @@
 # SCTIMER
 
 
+## [2.6.2]
+
+- Bug Fixes
+  - Fixed a one-tick output glitch on every PWM period when an edge-aligned
+    channel runs at 0% duty cycle. The pulse-start action sits on the period
+    event, which is also the counter limit, so the output was driven active at
+    the period boundary and inactive one counter tick later at the 0% duty match
+    of 0, instead of holding its inactive level. The period event's pulse-start
+    action is now left unregistered while the duty cycle is 0. Affects
+    SCTIMER_SetupSharedPeriodPwm() and SCTIMER_UpdatePwmDutycycleByEvent().
+
 ## [2.6.1]
 
 - Bug Fixes

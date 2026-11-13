@@ -999,7 +999,7 @@ static inline void EDMA_EnableAsyncRequest(EDMA_Type *base, uint32_t channel, bo
 
 #if defined FSL_EDMA_SOC_IP_EDMA && FSL_EDMA_SOC_IP_EDMA
     EDMA_CORE_BASE(base)->EARS &= ~((uint32_t)1U << channel);
-    EDMA_CORE_BASE(base)->EARS |= ((uint32_t)(true == enable ? 1U : 0U) << channel);
+    EDMA_CORE_BASE(base)->EARS |= (uint32_t)(((true == enable) ? 1U : 0U) << channel);
 #else
     if (enable)
     {

@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SAI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 7, 4)) /*!< Version 2.7.4 */
+#define FSL_SAI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 7, 6)) /*!< Version 2.7.6 */
 /*! @} */
 
 /*! @brief the SAI enable position When calling SAI_TransferReceiveEDMA */
@@ -167,13 +167,13 @@ void SAI_TransferTxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
  * @note SAI eDMA supports data transfer in a multiple SAI channels if the FIFO Combine feature is supported.
  * To activate the multi-channel transfer enable SAI channels by filling the channelMask
  * of sai_transceiver_t with the corresponding values of _sai_channel_mask enum, enable the FIFO Combine
- * mode by assigning kSAI_FifoCombineModeEnabledOnRead to the fifoCombine member of sai_fifo_combine_t
+ * mode by assigning kSAI_RXFifoCombineModeEnabledOnRead to the fifoCombine member of sai_fifo_combine_t
  * which is a member of sai_transceiver_t.
  * This is an example of multi-channel data transfer configuration step.
  *  @code
  *   sai_transceiver_t config;
  *   SAI_GetClassicI2SConfig(&config, kSAI_WordWidth16bits, kSAI_Stereo, kSAI_Channel0Mask|kSAI_Channel1Mask);
- *   config.fifo.fifoCombine = kSAI_FifoCombineModeEnabledOnRead;
+ *   config.fifo.fifoCombine = kSAI_RXFifoCombineModeEnabledOnRead;
  *   SAI_TransferRxSetConfigEDMA(I2S0, &edmaHandle, &config);
  *  @endcode
  * @param base SAI base pointer.

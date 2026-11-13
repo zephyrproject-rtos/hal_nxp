@@ -62,6 +62,29 @@
 #endif
 
 /*!
+ * @brief NOP loop count used to wait for at least 2 ADC functional clock cycles after
+ *        STAT0[CAL_RDY] is asserted at the end of a calibration step.
+ *
+ * The reference manual requires software to wait 2 ADC clock cycles after polling
+ * STAT0[CAL_RDY] and finding it set before proceeding. This macro controls how many
+ * __NOP() iterations DUALADC_DoCalibration executes to provide a portable hold time
+ * that scales with CPU clock speed.
+ *
+ * The required NOP count scales with the CPU-to-ADC clock frequency ratio:
+ *   min_count = ceil(2 * f_CPU / f_ADC)
+ * The default value of 20 covers ratios up to 10 (e.g., 150 MHz CPU with 16 MHz ADC
+ * clock). Increase this value via Kconfig option CONFIG_DUALADC_CAL_RDY_DELAY when the
+ * CPU clock is much faster than the ADC functional clock (large f_CPU/f_ADC ratio).
+ */
+#ifndef DUALADC_CAL_RDY_DELAY
+#ifdef CONFIG_DUALADC_CAL_RDY_DELAY
+#define DUALADC_CAL_RDY_DELAY (uint32_t)CONFIG_DUALADC_CAL_RDY_DELAY
+#else
+#define DUALADC_CAL_RDY_DELAY (20UL)
+#endif
+#endif
+
+/*!
  * @brief DualADC conversion mode selection.
  *
  * Controls whether ADCA and ADCB share one conversion sequence (cooperation)
@@ -373,8 +396,10 @@ typedef struct _dadc_config
     uint8_t hardwareTrigger1Delay;  /*!< Trigger1 delay select (0-15, raw count);
                                         delay time 2^hardwareTrigger1Delay ADCK cycles. */
 
-    /* DE - DMA trigger source */
+    /* DE - DMA enable and trigger source */
+    bool enableDmaA;           /*!< Enable DMA request for ADCA. */
     dadc_dma_src_t dmaSourceA; /*!< DMA trigger source for ADCA. */
+    bool enableDmaB;           /*!< Enable DMA request for ADCB (independence mode only). */
     dadc_dma_src_t dmaSourceB; /*!< DMA trigger source for ADCB (independence mode only). */
 } dadc_config_t;
 
@@ -690,12 +715,65 @@ static inline void DUALADC_Disable(DADC_Type *base)
 static inline void DUALADC_GetConversionResult(DADC_Type *base, uint32_t index, dadc_conversion_result_t *result)
 {
     assert(NULL != result);
-    assert(index >= 1U && index <= DADC_RSLT_COUNT);
+    assert(index >= 1U && index <= DADC_RSLT_RSLT_32B_RSLT_COUNT);
 
     uint32_t raw = base->RSLT[index - 1U];
     result->result32   = raw;
     result->resultLow  = (uint16_t)(raw & 0xFFFFUL);
     result->resultHigh = (uint16_t)((raw >> 16U) & 0xFFFFUL);
+}
+
+/*!
+ * @brief Read the full 32-bit raw conversion result for a command buffer entry.
+ *
+ * Returns RSLT[index-1] as a single uint32_t. This is the most efficient path
+ * when the average-with-timer summed value is required.
+ * Reading the result register automatically clears the corresponding RSLTRDY_STAT bit.
+ *
+ * @param base  DualADC peripheral base address.
+ * @param index Command buffer index, range 1-20.
+ * @return Raw 32-bit RSLT register value.
+ */
+static inline uint32_t DUALADC_GetConversionResult32(DADC_Type *base, uint32_t index)
+{
+    assert(index >= 1U && index <= DADC_RSLT_RSLT_32B_RSLT_COUNT);
+    return base->RSLT[index - 1U];
+}
+
+/*!
+ * @brief Read the low 16-bit conversion result for a command buffer entry.
+ *
+ * Returns RSLT_16B[index-1].RSLT_L directly as a uint16_t, equivalent to
+ * bit[15:0] of the RSLT register.
+ * Reading the result register automatically clears the corresponding
+ * RSLTRDY_STAT bit.
+ *
+ * @param base  DualADC peripheral base address.
+ * @param index Command buffer index, range 1-20.
+ * @return Low 16-bit result (bit[15:0] of RSLT).
+ */
+static inline uint16_t DUALADC_GetConversionResultLow(DADC_Type *base, uint32_t index)
+{
+    assert(index >= 1U && index <= DADC_RSLT_RSLT_16B_RSLT_16B_COUNT);
+    return base->RSLT_16B[index - 1U].RSLT_L;
+}
+
+/*!
+ * @brief Read the high 16-bit conversion result for a command buffer entry.
+ *
+ * Returns RSLT_16B[index-1].RSLT_H directly as a uint16_t, equivalent to
+ * bit[31:16] of the RSLT register.
+ * Reading the result register automatically clears the corresponding
+ * RSLTRDY_STAT bit.
+ *
+ * @param base  DualADC peripheral base address.
+ * @param index Command buffer index, range 1-20.
+ * @return High 16-bit result (bit[31:16] of RSLT).
+ */
+static inline uint16_t DUALADC_GetConversionResultHigh(DADC_Type *base, uint32_t index)
+{
+    assert(index >= 1U && index <= DADC_RSLT_RSLT_16B_RSLT_16B_COUNT);
+    return base->RSLT_16B[index - 1U].RSLT_H;
 }
 
 /*!
@@ -906,6 +984,40 @@ static inline void DUALADC_ClearScanSequenceStatusFlags(DADC_Type *base, uint32_
 }
 
 /*!
+ * @brief Get the result-ready flags for all command buffers.
+ *
+ * Each bit indicates a conversion result is available in the corresponding RSLT register.
+ * Flags clear automatically when the associated RSLT register is read by @ref DUALADC_GetConversionResult.
+ *
+ * @param base DualADC peripheral base address.
+ * @return Bitmask of ready results; use @ref dadc_cmd_mask_t to check individual commands.
+ */
+static inline uint32_t DUALADC_GetResultReadyFlags(DADC_Type *base)
+{
+    return base->RSLTRDY_STAT;
+}
+
+/*!
+ * @brief Get the compare status flags for all command buffers.
+ * @param base DualADC peripheral base address.
+ * @return Bitmask of compare results; use @ref dadc_cmd_mask_t to check individual commands.
+ */
+static inline uint32_t DUALADC_GetCompareStatusFlags(DADC_Type *base)
+{
+    return base->CMP_STAT;
+}
+
+/*!
+ * @brief Clear compare status flags for one or more command buffers.
+ * @param base DualADC peripheral base address.
+ * @param mask OR combination of @ref dadc_cmd_mask_t values to clear.
+ */
+static inline void DUALADC_ClearCompareStatusFlags(DADC_Type *base, uint32_t mask)
+{
+    base->CMP_STAT = mask;
+}
+
+/*!
  * @brief Get error status flags for ADCA and ADCB (STAT1).
  *
  * Returns the OR-combination of STAT1[INTVTIMEERR_FLAGA/B] and STAT1[OVERLAP_FLAGA/B].
@@ -1045,40 +1157,6 @@ static inline uint32_t DUALADC_GetIntervalErrCommandA(DADC_Type *base)
 static inline uint32_t DUALADC_GetIntervalErrCommandB(DADC_Type *base)
 {
     return (base->STAT1 & DADC_STAT1_INTVTIMEERR_CMDB_MASK) >> DADC_STAT1_INTVTIMEERR_CMDB_SHIFT;
-}
-
-/*!
- * @brief Get the compare status flags for all command buffers.
- * @param base DualADC peripheral base address.
- * @return Bitmask of compare results; use @ref dadc_cmd_mask_t to check individual commands.
- */
-static inline uint32_t DUALADC_GetCompareStatusFlags(DADC_Type *base)
-{
-    return base->CMP_STAT;
-}
-
-/*!
- * @brief Clear compare status flags for one or more command buffers.
- * @param base DualADC peripheral base address.
- * @param mask OR combination of @ref dadc_cmd_mask_t values to clear.
- */
-static inline void DUALADC_ClearCompareStatusFlags(DADC_Type *base, uint32_t mask)
-{
-    base->CMP_STAT = mask;
-}
-
-/*!
- * @brief Get the result-ready flags for all command buffers.
- *
- * Each bit indicates a conversion result is available in the corresponding RSLT register.
- * Flags clear automatically when the associated RSLT register is read by @ref DUALADC_GetConversionResult.
- *
- * @param base DualADC peripheral base address.
- * @return Bitmask of ready results; use @ref dadc_cmd_mask_t to check individual commands.
- */
-static inline uint32_t DUALADC_GetResultReadyFlags(DADC_Type *base)
-{
-    return base->RSLTRDY_STAT;
 }
 
 /*! @} */

@@ -1,5 +1,9 @@
 # ASRC_SDMA
 
+## [2.0.5]
+- Bug Fixes
+    - Fixed Coverity NULL_FIELD findings by adding null SDMA handle guards in ASRC_TransferSubmitOutM2MSDMA, ASRC_TransferOutSDMA and ASRC_TransferInSDMA.
+
 ## [2.0.4]
 - Bug Fixes
     - Fixed violations of MISRA C-2012 rule 10.1, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8.

@@ -1,5 +1,15 @@
 # SAI_EDMA
 
+## [2.7.6]
+
+- Bug Fixes
+  - Fixed SAI_TransferRxSetConfigEDMA using the TX FIFO-combine enum kSAI_FifoCombineModeEnabledOnRead (value 1) for the RX path. On RCR4 that value selects write-combine instead of the read-combine required by multi-channel RX DMA, and the assert validated the same wrong value and silently passed. The RX assert and documentation now use kSAI_RXFifoCombineModeEnabledOnRead (value 2). Note: multi-channel RX code that previously passed the old value will now assert in debug builds, surfacing the misconfiguration instead of hiding it.
+
+## [2.7.5]
+
+- Bug Fixes
+  - Fixed Coverity DEADCODE finding by removing the unreachable offset overflow branch in SAI_TransferSendEDMA and SAI_TransferReceiveEDMA.
+
 ## [2.7.4]
 
 - Bug Fixes

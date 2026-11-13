@@ -1,5 +1,10 @@
 # FLEXCAN_EDMA
 
+## [2.12.2]
+
+- Bug Fixes
+  - Fixed violations of the NO_EFFECT and NULL_FIELD.
+
 ## [2.12.1]
 
 - Bug Fixes

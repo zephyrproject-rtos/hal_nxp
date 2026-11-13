@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SPI driver version. */
-#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 5))
+#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 6))
 /*! @} */
 
 #ifndef SPI_DUMMYDATA
@@ -343,7 +343,7 @@ static inline void SPI_Enable(SPI_Type *base, bool enable)
     }
     else
     {
-        base->C1 &= (uint8_t)~SPI_C1_SPE_MASK;
+        base->C1 &= (uint8_t)(~SPI_C1_SPE_MASK & 0xFFU);
     }
 }
 
@@ -482,7 +482,7 @@ uint32_t SPI_GetInstance(SPI_Type *base);
 static inline void SPI_SetPinMode(SPI_Type *base, spi_pin_mode_t pinMode)
 {
     /* Clear SPC0 and BIDIROE bit. */
-    base->C2 &= (uint8_t) ~(SPI_C2_BIDIROE_MASK | SPI_C2_SPC0_MASK);
+    base->C2 &= (uint8_t)((~(SPI_C2_BIDIROE_MASK | SPI_C2_SPC0_MASK)) & 0xFFU);
     /* Set pin mode for transfer. */
     base->C2 |= SPI_C2_BIDIROE((uint8_t)pinMode >> 1U) | SPI_C2_SPC0((uint8_t)pinMode & 1U);
 }

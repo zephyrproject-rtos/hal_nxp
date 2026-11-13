@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 3.0, 2025-11-18
-**     Build:               b260717
+**     Build:               b260911
 **
 **     Abstract:
 **         Chip specific module features.
@@ -96,7 +96,9 @@
     /* @brief OSTIMER availability on the SoC. */
     #define FSL_FEATURE_SOC_OSTIMER_COUNT (1)
     /* @brief PINT availability on the SoC. */
-    #define FSL_FEATURE_SOC_PINT_COUNT (2)
+    #define FSL_FEATURE_SOC_PINT_COUNT (1)
+    /* @brief SECPINT availability on the SoC. */
+    #define FSL_FEATURE_SOC_SECPINT_COUNT (1)
     /* @brief PKC availability on the SoC. */
     #define FSL_FEATURE_SOC_PKC_COUNT (1)
     /* @brief PMC availability on the SoC. */
@@ -191,7 +193,9 @@
     /* @brief OSTIMER availability on the SoC. */
     #define FSL_FEATURE_SOC_OSTIMER_COUNT (1)
     /* @brief PINT availability on the SoC. */
-    #define FSL_FEATURE_SOC_PINT_COUNT (2)
+    #define FSL_FEATURE_SOC_PINT_COUNT (1)
+    /* @brief SECPINT availability on the SoC. */
+    #define FSL_FEATURE_SOC_SECPINT_COUNT (1)
     /* @brief PKC availability on the SoC. */
     #define FSL_FEATURE_SOC_PKC_COUNT (1)
     /* @brief PMC availability on the SoC. */
@@ -714,9 +718,9 @@
 /* PINT module features */
 
 /* @brief Number of connected outputs */
-#define FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS (8)
-/* @brief Number of connected outputs */
-#define FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS (2)
+#define FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTSn(x) \
+    (((x) == PINT) ? (8) : \
+    (((x) == SECPINT) ? (2) : (-1)))
 
 /* PMC module features */
 

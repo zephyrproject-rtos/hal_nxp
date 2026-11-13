@@ -843,7 +843,6 @@ void FLEXIO_I2S_TransferTxHandleIRQ(void *i2sBase, void *i2sHandle)
 
     flexio_i2s_handle_t *handle = (flexio_i2s_handle_t *)i2sHandle;
     FLEXIO_I2S_Type *base       = (FLEXIO_I2S_Type *)i2sBase;
-    uint8_t *buffer             = handle->queue[handle->queueDriver].data;
     uint8_t dataSize            = handle->bitWidth / 8U;
 
     /* Handle error */
@@ -855,7 +854,9 @@ void FLEXIO_I2S_TransferTxHandleIRQ(void *i2sBase, void *i2sHandle)
     if (((FLEXIO_I2S_GetStatusFlags(base) & (uint32_t)kFLEXIO_I2S_TxDataRegEmptyFlag) != 0UL) &&
         (handle->queue[handle->queueDriver].data != NULL))
     {
+        uint8_t *buffer = handle->queue[handle->queueDriver].data;
         FLEXIO_I2S_WriteNonBlocking(base, handle->bitWidth, buffer, dataSize);
+
 
         /* Update internal counter */
         if (handle->queue[handle->queueDriver].dataSize >= dataSize)
@@ -903,14 +904,15 @@ void FLEXIO_I2S_TransferRxHandleIRQ(void *i2sBase, void *i2sHandle)
 
     flexio_i2s_handle_t *handle = (flexio_i2s_handle_t *)i2sHandle;
     FLEXIO_I2S_Type *base       = (FLEXIO_I2S_Type *)i2sBase;
-    uint8_t *buffer             = handle->queue[handle->queueDriver].data;
     uint8_t dataSize            = handle->bitWidth / 8U;
 
     /* Handle transfer */
     if (((FLEXIO_I2S_GetStatusFlags(base) & (uint32_t)kFLEXIO_I2S_RxDataRegFullFlag) != 0UL) &&
         (handle->queue[handle->queueDriver].data != NULL))
     {
+        uint8_t *buffer = handle->queue[handle->queueDriver].data;
         FLEXIO_I2S_ReadNonBlocking(base, handle->bitWidth, buffer, dataSize);
+
 
         /* Update internal state */
         if (handle->queue[handle->queueDriver].dataSize >= dataSize)

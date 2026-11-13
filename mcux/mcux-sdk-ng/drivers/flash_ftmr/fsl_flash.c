@@ -502,12 +502,15 @@ status_t FLASH_SetCallback(flash_config_t *config, flash_callback_t callback)
 #if defined(FLASH_DRIVER_IS_FLASH_RESIDENT) && FLASH_DRIVER_IS_FLASH_RESIDENT
 status_t FLASH_PrepareExecuteInRamFunctions(flash_config_t *config)
 {
-    flash_execute_in_ram_function_config_t *flashExecuteInRamFunctionInfo = &config->executeInRamFunction;
+    flash_execute_in_ram_function_config_t *flashExecuteInRamFunctionInfo;
 
     if ((config == NULL) || (config->flashExecuteInRamFunctionInfo == NULL))
     {
         return kStatus_FLASH_InvalidArgument;
     }
+
+    flashExecuteInRamFunctionInfo = &config->executeInRamFunction;
+
     /* copy flash run command to ram*/
     copy_flash_run_command(config);
 

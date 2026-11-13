@@ -1645,22 +1645,17 @@ status_t PWM_SetPhaseDelay(PWM_Type *base, pwm_channels_t pwmChannel, pwm_submod
     {
         /*
          * ERR051989: When the value of the phase delay register SMxPHASEDLY is reduced from a
-         * non-zero value to 0 and submodule x reload source is from submodule0, the submodule
-         * x may output an unexpected wide PWM pulse. The workaround is set SMxPHASEDLY=1,
-         * SMxINIT=SM0INIT-1, SMxVALy=SM0VALy-1 (x=1,2,3, y=0,1,2,3,4,5).
+         * non-zero value to 0x0000 while SM1, SM2, or SM3 is configured for master reload
+         * operation, the submodule may output an unexpected wide PWM pulse. The workaround is
+         * to use 0x0001 as the minimum programmed value for SMxPHASEDLY. This results in a
+         * residual phase offset of one PWM clock cycle that must be considered in the
+         * application design.
          */
 #if defined(FSL_FEATURE_PWM_HAS_ERRATA_51989) && FSL_FEATURE_PWM_HAS_ERRATA_51989
         if (delayCycles == 0U &&
             ((base->SM[subModule].CTRL2 & PWM_CTRL2_RELOAD_SEL_MASK) >> PWM_CTRL2_RELOAD_SEL_SHIFT) == 1U)
         {
             base->SM[subModule].PHASEDLY = 1U;
-            base->SM[subModule].INIT     = (uint16_t)((base->SM[0].INIT - 1U) & 0xFFFFU);
-            base->SM[subModule].VAL0     = (uint16_t)((base->SM[0].VAL0 - 1U) & 0xFFFFU);
-            base->SM[subModule].VAL1     = (uint16_t)((base->SM[0].VAL1 - 1U) & 0xFFFFU);
-            base->SM[subModule].VAL2     = (uint16_t)((base->SM[0].VAL2 - 1U) & 0xFFFFU);
-            base->SM[subModule].VAL3     = (uint16_t)((base->SM[0].VAL3 - 1U) & 0xFFFFU);
-            base->SM[subModule].VAL4     = (uint16_t)((base->SM[0].VAL4 - 1U) & 0xFFFFU);
-            base->SM[subModule].VAL5     = (uint16_t)((base->SM[0].VAL5 - 1U) & 0xFFFFU);
         }
         else
         {

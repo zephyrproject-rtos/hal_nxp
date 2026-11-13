@@ -24,14 +24,14 @@
  * Prototypes
  ******************************************************************************/
 /*!
- * @brief Calculate the gain conversion result from the gain calibration value.
+ * @brief Calculate the gain calculation result from the gain calibration value.
  *
  * Gain_Adj = 131072 / (131072 - gainCalValue), encoded into the 17-bit GCR register field as Q1.16.
  *
- * @param gainCalValue Signed gain calibration value within [-32768, 32767] read from the GCC register.
+ * @param gainCalValue Raw gain calibration value read from the GCC register.
  * @return Gain adjustment calculation result to be written into the GCR register.
  */
-static uint32_t DUALADC_CalculateGainResult(int16_t gainCalValue);
+static uint32_t DUALADC_CalculateGainResult(uint32_t gainCalValue);
 
 /*******************************************************************************
  * Variables
@@ -118,8 +118,10 @@ void DUALADC_GetDefaultConfig(dadc_config_t *config)
     config->enableHardwareTrigger1  = false;
     config->hardwareTrigger1Delay   = 0U;
 
-    /* DE - DMA trigger source */
+    /* DE - DMA enable and trigger source */
+    config->enableDmaA              = false;
     config->dmaSourceA              = kDADC_DmaSrcEndOfScan;
+    config->enableDmaB              = false;
     config->dmaSourceB              = kDADC_DmaSrcEndOfScan;
 }
 
@@ -216,13 +218,13 @@ status_t DUALADC_Init(DADC_Type *base, const dadc_config_t *config)
     reg |= config->enableHardwareTrigger1 ? DADC_TCTRL_HTEN1_MASK : 0U;
     base->TCTRL = reg;
 
-    /*
-     * Configure DMA trigger sources (DE[DMASRCA/B]). DMAENAA/B are not set here;
-     * call DUALADC_EnableDmaA/B at runtime when DMA transfers should begin.
-     */
+    /* Configure DE: DMA enable and trigger source for ADCA and ADCB. */
     reg = base->DE;
-    reg &= MCUX_MASK_INVERT_32(DADC_DE_DMASRCA_MASK | DADC_DE_DMASRCB_MASK);
+    reg &= MCUX_MASK_INVERT_32(DADC_DE_DMAENAA_MASK | DADC_DE_DMASRCA_MASK |
+                               DADC_DE_DMAENAB_MASK | DADC_DE_DMASRCB_MASK);
     reg |= DADC_DE_DMASRCA(config->dmaSourceA) | DADC_DE_DMASRCB(config->dmaSourceB);
+    reg |= config->enableDmaA ? DADC_DE_DMAENAA_MASK : 0U;
+    reg |= config->enableDmaB ? DADC_DE_DMAENAB_MASK : 0U;
     base->DE = reg;
 
     return kStatus_Success;
@@ -374,19 +376,22 @@ void DUALADC_ConfigAverageTimer(DADC_Type *base, const dadc_avgt_config_t *confi
 }
 
 /*!
- * @brief Calculate the gain conversion result from the gain calibration value.
+ * @brief Calculate the gain calculation result from the gain calibration value.
  *
  * Gain_Adj = 131072 / (131072 - gainCalValue), encoded into the 17-bit GCR register field as Q1.16.
  *
- * @param gainCalValue Signed gain calibration value within [-32768, 32767] read from the GCC register.
+ * @param gainCalValue Raw gain calibration value read from the GCC register.
  * @return Gain adjustment calculation result to be written into the GCR register.
  */
-static uint32_t DUALADC_CalculateGainResult(int16_t gainCalValue)
+static uint32_t DUALADC_CalculateGainResult(uint32_t gainCalValue)
 {
     uint32_t gainConvResult;
     int32_t denominator;
+    int32_t signedGainCalValue;
 
-    denominator = 131072 - gainCalValue;
+    /* Sign-extend bit 15 to fill bits [31:16]. */
+    signedGainCalValue = (int32_t)((gainCalValue ^ 0x8000UL) - 0x8000UL);
+    denominator = 131072 - signedGainCalValue;
 
     /*
      * Fixed point formula equivalent to 131072.0 / (131072.0 - gainCalValue).
@@ -411,8 +416,8 @@ static uint32_t DUALADC_CalculateGainResult(int16_t gainCalValue)
  */
 status_t DUALADC_DoCalibration(DADC_Type *base)
 {
-    int16_t GCCa;
-    int16_t GCCb;
+    uint32_t GCCa;
+    uint32_t GCCb;
     uint32_t GCRa;
     uint32_t GCRb;
 #if DUALADC_CALIBRATION_TIMEOUT
@@ -441,6 +446,12 @@ status_t DUALADC_DoCalibration(DADC_Type *base)
 #endif
     }
 
+    /* Wait 2 ADC clock cycles after STAT0[CAL_RDY] is set. */
+    for (uint32_t i = 0; i < DUALADC_CAL_RDY_DELAY; i++)
+    {
+        __NOP();
+    }
+
     /* Step 2: High-speed calibration - only required when CFG1[HS] is set. */
     if ((base->CFG1 & DADC_CFG1_HS_MASK) != 0U)
     {
@@ -457,6 +468,12 @@ status_t DUALADC_DoCalibration(DADC_Type *base)
             }
 #endif
         }
+    }
+
+    /* Wait 2 ADC clock cycles after STAT0[CAL_RDY] is set. */
+    for (uint32_t i = 0; i < DUALADC_CAL_RDY_DELAY; i++)
+    {
+        __NOP();
     }
 
     /* Step 3: Gain and linearity calibration. */
@@ -477,9 +494,9 @@ status_t DUALADC_DoCalibration(DADC_Type *base)
 #endif
     }
 
-    /* Read 16-bit signed GAIN_CAL; casting to int16_t performs sign extension. */
-    GCCa = (int16_t)((base->GCC[0] & DADC_GCC_GAIN_CAL_MASK) & 0xFFFF);
-    GCCb = (int16_t)((base->GCC[1] & DADC_GCC_GAIN_CAL_MASK) & 0xFFFF);
+    /* Read raw GAIN_CAL from the GCC register. */
+    GCCa = (base->GCC[0] & DADC_GCC_GAIN_CAL_MASK) >> DADC_GCC_GAIN_CAL_SHIFT;
+    GCCb = (base->GCC[1] & DADC_GCC_GAIN_CAL_MASK) >> DADC_GCC_GAIN_CAL_SHIFT;
 
     GCRa = DUALADC_CalculateGainResult(GCCa);
     GCRb = DUALADC_CalculateGainResult(GCCb);
@@ -500,6 +517,12 @@ status_t DUALADC_DoCalibration(DADC_Type *base)
             return kStatus_Timeout;
         }
 #endif
+    }
+
+    /* Wait 2 ADC clock cycles after STAT0[CAL_RDY] is set. */
+    for (uint32_t i = 0; i < DUALADC_CAL_RDY_DELAY; i++)
+    {
+        __NOP();
     }
 
     /* Restore ADC enable state after calibration routines. */

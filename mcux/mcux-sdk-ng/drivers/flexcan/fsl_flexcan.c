@@ -399,8 +399,9 @@ static void flexcan_memset(void *s, uint32_t c, size_t n)
 
     m = n / sizeof(*ptr);
 
-    while ((m--) != (size_t)0)
+    while (m != (size_t)0)
     {
+        m--;
         *ptr++ = c;
     }
 }
@@ -551,10 +552,7 @@ status_t FLEXCAN_EnterFreezeMode(CAN_Type *base)
     uint32_t u32TimeoutCount = 0U;
     uint32_t u32TempMCR      = 0U;
     uint32_t u32TempIMASK1   = 0U;
-#if defined(CAN_IMASK2_BUF63TO32M_MASK)
-    uint32_t u32TempIMASK2 = 0U;
-    int maxMB = FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(base);
-#endif
+    uint32_t u32TempIMASK2   = 0U;
 
     /* Step1: set FRZ enable in MCR. */
     base->MCR |= CAN_MCR_FRZ_MASK;
@@ -593,12 +591,8 @@ status_t FLEXCAN_EnterFreezeMode(CAN_Type *base)
             /* backup MCR and IMASK register. */
             u32TempMCR    = base->MCR;
             u32TempIMASK1 = base->IMASK1;
-#if defined(CAN_IMASK2_BUF63TO32M_MASK)
-            if (maxMB > 32)
-            {
-                u32TempIMASK2 = base->IMASK2;
-            }
-#endif
+            u32TempIMASK2 = base->IMASK2;
+
             /* Set the Soft Reset bit ((SOFTRST) in the MCR.*/
             base->MCR |= CAN_MCR_SOFTRST_MASK;
 
@@ -621,26 +615,16 @@ status_t FLEXCAN_EnterFreezeMode(CAN_Type *base)
 
             /* Reconfig IMASK. */
             base->IMASK1 = u32TempIMASK1;
-#if defined(CAN_IMASK2_BUF63TO32M_MASK)
-            if (maxMB > 32)
-            {
-                base->IMASK2 = u32TempIMASK2;
-            }
-#endif
+            base->IMASK2 = u32TempIMASK2;
         }
     }
     else
     {
         /* Bus Off state */
-        /* backup MCR and IMASK register. Errata document not descript it, but we need backup for step 8A and 9A. */
+        /* backup MCR and IMASK register. Errata document not describe it, but we need backup for step 8A and 9A. */
         u32TempMCR    = base->MCR;
         u32TempIMASK1 = base->IMASK1;
-#if defined(CAN_IMASK2_BUF63TO32M_MASK)
-        if (maxMB > 32)
-        {
-            u32TempIMASK2 = base->IMASK2;
-        }
-#endif
+        u32TempIMASK2 = base->IMASK2;
 
         /* Step5A: Set the Soft Reset bit ((SOFTRST) in the MCR.*/
         base->MCR |= CAN_MCR_SOFTRST_MASK;
@@ -665,17 +649,20 @@ status_t FLEXCAN_EnterFreezeMode(CAN_Type *base)
             __NOP();
         }
 
+        /*
+         * Ensure HALT=1 in the saved MCR before restoring it. After the soft reset, the
+         * hardware automatically enters Freeze mode with FRZ=1 HALT=1. The value was saved
+         * at step 2A when HALT was still 0; writing it back would exit Freeze mode and
+         * make Freeze-mode-only register accesses (e.g. RXIMR) trigger a bus fault.
+         */
+        u32TempMCR |= CAN_MCR_HALT_MASK;
+
         /* Step8A: reconfig MCR. */
         base->MCR = u32TempMCR;
 
         /* Step9A: reconfig IMASK. */
         base->IMASK1 = u32TempIMASK1;
-#if defined(CAN_IMASK2_BUF63TO32M_MASK)
-        if (maxMB > 32)
-        {
-            base->IMASK2 = u32TempIMASK2;
-        }
-#endif
+        base->IMASK2 = u32TempIMASK2;
     }
     return kStatus_Success;
 }
@@ -710,7 +697,7 @@ status_t FLEXCAN_EnterFreezeMode(CAN_Type *base)
     /* Step4: check whether the timeout reached. if no skip step5 to step8. */
     if (0U == u32TimeoutCount)
     {
-        /* backup MCR and IMASK register. Errata document not descript it, but we need backup for step 8A and 9A. */
+        /* backup MCR and IMASK register. Errata document not describe it, but we need backup for step 8A and 9A. */
         u32TempMCR    = base->MCR;
         u32TempIMASK1 = base->IMASK1;
 #if defined(CAN_IMASK2_BUF63TO32M_MASK)
@@ -5385,11 +5372,14 @@ void FLEXCAN_TransferHandleIRQ(CAN_Type *base, flexcan_handle_t *handle)
             }
 #endif
         }
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT) || \
+    (defined(FSL_FEATURE_FLEXCAN_HAS_PN_MODE) && FSL_FEATURE_FLEXCAN_HAS_PN_MODE)
         else if (0U != (result & FLEXCAN_WAKE_UP_FLAG))
         {
             status = kStatus_FLEXCAN_WakeUp;
             FLEXCAN_ClearStatusFlags(base, FLEXCAN_WAKE_UP_FLAG);
         }
+#endif
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
         else if (0U != (FLEXCAN_EFIFO_STATUS_UNMASK(result & FLEXCAN_ENHANCED_RX_FIFO_INT_FLAG) & base->ERFIER))
         {

@@ -40,7 +40,7 @@ Origin:
 
    NXP MCUXpresso SDK Core
    https://github.com/nxp-mcuxpresso/mcuxsdk-core
-   SHA: fd4dc182034f1bbfc6ca465312aa8eabcab92625
+   SHA: b2cee0c457e7e59bd85379fe835076f864260b93
    Source folder: cmake/extension
    Destination folder: mcux-sdk-ng/cmake/extension
 
@@ -58,37 +58,37 @@ Origin:
 
    NXP MCUXpresso SDK Device i.MX
    https://github.com/nxp-mcuxpresso/mcux-devices-imx
-   SHA: 8c5a76ed3c5e90552fd799bc2583edb5d1223efa
+   SHA: c80524e51b7e87baf36fe9028a8994a9947e98d7
    Source folder: Root folder of the NXP MCUXpresso SDK Device i.MX Repository
    Destination folder: mcux-sdk-ng/devices/i.MX
 
    NXP MCUXpresso SDK Device RT
    https://github.com/nxp-mcuxpresso/mcux-devices-rt
-   SHA: f7b174ef993614aaa3a23b3ca77a996c2211994c
+   SHA: b2bd8af1fd02c16cace963ca982d065190655dab
    Source folder: Root folder of the NXP MCUXpresso SDK Device RT Repository
    Destination folder: mcux-sdk-ng/devices/RT
 
    NXP MCUXpresso SDK Device Kinetis
    https://github.com/nxp-mcuxpresso/mcux-devices-kinetis
-   SHA: 3a0a8dfdd90669dea9998bad0657cf5787073006
+   SHA: 056f755c65fa413eea0622e54f8f17c4aedbabcc
    Source folder: Root folder of the NXP MCUXpresso SDK Device Kinetis Repository
    Destination folder: mcux-sdk-ng/devices/Kinetis
 
    NXP MCUXpresso SDK Device LPC
    https://github.com/nxp-mcuxpresso/mcux-devices-lpc
-   SHA: 3219d258961967797d435d874d1ca01b474aa390
+   SHA: 977ea4da4f39bdc43faf11d30448733724f79166
    Source folder: Root folder of the NXP MCUXpresso SDK Device LPC Repository
    Destination folder: mcux-sdk-ng/devices/LPC
 
    NXP MCUXpresso SDK Device MCX
    https://github.com/nxp-mcuxpresso/mcux-devices-mcx
-   SHA: 5265e58df14d31bcb3bc88c28a305ce9e230b090
+   SHA: 0cca06be224bfd03d1a2ff71139db6ffed12d0d5
    Source folder: Root folder of the NXP MCUXpresso SDK Device MCX Repository
    Destination folder: mcux-sdk-ng/devices/MCX
 
    NXP MCUXpresso SDK Device Wireless
    https://github.com/nxp-mcuxpresso/mcux-devices-wireless
-   SHA: 0d2c97770475558c72f5b6947f468bf97282df79
+   SHA: 0ee8242572a7f83afb254a92c65d0ee1a61a98c6
    Source folder: Root folder of the NXP MCUXpresso SDK Device Wireless Repository
    Destination folder: mcux-sdk-ng/devices/Wireless
 
@@ -151,6 +151,12 @@ Patch List:
      - devices\K32W*
      - devices\MIMX9301 through MIMX9351
      - devices\MIMX9596
+     - mcux-sdk-ng\drivers\dsc_*, jn_*, qn_*: unsupported cores or missing device headers
+     - mcux-sdk-ng\devices\**\*.S: Zephyr supplies device assembly
+     - mcux-sdk-ng\devices\Wireless\**\internal: duplicate internal device headers
+     - mcux-sdk-ng\devices\i.MX\i.MX943, i.MX95, i.MX952: unused TRDC and NOC_GICD headers,
+       except driver and feature headers; references outside drivers/features/periph are pruned, preserving IRQn
+     - mcux-sdk-ng\devices\i.MX\i.MX91\periph\PERI_GICD.h and PERI_GICDA.h
 
   - Add usb_device_mcux_drv_port.h file for using MCUX SDK USB device controller driver easily in Zephyr.
       - usb_device_mcux_drv_port.h contains the simplified structs, enums and APIs that MCUX SDK USB device controller drivers need.
@@ -207,15 +213,6 @@ Patch List:
       - Update usb_host_ehci.c and usb_host_ip3516hs.c to not depend on usb_host_device_instance_t struct.
   - mcux-sdk: devices: fix MKV56F24.h wrong macro
       - The MKV56F24 device doesn't contain CAN2 peripheral. Remove it from the device header.
-  - mcux-sdk-ng: devices: RT1150/RT1160/RT1170: fsl_clock: read the AUDIO/VIDEO PLL numerator as signed
-      - CLOCK_GetAvPllFreq() converted the numerator (MFN) as unsigned, but it is a signed 30-bit field
-        (RM, NUMERATOR[NUM]; AN14420), so a numerator with bit 29 set gave a wrong frequency.
-      - This patch is in hal_nxp but is not in mcux-devices-rt (main, 2026-10-09).
-
-  - hal_nxp: undefine PAGESIZE macro before naming fields.
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/6ef86202a220da2a02c1ba9a6e148d4d896aa26f
-   - This patch is in hal_nxp but is not in 26.06.00 release.
-
   - hal/nxp: s32K344: flash_c40: add C40 features, IP aliases
    - Commit: https://github.com/zephyrproject-rtos/hal_nxp/pull/618/commits/64395f565184964bbf21e247df6ca88dc4d7cf83
    - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
@@ -223,6 +220,22 @@ Patch List:
      Also since the additions about C40 Flash geometry in S32K344_features.h and defining local Flash Aliases in
      S32K344_glue_mcux.h, are for S32K344 SoC so they are not present in the mcusdk-core repo.
 
-   - MCUX SDK 26.09.00 RC1 sync special patches:
+   - MCUX SDK 26.12.00 pvw1 sync special patches:
     - hal_nxp: undefine PAGESIZE macro before naming fields
-      - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/2199f173d1b3cd31f3d97677479270314154fd55
+      - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/63e23b396f20084cef12ab89e28a2ea4f6bad4ef
+    - mcux: sdk-ng: lpc546xx: fix FlexComm clock rate for audio PLL source
+      - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/9b068677152e4bb27f567875e54288df5583168f
+    - mcux: sdk-ng: lpc546xx: fix DMIC clock rate
+      - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/e7f2005cb0d5bd37b81cac363756faedd2d385ca
+    - mcux: sdk-ng: lpc546xx: add audio PLL to async APB clock rate
+      - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/587276a3b0d42ffcbfbaefdaf756e9c3cdeab233
+    - mcux: sdk-ng: RT11xx: fsl_clock: read the PLL numerator as signed
+      - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/dd1dc48efcc6e34fb6e1ee52d150ffda8974ca1e
+    - mcux: sdk-ng: pint: support legacy device headers
+      - Guard clock metadata when SDK driver clock control is disabled.
+      - Retain kCLOCK_Pint and the fixed connected-output count for legacy device headers.
+      - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/1a0bad66a30137aaf1fb7cd1a176a070e041fee1
+    - mcux: sdk-ng: pint: keep instance lookup within bounds
+      - Return matched instances directly; assert and use the documented zero fallback on a miss.
+      - Avoid the optimized legacy-callback array-bounds diagnostic without changing IRQ offsets.
+      - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/020eecad5f0f176e432358a3f6cb5ec397e78fbe

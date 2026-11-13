@@ -339,13 +339,13 @@ void SAI_TransferTxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
  * note SAI eDMA supports data transfer in a multiple SAI channels if the FIFO Combine feature is supported.
  * To activate the multi-channel transfer enable SAI channels by filling the channelMask
  * of sai_transceiver_t with the corresponding values of _sai_channel_mask enum, enable the FIFO Combine
- * mode by assigning kSAI_FifoCombineModeEnabledOnRead to the fifoCombine member of sai_fifo_combine_t
+ * mode by assigning kSAI_RXFifoCombineModeEnabledOnRead to the fifoCombine member of sai_fifo_combine_t
  * which is a member of sai_transceiver_t.
  * This is an example of multi-channel data transfer configuration step.
  *  code
  *   sai_transceiver_t config;
  *   SAI_GetClassicI2SConfig(&config, kSAI_WordWidth16bits, kSAI_Stereo, kSAI_Channel0Mask|kSAI_Channel1Mask);
- *   config.fifo.fifoCombine = kSAI_FifoCombineModeEnabledOnRead;
+ *   config.fifo.fifoCombine = kSAI_RXFifoCombineModeEnabledOnRead;
  *   SAI_TransferRxSetConfigEDMA(I2S0, &edmaHandle, &config);
  *  endcode
  * param base SAI base pointer.
@@ -363,7 +363,7 @@ void SAI_TransferRxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     /* Allow multi-channel transfer only if FIFO Combine mode is enabled */
     assert(
         (saiConfig->channelNums <= 1U) ||
-        ((saiConfig->channelNums > 1U) && ((saiConfig->fifo.fifoCombine == kSAI_FifoCombineModeEnabledOnRead) ||
+        ((saiConfig->channelNums > 1U) && ((saiConfig->fifo.fifoCombine == kSAI_RXFifoCombineModeEnabledOnRead) ||
                                            (saiConfig->fifo.fifoCombine == kSAI_FifoCombineModeEnabledOnReadWrite))));
 #endif
 
@@ -433,15 +433,13 @@ status_t SAI_TransferSendEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_tra
     edma_minor_offset_config_t minorOffset;
     minorOffset.enableSrcMinorOffset = true;
     minorOffset.enableDestMinorOffset = false;
-    /* Multiplication overflow - fallback to safe value */
-    if (srcOffset > (UINT32_MAX / 2U)) 
+    /* Compare in division form so no multiplication is performed before srcOffset is bounded.
+     * This avoids an unsigned wraparound in 2U * srcOffset (CERT INT30-C) while keeping the
+     * single reachable branch (no dead code). In the else branch srcOffset <= (0xFFFFFU + 1U) / 2U,
+     * so 2U * srcOffset can never overflow. */
+    if (srcOffset > ((0xFFFFFU + 1U) / 2U))
     {
-        minorOffset.minorOffset = handle->bytesPerFrame; 
-    }
-    /* Subtraction overflow - fallback to safe value */
-    else if ((2U * srcOffset) > (0xFFFFFU + 1U)) 
-    {
-        minorOffset.minorOffset = handle->bytesPerFrame; 
+        minorOffset.minorOffset = handle->bytesPerFrame;
     }
     else
     {
@@ -588,15 +586,13 @@ status_t SAI_TransferReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     edma_minor_offset_config_t minorOffset;
     minorOffset.enableSrcMinorOffset = false;
     minorOffset.enableDestMinorOffset = true;
-    /* Multiplication overflow - fallback to safe value */
-    if (destOffset > (UINT32_MAX / 2U)) 
+    /* Compare in division form so no multiplication is performed before destOffset is bounded.
+     * This avoids an unsigned wraparound in 2U * destOffset (CERT INT30-C) while keeping the
+     * single reachable branch (no dead code). In the else branch destOffset <= (0xFFFFFU + 1U) / 2U,
+     * so 2U * destOffset can never overflow. */
+    if (destOffset > ((0xFFFFFU + 1U) / 2U))
     {
-        minorOffset.minorOffset = handle->bytesPerFrame; 
-    }
-    /* Subtraction overflow - fallback to safe value */
-    else if ((2U * destOffset) > (0xFFFFFU + 1U)) 
-    {
-        minorOffset.minorOffset = handle->bytesPerFrame; 
+        minorOffset.minorOffset = handle->bytesPerFrame;
     }
     else
     {

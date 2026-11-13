@@ -1815,7 +1815,11 @@ void CLOCK_DisableUsbhs0PhyPllClock(void)
     USBPHY1->PLL_SIC_CLR = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);
     USBPHY1->CTRL |= USBPHY_CTRL_CLKGATE_MASK; /* Set to 1U to gate clocks */
 }
-#if !(defined(MIMXRT1186_cm33_SERIES) || defined(MIMXRT1186_cm7_SERIES) || defined(MIMXRT1185_cm33_SERIES) || defined(MIMXRT1185_cm7_SERIES) || defined(MIMXRT118C_cm33_SERIES) || defined(MIMXRT118C_cm7_SERIES))
+#if !(defined(MIMXRT1186_cm33_SERIES) || defined(MIMXRT1186_cm7_SERIES) || defined(MIMXRT1185_cm33_SERIES) || \
+      defined(MIMXRT1185_cm7_SERIES) || defined(MIMXRT118C_cm33_SERIES) || defined(MIMXRT118C_cm7_SERIES) || \
+      defined(MIMXRT1183_cm33_SERIES) || defined(MIMXRT1183_cm7_SERIES) || defined(MIMXRT1184_cm33_SERIES) || \
+      defined(MIMXRT1184_cm7_SERIES) || defined(MIMXRT118D_cm33_SERIES) || defined(MIMXRT118D_cm7_SERIES) || \
+      defined(MIMXRT118E_cm33_SERIES) || defined(MIMXRT118E_cm7_SERIES))
 bool CLOCK_EnableUsbhs1Clock(clock_usb_src_t src, uint32_t freq)
 {
     return true;

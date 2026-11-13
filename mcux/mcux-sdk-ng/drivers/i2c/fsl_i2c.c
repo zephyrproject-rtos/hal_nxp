@@ -96,12 +96,95 @@ static status_t I2C_CheckAndClearError(I2C_Type *base, uint32_t status);
 static status_t I2C_MasterTransferRunStateMachine(I2C_Type *base, i2c_master_handle_t *handle, bool *isDone);
 
 /*!
+ * @brief Check address acknowledge and set the next transfer state.
+ *
+ * @param handle pointer to i2c_master_handle_t structure which stores the transfer state.
+ * @param statusFlags current i2c hardware status flags.
+ * @retval kStatus_Success No error found.
+ * @retval kStatus_I2C_Addr_Nak Received address NAK error.
+ */
+static status_t I2C_MasterHandleCheckAddressState(i2c_master_handle_t *handle, uint32_t statusFlags);
+
+/*!
+ * @brief Transmit subaddress bytes or the first data byte in the send-command state.
+ *
+ * @param base I2C peripheral base address.
+ * @param handle pointer to i2c_master_handle_t structure which stores the transfer state.
+ * @param isDone output flag set to true when the transfer is complete.
+ * @retval kStatus_Success No error found.
+ * @retval kStatus_I2C_ArbitrationLost Transfer error, arbitration lost.
+ * @retval kStatus_I2C_Nak Received NAK error.
+ */
+static status_t I2C_MasterHandleSendCommand(I2C_Type *base, i2c_master_handle_t *handle, bool *isDone);
+
+/*!
+ * @brief Read one received data byte and manage the NACK and stop condition.
+ *
+ * @param base I2C peripheral base address.
+ * @param handle pointer to i2c_master_handle_t structure which stores the transfer state.
+ * @param isDone output flag set to true when the last byte has been received.
+ * @retval kStatus_Success No error found.
+ * @retval kStatus_I2C_ArbitrationLost Transfer error, arbitration lost.
+ * @retval kStatus_I2C_Nak Received NAK error.
+ */
+static status_t I2C_MasterHandleReceiveData(I2C_Type *base, i2c_master_handle_t *handle, bool *isDone);
+
+/*!
  * @brief I2C common interrupt handler.
  *
  * @param base I2C peripheral base address.
  * @param handle pointer to i2c_master_handle_t structure which stores the transfer state
  */
 static void I2C_TransferCommonIRQHandler(I2C_Type *base, void *handle);
+
+/*!
+ * @brief Send subaddress bytes and, for a read transfer, issue a repeated start with the read address.
+ *
+ * @param base I2C peripheral base address.
+ * @param xfer pointer to i2c_master_transfer_t structure which holds the transfer parameters.
+ * @retval kStatus_Success No error found.
+ * @retval kStatus_I2C_ArbitrationLost Transfer error, arbitration lost.
+ * @retval kStatus_I2C_Nak Received NAK error.
+ * @retval kStatus_I2C_Timeout Transfer error, wait signal timeout.
+ */
+static status_t I2C_MasterSendSubaddress(I2C_Type *base, i2c_master_transfer_t *xfer);
+
+/*!
+ * @brief Invoke the slave transfer callback if the event is enabled in the event mask.
+ *
+ * Does nothing if the callback pointer is NULL or the event is not enabled.
+ *
+ * @param base I2C peripheral base address.
+ * @param handle Pointer to the slave transfer handle.
+ * @param xfer Pointer to the slave transfer descriptor.
+ */
+static inline void I2C_SlaveInvokeCallback(I2C_Type *base, i2c_slave_handle_t *handle, i2c_slave_transfer_t *xfer);
+
+/*!
+ * @brief Handle an address-match interrupt event.
+ *
+ * Sets the transfer direction, reads the dummy byte for a general-call address,
+ * invokes the slave callback, and returns whether a transmit should follow.
+ *
+ * @param base I2C peripheral base address.
+ * @param handle Pointer to the slave transfer handle.
+ * @param xfer Pointer to the slave transfer descriptor.
+ * @param status Current I2C status flags.
+ * @return true if a slave transmit should be started; false otherwise.
+ */
+static bool I2C_SlaveHandleAddressMatch(I2C_Type *base, i2c_slave_handle_t *handle, i2c_slave_transfer_t *xfer, uint16_t status);
+
+/*!
+ * @brief Handle a NAK received during slave transmit.
+ *
+ * Switches to receive mode, reads the dummy byte to release the bus,
+ * and signals transfer completion via the slave callback.
+ *
+ * @param base I2C peripheral base address.
+ * @param handle Pointer to the slave transfer handle.
+ * @param xfer Pointer to the slave transfer descriptor.
+ */
+static void I2C_SlaveHandleNak(I2C_Type *base, i2c_slave_handle_t *handle, i2c_slave_transfer_t *xfer);
 
 /*******************************************************************************
  * Variables
@@ -147,7 +230,7 @@ uint32_t I2C_GetInstance(I2C_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_i2cBases); instance++)
+    for (instance = 0U; instance < ARRAY_SIZE(s_i2cBases); instance++)
     {
         if (MSDK_REG_NONSECURE_ADDR(s_i2cBases[instance]) == MSDK_REG_NONSECURE_ADDR(base))
         {
@@ -163,12 +246,11 @@ uint32_t I2C_GetInstance(I2C_Type *base)
 static void I2C_SetHoldTime(I2C_Type *base, uint32_t sclStopHoldTime_ns, uint32_t sourceClock_Hz)
 {
     uint32_t multiplier;
-    uint32_t computedSclHoldTime;
+    uint64_t computedSclHoldTime;
     uint32_t absError;
     uint32_t bestError = UINT32_MAX;
-    uint32_t bestMult  = 0u;
-    uint32_t bestIcr   = 0u;
-    uint32_t u32flag   = 1u;
+    uint32_t bestMult  = 0U;
+    uint32_t bestIcr   = 0U;
     uint8_t mult;
     uint8_t i;
 
@@ -178,22 +260,23 @@ static void I2C_SetHoldTime(I2C_Type *base, uint32_t sclStopHoldTime_ns, uint32_
     /* SCL start hold time = bus period (s) * mul * SCL start hold value. */
     /* SCL stop hold time = bus period (s) * mul * SCL stop hold value. */
 
-    for (mult = 0u; mult <= 2u; ++mult)
+    for (mult = 0U; mult <= 2U; ++mult)
     {
-        if (bestError == 0u)
+        if (bestError == 0U)
         {
             break;
         }
 
-        multiplier = u32flag << mult;
+        multiplier = (uint32_t)1U << mult;
 
         /* Scan table to find best match. */
-        for (i = 0u; i < sizeof(s_i2cDividerTable) / sizeof(s_i2cDividerTable[0]); ++i)
+        for (i = 0U; i < sizeof(s_i2cDividerTable) / sizeof(s_i2cDividerTable[0]); ++i)
         {
             /* Assume SCL hold(stop) value = s_i2cDividerTable[i]/2. */
-            computedSclHoldTime = (uint32_t)((((uint64_t)multiplier * s_i2cDividerTable[i]) * 500000000U) / sourceClock_Hz);
-            absError = sclStopHoldTime_ns > computedSclHoldTime ? (sclStopHoldTime_ns - computedSclHoldTime) :
-                                                                  (computedSclHoldTime - sclStopHoldTime_ns);
+            assert(((uint64_t)multiplier * s_i2cDividerTable[i]) <= (UINT64_MAX / 500000000U));
+            computedSclHoldTime = ((((uint64_t)multiplier * s_i2cDividerTable[i]) * 500000000U) / sourceClock_Hz);
+            absError = sclStopHoldTime_ns > computedSclHoldTime ? (sclStopHoldTime_ns - (uint32_t)computedSclHoldTime) :
+                                                                  (uint32_t)(computedSclHoldTime - (uint64_t)sclStopHoldTime_ns);
 
             if (absError < bestError)
             {
@@ -202,7 +285,7 @@ static void I2C_SetHoldTime(I2C_Type *base, uint32_t sclStopHoldTime_ns, uint32_
                 bestError = absError;
 
                 /* If the error is 0, then we can stop searching because we won't find a better match. */
-                if (absError == 0u)
+                if (absError == 0U)
                 {
                     break;
                 }
@@ -221,7 +304,7 @@ static void I2C_MasterAckByte(I2C_Type *base)
     base->C1 &= ~(uint8_t)I2C_C1_TXAK_MASK;
 
     /* Delay at least one bit time */
-    SDK_DelayAtLeastUs(1000000 / g_baudrate, SystemCoreClock);
+    SDK_DelayAtLeastUs(1000000U / g_baudrate, SystemCoreClock);
 
     /* Do dummy read. */
     (void)base->D;
@@ -240,7 +323,7 @@ static status_t I2C_InitTransferStateMachine(I2C_Type *base, i2c_master_handle_t
     handle->transferSize = xfer->dataSize;
 
     /* Initial transfer state. */
-    if (handle->transfer.subaddressSize > 0u)
+    if (handle->transfer.subaddressSize > 0U)
     {
         if (xfer->direction == kI2C_Read)
         {
@@ -257,7 +340,7 @@ static status_t I2C_InitTransferStateMachine(I2C_Type *base, i2c_master_handle_t
     if (0U != (handle->transfer.flags & (uint32_t)kI2C_TransferNoStartFlag))
     {
         /* No need to send start flag, directly go to send command or data */
-        if (handle->transfer.subaddressSize > 0u)
+        if (handle->transfer.subaddressSize > 0U)
         {
             handle->state = (uint8_t)kSendCommandState;
         }
@@ -330,6 +413,120 @@ static status_t I2C_CheckAndClearError(I2C_Type *base, uint32_t status)
     return result;
 }
 
+static status_t I2C_MasterHandleCheckAddressState(i2c_master_handle_t *handle, uint32_t statusFlags)
+{
+    status_t result = kStatus_Success;
+    if (0U != (statusFlags & (uint8_t)kI2C_ReceiveNakFlag))
+    {
+        result = kStatus_I2C_Addr_Nak;
+    }
+    else
+    {
+        if (handle->transfer.subaddressSize > 0U)
+        {
+            handle->state = (uint8_t)kSendCommandState;
+        }
+        else
+        {
+            if (handle->transfer.direction == kI2C_Write)
+            {
+                /* Next state, send data. */
+                handle->state = (uint8_t)kSendDataState;
+            }
+            else
+            {
+                /* Next state, receive data begin. */
+                handle->state = (uint8_t)kReceiveDataBeginState;
+            }
+        }
+    }
+    return result;
+}
+
+static status_t I2C_MasterHandleSendCommand(I2C_Type *base, i2c_master_handle_t *handle, bool *isDone)
+{
+    status_t result = kStatus_Success;
+    if (0U != handle->transfer.subaddressSize)
+    {
+        handle->transfer.subaddressSize--;
+        base->D = (uint8_t)(((handle->transfer.subaddress) >> (8U * handle->transfer.subaddressSize)) & 0xFFU);
+    }
+    else
+    {
+        if (handle->transfer.direction == kI2C_Write)
+        {
+            /* Send first byte of data. */
+            if (handle->transfer.dataSize > 0U)
+            {
+                /* Next state, send data. */
+                handle->state = (uint8_t)kSendDataState;
+                base->D       = *handle->transfer.data;
+                handle->transfer.data++;
+                handle->transfer.dataSize--;
+            }
+            else
+            {
+                *isDone = true;
+            }
+        }
+        else
+        {
+            /* Send repeated start and slave address. */
+            result = I2C_MasterRepeatedStart(base, handle->transfer.slaveAddress, kI2C_Read);
+
+            /* Next state, receive data begin. */
+            handle->state = (uint8_t)kReceiveDataBeginState;
+        }
+    }
+    return result;
+}
+
+static status_t I2C_MasterHandleReceiveData(I2C_Type *base, i2c_master_handle_t *handle, bool *isDone)
+{
+    status_t result  = kStatus_Success;
+    uint8_t tmpdata;
+    /* Receive one byte of data. */
+    if (0U != handle->transfer.dataSize)
+    {
+        handle->transfer.dataSize--;
+        if (handle->transfer.dataSize == 0U)
+        {
+            *isDone = true;
+
+            /* Send stop if kI2C_TransferNoStop is not asserted. */
+            if (0U == (handle->transfer.flags & (uint32_t)kI2C_TransferNoStopFlag))
+            {
+                result = I2C_MasterStop(base);
+            }
+            else
+            {
+                base->C1 |= I2C_C1_TX_MASK;
+            }
+        }
+
+        /* Read the data byte into the transfer buffer. */
+        tmpdata                = base->D;
+        *handle->transfer.data = tmpdata;
+        handle->transfer.data++;
+
+#if defined(I2C_MASTER_FACK_CONTROL) && I2C_MASTER_FACK_CONTROL
+        if (handle->transfer.dataSize != 0U)
+        {
+            I2C_MasterAckByte(base);
+        }
+#endif
+        if (handle->transfer.dataSize == 1U)
+        {
+            /* Issue NACK on read. */
+            base->C1 |= I2C_C1_TXAK_MASK;
+#if defined(I2C_MASTER_FACK_CONTROL) && I2C_MASTER_FACK_CONTROL
+            base->SMB &= ~(uint8_t)I2C_SMB_FACK_MASK;
+#endif
+        }
+    }
+    return result;
+}
+
 static status_t I2C_MasterTransferRunStateMachine(I2C_Type *base, i2c_master_handle_t *handle, bool *isDone)
 {
     status_t result      = kStatus_Success;
@@ -337,8 +534,7 @@ static status_t I2C_MasterTransferRunStateMachine(I2C_Type *base, i2c_master_han
     *isDone              = false;
     uint32_t tmpDataSize = handle->transfer.dataSize;
     bool ignoreNak       = ((handle->state == (uint8_t)kSendDataState) && (tmpDataSize == 0U)) ||
-                     ((handle->state == (uint8_t)kReceiveDataState) && (tmpDataSize == 1U));
-    uint8_t tmpdata;
+                           ((handle->state == (uint8_t)kReceiveDataState) && (tmpDataSize == 1U));
 
     /* Check & clear error flags. */
     result = I2C_CheckAndClearError(base, statusFlags);
@@ -353,30 +549,7 @@ static status_t I2C_MasterTransferRunStateMachine(I2C_Type *base, i2c_master_han
        probe application. */
     if (handle->state == (uint8_t)kCheckAddressState)
     {
-        if (0U != (statusFlags & (uint8_t)kI2C_ReceiveNakFlag))
-        {
-            result = kStatus_I2C_Addr_Nak;
-        }
-        else
-        {
-            if (handle->transfer.subaddressSize > 0U)
-            {
-                handle->state = (uint8_t)kSendCommandState;
-            }
-            else
-            {
-                if (handle->transfer.direction == kI2C_Write)
-                {
-                    /* Next state, send data. */
-                    handle->state = (uint8_t)kSendDataState;
-                }
-                else
-                {
-                    /* Next state, receive data begin. */
-                    handle->state = (uint8_t)kReceiveDataBeginState;
-                }
-            }
-        }
+        result = I2C_MasterHandleCheckAddressState(handle, statusFlags);
     }
 
     if (kStatus_Success != result)
@@ -389,38 +562,7 @@ static status_t I2C_MasterTransferRunStateMachine(I2C_Type *base, i2c_master_han
     {
         /* Send I2C command. */
         case (uint8_t)kSendCommandState:
-            if (0U != (handle->transfer.subaddressSize))
-            {
-                handle->transfer.subaddressSize--;
-                base->D = (uint8_t)((handle->transfer.subaddress) >> (8U * handle->transfer.subaddressSize));
-            }
-            else
-            {
-                if (handle->transfer.direction == kI2C_Write)
-                {
-                    /* Send first byte of data. */
-                    if (handle->transfer.dataSize > 0U)
-                    {
-                        /* Next state, send data. */
-                        handle->state = (uint8_t)kSendDataState;
-                        base->D       = *handle->transfer.data;
-                        handle->transfer.data++;
-                        handle->transfer.dataSize--;
-                    }
-                    else
-                    {
-                        *isDone = true;
-                    }
-                }
-                else
-                {
-                    /* Send repeated start and slave address. */
-                    result = I2C_MasterRepeatedStart(base, handle->transfer.slaveAddress, kI2C_Read);
-
-                    /* Next state, receive data begin. */
-                    handle->state = (uint8_t)kReceiveDataBeginState;
-                }
-            }
+            result = I2C_MasterHandleSendCommand(base, handle, isDone);
             break;
 
         /* Send I2C data. */
@@ -445,7 +587,7 @@ static status_t I2C_MasterTransferRunStateMachine(I2C_Type *base, i2c_master_han
             base->SMB |= I2C_SMB_FACK_MASK;
 #endif
 
-            base->C1 &= ~(uint8_t)(I2C_C1_TX_MASK | I2C_C1_TXAK_MASK);
+            base->C1 &= (uint8_t)((~(I2C_C1_TX_MASK | I2C_C1_TXAK_MASK)) & 0xFFU);
 
             /* Read dummy to release the bus. */
             (void)base->D;
@@ -465,45 +607,7 @@ static status_t I2C_MasterTransferRunStateMachine(I2C_Type *base, i2c_master_han
 
         /* Receive I2C data. */
         case (uint8_t)kReceiveDataState:
-            /* Receive one byte of data. */
-            if (0U != (handle->transfer.dataSize--))
-            {
-                if (handle->transfer.dataSize == 0U)
-                {
-                    *isDone = true;
-
-                    /* Send stop if kI2C_TransferNoStop is not asserted. */
-                    if (0U == (handle->transfer.flags & (uint32_t)kI2C_TransferNoStopFlag))
-                    {
-                        result = I2C_MasterStop(base);
-                    }
-                    else
-                    {
-                        base->C1 |= I2C_C1_TX_MASK;
-                    }
-                }
-
-                /* Read the data byte into the transfer buffer. */
-                tmpdata                = base->D;
-                *handle->transfer.data = tmpdata;
-                handle->transfer.data++;
-
-#if defined(I2C_MASTER_FACK_CONTROL) && I2C_MASTER_FACK_CONTROL
-                if (handle->transfer.dataSize != 0U)
-                {
-                    I2C_MasterAckByte(base);
-                }
-#endif
-                if (handle->transfer.dataSize == 1U)
-                {
-                    /* Issue NACK on read. */
-                    base->C1 |= I2C_C1_TXAK_MASK;
-#if defined(I2C_MASTER_FACK_CONTROL) && I2C_MASTER_FACK_CONTROL
-                    base->SMB &= ~(uint8_t)I2C_SMB_FACK_MASK;
-#endif
-                }
-            }
-
+            result = I2C_MasterHandleReceiveData(base, handle, isDone);
             break;
 
         default:
@@ -586,7 +690,7 @@ void I2C_MasterInit(I2C_Type *base, const i2c_master_config_t *masterConfig, uin
     base->RA = 0;
 
     /* Disable I2C prior to configuring it. */
-    base->C1 &= ~(uint8_t)(I2C_C1_IICEN_MASK);
+    base->C1 &= (uint8_t)((~I2C_C1_IICEN_MASK) & 0xFFU);
 
     /* Clear all flags. */
     I2C_MasterClearStatusFlags(base, (uint32_t)kClearFlags);
@@ -599,19 +703,19 @@ void I2C_MasterInit(I2C_Type *base, const i2c_master_config_t *masterConfig, uin
 
 #if defined(FSL_FEATURE_I2C_HAS_STOP_HOLD_OFF) && FSL_FEATURE_I2C_HAS_STOP_HOLD_OFF
     /* Configure the stop / hold enable. */
-    fltReg &= ~(uint8_t)(I2C_FLT_SHEN_MASK);
+    fltReg &= (uint8_t)((~I2C_FLT_SHEN_MASK) & 0xFFU);
     fltReg |= I2C_FLT_SHEN(masterConfig->enableStopHold ? 1U : 0U);
 #endif
 
     /* Configure the glitch filter value. */
-    fltReg &= ~(uint8_t)(I2C_FLT_FLT_MASK);
+    fltReg &= (uint8_t)((~I2C_FLT_FLT_MASK) & 0xFFU);
     fltReg |= I2C_FLT_FLT(masterConfig->glitchFilterWidth);
 
     /* Write the register value back to the filter register. */
     base->FLT = fltReg;
 
     /* Enable the I2C peripheral based on the configuration. */
-    base->C1 = I2C_C1_IICEN(masterConfig->enableMaster);
+    base->C1 = I2C_C1_IICEN(masterConfig->enableMaster ? 1U : 0U);
 
     /* Enable/Disable double buffering. */
 #if defined(FSL_FEATURE_I2C_HAS_DOUBLE_BUFFER_ENABLE) && FSL_FEATURE_I2C_HAS_DOUBLE_BUFFER_ENABLE
@@ -717,7 +821,7 @@ void I2C_EnableInterrupts(I2C_Type *base, uint32_t mask)
         fltReg = base->FLT;
 
         /* Keep STARTF and STOPF flags. */
-        fltReg &= ~(uint8_t)(I2C_FLT_STOPF_MASK | I2C_FLT_STARTF_MASK);
+        fltReg &= (uint8_t)((~(I2C_FLT_STOPF_MASK | I2C_FLT_STARTF_MASK)) & 0xFFU);
 
         /* Start and stop detect enable. */
         fltReg |= I2C_FLT_SSIE_MASK;
@@ -740,7 +844,7 @@ void I2C_DisableInterrupts(I2C_Type *base, uint32_t mask)
 {
     if (0U != (mask & (uint32_t)kI2C_GlobalInterruptEnable))
     {
-        base->C1 &= ~(uint8_t)I2C_C1_IICIE_MASK;
+        base->C1 &= (uint8_t)((~I2C_C1_IICIE_MASK) & 0xFFU);
     }
 
 #if defined(FSL_FEATURE_I2C_HAS_STOP_DETECT) && FSL_FEATURE_I2C_HAS_STOP_DETECT
@@ -753,7 +857,7 @@ void I2C_DisableInterrupts(I2C_Type *base, uint32_t mask)
 #if defined(FSL_FEATURE_I2C_HAS_START_STOP_DETECT) && FSL_FEATURE_I2C_HAS_START_STOP_DETECT
     if (0U != (mask & (uint32_t)kI2C_StartStopDetectInterruptEnable))
     {
-        base->FLT &= ~(uint8_t)(I2C_FLT_SSIE_MASK | I2C_FLT_STOPF_MASK | I2C_FLT_STARTF_MASK);
+        base->FLT &= (uint8_t)((~(I2C_FLT_SSIE_MASK | I2C_FLT_STOPF_MASK | I2C_FLT_STARTF_MASK)) & 0xFFU);
     }
 #endif /* FSL_FEATURE_I2C_HAS_START_STOP_DETECT */
 }
@@ -771,27 +875,27 @@ void I2C_MasterSetBaudRate(I2C_Type *base, uint32_t baudRate_Bps, uint32_t srcCl
     uint32_t computedRate;
     uint32_t absError;
     uint32_t bestError = UINT32_MAX;
-    uint32_t bestMult  = 0u;
-    uint32_t bestIcr   = 0u;
-    uint32_t u32flag   = 1u;
+    uint32_t bestMult  = 0U;
+    uint32_t bestIcr   = 0U;
     uint8_t mult;
     uint8_t i;
 
     /* Search for the settings with the lowest error. Mult is the MULT field of the I2C_F register,
      * and ranges from 0-2. It selects the multiplier factor for the divider. */
-    for (mult = 0u; mult <= 2u; ++mult)
+    for (mult = 0U; mult <= 2U; ++mult)
     {
-        if (bestError == 0u)
+        if (bestError == 0U)
         {
             break;
         }
 
-        multiplier = u32flag << mult;
+        multiplier = (uint32_t)1U << mult;
 
         /* Scan table to find best match. */
-        for (i = 0u; i < sizeof(s_i2cDividerTable) / sizeof(uint16_t); ++i)
+        for (i = 0U; i < sizeof(s_i2cDividerTable) / sizeof(uint16_t); ++i)
         {
-            computedRate = srcClock_Hz / (multiplier * s_i2cDividerTable[i]);
+            assert(multiplier <= (UINT32_MAX / (uint32_t)s_i2cDividerTable[i]));
+            computedRate = srcClock_Hz / (multiplier * (uint32_t)s_i2cDividerTable[i]);
             absError     = baudRate_Bps > computedRate ? (baudRate_Bps - computedRate) : (computedRate - baudRate_Bps);
 
             if (absError < bestError)
@@ -801,7 +905,7 @@ void I2C_MasterSetBaudRate(I2C_Type *base, uint32_t baudRate_Bps, uint32_t srcCl
                 bestError = absError;
 
                 /* If the error is 0, then we can stop searching because we won't find a better match. */
-                if (absError == 0u)
+                if (absError == 0U)
                 {
                     break;
                 }
@@ -861,7 +965,7 @@ status_t I2C_MasterStart(I2C_Type *base, uint8_t address, i2c_direction_t direct
 #endif
 #endif /* FSL_FEATURE_I2C_HAS_DOUBLE_BUFFERING */
 
-        base->D = (uint8_t)(((uint32_t)address) << 1U | ((direction == kI2C_Read) ? 1U : 0U));
+        base->D = (uint8_t)((((uint32_t)address) << 1U | ((direction == kI2C_Read) ? 1U : 0U)) & 0xFFU);
     }
 
     return result;
@@ -923,7 +1027,7 @@ status_t I2C_MasterRepeatedStart(I2C_Type *base, uint8_t address, i2c_direction_
 #endif
 #endif /* FSL_FEATURE_I2C_HAS_DOUBLE_BUFFERING */
 
-        base->D = (uint8_t)(((uint32_t)address) << 1U | ((direction == kI2C_Read) ? 1U : 0U));
+        base->D = (uint8_t)((((uint32_t)address) << 1U | ((direction == kI2C_Read) ? 1U : 0U)) & 0xFFU);
     }
 
     return result;
@@ -940,7 +1044,7 @@ status_t I2C_MasterStop(I2C_Type *base)
     status_t result = kStatus_Success;
 
     /* Issue the STOP command on the bus. */
-    base->C1 &= ~(uint8_t)(I2C_C1_MST_MASK | I2C_C1_TX_MASK | I2C_C1_TXAK_MASK);
+    base->C1 &= (uint8_t)((~(I2C_C1_MST_MASK | I2C_C1_TX_MASK | I2C_C1_TXAK_MASK)) & 0xFFU);
 
 #if I2C_RETRY_TIMES != 0U
     uint32_t waitTimes = I2C_RETRY_TIMES;
@@ -1034,8 +1138,9 @@ status_t I2C_MasterWriteBlocking(I2C_Type *base, const uint8_t *txBuff, size_t t
     /* Setup the I2C peripheral to transmit data. */
     base->C1 |= I2C_C1_TX_MASK;
 
-    while (0U != (txSize--))
+    while (txSize > 0U)
     {
+        txSize--;
         /* Send a byte of data. */
         base->D = *txBuff++;
 
@@ -1139,7 +1244,7 @@ status_t I2C_MasterReadBlocking(I2C_Type *base, uint8_t *rxBuff, size_t rxSize, 
 #endif
 
     /* Setup the I2C peripheral to receive data. */
-    base->C1 &= ~(uint8_t)(I2C_C1_TX_MASK | I2C_C1_TXAK_MASK);
+    base->C1 &= (uint8_t)((~(I2C_C1_TX_MASK | I2C_C1_TXAK_MASK)) & 0xFFU);
 
 #if !(defined(I2C_MASTER_FACK_CONTROL) && I2C_MASTER_FACK_CONTROL)
     if (rxSize == 1U)
@@ -1223,6 +1328,103 @@ status_t I2C_MasterReadBlocking(I2C_Type *base, uint8_t *rxBuff, size_t rxSize, 
     }
 
     return result;
+}
+
+static status_t I2C_MasterSendSubaddress(I2C_Type *base, i2c_master_transfer_t *xfer)
+{
+    uint8_t subaddressSize = xfer->subaddressSize;
+    assert(subaddressSize > 0U);
+    status_t result;
+#if I2C_RETRY_TIMES != 0U
+    uint32_t waitTimes;
+#endif
+
+    do
+    {
+        /* Clear interrupt pending flag before writing the next subaddress byte. */
+        base->S = (uint8_t)kI2C_IntPendingFlag;
+
+        subaddressSize--;
+        base->D = (uint8_t)(((xfer->subaddress) >> (8U * subaddressSize)) & 0xFFU);
+
+#if I2C_RETRY_TIMES != 0U
+        waitTimes = I2C_RETRY_TIMES;
+        /* Wait until data transfer complete. */
+        while ((0U == (base->S & (uint8_t)kI2C_IntPendingFlag)) && (0U != waitTimes))
+        {
+            waitTimes--;
+        }
+        if (0U == waitTimes)
+        {
+            return kStatus_I2C_Timeout;
+        }
+#else
+        /* Wait until data transfer complete. */
+        while (0U == (base->S & (uint8_t)kI2C_IntPendingFlag))
+        {
+        }
+#endif
+
+        /* Check if there's transfer error. */
+        result = I2C_CheckAndClearError(base, base->S);
+        if (kStatus_Success != result)
+        {
+            if (result == kStatus_I2C_Nak)
+            {
+                (void)I2C_MasterStop(base);
+            }
+            return result;
+        }
+
+    } while (subaddressSize > 0U);
+
+    /* For read transfers issue a repeated start to switch bus direction. */
+    if (xfer->direction == kI2C_Read)
+    {
+        /* Clear pending flag before repeated start. */
+        base->S = (uint8_t)kI2C_IntPendingFlag;
+
+        /* Send repeated start and slave address. */
+        result = I2C_MasterRepeatedStart(base, xfer->slaveAddress, kI2C_Read);
+
+        /* Return if error. */
+        if (kStatus_Success != result)
+        {
+            return result;
+        }
+
+#if I2C_RETRY_TIMES != 0U
+        waitTimes = I2C_RETRY_TIMES;
+        /* Wait until data transfer complete. */
+        while ((0U == (base->S & (uint8_t)kI2C_IntPendingFlag)) && (0U != waitTimes))
+        {
+            waitTimes--;
+        }
+        if (0U == waitTimes)
+        {
+            return kStatus_I2C_Timeout;
+        }
+#else
+        /* Wait until data transfer complete. */
+        while (0U == (base->S & (uint8_t)kI2C_IntPendingFlag))
+        {
+        }
+#endif
+
+        /* Check if there's transfer error. */
+        result = I2C_CheckAndClearError(base, base->S);
+        if (kStatus_Success != result)
+        {
+            if (result == kStatus_I2C_Nak)
+            {
+                result = kStatus_I2C_Addr_Nak;
+                (void)I2C_MasterStop(base);
+            }
+            return result;
+        }
+    }
+
+    return kStatus_Success;
 }
 
 /*!
@@ -1334,96 +1536,15 @@ status_t I2C_MasterTransferBlocking(I2C_Type *base, i2c_master_transfer_t *xfer)
         }
     }
 
-    /* Send subaddress. */
+    /* Send subaddress bytes; for read transfers also issues the repeated start. */
     if (0U != subaddressSize)
     {
-        do
+        result = I2C_MasterSendSubaddress(base, xfer);
+
+        /* Return if error. */
+        if (kStatus_Success != result)
         {
-            /* Clear interrupt pending flag. */
-            base->S = (uint8_t)kI2C_IntPendingFlag;
-
-            subaddressSize--;
-            base->D = (uint8_t)((xfer->subaddress) >> (8U * subaddressSize));
-
-#if I2C_RETRY_TIMES != 0U
-            waitTimes = I2C_RETRY_TIMES;
-            /* Wait until data transfer complete. */
-            while ((0U == (base->S & (uint8_t)kI2C_IntPendingFlag)) && (0U != waitTimes))
-            {
-                waitTimes--;
-            }
-            if (0U == waitTimes)
-            {
-                return kStatus_I2C_Timeout;
-            }
-#else
-            /* Wait until data transfer complete. */
-            while (0U == (base->S & (uint8_t)kI2C_IntPendingFlag))
-            {
-            }
-#endif
-
-            /* Check if there's transfer error. */
-            result = I2C_CheckAndClearError(base, base->S);
-
-            if (0 != result)
-            {
-                if (result == kStatus_I2C_Nak)
-                {
-                    (void)I2C_MasterStop(base);
-                }
-
-                return result;
-            }
-
-        } while (subaddressSize > 0u);
-
-        if (xfer->direction == kI2C_Read)
-        {
-            /* Clear pending flag. */
-            base->S = (uint8_t)kI2C_IntPendingFlag;
-
-            /* Send repeated start and slave address. */
-            result = I2C_MasterRepeatedStart(base, xfer->slaveAddress, kI2C_Read);
-
-            /* Return if error. */
-            if (kStatus_Success != result)
-            {
-                return result;
-            }
-
-#if I2C_RETRY_TIMES != 0U
-            waitTimes = I2C_RETRY_TIMES;
-            /* Wait until data transfer complete. */
-            while ((0U == (base->S & (uint8_t)kI2C_IntPendingFlag)) && (0U != waitTimes))
-            {
-                waitTimes--;
-            }
-            if (0U == waitTimes)
-            {
-                return kStatus_I2C_Timeout;
-            }
-#else
-            /* Wait until data transfer complete. */
-            while (0U == (base->S & (uint8_t)kI2C_IntPendingFlag))
-            {
-            }
-#endif
-
-            /* Check if there's transfer error. */
-            result = I2C_CheckAndClearError(base, base->S);
-
-            if (kStatus_Success != result)
-            {
-                if (result == kStatus_I2C_Nak)
-                {
-                    result = kStatus_I2C_Addr_Nak;
-
-                    (void)I2C_MasterStop(base);
-                }
-
-                return result;
-            }
+            return result;
         }
     }
 
@@ -1450,7 +1571,7 @@ status_t I2C_MasterTransferBlocking(I2C_Type *base, i2c_master_transfer_t *xfer)
     }
 
     /* Receive Data. */
-    if ((xfer->dataSize > 0u) && (xfer->direction == kI2C_Read))
+    if ((xfer->dataSize > 0U) && (xfer->direction == kI2C_Read))
     {
         uint8_t *tmpData   = xfer->data;
         size_t tmpDataSize = xfer->dataSize;
@@ -1490,7 +1611,7 @@ void I2C_MasterTransferCreateHandle(I2C_Type *base,
     s_i2cHandle[instance] = handle;
 
     /* Save master interrupt handler. */
-    s_i2cMasterIsr = I2C_MasterTransferHandleIRQ;
+    s_i2cMasterIsr = &I2C_MasterTransferHandleIRQ;
 
     /* Enable NVIC interrupt. */
     (void)EnableIRQ(s_i2cIrqs[instance]);
@@ -1592,7 +1713,7 @@ status_t I2C_MasterTransferAbort(I2C_Type *base, i2c_master_handle_t *handle)
 #endif
         base->S = (uint8_t)kI2C_IntPendingFlag;
 
-        base->C1 &= ~(uint8_t)(I2C_C1_MST_MASK | I2C_C1_TX_MASK | I2C_C1_TXAK_MASK);
+        base->C1 &= (uint8_t)((~(I2C_C1_MST_MASK | I2C_C1_TX_MASK | I2C_C1_TXAK_MASK)) & 0xFFU);
         (void)base->D;
     }
     else
@@ -1614,7 +1735,7 @@ status_t I2C_MasterTransferAbort(I2C_Type *base, i2c_master_handle_t *handle)
         }
 #endif
         base->S = (uint8_t)kI2C_IntPendingFlag;
-        base->C1 &= ~(uint8_t)(I2C_C1_MST_MASK | I2C_C1_TX_MASK | I2C_C1_TXAK_MASK);
+        base->C1 &= (uint8_t)((~(I2C_C1_MST_MASK | I2C_C1_TX_MASK | I2C_C1_TXAK_MASK)) & 0xFFU);
     }
 
     return kStatus_Success;
@@ -1747,13 +1868,13 @@ void I2C_SlaveInit(I2C_Type *base, const i2c_slave_config_t *slaveConfig, uint32
     switch (slaveConfig->addressingMode)
     {
         case kI2C_Address7bit:
-            base->A1 = (uint8_t)(((uint32_t)(slaveConfig->slaveAddress)) << 1U);
+            base->A1 = (uint8_t)((((uint32_t)(slaveConfig->slaveAddress)) << 1U) & 0xFFU);
             break;
 
         case kI2C_RangeMatch:
             assert(slaveConfig->slaveAddress < slaveConfig->upperAddress);
-            base->A1 = (uint8_t)(((uint32_t)(slaveConfig->slaveAddress)) << 1U);
-            base->RA = (uint8_t)(((uint32_t)(slaveConfig->upperAddress)) << 1U);
+            base->A1 = (uint8_t)((((uint32_t)(slaveConfig->slaveAddress)) << 1U) & 0xFFU);
+            base->RA = (uint8_t)((((uint32_t)(slaveConfig->upperAddress)) << 1U) & 0xFFU);
             base->C2 |= I2C_C2_RMEN_MASK;
             break;
 
@@ -1765,12 +1886,12 @@ void I2C_SlaveInit(I2C_Type *base, const i2c_slave_config_t *slaveConfig, uint32
 
     /* Configure low power wake up feature. */
     tmpReg = base->C1;
-    tmpReg &= ~(uint8_t)I2C_C1_WUEN_MASK;
+    tmpReg &= (uint8_t)((~I2C_C1_WUEN_MASK) & 0xFFU);
     base->C1 = tmpReg | I2C_C1_WUEN(slaveConfig->enableWakeUp ? 1U : 0U) | I2C_C1_IICEN(slaveConfig->enableSlave ? 1U : 0U);
 
     /* Configure general call & baud rate control. */
     tmpReg = base->C2;
-    tmpReg &= ~(uint8_t)(I2C_C2_SBRC_MASK | I2C_C2_GCAEN_MASK);
+    tmpReg &= (uint8_t)((~(I2C_C2_SBRC_MASK | I2C_C2_GCAEN_MASK)) & 0xFFU);
     tmpReg |= I2C_C2_SBRC(slaveConfig->enableBaudRateCtl ? 1U : 0U) | I2C_C2_GCAEN(slaveConfig->enableGeneralCall ? 1U : 0U);
     base->C2 = tmpReg;
 
@@ -2021,7 +2142,7 @@ void I2C_SlaveTransferCreateHandle(I2C_Type *base,
     s_i2cHandle[instance] = handle;
 
     /* Save slave interrupt handler. */
-    s_i2cSlaveIsr = I2C_SlaveTransferHandleIRQ;
+    s_i2cSlaveIsr = &I2C_SlaveTransferHandleIRQ;
 
     /* Enable NVIC interrupt. */
     (void)EnableIRQ(s_i2cIrqs[instance]);
@@ -2141,6 +2262,81 @@ status_t I2C_SlaveTransferGetCount(I2C_Type *base, i2c_slave_handle_t *handle, s
     return kStatus_Success;
 }
 
+static inline void I2C_SlaveInvokeCallback(I2C_Type *base,
+                                           i2c_slave_handle_t *handle,
+                                           i2c_slave_transfer_t *xfer)
+{
+    if ((0U != (handle->eventMask & (uint32_t)xfer->event)) && (handle->callback != NULL))
+    {
+        handle->callback(base, xfer, handle->userData);
+    }
+}
+
+static bool I2C_SlaveHandleAddressMatch(I2C_Type *base,
+                                        i2c_slave_handle_t *handle,
+                                        i2c_slave_transfer_t *xfer,
+                                        uint16_t status)
+{
+    bool doTransmit = false;
+
+    handle->isBusy = true;
+    xfer->event    = kI2C_SlaveAddressMatchEvent;
+
+    /* Slave transmit, master reading from slave. */
+    if (0U != (status & (uint16_t)kI2C_TransferDirectionFlag))
+    {
+        /* Change direction to send data. */
+        base->C1 |= I2C_C1_TX_MASK;
+
+        doTransmit = true;
+    }
+    else
+    {
+        /* Slave receive, master writing to slave. */
+        base->C1 &= (uint8_t)((~(I2C_C1_TX_MASK | I2C_C1_TXAK_MASK)) & 0xFFU);
+
+        /* Read dummy to release the bus and check the address master issued. */
+        if (base->D == 0U)
+        {
+            xfer->event = kI2C_SlaveGenaralcallEvent;
+        }
+    }
+
+    I2C_SlaveInvokeCallback(base, handle, xfer);
+
+    return doTransmit;
+}
+
+static void I2C_SlaveHandleNak(I2C_Type *base,
+                               i2c_slave_handle_t *handle,
+                               i2c_slave_transfer_t *xfer)
+{
+    /* Set receive mode. */
+    base->C1 &= (uint8_t)((~(I2C_C1_TX_MASK | I2C_C1_TXAK_MASK)) & 0xFFU);
+
+    /* Read dummy. */
+    (void)base->D;
+
+    if (handle->transfer.dataSize != 0U)
+    {
+        xfer->event            = kI2C_SlaveCompletionEvent;
+        xfer->completionStatus = kStatus_I2C_Nak;
+        handle->isBusy         = false;
+
+        I2C_SlaveInvokeCallback(base, handle, xfer);
+    }
+    else
+    {
+#ifndef I2C_HAS_STOP_DETECT
+        xfer->event            = kI2C_SlaveCompletionEvent;
+        xfer->completionStatus = kStatus_Success;
+        handle->isBusy         = false;
+
+        I2C_SlaveInvokeCallback(base, handle, xfer);
+#endif /* !FSL_FEATURE_I2C_HAS_START_STOP_DETECT or !FSL_FEATURE_I2C_HAS_STOP_DETECT */
+    }
+}
+
 /*!
  * brief Slave interrupt handler.
  *
@@ -2157,7 +2353,7 @@ void I2C_SlaveTransferHandleIRQ(I2C_Type *base, void *i2cHandle)
     i2c_slave_transfer_t *xfer;
     size_t tmpDataSize = 0;
 
-    status = (uint16_t)I2C_SlaveGetStatusFlags(base);
+    status = (uint16_t)(I2C_SlaveGetStatusFlags(base) & 0xFFFFU);
     xfer   = &(handle->transfer);
 
 #ifdef I2C_HAS_STOP_DETECT
@@ -2176,10 +2372,7 @@ void I2C_SlaveTransferHandleIRQ(I2C_Type *base, void *i2cHandle)
             xfer->completionStatus = kStatus_Success;
             handle->isBusy         = false;
 
-            if ((0U != (handle->eventMask & (uint32_t)xfer->event)) && (NULL != handle->callback))
-            {
-                handle->callback(base, xfer, handle->userData);
-            }
+            I2C_SlaveInvokeCallback(base, handle, xfer);
         }
 
         if (0U == (status & (uint16_t)kI2C_AddressMatchFlag))
@@ -2200,10 +2393,7 @@ void I2C_SlaveTransferHandleIRQ(I2C_Type *base, void *i2cHandle)
 
         xfer->event = kI2C_SlaveStartEvent;
 
-        if ((0U != (handle->eventMask & (uint32_t)xfer->event)) && (NULL != handle->callback))
-        {
-            handle->callback(base, xfer, handle->userData);
-        }
+        I2C_SlaveInvokeCallback(base, handle, xfer);
 
         if (0U == (status & (uint16_t)kI2C_AddressMatchFlag))
         {
@@ -2218,67 +2408,12 @@ void I2C_SlaveTransferHandleIRQ(I2C_Type *base, void *i2cHandle)
     /* Check NAK */
     if (0U != (status & (uint16_t)kI2C_ReceiveNakFlag))
     {
-        /* Set receive mode. */
-        base->C1 &= ~(uint8_t)(I2C_C1_TX_MASK | I2C_C1_TXAK_MASK);
-
-        /* Read dummy. */
-        (void)base->D;
-
-        if (handle->transfer.dataSize != 0u)
-        {
-            xfer->event            = kI2C_SlaveCompletionEvent;
-            xfer->completionStatus = kStatus_I2C_Nak;
-            handle->isBusy         = false;
-
-            if ((0U != (handle->eventMask & (uint32_t)xfer->event)) && (NULL != handle->callback))
-            {
-                handle->callback(base, xfer, handle->userData);
-            }
-        }
-        else
-        {
-#ifndef I2C_HAS_STOP_DETECT
-            xfer->event            = kI2C_SlaveCompletionEvent;
-            xfer->completionStatus = kStatus_Success;
-            handle->isBusy         = false;
-
-            if ((0U != (handle->eventMask & (uint32_t)xfer->event)) && (NULL != handle->callback))
-            {
-                handle->callback(base, xfer, handle->userData);
-            }
-#endif /* !FSL_FEATURE_I2C_HAS_START_STOP_DETECT or !FSL_FEATURE_I2C_HAS_STOP_DETECT */
-        }
+        I2C_SlaveHandleNak(base, handle, xfer);
     }
     /* Check address match. */
     else if (0U != (status & (uint16_t)kI2C_AddressMatchFlag))
     {
-        handle->isBusy = true;
-        xfer->event    = kI2C_SlaveAddressMatchEvent;
-
-        /* Slave transmit, master reading from slave. */
-        if (0U != (status & (uint16_t)kI2C_TransferDirectionFlag))
-        {
-            /* Change direction to send data. */
-            base->C1 |= I2C_C1_TX_MASK;
-
-            doTransmit = true;
-        }
-        else
-        {
-            /* Slave receive, master writing to slave. */
-            base->C1 &= ~(uint8_t)(I2C_C1_TX_MASK | I2C_C1_TXAK_MASK);
-
-            /* Read dummy to release the bus and check the address master issued. */
-            if (base->D == 0u)
-            {
-                xfer->event = kI2C_SlaveGenaralcallEvent;
-            }
-        }
-
-        if ((0U != (handle->eventMask & (uint32_t)xfer->event)) && (NULL != handle->callback))
-        {
-            handle->callback(base, xfer, handle->userData);
-        }
+        doTransmit = I2C_SlaveHandleAddressMatch(base, handle, xfer, status);
     }
     /* Check transfer complete flag. */
     else if (0U != (status & (uint16_t)kI2C_TransferCompleteFlag))
@@ -2311,6 +2446,7 @@ void I2C_SlaveTransferHandleIRQ(I2C_Type *base, void *i2cHandle)
             if (0U != (handle->transfer.dataSize))
             {
                 /* Receive data. */
+                assert(handle->transfer.data != NULL);
                 *handle->transfer.data++ = data;
                 handle->transfer.dataSize--;
                 xfer->transferredCount++;
@@ -2322,10 +2458,7 @@ void I2C_SlaveTransferHandleIRQ(I2C_Type *base, void *i2cHandle)
                     handle->isBusy         = false;
 
                     /* Proceed receive complete event. */
-                    if (((handle->eventMask & (uint32_t)xfer->event) != 0U) && (handle->callback != NULL))
-                    {
-                        handle->callback(base, xfer, handle->userData);
-                    }
+                    I2C_SlaveInvokeCallback(base, handle, xfer);
 #endif /* !FSL_FEATURE_I2C_HAS_START_STOP_DETECT or !FSL_FEATURE_I2C_HAS_STOP_DETECT */
                 }
             }
@@ -2358,6 +2491,7 @@ void I2C_SlaveTransferHandleIRQ(I2C_Type *base, void *i2cHandle)
         if (0U != (handle->transfer.dataSize))
         {
             /* Send data. */
+            assert(handle->transfer.data != NULL);
             base->D = *handle->transfer.data++;
             handle->transfer.dataSize--;
             xfer->transferredCount++;
@@ -2365,7 +2499,7 @@ void I2C_SlaveTransferHandleIRQ(I2C_Type *base, void *i2cHandle)
         else
         {
             /* Switch to receive mode. */
-            base->C1 &= ~(uint8_t)(I2C_C1_TX_MASK | I2C_C1_TXAK_MASK);
+            base->C1 &= (uint8_t)((~(I2C_C1_TX_MASK | I2C_C1_TXAK_MASK)) & 0xFFU);
 
             /* Read dummy to release bus. */
             (void)base->D;
@@ -2376,10 +2510,7 @@ void I2C_SlaveTransferHandleIRQ(I2C_Type *base, void *i2cHandle)
             handle->isBusy         = false;
 
             /* Proceed txdone event. */
-            if (((handle->eventMask & (uint32_t)xfer->event) != 0U) && (handle->callback != NULL))
-            {
-                handle->callback(base, xfer, handle->userData);
-            }
+            I2C_SlaveInvokeCallback(base, handle, xfer);
 #endif /* !FSL_FEATURE_I2C_HAS_START_STOP_DETECT or !FSL_FEATURE_I2C_HAS_STOP_DETECT */
         }
     }

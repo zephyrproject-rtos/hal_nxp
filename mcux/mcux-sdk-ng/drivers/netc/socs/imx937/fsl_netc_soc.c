@@ -24,6 +24,8 @@ void NETC_SocGetBaseResource(netc_enetc_hw_t *hw, netc_hw_si_idx_t si)
     uint8_t siNum    = getSiNum(si);
     uint8_t siIdx    = getSiIdx(si);
 
+    assert(siIdx < sizeof(s_enetcSiBases) / sizeof(s_enetcSiBases[0]));
+
     hw->si             = s_enetcSiBases[siIdx];
     hw->base           = s_netcEnetcBases[instance];
     hw->common         = (NETC_SW_ENETC_Type *)((uintptr_t)hw->base + 0x1000U);
@@ -32,11 +34,13 @@ void NETC_SocGetBaseResource(netc_enetc_hw_t *hw, netc_hw_si_idx_t si)
     hw->global         = (ENETC_GLOBAL_Type *)((uintptr_t)hw->base + 0x10000U);
     if (siNum == 0U)
     {
+        assert(1U + siIdx < sizeof(s_netcBases) / sizeof(s_netcBases[0]));
         hw->func.pf   = s_netcBases[1U + siIdx];
         hw->msixTable = (netc_msix_entry_t *)((uintptr_t)hw->si + 0x30000U);
     }
     else
     {
+        assert(siIdx >= 2U);
         hw->func.vf   = s_netcVfBases[siIdx - 2U];
         hw->msixTable = (netc_msix_entry_t *)((uintptr_t)hw->si + 0x60000U);
     }

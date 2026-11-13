@@ -19,7 +19,7 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*! @{ */
-#define FSL_PWM_DRIVER_VERSION (MAKE_VERSION(2, 10, 1)) /*!< Version 2.10.1 */
+#define FSL_PWM_DRIVER_VERSION (MAKE_VERSION(2, 10, 2)) /*!< Version 2.10.2 */
 /*! @} */
 
 /*! Number of bits per submodule for software output control */
@@ -358,6 +358,18 @@ typedef enum _pwm_fault_clear
     kPWM_ManualNormal,   /*!< Manual fault clearing with no fault safety mode */
     kPWM_ManualSafety    /*!< Manual fault clearing with fault safety mode */
 } pwm_fault_clear_t;
+
+#if (defined(FSL_FEATURE_PWM_MCTRL2_HAS_STRETCH_CNT_PRSC_BITFIELD) && \
+     FSL_FEATURE_PWM_MCTRL2_HAS_STRETCH_CNT_PRSC_BITFIELD)
+/*! @brief Trigger signal stretch IPBus clock count prescaler (MCTRL2[STRETCH_CNT_PRSC]). */
+typedef enum _pwm_stretch_count_prescaler
+{
+    kPWM_StretchIPBusClockPrescaler1 = 0U, /*!< Stretch count is zero, no stretch. */
+    kPWM_StretchIPBusClockPrescaler2,      /*!< Stretch trigger signal for 2 IPBus clock periods. */
+    kPWM_StretchIPBusClockPrescaler4,      /*!< Stretch trigger signal for 4 IPBus clock periods. */
+    kPWM_StretchIPBusClockPrescaler8       /*!< Stretch trigger signal for 8 IPBus clock periods. */
+} pwm_stretch_count_prescaler_t;
+#endif
 
 /*! @brief Options for submodule master control operation */
 typedef enum _pwm_module_control
@@ -1199,6 +1211,26 @@ static inline void PWM_DeactivateOutputTrigger(PWM_Type *base, pwm_submodule_t s
 {
     base->SM[subModule].TCTRL &= MCUX_MASK_INVERT_16(PWM_TCTRL_OUT_TRIG_EN_MASK & (valueRegisterMask));
 }
+
+#if (defined(FSL_FEATURE_PWM_MCTRL2_HAS_STRETCH_CNT_PRSC_BITFIELD) && \
+     FSL_FEATURE_PWM_MCTRL2_HAS_STRETCH_CNT_PRSC_BITFIELD)
+/*!
+ * @brief Sets the trigger signal stretch IPBus clock count prescaler (MCTRL2[STRETCH_CNT_PRSC]).
+ *
+ * MCTRL2[STRETCH_CNT_PRSC] is a module-level register that controls the stretch prescaler for
+ * all trigger outputs (mux0_trig, mux1_trig, out0_trig, out1_trig, pwma_trig, pwmb_trig) across
+ * all submodules. Call this function once after all submodules have been initialised with
+ * PWM_Init(), rather than configuring it per submodule, to avoid unintentional overwrite.
+ *
+ * @param base       PWM peripheral base address
+ * @param prescaler  Stretch prescaler value, see ::pwm_stretch_count_prescaler_t.
+ */
+static inline void PWM_SetTriggerStretchPrescaler(PWM_Type *base, pwm_stretch_count_prescaler_t prescaler)
+{
+    base->MCTRL2 = (base->MCTRL2 & MCUX_MASK_INVERT_16(PWM_MCTRL2_STRETCH_CNT_PRSC_MASK)) |
+                   PWM_MCTRL2_STRETCH_CNT_PRSC(prescaler);
+}
+#endif
 
 /*!
  * @brief Sets the software control output for a pin to high or low.

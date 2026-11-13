@@ -129,7 +129,8 @@ void PDM_ReadFifo(
         for (j = 0; j < channelNums; j++)
         {
 #if defined(FSL_FEATURE_PDM_FIFO_WIDTH) && (FSL_FEATURE_PDM_FIFO_WIDTH != 2U)
-            if ((SIZE_MAX - j) >= startChannel)
+            /* Guard both the channel index and the buffer-pointer advance against unsigned wraparound. */
+            if (((SIZE_MAX - j) >= startChannel) && (((uint32_t)dataAddr) <= (UINT32_MAX - dataWidth)))
             {
                 *dataAddr = base->DATACH[startChannel + j] >> shift;
                 dataAddr  = (uint32_t *)((uint32_t)dataAddr + dataWidth);
@@ -140,8 +141,17 @@ void PDM_ReadFifo(
                 break;
             }
 #else
-            *dataAddr = base->DATACH[startChannel + j];
-            dataAddr  = (uint32_t *)((uint32_t)dataAddr + 2U);
+            /* Guard both the channel index and the buffer-pointer advance against unsigned wraparound. */
+            if (((SIZE_MAX - j) >= startChannel) && (((uint32_t)dataAddr) <= (UINT32_MAX - 2U)))
+            {
+                *dataAddr = base->DATACH[startChannel + j];
+                dataAddr  = (uint32_t *)((uint32_t)dataAddr + 2U);
+            }
+            else
+            {
+                assert(false);
+                break;
+            }
 #endif
         }
     }
@@ -151,6 +161,7 @@ void PDM_ReadFifo(
 /*!
  * brief PDM read data non blocking, only support 16bit data read.
  * So the actually read data byte size in this function is (size * 2 * channelNums).
+
  * param base PDM base pointer.
  * param startChannel start channel number.
  * param channelNums total enabled channelnums.
@@ -160,13 +171,26 @@ void PDM_ReadFifo(
 void PDM_ReadNonBlocking(PDM_Type *base, uint32_t startChannel, uint32_t channelNums, int16_t *buffer, size_t size)
 {
     uint32_t i = 0, j = 0U;
+    uint16_t rawSample = 0U;
 
     for (i = 0U; i < size; i++)
     {
         for (j = 0; j < channelNums; j++)
         {
-            /* Extract lower 16 bits of valid data and interpret as signed int */
-            *buffer++ = (int16_t)(uint16_t)(base->DATACH[startChannel + j] & 0xFFFFU);
+            /* Guard the channel index against unsigned wraparound before it is used. */
+            if ((SIZE_MAX - j) >= startChannel)
+            {
+                /* Extract lower 16 bits of valid data and reinterpret the bit pattern as signed int.
+                 * memcpy copies the 16-bit pattern without a value-changing unsigned-to-signed conversion. */
+                rawSample = (uint16_t)(base->DATACH[startChannel + j] & 0xFFFFU);
+                (void)memcpy((void *)buffer, (const void *)&rawSample, sizeof(int16_t));
+                buffer++;
+            }
+            else
+            {
+                assert(false);
+                break;
+            }
         }
     }
 }
@@ -757,7 +781,8 @@ void PDM_TransferHandleIRQ(PDM_Type *base, pdm_handle_t *handle)
 
     /* Handle transfer */
     if (((base->STAT & 0xFFU) != 0U) && (handle->channelNums != 0U) &&
-        ((base->CTRL_1 & PDM_CTRL_1_DISEL_MASK) == (0x2UL << PDM_CTRL_1_DISEL_SHIFT)))
+        ((base->CTRL_1 & PDM_CTRL_1_DISEL_MASK) == (0x2UL << PDM_CTRL_1_DISEL_SHIFT)) &&
+        (handle->pdmQueue[handle->queueDriver].data != NULL))
     {
         PDM_ClearStatus(base, 0xFFU);
         /* Judge if the data need to transmit is less than space */
@@ -773,8 +798,11 @@ void PDM_TransferHandleIRQ(PDM_Type *base, pdm_handle_t *handle)
         handle->pdmQueue[handle->queueDriver].data = &(handle->pdmQueue[handle->queueDriver].data[size]);
     }
 
-    /* If finished a block, call the callback function */
-    if (handle->pdmQueue[handle->queueDriver].dataSize == 0U)
+    /* If finished a block, call the callback function.
+     * The data != NULL guard prevents a spurious kStatus_PDM_Idle callback and queueDriver
+     * advance when no transfer is queued, because an empty queue entry has dataSize == 0U too. */
+    if ((handle->pdmQueue[handle->queueDriver].data != NULL) &&
+        (handle->pdmQueue[handle->queueDriver].dataSize == 0U))
     {
         handle->pdmQueue[handle->queueDriver].data = NULL;
         handle->queueDriver                        = (handle->queueDriver + 1U) % PDM_XFER_QUEUE_SIZE;
@@ -1042,7 +1070,7 @@ void PDM_EnableHwvadInterruptCallback(PDM_Type *base, pdm_hwvad_callback_t vadCa
 
 #endif
 
-static void PDM_EventHandleIRQ(uint32_t instance)
+void PDM_EventHandleIRQ(uint32_t instance)
 {
     assert(instance < ARRAY_SIZE(s_pdmBases));
     assert(s_pdmHandle[instance] != NULL);
@@ -1052,7 +1080,7 @@ static void PDM_EventHandleIRQ(uint32_t instance)
 }
 
 #if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
-static void PDM_ErrorHandleIRQ(uint32_t instance)
+void PDM_ErrorHandleIRQ(uint32_t instance)
 {
     assert(instance < ARRAY_SIZE(s_pdmBases));
     assert(s_pdmHandle[instance] != NULL);
@@ -1062,7 +1090,7 @@ static void PDM_ErrorHandleIRQ(uint32_t instance)
 #endif
 
 #if !(defined(FSL_FEATURE_PDM_HAS_NO_HWVAD) && FSL_FEATURE_PDM_HAS_NO_HWVAD)
-static void PDM_HwvadEventHandleIRQ(uint32_t instance)
+void PDM_HwvadEventHandleIRQ(uint32_t instance)
 {
     assert(instance < ARRAY_SIZE(s_pdmBases));
 
@@ -1089,7 +1117,7 @@ static void PDM_HwvadEventHandleIRQ(uint32_t instance)
 }
 
 #if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
-static void PDM_HwvadErrorHandleIRQ(uint32_t instance)
+void PDM_HwvadErrorHandleIRQ(uint32_t instance)
 {
     assert(instance < ARRAY_SIZE(s_pdmBases));
 

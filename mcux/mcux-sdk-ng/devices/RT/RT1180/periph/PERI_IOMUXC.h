@@ -8,6 +8,10 @@
 **                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
 **                          MIMXRT1182XVP2C
+**                          MIMXRT1183CHM8C_cm33
+**                          MIMXRT1183CHM8C_cm7
+**                          MIMXRT1184CHM8C_cm33
+**                          MIMXRT1184CHM8C_cm7
 **                          MIMXRT1185CVJ8C_cm33
 **                          MIMXRT1185CVJ8C_cm7
 **                          MIMXRT1185XVJ8C_cm33
@@ -40,9 +44,17 @@
 **                          MIMXRT118CCVJ8C_cm7
 **                          MIMXRT118CXVJ8C_cm33
 **                          MIMXRT118CXVJ8C_cm7
+**                          MIMXRT118DCHM8C_cm33
+**                          MIMXRT118DCHM8C_cm7
+**                          MIMXRT118DXHM8C_cm33
+**                          MIMXRT118DXHM8C_cm7
+**                          MIMXRT118ECHM8C_cm33
+**                          MIMXRT118ECHM8C_cm7
+**                          MIMXRT118EXHM8C_cm33
+**                          MIMXRT118EXHM8C_cm7
 **
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260206
+**     Version:             rev. 4.0, 2026-08-14
+**     Build:               b260822
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC
@@ -62,14 +74,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2026-08-14)
+**         Based on RM Rev 10.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_IOMUXC.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-08-14
  * @brief CMSIS Peripheral Access Layer for IOMUXC
  *
  * CMSIS Peripheral Access Layer for IOMUXC
@@ -82,6 +96,14 @@
 #include "MIMXRT1181_COMMON.h"
 #elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
+#elif (defined(CPU_MIMXRT1183CHM8C_cm33))
+#include "MIMXRT1183_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1183CHM8C_cm7))
+#include "MIMXRT1183_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1184CHM8C_cm33))
+#include "MIMXRT1184_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1184CHM8C_cm7))
+#include "MIMXRT1184_cm7_COMMON.h"
 #elif (defined(CPU_MIMXRT1185CVJ8C_cm33) || defined(CPU_MIMXRT1185XVJ8C_cm33))
 #include "MIMXRT1185_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT1185CVJ8C_cm7) || defined(CPU_MIMXRT1185XVJ8C_cm7))
@@ -102,6 +124,14 @@
 #include "MIMXRT118C_cm33_COMMON.h"
 #elif (defined(CPU_MIMXRT118CCVJ8C_cm7) || defined(CPU_MIMXRT118CXVJ8C_cm7))
 #include "MIMXRT118C_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118DCHM8C_cm33) || defined(CPU_MIMXRT118DXHM8C_cm33))
+#include "MIMXRT118D_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118DCHM8C_cm7) || defined(CPU_MIMXRT118DXHM8C_cm7))
+#include "MIMXRT118D_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT118ECHM8C_cm33) || defined(CPU_MIMXRT118EXHM8C_cm33))
+#include "MIMXRT118E_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT118ECHM8C_cm7) || defined(CPU_MIMXRT118EXHM8C_cm7))
+#include "MIMXRT118E_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -795,7 +825,7 @@ typedef struct {
        uint8_t RESERVED_0[16];
   __IO uint32_t SW_MUX_CTL_PAD[IOMUXC_SW_MUX_CTL_PAD_COUNT]; /**< SW_MUX_CTL_PAD_GPIO_EMC_B1_00 SW MUX Control Register..SW_MUX_CTL_PAD_GPIO_B2_13 SW MUX Control Register, array offset: 0x10, array step: 0x4 */
   __IO uint32_t SW_PAD_CTL_PAD[IOMUXC_SW_PAD_CTL_PAD_COUNT]; /**< SW_PAD_CTL_PAD_GPIO_EMC_B1_00 SW PAD Control Register..SW_PAD_CTL_PAD_GPIO_B2_13 SW PAD Control Register, array offset: 0x258, array step: 0x4 */
-  __IO uint32_t SELECT_INPUT[IOMUXC_SELECT_INPUT_COUNT]; /**< CAN1_IPP_IND_CANRX_SELECT_INPUT DAISY Register..XSPI_SLV_IPP_IND_SCK_SELECT_INPUT DAISY Register, array offset: 0x4A0, array step: 0x4, valid indices: [0-143, 190-266, 269-282, 285-315, 344-354] */
+  __IO uint32_t SELECT_INPUT[IOMUXC_SELECT_INPUT_COUNT]; /**< Select FLEXCAN1_RX Daisy Register..Select XSPI_SLV_CLK DAISY Register, array offset: 0x4A0, array step: 0x4, valid indices: [0-143, 190-266, 269-282, 285-315, 344-354] */
 } IOMUXC_Type;
 
 /* ----------------------------------------------------------------------------
@@ -813,19 +843,19 @@ typedef struct {
 #define IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_MASK      (0xFU)  /* Merged from fields with different position or width, of widths (3, 4), largest definition used */
 #define IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_SHIFT     (0U)
 /*! MUX_MODE - MUX Mode Select Field.
- *  0b0000..Select mux mode: ALT0 mux port: MIC_BITSTREAM00 of instance: mic
- *  0b0001..Select mux mode: ALT1 mux port: SINC2_EMCLK03 of instance: sinc2
- *  0b0010..Select mux mode: ALT2 mux port: CAN3_TX of instance: can3
+ *  0b0000..Select mux mode: ALT0 mux port: MIC_BITSTREAM0 of instance: mic
+ *  0b0001..Select mux mode: ALT1 mux port: SINC2_EMCLK3 of instance: sinc2
+ *  0b0010..Select mux mode: ALT2 mux port: FLEXCAN3_TX of instance: can3
  *  0b0011..Select mux mode: ALT3 mux port: LPUART8_CTS_B of instance: lpuart8
- *  0b0100..Select mux mode: ALT4 mux port: LPUART6_TX of instance: lpuart6
+ *  0b0100..Select mux mode: ALT4 mux port: LPUART6_TXD of instance: lpuart6
  *  0b0101..Select mux mode: ALT5 mux port: GPIO6_IO24 of instance: gpio6
  *  0b0110..Select mux mode: ALT6 mux port: LPI2C4_SCL of instance: lpi2c4
- *  0b0111..Select mux mode: ALT7 mux port: FLEXSPI1_BUS2BIT_A_DATA00 of instance: flexspi1_bus2bit
- *  0b1000..Select mux mode: ALT8 mux port: TPM4_CH00 of instance: tpm4
+ *  0b0111..Select mux mode: ALT7 mux port: FLEXSPI1_A_DATA0 of instance: flexspi1_bus2bit
+ *  0b1000..Select mux mode: ALT8 mux port: TPM4_CH0 of instance: tpm4
  *  0b1001..Select mux mode: ALT9 mux port: LPSPI4_SCK of instance: lpspi4
- *  0b1010..Select mux mode: ALT10 mux port: XSPI_SLV_DATA00 of instance: xspi_slv
- *  0b1011..Select mux mode: ALT11 mux port: NETC_PINMUX_ETH2_RXD00 of instance: netc_pinmux
- *  0b1100..Select mux mode: ALT12 mux port: ECAT_RX_DATA0_1 of instance: ecat
+ *  0b1010..Select mux mode: ALT10 mux port: XSPI_SLV_DATA0 of instance: xspi_slv
+ *  0b1011..Select mux mode: ALT11 mux port: ETH2_RX_DATA0 of instance: netc_pinmux
+ *  0b1100..Select mux mode: ALT12 mux port: ECAT_PT1_RXD[0] of instance: ecat
  */
 #define IOMUXC_SW_MUX_CTL_PAD_MUX_MODE(x)        (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_SHIFT)) & IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_MASK)  /* Merged from fields with different position or width, of widths (3, 4), largest definition used */
 
@@ -918,7 +948,7 @@ typedef struct {
 #define IOMUXC_SW_PAD_CTL_PAD_DWP_LOCK(x)        (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_PAD_CTL_PAD_DWP_LOCK_SHIFT)) & IOMUXC_SW_PAD_CTL_PAD_DWP_LOCK_MASK)
 /*! @} */
 
-/*! @name SELECT_INPUT - CAN1_IPP_IND_CANRX_SELECT_INPUT DAISY Register..XSPI_SLV_IPP_IND_SCK_SELECT_INPUT DAISY Register */
+/*! @name SELECT_INPUT - Select FLEXCAN1_RX Daisy Register..Select XSPI_SLV_CLK DAISY Register */
 /*! @{ */
 
 #define IOMUXC_SELECT_INPUT_DAISY_MASK           (0x7U)  /* Merged from fields with different position or width, of widths (1, 2, 3), largest definition used */

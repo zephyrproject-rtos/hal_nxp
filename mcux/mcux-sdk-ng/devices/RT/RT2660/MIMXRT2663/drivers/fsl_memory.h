@@ -98,12 +98,19 @@ static inline uint32_t MEMORY_ConvertMemoryMapAddress(uint32_t addr, mem_directi
             {
                 dest = addr + MEM_DTCM_ALIAS_OFFSET;
             }
+#if 0
+            /* 
+             * Don't Use Translation for XSPI Addresses 
+             * CM85 always set XSPI LLC memory region's outer cache policy to cacheable, so CM85 never bypass XSPI LLC
+             * Various bus master's MODCON always set AxCACHE to cacheable too, data coherence is always there for XSPI0 LLC and XSPI1 LLC
+             */ 
             /*XSPI*/
             else if (((addr >= MEM_XSPI0_LLC_START) && (addr <= MEM_XSPI0_LLC_END)) || ((addr >= SECURE_ADDR(MEM_XSPI0_LLC_START)) && (addr <= SECURE_ADDR(MEM_XSPI0_LLC_END)))
                      || ((addr >= MEM_XSPI1_LLC_START) && (addr <= MEM_XSPI1_LLC_END)) || ((addr >= SECURE_ADDR(MEM_XSPI1_LLC_START)) && (addr <= SECURE_ADDR(MEM_XSPI1_LLC_END))))
             {
                 dest = addr - MEM_XSPI_LLC_OFFSET;
             }
+#endif
             else
             {
                 dest = addr;
@@ -122,12 +129,14 @@ static inline uint32_t MEMORY_ConvertMemoryMapAddress(uint32_t addr, mem_directi
             {
                 dest = addr - MEM_DTCM_ALIAS_OFFSET;
             }
+#if 0
             /*XSPI*/
             else if (((addr >= MEM_XSPI0_START) && (addr <= MEM_XSPI0_END)) || ((addr >= SECURE_ADDR(MEM_XSPI0_START)) && (addr <= SECURE_ADDR(MEM_XSPI0_END)))
                      || ((addr >= MEM_XSPI1_START) && (addr <= MEM_XSPI1_END)) || ((addr >= SECURE_ADDR(MEM_XSPI1_START)) && (addr <= SECURE_ADDR(MEM_XSPI1_END))))
             {
                 dest = addr + MEM_XSPI_LLC_OFFSET;
             }
+#endif
             else
             {
                 dest = addr;

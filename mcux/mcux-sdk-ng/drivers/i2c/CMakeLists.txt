@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.i2c_dma)
-    mcux_component_version(2.0.9)
+    mcux_component_version(2.0.10)
 
     mcux_add_source(SOURCES fsl_i2c_dma.c fsl_i2c_dma.h)
 
@@ -21,7 +21,7 @@ if(CONFIG_MCUX_COMPONENT_driver.i2c_edma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.i2c)
-    mcux_component_version(2.0.12)
+    mcux_component_version(2.0.13)
 
     mcux_add_source(SOURCES fsl_i2c.h fsl_i2c.c)
 

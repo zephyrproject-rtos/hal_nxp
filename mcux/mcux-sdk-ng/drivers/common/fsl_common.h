@@ -39,7 +39,7 @@
  ******************************************************************************/
 
 /*! @brief Construct a status code value from a group and code number. */
-#define MAKE_STATUS(group, code) ((((group)*100L) + (code)))
+#define MAKE_STATUS(statusGroup, statusCode) ((((statusGroup)*100L) + (statusCode)))
 
 /*! @brief Construct the version number for drivers.
  *
@@ -58,7 +58,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief common driver version. */
-#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 6, 6))
+#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 6, 8))
 /*! @} */
 
 /*! @name Debug console type definition. */
@@ -448,6 +448,45 @@ typedef int32_t status_t;
 #else
 #define SUPPRESS_FALL_THROUGH_WARNING()
 #endif
+
+/*!
+ * @def MCUX_BUILD_ASSERT(cond, msg)
+ *
+ * @brief Compile-time assertion macro.
+ *
+ * Triggers a compile error when the constant expression @p cond evaluates to
+ * false, printing @p msg as the diagnostic message.
+ *
+ * @param cond  A constant integer expression that must evaluate to non-zero.
+ * @param msg   A string literal that the compiler emits when @p cond is false.
+ *
+ * Example:
+ * @code
+ *   MCUX_BUILD_ASSERT(sizeof(uint32_t) == 4U, "uint32_t must be 4 bytes");
+ * @endcode
+ */
+#if !defined(MCUX_BUILD_ASSERT)
+#if ((defined(__DSC__) && defined(__CW__)))
+
+/* DSC/CodeWarrior: emulate static assertion via a typedef of an array. */
+#define MCUX_BUILD_ASSERT(cond, msg) \
+    typedef char build_assert_##__COUNTER__[(cond) ? 1 : -1]
+
+#else
+
+/*
+ * From C/C++ standard, C11 and C++11 support static_assert/_Static_assert,
+ * Here use the new feature unconditionally because morden toolchain already
+ * support it, it provides better use experience.
+ */
+#if defined(__cplusplus)
+#define MCUX_BUILD_ASSERT(cond, msg) static_assert(cond, msg)
+#else
+#define MCUX_BUILD_ASSERT(cond, msg) _Static_assert(cond, msg)
+#endif
+
+#endif
+#endif /* !defined(MCUX_BUILD_ASSERT) */
 
 /*******************************************************************************
  * API

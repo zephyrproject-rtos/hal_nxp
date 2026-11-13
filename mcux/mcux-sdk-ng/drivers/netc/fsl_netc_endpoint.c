@@ -209,7 +209,7 @@ static status_t EP_DescriptorInit(ep_handle_t *handle, const ep_config_t *config
         handle->txBdRing[ring].bdBase    = bdrConfig->txBdrConfig[ring].bdArray;
         handle->txBdRing[ring].dirtyBase = bdrConfig->txBdrConfig[ring].dirtyArray;
         handle->txBdRing[ring].len       = bdrConfig->txBdrConfig[ring].len;
-        handle->txBdRing[ring].enableInterrupt = bdrConfig->txBdrConfig[ring].enIntr;
+        handle->txBdRing[ring].enableInterrupt = (bdrConfig->txBdrConfig[ring].enIntr ? 1U : 0U);
     }
     for (ring = 0; ring < config->siConfig.rxRingUse; ring++)
     {

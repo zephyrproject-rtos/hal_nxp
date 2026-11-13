@@ -1,5 +1,11 @@
 # SPDIF
 
+## [2.0.11]
+
+- Bug Fixes
+  - Fixed MSG NULL_FIELD findings by adding buffer NULL guards in the Tx/Rx
+    interrupt transfer handlers to prevent NULL pointer dereferences.
+
 ## [2.0.10]
 
 - Improvements

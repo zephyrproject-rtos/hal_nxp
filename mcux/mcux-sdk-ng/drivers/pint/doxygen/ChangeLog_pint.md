@@ -1,5 +1,10 @@
 # PINT
 
+## [2.3.2]
+
+- Improvements
+  - Added support for multiple ordinary PINT instances with asymmetric interrupt counts.
+
 ## [2.3.1]
 
 - New Features

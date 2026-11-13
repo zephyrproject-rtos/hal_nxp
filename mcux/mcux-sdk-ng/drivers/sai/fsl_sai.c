@@ -2287,7 +2287,7 @@ void SAI_TransferTxHandleIRQ(I2S_Type *base, sai_handle_t *handle)
 
 /* Handle transfer */
 #if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
-    if (IS_SAI_FLAG_SET(base->TCSR, I2S_TCSR_FRF_MASK))
+    if ((buffer != NULL) && IS_SAI_FLAG_SET(base->TCSR, I2S_TCSR_FRF_MASK))
     {
         assert(FSL_FEATURE_SAI_FIFO_COUNTn(base) != -1);
         /* Judge if the data need to transmit is less than space */
@@ -2322,7 +2322,7 @@ void SAI_TransferTxHandleIRQ(I2S_Type *base, sai_handle_t *handle)
         }
     }
 #else
-    if (IS_SAI_FLAG_SET(base->TCSR, I2S_TCSR_FWF_MASK))
+    if ((buffer != NULL) && IS_SAI_FLAG_SET(base->TCSR, I2S_TCSR_FWF_MASK))
     {
         size_t size = MIN((handle->saiQueue[handle->queueDriver].dataSize), dataSize);
 
@@ -2393,7 +2393,7 @@ void SAI_TransferRxHandleIRQ(I2S_Type *base, sai_handle_t *handle)
 
 /* Handle transfer */
 #if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
-    if (IS_SAI_FLAG_SET(base->RCSR, I2S_RCSR_FRF_MASK))
+    if ((buffer != NULL) && IS_SAI_FLAG_SET(base->RCSR, I2S_RCSR_FRF_MASK))
     {
         assert(FSL_FEATURE_SAI_FIFO_COUNTn(base) != -1);
         /* Judge if the data need to transmit is less than space */
@@ -2426,7 +2426,7 @@ void SAI_TransferRxHandleIRQ(I2S_Type *base, sai_handle_t *handle)
         }
     }
 #else
-    if (IS_SAI_FLAG_SET(base->RCSR, I2S_RCSR_FWF_MASK))
+    if ((buffer != NULL) && IS_SAI_FLAG_SET(base->RCSR, I2S_RCSR_FWF_MASK))
     {
         size_t size = MIN((handle->saiQueue[handle->queueDriver].dataSize), dataSize);
 

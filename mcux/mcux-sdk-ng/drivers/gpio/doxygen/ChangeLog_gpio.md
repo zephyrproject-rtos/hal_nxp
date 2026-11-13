@@ -1,5 +1,11 @@
 # GPIO
 
+## [2.9.0]
+- New Features
+  - Added handle-based pin-mask interrupt callback support (`GPIO_CreateHandle`,
+    `GPIO_SetPinCallback`, `GPIO_ClearPinCallback` and the shared dispatcher
+    `GPIO_DriverIRQHandler`).
+
 ## [2.8.6]
 - Bug Fixes
   - Fixed CERT INT31-C violations in `GPIO_FIT_REG` macro for platforms with 8-bit register width.

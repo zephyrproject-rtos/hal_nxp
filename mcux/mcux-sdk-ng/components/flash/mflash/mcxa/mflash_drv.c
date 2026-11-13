@@ -46,31 +46,31 @@ int32_t mflash_drv_init(void)
 {
     status_t result;
 
-    result = FLASH_API->flash_init(&g_flash_instance);
+    result = FLASH_Init(&g_flash_instance);
     if (result != kStatus_Success)
     {
         return result;
     }
 
-    result = FLASH_API->flash_get_property(&g_flash_instance, kFLASH_PropertyPflashBlockBaseAddr, &pflashBlockBase);
+    result = FLASH_GetProperty(&g_flash_instance, kFLASH_PropertyPflashBlockBaseAddr, &pflashBlockBase);
     if (result != kStatus_Success)
     {
         return result;
     }
 
-    result = FLASH_API->flash_get_property(&g_flash_instance, kFLASH_PropertyPflashSectorSize, &pflashSectorSize);
+    result = FLASH_GetProperty(&g_flash_instance, kFLASH_PropertyPflashSectorSize, &pflashSectorSize);
     if (result != kStatus_Success)
     {
         return result;
     }
 
-    result = FLASH_API->flash_get_property(&g_flash_instance, kFLASH_PropertyPflashTotalSize, &pflashTotalSize);
+    result = FLASH_GetProperty(&g_flash_instance, kFLASH_PropertyPflashTotalSize, &pflashTotalSize);
     if (result != kStatus_Success)
     {
         return result;
     }
 
-    result = FLASH_API->flash_get_property(&g_flash_instance, kFLASH_PropertyPflashPageSize, &pflashPageSize);
+    result = FLASH_GetProperty(&g_flash_instance, kFLASH_PropertyPflashPageSize, &pflashPageSize);
     if (result != kStatus_Success)
     {
         return result;
@@ -95,7 +95,7 @@ int32_t mflash_drv_sector_erase(uint32_t sector_addr)
     }
     else
     {
-        ret = FLASH_API->flash_erase_sector(&g_flash_instance, sector_addr, MFLASH_SECTOR_SIZE, kFLASH_ApiEraseKey);
+        ret = FLASH_EraseSector(&g_flash_instance, sector_addr, MFLASH_SECTOR_SIZE, kFLASH_ApiEraseKey);
     }
 
     speculation_buffer_clear();
@@ -114,7 +114,7 @@ int32_t mflash_drv_page_program(uint32_t page_addr, uint32_t *data)
     }
     else
     {
-        ret = FLASH_API->flash_program_page(&g_flash_instance, page_addr, (uint8_t *)data, MFLASH_PAGE_SIZE);
+        ret = FLASH_ProgramPage(&g_flash_instance, page_addr, (uint8_t *)data, MFLASH_PAGE_SIZE);
     }
 
     speculation_buffer_clear();
@@ -133,7 +133,7 @@ int32_t mflash_drv_phrase_program(uint32_t page_addr, uint32_t *data)
     }
     else
     {
-        ret = FLASH_API->flash_program_phrase(&g_flash_instance, page_addr, (uint8_t *)data, MFLASH_PHRASE_SIZE);
+        ret = FLASH_ProgramPhrase(&g_flash_instance, page_addr, (uint8_t *)data, MFLASH_PHRASE_SIZE);
     }
 
     speculation_buffer_clear();

@@ -341,7 +341,7 @@ static inline void PORT_SecletPortVoltageRange(PORT_Type *base, port_voltage_ran
  *
  * This is an example to define an input pin or output pin PCR configuration.
  * @code
- * // Define a digital input pin PCR configuration
+ * Define a digital input pin PCR configuration
  * port_pin_config_t config = {
  *      kPORT_PullUp,
  *      kPORT_FastSlewRate,

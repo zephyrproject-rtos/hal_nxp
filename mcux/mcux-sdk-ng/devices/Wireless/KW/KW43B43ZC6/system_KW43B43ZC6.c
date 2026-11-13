@@ -113,6 +113,10 @@ __attribute__ ((weak)) void SystemInit (void) {
   __DMB();
   SYSCON->AUTHENTICATE = 0UL;
 
+  /* Disable aGDET interrupt and reset */
+  SPC0->ACTIVE_CFG |= SPC_ACTIVE_CFG_GLITCH_DETECT_DISABLE_MASK;
+  SPC0->LP_CFG |= SPC_ACTIVE_CFG_GLITCH_DETECT_DISABLE_MASK;
+
   SystemInitHook();
 }
 

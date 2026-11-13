@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -13,7 +13,11 @@
 
 #define MFLASH_PAGE_SIZE (256U)
 
-#define MFLASH_BASE_ADDRESS (XSPI0_AMBA_BASE)
+#if USE_XSPI1
+    #define MFLASH_BASE_ADDRESS (XSPI1_AMBA_BASE)
+#else
+    #define MFLASH_BASE_ADDRESS (XSPI0_AMBA_BASE)
+#endif
 
 #define MFLASH_FLASH_SIZE (64UL * 1024UL * 1024UL)
 

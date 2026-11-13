@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2024-2025 NXP
+ * Copyright 2016-2019, 2024-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -39,14 +39,8 @@
 #if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
     defined(FSL_FEATURE_SOC_PORT_COUNT)
 static PORT_Type *const s_portBases[] = PORT_BASE_PTRS;
-static GPIO_Type *const s_gpioBases[] = GPIO_BASE_PTRS;
-#else
-#if defined(GPIO_RESETS_ARRAY) || \
-    !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-static GPIO_Type *const s_gpioBases[] = GPIO_BASE_PTRS;
 #endif
-#endif
-
+static GPIO_Type *const s_gpioBases[] = GPIO_BASE_PTRS;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && \
     defined(GPIO_CLOCKS_ARRAY)
@@ -72,22 +66,21 @@ static const clock_ip_name_t s_fgpioClockName[] = FGPIO_CLOCKS;
 static const reset_ip_name_t s_gpioResets[] = GPIO_RESETS_ARRAY;
 #endif
 
+#if GPIO_PIN_CALLBACK_COUNT
+/*!
+ * @brief Pointers to the handle registered for each GPIO instance, indexed by instance.
+ *
+ * Driver keeps an instance-indexed table of the caller-owned handles registered through
+ * GPIO_CreateHandle(). The shared dispatcher GPIO_DriverIRQHandler(instance) looks the handle up
+ * by instance, so a board/device vector ISR only needs the controller instance -- no per-use-case
+ * ISR body and no hand-passed handle at interrupt time.
+ */
+static gpio_handle_t *s_gpioHandles[ARRAY_SIZE(s_gpioBases)];
+#endif /* GPIO_PIN_CALLBACK_COUNT */
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
-    defined(FSL_FEATURE_SOC_PORT_COUNT) || defined(GPIO_RESETS_ARRAY) || \
-    (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && \
-    defined(GPIO_CLOCKS_ARRAY))
-/*!
- * @brief Gets the GPIO instance according to the GPIO base
- *
- * @param base    GPIO peripheral base pointer(PTA, PTB, PTC, etc.)
- * @retval GPIO instance
- */
-static uint32_t GPIO_GetInstance(GPIO_Type *base);
-#endif
-
 /*!
  * @brief Enable/disable GPIO port clock.
  *
@@ -95,15 +88,11 @@ static uint32_t GPIO_GetInstance(GPIO_Type *base);
  * @param enable True means enable GPIO port clock, false means disable.
  */
 static void GPIO_PortClockEnable(GPIO_Type *base, bool enable);
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
-#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
-    defined(FSL_FEATURE_SOC_PORT_COUNT) || defined(GPIO_RESETS_ARRAY) || \
-    (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && \
-    defined(GPIO_CLOCKS_ARRAY))
-     
-static uint32_t GPIO_GetInstance(GPIO_Type *base)
+uint32_t GPIO_GetInstance(GPIO_Type *base)
 {
     uint32_t instance;
 
@@ -125,7 +114,6 @@ static uint32_t GPIO_GetInstance(GPIO_Type *base)
 
     return instance;
 }
-#endif
 
 static void GPIO_PortClockEnable(GPIO_Type *base, bool enable)
 {
@@ -349,6 +337,7 @@ void GPIO_PinClearInterruptFlag(GPIO_Type *base, uint32_t pin)
 {
     base->ICR[pin] |= GPIO_FIT_REG(GPIO_ICR_ISF(1U));
 }
+
 #endif /* FSL_FEATURE_PORT_HAS_NO_INTERRUPT */
 
 #if defined(FSL_FEATURE_GPIO_HAS_ATTRIBUTE_CHECKER) && FSL_FEATURE_GPIO_HAS_ATTRIBUTE_CHECKER
@@ -373,34 +362,281 @@ void GPIO_CheckAttributeBytes(GPIO_Type *base, gpio_checker_attribute_t attribut
 }
 #endif
 
+#if GPIO_PIN_CALLBACK_COUNT
+/*!
+ * brief Initializes a GPIO interrupt handle and registers it for the controller.
+ *
+ * Clears the handle's per-pin callback table and stores the handle in the driver's
+ * instance-indexed table so the shared dispatcher GPIO_DriverIRQHandler(instance) can find it from
+ * the controller instance alone. Call once before registering any pin callback.
+ *
+ * param base   GPIO peripheral base pointer (GPIOA, GPIOB, GPIOC, and so on).
+ * param handle Pointer to the caller-owned GPIO interrupt handle.
+ */
+void GPIO_CreateHandle(GPIO_Type *base, gpio_handle_t *handle)
+{
+    uint32_t i;
+
+    assert(NULL != handle);
+
+    for (i = 0U; i < GPIO_PIN_CALLBACK_COUNT; i++)
+    {
+        handle->entries[i].pinMask  = 0U;
+        handle->entries[i].callback = NULL;
+        handle->entries[i].userData = NULL;
+    }
+
+    /* Register the handle for this instance so the shared dispatcher can look it up. */
+    s_gpioHandles[GPIO_GetInstance(base)] = handle;
+}
+
+/*!
+ * brief Registers a pin-mask interrupt callback in the handle.
+ *
+ * note Matching is by exact pinMask, not by overlap. Registering masks that share a pin (for
+ * example 0x3 then 0x1) creates two separate entries, and both callbacks run when the shared pin
+ * fires.
+ *
+ * param handle   Pointer to the GPIO interrupt handle.
+ * param pinMask  Bitmask of pins to register the callback for (bit n == pin n).
+ * param callback Callback to invoke for the watched pins. Passing NULL removes the matching entry.
+ * param userData User data pointer passed back to the callback.
+ * retval kStatus_Success         Callback stored (or removed when callback is NULL).
+ * retval kStatus_InvalidArgument pinMask is 0.
+ * retval kStatus_OutOfRange      No free entry is available to store a new callback.
+ */
+status_t GPIO_SetPinCallback(gpio_handle_t *handle, uint32_t pinMask, gpio_pin_callback_t callback, void *userData)
+{
+    uint32_t i;
+    uint32_t freeSlot = GPIO_PIN_CALLBACK_COUNT;
+
+    assert(NULL != handle);
+
+    if (0U == pinMask)
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    /* Passing a NULL callback is a removal request. */
+    if (NULL == callback)
+    {
+        return GPIO_ClearPinCallback(handle, pinMask);
+    }
+
+    /* Replace an entry watching exactly this mask, else remember the first free slot. */
+    for (i = 0U; i < GPIO_PIN_CALLBACK_COUNT; i++)
+    {
+        if (handle->entries[i].pinMask == pinMask)
+        {
+            handle->entries[i].callback = callback;
+            handle->entries[i].userData = userData;
+            return kStatus_Success;
+        }
+        if ((0U == handle->entries[i].pinMask) && (freeSlot == GPIO_PIN_CALLBACK_COUNT))
+        {
+            freeSlot = i;
+        }
+    }
+
+    if (freeSlot == GPIO_PIN_CALLBACK_COUNT)
+    {
+        return kStatus_OutOfRange;
+    }
+
+    handle->entries[freeSlot].pinMask  = pinMask;
+    handle->entries[freeSlot].callback = callback;
+    handle->entries[freeSlot].userData = userData;
+
+    return kStatus_Success;
+}
+
+/*!
+ * brief Clears a pin-mask interrupt callback in the handle.
+ *
+ * param handle  Pointer to the GPIO interrupt handle.
+ * param pinMask Bitmask of pins whose callback entry is removed (bit n == pin n).
+ * retval kStatus_Success         Callback cleared.
+ * retval kStatus_InvalidArgument pinMask is 0.
+ * retval kStatus_OutOfRange      No entry watches exactly pinMask.
+ */
+status_t GPIO_ClearPinCallback(gpio_handle_t *handle, uint32_t pinMask)
+{
+    uint32_t i;
+
+    assert(NULL != handle);
+
+    if (0U == pinMask)
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    for (i = 0U; i < GPIO_PIN_CALLBACK_COUNT; i++)
+    {
+        if (handle->entries[i].pinMask == pinMask)
+        {
+            handle->entries[i].pinMask  = 0U;
+            handle->entries[i].callback = NULL;
+            handle->entries[i].userData = NULL;
+            return kStatus_Success;
+        }
+    }
+
+    return kStatus_OutOfRange;
+}
+#endif /* GPIO_PIN_CALLBACK_COUNT */
+
+/*!
+ * brief Unified GPIO interrupt dispatcher.
+ *
+ * Looks up the handle registered for instance via GPIO_CreateHandle(), reads the controller's
+ * pending interrupt flags, and for each callback entry whose watched pins intersect the pending
+ * flags: clears those flags first, then invokes the callback once with the pending subset as a
+ * pin bitmask. After the entries are serviced, any pending flags not claimed by a registered entry
+ * are cleared as well, so an interrupt that is enabled in hardware but has no callback cannot keep
+ * re-firing (interrupt storm). Following the SDK convention where the vector handler recovers its
+ * handle from a driver-static table (compare PDM_EventHandleIRQ(instance)), a board/device vector
+ * ISR forwards to this function with only the controller instance, so no per-use-case ISR body is
+ * needed.
+ *
+ * param instance GPIO peripheral instance number.
+ */
+#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
+    defined(FSL_FEATURE_SOC_PORT_COUNT)
+/* Interrupt is route to PORT. */
+void GPIO_DriverIRQHandler(uint32_t instance)
+{
+    PORT_Type *base;
+    uint32_t flags;
+
+    if (instance >= ARRAY_SIZE(s_portBases))
+    {
+        SDK_ISR_EXIT_BARRIER;
+        return;
+    }
+
+    base   = s_portBases[instance];
+
+#if GPIO_PIN_CALLBACK_COUNT
+    uint32_t handled = 0U;
+    uint32_t unhandled;
+    uint32_t i;
+
+    gpio_handle_t *handle = s_gpioHandles[instance];
+
+    /* No handle registered for this controller: nothing to dispatch. */
+    if (NULL == handle)
+    {
+        SDK_ISR_EXIT_BARRIER;
+        return;
+    }
+
+    flags = base->ISFR;
+
+    for (i = 0U; i < GPIO_PIN_CALLBACK_COUNT; i++)
+    {
+        uint32_t pending = flags & handle->entries[i].pinMask;
+
+        if ((0U != pending) && (NULL != handle->entries[i].callback))
+        {
+            /* Clear the pending flags before invoking the callback so a level re-assert during
+             * the callback is observed on the next interrupt. */
+            base->ISFR = pending;
+            handled |= pending;
+            handle->entries[i].callback(s_gpioBases[instance], handle, pending, handle->entries[i].userData);
+        }
+    }
+
+    /* Clear any pending flags not claimed by a registered entry. Without this, a pin whose
+     * interrupt is enabled in hardware but has no matching callback would never have its flag
+     * cleared and would keep re-entering this handler (interrupt storm). */
+    unhandled = flags & ~handled;
+    if (0U != unhandled)
+    {
+        base->ISFR = unhandled;
+    }
+#else
+    flags = base->ISFR;
+    base->ISFR = flags;
+#endif /* GPIO_PIN_CALLBACK_COUNT */
+
+    SDK_ISR_EXIT_BARRIER;
+}
+#else /* Interrupt handle by GPIO */
+void GPIO_DriverIRQHandler(uint32_t instance)
+{
+    GPIO_Type *base;
+    uint32_t flags;
+
+    if (instance >= ARRAY_SIZE(s_gpioBases))
+    {
+        SDK_ISR_EXIT_BARRIER;
+        return;
+    }
+
+    base   = s_gpioBases[instance];
+
+#if GPIO_PIN_CALLBACK_COUNT
+    uint32_t handled = 0U;
+    uint32_t unhandled;
+    uint32_t i;
+
+    gpio_handle_t *handle = s_gpioHandles[instance];
+
+    /* No handle registered for this controller: nothing to dispatch. */
+    if (NULL == handle)
+    {
+        SDK_ISR_EXIT_BARRIER;
+        return;
+    }
+
+    flags = GPIO_GpioGetInterruptFlags(base);
+
+    for (i = 0U; i < GPIO_PIN_CALLBACK_COUNT; i++)
+    {
+        uint32_t pending = flags & handle->entries[i].pinMask;
+
+        if ((0U != pending) && (NULL != handle->entries[i].callback))
+        {
+            /* Clear the pending flags before invoking the callback so a level re-assert during
+             * the callback is observed on the next interrupt. */
+            GPIO_GpioClearInterruptFlags(base, pending);
+            handled |= pending;
+            handle->entries[i].callback(base, handle, pending, handle->entries[i].userData);
+        }
+    }
+
+    /* Clear any pending flags not claimed by a registered entry. Without this, a pin whose
+     * interrupt is enabled in hardware but has no matching callback would never have its flag
+     * cleared and would keep re-entering this handler (interrupt storm). */
+    unhandled = flags & ~handled;
+    if (0U != unhandled)
+    {
+        GPIO_GpioClearInterruptFlags(base, unhandled);
+    }
+#else
+    flags = GPIO_GpioGetInterruptFlags(base);
+    GPIO_GpioClearInterruptFlags(base, flags);
+#endif /* GPIO_PIN_CALLBACK_COUNT */
+
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
+
 #if defined(FSL_FEATURE_SOC_FGPIO_COUNT) && FSL_FEATURE_SOC_FGPIO_COUNT
 
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
-    defined(FSL_FEATURE_SOC_PORT_COUNT)
 static FGPIO_Type *const s_fgpioBases[] = FGPIO_BASE_PTRS;
-#endif
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
-    defined(FSL_FEATURE_SOC_PORT_COUNT)
-/*!
- * @brief Gets the FGPIO instance according to the GPIO base
- *
- * @param base    FGPIO peripheral base pointer(PTA, PTB, PTC, etc.)
- * @retval FGPIO instance
- */
-static uint32_t FGPIO_GetInstance(FGPIO_Type *base);
-#endif
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
-#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
-    defined(FSL_FEATURE_SOC_PORT_COUNT)
-static uint32_t FGPIO_GetInstance(FGPIO_Type *base)
+uint32_t FGPIO_GetInstance(FGPIO_Type *base)
 {
     uint32_t instance;
 
@@ -417,7 +653,7 @@ static uint32_t FGPIO_GetInstance(FGPIO_Type *base)
 
     return instance;
 }
-#endif
+
 #if defined(FSL_FEATURE_PCC_HAS_FGPIO_CLOCK_GATE_CONTROL) && FSL_FEATURE_PCC_HAS_FGPIO_CLOCK_GATE_CONTROL
 /*!
  * brief Initializes the FGPIO peripheral.

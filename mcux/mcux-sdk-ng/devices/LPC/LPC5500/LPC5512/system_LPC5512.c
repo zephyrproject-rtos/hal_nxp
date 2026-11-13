@@ -10,7 +10,7 @@
 **
 **     Reference manual:    LPC55S1x/LPC551x User manual Rev.0.6  15 November 2019
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b260817
+**     Build:               b260914
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -99,7 +99,7 @@ static uint32_t findPll0PostDiv(void)
 /* Get multiplier (M) from PLL0 SSCG and SEL_EXT settings */
 static float findPll0MMult(void)
 {
-    float mMult = 1.0F;
+    float mMult;
     float mMult_fract;
     uint32_t mMult_int;
 

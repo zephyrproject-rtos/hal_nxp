@@ -1039,7 +1039,10 @@ void MSCAN_TransferHandleIRQ(MSCAN_Type *base, mscan_handle_t *handle)
         }
     }
 
-    handle->callback(base, handle, status, handle->userData);
+    if (handle->callback != NULL)
+    {
+        handle->callback(base, handle, status, handle->userData);
+    }
 }
 
 #if defined(MSCAN)

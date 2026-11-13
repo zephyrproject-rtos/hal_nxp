@@ -34,6 +34,8 @@
   - Added `sampleCount` field in `hscmp_roundrobin_config_t` to configure RRCR0.RR_SAMPLE_CNT
     (number of samples for one channel).
   - Added `sampleThreshold` field in `hscmp_roundrobin_config_t` to configure RRCR0.RR_SAMPLE_THRESHOLD.
+- Bug Fixes:
+  - Fixed the available range of `DACValue` from 0-63 to 0-255 in hscmp_dac_config_t struct comment.
 
 ## [2.0.4]
 
