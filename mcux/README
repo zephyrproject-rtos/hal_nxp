@@ -231,3 +231,7 @@ Patch List:
       - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/587276a3b0d42ffcbfbaefdaf756e9c3cdeab233
     - mcux: sdk-ng: RT11xx: fsl_clock: read the PLL numerator as signed
       - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/dd1dc48efcc6e34fb6e1ee52d150ffda8974ca1e
+    - mcux: sdk-ng: pint: support legacy device headers
+      - Guard clock metadata when SDK driver clock control is disabled.
+      - Retain kCLOCK_Pint and the fixed connected-output count for legacy device headers.
+      - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/4a52c5f38988265209de1c779bce0f76766feba1
