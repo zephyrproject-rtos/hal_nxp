@@ -260,11 +260,18 @@ else()
 		${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/drivers/crc
 	)
 
-	target_sources(
-		McuxPsaCryptoDriverSgiPkc
-		PRIVATE
-		${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/drivers/glikey/fsl_glikey.c
-	)
+	# fsl_glikey.c is only compiled when the GLIKEY component is enabled.
+	# MCXW7xx (W70) has no GLIKEY_Type (MCUXCL_FEATURE_GLIKEY is not defined for
+	# this platform), so CONFIG_SGI_PKC_GLIKEY is disabled there and the FSL
+	# GLIKEY driver must not be built - otherwise fsl_glikey.c fails to compile
+	# with "unknown type name 'GLIKEY_Type'".
+	if(CONFIG_SGI_PKC_GLIKEY)
+		target_sources(
+			McuxPsaCryptoDriverSgiPkc
+			PRIVATE
+			${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/drivers/glikey/fsl_glikey.c
+		)
+	endif()
 
 	# fsl_crc.c is compiled here only when the Zephyr NXP CRC driver
 	# (CONFIG_CRC_DRIVER_NXP) is NOT enabled. When that driver is active, it
