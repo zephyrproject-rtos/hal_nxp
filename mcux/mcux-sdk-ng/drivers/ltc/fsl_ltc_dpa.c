@@ -41,7 +41,7 @@
 #define FSL_LTC_DPA_ACT_ND_DES              95u
 
 #define LTC_DPA_FIFO_SIZE            (0xff0u)
-#define BUILD_ASSERT(condition, msg) extern int msg[1 - 2 * (!(condition))] __attribute__((unused))
+#define LTC_DPA_BUILD_ASSERT(condition, msg) extern int msg[1 - 2 * (!(condition))] __attribute__((unused))
 
 #ifndef FSL_LTC_DPA_HAVE_COUNTERMEASURE_B
 #define FSL_LTC_DPA_HAVE_COUNTERMEASURE_B 1
@@ -1156,7 +1156,7 @@ void LTC_SetDummyProbabilityDPA(ltc_dpa_handle_t *handle, uint32_t probability)
  */
 status_t LTC_CreateHandleDPA(LTC_Type *base, ltc_dpa_handle_t *handle, uint8_t seed[16])
 {
-    BUILD_ASSERT((sizeof(ltc_dpa_request_t) >= sizeof(ltc_dpa_req_handle_t)), ltc_dpa_request_t_size_too_low);
+    LTC_DPA_BUILD_ASSERT((sizeof(ltc_dpa_request_t) >= sizeof(ltc_dpa_req_handle_t)), ltc_dpa_request_t_size_too_low);
     bool zeroSeed;
     uint32_t temp32;
 
