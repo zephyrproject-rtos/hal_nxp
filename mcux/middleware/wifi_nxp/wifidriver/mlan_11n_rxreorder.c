@@ -52,6 +52,24 @@ static mlan_status wlan_11n_dispatch_amsdu_pkt(mlan_private *priv, pmlan_buffer 
         pmbuf->data_len = prx_pd->rx_pkt_length;
         pmbuf->data_offset += prx_pd->rx_pkt_offset;
 
+        if ((pmbuf->data_offset + prx_pd->rx_pkt_length) > sizeof(amsdu_inbuf))
+        {
+            PRINTM(MERROR, "A-MSDU too large: offset=%d, rx_pkt_length=%d, max=%zu\n",
+                   pmbuf->data_offset, prx_pd->rx_pkt_length, sizeof(amsdu_inbuf));
+            net_stack_buffer_free(pmbuf->lwip_pbuf);
+#if !CONFIG_TX_RX_ZERO_COPY
+#if !CONFIG_MEM_POOLS
+            OSA_MemoryFree(pmbuf->pbuf);
+            OSA_MemoryFree(pmbuf);
+#else
+            OSA_MemoryPoolFree(buf_128_MemoryPool, pmbuf->pbuf);
+            OSA_MemoryPoolFree(buf_128_MemoryPool, pmbuf);
+#endif
+#endif
+            LEAVE();
+            return MLAN_STATUS_SUCCESS;
+        }
+
         (void)__memcpy(priv->adapter, amsdu_inbuf, pmbuf->pbuf, sizeof(RxPD));
         net_stack_buffer_copy_partial(pmbuf->lwip_pbuf, amsdu_inbuf + pmbuf->data_offset, prx_pd->rx_pkt_length, 0);
 #if !CONFIG_TX_RX_ZERO_COPY

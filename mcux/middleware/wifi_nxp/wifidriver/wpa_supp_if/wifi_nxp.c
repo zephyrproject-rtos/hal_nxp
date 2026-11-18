@@ -56,7 +56,6 @@ const rtos_wpa_supp_dev_ops wpa_supp_ops = {
     .cancel_remain_on_channel = wifi_nxp_wpa_supp_cancel_remain_on_channel,
     .get_survey_results       = wifi_nxp_wpa_supp_survey_results_get,
     .get_modes                = wifi_nxp_wpa_get_modes,
-    .set_modes                = wifi_nxp_hostapd_set_modes,
     .hapd_send_eapol          = wifi_nxp_hostapd_send_eapol,
     .set_freq                 = wifi_nxp_hostapd_set_freq,
     .set_rts                  = wifi_nxp_hostapd_set_rts,

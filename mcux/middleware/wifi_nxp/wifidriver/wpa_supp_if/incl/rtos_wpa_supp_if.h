@@ -173,7 +173,6 @@ void *wifi_nxp_hostapd_dev_init(void *hapd_drv_if_ctx,
 void wifi_nxp_hostapd_dev_deinit(void *if_priv);
 int wifi_nxp_hostapd_do_acs(void *priv, struct drv_acs_params *params);
 int wifi_nxp_hostapd_set_ap(void *if_priv, int beacon_set, struct wpa_driver_ap_params *params);
-int wifi_nxp_hostapd_set_modes(void *if_priv, struct hostapd_hw_modes *modes);
 int wifi_nxp_hostapd_sta_add(void *if_priv, struct hostapd_sta_add_params *params);
 int wifi_nxp_hostapd_sta_remove(void *if_priv, const u8 *addr);
 int wifi_nxp_hostapd_send_eapol(void *if_priv, const u8 *data, size_t data_len);

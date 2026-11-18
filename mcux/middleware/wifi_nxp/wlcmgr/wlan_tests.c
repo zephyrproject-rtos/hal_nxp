@@ -97,7 +97,11 @@ enum wps_session_types
 };
 #endif
 
+#if CONFIG_SIGMA_AGENT
+int __scan_cb(unsigned int count)
+#else
 static int __scan_cb(unsigned int count)
+#endif
 {
     struct wlan_scan_result res;
     unsigned int i;
@@ -7114,7 +7118,7 @@ static void dump_wlan_set_turbo_mode_usage()
 {
     (void)PRINTF("Usage: wlan-set-turbo-mode <STA/UAP> <mode>\r\n");
     (void)PRINTF("          <STA/UAP>  'STA'  or 'UAP' \r\n");
-    (void)PRINTF("          <mode> can be 0,1,2,3\r\n");
+    (void)PRINTF("          <mode> can be 0,1,2,3,4\r\n");
 }
 
 static void test_wlan_set_turbo_mode(int argc, char **argv)
@@ -7141,7 +7145,7 @@ static void test_wlan_set_turbo_mode(int argc, char **argv)
         return;
     }
 
-    if (get_uint(argv[2], &value, strlen(argv[2])) && value > 3)
+    if (!get_uint(argv[2], &value, strlen(argv[2])) && value > 4)
     {
         (void)PRINTF("Invalid mode argument\r\n");
         dump_wlan_set_turbo_mode_usage();

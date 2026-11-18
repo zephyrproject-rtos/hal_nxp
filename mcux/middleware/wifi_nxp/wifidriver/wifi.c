@@ -297,6 +297,32 @@ int wifi_put_command_lock(void)
     return WM_SUCCESS;
 }
 
+int wifi_get_cmdresp_ioctl_mutex(void)
+{
+    osa_status_t status;
+
+    status = OSA_MutexLock((osa_mutex_handle_t)wm_wifi.cmdresp_ioctl_mutex, osaWaitForever_c);
+    if (status != KOSA_StatusSuccess)
+    {
+        return -WM_FAIL;
+    }
+
+    return WM_SUCCESS;
+}
+
+int wifi_put_cmdresp_ioctl_mutex(void)
+{
+    osa_status_t status;
+
+    status = OSA_MutexUnlock((osa_mutex_handle_t)wm_wifi.cmdresp_ioctl_mutex);
+    if (status != KOSA_StatusSuccess)
+    {
+        return -WM_FAIL;
+    }
+
+    return WM_SUCCESS;
+}
+
 static int wifi_get_mcastf_lock(void)
 {
     osa_status_t status;
@@ -1298,6 +1324,13 @@ static int wifi_core_init(void)
         goto fail;
     }
 
+    status = OSA_MutexCreate((osa_mutex_handle_t)wm_wifi.cmdresp_ioctl_mutex);
+    if (status != KOSA_StatusSuccess)
+    {
+        wifi_e("Create cmdresp_ioctl_mutex failed");
+        goto fail;
+    }
+
     status = OSA_EventCreate((osa_event_handle_t)wm_wifi.wifi_event_Handle, 1);
     if (status != KOSA_StatusSuccess)
     {
@@ -1503,6 +1536,7 @@ static void wifi_core_deinit(void)
     (void)OSA_SemaphoreDestroy((osa_semaphore_handle_t)wm_wifi.tx_data_sem);
 #endif
     (void)OSA_MutexDestroy((osa_mutex_handle_t)wm_wifi.command_lock);
+    (void)OSA_MutexDestroy((osa_mutex_handle_t)wm_wifi.cmdresp_ioctl_mutex);
     (void)OSA_EventDestroy((osa_event_handle_t)wm_wifi.wifi_event_Handle);
 #if 0
     (void)OSA_TaskDestroy((osa_task_handle_t)wm_wifi.wifi_drv_task_Handle);

@@ -208,28 +208,28 @@ static oper_bw_chan oper_bw_chan_cn[] = {
 };
 
 static const global_oper_class_t global_oper_class_table[] = {
-    {BAND_2GHZ, 81, OPER_CLASS_BW_20MHZ, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}},
-    {BAND_2GHZ, 82, OPER_CLASS_BW_20MHZ, {14}},
-    {BAND_2GHZ, 83, OPER_CLASS_BW_40PLUS, {1, 2, 3, 4, 5, 6, 7, 8, 9}},
-    {BAND_2GHZ, 84, OPER_CLASS_BW_40MINUS, {5, 6, 7, 8, 9, 10, 11, 12, 13}},
+    {BAND_G, 81, OPER_CLASS_BW_20MHZ, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}},
+    {BAND_G, 82, OPER_CLASS_BW_20MHZ, {14}},
+    {BAND_G, 83, OPER_CLASS_BW_40PLUS, {1, 2, 3, 4, 5, 6, 7, 8, 9}},
+    {BAND_G, 84, OPER_CLASS_BW_40MINUS, {5, 6, 7, 8, 9, 10, 11, 12, 13}},
 #if CONFIG_5GHz_SUPPORT
-    {BAND_5GHZ, 115, OPER_CLASS_BW_20MHZ, {36, 40, 44, 48}},
-    {BAND_5GHZ, 116, OPER_CLASS_BW_40PLUS, {36, 44}},
-    {BAND_5GHZ, 117, OPER_CLASS_BW_40MINUS, {40, 48}},
-    {BAND_5GHZ, 118, OPER_CLASS_BW_20MHZ, {52, 56, 60, 64}},
-    {BAND_5GHZ, 119, OPER_CLASS_BW_40PLUS, {52, 60}},
-    {BAND_5GHZ, 120, OPER_CLASS_BW_40MINUS, {56, 64}},
-    {BAND_5GHZ, 121, OPER_CLASS_BW_20MHZ, {100, 104, 108, 112, 116, 120, 124, 128, 132, 136, 140, 144}},
-    {BAND_5GHZ, 122, OPER_CLASS_BW_40PLUS, {100, 108, 116, 124, 132, 140}},
-    {BAND_5GHZ, 123, OPER_CLASS_BW_40MINUS, {104, 112, 120, 128, 136, 144}},
-    {BAND_5GHZ, 124, OPER_CLASS_BW_20MHZ, {149, 153, 157, 161}},
-    {BAND_5GHZ, 125, OPER_CLASS_BW_20MHZ, {149, 153, 157, 161, 165, 169, 173, 177}},
-    {BAND_5GHZ, 126, OPER_CLASS_BW_40PLUS, {149, 157, 165, 173}},
-    {BAND_5GHZ, 127, OPER_CLASS_BW_40MINUS, {153, 161, 169, 177}},
+    {BAND_A, 115, OPER_CLASS_BW_20MHZ, {36, 40, 44, 48}},
+    {BAND_A, 116, OPER_CLASS_BW_40PLUS, {36, 44}},
+    {BAND_A, 117, OPER_CLASS_BW_40MINUS, {40, 48}},
+    {BAND_A, 118, OPER_CLASS_BW_20MHZ, {52, 56, 60, 64}},
+    {BAND_A, 119, OPER_CLASS_BW_40PLUS, {52, 60}},
+    {BAND_A, 120, OPER_CLASS_BW_40MINUS, {56, 64}},
+    {BAND_A, 121, OPER_CLASS_BW_20MHZ, {100, 104, 108, 112, 116, 120, 124, 128, 132, 136, 140, 144}},
+    {BAND_A, 122, OPER_CLASS_BW_40PLUS, {100, 108, 116, 124, 132, 140}},
+    {BAND_A, 123, OPER_CLASS_BW_40MINUS, {104, 112, 120, 128, 136, 144}},
+    {BAND_A, 124, OPER_CLASS_BW_20MHZ, {149, 153, 157, 161}},
+    {BAND_A, 125, OPER_CLASS_BW_20MHZ, {149, 153, 157, 161, 165, 169, 173, 177}},
+    {BAND_A, 126, OPER_CLASS_BW_40PLUS, {149, 157, 165, 173}},
+    {BAND_A, 127, OPER_CLASS_BW_40MINUS, {153, 161, 169, 177}},
 #if CONFIG_11AC || CONFIG_11AX
-    {BAND_5GHZ, 128, OPER_CLASS_BW_80MHZ, {42, 58, 106, 122, 138, 155, 171}},
-    {BAND_5GHZ, 129, OPER_CLASS_BW_160MHZ, {50, 114, 163}},
-    {BAND_5GHZ, 130, OPER_CLASS_BW_80P80MHZ, {42, 58, 106, 122, 138, 155, 171}},
+    {BAND_A, 128, OPER_CLASS_BW_80MHZ, {42, 58, 106, 122, 138, 155, 171}},
+    {BAND_A, 129, OPER_CLASS_BW_160MHZ, {50, 114, 163}},
+    {BAND_A, 130, OPER_CLASS_BW_80P80MHZ, {42, 58, 106, 122, 138, 155, 171}},
 #endif
 #endif
 };
@@ -2650,6 +2650,162 @@ void wlan_free_fw_cfp_tables(mlan_adapter *pmadapter)
 }
 #endif /* OTP_CHANINFO */
 
+#if CONFIG_11AX
+#define HE_CAP_SUPPORTED(_cap, _len, _mask) \
+        (((_cap) != MNULL) && \
+         ((_len) > util_offsetof(MrvlIEtypes_He_cap_t, he_phy_cap)) && \
+         (((_cap)[util_offsetof(MrvlIEtypes_He_cap_t, he_phy_cap)] & (_mask)) != 0U))
+#endif
+
+t_bool wlan_bandwidth_supported(mlan_private *pmpriv, t_u16 band, const t_u8 bandwidth)
+{
+    mlan_adapter *pmadapter;
+    t_u16 band_config;
+    t_u16 band_mask;
+    t_u32 ht_cap;
+#if CONFIG_11AX
+    const t_u8 *he_cap;
+    t_u32 he_cap_len;
+#endif
+
+    pmadapter = pmpriv->adapter;
+    band_config = (pmpriv->bss_mode == MLAN_BSS_MODE_IBSS) ? pmadapter->adhoc_start_band :
+                                                                pmpriv->config_bands;
+
+    switch (band)
+    {
+        case BAND_G:
+            band_mask = BAND_B | BAND_G | BAND_GN
+#if CONFIG_11AC
+                        | BAND_GAC
+#endif
+#if CONFIG_11AX
+                        | BAND_GAX
+#endif
+                        ;
+            ht_cap = pmadapter->usr_dot_11n_dev_cap_bg;
+#if CONFIG_11AX
+            he_cap     = pmpriv->user_2g_he_cap;
+            he_cap_len = pmpriv->user_2g_hecap_len;
+#endif
+        break;
+#if CONFIG_5GHz_SUPPORT
+        case BAND_A:
+            band_mask = BAND_A | BAND_AN
+#if CONFIG_11AC
+                        | BAND_AAC
+#endif
+#if CONFIG_11AX
+                        | BAND_AAX
+#endif
+                        ;
+            ht_cap = pmadapter->usr_dot_11n_dev_cap_a;
+#if CONFIG_11AX
+            he_cap     = pmpriv->user_he_cap;
+            he_cap_len = pmpriv->user_hecap_len;
+#endif
+        break;
+#endif
+        default:
+            return MFALSE;
+    }
+
+    switch (bandwidth)
+    {
+        case BANDWIDTH_20MHZ:
+            return ((band_config & band_mask) != 0U) ? MTRUE : MFALSE;
+        case BANDWIDTH_40MHZ:
+            if ((ISSUPP_CHANWIDTH40(ht_cap) != 0U)&&
+                (((ISSUPP_11NENABLED(pmadapter->fw_cap_info) != 0U) && wmsdk_is_11N_enabled() &&
+                    wlan_11n_bandconfig_allowed(pmpriv, band))
+#if CONFIG_11AC
+                || (((band == BAND_G) ? (ISSUPP_11AC2GENABLED(pmadapter->fw_cap_info) != 0U) :
+                                        (ISSUPP_11AC5GENABLED(pmadapter->fw_cap_info) != 0U))
+                    && wlan_11ac_bandconfig_allowed(pmpriv, band))
+#endif
+                ))
+            {
+                return MTRUE;
+            }
+
+#if CONFIG_11AX
+            if (wlan_11ax_bandconfig_allowed(pmpriv, band))
+            {
+                return HE_CAP_SUPPORTED(he_cap, he_cap_len,
+                        (band == BAND_G) ? AX_2G_40MHZ_SUPPORT : AX_5G_40MHZ_80MHZ_SUPPORT);
+            }
+#endif
+            return MFALSE;
+#if CONFIG_5GHz_SUPPORT
+        case BANDWIDTH_80MHZ:
+            if (band != BAND_A)
+            {
+                return MFALSE;
+            }
+#if CONFIG_11AC
+            if ((ISSUPP_11AC5GENABLED(pmadapter->fw_cap_info) != 0U) &&
+                wlan_11ac_bandconfig_allowed(pmpriv, BAND_A) &&
+                (ISSUPP_CHANWIDTH40(pmadapter->usr_dot_11n_dev_cap_a) != 0U))
+            {
+                return MTRUE;
+            }
+#endif
+#if CONFIG_11AX
+            if (wlan_11ax_bandconfig_allowed(pmpriv, BAND_A))
+            {
+                return HE_CAP_SUPPORTED(he_cap, he_cap_len, AX_5G_40MHZ_80MHZ_SUPPORT);
+            }
+#endif
+            return MFALSE;
+        case BANDWIDTH_160MHZ:
+            if (band != BAND_A)
+            {
+                return MFALSE;
+            }
+#if CONFIG_11AC
+            if ((ISSUPP_11AC5GENABLED(pmadapter->fw_cap_info) != 0U) &&
+                wlan_11ac_bandconfig_allowed(pmpriv, BAND_A) &&
+                (ISSUPP_11ACBW160(pmadapter->hw_dot_11ac_dev_cap) != 0U) &&
+                ((GET_VHTCAP_CHWDSET(pmadapter->usr_dot_11ac_dev_cap_a) == VHT_CAP_CHWD_160MHZ) ||
+                 (GET_VHTCAP_CHWDSET(pmadapter->usr_dot_11ac_dev_cap_a) == VHT_CAP_CHWD_80_80MHZ)))
+            {
+                return MTRUE;
+            }
+#endif
+#if CONFIG_11AX
+            if (wlan_11ax_bandconfig_allowed(pmpriv, BAND_A))
+            {
+                return HE_CAP_SUPPORTED(he_cap, he_cap_len, AX_5G_160MHZ_SUPPORT);
+            }
+#endif
+            return MFALSE;
+        case BANDWIDTH_80P80MHZ:
+            if (band != BAND_A)
+            {
+                return MFALSE;
+            }
+#if CONFIG_11AC
+            if ((ISSUPP_11AC5GENABLED(pmadapter->fw_cap_info) != 0U) &&
+                wlan_11ac_bandconfig_allowed(pmpriv, BAND_A) &&
+                (ISSUPP_11ACBW8080(pmadapter->hw_dot_11ac_dev_cap) != 0U) &&
+                (GET_VHTCAP_CHWDSET(pmadapter->usr_dot_11ac_dev_cap_a) == VHT_CAP_CHWD_80_80MHZ))
+            {
+                return MTRUE;
+            }
+#endif
+#if CONFIG_11AX
+            if (wlan_11ax_bandconfig_allowed(pmpriv, BAND_A))
+            {
+                return HE_CAP_SUPPORTED(he_cap, he_cap_len, AX_5G_80PLUS80MHZ_SUPPORT);
+            }
+#endif
+            return MFALSE;
+#endif /* CONFIG_5GHz_SUPPORT */
+        default:
+            return MFALSE;
+    }
+}
+
 t_bool wlan_is_etsi_country(pmlan_adapter pmadapter, t_u8 *country_code)
 {
     t_u8 i;
@@ -2800,171 +2956,33 @@ static t_bool wlan_oper_class_channel_usable(mlan_private *pmpriv, t_u16 band, t
     return MTRUE;
 }
 
-static t_bool wlan_oper_class_he_bandwidth_supported(mlan_private *pmpriv, t_u16 band, t_u8 bandwidth)
-{
-#if CONFIG_11AX
-    const t_u8 *he_cap;
-    t_u8 he_phy_cap;
-    t_u8 he_phy_cap_mask;
-
-    if (!IS_FW_SUPPORT_11AX(pmpriv->adapter))
-    {
-        return MFALSE;
-    }
-
-    switch (band)
-    {
-        case BAND_G:
-            if ((pmpriv->config_bands & BAND_GAX) == 0U)
-            {
-                return MFALSE;
-            }
-            he_cap = pmpriv->user_2g_he_cap;
-            break;
-#if CONFIG_5GHz_SUPPORT
-        case BAND_A:
-            if ((pmpriv->config_bands & BAND_AAX) == 0U)
-            {
-                return MFALSE;
-            }
-            he_cap = pmpriv->user_he_cap;
-            break;
-#endif
-        default:
-            return MFALSE;
-    }
-
-    if (band == BAND_G)
-    {
-        if (bandwidth != OPER_CLASS_BW_40PLUS && bandwidth != OPER_CLASS_BW_40MINUS)
-        {
-            return MFALSE;
-        }
-        he_phy_cap_mask = AX_2G_40MHZ_SUPPORT;
-    }
-    else
-    {
-        switch (bandwidth)
-        {
-            case OPER_CLASS_BW_40PLUS:
-            case OPER_CLASS_BW_40MINUS:
-            case OPER_CLASS_BW_80MHZ:
-                he_phy_cap_mask = AX_5G_40MHZ_80MHZ_SUPPORT;
-                break;
-            case OPER_CLASS_BW_160MHZ:
-                he_phy_cap_mask = AX_5G_160MHZ_SUPPORT;
-                break;
-            case OPER_CLASS_BW_80P80MHZ:
-                he_phy_cap_mask = AX_5G_80PLUS80MHZ_SUPPORT;
-                break;
-            default:
-                return MFALSE;
-        }
-    }
-
-    he_phy_cap = he_cap[util_offsetof(MrvlIEtypes_He_cap_t, he_phy_cap)];
-    return (he_phy_cap & he_phy_cap_mask) != 0U ? MTRUE : MFALSE;
-#else
-    (void)pmpriv;
-    (void)band;
-    (void)bandwidth;
-    return MFALSE;
-#endif
-}
-
 static t_bool wlan_oper_class_mode_supported(mlan_private *pmpriv, const global_oper_class_t *oper_class)
 {
-    t_u16 config_bands = pmpriv->config_bands;
-    t_u16 mode_band_mask, ht_band_mask;
-    t_u16 band;
-    t_u32 ht_dev_cap;
-    t_bool ht40_supported = MFALSE;
-
-    switch (oper_class->mode)
-    {
-        case BAND_2GHZ:
-            band = BAND_G;
-            mode_band_mask = (BAND_B | BAND_G | BAND_GN | BAND_GAC
-#if CONFIG_11AX
-                              | BAND_GAX
-#endif
-            );
-            ht_band_mask = BAND_GN | BAND_GAC;
-            ht_dev_cap = pmpriv->adapter->usr_dot_11n_dev_cap_bg;
-            break;
-
-#if CONFIG_5GHz_SUPPORT
-        case BAND_5GHZ:
-            band = BAND_A;
-            mode_band_mask = (BAND_A | BAND_AN | BAND_AAC
-#if CONFIG_11AX
-                              | BAND_AAX
-#endif
-            );
-            ht_band_mask = BAND_AN | BAND_AAC;
-            ht_dev_cap = pmpriv->adapter->usr_dot_11n_dev_cap_a;
-            break;
-#endif
-        default:
-            return MFALSE;
-    }
+    t_u8 bandwidth;
 
     switch (oper_class->bandwidth)
     {
         case OPER_CLASS_BW_20MHZ:
-            return (config_bands & mode_band_mask) != 0U ? MTRUE : MFALSE;
+            bandwidth = BANDWIDTH_20MHZ;
+            break;
         case OPER_CLASS_BW_40PLUS:
         case OPER_CLASS_BW_40MINUS:
-            ht40_supported = ((config_bands & ht_band_mask) != 0U && ISSUPP_CHANWIDTH40(ht_dev_cap) != 0U)
-                                ? MTRUE : MFALSE;
-            return (ht40_supported == MTRUE ||
-                    wlan_oper_class_he_bandwidth_supported(pmpriv, band, oper_class->bandwidth) == MTRUE)
-                    ? MTRUE : MFALSE;
+            bandwidth = BANDWIDTH_40MHZ;
+            break;
         case OPER_CLASS_BW_80MHZ:
-            if (band != BAND_A)
-            {
-                return MFALSE;
-            }
-#if CONFIG_11AC
-            if ((config_bands & BAND_AAC) != 0U && ISSUPP_11ACENABLED(pmpriv->adapter->fw_cap_info) != 0U &&
-                ISSUPP_CHANWIDTH40(ht_dev_cap) != 0U)
-            {
-                return MTRUE;
-            }
-#endif
-            return wlan_oper_class_he_bandwidth_supported(pmpriv, band, oper_class->bandwidth);
+            bandwidth = BANDWIDTH_80MHZ;
+            break;
         case OPER_CLASS_BW_160MHZ:
-            if (band != BAND_A)
-            {
-                return MFALSE;
-            }
-#if CONFIG_11AC
-            if ((config_bands & BAND_AAC) != 0U && ISSUPP_11ACENABLED(pmpriv->adapter->fw_cap_info) != 0U &&
-                ISSUPP_11ACBW160(pmpriv->adapter->hw_dot_11ac_dev_cap) != 0U &&
-                (GET_VHTCAP_CHWDSET(pmpriv->adapter->usr_dot_11ac_dev_cap_a) == VHT_CAP_CHWD_160MHZ ||
-                GET_VHTCAP_CHWDSET(pmpriv->adapter->usr_dot_11ac_dev_cap_a) == VHT_CAP_CHWD_80_80MHZ))
-            {
-                return MTRUE;
-            }
-#endif
-            return wlan_oper_class_he_bandwidth_supported(pmpriv, band, oper_class->bandwidth);
+            bandwidth = BANDWIDTH_160MHZ;
+            break;
         case OPER_CLASS_BW_80P80MHZ:
-            if (band != BAND_A)
-            {
-                return MFALSE;
-            }
-#if CONFIG_11AC
-            if ((config_bands & BAND_AAC) != 0U && ISSUPP_11ACENABLED(pmpriv->adapter->fw_cap_info) != 0U &&
-                ISSUPP_11ACBW8080(pmpriv->adapter->hw_dot_11ac_dev_cap) != 0U &&
-                GET_VHTCAP_CHWDSET(pmpriv->adapter->usr_dot_11ac_dev_cap_a) == VHT_CAP_CHWD_80_80MHZ)
-            {
-                return MTRUE;
-            }
-#endif
-            return wlan_oper_class_he_bandwidth_supported(pmpriv, band, oper_class->bandwidth);
+            bandwidth = BANDWIDTH_80P80MHZ;
+            break;
         default:
             return MFALSE;
     }
+
+    return wlan_bandwidth_supported(pmpriv, oper_class->mode, bandwidth);
 }
 
 static t_bool wlan_oper_class_channel_block_usable(mlan_private *pmpriv, t_u16 center_channel, t_u8 bandwidth)
@@ -3038,26 +3056,12 @@ static t_bool wlan_oper_class_80p80_usable(mlan_private *pmpriv, const global_op
 
 static t_bool wlan_oper_class_supported(mlan_private *pmpriv, const global_oper_class_t *oper_class)
 {
-    t_u16 band, channel, secondary_channel;
+    t_u16 channel, secondary_channel;
     t_u8 i, center_channel;
 
     if (!wlan_oper_class_mode_supported(pmpriv, oper_class))
     {
         return MFALSE;
-    }
-
-    switch (oper_class->mode)
-    {
-        case BAND_2GHZ:
-            band = BAND_G;
-            break;
-#if CONFIG_5GHz_SUPPORT
-        case BAND_5GHZ:
-            band = BAND_A;
-            break;
-#endif
-        default:
-            return MFALSE;
     }
 
     switch (oper_class->bandwidth)
@@ -3066,7 +3070,7 @@ static t_bool wlan_oper_class_supported(mlan_private *pmpriv, const global_oper_
             for (i = 0; i < NELEMENTS(oper_class->channel_list) && oper_class->channel_list[i] != 0U; i++)
             {
                 channel = oper_class->channel_list[i];
-                if (wlan_oper_class_channel_usable(pmpriv, band, channel))
+                if (wlan_oper_class_channel_usable(pmpriv, oper_class->mode, channel))
                 {
                     return MTRUE;
                 }
@@ -3078,8 +3082,8 @@ static t_bool wlan_oper_class_supported(mlan_private *pmpriv, const global_oper_
             {
                 channel = oper_class->channel_list[i];
                 secondary_channel = oper_class->bandwidth == OPER_CLASS_BW_40MINUS ? channel - 4U : channel + 4U;
-                if (wlan_oper_class_channel_usable(pmpriv, band, channel) &&
-                    wlan_oper_class_channel_usable(pmpriv, band, secondary_channel))
+                if (wlan_oper_class_channel_usable(pmpriv, oper_class->mode, channel) &&
+                    wlan_oper_class_channel_usable(pmpriv, oper_class->mode, secondary_channel))
                 {
                     return MTRUE;
                 }

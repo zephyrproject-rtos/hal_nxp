@@ -230,6 +230,7 @@ mlan_status wlan_init_priv(pmlan_private priv)
     priv->beacon_vendor_index = MLAN_MGMT_IE_INVALID_IDX;
 #endif
 #endif
+    priv->rsnxe_index = MLAN_MGMT_IE_INVALID_IDX;
 #if CONFIG_TCP_ACK_ENH
     priv->enable_tcp_ack_enh = MTRUE;
 #endif
@@ -237,6 +238,8 @@ mlan_status wlan_init_priv(pmlan_private priv)
 #if CONFIG_WPA_SUPP_DPP
     priv->is_dpp_connect = MFALSE;
 #endif
+
+    priv->ssid_protection = MFALSE;
 
     LEAVE();
     return ret;

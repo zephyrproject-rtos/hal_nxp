@@ -2202,12 +2202,8 @@ typedef enum _mlan_rate_format
 {
     MLAN_RATE_FORMAT_LG = 0,
     MLAN_RATE_FORMAT_HT,
-#if CONFIG_11AC
     MLAN_RATE_FORMAT_VHT,
-#endif
-#if CONFIG_11AX
     MLAN_RATE_FORMAT_HE,
-#endif
     MLAN_RATE_FORMAT_AUTO = 0xFF,
 } mlan_rate_format;
 

@@ -668,6 +668,59 @@ int wifi_get_pmfcfg(t_u8 *mfpc, t_u8 *mfpr)
     return WM_SUCCESS;
 }
 
+int wifi_set_ssid_protection(bool enable, enum wlan_bss_type bss_type)
+{
+    mlan_private *pmpriv = (mlan_private *)mlan_adap->priv[bss_type];
+
+    if ((t_u32)bss_type >= MLAN_MAX_BSS_NUM || mlan_adap->priv[bss_type] == MNULL)
+    {
+        return -WM_FAIL;
+    }
+    pmpriv->ssid_protection = enable;
+
+    return WM_SUCCESS;
+}
+
+#if UAP_SUPPORT
+int wifi_set_uap_rsnx_ie(bool enable)
+{
+    mlan_private *pmpriv = (mlan_private *)mlan_adap->priv[MLAN_BSS_TYPE_UAP];
+    mlan_status ret;
+
+    if (!enable)
+    {
+        if (pmpriv->rsnxe_index != MLAN_MGMT_IE_INVALID_IDX)
+        {
+            ret = wifi_mgmt_ie_clear(pmpriv, &pmpriv->rsnxe_index);
+            return (ret == MLAN_STATUS_SUCCESS) ? WM_SUCCESS : -WM_FAIL;
+        }
+        return WM_SUCCESS;
+    }
+
+    /*
+     * RSNX IE: element_id=244, len=3
+     *   data[0] = 0x02  (bits[3:0] = Field Length = n-1 = 2 => Ext RSN Capab is 3 octets;
+     *                    bits[7:4] = other capabs)
+     *   data[1] = 0x00  (bits 8-15, none set)
+     *   data[2] = 0x20  (bit 21 = SSID Protection)
+     */
+    t_u8 rsnx_ie[] = {
+        (t_u8)RSNX_IE,                          /* element_id = 244 */
+        0x03U,                                   /* length = 3       */
+        0x02U,                                   /* octet 1          */
+        0x00U,                                   /* octet 2          */
+        (t_u8)(0x1U << SSID_PROTECTION_OCTET3_BIT) /* octet 3       */
+    };
+
+    ret = wifi_mgmt_ie_set(pmpriv,
+                           MGMT_MASK_BEACON | MGMT_MASK_PROBE_RESP |
+                           MGMT_MASK_ASSOC_RESP | MGMT_MASK_REASSOC_RESP,
+                           rsnx_ie, sizeof(rsnx_ie),
+                           &pmpriv->rsnxe_index);
+    return (ret == MLAN_STATUS_SUCCESS) ? WM_SUCCESS : -WM_FAIL;
+}
+#endif
+
 int wifi_set_packet_filters(wifi_flt_cfg_t *flt_cfg)
 {
     (void)wifi_get_command_lock();
@@ -5276,11 +5329,6 @@ int wifi_send_hostcmd(
     const void *cmd_buf, uint32_t cmd_buf_len, void *resp_buf, uint32_t resp_buf_len, uint32_t *reqd_resp_len)
 {
     uint32_t ret = WM_SUCCESS;
-    /* Store IN & OUT params to be used by driver to update internaally*/
-    /* These variables are updated from reponse handlers */
-    wm_wifi.hostcmd_cfg.resp_buf      = resp_buf;
-    wm_wifi.hostcmd_cfg.resp_buf_len  = resp_buf_len;
-    wm_wifi.hostcmd_cfg.reqd_resp_len = reqd_resp_len;
 
     /* Check if command is larger than the command size that can be handled by firmware */
     if (cmd_buf_len > WIFI_FW_CMDBUF_SIZE)
@@ -5299,6 +5347,11 @@ int wifi_send_hostcmd(
         /* Do Nothing */
     }
     (void)wifi_get_command_lock();
+	/* Store IN & OUT params to be used by driver to update internaally*/
+    /* These variables are updated from reponse handlers */
+    wm_wifi.hostcmd_cfg.resp_buf      = resp_buf;
+    wm_wifi.hostcmd_cfg.resp_buf_len  = resp_buf_len;
+    wm_wifi.hostcmd_cfg.reqd_resp_len = reqd_resp_len;
     /* Copy command buffer to driver command buffer */
     HostCmd_DS_COMMAND *cmd = wifi_get_command_buffer();
     (void)memcpy((void *)cmd, (const void *)cmd_buf, cmd_buf_len);

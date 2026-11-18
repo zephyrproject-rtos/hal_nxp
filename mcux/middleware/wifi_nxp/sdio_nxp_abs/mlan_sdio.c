@@ -306,6 +306,22 @@ void sdio_oob_reset(void)
     int err = 0;
     struct gpio_dt_spec oob_reset = GPIO_DT_SPEC_GET(DT_DRV_INST(0), sd_gpios);
 
+    err = gpio_pin_get_dt(&oob_reset);
+    if (err < 0)
+    {
+        return;
+    }
+    else if (err == 0)
+    {
+        err = gpio_pin_set_dt(&oob_reset, 1);
+        if (err)
+        {
+            return;
+        }
+
+        OSA_TimeDelay(10);
+    }
+
     err = gpio_pin_set_dt(&oob_reset, 0);
     if (err) {
         return;

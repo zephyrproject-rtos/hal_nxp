@@ -1025,6 +1025,8 @@ typedef struct _wlan_802_11_security_t
     mlan_encryption_mode encryption_mode;
     /** RSN Selector */
     mlan_rsn_selector rsn_selector;
+    /** STA PWE derivation mode: 0=H&P only, 1=H2E only, 2=both */
+    t_u8 pwe_derivation;
 } wlan_802_11_security_t;
 
 /** Current Basic Service Set State Structure */
@@ -1663,6 +1665,7 @@ struct _mlan_private
     t_u16 beacon_vendor_index;
 #endif
 #endif
+    t_u16 rsnxe_index;
     /** uAP started or not */
     bool bss_started;
     /** host based uap flag */
@@ -1678,6 +1681,7 @@ struct _mlan_private
     /** configured by DPP */
     bool is_dpp_connect;
 #endif
+    bool ssid_protection;
 };
 
 /** BA stream status */
@@ -2651,6 +2655,9 @@ mlan_status wlan_cmd_subscribe_event(IN mlan_private *pmpriv,
                                      IN t_void *pioctl_buf);
 int wlan_parse_getdata(HostCmd_DS_COMMAND *resp, mlan_ds_subscribe_evt *sub_evt);
 #endif
+
+/** Check whether a band and channel bandwidth are enabled and supported. */
+t_bool wlan_bandwidth_supported(mlan_private *pmpriv, t_u16 band, const t_u8 bandwidth);
 
 /** Handler to get current operating class */
 /* For several features, such as DPP and MBO, we need the global operating class. */

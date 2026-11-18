@@ -1796,9 +1796,22 @@ static int _wifi_nxp_wpa_supp_set_key(void *if_priv,
     int skip_set_key                           = 1;
 
     wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
+
     if ((key_flag & KEY_FLAG_PAIRWISE_MASK) == KEY_FLAG_PAIRWISE_RX_TX_MODIFY)
     {
         supp_d("SET_KEY (pairwise RX/TX modify)");
+    }
+    else if (key_flag & KEY_FLAG_NEXT)
+    {
+        /* KEY_FLAG_NEXT (introduced in hostap 2.12) requests installing
+         * the TK for RX-only before the 4-Way Handshake completes.
+         * This driver does not support dual active RX keys, so skip
+         * the actual key installation. Return success since the callers
+         * treat this as an optional optimization.
+         */
+        supp_d("set_key: KEY_FLAG_NEXT not supported, skipping");
+        ret = 0;
+        goto out;
     }
     else if (alg == WPA_ALG_NONE && (key_flag & KEY_FLAG_RX_TX))
     {
@@ -3187,146 +3200,6 @@ void wifi_nxp_hostapd_dev_deinit(void *if_priv)
         OSA_MemoryFree((void *)wifi_if_ctx_rtos->last_mgmt_tx_data);
         memset(wifi_if_ctx_rtos, 0x00, sizeof(struct wifi_nxp_ctx_rtos));
     }
-}
-
-int wifi_nxp_hostapd_set_modes(void *if_priv, struct hostapd_hw_modes *modes)
-{
-    int status     = -WM_FAIL;
-#if CONFIG_11AX
-    t_u8 bandwidth = wifi_uap_get_bandwidth();
-#endif
-
-    if ((!if_priv) || (!modes) || !wifi_supp_is_init_done())
-    {
-        supp_e("%s: Invalid state", __func__);
-        goto out;
-    }
-
-    status = wifi_setup_ht_cap(&modes[HOSTAPD_MODE_IEEE80211G].ht_capab, &modes[HOSTAPD_MODE_IEEE80211G].mcs_set[0],
-                               &modes[HOSTAPD_MODE_IEEE80211G].a_mpdu_params, 0);
-    if (status != WM_SUCCESS)
-    {
-        supp_e("%s: wifi nxp set 2G infra ht cap failed", __func__);
-        goto out;
-    }
-
-#if CONFIG_5GHz_SUPPORT
-    if (!ISSUPP_NO5G(mlan_adap->fw_cap_ext))
-    {
-        status = wifi_setup_ht_cap(&modes[HOSTAPD_MODE_IEEE80211A].ht_capab, &modes[HOSTAPD_MODE_IEEE80211A].mcs_set[0],
-                                   &modes[HOSTAPD_MODE_IEEE80211A].a_mpdu_params, 1);
-        if (status != WM_SUCCESS)
-        {
-            supp_e("%s: wifi nxp set 5G infra ht cap failed", __func__);
-            goto out;
-        }
-    }
-#endif
-
-    modes[HOSTAPD_MODE_IEEE80211G].flags |= HOSTAPD_MODE_FLAG_HT_INFO_KNOWN;
-#if CONFIG_5GHz_SUPPORT
-    if (!ISSUPP_NO5G(mlan_adap->fw_cap_ext))
-    {
-        modes[HOSTAPD_MODE_IEEE80211A].flags |= HOSTAPD_MODE_FLAG_HT_INFO_KNOWN;
-    }
-#endif
-
-#if CONFIG_11AC
-    status = wifi_setup_vht_cap((t_u32 *)&modes[HOSTAPD_MODE_IEEE80211G].vht_capab,
-                                modes[HOSTAPD_MODE_IEEE80211G].vht_mcs_set, 0);
-    if (status != WM_SUCCESS)
-    {
-        supp_e("%s: wifi nxp set 2G infra vht cap failed", __func__);
-        goto out;
-    }
-
-#if CONFIG_5GHz_SUPPORT
-    if (!ISSUPP_NO5G(mlan_adap->fw_cap_ext))
-    {
-        status = wifi_setup_vht_cap((t_u32 *)&modes[HOSTAPD_MODE_IEEE80211A].vht_capab,
-                                    modes[HOSTAPD_MODE_IEEE80211A].vht_mcs_set, 1);
-        if (status != WM_SUCCESS)
-        {
-            supp_e("%s: wifi nxp set 5G infra vht cap failed", __func__);
-            goto out;
-        }
-    }
-#endif
-
-    modes[HOSTAPD_MODE_IEEE80211G].flags |= HOSTAPD_MODE_FLAG_VHT_INFO_KNOWN;
-#if CONFIG_5GHz_SUPPORT
-    if (!ISSUPP_NO5G(mlan_adap->fw_cap_ext))
-    {
-        modes[HOSTAPD_MODE_IEEE80211A].flags |= HOSTAPD_MODE_FLAG_VHT_INFO_KNOWN;
-    }
-#endif
-#endif
-
-#if CONFIG_11AX
-    if (IS_FW_SUPPORT_11AX(mlan_adap))
-    {
-        status = wifi_setup_he_cap(
-            (nxp_wifi_he_capabilities *)&modes[HOSTAPD_MODE_IEEE80211G].he_capab[IEEE80211_MODE_INFRA], 0);
-        if (status != WM_SUCCESS)
-        {
-            supp_e("%s: wifi nxp set 2G infra he cap failed", __func__);
-            goto out;
-        }
-
-        status =
-            wifi_setup_he_cap((nxp_wifi_he_capabilities *)&modes[HOSTAPD_MODE_IEEE80211G].he_capab[IEEE80211_MODE_AP], 0);
-        if (status != WM_SUCCESS)
-        {
-            supp_e("%s: wifi nxp set 2G ap he cap failed", __func__);
-            goto out;
-        }
-        if (bandwidth == BANDWIDTH_20MHZ)
-        {
-            modes[HOSTAPD_MODE_IEEE80211G].he_capab[IEEE80211_MODE_AP].phy_cap[HE_PHYCAP_CHANNEL_WIDTH_SET_IDX] = 0;
-        }
-#if CONFIG_5GHz_SUPPORT
-        if (!ISSUPP_NO5G(mlan_adap->fw_cap_ext))
-        {
-            status = wifi_setup_he_cap(
-                (nxp_wifi_he_capabilities *)&modes[HOSTAPD_MODE_IEEE80211A].he_capab[IEEE80211_MODE_INFRA], 1);
-            if (status != WM_SUCCESS)
-            {
-                supp_e("%s: wifi nxp set 5G infra he cap failed", __func__);
-                goto out;
-            }
-
-            status = wifi_setup_he_cap(
-                (nxp_wifi_he_capabilities *)&modes[HOSTAPD_MODE_IEEE80211A].he_capab[IEEE80211_MODE_AP], 1);
-            if (status != WM_SUCCESS)
-            {
-                supp_e("%s: wifi nxp set 5G ap he cap failed", __func__);
-                goto out;
-            }
-        }
-        if (bandwidth == BANDWIDTH_20MHZ)
-        {
-            modes[HOSTAPD_MODE_IEEE80211A].he_capab[IEEE80211_MODE_AP].phy_cap[HE_PHYCAP_CHANNEL_WIDTH_SET_IDX] = 0;
-        }
-#endif
-    }
-#endif
-
-    wifi_setup_channel_info(modes[HOSTAPD_MODE_IEEE80211B].channels, modes[HOSTAPD_MODE_IEEE80211B].num_channels,
-                            BAND_2GHZ);
-    wifi_setup_channel_info(modes[HOSTAPD_MODE_IEEE80211G].channels, modes[HOSTAPD_MODE_IEEE80211G].num_channels,
-                            BAND_2GHZ);
-#if CONFIG_5GHz_SUPPORT
-    if (!ISSUPP_NO5G(mlan_adap->fw_cap_ext))
-    {
-        wifi_setup_channel_info(modes[HOSTAPD_MODE_IEEE80211A].channels, modes[HOSTAPD_MODE_IEEE80211A].num_channels,
-                                BAND_5GHZ);
-    }
-#endif
-
-    status = WM_SUCCESS;
-
-out:
-    return status;
 }
 
 static void wifi_nxp_set_acs_params(nxp_wifi_acs_params *acs_params)

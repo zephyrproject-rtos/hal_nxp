@@ -133,18 +133,6 @@ static void dump_wlan_set_channel_usage(void)
     (void)PRINTF("\r\n");
 }
 
-#if !defined(SD8978)
-static void dump_wlan_set_radio_mode_usage()
-{
-    (void)PRINTF("Usage:\r\n");
-    (void)PRINTF("wlan-set-rf-radio-mode <radio_mode> \r\n");
-    (void)PRINTF("0: set the radio in power down mode\r\n");
-    (void)PRINTF("3: sets the radio in 5GHz band, 1X1 mode(path A)\r\n");
-    (void)PRINTF("11: sets the radio in 2.4GHz band, 1X1 mode(path A)\r\n");
-    (void)PRINTF("\r\n");
-}
-#endif
-
 static void wlan_rf_channel_set(int argc, char *argv[])
 {
     int ret;
@@ -176,7 +164,47 @@ static void wlan_rf_channel_set(int argc, char *argv[])
     }
 }
 
-#if !defined(SD8978)
+#if defined(SD9177) || defined(IW610) || defined(RW610)
+static void dump_wlan_set_radio_mode_usage()
+{
+    (void)PRINTF("Usage:\r\n");
+    (void)PRINTF("wlan-set-rf-radio-mode <radio_mode> \r\n");
+    (void)PRINTF("0: set the radio in power down mode\r\n");
+    (void)PRINTF("3: sets the radio in 5GHz band, 1X1 mode(path A)\r\n");
+    (void)PRINTF("11: sets the radio in 2.4GHz band, 1X1 mode(path A)\r\n");
+    (void)PRINTF("\r\n");
+}
+
+static void wlan_rf_radio_mode_set(int argc, char *argv[])
+{
+    int ret;
+    uint8_t radio_mode;
+
+    if (!rf_test_mode)
+    {
+        dump_wlan_set_rf_test_mode();
+        return;
+    }
+
+    if (argc != 2)
+    {
+        dump_wlan_set_radio_mode_usage();
+        return;
+    }
+
+    radio_mode = atoi(argv[1]);
+    ret        = wlan_set_rf_radio_mode(radio_mode);
+    if (ret == WM_SUCCESS)
+    {
+        (void)PRINTF("Set radio mode successful\r\n");
+    }
+    else
+    {
+        (void)PRINTF("Set radio mode failed!\r\n");
+        dump_wlan_set_radio_mode_usage();
+    }
+}
+
 static void dump_wlan_get_radio_mode_usage()
 {
     (void)PRINTF("Usage:\r\n");
@@ -247,7 +275,7 @@ static void wlan_rf_channel_get(int argc, char *argv[])
         dump_wlan_get_channel_usage();
     }
 }
-
+#if defined(SD8978) || defined(SD8987)
 static void dump_wlan_set_rf_band_usage(void)
 {
     (void)PRINTF("Usage:\r\n");
@@ -335,7 +363,7 @@ static void wlan_rf_band_get(int argc, char *argv[])
         dump_wlan_get_rf_band_usage();
     }
 }
-
+#endif
 #ifdef RW610
 static void dump_wlan_set_rf_xtal_usage(void)
 {
@@ -1357,36 +1385,6 @@ static void wlan_set_rf_he_tb_tx(int argc, char *argv[])
     }
 }
 
-static void wlan_rf_radio_mode_set(int argc, char *argv[])
-{
-    int ret;
-    uint8_t radio_mode;
-
-    if (!rf_test_mode)
-    {
-        dump_wlan_set_rf_test_mode();
-        return;
-    }
-
-    if (argc != 2)
-    {
-        dump_wlan_set_radio_mode_usage();
-        return;
-    }
-
-    radio_mode = atoi(argv[1]);
-    ret        = wlan_set_rf_radio_mode(radio_mode);
-    if (ret == WM_SUCCESS)
-    {
-        (void)PRINTF("Set radio mode successful\r\n");
-    }
-    else
-    {
-        (void)PRINTF("Set radio mode failed!\r\n");
-        dump_wlan_set_radio_mode_usage();
-    }
-}
-
 static void dump_wlan_set_otp_mac_addr_usage(void)
 {
     (void)PRINTF("Usage:\r\n");
@@ -1603,8 +1601,10 @@ static struct cli_command wlan_test_mode_commands[] = {
     {"wlan-get-rf-tx-antenna", NULL, wlan_rf_tx_antenna_get},
     {"wlan-set-rf-rx-antenna", "<antenna>", wlan_rf_rx_antenna_set},
     {"wlan-get-rf-rx-antenna", NULL, wlan_rf_rx_antenna_get},
+#if defined(SD8978) || defined(SD8987)
     {"wlan-set-rf-band", "<band>", wlan_rf_band_set},
     {"wlan-get-rf-band", NULL, wlan_rf_band_get},
+#endif
 #ifdef RW610
     {"wlan-set-rf-xtal", "<xtal_cal>", wlan_rf_xtal_set},
     {"wlan-get-rf-xtal", NULL, wlan_rf_xtal_get},
@@ -1613,7 +1613,7 @@ static struct cli_command wlan_test_mode_commands[] = {
     {"wlan-get-rf-bandwidth", NULL, wlan_rf_bandwidth_get},
     {"wlan-set-rf-channel", "<channel>", wlan_rf_channel_set},
     {"wlan-get-rf-channel", NULL, wlan_rf_channel_get},
-#if !defined(SD8978)
+#if defined(SD9177) || defined(IW610) || defined(RW610)
     {"wlan-set-rf-radio-mode", "<radio_mode>", wlan_rf_radio_mode_set},
     {"wlan-get-rf-radio-mode", NULL, wlan_rf_radio_mode_get},
 #endif
