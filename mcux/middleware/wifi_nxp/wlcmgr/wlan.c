@@ -922,6 +922,7 @@ static int wlan_get_uap_ipv4_addr(unsigned int *ipv4_addr)
 #endif
 
 static int wlan_set_pmfcfg(uint8_t mfpc, uint8_t mfpr);
+static int wlan_set_sta_pwe_derivation(uint8_t pwe_derivation);
 
 #if CONFIG_HOST_SLEEP
 int wlan_send_host_sleep_int()
@@ -2098,7 +2099,13 @@ static int do_connect(int netindex)
 }
 #endif
 
-#if !CONFIG_WIFI_NM_WPA_SUPPLICANT && UAP_SUPPORT
+#if !CONFIG_WIFI_NM_WPA_SUPPLICANT
+static void wlan_set_ssid_protection(bool enable, enum wlan_bss_type bss_type)
+{
+    wifi_set_ssid_protection(enable, bss_type);
+}
+
+#if UAP_SUPPORT
 static int do_start(struct wlan_network *network)
 {
     int ret = 0;
@@ -2241,6 +2248,13 @@ static int do_start(struct wlan_network *network)
             wifi_uap_set_bandwidth(BANDWIDTH_20MHZ);
         }
 
+#if !CONFIG_WPA_SUPP
+        if (wifi_set_uap_rsnx_ie(network->ssid_protection) != WM_SUCCESS)
+        {
+            wlcm_e("Failed to set UAP RSNX IE for SSID protection");
+        }
+#endif
+
         ret = wifi_uap_start((mlan_bss_type)network->type, network->ssid,
 #if CONFIG_P2P
                              wlan.wfd_mac,
@@ -2329,7 +2343,8 @@ static int do_stop(struct wlan_network *network)
 
     return WM_SUCCESS;
 }
-#endif /* !CONFIG_WIFI_NM_WPA_SUPPLICANT && UAP_SUPPORT */
+#endif /* UAP_SUPPORT */
+#endif /* !CONFIG_WIFI_NM_WPA_SUPPLICANT */
 
 /* A connection attempt has failed for 'reason', decide whether to try to
  * connect to another network (in that case, tell the state machine to
@@ -4178,6 +4193,44 @@ static void wlcm_process_authentication_event(struct wifi_message *msg,
 #endif
     }
 }
+
+#if !CONFIG_WPA_SUPP
+static void wlcm_process_transition_disable(t_u8 bitmap)
+{
+    struct wlan_network *network = NULL;
+
+    if (wlan.cur_network_idx < 0 ||
+        wlan.cur_network_idx >= (int)ARRAY_SIZE(wlan.networks))
+        return;
+
+    network = &wlan.networks[wlan.cur_network_idx];
+
+    wlcm_d("WPA3 Transition Disable bitmap=0x%02x for SSID: %s",
+           bitmap, network->ssid);
+
+    if ((bitmap & 0x01U) != 0U)
+    {
+        if (network->security.type == WLAN_SECURITY_WPA3_SAE ||
+            network->security.type == WLAN_SECURITY_WPA2_WPA3_SAE_MIXED)
+        {
+            if (network->security.type == WLAN_SECURITY_WPA2_WPA3_SAE_MIXED ||
+                network->security.mfpr == false)
+            {
+                wlcm_d("TD: WPA3-Personal transition disabled for SSID '%s'",
+                       network->ssid);
+                network->security.type     = WLAN_SECURITY_WPA3_SAE;
+                network->security.key_mgmt = WLAN_KEY_MGMT_SAE;
+                network->security.mfpr     = true;
+                network->security.mfpc     = true;
+                (void)wlan_set_pmfcfg((t_u8)network->security.mfpc,
+                                      (t_u8)network->security.mfpr);
+
+                network->security.transition_disable = 1U;
+            }
+        }
+    }
+}
+#endif /* !CONFIG_WPA_SUPP */
 
 #if CONFIG_ROAMING && !CONFIG_WIFI_NM_WPA_SUPPLICANT
 /** Try to roaming if enabled based on priority:
@@ -6576,6 +6629,11 @@ static void wlcm_request_connect(struct wifi_message *msg, enum cm_sta_state *ne
 #endif /* CONFIG_WLAN_FAST_PATH */
 
     (void)wlan_set_pmfcfg((t_u8)new_network->security.mfpc, (t_u8)new_network->security.mfpr);
+    (void)wlan_set_sta_pwe_derivation((uint8_t)new_network->security.pwe_derivation);
+
+#if !CONFIG_WPA_SUPP
+    wlan_set_ssid_protection(new_network->ssid_protection, WLAN_BSS_TYPE_STA);
+#endif
 
     if ((wlan.roam_reassoc == false) && (wlan.sta_state >= CM_STA_ASSOCIATING))
     {
@@ -6703,22 +6761,6 @@ static void wlcm_process_get_hw_spec_event(void)
 {
 #if CONFIG_WMM
     (void)wifi_wmm_init();
-#endif
-
-#if CONFIG_WIFI_SMOKE_TESTS
-    extern int initNetwork(void);
-    /* network enet init */
-    int ret = initNetwork();
-    if (ret != WM_SUCCESS)
-    {
-        wlcm_e("FAILED to init network (ret=%d). Reboot the board and try again.", ret);
-    }
-#endif
-
-#if CONFIG_SIGMA_AGENT
-    extern int sigma_agent_init(void);
-
-    (void)sigma_agent_init();
 #endif
 
     /* Set Tx Power Limits in Wi-Fi firmware */
@@ -7199,6 +7241,20 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
                 break;
 
             wlcm_process_authentication_event(msg, &next, network);
+            break;
+        case WIFI_EVENT_TRANSITION_DISABLE:
+#if !CONFIG_WPA_SUPP
+            if (msg->data != NULL)
+            {
+                t_u8 transition_disable = *(t_u8 *)(msg->data);
+                wlcm_process_transition_disable(transition_disable);
+#if !CONFIG_MEM_POOLS
+                OSA_MemoryFree(msg->data);
+#else
+                OSA_MemoryPoolFree(buf_32_MemoryPool, msg->data);
+#endif
+            }
+#endif
             break;
         case WIFI_EVENT_LINK_LOSS:
             wlcm_d("got event: link loss, code=%d", (int)(uintptr_t)msg->data);
@@ -8364,6 +8420,14 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
     {
         wlcm_e("Unable to create temperature monitor timer");
     }
+#endif
+#if CONFIG_SIGMA_AGENT
+    extern int nxp_wifi_dhcp_client_init(void);
+    (void)nxp_wifi_dhcp_client_init();
+
+    extern int sigma_agent_init(void);
+
+    (void)sigma_agent_init();
 #endif
 
     wlan.running = 1;
@@ -12639,6 +12703,11 @@ uint8_t wlan_get_dtim_period(void)
 int wlan_get_data_rate(wlan_ds_rate *ds_rate, mlan_bss_type bss_type)
 {
     return wifi_get_data_rate(ds_rate, bss_type);
+}
+
+static int wlan_set_sta_pwe_derivation(uint8_t pwe_derivation)
+{
+    return wifi_set_sta_pwe_derivation(pwe_derivation);
 }
 
 static int wlan_set_pmfcfg(uint8_t mfpc, uint8_t mfpr)

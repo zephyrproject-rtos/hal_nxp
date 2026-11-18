@@ -56,11 +56,11 @@
 
 #define WIFI_COMMAND_RESPONSE_WAIT_MS 20000
 
-#define BANDWIDTH_20MHZ 1U
-#define BANDWIDTH_40MHZ 2U
-#if CONFIG_11AC
-#define BANDWIDTH_80MHZ 3U
-#endif
+#define BANDWIDTH_20MHZ     1U
+#define BANDWIDTH_40MHZ     2U
+#define BANDWIDTH_80MHZ     3U
+#define BANDWIDTH_160MHZ    4U
+#define BANDWIDTH_80P80MHZ  5U
 
 #define MAX_NUM_CHANS_IN_NBOR_RPT 6U
 
@@ -942,6 +942,7 @@ void wifi_configure_delay_to_ps(unsigned int timeout_ms);
 unsigned short wifi_get_listen_interval();
 unsigned int wifi_get_delay_to_ps();
 void wifi_configure_null_pkt_interval(unsigned int null_pkt_interval);
+int wifi_set_sta_pwe_derivation(uint8_t pwe_derivation);
 int wrapper_wifi_assoc(
     const unsigned char *bssid, int wlan_security, bool is_wpa_tkip,
     unsigned int owe_trans_mode, bool is_ft, int key_mgmt);

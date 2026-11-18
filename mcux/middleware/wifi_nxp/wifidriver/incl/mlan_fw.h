@@ -383,7 +383,9 @@ typedef enum _WLAN_802_11_WEP_STATUS
 #define TLV_TYPE_WPA3_SAE_PASSWORD (PROPRIETARY_TLV_BASE_ID + 0x141U) // 0x0241
 
 /** TLV type : SAE PWE Derivation Mode */
-#define TLV_TYPE_WPA3_SAE_PWE_DERIVATION_MODE (PROPRIETARY_TLV_BASE_ID + 339) /* 0x0100 + 0x153 */
+#define TLV_TYPE_WPA3_SAE_PWE_DERIVATION_MODE (PROPRIETARY_TLV_BASE_ID + 339)
+/** TLV type : RSNX IE (IEEE 802.11 Element ID 244) */
+#define TLV_TYPE_RSNX 0x00F4U
 
 /** TLV type: fw cap info */
 #define TLV_TYPE_FW_CAP_INFO (PROPRIETARY_TLV_BASE_ID + 318)
@@ -460,6 +462,8 @@ typedef enum _WLAN_802_11_WEP_STATUS
 #define TLV_TYPE_CSI_MONITOR_CFG (PROPRIETARY_TLV_BASE_ID + 354) /*0x0262*/
 
 #define TLV_TYPE_RSNO_IE (PROPRIETARY_TLV_BASE_ID + 0x167) /* 0x267 */
+
+#define TLV_TYPE_TRANSTION_DISABLE (PROPRIETARY_TLV_BASE_ID + 0x17f) /* 0x27f */
 
 /** ADDBA TID mask */
 #define ADDBA_TID_MASK (MBIT(2) | MBIT(3) | MBIT(4) | MBIT(5))
@@ -797,9 +801,9 @@ typedef enum _WLAN_802_11_WEP_STATUS
 /** HW_SPEC Dot11acDevCap : LDPC coding support */
 #define ISSUPP_11ACLDPC(Dot11acDevCap) (Dot11acDevCap & MBIT(4))
 /** HW_SPEC Dot11acDevCap : Channel BW 20/40/80/160/80+80 MHz support */
-#define ISSUPP_11ACBW8080(Dot11acDevCap) (Dot11acDevCap & MBIT(3))
+#define ISSUPP_11ACBW8080(Dot11acDevCap) ((Dot11acDevCap) & MBIT(3))
 /** HW_SPEC Dot11acDevCap : Channel BW 20/40/80/160 MHz support */
-#define ISSUPP_11ACBW160(Dot11acDevCap) (Dot11acDevCap & MBIT(2))
+#define ISSUPP_11ACBW160(Dot11acDevCap) ((Dot11acDevCap) & (MBIT(2) | MBIT(3)))
 
 /** Set VHT Cap Info: Max MPDU length */
 #define SET_VHTCAP_MAXMPDULEN(VHTCapInfo, value) ((VHTCapInfo) |= (value & 0x03U))
@@ -1770,6 +1774,8 @@ typedef enum _ENH_PS_MODES
 
 /** Event definition: RXBA_SYNC */
 #define EVENT_RXBA_SYNC 0x00000059
+
+#define EVENT_IN_BAND_RESET 0x000000AD
 
 #if defined(SD9177) || defined(IW610)
 #define EVENT_IMD3_CAL_START 0x000000A0
@@ -2827,6 +2833,15 @@ typedef MLAN_PACK_START struct _MrvlIEtypes_RsnParamSet_t
     /** RSN IE */
     t_u8 rsn_ie[1];
 } MLAN_PACK_END MrvlIEtypes_RsnParamSet_t;
+
+/** MrvlIEtypes_RsnxParamSet_t */
+typedef MLAN_PACK_START struct _MrvlIEtypes_RsnxParamSet_t
+{
+    /** Header */
+    MrvlIEtypesHeader_t header;
+    /** RSN IE */
+    t_u8 data[3];
+} MLAN_PACK_END MrvlIEtypes_RsnxParamSet_t;
 
 #if defined(WPA) || defined(WAPI_AP) || defined(HOST_AUTHENTICATOR)
 #ifdef KEY_PARAM_SET_V2
@@ -4274,9 +4289,11 @@ typedef MLAN_PACK_START struct _MrvlRateScope_t
     t_u16 ofdm_rate_bitmap;
     /** Bitmap of HT-MCSs allowed for initial rate */
     t_u16 ht_mcs_rate_bitmap[8];
+#if !defined(SD8978)
     /** VHT MCS rate bitmap */
     t_u16 vht_mcs_rate_bitmap[8];
-#if CONFIG_11AX
+#endif
+#if !defined(SD8978) && !defined(SD8987)
     /** HE MCS rate bitmap */
     t_u16 he_mcs_rate_bitmap[8];
 #endif
@@ -5532,6 +5549,9 @@ typedef MLAN_PACK_START struct _MrvlIEtypes_SAE_PWE_Mode_t
 
 /** SAE H2E capability bit in RSNX */
 #define SAE_H2E_BIT 5
+
+/* Bit 5 of RSNX octet 2 (3rd octet, 0-indexed) — IEEE 802.11-2020 Table 9-780 */
+#define SSID_PROTECTION_OCTET3_BIT 5
 
 /* unicastCipher -
  *      Bit 0   : RFU
@@ -7796,6 +7816,15 @@ typedef MLAN_PACK_START struct _HostCmd_DS_CSI_CFG
     MrvlIEtypes_channel_bandcfg_t channel_bandconfig;
 } MLAN_PACK_END HostCmd_DS_CSI_CFG;
 #endif
+
+/** MrvlIEtypes_transition_disable_t */
+typedef MLAN_PACK_START struct _MrvlIEtypes_transition_disable_t
+{
+    /** Header */
+    MrvlIEtypesHeader_t header;
+    /** transition disable bitmap */
+    t_u8 transition_disable;
+} MLAN_PACK_END MrvlIEtypes_transition_disable_t;
 
 /** HostCmd_DS_BOOT_SLEEP */
 typedef MLAN_PACK_START struct _HostCmd_DS_BOOT_SLEEP

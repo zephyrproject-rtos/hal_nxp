@@ -190,6 +190,8 @@ enum wifi_event
 #endif
     /** Roaming trigger event */
     WIFI_EVENT_ROAMING_TRIGGER,
+    /** Transition disable event */
+    WIFI_EVENT_TRANSITION_DISABLE,
     /** Event to indicate end of Wi-Fi events */
     WIFI_EVENT_LAST,
     /* other events can be added after this, however this must

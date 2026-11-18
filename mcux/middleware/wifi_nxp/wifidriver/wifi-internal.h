@@ -102,6 +102,7 @@ typedef struct
     OSA_MUTEX_HANDLE_DEFINE(command_lock);
 
     OSA_SEMAPHORE_HANDLE_DEFINE(command_resp_sem);
+    OSA_MUTEX_HANDLE_DEFINE(cmdresp_ioctl_mutex);
 
 #if CONFIG_WIFI_FW_DEBUG
     OSA_SEMAPHORE_HANDLE_DEFINE(fw_dump_event);
@@ -351,6 +352,9 @@ int wifi_put_command_resp_sem(void);
  *
  */
 int wifi_put_command_lock(void);
+int wifi_get_cmdresp_ioctl_mutex(void);
+int wifi_put_cmdresp_ioctl_mutex(void);
+
 
 #if ((CONFIG_11MC) || (CONFIG_11AZ)) && (CONFIG_WLS_CSI_PROC)
 /*

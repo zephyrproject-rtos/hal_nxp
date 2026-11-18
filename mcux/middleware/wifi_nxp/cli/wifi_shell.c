@@ -116,7 +116,7 @@ static const struct cli_command *lookup_command(char *name, int len)
         /* See if partial or full match is expected */
         if (len != 0)
         {
-            if (strncmp(cli.commands[i]->name, name, (size_t)len) == 0)
+            if (strncmp(cli.commands[i]->name, name, (size_t)len) == 0 && strlen(cli.commands[i]->name) == (size_t)len)
             {
                 return cli.commands[i];
             }
