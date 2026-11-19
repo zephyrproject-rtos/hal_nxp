@@ -257,11 +257,95 @@ int wifi_setup_ht_cap(t_u16 *ht_capab, t_u8 *pmcs_set, t_u8 *a_mpdu_params, t_u8
     return WM_SUCCESS;
 }
 
+
+static int wifi_supports_40mhz(mlan_adapter *pmadapter, t_u8 band)
+{
+    t_u32 usr_dot_11n_dev_cap;
+
+    if (band == BAND_2GHZ)
+    {
+        usr_dot_11n_dev_cap = pmadapter->usr_dot_11n_dev_cap_bg;
+    }
+    else if (band == BAND_5GHZ)
+    {
+        usr_dot_11n_dev_cap = pmadapter->usr_dot_11n_dev_cap_a;
+    }
+    else
+    {
+        return 0;
+    }
+
+    return ISSUPP_CHANWIDTH40(usr_dot_11n_dev_cap);
+}
+
+static int wifi_supports_80mhz(mlan_adapter *pmadapter, t_u8 band)
+{
+    if (band != BAND_5GHZ)
+    {
+        return 0;
+    }
+
+    /* VHT's width-set field describes widths above 80 MHz; HT40 is a prerequisite for 80 MHz. */
+    if (wifi_supports_40mhz(pmadapter, band))
+    {
+#if CONFIG_11AC
+        if (ISSUPP_11AC5GENABLED(pmadapter->fw_cap_info))
+        {
+            return 1;
+        }
+#endif
+    }
+
+#if CONFIG_11AX
+    if (IS_FW_SUPPORT_11AX(pmadapter) &&
+        (pmadapter->hw_he_cap[util_offsetof(MrvlIEtypes_He_cap_t, he_phy_cap)]
+        & AX_5G_40MHZ_80MHZ_SUPPORT))
+    {
+        return 1;
+    }
+#endif
+
+    return 0;
+}
+
+static int wifi_supports_160mhz(mlan_adapter *pmadapter, t_u8 band)
+{
+    if (band != BAND_5GHZ)
+    {
+        return 0;
+    }
+
+#if CONFIG_11AC
+    if (ISSUPP_11AC5GENABLED(pmadapter->fw_cap_info) &&
+        ISSUPP_11ACBW160(pmadapter->hw_dot_11ac_dev_cap) &&
+        (GET_VHTCAP_CHWDSET(pmadapter->hw_dot_11ac_dev_cap) == VHT_CAP_CHWD_160MHZ ||
+         GET_VHTCAP_CHWDSET(pmadapter->hw_dot_11ac_dev_cap) == VHT_CAP_CHWD_80_80MHZ))
+    {
+        return 1;
+    }
+#endif
+
+#if CONFIG_11AX
+    if (IS_FW_SUPPORT_11AX(pmadapter) &&
+        (pmadapter->hw_he_cap[util_offsetof(MrvlIEtypes_He_cap_t, he_phy_cap)]
+        & AX_5G_160MHZ_SUPPORT))
+    {
+        return 1;
+    }
+#endif
+
+    return 0;
+}
+
 static void wifi_setup_channel_flag(void *channels, int num_chan, region_chan_t *region, t_u8 band)
 {
     int i;
     int set_idx                             = 0;
     int get_idx                             = 0;
+    mlan_adapter *pmadapter                 = (mlan_adapter *)mlan_adap;
+    int supports_40mhz                      = wifi_supports_40mhz(pmadapter, band);
+    int supports_80mhz                      = wifi_supports_80mhz(pmadapter, band);
+    int supports_160mhz                     = wifi_supports_160mhz(pmadapter, band);
     const chan_freq_power_t *pchans_get     = region->pcfp;
     struct wifi_nxp_event_channel *pchans_set = (struct wifi_nxp_event_channel *)channels;
 
@@ -283,12 +367,21 @@ static void wifi_setup_channel_flag(void *channels, int num_chan, region_chan_t 
             pchans_set[set_idx].wifi_nxp_max_power = pchans_get[get_idx].max_tx_power;
             pchans_set[set_idx].wifi_nxp_flags &= (~WIFI_NXP_CHAN_FLAG_FREQUENCY_DISABLED);
 
-            if (band == BAND_2GHZ)
+            if (!supports_40mhz)
+            {
+                pchans_set[set_idx].wifi_nxp_flags |= WIFI_NXP_CHAN_FLAG_FREQUENCY_ATTR_NO_HT40_MINUS;
+                pchans_set[set_idx].wifi_nxp_flags |= WIFI_NXP_CHAN_FLAG_FREQUENCY_ATTR_NO_HT40_PLUS;
+            }
+
+            if (!supports_80mhz)
             {
                 pchans_set[set_idx].wifi_nxp_flags |= WIFI_NXP_CHAN_FLAG_FREQUENCY_ATTR_NO_80MHZ;
             }
 
-            pchans_set[set_idx].wifi_nxp_flags |= WIFI_NXP_CHAN_FLAG_FREQUENCY_ATTR_NO_160MHZ;
+            if (!supports_160mhz)
+            {
+                pchans_set[set_idx].wifi_nxp_flags |= WIFI_NXP_CHAN_FLAG_FREQUENCY_ATTR_NO_160MHZ;
+            }
 
             /* set passive scan or radar detect flag */
             if (pchans_get[get_idx].passive_scan_or_radar_detect == MTRUE)
