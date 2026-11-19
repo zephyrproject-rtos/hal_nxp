@@ -668,6 +668,58 @@ int wifi_get_pmfcfg(t_u8 *mfpc, t_u8 *mfpr)
     return WM_SUCCESS;
 }
 
+int wifi_set_ssid_protection(bool enable, enum wlan_bss_type bss_type)
+{
+    mlan_private *pmpriv = (mlan_private *)mlan_adap->priv[bss_type];
+
+    if ((t_u32)bss_type >= MLAN_MAX_BSS_NUM || mlan_adap->priv[bss_type] == MNULL)
+    {
+        return -WM_FAIL;
+    }
+    pmpriv->ssid_protection = enable;
+
+    return WM_SUCCESS;
+}
+
+#if UAP_SUPPORT
+int wifi_set_uap_rsnx_ie(bool enable)
+{
+    mlan_private *pmpriv = (mlan_private *)mlan_adap->priv[MLAN_BSS_TYPE_UAP];
+    mlan_status ret;
+
+    if (!enable)
+    {
+        if (pmpriv->rsnxe_index != MLAN_MGMT_IE_INVALID_IDX)
+        {
+            ret = wifi_mgmt_ie_clear(pmpriv, &pmpriv->rsnxe_index);
+            return (ret == MLAN_STATUS_SUCCESS) ? WM_SUCCESS : -WM_FAIL;
+        }
+        return WM_SUCCESS;
+    }
+
+    /*
+     * RSNX IE: element_id=244, len=3
+     *   data[0] = 0x02  (bits[3:0]=1 => 2 more octets; bit[1]=SSID_PROT len indicator)
+     *   data[1] = 0x00
+     *   data[2] = 0x20  (bit 5 = SSID Protection capability)
+     */
+    t_u8 rsnx_ie[] = {
+        (t_u8)RSNX_IE,                          /* element_id = 244 */
+        0x03U,                                   /* length = 3       */
+        0x02U,                                   /* octet 1          */
+        0x00U,                                   /* octet 2          */
+        (t_u8)(0x1U << SSID_PROTECTION_OCTET3_BIT) /* octet 3       */
+    };
+
+    ret = wifi_mgmt_ie_set(pmpriv,
+                           MGMT_MASK_BEACON | MGMT_MASK_PROBE_RESP |
+                           MGMT_MASK_ASSOC_RESP | MGMT_MASK_REASSOC_RESP,
+                           rsnx_ie, sizeof(rsnx_ie),
+                           &pmpriv->rsnxe_index);
+    return (ret == MLAN_STATUS_SUCCESS) ? WM_SUCCESS : -WM_FAIL;
+}
+#endif
+
 int wifi_set_packet_filters(wifi_flt_cfg_t *flt_cfg)
 {
     (void)wifi_get_command_lock();
