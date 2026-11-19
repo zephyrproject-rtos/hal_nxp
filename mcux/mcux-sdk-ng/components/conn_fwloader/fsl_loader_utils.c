@@ -1472,12 +1472,13 @@ status_t load_service(LOAD_Target_Type loadTarget, uint32_t sourceAddr)
         {
             pt_a_ptr = (void *)(((uint8_t *)pt_a_ptr) + header->ih_hdr_size);
         }
-
+#if !CONFIG_FLASH_IPED
         header = (void *)pt_b_ptr;
         if (header->ih_magic == IMAGE_MAGIC)
         {
             pt_b_ptr = (void *)(((uint8_t *)pt_b_ptr) + header->ih_hdr_size);
         }
+#endif
     }
 #endif
 
@@ -1502,6 +1503,31 @@ status_t load_service(LOAD_Target_Type loadTarget, uint32_t sourceAddr)
 
         power_on_device_impl(loadTarget);
     }
+
+#if CONFIG_FLASH_IPED
+    (void)pt_b_ptr;
+    if ((pt_a_ptr->magic != TAG_SB_V3))
+    {
+        active_pt_ptr = pt_a_ptr;
+        status        = loader_process_raw_file((uint32_t)active_pt_ptr);
+    }
+    else if ((pt_a_ptr->magic == TAG_SB_V3))
+    {
+        active_pt_ptr = pt_a_ptr;
+#ifdef CONFIG_FW_VDLLV2
+        if (LOAD_WIFI_VDLL_FIRMWARE != loadTarget)
+        {
+#endif
+            if (active_pt_ptr->firmwareVersion < firmwareVersion)
+            {
+                return kStatus_Fail;
+            }
+#ifdef CONFIG_FW_VDLLV2
+        }
+#endif
+        status = loader_process_sb_file((uint32_t)active_pt_ptr);
+    }
+#else
 
     /* Check partition TAG and select active partition */
     if ((pt_a_ptr->magic != TAG_SB_V3) && (pt_b_ptr->magic != TAG_SB_V3))
@@ -1551,6 +1577,7 @@ status_t load_service(LOAD_Target_Type loadTarget, uint32_t sourceAddr)
         }
         status = loader_process_sb_file((uint32_t)active_pt_ptr);
     }
+#endif
 
     if (otp_status != 0)
     {
