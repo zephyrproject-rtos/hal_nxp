@@ -848,6 +848,44 @@ mlan_status wlan_cmd_802_11_net_monitor(IN pmlan_private pmpriv,
 }
 #endif
 
+#if CONFIG_WPA_SUPP_P2P
+/**
+ *  @brief Set/Get wifi_direct_mode
+ *
+ *  @param pmadapter	A pointer to mlan_adapter structure
+ *  @param pioctl_req	A pointer to ioctl request buffer
+ *
+ *  @return		MLAN_STATUS_SUCCESS --success, otherwise fail
+ */
+mlan_status wlan_bss_ioctl_wifi_direct_mode(IN pmlan_adapter pmadapter, IN pmlan_ioctl_req pioctl_req)
+{
+    mlan_status ret  = MLAN_STATUS_SUCCESS;
+    mlan_ds_bss *bss = MNULL;
+
+    t_u16 cmd_action     = 0;
+    mlan_private *pmpriv = pmadapter->priv[pioctl_req->bss_index];
+
+    ENTER();
+
+    bss = (mlan_ds_bss *)pioctl_req->pbuf;
+
+    if (pioctl_req->action == MLAN_ACT_SET)
+        cmd_action = HostCmd_ACT_GEN_SET;
+    else
+        cmd_action = HostCmd_ACT_GEN_GET;
+
+    /* Send request to firmware */
+    ret = wlan_prepare_cmd(pmpriv, HostCmd_CMD_WIFI_DIRECT_MODE_CONFIG, cmd_action, 0, (t_void *)pioctl_req,
+                           &bss->param.wfd_mode);
+
+    if (ret == MLAN_STATUS_SUCCESS)
+        ret = MLAN_STATUS_PENDING;
+
+    LEAVE();
+    return ret;
+}
+#endif
+
 #ifdef WLAN_LOW_POWER_ENABLE
 /**
  *  @brief Set/Get Low Power Mode
