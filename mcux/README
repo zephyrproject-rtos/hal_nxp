@@ -92,6 +92,12 @@ Origin:
    Source folder: Root folder of the NXP MCUXpresso SDK Device Wireless Repository
    Destination folder: mcux-sdk-ng/devices/Wireless
 
+   NXP UWB SR250 UWBIOT Zephyr
+   https://github.com/nxp-uwb/sr250-uwbiot-zephyr
+   SHA: bc1f57db916d5506da0651b5c9449a598cce5d2e
+   Source folder: Root folder of the NXP SR250 UWBIOT Repository
+   Destination folder: middleware/uwb
+
 Status:
    Some older Kinetis W family SoCs are not supported in MCUXpresso SDK, but
    instead are supported by the Kinetis Connectivity Software. This
