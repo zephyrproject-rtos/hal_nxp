@@ -8,6 +8,7 @@
  *
  */
 
+#include <stdlib.h>
 #include <wlan.h>
 #include <wifi_shell.h>
 #include <cli_utils.h>
