@@ -74,6 +74,12 @@
         kCLOCK_IpInvalid, kCLOCK_Can1, kCLOCK_Can2, \
     }
 
+/*! @brief Clock ip name array for FLEXSPI. */
+#define FLEXSPI_CLOCKS \
+    {                  \
+        kCLOCK_Qspi    \
+    }
+
 /*! @brief Clock ip name array for GPIO. */
 #define GPIO_CLOCKS                                                                             \
     {                                                                                           \
