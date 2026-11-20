@@ -27,7 +27,7 @@ Change Log:
 /** 100mW */
 #define WLAN_TX_PWR_DEFAULT 20
 /** 100mW */
-#define WLAN_TX_PWR_US_DEFAULT 20
+#define WLAN_TX_PWR_US_DEFAULT 30
 /** 100mW */
 #define WLAN_TX_PWR_JP_BG_DEFAULT 20
 /** 200mW */
