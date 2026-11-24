@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -79,6 +79,59 @@ void SRAMC_GetDefaultConfig(sramc_config_t *config)
 }
 
 /*!
+ * brief Configures clock gating, bus timeout, ADV polarity, address mode and port size.
+ *
+ * param base Pointer to the AHB SRAMC module instance.
+ * param config Pointer to the SRAMC configuration.
+ */
+void SRAMC_SetControllerConfig(AHB_SRAMC_Type *base, const sramc_config_t *config)
+{
+    assert(base != NULL);
+    assert(config != NULL);
+
+    SRAMC_LockRegisters(base, false);
+    base->MCR = AHB_SRAMC_MCR_CG_DIS(config->funcClkAlwaysOn ? 1U : 0U) | AHB_SRAMC_MCR_BTO(config->busTimeoutCounter) |
+                AHB_SRAMC_MCR_BTOEN(config->busTimeoutEnable ? 1U : 0U) | AHB_SRAMC_MCR_ADVP(config->advPolarity) |
+                AHB_SRAMC_MCR_AM(config->addressMode) | AHB_SRAMC_MCR_PS(config->portSize);
+    SRAMC_LockRegisters(base, true);
+}
+
+/*!
+ * brief Configures prescaler, access timing and WAIT settings for selected chip selects.
+ *
+ * param base Pointer to the AHB SRAMC module instance.
+ * param chipSelect Bitmask of chip selects to configure. Use bitwise OR to combine multiple chip selects.
+ * param config Pointer to the SRAMC configuration.
+ */
+void SRAMC_SetChipSelectConfig(AHB_SRAMC_Type *base,
+                               sramc_chip_select_t chipSelect,
+                               const sramc_config_t *config)
+{
+    assert(base != NULL);
+    assert(config != NULL);
+
+    SRAMC_LockRegisters(base, false);
+
+    for (uint32_t chip = 0U; chip < AHB_SRAMC_CFG0_CS_COUNT; chip++)
+    {
+        if (((uint32_t)chipSelect & (1UL << chip)) != 0U)
+        {
+            base->CFG0_CS[chip].CFG0_CS =
+                AHB_SRAMC_CFG0_CS_PRE(config->prescaler) | AHB_SRAMC_CFG0_CS_TA(config->turnaroundTime) |
+                AHB_SRAMC_CFG0_CS_AH(config->addressHoldTime) | AHB_SRAMC_CFG0_CS_AS(config->addressSetupTime) |
+                AHB_SRAMC_CFG0_CS_CEH(config->ceHoldTime) | AHB_SRAMC_CFG0_CS_CES(config->ceSetupTime) |
+                AHB_SRAMC_CFG0_CS_WP_POL(config->waitPolarity) | AHB_SRAMC_CFG0_CS_WP_MUX(config->waitPinMux) |
+                AHB_SRAMC_CFG0_CS_WM_SEL(config->waitMode) | AHB_SRAMC_CFG0_CS_WM_EN(config->waitModeEnable ? 1U : 0U);
+
+            base->CFG0_CS[chip].CFG1_CS =
+                AHB_SRAMC_CFG1_CS_REH(config->readEnableHighTime) | AHB_SRAMC_CFG1_CS_REL(config->readEnableLowTime) |
+                AHB_SRAMC_CFG1_CS_WEH(config->writeEnableHighTime) | AHB_SRAMC_CFG1_CS_WEL(config->writeEnableLowTime);
+        }
+    }
+    SRAMC_LockRegisters(base, true);
+}
+
+/*!
  * brief Initializes the SRAMC peripheral.
  *
  * This function configures the SRAMC controller based on the provided configuration.
@@ -91,34 +144,11 @@ void SRAMC_Init(AHB_SRAMC_Type *base, const sramc_config_t *config)
     assert(base != NULL);
     assert(config != NULL);
 
-    uint8_t i;
-
-    SRAMC_LockRegisters(base, false); /* Unlock registers for configuration */
-
     /* Config SRAMC module access setting*/
-    base->MCR = AHB_SRAMC_MCR_CG_DIS(config->funcClkAlwaysOn ? 1U : 0U) | AHB_SRAMC_MCR_BTO(config->busTimeoutCounter) |
-                AHB_SRAMC_MCR_BTOEN(config->busTimeoutEnable ? 1U : 0U) | AHB_SRAMC_MCR_ADVP(config->advPolarity) |
-                AHB_SRAMC_MCR_AM(config->addressMode) | AHB_SRAMC_MCR_PS(config->portSize);
+    SRAMC_SetControllerConfig(base, config);
 
     /* configures access timing and wait mode settings */
-    for (i = 0; i < AHB_SRAMC_CFG0_CS_COUNT; i++)
-    {
-        if (((uint8_t)config->chipSelect & (1U << i)) != 0U)
-        {
-            base->CFG0_CS[i].CFG0_CS =
-                AHB_SRAMC_CFG0_CS_PRE(config->prescaler) | AHB_SRAMC_CFG0_CS_TA(config->turnaroundTime) |
-                AHB_SRAMC_CFG0_CS_AH(config->addressHoldTime) | AHB_SRAMC_CFG0_CS_AS(config->addressSetupTime) |
-                AHB_SRAMC_CFG0_CS_CEH(config->ceHoldTime) | AHB_SRAMC_CFG0_CS_CES(config->ceSetupTime) |
-                AHB_SRAMC_CFG0_CS_WP_POL(config->waitPolarity) | AHB_SRAMC_CFG0_CS_WP_MUX(config->waitPinMux) |
-                AHB_SRAMC_CFG0_CS_WM_SEL(config->waitMode) | AHB_SRAMC_CFG0_CS_WM_EN(config->waitModeEnable ? 1U : 0U);
-
-            base->CFG0_CS[i].CFG1_CS =
-                AHB_SRAMC_CFG1_CS_REH(config->readEnableHighTime) | AHB_SRAMC_CFG1_CS_REL(config->readEnableLowTime) |
-                AHB_SRAMC_CFG1_CS_WEH(config->writeEnableHighTime) | AHB_SRAMC_CFG1_CS_WEL(config->writeEnableLowTime);
-        }
-    }
-
-    SRAMC_LockRegisters(base, true); /* lock configuration */
+    SRAMC_SetChipSelectConfig(base, config->chipSelect, config);
 }
 
 /*!

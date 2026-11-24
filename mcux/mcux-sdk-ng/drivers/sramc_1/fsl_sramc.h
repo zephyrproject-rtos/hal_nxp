@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 NXP
+ * Copyright 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Defines SRAMC driver version. */
-#define FSL_SRAMC_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_SRAMC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*! @} */
 
 /*!
@@ -188,6 +188,25 @@ extern "C" {
  * @param config Pointer to the sramc_config_t structure to be initialized.
  */
 void SRAMC_GetDefaultConfig(sramc_config_t *config);
+
+/*!
+ * @brief Configures clock gating, bus timeout, ADV polarity, address mode and port size.
+ *
+ * @param base Pointer to the AHB SRAMC module instance.
+ * @param config Pointer to the SRAMC configuration.
+ */
+void SRAMC_SetControllerConfig(AHB_SRAMC_Type *base, const sramc_config_t *config);
+
+/*!
+ * @brief Configures prescaler, access timing and WAIT settings for selected chip selects.
+ *
+ * @param base Pointer to the AHB SRAMC module instance.
+ * @param chipSelect Bitmask of chip selects to configure. Use bitwise OR to combine multiple chip selects.
+ * @param config Pointer to the SRAMC configuration.
+ */
+void SRAMC_SetChipSelectConfig(AHB_SRAMC_Type *base,
+                               sramc_chip_select_t chipSelect,
+                               const sramc_config_t *config);
 
 /*!
  * @brief Initializes the SRAMC peripheral.
