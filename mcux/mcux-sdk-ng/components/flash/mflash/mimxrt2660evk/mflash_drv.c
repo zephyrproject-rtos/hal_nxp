@@ -35,7 +35,6 @@
 #include "fsl_xspi.h"
 #include "fsl_cache.h"
 #include "fsl_clock.h"
-#include "board.h"
 
 /*******************************************************************************
  * Definitions
