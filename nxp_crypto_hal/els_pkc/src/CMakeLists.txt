@@ -356,6 +356,13 @@ if(CONFIG_SOC_SERIES_IMXRT7XX)
             ${CMAKE_CURRENT_SOURCE_DIR}/comps/mcuxClOsccaSm3/inc/internal
             ${CMAKE_CURRENT_SOURCE_DIR}/comps/mcuxClOsccaSm4/inc
             ${CMAKE_CURRENT_SOURCE_DIR}/comps/mcuxClOsccaSm4/inc/internal
+            # Platform-specific *_MemoryConsumption.h headers of the OSCCA comps.
+            ${CMAKE_CURRENT_SOURCE_DIR}/comps/mcuxClOsccaAeadModes/inc/platform/${ELS_PKC_PLATFORM}
+            ${CMAKE_CURRENT_SOURCE_DIR}/comps/mcuxClOsccaCipherModes/inc/platform/${ELS_PKC_PLATFORM}
+            ${CMAKE_CURRENT_SOURCE_DIR}/comps/mcuxClOsccaMacModes/inc/platform/${ELS_PKC_PLATFORM}
+            ${CMAKE_CURRENT_SOURCE_DIR}/comps/mcuxClOsccaRandomModes/inc/platform/${ELS_PKC_PLATFORM}
+            ${CMAKE_CURRENT_SOURCE_DIR}/comps/mcuxClOsccaSm2/inc/platform/${ELS_PKC_PLATFORM}
+            ${CMAKE_CURRENT_SOURCE_DIR}/comps/mcuxClOsccaSm3/inc/platform/${ELS_PKC_PLATFORM}
             # The OSCCA comps (e.g. Sm2) pull in the mcuxClSignature and
             # mcuxClCrc component headers (mcuxClSignature_Types.h, mcuxClCrc.h).
             # These are not OSCCA comps but are required build dependencies, so
@@ -363,6 +370,7 @@ if(CONFIG_SOC_SERIES_IMXRT7XX)
             ${CMAKE_CURRENT_SOURCE_DIR}/comps/mcuxClSignature/inc
             ${CMAKE_CURRENT_SOURCE_DIR}/comps/mcuxClSignature/inc/internal
             ${CMAKE_CURRENT_SOURCE_DIR}/comps/mcuxClSignature/inc/platform
+            ${CMAKE_CURRENT_SOURCE_DIR}/comps/mcuxClSignature/inc/platform/${ELS_PKC_PLATFORM}
             ${CMAKE_CURRENT_SOURCE_DIR}/comps/mcuxClCrc/inc
             ${CMAKE_CURRENT_SOURCE_DIR}/comps/mcuxClCrc/inc/internal
     )
