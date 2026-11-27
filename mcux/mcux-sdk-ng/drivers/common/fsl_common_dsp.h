@@ -71,12 +71,20 @@
  */
 /*! @{ */
 
+#ifndef AT_NONCACHEABLE_SECTION_INIT
 #define AT_NONCACHEABLE_SECTION_INIT(var) __attribute__((section("NonCacheable.init"))) var
+#endif
+#ifndef AT_NONCACHEABLE_SECTION
 #define AT_NONCACHEABLE_SECTION(var) __attribute__((section("NonCacheable"))) var
+#endif
+#ifndef AT_NONCACHEABLE_SECTION_ALIGN_INIT
 #define AT_NONCACHEABLE_SECTION_ALIGN_INIT(var, alignbytes) \
     __attribute__((section("NonCacheable.init"))) var __attribute__((aligned(alignbytes)))
+#endif
+#ifndef AT_NONCACHEABLE_SECTION_ALIGN
 #define AT_NONCACHEABLE_SECTION_ALIGN(var, alignbytes) \
     __attribute__((section("NonCacheable"))) var __attribute__((aligned(alignbytes)))
+#endif
 
 /*! @} */
 

@@ -21,6 +21,17 @@
 #include "fsl_device_registers.h"
 
 /*!
+ * @brief Optional SDK port header.
+ *
+ * Define MCUX_PORT_HEADER to a quoted header name to provide port-specific
+ * overrides before the SDK defaults. The header must not include fsl_common.h
+ * or headers that depend on its definitions.
+ */
+#if defined(MCUX_PORT_HEADER)
+#include MCUX_PORT_HEADER
+#endif
+
+/*!
  * @addtogroup ksdk_common
  * @{
  */
@@ -239,9 +250,6 @@ enum
 /*! @brief Type used for all status and error return values. */
 typedef int32_t status_t;
 
-#ifdef __ZEPHYR__
-#include <zephyr/sys/util.h>
-#else
 /*!
  * @name Min/max macros
  * @{
@@ -261,7 +269,6 @@ typedef int32_t status_t;
 #if !defined(ARRAY_SIZE)
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 #endif
-#endif /* __ZEPHYR__ */
 
 /*! @name UINT16_MAX/UINT32_MAX value */
 /*! @{ */
