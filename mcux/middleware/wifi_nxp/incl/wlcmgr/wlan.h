@@ -2375,6 +2375,8 @@ typedef struct _tx_ampdu_prot_mode_para
 
 typedef wifi_uap_client_disassoc_t wlan_uap_client_disassoc_t;
 
+typedef wifi_uap_client_event_t wlan_uap_client_event_t;
+
 #if CONFIG_INACTIVITY_TIMEOUT_EXT
 typedef wifi_inactivity_to_t wlan_inactivity_to_t;
 #endif
@@ -2924,6 +2926,22 @@ int wlan_get_mac_address(uint8_t *dest);
  *  \return -WM_E_INVAL if \a dest is NULL.
  */
 int wlan_get_mac_address_uap(uint8_t *dest);
+
+#if CONFIG_WPA_SUPP_P2P
+/** Retrieve the Wi-Fi MAC address of the P2P interface.
+ *
+ *  This function copies the MAC address of the Wi-Fi P2P interface to
+ *  the 6-byte array pointed to by \a dest. In the event of an error, nothing
+ *  is copied to \a dest.
+ *
+ *  \param[out] dest: A pointer to a 6-byte array where the MAC address can be
+ *              copied.
+ *
+ *  \return WM_SUCCESS if the MAC address was copied.
+ *  \return -WM_E_INVAL if \a dest is NULL.
+ */
+int wlan_get_wfd_mac_address(unsigned char *dest);
+#endif
 
 /** Retrieve the IP address configuration of the station interface.
  *
