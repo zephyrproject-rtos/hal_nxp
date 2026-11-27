@@ -62,7 +62,7 @@ typedef enum pd_bits
     kPDRUNCFG_PD_AUDIO_PLL = MAKE_PD_BITS(PDRCFG1, 2U),
     kPDRUNCFG_PD_SYS_OSC   = MAKE_PD_BITS(PDRCFG1, 3U),
     kPDRUNCFG_PD_EEPROM    = MAKE_PD_BITS(PDRCFG1, 5U),
-    kPDRUNCFG_PD_rng       = MAKE_PD_BITS(PDRCFG1, 6U),
+    kPDRUNCFG_PD_rng       = MAKE_PD_BITS(PDRCFG1, 7U),
 
     /*
     This enum member has no practical meaning,it is used to avoid MISRA issue,
