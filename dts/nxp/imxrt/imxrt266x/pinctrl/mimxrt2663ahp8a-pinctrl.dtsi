@@ -37,11 +37,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_0_hsp_qtpm0_ch0: MAIN__IOMUXC_PIO2_0_HSP_QTPM0_CH0 {
 		pinmux = <0x421c0000 6 0x0 0 0x421c0000>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_0_hsp_xbar0_inout00: MAIN__IOMUXC_PIO2_0_HSP_XBAR0_INOUT00 {
+	/omit-if-no-ref/ main__iomuxc_pio2_0_hsp_xbar0_in00: MAIN__IOMUXC_PIO2_0_HSP_XBAR0_IN00 {
 		pinmux = <0x421c0000 10 0x421c82e8 0 0x421c0000>;
+		gpr = <0x40006810 0x0 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_0_hsp_xbar1_inout00: MAIN__IOMUXC_PIO2_0_HSP_XBAR1_INOUT00 {
+	/omit-if-no-ref/ main__iomuxc_pio2_0_hsp_xbar0_out00: MAIN__IOMUXC_PIO2_0_HSP_XBAR0_OUT00 {
+		pinmux = <0x421c0000 10 0x421c82e8 0 0x421c0000>;
+		gpr = <0x40006810 0x0 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_0_hsp_xbar1_in00: MAIN__IOMUXC_PIO2_0_HSP_XBAR1_IN00 {
 		pinmux = <0x421c0000 11 0x421c8358 0 0x421c0000>;
+		gpr = <0x40006814 0x0 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_0_hsp_xbar1_out00: MAIN__IOMUXC_PIO2_0_HSP_XBAR1_OUT00 {
+		pinmux = <0x421c0000 11 0x421c8358 0 0x421c0000>;
+		gpr = <0x40006814 0x0 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_0_hsp_eflexpwm0_pwm_a0: MAIN__IOMUXC_PIO2_0_HSP_eFlexPWM0_PWM_A0 {
 		pinmux = <0x421c0000 4 0x421c8138 0 0x421c0000>;
@@ -70,11 +80,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_1_hsp_qtpm0_ch1: MAIN__IOMUXC_PIO2_1_HSP_QTPM0_CH1 {
 		pinmux = <0x421c0004 6 0x0 0 0x421c0004>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_1_hsp_xbar0_inout01: MAIN__IOMUXC_PIO2_1_HSP_XBAR0_INOUT01 {
+	/omit-if-no-ref/ main__iomuxc_pio2_1_hsp_xbar0_in01: MAIN__IOMUXC_PIO2_1_HSP_XBAR0_IN01 {
 		pinmux = <0x421c0004 10 0x421c82ec 0 0x421c0004>;
+		gpr = <0x40006810 0x1 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_1_hsp_xbar1_inout01: MAIN__IOMUXC_PIO2_1_HSP_XBAR1_INOUT01 {
+	/omit-if-no-ref/ main__iomuxc_pio2_1_hsp_xbar0_out01: MAIN__IOMUXC_PIO2_1_HSP_XBAR0_OUT01 {
+		pinmux = <0x421c0004 10 0x421c82ec 0 0x421c0004>;
+		gpr = <0x40006810 0x1 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_1_hsp_xbar1_in01: MAIN__IOMUXC_PIO2_1_HSP_XBAR1_IN01 {
 		pinmux = <0x421c0004 11 0x421c835c 0 0x421c0004>;
+		gpr = <0x40006814 0x1 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_1_hsp_xbar1_out01: MAIN__IOMUXC_PIO2_1_HSP_XBAR1_OUT01 {
+		pinmux = <0x421c0004 11 0x421c835c 0 0x421c0004>;
+		gpr = <0x40006814 0x1 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_1_hsp_eflexpwm0_pwm_b0: MAIN__IOMUXC_PIO2_1_HSP_eFlexPWM0_PWM_B0 {
 		pinmux = <0x421c0004 4 0x421c8144 0 0x421c0004>;
@@ -106,11 +126,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_10_hsp_sinc0_mclk_out2: MAIN__IOMUXC_PIO2_10_HSP_SINC0_MCLK_OUT2 {
 		pinmux = <0x421c0028 6 0x0 0 0x421c0028>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_10_hsp_xbar0_inout10: MAIN__IOMUXC_PIO2_10_HSP_XBAR0_INOUT10 {
+	/omit-if-no-ref/ main__iomuxc_pio2_10_hsp_xbar0_in10: MAIN__IOMUXC_PIO2_10_HSP_XBAR0_IN10 {
 		pinmux = <0x421c0028 10 0x421c8310 0 0x421c0028>;
+		gpr = <0x40006810 0xa 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_10_hsp_xbar1_inout10: MAIN__IOMUXC_PIO2_10_HSP_XBAR1_INOUT10 {
+	/omit-if-no-ref/ main__iomuxc_pio2_10_hsp_xbar0_out10: MAIN__IOMUXC_PIO2_10_HSP_XBAR0_OUT10 {
+		pinmux = <0x421c0028 10 0x421c8310 0 0x421c0028>;
+		gpr = <0x40006810 0xa 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_10_hsp_xbar1_in10: MAIN__IOMUXC_PIO2_10_HSP_XBAR1_IN10 {
 		pinmux = <0x421c0028 11 0x421c8380 0 0x421c0028>;
+		gpr = <0x40006814 0xa 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_10_hsp_xbar1_out10: MAIN__IOMUXC_PIO2_10_HSP_XBAR1_OUT10 {
+		pinmux = <0x421c0028 11 0x421c8380 0 0x421c0028>;
+		gpr = <0x40006814 0xa 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_10_main_ahb_sramc_sramc_da09: MAIN__IOMUXC_PIO2_10_MAIN_AHB_SRAMC_SRAMC_DA09 {
 		pinmux = <0x421c0028 5 0x421c83ec 0 0x421c0028>;
@@ -133,11 +163,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_11_hsp_sinc0_mclk3: MAIN__IOMUXC_PIO2_11_HSP_SINC0_MCLK3 {
 		pinmux = <0x421c002c 4 0x421c82c4 0 0x421c002c>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_11_hsp_xbar0_inout11: MAIN__IOMUXC_PIO2_11_HSP_XBAR0_INOUT11 {
+	/omit-if-no-ref/ main__iomuxc_pio2_11_hsp_xbar0_in11: MAIN__IOMUXC_PIO2_11_HSP_XBAR0_IN11 {
 		pinmux = <0x421c002c 10 0x421c8314 0 0x421c002c>;
+		gpr = <0x40006810 0xb 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_11_hsp_xbar1_inout11: MAIN__IOMUXC_PIO2_11_HSP_XBAR1_INOUT11 {
+	/omit-if-no-ref/ main__iomuxc_pio2_11_hsp_xbar0_out11: MAIN__IOMUXC_PIO2_11_HSP_XBAR0_OUT11 {
+		pinmux = <0x421c002c 10 0x421c8314 0 0x421c002c>;
+		gpr = <0x40006810 0xb 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_11_hsp_xbar1_in11: MAIN__IOMUXC_PIO2_11_HSP_XBAR1_IN11 {
 		pinmux = <0x421c002c 11 0x421c8384 0 0x421c002c>;
+		gpr = <0x40006814 0xb 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_11_hsp_xbar1_out11: MAIN__IOMUXC_PIO2_11_HSP_XBAR1_OUT11 {
+		pinmux = <0x421c002c 11 0x421c8384 0 0x421c002c>;
+		gpr = <0x40006814 0xb 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_11_main_ahb_sramc_sramc_da10: MAIN__IOMUXC_PIO2_11_MAIN_AHB_SRAMC_SRAMC_DA10 {
 		pinmux = <0x421c002c 5 0x421c83f0 0 0x421c002c>;
@@ -163,11 +203,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_12_hsp_sinc0_mbit0: MAIN__IOMUXC_PIO2_12_HSP_SINC0_MBIT0 {
 		pinmux = <0x421c0030 4 0x421c82a8 0 0x421c0030>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_12_hsp_xbar0_inout12: MAIN__IOMUXC_PIO2_12_HSP_XBAR0_INOUT12 {
+	/omit-if-no-ref/ main__iomuxc_pio2_12_hsp_xbar0_in12: MAIN__IOMUXC_PIO2_12_HSP_XBAR0_IN12 {
 		pinmux = <0x421c0030 10 0x421c8318 0 0x421c0030>;
+		gpr = <0x40006810 0xc 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_12_hsp_xbar1_inout12: MAIN__IOMUXC_PIO2_12_HSP_XBAR1_INOUT12 {
+	/omit-if-no-ref/ main__iomuxc_pio2_12_hsp_xbar0_out12: MAIN__IOMUXC_PIO2_12_HSP_XBAR0_OUT12 {
+		pinmux = <0x421c0030 10 0x421c8318 0 0x421c0030>;
+		gpr = <0x40006810 0xc 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_12_hsp_xbar1_in12: MAIN__IOMUXC_PIO2_12_HSP_XBAR1_IN12 {
 		pinmux = <0x421c0030 11 0x421c8388 0 0x421c0030>;
+		gpr = <0x40006814 0xc 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_12_hsp_xbar1_out12: MAIN__IOMUXC_PIO2_12_HSP_XBAR1_OUT12 {
+		pinmux = <0x421c0030 11 0x421c8388 0 0x421c0030>;
+		gpr = <0x40006814 0xc 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_12_main_ahb_sramc_sramc_da11: MAIN__IOMUXC_PIO2_12_MAIN_AHB_SRAMC_SRAMC_DA11 {
 		pinmux = <0x421c0030 5 0x421c83f4 0 0x421c0030>;
@@ -190,11 +240,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_13_hsp_sinc0_mbit1: MAIN__IOMUXC_PIO2_13_HSP_SINC0_MBIT1 {
 		pinmux = <0x421c0034 4 0x421c82ac 0 0x421c0034>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_13_hsp_xbar0_inout13: MAIN__IOMUXC_PIO2_13_HSP_XBAR0_INOUT13 {
+	/omit-if-no-ref/ main__iomuxc_pio2_13_hsp_xbar0_in13: MAIN__IOMUXC_PIO2_13_HSP_XBAR0_IN13 {
 		pinmux = <0x421c0034 10 0x421c831c 0 0x421c0034>;
+		gpr = <0x40006810 0xd 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_13_hsp_xbar1_inout13: MAIN__IOMUXC_PIO2_13_HSP_XBAR1_INOUT13 {
+	/omit-if-no-ref/ main__iomuxc_pio2_13_hsp_xbar0_out13: MAIN__IOMUXC_PIO2_13_HSP_XBAR0_OUT13 {
+		pinmux = <0x421c0034 10 0x421c831c 0 0x421c0034>;
+		gpr = <0x40006810 0xd 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_13_hsp_xbar1_in13: MAIN__IOMUXC_PIO2_13_HSP_XBAR1_IN13 {
 		pinmux = <0x421c0034 11 0x421c838c 0 0x421c0034>;
+		gpr = <0x40006814 0xd 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_13_hsp_xbar1_out13: MAIN__IOMUXC_PIO2_13_HSP_XBAR1_OUT13 {
+		pinmux = <0x421c0034 11 0x421c838c 0 0x421c0034>;
+		gpr = <0x40006814 0xd 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_13_hsp_eflexpwm0_pwm_x0: MAIN__IOMUXC_PIO2_13_HSP_eFlexPWM0_PWM_X0 {
 		pinmux = <0x421c0034 6 0x0 0 0x421c0034>;
@@ -226,11 +286,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_14_hsp_sinc0_mbit2: MAIN__IOMUXC_PIO2_14_HSP_SINC0_MBIT2 {
 		pinmux = <0x421c0038 4 0x421c82b0 0 0x421c0038>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_14_hsp_xbar0_inout14: MAIN__IOMUXC_PIO2_14_HSP_XBAR0_INOUT14 {
+	/omit-if-no-ref/ main__iomuxc_pio2_14_hsp_xbar0_in14: MAIN__IOMUXC_PIO2_14_HSP_XBAR0_IN14 {
 		pinmux = <0x421c0038 10 0x421c8320 0 0x421c0038>;
+		gpr = <0x40006810 0xe 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_14_hsp_xbar1_inout14: MAIN__IOMUXC_PIO2_14_HSP_XBAR1_INOUT14 {
+	/omit-if-no-ref/ main__iomuxc_pio2_14_hsp_xbar0_out14: MAIN__IOMUXC_PIO2_14_HSP_XBAR0_OUT14 {
+		pinmux = <0x421c0038 10 0x421c8320 0 0x421c0038>;
+		gpr = <0x40006810 0xe 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_14_hsp_xbar1_in14: MAIN__IOMUXC_PIO2_14_HSP_XBAR1_IN14 {
 		pinmux = <0x421c0038 11 0x421c8390 0 0x421c0038>;
+		gpr = <0x40006814 0xe 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_14_hsp_xbar1_out14: MAIN__IOMUXC_PIO2_14_HSP_XBAR1_OUT14 {
+		pinmux = <0x421c0038 11 0x421c8390 0 0x421c0038>;
+		gpr = <0x40006814 0xe 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_14_hsp_eflexpwm0_pwm_x1: MAIN__IOMUXC_PIO2_14_HSP_eFlexPWM0_PWM_X1 {
 		pinmux = <0x421c0038 6 0x0 0 0x421c0038>;
@@ -259,11 +329,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_15_hsp_sinc0_mbit3: MAIN__IOMUXC_PIO2_15_HSP_SINC0_MBIT3 {
 		pinmux = <0x421c003c 4 0x421c82b4 0 0x421c003c>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_15_hsp_xbar0_inout15: MAIN__IOMUXC_PIO2_15_HSP_XBAR0_INOUT15 {
+	/omit-if-no-ref/ main__iomuxc_pio2_15_hsp_xbar0_in15: MAIN__IOMUXC_PIO2_15_HSP_XBAR0_IN15 {
 		pinmux = <0x421c003c 10 0x421c8324 0 0x421c003c>;
+		gpr = <0x40006810 0xf 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_15_hsp_xbar1_inout15: MAIN__IOMUXC_PIO2_15_HSP_XBAR1_INOUT15 {
+	/omit-if-no-ref/ main__iomuxc_pio2_15_hsp_xbar0_out15: MAIN__IOMUXC_PIO2_15_HSP_XBAR0_OUT15 {
+		pinmux = <0x421c003c 10 0x421c8324 0 0x421c003c>;
+		gpr = <0x40006810 0xf 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_15_hsp_xbar1_in15: MAIN__IOMUXC_PIO2_15_HSP_XBAR1_IN15 {
 		pinmux = <0x421c003c 11 0x421c8394 0 0x421c003c>;
+		gpr = <0x40006814 0xf 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_15_hsp_xbar1_out15: MAIN__IOMUXC_PIO2_15_HSP_XBAR1_OUT15 {
+		pinmux = <0x421c003c 11 0x421c8394 0 0x421c003c>;
+		gpr = <0x40006814 0xf 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_15_hsp_eflexpwm0_pwm_x2: MAIN__IOMUXC_PIO2_15_HSP_eFlexPWM0_PWM_X2 {
 		pinmux = <0x421c003c 6 0x0 0 0x421c003c>;
@@ -292,11 +372,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_16_hsp_sinc0_break: MAIN__IOMUXC_PIO2_16_HSP_SINC0_BREAK {
 		pinmux = <0x421c0040 4 0x0 0 0x421c0040>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_16_hsp_xbar0_inout16: MAIN__IOMUXC_PIO2_16_HSP_XBAR0_INOUT16 {
+	/omit-if-no-ref/ main__iomuxc_pio2_16_hsp_xbar0_in16: MAIN__IOMUXC_PIO2_16_HSP_XBAR0_IN16 {
 		pinmux = <0x421c0040 10 0x421c8328 0 0x421c0040>;
+		gpr = <0x40006810 0x10 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_16_hsp_xbar1_inout16: MAIN__IOMUXC_PIO2_16_HSP_XBAR1_INOUT16 {
+	/omit-if-no-ref/ main__iomuxc_pio2_16_hsp_xbar0_out16: MAIN__IOMUXC_PIO2_16_HSP_XBAR0_OUT16 {
+		pinmux = <0x421c0040 10 0x421c8328 0 0x421c0040>;
+		gpr = <0x40006810 0x10 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_16_hsp_xbar1_in16: MAIN__IOMUXC_PIO2_16_HSP_XBAR1_IN16 {
 		pinmux = <0x421c0040 11 0x421c8398 0 0x421c0040>;
+		gpr = <0x40006814 0x10 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_16_hsp_xbar1_out16: MAIN__IOMUXC_PIO2_16_HSP_XBAR1_OUT16 {
+		pinmux = <0x421c0040 11 0x421c8398 0 0x421c0040>;
+		gpr = <0x40006814 0x10 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_16_hsp_eflexpwm0_pwm_x3: MAIN__IOMUXC_PIO2_16_HSP_eFlexPWM0_PWM_X3 {
 		pinmux = <0x421c0040 6 0x0 0 0x421c0040>;
@@ -328,11 +418,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_17_hsp_lpuart4_rxd: MAIN__IOMUXC_PIO2_17_HSP_LPUART4_RXD {
 		pinmux = <0x421c0044 1 0x421c8294 0 0x421c0044>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_17_hsp_xbar0_inout17: MAIN__IOMUXC_PIO2_17_HSP_XBAR0_INOUT17 {
+	/omit-if-no-ref/ main__iomuxc_pio2_17_hsp_xbar0_in17: MAIN__IOMUXC_PIO2_17_HSP_XBAR0_IN17 {
 		pinmux = <0x421c0044 10 0x421c832c 0 0x421c0044>;
+		gpr = <0x40006810 0x11 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_17_hsp_xbar1_inout17: MAIN__IOMUXC_PIO2_17_HSP_XBAR1_INOUT17 {
+	/omit-if-no-ref/ main__iomuxc_pio2_17_hsp_xbar0_out17: MAIN__IOMUXC_PIO2_17_HSP_XBAR0_OUT17 {
+		pinmux = <0x421c0044 10 0x421c832c 0 0x421c0044>;
+		gpr = <0x40006810 0x11 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_17_hsp_xbar1_in17: MAIN__IOMUXC_PIO2_17_HSP_XBAR1_IN17 {
 		pinmux = <0x421c0044 11 0x421c839c 0 0x421c0044>;
+		gpr = <0x40006814 0x11 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_17_hsp_xbar1_out17: MAIN__IOMUXC_PIO2_17_HSP_XBAR1_OUT17 {
+		pinmux = <0x421c0044 11 0x421c839c 0 0x421c0044>;
+		gpr = <0x40006814 0x11 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_17_main_ahb_sramc_sramc_ubb: MAIN__IOMUXC_PIO2_17_MAIN_AHB_SRAMC_SRAMC_UBB {
 		pinmux = <0x421c0044 5 0x0 0 0x421c0044>;
@@ -355,11 +455,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_18_hsp_lpuart4_cts_b: MAIN__IOMUXC_PIO2_18_HSP_LPUART4_CTS_B {
 		pinmux = <0x421c0048 1 0x421c8290 0 0x421c0048>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_18_hsp_xbar0_inout18: MAIN__IOMUXC_PIO2_18_HSP_XBAR0_INOUT18 {
+	/omit-if-no-ref/ main__iomuxc_pio2_18_hsp_xbar0_in18: MAIN__IOMUXC_PIO2_18_HSP_XBAR0_IN18 {
 		pinmux = <0x421c0048 10 0x421c8330 0 0x421c0048>;
+		gpr = <0x40006810 0x12 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_18_hsp_xbar1_inout18: MAIN__IOMUXC_PIO2_18_HSP_XBAR1_INOUT18 {
+	/omit-if-no-ref/ main__iomuxc_pio2_18_hsp_xbar0_out18: MAIN__IOMUXC_PIO2_18_HSP_XBAR0_OUT18 {
+		pinmux = <0x421c0048 10 0x421c8330 0 0x421c0048>;
+		gpr = <0x40006810 0x12 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_18_hsp_xbar1_in18: MAIN__IOMUXC_PIO2_18_HSP_XBAR1_IN18 {
 		pinmux = <0x421c0048 11 0x421c83a0 0 0x421c0048>;
+		gpr = <0x40006814 0x12 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_18_hsp_xbar1_out18: MAIN__IOMUXC_PIO2_18_HSP_XBAR1_OUT18 {
+		pinmux = <0x421c0048 11 0x421c83a0 0 0x421c0048>;
+		gpr = <0x40006814 0x12 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_18_main_ahb_sramc_sramc_web: MAIN__IOMUXC_PIO2_18_MAIN_AHB_SRAMC_SRAMC_WEB {
 		pinmux = <0x421c0048 5 0x0 0 0x421c0048>;
@@ -379,11 +489,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_19_hsp_lpuart4_rts_b: MAIN__IOMUXC_PIO2_19_HSP_LPUART4_RTS_B {
 		pinmux = <0x421c004c 1 0x0 0 0x421c004c>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_19_hsp_xbar0_inout19: MAIN__IOMUXC_PIO2_19_HSP_XBAR0_INOUT19 {
+	/omit-if-no-ref/ main__iomuxc_pio2_19_hsp_xbar0_in19: MAIN__IOMUXC_PIO2_19_HSP_XBAR0_IN19 {
 		pinmux = <0x421c004c 10 0x421c8334 0 0x421c004c>;
+		gpr = <0x40006810 0x13 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_19_hsp_xbar1_inout19: MAIN__IOMUXC_PIO2_19_HSP_XBAR1_INOUT19 {
+	/omit-if-no-ref/ main__iomuxc_pio2_19_hsp_xbar0_out19: MAIN__IOMUXC_PIO2_19_HSP_XBAR0_OUT19 {
+		pinmux = <0x421c004c 10 0x421c8334 0 0x421c004c>;
+		gpr = <0x40006810 0x13 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_19_hsp_xbar1_in19: MAIN__IOMUXC_PIO2_19_HSP_XBAR1_IN19 {
 		pinmux = <0x421c004c 11 0x421c83a4 0 0x421c004c>;
+		gpr = <0x40006814 0x13 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_19_hsp_xbar1_out19: MAIN__IOMUXC_PIO2_19_HSP_XBAR1_OUT19 {
+		pinmux = <0x421c004c 11 0x421c83a4 0 0x421c004c>;
+		gpr = <0x40006814 0x13 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_19_hsp_eflexpwm1_pwm_x0: MAIN__IOMUXC_PIO2_19_HSP_eFlexPWM1_PWM_X0 {
 		pinmux = <0x421c004c 4 0x421c8170 0 0x421c004c>;
@@ -415,11 +535,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_2_hsp_qtpm0_ch2: MAIN__IOMUXC_PIO2_2_HSP_QTPM0_CH2 {
 		pinmux = <0x421c0008 6 0x0 0 0x421c0008>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_2_hsp_xbar0_inout02: MAIN__IOMUXC_PIO2_2_HSP_XBAR0_INOUT02 {
+	/omit-if-no-ref/ main__iomuxc_pio2_2_hsp_xbar0_in02: MAIN__IOMUXC_PIO2_2_HSP_XBAR0_IN02 {
 		pinmux = <0x421c0008 10 0x421c82f0 0 0x421c0008>;
+		gpr = <0x40006810 0x2 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_2_hsp_xbar1_inout02: MAIN__IOMUXC_PIO2_2_HSP_XBAR1_INOUT02 {
+	/omit-if-no-ref/ main__iomuxc_pio2_2_hsp_xbar0_out02: MAIN__IOMUXC_PIO2_2_HSP_XBAR0_OUT02 {
+		pinmux = <0x421c0008 10 0x421c82f0 0 0x421c0008>;
+		gpr = <0x40006810 0x2 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_2_hsp_xbar1_in02: MAIN__IOMUXC_PIO2_2_HSP_XBAR1_IN02 {
 		pinmux = <0x421c0008 11 0x421c8360 0 0x421c0008>;
+		gpr = <0x40006814 0x2 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_2_hsp_xbar1_out02: MAIN__IOMUXC_PIO2_2_HSP_XBAR1_OUT02 {
+		pinmux = <0x421c0008 11 0x421c8360 0 0x421c0008>;
+		gpr = <0x40006814 0x2 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_2_hsp_eflexpwm0_pwm_a1: MAIN__IOMUXC_PIO2_2_HSP_eFlexPWM0_PWM_A1 {
 		pinmux = <0x421c0008 4 0x421c813c 0 0x421c0008>;
@@ -445,11 +575,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_20_hsp_lpuart5_txd: MAIN__IOMUXC_PIO2_20_HSP_LPUART5_TXD {
 		pinmux = <0x421c0050 1 0x421c82a4 0 0x421c0050>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_20_hsp_xbar0_inout20: MAIN__IOMUXC_PIO2_20_HSP_XBAR0_INOUT20 {
+	/omit-if-no-ref/ main__iomuxc_pio2_20_hsp_xbar0_in20: MAIN__IOMUXC_PIO2_20_HSP_XBAR0_IN20 {
 		pinmux = <0x421c0050 10 0x421c8338 0 0x421c0050>;
+		gpr = <0x40006810 0x14 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_20_hsp_xbar1_inout20: MAIN__IOMUXC_PIO2_20_HSP_XBAR1_INOUT20 {
+	/omit-if-no-ref/ main__iomuxc_pio2_20_hsp_xbar0_out20: MAIN__IOMUXC_PIO2_20_HSP_XBAR0_OUT20 {
+		pinmux = <0x421c0050 10 0x421c8338 0 0x421c0050>;
+		gpr = <0x40006810 0x14 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_20_hsp_xbar1_in20: MAIN__IOMUXC_PIO2_20_HSP_XBAR1_IN20 {
 		pinmux = <0x421c0050 11 0x421c83a8 0 0x421c0050>;
+		gpr = <0x40006814 0x14 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_20_hsp_xbar1_out20: MAIN__IOMUXC_PIO2_20_HSP_XBAR1_OUT20 {
+		pinmux = <0x421c0050 11 0x421c83a8 0 0x421c0050>;
+		gpr = <0x40006814 0x14 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_20_hsp_eflexpwm1_pwm_a3: MAIN__IOMUXC_PIO2_20_HSP_eFlexPWM1_PWM_A3 {
 		pinmux = <0x421c0050 4 0x421c815c 0 0x421c0050>;
@@ -478,11 +618,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_21_hsp_lpuart5_rxd: MAIN__IOMUXC_PIO2_21_HSP_LPUART5_RXD {
 		pinmux = <0x421c0054 1 0x421c82a0 0 0x421c0054>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_21_hsp_xbar0_inout21: MAIN__IOMUXC_PIO2_21_HSP_XBAR0_INOUT21 {
+	/omit-if-no-ref/ main__iomuxc_pio2_21_hsp_xbar0_in21: MAIN__IOMUXC_PIO2_21_HSP_XBAR0_IN21 {
 		pinmux = <0x421c0054 10 0x421c833c 0 0x421c0054>;
+		gpr = <0x40006810 0x15 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_21_hsp_xbar1_inout21: MAIN__IOMUXC_PIO2_21_HSP_XBAR1_INOUT21 {
+	/omit-if-no-ref/ main__iomuxc_pio2_21_hsp_xbar0_out21: MAIN__IOMUXC_PIO2_21_HSP_XBAR0_OUT21 {
+		pinmux = <0x421c0054 10 0x421c833c 0 0x421c0054>;
+		gpr = <0x40006810 0x15 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_21_hsp_xbar1_in21: MAIN__IOMUXC_PIO2_21_HSP_XBAR1_IN21 {
 		pinmux = <0x421c0054 11 0x421c83ac 0 0x421c0054>;
+		gpr = <0x40006814 0x15 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_21_hsp_xbar1_out21: MAIN__IOMUXC_PIO2_21_HSP_XBAR1_OUT21 {
+		pinmux = <0x421c0054 11 0x421c83ac 0 0x421c0054>;
+		gpr = <0x40006814 0x15 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_21_hsp_eflexpwm1_pwm_b3: MAIN__IOMUXC_PIO2_21_HSP_eFlexPWM1_PWM_B3 {
 		pinmux = <0x421c0054 4 0x421c816c 0 0x421c0054>;
@@ -511,11 +661,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_22_hsp_lpuart5_cts_b: MAIN__IOMUXC_PIO2_22_HSP_LPUART5_CTS_B {
 		pinmux = <0x421c0058 1 0x421c829c 0 0x421c0058>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_22_hsp_xbar0_inout22: MAIN__IOMUXC_PIO2_22_HSP_XBAR0_INOUT22 {
+	/omit-if-no-ref/ main__iomuxc_pio2_22_hsp_xbar0_in22: MAIN__IOMUXC_PIO2_22_HSP_XBAR0_IN22 {
 		pinmux = <0x421c0058 10 0x421c8340 0 0x421c0058>;
+		gpr = <0x40006810 0x16 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_22_hsp_xbar1_inout22: MAIN__IOMUXC_PIO2_22_HSP_XBAR1_INOUT22 {
+	/omit-if-no-ref/ main__iomuxc_pio2_22_hsp_xbar0_out22: MAIN__IOMUXC_PIO2_22_HSP_XBAR0_OUT22 {
+		pinmux = <0x421c0058 10 0x421c8340 0 0x421c0058>;
+		gpr = <0x40006810 0x16 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_22_hsp_xbar1_in22: MAIN__IOMUXC_PIO2_22_HSP_XBAR1_IN22 {
 		pinmux = <0x421c0058 11 0x421c83b0 0 0x421c0058>;
+		gpr = <0x40006814 0x16 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_22_hsp_xbar1_out22: MAIN__IOMUXC_PIO2_22_HSP_XBAR1_OUT22 {
+		pinmux = <0x421c0058 11 0x421c83b0 0 0x421c0058>;
+		gpr = <0x40006814 0x16 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_22_hsp_eflexpwm1_pwm_a2: MAIN__IOMUXC_PIO2_22_HSP_eFlexPWM1_PWM_A2 {
 		pinmux = <0x421c0058 4 0x421c8158 0 0x421c0058>;
@@ -538,11 +698,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_23_hsp_lpuart5_rts_b: MAIN__IOMUXC_PIO2_23_HSP_LPUART5_RTS_B {
 		pinmux = <0x421c005c 1 0x0 0 0x421c005c>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_23_hsp_xbar0_inout23: MAIN__IOMUXC_PIO2_23_HSP_XBAR0_INOUT23 {
+	/omit-if-no-ref/ main__iomuxc_pio2_23_hsp_xbar0_in23: MAIN__IOMUXC_PIO2_23_HSP_XBAR0_IN23 {
 		pinmux = <0x421c005c 10 0x421c8344 0 0x421c005c>;
+		gpr = <0x40006810 0x17 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_23_hsp_xbar1_inout23: MAIN__IOMUXC_PIO2_23_HSP_XBAR1_INOUT23 {
+	/omit-if-no-ref/ main__iomuxc_pio2_23_hsp_xbar0_out23: MAIN__IOMUXC_PIO2_23_HSP_XBAR0_OUT23 {
+		pinmux = <0x421c005c 10 0x421c8344 0 0x421c005c>;
+		gpr = <0x40006810 0x17 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_23_hsp_xbar1_in23: MAIN__IOMUXC_PIO2_23_HSP_XBAR1_IN23 {
 		pinmux = <0x421c005c 11 0x421c83b4 0 0x421c005c>;
+		gpr = <0x40006814 0x17 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_23_hsp_xbar1_out23: MAIN__IOMUXC_PIO2_23_HSP_XBAR1_OUT23 {
+		pinmux = <0x421c005c 11 0x421c83b4 0 0x421c005c>;
+		gpr = <0x40006814 0x17 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_23_hsp_eflexpwm1_pwm_b2: MAIN__IOMUXC_PIO2_23_HSP_eFlexPWM1_PWM_B2 {
 		pinmux = <0x421c005c 4 0x421c8168 0 0x421c005c>;
@@ -577,11 +747,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_24_hsp_lpspi1_pcs0: MAIN__IOMUXC_PIO2_24_HSP_LPSPI1_PCS0 {
 		pinmux = <0x421c0060 9 0x421c81f8 0 0x421c0060>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_24_hsp_xbar0_inout24: MAIN__IOMUXC_PIO2_24_HSP_XBAR0_INOUT24 {
+	/omit-if-no-ref/ main__iomuxc_pio2_24_hsp_xbar0_in24: MAIN__IOMUXC_PIO2_24_HSP_XBAR0_IN24 {
 		pinmux = <0x421c0060 10 0x421c8348 0 0x421c0060>;
+		gpr = <0x40006810 0x18 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_24_hsp_xbar1_inout24: MAIN__IOMUXC_PIO2_24_HSP_XBAR1_INOUT24 {
+	/omit-if-no-ref/ main__iomuxc_pio2_24_hsp_xbar0_out24: MAIN__IOMUXC_PIO2_24_HSP_XBAR0_OUT24 {
+		pinmux = <0x421c0060 10 0x421c8348 0 0x421c0060>;
+		gpr = <0x40006810 0x18 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_24_hsp_xbar1_in24: MAIN__IOMUXC_PIO2_24_HSP_XBAR1_IN24 {
 		pinmux = <0x421c0060 11 0x421c83b8 0 0x421c0060>;
+		gpr = <0x40006814 0x18 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_24_hsp_xbar1_out24: MAIN__IOMUXC_PIO2_24_HSP_XBAR1_OUT24 {
+		pinmux = <0x421c0060 11 0x421c83b8 0 0x421c0060>;
+		gpr = <0x40006814 0x18 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_24_hsp_eflexpwm1_pwm_a1: MAIN__IOMUXC_PIO2_24_HSP_eFlexPWM1_PWM_A1 {
 		pinmux = <0x421c0060 4 0x421c8154 0 0x421c0060>;
@@ -613,11 +793,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_25_hsp_lpspi1_sck: MAIN__IOMUXC_PIO2_25_HSP_LPSPI1_SCK {
 		pinmux = <0x421c0064 9 0x421c8208 0 0x421c0064>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_25_hsp_xbar0_inout25: MAIN__IOMUXC_PIO2_25_HSP_XBAR0_INOUT25 {
+	/omit-if-no-ref/ main__iomuxc_pio2_25_hsp_xbar0_in25: MAIN__IOMUXC_PIO2_25_HSP_XBAR0_IN25 {
 		pinmux = <0x421c0064 10 0x421c834c 0 0x421c0064>;
+		gpr = <0x40006810 0x19 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_25_hsp_xbar1_inout25: MAIN__IOMUXC_PIO2_25_HSP_XBAR1_INOUT25 {
+	/omit-if-no-ref/ main__iomuxc_pio2_25_hsp_xbar0_out25: MAIN__IOMUXC_PIO2_25_HSP_XBAR0_OUT25 {
+		pinmux = <0x421c0064 10 0x421c834c 0 0x421c0064>;
+		gpr = <0x40006810 0x19 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_25_hsp_xbar1_in25: MAIN__IOMUXC_PIO2_25_HSP_XBAR1_IN25 {
 		pinmux = <0x421c0064 11 0x421c83bc 0 0x421c0064>;
+		gpr = <0x40006814 0x19 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_25_hsp_xbar1_out25: MAIN__IOMUXC_PIO2_25_HSP_XBAR1_OUT25 {
+		pinmux = <0x421c0064 11 0x421c83bc 0 0x421c0064>;
+		gpr = <0x40006814 0x19 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_25_hsp_eflexpwm1_pwm_b1: MAIN__IOMUXC_PIO2_25_HSP_eFlexPWM1_PWM_B1 {
 		pinmux = <0x421c0064 4 0x421c8164 0 0x421c0064>;
@@ -646,11 +836,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_26_hsp_lpspi1_sin: MAIN__IOMUXC_PIO2_26_HSP_LPSPI1_SIN {
 		pinmux = <0x421c0068 9 0x421c820c 0 0x421c0068>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_26_hsp_xbar0_inout26: MAIN__IOMUXC_PIO2_26_HSP_XBAR0_INOUT26 {
+	/omit-if-no-ref/ main__iomuxc_pio2_26_hsp_xbar0_in26: MAIN__IOMUXC_PIO2_26_HSP_XBAR0_IN26 {
 		pinmux = <0x421c0068 10 0x421c8350 0 0x421c0068>;
+		gpr = <0x40006810 0x1a 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_26_hsp_xbar1_inout26: MAIN__IOMUXC_PIO2_26_HSP_XBAR1_INOUT26 {
+	/omit-if-no-ref/ main__iomuxc_pio2_26_hsp_xbar0_out26: MAIN__IOMUXC_PIO2_26_HSP_XBAR0_OUT26 {
+		pinmux = <0x421c0068 10 0x421c8350 0 0x421c0068>;
+		gpr = <0x40006810 0x1a 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_26_hsp_xbar1_in26: MAIN__IOMUXC_PIO2_26_HSP_XBAR1_IN26 {
 		pinmux = <0x421c0068 11 0x421c83c0 0 0x421c0068>;
+		gpr = <0x40006814 0x1a 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_26_hsp_xbar1_out26: MAIN__IOMUXC_PIO2_26_HSP_XBAR1_OUT26 {
+		pinmux = <0x421c0068 11 0x421c83c0 0 0x421c0068>;
+		gpr = <0x40006814 0x1a 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_26_hsp_eflexpwm1_pwm_a0: MAIN__IOMUXC_PIO2_26_HSP_eFlexPWM1_PWM_A0 {
 		pinmux = <0x421c0068 4 0x421c8150 0 0x421c0068>;
@@ -676,11 +876,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_27_hsp_lpspi1_sout: MAIN__IOMUXC_PIO2_27_HSP_LPSPI1_SOUT {
 		pinmux = <0x421c006c 9 0x421c8210 0 0x421c006c>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_27_hsp_xbar0_inout27: MAIN__IOMUXC_PIO2_27_HSP_XBAR0_INOUT27 {
+	/omit-if-no-ref/ main__iomuxc_pio2_27_hsp_xbar0_in27: MAIN__IOMUXC_PIO2_27_HSP_XBAR0_IN27 {
 		pinmux = <0x421c006c 10 0x421c8354 0 0x421c006c>;
+		gpr = <0x40006810 0x1b 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_27_hsp_xbar1_inout27: MAIN__IOMUXC_PIO2_27_HSP_XBAR1_INOUT27 {
+	/omit-if-no-ref/ main__iomuxc_pio2_27_hsp_xbar0_out27: MAIN__IOMUXC_PIO2_27_HSP_XBAR0_OUT27 {
+		pinmux = <0x421c006c 10 0x421c8354 0 0x421c006c>;
+		gpr = <0x40006810 0x1b 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_27_hsp_xbar1_in27: MAIN__IOMUXC_PIO2_27_HSP_XBAR1_IN27 {
 		pinmux = <0x421c006c 11 0x421c83c4 0 0x421c006c>;
+		gpr = <0x40006814 0x1b 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_27_hsp_xbar1_out27: MAIN__IOMUXC_PIO2_27_HSP_XBAR1_OUT27 {
+		pinmux = <0x421c006c 11 0x421c83c4 0 0x421c006c>;
+		gpr = <0x40006814 0x1b 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_27_hsp_eflexpwm1_pwm_b0: MAIN__IOMUXC_PIO2_27_HSP_eFlexPWM1_PWM_B0 {
 		pinmux = <0x421c006c 4 0x421c8160 0 0x421c006c>;
@@ -709,11 +919,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_3_hsp_qtpm0_ch3: MAIN__IOMUXC_PIO2_3_HSP_QTPM0_CH3 {
 		pinmux = <0x421c000c 6 0x0 0 0x421c000c>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_3_hsp_xbar0_inout03: MAIN__IOMUXC_PIO2_3_HSP_XBAR0_INOUT03 {
+	/omit-if-no-ref/ main__iomuxc_pio2_3_hsp_xbar0_in03: MAIN__IOMUXC_PIO2_3_HSP_XBAR0_IN03 {
 		pinmux = <0x421c000c 10 0x421c82f4 0 0x421c000c>;
+		gpr = <0x40006810 0x3 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_3_hsp_xbar1_inout03: MAIN__IOMUXC_PIO2_3_HSP_XBAR1_INOUT03 {
+	/omit-if-no-ref/ main__iomuxc_pio2_3_hsp_xbar0_out03: MAIN__IOMUXC_PIO2_3_HSP_XBAR0_OUT03 {
+		pinmux = <0x421c000c 10 0x421c82f4 0 0x421c000c>;
+		gpr = <0x40006810 0x3 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_3_hsp_xbar1_in03: MAIN__IOMUXC_PIO2_3_HSP_XBAR1_IN03 {
 		pinmux = <0x421c000c 11 0x421c8364 0 0x421c000c>;
+		gpr = <0x40006814 0x3 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_3_hsp_xbar1_out03: MAIN__IOMUXC_PIO2_3_HSP_XBAR1_OUT03 {
+		pinmux = <0x421c000c 11 0x421c8364 0 0x421c000c>;
+		gpr = <0x40006814 0x3 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_3_hsp_eflexpwm0_pwm_b1: MAIN__IOMUXC_PIO2_3_HSP_eFlexPWM0_PWM_B1 {
 		pinmux = <0x421c000c 4 0x421c8148 0 0x421c000c>;
@@ -742,11 +962,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_4_hsp_qtpm0_ch4: MAIN__IOMUXC_PIO2_4_HSP_QTPM0_CH4 {
 		pinmux = <0x421c0010 6 0x0 0 0x421c0010>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_4_hsp_xbar0_inout04: MAIN__IOMUXC_PIO2_4_HSP_XBAR0_INOUT04 {
+	/omit-if-no-ref/ main__iomuxc_pio2_4_hsp_xbar0_in04: MAIN__IOMUXC_PIO2_4_HSP_XBAR0_IN04 {
 		pinmux = <0x421c0010 10 0x421c82f8 0 0x421c0010>;
+		gpr = <0x40006810 0x4 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_4_hsp_xbar1_inout04: MAIN__IOMUXC_PIO2_4_HSP_XBAR1_INOUT04 {
+	/omit-if-no-ref/ main__iomuxc_pio2_4_hsp_xbar0_out04: MAIN__IOMUXC_PIO2_4_HSP_XBAR0_OUT04 {
+		pinmux = <0x421c0010 10 0x421c82f8 0 0x421c0010>;
+		gpr = <0x40006810 0x4 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_4_hsp_xbar1_in04: MAIN__IOMUXC_PIO2_4_HSP_XBAR1_IN04 {
 		pinmux = <0x421c0010 11 0x421c8368 0 0x421c0010>;
+		gpr = <0x40006814 0x4 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_4_hsp_xbar1_out04: MAIN__IOMUXC_PIO2_4_HSP_XBAR1_OUT04 {
+		pinmux = <0x421c0010 11 0x421c8368 0 0x421c0010>;
+		gpr = <0x40006814 0x4 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_4_hsp_eflexpwm0_pwm_a2: MAIN__IOMUXC_PIO2_4_HSP_eFlexPWM0_PWM_A2 {
 		pinmux = <0x421c0010 4 0x421c8140 0 0x421c0010>;
@@ -778,11 +1008,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_5_hsp_qtpm0_ch5: MAIN__IOMUXC_PIO2_5_HSP_QTPM0_CH5 {
 		pinmux = <0x421c0014 6 0x0 0 0x421c0014>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_5_hsp_xbar0_inout05: MAIN__IOMUXC_PIO2_5_HSP_XBAR0_INOUT05 {
+	/omit-if-no-ref/ main__iomuxc_pio2_5_hsp_xbar0_in05: MAIN__IOMUXC_PIO2_5_HSP_XBAR0_IN05 {
 		pinmux = <0x421c0014 10 0x421c82fc 0 0x421c0014>;
+		gpr = <0x40006810 0x5 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_5_hsp_xbar1_inout05: MAIN__IOMUXC_PIO2_5_HSP_XBAR1_INOUT05 {
+	/omit-if-no-ref/ main__iomuxc_pio2_5_hsp_xbar0_out05: MAIN__IOMUXC_PIO2_5_HSP_XBAR0_OUT05 {
+		pinmux = <0x421c0014 10 0x421c82fc 0 0x421c0014>;
+		gpr = <0x40006810 0x5 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_5_hsp_xbar1_in05: MAIN__IOMUXC_PIO2_5_HSP_XBAR1_IN05 {
 		pinmux = <0x421c0014 11 0x421c836c 0 0x421c0014>;
+		gpr = <0x40006814 0x5 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_5_hsp_xbar1_out05: MAIN__IOMUXC_PIO2_5_HSP_XBAR1_OUT05 {
+		pinmux = <0x421c0014 11 0x421c836c 0 0x421c0014>;
+		gpr = <0x40006814 0x5 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_5_hsp_eflexpwm0_pwm_b2: MAIN__IOMUXC_PIO2_5_HSP_eFlexPWM0_PWM_B2 {
 		pinmux = <0x421c0014 4 0x421c814c 0 0x421c0014>;
@@ -814,11 +1054,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_6_hsp_qtpm0_ch6: MAIN__IOMUXC_PIO2_6_HSP_QTPM0_CH6 {
 		pinmux = <0x421c0018 6 0x0 0 0x421c0018>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_6_hsp_xbar0_inout06: MAIN__IOMUXC_PIO2_6_HSP_XBAR0_INOUT06 {
+	/omit-if-no-ref/ main__iomuxc_pio2_6_hsp_xbar0_in06: MAIN__IOMUXC_PIO2_6_HSP_XBAR0_IN06 {
 		pinmux = <0x421c0018 10 0x421c8300 0 0x421c0018>;
+		gpr = <0x40006810 0x6 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_6_hsp_xbar1_inout06: MAIN__IOMUXC_PIO2_6_HSP_XBAR1_INOUT06 {
+	/omit-if-no-ref/ main__iomuxc_pio2_6_hsp_xbar0_out06: MAIN__IOMUXC_PIO2_6_HSP_XBAR0_OUT06 {
+		pinmux = <0x421c0018 10 0x421c8300 0 0x421c0018>;
+		gpr = <0x40006810 0x6 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_6_hsp_xbar1_in06: MAIN__IOMUXC_PIO2_6_HSP_XBAR1_IN06 {
 		pinmux = <0x421c0018 11 0x421c8370 0 0x421c0018>;
+		gpr = <0x40006814 0x6 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_6_hsp_xbar1_out06: MAIN__IOMUXC_PIO2_6_HSP_XBAR1_OUT06 {
+		pinmux = <0x421c0018 11 0x421c8370 0 0x421c0018>;
+		gpr = <0x40006814 0x6 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_6_hsp_eflexpwm0_pwm_a3: MAIN__IOMUXC_PIO2_6_HSP_eFlexPWM0_PWM_A3 {
 		pinmux = <0x421c0018 4 0x0 0 0x421c0018>;
@@ -850,11 +1100,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_7_hsp_qtpm0_ch7: MAIN__IOMUXC_PIO2_7_HSP_QTPM0_CH7 {
 		pinmux = <0x421c001c 6 0x0 0 0x421c001c>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_7_hsp_xbar0_inout07: MAIN__IOMUXC_PIO2_7_HSP_XBAR0_INOUT07 {
+	/omit-if-no-ref/ main__iomuxc_pio2_7_hsp_xbar0_in07: MAIN__IOMUXC_PIO2_7_HSP_XBAR0_IN07 {
 		pinmux = <0x421c001c 10 0x421c8304 0 0x421c001c>;
+		gpr = <0x40006810 0x7 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_7_hsp_xbar1_inout07: MAIN__IOMUXC_PIO2_7_HSP_XBAR1_INOUT07 {
+	/omit-if-no-ref/ main__iomuxc_pio2_7_hsp_xbar0_out07: MAIN__IOMUXC_PIO2_7_HSP_XBAR0_OUT07 {
+		pinmux = <0x421c001c 10 0x421c8304 0 0x421c001c>;
+		gpr = <0x40006810 0x7 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_7_hsp_xbar1_in07: MAIN__IOMUXC_PIO2_7_HSP_XBAR1_IN07 {
 		pinmux = <0x421c001c 11 0x421c8374 0 0x421c001c>;
+		gpr = <0x40006814 0x7 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_7_hsp_xbar1_out07: MAIN__IOMUXC_PIO2_7_HSP_XBAR1_OUT07 {
+		pinmux = <0x421c001c 11 0x421c8374 0 0x421c001c>;
+		gpr = <0x40006814 0x7 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_7_hsp_eflexpwm0_pwm_b3: MAIN__IOMUXC_PIO2_7_HSP_eFlexPWM0_PWM_B3 {
 		pinmux = <0x421c001c 4 0x0 0 0x421c001c>;
@@ -889,11 +1149,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_8_hsp_sinc0_mclk_out0: MAIN__IOMUXC_PIO2_8_HSP_SINC0_MCLK_OUT0 {
 		pinmux = <0x421c0020 6 0x0 0 0x421c0020>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_8_hsp_xbar0_inout08: MAIN__IOMUXC_PIO2_8_HSP_XBAR0_INOUT08 {
+	/omit-if-no-ref/ main__iomuxc_pio2_8_hsp_xbar0_in08: MAIN__IOMUXC_PIO2_8_HSP_XBAR0_IN08 {
 		pinmux = <0x421c0020 10 0x421c8308 0 0x421c0020>;
+		gpr = <0x40006810 0x8 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_8_hsp_xbar1_inout08: MAIN__IOMUXC_PIO2_8_HSP_XBAR1_INOUT08 {
+	/omit-if-no-ref/ main__iomuxc_pio2_8_hsp_xbar0_out08: MAIN__IOMUXC_PIO2_8_HSP_XBAR0_OUT08 {
+		pinmux = <0x421c0020 10 0x421c8308 0 0x421c0020>;
+		gpr = <0x40006810 0x8 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_8_hsp_xbar1_in08: MAIN__IOMUXC_PIO2_8_HSP_XBAR1_IN08 {
 		pinmux = <0x421c0020 11 0x421c8378 0 0x421c0020>;
+		gpr = <0x40006814 0x8 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_8_hsp_xbar1_out08: MAIN__IOMUXC_PIO2_8_HSP_XBAR1_OUT08 {
+		pinmux = <0x421c0020 11 0x421c8378 0 0x421c0020>;
+		gpr = <0x40006814 0x8 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_8_main_ahb_sramc_sramc_lbb: MAIN__IOMUXC_PIO2_8_MAIN_AHB_SRAMC_SRAMC_LBB {
 		pinmux = <0x421c0020 5 0x0 0 0x421c0020>;
@@ -925,11 +1195,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio2_9_hsp_sinc0_mclk_out1: MAIN__IOMUXC_PIO2_9_HSP_SINC0_MCLK_OUT1 {
 		pinmux = <0x421c0024 6 0x0 0 0x421c0024>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_9_hsp_xbar0_inout09: MAIN__IOMUXC_PIO2_9_HSP_XBAR0_INOUT09 {
+	/omit-if-no-ref/ main__iomuxc_pio2_9_hsp_xbar0_in09: MAIN__IOMUXC_PIO2_9_HSP_XBAR0_IN09 {
 		pinmux = <0x421c0024 10 0x421c830c 0 0x421c0024>;
+		gpr = <0x40006810 0x9 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio2_9_hsp_xbar1_inout09: MAIN__IOMUXC_PIO2_9_HSP_XBAR1_INOUT09 {
+	/omit-if-no-ref/ main__iomuxc_pio2_9_hsp_xbar0_out09: MAIN__IOMUXC_PIO2_9_HSP_XBAR0_OUT09 {
+		pinmux = <0x421c0024 10 0x421c830c 0 0x421c0024>;
+		gpr = <0x40006810 0x9 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_9_hsp_xbar1_in09: MAIN__IOMUXC_PIO2_9_HSP_XBAR1_IN09 {
 		pinmux = <0x421c0024 11 0x421c837c 0 0x421c0024>;
+		gpr = <0x40006814 0x9 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio2_9_hsp_xbar1_out09: MAIN__IOMUXC_PIO2_9_HSP_XBAR1_OUT09 {
+		pinmux = <0x421c0024 11 0x421c837c 0 0x421c0024>;
+		gpr = <0x40006814 0x9 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio2_9_main_ahb_sramc_sramc_da08: MAIN__IOMUXC_PIO2_9_MAIN_AHB_SRAMC_SRAMC_DA08 {
 		pinmux = <0x421c0024 5 0x421c83e8 0 0x421c0024>;
@@ -952,11 +1232,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_0_hsp_gpio1_gpio0: MAIN__IOMUXC_PIO3_0_HSP_GPIO1_GPIO0 {
 		pinmux = <0x421c0080 0 0x0 0 0x421c0080>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_0_hsp_xbar0_inout00: MAIN__IOMUXC_PIO3_0_HSP_XBAR0_INOUT00 {
+	/omit-if-no-ref/ main__iomuxc_pio3_0_hsp_xbar0_in00: MAIN__IOMUXC_PIO3_0_HSP_XBAR0_IN00 {
 		pinmux = <0x421c0080 10 0x421c82e8 1 0x421c0080>;
+		gpr = <0x40006810 0x0 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_0_hsp_xbar1_inout00: MAIN__IOMUXC_PIO3_0_HSP_XBAR1_INOUT00 {
+	/omit-if-no-ref/ main__iomuxc_pio3_0_hsp_xbar0_out00: MAIN__IOMUXC_PIO3_0_HSP_XBAR0_OUT00 {
+		pinmux = <0x421c0080 10 0x421c82e8 1 0x421c0080>;
+		gpr = <0x40006810 0x0 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_0_hsp_xbar1_in00: MAIN__IOMUXC_PIO3_0_HSP_XBAR1_IN00 {
 		pinmux = <0x421c0080 11 0x421c8358 1 0x421c0080>;
+		gpr = <0x40006814 0x0 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_0_hsp_xbar1_out00: MAIN__IOMUXC_PIO3_0_HSP_XBAR1_OUT00 {
+		pinmux = <0x421c0080 11 0x421c8358 1 0x421c0080>;
+		gpr = <0x40006814 0x0 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_0_hsp_eflexpwm1_pwm_a0: MAIN__IOMUXC_PIO3_0_HSP_eFlexPWM1_PWM_A0 {
 		pinmux = <0x421c0080 8 0x421c8150 1 0x421c0080>;
@@ -988,11 +1278,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_1_hsp_gpio1_gpio1: MAIN__IOMUXC_PIO3_1_HSP_GPIO1_GPIO1 {
 		pinmux = <0x421c0084 0 0x0 0 0x421c0084>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_1_hsp_xbar0_inout01: MAIN__IOMUXC_PIO3_1_HSP_XBAR0_INOUT01 {
+	/omit-if-no-ref/ main__iomuxc_pio3_1_hsp_xbar0_in01: MAIN__IOMUXC_PIO3_1_HSP_XBAR0_IN01 {
 		pinmux = <0x421c0084 10 0x421c82ec 1 0x421c0084>;
+		gpr = <0x40006810 0x1 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_1_hsp_xbar1_inout01: MAIN__IOMUXC_PIO3_1_HSP_XBAR1_INOUT01 {
+	/omit-if-no-ref/ main__iomuxc_pio3_1_hsp_xbar0_out01: MAIN__IOMUXC_PIO3_1_HSP_XBAR0_OUT01 {
+		pinmux = <0x421c0084 10 0x421c82ec 1 0x421c0084>;
+		gpr = <0x40006810 0x1 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_1_hsp_xbar1_in01: MAIN__IOMUXC_PIO3_1_HSP_XBAR1_IN01 {
 		pinmux = <0x421c0084 11 0x421c835c 1 0x421c0084>;
+		gpr = <0x40006814 0x1 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_1_hsp_xbar1_out01: MAIN__IOMUXC_PIO3_1_HSP_XBAR1_OUT01 {
+		pinmux = <0x421c0084 11 0x421c835c 1 0x421c0084>;
+		gpr = <0x40006814 0x1 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_1_hsp_eflexpwm1_pwm_b0: MAIN__IOMUXC_PIO3_1_HSP_eFlexPWM1_PWM_B0 {
 		pinmux = <0x421c0084 8 0x421c8160 1 0x421c0084>;
@@ -1036,11 +1336,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_10_hsp_lpuart2_cts_b: MAIN__IOMUXC_PIO3_10_HSP_LPUART2_CTS_B {
 		pinmux = <0x421c00a8 9 0x421c8278 1 0x421c00a8>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_10_hsp_xbar0_inout10: MAIN__IOMUXC_PIO3_10_HSP_XBAR0_INOUT10 {
+	/omit-if-no-ref/ main__iomuxc_pio3_10_hsp_xbar0_in10: MAIN__IOMUXC_PIO3_10_HSP_XBAR0_IN10 {
 		pinmux = <0x421c00a8 10 0x421c8310 1 0x421c00a8>;
+		gpr = <0x40006810 0xa 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_10_hsp_xbar1_inout10: MAIN__IOMUXC_PIO3_10_HSP_XBAR1_INOUT10 {
+	/omit-if-no-ref/ main__iomuxc_pio3_10_hsp_xbar0_out10: MAIN__IOMUXC_PIO3_10_HSP_XBAR0_OUT10 {
+		pinmux = <0x421c00a8 10 0x421c8310 1 0x421c00a8>;
+		gpr = <0x40006810 0xa 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_10_hsp_xbar1_in10: MAIN__IOMUXC_PIO3_10_HSP_XBAR1_IN10 {
 		pinmux = <0x421c00a8 11 0x421c8380 1 0x421c00a8>;
+		gpr = <0x40006814 0xa 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_10_hsp_xbar1_out10: MAIN__IOMUXC_PIO3_10_HSP_XBAR1_OUT10 {
+		pinmux = <0x421c00a8 11 0x421c8380 1 0x421c00a8>;
+		gpr = <0x40006814 0xa 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_10_hsp_eflexpwm2_pwm_a1: MAIN__IOMUXC_PIO3_10_HSP_eFlexPWM2_PWM_A1 {
 		pinmux = <0x421c00a8 12 0x421c8178 0 0x421c00a8>;
@@ -1081,11 +1391,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_11_hsp_lpuart2_rts_b: MAIN__IOMUXC_PIO3_11_HSP_LPUART2_RTS_B {
 		pinmux = <0x421c00ac 9 0x0 0 0x421c00ac>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_11_hsp_xbar0_inout11: MAIN__IOMUXC_PIO3_11_HSP_XBAR0_INOUT11 {
+	/omit-if-no-ref/ main__iomuxc_pio3_11_hsp_xbar0_in11: MAIN__IOMUXC_PIO3_11_HSP_XBAR0_IN11 {
 		pinmux = <0x421c00ac 10 0x421c8314 1 0x421c00ac>;
+		gpr = <0x40006810 0xb 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_11_hsp_xbar1_inout11: MAIN__IOMUXC_PIO3_11_HSP_XBAR1_INOUT11 {
+	/omit-if-no-ref/ main__iomuxc_pio3_11_hsp_xbar0_out11: MAIN__IOMUXC_PIO3_11_HSP_XBAR0_OUT11 {
+		pinmux = <0x421c00ac 10 0x421c8314 1 0x421c00ac>;
+		gpr = <0x40006810 0xb 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_11_hsp_xbar1_in11: MAIN__IOMUXC_PIO3_11_HSP_XBAR1_IN11 {
 		pinmux = <0x421c00ac 11 0x421c8384 1 0x421c00ac>;
+		gpr = <0x40006814 0xb 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_11_hsp_xbar1_out11: MAIN__IOMUXC_PIO3_11_HSP_XBAR1_OUT11 {
+		pinmux = <0x421c00ac 11 0x421c8384 1 0x421c00ac>;
+		gpr = <0x40006814 0xb 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_11_hsp_eflexpwm2_pwm_b1: MAIN__IOMUXC_PIO3_11_HSP_eFlexPWM2_PWM_B1 {
 		pinmux = <0x421c00ac 12 0x421c8188 0 0x421c00ac>;
@@ -1126,11 +1446,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_12_hsp_lpuart2_txd: MAIN__IOMUXC_PIO3_12_HSP_LPUART2_TXD {
 		pinmux = <0x421c00b0 9 0x421c8280 1 0x421c00b0>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_12_hsp_xbar0_inout12: MAIN__IOMUXC_PIO3_12_HSP_XBAR0_INOUT12 {
+	/omit-if-no-ref/ main__iomuxc_pio3_12_hsp_xbar0_in12: MAIN__IOMUXC_PIO3_12_HSP_XBAR0_IN12 {
 		pinmux = <0x421c00b0 10 0x421c8318 1 0x421c00b0>;
+		gpr = <0x40006810 0xc 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_12_hsp_xbar1_inout12: MAIN__IOMUXC_PIO3_12_HSP_XBAR1_INOUT12 {
+	/omit-if-no-ref/ main__iomuxc_pio3_12_hsp_xbar0_out12: MAIN__IOMUXC_PIO3_12_HSP_XBAR0_OUT12 {
+		pinmux = <0x421c00b0 10 0x421c8318 1 0x421c00b0>;
+		gpr = <0x40006810 0xc 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_12_hsp_xbar1_in12: MAIN__IOMUXC_PIO3_12_HSP_XBAR1_IN12 {
 		pinmux = <0x421c00b0 11 0x421c8388 1 0x421c00b0>;
+		gpr = <0x40006814 0xc 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_12_hsp_xbar1_out12: MAIN__IOMUXC_PIO3_12_HSP_XBAR1_OUT12 {
+		pinmux = <0x421c00b0 11 0x421c8388 1 0x421c00b0>;
+		gpr = <0x40006814 0xc 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_12_hsp_eflexpwm2_pwm_a3: MAIN__IOMUXC_PIO3_12_HSP_eFlexPWM2_PWM_A3 {
 		pinmux = <0x421c00b0 12 0x421c8180 0 0x421c00b0>;
@@ -1171,11 +1501,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_13_hsp_lpuart2_rxd: MAIN__IOMUXC_PIO3_13_HSP_LPUART2_RXD {
 		pinmux = <0x421c00b4 9 0x421c827c 1 0x421c00b4>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_13_hsp_xbar0_inout13: MAIN__IOMUXC_PIO3_13_HSP_XBAR0_INOUT13 {
+	/omit-if-no-ref/ main__iomuxc_pio3_13_hsp_xbar0_in13: MAIN__IOMUXC_PIO3_13_HSP_XBAR0_IN13 {
 		pinmux = <0x421c00b4 10 0x421c831c 1 0x421c00b4>;
+		gpr = <0x40006810 0xd 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_13_hsp_xbar1_inout13: MAIN__IOMUXC_PIO3_13_HSP_XBAR1_INOUT13 {
+	/omit-if-no-ref/ main__iomuxc_pio3_13_hsp_xbar0_out13: MAIN__IOMUXC_PIO3_13_HSP_XBAR0_OUT13 {
+		pinmux = <0x421c00b4 10 0x421c831c 1 0x421c00b4>;
+		gpr = <0x40006810 0xd 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_13_hsp_xbar1_in13: MAIN__IOMUXC_PIO3_13_HSP_XBAR1_IN13 {
 		pinmux = <0x421c00b4 11 0x421c838c 1 0x421c00b4>;
+		gpr = <0x40006814 0xd 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_13_hsp_xbar1_out13: MAIN__IOMUXC_PIO3_13_HSP_XBAR1_OUT13 {
+		pinmux = <0x421c00b4 11 0x421c838c 1 0x421c00b4>;
+		gpr = <0x40006814 0xd 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_13_hsp_eflexpwm2_pwm_b3: MAIN__IOMUXC_PIO3_13_HSP_eFlexPWM2_PWM_B3 {
 		pinmux = <0x421c00b4 12 0x421c8190 0 0x421c00b4>;
@@ -1216,11 +1556,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_14_hsp_lpuart3_cts_b: MAIN__IOMUXC_PIO3_14_HSP_LPUART3_CTS_B {
 		pinmux = <0x421c00b8 9 0x421c8284 1 0x421c00b8>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_14_hsp_xbar0_inout14: MAIN__IOMUXC_PIO3_14_HSP_XBAR0_INOUT14 {
+	/omit-if-no-ref/ main__iomuxc_pio3_14_hsp_xbar0_in14: MAIN__IOMUXC_PIO3_14_HSP_XBAR0_IN14 {
 		pinmux = <0x421c00b8 10 0x421c8320 1 0x421c00b8>;
+		gpr = <0x40006810 0xe 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_14_hsp_xbar1_inout14: MAIN__IOMUXC_PIO3_14_HSP_XBAR1_INOUT14 {
+	/omit-if-no-ref/ main__iomuxc_pio3_14_hsp_xbar0_out14: MAIN__IOMUXC_PIO3_14_HSP_XBAR0_OUT14 {
+		pinmux = <0x421c00b8 10 0x421c8320 1 0x421c00b8>;
+		gpr = <0x40006810 0xe 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_14_hsp_xbar1_in14: MAIN__IOMUXC_PIO3_14_HSP_XBAR1_IN14 {
 		pinmux = <0x421c00b8 11 0x421c8390 1 0x421c00b8>;
+		gpr = <0x40006814 0xe 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_14_hsp_xbar1_out14: MAIN__IOMUXC_PIO3_14_HSP_XBAR1_OUT14 {
+		pinmux = <0x421c00b8 11 0x421c8390 1 0x421c00b8>;
+		gpr = <0x40006814 0xe 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_14_main_ahb_sramc_sramc_addr14: MAIN__IOMUXC_PIO3_14_MAIN_AHB_SRAMC_SRAMC_ADDR14 {
 		pinmux = <0x421c00b8 5 0x0 0 0x421c00b8>;
@@ -1252,11 +1602,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_15_hsp_lpuart3_rts_b: MAIN__IOMUXC_PIO3_15_HSP_LPUART3_RTS_B {
 		pinmux = <0x421c00bc 9 0x0 0 0x421c00bc>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_15_hsp_xbar0_inout15: MAIN__IOMUXC_PIO3_15_HSP_XBAR0_INOUT15 {
+	/omit-if-no-ref/ main__iomuxc_pio3_15_hsp_xbar0_in15: MAIN__IOMUXC_PIO3_15_HSP_XBAR0_IN15 {
 		pinmux = <0x421c00bc 10 0x421c8324 1 0x421c00bc>;
+		gpr = <0x40006810 0xf 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_15_hsp_xbar1_inout15: MAIN__IOMUXC_PIO3_15_HSP_XBAR1_INOUT15 {
+	/omit-if-no-ref/ main__iomuxc_pio3_15_hsp_xbar0_out15: MAIN__IOMUXC_PIO3_15_HSP_XBAR0_OUT15 {
+		pinmux = <0x421c00bc 10 0x421c8324 1 0x421c00bc>;
+		gpr = <0x40006810 0xf 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_15_hsp_xbar1_in15: MAIN__IOMUXC_PIO3_15_HSP_XBAR1_IN15 {
 		pinmux = <0x421c00bc 11 0x421c8394 1 0x421c00bc>;
+		gpr = <0x40006814 0xf 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_15_hsp_xbar1_out15: MAIN__IOMUXC_PIO3_15_HSP_XBAR1_OUT15 {
+		pinmux = <0x421c00bc 11 0x421c8394 1 0x421c00bc>;
+		gpr = <0x40006814 0xf 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_15_main_ahb_sramc_sramc_addr15: MAIN__IOMUXC_PIO3_15_MAIN_AHB_SRAMC_SRAMC_ADDR15 {
 		pinmux = <0x421c00bc 5 0x0 0 0x421c00bc>;
@@ -1291,11 +1651,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_16_hsp_lpuart3_txd: MAIN__IOMUXC_PIO3_16_HSP_LPUART3_TXD {
 		pinmux = <0x421c00c0 9 0x421c828c 1 0x421c00c0>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_16_hsp_xbar0_inout16: MAIN__IOMUXC_PIO3_16_HSP_XBAR0_INOUT16 {
+	/omit-if-no-ref/ main__iomuxc_pio3_16_hsp_xbar0_in16: MAIN__IOMUXC_PIO3_16_HSP_XBAR0_IN16 {
 		pinmux = <0x421c00c0 10 0x421c8328 1 0x421c00c0>;
+		gpr = <0x40006810 0x10 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_16_hsp_xbar1_inout16: MAIN__IOMUXC_PIO3_16_HSP_XBAR1_INOUT16 {
+	/omit-if-no-ref/ main__iomuxc_pio3_16_hsp_xbar0_out16: MAIN__IOMUXC_PIO3_16_HSP_XBAR0_OUT16 {
+		pinmux = <0x421c00c0 10 0x421c8328 1 0x421c00c0>;
+		gpr = <0x40006810 0x10 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_16_hsp_xbar1_in16: MAIN__IOMUXC_PIO3_16_HSP_XBAR1_IN16 {
 		pinmux = <0x421c00c0 11 0x421c8398 1 0x421c00c0>;
+		gpr = <0x40006814 0x10 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_16_hsp_xbar1_out16: MAIN__IOMUXC_PIO3_16_HSP_XBAR1_OUT16 {
+		pinmux = <0x421c00c0 11 0x421c8398 1 0x421c00c0>;
+		gpr = <0x40006814 0x10 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_16_main_ahb_sramc_sramc_addr16: MAIN__IOMUXC_PIO3_16_MAIN_AHB_SRAMC_SRAMC_ADDR16 {
 		pinmux = <0x421c00c0 5 0x0 0 0x421c00c0>;
@@ -1336,11 +1706,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_17_hsp_lpuart3_rxd: MAIN__IOMUXC_PIO3_17_HSP_LPUART3_RXD {
 		pinmux = <0x421c00c4 9 0x421c8288 1 0x421c00c4>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_17_hsp_xbar0_inout17: MAIN__IOMUXC_PIO3_17_HSP_XBAR0_INOUT17 {
+	/omit-if-no-ref/ main__iomuxc_pio3_17_hsp_xbar0_in17: MAIN__IOMUXC_PIO3_17_HSP_XBAR0_IN17 {
 		pinmux = <0x421c00c4 10 0x421c832c 1 0x421c00c4>;
+		gpr = <0x40006810 0x11 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_17_hsp_xbar1_inout17: MAIN__IOMUXC_PIO3_17_HSP_XBAR1_INOUT17 {
+	/omit-if-no-ref/ main__iomuxc_pio3_17_hsp_xbar0_out17: MAIN__IOMUXC_PIO3_17_HSP_XBAR0_OUT17 {
+		pinmux = <0x421c00c4 10 0x421c832c 1 0x421c00c4>;
+		gpr = <0x40006810 0x11 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_17_hsp_xbar1_in17: MAIN__IOMUXC_PIO3_17_HSP_XBAR1_IN17 {
 		pinmux = <0x421c00c4 11 0x421c839c 1 0x421c00c4>;
+		gpr = <0x40006814 0x11 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_17_hsp_xbar1_out17: MAIN__IOMUXC_PIO3_17_HSP_XBAR1_OUT17 {
+		pinmux = <0x421c00c4 11 0x421c839c 1 0x421c00c4>;
+		gpr = <0x40006814 0x11 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_17_main_ahb_sramc_sramc_advb: MAIN__IOMUXC_PIO3_17_MAIN_AHB_SRAMC_SRAMC_ADVB {
 		pinmux = <0x421c00c4 5 0x0 0 0x421c00c4>;
@@ -1375,11 +1755,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_18_hsp_lpspi0_pcs2: MAIN__IOMUXC_PIO3_18_HSP_LPSPI0_PCS2 {
 		pinmux = <0x421c00c8 8 0x421c81e4 1 0x421c00c8>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_18_hsp_xbar0_inout18: MAIN__IOMUXC_PIO3_18_HSP_XBAR0_INOUT18 {
+	/omit-if-no-ref/ main__iomuxc_pio3_18_hsp_xbar0_in18: MAIN__IOMUXC_PIO3_18_HSP_XBAR0_IN18 {
 		pinmux = <0x421c00c8 10 0x421c8330 1 0x421c00c8>;
+		gpr = <0x40006810 0x12 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_18_hsp_xbar1_inout18: MAIN__IOMUXC_PIO3_18_HSP_XBAR1_INOUT18 {
+	/omit-if-no-ref/ main__iomuxc_pio3_18_hsp_xbar0_out18: MAIN__IOMUXC_PIO3_18_HSP_XBAR0_OUT18 {
+		pinmux = <0x421c00c8 10 0x421c8330 1 0x421c00c8>;
+		gpr = <0x40006810 0x12 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_18_hsp_xbar1_in18: MAIN__IOMUXC_PIO3_18_HSP_XBAR1_IN18 {
 		pinmux = <0x421c00c8 11 0x421c83a0 1 0x421c00c8>;
+		gpr = <0x40006814 0x12 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_18_hsp_xbar1_out18: MAIN__IOMUXC_PIO3_18_HSP_XBAR1_OUT18 {
+		pinmux = <0x421c00c8 11 0x421c83a0 1 0x421c00c8>;
+		gpr = <0x40006814 0x12 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_18_main_ahb_sramc_sramc_cs0: MAIN__IOMUXC_PIO3_18_MAIN_AHB_SRAMC_SRAMC_CS0 {
 		pinmux = <0x421c00c8 5 0x0 0 0x421c00c8>;
@@ -1420,11 +1810,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_19_hsp_lpspi0_pcs1: MAIN__IOMUXC_PIO3_19_HSP_LPSPI0_PCS1 {
 		pinmux = <0x421c00cc 8 0x421c81e0 1 0x421c00cc>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_19_hsp_xbar0_inout19: MAIN__IOMUXC_PIO3_19_HSP_XBAR0_INOUT19 {
+	/omit-if-no-ref/ main__iomuxc_pio3_19_hsp_xbar0_in19: MAIN__IOMUXC_PIO3_19_HSP_XBAR0_IN19 {
 		pinmux = <0x421c00cc 10 0x421c8334 1 0x421c00cc>;
+		gpr = <0x40006810 0x13 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_19_hsp_xbar1_inout19: MAIN__IOMUXC_PIO3_19_HSP_XBAR1_INOUT19 {
+	/omit-if-no-ref/ main__iomuxc_pio3_19_hsp_xbar0_out19: MAIN__IOMUXC_PIO3_19_HSP_XBAR0_OUT19 {
+		pinmux = <0x421c00cc 10 0x421c8334 1 0x421c00cc>;
+		gpr = <0x40006810 0x13 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_19_hsp_xbar1_in19: MAIN__IOMUXC_PIO3_19_HSP_XBAR1_IN19 {
 		pinmux = <0x421c00cc 11 0x421c83a4 1 0x421c00cc>;
+		gpr = <0x40006814 0x13 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_19_hsp_xbar1_out19: MAIN__IOMUXC_PIO3_19_HSP_XBAR1_OUT19 {
+		pinmux = <0x421c00cc 11 0x421c83a4 1 0x421c00cc>;
+		gpr = <0x40006814 0x13 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_19_main_ahb_sramc_sramc_cs1: MAIN__IOMUXC_PIO3_19_MAIN_AHB_SRAMC_SRAMC_CS1 {
 		pinmux = <0x421c00cc 5 0x0 0 0x421c00cc>;
@@ -1459,11 +1859,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_2_hsp_lpuart0_txd: MAIN__IOMUXC_PIO3_2_HSP_LPUART0_TXD {
 		pinmux = <0x421c0088 9 0x421c8268 1 0x421c0088>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_2_hsp_xbar0_inout02: MAIN__IOMUXC_PIO3_2_HSP_XBAR0_INOUT02 {
+	/omit-if-no-ref/ main__iomuxc_pio3_2_hsp_xbar0_in02: MAIN__IOMUXC_PIO3_2_HSP_XBAR0_IN02 {
 		pinmux = <0x421c0088 10 0x421c82f0 1 0x421c0088>;
+		gpr = <0x40006810 0x2 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_2_hsp_xbar1_inout02: MAIN__IOMUXC_PIO3_2_HSP_XBAR1_INOUT02 {
+	/omit-if-no-ref/ main__iomuxc_pio3_2_hsp_xbar0_out02: MAIN__IOMUXC_PIO3_2_HSP_XBAR0_OUT02 {
+		pinmux = <0x421c0088 10 0x421c82f0 1 0x421c0088>;
+		gpr = <0x40006810 0x2 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_2_hsp_xbar1_in02: MAIN__IOMUXC_PIO3_2_HSP_XBAR1_IN02 {
 		pinmux = <0x421c0088 11 0x421c8360 1 0x421c0088>;
+		gpr = <0x40006814 0x2 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_2_hsp_xbar1_out02: MAIN__IOMUXC_PIO3_2_HSP_XBAR1_OUT02 {
+		pinmux = <0x421c0088 11 0x421c8360 1 0x421c0088>;
+		gpr = <0x40006814 0x2 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_2_hsp_eflexpwm1_pwm_a1: MAIN__IOMUXC_PIO3_2_HSP_eFlexPWM1_PWM_A1 {
 		pinmux = <0x421c0088 8 0x421c8154 1 0x421c0088>;
@@ -1501,11 +1911,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_20_hsp_lpspi0_sck: MAIN__IOMUXC_PIO3_20_HSP_LPSPI0_SCK {
 		pinmux = <0x421c00d0 8 0x421c81ec 1 0x421c00d0>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_20_hsp_xbar0_inout20: MAIN__IOMUXC_PIO3_20_HSP_XBAR0_INOUT20 {
+	/omit-if-no-ref/ main__iomuxc_pio3_20_hsp_xbar0_in20: MAIN__IOMUXC_PIO3_20_HSP_XBAR0_IN20 {
 		pinmux = <0x421c00d0 10 0x421c8338 1 0x421c00d0>;
+		gpr = <0x40006810 0x14 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_20_hsp_xbar1_inout20: MAIN__IOMUXC_PIO3_20_HSP_XBAR1_INOUT20 {
+	/omit-if-no-ref/ main__iomuxc_pio3_20_hsp_xbar0_out20: MAIN__IOMUXC_PIO3_20_HSP_XBAR0_OUT20 {
+		pinmux = <0x421c00d0 10 0x421c8338 1 0x421c00d0>;
+		gpr = <0x40006810 0x14 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_20_hsp_xbar1_in20: MAIN__IOMUXC_PIO3_20_HSP_XBAR1_IN20 {
 		pinmux = <0x421c00d0 11 0x421c83a8 1 0x421c00d0>;
+		gpr = <0x40006814 0x14 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_20_hsp_xbar1_out20: MAIN__IOMUXC_PIO3_20_HSP_XBAR1_OUT20 {
+		pinmux = <0x421c00d0 11 0x421c83a8 1 0x421c00d0>;
+		gpr = <0x40006814 0x14 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_20_main_ahb_sramc_sramc_wp0: MAIN__IOMUXC_PIO3_20_MAIN_AHB_SRAMC_SRAMC_WP0 {
 		pinmux = <0x421c00d0 5 0x421c8408 1 0x421c00d0>;
@@ -1543,11 +1963,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_21_hsp_lpspi0_sout: MAIN__IOMUXC_PIO3_21_HSP_LPSPI0_SOUT {
 		pinmux = <0x421c00d4 8 0x421c81f4 1 0x421c00d4>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_21_hsp_xbar0_inout21: MAIN__IOMUXC_PIO3_21_HSP_XBAR0_INOUT21 {
+	/omit-if-no-ref/ main__iomuxc_pio3_21_hsp_xbar0_in21: MAIN__IOMUXC_PIO3_21_HSP_XBAR0_IN21 {
 		pinmux = <0x421c00d4 10 0x421c833c 1 0x421c00d4>;
+		gpr = <0x40006810 0x15 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_21_hsp_xbar1_inout21: MAIN__IOMUXC_PIO3_21_HSP_XBAR1_INOUT21 {
+	/omit-if-no-ref/ main__iomuxc_pio3_21_hsp_xbar0_out21: MAIN__IOMUXC_PIO3_21_HSP_XBAR0_OUT21 {
+		pinmux = <0x421c00d4 10 0x421c833c 1 0x421c00d4>;
+		gpr = <0x40006810 0x15 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_21_hsp_xbar1_in21: MAIN__IOMUXC_PIO3_21_HSP_XBAR1_IN21 {
 		pinmux = <0x421c00d4 11 0x421c83ac 1 0x421c00d4>;
+		gpr = <0x40006814 0x15 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_21_hsp_xbar1_out21: MAIN__IOMUXC_PIO3_21_HSP_XBAR1_OUT21 {
+		pinmux = <0x421c00d4 11 0x421c83ac 1 0x421c00d4>;
+		gpr = <0x40006814 0x15 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_21_hsp_eflexpwm2_pwm_x0: MAIN__IOMUXC_PIO3_21_HSP_eFlexPWM2_PWM_X0 {
 		pinmux = <0x421c00d4 12 0x421c8194 0 0x421c00d4>;
@@ -1588,11 +2018,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_22_hsp_lpspi0_sin: MAIN__IOMUXC_PIO3_22_HSP_LPSPI0_SIN {
 		pinmux = <0x421c00d8 8 0x421c81f0 1 0x421c00d8>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_22_hsp_xbar0_inout22: MAIN__IOMUXC_PIO3_22_HSP_XBAR0_INOUT22 {
+	/omit-if-no-ref/ main__iomuxc_pio3_22_hsp_xbar0_in22: MAIN__IOMUXC_PIO3_22_HSP_XBAR0_IN22 {
 		pinmux = <0x421c00d8 10 0x421c8340 1 0x421c00d8>;
+		gpr = <0x40006810 0x16 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_22_hsp_xbar1_inout22: MAIN__IOMUXC_PIO3_22_HSP_XBAR1_INOUT22 {
+	/omit-if-no-ref/ main__iomuxc_pio3_22_hsp_xbar0_out22: MAIN__IOMUXC_PIO3_22_HSP_XBAR0_OUT22 {
+		pinmux = <0x421c00d8 10 0x421c8340 1 0x421c00d8>;
+		gpr = <0x40006810 0x16 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_22_hsp_xbar1_in22: MAIN__IOMUXC_PIO3_22_HSP_XBAR1_IN22 {
 		pinmux = <0x421c00d8 11 0x421c83b0 1 0x421c00d8>;
+		gpr = <0x40006814 0x16 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_22_hsp_xbar1_out22: MAIN__IOMUXC_PIO3_22_HSP_XBAR1_OUT22 {
+		pinmux = <0x421c00d8 11 0x421c83b0 1 0x421c00d8>;
+		gpr = <0x40006814 0x16 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_22_hsp_eflexpwm2_pwm_x1: MAIN__IOMUXC_PIO3_22_HSP_eFlexPWM2_PWM_X1 {
 		pinmux = <0x421c00d8 12 0x421c8198 0 0x421c00d8>;
@@ -1624,11 +2064,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_23_hsp_lpspi0_pcs0: MAIN__IOMUXC_PIO3_23_HSP_LPSPI0_PCS0 {
 		pinmux = <0x421c00dc 8 0x421c81dc 1 0x421c00dc>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_23_hsp_xbar0_inout23: MAIN__IOMUXC_PIO3_23_HSP_XBAR0_INOUT23 {
+	/omit-if-no-ref/ main__iomuxc_pio3_23_hsp_xbar0_in23: MAIN__IOMUXC_PIO3_23_HSP_XBAR0_IN23 {
 		pinmux = <0x421c00dc 10 0x421c8344 1 0x421c00dc>;
+		gpr = <0x40006810 0x17 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_23_hsp_xbar1_inout23: MAIN__IOMUXC_PIO3_23_HSP_XBAR1_INOUT23 {
+	/omit-if-no-ref/ main__iomuxc_pio3_23_hsp_xbar0_out23: MAIN__IOMUXC_PIO3_23_HSP_XBAR0_OUT23 {
+		pinmux = <0x421c00dc 10 0x421c8344 1 0x421c00dc>;
+		gpr = <0x40006810 0x17 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_23_hsp_xbar1_in23: MAIN__IOMUXC_PIO3_23_HSP_XBAR1_IN23 {
 		pinmux = <0x421c00dc 11 0x421c83b4 1 0x421c00dc>;
+		gpr = <0x40006814 0x17 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_23_hsp_xbar1_out23: MAIN__IOMUXC_PIO3_23_HSP_XBAR1_OUT23 {
+		pinmux = <0x421c00dc 11 0x421c83b4 1 0x421c00dc>;
+		gpr = <0x40006814 0x17 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_23_hsp_eflexpwm2_pwm_x2: MAIN__IOMUXC_PIO3_23_HSP_eFlexPWM2_PWM_X2 {
 		pinmux = <0x421c00dc 12 0x421c819c 0 0x421c00dc>;
@@ -1657,11 +2107,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_24_hsp_lpi2c0_sda: MAIN__IOMUXC_PIO3_24_HSP_LPI2C0_SDA {
 		pinmux = <0x421c00e0 8 0x421c81d0 3 0x421c00e0>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_24_hsp_xbar0_inout24: MAIN__IOMUXC_PIO3_24_HSP_XBAR0_INOUT24 {
+	/omit-if-no-ref/ main__iomuxc_pio3_24_hsp_xbar0_in24: MAIN__IOMUXC_PIO3_24_HSP_XBAR0_IN24 {
 		pinmux = <0x421c00e0 10 0x421c8348 1 0x421c00e0>;
+		gpr = <0x40006810 0x18 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_24_hsp_xbar1_inout24: MAIN__IOMUXC_PIO3_24_HSP_XBAR1_INOUT24 {
+	/omit-if-no-ref/ main__iomuxc_pio3_24_hsp_xbar0_out24: MAIN__IOMUXC_PIO3_24_HSP_XBAR0_OUT24 {
+		pinmux = <0x421c00e0 10 0x421c8348 1 0x421c00e0>;
+		gpr = <0x40006810 0x18 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_24_hsp_xbar1_in24: MAIN__IOMUXC_PIO3_24_HSP_XBAR1_IN24 {
 		pinmux = <0x421c00e0 11 0x421c83b8 1 0x421c00e0>;
+		gpr = <0x40006814 0x18 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_24_hsp_xbar1_out24: MAIN__IOMUXC_PIO3_24_HSP_XBAR1_OUT24 {
+		pinmux = <0x421c00e0 11 0x421c83b8 1 0x421c00e0>;
+		gpr = <0x40006814 0x18 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_24_hsp_eflexpwm2_pwm_x3: MAIN__IOMUXC_PIO3_24_HSP_eFlexPWM2_PWM_X3 {
 		pinmux = <0x421c00e0 12 0x421c81a0 0 0x421c00e0>;
@@ -1687,11 +2147,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_25_hsp_lpi2c0_scl: MAIN__IOMUXC_PIO3_25_HSP_LPI2C0_SCL {
 		pinmux = <0x421c00e4 8 0x421c81cc 3 0x421c00e4>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_25_hsp_xbar0_inout25: MAIN__IOMUXC_PIO3_25_HSP_XBAR0_INOUT25 {
+	/omit-if-no-ref/ main__iomuxc_pio3_25_hsp_xbar0_in25: MAIN__IOMUXC_PIO3_25_HSP_XBAR0_IN25 {
 		pinmux = <0x421c00e4 10 0x421c834c 1 0x421c00e4>;
+		gpr = <0x40006810 0x19 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_25_hsp_xbar1_inout25: MAIN__IOMUXC_PIO3_25_HSP_XBAR1_INOUT25 {
+	/omit-if-no-ref/ main__iomuxc_pio3_25_hsp_xbar0_out25: MAIN__IOMUXC_PIO3_25_HSP_XBAR0_OUT25 {
+		pinmux = <0x421c00e4 10 0x421c834c 1 0x421c00e4>;
+		gpr = <0x40006810 0x19 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_25_hsp_xbar1_in25: MAIN__IOMUXC_PIO3_25_HSP_XBAR1_IN25 {
 		pinmux = <0x421c00e4 11 0x421c83bc 1 0x421c00e4>;
+		gpr = <0x40006814 0x19 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_25_hsp_xbar1_out25: MAIN__IOMUXC_PIO3_25_HSP_XBAR1_OUT25 {
+		pinmux = <0x421c00e4 11 0x421c83bc 1 0x421c00e4>;
+		gpr = <0x40006814 0x19 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_25_media_dcif_pixel_clk: MAIN__IOMUXC_PIO3_25_MEDIA_DCIF_PIXEL_CLK {
 		pinmux = <0x421c00e4 6 0x0 0 0x421c00e4>;
@@ -1708,11 +2178,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_26_hsp_i3c_scl: MAIN__IOMUXC_PIO3_26_HSP_I3C_SCL {
 		pinmux = <0x421c00e8 3 0x421c81c4 1 0x421c00e8>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_26_hsp_xbar0_inout26: MAIN__IOMUXC_PIO3_26_HSP_XBAR0_INOUT26 {
+	/omit-if-no-ref/ main__iomuxc_pio3_26_hsp_xbar0_in26: MAIN__IOMUXC_PIO3_26_HSP_XBAR0_IN26 {
 		pinmux = <0x421c00e8 10 0x421c8350 1 0x421c00e8>;
+		gpr = <0x40006810 0x1a 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_26_hsp_xbar1_inout26: MAIN__IOMUXC_PIO3_26_HSP_XBAR1_INOUT26 {
+	/omit-if-no-ref/ main__iomuxc_pio3_26_hsp_xbar0_out26: MAIN__IOMUXC_PIO3_26_HSP_XBAR0_OUT26 {
+		pinmux = <0x421c00e8 10 0x421c8350 1 0x421c00e8>;
+		gpr = <0x40006810 0x1a 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_26_hsp_xbar1_in26: MAIN__IOMUXC_PIO3_26_HSP_XBAR1_IN26 {
 		pinmux = <0x421c00e8 11 0x421c83c0 1 0x421c00e8>;
+		gpr = <0x40006814 0x1a 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_26_hsp_xbar1_out26: MAIN__IOMUXC_PIO3_26_HSP_XBAR1_OUT26 {
+		pinmux = <0x421c00e8 11 0x421c83c0 1 0x421c00e8>;
+		gpr = <0x40006814 0x1a 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_26_media_dcif_hsync: MAIN__IOMUXC_PIO3_26_MEDIA_DCIF_HSYNC {
 		pinmux = <0x421c00e8 6 0x0 0 0x421c00e8>;
@@ -1729,11 +2209,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_27_hsp_i3c_pur: MAIN__IOMUXC_PIO3_27_HSP_I3C_PUR {
 		pinmux = <0x421c00ec 3 0x0 0 0x421c00ec>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_27_hsp_xbar0_inout27: MAIN__IOMUXC_PIO3_27_HSP_XBAR0_INOUT27 {
+	/omit-if-no-ref/ main__iomuxc_pio3_27_hsp_xbar0_in27: MAIN__IOMUXC_PIO3_27_HSP_XBAR0_IN27 {
 		pinmux = <0x421c00ec 10 0x421c8354 1 0x421c00ec>;
+		gpr = <0x40006810 0x1b 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_27_hsp_xbar1_inout27: MAIN__IOMUXC_PIO3_27_HSP_XBAR1_INOUT27 {
+	/omit-if-no-ref/ main__iomuxc_pio3_27_hsp_xbar0_out27: MAIN__IOMUXC_PIO3_27_HSP_XBAR0_OUT27 {
+		pinmux = <0x421c00ec 10 0x421c8354 1 0x421c00ec>;
+		gpr = <0x40006810 0x1b 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_27_hsp_xbar1_in27: MAIN__IOMUXC_PIO3_27_HSP_XBAR1_IN27 {
 		pinmux = <0x421c00ec 11 0x421c83c4 1 0x421c00ec>;
+		gpr = <0x40006814 0x1b 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_27_hsp_xbar1_out27: MAIN__IOMUXC_PIO3_27_HSP_XBAR1_OUT27 {
+		pinmux = <0x421c00ec 11 0x421c83c4 1 0x421c00ec>;
+		gpr = <0x40006814 0x1b 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_27_media_dcif_vsync: MAIN__IOMUXC_PIO3_27_MEDIA_DCIF_VSYNC {
 		pinmux = <0x421c00ec 6 0x0 0 0x421c00ec>;
@@ -1753,11 +2243,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_28_hsp_lpuart0_cts_b: MAIN__IOMUXC_PIO3_28_HSP_LPUART0_CTS_B {
 		pinmux = <0x421c00f0 1 0x421c8260 2 0x421c00f0>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_28_hsp_xbar0_inout28: MAIN__IOMUXC_PIO3_28_HSP_XBAR0_INOUT28 {
+	/omit-if-no-ref/ main__iomuxc_pio3_28_hsp_xbar0_in28: MAIN__IOMUXC_PIO3_28_HSP_XBAR0_IN28 {
 		pinmux = <0x421c00f0 10 0x0 0 0x421c00f0>;
+		gpr = <0x40006810 0x1c 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_28_hsp_xbar1_inout28: MAIN__IOMUXC_PIO3_28_HSP_XBAR1_INOUT28 {
+	/omit-if-no-ref/ main__iomuxc_pio3_28_hsp_xbar0_out28: MAIN__IOMUXC_PIO3_28_HSP_XBAR0_OUT28 {
+		pinmux = <0x421c00f0 10 0x0 0 0x421c00f0>;
+		gpr = <0x40006810 0x1c 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_28_hsp_xbar1_in28: MAIN__IOMUXC_PIO3_28_HSP_XBAR1_IN28 {
 		pinmux = <0x421c00f0 11 0x0 0 0x421c00f0>;
+		gpr = <0x40006814 0x1c 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_28_hsp_xbar1_out28: MAIN__IOMUXC_PIO3_28_HSP_XBAR1_OUT28 {
+		pinmux = <0x421c00f0 11 0x0 0 0x421c00f0>;
+		gpr = <0x40006814 0x1c 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_28_hsp_eflexpwm1_pwm_x1: MAIN__IOMUXC_PIO3_28_HSP_eFlexPWM1_PWM_X1 {
 		pinmux = <0x421c00f0 4 0x0 0 0x421c00f0>;
@@ -1783,11 +2283,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_29_hsp_lpuart0_rts_b: MAIN__IOMUXC_PIO3_29_HSP_LPUART0_RTS_B {
 		pinmux = <0x421c00f4 1 0x0 0 0x421c00f4>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_29_hsp_xbar0_inout29: MAIN__IOMUXC_PIO3_29_HSP_XBAR0_INOUT29 {
+	/omit-if-no-ref/ main__iomuxc_pio3_29_hsp_xbar0_in29: MAIN__IOMUXC_PIO3_29_HSP_XBAR0_IN29 {
 		pinmux = <0x421c00f4 10 0x0 0 0x421c00f4>;
+		gpr = <0x40006810 0x1d 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_29_hsp_xbar1_inout29: MAIN__IOMUXC_PIO3_29_HSP_XBAR1_INOUT29 {
+	/omit-if-no-ref/ main__iomuxc_pio3_29_hsp_xbar0_out29: MAIN__IOMUXC_PIO3_29_HSP_XBAR0_OUT29 {
+		pinmux = <0x421c00f4 10 0x0 0 0x421c00f4>;
+		gpr = <0x40006810 0x1d 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_29_hsp_xbar1_in29: MAIN__IOMUXC_PIO3_29_HSP_XBAR1_IN29 {
 		pinmux = <0x421c00f4 11 0x0 0 0x421c00f4>;
+		gpr = <0x40006814 0x1d 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_29_hsp_xbar1_out29: MAIN__IOMUXC_PIO3_29_HSP_XBAR1_OUT29 {
+		pinmux = <0x421c00f4 11 0x0 0 0x421c00f4>;
+		gpr = <0x40006814 0x1d 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_29_hsp_eflexpwm1_pwm_x2: MAIN__IOMUXC_PIO3_29_HSP_eFlexPWM1_PWM_X2 {
 		pinmux = <0x421c00f4 4 0x0 0 0x421c00f4>;
@@ -1807,11 +2317,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_3_hsp_lpuart0_rxd: MAIN__IOMUXC_PIO3_3_HSP_LPUART0_RXD {
 		pinmux = <0x421c008c 9 0x421c8264 1 0x421c008c>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_3_hsp_xbar0_inout03: MAIN__IOMUXC_PIO3_3_HSP_XBAR0_INOUT03 {
+	/omit-if-no-ref/ main__iomuxc_pio3_3_hsp_xbar0_in03: MAIN__IOMUXC_PIO3_3_HSP_XBAR0_IN03 {
 		pinmux = <0x421c008c 10 0x421c82f4 1 0x421c008c>;
+		gpr = <0x40006810 0x3 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_3_hsp_xbar1_inout03: MAIN__IOMUXC_PIO3_3_HSP_XBAR1_INOUT03 {
+	/omit-if-no-ref/ main__iomuxc_pio3_3_hsp_xbar0_out03: MAIN__IOMUXC_PIO3_3_HSP_XBAR0_OUT03 {
+		pinmux = <0x421c008c 10 0x421c82f4 1 0x421c008c>;
+		gpr = <0x40006810 0x3 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_3_hsp_xbar1_in03: MAIN__IOMUXC_PIO3_3_HSP_XBAR1_IN03 {
 		pinmux = <0x421c008c 11 0x421c8364 1 0x421c008c>;
+		gpr = <0x40006814 0x3 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_3_hsp_xbar1_out03: MAIN__IOMUXC_PIO3_3_HSP_XBAR1_OUT03 {
+		pinmux = <0x421c008c 11 0x421c8364 1 0x421c008c>;
+		gpr = <0x40006814 0x3 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_3_hsp_eflexpwm1_pwm_b1: MAIN__IOMUXC_PIO3_3_HSP_eFlexPWM1_PWM_B1 {
 		pinmux = <0x421c008c 8 0x421c8164 1 0x421c008c>;
@@ -1849,11 +2369,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_30_hsp_lpuart0_txd: MAIN__IOMUXC_PIO3_30_HSP_LPUART0_TXD {
 		pinmux = <0x421c00f8 1 0x421c8268 2 0x421c00f8>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_30_hsp_xbar0_inout30: MAIN__IOMUXC_PIO3_30_HSP_XBAR0_INOUT30 {
+	/omit-if-no-ref/ main__iomuxc_pio3_30_hsp_xbar0_in30: MAIN__IOMUXC_PIO3_30_HSP_XBAR0_IN30 {
 		pinmux = <0x421c00f8 10 0x0 0 0x421c00f8>;
+		gpr = <0x40006810 0x1e 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_30_hsp_xbar1_inout30: MAIN__IOMUXC_PIO3_30_HSP_XBAR1_INOUT30 {
+	/omit-if-no-ref/ main__iomuxc_pio3_30_hsp_xbar0_out30: MAIN__IOMUXC_PIO3_30_HSP_XBAR0_OUT30 {
+		pinmux = <0x421c00f8 10 0x0 0 0x421c00f8>;
+		gpr = <0x40006810 0x1e 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_30_hsp_xbar1_in30: MAIN__IOMUXC_PIO3_30_HSP_XBAR1_IN30 {
 		pinmux = <0x421c00f8 11 0x0 0 0x421c00f8>;
+		gpr = <0x40006814 0x1e 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_30_hsp_xbar1_out30: MAIN__IOMUXC_PIO3_30_HSP_XBAR1_OUT30 {
+		pinmux = <0x421c00f8 11 0x0 0 0x421c00f8>;
+		gpr = <0x40006814 0x1e 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_30_hsp_eflexpwm1_pwm_x3: MAIN__IOMUXC_PIO3_30_HSP_eFlexPWM1_PWM_X3 {
 		pinmux = <0x421c00f8 4 0x0 0 0x421c00f8>;
@@ -1876,11 +2406,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_31_hsp_lpuart0_rxd: MAIN__IOMUXC_PIO3_31_HSP_LPUART0_RXD {
 		pinmux = <0x421c00fc 1 0x421c8264 2 0x421c00fc>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_31_hsp_xbar0_inout31: MAIN__IOMUXC_PIO3_31_HSP_XBAR0_INOUT31 {
+	/omit-if-no-ref/ main__iomuxc_pio3_31_hsp_xbar0_in31: MAIN__IOMUXC_PIO3_31_HSP_XBAR0_IN31 {
 		pinmux = <0x421c00fc 10 0x0 0 0x421c00fc>;
+		gpr = <0x40006810 0x1f 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_31_hsp_xbar1_inout31: MAIN__IOMUXC_PIO3_31_HSP_XBAR1_INOUT31 {
+	/omit-if-no-ref/ main__iomuxc_pio3_31_hsp_xbar0_out31: MAIN__IOMUXC_PIO3_31_HSP_XBAR0_OUT31 {
+		pinmux = <0x421c00fc 10 0x0 0 0x421c00fc>;
+		gpr = <0x40006810 0x1f 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_31_hsp_xbar1_in31: MAIN__IOMUXC_PIO3_31_HSP_XBAR1_IN31 {
 		pinmux = <0x421c00fc 11 0x0 0 0x421c00fc>;
+		gpr = <0x40006814 0x1f 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_31_hsp_xbar1_out31: MAIN__IOMUXC_PIO3_31_HSP_XBAR1_OUT31 {
+		pinmux = <0x421c00fc 11 0x0 0 0x421c00fc>;
+		gpr = <0x40006814 0x1f 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_31_main_freqme_clk_out: MAIN__IOMUXC_PIO3_31_MAIN_FREQME_CLK_OUT {
 		pinmux = <0x421c00fc 3 0x0 0 0x421c00fc>;
@@ -1903,11 +2443,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_4_hsp_lpuart0_cts_b: MAIN__IOMUXC_PIO3_4_HSP_LPUART0_CTS_B {
 		pinmux = <0x421c0090 9 0x421c8260 1 0x421c0090>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_4_hsp_xbar0_inout04: MAIN__IOMUXC_PIO3_4_HSP_XBAR0_INOUT04 {
+	/omit-if-no-ref/ main__iomuxc_pio3_4_hsp_xbar0_in04: MAIN__IOMUXC_PIO3_4_HSP_XBAR0_IN04 {
 		pinmux = <0x421c0090 10 0x421c82f8 1 0x421c0090>;
+		gpr = <0x40006810 0x4 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_4_hsp_xbar1_inout04: MAIN__IOMUXC_PIO3_4_HSP_XBAR1_INOUT04 {
+	/omit-if-no-ref/ main__iomuxc_pio3_4_hsp_xbar0_out04: MAIN__IOMUXC_PIO3_4_HSP_XBAR0_OUT04 {
+		pinmux = <0x421c0090 10 0x421c82f8 1 0x421c0090>;
+		gpr = <0x40006810 0x4 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_4_hsp_xbar1_in04: MAIN__IOMUXC_PIO3_4_HSP_XBAR1_IN04 {
 		pinmux = <0x421c0090 11 0x421c8368 1 0x421c0090>;
+		gpr = <0x40006814 0x4 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_4_hsp_xbar1_out04: MAIN__IOMUXC_PIO3_4_HSP_XBAR1_OUT04 {
+		pinmux = <0x421c0090 11 0x421c8368 1 0x421c0090>;
+		gpr = <0x40006814 0x4 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_4_hsp_eflexpwm1_pwm_a2: MAIN__IOMUXC_PIO3_4_HSP_eFlexPWM1_PWM_A2 {
 		pinmux = <0x421c0090 8 0x421c8158 1 0x421c0090>;
@@ -1945,11 +2495,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_5_hsp_lpuart0_rts_b: MAIN__IOMUXC_PIO3_5_HSP_LPUART0_RTS_B {
 		pinmux = <0x421c0094 9 0x0 0 0x421c0094>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_5_hsp_xbar0_inout05: MAIN__IOMUXC_PIO3_5_HSP_XBAR0_INOUT05 {
+	/omit-if-no-ref/ main__iomuxc_pio3_5_hsp_xbar0_in05: MAIN__IOMUXC_PIO3_5_HSP_XBAR0_IN05 {
 		pinmux = <0x421c0094 10 0x421c82fc 1 0x421c0094>;
+		gpr = <0x40006810 0x5 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_5_hsp_xbar1_inout05: MAIN__IOMUXC_PIO3_5_HSP_XBAR1_INOUT05 {
+	/omit-if-no-ref/ main__iomuxc_pio3_5_hsp_xbar0_out05: MAIN__IOMUXC_PIO3_5_HSP_XBAR0_OUT05 {
+		pinmux = <0x421c0094 10 0x421c82fc 1 0x421c0094>;
+		gpr = <0x40006810 0x5 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_5_hsp_xbar1_in05: MAIN__IOMUXC_PIO3_5_HSP_XBAR1_IN05 {
 		pinmux = <0x421c0094 11 0x421c836c 1 0x421c0094>;
+		gpr = <0x40006814 0x5 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_5_hsp_xbar1_out05: MAIN__IOMUXC_PIO3_5_HSP_XBAR1_OUT05 {
+		pinmux = <0x421c0094 11 0x421c836c 1 0x421c0094>;
+		gpr = <0x40006814 0x5 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_5_hsp_eflexpwm1_pwm_b2: MAIN__IOMUXC_PIO3_5_HSP_eFlexPWM1_PWM_B2 {
 		pinmux = <0x421c0094 8 0x421c8168 1 0x421c0094>;
@@ -1987,11 +2547,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_6_hsp_lpuart1_cts_b: MAIN__IOMUXC_PIO3_6_HSP_LPUART1_CTS_B {
 		pinmux = <0x421c0098 9 0x421c826c 1 0x421c0098>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_6_hsp_xbar0_inout06: MAIN__IOMUXC_PIO3_6_HSP_XBAR0_INOUT06 {
+	/omit-if-no-ref/ main__iomuxc_pio3_6_hsp_xbar0_in06: MAIN__IOMUXC_PIO3_6_HSP_XBAR0_IN06 {
 		pinmux = <0x421c0098 10 0x421c8300 1 0x421c0098>;
+		gpr = <0x40006810 0x6 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_6_hsp_xbar1_inout06: MAIN__IOMUXC_PIO3_6_HSP_XBAR1_INOUT06 {
+	/omit-if-no-ref/ main__iomuxc_pio3_6_hsp_xbar0_out06: MAIN__IOMUXC_PIO3_6_HSP_XBAR0_OUT06 {
+		pinmux = <0x421c0098 10 0x421c8300 1 0x421c0098>;
+		gpr = <0x40006810 0x6 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_6_hsp_xbar1_in06: MAIN__IOMUXC_PIO3_6_HSP_XBAR1_IN06 {
 		pinmux = <0x421c0098 11 0x421c8370 1 0x421c0098>;
+		gpr = <0x40006814 0x6 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_6_hsp_xbar1_out06: MAIN__IOMUXC_PIO3_6_HSP_XBAR1_OUT06 {
+		pinmux = <0x421c0098 11 0x421c8370 1 0x421c0098>;
+		gpr = <0x40006814 0x6 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_6_hsp_eflexpwm1_pwm_a3: MAIN__IOMUXC_PIO3_6_HSP_eFlexPWM1_PWM_A3 {
 		pinmux = <0x421c0098 8 0x421c815c 1 0x421c0098>;
@@ -2029,11 +2599,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_7_hsp_lpuart1_rts_b: MAIN__IOMUXC_PIO3_7_HSP_LPUART1_RTS_B {
 		pinmux = <0x421c009c 9 0x0 0 0x421c009c>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_7_hsp_xbar0_inout07: MAIN__IOMUXC_PIO3_7_HSP_XBAR0_INOUT07 {
+	/omit-if-no-ref/ main__iomuxc_pio3_7_hsp_xbar0_in07: MAIN__IOMUXC_PIO3_7_HSP_XBAR0_IN07 {
 		pinmux = <0x421c009c 10 0x421c8304 1 0x421c009c>;
+		gpr = <0x40006810 0x7 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_7_hsp_xbar1_inout07: MAIN__IOMUXC_PIO3_7_HSP_XBAR1_INOUT07 {
+	/omit-if-no-ref/ main__iomuxc_pio3_7_hsp_xbar0_out07: MAIN__IOMUXC_PIO3_7_HSP_XBAR0_OUT07 {
+		pinmux = <0x421c009c 10 0x421c8304 1 0x421c009c>;
+		gpr = <0x40006810 0x7 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_7_hsp_xbar1_in07: MAIN__IOMUXC_PIO3_7_HSP_XBAR1_IN07 {
 		pinmux = <0x421c009c 11 0x421c8374 1 0x421c009c>;
+		gpr = <0x40006814 0x7 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_7_hsp_xbar1_out07: MAIN__IOMUXC_PIO3_7_HSP_XBAR1_OUT07 {
+		pinmux = <0x421c009c 11 0x421c8374 1 0x421c009c>;
+		gpr = <0x40006814 0x7 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_7_hsp_eflexpwm1_pwm_b3: MAIN__IOMUXC_PIO3_7_HSP_eFlexPWM1_PWM_B3 {
 		pinmux = <0x421c009c 8 0x421c816c 1 0x421c009c>;
@@ -2077,11 +2657,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_8_hsp_lpuart1_txd: MAIN__IOMUXC_PIO3_8_HSP_LPUART1_TXD {
 		pinmux = <0x421c00a0 9 0x421c8274 1 0x421c00a0>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_8_hsp_xbar0_inout08: MAIN__IOMUXC_PIO3_8_HSP_XBAR0_INOUT08 {
+	/omit-if-no-ref/ main__iomuxc_pio3_8_hsp_xbar0_in08: MAIN__IOMUXC_PIO3_8_HSP_XBAR0_IN08 {
 		pinmux = <0x421c00a0 10 0x421c8308 1 0x421c00a0>;
+		gpr = <0x40006810 0x8 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_8_hsp_xbar1_inout08: MAIN__IOMUXC_PIO3_8_HSP_XBAR1_INOUT08 {
+	/omit-if-no-ref/ main__iomuxc_pio3_8_hsp_xbar0_out08: MAIN__IOMUXC_PIO3_8_HSP_XBAR0_OUT08 {
+		pinmux = <0x421c00a0 10 0x421c8308 1 0x421c00a0>;
+		gpr = <0x40006810 0x8 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_8_hsp_xbar1_in08: MAIN__IOMUXC_PIO3_8_HSP_XBAR1_IN08 {
 		pinmux = <0x421c00a0 11 0x421c8378 1 0x421c00a0>;
+		gpr = <0x40006814 0x8 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_8_hsp_xbar1_out08: MAIN__IOMUXC_PIO3_8_HSP_XBAR1_OUT08 {
+		pinmux = <0x421c00a0 11 0x421c8378 1 0x421c00a0>;
+		gpr = <0x40006814 0x8 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_8_hsp_eflexpwm2_pwm_a0: MAIN__IOMUXC_PIO3_8_HSP_eFlexPWM2_PWM_A0 {
 		pinmux = <0x421c00a0 12 0x421c8174 0 0x421c00a0>;
@@ -2122,11 +2712,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio3_9_hsp_lpuart1_rxd: MAIN__IOMUXC_PIO3_9_HSP_LPUART1_RXD {
 		pinmux = <0x421c00a4 9 0x421c8270 1 0x421c00a4>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_9_hsp_xbar0_inout09: MAIN__IOMUXC_PIO3_9_HSP_XBAR0_INOUT09 {
+	/omit-if-no-ref/ main__iomuxc_pio3_9_hsp_xbar0_in09: MAIN__IOMUXC_PIO3_9_HSP_XBAR0_IN09 {
 		pinmux = <0x421c00a4 10 0x421c830c 1 0x421c00a4>;
+		gpr = <0x40006810 0x9 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio3_9_hsp_xbar1_inout09: MAIN__IOMUXC_PIO3_9_HSP_XBAR1_INOUT09 {
+	/omit-if-no-ref/ main__iomuxc_pio3_9_hsp_xbar0_out09: MAIN__IOMUXC_PIO3_9_HSP_XBAR0_OUT09 {
+		pinmux = <0x421c00a4 10 0x421c830c 1 0x421c00a4>;
+		gpr = <0x40006810 0x9 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_9_hsp_xbar1_in09: MAIN__IOMUXC_PIO3_9_HSP_XBAR1_IN09 {
 		pinmux = <0x421c00a4 11 0x421c837c 1 0x421c00a4>;
+		gpr = <0x40006814 0x9 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio3_9_hsp_xbar1_out09: MAIN__IOMUXC_PIO3_9_HSP_XBAR1_OUT09 {
+		pinmux = <0x421c00a4 11 0x421c837c 1 0x421c00a4>;
+		gpr = <0x40006814 0x9 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio3_9_hsp_eflexpwm2_pwm_b0: MAIN__IOMUXC_PIO3_9_HSP_eFlexPWM2_PWM_B0 {
 		pinmux = <0x421c00a4 12 0x421c8184 0 0x421c00a4>;
@@ -2164,11 +2764,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_0_hsp_sinc1_mbit0: MAIN__IOMUXC_PIO4_0_HSP_SINC1_MBIT0 {
 		pinmux = <0x421c0100 5 0x421c82c8 0 0x421c0100>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_0_hsp_xbar0_inout00: MAIN__IOMUXC_PIO4_0_HSP_XBAR0_INOUT00 {
+	/omit-if-no-ref/ main__iomuxc_pio4_0_hsp_xbar0_in00: MAIN__IOMUXC_PIO4_0_HSP_XBAR0_IN00 {
 		pinmux = <0x421c0100 10 0x421c82e8 2 0x421c0100>;
+		gpr = <0x40006810 0x0 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_0_hsp_xbar1_inout00: MAIN__IOMUXC_PIO4_0_HSP_XBAR1_INOUT00 {
+	/omit-if-no-ref/ main__iomuxc_pio4_0_hsp_xbar0_out00: MAIN__IOMUXC_PIO4_0_HSP_XBAR0_OUT00 {
+		pinmux = <0x421c0100 10 0x421c82e8 2 0x421c0100>;
+		gpr = <0x40006810 0x0 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_0_hsp_xbar1_in00: MAIN__IOMUXC_PIO4_0_HSP_XBAR1_IN00 {
 		pinmux = <0x421c0100 11 0x421c8358 2 0x421c0100>;
+		gpr = <0x40006814 0x0 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_0_hsp_xbar1_out00: MAIN__IOMUXC_PIO4_0_HSP_XBAR1_OUT00 {
+		pinmux = <0x421c0100 11 0x421c8358 2 0x421c0100>;
+		gpr = <0x40006814 0x0 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_0_hsp_eflexpwm2_pwm_a0: MAIN__IOMUXC_PIO4_0_HSP_eFlexPWM2_PWM_A0 {
 		pinmux = <0x421c0100 8 0x421c8174 1 0x421c0100>;
@@ -2203,11 +2813,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_1_hsp_sinc1_mclk_out0: MAIN__IOMUXC_PIO4_1_HSP_SINC1_MCLK_OUT0 {
 		pinmux = <0x421c0104 9 0x0 0 0x421c0104>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_1_hsp_xbar0_inout01: MAIN__IOMUXC_PIO4_1_HSP_XBAR0_INOUT01 {
+	/omit-if-no-ref/ main__iomuxc_pio4_1_hsp_xbar0_in01: MAIN__IOMUXC_PIO4_1_HSP_XBAR0_IN01 {
 		pinmux = <0x421c0104 10 0x421c82ec 2 0x421c0104>;
+		gpr = <0x40006810 0x1 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_1_hsp_xbar1_inout01: MAIN__IOMUXC_PIO4_1_HSP_XBAR1_INOUT01 {
+	/omit-if-no-ref/ main__iomuxc_pio4_1_hsp_xbar0_out01: MAIN__IOMUXC_PIO4_1_HSP_XBAR0_OUT01 {
+		pinmux = <0x421c0104 10 0x421c82ec 2 0x421c0104>;
+		gpr = <0x40006810 0x1 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_1_hsp_xbar1_in01: MAIN__IOMUXC_PIO4_1_HSP_XBAR1_IN01 {
 		pinmux = <0x421c0104 11 0x421c835c 2 0x421c0104>;
+		gpr = <0x40006814 0x1 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_1_hsp_xbar1_out01: MAIN__IOMUXC_PIO4_1_HSP_XBAR1_OUT01 {
+		pinmux = <0x421c0104 11 0x421c835c 2 0x421c0104>;
+		gpr = <0x40006814 0x1 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_1_hsp_eflexpwm2_pwm_b0: MAIN__IOMUXC_PIO4_1_HSP_eFlexPWM2_PWM_B0 {
 		pinmux = <0x421c0104 8 0x421c8184 1 0x421c0104>;
@@ -2236,8 +2856,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_10_hsp_lpuart5_txd: MAIN__IOMUXC_PIO4_10_HSP_LPUART5_TXD {
 		pinmux = <0x421c0128 9 0x421c82a4 1 0x421c0128>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_10_hsp_xbar1_inout10: MAIN__IOMUXC_PIO4_10_HSP_XBAR1_INOUT10 {
+	/omit-if-no-ref/ main__iomuxc_pio4_10_hsp_xbar1_in10: MAIN__IOMUXC_PIO4_10_HSP_XBAR1_IN10 {
 		pinmux = <0x421c0128 11 0x421c8380 2 0x421c0128>;
+		gpr = <0x40006814 0xa 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_10_hsp_xbar1_out10: MAIN__IOMUXC_PIO4_10_HSP_XBAR1_OUT10 {
+		pinmux = <0x421c0128 11 0x421c8380 2 0x421c0128>;
+		gpr = <0x40006814 0xa 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_10_hsp_eflexpwm3_pwm_b0: MAIN__IOMUXC_PIO4_10_HSP_eFlexPWM3_PWM_B0 {
 		pinmux = <0x421c0128 8 0x421c81b4 0 0x421c0128>;
@@ -2269,8 +2894,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_11_hsp_lpuart5_rxd: MAIN__IOMUXC_PIO4_11_HSP_LPUART5_RXD {
 		pinmux = <0x421c012c 9 0x421c82a0 1 0x421c012c>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_11_hsp_xbar1_inout11: MAIN__IOMUXC_PIO4_11_HSP_XBAR1_INOUT11 {
+	/omit-if-no-ref/ main__iomuxc_pio4_11_hsp_xbar1_in11: MAIN__IOMUXC_PIO4_11_HSP_XBAR1_IN11 {
 		pinmux = <0x421c012c 11 0x421c8384 2 0x421c012c>;
+		gpr = <0x40006814 0xb 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_11_hsp_xbar1_out11: MAIN__IOMUXC_PIO4_11_HSP_XBAR1_OUT11 {
+		pinmux = <0x421c012c 11 0x421c8384 2 0x421c012c>;
+		gpr = <0x40006814 0xb 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_11_hsp_eflexpwm3_pwm_a1: MAIN__IOMUXC_PIO4_11_HSP_eFlexPWM3_PWM_A1 {
 		pinmux = <0x421c012c 8 0x421c81a8 0 0x421c012c>;
@@ -2305,8 +2935,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_12_hsp_lpuart5_cts_b: MAIN__IOMUXC_PIO4_12_HSP_LPUART5_CTS_B {
 		pinmux = <0x421c0130 9 0x421c829c 1 0x421c0130>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_12_hsp_xbar1_inout12: MAIN__IOMUXC_PIO4_12_HSP_XBAR1_INOUT12 {
+	/omit-if-no-ref/ main__iomuxc_pio4_12_hsp_xbar1_in12: MAIN__IOMUXC_PIO4_12_HSP_XBAR1_IN12 {
 		pinmux = <0x421c0130 11 0x421c8388 2 0x421c0130>;
+		gpr = <0x40006814 0xc 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_12_hsp_xbar1_out12: MAIN__IOMUXC_PIO4_12_HSP_XBAR1_OUT12 {
+		pinmux = <0x421c0130 11 0x421c8388 2 0x421c0130>;
+		gpr = <0x40006814 0xc 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_12_hsp_eflexpwm3_pwm_b1: MAIN__IOMUXC_PIO4_12_HSP_eFlexPWM3_PWM_B1 {
 		pinmux = <0x421c0130 8 0x421c81b8 0 0x421c0130>;
@@ -2338,8 +2973,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_13_hsp_lpuart5_rts_b: MAIN__IOMUXC_PIO4_13_HSP_LPUART5_RTS_B {
 		pinmux = <0x421c0134 9 0x0 0 0x421c0134>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_13_hsp_xbar1_inout13: MAIN__IOMUXC_PIO4_13_HSP_XBAR1_INOUT13 {
+	/omit-if-no-ref/ main__iomuxc_pio4_13_hsp_xbar1_in13: MAIN__IOMUXC_PIO4_13_HSP_XBAR1_IN13 {
 		pinmux = <0x421c0134 11 0x421c838c 2 0x421c0134>;
+		gpr = <0x40006814 0xd 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_13_hsp_xbar1_out13: MAIN__IOMUXC_PIO4_13_HSP_XBAR1_OUT13 {
+		pinmux = <0x421c0134 11 0x421c838c 2 0x421c0134>;
+		gpr = <0x40006814 0xd 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_13_hsp_eflexpwm3_pwm_a2: MAIN__IOMUXC_PIO4_13_HSP_eFlexPWM3_PWM_A2 {
 		pinmux = <0x421c0134 8 0x421c81ac 0 0x421c0134>;
@@ -2368,8 +3008,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_14_hsp_lpspi2_pcs0: MAIN__IOMUXC_PIO4_14_HSP_LPSPI2_PCS0 {
 		pinmux = <0x421c0138 5 0x421c8214 0 0x421c0138>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_14_hsp_xbar1_inout14: MAIN__IOMUXC_PIO4_14_HSP_XBAR1_INOUT14 {
+	/omit-if-no-ref/ main__iomuxc_pio4_14_hsp_xbar1_in14: MAIN__IOMUXC_PIO4_14_HSP_XBAR1_IN14 {
 		pinmux = <0x421c0138 11 0x421c8390 2 0x421c0138>;
+		gpr = <0x40006814 0xe 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_14_hsp_xbar1_out14: MAIN__IOMUXC_PIO4_14_HSP_XBAR1_OUT14 {
+		pinmux = <0x421c0138 11 0x421c8390 2 0x421c0138>;
+		gpr = <0x40006814 0xe 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_14_hsp_eflexpwm3_pwm_b2: MAIN__IOMUXC_PIO4_14_HSP_eFlexPWM3_PWM_B2 {
 		pinmux = <0x421c0138 8 0x421c81bc 0 0x421c0138>;
@@ -2395,8 +3040,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_15_hsp_lpspi2_sck: MAIN__IOMUXC_PIO4_15_HSP_LPSPI2_SCK {
 		pinmux = <0x421c013c 5 0x421c8224 0 0x421c013c>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_15_hsp_xbar1_inout15: MAIN__IOMUXC_PIO4_15_HSP_XBAR1_INOUT15 {
+	/omit-if-no-ref/ main__iomuxc_pio4_15_hsp_xbar1_in15: MAIN__IOMUXC_PIO4_15_HSP_XBAR1_IN15 {
 		pinmux = <0x421c013c 11 0x421c8394 2 0x421c013c>;
+		gpr = <0x40006814 0xf 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_15_hsp_xbar1_out15: MAIN__IOMUXC_PIO4_15_HSP_XBAR1_OUT15 {
+		pinmux = <0x421c013c 11 0x421c8394 2 0x421c013c>;
+		gpr = <0x40006814 0xf 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_15_hsp_eflexpwm3_pwm_a3: MAIN__IOMUXC_PIO4_15_HSP_eFlexPWM3_PWM_A3 {
 		pinmux = <0x421c013c 8 0x421c81b0 0 0x421c013c>;
@@ -2422,8 +3072,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_16_hsp_lpspi2_sout: MAIN__IOMUXC_PIO4_16_HSP_LPSPI2_SOUT {
 		pinmux = <0x421c0140 5 0x421c822c 0 0x421c0140>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_16_hsp_xbar1_inout16: MAIN__IOMUXC_PIO4_16_HSP_XBAR1_INOUT16 {
+	/omit-if-no-ref/ main__iomuxc_pio4_16_hsp_xbar1_in16: MAIN__IOMUXC_PIO4_16_HSP_XBAR1_IN16 {
 		pinmux = <0x421c0140 11 0x421c8398 2 0x421c0140>;
+		gpr = <0x40006814 0x10 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_16_hsp_xbar1_out16: MAIN__IOMUXC_PIO4_16_HSP_XBAR1_OUT16 {
+		pinmux = <0x421c0140 11 0x421c8398 2 0x421c0140>;
+		gpr = <0x40006814 0x10 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_16_hsp_eflexpwm3_pwm_b3: MAIN__IOMUXC_PIO4_16_HSP_eFlexPWM3_PWM_B3 {
 		pinmux = <0x421c0140 8 0x421c81c0 0 0x421c0140>;
@@ -2455,8 +3110,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_17_hsp_lpspi2_sin: MAIN__IOMUXC_PIO4_17_HSP_LPSPI2_SIN {
 		pinmux = <0x421c0144 5 0x421c8228 0 0x421c0144>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_17_hsp_xbar1_inout17: MAIN__IOMUXC_PIO4_17_HSP_XBAR1_INOUT17 {
+	/omit-if-no-ref/ main__iomuxc_pio4_17_hsp_xbar1_in17: MAIN__IOMUXC_PIO4_17_HSP_XBAR1_IN17 {
 		pinmux = <0x421c0144 11 0x421c839c 2 0x421c0144>;
+		gpr = <0x40006814 0x11 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_17_hsp_xbar1_out17: MAIN__IOMUXC_PIO4_17_HSP_XBAR1_OUT17 {
+		pinmux = <0x421c0144 11 0x421c839c 2 0x421c0144>;
+		gpr = <0x40006814 0x11 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_17_hsp_eflexpwm3_pwm_x0: MAIN__IOMUXC_PIO4_17_HSP_eFlexPWM3_PWM_X0 {
 		pinmux = <0x421c0144 8 0x0 0 0x421c0144>;
@@ -2488,8 +3148,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_18_hsp_lpspi2_pcs1: MAIN__IOMUXC_PIO4_18_HSP_LPSPI2_PCS1 {
 		pinmux = <0x421c0148 5 0x421c8218 0 0x421c0148>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_18_hsp_xbar1_inout18: MAIN__IOMUXC_PIO4_18_HSP_XBAR1_INOUT18 {
+	/omit-if-no-ref/ main__iomuxc_pio4_18_hsp_xbar1_in18: MAIN__IOMUXC_PIO4_18_HSP_XBAR1_IN18 {
 		pinmux = <0x421c0148 11 0x421c83a0 2 0x421c0148>;
+		gpr = <0x40006814 0x12 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_18_hsp_xbar1_out18: MAIN__IOMUXC_PIO4_18_HSP_XBAR1_OUT18 {
+		pinmux = <0x421c0148 11 0x421c83a0 2 0x421c0148>;
+		gpr = <0x40006814 0x12 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_18_hsp_eflexpwm3_pwm_x1: MAIN__IOMUXC_PIO4_18_HSP_eFlexPWM3_PWM_X1 {
 		pinmux = <0x421c0148 8 0x0 0 0x421c0148>;
@@ -2521,8 +3186,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_19_hsp_sinc1_mbit0: MAIN__IOMUXC_PIO4_19_HSP_SINC1_MBIT0 {
 		pinmux = <0x421c014c 10 0x421c82c8 1 0x421c014c>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_19_hsp_xbar1_inout19: MAIN__IOMUXC_PIO4_19_HSP_XBAR1_INOUT19 {
+	/omit-if-no-ref/ main__iomuxc_pio4_19_hsp_xbar1_in19: MAIN__IOMUXC_PIO4_19_HSP_XBAR1_IN19 {
 		pinmux = <0x421c014c 11 0x421c83a4 2 0x421c014c>;
+		gpr = <0x40006814 0x13 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_19_hsp_xbar1_out19: MAIN__IOMUXC_PIO4_19_HSP_XBAR1_OUT19 {
+		pinmux = <0x421c014c 11 0x421c83a4 2 0x421c014c>;
+		gpr = <0x40006814 0x13 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_19_hsp_eflexpwm3_pwm_x2: MAIN__IOMUXC_PIO4_19_HSP_eFlexPWM3_PWM_X2 {
 		pinmux = <0x421c014c 8 0x0 0 0x421c014c>;
@@ -2560,11 +3230,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_2_hsp_sinc1_mclk_out1: MAIN__IOMUXC_PIO4_2_HSP_SINC1_MCLK_OUT1 {
 		pinmux = <0x421c0108 9 0x0 0 0x421c0108>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_2_hsp_xbar0_inout02: MAIN__IOMUXC_PIO4_2_HSP_XBAR0_INOUT02 {
+	/omit-if-no-ref/ main__iomuxc_pio4_2_hsp_xbar0_in02: MAIN__IOMUXC_PIO4_2_HSP_XBAR0_IN02 {
 		pinmux = <0x421c0108 10 0x421c82f0 2 0x421c0108>;
+		gpr = <0x40006810 0x2 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_2_hsp_xbar1_inout02: MAIN__IOMUXC_PIO4_2_HSP_XBAR1_INOUT02 {
+	/omit-if-no-ref/ main__iomuxc_pio4_2_hsp_xbar0_out02: MAIN__IOMUXC_PIO4_2_HSP_XBAR0_OUT02 {
+		pinmux = <0x421c0108 10 0x421c82f0 2 0x421c0108>;
+		gpr = <0x40006810 0x2 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_2_hsp_xbar1_in02: MAIN__IOMUXC_PIO4_2_HSP_XBAR1_IN02 {
 		pinmux = <0x421c0108 11 0x421c8360 2 0x421c0108>;
+		gpr = <0x40006814 0x2 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_2_hsp_xbar1_out02: MAIN__IOMUXC_PIO4_2_HSP_XBAR1_OUT02 {
+		pinmux = <0x421c0108 11 0x421c8360 2 0x421c0108>;
+		gpr = <0x40006814 0x2 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_2_hsp_eflexpwm2_pwm_a1: MAIN__IOMUXC_PIO4_2_HSP_eFlexPWM2_PWM_A1 {
 		pinmux = <0x421c0108 8 0x421c8178 1 0x421c0108>;
@@ -2599,8 +3279,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_20_hsp_sinc1_mbit1: MAIN__IOMUXC_PIO4_20_HSP_SINC1_MBIT1 {
 		pinmux = <0x421c0150 10 0x421c82cc 1 0x421c0150>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_20_hsp_xbar1_inout20: MAIN__IOMUXC_PIO4_20_HSP_XBAR1_INOUT20 {
+	/omit-if-no-ref/ main__iomuxc_pio4_20_hsp_xbar1_in20: MAIN__IOMUXC_PIO4_20_HSP_XBAR1_IN20 {
 		pinmux = <0x421c0150 11 0x421c83a8 2 0x421c0150>;
+		gpr = <0x40006814 0x14 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_20_hsp_xbar1_out20: MAIN__IOMUXC_PIO4_20_HSP_XBAR1_OUT20 {
+		pinmux = <0x421c0150 11 0x421c83a8 2 0x421c0150>;
+		gpr = <0x40006814 0x14 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_20_hsp_eflexpwm3_pwm_x3: MAIN__IOMUXC_PIO4_20_HSP_eFlexPWM3_PWM_X3 {
 		pinmux = <0x421c0150 8 0x0 0 0x421c0150>;
@@ -2635,8 +3320,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_21_hsp_sinc1_mbit2: MAIN__IOMUXC_PIO4_21_HSP_SINC1_MBIT2 {
 		pinmux = <0x421c0154 10 0x421c82d0 1 0x421c0154>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_21_hsp_xbar1_inout21: MAIN__IOMUXC_PIO4_21_HSP_XBAR1_INOUT21 {
+	/omit-if-no-ref/ main__iomuxc_pio4_21_hsp_xbar1_in21: MAIN__IOMUXC_PIO4_21_HSP_XBAR1_IN21 {
 		pinmux = <0x421c0154 11 0x421c83ac 2 0x421c0154>;
+		gpr = <0x40006814 0x15 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_21_hsp_xbar1_out21: MAIN__IOMUXC_PIO4_21_HSP_XBAR1_OUT21 {
+		pinmux = <0x421c0154 11 0x421c83ac 2 0x421c0154>;
+		gpr = <0x40006814 0x15 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_21_hsp_eflexpwm2_pwm_x0: MAIN__IOMUXC_PIO4_21_HSP_eFlexPWM2_PWM_X0 {
 		pinmux = <0x421c0154 8 0x421c8194 1 0x421c0154>;
@@ -2674,8 +3364,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_22_hsp_sinc1_mbit3: MAIN__IOMUXC_PIO4_22_HSP_SINC1_MBIT3 {
 		pinmux = <0x421c0158 10 0x421c82d4 1 0x421c0158>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_22_hsp_xbar1_inout22: MAIN__IOMUXC_PIO4_22_HSP_XBAR1_INOUT22 {
+	/omit-if-no-ref/ main__iomuxc_pio4_22_hsp_xbar1_in22: MAIN__IOMUXC_PIO4_22_HSP_XBAR1_IN22 {
 		pinmux = <0x421c0158 11 0x421c83b0 2 0x421c0158>;
+		gpr = <0x40006814 0x16 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_22_hsp_xbar1_out22: MAIN__IOMUXC_PIO4_22_HSP_XBAR1_OUT22 {
+		pinmux = <0x421c0158 11 0x421c83b0 2 0x421c0158>;
+		gpr = <0x40006814 0x16 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_22_hsp_eflexpwm2_pwm_x1: MAIN__IOMUXC_PIO4_22_HSP_eFlexPWM2_PWM_X1 {
 		pinmux = <0x421c0158 8 0x421c8198 1 0x421c0158>;
@@ -2713,8 +3408,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_23_hsp_sinc1_mclk_out0: MAIN__IOMUXC_PIO4_23_HSP_SINC1_MCLK_OUT0 {
 		pinmux = <0x421c015c 5 0x0 0 0x421c015c>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_23_hsp_xbar1_inout23: MAIN__IOMUXC_PIO4_23_HSP_XBAR1_INOUT23 {
+	/omit-if-no-ref/ main__iomuxc_pio4_23_hsp_xbar1_in23: MAIN__IOMUXC_PIO4_23_HSP_XBAR1_IN23 {
 		pinmux = <0x421c015c 11 0x421c83b4 2 0x421c015c>;
+		gpr = <0x40006814 0x17 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_23_hsp_xbar1_out23: MAIN__IOMUXC_PIO4_23_HSP_XBAR1_OUT23 {
+		pinmux = <0x421c015c 11 0x421c83b4 2 0x421c015c>;
+		gpr = <0x40006814 0x17 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_23_hsp_eflexpwm2_pwm_x2: MAIN__IOMUXC_PIO4_23_HSP_eFlexPWM2_PWM_X2 {
 		pinmux = <0x421c015c 8 0x421c819c 1 0x421c015c>;
@@ -2746,8 +3446,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_24_hsp_sinc1_mclk_out1: MAIN__IOMUXC_PIO4_24_HSP_SINC1_MCLK_OUT1 {
 		pinmux = <0x421c0160 5 0x0 0 0x421c0160>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_24_hsp_xbar1_inout24: MAIN__IOMUXC_PIO4_24_HSP_XBAR1_INOUT24 {
+	/omit-if-no-ref/ main__iomuxc_pio4_24_hsp_xbar1_in24: MAIN__IOMUXC_PIO4_24_HSP_XBAR1_IN24 {
 		pinmux = <0x421c0160 11 0x421c83b8 2 0x421c0160>;
+		gpr = <0x40006814 0x18 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_24_hsp_xbar1_out24: MAIN__IOMUXC_PIO4_24_HSP_XBAR1_OUT24 {
+		pinmux = <0x421c0160 11 0x421c83b8 2 0x421c0160>;
+		gpr = <0x40006814 0x18 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_24_hsp_eflexpwm2_pwm_x3: MAIN__IOMUXC_PIO4_24_HSP_eFlexPWM2_PWM_X3 {
 		pinmux = <0x421c0160 8 0x421c81a0 1 0x421c0160>;
@@ -2785,8 +3490,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_25_hsp_sinc1_mclk_out2: MAIN__IOMUXC_PIO4_25_HSP_SINC1_MCLK_OUT2 {
 		pinmux = <0x421c0164 5 0x0 0 0x421c0164>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_25_hsp_xbar1_inout25: MAIN__IOMUXC_PIO4_25_HSP_XBAR1_INOUT25 {
+	/omit-if-no-ref/ main__iomuxc_pio4_25_hsp_xbar1_in25: MAIN__IOMUXC_PIO4_25_HSP_XBAR1_IN25 {
 		pinmux = <0x421c0164 11 0x421c83bc 2 0x421c0164>;
+		gpr = <0x40006814 0x19 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_25_hsp_xbar1_out25: MAIN__IOMUXC_PIO4_25_HSP_XBAR1_OUT25 {
+		pinmux = <0x421c0164 11 0x421c83bc 2 0x421c0164>;
+		gpr = <0x40006814 0x19 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_25_media_csi_hsync: MAIN__IOMUXC_PIO4_25_MEDIA_CSI_HSYNC {
 		pinmux = <0x421c0164 4 0x421c8454 1 0x421c0164>;
@@ -2818,8 +3528,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_26_hsp_sinc1_mclk3: MAIN__IOMUXC_PIO4_26_HSP_SINC1_MCLK3 {
 		pinmux = <0x421c0168 10 0x421c82e4 1 0x421c0168>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_26_hsp_xbar1_inout26: MAIN__IOMUXC_PIO4_26_HSP_XBAR1_INOUT26 {
+	/omit-if-no-ref/ main__iomuxc_pio4_26_hsp_xbar1_in26: MAIN__IOMUXC_PIO4_26_HSP_XBAR1_IN26 {
 		pinmux = <0x421c0168 11 0x421c83c0 2 0x421c0168>;
+		gpr = <0x40006814 0x1a 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_26_hsp_xbar1_out26: MAIN__IOMUXC_PIO4_26_HSP_XBAR1_OUT26 {
+		pinmux = <0x421c0168 11 0x421c83c0 2 0x421c0168>;
+		gpr = <0x40006814 0x1a 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_26_media_csi_vsync: MAIN__IOMUXC_PIO4_26_MEDIA_CSI_VSYNC {
 		pinmux = <0x421c0168 4 0x421c845c 1 0x421c0168>;
@@ -2848,8 +3563,13 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_27_hsp_sinc1_break: MAIN__IOMUXC_PIO4_27_HSP_SINC1_BREAK {
 		pinmux = <0x421c016c 10 0x0 0 0x421c016c>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_27_hsp_xbar1_inout27: MAIN__IOMUXC_PIO4_27_HSP_XBAR1_INOUT27 {
+	/omit-if-no-ref/ main__iomuxc_pio4_27_hsp_xbar1_in27: MAIN__IOMUXC_PIO4_27_HSP_XBAR1_IN27 {
 		pinmux = <0x421c016c 11 0x421c83c4 2 0x421c016c>;
+		gpr = <0x40006814 0x1b 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_27_hsp_xbar1_out27: MAIN__IOMUXC_PIO4_27_HSP_XBAR1_OUT27 {
+		pinmux = <0x421c016c 11 0x421c83c4 2 0x421c016c>;
+		gpr = <0x40006814 0x1b 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_27_main_trace_swo: MAIN__IOMUXC_PIO4_27_MAIN_TRACE_SWO {
 		pinmux = <0x421c016c 3 0x0 0 0x421c016c>;
@@ -2878,11 +3598,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_3_hsp_sinc1_mbit1: MAIN__IOMUXC_PIO4_3_HSP_SINC1_MBIT1 {
 		pinmux = <0x421c010c 5 0x421c82cc 0 0x421c010c>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_3_hsp_xbar0_inout03: MAIN__IOMUXC_PIO4_3_HSP_XBAR0_INOUT03 {
+	/omit-if-no-ref/ main__iomuxc_pio4_3_hsp_xbar0_in03: MAIN__IOMUXC_PIO4_3_HSP_XBAR0_IN03 {
 		pinmux = <0x421c010c 10 0x421c82f4 2 0x421c010c>;
+		gpr = <0x40006810 0x3 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_3_hsp_xbar1_inout03: MAIN__IOMUXC_PIO4_3_HSP_XBAR1_INOUT03 {
+	/omit-if-no-ref/ main__iomuxc_pio4_3_hsp_xbar0_out03: MAIN__IOMUXC_PIO4_3_HSP_XBAR0_OUT03 {
+		pinmux = <0x421c010c 10 0x421c82f4 2 0x421c010c>;
+		gpr = <0x40006810 0x3 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_3_hsp_xbar1_in03: MAIN__IOMUXC_PIO4_3_HSP_XBAR1_IN03 {
 		pinmux = <0x421c010c 11 0x421c8364 2 0x421c010c>;
+		gpr = <0x40006814 0x3 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_3_hsp_xbar1_out03: MAIN__IOMUXC_PIO4_3_HSP_XBAR1_OUT03 {
+		pinmux = <0x421c010c 11 0x421c8364 2 0x421c010c>;
+		gpr = <0x40006814 0x3 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_3_hsp_eflexpwm2_pwm_b1: MAIN__IOMUXC_PIO4_3_HSP_eFlexPWM2_PWM_B1 {
 		pinmux = <0x421c010c 8 0x421c8188 1 0x421c010c>;
@@ -2917,11 +3647,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_4_hsp_sinc1_mclk_out2: MAIN__IOMUXC_PIO4_4_HSP_SINC1_MCLK_OUT2 {
 		pinmux = <0x421c0110 9 0x0 0 0x421c0110>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_4_hsp_xbar0_inout04: MAIN__IOMUXC_PIO4_4_HSP_XBAR0_INOUT04 {
+	/omit-if-no-ref/ main__iomuxc_pio4_4_hsp_xbar0_in04: MAIN__IOMUXC_PIO4_4_HSP_XBAR0_IN04 {
 		pinmux = <0x421c0110 10 0x421c82f8 2 0x421c0110>;
+		gpr = <0x40006810 0x4 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_4_hsp_xbar1_inout04: MAIN__IOMUXC_PIO4_4_HSP_XBAR1_INOUT04 {
+	/omit-if-no-ref/ main__iomuxc_pio4_4_hsp_xbar0_out04: MAIN__IOMUXC_PIO4_4_HSP_XBAR0_OUT04 {
+		pinmux = <0x421c0110 10 0x421c82f8 2 0x421c0110>;
+		gpr = <0x40006810 0x4 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_4_hsp_xbar1_in04: MAIN__IOMUXC_PIO4_4_HSP_XBAR1_IN04 {
 		pinmux = <0x421c0110 11 0x421c8368 2 0x421c0110>;
+		gpr = <0x40006814 0x4 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_4_hsp_xbar1_out04: MAIN__IOMUXC_PIO4_4_HSP_XBAR1_OUT04 {
+		pinmux = <0x421c0110 11 0x421c8368 2 0x421c0110>;
+		gpr = <0x40006814 0x4 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_4_hsp_eflexpwm2_pwm_a2: MAIN__IOMUXC_PIO4_4_HSP_eFlexPWM2_PWM_A2 {
 		pinmux = <0x421c0110 8 0x421c817c 0 0x421c0110>;
@@ -2953,11 +3693,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_5_hsp_sinc1_mbit2: MAIN__IOMUXC_PIO4_5_HSP_SINC1_MBIT2 {
 		pinmux = <0x421c0114 5 0x421c82d0 0 0x421c0114>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_5_hsp_xbar0_inout05: MAIN__IOMUXC_PIO4_5_HSP_XBAR0_INOUT05 {
+	/omit-if-no-ref/ main__iomuxc_pio4_5_hsp_xbar0_in05: MAIN__IOMUXC_PIO4_5_HSP_XBAR0_IN05 {
 		pinmux = <0x421c0114 10 0x421c82fc 2 0x421c0114>;
+		gpr = <0x40006810 0x5 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_5_hsp_xbar1_inout05: MAIN__IOMUXC_PIO4_5_HSP_XBAR1_INOUT05 {
+	/omit-if-no-ref/ main__iomuxc_pio4_5_hsp_xbar0_out05: MAIN__IOMUXC_PIO4_5_HSP_XBAR0_OUT05 {
+		pinmux = <0x421c0114 10 0x421c82fc 2 0x421c0114>;
+		gpr = <0x40006810 0x5 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_5_hsp_xbar1_in05: MAIN__IOMUXC_PIO4_5_HSP_XBAR1_IN05 {
 		pinmux = <0x421c0114 11 0x421c836c 2 0x421c0114>;
+		gpr = <0x40006814 0x5 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_5_hsp_xbar1_out05: MAIN__IOMUXC_PIO4_5_HSP_XBAR1_OUT05 {
+		pinmux = <0x421c0114 11 0x421c836c 2 0x421c0114>;
+		gpr = <0x40006814 0x5 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_5_hsp_eflexpwm2_pwm_b2: MAIN__IOMUXC_PIO4_5_HSP_eFlexPWM2_PWM_B2 {
 		pinmux = <0x421c0114 8 0x421c818c 0 0x421c0114>;
@@ -2989,11 +3739,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_6_hsp_sinc1_mclk3: MAIN__IOMUXC_PIO4_6_HSP_SINC1_MCLK3 {
 		pinmux = <0x421c0118 5 0x421c82e4 0 0x421c0118>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_6_hsp_xbar0_inout06: MAIN__IOMUXC_PIO4_6_HSP_XBAR0_INOUT06 {
+	/omit-if-no-ref/ main__iomuxc_pio4_6_hsp_xbar0_in06: MAIN__IOMUXC_PIO4_6_HSP_XBAR0_IN06 {
 		pinmux = <0x421c0118 10 0x421c8300 2 0x421c0118>;
+		gpr = <0x40006810 0x6 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_6_hsp_xbar1_inout06: MAIN__IOMUXC_PIO4_6_HSP_XBAR1_INOUT06 {
+	/omit-if-no-ref/ main__iomuxc_pio4_6_hsp_xbar0_out06: MAIN__IOMUXC_PIO4_6_HSP_XBAR0_OUT06 {
+		pinmux = <0x421c0118 10 0x421c8300 2 0x421c0118>;
+		gpr = <0x40006810 0x6 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_6_hsp_xbar1_in06: MAIN__IOMUXC_PIO4_6_HSP_XBAR1_IN06 {
 		pinmux = <0x421c0118 11 0x421c8370 2 0x421c0118>;
+		gpr = <0x40006814 0x6 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_6_hsp_xbar1_out06: MAIN__IOMUXC_PIO4_6_HSP_XBAR1_OUT06 {
+		pinmux = <0x421c0118 11 0x421c8370 2 0x421c0118>;
+		gpr = <0x40006814 0x6 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_6_hsp_eflexpwm2_pwm_a3: MAIN__IOMUXC_PIO4_6_HSP_eFlexPWM2_PWM_A3 {
 		pinmux = <0x421c0118 8 0x421c8180 1 0x421c0118>;
@@ -3025,11 +3785,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_7_hsp_sinc1_mbit3: MAIN__IOMUXC_PIO4_7_HSP_SINC1_MBIT3 {
 		pinmux = <0x421c011c 5 0x421c82d4 0 0x421c011c>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_7_hsp_xbar0_inout07: MAIN__IOMUXC_PIO4_7_HSP_XBAR0_INOUT07 {
+	/omit-if-no-ref/ main__iomuxc_pio4_7_hsp_xbar0_in07: MAIN__IOMUXC_PIO4_7_HSP_XBAR0_IN07 {
 		pinmux = <0x421c011c 10 0x421c8304 2 0x421c011c>;
+		gpr = <0x40006810 0x7 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_7_hsp_xbar1_inout07: MAIN__IOMUXC_PIO4_7_HSP_XBAR1_INOUT07 {
+	/omit-if-no-ref/ main__iomuxc_pio4_7_hsp_xbar0_out07: MAIN__IOMUXC_PIO4_7_HSP_XBAR0_OUT07 {
+		pinmux = <0x421c011c 10 0x421c8304 2 0x421c011c>;
+		gpr = <0x40006810 0x7 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_7_hsp_xbar1_in07: MAIN__IOMUXC_PIO4_7_HSP_XBAR1_IN07 {
 		pinmux = <0x421c011c 11 0x421c8374 2 0x421c011c>;
+		gpr = <0x40006814 0x7 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_7_hsp_xbar1_out07: MAIN__IOMUXC_PIO4_7_HSP_XBAR1_OUT07 {
+		pinmux = <0x421c011c 11 0x421c8374 2 0x421c011c>;
+		gpr = <0x40006814 0x7 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_7_hsp_eflexpwm2_pwm_b3: MAIN__IOMUXC_PIO4_7_HSP_eFlexPWM2_PWM_B3 {
 		pinmux = <0x421c011c 8 0x421c8190 1 0x421c011c>;
@@ -3067,11 +3837,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_8_hsp_sinc1_break: MAIN__IOMUXC_PIO4_8_HSP_SINC1_BREAK {
 		pinmux = <0x421c0120 5 0x0 0 0x421c0120>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_8_hsp_xbar0_inout08: MAIN__IOMUXC_PIO4_8_HSP_XBAR0_INOUT08 {
+	/omit-if-no-ref/ main__iomuxc_pio4_8_hsp_xbar0_in08: MAIN__IOMUXC_PIO4_8_HSP_XBAR0_IN08 {
 		pinmux = <0x421c0120 10 0x421c8308 2 0x421c0120>;
+		gpr = <0x40006810 0x8 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_8_hsp_xbar1_inout08: MAIN__IOMUXC_PIO4_8_HSP_XBAR1_INOUT08 {
+	/omit-if-no-ref/ main__iomuxc_pio4_8_hsp_xbar0_out08: MAIN__IOMUXC_PIO4_8_HSP_XBAR0_OUT08 {
+		pinmux = <0x421c0120 10 0x421c8308 2 0x421c0120>;
+		gpr = <0x40006810 0x8 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_8_hsp_xbar1_in08: MAIN__IOMUXC_PIO4_8_HSP_XBAR1_IN08 {
 		pinmux = <0x421c0120 11 0x421c8378 2 0x421c0120>;
+		gpr = <0x40006814 0x8 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_8_hsp_xbar1_out08: MAIN__IOMUXC_PIO4_8_HSP_XBAR1_OUT08 {
+		pinmux = <0x421c0120 11 0x421c8378 2 0x421c0120>;
+		gpr = <0x40006814 0x8 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_8_media_csi_data15: MAIN__IOMUXC_PIO4_8_MEDIA_CSI_DATA15 {
 		pinmux = <0x421c0120 4 0x421c8450 1 0x421c0120>;
@@ -3100,11 +3880,21 @@
 	/omit-if-no-ref/ main__iomuxc_pio4_9_hsp_lpuart4_rxd: MAIN__IOMUXC_PIO4_9_HSP_LPUART4_RXD {
 		pinmux = <0x421c0124 9 0x421c8294 1 0x421c0124>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_9_hsp_xbar0_inout09: MAIN__IOMUXC_PIO4_9_HSP_XBAR0_INOUT09 {
+	/omit-if-no-ref/ main__iomuxc_pio4_9_hsp_xbar0_in09: MAIN__IOMUXC_PIO4_9_HSP_XBAR0_IN09 {
 		pinmux = <0x421c0124 10 0x421c830c 2 0x421c0124>;
+		gpr = <0x40006810 0x9 0x1>;
 	};
-	/omit-if-no-ref/ main__iomuxc_pio4_9_hsp_xbar1_inout09: MAIN__IOMUXC_PIO4_9_HSP_XBAR1_INOUT09 {
+	/omit-if-no-ref/ main__iomuxc_pio4_9_hsp_xbar0_out09: MAIN__IOMUXC_PIO4_9_HSP_XBAR0_OUT09 {
+		pinmux = <0x421c0124 10 0x421c830c 2 0x421c0124>;
+		gpr = <0x40006810 0x9 0x0>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_9_hsp_xbar1_in09: MAIN__IOMUXC_PIO4_9_HSP_XBAR1_IN09 {
 		pinmux = <0x421c0124 11 0x421c837c 2 0x421c0124>;
+		gpr = <0x40006814 0x9 0x1>;
+	};
+	/omit-if-no-ref/ main__iomuxc_pio4_9_hsp_xbar1_out09: MAIN__IOMUXC_PIO4_9_HSP_XBAR1_OUT09 {
+		pinmux = <0x421c0124 11 0x421c837c 2 0x421c0124>;
+		gpr = <0x40006814 0x9 0x0>;
 	};
 	/omit-if-no-ref/ main__iomuxc_pio4_9_hsp_eflexpwm3_pwm_a0: MAIN__IOMUXC_PIO4_9_HSP_eFlexPWM3_PWM_A0 {
 		pinmux = <0x421c0124 8 0x421c81a4 0 0x421c0124>;
