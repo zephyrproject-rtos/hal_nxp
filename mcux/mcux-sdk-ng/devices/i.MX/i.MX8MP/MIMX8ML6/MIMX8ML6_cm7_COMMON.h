@@ -651,6 +651,16 @@ typedef enum IRQn {
 #define FLEXSPI_BASE_ADDRS                       { FLEXSPI_BASE }
 /** Array initializer of FLEXSPI peripheral base pointers */
 #define FLEXSPI_BASE_PTRS                        { FLEXSPI }
+/** Interrupt vectors for the FLEXSPI peripheral type */
+#define FLEXSPI_IRQS                             { FlexSPI_IRQn }
+/** FlexSPI AMBA memory base alias count */
+#define FLEXSPI_AMBA_BASE_ALIAS_COUNT     (2)
+/** FlexSPI AMBA base address array */
+#define FlexSPI_AMBA_BASE_ARRAY                  { {0x08000000u, 0xC0000000u} }
+/** FlexSPI AMBA end address array */
+#define FlexSPI_AMBA_END_ARRAY                   { {0x0FFFFFFFu, 0xCFFFFFFFu} }
+/* FlexSPI AMBA address. */
+#define FlexSPI_AMBA_BASE                        (0x08000000u)
 
 /* FRAMECOMPOSER - Peripheral instance base addresses */
 /** Peripheral FRAMECOMPOSER base address */
