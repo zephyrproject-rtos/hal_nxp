@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_CSI_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
+#define FSL_CSI_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
 /*! @} */
 
 #define CSI_REG_CR1(base)       (base)->CR1
@@ -214,11 +214,18 @@ typedef struct _csi_handle csi_handle_t;
  */
 typedef void (*csi_transfer_callback_t)(CSI_Type *base, csi_handle_t *handle, status_t status, void *userData);
 
+/*!
+ * @brief Circular queue of frame buffer addresses.
+ *
+ * The oldest entry is at @c head, the entries in use are counted by @c count,
+ * so the queue holds up to CSI_DRIVER_QUEUE_SIZE buffers whatever the history
+ * of enqueues and dequeues.
+ */
 typedef struct
 {
     uint32_t addr[CSI_DRIVER_QUEUE_SIZE];
-    int head;
-    int tail;
+    uint8_t head;
+    uint8_t count;
 } buf_queue_t;
 
 /*!

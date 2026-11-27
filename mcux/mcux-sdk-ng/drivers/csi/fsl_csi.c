@@ -147,34 +147,23 @@ static uint32_t CSI_GetInstance(CSI_Type *base)
 #if !CSI_DRIVER_FRAG_MODE
 static void CSI_InitBufferQueue(buf_queue_t *bq)
 {
-    bq->head = -1;
-    bq->tail = -1;
+    bq->head  = 0U;
+    bq->count = 0U;
 }
 
 static bool CSI_IsBufferQueueEmpty(buf_queue_t *bq)
 {
-    return (bq->head == -1) && (bq->tail == -1);
+    return bq->count == 0U;
 }
 
 static bool CSI_IsBufferQueueFull(buf_queue_t *bq)
 {
-    return bq->tail == ((int)CSI_DRIVER_QUEUE_SIZE - 1);
+    return bq->count >= CSI_DRIVER_QUEUE_SIZE;
 }
 
 static uint32_t CSI_BufferQueueCount(buf_queue_t *bq)
 {
-    if (CSI_IsBufferQueueEmpty(bq))
-    {
-        return 0U;
-    }
-
-    /* Defensive check, the queue indices must be valid in non-empty state. */
-    if ((bq->head < 0) || (bq->tail < bq->head))
-    {
-        return 0U;
-    }
-
-    return ((uint32_t)bq->tail - (uint32_t)bq->head) + 1U;
+    return bq->count;
 }
 
 static status_t CSI_EnqueueBuffer(buf_queue_t *bq, uint32_t addr)
@@ -184,47 +173,24 @@ static status_t CSI_EnqueueBuffer(buf_queue_t *bq, uint32_t addr)
         return kStatus_CSI_QueueFull;
     }
 
-    if (CSI_IsBufferQueueEmpty(bq))
-    {
-        bq->head = 0;
-    }
-
-    /* Defensive check, the queue indices must be valid in non-empty state. */
-    if ((bq->tail < -1) || (bq->tail < (bq->head - 1)) || (bq->tail >= ((int)CSI_DRIVER_QUEUE_SIZE - 1)))
-    {
-        return kStatus_CSI_QueueFull;
-    }
-
-    bq->tail++;
-    bq->addr[bq->tail] = addr;
+    bq->addr[(bq->head + bq->count) % CSI_DRIVER_QUEUE_SIZE] = addr;
+    bq->count++;
 
     return kStatus_Success;
 }
 
 static uint32_t CSI_DequeueBuffer(buf_queue_t *bq)
 {
+    uint32_t addr;
+
     if (CSI_IsBufferQueueEmpty(bq))
     {
         return 0U;
     }
 
-    /* Defensive check, the queue indices must be valid in non-empty state. */
-    if ((bq->head < 0) || (bq->tail < bq->head))
-    {
-        return 0U;
-    }
-
-    uint32_t addr = bq->addr[bq->head];
-
-    if (bq->head == bq->tail)
-    {
-        bq->head = -1;
-        bq->tail = -1;
-    }
-    else
-    {
-        bq->head++;
-    }
+    addr     = bq->addr[bq->head];
+    bq->head = (bq->head + 1U) % CSI_DRIVER_QUEUE_SIZE;
+    bq->count--;
 
     return addr;
 }
