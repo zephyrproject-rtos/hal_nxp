@@ -300,7 +300,9 @@ extern "C" {
 #endif
 
 #if CONFIG_NXP_OVERRIDE_CALIBRATION_DATA
-#if defined(CONFIG_WLAN_CALDATA_2ANT_HI_ISO)
+#if defined(CONFIG_NXP_WIFI_FRDM_RW612_EXT_ANT_CALDATA)
+#define OVERRIDE_CALIBRATION_DATA "wifi_cal_data_frdmrw61x_1ant_external.h"
+#elif defined(CONFIG_WLAN_CALDATA_2ANT_HI_ISO)
 #define OVERRIDE_CALIBRATION_DATA "wifi_cal_data_iw612_2ant_hi_iso.h"
 #elif defined(CONFIG_WLAN_CALDATA_2ANT_LO_ISO)
 #define OVERRIDE_CALIBRATION_DATA "wifi_cal_data_iw612_2ant_lo_iso.h"
