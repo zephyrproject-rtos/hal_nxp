@@ -1,10 +1,11 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2021, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 #include <stdint.h>
+#include <string.h>
 
 #include "fsl_sscp_mu.h"
 #include "fsl_sss_sscp.h"
@@ -13,6 +14,78 @@
 #define SSCP_MU_Deinit   (void)
 #define ELE_SUCCESS ((uint8_t)0x3C)
 #define ELE_FAIL    ((uint8_t)0xC3)
+
+/*
+ * Optional thread-safety for the MU transport.
+ *
+ * When CONFIG_SSCP_MU_THREAD_SAFE is not set, the lock hooks compile to no-ops.
+ */
+#if defined(CONFIG_SSCP_MU_THREAD_SAFE) && (CONFIG_SSCP_MU_THREAD_SAFE > 0)
+#include "fsl_os_abstraction.h"
+
+static OSA_MUTEX_HANDLE_DEFINE(s_sscpMuMutex);
+static volatile bool s_sscpMuMutexReady = false;
+
+/* Create the mutex exactly once, even if sscp_mu_init() is called repeatedly
+ * or concurrently from several contexts.
+ */
+static sscp_status_t SSCP_MU_MutexInitOnce(void)
+{
+    sscp_status_t status = kStatus_SSCP_Success;
+    OSA_SR_ALLOC();
+
+    OSA_ENTER_CRITICAL();
+    if (!s_sscpMuMutexReady)
+    {
+        if (OSA_MutexCreate((osa_mutex_handle_t)s_sscpMuMutex) == KOSA_StatusSuccess)
+        {
+            s_sscpMuMutexReady = true;
+        }
+        else
+        {
+            status = kStatus_SSCP_Fail;
+        }
+    }
+    OSA_EXIT_CRITICAL();
+
+    return status;
+}
+
+static bool SSCP_MU_Lock(void)
+{
+    return (s_sscpMuMutexReady &&
+            (OSA_MutexLock((osa_mutex_handle_t)s_sscpMuMutex, osaWaitForever_c) == KOSA_StatusSuccess));
+}
+
+static void SSCP_MU_Unlock(void)
+{
+    (void)OSA_MutexUnlock((osa_mutex_handle_t)s_sscpMuMutex);
+}
+
+#define SSCP_MU_MUTEX_INIT()   SSCP_MU_MutexInitOnce()
+#define SSCP_MU_MUTEX_LOCK()   SSCP_MU_Lock()
+#define SSCP_MU_MUTEX_UNLOCK() SSCP_MU_Unlock()
+#else
+#define SSCP_MU_MUTEX_INIT()   (kStatus_SSCP_Success)
+#define SSCP_MU_MUTEX_LOCK()   (true)
+#define SSCP_MU_MUTEX_UNLOCK() do { } while (false)
+#endif /* CONFIG_SSCP_MU_THREAD_SAFE */
+
+#if defined(ELE_TRACK_SESSION_STATE)
+/*
+ * Software emulation of an already-opened ELE session (used on devices that
+ * do not natively support re-opening an existing session, e.g. KW45/MCXW71).
+ * This state is read/written from within sscp_mu_invoke_command().
+ */
+typedef enum {
+    sessionClosed,
+    sessionOpen
+} session_state_t;
+
+static session_state_t session_state       = sessionClosed;
+static sss_sscp_session_t session_internal = {0};
+#endif /* ELE_TRACK_SESSION_STATE */
+
 
 void SSCP_MU_Init(void)
 {
@@ -63,11 +136,23 @@ sscp_status_t sscp_mu_init(sscp_context_t *context, ELEMU_Type *base)
 {
     sscp_mu_context_t *muContext = (sscp_mu_context_t *)(uintptr_t)context;
 
+    if (SSCP_MU_MUTEX_INIT() != kStatus_SSCP_Success)
+    {
+        return kStatus_SSCP_Fail;
+    }
+    if (!SSCP_MU_MUTEX_LOCK())
+    {
+        return kStatus_SSCP_ResourceBusy;
+    }
+
     muContext->base = base;
     SSCP_MU_Init();
 
     /* assign MU implementation of ::sscp_invoke_command() */
     muContext->invoke = &sscp_mu_invoke_command;
+
+    SSCP_MU_MUTEX_UNLOCK();
+
     return kStatus_SSCP_Success;
 }
 
@@ -222,6 +307,30 @@ sscp_status_t sscp_mu_invoke_command(sscp_context_t *context,
     *ret                         = kStatus_SSS_Fail;
     mu_hdr_t muMsgHeader;
 
+    if (!SSCP_MU_MUTEX_LOCK())
+    {
+        return kStatus_SSCP_ResourceBusy;
+    }
+
+#if defined(ELE_TRACK_SESSION_STATE)
+    /* Emulate re-opening an already-open session entirely in software,
+     * without a real MU transaction.
+     */
+    if ((commandId == kSSCP_CMD_SSS_OpenSession) && (sessionOpen == session_state))
+    {
+        sss_sscp_session_t *outSession = (sss_sscp_session_t *)(op->result[0].context.ptr);
+
+        session_internal.subsystem = (sss_type_t)op->params[0].value.a;
+        session_internal.sscp      = context;
+        (void)memcpy(outSession, &session_internal, sizeof(sss_sscp_session_t));
+
+        *ret = kStatus_SSS_Success;
+
+        SSCP_MU_MUTEX_UNLOCK();
+        return kStatus_SSCP_Success;
+    }
+#endif /* ELE_TRACK_SESSION_STATE */
+
     do
     {
         if (prepareMessage(op, msg, &wrIdx) != kStatus_SSCP_Success)
@@ -342,6 +451,29 @@ sscp_status_t sscp_mu_invoke_command(sscp_context_t *context,
             ret2 = kStatus_SSCP_Fail;
         }
     } while (false);
+
+#if defined(ELE_TRACK_SESSION_STATE)
+    if (ret2 == kStatus_SSCP_Success)
+    {
+        if (commandId == kSSCP_CMD_SSS_OpenSession)
+        {
+            sss_sscp_session_t *outSession = (sss_sscp_session_t *)(op->result[0].context.ptr);
+
+            (void)memcpy(&session_internal, outSession, sizeof(sss_sscp_session_t));
+            session_state = sessionOpen;
+        }
+        else if (commandId == kSSCP_CMD_SSS_CloseSession)
+        {
+            session_state = sessionClosed;
+        }
+        else
+        {
+            /* No session state change for other commands */
+        }
+    }
+#endif /* ELE_TRACK_SESSION_STATE */
+
+    SSCP_MU_MUTEX_UNLOCK();
 
     return ret2;
 }
