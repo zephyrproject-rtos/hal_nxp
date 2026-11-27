@@ -20,7 +20,16 @@ if(CONFIG_BUILD_WITH_TFM)
 include(${CMAKE_CURRENT_LIST_DIR}/tfm.cmake)
 else()
 target_link_libraries(McuxSgiPkc PRIVATE zephyr_interface)
+
+# McuxSgiPkc is a plain add_library() target (not a zephyr_library()), so it
+# does NOT automatically inherit the build-order dependency on the Zephyr
+# generated headers (autoconf.h, syscall/offset/kobj headers). Without this
+# explicit dependency Ninja may compile the SGI PKC sources before
+# zephyr/include/generated/zephyr/autoconf.h has been produced, which fails
+# with "autoconf.h: No such file or directory". Force the ordering here.
+add_dependencies(McuxSgiPkc zephyr_generated_headers)
 endif()
+
 
 # Common include directories - always added and visible globally
 target_include_directories(McuxSgiPkc PUBLIC
@@ -504,6 +513,17 @@ if(CONFIG_SGI_PKC_SIGNATURE)
         ${SGI_PKC_BASE}/src/comps/mcuxClSignature/inc
         ${SGI_PKC_BASE}/src/comps/mcuxClSignature/inc/internal
     )
+    # mcuxClSignature.c unconditionally includes <mcuxClRsa_Types.h> and
+    # <mcuxClEcc_Types.h> for the generic sign/verify dispatch, so the RSA and
+    # ECC public header directories must be visible whenever the Signature
+    # component is built, even on Thread-only builds where CONFIG_SGI_PKC_RSA is
+    # disabled to save Flash (Thread uses ECC P-256 only, never RSA).
+    if(NOT CONFIG_SGI_PKC_RSA)
+        target_include_directories(McuxSgiPkc PUBLIC
+            ${SGI_PKC_BASE}/src/comps/mcuxClRsa/inc
+            ${SGI_PKC_BASE}/src/comps/mcuxClRsa/inc/internal
+        )
+    endif()
 endif()
 
 # TRNG component
