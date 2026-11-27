@@ -1037,7 +1037,7 @@ void Radio_Phy_PdDataIndication(Phy_PhyLocalStruct_t *ctx);
 
 void Radio_Phy_PlmeCcaConfirm(phyStatus_t phyChannelStatus, Phy_PhyLocalStruct_t *ctx);
 
-void Radio_Phy_PlmeEdConfirm(Phy_PhyLocalStruct_t *ctx, int8_t energyLeveldB);
+void Radio_Phy_PlmeEdConfirm(Phy_PhyLocalStruct_t *ctx, int8_t energyLeveldB, bool_t sampleValid);
 
 void Radio_Phy_PlmeSyncLossIndication(Phy_PhyLocalStruct_t *ctx);
 

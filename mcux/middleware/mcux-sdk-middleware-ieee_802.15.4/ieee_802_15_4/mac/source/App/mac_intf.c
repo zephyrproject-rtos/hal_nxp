@@ -297,7 +297,10 @@ static void mac_rx_callback(uint8_t *data, uint16_t len, void *param)
             return;
         }
 
-        memcpy(msg->msgData.scanCnf.resList.pEnergyDetectList, pNwkMsg->msgData.scanCnf.resList.pEnergyDetectList, msg->msgData.scanCnf.resultListSize);
+        /* The energy bytes are appended after the struct by the sender; the
+           pEnergyDetectList field itself holds a pointer into the sender address
+           space and must not be dereferenced here (see the length check above) */
+        memcpy(msg->msgData.scanCnf.resList.pEnergyDetectList, (uint8_t *)pNwkMsg + sizeof(nwkMessage_t), msg->msgData.scanCnf.resultListSize);
     }
     else if ((msg->msgType == gMlmeScanCnf_c) && (msg->msgData.scanCnf.scanType == gScanModeActive_c))
     {
