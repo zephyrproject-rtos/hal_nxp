@@ -239,3 +239,4 @@ Patch List:
       - Return matched instances directly; assert and use the documented zero fallback on a miss.
       - Avoid the optimized legacy-callback array-bounds diagnostic without changing IRQ offsets.
       - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/020eecad5f0f176e432358a3f6cb5ec397e78fbe
+  - drivers: tenbaset_phy: add inline TENBASET_PHY_ReadReg/WriteReg (Clause 45 register file access)

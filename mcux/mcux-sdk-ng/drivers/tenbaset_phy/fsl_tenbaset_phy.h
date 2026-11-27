@@ -731,6 +731,62 @@ status_t TENBASET_PHY_SMIWrite(TENBASET_PHY_Type *base, uint8_t phyAddr, uint8_t
 
 /*! @} */
 
+/*!
+ * @name Direct register access (Clause 45 register file)
+ * @{
+ */
+
+/*! @brief Highest valid register byte offset (VERSION register). */
+#define TENBASET_PHY_REG_MAX (0x1FEU)
+
+/*!
+ * @brief Reads a 16-bit register of the TENBASET_PHY register file.
+ *
+ * The TENBASET_PHY exposes its Clause 45 register set directly on the APB as one
+ * 16-bit register file, so the register address equals the byte offset from the
+ * peripheral base address.
+ *
+ * @param base TENBASET_PHY peripheral base address.
+ * @param regAddr Register byte offset, halfword aligned.
+ * @param data Pointer to store the read register value.
+ * @retval kStatus_Success Read successful.
+ * @retval kStatus_InvalidArgument Offset out of range or not halfword aligned.
+ */
+static inline status_t TENBASET_PHY_ReadReg(TENBASET_PHY_Type *base, uint16_t regAddr, uint16_t *data)
+{
+    if ((regAddr > TENBASET_PHY_REG_MAX) || ((regAddr & 0x1U) != 0U))
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    *data = *(volatile uint16_t *)((uintptr_t)base + regAddr);
+
+    return kStatus_Success;
+}
+
+/*!
+ * @brief Writes a 16-bit register of the TENBASET_PHY register file.
+ *
+ * @param base TENBASET_PHY peripheral base address.
+ * @param regAddr Register byte offset, halfword aligned.
+ * @param data Value to write to the register.
+ * @retval kStatus_Success Write successful.
+ * @retval kStatus_InvalidArgument Offset out of range or not halfword aligned.
+ */
+static inline status_t TENBASET_PHY_WriteReg(TENBASET_PHY_Type *base, uint16_t regAddr, uint16_t data)
+{
+    if ((regAddr > TENBASET_PHY_REG_MAX) || ((regAddr & 0x1U) != 0U))
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    *(volatile uint16_t *)((uintptr_t)base + regAddr) = data;
+
+    return kStatus_Success;
+}
+
+/*! @} */
+
 #if defined(__cplusplus)
 }
 #endif
